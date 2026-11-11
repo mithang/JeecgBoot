@@ -1,7 +1,7 @@
 <template>
   <BasicDrawer v-bind="getProps">
     <BasicTable @register="registerTable">
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" /> </template
     ></BasicTable>
@@ -19,23 +19,23 @@
   import { getTrackList, deleteOne } from '@/views/super/airag/aiprompts/AiragExtData.api';
   import {useListPage} from "@/hooks/system/useListPage";
   import AiragTrackDetailModal from './AiragTrackDetailModal.vue';
-  // Emits声明
+  // Khai báo Emits
   const attrs = useAttrs();
   const [registerTrackDetailModal, { openModal }] = useModal();
-  //列配置
+  //Cấu hình cột
   const trackColumns = ref([
-    { title: '问题', dataIndex: 'userQuery', key: 'userQuery' },
-    { title: '提示词答案', dataIndex: 'promptAnswer', key: 'promptAnswer' },
-    { title: '评估分数', dataIndex: 'answerScore', key: 'answerScore' },
-    { title: '版本号', dataIndex: 'version', key: 'version' },
+    { title: 'Câu hỏi', dataIndex: 'userQuery', key: 'userQuery' },
+    { title: 'Đáp án prompt', dataIndex: 'promptAnswer', key: 'promptAnswer' },
+    { title: 'Điểm đánh giá', dataIndex: 'answerScore', key: 'answerScore' },
+    { title: 'Số phiên bản', dataIndex: 'version', key: 'version' },
   ]);
-  // 注册抽屉
+  // Đăng ký ngăn kéo
   const [registerDrawer, { closeDrawer }] = useDrawerInner(open);
-  // 表格定义
+  // Định nghĩa bảng
   const { tableContext } = useListPage({
     designScope: 'agent-config',
     tableProps: {
-      title: '调用记录',
+      title: 'Bản ghi gọi',
       api: getTrackList,
       columns: trackColumns.value,
       canResize: false,
@@ -62,11 +62,11 @@
     },
   });
   const [registerTable, { reload }] = tableContext;
-  // 抽屉最终props
+  // props cuối cùng của ngăn kéo
   const getProps = computed(() => {
     let drawerProps: Partial<DrawerProps> = {
       width: 1000,
-      title: '调用记录',
+      title: 'Bản ghi gọi',
       destroyOnClose: true,
     };
     let finalProps: Recordable = {
@@ -79,13 +79,13 @@
   });
   /** dataId */
   const dataId = ref<any>('');
-  /** 抽屉开启 */
+  /** Ngăn kéo mở */
   function open(data) {
     dataId.value = data.record?.id || '';
     reload();
   }
   /**
-   * 删除
+   * Xóa
    */
   function handleDelete(record) {
     console.log(record, 'record');
@@ -93,25 +93,25 @@
   }
 
   /**
-   * 详情
+   * Chi tiết
    * @param record
    */
   function handleDetail(record) {
     openModal(true, { dataValue: record.dataValue });
   }
   /*
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa hay không',
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft',
         },
@@ -124,8 +124,8 @@
   .dynamic-column-config {
     max-width: 1200px;
     margin: 0 auto;
-    max-height: calc(100vh - 100px); /* 设置最大高度为视口高度的70% */
-    overflow-y: auto; /* 超出时显示垂直滚动条 */
+    max-height: calc(100vh - 100px); /* Đặt chiều cao tối đa là 70 của chiều cao viewport% */
+    overflow-y: auto; /* Khi vượt quá hiển thị thanh cuộn dọc */
 
     :deep(.ant-card-head) {
       border-bottom: 1px solid #f0f0f0;
@@ -145,7 +145,7 @@
   }
 
   .column-item {
-    position: relative; /* 为绝对定位的操作区域提供参考 */
+    position: relative; /* Cung cấp tham chiếu cho khu vực thao tác định vị tuyệt đối */
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -161,7 +161,7 @@
       background: #f6fbff;
     }
 
-    /* 操作区域样式 */
+    /* Kiểu khu vực thao tác */
     .action-area {
       position: absolute;
       top: 8px;
@@ -182,7 +182,7 @@
 
   .column-form {
     flex: 1;
-    width: 100%; /* 确保表单占满宽度 */
+    width: 100%; /* Đảm bảo biểu mẫu chiếm hết độ rộng */
   }
 
   .form-row {
@@ -228,7 +228,7 @@
   }
 
   .form-actions {
-    display: none; /* 隐藏原来的删除按钮区域 */
+    display: none; /* Ẩn khu vực nút xóa ban đầu */
   }
 
   .fixed-columns {

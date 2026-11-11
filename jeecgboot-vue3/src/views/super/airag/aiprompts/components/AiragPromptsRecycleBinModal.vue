@@ -1,27 +1,27 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="提示词回收站" :showOkBtn="false" width="900px" destroyOnClose @fullScreen="handleFullScreen">
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Thùng rác prompt" :showOkBtn="false" width="900px" destroyOnClose @fullScreen="handleFullScreen">
     <BasicTable @register="registerTable" :rowSelection="rowSelection" :scroll="scroll">
-      <!--插槽:table标题-->
+      <!--slot:tiêu đề table-->
       <template #tableTitle>
         <a-dropdown v-if="checkedKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                批量删除
+                Xóa hàng loạt
               </a-menu-item>
               <a-menu-item key="2" @click="batchHandleRevert">
                 <Icon icon="ant-design:redo-outlined"></Icon>
-                批量还原
+                Khôi phục hàng loạt
               </a-menu-item>
             </a-menu>
           </template>
-          <a-button>批量操作
+          <a-button>Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="getTableAction(record)" />
@@ -64,7 +64,7 @@
     canResize: false,
     actionColumn: {
       width: 150,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       fixed: undefined,
     },
@@ -106,7 +106,7 @@
   }
 
   /**
-   * 还原
+   * Khôi phục
    * @param record
    */
   async function handleRevert(record) {
@@ -116,14 +116,14 @@
   }
 
   /**
-   * 批量还原
+   * Khôi phục hàng loạt
    */
   function batchHandleRevert() {
     handleRevert({ id: toRaw(unref(checkedKeys)).join(',') });
   }
 
   /**
-   * 删除
+   * Xóa
    * @param record
    */
   async function handleDelete(record) {
@@ -134,8 +134,8 @@
   function batchHandleDelete() {
     createConfirm({
       iconType: 'warning',
-      title: '删除',
-      content: '确定要永久删除吗？删除后将不可恢复！',
+      title: 'Xóa',
+      content: 'Xác nhận xóa vĩnh viễn? Sau khi xóa sẽ không thể khôi phục!',
       onOk: () => handleDelete({ id: toRaw(unref(checkedKeys)).join(',') }),
       onCancel() {},
     });
@@ -144,18 +144,18 @@
   function getTableAction(record) {
     return [
       {
-        label: '取回',
+        label: 'Lấy lại',
         icon: 'ant-design:redo-outlined',
         popConfirm: {
-          title: '是否确认还原',
+          title: 'Có xác nhận khôi phục hay không',
           confirm: handleRevert.bind(null, record),
         },
       },
       {
-        label: '彻底删除',
+        label: 'Xóa triệt để',
         icon: 'ant-design:scissor-outlined',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa hay không',
           confirm: handleDelete.bind(null, record),
         },
       },

@@ -1,20 +1,20 @@
 import { FormSchema } from '@/components/Form';
 
-// 左侧语音控制表单
+// Biểu mẫu điều khiển giọng nói bên trái
 export const voiceFormSchemas: FormSchema[] = [
   /*  {
-    label: '模型',
+    label: 'Mô hình',
     field: 'model',
     component: 'JDictSelectTag',
     required: true,
     defaultValue: 'voice-generation-1',
     componentProps: {
-      placeholder: '请选择语音模型',
+      placeholder: 'Vui lòng chọn mô hình giọng nói',
       dictCode: "airag_model where model_type = 'VOICE' and activate_flag = 1,name,id",
     },
   },*/
   {
-    label: '倍速',
+    label: 'Tốc độ phát',
     field: 'speed',
     component: 'Slider',
     defaultValue: 1,
@@ -39,7 +39,7 @@ export const voiceFormSchemas: FormSchema[] = [
     },
   },
   {
-    label: '音量增益(dB)',
+    label: 'Tăng âm lượng(dB)',
     field: 'volume',
     component: 'Slider',
     defaultValue: 0,
@@ -58,26 +58,26 @@ export const voiceFormSchemas: FormSchema[] = [
     },
   },
   {
-    label: '声色',
+    label: 'Âm sắc',
     field: 'voice',
     component: 'Select',
     required: true,
     defaultValue: 'tongtong',
     componentProps: {
       options: [
-        { label: '彤彤', value: 'tongtong' },
-        { label: '锤锤', value: 'chuichui' },
-        { label: '小陈', value: 'xiaochen' },
+        { label: 'Đồng Đồng', value: 'tongtong' },
+        { label: 'Chùy Chùy', value: 'chuichui' },
+        { label: 'Tiểu Trần', value: 'xiaochen' },
         { label: 'Jam', value: 'jam' },
         { label: 'Kazi', value: 'kazi' },
         { label: 'Douji', value: 'douji' },
         { label: 'Luodo', value: 'luodo' },
       ],
-      placeholder: '请选择声色',
+      placeholder: 'Vui lòng chọn âm sắc',
     },
   },
   {
-    label: '文案',
+    label: 'Nội dung văn bản',
     field: 'text',
     component: 'InputTextArea',
     required: true,
@@ -86,7 +86,7 @@ export const voiceFormSchemas: FormSchema[] = [
     },
     componentProps: {
       rows: 6,
-      placeholder: '请输入要合成的文案内容',
+      placeholder: 'Vui lòng nhập nội dung văn bản muốn tổng hợp',
       maxlength: 500,
       showCount: true,
     },
@@ -94,22 +94,22 @@ export const voiceFormSchemas: FormSchema[] = [
 ];
 
 /**
- * 历史记录表格列配置
+ * Cấu hình cột bảng lịch sử
  */
 export const historyColumns = [
   {
-    title: '文案',
+    title: 'Nội dung văn bản',
     dataIndex: 'text',
     width: 100,
     ellipsis: true,
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     dataIndex: 'createTime',
     width: 100,
   },
   {
-    title: '操作',
+    title: 'Thao tác',
     dataIndex: 'action',
     width: 100,
     fixed: 'right',

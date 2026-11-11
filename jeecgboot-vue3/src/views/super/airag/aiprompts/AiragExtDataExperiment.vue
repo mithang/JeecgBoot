@@ -6,21 +6,21 @@
 
 <script lang="ts" setup>
 /**
- * 评估器 evaluator
- * 评测集 evaluationSet
- * 实验 experiment
+ * Bộ đánh giá evaluator
+ * Tập đánh giá evaluationSet
+ * Thử nghiệm experiment
  */
 import { ref, onMounted } from 'vue';
 import AiragExtDataList from './AiragExtDataList.vue'
 
 /**
- * 评估器 evaluator
- * 评测集 evaluationSet
- * 实验 experiment
+ * Bộ đánh giá evaluator
+ * Tập đánh giá evaluationSet
+ * Thử nghiệm experiment
  */
 const activeKey = ref('evaluator');
 /**
- * 切换tab
+ * Chuyển đổi tab
  */
 function handleChangePanel(key) {
   activeKey.value = key;

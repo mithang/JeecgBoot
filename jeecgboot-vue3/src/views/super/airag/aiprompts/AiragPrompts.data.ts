@@ -1,98 +1,98 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-//列表数据
+//Dữ liệu danh sách
 export const columns: BasicColumn[] = [
   {
-    title: '名称',
+    title: 'Tên',
     align: 'center',
     dataIndex: 'name',
   },
   {
-    title: '功能描述',
+    title: 'Mô tả chức năng',
     align: 'center',
     dataIndex: 'description',
   },
   // {
-  //   title: '状态',
+  //   title: 'Trạng thái',
   //   align: 'center',
   //   dataIndex: 'status',
   // },
   // {
-  //   title: '最近提交人',
+  //   title: 'Người gửi gần nhất',
   //   align: 'center',
   //   dataIndex: 'updateBy',
   // },
   // {
-  //   title: '最近提交时间',
+  //   title: 'Thời gian gửi gần nhất',
   //   align: 'center',
   //   dataIndex: 'updateTime',
   // },
   // {
-  //   title: '创建时间',
+  //   title: 'Thời gian tạo',
   //   align: 'center',
   //   dataIndex: 'createTime',
   // }
 ];
-//回收站列表数据
+//Dữ liệu danh sách thùng rác
 export const recycleColumns: BasicColumn[] = [
   {
-    title: '名称',
+    title: 'Tên',
     align: 'center',
     dataIndex: 'name',
   },
   {
-    title: '功能描述',
+    title: 'Mô tả chức năng',
     align: 'center',
     dataIndex: 'description',
   },
   {
-    title: '创建人',
+    title: 'Người tạo',
     align: 'center',
     dataIndex: 'createBy',
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     align: 'center',
     dataIndex: 'createTime',
   },
 ];
-//查询数据
+//Truy vấn dữ liệu
 export const searchFormSchema: FormSchema[] = [
     {
-      label: '名称',
+      label: 'Tên',
       field: 'name',
       component: 'JInput',
     },
 ];
-// 名称最大长度
+// Độ dài tối đa của tên
 export const NAME_MAX_LENGTH = 40;
-// 编码最大长度
+// Độ dài tối đa của mã
 export const CODE_MAX_LENGTH = 50;
-//表单数据
+//Dữ liệu biểu mẫu
 export const formSchema: FormSchema[] = [
   {
-    label: '名称',
+    label: 'Tên',
     field: 'name',
     component: 'Input',
     componentProps: () => {
       return {
-        placeholder: '例如：SQL转换',
+        placeholder: 'Ví dụ: chuyển đổi SQL',
         maxlength: 40,
         showCount: true
       };
     },
     dynamicRules() {
       return [
-        {required: true, message: '请输入提示词名称'},
+        {required: true, message: 'Vui lòng nhập tên prompt'},
         {
           max: NAME_MAX_LENGTH,
-          message: `名称长度不能超过${NAME_MAX_LENGTH}个字符`,
+          message: `Độ dài tên không được vượt quá${NAME_MAX_LENGTH}ký tự`,
         },
       ];
     }
   },
   {
-    label: '提示词功能描述',
+    label: 'Mô tả chức năng prompt',
     field: 'description',
     component: 'InputTextArea',
     componentProps: {
@@ -108,10 +108,10 @@ export const formSchema: FormSchema[] = [
 ];
 
 /**
- * 流程表单调用这个方法获取formSchema
+ * Biểu mẫu quy trình gọi phương thức này để lấy formSchema
  * @param param
  */
 export function getBpmFormSchema(_formData): FormSchema[] {
-  // 默认和原始表单保持一致 如果流程中配置了权限数据，这里需要单独处理formSchema
+  // Mặc định giữ nhất quán với biểu mẫu gốc. Nếu trong quy trình có cấu hình dữ liệu quyền, chỗ này cần xử lý riêng formSchema
   return formSchema;
 }

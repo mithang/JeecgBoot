@@ -16,30 +16,30 @@
           <div style="display: flex">
             <img :src="getImage()" class="header-img" />
             <div class="header-name">{{ formState.name }}</div>
-            <a-tooltip title="编辑">
+            <a-tooltip title="Chỉnh sửa">
               <Icon icon="ant-design:edit-outlined" style="margin-left: 4px; cursor: pointer" color="#354052" size="20" @click="handleEdit"></Icon>
             </a-tooltip>
           </div>
           <div>
-            提示词编排
-            <a-tooltip title="AI应用文档">
+            Sắp xếp prompt
+            <a-tooltip title="Tài liệu ứng dụng AI">
               <a style="color: unset" href="https://help.jeecg.com/aigc/guide/app" target="_blank">
                 <Icon style="position: relative; left: 2px; top: 1px" icon="ant-design:question-circle-outlined"></Icon>
               </a>
             </a-tooltip>
           </div>
           <div style="display: flex">
-            <a-button @click="handleOk" style="margin-right: 30px" type="primary">保存</a-button>
+            <a-button @click="handleOk" style="margin-right: 30px" type="primary">Lưu</a-button>
           </div>
         </div>
       </template>
       <div style="height: 100%; width: 100%">
         <a-row :span="24">
           <a-col :span="10">
-            <div class="orchestration">提示词</div>
+            <div class="orchestration">Prompt</div>
           </a-col>
           <a-col :span="14">
-            <div class="view">预览</div>
+            <div class="view">Xem trước</div>
           </a-col>
         </a-row>
         <a-row :span="24">
@@ -51,7 +51,7 @@
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.content" style="margin-bottom: 0">
                       <template #label>
                         <div class="prompt-title-padding item-title space-between">
-                          <span>提示词</span>
+                          <span>Prompt</span>
                           <a-button size="middle" ghost>
                             <span style="align-items: center; display: flex" @click="generatedPrompt">
                               <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -59,12 +59,12 @@
                                   d="M18.9839 1.85931C19.1612 1.38023 19.8388 1.38023 20.0161 1.85931L20.5021 3.17278C20.5578 3.3234 20.6766 3.44216 20.8272 3.49789L22.1407 3.98392C22.6198 4.1612 22.6198 4.8388 22.1407 5.01608L20.8272 5.50211C20.6766 5.55784 20.5578 5.6766 20.5021 5.82722L20.0161 7.14069C19.8388 7.61977 19.1612 7.61977 18.9839 7.14069L18.4979 5.82722C18.4422 5.6766 18.3234 5.55784 18.1728 5.50211L16.8593 5.01608C16.3802 4.8388 16.3802 4.1612 16.8593 3.98392L18.1728 3.49789C18.3234 3.44216 18.4422 3.3234 18.4979 3.17278L18.9839 1.85931zM13.5482 4.07793C13.0164 2.64069 10.9836 2.64069 10.4518 4.07793L8.99368 8.01834C8.82648 8.47021 8.47021 8.82648 8.01834 8.99368L4.07793 10.4518C2.64069 10.9836 2.64069 13.0164 4.07793 13.5482L8.01834 15.0063C8.47021 15.1735 8.82648 15.5298 8.99368 15.9817L10.4518 19.9221C10.9836 21.3593 13.0164 21.3593 13.5482 19.9221L15.0063 15.9817C15.1735 15.5298 15.5298 15.1735 15.9817 15.0063L19.9221 13.5482C21.3593 13.0164 21.3593 10.9836 19.9221 10.4518L15.9817 8.99368C15.5298 8.82648 15.1735 8.47021 15.0063 8.01834L13.5482 4.07793zM5.01608 16.8593C4.8388 16.3802 4.1612 16.3802 3.98392 16.8593L3.49789 18.1728C3.44216 18.3234 3.3234 18.4422 3.17278 18.4979L1.85931 18.9839C1.38023 19.1612 1.38023 19.8388 1.85931 20.0161L3.17278 20.5021C3.3234 20.5578 3.44216 20.6766 3.49789 20.8272L3.98392 22.1407C4.1612 22.6198 4.8388 22.6198 5.01608 22.1407L5.50211 20.8272C5.55784 20.6766 5.6766 20.5578 5.82722 20.5021L7.14069 20.0161C7.61977 19.8388 7.61977 19.1612 7.14069 18.9839L5.82722 18.4979C5.6766 18.4422 5.55784 18.3234 5.50211 18.1728L5.01608 16.8593z"
                                 />
                               </svg>
-                              <span style="margin-left: 4px">生成</span>
+                              <span style="margin-left: 4px">Tạo</span>
                             </span>
                           </a-button>
                         </div>
                       </template>
-                      <a-textarea :rows="8" v-model:value="formState.content" placeholder="请输入提示词" @change="handleContentChange" />
+                      <a-textarea :rows="8" v-model:value="formState.content" placeholder="Vui lòng nhập prompt" @change="handleContentChange" />
                     </a-form-item>
                   </div>
                 </a-col>
@@ -74,15 +74,15 @@
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.modelId">
                       <template #label>
                         <div style="display: flex; justify-content: space-between; width: 100%; margin-right: 2px">
-                          <div class="item-title">AI模型</div>
+                          <div class="item-title">Mô hình AI</div>
                           <div @click="handleParamSettingClick('model')" class="knowledge-txt">
-                            <Icon icon="ant-design:setting-outlined" size="13" style="margin-right: 2px"></Icon>参数配置
+                            <Icon icon="ant-design:setting-outlined" size="13" style="margin-right: 2px"></Icon>Cấu hình tham số
                           </div>
                         </div>
                       </template>
                       <JDictSelectTag
                         v-model:value="formState.modelId"
-                        placeholder="请选择AI模型"
+                        placeholder="Vui lòng chọn mô hình AI"
                         dict-code="airag_model where model_type = 'LLM' and activate_flag = 1,name,id"
                         style="width: 100%"
                         @change="handleModelIdChange"
@@ -95,19 +95,19 @@
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
                       <template #label>
                         <div style="display: flex; justify-content: space-between; width: 100%; margin-right: 2px">
-                          <div class="item-title">Prompt 变量</div>
+                          <div class="item-title">Biến Prompt</div>
                         </div>
                       </template>
-                      <!-- 变量列表容器 -->
+                      <!-- Container danh sách biến -->
                       <div class="prompt-variable-container">
-                        <!-- 无变量时的空状态 -->
+                        <!-- Trạng thái trống khi không có biến -->
                         <div v-if="!metadata.promptVariables || metadata.promptVariables.length === 0" class="empty-variables">
                           <Icon icon="ant-design:inbox-outlined" style="font-size: 32px; color: #d9d9d9" />
-                          <p>暂无变量</p>
-                          <span class="empty-hint">请在提示词中使用 {{ 变量名 }} 格式添加变量</span>
+                          <p>Tạm thời chưa có biến</p>
+                          <span class="empty-hint">Vui lòng sử dụng định dạng {{ tên biến }} trong prompt để thêm biến</span>
                         </div>
 
-                        <!-- 变量列表 -->
+                        <!-- Danh sách biến -->
                         <div v-else class="prompt-variables-list">
                           <div
                             class="prompt-variable-item"
@@ -115,21 +115,21 @@
                             :key="index"
                             :class="{ 'variable-focused': focusedVariable === index }"
                           >
-                            <!-- 变量名标签 -->
+                            <!-- Nhãn tên biến -->
                             <div class="variable-tag">
                               <Icon icon="ant-design:tag-outlined" />
                               <span class="variable-name">{{ item.name }}</span>
                             </div>
 
-                            <!-- 变量值输入框 -->
+                            <!-- Ô nhập giá trị biến -->
                             <div class="variable-input-wrapper">
-                              <!-- 附件输入框 -->
+                              <!-- Ô nhập tệp đính kèm -->
                               <JImageUpload :maxCount="1" v-if="item.type === 'FILE'" v-model:value="item.value"></JImageUpload>
-                              <!-- 文本输入框 -->
+                              <!-- Ô nhập văn bản -->
                               <a-input
                                   v-else
                                   v-model:value="item.value"
-                                  placeholder="请输入变量值"
+                                  placeholder="Vui lòng nhập giá trị biến"
                                   @focus="focusedVariable = index"
                                   @blur="focusedVariable = null"
                                   class="variable-input"
@@ -140,23 +140,23 @@
                               </a-input>
                             </div>
                            
-                            <!-- 类型选择框 -->
+                            <!-- Hộp chọn loại -->
                             <div class="variable-input-wrapper">
                               <a-select
                                   v-model:value="item.type"
-                                  placeholder="请选择类型"
+                                  placeholder="Vui lòng chọn loại"
                                   :options="[
-                                    { value: 'TEXT', label: '文本' },
-                                    { value: 'FILE', label: '附件' }
+                                    { value: 'TEXT', label: 'Văn bản' },
+                                    { value: 'FILE', label: 'Tệp đính kèm' }
                                   ]"
                                   class="variable-input"
                               >
                               </a-select>
                             </div>
 
-                            <!-- 变量操作按钮 -->
+                            <!-- Nút thao tác biến -->
                             <div class="variable-actions">
-                              <a-tooltip title="清空值">
+                              <a-tooltip title="Làm trống giá trị">
                                 <a-button type="text" size="small" @click="item.value = ''" class="action-btn">
                                   <Icon icon="ant-design:clear-outlined" />
                                 </a-button>
@@ -178,11 +178,11 @@
       </div>
     </BasicModal>
 
-    <!-- Ai配置弹窗   -->
+    <!-- Popup cấu hình Ai   -->
     <AiAppParamsSettingModal @register="registerParamsSettingModal" @ok="handleParamsSettingOk"></AiAppParamsSettingModal>
-    <!-- Ai生成器   -->
+    <!-- Trình tạo Ai   -->
     <AiAppGeneratedPromptModal @register="registerAiAppPromptModal" @ok="handleAiAppPromptOk"></AiAppGeneratedPromptModal>
-    <!-- Ai提示词弹窗   -->
+    <!-- Popup prompt Ai   -->
     <AiragPromptsModal @register="registerPromptModal" @success="handleSuccess"></AiragPromptsModal>
   </div>
 </template>
@@ -204,11 +204,11 @@
   import { saveOrUpdate } from '@/views/super/airag/aiprompts/AiragPrompts.api';
   import { JImageUpload } from "@/components/Form";
 
-  //保存或修改
+  //Lưu hoặc sửa đổi
   const isUpdate = ref<boolean>(false);
   //uuid
   const uuid = ref(randomString(16));
-  //form表单数据
+  //Dữ liệu biểu mẫu form
   const formState = reactive<any>({
     id: '',
     name: '',
@@ -218,26 +218,26 @@
     modelId: '',
     modelParam: '',
   });
-  //表单验证
+  //Xác thực biểu mẫu
   const validatorRules = ref<any>({
-    content: [{ required: true, message: '请输入提示词!' }],
-    modelId: [{ required: true, message: '请选择AI模型!' }],
+    content: [{ required: true, message: 'Vui lòng nhập prompt!' }],
+    modelId: [{ required: true, message: 'Vui lòng chọn mô hình AI!' }],
   });
-  //注册form
+  //Đăng ký form
   const useForm = Form.useForm;
   const { resetFields, validate, validateInfos } = useForm(formState, validatorRules, { immediate: false });
   const labelCol = ref<any>({ span: 24 });
   const wrapperCol = ref<any>({ span: 24 });
-  //参数配置
+  //Cấu hình tham số
   const metadata = ref<any>({});
-  //定义 emit 事件
+  //Định nghĩa sự kiện emit
   const emit = defineEmits(['success', 'register']);
-  // 添加聚焦变量索引
+  // Thêm chỉ số biến được tập trung
   const focusedVariable = ref<number | null>(null);
-  // 提示词
+  // Prompt
   const prompt = ref<any>();
 
-  //注册modal
+  //Đăng ký modal
   const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
     isUpdate.value = !!data?.isUpdate;
     clearFormState();
@@ -248,7 +248,7 @@
     setModalProps({ bodyStyle: { padding: '10px' } });
   });
 
-  //注册modal
+  //Đăng ký modal
   const [registerParamsSettingModal, { openModal: paramsSettingOpen }] = useModal();
   const [registerAiAppPromptModal, { openModal: aiAppPromptModalOpen }] = useModal();
   const [registerPromptModal, { openModal: promptModalOpen }] = useModal();
@@ -273,7 +273,7 @@
     }
   );
   /**
-   * 改变提示词
+   * Thay đổi prompt
    */
   function changePrompt() {
     prompt.value = formState.content;
@@ -288,7 +288,7 @@
   }
 
   /**
-   * 提示词内容改变事件
+   * Sự kiện thay đổi nội dung prompt
    */
   function handleContentChange() {
     if (formState.content) {
@@ -311,23 +311,23 @@
   }
 
   /**
-   * 从提示词中提取变量名
+   * Trích xuất tên biến từ prompt
    * @param str
    */
   function extractVariables(str) {
-    // 匹配 {{ 和 }} 之间的内容，非贪婪匹配
+    // Khớp {{ Và }} nội dung ở giữa, khớp không tham lam
     const regex = /\{\{(.*?)\}\}/g;
-    const matches = new Set(); // 使用 Set 自动去重
+    const matches = new Set(); // Dùng Set tự động loại trùng
     let match;
 
     while ((match = regex.exec(str)) !== null) {
-      matches.add(match[1].trim()); // 去除可能的首尾空格并添加到 Set
+      matches.add(match[1].trim()); // Loại bỏ dấu cách ở đầu và cuối có thể có và thêm vào Set
     }
 
     return Array.from(matches);;
   }
 
-  //编辑
+  //Chỉnh sửa
   function handleEdit() {
     promptModalOpen(true, {
       isUpdate: true,
@@ -341,19 +341,19 @@
     });
   }
   /**
-   * 保存
+   * Lưu
    */
   async function handleOk() {
     try {
       let values = await validate();
       values.modelParam = JSON.stringify(cloneDeep(metadata.value));
       values = Object.assign(formState, values);
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdate(values, isUpdate.value);
       setModalProps({ confirmLoading: true });
-      //关闭弹窗
+      //Đóng popup
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });
@@ -361,14 +361,14 @@
   }
 
   /**
-   * 取消
+   * Hủy
    */
   function handleCancel() {
     closeModal();
   }
 
   /**
-   * 关闭弹窗触发列表刷新
+   * Đóng popup kích hoạt làm mới danh sách
    *
    * @param value
    */
@@ -378,7 +378,7 @@
     }
   }
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess(data) {
     setFormState(data);
@@ -386,7 +386,7 @@
   }
 
   /**
-   * 参数配置点击事件
+   * Sự kiện nhấp cấu hình tham số
    * @param value
    */
   function handleParamSettingClick(value) {
@@ -394,7 +394,7 @@
   }
 
   /**
-   * 参数配置确定回调事件
+   * Sự kiện callback xác nhận cấu hình tham số
    *
    * @param value
    */
@@ -403,14 +403,14 @@
   }
 
   /**
-   * 获取图标
+   * Lấy biểu tượng
    */
   function getImage() {
     return formState.icon ? getFileAccessHttpUrl(formState.icon) : defaultImg;
   }
 
   /**
-   * 清除参数
+   * Làm trống tham số
    */
   function clearFormState() {
     formState.id = '';
@@ -424,30 +424,30 @@
   }
 
   /**
-   * 设置form属性
+   * Đặt thuộc tính form
    * @param data
    */
   function setFormState(data: any) {
-    //赋值
+    //Gán giá trị
     Object.assign(formState, data);
 
-    // 如果已有modelId，查询模型信息并更新到metadata中
+    // Nếu đã có modelId, truy vấn thông tin mô hình và cập nhật vào metadata
     if (data.modelId) {
       metadata.value = data.modelParam ? JSON.parse(data.modelParam) : {};
     }
-    console.log('设置form属性formState', formState);
+    console.log('Đặt thuộc tính form là formState', formState);
   }
 
-  //============= begin 提示词 ================================
+  //============= begin Prompt ================================
   /**
-   * 生成提示词
+   * Tạo prompt
    */
   function generatedPrompt() {
     aiAppPromptModalOpen(true, {});
   }
 
   /**
-   * 提示词回调
+   * Callback prompt
    *
    * @param value
    */
@@ -455,22 +455,22 @@
     console.log('handleAiAppPromptOk value', value);
     formState.content = value;
   }
-  //============= end 提示词 ================================
+  //============= end Prompt ================================
 
   /**
-   * 模型ID变化处理
-   * 查询模型信息并更新到metadata中，供chat组件使用
+   * Xử lý thay đổi ID mô hình
+   * Truy vấn thông tin mô hình và cập nhật vào metadata, để component chat sử dụng
    */
   async function handleModelIdChange(modelId: string) {
     if (!modelId) {
-      // 如果清空模型，清除模型信息
+      // Nếu làm trống mô hình, xóa thông tin mô hình
       if (metadata.value.modelInfo) {
         delete metadata.value.modelInfo;
       }
       return;
     }
     try {
-      //update-begin---author:scott ---date:20260506  for：【issues/9600】低权限用户可获取 LLM API Key——非编辑场景改用 /detail，避免依赖 airag:model:queryById 权限并减少 credential 暴露面-----------
+      //update-begin---author:scott ---date:20260506  for：【issues/9600】Người dùng quyền thấp có thể lấy được LLM API Key——tình huống không chỉnh sửa đổi sang dùng /detail, tránh phụ thuộc vào quyền airag:model:queryById và giảm bề mặt lộ credential-----------
       const res = await defHttp.get(
         {
           url: '/airag/airagModel/detail',
@@ -478,10 +478,10 @@
         },
         { isTransformResponse: false }
       );
-      //update-end---author:scott ---date:20260506  for：【issues/9600】低权限用户可获取 LLM API Key——非编辑场景改用 /detail，避免依赖 airag:model:queryById 权限并减少 credential 暴露面-----------
+      //update-end---author:scott ---date:20260506  for：【issues/9600】Người dùng quyền thấp có thể lấy được LLM API Key——tình huống không chỉnh sửa đổi sang dùng /detail, tránh phụ thuộc vào quyền airag:model:queryById và giảm bề mặt lộ credential-----------
       if (res.success && res.result) {
         const model = res.result;
-        // 将模型信息添加到metadata中
+        // Thêm thông tin mô hình vào metadata
         if (!metadata.value) {
           metadata.value = {};
         }
@@ -492,7 +492,7 @@
         };
       }
     } catch (e) {
-      console.error('获取模型信息失败', e);
+      console.error('Lấy thông tin mô hình thất bại', e);
     }
   }
 </script>
@@ -759,7 +759,7 @@
     font-size: 12px;
     color: #676f83;
   }
-  // 变量信息样式
+  // Kiểu thông tin biến
   .variable-info {
     display: flex;
     align-items: center;
@@ -768,13 +768,13 @@
     font-weight: 500;
   }
 
-  // 变量容器样式
+  // Kiểu container biến
   .prompt-variable-container {
     margin-top: 12px;
     min-height: 80px;
   }
 
-  // 空状态样式
+  // Kiểu trạng thái trống
   .empty-variables {
     display: flex;
     flex-direction: column;
@@ -797,14 +797,14 @@
     }
   }
 
-  // 变量列表样式
+  // Kiểu danh sách biến
   .prompt-variables-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
 
-  // 变量项样式
+  // Kiểu mục biến
   .prompt-variable-item {
     display: flex;
     align-items: center;
@@ -816,20 +816,20 @@
     position: relative;
     overflow: hidden;
 
-    // 悬停效果
+    // Hiệu ứng di chuột
     &:hover {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       border-color: #1890ff;
       transform: translateY(-2px);
     }
 
-    // 聚焦效果
+    // Hiệu ứng tập trung
     &.variable-focused {
       border-color: #1890ff;
       box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
     }
 
-    // 左侧装饰条
+    // Thanh trang trí bên trái
     &::before {
       content: '';
       position: absolute;
@@ -848,7 +848,7 @@
     }
   }
 
-  // 变量标签样式
+  // Kiểu nhãn biến
   .variable-tag {
     display: flex;
     align-items: center;
@@ -867,7 +867,7 @@
     }
   }
 
-  // 变量输入框包装器
+  // Bộ bọc ô nhập biến
   .variable-input-wrapper {
     flex: 1;
     margin-right: 12px;
@@ -888,7 +888,7 @@
     }
   }
 
-  // 变量操作按钮
+  // Nút thao tác biến
   .variable-actions {
     display: flex;
     gap: 4px;
@@ -913,12 +913,12 @@
     }
   }
 
-  // 变量项悬停时显示操作按钮
+  // Khi di chuột qua mục biến thì hiển thị nút thao tác
   .prompt-variable-item:hover .variable-actions {
     opacity: 1;
   }
 
-  // 响应式设计
+  // Thiết kế responsive
   @media (max-width: 768px) {
     .prompt-variable-item {
       flex-direction: column;

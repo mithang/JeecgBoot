@@ -1,27 +1,27 @@
 <template>
   <div class="ai-video-page">
-    <!-- 头部区域 -->
+    <!-- Khu vực đầu -->
     <div class="page-header">
-      <div class="title">AI视频</div>
-      <div class="subtitle">将文本快速转换为生动的视频内容</div>
+      <div class="title">AI Video</div>
+      <div class="subtitle">Chuyển đổi nhanh văn bản thành nội dung video sinh động</div>
     </div>
 
     <div class="content-wrapper">
-      <!-- 左侧：视频控制 + 文案 + 常用场景 + 生成按钮 -->
+      <!-- Bên trái: điều khiển video + Nội dung văn bản + Tình huống thường dùng + Nút tạo -->
       <div class="control-panel">
-        <div class="panel-title">视频配置</div>
+        <div class="panel-title">Cấu hình video</div>
         <div class="form-container">
           <BasicForm @register="registerForm" :schemas="leftFormSchemas" />
 
-          <!-- 文案输入框 -->
+          <!-- Ô nhập nội dung văn bản -->
           <div class="form-item-group">
-            <label class="form-label">文案</label>
-            <a-textarea v-model:value="formText" :rows="4" :maxlength="500" show-count placeholder="请输入要生成视频的文案内容" />
+            <label class="form-label">Nội dung văn bản</label>
+            <a-textarea v-model:value="formText" :rows="4" :maxlength="500" show-count placeholder="Vui lòng nhập nội dung văn bản của video muốn tạo" />
           </div>
 
-          <!-- 常用场景 -->
+          <!-- Tình huống thường dùng -->
           <div class="preset-group">
-            <div class="preset-label">常用场景</div>
+            <div class="preset-label">Tình huống thường dùng</div>
             <div class="preset-items">
               <div v-for="(item, index) in presetTexts" :key="index" class="preset-item" @click.prevent="handleApplyPreset(item.content)">
                 {{ item.title }}
@@ -30,30 +30,30 @@
           </div>
         </div>
 
-        <!-- 开始生成按钮 -->
+        <!-- Nút bắt đầu tạo -->
         <div class="action-btn-group">
           <a-button type="primary" size="large" block :loading="generating" @click="handleGenerate">
             <Icon icon="ant-design:video-camera-outlined" />
-            开始生成
+            Bắt đầu tạo
           </a-button>
         </div>
       </div>
 
-      <!-- 中间：视频预览 -->
+      <!-- Ở giữa: xem trước video -->
       <div class="preview-panel">
-        <div class="panel-title">预览区域</div>
+        <div class="panel-title">Khu vực xem trước</div>
         <div class="preview-content">
           <div v-if="!currentVideoUrl && !generating" class="empty-state">
             <Icon icon="ant-design:video-camera-outlined" size="72" color="#c0c4cc" />
-            <p>填写左侧文案并点击「开始生成」</p>
-            <p class="tip">支持调整视频长度、风格和效果，生成更加个性化的视频内容</p>
+            <p>Điền nội dung văn bản bên trái và nhấp「Bắt đầu tạo」</p>
+            <p class="tip">Hỗ trợ điều chỉnh độ dài video, phong cách và hiệu ứng, tạo nội dung video cá nhân hóa hơn</p>
           </div>
 
           <div v-if="generating" class="loading-state">
             <a-spin size="large" />
             <div class="loading-text">
-              <p>正在生成视频，请耐心等待...</p>
-              <p class="elapsed-time">已等待 {{ elapsedTimeText }}</p>
+              <p>Đang tạo video, vui lòng kiên nhẫn chờ đợi...</p>
+              <p class="elapsed-time">Đã chờ {{ elapsedTimeText }}</p>
               <p class="status-text">{{ statusText }}</p>
             </div>
           </div>
@@ -62,21 +62,21 @@
             <video ref="videoRef" :src="currentVideoUrl" controls class="video-control" />
           </div>
         </div>
-        <!-- 当前播放视频信息 -->
+        <!-- Thông tin video đang phát -->
         <div v-if="currentVideoUrl" class="video-info-section">
           <div class="current-video-info">
-            <span class="info-label">当前视频：</span>
+            <span class="info-label">Video hiện tại:</span>
             <span class="info-text">{{ currentText }}</span>
           </div>
         </div>
       </div>
 
-      <!-- 右侧生成历史 - 列表风格 -->
+      <!-- Lịch sử tạo bên phải - kiểu danh sách -->
       <div class="history-panel">
-        <div class="panel-title">生成历史</div>
+        <div class="panel-title">Lịch sử tạo</div>
         <div class="history-list-wrapper">
           <div v-if="historyList.length === 0" class="empty-history">
-            <p>暂无生成历史</p>
+            <p>Tạm thời chưa có lịch sử tạo</p>
           </div>
           <div v-else class="history-list">
             <div v-for="(item, index) in historyList" :key="item.id" class="history-item">
@@ -87,15 +87,15 @@
               <div class="item-actions">
                 <a-button type="text" size="small" @click="handlePlay(item)">
                   <Icon icon="ant-design:play-circle-outlined" />
-                  播放
+                  Phát
                 </a-button>
                 <a-button type="text" size="small" @click="handleUseText(item)">
                   <Icon icon="ant-design:copy-outlined" />
-                  复用文案
+                  Tái sử dụng nội dung văn bản
                 </a-button>
                 <a-button type="text" size="small" @click="handleDownload(item)">
                   <Icon icon="ant-design:download-outlined" />
-                  下载
+                  Tải xuống
                 </a-button>
                 <a-button type="text" size="small" danger @click="handleDelete(item.id)">
                   <Icon icon="ant-design:delete-outlined" />
@@ -124,7 +124,7 @@
   const { createMessage } = useMessage();
   const userStore = useUserStore();
 
-  // 左侧表单：不包含文案
+  // Biểu mẫu bên trái: không bao gồm nội dung văn bản
   const leftFormSchemas = videoFormSchemas.filter((item) => !['text'].includes(item.field));
 
   const [registerForm, { validate }] = useForm({
@@ -142,7 +142,7 @@
   const historyList = ref<any[]>([]);
   const isPresetApplying = ref(false);
   const elapsedSeconds = ref(0);
-  const statusText = ref('任务已提交，排队中...');
+  const statusText = ref('Nhiệm vụ đã gửi, đang xếp hàng...');
 
   let pollTimer: ReturnType<typeof setInterval> | null = null;
   let elapsedTimer: ReturnType<typeof setInterval> | null = null;
@@ -151,36 +151,36 @@
     const minutes = Math.floor(elapsedSeconds.value / 60);
     const seconds = elapsedSeconds.value % 60;
     if (minutes > 0) {
-      return `${minutes}分${seconds}秒`;
+      return `${minutes} phút ${seconds} giây`;
     }
-    return `${seconds}秒`;
+    return `${seconds} giây`;
   });
 
   const presetTexts = [
-    { title: '沙滩金毛犬', content: '一只金毛犬在金色的沙滩上奔跑，海浪轻轻拍打着岸边，阳光明媚，慢动作镜头' },
-    { title: '航拍山脉全景', content: '航拍壮丽的山脉全景，云雾缭绕在山峰之间，镜头缓缓推进。' },
-    { title: '咖啡微距特写', content: '一杯咖啡被缓缓倒入透明玻璃杯中，咖啡与牛奶融合形成美丽的纹理，微距特写。' },
-    { title: '极光延时摄影', content: '星空下的极光在天空中舞动，色彩绚烂，延时摄影效果。' },
+    { title: 'Chó Golden trên bãi biển', content: 'Một chú chó Golden chạy trên bãi cát vàng, sóng biển nhẹ nhàng vỗ vào bờ, nắng đẹp, cảnh quay chậm' },
+    { title: 'Toàn cảnh dãy núi chụp từ trên không', content: 'Quay từ trên cao toàn cảnh dãy núi hùng vĩ, mây mù bao quanh giữa các đỉnh núi, ống kính tiến chậm về phía trước.' },
+    { title: 'Đặc tả macro cà phê', content: 'Một ly cà phê được rót từ từ vào cốc thủy tinh trong suốt, cà phê và sữa hòa quyện tạo thành họa tiết đẹp, cận cảnh macro.' },
+    { title: 'Chụp ảnh time-lapse cực quang', content: 'Cực quang dưới bầu trời sao nhảy múa trên không, sắc màu rực rỡ, hiệu ứng chụp timelapse.' },
     {
-      title: '女讲师教学',
+      title: 'Giảng viên nữ giảng dạy',
       content:
-        '女讲师，站在 PPT 前手持教鞭指向内容，表情认真亲和，讲解自然流畅，手势得体大方，光线明亮清晰，背景干净整洁，1080P 高清，画面稳定流畅，适合知识讲解、课程教学，风格专业、清晰、有说服力',
+        'Giảng viên nữ, đứng trước PPT cầm que chỉ vào nội dung, biểu cảm nghiêm túc thân thiện, giảng giải tự nhiên trôi chảy, cử chỉ đoan trang, ánh sáng sáng rõ, nền sạch gọn, 1080P độ nét cao, hình ảnh ổn định mượt mà, phù hợp giảng giải kiến thức, dạy học khóa học, phong cách chuyên nghiệp, rõ ràng, có sức thuyết phục',
     },
     {
-      title: '口红带货主播',
+      title: 'Streamer bán hàng livestream son môi',
       content:
-        '画面主体： 一位美丽的年轻中国女主播，特写镜头，面对镜头微笑。\n' +
-        '外貌着装： 她穿着浅色职业装，妆容精致无瑕。\n' +
-        '核心动作： 她一只手握着一支高端口红，另一只手优雅地打开盖子，露出丝滑的膏体。她温柔地将口红涂抹在自己的嘴唇上，动作轻柔，目光专注且含笑。\n' +
-        '背景环境： 身后是明亮整洁的直播工作室，有环形灯补光，背景呈柔和的虚化效果。\n' +
-        '画面质感： 高色彩饱和度，电影级布光，4k分辨率，60fps。\n' +
-        '特殊效果： 使用慢镜头捕捉口红涂抹瞬间的丝滑质感。\n'+
-        '语言风格：中文，适合电商直播带货场景，风格专业、清晰、有说服力',
+        'Chủ thể hình ảnh: Một nữ streamer Trung Quốc trẻ đẹp, cảnh cận, mỉm cười nhìn vào ống kính.\n' +
+        'Ngoại hình trang phục: Cô ấy mặc trang phục công sở sáng màu, trang điểm tinh tế không tì vết.\n' +
+        'Động tác cốt lõi: Một tay cô ấy cầm một thỏi son cao cấp, tay còn lại thanh nhã mở nắp, để lộ chất son mượt mà. Cô ấy dịu dàng thoa son lên môi mình, động tác nhẹ nhàng, ánh mắt tập trung và mỉm cười.\n' +
+        'Môi trường nền: Phía sau là phòng livestream sáng sủa gọn gàng, có đèn vòng bổ sung ánh sáng, nền có hiệu ứng mờ mềm.\n' +
+        'Chất cảm hình ảnh: Độ bão hòa màu cao, bố trí ánh sáng cấp điện ảnh, độ phân giải 4k, 60fps.\n' +
+        'Hiệu ứng đặc biệt: Dùng cảnh quay chậm ghi lại chất cảm mượt mà trong khoảnh khắc thoa son.\n'+
+        'Phong cách ngôn ngữ: tiếng Trung, phù hợp tình huống livestream bán hàng thương mại điện tử, phong cách chuyên nghiệp, rõ ràng, có sức thuyết phục',
     },
   ];
 
   /**
-   * 根据当前用户id加载视频列表
+   * Tải danh sách video theo id người dùng hiện tại
    */
   async function loadVideoList() {
     try {
@@ -199,11 +199,11 @@
     }
   }
 
-  // 页面加载时获取历史列表
+  // Khi tải trang lấy danh sách lịch sử
   loadVideoList();
 
   /**
-   * 应用预设文案
+   * Áp dụng nội dung văn bản đặt sẵn
    */
   function handleApplyPreset(text: string) {
     if (isPresetApplying.value) return;
@@ -215,7 +215,7 @@
   }
 
   /**
-   * 清除所有定时器
+   * Xóa tất cả bộ hẹn giờ
    */
   function clearTimers() {
     if (pollTimer) {
@@ -229,33 +229,33 @@
   }
 
   /**
-   * 开始生成（异步轮询模式）
+   * Bắt đầu tạo (chế độ thăm dò bất đồng bộ)
    */
   async function handleGenerate() {
     try {
       const values = await validate();
 
       if (!formText.value.trim()) {
-        createMessage.warn('请输入文案内容');
+        createMessage.warn('Vui lòng nhập nội dung văn bản');
         return;
       }
 
-      // 重置状态
+      // Đặt lại trạng thái
       generating.value = true;
       currentVideoUrl.value = '';
       elapsedSeconds.value = 0;
-      statusText.value = '任务已提交，排队中...';
+      statusText.value = 'Nhiệm vụ đã gửi, đang xếp hàng...';
       values.prompt = formText.value.trim();
 
-      // 启动计时器
+      // Khởi động bộ hẹn giờ
       elapsedTimer = setInterval(() => {
         elapsedSeconds.value++;
       }, 1000);
 
-      // 提交任务
+      // Gửi nhiệm vụ
       const submitResult = await submitVideoTask(values);
       if (!submitResult || !submitResult.success || !submitResult.result?.taskId) {
-        createMessage.error(submitResult?.message || '提交任务失败');
+        createMessage.error(submitResult?.message || 'Gửi nhiệm vụ thất bại');
         generating.value = false;
         clearTimers();
         return;
@@ -263,9 +263,9 @@
 
       const taskId = submitResult.result.taskId;
       localStorage.setItem(TASK_ID_KEY, taskId);
-      statusText.value = '视频生成中...';
+      statusText.value = 'Đang tạo video...';
 
-      // 开始轮询
+      // Bắt đầu thăm dò
       pollTimer = setInterval(async () => {
         try {
           const queryResult = await queryVideoTask(taskId);
@@ -277,20 +277,20 @@
               localStorage.removeItem(TASK_ID_KEY);
               currentVideoUrl.value = getFileAccessHttpUrl(videoUrl) || '';
               currentText.value = formText.value;
-              createMessage.success('视频生成成功！');
+              createMessage.success('Tạo video thành công!');
               await loadVideoList();
             } else if (status === 'FAIL') {
               clearTimers();
               generating.value = false;
               localStorage.removeItem(TASK_ID_KEY);
-              createMessage.error(message || '视频生成失败');
+              createMessage.error(message || 'Tạo video thất bại');
             }
-            // PROCESSING 状态继续轮询
+            // Trạng thái PROCESSING tiếp tục thăm dò
           }
         } catch (e: any) {
           clearTimers();
           generating.value = false;
-          createMessage.error('查询任务状态失败: ' + (e.message || '未知错误'));
+          createMessage.error('Truy vấn trạng thái nhiệm vụ thất bại: ' + (e.message || 'Lỗi không rõ'));
         }
       }, 5000);
     } catch (error: any) {
@@ -299,12 +299,12 @@
       if (error?.errorFields) {
         return;
       }
-      createMessage.error(error.message || '提交任务失败');
+      createMessage.error(error.message || 'Gửi nhiệm vụ thất bại');
     }
   }
 
   /**
-   * 从历史记录中播放
+   * Phát từ trong lịch sử
    */
   function handlePlay(record: any) {
     currentVideoUrl.value = record.videoFullUrl || getFileAccessHttpUrl(record.videoUrl) || '';
@@ -315,20 +315,20 @@
   }
 
   /**
-   * 将历史记录的文案回填到文案输入框
+   * Điền lại nội dung văn bản của lịch sử vào ô nhập nội dung văn bản
    */
   function handleUseText(record: any) {
     formText.value = record.content;
-    createMessage.success('已将文案填入输入框');
+    createMessage.success('Đã điền nội dung văn bản vào ô nhập');
   }
 
   /**
-   * 下载视频文件
+   * Tải xuống tệp video
    */
   function handleDownload(record: any) {
     const url = record.videoFullUrl || getFileAccessHttpUrl(record.videoUrl);
     if (!url) {
-      createMessage.error('下载地址不存在');
+      createMessage.error('Địa chỉ tải xuống không tồn tại');
       return;
     }
     const link = document.createElement('a');
@@ -341,7 +341,7 @@
   }
 
   /**
-   * 删除历史记录
+   * Xóa lịch sử
    */
   async function handleDelete(id: string) {
     const userId = userStore.getUserInfo?.id;
@@ -349,31 +349,31 @@
     try {
       const res = await deleteVideoRecord({ userId: userId, recordId: id });
       if (res.success) {
-        createMessage.success('已删除');
+        createMessage.success('Đã xóa');
         await loadVideoList();
       } else {
-        createMessage.error(res.message || '删除失败');
+        createMessage.error(res.message || 'Xóa thất bại');
       }
     } catch (e) {
-      createMessage.error('删除失败');
+      createMessage.error('Xóa thất bại');
     }
   }
 
   /**
-   * 格式化时间展示
+   * Hiển thị thời gian đã định dạng
    */
   function formatTime(item: any) {
     return item?.createTime || '';
   }
 
-  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
   onMounted(() => {
     const savedTaskId = localStorage.getItem(TASK_ID_KEY);
     if (savedTaskId) {
       generating.value = true;
       currentVideoUrl.value = '';
       elapsedSeconds.value = 0;
-      statusText.value = '任务恢复中，继续等待...';
+      statusText.value = 'Nhiệm vụ đang khôi phục, tiếp tục chờ đợi...';
       elapsedTimer = setInterval(() => {
         elapsedSeconds.value++;
       }, 1000);
@@ -387,24 +387,24 @@
               generating.value = false;
               localStorage.removeItem(TASK_ID_KEY);
               currentVideoUrl.value = getFileAccessHttpUrl(videoUrl) || '';
-              createMessage.success('视频生成成功！');
+              createMessage.success('Tạo video thành công!');
               await loadVideoList();
             } else if (status === 'FAIL') {
               clearTimers();
               generating.value = false;
               localStorage.removeItem(TASK_ID_KEY);
-              createMessage.error(message || '视频生成失败');
+              createMessage.error(message || 'Tạo video thất bại');
             }
           }
         } catch (e: any) {
           clearTimers();
           generating.value = false;
-          createMessage.error('查询任务状态失败: ' + (e.message || '未知错误'));
+          createMessage.error('Truy vấn trạng thái nhiệm vụ thất bại: ' + (e.message || 'Lỗi không rõ'));
         }
       }, 5000);
     }
   });
-  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
   onUnmounted(() => {
     clearTimers();
   });

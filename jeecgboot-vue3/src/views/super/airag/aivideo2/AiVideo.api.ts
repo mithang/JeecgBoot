@@ -7,16 +7,16 @@ enum Api {
 }
 
 /**
- * 提交视频生成任务
+ * Gửi nhiệm vụ tạo video
  */
 export const submitVideoTask = (params: { prompt: string; category?: string }) => defHttp.post({ url: Api.submit, params });
 
 /**
- * 查询视频生成任务状态
+ * Truy vấn trạng thái nhiệm vụ tạo video
  */
 export const queryVideoTask = (taskId: string) => defHttp.get({ url: `${Api.query}/${taskId}` });
 
 /**
- * 获取预设提示词
+ * Lấy prompt đặt sẵn
  */
 export const getPresetPrompts = () => defHttp.get({ url: Api.prompts });

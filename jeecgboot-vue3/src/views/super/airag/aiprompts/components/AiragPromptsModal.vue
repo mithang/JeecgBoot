@@ -13,11 +13,11 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getDateByPicker } from '/@/utils';
   const { createMessage } = useMessage();
-  // Emits声明
+  // Khai báo Emits
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
   const isDetail = ref(false);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { setProps, resetFields, setFieldsValue, validate, scrollToField }] = useForm({
     labelWidth: 150,
     schemas: formSchema,
@@ -25,38 +25,38 @@
     baseColProps: { span: 24 },
     baseRowStyle: { padding: '0 20px' },
   });
-  //表单赋值
+  //Gán giá trị biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false, showCancelBtn: !!data?.showFooter, showOkBtn: !!data?.showFooter });
     isUpdate.value = !!data?.isUpdate;
     isDetail.value = !!data?.showFooter;
     if (unref(isUpdate)) {
-      //表单赋值
+      //Gán giá trị biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
-    // 隐藏底部时禁用整个表单
+    // Khi ẩn phần đáy thì vô hiệu hóa toàn bộ biểu mẫu
     setProps({ disabled: !data?.showFooter });
   });
-  //日期个性化选择
+  //Chọn cá nhân hóa ngày tháng
   const fieldPickers = reactive({});
-  //设置标题
-  const title = computed(() => (!unref(isUpdate) ? '新增' : !unref(isDetail) ? '详情' : '编辑'));
-  //表单提交事件
+  //Đặt tiêu đề
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới' : !unref(isDetail) ? 'Chi tiết' : 'Chỉnh sửa'));
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit(v) {
     try {
       let values = await validate();
-      // 预处理日期数据
+      // Tiền xử lý dữ liệu ngày tháng
       changeDateValue(values);
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdate(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng popup
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success',values);
     } catch ({ errorFields }) {
       if (errorFields) {
@@ -72,8 +72,8 @@
   }
 
   /**
-   * 处理日期值
-   * @param formData 表单数据
+   * Xử lý giá trị ngày tháng
+   * @param formData dữ liệu biểu mẫu
    */
   const changeDateValue = (formData) => {
     if (formData && fieldPickers) {
@@ -87,7 +87,7 @@
 </script>
 
 <style lang="less" scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

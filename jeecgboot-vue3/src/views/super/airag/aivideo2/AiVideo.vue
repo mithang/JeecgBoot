@@ -1,6 +1,6 @@
 <template>
   <div class="content-wrapper">
-    <!-- 左侧配置面板 -->
+    <!-- Panel cấu hình bên trái -->
     <div class="config-panel">
       <div class="config-tabs">
         <a-tabs v-model:activeKey="activeCategory" :tabBarStyle="{ margin: 0 }">
@@ -8,9 +8,9 @@
         </a-tabs>
       </div>
 
-      <!-- 预设提示词 -->
+      <!-- Prompt đặt sẵn -->
       <div class="preset-prompts">
-        <div class="preset-label">快捷提示词</div>
+        <div class="preset-label">Prompt tắt</div>
         <div class="preset-list">
           <a-button
             v-for="(prompt, index) in currentPrompts"
@@ -31,51 +31,51 @@
       <div class="action-container">
         <a-button type="primary" size="large" block @click="handleGenerate" :loading="generating" :disabled="generating">
           <Icon icon="ant-design:video-camera-outlined" />
-          {{ generating ? '生成中...' : '开始生成' }}
+          {{ generating ? 'Đang tạo...' : 'Bắt đầu tạo' }}
         </a-button>
       </div>
     </div>
 
-    <!-- 右侧预览面板 -->
+    <!-- Panel xem trước bên phải -->
     <div class="preview-panel">
-      <div class="panel-title">生成结果</div>
+      <div class="panel-title">Kết quả tạo</div>
       <div class="preview-content">
-        <!-- 空状态 -->
+        <!-- Trạng thái trống -->
         <div v-if="!videoUrl && !generating" class="empty-state">
           <Icon icon="ant-design:video-camera-outlined" size="64" color="#ccc" />
-          <p>在左侧输入视频描述，点击开始生成</p>
+          <p>Nhập mô tả video ở bên trái, nhấp bắt đầu tạo</p>
         </div>
 
-        <!-- 生成中 -->
+        <!-- Đang tạo -->
         <div v-if="generating" class="loading-state">
           <a-spin size="large" />
           <div class="loading-text">
-            <p>正在生成视频，请耐心等待...</p>
-            <p class="elapsed-time">已等待 {{ elapsedTimeText }}</p>
+            <p>Đang tạo video, vui lòng kiên nhẫn chờ đợi...</p>
+            <p class="elapsed-time">Đã chờ {{ elapsedTimeText }}</p>
             <p class="status-text">{{ statusText }}</p>
           </div>
         </div>
 
-        <!-- 生成完成 -->
+        <!-- Tạo hoàn thành -->
         <div v-if="videoUrl && !generating" class="result-video-wrapper">
           <video :src="videoUrl" controls class="result-video" />
           <div class="video-actions">
             <a-button type="primary" @click="handleDownload">
               <Icon icon="ant-design:download-outlined" />
-              下载视频
+              Tải xuống video
             </a-button>
             <a-button @click="handleReset">
               <Icon icon="ant-design:redo-outlined" />
-              重新生成
+              Tạo lại
             </a-button>
           </div>
         </div>
 
-        <!-- 生成失败 -->
+        <!-- Tạo thất bại -->
         <div v-if="errorMessage && !generating" class="error-state">
           <Icon icon="ant-design:close-circle-outlined" size="64" color="#ff4d4f" />
           <p class="error-text">{{ errorMessage }}</p>
-          <a-button type="primary" @click="handleReset">重试</a-button>
+          <a-button type="primary" @click="handleReset">Thử lại</a-button>
         </div>
       </div>
     </div>
@@ -97,15 +97,15 @@
   const videoUrl = ref('');
   const errorMessage = ref('');
   const elapsedSeconds = ref(0);
-  const statusText = ref('任务已提交，排队中...');
+  const statusText = ref('Nhiệm vụ đã gửi, đang xếp hàng...');
 
   let pollTimer: ReturnType<typeof setInterval> | null = null;
   let elapsedTimer: ReturnType<typeof setInterval> | null = null;
 
-  // 预设提示词（优先从后端加载）
+  // Prompt đặt sẵn (ưu tiên tải từ backend)
   const promptsMap = ref<Record<string, string[]>>({ ...fallbackPrompts });
 
-  // 加载后端预设提示词
+  // Tải prompt đặt sẵn của backend
   getPresetPrompts()
     .then((data) => {
       if (data && Object.keys(data).length > 0) {
@@ -113,7 +113,7 @@
       }
     })
     .catch(() => {
-      // 使用备用提示词
+      // Dùng prompt dự phòng
     });
 
   const currentPrompts = computed(() => {
@@ -124,9 +124,9 @@
     const minutes = Math.floor(elapsedSeconds.value / 60);
     const seconds = elapsedSeconds.value % 60;
     if (minutes > 0) {
-      return `${minutes}分${seconds}秒`;
+      return `${minutes} phút ${seconds} giây`;
     }
-    return `${seconds}秒`;
+    return `${seconds} giây`;
   });
 
   const [registerForm, { validate, setFieldsValue }] = useForm({
@@ -144,35 +144,35 @@
     try {
       const values = await validate();
       if (!values.prompt || !values.prompt.trim()) {
-        createMessage.warning('请输入视频描述');
+        createMessage.warning('Vui lòng nhập mô tả video');
         return;
       }
 
-      // 重置状态
+      // Đặt lại trạng thái
       generating.value = true;
       videoUrl.value = '';
       errorMessage.value = '';
       elapsedSeconds.value = 0;
-      statusText.value = '任务已提交，排队中...';
+      statusText.value = 'Nhiệm vụ đã gửi, đang xếp hàng...';
 
-      // 启动计时器
+      // Khởi động bộ hẹn giờ
       elapsedTimer = setInterval(() => {
         elapsedSeconds.value++;
       }, 1000);
 
-      // 提交任务
+      // Gửi nhiệm vụ
       const submitResult = await submitVideoTask({
         prompt: values.prompt.trim(),
         category: activeCategory.value,
       });
 
       if (!submitResult || !submitResult.taskId) {
-        throw new Error(submitResult?.message || '提交任务失败');
+        throw new Error(submitResult?.message || 'Gửi nhiệm vụ thất bại');
       }
 
-      statusText.value = '视频生成中...';
+      statusText.value = 'Đang tạo video...';
 
-      // 开始轮询
+      // Bắt đầu thăm dò
       pollTimer = setInterval(async () => {
         try {
           const queryResult = await queryVideoTask(submitResult.taskId);
@@ -180,27 +180,27 @@
             clearTimers();
             generating.value = false;
             videoUrl.value = queryResult.videoUrl;
-            createMessage.success('视频生成成功！');
+            createMessage.success('Tạo video thành công!');
           } else if (queryResult.status === 'FAIL') {
             clearTimers();
             generating.value = false;
-            errorMessage.value = queryResult.message || '视频生成失败';
+            errorMessage.value = queryResult.message || 'Tạo video thất bại';
           }
-          // PROCESSING状态继续轮询
+          // Trạng thái PROCESSING tiếp tục thăm dò
         } catch (e: any) {
           clearTimers();
           generating.value = false;
-          errorMessage.value = '查询任务状态失败: ' + (e.message || '未知错误');
+          errorMessage.value = 'Truy vấn trạng thái nhiệm vụ thất bại: ' + (e.message || 'Lỗi không rõ');
         }
       }, 5000);
     } catch (error: any) {
       clearTimers();
       generating.value = false;
       if (error?.errorFields) {
-        // 表单验证失败，不显示额外错误
+        // Xác thực biểu mẫu thất bại, không hiển thị lỗi bổ sung
         return;
       }
-      errorMessage.value = error.message || '提交任务失败';
+      errorMessage.value = error.message || 'Gửi nhiệm vụ thất bại';
     }
   }
 

@@ -1,4 +1,4 @@
-// AI Video API 接口配置
+// Cấu hình giao diện AI Video API
 import { defHttp } from '@/utils/http/axios';
 
 enum Api {
@@ -9,28 +9,28 @@ enum Api {
 }
 
 /**
- * 提交视频生成任务
+ * Gửi nhiệm vụ tạo video
  */
 export const submitVideoTask = (params: any) => {
   return defHttp.post({ url: Api.submit, params }, { isTransformResponse: false });
 };
 
 /**
- * 查询视频生成任务状态
+ * Truy vấn trạng thái nhiệm vụ tạo video
  */
 export const queryVideoTask = (taskId: string) => {
   return defHttp.get({ url: `${Api.query}/${taskId}` }, { isTransformResponse: false });
 };
 
 /**
- * 根据用户id查询视频列表
+ * Truy vấn danh sách video theo id người dùng
  */
 export const getVideoListByUser = (params: { userId: string }) => {
   return defHttp.get({ url: Api.listByUser, params }, { isTransformResponse: false });
 };
 
 /**
- * 删除视频记录
+ * Xóa bản ghi video
  */
 export const deleteVideoRecord = (params) => {
   return defHttp.delete({ url: Api.deleteRecord, params }, { isTransformResponse: false, joinParamsToUrl: true });

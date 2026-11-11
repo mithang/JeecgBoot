@@ -1,35 +1,35 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Bảng trích dẫn-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--slot:tiêu đề table-->
       <template #tableTitle>
-        <a-button type="primary" v-auth="'wordtpl:template:add'" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增 </a-button>
+        <a-button type="primary" v-auth="'wordtpl:template:add'" @click="handleAdd" preIcon="ant-design:plus-outlined"> Thêm mới </a-button>
 
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined" />
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button v-auth="'wordtpl:template:deleteBatch'"
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down" />
           </a-button>
         </a-dropdown>
-        <a-button type="default" v-auth="'wordtpl:template:add'" @click="handleGenResume" preIcon="ant-design:plus-outlined"> 生成简历 </a-button>
+        <a-button type="default" v-auth="'wordtpl:template:add'" @click="handleGenResume" preIcon="ant-design:plus-outlined"> Tạo hồ sơ </a-button>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
-      <!--字段回显插槽-->
+      <!--Slot hiển thị lại trường-->
       <template #bodyCell="{ column, record, index, text }"></template>
     </BasicTable>
-    <!-- 表单区域 -->
+    <!-- Khu vực biểu mẫu -->
     <EoaWordTemplateModal @register="registerModal" @success="handleSuccess" />
 
     <BasicModal
@@ -50,25 +50,25 @@
       v-bind="$attrs"
       :canFullscreen="false"
       @register="generateModal"
-      title="测试模版生成"
+      title="Kiểm tra tạo mẫu"
       :width="528"
       destroyOnClose
       @ok="handleGenOk"
     >
       <a-form :model="genWordData" :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
         <a-form-item class="field-clos" :label="field" :name="field" v-for="field in tplFieldList">
-          <a-input v-model:value="genWordData[field]" style="width:90%" :placeholder="'请输入'+field"></a-input>
+          <a-input v-model:value="genWordData[field]" style="width:90%" :placeholder="'Vui lòng nhập'+field"></a-input>
         </a-form-item>
       </a-form>
     </BasicModal>
 
-    <BasicModal :loading="resumeLoading" v-bind="$attrs" :canFullscreen="false" @register="resumeModal" title="生成简历" :width="628" destroyOnClose @ok="handleGenResumeOk" @cancel="handleGenResumeCancel">
+    <BasicModal :loading="resumeLoading" v-bind="$attrs" :canFullscreen="false" @register="resumeModal" title="Tạo hồ sơ" :width="628" destroyOnClose @ok="handleGenResumeOk" @cancel="handleGenResumeCancel">
       <a-form :model="genResumeData" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-        <a-form-item class="field-clos" label="基础信息" name="content">
-          <a-input v-model:value="genResumeData.content" style="width: 90%" placeholder="请输入基础信息" />
+        <a-form-item class="field-clos" label="Thông tin cơ sở" name="content">
+          <a-input v-model:value="genResumeData.content" style="width: 90%" placeholder="Vui lòng nhập thông tin cơ bản" />
         </a-form-item>
-        <a-form-item class="field-clos" label="个人介绍" name="profile">
-          <a-textarea rows="8" v-model:value="genResumeData.profile" style="width: 90%" placeholder="请输入个人介绍" />
+        <a-form-item class="field-clos" label="Giới thiệu cá nhân" name="profile">
+          <a-textarea rows="8" v-model:value="genResumeData.profile" style="width: 90%" placeholder="Vui lòng nhập giới thiệu cá nhân" />
         </a-form-item>
       </a-form>
     </BasicModal>
@@ -88,21 +88,21 @@
   import { getDateByPicker } from '/src/utils';
   import DocDesign from '/src/components/wordtpl/DocDesign.vue';
   import { BasicForm } from '@/components/Form';
-  //日期个性化选择
+  //Chọn cá nhân hóa ngày tháng
   const fieldPickers = reactive({});
   const queryParam = reactive<any>({});
   const checkedKeys = ref<Array<string | number>>([]);
   const userStore = useUserStore();
   const { createMessage } = useMessage();
-  //注册model
+  //Đăng ký model
   const [registerModal, { openModal }] = useModal();
   const [designModal, { openModal: openDesignModal, closeModal: closeDesignModal }] = useModal();
   const [generateModal, { openModal: openGenModal, closeModal: closeGenModal }] = useModal();
   const [resumeModal, { openModal: openResumeModal, closeModal: closeResumeModal }] = useModal();
-  //注册table数据
+  //Đăng ký dữ liệu table
   const { prefixCls, tableContext } = useListPage({
     tableProps: {
-      title: 'word模版管理',
+      title: 'Quản lý mẫu word',
       api: list,
       columns,
       canResize: true,
@@ -138,18 +138,18 @@
   const genWordData = reactive({});
   const tplFieldList = reactive([]);
   const defaultGenResumeData = {
-    content: '张三；电话：186xxxxxxxx；邮箱：zhangsan@ex.com',
-    profile: '拥有13年开发经验，8年项目管理经验，6年系统架构经验，曾在多个平台级产品中担任核心负责人，具备从0到1搭建平台、从1到100推动演进的能力。',
+    content: 'Zhang San; điện thoại: 186xxxxxxxx; email: zhangsan@ex.com',
+    profile: 'Có 13 năm kinh nghiệm phát triển, 8 năm kinh nghiệm quản lý dự án, 6 năm kinh nghiệm kiến trúc hệ thống, từng đảm nhiệm vai trò phụ trách cốt lõi trong nhiều sản phẩm cấp nền tảng, có năng lực xây dựng nền tảng từ 0 đến 1, thúc đẩy phát triển từ 1 đến 100.',
   };
   const genResumeData = reactive({ ...defaultGenResumeData });
   const resumeLoading = ref(false);
   let resumeRequestId = 0;
 
-  // 高级查询配置
+  // Cấu hình truy vấn nâng cao
   const superQueryConfig = reactive(superQuerySchema);
 
   /**
-   * 高级查询事件
+   * Sự kiện truy vấn nâng cao
    */
   function handleSuperQuery(params) {
     Object.keys(params).map((k) => {
@@ -159,7 +159,7 @@
   }
 
   /**
-   * 新增事件
+   * Thêm mới sự kiện
    */
   function handleAdd() {
     openModal(true, {
@@ -169,7 +169,7 @@
   }
 
   /**
-   * 生成简历事件
+   * Sự kiện tạo hồ sơ
    */
   function handleGenResume() {
     resumeRequestId++;
@@ -182,7 +182,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     openModal(true, {
@@ -202,7 +202,7 @@
   }
 
   /**
-   * 详情
+   * Chi tiết
    */
   function handleDetail(record: Recordable) {
     openModal(true, {
@@ -215,7 +215,7 @@
   function handleGenWord(record: Recordable) {
     extractTplFields(record);
     if(tplFieldList.length > 0){
-      // 如果有字段需要填写，则打开生成模版的弹窗
+      // Nếu có trường cần điền, mở popup tạo mẫu
       currentTpl.id = record.id;
       currentTpl.name = record.name;
       Object.keys(genWordData).forEach((key) => delete genWordData[key]);
@@ -224,7 +224,7 @@
       });
       return;
     } else {
-      // 如果没有字段需要填写，则直接生成word
+      // Nếu không có trường cần điền, tạo trực tiếp word
       const params = {
         templateId: record.id,
         data: {},
@@ -259,7 +259,7 @@
         resumeLoading.value = false;
         reload();
       }else{
-        createMessage.error('生成简历失败: ' + resp.message);
+        createMessage.error('Tạo hồ sơ thất bại: ' + resp.message);
         resumeLoading.value = false;
       }
     }).catch(() => {
@@ -278,20 +278,20 @@
     const fields = new Set<string>();
     if (record.main) {
       let mainContent = [];
-      // 如果record.main是string
+      // Nếu record.main là string
       if (typeof record.main === 'string') {
         mainContent = JSON.parse(record.main);
       } else {
         mainContent = record.main;
       }
-      // 先拼接所有 value
+      // Trước tiên nối tất cả value
       let contentStr = '';
       mainContent.forEach((item) => {
         if (typeof item.value === 'string' && (!item.type || item.type === '')) {
           contentStr += item.value;
         }
       });
-      // 统一正则提取
+      // Trích xuất biểu thức chính quy thống nhất
       const matches = contentStr.match(/{{(.*?)}}/g);
       if (matches) {
         matches.forEach((m) => {
@@ -304,38 +304,38 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteOne({ id: record.id }, handleSuccess);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDelete({ ids: selectedRowKeys.value }, handleSuccess);
   }
 
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
         auth: 'wordtpl:template:edit',
       },
       {
-        label: '设计',
+        label: 'Thiết kế',
         onClick: handleDesign.bind(null, record),
         auth: 'wordtpl:template:design',
       },
@@ -343,22 +343,22 @@
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '生成word',
+        label: 'Tạo word',
         onClick: handleGenWord.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa hay không',
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft',
         },
@@ -368,23 +368,23 @@
   }
 
   /**
-   * 设计器保存事件
+   * Sự kiện lưu của trình thiết kế
    * @param content
    */
   function handleDesignSave(content) {
-    console.log('表单数据', content);
+    console.log('Dữ liệu biểu mẫu', content);
     saveOrUpdate(content, true)
       .then((data) => {
         // closeDesignModal();
         reload();
       })
       .catch((err) => {
-        createMessage.error('保存失败: ' + err.message);
+        createMessage.error('Lưu thất bại: ' + err.message);
       });
   }
 
   /**
-   * 设计器下载事件
+   * Sự kiện tải xuống của trình thiết kế
    * @param content
    */
   function handleDesignDownload(content) {

@@ -18,41 +18,41 @@ enum Api {
   getTrackList = '/airag/extData/getTrackList',
 }
 /**
- * 导出api
+ * api xuất
  * @param params
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入api
+ * api nhập
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 列表接口
+ * Giao diện danh sách
  * @param params
  */
 export const list = (params) =>
   defHttp.get({url: Api.list, params});
 /**
- * 调用轨迹接口
+ * Gọi giao diện quỹ đạo
  * @param params
  */
 export const getTrackList = (params) =>
   defHttp.get({url: Api.getTrackList, params});
 /**
- * 根据数据集id查询数据
+ * Truy vấn dữ liệu theo id tập dữ liệu
  * @param params
  */
 export const queryById = (params) =>
   defHttp.get({url: Api.queryById, params},{isTransformResponse: false});
 /**
- * 根据数据集id查询数据
+ * Truy vấn dữ liệu theo id tập dữ liệu
  * @param params
  */
 export const queryTrackById = (params) =>
   defHttp.get({url: Api.queryTrackById, params},{isTransformResponse: false});
 
 /**
- * 删除单个
+ * Xóa đơn lẻ
  */
 export const deleteOne = (params,handleSuccess) => {
   return defHttp.delete({url: Api.deleteOne, params}, {joinParamsToUrl: true}).then(() => {
@@ -60,16 +60,16 @@ export const deleteOne = (params,handleSuccess) => {
   });
 }
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  */
 export const batchDelete = (params, handleSuccess) => {
   createConfirm({
     iconType: 'warning',
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa dữ liệu đã chọn hay không',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({url: Api.deleteBatch, data: params}, {joinParamsToUrl: true}).then(() => {
         handleSuccess();
@@ -78,7 +78,7 @@ export const batchDelete = (params, handleSuccess) => {
   });
 }
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
  */
 export const saveOrUpdate = (params, isUpdate,showSuccessMsg=true) => {
@@ -86,7 +86,7 @@ export const saveOrUpdate = (params, isUpdate,showSuccessMsg=true) => {
   return defHttp.post({url: url, params},{successMessageMode:showSuccessMsg?'success':'none'});
 }
 /**
- * 調試
+ * Gỡ lỗi
  * @param params
  */
 export const debugEvaluator = (params) => {

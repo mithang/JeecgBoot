@@ -3,13 +3,13 @@
     <div class="panel-header">
       <div class="title">
         <span class="icon-dot"></span>
-        <span class="main">智能 OCR 解析</span>
-        <span class="sub">上传图片，快速识别并结构化输出</span>
+        <span class="main">Phân tích OCR thông minh</span>
+        <span class="sub">Tải lên hình ảnh, nhận diện nhanh và xuất ra có cấu trúc</span>
       </div>
-      <a-button type="primary" size="large" class="parse-btn" :loading="loading" @click="analysisHandleClick">解析</a-button>
+      <a-button type="primary" size="large" class="parse-btn" :loading="loading" @click="analysisHandleClick">Phân tích</a-button>
     </div>
     <div class="form-body">
-      <a-spin tip="解析中，请稍后" :spinning="loading">
+      <a-spin tip="Đang phân tích, vui lòng chờ" :spinning="loading">
         <BasicForm @register="registerForm" />
       </a-spin>
     </div>
@@ -33,7 +33,7 @@
   });
 
   /**
-   * 将 OCR 的字符串或结构化结果统一转换为文本框可展示的内容。
+   * Chuyển đổi thống nhất chuỗi hoặc kết quả có cấu trúc của OCR thành nội dung có thể hiển thị trong ô văn bản.
    */
   function formatAnalysisResult(result: unknown) {
     if (result == null) {
@@ -52,7 +52,7 @@
           params: {
             flowId: '1904779811574784002',
             inputParams: {
-              content: values.prompt ? values.prompt: '解析图片中的文字',
+              content: values.prompt ? values.prompt: 'Phân tích chữ trong hình ảnh',
               images: values.url,
             },
             responseMode: 'blocking',
@@ -65,18 +65,18 @@
       )
       .then((res) => {
         if (res.success) {
-          //update-begin---author:wangshuai---date:2026-01-14---for: OCR数据返回信息报错，增加try catch---
+          //update-begin---author:wangshuai---date:2026-01-14---for: Thông tin trả về của dữ liệu OCR báo lỗi, thêm try catch---
           let text = res.result.data.replace(/\s+/g, '').replace('```json','').replace('```','');
           let lastText = "";
           try {
             let parse = JSON.parse(text);
-            //update-begin---author:wangshuai---date:20260807---for:OCR添加提示词后结构化结果显示为[object Object]---
+            //update-begin---author:wangshuai---date:20260807---for:Sau khi OCR thêm prompt, kết quả có cấu trúc hiển thị thành[object Object]---
             lastText = formatAnalysisResult(parse.text ?? parse);
-            //update-end---author:wangshuai---date:20260807---for:OCR添加提示词后结构化结果显示为[object Object]---
+            //update-end---author:wangshuai---date:20260807---for:Sau khi OCR thêm prompt, kết quả có cấu trúc hiển thị thành[object Object]---
           } catch (e) {
             lastText = text;
           }
-          //update-end---author:wangshuai---date:2026-01-14---for:  OCR数据返回信息报错，增加try catch---
+          //update-end---author:wangshuai---date:2026-01-14---for:  OCR Thông tin trả về của dữ liệu OCR báo lỗi, thêm try catch---
           setFieldsValue({ analysisResult: lastText });
         } else {
           createMessage.warning(res.message);

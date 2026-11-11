@@ -5,23 +5,23 @@
       :canFullscreen="true"
       :footer="null"
       destroyOnClose
-      title="详情"
+      title="Chi tiết"
       wrapClassName="track-detail-modal"
   >
     <div class="track-detail-container">
-      <!-- JSON内容显示区域 -->
+      <!-- Khu vực hiển thị nội dung JSON -->
       <div class="json-content-wrapper">
         <div class="content-header">
-          <span class="content-status">{{ isFormatted ? '格式化内容' : '原始数据' }}</span>
+          <span class="content-status">{{ isFormatted ? 'Nội dung đã định dạng' : 'Dữ liệu gốc' }}</span>
           <a-button type="link" size="small" @click="toggleFormat" class="format-btn" :aria-pressed="isFormatted">
             <Icon :icon="isFormatted ? 'ant-design:compress-outlined' : 'ant-design:expand-outlined'" />
-            {{ isFormatted ? '收起' : '展开' }}
+            {{ isFormatted ? 'Thu gọn' : 'Mở rộng' }}
           </a-button>
         </div>
 
         <div v-if="!trackContent" class="empty-state">
           <Icon icon="ant-design:inbox-outlined" style="font-size: 48px; color: #d9d9d9;" />
-          <p>暂无轨迹数据</p>
+          <p>Tạm thời chưa có dữ liệu quỹ đạo</p>
         </div>
 
         <div v-else class="json-display">
@@ -38,43 +38,43 @@ import { ref, computed } from 'vue';
 import { BasicModal, useModalInner } from '/@/components/Modal';
 import Icon from '/@/components/Icon/src/Icon.vue';
 
-// 轨迹详情
+// Chi tiết quỹ đạo
 const trackContent = ref('');
 const isFormatted = ref(true);
 
-// 计算属性：格式化JSON
+// Thuộc tính tính toán: định dạng JSON
 const formattedJson = computed(() => {
   try {
-    // 尝试解析为JSON并格式化
+    // Thử phân tích thành JSON và định dạng
     const jsonData = JSON.parse(trackContent.value);
     return JSON.stringify(jsonData, null, 2);
   } catch (e) {
-    // 如果不是有效的JSON，返回原始内容
+    // Nếu không phải JSON hợp lệ, trả về nội dung gốc
     return trackContent.value;
   }
 });
 
-// 切换格式化状态
+// Chuyển trạng thái định dạng
 const toggleFormat = () => {
   isFormatted.value = !isFormatted.value;
 };
 
-// 复制JSON内容
+// Sao chép nội dung JSON
 const copyJson = async () => {
   try {
     const content = isFormatted.value ? formattedJson.value : trackContent.value;
     await navigator.clipboard.writeText(content);
-    // 这里可以添加一个轻提示
-    console.log('JSON内容已复制到剪贴板');
+    // Tại đây có thể thêm một gợi ý nhẹ
+    console.log('Nội dung JSON đã sao chép vào bộ nhớ tạm');
   } catch (err) {
-    console.error('复制失败:', err);
+    console.error('Sao chép thất bại:', err);
   }
 };
 
-// 表单赋值
+// Gán giá trị biểu mẫu
 const [registerModal] = useModalInner(async (data) => {
   trackContent.value = data?.dataValue || '';
-  // 默认显示格式化内容
+  // Mặc định hiển thị nội dung đã định dạng
   isFormatted.value = true;
 });
 </script>
@@ -92,7 +92,7 @@ const [registerModal] = useModalInner(async (data) => {
   min-height: 400px;
 }
 
-// JSON内容显示区域
+// Khu vực hiển thị nội dung JSON
 .json-content-wrapper {
   flex: 1;
   overflow: auto;
@@ -160,7 +160,7 @@ const [registerModal] = useModalInner(async (data) => {
     .formatted-json {
       color: @text-color;
 
-      // JSON语法高亮样式
+      // Kiểu tô sáng cú pháp JSON
       &::before {
         content: '{';
         color: #d73a49;
@@ -182,7 +182,7 @@ const [registerModal] = useModalInner(async (data) => {
   }
 }
 
-// 滚动条样式
+// Kiểu thanh cuộn
 .json-content-wrapper::-webkit-scrollbar,
 .json-display pre::-webkit-scrollbar {
   width: 8px;
@@ -205,7 +205,7 @@ const [registerModal] = useModalInner(async (data) => {
   }
 }
 
-// 响应式设计
+// Thiết kế responsive
 @media (max-width: 768px) {
   .json-content-wrapper {
     .json-display pre {
@@ -216,7 +216,7 @@ const [registerModal] = useModalInner(async (data) => {
 </style>
 
 <style lang="less">
-// 模态框样式调整
+// Điều chỉnh kiểu hộp modal
 .track-detail-modal {
   .ant-modal-body {
     padding: 24px;

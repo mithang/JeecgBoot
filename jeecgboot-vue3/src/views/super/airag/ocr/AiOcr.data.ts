@@ -1,27 +1,27 @@
 import { BasicColumn, FormSchema } from '@/components/Table';
 
-//ocr表格
+//Bảng ocr
 export const columns: BasicColumn[] = [
   {
-    title: '编号',
+    title: 'Số hiệu',
     dataIndex: 'id',
     ifShow: false,
   },
   {
-    title: '标题',
+    title: 'Tiêu đề',
     dataIndex: 'title',
     ellipsis: true,
     width: 300,
   },
   {
-    title: '提示词',
+    title: 'Prompt',
     dataIndex: 'prompt',
     ellipsis: true,
     width: 300,
   },
 ];
 
-//ocr表单
+//Biểu mẫu ocr
 export const schemas: FormSchema[] = [
   {
     label: '',
@@ -30,13 +30,13 @@ export const schemas: FormSchema[] = [
     show: false,
   },
   {
-    label: '标题',
+    label: 'Tiêu đề',
     field: 'title',
     component: 'Input',
     required: true,
   },
   {
-    label: '提示词',
+    label: 'Prompt',
     field: 'prompt',
     component: 'InputTextArea',
     componentProps: {
@@ -47,7 +47,7 @@ export const schemas: FormSchema[] = [
   },
 ];
 
-//ocr解析表单
+//Biểu mẫu phân tích ocr
 export const analysisSchemas: FormSchema[] = [
   {
     label: '',
@@ -56,30 +56,30 @@ export const analysisSchemas: FormSchema[] = [
     show: false,
   },
   {
-    label: '图片',
+    label: 'Hình ảnh',
     field: 'url',
     component: 'JImageUpload',
     required: true,
   },
   {
-    label: '提示词',
+    label: 'Prompt',
     field: 'prompt',
     component: 'InputTextArea',
     componentProps: {
       row: 2,
       autosize: { minRows: 2, maxRows: 2 },
-      placeholder:"请填写提示词，如提取图片中的文字"
+      placeholder:"Vui lòng điền prompt, ví dụ trích xuất chữ trong hình ảnh"
     }
   },
   {
-    label: '解析结果',
+    label: 'Kết quả phân tích',
     field: 'analysisResult',
     component: 'InputTextArea',
     componentProps: {
       row: 10,
       autosize: { minRows: 10, maxRows: 10 },
       readonly: true,
-      placeholder:"解析结果将在这里显示"
+      placeholder:"Kết quả phân tích sẽ hiển thị ở đây"
     },
   },
 ];

@@ -1,16 +1,16 @@
 import type { FormSchema } from '@/components/Form';
 
 /**
- * 视频生成表单Schema
+ * Schema biểu mẫu tạo video
  */
 export const videoFormSchema: FormSchema[] = [
   {
     field: 'prompt',
-    label: '视频描述',
+    label: 'Mô tả video',
     component: 'InputTextArea',
     required: true,
     componentProps: {
-      placeholder: '请描述你想生成的视频内容，例如：一只金毛犬在沙滩上奔跑，海浪拍打岸边，阳光明媚',
+      placeholder: 'Vui lòng mô tả nội dung video bạn muốn tạo, ví dụ: một chú chó Golden chạy trên bãi biển, sóng vỗ vào bờ, nắng đẹp',
       rows: 5,
       maxlength: 500,
       showCount: true,
@@ -19,32 +19,32 @@ export const videoFormSchema: FormSchema[] = [
 ];
 
 /**
- * 场景分类
+ * Phân loại tình huống
  */
-export const categoryList = ['通用演示', '产品营销', '教育培训', '创意设计'];
+export const categoryList = ['Trình diễn thông thường', 'Marketing sản phẩm', 'Giáo dục đào tạo', 'Thiết kế sáng tạo'];
 
 /**
- * 备用预设提示词（当后端API不可用时使用）
+ * Prompt đặt sẵn dự phòng (dùng khi API backend không khả dụng)
  */
 export const fallbackPrompts: Record<string, string[]> = {
-  通用演示: [
-    '一只金毛犬在金色的沙滩上奔跑，海浪轻轻拍打着岸边，阳光明媚，慢动作镜头',
-    '航拍壮丽的山脉全景，云雾缭绕在山峰之间，镜头缓缓推进',
-    '樱花树下，花瓣随风飘落，一条小溪静静流淌，春日午后的宁静氛围',
+  'Trình diễn thông thường': [
+    'Một chú chó Golden chạy trên bãi cát vàng, sóng biển nhẹ nhàng vỗ vào bờ, nắng đẹp, cảnh quay chậm',
+    'Quay từ trên cao toàn cảnh dãy núi hùng vĩ, mây mù bao quanh giữa các đỉnh núi, ống kính tiến chậm về phía trước',
+    'Dưới cây hoa anh đào, cánh hoa rơi theo gió, một con suối nhỏ lặng lẽ chảy, không khí yên tĩnh của buổi chiều xuân',
   ],
-  产品营销: [
-    '一杯咖啡被缓缓倒入透明玻璃杯中，咖啡与牛奶融合形成美丽的纹理，微距特写',
-    '一款高端智能手表在旋转展示台上缓缓旋转，灯光打在表面上反射出金属光泽，黑色背景',
-    '一双运动鞋踩入水洼溅起水花，慢动作特写，动感活力的画面',
+  'Marketing sản phẩm': [
+    'Một ly cà phê được rót từ từ vào cốc thủy tinh trong suốt, cà phê và sữa hòa quyện tạo thành họa tiết đẹp, cận cảnh macro',
+    'Một chiếc đồng hồ thông minh cao cấp xoay chậm trên bệ trưng bày xoay, ánh sáng chiếu lên mặt đồng hồ phản chiếu ánh kim loại, nền đen',
+    'Một đôi giày thể thao dẫm vào vũng nước bắn tung tóe, cận cảnh quay chậm, hình ảnh năng động tràn đầy sức sống',
   ],
-  教育培训: [
-    '地球从太空视角缓缓旋转，可以看到大气层和云层的细节，星空背景',
-    '一本书的书页被风吹动快速翻动，文字和插图若隐若现，知识流动的意象',
-    '显微镜下的细胞分裂过程，色彩鲜明的科学可视化风格',
+  'Giáo dục đào tạo': [
+    'Trái Đất từ góc nhìn vũ trụ xoay chậm, có thể thấy chi tiết của tầng khí quyển và tầng mây, nền trời sao',
+    'Các trang của một cuốn sách bị gió thổi lật nhanh, chữ và hình minh họa lúc ẩn lúc hiện, hình tượng tri thức tuôn chảy',
+    'Quá trình phân chia tế bào dưới kính hiển vi, phong cách trực quan hóa khoa học sắc màu tươi sáng',
   ],
-  创意设计: [
-    '一座未来主义的城市在日落时分，霓虹灯光倒映在雨水的路面上，赛博朋克风格',
-    '水墨在水中缓缓扩散，形成抽象的山水画意境，中国风艺术效果',
-    '星空下的极光在天空中舞动，色彩绚烂，延时摄影效果',
+  'Thiết kế sáng tạo': [
+    'Một thành phố vị lai vào lúc hoàng hôn, ánh đèn neon phản chiếu trên mặt đường mưa, phong cách cyberpunk',
+    'Mực tàu lan chậm trong nước, tạo thành ý cảnh tranh sơn thủy trừu tượng, hiệu ứng nghệ thuật phong cách Trung Quốc',
+    'Cực quang dưới bầu trời sao nhảy múa trên không, sắc màu rực rỡ, hiệu ứng chụp timelapse',
   ],
 };

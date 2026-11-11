@@ -9,11 +9,11 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { schemas } from '../AiOcr.data';
   import {addOcr, editOcr} from "../AiOcr.api";
-  const title = ref<string>('新增');
+  const title = ref<string>('Thêm mới');
   const isUpdate = ref<boolean>();
-  // 声明Emits
+  // Khai báo Emits
   const emit = defineEmits(['success', 'register']);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     schemas: schemas,
     showActionButtonGroup: false,
@@ -21,21 +21,21 @@
     wrapperCol: { span: 24 },
   });
 
-  //表单赋值
+  //Gán giá trị biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     setModalProps({ confirmLoading: true, bodyStyle:{ padding:'24px'} });
     isUpdate.value = !!data?.isUpdate;
-    title.value = !unref(isUpdate) ? '新增' : '编辑'
-    //重置表单
+    title.value = !unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     if(unref(isUpdate)){
-      //表单赋值
+      //Gán giá trị biểu mẫu
       await setFieldsValue({ ...data.record });
     }
   });
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       const values = await validate();
@@ -45,9 +45,9 @@
         await addOcr(values);
       }
       setModalProps({ confirmLoading: true });
-      //关闭弹窗
+      //Đóng popup
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

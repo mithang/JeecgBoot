@@ -2,7 +2,7 @@
   <div style="min-height: 400px">
     <BasicForm @register="registerForm"></BasicForm>
     <div style="width: 100%; text-align: center" v-if="!formDisabled">
-      <a-button @click="submitForm" pre-icon="ant-design:check" type="primary">提 交</a-button>
+      <a-button @click="submitForm" pre-icon="ant-design:check" type="primary">Gửi</a-button>
     </div>
   </div>
 </template>
@@ -45,16 +45,16 @@
         let params = { id: props.formData.dataId };
         const data = await defHttp.get({ url: queryByIdUrl, params });
         formData = { ...data };
-        //设置表单的值
+        //Đặt giá trị của biểu mẫu
         await setFieldsValue(formData);
-        //默认是禁用
+        //Mặc định là vô hiệu hóa
         await setProps({ disabled: formDisabled.value });
       }
 
       async function submitForm() {
         let data = getFieldsValue();
         let params = Object.assign({}, formData, data);
-        console.log('表单数据', params);
+        console.log('Dữ liệu biểu mẫu', params);
         await saveOrUpdate(params, true);
       }
 

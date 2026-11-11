@@ -1,22 +1,22 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-//列表数据
+//Dữ liệu danh sách
 export const columns: BasicColumn[] = [
   {
-    title: '名称',
+    title: 'Tên',
     align: 'center',
     dataIndex: 'name',
   },
   {
-    title: '描述信息',
+    title: 'Thông tin mô tả',
     align: 'center',
     dataIndex: 'descr',
   },
 ];
-//查询数据
+//Truy vấn dữ liệu
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '名称',
+    label: 'Tên',
     field: 'name',
     component: 'JInput',
     colProps: {
@@ -24,22 +24,22 @@ export const searchFormSchema: FormSchema[] = [
     },
   },
 ];
-//表单数据
+//Dữ liệu biểu mẫu
 export const formSchema: FormSchema[] = [
   {
-    label: '业务类型标识',
+    label: 'Định danh loại nghiệp vụ',
     field: 'bizType',
     component: 'Input',
     defaultValue: 'evaluator',
     show: false,
   },
   {
-    label: '名称',
+    label: 'Tên',
     field: 'name',
     component: 'Input',
   },
   {
-    label: '描述信息',
+    label: 'Thông tin mô tả',
     field: 'descr',
     component: 'InputTextArea',
   },
@@ -52,10 +52,10 @@ export const formSchema: FormSchema[] = [
 ];
 
 /**
- * 流程表单调用这个方法获取formSchema
+ * Biểu mẫu quy trình gọi phương thức này để lấy formSchema
  * @param param
  */
 export function getBpmFormSchema(_formData): FormSchema[] {
-  // 默认和原始表单保持一致 如果流程中配置了权限数据，这里需要单独处理formSchema
+  // Mặc định giữ nhất quán với biểu mẫu gốc. Nếu trong quy trình có cấu hình dữ liệu quyền, chỗ này cần xử lý riêng formSchema
   return formSchema;
 }

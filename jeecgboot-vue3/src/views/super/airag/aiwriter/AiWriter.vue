@@ -6,7 +6,7 @@
     <div class="preview" ref="previewRef">
       <div class="preview-header">
         <div class="preview-header-left">
-          <span class="preview-title-text">{{ isEditing ? '编辑' : '预览' }}</span>
+          <span class="preview-title-text">{{ isEditing ? 'Chỉnh sửa' : 'Xem trước' }}</span>
           <a-select
             v-if="historyData && historyData.length"
             v-model:value="activeVersion"
@@ -14,7 +14,7 @@
             class="version-select"
             @change="handleVersionChange"
           >
-            <a-select-option :value="CURRENT_VERSION_KEY">当前内容</a-select-option>
+            <a-select-option :value="CURRENT_VERSION_KEY">Nội dung hiện tại</a-select-option>
             <a-select-option v-for="item in historyData" :key="item.version" :value="item.version">
               {{ item.version }}
             </a-select-option>
@@ -27,14 +27,14 @@
             @click="handleDeleteVersion"
           >
             <DeleteOutlined />
-            删除
+            Xóa
           </a-button>
         </div>
         <div class="preview-actions">
           <a-button v-if="!generating" type="link" size="small" class="preview-action-btn custom-save-btn" @click="toggleEdit">
             <FormOutlined v-if="!isEditing" />
             <CheckOutlined v-else />
-            {{ isEditing ? '完成' : '编辑' }}
+            {{ isEditing ? 'Hoàn thành' : 'Chỉnh sửa' }}
           </a-button>
           <a-button
             v-if="!generating"
@@ -45,18 +45,18 @@
             @click="handlePolish"
           >
             <ThunderboltOutlined class="preview-actions-icon" style="position: relative; top: 1px" />
-            润色
+            Trau chuốt
           </a-button>
-          <a-tooltip title="保存草稿">
+          <a-tooltip title="Lưu bản nháp">
             <a-button v-if="!generating" type="link" size="small" class="preview-action-btn custom-save-btn" :loading="saving" @click="handleSave">
               <SaveOutlined class="preview-actions-icon" />
-              保存
+              Lưu
             </a-button>
           </a-tooltip>
-          <a-tooltip title="复制内容">
+          <a-tooltip title="Sao chép nội dung">
             <a-button type="link" size="small" class="preview-action-btn custom-save-btn" @click="handleCopy">
               <CopyOutlined class="preview-actions-icon" />
-              复制
+              Sao chép
             </a-button>
           </a-tooltip>
         </div>
@@ -90,27 +90,27 @@
   const { createMessage } = useMessage();
   const writeText = ref<string>('');
   const previewRef = ref<HTMLElement | null>(null);
-  //生成的loading
+  //loading của việc tạo
   const generating = ref<boolean>(false);
-  //是否编辑
+  //Có chỉnh sửa hay không
   const isEditing = ref<boolean>(false);
-  //润色的loading
+  //loading của việc trau chuốt
   const polishLoading = ref<boolean>(false);
-  //保存loading
+  //Đang lưu loading
   const saving = ref<boolean>(false);
-  //左侧的内容
+  //Nội dung bên trái
   const leftData = ref<any>();
-  //历史数据
+  //Dữ liệu lịch sử
   const historyData = ref<any>([]);
-  //ai提示文本
+  //Văn bản gợi ý ai
   const aiText = ref<string>('');
-  //当期版本的key
+  //key của phiên bản kỳ này
   const CURRENT_VERSION_KEY = 'CURRENT';
-  //当前选中的本本
+  //Cuốn sổ hiện đang chọn
   const activeVersion = ref<string>(CURRENT_VERSION_KEY);
-  //原始内容
+  //Nội dung gốc
   const originalContent = ref<string | null>(null);
-  //第一个回复节点之后的内容
+  //Nội dung sau nút trả lời đầu tiên
   const afterNodeFinished = ref<boolean>(false);
   const mdi = new MarkdownIt({
     html: true,
@@ -127,7 +127,7 @@
   mdi.use(mila, { attrs: { target: '_blank', rel: 'noopener' } });
   mdi.use(mdKatex, { blockClass: 'katexmath-block rounded-md p-[10px]', errorColor: ' #cc0000' });
 
-  //返回文本（生成中在末尾追加打点）
+  //Trả về văn bản (trong lúc tạo thì thêm dấu chấm ở cuối)
   const previewMd = computed(() => {
     let content = writeText.value || aiText.value;
     if (generating.value) {
@@ -138,7 +138,7 @@
   });
 
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function toggleEdit() {
     if (generating.value) {
@@ -148,18 +148,18 @@
   }
 
   /**
-   * 复制
+   * Sao chép
    */
   function handleCopy() {
     if (!writeText.value) {
-      createMessage.warning('暂无内容可复制');
+      createMessage.warning('Tạm thời chưa có nội dung để sao chép');
       return;
     }
     const success = copyTextToClipboard(writeText.value);
     if (success) {
-      createMessage.success('复制成功');
+      createMessage.success('Sao chép thành công');
     } else {
-      createMessage.error('复制失败');
+      createMessage.error('Sao chép thất bại');
     }
   }
 
@@ -170,7 +170,7 @@
   }
 
   /**
-   * 生成
+   * Tạo
    *
    * @param data
    * @param type
@@ -200,7 +200,7 @@
           }
         )
         .catch((res) => {
-          createMessage.warn(res.message ? res.message : '请求出错，请稍后重试！');
+          createMessage.warn(res.message ? res.message : 'Yêu cầu xảy ra lỗi, vui lòng thử lại sau!');
         });
 
       const reader = readableStream.getReader();
@@ -215,9 +215,9 @@
         let chunk = decoder.decode(value, { stream: true });
         buffer += chunk;
 
-        // 处理可能被截断的消息
+        // Xử lý tin nhắn có thể bị cắt ngắn
         const lines = buffer.split('\n\n');
-        // 保留最后一个片段（可能不完整）
+        // Giữ lại đoạn cuối cùng (có thể không hoàn chỉnh)
         buffer = lines.pop() || '';
         for (const line of lines) {
           if (line.startsWith('data:')) {
@@ -246,15 +246,15 @@
       }
     } catch (e) {
       console.error('Generation error:', e);
-      writeText.value += '\n\n[生成出错]';
+      writeText.value += '\n\n[Tạo xảy ra lỗi]';
     } finally {
-      // 若服务端结束未触发 MESSAGE_END，兜底关闭生成状态
+      // Nếu phía máy chủ kết thúc mà chưa kích hoạt MESSAGE_END, đóng trạng thái tạo ở mức dự phòng
       generating.value = false;
     }
   }
 
   /**
-   * 渲染文本
+   * Hiển thị văn bản
    *
    * @param item
    */
@@ -285,24 +285,24 @@
         nextTick(scrollToBottom);
       }
       if (parse.event == 'ERROR') {
-        writeText.value = parse.data.message ? parse.data.message : '生成失败，请稍后重试！';
+        writeText.value = parse.data.message ? parse.data.message : 'Tạo thất bại, vui lòng thử lại sau!';
         generating.value = false;
         polishLoading.value = false;
         nextTick(scrollToBottom);
       }
       
-      //开始加点
+      //Bắt đầu thêm dấu chấm
       if (parse.event === 'NODE_STARTED') {
         if (!parse.data || parse.data.type !== 'end') {
           if (parse.data.type === 'llm' || parse.data.type === 'reply') {
-            aiText.value = '正在构建响应内容';
+            aiText.value = 'Đang xây dựng nội dung phản hồi';
           }
         }
       }
-      //流程结束节点
+      //Nút kết thúc quy trình
       if (parse.event == 'FLOW_FINISHED') {
         if (parse.data && !parse.data.success) {
-          writeText.value = parse.data.message ? parse.data.message : '生成失败，请稍后重试！';
+          writeText.value = parse.data.message ? parse.data.message : 'Tạo thất bại, vui lòng thử lại sau!';
         }
         generating.value = false;
         polishLoading.value = false;
@@ -313,21 +313,21 @@
   }
 
   /**
-   * 代码块
+   * Khối mã
    * @param str
    * @param lang
    */
   function highlightBlock(str: string, lang?: string) {
-    return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">复制代码</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`;
+    return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">Sao chép mã</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`;
   }
 
 
   /**
-   * 润色
+   * Trau chuốt
    */
   async function handlePolish() {
     if (!writeText.value) {
-      createMessage.warning('暂无内容可润色');
+      createMessage.warning('Tạm thời chưa có nội dung để trau chuốt');
       return;
     }
     if (generating.value || polishLoading.value) {
@@ -351,11 +351,11 @@
   }
 
   /**
-   * 保存
+   * Lưu
    */
   async function handleSave() {
     if (!writeText.value) {
-      createMessage.warning('暂无内容可保存');
+      createMessage.warning('Tạm thời chưa có nội dung để lưu');
       return;
     }
     if (saving.value) {
@@ -369,14 +369,14 @@
       }
       initHistoryData();
     } catch (e) {
-      createMessage.error('保存失败，请稍后重试');
+      createMessage.error('Lưu thất bại, vui lòng thử lại sau');
     } finally {
       saving.value = false;
     }
   }
 
   /**
-   * 初始化历史信息
+   * Khởi tạo thông tin lịch sử
    */
   function initHistoryData() {
     historyData.value = [];
@@ -388,7 +388,7 @@
   }
 
   /**
-   * 版本删除
+   * Xóa phiên bản
    */
   async function handleDeleteVersion() {
     if (activeVersion.value === CURRENT_VERSION_KEY) {
@@ -399,10 +399,10 @@
       return;
     }
     Modal.confirm({
-      title: '删除版本',
-      content: '是否确认删除该版本？',
-      okText: '确定',
-      cancelText: '取消',
+      title: 'Xóa phiên bản',
+      content: 'Có xác nhận xóa phiên bản này không?',
+      okText: 'Xác định',
+      cancelText: 'Hủy',
       async onOk() {
         try {
           await defHttp.delete(
@@ -413,14 +413,14 @@
           activeVersion.value = CURRENT_VERSION_KEY;
           writeText.value = originalContent.value ?? '';
         } catch (e) {
-          createMessage.error('删除失败，请稍后重试');
+          createMessage.error('Xóa thất bại, vui lòng thử lại sau');
         }
       },
     });
   }
 
   /**
-   * 版本切换事件
+   * Sự kiện chuyển đổi phiên bản
    * @param value
    */
   function handleVersionChange(value: string) {
@@ -438,7 +438,7 @@
   }
   
   onMounted(() => {
-    //初始化的时候加载历史版本
+    //Khi khởi tạo thì tải phiên bản lịch sử
     initHistoryData();
   });
 </script>
@@ -464,7 +464,7 @@
     position: sticky;
     top: 16px;
   }
-  /*begin  头部样式 */
+  /*begin  Kiểu phần đầu */
   .preview {
     flex: 1;
     border: 1px solid #eef0f5;
@@ -548,9 +548,9 @@
       color: @primary-color;
     }
   }
-  /*end  头部样式 */
+  /*end  Kiểu phần đầu */
 
-  /*begin 编辑器的样式*/
+  /*begin Kiểu của trình soạn thảo*/
   .markdown-container {
     min-height: 300px;
     padding: 8px 4px 16px 4px;
@@ -601,5 +601,5 @@
       opacity: 1;
     }
   }
-  /*end 编辑器的样式*/
+  /*end Kiểu của trình soạn thảo*/
 </style>

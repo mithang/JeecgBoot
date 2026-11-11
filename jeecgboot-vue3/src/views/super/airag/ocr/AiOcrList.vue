@@ -2,9 +2,9 @@
   <div class="ocr-page p-2">
     <AiOcrAnalysisModal />
 <!--    <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      &lt;!&ndash;插槽:table标题&ndash;&gt;
+      &lt;!&ndash;Slot:tiêu đề table&ndash;&gt;
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate">新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate">Thêm mới</a-button>
       </template>
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
@@ -26,7 +26,7 @@
   const [registerModal, { openModal }] = useModal();
   const [registerAnalysisModal, { openModal: openAnalysisModal }] = useModal();
   
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     tableProps: {
       api: list,
@@ -42,14 +42,14 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增
+   * Thêm mới
    */
   function handleCreate() {
     openModal(true, {});
   }
 
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     openModal(true, {
@@ -60,7 +60,7 @@
   }
 
   /**
-   * 删除
+   * Xóa
    */
   async function handleDelete(id) {
     await deleteOcrById({ id: id });
@@ -68,7 +68,7 @@
   }
 
   /**
-   * 解析
+   * Phân tích
    * @param record
    */
   function handleAnalysis(record){
@@ -79,22 +79,22 @@
   }
   
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '解析',
+        label: 'Phân tích',
         onClick: handleAnalysis.bind(null, record),
       },
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa hay không',
           placement: 'left',
           confirm: handleDelete.bind(null, record.id),
         },

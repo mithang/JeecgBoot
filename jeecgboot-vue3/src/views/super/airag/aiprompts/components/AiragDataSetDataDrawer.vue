@@ -1,27 +1,27 @@
 <template>
   <BasicDrawer v-bind="getProps">
     <div class="dynamic-column-config">
-      <!-- 列配置列表 -->
+      <!-- Danh sách cấu hình cột -->
       <div class="column-list">
-        <!-- 移除了 draggable 组件，直接使用 div 渲染列表 -->
+        <!-- Đã loại bỏ component draggable, dùng trực tiếp div để hiển thị danh sách -->
         <div v-for="(element, index) in dataSet" :key="index" class="column-item">
-          <!-- 操作区域 - 放在右上角 -->
+          <!-- Khu vực thao tác - đặt ở góc trên phải -->
           <div class="action-area">
-            <a-button type="text" danger @click="handleRemoveData(index)" title="删除">
+            <a-button type="text" danger @click="handleRemoveData(index)" title="Xóa">
               <DeleteOutlined />
             </a-button>
           </div>
-          <!-- 列配置表单 -->
+          <!-- Biểu mẫu cấu hình cột -->
           <div class="column-form">
             <div class="form-row">
               <div class="form-item" v-for="item in columns" :key="item.name">
                 <label class="form-label">{{ item.name }}</label>
-                <!-- 附件输入框 -->
+                <!-- Ô nhập tệp đính kèm -->
                 <JImageUpload :maxCount="1" v-if="item.dataType === 'FILE'" v-model:value="element[item.name]"></JImageUpload>
                 <a-input
                     v-else
                     v-model:value="element[item.name]"
-                    :placeholder="'请输入' + item.name"
+                    :placeholder="'Vui lòng nhập' + item.name"
                     :class="{ 'has-error': !element[item.name] }"
                     @blur="validateColumn(element[item.name])"
                 />
@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <a-button v-if="!isUpdate" type="dashed" style="width: 100%" @click="handleAddData"> <PlusOutlined />添加数据 </a-button>
+      <a-button v-if="!isUpdate" type="dashed" style="width: 100%" @click="handleAddData"> <PlusOutlined />Thêm dữ liệu </a-button>
     </div>
   </BasicDrawer>
 </template>
@@ -45,68 +45,68 @@
   import { saveOrUpdate } from '@/views/super/airag/aiprompts/AiragExtData.api';
   import { message } from 'ant-design-vue';
   import {JImageUpload} from "@/components/Form";
-  // Emits声明
+  // Khai báo Emits
   const emit = defineEmits(['register', 'success']);
   const attrs = useAttrs();
-  // 消息提示
+  // Gợi ý tin nhắn
   const { createMessage } = useMessage();
-  // 注册抽屉
+  // Đăng ký ngăn kéo
   const [registerDrawer, { closeDrawer }] = useDrawerInner(open);
-  // 抽屉最终props
+  // props cuối cùng của ngăn kéo
   const getProps = computed(() => {
     let drawerProps: Partial<DrawerProps> = {
       width: 1000,
-      title: '数据配置',
+      title: 'Cấu hình dữ liệu',
       showFooter: true,
       destroyOnClose: true,
     };
     let finalProps: Recordable = {
       ...unref(attrs),
       ...drawerProps,
-      okText: '保存',
+      okText: 'Lưu',
       onOk: handleSubmit,
       onCancel: closeDrawer,
       onRegister: registerDrawer,
     };
     return finalProps;
   });
-  /** 更新状态 */
+  /** Cập nhật trạng thái */
   const isUpdate = ref<boolean>(false);
   /** dataId */
   const dataId = ref<any>('');
-  /** 数据列表 */
+  /** Danh sách dữ liệu */
   const allData = ref<any>([]);
-  /** 数据列表 */
+  /** Danh sách dữ liệu */
   const dataSet = ref<any>([]);
-  // 列配置
+  // Cấu hình cột
   const columns = ref<any>([]);
-  // 验证数据非空
+  // Kiểm chứng dữ liệu không trống
   const validateColumn = (value) => {
     return value && value.trim() !== '';
   };
-  // 生成唯一ID
+  // Tạo ID duy nhất
   function generateId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
-  //添加数据
+  //Thêm dữ liệu
   function handleAddData() {
     dataSet.value.push({
       id: generateId(),
     });
   }
-  //保存数据
+  //Lưu dữ liệu
   async function handleSubmit() {
-    // 验证数据
+    // Kiểm chứng dữ liệu
     const invalidData = dataSet.value.filter((item) => {
       return columns.value.some((col) => col.required && !validateColumn(item[col.name]));
     });
     if (invalidData.length > 0) {
-      createMessage.error('请填写所有必填项（名称）');
+      createMessage.error('Vui lòng điền tất cả mục bắt buộc (tên)');
       return;
     }
 
     try {
-      // 构造提交数据
+      // Cấu trúc dữ liệu gửi
       let dataSource:any = [];
       if (isUpdate.value) {
         dataSource = allData.value.map(item =>
@@ -123,25 +123,25 @@
         id: dataId.value,
       };
 
-      console.log('提交数据:', submitData);
+      console.log('Dữ liệu gửi:', submitData);
 
       await saveOrUpdate(submitData, true, false);
 
-      message.success('数据保存成功！');
-      // 关闭弹窗并触发成功事件
+      message.success('Lưu dữ liệu thành công!');
+      // Đóng popup và kích hoạt sự kiện thành công
       closeDrawer();
       emit('success');
     } catch (error) {
-      console.error('提交失败:', error);
+      console.error('Gửi thất bại:', error);
     } finally {
       //loading.value = false;
     }
   }
-  // 删除列
+  // Xóa cột
   const handleRemoveData = (index: number) => {
     dataSet.value.splice(index, 1);
   };
-  /** 抽屉开启 */
+  /** Ngăn kéo mở */
   function open(data) {
     isUpdate.value = data.isUpdate;
     dataId.value = data?.id || '';
@@ -161,8 +161,8 @@
   .dynamic-column-config {
     max-width: 1200px;
     margin: 0 auto;
-    max-height: calc(100vh - 100px); /* 设置最大高度为视口高度的70% */
-    overflow-y: auto; /* 超出时显示垂直滚动条 */
+    max-height: calc(100vh - 100px); /* Đặt chiều cao tối đa là 70 của chiều cao viewport% */
+    overflow-y: auto; /* Khi vượt quá hiển thị thanh cuộn dọc */
 
     :deep(.ant-card-head) {
       border-bottom: 1px solid #f0f0f0;
@@ -182,7 +182,7 @@
   }
 
   .column-item {
-    position: relative; /* 为绝对定位的操作区域提供参考 */
+    position: relative; /* Cung cấp tham chiếu cho khu vực thao tác định vị tuyệt đối */
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -198,7 +198,7 @@
       background: #f6fbff;
     }
 
-    /* 操作区域样式 */
+    /* Kiểu khu vực thao tác */
     .action-area {
       position: absolute;
       top: 8px;
@@ -219,7 +219,7 @@
 
   .column-form {
     flex: 1;
-    width: 100%; /* 确保表单占满宽度 */
+    width: 100%; /* Đảm bảo biểu mẫu chiếm hết độ rộng */
   }
 
   .form-row {
@@ -265,7 +265,7 @@
   }
 
   .form-actions {
-    display: none; /* 隐藏原来的删除按钮区域 */
+    display: none; /* Ẩn khu vực nút xóa ban đầu */
   }
 
   .fixed-columns {

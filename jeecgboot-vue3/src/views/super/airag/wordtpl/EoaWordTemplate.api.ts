@@ -17,13 +17,13 @@ enum Api {
   generateResume = '/airag/flow/run',
 }
 /**
- * 列表接口
+ * Giao diện danh sách
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 
 /**
- * 删除单个
+ * Xóa đơn lẻ
  */
 export const deleteOne = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteOne, params }, { joinParamsToUrl: true }).then(() => {
@@ -31,16 +31,16 @@ export const deleteOne = (params, handleSuccess) => {
   });
 };
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  */
 export const batchDelete = (params, handleSuccess) => {
   createConfirm({
     iconType: 'warning',
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa dữ liệu đã chọn hay không',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -49,7 +49,7 @@ export const batchDelete = (params, handleSuccess) => {
   });
 };
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
  */
 export const saveOrUpdate = (params, isUpdate) => {
@@ -58,7 +58,7 @@ export const saveOrUpdate = (params, isUpdate) => {
 };
 
 /**
- * 下载模版
+ * Tải xuống mẫu
  * @param params
  */
 export const downloadTpl = (params) => {
@@ -66,7 +66,7 @@ export const downloadTpl = (params) => {
 };
 
 /**
- * 生成word
+ * Tạo word
  * @param params
  */
 export const generateWord = (fileName, params) => {
@@ -81,7 +81,7 @@ export const generateWord = (fileName, params) => {
     )
     .then((data) => {
       if (!data || data.size === 0) {
-        message.warning('文件下载失败');
+        message.warning('Tải xuống tệp thất bại');
         return;
       }
       if (typeof window.navigator.msSaveBlob !== 'undefined') {
@@ -94,14 +94,14 @@ export const generateWord = (fileName, params) => {
         link.setAttribute('download', fileName);
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link); //下载完成移除元素
-        window.URL.revokeObjectURL(url); //释放掉blob对象
+        document.body.removeChild(link); //Sau khi tải xuống hoàn thành loại bỏ phần tử
+        window.URL.revokeObjectURL(url); //Giải phóng đối tượng blob
       }
     });
 };
 
 /**
- * 生成简历
+ * Tạo hồ sơ
  * @param params
  */
 export const generateResume = (params, handleSuccess) => {
@@ -111,7 +111,7 @@ export const generateResume = (params, handleSuccess) => {
         url: Api.generateResume,
         params: params,
         timeout: 120000,
-        timeoutErrorMessage: '同步数据库超时，已自动刷新',
+        timeoutErrorMessage: 'Đồng bộ cơ sở dữ liệu quá thời gian chờ, đã tự động làm mới',
       },
       { isTransformResponse: false }
     )
@@ -121,7 +121,7 @@ export const generateResume = (params, handleSuccess) => {
 };
 
 /**
- * 解析word文档地址
+ * Phân tích địa chỉ tài liệu word
  * @param params
  */
 export const parseFileUrl = Api.parseFile;

@@ -1,37 +1,37 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Bảng trích dẫn-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--slot:tiêu đề table-->
       <template #tableTitle>
-        <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined">新增</a-button>
-        <a-button type="primary" @click="openRecycleBinModal(true, {})" preIcon="ant-design:hdd-outlined">回收站</a-button>
+        <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined">Thêm mới</a-button>
+        <a-button type="primary" @click="openRecycleBinModal(true, {})" preIcon="ant-design:hdd-outlined">Thùng rác</a-button>
 
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
-    <!-- 表单区域 -->
+    <!-- Khu vực biểu mẫu -->
     <AiragPromptsModal @register="registerModal" @success="handleSuccess"></AiragPromptsModal>
-    <!-- 表单区域 -->
+    <!-- Khu vực biểu mẫu -->
     <AiPromptSettingModal @register="registerSettingModal" @success="handleSuccess"></AiPromptSettingModal>
-    <!-- 回收站 -->
+    <!-- Thùng rác -->
     <AiragPromptsRecycleBinModal @register="registerRecycleBinModal" @success="handleSuccess"></AiragPromptsRecycleBinModal>
   </div>
 </template>
@@ -45,13 +45,13 @@
   import AiragPromptsRecycleBinModal from './components/AiragPromptsRecycleBinModal.vue';
   import { columns, searchFormSchema } from './AiragPrompts.data';
   import { list, deleteOne, batchDelete, getImportUrl, getExportUrl } from './AiragPrompts.api';
-  //注册model
+  //Đăng ký model
   const [registerModal, { openModal }] = useModal();
-  //注册model
+  //Đăng ký model
   const [registerSettingModal, { openModal: openSettingModal }] = useModal();
-  //回收站model
+  //model thùng rác
   const [registerRecycleBinModal, { openModal: openRecycleBinModal }] = useModal();
-  //注册table数据
+  //Đăng ký dữ liệu table
   const { tableContext } = useListPage({
     tableProps: {
       title: 'airag_prompts',
@@ -84,7 +84,7 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增事件
+   * Thêm mới sự kiện
    */
   function handleAdd() {
     openModal(true, {
@@ -93,7 +93,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     openSettingModal(true, {
@@ -103,7 +103,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   function handleDetail(record: Recordable) {
     openModal(true, {
@@ -113,47 +113,47 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteOne({ id: record.id }, handleSuccess);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDelete({ ids: selectedRowKeys.value }, handleSuccess);
   }
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '配置',
+        label: 'Cấu hình',
         onClick: handleEdit.bind(null, record),
       },
     ];
   }
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa hay không',
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft',
         },

@@ -19,30 +19,30 @@ enum Api {
   deleteRecycleBin = '/airag/prompts/deleteRecycleBin',
 }
 /**
- * 导出api
+ * api xuất
  * @param params
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入api
+ * api nhập
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 列表接口
+ * Giao diện danh sách
  * @param params
  */
 export const list = (params) =>
   defHttp.get({url: Api.list, params});
 
 /**
- * 根据ID查询提示词详情
- * @param id 提示词ID
+ * Truy vấn chi tiết prompt theo ID
+ * @param id ID prompt
  */
 export const queryById = (id: string) =>
   defHttp.get({url: Api.queryById, params: {id}});
 
 /**
- * 删除单个
+ * Xóa đơn lẻ
  */
 export const deleteOne = (params,handleSuccess) => {
   return defHttp.delete({url: Api.deleteOne, params}, {joinParamsToUrl: true}).then(() => {
@@ -50,16 +50,16 @@ export const deleteOne = (params,handleSuccess) => {
   });
 }
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  */
 export const batchDelete = (params, handleSuccess) => {
   createConfirm({
     iconType: 'warning',
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa dữ liệu đã chọn hay không',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({url: Api.deleteBatch, data: params}, {joinParamsToUrl: true}).then(() => {
         handleSuccess();
@@ -68,7 +68,7 @@ export const batchDelete = (params, handleSuccess) => {
   });
 }
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
  */
 export const saveOrUpdate = (params, isUpdate) => {
@@ -76,18 +76,18 @@ export const saveOrUpdate = (params, isUpdate) => {
   return defHttp.post({url: url, params});
 }
 /**
- * 实验
+ * Thử nghiệm
  * @param params
  */
 export const promptExperiment = (params) => {
   return defHttp.post({url: Api.promptExperiment, params},{ isTransformResponse: false });
 }
 /**
- * 回收站列表
+ * Danh sách thùng rác
  */
 export const getRecycleBinList = (params) => defHttp.get({ url: Api.recycleBinList, params });
 /**
- * 还原
+ * Khôi phục
  */
 export const putRecycleBin = (params, handleSuccess) => {
   return defHttp.put({ url: Api.revertRecycleBin, params }, { joinParamsToUrl: true }).then(() => {
@@ -95,7 +95,7 @@ export const putRecycleBin = (params, handleSuccess) => {
   });
 };
 /**
- * 彻底删除
+ * Xóa triệt để
  */
 export const deleteRecycleBin = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteRecycleBin, params }, { joinParamsToUrl: true }).then(() => {

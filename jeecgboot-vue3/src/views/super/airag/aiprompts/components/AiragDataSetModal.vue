@@ -1,15 +1,15 @@
 <template>
-  <BasicModal v-bind="$attrs" :zIndex="999" @register="registerModal" :canFullscreen="true" :footer="null" defaultFullscreen destroyOnClose title="评测集">
+  <BasicModal v-bind="$attrs" :zIndex="999" @register="registerModal" :canFullscreen="true" :footer="null" defaultFullscreen destroyOnClose title="Tập đánh giá">
     <div class="modal-content">
       <div class="top-section">
         <div class="header-actions">
           <a-button type="primary" v-if="columns && columns.length > 0" @click="handleAddData">
             <Icon icon="ant-design:plus-outlined" />
-            新增数据
+            Thêm mới dữ liệu
           </a-button>
           <a-button @click="columnConfig" class="config-btn">
             <Icon icon="ant-design:setting-outlined" />
-            列配置
+            Cấu hình cột
           </a-button>
         </div>
       </div>
@@ -37,9 +37,9 @@
       </div>
     </div>
   </BasicModal>
-  <!--自定义列配置  -->
+  <!--Cấu hình cột tùy chỉnh  -->
   <AiragDataSetColumnModal @register="registerDataSetColumnModal" @success="reload" />
-  <!--自定义数据配置  -->
+  <!--!-- Cấu hình dữ liệu tùy chỉnh  -->
   <AiragDataSetDataDrawer @register="registerDataSetDataDrawer" @success="reload" />
 </template>
 
@@ -53,7 +53,7 @@ import { useDrawer } from '@/components/Drawer';
 import { cloneDeep } from 'lodash-es';
 import {useMessage} from "@/hooks/web/useMessage";
 import { Modal } from 'ant-design-vue';
-// Emits声明
+// Khai báo Emits
 const emit = defineEmits(['register', 'success']);
 const { createMessage } = useMessage();
 const dataId = ref<string>('');
@@ -70,18 +70,18 @@ function handleTableChange(pageInfo: any) {
   pagination.value.current = pageInfo.current;
   pagination.value.pageSize = pageInfo.pageSize;
 }
-//表单赋值
+//Gán giá trị biểu mẫu
 const [registerModal] = useModalInner(async (data) => {
   dataId.value = data.record?.id;
   initData(data.record)
 });
-//注册列配置
+//Đăng ký cấu hình cột
 const [registerDataSetColumnModal, { openModal: openColumnModal }] = useModal();
-//注册数据抽屉
+//Đăng ký ngăn kéo dữ liệu
 const [registerDataSetDataDrawer, { openDrawer }] = useDrawer();
 
 /**
- * 刷新数据
+ * Làm mới dữ liệu
  */
 function reload() {
   queryById({ id: dataId.value }).then((res) => {
@@ -92,7 +92,7 @@ function reload() {
   emit('success');
 }
 /**
- * 初始化数据
+ * Khởi tạo dữ liệu
  */
 function initData(result) {
   dataSource.value = []
@@ -109,11 +109,11 @@ function initData(result) {
     });
   }
   dataSource.value = datasetValue.value?.dataSource || [];
-  //是否已经包含操作列
+  //Đã bao gồm cột thao tác hay chưa
   const hasAction = columns.value.some(item=>item.key == 'action');
   if(!hasAction){
     columns.value.push({
-      title: "操作",
+      title: "Thao tác",
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
@@ -123,7 +123,7 @@ function initData(result) {
   }
 }
 /**
- * 打开列配置
+ * Mở cấu hình cột
  */
 function columnConfig() {
   openColumnModal(true, {
@@ -133,11 +133,11 @@ function columnConfig() {
 }
 
 /**
- * 新增数据点击事件
+ * Sự kiện nhấp thêm mới dữ liệu
  */
 function handleAddData() {
   if(!datasetValue.value?.columns || datasetValue.value?.columns.length == 0){
-    createMessage.warning('请先配置列信息');
+    createMessage.warning('Vui lòng cấu hình thông tin cột trước');
     return;
   }
   openDrawer(true, {
@@ -149,7 +149,7 @@ function handleAddData() {
 }
 
 /**
- * 编辑数据点击事件
+ * Sự kiện nhấp chỉnh sửa dữ liệu
  * @param record
  */
 function handleEditDataset(record) {
@@ -163,15 +163,15 @@ function handleEditDataset(record) {
 }
 
 /**
- * 删除数据点击事件
+ * Sự kiện nhấp xóa dữ liệu
  */
 function handleDelete(record) {
-  //删除数据
+  //Xóa dữ liệu
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除？',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa hay không?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       dataSource.value = dataSource.value.filter((item) => item.id !== record.id);
       refreshDataset()
@@ -180,10 +180,10 @@ function handleDelete(record) {
 }
 
 /**
- *  表单提交事件
+ *  Sự kiện gửi biểu mẫu
  */
 async function refreshDataset() {
-  //提交表单
+  //Gửi biểu mẫu
   const submitData = {
     datasetValue: JSON.stringify({
       columns: datasetValue.value.columns,
@@ -192,7 +192,7 @@ async function refreshDataset() {
     id: dataId.value,
   };
 
-  console.log('提交数据:', submitData);
+  console.log('Dữ liệu gửi:', submitData);
   await saveOrUpdate(submitData, true, false);
   reload()
 }
@@ -274,7 +274,7 @@ async function refreshDataset() {
   }
 }
 
-/** 时间和数字输入框样式 */
+/** Kiểu ô nhập thời gian và số */
 :deep(.ant-input-number) {
   width: 100%;
 }

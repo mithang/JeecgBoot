@@ -5,31 +5,31 @@
     :canFullscreen="true"
     defaultFullscreen
     destroyOnClose
-    title="评测调试"
+    title="Gỡ lỗi đánh giá"
     :showOkBtn="false"
     :showCancelBtn="false"
     wrapClassName="evaluator-debug-modal"
   >
-    <!-- 步骤条 -->
+    <!-- Thanh bước -->
     <a-steps :current="currentStep" class="steps-container">
-      <a-step title="选择提示词">
+      <a-step title="Chọn prompt">
         <template #icon>
           <Icon icon="ant-design:file-search-outlined" />
         </template>
       </a-step>
-      <a-step title="调试配置">
+      <a-step title="Cấu hình gỡ lỗi">
         <template #icon>
           <Icon icon="ant-design:setting-outlined" />
         </template>
       </a-step>
     </a-steps>
 
-    <!-- 第一步：选择提示词和字段映射 -->
+    <!-- Bước một: chọn prompt và ánh xạ trường -->
     <div v-show="currentStep === 0" class="step-content step-one">
       <div class="form-section">
         <div class="form-item">
-          <label class="form-label">选择提示词：</label>
-          <a-select v-model:value="selectedPromptKey" placeholder="请选择提示词" class="prompt-select" @change="onPromptChange">
+          <label class="form-label">Chọn prompt:</label>
+          <a-select v-model:value="selectedPromptKey" placeholder="Vui lòng chọn prompt" class="prompt-select" @change="onPromptChange">
             <a-select-option v-for="prompt in promptOptions" :key="prompt.key" :value="prompt.key">
               <span class="prompt-option">
                 <Icon icon="ant-design:file-text-outlined" />
@@ -43,20 +43,20 @@
           <div class="section-header">
             <h3>
               <Icon icon="ant-design:link-outlined" />
-              字段映射关系
+              Quan hệ ánh xạ trường
             </h3>
           </div>
           <div class="mapping-list">
             <div class="mapping-item">
               <div class="field-label">
                 <Icon icon="ant-design:tag-outlined" />
-                用户输入[user_query]
+                Người dùng nhập[user_query]
               </div>
               <div class="equal-sign">=</div>
-              <a-select allow-clear v-model:value="fieldMappings['user_query']" placeholder="请选择数据集字段" class="field-select">
+              <a-select allow-clear v-model:value="fieldMappings['user_query']" placeholder="Vui lòng chọn trường tập dữ liệu" class="field-select">
                 <a-select-option v-for="column in datasetColumns" :key="column.key" :value="column.key">
                   <span class="column-option">
-                    <span style="color:blue">评测集</span>
+                    <span style="color:blue">Tập đánh giá</span>
                     <span> [{{ column.title }}]</span>
                     <span style="margin-left: 5px">
                       <a-tooltip :title="column.description"><Icon icon="ant-design:info-circle-outlined" size="14" /></a-tooltip>
@@ -68,13 +68,13 @@
             <div class="mapping-item" v-for="(item, index) in promptParams" :key="index">
               <div class="field-label">
                 <Icon icon="ant-design:tag-outlined" />
-                变量[{{ item.name }}]
+                Biến[{{ item.name }}]
               </div>
               <div class="equal-sign">=</div>
-              <a-select allow-clear v-model:value="fieldMappings[item.name]" placeholder="请选择数据集字段" class="field-select">
+              <a-select allow-clear v-model:value="fieldMappings[item.name]" placeholder="Vui lòng chọn trường tập dữ liệu" class="field-select">
                 <a-select-option v-for="column in datasetColumns" :key="column.key" :value="column.key">
                   <span class="column-option">
-                    <span style="color:blue">评测集</span>
+                    <span style="color:blue">Tập đánh giá</span>
                     <span> [{{ column.title }}]</span>
                     <span style="margin-left: 5px">
                       <a-tooltip :title="column.description"><Icon icon="ant-design:info-circle-outlined" size="14" /></a-tooltip>
@@ -90,37 +90,37 @@
       <div class="form-footer">
         <a-button @click="closeModal" class="footer-btn cancel-btn">
           <Icon icon="ant-design:close-circle-outlined" />
-          取消
+          Hủy
         </a-button>
         <a-button type="primary" @click="nextStep" :disabled="!selectedPromptKey || !fieldMappings['user_query']" class="footer-btn next-btn">
           <Icon icon="ant-design:right-circle-outlined" />
-          下一步
+          Bước tiếp theo
         </a-button>
       </div>
     </div>
 
-    <!-- 第二步：调试配置和结果显示 -->
+    <!-- Bước hai: cấu hình gỡ lỗi và hiển thị kết quả -->
     <div v-show="currentStep === 1" class="step-content step-two">
       <div class="form-section">
         <div class="mapping-section">
           <div class="section-header">
             <h3>
               <Icon icon="ant-design:link-outlined" />
-              字段映射
+              Ánh xạ trường
             </h3>
           </div>
           <div class="mapping-list">
             <div class="mapping-item" v-for="(item, index) in evaluatorFields" :key="index">
               <div class="field-label">
                 <Icon icon="ant-design:tag-outlined" />
-                评估器 [{{ item.field }}]
+                Bộ đánh giá [{{ item.field }}]
               </div>
               <div class="equal-sign">=</div>
-              <a-select allow-clear v-model:value="fieldMappings[item.field]" placeholder="请选择数据集字段" class="field-select">
+              <a-select allow-clear v-model:value="fieldMappings[item.field]" placeholder="Vui lòng chọn trường tập dữ liệu" class="field-select">
                 <a-select-option v-for="column in evaluatorColumns" :key="column.name" :value="column.name">
                   <span class="column-option">
 <!--                    <a-divider style="margin:4px 0;" v-if="column.label" />-->
-                    <span :style="{color:column.label ? 'green' : 'blue'}"> [{{ column.label || '评测集' }}] </span>
+                    <span :style="{color:column.label ? 'green' : 'blue'}"> [{{ column.label || 'Tập đánh giá' }}] </span>
                     <span>{{ column.name }}</span>
                     <span style="margin-left: 5px">
                       <a-tooltip :title="column.description">
@@ -138,20 +138,20 @@
           <div class="section-header">
             <h3>
               <Icon icon="ant-design:bar-chart-outlined" />
-              调试结果
+              Kết quả gỡ lỗi
             </h3>
           </div>
           <div class="debug-result-container">
-            <!-- 条件渲染，当有调试结果时显示表格 -->
+            <!-- Hiển thị có điều kiện, khi có kết quả gỡ lỗi thì hiển thị bảng -->
             <div class="result-table-container" v-if="debugResult.length > 0">
-              <!-- 添加外部容器和标题 -->
+              <!-- Thêm container bên ngoài và tiêu đề -->
               <div class="table-header">
-                <div class="table-title" v-if="!confirmLoading">调试结果</div>
-                <div class="table-title"  v-if="confirmLoading"><span>实验初始化中，请稍后点击<a href="javascript:void(0)" @click="handleReload">刷新</a></span></div>
-                <div class="table-subtitle">实际输出与参考输出对比</div>
+                <div class="table-title" v-if="!confirmLoading">Kết quả gỡ lỗi</div>
+                <div class="table-title"  v-if="confirmLoading"><span>Thử nghiệm đang khởi tạo, vui lòng nhấp sau<a href="javascript:void(0)" @click="handleReload">Làm mới</a></span></div>
+                <div class="table-subtitle">So sánh đầu ra thực tế với đầu ra tham khảo</div>
               </div>
 
-              <!-- 表格区域 -->
+              <!-- Khu vực bảng -->
               <a-table
                 :columns="resultColumns"
                 :dataSource="debugResult"
@@ -160,9 +160,9 @@
                 class="result-table"
                 :rowClassName="setRowClassName"
               >
-                <!-- 自定义单元格渲染 -->
+                <!-- Hiển thị ô tùy chỉnh -->
                 <template #bodyCell="{ column, record, text }">
-                  <!-- 状态列特殊样式 -->
+                  <!-- Kiểu đặc biệt cho cột trạng thái -->
                   <template v-if="column.dataIndex === 'status'">
                     <span :class="['status-badge', getStatusClass(record)]">
                       {{ text }}
@@ -172,13 +172,13 @@
               </a-table>
             </div>
 
-            <!-- 无数据时显示加载或提示 -->
+            <!-- Khi không có dữ liệu hiển thị đang tải hoặc gợi ý -->
             <div v-else class="no-data-container">
               <div class="loading-text" v-if="confirmLoading">
                 <loading-outlined style="font-size: 24px; margin-right: 8px" @click="handleReload" />
-                <span>实验初始化中，请稍后点击<a href="javascript:void(0)" @click="handleReload">刷新</a></span>
+                <span>Thử nghiệm đang khởi tạo, vui lòng nhấp sau<a href="javascript:void(0)" @click="handleReload">Làm mới</a></span>
               </div>
-              <div class="empty-text" v-else> 暂无调试结果 </div>
+              <div class="empty-text" v-else> Tạm thời chưa có kết quả gỡ lỗi </div>
             </div>
           </div>
         </div>
@@ -187,15 +187,15 @@
       <div class="form-footer">
         <a-button @click="prevStep" class="footer-btn prev-btn">
           <Icon icon="ant-design:left-circle-outlined" />
-          上一步
+          Bước trước
         </a-button>
         <a-button v-if="debugResult.length == 0"  :disabled="canConfirmDebug" :loading="confirmLoading" type="primary" @click="confirmDebug" class="footer-btn confirm-btn">
           <Icon v-if="!confirmLoading" icon="ant-design:play-circle-outlined" />
-          {{ confirmLoading ? '正在调试...' : '确认调试配置' }}
+          {{ confirmLoading ? 'Đang gỡ lỗi...' : 'Xác nhận cấu hình gỡ lỗi' }}
         </a-button>
         <a-button v-if="debugResult.length > 0" @click="closeModal" class="footer-btn close-btn">
           <Icon icon="ant-design:check-circle-outlined" />
-          完成
+          Hoàn thành
         </a-button>
       </div>
     </div>
@@ -210,46 +210,46 @@
   import { useMessage } from '@/hooks/web/useMessage';
   import { queryTrackById } from '@/views/super/airag/aiprompts/AiragExtData.api';
   import { LoadingOutlined } from '@ant-design/icons-vue';
-  // Emits声明
+  // Khai báo Emits
   const emit = defineEmits(['register', 'success']);
-  // 确认调试配置加载状态
+  // Xác nhận trạng thái tải cấu hình gỡ lỗi
   const confirmLoading = ref(false);
-  // 提示信息
+  // Thông tin gợi ý
   const { createMessage } = useMessage();
-  //核心数据
+  //Dữ liệu cốt lõi
   const record = ref<any>({});
-  // 步骤控制
+  // Kiểm soát bước
   const currentStep = ref(0);
-  // 选择调试的提示词
+  // Chọn prompt để gỡ lỗi
   const selectedPromptKey = ref<string>('');
   const selectedPrompt = ref<any>({});
-  // 评估器字段配置
+  // Cấu hình trường của bộ đánh giá
   const evaluatorFields = ref<any>([]);
-  // 评估器下拉列配置
+  // Cấu hình cột thả xuống của bộ đánh giá
   const evaluatorColumns = ref<any>([]);
-  //字段映射
+  //Ánh xạ trường
   const fieldMappings = reactive<Record<string, string>>({});
-  //页码配置
+  //Cấu hình số trang
   const page = ref({
     pageNo: 1,
     pageSize: 10,
   });
-  // 提示词选项数据
+  // Dữ liệu tùy chọn prompt
   const promptOptions = ref<any[]>([]);
-  // 数据集列
+  // Cột tập dữ liệu
   const datasetColumns = ref<any[]>([]);
-  // 提示词参数
+  // Tham số prompt
   const promptParams = ref<any[]>([]);
-  // 调试结果
+  // Kết quả gỡ lỗi
   const debugResult = ref<any[]>([]);
-  // 结果表格列
+  // Cột bảng kết quả
   const resultColumns = ref<any[]>([
-    { title: '问题', dataIndex: 'userQuery', key: 'userQuery',fixed: 'left' },
-    { title: '提示词输出答案', dataIndex: 'promptAnswer', key: 'promptAnswer',fixed: 'left' },
-    { title: '评分', dataIndex: 'answerScore', key: 'answerScore',fixed: 'left' },
+    { title: 'Câu hỏi', dataIndex: 'userQuery', key: 'userQuery',fixed: 'left' },
+    { title: 'Prompt xuất đáp án', dataIndex: 'promptAnswer', key: 'promptAnswer',fixed: 'left' },
+    { title: 'Chấm điểm', dataIndex: 'answerScore', key: 'answerScore',fixed: 'left' },
   ]);
 
-  // 确认调试配置
+  // Xác nhận cấu hình gỡ lỗi
   const canConfirmDebug = computed(() => {
     let canConfirm = true;
     evaluatorFields.value.forEach((field) => {
@@ -259,22 +259,22 @@
     });
     return canConfirm;
   });
-  // 表单赋值
+  // Gán giá trị biểu mẫu
   const [registerModal, { closeModal }] = useModalInner(async (data) => {
-    //调试数据
+    //Dữ liệu gỡ lỗi
     record.value = data.record;
-    //重置数据
+    //Đặt lại dữ liệu
     resetForm();
-    //查询提示词
+    //Truy vấn prompt
     await getPromptList();
-    //查询测评列配置
+    //Truy vấn cấu hình cột trắc nghiệm
     getDatasetColumns();
-    //查询评估器字段配置
+    //Truy vấn cấu hình trường của bộ đánh giá
     getEvaluatorFields();
   });
 
   /**
-   * 获取数据集列字段
+   * Lấy trường cột của tập dữ liệu
    */
   function getDatasetColumns() {
     let datasetValue = record.value?.datasetValue;
@@ -290,23 +290,23 @@
         }
       });
     } else {
-      createMessage.warning('未配置评测集信息！');
+      createMessage.warning('Chưa cấu hình thông tin tập đánh giá!');
     }
   }
   /**
-   * 获取数据集列字段
+   * Lấy trường cột của tập dữ liệu
    */
   function getEvaluatorFields() {
     let dataValue = record.value?.dataValue;
     if (dataValue) {
       evaluatorFields.value = dataValue.match(/{{\s*([^}\s]+)\s*}}/g).map((match) => ({ field: match.replace(/{{\s*|\s*}}/g, '') }));
     } 
-    //列配置
-    evaluatorColumns.value.push({ name: 'actual_output', label: '评测对象', description: '实际输出', dateType: 'String' });
+    //Cấu hình cột
+    evaluatorColumns.value.push({ name: 'actual_output', label: 'Đối tượng đánh giá', description: 'Đầu ra thực tế', dateType: 'String' });
   }
 
   /**
-   * 获取提示词
+   * Lấy prompt
    */
   async function getPromptList() {
     const res = await list({ ...page });
@@ -316,7 +316,7 @@
       });
     }
   }
-  // 重置表单
+  // Đặt lại biểu mẫu
   function resetForm() {
     currentStep.value = 0;
     selectedPromptKey.value = '';
@@ -330,11 +330,11 @@
     debugResult.value = [];
   }
 
-  // 提示词改变事件
+  // Sự kiện thay đổi prompt
   function onPromptChange(value: string) {
-    //选中的提示词信息
+    //Thông tin prompt đã chọn
     selectedPrompt.value = promptOptions.value.find((item) => item.value == value);
-    // 清空之前的映射
+    // Làm trống ánh xạ trước đó
     Object.keys(fieldMappings).forEach((key) => {
       delete fieldMappings[key];
     });
@@ -349,66 +349,66 @@
     }
   }
 
-  // 下一步
+  // Bước tiếp theo
   function nextStep() {
     if (selectedPromptKey.value) {
       currentStep.value = 1;
     }
   }
 
-  // 上一步
+  // Bước trước
   function prevStep() {
     confirmLoading.value = false;
     debugResult.value = [];
     currentStep.value = 0;
   }
 
-  // 确认调试配置
+  // Xác nhận cấu hình gỡ lỗi
   async function confirmDebug() {
-    // 模拟调试过程
+    // Mô phỏng quá trình gỡ lỗi
     let params = {
       mappings: fieldMappings,
       promptKey: selectedPromptKey.value,
       extDataId: record.value.id,
     };
-    console.log('开始调试...', params);
+    console.log('Bắt đầu gỡ lỗi...', params);
     confirmLoading.value = true;
     let res = await promptExperiment(params);
-    console.log('结束调试res...', res);
+    console.log('Kết thúc gỡ lỗi res...', res);
     emit('success');
   }
 
-  // 刷新评测集
+  // Làm mới tập đánh giá
   async function handleReload() {
     debugResult.value = []
     let res = await queryTrackById({ id: record.value.id });
-    console.log('刷新评测集res...', res);
+    console.log('Làm mới tập đánh giá res...', res);
     if (!res.success) {
       createMessage.error(res.message);
       return;
     } else {
       if (res.result && res.result.length > 0) {
-        console.log('刷新评测集res.result...', res.result);
+        console.log('Làm mới tập đánh giá res.result...', res.result);
         confirmLoading.value = false;
-        // 1. 先找出最大version值
+        // 1. Trước tiên tìm ra giá trị version lớn nhất
         const maxVersion = Math.max(...res.result.map(item => item.version));
 
-        // 2. 过滤出所有具有最大version的项
+        // 2. Lọc ra tất cả các mục có version lớn nhất
         const maxVersionItems = res.result.filter(item => item.version === maxVersion);
        
-        console.log('刷新评测集maxVersionItems...', maxVersionItems);
+        console.log('Làm mới tập đánh giá maxVersionItems...', maxVersionItems);
         if (maxVersionItems.length > 0) {
           maxVersionItems.forEach((item) => {
             debugResult.value.push(JSON.parse(item.dataValue));
           });
         }
       }else{
-        createMessage.warning('数据处理中，请稍后刷新！');
+        createMessage.warning('Đang xử lý dữ liệu, vui lòng làm mới sau!');
       }
     }
   }
 
-  // 状态样式类
+  // Lớp kiểu trạng thái
   const getStatusClass = (record) => {
     if (record.status === '成功') return 'status-success';
     if (record.status === '失败') return 'status-failed';
@@ -416,7 +416,7 @@
     return '';
   };
 
-  // 行样式
+  // Kiểu dòng
   const setRowClassName = (record, index) => {
     return index % 2 === 0 ? 'even-row' : 'odd-row';
   };
@@ -682,7 +682,7 @@
     }
   }
 
-  // 响应式设计
+  // Thiết kế responsive
   @media (max-width: 768px) {
     .step-content {
       padding: 16px;

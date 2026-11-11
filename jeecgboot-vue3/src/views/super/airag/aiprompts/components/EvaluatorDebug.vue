@@ -1,89 +1,89 @@
 <template>
   <div class="ai-assessment-container">
-    <!-- 标题和操作栏 -->
+    <!-- Thanh tiêu đề và thao tác -->
     <div class="assessment-header">
       <div class="header-left">
-        <h5 class="title">AI内容评估</h5>
+        <h5 class="title">Đánh giá nội dung AI</h5>
       </div>
       <div class="header-right" v-if="variable && variable.length > 0">
         <a-button type="primary" ghost class="clear-btn" @click="handleClear">
           <template #icon><DeleteOutlined /></template>
-          清空
+          Làm trống
         </a-button>
         <a-button type="primary" :loading="loading" class="run-btn" @click="handleRun">
           <template #icon><PlayCircleOutlined /></template>
-          运行
+          Chạy
         </a-button>
       </div>
     </div>
 
-    <!-- 评估内容区域 -->
+    <!-- Khu vực nội dung đánh giá -->
     <div class="assessment-content" v-if="variable && variable.length > 0">
       <div class="input-section" v-for="item in variable" :key="item.name">
         <div class="section-header output-header">
           <span class="section-title">{{item.name}}</span>
         </div>
         <div class="section-content output-content">
-          <a-input v-model:value="item.value" placeholder="请输入" />
+          <a-input v-model:value="item.value" placeholder="Vui lòng nhập" />
         </div>
       </div>
     </div>
     <div v-else class="empty-container">
       <Empty
           :image="Empty.PRESENTED_IMAGE_SIMPLE"
-          description="暂无变量"
+          description="Tạm thời chưa có biến"
           class="custom-empty"
       />
     </div>
-    <!-- 结果内容区域 -->
+    <!-- Khu vực nội dung kết quả -->
     <div class="debug-result-container" v-if="result">
-      <!-- 调试成功提示 -->
+      <!-- Gợi ý gỡ lỗi thành công -->
       <div class="debug-success">
         <div class="success-header">
           <div class="success-icon">✓</div>
-          <span class="success-text">调试成功</span>
+          <span class="success-text">Gỡ lỗi thành công</span>
         </div>
 
-        <!-- 分数显示 -->
+        <!-- Hiển thị điểm số -->
 <!--        <div class="score-section">-->
-<!--          <span class="score-label">0 分</span>-->
+<!--          <span class="score-label">0 điểm</span>-->
 <!--          <div class="score-note">-->
-<!--            <span class="note-text">得分仅预览效果，非实际结果。</span>-->
+<!--            <span class="note-text">Điểm số chỉ để xem trước hiệu quả, không phải kết quả thực tế.</span>-->
 <!--          </div>-->
 <!--        </div>-->
 
-        <!-- 原因分析 -->
+        <!-- Phân tích nguyên nhân -->
         <div class="reason-section">
-<!--          <div class="reason-label">原因:</div>-->
+<!--          <div class="reason-label">Nguyên nhân:</div>-->
           <div class="reason-content">
             <span>{{result}}</span>
           </div>
         </div>
 
-        <!-- 免责声明 -->
+        <!-- Tuyên bố miễn trừ trách nhiệm -->
         <div class="disclaimer">
-          <span class="disclaimer-text">内容由AI生成，无法确保真实准确，仅供参考。</span>
+          <span class="disclaimer-text">Nội dung do AI tạo ra, không thể đảm bảo chân thực chính xác, chỉ để tham khảo.</span>
         </div>
       </div>
 
-      <!-- 调试失败示例（可选显示） -->
+      <!-- Ví dụ gỡ lỗi thất bại (hiển thị tùy chọn) -->
       <div v-if="showFailureExample" class="debug-failure">
         <div class="failure-header">
           <div class="failure-icon">✗</div>
-          <span class="failure-text">调试失败</span>
+          <span class="failure-text">Gỡ lỗi thất bại</span>
         </div>
 
         <div class="error-message">
-          <span>代码中存在语法错误，请检查后重新调试。</span>
+          <span>Trong mã tồn tại lỗi cú pháp, vui lòng kiểm tra rồi gỡ lỗi lại.</span>
         </div>
       </div>
     </div>
     
-    <!-- 底部说明 -->
+    <!-- Giải thích ở đáy -->
 <!--    <div class="assessment-footer">-->
 <!--      <div class="footer-content">-->
 <!--        <InfoCircleOutlined class="footer-icon" />-->
-<!--        <span>内容由AI生成，无法确保真实准确，仅供参考。</span>-->
+<!--        <span>Nội dung do AI tạo ra, không thể đảm bảo chân thực chính xác, chỉ để tham khảo.</span>-->
 <!--      </div>-->
 <!--    </div>-->
   </div>
@@ -97,23 +97,23 @@ import {
   PlayCircleOutlined,
 } from '@ant-design/icons-vue'
 
-// 组件属性
+// Thuộc tính component
 const props = defineProps({
-  // 原始内容
+  // Nội dung gốc
   content: {
     type: String,
     default: ``
   },
 })
-// 控制是否显示失败示例
+// Kiểm soát có hiển thị ví dụ thất bại hay không
 const showFailureExample = ref(false)
-// 运行状态
+// trạng thái đang chạy
 const loading = ref(false)
-// 响应式数据
+// Dữ liệu responsive
 const variable = ref([])
-// 结果
+// Kết quả
 const result = ref("")
-// 从内容中提取参数
+// Trích xuất tham số từ nội dung
 const extractContent = () => {
   if(props.content){
     const vars = props.content.match(/{{\s*([^}\s]+)\s*}}/g);
@@ -125,26 +125,26 @@ const extractContent = () => {
   }
 }
 
-// 清空操作
+// Thao tác làm trống
 const handleClear = () => {
   variable.value.forEach((item) => item.value = '')
 }
 
-// 运行操作
+// Thao tác chạy
 const handleRun = () => {
-  // 触发运行事件
+  // Kích hoạt sự kiện chạy
   emit('run', variable.value)
 }
 
-// 定义事件
+// Định nghĩa sự kiện
 const emit = defineEmits(['clear', 'run'])
 
-// 生命周期
+// Vòng đời
 onMounted(() => {
   extractContent()
 })
 
-// 监听内容变化
+// Lắng nghe thay đổi nội dung
 watch(() => props.content, extractContent)
 
 defineExpose({
@@ -163,7 +163,7 @@ defineExpose({
   overflow: hidden;
 }
 
-/* 头部样式 */
+/* Kiểu phần đầu */
 .assessment-header {
   display: flex;
   justify-content: space-between;
@@ -212,7 +212,7 @@ defineExpose({
   border-color: #40a9ff;
 }
 
-/* 内容区域样式 */
+/* Kiểu khu vực nội dung */
 .assessment-content {
   padding: 20px;
   display: flex;
@@ -220,7 +220,7 @@ defineExpose({
   gap: 16px;
 }
 
-/* 通用区块样式 */
+/* Kiểu khối thông thường */
 .input-section,
 .output-section {
   background: #fff;
@@ -241,7 +241,7 @@ defineExpose({
   font-weight: 500;
 }
 
-/* 输出区域 */
+/* Khu vực đầu ra */
 .output-header {
   background: #e6f7ff;
   border-bottom: 1px solid #91d5ff;
@@ -261,7 +261,7 @@ defineExpose({
 }
 
 
-/* 底部样式 */
+/* Kiểu phần đáy */
 .assessment-footer {
   padding: 12px 20px;
   background: #fff;
@@ -286,7 +286,7 @@ defineExpose({
   margin: 20px auto;
 }
 
-/* 成功样式 */
+/* Kiểu thành công */
 .debug-success {
   border: 1px solid #e1e4e8;
   border-radius: 6px;
@@ -321,7 +321,7 @@ defineExpose({
   color: #24292e;
 }
 
-/* 分数部分 */
+/* Phần điểm số */
 .score-section {
   margin-bottom: 16px;
 }
@@ -345,7 +345,7 @@ defineExpose({
   border-radius: 4px;
 }
 
-/* 原因部分 */
+/* Phần nguyên nhân */
 .reason-section {
   margin-bottom: 16px;
 }
@@ -366,7 +366,7 @@ defineExpose({
   border-radius: 4px;
 }
 
-/* 免责声明 */
+/* Tuyên bố miễn trừ trách nhiệm */
 .disclaimer {
   padding: 8px;
   background-color: #fff8e6;
@@ -380,7 +380,7 @@ defineExpose({
   font-style: italic;
 }
 
-/* 失败样式 */
+/* Kiểu thất bại */
 .debug-failure {
   margin-top: 20px;
   border: 1px solid #e1e4e8;
@@ -424,7 +424,7 @@ defineExpose({
   border: 1px solid #d0d7de;
   border-radius: 4px;
 }
-/* 响应式设计 */
+/* Thiết kế responsive */
 @media (max-width: 768px) {
   .assessment-header {
     flex-direction: column;

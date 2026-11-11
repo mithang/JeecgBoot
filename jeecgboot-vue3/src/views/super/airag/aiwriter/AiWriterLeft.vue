@@ -1,8 +1,8 @@
 <template>
   <div class="writer-sidebar">
     <div class="mode-tabs">
-      <div class="tab-item" :class="{ active: activeMode === 'compose' }" @click="activeModeClick('compose')"> 撰写 </div>
-      <div class="tab-item" :class="{ active: activeMode === 'reply' }" @click="activeModeClick('reply')"> 回复 </div>
+      <div class="tab-item" :class="{ active: activeMode === 'compose' }" @click="activeModeClick('compose')"> Soạn thảo </div>
+      <div class="tab-item" :class="{ active: activeMode === 'reply' }" @click="activeModeClick('reply')"> Trả lời </div>
     </div>
 
     <div class="form-content">
@@ -11,8 +11,8 @@
           <a-form-item>
             <template #label>
               <div style="display: flex; justify-content: space-between; width: 100%; align-items: center">
-                <span>原文</span>
-                <span class="example-link" @click="fillExample">示例</span>
+                <span>Văn bản gốc</span>
+                <span class="example-link" @click="fillExample">Ví dụ</span>
               </div>
             </template>
             <a-textarea
@@ -20,16 +20,16 @@
               :auto-size="{ minRows: 4, maxRows: 6 }"
               :maxlength="500"
               show-count
-              placeholder="请输入原文"
+              placeholder="Vui lòng nhập văn bản gốc"
             />
           </a-form-item>
-          <a-form-item label="回复内容">
+          <a-form-item label="Nội dung trả lời">
             <a-textarea
               v-model:value="formData.prompt"
               :auto-size="{ minRows: 4, maxRows: 6 }"
               :maxlength="500"
               show-count
-              placeholder="请输入回复内容"
+              placeholder="Vui lòng nhập nội dung trả lời"
             />
           </a-form-item>
         </template>
@@ -37,8 +37,8 @@
           <a-form-item>
             <template #label>
               <div style="display: flex; justify-content: space-between; width: 100%; align-items: center">
-                <span>写作内容</span>
-                <span class="example-link" @click="fillComposeExample">示例</span>
+                <span>Nội dung viết</span>
+                <span class="example-link" @click="fillComposeExample">Ví dụ</span>
               </div>
             </template>
             <a-textarea
@@ -46,12 +46,12 @@
               :auto-size="{ minRows: 6, maxRows: 12 }"
               :maxlength="500"
               show-count
-              placeholder="请输入写作内容"
+              placeholder="Vui lòng nhập nội dung viết"
             />
           </a-form-item>
         </template>
 
-        <a-form-item label="长度">
+        <a-form-item label="Độ dài">
           <div class="tag-group">
             <span
               v-for="item in options.length"
@@ -65,7 +65,7 @@
           </div>
         </a-form-item>
 
-        <a-form-item label="格式">
+        <a-form-item label="Định dạng">
           <div class="tag-group">
             <span
               v-for="item in options.format"
@@ -79,7 +79,7 @@
           </div>
         </a-form-item>
 
-        <a-form-item label="语气">
+        <a-form-item label="Ngữ khí">
           <div class="tag-group">
             <span
               v-for="item in options.tone"
@@ -93,7 +93,7 @@
           </div>
         </a-form-item>
 
-        <a-form-item label="语言">
+        <a-form-item label="Ngôn ngữ">
           <div class="tag-group">
             <span
               v-for="item in options.language"
@@ -110,8 +110,8 @@
     </div>
 
     <div class="action-footer">
-      <a-button @click="handleReset" style="margin-right: 10px">重置</a-button>
-      <a-button type="primary" @click="handleGenerate">生成</a-button>
+      <a-button @click="handleReset" style="margin-right: 10px">Đặt lại</a-button>
+      <a-button type="primary" @click="handleGenerate">Tạo</a-button>
     </div>
   </div>
 </template>
@@ -127,55 +127,55 @@
   const formData = reactive({
     prompt: '',
     originalContent: '',
-    length: '自动',
-    format: '自动',
-    tone: '自动',
-    language: '自动',
+    length: 'Tự động',
+    format: 'Tự động',
+    tone: 'Tự động',
+    language: 'Tự động',
     activeMode: 'compose',
   });
 
   const options = {
-    //长度
+    //Độ dài
     length: [
-      { label: '自动', value: '自动' },
-      { label: '短', value: '短' },
-      { label: '中等', value: '中等' },
-      { label: '长', value: '长' },
+      { label: 'Tự động', value: 'Tự động' },
+      { label: 'Ngắn', value: 'Ngắn' },
+      { label: 'Trung bình', value: 'Trung bình' },
+      { label: 'Dài', value: 'Dài' },
     ],
-    //格式化
+    //Định dạng
     format: [
-      { label: '自动', value: '自动' },
-      { label: '电子邮件', value: '电子邮件' },
-      { label: '消息', value: '消息' },
-      { label: '评论', value: '评论' },
-      { label: '段落', value: '段落' },
-      { label: '文章', value: '文章' },
-      { label: '博客文章', value: '博客文章' },
-      { label: '想法', value: '想法' },
-      { label: '大纲', value: '大纲' },
+      { label: 'Tự động', value: 'Tự động' },
+      { label: 'Email', value: 'Email' },
+      { label: 'Tin nhắn', value: 'Tin nhắn' },
+      { label: 'Bình luận', value: 'Bình luận' },
+      { label: 'Đoạn văn', value: 'Đoạn văn' },
+      { label: 'Bài viết', value: 'Bài viết' },
+      { label: 'Bài viết blog', value: 'Bài viết blog' },
+      { label: 'Ý tưởng', value: 'Ý tưởng' },
+      { label: 'Đề cương', value: 'Đề cương' },
     ],
-    //语气
+    //Ngữ khí
     tone: [
-      { label: '自动', value: '自动' },
-      { label: '友善', value: '友善' },
-      { label: '随意', value: '随意' },
-      { label: '专业', value: '专业' },
-      { label: '诙谐', value: '诙谐' },
-      { label: '有趣', value: '有趣' },
-      { label: '正式', value: '正式' },
+      { label: 'Tự động', value: 'Tự động' },
+      { label: 'Thân thiện', value: 'Thân thiện' },
+      { label: 'Tùy ý', value: 'Tùy ý' },
+      { label: 'Chuyên nghiệp', value: 'Chuyên nghiệp' },
+      { label: 'Hài hước', value: 'Hài hước' },
+      { label: 'Thú vị', value: 'Thú vị' },
+      { label: 'Chính thức', value: 'Chính thức' },
     ],
-    //语言
+    //Ngôn ngữ
     language: [
-      { label: '自动', value: '自动' },
-      { label: '中文', value: '中文' },
-      { label: '英文', value: '英文' },
-      { label: '韩语', value: '韩语' },
-      { label: '日语', value: '日语' },
+      { label: 'Tự động', value: 'Tự động' },
+      { label: 'Tiếng Trung', value: 'Tiếng Trung' },
+      { label: 'Tiếng Anh', value: 'Tiếng Anh' },
+      { label: 'Tiếng Hàn', value: 'Tiếng Hàn' },
+      { label: 'Tiếng Nhật', value: 'Tiếng Nhật' },
     ],
   };
 
   /**
-   * 撰写和回复切换事件
+   * Sự kiện chuyển đổi soạn thảo và trả lời
    * @param type
    */
   function activeModeClick(type) {
@@ -185,33 +185,33 @@
   }
 
   /**
-   * 重置
+   * Đặt lại
    */
   function handleReset() {
     formData.originalContent = '';
     formData.prompt = '';
-    formData.length = '自动';
-    formData.format = '自动';
-    formData.tone = '自动';
-    formData.language = '自动';
+    formData.length = 'Tự động';
+    formData.format = 'Tự động';
+    formData.tone = 'Tự động';
+    formData.language = 'Tự động';
     formData.activeMode = 'compose';
     emit('reset');
   }
 
   /**
-   * 生成
+   * Tạo
    */
   function handleGenerate() {
     if (activeMode.value === 'compose' && !formData.prompt) {
-      createMessage.warn('请填写写作内容!');
+      createMessage.warn('Vui lòng điền nội dung viết!');
       return;
     }
     if (activeMode.value === 'reply' && !formData.originalContent) {
-      createMessage.warn('请填写原文!');
+      createMessage.warn('Vui lòng điền văn bản gốc!');
       return;
     }
     if (activeMode.value === 'reply' && !formData.prompt) {
-      createMessage.warn('请填写回复!');
+      createMessage.warn('Vui lòng điền trả lời!');
       return;
     }
     formData.activeMode = activeMode.value;
@@ -219,18 +219,18 @@
   }
 
   /**
-   * 回复示例
+   * Ví dụ trả lời
    */
   function fillExample() {
-    formData.originalContent = '关于下周一项目进度会议的安排通知。';
-    formData.prompt = '我已收到，下周一会准时前往';
+    formData.originalContent = 'Thông báo về việc sắp xếp cuộc họp tiến độ dự án vào thứ Hai tuần sau.';
+    formData.prompt = 'Tôi đã nhận được, thứ Hai tuần sau sẽ đến đúng giờ';
   }
 
   /**
-   * 创作示例
+   * Ví dụ sáng tác
    */
   function fillComposeExample() {
-    formData.prompt = '介绍一下 Vue3 的整体架构';
+    formData.prompt = 'Giới thiệu kiến trúc tổng thể của Vue3';
     formData.originalContent = '';
   }
 </script>

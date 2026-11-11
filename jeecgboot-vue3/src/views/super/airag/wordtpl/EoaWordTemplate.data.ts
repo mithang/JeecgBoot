@@ -1,149 +1,149 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-//列表数据
+//Dữ liệu danh sách
 export const columns: BasicColumn[] = [
   {
-    title: '模版名称',
+    title: 'Tên mẫu',
     align: 'center',
     dataIndex: 'name',
   },
   {
-    title: '模版编码',
+    title: 'Mã mẫu',
     align: 'center',
     dataIndex: 'code',
   },
   // {
-  //   title: '页眉',
+  //   title: 'Đầu trang',
   //   align: 'center',
   //   dataIndex: 'header',
   //   ifShow: false,
   // },
   // {
-  //   title: '页脚',
+  //   title: 'Chân trang',
   //   align: 'center',
   //   dataIndex: 'footer',
   //   ifShow: false,
   // },
   // {
-  //   title: '主体内容',
+  //   title: 'Nội dung chủ thể',
   //   align: 'center',
   //   dataIndex: 'main',
   //   ifShow: false,
   // },
   // {
-  //   title: '页边距',
+  //   title: 'Lề trang',
   //   align: 'center',
   //   dataIndex: 'margins',
   //   ifShow: false,
   // },
   // {
-  //   title: '宽度',
+  //   title: 'Độ rộng',
   //   align: 'center',
   //   dataIndex: 'width',
   //   ifShow: false,
   // },
   // {
-  //   title: '高度',
+  //   title: 'Chiều cao',
   //   align: 'center',
   //   dataIndex: 'height',
   //   ifShow: false,
   // },
   // {
-  //   title: '纸张方向',
+  //   title: 'Hướng giấy',
   //   align: 'center',
   //   dataIndex: 'paperDirection',
   //   ifShow: false,
   // },
   // {
-  //   title: '水印',
+  //   title: 'Hình mờ',
   //   align: 'center',
   //   dataIndex: 'watermark',
   //   ifShow: false,
   // },
 ];
-//查询数据
+//Truy vấn dữ liệu
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '模版名称',
+    label: 'Tên mẫu',
     field: 'name',
     component: 'JInput',
   },
   {
-    label: '模版编码',
+    label: 'Mã mẫu',
     field: 'code',
     component: 'JInput',
   },
 ];
-//表单数据
+//Dữ liệu biểu mẫu
 export const formSchema: FormSchema[] = [
   {
-    label: '模版名称',
+    label: 'Tên mẫu',
     field: 'name',
     component: 'Input',
     dynamicRules: ({ model, schema }) => {
-      return [{ required: true, message: '请输入模版名称!' }];
+      return [{ required: true, message: 'Vui lòng nhập tên mẫu!' }];
     },
   },
   {
-    label: '模版编码',
+    label: 'Mã mẫu',
     field: 'code',
     component: 'Input',
     dynamicRules: ({ model, schema }) => {
       return [
-        { required: true, message: '请输入模版编码!' },
-        { pattern: /^[A-Za-z_]+$/, message: '只能输入英文和下划线!' },
+        { required: true, message: 'Vui lòng nhập mã mẫu!' },
+        { pattern: /^[A-Za-z_]+$/, message: 'Chỉ được nhập tiếng Anh và gạch dưới!' },
       ];
     },
   },
   {
-    label: '页眉',
+    label: 'Đầu trang',
     field: 'header',
     component: 'Input',
     show: false,
   },
   {
-    label: '页脚',
+    label: 'Chân trang',
     field: 'footer',
     component: 'Input',
     show: false,
   },
   {
-    label: '主体内容',
+    label: 'Nội dung chủ thể',
     field: 'main',
     component: 'Input',
     show: false,
   },
   {
-    label: '页边距',
+    label: 'Lề trang',
     field: 'margins',
     component: 'Input',
     show: false,
   },
   {
-    label: '宽度',
+    label: 'Độ rộng',
     field: 'width',
     component: 'InputNumber',
     show: false,
   },
   {
-    label: '高度',
+    label: 'Chiều cao',
     field: 'height',
     component: 'InputNumber',
     show: false,
   },
   {
-    label: '纸张方向',
+    label: 'Hướng giấy',
     field: 'paperDirection',
     component: 'Input',
     show: false,
   },
   {
-    label: '水印',
+    label: 'Hình mờ',
     field: 'watermark',
     component: 'Input',
     show: false,
   },
-  // TODO 主键隐藏字段，目前写死为ID
+  // TODO Trường ẩn khóa chính, hiện viết cứng là ID
   {
     label: '',
     field: 'id',
@@ -152,25 +152,25 @@ export const formSchema: FormSchema[] = [
   },
 ];
 
-// 高级查询数据
+// Dữ liệu truy vấn nâng cao
 export const superQuerySchema = {
-  name: { title: '模版名称', order: 0, view: 'text', type: 'string' },
-  code: { title: '模版编码', order: 1, view: 'text', type: 'string' },
-  header: { title: '页眉', order: 2, view: 'text', type: 'string' },
-  footer: { title: '页脚', order: 3, view: 'text', type: 'string' },
-  main: { title: '主体内容', order: 4, view: 'text', type: 'string' },
-  margins: { title: '页边距', order: 5, view: 'text', type: 'string' },
-  width: { title: '宽度', order: 6, view: 'number', type: 'number' },
-  height: { title: '高度', order: 7, view: 'number', type: 'number' },
-  paperDirection: { title: '纸张方向', order: 8, view: 'text', type: 'string' },
-  watermark: { title: '水印', order: 9, view: 'text', type: 'string' },
+  name: { title: 'Tên mẫu', order: 0, view: 'text', type: 'string' },
+  code: { title: 'Mã mẫu', order: 1, view: 'text', type: 'string' },
+  header: { title: 'Đầu trang', order: 2, view: 'text', type: 'string' },
+  footer: { title: 'Chân trang', order: 3, view: 'text', type: 'string' },
+  main: { title: 'Nội dung chủ thể', order: 4, view: 'text', type: 'string' },
+  margins: { title: 'Lề trang', order: 5, view: 'text', type: 'string' },
+  width: { title: 'Độ rộng', order: 6, view: 'number', type: 'number' },
+  height: { title: 'Chiều cao', order: 7, view: 'number', type: 'number' },
+  paperDirection: { title: 'Hướng giấy', order: 8, view: 'text', type: 'string' },
+  watermark: { title: 'Hình mờ', order: 9, view: 'text', type: 'string' },
 };
 
 /**
- * 流程表单调用这个方法获取formSchema
+ * Biểu mẫu quy trình gọi phương thức này để lấy formSchema
  * @param param
  */
 export function getBpmFormSchema(_formData): FormSchema[] {
-  // 默认和原始表单保持一致 如果流程中配置了权限数据，这里需要单独处理formSchema
+  // Mặc định giữ nhất quán với biểu mẫu gốc. Nếu trong quy trình có cấu hình dữ liệu quyền, chỗ này cần xử lý riêng formSchema
   return formSchema;
 }

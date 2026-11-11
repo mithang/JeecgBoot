@@ -10,7 +10,7 @@ export enum Api {
 }
 
 /**
- * 查询ocr列表
+ * Truy vấn danh sách ocr
  *
  * @param params
  */
@@ -19,7 +19,7 @@ export const list = (params) => {
 };
 
 /**
- * 添加Orc
+ * Thêm Orc
  * @param params
  * @param handleSuccess
  */
@@ -28,7 +28,7 @@ export const addOcr = (params) => {
 };
 
 /**
- * 编辑Orc
+ * Chỉnh sửa Orc
  * @param params
  * @param handleSuccess
  */
@@ -37,7 +37,7 @@ export const editOcr = (params) => {
 };
 
 /**
- * 根据id删除 Orc
+ * Xóa Orc theo id
  * @param params
  * @param handleSuccess
  */

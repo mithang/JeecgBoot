@@ -1,39 +1,39 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Bảng trích dẫn-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--slot:tiêu đề table-->
       <template #tableTitle>
-        <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
+        <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined"> Thêm mới</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
-    <!-- 表单区域 -->
+    <!-- Khu vực biểu mẫu -->
     <AiragExtDataModal @register="registerModal" @success="handleSuccess"></AiragExtDataModal>
-    <!-- 评测集 -->
+    <!-- Tập đánh giá -->
     <AiragDataSetModal @register="registerDataSetModal" @success="handleSuccess"></AiragDataSetModal>
-    <!-- 评估器配置 -->
+    <!-- Cấu hình bộ đánh giá -->
     <AiEvaluatorSettingModal @register="registerEvaluatorModal" @success="handleSuccess"></AiEvaluatorSettingModal>
-    <!-- 调试配置 -->
+    <!-- Cấu hình gỡ lỗi -->
     <AiEvaluatorDebugModal @register="registerDebugModal" @success="handleSuccess"></AiEvaluatorDebugModal>
-    <!-- 调用记录 -->
+    <!-- Bản ghi gọi -->
     <AiragInvokeRecordsDrawer @register="registerRecordsModal" @success="handleSuccess"></AiragInvokeRecordsDrawer>
   </div>
 </template>
@@ -50,15 +50,15 @@
   import AiragInvokeRecordsDrawer from './components/AiragInvokeRecordsDrawer.vue';
   import { columns, searchFormSchema } from './AiragExtData.data';
   import { list, deleteOne, batchDelete } from './AiragExtData.api';
-  //注册model
+  //Đăng ký model
   const [registerModal, { openModal }] = useModal();
-  //注册评测集model
+  //Đăng ký model tập đánh giá
   const [registerDataSetModal, { openModal:openDataSetModal }] = useModal();
-  //注册评估器model
+  //Đăng ký model bộ đánh giá
   const [registerEvaluatorModal, { openModal:openEvaluatorModal }] = useModal();
-  //注册评估器model
+  //Đăng ký model bộ đánh giá
   const [registerDebugModal, { openModal:openDebugModal }] = useModal();
-  //注册调用记录model
+  //Đăng ký model bản ghi gọi
   const [registerRecordsModal, { openDrawer:openRecordsDrawer }] = useDrawer();
   const { tableContext } = useListPage({
     tableProps: {
@@ -83,7 +83,7 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增事件
+   * Thêm mới sự kiện
    */
   function handleAdd() {
     openModal(true, {
@@ -92,7 +92,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     openEvaluatorModal(true, {
@@ -102,7 +102,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   function handleDateSet(record: Recordable) {
     openDataSetModal(true, {
@@ -110,19 +110,19 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteOne({ id: record.id }, handleSuccess);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDelete({ ids: selectedRowKeys.value }, handleSuccess);
   }
   /**
-   * 调试事件
+   * Sự kiện gỡ lỗi
    */
   async function handleDebug(record) {
     openDebugModal(true, {
@@ -130,7 +130,7 @@
     });
   }
   /**
-   * 调试事件
+   * Sự kiện gỡ lỗi
    */
   async function handleRecords(record) {
     openRecordsDrawer(true, {
@@ -138,43 +138,43 @@
     });
   }
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '配置',
+        label: 'Cấu hình',
         onClick: handleEdit.bind(null, record),
       }
     ];
   }
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '评测集',
+        label: 'Tập đánh giá',
         onClick: handleDateSet.bind(null, record),
       },
       {
-        label: '调试',
+        label: 'Gỡ lỗi',
         onClick: handleDebug.bind(null, record),
       },
       {
-        label: '调用记录',
+        label: 'Bản ghi gọi',
         onClick: handleRecords.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa hay không',
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft',
         },
