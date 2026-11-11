@@ -2,7 +2,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { Modal } from 'ant-design-vue';
 
 export enum Api {
-  //知识库管理
+  //Quản lý kho tri thức
   list = '/airag/app/list',
   save = '/airag/app/edit',
   copy = '/airag/app/copy',
@@ -18,7 +18,7 @@ export enum Api {
 }
 
 /**
- * 查询应用
+ * Truy vấn ứng dụng
  * @param params
  */
 export const appList = (params) => {
@@ -26,7 +26,7 @@ export const appList = (params) => {
 };
 
 /**
- * 查询知识库
+ * Truy vấn kho tri thức
  * @param params
  */
 export const queryKnowledgeBathById = (params) => {
@@ -34,7 +34,7 @@ export const queryKnowledgeBathById = (params) => {
 };
 
 /**
- * 查询知识库(单条)
+ * Truy vấn kho tri thức(Đơn lẻ)
  * @param params
  */
 export const queryKnowledgeById = (params) => {
@@ -42,7 +42,7 @@ export const queryKnowledgeById = (params) => {
 };
 
 /**
- * 根据应用id查询应用
+ * Truy vấn ứng dụng theo id ứng dụng
  * @param params
  */
 export const queryById = (params) => {
@@ -50,7 +50,7 @@ export const queryById = (params) => {
 };
 
 /**
- * 新增应用
+ * Thêm mới ứng dụng
  * @param params
  */
 export const saveApp = (params) => {
@@ -58,16 +58,16 @@ export const saveApp = (params) => {
 };
 
 /**
- * 复制应用
+ * Sao chép ứng dụng
  * @param params
  * @author scott
- * @since 2026-08-06 【LHZP-1512】AI应用增加后台复制接口
+ * @since 2026-08-06 【LHZP-1512】AIsince 2026-08-06 Thêm giao diện sao chép phía backend cho ứng dụng AI
  */
 export const copyApp = (params) => {
   return defHttp.post({ url: Api.copy, params }, { joinParamsToUrl: true });
 };
 
-// 发布应用
+// Phát hành ứng dụng
 export function releaseApp(appId: string, release = false) {
   return defHttp.post({
     url: Api.release,
@@ -79,16 +79,16 @@ export function releaseApp(appId: string, release = false) {
 }
 
 /**
- * 删除应用
+ * Xóa ứng dụng
  * @param params
  * @param handleSuccess
  */
 export const deleteApp = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除名称为'+params.name+'的应用吗？',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa tên là'+params.name+'ứng dụng?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.delete, params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -99,7 +99,7 @@ export const deleteApp = (params, handleSuccess) => {
 
 
 /**
- * 根据应用id查询流程
+ * Truy vấn quy trình theo id ứng dụng
  * @param params
  */
 export const queryFlowById = (params) => {
@@ -107,7 +107,7 @@ export const queryFlowById = (params) => {
 };
 
 /**
- * 根据应用id查询流程
+ * Truy vấn quy trình theo id ứng dụng
  * @param params
  */
 export const queryFlowByIds = (params) => {
@@ -115,7 +115,7 @@ export const queryFlowByIds = (params) => {
 };
 
 /**
- * 应用编排
+ * Sắp xếp ứng dụng
  * @param params
  */
 export const promptGenerate = (params) => {
@@ -133,7 +133,7 @@ export const promptGenerate = (params) => {
 };
 
 /**
- * 应用编排
+ * Sắp xếp ứng dụng
  * @param params
  */
 export const generateMemoryByAppId = (params) => {

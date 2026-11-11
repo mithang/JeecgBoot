@@ -2,10 +2,10 @@
   <div class="slide-wrap">
     <div class="header">
       <img class="header-image" :src="getImage()" />
-      <div class="header-name">{{ appData.name || 'AI助手' }}</div>
+      <div class="header-name">{{ appData.name || 'Trợ lý AI' }}</div>
     </div>
     <div class="createArea">
-      <a-button type="dashed" @click="handleCreate">新建聊天</a-button>
+      <a-button type="dashed" @click="handleCreate">Tạo mới trò chuyện</a-button>
     </div>
     <div class="historyArea">
       <ul>
@@ -38,7 +38,7 @@
             ref="inputRef"
             v-if="item.isEdit"
             :defaultValue="item.title"
-            placeholder="请输入标题"
+            placeholder="Vui lòng nhập tiêu đề"
             @change="handleInputChange"
             @keyup.enter="inputBlur(item)"
             @blur="inputBlur(item)"
@@ -55,10 +55,10 @@
           <span class="icon del">
             <a-popconfirm
               :overlayStyle="{ 'z-index': 9999 }"
-              title="确定删除此记录？"
+              title="Xác nhận xóa bản ghi này?"
               placement="bottom"
-              ok-text="确定"
-              cancel-text="取消"
+              ok-text="Xác định"
+              cancel-text="Hủy"
               @confirm.stop="handleDel(item)"
             >
               <svg xmlns="http://www.w3.org/2000/svg" role="img" class="iconify iconify--ri" width="1em" height="1em" viewBox="0 0 24 24">
@@ -73,11 +73,11 @@
       </ul>
     </div>
     <div class="left-footer" v-if="source!='chatJs'">
-      AI客服由
+      Chăm sóc khách hàng AI do
       <a style="color: #4183c4;margin-left: 2px;margin-right: 2px" href="https://www.qiaoqiaoyun.com/aiCustomerService" target="_blank">
         JEECG AI
       </a>
-      提供
+      Cung cấp
     </div>
   </div>
 </template>
@@ -93,15 +93,15 @@
   const inputRef = ref(null);
   const router = useRouter();
   let inputValue = '';
-  //新建聊天
+  //Tạo mới trò chuyện
   const handleCreate = () => {
     const uuid = getUuid();
-    props.dataSource.history.unshift({ title: '新建聊天', id: uuid, isEdit: false, disabled: true });
-    // 新建第一个(需要高亮选中)
+    props.dataSource.history.unshift({ title: 'Tạo mới trò chuyện', id: uuid, isEdit: false, disabled: true });
+    // Tạo cái đầu tiên(Cần tô sáng khi chọn)
     props.dataSource.active = uuid;
-    emit('click', "新建聊天", 0);
+    emit('click', "Tạo mới trò chuyện", 0);
   };
-  // 切换聊天
+  // Chuyển đổi trò chuyện
   const handleToggleChat = (item, index) => {
     if (item.id != props.dataSource.active) {
       props.dataSource.active = item.id;
@@ -111,7 +111,7 @@
   const handleInputChange = (e) => {
     inputValue = e.target.value.trim();
   };
-  // 失去焦点
+  // Mất tiêu điểm
   const inputBlur = (item) => {
     if (!item.isEdit) {
       return;
@@ -128,27 +128,27 @@
       )
       .then((res) => {});
   };
-  // 编辑
+  // Chỉnh sửa
   const handleEdit = (item) => {
     console.log(item);
     item.isEdit = true;
     inputValue = item.title;
   };
-  // 保存
+  // Lưu
   const handleSave = (item) => {
     item.isEdit = false;
     item.title = inputValue;
   };
 
   /**
-   * 删除
+   * Xóa
    * @param data
    */
   function handleDel(data) {
     const findIndex = props.dataSource.history.findIndex((item) => item.id == data.id);
     if (findIndex != -1) {
       props.dataSource.history.splice(findIndex, 1);
-      // 删除的是当前active的，active往前移，前面没了往后移。
+      // Cái bị xóa là cái đang active, active dịch về phía trước, phía trước không còn thì dịch về phía sau.
       if (props.dataSource.history.length) {
         if (props.dataSource.active == data.id) {
           if (findIndex > 0) {
@@ -159,22 +159,22 @@
         }
         emit('click', props.dataSource.history[0].title, findIndex);
       } else {
-        //  删没了（删除了最后一个）
+        //  Đã xóa hết (đã xóa cái cuối cùng)
         handleCreate();
       }
     }
-    //update-begin---author:wangshuai---date:2025-03-12---for:【QQYUN-11560】新建聊天内容为空，无法删除---
+    //update-begin---author:wangshuai---date:2025-03-12---for:【QQYUN-11560】Nội dung trò chuyện mới tạo bị trống, không xóa được---
     if(data.disabled){
       return;
     }
-    //update-end---author:wangshuai---date:2025-03-12---for:【QQYUN-11560】新建聊天内容为空，无法删除---
+    //update-end---author:wangshuai---date:2025-03-12---for:【QQYUN-11560】Nội dung trò chuyện mới tạo bị trống, không xóa được---
     defHttp.delete({
       url: '/airag/chat/conversation/' + data.id,
     },{ isTransformResponse: false });
   }
 
   /**
-   * 获取图片
+   * Lấy hình ảnh
    */
   function getImage() {
     return props.appData.icon ? getFileAccessHttpUrl(props.appData.icon) : defaultImg;
@@ -190,7 +190,7 @@
     { deep: true }
   );
 
-  // 指定长度和基数
+  // Chỉ định độ dài và cơ số
   const getUuid = (len = 10, radix = 16) => {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
     var uuid: any = [],

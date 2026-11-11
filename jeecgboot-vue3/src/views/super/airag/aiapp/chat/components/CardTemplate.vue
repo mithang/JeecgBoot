@@ -1,10 +1,10 @@
-<!-- card 官方模板 -->
+<!-- card mẫu chính thức -->
 <template>
   <div class="card-select-panel" @click="handleClick">
-    <!-- 卡片内容 -->
+    <!-- Nội dung thẻ -->
     <div class="card-item">
       <div class="card-title">{{ getTitle }}</div>
-      <!-- 缩略图左侧变体 -->
+      <!-- Biến thể ảnh thu nhỏ bên trái -->
       <div v-if="getTemplateId === 'template-1'" class="card-top">
         <div class="thumb" v-if="!getImage">
           <div class="thumb-dot"></div>
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <!-- 缩略图右侧变体 -->
+      <!-- Biến thể ảnh thu nhỏ bên phải -->
       <div v-else-if="getTemplateId === 'template-2'" class="card-top">
         <div class="desc clamp">
           {{ getContent }}
@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <!-- 横幅图片变体 -->
+      <!-- Biến thể hình ảnh banner -->
       <div v-else-if="getTemplateId === 'template-3'">
         <div class="banner" v-if="!getImage">
           <div class="banner-dot"></div>
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <!-- 纯文本变体 -->
+      <!-- Biến thể văn bản thuần -->
       <div v-else-if="getTemplateId === 'template-4'" class="desc">
         {{ getContent }}
       </div>
@@ -68,12 +68,12 @@
   });
   const emit = defineEmits(['register', 'click', 'delete']);
   const { domainUrl } = useGlobSetting();
-  const content = ref<string>('内容描述是一种重要的沟通和表达，它在描述事物时发挥着至关重要的作用');
+  const content = ref<string>('Mô tả nội dung là một cách giao tiếp và biểu đạt quan trọng, nó phát huy vai trò cực kỳ quan trọng khi mô tả sự vật');
 
-  //获取模板id
+  //Lấy id mẫu
   const getTemplateId = computed(() => props.templateId);
 
-  //获取内容
+  //Lấy nội dung
   const getContent = computed(() => {
     if (props.cardData && props.cardConfig) {
       return props.cardData[props.cardConfig?.content];
@@ -81,18 +81,18 @@
     return content;
   });
 
-  //获取文本
+  //Lấy văn bản
   const getTitle = computed(() => {
     if (props.cardData && props.cardConfig) {
       return props.cardData[props.cardConfig?.title];
     }
-    return '标题';
+    return 'Tiêu đề';
   });
 
-  //获取图片
+  //Lấy hình ảnh
   const getImage = computed(() => {
     if (props.cardData && props.cardConfig) {
-      // update-begin--author:liaozhiyang---date:20260813---for:【LHZP-1603】卡片图片必填去掉
+      // update-begin--author:liaozhiyang---date:20260813---for:【LHZP-1603】Bỏ bắt buộc ảnh thẻ
       const imageField = props.cardConfig?.image;
       if (!imageField) {
         return '';
@@ -101,7 +101,7 @@
       if (typeof src !== 'string' || !src.trim()) {
         return '';
       }
-      // update-end--author:liaozhiyang---date:20260813---for:【LHZP-1603】卡片图片必填去掉
+      // update-end--author:liaozhiyang---date:20260813---for:【LHZP-1603】Bỏ bắt buộc ảnh thẻ
       let reg = /#\s*{\s*domainURL\s*}/g;
       src = src.replace(reg,domainUrl);
       return src;
@@ -110,14 +110,14 @@
   });
 
   /**
-   * 卡片点击事件
+   * Sự kiện nhấp thẻ
    */
   function handleClick() {
     emit('click');
   }
 
   /**
-   * 卡片删除事件
+   * Sự kiện xóa thẻ
    */
   function handleDelete() {
     emit('delete');
@@ -129,7 +129,7 @@
     padding: 8px 0;
     cursor: pointer;
   }
-  /* 标题 */
+  /* Tiêu đề */
   .card-title {
     width: 100%;
     font-weight: 600;
@@ -147,14 +147,14 @@
     -webkit-line-clamp: 1;
   }
 
-  /* 描述文本 */
+  /* Văn bản mô tả */
   .desc {
     color: #667085;
     font-size: 13px;
     line-height: 1.6;
   }
 
-  /* 多行省略，用于第一张卡片（示例） */
+  /* Cắt bớt nhiều dòng, dùng cho thẻ đầu tiên (ví dụ) */
   .clamp {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -162,13 +162,13 @@
     overflow: hidden;
   }
 
-  /* 顶部缩略图行（缩略图 + 描述） */
+  /* Hàng ảnh thu nhỏ trên cùng (ảnh thu nhỏ + Mô tả) */
   .card-top {
     display: flex;
     gap: 12px;
     align-items: center;
   }
-  /* 卡片容器 */
+  /* Container thẻ */
   .card-item {
     display: flex;
     flex-direction: column;
@@ -180,7 +180,7 @@
     transition: all 0.2s ease;
   }
 
-  /* 轻微内阴影与悬浮效果 */
+  /* Hiệu ứng bóng trong nhẹ và lơ lửng */
   .card-item::before {
     content: '';
     position: absolute;
@@ -196,7 +196,7 @@
       display: block;
     }
   }
-  /* 描述文本 */
+  /* Văn bản mô tả */
   .desc {
     color: #667085;
     margin-top: 10px;
@@ -213,7 +213,7 @@
     text-align: left;
     -webkit-line-clamp: 3;
   }
-  /* 缩略图占位（与示例一致：左上小图） */
+  /* Giữ chỗ ảnh thu nhỏ (nhất quán với ví dụ: ảnh nhỏ ở góc trên trái) */
   .thumb {
     width: 44px;
     height: 44px;
@@ -241,7 +241,7 @@
     left: 12px;
   }
 
-  /* 横幅图片占位（第三张卡片的大图） */
+  /* Giữ chỗ hình ảnh banner (ảnh lớn của thẻ thứ ba) */
   .banner {
     width: 100%;
     height: 96px;
@@ -270,7 +270,7 @@
     transform: translateX(-50%);
   }
 
-  /* 变体微调：确保整体间距与示例一致 */
+  /* Tinh chỉnh biến thể: đảm bảo khoảng cách tổng thể nhất quán với ví dụ */
   .variant-text .desc {
     margin-top: 2px;
   }

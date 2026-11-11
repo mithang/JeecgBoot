@@ -137,7 +137,7 @@ import {ref, onMounted, onBeforeUnmount, watch} from 'vue';
       width: 100%;
       overflow-y: hidden;
       overflow-x: auto;
-      /* 隐藏所有滚动条 */
+      /* Ẩn tất cả thanh cuộn */
       &::-webkit-scrollbar {
         display: none;
         height: 0;

@@ -1,4 +1,4 @@
-<!--image放大封装-->
+<!--Đóng gói phóng to image-->
 <template>
   <div class="amplify-image">
     <div class="img-preview-content" @click="hideImageClick" @mousewheel="handlePicMousewheel">
@@ -8,17 +8,17 @@
 </template>
 
 <script setup lang="ts">
-  //图片地址
+  //Địa chỉ hình ảnh
   import {onMounted, ref, unref} from 'vue';
   const props = defineProps(['imageUrl']);
   const emit = defineEmits(['register', 'hide']);
-  //图片的ref
+  //ref của hình ảnh
   const imageRef = ref();
-  //缩放级别
+  //Mức thu phóng
   const scale = ref<number>(1);
 
   /**
-   * 隐藏图片
+   * Ẩn hình ảnh
    */
   function hideImageClick() {
     scale.value = 1;
@@ -26,15 +26,15 @@
   }
 
   /**
-   * 鼠标滑轮滚动
+   * Cuộn bằng con lăn chuột
    * @param event
    */
   function handlePicMousewheel(event) {
     event.preventDefault();
-    // 判断是放大还是缩小
+    // Phán đoán là phóng to hay thu nhỏ
     const delta = event.deltaY > 0 ? -1 : 1;
     const scaleStep = 0.1;
-    // 更新缩放级别
+    // Cập nhật mức thu phóng
     scale.value = scale.value + delta * scaleStep
     imageRef.value.style.transform = `scale(${unref(scale)})`;
   }

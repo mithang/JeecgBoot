@@ -6,30 +6,30 @@
           <div style="display: flex">
             <img :src="getImage()" class="header-img"/>
             <div class="header-name">{{formState.name}}</div>
-            <a-tooltip v-if="!isRelease" title="编辑">
+            <a-tooltip v-if="!isRelease" title="Chỉnh sửa">
               <Icon icon="ant-design:edit-outlined" style="margin-left: 4px;cursor: pointer" color="#354052" size="20" @click="handleEdit"></Icon>
             </a-tooltip>
           </div>
           <div>
-            应用编排
-            <a-tooltip title="AI应用文档">
+            Sắp xếp ứng dụng
+            <a-tooltip title="Tài liệu ứng dụng AI">
               <a style="color: unset" href="https://help.jeecg.com/aigc/guide/app" target="_blank">
                 <Icon style="position:relative;left:2px;top:1px" icon="ant-design:question-circle-outlined"></Icon>
               </a>
             </a-tooltip>
           </div>
           <div style="display: flex">
-            <a-button v-if="!isRelease" @click="handleOk" style="margin-right: 30px" type="primary">保存</a-button>
+            <a-button v-if="!isRelease" @click="handleOk" style="margin-right: 30px" type="primary">Lưu</a-button>
           </div>
         </div>
       </template>
       <div style="height: 100%; width: 100%">
         <a-row :span="24">
           <a-col :span="10">
-            <div class="orchestration">编排</div>
+            <div class="orchestration">Sắp xếp</div>
           </a-col>
           <a-col :span="14">
-            <div class="view">预览</div>
+            <div class="view">Xem trước</div>
           </a-col>
         </a-row>
         <a-row :span="24">
@@ -41,9 +41,9 @@
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.flowId">
                       <template #label>
                         <div style="display: flex;justify-content: space-between;width: 100%;">
-                          <span>关联流程</span>
+                          <span>Quy trình liên kết</span>
                           <span v-if="!isRelease" @click="handleAddFlowClick('chatFLow')" class="knowledge-txt">
-                             <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>添加
+                             <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>Thêm
                           </span>
                         </div>
                       </template>
@@ -54,7 +54,7 @@
                             <div style="display: grid;margin-left: 5px;align-items: center;width: calc(100% - 20px)">
                               <span class="flow-name ellipsis align-items: center;">{{ flowData.name }}</span>
                               <div class="flex text-status" v-if="flowData.metadata && flowData.metadata.length>0">
-                                <span class="tag-input">输入</span>
+                                <span class="tag-input">Đầu vào</span>
                                 <div v-for="(metaItem, index) in flowData.metadata">
                                   <a-tag color="#f2f3f8" class="tags-meadata">
                                     <span v-if="index<5" class="tag-text">{{ metaItem.field }}</span>
@@ -67,7 +67,7 @@
                         </div>
                       </a-card>
                       <div v-else class="data-empty-text">
-                        工作流支持通过可视化的方式，对大语言模型、脚本、增强等功能进行组合，从而实现复杂、稳定的业务流程编排，例如旅行规划、报告分析。
+                        Quy trình làm việc hỗ trợ bằng cách trực quan hóa, kết hợp các chức năng như mô hình ngôn ngữ lớn, tập lệnh, tăng cường, từ đó hiện thực hóa việc sắp xếp quy trình nghiệp vụ phức tạp, ổn định, ví dụ lập kế hoạch du lịch, phân tích báo cáo.
                       </div>
                     </a-form-item>
                   </div>
@@ -77,23 +77,23 @@
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.prompt" style="margin-bottom:0;">
                       <template #label>
                         <div class="prompt-title-padding item-title space-between">
-                          <span>提示词</span>
+                          <span>Prompt</span>
                           <div style="align-items: center;display:flex;justify-content: center" v-if="!isRelease">
                             <a-button size="middle" ghost>
                               <span style="align-items: center;display:flex"  @click="openPromptApps">
-                                <Icon icon="ant-design:database-outlined"></Icon>提示词库
+                                <Icon icon="ant-design:database-outlined"></Icon>Thư viện prompt
                               </span>
                             </a-button>
                             <a-button  size="middle" ghost>
                               <span style="align-items: center;display:flex"  @click="generatedPrompt">
                                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.9839 1.85931C19.1612 1.38023 19.8388 1.38023 20.0161 1.85931L20.5021 3.17278C20.5578 3.3234 20.6766 3.44216 20.8272 3.49789L22.1407 3.98392C22.6198 4.1612 22.6198 4.8388 22.1407 5.01608L20.8272 5.50211C20.6766 5.55784 20.5578 5.6766 20.5021 5.82722L20.0161 7.14069C19.8388 7.61977 19.1612 7.61977 18.9839 7.14069L18.4979 5.82722C18.4422 5.6766 18.3234 5.55784 18.1728 5.50211L16.8593 5.01608C16.3802 4.8388 16.3802 4.1612 16.8593 3.98392L18.1728 3.49789C18.3234 3.44216 18.4422 3.3234 18.4979 3.17278L18.9839 1.85931zM13.5482 4.07793C13.0164 2.64069 10.9836 2.64069 10.4518 4.07793L8.99368 8.01834C8.82648 8.47021 8.47021 8.82648 8.01834 8.99368L4.07793 10.4518C2.64069 10.9836 2.64069 13.0164 4.07793 13.5482L8.01834 15.0063C8.47021 15.1735 8.82648 15.5298 8.99368 15.9817L10.4518 19.9221C10.9836 21.3593 13.0164 21.3593 13.5482 19.9221L15.0063 15.9817C15.1735 15.5298 15.5298 15.1735 15.9817 15.0063L19.9221 13.5482C21.3593 13.0164 21.3593 10.9836 19.9221 10.4518L15.9817 8.99368C15.5298 8.82648 15.1735 8.47021 15.0063 8.01834L13.5482 4.07793zM5.01608 16.8593C4.8388 16.3802 4.1612 16.3802 3.98392 16.8593L3.49789 18.1728C3.44216 18.3234 3.3234 18.4422 3.17278 18.4979L1.85931 18.9839C1.38023 19.1612 1.38023 19.8388 1.85931 20.0161L3.17278 20.5021C3.3234 20.5578 3.44216 20.6766 3.49789 20.8272L3.98392 22.1407C4.1612 22.6198 4.8388 22.6198 5.01608 22.1407L5.50211 20.8272C5.55784 20.6766 5.6766 20.5578 5.82722 20.5021L7.14069 20.0161C7.61977 19.8388 7.61977 19.1612 7.14069 18.9839L5.82722 18.4979C5.6766 18.4422 5.55784 18.3234 5.50211 18.1728L5.01608 16.8593z"/></svg>
-                                <span style="margin-left: 4px">生成</span>
+                                <span style="margin-left: 4px">Tạo</span>
                               </span>
                             </a-button>
                           </div>
                         </div>
                       </template>
-                      <a-textarea :disabled="isRelease" :rows="8" v-model:value="formState.prompt" placeholder="请输入提示词"/>
+                      <a-textarea :disabled="isRelease" :rows="8" v-model:value="formState.prompt" placeholder="Vui lòng nhập prompt"/>
                     </a-form-item>
                   </div>
                 </a-col>
@@ -101,7 +101,7 @@
                   <div class="prologue-chunk-edit">
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.prologue" style="margin-bottom:0;">
                       <template #label>
-                        <div class="prompt-title-padding item-title">开场白</div>
+                        <div class="prompt-title-padding item-title">Lời mở đầu</div>
                       </template>
                       <div class="prologue-chunk-edit">
                         <j-markdown-editor :height="166" v-model:value="formState.prologue" :disabled="isRelease" @change="prologueTextAreaBlur" :preview="{ mode: 'view', action: [] }"></j-markdown-editor>
@@ -114,8 +114,8 @@
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.presetQuestion" style="margin-bottom:0;">
                       <template #label>
                         <div class="prompt-title-padding item-title space-between">
-                          <div class="item-title">预设问题</div>
-                          <a-tooltip v-if="!isRelease" title="添加预设问题">
+                          <div class="item-title">Câu hỏi đặt sẵn</div>
+                          <a-tooltip v-if="!isRelease" title="Thêm câu hỏi đặt sẵn">
                             <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 16px;cursor: pointer" @click="presetQuestionAddClick"></Icon>
                           </a-tooltip>
                         </div>
@@ -125,14 +125,14 @@
                           <template #item="{ element:item }">
                             <div style="display: flex;width: 100%;margin-top: 10px">
                               <Icon v-if="!isRelease" icon="ant-design:holder-outlined" size="20"></Icon>
-                              <a-input :disabled="isRelease" placeholder="输入预设问题" v-model:value="item.descr" style="margin-left: 10px;" @blur="onBlur(item)" @focus="onFocus(item)" @change="questionChange"></a-input>
+                              <a-input :disabled="isRelease" placeholder="Nhập câu hỏi đặt sẵn" v-model:value="item.descr" style="margin-left: 10px;" @blur="onBlur(item)" @focus="onFocus(item)" @change="questionChange"></a-input>
                               <Icon v-if="!isRelease" style="cursor: pointer;margin-left: 10px" icon="ant-design:delete-outlined" @click="deleteQuestionClick(item.key)"></Icon>
                             </div>
                           </template>
                         </draggable>
                       </div>
                       <div v-else class="data-empty-text">
-                        预设问题问题是新对话的初始引导，用户可以快速发起预设对话
+                        Câu hỏi đặt sẵn là hướng dẫn ban đầu của cuộc trò chuyện mới, người dùng có thể nhanh chóng bắt đầu cuộc trò chuyện đặt sẵn
                       </div>
                     </a-form-item>
                   </div>
@@ -142,8 +142,8 @@
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.presetQuestion" style="margin-bottom:0;">
                       <template #label>
                         <div class="prompt-title-padding item-title space-between">
-                          <div class="item-title">快捷指令</div>
-                          <a-tooltip v-if="!isRelease" title="添加快捷指令">
+                          <div class="item-title">Lệnh tắt</div>
+                          <a-tooltip v-if="!isRelease" title="Thêm lệnh tắt">
                             <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 16px;cursor: pointer" @click="quickCommandAddClick"></Icon>
                           </a-tooltip>
                         </div>
@@ -158,10 +158,10 @@
                                 <div style="max-width: 400px;margin-left: 4px" class="ellipsis">{{item.name}}</div>
                               </div>
                               <div v-if="!isRelease" style="align-items: center" class="quick-command-icon">
-                                <a-tooltip title="编辑">
+                                <a-tooltip title="Chỉnh sửa">
                                   <Icon style="cursor: pointer;margin-left: 10px" icon="ant-design:edit-outlined" @click="editCommandClick(item)"></Icon>
                                 </a-tooltip>
-                                <a-tooltip title="删除">
+                                <a-tooltip title="Xóa">
                                   <Icon style="cursor: pointer;margin-left: 10px" icon="ant-design:delete-outlined" @click="deleteCommandClick(item.key)"></Icon>
                                 </a-tooltip>
                               </div>
@@ -170,7 +170,7 @@
                         </draggable>
                       </div>
                       <div v-else class="data-empty-text">
-                        快捷指令是对话输入框上方的按钮，配置完成后，用户可以快速发起预设对话
+                        Lệnh tắt là nút phía trên ô nhập hội thoại, sau khi cấu hình xong, người dùng có thể nhanh chóng bắt đầu cuộc trò chuyện đặt sẵn
                       </div>
                     </a-form-item>
                   </div>
@@ -180,16 +180,16 @@
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.modelId">
                       <template #label>
                        <div style="display: flex;justify-content: space-between;width: 100%;margin-right: 2px">
-                         <div class="item-title">AI模型</div>
+                         <div class="item-title">Mô hình AI</div>
                          <div v-if="!isRelease" @click="handleParamSettingClick('model')" class="knowledge-txt">
-                            <Icon icon="ant-design:setting-outlined" size="13" style="margin-right: 2px"></Icon>参数配置
+                            <Icon icon="ant-design:setting-outlined" size="13" style="margin-right: 2px"></Icon>Cấu hình tham số
                          </div>
                        </div>
                       </template>
                       <JDictSelectTag
                           v-model:value="formState.modelId"
                           :disabled="isRelease"
-                          placeholder="请选择AI模型"
+                          placeholder="Vui lòng chọn mô hình AI"
                           dict-code="airag_model where model_type = 'LLM' and activate_flag = 1,name,id"
                           style="width: 100%;"
                           @change="handleModelIdChange"
@@ -208,13 +208,13 @@
                     >
                       <template #label>
                         <div style="display: flex; justify-content: space-between; width: 100%;margin-left: 2px;">
-                          <div class="item-title">知识库</div>
+                          <div class="item-title">Kho tri thức</div>
                           <div v-if="!isRelease">
                             <span @click="handleParamSettingClick('knowledge')" class="knowledge-txt">
-                              <Icon icon="ant-design:setting-outlined" size="13" style="margin-right: 2px"></Icon>参数配置
+                              <Icon icon="ant-design:setting-outlined" size="13" style="margin-right: 2px"></Icon>Cấu hình tham số
                             </span>
                             <span @click="handleAddKnowledgeIdClick('knowledge')" class="knowledge-txt">
-                              <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>添加
+                              <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>Thêm
                             </span>
                           </div>
                         </div>
@@ -233,21 +233,21 @@
                           </a-card>
                         </a-col>
                         <div v-else class="data-empty-text">
-                          添加知识库后，用户发送消息时，智能体能够引用文本知识中的内容回答用户问题。
+                          Sau khi thêm vào kho tri thức, khi người dùng gửi tin nhắn, tác tử có thể trích dẫn nội dung trong tri thức văn bản để trả lời câu hỏi của người dùng.
                         </div>
                       </a-row>
                     </a-form-item>
                   </div>
                 </a-col>
-                <!-- 关联工作流多个 -->
+                <!-- Liên kết nhiều quy trình làm việc -->
                 <a-col :span="24" v-if="formState.type==='chatSimple'" class="mt-10">
                   <div class="prologue-chunk">
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
                       <template #label>
                         <div style="display: flex;justify-content: space-between;width: 100%;">
-                          <span>关联流程</span>
+                          <span>Quy trình liên kết</span>
                           <span v-if="!isRelease" @click="handleAddFlowClick('chatSimple')" class="knowledge-txt">
-                             <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>添加
+                             <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>Thêm
                           </span>
                         </div>
                       </template>
@@ -261,7 +261,7 @@
                                   <span class="flow-name" style="color: #e03e2d;text-decoration: line-through" v-if="flowData.type">{{ flowData.name }}</span>
                                   <span v-else class="flow-name ellipsis align-items: center;">{{ flowData.name }}</span>
                                   <div class="flex text-status" v-if="flowData.metadata && flowData.metadata.length>0">
-                                    <span class="tag-input">输入</span>
+                                    <span class="tag-input">Đầu vào</span>
                                     <div v-for="(metaItem, index) in flowData.metadata">
                                       <a-tag color="#f2f3f8" class="tags-meadata">
                                         <span v-if="index<5" class="tag-text">{{ metaItem.field }}</span>
@@ -275,23 +275,23 @@
                           </a-card>
                         </a-col>
                         <div v-else class="data-empty-text">
-                          工作流支持通过可视化的方式，对大语言模型、脚本、增强等功能进行组合，从而实现复杂、稳定的业务流程编排，例如旅行规划、报告分析。
+                          Quy trình làm việc hỗ trợ bằng cách trực quan hóa, kết hợp các chức năng như mô hình ngôn ngữ lớn, tập lệnh, tăng cường, từ đó hiện thực hóa việc sắp xếp quy trình nghiệp vụ phức tạp, ổn định, ví dụ lập kế hoạch du lịch, phân tích báo cáo.
                         </div>
                       </a-row>
                
                     </a-form-item>
                   </div>
                 </a-col>
-                <!-- 插件关联区块 -->
+                <!-- Khối liên kết plugin -->
                 <a-col :span="24" v-if="formState.type==='chatSimple'" class="mt-10">
                   <div class="prologue-chunk">
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
                       <template #label>
                         <div style="display: flex; justify-content: space-between; width: 100%;margin-left: 2px;">
-                          <div class="item-title">关联MCP&插件</div>
+                          <div class="item-title">Liên kết MCP&Plugin</div>
                           <div v-if="!isRelease">
                             <span @click="handleAddMcpClick" class="knowledge-txt">
-                              <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>添加
+                              <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>Thêm
                             </span>
                           </div>
                         </div>
@@ -302,19 +302,19 @@
                             <div style="display: flex; width: 100%; justify-content: space-between">
                               <div>
                                 <img class="knowledge-img" src="/@/views/super/airag/aimcp/imgs/mcpLogo.png" />
-                                <span class="knowledge-name" :class="{ disabled: item.status === 'disable' || item.isDelete }" :title="item.isDelete ? '已删除' : item.status === 'disable' ? '已禁用' : item.name">{{ item.name }}</span>
-                                <span v-if="item.status === 'disable'" class="status-disabled">禁用</span>
-                                <span v-else-if="item.isDelete" class="status-disabled">已删除</span>
+                                <span class="knowledge-name" :class="{ disabled: item.status === 'disable' || item.isDelete }" :title="item.isDelete ? 'Đã xóa' : item.status === 'disable' ? 'Đã vô hiệu hóa' : item.name">{{ item.name }}</span>
+                                <span v-if="item.status === 'disable'" class="status-disabled">Vô hiệu hóa</span>
+                                <span v-else-if="item.isDelete" class="status-disabled">Đã xóa</span>
                               </div>
                               <Icon v-if="!isRelease" @click="handleDeleteMcp(item.id)" icon="ant-design:close-outlined" size="20" class="knowledge-icon"></Icon>
                             </div>
                           </a-card>
                         </a-col>
                         <div v-else class="data-empty-text">
-                          <div style="margin-bottom: 8px;">添加插件后，智能体可调用外部工具能力丰富对话。</div>
+                          <div style="margin-bottom: 8px;">Sau khi thêm plugin, tác tử có thể gọi năng lực công cụ bên ngoài để làm phong phú cuộc trò chuyện.</div>
                           <div class="mcp-warning-tip">
                             <Icon icon="ant-design:exclamation-circle-outlined" style="margin-right: 4px;" />
-                            <span>注意：部分大模型暂不支持工具调用功能，请确认所选模型兼容性</span>
+                            <span>Lưu ý: một số mô hình lớn tạm thời không hỗ trợ chức năng gọi công cụ, vui lòng xác nhận tính tương thích của mô hình đã chọn</span>
                           </div>
                         </div>
                       </a-row>
@@ -326,17 +326,17 @@
                     <a-collapse-panel key="1">
                       <template #header>
                         <div style="font-weight: 600;color: rgba(32,41,69,0.62);font-size: 14px;justify-content: space-between;display: flex; width: 100%">
-                          <span>记忆</span>
-                          <a-switch @click.prevent.stop="" :disabled="isRelease" v-model:checked="izOpenMemoryChecked" checked-children="开" un-checked-children="关" @change="handleMemoryChange"></a-switch>
+                          <span>Bộ nhớ</span>
+                          <a-switch @click.prevent.stop="" :disabled="isRelease" v-model:checked="izOpenMemoryChecked" checked-children="Mở" un-checked-children="Đóng" @change="handleMemoryChange"></a-switch>
                         </div>
                       </template>
                       <div v-if="izOpenMemoryChecked">
                         <div class="prologue-chunk">
                           <div style="display: flex; justify-content: space-between; width: 100%;margin-left: 2px;">
-                            <div class="item-title">变量</div>
+                            <div class="item-title">Biến</div>
                             <div v-if="!isRelease">
                               <span @click="handleAddVariable" class="knowledge-txt">
-                                <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>添加
+                                <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>Thêm
                               </span>
                             </div>
                           </div>
@@ -353,15 +353,15 @@
                             </div>
                           </div>
                           <div v-else class="data-empty-text">
-                            用于保存用户个人信息，让智能体记住用户的特征，使回复更加个性化。
+                            Dùng để lưu thông tin cá nhân của người dùng, để tác tử ghi nhớ đặc điểm của người dùng, giúp trả lời cá nhân hóa hơn.
                           </div>
                         </div>
                         <div class="prologue-chunk" style="margin-top: 10px;">
                           <div style="display: flex; justify-content: space-between; width: 100%;margin-left: 2px;">
-                            <div class="item-title">长期记忆</div>
+                            <div class="item-title">Bộ nhớ dài hạn</div>
                             <div v-if="!isRelease">
                               <span @click="handleAddKnowledgeIdClick('memory')" class="knowledge-txt">
-                                <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>添加
+                                <Icon icon="ant-design:plus-outlined" size="13" style="margin-right: 2px"></Icon>Thêm
                               </span>
                             </div>
                           </div>
@@ -380,23 +380,23 @@
                             </a-form-item>
                           </div>
                           <div v-else class="data-empty-text">
-                            开启后可总结聊天对话的内容，并用于更好的响应用户的消息。
+                            Sau khi bật có thể tóm tắt nội dung cuộc trò chuyện, và dùng để phản hồi tin nhắn của người dùng tốt hơn.
                           </div>
                         </div>
                         <div class="prologue-chunk" style="margin-top: 20px;">
                           <div class="prompt-title-padding item-title space-between">
-                            <span>记忆与变量提示词</span>
+                            <span>Prompt bộ nhớ và biến</span>
                             <div style="align-items: center;display:flex;justify-content: center" v-if="!isRelease">
                               <a-button size="middle" ghost>
                                  <span style="align-items: center;display:flex" @click="generateVariablePrompt">
                                    <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.9839 1.85931C19.1612 1.38023 19.8388 1.38023 20.0161 1.85931L20.5021 3.17278C20.5578 3.3234 20.6766 3.44216 20.8272 3.49789L22.1407 3.98392C22.6198 4.1612 22.6198 4.8388 22.1407 5.01608L20.8272 5.50211C20.6766 5.55784 20.5578 5.6766 20.5021 5.82722L20.0161 7.14069C19.8388 7.61977 19.1612 7.61977 18.9839 7.14069L18.4979 5.82722C18.4422 5.6766 18.3234 5.55784 18.1728 5.50211L16.8593 5.01608C16.3802 4.8388 16.3802 4.1612 16.8593 3.98392L18.1728 3.49789C18.3234 3.44216 18.4422 3.3234 18.4979 3.17278L18.9839 1.85931zM13.5482 4.07793C13.0164 2.64069 10.9836 2.64069 10.4518 4.07793L8.99368 8.01834C8.82648 8.47021 8.47021 8.82648 8.01834 8.99368L4.07793 10.4518C2.64069 10.9836 2.64069 13.0164 4.07793 13.5482L8.01834 15.0063C8.47021 15.1735 8.82648 15.5298 8.99368 15.9817L10.4518 19.9221C10.9836 21.3593 13.0164 21.3593 13.5482 19.9221L15.0063 15.9817C15.1735 15.5298 15.5298 15.1735 15.9817 15.0063L19.9221 13.5482C21.3593 13.0164 21.3593 10.9836 19.9221 10.4518L15.9817 8.99368C15.5298 8.82648 15.1735 8.47021 15.0063 8.01834L13.5482 4.07793zM5.01608 16.8593C4.8388 16.3802 4.1612 16.3802 3.98392 16.8593L3.49789 18.1728C3.44216 18.3234 3.3234 18.4422 3.17278 18.4979L1.85931 18.9839C1.38023 19.1612 1.38023 19.8388 1.85931 20.0161L3.17278 20.5021C3.3234 20.5578 3.44216 20.6766 3.49789 20.8272L3.98392 22.1407C4.1612 22.6198 4.8388 22.6198 5.01608 22.1407L5.50211 20.8272C5.55784 20.6766 5.6766 20.5578 5.82722 20.5021L7.14069 20.0161C7.61977 19.8388 7.61977 19.1612 7.14069 18.9839L5.82722 18.4979C5.6766 18.4422 5.55784 18.3234 5.50211 18.1728L5.01608 16.8593z"/></svg>
-                                   <span style="margin-left: 4px">生成</span>
+                                   <span style="margin-left: 4px">Tạo</span>
                                  </span>
                               </a-button>
                             </div>
                           </div>
-                          <a-spin :spinning="memoryLoading" tip="为您编排应用程序中…">
-                            <a-textarea :disabled="memoryLoading || !canGenerateMemoryPrompt || isRelease" :rows="6" v-model:value="formState.memoryPrompt" placeholder="点击生成按钮生成记忆与变量提示词"/>
+                          <a-spin :spinning="memoryLoading" tip="Đang sắp xếp cho bạn trong ứng dụng…">
+                            <a-textarea :disabled="memoryLoading || !canGenerateMemoryPrompt || isRelease" :rows="6" v-model:value="formState.memoryPrompt" placeholder="Nhấp nút tạo để tạo prompt bộ nhớ và biến"/>
                           </a-spin>
                         </div>
                       </div>
@@ -407,7 +407,7 @@
                   <div class="prologue-chunk">
                     <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.msgNum">
                       <template #label>
-                        <div style="margin-left: 2px">历史聊天记录</div>
+                        <div style="margin-left: 2px">Lịch sử trò chuyện</div>
                       </template>
                       <a-input-number :disabled="isRelease" v-model:value="formState.msgNum"></a-input-number>
                     </a-form-item>
@@ -415,32 +415,32 @@
                 </a-col>
                 <a-col :span="24" class="mt-10">
                   <div class="prologue-chunk">
-                    <div style="margin-left: 2px">个性化设置</div>
+                    <div style="margin-left: 2px">Cài đặt cá nhân hóa</div>
                     <a-row>
                       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.multiSession">
                         <div style="display: flex;margin-top: 10px">
-                          <div style="margin-left: 2px">多会话模式：</div>
-                          <a-switch :disabled="isRelease" v-model:checked="multiSessionChecked" checked-children="开" un-checked-children="关" @change="handleMultiSessionChange"></a-switch>
+                          <div style="margin-left: 2px">Chế độ nhiều phiên:</div>
+                          <a-switch :disabled="isRelease" v-model:checked="multiSessionChecked" checked-children="Mở" un-checked-children="Đóng" @change="handleMultiSessionChange"></a-switch>
                         </div>
                       </a-form-item>
                     </a-row>
                     <a-row>
                       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
                         <div style="display: flex;margin-top: 10px">
-                          <div style="margin-left: 2px">开启绘画能力：</div>
-                          <a-switch :disabled="isRelease" v-model:checked="izDrawChecked" checked-children="开" un-checked-children="关" @change="handleDrawChange"></a-switch>
+                          <div style="margin-left: 2px">Bật khả năng vẽ:</div>
+                          <a-switch :disabled="isRelease" v-model:checked="izDrawChecked" checked-children="Mở" un-checked-children="Đóng" @change="handleDrawChange"></a-switch>
                         </div>
                       </a-form-item>
                     </a-row>
                     <a-row>
                       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
                         <div style="display: flex;margin-top: 10px">
-                          <div style="margin-left: 2px">显示工具调用过程：</div>
+                          <div style="margin-left: 2px">Hiển thị quá trình gọi công cụ:</div>
                           <a-switch
                             v-model:checked="showToolProcessChecked"
                             :disabled="isRelease"
-                            checked-children="开"
-                            un-checked-children="关"
+                            checked-children="Mở"
+                            un-checked-children="Đóng"
                             @change="handleShowToolProcessChange"
                           />
                         </div>
@@ -449,11 +449,11 @@
                     <a-row v-if="izDrawChecked" class="mt-10">
                       <a-col :span="24">
                         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.drawModelId">
-                          <span style="margin-left: 2px; margin-bottom: 5px">绘画模型：</span>
+                          <span style="margin-left: 2px; margin-bottom: 5px">Mô hình vẽ:</span>
                           <JDictSelectTag
                               v-model:value="formState.drawModelId"
                               :disabled="isRelease"
-                              placeholder="请选择会话模型"
+                              placeholder="Vui lòng chọn mô hình phiên"
                               dict-code="airag_model where model_type = 'IMAGE' and activate_flag = 1,name,id"
                               @change="handleDrawModelChange"
                           ></JDictSelectTag>
@@ -483,23 +483,23 @@
       </div>
     </BasicModal>
 
-    <!--  Ai知识库选择弹窗   -->
+    <!--  Popup chọn kho tri thức Ai   -->
     <AiAppAddKnowledgeModal :multiple="knowledgeMultiple" :type="knowledgeMultiple?'knowledge':'memory'" @register="registerKnowledgeModal" @success="handleSuccess"></AiAppAddKnowledgeModal>
-    <!--  插件选择弹窗   -->
+    <!--  Popup chọn plugin   -->
     <AiAppAddMcpModal @register="registerMcpModal" @success="handleMcpSuccess"></AiAppAddMcpModal>
-    <!--  Ai添加流程弹窗  -->
+    <!--  Popup thêm quy trình Ai  -->
     <AiAppAddFlowModal @register="registerFlowModal" @success="handleAddFlowSuccess" :multiple="multiple"></AiAppAddFlowModal>
-    <!-- Ai配置弹窗   -->
+    <!-- Popup cấu hình Ai   -->
     <AiAppParamsSettingModal @register="registerParamsSettingModal" @ok="handleParamsSettingOk"></AiAppParamsSettingModal>
-    <!--  Ai应用新增编辑弹窗  -->
+    <!--  Popup thêm mới/chỉnh sửa ứng dụng Ai  -->
     <AiAppModal @register="registerAiAppModal" @success="handelEditSuccess"></AiAppModal>
-    <!-- Ai生成器   -->
+    <!-- Trình tạo Ai   -->
     <AiAppGeneratedPromptModal @register="registerAiAppPromptModal" @ok="handleAiAppPromptOk"></AiAppGeneratedPromptModal>
-    <!-- Ai提示词选择弹窗   -->
+    <!-- Popup chọn prompt Ai   -->
     <AiAppPromptMarketModal @register="registerAiPromptSelectModal" @ok="handleAiAppPromptOk"></AiAppPromptMarketModal>
-    <!--  Ai快捷指令  -->
+    <!--  Lệnh tắt Ai  -->
     <AiAppQuickCommandModal @register="registerAiAppCommandModal" @ok="handleAiAppCommandOk" @update-ok="handleAiAppCommandUpdateOk"></AiAppQuickCommandModal>
-    <!-- 对话设置弹窗 -->
+    <!-- Popup cài đặt hội thoại -->
     <ConversationSettingsModal
       ref="settingsModalRef"
       :flowInputs="flowInputs"
@@ -507,7 +507,7 @@
       :existingSettings="conversationSettings"
       @ok="handleSettingsOk"
     />
-    <!--  用户变量  -->
+    <!--  Biến người dùng  -->
     <AiUserVariablesModal @register="registerVariablesModal" @ok="handleVariablesOk"></AiUserVariablesModal>
   </div>
 </template>
@@ -568,17 +568,17 @@
     },
     emits: ['success', 'register'],
     setup(props, { emit }) {
-      const title = ref<string>('设置');
+      const title = ref<string>('Cài đặt');
 
-      //保存或修改
+      //Lưu hoặc sửa đổi
       const isUpdate = ref<boolean>(false);
       //uuid
       const uuid = ref(randomString(16));
-      //app类型
+      //Loại app
       const appTypeOption = ref<any>([]);
-      //应用类型
+      //Loại ứng dụng
       const type = ref<string>('chatSimple');
-      //form表单数据
+      //Dữ liệu biểu mẫu form
       const formState = reactive<any>({
         name: '',
         descr: '',
@@ -598,75 +598,75 @@
         drawModelId: '',
       });
 
-      //表单验证
+      //Xác thực biểu mẫu
       const validatorRules = ref<any>({
-        name: [{ required: true, message: '请输入应用名称!' }],
-        modelId: [{ required: true, message: '请选择AI模型!' }],
-        flowId:[{ required: true, message: '请选择AI流程!' }],
-        drawModelId: [{  required: true, message: '请选择绘画模型!' }]
+        name: [{ required: true, message: 'Vui lòng nhập tên ứng dụng!' }],
+        modelId: [{ required: true, message: 'Vui lòng chọn mô hình AI!' }],
+        flowId:[{ required: true, message: 'Vui lòng chọn quy trình AI!' }],
+        drawModelId: [{  required: true, message: 'Vui lòng chọn mô hình vẽ!' }]
       });
-      //注册form
+      //Đăng ký form
       const useForm = Form.useForm;
       const { resetFields, validate, validateInfos } = useForm(formState, validatorRules, { immediate: false });
       const labelCol = ref<any>({ span: 24 });
       const wrapperCol = ref<any>({ span: 24 });
-      //关联知识库的id
+      //id của kho tri thức liên kết
       const knowledgeIds = ref<any>('');
-      //知识库集合
+      //Tập hợp kho tri thức
       const knowledgeDataList = ref<any>([]);
-      //记忆库的数据
+      //Dữ liệu của kho bộ nhớ
       const memoryData = ref<any>(null);
       const knowledgeMultiple = ref<boolean>(true);
-      // 插件id集合（只存id）
+      // Tập hợp id plugin (chỉ lưu id)
       const pluginIds = ref<any>([]);
-      // 插件对象集合（包含name等）
+      // Tập hợp đối tượng plugin (bao gồm name, v.v.)
       const pluginDataList = ref<any>([]);
-      // 插件结构（保存时写入 formState.plugins）
+      // Cấu trúc plugin (khi lưu ghi vào formState.plugins)
       const plugins = ref<any>([]);
-      //开场白的数据
+      //Dữ liệu của lời mở đầu
       const prologue = ref<any>('');
-      //应用id
+      //id ứng dụng
       const appId = ref<any>('');
-      //参数配置
+      //Cấu hình tham số
       const metadata = ref<any>({});
       const presetQuestion = ref<string>('');
-      //预设问题集合
+      //Tập hợp câu hỏi đặt sẵn
       const presetQuestionList = ref<any>([{ key:1, sort: 1, descr: '' }]);
-      //快捷指令集合
+      //Tập hợp lệnh tắt
       const quickCommandList = ref<any>([]);
-      //快捷指令
+      //Lệnh tắt
       const quickCommand = ref<any>('');
       const { createMessage } = useMessage();
-      //多会话模式选中状态
+      //Trạng thái chọn của chế độ nhiều phiên
       const multiSessionChecked = ref<boolean>(true);
-      //开启会话能力
+      //Bật khả năng phiên
       const izDrawChecked = ref<boolean>(false);
-      //显示工具调用过程
+      //Hiển thị quá trình gọi công cụ
       const showToolProcessChecked = ref<boolean>(true);
-      // 是否已发布
+      // Đã phát hành hay chưa
       const isRelease = ref<boolean>(false);
-      //对话设置弹窗ref
+      //ref của popup cài đặt hội thoại
       const settingsModalRef = ref();
-      //工作流入参列表
+      //Danh sách tham số đầu vào quy trình làm việc
       const flowInputs = ref<any[]>([]);
-      //对话设置（用于调试模式）
+      //Cài đặt hội thoại (dùng cho chế độ gỡ lỗi)
       const conversationSettings = ref<Record<string, any>>({});
-      //流程数据集合
+      //Tập hợp dữ liệu quy trình
       const flowDataList = ref<any>([]);
-      //多个流程id
+      //Nhiều id quy trình
       const flowIds = ref<string>('');
-      //是否多选
+      //Có chọn nhiều hay không
       const multiple = ref<boolean>(false);
-      //变量数据
+      //Dữ liệu biến
       const variablesList = ref<any>([]);
-      //是否开启记忆
+      //Có bật bộ nhớ hay không
       const izOpenMemoryChecked = ref<any>(false);
-      //记忆折叠面板
+      //Panel gấp bộ nhớ
       const memoryActiveKey = ref<any>();
-      //记忆提示词是否加载
+      //Prompt bộ nhớ có tải hay không
       const memoryLoading = ref<any>(false);
       
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
         appId.value = data.id;
         isUpdate.value = !!data?.isUpdate;
@@ -677,11 +677,11 @@
             setFormState(data);
           }, 300);
         } else {
-          //新增成功之后需要有id
+          //Sau khi thêm mới thành công cần có id
           queryById({ id: data.id }).then((res) => {
             if (res.success) {
               resetFields();
-              //赋值
+              //Gán giá trị
               Object.assign(formState, res.result);
               formState.prompt = cloneDeep(AiAppJson.prompt);
               formState.prologue = cloneDeep(AiAppJson.prologue);
@@ -697,7 +697,7 @@
         setModalProps({ bodyStyle: { padding: '10px' } });
       });
 
-      //注册modal
+      //Đăng ký modal
       const [registerKnowledgeModal, { openModal }] = useModal();
       const [registerMcpModal, { openModal: openMcpModal }] = useModal();
       const [registerFlowModal, { openModal: registerFlowOpen }] = useModal();
@@ -709,7 +709,7 @@
       const [registerVariablesModal, { openModal: aiVariablesModalOpen }] = useModal();
 
       /**
-       * 保存
+       * Lưu
        */
       async function handleOk() {
         try {
@@ -726,7 +726,7 @@
         }
       }
 
-      //初始化AI应用类型
+      //Khởi tạo loại ứng dụng AI
       initAppTypeOption();
 
       function initAppTypeOption() {
@@ -734,9 +734,9 @@
           if (data && data.length > 0) {
             for (const datum of data) {
               if (datum.value === 'chatSimple') {
-                datum['desc'] = '适合新手创建小助手';
+                datum['desc'] = 'Phù hợp cho người mới tạo trợ lý nhỏ';
               } else if (datum.value === 'chatFLow') {
-                datum['desc'] = '适合高级用户自定义小助手的工作流';
+                datum['desc'] = 'Quy trình làm việc phù hợp cho người dùng nâng cao tùy chỉnh trợ lý nhỏ';
               }
             }
           }
@@ -745,26 +745,26 @@
       }
 
       /**
-       * 取消
+       * Hủy
        */
       function handleCancel() {
         closeModal();
       }
 
       /**
-       * 应用类型点击事件
+       * Sự kiện nhấp loại ứng dụng
        */
       function handleTypeClick(val) {
         type.value = val;
       }
 
       /**
-       * 添加关联知识库
+       * Thêm kho tri thức liên kết
        * 
        * @param type
        */
       function handleAddKnowledgeIdClick(type) {
-        //update-begin---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】支持记忆---
+        //update-begin---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
         knowledgeMultiple.value = type === 'knowledge'
         if(type === 'knowledge'){
           openModal(true, {
@@ -777,11 +777,11 @@
             knowledgeData: memoryData.value,
           });
         }
-        //update-end---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】支持记忆---
+        //update-end---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
       }
 
       /**
-       * 添加关联MCP
+       * Thêm MCP liên kết
        */
       function handleAddMcpClick(){
         openMcpModal(true,{
@@ -791,12 +791,12 @@
       }
 
       /**
-       * 选中回调事件
+       * Sự kiện callback chọn
        * @param knowledgeId
        * @param knowledgeData
        */
       function handleSuccess(knowledgeId, knowledgeData) {
-        //update-begin---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】支持记忆---
+        //update-begin---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
         if(knowledgeMultiple.value){
           knowledgeIds.value = cloneDeep(knowledgeId.join(','));
           knowledgeDataList.value = cloneDeep(knowledgeData);
@@ -805,11 +805,11 @@
           formState.memoryId = knowledgeId;
           memoryData.value = knowledgeData;
         }
-        //update-end---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】支持记忆---
+        //update-end---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
       }
 
       /**
-       * MCP选中成功回调
+       * Callback chọn MCP thành công
        * @param ids
        * @param dataList
        * @param pluginStruct
@@ -822,13 +822,13 @@
       }
 
       /**
-       * 删除知识库
+       * Xóa kho tri thức
        */
       function handleDeleteKnowledge(id, type) {
-        //update-begin---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】支持记忆---
-        //update-begin---author:wangshuai---date:2026-01-14---for:【QQYUN-14562】【ai应用】记忆添加后，×不掉---
+        //update-begin---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
+        //update-begin---author:wangshuai---date:2026-01-14---for:【QQYUN-14562】【aiỨng dụng】Sau khi thêm bộ nhớ, dấu × không bỏ được---
         if(type === 'knowledge'){
-        //update-end---author:wangshuai---date:2026-01-14---for:【QQYUN-14562】【ai应用】记忆添加后，×不掉---
+        //update-end---author:wangshuai---date:2026-01-14---for:【QQYUN-14562】【aiỨng dụng】Sau khi thêm bộ nhớ, dấu × không bỏ được---
           let array = knowledgeIds.value.split(',');
           let findIndex = array.findIndex((item) => item === id);
           if (findIndex != -1) {
@@ -840,12 +840,12 @@
         } else {
           formState.memoryId = "";
           memoryData.value = null;
-        //update-end---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】支持记忆---
+        //update-end---author:wangshuai---date:2025-12-29---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
         }
       }
 
       /**
-       * 删除MCP
+       * Xóa MCP
        */
       function handleDeleteMcp(id){
         const findIndex = pluginIds.value.findIndex((item:any)=> item === id);
@@ -858,12 +858,12 @@
       }
 
       /**
-       * 根据知识库id查询知识库内容
+       * Truy vấn nội dung kho tri thức theo id kho tri thức
        * @param ids
        */
       function getKnowledgeDataList(ids) {
         queryKnowledgeBathById({ ids: ids }).then((res) => {
-          //update-begin---author:wangshuai---date:2025-04-24---for:【QQYUN-12133】【AI】应用关联的知识库呗删除后，再次进入应用看不到已删除的知识库，并且无法清理掉知识库。---
+          //update-begin---author:wangshuai---date:2025-04-24---for:【QQYUN-12133】【AI】Sau khi kho tri thức liên kết với ứng dụng bị xóa, vào lại ứng dụng không thấy kho tri thức đã xóa và không thể dọn sạch kho tri thức.---
           if (res.success && res.result) {
             let result = res.result;
             let idArray = ids.split(",");
@@ -873,7 +873,7 @@
               if(filter && filter.length > 0) {
                 arr.push({ id: id, name: filter[0].name});
               } else {
-                arr.push({ name: '该知识库已被删除', id: id,isDelete: true })
+                arr.push({ name: 'Kho tri thức này đã bị xóa', id: id,isDelete: true })
               }
             }
             knowledgeDataList.value = arr;
@@ -881,18 +881,18 @@
           } else {
             let arr:any = [];
             for (const id of ids) {
-              arr.push({ name: '该知识库已被删除', id: id, isDelete: true })
+              arr.push({ name: 'Kho tri thức này đã bị xóa', id: id, isDelete: true })
             }
             knowledgeDataList.value = arr;
             knowledgeIds.value = ids;
           }
-          //update-end---author:wangshuai---date:2025-04-24---for:【QQYUN-12133】【AI】应用关联的知识库呗删除后，再次进入应用看不到已删除的知识库，并且无法清理掉知识库。---
+          //update-end---author:wangshuai---date:2025-04-24---for:【QQYUN-12133】【AI】Sau khi kho tri thức liên kết với ứng dụng bị xóa, vào lại ứng dụng không thấy kho tri thức đã xóa và không thể dọn sạch kho tri thức.---
         });
       }
 
-      //update-begin---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】已删除和已禁用的插件需要标识---
+      //update-begin---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】Plugin đã bị xóa và đã bị vô hiệu hóa cần được đánh dấu---
       /**
-       * 根据插件id查询插件内容
+       * Truy vấn nội dung plugin theo id plugin
        * @param ids
        */
       function getPluginDataList(ids) {
@@ -903,7 +903,7 @@
             let arr = [];
             for (const id of idArray) {
               let item = records.find((r) => r.id === id);
-              // 从已保存的 plugins 中找回原始名称
+              // Tìm lại tên gốc từ plugins đã lưu
               let original = plugins.value.find((p:any) => p.pluginId === id);
               if (item) {
                 arr.push({ id: id, name: item.name || original?.pluginName || id, status: item.status });
@@ -923,17 +923,17 @@
           }
         });
       }
-      //update-end---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】已删除和已禁用的插件需要标识---
+      //update-end---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】Plugin đã bị xóa và đã bị vô hiệu hóa cần được đánh dấu---
 
       /**
-       * 开场白值改变事件
+       * Sự kiện thay đổi giá trị lời mở đầu
        */
       function prologueTextAreaBlur(value) {
         prologue.value = value;
       }
 
       /**
-       * 关闭弹窗触发列表刷新
+       * Đóng popup kích hoạt làm mới danh sách
        *
        * @param value
        */
@@ -944,26 +944,26 @@
       }
 
       /**
-       * 添加检验
+       * Thêm kiểm nghiệm
        *
        * @param type
        */
       function addRules(type){
         if(type === 'chatSimple') {
           validatorRules.value = {
-            name: [{ required: true, message: '请输入应用名称!' }],
-            modelId: [{ required: true, message: '请选择AI模型!' }],
+            name: [{ required: true, message: 'Vui lòng nhập tên ứng dụng!' }],
+            modelId: [{ required: true, message: 'Vui lòng chọn mô hình AI!' }],
           }
         }else if(type === 'chatFLow') {
           validatorRules.value = {
-            name: [{ required: true, message: '请输入应用名称!' }],
-            flowId:[{ required: true, message: '请选择AI流程!' }]
+            name: [{ required: true, message: 'Vui lòng nhập tên ứng dụng!' }],
+            flowId:[{ required: true, message: 'Vui lòng chọn quy trình AI!' }]
           }
         }
       }
 
       /**
-       * 参数配置点击事件
+       * Sự kiện nhấp cấu hình tham số
        * @param value
        */
       function handleParamSettingClick(value) {
@@ -971,7 +971,7 @@
       }
 
       /**
-       * 参数配置确定回调事件
+       * Sự kiện callback xác nhận cấu hình tham số
        *
        * @param value
        */
@@ -982,13 +982,13 @@
         }
       }
 
-      //流程id
+      //id quy trình
       const flowId = ref<string>('');
-      //流程数据
+      //Dữ liệu quy trình
       const flowData = ref<any>(null);
 
       /**
-       * 根据流程id查询流程
+       * Truy vấn quy trình theo id quy trình
        */
       function getFlowDataById(id) {
         queryFlowById({ id: id}).then((res) =>{
@@ -1006,26 +1006,26 @@
       }
 
       /**
-       * 添加流程
-       * @param type 是否多选
+       * Thêm quy trình
+       * @param type có chọn nhiều hay không
        */
       function handleAddFlowClick(type) {
-        //update-begin---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】创建应用的时候，选择工作流，让应用可以像调用MCP一样去调用流程: 单选和多选做区分---
+        //update-begin---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】Khi tạo ứng dụng, chọn quy trình làm việc, để ứng dụng có thể gọi quy trình như gọi MCP: phân biệt chọn một và chọn nhiều---
         multiple.value = type === 'chatSimple';
         if(type === 'chatSimple'){
           registerFlowOpen(true,{ flowId: flowIds.value, flowData: flowDataList.value })
         } else {
           registerFlowOpen(true,{ flowId: flowId.value, flowData: flowData.value })
         }
-        //update-end---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】创建应用的时候，选择工作流，让应用可以像调用MCP一样去调用流程: 单选和多选做区分---
+        //update-end---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】Khi tạo ứng dụng, chọn quy trình làm việc, để ứng dụng có thể gọi quy trình như gọi MCP: phân biệt chọn một và chọn nhiều---
       }
 
       /**
-       * 添加流程确定事件
+       * Sự kiện xác nhận thêm quy trình
        * @param values
        */
       function handleAddFlowSuccess(values) {
-        //update-begin---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】创建应用的时候，选择工作流，让应用可以像调用MCP一样去调用流程: 单选和多选做区分---
+        //update-begin---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】Khi tạo ứng dụng, chọn quy trình làm việc, để ứng dụng có thể gọi quy trình như gọi MCP: phân biệt chọn một và chọn nhiều---
         if(multiple.value){
           flowIds.value = values.flowId?.join(",");
           formState.flowId = flowIds.value;
@@ -1035,14 +1035,14 @@
           formState.flowId = values.flowId;
           flowData.value = values.flowData;
         }
-        //update-end---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】创建应用的时候，选择工作流，让应用可以像调用MCP一样去调用流程: 单选和多选做区分---
+        //update-end---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】Khi tạo ứng dụng, chọn quy trình làm việc, để ứng dụng có thể gọi quy trình như gọi MCP: phân biệt chọn một và chọn nhiều---
       }
 
       /**
-       * 删除流程
+       * Xóa quy trình
        */
       function handleDeleteFlow(type, id = '') {
-        //update-begin---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】创建应用的时候，选择工作流，让应用可以像调用MCP一样去调用流程: 单选和多选做区分---
+        //update-begin---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】Khi tạo ứng dụng, chọn quy trình làm việc, để ứng dụng có thể gọi quy trình như gọi MCP: phân biệt chọn một và chọn nhiều---
         if(type === 'chatFLow'){
           flowId.value = "";
           formState.flowId = "";
@@ -1057,25 +1057,25 @@
             flowDataList.value.splice(findIndex, 1);
           }
         }
-        //update-end---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】创建应用的时候，选择工作流，让应用可以像调用MCP一样去调用流程: 单选和多选做区分---
+        //update-end---author:wangshuai---date:2025-12-24---for:【QQYUN-14267】Khi tạo ứng dụng, chọn quy trình làm việc, để ứng dụng có thể gọi quy trình như gọi MCP: phân biệt chọn một và chọn nhiều---
       }
 
       /**
-       * 获取图标
+       * Lấy biểu tượng
        */
       function getImage() {
         return formState.icon ? getFileAccessHttpUrl(formState.icon): defaultImg;
       }
 
       /**
-       * 获取流程图标
+       * Lấy biểu tượng quy trình
        */
       function getFlowImage(icon) {
         return icon ? getFileAccessHttpUrl(icon) : defaultFlowImg;
       }
 
       /**
-       * 编辑应用弹窗
+       * Popup chỉnh sửa ứng dụng
        */
       function handleEdit() {
         aiAppModalOpen(true,{
@@ -1085,7 +1085,7 @@
       }
 
       /**
-       * 应用编辑回调事件
+       * Sự kiện callback chỉnh sửa ứng dụng
        *
        * @param values
        */
@@ -1094,9 +1094,9 @@
         formState.name = values.name ? values.name:'';
       }
 
-      //=========== begin预设问题 ===========================
+      //=========== beginCâu hỏi đặt sẵn ===========================
 
-      // 编辑状态不允许拖动
+      // Trạng thái chỉnh sửa không cho phép kéo
       const disabledDrag = computed(()=>{
         let list = presetQuestionList.value;
         if(list && list.length>0){
@@ -1109,7 +1109,7 @@
       });
 
       /**
-       * 预设问题拖拽
+       * Kéo thả câu hỏi đặt sẵn
        */
       function presetQuestionEnd(){
         presetQuestion.value = JSON.stringify(presetQuestionList.value);
@@ -1117,7 +1117,7 @@
       }
 
       /**
-       * 预设问题添加
+       * Thêm câu hỏi đặt sẵn
        *
        * @param e
        */
@@ -1131,7 +1131,7 @@
       }
 
       /**
-       * 预设问题删除
+       * Xóa câu hỏi đặt sẵn
        *
        * @param key
        */
@@ -1142,7 +1142,7 @@
       }
 
       /**
-       * input聚焦事件
+       * Sự kiện tập trung của input
        * @param item
        */
       function onFocus(item){
@@ -1150,7 +1150,7 @@
       }
 
       /**
-       * input 失焦事件
+       * Sự kiện mất tiêu điểm của input
        * @param item
        */
       function onBlur(item){
@@ -1158,7 +1158,7 @@
       }
 
       /**
-       * 预设问题值改变事件
+       * Sự kiện thay đổi giá trị câu hỏi đặt sẵn
        *
        */
       function questionChange() {
@@ -1171,10 +1171,10 @@
         }
       }
 
-      //=========== end预设问题 ===========================
+      //=========== endCâu hỏi đặt sẵn ===========================
 
       /**
-       * 根据多个流程id查询流程
+       * Truy vấn quy trình theo nhiều id quy trình
        */
       function getFlowDataByIds(ids) {
         queryFlowByIds({ id: ids, pageNo:1, pageSize: 100 }).then((res) =>{
@@ -1199,7 +1199,7 @@
                 }
                 arr.push(item);
               } else {
-                arr.push({ name: '该流程已被删除', id: id, type: 'delete' });
+                arr.push({ name: 'Quy trình này đã bị xóa', id: id, type: 'delete' });
               }
               idsList.push(id);
             }
@@ -1209,7 +1209,7 @@
             let arr:any = [];
             let idArray = ids.split(",");
             for (const id of idArray) {
-              arr.push({ name: '该流程已被删除', id: id, type: 'delete'})
+              arr.push({ name: 'Quy trình này đã bị xóa', id: id, type: 'delete'})
             }
             flowDataList.value = arr;
             flowIds.value = ids;
@@ -1218,7 +1218,7 @@
       }
 
       /**
-       * 清除参数
+       * Làm trống tham số
        */
       function clearParam() {
         knowledgeIds.value = '';
@@ -1245,7 +1245,7 @@
       }
 
       /**
-       * 设置form属性
+       * Đặt thuộc tính form
        * @param data
        */
       function setFormState(data: any) {
@@ -1281,13 +1281,13 @@
           presetQuestionList.value = JSON.parse(data.presetQuestion);
         }
         if(data.quickCommand){
-          //update-begin---author:wangshuai---date:2025-04-08---for:【QQYUN-11939】ai应用 快捷指令 修改保存以后，再次打开还是原来的---
+          //update-begin---author:wangshuai---date:2025-04-08---for:【QQYUN-11939】aiỨng dụng AI, lệnh tắt, sau khi sửa và lưu, mở lại vẫn là nội dung cũ---
           let parse = JSON.parse(data.quickCommand);
           for (let i = 0; i < parse.length; i++) {
             parse[i].key = (i+1).toString();
           }
           quickCommandList.value = parse;
-          //update-end---author:wangshuai---date:2025-04-08---for:【QQYUN-11939】ai应用 快捷指令 修改保存以后，再次打开还是原来的---
+          //update-end---author:wangshuai---date:2025-04-08---for:【QQYUN-11939】aiỨng dụng AI, lệnh tắt, sau khi sửa và lưu, mở lại vẫn là nội dung cũ---
         }
         if(data.plugins){
           try {
@@ -1295,46 +1295,46 @@
             pluginIds.value = parsePlugins.map((p:any)=> p.pluginId);
             pluginDataList.value = parsePlugins.map((p:any)=> ({ id: p.pluginId, name: p.pluginName }));
             plugins.value = parsePlugins;
-            //update-begin---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】已删除和已禁用的插件需要标识---
-            // 根据插件id查询插件状态
+            //update-begin---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】Plugin đã bị xóa và đã bị vô hiệu hóa cần được đánh dấu---
+            // Truy vấn trạng thái plugin theo id plugin
             const pluginIdStr = pluginIds.value.join(',');
             if(pluginIdStr){
               getPluginDataList(pluginIdStr);
             }
-            //update-end---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】已删除和已禁用的插件需要标识---
+            //update-end---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】Plugin đã bị xóa và đã bị vô hiệu hóa cần được đánh dấu---
           } catch (e) {
             pluginIds.value = [];
             pluginDataList.value = [];
             plugins.value = [];
           }
         }
-        //赋值
+        //Gán giá trị
         Object.assign(formState, data);
-        //根据知识库id查询知识库内容
+        //Truy vấn nội dung kho tri thức theo id kho tri thức
         if (data.type === 'chatSimple' && data.knowledgeIds) {
           getKnowledgeDataList(data.knowledgeIds);
         }
-        //根据知识库id查询流程信息
+        //Truy vấn thông tin quy trình theo id kho tri thức
         if (data.type === 'chatFLow' && data.flowId) {
           getFlowDataById(data.flowId);
         }
-        //根据流程的id查询流程信息
+        //Truy vấn thông tin quy trình theo id của quy trình
         if (data.type === 'chatSimple' && data.flowId) {
           getFlowDataByIds(data.flowId);
         }
-        // 如果已有modelId，查询模型信息并更新到metadata中
+        // Nếu đã có modelId, truy vấn thông tin mô hình và cập nhật vào metadata
         if (data.type === 'chatSimple' && data.modelId) {
           handleModelIdChange(data.modelId);
         }
-        // 存在记忆库的id,查询记忆库并显示
+        // Tồn tại id của kho bộ nhớ, truy vấn kho bộ nhớ và hiển thị
         if(data.type === 'chatSimple' && data.memoryId){
           getMemoryDataById(data.memoryId);
         }
-        //变量
+        //Biến
         if(formState.variables){
           variablesList.value = JSON.parse(formState.variables);
         }
-        //是否开启记忆
+        //Có bật bộ nhớ hay không
         if(formState.izOpenMemory){
           console.log("formState.izOpenMemory:::",formState.izOpenMemory)
           izOpenMemoryChecked.value = formState.izOpenMemory === 1;
@@ -1346,43 +1346,43 @@
         }
       }
 
-      //============= begin 提示词 ================================
+      //============= begin Prompt ================================
       /**
-       * 生成提示词
+       * Tạo prompt
        */
       function generatedPrompt() {
         aiAppPromptModalOpen(true,{})
       }
 
       /**
-       * 提示词回调
+       * Callback prompt
        *
        * @param value
        */
       function handleAiAppPromptOk(value) {
         formState.prompt = value;
       }
-      //============= end 提示词 ================================
+      //============= end Prompt ================================
 
-      //=============== begin 快捷指令 ============================
+      //=============== begin Lệnh tắt ============================
       function quickCommandEnd() {
         quickCommand.value = JSON.stringify(quickCommandList.value);
         formState.quickCommand = quickCommand.value;
       }
 
       /**
-       * 快捷指令新增点击事件
+       * Sự kiện nhấp thêm mới lệnh tắt
        */
       function quickCommandAddClick(){
         if(quickCommandList.value && quickCommandList.value.length > 4){
-          createMessage.warning("最多只能添加5个！");
+          createMessage.warning("Tối đa chỉ được thêm 5 cái!");
           return;
         }
         aiAppCommandModalOpen(true,{})
       }
 
       /**
-       * 快捷指令编辑点击事件
+       * Sự kiện nhấp chỉnh sửa lệnh tắt
        * @param item
        */
       function editCommandClick(item){
@@ -1393,20 +1393,20 @@
       }
 
       /**
-       * 快捷指令添加回调事件
+       * Sự kiện callback thêm lệnh tắt
        * @param value
        */
       function handleAiAppCommandOk(value){
-        //update-begin---author:wangshuai---date:2025-04-08---for:【QQYUN-11939】ai应用 快捷指令 修改保存以后，再次打开还是原来的---
+        //update-begin---author:wangshuai---date:2025-04-08---for:【QQYUN-11939】aiỨng dụng AI, lệnh tắt, sau khi sửa và lưu, mở lại vẫn là nội dung cũ---
         value.key = (quickCommandList.value.length + 1).toString();
-        //update-end---author:wangshuai---date:2025-04-08---for:【QQYUN-11939】ai应用 快捷指令 修改保存以后，再次打开还是原来的---
+        //update-end---author:wangshuai---date:2025-04-08---for:【QQYUN-11939】aiỨng dụng AI, lệnh tắt, sau khi sửa và lưu, mở lại vẫn là nội dung cũ---
         quickCommandList.value.unshift({...value });
         quickCommand.value = JSON.stringify(quickCommandList.value);
         formState.quickCommand = quickCommand.value;
       }
 
       /**
-       * 快捷指令更新回调事件
+       * Sự kiện callback cập nhật lệnh tắt
        * @param value
        */
       function handleAiAppCommandUpdateOk(value) {
@@ -1419,7 +1419,7 @@
       }
 
       /**
-       * 删除快捷指令
+       * Xóa lệnh tắt
        * @param value
        */
       function deleteCommandClick(value) {
@@ -1430,10 +1430,10 @@
           formState.quickCommand = quickCommand.value;
         }
       }
-      //=============== end 快捷指令 ============================
+      //=============== end Lệnh tắt ============================
 
       /**
-       * 复选框相中时的回调
+       * Callback khi hộp kiểm được chọn
        */
       function handleMultiSessionChange(checked){
         if(checked){
@@ -1444,7 +1444,7 @@
         formState.metadata = JSON.stringify(metadata.value);
       }
 
-      // 检查是否有额外的工作流入参
+      // Kiểm tra có tham số đầu vào quy trình làm việc bổ sung hay không
       const hasExtraFlowInputs = computed(() => {
         if (!flowData.value || !flowData.value.metadata) {
           return false;
@@ -1452,18 +1452,18 @@
         try {
           const flowInputsList = flowData.value.metadata || [];
           
-          // 过滤掉固定参数
+          // Lọc bỏ tham số cố định
           const fixedParams = ['history', 'content', 'images'];
           const extraInputs = flowInputsList.filter((input: any) => !fixedParams.includes(input.field));
           
           return extraInputs.length > 0;
         } catch (e) {
-          console.error('解析flowData.metadata失败', e);
+          console.error('Phân tích flowData.metadata thất bại', e);
           return false;
         }
       });
 
-      // 监听flowData变化，更新flowInputs
+      // Lắng nghe thay đổi của flowData, cập nhật flowInputs
       watch(
         () => flowData.value,
         (val) => {
@@ -1475,7 +1475,7 @@
             const flowInputsList = val.metadata || [];
             flowInputs.value = flowInputsList;
           } catch (e) {
-            console.error('解析flowData.metadata失败', e);
+            console.error('Phân tích flowData.metadata thất bại', e);
             flowInputs.value = [];
           }
         },
@@ -1483,7 +1483,7 @@
       );
 
       /**
-       * 打开对话设置弹窗
+       * Mở popup cài đặt hội thoại
        */
       function handleEditSettings() {
         if (settingsModalRef.value) {
@@ -1492,20 +1492,20 @@
       }
 
       /**
-       * 对话设置确定回调
+       * Callback xác nhận cài đặt hội thoại
        */
       function handleSettingsOk(settings: Record<string, any>) {
         conversationSettings.value = settings;
-        console.log('调试模式对话设置已更新:', settings);
+        console.log('Cài đặt hội thoại chế độ gỡ lỗi đã cập nhật:', settings);
       }
 
       /**
-       * 模型ID变化处理
-       * 查询模型信息并更新到metadata中，供chat组件使用
+       * Xử lý thay đổi ID mô hình
+       * Truy vấn thông tin mô hình và cập nhật vào metadata, để component chat sử dụng
        */
       async function handleModelIdChange(modelId: string) {
         if (!modelId) {
-          // 如果清空模型，清除模型信息
+          // Nếu làm trống mô hình, xóa thông tin mô hình
           if (metadata.value.modelInfo) {
             delete metadata.value.modelInfo;
             formState.metadata = JSON.stringify(metadata.value);
@@ -1513,15 +1513,15 @@
           return;
         }
         try {
-          //update-begin---author:scott ---date:20260506  for：【issues/9600】低权限用户可获取 LLM API Key——非编辑场景改用 /detail，避免依赖 airag:model:queryById 权限并减少 credential 暴露面-----------
+          //update-begin---author:scott ---date:20260506  for：【issues/9600】Người dùng quyền thấp có thể lấy được LLM API Key——tình huống không chỉnh sửa đổi sang dùng /detail, tránh phụ thuộc vào quyền airag:model:queryById và giảm bề mặt lộ credential-----------
           const res = await defHttp.get({
             url: '/airag/airagModel/detail',
             params: { id: modelId }
           }, { isTransformResponse: false });
-          //update-end---author:scott ---date:20260506  for：【issues/9600】低权限用户可获取 LLM API Key——非编辑场景改用 /detail，避免依赖 airag:model:queryById 权限并减少 credential 暴露面-----------
+          //update-end---author:scott ---date:20260506  for：【issues/9600】Người dùng quyền thấp có thể lấy được LLM API Key——tình huống không chỉnh sửa đổi sang dùng /detail, tránh phụ thuộc vào quyền airag:model:queryById và giảm bề mặt lộ credential-----------
           if (res.success && res.result) {
             const model = res.result;
-            // 将模型信息添加到metadata中
+            // Thêm thông tin mô hình vào metadata
             if (!metadata.value) {
               metadata.value = {};
             }
@@ -1533,7 +1533,7 @@
             formState.metadata = JSON.stringify(metadata.value);
           }
         } catch (e) {
-          console.error('获取模型信息失败', e);
+          console.error('Lấy thông tin mô hình thất bại', e);
         }
       }
       
@@ -1541,20 +1541,20 @@
         aiPromptSelectModalOpen(true,{});
       }
       /**
-       * 获取记忆库的数据
+       * Lấy dữ liệu của kho bộ nhớ
        */
       function getMemoryDataById(id) {
         queryKnowledgeById({id: id}).then((res) =>{
           if(res.success && res.result){
             memoryData.value = res.result;
           } else {
-            memoryData.value = { name: '该知识库已被删除', id: id, isDelete: true };
+            memoryData.value = { name: 'Kho tri thức này đã bị xóa', id: id, isDelete: true };
           }
         })
       }
-      //================================================ begin 变量和记忆提示词功能 =========================================================
+      //================================================ begin Chức năng prompt biến và bộ nhớ =========================================================
       /**
-       * 添加变量
+       * Thêm biến
        */
       function handleAddVariable() {
         aiVariablesModalOpen(true,{
@@ -1563,7 +1563,7 @@
       }
 
       /**
-       * 变量返回事件
+       * Sự kiện trả về của biến
        * 
        * @param values
        */
@@ -1578,7 +1578,7 @@
       }
 
       /**
-       * 是否开启会话模式返回值
+       * Giá trị trả về có bật chế độ phiên hay không
        * @param checked
        */
       function handleMemoryChange(checked) {
@@ -1590,18 +1590,18 @@
       }
 
       /**
-       * 记忆和变量提示词
+       * Prompt bộ nhớ và biến
        */
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-918】无变量且无长期记忆时禁用文本框，生成前校验提示
+      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-918】Khi không có biến và không có bộ nhớ dài hạn thì vô hiệu hóa ô văn bản, kiểm tra cảnh báo trước khi tạo
       const canGenerateMemoryPrompt = computed(() => {
         return variablesList.value?.length > 0 || !!formState.memoryId;
       });
       async function generateVariablePrompt() {
         if (!canGenerateMemoryPrompt.value) {
-          createMessage.warning('请先添加变量或长期记忆后再生成');
+          createMessage.warning('Vui lòng thêm biến hoặc bộ nhớ dài hạn trước rồi mới tạo');
           return;
         }
-        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-918】无变量且无长期记忆时禁用文本框，生成前校验提示
+        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-918】Khi không có biến và không có bộ nhớ dài hạn thì vô hiệu hóa ô văn bản, kiểm tra cảnh báo trước khi tạo
         formState.memoryPrompt = '';
         memoryLoading.value = true;
         let readableStream = await generateMemoryByAppId({ variables: formState.variables, memoryId: formState.memoryId }).catch(() => {
@@ -1645,7 +1645,7 @@
       }
 
       /**
-       * 渲染文本
+       * Hiển thị văn bản
        *
        * @param item
        */
@@ -1662,18 +1662,18 @@
             memoryLoading.value = false;
           }
           if (parse.event == 'ERROR') {
-            formState.memoryPrompt = parse.data.message ? parse.data.message: '生成失败，请稍后重试！'
+            formState.memoryPrompt = parse.data.message ? parse.data.message: 'Tạo thất bại, vui lòng thử lại sau!'
             memoryLoading.value = false;
           }
         } catch (error) {
           console.log('Error parsing update:', error);
         }
       }
-      //================================================ end 变量和记忆提示词功能 =========================================================
+      //================================================ end Chức năng prompt biến và bộ nhớ =========================================================
 
-      //================================================ begin 开启绘画 =========================================================
+      //================================================ begin Bắt đầu vẽ =========================================================
       /**
-       * 开启会话能力回调
+       * Callback bật khả năng phiên
        */
       function handleDrawChange(checked){
         if(checked){
@@ -1685,17 +1685,17 @@
       }
 
       /**
-       * 会话模型改变回调
+       * Callback thay đổi mô hình phiên
        */
       function handleDrawModelChange(val){
         metadata.value.drawModelId = val;
         formState.metadata = JSON.stringify(metadata.value);
       }
-      //================================================ end 开启绘画 ========================================================
+      //================================================ end Bắt đầu vẽ ========================================================
 
-      //================================================ begin 显示工具调用过程 =========================================================
+      //================================================ begin Hiển thị quá trình gọi công cụ =========================================================
       /**
-       * 显示工具调用过程开关回调
+       * Callback công tắc hiển thị quá trình gọi công cụ
        */
       function handleShowToolProcessChange(checked){
         if(checked){
@@ -1705,7 +1705,7 @@
         }
         formState.metadata = JSON.stringify(metadata.value);
       }
-      //================================================ end 显示工具调用过程 ========================================================
+      //================================================ end Hiển thị quá trình gọi công cụ ========================================================
 
       return {
         registerModal,
@@ -1871,7 +1871,7 @@
   .knowledge-name {
     margin-left: 4px;
   }
-/**update-begin---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】已删除和已禁用的插件需要标识---*/
+/**update-begin---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】Plugin đã bị xóa và đã bị vô hiệu hóa cần được đánh dấu---*/
   .knowledge-name.disabled {
     color: #999;
     text-decoration: line-through;
@@ -1887,7 +1887,7 @@
     line-height: 14px;
     display: inline-block;
   }
-  /**update-end---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】已删除和已禁用的插件需要标识---*/
+  /**update-end---author:liaozhiyang---date:2026-07-27---for:【LHZP-1499】Plugin đã bị xóa và đã bị vô hiệu hóa cần được đánh dấu---*/
 
   .knowledge-card {
     margin-bottom: 10px;

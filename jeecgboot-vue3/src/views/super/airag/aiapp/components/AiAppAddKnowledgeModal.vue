@@ -7,7 +7,7 @@
           class="header-search"
           size="small"
           v-model:value="searchText"
-          placeholder="请输入知识库名称，回车搜索"
+          placeholder="Vui lòng nhập tên kho tri thức, nhấn Enter để tìm kiếm"
         ></a-input>
       </div>
       <a-row :span="24">
@@ -25,12 +25,12 @@
       </a-row>
       <div v-if="knowledgeIds && knowledgeIds.length > 0" class="use-select">
         <template v-if="!multiple">
-          已选择 <span class="ellipsis" style="max-width: 150px">{{knowledgeData.name}}</span>
+          Đã chọn <span class="ellipsis" style="max-width: 150px">{{knowledgeData.name}}</span>
         </template>
         <template v-else>
-          已选择 {{ knowledgeIds.length }} 知识库
+          Đã chọn {{ knowledgeIds.length }} Kho tri thức
         </template>
-        <span style="margin-left: 8px; color: #3d79fb; cursor: pointer" @click="handleClearClick">清空</span>
+        <span style="margin-left: 8px; color: #3d79fb; cursor: pointer" @click="handleClearClick">Làm trống</span>
       </div>
       <Pagination
         v-if="appKnowledgeOption.length > 0"
@@ -69,27 +69,27 @@
       type: { type: String, default: 'knowledge' }
     },
     setup(props, { emit }) {
-      const title = ref<string>('添加关联知识库');
+      const title = ref<string>('Thêm kho tri thức liên kết');
 
-      //app知识库
+      //Kho tri thức app
       const appKnowledgeOption = ref<any>([]);
-      //应用类型
+      //Loại ứng dụng
       const knowledgeIds = ref<any>([]);
-      //应用数据
+      //Dữ liệu ứng dụng
       const knowledgeData = ref<any>([]);
-      //当前页数
+      //Số trang hiện tại
       const pageNo = ref<number>(1);
-      //每页条数
+      //Số mục mỗi trang
       const pageSize = ref<number>(10);
-      //总条数
+      //Tổng số mục
       const total = ref<number>(0);
-      //搜索文本
+      //Tìm kiếm văn bản
       const searchText = ref<string>('');
-      //可选择的页数
+      //Số trang có thể chọn
       const pageSizeOptions = ref<any>(['10', '20', '30']);
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
-        //update-begin---author:wangshuai---date:2025-12-25---for:知识库选择支持单选和多选---
+        //update-begin---author:wangshuai---date:2025-12-25---for:Chọn kho tri thức hỗ trợ chọn một và chọn nhiều---
         if (props.multiple) {
           knowledgeIds.value = data.knowledgeIds ? cloneDeep(data.knowledgeIds.split(',')) : [];
           knowledgeData.value = data.knowledgeDataList ? cloneDeep(data.knowledgeDataList) : [];
@@ -97,36 +97,36 @@
           knowledgeIds.value = data.knowledgeIds ? cloneDeep(data.knowledgeIds) : '';
           knowledgeData.value = data.knowledgeData ? cloneDeep(data.knowledgeData) : {};
         }
-        //update-end---author:wangshuai---date:2025-12-25---for:知识库选择支持单选和多选---
+        //update-end---author:wangshuai---date:2025-12-25---for:Chọn kho tri thức hỗ trợ chọn một và chọn nhiều---
         setModalProps({ minHeight: 500, bodyStyle: { padding: '10px' } });
         loadKnowledgeData();
       });
 
       /**
-       * 保存
+       * Lưu
        */
       async function handleOk() {
-        console.log("知识库确定选中的值",knowledgeData.value);
-        //update-begin---author:wangshuai---date:2025-12-25---for:知识库选择支持单选和多选---
+        console.log("Giá trị kho tri thức xác nhận chọn",knowledgeData.value);
+        //update-begin---author:wangshuai---date:2025-12-25---for:Chọn kho tri thức hỗ trợ chọn một và chọn nhiều---
         if (props.multiple) {
           emit('success', knowledgeIds.value, knowledgeData.value);
         } else {
           emit('success', knowledgeIds.value, knowledgeData.value);
         }
-        //update-end---author:wangshuai---date:2025-12-25---for:知识库选择支持单选和多选---
+        //update-end---author:wangshuai---date:2025-12-25---for:Chọn kho tri thức hỗ trợ chọn một và chọn nhiều---
         handleCancel();
       }
 
       /**
-       * 取消
+       * Hủy
        */
       function handleCancel() {
         closeModal();
       }
 
-      //复选框选中事件
+      //Sự kiện chọn hộp kiểm
       function handleSelect(item){
-        //update-begin---author:wangshuai---date:2025-12-25---for:知识库选择支持单选和多选---
+        //update-begin---author:wangshuai---date:2025-12-25---for:Chọn kho tri thức hỗ trợ chọn một và chọn nhiều---
         if(!props.multiple) {
           if (knowledgeIds.value === item.id) {
             knowledgeIds.value = "";
@@ -141,11 +141,11 @@
           if (target) {
             target.checked = !target.checked;
           }
-          //存放选中的知识库的id
+          //Lưu id của kho tri thức đã chọn
           if (!knowledgeIds.value || knowledgeIds.value.length == 0) {
             knowledgeIds.value.push(id);
             knowledgeData.value.push(item);
-            console.log("知识库勾选或取消勾选复选框的值",knowledgeData.value);
+            console.log("Giá trị của hộp kiểm chọn hoặc bỏ chọn kho tri thức",knowledgeData.value);
             return;
           }
           let findIndex = knowledgeIds.value.findIndex((item) => item === id);
@@ -156,13 +156,13 @@
             knowledgeIds.value.splice(findIndex, 1);
             knowledgeData.value.splice(findIndex, 1);
           }
-          console.log("知识库勾选或取消勾选复选框的值",knowledgeData.value);
+          console.log("Giá trị của hộp kiểm chọn hoặc bỏ chọn kho tri thức",knowledgeData.value);
         }
-        //update-end---author:wangshuai---date:2025-12-25---for:知识库选择支持单选和多选---
+        //update-end---author:wangshuai---date:2025-12-25---for:Chọn kho tri thức hỗ trợ chọn một và chọn nhiều---
       }
 
       /**
-       * 加载知识库
+       * Tải kho tri thức
        */
       function loadKnowledgeData() {
         let params = {
@@ -194,7 +194,7 @@
       }
 
       /**
-       * 分页改变事件
+       * Sự kiện thay đổi phân trang
        * @param page
        * @param current
        */
@@ -205,10 +205,10 @@
       }
 
       /**
-       * 清空选中状态
+       * Làm trống trạng thái chọn
        */
       function handleClearClick() {
-        //update-begin---author:wangshuai---date:2025-12-25---for:知识库选择支持单选和多选---
+        //update-begin---author:wangshuai---date:2025-12-25---for:Chọn kho tri thức hỗ trợ chọn một và chọn nhiều---
         if (!props.multiple) {
           knowledgeIds.value = "";
           knowledgeData.value = null;
@@ -219,11 +219,11 @@
             item.checked = false;
           });
         }
-        //update-end---author:wangshuai---date:2025-12-25---for:知识库选择支持单选和多选---
+        //update-end---author:wangshuai---date:2025-12-25---for:Chọn kho tri thức hỗ trợ chọn một và chọn nhiều---
       }
 
       /**
-       * 复选框选中事件
+       * Sự kiện chọn hộp kiểm
        *
        * @param e
        * @param item
@@ -242,7 +242,7 @@
       }
 
       /**
-       * 获取卡片样式
+       * Lấy kiểu thẻ
        * 
        * @param item
        */

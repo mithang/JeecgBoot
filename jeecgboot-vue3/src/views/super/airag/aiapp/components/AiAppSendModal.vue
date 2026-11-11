@@ -1,22 +1,22 @@
 <template>
   <div>
     <BasicModal destroyOnClose @register="registerModal" :canFullscreen="false" :width="width" :title="title" :footer="null">
-      <!--  嵌入表单    -->
+      <!--  Nhúng biểu mẫu    -->
       <div v-if="type === 'menu'">
         <a-form layout="vertical" :model="appData">
-          <a-form-item label="菜单名称">
+          <a-form-item label="Tên menu">
             <a-input v-model:value="appData.name" readonly/>
           </a-form-item>  
-          <a-form-item label="菜单地址">
+          <a-form-item label="Địa chỉ menu">
             <a-input v-model:value="appData.menu" readonly/>
           </a-form-item>
           <a-form-item style="text-align:right">
-            <a-button @click.prevent="copyMenu">复制菜单</a-button>
-            <a-button  type="primary" style="margin-left: 10px" @click="copySql">复制SQL</a-button>
+            <a-button @click.prevent="copyMenu">Sao chép menu</a-button>
+            <a-button  type="primary" style="margin-left: 10px" @click="copySql">Sao chép SQL</a-button>
           </a-form-item>
         </a-form>
       </div>
-      <!--   嵌入网站   -->
+      <!--   Nhúng website   -->
       <div v-else-if="type === 'web'" class="web">
     
         <div style="display: flex;margin: 0 auto">
@@ -28,10 +28,10 @@
           </div>
         </div>    
         <div class="web-title" v-if="activeKey === 1">
-          将以下 iframe 嵌入到你的网站中的目标位置
+          Nhúng iframe sau vào vị trí đích trong website của bạn
         </div>  
         <div class="web-title" v-else>
-          将以下 script 添加到网页的body区域中
+          Thêm script sau vào vùng body của trang web
         </div>
         <div class="web-code" v-if="activeKey === 1">
           <div class="web-code-title">
@@ -80,22 +80,22 @@
     },
     emits: ['success', 'register'],
     setup(props, { emit }) {
-      //标题
-      const title = ref<string>('嵌入网站');
+      //Tiêu đề
+      const title = ref<string>('Nhúng website');
       const $message = useMessage();
-      //类型
+      //Loại
       const type = ref<string>('web');
-      //应用信息
+      //Thông tin ứng dụng
       const appData = ref<any>({});
-      //弹窗宽度
+      //Độ rộng popup
       const width = ref<string>("800px");
-      //选中的key
+      //key đã chọn
       const activeKey = ref<number>(1);
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
         type.value = data.type;
         appData.value = data.data;
-        // 配置菜单：登录态内部路由，不带 shareToken
+        // Menu cấu hình: route nội bộ ở trạng thái đăng nhập, không mang shareToken
         appData.value.menu = '/ai/chat/' + data.data.id;
         const shareToken = data.data.shareToken || data.data.share_token;
         if (shareToken) {
@@ -104,28 +104,28 @@
         activeKey.value = 1;
         let minHeight = 220;
         if(data.type === 'web'){
-          title.value = '嵌入网站';
+          title.value = 'Nhúng website';
           width.value = '640px';
           minHeight = 500;
           if (data.data.status === 'release' && !shareToken) {
-            $message.createMessage.warning('分享链接无效，请重新发布后再嵌入');
+            $message.createMessage.warning('Liên kết chia sẻ không hợp lệ, vui lòng phát hành lại rồi nhúng');
           }
         }else{
-          title.value = '配置菜单';
+          title.value = 'Cấu hình menu';
           width.value = '500px';
         }
         setModalProps({ height: minHeight, bodyStyle: { padding: '10px' } });
       });
 
       /**
-       * 复制菜单
+       * Sao chép menu
        */
       function copyMenu() {
         copyText(appData.value.menu);
       }
       
       /**
-       * 复制sql
+       * Sao chép sql
        */
       function copySql() {
         const insertMenuSql = `INSERT INTO sys_permission(id, parent_id, name, url, component, component_name, redirect, menu_type, perms, perms_type, sort_no, always_show, icon, is_route, is_leaf, keep_alive, hidden, hide_tab, description, status, del_flag, rule_flag, create_by, create_time, update_by, update_time, internal_or_external)
@@ -134,7 +134,7 @@
       }
 
       /**
-       * 聊天页公开地址（含 shareToken）
+       * Địa chỉ công khai của trang trò chuyện (chứa shareToken)
        */
       function getShareChatPath() {
         const shareToken = appData.value.shareToken || appData.value.share_token;
@@ -145,19 +145,19 @@
       }
 
       /**
-       * 获取当前文本
+       * Lấy văn bản hiện tại
        */
       function getIframeText(value) {
         let locationUrl = document.location.protocol +"//" + window.location.host;
         const chatPath = getShareChatPath();
-        //update-begin---author:wangshuai---date:2025-03-20---for:【QQYUN-11649】【AI】应用嵌入，支持一个小图标点击出聊天---
+        //update-begin---author:wangshuai---date:2025-03-20---for:【QQYUN-11649】【AI】Nhúng ứng dụng, hỗ trợ một biểu tượng nhỏ nhấp vào để mở trò chuyện---
         if(value === 1){
           return '<iframe\n' +
               '   src="'+locationUrl+chatPath+'"\n' +
               '   style="width: 100%; height: 100%;">\n' +
               '</iframe>';
         }else{
-            //update-begin---author:wangshuai---date:2025-03-28---for:【QQYUN-11649】应用嵌入，支持一个小图标点击出聊天---
+            //update-begin---author:wangshuai---date:2025-03-28---for:【QQYUN-11649】Ứng dụng nhúng, hỗ trợ một biểu tượng nhỏ nhấp vào để mở trò chuyện---
             let path = "/src/views/super/airag/aiapp/chat/js/chat.js"
             if(!isDevMode()){
               path = "/chat/chat.js";
@@ -170,36 +170,36 @@
             if (shareToken) {
               text += '       shareToken:"'+ shareToken +'",\n';
             }
-            text += '       // 支持top-left左上, top-right右上, bottom-left左下, bottom-right右下\n';
+            text += '       // Hỗ trợ top-left góc trên trái, top-right góc trên phải, bottom-left góc dưới trái, bottom-right góc dưới phải\n';
             text += '       iconPosition:"bottom-right"\n';
             text += '    })\n';
             text += ' <'+'/script>';
             return text;
-            //update-end---author:wangshuai---date:2025-03-28---for:【QQYUN-11649】应用嵌入，支持一个小图标点击出聊天---
+            //update-end---author:wangshuai---date:2025-03-28---for:【QQYUN-11649】Ứng dụng nhúng, hỗ trợ một biểu tượng nhỏ nhấp vào để mở trò chuyện---
         }
-        //update-end---author:wangshuai---date:2025-03-20---for:【QQYUN-11649】【AI】应用嵌入，支持一个小图标点击出聊天---
+        //update-end---author:wangshuai---date:2025-03-20---for:【QQYUN-11649】【AI】Nhúng ứng dụng, hỗ trợ một biểu tượng nhỏ nhấp vào để mở trò chuyện---
       }
 
       /**
-       * 复制iframe
+       * Sao chép iframe
        */
       function copyIframe(value) {
         copyText(getIframeText(value));
       }
 
-      // 复制文本到剪贴板
+      // Sao chép văn bản vào bộ nhớ tạm
       function copyText(text: string) {
         const success = copyTextToClipboard(text);
         if (success) {
-          $message.createMessage.success('复制成功！');
+          $message.createMessage.success('Sao chép thành công!');
         } else {
-          $message.createMessage.error('复制失败！');
+          $message.createMessage.error('Sao chép thất bại!');
         }
         return success;
       }
 
       /**
-       * 图片点击事件
+       * Sự kiện nhấp hình ảnh
        * 
        * @param value
        */

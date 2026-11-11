@@ -1,7 +1,7 @@
 import { Component } from 'vue';
 
 /**
- * JeecgTag类型
+ * Loại JeecgTag
  */
 export type JeecgTag = {
   name: string;

@@ -1,7 +1,7 @@
 <template>
   <div v-if="parsedText != '' || error" class="textWrap" :class="[inversion === 'user' ? 'self' : (isOnlyImage ? 'chatgpt-image' : 'chatgpt')]" ref="textRef">
-    <a-tooltip v-if="inversion !== 'user' && !isOnlyImage && !error && !loading && !hideCopyButton" :title="copied ? '已复制' : '复制 Markdown'">
-      <a-button class="copyMarkdownBtn" type="text" size="small" :aria-label="copied ? '已复制' : '复制 Markdown'" @click="handleCopyMarkdown">
+    <a-tooltip v-if="inversion !== 'user' && !isOnlyImage && !error && !loading && !hideCopyButton" :title="copied ? 'Đã sao chép' : 'Sao chép Markdown'">
+      <a-button class="copyMarkdownBtn" type="text" size="small" :aria-label="copied ? 'Đã sao chép' : 'Sao chép Markdown'" @click="handleCopyMarkdown">
         <CheckOutlined v-if="copied" />
         <CopyOutlined v-else />
       </a-button>
@@ -9,7 +9,7 @@
     <div v-if="inversion != 'user'" :style="{ width: getIsMobile? screenWidth : 'auto' }">
       <div ref="markdownBodyRef" class="markdown-body" :class="{ 'markdown-body-generate': loading }" v-html="parsedText" />
       <template v-if="showRefKnow">
-        <a-divider orientation="left">引用</a-divider>
+        <a-divider orientation="left">Trích dẫn</a-divider>
         <template v-for="(item, idx) in referenceKnowledge" :key="idx">
           <a-tooltip
             :title="item.content?.substring(0, 800)"
@@ -37,7 +37,7 @@
     <div v-else class="msg user-message-text">{{ props.text }}</div>
   </div>
   <ImageViewer v-if="amplifyImage" :imageUrl="imageUrl" @hide="pictureHide"></ImageViewer>
-  <!-- 聊天中渲染JeecgTag -->
+  <!-- Hiển thị JeecgTag trong trò chuyện -->
   <template v-if="jeecgTagList.length">
     <template v-for="item of jeecgTagList" :key="item.key">
       <teleport :to="item.to">
@@ -68,29 +68,29 @@
   import { CheckOutlined, CopyOutlined } from '@ant-design/icons-vue';
 
   /**
-   * 屏幕宽度
+   * Độ rộng màn hình
    */
   const screenWidth = ref<string>();
   const { domainUrl } = useGlobSetting();
   const { getIsMobile } = useAppInject();
 
-  //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用---
+  //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ---
   const props = defineProps(['dateTime', 'text', 'inversion', 'error', 'errorMsg', 'currentToolTag', 'loading', 'referenceKnowledge', 'isLast', 'hideCopyButton']);
-  //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用---
+  //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ---
   const textRef = ref();
   const markdownBodyRef = ref<HTMLDivElement>();
   const copied = ref(false);
   const knowledgeTooltipStyle = { maxHeight: '240px', overflowY: 'auto', scrollbarGutter: 'stable' };
   let copyResetTimer: ReturnType<typeof setTimeout> | undefined;
 
-  //图片地址
+  //Địa chỉ hình ảnh
   const imageUrl = ref<string>('');
-  //是否放大图片
+  //Có phóng to hình ảnh hay không
   const amplifyImage = ref<boolean>(false);
 
   const parsedText = ref<string>('');
 
-  // 解析出来的 jeecgTag 列表
+  // Danh sách jeecgTag phân tích được
   const jeecgTagList = ref<{
     key: string;
     to: HTMLDivElement;
@@ -111,30 +111,30 @@
     },
   });
 
-  // 自定义 mdi 插件
+  // Plugin mdi tùy chỉnh
   mdi.use(mdPluginJeecgTag);
-  // 官方 mdi 插件
+  // Plugin mdi chính thức
   mdi.use(mila, { attrs: { target: '_blank', rel: 'noopener' } });
   mdi.use(mdKatex, { blockClass: 'katexmath-block rounded-md p-[10px]', errorColor: ' #cc0000' });
 
   /**
-   * 处理聊天文本并在一定时间内节流更新
+   * Xử lý văn bản trò chuyện và cập nhật tiết lưu trong một khoảng thời gian nhất định
    */
   const updateTextContent = throttle(() => {
     let value = props.text ?? '';
     if (props.inversion !== 'user') {
-      // 先替换图片宽度与域名占位符后再渲染 markdown
+      // Trước tiên thay thế trình giữ chỗ độ rộng hình ảnh và tên miền rồi mới hiển thị markdown
       value = replaceImageWith(value);
       value = replaceDomainUrl(value);
       parsedText.value = sanitizeRichText(mdi.render(value));
-      // 解析 jeecgTag 标签
+      // Phân tích nhãn jeecgTag
       parseJeecgTag();
       return;
     }
     parsedText.value = value;
   }, 100);
 
-  // 是否显示引用知识库
+  // Có hiển thị trích dẫn kho tri thức hay không
   const showRefKnow = computed(() => {
     const {loading, referenceKnowledge} = props
     if (loading) {
@@ -143,7 +143,7 @@
     return Array.isArray(referenceKnowledge) && referenceKnowledge.length > 0;
   })
 
-  // 判断是否只有图片
+  // Phán đoán có chỉ có hình ảnh hay không
   const isOnlyImage = computed(() => {
     if (showRefKnow.value){
       return false;
@@ -154,34 +154,34 @@
       return false;
     }
     
-    //匹配![图片1](url1) 
+    //Khớp![Hình ảnh 1](url1) 
     const imageRegex = /!\[.*?\]\(.*?\)/g;
     if (!imageRegex.test(content)) {
       return false;
     }
     
-    //替换之后是否存在文本
+    //Sau khi thay thế có tồn tại văn bản hay không
     const remaining = content.replace(imageRegex, '').trim();
     return remaining.length === 0;
   });
 
-  // 监听文本变化，触发界面更新
+  // Lắng nghe thay đổi văn bản, kích hoạt cập nhật giao diện
   watch(() => props.text, () => updateTextContent(), {immediate: true});
 
-  // 监听 当前调用的工具 变化，追加渲染内容
+  // Lắng nghe thay đổi của công cụ đang gọi, hiển thị thêm nội dung
   watch(() => props.currentToolTag, () => {
     const {isLast, inversion, currentToolTag, loading} = props;
     if (isLast && inversion != 'user' && currentToolTag && loading) {
       parsedText.value += sanitizeRichText(mdi.render(currentToolTag));
-      // 解析 jeecgTag 标签
+      // Phân tích nhãn jeecgTag
       parseJeecgTag();
     }
   }, {immediate: true});
 
-  //替换图片宽度
+  //Thay thế độ rộng hình ảnh
   function replaceImageWith(markdownContent) {
-    //update-begin---author:wangshuai---date:2026-01-08---for: 兼容返回多张图片集图片默认宽度调整---
-    // 1. 连续输出的多张图片优先使用九宫格，包括带width的文章配图
+    //update-begin---author:wangshuai---date:2026-01-08---for: Tương thích trả về nhiều hình ảnh, điều chỉnh độ rộng mặc định của ảnh trong tập hình ảnh---
+    // 1. Nhiều hình ảnh xuất ra liên tiếp ưu tiên dùng lưới chín ô, bao gồm ảnh minh họa bài viết có width
     const regexCustomWidth = /!\[([^\]]*)\]\(([^)]+)\s=([0-9]+)\)/g;
     const regexStandard = /!\[([^\]]*)\]\(([^)]+)\)/g;
     const regexContinuousImages = /(?:!\[[^\]]*\]\([^)]+\)[ \t]*(?:\r?\n[ \t]*)*){2,}/g;
@@ -195,21 +195,21 @@
       return imageGroup.replace(regexStandard, (_match, alt, src) => renderImage(alt, src, 'chat-image-grid-item'));
     });
 
-    // 2. 支持图片设置width的写法 ![](/static/jimuImages/screenshot_1617252560523.png =100)
-    // 必须有空格，避免匹配到url参数中的=
+    // 2. Hỗ trợ cách viết đặt width cho hình ảnh ![](/static/jimuImages/screenshot_1617252560523.png =100)
+    // Phải có dấu cách, tránh khớp vào trong tham số url=
     markdownContent = markdownContent.replace(regexCustomWidth, (_match, alt, src, width) => {
       const reg = /#\s*{\s*domainURL\s*}/g;
       const imageSrc = src.replace(reg, domainUrl);
       return `<div class="chat-image-custom"><img src='${imageSrc}' alt='${alt}' width='${width}' /></div>`;
     });
 
-    // 3. 文章中不连续的普通图片保持单图展示
+    // 3. Hình ảnh thường không liên tiếp trong bài viết giữ hiển thị ảnh đơn
     markdownContent = markdownContent.replace(regexStandard, (_match, alt, src) => renderImage(alt, src, 'chat-image-single'));
     return markdownContent;
-    //update-end---author:wangshuai---date:2026-01-08---for: 兼容返回多张图片集图片默认宽度调整---
+    //update-end---author:wangshuai---date:2026-01-08---for: Tương thích trả về nhiều hình ảnh, điều chỉnh độ rộng mặc định của ảnh trong tập hình ảnh---
   };
 
-  //替换domainURL
+  //Thay thế domainURL
   function replaceDomainUrl(markdownContent) {
     const regex = /!\[([^\]]*)\]\(.*?#\s*{\s*domainURL\s*}.*?\)/g;
     return markdownContent.replace(regex, (match) => {
@@ -219,7 +219,7 @@
   }
 
   function highlightBlock(str: string, lang?: string) {
-    return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">复制代码</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`;
+    return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">Sao chép mã</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`;
   }
   function addCopyEvents() {
     if (textRef.value) {
@@ -229,9 +229,9 @@
           const code = btn.parentElement?.nextElementSibling?.textContent;
           if (code) {
             copyToClip(code).then(() => {
-              btn.textContent = '复制成功';
+              btn.textContent = 'Sao chép thành công';
               setTimeout(() => {
-                btn.textContent = '复制代码';
+                btn.textContent = 'Sao chép mã';
               }, 1e3);
             });
           }
@@ -251,7 +251,7 @@
 
 
   /**
-   * 添加图片点击事件
+   * Sự kiện nhấp thêm hình ảnh
    */
   function addImageClickEvent() {
     if (textRef.value) {
@@ -267,7 +267,7 @@
 
 
   /**
-   * 移出图片点击事件
+   * Sự kiện nhấp loại bỏ hình ảnh
    */
   function removeImageClickEvent(){
     if (textRef.value) {
@@ -279,7 +279,7 @@
   }
 
   /**
-   * 图片隐藏
+   * Ẩn hình ảnh
    */
   function pictureHide(){
     amplifyImage.value = false;
@@ -288,20 +288,20 @@
 
 
   /**
-   * 设置markdown body整体宽度
+   * Đặt độ rộng tổng thể của markdown body
    */
   function setMarkdownBodyWidth() {
-    //平板
+    //Máy tính bảng
     console.log("window.innerWidth::",window.innerWidth)
     if(window.innerWidth>600 && window.innerWidth<1024){
       screenWidth.value = window.innerWidth - 120 + 'px';
     }else if(window.innerWidth < 600){
-      //手机
+      //Điện thoại
       screenWidth.value = window.innerWidth - 60 + 'px';
     }
   }
 
-  // 解析JeecgTag标签
+  // Phân tích nhãn JeecgTag
   async function parseJeecgTag() {
     await nextTick();
     if (!markdownBodyRef.value) {
@@ -314,17 +314,17 @@
       const tagName = el.nodeName.toLowerCase();
       const tag = jeecgTagMap.get(tagName);
       if (!tag) {
-        console.warn(`未识别的 jeecg 标签:`, tagName, el);
+        console.warn(`Nhãn jeecg chưa nhận diện:`, tagName, el);
         return;
       }
       const renderEl = el.querySelector('render') as HTMLDivElement;
       if (!renderEl) {
         if (props.loading) {
-          // 渲染中
-          el.innerHTML = `<div style="color: #888; margin-top: 12px;">图表渲染中，请稍候...</div>`;
+          // Đang hiển thị
+          el.innerHTML = `<div style="color: #888; margin-top: 12px;">Đang hiển thị biểu đồ, vui lòng chờ...</div>`;
           return;
         }
-        el.innerHTML = `<div style="color: red;">模型返回的图表渲染格式不正确，请优化提示词或重新尝试。</div>`;
+        el.innerHTML = `<div style="color: red;">Định dạng hiển thị biểu đồ do mô hình trả về không đúng, vui lòng tối ưu prompt hoặc thử lại.</div>`;
         return;
       }
 
@@ -335,7 +335,7 @@
   }
 
   /**
-   * 提交渲染 jeecg 标签
+   * Gửi hiển thị nhãn jeecg
    */
   function renderJeecgTag(tag: JeecgTag, data: string, renderEl: HTMLDivElement) {
     jeecgTagList.value.push({
@@ -347,7 +347,7 @@
   }
 
   /**
-   * 复制最终回答的原始 Markdown 内容
+   * Sao chép nội dung Markdown gốc của câu trả lời cuối cùng
    */
   async function handleCopyMarkdown() {
     const markdown = props.text ?? '';
@@ -480,14 +480,14 @@
     }
   }
   @media (max-width: 1024px) {
-    //手机和平板下的样式
+    //Kiểu trên điện thoại và máy tính bảng
     .textWrap{
       margin-left: -40px;
       margin-top: 10px;
     }
   }
 
-  // 生成图片的样式
+  // Kiểu của hình ảnh được tạo
   :deep(.chat-image-grid-item) {
     display: inline-block;
     width: 24%;

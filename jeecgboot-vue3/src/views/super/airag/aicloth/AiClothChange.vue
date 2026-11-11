@@ -1,75 +1,75 @@
 <template>
   <div class="ai-cloth-change-page">
-    <!-- 顶部标题区 -->
+    <!-- Khu vực tiêu đề trên cùng -->
     <div class="page-header">
-      <h1 class="page-title">AI 换衣</h1>
-      <div class="header-desc">将模特图片和服装图片上传，AI自动生成换衣效果</div>
+      <h1 class="page-title">AI Thay trang phục</h1>
+      <div class="header-desc">Tải lên ảnh người mẫu và ảnh trang phục, AI tự động tạo hiệu ứng thay trang phục</div>
     </div>
 
     <div class="cloth-change-wrapper">
-      <!-- 左侧配置面板 -->
+      <!-- Panel cấu hình bên trái -->
       <div class="config-panel">
-        <!-- 顶部 Tab：生成图片 / 生成视频 -->
+        <!-- Tab trên cùng: tạo hình ảnh / Nút tạo video -->
         <div class="config-tabs">
           <a-tabs v-model:activeKey="genType" :tabBarStyle="{ margin: 0 }">
-            <a-tab-pane key="image" tab="生成图片" />
-            <a-tab-pane key="video" tab="生成视频" />
+            <a-tab-pane key="image" tab="Tạo hình ảnh" />
+            <a-tab-pane key="video" tab="Tạo video" />
           </a-tabs>
         </div>
 
         <div class="form-scroll">
-          <div class="examples-row" role="toolbar" aria-label="示例">
-            <a-button class="example-btn" type="default" @click.prevent="useExample1">示例：换整体服装</a-button>
-            <a-button class="example-btn" type="default" @click.prevent="useExample2">示例：上衣/裤子</a-button>
+          <div class="examples-row" role="toolbar" aria-label="Ví dụ">
+            <a-button class="example-btn" type="default" @click.prevent="useExample1">Ví dụ: thay toàn bộ trang phục</a-button>
+            <a-button class="example-btn" type="default" @click.prevent="useExample2">Ví dụ: áo trên/Quần</a-button>
           </div>
-          <!-- 模型选择 -->
+          <!-- Chọn mô hình -->
           <BasicForm @register="registerForm">
-            <!-- 上传区域（单一上传组件支持多张图片） -->
+            <!-- Khu vực tải lên (một component tải lên duy nhất hỗ trợ nhiều hình ảnh) -->
             <template #clothUpload>
               <div class="section-block">
-                <JImageUpload v-model:value="clothUploads" :fileMax="2" text="上传服装" />
+                <JImageUpload v-model:value="clothUploads" :fileMax="2" text="Tải lên trang phục" />
               </div>
             </template>
           </BasicForm>
 
-          <!-- 视频提示 -->
+          <!-- Gợi ý video -->
           <div v-if="genType === 'video'" class="ai-notice">
-            <a-alert message="视频生成可能需要较长时间，请耐心等待~" type="info" show-icon :closable="false" />
+            <a-alert message="Tạo video có thể cần thời gian khá dài, vui lòng kiên nhẫn chờ đợi~" type="info" show-icon :closable="false" />
           </div>
         </div>
 
-        <!-- 底部生成按钮 -->
+        <!-- Nút tạo ở đáy -->
         <div class="action-bar">
-          <a-button type="primary" size="large" block class="gen-btn" :loading="loading" @click="handleGenerate"> 生成 </a-button>
+          <a-button type="primary" size="large" block class="gen-btn" :loading="loading" @click="handleGenerate"> Tạo </a-button>
         </div>
       </div>
 
-      <!-- 右侧结果展示 -->
+      <!-- Hiển thị kết quả bên phải -->
       <div class="preview-panel">
         <div class="preview-content">
           <div v-if="!generatedResult && !loading" class="empty-state">
             <Icon icon="ant-design:picture-outlined" size="64" color="#ccc" />
-            <p>在左侧配置后点击「生成」</p>
+            <p>Sau khi cấu hình ở bên trái nhấp「Tạo」</p>
           </div>
 
           <div v-if="loading" class="loading-state">
-            <a-spin size="large" :tip="`正在${genType === 'image' ? '生成图片' : '生成视频'}，请稍候...`" />
+            <a-spin size="large" :tip="`Đang${genType === 'image' ? 'Tạo hình ảnh' : 'Tạo video'}，vui lòng chờ...`" />
           </div>
 
-          <!-- 图片结果 -->
+          <!-- Kết quả hình ảnh -->
           <div v-if="genType === 'image' && generatedResult && !loading" class="result-image-wrapper group">
-            <img :src="generatedResult" class="result-image" alt="换衣结果" />
+            <img :src="generatedResult" class="result-image" alt="Kết quả thay trang phục" />
             <div class="hover-actions">
-              <a-button type="primary" ghost @click="previewVisible = true"> <Icon icon="ant-design:eye-outlined" /> 预览 </a-button>
-              <a-button type="primary" ghost @click="handleDownload"> <Icon icon="ant-design:download-outlined" /> 下载 </a-button>
+              <a-button type="primary" ghost @click="previewVisible = true"> <Icon icon="ant-design:eye-outlined" /> Xem trước </a-button>
+              <a-button type="primary" ghost @click="handleDownload"> <Icon icon="ant-design:download-outlined" /> Tải xuống </a-button>
             </div>
           </div>
 
-          <!-- 视频结果 -->
+          <!-- Kết quả video -->
           <div v-if="genType === 'video' && generatedResult && !loading" class="result-video-wrapper group">
             <video ref="videoRef" :src="generatedResult" controls class="result-video" />
             <div class="hover-actions">
-              <a-button type="primary" ghost @click="handleDownload"> <Icon icon="ant-design:download-outlined" /> 下载 </a-button>
+              <a-button type="primary" ghost @click="handleDownload"> <Icon icon="ant-design:download-outlined" /> Tải xuống </a-button>
             </div>
           </div>
         </div>
@@ -95,11 +95,11 @@
   const { createMessage } = useMessage();
   const { domainUrl } = useGlobSetting();
 
-  //  状态
-  // 生成类型
+  //  Trạng thái
+  // Loại tạo
   const genType = ref<'image' | 'video'>('image');
 
-  // 上传的服装图片（JImageUpload 返回逗号拼接的路径字符串）
+  // Hình ảnh trang phục đã tải lên (JImageUpload trả về chuỗi đường dẫn nối bằng dấu phẩy)
   const clothUploads = ref<string>('');
   const loading = ref(false);
   const generatedResult = ref('');
@@ -107,7 +107,7 @@
   const videoRef = ref<HTMLVideoElement | null>(null);
   let pollTimer: ReturnType<typeof setTimeout> | null = null;
 
-  // 表单
+  // Biểu mẫu
   const [registerForm, { validate, resetSchema, getFieldsValue, setFieldsValue }] = useForm({
     schemas: clothImageFormSchema,
     showActionButtonGroup: false,
@@ -115,7 +115,7 @@
     labelCol: { span: 24 },
   });
 
-  // 不再区分单件/多件，提示词可由用户自定义
+  // Không còn phân biệt món đơn/Nhiều món, prompt có thể do người dùng tùy chỉnh
 
   watch(genType, (val) => {
     generatedResult.value = '';
@@ -123,23 +123,23 @@
   });
 
   /**
-   * 构建提示词
+   * Xây dựng prompt
    * @param values
    */
   function buildPrompt(values: any, clothCount: number): string {
     const userPrompt: string = (values.userPrompt || '').toString().trim();
     const modelImageNumber = clothCount + 1;
-    const clothImageNumbers = Array.from({ length: clothCount }, (_, index) => `[图${index + 1}]`).join('、');
+    const clothImageNumbers = Array.from({ length: clothCount }, (_, index) => `[Hình${index + 1}]`).join(', ');
     const fixedPrompt =
-      `图片角色：${clothImageNumbers}是必须使用的服装素材，[图${modelImageNumber}]是模特目标图。` +
-      `以[图${modelImageNumber}]为唯一画布，将${clothImageNumbers}中的服装准确穿到模特身上。` +
-      '必须保留服装素材的款式、颜色、图案、领口、袖型和装饰细节，不得自行设计或替换成其他服装；' +
-      '仅修改模特的服装区域，保持人物身份、面部、发型、姿态、身材、背景和构图不变，服装贴合自然，光影一致，写实高清。';
-    return userPrompt ? `${fixedPrompt}\n补充要求：${userPrompt}` : fixedPrompt;
+      `Vai trò hình ảnh:${clothImageNumbers}Là chất liệu trang phục bắt buộc phải dùng，[Hình${modelImageNumber}]Là hình đích của người mẫu.` +
+      `Lấy[Hình${modelImageNumber}]làm canvas duy nhất, sẽ${clothImageNumbers}mặc chính xác trang phục trong đó lên người người mẫu.` +
+      'Phải giữ nguyên kiểu dáng, màu sắc, họa tiết, cổ áo, kiểu tay áo và chi tiết trang trí của chất liệu trang phục, không được tự thiết kế hoặc thay bằng trang phục khác;' +
+      'Chỉ sửa vùng trang phục của người mẫu, giữ nguyên danh tính nhân vật, khuôn mặt, kiểu tóc, tư thế, vóc dáng, nền và bố cục, trang phục ôm tự nhiên, ánh sáng nhất quán, tả thực độ nét cao.';
+    return userPrompt ? `${fixedPrompt}\nYêu cầu bổ sung:${userPrompt}` : fixedPrompt;
   }
   
-  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
-  /** 轮询查询任务结果 */
+  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
+  /** Thăm dò truy vấn kết quả nhiệm vụ */
   function startPolling(taskId: string) {
     const poll = () => {
       defHttp
@@ -153,12 +153,12 @@
               generatedResult.value = (res.result as string).replace(reg, domainUrl + '/sys/common/static');
               loading.value = false;
               localStorage.removeItem(TASK_ID_KEY);
-              createMessage.success(genType.value === 'image' ? '图片生成成功！' : '视频生成成功！');
+              createMessage.success(genType.value === 'image' ? 'Tạo hình ảnh thành công!' : 'Tạo video thành công!');
             }
           } else {
             loading.value = false;
             localStorage.removeItem(TASK_ID_KEY);
-            createMessage.warning(res.message || '生成失败！');
+            createMessage.warning(res.message || 'Tạo thất bại!');
           }
         })
         .catch(() => {
@@ -167,16 +167,16 @@
     };
     poll();
   }
-  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
 
   /**
-   * 生成
+   * Tạo
    */
   async function handleGenerate() {
-    // 校验服装图（从 clothUploads 解析）
+    // Kiểm chứng ảnh trang phục (phân tích từ clothUploads)
     const validCloth = (clothUploads.value || '').split(',').filter(Boolean);
     if (validCloth.length === 0) {
-      createMessage.warning('请上传服装图片');
+      createMessage.warning('Vui lòng tải lên hình ảnh trang phục');
       return;
     }
 
@@ -185,14 +185,14 @@
       loading.value = true;
       generatedResult.value = '';
 
-      // 多图融合以最后一张图作为目标画布：服装素材在前，模特图在最后
+      // Hợp nhất nhiều ảnh lấy ảnh cuối cùng làm canvas đích: chất liệu trang phục ở trước, ảnh người mẫu ở cuối cùng
       const modelImage = (values.modelImage || '').toString().split(',')[0];
       const imgUrls: string[] = [...validCloth, modelImage];
 
       if (genType.value === 'image') {
         values.imageSize = '720*1280';
       } else {
-        createMessage.info('敬请期待');
+        createMessage.info('Hãy đón chờ');
         loading.value = false;
         return;
       }
@@ -200,15 +200,15 @@
 
       const params: Record<string, any> = {
         drawModelId: values.drawModelId,
-        //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+        //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
         content: prompt,
         imageUrl: imgUrls.join(','),
-        //update-end---author:wangshuai ---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+        //update-end---author:wangshuai ---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
         type: genType.value === 'image' ? 'cloth_image' : 'cloth_video',
         imageSize: values.imageSize,
       };
 
-      //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+      //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
       const res = await defHttp.post(
         { url: '/airag/chat/genAiPosterAsync', params },
         { isTransformResponse: false },
@@ -219,15 +219,15 @@
         startPolling(taskId);
       } else {
         loading.value = false;
-        createMessage.warning('提交任务失败！');
+        createMessage.warning('Gửi nhiệm vụ thất bại!');
       }
-      //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+      //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
     } catch {
       loading.value = false;
     }
   }
 
-  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
   onMounted(() => {
     const savedTaskId = localStorage.getItem(TASK_ID_KEY);
     if (savedTaskId) {
@@ -243,10 +243,10 @@
       pollTimer = null;
     }
   });
-  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
 
   /**
-   * 下载
+   * Tải xuống
    */
   function handleDownload() {
     if (!generatedResult.value) {
@@ -259,10 +259,10 @@
     a.click();
   }
 
-  // 示例提示词操作
+  // Thao tác prompt ví dụ
   function useExample1() {
     const example =
-      '完整替换模特原有服装，优先还原服装素材的版型、颜色、纹理和装饰细节。';
+      'Thay thế hoàn toàn trang phục gốc của người mẫu, ưu tiên tái hiện phom dáng, màu sắc, họa tiết và chi tiết trang trí của chất liệu trang phục.';
     const modelImage = 'https://jeecgdev.oss-cn-beijing.aliyuncs.com/upload/test/model_1772695749704.jpg';
     clothUploads.value = 'https://jeecgdev.oss-cn-beijing.aliyuncs.com/upload/test/dress_1772700962866.jpg';
     setFieldsValue({ userPrompt: example, modelImage: modelImage });
@@ -270,7 +270,7 @@
 
   function useExample2() {
     const example =
-      '图1为上衣素材，图2为下装素材；分别准确替换模特的上衣和下装，组成完整穿搭，不得混淆两件服装。';
+      'Hình 1 là chất liệu áo trên, hình 2 là chất liệu trang phục dưới; thay thế chính xác áo trên và trang phục dưới của người mẫu, tạo thành bộ trang phục hoàn chỉnh, không được nhầm lẫn hai món trang phục.';
     const modelImage = 'https://jeecgdev.oss-cn-beijing.aliyuncs.com/upload/test/model_1772695749704.jpg';
     clothUploads.value =
       'https://jeecgdev.oss-cn-beijing.aliyuncs.com/upload/test/jacket_1772701290346.jpg,https://jeecgdev.oss-cn-beijing.aliyuncs.com/upload/test/pants_1772701320192.jpg';

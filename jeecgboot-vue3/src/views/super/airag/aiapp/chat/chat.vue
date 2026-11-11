@@ -9,18 +9,18 @@
             type="text" 
             class="edit-btn" 
             @click="handleEditSettings"
-            title="参数设置"
+            title="Cài đặt tham số"
           >
             <Icon icon="ant-design:setting-outlined" :size="16" />
           </a-button>
         </div>
         <div class="header-actions">
           <div v-if="showAdvertising" class="header-advertisint">
-            AI客服由
+            Chăm sóc khách hàng AI do
             <a style="color: #4183c4;margin-left: 2px;margin-right: 2px" href="https://jeecg.com/aigcIndex" target="_blank">
               JEECG AI
             </a>
-            提供
+            Cung cấp
           </div>
         </div>
       </div>
@@ -62,9 +62,9 @@
         <div class="bottomArea">
           <a-popconfirm
             placement="topLeft"
-            title="确认清除当前会话？"
-            ok-text="清除"
-            cancel-text="取消"
+            title="Xác nhận xóa phiên hiện tại?"
+            ok-text="Xóa sạch"
+            cancel-text="Hủy"
             :overlayStyle="{ 'z-index': 9999 }"
             @confirm="handleDelSession"
           >
@@ -105,9 +105,9 @@
             </svg>
           </a-button>
           <div class="chat-textarea" :class="textareaActive?'textarea-active':''">
-            <!--   begin 兼容文件显示   -->
+            <!--   begin Tương thích hiển thị tệp   -->
             <div class="textarea-top" v-if="(uploadUrlList && uploadUrlList.length>0) || (fileList && fileList.length>0)">
-              <!-- 只拥有图片 -->
+              <!-- Chỉ có hình ảnh -->
               <template v-if="(!fileList || fileList.length===0)">
                 <div v-for="(item,index) in uploadUrlList" class="top-image" :key="index">
                   <img :src="getImage(item)" @click="handlePreview(item)"/>
@@ -116,23 +116,23 @@
                   </div>
                 </div>
               </template>
-              <!-- 拥有文件 -->
+              <!-- Có tệp -->
               <template v-else>
                 <div class="file-card-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                  <!-- 图片渲染 -->
+                  <!-- Hiển thị hình ảnh -->
                   <div v-for="(url, index) in uploadUrlList" :key="'img-'+index" class="file-card">
                     <div class="file-card-icon">
                       <img :src="getImage(url)" class="file-thumb" @click="handlePreview(url)"/>
                     </div>
                     <div class="file-card-info">
-                      <div class="file-name" :title="fileInfoList[index]?.name || '图片'">{{ fileInfoList[index]?.name || '图片' }}</div>
+                      <div class="file-name" :title="fileInfoList[index]?.name || 'Hình ảnh'">{{ fileInfoList[index]?.name || 'Hình ảnh' }}</div>
                       <div class="file-size">{{ calculateFileSize(fileInfoList[index]?.size) }}</div>
                     </div>
                     <div class="file-card-close" @click="deleteImage(index)">
                       <Icon icon="ant-design:close-outlined" size="12px"/>
                     </div>
                   </div>
-                  <!-- 文件渲染 -->
+                  <!-- Hiển thị tệp -->
                   <template v-for="(item, index) in fileList" :key="'file-'+index">
                     <div class="file-card" v-if="item.status !== 'error'">
                       <div class="file-card-icon">
@@ -149,7 +149,7 @@
                   </template>
                 </div>
               </template>
-              <!--   end 兼容文件显示   -->
+              <!--   end Tương thích hiển thị tệp   -->
             </div>
             <div class="textarea-bottom">
               <a-textarea
@@ -187,7 +187,7 @@
                         >
                           <div style="display: flex; align-items: center">
                             <Icon icon="ant-design:picture-outlined" style="margin-right:8px;color:#3d4353" />
-                            上传图片
+                            Tải lên hình ảnh
                           </div>
                         </a-upload>
                       </a-menu-item>
@@ -207,7 +207,7 @@
                         >
                           <div style="display: flex; align-items: center">
                             <Icon icon="ant-design:file-add-outlined" style="margin-right:8px;color:#3d4353" />
-                            上传文件
+                            Tải lên tệp
                           </div>
                         </a-upload>
                       </a-menu-item>
@@ -218,34 +218,34 @@
                   </a-button>
                 </a-dropdown>
                   <a-divider type="vertical" v-if="showThink || showWebSearch || showDraw "/>
-                  <a-tooltip v-if="showThink" :title="enableThink ? '关闭深度思考' : '开启深度思考'">
+                  <a-tooltip v-if="showThink" :title="enableThink ? 'Tắt suy nghĩ sâu' : 'Bật suy nghĩ sâu'">
                     <a-button
                         class="sendBtn webSearchBtn"
                         type="text"
                         :class="{ 'enabled': enableThink }"
                         @click="toggleThink">
                       <svg style="margin-right: 6px" :style="enableThink ? { color: '#06f' } : { color: '#3d4353' }" width="16" height="16" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.06428 5.93342C7.6876 5.93342 8.19304 6.43904 8.19319 7.06233C8.19319 7.68573 7.68769 8.19123 7.06428 8.19123C6.44096 8.19113 5.93537 7.68567 5.93537 7.06233C5.93552 6.43911 6.44105 5.93353 7.06428 5.93342Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M8.68147 0.963693C10.1168 0.447019 11.6266 0.374829 12.5633 1.31135C13.5 2.24805 13.4276 3.75776 12.911 5.19319C12.7126 5.74431 12.4385 6.31796 12.0965 6.89729C12.4969 7.54638 12.8141 8.19018 13.036 8.80647C13.5527 10.2419 13.625 11.7516 12.6883 12.6883C11.7516 13.625 10.2419 13.5527 8.80647 13.036C8.19019 12.8141 7.54638 12.4969 6.89729 12.0965C6.31794 12.4386 5.74432 12.7125 5.19319 12.911C3.75774 13.4276 2.24807 13.5 1.31135 12.5633C0.374829 11.6266 0.447019 10.1168 0.963693 8.68147C1.17182 8.10338 1.46318 7.50063 1.82893 6.8924C1.52179 6.35711 1.27232 5.82825 1.08869 5.31819C0.572038 3.88278 0.499683 2.37306 1.43635 1.43635C2.37304 0.499655 3.88277 0.572044 5.31819 1.08869C5.82825 1.27232 6.35712 1.5218 6.8924 1.82893C7.50063 1.46318 8.10338 1.17181 8.68147 0.963693ZM11.3572 8.01154C10.9083 8.62253 10.3901 9.22873 9.8094 9.8094C9.22874 10.3901 8.62252 10.9083 8.01154 11.3572C8.42567 11.5841 8.82867 11.7688 9.21272 11.9071C10.5455 12.3868 11.4246 12.2547 11.8397 11.8397C12.2547 11.4246 12.3869 10.5456 11.9071 9.21272C11.7688 8.82866 11.5841 8.42568 11.3572 8.01154ZM2.56526 8.02912C2.3734 8.39322 2.21492 8.74796 2.0926 9.08772C1.61288 10.4204 1.74509 11.2995 2.15998 11.7147C2.57502 12.1297 3.45412 12.2618 4.78694 11.7821C5.11053 11.6656 5.44783 11.5164 5.79377 11.3367C5.24897 10.9223 4.70919 10.4533 4.19026 9.9344C3.57575 9.31987 3.03166 8.67633 2.56526 8.02912ZM6.90705 3.2469C6.24062 3.70479 5.56457 4.26321 4.91389 4.91389C4.26322 5.56456 3.70479 6.24063 3.2469 6.90705C3.72671 7.63325 4.32774 8.37685 4.91389 8.96299C5.50003 9.54914 6.24362 10.1502 6.96983 10.6299C7.69601 10.1502 8.43961 9.54914 9.02575 8.96299C9.6119 8.37685 10.2129 7.63325 10.6927 6.90705C10.2129 6.18086 9.6119 5.43725 9.02575 4.8511C8.43961 4.26496 7.69601 3.66391 6.96983 3.18419C6.94896 3.205 6.92803 3.22593 6.90705 3.2469Z" fill="currentColor"></path></svg>
-                      深度思考
+                      Suy nghĩ sâu
                     </a-button>
                   </a-tooltip>
-                  <a-tooltip v-if="showWebSearch" :title="enableSearch ? '关闭联网搜索' : '开启联网搜索'">
+                  <a-tooltip v-if="showWebSearch" :title="enableSearch ? 'Tắt tìm kiếm liên mạng' : 'Bật tìm kiếm liên mạng'">
                     <a-button
                         class="sendBtn webSearchBtn"
                         type="text"
                         :class="{ 'enabled': enableSearch }"
                         @click="toggleWebSearch">
                       <Icon size="16" icon="ant-design:global-outlined" :style="enableSearch ? { color: '#06f' } : { color: '#3d4353' }"></Icon>
-                      联网搜索
+                      Tìm kiếm liên mạng
                     </a-button>
                   </a-tooltip>
-                  <a-tooltip v-if="showDraw" :title="enableDraw ? '关闭图像生成' : '开启图像生成'">
+                  <a-tooltip v-if="showDraw" :title="enableDraw ? 'Tắt tạo hình tượng' : 'Bật tạo hình tượng'">
                     <a-button
                         class="sendBtn webSearchBtn"
                         type="text"
                         :class="{ 'enabled': enableDraw }"
                         @click="handleGenerateImage">
                       <svg style="margin-right: 6px" :style="enableDraw ? { color: '#06f' } : { color: '#3d4353' }" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class=""><path d="M12 2.3584C14.1681 2.35841 16.1541 2.52965 17.7266 2.72754C19.9228 3.00409 21.6336 4.66074 21.9365 6.85352C22.1348 8.28975 22.2998 10.0677 22.2998 12L22.293 12.7168C22.2586 14.3712 22.1101 15.8897 21.9365 17.1465L21.9043 17.3496C21.5268 19.4411 19.8545 21.0045 17.7266 21.2725L17.1182 21.3457C15.655 21.511 13.8972 21.6416 12 21.6416L11.1963 21.6338C9.60724 21.6034 8.13686 21.4874 6.88281 21.3457L6.27441 21.2725C4.14635 21.0046 2.47428 19.4411 2.09668 17.3496L2.06445 17.1465C1.89093 15.8897 1.74239 14.3712 1.70801 12.7168L1.7002 12C1.7002 10.3092 1.82669 8.737 1.99121 7.4082L2.06445 6.85352C2.35801 4.72923 3.9719 3.10743 6.06934 2.75684L6.27441 2.72754C7.84674 2.52969 9.83219 2.35841 12 2.3584ZM11.9775 13.3496C11.4613 13.3496 10.9378 13.4818 10.2207 13.8066C9.48747 14.1388 8.61112 14.6435 7.37793 15.3555L3.76367 17.4424C4.13152 18.6436 5.16153 19.5204 6.47363 19.6855C7.99607 19.8771 9.91342 20.042 12 20.042C14.0865 20.042 16.0039 19.8771 17.5264 19.6855C18.8303 19.5214 19.8566 18.6546 20.2305 17.4648L16.5771 15.3555C15.344 14.6435 14.4676 14.1388 13.7344 13.8066C13.0173 13.4818 12.4938 13.3496 11.9775 13.3496ZM12 3.95801C9.91342 3.95802 7.99607 4.12286 6.47363 4.31445C4.98011 4.50243 3.85117 5.61215 3.64941 7.07324C3.45876 8.45412 3.2998 10.1566 3.2998 12C3.2998 13.3468 3.38385 14.6183 3.50391 15.7441L6.57715 13.9707C7.78367 13.2741 8.73894 12.7218 9.56055 12.3496C10.3981 11.9702 11.1542 11.75 11.9775 11.75C12.8008 11.75 13.557 11.9702 14.3945 12.3496C15.2161 12.7218 16.1714 13.2741 17.3779 13.9707L20.4922 15.7686C20.6134 14.6367 20.7002 13.3565 20.7002 12C20.7002 10.1566 20.5422 8.4541 20.3516 7.07324C20.1498 5.61218 19.0198 4.50249 17.5264 4.31445C16.0039 4.12287 14.0865 3.95802 12 3.95801ZM7.73438 7.0625C8.76128 7.0625 9.59375 7.89497 9.59375 8.92188C9.59375 9.94878 8.76128 10.7812 7.73438 10.7812C6.70747 10.7812 5.875 9.94878 5.875 8.92188C5.875 7.89497 6.70747 7.0625 7.73438 7.0625Z" fill="currentColor"></path></svg>
-                      <span style="font-size: 12px">图像生成</span>
+                      <span style="font-size: 12px">Tạo hình tượng</span>
                     </a-button>
                   </a-tooltip>
                 </div>
@@ -335,39 +335,39 @@
 
   const props = defineProps(['uuid', 'prologue', 'formState', 'url', 'type','historyData','chatTitle','presetQuestion','quickCommandData','showAdvertising','hasExtraFlowInputs','conversationSettings','sessionType']);
   const emit = defineEmits(['save','reload-message-title','edit-settings']);
-  //【LHZP-1351】AI生成过程中用户向上滚动时不再强制滚动到底部
+  //【LHZP-1351】AITrong quá trình AI tạo nội dung, khi người dùng cuộn lên thì không còn ép cuộn xuống đáy nữa
   const { scrollRef, scrollToBottom, scrollToBottomIfAuto } = useScroll();
   const prompt = ref<string>('');
   const loading = ref<boolean>(false);
   const inputRef = ref<Ref | null>(null);
   const headerTitle = ref<string>(props.chatTitle);
 
-  //聊天数据
+  //Dữ liệu trò chuyện
   const chatData = ref<any>([]);
-  //应用数据
+  //Dữ liệu ứng dụng
   const appData = ref<any>({});
   const usingContext = ref<any>(true);
   const uuid = ref<string>(props.uuid);
   const topicId = ref<string>('');
-  //请求id
+  //id yêu cầu
   const requestId = ref<string>('');
   const { getIsMobile } = useAppInject();
   const conversationList = computed(() => chatData.value.filter((item) => item.inversion != 'user' && !!item.conversationOptions));
   const placeholder = computed(() => {
     if(getIsMobile.value){
-      return '来说点什么吧...'
+      return 'Hãy nói gì đó đi... (Shift'
     } else {
-      return '来说点什么吧...（Shift + Enter = 换行）';
+      return 'Hãy nói gì đó đi... (Shift + Enter = Xuống dòng)';
     }
   });
   //token
   const headers = getHeaders();
-  //文本域点击事件
+  //Sự kiện nhấp vùng văn bản
   const textareaActive = ref<boolean>(false);
 
   const globSetting = useGlobSetting();
   const baseUploadUrl = globSetting.uploadUrl;
-  // 匿名上传需携带 appId + shareToken；登录态可不带 shareToken
+  // Tải lên ẩn danh cần mang theo appId + shareToken; trạng thái đã đăng nhập có thể không mang shareToken
   const uploadUrl = computed(() => {
     let url = `${baseUploadUrl}/airag/chat/upload`;
     const appId = appData.value?.id;
@@ -381,41 +381,41 @@
     }
     return `${url}?${params.toString()}`;
   });
-  //是否为断线重连
+  //Có phải kết nối lại sau khi mất kết nối hay không
   const isReConnect = ref<boolean>(false);
-  //是否存在思考过程
+  //Có tồn tại quá trình suy nghĩ hay không
   const isThinking = ref<boolean>(false);
-  //是否开启网络搜索
+  //Có bật tìm kiếm mạng hay không
   const enableSearch = ref<boolean>(false);
-  //是否显示网络搜索按钮（默认显示）
+  //Có hiển thị nút tìm kiếm mạng hay không (mặc định hiển thị)
   const showWebSearch = ref<boolean>(true);
-  //模型provider信息
+  //Thông tin provider của mô hình
   const modelProvider = ref<string>('');
-  //是否显示深度思考( 只有deepsee-reason支持 )
+  //Có hiển thị suy nghĩ sâu hay không( Chỉ deepsee-reason hỗ trợ )
   const showThink = ref<boolean>(false);
-  //是否开启深度思考
+  //Có bật suy nghĩ sâu hay không
   const enableThink = ref<boolean>(false);
-  //模型名称
+  //Tên mô hình
   const modelName = ref<string>('');
-  //是否开启绘画
+  //Có bật vẽ hay không
   const enableDraw = ref<boolean>(false);
-  //是否显示工具栏
+  //Có hiển thị thanh công cụ hay không
   const showDraw = ref<boolean>(false);
-  //绘画模型的id
+  //id của mô hình vẽ
   const drawModelId = ref<string>('');
-  //其他文件列表
+  //Danh sách tệp khác
   const fileUrlList = ref<any>([]);
-  //文件列表（用于显示和管理）
+  //Danh sách tệp (dùng để hiển thị và quản lý)
   const fileList = ref<any>([]);
 
-  // 当前正在调用的工具
+  // Công cụ hiện đang gọi
   const currentToolTag = ref<string>('');
-  //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考中的工具名称翻译为流程名并显示工具调用---
-  // 当前一轮思考中已识别的工具展示名称
+  //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Tên công cụ trong quá trình suy nghĩ được dịch thành tên quy trình và hiển thị lệnh gọi công cụ---
+  // Tên hiển thị công cụ đã nhận diện trong vòng suy nghĩ hiện tại
   const thinkingToolDisplayNames = new Map<string, string>();
-  // 当前一轮思考消息位置
+  // Vị trí tin nhắn suy nghĩ của vòng hiện tại
   const activeThinkingIndex = ref<number>(-1);
-  //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考中的工具名称翻译为流程名并显示工具调用---
+  //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Tên công cụ trong quá trình suy nghĩ được dịch thành tên quy trình và hiển thị lệnh gọi công cụ---
 
   function handleEnter(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -435,25 +435,25 @@
   async function onConversation(userMessage) {
     if(!props.type && props.type != 'view'){
       if(appData.value.type && appData.value.type == 'chatSimple' && !appData.value.modelId) {
-        messageTip("请选择AI模型");
+        messageTip("Vui lòng chọn mô hình AI");
         return;
       }
       if(appData.value.type && appData.value.type == 'chatFLow' && !appData.value.flowId) {
-        messageTip("请选择关联流程");
+        messageTip("Vui lòng chọn quy trình liên kết");
         return;
       }
       if(!appData.value.name) {
-        messageTip("请填写应用名称");
+        messageTip("Vui lòng điền tên ứng dụng");
         return;
       }
     }
     
-    // 检查是否需要设置额外参数
+    // Kiểm tra có cần cài đặt tham số bổ sung hay không
     if (props.hasExtraFlowInputs) {
-      // 检查是否已设置
+      // Kiểm tra đã cài đặt hay chưa
       if (!props.conversationSettings || Object.keys(props.conversationSettings).length === 0) {
-        // 弹出设置弹窗，阻止发送
-        message.warning('请先设置对话参数');
+        // Bật popup cài đặt, ngăn gửi
+        message.warning('Vui lòng cài đặt tham số hội thoại trước');
         emit('edit-settings');
         return;
       }
@@ -483,7 +483,7 @@
 
     addChat(uuid.value, {
       dateTime: new Date().toLocaleString(),
-      content: '思考中...',
+      content: 'Đang suy nghĩ...',
       loading: true,
       inversion: 'ai',
       error: false,
@@ -495,7 +495,7 @@
 
     scrollToBottom();
 
-    //发送消息
+    //Gửi tin nhắn
     sendMessage(userMessage,options);
   }
 
@@ -515,7 +515,7 @@
     await scrollToBottomIfAuto();
   };
   /**
-   * 顶置开场白
+   * Lời mở đầu ghim trên cùng
    * @param txt
    */
   const topChat = (txt) => {
@@ -558,19 +558,19 @@
   };
 
   /**
-   * 清空会话
+   * Làm trống phiên
    * @param id
    */
   function handleDelSession (){
     try {
-      //update-begin---author:wangshuai---date:2025-12-12---for:【QQYUN-14127】【AI】AI应用门户---
+      //update-begin---author:wangshuai---date:2025-12-12---for:【QQYUN-14127】【AI】AICổng ứng dụng AI---
       let url = '/airag/chat/messages/clear/' + uuid.value;
       if(props.sessionType){
         url += "/" + props.sessionType;
       }
       defHttp.get({
         url: url,
-      //update-end---author:wangshuai---date:2025-12-12---for:【QQYUN-14127】【AI】AI应用门户---
+      //update-end---author:wangshuai---date:2025-12-12---for:【QQYUN-14127】【AI】AICổng ứng dụng AI---
       },{ isTransformResponse: false }).then((res) => {
         if(res.success){
           chatData.value = [];
@@ -585,9 +585,9 @@
     }
   };
 
-  // 停止响应
+  // Dừng phản hồi
   const handleStop = () => {
-    console.log('ai 聊天：：：---停止响应, 当前loading:', loading.value, ', 调用栈:', new Error().stack?.split('\n').slice(1,4).join(' <- '));
+    console.log('ai trò chuyện：：：---dừng phản hồi, loading hiện tại:', loading.value, ', Ngăn xếp gọi:', new Error().stack?.split('\n').slice(1,4).join(' <- '));
     if (loading.value) {
       loading.value = false;
     }
@@ -599,14 +599,14 @@
   const knowList = ref<Recordable[]>([])
 
   /**
-   * 停止消息
+   * Dừng tin nhắn
    */
   function handleStopChat() {
-    //update-begin---author:wangshuai---date:2025-06-03---for:【issues/8338】AI应用聊天回复stop无效，仍会继续输出回复---
+    //update-begin---author:wangshuai---date:2025-06-03---for:【issues/8338】Ứng dụng AI trả lời trò chuyện, stop không hiệu lực, vẫn tiếp tục xuất ra câu trả lời---
     const currentRequestId = requestId.value
     if(currentRequestId){
       try{
-        //调用后端接口停止响应
+        //Gọi giao diện backend dừng phản hồi
         defHttp.get({
           url: '/airag/chat/stop/' + currentRequestId,
         },{ isTransformResponse: false });
@@ -614,14 +614,14 @@
         handleStop();
         localStorage.removeItem('chat_requestId_' + uuid.value);
       }
-      //update-end---author:wangshuai---date:2025-06-03---for:【issues/8338】AI应用聊天回复stop无效，仍会继续输出回复---
+      //update-end---author:wangshuai---date:2025-06-03---for:【issues/8338】Ứng dụng AI trả lời trò chuyện, stop không hiệu lực, vẫn tiếp tục xuất ra câu trả lời---
     } else {
       localStorage.removeItem('chat_requestId_' + uuid.value);
     }
   }
 
   /**
-   * 读取文本
+   * Đọc văn bản
    * @param message
    * @param options
    */
@@ -638,16 +638,16 @@
         topicId: topicId.value,
         app: appData.value,
         responseMode: 'streaming',
-        // 添加对话设置参数（调试模式也需要）
+        // Thêm tham số cài đặt hội thoại (chế độ gỡ lỗi cũng cần)
         flowInputs: props.conversationSettings || {},
-        // 添加网络搜索参数
+        // Thêm tham số tìm kiếm mạng
         enableSearch: enableSearch.value,
-        // 添加深度思考参数
+        // Thêm tham số suy nghĩ sâu
         enableThink: enableThink.value,
-        // 添加绘画参数
+        // Thêm tham số vẽ
         enableDraw: enableDraw.value,
         drawModelId: enableDraw.value ? drawModelId.value : '',
-        // 添加消息类型 portal 门户
+        // Thêm loại tin nhắn portal Cổng thông tin
         sessionType: props.sessionType || ''
       };
     }else{
@@ -660,20 +660,20 @@
         shareToken: appData.value.shareToken,
         responseMode: 'streaming',
         conversationId: uuid.value === "1002"?'':uuid.value,
-        // 添加对话设置参数
+        // Thêm tham số cài đặt hội thoại
         flowInputs: props.conversationSettings || {},
-        // 添加网络搜索参数
+        // Thêm tham số tìm kiếm mạng
         enableSearch: enableSearch.value,
-        // 添加深度思考参数
+        // Thêm tham số suy nghĩ sâu
         enableThink: enableThink.value,
-        // 添加绘画参数
+        // Thêm tham số vẽ
         enableDraw: enableDraw.value,
         drawModelId: enableDraw.value ? drawModelId.value : '',
-        // 添加消息类型 portal 门户
+        // Thêm loại tin nhắn portal Cổng thông tin
         sessionType: props.sessionType || ''
       };
 
-      if(headerTitle.value == '新建聊天'){
+      if(headerTitle.value == 'Tạo mới trò chuyện'){
         headerTitle.value = message.length>10?truncateString(message,10):message
       }
 
@@ -698,36 +698,36 @@
         isTransformResponse: false,
       }
     ).catch((e)=>{
-      //update-begin---author:wangshuai---date:2025-04-28---for:【QQYUN-12297】【AI】聊天，超时以后提示---
+      //update-begin---author:wangshuai---date:2025-04-28---for:【QQYUN-12297】【AI】Trò chuyện, thông báo sau khi quá thời gian chờ---
       if(e.code === 'ETIMEDOUT'){
-        updateChatFail(uuid, "当前用户较多，排队中，请稍候再次重试！");
+        updateChatFail(uuid, "Hiện tại khá nhiều người dùng, đang xếp hàng, vui lòng thử lại sau giây lát!");
         handleStop();
         return;
       }else{
-        updateChatFail(uuid, "服务器错误，请稍后重试！");
+        updateChatFail(uuid, "Lỗi máy chủ, vui lòng thử lại sau!");
         handleStop();
         return;
       }
       console.error(e)
-      //update-end---author:wangshuai---date:2025-04-28---for:【QQYUN-12297】【AI】聊天，超时以后提示---
+      //update-end---author:wangshuai---date:2025-04-28---for:【QQYUN-12297】【AI】Trò chuyện, thông báo sau khi quá thời gian chờ---
     });
     if (!readableStream) {
       return;
     }
     await renderChatByResult(readableStream,options);
   }
-  // 是否使用上下文
+  // Có dùng ngữ cảnh hay không
   const handleUsingContext = () => {
     usingContext.value = !usingContext.value;
     if (usingContext.value) {
-      message.success("当前模式下, 发送消息会携带之前的聊天记录");
+      message.success("Ở chế độ hiện tại, gửi tin nhắn sẽ mang theo lịch sử trò chuyện trước đó");
     } else {
-      message.warning("当前模式下, 发送消息不会携带之前的聊天记录");
+      message.warning("Ở chế độ hiện tại, gửi tin nhắn sẽ không mang theo lịch sử trò chuyện trước đó");
     }
   };
 
   /**
-   * 提示
+   * Gợi ý
    * @param value
    */
   function messageTip(value) {
@@ -735,7 +735,7 @@
   }
 
   /**
-   * 判断消息是否为工具执行记录，避免底层协议数据混入思考文本。
+   * Phán đoán tin nhắn có phải bản ghi thực thi công cụ hay không, tránh để dữ liệu giao thức tầng dưới lẫn vào văn bản suy nghĩ.
    */
   function isToolExecPayload(value: unknown): boolean {
     if (typeof value !== 'string') {
@@ -761,7 +761,7 @@
   }
 
   /**
-   * 渲染文本
+   * Hiển thị văn bản
    * @param item
    * @param conversationId
    * @param text
@@ -771,14 +771,14 @@
     let returnText = "";
     if (item.event == 'MESSAGE' || item.event == 'THINKING' || item.event == 'THINKING_END') {
       let message = item.data?.message ?? "";
-      // 工具结果已有专用事件处理，思考中不应作为普通消息打断当前思考状态
-      // update-begin--author:wangshuai---date:20260813---for：【LHZP-1601】【AI应用】有时候思考结束还会重新思考，一直思考到思考结束好几轮
+      // Kết quả công cụ đã có xử lý sự kiện chuyên dụng, trong lúc suy nghĩ không nên làm gián đoạn trạng thái suy nghĩ hiện tại như tin nhắn thường
+      // update-begin--author:wangshuai---date:20260813---for：【LHZP-1601】【AIỨng dụng】Đôi khi suy nghĩ đã kết thúc vẫn suy nghĩ lại, cứ suy nghĩ nhiều vòng cho đến khi kết thúc
       if (isThinking.value && isToolExecPayload(message)) {
-      // update-end--author:wangshuai---date:20260813---for：【LHZP-1601】【AI应用】有时候思考结束还会重新思考，一直思考到思考结束好几轮
+      // update-end--author:wangshuai---date:20260813---for：【LHZP-1601】【AIỨng dụng】Đôi khi suy nghĩ đã kết thúc vẫn suy nghĩ lại, cứ suy nghĩ nhiều vòng cho đến khi kết thúc
         return { returnText: text, conversationId };
       }
       let messageText = "";
-      //update-begin---author:wangshuai---date:2025-04-24---for:应该先判断是否包含card---
+      //update-begin---author:wangshuai---date:2025-04-24---for:Nên phán đoán trước xem có chứa card hay không---
       if(message && message.indexOf("::card::") !== -1){
         messageText = message;
       } else if(message && message.indexOf("::cardConfig::") !== -1) {
@@ -791,8 +791,8 @@
         messageText = text;
         returnText = text;
       }
-      //update-end---author:wangshuai---date:2025-04-24---for:应该先判断是否包含card---
-      // 从消息中获取 requestId
+      //update-end---author:wangshuai---date:2025-04-24---for:Nên phán đoán trước xem có chứa card hay không---
+      // Lấy requestId từ tin nhắn
       if (item.requestId) {
         requestId.value = item.requestId;
       }
@@ -803,7 +803,7 @@
         updateChatSome(uuid.value, chatData.value.length - 1, { loading: false, eventType: 'thinking_end' });
         text = item.data.message;
         returnText = item.data.message;
-        //发送用户消息
+        //Gửi tin nhắn người dùng
         addChat(uuid.value, {
           dateTime: new Date().toLocaleString(),
           content: item.data.message,
@@ -819,7 +819,7 @@
         isThinking.value = false;
         return { returnText, conversationId };
       }
-      //更新聊天信息
+      //Cập nhật thông tin trò chuyện
       const chatIndex = chatData.value.length - 1;
       const currentChat = chatData.value[chatIndex];
       updateChat(uuid.value, chatIndex, {
@@ -832,10 +832,10 @@
         requestOptions: { prompt: message, options: { ...options } },
         referenceKnowledge: knowList.value,
         eventType: item.event.toLowerCase(),
-        //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用---
+        //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ---
         currentToolTag: currentChat?.currentToolTag,
         thinkingToolTags: currentChat?.thinkingToolTags,
-        //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用---
+        //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ---
       });
       if (item.event == 'THINKING') {
         activeThinkingIndex.value = chatIndex;
@@ -855,15 +855,15 @@
       handleStop();
     }
     if (item.event == 'FLOW_FINISHED') {
-      //update-begin---author:wangshuai---date:2025-03-07---for:【QQYUN-11457】聊天调用流程，执行失败了但是没提示---
+      //update-begin---author:wangshuai---date:2025-03-07---for:【QQYUN-11457】Trò chuyện gọi quy trình, thực thi thất bại nhưng không có thông báo---
       if(item.data && !item.data.success){
-        updateChatFail(uuid, item.data.message?item.data.message:'请求出错，请稍后重试！');
+        updateChatFail(uuid, item.data.message?item.data.message:'Yêu cầu xảy ra lỗi, vui lòng thử lại sau!');
         localStorage.removeItem('chat_requestId_' + uuid.value);
         handleStop();
         return "";
       }
-      //update-end---author:wangshuai---date:2025-03-07---for:【QQYUN-11457】聊天调用流程，执行失败了但是没提示---
-      // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-2020】新增图像生成节点（流程结束后按 outputTypes 和 outputValues 渲染图片）
+      //update-end---author:wangshuai---date:2025-03-07---for:【QQYUN-11457】Trò chuyện gọi quy trình, thực thi thất bại nhưng không có thông báo---
+      // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-2020】Thêm node tạo hình ảnh mới (sau khi quy trình kết thúc, hiển thị hình ảnh theo outputTypes và outputValues)
       const flowOutputSegments = buildFlowOutputSegments(item.data);
       if (flowOutputSegments.some((segment) => segment.type === 'image')) {
         updateChatSome(uuid.value, chatData.value.length - 1, {
@@ -886,7 +886,7 @@
           await scrollToBottomIfAuto();
         }
       }
-      // update-end--author:liaozhiyang---date:20260831---for:【LHZP-2020】新增图像生成节点（流程结束后按 outputTypes 和 outputValues 渲染图片）
+      // update-end--author:liaozhiyang---date:20260831---for:【LHZP-2020】Thêm node tạo hình ảnh mới (sau khi quy trình kết thúc, hiển thị hình ảnh theo outputTypes và outputValues)
       topicId.value = item.topicId;
       conversationId = item.conversationId;
       uuid.value = item.conversationId;
@@ -895,14 +895,14 @@
       handleStop();
     }
     if (item.event == 'ERROR') {
-      updateChatFail(uuid, item.data.message?item.data.message:'请求出错，请稍后重试！');
+      updateChatFail(uuid, item.data.message?item.data.message:'Yêu cầu xảy ra lỗi, vui lòng thử lại sau!');
       localStorage.removeItem('chat_requestId_' + uuid.value);
       handleStop();
       return "";
     }
 
-    //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用---
-    // 工具调用开始
+    //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ---
+    // Gọi công cụ bắt đầu
     if (item.event == 'TOOL_EXEC_BEFORE') {
       const toolTag = item.data?.message ?? '';
       if (!updateThinkingTool(toolTag, false)) {
@@ -910,45 +910,45 @@
       }
     }
 
-    // 工具调用结束
+    // Gọi công cụ kết thúc
     if (item.event == 'TOOL_EXEC_DONE') {
       const toolTag = item.data?.message ?? '';
       if (!updateThinkingTool(toolTag, true)) {
         currentToolTag.value = '';
       }
     }
-    //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用---
+    //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ---
 
-    //update-begin---author:wangshuai---date:2025-03-21---for:【QQYUN-11495】【AI】实时展示当前思考进度---
+    //update-begin---author:wangshuai---date:2025-03-21---for:【QQYUN-11495】【AI】Hiển thị tiến trình suy nghĩ hiện tại theo thời gian thực---
     if(item.event === "NODE_STARTED"){   
       if(!item.data || item.data.type !== 'end'){
         let aiText = "";
         if(item.data.type === 'llm' || item.data.type === 'reply'){
-          aiText = "正在构建响应内容";
+          aiText = "Đang xây dựng nội dung phản hồi";
         }
         if(item.data.type === 'knowledge'){
-          aiText = "正在对知识库进行深度检索";
+          aiText = "Đang truy xuất sâu kho tri thức";
         }
         if(item.data.type === 'classifier'){
-          aiText = "正在分类";
+          aiText = "Đang phân loại";
         }
         if(item.data.type === 'code'){
-          aiText = "正在实施代码运行操作";
+          aiText = "Đang thực thi thao tác chạy mã";
         }
         if(item.data.type === 'subflow'){
-          aiText = "正在运行子流程";
+          aiText = "Đang chạy quy trình con";
         }
         if(item.data.type === 'enhanceJava'){
-          aiText = "正在执行java增强";
+          aiText = "Đang thực thi tăng cường java";
         }
         if(item.data.type === 'http'){
-          aiText = "正在发送http请求";
+          aiText = "Đang gửi yêu cầu http";
         }
         if (item.data.type === 'imageGen') {
-          aiText = "正在生成图片中";
+          aiText = "Đang tạo hình ảnh";
         }
         if(!text){
-          //更新聊天信息
+          //Cập nhật thông tin trò chuyện
           updateChat(uuid.value, chatData.value.length - 1, {
             dateTime: new Date().toLocaleString(),
             retrievalText: aiText,
@@ -964,14 +964,14 @@
         }
       }
     }
-    //update-end---author:wangshuai---date:2025-03-21---for:【QQYUN-11495】【AI】实时展示当前思考进度---
+    //update-end---author:wangshuai---date:2025-03-21---for:【QQYUN-11495】【AI】Hiển thị tiến trình suy nghĩ hiện tại theo thời gian thực---
     else if (item.event === 'NODE_FINISHED') {
       if(!item.data || item.data.type !== 'end'){
         if(item.data.type === 'knowledge'){
           const id = item.data.id;
           const data = item.data.outputs[id + ".documents"]
           knowList.value = data
-          //更新聊天信息
+          //Cập nhật thông tin trò chuyện
           updateChatSome(uuid.value, chatData.value.length - 1, {referenceKnowledge: knowList.value})
         }
       }
@@ -982,20 +982,20 @@
     return { returnText, conversationId };
   }
 
-  //上传文件列表集合
+  //Tập hợp danh sách tệp tải lên
   const uploadUrlList = ref<any>([]);
-  //文件集合
+  //Tập hợp tệp
   const fileInfoList = ref<any>([]);
 
   /**
-   * 文件上传回调事件
+   * Sự kiện callback tải lên tệp
    * @param info
    */
   function handleChange(info) {
     let { fileList, file } = info;
     fileInfoList.value = fileList;
     if (file.status === 'error' || (file.response && file.response.code == 500)) {
-      message.error(file.response?.message || `${file.name} 上传失败,请查看服务端日志`);
+      message.error(file.response?.message || `${file.name} Tải lên thất bại, vui lòng xem nhật ký phía máy chủ`);
       return;
     }
     if (file.status === 'done') {
@@ -1004,7 +1004,7 @@
   }
 
   /**
-   * 获取图片地址
+   * Lấy địa chỉ hình ảnh
    *
    * @param url
    */
@@ -1013,25 +1013,25 @@
   }
 
   /**
-   * 上传前事件
+   * Sự kiện trước khi tải lên
    */
   function beforeUpload(file) {
     var fileType = file.type;
     if (fileType === 'image') {
       if (fileType.indexOf('image') < 0) {
-        message.warning('请上传图片');
+        message.warning('Vui lòng tải lên hình ảnh');
         return false;
       }
     }
     if(uploadUrlList.value && uploadUrlList.value.length > 2){
-      message.warning("最多只能上传三张！");
+      message.warning("Tối đa chỉ được tải lên ba hình!");
       return false;
     }
     return true;
   }
 
   /**
-   * 删除图片
+   * Xóa hình ảnh
    */
   function deleteImage(index) {
     uploadUrlList.value.splice(index,1);
@@ -1039,19 +1039,19 @@
   }
 
   /**
-   * 图片预览
+   * Xem trước hình ảnh
    * @param url
    */
   function handlePreview(url){
     const onImgLoad = ({ index, url, dom }) => {
-      console.log(`第${index + 1}张图片已加载，URL为：${url}`, dom);
+      console.log(`Thứ${index + 1}hình ảnh đã tải, URL là:${url}`, dom);
     };
     let imageList = [getImage(url)];
     createImgPreview({ imageList: imageList, defaultWidth: 700, rememberState: true, onImgLoad });
   }
 
   /**
-   * 截取字符串
+   * Cắt chuỗi
    * @param str
    * @param maxLength
    */
@@ -1065,11 +1065,11 @@
     let result = '';
     for (let i = 0; i < str.length; i++) {
       const char = str[i];
-      if (/[\u4e00-\u9fa5]/.test(char)) { // 判断是否为汉字
+      if (/[\u4e00-\u9fa5]/.test(char)) { // Phán đoán có phải chữ Hán hay không
         chineseCount++;
-      } else if (/[a-zA-Z]/.test(char)) { // 判断是否为英文字母
+      } else if (/[a-zA-Z]/.test(char)) { // Phán đoán có phải chữ cái tiếng Anh hay không
         englishCount++;
-      } else if (/\d/.test(char)) { // 判断是否为数字
+      } else if (/\d/.test(char)) { // Phán đoán có phải số hay không
         digitCount++;
       }
       if (chineseCount + englishCount / 2 + digitCount / 2 > maxLength) {
@@ -1082,18 +1082,18 @@
   }
 
   /**
-   * 粘贴事件
+   * Sự kiện dán
    * @param event
    */
   function paste(event) {
     if(uploadUrlList.value && uploadUrlList.value.length > 2){
-      message.warning("最多只能上传三张！");
+      message.warning("Tối đa chỉ được tải lên ba hình!");
       return;
     }
     const items = (event.clipboardData || window.clipboardData).items;
     if (!items || items.length === 0){
-      //说明浏览器不支持复制图片
-      message.error('当前浏览器不支持本地打开图片！');
+      //Giải thích trình duyệt không hỗ trợ sao chép hình ảnh
+      message.error('Trình duyệt hiện tại không hỗ trợ mở hình ảnh cục bộ!');
       return;
     }
     let image = null;
@@ -1107,7 +1107,7 @@
   }
 
   /**
-   * 粘贴图片
+   * Dán hình ảnh
    * @param image
    */
   async function handleUploadImage(image) {
@@ -1118,14 +1118,14 @@
           uploadUrlList.value.push(message);
           fileInfoList.value.push(image);
         } else if (fileInfo.code === 500 || fileInfo.code === 510) {
-          message.error(fileInfo.message || `${image.name} 导入失败`);
+          message.error(fileInfo.message || `${image.name} Nhập thất bại`);
         }
       } catch (error) {
-        console.log('导入的数据异常', error);
-        message.error(`${image.name} 导入失败`);
+        console.log('Dữ liệu nhập vào bất thường', error);
+        message.error(`${image.name} Nhập thất bại`);
       }
     };
-    // 与 a-upload 一致：匿名上传携带 appId + shareToken
+    // Nhất quán với a-upload: tải lên ẩn danh mang theo appId + shareToken
     let uploadApi = '/airag/chat/upload';
     const appId = appData.value?.id;
     if (appId) {
@@ -1140,7 +1140,7 @@
   }
 
   /**
-   * 渲染返回来的结果
+   * Hiển thị kết quả trả về
    * @param readableStream
    * @param options
    */
@@ -1149,16 +1149,16 @@
     const decoder = new TextDecoder('UTF-8');
     let conversationId = '';
     let buffer = '';
-    let text = ''; // 按 SSE 协议分割消息
+    let text = ''; // Chia tin nhắn theo giao thức SSE
     while (true) {
       const { done, value } = await reader.read();
       if (done) {
         break;
       }
-      //update-begin---author:wangshuai---date:2025-03-12---for:【QQYUN-11555】聊天时要流式显示消息---
+      //update-begin---author:wangshuai---date:2025-03-12---for:【QQYUN-11555】Khi trò chuyện phải hiển thị tin nhắn dạng streaming---
       let result = decoder.decode(value, { stream: true });
       buffer += result;
-      // 按SSE协议用 \n\n 分割完整事件，最后一个元素可能不完整需保留在buffer中
+      // Dùng theo giao thức SSE \n\n Chia sự kiện hoàn chỉnh, phần tử cuối cùng có thể không hoàn chỉnh, cần giữ lại trong buffer
       const parts = buffer.split('\n\n');
       buffer = parts.pop() || '';
       for (let part of parts) {
@@ -1169,7 +1169,7 @@
         if (!content) {
           continue;
         }
-        //update-begin---author:wangshuai---date:2025-03-13---for:【QQYUN-11572】发布到线上不能实时动态，内容不能加载出来，得刷新才能看到全部回答---
+        //update-begin---author:wangshuai---date:2025-03-13---for:【QQYUN-11572】Phát hành lên môi trường thật không cập nhật động theo thời gian thực được, nội dung không tải ra được, phải làm mới mới thấy toàn bộ câu trả lời---
         try {
           if(content.indexOf(":::card:::") !== -1){
             content = content.replace(/\s+/g, '');
@@ -1180,13 +1180,13 @@
             conversationId = res.conversationId;
           });
         } catch (error) {
-          console.log('JSON解析失败, content长度:', content.length, ', error:', error);
+          console.log('Phân tích JSON thất bại, độ dài content:', content.length, ', error:', error);
         }
-        //update-end---author:wangshuai---date:2025-03-13---for:【QQYUN-11572】发布到线上不能实时动态，内容不能加载出来，得刷新才能看到全部回答---
+        //update-end---author:wangshuai---date:2025-03-13---for:【QQYUN-11572】Phát hành lên môi trường thật không cập nhật động theo thời gian thực được, nội dung không tải ra được, phải làm mới mới thấy toàn bộ câu trả lời---
       }
-      //update-end---author:wangshuai---date:2025-03-12---for:【QQYUN-11555】聊天时要流式显示消息---
+      //update-end---author:wangshuai---date:2025-03-12---for:【QQYUN-11555】Khi trò chuyện phải hiển thị tin nhắn dạng streaming---
     }
-    //update-begin---author:scott ---date:20260721  for：【issues/9787】兼容非SSE错误响应，避免错误文案滞留在buffer-----------
+    //update-begin---author:scott ---date:20260721  for：【issues/9787】Tương thích phản hồi lỗi không phải SSE, tránh để văn bản lỗi đọng lại trong buffer-----------
     buffer += decoder.decode();
     if (buffer.trim()) {
       let content = buffer.startsWith('data:') ? buffer.replace('data:', '').trim() : buffer.trim();
@@ -1203,29 +1203,29 @@
           conversationId = result.conversationId;
         }
       } catch (error) {
-        console.log('JSON解析失败, content长度:', content.length, ', error:', error);
+        console.log('Phân tích JSON thất bại, độ dài content:', content.length, ', error:', error);
       }
     }
-    //update-end---author:scott ---date:20260721  for：【issues/9787】兼容非SSE错误响应，避免错误文案滞留在buffer-----------
-    //update-begin---author:wangshuai---date:2025-11-05---for: 如果是断线重连并且文本为空，需要移出前面两条会话---
+    //update-end---author:scott ---date:20260721  for：【issues/9787】Tương thích phản hồi lỗi không phải SSE, tránh để văn bản lỗi đọng lại trong buffer-----------
+    //update-begin---author:wangshuai---date:2025-11-05---for: Nếu là kết nối lại sau khi mất kết nối và văn bản trống, cần loại bỏ hai phiên trò chuyện phía trước---
     if(!text && isReConnect && chatData.value.length >1){
-      //如果是断线重连的情况下，流结果为空时，移除占位的AI消息，避免空结果也新增聊天记录
+      //Nếu là trường hợp kết nối lại sau khi mất kết nối, khi kết quả stream trống, loại bỏ tin nhắn AI giữ chỗ, tránh kết quả trống cũng thêm bản ghi trò chuyện
       const lastMsg = chatData.value[chatData.value.length - 1];
-      if (lastMsg && lastMsg.inversion === 'ai' && lastMsg.content === '请稍后') {
+      if (lastMsg && lastMsg.inversion === 'ai' && lastMsg.content === 'Vui lòng chờ') {
         chatData.value.splice(chatData.value.length - 1, 1);
         chatData.value.splice(chatData.value.length - 1, 1);
       }
-    //update-end---author:wangshuai---date:2025-11-05---for: 如果是断线重连并且文本为空，需要移出前面两条会话---
+    //update-end---author:wangshuai---date:2025-11-05---for: Nếu là kết nối lại sau khi mất kết nối và văn bản trống, cần loại bỏ hai phiên trò chuyện phía trước---
       localStorage.removeItem('chat_requestId_' + uuid.value);
       loading.value = false;
     }
   }
 
   /**
-   * ai重连
+   * ai kết nối lại
    */
   async function aiReConnection() {
-    //查询requestId
+    //Truy vấn requestId
     let chat = localStorage.getItem("chat_requestId_" + uuid.value);
     if(chat) {
       let array = JSON.parse(chat);
@@ -1242,7 +1242,7 @@
       if(result && message){
         loading.value = true;
         isReConnect.value = true;
-        //发送用户消息
+        //Gửi tin nhắn người dùng
         addChat(uuid.value, {
           dateTime: new Date().toLocaleString(),
           content: message,
@@ -1258,10 +1258,10 @@
         if (lastContext && usingContext.value) {
           options = { ...lastContext };
         }
-        //添加ai消息
+        //Thêm tin nhắn ai
         addChat(uuid.value, {
           dateTime: new Date().toLocaleString(),
-          content: '请稍后',
+          content: 'Vui lòng chờ',
           loading: false,
           inversion: 'ai',
           error: false,
@@ -1272,7 +1272,7 @@
         });
         options.message = message;
         scrollToBottom();
-        //流式输出
+        //Đầu ra streaming
         await renderChatByResult(result,options);
       } else {
         loading.value = false;
@@ -1284,7 +1284,7 @@
     }
   }
 
-  //监听开场白
+  //Lắng nghe lời mở đầu
   watch(
     () => props.prologue,
     (val) => {
@@ -1296,7 +1296,7 @@
     }
   );
 
-  //监听开场白预制问题
+  //Lắng nghe câu hỏi chế sẵn của lời mở đầu
   watch(
     () => props.presetQuestion,
     (val) => {
@@ -1304,14 +1304,14 @@
     }
   );
 
-  //监听应用信息
+  //Lắng nghe thông tin ứng dụng
   watch(
     () => props.formState,
     (val) => {
       try {
         if (val) {
           appData.value = val;
-          // 检查模型是否支持网络搜索
+          // Kiểm tra mô hình có hỗ trợ tìm kiếm mạng hay không
           checkModelProvider();
         }
       } catch (e) {}
@@ -1319,34 +1319,34 @@
     { deep: true, immediate: true }
   );
 
-  // 编辑对话设置
+  // Chỉnh sửa cài đặt hội thoại
   function handleEditSettings() {
     emit('edit-settings');
   }
 
-  // 切换网络搜索
+  // Chuyển đổi tìm kiếm mạng
   function toggleWebSearch() {
     enableSearch.value = !enableSearch.value;
     if (enableSearch.value) {
-      message.success("已开启联网搜索");
+      message.success("Đã bật tìm kiếm liên mạng");
     } else {
-      message.info("已关闭联网搜索");
+      message.info("Đã tắt tìm kiếm liên mạng");
     }
   }
 
   /**
-   * 切换网络思考
+   * Chuyển đổi suy nghĩ mạng
    */
   function toggleThink() {
     enableThink.value = !enableThink.value;
     if (enableThink.value) {
-      message.success("已开启深度思考");
+      message.success("Đã bật suy nghĩ sâu");
     } else {
-      message.info("已关闭深度思考");
+      message.info("Đã tắt suy nghĩ sâu");
     }
   }
 
-  // 检查模型是否支持网络搜索（从appData.metadata.modelInfo中获取）
+  // Kiểm tra mô hình có hỗ trợ tìm kiếm mạng hay không (lấy từ appData.metadata.modelInfo)
   function checkModelProvider() {
     if (appData.value && appData.value.metadata) {
       try {
@@ -1354,9 +1354,9 @@
           ? JSON.parse(appData.value.metadata) 
           : appData.value.metadata;
 
-        //是否显示绘图工具
+        //Có hiển thị công cụ vẽ hay không
         showDraw.value = metadata.izDraw === '1';
-        // 绘画能力仅控制按钮是否显示，未明确配置时不默认进入图片生成模式
+        // Năng lực vẽ chỉ kiểm soát nút có hiển thị hay không, khi chưa cấu hình rõ ràng thì không mặc định vào chế độ tạo hình ảnh
         enableDraw.value = metadata.defaultSelect === '1';
         
         drawModelId.value = metadata.drawModelId;
@@ -1369,7 +1369,7 @@
           showThink.value = false;
         }
       } catch (e) {
-        console.error('解析模型信息失败', e);
+        console.error('Phân tích thông tin mô hình thất bại', e);
         showThink.value = false;
         enableDraw.value = false;
       }
@@ -1381,20 +1381,20 @@
   }
 
   /**
-   * 生成图片
+   * Tạo hình ảnh
    */
   function handleGenerateImage() {
     enableDraw.value = !enableDraw.value;
     if (enableDraw.value) {
-      message.success("已开启生成图片");
+      message.success("Đã bật tạo hình ảnh");
     } else {
-      message.info("已关闭生成图片");
+      message.info("Đã tắt tạo hình ảnh");
     }
   }
 
-  //================================================== begin 【QQYUN-14261】AI助手，支持多模态能力- 文档 ====================================
+  //================================================== begin 【QQYUN-14261】AIbegin Trợ lý AI, hỗ trợ năng lực đa phương thức- Tài liệu ====================================
   /**
-   * 通用文件上传前校验
+   * Kiểm chứng trước khi tải lên tệp thông thường
    * 
    * @param file
    */
@@ -1403,21 +1403,21 @@
     const fileType = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
     const allowFileTypes = ['txt', 'pdf', 'docx', 'doc', 'pptx', 'ppt', 'xlsx', 'xls', 'md'];
     if (allowFileTypes.indexOf(fileType) === -1) {
-      message.warning('不支持该文件类型上传，请上传 txt, pdf, docx, doc, pptx, ppt, xlsx, xls, md 格式文件');
+      message.warning('Không hỗ trợ tải lên loại tệp này, vui lòng tải lên tệp định dạng txt, pdf, docx, doc, pptx, ppt, xlsx, xls, md');
       return false;
     }
     return true;
   }
 
   /**
-   * 文件上传（非图片）
+   * Tải lên tệp (không phải hình ảnh)
    * @param info
    */
   function handleChangeFile(info) {
     let { file, fileList: newFileList } = info;
     fileList.value = newFileList;
     if (file.status === 'error' || (file.response && file.response.code == 500)) {
-      message.error(file.response?.message || `${file.name} 上传失败,请查看服务端日志`);
+      message.error(file.response?.message || `${file.name} Tải lên thất bại, vui lòng xem nhật ký phía máy chủ`);
       return;
     }
     fileUrlList.value = fileList.value
@@ -1426,7 +1426,7 @@
   }
 
   /**
-   * 删除文件
+   * Xóa tệp
    */
   function deleteFile(index) {
     fileList.value.splice(index, 1);
@@ -1435,11 +1435,11 @@
         .map(item => item.response.message);
   }
   
-  //================================================== end 【QQYUN-14261】AI助手，支持多模态能力- 文档 ====================================
+  //================================================== end 【QQYUN-14261】AIend Trợ lý AI, hỗ trợ năng lực đa phương thức- Tài liệu ====================================
 
-  //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考中的工具名称翻译为流程名并显示工具调用---
+  //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Tên công cụ trong quá trình suy nghĩ được dịch thành tên quy trình và hiển thị lệnh gọi công cụ---
   /**
-   * 从工具标签中读取工具名称和展示名称。
+   * Đọc tên công cụ và tên hiển thị từ nhãn công cụ.
    */
   function parseToolDisplayName(toolTag: string) {
     if (!toolTag || !toolTag.includes('<jeecg-tool-exec')) {
@@ -1461,7 +1461,7 @@
   }
 
   /**
-   * 隐藏思考文本中的工具技术名称。
+   * Ẩn tên kỹ thuật của công cụ trong văn bản suy nghĩ.
    */
   function replaceThinkingToolNames(content: string) {
     let displayContent = content;
@@ -1475,7 +1475,7 @@
   }
 
   /**
-   * 查找本轮最近一条思考消息。
+   * Tìm tin nhắn suy nghĩ gần nhất của vòng này.
    */
   function findThinkingMessageIndex() {
     const activeIndex = activeThinkingIndex.value;
@@ -1487,24 +1487,24 @@
   }
 
   /**
-   * 将工具状态保存到当前思考消息，避免回答生成后工具卡片消失。
+   * Lưu trạng thái công cụ vào tin nhắn suy nghĩ hiện tại, tránh thẻ công cụ biến mất sau khi tạo câu trả lời.
    */
   function updateThinkingTool(toolTag: string, completed: boolean) {
-    // 工具事件需要挂载到对应的思考消息上，不能直接使用最后一条聊天消息
+    // Sự kiện công cụ cần gắn lên tin nhắn suy nghĩ tương ứng, không thể dùng trực tiếp tin nhắn trò chuyện cuối cùng
     const index = findThinkingMessageIndex();
     const thinkingMessage = chatData.value[index];
     if (!thinkingMessage) {
       return false;
     }
-    // 执行中保存当前工具标签；执行完成后清空运行状态
+    // Trong lúc thực thi lưu nhãn công cụ hiện tại; sau khi thực thi xong làm trống trạng thái đang chạy
     const changes: Record<string, string> = {
       currentToolTag: completed ? '' : toolTag,
     };
     if (completed) {
-      // 保存已完成的工具标签，保证回复结束后工具调用记录仍然显示
+      // Lưu nhãn công cụ đã hoàn thành, đảm bảo sau khi trả lời kết thúc bản ghi gọi công cụ vẫn hiển thị
       changes.thinkingToolTags = `${thinkingMessage.thinkingToolTags || ''}${toolTag}\n\n`;
     }
-    // 缓存后端返回的展示名，并将思考文本中的 flow_xxx 替换为流程名称
+    // Lưu vào bộ nhớ đệm tên hiển thị do backend trả về, và thay flow_xxx trong văn bản suy nghĩ bằng tên quy trình
     const toolName = parseToolDisplayName(toolTag);
     if (toolName && typeof thinkingMessage.content === 'string') {
       thinkingToolDisplayNames.set(toolName.name, toolName.displayName);
@@ -1513,21 +1513,21 @@
     updateChatSome(uuid.value, index, changes);
     return true;
   }
-  //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考中的工具名称翻译为流程名并显示工具调用---
+  //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Tên công cụ trong quá trình suy nghĩ được dịch thành tên quy trình và hiển thị lệnh gọi công cụ---
 
-  //监听历史信息
+  //Lắng nghe thông tin lịch sử
   watch(
     () => props.historyData,
     (val) => {
       try {
-        //update-begin---author:wangshuai---date:2025-03-06---for:【QQYUN-11384】浏览器打开应用开场白丢了---
+        //update-begin---author:wangshuai---date:2025-03-06---for:【QQYUN-11384】Mở ứng dụng bằng trình duyệt bị mất lời mở đầu---
         if (val && val.length > 0) {
-          // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-2020】新增图像生成节点（历史消息根据 content、outputTypes 和 outputValues 恢复图文结果）
+          // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-2020】Thêm node tạo hình ảnh mới (tin nhắn lịch sử khôi phục kết quả văn bản-hình ảnh dựa trên content, outputTypes và outputValues)
           chatData.value = cloneDeep(val).map((item) => {
             const flowOutputSegments = buildFlowOutputSegments(item);
             return flowOutputSegments.some((segment) => segment.type === 'image') ? { ...item, flowOutputSegments } : item;
           });
-          // update-end--author:liaozhiyang---date:20260831---for:【LHZP-2020】新增图像生成节点（历史消息根据 content、outputTypes 和 outputValues 恢复图文结果）
+          // update-end--author:liaozhiyang---date:20260831---for:【LHZP-2020】Thêm node tạo hình ảnh mới (tin nhắn lịch sử khôi phục kết quả văn bản-hình ảnh dựa trên content, outputTypes và outputValues)
           if(chatData.value[0]){
             topicId.value = chatData.value[0].topicId
           }
@@ -1535,17 +1535,17 @@
           chatData.value = [];
           headerTitle.value = props.chatTitle;
         }
-        //update-begin---author:wangshuai---date:2025-11-18---for:【QQYUN-14049】【AI】没有开场白，就不展示预设问题了---
+        //update-begin---author:wangshuai---date:2025-11-18---for:【QQYUN-14049】【AI】Không có lời mở đầu thì không hiển thị câu hỏi đặt sẵn nữa---
         if((props.prologue || props.presetQuestion) && props.chatTitle){
-        //update-end---author:wangshuai---date:2025-11-18---for:【QQYUN-14049】【AI】没有开场白，就不展示预设问题了---
+        //update-end---author:wangshuai---date:2025-11-18---for:【QQYUN-14049】【AI】Không có lời mở đầu thì không hiển thị câu hỏi đặt sẵn nữa---
           topChat(props.prologue)
         }
-        //ai回复重连
+        //ai trả lời kết nối lại
         aiReConnection();
       } catch (e) {
         console.log(e)
       }
-      //update-end---author:wangshuai---date:2025-03-06---for:【QQYUN-11384】浏览器打开应用开场白丢了---
+      //update-end---author:wangshuai---date:2025-03-06---for:【QQYUN-11384】Mở ứng dụng bằng trình duyệt bị mất lời mở đầu---
     },
     { deep: true, immediate: true }
   );
@@ -1556,7 +1556,7 @@
     fileInfoList.value = [];
     fileUrlList.value = [];
     fileList.value = [];
-    // 检查模型是否支持网络搜索
+    // Kiểm tra mô hình có hỗ trợ tìm kiếm mạng hay không
     checkModelProvider();
   });
 </script>
@@ -1582,7 +1582,7 @@
       overflow-y: auto;
       height: 100%;
 
-      // 长回复会按内容比例压缩滑块，此处仅增强聊天区滚动条的可见性，避免影响全局样式。
+      // Trả lời dài sẽ nén thanh trượt theo tỷ lệ nội dung, chỗ này chỉ tăng khả năng hiển thị của thanh cuộn khu vực trò chuyện, tránh ảnh hưởng kiểu toàn cục.
       &::-webkit-scrollbar {
         width: 10px;
       }
@@ -1789,7 +1789,7 @@
           width: 60px;
         }
       }
-      /*begin 文件的样式*/
+      /*begin Kiểu của tệp*/
       .file-card {
         display: flex;
         align-items: center;
@@ -1855,7 +1855,7 @@
         &:hover .file-card-close {
           opacity: 1;
         }
-        /*end 文件的样式*/
+        /*end Kiểu của tệp*/
       }
     }
     .textarea-bottom{
@@ -1866,7 +1866,7 @@
       position: relative;
       padding: 2px 4px;
       width: 100%;
-      /*begin 底部样式*/
+      /*begin Kiểu phần đáy*/
       .textarea-action-bar {
         display: flex;
         justify-content: space-between;
@@ -1890,7 +1890,7 @@
           height: 30px;
         }
       }
-      /*end 底部样式*/
+      /*end Kiểu phần đáy*/
     }
   }
   .chat-textarea:hover{
@@ -1923,7 +1923,7 @@
   }
   
   @media (max-width: 600px) {
-    //手机下的样式 平板不需要调整
+    //Kiểu trên điện thoại, máy tính bảng không cần điều chỉnh
     .footer{
       padding: 0;
       .bottomArea{

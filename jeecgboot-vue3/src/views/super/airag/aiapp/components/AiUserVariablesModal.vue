@@ -1,7 +1,7 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="用户变量" :width="1000" @ok="handleSubmit" destroyOnClose>
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Biến người dùng" :width="1000" @ok="handleSubmit" destroyOnClose>
     <div class="p-4">
-      <div class="mb-4 text-gray-500"> 用于存储每个用户使用项目过程中，需要持久化存储和读取的数据，如用户的语言偏好、个性化设置等。 </div>
+      <div class="mb-4 text-gray-500"> Dùng để lưu trữ dữ liệu cần lưu trữ bền vững và đọc trong quá trình mỗi người dùng sử dụng dự án, ví dụ như tùy chọn ngôn ngữ, cài đặt cá nhân hóa của người dùng. </div>
 
       <JVxeTable
         ref="tableRef"
@@ -15,15 +15,15 @@
         <template #toolbarSuffix>
           <a-button type="primary" @click="handleAdd">
             <Icon icon="ant-design:plus-outlined" />
-            新增
+            Thêm mới
           </a-button>
         </template>
 
         <template #action="props">
           <div class="action-group">
-            <a-switch v-model:checked="props.row.enable" checked-children="开" un-checked-children="关" size="small" class="ml-2" />
+            <a-switch v-model:checked="props.row.enable" checked-children="Mở" un-checked-children="Đóng" size="small" class="ml-2" />
 
-            <a-popconfirm title="确定删除吗？" @confirm="handleDelete(props)">
+            <a-popconfirm title="Bạn có chắc muốn xóa?" @confirm="handleDelete(props)">
               <Icon icon="ant-design:delete-outlined" class="cursor-pointer hover:text-red-500 ml-2" size="18" color="red" />
             </a-popconfirm>
           </div>
@@ -56,35 +56,35 @@
       const { createMessage } = useMessage();
       const tableRef = ref<JVxeTableInstance>();
 
-      // 定义列配置
+      // Định nghĩa cấu hình cột
       const columns = ref<JVxeColumn[]>([
         {
-          title: '名称',
+          title: 'Tên',
           key: 'name',
           type: JVxeTypes.input,
           width: 200,
-          placeholder: '请输入变量名',
+          placeholder: 'Vui lòng nhập tên biến',
           validateRules: [
-            { required: true, message: '名称不能为空' },
-            { pattern: /^[a-zA-Z][a-zA-Z0-9_]*$/, message: '仅支持字母、数字和下划线，且以字母开头' },
+            { required: true, message: 'Tên không được để trống' },
+            { pattern: /^[a-zA-Z][a-zA-Z0-9_]*$/, message: 'Chỉ hỗ trợ chữ cái, chữ số và gạch dưới, và bắt đầu bằng chữ cái' },
           ],
         },
         {
-          title: '描述',
+          title: 'Mô tả',
           key: 'description',
           type: JVxeTypes.input,
           width: 300,
-          placeholder: '字段描述',
+          placeholder: 'Mô tả trường',
         },
         {
-          title: '默认值',
+          title: 'Giá trị mặc định',
           key: 'defaultValue',
           type: JVxeTypes.input,
           width: 200,
-          placeholder: '默认值',
+          placeholder: 'Giá trị mặc định',
         },
         {
-          title: '操作',
+          title: 'Thao tác',
           key: 'action',
           type: JVxeTypes.slot,
           slotName: 'action',
@@ -96,7 +96,7 @@
       const dataSource = ref<any[]>([]);
 
       const [registerModal, { setModalProps, closeModal }] = useModalInner((data) => {
-        // 如果传入了已有数据，进行初始化
+        // Nếu đã truyền vào dữ liệu có sẵn, tiến hành khởi tạo
         if (data && data.variables) {
           dataSource.value = JSON.parse(data.variables);
         } else {
@@ -104,10 +104,10 @@
         }
       });
 
-      // 新增行
+      // Thêm dòng mới
       const handleAdd = () => {
         if (dataSource.value.length > 9) {
-          createMessage.warn('最多支持10个变量！');
+          createMessage.warn('Hỗ trợ tối đa 10 biến!');
           return;
         }
         tableRef.value?.addRows({
@@ -118,26 +118,26 @@
         });
       };
 
-      // 删除行
+      // Xóa dòng
       const handleDelete = (props) => {
         tableRef.value?.removeRows(props.row);
       };
 
       const handleSubmit = async () => {
-        // 校验表格
+        // Kiểm chứng bảng
         const errMap = await tableRef.value?.validateTable();
         if (errMap) {
-          createMessage.error('请检查表单填写是否正确');
+          createMessage.error('Vui lòng kiểm tra việc điền biểu mẫu có đúng hay không');
           return;
         }
 
-        // 获取全量数据
+        // Lấy dữ liệu toàn lượng
         const tableData = tableRef.value?.getTableData();
-        console.log('保存用户变量:', tableData);
+        console.log('Lưu biến người dùng:', tableData);
 
         closeModal();
         emit('ok', tableData);
-        createMessage.success('保存成功');
+        createMessage.success('Lưu thành công');
       };
 
       return {

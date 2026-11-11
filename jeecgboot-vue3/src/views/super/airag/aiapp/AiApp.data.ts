@@ -1,7 +1,7 @@
 import { FormSchema } from '@/components/Form';
 
 /**
- * 表单
+ * Biểu mẫu
  */
 export const formSchema: FormSchema[] = [
   {
@@ -11,35 +11,35 @@ export const formSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '应用名称',
+    label: 'Tên ứng dụng',
     field: 'name',
     required: true,
     componentProps: {
-      //是否展示字数
+      //Có trưng bày số chữ hay không
       showCount: true,
       maxlength: 64,
     },
     component: 'Input',
   },
   {
-    label: '应用描述',
+    label: 'Mô tả ứng dụng',
     field: 'descr',
     component: 'InputTextArea',
     componentProps: {
-      placeholder: '描述该应用的应用场景及用途',
+      placeholder: 'Mô tả kịch bản ứng dụng và mục đích sử dụng của ứng dụng này',
       rows: 4,
-      //是否展示字数
+      //Có trưng bày số chữ hay không
       showCount: true,
       maxlength: 256,
     },
   },
   {
-    label: '应用图标',
+    label: 'Biểu tượng ứng dụng',
     field: 'icon',
     component: 'JImageUpload',
   },
   {
-    label: '选择应用类型',
+    label: 'Chọn loại ứng dụng',
     field: 'type',
     component: 'Input',
     show:({ values })=>{
@@ -50,7 +50,7 @@ export const formSchema: FormSchema[] = [
 ];
 
 /**
- * 快捷指令表单
+ * Biểu mẫu lệnh tắt
  */
 export const quickCommandFormSchema: FormSchema[] = [
   {
@@ -60,7 +60,7 @@ export const quickCommandFormSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '按钮名称',
+    label: 'Tên nút',
     field: 'name',
     required: true,
     component: 'Input',
@@ -70,12 +70,12 @@ export const quickCommandFormSchema: FormSchema[] = [
     },
   },
   {
-    label: '按钮图标',
+    label: 'Biểu tượng nút',
     field: 'icon',
     component: 'IconPicker',
   },
   {
-    label: '指令内容',
+    label: 'Nội dung lệnh',
     field: 'descr',
     required: true,
     component: 'InputTextArea',

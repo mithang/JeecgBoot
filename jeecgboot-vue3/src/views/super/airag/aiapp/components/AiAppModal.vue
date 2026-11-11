@@ -4,7 +4,7 @@
       <template #title>
          <span style="display: flex">
           {{title}}
-          <a-tooltip title="AI应用文档">
+          <a-tooltip title="Tài liệu ứng dụng AI">
             <a style="color: unset" href="https://help.jeecg.com/aigc/guide/app" target="_blank">
               <Icon style="position:relative;left:2px;top:1px" icon="ant-design:question-circle-outlined"></Icon>
             </a>
@@ -52,15 +52,15 @@
     },
     emits: ['success', 'register'],
     setup(props, { emit }) {
-      //保存或修改
+      //Lưu hoặc sửa đổi
       const isUpdate = ref<boolean>(false);
 
-      const title = computed<string>(() => isUpdate.value ? '修改应用' : '创建应用');
+      const title = computed<string>(() => isUpdate.value ? 'Sửa đổi ứng dụng' : 'Tạo ứng dụng');
 
-      //app类型
+      //Loại app
       const appTypeOption = ref<any>([]);
 
-      //表单配置
+      //Cấu hình biểu mẫu
       const [registerForm, { validate, resetFields, setFieldsValue }] = useForm({
         schemas: formSchema,
         showActionButtonGroup: false,
@@ -68,13 +68,13 @@
         wrapperCol: { span: 24 },
       });
 
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
         await resetFields();
-        //update-begin---author:wangshuai---date:2025-03-11---for: 【QQYUN-11324】8.修改弹窗head---
+        //update-begin---author:wangshuai---date:2025-03-11---for: 【QQYUN-11324】8.Sửa phần head của popup---
         isUpdate.value = !!data?.isUpdate;
         if (unref(isUpdate)) {
-          //表单赋值
+          //Gán giá trị biểu mẫu
           await setFieldsValue({
             ...data.record,
           });
@@ -83,12 +83,12 @@
             type: 'chatSimple',
           })
         }
-        //update-end---author:wangshuai---date:2025-03-11---for:【QQYUN-11324】8.修改弹窗head---
+        //update-end---author:wangshuai---date:2025-03-11---for:【QQYUN-11324】8.Sửa phần head của popup---
         setModalProps({ minHeight: 500, bodyStyle: { padding: '10px' } });
       });
 
       /**
-       * 保存
+       * Lưu
        */
       async function handleOk() {
         try {
@@ -96,24 +96,24 @@
           setModalProps({ confirmLoading: true });
           let result = await saveApp(values);
           if (result) {
-            //关闭弹窗
+            //Đóng popup
             closeModal();
-            //update-begin---author:wangshuai---date:2025-03-11---for: 【QQYUN-11324】8.修改弹窗head---
+            //update-begin---author:wangshuai---date:2025-03-11---for: 【QQYUN-11324】8.Sửa phần head của popup---
             if(isUpdate.value){
-              //刷新列表
+              //Làm mới danh sách
               emit('success', values);
             }else{
-              //刷新列表
+              //Làm mới danh sách
               emit('success', result);
             }
-            //update-end---author:wangshuai---date:2025-03-11---for: 【QQYUN-11324】8.修改弹窗head---
+            //update-end---author:wangshuai---date:2025-03-11---for: 【QQYUN-11324】8.Sửa phần head của popup---
           }
         } finally {
           setModalProps({ confirmLoading: false });
         }
       }
 
-      //初始化AI应用类型
+      //Khởi tạo loại ứng dụng AI
       initAppTypeOption();
 
       function initAppTypeOption() {
@@ -121,9 +121,9 @@
           if (data && data.length > 0) {
             for (const datum of data) {
               if (datum.value === 'chatSimple') {
-                datum['desc'] = '适合新手创建小助手';
+                datum['desc'] = 'Phù hợp cho người mới tạo trợ lý nhỏ';
               } else if (datum.value === 'chatFLow') {
-                datum['desc'] = '适合高级用户自定义小助手的工作流';
+                datum['desc'] = 'Quy trình làm việc phù hợp cho người dùng nâng cao tùy chỉnh trợ lý nhỏ';
               }
             }
           }
@@ -132,7 +132,7 @@
       }
 
       /**
-       * 取消
+       * Hủy
        */
       function handleCancel() {
         closeModal();

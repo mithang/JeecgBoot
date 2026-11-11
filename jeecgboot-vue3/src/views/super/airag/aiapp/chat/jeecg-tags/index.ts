@@ -5,30 +5,30 @@ import ToolExecTag from './tool-exec';
 import JeecgChart from "./jeecg-chart";
 
 export const jeecgTagMap: Map<string, JeecgTag> = new Map();
-// 所有 jeecg 标签名称列表
+// Danh sách tất cả tên nhãn jeecg
 export const tagNames: string[] = [];
 
-// 注册 工具调用 标签
+// Đăng ký nhãn gọi công cụ
 useJeecgTag(ToolExecTag);
-// 注册 图表渲染 标签
+// Đăng ký nhãn hiển thị biểu đồ
 useJeecgTag(JeecgChart);
 
-// jeecg 标签统一的 class 名称
+// Tên class thống nhất của nhãn jeecg
 export const JEECG_TAG_CLASS = 'jeecg-tag';
 
 /**
- * 忽略 jeecg 自定义标签的解析
+ * Bỏ qua việc phân tích nhãn tùy chỉnh jeecg
  * @param md
  */
 export function mdPluginJeecgTag(md: any) {
-  // 保存原始的 html_block  渲染规则
+  // Lưu quy tắc hiển thị html_block gốc
   const htmlBlockOrigin =
     md.renderer.rules.html_block ||
     function (tokens, idx) {
       return tokens[idx].content;
     };
 
-  // 覆盖 html_block  渲染规则
+  // Ghi đè quy tắc hiển thị html_block
   md.renderer.rules.html_block = function (tokens, idx) {
     const token = tokens[idx];
     const content = token.content;
@@ -37,7 +37,7 @@ export function mdPluginJeecgTag(md: any) {
     let tagName = '';
 
     for (const name of tagNames) {
-      // 检查内容是否包含自定义标签的起始或结束标签
+      // Kiểm tra nội dung có chứa nhãn bắt đầu hoặc nhãn kết thúc của nhãn tùy chỉnh hay không
       const startTag = new RegExp(`<${name}(\\s|>)`, 'i');
       const endTag = new RegExp(`</${name}>`, 'i');
       if (startTag.test(content) || endTag.test(content)) {
@@ -47,7 +47,7 @@ export function mdPluginJeecgTag(md: any) {
       }
     }
 
-    // jeecg 自定义标签
+    // Nhãn tùy chỉnh jeecg
     if (isJeecgTag) {
       const box = document.createElement('div');
       box.innerHTML = content;
@@ -56,7 +56,7 @@ export function mdPluginJeecgTag(md: any) {
       return tag.outerHTML;
     }
 
-    // 其他 HTML 标签按默认方式渲染
+    // Các nhãn HTML khác hiển thị theo cách mặc định
     return htmlBlockOrigin(tokens, idx);
   };
 }

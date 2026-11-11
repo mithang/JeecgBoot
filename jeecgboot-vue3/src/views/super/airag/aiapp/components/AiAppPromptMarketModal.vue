@@ -6,23 +6,23 @@
     width="1000px"
     @ok="handleOk"
     @cancel="handleCancel"
-    okText="使用"
+    okText="Sử dụng"
     wrapClassName="ai-rag-generate-prompt-modal"
     :confirmLoading="loading"
   >
     <div class="prompt-market-content">
-      <!-- 搜索区域 -->
+      <!-- Khu vực tìm kiếm -->
       <div class="search-section">
         <a-input-search
           v-model:value="searchText"
-          placeholder="搜索提示词名称或描述"
+          placeholder="Tìm kiếm tên hoặc mô tả prompt"
           style="width: 300px"
           @search="handleSearch"
           @pressEnter="handleSearch"
         />
       </div>
 
-      <!-- 提示词列表 -->
+      <!-- Danh sách prompt -->
       <div class="prompt-list-section">
         <a-spin :spinning="loading">
           <template v-if="promptList.length > 0">
@@ -49,12 +49,12 @@
             </a-row>
           </template>
 
-          <!-- 空状态 -->
-          <empty v-else description="暂无提示词数据" class="empty-state" />
+          <!-- Trạng thái trống -->
+          <empty v-else description="Tạm thời chưa có dữ liệu prompt" class="empty-state" />
         </a-spin>
       </div>
 
-      <!-- 分页区域 -->
+      <!-- Khu vực phân trang -->
       <div class="pagination-section">
         <Pagination
           v-model:current="pagination.current"
@@ -90,29 +90,29 @@
     emits: ['ok', 'register', 'select'],
     setup(props, { emit }) {
       const { createMessage } = useMessage();
-      // 提示词列表
+      // Danh sách prompt
       const promptList = ref<any[]>([]);
-      // 加载状态
+      // Trạng thái tải
       const loading = ref<boolean>(false);
-      // 搜索文本
+      // Tìm kiếm văn bản
       const searchText = ref<string>('');
-      // 选中的提示词
+      // Prompt đã chọn
       const selectedPrompt = ref<any>(null);
 
-      // 分页配置
+      // Cấu hình phân trang
       const pagination = reactive({
         current: 1,
         pageSize: 12,
         total: 0,
       });
 
-      // 注册modal
+      // Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async () => {
         loading.value = false;
         resetField();
         await getPromptList();
         setModalProps({
-          title: '选择提示词',
+          title: 'Chọn prompt',
           height: 600,
           bodyStyle: { padding: '24px' },
         });
@@ -129,7 +129,7 @@
       }
 
       /**
-       * 获取提示词列表
+       * Lấy danh sách prompt
        */
       async function getPromptList() {
         loading.value = true;
@@ -141,7 +141,7 @@
           };
 
           const res = await list(params);
-          console.log('获取提示词列表成功:', res);
+          console.log('Lấy danh sách prompt thành công:', res);
           if (res?.records) {
             promptList.value = res?.records || [];
             pagination.total = res?.total || 0;
@@ -150,7 +150,7 @@
             pagination.total = 0;
           }
         } catch (error) {
-          console.error('获取提示词列表失败:', error);
+          console.error('Lấy danh sách prompt thất bại:', error);
           promptList.value = [];
           pagination.total = 0;
         } finally {
@@ -159,7 +159,7 @@
       }
 
       /**
-       * 处理搜索
+       * Xử lý tìm kiếm
        */
       function handleSearch() {
         pagination.current = 1;
@@ -167,7 +167,7 @@
       }
 
       /**
-       * 处理页码变化
+       * Xử lý thay đổi số trang
        */
       function handlePageChange(page: number, pageSize: number) {
         pagination.current = page;
@@ -176,7 +176,7 @@
       }
 
       /**
-       * 处理页面大小变化
+       * Xử lý thay đổi kích thước trang
        */
       function handleSizeChange(current: number, size: number) {
         pagination.current = current;
@@ -185,13 +185,13 @@
       }
 
       /**
-       * 选择提示词
+       * Chọn prompt
        */
       function handleSelectPrompt(item: any) {
         selectedPrompt.value = item;
       }
       /**
-       * 格式化时间
+       * Thời gian đã định dạng
        */
       function formatTime(time) {
         console.log('formatTime:', formatToDateTime(time));
@@ -199,27 +199,27 @@
       }
 
       /**
-       * 保存
+       * Lưu
        */
       async function handleOk() {
-        // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-1518】修复选择弹窗的提示词，没回显内容
+        // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-1518】Sửa prompt của popup chọn, không hiển thị lại được nội dung
         if (!selectedPrompt.value) {
-          createMessage.warning('请选择提示词');
+          createMessage.warning('Vui lòng chọn prompt');
           return;
         }
         if (!String(selectedPrompt.value.content ?? '').trim()) {
-          createMessage.warning('当前提示词数据尚未配置提示词内容，请前往「AI 提示词」页面找到对应数据并完成配置。');
+          createMessage.warning('Dữ liệu prompt hiện tại chưa cấu hình nội dung prompt, vui lòng vào trang 「Prompt AI」 tìm dữ liệu tương ứng và hoàn tất cấu hình.');
           return;
         }
-        // update-end--author:liaozhiyang---date:20260810---for：【LHZP-1518】修复选择弹窗的提示词，没回显内容
-        // select 传递完整对象，供调用方按需取用 id/name/content
+        // update-end--author:liaozhiyang---date:20260810---for：【LHZP-1518】Sửa prompt của popup chọn, không hiển thị lại được nội dung
+        // select truyền đối tượng đầy đủ, để bên gọi lấy id theo nhu cầu/name/content
         emit('select', selectedPrompt.value);
         emit('ok', selectedPrompt.value.content);
         handleCancel();
       }
 
       /**
-       * 取消
+       * Hủy
        */
       function handleCancel() {
         closeModal();
@@ -274,7 +274,7 @@
       .prompt-item-card {
         border-radius: 8px;
         overflow: hidden;
-        height: 150px; // 增加卡片高度
+        height: 150px; // Tăng chiều cao thẻ
         transition: all 0.3s ease;
         border: 1px solid #e8e8e8;
 
@@ -285,14 +285,14 @@
 
         .ant-card-body {
           padding: 12px 16px;
-          height: calc(100% - 48px); // 调整内容区域高度
+          height: calc(100% - 48px); // Điều chỉnh chiều cao khu vực nội dung
           display: flex;
           flex-direction: column;
         }
 
         &.selected {
           border-color: #1890ff;
-          background-color: #e6f7ff; // 添加选中背景色
+          background-color: #e6f7ff; // Thêm màu nền khi chọn
           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
 
           .card-title .title-text {
@@ -315,10 +315,10 @@
         }
 
         .card-content {
-          flex: 1; // 使用flex让内容区域自适应
+          flex: 1; // Dùng flex để khu vực nội dung tự thích ứng
           display: flex;
           flex-direction: column;
-          justify-content: space-between; // 让内容和时间信息在垂直方向上分布
+          justify-content: space-between; // Để nội dung và thông tin thời gian phân bố theo chiều dọc
 
           .description {
             color: #666;
@@ -329,11 +329,11 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            flex: 1; // 让描述区域自适应
+            flex: 1; // Để khu vực mô tả tự thích ứng
           }
 
           .card-footer {
-            margin-top: 8px; // 调整间距
+            margin-top: 8px; // Điều chỉnh khoảng cách
             padding-top: 8px;
             border-top: 1px solid #f5f5f5;
             display: flex;
@@ -362,7 +362,7 @@
   }
 }
 
-// 模态框整体样式
+// Kiểu tổng thể của hộp modal
 .ai-rag-generate-prompt-modal {
   .ant-modal-body {
     padding: 0 !important;

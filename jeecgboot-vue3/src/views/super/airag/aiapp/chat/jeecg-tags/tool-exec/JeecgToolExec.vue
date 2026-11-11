@@ -1,9 +1,9 @@
 <template>
   <div class="tool-exec-wrapper">
-    <div v-if="!toolRecord" class="tool-exec-empty">暂无工具调用结果</div>
+    <div v-if="!toolRecord" class="tool-exec-empty">Tạm thời chưa có kết quả gọi công cụ</div>
     <div v-else-if="toolRecord.loading" class="tool-exec-loading">
       <LoadingOutlined spin/>
-      <span style="margin-left: 8px;">正在运行 {{ titleText }}</span>
+      <span style="margin-left: 8px;">Đang chạy {{ titleText }}</span>
     </div>
     <div v-else class="tool-exec-list">
       <div class="tool-exec-card">
@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="header-right">
-            <!-- <span class="collapse-text">{{ expanded ? '收起' : '展开' }}</span>-->
+            <!-- <span class="collapse-text">{{ expanded ? 'Thu gọn' : 'Mở rộng' }}</span>-->
             <span class="collapse-icon" :class="{ opened: expanded }">
               <DownOutlined/>
             </span>
@@ -29,15 +29,15 @@
         </div>
         <div v-if="expanded" class="card-body">
           <div class="section">
-            <div class="section-title">输入</div>
+            <div class="section-title">Đầu vào</div>
             <pre class="section-content">{{ formattedInput }}</pre>
           </div>
           <div class="section">
-            <div class="section-title">输出</div>
+            <div class="section-title">Đầu ra</div>
             <pre class="section-content">{{ formattedOutput }}</pre>
           </div>
           <div v-if="toolRecord.errorMessage" class="section">
-            <div class="section-title">错误信息</div>
+            <div class="section-title">Thông tin lỗi</div>
             <pre class="section-content">{{ formattedError }}</pre>
           </div>
         </div>
@@ -51,12 +51,12 @@ import { computed, ref } from 'vue';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 
 /**
- * 工具调用结果记录类型
+ * Loại bản ghi kết quả gọi công cụ
  */
 type ToolExecStatus = 'success' | 'running' | 'error';
 
 /**
- * 工具调用展示记录
+ * Bản ghi hiển thị gọi công cụ
  */
 interface ToolExecRecord {
   id: string;
@@ -84,7 +84,7 @@ const props = defineProps({
 });
 
 /**
- * 解析 props.data 为单条记录
+ * Phân tích props.data thành một bản ghi đơn
  */
 const parsedRecord = computed<ToolExecRecord | null>(() => {
   try {
@@ -99,7 +99,7 @@ const parsedRecord = computed<ToolExecRecord | null>(() => {
 });
 
 /**
- * 归一化后的单条记录，补齐常用字段
+ * Bản ghi đơn sau khi chuẩn hóa, bổ sung đủ các trường thường dùng
  */
 const toolRecord = computed<ToolExecRecord | null>(() => {
   const item = parsedRecord.value;
@@ -117,21 +117,21 @@ const toolRecord = computed<ToolExecRecord | null>(() => {
 });
 
 /**
- * 单卡片展开状态
+ * Trạng thái mở rộng của thẻ đơn
  */
 const expanded = ref<boolean>(false);
 
 /**
- * 状态文本映射
+ * Ánh xạ văn bản trạng thái
  */
 const statusLabelMap: Record<ToolExecStatus, string> = {
-  success: '已运行',
-  running: '执行中',
-  error: '执行失败',
+  success: 'Đã chạy',
+  running: 'Đang thực thi',
+  error: 'Thực thi thất bại',
 };
 
 /**
- * 已解析状态
+ * Trạng thái đã phân tích
  */
 const resolvedStatus = computed<ToolExecStatus>(() => {
   const record = toolRecord.value;
@@ -147,7 +147,7 @@ const resolvedStatus = computed<ToolExecStatus>(() => {
 });
 
 /**
- * 状态标签文案
+ * Nội dung nhãn trạng thái
  */
 const statusLabel = computed<string>(() => {
   const current = resolvedStatus.value;
@@ -155,7 +155,7 @@ const statusLabel = computed<string>(() => {
 });
 
 /**
- * 卡片标题
+ * Tiêu đề thẻ
  */
 const titleText = computed<string>(() => {
   if (toolRecord.value) {
@@ -171,11 +171,11 @@ const titleText = computed<string>(() => {
       return parts.join(' - ');
     }
   }
-  return '工具调用';
+  return 'Gọi công cụ';
 });
 
 /**
- * 输入、输出、错误信息格式化
+ * Định dạng đầu vào, đầu ra, thông tin lỗi
  */
 const formattedInput = computed<string>(() => {
   return formatData(toolRecord.value ? toolRecord.value.input : '');
@@ -190,7 +190,7 @@ const formattedError = computed<string>(() => {
 });
 
 /**
- * 切换卡片展开状态
+ * Chuyển trạng thái mở rộng của thẻ
  */
 function toggleCard(): void {
   const next = !expanded.value;
@@ -198,8 +198,8 @@ function toggleCard(): void {
 }
 
 /**
- * 序列化输入或输出数据，保证预格式化可读
- * @param value 输入或输出值
+ * Tuần tự hóa dữ liệu đầu vào hoặc đầu ra, đảm bảo tiền định dạng dễ đọc
+ * @param value giá trị đầu vào hoặc đầu ra
  */
 function formatData(value: unknown): string {
   if (value === null || value === undefined) {

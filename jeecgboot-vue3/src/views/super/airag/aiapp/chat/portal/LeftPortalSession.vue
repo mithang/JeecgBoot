@@ -1,4 +1,4 @@
-<!-- 左侧应用门户会话设置 -->
+<!-- Cài đặt phiên cổng ứng dụng bên trái -->
 <template>
   <div class="space-page">
     <div class="header">
@@ -10,7 +10,7 @@
         <div class="app-icon">
           <Icon icon="ant-design:edit-outlined" size="14"></Icon>
         </div>
-        <div class="app-name">新对话</div>
+        <div class="app-name">Hội thoại mới</div>
       </div>
     </div>
     <div class="session-scroll">
@@ -26,7 +26,7 @@
       </div>
 
       <div class="section">
-        <div class="section-title">历史对话</div>
+        <div class="section-title">Hội thoại lịch sử</div>
         <div v-if="tasks.length" class="task-list">
           <div v-for="task in tasks" :key="task.id" class="task-item" :class="activeKey === task.id ? 'active' : ''" @click="handleTaskClick(task)">
             <div class="task-title" :title="task.title" v-if="!task.isEdit">{{ task.title }}</div>
@@ -35,7 +35,7 @@
               ref="inputRef"
               v-if="task.isEdit"
               :defaultValue="task.title"
-              placeholder="请输入标题"
+              placeholder="Vui lòng nhập tiêu đề"
               @change="handleInputChange"
               @keyup.enter="inputBlur(task)"
             />
@@ -52,10 +52,10 @@
                 <span class="icon del">
                   <a-popconfirm
                     :overlayStyle="{ 'z-index': 9999 }"
-                    title="确定删除此记录？"
+                    title="Xác nhận xóa bản ghi này?"
                     placement="bottom"
-                    ok-text="确定"
-                    cancel-text="取消"
+                    ok-text="Xác định"
+                    cancel-text="Hủy"
                     @confirm.prevent.stop="handleDel(task)"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" role="img" class="iconify iconify--ri" width="1em" height="1em" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@
             </div>
           </div>
         </div>
-        <a-empty v-else description="暂无历史对话" />
+        <a-empty v-else description="Tạm thời chưa có hội thoại lịch sử" />
       </div>
     </div>
   </div>
@@ -87,67 +87,67 @@
 
   const defaultApp = ref({
     id: '1999373661846880258',
-    name: '聊天助手',
+    name: 'Trợ lý trò chuyện',
   });
-  //应用列表
+  //Danh sách ứng dụng
   const apps = ref([
     {
       id: '1998717610730352641',
-      name: '帮我写作',
+      name: 'Giúp tôi viết',
       icon: 'https://jeecgdev.oss-cn-beijing.aliyuncs.com/upload/test/helpWriting_1765520898059.png',
-      prologue: '请输入\n出发地：\n目的地：\n人数：',
+      prologue: 'Vui lòng nhập\nĐiểm xuất phát:\nĐiểm đến:\nSố người:',
     },
     {
       id: '1996471445272088578',
-      name: '图像识别',
+      name: 'Nhận diện hình tượng',
       icon: 'https://jeecgdev.oss-cn-beijing.aliyuncs.com/temp/1dataOCR_1743065089791.png',
-      prologue: '上传一张图片，我来为你识别图片的内容',
+      prologue: 'Tải lên một hình ảnh, tôi sẽ nhận diện nội dung trong ảnh giúp bạn',
     },
     {
       id: '1902262577996546050',
-      name: '看图说话',
+      name: 'Nhìn hình kể chuyện',
       icon: 'https://jeecgdev.oss-cn-beijing.aliyuncs.com/temp/工具-图片解析_1743065064801.png',
-      prologue: '上传一张图片，我来为你讲述图片中的故事',
+      prologue: 'Tải lên một hình ảnh, tôi sẽ kể cho bạn câu chuyện trong ảnh',
     },    
     {
       id: '2008448202536456193',
       name: 'Chat2BI',
       icon: 'https://minio.jeecg.com/otatest/chatShow_1769395642452.png',
-      prologue: '你好，我是Chat2BI 图表生成智能体。',
+      prologue: 'Xin chào, tôi là tác tử tạo biểu đồ Chat2BI.',
       flowId: '2008379264947519489',
       type: 'chatFLow',
-      presetQuestion: '[{"key":1,"descr":"请统计系统用户的性别分布比例，并以饼状图和列表表格展示。","update":true}]'
+      presetQuestion: '[{"key":1,"descr":"Vui lòng thống kê tỷ lệ phân bố giới tính của người dùng hệ thống, và hiển thị bằng biểu đồ tròn và bảng danh sách.","update":true}]'
     },    
     {
       id: '2008090512835629057',
-      name: 'AI绘画',
+      name: 'AI Vẽ tranh',
       icon: 'https://minio.jeecg.com/otatest/AiWrite_1769395779558.png',
-      prologue: '你好，我是 AI绘图智能体。',
-      presetQuestion: '[{"key":1,"descr":"请生成一张具有日本风格的动漫成年女孩。","update":true}, {"key":2,"descr":"请生成一幅中国神话故事中，手持武器的哪吒形象。","update":true}]',
+      prologue: 'Xin chào, tôi là tác tử vẽ AI.',
+      presetQuestion: '[{"key":1,"descr":"Vui lòng tạo một hình ảnh cô gái trưởng thành phong cách anime Nhật Bản.","update":true}, {"key":2,"descr":"Vui lòng tạo một hình ảnh Na Tra cầm vũ khí trong truyện thần thoại Trung Quốc.","update":true}]',
       metadata:"{\"izDraw\":\"1\"}"
     },  
     {
       id: '1993651187913981953',
-      name: '商品导购',
+      name: 'Hướng dẫn mua sắm sản phẩm',
       icon: 'https://minio.jeecg.com/otatest/shoppingGuide_1769754188966.png',
-      prologue: '向要了解哪一款产品，我可以给你介绍。',
+      prologue: 'Muốn tìm hiểu sản phẩm nào, tôi có thể giới thiệu cho bạn.',
       presetQuestion: '[{"key":1,"sort":1,"descr":"HIP 0603T Series","update":false},{"key":2,"sort":2,"descr":"CHIP 1206HC Series","update":false},{"key":3,"sort":3,"descr":"BRICK 1032ST Series","update":true}]',
     },
   ]);
 
-  //应用数据
+  //Dữ liệu ứng dụng
   const appData = ref<any>({});
 
-  //会话
+  //Phiên
   const tasks = ref<any>([]);
 
   /**
-   * 点击的key
+   * key được nhấp
    */
   const activeKey = ref<string>('');
 
   /**
-   * 获取图片
+   * Lấy hình ảnh
    */
   const getAiImg = (app) => {
     return getFileAccessHttpUrl(app?.icon) || defaultImg;
@@ -157,14 +157,14 @@
     inputValue = e.target.value.trim();
   };
 
-  // 编辑
+  // Chỉnh sửa
   const handleEdit = (item) => {
     item.isEdit = true;
     inputValue = item.title;
   };
 
   /**
-   * 应用点击事件
+   * Sự kiện nhấp ứng dụng
    *
    * @param app
    */
@@ -175,7 +175,7 @@
   }
 
   /**
-   * 添加会话
+   * Thêm phiên
    */
   function addSession(title, id) {
     activeKey.value = id;
@@ -189,7 +189,7 @@
   }
 
   /**
-   * 获取会话
+   * Lấy phiên
    */
   async function getSessionList() {
     const res = await defHttp.get(
@@ -208,7 +208,7 @@
   }
 
   /**
-   * 会话点击事件
+   * Sự kiện nhấp phiên
    *
    * @param task
    */
@@ -220,7 +220,7 @@
     emit('task-click', task.id, task.title);
   }
 
-  // 失去焦点
+  // Mất tiêu điểm
   function inputBlur(item) {
     item.isEdit = false;
     item.title = inputValue;
@@ -234,7 +234,7 @@
   }
 
   /**
-   * 删除
+   * Xóa
    * @param data
    */
   function handleDel(data) {
@@ -251,7 +251,7 @@
   }
 
   /**
-   * 新对话
+   * Hội thoại mới
    */
   function handleNewSession() {
     activeKey.value = '';
@@ -279,9 +279,9 @@
   .space-page {
     padding: 12px 16px;
     height: 100%;
-    background: #fbfcff; // 左侧浅色背景，区分右侧
-    border-right: 1px solid #eef2f6; // 与右侧的分隔线
-    display: flex; // 纵向布局，顶部固定，下面滚动
+    background: #fbfcff; // Nền sáng bên trái, phân biệt với bên phải
+    border-right: 1px solid #eef2f6; // Đường phân cách với phía phải
+    display: flex; // Bố cục dọc, trên cùng cố định, phía dưới cuộn
     flex-direction: column;
     box-sizing: border-box;
   }
@@ -446,12 +446,12 @@
     display: flex;
   }
   .session-scroll {
-    flex: 1; // 占满剩余空间
-    min-height: 0; // 允许子元素在容器内正确滚动
-    overflow-y: auto; // 仅列表区域滚动
+    flex: 1; // Chiếm hết không gian còn lại
+    min-height: 0; // Cho phép phần tử con cuộn đúng trong container
+    overflow-y: auto; // Chỉ khu vực danh sách cuộn
     margin-bottom: 20px;
 
-    // 自定义滚动条样式
+    // Kiểu thanh cuộn tùy chỉnh
     &::-webkit-scrollbar {
       width: 7px;
       height: 8px;

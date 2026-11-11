@@ -23,12 +23,12 @@ export default {
   },
   emits: ['ok', 'update-ok', 'register'],
   setup(props, { emit }) {
-    const title = ref<string>('添加指令');
+    const title = ref<string>('Thêm lệnh');
 
-    //保存或修改
+    //Lưu hoặc sửa đổi
     const isUpdate = ref<boolean>(false);
 
-    //表单配置
+    //Cấu hình biểu mẫu
     const [registerForm, { validate, resetFields, setFieldsValue }] = useForm({
       schemas: quickCommandFormSchema,
       showActionButtonGroup: false,
@@ -36,12 +36,12 @@ export default {
       wrapperCol: { span: 24 },
     });
 
-    //注册modal
+    //Đăng ký modal
     const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
       await resetFields();
       isUpdate.value = !!data?.isUpdate;
       if (unref(isUpdate)) {
-        //表单赋值
+        //Gán giá trị biểu mẫu
         await setFieldsValue({
           ...data.record,
         });
@@ -50,7 +50,7 @@ export default {
     });
 
     /**
-     * 保存
+     * Lưu
      */
     async function handleOk() {
       try {
@@ -68,7 +68,7 @@ export default {
     }
 
     /**
-     * 取消
+     * Hủy
      */
     function handleCancel() {
       closeModal();

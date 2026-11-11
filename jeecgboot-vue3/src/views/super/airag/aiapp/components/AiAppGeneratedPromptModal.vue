@@ -1,13 +1,13 @@
 <template>
   <div>
-    <BasicModal destroyOnClose @register="registerModal" :canFullscreen="false" width="1000px" @ok="handleOk" @cancel="handleCancel" okText="替换" wrapClassName='ai-rag-generate-prompt-modal'>
+    <BasicModal destroyOnClose @register="registerModal" :canFullscreen="false" width="1000px" @ok="handleOk" @cancel="handleCancel" okText="Thay thế" wrapClassName='ai-rag-generate-prompt-modal'>
       <div class="prompt">
         <div class="prompt-left">
-          <div class="prompt-left-title">提示词生成器</div>
-          <div class="prompt-left-desc">提示词生成器使用配置的模型来优化提示词，以获得更高的质量和更好的结构。请写出清晰详细的说明。</div>
+          <div class="prompt-left-title">Trình tạo prompt</div>
+          <div class="prompt-left-desc">Trình tạo prompt dùng mô hình đã cấu hình để tối ưu prompt, nhằm đạt chất lượng cao hơn và cấu trúc tốt hơn. Vui lòng viết ra hướng dẫn rõ ràng chi tiết.</div>
           <a-divider></a-divider>
           <div class="prompt-left-try">
-            <div class="prompt-left-try-title">试一试</div>
+            <div class="prompt-left-try-title">Thử một lần</div>
           </div>
           <div class="instructions">
             <div class="instructions-content" v-for="item in instructionsList" @click="instructionsClick(item.value)">
@@ -17,10 +17,10 @@
           </div>
           <div class="prompt-left-textarea">
             <div class="command">
-              <span style="margin-right: 5px">指令</span>
-              <a-tooltip title="提示词库">
+              <span style="margin-right: 5px">Lệnh</span>
+              <a-tooltip title="Thư viện prompt">
                 <span @click="openPromptApps" style="color:#1890ff;cursor: pointer">
-                  <Icon icon="ant-design:bulb-outlined" color="#1890ff"></Icon>词库选择
+                  <Icon icon="ant-design:bulb-outlined" color="#1890ff"></Icon>Chọn kho từ
                 </span>
               </a-tooltip>
             </div>
@@ -33,7 +33,7 @@
                   d="M18.9839 1.85931C19.1612 1.38023 19.8388 1.38023 20.0161 1.85931L20.5021 3.17278C20.5578 3.3234 20.6766 3.44216 20.8272 3.49789L22.1407 3.98392C22.6198 4.1612 22.6198 4.8388 22.1407 5.01608L20.8272 5.50211C20.6766 5.55784 20.5578 5.6766 20.5021 5.82722L20.0161 7.14069C19.8388 7.61977 19.1612 7.61977 18.9839 7.14069L18.4979 5.82722C18.4422 5.6766 18.3234 5.55784 18.1728 5.50211L16.8593 5.01608C16.3802 4.8388 16.3802 4.1612 16.8593 3.98392L18.1728 3.49789C18.3234 3.44216 18.4422 3.3234 18.4979 3.17278L18.9839 1.85931zM13.5482 4.07793C13.0164 2.64069 10.9836 2.64069 10.4518 4.07793L8.99368 8.01834C8.82648 8.47021 8.47021 8.82648 8.01834 8.99368L4.07793 10.4518C2.64069 10.9836 2.64069 13.0164 4.07793 13.5482L8.01834 15.0063C8.47021 15.1735 8.82648 15.5298 8.99368 15.9817L10.4518 19.9221C10.9836 21.3593 13.0164 21.3593 13.5482 19.9221L15.0063 15.9817C15.1735 15.5298 15.5298 15.1735 15.9817 15.0063L19.9221 13.5482C21.3593 13.0164 21.3593 10.9836 19.9221 10.4518L15.9817 8.99368C15.5298 8.82648 15.1735 8.47021 15.0063 8.01834L13.5482 4.07793zM5.01608 16.8593C4.8388 16.3802 4.1612 16.3802 3.98392 16.8593L3.49789 18.1728C3.44216 18.3234 3.3234 18.4422 3.17278 18.4979L1.85931 18.9839C1.38023 19.1612 1.38023 19.8388 1.85931 20.0161L3.17278 20.5021C3.3234 20.5578 3.44216 20.6766 3.49789 20.8272L3.98392 22.1407C4.1612 22.6198 4.8388 22.6198 5.01608 22.1407L5.50211 20.8272C5.55784 20.6766 5.6766 20.5578 5.82722 20.5021L7.14069 20.0161C7.61977 19.8388 7.61977 19.1612 7.14069 18.9839L5.82722 18.4979C5.6766 18.4422 5.55784 18.3234 5.50211 18.1728L5.01608 16.8593z"
                 ></path>
               </svg>
-              <span style="margin-left: 4px">生成</span>
+              <span style="margin-left: 4px">Tạo</span>
             </span>
           </a-button>
         </div>
@@ -44,11 +44,11 @@
                 d="M18.9839 1.85931C19.1612 1.38023 19.8388 1.38023 20.0161 1.85931L20.5021 3.17278C20.5578 3.3234 20.6766 3.44216 20.8272 3.49789L22.1407 3.98392C22.6198 4.1612 22.6198 4.8388 22.1407 5.01608L20.8272 5.50211C20.6766 5.55784 20.5578 5.6766 20.5021 5.82722L20.0161 7.14069C19.8388 7.61977 19.1612 7.61977 18.9839 7.14069L18.4979 5.82722C18.4422 5.6766 18.3234 5.55784 18.1728 5.50211L16.8593 5.01608C16.3802 4.8388 16.3802 4.1612 16.8593 3.98392L18.1728 3.49789C18.3234 3.44216 18.4422 3.3234 18.4979 3.17278L18.9839 1.85931zM13.5482 4.07793C13.0164 2.64069 10.9836 2.64069 10.4518 4.07793L8.99368 8.01834C8.82648 8.47021 8.47021 8.82648 8.01834 8.99368L4.07793 10.4518C2.64069 10.9836 2.64069 13.0164 4.07793 13.5482L8.01834 15.0063C8.47021 15.1735 8.82648 15.5298 8.99368 15.9817L10.4518 19.9221C10.9836 21.3593 13.0164 21.3593 13.5482 19.9221L15.0063 15.9817C15.1735 15.5298 15.5298 15.1735 15.9817 15.0063L19.9221 13.5482C21.3593 13.0164 21.3593 10.9836 19.9221 10.4518L15.9817 8.99368C15.5298 8.82648 15.1735 8.47021 15.0063 8.01834L13.5482 4.07793zM5.01608 16.8593C4.8388 16.3802 4.1612 16.3802 3.98392 16.8593L3.49789 18.1728C3.44216 18.3234 3.3234 18.4422 3.17278 18.4979L1.85931 18.9839C1.38023 19.1612 1.38023 19.8388 1.85931 20.0161L3.17278 20.5021C3.3234 20.5578 3.44216 20.6766 3.49789 20.8272L3.98392 22.1407C4.1612 22.6198 4.8388 22.6198 5.01608 22.1407L5.50211 20.8272C5.55784 20.6766 5.6766 20.5578 5.82722 20.5021L7.14069 20.0161C7.61977 19.8388 7.61977 19.1612 7.14069 18.9839L5.82722 18.4979C5.6766 18.4422 5.55784 18.3234 5.50211 18.1728L5.01608 16.8593z"
               ></path>
             </svg>
-            <div>在左侧描述您的用例，</div>
-            <div>编排预览将在此处显示。</div>
+            <div>Mô tả trường hợp sử dụng của bạn ở bên trái，</div>
+            <div>Xem trước sắp xếp sẽ hiển thị tại đây.</div>
           </div>
           <div v-if="loading">
-            <a-spin :spinning="loading" tip="为您编排应用程序中…"></a-spin>
+            <a-spin :spinning="loading" tip="Đang sắp xếp cho bạn trong ứng dụng…"></a-spin>
           </div>
           <div v-if="content">
             <a-textarea v-model:value="content" :autoSize="{ minRows: 18, maxRows: 18 }"></a-textarea>
@@ -57,7 +57,7 @@
       </div>
     </BasicModal>
   </div>
-  <!-- Ai提示词选择弹窗   -->
+  <!-- Popup chọn prompt Ai   -->
   <AiAppPromptMarketModal @register="registerAiPromptSelectModal" @ok="handleAiAppPromptOk"></AiAppPromptMarketModal>
 </template>
 
@@ -76,72 +76,72 @@
     },
     emits: ['ok', 'register'],
     setup(props, { emit }) {
-      //提示词
+      //Prompt
       const prompt = ref<string>('');
-      //加载
+      //Tải
       const loading = ref<boolean>(false);
-      //显示文本
+      //Hiển thị văn bản
       const content = ref<string>('');
-      //指令提示词
+      //Prompt lệnh
       const instructionsList = ref<any>([
-        { name: 'python代码助手', value: 'python', icon: 'ant-design:code-outlined' },
-        { name: '翻译器', value: 'translator', icon: 'ant-design:translation-outlined' },
-        { name: '会议助手', value: 'meeting', icon: 'ant-design:team-outlined' },
-        { name: '润色文章', value: 'article', icon: 'ant-design:profile-outlined' },
-        { name: 'sql生成器', value: 'sql', icon: 'ant-design:console-sql-outlined' },
-        { name: '旅行规划师', value: 'travel', icon: 'ant-design:car-outlined' },
-        { name: 'linux专家', value: 'linux', icon: 'ant-design:fund-projection-screen-outlined' },
-        { name: '内容提炼器', value: 'content', icon: 'ant-design:read-outlined' },
+        { name: 'Trợ lý mã python', value: 'python', icon: 'ant-design:code-outlined' },
+        { name: 'Trình dịch', value: 'translator', icon: 'ant-design:translation-outlined' },
+        { name: 'Trợ lý cuộc họp', value: 'meeting', icon: 'ant-design:team-outlined' },
+        { name: 'Trau chuốt bài viết', value: 'article', icon: 'ant-design:profile-outlined' },
+        { name: 'Trình tạo sql', value: 'sql', icon: 'ant-design:console-sql-outlined' },
+        { name: 'Chuyên gia lập kế hoạch du lịch', value: 'travel', icon: 'ant-design:car-outlined' },
+        { name: 'Chuyên gia linux', value: 'linux', icon: 'ant-design:fund-projection-screen-outlined' },
+        { name: 'Trình chắt lọc nội dung', value: 'content', icon: 'ant-design:read-outlined' },
       ]);
-      //指令
+      //Lệnh
       const tip = ref<any>({
-        python: '你是一个python专家，可以帮助用户编写和纠错代码。',
-        translator: '一个可以将多种语言翻译为中文的翻译器。',
-        meeting: '将会议内容提炼总结，包括讨论主题、关键要点和待办事项。',
-        article: '用高超的编辑技巧改进我的文章。',
-        sql: '根据用户的描述，生成sql语句，要支持引导用户提供表结构',
-        travel: '你是一个旅行规划师，擅长帮助用户轻松规划他们的旅行',
-        linux: '你是一个linux专家，擅长解决各种linux相关的问题。',
-        content: '你是一个阅读理解大师，可以阅读用户提供的文章，并提炼主要内容输出给用户。',
+        python: 'Bạn là một chuyên gia python, có thể giúp người dùng viết và sửa lỗi mã.',
+        translator: 'Một trình dịch có thể dịch nhiều ngôn ngữ sang tiếng Trung.',
+        meeting: 'Chắt lọc tóm tắt nội dung cuộc họp, bao gồm chủ đề thảo luận, điểm chính quan trọng và việc cần làm.',
+        article: 'Dùng kỹ thuật biên tập siêu đẳng để cải thiện bài viết của tôi.',
+        sql: 'Theo mô tả của người dùng, tạo câu lệnh sql, cần hỗ trợ hướng dẫn người dùng cung cấp cấu trúc bảng',
+        travel: 'Bạn là một chuyên viên lập kế hoạch du lịch, giỏi giúp người dùng lập kế hoạch chuyến đi một cách nhẹ nhàng',
+        linux: 'Bạn là một chuyên gia linux, giỏi giải quyết các vấn đề liên quan đến linux.',
+        content: 'Bạn là một bậc thầy về đọc hiểu, có thể đọc bài viết người dùng cung cấp, đồng thời chắt lọc nội dung chính để xuất ra cho người dùng.',
       });
-      //注册提示词modal
+      //Đăng ký modal prompt
       const [registerAiPromptSelectModal, { openModal: aiPromptSelectModalOpen }] = useModal();
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
         content.value = '';
         loading.value = false;
         prompt.value = '';
-        // update-begin--author:liaozhiyang---date:20260804---for：打开弹窗时禁用「替换」，需等生成完成后再启用
+        // update-begin--author:liaozhiyang---date:20260804---for：Khi mở popup thì vô hiệu hóa「Thay thế」, phải đợi tạo xong mới kích hoạt lại
         setModalProps({ height: 500, okButtonProps: { disabled: true } });
-        // update-end--author:liaozhiyang---date:20260804---for：打开弹窗时禁用「替换」，需等生成完成后再启用
+        // update-end--author:liaozhiyang---date:20260804---for：Khi mở popup thì vô hiệu hóa「Thay thế」, phải đợi tạo xong mới kích hoạt lại
       });
 
       /**
-       * 设置替换按钮是否可用
+       * Đặt nút thay thế có khả dụng hay không
        */
       function setReplaceEnabled(enabled: boolean) {
         setModalProps({ okButtonProps: { disabled: !enabled } });
       }
 
       /**
-       * 保存
+       * Lưu
        */
       async function handleOk() {
         emit('ok', content.value);
         handleCancel();
       }
 
-      //update-begin---author:wangshuai---date:2025-04-01---for:【QQYUN-11796】【AI】提示词生成器，改成异步---
+      //update-begin---author:wangshuai---date:2025-04-01---for:【QQYUN-11796】【AI】Trình tạo prompt, đổi thành bất đồng bộ---
       /**
-       * 生成
+       * Tạo
        */
       async function generatedPrompt() {
         content.value = '';
         loading.value = true;
-        // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1477】打开弹窗时禁用「替换」，需等生成完成后再启用
-        // 开始生成时禁用「替换」，流式数据全部完成后再启用
+        // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1477】Khi mở popup thì vô hiệu hóa「Thay thế」, phải đợi tạo xong mới kích hoạt lại
+        // Khi bắt đầu tạo thì vô hiệu hóa「Thay thế」, sau khi dữ liệu streaming hoàn thành toàn bộ mới kích hoạt lại
         setReplaceEnabled(false);
-        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1477】打开弹窗时禁用「替换」，需等生成完成后再启用
+        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1477】Khi mở popup thì vô hiệu hóa「Thay thế」, phải đợi tạo xong mới kích hoạt lại
         let readableStream = await promptGenerate({ prompt: encodeURIComponent(prompt.value) }).catch(() => {
             loading.value = false;
         });
@@ -154,13 +154,13 @@
         while (true) {
           const { done, value } = await reader.read();
           if (done) {
-            // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1477】打开弹窗时禁用「替换」，需等生成完成后再启用
-            // 接口流式数据全部接收完成后启用「替换」
+            // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1477】Khi mở popup thì vô hiệu hóa「Thay thế」, phải đợi tạo xong mới kích hoạt lại
+            // Sau khi nhận xong toàn bộ dữ liệu streaming của giao diện mới kích hoạt「Thay thế」
             loading.value = false;
             if (content.value) {
               setReplaceEnabled(true);
             }
-            // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1477】打开弹窗时禁用「替换」，需等生成完成后再启用
+            // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1477】Khi mở popup thì vô hiệu hóa「Thay thế」, phải đợi tạo xong mới kích hoạt lại
             break;
           }
           let result = decoder.decode(value, { stream: true });
@@ -193,7 +193,7 @@
       }
 
       /**
-       * 渲染文本
+       * Hiển thị văn bản
        * 
        * @param item
        */
@@ -210,41 +210,41 @@
             loading.value = false;
           }
           if (parse.event == 'ERROR') {
-            content.value = parse.data.message?parse.data.message:'生成失败，请稍后重试！'
+            content.value = parse.data.message?parse.data.message:'Tạo thất bại, vui lòng thử lại sau!'
             loading.value = false;
-            // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1477】打开弹窗时禁用「替换」，需等生成完成后再启用
-            // 生成失败保持「替换」禁用
+            // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1477】Khi mở popup thì vô hiệu hóa「Thay thế」, phải đợi tạo xong mới kích hoạt lại
+            // Khi tạo thất bại giữ「Thay thế」ở trạng thái vô hiệu hóa
             setReplaceEnabled(false);
-            // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1477】打开弹窗时禁用「替换」，需等生成完成后再启用
+            // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1477】Khi mở popup thì vô hiệu hóa「Thay thế」, phải đợi tạo xong mới kích hoạt lại
           }
         } catch (error) {
           console.log('Error parsing update:', error);
         }
       }
-      //update-end---author:wangshuai---date:2025-04-01---for:【QQYUN-11796】【AI】提示词生成器，改成异步---
+      //update-end---author:wangshuai---date:2025-04-01---for:【QQYUN-11796】【AI】Trình tạo prompt, đổi thành bất đồng bộ---
 
       /**
-       * 指令点击事件
+       * Sự kiện nhấp lệnh
        */
       function instructionsClick(value) {
         prompt.value = tip.value[value];
       }
 
       /**
-       * 取消
+       * Hủy
        */
       function handleCancel() {
         closeModal();
       }
 
       /**
-       * 打开提示词库弹窗
+       * Mở popup thư viện prompt
        */
       function openPromptApps() {
         aiPromptSelectModalOpen(true,{});
       }
       /**
-       * 提示词回调
+       * Callback prompt
        *
        * @param value
        */

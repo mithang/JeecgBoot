@@ -1,6 +1,6 @@
-<!--手动录入text-->
+<!--Nhập thủ công text-->
 <template>
-  <BasicModal title="参数设置" destroyOnClose @register="registerModal" :canFullscreen="false" width="560px" @ok="handleOk" @cancel="handleCancel">
+  <BasicModal title="Cài đặt tham số" destroyOnClose @register="registerModal" :canFullscreen="false" width="560px" @ok="handleOk" @cancel="handleCancel">
     <AiModelSeniorForm ref="aiModelSeniorFormRef" :type="type"></AiModelSeniorForm>
   </BasicModal>
 </template>
@@ -25,9 +25,9 @@ export default {
   emits: ['ok', 'register'],
   setup(props, { emit }) {
     let aiModelSeniorFormRef = ref()
-    //类型
+    //Loại
     const type = ref<string>('');
-    //注册modal
+    //Đăng ký modal
     const [registerModal, { closeModal }] = useModalInner(async (data) => {
       type.value = data.type;
       if(data.type === 'model'){
@@ -54,7 +54,7 @@ export default {
     });
 
     /**
-     * 弹窗点击事件
+     * Sự kiện nhấp popup
      */
     function handleOk() {
       let emitChange = aiModelSeniorFormRef.value.emitChange();
@@ -63,7 +63,7 @@ export default {
     }
 
     /**
-     * 弹窗关闭事件
+     * Sự kiện đóng popup
      */
     function handleCancel() {
       closeModal();

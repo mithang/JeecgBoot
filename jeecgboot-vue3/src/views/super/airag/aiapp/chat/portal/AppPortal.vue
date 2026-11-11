@@ -1,4 +1,4 @@
-<!-- 应用门户 -->
+<!-- Cổng ứng dụng -->
 <template>
   <div ref="portalRef" class="portal-container" :style="portalContainerStyle">
     <div class="leftArea" :class="[expand ? 'expand' : 'shrink']">
@@ -49,39 +49,39 @@
   import { useUserStore } from '@/store/modules/user';
 
   const portalContainerStyle = ref<any>(null);
-  //应用门户的ref
+  //ref của cổng ứng dụng
   const portalRef = ref();
-  //左侧列表是否展开
+  //Danh sách bên trái có mở rộng hay không
   const expand = ref<any>(true);
-  //左侧列表展开关闭事件
+  //Sự kiện mở rộng/đóng danh sách bên trái
   const handleToggle = () => {
     expand.value = !expand.value;
   };
-  //随机id
+  //id ngẫu nhiên
   const uuid = ref<string>('');
-  //历史记录
+  //Lịch sử
   const historyData = ref<any>();
-  //应用数据
+  //Dữ liệu ứng dụng
   const appData = ref<any>();
-  //聊天标题
+  //Tiêu đề trò chuyện
   const chatTitle = ref<any>();
-  //当前会话的设置
+  //Cài đặt của phiên hiện tại
   const conversationSettings = ref<Record<string, Record<string, any>>>({});
-  // 获取当前会话的设置
+  // Lấy cài đặt của phiên hiện tại
   const getCurrentSettings = computed(() => {
     return conversationSettings.value[uuid.value] || {};
   });
-  //对话设置弹窗ref
+  //ref của popup cài đặt hội thoại
   const settingsModalRef = ref();
-  //左侧会话的ref
+  //ref của phiên bên trái
   const leftPortalRef = ref();
-  // 欢迎语（取当前登录用户姓名或用户名）
+  // Lời chào (lấy họ tên hoặc tên người dùng của người dùng đăng nhập hiện tại)
   const userStore = useUserStore();
   const welcomeName = computed(() => userStore.getUserInfo?.realname || userStore.getUserInfo?.username || '');
-  const welcomeText = computed(() => (welcomeName.value ? `你好，${welcomeName.value}。准备好开始了吗？` : '你好，准备好开始了吗？'));
+  const welcomeText = computed(() => (welcomeName.value ? `Xin chào，${welcomeName.value}。Bạn đã sẵn sàng bắt đầu chưa?` : 'Xin chào, bạn đã sẵn sàng bắt đầu chưa?'));
   const showWelcome = ref<boolean>(false);
 
-  // 指定长度和基数
+  // Chỉ định độ dài và cơ số
   const getUuid = (len = 10, radix = 16) => {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
     var uuid: any = [],
@@ -105,7 +105,7 @@
   };
 
   /**
-   * 重新加载标题
+   * Tải lại tiêu đề
    * @param title
    */
   function reloadMessageTitle(title) {
@@ -113,7 +113,7 @@
     leftPortalRef.value.addSession(title, uuid.value);
   }
 
-  // 编辑对话设置
+  // Chỉnh sửa cài đặt hội thoại
   function handleEditSettings() {
     if (settingsModalRef.value) {
       settingsModalRef.value.open();
@@ -121,12 +121,12 @@
   }
 
   /**
-   * 应用数据点击返回事件
+   * Sự kiện trả về khi nhấp dữ liệu ứng dụng
    *
    * @param value
    */
   function handleAppClick(value) {
-    //每次点击都是一个新的会话
+    //Mỗi lần nhấp đều là một phiên mới
     uuid.value = getUuid(32);
     appData.value = value;
     chatTitle.value = appData.value.name;
@@ -134,7 +134,7 @@
   }
 
   /**
-   * 回话点击事件
+   * Sự kiện nhấp hội thoại
    *
    * @param id
    */
@@ -142,12 +142,12 @@
     showWelcome.value = false;
     uuid.value = id;
     chatTitle.value = title;
-    //根据选中的id查询聊天内容
+    //Truy vấn nội dung trò chuyện theo id đã chọn
     let params = { conversationId: id, sessionType: 'portal' };
-    //根据id获取历史记录
+    //Lấy lịch sử theo id
     defHttp.get({ url: '/airag/chat/messages', params }, { isTransformResponse: false }).then((res) => {
       if (res.success) {
-        // 处理新的返回格式（包含messages和flowInputs）
+        // Xử lý định dạng trả về mới (bao gồm messages và flowInputs)
         if (res.result && res.result.messages) {
           historyData.value = res.result.messages;
           if (res.result?.appData) {
@@ -155,12 +155,12 @@
           } else {
             appData.value = null;
           }
-          // 加载已保存的设置
+          // Tải cài đặt đã lưu
           if (res.result.flowInputs) {
             conversationSettings.value[id] = res.result.flowInputs;
           }
         } else if (Array.isArray(res.result)) {
-          // 兼容旧格式
+          // Tương thích định dạng cũ
           historyData.value = res.result;
         } else {
           historyData.value = [];
@@ -171,14 +171,14 @@
     });
   }
 
-  // 当 uuid 变化时，清空右侧聊天的会话数据并初始化当前设置，确保开启全新会话
+  // Khi uuid thay đổi, làm trống dữ liệu phiên của trò chuyện bên phải và khởi tạo cài đặt hiện tại, đảm bảo mở phiên hoàn toàn mới
   watch(
     () => uuid.value,
     (newVal) => {
       if (!newVal) return;
-      // 清空标题与历史记录、防止沿用上一会话数据
+      // Làm trống tiêu đề và lịch sử, ngăn dùng lại dữ liệu của phiên trước
       historyData.value = [];
-      // 初始化当前会话设置容器
+      // Khởi tạo container cài đặt phiên hiện tại
       conversationSettings.value[newVal] = conversationSettings.value[newVal] || {};
     }
   );

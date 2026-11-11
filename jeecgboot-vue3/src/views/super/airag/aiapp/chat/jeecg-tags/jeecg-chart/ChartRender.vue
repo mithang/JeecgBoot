@@ -4,26 +4,26 @@
     <div v-else-if="!resolvedType || !hasData" class="ai-chat-chart__error">
       <div v-if="loading"
            style="color: #999; padding: 12px 8px; border: 1px dashed #eee; margin: 8px 0; border-radius: 4px;">
-        <span>图表渲染中...</span>
+        <span>Đang hiển thị biểu đồ...</span>
       </div>
-      <span v-else>模型返回的图表渲染格式不正确，请优化提示词或重新尝试。</span>
+      <span v-else>Định dạng hiển thị biểu đồ do mô hình trả về không đúng, vui lòng tối ưu prompt hoặc thử lại.</span>
     </div>
     <div v-else class="ai-chat-chart__body">
       <Tabs v-model:activeKey="activeTab" size="small" class="ai-chat-chart__tabs">
-        <!-- 主图表 Tab -->
+        <!-- Tab biểu đồ chính -->
         <TabPane :key="resolvedType" :tab="getChartLabel(resolvedType)">
           <ChartBody :chartType="resolvedType" />
         </TabPane>
-        <!-- 可替代图表 Tabs -->
+        <!-- Tabs biểu đồ có thể thay thế -->
         <TabPane v-for="alt in validAltTypes" :key="alt" :tab="getChartLabel(alt)">
           <ChartBody :chartType="alt" />
         </TabPane>
-        <!-- 数据 Tab -->
-        <TabPane v-if="hasSql" key="__data__" tab="数据">
+        <!-- Tab dữ liệu -->
+        <TabPane v-if="hasSql" key="__data__" tab="Dữ liệu">
           <div class="ai-chat-chart__data-toolbar">
             <a-button size="small" :loading="exportLoading" @click="handleExport">
               <template #icon><DownloadOutlined /></template>
-              导出
+              Xuất
             </a-button>
           </div>
           <BasicTable
@@ -56,8 +56,8 @@ import { sqlPageExecute, sqlExportXls } from './ChartRender.api';
 
 const props = defineProps({
   /**
-   * 图表配置字符串，示例：
-   * {"type":"bar","altTypes":["line","pie"],"data":[...],"sql":"SELECT ...","dbSource":"","columns":{"field1":"标题1"}}
+   * Chuỗi cấu hình biểu đồ, ví dụ:
+   * {"type":"bar","altTypes":["line","pie"],"data":[...],"sql":"SELECT ...","dbSource":"","columns":{"field1":"Tiêu đề 1"}}
    */
   data: {
     type: String,
@@ -69,50 +69,50 @@ const props = defineProps({
   },
 });
 
-/** 图表类型中文名映射 */
+/** Ánh xạ tên tiếng Trung của loại biểu đồ */
 const chartTypeLabels: Record<string, string> = {
-  bar: '柱状图',
-  line: '折线图',
-  pie: '饼图',
-  radar: '雷达图',
-  gauge: '仪表盘',
-  barline: '折柱图',
-  multibar: '多列柱状图',
-  multiline: '多行折线图',
-  area: '面积图',
+  bar: 'Biểu đồ cột',
+  line: 'Biểu đồ đường',
+  pie: 'Biểu đồ tròn',
+  radar: 'Biểu đồ radar',
+  gauge: 'Bảng điều khiển',
+  barline: 'Biểu đồ cột gấp',
+  multibar: 'Biểu đồ cột nhiều cột',
+  multiline: 'Biểu đồ đường nhiều dòng',
+  area: 'Biểu đồ diện tích',
 };
 
-/** 获取图表类型的中文标签 */
+/** Lấy nhãn tiếng Trung của loại biểu đồ */
 function getChartLabel(type: string): string {
   return chartTypeLabels[type] || type;
 }
 
-/** 当前激活的 Tab */
+/** Tab hiện đang kích hoạt */
 const activeTab = ref<string>('');
-/** 表格加载状态 */
+/** Trạng thái tải của bảng */
 const tableLoading = ref(false);
-/** 导出加载状态 */
+/** Trạng thái tải của việc xuất */
 const exportLoading = ref(false);
-/** 表格数据 */
+/** Dữ liệu bảng */
 const tableData = ref<Recordable[]>([]);
-/** 表格列定义 */
+/** Định nghĩa cột bảng */
 const tableColumns = ref<BasicColumn[]>([]);
-/** 数据总条数 */
+/** Tổng số dữ liệu */
 const tableTotal = ref(0);
-/** 是否已首次加载过数据 */
+/** Đã tải dữ liệu lần đầu hay chưa */
 const dataLoaded = ref(false);
 
 /**
- * 解析失败或类型错误的提示文本。
+ * Văn bản gợi ý khi phân tích thất bại hoặc loại sai.
  */
 const errorMessage = ref<string>('');
 /**
- * 是否存在阻止渲染的错误。
+ * Có tồn tại lỗi ngăn hiển thị hay không.
  */
 const isError = ref<boolean>(false);
 
 /**
- * 将字符串解析为配置对象，失败时记录错误信息。
+ * Phân tích chuỗi thành đối tượng cấu hình, khi thất bại ghi lại thông tin lỗi.
  */
 const parsedConfig = computed<Recordable>(() => {
   try {
@@ -120,19 +120,19 @@ const parsedConfig = computed<Recordable>(() => {
     isError.value = false;
     return JSON.parse(props.data || '{}');
   } catch (error) {
-    errorMessage.value = '图表数据解析错误，无法渲染图表。';
+    errorMessage.value = 'Lỗi phân tích dữ liệu biểu đồ, không thể hiển thị biểu đồ.';
     isError.value = true;
     return {};
   }
 });
 
 /**
- * 支持的图表类型集合。
+ * Tập hợp các loại biểu đồ được hỗ trợ.
  */
 const supportedTypes: ChartType[] = ['bar', 'line', 'pie', 'radar', 'gauge', 'barline', 'multibar', 'multiline', 'area'];
 
 /**
- * 解析得到的图表类型，统一小写后做合法性校验。
+ * Loại biểu đồ phân tích được, thống nhất chuyển thành chữ thường rồi kiểm chứng tính hợp lệ.
  */
 const resolvedType = computed<ChartType>(() => {
   const rawType = String((parsedConfig.value as any).type || '').toLowerCase();
@@ -158,7 +158,7 @@ const resolvedType = computed<ChartType>(() => {
   return '';
 });
 
-/** 解析可替代图表类型列表（过滤掉无效类型和主类型重复） */
+/** Phân tích danh sách loại biểu đồ có thể thay thế (lọc bỏ loại không hợp lệ và trùng với loại chính) */
 const validAltTypes = computed<ChartType[]>(() => {
   const altTypes = (parsedConfig.value as any).altTypes;
   if (!Array.isArray(altTypes)) {
@@ -170,7 +170,7 @@ const validAltTypes = computed<ChartType[]>(() => {
     .filter((t: ChartType) => t !== primary && supportedTypes.includes(t));
 });
 
-/** 初始化 activeTab 为主图表类型 */
+/** Khởi tạo activeTab là loại biểu đồ chính */
 watchEffect(() => {
   if (resolvedType.value && !activeTab.value) {
     activeTab.value = resolvedType.value;
@@ -178,7 +178,7 @@ watchEffect(() => {
 });
 
 /**
- * 当类型不被支持时，给出错误提示。
+ * Khi loại không được hỗ trợ, đưa ra gợi ý lỗi.
  */
 watchEffect(() => {
   if (isError.value) {
@@ -187,7 +187,7 @@ watchEffect(() => {
   if (resolvedType.value === '') {
     const typeValue = (parsedConfig.value as any).type;
     if (typeValue) {
-      errorMessage.value = '当前仅支持 bar、line、pie、radar、gauge、barline、multibar、multiline、area 类型图表。';
+      errorMessage.value = 'Hiện tại chỉ hỗ trợ các loại biểu đồ bar, line, pie, radar, gauge, barline, multibar, multiline, area.';
       isError.value = true;
     }
   } else {
@@ -197,12 +197,12 @@ watchEffect(() => {
 });
 
 /**
- * 原始数据列表。
+ * Danh sách dữ liệu gốc.
  */
 const rawData = computed<unknown>(() => (parsedConfig.value as any).data);
 
 /**
- * 判断是否存在可用的数据数组。
+ * Phán đoán có tồn tại mảng dữ liệu khả dụng hay không.
  */
 const hasData = computed<boolean>(() => {
   if (resolvedType.value === 'gauge') {
@@ -211,29 +211,29 @@ const hasData = computed<boolean>(() => {
   return Array.isArray(rawData.value) && rawData.value.length > 0;
 });
 
-/** 是否包含可查询的 SQL */
+/** Có chứa SQL có thể truy vấn hay không */
 const hasSql = computed<boolean>(() => {
   const sql = (parsedConfig.value as any).sql;
   return typeof sql === 'string' && sql.trim().length > 0;
 });
 
-/** 从配置中提取 SQL */
+/** Trích xuất SQL từ cấu hình */
 const chartSql = computed<string>(() => {
   return ((parsedConfig.value as any).sql || '').trim();
 });
 
-/** 从配置中提取数据源 */
+/** Trích xuất nguồn dữ liệu từ cấu hình */
 const chartDbSource = computed<string>(() => {
   return ((parsedConfig.value as any).dbSource || '').trim();
 });
 
-/** 从配置中提取列标题映射 */
+/** Trích xuất ánh xạ tiêu đề cột từ cấu hình */
 const chartColumns = computed<Recordable>(() => {
   return (parsedConfig.value as any).columns || {};
 });
 
 /**
- * 使用 BasicTable 组件
+ * Dùng component BasicTable
  */
 const [registerTable, { setPagination }] = useTable({
   columns: tableColumns,
@@ -249,13 +249,13 @@ const [registerTable, { setPagination }] = useTable({
   onChange: handleTableChange,
 });
 
-/** 表格绑定属性 */
+/** Thuộc tính ràng buộc của bảng */
 const tableBindings = computed(() => ({
   onRegister: registerTable,
 }));
 
 /**
- * 加载表格数据
+ * Tải dữ liệu bảng
  */
 async function loadTableData(pageNo = 1, pageSize = 10) {
   if (!chartSql.value) {
@@ -273,7 +273,7 @@ async function loadTableData(pageNo = 1, pageSize = 10) {
       const { records = [], total = 0 } = res.result;
       tableData.value = records;
       tableTotal.value = total;
-      // 根据返回数据动态生成列（使用 columns 映射中文标题）
+      // Tạo cột động theo dữ liệu trả về (dùng columns ánh xạ tiêu đề tiếng Trung)
       if (records.length > 0) {
         tableColumns.value = buildColumns(records[0]);
       }
@@ -287,7 +287,7 @@ async function loadTableData(pageNo = 1, pageSize = 10) {
       tableTotal.value = 0;
     }
   } catch (e) {
-    console.error('加载图表原始数据失败', e);
+    console.error('Tải dữ liệu gốc của biểu đồ thất bại', e);
     tableData.value = [];
     tableTotal.value = 0;
   } finally {
@@ -296,7 +296,7 @@ async function loadTableData(pageNo = 1, pageSize = 10) {
 }
 
 /**
- * 根据数据行的 key 动态生成 BasicTable 列定义，优先使用 columns 映射的中文标题
+ * Tạo động định nghĩa cột BasicTable theo key của hàng dữ liệu, ưu tiên dùng tiêu đề tiếng Trung được ánh xạ trong columns
  */
 function buildColumns(row: Recordable): BasicColumn[] {
   const columnMap = chartColumns.value;
@@ -309,14 +309,14 @@ function buildColumns(row: Recordable): BasicColumn[] {
 }
 
 /**
- * 表格分页变更处理
+ * Xử lý thay đổi phân trang bảng
  */
 function handleTableChange(pagination: any) {
   loadTableData(pagination.current, pagination.pageSize);
 }
 
 /**
- * 导出全部数据
+ * Xuất toàn bộ dữ liệu
  */
 async function handleExport() {
   if (!chartSql.value) {
@@ -330,42 +330,42 @@ async function handleExport() {
       columns: chartColumns.value,
     });
     if (!response || !response.data) {
-      message.warning('导出失败');
+      message.warning('Xuất thất bại');
       return;
     }
     const data = response.data;
-    // 检查是否为错误响应（JSON 格式）
+    // Kiểm tra có phải phản hồi lỗi hay không (định dạng JSON)
     if (data.type && data.type.indexOf('json') !== -1) {
       const text = await data.text();
       try {
         const json = JSON.parse(text);
         if (!json.success) {
-          message.warning('导出失败：' + (json.message || '未知错误'));
+          message.warning('Xuất thất bại:' + (json.message || 'Lỗi không rõ'));
           return;
         }
       } catch (_e) {
-        // 非 JSON，继续下载
+        // Không phải JSON, tiếp tục tải xuống
       }
     }
     const url = window.URL.createObjectURL(new Blob([data], { type: 'application/vnd.ms-excel' }));
     const link = document.createElement('a');
     link.style.display = 'none';
     link.href = url;
-    link.setAttribute('download', '数据导出.xls');
+    link.setAttribute('download', 'Xuất dữ liệu.xls');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   } catch (e) {
-    console.error('导出失败', e);
-    message.error('导出失败');
+    console.error('Xuất thất bại', e);
+    message.error('Xuất thất bại');
   } finally {
     exportLoading.value = false;
   }
 }
 
 /**
- * 切换到数据 Tab 时首次加载
+ * Khi chuyển sang Tab dữ liệu thì tải lần đầu
  */
 watch(activeTab, (val) => {
   if (val === '__data__' && !dataLoaded.value && hasSql.value) {
@@ -374,10 +374,10 @@ watch(activeTab, (val) => {
   }
 });
 
-// ======================== 图表数据转换 ========================
+// ======================== Chuyển đổi dữ liệu biểu đồ ========================
 
 /**
- * 将原始数据标准化为多序列图表所需的结构。
+ * Chuẩn hóa dữ liệu gốc thành cấu trúc cần cho biểu đồ nhiều chuỗi.
  */
 const multiSeriesData = computed<Recordable[]>(() => {
   if (!Array.isArray(rawData.value)) {
@@ -387,7 +387,7 @@ const multiSeriesData = computed<Recordable[]>(() => {
 });
 
 /**
- * 面积折线与多行折线共享的数据结构，透传 seriesType 控制折线类型。
+ * Cấu trúc dữ liệu dùng chung giữa biểu đồ đường diện tích và biểu đồ đa đường, truyền trong suốt seriesType để kiểm soát loại đường.
  */
 const areaSeriesData = computed<Recordable[]>(() => {
   if (!Array.isArray(rawData.value)) {
@@ -403,7 +403,7 @@ const areaSeriesData = computed<Recordable[]>(() => {
 });
 
 /**
- * 将原始数据标准化为饼图所需的结构。
+ * Chuẩn hóa dữ liệu gốc thành cấu trúc cần cho biểu đồ tròn.
  */
 const pieSeriesData = computed<Recordable[]>(() => {
   if (!Array.isArray(rawData.value)) {
@@ -418,7 +418,7 @@ const pieSeriesData = computed<Recordable[]>(() => {
 });
 
 /**
- * 构建多序列图表需要的标准化数据项。
+ * Xây dựng mục dữ liệu chuẩn hóa cần cho biểu đồ nhiều chuỗi.
  */
 function buildMultiSeriesItem(item: Recordable): Recordable {
   const seriesName = resolveSeriesName(item);
@@ -428,7 +428,7 @@ function buildMultiSeriesItem(item: Recordable): Recordable {
 }
 
 /**
- * 解析系列名称，优先使用 series，其次使用 type，最后回退为"数据"。
+ * Phân tích tên series, ưu tiên dùng series, tiếp theo dùng type, cuối cùng quay về"Dữ liệu"。
  */
 function resolveSeriesName(item: Recordable): string {
   if (item && item.series !== undefined) {
@@ -437,11 +437,11 @@ function resolveSeriesName(item: Recordable): string {
   if (item && item.type !== undefined) {
     return String(item.type);
   }
-  return '数据';
+  return 'Dữ liệu';
 }
 
 /**
- * 解析横轴名称，支持 x 与 name 字段。
+ * Phân tích tên trục ngang, hỗ trợ trường x và name.
  */
 function resolveName(item: Recordable): string {
   if (item && item.x !== undefined) {
@@ -454,7 +454,7 @@ function resolveName(item: Recordable): string {
 }
 
 /**
- * 解析数值字段，支持 y 与 value，非数字时回退为 0。
+ * Phân tích trường số, hỗ trợ y và value, khi không phải số thì quay về 0.
  */
 function resolveNumber(item: Recordable): number {
   const rawValue = item ? item.y ?? item.value : null;
@@ -466,7 +466,7 @@ function resolveNumber(item: Recordable): number {
 }
 
 /**
- * 解析序列类型，折柱图需要区分 bar / line。
+ * Phân tích loại chuỗi, biểu đồ cột gấp cần phân biệt bar / line。
  */
 function resolveSeriesType(item: Recordable): string {
   if (item && item.seriesType !== undefined) {
@@ -476,22 +476,22 @@ function resolveSeriesType(item: Recordable): string {
 }
 
 /**
- * 仪表盘数据，允许数组或对象输入，确保返回 name、value。
+ * Dữ liệu dashboard, cho phép đầu vào là mảng hoặc đối tượng, đảm bảo trả về name, value.
  */
 const gaugeData = computed(() => {
   const dataSource = rawData.value as any;
   if (Array.isArray(dataSource) && dataSource.length > 0) {
     const item = dataSource[0];
-    return { name: resolveName(item) || '仪表盘', value: resolveNumber(item) };
+    return { name: resolveName(item) || 'Bảng điều khiển', value: resolveNumber(item) };
   }
   if (dataSource && typeof dataSource === 'object') {
-    return { name: resolveName(dataSource) || '仪表盘', value: resolveNumber(dataSource as Recordable) };
+    return { name: resolveName(dataSource) || 'Bảng điều khiển', value: resolveNumber(dataSource as Recordable) };
   }
-  return { name: '仪表盘', value: 0 };
+  return { name: 'Bảng điều khiển', value: 0 };
 });
 
 /**
- * 雷达图数据，支持 max 字段定义指标上限。
+ * Dữ liệu biểu đồ radar, hỗ trợ trường max định nghĩa giới hạn trên của chỉ số.
  */
 const radarSeriesData = computed<Recordable[]>(() => {
   if (!Array.isArray(rawData.value)) {
@@ -508,7 +508,7 @@ const radarSeriesData = computed<Recordable[]>(() => {
 });
 
 /**
- * 折柱图数据，附带 seriesType 用于区分柱/线。
+ * Dữ liệu biểu đồ cột gấp, kèm seriesType dùng để phân biệt cột/tuyến.
  */
 const barLineSeriesData = computed<Recordable[]>(() => {
   if (!Array.isArray(rawData.value)) {
@@ -522,10 +522,10 @@ const barLineSeriesData = computed<Recordable[]>(() => {
   });
 });
 
-// ======================== 根据类型获取图表 props ========================
+// ======================== Lấy props biểu đồ theo loại ========================
 
 /**
- * 根据图表类型返回对应的渲染属性
+ * Theo loại biểu đồ trả về thuộc tính hiển thị tương ứng
  */
 function getChartPropsForType(type: ChartType): Recordable {
   switch (type) {
@@ -553,7 +553,7 @@ function getChartPropsForType(type: ChartType): Recordable {
 }
 
 /**
- * 根据图表类型返回对应的组件
+ * Theo loại biểu đồ trả về component tương ứng
  */
 function getChartComponentForType(type: ChartType) {
   switch (type) {
@@ -581,7 +581,7 @@ function getChartComponentForType(type: ChartType) {
 }
 
 /**
- * 内部图表渲染组件，根据 chartType 动态渲染对应图表
+ * Component hiển thị biểu đồ nội bộ, hiển thị biểu đồ tương ứng một cách động theo chartType
  */
 const ChartBody = defineComponent({
   props: {

@@ -17,19 +17,19 @@
   import AiChat from './AiChat.vue';
   import { useRouter } from 'vue-router';
 
-  //aiChat的ref
+  //ref của aiChat
   const aiChatRef = ref();
-  //应用id
+  //id ứng dụng
   const appId = ref<string>('');
 
-  //是否显示聊天
+  //Có hiển thị trò chuyện hay không
   const showChat = ref<any>(false);
   const router = useRouter();
-  //判断是否为初始化
+  //Phán đoán có phải khởi tạo hay không
   const isInit = ref<boolean>(false);
   
   /**
-   * chat图标点击事件
+   * Sự kiện nhấp biểu tượng chat
    */
   function chatClick() {
     showChat.value = !showChat.value;

@@ -20,7 +20,7 @@
   import { sanitizeRichText } from '/@/utils/htmlSanitizer';
 
   /**
-   * 屏幕宽度
+   * Độ rộng màn hình
    */
   const screenWidth = ref<string>();
   const { getIsMobile } = useAppInject();
@@ -53,7 +53,7 @@
     return sanitizeRichText(value.replace(/\n/g, '<br>'));
   });
 
-  // 是否显示引用知识库
+  // Có hiển thị trích dẫn kho tri thức hay không
   const showRefKnow = computed(() => {
     const { loading, referenceKnowledge } = props;
     if (loading) {
@@ -62,9 +62,9 @@
     return Array.isArray(referenceKnowledge) && referenceKnowledge.length > 0;
   });
 
-  //替换图片宽度
+  //Thay thế độ rộng hình ảnh
   const replaceImageWith = (markdownContent) => {
-    // 支持图片设置width的写法 ![](/static/jimuImages/screenshot_1617252560523.png =100)
+    // Hỗ trợ cách viết đặt width cho hình ảnh ![](/static/jimuImages/screenshot_1617252560523.png =100)
     const regex = /!\[([^\]]*)\]\(([^)]+)=([0-9]+)\)/g;
     return markdownContent.replace(regex, (match, alt, src, width) => {
       let reg = /#\s*{\s*domainURL\s*}/g;
@@ -73,7 +73,7 @@
     });
   };
   const { domainUrl } = useGlobSetting();
-  //替换domainURL
+  //Thay thế domainURL
   const replaceDomainUrl = (markdownContent) => {
     const regex = /!\[([^\]]*)\]\(.*?#\s*{\s*domainURL\s*}.*?\)/g;
     return markdownContent.replace(regex, (match) => {
@@ -82,13 +82,13 @@
     });
   };
 
-  //是否放大图片
+  //Có phóng to hình ảnh hay không
   const amplifyImage = ref<boolean>(false);
-  //图片地址
+  //Địa chỉ hình ảnh
   const imageUrl = ref<string>('');
 
   function highlightBlock(str: string, lang?: string) {
-    return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">复制代码</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`;
+    return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">Sao chép mã</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`;
   }
   function addCopyEvents() {
     if (textRef.value) {
@@ -98,9 +98,9 @@
           const code = btn.parentElement?.nextElementSibling?.textContent;
           if (code) {
             copyToClip(code).then(() => {
-              btn.textContent = '复制成功';
+              btn.textContent = 'Sao chép thành công';
               setTimeout(() => {
-                btn.textContent = '复制代码';
+                btn.textContent = 'Sao chép mã';
               }, 1e3);
             });
           }
@@ -119,7 +119,7 @@
   }
 
   /**
-   * 添加图片点击事件
+   * Sự kiện nhấp thêm hình ảnh
    */
   function addImageClickEvent() {
     if (textRef.value) {
@@ -134,7 +134,7 @@
   }
 
   /**
-   * 移出图片点击事件
+   * Sự kiện nhấp loại bỏ hình ảnh
    */
   function removeImageClickEvent() {
     if (textRef.value) {
@@ -146,7 +146,7 @@
   }
 
   /**
-   * 图片隐藏
+   * Ẩn hình ảnh
    */
   function pictureHide() {
     amplifyImage.value = false;
@@ -154,15 +154,15 @@
   }
 
   /**
-   * 设置markdown body整体宽度
+   * Đặt độ rộng tổng thể của markdown body
    */
   function setMarkdownBodyWidth() {
-    //平板
+    //Máy tính bảng
     console.log('window.innerWidth::', window.innerWidth);
     if (window.innerWidth > 600 && window.innerWidth < 1024) {
       screenWidth.value = window.innerWidth - 120 + 'px';
     } else if (window.innerWidth < 600) {
-      //手机
+      //Điện thoại
       screenWidth.value = window.innerWidth - 60 + 'px';
     }
   }
@@ -239,7 +239,7 @@
     line-height: 1.25rem;
   }
 
-  // 已停止下方的样式
+  // Kiểu của phần đã dừng ở phía dưới
   :deep(.markdown-body) {
     color: #333;
     font-family:
@@ -248,7 +248,7 @@
     line-height: 1.6;
     padding: 14px;
 
-    // 段落样式
+    // Kiểu đoạn văn
     p {
       color: #333;
       line-height: 1.6;
@@ -256,7 +256,7 @@
       margin-top: 0;
     }
 
-    // 列表样式
+    // Kiểu danh sách
     ul,
     ol {
       margin-left: 1.5em;
@@ -271,7 +271,7 @@
       }
     }
 
-    // 关键词/代码高亮样式
+    // Từ khóa/Kiểu tô sáng mã
     code {
       background-color: #f0f0f0;
       color: #333;
@@ -281,7 +281,7 @@
       font-size: 0.9em;
     }
 
-    // 行内代码
+    // Mã nội dòng
     p code,
     li code,
     td code {
@@ -291,7 +291,7 @@
       border-radius: 3px;
     }
 
-    // 代码块保持原有样式
+    // Khối mã giữ kiểu vốn có
     pre {
       code {
         background-color: transparent;
@@ -299,14 +299,14 @@
       }
     }
 
-    // 强调文本
+    // Văn bản nhấn mạnh
     strong,
     b {
       color: #333;
       font-weight: 600;
     }
 
-    // 链接样式
+    // Kiểu liên kết
     a {
       color: #4183c4;
       text-decoration: none;
@@ -318,7 +318,7 @@
   }
 
   @media (max-width: 1024px) {
-    //手机和平板下的样式
+    //Kiểu trên điện thoại và máy tính bảng
     .textWrap {
       margin-left: -40px;
       margin-top: 10px;

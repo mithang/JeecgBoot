@@ -1,7 +1,7 @@
 <template>
   <div ref="chatContainerRef" class="chat-container" :style="chatContainerStyle">
     <div v-if="pageError" class="chat-error-state">
-      <a-result status="warning" :title="pageError" sub-title="请联系分享者确认链接状态后重试" />
+      <a-result status="warning" :title="pageError" sub-title="Vui lòng liên hệ người chia sẻ xác nhận trạng thái liên kết rồi thử lại" />
     </div>
     <template v-else-if="dataSource">
       <div v-if="isMultiSession" class="leftArea" :class="[expand ? 'expand' : 'shrink']">
@@ -40,7 +40,7 @@
           ref="chatRef"
         ></chat>
       </div>
-      <!-- [issues/8545]新建AI应用的时候只能选择没有自定义参数的AI流程 -->
+      <!-- [issues/8545]Khi tạo mới ứng dụng AI chỉ có thể chọn quy trình AI không có tham số tùy chỉnh -->
       <ConversationSettingsModal
         ref="settingsModalRef"
         :flowInputs="flowInputs"
@@ -51,7 +51,7 @@
         @ok="handleSettingsOk"
       />
     </template>
-    <Loading :loading="loading" tip="加载中，请稍后"></Loading>
+    <Loading :loading="loading" tip="Đang tải, vui lòng chờ"></Loading>
   </div>
 </template>
 
@@ -81,58 +81,58 @@
   const chatVisible = ref(true);
   const chatContainerRef = ref<any>(null);
   const chatContainerStyle = ref({});
-  //左侧聊天信息
+  //Thông tin trò chuyện bên trái
   const chatTitle = ref<string>('');
-  //左侧聊天点击的坐标
+  //Tọa độ nhấp trò chuyện bên trái
   const chatActiveKey = ref<number>(0);
-  //预置开场白
+  //Lời mở đầu đặt sẵn
   const presetQuestion = ref<string>('');
-  //加载
+  //Tải
   const loading = ref<any>(true);
   const pageError = ref<string>('');
 
   const handleToggle = () => {
     expand.value = !expand.value;
   };
-  //应用id
+  //id ứng dụng
   const appId = ref<string>('');
-  //应用数据
+  //Dữ liệu ứng dụng
   const appData = ref<any>({});
-  //开场白
+  //Lời mở đầu
   const prologue = ref<string>('');
-  //快捷指令
+  //Lệnh tắt
   const quickCommandData = ref<any>([]);
-  //是否显示广告位
+  //Có hiển thị vị trí quảng cáo hay không
   const showAdvertising = ref<boolean>(false);
-  //对话设置弹窗ref
+  //ref của popup cài đặt hội thoại
   const settingsModalRef = ref();
-  //工作流入参列表
+  //Danh sách tham số đầu vào quy trình làm việc
   const flowInputs = ref<any[]>([]);
-  //当前会话的设置
+  //Cài đặt của phiên hiện tại
   const conversationSettings = ref<Record<string, Record<string, any>>>({});
 
   const priming = () => {
     dataSource.value = {
       active: '1002',
       usingContext: true,
-      history: [{ id: '1002', title: '新建聊天', isEdit: false, disabled: true }],
+      history: [{ id: '1002', title: 'Tạo mới trò chuyện', isEdit: false, disabled: true }],
     };
-    chatTitle.value = '新建聊天';
+    chatTitle.value = 'Tạo mới trò chuyện';
     chatActiveKey.value = 0;
   };
 
   const handleSave = () => {
-    // 删除标签或清空内容之后的保存
+    // Việc lưu sau khi xóa nhãn hoặc làm trống nội dung
     //save(dataSource.value);
     setTimeout(() => {
-      // 删除标签或清空内容也会触发watch保存，此时不需watch保存需清除
+      // Xóa nhãn hoặc làm trống nội dung cũng kích hoạt lưu qua watch, lúc này không cần lưu qua watch thì phải xóa
       //clearTimeout(timer);
     }, 50);
   };
 
   /**
-   * 检查是否有额外的工作流入参
-   * for [issues/8545]新建AI应用的时候只能选择没有自定义参数的AI流程
+   * Kiểm tra có tham số đầu vào quy trình làm việc bổ sung hay không
+   * for [issues/8545]Khi tạo mới ứng dụng AI chỉ có thể chọn quy trình AI không có tham số tùy chỉnh
     */
   const hasExtraFlowInputs = computed(() => {
     if (!appData.value || !appData.value.metadata) {
@@ -144,18 +144,18 @@
         : appData.value.metadata;
       const flowInputsList = metadata.flowInputs || [];
       
-      // 过滤掉固定参数
+      // Lọc bỏ tham số cố định
       const fixedParams = ['history', 'content', 'images'];
       const extraInputs = flowInputsList.filter((input: any) => !fixedParams.includes(input.field));
       
       return extraInputs.length > 0;
     } catch (e) {
-      console.error('解析metadata失败', e);
+      console.error('Phân tích metadata thất bại', e);
       return false;
     }
   });
 
-  // 检查是否有必填的额外参数
+  // Kiểm tra có tham số bổ sung bắt buộc hay không
   const hasRequiredFlowInputs = computed(() => {
     if (!appData.value || !appData.value.metadata) {
       return false;
@@ -166,7 +166,7 @@
         : appData.value.metadata;
       const flowInputsList = metadata.flowInputs || [];
       
-      // 过滤掉固定参数，且必须是必填的
+      // Lọc bỏ tham số cố định, và phải là bắt buộc
       const fixedParams = ['history', 'content', 'images'];
       const requiredInputs = flowInputsList.filter((input: any) =>
         !fixedParams.includes(input.field) && isRequired(input.required)
@@ -174,17 +174,17 @@
       
       return requiredInputs.length > 0;
     } catch (e) {
-      console.error('解析metadata失败', e);
+      console.error('Phân tích metadata thất bại', e);
       return false;
     }
   });
 
-  /** 兼容流程元数据中 boolean、number 和 string 形式的必填标识。 */
+  /** Tương thích với dấu hiệu bắt buộc dạng boolean, number và string trong siêu dữ liệu quy trình. */
   function isRequired(required: unknown): boolean {
     return required === true || required === 1 || required === '1' || required === 'true';
   }
 
-  // 监听appData变化，更新flowInputs
+  // Lắng nghe thay đổi của appData, cập nhật flowInputs
   watch(
     () => appData.value,
     (val) => {
@@ -198,37 +198,37 @@
           : val.metadata;
         flowInputs.value = metadata.flowInputs || [];
       } catch (e) {
-        console.error('解析metadata失败', e);
+        console.error('Phân tích metadata thất bại', e);
         flowInputs.value = [];
       }
     },
     { immediate: true, deep: true }
   );
 
-  // 获取当前会话的设置
+  // Lấy cài đặt của phiên hiện tại
   const getCurrentSettings = computed(() => {
     return conversationSettings.value[uuid.value] || {};
   });
 
-  // 编辑对话设置
+  // Chỉnh sửa cài đặt hội thoại
   function handleEditSettings() {
     if (settingsModalRef.value) {
       settingsModalRef.value.open();
     }
   }
 
-  // 保存对话设置
+  // Lưu cài đặt hội thoại
   function handleSettingsOk(data: Record<string, any>) {
-    // 保存到本地状态（会在发送消息时传给后端）
+    // Lưu vào trạng thái cục bộ (sẽ truyền cho backend khi gửi tin nhắn)
     conversationSettings.value[uuid.value] = data;
-    message.success('对话设置已保存');
+    message.success('Cài đặt hội thoại đã lưu');
     
     nextTick(() => {
       chatVisible.value = true;
     });
   }
 
-  // 监听dataSource变化执行操作
+  // Lắng nghe thay đổi của dataSource để thực thi thao tác
   const execute = () => {
     unwatch01 = watch(
       () => dataSource.value.active,
@@ -237,11 +237,11 @@
           if (value == '1002') {
             uuid.value = '1002';
             chatData.value = [];
-            chatTitle.value = "新建聊天";
+            chatTitle.value = "Tạo mới trò chuyện";
             chatVisible.value = false;
             nextTick(() => {
               chatVisible.value = true;
-              // 新会话且有必填参数，弹出设置弹窗
+              // Phiên mới và có tham số bắt buộc, bật popup cài đặt
               if (hasRequiredFlowInputs.value && !conversationSettings.value['1002']) {
                 if (settingsModalRef.value) {
                   settingsModalRef.value.open();
@@ -250,26 +250,26 @@
             });
             return;
           }
-          //update-begin---author:wangshuai---date:2025-03-14---for:【QQYUN-11421】聊天，删除会话后，聊天切换到新的会话，但是聊天标题没有变---
+          //update-begin---author:wangshuai---date:2025-03-14---for:【QQYUN-11421】Trò chuyện, sau khi xóa phiên trò chuyện, cuộc trò chuyện chuyển sang phiên mới nhưng tiêu đề trò chuyện không thay đổi---
           let values = dataSource.value.history.filter((item) => item.id === value);
           if(values && values.length>0){
             chatTitle.value = values[0]?.title
           }
-          //update-end---author:wangshuai---date:2025-03-14---for:【QQYUN-11421】聊天，删除会话后，聊天切换到新的会话，但是聊天标题没有变---
-          //根据选中的id查询聊天内容
+          //update-end---author:wangshuai---date:2025-03-14---for:【QQYUN-11421】Trò chuyện, sau khi xóa phiên trò chuyện, cuộc trò chuyện chuyển sang phiên mới nhưng tiêu đề trò chuyện không thay đổi---
+          //Truy vấn nội dung trò chuyện theo id đã chọn
           let params = { conversationId: value };
           uuid.value = value;
           defHttp.get({ url: '/airag/chat/messages', params }, { isTransformResponse: false }).then((res) => {
             if (res.success) {
-              // 处理新的返回格式（包含messages和flowInputs）
+              // Xử lý định dạng trả về mới (bao gồm messages và flowInputs)
               if (res.result && res.result.messages) {
                 chatData.value = res.result.messages;
-                // 加载已保存的设置
+                // Tải cài đặt đã lưu
                 if (res.result.flowInputs) {
                   conversationSettings.value[value] = res.result.flowInputs;
                 }
               } else if (Array.isArray(res.result)) {
-                // 兼容旧格式
+                // Tương thích định dạng cũ
                 chatData.value = res.result;
               } else {
                 chatData.value = [];
@@ -278,7 +278,7 @@
               chatData.value = [];
             }
             chatVisible.value = false;
-            // 新会话且有必填参数，弹出设置弹窗
+            // Phiên mới và có tham số bắt buộc, bật popup cài đặt
             if (hasRequiredFlowInputs.value && !conversationSettings.value[value]) {
               if (settingsModalRef.value) {
                 settingsModalRef.value.open();
@@ -298,15 +298,15 @@
     );
   };
 
-  //是否为多会话模式
+  //Có phải chế độ nhiều phiên hay không
   const isMultiSession = ref<boolean>(true);
-  //是否为手机
+  //Có phải điện thoại hay không
   const { getIsMobile } = useAppInject();
-  //来源
+  //Nguồn
   const source = ref<string>('');
   
   /**
-   * 初始化聊天信息
+   * Khởi tạo thông tin trò chuyện
    * @param appId
    */
   function initChartData(appId = '') {
@@ -355,11 +355,11 @@
       initChartData();
       appData.value.metadata = { izDraw: '1', defaultSelect: '0' }  
       quickCommandData.value = [
-          { name: '介绍一下JeecgBoot', descr: "请介绍一下JeecgBoot" },
-          { name: 'JEECG的优势？', descr: "JEECG有哪些优势？" },
-          { name: 'JEECG可以做什么？', descr: "JEECG可以做哪些事情？" },
-          { name: '创建一个系统用户', descr: "请创建一个系统用户，具体信息如下：\n" +
-              "账号 zhangsan2，密码 Abc123456，姓名张三，邮箱 zhangsan@example.com，手机号 13800138000，并赋予 jeecg 角色权限。" },];
+          { name: 'Giới thiệu về JeecgBoot', descr: "Vui lòng giới thiệu về JeecgBoot" },
+          { name: 'Ưu thế của JEECG?', descr: "JEECG có những ưu thế nào?" },
+          { name: 'JEECG có thể làm gì?', descr: "JEECG có thể làm những việc gì?" },
+          { name: 'Tạo một người dùng hệ thống', descr: "Vui lòng tạo một người dùng hệ thống, thông tin cụ thể như sau:\n" +
+              "Tài khoản zhangsan2, mật khẩu Abc123456, họ tên Zhang San, email zhangsan@example.com, số điện thoại 13800138000, và cấp quyền vai trò jeecg." },];
     }
   });
 
@@ -372,10 +372,10 @@
   })
   
   /**
-   * 获取应用id
+   * Lấy id ứng dụng
    *
    * @param appId
-   * @param shareToken 分享令牌
+   * @param shareToken token chia sẻ
    */
   async function getApplicationData(appId, shareToken = '') {
     pageError.value = '';
@@ -401,9 +401,9 @@
           }
           if (res.result && res.result.metadata) {
             let metadata = JSON.parse(res.result.metadata);
-            //判斷是否为手机模式
+            //Phán đoán có phải chế độ điện thoại hay không
             if(!getIsMobile.value){
-              //是否为多会话模式
+              //Có phải chế độ nhiều phiên hay không
               if((metadata.multiSession && metadata.multiSession === '1') || !metadata.multiSession) {
                 isMultiSession.value = true;
               } else {
@@ -417,18 +417,18 @@
             expand.value = false;
           }
         } else {
-          pageError.value = getChatErrorMessage(res) || '分享链接无效或已取消发布';
+          pageError.value = getChatErrorMessage(res) || 'Liên kết chia sẻ không hợp lệ hoặc đã hủy phát hành';
           appData.value = {};
         }
       })
       .catch((error) => {
-        pageError.value = error?.response?.data?.message || error?.message || '应用加载失败，请稍后重试';
+        pageError.value = error?.response?.data?.message || error?.message || 'Tải ứng dụng thất bại, vui lòng thử lại sau';
         appData.value = {};
       });
   }
 
   /**
-   * 左侧消息列表点击事件
+   * Sự kiện nhấp danh sách tin nhắn bên trái
    * @param title
    * @param index
    */
@@ -438,12 +438,12 @@
   }
 
   /**
-   * 重新加载标题消息
+   * Tải lại tin nhắn tiêu đề
    * @param text
    */
   function reloadMessageTitle(text) {
     let title = dataSource.value.history[chatActiveKey.value].title;
-    if(title === '新建聊天'){
+    if(title === 'Tạo mới trò chuyện'){
       dataSource.value.history[chatActiveKey.value].title = text;
       dataSource.value.history[chatActiveKey.value]['disabled'] = false;
     }
@@ -451,7 +451,7 @@
   }
   
   /**
-   * 初始化聊天：用于icon点击
+   * Khởi tạo trò chuyện: dùng cho nhấp icon
    */
   function initChat(value) {
     appId.value = value;

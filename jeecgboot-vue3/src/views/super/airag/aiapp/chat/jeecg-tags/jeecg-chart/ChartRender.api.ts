@@ -6,7 +6,7 @@ enum Api {
 }
 
 /**
- * 分页执行 SQL 查询
+ * Thực thi truy vấn SQL theo phân trang
  */
 export function sqlPageExecute(params: { sql: string; dbSource?: string; pageNo: number; pageSize: number }) {
   return defHttp.post<Recordable>(
@@ -24,7 +24,7 @@ export function sqlPageExecute(params: { sql: string; dbSource?: string; pageNo:
 }
 
 /**
- * 导出图表原始数据为 Excel
+ * Xuất dữ liệu gốc của biểu đồ thành Excel
  */
 export function sqlExportXls(params: { sql: string; dbSource?: string; columns?: Recordable }) {
   return defHttp.post(

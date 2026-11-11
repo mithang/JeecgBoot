@@ -13,32 +13,32 @@ interface ScrollReturn {
 
 export function useScroll(): ScrollReturn {
   const scrollRef = ref<ScrollElement>(null);
-  // update-begin--author:liaozhiyang---date:20261027---for：【LHZP-1351】AI生成过程中用户向上滚动时不再强制滚动到底部
+  // update-begin--author:liaozhiyang---date:20261027---for：【LHZP-1351】AITrong quá trình AI tạo nội dung, khi người dùng cuộn lên thì không còn ép cuộn xuống đáy nữa
   const autoScroll = ref(true);
-  // 距离底部小于该值视为在底部
+  // Khoảng cách đến đáy nhỏ hơn giá trị này thì coi là ở đáy
   const bottomThreshold = 30;
-  // 是否正在拖动滚动条
+  // Có đang kéo thanh cuộn hay không
   let dragging = false;
   let lastScrollTop = 0;
   let touchStartY = 0;
   const getDistanceToBottom = (el: HTMLDivElement) => el.scrollHeight - el.scrollTop - el.clientHeight;
-  // 内容可滚动时才暂停，避免内容未溢出时误暂停导致后续不再跟随
+  // Chỉ tạm dừng khi nội dung có thể cuộn, tránh tạm dừng nhầm khi nội dung chưa tràn khiến sau đó không bám theo nữa
   const pauseAutoScroll = () => {
     const el = scrollRef.value;
     if (el && el.scrollHeight > el.clientHeight) autoScroll.value = false;
   };
-  // 鼠标滚轮/触控板向上滚动：在滚动发生前直接暂停（避免平滑滚动动画被流式输出打断）
+  // Con lăn chuột/Cuộn lên bằng bàn di chuột: tạm dừng trực tiếp trước khi cuộn xảy ra (tránh để hoạt ảnh cuộn mượt bị đầu ra streaming làm gián đoạn)
   const handleWheel = (e: WheelEvent) => {
     if (e.deltaY < 0) pauseAutoScroll();
   };
-  // 移动端手指下滑（内容向上）：暂停
+  // Ngón tay trượt xuống trên di động (nội dung đi lên): tạm dừng
   const handleTouchStart = (e: TouchEvent) => {
     touchStartY = e.touches[0]?.clientY ?? 0;
   };
   const handleTouchMove = (e: TouchEvent) => {
     if ((e.touches[0]?.clientY ?? 0) > touchStartY) pauseAutoScroll();
   };
-  // 拖动滚动条期间不自动滚动（点击滚动条时 target 为容器本身）
+  // Trong lúc kéo thanh cuộn không tự động cuộn (khi nhấp thanh cuộn, target là chính container)
   const handlePointerDown = (e: PointerEvent) => {
     if (e.target === scrollRef.value) {
       dragging = true;
@@ -56,10 +56,10 @@ export function useScroll(): ScrollReturn {
     const scrollTop = el.scrollTop;
     const distanceToBottom = getDistanceToBottom(el);
     if (scrollTop < lastScrollTop && distanceToBottom > bottomThreshold) {
-      // 向上滚动离开底部（键盘、拖动滚动条等）
+      // Cuộn lên rời khỏi đáy (bàn phím, kéo thanh cuộn, v.v.)
       autoScroll.value = false;
     } else if (scrollTop >= lastScrollTop && distanceToBottom <= bottomThreshold && !dragging) {
-      // 向下滚动回到底部，恢复跟随
+      // Cuộn xuống trở lại đáy, khôi phục bám theo
       autoScroll.value = true;
     }
     lastScrollTop = scrollTop;
@@ -82,19 +82,19 @@ export function useScroll(): ScrollReturn {
     window.removeEventListener('pointerup', handlePointerUp);
   });
 
-  // 强制滚动到底部（如用户发送消息），并恢复自动跟随
+  // Ép cuộn xuống đáy (ví dụ khi người dùng gửi tin nhắn), và khôi phục tự động bám theo
   const scrollToBottom = async () => {
     await nextTick();
     autoScroll.value = true;
     if (scrollRef.value) scrollRef.value.scrollTop = scrollRef.value.scrollHeight;
   };
 
-  // 仅在自动跟随状态下滚动到底部（用于AI流式输出过程）
+  // Chỉ cuộn xuống đáy ở trạng thái tự động bám theo (dùng cho quá trình đầu ra streaming của AI)
   const scrollToBottomIfAuto = async () => {
     await nextTick();
     if (autoScroll.value && !dragging && scrollRef.value) scrollRef.value.scrollTop = scrollRef.value.scrollHeight;
   };
-  // update-end--author:liaozhiyang---date:20261027---for：【LHZP-1351】AI生成过程中用户向上滚动时不再强制滚动到底部
+  // update-end--author:liaozhiyang---date:20261027---for：【LHZP-1351】AITrong quá trình AI tạo nội dung, khi người dùng cuộn lên thì không còn ép cuộn xuống đáy nữa
 
   const scrollToTop = async () => {
     await nextTick();

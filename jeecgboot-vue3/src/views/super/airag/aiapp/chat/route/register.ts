@@ -9,7 +9,7 @@ const ChatRoutes: RouteRecordRaw[] = [
     name: "ai-chat-@appId-@modeType",
     component: () => import("/@/views/super/airag/aiapp/chat/AiChat.vue"),
     meta: {
-      title: 'AI聊天',
+      title: 'AI Trò chuyện',
       ignoreAuth: true,
     },
   },  
@@ -18,7 +18,7 @@ const ChatRoutes: RouteRecordRaw[] = [
     name: "ai-chatIcon-@appId",
     component: () => import("/@/views/super/airag/aiapp/chat/AiChatIcon.vue"),
     meta: {
-      title: 'AI聊天',
+      title: 'AI Trò chuyện',
       ignoreAuth: true,
     },
   },
@@ -27,7 +27,7 @@ const ChatRoutes: RouteRecordRaw[] = [
     name: 'aiChat',
     component: LAYOUT,
     meta: {
-      title: 'ai聊天',
+      title: 'ai trò chuyện',
     },
     children: [
       {
@@ -35,7 +35,7 @@ const ChatRoutes: RouteRecordRaw[] = [
         name: "ai-chat-@appId",
         component: () => import("/@/views/super/airag/aiapp/chat/AiChat.vue"),
         meta: {
-          title:'AI助手',
+          title:'Trợ lý AI',
           ignoreAuth: false,
         },
       },
@@ -44,7 +44,7 @@ const ChatRoutes: RouteRecordRaw[] = [
         name: "ai-chat",
         component: () => import("/@/views/super/airag/aiapp/chat/AiChat.vue"),
         meta: {
-          title:'AI助手',
+          title:'Trợ lý AI',
           ignoreAuth: false,
         },
       }
@@ -55,16 +55,16 @@ const ChatRoutes: RouteRecordRaw[] = [
     name: 'ai-chat-portal',
     component: () => import('/@/views/super/airag/aiapp/chat/portal/AppPortal.vue'),
     meta: {
-      title: 'AI聊天',
+      title: 'AI Trò chuyện',
       ignoreAuth: false,
     },
   },
 ]
 
-/** 注册路由 */
+/** Đăng ký định tuyến */
 export async function register(app: App) {
   await registerMyAppRouter(app);
-  console.log('[聊天路由] 注册完成！');
+  console.log('[Định tuyến trò chuyện] Đăng ký hoàn thành!');
 }
 
 async function registerMyAppRouter(_: App) {

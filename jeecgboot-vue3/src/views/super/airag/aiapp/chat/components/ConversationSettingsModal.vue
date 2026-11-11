@@ -1,12 +1,12 @@
 <template>
   <a-modal
     v-model:open="visible"
-    title="对话设置"
+    title="Cài đặt hội thoại"
     :width="600"
     :maskClosable="false"
     :keyboard="false"
     @ok="handleOk"
-    okText="开始对话"
+    okText="Bắt đầu hội thoại"
     :cancelButtonProps="{ style: { display: 'none' } }"
     :okButtonProps="{ disabled: !canSubmit }"
   >
@@ -18,35 +18,35 @@
           :label="input.name"
           :required="input.required"
         >
-          <!-- 文本类型 - 使用单行输入 -->
+          <!-- Loại văn bản - dùng nhập một dòng -->
           <a-input
             v-if="input.type === 'string'"
             v-model:value="formData[input.field]"
-            :placeholder="`请输入${input.name}`"
+            :placeholder="`Vui lòng nhập${input.name}`"
             :maxlength="input.maxLength"
             show-count
           />
-          <!-- 数字类型 -->
+          <!-- Loại số -->
           <a-input-number
             v-else-if="input.type === 'number'"
             v-model:value="formData[input.field]"
-            :placeholder="`请输入${input.name}`"
+            :placeholder="`Vui lòng nhập${input.name}`"
             style="width: 100%"
             :min="input.min"
             :max="input.max"
           />
           
-            <!-- 图片类型 - 使用类似chat.vue的上传样式，固定支持3张图片 -->
+            <!-- Loại hình ảnh - dùng kiểu tải lên tương tự chat.vue, cố định hỗ trợ 3 hình ảnh -->
           <div v-else-if="input.type === 'picture'" class="image-upload-container">
             <div class="image-list-wrapper">
-              <!-- 已上传的图片 -->
+              <!-- Hình ảnh đã tải lên -->
               <div v-for="(img, idx) in imageFileList[input.field]" :key="idx" class="image-preview-item">
                 <img :src="getImageUrl(img)" @click="handlePreview(img)" />
                 <div class="image-remove-icon" @click="handleRemove(idx, input.field)">
                   <Icon icon="ant-design:close-outlined" :size="12" />
                 </div>
               </div>
-              <!-- 上传按钮 -->
+              <!-- Nút tải lên -->
               <a-upload
                 v-if="(imageFileList[input.field]?.length || 0) < 3"
                 accept=".jpg,.jpeg,.png"
@@ -61,20 +61,20 @@
               >
                 <div class="upload-trigger">
                   <Icon icon="ant-design:plus-outlined" :size="20" />
-                  <div class="upload-text">上传图片</div>
+                  <div class="upload-text">Tải lên hình ảnh</div>
                 </div>
               </a-upload>
             </div>
           </div>
-          <!-- 字符串数组类型（如history） -->
+          <!-- Loại mảng chuỗi (ví dụ history) -->
           <a-select
             v-else-if="input.type === 'string[]'"
             v-model:value="formData[input.field]"
             mode="tags"
-            :placeholder="`请输入${input.name}`"
+            :placeholder="`Vui lòng nhập${input.name}`"
             style="width: 100%"
           />
-          <!-- 文件类型 -->
+          <!-- Loại tệp -->
           <JFileUploadSlot
             v-else-if="input.type === 'file'"
             :value="formData[input.field] || ''"
@@ -83,11 +83,11 @@
             :useAuthHeaders="useAuthHeaders"
             @update:value="(val) => updateFormField(input.field, val)"
           />
-          <!-- 其他类型使用文本输入 -->
+          <!-- Loại khác dùng nhập văn bản -->
           <a-input
             v-else
             v-model:value="formData[input.field]"
-            :placeholder="`请输入${input.name}`"
+            :placeholder="`Vui lòng nhập${input.name}`"
           />
         </a-form-item>
       </a-form>
@@ -122,7 +122,7 @@
 
   const globSetting = useGlobSetting();
   const baseUploadUrl = globSetting.uploadUrl;
-  // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】需要传递token和 shareToken
+  // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】Cần truyền token và shareToken
   const useAuthHeaders = computed(() => !props.shareToken);
   const uploadHeaders = computed(() => (useAuthHeaders.value ? getHeaders() : {}));
   const uploadUrl = computed(() => {
@@ -136,29 +136,29 @@
     }
     return `${url}?${params.toString()}`;
   });
-  // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】需要传递token和 shareToken
+  // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】Cần truyền token và shareToken
 
-  // 过滤掉固定参数（history, content, images）
+  // Lọc bỏ tham số cố định (history, content, images)
   const flowInputs = computed(() => {
     const fixedParams = ['history', 'content', 'images'];
     return props.flowInputs?.filter((input) => !fixedParams.includes(input.field)) || [];
   });
 
-  // 检查是否可以提交（必填项都已填写）
+  // Kiểm tra có thể gửi hay không (các mục bắt buộc đều đã điền)
   const canSubmit = computed(() => {
     if (flowInputs.value.length === 0) return true;
     return flowInputs.value.every((input) => {
       if (!input.required) return true;
-    // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传
+    // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】aiFile quy trình AI là bắt buộc, nhưng trong trò chuyện AI là nhập file chứ không phải tải file lên
       return hasFieldValue(input);
     });
   });
 
   /**
-   * 判断流程入参是否已有有效值，用于必填校验和“开始对话”按钮状态。
-   * 图片检查上传列表，文件检查上传后返回的地址，其他数组和普通值分别判断。
+   * Phán đoán tham số đầu vào của quy trình đã có giá trị hợp lệ chưa, dùng cho kiểm tra bắt buộc và trạng thái nút “Bắt đầu trò chuyện”.
+   * Hình ảnh kiểm tra danh sách tải lên, tệp kiểm tra địa chỉ trả về sau khi tải lên, các mảng khác và giá trị thường phán đoán riêng.
    *
-   * @param input 流程入参配置
+   * @param input cấu hình tham số đầu vào quy trình
    */
   function hasFieldValue(input: any): boolean {
     const value = formData.value[input.field];
@@ -176,41 +176,41 @@
   }
 
   /**
-   * 更新指定流程入参，并通过创建新对象触发 Vue 响应式更新。
-   * 文件类型保存上传接口返回的文件地址，图片类型保存文件地址数组。
+   * Cập nhật tham số đầu vào của quy trình chỉ định, và thông qua tạo đối tượng mới kích hoạt cập nhật reactive của Vue.
+   * Loại tệp lưu địa chỉ tệp do giao diện tải lên trả về, loại hình ảnh lưu mảng địa chỉ tệp.
    *
-   * @param field 流程入参字段名
-   * @param value 流程入参值
+   * @param field tên trường tham số đầu vào quy trình
+   * @param value giá trị tham số đầu vào quy trình
    */
   function updateFormField(field: string, value: any) {
     formData.value = { ...formData.value, [field]: value };
   }
-  // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传
+  // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】aiFile quy trình AI là bắt buộc, nhưng trong trò chuyện AI là nhập file chứ không phải tải file lên
 
-  // 上传前处理
+  // Xử lý trước khi tải lên
   const beforeUpload = (file: any, field: string) => {
     const isImage = file.type?.startsWith('image/');
     if (!isImage) {
-      message.error('只能上传图片文件！');
+      message.error('Chỉ được tải lên tệp hình ảnh!');
       return false;
     }
     
     const currentCount = imageFileList.value[field]?.length || 0;
     
     if (currentCount >= 3) {
-      message.warning('最多只能上传3张图片！');
+      message.warning('Tối đa chỉ được tải lên 3 hình ảnh!');
       return false;
     }
     
     return true;
   };
 
-  // 上传状态变化处理
+  // Xử lý thay đổi trạng thái tải lên
   const handleChange = (info: any, field: string) => {
     const { file } = info;
     
     if (file.status === 'error' || (file.response && file.response.code === 500)) {
-      message.error(file.response?.message || `${file.name} 上传失败`);
+      message.error(file.response?.message || `${file.name} Tải lên thất bại`);
       return;
     }
     
@@ -220,23 +220,23 @@
         imageFileList.value[field] = [];
       }
       
-      // 检查是否已达到上限
+      // Kiểm tra đã đạt giới hạn trên hay chưa
       if (imageFileList.value[field].length >= 3) {
-        message.warning('最多只能上传3张图片！');
+        message.warning('Tối đa chỉ được tải lên 3 hình ảnh!');
         return;
       }
       
       imageFileList.value[field].push(imageUrl);
       
-      // 图片类型始终作为数组存储，触发响应式更新
+      // Loại hình ảnh luôn lưu dưới dạng mảng, kích hoạt cập nhật reactive
       imageFileList.value = { ...imageFileList.value };
-      // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传
+      // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】aiFile quy trình AI là bắt buộc, nhưng trong trò chuyện AI là nhập file chứ không phải tải file lên
       updateFormField(field, [...imageFileList.value[field]]);
-      // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传
+      // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】aiFile quy trình AI là bắt buộc, nhưng trong trò chuyện AI là nhập file chứ không phải tải file lên
     }
   };
 
-  // 获取图片URL
+  // Lấy URL hình ảnh
   const getImageUrl = (img: any) => {
     if (typeof img === 'string') {
       return getFileAccessHttpUrl(img);
@@ -244,70 +244,70 @@
     return getFileAccessHttpUrl(img.url || img);
   };
 
-  // 图片预览
+  // Xem trước hình ảnh
   const handlePreview = (img: any) => {
     const url = typeof img === 'string' ? img : (img.url || img);
     const imageUrl = getFileAccessHttpUrl(url);
-    // 可以使用 ant-design-vue 的 Image 预览功能
+    // Có thể dùng chức năng xem trước Image của ant-design-vue
     window.open(imageUrl, '_blank');
   };
 
-  // 移除图片
+  // Loại bỏ hình ảnh
   const handleRemove = (index: number, field: string) => {
     if (imageFileList.value[field]) {
       imageFileList.value[field].splice(index, 1);
       
-      // 触发响应式更新
+      // Kích hoạt cập nhật reactive
       imageFileList.value = { ...imageFileList.value };
 
-      // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传
+      // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】aiFile quy trình AI là bắt buộc, nhưng trong trò chuyện AI là nhập file chứ không phải tải file lên
       updateFormField(
         field,
         imageFileList.value[field].length > 0 ? [...imageFileList.value[field]] : [],
       );
-      // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传
+      // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】aiFile quy trình AI là bắt buộc, nhưng trong trò chuyện AI là nhập file chứ không phải tải file lên
     }
   };
 
-  // 打开弹窗
+  // Mở popup
   const open = () => {
     visible.value = true;
-    // 初始化表单数据
+    // Khởi tạo dữ liệu biểu mẫu
     formData.value = {};
     imageFileList.value = {};
     
-    // 如果有已存在的设置，填充表单
+    // Nếu có cài đặt đã tồn tại, điền vào biểu mẫu
     if (props.existingSettings && Object.keys(props.existingSettings).length > 0) {
       Object.keys(props.existingSettings).forEach((key) => {
         const input = props.flowInputs.find((i) => i.field === key);
         if (input) {
           if (input.type === 'picture') {
-            // 确保是数组格式
+            // Đảm bảo là định dạng mảng
             const urls = Array.isArray(props.existingSettings![key]) 
               ? props.existingSettings![key] 
               : (props.existingSettings![key] ? [props.existingSettings![key]] : []);
-            // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传
+            // update-begin--author:wangshuai---date:20260820---for：【LHZP-1627】aiFile quy trình AI là bắt buộc, nhưng trong trò chuyện AI là nhập file chứ không phải tải file lên
             imageFileList.value[key] = urls.filter((url) => url);
             updateFormField(key, [...imageFileList.value[key]]);
           } else if (input.type === 'file') {
             updateFormField(key, props.existingSettings![key] || '');
           } else {
             updateFormField(key, props.existingSettings![key]);
-            // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传
+            // update-end--author:wangshuai---date:20260820---for：【LHZP-1627】aiFile quy trình AI là bắt buộc, nhưng trong trò chuyện AI là nhập file chứ không phải tải file lên
           }
         }
       });
     }
   };
 
-  // 确定
+  // Xác định
   const handleOk = async () => {
     if (!canSubmit.value) {
-      message.warning('请填写所有必填项');
+      message.warning('Vui lòng điền tất cả mục bắt buộc');
       return;
     }
     
-    // 构建最终数据
+    // Xây dựng dữ liệu cuối cùng
     const result: Record<string, any> = {};
     flowInputs.value.forEach((input) => {
       const value = formData.value[input.field];
@@ -316,14 +316,14 @@
       }
     });
     
-    // 先保存，再触发事件
-    // 直接通过emit返回设置数据，不需要单独保存
-    // 设置会在发送消息时自动保存到后端
+    // Lưu trước, rồi kích hoạt sự kiện
+    // Trả về trực tiếp dữ liệu cài đặt qua emit, không cần lưu riêng
+    // Cài đặt sẽ tự động lưu vào backend khi gửi tin nhắn
     emit('ok', result);
     visible.value = false;
   };
 
-  // 暴露方法
+  // Lộ ra phương thức
   defineExpose({
     open,
   });

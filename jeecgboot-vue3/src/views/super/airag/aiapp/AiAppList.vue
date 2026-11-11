@@ -1,7 +1,7 @@
-<!--知识库文档列表-->
+<!--Danh sách tài liệu kho tri thức-->
 <template>
   <div class="knowledge">
-    <!--查询区域-->
+    <!--Khu vực truy vấn-->
     <div class="jeecg-basic-table-form-container">
       <a-form
         ref="formRef"
@@ -13,20 +13,20 @@
       >
         <a-row :gutter="24">
           <a-col :xl="7" :lg="7" :md="8" :sm="24">
-            <a-form-item name="name" label="应用名称">
-              <JInput v-model:value="queryParam.name" placeholder="请输入应用名称" />
+            <a-form-item name="name" label="Tên ứng dụng">
+              <JInput v-model:value="queryParam.name" placeholder="Vui lòng nhập tên ứng dụng" />
             </a-form-item>
           </a-col>
           <a-col :xl="7" :lg="7" :md="8" :sm="24">
-            <a-form-item name="type" label="应用类型">
-              <j-dict-select-tag v-model:value="queryParam.type" dict-code="ai_app_type" placeholder="请选择应用类型" />
+            <a-form-item name="type" label="Loại ứng dụng">
+              <j-dict-select-tag v-model:value="queryParam.type" dict-code="ai_app_type" placeholder="Vui lòng chọn loại ứng dụng" />
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-col :lg="6">
-                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">查询</a-button>
-                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">重置</a-button>
+                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">Truy vấn</a-button>
+                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">Đặt lại</a-button>
               </a-col>
             </span>
           </a-col>
@@ -38,7 +38,7 @@
         <a-card class="add-knowledge-card" @click="handleCreateApp">
           <div class="flex">
             <Icon icon="ant-design:plus-outlined" class="add-knowledge-card-icon" size="20"></Icon>
-            <span class="add-knowledge-card-title">创建应用</span>
+            <span class="add-knowledge-card-title">Tạo ứng dụng</span>
           </div>
         </a-card>
       </a-col>
@@ -49,44 +49,44 @@
             <div class="header-text">
               <span class="header-text-top header-name ellipsis"> {{ item.name }} </span>
               <span class="header-text-top header-create ellipsis">
-                <a-tag v-if="item.status === 'release'" color="green">已发布</a-tag>
-                <a-tag v-if="item.status === 'disable'">已禁用</a-tag>
-                <span>创建者：{{ item.createBy_dictText || item.createBy }}</span>
+                <a-tag v-if="item.status === 'release'" color="green">Đã phát hành</a-tag>
+                <a-tag v-if="item.status === 'disable'">Đã vô hiệu hóa</a-tag>
+                <span>Người tạo:{{ item.createBy_dictText || item.createBy }}</span>
               </span>
             </div>
             <div class="header-tag">
               <a-tag color="#EBF1FF" style="margin-right: 0" v-if="item.type === 'chatSimple'">
-                <span style="color: #3370ff">智能体</span>
+                <span style="color: #3370ff">Tác tử thông minh</span>
               </a-tag>
               <a-tag color="#FDF6EC" style="margin-right: 0" v-if="item.type === 'chatFLow'">
-                <span style="color: #e6a343">高级编排</span>
+                <span style="color: #e6a343">Sắp xếp nâng cao</span>
               </a-tag>
             </div>
           </div>
           <div class="card-description">
-            <span>{{ item.descr || '暂无描述' }}</span>
+            <span>{{ item.descr || 'Tạm thời chưa có mô tả' }}</span>
           </div>
           <div class="card-footer">
-            <a-tooltip title="演示">
+            <a-tooltip title="Trình diễn">
               <div class="card-footer-icon" @click.prevent.stop="handleViewClick(item)">
                 <Icon class="operation" icon="lucide:circle-play" size="16"></Icon>
               </div>
             </a-tooltip>
             <template v-if="item.status === 'release'">
-              <a-tooltip title="复制链接">
+              <a-tooltip title="Sao chép liên kết">
                 <div class="card-footer-icon" @click.prevent.stop="handleCopyShareLink(item)">
                   <Icon class="operation" icon="lucide:link-2" size="16"></Icon>
                 </div>
               </a-tooltip>
             </template>
             <template v-if="item.status !== 'release'">
-              <a-tooltip title="删除">
+              <a-tooltip title="Xóa">
                 <div class="card-footer-icon delete-action" @click.prevent.stop="handleDeleteClick(item)">
                   <Icon icon="lucide:trash-2" class="operation" size="16"></Icon>
                 </div>
               </a-tooltip>
             </template>
-            <a-tooltip :title="item.status === 'release' ? '分享' : '更多'">
+            <a-tooltip :title="item.status === 'release' ? 'Chia sẻ' : 'Thêm'">
               <a-dropdown class="card-footer-icon" placement="bottomLeft" :trigger="['click']">
                 <div @click.prevent.stop>
                   <Icon
@@ -100,30 +100,30 @@
                     <template v-if="item.status === 'enable'">
                       <a-menu-item key="release" @click.prevent.stop="handleSendClick(item,'release')">
                         <Icon icon="lineicons:rocket-5" size="14"></Icon>
-                        发布
+                        Phát hành
                       </a-menu-item>
                       <a-menu-divider/>
                     </template>
                     <template v-else-if="item.status === 'release'">
                       <a-menu-item key="copy-share" @click.prevent.stop="handleCopyShareLink(item)">
                         <Icon icon="ant-design:copy-outlined" size="14"></Icon>
-                        复制链接
+                        Sao chép liên kết
                       </a-menu-item>
                       <a-menu-item key="un-release" @click.prevent.stop="handleSendClick(item,'un-release')">
                         <Icon icon="tabler:rocket-off" size="14"></Icon>
-                        取消发布
+                        Hủy phát hành
                       </a-menu-item>
                       <a-menu-divider/>
                     </template>
                     <a-menu-item key="copy" @click.prevent.stop="handleCopyClick(item)">
-                      <Icon icon="ant-design:copy-outlined" size="16"></Icon> 复制
+                      <Icon icon="ant-design:copy-outlined" size="16"></Icon> Sao chép
                     </a-menu-item>
                     <a-menu-item v-if="item.status === 'release'" key="web" @click.prevent.stop="handleSendClick(item,'web')">
                       <Icon icon="ant-design:dribbble-outlined" size="16"></Icon>
-                      嵌入网站
+                      Nhúng website
                     </a-menu-item>
                     <a-menu-item v-if="isShowMenu" key="menu" @click.prevent.stop="handleSendClick(item,'menu')">
-                      <Icon icon="ant-design:menu-outlined" size="16"></Icon> 配置菜单
+                      <Icon icon="ant-design:menu-outlined" size="16"></Icon> Cấu hình menu
                     </a-menu-item>
                   </a-menu>
                 </template>
@@ -144,13 +144,13 @@
       @change="handlePageChange"
       class="list-footer"
       size="small"
-      :show-total="() => `共${total}条` "
+      :show-total="() => `Tổng cộng${total}Mục` "
     />
-    <!-- Ai新增弹窗  -->
+    <!-- Popup thêm mới Ai  -->
     <AiAppModal @register="registerModal" @success="handleSuccess"></AiAppModal>
-    <!-- Ai设置弹窗 -->
+    <!-- Popup cài đặt Ai -->
     <AiAppSettingModal @register="registerSettingModal" @success="reload"></AiAppSettingModal>
-    <!-- 发布弹窗 -->
+    <!-- Popup phát hành -->
     <AiAppSendModal @register="registerAiAppSendModal"/>
   </div>
 </template>
@@ -192,43 +192,43 @@
     emits: ['success', 'register'],
     setup(props, { emit }) {
       /**
-       * 创建应用的集合
+       * Tạo tập hợp của ứng dụng
        */
       const knowledgeAppDataList = ref<any>([]);
-      //当前页数
+      //Số trang hiện tại
       const pageNo = ref<number>(1);
-      //每页条数
+      //Số mục mỗi trang
       const pageSize = ref<number>(30);
-      //总条数
+      //Tổng số mục
       const total = ref<number>(0);
-      //可选择的页数
+      //Số trang có thể chọn
       const pageSizeOptions = ref<any>(['10', '20', '30']);
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { openModal }] = useModal();
       const [registerSettingModal, { openModal: openAppModal }] = useModal();
       const [registerAiAppSendModal, { openModal: openAiAppSendModal }] = useModal();
       const { createMessage, createConfirmSync } = useMessage();
-      //查询参数
+      //Tham số truy vấn
       const queryParam = reactive<any>({});
-      //查询区域label宽度
+      //Độ rộng label của khu vực truy vấn
       const labelCol = reactive({
         xs: 24,
         sm: 4,
         xl: 6,
         xxl: 6,
       });
-      //查询区域组件宽度
+      //Độ rộng component khu vực truy vấn
       const wrapperCol = reactive({
         xs: 24,
         sm: 20,
       });
-      //表单的ref
+      //ref của biểu mẫu
       const formRef = ref();
 
       reload();
 
       /**
-       * 加载数据
+       * Tải dữ liệu
        */
       function reload() {
         let params = {
@@ -250,14 +250,14 @@
       }
 
       /**
-       * 创建应用
+       * Tạo ứng dụng
        */
       function handleCreateApp() {
         openModal(true, {});
       }
 
       /**
-       * 分页改变事件
+       * Sự kiện thay đổi phân trang
        * @param page
        * @param current
        */
@@ -268,11 +268,11 @@
       }
 
       /**
-       * 成功
+       * Thành công
        */
       function handleSuccess(id) {
         reload();
-        //打开编辑弹窗
+        //Mở popup chỉnh sửa
         openAppModal(true, {
           isUpdate: false,
           id: id,
@@ -280,7 +280,7 @@
       }
 
       /**
-       * 获取图片
+       * Lấy hình ảnh
        * @param url
        */
       function getImage(url) {
@@ -288,7 +288,7 @@
       }
 
       /**
-       * 编辑
+       * Chỉnh sửa
        * @param item
        */
       function handleEditClick(item) {
@@ -300,7 +300,7 @@
       }
 
       /**
-       * 演示
+       * Trình diễn
        */
       function handleViewClick(item: any) {
         let url = '/ai/app/chat/' + item.id;
@@ -308,22 +308,23 @@
           url += '?shareToken=' + item.shareToken;
         }
 
-        // update-begin--author:sunjianlei---date:20250411---for：【QQYUN-9685】构建 electron 桌面应用
+        // update-begin--author:sunjianlei---date:20250411---for：【QQYUN-9685】Xây dựng ứng dụng desktop electron
         if ($electron.isElectron()) {
           url = $electron.resolveRoutePath(url);
           window.open(url, '_blank', 'width=1200,height=800');
           return
         }
-        // update-end----author:sunjianlei---date:20250411---for：【QQYUN-9685】构建 electron 桌面应用
+        // update-end----author:sunjianlei---date:20250411---for：【QQYUN-9685】Xây dựng ứng dụng desktop electron
 
         window.open(url, '_blank');
       }
 
       /**
-       * 获取推广链接（含 shareToken）
+       * Lấy liên kết quảng bá (chứa shareToken)
        */
       function getShareUrl(item: any) {
         const shareToken = item?.shareToken;
+        // NOTE: giữ nguyên chuỗi tiếng Trung '发布成功'/'取消发布成功' — backend trả về đúng văn bản này làm shareToken khi lỗi, so sánh phải khớp văn bản backend (không dịch).
         if (!item?.id || !shareToken || shareToken === '发布成功' || shareToken === '取消发布成功') {
           return '';
         }
@@ -331,7 +332,7 @@
       }
 
       /**
-       * 从详情接口刷新分享令牌
+       * Làm mới token chia sẻ từ giao diện chi tiết
        */
       async function refreshShareToken(item: any) {
         const res: any = await queryById({ id: item.id });
@@ -343,7 +344,7 @@
       }
 
       /**
-       * 复制推广链接
+       * Sao chép liên kết quảng bá
        */
       async function handleCopyShareLink(item: any) {
         let url = getShareUrl(item);
@@ -352,21 +353,21 @@
           url = getShareUrl(item);
         }
         if (!url) {
-          createMessage.warning('分享链接无效，请重新发布后再复制');
+          createMessage.warning('Liên kết chia sẻ không hợp lệ, vui lòng phát hành lại rồi sao chép');
           return;
         }
         if (copyTextToClipboard(url)) {
-          createMessage.success('链接已复制');
+          createMessage.success('Liên kết đã sao chép');
         } else {
-          createMessage.error('复制失败');
+          createMessage.error('Sao chép thất bại');
         }
       }
 
       /**
-       * 复制应用
+       * Sao chép ứng dụng
        * @param item
        * @author scott
-       * @since 2026-08-06 【LHZP-1512】AI应用增加复制功能
+       * @since 2026-08-06 【LHZP-1512】AIsince 2026-08-06 Thêm chức năng sao chép cho ứng dụng AI
        */
       async function handleCopyClick(item: any) {
         await copyApp({ id: item.id });
@@ -375,7 +376,7 @@
       }
 
       /**
-       * 删除
+       * Xóa
        */
       function handleDeleteClick(item) {
         if(knowledgeAppDataList.value.length == 1 && pageNo.value > 1) {
@@ -385,9 +386,9 @@
       }
 
       /**
-       * 发布点击事件
-       * @param item 数据
-       * @param type 类别
+       * Sự kiện nhấp phát hành
+       * @param item dữ liệu
+       * @param type loại
        */
       function handleSendClick(item,type) {
         if (type === 'release' || type === 'un-release') {
@@ -403,12 +404,12 @@
       async function onRelease(item) {
         const toRelease = item.status === 'enable';
         let flag = await createConfirmSync({
-          title: toRelease ? '发布应用' : '取消发布',
+          title: toRelease ? 'Phát hành ứng dụng' : 'Hủy phát hành',
           content: toRelease
-            ? '确定发布吗？发布后将生成分享链接（访客无需登录），且不允许再修改应用。'
-            : '确定取消发布吗？取消后分享链接将失效。',
-          okText: '确定',
-          cancelText: '取消',
+            ? 'Xác nhận phát hành? Sau khi phát hành sẽ tạo liên kết chia sẻ (khách truy cập không cần đăng nhập), và không cho phép sửa ứng dụng nữa.'
+            : 'Xác nhận hủy phát hành? Sau khi hủy, liên kết chia sẻ sẽ mất hiệu lực.',
+          okText: 'Xác định',
+          cancelText: 'Hủy',
         });
         if (!flag) {
           return
@@ -417,14 +418,14 @@
       }
 
       /**
-       * 发布
+       * Phát hành
        */
       async function doRelease(item, release: boolean) {
         const res: any = await releaseApp(item.id, release);
         if (res && res.success) {
           if (release) {
             item.status = 'release';
-            // result 应为 32 位令牌；若误为提示文案则回查详情
+            // result phải là token 32 ký tự; nếu nhầm thành văn bản gợi ý thì tra lại chi tiết
             const token = res.result;
             if (token && token !== res.message && /^[a-fA-F0-9]{32}$/.test(token)) {
               item.shareToken = token;
@@ -439,27 +440,27 @@
       }
 
       /**
-       * 重置
+       * Đặt lại
        */
       function searchReset() {
         pageNo.value = 1;
         formRef.value.resetFields();
         queryParam.name = '';
-        //刷新数据
+        //Làm mới dữ liệu
         reload();
       }
 
       /**
-       * 查询
+       * Truy vấn
        */
       function searchQuery(){
         pageNo.value = 1; 
-        //刷新数据
+        //Làm mới dữ liệu
         reload();
       }
 
       const router = useRouter();
-      //是否显示菜单配置选项
+      //Có hiển thị tùy chọn cấu hình menu hay không
       const isShowMenu = ref<boolean>(false);
       onMounted((()=>{
         let fullPath = router.currentRoute.value.fullPath;

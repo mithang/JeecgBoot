@@ -7,7 +7,7 @@
           class="header-search"
           size="small"
           v-model:value="searchText"
-          placeholder="请输入MCP名称，回车搜索"
+          placeholder="Vui lòng nhập tên MCP, nhấn Enter để tìm kiếm"
         ></a-input>
       </div>
       <a-row :span="24">
@@ -19,11 +19,11 @@
                 <div class="mcp-card-info">
                   <div class="mcp-card-name" :title="item.name">{{ item.name }}</div>
                   <div class="mcp-card-meta">
-                    <div class="pill type-pill" :title="'类型: '+(item.category === 'plugin' ? '插件' : 'MCP')">
+                    <div class="pill type-pill" :title="'Loại: '+(item.category === 'plugin' ? 'Plugin' : 'MCP')">
                       <Icon :icon="getCategoryIcon(item.category)" class="pill-icon" />
-                      <span class="pill-text">{{ item.category === 'plugin' ? '插件' : 'MCP' }}</span>
+                      <span class="pill-text">{{ item.category === 'plugin' ? 'Plugin' : 'MCP' }}</span>
                     </div>
-                    <div class="pill tool-pill" :title="getToolCount(item.metadata)+' 个工具'">
+                    <div class="pill tool-pill" :title="getToolCount(item.metadata)+' công cụ'">
                       <Icon icon="ant-design:tool-outlined" class="pill-icon" />
                       <span class="pill-text">{{ getToolCount(item.metadata) }}</span>
                     </div>
@@ -36,8 +36,8 @@
         </a-col>
       </a-row>
       <div v-if="pluginIds.length > 0" class="use-select">
-        已选择 {{ pluginIds.length }} 个MCP
-        <span style="margin-left: 8px; color: #3d79fb; cursor: pointer" @click="handleClearClick">清空</span>
+        Đã chọn {{ pluginIds.length }} MCP
+        <span style="margin-left: 8px; color: #3d79fb; cursor: pointer" @click="handleClearClick">Làm trống</span>
       </div>
       <Pagination
         v-if="mcpOption.length > 0"
@@ -74,11 +74,11 @@
     },
     emits: ['success', 'register'],
     setup(props, { emit }) {
-      const title = ref<string>('添加关联MCP');
+      const title = ref<string>('Thêm MCP liên kết');
 
       const mcpOption = ref<any>([]);
-      const pluginIds = ref<any>([]); // 仅存放id
-      const pluginDataList = ref<any>([]); // 选中对象
+      const pluginIds = ref<any>([]); // Chỉ lưu id
+      const pluginDataList = ref<any>([]); // Đối tượng đã chọn
 
       const pageNo = ref<number>(1);
       const pageSize = ref<number>(10);
@@ -98,7 +98,7 @@
       }
 
       async function handleOk() {
-        // 拼接插件结构，使用item的category字段
+        // Ghép cấu trúc plugin, dùng trường category của item
         const plugins = pluginDataList.value.map((item:any)=>({ 
           pluginId: item.id, 
           pluginName: item.name, 
@@ -179,7 +179,7 @@
         }
       }
 
-      // 工具数量：从 metadata 中读取 tool_count
+      // Số lượng công cụ: đọc tool_count từ metadata
       function getToolCount(metadata: any): number {
         if (!metadata) return 0;
         let metaObj: any = metadata;
@@ -194,7 +194,7 @@
         return typeof count === 'number' ? count : parseInt(count, 10) || 0;
       }
 
-      // 类型图标映射
+      // Ánh xạ biểu tượng loại
       function getTypeIcon(type?: string) {
         switch (type) {
           case 'sse':
@@ -206,7 +206,7 @@
         }
       }
 
-      // category图标映射
+      // Ánh xạ biểu tượng category
       function getCategoryIcon(category?: string) {
         if (category === 'plugin') {
           return 'ant-design:api-outlined';

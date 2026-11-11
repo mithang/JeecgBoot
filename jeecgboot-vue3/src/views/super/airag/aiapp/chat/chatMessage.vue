@@ -6,7 +6,7 @@
     </div>
     <div class="content">
       <p class="date" v-if="showAvatar !== 'no'">
-        <span v-if="inversion === 'ai'" style="margin-right: 10px">{{appData.name || 'AI助手'}}</span>
+        <span v-if="inversion === 'ai'" style="margin-right: 10px">{{appData.name || 'Trợ lý AI'}}</span>
         <span>{{ dateTime }}</span>
       </p>
       <div v-if="images && images.length>0" class="images">
@@ -16,17 +16,17 @@
       </div>     
       <div v-if="hasFlowOutputSegments" class="flow-output-segments">
         <div class="flow-image-actions">
-          <a-tooltip :title="flowCopied ? '已复制' : '复制 Markdown'">
+          <a-tooltip :title="flowCopied ? 'Đã sao chép' : 'Sao chép Markdown'">
             <a-button type="text" size="small" :preIcon="flowCopied ? 'ant-design:check-outlined' : 'ant-design:copy-outlined'" @click="copyFlowMarkdown" />
           </a-tooltip>
-          <a-button v-if="flowImageUrls.length > 1" size="small" preIcon="ant-design:download-outlined" @click="downloadAllFlowImages">全部下载</a-button>
+          <a-button v-if="flowImageUrls.length > 1" size="small" preIcon="ant-design:download-outlined" @click="downloadAllFlowImages">Tải xuống tất cả</a-button>
         </div>
         <template v-for="(segment, index) in flowOutputSegments" :key="index">
           <div v-if="segment.type === 'image'" class="flow-image-item">
             <div class="image" @click="handleFlowPreview(segment.value)">
               <img :src="getImageUrl(segment.value)" />
             </div>
-            <a-button size="small" preIcon="ant-design:download-outlined" @click="downloadFlowImage(segment.value)">下载</a-button>
+            <a-button size="small" preIcon="ant-design:download-outlined" @click="downloadFlowImage(segment.value)">Tải xuống</a-button>
           </div>
           <chatText
             v-else-if="segment.value"
@@ -74,9 +74,9 @@
       </div>
       <div class="thinkArea" style="margin-bottom: 10px" v-if="!hasFlowOutputSegments && !isCard && !isCardConfig && isThinkingEvent">
         <a-collapse v-model:activeKey="activeKey" ghost>
-          <a-collapse-panel :key="uuid" :header="loading?'正在思考中':'思考结束'">
+          <a-collapse-panel :key="uuid" :header="loading?'Đang suy nghĩ':'Suy nghĩ kết thúc'">
             <ThinkText :text="thinkingText" :inversion="inversion" :error="error" :loading="loading"></ThinkText>
-            <!--update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用-->
+            <!--update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ-->
             <chatText
               v-if="thinkingToolTags || (isLast && currentToolTag)"
               :text="thinkingToolTags"
@@ -86,7 +86,7 @@
               :isLast="isLast"
               :hideCopyButton="true"
             />
-            <!--update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用-->
+            <!--update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ-->
           </a-collapse-panel>
         </a-collapse>
       </div>
@@ -118,13 +118,13 @@
   import { copyTextToClipboard } from '/@/hooks/web/useCopyToClipboard';
 
   const { domainUrl, viewUrl } = useGlobSetting();
-  //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用---
+  //update-begin---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ---
   const props = defineProps(['dateTime', 'text', 'inversion', 'error', 'loading','errorMsg', 'currentToolTag', 'thinkingToolTags', 'appData','presetQuestion','images','retrievalText', 'referenceKnowledge', 'eventType', 'showAvatar',"files", 'isLast', 'flowOutputSegments']);
-  //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】思考过程不显示工具调用---
+  //update-end---author:wangshuai---date:20260827---for：【LHZP-1614】【AI】Quá trình suy nghĩ không hiển thị lệnh gọi công cụ---
 
   const uuid = ref<any>(buildUUID());
   const activeKey = ref<any>(uuid.value);
-  // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-2020】新增图像生成节点（维护流程图文结果和复制状态）
+  // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-2020】Thêm node tạo hình ảnh mới (duy trì trạng thái kết quả văn bản-hình ảnh và sao chép của quy trình)
   const flowCopied = ref(false);
   let flowCopyTimer: ReturnType<typeof setTimeout> | undefined;
   const isThinkingEvent = computed(() => props.eventType === 'thinking' || props.eventType === 'thinking_end');
@@ -132,10 +132,10 @@
   const flowImageUrls = computed(() =>
     (props.flowOutputSegments || []).filter((segment) => segment.type === 'image').map((segment) => getImageUrl(segment.value))
   );
-  // update-end--author:liaozhiyang---date:20260831---for:【LHZP-2020】新增图像生成节点（维护流程图文结果和复制状态）
+  // update-end--author:liaozhiyang---date:20260831---for:【LHZP-2020】Thêm node tạo hình ảnh mới (duy trì trạng thái kết quả văn bản-hình ảnh và sao chép của quy trình)
   const thinkingText = computed(() => {
     const text = props.text ?? '';
-    // update-begin--author:wangshuai---date:20260813---for：【LHZP-1615】这种程序底层语言不应该不返回显示把？
+    // update-begin--author:wangshuai---date:20260813---for：【LHZP-1615】Loại ngôn ngữ nền của chương trình này chẳng lẽ không nên trả về hiển thị sao?
     if (typeof text !== 'string') {
       return text;
     }
@@ -145,11 +145,11 @@
       .filter((line) => !isToolExecPayload(line))
       .join('\n')
       .trim();
-    // update-end--author:wangshuai---date:20260813---for：【LHZP-1615】这种程序底层语言不应该不返回显示把？
+    // update-end--author:wangshuai---date:20260813---for：【LHZP-1615】Loại ngôn ngữ nền của chương trình này chẳng lẽ không nên trả về hiển thị sao?
   });
 
   /**
-   * 判断思考文本中的单行 JSON 是否为工具执行记录。
+   * Phán đoán JSON một dòng trong văn bản suy nghĩ có phải bản ghi thực thi công cụ hay không.
    */
   function isToolExecPayload(text: string): boolean {
     const value = text.trim();
@@ -195,7 +195,7 @@
     }
     return false;
   });
-  //卡片配置
+  //Cấu hình thẻ
   const cardConfig = ref<any>();
 
   const { userInfo } = useUserStore();
@@ -208,7 +208,7 @@
   };
 
   /**
-   * 预设问题点击事件
+   * Sự kiện nhấp câu hỏi đặt sẵn
    *
    */
   function presetQuestionClick(descr) {
@@ -216,7 +216,7 @@
   }
 
   /**
-   * 获取图片
+   * Lấy hình ảnh
    *
    * @param item
    */
@@ -236,18 +236,18 @@
   }
 
   /**
-   * 图片预览
+   * Xem trước hình ảnh
    * @param url
    */
   function handlePreview(url){
     const onImgLoad = ({ index, url, dom }) => {
-      console.log(`第${index + 1}张图片已加载，URL为：${url}`, dom);
+      console.log(`Thứ${index + 1}hình ảnh đã tải, URL là:${url}`, dom);
     };
     let imageList = [getImageUrl(url)];
     createImgPreview({ imageList: imageList, defaultWidth: 700, rememberState: true, onImgLoad });
   }
 
-  // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-2020】新增图像生成节点（支持图片整组预览、单张下载、全部下载和整体复制）
+  // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-2020】Thêm node tạo hình ảnh mới (hỗ trợ xem trước cả nhóm hình ảnh, tải xuống từng ảnh, tải xuống tất cả và sao chép toàn bộ)
   function handleFlowPreview(url) {
     const imageUrl = getImageUrl(url);
     createImgPreview({ imageList: flowImageUrls.value, index: Math.max(flowImageUrls.value.indexOf(imageUrl), 0), defaultWidth: 700, rememberState: true });
@@ -272,12 +272,12 @@
   }
 
   function getImageDownloadName(url) {
-    return url.split('?')[0].split('/').pop() || '生成图片.png';
+    return url.split('?')[0].split('/').pop() || 'Tạo hình ảnh.png';
   }
-  // update-end--author:liaozhiyang---date:20260831---for:【LHZP-2020】新增图像生成节点（支持图片整组预览、单张下载、全部下载和整体复制）
+  // update-end--author:liaozhiyang---date:20260831---for:【LHZP-2020】Thêm node tạo hình ảnh mới (hỗ trợ xem trước cả nhóm hình ảnh, tải xuống từng ảnh, tải xuống tất cả và sao chép toàn bộ)
 
   /**
-   * 获取卡片列表
+   * Lấy danh sách thẻ
    */
   function getCardList() {
     let text = props.text;
@@ -291,7 +291,7 @@
   }
 
   /**
-   * ai卡片点击事件
+   * Sự kiện nhấp thẻ ai
    * @param url
    */
   function aiCardHandleClick(url){
@@ -300,7 +300,7 @@
 
 
   /**
-   * 从config获取取卡片列表
+   * Lấy danh sách thẻ từ config
    */
   function getCardConfigList() {
     let text = props.text;
@@ -316,7 +316,7 @@
   }
 
   /**
-   * 卡片点击跳转
+   * Nhấp thẻ để chuyển trang
    */
   function handleJumpClick(item) {
     if(cardConfig.value?.enableJump){
@@ -328,13 +328,13 @@
   }
 
   /**
-   * 获取文件名字
+   * Lấy tên tệp
    * 
    * @param fileUrl
    */
   function getFileName(fileUrl){
     if(!fileUrl) {
-      return '未命名的文件';
+      return 'Tệp chưa đặt tên';
     }
     let fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1).toLowerCase();
     fileName = fileName.substring(0,fileName.lastIndexOf("."));
@@ -342,7 +342,7 @@
   }
 
   /**
-   * 文件预览
+   * Xem trước tệp
    * 
    * @param fileUrl
    */
@@ -501,7 +501,7 @@
     }
   }
 
-  /*begin文件列表的样式*/
+  /*beginKiểu của danh sách tệp*/
   .file-list {
     margin-bottom: 10px;
     display: flex;
@@ -535,7 +535,7 @@
       max-width: 200px;
     }
   }
-  /*end文件列表的样式*/
+  /*endKiểu của danh sách tệp*/
 
   .retrieval,
   .card {
@@ -561,7 +561,7 @@
     margin-left: 3px;
     vertical-align: baseline;
   }
-  // update-begin--author:liaozhiyang---date:20260805---for：【LHZP-1436】思考加载的动画独立命名避免和codeMirror冲突
+  // update-begin--author:liaozhiyang---date:20260805---for：【LHZP-1436】Hoạt ảnh tải khi suy nghĩ đặt tên độc lập để tránh xung đột với codeMirror
   @keyframes ai-chat-cursor-blink {
     0%,
     100% {
@@ -571,7 +571,7 @@
       opacity: 0;
     }
   }
-  // update-end--author:liaozhiyang---date:20260805---for：【LHZP-1436】思考加载的动画独立命名避免和codeMirror冲突
+  // update-end--author:liaozhiyang---date:20260805---for：【LHZP-1436】Hoạt ảnh tải khi suy nghĩ đặt tên độc lập để tránh xung đột với codeMirror
   .card{
     width: 100%;
     background-color: unset;

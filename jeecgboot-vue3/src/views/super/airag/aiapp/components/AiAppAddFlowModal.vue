@@ -7,13 +7,13 @@
           class="header-search"
           size="small"
           v-model:value="searchText"
-          placeholder="请输入流程名称，回车搜索"
+          placeholder="Vui lòng nhập tên quy trình, nhấn Enter để tìm kiếm"
         />
       </div>
       <div class="scroll-container">
         <a-row :span="24">
           <a-col :span="12" v-for="item in flowList" :key="item.id" @click="handleSelect(item)">
-            <!-- begin 流程选择支持单选和多选 -->
+            <!-- begin Chọn quy trình hỗ trợ chọn một và chọn nhiều -->
             <a-card :style="getCardStyle(item)" hoverable class="checkbox-card" :body-style="{ width: '100%' }">
               <div style="display: flex; width: 100%;align-items:center; justify-content: space-between">
                 <div style="display: flex; align-items:center; flex: 1; overflow: hidden; margin-right: 10px;">
@@ -21,7 +21,7 @@
                   <div style="display: grid;margin-left: 5px;align-items: center">
                     <span class="checkbox-name ellipsis">{{ item.name }}</span>
                     <div class="flex text-status" v-if="item.metadata && item.metadata.length>0">
-                      <span class="tag-input">输入</span>
+                      <span class="tag-input">Đầu vào</span>
                       <div v-for="(metaItem, index) in item.metadata" :key="index">
                         <a-tag color="#f2f3f8" class="tags-meadata">
                           <span v-if="index<3" class="tag-text">{{ metaItem.field }}</span>
@@ -31,10 +31,10 @@
                   </div>
                 </div>
                 <a-checkbox v-if="multiple" v-model:checked="item.checked" @click.stop @change="(e)=>handleChange(e,item)"></a-checkbox>
-                <!-- end 流程选择支持单选和多选 -->
+                <!-- end Chọn quy trình hỗ trợ chọn một và chọn nhiều -->
               </div>
               <div class="text-desc mt-10">
-                {{ item.descr || '暂无描述' }}
+                {{ item.descr || 'Tạm thời chưa có mô tả' }}
               </div>
             </a-card>
           </a-col>
@@ -43,12 +43,12 @@
       <div class="footer-bar">
         <div v-if="showFooterSelection" class="use-select">
           <template v-if="!multiple">
-            已选择 <span class="ellipsis" style="max-width: 100px">{{flowData.name}}</span>
+            Đã chọn <span class="ellipsis" style="max-width: 100px">{{flowData.name}}</span>
           </template>
           <template v-else>
-            已选择 {{ flowId.length }} 个流程
+            Đã chọn {{ flowId.length }} quy trình
           </template>
-          <span style="margin-left: 8px; color: #3d79fb; cursor: pointer" @click="handleClearClick">清空</span>
+          <span style="margin-left: 8px; color: #3d79fb; cursor: pointer" @click="handleClearClick">Làm trống</span>
         </div>
         <Pagination
           v-if="flowList.length > 0"
@@ -91,30 +91,30 @@
     emits: ['success', 'register'],
     props: {
       multiple:{ type: Boolean, default: false },
-      // 排除的流程ID，多个逗号分隔
+      // ID quy trình bị loại trừ, nhiều ID phân tách bằng dấu phẩy
       excludedIds: { type: String, default: '' },
     },
     setup(props, { emit }) {
-      const title = ref<string>('选择流程');
-      //应用类型
+      const title = ref<string>('Chọn quy trình');
+      //Loại ứng dụng
       const flowId = ref<any>([]);
-      //流程数据
+      //Dữ liệu quy trình
       const flowList = ref<any>([]);
-      //选中的数据
+      //Dữ liệu đã chọn
       const flowData = ref<any>({})
-      //当前页数
+      //Số trang hiện tại
       const pageNo = ref<number>(1);
-      //每页条数
+      //Số mục mỗi trang
       const pageSize = ref<number>(10);
-      //总条数
+      //Tổng số mục
       const total = ref<number>(0);
-      //搜索文本
+      //Tìm kiếm văn bản
       const searchText = ref<string>('');
-      //可选择的页数
+      //Số trang có thể chọn
       const pageSizeOptions = ref<any>(['10', '20', '30']);
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
-        //update-begin---author:wangshuai---date:2025-12-24---for: 流程选择支持单选和多选 ---
+        //update-begin---author:wangshuai---date:2025-12-24---for: Chọn quy trình hỗ trợ chọn một và chọn nhiều ---
         if (props.multiple) {
           flowId.value = data.flowId ? (Array.isArray(data.flowId) ? cloneDeep(data.flowId) : data.flowId.split(',')) : [];
           flowData.value = data.flowData ? cloneDeep(data.flowData) : [];
@@ -123,12 +123,12 @@
           flowData.value = data.flowData ? cloneDeep(data.flowData) : {};
         }
         setModalProps({ bodyStyle: { padding: '10px' } });
-        //update-end---author:wangshuai---date:2025-12-24---for:流程选择支持单选和多选---
+        //update-end---author:wangshuai---date:2025-12-24---for:Chọn quy trình hỗ trợ chọn một và chọn nhiều---
         loadFlowData();
       });
 
       /**
-       * 保存
+       * Lưu
        */
       async function handleOk() {
         emit('success',{ flowId: flowId.value, flowData: flowData.value });
@@ -136,15 +136,15 @@
       }
 
       /**
-       * 取消
+       * Hủy
        */
       function handleCancel() {
         closeModal();
       }
 
-      //复选框选中事件
+      //Sự kiện chọn hộp kiểm
       const handleSelect = (item) => {
-        //update-begin---author:wangshuai---date:2025-12-24---for: 流程选择支持单选和多选 ---
+        //update-begin---author:wangshuai---date:2025-12-24---for: Chọn quy trình hỗ trợ chọn một và chọn nhiều ---
         if(!props.multiple) {
           if (flowId.value === item.id) {
             flowId.value = "";
@@ -157,11 +157,11 @@
           item.checked = !item.checked;
           updateMultipleSelection(item);
         }
-        //update-end---author:wangshuai---date:2025-12-24---for: 流程选择支持单选和多选 ---
+        //update-end---author:wangshuai---date:2025-12-24---for: Chọn quy trình hỗ trợ chọn một và chọn nhiều ---
       };
 
       /**
-       * 加载AI流程
+       * Tải quy trình AI
        */
       function loadFlowData() {
         let params: Recordable = {
@@ -173,7 +173,7 @@
           status: 'enable,release'
         };
 
-        // 排除的流程ID，多个逗号分隔
+        // ID quy trình bị loại trừ, nhiều ID phân tách bằng dấu phẩy
         if (props.excludedIds) {
           params.excludedIds = props.excludedIds;
         }
@@ -182,11 +182,11 @@
           if(res){
             for (const data of res.records) {
               data.metadata = getMetadata(data.metadata);
-              //update-begin---author:wangshuai---date:2025-12-24---for: 流程选择支持单选和多选 ---
+              //update-begin---author:wangshuai---date:2025-12-24---for: Chọn quy trình hỗ trợ chọn một và chọn nhiều ---
               if (props.multiple && Array.isArray(flowId.value) && flowId.value.includes(data.id)) {
                 data.checked = true;
               }
-              //update-end---author:wangshuai---date:2025-12-24---for: 流程选择支持单选和多选 ---
+              //update-end---author:wangshuai---date:2025-12-24---for: Chọn quy trình hỗ trợ chọn một và chọn nhiều ---
             }
             flowList.value = res.records;
             total.value = res.total;
@@ -202,7 +202,7 @@
       }
       
       /**
-       * 分页改变事件
+       * Sự kiện thay đổi phân trang
        * @param page
        * @param current
        */
@@ -213,10 +213,10 @@
       }
 
       /**
-       * 清空选中状态
+       * Làm trống trạng thái chọn
        */
       function handleClearClick() {
-        //update-begin---author:wangshuai---date:2025-12-24---for: 流程选择支持单选和多选 ---
+        //update-begin---author:wangshuai---date:2025-12-24---for: Chọn quy trình hỗ trợ chọn một và chọn nhiều ---
         if (!props.multiple) {
           flowId.value = "";
           flowData.value = null;
@@ -227,18 +227,18 @@
             flowList.value.forEach(item => item.checked = false);
           }
         }
-        //update-end---author:wangshuai---date:2025-12-24---for: 流程选择支持单选和多选 ---
+        //update-end---author:wangshuai---date:2025-12-24---for: Chọn quy trình hỗ trợ chọn một và chọn nhiều ---
       }
 
       /**
-       * 获取图标
+       * Lấy biểu tượng
        */
       function getImage(icon) {
         return icon ? getFileAccessHttpUrl(icon) : defaultFlowImg;
       }
       
       /**
-       * 获取输入输出参入
+       * Lấy tham số đầu vào đầu ra
        *
        * @param metadata
        */
@@ -251,7 +251,7 @@
         return [...inputsArr];
       }
 
-      /*===========begin 流程选择支持多选 ===========*/
+      /*===========begin Chọn quy trình hỗ trợ chọn nhiều ===========*/
       function handleChange(e, item) {
         updateMultipleSelection(item);
       }
@@ -284,7 +284,7 @@
         }
         return item.id === flowId.value ? { border: '1px solid #3370ff' } : {};
       }
-      /*===========end 流程选择支持多选 ===========*/
+      /*===========end Chọn quy trình hỗ trợ chọn nhiều ===========*/
       
       return {
         registerModal,
