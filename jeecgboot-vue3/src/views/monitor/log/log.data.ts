@@ -2,19 +2,19 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
 
 export const columns: BasicColumn[] = [
   {
-    title: '日志内容',
+    title: 'Nội dung nhật ký',
     dataIndex: 'logContent',
     width: 200,
     align: 'left',
     ellipsis: true,
   },
   {
-    title: '操作人ID',
+    title: 'ID người thao tác',
     dataIndex: 'userid',
     width: 80,
   },
   {
-    title: '操作人',
+    title: 'Người thao tác',
     dataIndex: 'username',
     width: 80,
   },
@@ -24,18 +24,18 @@ export const columns: BasicColumn[] = [
     width: 60,
   },
   {
-    title: '耗时(毫秒)',
+    title: 'Thời gian xử lý (mili giây)',
     dataIndex: 'costTime',
     width: 50,
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     dataIndex: 'createTime',
     sorter: true,
     width: 80,
   },
   {
-    title: '客户端类型',
+    title: 'Loại client',
     dataIndex: 'clientType_dictText',
     width: 50,
   },
@@ -44,12 +44,12 @@ export const columns: BasicColumn[] = [
 export const loginLogColumns: BasicColumn[] = columns.filter((column) => column.dataIndex !== 'costTime');
 
 /**
- * 操作日志需要操作类型
+ * Nhật ký thao tác cần loại thao tác
  */
 export const operationLogColumn: BasicColumn[] = [
   ...columns,
   {
-    title: '操作类型',
+    title: 'Loại thao tác',
     dataIndex: 'operateType_dictText',
     width: 40,
   },
@@ -57,28 +57,28 @@ export const operationLogColumn: BasicColumn[] = [
 
 export const exceptionColumns: BasicColumn[] = [
   {
-    title: '异常标题',
+    title: 'Tiêu đề ngoại lệ',
     dataIndex: 'logContent',
     width: 200,
     align: 'left',
     ellipsis: true,
   },
   {
-    title: '请求地址',
+    title: 'Địa chỉ yêu cầu',
     dataIndex: 'requestUrl',
     width: 140,
     align: 'left',
     ellipsis: true,
   },
   {
-    title: '请求方法',
+    title: 'Phương thức yêu cầu',
     dataIndex: 'method',
     width: 120,
     align: 'left',
     ellipsis: true,
   },
   {
-    title: '操作人',
+    title: 'Người thao tác',
     dataIndex: 'username',
     width: 80,
     customRender: ({ record }) => {
@@ -96,13 +96,13 @@ export const exceptionColumns: BasicColumn[] = [
     width: 60,
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     dataIndex: 'createTime',
     sorter: true,
     width: 80,
   },
   {
-    title: '客户端类型',
+    title: 'Loại client',
     dataIndex: 'clientType_dictText',
     width: 50,
   },
@@ -111,14 +111,14 @@ export const exceptionColumns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'keyWord',
-    label: '搜索日志',
+    label: 'Tìm kiếm nhật ký',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
     field: 'fieldTime',
     component: 'RangePicker',
-    label: '创建时间',
+    label: 'Thời gian tạo',
     componentProps: {
       valueType: 'Date',
     },
@@ -132,7 +132,7 @@ export const operationSearchFormSchema: FormSchema[] = [
   ...searchFormSchema,
   {
     field: 'operateType',
-    label: '操作类型',
+    label: 'Loại thao tác',
     component: 'JDictSelectTag',
     colProps: { span: 4 },
     componentProps: {

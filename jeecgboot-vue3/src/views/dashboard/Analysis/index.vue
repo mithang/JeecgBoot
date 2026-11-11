@@ -4,12 +4,12 @@
   <IndexBdc v-if="indexStyle == 2"></IndexBdc>
   <IndexTask v-if="indexStyle == 3"></IndexTask>
   <div style="width: 100%; text-align: right; margin-top: 20px">
-    首页主题：
+    Chủ đề trang chủ:
     <a-radio-group v-model:value="indexStyle">
-      <a-radio :value="0">默认</a-radio>
-      <a-radio :value="1">销量统计</a-radio>
-      <a-radio :value="2">业务统计</a-radio>
-      <a-radio :value="3">我的任务</a-radio>
+      <a-radio :value="0">Mặc định</a-radio>
+      <a-radio :value="1">Thống kê doanh số</a-radio>
+      <a-radio :value="2">Thống kê nghiệp vụ</a-radio>
+      <a-radio :value="3">Nhiệm vụ của tôi</a-radio>
     </a-radio-group>
   </div>
 </template>

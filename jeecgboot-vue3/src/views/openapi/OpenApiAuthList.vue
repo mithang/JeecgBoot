@@ -1,37 +1,37 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Bảng tham chiếu-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Slot: Tiêu đề bảng-->
       <template #tableTitle>
-        <a-button type="primary" v-auth="'openapi:open_api_auth:add'" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
-        <a-button type="primary" v-auth="'openapi:open_api_auth:exportXls'" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-        <j-upload-button type="primary" v-auth="'openapi:open_api_auth:importExcel'" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
+        <a-button type="primary" v-auth="'openapi:open_api_auth:add'" @click="handleAdd" preIcon="ant-design:plus-outlined"> Thêm mới</a-button>
+        <a-button type="primary" v-auth="'openapi:open_api_auth:exportXls'" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất</a-button>
+        <j-upload-button type="primary" v-auth="'openapi:open_api_auth:importExcel'" preIcon="ant-design:import-outlined" @click="onImportXls">Nhập</j-upload-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
-          <a-button v-auth="'openapi:open_api_auth:deleteBatch'">批量操作
+          <a-button v-auth="'openapi:open_api_auth:deleteBatch'">Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
-        <!-- 高级查询 -->
+        <!-- Tìm kiếm nâng cao -->
         <super-query :config="superQueryConfig" @search="handleSuperQuery" />
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
-      <!--字段回显插槽-->
+      <!--Slot hiển thị lại trường-->
       <template v-slot:bodyCell="{ column, record, index, text }">
       </template>
     </BasicTable>
-    <!-- 表单区域 -->
+    <!-- Vùng biểu mẫu -->
     <OpenApiAuthDrawer @register="registerAuthDrawer" @success="handleSuccess" />
     <AuthDrawer @register="registerPermDrawer" @success="handleSuccess" />
   </div>
@@ -54,10 +54,10 @@
   const [registerAuthDrawer, { openDrawer: openAuthDrawer }] = useDrawer();
   const [registerPermDrawer, { openDrawer: openPermDrawer }] = useDrawer();
 
-  //注册table数据
+  //Đăng ký dữ liệu bảng
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     tableProps: {
-      title: '授权管理',
+      title: 'Quản lý ủy quyền',
       api: list,
       columns,
       canResize: false,
@@ -77,7 +77,7 @@
       },
     },
     exportConfig: {
-      name: '授权管理',
+      name: 'Quản lý ủy quyền',
       url: getExportUrl,
       params: queryParam,
     },
@@ -88,11 +88,11 @@
   });
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
-  // 高级查询配置
+  // Cấu hình tìm kiếm nâng cao
   const superQueryConfig = reactive(superQuerySchema);
 
   /**
-   * 高级查询事件
+   * Sự kiện tìm kiếm nâng cao
    */
   function handleSuperQuery(params) {
     Object.keys(params).map((k) => {
@@ -102,7 +102,7 @@
   }
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openAuthDrawer(true, {
@@ -112,7 +112,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     openAuthDrawer(true, {
@@ -123,14 +123,14 @@
   }
 
   /**
-   * 授权事件
+   * Sự kiện ủy quyền
    */
   function handleAuth(record: Recordable) {
     openPermDrawer(true, { record });
   }
 
   /**
-   * 重置AK/SK
+   * Đặt lại AK/SK
    */
   async function handleReset(record: Recordable) {
     const AKSKObj = await getGenAKSK({});
@@ -141,7 +141,7 @@
   }
 
   /**
-   * 详情
+   * Chi tiết
    */
   function handleDetail(record: Recordable) {
     openAuthDrawer(true, {
@@ -152,50 +152,50 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteOne({ id: record.id }, handleSuccess);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDelete({ ids: selectedRowKeys.value }, handleSuccess);
   }
 
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   /**
-   * 复制密钥
+   * Sao chép khóa bí mật
    */
   function handleCopyKeys(record: Recordable) {
-    const text = `访问密钥（AK）: ${record.ak}\n签名密钥（SK）: ${record.sk}`;
+    const text = `Khóa truy cập (AK): ${record.ak}\nKhóa ký (SK): ${record.sk}`;
     const isSuccess = copyTextToClipboard(text);
     if (isSuccess) {
-      createMessage.success('密钥已复制到剪贴板');
+      createMessage.success('Khóa bí mật đã sao chép vào clipboard');
     } else {
-      createMessage.error('复制失败，请手动复制');
+      createMessage.error('Sao chép thất bại, vui lòng sao chép thủ công');
     }
   }
 
   function getTableAction(record) {
     return [
       {
-        label: '复制密钥',
+        label: 'Sao chép khóa bí mật',
         onClick: handleCopyKeys.bind(null, record),
       },
       {
-        label: '分配接口',
+        label: 'Phân bổ API',
         onClick: handleAuth.bind(null, record),
         auth: 'openapi:open_api_auth:edit',
       },
@@ -203,28 +203,28 @@
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác dropdown
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '修改对象',
+        label: 'Sửa đối tượng',
         onClick: handleEdit.bind(null, record),
         auth: 'openapi:open_api_auth:edit',
       },
       {
-        label: '重置密钥',
+        label: 'Đặt lại khóa',
         popConfirm: {
-          title: '原密钥将失效，确认重置？',
+          title: 'Khóa bí mật gốc sẽ hết hiệu lực, xác nhận đặt lại?',
           confirm: handleReset.bind(null, record),
           placement: 'topLeft',
         },
         auth: 'openapi:open_api_auth:edit',
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Bạn có xác nhận xóa không?',
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft',
         },

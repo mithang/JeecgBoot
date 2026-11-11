@@ -1,6 +1,6 @@
 <template>
   <div class="redis-monitor p-4">
-    <!-- 顶部概览卡片 -->
+    <!-- Thẻ tổng quan phần trên -->
     <a-row :gutter="16" class="overview-row">
       <a-col :sm="12" :md="6" v-for="item in overviewCards" :key="item.label">
         <div class="overview-card" :style="{ borderTopColor: item.color }">
@@ -10,7 +10,7 @@
       </a-col>
     </a-row>
 
-    <!-- Redis 信息实时监控 -->
+    <!-- Giám sát thông tin Redis theo thời gian thực -->
     <a-row :gutter="16" class="chart-row">
       <a-col :sm="24" :xl="12">
         <a-card :bordered="false" class="chart-card">
@@ -24,8 +24,8 @@
       </a-col>
     </a-row>
 
-    <!-- Redis 详细信息表格 -->
-    <a-card :bordered="false" class="table-card" title="Redis 配置详情">
+    <!-- Bảng thông tin chi tiết Redis -->
+    <a-card :bordered="false" class="table-card" title="Chi tiết cấu hình Redis">
       <BasicTable @register="registerTable" :api="getInfo" :canResize="false"></BasicTable>
     </a-card>
   </div>
@@ -44,22 +44,22 @@
   const { setOptions: setOptions2 } = useECharts(chartRef2 as Ref<HTMLDivElement>);
   let timer: any = null;
 
-  // 概览数据
+  // Dữ liệu tổng quan
   const currentMemory = ref('--');
   const currentKeys = ref('--');
   const currentUptime = ref('--');
   const currentPort = ref('--');
 
   const overviewCards = computed(() => [
-    { label: '已用内存', value: currentMemory.value, color: '#1890ff' },
-    { label: 'Key 数量', value: currentKeys.value, color: '#52c41a' },
-    { label: '运行时间', value: currentUptime.value, color: '#faad14' },
-    { label: '监听端口', value: currentPort.value, color: '#722ed1' },
+    { label: 'Bộ nhớ đã dùng', value: currentMemory.value, color: '#1890ff' },
+    { label: 'Số lượng Key', value: currentKeys.value, color: '#52c41a' },
+    { label: 'Thời gian chạy', value: currentUptime.value, color: '#faad14' },
+    { label: 'Cổng lắng nghe', value: currentPort.value, color: '#722ed1' },
   ]);
 
   const memoryOption = reactive({
     title: {
-      text: 'Redis 内存实时占用（KB）',
+      text: 'Mức chiếm dụng bộ nhớ Redis theo thời gian thực (KB)',
       textStyle: { fontSize: 14, fontWeight: 500, color: '#333' },
     },
     tooltip: {
@@ -71,7 +71,7 @@
       formatter(params) {
         const p = params[0];
         return `<div style="font-weight:500;margin-bottom:4px">${p.axisValue}</div>
-                <span style="color:#1890ff">● 内存</span>：${p.value} KB`;
+                <span style="color:#1890ff">● Bộ nhớ</span>: ${p.value} KB`;
       },
     },
     grid: { top: 50, right: 20, bottom: 30, left: 60 },
@@ -116,7 +116,7 @@
 
   const keyOption = reactive({
     title: {
-      text: 'Redis Key 实时数量（个）',
+      text: 'Số lượng Key Redis theo thời gian thực (cái)',
       textStyle: { fontSize: 14, fontWeight: 500, color: '#333' },
     },
     tooltip: {
@@ -128,7 +128,7 @@
       formatter(params) {
         const p = params[0];
         return `<div style="font-weight:500;margin-bottom:4px">${p.axisValue}</div>
-                <span style="color:#52c41a">● Key 数量</span>：${p.value}`;
+                <span style="color:#52c41a">● Số lượng Key</span>: ${p.value}`;
       },
     },
     grid: { top: 50, right: 20, bottom: 30, left: 60 },
@@ -185,7 +185,7 @@
     setOptions2(keyOption);
   }
 
-  /** 开启定时器 */
+  /** Bật bộ hẹn giờ */
   function openTimer() {
     loadHistoryData();
     closeTimer();
@@ -194,12 +194,12 @@
     }, 15000);
   }
 
-  /** 关闭定时器 */
+  /** Tắt bộ hẹn giờ */
   function closeTimer() {
     if (timer) clearInterval(timer);
   }
 
-  /** 加载历史监控数据 */
+  /** Tải dữ liệu giám sát lịch sử */
   function loadHistoryData() {
     getMetricsHistory().then((res) => {
       const dbSizes = res.dbSize;
@@ -212,7 +212,7 @@
         memoryOption.xAxis.data.push(dayjs(memoryData.create_time).format('HH:mm:ss'));
         memoryOption.series[0].data.push(memoryData.used_memory / 1000);
       });
-      // 更新概览卡片
+      // Cập nhật thẻ tổng quan
       if (memories.length > 0) {
         const lastMem = memories[memories.length - 1].used_memory / 1000;
         currentMemory.value = lastMem.toFixed(0) + ' KB';
@@ -223,13 +223,13 @@
       setOptions(memoryOption, false);
       setOptions2(keyOption, false);
     });
-    // 加载详细信息获取端口和运行时间
+    // Tải thông tin chi tiết để lấy cổng và thời gian chạy
     getInfo().then((res) => {
       const list = res.result || res;
       if (Array.isArray(list)) {
         list.forEach((item) => {
           if (item.key === 'tcp_port') currentPort.value = item.value;
-          if (item.key === 'uptime_in_days') currentUptime.value = item.value + ' 天';
+          if (item.key === 'uptime_in_days') currentUptime.value = item.value + ' ngày';
         });
       }
     });
@@ -247,11 +247,11 @@
         memoryOption.xAxis.data.push(time);
         memoryOption.series[0].data.push(curMem);
 
-        // 更新概览
+        // Cập nhật tổng quan
         currentMemory.value = curMem.toFixed(0) + ' KB';
         currentKeys.value = curSize + '';
 
-        // 最大长度为80
+        // Độ dài tối đa là 80
         if (keyOption.series[0].data.length > 80) {
           keyOption.xAxis.data.splice(0, 1);
           keyOption.series[0].data.splice(0, 1);

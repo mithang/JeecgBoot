@@ -4,7 +4,7 @@ import { Tag, Tooltip } from 'ant-design-vue';
 
 export const columns: BasicColumn[] = [
   {
-    title: '表名',
+    title: 'Tên bảng',
     dataIndex: 'dataTable',
     width: 120,
     align: 'left',
@@ -13,7 +13,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '数据ID',
+    title: 'ID dữ liệu',
     dataIndex: 'dataId',
     width: 260,
     align: 'left',
@@ -27,7 +27,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '版本号',
+    title: 'Số phiên bản',
     dataIndex: 'dataVersion',
     width: 70,
     align: 'center',
@@ -36,12 +36,12 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '数据内容',
+    title: 'Nội dung dữ liệu',
     dataIndex: 'dataContent',
     ellipsis: true,
     customRender: ({ text }) => {
       if (!text) return '--';
-      // 尝试格式化 JSON 显示关键字段
+      // Thử định dạng JSON để hiển thị các trường quan trọng
       try {
         const obj = JSON.parse(text);
         const keys = Object.keys(obj);
@@ -53,7 +53,7 @@ export const columns: BasicColumn[] = [
             return `${k}: ${val.length > 20 ? val.substring(0, 20) + '...' : val}`;
           })
           .join(' | ');
-        const suffix = keys.length > 3 ? ` (+${keys.length - 3} 字段)` : '';
+        const suffix = keys.length > 3 ? ` (+${keys.length - 3} Trường)` : '';
         return h(
           Tooltip,
           { title: JSON.stringify(obj, null, 2), overlayStyle: { maxWidth: '500px', whiteSpace: 'pre-wrap', fontFamily: 'Consolas, monospace', fontSize: '12px' } },
@@ -65,13 +65,13 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '创建人',
+    title: 'Người tạo',
     dataIndex: 'createBy',
     sorter: true,
     width: 90,
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     dataIndex: 'createTime',
     width: 180,
     sorter: true,
@@ -81,25 +81,25 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'dataTable',
-    label: '表名',
+    label: 'Tên bảng',
     component: 'JInput',
     componentProps: {
-      placeholder: '请输入表名',
+      placeholder: 'Vui lòng nhập tên bảng',
     },
     colProps: { span: 6 },
   },
   {
     field: 'dataId',
-    label: '数据ID',
+    label: 'ID dữ liệu',
     component: 'JInput',
     componentProps: {
-      placeholder: '请输入数据ID',
+      placeholder: 'Vui lòng nhập ID dữ liệu',
     },
     colProps: { span: 6 },
   },
   {
     field: 'createBy',
-    label: '创建人',
+    label: 'Người tạo',
     component: 'JSelectUserByDepartment',
     componentProps: {
       rowKey: 'username',

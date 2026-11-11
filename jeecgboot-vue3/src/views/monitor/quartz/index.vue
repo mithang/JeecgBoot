@@ -2,20 +2,20 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">新增</a-button>
-        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">Thêm mới</a-button>
+        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất</a-button>
+        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">Nhập</j-upload-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
@@ -39,11 +39,11 @@
 
   const { createMessage } = useMessage();
   const [registerModal, { openModal }] = useModal();
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     designScope: 'quartz-template',
     tableProps: {
-      title: '任务列表',
+      title: 'Danh sách nhiệm vụ',
       api: getQuartzList,
       columns: columns,
       actionColumn: {
@@ -56,7 +56,7 @@
       },
     },
     exportConfig: {
-      name: '定时任务列表',
+      name: 'Danh sách tác vụ định kỳ',
       url: getExportUrl,
     },
     importConfig: {
@@ -67,15 +67,15 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '启动',
+        label: 'Khởi động',
         popConfirm: {
-          title: '是否启动选中任务?',
+          title: 'Có khởi động nhiệm vụ đã chọn không?',
           confirm: handlerResume.bind(null, record),
         },
         ifShow: (_action) => {
@@ -83,9 +83,9 @@
         },
       },
       {
-        label: '停止',
+        label: 'Dừng',
         popConfirm: {
-          title: '是否暂停选中任务?',
+          title: 'Có tạm dừng nhiệm vụ đã chọn không?',
           confirm: handlerPause.bind(null, record),
         },
         ifShow: (_action) => {
@@ -96,25 +96,25 @@
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác dropdown
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '立即执行',
+        label: 'Thực thi ngay',
         popConfirm: {
-          title: '是否立即执行任务?',
+          title: 'Có thực thi nhiệm vụ ngay không?',
           confirm: handlerExecute.bind(null, record),
         },
       },
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa không?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -122,7 +122,7 @@
   }
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openModal(true, {
@@ -131,7 +131,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     openModal(true, {
@@ -141,43 +141,43 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteQuartz({ id: record.id }, reload);
   }
 
   /**
-   * 立即执行
+   * Thực thi ngay
    */
   async function handlerExecute(record) {
     await executeImmediately({ id: record.id }, reload);
   }
 
   /**
-   * 暂停
+   * Tạm dừng
    */
   async function handlerPause(record) {
     await pauseJob({ id: record.id }, reload);
   }
 
   /**
-   * 启动
+   * Khởi động
    */
   async function handlerResume(record) {
     await resumeJob({ id: record.id }, reload);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteQuartz({ ids: selectedRowKeys.value }, () => {
-      // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1662】菜单管理、定时任务批量删除清空选中
+      // -update-begin--author:liaozhiyang---date:20240702---for: 【TV360X-1662】Quản lý menu, tác vụ định kỳ: xóa hàng loạt thì xóa lựa chọn đã chọn
       reload();
       selectedRows.value = [];
       selectedRowKeys.value = [];
-      // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1662】菜单管理、定时任务批量删除清空选中
+      // -update-end--author:liaozhiyang---date:20240702---for: 【TV360X-1662】Quản lý menu, tác vụ định kỳ: xóa hàng loạt thì xóa lựa chọn đã chọn
     });
   }
 </script>

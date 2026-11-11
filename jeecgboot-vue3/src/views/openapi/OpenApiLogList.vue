@@ -7,12 +7,12 @@
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined" />
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button v-auth="'openapi:open_api_log:deleteBatch'">
-            批量操作
+            Thao tác hàng loạt
             <Icon icon="mdi:chevron-down" />
           </a-button>
         </a-dropdown>
@@ -43,7 +43,7 @@
 
   const { tableContext } = useListPage({
     tableProps: {
-      title: '调用日志',
+      title: 'Nhật ký gọi',
       api: list,
       columns,
       canResize: false,
@@ -101,13 +101,13 @@
   function getTableAction(record) {
     return [
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Bạn có xác nhận xóa không?',
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft',
         },

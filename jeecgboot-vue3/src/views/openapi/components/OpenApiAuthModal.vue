@@ -1,5 +1,5 @@
 <template>
-  <j-modal :title="title" :width="width" :maxHeight="200" :visible="visible" @ok="handleOk" :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }" @cancel="handleCancel" cancelText="关闭">
+  <j-modal :title="title" :width="width" :maxHeight="200" :visible="visible" @ok="handleOk" :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }" @cancel="handleCancel" cancelText="Đóng">
     <OpenApiAuthForm ref="registerForm" @ok="submitCallback" :title="title" :formDisabled="disableSubmit" :formBpm="false"></OpenApiAuthForm>
   </j-modal>
 </template>
@@ -17,10 +17,10 @@
   const emit = defineEmits(['register', 'success']);
 
   /**
-   * 新增
+   * Thêm mới
    */
   function add() {
-    title.value = '新增';
+    title.value = 'Thêm mới';
     visible.value = true;
     nextTick(() => {
       registerForm.value.add();
@@ -28,11 +28,11 @@
   }
   
   /**
-   * 编辑
+   * Chỉnh sửa
    * @param record
    */
   function edit(record) {
-    title.value = disableSubmit.value ? '详情' : '编辑';
+    title.value = disableSubmit.value ? 'Chi tiết' : 'Chỉnh sửa';
     visible.value = true;
     nextTick(() => {
       registerForm.value.edit(record);
@@ -40,14 +40,14 @@
   }
   
   /**
-   * 确定按钮点击事件
+   * Sự kiện nhấp nút xác nhận
    */
   function handleOk() {
     registerForm.value.submitForm();
   }
 
   /**
-   * form保存回调事件
+   * Sự kiện callback khi lưu form
    */
   function submitCallback() {
     handleCancel();
@@ -55,7 +55,7 @@
   }
 
   /**
-   * 取消按钮回调事件
+   * Sự kiện callback nút hủy
    */
   function handleCancel() {
     visible.value = false;
@@ -69,7 +69,7 @@
 </script>
 
 <style lang="less">
-  /**隐藏样式-modal确定按钮 */
+  /** Kiểu ẩn — nút xác nhận của modal */
   .jee-hidden {
     display: none !important;
   }

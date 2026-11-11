@@ -5,15 +5,15 @@
         <template #rightExtra>
           <div class="extra-wrapper">
             <div class="extra-item">
-              <a>今日</a>
-              <a>本周</a>
-              <a>本月</a>
-              <a>本年</a>
+              <a>Hôm nay</a>
+              <a>Tuần này</a>
+              <a>Tháng này</a>
+              <a>Năm nay</a>
             </div>
             <a-range-picker :style="{ width: '256px' }" />
           </div>
         </template>
-        <a-tab-pane loading="true" tab="受理监管" key="1">
+        <a-tab-pane loading="true" tab="Giám sát tiếp nhận" key="1">
           <a-row>
             <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
               <Bar :chartData="barData" :option="{ title: { text: '', textStyle: { fontWeight: 'lighter' } } }" height="40vh" :seriesColor="seriesColor" />
@@ -23,7 +23,7 @@
             </a-col>
           </a-row>
         </a-tab-pane>
-        <a-tab-pane tab="交互监管" key="2">
+        <a-tab-pane tab="Giám sát tương tác" key="2">
           <a-row>
             <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
               <BarMulti
@@ -38,11 +38,11 @@
             </a-col>
           </a-row>
         </a-tab-pane>
-        <a-tab-pane tab="存储监管" key="3">
+        <a-tab-pane tab="Giám sát lưu trữ" key="3">
           <a-row>
             <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24" style="display: flex">
-              <Gauge :seriesColor="seriesColor" :chartData="{ name: 'C盘', value: 70 }" height="30vh"></Gauge>
-              <Gauge :seriesColor="seriesColor" :chartData="{ name: 'D盘', value: 50 }" height="30vh"></Gauge>
+              <Gauge :seriesColor="seriesColor" :chartData="{ name: 'Cđĩa', value: 70 }" height="30vh"></Gauge>
+              <Gauge :seriesColor="seriesColor" :chartData="{ name: 'Dđĩa', value: 50 }" height="30vh"></Gauge>
             </a-col>
             <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
               <QuickNav :loading="loading" class="enter-y" :bordered="false" :body-style="{ padding: 0 }" />
@@ -71,7 +71,7 @@
   const rankList = [];
   for (let i = 0; i < 7; i++) {
     rankList.push({
-      name: '白鹭岛 ' + (i + 1) + ' 号店',
+      name: 'Đảo Bạch Lộ ' + (i + 1) + ' cửa hàng',
       total: 1234.56 - i * 100,
     });
   }
@@ -79,7 +79,7 @@
   const barData = [];
   for (let i = 0; i < 12; i += 1) {
     barData.push({
-      name: `${i + 1}月`,
+      name: `${i + 1}tháng`,
       value: Math.floor(Math.random() * 1000) + 200,
     });
   }
@@ -88,7 +88,7 @@
     for (let i = 0; i < 12; i += 1) {
       barMultiData.push({
         type: j == 0 ? 'jeecg' : 'jeebt',
-        name: `${i + 1}月`,
+        name: `${i + 1}tháng`,
         value: Math.floor(Math.random() * 1000) + 200,
       });
     }

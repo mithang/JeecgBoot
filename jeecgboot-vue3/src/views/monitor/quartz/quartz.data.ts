@@ -4,28 +4,28 @@ import JCronValidator from '/@/components/Form/src/jeecg/components/JEasyCron/va
 
 export const columns: BasicColumn[] = [
   {
-    title: '任务类名',
+    title: 'Tên lớp nhiệm vụ',
     dataIndex: 'jobClassName',
     width: 200,
     align: 'left',
   },
   {
-    title: 'Cron表达式',
+    title: 'Biểu thức Cron',
     dataIndex: 'cronExpression',
     width: 200,
   },
   {
-    title: '参数',
+    title: 'Tham số',
     dataIndex: 'parameter',
     width: 200,
   },
   {
-    title: '描述',
+    title: 'Mô tả',
     dataIndex: 'description',
     width: 200,
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status',
     width: 100,
     customRender: ({ text }) => {
@@ -38,13 +38,13 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'jobClassName',
-    label: '任务类名',
+    label: 'Tên lớp nhiệm vụ',
     component: 'Input',
     colProps: { span: 6 },
   },
   {
     field: 'status',
-    label: '任务状态',
+    label: 'Trạng thái nhiệm vụ',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'quartz_status',
@@ -54,7 +54,7 @@ export const searchFormSchema: FormSchema[] = [
   },
    {
     field: 'description',
-    label: '描述',
+    label: 'Mô tả',
     component: 'JInput',
     colProps: { span: 6 },
   },
@@ -69,32 +69,32 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'jobClassName',
-    label: '任务类名',
+    label: 'Tên lớp nhiệm vụ',
     component: 'Input',
     required: true,
   },
   {
     field: 'cronExpression',
-    label: 'Cron表达式',
+    label: 'Biểu thức Cron',
     component: 'JEasyCron',
     defaultValue: '* * * * * ? *',
-    rules: [{ required: true, message: '请输入Cron表达式' }, { validator: JCronValidator }],
+    rules: [{ required: true, message: 'Vui lòng nhập biểu thức Cron' }, { validator: JCronValidator }],
   },
   {
     field: 'paramterType',
-    label: '参数类型',
+    label: 'Loại tham số',
     component: 'Select',
     defaultValue: 'string',
     componentProps: {
       options: [
-        { label: '字符串', value: 'string' },
-        { label: 'JSON对象', value: 'json' },
+        { label: 'Chuỗi', value: 'string' },
+        { label: 'Đối tượng JSON', value: 'json' },
       ],
     },
   },
   {
     field: 'parameter',
-    label: '参数',
+    label: 'Tham số',
     component: 'InputTextArea',
     ifShow: ({ values }) => {
       return values.paramterType == 'string';
@@ -102,16 +102,16 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'parameter',
-    label: '参数',
+    label: 'Tham số',
     component: 'JAddInput',
-    helpMessage: '键值对形式填写',
+    helpMessage: 'Điền dạng cặp key-value',
     ifShow: ({ values }) => {
       return values.paramterType == 'json';
     },
   },
   {
     field: 'status',
-    label: '状态',
+    label: 'Trạng thái',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'quartz_status',
@@ -124,7 +124,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'description',
-    label: '描述',
+    label: 'Mô tả',
     component: 'InputTextArea',
   },
 ];

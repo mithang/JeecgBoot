@@ -2,23 +2,23 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
 
 export const columns: BasicColumn[] = [
   {
-    title: '路由ID',
+    title: 'ID định tuyến',
     dataIndex: 'routerId',
     width: 200,
     align: 'left',
   },
   {
-    title: '路由名称',
+    title: 'Tên định tuyến',
     dataIndex: 'name',
     width: 200,
   },
   {
-    title: '路由URI',
+    title: 'URI định tuyến',
     dataIndex: 'uri',
     width: 200,
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status',
     slots: { customRender: 'status' },
     width: 150,
@@ -28,24 +28,24 @@ export const columns: BasicColumn[] = [
 export const formSchema: FormSchema[] = [
   {
     field: 'name',
-    label: '路由ID',
+    label: 'ID định tuyến',
     component: 'Input',
     required: true,
   },
   {
     field: 'name',
-    label: '路由名称',
+    label: 'Tên định tuyến',
     component: 'InputNumber',
     required: true,
   },
   {
     field: 'uri',
-    label: '路由URI',
+    label: 'URI định tuyến',
     component: 'Input',
   },
   {
     field: 'predicates',
-    label: '路由条件',
+    label: 'Điều kiện định tuyến',
     slot: 'predicates',
     component: 'Input',
   },

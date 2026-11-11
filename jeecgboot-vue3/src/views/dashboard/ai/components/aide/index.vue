@@ -3,13 +3,13 @@
     <a-popconfirm
       :open="popconfirmVisible"
       placement="topRight"
-      title="确定AI助手退出吗？"
-      ok-text="确定"
-      cancel-text="取消"
+      title="Xác nhậnAIThoát trợ lý?"
+      ok-text="Xác nhận"
+      cancel-text="Hủy"
       @cancel="handleCancel"
       @confirm="handleConfirm"
     >
-      <img :src="aiImage" alt="ai助手" />
+      <img :src="aiImage" alt="aiTrợ lý" />
     </a-popconfirm>
   </div>
 </template>

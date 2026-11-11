@@ -6,7 +6,7 @@ import { Tag } from 'ant-design-vue';
 
 export const columns: BasicColumn[] = [
   {
-    title: '请求时间',
+    title: 'Thời gian yêu cầu',
     dataIndex: 'timestamp',
     width: 50,
     customRender({ text }) {
@@ -14,7 +14,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '请求方法',
+    title: 'Phương thức yêu cầu',
     dataIndex: 'request.method',
     width: 20,
     customRender({ record, column }) {
@@ -36,7 +36,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '请求URL',
+    title: 'URL yêu cầu',
     dataIndex: 'request.uri',
     width: 200,
     customRender({ record, column }) {
@@ -44,7 +44,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '响应状态',
+    title: 'Trạng thái phản hồi',
     dataIndex: 'response.status',
     width: 50,
     customRender({ record, column }) {
@@ -65,7 +65,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '请求耗时',
+    title: 'Thời gian xử lý yêu cầu',
     dataIndex: 'timeTaken',
     width: 50,
     customRender({ record, column }) {

@@ -57,7 +57,7 @@
     setProps({ disabled: !data?.showFooter });
   });
 
-  const title = computed(() => (!unref(isUpdate) ? '新增' : !unref(formDisabled) ? '编辑' : '详情'));
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới' : !unref(formDisabled) ? 'Chỉnh sửa' : 'Chi tiết'));
 
   async function handleSubmit() {
     try {

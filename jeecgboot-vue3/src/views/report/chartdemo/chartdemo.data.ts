@@ -24,19 +24,19 @@ export const getData = (() => {
     }
   }
   const pieData = [
-    { value: 335, name: '客服电话' },
-    { value: 310, name: '奥迪官网' },
-    { value: 234, name: '媒体曝光' },
-    { value: 135, name: '质检总局' },
-    { value: 105, name: '其他' },
+    { value: 335, name: 'Điện thoại chăm sóc khách hàng' },
+    { value: 310, name: 'Trang web chính thức của Audi' },
+    { value: 234, name: 'Đưa tin trên truyền thông' },
+    { value: 135, name: 'Tổng cục Kiểm tra chất lượng' },
+    { value: 105, name: 'Khác' },
   ];
   const radarData = [
-    { value: 75, name: '政治', type: '文综', max: 100 },
-    { value: 65, name: '历史', type: '文综', max: 100 },
-    { value: 55, name: '地理', type: '文综', max: 100 },
-    { value: 74, name: '化学', type: '文综', max: 100 },
-    { value: 38, name: '物理', type: '文综', max: 100 },
-    { value: 88, name: '生物', type: '文综', max: 100 },
+    { value: 75, name: 'Chính trị', type: 'Tổng hợp khoa học xã hội', max: 100 },
+    { value: 65, name: 'Lịch sử', type: 'Tổng hợp khoa học xã hội', max: 100 },
+    { value: 55, name: 'Địa lý', type: 'Tổng hợp khoa học xã hội', max: 100 },
+    { value: 74, name: 'Hóa học', type: 'Tổng hợp khoa học xã hội', max: 100 },
+    { value: 38, name: 'Vật lý', type: 'Tổng hợp khoa học xã hội', max: 100 },
+    { value: 88, name: 'Sinh học', type: 'Tổng hợp khoa học xã hội', max: 100 },
   ];
   for (let j = 0; j < 2; j++) {
     for (let i = 0; i < 15; i++) {

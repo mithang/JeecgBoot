@@ -12,7 +12,7 @@ enum Api {
 }
 
 /**
- * 查询消息列表
+ * Truy vấn danh sách tin nhắn
  * @param params
  */
 export const getMyNewsList = (params) => {
@@ -20,7 +20,7 @@ export const getMyNewsList = (params) => {
 };
 
 /**
- * 更新用户系统消息阅读状态
+ * Cập nhật trạng thái đọc tin nhắn hệ thống của người dùng
  * @param params
  */
 export const editCementSend = (params) => {
@@ -28,15 +28,15 @@ export const editCementSend = (params) => {
 };
 
 /**
- * 一键已读
+ * Đánh dấu tất cả đã đọc bằng một lần nhấn
  * @param params
  */
 export const readAllMsg = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认操作',
-    content: '是否全部标注已读?',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận thao tác',
+    content: 'Có đánh dấu tất cả đã đọc không?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.put({ url: Api.readAllMsg, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -46,7 +46,7 @@ export const readAllMsg = (params, handleSuccess) => {
 };
 
 /**
- * 同步消息
+ * Đồng bộ tin nhắn
  * @param params
  */
 export const syncNotic = (params) => {
@@ -54,7 +54,7 @@ export const syncNotic = (params) => {
 };
 
 /**
- * 根据消息发送记录ID获取消息内容
+ * Lấy nội dung tin nhắn theo ID bản ghi gửi tin nhắn
  * @param sendId
  */
 export const getOne = (sendId) => {
@@ -62,7 +62,7 @@ export const getOne = (sendId) => {
 };
 
 /**
- * 删除用户通告阅读标记的数据
+ * Xóa dữ liệu đánh dấu đã đọc thông báo của người dùng
  * @param params
  * @param handleSuccess
  */
@@ -73,17 +73,17 @@ export const deleteAnnSend = (params, handleSuccess) =>{
 }
 
 /**
- * 批量删除用户通告阅读标记的数据
+ * Xóa hàng loạt dữ liệu đánh dấu đã đọc thông báo của người dùng
  * @param params
  * @param handleSuccess
  */
 export const deleteBatchAnnSend = (params, handleSuccess) =>{
   Modal.confirm({
     iconType: 'warning',
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa dữ liệu đã chọn không?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, params }, { joinParamsToUrl: true }).then(()=>{
         handleSuccess();

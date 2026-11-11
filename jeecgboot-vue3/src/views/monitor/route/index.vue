@@ -2,19 +2,19 @@
   <div class="p-4">
     <BasicTable @register="registerTable" :indexColumnProps="indexColumnProps">
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">新增</a-button>
-        <a-button type="primary" @click="openRecycleModal(true)" preIcon="ant-design:hdd-outlined"> 回收站</a-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">Thêm mới</a-button>
+        <a-button type="primary" @click="openRecycleModal(true)" preIcon="ant-design:hdd-outlined"> Thùng rác</a-button>
       </template>
       <template #status="{ record, text }">
-        <a-tag color="pink" v-if="text == 0">禁用</a-tag>
-        <a-tag color="#87d068" v-if="text == 1">正常</a-tag>
+        <a-tag color="pink" v-if="text == 0">Vô hiệu hóa</a-tag>
+        <a-tag color="#87d068" v-if="text == 1">Bình thường</a-tag>
       </template>
       <template #action="{ record }">
         <TableAction :actions="getActions(record)" />
       </template>
     </BasicTable>
     <RouteModal @register="registerDrawer" @success="reload" />
-    <!--回收站弹窗-->
+    <!--Popup thùng rác-->
     <RouteRecycleBinModal @register="registerRecycleModal" @success="reload" />
   </div>
 </template>
@@ -33,13 +33,13 @@
   const [registerDrawer, { openDrawer }] = useDrawer();
   const checkedKeys = ref<Array<string | number>>([]);
 
-  //回收站model
+  // Modal thùng rác
   const [registerRecycleModal, { openModal: openRecycleModal }] = useModal();
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     designScope: 'router-template',
     tableProps: {
-      title: '路由列表',
+      title: 'Danh sách định tuyến',
       api: getRouteList,
       useSearchForm: false,
       columns: columns,
@@ -48,7 +48,7 @@
 
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
   /**
-   * 序号列配置
+   * Cấu hình cột số thứ tự
    */
   const indexColumnProps = {
     dataIndex: 'index',
@@ -56,26 +56,26 @@
   };
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '复制',
+        label: 'Sao chép',
         popConfirm: {
-          title: '是否确认复制',
+          title: 'Bạn có chắc chắn muốn sao chép không?',
           confirm: handleCopy.bind(null, record),
         },
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Bạn có chắc chắn muốn xóa không?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -83,14 +83,14 @@
   }
 
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;
   }
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openDrawer(true, {
@@ -99,7 +99,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     openDrawer(true, {
@@ -108,15 +108,15 @@
     });
   }
   /**
-   * 复制
+   * Sao chép
    */
   async function handleCopy(record) {
     await copyRoute({ id: record.id }, reload);
-    createMessage.success('复制成功');
+    createMessage.success('Sao chép thành công');
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteRoute({ id: record.id }, reload);

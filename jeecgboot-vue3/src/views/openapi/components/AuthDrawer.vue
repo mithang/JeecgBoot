@@ -2,7 +2,7 @@
   <BasicDrawer
     v-bind="$attrs"
     @register="registerDrawer"
-    title="接口授权"
+    title="Ủy quyền API"
     width="720px"
     destroyOnClose
     showFooter
@@ -29,7 +29,7 @@
         </a-col>
       </a-row>
       <div v-if="apiList.length === 0 && !confirmLoading" style="text-align: center; padding: 40px 0; color: #999">
-        暂无接口数据
+        Không có dữ liệu API
       </div>
       <div v-if="total > 0" style="margin-top: 16px; text-align: right">
         <a-pagination

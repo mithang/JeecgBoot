@@ -30,7 +30,7 @@ enum Api {
   tomcatSessionsRejected = '/actuator/metrics/tomcat.sessions.rejected',
 
   memoryInfo = '/sys/actuator/memory/info',
-  // undertow 监控
+  // Giám sát Undertow
   undertowSessionsCreated = '/actuator/metrics/undertow.sessions.created',
   undertowSessionsExpired = '/actuator/metrics/undertow.sessions.expired',
   undertowSessionsActiveCurrent = '/actuator/metrics/undertow.sessions.active.current',
@@ -38,210 +38,210 @@ enum Api {
 }
 
 /**
- * 查询cpu数量
+ * Truy vấn số lượng CPU
  */
 export const getCpuCount = () => {
   return defHttp.get({ url: Api.cpuCount }, { isTransformResponse: false });
 };
 
 /**
- * 查询系统 CPU 使用率
+ * Truy vấn tỷ lệ sử dụng CPU của hệ thống
  */
 export const getCpuUsage = () => {
   return defHttp.get({ url: Api.cpuUsage }, { isTransformResponse: false });
 };
 
 /**
- * 查询应用启动时间点
+ * Truy vấn thời điểm ứng dụng khởi động
  */
 export const getProcessStartTime = () => {
   return defHttp.get({ url: Api.processStartTime }, { isTransformResponse: false });
 };
 
 /**
- * 查询应用已运行时间
+ * Truy vấn thời gian ứng dụng đã chạy
  */
 export const getProcessUptime = () => {
   return defHttp.get({ url: Api.processUptime }, { isTransformResponse: false });
 };
 
 /**
- * 查询当前应用 CPU 使用率
+ * Truy vấn tỷ lệ sử dụng CPU của ứng dụng hiện tại
  */
 export const getProcessCpuUsage = () => {
   return defHttp.get({ url: Api.processCpuUsage }, { isTransformResponse: false });
 };
 
 /**
- * 查询JVM 最大内存
+ * Truy vấn bộ nhớ tối đa của JVM
  */
 export const getJvmMemoryMax = () => {
   return defHttp.get({ url: Api.jvmMemoryMax }, { isTransformResponse: false });
 };
 
 /**
- * JVM 可用内存
+ * Bộ nhớ khả dụng của JVM
  */
 export const getJvmMemoryCommitted = () => {
   return defHttp.get({ url: Api.jvmMemoryCommitted }, { isTransformResponse: false });
 };
 
 /**
- * JVM 已用内存
+ * Bộ nhớ đã dùng của JVM
  */
 export const getJvmMemoryUsed = () => {
   return defHttp.get({ url: Api.jvmMemoryUsed }, { isTransformResponse: false });
 };
 
 /**
- * JVM 缓冲区已用内存
+ * Bộ nhớ đệm đã dùng của JVM
  */
 export const getJvmBufferMemoryUsed = () => {
   return defHttp.get({ url: Api.jvmBufferMemoryUsed }, { isTransformResponse: false });
 };
 
 /**
- *JVM 当前缓冲区数量
+ * Số lượng bộ đệm hiện tại của JVM
  */
 export const getJvmBufferCount = () => {
   return defHttp.get({ url: Api.jvmBufferCount }, { isTransformResponse: false });
 };
 
 /**
- **JVM 守护线程数量
+ ** Số lượng thread daemon của JVM
  */
 export const getJvmThreadsDaemon = () => {
   return defHttp.get({ url: Api.jvmThreadsDaemon }, { isTransformResponse: false });
 };
 
 /**
- *JVM 当前活跃线程数量
+ * Số lượng thread đang hoạt động của JVM
  */
 export const getJvmThreadsLive = () => {
   return defHttp.get({ url: Api.jvmThreadsLive }, { isTransformResponse: false });
 };
 
 /**
- *JVM 峰值线程数量
+ * Số lượng thread cao nhất của JVM
  */
 export const getJvmThreadsPeak = () => {
   return defHttp.get({ url: Api.jvmThreadsPeak }, { isTransformResponse: false });
 };
 
 /**
- *JVM 已加载 Class 数量
+ * Số lượng class đã tải của JVM
  */
 export const getJvmClassesLoaded = () => {
   return defHttp.get({ url: Api.jvmClassesLoaded }, { isTransformResponse: false });
 };
 
 /**
- *JVM 未加载 Class 数量
+ * Số lượng class chưa tải của JVM
  */
 export const getJvmClassesUnloaded = () => {
   return defHttp.get({ url: Api.jvmClassesUnloaded }, { isTransformResponse: false });
 };
 
 /**
- **GC 时, 年轻代分配的内存空间
+ ** Bộ nhớ được GC phân bổ cho Young Generation
  */
 export const getJvmGcMemoryAllocated = () => {
   return defHttp.get({ url: Api.jvmGcMemoryAllocated }, { isTransformResponse: false });
 };
 
 /**
- *GC 时, 老年代分配的内存空间
+ * Bộ nhớ được GC phân bổ cho Old Generation
  */
 export const getJvmGcMemoryPromoted = () => {
   return defHttp.get({ url: Api.jvmGcMemoryPromoted }, { isTransformResponse: false });
 };
 
 /**
- *GC 时, 老年代的最大内存空间
+ * Bộ nhớ tối đa của Old Generation khi GC
  */
 export const getJvmGcMaxDataSize = () => {
   return defHttp.get({ url: Api.jvmGcMaxDataSize }, { isTransformResponse: false });
 };
 
 /**
- *FullGC 时, 老年代的内存空间
+ * Bộ nhớ của Old Generation khi Full GC
  */
 export const getJvmGcLiveDataSize = () => {
   return defHttp.get({ url: Api.jvmGcLiveDataSize }, { isTransformResponse: false });
 };
 
 /**
- *系统启动以来GC 次数
+ * Số lần GC kể từ khi hệ thống khởi động
  */
 export const getJvmGcPause = () => {
   return defHttp.get({ url: Api.jvmGcPause }, { isTransformResponse: false });
 };
 
 /**
- *tomcat 已创建 session 数
+ * Số session Tomcat đã tạo
  */
 export const getTomcatSessionsCreated = () => {
   return defHttp.get({ url: Api.tomcatSessionsCreated }, { isTransformResponse: false });
 };
 
 /**
- *tomcat 已过期 session 数
+ * Số session Tomcat đã hết hạn
  */
 export const getTomcatSessionsExpired = () => {
   return defHttp.get({ url: Api.tomcatSessionsExpired }, { isTransformResponse: false });
 };
 
 /**
- *tomcat 当前活跃 session 数
+ * Số session Tomcat đang hoạt động
  */
 export const getTomcatSessionsActiveCurrent = () => {
   return defHttp.get({ url: Api.tomcatSessionsActiveCurrent }, { isTransformResponse: false });
 };
 
 /**
- *tomcat 活跃 session 数峰值
+ * Số session Tomcat đang hoạt động tối đa
  */
 export const getTomcatSessionsActiveMax = () => {
   return defHttp.get({ url: Api.tomcatSessionsActiveMax }, { isTransformResponse: false });
 };
 
 /**
- *超过session 最大配置后，拒绝的 session 个数
+ * Số session bị từ chối sau khi vượt quá số lượng session tối đa đã cấu hình
  */
 export const getTomcatSessionsRejected = () => {
   return defHttp.get({ url: Api.tomcatSessionsRejected }, { isTransformResponse: false });
 };
 
 /**
- *undertow 已创建 session 数
+ * Số session Undertow đã tạo
  */
 export const getUndertowSessionsCreated = () => {
   return defHttp.get({ url: Api.undertowSessionsCreated }, { isTransformResponse: false });
 };
 
 /**
- *undertow 已过期 session 数
+ * Số session Undertow đã hết hạn
  */
 export const getUndertowSessionsExpired = () => {
   return defHttp.get({ url: Api.undertowSessionsExpired }, { isTransformResponse: false });
 };
 
 /**
- *undertow 当前活跃 session 数
+ * Số session Undertow đang hoạt động
  */
 export const getUndertowSessionsActiveCurrent = () => {
   return defHttp.get({ url: Api.undertowSessionsActiveCurrent }, { isTransformResponse: false });
 };
 
 /**
- *undertow 活跃 session 数峰值
+ * Số session Undertow đang hoạt động tối đa
  */
 export const getUndertowSessionsActiveMax = () => {
   return defHttp.get({ url: Api.undertowSessionsActiveMax }, { isTransformResponse: false });
 };
 
 /**
- * 内存信息
+ * Thông tin bộ nhớ
  */
 export const getMemoryInfo = () => {
   return defHttp.get({ url: Api.memoryInfo }, { isTransformResponse: false });
@@ -271,78 +271,78 @@ export const getMoreInfo = (infoType) => {
 export const getTextInfo = (infoType) => {
   if (infoType == '1') {
     return {
-      'system.cpu.count': { color: 'green', text: 'CPU 数量', unit: '核' },
-      'system.cpu.usage': { color: 'green', text: '系统 CPU 使用率', unit: '%', valueType: 'Number' },
-      'process.start.time': { color: 'purple', text: '应用启动时间点', unit: '', valueType: 'Date' },
-      'process.uptime': { color: 'purple', text: '应用已运行时间', unit: '秒' },
-      'process.cpu.usage': { color: 'purple', text: '当前应用 CPU 使用率', unit: '%', valueType: 'Number' },
+      'system.cpu.count': { color: 'green', text: 'Số lượng CPU', unit: 'lõi' },
+      'system.cpu.usage': { color: 'green', text: 'Tỷ lệ sử dụng CPU hệ thống', unit: '%', valueType: 'Number' },
+      'process.start.time': { color: 'purple', text: 'Thời điểm ứng dụng khởi động', unit: '', valueType: 'Date' },
+      'process.uptime': { color: 'purple', text: 'Thời gian ứng dụng đã chạy', unit: 'giây' },
+      'process.cpu.usage': { color: 'purple', text: 'Tỷ lệ sử dụng CPU của ứng dụng hiện tại', unit: '%', valueType: 'Number' },
     };
   }
   if (infoType == '2') {
     return {
-      'jvm.memory.max': { color: 'purple', text: 'JVM 最大内存', unit: 'MB', valueType: 'RAM' },
-      'jvm.memory.committed': { color: 'purple', text: 'JVM 可用内存', unit: 'MB', valueType: 'RAM' },
-      'jvm.memory.used': { color: 'purple', text: 'JVM 已用内存', unit: 'MB', valueType: 'RAM' },
-      'jvm.buffer.memory.used': { color: 'cyan', text: 'JVM 缓冲区已用内存', unit: 'MB', valueType: 'RAM' },
-      'jvm.buffer.count': { color: 'cyan', text: '当前缓冲区数量', unit: '个' },
-      'jvm.threads.daemon': { color: 'green', text: 'JVM 守护线程数量', unit: '个' },
-      'jvm.threads.live': { color: 'green', text: 'JVM 当前活跃线程数量', unit: '个' },
-      'jvm.threads.peak': { color: 'green', text: 'JVM 峰值线程数量', unit: '个' },
-      'jvm.classes.loaded': { color: 'orange', text: 'JVM 已加载 Class 数量', unit: '个' },
-      'jvm.classes.unloaded': { color: 'orange', text: 'JVM 未加载 Class 数量', unit: '个' },
-      'jvm.gc.memory.allocated': { color: 'pink', text: 'GC 时, 年轻代分配的内存空间', unit: 'MB', valueType: 'RAM' },
-      'jvm.gc.memory.promoted': { color: 'pink', text: 'GC 时, 老年代分配的内存空间', unit: 'MB', valueType: 'RAM' },
-      'jvm.gc.max.data.size': { color: 'pink', text: 'GC 时, 老年代的最大内存空间', unit: 'MB', valueType: 'RAM' },
-      'jvm.gc.live.data.size': { color: 'pink', text: 'FullGC 时, 老年代的内存空间', unit: 'MB', valueType: 'RAM' },
-      'jvm.gc.pause.count': { color: 'blue', text: '系统启动以来GC 次数', unit: '次' },
-      'jvm.gc.pause.totalTime': { color: 'blue', text: '系统启动以来GC 总耗时', unit: '秒' },
+      'jvm.memory.max': { color: 'purple', text: 'Bộ nhớ tối đa của JVM', unit: 'MB', valueType: 'RAM' },
+      'jvm.memory.committed': { color: 'purple', text: 'Bộ nhớ khả dụng của JVM', unit: 'MB', valueType: 'RAM' },
+      'jvm.memory.used': { color: 'purple', text: 'Bộ nhớ đã dùng của JVM', unit: 'MB', valueType: 'RAM' },
+      'jvm.buffer.memory.used': { color: 'cyan', text: 'Bộ nhớ đệm đã dùng của JVM', unit: 'MB', valueType: 'RAM' },
+      'jvm.buffer.count': { color: 'cyan', text: 'Số lượng bộ đệm hiện tại', unit: '' },
+      'jvm.threads.daemon': { color: 'green', text: 'Số lượng thread daemon của JVM', unit: '' },
+      'jvm.threads.live': { color: 'green', text: 'Số lượng thread đang hoạt động của JVM', unit: '' },
+      'jvm.threads.peak': { color: 'green', text: 'Số lượng thread cao nhất của JVM', unit: '' },
+      'jvm.classes.loaded': { color: 'orange', text: 'Số lượng class đã tải của JVM', unit: '' },
+      'jvm.classes.unloaded': { color: 'orange', text: 'Số lượng class chưa tải của JVM', unit: '' },
+      'jvm.gc.memory.allocated': { color: 'pink', text: 'Bộ nhớ được GC phân bổ cho Young Generation', unit: 'MB', valueType: 'RAM' },
+      'jvm.gc.memory.promoted': { color: 'pink', text: 'Bộ nhớ được GC phân bổ cho Old Generation', unit: 'MB', valueType: 'RAM' },
+      'jvm.gc.max.data.size': { color: 'pink', text: 'Bộ nhớ tối đa của Old Generation khi GC', unit: 'MB', valueType: 'RAM' },
+      'jvm.gc.live.data.size': { color: 'pink', text: 'Bộ nhớ của Old Generation khi Full GC', unit: 'MB', valueType: 'RAM' },
+      'jvm.gc.pause.count': { color: 'blue', text: 'Số lần GC kể từ khi hệ thống khởi động', unit: 'lần' },
+      'jvm.gc.pause.totalTime': { color: 'blue', text: 'Tổng thời gian GC kể từ khi hệ thống khởi động', unit: 'giây' },
     };
   }
   if (infoType == '3') {
     return {
-      'tomcat.sessions.created': { color: 'green', text: 'tomcat 已创建 session 数', unit: '个' },
-      'tomcat.sessions.expired': { color: 'green', text: 'tomcat 已过期 session 数', unit: '个' },
-      'tomcat.sessions.active.current': { color: 'green', text: 'tomcat 当前活跃 session 数', unit: '个' },
-      'tomcat.sessions.active.max': { color: 'green', text: 'tomcat 活跃 session 数峰值', unit: '个' },
-      'tomcat.sessions.rejected': { color: 'green', text: '超过session 最大配置后，拒绝的 session 个数', unit: '个' },
-      'tomcat.global.sent': { color: 'purple', text: '发送的字节数', unit: 'bytes' },
-      'tomcat.global.request.max': { color: 'purple', text: 'request 请求最长耗时', unit: '秒' },
-      'tomcat.global.request.count': { color: 'purple', text: '全局 request 请求次数', unit: '次' },
-      'tomcat.global.request.totalTime': { color: 'purple', text: '全局 request 请求总耗时', unit: '秒' },
-      'tomcat.servlet.request.max': { color: 'cyan', text: 'servlet 请求最长耗时', unit: '秒' },
-      'tomcat.servlet.request.count': { color: 'cyan', text: 'servlet 总请求次数', unit: '次' },
-      'tomcat.servlet.request.totalTime': { color: 'cyan', text: 'servlet 请求总耗时', unit: '秒' },
-      'tomcat.threads.current': { color: 'pink', text: 'tomcat 当前线程数（包括守护线程）', unit: '个' },
-      'tomcat.threads.config.max': { color: 'pink', text: 'tomcat 配置的线程最大数', unit: '个' },
+      'tomcat.sessions.created': { color: 'green', text: 'Số session Tomcat đã tạo', unit: '' },
+      'tomcat.sessions.expired': { color: 'green', text: 'Số session Tomcat đã hết hạn', unit: '' },
+      'tomcat.sessions.active.current': { color: 'green', text: 'Số session Tomcat đang hoạt động', unit: '' },
+      'tomcat.sessions.active.max': { color: 'green', text: 'Số session Tomcat đang hoạt động tối đa', unit: '' },
+      'tomcat.sessions.rejected': { color: 'green', text: 'Số session bị từ chối sau khi vượt quá số lượng session tối đa đã cấu hình', unit: '' },
+      'tomcat.global.sent': { color: 'purple', text: 'Số byte đã gửi', unit: 'bytes' },
+      'tomcat.global.request.max': { color: 'purple', text: 'Thời gian xử lý request dài nhất', unit: 'giây' },
+      'tomcat.global.request.count': { color: 'purple', text: 'Tổng số lần request toàn cục', unit: 'lần' },
+      'tomcat.global.request.totalTime': { color: 'purple', text: 'Tổng thời gian xử lý request toàn cục', unit: 'giây' },
+      'tomcat.servlet.request.max': { color: 'cyan', text: 'Thời gian xử lý request của servlet dài nhất', unit: 'giây' },
+      'tomcat.servlet.request.count': { color: 'cyan', text: 'Tổng số lần request của servlet', unit: 'lần' },
+      'tomcat.servlet.request.totalTime': { color: 'cyan', text: 'Tổng thời gian xử lý request của servlet', unit: 'giây' },
+      'tomcat.threads.current': { color: 'pink', text: 'Số thread hiện tại của Tomcat (bao gồm thread daemon)', unit: '' },
+      'tomcat.threads.config.max': { color: 'pink', text: 'Số thread tối đa đã cấu hình của Tomcat', unit: '' },
     };
   }
   if (infoType == '5') {
     return {
-      'memory.physical.total': { color: 'green', text: '总物理内存', unit: 'MB', valueType: 'RAM' },
-      'memory.physical.used': { color: 'green', text: '已使用物理内存', unit: 'MB', valueType: 'RAM' },
-      'memory.physical.free': { color: 'green', text: '可用物理内存', unit: 'MB', valueType: 'RAM' },
-      'memory.physical.usage': { color: 'green', text: '物理内存使用率', unit: '%', valueType: 'Number' },
-      'memory.runtime.total': { color: 'purple', text: 'JVM总内存', unit: 'MB', valueType: 'RAM' },
-      'memory.runtime.used': { color: 'purple', text: 'JVM已使用内存', unit: 'MB', valueType: 'RAM' },
-      'memory.runtime.max': { color: 'purple', text: 'JVM最大内存', unit: 'MB', valueType: 'RAM' },
-      'memory.runtime.free': { color: 'purple', text: 'JVM可用内存', unit: 'MB', valueType: 'RAM' },
-      'memory.runtime.usage': { color: 'purple', text: 'JVM内存使用率', unit: '%', valueType: 'Number' },
+      'memory.physical.total': { color: 'green', text: 'Tổng bộ nhớ vật lý', unit: 'MB', valueType: 'RAM' },
+      'memory.physical.used': { color: 'green', text: 'Bộ nhớ vật lý đã dùng', unit: 'MB', valueType: 'RAM' },
+      'memory.physical.free': { color: 'green', text: 'Bộ nhớ vật lý khả dụng', unit: 'MB', valueType: 'RAM' },
+      'memory.physical.usage': { color: 'green', text: 'Tỷ lệ sử dụng bộ nhớ vật lý', unit: '%', valueType: 'Number' },
+      'memory.runtime.total': { color: 'purple', text: 'Tổng bộ nhớ JVM', unit: 'MB', valueType: 'RAM' },
+      'memory.runtime.used': { color: 'purple', text: 'Bộ nhớ JVM đã dùng', unit: 'MB', valueType: 'RAM' },
+      'memory.runtime.max': { color: 'purple', text: 'Bộ nhớ tối đa của JVM', unit: 'MB', valueType: 'RAM' },
+      'memory.runtime.free': { color: 'purple', text: 'Bộ nhớ khả dụng của JVM', unit: 'MB', valueType: 'RAM' },
+      'memory.runtime.usage': { color: 'purple', text: 'Tỷ lệ sử dụng bộ nhớ JVM', unit: '%', valueType: 'Number' },
     };
   }
   if (infoType == '6') {
-    // undertow 监控
+    // Giám sát Undertow
     return {
-      'undertow.sessions.created': { color: 'green', text: 'undertow 已创建 session 数', unit: '个' },
-      'undertow.sessions.expired': { color: 'green', text: 'undertow 已过期 session 数', unit: '个' },
-      'undertow.sessions.active.current': { color: 'green', text: 'undertow 当前活跃 session 数', unit: '个' },
-      'undertow.sessions.active.max': { color: 'green', text: 'undertow 活跃 session 数峰值', unit: '个' },
-      'undertow.sessions.rejected': { color: 'green', text: '超过session 最大配置后，拒绝的 session 个数', unit: '个' },
+      'undertow.sessions.created': { color: 'green', text: 'Số session Undertow đã tạo', unit: '' },
+      'undertow.sessions.expired': { color: 'green', text: 'Số session Undertow đã hết hạn', unit: '' },
+      'undertow.sessions.active.current': { color: 'green', text: 'Số session Undertow đang hoạt động', unit: '' },
+      'undertow.sessions.active.max': { color: 'green', text: 'Số session Undertow đang hoạt động tối đa', unit: '' },
+      'undertow.sessions.rejected': { color: 'green', text: 'Số session bị từ chối sau khi vượt quá số lượng session tối đa đã cấu hình', unit: '' },
     };
   }
 };
 
 /**
- * 查询cpu数量
+ * Truy vấn số lượng CPU
  * @param params
  */
 export const getServerInfo = (infoType) => {
@@ -380,7 +380,7 @@ export const getServerInfo = (infoType) => {
   if (infoType == '5') {
     return Promise.all([getMemoryInfo()]);
   }
-  // undertow监控
+  // Giám sát Undertow
   if (infoType == '6') {
     return Promise.all([
       getUndertowSessionsActiveCurrent(),

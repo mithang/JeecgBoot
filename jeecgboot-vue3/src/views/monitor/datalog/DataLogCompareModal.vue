@@ -1,18 +1,18 @@
 <template>
   <div>
-    <BasicModal v-bind="$attrs" @register="register" title="数据版本对比" width="60%" destroyOnClose :showOkBtn="false">
-      <!-- 版本选择区 -->
+    <BasicModal v-bind="$attrs" @register="register" title="So sánh phiên bản dữ liệu" width="60%" destroyOnClose :showOkBtn="false">
+      <!-- Vùng chọn phiên bản -->
       <div class="compare-header">
         <div class="compare-header__info">
-          <span class="compare-header__label">数据表：</span>
+          <span class="compare-header__label">Bảng dữ liệu:</span>
           <a-tag color="blue">{{ dataTable }}</a-tag>
-          <span class="compare-header__label" style="margin-left: 16px">数据ID：</span>
+          <span class="compare-header__label" style="margin-left: 16px">ID dữ liệu:</span>
           <span class="compare-header__id">{{ dataId }}</span>
         </div>
         <div class="compare-header__selector">
-          <span class="compare-header__label">版本对比：</span>
+          <span class="compare-header__label">So sánh phiên bản:</span>
           <a-select
-            placeholder="选择版本"
+            placeholder="Chọn phiên bản"
             @change="handleChange1"
             v-model:value="params.dataId1"
             style="width: 120px"
@@ -23,7 +23,7 @@
           </a-select>
           <span class="compare-header__vs">VS</span>
           <a-select
-            placeholder="选择版本"
+            placeholder="Chọn phiên bản"
             @change="handleChange2"
             v-model:value="params.dataId2"
             style="width: 120px"
@@ -35,19 +35,19 @@
         </div>
       </div>
 
-      <!-- 差异统计 -->
+      <!-- Thống kê khác biệt -->
       <div class="compare-stats" v-if="dataSource.length > 0">
-        <a-tag color="red">{{ diffCount }} 处差异</a-tag>
-        <a-tag color="green">{{ dataSource.length - diffCount }} 处相同</a-tag>
-        <span class="compare-stats__total">共 {{ dataSource.length }} 个字段</span>
+        <a-tag color="red">{{ diffCount }} điểm khác biệt</a-tag>
+        <a-tag color="green">{{ dataSource.length - diffCount }} điểm giống nhau</a-tag>
+        <span class="compare-stats__total">Tổng cộng {{ dataSource.length }} trường</span>
       </div>
 
-      <!-- 对比表格 -->
+      <!-- Bảng so sánh -->
       <div class="compare-table" v-if="isUpdate">
         <table class="compare-table__inner">
           <thead>
             <tr>
-              <th class="col-field">字段名</th>
+              <th class="col-field">Tên trường</th>
               <th class="col-value">
                 <span class="version-tag version-tag--left">V{{ dataVersion1Num }}</span>
               </th>
@@ -123,7 +123,7 @@
           dataVersion2Num.value = res[1].dataVersion;
           const json1 = JSON.parse(res[0].dataContent);
           const json2 = JSON.parse(res[1].dataContent);
-          // 收集所有字段（兼顾两边都有的和只有一边有的）
+          // Thu thập tất cả các trường (bao gồm cả hai bên đều có và chỉ một bên có)
           const allKeys = new Set([...Object.keys(json1), ...Object.keys(json2)]);
           const data: any[] = [];
           allKeys.forEach((fieldKey) => {
@@ -136,7 +136,7 @@
               isDiff: String(v1) !== String(v2),
             });
           });
-          // 差异项排前面
+          // Các mục khác nhau xếp lên trước
           data.sort((a, b) => (a.isDiff === b.isDiff ? 0 : a.isDiff ? -1 : 1));
           dataSource.value = data;
         });
@@ -144,7 +144,7 @@
 
       function handleChange1(value) {
         if (params.dataId2 == value) {
-          createMessage.warning('相同版本号不能比较');
+          createMessage.warning('Không thể so sánh hai phiên bản giống nhau');
           return;
         }
         params.dataId1 = value;
@@ -153,7 +153,7 @@
 
       function handleChange2(value) {
         if (params.dataId1 == value) {
-          createMessage.warning('相同版本号不能比较');
+          createMessage.warning('Không thể so sánh hai phiên bản giống nhau');
           return;
         }
         params.dataId2 = value;

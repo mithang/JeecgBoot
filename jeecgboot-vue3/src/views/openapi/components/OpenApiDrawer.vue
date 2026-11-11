@@ -8,7 +8,7 @@
     @ok="handleSubmit"
     :showFooter="showFooter"
   >
-    <!-- 上部：基本信息表单 -->
+    <!-- Phần trên: Biểu mẫu thông tin cơ bản -->
     <BasicForm @register="registerForm" ref="formRef">
       <template #requestUrlSlot="{ model, field }">
         <a-input-group compact style="display: flex">
@@ -18,7 +18,7 @@
             style="width: 130px; flex-shrink: 0"
             :options="requestMethodOptions"
             :disabled="formDisabled"
-            placeholder="请求方式"
+            placeholder="Phương thức yêu cầu"
           />
         </a-input-group>
       </template>
@@ -26,10 +26,10 @@
         <a-textarea
           v-model:value="model[field]"
           :rows="5"
-          placeholder="示例：&#10;192.168.1.100&#10;10.0.0.0/8&#10;172.16.*.*"
+          placeholder="Ví dụ:&#10;192.168.1.100&#10;10.0.0.0/8&#10;172.16.*.*"
           :disabled="formDisabled"
         />
-        <!-- 标签预览 -->
+        <!-- Xem trước nhãn -->
         <div v-if="model[field]" style="margin-top: 8px">
           <a-tag
             v-for="item in parseWhiteList(model[field])"
@@ -40,16 +40,16 @@
             {{ item }}
           </a-tag>
         </div>
-        <!-- 整理按钮 -->
+        <!-- Nút sắp xếp -->
         <div v-if="model[field] && !formDisabled" style="margin-top: 4px; text-align: right">
-          <a-button size="small" @click="formatWhiteList(model, field)">整 理</a-button>
+          <a-button size="small" @click="formatWhiteList(model, field)">Sắp xếp</a-button>
         </div>
       </template>
     </BasicForm>
 
-    <!-- 下部：Tabs -->
+    <!-- Phần dưới: Tabs -->
     <a-tabs v-model:activeKey="activeTab" style="margin-top: 16px">
-      <a-tab-pane key="headers" tab="请求头">
+      <a-tab-pane key="headers" tab="Header yêu cầu">
         <JVxeTable
           keep-source
           ref="openApiHeader"
@@ -66,7 +66,7 @@
         />
       </a-tab-pane>
 
-      <a-tab-pane key="params" tab="请求参数">
+      <a-tab-pane key="params" tab="Tham số yêu cầu">
         <JVxeTable
           keep-source
           ref="openApiParam"
@@ -81,14 +81,14 @@
         />
       </a-tab-pane>
 
-      <a-tab-pane key="body" tab="请求体">
+      <a-tab-pane key="body" tab="Body yêu cầu">
         <div style="margin-bottom: 8px" v-if="!formDisabled">
           <a-space>
             <a-button size="small" @click="toggleBodyExample">
-              {{ showBodyExample ? '隐藏示例' : '查看示例' }}
+              {{ showBodyExample ? 'Ẩn ví dụ' : 'Xem ví dụ' }}
             </a-button>
-            <a-button size="small" type="primary" ghost @click="fillBodyExample" :disabled="formDisabled">填入示例</a-button>
-            <a-button size="small" danger @click="clearBody" :disabled="formDisabled">清空</a-button>
+            <a-button size="small" type="primary" ghost @click="fillBodyExample" :disabled="formDisabled">Điền ví dụ</a-button>
+            <a-button size="small" danger @click="clearBody" :disabled="formDisabled">Xóa sạch</a-button>
           </a-space>
         </div>
         <div
@@ -96,7 +96,7 @@
           style="margin-bottom: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px; border-left: 3px solid #1890ff"
         >
           <div style="margin-bottom: 8px; color: #666; font-size: 12px">
-            <strong>示例参考：</strong>以下为常见 JSON 请求体示例，请根据实际接口字段调整后填入下方编辑器。
+            <strong>Tham khảo ví dụ:</strong> Dưới đây là ví dụ JSON request body thường gặp, vui lòng điều chỉnh theo trường API thực tế rồi điền vào trình soạn thảo bên dưới.
           </div>
           <pre
             style="margin: 0; white-space: pre-wrap; word-break: break-all; font-family: 'Courier New', monospace; font-size: 12px; color: #333"
@@ -107,15 +107,15 @@
         </div>
       </a-tab-pane>
 
-      <a-tab-pane key="response" tab="响应配置" v-if="false">
+      <a-tab-pane key="response" tab="Cấu hình phản hồi" v-if="false">
         <div style="margin-bottom: 16px">
-          <h4 style="margin-bottom: 8px">响应示例</h4>
+          <h4 style="margin-bottom: 8px">Ví dụ phản hồi</h4>
           <div style="border: 1px solid #d9d9d9; border-radius: 4px; min-height: 200px">
             <CodeEditor v-model:value="responseExample" mode="application/json" :readonly="formDisabled" />
           </div>
         </div>
         <div>
-          <h4 style="margin-bottom: 8px">响应字段说明</h4>
+          <h4 style="margin-bottom: 8px">Giải thích trường phản hồi</h4>
           <JVxeTable
             keep-source
             ref="responseField"
@@ -152,38 +152,38 @@
 
   const emit = defineEmits(['register', 'success']);
   const $message = useMessage();
-  // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1266】默认请求头 appKey/signature/timestamp 删除时校验拦截且必填禁用
-  // 默认请求头 appKey/signature/timestamp 删除时校验拦截
+  // update-begin--author:liaozhiyang---date:20260804---for: [LHZP-1266] Header yêu cầu mặc định appKey/signature/timestamp: chặn kiểm tra khi xóa, bắt buộc bị vô hiệu hóa
+  // Chặn kiểm tra khi xóa header yêu cầu mặc định appKey/signature/timestamp
 
-  /** 批量删除请求头时拦截默认参数 */
+  /** Chặn tham số mặc định khi xóa hàng loạt header yêu cầu */
   async function onHeaderRemoved(event) {
     const deleteRows = event?.deleteRows || [];
     const blockedRows = deleteRows.filter((row) => FIXED_HEADER_KEYS.includes(row.headerKey));
     const allowRows = deleteRows.filter((row) => !FIXED_HEADER_KEYS.includes(row.headerKey));
 
     if (blockedRows.length) {
-      const names = blockedRows.map((row) => row.headerKey).join('、');
-      $message.createMessage.warning(`默认请求头 ${names} 不允许删除`);
+      const names = blockedRows.map((row) => row.headerKey).join(', ');
+      $message.createMessage.warning(`Header yêu cầu mặc định ${names} không được phép xóa`);
     }
 
-    // 全部都是默认请求头，直接取消删除
+    // Tất cả đều là header yêu cầu mặc định, hủy xóa trực tiếp
     if (!allowRows.length) {
       return;
     }
 
-    // 仅删除允许删除的行
+    // Chỉ xóa các hàng được phép xóa
     if (blockedRows.length) {
       await openApiHeader.value?.removeRows(allowRows);
       await openApiHeader.value?.clearSelection?.();
       return;
     }
 
-    // 没有默认请求头，走正常确认删除
+    // Không có header yêu cầu mặc định, thực hiện xác nhận xóa bình thường
     if (typeof event.confirmRemove === 'function') {
       await event.confirmRemove();
     }
   }
-  // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1266】默认请求头 appKey/signature/timestamp 删除时校验拦截且必填禁用
+  // update-end--author:liaozhiyang---date:20260804---for: [LHZP-1266] Header yêu cầu mặc định appKey/signature/timestamp: chặn kiểm tra khi xóa, bắt buộc bị vô hiệu hóa
   const isUpdate = ref(true);
   const formDisabled = ref(false);
   const showFooter = ref(true);
@@ -192,7 +192,7 @@
   const responseExample = ref('');
   const showBodyExample = ref(false);
 
-  // 请求体示例代码（供前端参考/一键填入）
+  // Mã ví dụ request body (để frontend tham khảo / điền một lần)
   const bodyExample = `{
   "name": "jeecg",
   "remember": true,
@@ -260,9 +260,9 @@
     setProps({ disabled: !data?.showFooter });
   });
 
-  const title = computed(() => (!unref(isUpdate) ? '新增' : !unref(formDisabled) ? '编辑' : '详情'));
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới' : !unref(formDisabled) ? 'Chỉnh sửa' : 'Chi tiết'));
 
-  /** 解析白名单文本为条目数组 */
+  /** Phân tích văn bản danh sách trắng thành mảng mục */
   function parseWhiteList(text: string): string[] {
     if (!text) return [];
     return text
@@ -271,7 +271,7 @@
       .filter(Boolean);
   }
 
-  /** 整理白名单：去空行、去重、每行一个 */
+  /** Sắp xếp whitelist: bỏ dòng trống, bỏ trùng, mỗi dòng một cái */
   function formatWhiteList(model: any, field: string) {
     const items = parseWhiteList(model[field]);
     const unique = [...new Set(items)];
@@ -289,17 +289,17 @@
     showBodyExample.value = false;
   }
 
-  /** 切换请求体示例展示 */
+  /** Bật/tắt hiển thị ví dụ request body */
   function toggleBodyExample() {
     showBodyExample.value = !showBodyExample.value;
   }
 
-  /** 将示例代码填入请求体编辑器 */
+  /** Điền mã ví dụ vào trình chỉnh sửa request body */
   function fillBodyExample() {
     bodyContent.value = bodyExample;
   }
 
-  /** 清空请求体 */
+  /** Xóa sạch request body */
   function clearBody() {
     bodyContent.value = '';
   }
@@ -309,27 +309,27 @@
       const values = await validate();
       setDrawerProps({ confirmLoading: true });
 
-      // Collect JVxeTable data（getTableData 直接返回数组）
+      // Thu thập dữ liệu JVxeTable (getTableData trả về trực tiếp một mảng)
       const headerData = openApiHeader.value?.getTableData();
       const paramData = openApiParam.value?.getTableData();
       const responseFieldData = responseField.value?.getTableData();
 
       const headersJson = headerData?.length ? JSON.stringify(headerData) : null;
-      // update-begin--author:liusq---date:20260805---for：【请求参数】删除全部数据后保存，重新打开仍存在
-      // 空数组需要明确提交，避免 null 被请求参数序列化忽略，导致后端保留原数据
+      // update-begin--author:liusq---date:20260805---for: [Tham số yêu cầu] Sau khi xóa tất cả dữ liệu rồi lưu, mở lại vẫn tồn tại
+      // Mảng trống cần gửi rõ ràng, tránh null bị tham số yêu cầu serialize bỏ qua khiến backend giữ dữ liệu gốc
       const paramsJson = JSON.stringify(paramData || []);
-      // update-end--author:liusq---date:20260805---for：【请求参数】删除全部数据后保存，重新打开仍存在
+      // update-end--author:liusq---date:20260805---for: [Tham số yêu cầu] Sau khi xóa tất cả dữ liệu rồi lưu, mở lại vẫn tồn tại
       const responseFieldsJson = responseFieldData?.length ? JSON.stringify(responseFieldData) : null;
 
       // Validate body JSON
       if (bodyContent.value) {
         try {
           if (typeof JSON.parse(bodyContent.value) != 'object') {
-            $message.createMessage.error('JSON格式化错误,请检查输入数据');
+            $message.createMessage.error('Lỗi định dạng JSON, vui lòng kiểm tra dữ liệu đã nhập');
             return;
           }
         } catch (e) {
-          $message.createMessage.error('JSON格式化错误,请检查输入数据');
+          $message.createMessage.error('Lỗi định dạng JSON, vui lòng kiểm tra dữ liệu đã nhập');
           return;
         }
       }
@@ -339,7 +339,7 @@
         try {
           JSON.parse(responseExample.value);
         } catch (e) {
-          $message.createMessage.error('响应示例JSON格式错误,请检查输入数据');
+          $message.createMessage.error('Ví dụ phản hồi lỗi định dạng JSON, vui lòng kiểm tra dữ liệu đã nhập');
           return;
         }
       }

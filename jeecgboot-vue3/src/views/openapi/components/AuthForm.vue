@@ -4,11 +4,11 @@
       <a-col :span="12" v-for="item in apiList" @click="handleSelect(item)">
         <a-card :style="item.checked ? { border: '1px solid #3370ff' } : {}" hoverable class="checkbox-card" :body-style="{ width: '100%', padding: '10px' }">
           <div class="checkbox-name" style="display: flex; width: 100%; justify-content: space-between">
-            <span>接口名称: {{ item.name }}</span>
+            <span>Tên API: {{ item.name }}</span>
             <a-checkbox v-model:checked="item.checked" @click.stop class="quantum-checker" @change="(e) => handleChange(e, item)"> </a-checkbox>
           </div>
           <div class="checkbox-name" style="margin-top: 4px">
-            请求方式: <span>{{item.requestMethod}}</span>
+            Phương thức yêu cầu: <span>{{item.requestMethod}}</span>
           </div>
         </a-card>
       </a-col>
@@ -43,26 +43,26 @@ const props = defineProps({
   const emit = defineEmits(['register', 'ok']);
   const { createMessage } = useMessage();
   const confirmLoading = ref<boolean>(false);
-  //认证ID
+  // ID xác thực
   const apiAuthId = ref<string>('');
-  //表单验证
+  // Kiểm chứng biểu mẫu
   const validatorRules = reactive({});
-  //api列表
+  // Danh sách API
   const apiList = ref<any>([]);
-  //选中的值
+  // Giá trị đã chọn
   const selectedRowKeys = ref<any>([]);
-  //选中的数据
+  // Dữ liệu đã chọn
   const selectedRows = ref<any>([]);
-  //当前页数
+  // Số trang hiện tại
   const pageNo = ref<number>(1);
-  //每页条数
+  // Số bản ghi mỗi trang
   const pageSize = ref<number>(10);
-  //总条数
+  // Tổng số bản ghi
   const total = ref<number>(0);
-  //可选择的页数
+  // Số trang có thể chọn
   const pageSizeOptions = ref<any>(['10', '20', '30']);
 
-  // 表单禁用
+  // Vô hiệu hóa biểu mẫu
   const disabled = computed(() => {
     if (props.formBpm === true) {
       if (props.formData.disabled === false) {
@@ -75,7 +75,7 @@ const props = defineProps({
   });
 
   /**
-   * 加载数据
+   * Tải dữ liệu
    */
   function reload() {
     getApiList({ pageNo: pageNo.value, pageSize: pageSize.value, column: 'createTime', order: 'desc'}).then((res)=>{
@@ -94,14 +94,14 @@ const props = defineProps({
   }
   
   /**
-   * 新增
+   * Thêm mới
    */
   function add() {
     edit({});
   }
 
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   async function edit(record) {
     selectedRowKeys.value = [];
@@ -110,7 +110,7 @@ const props = defineProps({
     pageSize.value = 10;
     apiAuthId.value = record.id;
     await nextTick(() => {
-      // 获取当前已授权的项目
+      // Lấy dự án đã ủy quyền hiện tại
       getPermissionList({ apiAuthId: record.id }).then((res) => {
         if (res.length > 0) {
           res.forEach((item) => {
@@ -119,7 +119,7 @@ const props = defineProps({
               selectedRows.value.push(item);
             }
           });
-          //设置选中
+          // Đặt trạng thái đã chọn
           setChecked();
         }
       });
@@ -128,11 +128,11 @@ const props = defineProps({
   }
 
   /**
-   * 提交数据
+   * Gửi dữ liệu
    */
   async function submitForm() {
     confirmLoading.value = true;
-    //时间格式化
+    // Định dạng thời gian
     let model = {};
     let apiId = ""
     selectedRowKeys.value.forEach((item) => {
@@ -160,7 +160,7 @@ const props = defineProps({
   };
 
   /**
-   * 复选框选中事件
+   * Sự kiện chọn checkbox
    * @param item
    */
   function handleSelect(item) {
@@ -169,7 +169,7 @@ const props = defineProps({
     if (target) {
       target.checked = !target.checked;
     }
-    //存放选中的知识库的id
+    // Lưu ID kho tri thức đã chọn
     if (!selectedRowKeys.value || selectedRowKeys.value.length == 0) {
       selectedRowKeys.value.push(id);
       selectedRows.value.push(item);
@@ -186,7 +186,7 @@ const props = defineProps({
   }
 
   /**
-   * 复选框选中事件
+   * Sự kiện chọn checkbox
    *
    * @param e
    * @param item
@@ -205,7 +205,7 @@ const props = defineProps({
   }
 
   /**
-   * 分页改变事件
+   * Sự kiện đổi trang
    * @param page
    * @param current
    */
@@ -216,7 +216,7 @@ const props = defineProps({
   }
 
   /**
-   * 设置选装状态
+   * Đặt trạng thái đã chọn
    */
   function setChecked() {
     if (apiList.value && apiList.value.length > 0){

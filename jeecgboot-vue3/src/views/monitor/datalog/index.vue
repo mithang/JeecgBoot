@@ -2,12 +2,12 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button preIcon="ant-design:swap-outlined" type="primary" size="small" @click="handleCompare">数据比较</a-button>
-        <span v-if="selectedRowKeys.length === 0" class="compare-tip">请勾选两条相同数据ID的记录</span>
-        <a-tag v-else-if="selectedRowKeys.length === 1" color="warning" style="margin-left: 10px">再选一条相同数据ID的记录</a-tag>
-        <a-tag v-else-if="selectedRowKeys.length === 2 && !isSameDataId" color="error" style="margin-left: 10px">数据ID不一致，无法比较</a-tag>
-        <a-tag v-else-if="selectedRowKeys.length === 2 && isSameDataId" color="success" style="margin-left: 10px">可以比较 V{{ selectedRows[0]?.dataVersion }} vs V{{ selectedRows[1]?.dataVersion }}</a-tag>
-        <a-tag v-else color="error" style="margin-left: 10px">只能选择两条记录</a-tag>
+        <a-button preIcon="ant-design:swap-outlined" type="primary" size="small" @click="handleCompare">So sánh dữ liệu</a-button>
+        <span v-if="selectedRowKeys.length === 0" class="compare-tip">Vui lòng chọn hai bản ghi có cùng ID dữ liệu</span>
+        <a-tag v-else-if="selectedRowKeys.length === 1" color="warning" style="margin-left: 10px">Chọn thêm một bản ghi có cùng ID dữ liệu</a-tag>
+        <a-tag v-else-if="selectedRowKeys.length === 2 && !isSameDataId" color="error" style="margin-left: 10px">ID dữ liệu không nhất quán, không thể so sánh</a-tag>
+        <a-tag v-else-if="selectedRowKeys.length === 2 && isSameDataId" color="success" style="margin-left: 10px">Có thể so sánh V{{ selectedRows[0]?.dataVersion }} vs V{{ selectedRows[1]?.dataVersion }}</a-tag>
+        <a-tag v-else color="error" style="margin-left: 10px">Chỉ có thể chọn hai bản ghi</a-tag>
       </template>
     </BasicTable>
     <DataLogCompareModal @register="registerModal" @success="reload" />
@@ -30,7 +30,7 @@
   const { tableContext } = useListPage({
     designScope: 'datalog-template',
     tableProps: {
-      title: '数据日志列表',
+      title: 'Danh sách nhật ký dữ liệu',
       api: getDataLogList,
       columns: columns,
       afterFetch: translateCreateBy,
@@ -50,7 +50,7 @@
     return rows[0].dataId === rows[1].dataId;
   });
 
-  /** 批量将创建人账号翻译为用户姓名 */
+  /** Dịch hàng loạt tài khoản người tạo thành tên người dùng */
   async function translateCreateBy(records) {
     const usernames = [...new Set(records?.map((item) => item.createBy).filter(Boolean))];
     if (!usernames.length) {
@@ -63,7 +63,7 @@
         record.createBy = realnameMap.get(record.createBy) || record.createBy;
       });
     } catch (_error) {
-      // 翻译失败时保留原账号，不影响日志列表展示
+      // Khi dịch thất bại, giữ lại tài khoản gốc, không ảnh hưởng đến việc hiển thị danh sách nhật ký
     }
     return records;
   }
@@ -71,11 +71,11 @@
   function handleCompare() {
     const rows = selectedRows.value;
     if (!rows || rows.length !== 2) {
-      createMessage.warning('请选择两条数据进行比较！');
+      createMessage.warning('Vui lòng chọn hai dữ liệu để so sánh!');
       return;
     }
     if (rows[0].dataId !== rows[1].dataId) {
-      createMessage.warning('请选择相同数据ID的记录进行比较！');
+      createMessage.warning('Vui lòng chọn các bản ghi có cùng ID dữ liệu để so sánh!');
       return;
     }
     openModal(true, {

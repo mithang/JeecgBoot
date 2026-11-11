@@ -1,4 +1,4 @@
-//xss攻击白名单列表
+// Danh sách trắng chống tấn công XSS
 export const options = {
   whiteList: {
     h1: ['style'],
@@ -23,10 +23,10 @@ export const options = {
     tr: ['style', 'valign', 'align'],
     td: ['style', 'width', 'colspan', 'rowspan', 'border', 'valign', 'align'],
     th: ['style', 'width', 'colspan', 'rowspan', 'border', 'valign', 'align'],
-    // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-1128】修复thead标签没解析出来
+    // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-1128】Sửa lỗi thẻ thead chưa được phân tích ra
     thead: ['style'],
     tfoot: ['style'],
-    // update-end--author:liaozhiyang---date:20260807---for:【LHZP-1128】修复thead标签没解析出来
+    // update-end--author:liaozhiyang---date:20260807---for:【LHZP-1128】Sửa lỗi thẻ thead chưa được phân tích ra
     tbody: ['style'],
     ul: ['style'],
     li: ['style'],

@@ -9,14 +9,14 @@
             <template #rightExtra>
               <div class="extra-wrapper">
                 <a-radio-group v-model:value="indexRegisterType" @change="changeRegisterType">
-                  <a-radio-button value="转移登记">转移登记</a-radio-button>
-                  <a-radio-button value="抵押登记">抵押登记</a-radio-button>
-                  <a-radio-button value="">所有</a-radio-button>
+                  <a-radio-button value="Đăng ký chuyển nhượng">Đăng ký chuyển nhượng</a-radio-button>
+                  <a-radio-button value="Đăng ký thế chấp">Đăng ký thế chấp</a-radio-button>
+                  <a-radio-button value="">Tất cả</a-radio-button>
                 </a-radio-group>
               </div>
             </template>
 
-            <a-tab-pane tab="业务流程限时监管" key="1">
+            <a-tab-pane tab="Giám sát giới hạn thời gian quy trình nghiệp vụ" key="1">
               <a-table
                 :dataSource="dataSource"
                 size="default"
@@ -38,7 +38,7 @@
               </a-table>
             </a-tab-pane>
 
-            <a-tab-pane loading="true" tab="业务节点限时监管" key="2">
+            <a-tab-pane loading="true" tab="Giám sát giới hạn thời gian nút nghiệp vụ" key="2">
               <a-table
                 :dataSource="dataSource1"
                 size="default"
@@ -49,7 +49,7 @@
               >
                 <template #bodyCell="{ column, record }">
                   <template v-if="column.dataIndex === 'flowRate'">
-                    <span style="color: red">{{ record.flowRate }}小时</span>
+                    <span style="color: red">{{ record.flowRate }}Giờ</span>
                   </template>
                 </template>
               </a-table>
@@ -76,7 +76,7 @@
   }, 500);
 
   const indexBottomTab = ref('1');
-  const indexRegisterType = ref('转移登记');
+  const indexRegisterType = ref('Đăng ký chuyển nhượng');
   const dataSource = ref([]);
   const dataSource1 = ref([]);
   const ipagination = ref(table.ipagination);
@@ -109,7 +109,7 @@
 
   function getPercentFormat(value) {
     if (value == 100) {
-      return '超时';
+      return 'Hết thời gian';
     } else {
       return value + '%';
     }

@@ -12,49 +12,49 @@
   import { formSchema } from './quartz.data';
   import { saveOrUpdateQuartz, getQuartzById } from './quartz.api';
   import { isJsonObjectString } from '/@/utils/is';
-  // Emits声明
+  // Khai báo Emits
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
-  //表单配置
+  // Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     // labelWidth: 150,
     schemas: formSchema,
     showActionButtonGroup: false,
-    // 代码逻辑说明: 【issues/790】弹窗内文本框不居中问题
+    // Giải thích logic mã: 【issues/790】Vấn đề ô nhập văn bản trong popup không được căn giữa
     labelWidth: 100,
   });
-  //表单赋值
+  // Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    // Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      //获取详情
+      // Lấy chi tiết
       //data.record = await getQuartzById({id: data.record.id});
       try {
         data.record.paramterType = isJsonObjectString(data?.record?.parameter) ? 'json' : 'string';
       } catch (e) {
         console.log(e);
       }
-      //表单赋值
+      // Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
   });
-  //设置标题
-  const title = computed(() => (!unref(isUpdate) ? '新增任务' : '编辑任务'));
-  //表单提交事件
+  // Cài đặt tiêu đề
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới nhiệm vụ' : 'Chỉnh sửa nhiệm vụ'));
+  // Sự kiện submit biểu mẫu
   async function handleSubmit(v) {
     try {
       let values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      // Gửi biểu mẫu
       await saveOrUpdateQuartz(values, isUpdate.value);
-      //关闭弹窗
+      // Đóng popup
       closeModal();
-      //刷新列表
+      // Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

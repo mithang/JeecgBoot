@@ -15,7 +15,7 @@
   };
 
   /**
-   * 跟换组件和传值事件
+   * Sự kiện thay đổi component và truyền giá trị
    */
   function detail() {
     setTimeout(() => {

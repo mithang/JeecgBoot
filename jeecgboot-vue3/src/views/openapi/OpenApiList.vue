@@ -1,52 +1,52 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Bảng tham chiếu-->
    <BasicTable @register="registerTable" :rowSelection="rowSelection"  @expand="handleExpand">
-      <!-- 内嵌table区域 begin -->
+      <!-- Khu vực bảng nhúng begin -->
 <!--           <template #expandedRowRender="{record}">-->
 <!--             <a-tabs tabPosition="top">-->
-<!--               <a-tab-pane tab="请求头表" key="openApiHeader" forceRender>-->
+<!--               <a-tab-pane tab="Bảng header yêu cầu" key="openApiHeader" forceRender>-->
 <!--                  <openApiHeaderSubTable v-if="expandedRowKeys.includes(record.id)" :id="record.id" />-->
 <!--               </a-tab-pane>-->
-<!--               <a-tab-pane tab="请求参数部分" key="openApiParam" forceRender>-->
+<!--               <a-tab-pane tab="Phần tham số yêu cầu" key="openApiParam" forceRender>-->
 <!--                  <openApiParamSubTable v-if="expandedRowKeys.includes(record.id)" :id="record.id" />-->
 <!--               </a-tab-pane>-->
 <!--             </a-tabs>-->
 <!--           </template>-->
-     <!-- 内嵌table区域 end -->
-     <!--插槽:table标题-->
+     <!-- Khu vực bảng nhúng end -->
+     <!--Slot: Tiêu đề bảng-->
       <template #tableTitle>
-          <a-button type="primary" v-auth="'openapi:open_api:add'"  @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
-<!--          <a-button  type="primary" v-auth="'openapi:open_api:exportXls'"  preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>-->
-<!--          <j-upload-button  type="primary" v-auth="'openapi:open_api:importExcel'"  preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>-->
+          <a-button type="primary" v-auth="'openapi:open_api:add'"  @click="handleAdd" preIcon="ant-design:plus-outlined"> Thêm mới</a-button>
+<!--          <a-button  type="primary" v-auth="'openapi:open_api:exportXls'"  preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất</a-button>-->
+<!--          <j-upload-button  type="primary" v-auth="'openapi:open_api:importExcel'"  preIcon="ant-design:import-outlined" @click="onImportXls">Nhập</j-upload-button>-->
           <a-dropdown v-if="selectedRowKeys.length > 0">
               <template #overlay>
                 <a-menu>
                   <a-menu-item key="1" @click="batchHandleDelete">
                     <Icon icon="ant-design:delete-outlined"></Icon>
-                    删除
+                    Xóa
                   </a-menu-item>
                 </a-menu>
               </template>
-              <a-button  v-auth="'openapi:open_api:deleteBatch'">批量操作
+              <a-button  v-auth="'openapi:open_api:deleteBatch'">Thao tác hàng loạt
                 <Icon icon="mdi:chevron-down"></Icon>
               </a-button>
         </a-dropdown>
-        <!-- 高级查询 -->
+        <!-- Tìm kiếm nâng cao -->
         <super-query :config="superQueryConfig" @search="handleSuperQuery" />
       </template>
-       <!--操作栏-->
+       <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)"/>
       </template>
-      <!--字段回显插槽-->
+      <!--Slot hiển thị lại trường-->
       <template v-slot:bodyCell="{ column, record, index, text }">
         <template v-if="column.dataIndex === 'requestUrl'">
-          <a @click="handleCopyUrl(record)" title="点击复制完整接口地址">{{ text }}</a>
+          <a @click="handleCopyUrl(record)" title="Nhấp sao chép địa chỉ API đầy đủ">{{ text }}</a>
         </template>
       </template>
     </BasicTable>
-    <!-- 表单区域 -->
+    <!-- Vùng biểu mẫu -->
     <OpenApiDrawer @register="registerDrawer" @success="handleSuccess" />
   </div>
 </template>
@@ -66,10 +66,10 @@
   const { createMessage } = useMessage();
   const API_DOMAIN = import.meta.env.VITE_GLOB_DOMAIN_URL;
   const [registerDrawer, { openDrawer }] = useDrawer();
-   //注册table数据
+   //Đăng ký dữ liệu bảng
   const { prefixCls,tableContext,onExportXls,onImportXls } = useListPage({
       tableProps:{
-           title: '接口管理',
+           title: 'Quản lý API',
            api: list,
            columns,
            canResize:false,
@@ -92,7 +92,7 @@
            },
         },
         exportConfig: {
-            name:"接口管理",
+            name:"Quản lý API",
             url: getExportUrl,
             params: queryParam,
         },
@@ -104,11 +104,11 @@
 
   const [registerTable, {reload},{ rowSelection, selectedRowKeys }] = tableContext
 
-   // 高级查询配置
+   // Cấu hình tìm kiếm nâng cao
    const superQueryConfig = reactive(superQuerySchema);
 
    /**
-   * 高级查询事件
+   * Sự kiện tìm kiếm nâng cao
    */
    function handleSuperQuery(params) {
      Object.keys(params).map((k) => {
@@ -118,7 +118,7 @@
    }
 
    /**
-     * 展开事件
+     * Sự kiện mở rộng
      * */
    function handleExpand(expanded, record){
         expandedRowKeys.value=[];
@@ -127,7 +127,7 @@
         }
     }
    /**
-    * 新增事件
+    * Sự kiện thêm mới
     */
   function handleAdd() {
      openDrawer(true, {
@@ -136,7 +136,7 @@
      });
   }
    /**
-    * 编辑事件
+    * Sự kiện chỉnh sửa
     */
   function handleEdit(record: Recordable) {
      openDrawer(true, {
@@ -146,7 +146,7 @@
      });
    }
    /**
-    * 详情
+    * Chi tiết
    */
   function handleDetail(record: Recordable) {
      openDrawer(true, {
@@ -156,48 +156,48 @@
      });
    }
    /**
-    * 删除事件
+    * Sự kiện xóa
     */
   async function handleDelete(record) {
      await deleteOne({id: record.id}, handleSuccess);
    }
    /**
-    * 批量删除事件
+    * Sự kiện xóa hàng loạt
     */
   async function batchHandleDelete() {
      await batchDelete({ids: selectedRowKeys.value},handleSuccess);
    }
    /**
-    * 成功回调
+    * Callback thành công
     */
   function handleSuccess() {
       (selectedRowKeys.value = []) && reload();
    }
    /**
-      * 操作栏
+      * Thanh thao tác
       */
   /**
-   * 复制接口地址
+   * Sao chép địa chỉ API
    */
   async function handleCopyUrl(record: Recordable) {
     const url = API_DOMAIN + '/openapi/call/' + record.requestUrl;
     try {
-      //update-begin---wangshuai---date:20260804  for：[LHZP-1353] openapi 接口管理 复制不了------------
+      //update-begin---wangshuai---date:20260804  for: [LHZP-1353] openapi Quản lý API không sao chép được------------
       if (copyTextToClipboard(url)) {
-        createMessage.success('接口地址已复制');
+        createMessage.success('Địa chỉ API đã sao chép');
       } else {
-        createMessage.error('复制失败，请手动复制');
+        createMessage.error('Sao chép thất bại, vui lòng sao chép thủ công');
       }
-      //update-end---author:wangshuai ---date:20260804  for：[LHZP-1353]openapi 接口管理 复制不了------------
+      //update-end---author:wangshuai ---date:20260804  for: [LHZP-1353]openapi Quản lý API không sao chép được------------
     } catch (_e) {
-      createMessage.error('复制失败，请手动复制');
+      createMessage.error('Sao chép thất bại, vui lòng sao chép thủ công');
     }
   }
 
   function getTableAction(record){
        return [
          {
-           label: '编辑',
+           label: 'Chỉnh sửa',
            onClick: handleEdit.bind(null, record),
            auth: 'openapi:open_api:edit'
          },
@@ -206,17 +206,17 @@
 
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác dropdown
    */
   function getDropDownAction(record){
     return [
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       }, {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Bạn có xác nhận xóa không?',
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft'
         },

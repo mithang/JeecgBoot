@@ -5,7 +5,7 @@ enum Api {
 }
 
 /**
- * 详细信息
+ * Thông tin chi tiết
  */
 export const queryDiskInfo = () => {
   return defHttp.get({ url: Api.queryDiskInfo }, { successMessageMode: 'none' });

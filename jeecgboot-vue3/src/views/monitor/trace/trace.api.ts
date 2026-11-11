@@ -5,7 +5,7 @@ enum Api {
 }
 
 /**
- * 追踪信息
+ * Thông tin theo dõi
  */
 export const getActuatorList = (query: String, order: String) => {
   return defHttp.get({ url: Api.actuatorList + query + '/' + order }, { isTransformResponse: false });

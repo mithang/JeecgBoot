@@ -6,13 +6,13 @@
           <template #title>
             <div class="index-md-title">
               <img src="../../../../assets/images/daiban.png" />
-              我的待办【{{ dataSource1.length }}】
+              Việc cần làm của tôi[{{ dataSource1.length }}]
             </div>
           </template>
 
           <template v-if="dataSource1 && dataSource1.length > 0" #extra>
             <a @click="goPage"
-              >更多
+              >Thêm
               <Icon icon="ant-design:double-right-outlined" />
             </a>
           </template>
@@ -35,7 +35,7 @@
             </template>
 
             <template #action="{ text, record }">
-              <a @click="handleData">办理</a>
+              <a @click="handleData">Xử lý</a>
             </template>
           </a-table>
         </a-card>
@@ -46,13 +46,13 @@
           <template #title>
             <div class="index-md-title">
               <img src="../../../../assets/images/zaiban.png" />
-              我的在办【{{ dataSource2.length }}】
+              Đang xử lý của tôi[{{ dataSource2.length }}]
             </div>
           </template>
 
           <template v-if="dataSource2 && dataSource2.length > 0" #extra>
             <a @click="goPage"
-              >更多
+              >Thêm
               <Icon icon="ant-design:double-right-outlined" />
             </a>
           </template>
@@ -75,7 +75,7 @@
             </template>
 
             <template #action="{ text, record }">
-              <a @click="handleData">办理</a>
+              <a @click="handleData">Xử lý</a>
             </template>
           </a-table>
         </a-card>
@@ -90,7 +90,7 @@
           <template #title>
             <div class="index-md-title">
               <img src="../../../../assets/images/guaz.png" />
-              我的挂账【{{ dataSource4.length }}】
+              Treo sổ của tôi[{{ dataSource4.length }}]
             </div>
           </template>
 
@@ -112,7 +112,7 @@
             </template>
 
             <template #action="{ text, record }">
-              <a @click="handleData">办理</a>
+              <a @click="handleData">Xử lý</a>
             </template>
           </a-table>
         </a-card>
@@ -123,7 +123,7 @@
           <template #title>
             <div class="index-md-title">
               <img src="../../../../assets/images/duban.png" />
-              我的督办【{{ dataSource3.length }}】
+              Giám sát của tôi[{{ dataSource3.length }}]
             </div>
           </template>
 
@@ -145,7 +145,7 @@
             </template>
 
             <template #action="{ text, record }">
-              <a @click="handleData">办理</a>
+              <a @click="handleData">Xử lý</a>
             </template>
           </a-table>
         </a-card>
@@ -164,32 +164,32 @@
   const tempSs1 = [
     {
       id: '001',
-      orderNo: '电[1]1267102',
-      orderTitle: '药品出问题了',
+      orderNo: 'Điện[1]1267102',
+      orderTitle: 'Thuốc có vấn đề',
       restDay: 1,
     },
     {
       id: '002',
-      orderNo: '电[4]5967102',
-      orderTitle: '吃了xxx医院的药，病情越来越严重',
+      orderNo: 'Điện[4]5967102',
+      orderTitle: 'Đã ănxxxThuốc của bệnh viện, bệnh càng ngày càng nặng',
       restDay: 0,
     },
     {
       id: '003',
-      orderNo: '电[3]5988987',
-      orderTitle: '今天去超市买鸡蛋，鸡蛋都是坏的',
+      orderNo: 'Điện[3]5988987',
+      orderTitle: 'Hôm nay đi siêu thị mua trứng, trứng đều hỏng cả',
       restDay: 7,
     },
     {
       id: '004',
-      orderNo: '电[2]5213491',
-      orderTitle: 'xx宝实体店高价售卖xx',
+      orderNo: 'Điện[2]5213491',
+      orderTitle: 'xxCửa hàng thực thể Bảo bán giá caoxx',
       restDay: 5,
     },
     {
       id: '005',
-      orderNo: '电[1]1603491',
-      orderTitle: '以红利相诱，答应退保后扣一年费用',
+      orderNo: 'Điện[1]1603491',
+      orderTitle: 'Dụ dỗ bằng lợi tức, đồng ý hủy bảo hiểm rồi trừ một năm phí',
       restDay: 0,
     },
   ];
@@ -197,41 +197,41 @@
   const tempSs2 = [
     {
       id: '001',
-      orderTitle: '我要投诉这个大超市',
-      orderNo: '电[1]10299456',
+      orderTitle: 'Tôi muốn khiếu nại siêu thị lớn này',
+      orderNo: 'Điện[1]10299456',
       restDay: 6,
     },
     {
       id: '002',
-      orderTitle: 'xxx医院乱开药方,售卖假药',
-      orderNo: '电[2]20235691',
+      orderTitle: 'xxxBệnh viện kê đơn bừa bãi,Bán thuốc giả',
+      orderNo: 'Điện[2]20235691',
       restDay: 0,
     },
     {
       id: '003',
-      orderTitle: '我想问问这家店是干啥的',
-      orderNo: '电[3]495867322',
+      orderTitle: 'Tôi muốn hỏi cửa hàng này làm gì',
+      orderNo: 'Điện[3]495867322',
       restDay: 7,
     },
     {
       id: '004',
-      orderTitle: '我要举报朝阳区奥森公园酒店',
-      orderNo: '电[2]1193849',
+      orderTitle: 'Tôi muốn tố cáo khách sạn Công viên Aosen, quận Triều Dương',
+      orderNo: 'Điện[2]1193849',
       restDay: 3,
     },
     {
       id: '005',
-      orderTitle: '我今天吃饭吃到一个石头子',
-      orderNo: '电[4]56782344',
+      orderTitle: 'Hôm nay tôi ăn cơm ăn phải một hòn đá',
+      orderNo: 'Điện[4]56782344',
       restDay: 9,
     },
   ];
 
-  //4-7天
+  // 4-7 ngày
   const tip_green = 'rgba(0, 255, 0, 1)';
-  //1-3天
+  // 1-3 ngày
   const tip_yellow = 'rgba(255, 255, 0, 1)';
-  //超期
+  // Quá hạn
   const tip_red = 'rgba(255, 0, 0, 1)';
 
   const textMaxLength = 8;
@@ -252,24 +252,24 @@
       slots: { customRender: 'dayWarnning' },
     },
     {
-      title: '剩余天数',
+      title: 'Số ngày còn lại',
       align: 'center',
       dataIndex: 'restDay',
       width: 80,
     },
     {
-      title: '工单标题',
+      title: 'Tiêu đề ticket',
       align: 'center',
       dataIndex: 'orderTitle',
       slots: { customRender: 'ellipsisText' },
     },
     {
-      title: '工单编号',
+      title: 'Mã ticket',
       align: 'center',
       dataIndex: 'orderNo',
     },
     {
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       align: 'center',
       slots: { customRender: 'action' },
@@ -307,11 +307,11 @@
   }
 
   function handleData() {
-    $message.createMessage.success('办理完成');
+    $message.createMessage.success('Xử lý xong');
   }
 
   function goPage() {
-    $message.createMessage.success('请根据具体业务跳转页面');
+    $message.createMessage.success('Vui lòng chuyển trang theo nghiệp vụ cụ thể');
   }
 
   mock();

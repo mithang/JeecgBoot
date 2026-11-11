@@ -1,49 +1,49 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 
-//列表数据
+//Dữ liệu danh sách
 export const columns: BasicColumn[] = [
   {
-    title: '授权对象',
+    title: 'Đối tượng ủy quyền',
     align: 'center',
     dataIndex: 'name',
   },
   {
-    title: '访问密钥（AK）',
+    title: 'Khóa truy cập (AK)',
     align: 'center',
     dataIndex: 'ak',
     ellipsis: true,
   },
   {
-    title: '创建人',
+    title: 'Người tạo',
     align: 'center',
     dataIndex: 'createBy',
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     align: 'center',
     dataIndex: 'createTime',
   },
 ];
 
-//查询数据
+//Truy vấn dữ liệu
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '授权对象',
+    label: 'Đối tượng ủy quyền',
     field: 'name',
     component: 'JInput',
   },
   {
-    label: '访问密钥',
+    label: 'Khóa truy cập',
     field: 'ak',
     component: 'JInput',
   },
 ];
 
-//授权表单数据
+//Dữ liệu biểu mẫu ủy quyền
 export const authFormSchema: FormSchema[] = [
   {
-    label: '授权对象',
+    label: 'Đối tượng ủy quyền',
     field: 'name',
     component: 'Input',
     required: true,
@@ -74,11 +74,11 @@ export const authFormSchema: FormSchema[] = [
   },
 ];
 
-// 高级查询数据
+// Dữ liệu tìm kiếm nâng cao
 export const superQuerySchema = {
-  name: { title: '授权对象', order: 0, view: 'text', type: 'string' },
-  ak: { title: '访问密钥（AK）', order: 1, view: 'text', type: 'string' },
-  sk: { title: '签名密钥（SK）', order: 2, view: 'text', type: 'string' },
-  createBy: { title: '创建人', order: 3, view: 'text', type: 'string' },
-  createTime: { title: '创建时间', order: 4, view: 'datetime', type: 'string' },
+  name: { title: 'Đối tượng ủy quyền', order: 0, view: 'text', type: 'string' },
+  ak: { title: 'Khóa truy cập (AK)', order: 1, view: 'text', type: 'string' },
+  sk: { title: 'Khóa ký (SK)', order: 2, view: 'text', type: 'string' },
+  createBy: { title: 'Người tạo', order: 3, view: 'text', type: 'string' },
+  createTime: { title: 'Thời gian tạo', order: 4, view: 'datetime', type: 'string' },
 };

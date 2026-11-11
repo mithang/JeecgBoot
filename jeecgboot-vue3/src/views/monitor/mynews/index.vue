@@ -2,18 +2,18 @@
   <div>
     <BasicTable @register="registerTable" :searchInfo="searchInfo" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button type="primary" @click="handlerReadAllMsg">全部标注已读</a-button>
+        <a-button type="primary" @click="handlerReadAllMsg">Đánh dấu tất cả đã đọc</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            批量操作
+            Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
@@ -53,7 +53,7 @@ import {ref, onMounted, unref} from 'vue';
   const router = useRouter();
   const { currentRoute } = useRouter();
   const { goPage, currentModal, modalRegCache, bindParams } = useMessageHref();
-  // 代码逻辑说明: 【QQYUN-13058】我的消息区分类型且支持根据url参数查询类型
+  // Giải thích logic mã: 【QQYUN-13058】Tin nhắn của tôi được phân loại theo loại và hỗ trợ truy vấn loại theo tham số url
   const querystring = currentRoute.value.query;
   const findItem: any = searchFormSchema.find((item: any) => item.field === 'msgCategory');
   if (findItem) {
@@ -68,16 +68,16 @@ import {ref, onMounted, unref} from 'vue';
   const { prefixCls, tableContext } = useListPage({
     designScope: 'mynews-list',
     tableProps: {
-      title: '我的消息',
+      title: 'Tin nhắn của tôi',
       api: getMyNewsList,
       columns: columns,
       formConfig: {
         schemas: searchFormSchema,
-        // 代码逻辑说明: 【TV360X-545】我的消息列表不能通过时间范围查询---
+        // Giải thích logic mã: 【TV360X-545】Danh sách tin nhắn của tôi không thể truy vấn theo khoảng thời gian---
         fieldMapToTime: [['sendTime', ['sendTimeBegin', 'sendTimeEnd'], 'YYYY-MM-DD']],
       },
       beforeFetch: (params) => {
-        // 代码逻辑说明: 【QQYUN-13058】我的消息区分类型且支持根据url参数查询类型
+        // Giải thích logic mã: 【QQYUN-13058】Tin nhắn của tôi được phân loại theo loại và hỗ trợ truy vấn loại theo tham số url
         if (params.msgCategory) {
           if (['1', '2'].includes(params.msgCategory)) {
             params.msgCategory = params.msgCategory;
@@ -98,19 +98,19 @@ import {ref, onMounted, unref} from 'vue';
   });
   const [registerTable, { reload }, { rowSelection, selectedRows, selectedRowKeys }] = tableContext;
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '查看',
+        label: 'Xem',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa không?',
           confirm: handleDelete.bind(null, record.id),
         },
         ifShow: record.readFlag === 1
@@ -119,7 +119,7 @@ import {ref, onMounted, unref} from 'vue';
   }
 
   /**
-   * 查看
+   * Xem
    */
   function handleDetail(record) {
     let anntId = record.anntId;
@@ -136,25 +136,25 @@ import {ref, onMounted, unref} from 'vue';
     goPage(record, openModalFun);
 
   }
-  // 日志类型
+  // Loại nhật ký
   function callback(key) {
     searchInfo.logType = key;
     reload();
   }
 
-  //全部标记已读
+  // Đánh dấu tất cả đã đọc
   function handlerReadAllMsg() {
     readAllMsg({}, reload);
   }
 
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;
   }
 
-  // 代码逻辑说明: 消息跳转，打开详情表单
+  // Giải thích logic mã: tin nhắn chuyển hướng, mở biểu mẫu chi tiết
   onMounted(()=>{
     initHrefModal();
   });
@@ -188,7 +188,7 @@ import {ref, onMounted, unref} from 'vue';
   }
   
   /**
-   * 删除我的消息
+   * Xóa tin nhắn của tôi
    * 
    * @param id
    */
@@ -197,12 +197,12 @@ import {ref, onMounted, unref} from 'vue';
   }
 
   /**
-   * 批量删除我的消息
+   * Xóa hàng loạt tin nhắn của tôi
    */
   async function batchHandleDelete() {
     let unRead = unref(selectedRows).filter((item) => item.readFlag == 0);
     if (unref(unRead).length > 0) {
-      createMessage.warning('未阅读的消息禁止删除！');
+      createMessage.warning('Không được xóa tin nhắn chưa đọc!');
       return;
     }
     await deleteBatchAnnSend({ ids: selectedRowKeys.value }, handleSuccess);

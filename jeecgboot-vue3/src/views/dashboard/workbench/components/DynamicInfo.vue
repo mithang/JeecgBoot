@@ -1,7 +1,7 @@
 <template>
-  <Card title="最新动态" v-bind="$attrs">
+  <Card title="Hoạt động mới nhất" v-bind="$attrs">
     <template #extra>
-      <a-button type="link" size="small">更多</a-button>
+      <a-button type="link" size="small">Thêm</a-button>
     </template>
     <List item-layout="horizontal" :data-source="dynamicInfoItems">
       <template #renderItem="{ item }">

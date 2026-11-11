@@ -1,5 +1,5 @@
 <template>
-  <!--  <j-modal :title="title" :width="width" :visible="visible" @ok="handleOk" :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }" @cancel="handleCancel" cancelText="关闭">-->
+  <!--  <j-modal :title="title" :width="width" :visible="visible" @ok="handleOk" :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }" @cancel="handleCancel" cancelText="Đóng">-->
   <div style="position: relative;">
     <a-modal
       v-model:open="authDrawerOpen"
@@ -38,10 +38,10 @@
   };
 
   /**
-   * 新增
+   * Thêm mới
    */
   function add() {
-    title.value = '新增';
+    title.value = 'Thêm mới';
     visible.value = true;
     nextTick(() => {
       registerForm.value.add();
@@ -49,11 +49,11 @@
   }
 
   /**
-   * 授权
+   * Ủy quyền
    * @param record
    */
   function edit(record) {
-    title.value = disableSubmit.value ? '详情' : '授权';
+    title.value = disableSubmit.value ? 'Chi tiết' : 'Ủy quyền';
     visible.value = true;
     authDrawerOpen.value = true;
     nextTick(() => {
@@ -62,14 +62,14 @@
   }
 
   /**
-   * 确定按钮点击事件
+   * Sự kiện nhấp nút xác nhận
    */
   function handleOk() {
     registerForm.value.submitForm();
   }
 
   /**
-   * form保存回调事件
+   * Sự kiện callback khi lưu form
    */
   function submitCallback() {
     handleCancel();
@@ -77,7 +77,7 @@
   }
 
   /**
-   * 取消按钮回调事件
+   * Sự kiện callback nút hủy
    */
   function handleCancel() {
     visible.value = false;
@@ -92,7 +92,7 @@
 </script>
 
 <style lang="less">
-  /**隐藏样式-modal确定按钮 */
+  /** Kiểu ẩn — nút xác nhận của modal */
   .jee-hidden {
     display: none !important;
   }

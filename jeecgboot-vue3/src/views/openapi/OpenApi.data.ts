@@ -1,57 +1,57 @@
 import {BasicColumn} from '/@/components/Table';
 import {FormSchema} from '/@/components/Table';
 import {JVxeTypes,JVxeColumn} from '/@/components/jeecg/JVxeTable/types'
-//列表数据
+//Dữ liệu danh sách
 export const columns: BasicColumn[] = [
    {
-    title: '接口名称',
+    title: 'Tên API',
     align:"center",
     dataIndex: 'name'
    },
    {
-    title: '接口地址',
+    title: 'Địa chỉ API',
     align:"center",
     dataIndex: 'requestUrl',
     width: 120,
    },
    {
-    title: '请求方式',
+    title: 'Phương thức yêu cầu',
     align:"center",
     dataIndex: 'requestMethod',
     width: 100,
    },
    {
-    title: '原始接口',
+    title: 'API gốc',
     align:"center",
     dataIndex: 'originUrl',
     ellipsis: true,
    },
    {
-    title: 'IP 白名单',
+    title: 'IP Danh sách trắng',
     align:"center",
     dataIndex: 'whiteList',
     ellipsis: true,
     customRender: ({ text }) => {
-      if (!text) return '不限制';
+      if (!text) return 'Không giới hạn';
       const count = text.split(/[,\n]/).filter(item => item.trim()).length;
-      return count + ' 条规则';
+      return count + ' quy tắc';
     }
    },
 ];
-//查询数据
+//Truy vấn dữ liệu
 export const searchFormSchema: FormSchema[] = [
   {
-    label: "接口名称",
+    label: "Tên API",
     field: "name",
     component: 'JInput',
   },
   {
-    label: "接口地址",
+    label: "Địa chỉ API",
     field: "requestUrl",
     component: 'JInput',
   },
 ];
-// 请求方式选项（供表单 slot 复用）
+// Tùy chọn phương thức yêu cầu (cho biểu mẫu slot Tái sử dụng)
 export const requestMethodOptions = [
   { label: 'POST', value: 'POST' },
   { label: 'GET', value: 'GET' },
@@ -63,54 +63,54 @@ export const requestMethodOptions = [
   { label: 'TRACE', value: 'TRACE' },
 ];
 
-//表单数据
+//Dữ liệu biểu mẫu
 export const formSchema: FormSchema[] = [
   {
-    label: '接口名称',
+    label: 'Tên API',
     field: 'name',
     component: 'Input',
     dynamicRules: () => {
           return [
-                 { required: true, message: '请输入接口名称!'},
+                 { required: true, message: 'Vui lòng nhập tên API!'},
           ];
      },
   },
   {
-    label: '接口地址',
+    label: 'Địa chỉ API',
     field: 'requestUrl',
     component: 'Input',
     slot: 'requestUrlSlot',
     dynamicDisabled: true,
   },
   {
-    label: '请求方式',
+    label: 'Phương thức yêu cầu',
     field: 'requestMethod',
     defaultValue:'GET',
     component: 'Input',
     show: false,
   },
   {
-    label: '原始接口',
+    label: 'API gốc',
     field: 'originUrl',
     component: 'Input',
     componentProps: {
-      placeholder: '当前系统的原始接口地址，如 /sys/user/list',
+      placeholder: 'Địa chỉ API gốc của hệ thống hiện tại, ví dụ /sys/user/list',
     },
-    helpMessage: '当前系统中被代理的原始接口路径',
+    helpMessage: 'Đường dẫn API gốc được proxy trong hệ thống hiện tại',
     colProps: { span: 24 },
     dynamicRules: () => {
       return [
-        { required: true, message: '请输入原始接口路径!' },
+        { required: true, message: 'Vui lòng nhập đường dẫn API gốc!' },
         {
           validator: (_, value) => {
             if (value && !value.startsWith('/')) {
-              return Promise.reject('原始接口路径必须以 / 开头');
+              return Promise.reject('Đường dẫn API gốc phải bắt đầu bằng /');
             }
             if (value && value.includes('//')) {
-              return Promise.reject('原始接口路径不能包含 //');
+              return Promise.reject('Đường dẫn API gốc không được chứa //');
             }
             if (value && value.includes('..')) {
-              return Promise.reject('原始接口路径不能包含 ..');
+              return Promise.reject('Đường dẫn API gốc không được chứa ..');
             }
             return Promise.resolve();
           },
@@ -120,52 +120,52 @@ export const formSchema: FormSchema[] = [
   },
 
   {
-    label: 'IP 白名单',
+    label: 'IP Danh sách trắng',
     field: 'whiteList',
-    helpMessage: '支持精确IP、CIDR网段（如192.168.1.0/24）、通配符（如10.2.3.*），每行一个或逗号分隔，为空则不限制',
+    helpMessage: 'Hỗ trợ IP chính xác, dải mạng CIDR (ví dụ: 192.168.1.0/24), ký tự đại diện (ví dụ: 10.2.3.*), mỗi dòng một địa chỉ hoặc phân tách bằng dấu phẩy, để trống thì không giới hạn',
     component: 'InputTextArea',
     slot: 'whiteListSlot',
     componentProps: {
       rows: 5,
-      placeholder: '示例：\n192.168.1.100\n10.0.0.0/8\n172.16.*.*',
+      placeholder: 'Ví dụ:\n192.168.1.100\n10.0.0.0/8\n172.16.*.*',
     },
     colProps: { span: 24 },
   },
   {
-    label: '备注',
+    label: 'Ghi chú',
     field: 'remarks',
     component: 'InputTextArea',
     componentProps: {
       rows: 2,
-      placeholder: '请输入白名单备注说明',
+      placeholder: 'Vui lòng nhập ghi chú danh sách trắng',
     },
     colProps: { span: 24 },
   },
   {
-    label: '接口描述',
+    label: 'Mô tả API',
     field: 'description',
     component: 'InputTextArea',
     componentProps: {
       rows: 3,
-      placeholder: '请输入接口描述',
+      placeholder: 'Vui lòng nhập mô tả API',
     },
     colProps: { span: 24 },
   },
   {
-    label: '删除标识',
+    label: 'Cờ xóa',
     field: 'delFlag',
     component: 'Input',
     defaultValue:0,
     show:false
   },
   {
-    label: '状态',
+    label: 'Trạng thái',
     field: 'status',
     component: 'Input',
     defaultValue:"1",
     show:false
   },
-	// TODO 主键隐藏字段，目前写死为ID
+	// TODO Trường khóa chính ẩn, hiện đang cố định là ID
 	{
 	  label: '',
 	  field: 'id',
@@ -173,8 +173,8 @@ export const formSchema: FormSchema[] = [
 	  show: false
 	},
 ];
-//子表单数据
-//子表列表数据
+//Dữ liệu biểu mẫu con
+//Dữ liệu danh sách bảng con
 export const openApiHeaderColumns: BasicColumn[] = [
    // {
    //  title: 'apiId',
@@ -182,27 +182,27 @@ export const openApiHeaderColumns: BasicColumn[] = [
    //  dataIndex: 'apiId'
    // },
    {
-    title: '请求头Key',
+    title: 'Key header yêu cầu',
     align:"center",
     dataIndex: 'headerKey'
    },
    {
-    title: '是否必填',
+    title: 'Có bắt buộc không',
     align:"center",
     dataIndex: 'required_dictText'
    },
    {
-    title: '默认值',
+    title: 'Giá trị mặc định',
     align:"center",
     dataIndex: 'defaultValue'
    },
    {
-    title: '备注',
+    title: 'Ghi chú',
     align:"center",
     dataIndex: 'note'
    },
 ];
-//子表列表数据
+//Dữ liệu danh sách bảng con
 export const openApiParamColumns: BasicColumn[] = [
    // {
    //  title: 'apiId',
@@ -210,65 +210,65 @@ export const openApiParamColumns: BasicColumn[] = [
    //  dataIndex: 'apiId'
    // },
    {
-    title: '参数Key',
+    title: 'Key tham số',
     align:"center",
     dataIndex: 'paramKey'
    },
    {
-    title: '是否必填',
+    title: 'Có bắt buộc không',
     align:"center",
     dataIndex: 'required_dictText'
    },
    {
-    title: '默认值',
+    title: 'Giá trị mặc định',
     align:"center",
     dataIndex: 'defaultValue'
    },
    {
-    title: '备注',
+    title: 'Ghi chú',
     align:"center",
     dataIndex: 'note'
    },
 ];
-//子表表格配置
-// update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1266】默认请求头 appKey/signature/timestamp 删除时校验拦截且必填禁用
+//Cấu hình bảng của bảng con
+// update-begin--author:liaozhiyang---date:20260804---for: [LHZP-1266] Các request header mặc định appKey/signature/timestamp bị chặn kiểm tra khi xóa và bị vô hiệu hóa bắt buộc
 export const FIXED_HEADER_KEYS = ['appKey', 'signature', 'timestamp'];
-// update-end--author:liaozhiyang---date:20260804---for：【LHZP-1266】默认请求头 appKey/signature/timestamp 删除时校验拦截且必填禁用
+// update-end--author:liaozhiyang---date:20260804---for: [LHZP-1266] Các request header mặc định appKey/signature/timestamp bị chặn kiểm tra khi xóa và bị vô hiệu hóa bắt buộc
 export const openApiHeaderJVxeColumns: JVxeColumn[] = [
     // {
     //   title: 'apiId',
     //   key: 'apiId',
     //   type: JVxeTypes.input,
     //   width:"200px",
-    //   placeholder: '请输入${title}',
+    //   placeholder: 'Vui lòng nhập${title}',
     //   defaultValue:'',
     // },
     {
-      title: '请求头Key',
+      title: 'Key header yêu cầu',
       key: 'headerKey',
       type: JVxeTypes.input,
       width:"200px",
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue:'',
     },
     {
-      title: '是否必填',
+      title: 'Có bắt buộc không',
       key: 'required',
       type: JVxeTypes.checkbox,
       options:[],
       // dictCode:"yn",
       width:"100px",
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue:'',
       customValue: ['1','0'],
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1266】默认请求头 appKey/signature/timestamp 删除时校验拦截且必填禁用
+      // update-begin--author:liaozhiyang---date:20260804---for: [LHZP-1266] Các request header mặc định appKey/signature/timestamp bị chặn kiểm tra khi xóa và bị vô hiệu hóa bắt buộc
       props: {
         isDisabledCell: ({ row }) => FIXED_HEADER_KEYS.includes(row.headerKey),
       },
-      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1266】默认请求头 appKey/signature/timestamp 删除时校验拦截且必填禁用
+      // update-end--author:liaozhiyang---date:20260804---for: [LHZP-1266] Các request header mặc định appKey/signature/timestamp bị chặn kiểm tra khi xóa và bị vô hiệu hóa bắt buộc
     },
     {
-      title: '参数类型',
+      title: 'Loại tham số',
       key: 'paramType',
       type: JVxeTypes.select,
       width: '120px',
@@ -283,26 +283,26 @@ export const openApiHeaderJVxeColumns: JVxeColumn[] = [
       defaultValue: 'string',
     },
     {
-      title: '默认值',
+      title: 'Giá trị mặc định',
       key: 'defaultValue',
       type: JVxeTypes.input,
       width:"200px",
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue:'',
     },
     {
-      title: '示例值',
+      title: 'Giá trị ví dụ',
       key: 'example',
       type: JVxeTypes.input,
       width: '200px',
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue: '',
     },
     {
-      title: '备注',
+      title: 'Ghi chú',
       key: 'note',
       type: JVxeTypes.input,
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue:'',
     },
   ]
@@ -312,30 +312,30 @@ export const openApiParamJVxeColumns: JVxeColumn[] = [
     //   key: 'apiId',
     //   type: JVxeTypes.input,
     //   width:"200px",
-    //   placeholder: '请输入${title}',
+    //   placeholder: 'Vui lòng nhập${title}',
     //   defaultValue:'',
     // },
     {
-      title: '参数Key',
+      title: 'Key tham số',
       key: 'paramKey',
       type: JVxeTypes.input,
       width:"200px",
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue:'',
     },
     {
-      title: '是否必填',
+      title: 'Có bắt buộc không',
       key: 'required',
       type: JVxeTypes.checkbox,
       options:[],
       // dictCode:"yn",
       width:"100px",
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue:'',
       customValue: ['1','0']
     },
     {
-      title: '参数类型',
+      title: 'Loại tham số',
       key: 'paramType',
       type: JVxeTypes.select,
       width: '120px',
@@ -350,41 +350,41 @@ export const openApiParamJVxeColumns: JVxeColumn[] = [
       defaultValue: 'string',
     },
     {
-      title: '默认值',
+      title: 'Giá trị mặc định',
       key: 'defaultValue',
       type: JVxeTypes.input,
       width:"200px",
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue:'',
     },
     {
-      title: '示例值',
+      title: 'Giá trị ví dụ',
       key: 'example',
       type: JVxeTypes.input,
       width: '200px',
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue: '',
     },
     {
-      title: '备注',
+      title: 'Ghi chú',
       key: 'note',
       type: JVxeTypes.input,
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       defaultValue:'',
     },
   ]
 
 export const responseFieldJVxeColumns: JVxeColumn[] = [
   {
-    title: '字段名',
+    title: 'Tên trường',
     key: 'fieldName',
     type: JVxeTypes.input,
     width: '200px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },
   {
-    title: '类型',
+    title: 'Loại',
     key: 'fieldType',
     type: JVxeTypes.select,
     width: '120px',
@@ -399,53 +399,53 @@ export const responseFieldJVxeColumns: JVxeColumn[] = [
     defaultValue: 'string',
   },
   {
-    title: '说明',
+    title: 'Giải thích',
     key: 'fieldDesc',
     type: JVxeTypes.input,
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },
 ];
 
-// 高级查询数据
+// Dữ liệu tìm kiếm nâng cao
 export const superQuerySchema = {
-  name: {title: '接口名称',order: 0,view: 'text', type: 'string',},
-  requestMethod: {title: '请求方式',order: 1,view: 'list', type: 'string',dictCode: '',},
-  requestUrl: {title: '接口地址',order: 2,view: 'text', type: 'string',},
-  whiteList: {title: 'IP 白名单',order: 3,view: 'text', type: 'string',},
-  status: {title: '状态',order: 5,view: 'number', type: 'number',},
-  createBy: {title: '创建人',order: 6,view: 'text', type: 'string',},
-  createTime: {title: '创建时间',order: 7,view: 'datetime', type: 'string',},
-  //子表高级查询
+  name: {title: 'Tên API',order: 0,view: 'text', type: 'string',},
+  requestMethod: {title: 'Phương thức yêu cầu',order: 1,view: 'list', type: 'string',dictCode: '',},
+  requestUrl: {title: 'Địa chỉ API',order: 2,view: 'text', type: 'string',},
+  whiteList: {title: 'IP Danh sách trắng',order: 3,view: 'text', type: 'string',},
+  status: {title: 'Trạng thái',order: 5,view: 'number', type: 'number',},
+  createBy: {title: 'Người tạo',order: 6,view: 'text', type: 'string',},
+  createTime: {title: 'Thời gian tạo',order: 7,view: 'datetime', type: 'string',},
+  //Truy vấn nâng cao bảng con
   openApiHeader: {
-    title: '请求头表',
+    title: 'Bảng header yêu cầu',
     view: 'table',
     fields: {
         // apiId: {title: 'apiId',order: 0,view: 'text', type: 'string',},
-        headerKey: {title: '请求头Key',order: 1,view: 'text', type: 'string',},
-        required: {title: '是否必填',order: 2,view: 'number', type: 'number',dictCode: 'yn',},
-        defaultValue: {title: '默认值',order: 3,view: 'text', type: 'string',},
-        note: {title: '备注',order: 4,view: 'text', type: 'string',},
+        headerKey: {title: 'Key header yêu cầu',order: 1,view: 'text', type: 'string',},
+        required: {title: 'Có bắt buộc không',order: 2,view: 'number', type: 'number',dictCode: 'yn',},
+        defaultValue: {title: 'Giá trị mặc định',order: 3,view: 'text', type: 'string',},
+        note: {title: 'Ghi chú',order: 4,view: 'text', type: 'string',},
     }
   },
   openApiParam: {
-    title: '请求参数部分',
+    title: 'Phần tham số yêu cầu',
     view: 'table',
     fields: {
         // apiId: {title: 'apiId',order: 0,view: 'text', type: 'string',},
-        paramKey: {title: '参数Key',order: 1,view: 'text', type: 'string',},
-        required: {title: '是否必填',order: 2,view: 'number', type: 'number',dictCode: 'yn',},
-        defaultValue: {title: '默认值',order: 3,view: 'text', type: 'string',},
-        note: {title: '备注',order: 4,view: 'text', type: 'string',},
+        paramKey: {title: 'Key tham số',order: 1,view: 'text', type: 'string',},
+        required: {title: 'Có bắt buộc không',order: 2,view: 'number', type: 'number',dictCode: 'yn',},
+        defaultValue: {title: 'Giá trị mặc định',order: 3,view: 'text', type: 'string',},
+        note: {title: 'Ghi chú',order: 4,view: 'text', type: 'string',},
     }
   },
 };
 
 /**
-* 流程表单调用这个方法获取formSchema
+* Biểu mẫu quy trình gọi phương thức này để lấy formSchema
 * @param param
 */
 export function getBpmFormSchema(_formData): FormSchema[]{
-  // 默认和原始表单保持一致 如果流程中配置了权限数据，这里需要单独处理formSchema
+  // Mặc định giữ nhất quán với biểu mẫu gốc. Nếu trong quy trình đã cấu hình dữ liệu quyền, ở đây cần xử lý riêng formSchema
   return formSchema;
 }

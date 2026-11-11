@@ -9,13 +9,13 @@
         :class="[index + 1 < 4 && '!md:mr-4']"
       >
         <template #action>
-          <a-tooltip title="指标说明">
+          <a-tooltip title="Giải thích chỉ số">
             <Icon :icon="item.icon" :size="20" />
           </a-tooltip>
         </template>
         <div v-if="type === 'chart'">
-          <Trend term="周同比" :percentage="12" v-if="index === 0" />
-          <Trend term="日同比" :percentage="11" v-if="index === 0" :type="false" />
+          <Trend term="So với cùng kỳ tuần" :percentage="12" v-if="index === 0" />
+          <Trend term="So với cùng kỳ ngày" :percentage="11" v-if="index === 0" :type="false" />
 
           <SingleLine v-if="index === 1" :option="option" :chartData="chartData" :seriesColor="seriesColor" height="50px"></SingleLine>
 
@@ -37,8 +37,8 @@
           <span v-if="index !== 3"
             >{{ item.footer }}<span>{{ item.value }}</span></span
           >
-          <Trend term="周同比" :percentage="12" v-if="index === 3" />
-          <Trend term="日同比" :percentage="11" v-if="index === 3" :type="false" />
+          <Trend term="So với cùng kỳ tuần" :percentage="12" v-if="index === 3" />
+          <Trend term="So với cùng kỳ ngày" :percentage="11" v-if="index === 3" :type="false" />
         </template>
         <template #footer v-else>
           <span
@@ -74,27 +74,27 @@
 
   const chartData = ref([
     {
-      name: '1月',
+      name: 'Tháng 1',
       value: 50,
     },
     {
-      name: '2月',
+      name: 'Tháng 2',
       value: 100,
     },
     {
-      name: '3月',
+      name: 'Tháng 3',
       value: 150,
     },
     {
-      name: '4月',
+      name: 'Tháng 4',
       value: 40,
     },
     {
-      name: '5月',
+      name: 'Tháng 5',
       value: 110,
     },
     {
-      name: '6月',
+      name: 'Tháng 6',
       value: 120,
     },
   ]);

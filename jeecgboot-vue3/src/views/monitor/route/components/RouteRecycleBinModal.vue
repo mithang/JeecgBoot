@@ -1,11 +1,11 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="路由回收站" :showOkBtn="false" width="1000px" destroyOnClose>
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Thùng rác định tuyến" :showOkBtn="false" width="1000px" destroyOnClose>
     <BasicTable @register="registerTable">
       <template #status="{ record, text }">
-        <a-tag color="pink" v-if="text == 0">禁用</a-tag>
-        <a-tag color="#87d068" v-if="text == 1">正常</a-tag>
+        <a-tag color="pink" v-if="text == 0">Vô hiệu hóa</a-tag>
+        <a-tag color="#87d068" v-if="text == 1">Bình thường</a-tag>
       </template>
-      <!--操作栏-->
+      <!-- Thanh thao tác -->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -18,13 +18,13 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { columns } from '../route.data';
   import { deleteRouteList, putRecycleBin, deleteRecycleBin } from '../route.api';
-  // 声明Emits
+  // Khai báo Emits
   const emit = defineEmits(['success', 'register']);
   const checkedKeys = ref<Array<string | number>>([]);
   const [registerModal] = useModalInner(() => {
     checkedKeys.value = [];
   });
-  //注册table数据
+  // Đăng ký dữ liệu bảng
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
     api: deleteRouteList,
@@ -38,7 +38,7 @@
     canResize: false,
     actionColumn: {
       width: 150,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       slots: { customRender: 'action' },
       fixed: 'right',
@@ -46,36 +46,36 @@
   });
 
   /**
-   * 还原事件
+   * Sự kiện khôi phục
    */
   async function handleRevert(record) {
     await putRecycleBin({ ids: record.id }, reload);
     emit('success');
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteRecycleBin({ ids: record.id }, reload);
   }
 
-  //获取操作栏事件
+  // Lấy sự kiện thanh thao tác
   function getTableAction(record) {
     return [
       {
-        label: '取回',
+        label: 'Thu hồi',
         icon: 'ant-design:redo-outlined',
         popConfirm: {
-          title: '是否确认取回',
+          title: 'Bạn có chắc chắn muốn thu hồi không?',
           confirm: handleRevert.bind(null, record),
         },
       },
       {
-        label: '彻底删除',
+        label: 'Xóa hoàn toàn',
         icon: 'ant-design:scissor-outlined',
         color: 'error',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Bạn có chắc chắn muốn xóa không?',
           confirm: handleDelete.bind(null, record),
         },
       },

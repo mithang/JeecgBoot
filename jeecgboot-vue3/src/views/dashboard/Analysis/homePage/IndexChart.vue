@@ -4,11 +4,11 @@
     <SaleTabCard class="!my-4 enter-y" :loading="loading" />
     <a-row>
       <a-col :span="24">
-        <a-card :loading="loading" :bordered="false" title="最近一周访问量统计">
+        <a-card :loading="loading" :bordered="false" title="Thống kê lượt truy cập trong tuần gần nhất">
           <div class="infoArea">
-            <HeadInfo title="今日IP" :iconColor="ipColor" :content="loginfo.todayIp" icon="environment"></HeadInfo>
-            <HeadInfo title="今日访问" :iconColor="visitColor" :content="loginfo.todayVisitCount" icon="team"></HeadInfo>
-            <HeadInfo title="总访问量" :iconColor="seriesColor" :content="loginfo.totalVisitCount" icon="rise"></HeadInfo>
+            <HeadInfo title="Hôm nayIP" :iconColor="ipColor" :content="loginfo.todayIp" icon="environment"></HeadInfo>
+            <HeadInfo title="Lượt truy cập hôm nay" :iconColor="visitColor" :content="loginfo.todayVisitCount" icon="team"></HeadInfo>
+            <HeadInfo title="Tổng lượt truy cập" :iconColor="seriesColor" :content="loginfo.totalVisitCount" icon="rise"></HeadInfo>
           </div>
           <LineMulti :chartData="lineMultiData" height="33vh" type="line" :option="{ legend: { top: 'bottom' } }"></LineMulti>
         </a-card>
@@ -111,7 +111,7 @@
     }
   }
 
-  /* 首页访问量统计 */
+  /* Thống kê lượt truy cập trang chủ */
   .head-info {
     position: relative;
     text-align: left;

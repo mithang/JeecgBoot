@@ -7,7 +7,7 @@ enum Api {
 }
 
 /**
- * 查询数据日志列表
+ * Truy vấn danh sách nhật ký dữ liệu
  * @param params
  */
 export const getDataLogList = (params) => {
@@ -15,7 +15,7 @@ export const getDataLogList = (params) => {
 };
 
 /**
- * 查询数据日志列表
+ * Truy vấn danh sách nhật ký dữ liệu
  * @param params
  */
 export const queryDataVerList = (params) => {
@@ -23,7 +23,7 @@ export const queryDataVerList = (params) => {
 };
 
 /**
- * 查询对比数据
+ * Truy vấn dữ liệu so sánh
  * @param params
  */
 export const queryCompareList = (params) => {

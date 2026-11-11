@@ -2,7 +2,7 @@ import { BasicColumn } from '/@/components/Table';
 
 export const columns: BasicColumn[] = [
   {
-    title: '配置项',
+    title: 'Mục cấu hình',
     dataIndex: 'key',
     width: 120,
     align: 'left',
@@ -11,14 +11,14 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '说明',
+    title: 'Giải thích',
     dataIndex: 'description',
     width: 200,
     align: 'left',
     ellipsis: true,
   },
   {
-    title: '值',
+    title: 'Giá trị',
     dataIndex: 'value',
     width: 80,
     align: 'right',

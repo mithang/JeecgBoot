@@ -3,13 +3,13 @@
     <template #tableTitle>
       <div class="table-title-bar">
         <a-tabs defaultActiveKey="4" @change="tabChange" size="small">
-          <a-tab-pane tab="异常日志" key="4"></a-tab-pane>
-          <a-tab-pane tab="登录日志" key="1"></a-tab-pane>
-          <a-tab-pane tab="操作日志" key="2"></a-tab-pane>
+          <a-tab-pane tab="Nhật ký ngoại lệ" key="4"></a-tab-pane>
+          <a-tab-pane tab="Nhật ký đăng nhập" key="1"></a-tab-pane>
+          <a-tab-pane tab="Nhật ký thao tác" key="2"></a-tab-pane>
         </a-tabs>
         <span class="export-btn" v-if="searchInfo.logType == 2">
           <a-tooltip>
-            <template #title>导出</template>
+            <template #title>Xuất</template>
             <a-button  type="text" preIcon="ant-design:download-outlined" shape="circle" @click="onExportXls" />
           </a-tooltip>
         </span>
@@ -19,16 +19,16 @@
       <div v-if="searchInfo.logType == 2">
         <div style="margin-bottom: 5px">
           <a-badge status="success" style="vertical-align: middle" />
-          <span style="vertical-align: middle">请求方法:{{ record.method }}</span></div
+          <span style="vertical-align: middle">Phương thức yêu cầu:{{ record.method }}</span></div
         >
         <div>
           <a-badge status="processing" style="vertical-align: middle" />
-          <span style="vertical-align: middle">请求参数:{{ record.requestParam }}</span></div
+          <span style="vertical-align: middle">Tham số yêu cầu:{{ record.requestParam }}</span></div
         >
       </div>
       <div v-if="searchInfo.logType == 4">
         <div class="error-section">
-          <div class="error-label"><a-badge status="error" /> 异常堆栈:</div>
+          <div class="error-label"><a-badge status="error" /> Ngăn xếp ngoại lệ:</div>
           <pre class="error-box">{{ record.requestParam }}</pre>
         </div>
       </div>
@@ -54,11 +54,11 @@
   const logColumns = ref<any>(exceptionColumns);
   const searchSchema = ref<any>(searchFormSchema);
   const searchInfo = { logType: '4' };
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { prefixCls, tableContext, onExportXls } = useListPage({
     designScope: 'user-list',
     tableProps: {
-      title: '日志列表',
+      title: 'Danh sách nhật ký',
       api: getLogList,
       expandRowByClick: true,
       showActionColumn: false,
@@ -71,19 +71,19 @@
       },
     },
     exportConfig: {
-      name:"操作日志",
+      name:"Nhật ký thao tác",
       url: getExportUrl,
       params: searchInfo,
-      timeout: 300000, // 设置超时时间为5分钟(300秒)
+      timeout: 300000, // Đặt thời gian chờ là 5 phút (300 giây)
     },
   });
 
   const [registerTable, { reload }] = tableContext;
 
-  // 日志类型
+  // Loại nhật ký
   function tabChange(key) {
     searchInfo.logType = key;
-    // 代码逻辑说明: [VUEN-943]vue3日志管理列表翻译不对------------
+    // Giải thích logic mã: [VUEN-943] vue3 — danh sách quản lý nhật ký dịch không đúng------------
     if (key == '2') {
       logColumns.value = operationLogColumn;
       searchSchema.value = operationSearchFormSchema;
@@ -98,7 +98,7 @@
   }
 
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;

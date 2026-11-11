@@ -1,8 +1,8 @@
 <template>
   <div>
-      <!--引用表格-->
+      <!-- Bảng tham chiếu -->
      <BasicTable bordered size="middle" :loading="loading" rowKey="id" :canResize="false" :columns="openApiParamColumns" :dataSource="dataSource" :pagination="false">
-        <!--字段回显插槽-->
+        <!-- Slot hiển thị lại trường -->
         <template v-slot:bodyCell="{ column, record, index, text }">
         </template>
       </BasicTable>

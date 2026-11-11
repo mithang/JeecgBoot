@@ -2,63 +2,63 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
 import { render } from '/@/utils/common/renderUtils';
 
 /**
- * 发布人是否为 system：系统自动发送的消息，发布人存的是 system，不是用户账号
+ * Người đăng có phải là system không: tin nhắn hệ thống tự động gửi, người đăng được lưu là system, không phải tài khoản người dùng
  * @author wangshuai
- * @since 2026-11-02 【LHZP-1240】【消息中心】我的消息 发布人未翻译
+ * @since 2026-11-02 【LHZP-1240】【Trung tâm tin nhắn】 Tin nhắn của tôi: người đăng chưa được dịch
  */
 export function isSystemSender(sender) {
   return sender === 'system';
 }
 
 /**
- * 发布人显示文本：system 默认显示为「系统」，其他发布人显示 text（姓名或原值）
- * 按发布人原值判断，就算有叫 system 的账号也不会显示成他的姓名；列表和详情弹窗共用
+ * Văn bản hiển thị của người đăng: system mặc định hiển thị là "Hệ thống", người đăng khác hiển thị text (tên hoặc giá trị gốc)
+ * Xét theo giá trị gốc của người đăng, dù có tài khoản tên là system thì cũng không hiển thị thành tên của tài khoản đó; danh sách và popup chi tiết dùng chung
  * @author wangshuai
- * @since 2026-11-02 【LHZP-1240】【消息中心】我的消息 发布人未翻译
+ * @since 2026-11-02 【LHZP-1240】【Trung tâm tin nhắn】 Tin nhắn của tôi: người đăng chưa được dịch
  */
 export function getSenderText(sender, text) {
   if (isSystemSender(sender)) {
-    return '系统';
+    return 'Hệ thống';
   }
   return text;
 }
 
 export const columns: BasicColumn[] = [
   {
-    title: '标题',
+    title: 'Tiêu đề',
     dataIndex: 'titile',
     width: 100,
     align: 'left',
   },
   {
-    title: '消息类型',
+    title: 'Loại tin nhắn',
     dataIndex: 'msgCategory',
     width: 80,
     customRender: ({ text }) => {
       return render.renderDictNative(
         text,
         [
-          { label: '通知公告', value: '1', color: 'blue' },
-          { label: '系统消息', value: '2' },
+          { label: 'Thông báo', value: '1', color: 'blue' },
+          { label: 'Tin nhắn hệ thống', value: '2' },
         ],
         true
       );
     },
   },
   {
-    title: '发布人',
+    title: 'Người đăng',
     dataIndex: 'sender',
     width: 80,
-    // 账号显示后端翻译的姓名，流程通知等非账号的值原样显示；当前页没有任何发布人匹配到账号时后端不返回 sender_dictText，回退显示原值
+    // Tài khoản hiển thị tên đã dịch từ backend, các giá trị không phải tài khoản như thông báo quy trình hiển thị nguyên văn; khi trang hiện tại không có người phát hành nào khớp tài khoản thì backend không trả về sender_dictText, fallback hiển thị giá trị gốc
     customRender: ({ record }) => getSenderText(record.sender, record.sender_dictText || record.sender),
   },
   {
-    title: '发布时间',
+    title: 'Thời gian đăng',
     dataIndex: 'sendTime',
     width: 80,
   },
   {
-    title: '优先级',
+    title: 'Mức ưu tiên',
     dataIndex: 'priority',
     width: 80,
     customRender: ({ text }) => {
@@ -67,15 +67,15 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '阅读状态',
+    title: 'Trạng thái đọc',
     dataIndex: 'readFlag',
     width: 80,
     customRender: ({ text }) => {
       return render.renderDictNative(
         text,
         [
-          { label: '未读', value: '0', color: 'red' },
-          { label: '已读', value: '1' },
+          { label: 'Chưa đọc', value: '0', color: 'red' },
+          { label: 'Đã đọc', value: '1' },
         ],
         true
       );
@@ -86,19 +86,19 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'titile',
-    label: '标题',
+    label: 'Tiêu đề',
     component: 'Input',
     colProps: { span: 6 },
   },
   {
     field: 'sender',
-    label: '发布人',
+    label: 'Người đăng',
     component: 'Input',
     colProps: { span: 6 },
   },
   {
     field: 'sendTime',
-    label: '发布时间',
+    label: 'Thời gian đăng',
     component: 'RangeDate',
     componentProps: {
       valueType: 'Date',
@@ -107,18 +107,18 @@ export const searchFormSchema: FormSchema[] = [
   },
   {
     field: 'msgCategory',
-    label: '消息类型',
+    label: 'Loại tin nhắn',
     component: 'Select',
     componentProps: {
       options: [
-        { label: '通知公告', value: '1' },
-        { label: '系统消息', value: '2' },
-        { label: '日程计划', value: 'plan' },
-        { label: '流程消息', value: 'flow' },
-        { label: '会议', value: 'meeting' },
-        { label: '知识库', value: 'file' },
-        { label: '协同通知', value: 'collab' },
-        { label: '督办通知', value: 'supe' },
+        { label: 'Thông báo', value: '1' },
+        { label: 'Tin nhắn hệ thống', value: '2' },
+        { label: 'Kế hoạch lịch trình', value: 'plan' },
+        { label: 'Tin nhắn quy trình', value: 'flow' },
+        { label: 'Cuộc họp', value: 'meeting' },
+        { label: 'Kho tri thức', value: 'file' },
+        { label: 'Thông báo phối hợp', value: 'collab' },
+        { label: 'Thông báo giám sát', value: 'supe' },
       ],
     },
     colProps: { span: 6 },

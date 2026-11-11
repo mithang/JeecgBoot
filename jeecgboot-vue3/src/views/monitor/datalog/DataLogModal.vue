@@ -1,26 +1,26 @@
 <template>
   <div>
-    <BasicModal v-bind="$attrs" @register="registerModal" title="数据对比窗口" :minHeight="300" width="800px" @ok="handleSubmit">
+    <BasicModal v-bind="$attrs" @register="registerModal" title="Cửa sổ so sánh dữ liệu" :minHeight="300" width="800px" @ok="handleSubmit">
       <a-spin :spinning="confirmLoading">
         <a-form @submit="handleSubmit" :form="form" class="form">
           <a-row class="form-row" :gutter="24">
             <a-col :md="12" :sm="8">
-              <a-form-item label="数据库表名" :label-col="{ span: 6 }" :wrapper-col="{ span: 15 }" name="dataTable">
-                <a-input placeholder="请输入数据库表名" v-model:value="dataTable" disabled />
+              <a-form-item label="Tên bảng cơ sở dữ liệu" :label-col="{ span: 6 }" :wrapper-col="{ span: 15 }" name="dataTable">
+                <a-input placeholder="Vui lòng nhập tên bảng cơ sở dữ liệu" v-model:value="dataTable" disabled />
               </a-form-item>
             </a-col>
 
             <a-col :md="12" :sm="8">
-              <a-form-item label="数据ID" :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
-                <a-input placeholder="请输入数据ID" v-model:value="dataId" disabled />
+              <a-form-item label="ID dữ liệu" :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
+                <a-input placeholder="Vui lòng nhập ID dữ liệu" v-model:value="dataId" disabled />
               </a-form-item>
             </a-col>
           </a-row>
 
           <a-row class="form-row" :gutter="24">
             <a-col :md="12" :sm="8">
-              <a-form-item label="版本号1" :label-col="{ span: 6 }" :wrapper-col="{ span: 15 }">
-                <a-select placeholder="请选择版本号" @change="handleChange1" v-model:value="dataVersion1">
+              <a-form-item label="Số phiên bản 1" :label-col="{ span: 6 }" :wrapper-col="{ span: 15 }">
+                <a-select placeholder="Vui lòng chọn số phiên bản" @change="handleChange1" v-model:value="dataVersion1">
                   <a-select-option v-for="(log, logindex) in dataVersionList" :key="logindex.toString()" :value="log.id">
                     {{ log.dataVersion }}
                   </a-select-option>
@@ -28,8 +28,8 @@
               </a-form-item>
             </a-col>
             <a-col :md="12" :sm="8">
-              <a-form-item label="版本号2" :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
-                <a-select placeholder="请选择版本号" @change="handleChange2" v-model:value="dataVersion2">
+              <a-form-item label="Số phiên bản 2" :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
+                <a-select placeholder="Vui lòng chọn số phiên bản" @change="handleChange2" v-model:value="dataVersion2">
                   <a-select-option v-for="(log, logindex) in dataVersionList" :key="logindex.toString()" :value="log.id">
                     {{ log.dataVersion }}
                   </a-select-option>
@@ -58,7 +58,7 @@
   const isUpdate = ref(true);
   const dataVersionList = ref([]);
   let dataLog = reactive({});
-  //表单赋值
+  // Gán giá trị biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {

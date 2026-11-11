@@ -4,13 +4,13 @@
       <template #pwd="{ model, field }">
         <a-row :gutter="8">
           <a-col :sm="15" :md="16" :lg="17" :xl="19">
-            <a-input-password v-model:value="model[field]" placeholder="请输入密码" autocomplete="new-password" />
+            <a-input-password v-model:value="model[field]" placeholder="Vui lòng nhập mật khẩu" autocomplete="new-password" />
           </a-col>
           <a-col :sm="9" :md="7" :lg="7" :xl="5">
-            <a-button type="primary" style="width: 100%" @click="handleTest">测试</a-button>
+            <a-button type="primary" style="width: 100%" @click="handleTest">Kiểm tra</a-button>
           </a-col>
         </a-row>
-        <div v-if="isUpdate" style="color: #ff4d4f; line-height: 1.5; margin-top: 2px">密码留空表示不修改，测试和保存均沿用原密码</div>
+        <div v-if="isUpdate" style="color: #ff4d4f; line-height: 1.5; margin-top: 2px">Để trống mật khẩu nghĩa là không thay đổi, kiểm tra và lưu đều dùng mật khẩu gốc</div>
       </template>
     </BasicForm>
   </BasicModal>
@@ -24,44 +24,44 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   const { createMessage } = useMessage();
-  // Emits声明
+  // Khai báo Emits
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
-  //表单配置
+  // Cấu hình biểu mẫu
   const [registerForm, { getFieldsValue, resetFields, validateFields, setFieldsValue, validate }] = useForm({
     // labelWidth: 150,
     schemas: formSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  // Gán giá trị biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    // Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      //获取详情
+      // Lấy chi tiết
       data.record = await getDataSourceById({ id: data.record.id });
-      //【安全加固】编辑时不回填密码，留空表示不修改；测试和保存均由后端按id/code沿用原密码
+      // [Tăng cường bảo mật] Khi chỉnh sửa không điền lại mật khẩu, để trống nghĩa là không sửa; kiểm tra và lưu đều do backend theo id/code dùng mật khẩu gốc
       await setFieldsValue({
         ...data.record,
         dbPassword: '',
       });
     }
   });
-  //设置标题
-  const title = computed(() => (!unref(isUpdate) ? '新增数据源' : '编辑数据源'));
+  // Cài đặt tiêu đề
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới nguồn dữ liệu' : 'Chỉnh sửa nguồn dữ liệu'));
 
   async function handleTest() {
     let keys = ['dbType', 'dbDriver', 'dbUrl', 'dbUsername'];
     await validateFields(keys).then(() => {
-      //【安全加固】取全部字段（含id、code），密码留空时由后端按id/code沿用原密码进行测试
+      // [Tăng cường bảo mật] Lấy tất cả các trường (bao gồm id, code); khi mật khẩu để trống thì backend theo id/code dùng mật khẩu gốc để kiểm tra
       let values = getFieldsValue();
-      let loading = createMessage.loading('连接中....', 0);
+      let loading = createMessage.loading('Đang kết nối....', 0);
       testConnection(values)
         .then((data) => {
           if (data.success) {
-            createMessage.success('连接成功');
+            createMessage.success('Kết nối thành công');
           }
         })
         .catch((error) => {})
@@ -69,17 +69,17 @@
     });
   }
 
-  //表单提交事件
+  // Sự kiện gửi biểu mẫu
   async function handleSubmit(v) {
     try {
       let values = await validate();
-      //【安全加固】密码留空表示不修改，由后端沿用原密码保存
+      // [Tăng cường bảo mật] Mật khẩu để trống nghĩa là không sửa, backend dùng mật khẩu gốc để lưu
       setModalProps({ confirmLoading: true });
-      //提交表单
+      // Gửi biểu mẫu
       await saveOrUpdateDataSource(values, isUpdate.value);
-      //关闭弹窗
+      // Đóng popup
       closeModal();
-      //刷新列表
+      // Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

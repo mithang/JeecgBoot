@@ -61,7 +61,7 @@
         data: [
           {
             value: 70,
-            name: '本地磁盘',
+            name: 'Ổ đĩa cục bộ',
           },
         ],
       },

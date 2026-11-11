@@ -2,39 +2,39 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
 
 export const columns: BasicColumn[] = [
   {
-    title: '调用时间',
+    title: 'Thời gian gọi',
     dataIndex: 'callTime',
     align: 'center',
     width: 170,
   },
   {
-    title: '请求方式',
+    title: 'Phương thức yêu cầu',
     dataIndex: 'requestMethod',
     align: 'center',
     width: 90,
   },
   {
-    title: '请求路径',
+    title: 'Đường dẫn yêu cầu',
     dataIndex: 'requestPath',
     align: 'left',
     width: 220,
     ellipsis: true,
   },
   {
-    title: '调用者AK',
+    title: 'AK của bên gọi',
     dataIndex: 'callerAk',
     align: 'center',
     width: 180,
     ellipsis: true,
   },
   {
-    title: '来源IP',
+    title: 'IP nguồn',
     dataIndex: 'ip',
     align: 'center',
     width: 140,
   },
   {
-    title: '状态码',
+    title: 'Mã trạng thái',
     dataIndex: 'responseCode',
     align: 'center',
     width: 90,
@@ -43,22 +43,22 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '调用者AK',
+    label: 'AK của bên gọi',
     field: 'callerAk',
     component: 'JInput',
   },
   {
-    label: '来源IP',
+    label: 'IP nguồn',
     field: 'ip',
     component: 'JInput',
   },
   {
-    label: '请求路径',
+    label: 'Đường dẫn yêu cầu',
     field: 'requestPath',
     component: 'JInput',
   },
   {
-    label: '请求方式',
+    label: 'Phương thức yêu cầu',
     field: 'requestMethod',
     component: 'JSearchSelect',
     componentProps: {
@@ -66,12 +66,12 @@ export const searchFormSchema: FormSchema[] = [
     },
   },
   {
-    label: '响应状态码',
+    label: 'Mã trạng thái phản hồi',
     field: 'responseCode',
     component: 'Input',
   },
   {
-    label: '调用时间',
+    label: 'Thời gian gọi',
     field: 'callTime',
     component: 'RangePicker',
     componentProps: { valueType: 'Date', showTime: true },

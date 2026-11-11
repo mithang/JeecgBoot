@@ -23,7 +23,7 @@
     queryDiskInfo()
       .then((res) => {
         for (let i = 0; i < res.length; i++) {
-          // 当前算法算的是磁盘的已使用空间
+          // Thuật toán hiện tại tính không gian đĩa đã dùng
           res[i].restPPT = 100 - parseInt(String((res[i].rest / res[i].max) * 100));
         }
         diskInfo.value = res;
