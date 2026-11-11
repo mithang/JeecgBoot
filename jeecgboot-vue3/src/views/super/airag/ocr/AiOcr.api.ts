@@ -19,7 +19,7 @@ export const list = (params) => {
 };
 
 /**
- * Thêm Orc
+ * Thêm OCR
  * @param params
  * @param handleSuccess
  */
@@ -28,7 +28,7 @@ export const addOcr = (params) => {
 };
 
 /**
- * Chỉnh sửa Orc
+ * Chỉnh sửa OCR
  * @param params
  * @param handleSuccess
  */
@@ -37,7 +37,7 @@ export const editOcr = (params) => {
 };
 
 /**
- * Xóa Orc theo id
+ * Xóa OCR theo id
  * @param params
  * @param handleSuccess
  */

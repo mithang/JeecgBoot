@@ -57,7 +57,7 @@
     >
       <a-form :model="genWordData" :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
         <a-form-item class="field-clos" :label="field" :name="field" v-for="field in tplFieldList">
-          <a-input v-model:value="genWordData[field]" style="width:90%" :placeholder="'Vui lòng nhập'+field"></a-input>
+          <a-input v-model:value="genWordData[field]" style="width:90%" :placeholder="'Vui lòng nhập ' + field"></a-input>
         </a-form-item>
       </a-form>
     </BasicModal>

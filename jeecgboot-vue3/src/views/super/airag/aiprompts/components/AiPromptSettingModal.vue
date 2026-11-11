@@ -104,7 +104,7 @@
                         <div v-if="!metadata.promptVariables || metadata.promptVariables.length === 0" class="empty-variables">
                           <Icon icon="ant-design:inbox-outlined" style="font-size: 32px; color: #d9d9d9" />
                           <p>Tạm thời chưa có biến</p>
-                          <span class="empty-hint">Vui lòng sử dụng định dạng {{ tên biến }} trong prompt để thêm biến</span>
+                          <span class="empty-hint">Vui lòng sử dụng định dạng &#123;&#123; tên biến &#125;&#125; trong prompt để thêm biến</span>
                         </div>
 
                         <!-- Danh sách biến -->

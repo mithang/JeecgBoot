@@ -267,7 +267,7 @@
     if(!formState.dataValue){
       formState.dataValue = `${label}:{{${type}}}`;
     }else{
-      formState.dataValue += `\r\n\r\n${label}：{{${type}}}`;
+      formState.dataValue += `\r\n\r\n${label}:{{${type}}}`;
       // Lấy phần tử textarea và cuộn xuống đáy
       setTimeout(() => {
         const textarea = document.querySelector('textarea.ant-input') as HTMLTextAreaElement;

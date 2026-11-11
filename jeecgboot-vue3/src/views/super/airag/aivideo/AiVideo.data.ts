@@ -62,7 +62,7 @@ export const videoFormSchemas: FormSchema[] = [
     },
   },
   {
-    label: 'Có phải hiệu ứng âm thanh tổng hợp ai hay không',
+    label: 'Có tổng hợp hiệu ứng âm thanh AI không',
     field: 'izAiAudio',
     component: 'Select',
     defaultValue: 0,

@@ -127,50 +127,50 @@
   const formData = reactive({
     prompt: '',
     originalContent: '',
-    length: 'Tự động',
-    format: 'Tự động',
-    tone: 'Tự động',
-    language: 'Tự động',
+    length: '自动',
+    format: '自动',
+    tone: '自动',
+    language: '自动',
     activeMode: 'compose',
   });
 
   const options = {
     //Độ dài
     length: [
-      { label: 'Tự động', value: 'Tự động' },
-      { label: 'Ngắn', value: 'Ngắn' },
-      { label: 'Trung bình', value: 'Trung bình' },
-      { label: 'Dài', value: 'Dài' },
+      { label: 'Tự động', value: '自动' },
+      { label: 'Ngắn', value: '短' },
+      { label: 'Trung bình', value: '中等' },
+      { label: 'Dài', value: '长' },
     ],
     //Định dạng
     format: [
-      { label: 'Tự động', value: 'Tự động' },
-      { label: 'Email', value: 'Email' },
-      { label: 'Tin nhắn', value: 'Tin nhắn' },
-      { label: 'Bình luận', value: 'Bình luận' },
-      { label: 'Đoạn văn', value: 'Đoạn văn' },
-      { label: 'Bài viết', value: 'Bài viết' },
-      { label: 'Bài viết blog', value: 'Bài viết blog' },
-      { label: 'Ý tưởng', value: 'Ý tưởng' },
-      { label: 'Đề cương', value: 'Đề cương' },
+      { label: 'Tự động', value: '自动' },
+      { label: 'Email', value: '电子邮件' },
+      { label: 'Tin nhắn', value: '消息' },
+      { label: 'Bình luận', value: '评论' },
+      { label: 'Đoạn văn', value: '段落' },
+      { label: 'Bài viết', value: '文章' },
+      { label: 'Bài viết blog', value: '博客文章' },
+      { label: 'Ý tưởng', value: '想法' },
+      { label: 'Đề cương', value: '大纲' },
     ],
     //Ngữ khí
     tone: [
-      { label: 'Tự động', value: 'Tự động' },
-      { label: 'Thân thiện', value: 'Thân thiện' },
-      { label: 'Tùy ý', value: 'Tùy ý' },
-      { label: 'Chuyên nghiệp', value: 'Chuyên nghiệp' },
-      { label: 'Hài hước', value: 'Hài hước' },
-      { label: 'Thú vị', value: 'Thú vị' },
-      { label: 'Chính thức', value: 'Chính thức' },
+      { label: 'Tự động', value: '自动' },
+      { label: 'Thân thiện', value: '友善' },
+      { label: 'Tùy ý', value: '随意' },
+      { label: 'Chuyên nghiệp', value: '专业' },
+      { label: 'Hài hước', value: '诙谐' },
+      { label: 'Thú vị', value: '有趣' },
+      { label: 'Chính thức', value: '正式' },
     ],
     //Ngôn ngữ
     language: [
-      { label: 'Tự động', value: 'Tự động' },
-      { label: 'Tiếng Trung', value: 'Tiếng Trung' },
-      { label: 'Tiếng Anh', value: 'Tiếng Anh' },
-      { label: 'Tiếng Hàn', value: 'Tiếng Hàn' },
-      { label: 'Tiếng Nhật', value: 'Tiếng Nhật' },
+      { label: 'Tự động', value: '自动' },
+      { label: 'Tiếng Trung', value: '中文' },
+      { label: 'Tiếng Anh', value: '英文' },
+      { label: 'Tiếng Hàn', value: '韩语' },
+      { label: 'Tiếng Nhật', value: '日语' },
     ],
   };
 
@@ -190,10 +190,10 @@
   function handleReset() {
     formData.originalContent = '';
     formData.prompt = '';
-    formData.length = 'Tự động';
-    formData.format = 'Tự động';
-    formData.tone = 'Tự động';
-    formData.language = 'Tự động';
+    formData.length = '自动';
+    formData.format = '自动';
+    formData.tone = '自动';
+    formData.language = '自动';
     formData.activeMode = 'compose';
     emit('reset');
   }

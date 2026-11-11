@@ -86,7 +86,7 @@ export const formSchema: FormSchema[] = [
         {required: true, message: 'Vui lòng nhập tên prompt'},
         {
           max: NAME_MAX_LENGTH,
-          message: `Độ dài tên không được vượt quá${NAME_MAX_LENGTH}ký tự`,
+          message: `Độ dài tên không được vượt quá ${NAME_MAX_LENGTH} ký tự`,
         },
       ];
     }

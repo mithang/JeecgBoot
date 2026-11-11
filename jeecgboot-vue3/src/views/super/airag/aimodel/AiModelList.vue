@@ -102,7 +102,7 @@
       @change="handlePageChange"
       class="list-footer"
       size="small"
-      :show-total="() => `Tổng cộng${total}Mục` "
+      :show-total="() => `Tổng cộng ${total} mục` "
     />
   </div>
 
