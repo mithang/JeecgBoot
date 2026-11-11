@@ -1,14 +1,14 @@
-<!--弹窗绑定企业微信页面-->
+<!--Trang liên kết WeCom của hộp thoại-->
 <template>
   <BasicModal @register="registerModal" :width="800" :title="title" destroyOnClose>
     <a-spin :spinning="loading">
       <div class="we-bind">
         <a-row :span="24" class="we-title-background">
           <a-col :span="12" class="border-right">
-            <span>组织用户</span>
+            <span>Người dùng tổ chức</span>
           </a-col>
           <a-col :span="12" class="padding-left">
-            <span>企业微信用户</span>
+            <span>Người dùng WeCom</span>
           </a-col>
         </a-row>
         <a-row :span="24">
@@ -25,7 +25,7 @@
             <a-col :span="12" class="padding-left border-bottom">
               <div class="we-account">
                 <span v-if="item.wechatUserId || izBind" class="we-remove"
-                  >{{ item.wechatRealName }} <span style="margin-right: 20px" @click="handleRemoveClick(index, item)">移出</span></span
+                  >{{ item.wechatRealName }} <span style="margin-right: 20px" @click="handleRemoveClick(index, item)">Loại bỏ</span></span
                 >
                 <a-select
                   v-else
@@ -43,7 +43,7 @@
       </div>
     </a-spin>
     <template #footer>
-      <a-button v-if="!izBind" type="primary" @click="handleSubmit">同步</a-button>
+      <a-button v-if="!izBind" type="primary" @click="handleSubmit">Đồng bộ</a-button>
     </template>
   </BasicModal>
 </template>
@@ -61,19 +61,19 @@
     name: 'ThirdAppBindWeEnterpriseModal',
     components: { BasicModal },
     setup(props, { emit }) {
-      const title = ref<string>('企业微信绑定');
-      //企业微信的绑定数据
+      const title = ref<string>('Liên kết WeCom');
+      //Dữ liệu liên kết của WeCom
       const bindData = ref<any>({});
       const loading = ref<boolean>(false);
       const btnLoading = ref<boolean>(false);
       const { createMessage } = useMessage();
       const userList = ref<any>([]);
-      //同步文本信息展示
+      //Hiển thị thông tin văn bản đồng bộ
       const syncText = ref<string>('');
-      //是否已绑定数据，展示不同的列表
+      //Dữ liệu đã liên kết hay chưa thì hiển thị danh sách khác nhau
       const izBind = ref<boolean>(false);
       const userStore = useUserStore();
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       const [registerModal, { closeModal }] = useModalInner(async (data) => {
         loading.value = true;
         console.log('izBind：：', izBind);
@@ -86,7 +86,7 @@
       });
 
       /**
-       * 未绑定的数据
+       * Dữ liệu chưa liên kết
        */
       async function getUnboundData() {
         await getThirdUserByWechat().then((res) => {
@@ -97,7 +97,7 @@
             /*   if (userLists && userLists.length > 0) {
             syncText.value = "";
           } else {
-            syncText.value = "企业微信用户均已同步";
+            syncText.value = "Người dùng WeCom đều đã đồng bộ";
           }*/
             loading.value = false;
           } else {
@@ -108,7 +108,7 @@
       }
 
       /**
-       * 已绑定的数据
+       * Dữ liệu đã liên kết
        */
       async function getBoundData() {
         await getThirdUserBindByWechat().then((res) => {
@@ -123,14 +123,14 @@
       }
 
       /**
-       * 第三方配置点击事件
+       * Sự kiện nhấp vào cấu hình bên thứ ba
        */
       async function handleSubmit() {
         btnLoading.value = true;
         let userList = bindData.value.userList;
-        //重新封装数据，只留用户id和企业微信id即可,还需要把没绑定的用户传给后台
+        //Đóng gói lại dữ liệu, chỉ giữ ID người dùng và ID WeCom là đủ,Còn cần truyền người dùng chưa liên kết cho hậu trường
         let params: any = [];
-        //查询用户绑定的企业微信用户
+        //Truy vấn người dùng WeCom mà người dùng đã liên kết
         for (const item of bindData.value.jwUserDepartVos) {
           if (item.wechatUserId) {
             userList = userList.filter((a) => a.wechatUserId != item.wechatUserId);
@@ -143,18 +143,18 @@
           }
         }
         let text: string = '';
-        //查询未被绑定的租户
+        //Truy vấn đơn vị thuê chưa được liên kết
         if (userList && userList.length > 0) {
           for (const item of userList) {
             params.push({ wechatUserId: item.wechatUserId, wechatDepartId: item.wechatDepartId, wechatRealName: item.wechatRealName });
           }
-          text = '检测到未绑定的企业微信用户 ' + userList.length + ' 位，平台将会为这 ' + userList.length + ' 位用户创建新的账号';
+          text = 'Phát hiện người dùng WeCom chưa liên kết ' + userList.length + ' , nền tảng sẽ cho người dùng này ' + userList.length + ' người dùng tạo tài khoản mới';
         }
 
         Modal.confirm({
-          title: '确认同步',
+          title: 'Xác nhận đồng bộ',
           content: text,
-          okText: '确认',
+          okText: 'Xác nhận',
           onOk: () => {
             let json = JSON.stringify(params);
             console.log('json：：', json);
@@ -168,12 +168,12 @@
                       title: res.message,
                       content: () => {
                         let nodes;
-                        let successInfo = [`成功信息如下：`, renderTextarea(h, res.result.successInfo.map((v, i) => `${i + 1}. ${v}`).join('\n'))];
+                        let successInfo = [`Thông tin thành công như sau:`, renderTextarea(h, res.result.successInfo.map((v, i) => `${i + 1}. ${v}`).join('\n'))];
                         if (res.success) {
-                          nodes = [...successInfo, h('br'), `无失败信息！`];
+                          nodes = [...successInfo, h('br'), `Không có thông tin thất bại!`];
                         } else {
                           nodes = [
-                            `失败信息如下：`,
+                            `Thông tin thất bại như sau:`,
                             renderTextarea(h, res.result.failInfo.map((v, i) => `${i + 1}. ${v}`).join('\n')),
                             h('br'),
                             ...successInfo,
@@ -195,7 +195,7 @@
       }
 
       /**
-       * 下拉框选择事件
+       * Sự kiện chọn hộp thả xuống
        */
       function handleSelect(val, option, index) {
         bindData.value.jwUserDepartVos[index].wechatUserId = option.wechatUserId;
@@ -205,7 +205,7 @@
       }
 
       /**
-       * 移出事件
+       * Sự kiện loại bỏ
        * @param index
        * @param item
        */
@@ -221,12 +221,12 @@
           bindData.value.jwUserDepartVos[index].wechatDepartId = '';
         } else {
           Modal.confirm({
-            title: '确认取消绑定吗',
-            okText: '确认',
+            title: 'Xác nhận hủy liên kết không',
+            okText: 'Xác nhận',
             onOk: async () => {
               await deleteThirdAccount({ id: item.thirdId, sysUserId: userStore.getUserInfo.id }).then((res) => {
                 if (res.success) {
-                  createMessage.success('取消绑定成功！');
+                  createMessage.success('Hủy liên kết thành công!');
                   getBoundData();
                 } else {
                   createMessage.warning(res.message);

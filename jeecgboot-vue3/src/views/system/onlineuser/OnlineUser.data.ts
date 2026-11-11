@@ -2,58 +2,58 @@ import { FormSchema } from '/@/components/Table';
 import { render } from "/@/utils/common/renderUtils";
 import { getToken } from '/@/utils/auth';
 
-//列表
+//Danh sách
 export const columns = [
   {
-    title:'用户账号',
+    title:'Tài khoản người dùng',
     align:"center",
     dataIndex: 'username',
     customRender: ( {text,record} ) => {
       let token = getToken();
       if(record.token === token) {
-        return text + '（我）'
+        return text + '（tôi）'
       }
       return text
     },
   },{
-    title:'用户姓名',
+    title:'Họ tên người dùng',
     align:"center",
     dataIndex: 'realname'
   },{
-    title: '头像',
+    title: 'Ảnh đại diện',
     align: "center",
     width: 120,
     dataIndex: 'avatar',
     customRender: render.renderAvatar,
   },{
-    title:'生日',
+    title:'Ngày sinh',
     align:"center",
     dataIndex: 'birthday'
   },{
-    title: '性别',
+    title: 'Giới tính',
     align: "center",
     dataIndex: 'sex',
     customRender: ({text}) => {
       return render.renderDict(text, 'sex');
     }
   },{
-    title:'手机号',
+    title:'Số điện thoại',
     align:"center",
     dataIndex: 'phone'
   }
 ];
 
-//查询区域
+//Khu vực truy vấn
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'username',
-    label: '用户账号',
+    label: 'Tài khoản người dùng',
     component: 'Input',
     colProps: { span: 6 },
   },
   {
     field: 'realname',
-    label: '用户姓名',
+    label: 'Họ tên người dùng',
     component: 'Input',
     colProps: { span: 6 },
   }

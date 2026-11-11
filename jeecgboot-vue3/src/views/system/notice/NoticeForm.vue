@@ -2,14 +2,14 @@
   <div style="min-height: 400px">
     <BasicForm @register="registerForm">
       <template #msgTemplate="{ model, field }">
-        <a-select v-model:value="model[field]" placeholder="请选择消息模版" :options="templateOption" @change="handleChange" />
+        <a-select v-model:value="model[field]" placeholder="Vui lòng chọn mẫu tin nhắn" :options="templateOption" @change="handleChange" />
       </template>
       <template #msgContent="{ model, field }">
         <div v-html="model[field]" class="article-content"></div>
       </template>
     </BasicForm>
     <div class="footer-btn" v-if="!formDisabled">
-      <a-button @click="submitForm" pre-icon="ant-design:check" type="primary">提 交</a-button>
+      <a-button @click="submitForm" pre-icon="ant-design:check" type="primary">Gửi</a-button>
     </div>
   </div>
 </template>
@@ -18,14 +18,14 @@
   import { getBpmFormSchema } from './notice.data';
   import { getTempList, queryById, saveOrUpdate } from './notice.api';
   import { computed, ref } from 'vue';
-  // 定义属性
+  // Định nghĩa thuộc tính
   const props = defineProps({
     formData: {
       type: Object,
       default: () => ({}),
     },
   });
-  //表单禁用
+  //Vô hiệu hóa biểu mẫu
   const formDisabled = computed(() => {
     if (props.formData.disabled === false) {
       return false;
@@ -33,7 +33,7 @@
     return true;
   });
   const templateOption = ref([]);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     schemas: getBpmFormSchema(props.formData),
     showActionButtonGroup: false,
@@ -43,7 +43,7 @@
     baseColProps: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12, xxl: 12 },
   });
 
-  //表单提交
+  //Gửi biểu mẫu
   async function submitForm() {
     let values = await validate();
     if (values.msgType === 'ALL') {
@@ -51,10 +51,10 @@
     } else {
       values.userIds += ',';
     }
-    console.log('表单数据', values);
+    console.log('Dữ liệu biểu mẫu', values);
     await saveOrUpdate(values, true);
   }
-  //初始化模板
+  //Khởi tạo mẫu
   async function initTemplate() {
     const res = await getTempList({ templateCategory: 'notice', pageSize: 100 });
     console.log('res', res);
@@ -69,7 +69,7 @@
     }
   }
   /**
-   * 模版修改
+   * Sửa mẫu
    * @param val
    */
   function handleChange(val) {
@@ -81,26 +81,26 @@
     }
   }
   /**
-   * 加载数据
+   * Tải dữ liệu
    */
   async function initFormData() {
     let res = await queryById({ id: props.formData.dataId });
     if (res.success) {
-      //重置表单
+      //Đặt lại biểu mẫu
       await resetFields();
       const record = res.result;
       if (record.userIds) {
         record.userIds = record.userIds.substring(0, record.userIds.length - 1);
       }
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...record,
       });
     }
   }
-  //加载模版
+  //Tải mẫu
   initTemplate();
-  //加载数据
+  //Tải dữ liệu
   initFormData();
 </script>
 <style lang="less" scoped>

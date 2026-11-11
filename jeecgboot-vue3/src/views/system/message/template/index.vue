@@ -1,28 +1,28 @@
 <template>
   <div :class="prefixCls">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="onAdd">新增</a-button>
-        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="onAdd">Thêm mới</a-button>
+        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất (export)</a-button>
+        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">Nhập (import)</j-upload-button>
         <a-dropdown v-if="showBatchBtn">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="onDeleteBatch">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                <span>删除</span>
+                <span>Xóa</span>
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            <span>批量操作</span>
+            <span>Thao tác hàng loạt</span>
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
 
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
@@ -44,11 +44,11 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   const { createMessage } = useMessage();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, onExportXls, onImportXls, tableContext } = useListPage({
     designScope: 'message-template',
     tableProps: {
-      title: '消息中心模板列表数据',
+      title: 'Dữ liệu danh sách mẫu của trung tâm tin nhắn',
       api: list,
       columns: columns,
       formConfig: {
@@ -57,7 +57,7 @@
     },
     exportConfig: {
       url: Api.exportXls,
-      name: '消息中心模板列表',
+      name: 'Danh sách mẫu của trung tâm tin nhắn',
     },
     importConfig: {
       url: Api.importXls,
@@ -65,7 +65,7 @@
     },
   });
 
-  // 注册 ListTable
+  // Đăng ký ListTable
   const [registerTable, { reload, setLoading }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
   const [registerModal, { openModal }] = useModal();
   const [registerTestModal, testModal] = useModal();
@@ -73,7 +73,7 @@
 
   function onAdd() {
     openModal(true, {
-      title: '新增消息模板',
+      title: 'Thêm mới mẫu tin nhắn',
       isUpdate: false,
       showFooter: true,
       record: {},
@@ -82,11 +82,11 @@
 
   function onEdit(record) {
     if (record.useStatus === '1') {
-      createMessage.warning('此模板已被应用，禁止编辑!');
+      createMessage.warning('Mẫu này đã được ứng dụng, cấm chỉnh sửa!');
       return;
     }
     openModal(true, {
-      title: '修改消息模板',
+      title: 'Sửa mẫu tin nhắn',
       isUpdate: true,
       record: record,
       showFooter: true,
@@ -95,9 +95,9 @@
 
   function onDelete(record) {
     if (record) {
-      // 代码逻辑说明: VUEN-1652【bug】应用状态下不允许删除
+      // Giải thích logic mã: VUEN-1652【bug】Không cho phép xóa khi đang ở trạng thái ứng dụng
       if(record.useStatus == '1'){
-        createMessage.warning('该模板已被应用禁止删除!');
+        createMessage.warning('Mẫu này đã được ứng dụng, cấm xóa!');
         return;
       }
       doDeleteDepart([record.id], false);
@@ -105,9 +105,9 @@
   }
 
   /**
-   * 根据 ids 批量删除
+   * Xóa hàng loạt theo ids
    * @param idListRef array
-   * @param confirm 是否显示确认提示框
+   * @param confirm Có hiển thị hộp thoại nhắc xác nhận không
    */
   async function doDeleteDepart(idListRef, confirm = true) {
     const idList = unref(idListRef);
@@ -124,11 +124,11 @@
 
   async function onDeleteBatch() {
     try {
-      // 代码逻辑说明: VUEN-1652【bug】应用状态下不允许删除
+      // Giải thích logic mã: VUEN-1652【bug】Không cho phép xóa khi đang ở trạng thái ứng dụng
       let arr = toRaw(selectedRows.value);
       let temp = arr.filter(item=>item.useStatus=='1')
       if(temp.length>0){
-        createMessage.warning('选中的模板已被应用禁止删除!');
+        createMessage.warning('Mẫu đã chọn đã được ứng dụng, cấm xóa!');
         return;
       }
       await doDeleteDepart(selectedRowKeys);
@@ -137,32 +137,32 @@
     }
   }
 
-  // 发送消息测试
+  // Gửi tin nhắn kiểm tra
   function onSendTest(record) {
     testModal.openModal(true, { record });
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
-    // 代码逻辑说明: [VUEN-2807]消息模板加一个查看功能------------
-    return [{ label: '查看', onClick: handleDetail.bind(null, record)}, { label: '编辑', onClick: onEdit.bind(null, record) }];
+    // Giải thích logic mã: [VUEN-2807]Thêm chức năng xem cho mẫu tin nhắn------------
+    return [{ label: 'Xem', onClick: handleDetail.bind(null, record)}, { label: 'Chỉnh sửa', onClick: onEdit.bind(null, record) }];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record): ActionItem[] {
     return [
-      { label: '应用', onClick: handleUse.bind(null, record) },
-      { label: '停用', onClick: handleNotUse.bind(null, record) },
-      { label: '发送测试', onClick: onSendTest.bind(null, record) },
+      { label: 'Ứng dụng', onClick: handleUse.bind(null, record) },
+      { label: 'Ngừng sử dụng', onClick: handleNotUse.bind(null, record) },
+      { label: 'Gửi kiểm tra', onClick: onSendTest.bind(null, record) },
       {
-        label: '删除',
+        label: 'Xóa',
         color: 'error',
         popConfirm: {
-          title: '确认要删除吗？',
+          title: 'Bạn có chắc chắn muốn xóa không?',
           confirm: onDelete.bind(null, record),
         },
       },
@@ -170,7 +170,7 @@
   }
 
   /**
-   * 应用
+   * Ứng dụng
    */
   async function handleUse(record) {
     let param = { id: record.id, useStatus: '1' };
@@ -179,7 +179,7 @@
   }
 
   /**
-   * 停用
+   * Ngừng sử dụng
    */
   async function handleNotUse(record) {
     let param = { id: record.id, useStatus: '0' };
@@ -188,12 +188,12 @@
   }
 
   /**
-   * 查看
+   * Xem
    * @param record
    */
   function handleDetail(record) {
     openModal(true,{
-      title: "消息模板详情",
+      title: "Chi tiết mẫu tin nhắn",
       isUpdate: true,
       showFooter: false,
       record:record

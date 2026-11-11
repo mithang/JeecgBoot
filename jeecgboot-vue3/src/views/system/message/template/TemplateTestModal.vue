@@ -1,5 +1,5 @@
 <template>
-  <BasicModal @register="registerModal" title="发送测试" :width="800" v-bind="$attrs" @ok="onSubmit">
+  <BasicModal @register="registerModal" title="Gửi kiểm tra" :width="800" v-bind="$attrs" @ok="onSubmit">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -11,27 +11,27 @@
   import { sendTestFormSchemas } from './template.data';
   import { sendMessageTest } from './template.api';
 
-  // 声明 emits
+  // Khai báo emits
   const emit = defineEmits(['register']);
-  // 注册 form
+  // Đăng ký form
   const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
     schemas: sendTestFormSchemas,
     showActionButtonGroup: false,
   });
-  // 注册 modal
+  // Đăng ký modal
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     await resetFields();
     await setFieldsValue({ ...unref(data.record) });
   });
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function onSubmit() {
     try {
       const values = await validate();
       setModalProps({ confirmLoading: true });
-      // 提交表单
+      // Gửi biểu mẫu
       await sendMessageTest(values);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
     } finally {
       setModalProps({ confirmLoading: false });

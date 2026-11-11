@@ -12,13 +12,13 @@ import { columns, searchFormSchema } from './OnlineUser.data';
 import { list, forceLogout } from './OnlineUser.api';
 import { useListPage } from '/@/hooks/system/useListPage';
 import { useMessage } from "/@/hooks/web/useMessage";
-// 列表页面公共参数、方法
+// Tham số và phương thức dùng chung của trang danh sách
 const { prefixCls, tableContext, onImportXls, onExportXls } = useListPage({
   designScope: 'online-user',
   tableProps: {
-    //在线用户rowKey默认id会造成key重复，导致页面出现重复数据
+    //rowKey mặc định id của người dùng trực tuyến sẽ gây trùng key, khiến trang xuất hiện dữ liệu trùng lặp
     rowKey:'token',
-    title: '在线用户',
+    title: 'Người dùng trực tuyến',
     api: list,
     columns: columns,
     formConfig: {
@@ -33,13 +33,13 @@ const { prefixCls, tableContext, onImportXls, onExportXls } = useListPage({
 const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 const $message = useMessage();
 
-//操作栏
+//Thanh thao tác
 function getTableAction(record) {
   return [
     {
-      label: '强退',
+      label: 'Buộc thoát',
       popConfirm: {
-        title: '强制退出用户？',
+        title: 'Buộc đăng xuất người dùng?',
         confirm: handleForce.bind(null, record),
       },
     },
@@ -47,14 +47,14 @@ function getTableAction(record) {
 }
 
 /**
- * 强退
+ * Buộc thoát
  * @param record
  */
 function handleForce(record) {
    forceLogout({ token: record.token }).then((res)=>{
      if(res.success){
        reload();
-       $message.createMessage.success('强制退出用户”'+record.realname+'“成功！');
+       $message.createMessage.success('Buộc đăng xuất người dùng”'+record.realname+'“Thành công!');
      }else{
        $message.createMessage.warn(res.message);
      }

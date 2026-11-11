@@ -5,13 +5,13 @@
         v-if="messageList && messageList.length > 0 && !loadEndStatus && !loadingMoreStatus"
         :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }"
       >
-        <a-button @click="onLoadMore">加载更多</a-button>
+        <a-button @click="onLoadMore">Tải thêm</a-button>
       </div>
       <div
         v-if="messageList && messageList.length > 0 && loadEndStatus"
         :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }"
       >
-        没有更多了
+        Không còn thêm nữa
       </div>
     </template>
 
@@ -35,7 +35,7 @@
           <template #title>
             <div style="position: relative">
            <!--   <span style="display: inline-block; position: absolute; left: -16px">
-                <exclamation-outlined v-if="noRead(item)" title="未读消息" style="color: red" />
+                <exclamation-outlined v-if="noRead(item)" title="Tin nhắn chưa đọc" style="color: red" />
               </span>-->
 
               <span>{{ getMsgCategory(item) }}</span>
@@ -55,42 +55,42 @@
           <template #avatar>
             <template v-if="item.busType=='email'">
               <a-badge dot v-if="noRead(item)" class="msg-no-read">
-                <a-avatar style="background: #79919d"><mail-outlined style="font-size: 16px" title="未读消息"/></a-avatar>
+                <a-avatar style="background: #79919d"><mail-outlined style="font-size: 16px" title="Tin nhắn chưa đọc"/></a-avatar>
               </a-badge>
               <a-avatar v-else style="background: #79919d"><mail-outlined style="font-size: 16px"/></a-avatar>
             </template>
 
             <template v-else-if="item.busType=='bpm_task'">
               <a-badge dot v-if="noRead(item)" class="msg-no-read">
-                <a-avatar style="background: #79919d"><interaction-outlined style="font-size: 16px" title="未读消息"/></a-avatar>
+                <a-avatar style="background: #79919d"><interaction-outlined style="font-size: 16px" title="Tin nhắn chưa đọc"/></a-avatar>
               </a-badge>
               <a-avatar v-else style="background: #79919d"><interaction-outlined style="font-size: 16px"/></a-avatar>
             </template>
 
             <template v-else-if="item.busType=='bpm'">
               <a-badge dot v-if="noRead(item)" class="msg-no-read">
-                <a-avatar style="background: #79919d"><alert-outlined style="font-size: 16px" title="未读消息"/></a-avatar>
+                <a-avatar style="background: #79919d"><alert-outlined style="font-size: 16px" title="Tin nhắn chưa đọc"/></a-avatar>
               </a-badge>
               <a-avatar v-else style="background: #79919d"><alert-outlined style="font-size: 16px"/></a-avatar>
             </template>
 
             <template v-else-if="['eoa_co_remind', 'eoa_co_notify'].includes(item.busType)">
               <a-badge dot v-if="noRead(item)" class="msg-no-read">
-                <a-avatar style="background: #79919d"><GatewayOutlined style="font-size: 16px" title="未读消息"/></a-avatar>
+                <a-avatar style="background: #79919d"><GatewayOutlined style="font-size: 16px" title="Tin nhắn chưa đọc"/></a-avatar>
               </a-badge>
               <a-avatar v-else style="background: #79919d"><GatewayOutlined style="font-size: 16px"/></a-avatar>
             </template>
 
             <template v-else-if="['eoa_sup_remind', 'eoa_sup_notify'].includes(item.busType)">
               <a-badge dot v-if="noRead(item)" class="msg-no-read">
-                <a-avatar style="background: #79919d"><AlertOutlined style="font-size: 16px" title="未读消息"/></a-avatar>
+                <a-avatar style="background: #79919d"><AlertOutlined style="font-size: 16px" title="Tin nhắn chưa đọc"/></a-avatar>
               </a-badge>
               <a-avatar v-else style="background: #79919d"><AlertOutlined style="font-size: 16px"/></a-avatar>
             </template>
 
             <template v-else>
               <a-badge dot v-if="noRead(item)" class="msg-no-read">
-                <a-avatar style="background: #79919d"><bell-filled style="font-size: 16px" title="未读消息"/></a-avatar>
+                <a-avatar style="background: #79919d"><bell-filled style="font-size: 16px" title="Tin nhắn chưa đọc"/></a-avatar>
               </a-badge>
               <a-avatar v-else style="background: #79919d"><bell-filled style="font-size: 16px" /></a-avatar>
             </template>
@@ -147,7 +147,7 @@
     setup(props, {emit}){
       const { messageList,loadEndStatus,loadingMoreStatus,onLoadMore,noRead, getMsgCategory, getHrefText, searchParams, reset, loadData, updateStarMessage } = useSysMessage(setLocaleText);
 
-      //系统消息
+      //Tin nhắn hệ thống
       const messageCount = ref(0);
 
       function reload(params){
@@ -156,7 +156,7 @@
         searchParams.rangeDateKey = rangeDateKey||'';
         searchParams.rangeDate = rangeDate||[];
         searchParams.noticeType = noticeType || '';
-        //list列表为空时赋初始值
+        //listKhi danh sách trống thì gán giá trị khởi tạo
         locale.value = { locale: { emptyText: `<a-empty />` }};
         if(props.star===true){
           searchParams.starFlag = '1'
@@ -170,7 +170,7 @@
       function clickStar(item){
         console.log(item)
         updateStarMessage(item);
-        // 代码逻辑说明: 【TV360X-349】通知-标星消息tab列表取消标星后，该条信息从标星列表移除
+        // Giải thích logic mã: 【TV360X-349】Thông báo - Sau khi bỏ gắn sao trong danh sách tab tin nhắn gắn sao, tin nhắn đó sẽ bị loại khỏi danh sách gắn sao
         if (item.starFlag == '1' && props.cancelStarAfterDel) {
           const findIndex = messageList.value.findIndex((item) => item.id === item.id);
           if (findIndex !== -1) {
@@ -185,7 +185,7 @@
         }
       }
 
-      // 代码逻辑说明: QQYUN-4744【系统通知】6、系统通知@人后，对方看不到是哪个表单@的，没有超链接
+      // Giải thích logic mã: QQYUN-4744【Thông báo hệ thống】6、Thông báo hệ thống@sau đó, đối phương không nhìn ra đó là biểu mẫu nào@, không có siêu liên kết
       const { goPage, currentModal, modalRegCache, bindParams, isFormComment } = useMessageHref(emit, props);
       //const emojiIndex = inject('$globalEmojiIndex')
       const emojiIndex = getGloablEmojiIndex()
@@ -195,21 +195,21 @@
         record.readFlag = '1'
         goPage(record);
         emit('close', record.id)
-        // 代码逻辑说明: 【TV360X-791】收到邮件通知，点击回复，应该把通知公告列表关闭---
+        // Giải thích logic mã: 【TV360X-791】Nhận thông báo qua email, nhấn trả lời thì cần đóng danh sách thông báo---
         if(record.busType==='email'){
           emit('close-modal')
-        // 代码逻辑说明: 【JHHB-224】【我的消息】点击去处理后应该关闭弹窗---
+        // Giải thích logic mã: 【JHHB-224】【Tin nhắn của tôi】Sau khi nhấn đi xử lý thì cần đóng hộp thoại---
         } else if(['bpm', 'bpm_task', 'tenant_invite'].includes(record.busType)){
-          //判断是否是查看详情
+          //Kiểm tra có phải đang xem chi tiết hay không
           if (record.msgAbstract) {
             try {
               const json = JSON.parse(record.msgAbstract);
-              //查看详情，非去处理
+              //Xem chi tiết, không phải đi xử lý
               if (json.taskDetail) {
                 return;
               }
             } catch (e) {
-              console.error('getHrefText:msgAbstract参数不是JSON格式', record.msgAbstract);
+              console.error('getHrefText:msgAbstractTham số không ở định dạng JSON', record.msgAbstract);
             }
           }
           emit('close-modal');
@@ -218,28 +218,28 @@
         }
       }
 
-      //返回list列表为空数据时展示的内容
+      //Nội dung hiển thị khi danh sách list trả về dữ liệu trống
       const locale = ref({});
 
       /**
-       * 日期格式化
+       * Định dạng ngày
        */
       function formatData(data) {
         return data?dayjs(data).format('YYYY-MM-DD HH:mm'): '';
       }
       /**
-       * 未读点击事件
+       * Sự kiện nhấp vào chưa đọc
        */
       function noReadClick() {
         emit('clear')
       }
 
       /**
-       * 设置list为空的时候提示文本
+       * Đặt văn bản nhắc khi list trống
        *
        */
       function setLocaleText() {
-        // 代码逻辑说明: 【QQYUN-9105】未读有问题---
+        // Giải thích logic mã: 【QQYUN-9105】Mục chưa đọc có vấn đề---
         let rangeDateKey = searchParams.rangeDateKey;
         let value = messageCount.value;
         if (value > 0 && !props.star && rangeDateKey && rangeDateKey === '7day') {
@@ -251,14 +251,14 @@
                   onClick: () => {
                     noReadClick();
                   },
-                }, `还剩余未读消息(${value > 99 ? '99+' : value})`)
+                }, `Còn tin nhắn chưa đọc(${value > 99 ? '99+' : value})`)
           }
         } else {
           locale.value = { locale: {emptyText: `<a-empty />` }};
         }
       }
 
-      //监听信息数量
+      //Theo dõi số lượng thông tin
       watch(() => props.messageCount, (value) => {
         messageCount.value = value;
       }, { immediate: true })
@@ -299,7 +299,7 @@
      margin-top: 0;
    }
 
-   /** QQYUN-5688 【样式】鼠标放上去怎么不是手 */
+   /** QQYUN-5688 【Kiểu】Di chuột lên sao không phải hình bàn tay */
    :deep(.ant-rate-disabled){
      .ant-rate-star{
        cursor: pointer !important;

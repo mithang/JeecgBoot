@@ -18,19 +18,19 @@ import {BasicModal, useModalInner} from '/@/components/Modal';
 import {BasicForm, useForm} from '/@/components/Form/index';
 import {formSchema} from '../SysTableWhiteList.data';
 import {saveOrUpdate} from '../SysTableWhiteList.api';
-// Emits声明
+// EmitsKhai báo
 const emit = defineEmits(['register', 'success']);
 const isUpdate = ref(true);
-//表单配置
+//Cấu hình biểu mẫu
 const [registerForm, { resetFields, setFieldsValue, validate, setProps }] = useForm({
   labelWidth: 120,
   wrapperCol: null,
   schemas: formSchema,
   showActionButtonGroup: false,
 });
-//表单赋值
+//Gán giá trị cho biểu mẫu
 const [registerModal, {setModalProps, closeModal}] = useModalInner(async (data) => {
-  //重置表单
+  //Đặt lại biểu mẫu
   await resetFields();
   setModalProps({
     confirmLoading: false,
@@ -39,26 +39,26 @@ const [registerModal, {setModalProps, closeModal}] = useModalInner(async (data) 
   });
   isUpdate.value = !!data?.isUpdate;
   if (unref(isUpdate)) {
-    //表单赋值
+    //Gán giá trị cho biểu mẫu
     await setFieldsValue({
       ...data.record,
     });
   }
   setProps({ disabled: !data?.showFooter })
 });
-//设置标题
-const title = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
+//Đặt tiêu đề
+const title = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
 
-//表单提交事件
+//Sự kiện gửi biểu mẫu
 async function handleSubmit(v) {
   try {
     let values = await validate();
     setModalProps({confirmLoading: true});
-    //提交表单
+    //Gửi biểu mẫu
     await saveOrUpdate(values, isUpdate.value);
-    //关闭弹窗
+    //Đóng cửa sổ bật lên
     closeModal();
-    //刷新列表
+    //Làm mới danh sách
     emit('success', {isUpdate: isUpdate.value, values});
   } finally {
     setModalProps({confirmLoading: false});

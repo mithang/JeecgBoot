@@ -2,11 +2,11 @@
   <div class="ding-ding-container" :class="[`${prefixCls}`]">
     <div class="ding-header">
       <ul class="ding-menu-tab">
-        <li :class="activeKey === 'ding' ? 'active' : ''" @click="dingLiClick('ding')"><a>钉钉集成</a></li>
-        <li :class="activeKey === 'wechat' ? 'active' : ''" @click="dingLiClick('wechat')"><a>企业微信集成</a></li>
-        <!--update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成-->
-        <li :class="activeKey === 'feishu' ? 'active' : ''" @click="dingLiClick('feishu')"><a>飞书集成</a></li>
-        <!--update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成-->
+        <li :class="activeKey === 'ding' ? 'active' : ''" @click="dingLiClick('ding')"><a>Tích hợp DingTalk</a></li>
+        <li :class="activeKey === 'wechat' ? 'active' : ''" @click="dingLiClick('wechat')"><a>Tích hợp WeCom</a></li>
+        <!--update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu-->
+        <li :class="activeKey === 'feishu' ? 'active' : ''" @click="dingLiClick('feishu')"><a>Tích hợp Feishu</a></li>
+        <!--update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu-->
       </ul>
     </div>
     <div v-show="activeKey === 'ding'" class="base-collapse">
@@ -15,11 +15,11 @@
     <div v-show="activeKey === 'wechat'" class="base-collapse">
       <ThirdAppWeEnterpriseConfigForm />
     </div>
-    <!--update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成-->
+    <!--update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu-->
     <div v-show="activeKey === 'feishu'" class="base-collapse">
       <ThirdAppFeishuConfigForm />
     </div>
-    <!--update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成-->
+    <!--update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu-->
   </div>
 </template>
 
@@ -40,11 +40,11 @@
     setup() {
       const { prefixCls } = useDesign('j-dd-container');
 
-      //选中的key
+      //đã được chọnkey
       const activeKey = ref<string>('ding');
 
       /**
-       * tab点击事件
+       * tabSự kiện nhấp
        * @param key
        */
       function dingLiClick(key) {
@@ -68,9 +68,9 @@
   }
   .ding-header {
     align-items: center;
-    /*begin 兼容暗夜模式*/
+    /*begin Tương thích chế độ tối*/
     border-bottom: 1px solid @border-color-base;
-    /*end 兼容暗夜模式*/
+    /*end Tương thích chế độ tối*/
     box-sizing: border-box;
     display: flex;
     height: 50px;
@@ -93,9 +93,9 @@
       margin-right: 38px;
 
       a {
-        /*begin 兼容暗夜模式*/
+        /*begin Tương thích chế độ tối*/
         color: @text-color !important;
-        /*end 兼容暗夜模式*/
+        /*end Tương thích chế độ tối*/
         font-size: 15px;
         font-weight: 700;
       }
@@ -119,9 +119,9 @@
 </style>
 
 <style lang="less">
-  /* update-begin-author:liusq date:20230625 for: [issues/563]暗色主题部分失效*/
+  /* update-begin-author:liusq date:20230625 for: [issues/563]Một phần chủ đề tối không hoạt động*/
   @prefix-cls: ~'@{namespace}-j-dd-container';
-  /*begin 兼容暗夜模式*/
+  /*begin Tương thích chế độ tối*/
   .@{prefix-cls} {
     background: @component-background;
 
@@ -145,6 +145,6 @@
       background-color: @component-background;
     }
   }
-  /*end 兼容暗夜模式*/
-/* update-end-author:liusq date:20230625 for: [issues/563]暗色主题部分失效*/
+  /*end Tương thích chế độ tối*/
+/* update-end-author:liusq date:20230625 for: [issues/563]Một phần chủ đề tối không hoạt động*/
 </style>

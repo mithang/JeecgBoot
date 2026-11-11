@@ -1,34 +1,34 @@
 <template>
   <div class="base-collapse">
-    <div class="header">飞书集成</div>
+    <div class="header">Tích hợp Feishu</div>
 
-    <!-- 步骤1：获取对接信息 -->
+    <!-- Bước 1: Lấy thông tin tích hợp -->
     <a-collapse expand-icon-position="right" :bordered="false">
       <a-collapse-panel key="1">
         <template #header>
-          <div style="font-size: 16px">1. 获取对接信息</div>
+          <div style="font-size: 16px">1. Lấy thông tin tích hợp</div>
         </template>
-        <div class="base-desc"> 登录飞书开放平台创建企业自建应用，获取 App ID 和 App Secret 后即可开始集成 </div>
+        <div class="base-desc"> Đăng nhập nền tảng mở Feishu để tạo ứng dụng tự xây dựng cho doanh nghiệp, sau khi lấy App ID và App Secret là có thể bắt đầu tích hợp </div>
         <div style="margin-top: 5px">
-          <a href="https://open.feishu.cn/app" target="_blank">前往飞书开放平台创建应用</a>
+          <a href="https://open.feishu.cn/app" target="_blank">Đi tới nền tảng mở Feishu để tạo ứng dụng</a>
         </div>
         <div style="margin-top: 8px" class="base-desc">
           <ul style="list-style-type: disc; margin-left: 20px">
-            <li>进入应用详情 → 凭证与基础信息，获取 App ID 和 App Secret</li>
+            <li>Vào chi tiết ứng dụng → Thông tin xác thực và thông tin cơ bản, lấy App ID và App Secret</li>
           </ul>
         </div>
       </a-collapse-panel>
     </a-collapse>
 
-    <!-- 步骤2：对接信息录入 -->
+    <!-- Bước 2: Nhập thông tin tích hợp -->
     <a-collapse expand-icon-position="right" :bordered="false">
       <a-collapse-panel key="2">
         <template #header>
           <div style="width: 100%; justify-content: space-between; display: flex">
-            <div style="font-size: 16px">2. 对接信息录入及解绑</div>
+            <div style="font-size: 16px">2. Nhập thông tin tích hợp và gỡ liên kết</div>
           </div>
         </template>
-        <div class="base-desc">填入 App ID 和 App Secret 后，即可开启飞书 OAuth2 扫码登录</div>
+        <div class="base-desc">Sau khi điền App ID và App Secret, có thể bật đăng nhập quét mã OAuth2 của Feishu</div>
         <div class="flex-flow">
           <div class="base-title">App ID</div>
           <div class="base-message">
@@ -42,30 +42,30 @@
           </div>
         </div>
         <div style="margin-top: 20px; width: 100%; text-align: right">
-          <a-button @click="feishuEditClick">编辑</a-button>
-          <a-button v-if="appConfigData.id" @click="cancelBindClick" danger style="margin-left: 10px">取消绑定</a-button>
+          <a-button @click="feishuEditClick">Chỉnh sửa</a-button>
+          <a-button v-if="appConfigData.id" @click="cancelBindClick" danger style="margin-left: 10px">Hủy liên kết</a-button>
         </div>
       </a-collapse-panel>
     </a-collapse>
 
-    <!-- 步骤3：数据同步 -->
+    <!-- Bước 3: Đồng bộ dữ liệu -->
     <div class="sync-padding">
-      <div style="font-size: 16px; width: 100%">3. 数据同步</div>
+      <div style="font-size: 16px; width: 100%">3. Đồng bộ dữ liệu</div>
       <div style="margin-top: 20px" class="base-desc">
-        从飞书同步到本系统（飞书→本地）
+        Đồng bộ từ Feishu vào hệ thống này (Feishu→cục bộ）
         <ul style="list-style-type: disc; margin-left: 20px">
-          <li>同步飞书通讯录中的部门结构到本地</li>
+          <li>Đồng bộ cấu trúc phòng ban trong danh bạ Feishu về cục bộ</li>
           <li>
-            同步部门下的用户到本地，并自动创建系统账号
-            <a-tooltip title="需在飞书应用权限管理中开通 contact:department:read 和 contact:user.base:readonly 权限，并发布应用">
+            Đồng bộ người dùng thuộc phòng ban về cục bộ, đồng thời tự động tạo tài khoản hệ thống
+            <a-tooltip title="Cần bật các quyền contact:department:read và contact:user.base:readonly trong quản lý quyền của ứng dụng Feishu, đồng thời phát hành ứng dụng">
               <QuestionCircleOutlined class="sync-tip-icon" />
             </a-tooltip>
           </li>
-          <li>已存在的用户和部门将跳过，不会重复创建</li>
+          <li>Người dùng và phòng ban đã tồn tại sẽ bị bỏ qua, không tạo trùng lặp</li>
         </ul>
         <div style="float: right; padding-bottom: 20px">
           <a-button :loading="btnLoading" :disabled="!appConfigData.id" @click="syncFeishu">
-            {{ btnLoading ? '同步中...' : '同步通讯录' }}
+            {{ btnLoading ? 'Đang đồng bộ...' : 'Đồng bộ danh bạ' }}
           </a-button>
         </div>
       </div>
@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-  //update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成
+  //update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu
   import { defineComponent, h, onMounted, ref } from 'vue';
   import { deleteThirdAppConfig, getThirdConfigByTenantId, syncFeishuDepartUserToLocal } from './ThirdApp.api';
   import { useModal } from '/@/components/Modal';
@@ -123,11 +123,11 @@
       }
 
       /**
-       * 同步飞书通讯录（飞书→本地）
+       * Đồng bộ danh bạ Feishu (Feishu→cục bộ）
        */
       async function syncFeishu() {
         if (!appConfigData.value.id) {
-          createMessage.warning('请先配置飞书应用信息');
+          createMessage.warning('Vui lòng cấu hình thông tin ứng dụng Feishu trước');
           return;
         }
         btnLoading.value = true;
@@ -142,27 +142,27 @@
                 const successList = res.result.successInfo || [];
                 const failList = res.result.failInfo || [];
                 if (failList.length > 0) {
-                  nodes.push('失败信息如下：');
+                  nodes.push('Thông tin thất bại như sau:');
                   nodes.push(renderTextarea(h, failList.map((v, i) => `${i + 1}. ${v}`).join('\n')));
                   nodes.push(h('br'));
                 }
                 if (successList.length > 0) {
-                  nodes.push('成功信息如下：');
+                  nodes.push('Thông tin thành công như sau:');
                   nodes.push(renderTextarea(h, successList.map((v, i) => `${i + 1}. ${v}`).join('\n')));
                 } else {
-                  nodes.push('无成功信息');
+                  nodes.push('Không có thông tin thành công');
                 }
                 return nodes;
               };
             }
             if (res.success) {
-              options.title ? Modal.success(options) : createMessage.success(res.message || '同步成功');
+              options.title ? Modal.success(options) : createMessage.success(res.message || 'Đồng bộ thành công');
             } else {
-              options.title ? Modal.warning(options) : createMessage.warning(res.message || '同步完成（含失败项）');
+              options.title ? Modal.warning(options) : createMessage.warning(res.message || 'Đồng bộ hoàn thành (bao gồm các mục thất bại)');
             }
           })
           .catch(() => {
-            createMessage.error('同步请求失败，请检查飞书应用配置及网络');
+            createMessage.error('Yêu cầu đồng bộ thất bại, vui lòng kiểm tra cấu hình ứng dụng Feishu và mạng');
           })
           .finally(() => {
             btnLoading.value = false;
@@ -190,14 +190,14 @@
 
       function cancelBindClick() {
         if (!appConfigData.value.id) {
-          createMessage.warning('请先绑定飞书应用！');
+          createMessage.warning('Vui lòng liên kết ứng dụng Feishu trước!');
           return;
         }
         Modal.confirm({
-          title: '取消绑定',
-          content: '是否要解除当前租户的飞书应用配置绑定？',
-          okText: '确认',
-          cancelText: '取消',
+          title: 'Hủy liên kết',
+          content: 'Có muốn gỡ liên kết cấu hình ứng dụng Feishu của đơn vị thuê hiện tại không?',
+          okText: 'Xác nhận',
+          cancelText: 'Hủy',
           onOk: () => {
             deleteThirdAppConfig({ id: appConfigData.value.id }, handleSuccess);
           },
@@ -221,7 +221,7 @@
       };
     },
   });
-  //update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成
+  //update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu
 </script>
 
 <style lang="less" scoped>
@@ -292,11 +292,11 @@
       padding-left: 0;
     }
   }
-  /*begin 兼容暗夜模式*/
+  /*begin Tương thích chế độ tối*/
   [data-theme='dark'] .base-collapse .ant-collapse {
     border: none !important;
   }
-  /*end 兼容暗夜模式*/
+  /*end Tương thích chế độ tối*/
   :deep(.ant-collapse-borderless > .ant-collapse-item:last-child) {
     border-bottom-width: 1px;
   }

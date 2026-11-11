@@ -1,11 +1,11 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Tham chiếu bảng-->
     <BasicTable @register="registerTable">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
         <a-upload name="file" :showUploadList="false" :action="ossAction" :headers="tokenHeader" :beforeUpload="beforeUpload" @change="handleChange">
-          <a-button type="primary" preIcon="ant-design:upload-outlined">OSS文件上传</a-button>
+          <a-button type="primary" preIcon="ant-design:upload-outlined">OSSTải tệp lên</a-button>
         </a-upload>
         <a-upload
           name="file"
@@ -15,10 +15,10 @@
           :beforeUpload="beforeUpload"
           @change="handleChange"
         >
-          <a-button type="primary" preIcon="ant-design:upload-outlined">MINIO文件上传</a-button>
+          <a-button type="primary" preIcon="ant-design:upload-outlined">MINIOTải tệp lên</a-button>
         </a-upload>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" name="system-ossfile" setup>
-  //ts语法
+  //tsCú pháp
   import { ref, computed, unref } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -41,7 +41,7 @@
   const { createMessage } = useMessage();
   const glob = useGlobSetting();
   const tokenHeader = { 'X-Access-Token': getToken() };
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload }] = useTable({
     api: list,
     rowKey: 'id',
@@ -63,29 +63,29 @@
     },
     actionColumn: {
       width: 80,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       slots: { customRender: 'action' },
       fixed: undefined,
     },
   });
   /**
-   * 上传url
+   * Tải lênurl
    */
   const ossAction = computed(() => `${glob.uploadUrl}${getOssUrl}`);
   const minioAction = computed(() => `${glob.uploadUrl}${getMinioUrl}`);
 
   /**
-   * 预览
+   * Xem trước
    */
   function handleView(record) {
     if (record && record.url) {
       console.log('glob.onlineUrl', glob.viewUrl);
       // let filePath = encodeURIComponent(record.url);
-      //update-begin-author:scott---date:2026-04-16--for: 【Github #8855】修复文件预览路径处理问题，url需要先拼接完整URL再编码
+      //update-begin-author:scott---date:2026-04-16--for: 【Github #8855】Sửa lỗi xử lý đường dẫn xem trước tệp, url cần nối thành URL đầy đủ trước rồi mới mã hóa
       let url = encodeURIComponent(encryptByBase64(getFileAccessHttpUrl(record.url)));
-      //update-end-author:scott---date:2026-04-16--for: 【Github #8855】修复文件预览路径处理问题，url需要先拼接完整URL再编码
-      // //文档采用pdf预览高级模式
+      //update-end-author:scott---date:2026-04-16--for: 【Github #8855】Sửa lỗi xử lý đường dẫn xem trước tệp, url cần nối thành URL đầy đủ trước rồi mới mã hóa
+      // //Tài liệu dùng chế độ nâng cao xem trước PDF
       // if(filePath.endsWith(".pdf") || filePath.endsWith(".doc") || filePath.endsWith(".docx")){
       //   filePath = filePath
       // }
@@ -96,25 +96,25 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteFile({ id: record.id }, reload);
   }
 
   /**
-   * 上传前事件
+   * Sự kiện trước khi tải lên
    */
   function beforeUpload(file) {
     var fileType = file.type;
     if (fileType === 'image') {
       if (fileType.indexOf('image') < 0) {
-        createMessage.warning('请上传图片');
+        createMessage.warning('Vui lòng tải lên hình ảnh');
         return false;
       }
     } else if (fileType === 'file') {
       if (fileType.indexOf('image') >= 0) {
-        createMessage.warning('请上传文件');
+        createMessage.warning('Vui lòng tải lên tệp');
         return false;
       }
     }
@@ -122,13 +122,13 @@
   }
 
   /**
-   * 文件上传事件
+   * Sự kiện tải tệp lên
    */
   function handleChange(info) {
     if (info.file.status === 'done') {
       if (info.file.response.success) {
         reload();
-        createMessage.success(`${info.file.name} 上传成功!`);
+        createMessage.success(`${info.file.name} Tải lên thành công!`);
       } else {
         createMessage.error(`${info.file.response.message}`);
       }
@@ -138,18 +138,18 @@
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '预览',
+        label: 'Xem trước',
         onClick: handleView.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },

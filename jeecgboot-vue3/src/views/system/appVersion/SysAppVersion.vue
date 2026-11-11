@@ -1,18 +1,18 @@
 <template>
   <PageWrapper contentFullHeight>
-    <a-card :bordered="false" title="版本管理">
-      <!--编辑模式-->
+    <a-card :bordered="false" title="Quản lý phiên bản">
+      <!--Chế độ chỉnh sửa-->
       <a-spin v-if="active" :spinning="confirmLoading">
         <a-form ref="formRef" :model="model" :labelCol="labelCol" :wrapperCol="wrapperCol" :rules="validatorRules">
           <a-row>
             <a-col :span="24">
-              <a-form-item label="版本" name="appVersion">
-                <a-input v-model:value="model.appVersion" placeholder="请输入版本" />
+              <a-form-item label="Phiên bản" name="appVersion">
+                <a-input v-model:value="model.appVersion" placeholder="Vui lòng nhập phiên bản" />
               </a-form-item>
             </a-col>
             <a-col :span="24">
-              <a-form-item label="APP安装apk" name="downloadUrl">
-                <a-input placeholder="设置APP安装apk" v-model:value="model.downloadUrl">
+              <a-form-item label="APPCài đặtapk" name="downloadUrl">
+                <a-input placeholder="Đặt cài đặt APPapk" v-model:value="model.downloadUrl">
                   <template #addonAfter>
                     <Icon icon="ant-design:upload-outlined" style="cursor: pointer" @click="showUploadModal('apk')" />
                   </template>
@@ -20,8 +20,8 @@
               </a-form-item>
             </a-col>
             <a-col :span="24">
-              <a-form-item label="APP热更新文件" name="wgtUrl">
-                <a-input placeholder="设置APP热更新文件" v-model:value="model.wgtUrl">
+              <a-form-item label="APPTệp cập nhật nóng (hot update)" name="wgtUrl">
+                <a-input placeholder="Đặt tệp cập nhật nóng của APP" v-model:value="model.wgtUrl">
                   <template #addonAfter>
                     <Icon icon="ant-design:upload-outlined" style="cursor: pointer" @click="showUploadModal('wgt')" />
                   </template>
@@ -29,8 +29,8 @@
               </a-form-item>
             </a-col>
             <a-col :span="24">
-              <a-form-item label="桌面应用" name="webDownloadUrl">
-                <a-input placeholder="桌面应用安装路径" v-model:value="model.webDownloadUrl">
+              <a-form-item label="Ứng dụng desktop" name="webDownloadUrl">
+                <a-input placeholder="Đường dẫn cài đặt ứng dụng desktop" v-model:value="model.webDownloadUrl">
                   <template #addonAfter>
                     <Icon icon="ant-design:upload-outlined" style="cursor: pointer" @click="showUploadModal('web')" />
                   </template>
@@ -38,20 +38,20 @@
               </a-form-item>
             </a-col>
             <a-col :span="24">
-              <a-form-item label="更新内容">
-                <a-textarea :rows="4" v-model:value="model.updateNote" placeholder="请输入更新内容" />
+              <a-form-item label="Nội dung cập nhật">
+                <a-textarea :rows="4" v-model:value="model.updateNote" placeholder="Vui lòng nhập nội dung cập nhật" />
               </a-form-item>
             </a-col>
           </a-row>
         </a-form>
         <JUploadModal :value="modalValue" :bizPath="filePath" :maxCount="1" @register="registerModel" @change="uploadBack" />
       </a-spin>
-      <!--详情模式-->
+      <!--Chế độ chi tiết-->
       <Description v-else class="desc" :column="1" :data="model" :schema="schema" />
-      <!--底部按钮-->
+      <!--Nút ở cuối-->
       <div class="anty-form-btn" v-if="hasPermission('app:edit:version')">
-        <a-button v-if="active" @click="handleSubmit" type="primary" preIcon="ant-design:save-outlined">保存</a-button>
-        <a-button v-else @click="active = true" type="primary" preIcon="ant-design:edit-outlined">开启编辑模式</a-button>
+        <a-button v-if="active" @click="handleSubmit" type="primary" preIcon="ant-design:save-outlined">Lưu</a-button>
+        <a-button v-else @click="active = true" type="primary" preIcon="ant-design:edit-outlined">Bật chế độ chỉnh sửa</a-button>
       </div>
     </a-card>
   </PageWrapper>
@@ -97,7 +97,7 @@
   });
 
   /**
-   * 初始化表单数据
+   * Khởi tạo dữ liệu biểu mẫu
    * @param record
    */
   async function initFormData() {
@@ -108,7 +108,7 @@
   }
 
   /**
-   * 提交保存版本信息
+   * Gửi và lưu thông tin phiên bản
    */
   function handleSubmit() {
     const form = unref(formRef);
@@ -120,7 +120,7 @@
       obj.id = appKey;
       confirmLoading.value = true;
       await saveAppVersion(obj);
-      createMessage.success('保存成功');
+      createMessage.success('Lưu thành công');
       confirmLoading.value = false;
       active.value = false;
     }).finally(() => {
@@ -129,7 +129,7 @@
   }
 
   /**
-   * 显示设置弹窗
+   * Hộp thoại cài đặt hiển thị
    * @param type
    */
   function showUploadModal(type) {
@@ -142,7 +142,7 @@
   }
 
   /**
-   *上传返回
+   *Kết quả trả về khi tải lên
    */
   function uploadBack(value) {
     if (unref(uploadType) == 'apk') {
@@ -153,33 +153,33 @@
       model.webDownloadUrl = value;
     }
   }
-  //表单校验规则
+  //Quy tắc kiểm tra biểu mẫu
   const validatorRules = {
-    appVersion: [{ required: true, message: '版本不能为空', trigger: 'blur' }],
-    downloadUrl: [{ required: true, message: 'APP安装apk不能为空', trigger: 'change' }],
-    wgtUrl: [{ required: false, message: 'APP热更新文件不能为空', trigger: 'change' }],
+    appVersion: [{ required: true, message: 'Phiên bản không được để trống', trigger: 'blur' }],
+    downloadUrl: [{ required: true, message: 'APPCài đặt apk không được để trống', trigger: 'change' }],
+    wgtUrl: [{ required: false, message: 'APPTệp cập nhật nóng không được để trống', trigger: 'change' }],
   };
-  // 显示字段
+  // Trường hiển thị
   const schema: DescItem[] = [
     {
       field: 'appVersion',
-      label: '版本',
+      label: 'Phiên bản',
     },
     {
       field: 'downloadUrl',
-      label: 'APP安装apk',
+      label: 'APPCài đặtapk',
     },
     {
       field: 'wgtUrl',
-      label: 'APP热更新文件',
+      label: 'APPTệp cập nhật nóng (hot update)',
     },
     {
       field: 'webDownloadUrl',
-      label: '桌面应用下载地址',
+      label: 'Địa chỉ tải xuống ứng dụng desktop',
     },
     {
       field: 'updateNote',
-      label: '更新内容',
+      label: 'Nội dung cập nhật',
     },
   ];
 

@@ -24,7 +24,7 @@
                   class="ant-tabs-tab"
                   :class="{ 'ant-tabs-tab-active': activeKey == 'all' }"
                 >
-                  全部消息
+                  Tất cả tin nhắn
                 </div>
                 <div
                   @click="(e) => handleChangeTab(e, 'star')"
@@ -34,7 +34,7 @@
                   class="ant-tabs-tab"
                   :class="{ 'ant-tabs-tab-active': activeKey == 'star' }"
                 >
-                  标星消息
+                  Tin nhắn gắn sao
                 </div>
               </div>
               <div
@@ -50,13 +50,13 @@
           </div>
         </div>
 
-        <!-- 头部图标 -->
+        <!-- Biểu tượng phần đầu -->
         <div class="icon-right">
           <div class="icons">
             <a-popover placement="bottomRight" :overlayStyle="{ width: '400px', zIndex: 1000 }" trigger="click" v-model:open="showSearch">
               <template #content>
                 <div>
-                  <span class="search-label">回复、提到我的人?：</span>
+                  <span class="search-label">Trả lời, nhắc đến người của tôi?：</span>
                   <span style="display: inline-block;">
                     <div v-if="searchParams.fromUser" class="selected-user">
                       <span>{{searchParams.realname}}</span>
@@ -69,7 +69,7 @@
                   </span>
                 </div>
                 <div class="search-date">
-                  <div class="date-label">时间：</div>
+                  <div class="date-label">Thời gian:</div>
                   <div class="date-tags">
                     <div class="tags-container">
                       <div v-for="item in dateTags" :class="item.active == true ? 'tag active' : 'tag'" @click="handleClickDateTag(item)">{{
@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="search-date">
-                  <div class="date-label">类型：</div>
+                  <div class="date-label">Loại:</div>
                   <div class="date-tags">
                     <div class="tags-container">
                       <div v-for="item in noticeTypeOption" :class="item.active == true ? 'tag active flex' : 'tag flex'" @click="handleClickNoticeType(item)">
@@ -120,12 +120,12 @@
           <div></div>
         </template>
 
-        <a-tab-pane tab="全部消息" key="all" forceRender>
+        <a-tab-pane tab="Tất cả tin nhắn" key="all" forceRender>
           <sys-message-list :isLowApp="isLowApp" ref="allMessageRef" @close="hrefThenClose" @detail="showDetailModal" @clear="clearAll" :messageCount="messageCount" @closeModal="closeModal"/>
         </a-tab-pane>
 
-        <!-- 标星 -->
-        <a-tab-pane tab="标星消息" key="star" forceRender>
+        <!-- Gắn sao -->
+        <a-tab-pane tab="Tin nhắn gắn sao" key="star" forceRender>
           <sys-message-list :isLowApp="isLowApp" ref="starMessageRef" star @close="hrefThenClose" @detail="showDetailModal" @clear="clearAll" :messageCount="messageCount" @closeModal="closeModal" :cancelStarAfterDel="true"/>
         </a-tab-pane>
       </a-tabs>
@@ -161,7 +161,7 @@
       BellFilled,
       ExclamationOutlined,
       JSelectUser,
-      // 代码逻辑说明: 【QQYUN-8241】emoji-mart-vue-fast库异步加载
+      // Giải thích logic mã: 【QQYUN-8241】Tải không đồng bộ thư viện emoji-mart-vue-fast
       SysMessageList: createAsyncComponent(() => import('./SysMessageList.vue')),
       // SysMessageList,
       UserSelectModal,
@@ -179,14 +179,14 @@
       const allMessageRef = ref();
       const starMessageRef = ref();
       const activeKey = ref('all');
-      //通知类型
+      //Loại thông báo
       const noticeType = ref('');
-      //通知类型数组
+      //Mảng loại thông báo
       const noticeTypeOption = reactive([
-        { key: 'system', text: '系统通知', active: false, img: system },
-        { key: 'flow', text: '流程通知', active: false, img: flow },
-        { key: 'plan', text: '日程通知', active: false, img: calendar },
-        { key: 'file', text: '知识通知', active: false, img: folder },
+        { key: 'system', text: 'Thông báo hệ thống', active: false, img: system },
+        { key: 'flow', text: 'Thông báo quy trình', active: false, img: flow },
+        { key: 'plan', text: 'Thông báo lịch trình', active: false, img: calendar },
+        { key: 'file', text: 'Thông báo tri thức', active: false, img: folder },
       ]);
       const noticeImg = ref('');
       function handleChangeTab(e, key) {
@@ -197,7 +197,7 @@
         activeKey.value = key;
       }
 
-      // 查询区域存储值
+      // Giá trị lưu trữ của khu vực truy vấn
       const searchParams = reactive({
         fromUser: '',
         realname: '',
@@ -227,7 +227,7 @@
         showSearch.value = false
         if(data.noticeType){
           noticeType.value = data.noticeType;
-          // 代码逻辑说明: 【QQYUN-12998】点击完聊天的系统图标，再点击系统上面的铃铛就不出数据了---
+          // Giải thích logic mã: 【QQYUN-12998】Sau khi nhấn vào biểu tượng hệ thống trong trò chuyện, nhấn tiếp vào chuông phía trên hệ thống thì không hiển thị dữ liệu nữa---
           for (const item of noticeTypeOption) {
             if(item.key === data.noticeType){
               item.active = true;
@@ -238,7 +238,7 @@
           }
           delete data.noticeType;
         }
-        //每次弹窗打开 加载最新的数据
+        //Mỗi lần hộp thoại mở, tải dữ liệu mới nhất
         loadData();
         if(data){
           isLowApp.value = data.isLowApp||false
@@ -250,20 +250,20 @@
       const showSearch = ref(false);
 
       function handleChangeSearchPerson(value, a) {
-        console.log('选择改变', value, a);
+        console.log('Thay đổi lựa chọn', value, a);
         showSearch.value = true;
       }
 
       const dateTags = reactive([
-        { key: 'jt', text: '今天', active: false },
-        { key: 'zt', text: '昨天', active: false },
-        { key: 'qt', text: '前天', active: false },
-        { key: 'bz', text: '本周', active: false },
-        { key: 'sz', text: '上周', active: false },
-        { key: 'by', text: '本月', active: false },
-        { key: 'sy', text: '上月', active: false },
-        { key: '7day', text: '七日', active: true },
-        { key: 'zdy', text: '自定义', active: false },
+        { key: 'jt', text: 'Hôm nay', active: false },
+        { key: 'zt', text: 'Hôm qua', active: false },
+        { key: 'qt', text: 'Hôm kia', active: false },
+        { key: 'bz', text: 'Tuần này', active: false },
+        { key: 'sz', text: 'Tuần trước', active: false },
+        { key: 'by', text: 'Tháng này', active: false },
+        { key: 'sy', text: 'Tháng trước', active: false },
+        { key: '7day', text: '7 ngày', active: true },
+        { key: 'zdy', text: 'Tùy chỉnh', active: false },
       ]);
       function handleClickDateTag(item) {
         for (let a of dateTags) {
@@ -278,7 +278,7 @@
           searchParams.rangeDateKey = item.key;
         }
         if (item.key == 'zdy') {
-          // 自定义日期查询走的是 handleChangeSearchDate
+          // Truy vấn ngày tùy chỉnh đi theo handleChangeSearchDate
           if(item.active == false){
             searchParams.rangeDate = []
             loadData();
@@ -290,7 +290,7 @@
       const showRangeDate = computed(() => {
         let temp = dateTags.filter((i) => i.active == true);
         if (temp && temp.length > 0) {
-          if (temp[0].text == '自定义') {
+          if (temp[0].text == 'Tùy chỉnh') {
             return true;
           }
         }
@@ -307,7 +307,7 @@
        // closeModal();
       }
 
-      // 有查询条件值的时候显示该字符串
+      // Khi có giá trị điều kiện truy vấn thì hiển thị chuỗi đó
       const conditionStr = computed(()=>{
         const { fromUser, rangeDateKey, realname } = searchParams;
         if(!fromUser && !rangeDateKey){
@@ -326,16 +326,16 @@
         return arr.join('、')
       });
 
-      //注册model
+      //Đăng kýmodel
       const [regModal, { openModal }] = useModal();
 
       function getSelectedUser(options, value){
         if(options && options.length>0){
           searchParams.fromUser = value
           searchParams.realname = options[0].label;
-          // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-1217】添加人和删除人立马触发查询
+          // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-1217】Thêm người và xóa người sẽ kích hoạt tìm kiếm ngay lập tức
           loadData();
-          // update-end--author:liaozhiyang---date:20260810---for：【LHZP-1217】添加人和删除人立马触发查询
+          // update-end--author:liaozhiyang---date:20260810---for：【LHZP-1217】Thêm người và xóa người sẽ kích hoạt tìm kiếm ngay lập tức
         }
       }
       
@@ -346,9 +346,9 @@
       function clearSearchParamsUser(){
         searchParams.fromUser = ''
         searchParams.realname = ''
-        // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-1217】添加人和删除人立马触发查询
+        // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-1217】Thêm người và xóa người sẽ kích hoạt tìm kiếm ngay lập tức
         loadData();
-        // update-end--author:liaozhiyang---date:20260810---for：【LHZP-1217】添加人和删除人立马触发查询
+        // update-end--author:liaozhiyang---date:20260810---for：【LHZP-1217】Thêm người và xóa người sẽ kích hoạt tìm kiếm ngay lập tức
       }
 
 
@@ -392,7 +392,7 @@
       }
 
       /**
-       * 只是通知
+       * Chỉ là thông báo
        * @param item
        */
       function handleClickNoticeType(item) {
@@ -467,15 +467,15 @@
     .ant-modal-body {
       height: 550px;
       overflow-y: auto;
-      //update-begin-author:liusq---date:2026-04-23--for: JHHB-1390 【PC端】消息列表展示问题，下面有一块空白，刷新换账号也存在，Edge、Chrome都是这样
-      // 让 .ant-modal-body 作为唯一滚动容器，禁用内部 ModalWrapper ScrollContainer 的 overflow 限制
-      // 否则 ScrollContainer 会自动收缩到内容高度（如3条消息≈200px），导致只有上方小区域可滚动
+      //update-begin-author:liusq---date:2026-04-23--for: JHHB-1390 【Phía PC】Lỗi hiển thị danh sách tin nhắn, phía dưới có một khoảng trống, làm mới hay đổi tài khoản vẫn vậy, Edge và Chrome đều bị
+      // Để .ant-modal-body làm vùng chứa cuộn duy nhất, vô hiệu hóa giới hạn overflow của ScrollContainer thuộc ModalWrapper ở bên trong
+      // Nếu không, ScrollContainer sẽ tự động co lại theo chiều cao nội dung (ví dụ 3 tin nhắn≈200px), khiến chỉ vùng nhỏ phía trên có thể cuộn
       .scrollbar__wrap {
         overflow-y: visible !important;
         max-height: none !important;
         min-height: 0 !important;
       }
-      //update-end-author:liusq---date:2026-04-23--for: JHHB-1390 【PC端】消息列表展示问题，下面有一块空白，刷新换账号也存在，Edge、Chrome都是这样
+      //update-end-author:liusq---date:2026-04-23--for: JHHB-1390 【Phía PC】Lỗi hiển thị danh sách tin nhắn, phía dưới có một khoảng trống, làm mới hay đổi tài khoản vẫn vậy, Edge và Chrome đều bị
     }
     .ant-modal {
       position: absolute;

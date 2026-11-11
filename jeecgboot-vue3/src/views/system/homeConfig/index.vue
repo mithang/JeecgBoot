@@ -2,33 +2,33 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate">新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate">Thêm mới</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
-                <Icon icon="ant-design:delete-outlined" /> 删除
+                <Icon icon="ant-design:delete-outlined" /> Xóa
               </a-menu-item>
             </a-menu>
           </template>
-          <a-button>批量操作<Icon icon="mdi:chevron-down" /></a-button>
+          <a-button>Thao tác hàng loạt<Icon icon="mdi:chevron-down" /></a-button>
         </a-dropdown>
       </template>
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
       <template #status="{ text }">
-        <a-tag color="pink" v-if="text == 0">禁用</a-tag>
-        <a-tag color="#87d068" v-if="text == 1">启用</a-tag>
+        <a-tag color="pink" v-if="text == 0">Vô hiệu hóa</a-tag>
+        <a-tag color="#87d068" v-if="text == 1">Kích hoạt</a-tag>
       </template>
       <template #relationType="{ text, record }">
-        <span>{{ record.roleCode == 'DEF_INDEX_ALL' ? '全局默认' : text }}</span>
+        <span>{{ record.roleCode == 'DEF_INDEX_ALL' ? 'Mặc định toàn cục' : text }}</span>
       </template>
       <template #roleCode="{ text, record }">
-        <span>{{ record.roleCode == 'DEF_INDEX_ALL' ? '菜单默认首页' : text || record.roleCode }}</span>
+        <span>{{ record.roleCode == 'DEF_INDEX_ALL' ? 'Trang chủ mặc định của menu' : text || record.roleCode }}</span>
       </template>
     </BasicTable>
-    <!--角色首页配置-->
+    <!--Cấu hình trang chủ của vai trò-->
     <HomeConfigModal @register="register" @success="reload" />
   </div>
 </template>
@@ -43,14 +43,14 @@
 
   const { createMessage } = useMessage();
 
-  //弹窗配置
+  //Cấu hình hộp thoại
   const [register, { openModal }] = useModal();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { tableContext } = useListPage({
     designScope: 'home-config',
     tableProps: {
-      title: '首页配置',
+      title: 'Cấu hình trang chủ',
       api: list,
       columns: columns,
       formConfig: {
@@ -64,7 +64,7 @@
       actionColumn: {
         width: 140,
       },
-      //自定义默认排序
+      //Tùy chỉnh sắp xếp mặc định
       defSort: {
         column: 'id',
         order: 'desc',
@@ -74,7 +74,7 @@
   const [registerTable, { reload, clearSelectedRowKeys }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   async function handleCreate() {
     openModal(true, {
@@ -82,7 +82,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   async function handleEdit(record) {
     openModal(true, {
@@ -91,7 +91,7 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteIndex({ id: record.id }, () => {
@@ -99,17 +99,17 @@
     });
   }
   /**
-   * 启用/禁用事件
+   * Sự kiện bật/tắt
    */
   async function handleChangeStatus(record) {
     const newStatus = record.status == 1 ? 0 : 1;
     await changeStatus({ id: record.id, status: newStatus }, () => {
-      createMessage.success(newStatus == 1 ? '启用成功' : '禁用成功');
+      createMessage.success(newStatus == 1 ? 'Kích hoạt thành công' : 'Vô hiệu hóa thành công');
       reload();
     });
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDelete({ ids: selectedRowKeys.value }, () => {
@@ -119,25 +119,25 @@
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: record.status == 1 ? '禁用' : '启用',
+        label: record.status == 1 ? 'Vô hiệu hóa' : 'Kích hoạt',
         popConfirm: {
-          title: `是否${record.status == 1 ? '禁用' : '启用'}？`,
+          title: `Có phải${record.status == 1 ? 'Vô hiệu hóa' : 'Kích hoạt'}？`,
           confirm: handleChangeStatus.bind(null, record),
         },
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },

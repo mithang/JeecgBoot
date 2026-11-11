@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Tham chiếu bảng-->
     <BasicTable
       @register="registerTable"
       :rowSelection="rowSelection"
@@ -8,38 +8,38 @@
       @expand="handleExpand"
       @fetch-success="onFetchSuccess"
     >
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
-        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> Thêm mới</a-button>
+        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất (export)</a-button>
+        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">Nhập (import)</j-upload-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
     </BasicTable>
-    <!--字典弹窗-->
+    <!--Hộp thoại từ điển-->
     <CategoryModal @register="registerModal" @success="handleSuccess" />
   </div>
 </template>
 
 <script lang="ts" name="system-category" setup>
-  //ts语法
+  //tsCú pháp
   import { ref, computed, unref, toRaw, nextTick } from 'vue';
   import { BasicTable, useTable, TableAction } from '/src/components/Table';
   import { useDrawer } from '/src/components/Drawer';
@@ -52,13 +52,13 @@
 
   const expandedRowKeys = ref([]);
   const { handleExportXls, handleImportXls } = useMethods();
-  //字典model
+  //Từ điểnmodel
   const [registerModal, { openModal }] = useModal();
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, onExportXls, onImportXls, tableContext } = useListPage({
     designScope: 'category-template',
     tableProps: {
-      title: '分类字典',
+      title: 'Từ điển phân loại',
       api: list,
       columns: columns,
       actionColumn: {
@@ -70,7 +70,7 @@
       isTreeTable: true,
     },
     exportConfig: {
-      name: '分类字典列表',
+      name: 'Danh sách từ điển phân loại',
       url: getExportUrl,
     },
     importConfig: {
@@ -78,12 +78,12 @@
     },
   });
 
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload, collapseAll, updateTableDataRecord, findTableDataRecord, getDataSource }, { rowSelection, selectedRowKeys }] =
     tableContext;
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleCreate() {
     openModal(true, {
@@ -92,7 +92,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   async function handleEdit(record) {
     openModal(true, {
@@ -102,7 +102,7 @@
   }
 
   /**
-   * 详情
+   * Chi tiết
    */
   async function handleDetail(record) {
     openModal(true, {
@@ -113,28 +113,28 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteCategory({ id: record.id }, importSuccess);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     const ids = selectedRowKeys.value.filter((item) => !item.includes('loading'));
     await batchDeleteCategory({ ids: ids }, importSuccess);
   }
   /**
-   * 导入
+   * Nhập (import)
    */
   function importSuccess() {
-    // 代码逻辑说明: [issues/54]树字典，勾选，然后批量删除，系统错误------------
+    // Giải thích logic mã: [issues/54]Từ điển cây, đánh dấu chọn, sau đó xóa hàng loạt, lỗi hệ thống------------
     (selectedRowKeys.value = []) && reload();
   }
   /**
-   * 添加下级
+   * Thêm cấp dưới
    */
   function handleAddSub(record) {
     openModal(true, {
@@ -143,19 +143,19 @@
     });
   }
   /**
-   * 成功回调
+   * Callback thành công
    */
   async function handleSuccess({ isUpdate,isSubAdd, values, expandedArr }) {
     if (isUpdate) {
-      //编辑回调
+      //Callback khi chỉnh sửa
       updateTableDataRecord(values.id, values);
     } else {
       if (!values['pid']) {
-        //新增根节点
+        //Thêm mới nút gốc
         reload();
       } else {
-        //新增子集
-        // 代码逻辑说明: [issue/4550]分类字典数据量过多会造成数据查询时间过长---
+        //Thêm mới tập con
+        // Giải thích logic mã: [issue/4550]Từ điển phân loại có lượng dữ liệu quá nhiều sẽ khiến thời gian truy vấn dữ liệu quá dài---
         if(isSubAdd){
           await expandTreeNode(values.pid);
         }else{
@@ -169,19 +169,19 @@
   }
 
   /**
-   * 接口请求成功后回调
+   * Callback sau khi yêu cầu API thành công
    */
   function onFetchSuccess(result) {
     getDataByResult(result.items) && loadDataByExpandedRows();
   }
   /**
-   * 根据已展开的行查询数据（用于保存后刷新时异步加载子级的数据）
+   * Truy vấn dữ liệu theo các hàng đã mở rộng (dùng để tải không đồng bộ dữ liệu cấp con khi làm mới sau khi lưu)
    */
   async function loadDataByExpandedRows() {
     if (unref(expandedRowKeys).length > 0) {
       const res = await getChildListBatch({ parentIds: unref(expandedRowKeys).join(',') });
       if (res.success && res.result.records.length > 0) {
-        //已展开的数据批量子节点
+        //Các nút con hàng loạt của dữ liệu đã mở rộng
         let records = res.result.records;
         const listMap = new Map();
         for (let item of records) {
@@ -211,12 +211,12 @@
     }
   }
   /**
-   * 处理数据集
+   * Xử lý tập dữ liệu
    */
   function getDataByResult(result) {
     if (result && result.length > 0) {
       return result.map((item) => {
-        //判断是否标记了带有子节点
+        //Kiểm tra có đánh dấu là có nút con hay không
         if (item['hasChild'] == '1') {
           let loadChild = { id: item.id + '_loadChild', name: 'loading...', isLoading: true };
           item.children = [loadChild];
@@ -226,10 +226,10 @@
     }
   }
   /**
-   *树节点展开合并
+   *Mở rộng/gộp nút cây
    * */
   async function handleExpand(expanded, record) {
-    // 判断是否是展开状态，展开状态(expanded)并且存在子集(children)并且未加载过(isLoading)的就去查询子节点数据
+    // Kiểm tra có phải trạng thái mở rộng hay không, trạng thái mở rộng(expanded)Và tồn tại tập con(children)Và chưa từng tải(isLoading)thì đi truy vấn dữ liệu nút con
     if (expanded) {
       expandedRowKeys.value.push(record.id);
       if (record.children.length > 0 && !!record.children[0].isLoading) {
@@ -249,11 +249,11 @@
     }
   }
   /**
-   *操作表格后处理树节点展开合并
+   *Sau khi thao tác bảng, xử lý việc mở rộng/gộp nút cây
    * */
   async function expandTreeNode(key) {
     let record:any = findTableDataRecord(key);
-    // 代码逻辑说明: [issue/4550]分类字典数据量过多会造成数据查询时间过长，显示“接口请求超时,请刷新页面重试!”---
+    // Giải thích logic mã: [issue/4550]Từ điển phân loại có lượng dữ liệu quá nhiều sẽ khiến thời gian truy vấn dữ liệu quá dài, hiển thị 'Yêu cầu API quá thời gian chờ,Vui lòng làm mới trang và thử lại!”---
     if(!expandedRowKeys.value.includes(key)){
       expandedRowKeys.value.push(key);
     }
@@ -267,23 +267,23 @@
     updateTableDataRecord(key, record);
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '确定删除吗?',
+          title: 'Bạn có chắc muốn xóa không?',
           confirm: handleDelete.bind(null, record),
         },
       },
       {
-        label: '添加下级',
+        label: 'Thêm cấp dưới',
         onClick: handleAddSub.bind(null, { pid: record.id }),
       },
     ];

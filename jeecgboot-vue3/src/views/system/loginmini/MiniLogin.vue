@@ -137,17 +137,17 @@
                   </div>
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a title="企业微信" @click="onThirdLogin('wechat_enterprise')"><icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
+                      <a title="WeCom" @click="onThirdLogin('wechat_enterprise')"><icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
                     </div>
                   </div>
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a title="钉钉" @click="onThirdLogin('dingtalk')"><DingtalkCircleFilled /></a>
+                      <a title="DingTalk" @click="onThirdLogin('dingtalk')"><DingtalkCircleFilled /></a>
                     </div>
                   </div>
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a title="微信" @click="onThirdLogin('wechat_open')"><WechatFilled /></a>
+                      <a title="WeChat" @click="onThirdLogin('wechat_open')"><WechatFilled /></a>
                     </div>
                   </div>
                 </div>
@@ -166,10 +166,10 @@
     <div v-if="codeLoginLoaded" v-show="type === 'codeLogin'" :class="`${prefixCls}-form`">
       <MiniCodelogin ref="codeRef" @go-back="goBack" @success="handleSuccess" />
     </div>
-    <!-- 第三方登录相关弹框 -->
+    <!-- Các hộp thoại liên quan đến đăng nhập bên thứ ba -->
     <ThirdModal ref="thirdModalRef"></ThirdModal>
 
-    <!-- 图片验证码弹窗 -->
+    <!-- Hộp thoại mã xác thực hình ảnh -->
     <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
   </div>
 </template>
@@ -213,42 +213,42 @@
     requestCodeSuccess: false,
     checkKey: null,
   });
-  // 记住用户名
+  // Ghi nhớ tên người dùng
   const rememberMe = ref<boolean>(false);
   const REMEMBER_USERNAME_KEY = 'LOGIN_REMEMBER_USERNAME';
-  //手机号登录还是账号登录
+  //Đăng nhập bằng số điện thoại hay đăng nhập bằng tài khoản
   const activeIndex = ref<string>('accountLogin');
   const type = ref<string>('login');
-  //账号登录表单字段
+  //Trường của biểu mẫu đăng nhập bằng tài khoản
   const formData = reactive<any>({
     inputCode: '',
     username: 'admin',
     password: '123456',
     loginOrgCode: '',
   });
-  //手机登录表单字段
+  //Trường của biểu mẫu đăng nhập bằng điện thoại
   const phoneFormData = reactive<any>({
     mobile: '',
     smscode: '',
     loginOrgCode: '',
   });
   const loginRef = ref();
-  //第三方登录弹窗
+  //Hộp thoại đăng nhập bên thứ ba
   const thirdModalRef = ref();
-  //扫码登录
+  //Đăng nhập bằng quét mã
   const codeRef = ref();
-  //是否显示获取验证码
+  //Có hiển thị lấy mã xác thực không
   const showInterval = ref<boolean>(true);
   //60s
   const timeRuning = ref<number>(60);
-  //定时器
+  //Bộ hẹn giờ
   const timer = ref<any>(null);
-  //忘记密码
+  //Quên mật khẩu
   const forgotRef = ref();
-  //注册
+  //Đăng ký
   const registerRef = ref();
   const loginLoading = ref<boolean>(false);
-  // 以下三个组件懒加载控制标志位，点击时才挂载
+  // Cờ kiểm soát tải lười của ba component dưới đây, chỉ gắn kết khi nhấn vào
   const forgotLoaded = ref<boolean>(false);
   const registerLoaded = ref<boolean>(false);
   const codeLoginLoaded = ref<boolean>(false);
@@ -259,14 +259,14 @@
       type: Boolean,
     },
   });
- //**********************查询部门逻辑begin**********************************************
-  //用户部门
+ //**********************Logic truy vấn phòng banbegin**********************************************
+  //Phòng ban của người dùng
   const departList = ref([]);
-  //部门显示
+  //Hiển thị phòng ban
   const showDepart = computed(()=>{
     return departList.value.length > 1
   })
-  //获取部门缩写
+  //Lấy tên viết tắt phòng ban
   const getShortDeptName = computed(()=>{
     return (deptName) => {
       if (!deptName) return '';
@@ -276,7 +276,7 @@
       return deptName;
     };
   })
-  //监听验证码和输入框的修改
+  //Theo dõi thay đổi của mã xác thực và ô nhập
   watch(
       () => [formData.inputCode, phoneFormData.smscode],
       () => {
@@ -287,7 +287,7 @@
       },
   );
   /**
-   * 监听账号变化，清除部门信息
+   * Theo dõi thay đổi tài khoản, xóa thông tin phòng ban
    */
   watch(
       () => [formData.username,phoneFormData.mobile,activeIndex.value],
@@ -302,20 +302,20 @@
       }
   );
 
-  //初始化数据
+  //Khởi tạo dữ liệu
   let deptTimer;
   function checkAccount() {
     deptTimer && clearTimeout(deptTimer);
     deptTimer = setTimeout(async () => {
       let loginType = activeIndex.value === 'accountLogin' ? 'account' : 'phone';
-      // 验证条件提取
+      // Trích xuất điều kiện xác thực
       const isValidAccount = loginType === 'account' && formData.username && formData.password;
       const isValidPhone = loginType == 'phone' && phoneFormData.mobile && phoneFormData.smscode;
       let finalFormData = loginType == 'phone' ? {...phoneFormData} : {...formData};
       if (!isValidAccount && !isValidPhone) {
         return;
       }
-      //查询部门信息前，优先进行账户校验
+      //Trước khi truy vấn thông tin phòng ban, ưu tiên kiểm tra tài khoản
       if (departList.value && departList.value.length == 0) {
         let params = {...finalFormData, loginType: activeIndex.value === 'accountLogin' ? 'account' : 'phone'};
         if (loginType == 'account') {
@@ -328,9 +328,9 @@
         }, {isTransformResponse: false});
         if (res.success && res.result) {
           let {departs,currentOrgCode} = res.result;
-          // 判断当前部门是否在所属的部门列表中
+          // Kiểm tra phòng ban hiện tại có nằm trong danh sách phòng ban trực thuộc hay không
           if (departs && departs.length > 0) {
-            // 代码逻辑说明: JHHB-790 用户部门变更，会出现这个情况（因为之前设置的这里只切换部门，过滤了公司和岗位信息）
+            // Giải thích logic mã: JHHB-790 Khi phòng ban của người dùng thay đổi sẽ xuất hiện tình huống này (vì cài đặt ở đây trước đây chỉ chuyển đổi phòng ban, đã lọc bỏ thông tin công ty và vị trí)
             const hasCurrentDepart = departs.some(item => item.orgCode == currentOrgCode);
             formData.loginOrgCode = hasCurrentDepart?currentOrgCode:null;
             phoneFormData.loginOrgCode = hasCurrentDepart?currentOrgCode:null;
@@ -349,13 +349,13 @@
       }
     },500)
   }
- //**********************查询部门逻辑end*************************************************
+ //**********************Logic truy vấn phòng banend*************************************************
   /**
-   * 获取验证码
+   * Lấy mã xác thực
    */
   function handleChangeCheckCode() {
     formData.inputCode = '';
-    // 代码逻辑说明: [QQYUN-10775]验证码可以复用 #7674------------
+    // Giải thích logic mã: [QQYUN-10775]Mã xác thực có thể tái sử dụng #7674------------
     randCodeData.checkKey = new Date().getTime() + Math.random().toString(36).slice(-4); // 1629428467008;
     getCodeInfo(randCodeData.checkKey).then((res) => {
       randCodeData.randCodeImage = res;
@@ -364,20 +364,20 @@
   }
 
   /**
-   * 切换登录方式
+   * Chuyển đổi cách đăng nhập
    */
   function loginClick(type) {
     activeIndex.value = type;
   }
 
   /**
-   * 账号或者手机登录
+   * Đăng nhập bằng tài khoản hoặc điện thoại
    */
   async function loginHandleClick() {
     if (unref(activeIndex) === 'accountLogin') {
       accountLogin();
     } else {
-      //手机号登录
+      //Đăng nhập bằng số điện thoại
       phoneLogin();
     }
   }
@@ -394,7 +394,7 @@
     try {
       loginLoading.value = true;
 
-      // 密码使用AES加密传输
+      // Mật khẩu được truyền bằng mã hóa AES
       const encryptedPassword = encryptAESCBC(formData.password);
       const { userInfo } = await userStore.login(
         toRaw({
@@ -403,7 +403,7 @@
           loginOrgCode: formData.loginOrgCode,
           captcha: formData.inputCode,
           checkKey: randCodeData.checkKey,
-          mode: 'none', //不要默认的错误提示
+          mode: 'none', //Không dùng thông báo lỗi mặc định
         })
       );
       if (userInfo) {
@@ -412,7 +412,7 @@
           description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realname}`,
           duration: 3,
         });
-        // 登录成功后处理记住用户名
+        // Sau khi đăng nhập thành công, xử lý ghi nhớ tên người dùng
         if (rememberMe.value && formData.username) {
           $ls.set(REMEMBER_USERNAME_KEY, formData.username)
         } else {
@@ -432,7 +432,7 @@
   }
 
   /**
-   * 手机号登录
+   * Đăng nhập bằng số điện thoại
    */
   async function phoneLogin() {
     if (!phoneFormData.mobile) {
@@ -449,7 +449,7 @@
         mobile: phoneFormData.mobile,
         captcha: phoneFormData.smscode,
         loginOrgCode: phoneFormData.loginOrgCode,
-        mode: 'none', //不要默认的错误提示
+        mode: 'none', //Không dùng thông báo lỗi mặc định
       });
       if (userInfo) {
         notification.success({
@@ -470,14 +470,14 @@
   }
 
   /**
-   * 获取手机验证码
+   * Lấy mã xác thực điện thoại
    */
   async function getLoginCode() {
     if (!phoneFormData.mobile) {
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    // 代码逻辑说明: 【issues/8567】严重：修改密码存在水平越权问题：登录应该用登录模板不应该用忘记密码的模板---
+    // Giải thích logic mã: 【issues/8567】Nghiêm trọng: đổi mật khẩu tồn tại lỗ hổng vượt quyền ngang: đăng nhập phải dùng mẫu đăng nhập, không được dùng mẫu quên mật khẩu---
     const result = await getCaptcha({ mobile: phoneFormData.mobile, smsmode: SmsEnum.LOGIN }).catch((res) =>{
       if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
         openCaptchaModal(true, {});
@@ -502,7 +502,7 @@
   }
 
   /**
-   * 第三方登录
+   * Đăng nhập bên thứ ba
    * @param type
    */
   function onThirdLogin(type) {
@@ -510,7 +510,7 @@
   }
 
   /**
-   * 忘记密码
+   * Quên mật khẩu
    */
   function forgetHandelClick() {
     forgotLoaded.value = true;
@@ -521,7 +521,7 @@
   }
 
   /**
-   * 返回登录页面
+   * Quay lại trang đăng nhập
    */
   function goBack() {
     activeIndex.value = 'accountLogin';
@@ -529,7 +529,7 @@
   }
 
   /**
-   * 忘记密码/注册账号回调事件
+   * Sự kiện callback quên mật khẩu/đăng ký tài khoản
    * @param value
    */
   function handleSuccess(value) {
@@ -541,7 +541,7 @@
   }
 
   /**
-   * 注册
+   * Đăng ký
    */
   function registerHandleClick() {
     registerLoaded.value = true;
@@ -552,7 +552,7 @@
   }
 
   /**
-   * 注册
+   * Đăng ký
    */
   function codeHandleClick() {
     codeLoginLoaded.value = true;
@@ -563,9 +563,9 @@
   }
 
   onMounted(() => {
-    //加载验证码
+    //Tải mã xác thực
     handleChangeCheckCode();
-    // 恢复已记住的用户名
+    // Khôi phục tên người dùng đã ghi nhớ
     const saved = $ls.get(REMEMBER_USERNAME_KEY);
     if (saved) {
       formData.username = saved;
@@ -691,7 +691,7 @@ html[data-theme='dark'] {
     .ant-checkbox-inner,.aui-success h3{
       border-color: #c9d1d9;
     }
-    // 代码逻辑说明: 【QQYUN-6363】这个样式代码有问题，不在里面，导致表达式有问题------------
+    // Giải thích logic mã: 【QQYUN-6363】Đoạn mã kiểu này có vấn đề, không nằm ở bên trong, khiến biểu thức gặp vấn đề------------
     &-sign-in-way {
       .anticon {
         font-size: 22px !important;

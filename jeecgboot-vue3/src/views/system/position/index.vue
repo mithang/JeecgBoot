@@ -2,18 +2,18 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleAdd">新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleAdd">Thêm mới</a-button>
         <a-popover placement="bottomLeft" trigger="hover">
           <template #content>
             <div class="position-level-popover">
-              <div class="position-level-popover__title">流程职级表达式仅识别 6 个预设职级</div>
-              <div class="position-level-popover__hint">职务等级名称及等级序号须严格匹配，数字越小职级越高。</div>
+              <div class="position-level-popover__title">Biểu thức cấp bậc quy trình chỉ nhận dạng 6 cấp bậc định sẵn</div>
+              <div class="position-level-popover__hint">Tên cấp bậc chức danh và số thứ tự cấp bậc phải khớp nghiêm ngặt, số càng nhỏ thì cấp bậc càng cao.</div>
               <div class="position-level-popover__warning">
-                这 6 个预设职级不允许修改或删除。其他职务可以正常维护，但不能用于流程职级表达式，否则流程将无法匹配审批人。
+                6 cấp bậc định sẵn này không được phép sửa hoặc xóa. Các chức danh khác có thể duy trì bình thường, nhưng không thể dùng cho biểu thức cấp bậc của quy trình, nếu không quy trình sẽ không khớp được với người phê duyệt.
               </div>
               <div class="position-level-popover__rules">
-                <div><span>配置</span>候选职级只能配置在部门上，不能直接关联用户。</div>
-                <div><span>概念</span>用户资料中的“职务”来自字典，与这里的职务等级是两个独立概念。</div>
+                <div><span>Cấu hình</span>Cấp bậc ứng viên chỉ có thể cấu hình trên phòng ban, không thể liên kết trực tiếp với người dùng.</div>
+                <div><span>Khái niệm</span>'Chức danh' trong hồ sơ người dùng đến từ từ điển, khác với cấp bậc chức danh ở đây, là hai khái niệm độc lập.</div>
               </div>
               <div class="position-level-popover__grid">
                 <div v-for="item in positionLevelTips" :key="item.level" class="position-level-popover__item">
@@ -24,19 +24,19 @@
               </div>
             </div>
           </template>
-          <a-button class="position-level-help" preIcon="ant-design:info-circle-outlined">流程仅支持 6 个预设职级</a-button>
+          <a-button class="position-level-help" preIcon="ant-design:info-circle-outlined">Quy trình chỉ hỗ trợ 6 cấp bậc định sẵn</a-button>
         </a-popover>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
@@ -60,19 +60,19 @@
   const { createMessage } = useMessage();
   const [registerModal, { openModal }] = useModal();
   const positionLevelTips = [
-    { id: '1958471111989067778', name: '董事长', level: 1, type: 'leader', typeName: '领导层级' },
-    { id: '1958471074953363458', name: '总经理', level: 2, type: 'leader', typeName: '领导层级' },
-    { id: '1958471030867034113', name: '副总经理', level: 3, type: 'leader', typeName: '领导层级' },
-    { id: '1958470912214368258', name: '部长', level: 4, type: 'staff', typeName: '职员层级' },
-    { id: '1958470865577902082', name: '副部长', level: 5, type: 'staff', typeName: '职员层级' },
-    { id: '1958470823064436737', name: '职员', level: 6, type: 'staff', typeName: '职员层级' },
+    { id: '1958471111989067778', name: 'Chủ tịch', level: 1, type: 'leader', typeName: 'Cấp lãnh đạo' },
+    { id: '1958471074953363458', name: 'Tổng giám đốc', level: 2, type: 'leader', typeName: 'Cấp lãnh đạo' },
+    { id: '1958471030867034113', name: 'Phó tổng giám đốc', level: 3, type: 'leader', typeName: 'Cấp lãnh đạo' },
+    { id: '1958470912214368258', name: 'Bộ trưởng', level: 4, type: 'staff', typeName: 'Cấp bậc nhân viên' },
+    { id: '1958470865577902082', name: 'Phó bộ trưởng', level: 5, type: 'staff', typeName: 'Cấp bậc nhân viên' },
+    { id: '1958470823064436737', name: 'Nhân viên', level: 6, type: 'staff', typeName: 'Cấp bậc nhân viên' },
   ];
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     designScope: 'position-template',
     tableProps: {
-      title: '职务列表',
+      title: 'Danh sách chức danh',
       api: getPositionList,
       columns: columns,
       formConfig: {
@@ -83,21 +83,21 @@
         width: 180,
       },
       showIndexColumn: true,
-      //update-begin---author:scott ---date:20260806  for：【LHZP-1183】限制流程预设职级修改和删除-----------
+      //update-begin---author:scott ---date:20260806  for：【LHZP-1183】Hạn chế sửa và xóa cấp bậc định sẵn của quy trình-----------
       rowSelection: {
         type: 'checkbox',
         getCheckboxProps: (record) => ({
           disabled: isDefaultPosition(record),
         }),
       },
-      //update-end---author:scott ---date:20260806  for：【LHZP-1183】限制流程预设职级修改和删除-----------
+      //update-end---author:scott ---date:20260806  for：【LHZP-1183】Hạn chế sửa và xóa cấp bậc định sẵn của quy trình-----------
       defSort: {
         column: "",
         order: ""
       }
     },
     exportConfig: {
-      name: '职务列表',
+      name: 'Danh sách chức danh',
       url: getExportUrl,
     },
     importConfig: {
@@ -108,34 +108,34 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
-    //update-begin---author:scott ---date:20260806  for：【LHZP-1183】限制流程预设职级修改和删除-----------
+    //update-begin---author:scott ---date:20260806  for：【LHZP-1183】Hạn chế sửa và xóa cấp bậc định sẵn của quy trình-----------
     const isDefault = isDefaultPosition(record);
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
         disabled: isDefault,
-        tooltip: isDefault ? '流程预设职级不允许修改' : undefined,
+        tooltip: isDefault ? 'Cấp bậc định sẵn của quy trình không được phép sửa' : undefined,
       },
       {
-        label: '删除',
+        label: 'Xóa',
         disabled: isDefault,
-        tooltip: isDefault ? '流程预设职级不允许删除' : undefined,
+        tooltip: isDefault ? 'Cấp bậc định sẵn của quy trình không được phép xóa' : undefined,
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },
     ];
-    //update-end---author:scott ---date:20260806  for：【LHZP-1183】限制流程预设职级修改和删除-----------
+    //update-end---author:scott ---date:20260806  for：【LHZP-1183】Hạn chế sửa và xóa cấp bậc định sẵn của quy trình-----------
   }
 
   /**
-   * 根据系统初始化数据ID判断是否为流程内置职级
+   * Dựa vào ID dữ liệu khởi tạo hệ thống để xác định có phải cấp bậc tích hợp sẵn của quy trình hay không
    * @author scott
    * @since 2026-08-06 LHZP-1183
    */
@@ -144,7 +144,7 @@
   }
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openModal(true, {
@@ -153,7 +153,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     openModal(true, {
@@ -163,18 +163,18 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deletePosition({ id: record.id }, reload);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeletePosition({ ids: selectedRowKeys.value }, () => {
-      // 代码逻辑说明: 【QQYUN-8334】批量删除之后，按钮未隐藏，选中记录还在
+      // Giải thích logic mã: 【QQYUN-8334】Sau khi xóa hàng loạt, nút chưa ẩn, bản ghi đã chọn vẫn còn
       selectedRowKeys.value = [];
       reload();
     });

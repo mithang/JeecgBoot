@@ -31,7 +31,7 @@
             </div>
             <div class="" style="height: 230px; position: relative">
               <a-form ref="formRef" :model="formData" v-if="activeKey === 1">
-                <!-- 身份验证 begin -->
+                <!-- Xác thực danh tính begin -->
                 <div class="aui-account aui-account-line aui-forgot">
                   <a-form-item>
                     <div class="aui-input-line">
@@ -46,10 +46,10 @@
                     <div v-else class="aui-code-line">{{t('component.countdown.sendText',[unref(timeRuning)])}}</div>
                   </div>
                 </div>
-                <!-- 身份验证 end -->
+                <!-- Xác thực danh tính end -->
               </a-form>
               <a-form ref="pwdFormRef" :model="pwdFormData" v-else-if="activeKey === 2">
-                <!-- 重置密码 begin -->
+                <!-- Đặt lại mật khẩu begin -->
                 <div class="aui-account aui-account-line aui-forgot">
                   <a-form-item>
                     <div class="aui-input-line">
@@ -62,16 +62,16 @@
                     </div>
                   </a-form-item>
                 </div>
-                <!-- 重置密码 end -->
+                <!-- Đặt lại mật khẩu end -->
               </a-form>
-                <!-- 重置成功 begin -->
+                <!-- Đặt lại thành công begin -->
                 <div class="aui-success" v-else>
                   <div class="aui-success-icon">
                     <img :src="successImg"/>
                   </div>
-                  <h3>恭喜您，重置密码成功！</h3>
+                  <h3>Chúc mừng bạn, đặt lại mật khẩu thành công!</h3>
                 </div>
-                <!-- 重置成功 end -->
+                <!-- Đặt lại thành công end -->
             </div>
             <div class="aui-formButton" style="padding-bottom: 40px">
               <div class="aui-flex" v-if="activeKey === 1 || activeKey === 2">
@@ -89,7 +89,7 @@
       </div>
     </div>
   </div>
-  <!-- 图片验证码弹窗 -->
+  <!-- Hộp thoại mã xác thực hình ảnh -->
   <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
 </template>
 <script lang="ts" name="mini-forgotpad" setup>
@@ -106,27 +106,27 @@
   import { ExceptionEnum } from "@/enums/exceptionEnum";
   const [captchaRegisterModal, { openModal: openCaptchaModal }] = useModal();
 
-  //下一步控制
+  //Kiểm soát bước tiếp theo
   const activeKey = ref<number>(1);
   const { t } = useI18n();
   const { handleBackLogin } = useLoginState();
   const { notification, createMessage, createErrorModal } = useMessage();
-  //是否显示获取验证码
+  //Có hiển thị lấy mã xác thực không
   const showInterval = ref<boolean>(true);
   //60s
   const timeRuning = ref<number>(60);
-  //定时器
+  //Bộ hẹn giờ
   const timer = ref<any>(null);
   const formRef = ref();
   const pwdFormRef = ref();
-  //账号数据
+  //Dữ liệu tài khoản
   const accountInfo = reactive<any>({});
-  //手机号表单
+  //Biểu mẫu số điện thoại
   const formData = reactive({
     mobile: '',
     smscode: '',
   });
-  //密码表单
+  //Biểu mẫu mật khẩu
   const pwdFormData = reactive<any>({
     password: '',
     confirmPassword: '',
@@ -134,7 +134,7 @@
   const emit = defineEmits(['go-back', 'success', 'register']);
 
   /**
-   * 下一步
+   * Bước tiếp theo
    */
   async function handleNext() {
     if (!formData.mobile) {
@@ -163,7 +163,7 @@
       },300)
     } else {
       notification.error({
-        message: '错误提示',
+        message: 'Thông báo lỗi',
         description: resultInfo.message || t('sys.api.networkExceptionMsg'),
         duration: 3,
       });
@@ -171,7 +171,7 @@
   }
 
   /**
-   * 完成修改密码
+   * Hoàn thành đổi mật khẩu
    */
   async function finishedPwd() {
     if (!pwdFormData.password) {
@@ -196,10 +196,10 @@
     );
     if (resultInfo.success) {
       accountInfo.password = pwdFormData.password;
-      //修改密码
+      //Đổi mật khẩu
       activeKey.value = 3;
     } else {
-      //错误提示
+      //Thông báo lỗi
       createErrorModal({
         title: t('sys.api.errorTip'),
         content: resultInfo.message || t('sys.api.networkExceptionMsg'),
@@ -207,7 +207,7 @@
     }
   }
   /**
-   * 下一步
+   * Bước tiếp theo
    */
   function nextStepClick() {
     if (unref(activeKey) == 1) {
@@ -218,7 +218,7 @@
   }
 
   /**
-   * 去登录
+   * Đi đăng nhập
    */
   function toLogin() {
     emit('success', { username: accountInfo.username, password: accountInfo.password });
@@ -226,7 +226,7 @@
   }
 
   /**
-   * 返回
+   * Quay lại
    */
   function goBack() {
     emit('go-back');
@@ -234,14 +234,14 @@
   }
 
   /**
-   * 获取手机验证码
+   * Lấy mã xác thực điện thoại
    */
   async function getLoginCode() {
     if (!formData.mobile) {
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    // 代码逻辑说明: 【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    // Giải thích logic mã: 【QQYUN-9005】Cùng một IP, nếu gửi quá 5 tin nhắn SMS trong 1 phút thì nhắc cần mã xác thực---
     const result = await getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.FORGET_PASSWORD }).catch((res) =>{
       if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
         openCaptchaModal(true, {});
@@ -266,7 +266,7 @@
   }
 
   /**
-   * 初始化表单
+   * Khởi tạo biểu mẫu
    */
   function initForm() {
     activeKey.value = 1;

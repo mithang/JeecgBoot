@@ -1,15 +1,15 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :width="800" title="查看详情" :showCancelBtn="false" :showOkBtn="false" :maxHeight="500">
+  <BasicModal v-bind="$attrs" @register="registerModal" :width="800" title="Xem chi tiết" :showCancelBtn="false" :showOkBtn="false" :maxHeight="500">
     <template #title>
-      <span class="basic-title">查看详情</span>
+      <span class="basic-title">Xem chi tiết</span>
       <div class="print-btn" @click="onPrinter">
         <Icon icon="ant-design:printer-filled" />
-        <span class="print-text">打印</span>
+        <span class="print-text">In</span>
       </div>
     </template>
     <iframe ref="iframeRef" :src="frameSrc" class="detail-iframe" @load="onIframeLoad"></iframe>
     <template v-if="noticeFiles && noticeFiles.length > 0">
-      <div class="files-title">相关附件：</div>
+      <div class="files-title">Tệp đính kèm liên quan:</div>
       <template v-for="(file, index) in noticeFiles" :key="index">
         <div class="files-area">
           <div class="files-area-text">
@@ -32,7 +32,7 @@
         </div>
       </template>
       <a v-if="noticeFiles.length > 1" :href="downLoadFiles + '?id=' + noticeId + '&token=' + getToken()" target="_blank"  style="margin: 15px 6px;color: #5ac0fa;">
-        <download-outlined class="item-icon" style="margin-right: 5px"  /><span>批量下载所有附件</span>
+        <download-outlined class="item-icon" style="margin-right: 5px"  /><span>Tải xuống hàng loạt mọi tệp đính kèm</span>
       </a>
     </template>
   </BasicModal>
@@ -49,20 +49,20 @@
   import { getToken } from "@/utils/auth";
   import {$electron} from "@/electron";
   const glob = useGlobSetting();
-  // 获取props
+  // Lấyprops
   defineProps({
     frameSrc: propTypes.string.def(''),
   });
   /**
-   * 下载文件路径
+   * Đường dẫn tải tệp xuống
    */
   const downLoadFiles = `${glob.domainUrl}/sys/annountCement/downLoadFiles`;
 
-  //附件内容
+  //Nội dung đính kèm
   const noticeFiles = ref([]);
-  //数据ID
+  //Dữ liệuID
   const noticeId = ref('');
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal] = useModalInner((data) => {
     noticeFiles.value = [];
     noticeId.value = data.record.id;
@@ -75,42 +75,42 @@
       });
     }
   });
-  // iframe引用
+  // iframeTham chiếu
   const iframeRef = ref<HTMLIFrameElement>();
-  // 存储当前打印会话ID
+  // Lưu trữ phiên in hiện tạiID
   const printSessionId = ref<string>('');
-  // iframe加载完成后初始化通信
+  // iframeSau khi tải xong, khởi tạo giao tiếp
   const onIframeLoad = () => {
-    printSessionId.value = buildUUID(); // 每次加载生成新的会话ID
+    printSessionId.value = buildUUID(); // Mỗi lần tải tạo phiên mớiID
   };
-  //打印
+  //In
   function onPrinter() {
     if (!iframeRef.value) return;
     console.log('onPrinter', iframeRef.value);
     iframeRef.value?.contentWindow?.postMessage({ printSessionId: printSessionId.value, type: 'action:print' }, '*');
   }
   /**
-   * 下载文件
+   * Tải tệp xuống
    * @param filePath
    */
   function handleDownloadFile(filePath) {
     window.open(getFileAccessHttpUrl(filePath), '_blank');
   }
   /**
-   * 预览文件
+   * Xem trước tệp
    * @param filePath
    */
   function handleViewFile(filePath) {
     if (filePath) {
-      //update-begin-author:scott---date:2026-04-16--for: 【Github #8855】修复文件预览路径处理问题，filePath需要先拼接完整URL再编码
+      //update-begin-author:scott---date:2026-04-16--for: 【Github #8855】Sửa lỗi xử lý đường dẫn xem trước tệp, filePath cần nối thành URL đầy đủ trước rồi mới mã hóa
       let url = encodeURIComponent(encryptByBase64(getFileAccessHttpUrl(filePath)));
-      //update-end-author:scott---date:2026-04-16--for: 【Github #8855】修复文件预览路径处理问题，filePath需要先拼接完整URL再编码
+      //update-end-author:scott---date:2026-04-16--for: 【Github #8855】Sửa lỗi xử lý đường dẫn xem trước tệp, filePath cần nối thành URL đầy đủ trước rồi mới mã hóa
       let previewUrl = `${glob.viewUrl}?url=` + url;
-      //update-begin-author:liusq---date:2025-12-16--for: JHHB-1139桌面端 文件预览统一修改 
+      //update-begin-author:liusq---date:2025-12-16--for: JHHB-1139Phía desktop: thống nhất sửa đổi xem trước tệp 
       if($electron.isElectron()){
         previewUrl = getElectronFileUrl(filePath);
       }
-      //update-end-author:liusq---date:2025-12-16--for: JHHB-1139桌面端 文件预览统一修改
+      //update-end-author:liusq---date:2025-12-16--for: JHHB-1139Phía desktop: thống nhất sửa đổi xem trước tệp
       window.open(previewUrl, '_blank');
     }
   }
@@ -136,9 +136,9 @@
     width: 100%;
     height: 100%;
     min-height: 500px;
-    // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1685】通知公告查看出现两个滚动条
+    // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1685】Khi xem thông báo xuất hiện hai thanh cuộn
     display: block;
-    // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1685】通知公告查看出现两个滚动条
+    // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1685】Khi xem thông báo xuất hiện hai thanh cuộn
   }
   .files-title {
     font-size: 16px;

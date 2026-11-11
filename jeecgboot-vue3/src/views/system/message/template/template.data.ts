@@ -4,35 +4,35 @@ import { filterDictTextByCache } from '/@/utils/dict/JDictSelectUtil';
 
 export const columns: BasicColumn[] = [
   {
-    title: '模板标题',
+    title: 'Tiêu đề mẫu',
     dataIndex: 'templateName',
     width: 80,
   },
   {
-    title: '模板编码',
+    title: 'Mã mẫu',
     dataIndex: 'templateCode',
     width: 100,
   },
   {
-    title: '通知模板',
+    title: 'Mẫu thông báo',
     dataIndex: 'templateContent',
     width: 150,
   },
   {
-    title: '模板类型',
+    title: 'Loại mẫu',
     dataIndex: 'templateType',
     width: 100,
     customRender: ({ text }) => filterDictTextByCache('msgType', text),
   },
   {
-    title: '是否应用',
+    title: 'Có áp dụng không',
     dataIndex: 'useStatus',
     width: 90,
     customRender: function ({ text }) {
       if (text == '1') {
-        return '是';
+        return 'Có';
       } else {
-        return '否';
+        return 'Không';
       }
     },
   },
@@ -40,17 +40,17 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '模板标题',
+    label: 'Tiêu đề mẫu',
     field: 'templateName',
     component: 'Input',
   },
   {
-    label: '模板编码',
+    label: 'Mã mẫu',
     field: 'templateCode',
     component: 'Input',
   },
   {
-    label: '模板类型',
+    label: 'Loại mẫu',
     field: 'templateType',
     component: 'JDictSelectTag',
     componentProps: {
@@ -67,45 +67,45 @@ export const formSchemas: FormSchema[] = [
     show: false,
   },
   {
-    label: '模板标题',
+    label: 'Tiêu đề mẫu',
     field: 'templateName',
     component: 'Input',
     required: true,
   },
   {
-    label: '模板编码',
+    label: 'Mã mẫu',
     field: 'templateCode',
     component: 'Input',
     required: true,
     dynamicRules: ({ model, schema }) => {
       return [ ...rules.duplicateCheckRule('sys_sms_template', 'template_code', model, schema, true)];
     },
-    // 编辑模式下不可修改编码
+    // Ở chế độ chỉnh sửa không thể sửa mã
     dynamicDisabled: (params) => !!params.values.id,
   },
   {
-    label: '模板类型',
+    label: 'Loại mẫu',
     field: 'templateType',
     component: 'JDictSelectTag',
     defaultValue: '1',
     componentProps: {
       dictCode: 'msgType',
       type: 'radio',
-      placeholder: '请选择模板类型',
+      placeholder: 'Vui lòng chọn loại mẫu',
     },
     required: true,
   },
   {
-    label: '模板分类',
+    label: 'Phân loại mẫu',
     field: 'templateCategory',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'msgCategory',
-      placeholder: '请选择模板分类',
+      placeholder: 'Vui lòng chọn phân loại mẫu',
     }
   },
   {
-    label: '是否应用',
+    label: 'Có áp dụng không',
     field: 'useStatus',
     component: 'JSwitch',
     componentProps: {
@@ -113,7 +113,7 @@ export const formSchemas: FormSchema[] = [
     },
   },
   {
-    label: '模板内容',
+    label: 'Nội dung mẫu',
     field: 'templateContent',
     component: 'InputTextArea',
     componentProps: {
@@ -128,7 +128,7 @@ export const formSchemas: FormSchema[] = [
   },
 
   {
-    label: '模板内容',
+    label: 'Nội dung mẫu',
     field: 'templateContent',
     component: 'JEditor',
     ifShow: ({ values }) => {
@@ -136,7 +136,7 @@ export const formSchemas: FormSchema[] = [
     },
   },
   {
-    label: '模板内容',
+    label: 'Nội dung mẫu',
     field: 'templateContent',
     component: 'JMarkdownEditor',
     ifShow: ({ values }) => {
@@ -147,37 +147,37 @@ export const formSchemas: FormSchema[] = [
 
 export const sendTestFormSchemas: FormSchema[] = [
   {
-    label: '模板编码',
+    label: 'Mã mẫu',
     field: 'templateCode',
     component: 'Input',
     show: false,
   },
   {
-    label: '模板标题',
+    label: 'Tiêu đề mẫu',
     field: 'templateName',
     component: 'Input',
     componentProps: { disabled: true },
   },
   {
-    label: '模板内容',
+    label: 'Nội dung mẫu',
     field: 'templateContent',
     component: 'InputTextArea',
     componentProps: { disabled: true, rows: 5 },
   },
   {
-    label: '测试数据',
+    label: 'Dữ liệu kiểm tra',
     field: 'testData',
     component: 'InputTextArea',
     required: true,
-    helpMessage: 'JSON数据',
+    helpMessage: 'JSONDữ liệu',
     defaultValue: '{}',
     componentProps: {
-      placeholder: '请输入JSON格式测试数据',
+      placeholder: 'Vui lòng nhập dữ liệu kiểm tra định dạng JSON',
       rows: 5,
     },
   },
   {
-    label: '消息类型',
+    label: 'Loại tin nhắn',
     field: 'msgType',
     component: 'JDictSelectTag',
     required: true,
@@ -185,7 +185,7 @@ export const sendTestFormSchemas: FormSchema[] = [
     componentProps: { dictCode: 'messageType',type:'radio' },
   },
   {
-    label: '消息接收方',
+    label: 'Bên nhận tin nhắn',
     field: 'receiver',
     required: true,
     component: 'JSelectUser',

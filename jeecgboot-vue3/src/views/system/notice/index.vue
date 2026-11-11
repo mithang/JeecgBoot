@@ -2,20 +2,20 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd">新建</a-button>
-<!--        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>-->
-<!--        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>-->
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd">Tạo mới</a-button>
+<!--        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất (export)</a-button>-->
+<!--        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">Nhập (import)</j-upload-button>-->
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon style="fontsize: 12px" icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
@@ -48,11 +48,11 @@
   const [register, { openModal: openDetail }] = useModal();
   const iframeUrl = ref('');
   const { createMessage, createConfirm } = useMessage();
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, onExportXls, onImportXls, tableContext, doRequest } = useListPage({
     designScope: 'notice-template',
     tableProps: {
-      title: '消息通知',
+      title: 'Thông báo tin nhắn',
       api: getList,
       columns: columns,
       formConfig: {
@@ -61,7 +61,7 @@
       }
     },
     exportConfig: {
-      name: '消息通知列表',
+      name: 'Danh sách thông báo tin nhắn',
       url: getExportUrl,
     },
     importConfig: {
@@ -70,19 +70,19 @@
   });
 
   const [registerTable, { reload, getForm }, { rowSelection, selectedRowKeys }] = tableContext;
-  //流程编码
+  //Mã quy trình
   const flowCode = 'dev_sys_announcement_001';
   /**
-   * 新增/编辑保存成功
-   * 代码逻辑说明: 查询条件的消息类型默认是"通知公告"，若保存的是"系统消息"等其他类型，
-   * 数据会被查询条件过滤掉，用户误以为没保存成功，这里自动把查询条件切换到该条数据的消息类型
+   * Thêm mới/Chỉnh sửa lưu thành công
+   * Giải thích logic mã: Loại tin nhắn của điều kiện truy vấn mặc định là"Thông báo", nếu cái được lưu là"Tin nhắn hệ thống"và các loại khác,
+   * Dữ liệu sẽ bị điều kiện truy vấn lọc mất, người dùng tưởng nhầm là chưa lưu thành công, tại đây tự động chuyển điều kiện truy vấn sang loại tin nhắn của bản ghi dữ liệu đó
    */
   async function handleSuccess(values) {
     const msgCategory = values?.msgCategory;
     if (msgCategory) {
       const searchForm = getForm();
       const searchMsgCategory = searchForm.getFieldsValue()?.msgCategory;
-      // 查询条件为空表示查全部，无需切换
+      // Điều kiện truy vấn trống nghĩa là truy vấn tất cả, không cần chuyển đổi
       if (searchMsgCategory && searchMsgCategory != msgCategory) {
         await searchForm.setFieldsValue({ msgCategory });
         reload({ page: 1 });
@@ -92,7 +92,7 @@
     reload();
   }
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd(record = {}) {
     openModal(true, {
@@ -102,7 +102,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     openModal(true, {
@@ -112,40 +112,40 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteNotice({ id: record.id }, reload);
   }
   /**
-   * 置顶操作
+   * Thao tác ghim đầu
    */
   async function handleTop(record, izTop) {
      await editIzTop({ id: record.id, izTop }, reload);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     doRequest(() => batchDeleteNotice({ ids: selectedRowKeys.value }));
   }
   /**
-   * 发布
+   * Phát hành
    */
   async function handleRelease(id) {
     await doReleaseData({ id });
     reload();
   }
   /**
-   * 撤销
+   * Thu hồi
    */
   async function handleReovke(id) {
     await doReovkeData({ id });
     reload();
   }
   /**
-   * 查看
+   * Xem
    */
   function handleDetail(record) {
     iframeUrl.value = `${glob.uploadUrl}/sys/annountCement/show/${record.id}?token=${getToken()}`;
@@ -153,64 +153,64 @@
   }
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
         ifShow: record.sendStatus == 0 || record.sendStatus == '2',
       },
       {
-        label: '查看',
+        label: 'Xem',
         onClick: handleDetail.bind(null, record),
         ifShow: record.sendStatus == 1,
       },
     ];
   }
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '删除',
+        label: 'Xóa',
         ifShow: record.sendStatus != 1,
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },
       {
-        label: '发布',
+        label: 'Phát hành',
         ifShow: (!record?.izApproval || record.izApproval == '0') && record.sendStatus == 0,
         onClick: handleRelease.bind(null, record.id),
       },
       {
-        label: '撤销',
+        label: 'Thu hồi',
         ifShow: record.sendStatus == 1,
         popConfirm: {
-          title: '确定要撤销吗？',
+          title: 'Bạn có chắc muốn thu hồi không?',
           confirm: handleReovke.bind(null, record.id),
         },
       },
       {
-        label: '发布',
+        label: 'Phát hành',
         ifShow: record.sendStatus == '2',
         popConfirm: {
-          title: '确定要再次发布吗？',
+          title: 'Bạn có chắc muốn phát hành lại không?',
           confirm: handleRelease.bind(null, record.id),
         },
       },
       {
-        label: '置顶',
+        label: 'Ghim đầu',
         onClick: handleTop.bind(null, record, 1),
         ifShow: record.sendStatus == 1 && record.izTop == 0,
       },
       {
-        label: '取消置顶',
+        label: 'Bỏ ghim đầu',
         onClick: handleTop.bind(null, record, 0),
         ifShow: record.sendStatus == 1 && record.izTop == 1,
       },
@@ -218,7 +218,7 @@
   }
 
   onMounted(() => {
-    // 代码逻辑说明: 【JHHB-128】转公告
+    // Giải thích logic mã: 【JHHB-128】Chuyển thành thông báo
     const params = appStore.getMessageHrefParams;
     if (params?.add) {
       delete params.add;

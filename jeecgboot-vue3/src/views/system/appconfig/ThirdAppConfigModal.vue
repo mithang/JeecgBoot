@@ -14,29 +14,29 @@
     name: 'ThirdAppConfigModal',
     components: { BasicModal, BasicForm },
     setup(props, { emit }) {
-      const title = ref<string>('钉钉配置');
-      //表单配置
+      const title = ref<string>('Cấu hình DingTalk');
+      //Cấu hình biểu mẫu
       const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         schemas: thirdAppFormSchema,
         showActionButtonGroup: false,
         labelCol: { span: 24 },
         wrapperCol: { span: 24 },
       });
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         setModalProps({ confirmLoading: true });
         if (data.thirdType == 'dingtalk') {
-          title.value = '钉钉配置';
+          title.value = 'Cấu hình DingTalk';
         } else if (data.thirdType == 'feishu') {
-          title.value = '飞书配置';
+          title.value = 'Cấu hình Feishu';
         } else {
-          title.value = '企业微信配置';
+          title.value = 'Cấu hình WeCom';
         }
-        //重置表单
+        //Đặt lại biểu mẫu
         await resetFields();
         let values = await getThirdConfigByTenantId({ tenantId: data.tenantId, thirdType: data.thirdType });
         setModalProps({ confirmLoading: false });
-        //表单赋值
+        //Gán giá trị cho biểu mẫu
         if (values) {
           await setFieldsValue(values);
         } else {
@@ -45,7 +45,7 @@
       });
 
       /**
-       * 第三方配置点击事件
+       * Sự kiện nhấp vào cấu hình bên thứ ba
        */
       async function handleSubmit() {
         let values = await validate();

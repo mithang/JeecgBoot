@@ -12,15 +12,15 @@ enum Api {
   importExcel = '/test/jeecgDemo/importExcel',
 }
 /**
- * 导出api
+ * Xuất (export)api
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入api
+ * Nhập (import)api
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 查询示例列表
+ * Truy vấn danh sách ví dụ
  * @param params
  */
 export const getDemoList = (params) => {
@@ -28,7 +28,7 @@ export const getDemoList = (params) => {
 };
 
 /**
- * 保存或者更新示例
+ * Lưu hoặc cập nhật ví dụ
  * @param params
  */
 export const saveOrUpdateDemo = (params, isUpdate) => {
@@ -37,7 +37,7 @@ export const saveOrUpdateDemo = (params, isUpdate) => {
 };
 
 /**
- * 查询示例详情
+ * Truy vấn chi tiết ví dụ
  * @param params
  */
 export const getDemoById = (params) => {
@@ -45,7 +45,7 @@ export const getDemoById = (params) => {
 };
 
 /**
- * 删除示例
+ * Xóa ví dụ
  * @param params
  */
 export const deleteDemo = (params, handleSuccess) => {
@@ -55,15 +55,15 @@ export const deleteDemo = (params, handleSuccess) => {
 };
 
 /**
- * 批量删除示例
+ * Xóa hàng loạt ví dụ
  * @param params
  */
 export const batchDeleteDemo = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();

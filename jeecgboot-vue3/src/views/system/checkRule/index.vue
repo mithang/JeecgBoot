@@ -1,28 +1,28 @@
 <template>
   <div :class="prefixCls">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd">新增</a-button>
-        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd">Thêm mới</a-button>
+        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất (export)</a-button>
+        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">Nhập (import)</j-upload-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                <span>删除</span>
+                <span>Xóa</span>
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            <span>批量操作</span>
+            <span>Thao tác hàng loạt</span>
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
 
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
@@ -55,11 +55,11 @@
   import CheckRuleModal from '/@/views/system/checkRule/CheckRuleModal.vue';
   const [registerModal, { openModal }] = useModal();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext, createMessage, onExportXls, onImportXls, createSuccessModal } = useListPage({
     designScope: 'check-rule',
     tableProps: {
-      title: '编码校验规则管理页面',
+      title: 'Trang quản lý quy tắc kiểm tra mã',
       api: getCheckRuleList,
       columns: columns,
       showIndexColumn: true,
@@ -69,18 +69,18 @@
     },
     exportConfig: {
       url: exportUrl,
-      name: '编码校验规则列表',
+      name: 'Danh sách quy tắc kiểm tra mã',
     },
     importConfig: {
       url: importUrl,
       success: () => reload(),
     },
   });
-  // 注册 ListTable
+  // Đăng ký ListTable
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openModal(true, {
@@ -89,7 +89,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     console.log('record....', record);
@@ -100,7 +100,7 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     console.log(12345, record);
@@ -108,7 +108,7 @@
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteCheckRule({ ids: selectedRowKeys.value }, () => {
@@ -118,30 +118,30 @@
   }
 
   /**
-   * 功能测试
+   * Kiểm tra chức năng
    */
   function testRule(record) {
     openTestModal(true, { ruleCode: record.ruleCode });
   }
 
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function getTableAction(record): ActionItem[] {
-    return [{ label: '编辑', onClick: handleEdit.bind(null, record) }];
+    return [{ label: 'Chỉnh sửa', onClick: handleEdit.bind(null, record) }];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record): ActionItem[] {
     return [
-      { label: '功能测试', onClick: testRule.bind(null, record) },
+      { label: 'Kiểm tra chức năng', onClick: testRule.bind(null, record) },
       {
-        label: '删除',
+        label: 'Xóa',
         color: 'error',
         popConfirm: {
-          title: '确认要删除吗？',
+          title: 'Bạn có chắc chắn muốn xóa không?',
           confirm: handleDelete.bind(null, record),
         },
       },

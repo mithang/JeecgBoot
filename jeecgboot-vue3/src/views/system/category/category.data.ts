@@ -3,26 +3,26 @@ import { FormSchema } from '/@/components/Table';
 
 export const columns: BasicColumn[] = [
   {
-    title: '分类名称',
+    title: 'Tên phân loại',
     dataIndex: 'name',
     width: 350,
     align: 'left',
   },
   {
-    title: '分类编码',
+    title: 'Mã phân loại',
     dataIndex: 'code',
   },
 ];
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '名称',
+    label: 'Tên',
     field: 'name',
     component: 'JInput',
     colProps: { span: 6 },
   },
   {
-    label: '编码',
+    label: 'Mã',
     field: 'code',
     component: 'Input',
     colProps: { span: 6 },
@@ -37,11 +37,11 @@ export const formSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '父级节点',
+    label: 'Nút cấp cha',
     field: 'pid',
     component: 'TreeSelect',
     componentProps: {
-      // 代码逻辑说明: replaceFields已过期，使用fieldNames代替------------
+      // Giải thích logic mã: replaceFields đã lỗi thời, dùng fieldNames thay thế------------
       fieldNames: {
         value: 'key',
       },
@@ -58,7 +58,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '分类名称',
+    label: 'Tên phân loại',
     field: 'name',
     required: true,
     component: 'Input',

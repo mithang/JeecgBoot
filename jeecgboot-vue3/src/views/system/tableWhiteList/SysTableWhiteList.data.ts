@@ -2,46 +2,46 @@ import {BasicColumn, FormSchema} from '/@/components/Table';
 import { rules } from '/@/utils/helper/validator';
 
 const statusOptions = [
-  {label: '禁用', value: '0'},
-  {label: '启用', value: '1'},
+  {label: 'Vô hiệu hóa', value: '0'},
+  {label: 'Kích hoạt', value: '1'},
 ]
 
 export const columns: BasicColumn[] = [
   {
-    title: '允许的表名',
+    title: 'Tên bảng được phép',
     dataIndex: 'tableName',
   },
   {
-    title: '允许的字段名',
+    title: 'Tên trường được phép',
     dataIndex: 'fieldName',
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status',
     customRender({text}) {
       const find = statusOptions.find(opt => opt.value === text);
-      return find?.label || '未知';
+      return find?.label || 'Không xác định';
     }
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     dataIndex: 'createTime',
   }
 ];
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '允许的表名',
+    label: 'Tên bảng được phép',
     field: 'tableName',
     component: 'JInput',
   },
   {
-    label: '允许的字段名',
+    label: 'Tên trường được phép',
     field: 'fieldName',
     component: 'JInput',
   },
   {
-    label: '状态',
+    label: 'Trạng thái',
     field: 'status',
     component: 'Select',
     componentProps: {
@@ -53,21 +53,21 @@ export const searchFormSchema: FormSchema[] = [
 export const formSchema: FormSchema[] = [
   {label: '', field: 'id', component: 'Input', show: false},
   {
-    label: '允许的表名',
+    label: 'Tên bảng được phép',
     field: 'tableName',
     component: 'Input',
     required: true,
     dynamicRules: ({ model, schema }) => rules.duplicateCheckRule('sys_table_white_list', 'table_name', model, schema, true),
   },
   {
-    label: '允许的字段名',
+    label: 'Tên trường được phép',
     field: 'fieldName',
     component: 'Input',
     required: true,
-    helpMessage: '多个用逗号分割',
+    helpMessage: 'Nhiều giá trị phân tách bằng dấu phẩy',
   },
   {
-    label: '状态',
+    label: 'Trạng thái',
     field: 'status',
     component: 'Select',
     defaultValue: '1',

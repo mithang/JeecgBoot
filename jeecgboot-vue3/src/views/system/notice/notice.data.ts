@@ -5,12 +5,12 @@ import { Tinymce } from '@/components/Tinymce';
 
 export const columns: BasicColumn[] = [
   {
-    title: '标题',
+    title: 'Tiêu đề',
     width: 150,
     dataIndex: 'titile',
   },
   {
-    title: '消息类型',
+    title: 'Loại tin nhắn',
     dataIndex: 'msgCategory',
     width: 100,
     customRender: ({ text }) => {
@@ -18,12 +18,12 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '发布人',
+    title: 'Người phát hành',
     width: 100,
     dataIndex: 'sender_dictText',
   },
   {
-    title: '优先级',
+    title: 'Mức ưu tiên',
     dataIndex: 'priority',
     width: 70,
     customRender: ({ text }) => {
@@ -32,7 +32,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '通告对象',
+    title: 'Đối tượng thông cáo',
     dataIndex: 'msgType',
     width: 100,
     customRender: ({ text }) => {
@@ -40,7 +40,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '发布状态',
+    title: 'Trạng thái phát hành',
     dataIndex: 'sendStatus',
     width: 70,
     customRender: ({ text }) => {
@@ -49,12 +49,12 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '发布时间',
+    title: 'Thời gian phát hành',
     width: 100,
     dataIndex: 'sendTime',
   },
   {
-    title: '撤销时间',
+    title: 'Thời gian thu hồi',
     width: 100,
     dataIndex: 'cancelTime',
   },
@@ -63,34 +63,34 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'titile',
-    label: '标题',
+    label: 'Tiêu đề',
     component: 'JInput',
     colProps: { span: 6 },
   },
   {
     field: 'msgCategory',
-    label: '消息类型',
+    label: 'Loại tin nhắn',
     component: 'JDictSelectTag',
     defaultValue: '1',
     componentProps: {
       dictCode: 'msg_category',
-      placeholder: '请选择类型',
+      placeholder: 'Vui lòng chọn loại',
     },
     colProps: { span: 6 },
   },
   {
     field: 'msgClassify',
-    label: '公告分类',
+    label: 'Phân loại thông báo',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'notice_type',
-      placeholder: '请选择公告分类',
+      placeholder: 'Vui lòng chọn phân loại thông báo',
     },
     colProps: { span: 6 },
   },
   {
     field: 'sendTime',
-    label: '发布时间',
+    label: 'Thời gian phát hành',
     component: 'RangePicker',
     componentProps: {
       valueType: 'Date',
@@ -108,47 +108,47 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'msgCategory',
-    label: '消息类型',
+    label: 'Loại tin nhắn',
     required: true,
     component: 'JDictSelectTag',
     defaultValue: '1',
     componentProps: {
       type: 'radio',
       dictCode: 'msg_category',
-      placeholder: '请选择类型',
+      placeholder: 'Vui lòng chọn loại',
     },
   },
   {
     field: 'izTop',
-    label: '是否置顶',
+    label: 'Có ghim lên đầu không',
     defaultValue: '0',
     component: 'JSwitch',
     componentProps: {
-      //取值 options
+      //Lấy giá trị options
       options: ['1', '0'],
-      //文本option
-      labelOptions: ['是', '否'],
-      placeholder: '是否置顶',
-      checkedChildren: '是',
-      unCheckedChildren: '否',
+      //Văn bảnoption
+      labelOptions: ['Có', 'Không'],
+      placeholder: 'Có ghim lên đầu không',
+      checkedChildren: 'Có',
+      unCheckedChildren: 'Không',
     },
   },
   {
     field: 'titile',
-    label: '通告标题',
+    label: 'Tiêu đề thông cáo',
     component: 'Input',
     required: true,
     componentProps: {
-      placeholder: '请输入标题',
+      placeholder: 'Vui lòng nhập tiêu đề',
     },
-    // 代码逻辑说明: 【TV360X-1632】标题过长保存报错，长度校验
+    // Giải thích logic mã: 【TV360X-1632】Tiêu đề quá dài gây lỗi khi lưu, kiểm tra độ dài
     dynamicRules() {
       return [
         {
           validator: (_, value) => {
             return new Promise<void>((resolve, reject) => {
               if (value.length > 100) {
-                reject('最长100个字符');
+                reject('Tối đa 100 ký tự');
               }
               resolve();
             });
@@ -159,7 +159,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'msgAbstract',
-    label: '通告摘要',
+    label: 'Tóm tắt thông cáo',
     component: 'InputTextArea',
     componentProps: {
       allowClear: true,
@@ -172,72 +172,72 @@ export const formSchema: FormSchema[] = [
   },
   // {
   //   field: 'endTime',
-  //   label: '截至日期',
+  //   label: 'Ngày kết thúc',
   //   component: 'DatePicker',
   //   componentProps: {
   //     showTime: true,
   //     valueFormat: 'YYYY-MM-DD HH:mm:ss',
-  //     placeholder: '请选择截至日期',
+  //     placeholder: 'Vui lòng chọn ngày kết thúc',
   //   },
   //   dynamicRules: ({ model }) => rules.endTime(model.startTime, true),
   // },
   {
     field: 'msgType',
-    label: '接收用户',
+    label: 'Người dùng tiếp nhận',
     defaultValue: 'ALL',
     component: 'JDictSelectTag',
     required: true,
     componentProps: {
       type: 'radio',
       dictCode: 'msg_type',
-      placeholder: '请选择发布范围',
+      placeholder: 'Vui lòng chọn phạm vi phát hành',
     },
   },
   {
     field: 'userIds',
-    label: '指定用户',
+    label: 'Người dùng chỉ định',
     component: 'JSelectUserByDepartment',
     required: true,
     componentProps: {
       rowKey: 'id',
-      // 代码逻辑说明: 【TV360X-1627】通知公告用户选择组件没翻译
+      // Giải thích logic mã: 【TV360X-1627】Component chọn người dùng trong thông báo chưa được dịch
       labelKey: 'realname',
     },
     ifShow: ({ values }) => values.msgType == 'USER',
   },
   {
     field: 'msgClassify',
-    label: '公告分类',
+    label: 'Phân loại thông báo',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'notice_type',
-      placeholder: '请选择公告分类',
+      placeholder: 'Vui lòng chọn phân loại thông báo',
     },
   },
   {
     field: 'priority',
-    label: '优先级别',
+    label: 'Cấp độ ưu tiên',
     defaultValue: 'H',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'priority',
       type: 'radio',
-      placeholder: '请选择优先级',
+      placeholder: 'Vui lòng chọn mức ưu tiên',
     },
   },
   {
     field: 'izApproval',
-    label: '是否审批',
+    label: 'Có phê duyệt không',
     component: 'RadioGroup',
     defaultValue: '0',
     componentProps: {
       options: [
         {
-          label: '是',
+          label: 'Có',
           value: '1',
         },
         {
-          label: '否',
+          label: 'Không',
           value: '0',
         },
       ],
@@ -245,26 +245,26 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'msgTemplate',
-    label: '公告模版',
+    label: 'Mẫu thông báo',
     component: 'Input',
     slot: 'msgTemplate',
   },
   {
     field: 'files',
-    label: '通告附件',
+    label: 'Tệp đính kèm thông cáo',
     component: 'JUpload',
     componentProps: {
-      //是否显示选择按钮
-      text: '文件上传',
-      //最大上传数
+      //Có hiển thị nút chọn không
+      text: 'Tải tệp lên',
+      //Số lượng tải lên tối đa
       maxCount: 20,
-      //是否显示下载按钮
+      //Có hiển thị nút tải xuống không
       download: true,
     },
   },
   {
     field: 'msgContent',
-    label: '通告内容',
+    label: 'Nội dung thông cáo',
     component: 'Input',
     colProps: { span: 24 },
     render: render.renderTinymce,
@@ -272,11 +272,11 @@ export const formSchema: FormSchema[] = [
 ];
 
 /**
- * 流程表单调用这个方法获取formSchema
+ * Biểu mẫu quy trình gọi phương thức này để lấyformSchema
  * @param param
  */
 export function getBpmFormSchema(_formData): FormSchema[] {
-  // 默认和原始表单保持一致 如果流程中配置了权限数据，这里需要单独处理formSchema
+  // Mặc định giữ nhất quán với biểu mẫu gốc; nếu trong quy trình có cấu hình dữ liệu quyền thì tại đây cần xử lý riêngformSchema
   return [
     {
       field: 'id',
@@ -286,47 +286,47 @@ export function getBpmFormSchema(_formData): FormSchema[] {
     },
     {
       field: 'msgCategory',
-      label: '消息类型',
+      label: 'Loại tin nhắn',
       required: true,
       component: 'JDictSelectTag',
       defaultValue: '1',
       componentProps: {
         type: 'radio',
         dictCode: 'msg_category',
-        placeholder: '请选择类型',
+        placeholder: 'Vui lòng chọn loại',
       },
     },
     {
       field: 'izTop',
-      label: '是否置顶',
+      label: 'Có ghim lên đầu không',
       defaultValue: '0',
       component: 'JSwitch',
       componentProps: {
-        //取值 options
+        //Lấy giá trị options
         options: ['1', '0'],
-        //文本option
-        labelOptions: ['是', '否'],
-        placeholder: '是否置顶',
-        checkedChildren: '是',
-        unCheckedChildren: '否',
+        //Văn bảnoption
+        labelOptions: ['Có', 'Không'],
+        placeholder: 'Có ghim lên đầu không',
+        checkedChildren: 'Có',
+        unCheckedChildren: 'Không',
       },
     },
     {
       field: 'titile',
-      label: '通告标题',
+      label: 'Tiêu đề thông cáo',
       component: 'Input',
       required: true,
       componentProps: {
-        placeholder: '请输入标题',
+        placeholder: 'Vui lòng nhập tiêu đề',
       },
-      // 代码逻辑说明: 【TV360X-1632】标题过长保存报错，长度校验
+      // Giải thích logic mã: 【TV360X-1632】Tiêu đề quá dài gây lỗi khi lưu, kiểm tra độ dài
       dynamicRules() {
         return [
           {
             validator: (_, value) => {
               return new Promise<void>((resolve, reject) => {
                 if (value.length > 100) {
-                  reject('最长100个字符');
+                  reject('Tối đa 100 ký tự');
                 }
                 resolve();
               });
@@ -337,76 +337,76 @@ export function getBpmFormSchema(_formData): FormSchema[] {
     },
     {
       field: 'msgAbstract',
-      label: '通告摘要',
+      label: 'Tóm tắt thông cáo',
       component: 'InputTextArea',
       required: true,
     },
     {
       field: 'msgType',
-      label: '接收用户',
+      label: 'Người dùng tiếp nhận',
       defaultValue: 'ALL',
       component: 'JDictSelectTag',
       required: true,
       componentProps: {
         type: 'radio',
         dictCode: 'msg_type',
-        placeholder: '请选择发布范围',
+        placeholder: 'Vui lòng chọn phạm vi phát hành',
       },
     },
     {
       field: 'userIds',
-      label: '指定用户',
+      label: 'Người dùng chỉ định',
       component: 'JSelectUserByDepartment',
       required: true,
       componentProps: {
         rowKey: 'id',
-        // 代码逻辑说明: 【TV360X-1627】通知公告用户选择组件没翻译
+        // Giải thích logic mã: 【TV360X-1627】Component chọn người dùng trong thông báo chưa được dịch
         labelKey: 'realname',
       },
       ifShow: ({ values }) => values.msgType == 'USER',
     },
     {
       field: 'msgClassify',
-      label: '公告分类',
+      label: 'Phân loại thông báo',
       component: 'JDictSelectTag',
       componentProps: {
         dictCode: 'notice_type',
-        placeholder: '请选择公告分类',
+        placeholder: 'Vui lòng chọn phân loại thông báo',
       },
     },
     {
       field: 'priority',
-      label: '优先级别',
+      label: 'Cấp độ ưu tiên',
       defaultValue: 'H',
       component: 'JDictSelectTag',
       componentProps: {
         dictCode: 'priority',
         type: 'radio',
-        placeholder: '请选择优先级',
+        placeholder: 'Vui lòng chọn mức ưu tiên',
       },
     },
     {
       field: 'msgTemplate',
-      label: '公告模版',
+      label: 'Mẫu thông báo',
       component: 'Input',
       slot: 'msgTemplate',
     },
     {
       field: 'files',
-      label: '通告附件',
+      label: 'Tệp đính kèm thông cáo',
       component: 'JUpload',
       componentProps: {
-        //是否显示选择按钮
-        text: '文件上传',
-        //最大上传数
+        //Có hiển thị nút chọn không
+        text: 'Tải tệp lên',
+        //Số lượng tải lên tối đa
         maxCount: 2,
-        //是否显示下载按钮
+        //Có hiển thị nút tải xuống không
         download: true,
       },
     },
     {
       field: 'msgContent',
-      label: '通告内容',
+      label: 'Nội dung thông cáo',
       component: 'Input',
       colProps: { span: 24 },
       ifShow: ({}) => _formData.disabled == false,
@@ -424,7 +424,7 @@ export function getBpmFormSchema(_formData): FormSchema[] {
     },
     {
       field: 'msgContent',
-      label: '通告内容',
+      label: 'Nội dung thông cáo',
       component: 'Input',
       colProps: { span: 24 },
       ifShow: ({}) => _formData.disabled !== false,

@@ -40,8 +40,8 @@
                       <Icon class="aui-icon" icon="ant-design:lock-outlined"/>
                       <a-input class="fix-auto-fill" :type="pwdIndex==='close'?'password':'text'" :placeholder="t('sys.login.password')" v-model:value="formData.password" />
                       <div class="aui-eye">
-                        <img :src="eyeKImg" alt="开启" v-if="pwdIndex==='open'"  @click="pwdClick('close')" />
-                        <img :src="eyeGImg" alt="关闭"  v-else-if="pwdIndex==='close'"  @click="pwdClick('open')" />
+                        <img :src="eyeKImg" alt="Bật" v-if="pwdIndex==='open'"  @click="pwdClick('close')" />
+                        <img :src="eyeGImg" alt="Đóng"  v-else-if="pwdIndex==='close'"  @click="pwdClick('open')" />
                       </div>
                     </div>
                   </a-form-item>
@@ -50,8 +50,8 @@
                       <Icon class="aui-icon" icon="ant-design:lock-outlined"/>
                       <a-input class="fix-auto-fill" :type="confirmPwdIndex==='close'?'password':'text'" :placeholder="t('sys.login.confirmPassword')" v-model:value="formData.confirmPassword" />
                       <div class="aui-eye">
-                        <img :src="eyeKImg" alt="开启" v-if="confirmPwdIndex==='open'" @click="confirmPwdClick('close')" />
-                        <img :src="eyeGImg" alt="关闭" v-else-if="confirmPwdIndex==='close'" @click="confirmPwdClick('open')" />
+                        <img :src="eyeKImg" alt="Bật" v-if="confirmPwdIndex==='open'" @click="confirmPwdClick('close')" />
+                        <img :src="eyeGImg" alt="Đóng" v-else-if="confirmPwdIndex==='close'" @click="confirmPwdClick('open')" />
                       </div>
                     </div>
                   </a-form-item>
@@ -81,7 +81,7 @@
       </div>
     </div>
   </div>
-  <!-- 图片验证码弹窗 -->
+  <!-- Hộp thoại mã xác thực hình ảnh -->
   <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
 </template>
 
@@ -111,20 +111,20 @@
     confirmPassword: '',
     policy: false,
   });
-  //是否显示获取验证码
+  //Có hiển thị lấy mã xác thực không
   const showInterval = ref<boolean>(true);
   //60s
   const timeRuning = ref<number>(60);
-  //定时器
+  //Bộ hẹn giờ
   const timer = ref<any>(null);
-  //密码眼睛打开关闭
+  //Mở đóng con mắt ở mật khẩu
   const pwdIndex = ref<string>('close');
-  //确认密码眼睛打开关闭
+  //Mở đóng con mắt ở xác nhận mật khẩu
   const confirmPwdIndex = ref<string>('close');
   const [captchaRegisterModal, { openModal: openCaptchaModal }] = useModal();
 
   /**
-   * 返回
+   * Quay lại
    */
   function goBackHandleClick() {
     emit('go-back');
@@ -132,14 +132,14 @@
   }
 
   /**
-   * 获取手机验证码
+   * Lấy mã xác thực điện thoại
    */
   async function getLoginCode() {
     if (!formData.mobile) {
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    // 代码逻辑说明: 【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    // Giải thích logic mã: 【QQYUN-9005】Cùng một IP, nếu gửi quá 5 tin nhắn SMS trong 1 phút thì nhắc cần mã xác thực---
     const result = await getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.REGISTER }).catch((res) =>{
       if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
         openCaptchaModal(true, {});
@@ -196,7 +196,7 @@
   }
 
   /**
-   * 注册账号
+   * Đăng ký tài khoản
    */
   async function registerAccount() {
     try {
@@ -232,7 +232,7 @@
   }
 
   /**
-   * 初始化表单
+   * Khởi tạo biểu mẫu
    */
   function initForm() {
     Object.assign(formData,{username:'',mobile: '', smscode: '', password: '', confirmPassword: '', policy: false})
@@ -245,7 +245,7 @@
   }
 
   /**
-   * 密码打开或关闭
+   * Mở hoặc đóng mật khẩu
    * @param value
    */
   function pwdClick(value) {
@@ -253,7 +253,7 @@
   }
 
   /**
-   * 确认密码打开或关闭
+   * Mở hoặc đóng xác nhận mật khẩu
    * @param value
    */
   function confirmPwdClick(value) {

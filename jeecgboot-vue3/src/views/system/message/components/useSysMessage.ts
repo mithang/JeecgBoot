@@ -8,7 +8,7 @@ import { useModal } from '/@/components/Modal';
 import {useMessage} from "/@/hooks/web/useMessage";
 
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 const queryMessageList = (params) => {
@@ -17,9 +17,9 @@ const queryMessageList = (params) => {
 };
 
 /**
- * 获取消息列表数据
+ * Lấy dữ liệu danh sách tin nhắn
  *
- * setLocaleText 设置未读消息
+ * setLocaleText Đặt tin nhắn chưa đọc
  */
 export function useSysMessage(setLocaleText) {
   const { createMessage } = useMessage();
@@ -60,17 +60,17 @@ export function useSysMessage(setLocaleText) {
     return params;
   }
 
-  // 数据是否加载完了
+  // Dữ liệu đã tải xong chưa
   const loadEndStatus = ref(false);
 
-  //请求数据
+  //Dữ liệu yêu cầu
   async function loadData() {
     if(loadEndStatus.value === true){
       return;
     }
     let params = getQueryParams();
     const data = await queryMessageList(params);
-    console.log('获取结果', data);
+    console.log('Lấy kết quả', data);
     if(!data || data.length<=0){
       loadEndStatus.value = true;
       setLocaleText();
@@ -86,14 +86,14 @@ export function useSysMessage(setLocaleText) {
     setLocaleText();
   }
 
-  //重置
+  //Đặt lại
   function reset(){
     messageList.value = []
     pageNo.value = 1;
     loadEndStatus.value = false;
   }
 
-  //标星
+  //Gắn sao
   async function updateStarMessage(item){
     const url = '/sys/sysAnnouncementSend/edit';
     let starFlag = '1';
@@ -104,7 +104,7 @@ export function useSysMessage(setLocaleText) {
       starFlag,
       id: item.sendId
     }
-    // 代码逻辑说明: QQYUN-4491【应用】一些小问题  4、标星不需要提示吧
+    // Giải thích logic mã: QQYUN-4491【Ứng dụng】Một số vấn đề nhỏ  4、Gắn sao chắc không cần nhắc nhở
     const data:any = await defHttp.put({url, params}, {isTransformResponse: false});
     if(data.success === true){
     }else{
@@ -127,52 +127,52 @@ export function useSysMessage(setLocaleText) {
     return true;
   }
 
-  // 消息类型
+  // Loại tin nhắn
   function getMsgCategory(item) {
     if(item.busType=='email'){
-      return '邮件提醒:';
+      return 'Nhắc qua email:';
     } else if(item.busType=='bpm'){
-      return '流程催办:';
+      return 'Đốc thúc quy trình:';
     } else if(item.busType=='bpm_cc'){
-      return '流程抄送:';
+      return 'CC quy trình:';
     }else if(item.busType=='bpm_task'){
-      return '流程任务:';
+      return 'Tác vụ quy trình:';
     } else if (item.busType == 'eoa_co_remind') {
-      return '协同催办:';
+      return 'Cộng tác đốc thúc:';
     } else if (item.busType == 'eoa_co_notify') {
-      return '协同提醒:';
+      return 'Nhắc nhở cộng tác:';
     } else if (item.busType == 'eoa_sup_remind') {
-      return '督办催办:';
+      return 'Giám sát đốc thúc:';
     } else if (item.busType == 'eoa_sup_notify') {
-      return '督办提醒:';
+      return 'Nhắc nhở giám sát:';
     } else if (item.msgCategory == '2') {
-      return '系统消息:';
+      return 'Tin nhắn hệ thống:';
     } else if (item.msgCategory == '1') {
-      return '通知公告:';
+      return 'Thông báo:';
     }
     return '';
   }
 
-  // QQYUN-4472 来消息了没有提醒--查看详情改为去处理
+  // QQYUN-4472 Có tin nhắn đến nhưng không có nhắc nhở -- xem chi tiết đổi thành đi xử lý
   function getHrefText(item) {
     if(item.busType === 'bpm'|| item.busType === 'bpm_task' || item.busType === 'tenant_invite'){
-      //判断是否是查看详情
+      //Kiểm tra có phải đang xem chi tiết hay không
       if (item.msgAbstract) {
         try {
           const json = JSON.parse(item.msgAbstract);
           if (json.taskDetail) {
-            return '查看详情';
+            return 'Xem chi tiết';
           }
         } catch (e) {
-          console.error('getHrefText:msgAbstract参数不是JSON格式', item.msgAbstract);
+          console.error('getHrefText:msgAbstractTham số không ở định dạng JSON', item.msgAbstract);
         }
       }
-      return '去处理'
+      return 'Đi xử lý'
     } else if (['eoa_co_notify', 'eoa_co_remind', 'eoa_sup_notify', 'eoa_sup_remind'].includes(item.busType)) {
-      // 代码逻辑说明: 【JHHB-133】消息列表打开协同工作
-      return '去处理';
+      // Giải thích logic mã: 【JHHB-133】Danh sách tin nhắn mở cộng tác làm việc
+      return 'Đi xử lý';
     } else {
-      return '查看详情'
+      return 'Xem chi tiết'
     }
   }
 
@@ -192,15 +192,15 @@ export function useSysMessage(setLocaleText) {
 }
 
 /**
- * 用于消息跳转
+ * Dùng cho chuyển hướng tin nhắn
  */
 export function useMessageHref(emit, props){
   //const [registerHistoryModal, { openModal: openHistoryModal }] = useModal();
   //const [registerTaskModal, { openModal: openTaskModal }] = useModal();
-  // 注册表单弹窗
+  // Hộp thoại biểu mẫu đăng ký
   //const [registerDesignFormModal, { openModal: openDesignFormModal }] = useModal();
   let messageHrefArray: any[] = getDictItemsByCode('messageHref');
-  // 代码逻辑说明: 【JHHB-133】消息列表打开协同工作
+  // Giải thích logic mã: 【JHHB-133】Danh sách tin nhắn mở cộng tác làm việc
   messageHrefArray = [
     ...messageHrefArray,
     { value: 'eoa_co_remind', text: '/collaboration/pending', url: '/collaboration/launch' },
@@ -213,18 +213,18 @@ export function useMessageHref(emit, props){
   const rt = useRoute();
   const { close: closeTab, closeSameRoute } = useTabs();
 
-  //*********************************[QQYUN-6713]系统通知打开弹窗修改，动态设置弹窗begin******************************************
-  //当前表单弹窗
+  //*********************************[QQYUN-6713]Thông báo hệ thống mở hộp thoại để sửa, thiết lập hộp thoại độngbegin******************************************
+  //Hộp thoại biểu mẫu hiện tại
   const currentModal = ref<string | null>(null);
-  //当前表单参数
+  //Tham số biểu mẫu hiện tại
   const modalParams = ref<Recordable>({});
-  //表单注册缓存
+  //Bộ nhớ đệm đăng ký biểu mẫu
   const modalRegCache = ref<Recordable>({});
-  //组件绑定参数
+  //Tham số liên kết component
   const bindParams = ref<Recordable>({});
 
   /**
-   * 根据类型打开不同弹窗
+   * Dựa vào loại để mở các hộp thoại khác nhau
    * @param type
    * @param params
    */
@@ -233,17 +233,17 @@ export function useMessageHref(emit, props){
     modalParams.value = { ...params };
     switch (type) {
       case 'task':
-        //流程办理
+        //Xử lý quy trình
         bindParams.value = { actionType: 'todo' };
         currentModal.value = 'ProcessTaskHandleModal';
         break;
       case 'history':
         bindParams.value = {};
-        //历史流程
+        //Quy trình lịch sử
         currentModal.value = 'MyTaskHandleModal';
         break;
       case 'design':
-        //表单设计
+        //Thiết kế biểu mẫu
         currentModal.value = 'DesformViewModal';
         bindParams.value = {
           showRecordCopy: false,
@@ -253,11 +253,11 @@ export function useMessageHref(emit, props){
         };
         break;
       case 'cgform':
-        //Online表单
-        // update-begin--author:liusq---date:20261102---for：【online表单评论】系统消息查看详情改用新版详情弹窗
-        // 与列表页「详情」一致，用 OnlineDetailModal，不再用 OnlineAutoModal 的禁用表单
+        //OnlineBiểu mẫu
+        // update-begin--author:liusq---date:20261102---for：【Bình luận biểu mẫu online】Xem chi tiết tin nhắn hệ thống chuyển sang dùng hộp thoại chi tiết phiên bản mới
+        // Giống 'Chi tiết' ở trang danh sách, dùng OnlineDetailModal, không dùng biểu mẫu bị vô hiệu hóa của OnlineAutoModal nữa
         currentModal.value = 'OnlineDetailModal';
-        // update-end--author:liusq---date:20261102---for：【online表单评论】系统消息查看详情改用新版详情弹窗
+        // update-end--author:liusq---date:20261102---for：【Bình luận biểu mẫu online】Xem chi tiết tin nhắn hệ thống chuyển sang dùng hộp thoại chi tiết phiên bản mới
         bindParams.value = {
           id: params.formId,
         }
@@ -266,25 +266,25 @@ export function useMessageHref(emit, props){
         currentModal.value = null;
         break;
     }
-    //注册表单弹窗
+    //Hộp thoại biểu mẫu đăng ký
     initModalRegister();
     await nextTick(() => {
       if (modalRegCache.value[currentModal.value!]?.isRegister) {
-        console.log('已注冊，走缓存');
+        console.log('Đã đăng ký, đi theo bộ nhớ đệm');
         modalRegCache.value[currentModal.value!].modalMethods.openModal(true, modalParams.value);
       }
     });
   }
 
   /**
-   * 初始化弹窗注册
+   * Khởi tạo đăng ký hộp thoại
    */
   function initModalRegister() {
-    //如果当前选择表单为null，就不处理
+    //Nếu biểu mẫu đang chọn là null thì không xử lý
     if (!currentModal.value) {
       return;
     }
-    //判断缓存中是否存在，不存在就走缓存逻辑
+    //Kiểm tra có tồn tại trong bộ nhớ đệm hay không, nếu không tồn tại thì đi theo logic bộ nhớ đệm
     if (!modalRegCache.value[currentModal.value]) {
       const [registerModal, modalMethods] = useModal();
       modalRegCache.value[currentModal.value] = {
@@ -296,35 +296,35 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * 绑定注册弹窗
+   * Hộp thoại đăng ký liên kết
    * @param regFn
    * @param modalMethod
    */
   function bindRegisterModal(regFn, modalMethod) {
     return async (...args) => {
-      console.log('开始注册：', currentModal.value);
+      console.log('Bắt đầu đăng ký:', currentModal.value);
       await regFn(...args);
-      console.log('注册完成：', currentModal.value);
-      //打开弹窗
+      console.log('Đăng ký hoàn thành:', currentModal.value);
+      //Mở hộp thoại
       modalMethod.openModal(true, modalParams.value);
-      //设置缓存标识
+      //Đặt dấu hiệu bộ nhớ đệm
       modalRegCache.value[currentModal.value!].isRegister = true;
     };
   }
-  //*************************************[QQYUN-6713]系统通知打开弹窗修改，动态设置弹窗end*********************************************
+  //*************************************[QQYUN-6713]Thông báo hệ thống mở hộp thoại để sửa, thiết lập hộp thoại độngend*********************************************
   // const defaultPath = '/monitor/mynews';
   //const bpmPath = '/task/handle/'
 
   async function goPage(record, openModalFun?){
     if(!record.busType || record.busType == 'msg_node'){
       if(!openModalFun){
-        // 从首页的消息通知跳转
+        // Chuyển từ thông báo tin nhắn ở trang chủ
         await goPageFromOuter(record);
       }else{
-        // 从消息页面列表点击详情查看 直接打开modal
+        // Từ danh sách ở trang tin nhắn, nhấn xem chi tiết để mở trực tiếpmodal
         openModalFun()
       }
-      // 代码逻辑说明: QQYUN-4744【系统通知】6、系统通知@人后，对方看不到是哪个表单@的，没有超链接
+      // Giải thích logic mã: QQYUN-4744【Thông báo hệ thống】6、Thông báo hệ thống@sau đó, đối phương không nhìn ra đó là biểu mẫu nào@, không có siêu liên kết
     }else if(record.busType == 'comment'){
       // de
       let msgAbstract = record.msgAbstract;
@@ -337,7 +337,7 @@ export function useMessageHref(emit, props){
             showOnlineCgformModal(data);
           }
         }catch (e) {
-          console.error('打开评论表单，但是msgAbstract参数不是JSON格式', msgAbstract)
+          console.error('Mở biểu mẫu bình luận, nhưng tham số msgAbstract không ở định dạng JSON', msgAbstract)
           if(openModalFun){
             openModalFun();
           }
@@ -363,7 +363,7 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * 打开表单设计器 表单弹窗
+   * Mở hộp thoại biểu mẫu của trình thiết kế biểu mẫu
    * @param data
    */
   function showDesignFormModal(data) {
@@ -376,7 +376,7 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * 打开Online表单 弹窗
+   * Mở hộp thoại biểu mẫu Online
    * @param data
    */
   function showOnlineCgformModal(data) {
@@ -391,7 +391,7 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * 判断是不是表单的评论消息
+   * Kiểm tra có phải tin nhắn bình luận của biểu mẫu hay không
    * @param record
    */
   function isFormComment(record) {
@@ -404,7 +404,7 @@ export function useMessageHref(emit, props){
             return true
           }
         }catch (e) {
-          console.error('打开评论表单，但是msgAbstract参数不是JSON格式', msgAbstract)
+          console.error('Mở biểu mẫu bình luận, nhưng tham số msgAbstract không ở định dạng JSON', msgAbstract)
         }
       }
     }
@@ -412,24 +412,24 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * 如果是工作流任务 在lowApp中 直接打开modal
+   * Nếu là tác vụ quy trình làm việc thì mở trực tiếp trong lowAppmodal
    */
   function openLowAppFlowModal(record){
     const { busType, busId, msgAbstract } = record;
     let temp = messageHrefArray.filter(item=>item.value === busType);
     if(!temp || temp.length==0){
-      console.error('当前业务类型不识别', busType);
+      console.error('Loại nghiệp vụ hiện tại không nhận dạng được', busType);
       return;
     }
     if(busType.indexOf('bpm')<0){
-      console.error('low-app不支持跳转邮箱', busType);
+      console.error('low-appKhông hỗ trợ chuyển tới email', busType);
       return;
     }
-    //固定参数 detailId 用于查询表单数据
+    //Tham số cố định detailId dùng để truy vấn dữ liệu biểu mẫu
     let query:any = {
       detailId: busId
     };
-    // 额外参数处理
+    // Xử lý tham số bổ sung
     if(msgAbstract){
       try {
         let json = JSON.parse(msgAbstract);
@@ -437,7 +437,7 @@ export function useMessageHref(emit, props){
           query[k] = json[k]
         });
       }catch (e) {
-        console.error('msgAbstract参数不是JSON格式', msgAbstract)
+        console.error('msgAbstractTham số không ở định dạng JSON', msgAbstract)
       }
     }
     console.log("busType = ", busType)
@@ -452,14 +452,14 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * 根据busType不同跳转不同页面
+   * Dựa vào busType khác nhau để chuyển tới các trang khác nhau
    * @param record
    */
   async function goPageWithBusType(record){
     const { busType, busId, msgAbstract } = record;
     let temp = messageHrefArray.filter(item=>item.value === busType);
     if(!temp || temp.length==0){
-      console.error('当前业务类型不识别', busType);
+      console.error('Loại nghiệp vụ hiện tại không nhận dạng được', busType);
       return;
     }
     let path = temp[0].text;
@@ -471,11 +471,11 @@ export function useMessageHref(emit, props){
       }
     }
     path = path.replace('{DETAIL_ID}', busId)
-    //固定参数 detailId 用于查询表单数据
+    //Tham số cố định detailId dùng để truy vấn dữ liệu biểu mẫu
     let query:any = {
       detailId: busId
     };
-    // 额外参数处理
+    // Xử lý tham số bổ sung
     if(msgAbstract){
       try {
         let json = JSON.parse(msgAbstract);
@@ -483,14 +483,14 @@ export function useMessageHref(emit, props){
           query[k] = json[k]
         });
       }catch (e) {
-        console.error('msgAbstract参数不是JSON格式', msgAbstract)
+        console.error('msgAbstractTham số không ở định dạng JSON', msgAbstract)
       }
     }
     if(query.taskDetail){
-      // 查看任务详情的弹窗
+      // Hộp thoại xem chi tiết tác vụ
       await showHistory(query.procInsId, {taskOriginalId:query.taskId,busType,id:busId,readFlag:record.readFlag})
     }else{
-      // 跳转路由
+      // Chuyển định tuyến
       appStore.setMessageHrefParams(query);
       if(rt.path.indexOf(path)>=0){
         await closeTab();
@@ -503,16 +503,16 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * 从首页的消息通知跳转消息列表打开modal
+   * Từ thông báo tin nhắn ở trang chủ, chuyển tới danh sách tin nhắn để mởmodal
    * @param record
    */
   async function goPageFromOuter(record){
-    //没有定义业务类型 直接跳转我的消息页面
+    //Chưa định nghĩa loại nghiệp vụ, chuyển thẳng tới trang Tin nhắn của tôi
     emit('detail', record)
   }
 
   //===============================================================================================================
-  // 代码逻辑说明: QQYUN-3485 【查看流程】做一个查看页面，非办理页面，只通过流程实例参数即可
+  // Giải thích logic mã: QQYUN-3485 【Xem quy trình】Tạo một trang xem, không phải trang xử lý, chỉ cần thông qua tham số của thực thể quy trình là được
   async function showHistory(processInstanceId, data?) {
     let { formData, formUrl } = await getTaskInfoForHistory({ processInstanceId });
     formData['PROCESS_TAB_TYPE'] = 'history';
@@ -521,7 +521,7 @@ export function useMessageHref(emit, props){
       formUrl,
       isCc: data && data.busType == 'bpm_cc',
       record: data,
-      title: '流程历史',
+      title: 'Lịch sử quy trình',
     });
   }
 
@@ -529,10 +529,10 @@ export function useMessageHref(emit, props){
   const taskNodeInfo = (params) => defHttp.get({ url: nodeInfoUrl, params });
 
   async function getTaskInfoForHistory(record) {
-    //查询条件
+    //Điều kiện truy vấn
     let params = { procInstId: record.processInstanceId };
     const result = await taskNodeInfo(params);
-    console.log('获取历史任务信息', result);
+    console.log('Lấy thông tin tác vụ lịch sử', result);
     let formData: any = {
       dataId: result.dataId,
       taskId: record.id,
@@ -542,11 +542,11 @@ export function useMessageHref(emit, props){
       vars: result.records,
     };
     let tempFormUrl = result.formUrl;
-    console.log('获取流程节点表单URL', tempFormUrl);
-    //节点配置表单URL，VUE组件类型对应的拓展参数
+    console.log('Lấy biểu mẫu nút quy trìnhURL', tempFormUrl);
+    //URL biểu mẫu cấu hình nút, tham số mở rộng tương ứng với loại component VUE
     if (tempFormUrl && tempFormUrl.indexOf('?') != -1 && !isURL(tempFormUrl) && tempFormUrl.indexOf('{{DOMAIN_URL}}') == -1) {
       tempFormUrl = result.formUrl.split('?')[0];
-      console.log('获取流程节点表单URL（去掉参数）', tempFormUrl);
+      console.log('Lấy URL biểu mẫu của nút quy trình (bỏ tham số)', tempFormUrl);
       formData.extendUrlParams = getQueryVariable(result.formUrl);
     }
     return {
@@ -556,7 +556,7 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * 获取URL上参数
+   * Lấy tham số trên URL
    * @param url
    */
   function getQueryVariable(url) {
@@ -576,7 +576,7 @@ export function useMessageHref(emit, props){
   }
 
   /**
-   * URL地址
+   * URLĐịa chỉ
    * @param {*} s
    */
   function isURL(s) {

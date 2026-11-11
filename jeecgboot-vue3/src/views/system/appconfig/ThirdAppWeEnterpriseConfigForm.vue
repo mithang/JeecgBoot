@@ -1,14 +1,14 @@
 <template>
   <div class="base-collapse">
-    <div class="header"> 企业微信集成 </div>
+    <div class="header"> Tích hợp WeCom </div>
     <a-collapse expand-icon-position="right" :bordered="false">
       <a-collapse-panel key="1">
         <template #header>
-          <div style="font-size: 16px"> 1.获取对接信息</div>
+          <div style="font-size: 16px"> 1.Lấy thông tin tích hợp</div>
         </template>
-        <div class="base-desc">从企业微信平台获取对接信息，即可开始集成以及同步通讯录</div>
+        <div class="base-desc">Lấy thông tin tích hợp từ nền tảng WeCom là có thể bắt đầu tích hợp và đồng bộ danh bạ</div>
         <div style="margin-top: 5px">
-          <a href="https://help.qiaoqiaoyun.com/expand/dingding.html" target="_blank">如何获取对接信息?</a>
+          <a href="https://help.qiaoqiaoyun.com/expand/dingding.html" target="_blank">Cách lấy thông tin tích hợp?</a>
         </div>
       </a-collapse-panel>
     </a-collapse>
@@ -17,7 +17,7 @@
         <a-collapse-panel key="2">
           <template #header>
             <div style="width: 100%; justify-content: space-between; display: flex">
-              <div style="font-size: 16px"> 2.对接信息录入及解绑</div>
+              <div style="font-size: 16px"> 2.Nhập thông tin tích hợp và gỡ liên kết</div>
             </div>
           </template>
           <div class="flex-flow">
@@ -39,18 +39,18 @@
             </div>
           </div>
           <div style="margin-top: 20px; width: 100%; text-align: right">
-            <a-button @click="weEnterpriseEditClick">编辑</a-button>
-            <a-button v-if="appConfigData.id" @click="cancelBindClick" danger style="margin-left: 10px">取消绑定</a-button>
+            <a-button @click="weEnterpriseEditClick">Chỉnh sửa</a-button>
+            <a-button v-if="appConfigData.id" @click="cancelBindClick" danger style="margin-left: 10px">Hủy liên kết</a-button>
           </div>
         </a-collapse-panel>
       </a-collapse>
       <div class="sync-padding">
-        <div style="font-size: 16px; width: 100%"> 3.数据同步</div>
+        <div style="font-size: 16px; width: 100%"> 3.Đồng bộ dữ liệu</div>
         <div style="margin-top: 20px" class="base-desc">
-          从企业微信同步到敲敲云
-          <a style="margin-left: 10px" @click="seeBindWeChat">查看已绑定的企业微信用户</a>
+          Đồng bộ từ WeCom vào Qiaoqiao Cloud
+          <a style="margin-left: 10px" @click="seeBindWeChat">Xem người dùng WeCom đã liên kết</a>
           <div style="float: right">
-            <a-button @loading="btnLoading" @click="thirdUserByWechat">同步</a-button>
+            <a-button @loading="btnLoading" @click="thirdUserByWechat">Đồng bộ</a-button>
           </div>
         </div>
       </div>
@@ -78,19 +78,19 @@
     },
     setup() {
       const btnLoading = ref<boolean>(false);
-      //第三方配置数据
+      //Dữ liệu cấu hình bên thứ ba
       const appConfigData = ref<any>({
         agentId: '',
         clientId: '',
         clientSecret: '',
       });
-      //企业微信钉钉配置modal
+      //Cấu hình WeCom và DingTalkmodal
       const [registerAppConfigModal, { openModal }] = useModal();
       const [registerBindAppConfigModal, { openModal: openBindModal }] = useModal();
       const { createMessage } = useMessage();
 
       /**
-       * 初始化数据
+       * Khởi tạo dữ liệu
        *
        * @param params
        */
@@ -104,7 +104,7 @@
       }
 
       /**
-       * 企业微信编辑
+       * Chỉnh sửa WeCom
        */
       async function weEnterpriseEditClick() {
         let tenantId = getTenantId();
@@ -115,14 +115,14 @@
       }
 
       /**
-       * 获取企业微信绑定的用户
+       * Lấy người dùng đã liên kết WeCom
        */
       async function thirdUserByWechat() {
         openBindModal(true, { izBind: false });
       }
 
       /**
-       * 成功回调
+       * Callback thành công
        */
       function handleSuccess() {
         let tenantId = getTenantId();
@@ -130,7 +130,7 @@
       }
 
       /**
-       * 绑定成功返回值
+       * Giá trị trả về khi liên kết thành công
        *
        * @param options
        * @param item
@@ -149,7 +149,7 @@
             Modal.warning(options);
           } else {
             createMessage.warning({
-              content: '同步失败，请检查对接信息录入中是否填写正确，并确认是否已开启企业微信配置！',
+              content: 'Đồng bộ thất bại, vui lòng kiểm tra thông tin tích hợp đã nhập có đúng không, đồng thời xác nhận đã bật cấu hình WeCom chưa!',
               duration: 5,
             });
           }
@@ -157,25 +157,25 @@
       }
       
       /**
-       * 查看已绑定的企业微信
+       * Xem WeCom đã liên kết
        */
       function seeBindWeChat() {
         openBindModal(true,{ izBind: true })
       }
 
       /**
-       * 取消绑定
+       * Hủy liên kết
        */
       function cancelBindClick() {
         if(!appConfigData.value.id){
-          createMessage.warning("请先绑定企业微信应用！");
+          createMessage.warning("Vui lòng liên kết ứng dụng WeCom trước!");
           return;
         }
         Modal.confirm({
-          title: '取消绑定',
-          content: '是否要解除当前组织的企业微信应用配置绑定？',
-          okText: '确认',
-          cancelText: '取消',
+          title: 'Hủy liên kết',
+          content: 'Có muốn gỡ liên kết cấu hình ứng dụng WeCom của tổ chức hiện tại không?',
+          okText: 'Xác nhận',
+          cancelText: 'Hủy',
           onOk: () => {
             deleteThirdAppConfig({ id: appConfigData.value.id }, handleSuccess);
           },
@@ -256,13 +256,13 @@
       padding-left: 0;
     }
   }
-  /*begin 兼容暗夜模式*/
-  //暗黑模式下卡片的边框设置成none
+  /*begin Tương thích chế độ tối*/
+  //Ở chế độ tối, viền thẻ được đặt thànhnone
   [data-theme='dark'] .base-collapse .ant-collapse {
     border: none !important;
   }
-  /*end 兼容暗夜模式*/
-  /*文档按钮问号样式*/
+  /*end Tương thích chế độ tối*/
+  /*Kiểu dấu chấm hỏi của nút tài liệu*/
   .sync-text {
     margin-left: 2px;
     cursor: pointer;

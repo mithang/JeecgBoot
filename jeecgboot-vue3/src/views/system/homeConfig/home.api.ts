@@ -10,13 +10,13 @@ enum Api {
   queryIndexByCode = '/sys/sysRoleIndex/queryByCode',
 }
 /**
- * 系统角色列表
+ * Danh sách vai trò hệ thống
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 
 /**
- * 删除角色
+ * Xóa vai trò
  */
 export const deleteIndex = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteIndex, params }, { joinParamsToUrl: true }).then(() => {
@@ -24,15 +24,15 @@ export const deleteIndex = (params, handleSuccess) => {
   });
 };
 /**
- * 批量删除角色
+ * Xóa hàng loạt vai trò
  * @param params
  */
 export const batchDelete = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -41,7 +41,7 @@ export const batchDelete = (params, handleSuccess) => {
   });
 };
 /**
- * 保存或者更新首页配置
+ * Lưu hoặc cập nhật cấu hình trang chủ
  * @param params
  */
 export const saveOrUpdate = (params, isUpdate) => {
@@ -49,12 +49,12 @@ export const saveOrUpdate = (params, isUpdate) => {
   return defHttp.post({ url: url, params });
 };
 /**
- * 查询首页配置
+ * Truy vấn cấu hình trang chủ
  * @param params
  */
 export const queryIndexByCode = (params) => defHttp.get({ url: Api.queryIndexByCode, params }, { isTransformResponse: false });
 /**
- * 启用/禁用首页配置
+ * Bật/Tắt cấu hình trang chủ
  * @param params
  */
 export const changeStatus = (params, handleSuccess) => {

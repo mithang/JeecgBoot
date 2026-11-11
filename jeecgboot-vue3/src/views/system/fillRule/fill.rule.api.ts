@@ -13,16 +13,16 @@ enum Api {
 }
 
 /**
- * 导出地址
+ * Xuất địa chỉ
  */
 export const exportUrl = Api.exportXls;
 /**
- * 导入地址
+ * Nhập địa chỉ
  */
 export const importUrl = Api.importExcel;
 
 /**
- * 列表查询
+ * Truy vấn danh sách
  * @param params
  */
 export const getFillRuleList = (params) => {
@@ -30,7 +30,7 @@ export const getFillRuleList = (params) => {
 };
 
 /**
- * 删除
+ * Xóa
  * @param params
  * @param handleSuccess
  */
@@ -41,15 +41,15 @@ export const deleteFillRule = (params, handleSuccess) => {
 };
 
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  */
 export const batchDeleteFillRule = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -59,7 +59,7 @@ export const batchDeleteFillRule = (params, handleSuccess) => {
 };
 
 /**
- * 规则功能测试
+ * Kiểm tra chức năng quy tắc
  * @param params
  */
 export const handleTest = (params) => {
@@ -67,7 +67,7 @@ export const handleTest = (params) => {
 };
 
 /**
- * 保存
+ * Lưu
  * @param params
  */
 export const saveFillRule = (params) => {
@@ -75,7 +75,7 @@ export const saveFillRule = (params) => {
 };
 
 /**
- * 更新
+ * Cập nhật
  * @param params
  */
 export const updateFillRule = (params) => {

@@ -12,13 +12,13 @@ enum Api {
   deleteBatch = '/sys/position/deleteBatch',
 }
 /**
- * 导出api
+ * Xuất (export)api
  */
 export const getExportUrl = Api.exportXls;
 
 export const getImportUrl = Api.importExcel;
 /**
- * 查询列表
+ * Truy vấn danh sách
  * @param params
  */
 export const getPositionList = (params) => {
@@ -26,7 +26,7 @@ export const getPositionList = (params) => {
 };
 
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
  */
 export const saveOrUpdatePosition = (params, isUpdate) => {
@@ -35,7 +35,7 @@ export const saveOrUpdatePosition = (params, isUpdate) => {
 };
 
 /**
- * 查询详情
+ * Truy vấn chi tiết
  * @param params
  */
 export const getPositionById = (params) => {
@@ -43,7 +43,7 @@ export const getPositionById = (params) => {
 };
 
 /**
- * 单条删除
+ * Xóa từng mục
  * @param params
  */
 export const deletePosition = (params, handleSuccess) => {
@@ -53,15 +53,15 @@ export const deletePosition = (params, handleSuccess) => {
 };
 
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  */
 export const batchDeletePosition = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -71,7 +71,7 @@ export const batchDeletePosition = (params, handleSuccess) => {
 };
 
 /**
- * 自定义上传
+ * Tải lên tùy chỉnh
  * @param customUpload
  */
 export const customUpload = (params) => {

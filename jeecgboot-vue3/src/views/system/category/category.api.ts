@@ -14,22 +14,22 @@ enum Api {
   getChildListBatch = '/sys/category/getChildListBatch',
 }
 /**
- * 导出api
+ * Xuất (export)api
  * @param params
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入api
+ * Nhập (import)api
  * @param params
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 /**
- * 删除
+ * Xóa
  */
 export const deleteCategory = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteCategory, params }, { joinParamsToUrl: true }).then(() => {
@@ -37,15 +37,15 @@ export const deleteCategory = (params, handleSuccess) => {
   });
 };
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  */
 export const batchDeleteCategory = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -54,7 +54,7 @@ export const batchDeleteCategory = (params, handleSuccess) => {
   });
 };
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
  */
 export const saveOrUpdateDict = (params, isUpdate) => {
@@ -62,17 +62,17 @@ export const saveOrUpdateDict = (params, isUpdate) => {
   return defHttp.post({ url: url, params });
 };
 /**
- * 查询全部树形节点数据
+ * Truy vấn toàn bộ dữ liệu nút dạng cây
  * @param params
  */
 export const loadTreeData = (params) => defHttp.get({ url: Api.loadTreeData, params });
 /**
- * 查询子节点数据
+ * Truy vấn dữ liệu nút con
  * @param params
  */
 export const getChildList = (params) => defHttp.get({ url: Api.getChildList, params });
 /**
- * 批量查询子节点数据
+ * Truy vấn hàng loạt dữ liệu nút con
  * @param params
  */
 export const getChildListBatch = (params) => defHttp.get({ url: Api.getChildListBatch, params }, { isTransformResponse: false });

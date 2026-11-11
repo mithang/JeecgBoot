@@ -1,7 +1,7 @@
-//第三方app配置表单
+//Biểu mẫu cấu hình app bên thứ ba
 import { FormSchema } from '/@/components/Form';
 
-//第三方app表单
+//Biểu mẫu app bên thứ ba
 export const thirdAppFormSchema: FormSchema[] = [
   {
     label: 'id',
@@ -30,7 +30,7 @@ export const thirdAppFormSchema: FormSchema[] = [
     component: 'Input',
     required: true,
     ifShow: ({ values }) => {
-    // 飞书没有Agentld的配置
+    // Feishu không có cấu hình Agentld
       return values.thirdType !== 'feishu';
     }
   },
@@ -46,18 +46,18 @@ export const thirdAppFormSchema: FormSchema[] = [
     component: 'Input',
     required: true,
   },{
-    label: '启用',
+    label: 'Kích hoạt',
     field: 'status',
     component: 'Switch',
     componentProps:{
-      checkedChildren:'关闭',
+      checkedChildren:'Đóng',
       checkedValue:1,
-      unCheckedChildren:'开启',
+      unCheckedChildren:'Bật',
       unCheckedValue: 0
     },
     defaultValue: 1
   },{
-    label: '租户id',
+    label: 'Đơn vị thuê (tenant)id',
     field: 'tenantId',
     component: 'Input',
     show: false,

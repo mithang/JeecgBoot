@@ -2,18 +2,18 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleAdd">新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleAdd">Thêm mới</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
@@ -38,10 +38,10 @@
   import { getTenantId } from '@/utils/auth';
   const [registerModal, { openModal }] = useModal();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { onExportXls, onImportXls, tableContext } = useListPage({
     tableProps: {
-      title: '租户职务列表',
+      title: 'Danh sách chức danh đơn vị thuê',
       api: getPositionList,
       columns: columns,
       formConfig: {
@@ -60,7 +60,7 @@
       },
     },
     exportConfig: {
-      name: '租户职务列表',
+      name: 'Danh sách chức danh đơn vị thuê',
       url: getExportUrl,
     },
     importConfig: {
@@ -71,19 +71,19 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -91,7 +91,7 @@
   }
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openModal(true, {
@@ -100,7 +100,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     openModal(true, {
@@ -110,14 +110,14 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deletePosition({ id: record.id }, reload);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeletePosition({ ids: selectedRowKeys.value }, () => {
@@ -127,7 +127,7 @@
   }
 
   onMounted(() => {
-    //提示信息
-    tenantSaasMessage('租户职务');
+    //Thông tin thông báo
+    tenantSaasMessage('Chức danh đơn vị thuê');
   });
 </script>

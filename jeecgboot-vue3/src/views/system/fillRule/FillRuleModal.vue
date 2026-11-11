@@ -14,47 +14,47 @@
 
   const { createMessage: $message } = useMessage();
 
-  //设置标题
-  const title = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
+  //Đặt tiêu đề
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
 
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
 
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
     schemas: formSchema,
     showActionButtonGroup: false,
     baseColProps: { span: 12 },
   });
 
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
   });
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       let formValue = await validate();
 
-      // 检查参数是否合法
+      // Kiểm tra tham số có hợp lệ hay không
       let ruleParams = formValue.ruleParams;
       if (!!ruleParams) {
         ruleParams = JSON.parse(ruleParams);
         for (const key of Object.keys(ruleParams)) {
-          // online 保留字检查
+          // online Kiểm tra từ khóa dành riêng
           if (key === 'onl_watch') {
-            $message.error('参数名称不能是onl_watch');
+            $message.error('Tên tham số không thể làonl_watch');
             return
           }
         }
@@ -63,7 +63,7 @@
       setModalProps({ confirmLoading: true });
       if (isUpdate.value) {
         let allFieldsValue = getFieldsValue();
-        // 编辑页面 如果表单没有父级下拉框 则提交时候 validate方法不返该值 需要手动设置
+        // Trang chỉnh sửa: nếu biểu mẫu không có hộp thả xuống cấp cha thì khi gửi, phương thức validate không trả về giá trị đó, cần đặt thủ công
         if (!formValue.parentId && allFieldsValue.parentId) {
           formValue.parentId = allFieldsValue.parentId;
         }
@@ -71,9 +71,9 @@
       } else {
         await saveFillRule(formValue);
       }
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

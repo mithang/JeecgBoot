@@ -6,19 +6,19 @@ import { array } from 'vue-types';
 
 export const columns: BasicColumn[] = [
   {
-    title: '规则名称',
+    title: 'Tên quy tắc',
     dataIndex: 'ruleName',
     width: 200,
     align: 'center',
   },
   {
-    title: '规则编码',
+    title: 'Mã quy tắc',
     dataIndex: 'ruleCode',
     width: 200,
     align: 'center',
   },
   {
-    title: '规则描述',
+    title: 'Mô tả quy tắc',
     dataIndex: 'ruleDescription',
     width: 300,
     align: 'center',
@@ -31,13 +31,13 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'ruleName',
-    label: '规则名称',
+    label: 'Tên quy tắc',
     component: 'JInput',
     colProps: { span: 6 },
   },
   {
     field: 'ruleCode',
-    label: '规则编码',
+    label: 'Mã quy tắc',
     component: 'JInput',
     colProps: { span: 6 },
   },
@@ -52,14 +52,14 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'ruleName',
-    label: '规则名称',
+    label: 'Tên quy tắc',
     component: 'Input',
     required: true,
     colProps: { span: 24 },
   },
   {
     field: 'ruleCode',
-    label: '规则编码',
+    label: 'Mã quy tắc',
     component: 'Input',
     colProps: { span: 24 },
     dynamicDisabled: ({ values }) => {
@@ -72,7 +72,7 @@ export const formSchema: FormSchema[] = [
           validator: (_, value) => {
             return new Promise((resolve, reject) => {
               if (!value) {
-                return reject('请输入规则编码！');
+                return reject('Vui lòng nhập mã quy tắc!');
               }
               let params = {
                 tableName: 'sys_check_rule',
@@ -82,10 +82,10 @@ export const formSchema: FormSchema[] = [
               };
               duplicateCheckDelay(params)
                 .then((res) => {
-                  res.success ? resolve() : reject('规则编码已存在!');
+                  res.success ? resolve() : reject('Mã quy tắc đã tồn tại!');
                 })
                 .catch((err) => {
-                  reject(err.message || '校验失败');
+                  reject(err.message || 'Kiểm tra không hợp lệ');
                 });
             });
           },
@@ -95,11 +95,11 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'ruleDescription',
-    label: '规则描述',
+    label: 'Mô tả quy tắc',
     colProps: { span: 24 },
     component: 'InputTextArea',
     componentProps: {
-      placeholder: '请输入规则描述',
+      placeholder: 'Vui lòng nhập mô tả quy tắc',
       rows: 2,
     },
   },
@@ -114,7 +114,7 @@ export const checkRuleInput: FormSchema[] = [
   },
   {
     field: 'testValue',
-    label: '需要测试的值:',
+    label: 'Giá trị cần kiểm tra:',
     component: 'Input',
     componentProps: ({ formModel }) => {
       return {

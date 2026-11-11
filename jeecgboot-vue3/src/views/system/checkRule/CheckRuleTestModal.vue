@@ -34,15 +34,15 @@
     },
   });
 
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     realTestValue.value = '';
     setModalProps({
       confirmLoading: false,
-      cancelText: '关闭',
-      title: '功能测试',
+      cancelText: 'Đóng',
+      title: 'Kiểm tra chức năng',
       width: '1000px',
     });
     await setFieldsValue({

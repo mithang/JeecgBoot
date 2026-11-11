@@ -1,7 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
 
 enum Api {
-  //第三方登录配置
+  //Cấu hình đăng nhập bên thứ ba
   addThirdAppConfig = '/sys/thirdApp/addThirdAppConfig',
   editThirdAppConfig = '/sys/thirdApp/editThirdAppConfig',
   getThirdConfigByTenantId = '/sys/thirdApp/getThirdConfigByTenantId',
@@ -11,13 +11,13 @@ enum Api {
   getThirdUserBindByWechat = '/sys/thirdApp/getThirdUserBindByWechat',
   deleteThirdAccount = '/sys/thirdApp/deleteThirdAccount',
   deleteThirdAppConfig = '/sys/thirdApp/deleteThirdAppConfig',
-  // update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成
+  // update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu
   syncFeishuDepartUserToLocal = '/sys/thirdApp/sync/feishu/departAndUser/toLocal',
-  // update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成
+  // update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu
 }
 
 /**
- * 第三方配置保存或者更新
+ * Lưu hoặc cập nhật cấu hình bên thứ ba
  */
 export const saveOrUpdateThirdConfig = (params, isUpdate) => {
   let url = isUpdate ? Api.editThirdAppConfig : Api.addThirdAppConfig;
@@ -25,7 +25,7 @@ export const saveOrUpdateThirdConfig = (params, isUpdate) => {
 };
 
 /**
- * 获取第三方配置
+ * Lấy cấu hình bên thứ ba
  * @param params
  */
 export const getThirdConfigByTenantId = (params) => {
@@ -33,7 +33,7 @@ export const getThirdConfigByTenantId = (params) => {
 };
 
 /**
- * 同步钉钉部门用户到本地
+ * Đồng bộ người dùng phòng ban DingTalk về cục bộ
  * @param params
  */
 export const syncDingTalkDepartUserToLocal = () => {
@@ -41,7 +41,7 @@ export const syncDingTalkDepartUserToLocal = () => {
 };
 
 /**
- * 获取企业微信绑定的用户信息
+ * Lấy thông tin người dùng đã liên kết WeCom
  * @param params
  */
 export const getThirdUserByWechat = () => {
@@ -49,7 +49,7 @@ export const getThirdUserByWechat = () => {
 };
 
 /**
- * 同步企业微信用户部门到本地
+ * Đồng bộ người dùng và phòng ban WeCom về cục bộ
  * @param params
  */
 export const wechatEnterpriseToLocal = (params) => {
@@ -57,7 +57,7 @@ export const wechatEnterpriseToLocal = (params) => {
 };
 
 /**
- * 获取绑定企业微信的用户
+ * Lấy người dùng liên kết WeCom
  * @param params
  */
 export const getThirdUserBindByWechat = () => {
@@ -65,7 +65,7 @@ export const getThirdUserBindByWechat = () => {
 };
 
 /**
- * 根据第三方账号表的id解绑账号
+ * Dựa vào ID của bảng tài khoản bên thứ ba để gỡ liên kết tài khoản
  * @param params
  */
 export const deleteThirdAccount = (params) => {
@@ -73,7 +73,7 @@ export const deleteThirdAccount = (params) => {
 };
 
 /**
- * 根据配置表的id删除第三方配置
+ * Dựa vào ID của bảng cấu hình để xóa cấu hình bên thứ ba
  * @param params
  * @param handleSuccess
  */
@@ -84,7 +84,7 @@ export const deleteThirdAppConfig = (params, handleSuccess) => {
 };
 
 /**
- * 同步飞书部门和用户到本地（飞书→本地）
+ * Đồng bộ phòng ban và người dùng Feishu về cục bộ (Feishu→cục bộ）
  */
 export const syncFeishuDepartUserToLocal = () => {
   return defHttp.get({ url: Api.syncFeishuDepartUserToLocal, timeout: 120000 }, { isTransformResponse: false });

@@ -3,19 +3,19 @@ import { rules } from '/@/utils/helper/validator';
 
 export const columns: BasicColumn[] = [
   // {
-  //   title: '职务编码',
+  //   title: 'Mã chức danh',
   //   dataIndex: 'code',
   //   width: 200,
   //   align: 'left',
   // },
   {
-    title: '职务等级',
+    title: 'Cấp bậc chức danh',
     dataIndex: 'name',
     align: 'left'
     // width: 200,
   },
   {
-    title: '等级序号（数字越小，职级越高）',
+    title: 'Số thứ tự cấp bậc (số càng nhỏ, cấp bậc càng cao)',
     dataIndex: 'postLevel',
   },
 ];
@@ -23,7 +23,7 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'name',
-    label: '职务等级',
+    label: 'Cấp bậc chức danh',
     component: 'JInput',
     colProps: { span: 8 },
   },
@@ -31,19 +31,19 @@ export const searchFormSchema: FormSchema[] = [
 
 export const formSchema: FormSchema[] = [
   {
-    label: '主键',
+    label: 'Khóa chính',
     field: 'id',
     component: 'Input',
     show: false,
   },
   {
     field: 'name',
-    label: '职务等级',
+    label: 'Cấp bậc chức danh',
     component: 'Input',
     required: true,
   },
   {
-    label: '等级序号',
+    label: 'Số thứ tự cấp bậc',
     field: 'postLevel',
     component: 'InputNumber',
     required: true,
@@ -52,15 +52,15 @@ export const formSchema: FormSchema[] = [
       max: 99
     },
     itemProps: {
-      extra: '数字越小，职级越高；流程仅识别 1—6 级预设职级，其他等级不能用于流程职级表达式。',
+      extra: 'Số càng nhỏ, cấp bậc càng cao; quy trình chỉ nhận dạng 1—6 cấp bậc định sẵn, các cấp khác không thể dùng cho biểu thức cấp bậc của quy trình.',
     },
     dynamicRules: ({ model, schema }) => {
-      return [{ required: true, message: '请输入等级序号!' }];
+      return [{ required: true, message: 'Vui lòng nhập số thứ tự cấp bậc!' }];
     },
   },
   // {
   //   field: 'code',
-  //   label: '职务编码',
+  //   label: 'Mã chức danh',
   //   component: 'Input',
   //   required: true,
   //   dynamicDisabled: ({ values }) => {

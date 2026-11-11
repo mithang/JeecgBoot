@@ -1,20 +1,20 @@
 ﻿<template>
   <div>
-    <!--引用表格-->
+    <!--Tham chiếu bảng-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
-        <a-button type="primary" v-auth="'system:sys_ugroup:add'" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
-        <a-button type="primary" v-auth="'system:sys_ugroup:exportXls'" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
+        <a-button type="primary" v-auth="'system:sys_ugroup:add'" @click="handleAdd" preIcon="ant-design:plus-outlined"> Thêm mới</a-button>
+        <a-button type="primary" v-auth="'system:sys_ugroup:exportXls'" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất (export)</a-button>
         <j-upload-button type="primary" v-auth="'system:sys_ugroup:importExcel'" preIcon="ant-design:import-outlined" @click="onImportXls"
-          >导入</j-upload-button
+          >Nhập (import)</j-upload-button
         >
         <a-tooltip placement="right" :overlayInnerStyle="{ width: '520px' }">
           <template #title>
-            <div>用户组应用于以下功能中：</div>
-            <div>1. 流程办理时指定下一步操作人，根据用户组选择人员。</div>
-            <div>2. 表单设计器人员组件选择人员时，根据用户组选择人员。</div>
-            <div>3. OA模块中协同工作新增发起事项选择人员时，根据用户组选择人员。</div>
+            <div>Nhóm người dùng được áp dụng trong các chức năng sau:</div>
+            <div>1. Khi xử lý quy trình, chỉ định người thao tác bước tiếp theo, chọn nhân viên theo nhóm người dùng.</div>
+            <div>2. Khi component nhân viên trong trình thiết kế biểu mẫu chọn nhân viên, chọn theo nhóm người dùng.</div>
+            <div>3. OAKhi tạo mới việc khởi xướng trong cộng tác làm việc ở module, chọn nhân viên theo nhóm người dùng.</div>
           </template>
           <Icon icon="ant-design:question-circle-outlined" style="color: #8c8c8c; cursor: help" />
         </a-tooltip>
@@ -24,24 +24,24 @@
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button v-auth="'system:sys_ugroup:deleteBatch'"
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
-    <!-- 表单区域 -->
+    <!-- Khu vực biểu mẫu -->
     <SysUgroupModal @register="registerModal" @success="handleSuccess"></SysUgroupModal>
-    <!--角色用户表格-->
+    <!--Bảng người dùng của vai trò-->
     <GroupUserTable @register="groupUserDrawer" />
   </div>
 </template>
@@ -55,12 +55,12 @@
   import SysUgroupModal from './components/SysUgroupModal.vue';
   import GroupUserTable from './components/GroupUserTable.vue';
   import { useDrawer } from '/@/components/Drawer';
-  //注册model
+  //Đăng kýmodel
   const [registerModal, { openModal }] = useModal();
-  //注册table数据
+  //Đăng ký dữ liệu table
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     tableProps: {
-      title: '用户组表',
+      title: 'Bảng nhóm người dùng',
       api: list,
       columns,
       canResize: true,
@@ -75,7 +75,7 @@
       },
     },
     exportConfig: {
-      name: '用户组',
+      name: 'Nhóm người dùng',
       url: getExportUrl,
     },
     importConfig: {
@@ -87,7 +87,7 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
   const [groupUserDrawer, { openDrawer: openGroupUserDrawer }] = useDrawer();
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openModal(true, {
@@ -96,7 +96,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     openModal(true, {
@@ -106,7 +106,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   function handleDetail(record: Recordable) {
     openModal(true, {
@@ -116,58 +116,58 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteOne({ id: record.id }, handleSuccess);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDelete({ ids: selectedRowKeys.value }, handleSuccess);
   }
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
   /**
-   * 用户组用户
+   * Người dùng của nhóm người dùng
    */
   function handleUser(record) {
     openGroupUserDrawer(true, record);
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '用户',
+        label: 'Người dùng',
         onClick: handleUser.bind(null, record),
       },
     ];
   }
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
         auth: 'system:sys_ugroup:edit',
       },
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft',
         },

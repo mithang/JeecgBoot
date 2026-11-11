@@ -1,41 +1,41 @@
 import { FormSchema } from '/@/components/Table';
 
-//列配置
+//Cấu hình cột
 export const columns = [
   {
-    title: '关联类型(用户/角色)',
+    title: 'Loại liên kết(Người dùng/Vai trò)',
     dataIndex: 'relationType_dictText',
     width: 80,
     slots: { customRender: 'relationType' },
   },
   {
-    title: '用户/角色',
+    title: 'Người dùng/Vai trò',
     dataIndex: 'relationName',
     width: 80,
     slots: { customRender: 'roleCode' },
   },
   {
-    title: '首页路由',
+    title: 'Định tuyến trang chủ',
     dataIndex: 'url',
     width: 100,
   },
   {
-    title: '组件地址',
+    title: 'Địa chỉ component',
     dataIndex: 'component',
     width: 100,
   },
   {
-    title: '是否开启',
+    title: 'Có bật không',
     dataIndex: 'status',
     slots: { customRender: 'status' },
     width: 60,
   },
 ];
-//查询配置
+//Truy vấn cấu hình
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'relationType',
-    label: '关联类型',
+    label: 'Loại liên kết',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'relation_type',
@@ -43,8 +43,8 @@ export const searchFormSchema: FormSchema[] = [
   },
   {
     field: 'route',
-    label: '是否路由菜单',
-    helpMessage: '非路由菜单设置成首页，需开启',
+    label: 'Có phải menu định tuyến không',
+    helpMessage: 'Menu phi định tuyến được đặt làm trang chủ thì cần bật',
     component: 'Switch',
     show: false,
   },
@@ -59,7 +59,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'relationType',
-    label: '关联类型',
+    label: 'Loại liên kết',
     component: 'JDictSelectTag',
     required: true,
     defaultValue: 'ROLE',
@@ -69,7 +69,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '角色编码',
+    label: 'Mã vai trò',
     field: 'roleCode',
     component: 'JSelectRole',
     required: true,
@@ -80,7 +80,7 @@ export const formSchema: FormSchema[] = [
     ifShow: ({ values }) => values.relationType == 'ROLE',
   },
   {
-    label: '用户编码',
+    label: 'Mã người dùng',
     field: 'userCode',
     component: 'JSelectUser',
     required: true,
@@ -90,35 +90,35 @@ export const formSchema: FormSchema[] = [
     ifShow: ({ values }) => values.relationType == 'USER',
   },
   {
-    label: '首页路由',
+    label: 'Định tuyến trang chủ',
     field: 'url',
     component: 'Input',
     required: true,
   },
   {
-    label: '组件地址',
+    label: 'Địa chỉ component',
     field: 'component',
     component: 'Input',
     componentProps: {
-      placeholder: '请输入前端组件',
+      placeholder: 'Vui lòng nhập component frontend',
     },
     required: true,
   },
   {
-    label: '优先级',
+    label: 'Mức ưu tiên',
     field: 'priority',
     component: 'InputNumber',
   },
   {
     field: 'route',
-    label: '是否路由菜单',
-    helpMessage: '非路由菜单设置成首页，需开启',
+    label: 'Có phải menu định tuyến không',
+    helpMessage: 'Menu phi định tuyến được đặt làm trang chủ thì cần bật',
     component: 'Switch',
     defaultValue: true,
     show: false,
   },
   {
-    label: '是否开启',
+    label: 'Có bật không',
     field: 'status',
     component: 'JSwitch',
     defaultValue: '1',

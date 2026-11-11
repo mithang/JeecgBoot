@@ -1,48 +1,48 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-// 名称最大长度
+// Độ dài tối đa của tên
 export const NAME_MAX_LENGTH = 40;
 
-//列表数据
+//Dữ liệu danh sách
 export const columns: BasicColumn[] = [
   {
-    title: '用户组名称',
+    title: 'Tên nhóm người dùng',
     align: 'center',
     dataIndex: 'groupName',
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     align: 'center',
     dataIndex: 'createTime',
   },
 ];
-//查询数据
+//Truy vấn dữ liệu
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '用户组名称',
+    label: 'Tên nhóm người dùng',
     field: 'groupName',
     component: 'JInput',
   },
 ];
 
-//表单数据
+//Dữ liệu biểu mẫu
 export const formSchema: FormSchema[] = [
   {
-    label: '用户组名称',
+    label: 'Tên nhóm người dùng',
     field: 'groupName',
     component: 'Input',
     dynamicRules() {
       return [
-        {required: true, message: '请输入用户组名称'},
+        {required: true, message: 'Vui lòng nhập tên nhóm người dùng'},
         {
           max: NAME_MAX_LENGTH,
-          message: `名称长度不能超过${NAME_MAX_LENGTH}个字符`,
+          message: `Độ dài tên không được vượt quá ${NAME_MAX_LENGTH} ký tự`,
         },
       ];
     }
   },
   {
-    label: '描述',
+    label: 'Mô tả',
     field: 'description',
     component: 'InputTextArea',
   },
@@ -55,38 +55,38 @@ export const formSchema: FormSchema[] = [
 ];
 
 /**
- * 角色用户搜索form
+ * Tìm kiếm người dùng của vai tròform
  */
 export const searchUserFormSchema: FormSchema[] = [
   {
     field: 'username',
-    label: '用户账号',
+    label: 'Tài khoản người dùng',
     component: 'Input',
     colProps: { span: 8 },
     labelWidth: 74,
   },
   {
     field: 'realname',
-    label: '用户名称',
+    label: 'Tên người dùng',
     component: 'Input',
     colProps: { span: 8 },
     labelWidth: 74,
   },
 ];
 /**
- * 角色用户Columns
+ * Người dùng của vai tròColumns
  */
 export const userColumns = [
   {
-    title: '用户账号',
+    title: 'Tài khoản người dùng',
     dataIndex: 'username',
   },
   {
-    title: '用户姓名',
+    title: 'Họ tên người dùng',
     dataIndex: 'realname',
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status_dictText',
     width: 80,
   },

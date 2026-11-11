@@ -38,17 +38,17 @@
             </div>
             <div class="aui-flex-box">
               <div class="aui-third-login">
-                <a href="" title="企业微信" @click="onThirdLogin('wechat_enterprise')"><icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
+                <a href="" title="WeCom" @click="onThirdLogin('wechat_enterprise')"><icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
               </div>
             </div>
             <div class="aui-flex-box">
               <div class="aui-third-login">
-                <a href="" title="钉钉" @click="onThirdLogin('dingtalk')"><DingtalkCircleFilled /></a>
+                <a href="" title="DingTalk" @click="onThirdLogin('dingtalk')"><DingtalkCircleFilled /></a>
               </div>
             </div>
             <div class="aui-flex-box">
               <div class="aui-third-login">
-                <a href="" title="微信" @click="onThirdLogin('wechat_open')"><WechatFilled /></a>
+                <a href="" title="WeChat" @click="onThirdLogin('wechat_open')"><WechatFilled /></a>
               </div>
             </div>
           </div>
@@ -56,7 +56,7 @@
       </div>
     </div>
   </div>
-  <!-- 第三方登录相关弹框 -->
+  <!-- Các hộp thoại liên quan đến đăng nhập bên thứ ba -->
   <ThirdModal ref="thirdModalRef"></ThirdModal>
 </template>
 
@@ -82,7 +82,7 @@
   const userStore = useUserStore();
   const emit = defineEmits(['go-back', 'success', 'register']);
 
-  //加载二维码信息
+  //Tải thông tin mã QR
   function loadQrCode() {
     state.value = '0';
     getLoginQrcode().then((res) => {
@@ -92,16 +92,16 @@
       }
     });
   }
-  //监控扫码状态
+  //Theo dõi trạng thái quét mã
   function watchQrcodeToken(qrcodeId) {
     getQrcodeToken({ qrcodeId: qrcodeId }).then((res) => {
       let token = res.token;
       if (token == '-2') {
-        //二维码过期重新获取
+        //Mã QR hết hạn, lấy lại
         loadQrCode();
         clearInterval(timer);
       }
-      //扫码成功
+      //Quét mã thành công
       if (res.success) {
         state.value = '2';
         clearInterval(timer);
@@ -112,7 +112,7 @@
     });
   }
 
-  /** 开启定时器 */
+  /** Bật bộ hẹn giờ */
   function openTimer(qrcodeId) {
     watchQrcodeToken(qrcodeId);
     closeTimer();
@@ -121,13 +121,13 @@
     }, 1500);
   }
 
-  /** 关闭定时器 */
+  /** Tắt bộ hẹn giờ */
   function closeTimer() {
     if (timer) clearInterval(timer);
   }
 
   /**
-   * 第三方登录
+   * Đăng nhập bên thứ ba
    * @param type
    */
   function onThirdLogin(type) {
@@ -135,14 +135,14 @@
   }
 
   /**
-   * 初始化表单
+   * Khởi tạo biểu mẫu
    */
   function initFrom() {
     loadQrCode();
   }
 
   /**
-   * 返回
+   * Quay lại
    */
   function goBackHandleClick() {
     emit('go-back');

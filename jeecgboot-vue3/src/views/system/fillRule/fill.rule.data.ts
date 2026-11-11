@@ -3,25 +3,25 @@ import { duplicateCheckDelay } from '/@/views/system/user/user.api';
 
 export const columns: BasicColumn[] = [
   {
-    title: '规则名称',
+    title: 'Tên quy tắc',
     dataIndex: 'ruleName',
     width: 200,
     align: 'center',
   },
   {
-    title: '规则编码',
+    title: 'Mã quy tắc',
     dataIndex: 'ruleCode',
     width: 200,
     align: 'center',
   },
   {
-    title: '规则实现类',
+    title: 'Lớp triển khai quy tắc',
     dataIndex: 'ruleClass',
     width: 300,
     align: 'center',
   },
   {
-    title: '规则参数',
+    title: 'Tham số quy tắc',
     dataIndex: 'ruleParams',
     width: 200,
     align: 'center',
@@ -31,13 +31,13 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'ruleName',
-    label: '规则名称',
+    label: 'Tên quy tắc',
     component: 'JInput',
     colProps: { span: 6 },
   },
   {
     field: 'ruleCode',
-    label: '规则编码',
+    label: 'Mã quy tắc',
     component: 'JInput',
     colProps: { span: 6 },
   },
@@ -52,14 +52,14 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'ruleName',
-    label: '规则名称',
+    label: 'Tên quy tắc',
     component: 'Input',
     required: true,
     colProps: { span: 24 },
   },
   {
     field: 'ruleCode',
-    label: '规则编码',
+    label: 'Mã quy tắc',
     component: 'Input',
     colProps: { span: 24 },
     dynamicDisabled: ({ values }) => {
@@ -72,7 +72,7 @@ export const formSchema: FormSchema[] = [
           validator: (_, value) => {
             return new Promise((resolve, reject) => {
               if (!value) {
-                return reject('请输入规则编码！');
+                return reject('Vui lòng nhập mã quy tắc!');
               }
               let params = {
                 tableName: 'sys_fill_rule',
@@ -82,10 +82,10 @@ export const formSchema: FormSchema[] = [
               };
               duplicateCheckDelay(params)
                 .then((res) => {
-                  res.success ? resolve() : reject('规则编码已存在!');
+                  res.success ? resolve() : reject('Mã quy tắc đã tồn tại!');
                 })
                 .catch((err) => {
-                  reject(err.message || '校验失败');
+                  reject(err.message || 'Kiểm tra không hợp lệ');
                 });
             });
           },
@@ -95,14 +95,14 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'ruleClass',
-    label: '规则实现类',
+    label: 'Lớp triển khai quy tắc',
     component: 'Input',
     required: true,
     colProps: { span: 24 },
   },
   {
     field: 'ruleParams',
-    label: '规则参数',
+    label: 'Tham số quy tắc',
     colProps: { span: 24 },
     component: 'JAddInput',
     componentProps: {

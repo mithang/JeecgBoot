@@ -12,23 +12,23 @@ enum Api {
 }
 
 /**
- * 导出api
+ * Xuất (export)api
  * @param params
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入api
+ * Nhập (import)api
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 export const list = (params) =>
   defHttp.get({url: Api.list, params});
 
 /**
- * 删除单个
+ * Xóa một mục
  * @param params
  * @param handleSuccess
  */
@@ -38,16 +38,16 @@ export const deleteOne = (params, handleSuccess) => {
   });
 }
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  * @param handleSuccess
  */
 export const batchDelete = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({
         url: Api.deleteBatch,
@@ -59,9 +59,9 @@ export const batchDelete = (params, handleSuccess) => {
   });
 }
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
- * @param isUpdate 是否是更新数据
+ * @param isUpdate Có phải dữ liệu cập nhật không
  */
 export const saveOrUpdate = (params, isUpdate) => {
   let url = isUpdate ? Api.edit : Api.save;

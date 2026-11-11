@@ -1,14 +1,14 @@
 <template>
   <div class="base-collapse">
-    <div class="header"> 钉钉集成 </div>
+    <div class="header"> Tích hợp DingTalk </div>
     <a-collapse expand-icon-position="right" :bordered="false">
       <a-collapse-panel key="1">
         <template #header>
-          <div style="font-size: 16px"> 1.获取对接信息</div>
+          <div style="font-size: 16px"> 1.Lấy thông tin tích hợp</div>
         </template>
-        <div class="base-desc">从钉钉开放平台获取对接信息，即可开始集成以及同步通讯录</div>
+        <div class="base-desc">Lấy thông tin tích hợp từ nền tảng mở DingTalk là có thể bắt đầu tích hợp và đồng bộ danh bạ</div>
         <div style="margin-top: 5px">
-          <a href='https://help.qiaoqiaoyun.com/expand/dingding.html' target='_blank'>如何获取对接信息?</a>
+          <a href='https://help.qiaoqiaoyun.com/expand/dingding.html' target='_blank'>Cách lấy thông tin tích hợp?</a>
         </div>
       </a-collapse-panel>
     </a-collapse>
@@ -17,10 +17,10 @@
         <a-collapse-panel key="2">
           <template #header>
             <div style="width: 100%; justify-content: space-between; display: flex">
-              <div style="font-size: 16px"> 2.对接信息录入及解绑</div>
+              <div style="font-size: 16px"> 2.Nhập thông tin tích hợp và gỡ liên kết</div>
             </div>
           </template>
-          <div class="base-desc">完成步骤1后，填入Agentld、 AppKey、AppSecret后 可对接应用与同步通讯录</div>
+          <div class="base-desc">Sau khi hoàn thành bước 1, điền Agentld, AppKey, AppSecret vào là có thể tích hợp ứng dụng và đồng bộ danh bạ</div>
           <div class="flex-flow">
             <div class="base-title">CorpId</div>
             <div class="base-message">
@@ -46,26 +46,26 @@
             </div>
           </div>
           <div style="margin-top: 20px; width: 100%; text-align: right">
-            <a-button @click="dingEditClick">编辑</a-button>
-            <a-button v-if="appConfigData.id" @click="cancelBindClick" danger style="margin-left: 10px">取消绑定</a-button>
+            <a-button @click="dingEditClick">Chỉnh sửa</a-button>
+            <a-button v-if="appConfigData.id" @click="cancelBindClick" danger style="margin-left: 10px">Hủy liên kết</a-button>
           </div>
         </a-collapse-panel>
       </a-collapse>
       <div class="sync-padding">
-        <div style="font-size: 16px; width: 100%"> 3.数据同步</div>
+        <div style="font-size: 16px; width: 100%"> 3.Đồng bộ dữ liệu</div>
         <div style="margin-top: 20px" class="base-desc">
-          从钉钉同步到本地
+          Đồng bộ từ DingTalk về cục bộ
           <ul style='list-style-type: disc;margin-left: 20px;'>
-            <li>同步部门到本地</li>
+            <li>Đồng bộ phòng ban về cục bộ</li>
             <li>
-              同步部门下的用户到本地
-              <a-tooltip title='同步用户与部门文档'>
+              Đồng bộ người dùng thuộc phòng ban về cục bộ
+              <a-tooltip title='Đồng bộ tài liệu người dùng và phòng ban'>
                 <a-icon @click='handleIconClick' type="question-circle" class="sync-text"/>
               </a-tooltip>
             </li>
           </ul>
           <div style="float: right">
-            <a-button :loading="btnLoading" @click="syncDingTalk">{{ !btnLoading ? '同步' : '同步中' }}</a-button>
+            <a-button :loading="btnLoading" @click="syncDingTalk">{{ !btnLoading ? 'Đồng bộ' : 'Đang đồng bộ' }}</a-button>
           </div>
         </div>
       </div>
@@ -91,22 +91,22 @@
     },
     setup() {
       const { createMessage } = useMessage();
-      //折叠面板选中key
+      //Chọn bảng thu gọnkey
       const collapseActiveKey = ref<string>('');
-      //按钮加载事件
+      //Sự kiện tải nút
       const btnLoading = ref<boolean>(false);
-      //第三方配置数据
+      //Dữ liệu cấu hình bên thứ ba
       const appConfigData = ref<any>({
         agentId: undefined,
         clientId: '',
         clientSecret: '',
       });
 
-      //企业微信钉钉配置modal
+      //Cấu hình WeCom và DingTalkmodal
       const [registerAppConfigModal, { openModal }] = useModal();
 
       /**
-       * 钉钉编辑
+       * Chỉnh sửa DingTalk
        */
       async function dingEditClick() {
         let tenantId = getTenantId();
@@ -117,7 +117,7 @@
       }
 
       /**
-       * 初始化第三方数据
+       * Khởi tạo dữ liệu bên thứ ba
        */
       async function initThirdAppConfigData(params) {
         let values = await getThirdConfigByTenantId(params);
@@ -129,7 +129,7 @@
       }
 
       /**
-       * 成功回调
+       * Callback thành công
        */
       function handleSuccess() {
         let tenantId = getTenantId();
@@ -137,7 +137,7 @@
       }
 
       /**
-       * 同步钉钉
+       * Đồng bộ DingTalk
        */
       async function syncDingTalk() {
         btnLoading.value = true;
@@ -150,12 +150,12 @@
                 title: res.message,
                 content: () => {
                   let nodes;
-                  let successInfo = [`成功信息如下：`, renderTextarea(h, res.result.successInfo.map((v, i) => `${i + 1}. ${v}`).join('\n'))];
+                  let successInfo = [`Thông tin thành công như sau:`, renderTextarea(h, res.result.successInfo.map((v, i) => `${i + 1}. ${v}`).join('\n'))];
                   if (res.success) {
-                    nodes = [...successInfo, h('br'), `无失败信息！`];
+                    nodes = [...successInfo, h('br'), `Không có thông tin thất bại!`];
                   } else {
                     nodes = [
-                      `失败信息如下：`,
+                      `Thông tin thất bại như sau:`,
                       renderTextarea(h, res.result.failInfo.map((v, i) => `${i + 1}. ${v}`).join('\n')),
                       h('br'),
                       ...successInfo,
@@ -176,7 +176,7 @@
                 Modal.warning(options)
               } else {
                 createMessage.warning({
-                  content: res.message || "同步失败，请检查对接信息录入中是否填写正确，并确认是否已开启钉钉配置！",
+                  content: res.message || "Đồng bộ thất bại, vui lòng kiểm tra thông tin tích hợp đã nhập có đúng không, đồng thời xác nhận đã bật cấu hình DingTalk chưa!",
                   duration: 5
                 });
               }
@@ -188,7 +188,7 @@
       }
 
       /**
-       * 渲染文本
+       * Kết xuất văn bản
        * @param h
        * @param value
        */
@@ -212,25 +212,25 @@
       }
 
       /**
-       * 钉钉同步文档
+       * Tài liệu đồng bộ DingTalk
        */
       function handleIconClick(){
         window.open("https://help.qiaoqiaoyun.com/expand/dingdingsyn.html","_target")
       }
 
       /**
-       * 取消绑定
+       * Hủy liên kết
        */
       function cancelBindClick() {
         if(!appConfigData.value.id){
-          createMessage.warning("请先绑定钉钉应用！");
+          createMessage.warning("Vui lòng liên kết ứng dụng DingTalk trước!");
           return;
         }
         Modal.confirm({
-          title: '取消绑定',
-          content: '是否要解除当前组织的钉钉应用配置绑定？',
-          okText: '确认',
-          cancelText: '取消',
+          title: 'Hủy liên kết',
+          content: 'Có muốn gỡ liên kết cấu hình ứng dụng DingTalk của tổ chức hiện tại không?',
+          okText: 'Xác nhận',
+          cancelText: 'Hủy',
           onOk: () => {
             deleteThirdAppConfig({ id: appConfigData.value.id }, handleSuccess);
           },
@@ -309,13 +309,13 @@
       padding-left: 0;
     }
   }
-  /*begin 兼容暗夜模式*/
-  //暗黑模式下卡片的边框设置成none
+  /*begin Tương thích chế độ tối*/
+  //Ở chế độ tối, viền thẻ được đặt thànhnone
   [data-theme='dark'] .base-collapse .ant-collapse{
     border: none !important;
   }
-  /*end 兼容暗夜模式*/
-  /*文档按钮问号样式*/
+  /*end Tương thích chế độ tối*/
+  /*Kiểu dấu chấm hỏi của nút tài liệu*/
   .sync-text{
     margin-left: 2px;
     cursor: pointer;

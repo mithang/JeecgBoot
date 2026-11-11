@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="首页配置" @ok="handleSubmit" :width="600">
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Cấu hình trang chủ" @ok="handleSubmit" :width="600">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -10,29 +10,29 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from '../home.data';
   import { saveOrUpdate } from '../home.api';
-  // Emits声明
+  // EmitsKhai báo
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(false);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     labelWidth: 100,
     baseRowStyle: { marginTop: '10px' },
     schemas: formSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
       const record = {...data.values}
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       if (record.relationType == 'USER') {
         record.userCode = record.roleCode;
       }
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       if (record.relationType == 'DEFAULT') {
         record.roleCode = '';
       }
@@ -42,12 +42,12 @@
     }
   });
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       let values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       if(values.relationType == 'USER'){
         values.roleCode = values.userCode;
       }
@@ -55,9 +55,9 @@
         values.roleCode = 'DEF_INDEX_ALL';
       }
       await saveOrUpdate(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

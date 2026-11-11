@@ -9,28 +9,28 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from './demo.data';
   import { saveOrUpdateDemo, getDemoById } from './demo.api';
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
 
-  //自定义接受参数
+  //Tham số tiếp nhận tùy chỉnh
   const props = defineProps({
-    //是否禁用页面
+    //Có vô hiệu hóa trang không
     isDisabled: {
       type: Boolean,
       default: false,
     },
   });
 
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     //labelWidth: 150,
     schemas: formSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false, showOkBtn: !props.isDisabled});
     isUpdate.value = !!data?.isUpdate;
@@ -41,26 +41,26 @@
       await setFieldsValue({createTime: data.createTime})
     }
     if (unref(isUpdate)) {
-      //获取详情
+      //Lấy chi tiết
       data.record = await getDemoById({ id: data.record.id });
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
   });
-  //设置标题
-  const title = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
-  //表单提交事件
+  //Đặt tiêu đề
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit(v) {
     try {
       let values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateDemo(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success', values);
     } finally {
       setModalProps({ confirmLoading: false });

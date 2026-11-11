@@ -9,13 +9,13 @@
   import { BasicForm, useForm } from '/src/components/Form';
   import { formSchema } from '../category.data';
   import { loadTreeData, saveOrUpdateDict } from '../category.api';
-  // 获取emit
+  // Lấyemit
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
   const expandedRowKeys = ref([]);
   const treeData = ref([]);
   const isSubAdd = ref(false);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
     schemas: formSchema,
     showActionButtonGroup: false,
@@ -28,33 +28,33 @@
       sm: { span: 18 },
     },
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     expandedRowKeys.value = [];
     setModalProps({ confirmLoading: false, minHeight: 80 });
     isUpdate.value = !!data?.isUpdate;
-    // 代码逻辑说明: 分类字典data.record为空报错------------
+    // Giải thích logic mã: Từ điển phân loại báo lỗi khi data.record trống------------
     isSubAdd.value = !data?.isUpdate && data.record && data.record.id;
     if (data?.record) {
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
-    //父级节点树信息
+    //Thông tin cây của nút cha
     treeData.value = await loadTreeData({ async: false, pcode: '' });
     updateSchema({
       field: 'pid',
       componentProps: { treeData },
     });
   });
-  //设置标题
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增字典' : '编辑字典'));
+  //Đặt tiêu đề
+  const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới từ điển' : 'Chỉnh sửa từ điển'));
 
   /**
-   * 根据pid获取展开的节点
+   * Lấy các nút đã mở rộng theo pid
    * @param pid
    * @param arr
    */
@@ -62,7 +62,7 @@
     if (pid && arr && arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].key == pid && unref(expandedRowKeys).indexOf(pid) < 0) {
-          //需要获取同一级的key
+          //Cần lấy cùng cấpkey
           getSameLevelExpandKeysByPid(arr[i]);
           expandedRowKeys.value.push(arr[i].key);
           getExpandKeysByPid(arr[i]['parentId'], unref(treeData));
@@ -72,18 +72,18 @@
       }
     }
   }
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       let values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateDict(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //展开的节点信息
+      //Thông tin các nút đã mở rộng
       await getExpandKeysByPid(values['pid'], unref(treeData));
-      //刷新列表(isUpdate:是否编辑;values:表单信息;expandedArr:展开的节点信息)
+      //Làm mới danh sách(isUpdate:Có chỉnh sửa hay không; values: thông tin biểu mẫu; expandedArr: thông tin các nút đã mở rộng)
       emit('success', { isUpdate: unref(isUpdate), isSubAdd:unref(isSubAdd), values: { ...values }, expandedArr: unref(expandedRowKeys).reverse() });
     } finally {
       setModalProps({ confirmLoading: false });
@@ -91,7 +91,7 @@
   }
 
   /**
-   * 获取同一级的id和同一级的子级id
+   * Lấy ID cùng cấp và các mục con cùng cấpid
    */
   function getSameLevelExpandKeysByPid(arr) {
     if (arr.children && arr.children.length > 0) {

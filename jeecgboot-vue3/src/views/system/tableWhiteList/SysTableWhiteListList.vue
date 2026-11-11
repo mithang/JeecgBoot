@@ -1,34 +1,34 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Tham chiếu bảng-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
         <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined">
-          新增
+          Thêm mới
         </a-button>
 <!--        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls">-->
-<!--          导出-->
+<!--          Xuất (export)-->
 <!--        </a-button>-->
 <!--        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">-->
-<!--          导入-->
+<!--          Nhập (import)-->
 <!--        </j-upload-button>-->
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            批量操作
+            Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction
           :actions="getTableAction(record)"
@@ -37,7 +37,7 @@
       </template>
     </BasicTable>
 
-    <!-- 表单区域 -->
+    <!-- Khu vực biểu mẫu -->
     <SysTableWhiteListModal @register="registerModal" @success="handleSuccess"/>
   </div>
 </template>
@@ -50,12 +50,12 @@ import SysTableWhiteListModal from './modules/SysTableWhiteListModal.vue'
 import {columns, searchFormSchema} from './SysTableWhiteList.data';
 import {batchDelete, deleteOne, getExportUrl, getImportUrl, list} from './SysTableWhiteList.api';
 
-//注册model
+//Đăng kýmodel
 const [registerModal, {openModal}] = useModal();
-//注册table数据
+//Đăng ký dữ liệu table
 const {prefixCls, tableContext, onExportXls, onImportXls} = useListPage({
   tableProps: {
-    title: '系统表白名单',
+    title: 'Danh sách trắng bảng hệ thống',
     api: list,
     columns,
     canResize: false,
@@ -70,7 +70,7 @@ const {prefixCls, tableContext, onExportXls, onImportXls} = useListPage({
     },
   },
   exportConfig: {
-    name: "系统表白名单",
+    name: "Danh sách trắng bảng hệ thống",
     url: getExportUrl,
   },
   importConfig: {
@@ -81,7 +81,7 @@ const {prefixCls, tableContext, onExportXls, onImportXls} = useListPage({
 const [registerTable, {reload}, {rowSelection, selectedRowKeys}] = tableContext
 
 /**
- * 新增事件
+ * Sự kiện thêm mới
  */
 function handleAdd() {
   openModal(true, {
@@ -91,7 +91,7 @@ function handleAdd() {
 }
 
 /**
- * 编辑事件
+ * Sự kiện chỉnh sửa
  */
 function handleEdit(record: Recordable) {
   openModal(true, {
@@ -102,7 +102,7 @@ function handleEdit(record: Recordable) {
 }
 
 /**
- * 详情
+ * Chi tiết
  */
 function handleDetail(record: Recordable) {
   openModal(true, {
@@ -113,50 +113,50 @@ function handleDetail(record: Recordable) {
 }
 
 /**
- * 删除事件
+ * Sự kiện xóa
  */
 async function handleDelete(record) {
   await deleteOne({id: record.id}, reload);
 }
 
 /**
- * 批量删除事件
+ * Sự kiện xóa hàng loạt
  */
 async function batchHandleDelete() {
   await batchDelete({ids: selectedRowKeys.value}, reload);
 }
 
 /**
- * 成功回调
+ * Callback thành công
  */
 function handleSuccess({isUpdate, values}) {
   reload();
 }
 
 /**
- * 操作栏
+ * Thanh thao tác
  */
 function getTableAction(record) {
   return [
     {
-      label: '编辑',
+      label: 'Chỉnh sửa',
       onClick: handleEdit.bind(null, record),
     }
   ]
 }
 
 /**
- * 下拉操作栏
+ * Thanh thao tác thả xuống
  */
 function getDropDownAction(record) {
   return [
     {
-      label: '详情',
+      label: 'Chi tiết',
       onClick: handleDetail.bind(null, record),
     }, {
-      label: '删除',
+      label: 'Xóa',
       popConfirm: {
-        title: '是否确认删除',
+        title: 'Xác nhận xóa?',
         confirm: handleDelete.bind(null, record),
       }
     }

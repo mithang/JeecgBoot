@@ -4,39 +4,39 @@ import { getDepartName } from "@/utils/common/compUtils";
 
 export const columns: BasicColumn[] = [
   {
-    title: '姓名',
+    title: 'Họ tên',
     dataIndex: 'realname',
     width: 100,
   },
   {
-    title: '部门',
+    title: 'Phòng ban',
     dataIndex: 'departName',
     customRender:({ text })=>{
       return getDepartName(text);
     }
   },
   {
-    title: '主岗位',
+    title: 'Vị trí chính',
     dataIndex: 'postName',
     customRender:({ text })=>{
       return getDepartName(text);
     }
   },
   {
-    title: '兼职岗位',
+    title: 'Vị trí kiêm nhiệm',
     dataIndex: 'otherPostName',
     customRender:({ text })=>{
       return getDepartName(text);
     }
   },
 /*  {
-    title: '职务',
+    title: 'Chức danh',
     dataIndex: 'post',
     width: 150,
     slots: { customRender: 'post' },
   },*/
   {
-    title: '手机',
+    title: 'Điện thoại',
     width: 110,
     dataIndex: 'phone',
     customRender:( { record, text })=>{
@@ -47,7 +47,7 @@ export const columns: BasicColumn[] = [
     }
   },
   {
-    title: '邮箱',
+    title: 'Email',
     width: 180,
     dataIndex: 'email',
     customRender:( { record, text })=>{
@@ -61,7 +61,7 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '姓名',
+    label: 'Họ tên',
     field: 'realname',
     component: 'Input',
     colProps: { span: 6 },

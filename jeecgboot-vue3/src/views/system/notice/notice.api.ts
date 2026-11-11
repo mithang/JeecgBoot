@@ -17,15 +17,15 @@ enum Api {
 }
 
 /**
- * 导出url
+ * Xuất (export)url
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入url
+ * Nhập (import)url
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 查询消息列表
+ * Truy vấn danh sách tin nhắn
  * @param params
  */
 export const getList = (params) => {
@@ -33,7 +33,7 @@ export const getList = (params) => {
 };
 
 /**
- * 保存或者更新通告
+ * Lưu hoặc cập nhật thông cáo
  * @param params
  */
 export const saveOrUpdate = (params, isUpdate) => {
@@ -42,7 +42,7 @@ export const saveOrUpdate = (params, isUpdate) => {
 };
 
 /**
- * 删除通告
+ * Xóa thông cáo
  * @param params
  */
 export const deleteNotice = (params, handleSuccess) => {
@@ -51,7 +51,7 @@ export const deleteNotice = (params, handleSuccess) => {
   });
 };
 /**
- * 置顶编辑
+ * Chỉnh sửa ghim đầu
  * @param params
  */
 export const editIzTop = (params, handleSuccess) => {
@@ -61,33 +61,33 @@ export const editIzTop = (params, handleSuccess) => {
 };
 
 /**
- * 批量消息公告
+ * Thông báo tin nhắn hàng loạt
  * @param params
  */
 export const batchDeleteNotice = (params) => defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true });
 
 /**
- * 发布
+ * Phát hành
  * @param id
  */
 export const doReleaseData = (params) => defHttp.get({ url: Api.releaseData, params });
 /**
- * 撤销
+ * Thu hồi
  * @param id
  */
 export const doReovkeData = (params) => defHttp.get({ url: Api.reovkeData, params });
 /**
- * 新增访问量
+ * Thêm mới lượt truy cập
  * @param id
  */
 export const addVisitsNum = (params) => defHttp.get({ url: Api.addVisitsNum, params }, { successMessageMode: 'none' });
 /**
- * 根据ID查询数据
+ * Truy vấn dữ liệu theo ID
  * @param id
  */
 export const queryById = (params) => defHttp.get({ url: Api.queryById, params }, { isTransformResponse: false });
 /**
- * 查询模板列表
+ * Truy vấn danh sách mẫu
  * @param params
  */
 export const getTempList = (params) => {

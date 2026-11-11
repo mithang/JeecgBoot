@@ -1,8 +1,8 @@
 <template>
   <a-card :bordered="false" style="height: 100%;" :body-style="{ background: backgroundColor }" >
     <a-spin :spinning="loading">
-      <a-input-search v-if="showSearch" placeholder="按部门名称搜索…" style="margin-bottom: 10px" @search="onSearch" allowClear />
-      <!--组织机构树-->
+      <a-input-search v-if="showSearch" placeholder="Tìm kiếm theo tên phòng ban…" style="margin-bottom: 10px" @search="onSearch" allowClear />
+      <!--Cây tổ chức-->
       <template v-if="treeData.length > 0">
         <a-tree
           v-if="!treeReloading"
@@ -21,7 +21,7 @@
           </template>
         </a-tree>
       </template>
-      <a-empty v-else description="暂无数据" />
+      <a-empty v-else description="Không có dữ liệu" />
     </a-spin>
   </a-card>
 </template>
@@ -34,14 +34,14 @@
   import TreeIcon from "@/components/Form/src/jeecg/components/TreeIcon/TreeIcon.vue";
 
   const prefixCls = inject('prefixCls');
-  // 定义props
+  // Định nghĩaprops
   const props = defineProps({
-    // 是否显示搜索框
+    // Có hiển thị ô tìm kiếm không
     showSearch: {
       type: Boolean,
       default: true,
     },
-    // 背景色
+    // Màu nền
     backgroundColor: {
       type: String,
       default: 'inherit',
@@ -50,20 +50,20 @@
   const emit = defineEmits(['select', 'rootTreeData']);
 
   const loading = ref<boolean>(false);
-  // 部门树列表数据
+  // Dữ liệu danh sách cây phòng ban
   const treeData = ref<any[]>([]);
-  // 当前展开的项
+  // Mục đang mở rộng
   const expandedKeys = ref<any[]>([]);
-  // 当前选中的项
+  // Mục đang được chọn
   const selectedKeys = ref<any[]>([]);
-  // 树组件重新加载
+  // Tải lại component cây
   const treeReloading = ref<boolean>(false);
-  // 当前选中的部门
+  // Phòng ban đang chọn
   const currentDepart = ref<any>(null);
-  // 搜索关键字
+  // Từ khóa tìm kiếm
   const searchKeyword = ref('');
 
-  // 加载顶级部门信息
+  // Tải thông tin phòng ban cấp cao nhất
   async function loadRootTreeData() {
     try {
       loading.value = true;
@@ -82,7 +82,7 @@
 
   loadRootTreeData();
 
-  // 加载子级部门信息
+  // Tải thông tin phòng ban cấp con
   async function loadChildrenTreeData(treeNode) {
     try {
       const result = await queryDepartTreeSync({
@@ -93,7 +93,7 @@
       } else {
         treeNode.dataRef.children = result;
         if (expandedKeys.value.length > 0) {
-          // 判断获取的子级是否有当前展开的项
+          // Kiểm tra trong các mục con lấy được có mục đang mở rộng hay không
           let subKeys: any[] = [];
           for (let key of expandedKeys.value) {
             if (result.findIndex((item) => item.id === key) !== -1) {
@@ -112,7 +112,7 @@
     return Promise.resolve();
   }
 
-  // 自动展开父节点，只展开一级
+  // Tự động mở rộng nút cha, chỉ mở rộng một cấp
   function autoExpandParentNode() {
     let item = treeData.value[0];
     if (item) {
@@ -123,7 +123,7 @@
     }
   }
 
-  // 重新加载树组件，防止无法默认展开数据
+  // Tải lại component cây, ngăn việc không thể mở rộng dữ liệu mặc định
   async function reloadTree() {
     await nextTick();
     treeReloading.value = true;
@@ -132,7 +132,7 @@
   }
 
   /**
-   * 设置当前选中的行
+   * Đặt hàng đang được chọn
    */
   function setSelectedKey(key: string, data?: object) {
     selectedKeys.value = [key];
@@ -142,7 +142,7 @@
     }
   }
 
-  // 搜索事件
+  // Sự kiện tìm kiếm
   async function onSearch(value: string) {
     if (value) {
       try {
@@ -162,20 +162,20 @@
     searchKeyword.value = value;
   }
 
-  // 树选择事件
+  // Sự kiện lựa chọn trên cây
   function onSelect(selKeys, event) {
     if (selKeys.length > 0 && selectedKeys.value[0] !== selKeys[0]) {
       setSelectedKey(selKeys[0], event.selectedNodes[0]);
     } else {
-      // 这样可以防止用户取消选择
+      // Làm vậy có thể ngăn người dùng hủy lựa chọn
       setSelectedKey(selectedKeys.value[0]);
     }
   }
 
   /**
-   * 获取标题
-   * @param title 部门名称
-   * @param departNameAbbr 缩写
+   * Lấy tiêu đề
+   * @param title Tên phòng ban
+   * @param departNameAbbr Tên viết tắt
    */
   function getTitle(title, departNameAbbr) {
     if (departNameAbbr){

@@ -1,39 +1,39 @@
 <template>
   <div>
-    <!--自定义查询区域-->
+    <!--Khu vực truy vấn tùy chỉnh-->
     <div class="jeecg-basic-table-form-container" @keyup.enter="searchQuery" v-if="customSearch">
       <a-form ref="formRef" :model="queryParam" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-row :gutter="24">
           <a-col :lg="8">
-            <a-form-item label="用户名">
-              <a-input placeholder="请输入名称模糊查询" v-model:value="queryParam.name"></a-input>
+            <a-form-item label="Tên người dùng">
+              <a-input placeholder="Vui lòng nhập tên để tìm kiếm mờ" v-model:value="queryParam.name"></a-input>
             </a-form-item>
           </a-col>
           <a-col :lg="8">
-            <a-form-item label="年龄">
-              <a-input placeholder="最小年龄" type="ge" v-model:value="queryParam.age_begin" style="width: calc(50% - 15px)"></a-input>
+            <a-form-item label="Tuổi">
+              <a-input placeholder="Tuổi tối thiểu" type="ge" v-model:value="queryParam.age_begin" style="width: calc(50% - 15px)"></a-input>
               <span>~</span>
-              <a-input placeholder="最大年龄" type="le" v-model:value="queryParam.age_end" style="width: calc(50% - 15px)"></a-input>
+              <a-input placeholder="Tuổi tối đa" type="le" v-model:value="queryParam.age_end" style="width: calc(50% - 15px)"></a-input>
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
             <a-col :lg="8">
-              <a-form-item label="性别">
-                <JDictSelectTag v-model:value="queryParam.sex" placeholder="请选择性别" dictCode="sex" />
+              <a-form-item label="Giới tính">
+                <JDictSelectTag v-model:value="queryParam.sex" placeholder="Vui lòng chọn giới tính" dictCode="sex" />
               </a-form-item>
             </a-col>
             <a-col :lg="8">
-              <a-form-item label="选择用户">
-                <JDictSelectTag v-model:value="queryParam.id" placeholder="请选择用户" dictCode="demo,name,id" />
+              <a-form-item label="Chọn người dùng">
+                <JDictSelectTag v-model:value="queryParam.id" placeholder="Vui lòng chọn người dùng" dictCode="demo,name,id" />
               </a-form-item>
             </a-col>
           </template>
           <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
             <a-col :lg="6">
-              <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">查询</a-button>
-              <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">重置</a-button>
+              <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">Tìm kiếm</a-button>
+              <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">Đặt lại</a-button>
               <a @click="toggleSearchStatus = !toggleSearchStatus" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
+                {{ toggleSearchStatus ? 'Thu gọn' : 'Mở rộng' }}
                 <Icon :icon="toggleSearchStatus ? 'ant-design:up-outlined' : 'ant-design:down-outlined'" />
               </a>
             </a-col>
@@ -43,22 +43,22 @@
     </div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection" :class="{ 'p-4': customSearch }">
       <template #form-age="{ model, field }">
-        <a-input placeholder="最小年龄" type="ge" v-model:value="min" style="width: calc(50% - 15px)" @change="ageChange(model, field)"></a-input>
+        <a-input placeholder="Tuổi tối thiểu" type="ge" v-model:value="min" style="width: calc(50% - 15px)" @change="ageChange(model, field)"></a-input>
         <span>~</span>
-        <a-input placeholder="最大年龄" type="le" v-model:value="max" style="width: calc(50% - 15px)" @change="ageChange(model, field)"></a-input>
+        <a-input placeholder="Tuổi tối đa" type="le" v-model:value="max" style="width: calc(50% - 15px)" @change="ageChange(model, field)"></a-input>
       </template>
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd">新增</a-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd">Thêm mới</a-button>
         <a-upload name="file" :showUploadList="false" :customRequest="(file) => handleImportXls(file, getImportUrl, reload)">
-          <a-button preIcon="ant-design:import-outlined" type="primary">导入</a-button>
+          <a-button preIcon="ant-design:import-outlined" type="primary">Nhập (import)</a-button>
         </a-upload>
-        <a-button preIcon="ant-design:export-outlined" type="primary" @click="handleExportXls('单表示例', getExportUrl,exportParams)">导出</a-button>
-        <a-button preIcon="ant-design:filter" type="primary" @click="">高级查询</a-button>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="openTab">打开Tab页</a-button>
+        <a-button preIcon="ant-design:export-outlined" type="primary" @click="handleExportXls('Ví dụ bảng đơn', getExportUrl,exportParams)">Xuất (export)</a-button>
+        <a-button preIcon="ant-design:filter" type="primary" @click="">Truy vấn nâng cao</a-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="openTab">Mở trang Tab</a-button>
         <a-button preIcon="ant-design:retweet-outlined" type="primary" @click="customSearch = !customSearch">{{
-          customSearch ? '表单配置查询' : '自定义查询'
+          customSearch ? 'Truy vấn cấu hình biểu mẫu' : 'Truy vấn tùy chỉnh'
         }}</a-button>
-        <a-button preIcon="ant-design:import-outlined" type="primary" @click="handleImport">弹窗导入</a-button>
+        <a-button preIcon="ant-design:import-outlined" type="primary" @click="handleImport">Nhập trong hộp thoại</a-button>
 
         <super-query :config="superQueryConfig" @search="handleSuperQuery"/>
 
@@ -67,12 +67,12 @@
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon style="fontsize: 12px" icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
@@ -110,7 +110,7 @@
   const isDisabled = ref(false);
   
   const [registerTable, { reload, setProps }] = useTable({
-    title: '单表示例',
+    title: 'Ví dụ bảng đơn',
     api: getDemoList,
     columns,
     formConfig: {
@@ -123,7 +123,7 @@
         style: { textAlign: 'left' },
       },
     },
-    //自定义默认多字段排序
+    //Sắp xếp mặc định theo nhiều trường tùy chỉnh
     defSort: [
       {
         column: 'name',
@@ -145,14 +145,14 @@
     rowKey: 'id',
     actionColumn: {
       width: 180,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       slots: { customRender: 'action' },
       fixed: undefined,
     },
   });
   /**
-   * 选择列配置
+   * Cấu hình cột chọn
    */
   const rowSelection = {
     type: 'checkbox',
@@ -173,23 +173,23 @@
     return filterObj(paramsForm)
   })
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -197,7 +197,7 @@
   }
 
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     console.log("checkedKeys------>",checkedKeys)
@@ -205,7 +205,7 @@
   }
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     isDisabled.value = false;
@@ -215,7 +215,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     isDisabled.value = false;
@@ -226,7 +226,7 @@
   }
 
   /**
-   * 详情页面
+   * Trang chi tiết
    */
   function handleDetail(record) {
     isDisabled.value = true;
@@ -237,32 +237,32 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteDemo({ id: record.id }, reload);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteDemo({ ids: checkedKeys.value }, reload);
   }
   /**
-   * 年龄修改事件
+   * Sự kiện sửa tuổi
    */
   function ageChange(model, field) {
     model[field] = [unref(min), unref(max)];
   }
 
   /**
-   * 打开tab页面
+   * Mở trang tab
    */
   function openTab() {
     go(`/comp/jeecg/basic`);
   }
-  //-----自定义查询----begin--------
+  //-----Truy vấn tùy chỉnh----begin--------
   const formElRef = ref();
   const labelCol = reactive({
     xs: { span: 24 },
@@ -292,11 +292,11 @@
     Object.assign(queryParam, { name: '', age_begin: '', age_end: '', sex: '', id: '' });
     reload();
   }
-  //自定义查询----end---------
+  //Truy vấn tùy chỉnh----end---------
 
   const superQueryConfig = reactive({
-    name:{ title: "名称", view: "text", type: "string", order: 1 },
-    sex:{ title: "性别", view: "list", type: "string", dictCode:'sex', order: 2 },
+    name:{ title: "Tên", view: "text", type: "string", order: 1 },
+    sex:{ title: "Giới tính", view: "list", type: "string", dictCode:'sex', order: 2 },
   });
   
   function handleSuperQuery(params) {

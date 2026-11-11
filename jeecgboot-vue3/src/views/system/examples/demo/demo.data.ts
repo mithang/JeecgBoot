@@ -4,7 +4,7 @@ import { render } from '/@/utils/common/renderUtils';
 
 export const columns: BasicColumn[] = [
   {
-    title: '姓名',
+    title: 'Họ tên',
     dataIndex: 'name',
     width: 170,
     align: 'left',
@@ -14,19 +14,19 @@ export const columns: BasicColumn[] = [
     }
   },
   {
-    title: '关键词',
+    title: 'Từ khóa',
     dataIndex: 'keyWord',
     width: 130,
     resizable: true,
   },
   {
-    title: '打卡时间',
+    title: 'Thời gian chấm công',
     dataIndex: 'punchTime',
     width: 140,
     resizable: true,
   },
   {
-    title: '工资',
+    title: 'Lương',
     dataIndex: 'salaryMoney',
     width: 140,
     resizable: true,
@@ -35,39 +35,39 @@ export const columns: BasicColumn[] = [
     }
   },
   {
-    title: '奖金',
+    title: 'Tiền thưởng',
     dataIndex: 'bonusMoney',
     width: 140,
     resizable: true,
   },
   {
-    title: '性别',
+    title: 'Giới tính',
     dataIndex: 'sex',
     sorter: {
       multiple: 3
     },
     customRender: ({ record }) => {
       return render.renderDict(record.sex, 'sex', true);
-      // let v = record.sex ? (record.sex == '1' ? '男' : '女') : '';
+      // let v = record.sex ? (record.sex == '1' ? 'Nam' : 'Nữ') : '';
       // return h('span', v);
     },
     width: 120,
     resizable: true,
   },
   {
-    title: '生日',
+    title: 'Ngày sinh',
     dataIndex: 'birthday',
     width: 120,
     resizable: true,
   },
   {
-    title: '邮箱',
+    title: 'Email',
     dataIndex: 'email',
     width: 120,
     resizable: true,
   },
   {
-    title: '个人简介',
+    title: 'Giới thiệu cá nhân',
     dataIndex: 'content',
     width: 120,
     resizable: true,
@@ -77,7 +77,7 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'name',
-    label: '姓名',
+    label: 'Họ tên',
     component: 'Input',
     componentProps: {
       trim: true,
@@ -86,7 +86,7 @@ export const searchFormSchema: FormSchema[] = [
   },
   {
     field: 'birthday',
-    label: '生日',
+    label: 'Ngày sinh',
     component: 'RangePicker',
     componentProps: {
       valueType: 'Date'
@@ -95,19 +95,19 @@ export const searchFormSchema: FormSchema[] = [
   },
   {
     field: 'age',
-    label: '年龄',
+    label: 'Tuổi',
     component: 'Input',
     slot: 'age',
     colProps: { span: 8 },
   },
   {
     field: 'sex',
-    label: '性别',
+    label: 'Giới tính',
     colProps: { span: 8 },
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'sex',
-      placeholder: '请选择性别',
+      placeholder: 'Vui lòng chọn giới tính',
     },
   },
 ];
@@ -133,90 +133,90 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'name',
-    label: '名字',
+    label: 'Tên',
     component: 'Input',
     required: true,
     componentProps: {
-      placeholder: '请输入名字',
+      placeholder: 'Vui lòng nhập tên',
     },
   },
   {
     field: 'keyWord',
-    label: '关键词',
+    label: 'Từ khóa',
     component: 'Input',
     componentProps: {
-      placeholder: '请输入关键词',
+      placeholder: 'Vui lòng nhập từ khóa',
     },
   },
   {
     field: 'punchTime',
-    label: '打卡时间',
+    label: 'Thời gian chấm công',
     component: 'DatePicker',
     componentProps: {
       showTime: true,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
-      placeholder: '请选择打卡时间',
+      placeholder: 'Vui lòng chọn thời gian chấm công',
     },
   },
   {
     field: 'salaryMoney',
-    label: '工资',
+    label: 'Lương',
     component: 'Input',
     componentProps: {
-      placeholder: '请输入工资',
+      placeholder: 'Vui lòng nhập lương',
     },
   },
   {
     field: 'sex',
-    label: '性别',
+    label: 'Giới tính',
     component: 'JDictSelectTag',
     defaultValue: '1',
     componentProps: {
       type: 'radio',
       dictCode: 'sex',
-      placeholder: '请选择性别',
+      placeholder: 'Vui lòng chọn giới tính',
     },
   },
   {
     field: 'age',
-    label: '年龄',
+    label: 'Tuổi',
     component: 'InputNumber',
     defaultValue: 1,
     componentProps: {
-      placeholder: '请输入年龄',
+      placeholder: 'Vui lòng nhập tuổi',
     },
   },
   {
     field: 'birthday',
-    label: '生日',
+    label: 'Ngày sinh',
     component: 'DatePicker',
     defaultValue: '',
     componentProps: {
       valueFormat: 'YYYY-MM-DD',
-      placeholder: '请选择生日',
+      placeholder: 'Vui lòng chọn ngày sinh',
     },
   },
   {
     field: 'email',
-    label: '邮箱',
+    label: 'Email',
     component: 'Input',
-    rules: [{ required: false, type: 'email', message: '邮箱格式不正确', trigger: 'blur' }],
+    rules: [{ required: false, type: 'email', message: 'Định dạng email không đúng', trigger: 'blur' }],
     componentProps: {
-      placeholder: '请输入邮箱',
+      placeholder: 'Vui lòng nhập email',
     },
   },
   {
     field: 'content',
-    label: '个人简介 - To introduce myself',
+    label: 'Giới thiệu cá nhân - To introduce myself',
     component: 'InputTextArea',
     labelLength: 4,
     componentProps: {
-      placeholder: '请输入个人简介',
+      placeholder: 'Vui lòng nhập giới thiệu cá nhân',
     },
   },
   {
     field: 'updateCount',
-    label: '乐观锁',
+    label: 'Khóa lạc quan (optimistic lock)',
     show: false,
     component: 'Input',
   },

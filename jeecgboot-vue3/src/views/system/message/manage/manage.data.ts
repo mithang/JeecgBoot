@@ -2,38 +2,38 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
 
 export const columns: BasicColumn[] = [
   {
-    title: '消息标题',
+    title: 'Tiêu đề tin nhắn',
     dataIndex: 'esTitle',
     width: 140,
   },
   {
-    title: '发送内容',
+    title: 'Nội dung gửi',
     dataIndex: 'esContent',
     width: 200,
     // slots: { customRender: 'esContent' },
   },
   {
-    title: '接收人',
+    title: 'Người nhận',
     dataIndex: 'esReceiver',
     width: 140,
   },
   {
-    title: '发送次数',
+    title: 'Số lần gửi',
     dataIndex: 'esSendNum',
     width: 120,
   },
   {
-    title: '发送状态',
+    title: 'Trạng thái gửi',
     dataIndex: 'esSendStatus_dictText',
     width: 120,
   },
   {
-    title: '发送时间',
+    title: 'Thời gian gửi',
     dataIndex: 'esSendTime',
     width: 140,
   },
   {
-    title: '发送方式',
+    title: 'Phương thức gửi',
     dataIndex: 'esType_dictText',
     width: 120,
   },
@@ -41,12 +41,12 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '消息标题',
+    label: 'Tiêu đề tin nhắn',
     field: 'esTitle',
     component: 'Input',
   },
   {
-    label: '发送状态',
+    label: 'Trạng thái gửi',
     field: 'esSendStatus',
     component: 'JDictSelectTag',
     componentProps: {
@@ -54,7 +54,7 @@ export const searchFormSchema: FormSchema[] = [
     },
   },
   {
-    label: '发送方式',
+    label: 'Phương thức gửi',
     field: 'esType',
     component: 'JDictSelectTag',
     componentProps: {
@@ -71,62 +71,62 @@ export const formSchemas: FormSchema[] = [
     show: false,
   },
   {
-    label: '消息标题',
+    label: 'Tiêu đề tin nhắn',
     field: 'esTitle',
     component: 'Input',
     componentProps: { readOnly: true },
   },
   {
-    label: '发送内容',
+    label: 'Nội dung gửi',
     field: 'esContent',
     component: 'InputTextArea',
     componentProps: { readOnly: true },
   },
   {
-    label: '发送参数',
+    label: 'Tham số gửi',
     field: 'esParam',
     component: 'Input',
     componentProps: { readOnly: true },
   },
 
   {
-    label: '接收人',
+    label: 'Người nhận',
     field: 'esReceiver',
     component: 'Input',
     componentProps: { readOnly: true },
   },
   {
-    label: '发送方式',
+    label: 'Phương thức gửi',
     field: 'esType',
     component: 'JDictSelectTag',
     componentProps: { disabled: true, dictCode: 'messageType' },
   },
   {
-    label: '发送时间',
+    label: 'Thời gian gửi',
     field: 'esSendTime',
     component: 'Input',
     componentProps: { readOnly: true },
   },
   {
-    label: '发送状态',
+    label: 'Trạng thái gửi',
     field: 'esSendStatus',
     component: 'JDictSelectTag',
     componentProps: { disabled: true, dictCode: 'msgSendStatus' },
   },
   {
-    label: '发送次数',
+    label: 'Số lần gửi',
     field: 'esSendNum',
     component: 'Input',
     componentProps: { readOnly: true },
   },
   {
-    label: '发送失败原因',
+    label: 'Nguyên nhân gửi thất bại',
     field: 'esResult',
     component: 'Input',
     componentProps: { readOnly: true },
   },
   {
-    label: '备注',
+    label: 'Ghi chú',
     field: 'remark',
     component: 'InputTextArea',
     componentProps: { readOnly: true },

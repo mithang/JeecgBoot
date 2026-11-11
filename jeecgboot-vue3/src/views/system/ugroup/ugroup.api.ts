@@ -18,23 +18,23 @@ enum Api {
   addUserGroup = '/sys/user/addSysUserGroup',
 }
 /**
- * 导出api
+ * Xuất (export)api
  * @param params
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入api
+ * Nhập (import)api
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 export const list = (params) =>
   defHttp.get({url: Api.list, params});
 
 /**
- * 删除单个
+ * Xóa một mục
  */
 export const deleteOne = (params,handleSuccess) => {
   return defHttp.delete({url: Api.deleteOne, params}, {joinParamsToUrl: true}).then(() => {
@@ -42,16 +42,16 @@ export const deleteOne = (params,handleSuccess) => {
   });
 }
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  */
 export const batchDelete = (params, handleSuccess) => {
   createConfirm({
     iconType: 'warning',
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({url: Api.deleteBatch, data: params}, {joinParamsToUrl: true}).then(() => {
         handleSuccess();
@@ -60,7 +60,7 @@ export const batchDelete = (params, handleSuccess) => {
   });
 }
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
  */
 export const saveOrUpdate = (params, isUpdate,showTip = true) => {
@@ -68,12 +68,12 @@ export const saveOrUpdate = (params, isUpdate,showTip = true) => {
   return defHttp.post({url: url, params},{successMessageMode:showTip?'success':'none'});
 }
 /**
- * 角色列表接口
+ * API danh sách vai trò
  * @param params
  */
 export const userList = (params) => defHttp.get({ url: Api.userList, params });
 /**
- * 删除角色用户
+ * Xóa người dùng của vai trò
  */
 export const deleteUserGroup = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteUserGroup, params }, { joinParamsToUrl: true }).then(() => {
@@ -81,15 +81,15 @@ export const deleteUserGroup = (params, handleSuccess) => {
   });
 };
 /**
- * 批量删除角色用户
+ * Xóa hàng loạt người dùng của vai trò
  * @param params
  */
 export const batchDeleteUserGroup = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否确认取消关联选中用户？',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xác nhận hủy liên kết người dùng đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.batchDeleteUserGroup, params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -98,7 +98,7 @@ export const batchDeleteUserGroup = (params, handleSuccess) => {
   });
 };
 /**
- * 添加已有用户
+ * Thêm người dùng hiện có
  */
 export const addUserGroup = (params, handleSuccess) => {
   return defHttp.post({ url: Api.addUserGroup, params }).then(() => {

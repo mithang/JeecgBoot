@@ -5,7 +5,7 @@
     </a-col>
     <a-col :xl="18" :lg="24" :md="24" style="margin-bottom: 10px">
       <div style="height: 100%;" class="address-book">
-        <!--引用表格-->
+        <!--Tham chiếu bảng-->
         <BasicTable @register="registerTable">
           <template #post="{ text }">
             {{
@@ -38,19 +38,19 @@
   const { prefixCls } = useDesign('address-list');
   provide('prefixCls', prefixCls);
 
-  // 给子组件定义一个ref变量
+  // Định nghĩa một biến ref cho component con
   const leftTree = ref();
 
-  // 当前选中的部门code
+  // Phòng ban đang chọncode
   const orgCode = ref('');
   const positionInfo = ref({});
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { tableContext } = useListPage({
     tableProps: {
       api: list,
       columns,
-      // 代码逻辑说明: [VUEN-1485]进入系统管理--通讯录页面后，网页命令行报错------------
+      // Giải thích logic mã: [VUEN-1485]Sau khi vào trang Quản lý hệ thống -- Danh bạ, dòng lệnh của trang web báo lỗi------------
       rowKey: 'id',
       showIndexColumn: true,
       formConfig: {
@@ -61,36 +61,36 @@
       actionColumn:{
         width: 80
       },
-      // 请求之前对参数做处理
+      // Xử lý tham số trước khi gửi yêu cầu
       beforeFetch(params) {
         params.orgCode = orgCode.value;
       },
     },
   });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload }] = tableContext;
 
-  // 左侧树选择后触发
+  // Kích hoạt sau khi chọn cây bên trái
   function onTreeSelect(data) {
     orgCode.value = data.orgCode;
     reload();
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    * 
    * @param record
    */
   function getTableAction(record) {
     return [
       {
-        label: '发消息',
+        label: 'Gửi tin nhắn',
         onClick: handleSendChat.bind(null, record),
       },
     ];
   }
   
-  // 查询职务信息
+  // Truy vấn thông tin chức danh
   async function queryPositionInfo() {
     const result = await positionList({ pageSize: 99999 });
     if (result) {
@@ -104,38 +104,38 @@
   queryPositionInfo();
   
   /**
-   * 聊天
+   * Trò chuyện
    *
    * @param record
    */
   function handleSendChat(record) {
-    //获取messageId
+    //LấymessageId
     let cacheByDynKey = getCacheByDynKey(JEECG_CHAT_UID);
     let iframes:any = document.getElementById("jChatOnline");
     let id = record.id;
-    //update-begin---wangshuai---date:20260616  for：[JHHB-1436]【PC端通讯录】直接点击通讯录列表的发消息没反应，需要点一下通讯录图标，才能点列表的发消息------------
+    //update-begin---wangshuai---date:20260616  for：[JHHB-1436]【Danh bạ phía PC】Nhấn trực tiếp vào gửi tin nhắn trong danh sách danh bạ không có phản hồi, phải nhấn vào biểu tượng danh bạ trước mới nhấn gửi tin nhắn trong danh sách được------------
     const msgData = {
       type: "open-chat",
       messageId: cacheByDynKey,
       data: { id: id, type: "friend", groupName: "", avatar: record.avatar, username: record.realname }
     };
-    // .btn 存在说明聊天窗口尚未打开（v-if="showChatIcon"），先触发打开再等 iframe 初始化
+    // .btn Tồn tại nghĩa là cửa sổ trò chuyện chưa mở (v-if="showChatIcon", trước tiên kích hoạt mở rồi chờ iframe khởi tạo
     const chatBtn = document.querySelector<HTMLElement>('.j-chat-online .btn');
     if (chatBtn) {
       chatBtn.click();
       const onReady = (event: MessageEvent) => {
-        //打开之后 聊天那边会发送get-system-unread-num 或者 get-dialog-height，满足一个说明已打开，再去发送聊天打开窗口的请求
+        //Sau khi mở, phía trò chuyện sẽ gửi get-system-unread-num hoặc get-dialog-height, thỏa mãn một trong hai nghĩa là đã mở, rồi mới gửi yêu cầu mở cửa sổ trò chuyện
         if (event.data?.type === 'get-system-unread-num' || event.data?.type === 'get-dialog-height') {
           window.removeEventListener('message', onReady);
           iframes.contentWindow.postMessage(msgData, '*');
         }
       };
-      //监听消息
+      //Theo dõi tin nhắn
       window.addEventListener('message', onReady);
     } else {
       iframes.contentWindow.postMessage(msgData, '*');
     }
-    //update-end---author:wangshuai ---date:20260616  for：[JHHB-1436]【PC端通讯录】直接点击通讯录列表的发消息没反应，需要点一下通讯录图标，才能点列表的发消息------------
+    //update-end---author:wangshuai ---date:20260616  for：[JHHB-1436]【Danh bạ phía PC】Nhấn trực tiếp vào gửi tin nhắn trong danh sách danh bạ không có phản hồi, phải nhấn vào biểu tượng danh bạ trước mới nhấn gửi tin nhắn trong danh sách được------------
   }
 </script>
 

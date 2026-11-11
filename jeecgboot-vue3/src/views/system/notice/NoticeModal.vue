@@ -11,7 +11,7 @@
   >
     <BasicForm @register="registerForm">
       <template #msgTemplate="{ model, field }">
-        <a-select v-model:value="model[field]" placeholder="请选择消息模版" :options="templateOption" @change="handleChange" />
+        <a-select v-model:value="model[field]" placeholder="Vui lòng chọn mẫu tin nhắn" :options="templateOption" @change="handleChange" />
       </template>
     </BasicForm>
   </BasicModal>
@@ -22,12 +22,12 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from './notice.data';
   import { getTempList, saveOrUpdate } from './notice.api';
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
   const record = ref<any>({});
   const templateOption = ref([]);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     schemas: formSchema,
     showActionButtonGroup: false,
@@ -35,11 +35,11 @@
     baseRowStyle: { marginTop: '10px' },
     baseColProps: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12, xxl: 12 },
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //加载模版
+    //Tải mẫu
     await initTemplate();
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
@@ -47,27 +47,27 @@
       if (data.record.userIds) {
         data.record.userIds = data.record.userIds.substring(0, data.record.userIds.length - 1);
       }
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
       record.value = data.record;
     } else {
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
   });
-  //设置标题
-  const title = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
-  //表单提交事件
+  //Đặt tiêu đề
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       let values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
-      // 代码逻辑说明: [issue#429]新增通知公告提交指定用户参数有undefined ---
+      //Gửi biểu mẫu
+      // Giải thích logic mã: [issue#429]Thêm mới thông báo: tham số người dùng chỉ định khi gửi cóundefined ---
       if(values.msgType==='ALL'){
         values.userIds = '';
       }else{
@@ -77,15 +77,15 @@
         values.sendStatus = '0';
       }
       await saveOrUpdate(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表（把表单数据带出去，列表页需要根据消息类型自动切换查询条件）
+      //Làm mới danh sách (mang dữ liệu biểu mẫu ra ngoài, trang danh sách cần tự động chuyển điều kiện truy vấn theo loại tin nhắn)
       emit('success', values);
     } finally {
       setModalProps({ confirmLoading: false });
     }
   }
-  //初始化模板
+  //Khởi tạo mẫu
   async function initTemplate() {
     const res = await getTempList({ templateCategory: 'notice', pageSize: 100 });
     console.log('res', res);
@@ -101,7 +101,7 @@
   }
 
   /**
-   * 模版修改
+   * Sửa mẫu
    * @param val
    */
   function handleChange(val) {

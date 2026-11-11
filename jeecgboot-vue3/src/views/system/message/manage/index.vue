@@ -1,25 +1,25 @@
 <template>
   <div :class="prefixCls">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
         <a-dropdown v-if="showBatchBtn">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="onDeleteBatch">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                <span>删除</span>
+                <span>Xóa</span>
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            <span>批量操作</span>
+            <span>Thao tác hàng loạt</span>
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
 
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
@@ -37,11 +37,11 @@
   import { Api, list, deleteBatch } from './manage.api';
   import { columns, searchFormSchema } from './manage.data';
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     designScope: 'message-manage',
     tableProps: {
-      title: '消息中心模板列表数据',
+      title: 'Dữ liệu danh sách mẫu của trung tâm tin nhắn',
       api: list,
       columns: columns,
       formConfig: {
@@ -50,7 +50,7 @@
     },
     exportConfig: {
       url: Api.exportXls,
-      name: '消息中心模板列表',
+      name: 'Danh sách mẫu của trung tâm tin nhắn',
     },
     importConfig: {
       url: Api.importXls,
@@ -58,7 +58,7 @@
     },
   });
 
-  // 注册 ListTable
+  // Đăng ký ListTable
   const [registerTable, { reload, setLoading }, { rowSelection, selectedRowKeys }] = tableContext;
   const showBatchBtn = computed(() => selectedRowKeys.value.length > 0);
 
@@ -83,9 +83,9 @@
   }
 
   /**
-   * 根据 ids 批量删除
+   * Xóa hàng loạt theo ids
    * @param idListRef array
-   * @param confirm 是否显示确认提示框
+   * @param confirm Có hiển thị hộp thoại nhắc xác nhận không
    */
   async function doDeleteDepart(idListRef, confirm = true) {
     const idList = unref(idListRef);
@@ -101,22 +101,22 @@
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
-    return [{ label: '详情', onClick: onDetail.bind(null, record) }];
+    return [{ label: 'Chi tiết', onClick: onDetail.bind(null, record) }];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record): ActionItem[] {
     return [
       {
-        label: '删除',
+        label: 'Xóa',
         color: 'error',
         popConfirm: {
-          title: '确认要删除吗？',
+          title: 'Bạn có chắc chắn muốn xóa không?',
           confirm: onDelete.bind(null, record),
         },
       },
