@@ -8,9 +8,9 @@ import org.jeecgframework.codegenerate.generate.pojo.onetomany.MainTableVo;
 import org.jeecgframework.codegenerate.generate.pojo.onetomany.SubTableVo;
 
 /**
- * 代码生成器入口【一对多】
+ * Lối vào trình sinh mã [Một-nhiều]
  * 
- * 【 GUI模式功能弱一些，请优先使用Online代码生成 】
+ * [Chế độ GUI có chức năng yếu hơn, vui lòng ưu tiên sử dụng sinh mã Online]
  * @Author 张代浩
  * @site www.jeecg.com
  * 
@@ -18,62 +18,62 @@ import org.jeecgframework.codegenerate.generate.pojo.onetomany.SubTableVo;
 public class JeecgOneToMainUtil {
 
 	/**
-	 * 一对多(父子表)数据模型，生成方法
+	 * Một-nhiều (Bảng cha-con) Mô hình dữ liệu, phương thức sinh
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//第一步：设置主表配置
+		//Bước 1: Đặt cấu hình bảng chính
 		MainTableVo mainTable = new MainTableVo();
-        //表名
+        //Tên bảng
 		mainTable.setTableName("jeecg_order_main");
-        //实体名
+        //Tên thực thể
 		mainTable.setEntityName("GuiTestOrderMain");
-        //包名
+        //Tên package
 		mainTable.setEntityPackage("gui");
-        //描述
-		mainTable.setFtlDescription("GUI订单管理");
+        //Mô tả
+		mainTable.setFtlDescription("GUI Quản lý đơn hàng");
 		
-		//第二步：设置子表集合配置
+		//Bước 2: Đặt cấu hình tập hợp bảng con
 		List<SubTableVo> subTables = new ArrayList<SubTableVo>();
-		//[1].子表一
+		//[1].Bảng con 1
 		SubTableVo po = new SubTableVo();
-        //表名
+        //Tên bảng
 		po.setTableName("jeecg_order_customer");
-        //实体名
+        //Tên thực thể
 		po.setEntityName("GuiTestOrderCustom");
-        //包名
+        //Tên package
 		po.setEntityPackage("gui");
-        //描述
-		po.setFtlDescription("客户明细");
-		//子表外键参数配置
-		/*说明: 
-		 * a) 子表引用主表主键ID作为外键，外键字段必须以_ID结尾;
-		 * b) 主表和子表的外键字段名字，必须相同（除主键ID外）;
-		 * c) 多个外键字段，采用逗号分隔;
+        //Mô tả
+		po.setFtlDescription("Chi tiết khách hàng");
+		//Cấu hình tham số khóa ngoại của bảng con
+		/*Giải thích: 
+		 * a) Bảng con tham chiếu ID khóa chính của bảng chính làm khóa ngoại, trường khóa ngoại bắt buộc phải kết thúc bằng _ID;
+		 * b) Tên trường khóa ngoại của bảng chính và bảng con phải giống nhau (trừ ID khóa chính);
+		 * c) Nhiều trường khóa ngoại thì dùng dấu phẩy để phân tách;
 		*/
 		po.setForeignKeys(new String[]{"order_id"});
 		subTables.add(po);
-		//[2].子表二
+		//[2].Bảng con 2
 		SubTableVo po2 = new SubTableVo();
-        //表名
+        //Tên bảng
 		po2.setTableName("jeecg_order_ticket");
-        //实体名
+        //Tên thực thể
 		po2.setEntityName("GuiTestOrderTicket");
-        //包名
+        //Tên package
 		po2.setEntityPackage("gui");
-        //描述
-		po2.setFtlDescription("产品明细");
-		//子表外键参数配置
-		/*说明: 
-		 * a) 子表引用主表主键ID作为外键，外键字段必须以_ID结尾;
-		 * b) 主表和子表的外键字段名字，必须相同（除主键ID外）;
-		 * c) 多个外键字段，采用逗号分隔;
+        //Mô tả
+		po2.setFtlDescription("Chi tiết sản phẩm");
+		//Cấu hình tham số khóa ngoại của bảng con
+		/*Giải thích: 
+		 * a) Bảng con tham chiếu ID khóa chính của bảng chính làm khóa ngoại, trường khóa ngoại bắt buộc phải kết thúc bằng _ID;
+		 * b) Tên trường khóa ngoại của bảng chính và bảng con phải giống nhau (trừ ID khóa chính);
+		 * c) Nhiều trường khóa ngoại thì dùng dấu phẩy để phân tách;
 		*/
 		po2.setForeignKeys(new String[]{"order_id"});
 		subTables.add(po2);
 		mainTable.setSubTables(subTables);
 		
-		//第三步：一对多(父子表)数据模型,代码生成
+		//Bước 3: Một-nhiều (Bảng cha-con) Mô hình dữ liệu, Tạo mã
 		try {
 			new CodeGenerateOneToMany(mainTable,subTables).generateCodeFile(null);
 		} catch (Exception e) {

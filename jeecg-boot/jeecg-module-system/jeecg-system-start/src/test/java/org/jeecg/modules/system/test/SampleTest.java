@@ -28,7 +28,7 @@ public class SampleTest {
 	public void testSelect() {
 		System.out.println(("----- selectAll method test ------"));
 		List<JeecgDemo> userList = jeecgDemoMapper.selectList(null);
-		Assert.isTrue(15==userList.size(),"结果不是5条");
+		Assert.isTrue(15==userList.size(),"Kết quả không phải 5 bản ghi");
 		userList.forEach(System.out::println);
 	}
 
@@ -40,7 +40,7 @@ public class SampleTest {
 	}
 
 	/**
-	 * 测试事务
+	 * Kiểm thử transaction
 	 */
 	@Test
 	public void testTran() {
@@ -48,7 +48,7 @@ public class SampleTest {
 	}
 
 	/**
-	 * 测试数据日志添加
+	 * Kiểm thử thêm log dữ liệu
 	 */
 	@Test
 	public void testDataLogSave() {

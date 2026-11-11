@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
- * 单个controller测试
+ * Kiểm thử một controller
  */
 @WebMvcTest(value = MockController.class)
 public class MockControllerTest {

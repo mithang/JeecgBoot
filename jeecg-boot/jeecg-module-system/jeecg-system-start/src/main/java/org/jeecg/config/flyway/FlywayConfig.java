@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 /**
- * @Description: 初始化flyway配置 修改之后支持多数据源，当出现异常时打印日志，不影响项目启动
+ * @Description: Khởi tạo cấu hình Flyway. Sau khi sửa đổi hỗ trợ nhiều nguồn dữ liệu; khi xảy ra ngoại lệ sẽ in log mà không ảnh hưởng tới việc khởi động dự án
  *
  * @author: wangshuai
  * @date: 2024/3/12 10:03
@@ -33,67 +33,67 @@ public class FlywayConfig {
     private Environment environment;
 
     /**
-     * 是否开启flyway
+     * Có bật Flyway hay không
      */
     @Value("${spring.flyway.enabled:false}")
     private Boolean enabled;
     
     /**
-     * 编码格式，默认UTF-8
+     * Định dạng mã hóa, mặc định UTF-8
      */
     @Value("${spring.flyway.encoding:UTF-8}")
     private String encoding;
 
     /**
-     * 迁移sql脚本文件存放路径，官方默认db/migration
+     * Đường dẫn lưu file script SQL migration, mặc định chính thức là db/migration
      */
     @Value("${spring.flyway.locations:classpath:flyway/sql/mysql}")
     private String locations;
 
     /**
-     * 迁移sql脚本文件名称的前缀，默认V
+     * Tiền tố tên file script SQL migration, mặc định là V
      */
     @Value("${spring.flyway.sql-migration-prefix:V}")
     private String sqlMigrationPrefix;
 
     /**
-     * 迁移sql脚本文件名称的分隔符，默认2个下划线__
+     * Ký tự phân tách tên file script SQL migration, mặc định là 2 dấu gạch dưới __
      */
     @Value("${spring.flyway.sql-migration-separator:__}")
     private String sqlMigrationSeparator;
 
     /**
-     * 文本前缀
+     * Tiền tố văn bản
      */
     @Value("${spring.flyway.placeholder-prefix:#(}")
     private String placeholderPrefix;
 
     /**
-     * 文本后缀
+     * Hậu tố văn bản
      */
     @Value("${spring.flyway.placeholder-suffix:)}")
     private String placeholderSuffix;
 
     /**
-     * 迁移sql脚本文件名称的后缀
+     * Hậu tố tên file script SQL migration
      */
     @Value("${spring.flyway.sql-migration-suffixes:.sql}")
     private String sqlMigrationSuffixes;
 
     /**
-     * 迁移时是否进行校验，默认true
+     * Khi migration có thực hiện kiểm tra hay không, mặc định là true
      */
     @Value("${spring.flyway.validate-on-migrate:true}")
     private Boolean validateOnMigrate;
 
     /**
-     * 当迁移发现数据库非空且存在没有元数据的表时，自动执行基准迁移，新建schema_version表
+     * Khi migration phát hiện cơ sở dữ liệu không rỗng và tồn tại bảng chưa có metadata, tự động thực thi baseline migration và tạo bảng schema_version
      */
     @Value("${spring.flyway.baseline-on-migrate:true}")
     private Boolean baselineOnMigrate;
 
     /**
-     * 是否关闭要清除已有库下的表功能,生产环境必须为true,否则会删库，非常重要！！！
+     * Có tắt chức năng xóa các bảng trong cơ sở dữ liệu hiện có hay không; môi trường production bắt buộc phải là true, nếu không sẽ xóa mất cơ sở dữ liệu, rất quan trọng!!!
      */
     @Value("${spring.flyway.clean-disabled:true}")
     private Boolean cleanDisabled;
@@ -125,12 +125,12 @@ public class FlywayConfig {
                                 .cleanDisabled(cleanDisabled)
                                 .load();
                         flyway.migrate();
-                        log.info("【数据库升级】平台集成了MySQL库的Flyway，数据库版本自动升级! ");
+                        log.info("【Nâng cấp cơ sở dữ liệu】Nền tảng đã tích hợp Flyway cho cơ sở dữ liệu MySQL, phiên bản cơ sở dữ liệu tự động nâng cấp! ");
                     } catch (FlywayException e) {
-                        log.error("【数据库升级】flyway执行sql脚本失败", e);
+                        log.error("【Nâng cấp cơ sở dữ liệu】Flyway thực thi script SQL thất bại", e);
                     }
                 } else {
-                    log.warn("【数据库升级】平台只集成了MySQL库的Flyway，实现了数据库版本自动升级! 其他类型的数据库，您可以考虑手工升级~");
+                    log.warn("【Nâng cấp cơ sở dữ liệu】Nền tảng chỉ tích hợp Flyway cho cơ sở dữ liệu MySQL, đã thực hiện nâng cấp tự động phiên bản cơ sở dữ liệu! Đối với các loại cơ sở dữ liệu khác, bạn có thể cân nhắc nâng cấp thủ công~");
                 }
             }
         });

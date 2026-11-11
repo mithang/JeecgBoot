@@ -17,12 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-* 单体启动类（采用此类启动为单体模式）
-* 报错提醒: 未集成mongo报错，可以打开启动类上面的注释 exclude={MongoAutoConfiguration.class}
+* Lớp khởi động đơn thể (dùng lớp này để khởi động ở chế độ đơn thể)
+* Nhắc nhở lỗi: Chưa tích hợp mongo nên báo lỗi, có thể mở chú thích phía trên lớp khởi động exclude={MongoAutoConfiguration.class}
 */
 @Slf4j
 @SpringBootApplication
-@ImportAutoConfiguration(JustAuthAutoConfiguration.class)  // spring boot 3.x justauth 兼容性处理
+@ImportAutoConfiguration(JustAuthAutoConfiguration.class)  // spring boot 3.x justauth Xử lý tương thích
 public class JeecgSystemApplication extends SpringBootServletInitializer {
 
     @Override
@@ -46,7 +46,7 @@ public class JeecgSystemApplication extends SpringBootServletInitializer {
                 "Application Jeecg-Boot is running! Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + path + "\n\t" +
                 "External: \thttp://" + ip + ":" + port + path + "/doc.html\n\t" +
-                "Swagger文档: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
+                "Tài liệu Swagger: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
                 "----------------------------------------------------------");
 
     }

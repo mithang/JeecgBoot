@@ -17,7 +17,7 @@ management:
 
 spring:
   flyway:
-    # 是否启用flyway
+    # Có bật không flyway
     enabled: false
     clean-disabled: true
   servlet:
@@ -25,27 +25,27 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   mail:
-    # 定时任务发送邮件
+    # Tác vụ định kỳ gửi email
     timeJobSend: false
     host: smtp.163.com
     username: jeecgos@163.com
     password: ??
     properties:
-      mail.smtp.timeout: 10000  # 连接超时（毫秒）
-      mail.smtp.connectiontimeout: 10000  # 连接超时（毫秒）
-      mail.smtp.writetimeout: 10000  # 写入超时（毫秒）
+      mail.smtp.timeout: 10000  # Thời gian chờ kết nối (mili giây)
+      mail.smtp.connectiontimeout: 10000  # Thời gian chờ kết nối (mili giây)
+      mail.smtp.writetimeout: 10000  # Thời gian chờ ghi (mili giây)
       mail.smtp.auth: true
       smtp.ssl.enable: true
-  ## quartz定时任务,采用数据库方式
+  ## quartz Tác vụ định kỳ,Sử dụng phương thức cơ sở dữ liệu
   quartz:
     job-store-type: jdbc
     jdbc:
       initialize-schema: embedded
-    #定时任务启动开关，true-开  false-关
+    #Công tắc khởi động tác vụ định kỳ,true-Bật  false-Tắt
     auto-startup: true
-    #延迟1秒启动定时任务
+    #Trì hoãn 1 giây rồi khởi động tác vụ định kỳ
     startup-delay: 1s
-    #启动时更新己存在的Job
+    #Cập nhật Job đã tồn tại khi khởi động Job
     overwrite-existing-jobs: true
     properties:
       org:
@@ -65,7 +65,7 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
-  #json 时间戳统一转换
+  #json Chuyển đổi thống nhất dấu thời gian
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -76,25 +76,25 @@ spring:
         dialect: org.hibernate.dialect.DmDialect
   aop:
     proxy-target-class: true
-  #配置freemarker
+  #Cấu hình freemarker
   freemarker:
-    # 设置模板后缀名
+    # Đặt hậu tố tên mẫu
     suffix: .ftl
-    # 设置文档类型
+    # Đặt loại tài liệu
     content-type: text/html
-    # 设置页面编码格式
+    # Đặt định dạng mã hóa trang
     charset: UTF-8
-    # 设置页面缓存
+    # Đặt bộ nhớ đệm trang
     cache: false
     prefer-file-system-access: false
-    # 设置ftl文件路径
+    # Đặt đường dẫn tệp ftl
     template-loader-path:
       - classpath:/templates
     template_update_delay: 0
-  # 设置静态文件路径，js,css等
+  # Đặt đường dẫn tệp tĩnh,js,css v.v.
   mvc:
     static-path-pattern: /**
-    #Spring Boot 2.6+后映射匹配的默认策略已从AntPathMatcher更改为PathPatternParser,需要手动指定为ant-path-matcher
+    #Spring Boot 2.6+Chiến lược mặc định của việc khớp mapping sau đã đổi từ AntPathMatcher sang PathPatternParser,Cần chỉ định thủ công thành ant-path-matcher
     pathmatch:
       matching-strategy: ant_path_matcher
   resource:
@@ -107,57 +107,57 @@ spring:
       stat-view-servlet:
         enabled: true
         loginUsername: admin
-        # 默认弱口令，部署前务必修改
+        # Mật khẩu yếu mặc định, nhất định phải đổi trước khi triển khai
         loginPassword: 123456
         allow:
       web-stat-filter:
         enabled: true
-    #打开多数据源，加上上面的就可以实现多数据源的配置
+    #Bật đa nguồn dữ liệu, thêm phần trên là có thể cấu hình đa nguồn dữ liệu
     dynamic:
       druid:
         filters: stat,slf4j
-        # 初始连接数
+        # Số kết nối ban đầu
         initialSize: 5
         validationQuery: SELECT 1 FROM DUAL
-        # 最小连接池数量
+        # Số lượng tối thiểu của connection pool
         minIdle: 5
-        # 最大连接池数量
+        # Số lượng tối đa của connection pool
         maxActive: 10
       datasource:
-        # 重点是将数据源指向oracle 用compatibleMode=oracle即可
+        # Điểm mấu chốt là trỏ nguồn dữ liệu tới oracle, dùng compatibleMode=oracle là được
         master:
           url: jdbc:dm://127.0.0.1:30236?schema=SYSDBA&compatibleMode=oracle&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8
           username: SYSDBA
           password: SYSDBA
           driverClassName: dm.jdbc.driver.DmDriver
-  #redis 配置
+  #redis Cấu hình
   data:
     redis:
       database: 0
       host: 127.0.0.1
       port: 6379
       password: ''
-#mybatis plus 设置
+#mybatis plus Cài đặt
 mybatis-plus:
   mapper-locations: classpath*:org/jeecg/**/xml/*Mapper.xml
   global-config:
-    # 关闭MP3.0自带的banner
+    # Đóng MP3.0 tích hợp sẵn banner
     banner: false
     db-config:
-      #主键类型  0:"数据库ID自增",1:"该类型为未设置主键类型", 2:"用户输入ID",3:"全局唯一ID (数字类型唯一ID)", 4:"全局唯一ID UUID",5:"字符串全局唯一ID (idWorker 的字符串表示)";
+      #Loại khóa chính  0:"ID cơ sở dữ liệu tự tăng",1:"Loại này là chưa đặt loại khóa chính", 2:"Người dùng nhập ID",3:"Duy nhất toàn cục ID (Duy nhất kiểu số ID)", 4:"Duy nhất toàn cục ID UUID",5:"Duy nhất toàn cục kiểu chuỗi ID (idWorker Biểu diễn dạng chuỗi của)";
       id-type: ASSIGN_ID
-      # 默认数据库表下划线命名
+      # Mặc định tên bảng cơ sở dữ liệu dùng dấu gạch dưới
       table-underline: true
   configuration:
-#    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+#    # Cấu hình này sẽ in SQL đã thực thi ra, có thể dùng khi phát triển hoặc kiểm thử
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    # 返回类型为Map,显示null对应的字段
+    # Kiểu trả về là Map,Hiển thị trường tương ứng với null
     call-setters-on-nulls: true
-#jeecg专用配置
+#jeecg Cấu hình chuyên dụng
 minidao:
   base-package: org.jeecg.modules.jmreport.*,org.jeecg.modules.drag.*,org.jeecg.modules.chat2bi.*
 jeecg:
-  # AI集成
+  # AI Tích hợp
   ai-chat:
     enabled: true
     model: deepseek-v4-pro
@@ -166,43 +166,43 @@ jeecg:
     timeout: 60
     skills-dir:
     skills-shell-dir:
-    # AI聊天助手访问限流配置
+    # AI Cấu hình giới hạn truy cập của trợ lý trò chuyện
     rate-limit:
-      # 单 session 每分钟上限
+      # Giới hạn mỗi phút cho một session
       send-per-session-per-minute: 10
-      # 单 IP 每分钟上限
+      # Giới hạn mỗi phút cho một IP
       send-per-ip-per-minute: 20
-      # 单 session 每小时上限
+      # Giới hạn mỗi giờ cho một session
       upload-per-session-per-hour: 20
-    # AI文生图绘画
+    # AI Vẽ tranh từ văn bản
     ai-model-draw:
-      # 提供商 OPENAI/ZHIPU/QWEN
+      # Nhà cung cấp OPENAI/ZHIPU/QWEN
       provider: QWEN
       model: wan2.2-t2i-flash
       apiKey: sk-??
       apiHost: https://dashscope.aliyuncs.com/api/v1/
       timeout: 60
-    # AI图生图绘画
+    # AI Vẽ tranh từ hình ảnh
     ai-model-pic-draw:
-      # 提供商 QWEN
+      # Nhà cung cấp QWEN
       provider: QWEN
-      # 目前只支持 wan2.5-i2i-preview和wanx2.1-imageedit模型
+      # Hiện chỉ hỗ trợ wan2.5-i2i-preview và wanx2.1-imageedit Mô hình
       model: wan2.5-i2i-preview
       apiKey: sk-??
       apiHost: https://dashscope.aliyuncs.com/api/v1/
       timeout: 60
-    # AI语音 目前只支持智普 glm-tts
+    # AI Giọng nói hiện chỉ hỗ trợ Zhipu glm-tts
     ai-model-voice:
       provider: ZHIPU
       model: glm-tts
       apiKey: ??
       apiHost: https://open.bigmodel.cn/api/paas/v4
       timeout: 60
-      # tongtong、chuichui、xiaochen、jam、kazi、douji、luodo
+      # tongtong, chuichui, xiaochen, jam, kazi, douji, luodo
       voice: tongtong
       speed: 1.0
       volume: 0.0
-    # AI视频目前只支持智普 支持模型 cogvideox-3（支持自动生成语音）;viduq1-text、vidu2-reference(不支持自动生成语音，还贵)
+    # AI Video hiện chỉ hỗ trợ Zhipu, các mô hình được hỗ trợ cogvideox-3(Hỗ trợ tự động sinh giọng nói);viduq1-text, vidu2-reference(Không hỗ trợ tự động sinh giọng nói, lại còn đắt)
     ai-model-video:
       provider: ZHIPU
       model: cogvideox-3
@@ -211,14 +211,14 @@ jeecg:
       timeout: 60
       ffmpeg-path:
       edge-tts-path:
-    # 默认向量模型
+    # Mô hình vector mặc định
     ai-model-embed:
       provider: QWEN
       model: text-embedding-v1
       apiKey: sk-??
       apiHost: https://dashscope.aliyuncs.com/api/v1/services/
       timeout: 60
-  # AIRag向量库
+  # AIRag Thư viện vector
   ai-rag:
     embed-store:
       host: 127.0.0.1
@@ -227,103 +227,103 @@ jeecg:
       user: postgres
       password: postgres
       table: embeddings
-    # Brave Search 联网检索（AI Agent 工具）
+    # Brave Search Tìm kiếm trực tuyến (công cụ AI Agent)
     brave-search:
       api-key: ??
       endpoint: https://api.search.brave.com/res/v1/web/search
       count: 10
       timeout: 15
-  # 平台上线安全配置
+  # Cấu hình bảo mật khi nền tảng đưa vào vận hành
   firewall:
-    # 数据源安全 (开启后，Online报表和图表的数据源为必填)
+    # Bảo mật nguồn dữ liệu (Sau khi bật, nguồn dữ liệu của báo cáo và biểu đồ Online là bắt buộc)
     dataSourceSafe: false
-    # 低代码模式（dev:开发模式，prod:发布模式——关闭所有在线开发配置能力）
+    # Chế độ low-code (dev:Chế độ phát triển,prod:Chế độ phát hành — tắt toàn bộ khả năng phát triển trực tuyến)
     lowCodeMode: dev
-    # 登录是否启用验证码
+    # Đăng nhập có bật mã xác minh hay không
     enableLoginCaptcha: true
-    # 是否开启三级等保强密码校验（true 开启强密码模式，false 使用简单密码规则）
+    # Có bật kiểm tra mật khẩu mạnh cấp độ bảo vệ 3 hay không (true bật chế độ mật khẩu mạnh, false dùng quy tắc mật khẩu đơn giản)
     enableStrongPwd: false
-  # 签名密钥串(前后端要一致，正式发布请自行修改)
+  # Chuỗi khóa ký(Frontend và backend phải nhất quán, khi phát hành chính thức vui lòng tự sửa)
   signatureSecret: dd05f1c54d63749eda95f9fa6d49v442a
-  #签名拦截接口
+  #Giao diện chặn chữ ký
   signUrls: /sys/dict/getDictItems/*,/sys/dict/loadDict/*,/sys/dict/loadDictOrderByValue/*,/sys/dict/loadDictItem/*,/sys/dict/loadTreeData,/sys/api/queryTableDictItemsByCode,/sys/api/queryFilterTableDictInfo,/sys/api/queryTableDictByKeys,/sys/api/translateDictFromTable,/sys/api/translateDictFromTableByKeys,/sys/sendChangePwdSms,/sys/user/sendChangePhoneSms,/sys/sms,/desform/api/sendVerifyCode
-  # 上传类型：local（本地存储）| minio（MinIO对象存储）| alioss（阿里云OSS）
+  # Loại tải lên: local (lưu trữ cục bộ)| minio(Lưu trữ đối tượng MinIO)| alioss(OSS Alibaba Cloud)
   uploadType: local
-  # 前端访问地址
+  # Địa chỉ truy cập frontend
   domainUrl:
     pc: http://localhost:3100
     app: http://localhost:8051
   path:
-    #文件上传根目录 设置
+    #Đặt thư mục gốc tải tệp lên
     upload: /opt/upFiles
-    #webapp文件路径
+    #webapp Đường dẫn tệp
     webapp: /opt/webapp
   shiro:
     excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/bigscreen/category/**,/bigscreen/visual/**,/bigscreen/map/**,/jmreport/bigscreen2/**
-  #阿里云oss存储和大鱼短信秘钥配置
+  #Cấu hình lưu trữ OSS Alibaba Cloud và khóa bí mật SMS Alibaba Dayu
   oss:
     accessKey: ??
     secretKey: ??
     endpoint: oss-cn-beijing.aliyuncs.com
     bucketName: jeecgdev
-    # 短信模板
+    # Mẫu SMS
     sms-template:
-      # 签名
+      # Chữ ký
       signature:
-      # 模板code
+      # Mẫu code
       templateCode:
-        # 登录短信、忘记密码模板编码
+        # Mã mẫu SMS đăng nhập, quên mật khẩu
         SMS_175435174:
-        # 修改密码短信模板编码
+        # Mã mẫu SMS đổi mật khẩu
         SMS_465391221:
-        # 注册账号短信模板编码
+        # Mã mẫu SMS đăng ký tài khoản
         SMS_175430166:
-  # 在线预览文件服务器地址配置
+  # Cấu hình địa chỉ máy chủ xem trước tệp trực tuyến
   file-view-domain: http://fileview.jeecg.com
-  # minio文件上传
+  # minio Tải lên tệp
   minio:
     minio_url: http://minio.jeecg.com
     minio_name: ??
     minio_pass: ??
     bucketName: otatest
-  #大屏报表参数设置
+  #Đặt tham số báo cáo màn hình lớn
   jmreport:
-    #多租户模式，默认值为空(created:按照创建人隔离、tenant:按照租户隔离)
+    #Chế độ đa thuê bao, giá trị mặc định để trống(created:Cách ly theo người tạo,tenant:Cách ly theo thuê bao)
     saasMode:
-    # 签名密钥串(前后端要一致，正式发布请自行修改)
+    # Chuỗi khóa ký(Frontend và backend phải nhất quán, khi phát hành chính thức vui lòng tự sửa)
     signatureSecret: dd05f1c54d63749eda95f9fa6d49v442a
     ai:
-      # OpenAI 兼容 base 地址（必填）
+      # OpenAI Địa chỉ base tương thích (bắt buộc)
       base-url: https://api.deepseek.com
-      # API Key（必填，留空则 AI 不可用）
+      # API Key(Bắt buộc, để trống thì AI không dùng được)
       api-key:
-      # 模型名
+      # Tên mô hình
       model: deepseek-v4-pro
-      #确定性输出，默认temperature=0
+      #Đầu ra xác định, mặc định temperature=0
       temperature: 0
-      # 单次生成最大 token 数(传给大模型的 max_tokens)，DeepSeek 合法范围[1,393216]
+      # Số token tối đa cho một lần sinh(Truyền cho mô hình lớn max_tokens), phạm vi hợp lệ của DeepSeek[1,393216]
       max-tokens: 393216
-      # AI自动建表功（安全警告: 此功能会直接操作数据库DDL/DML，生产环境请勿启用）
+      # AI Chức năng tự động tạo bảng (cảnh báo bảo mật: Chức năng này sẽ thao tác trực tiếp với cơ sở dữ liệu DDL/DML, môi trường production xin đừng bật)
       autoTableEnabled: true
-    # 平台上线安全配置
+    # Cấu hình bảo mật khi nền tảng đưa vào vận hành
     firewall:
-      # 数据源安全 (开启后，不允许使用平台数据源、SQL解析加签并且不允许查询数据库)
+      # Bảo mật nguồn dữ liệu (Sau khi bật, không được sử dụng nguồn dữ liệu của nền tảng, ký xác thực khi phân tích SQL và không được truy vấn cơ sở dữ liệu)
       dataSourceSafe: false
-      # SQL解析安全 false: 数据库解析(默认,稳定性好) true: jsqlparser解析(不走数据库,安全级别高) v2.2.1+新增
+      # SQL Bảo mật phân tích false: Phân tích bằng cơ sở dữ liệu(Mặc định,Tính ổn định tốt) true: jsqlparser Phân tích cú pháp(Không qua cơ sở dữ liệu,Cấp độ bảo mật cao) v2.2.1+Thêm mới
       sqlParseSafe: true
-      # 低代码开发模式（dev:开发模式，prod:发布模式—关闭在线报表设计功能，分配角色admin、lowdeveloper可放开限制）
+      # Chế độ phát triển low-code (dev:Chế độ phát triển,prod:Chế độ phát hành — tắt chức năng thiết kế báo cáo trực tuyến, gán vai trò admin, lowdeveloper có thể nới lỏng giới hạn)
       lowCodeMode: dev
-      # sql注入检查级别（strict:严格, basic:简单校验, none:不校验）
+      # sql Cấp độ kiểm tra injection (strict:Nghiêm ngặt, basic:Kiểm tra đơn giản, none:Không kiểm tra)
       sqlInjectionLevel: basic
-      # 数据源重试连接的次数，默认10，空或者0不限制次数(2.3.1+)
+      # Số lần nguồn dữ liệu thử kết nối lại, mặc định 10, để trống hoặc 0 là không giới hạn số lần(2.3.1+)
       numberOfRetries: 10
-    # 高德地图Api配置
+    # Cấu hình API bản đồ Gaode
     gao-de-api:
-      # 应用key
+      # Ứng dụng key
       api-key: ??
-      # 应用秘钥
+      # Khóa bí mật ứng dụng
       secret-key: ??
-  #xxl-job配置
+  #xxl-job Cấu hình
   xxljob:
     enabled: false
     adminAddresses: http://127.0.0.1:9080/xxl-job-admin
@@ -334,16 +334,16 @@ jeecg:
     port: 30007
     logPath: logs/jeecg/job/jobhandler/
     logRetentionDays: 30
-  #分布式锁配置
+  #Cấu hình khóa phân tán
   redisson:
     address: 127.0.0.1:6379
     password:
     type: STANDALONE
     enabled: true
-#cas单点登录
+#cas Đăng nhập một lần
 cas:
   prefixUrl: http://cas.example.org:8443/cas
-#Mybatis输出sql日志
+#Mybatis Xuất nhật ký SQL
 logging:
   level:
     org.springframework.context.support.PostProcessorRegistrationDelegate: error
@@ -351,15 +351,15 @@ logging:
     org.jeecg.modules.system.mapper: info
 #swagger
 knife4j:
-  #开启增强配置
+  #Bật cấu hình tăng cường
   enable: true
-  #开启生产环境屏蔽
+  #Bật chặn môi trường production
   production: false
   basic:
     enable: false
     username: jeecg
     password: jeecg1314
-#第三方登录
+#Đăng nhập bên thứ ba
 justauth:
   enabled: true
   type:

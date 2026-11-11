@@ -10,31 +10,31 @@ import org.springframework.http.ResponseEntity;
 /**
  * @Description: TODO
  * @author: scott
- * @date: 2022年05月10日 14:02
+ * @date: 2022 năm 05 tháng 10 ngày 14:02
  */
 public class TestMain {
     public static void main(String[] args) {
-        // 请求地址
+        // Địa chỉ yêu cầu
         String url = "https://api3.boot.jeecg.com/sys/user/list";
-        // 请求 Header （用于传递Token）
+        // Header của yêu cầu (dùng để truyền Token)
         HttpHeaders headers = getHeaders();
-        // 请求方式是 GET 代表获取数据
+        // Phương thức yêu cầu là GET nghĩa là lấy dữ liệu
         HttpMethod method = HttpMethod.GET;
 
-        //System.out.println("请求地址：" + url);
-        //System.out.println("请求方式：" + method);
+        //System.out.println("Địa chỉ yêu cầu:" + url);
+        //System.out.println("Phương thức yêu cầu:" + method);
 
-        // 利用 RestUtil 请求该url
+        // Dùng RestUtil để yêu cầu url
         ResponseEntity<JSONObject> result = RestUtil.request(url, method, headers, null, null, JSONObject.class);
         if (result != null && result.getBody() != null) {
-            System.out.println("返回结果：" + result.getBody().toJSONString());
+            System.out.println("Kết quả trả về:" + result.getBody().toJSONString());
         } else {
-            System.out.println("查询失败");
+            System.out.println("Tìm kiếm thất bại");
         }
     }
     private static HttpHeaders getHeaders() {
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.50h-g6INOZRVnznExiawFb1U6PPjcVVA4POeYRA5a5Q";
-        System.out.println("请求Token：" + token);
+        System.out.println("Token yêu cầu:" + token);
 
         HttpHeaders headers = new HttpHeaders();
         String mediaType = MediaType.APPLICATION_JSON_VALUE;

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description: 消息推送测试
+ * @Description: Kiểm thử đẩy tin nhắn
  * @Author: lsq
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = JeecgSystemApplication.class)
@@ -32,103 +32,103 @@ public class SendMessageTest {
     ISysBaseAPI sysBaseAPI;
 
     /**
-     * 发送系统消息
+     * Gửi tin nhắn hệ thống
      */
     @Test
     public void sendSysAnnouncement() {
-        //发送人
+        //Người gửi
         String fromUser = "admin";
-        //接收人
+        //Người nhận
         String toUser = "jeecg";
-        //标题
-        String title = "系统消息";
-        //内容
-        String msgContent = "TEST:今日份日程计划已送达！";
-        //发送系统消息
+        //Tiêu đề
+        String title = "Tin nhắn hệ thống";
+        //Nội dung
+        String msgContent = "TEST:Lịch trình hôm nay đã được gửi tới!";
+        //Gửi tin nhắn hệ thống
         sysBaseAPI.sendSysAnnouncement(new MessageDTO(fromUser, toUser, title, msgContent));
-        //消息类型
+        //Loại tin nhắn
         String msgCategory = CommonConstant.MSG_CATEGORY_1;
-        //业务类型
+        //Loại nghiệp vụ
         String busType = SysAnnmentTypeEnum.EMAIL.getType();
-        //业务ID
+        //Nghiệp vụ ID
         String busId = "11111";
-        //发送带业务参数的系统消息
+        //Gửi tin nhắn hệ thống kèm tham số nghiệp vụ
         BusMessageDTO busMessageDTO = new BusMessageDTO(fromUser, toUser, title, msgContent, msgCategory, busType,busId);
         sysBaseAPI.sendBusAnnouncement(busMessageDTO);
     }
 
     /**
-     * 发送模版消息
+     * Gửi tin nhắn mẫu
      */
     @Test
     public void sendTemplateAnnouncement() {
-        //发送人
+        //Người gửi
         String fromUser = "admin";
-        //接收人
+        //Người nhận
         String toUser = "jeecg";
-        //标题
-        String title = "通知公告";
-        //模版编码
+        //Tiêu đề
+        String title = "Thông báo";
+        //Mã mẫu
         String templateCode = "412358";
-        //模版参数
+        //Tham số mẫu
         Map templateParam = new HashMap<>();
-        templateParam.put("realname","JEECG用户");
+        templateParam.put("realname","JEECG Người dùng");
         sysBaseAPI.sendTemplateAnnouncement(new TemplateMessageDTO(fromUser,toUser,title,templateParam,templateCode));
-        //业务类型
+        //Loại nghiệp vụ
         String busType = SysAnnmentTypeEnum.EMAIL.getType();
-        //业务ID
+        //Nghiệp vụ ID
         String busId = "11111";
-        //发送带业务参数的模版消息
+        //Gửi tin nhắn mẫu kèm tham số nghiệp vụ
         BusTemplateMessageDTO busMessageDTO = new BusTemplateMessageDTO(fromUser, toUser, title, templateParam ,templateCode, busType,busId);
         sysBaseAPI.sendBusTemplateAnnouncement(busMessageDTO);
-        //新发送模版消息
+        //Gửi tin nhắn mẫu mới
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.setType(MessageTypeEnum.XT.getType());
         messageDTO.setToAll(false);
         messageDTO.setToUser(toUser);
-        messageDTO.setTitle("【流程错误】");
+        messageDTO.setTitle("【Lỗi quy trình】");
         messageDTO.setFromUser("admin");
         HashMap data = new HashMap<>();
         data.put(CommonConstant.NOTICE_MSG_BUS_TYPE, "msg_node");
         messageDTO.setData(data);
-        messageDTO.setContent("TEST:流程执行失败！任务节点未找到");
+        messageDTO.setContent("TEST:Thực thi quy trình thất bại! Không tìm thấy nút tác vụ");
         sysBaseAPI.sendTemplateMessage(messageDTO);
     }
     /**
-     * 发送邮件
+     * Gửi email
      */
     @Test
     public void sendEmailMsg() {
-        String title = "【日程提醒】您的日程任务即将开始";
-        String content = "TEST:尊敬的王先生，您购买的演唱会将于本周日10：08分在国家大剧院如期举行，届时请携带好您的门票和身份证到场";
+        String title = "【Nhắc lịch trình】Nhiệm vụ lịch trình của bạn sắp bắt đầu";
+        String content = "TEST:Kính gửi ông Vương, buổi hòa nhạc mà ông đã mua vé sẽ diễn ra đúng hẹn vào 10:08 Chủ nhật tuần này tại Nhà hát Lớn Quốc gia, khi đó vui lòng mang theo vé và chứng minh nhân dân của ông đến tham dự";
         String email = "250678106@qq.com";
         sysBaseAPI.sendEmailMsg(email,title,content);
     }
     /**
-     * 发送html模版邮件
+     * Gửi email mẫu html
      */
     @Test
     public void sendTemplateEmailMsg() {
-        String title = "收到一个催办";
+        String title = "Nhận được một yêu cầu thúc giục";
         String email = "250678106@qq.com";
         JSONObject params = new JSONObject();
-        params.put("bpm_name","高级设置");
-        params.put("bpm_task","审批人");
+        params.put("bpm_name","Cài đặt nâng cao");
+        params.put("bpm_task","Người duyệt");
         params.put("datetime","2023-10-07 18:00:49");
         params.put("url","http://boot3.jeecg.com/message/template");
-        params.put("remark","快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点快点");
+        params.put("remark","Nhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lênNhanh lên");
         sysBaseAPI.sendHtmlTemplateEmail(email,title, EmailTemplateEnum.BPM_CUIBAN_EMAIL,params);
     }
     /**
-     * 发送短信
+     * Gửi SMS
      */
     @Test
     public void sendSms() throws ClientException {
-        //手机号
+        //Số điện thoại
         String mobile = "159***";
-        //消息模版
+        //Mẫu tin nhắn
         DySmsEnum templateCode = DySmsEnum.LOGIN_TEMPLATE_CODE;
-        //模版所需参数
+        //Tham số cần thiết của mẫu
         JSONObject obj = new JSONObject();
         obj.put("code", "4XDP");
         DySmsHelper.sendSms(mobile, obj, templateCode);

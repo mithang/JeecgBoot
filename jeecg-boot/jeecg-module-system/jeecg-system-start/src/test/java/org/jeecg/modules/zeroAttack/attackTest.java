@@ -15,30 +15,30 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * SVG 存储型 XSS 漏洞攻击与修复验证测试
+ * SVG Kiểm thử tấn công và xác minh sửa lỗi lỗ hổng XSS dạng lưu trữ
  * Issue: https://github.com/jeecgboot/JeecgBoot/issues/9646
  *
- * 漏洞原理：
- *   1. svg 在上传白名单中，允许上传含内联脚本的 SVG 文件
- *   2. /sys/common/static/** 路径设置了 Content-Disposition: attachment（强制下载，安全）
- *   3. 但上传目录同时被注册为静态资源目录（/**），可绕过 Controller 直接访问
- *   4. 浏览器以顶层文档渲染 SVG 时，内联 <script> 被执行 → Stored XSS
+ * Nguyên lý lỗ hổng:
+ *   1. svg SVG nằm trong danh sách trắng tải lên, cho phép tải lên tệp SVG chứa script nội tuyến
+ *   2. /sys/common/static/** Đường dẫn đã được thiết lập Content-Disposition: attachment(Bắt buộc tải xuống, an toàn)
+ *   3. Nhưng thư mục tải lên đồng thời cũng được đăng ký làm thư mục tài nguyên tĩnh (/**), có thể bỏ qua Controller để truy cập trực tiếp
+ *   4. Khi trình duyệt render SVG dưới dạng tài liệu cấp cao nhất, nội tuyến <script> bị thực thi → Stored XSS
  *
- * 修复方案（SvgSecurityFilter）：
- *   对所有 .svg 响应追加：
- *   - Content-Security-Policy: sandbox  → 沙箱化页面，禁止脚本执行
- *   - X-Content-Type-Options: nosniff   → 禁止 MIME 类型嗅探
+ * Phương án sửa lỗi (SvgSecurityFilter):
+ *   Đối với tất cả .svg Thêm vào phản hồi:
+ *   - Content-Security-Policy: sandbox  → Trang được sandbox hóa, cấm thực thi script
+ *   - X-Content-Type-Options: nosniff   → Cấm dò tìm loại MIME
  *
- * 前提：运行测试前，请先在本机启动 JeecgBoot 后端服务（localhost:8080）
- * 启动命令：cd jeecg-module-system/jeecg-system-start && mvn spring-boot:run
+ * Điều kiện tiên quyết: Trước khi chạy kiểm thử, vui lòng khởi động dịch vụ backend JeecgBoot trên máy cục bộ (localhost:8080)
+ * Lệnh khởi động:cd jeecg-module-system/jeecg-system-start && mvn spring-boot:run
  *
- * 测试用例说明：
- *   - testUploadMaliciousSvg              上传恶意 SVG，打印可在浏览器验证的 URL（手动验证）
- *   - testSvgSecurityFilterFix            【核心】验证 SvgSecurityFilter 修复是否生效（自动判断）
- *   - testSvgXssViaDirectStaticPath       对比直连路径与强制下载路径的所有安全响应头
+ * Mô tả test case:
+ *   - testUploadMaliciousSvg              Tải lên SVG độc hại, in URL có thể xác minh trên trình duyệt (xác minh thủ công)
+ *   - testSvgSecurityFilterFix            【Cốt lõi】Xác minh bản sửa SvgSecurityFilter có hiệu lực hay không (tự động nhận định)
+ *   - testSvgXssViaDirectStaticPath       So sánh tất cả header phản hồi an toàn của đường dẫn trực tiếp và đường dẫn bắt buộc tải xuống
  */
-// WebEnvironment.NONE：只启动 Spring 容器用于依赖注入（RedisUtil/JwtUtil），
-// 不启动内嵌服务器。HTTP 请求均发往外部已运行的 localhost:8080 服务。
+// WebEnvironment.NONE: Chỉ khởi động Spring container để dùng cho dependency injection (RedisUtil/JwtUtil),
+// Không khởi động máy chủ nhúng. Tất cả yêu cầu HTTP đều được gửi tới localhost:8080 dịch vụ đã chạy bên ngoài.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = JeecgSystemApplication.class)
 @SuppressWarnings({"FieldCanBeLocal", "SpringJavaAutowiredMembersInspection"})
 public class attackTest {
@@ -46,14 +46,14 @@ public class attackTest {
     @Autowired
     private RedisUtil redisUtil;
 
-    /** 已运行的后端服务地址，与 application-dev.yml 中的端口保持一致 */
+    /** Địa chỉ của dịch vụ backend đã chạy, giữ nhất quán với application-dev.yml cổng trong đó */
     private final String BASE_URL = "http://localhost:8080/jeecg-boot";
     private final String USERNAME = "admin";
     private final String PASSWORD = "123456";
 
     /**
-     * 恶意 SVG 内容：包含内联 XSS payload
-     * 浏览器以顶层文档渲染时，<script> 会被执行
+     * Nội dung SVG độc hại: chứa nội tuyến XSS payload
+     * Khi trình duyệt render dưới dạng tài liệu cấp cao nhất,<script> sẽ bị thực thi
      */
     private static final String MALICIOUS_SVG =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -63,48 +63,48 @@ public class attackTest {
             "  <text x=\"10\" y=\"50\" fill=\"white\">XSS PoC - Issue 9646</text>\n" +
             "</svg>";
 
-    // ===================== 测试用例 =====================
+    // ===================== Test case =====================
 
     /**
-     * 测试用例1：上传恶意 SVG，打印可在浏览器中手动验证的 URL
+     * Test case 1: Tải lên SVG độc hại, in URL có thể xác minh thủ công trên trình duyệt URL
      *
-     * 如何验证漏洞（修复前）：
-     *   用浏览器访问「直连路径」→ 弹出 alert 说明存在 XSS
-     * 如何验证修复（修复后）：
-     *   用浏览器访问「直连路径」→ 不弹 alert，说明 CSP sandbox 生效
+     * Cách xác minh lỗ hổng (trước khi sửa):
+     *   Dùng trình duyệt truy cập “đường dẫn trực tiếp”→ Hiện alert nghĩa là tồn tại XSS
+     * Cách xác minh bản sửa (sau khi sửa):
+     *   Dùng trình duyệt truy cập “đường dẫn trực tiếp”→ Không hiện alert, nghĩa là CSP sandbox đã có hiệu lực
      */
     @Test
     public void testUploadMaliciousSvg() throws Exception {
         String token = getToken();
         System.out.println("======================================================");
-        System.out.println("  测试：上传含 XSS payload 的 SVG 文件");
+        System.out.println("  Kiểm thử: Tải lên tệp SVG chứa XSS payload");
         System.out.println("  Issue: https://github.com/jeecgboot/JeecgBoot/issues/9646");
         System.out.println("======================================================");
 
         String filePath = uploadSvg(token);
-        System.out.println("[上传成功] 文件路径: " + filePath);
+        System.out.println("[Tải lên thành công] Đường dẫn tệp: " + filePath);
         System.out.println();
-        System.out.println(">>> 请在浏览器中访问以下地址手动验证 <<<");
+        System.out.println(">>> Vui lòng truy cập địa chỉ sau trên trình duyệt để xác minh thủ công <<<");
         System.out.println();
-        System.out.println("  [漏洞路径] 静态资源直连：");
+        System.out.println("  [Đường dẫn lỗ hổng] Truy cập trực tiếp tài nguyên tĩnh:");
         System.out.println("  " + BASE_URL + "/" + filePath);
-        System.out.println("  修复前：弹出 alert（XSS 触发）");
-        System.out.println("  修复后：不弹 alert（CSP sandbox 阻止脚本）");
+        System.out.println("  Trước khi sửa: hiện alert (XSS được kích hoạt)");
+        System.out.println("  Sau khi sửa: không hiện alert (CSP sandbox chặn script)");
         System.out.println();
-        System.out.println("  [对照路径] 强制下载（始终安全，不触发 XSS）：");
+        System.out.println("  [Đường dẫn đối chiếu] Bắt buộc tải xuống (luôn an toàn, không kích hoạt XSS):");
         System.out.println("  " + BASE_URL + "/sys/common/static/" + filePath);
     }
 
     /**
-     * 测试用例2：【核心】验证 SvgSecurityFilter 修复是否生效
+     * Test case 2: 【Cốt lõi】Xác minh bản sửa SvgSecurityFilter có hiệu lực hay không
      *
-     * SvgSecurityFilter 修复方案：对 .svg 响应追加安全头，而不是禁止上传
-     *   Content-Security-Policy: sandbox  → 浏览器沙箱化渲染，<script> 不被执行
-     *   X-Content-Type-Options: nosniff   → 禁止 MIME 嗅探绕过
+     * SvgSecurityFilter Phương án sửa lỗi: Đối với .svg Thêm header an toàn vào phản hồi, thay vì cấm tải lên
+     *   Content-Security-Policy: sandbox  → Trình duyệt render trong sandbox,<script> không bị thực thi
+     *   X-Content-Type-Options: nosniff   → Cấm bypass bằng dò tìm MIME
      *
-     * 判断逻辑：
-     *   直连路径响应包含 Content-Security-Policy: sandbox → 修复已生效
-     *   直连路径响应缺少 Content-Security-Policy: sandbox → 修复未生效
+     * Logic nhận định:
+     *   Phản hồi của đường dẫn trực tiếp chứa Content-Security-Policy: sandbox → Đã sửa và có hiệu lực
+     *   Phản hồi của đường dẫn trực tiếp thiếu Content-Security-Policy: sandbox → Sửa chưa có hiệu lực
      */
     @Test
     public void testSvgSecurityFilterFix() throws Exception {
@@ -112,17 +112,17 @@ public class attackTest {
         RestTemplate restTemplate = new RestTemplate();
 
         System.out.println("======================================================");
-        System.out.println("  测试：SvgSecurityFilter 安全响应头修复验证");
-        System.out.println("  修复类：org.jeecg.config.filter.SvgSecurityFilter");
+        System.out.println("  Kiểm thử: Xác minh sửa lỗi header phản hồi an toàn của SvgSecurityFilter");
+        System.out.println("  Lớp sửa lỗi:org.jeecg.config.filter.SvgSecurityFilter");
         System.out.println("======================================================");
 
-        // Step 1: 上传恶意 SVG（SvgSecurityFilter 修复不移除白名单，上传仍允许）
+        // Step 1: Tải lên SVG độc hại (bản sửa SvgSecurityFilter không gỡ khỏi danh sách trắng, vẫn cho phép tải lên)
         String filePath = uploadSvg(token);
-        System.out.println("[Step 1] SVG 上传成功，文件路径: " + filePath);
+        System.out.println("[Step 1] SVG Tải lên thành công, đường dẫn tệp: " + filePath);
 
-        // Step 2: 通过直连静态资源路径访问（漏洞路径）
+        // Step 2: Truy cập qua đường dẫn tài nguyên tĩnh trực tiếp (đường dẫn lỗ hổng)
         String directUrl = BASE_URL + "/" + filePath;
-        System.out.println("\n[Step 2] 检测直连路径响应头（漏洞路径）");
+        System.out.println("\n[Step 2] Kiểm tra header phản hồi của đường dẫn trực tiếp (đường dẫn lỗ hổng)");
         System.out.println("  URL: " + directUrl);
 
         try {
@@ -134,44 +134,44 @@ public class attackTest {
             String contentDisposition = resp.getHeaders().getFirst("Content-Disposition");
             String contentType = String.valueOf(resp.getHeaders().getContentType());
 
-            System.out.println("  响应状态: " + resp.getStatusCode());
+            System.out.println("  Trạng thái phản hồi: " + resp.getStatusCode());
             System.out.println("  Content-Type: " + contentType);
             System.out.println("  Content-Security-Policy: " + csp);
             System.out.println("  X-Content-Type-Options: " + xContentType);
             System.out.println("  Content-Disposition: " + contentDisposition);
 
-            // 判断 SvgSecurityFilter 是否生效
+            // Nhận định SvgSecurityFilter có hiệu lực hay không
             boolean cspSandboxPresent = csp != null && csp.contains("sandbox");
             boolean nosniffPresent = xContentType != null && xContentType.contains("nosniff");
 
             System.out.println();
             if (cspSandboxPresent && nosniffPresent) {
-                System.out.println("  ✓ [修复已生效] Content-Security-Policy: sandbox 存在");
-                System.out.println("  ✓ [修复已生效] X-Content-Type-Options: nosniff 存在");
-                System.out.println("  → 浏览器访问此 SVG 时，<script> 将因 CSP sandbox 被阻止执行");
-                System.out.println("  → XSS 漏洞已修复");
+                System.out.println("  ✓ [Đã sửa và có hiệu lực] Content-Security-Policy: sandbox có");
+                System.out.println("  ✓ [Đã sửa và có hiệu lực] X-Content-Type-Options: nosniff có");
+                System.out.println("  → Khi trình duyệt truy cập SVG này,<script> sẽ bị chặn thực thi do CSP sandbox");
+                System.out.println("  → XSS Lỗ hổng đã được sửa");
             } else {
-                System.out.println("  ✗ [修复未生效] 缺少必要的安全响应头：");
+                System.out.println("  ✗ [Sửa chưa có hiệu lực] Thiếu header phản hồi an toàn cần thiết:");
                 if (!cspSandboxPresent) {
-                    System.out.println("    - 缺少 Content-Security-Policy: sandbox（脚本可执行！）");
+                    System.out.println("    - Thiếu Content-Security-Policy: sandbox(Script có thể thực thi!)");
                 }
                 if (!nosniffPresent) {
-                    System.out.println("    - 缺少 X-Content-Type-Options: nosniff");
+                    System.out.println("    - Thiếu X-Content-Type-Options: nosniff");
                 }
-                System.out.println("  → SvgSecurityFilter 未注册或未生效，漏洞仍然存在！");
-                System.out.println("  → 浏览器访问此 URL 将触发 XSS: " + directUrl);
+                System.out.println("  → SvgSecurityFilter Chưa được đăng ký hoặc chưa có hiệu lực, lỗ hổng vẫn tồn tại!");
+                System.out.println("  → Trình duyệt truy cập URL này sẽ kích hoạt XSS: " + directUrl);
             }
         } catch (Exception e) {
-            System.out.println("  访问直连路径异常: " + e.getMessage());
+            System.out.println("  Lỗi khi truy cập đường dẫn trực tiếp: " + e.getMessage());
             if (e.getMessage() != null && e.getMessage().contains("Connection refused")) {
-                System.out.println("  [提示] 无法连接到 " + BASE_URL);
-                System.out.println("  [提示] 请先启动后端服务: cd jeecg-module-system/jeecg-system-start && mvn spring-boot:run");
+                System.out.println("  [Nhắc nhở] Không thể kết nối tới " + BASE_URL);
+                System.out.println("  [Nhắc nhở] Vui lòng khởi động dịch vụ backend trước: cd jeecg-module-system/jeecg-system-start && mvn spring-boot:run");
             }
         }
     }
 
     /**
-     * 上传恶意 SVG 文件，返回服务端返回的文件相对路径
+     * Tải lên tệp SVG độc hại, trả về đường dẫn tương đối của tệp do server trả về
      */
     private String uploadSvg(String token) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
@@ -193,32 +193,32 @@ public class attackTest {
         body.add("biz", "test");
 
         String uploadUrl = BASE_URL + "/sys/common/upload";
-        System.out.println("上传地址: " + uploadUrl);
+        System.out.println("Địa chỉ tải lên: " + uploadUrl);
 
         try {
             ResponseEntity<JSONObject> response = restTemplate.exchange(
                     uploadUrl, HttpMethod.POST, new HttpEntity<>(body, headers), JSONObject.class);
 
             if (response.getBody() == null) {
-                throw new RuntimeException("上传失败：无响应体");
+                throw new RuntimeException("Tải lên thất bại: không có body phản hồi");
             }
             boolean success = Boolean.TRUE.equals(response.getBody().getBoolean("success"));
             if (!success) {
-                throw new RuntimeException("上传被服务端拒绝（svg 可能已从白名单移除）: " + response.getBody().toJSONString());
+                throw new RuntimeException("Tải lên bị server từ chối (có thể svg đã bị gỡ khỏi danh sách trắng): " + response.getBody().toJSONString());
             }
             return response.getBody().getString("message");
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().contains("Connection refused")) {
                 throw new RuntimeException(
-                        "无法连接到后端服务 " + BASE_URL + "\n" +
-                        "请先启动后端：cd jeecg-module-system/jeecg-system-start && mvn spring-boot:run", e);
+                        "Không thể kết nối tới dịch vụ backend " + BASE_URL + "\n" +
+                        "Vui lòng khởi động backend trước:cd jeecg-module-system/jeecg-system-start && mvn spring-boot:run", e);
             }
             throw e;
         }
     }
 
     /**
-     * 生成 JWT Token 并写入 Redis，与 OnlineApiTest 写法一致
+     * Tạo JWT Token và ghi vào Redis, viết giống như trong OnlineApiTest
      */
     private String getToken() {
         String token = JwtUtil.sign(USERNAME, PASSWORD);

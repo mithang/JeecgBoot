@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * @Description: 系统表白名单测试
+ * @Description: Kiểm thử danh sách trắng bảng hệ thống
  * @Author: sunjianlei
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = JeecgSystemApplication.class)
@@ -28,34 +28,34 @@ public class SysTableWhiteCheckTest {
     @BeforeEach
     public void before() {
         String lowCodeMode = this.jeecgBaseConfig.getFirewall().getLowCodeMode();
-        System.out.println("当前 LowCode 模式为: " + lowCodeMode);
-        // 清空缓存，防止影响测试
+        System.out.println("Chế độ LowCode hiện tại là: " + lowCodeMode);
+        // Xóa cache để tránh ảnh hưởng tới kiểm thử
         whiteListHandler.clear();
     }
 
     @Test
     public void testSql() {
-        System.out.println("=== 开始测试 SQL 方式 ===");
+        System.out.println("=== Bắt đầu kiểm thử theo cách SQL ===");
         String[] sqlArr = new String[]{
                 "select username from sys_user",
                 "select username, CONCAT(realname, SEX) from SYS_USER",
                 "select username, CONCAT(realname, sex) from sys_user",
         };
         for (String sql : sqlArr) {
-            System.out.println("- 测试Sql: " + sql);
+            System.out.println("- Kiểm tra Sql: " + sql);
             try {
                 sysBaseAPI.dictTableWhiteListCheckBySql(sql);
-                System.out.println("-- 测试通过");
+                System.out.println("-- Kiểm thử đạt");
             } catch (Exception e) {
-                System.out.println("-- 测试未通过: " + e.getMessage());
+                System.out.println("-- Kiểm thử chưa đạt: " + e.getMessage());
             }
         }
-        System.out.println("=== 结束测试 SQL 方式 ===");
+        System.out.println("=== Kết thúc kiểm thử theo cách SQL ===");
     }
 
     @Test
     public void testDict() {
-        System.out.println("=== 开始测试 DICT 方式 ===");
+        System.out.println("=== Bắt đầu kiểm thử theo cách DICT ===");
 
         String table = "sys_user";
         String code = "username";
@@ -72,15 +72,15 @@ public class SysTableWhiteCheckTest {
         text = "CONCAT(realname, SEX)";
         this.testDict(table, code, text);
 
-        System.out.println("=== 结束测试 DICT 方式 ===");
+        System.out.println("=== Kết thúc kiểm thử theo cách DICT ===");
     }
 
     private void testDict(String table, String code, String text) {
         try {
             sysBaseAPI.dictTableWhiteListCheckByDict(table, code, text);
-            System.out.println("- 测试通过");
+            System.out.println("- Kiểm thử đạt");
         } catch (Exception e) {
-            System.out.println("- 测试未通过: " + e.getMessage());
+            System.out.println("- Kiểm thử chưa đạt: " + e.getMessage());
         }
     }
 

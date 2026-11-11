@@ -4,7 +4,7 @@ logging:
     
 spring:
   main:
-    # 启动加速 (建议开发环境)
+    # Tăng tốc khởi động (Khuyến nghị dùng cho môi trường phát triển)
     lazy-initialization: true
   application:
     name: jeecg-system

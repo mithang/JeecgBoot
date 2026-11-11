@@ -12,20 +12,20 @@
     <artifactId>jeecg-system-start</artifactId>
     
     <dependencies>
-        <!-- SYSTEM 系统管理模块 -->
+        <!-- SYSTEM Mô-đun quản trị hệ thống -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-system-biz</artifactId>
             <version>${jeecgboot.version}</version>
         </dependency>
-        <!-- DEMO 示例模块 -->
+        <!-- DEMO Mô-đun ví dụ -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-module-demo</artifactId>
             <version>${jeecgboot.version}</version>
         </dependency>
         
-        <!-- flyway 数据库自动升级 -->
+        <!-- flyway Tự động nâng cấp cơ sở dữ liệu -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
@@ -48,7 +48,7 @@
         </dependency>
 
 
-        <!-- 分库分表示例 -->
+        <!-- Ví dụ chia cơ sở dữ liệu và chia bảng -->
      <!--  <dependency>
            <groupId>org.jeecgframework.boot3</groupId>
            <artifactId>jeecg-cloud-test-shardingsphere</artifactId>

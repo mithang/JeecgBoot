@@ -20,39 +20,39 @@ public class SampleOpenApiTest {
     
     @Test
     public void test() throws Exception {
-        // 根据部门ID查询用户
+        // Truy vấn người dùng theo ID phòng ban
         String url = base_url+"/openapi/call/TEwcXBlr?id=c6d7cb4deeac411cb3384b1b31278596";
         JSONObject header = genTimestampAndSignature();
         HttpGet httpGet = new HttpGet(url);
-        // 设置请求头
+        // Thiết lập header yêu cầu
         httpGet.setHeader("Content-Type", "application/json");
         httpGet.setHeader("appkey",appKey);
         httpGet.setHeader("signature",header.get("signature").toString());
         httpGet.setHeader("timestamp",header.get("timestamp").toString());
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(httpGet);) {
-            // 获取响应状态码
+            // Lấy mã trạng thái phản hồi
             int statusCode = response.getStatusLine().getStatusCode();
-            System.out.println("[debug] 响应状态码: " + statusCode);
+            System.out.println("[debug] Mã trạng thái phản hồi: " + statusCode);
 
             HttpEntity entity = response.getEntity();
             System.out.println(entity);
-            // 获取响应内容
+            // Lấy nội dung phản hồi
             String responseBody = EntityUtils.toString(response.getEntity());
-            System.out.println("[debug] 响应内容: " + responseBody);
+            System.out.println("[debug] Nội dung phản hồi: " + responseBody);
 
-            // 解析JSON响应
+            // Phân tích phản hồi JSON
             JSONObject res = JSON.parseObject(responseBody);
-            //错误日志判断
+            //Nhận định log lỗi
             if(res.containsKey("success")){
                 Boolean success = res.getBoolean("success");
                 if(success){
-                    System.out.println("[info] 调用成功： " + res.toJSONString());  
+                    System.out.println("[info] Gọi thành công: " + res.toJSONString());  
                 }else{
-                    System.out.println("[error] 调用失败： " + res.getString("message"));
+                    System.out.println("[error] Gọi thất bại: " + res.getString("message"));
                 }
             }else{
-                System.out.println("[error] 调用失败： " + res.getString("message"));
+                System.out.println("[error] Gọi thất bại: " + res.getString("message"));
             }
         }
 
@@ -66,7 +66,7 @@ public class SampleOpenApiTest {
     }
 
     /**
-     * 生成md5
+     * Tạo md5
      * @param sourceStr
      * @return
      */
@@ -90,7 +90,7 @@ public class SampleOpenApiTest {
             }
             result = buf.toString();
         } catch (Exception e) {
-            throw new RuntimeException("sign签名错误", e);
+            throw new RuntimeException("sign Lỗi chữ ký", e);
         }
         return result;
     }

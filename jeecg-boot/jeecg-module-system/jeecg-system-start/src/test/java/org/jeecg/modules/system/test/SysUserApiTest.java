@@ -28,7 +28,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 /**
- * 系统用户单元测试
+ * Kiểm thử đơn vị người dùng hệ thống
  */
 @WebMvcTest(SysUserController.class)
 public class SysUserApiTest {
@@ -75,16 +75,16 @@ public class SysUserApiTest {
     @MockitoBean
     private JeecgBaseConfig jeecgBaseConfig;
     /**
-     * 测试地址：实际使用时替换成你自己的地址
+     * Địa chỉ kiểm thử: khi sử dụng thực tế hãy thay bằng địa chỉ của bạn
      */
     private final String BASE_URL = "/sys/user/";
 
     /**
-     * 测试用例：查询记录
+     * Test case: Truy vấn bản ghi
      */
     @Test
     public void testQuery() throws Exception{
-        // 请求地址
+        // Địa chỉ yêu cầu
         String url = BASE_URL + "list";
 
         Page<SysUser> sysUserPage = new Page<>();
@@ -105,18 +105,18 @@ public class SysUserApiTest {
     }
 
     /**
-     * 测试用例：新增
+     * Test case: Thêm mới
      */
     @Test
     public void testAdd() throws Exception {
-        // 请求地址
+        // Địa chỉ yêu cầu
         String url = BASE_URL + "add" ;
 
         JSONObject params = new JSONObject();
         params.put("username", "wangwuTest");
         params.put("password", "123456");
         params.put("confirmpassword","123456");
-        params.put("realname", "单元测试");
+        params.put("realname", "Kiểm thử đơn vị");
         params.put("activitiSync", "1");
         params.put("userIdentity","1");
         params.put("workNo","0025");
@@ -129,18 +129,18 @@ public class SysUserApiTest {
 
 
     /**
-     * 测试用例：修改
+     * Test case: Chỉnh sửa
      */
     @Test
     public void testEdit() throws Exception {
-        // 数据Id
+        // Dữ liệu Id
         String dataId = "1331795062924374018";
-        // 请求地址
+        // Địa chỉ yêu cầu
         String url = BASE_URL + "edit";
 
         JSONObject params = new JSONObject();
         params.put("username", "wangwuTest");
-        params.put("realname", "单元测试1111");
+        params.put("realname", "Kiểm thử đơn vị 1111");
         params.put("activitiSync", "1");
         params.put("userIdentity","1");
         params.put("workNo","0025");
@@ -159,13 +159,13 @@ public class SysUserApiTest {
 
 
     /**
-     * 测试用例：删除
+     * Test case: Xóa
      */
     @Test
     public void testDelete() throws Exception {
-        // 数据Id
+        // Dữ liệu Id
         String dataId = "1331795062924374018";
-        // 请求地址
+        // Địa chỉ yêu cầu
         String url = BASE_URL + "delete" + "?id=" + dataId;
         String result = mockMvc.perform(delete(url)).andReturn().getResponse().getContentAsString();
         JSONObject jsonObject = JSON.parseObject(result);

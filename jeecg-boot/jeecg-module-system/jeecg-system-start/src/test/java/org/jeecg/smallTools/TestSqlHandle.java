@@ -4,37 +4,37 @@ package org.jeecg.smallTools;
 import org.junit.jupiter.api.Test;
 
 /**
- * 测试sql分割、替换等操作
+ * Kiểm thử các thao tác tách, thay thế SQL
  * 
  * @author: scott
- * @date: 2023年09月05日 16:13
+ * @date: 2023 năm 09 tháng 05 ngày 16:13
  */
 public class TestSqlHandle {
 
     /**
-     * Where 分割测试
+     * Where Kiểm thử tách
      */
     @Test
     public void testSqlSplitWhere() {
         String tableFilterSql = " select * from data.sys_user Where name='12312' and age>100";
         String[] arr = tableFilterSql.split(" (?i)where ");
         for (String sql : arr) {
-            System.out.println("sql片段：" + sql);
+            System.out.println("sql Đoạn:" + sql);
         }
     }
 
 
     /**
-     * Where 替换
+     * Where Thay thế
      */
     @Test
     public void testSqlWhereReplace() {
         String input = " Where name='12312' and age>100";
-        String pattern = "(?i)where "; // (?i) 表示不区分大小写
+        String pattern = "(?i)where "; // (?i) Biểu thị không phân biệt chữ hoa/thường
 
         String replacedString = input.replaceAll(pattern, "");
 
-        System.out.println("替换前的字符串：" + input);
-        System.out.println("替换后的字符串：" + replacedString);
+        System.out.println("Chuỗi trước khi thay thế:" + input);
+        System.out.println("Chuỗi sau khi thay thế:" + replacedString);
     }
 }
