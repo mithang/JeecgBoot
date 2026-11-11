@@ -147,7 +147,7 @@ function checkUsername(rule, value, callback) {
   } else {
     return new Promise((resolve, reject) => {
       checkOnlyUser({ username: value }).then((res) => {
-        res.success ? resolve() : reject('用户名已存在!');
+        res.success ? resolve() : reject('Tên người dùng đã tồn tại!');
       });
     });
   }
@@ -156,39 +156,39 @@ async function checkPhone(rule, value, callback) {
   const { t } = useI18n();
   var reg = /^1[3456789]\d{9}$/;
   if (!reg.test(value)) {
-    return Promise.reject(new Error('请输入正确手机号'));
+    return Promise.reject(new Error('Vui lòng nhập số điện thoại đúng'));
   } else {
     return new Promise((resolve, reject) => {
       checkOnlyUser({ phone: value }).then((res) => {
-        res.success ? resolve() : reject('手机号已存在!');
+        res.success ? resolve() : reject('Số điện thoại đã tồn tại!');
       });
     });
   }
 }
 
 /**
- * 判断是否是OAuth2APP环境
+ * Kiểm tra có phải môi trường OAuth2 APP hay không
  */
 export function isOAuth2AppEnv() {
   return /wxwork|dingtalk|lark|feishu/i.test(navigator.userAgent);
 }
 
 /**
- * 判断是否是钉钉环境
+ * Kiểm tra có phải môi trường DingTalk hay không
  */
 export function isOAuth2DingAppEnv() {
   return /dingtalk/i.test(navigator.userAgent);
 }
 
 /**
- * 后台构造oauth2登录地址
+ * Hậu trường tạo địa chỉ đăng nhập oauth2
  * @param source
  * @param tenantId
  */
 export function sysOAuth2Login(source) {
   let url = `${window._CONFIG['domianURL']}/sys/thirdLogin/oauth2/${source}/login`;
   url += `?state=${encodeURIComponent(window.location.origin)}`;
-  // 代码逻辑说明: [QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
+  // Giải thích logic mã: [QQYUN-3440]Tạo mới bảng cấu hình WeCom và DingTalk, cách ly theo mô hình đơn vị thuê------------
   let tenantId = getAuthCache(OAUTH2_THIRD_LOGIN_TENANT_ID);
   if(tenantId){
     url += `&tenantId=${tenantId}`;
@@ -197,7 +197,7 @@ export function sysOAuth2Login(source) {
 }
 
 /**
- * 后台callBack
+ * Hậu trườngcallBack
  * @param code
  */
 export function sysOAuth2Callback(code:string) {

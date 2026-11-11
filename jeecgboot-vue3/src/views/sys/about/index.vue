@@ -1,10 +1,10 @@
 <template>
-  <PageWrapper title="关于">
+  <PageWrapper title="Giới thiệu">
     <template #headerContent>
       <div class="flex justify-between items-center">
         <span class="flex-1">
           <a :href="GITHUB_URL" target="_blank"> JeecgBoot </a>
-          是一款基于BPM的低代码平台！前后端分离架构 SpringBoot 2.x，SpringCloud，Ant Design&Vue，Mybatis-plus，Shiro，JWT，支持微服务。强大的代码生成器让前后端代码一键生成，实现低代码开发！ JeecgBoot引领新低代码开发模式 OnlineCoding-> 代码生成器-> 手工MERGE， 帮助Java项目解决70%的重复工作，让开发更多关注业务，既能快速提高效率，节省研发成本，同时又不失灵活性！一系列低代码能力：Online表单、Online报表、Online图表、表单设计、流程设计、报表设计、大屏设计 等等...。
+          là một nền tảng low-code dựa trên BPM! Kiến trúc tách biệt frontend/backend SpringBoot 2.x, SpringCloud,Ant Design&Vue, Mybatis-plus, Shiro, JWT, hỗ trợ vi dịch vụ (microservices). Bộ sinh mã mạnh mẽ giúp tạo mã frontend và backend chỉ với một cú nhấp, hiện thực hóa phát triển low-code! JeecgBoot dẫn đầu mô hình phát triển low-code mới OnlineCoding-> Bộ sinh mã-> MERGE thủ công, giúp các dự án Java giải quyết 70% công việc trùng lặp, để lập trình viên tập trung hơn vào nghiệp vụ, vừa nhanh chóng nâng cao hiệu quả, tiết kiệm chi phí nghiên cứu phát triển, vừa không mất tính linh hoạt! Hàng loạt năng lực low-code: Biểu mẫu Online, Báo cáo Online, Biểu đồ Online, Thiết kế biểu mẫu, Thiết kế quy trình, Thiết kế báo cáo, Thiết kế màn hình lớn, v.v...
         </span>
       </div>
     </template>
@@ -32,24 +32,24 @@
 
   const infoSchema: DescItem[] = [
     {
-      label: '版本',
+      label: 'Phiên bản',
       field: 'version',
       render: commonTagRender('blue'),
     },
     {
-      label: '最后编译时间',
+      label: 'Thời gian biên dịch cuối cùng',
       field: 'lastBuildTime',
       render: commonTagRender('blue'),
     },
     {
-      label: '文档地址',
+      label: 'Địa chỉ tài liệu',
       field: 'doc',
-      render: commonLinkRender('文档地址'),
+      render: commonLinkRender('Địa chỉ tài liệu'),
     },
     {
-      label: '预览地址',
+      label: 'Địa chỉ xem trước',
       field: 'preview',
-      render: commonLinkRender('预览地址'),
+      render: commonLinkRender('Địa chỉ xem trước'),
     },
     {
       label: 'Github',
@@ -75,21 +75,21 @@
   });
 
   const [register] = useDescription({
-    title: '生产环境依赖',
+    title: 'Phụ thuộc môi trường production',
     data: dependencies,
     schema: schema,
     column: 3,
   });
 
   const [registerDev] = useDescription({
-    title: '开发环境依赖',
+    title: 'Phụ thuộc môi trường phát triển',
     data: devDependencies,
     schema: devSchema,
     column: 3,
   });
 
   const [infoRegister] = useDescription({
-    title: '项目信息',
+    title: 'Thông tin dự án',
     data: infoData,
     schema: infoSchema,
     column: 2,

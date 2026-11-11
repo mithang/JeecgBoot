@@ -29,7 +29,7 @@
   const scanContent = computed(() => {
     return unref(state) === '0' ? t('sys.login.scanSign') : t('sys.login.scanSuccess');
   });
-  //加载二维码信息
+  //Tải thông tin mã QR
   function loadQrCode() {
     state.value = '0';
     getLoginQrcode().then((res) => {
@@ -39,16 +39,16 @@
       }
     });
   }
-  //监控扫码状态
+  //Theo dõi trạng thái quét mã
   function watchQrcodeToken(qrcodeId) {
     getQrcodeToken({ qrcodeId: qrcodeId }).then((res) => {
       let token = res.token;
       if (token == '-2') {
-        //二维码过期重新获取
+        //Mã QR hết hạn, lấy lại
         loadQrCode();
         clearInterval(timer);
       }
-      //扫码成功
+      //Quét mã thành công
       if (res.success) {
         state.value = '2';
         clearInterval(timer);
@@ -59,7 +59,7 @@
     });
   }
 
-  /** 开启定时器 */
+  /** Bật bộ hẹn giờ */
   function openTimer(qrcodeId) {
     watchQrcodeToken(qrcodeId);
     closeTimer();
@@ -68,7 +68,7 @@
     }, 1500);
   }
 
-  /** 关闭定时器 */
+  /** Tắt bộ hẹn giờ */
   function closeTimer() {
     if (timer) clearInterval(timer);
   }

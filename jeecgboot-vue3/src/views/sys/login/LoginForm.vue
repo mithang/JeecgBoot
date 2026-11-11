@@ -8,7 +8,7 @@
       <InputPassword size="large" visibilityToggle v-model:value="formData.password" :placeholder="t('sys.login.password')" />
     </FormItem>
 
-    <!--验证码-->
+    <!--Mã xác thực-->
     <ARow class="enter-x">
       <ACol :span="12">
         <FormItem name="inputCode" class="enter-x">
@@ -77,12 +77,12 @@
 
     <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
       <a @click="onThirdLogin('github')" title="github"><GithubFilled /></a>
-      <a @click="onThirdLogin('wechat_enterprise')" title="企业微信"> <icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
-      <a @click="onThirdLogin('dingtalk')" title="钉钉"><DingtalkCircleFilled /></a>
-      <a @click="onThirdLogin('wechat_open')" title="微信"><WechatFilled /></a>
+      <a @click="onThirdLogin('wechat_enterprise')" title="WeCom"> <icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
+      <a @click="onThirdLogin('dingtalk')" title="DingTalk"><DingtalkCircleFilled /></a>
+      <a @click="onThirdLogin('wechat_open')" title="WeChat"><WechatFilled /></a>
     </div>
   </Form>
-  <!-- 第三方登录相关弹框 -->
+  <!-- Các hộp thoại liên quan đến đăng nhập bên thứ ba -->
   <ThirdModal ref="thirdModalRef"></ThirdModal>
 </template>
 <script lang="ts" setup>
@@ -142,7 +142,7 @@
     try {
       loading.value = true;
 
-      // 密码使用AES加密传输
+      // Mật khẩu được truyền bằng mã hóa AES
       const encryptedPassword = encryptAESCBC(data.password);
       const { userInfo } = await userStore.login(
         toRaw({
@@ -150,7 +150,7 @@
           username: data.account,
           captcha: data.inputCode,
           checkKey: randCodeData.checkKey,
-          mode: 'none', //不要默认的错误提示
+          mode: 'none', //Không dùng thông báo lỗi mặc định
         })
       );
       if (userInfo) {
@@ -172,7 +172,7 @@
   }
   function handleChangeCheckCode() {
     formData.inputCode = '';
-    // 代码逻辑说明: [QQYUN-10775]验证码可以复用 #7674------------
+    // Giải thích logic mã: [QQYUN-10775]Mã xác thực có thể tái sử dụng #7674------------
     randCodeData.checkKey = new Date().getTime() + Math.random().toString(36).slice(-4); // 1629428467008;
     getCodeInfo(randCodeData.checkKey).then((res) => {
       randCodeData.randCodeImage = res;
@@ -181,13 +181,13 @@
   }
 
   /**
-   * 第三方登录
+   * Đăng nhập bên thứ ba
    * @param type
    */
   function onThirdLogin(type) {
     thirdModalRef.value.onThirdLogin(type);
   }
-  //初始化验证码
+  //Khởi tạo mã xác thực
   onMounted(() => {
     handleChangeCheckCode();
   });

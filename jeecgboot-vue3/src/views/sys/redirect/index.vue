@@ -5,7 +5,7 @@
   import { unref } from 'vue';
   import { useRouter } from 'vue-router';
   import { useMultipleTabStore } from '/@/store/modules/multipleTab';
-  // 代码逻辑说明: 【QQYUN-7099】动态路由匹配右键重新加载404
+  // Giải thích logic mã: 【QQYUN-7099】Định tuyến động khớp với việc nhấp chuột phải để tải lại404
   const { currentRoute, replace } = useRouter();
   const { params, query } = unref(currentRoute);
   const { path } = params;

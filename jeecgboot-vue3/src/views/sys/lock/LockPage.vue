@@ -90,7 +90,7 @@ import {ref, computed, onMounted, onUnmounted} from 'vue';
   /**
    * @description: unLock
    * 
-   * @param type enter 回车 change input值发生改变 不提示锁屏密码错误
+   * @param type enter Nhấn Enter, sự kiện change, giá trị input thay đổi, không nhắc lỗi mật khẩu khóa màn hình
    */
   async function unLock(type) {
     if (!password.value) {
@@ -118,13 +118,13 @@ import {ref, computed, onMounted, onUnmounted} from 'vue';
   }
 
   /**
-   * 监听键盘触发事件
+   * Theo dõi sự kiện kích hoạt bàn phím
    * 
    * @param event
    */
   function handleKeyDown(event) {
     if (event.key === 'Escape') {
-      // 处理回车键按下事件
+      // Xử lý sự kiện nhấn phím Enter
       handleShowForm(true);
       password.value = '';
     }

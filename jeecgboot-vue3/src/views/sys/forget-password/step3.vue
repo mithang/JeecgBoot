@@ -1,7 +1,7 @@
 <template>
-  <Result status="success" title="更改密码成功" :sub-title="getSubTitle">
+  <Result status="success" title="Đổi mật khẩu thành công" :sub-title="getSubTitle">
     <template #extra>
-      <a-button key="console" type="primary" @click="finish"> 返回登录 </a-button>
+      <a-button key="console" type="primary" @click="finish"> Quay lại đăng nhập </a-button>
     </template>
   </Result>
 </template>
@@ -40,7 +40,7 @@
         return t('sys.login.subTitleText', [unref(currentCount)]);
       });
       /**
-       * 倒计时
+       * Đếm ngược
        */
       watchEffect(() => {
         if (unref(currentCount) === 1) {
@@ -51,7 +51,7 @@
       });
 
       /**
-       * 结束回调
+       * Callback khi kết thúc
        */
       function finish() {
         handleBackLogin();

@@ -1,12 +1,12 @@
 <template>
   <template v-if="getShow">
-    <!--节点-->
+    <!--Nút-->
     <a-steps style="margin-bottom: 20px" :current="currentTab">
-      <a-step title="手机验证" />
-      <a-step title="更改密码" />
-      <a-step title="完成" />
+      <a-step title="Xác thực điện thoại" />
+      <a-step title="Đổi mật khẩu" />
+      <a-step title="Hoàn thành" />
     </a-steps>
-    <!--组件-->
+    <!--Component-->
     <div>
       <step1 v-if="currentTab === 0" @nextStep="nextStep" />
       <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep" :accountInfo="accountInfo" />
@@ -40,7 +40,7 @@
     },
   });
   /**
-   * 下一步
+   * Bước tiếp theo
    * @param data
    */
   function nextStep(data) {
@@ -50,7 +50,7 @@
     }
   }
   /**
-   * 上一步
+   * Bước trước
    * @param data
    */
   function prevStep(data) {
@@ -60,7 +60,7 @@
     }
   }
   /**
-   * 结束
+   * Kết thúc
    */
   function finish() {
     currentTab.value = 0;

@@ -1,25 +1,25 @@
 <template>
   <BasicModal v-bind="config" @register="registerModal" :title="currTitle" wrapClassName="loginSelectModal" v-model:visible="visible" :maxHeight="500">
     <a-form ref="formRef" :model="formState" :rules="rules" v-bind="layout" :colon="false" class="loginSelectForm">
-      <!--多租户选择-->
+      <!--Chọn đa đơn vị thuê-->
       <a-form-item v-if="isMultiTenant" name="tenantId" :validate-status="validate_status">
-        <!--label内容-->
+        <!--labelNội dung-->
         <template #label>
           <a-tooltip placement="topLeft">
             <template #title>
-              <span>您隶属于多租户，请选择登录租户</span>
+              <span>Bạn thuộc nhiều đơn vị thuê, vui lòng chọn đơn vị thuê để đăng nhập</span>
             </template>
-            <a-avatar style="background-color: #87d068" :size="30"> 租户 </a-avatar>
+            <a-avatar style="background-color: #87d068" :size="30"> Đơn vị thuê (tenant) </a-avatar>
           </a-tooltip>
         </template>
         <template #extra v-if="validate_status == 'error'">
-          <span style="color: #ed6f6f">请选择登录租户</span>
+          <span style="color: #ed6f6f">Vui lòng chọn đơn vị thuê để đăng nhập</span>
         </template>
-        <!--租户下拉内容-->
+        <!--Nội dung thả xuống của đơn vị thuê-->
         <a-select
           v-model:value="formState.tenantId"
           @change="handleTenantChange"
-          placeholder="请选择登录租户"
+          placeholder="Vui lòng chọn đơn vị thuê để đăng nhập"
           :class="{ 'valid-error': validate_status == 'error' }"
         >
           <template v-for="tenant in tenantList" :key="tenant.id">
@@ -27,25 +27,25 @@
           </template>
         </a-select>
       </a-form-item>
-      <!--多部门选择-->
+      <!--Chọn đa phòng ban-->
       <a-form-item v-if="isMultiDepart" :validate-status="validate_status1" :colon="false">
-        <!--label内容-->
+        <!--labelNội dung-->
         <template #label>
           <a-tooltip placement="topLeft">
             <template #title>
-              <span>您隶属于多部门，请选择登录部门</span>
+              <span>Bạn thuộc nhiều phòng ban, vui lòng chọn phòng ban để đăng nhập</span>
             </template>
-            <a-avatar style="background-color: rgb(104, 208, 203)" :size="30"> 部门 </a-avatar>
+            <a-avatar style="background-color: rgb(104, 208, 203)" :size="30"> Phòng ban </a-avatar>
           </a-tooltip>
         </template>
         <template #extra v-if="validate_status1 == 'error'">
-          <span style="color: #ed6f6f">请选择登录部门</span>
+          <span style="color: #ed6f6f">Vui lòng chọn phòng ban để đăng nhập</span>
         </template>
-        <!--部门下拉内容-->
+        <!--Nội dung thả xuống của phòng ban-->
         <a-select
           v-model:value="formState.orgCode"
           @change="handleDepartChange"
-          placeholder="请选择登录部门"
+          placeholder="Vui lòng chọn phòng ban để đăng nhập"
           :class="{ 'valid-error': validate_status1 == 'error' }"
         >
           <template v-for="depart in departList" :key="depart.orgCode">
@@ -56,7 +56,7 @@
     </a-form>
 
     <template #footer>
-      <a-button @click="handleSubmit" type="primary">确认</a-button>
+      <a-button @click="handleSubmit" type="primary">Xác nhận</a-button>
     </template>
   </BasicModal>
 </template>
@@ -82,21 +82,21 @@
     setup(props, { emit }) {
       const userStore = useUserStore();
       const { notification } = useMessage();
-      //租户配置
+      //Cấu hình đơn vị thuê
       const isMultiTenant = ref(false);
       const tenantList = ref([]);
       const validate_status = ref('');
-      //部门配置
+      //Cấu hình phòng ban
       const isMultiDepart = ref(false);
       const departList = ref([]);
       const validate_status1 = ref('');
-      //弹窗显隐
+      //Hiện/ẩn hộp thoại
       const visible = ref(false);
-      //登录用户
+      //Người dùng đăng nhập
       const username = ref('');
-      //表单
+      //Biểu mẫu
       const formRef = ref();
-      //选择的租户部门信息
+      //Thông tin đơn vị thuê và phòng ban đã chọn
       const formState: UnwrapRef<FormState> = reactive({
         orgCode: undefined,
         tenantId: null,
@@ -110,23 +110,23 @@
         minHeight: 20,
         maxHeight: 20,
       };
-      //弹窗操作
+      //Thao tác hộp thoại
       const [registerModal, { closeModal }] = useModalInner();
 
-      //当前标题
+      //Tiêu đề hiện tại
       const currTitle = computed(() => {
         if (unref(isMultiDepart) && unref(isMultiTenant)) {
-          return '请选择租户和部门';
+          return 'Vui lòng chọn đơn vị thuê và phòng ban';
         } else if (unref(isMultiDepart) && !unref(isMultiTenant)) {
-          return '请选择部门';
+          return 'Vui lòng chọn phòng ban';
         } else if (!unref(isMultiDepart) && unref(isMultiTenant)) {
-          return '请选择租户';
+          return 'Vui lòng chọn đơn vị thuê';
         }
       });
 
       const rules = ref({
-        tenantId: [{ required: unref(isMultiTenant), type: 'number', message: '请选择租户', trigger: 'change' }],
-        orgCode: [{ required: unref(isMultiDepart), message: '请选择部门', trigger: 'change' }],
+        tenantId: [{ required: unref(isMultiTenant), type: 'number', message: 'Vui lòng chọn đơn vị thuê', trigger: 'change' }],
+        orgCode: [{ required: unref(isMultiDepart), message: 'Vui lòng chọn phòng ban', trigger: 'change' }],
       });
 
       const layout = {
@@ -134,21 +134,21 @@
         wrapperCol: { span: 18 },
       };
       /**
-       * 处理部门情况
+       * Xử lý tình huống phòng ban
        */
       function bizDepart(loginResult) {
-        //如果登录接口返回了用户上次登录租户ID，则不需要重新选择
+        //Nếu API đăng nhập trả về ID đơn vị thuê đăng nhập lần trước của người dùng thì không cần chọn lại
         if(loginResult.userInfo?.orgCode && loginResult.userInfo?.orgCode!==''){
           isMultiDepart.value = false;
           return;
         }
         
         let multi_depart = loginResult.multi_depart;
-        //0:无部门 1:一个部门 2:多个部门
+        //0:Không có phòng ban 1: một phòng ban 2: nhiều phòng ban
         if (multi_depart == 0) {
           // notification.warn({
-          //   message: '提示',
-          //   description: `您尚未归属部门,请确认账号信息`,
+          //   message: 'Nhắc nhở',
+          //   description: `Bạn chưa thuộc phòng ban nào,Vui lòng xác nhận thông tin tài khoản`,
           //   duration: 3,
           // });
           isMultiDepart.value = false;
@@ -161,10 +161,10 @@
       }
 
       /**
-       * 处理租户情况
+       * Xử lý tình huống đơn vị thuê
        */
       function bizTenantList(loginResult) {
-        //如果登录接口返回了用户上次登录租户ID，则不需要重新选择
+        //Nếu API đăng nhập trả về ID đơn vị thuê đăng nhập lần trước của người dùng thì không cần chọn lại
         if(loginResult.userInfo?.loginTenantId && loginResult.userInfo?.loginTenantId!==0){
           isMultiTenant.value = false;
           return;
@@ -187,7 +187,7 @@
       }
 
       /**
-       * 确认选中的租户和部门信息
+       * Xác nhận thông tin đơn vị thuê và phòng ban đã chọn
        */
       function handleSubmit() {
         if (unref(isMultiTenant) && !formState.tenantId) {
@@ -207,18 +207,18 @@
                 emit('success');
               })
               .catch((e) => {
-                console.log('登录选择出现问题', e);
+                console.log('Lựa chọn đăng nhập xuất hiện vấn đề', e);
               })
               .finally(() => {
                 close();
               });
           })
           .catch((err) => {
-            console.log('表单校验未通过error', err);
+            console.log('Kiểm tra biểu mẫu không đạterror', err);
           });
       }
       /**
-       *切换选择部门
+       *Chuyển đổi lựa chọn phòng ban
        */
       function departResolve() {
         return new Promise((resolve, reject) => {
@@ -241,25 +241,25 @@
       }
 
       /**
-       * 请求失败处理
+       * Xử lý yêu cầu thất bại
        */
       function requestFailed(err) {
         notification.error({
-          message: '登录失败',
-          description: ((err.response || {}).data || {}).message || err.message || '请求出现错误，请稍后再试',
+          message: 'Đăng nhập thất bại',
+          description: ((err.response || {}).data || {}).message || err.message || 'Yêu cầu xảy ra lỗi, vui lòng thử lại sau',
           duration: 4,
         });
       }
 
       /**
-       * 关闭model
+       * Đóngmodel
        */
       function close() {
         closeModal();
         reset();
       }
       /**
-       * 弹窗打开前处理
+       * Xử lý trước khi hộp thoại mở
        */
       async function show(loginResult) {
         if (loginResult) {
@@ -273,13 +273,13 @@
             visible.value = true;
           }
         }
-        //登录弹窗完成后，将登录的标识设置成false
+        //Sau khi hoàn thành hộp thoại đăng nhập, đặt dấu hiệu đăng nhập thànhfalse
         loginResult.isLogin = false;
         userStore.setLoginInfo(loginResult);
       }
 
       /**
-       *重置数据
+       *Đặt lại dữ liệu
        */
       function reset() {
         tenantList.value = [];

@@ -7,7 +7,7 @@
       <CountdownInput size="large" v-model:value="formData.sms" :placeholder="t('sys.login.smsCode')" :sendCodeApi="sendCodeApi" />
     </FormItem>
     <FormItem class="enter-x">
-      <Button type="primary" size="large" block @click="handleNext" :loading="loading"> 下一步 </Button>
+      <Button type="primary" size="large" block @click="handleNext" :loading="loading"> Bước tiếp theo </Button>
       <Button size="large" block class="mt-4" @click="handleBackLogin">
         {{ t('sys.login.backSignIn') }}
       </Button>
@@ -51,7 +51,7 @@
       });
 
       /**
-       * 下一步
+       * Bước tiếp theo
        */
       async function handleNext() {
         const data = await validForm();
@@ -77,7 +77,7 @@
           });
         }
       }
-      //倒计时执行前的函数
+      //Hàm chạy trước khi đếm ngược
       function sendCodeApi() {
         return getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.FORGET_PASSWORD });
       }

@@ -29,20 +29,20 @@
   }
 
   /**
-   * 检测当前的环境
+   * Kiểm tra môi trường hiện tại
    */
   function checkEnv() {
-    // 判断当时是否是企业微信环境
+    // Kiểm tra tại thời điểm đó có phải môi trường WeCom hay không
     if (/wxwork/i.test(navigator.userAgent)) {
       env.value.thirdApp = true;
       env.value.wxWork = true;
     }
-    // 判断当时是否是钉钉环境
+    // Kiểm tra tại thời điểm đó có phải môi trường DingTalk hay không
     if (/dingtalk/i.test(navigator.userAgent)) {
       env.value.thirdApp = true;
       env.value.dingtalk = true;
     }
-    // 判断当前是否是飞书环境
+    // Kiểm tra hiện có phải môi trường Feishu hay không
     if (/lark|feishu/i.test(navigator.userAgent)) {
       env.value.thirdApp = true;
       env.value.feishu = true;
@@ -51,19 +51,19 @@
   }
 
   /**
-   * 进行OAuth2登录操作
+   * Thực hiện thao tác đăng nhập OAuth2
    */
   function doOAuth2Login() {
     if (env.value.thirdApp) {
-      // 判断是否携带了Token，是就说明登录成功
+      // Kiểm tra có mang theo Token hay không, nếu có nghĩa là đăng nhập thành công
       if (route.query.oauth2LoginToken) {
         let token = route.query.oauth2LoginToken;
-        //执行登录操作
+        //Thực hiện thao tác đăng nhập
         thirdLogin({ token, thirdType: route.query.thirdType,tenantId: getTenantId });
       } else if (env.value.wxWork) {
         sysOAuth2Login('wechat_enterprise');
       } else if (env.value.dingtalk) {
-        //新版钉钉登录
+        //Đăng nhập DingTalk phiên bản mới
         dingdingLogin();
       } else if (env.value.feishu) {
         sysOAuth2Login('feishu');
@@ -72,7 +72,7 @@
   }
 
   /**
-   * 第三方登录
+   * Đăng nhập bên thứ ba
    * @param params
    */
   function thirdLogin(params) {
@@ -88,8 +88,8 @@
         });
       } else {
         notification.error({
-          message: '登录失败',
-          description: ((res.response || {}).data || {}).message || res.message || '请求出现错误，请稍后再试',
+          message: 'Đăng nhập thất bại',
+          description: ((res.response || {}).data || {}).message || res.message || 'Yêu cầu xảy ra lỗi, vui lòng thử lại sau',
           duration: 4,
         });
       }
@@ -97,13 +97,13 @@
   }
 
   /**
-   * 钉钉登录
+   * Đăng nhập DingTalk
    */
   function dingdingLogin() {
-    //先获取钉钉的企业id，如果没有配置 还是走原来的逻辑，走原来的逻辑 需要判断存不存在token，存在token直接去首页
+    //Trước tiên lấy ID doanh nghiệp của DingTalk, nếu chưa cấu hình thì vẫn theo logic cũ; theo logic cũ cần kiểm tra token có tồn tại hay không, nếu có token thì đi thẳng tới trang chủ
     let tenantId = getAuthCache(OAUTH2_THIRD_LOGIN_TENANT_ID) || 0;
     let url = `/sys/thirdLogin/get/corpId/clientId?tenantId=${tenantId}`;
-    // 代码逻辑说明: 不要使用getAction online里面的，要用defHttp---
+    // Giải thích logic mã: Không dùng getAction trong online, phải dùngdefHttp---
     defHttp.get({ url:url },{ isTransformResponse: false }).then((res) => {
       if (res.success) {
         if(res.result && res.result.corpId && res.result.clientId){
@@ -123,7 +123,7 @@
   }
 
   /**
-   * 旧版钉钉登录
+   * Đăng nhập DingTalk phiên bản cũ
    */
   function toOldAuthLogin() {
     let token = getToken();

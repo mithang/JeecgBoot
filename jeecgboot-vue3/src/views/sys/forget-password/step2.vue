@@ -13,8 +13,8 @@
     </FormItem>
 
     <FormItem class="enter-x">
-      <Button type="primary" size="large" block @click="handlePrev"> 上一步 </Button>
-      <Button size="large" block class="mt-4" @click="handleNext"> 下一步 </Button>
+      <Button type="primary" size="large" block @click="handlePrev"> Bước trước </Button>
+      <Button size="large" block class="mt-4" @click="handleNext"> Bước tiếp theo </Button>
     </FormItem>
   </Form>
 </template>
@@ -58,14 +58,14 @@
       const { validForm } = useFormValid(formRef);
 
       /**
-       * 上一步
+       * Bước trước
        */
       function handlePrev() {
         emit('prevStep', accountInfo.obj);
       }
 
       /**
-       * 下一步
+       * Bước tiếp theo
        */
       async function handleNext() {
         const data = await validForm();
@@ -79,10 +79,10 @@
           })
         );
         if (resultInfo.success) {
-          //修改密码
+          //Đổi mật khẩu
           emit('nextStep', accountInfo.obj);
         } else {
-          //错误提示
+          //Thông báo lỗi
           createErrorModal({
             title: t('sys.api.errorTip'),
             content: resultInfo.message || t('sys.api.networkExceptionMsg'),

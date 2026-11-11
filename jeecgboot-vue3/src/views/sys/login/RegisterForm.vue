@@ -69,7 +69,7 @@
   const { validForm } = useFormValid(formRef);
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
   /**
-   * 注册
+   * Đăng ký
    */
   async function handleRegister() {
     const data = await validForm();
@@ -107,7 +107,7 @@
       loading.value = false;
     }
   }
-  //发送验证码的函数
+  //Hàm gửi mã xác thực
   function sendCodeApi() {
     return getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.REGISTER });
   }

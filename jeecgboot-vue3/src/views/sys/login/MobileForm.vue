@@ -51,7 +51,7 @@
   const { validForm } = useFormValid(formRef);
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.MOBILE);
   /**
-   * 登录
+   * Đăng nhập
    */
   async function handleLogin() {
     const data = await validForm();
@@ -62,7 +62,7 @@
         toRaw({
           mobile: data.mobile,
           captcha: data.sms,
-          mode: 'none', //不要默认的错误提示
+          mode: 'none', //Không dùng thông báo lỗi mặc định
         })
       );
       if (userInfo) {
@@ -82,9 +82,9 @@
       loading.value = false;
     }
   }
-  //倒计时执行前的函数
+  //Hàm chạy trước khi đếm ngược
   function sendCodeApi() {
-    // 代码逻辑说明: 【issues/8567】严重：修改密码存在水平越权问题：登录应该用登录模板不应该用忘记密码的模板---
+    // Giải thích logic mã: 【issues/8567】Nghiêm trọng: đổi mật khẩu tồn tại lỗ hổng vượt quyền ngang: đăng nhập phải dùng mẫu đăng nhập, không được dùng mẫu quên mật khẩu---
     return getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.LOGIN });
   }
 </script>
