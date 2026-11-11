@@ -288,7 +288,7 @@
         }
       }
 
-      // 代码逻辑说明: 【QQYUN-8927】侧边折叠导航模式区分彩色模式
+      // Giải thích logic mã: Chế độ điều hướng thu gọn ở thanh bên phân biệt chế độ màu
       watch(
         () => appStore.getProjectConfig.menuSetting,
         (menuSetting) => {
@@ -415,7 +415,7 @@
           border-bottom: 1px solid @border-color;
         }
       }
-      // 侧边折叠导航彩色模式文字颜色
+      // Màu chữ của chế độ màu trong điều hướng thu gọn ở thanh bên
       &.bright {
         .@{prefix-cls}-module {
           &__item {

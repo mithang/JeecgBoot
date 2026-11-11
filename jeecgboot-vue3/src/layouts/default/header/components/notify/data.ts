@@ -1,9 +1,9 @@
 export interface ListItem {
   id: string;
   avatar: string;
-  // 通知的标题内容
+  // Nội dung tiêu đề thông báo
   title: string;
-  // 是否在标题上显示删除线
+  // Có hiển thị gạch ngang trên tiêu đề không
   titleDelete?: boolean;
   datetime: string;
   type: string;
@@ -12,16 +12,16 @@ export interface ListItem {
   clickClose?: boolean;
   extra?: string;
   color?: string;
-  // 优先级
+  // Mức ưu tiên
   priority?: string;
 }
 
 export enum PriorityTypes {
-  // 低优先级，一般消息
+  // Ưu tiên thấp, tin nhắn thông thường
   L = 'L',
-  // 中优先级，重要消息
+  // Mức ưu tiên trung bình, tin nhắn quan trọng
   M = 'M',
-  // 高优先级，紧急消息
+  // Ưu tiên cao, tin nhắn khẩn cấp
   H = 'H',
 }
 
@@ -36,12 +36,12 @@ export interface TabItem {
 export const tabListData: TabItem[] = [
   {
     key: '1',
-    name: '通知',
+    name: 'Thông báo',
     list: [
       {
         id: '000000001',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
-        title: '你收到了 14 份新周报',
+        title: 'Bạn đã nhận được 14 báo cáo tuần mới',
         description: '',
         datetime: '2017-08-09',
         type: '1',
@@ -49,7 +49,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000002',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png',
-        title: '你推荐的 曲妮妮 已通过第三轮面试',
+        title: 'Bạn giới thiệu Khúc Ni Ni đã qua vòng phỏng vấn thứ ba',
         description: '',
         datetime: '2017-08-08',
         type: '1',
@@ -57,7 +57,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000003',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/kISTdvpyTAhtGxpovNWd.png',
-        title: '这种模板可以区分多种通知类型',
+        title: 'Mẫu này có thể phân biệt nhiều loại thông báo',
         description: '',
         datetime: '2017-08-07',
         // read: true,
@@ -66,7 +66,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000004',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png',
-        title: '左侧图标用于区分不同的类型',
+        title: 'Biểu tượng bên trái dùng để phân biệt các loại khác nhau',
         description: '',
         datetime: '2017-08-07',
         type: '1',
@@ -74,7 +74,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000005',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png',
-        title: '标题可以设置自动显示省略号，本例中标题行数已设为1行，如果内容超过1行将自动截断并支持tooltip显示完整标题。',
+        title: 'Tiêu đề có thể cài đặt tự động hiển thị dấu ba chấm, trong ví dụ này số dòng tiêu đề đã đặt là 1 hàng, nếu nội dung vượt quá 1 hàng sẽ tự động cắt ngắn và hỗ trợ tooltip hiển thị tiêu đề đầy đủ.',
         description: '',
         datetime: '2017-08-07',
         type: '1',
@@ -82,7 +82,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000006',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png',
-        title: '左侧图标用于区分不同的类型',
+        title: 'Biểu tượng bên trái dùng để phân biệt các loại khác nhau',
         description: '',
         datetime: '2017-08-07',
         type: '1',
@@ -90,7 +90,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000007',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png',
-        title: '左侧图标用于区分不同的类型',
+        title: 'Biểu tượng bên trái dùng để phân biệt các loại khác nhau',
         description: '',
         datetime: '2017-08-07',
         type: '1',
@@ -98,7 +98,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000008',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png',
-        title: '左侧图标用于区分不同的类型',
+        title: 'Biểu tượng bên trái dùng để phân biệt các loại khác nhau',
         description: '',
         datetime: '2017-08-07',
         type: '1',
@@ -106,7 +106,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000009',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png',
-        title: '左侧图标用于区分不同的类型',
+        title: 'Biểu tượng bên trái dùng để phân biệt các loại khác nhau',
         description: '',
         datetime: '2017-08-07',
         type: '1',
@@ -114,7 +114,7 @@ export const tabListData: TabItem[] = [
       {
         id: '000000010',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png',
-        title: '左侧图标用于区分不同的类型',
+        title: 'Biểu tượng bên trái dùng để phân biệt các loại khác nhau',
         description: '',
         datetime: '2017-08-07',
         type: '1',
@@ -124,13 +124,13 @@ export const tabListData: TabItem[] = [
   },
   {
     key: '2',
-    name: '系统消息',
+    name: 'Tin nhắn hệ thống',
     list: [
       {
         id: '000000006',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg',
-        title: '曲丽丽 评论了你',
-        description: '描述信息描述信息描述信息',
+        title: 'Khúc Lệ Lệ đã bình luận về bạn',
+        description: 'Thông tin mô tả thông tin mô tả thông tin mô tả',
         datetime: '2017-08-07',
         type: '2',
         clickClose: true,
@@ -138,8 +138,8 @@ export const tabListData: TabItem[] = [
       {
         id: '000000007',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg',
-        title: '朱偏右 回复了你',
-        description: '这种模板用于提醒谁与你发生了互动',
+        title: 'Chu Thiên Hữu đã trả lời bạn',
+        description: 'Mẫu này dùng để nhắc ai đã tương tác với bạn',
         datetime: '2017-08-07',
         type: '2',
         clickClose: true,
@@ -147,9 +147,9 @@ export const tabListData: TabItem[] = [
       {
         id: '000000008',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg',
-        title: '标题',
+        title: 'Tiêu đề',
         description:
-          '请将鼠标移动到此处，以便测试超长的消息在此处将如何处理。本例中设置的描述最大行数为2，超过2行的描述内容将被省略并且可以通过tooltip查看完整内容',
+          'Vui lòng di chuột đến đây, để kiểm tra tin nhắn siêu dài ở đây sẽ được xử lý thế nào. Số dòng tối đa của mô tả đặt trong ví dụ này là 2, vượt quá 2 hàng nội dung mô tả sẽ bị lược và có thể thông qua tooltip xem toàn bộ nội dung',
         datetime: '2017-08-07',
         type: '2',
         clickClose: true,
@@ -159,45 +159,45 @@ export const tabListData: TabItem[] = [
   },
   // {
   //   key: '3',
-  //   name: '待办',
+  //   name: 'Việc cần làm',
   //   list: [
   //     {
   //       id: '000000009',
   //       avatar: '',
-  //       title: '任务名称',
-  //       description: '任务需要在 2017-01-12 20:00 前启动',
+  //       title: 'Tên nhiệm vụ',
+  //       description: 'Nhiệm vụ cần phải 2017-01-12 20:00 trước khi khởi động',
   //       datetime: '',
-  //       extra: '未开始',
+  //       extra: 'Chưa bắt đầu',
   //       color: '',
   //       type: '3',
   //     },
   //     {
   //       id: '000000010',
   //       avatar: '',
-  //       title: '第三方紧急代码变更',
-  //       description: '冠霖 需在 2017-01-07 前完成代码变更任务',
+  //       title: 'Thay đổi mã khẩn cấp của bên thứ ba',
+  //       description: 'Quán Lâm Cần ở 2017-01-07 trước khi hoàn thành nhiệm vụ thay đổi mã',
   //       datetime: '',
-  //       extra: '马上到期',
+  //       extra: 'Sắp hết hạn',
   //       color: 'red',
   //       type: '3',
   //     },
   //     {
   //       id: '000000011',
   //       avatar: '',
-  //       title: '信息安全考试',
-  //       description: '指派竹尔于 2017-01-09 前完成更新并发布',
+  //       title: 'Kỳ thi an toàn thông tin',
+  //       description: 'Giao cho Trúc Nhĩ vào 2017-01-09 trước khi hoàn thành cập nhật và phát hành',
   //       datetime: '',
-  //       extra: '已耗时 8 天',
+  //       extra: 'Đã tốn thời gian 8 ngày',
   //       color: 'gold',
   //       type: '3',
   //     },
   //     {
   //       id: '000000012',
   //       avatar: '',
-  //       title: 'ABCD 版本发布',
-  //       description: '指派竹尔于 2017-01-09 前完成更新并发布',
+  //       title: 'ABCD Phát hành phiên bản',
+  //       description: 'Giao cho Trúc Nhĩ vào 2017-01-09 trước khi hoàn thành cập nhật và phát hành',
   //       datetime: '',
-  //       extra: '进行中',
+  //       extra: 'Đang tiến hành',
   //       color: 'blue',
   //       type: '3',
   //     },

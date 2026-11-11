@@ -15,14 +15,14 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   const localeStore = useLocaleStore();
   const { t } = useI18n();
-  // 声明Emits
+  // Khai báo Emits
   const emit = defineEmits(['register']);
   const $message = useMessage();
   const formRef = ref();
   const username = ref('');
-  // 代码逻辑说明: 【QQYUN-7970】国际化
+  // Giải thích logic mã: 【QQYUN-7970】 Quốc tế hóa
   const title = ref(t('layout.changePassword.changePassword'));
-  //表单配置
+  // Cấu hình biểu mẫu
   const [registerForm, { resetFields, validate, clearValidate }] = useForm({
     schemas: [
       {
@@ -43,11 +43,11 @@
             required: true,
             message: t('layout.changePassword.pleaseEnterNewPassword'),
           },
-          //update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】根据三级等保开关动态切换校验规则-----------
+          //update-begin---author:wangshuai ---date:2026-06-29  for: 【QQYUN-16619】 Chuyển đổi động quy tắc kiểm tra theo công tắc bảo mật cấp 3-----------
           {
             validator: createPasswordValidator(),
           },
-          //update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】根据三级等保开关动态切换校验规则-----------
+          //update-end---author:wangshuai ---date:2026-06-29  for: 【QQYUN-16619】 Chuyển đổi động quy tắc kiểm tra theo công tắc bảo mật cấp 3-----------
         ],
       },
       {
@@ -61,20 +61,20 @@
     wrapperCol: null,
     labelWidth: localeStore.getLocale == 'zh_CN' ? 100 : 160,
   });
-  //表单赋值
+  // Gán giá trị biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner();
 
-  //表单提交事件
+  // Sự kiện submit biểu mẫu
   async function handleSubmit() {
     try {
       const values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      // Gửi biểu mẫu
       let params = Object.assign({ username: unref(username) }, values);
       defHttp.put({ url: '/sys/user/updatePassword', params }, { isTransformResponse: false }).then((res) => {
         if (res.success) {
           $message.createMessage.success(res.message);
-          //关闭弹窗
+          // Đóng popup
           closeModal();
         } else {
           $message.createMessage.warning(res.message);
@@ -87,7 +87,7 @@
 
   async function show(name) {
     if (!name) {
-      $message.createMessage.warning('当前系统无登录用户!');
+      $message.createMessage.warning('Hệ thống hiện tại không có người dùng đăng nhập!');
       return;
     } else {
       username.value = name;

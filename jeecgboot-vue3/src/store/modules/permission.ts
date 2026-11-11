@@ -24,15 +24,15 @@ import { getBackMenuAndPerms } from '/@/api/sys/menu';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
 
-// 系统权限
+// Quyền hệ thống
 interface AuthItem {
-  // 菜单权限编码，例如：“sys:schedule:list,sys:schedule:info”,多个逗号隔开
+  // Mã quyền menu, ví dụ: “sys:schedule:list,sys:schedule:info”, tách bằng nhiều dấu phẩy
   action: string;
-  // 权限策略1显示2禁用
+  // Chính sách quyền: 1 Hiển thị, 2 Vô hiệu hóa
   type: string | number;
-  // 权限状态(0无效1有效)
+  // Trạng thái quyền (0 Không hợp lệ, 1 Có hiệu lực)
   status: string | number;
-  // 权限名称
+  // Tên quyền
   describe?: string;
   isAuth?: boolean;
 }
@@ -47,13 +47,13 @@ interface PermissionState {
   // Backstage menu list
   backMenuList: Menu[];
   frontMenuList: Menu[];
-  // 用户所拥有的权限
+  // Quyền người dùng sở hữu
   authList: AuthItem[];
-  // 全部权限配置
+  // Cấu hình tất cả quyền
   allAuthList: AuthItem[];
-  // 系统安全模式
+  // Chế độ an toàn hệ thống
   sysSafeMode: boolean;
-  // online子表按钮权限
+  // Quyền nút bảng con của online
   onlineSubTableAuthMap: object;
 }
 export const usePermissionStore = defineStore('app-permission', {
@@ -89,7 +89,7 @@ export const usePermissionStore = defineStore('app-permission', {
       return this.isDynamicAddedRoute;
     },
 
-    // 代码逻辑说明: VUEN-1162 子表按钮没控制
+    // Giải thích logic mã: VUEN-1162 Nút bảng con chưa được kiểm soát
     getOnlineSubTableAuth: (state) => {
       return (code) => state.onlineSubTableAuthMap[code];
     },
@@ -126,12 +126,12 @@ export const usePermissionStore = defineStore('app-permission', {
       const codeList = systemPermission.codeList;
       this.setPermCodeList(codeList);
       this.setAuthData(systemPermission);
-      // 代码逻辑说明: 【issues/9838】字典版本号变化时后台刷新字典缓存，不阻塞菜单构建
+      // Giải thích logic mã: [issues/9838] Khi phiên bản từ điển thay đổi, backend làm mới cache từ điển, không chặn việc xây dựng menu
       useUserStore()
         .refreshDictItemsIfChanged(systemPermission.dictVersion)
-        .catch((e) => console.warn('刷新字典缓存失败', e));
+        .catch((e) => console.warn('Làm mới cache từ điển thất bại', e));
 
-      //菜单路由
+      // Route menu
       const routeList = systemPermission.menu;
       return routeList;
     },
@@ -158,7 +158,7 @@ export const usePermissionStore = defineStore('app-permission', {
       };
 
       /**
-       * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
+       * @description Theo path trang chủ đã cài đặt, sửa đánh dấu affix trong routes (trang chủ cố định)
        * */
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return;
@@ -182,7 +182,7 @@ export const usePermissionStore = defineStore('app-permission', {
         try {
           patcher(routes);
         } catch (e) {
-          // 已处理完毕跳出循环
+          // Đã xử lý xong thì thoát vòng lặp
         }
         return;
       };
@@ -191,7 +191,7 @@ export const usePermissionStore = defineStore('app-permission', {
         case PermissionModeEnum.ROLE:
           routes = filter(asyncRoutes, routeFilter);
           routes = routes.filter(routeFilter);
-          //  将多级路由转换为二级
+          //  Chuyển route nhiều cấp thành hai cấp
           routes = flatMultiLevelRoutes(routes);
           break;
 
@@ -206,22 +206,22 @@ export const usePermissionStore = defineStore('app-permission', {
           });
 
           this.setFrontMenuList(menuList);
-          // 将多级路由转换为二级
+          // Chuyển route nhiều cấp thành hai cấp
           routes = flatMultiLevelRoutes(routes);
           break;
 
-        // 后台菜单构建
+        // Xây dựng menu backend
         case PermissionModeEnum.BACK:
           const { createMessage, createWarningModal } = useMessage();
-          console.log(" --- 构建后台路由菜单 --- ")
-          // 菜单加载提示
+          console.log(" --- Xây dựng menu route backend --- ")
+          // Gợi ý tải menu
           // createMessage.loading({
           //   content: t('sys.app.menuLoading'),
           //   duration: 1,
           // });
 
-          // 从后台获取权限码，
-          // 这个函数可能只需要执行一次，并且实际的项目可以在正确的时间被放置
+          // Lấy mã quyền từ backend,
+          // Hàm này có thể chỉ cần thực thi một lần, và trong dự án thực tế có thể đặt nó vào thời điểm thích hợp
           let routeList: AppRouteRecordRaw[] = [];
           try {
             routeList = await this.changePermissionCode();
@@ -229,28 +229,28 @@ export const usePermissionStore = defineStore('app-permission', {
             // let hasIndex: boolean = false;
             // let hasIcon: boolean = false;
             // for (let menuItem of routeList) {
-            //   // 条件1：判断组件是否是 layouts/default/index
+            //   // Điều kiện 1: Kiểm tra component có phải là layouts/default/index không
             //   if (!hasIndex) {
             //     hasIndex = menuItem.component === 'layouts/default/index';
             //   }
-            //   // 条件2：判断图标是否带有 冒号
+            //   // Điều kiện 2: Kiểm tra icon có mang dấu hai chấm không
             //   if (!hasIcon) {
             //     hasIcon = !!menuItem.meta?.icon?.includes(':');
             //   }
-            //   // 满足任何一个条件都直接跳出循环
+            //   // Thỏa mãn bất kỳ điều kiện nào cũng thoát vòng lặp ngay
             //   if (hasIcon || hasIndex) {
             //     break;
             //   }
             // }
-            // // 两个条件都不满足，就弹出提示框
+            // // Cả hai điều kiện đều không thỏa, thì bật hộp gợi ý
             // if (!hasIcon && !hasIndex) {
-            //   // 延迟1.5秒之后再出现提示，否则提示框出不来
+            //   // Trì hoãn 1.5 giây rồi mới hiện gợi ý, nếu không hộp gợi ý sẽ không hiện ra
             //   setTimeout(
             //     () =>
             //       createWarningModal({
-            //         title: '检测提示',
+            //         title: 'Nhắc nhở phát hiện',
             //         content:
-            //           '当前菜单表是 <b>Vue2版本</b>，导致菜单加载异常!<br>点击确认，切换到Vue3版菜单！',
+            //           'Bảng menu hiện tại là <b>phiên bản Vue2</b>, khiến việc tải menu bị bất thường!<br>Nhấn xác nhận để chuyển sang menu phiên bản Vue3!',
             //         onOk:function () {
             //           switchVue3Menu();
             //           location.reload();
@@ -262,21 +262,21 @@ export const usePermissionStore = defineStore('app-permission', {
           } catch (error) {
             console.error(error);
           }
-          // 组件地址前加斜杠处理  author: lsq date:2021-09-08
+          // Xử lý thêm dấu gạch chéo trước địa chỉ component  author: lsq date:2021-09-08
           routeList = addSlashToRouteComponent(routeList);
-          // 动态引入组件
+          // Import động component
           routeList = transformObjToRoute(routeList);
 
-          // 构建后台路由菜单
+          // Xây dựng menu route backend
           const backMenuList = transformRouteToMenu(routeList);
           this.setBackMenuList(backMenuList);
 
-          // 删除meta.ignoreRoute项
+          // Xóa mục meta.ignoreRoute
           routeList = filter(routeList, routeRemoveIgnoreFilter);
           routeList = routeList.filter(routeRemoveIgnoreFilter);
 
           routeList = flatMultiLevelRoutes(routeList);
-          // 代码逻辑说明: 【TV360X-522】ai助手路由写死在前端
+          // Giải thích logic mã: 【TV360X-522】Route của trợ lý AI được viết cứng ở frontend
           routes = [PAGE_NOT_FOUND_ROUTE, ...routeList, ...staticRoutesList];
           break;
       }
@@ -297,14 +297,14 @@ export const usePermissionStore = defineStore('app-permission', {
       this.allAuthList = authList;
     },
 
-    // 代码逻辑说明: VUEN-1162 子表按钮没控制
+    // Giải thích logic mã: VUEN-1162 Nút bảng con chưa được kiểm soát
     setOnlineSubTableAuth(code, hideBtnList) {
       this.onlineSubTableAuthMap[code] = hideBtnList;
     },
   },
 });
 
-// 需要在设置之外使用
+// Cần dùng bên ngoài setup
 export function usePermissionStoreWithOut() {
   return usePermissionStore(store);
 }

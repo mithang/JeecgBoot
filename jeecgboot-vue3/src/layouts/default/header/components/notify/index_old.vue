@@ -12,18 +12,18 @@
                 {{ item.name }}
                 <span v-if="item.list.length !== 0">({{ item.count }})</span>
               </template>
-              <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
+              <!-- Liên kết title-click: tiêu đề trong danh sách thông báo sự kiện có thể nhấp được -->
               <NoticeList :list="item.list" @title-click="onNoticeClick" />
             </TabPane>
           </template>
         </Tabs>
         <a-row class="bottom-buttons">
           <a-col :span="count === 0 ? 0 : 12">
-            <a-button @click="onEmptyNotify" type="dashed" block>清空消息</a-button>
+            <a-button @click="onEmptyNotify" type="dashed" block>Xóa sạch tin nhắn</a-button>
           </a-col>
           <a-col :span="count === 0 ? 24 : 12">
             <a-button @click="popoverVisible = false" type="dashed" block>
-              <router-link to="/monitor/mynews">查看更多</router-link>
+              <router-link to="/monitor/mynews">Xem thêm</router-link>
             </a-button>
           </a-col>
         </a-row>
@@ -95,7 +95,7 @@
         };
       }
 
-      // 获取系统消息
+      // Lấy tin nhắn hệ thống
       async function loadData() {
         try {
           let { anntMsgList, sysMsgList, anntMsgTotal, sysMsgTotal } = await listCementByUser({
@@ -106,7 +106,7 @@
           listData.value[0].count = anntMsgTotal;
           listData.value[1].count = sysMsgTotal;
         } catch (e) {
-          console.warn('系统消息通知异常：', e);
+          console.warn('Thông báo tin nhắn hệ thống bất thường:', e);
         }
       }
 
@@ -132,11 +132,11 @@
         popoverVisible.value = false;
       }
 
-      // 初始化 WebSocket
+      // Khởi tạo WebSocket
       function initWebSocket() {
         let userId = unref(userStore.getUserInfo).id;
         let token = getToken();
-        // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
+        // WebSocket khác với giao thức dùng cho yêu cầu thông thường, ws tương đương với http, wss tương đương với https
         let url = glob.domainUrl?.replace('https://', 'wss://').replace('http://', 'ws://') + '/websocket/' + userId;
         connectWebSocket(url);
         onWebSocket(onWebSocketMessage);
@@ -145,14 +145,14 @@
       function onWebSocketMessage(data) {
         console.log('---onWebSocketMessage---', data)
         if (data.cmd === 'topic' || data.cmd === 'user') {
-          //后台保存数据太慢 前端延迟刷新消息
+          // Backend lưu dữ liệu quá chậm, Frontend làm mới tin nhắn chậm
           setTimeout(()=>{
             loadData();
           }, 1000)
         }
       }
 
-      // 清空消息
+      // Xóa sạch tin nhắn
       function onEmptyNotify() {
         popoverVisible.value = false;
         readAllMsg({}, loadData);
@@ -247,7 +247,7 @@
     }
   }
 
-  // 兼容黑暗模式
+  // Tương thích chế độ tối
   [data-theme='dark'] .@{prefix-cls} {
     &__overlay {
       .ant-list-item {

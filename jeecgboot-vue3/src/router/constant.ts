@@ -3,7 +3,7 @@ export const REDIRECT_NAME = 'Redirect';
 export const PARENT_LAYOUT_NAME = 'ParentLayout';
 
 export const PAGE_NOT_FOUND_NAME = 'PageNotFound';
-// 代码逻辑说明: 【issues/7500】vue-router4.5.0版本路由name:PageNotFound同名导致登录进不去
+// Giải thích logic mã: 【issues/7500】vue-router 4.5.0, route name: PageNotFound trùng tên khiến không đăng nhập được
 export const PAGE_NOT_FOUND_NAME_404 = 'PageNotFound404';
 
 export const EXCEPTION_COMPONENT = () => import('/@/views/sys/exception/Exception.vue');

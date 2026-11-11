@@ -3,22 +3,22 @@ import { getMenus } from '/@/router/menus';
 
 export const useHideHomeDesign = (currentRoute) => {
   let menus: any = [];
-  // 是否隐藏门户设计
+  // Có ẩn thiết kế cổng không
   const isHideHomeDesign = ref(true);
   const getHideHomeDesign = (isCurItem, path) => {
     if (/^\/portal-view\/[^/]+$/.test(path) && isCurItem) {
       if (['/portal-view/system', '/portal-view/template'].includes(path)) {
-        // 主门户、模板门户 (需要检查是否存在设计列表,存在则显示门户设计,不存在则隐藏门户设计)
+        // Cổng chính, cổng mẫu (cần kiểm tra có danh sách thiết kế hay không; nếu có thì hiển thị thiết kế cổng, nếu không thì ẩn thiết kế cổng)
         getIsHasPortalDesignList();
       } else if (['/portal-view/default'].includes(path)) {
-        // 设计器打开的预览需隐藏设计模式
+        // Bản xem trước mở từ designer cần ẩn chế độ thiết kế
         isHideHomeDesign.value = true;
       } else {
-        // 个人工作台或者普通门户都可显示门户设计
+        // Bàn làm việc cá nhân hoặc cổng thông thường đều có thể hiển thị thiết kế cổng
         isHideHomeDesign.value = false;
       }
     } else {
-      // 非门户页面隐藏门户设计
+      // Trang không phải portal thì ẩn thiết kế portal
       isHideHomeDesign.value = true;
     }
   };
@@ -31,7 +31,7 @@ export const useHideHomeDesign = (currentRoute) => {
   };
   const getIsHasPortalDesignList = async () => {
     if (['/portal-view/system', '/portal-view/template'].includes(currentRoute.value.path)) {
-      // 主门户、模板门户时才需要查询菜单中是否有portalDesignList
+      // Chỉ khi là cổng chính, cổng mẫu mới cần truy vấn xem trong menu có portalDesignList hay không
       getMenusContainPath('/super/eoa/portalapp/portalDesignList').then((result) => {
         isHideHomeDesign.value = !result;
       });
@@ -47,7 +47,7 @@ export const useHideHomeDesign = (currentRoute) => {
 /*
  * 20250701
  * liaozhiyang
- * 通过path匹配菜单中的项
+ * Khớp mục trong menu thông qua path
  * */
 function getMatchingRouterName(menus, path) {
   for (let i = 0, len = menus.length; i < len; i++) {

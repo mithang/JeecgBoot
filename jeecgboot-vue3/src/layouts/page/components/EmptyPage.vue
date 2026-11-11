@@ -1,8 +1,8 @@
 <template>
   <template v-if="isQiankunRoute">
-    <!-- qiankun 路由不显示空白页提示 -->
+    <!-- qiankun Route không hiển thị gợi ý trang trắng -->
   </template>
-  <!-- 【QQYUN-13593】空白页美化 -->
+  <!-- 【QQYUN-13593】 Làm đẹp trang trống -->
   <div v-else class="animationEffect" :style="effectVars">
     <div class="effect-layer">
       <div class="blob blob-a"></div>
@@ -21,14 +21,14 @@ import { computed } from 'vue';
 import { router } from "@/router";
 import { useEmpty } from '../useEmpty';
 
-// 判断是否是 qiankun 路由
+// Kiểm tra có phải route qiankun không
 const isQiankunRoute = computed(() => !!router.currentRoute.value?.meta?.isQiankunRoute);
 
 const {pageTip, effectVars} = useEmpty();
 </script>
 
 <style lang="less" scoped>
-/** update-begin---author:liaozy ---date:2025-08-26  for：空白页美化样式 */
+/** update-begin---author:liaozy ---date:2025-08-26  for: Kiểu làm đẹp trang trắng */
 .pageTip {
   display: flex;
   justify-content: center;
@@ -170,5 +170,5 @@ const {pageTip, effectVars} = useEmpty();
   }
 }
 
-/** update-end---author:liaozy ---date:2025-08-26  for：空白页美化样式 */
+/** update-end---author:liaozy ---date:2025-08-26  for: Kiểu làm đẹp trang trắng */
 </style>

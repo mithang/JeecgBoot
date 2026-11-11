@@ -5,9 +5,9 @@ import { $electron } from "@/electron";
 import { basicRoutes } from './routes';
 import {createRouter as createVueRouter, destroyRouter, router} from './router'
 
-// 白名单应该包含基本静态路由
+// Danh sách trắng nên chứa các route tĩnh cơ bản
 const WHITE_NAME_LIST: string[] = [];
-// Online 路由在应用启动时注册，退出登录重置权限路由时需要保留，否则重新登录后会命中 404。
+// Route Online được đăng ký khi ứng dụng khởi động; khi đăng xuất, các route quyền cần được giữ lại khi đặt lại, nếu không sau khi đăng nhập lại sẽ gặp lỗi 404.
 const ONLINE_ROUTE_NAMES = [
   'onl-auto-cgform-router',
   'OnlineAutoList',
@@ -30,7 +30,7 @@ const getRouteNames = (array: any[]) =>
 getRouteNames(basicRoutes);
 
 /**
- * 创建路由实例
+ * Tạo instance route
  */
 export function createRouter() {
   let router = createVueRouter({
@@ -38,11 +38,11 @@ export function createRouter() {
       strict: true,
       scrollBehavior: () => ({left: 0, top: 0}),
     },
-    // 如果是 Electron 环境，则使用 hash 路由
+    // Nếu là môi trường Electron thì dùng hash route
     $electron.isElectron(),
   )
 
-  // TODO 【QQYUN-4517】【表单设计器】记录分享路由守卫测试
+  // TODO 【QQYUN-4517】【Trình thiết kế biểu mẫu】Ghi lại kiểm tra route guard chia sẻ
   router.beforeEach(async (to, from) => {
     //console.group('【QQYUN-4517】beforeEach');
     //console.warn('from', from);

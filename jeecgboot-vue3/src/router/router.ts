@@ -1,5 +1,5 @@
 /*
- * 路由实例存储文件，请勿轻易添加其他代码，防止出现 HMR 或其他问题
+ * Tệp lưu trữ instance của route, đừng tùy tiện thêm mã khác để tránh phát sinh vấn đề HMR hoặc các vấn đề khác
  */
 import type {Router, RouterHistory} from 'vue-router';
 import {createRouter as createVueRouter, createWebHistory, createWebHashHistory, RouterOptions} from 'vue-router';
@@ -13,9 +13,9 @@ export function setRouter(r: Router) {
 let webHistory: Nullable<RouterHistory> = null;
 
 /**
- * 创建路由
- * @param options 参数
- * @param useHashHistory 是否使用 hash 路由，true使用，false不使用hash路由
+ * Tạo route
+ * @param options Tham số
+ * @param useHashHistory Có dùng hash route không, true là dùng, false là không dùng hash route
  */
 export function createRouter(options: Partial<RouterOptions>, useHashHistory = false) {
   const createFn = useHashHistory ? createWebHashHistory : createWebHistory;
@@ -32,7 +32,7 @@ export function createRouter(options: Partial<RouterOptions>, useHashHistory = f
   return router
 }
 
-// 销毁路由
+// Hủy route
 export function destroyRouter() {
   setRouter(null as unknown as Router);
   if (webHistory) {

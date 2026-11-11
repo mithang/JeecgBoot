@@ -14,7 +14,7 @@
     destroyOnClose
   >
     <div>
-      <span class="pwd-topbar">您当前密码和系统密码一致，请修改密码！</span>
+      <span class="pwd-topbar">Mật khẩu hiện tại của bạn trùng với mật khẩu hệ thống, vui lòng đổi mật khẩu!</span>
       <BasicForm @register="registerForm" />
     </div>
   </BasicModal>
@@ -38,7 +38,7 @@
   const oldPassword = ref('');
   const userStore = useUserStore();
 
-  // 表单配置
+  // Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     labelWidth: 100,
     schemas: [
@@ -54,11 +54,11 @@
             required: true,
             message: t('layout.changePassword.pleaseEnterNewPassword'),
           },
-          //update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】根据三级等保开关动态切换校验规则-----------
+          //update-begin---author:wangshuai ---date:2026-06-29  for: 【QQYUN-16619】 Chuyển đổi động quy tắc kiểm tra theo công tắc bảo mật cấp 3-----------
           {
             validator: createPasswordValidator(oldPassword.value),
           },
-          //update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】根据三级等保开关动态切换校验规则-----------
+          //update-end---author:wangshuai ---date:2026-06-29  for: 【QQYUN-16619】 Chuyển đổi động quy tắc kiểm tra theo công tắc bảo mật cấp 3-----------
         ],
       },
       {
@@ -80,31 +80,31 @@
     oldPassword.value = decodeURIComponent(data.oldPassword)
   });
 
-  const getTitle = computed(() => '修改密码');
+  const getTitle = computed(() => 'Đổi mật khẩu');
   const { createMessage: $message } = useMessage();
 
   
   
-  // 提交处理
+  // Xử lý gửi
   async function handleSubmit() {
     try {
       const values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      // Gửi biểu mẫu
       let params = Object.assign({ username: userStore.getUserInfo.username, oldpassword: oldPassword.value }, values);
       defHttp.put({ url: '/sys/user/updatePassword', params }, { isTransformResponse: false }).then((res) => {
         if (res.success) {
             $message.info({
-              content:'密码修改成功，请重新登录！2s后自动退出登录',
+              content:'Đổi mật khẩu thành công, vui lòng đăng nhập lại! 2s sau sẽ tự động đăng xuất',
               duration: 2
             })
-            //3s后返回登录页面
+            // 3s sau quay lại trang đăng nhập
             setTimeout(()=>{
               userStore.logout(true);
             },2000)
-            //关闭弹窗
+            // Đóng popup
             closeModal();
-          //关闭弹窗
+          // Đóng popup
           closeModal();
         } else {
           $message.warning(res.message);

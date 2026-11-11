@@ -26,7 +26,7 @@
     setup() {
       const { t } = useI18n();
       const [register, { openModal }] = useModal();
-      // 代码逻辑说明: 【QQYUN-6333】空路由问题—首次访问资源太大
+      // Giải thích logic mã: Vấn đề route trống — Lần đầu truy cập tài nguyên quá lớn
       const lockModalVisible = ref(false);
       const modalRef = ref(null);
       async function handleLock() {

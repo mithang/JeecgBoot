@@ -1,11 +1,11 @@
 // /**
-//  *公共数据
+//  *Dữ liệu chung
 //  */
 // import { initGlobalState } from 'qiankun';
 // import { store } from '/@/store';
 // import { router } from '/@/router';
 // import { getToken } from '/@/utils/auth';
-// //定义传入子应用的数据
+// //Định nghĩa dữ liệu truyền vào micro app
 // export function getProps() {
 //   return {
 //     data: {
@@ -18,17 +18,17 @@
 // }
 //
 // /**
-//  * 定义全局状态，并返回通信方法,在主应用使用，微应用通过 props 获取通信方法。
-//  * @param state 主应用穿的公共数据
+//  * Định nghĩa trạng thái toàn cục, và trả về phương thức giao tiếp,Dùng trong ứng dụng chính, micro app thông qua props Lấy phương thức giao tiếp.
+//  * @param state Dữ liệu chung ứng dụng chính truyền sang
 //  */
 // export function initGlState(info = { userName: 'admin' }) {
-//   // 初始化state
+//   // Khởi tạostate
 //   const actions = initGlobalState(info);
-//   // 设置新的值
+//   // Cài đặt giá trị mới
 //   actions.setGlobalState(info);
-//   // 注册 观察者 函数 - 响应 globalState 变化，在 globalState 发生改变时触发该 观察者 函数。
+//   // Đăng ký Observer Hàm - Phản hồi globalState Thay đổi, trong globalState Khi xảy ra thay đổi thì kích hoạt Observer Hàm.
 //   actions.onGlobalStateChange((newState, prev) => {
-//     // state: 变更后的状态; prev 变更前的状态
+//     // state: Trạng thái sau khi thay đổi; prev Trạng thái trước khi thay đổi
 //     console.info('newState', newState);
 //     console.info('prev', prev);
 //     for (const key in newState) {

@@ -6,11 +6,11 @@
 //   let registered = false;
 //
 //   /**
-//    * 注册qiankun路由
+//    * Đăng kýqiankunRoute
 //    */
 //   function registerQiankunRouter() {
 //     if (!router) {
-//       // 如果路由对象不存在，递归调用，直到路由对象可用
+//       // Nếu đối tượng route không tồn tại, gọi đệ quy cho đến khi đối tượng route khả dụng
 //       setTimeout(() => registerQiankunRouter(), 1);
 //     } else {
 //       registerQiankunRouterNow();
@@ -23,15 +23,15 @@
 //     }
 //     registered = true;
 //     const checkQiankunRoute = (path: string) => apps.some(app => path.startsWith('/' + app.name));
-//     // 添加路由守卫
-//     // 路由守卫，判断是否是qiankun子应用路由
+//     // Thêm route guard
+//     // Route guard, phán đoán có phải làqiankunRoute micro app
 //     router.beforeEach(async (to, from, next) => {
 //       const isQiankunRoute = checkQiankunRoute(to.path);
 //       if (isQiankunRoute) {
-//         // 如果是qiankun子应用路由，设置meta属性
+//         // Nếu làqiankunRoute micro app, cài đặtmetaThuộc tính
 //         to.meta.isQiankunRoute = true;
 //       } else {
-//         // 如果不是qiankun子应用路由，清除meta属性
+//         // Nếu không phảiqiankunRoute micro app, xóametaThuộc tính
 //         delete to.meta.isQiankunRoute;
 //       }
 //       next();

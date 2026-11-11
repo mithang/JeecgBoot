@@ -71,7 +71,7 @@
       });
 
       const showClassSideBarRef = computed(() => {
-        // 控制是否显示侧边栏
+        // Kiểm soát có hiển thị thanh bên không
         if (appStore.getLayoutHideSider) {
           return false;
         }
@@ -84,7 +84,7 @@
           {
             [`${prefixCls}--fixed`]: unref(getMenuFixed),
             [`${prefixCls}--mix`]: unref(getIsMixMode) && !unref(getIsMobile),
-            // 【JEECG作为乾坤子应用】
+            // 
             [`${prefixCls}--qiankun-micro`]: glob.isQiankunMicro,
           },
         ];
@@ -102,8 +102,8 @@
         };
       });
 
-      // 在此处使用计算量可能会导致sider异常
-      // andv 更新后，如果trigger插槽可用，则此处代码可废弃
+      // Dùng computed ở đây có thể khiến sider bị lỗi
+      // Sau khi cập nhật antd, nếu slot trigger khả dụng thì có thể bỏ đoạn mã này
       const getTrigger = h(LayoutTrigger);
 
       return {
@@ -143,7 +143,7 @@
       height: 100%;
     }
 
-    // 【JEECG作为乾坤子应用】
+    // 
     &--qiankun-micro {
       position: absolute !important;
     }

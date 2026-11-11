@@ -22,9 +22,9 @@ interface AppState {
   projectConfig: ProjectConfig | null;
   // When the window shrinks, remember some states, and restore these states when the window is restored
   beforeMiniInfo: BeforeMiniState;
-  // 页面跳转临时参数存储
+  // Lưu trữ tham số tạm khi chuyển trang
   messageHrefParams: any,
-  // 应用参数
+  // Tham số ứng dụng
   mainAppProps: MainAppProps,
 }
 let timeId: TimeoutHandle;
@@ -42,19 +42,19 @@ export const useAppStore = defineStore('app', {
       return this.pageLoading;
     },
     getDarkMode(): 'light' | 'dark' | string {
-      // liaozhiyang---date:20250411---for：【QQYUN-11956】修复projectSetting中配置主题模式不生效
+      // liaozhiyang---date:20250411---for: [QQYUN-11956] Khắc phục lỗi cấu hình chế độ theme trong projectSetting không có hiệu lực
       const getSettingTheme = () => {
         const theme = setting.themeMode;
         if (theme) {
           if (theme == ThemeEnum.DARK) {
-            // 为了index.html页面loading时是暗黑
+            // Để trang loading của index.html ở chế độ tối
             localStorage.setItem(APP_DARK_MODE_KEY_, theme);
           }
           return theme;
         }
         return '';
       };
-      // liaozhiyang---date:20250411---for：【QQYUN-11956】修复projectSetting中配置主题模式不生效
+      // liaozhiyang---date:20250411---for: [QQYUN-11956] Khắc phục lỗi cấu hình chế độ theme trong projectSetting không có hiệu lực
       return this.darkMode || localStorage.getItem(APP_DARK_MODE_KEY_) || getSettingTheme() || darkMode;
     },
 
@@ -124,7 +124,7 @@ export const useAppStore = defineStore('app', {
 
     setProjectConfig(config: DeepPartial<ProjectConfig>): void {
       this.projectConfig = deepMerge(this.projectConfig || {}, config);
-      // 代码逻辑说明: 【QQYUN-8922】设置导航栏模式没存本地，刷新就还原了
+      // Giải thích logic mã: [QQYUN-8922] Cài đặt chế độ thanh điều hướng không lưu vào local, làm mới trang sẽ khôi phục lại
       Persistent.setLocal(PROJ_CFG_KEY, this.projectConfig, true);
     },
 
@@ -148,7 +148,7 @@ export const useAppStore = defineStore('app', {
       this.messageHrefParams = params;
     },
 
-    // 设置主应用参数
+    // Cài đặt tham số ứng dụng chính
     setMainAppProps(args: MainAppProps)  {
       this.mainAppProps.hideHeader = args.hideHeader ?? false;
       this.mainAppProps.hideSider = args.hideSider ?? false;

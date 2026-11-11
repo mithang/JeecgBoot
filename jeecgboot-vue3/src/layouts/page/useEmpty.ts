@@ -16,7 +16,7 @@ export const useEmpty = () => {
     const menuBg = unref(getMenuBgColor) || '#ffffff';
     const headerBg = unref(getHeaderBgColor);
     const isDark = unref(getDarkMode) === 'dark';
-    // 以主题色为基色，派生三组渐变色
+    // Lấy màu theme làm màu cơ bản, tạo ba nhóm màu gradient
     const a1 = lighten(primary, 25);
     const a2 = primary;
     const b1 = lighten(headerBg, 45);
@@ -50,9 +50,9 @@ export const useEmpty = () => {
     const menu = getMatchingPath(menus, route.path);
     if (menu) {
       if (['/layouts/default/index'].includes(menu.originComponent)) {
-        pageTip.value = '点击子菜单跳转到对应外部链接！';
+        pageTip.value = 'Nhấp vào menu con để chuyển đến liên kết ngoài tương ứng!';
       } else {
-        pageTip.value = '查看组件引用是否正确';
+        pageTip.value = 'Kiểm tra tham chiếu component có đúng không';
       }
     }
   };

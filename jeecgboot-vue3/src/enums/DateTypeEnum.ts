@@ -1,5 +1,5 @@
 /**
- * 日期类型
+ * Loại ngày tháng
  */
 export enum DateTypeEnum {
   Date = 'date',

@@ -1,7 +1,7 @@
 <template>
   <Dropdown :dropMenuList="getDropMenuList" :trigger="getTrigger" @menuEvent="handleMenuEvent" :overlayClassName="prefixCls">
     <div :class="`${prefixCls}__info`" @contextmenu="handleContext" v-if="getIsTabs">
-      <!-- updateBy:sunjianlei---updateDate:2021-09-03---修改tab切换栏样式：增加前缀图标 -->
+      <!-- updateBy: sunjianlei --- updateDate: 2021-09-03 --- Sửa kiểu thanh chuyển đổi tab: thêm biểu tượng tiền tố -->
       <!-- <span v-if="showPrefixIcon" :class="`${prefixCls}__prefix-icon`" @click="handleContext">
         <Icon :icon="prefixIconType" :size="14" />
       </span> -->
@@ -44,7 +44,7 @@
       const { prefixCls } = useDesign('multiple-tabs-content');
       const { t } = useI18n();
 
-      // 代码逻辑说明: VUEN-1144 online 配置成菜单后，打开菜单，显示名称未展示为菜单名称
+      // Giải thích logic mã: VUEN-1144 Sau khi cấu hình online thành menu, mở menu, tên hiển thị không hiển thị thành tên menu
       const localeStore = useLocaleStore();
       const getTitle = computed(() => {
         const { tabItem: { meta, fullPath } = {} } = props;
@@ -57,12 +57,12 @@
 
       const getIsTabs = computed(() => !props.isExtra);
 
-      // updateBy:sunjianlei---updateDate:2021-09-03---修改tab切换栏样式：前缀图标类型
+      // updateBy: sunjianlei --- updateDate: 2021-09-03 --- Sửa kiểu thanh chuyển đổi tab: loại biểu tượng tiền tố
       const prefixIconType = computed(() => {
         if (props.tabItem.meta.icon) {
           return props.tabItem.meta.icon;
         } else if (props.tabItem.path === PageEnum.BASE_HOME) {
-          // 当是首页时返回 home 图标 TODO 此处可能需要动态判断首页路径
+          // Khi là trang chủ thì trả về biểu tượng home. TODO: Ở đây có thể cần kiểm tra động đường dẫn trang chủ
           return 'ant-design:home-outlined';
         } else {
           return 'ant-design:code';
@@ -78,7 +78,7 @@
       }
 
       const { getTabsTheme } = useMultipleTabSetting();
-      // 是否显示图标
+      // Có hiển thị biểu tượng không
       const showPrefixIcon = computed(() => unref(getTabsTheme) === TabsThemeEnum.SMOOTH);
 
       return {

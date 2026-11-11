@@ -17,7 +17,7 @@ import { APP__THEME__COLOR } from '/@/enums/cacheEnum';
 /**
  *  2024-04-07
  *  liaozhiyang
- *  切换导航栏模式都走这个方法，每个模式都会有固定的顶部和菜单颜色搭配。暗黑模式则不走固定搭配
+ *  Chuyển chế độ thanh điều hướng đều đi qua phương thức này, mỗi chế độ đều có cách phối màu đầu trang và menu cố định. Chế độ tối thì không đi theo cách phối cố định
  * */
 export function layoutHandler(event: HandlerEnum, value: any) {
   const isHTopMenu = isObject(value) && value.type == MenuTypeEnum.TOP_MENU && value.mode == MenuModeEnum.HORIZONTAL;
@@ -25,7 +25,7 @@ export function layoutHandler(event: HandlerEnum, value: any) {
   const isMixSidebarMenu = isObject(value) && value.type == MenuTypeEnum.MIX_SIDEBAR && value.mode == MenuModeEnum.INLINE;
   const appStore = useAppStore();
   const darkMode = appStore.getDarkMode === ThemeEnum.DARK;
-  // 根据菜单类型动态获取主题色
+  // Lấy động màu theme theo loại menu
   const {themeColor: dynamicThemeColor, headerBgColor, sideBgColor } = getConfigByMenuType(value.type);
   if (isHTopMenu) {
     baseHandler(event, value);
@@ -44,7 +44,7 @@ export function layoutHandler(event: HandlerEnum, value: any) {
       updateHeaderBgColor();
       updateSidebarBgColor();
     }
-    // 顶部混合导航模式使用动态主题色
+    // Chế độ điều hướng hỗn hợp phần trên dùng màu chủ đề động
     baseHandler(HandlerEnum.CHANGE_THEME_COLOR, dynamicThemeColor);
     baseHandler(HandlerEnum.TABS_THEME, tabsThemeOptions[1].value);
   } else if (isMixSidebarMenu) {
@@ -68,7 +68,7 @@ export function layoutHandler(event: HandlerEnum, value: any) {
     baseHandler(HandlerEnum.CHANGE_THEME_COLOR, dynamicThemeColor);
     baseHandler(HandlerEnum.TABS_THEME, tabsThemeOptions[1].value);
   }
-  // 代码逻辑说明: 【QQYUN-13600】默认顶部混合导航模式且启用顶部左侧导航，切换到其他模式时导航刷新后菜单样式混乱
+  // Giải thích logic mã: Chế độ điều hướng hỗn hợp phía trên mặc định và bật điều hướng bên trái phía trên, khi chuyển sang chế độ khác, sau khi làm mới điều hướng thì kiểu menu bị lộn xộn
   if (isMixMenu) {
     baseHandler(HandlerEnum.MENU_SPLIT, true);
   } else {
@@ -110,7 +110,7 @@ export function handler(event: HandlerEnum, value: any): DeepPartial<ProjectConf
       if (getThemeColor.value === value) {
         return {};
       }
-      // 代码逻辑说明: 【QQYUN-8925】系统主题颜色（供页面加载使用）
+      // Giải thích logic mã: Màu theme hệ thống (dùng khi tải trang)
       localStorage.setItem(APP__THEME__COLOR, value);
       changeTheme(value);
 
@@ -207,7 +207,7 @@ export function handler(event: HandlerEnum, value: any): DeepPartial<ProjectConf
     case HandlerEnum.COLOR_WEAK:
       updateColorWeak(value);
       return { colorWeak: value };
-    // 代码逻辑说明: 【QQYUN-10952】AI助手支持通过设置来配置是否显示
+    // Giải thích logic mã: 【QQYUN-10952】Trợ lý AI hỗ trợ cấu hình có hiển thị hay không qua cài đặt
     case HandlerEnum.AI_ICON_SHOW:
       return { aiIconShow: value };
     case HandlerEnum.SHOW_LOGO:

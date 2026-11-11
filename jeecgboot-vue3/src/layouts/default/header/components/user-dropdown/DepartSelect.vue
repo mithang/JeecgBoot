@@ -2,17 +2,17 @@
   <BasicModal v-bind="config" :maxHeight="500" :title="currTitle" v-model:visible="visible" wrapClassName="loginSelectModal">
     <a-form ref="formRef" v-bind="layout" :colon="false" class="loginSelectForm">
       <a-form-item v-if="isMultiTenant" :validate-status="validate_status">
-        <!--label内容-->
+        <!-- Nội dung label -->
         <template #label>
           <a-tooltip placement="topLeft">
             <template #title>
-              <span>您隶属于多租户，请选择当前所属租户</span>
+              <span>Bạn thuộc nhiều tenant, vui lòng chọn tenant hiện tại</span>
             </template>
-            <a-avatar style="background-color: #87d068" :size="30"> 租户 </a-avatar>
+            <a-avatar style="background-color: #87d068" :size="30"> Tenant </a-avatar>
           </a-tooltip>
         </template>
-        <!--部门下拉内容-->
-        <a-select v-model:value="tenantSelected" placeholder="请选择登录部门" :class="{ 'valid-error': validate_status == 'error' }">
+        <!-- Nội dung dropdown phòng ban -->
+        <a-select v-model:value="tenantSelected" placeholder="Vui lòng chọn phòng ban đăng nhập" :class="{ 'valid-error': validate_status == 'error' }">
           <template #suffixIcon>
             <Icon icon="ant-design:gold-outline" />
           </template>
@@ -22,17 +22,17 @@
         </a-select>
       </a-form-item>
       <a-form-item v-if="isMultiDepart && departList.length > 0" :validate-status="validate_status1">
-        <!--label内容-->
+        <!-- Nội dung label -->
         <template #label>
           <a-tooltip placement="topLeft">
             <template #title>
-              <span>您隶属于多部门，请选择当前所在部门</span>
+              <span>Bạn thuộc nhiều phòng ban, vui lòng chọn phòng ban hiện tại</span>
             </template>
-            <a-avatar style="background-color: rgb(104, 208, 203)" :size="30"> 部门 </a-avatar>
+            <a-avatar style="background-color: rgb(104, 208, 203)" :size="30"> Phòng ban </a-avatar>
           </a-tooltip>
         </template>
-        <!--部门下拉内容-->
-        <a-select v-model:value="departSelected" placeholder="请选择登录部门" :class="{ 'valid-error': validate_status1 == 'error' }">
+        <!-- Nội dung dropdown phòng ban -->
+        <a-select v-model:value="departSelected" placeholder="Vui lòng chọn phòng ban đăng nhập" :class="{ 'valid-error': validate_status1 == 'error' }">
           <template #suffixIcon>
             <Icon icon="ant-design:gold-outline" />
           </template>
@@ -44,8 +44,8 @@
     </a-form>
 
     <template #footer>
-      <a-button @click="close">关闭</a-button>
-      <a-button @click="handleSubmit" type="primary">确认</a-button>
+      <a-button @click="close">Đóng</a-button>
+      <a-button @click="handleSubmit" type="primary">Xác nhận</a-button>
     </template>
   </BasicModal>
 </template>
@@ -61,7 +61,7 @@
   const userStore = useUserStore();
   const { createMessage, notification } = useMessage();
   const props = defineProps({
-    title: { type: String, default: '部门选择' },
+    title: { type: String, default: 'Chọn phòng ban' },
     closable: { type: Boolean, default: false },
     username: { type: String, default: '' },
   });
@@ -92,9 +92,9 @@
   const departSelected = ref('');
   const departList = ref([]);
   const validate_status1 = ref('');
-  //弹窗显隐
+  // Hiện/ẩn popup
   const visible = ref(false);
-  //获取部门缩写
+  // Lấy viết tắt phòng ban
   const getShortDeptName = computed(()=>{
     return (depart) => {
       let deptName = depart.departNameAbbr || depart.departPathName || depart.departName;
@@ -105,45 +105,45 @@
     };
   })
   /**
-   * 弹窗打开前处理
+   * Xử lý trước khi mở popup
    */
   async function show() {
-    // update-begin--author:liaozhiyang---date:20260812---for:【LHZP-1359】部门和租户任一有数据都需要展示出来，除非都没数据时则提示
+    // update-begin--author:liaozhiyang---date:20260812---for:【LHZP-1359】 Phòng ban và tenant, bên nào có dữ liệu cũng cần hiển thị, trừ khi cả hai đều không có dữ liệu thì mới nhắc
     const [canSwitchDepart, canSwitchTenant] = await Promise.all([loadDepartList(), loadTenantList()]);
     if (!canSwitchDepart && !canSwitchTenant) {
-      createMessage.info('当前没有可切换的租户或部门');
+      createMessage.info('Hiện tại không có tenant hoặc phòng ban nào để chuyển');
       return;
     }
-    // update-end--author:liaozhiyang---date:20260812---for:【LHZP-1359】部门和租户任一有数据都需要展示出来，除非都没数据时则提示
-    //标题配置
+    // update-end--author:liaozhiyang---date:20260812---for:【LHZP-1359】 Phòng ban và tenant, bên nào có dữ liệu cũng cần hiển thị, trừ khi cả hai đều không có dữ liệu thì mới nhắc
+    // Cấu hình tiêu đề
     if (unref(isMultiTenant) && unref(isMultiDepart)) {
-      currTitle.value = '切换租户和部门';
+      currTitle.value = 'Chuyển tenant và phòng ban';
     } else if (unref(isMultiTenant)) {
       currTitle.value =
-        unref(currentTenantName) && unref(currentTenantName).length > 0 ? `租户切换（当前租户 :${unref(currentTenantName)}）` : props.title;
+        unref(currentTenantName) && unref(currentTenantName).length > 0 ? `Chuyển tenant (tenant hiện tại: ${unref(currentTenantName)})` : props.title;
     } else if (unref(isMultiDepart)) {
       currTitle.value =
-        unref(currentDepartName) && unref(currentDepartName).length > 0 ? `部门切换（当前部门 :${unref(currentDepartName)}）` : props.title;
+        unref(currentDepartName) && unref(currentDepartName).length > 0 ? `Chuyển phòng ban (phòng ban hiện tại: ${unref(currentDepartName)})` : props.title;
     }
-    //model显隐
+    // Hiện/ẩn model
     if (unref(isMultiTenant) || unref(isMultiDepart)) {
       visible.value = true;
     }
   }
   /**
-   *加载部门信息
+   * Tải thông tin phòng ban
    */
   async function loadDepartList() {
     const result = await getUserDeparts();
-    // update-begin--author:liaozhiyang---date:20260812---for:【LHZP-1359】部门和租户任一有数据都需要展示出来，除非都没数据时则提示
+    // update-begin--author:liaozhiyang---date:20260812---for:【LHZP-1359】 Phòng ban và tenant, bên nào có dữ liệu cũng cần hiển thị, trừ khi cả hai đều không có dữ liệu thì mới nhắc
     const userDeparts = Array.isArray(result.list) ? result.list.filter((item) => item.orgCategory == '2') : [];
     if (userDeparts.length == 0) {
       return false;
     }
-    // update-end--author:liaozhiyang---date:20260812---for:【LHZP-1359】部门和租户任一有数据都需要展示出来，除非都没数据时则提示
+    // update-end--author:liaozhiyang---date:20260812---for:【LHZP-1359】 Phòng ban và tenant, bên nào có dữ liệu cũng cần hiển thị, trừ khi cả hai đều không có dữ liệu thì mới nhắc
     let currentDepart = userDeparts.filter((item) => item.orgCode == result.orgCode);
     departList.value = userDeparts;
-    // 代码逻辑说明: JHHB-790 用户部门变更，会出现这个情况（因为之前设置的这里只切换部门，过滤了公司和岗位信息）
+    // Giải thích logic mã: JHHB-790 Phòng ban người dùng thay đổi, sẽ xuất hiện trường hợp này (vì trước đây cài đặt ở đây chỉ chuyển phòng ban, đã lọc thông tin công ty và vị trí)
     const hasCurrentDepart = userDeparts.some(item => item.orgCode == result.orgCode);
     departSelected.value = hasCurrentDepart && currentDepart && currentDepart.length > 0 ? result.orgCode : '';
     currentDepartName.value = currentDepart && currentDepart.length > 0 ? currentDepart[0].departName : '';
@@ -151,7 +151,7 @@
     return true;
   }
   /**
-   *加载租户信息
+   * Tải thông tin tenant
    */
   async function loadTenantList() {
     const result = await getUserTenants();
@@ -168,7 +168,7 @@
   }
 
   /**
-   * 提交数据
+   * Dữ liệu gửi
    */
   async function handleSubmit() {
     if (unref(isMultiTenant) && unref(tenantSelected)==null) {
@@ -184,13 +184,13 @@
         if (unref(isMultiTenant)) {
           userStore.setTenant(unref(tenantSelected));
         }
-        createMessage.success('切换成功');
+        createMessage.success('Chuyển đổi thành công');
         
-        //切换租户后要刷新首页
+        // Sau khi chuyển tenant cần làm mới trang chủ
         window.location.reload();
       })
       .catch((e) => {
-        console.log('登录选择出现问题', e);
+        console.log('Lựa chọn đăng nhập gặp vấn đề', e);
       })
       .finally(() => {
         if (unref(isMultiTenant)) {
@@ -200,7 +200,7 @@
       });
   }
   /**
-   *切换选择部门
+   * Chuyển lựa chọn phòng ban
    */
   function departResolve() {
     return new Promise(async (resolve, reject) => {
@@ -226,24 +226,24 @@
     });
   }
   /**
-   * 请求失败处理
+   * Xử lý yêu cầu thất bại
    */
   function requestFailed(err) {
     notification.error({
-      message: '登录失败',
-      description: ((err.response || {}).data || {}).message || err.message || '请求出现错误，请稍后再试',
+      message: 'Đăng nhập thất bại',
+      description: ((err.response || {}).data || {}).message || err.message || 'Yêu cầu gặp lỗi, vui lòng thử lại sau',
       duration: 4,
     });
   }
   /**
-   * 关闭model
+   * Đóng model
    */
   function close() {
     departClear();
   }
 
   /**
-   *初始化数据
+   * Dữ liệu khởi tạo
    */
   function departClear() {
     currTitle.value = '';
@@ -264,7 +264,7 @@
   }
 
   /**
-   * 监听username
+   * Lắng nghe username
    */
   watch(
     () => props.username,

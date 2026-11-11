@@ -16,7 +16,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   children: [
     {
       path: '/:path(.*)*',
-      // 代码逻辑说明: 【issues/7500】vue-router4.5.0版本路由name:PageNotFound同名导致登录进不去
+      // Giải thích logic mã: 【issues/7500】vue-router 4.5.0, route name: PageNotFound trùng tên khiến không đăng nhập được
       name: PAGE_NOT_FOUND_NAME_404,
       component: EXCEPTION_COMPONENT,
       meta: {

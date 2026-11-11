@@ -25,7 +25,7 @@
       const qiankunDivId = ref('');
       useContentViewHeight();
 
-      // // 注册 qiankun
+      // // Đăng ký qiankun
       // if (openQiankun) {
       //   qiankunDivId.value = registerApps?.containerId;
       //   registerApps();

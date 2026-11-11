@@ -22,7 +22,7 @@ html,
 body {
   width: 100%;
   height: 100%;
-  // body添加行高保持跟3.x一致
+  // bodyThêm chiều cao dòng giữ theo3.xNhất quán
   line-height: 1.5715;
   
   &.color-weak {
@@ -35,7 +35,7 @@ body {
   }
 }
 
-/* 【LOWCOD-2300】【vue3】online--online表单开发，下拉框位置靠下时，点开下拉框，整屏跳 */
+/* 【LOWCOD-2300】【vue3】online--onlinePhát triển biểu mẫu, khi vị trí dropdown ở dưới, mở dropdown, toàn màn hình nhảy */
 body {
   overflow: visible;
   overflow-x: hidden;
@@ -50,7 +50,7 @@ span {
   outline: none !important;
 }
 
-// 保持 和 windi 一样的全局样式，减少升级带来的影响
+// Giữ và windi Kiểu toàn cục giống nhau, giảm ảnh hưởng do nâng cấp mang lại
 ul {
   list-style: none;
   margin: 0;
@@ -60,15 +60,15 @@ img, video {
   max-width: 100%;
   height: auto;
 }
-// 保持 和 windi 一样的全局样式，减少升级带来的影响
+// Giữ và windi Kiểu toàn cục giống nhau, giảm ảnh hưởng do nâng cấp mang lại
 
-// update-begin--author:liaozhiyang---date:20230925---for：【issues/5407】字段信息校验是多行提示会被遮挡
+// update-begin--author:liaozhiyang---date:20230925---for: 【issues/5407]Kiểm tra thông tin trường là gợi ý nhiều dòng sẽ bị che khuất
 .vxe-cell--valid-error-msg {
   white-space: nowrap;
 }
-// update-end--author:liaozhiyang---date:20230925---for：【issues/5407】字段信息校验是多行提示会被遮挡
+// update-end--author:liaozhiyang---date:20230925---for: 【issues/5407]Kiểm tra thông tin trường là gợi ý nhiều dòng sẽ bị che khuất
 
-// update-begin--author:liaozhiyang---date:20231013---for：【QQYUN-5133】升级之后提示样式跟之前一致
+// update-begin--author:liaozhiyang---date:20231013---for: 【QQYUN-5133]Sau khi nâng cấp, kiểu gợi ý giống như trước
 .vxe-table .vxe-body--row:last-child .vxe-cell--valid-error-hint {
   margin-top: auto;
 }
@@ -83,23 +83,23 @@ img, video {
   background-color: #f56c6c !important;
   
 }
-// update-end--author:liaozhiyang---date:20231013---for：【QQYUN-5133】升级之后提示样式跟之前一致
-// update-begin--author:liaozhiyang---date:20231116---for：【QQYUN-7011】online表单多了一个蓝色的边框
+// update-end--author:liaozhiyang---date:20231013---for: 【QQYUN-5133]Sau khi nâng cấp, kiểu gợi ý giống như trước
+// update-begin--author:liaozhiyang---date:20231116---for: 【QQYUN-7011】onlineBiểu mẫu có thêm một viền xanh
 // .vxe-table.vxe-table--render-default .vxe-body--column.col--selected {
 //   box-shadow: none;
 // }
-// update-end--author:liaozhiyang---date:20231116---for：【QQYUN-7011】online表单多了一个蓝色的边框
+// update-end--author:liaozhiyang---date:20231116---for: 【QQYUN-7011】onlineBiểu mẫu có thêm một viền xanh
 
-// update-begin--author:liaozhiyang---date:20240424---for：【issues/1175】解决vxetable鼠标hover之后title显示不对的问题
+// update-begin--author:liaozhiyang---date:20240424---for: 【issues/1175]Giải quyếtvxetableChuộthoverSau đótitleVấn đề hiển thị không đúng
 .vxe-cell {
   pointer-events: none;
   > * {
     pointer-events: auto;
   }
 }
-// update-end--author:liaozhiyang---date:20240424---for：【issues/1175】解决vxetable鼠标hover之后title显示不对的问题
+// update-end--author:liaozhiyang---date:20240424---for: 【issues/1175]Giải quyếtvxetableChuộthoverSau đótitleVấn đề hiển thị không đúng
 
-// update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-9023】引导样式调整
+// update-begin--author:liaozhiyang---date:20240429---for: 【QQYUN-9023]Điều chỉnh kiểu hướng dẫn
 .introjs-tooltipReferenceLayer {
   .introjs-tooltip-title {
     font-size: 15px;
@@ -128,9 +128,9 @@ img, video {
     font-size: 13px;
   }
 }
-// update-end--author:liaozhiyang---date:20240429---for：【QQYUN-9023】引导样式调整
+// update-end--author:liaozhiyang---date:20240429---for: 【QQYUN-9023]Điều chỉnh kiểu hướng dẫn
 
-// update-begin--author:liaozhiyang---date:20240605---for：【TV360X-857】online代码生成详情样式调整
+// update-begin--author:liaozhiyang---date:20240605---for: 【TV360X-857】onlineĐiều chỉnh kiểu chi tiết tạo mã
 
 html[data-theme='light'] {
   .jeecg-form-detail-effect {
@@ -179,7 +179,7 @@ html[data-theme='light'] {
       border-color: #eee !important;
       background-color: transparent !important;
     }
-    //【QQYUN-13754】switch在禁用的方式下效果有问题：字体为黑色
+    //【QQYUN-13754】switchKhi ở chế độ vô hiệu hóa có vấn đề về hiệu quả: chữ màu đen
     .ant-switch-disabled .ant-switch-inner-checked,.ant-switch-inner-unchecked{
       color: #fff !important;
     }
@@ -205,7 +205,7 @@ html[data-theme='dark'] {
     .ant-select-selection-item {
       background-color: transparent !important;
     }
-    // 暗黑模式下输入框等icon隐藏
+    // Ô nhập v.v. trong chế độ tốiiconẨn
     .ant-picker-suffix,.ant-select-arrow {
       content:" ";
       display: none;
@@ -292,22 +292,22 @@ html[data-theme='dark'] {
     }
   }
 }
-// update-end--author:liaozhiyang---date:20240605---for：【TV360X-857】online代码生成详情样式调整
+// update-end--author:liaozhiyang---date:20240605---for: 【TV360X-857】onlineĐiều chỉnh kiểu chi tiết tạo mã
 
-// update-begin--author:wangshuai---date:20240611---for：【TV360X-1070】一对多内嵌，为什么多这一块，不从头对齐
+// update-begin--author:wangshuai---date:20240611---for: 【TV360X-1070]Bảng con nhúng một-nhiều, tại sao lại thêm khối này, không căn từ đầu
 .ant-table-wrapper .ant-table.ant-table-middle .ant-table-tbody .ant-table-wrapper:only-child .ant-table{
   margin-block: 0;
   margin-inline: 0;
 }
-// update-end--author:wangshuai---date:20240611---for：【TV360X-1070】一对多内嵌，为什么多这一块，不从头对齐
+// update-end--author:wangshuai---date:20240611---for: 【TV360X-1070]Bảng con nhúng một-nhiều, tại sao lại thêm khối này, không căn từ đầu
 
-// 单行文本溢出省略号
+// Văn bản một dòng tràn thì hiện dấu ba chấm
 .ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
-// 两行省略
+// Bỏ qua hai dòng
 .ellipsis-2 {
   display: -webkit-box;
   overflow: hidden;
@@ -316,7 +316,7 @@ html[data-theme='dark'] {
   -webkit-box-orient: vertical;
   word-break: break-all;
 }
-// 三行省略
+// Bỏ qua ba dòng
 .ellipsis-3 {
   display: -webkit-box;
   overflow: hidden;

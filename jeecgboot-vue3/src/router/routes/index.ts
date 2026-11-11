@@ -11,7 +11,7 @@ const modules = import.meta.glob('./modules/**/*.ts', { eager: true });
 
 const routeModuleList: AppRouteModule[] = [];
 
-// 加入到路由集合中
+// Thêm vào tập hợp route
 Object.keys(modules).forEach((key) => {
   const mod = (modules as Recordable)[key].default || {};
   const modList = Array.isArray(mod) ? [...mod] : [mod];
@@ -32,7 +32,7 @@ export const RootRoute: AppRouteRecordRaw = {
 export const LoginRoute: AppRouteRecordRaw = {
   path: '/login',
   name: 'Login',
-  //新版后台登录，如果想要使用旧版登录放开即可
+  // Đăng nhập backend phiên bản mới, nếu muốn dùng đăng nhập phiên bản cũ thì bỏ comment là được
   // component: () => import('/@/views/sys/login/Login.vue'),
   component: () => import('/@/views/system/loginmini/MiniLogin.vue'),
   meta: {
@@ -40,11 +40,11 @@ export const LoginRoute: AppRouteRecordRaw = {
   },
 };
 
-// 代码逻辑说明: auth2登录页面路由------------
+// Giải thích logic mã: Route trang đăng nhập auth2------------
 export const Oauth2LoginRoute: AppRouteRecordRaw = {
   path: '/oauth2-app/login',
   name: 'oauth2-app-login',
-  //新版钉钉免登录，如果想要使用旧版放开即可
+  // Miễn đăng nhập DingTalk phiên bản mới, nếu muốn dùng phiên bản cũ thì bỏ comment là được
   // component: () => import('/@/views/sys/login/OAuth2Login.vue'),
   component: () => import('/@/views/system/loginmini/OAuth2Login.vue'),
   meta: {
@@ -53,24 +53,24 @@ export const Oauth2LoginRoute: AppRouteRecordRaw = {
 };
 
 /**
- * 【通过token直接静默登录】流程办理登录页面 中转跳转
+ * 【Đăng nhập im lặng trực tiếp qua token】Trang đăng nhập xử lý quy trình, chuyển tiếp
  */
 export const TokenLoginRoute: AppRouteRecordRaw = {
   path: '/tokenLogin',
   name: 'TokenLoginRoute',
   component: () => import('/@/views/sys/login/TokenLoginPage.vue'),
   meta: {
-    title: '带token登录页面',
+    title: 'Trang đăng nhập mang token',
     ignoreAuth: true,
   },
 };
-// 代码逻辑说明: 【QQYUN-7967】新增、编辑路由访问
+// Giải thích logic mã: 【QQYUN-7967】Truy cập route thêm mới, chỉnh sửa
 export const formUrlDetail = {
   path: '/online/formUrlDetail/:id/:dataId',
   name: 'formUrlDetail',
   component: () => import('/@/views/super/online/cgform/auto/default/OnlineFormUrlDetail.vue'),
   meta: {
-    title: '外部填报表单详情',
+    title: 'Chi tiết biểu mẫu kê khai ngoài',
     ignoreAuth: true,
   },
 };
@@ -80,7 +80,7 @@ export const formUrlAdd = {
   name: 'formUrlAdd',
   component: () => import('/@/views/super/online/cgform/auto/default/OnlineFormUrlAdd.vue'),
   meta: {
-    title: '外部填报表单新增',
+    title: 'Thêm mới biểu mẫu kê khai ngoài',
     ignoreAuth: true,
   },
 };
@@ -90,7 +90,7 @@ export const formUrlEdit = {
   name: 'formUrlEdit',
   component: () => import('/@/views/super/online/cgform/auto/default/OnlineFormUrlEdit.vue'),
   meta: {
-    title: '外部填报表单编辑',
+    title: 'Chỉnh sửa biểu mẫu kê khai ngoài',
     ignoreAuth: true,
   },
 };
@@ -100,7 +100,7 @@ export const formUrlSuccess = {
   name: 'formUrlSuccess',
   component: () => import('/@/views/super/online/cgform/auto/default/OnlineFormUrlSuccess.vue'),
   meta: {
-    title: '外部填报表单成功',
+    title: 'Biểu mẫu kê khai ngoài thành công',
     ignoreAuth: true,
   },
 };
@@ -110,7 +110,7 @@ export const onlinePreview = {
   path: '/onlinePreview',
   name: 'online-preview',
   meta: {
-    title: 'wps文件预览',
+    title: 'Xem trước tệp WPS',
     ignoreAuth: false,
   },
   component: () => import('/@/components/onlinePreview/WpsFileView.vue'),

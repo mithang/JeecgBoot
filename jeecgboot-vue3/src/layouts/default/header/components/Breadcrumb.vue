@@ -163,7 +163,7 @@
         margin-bottom: 2px;
       }
     }
-    // 代码逻辑说明: 【QQYUN-8922】面包屑样式调整
+    // Giải thích logic mã: Điều chỉnh kiểu breadcrumb
     &--light {
       .ant-breadcrumb-link {
         color: rgba(0, 0, 0, 0.85);

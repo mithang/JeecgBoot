@@ -19,7 +19,7 @@
   import { changeTheme } from '/@/logics/theme/index';
 
   const appStore = useAppStore();
-  // 解决日期时间国际化问题
+  // Giải quyết vấn đề i18n ngày giờ
   import 'dayjs/locale/zh-cn';
   // support Multi-language
   const { getAntdLocale } = useLocale();
@@ -28,7 +28,7 @@
   /**
    * 2024-04-07
    * liaozhiyang
-   * 暗黑模式下默认文字白色，白天模式默认文字 #333
+   * Trong chế độ tối chữ mặc định màu trắng, chế độ ban ngày chữ mặc định #333
    * */
   const modeAction = (data) => {
     if (data.token) {
@@ -38,13 +38,13 @@
         Object.assign(data.token, { colorTextBase: '#333' });
       }
 
-      // 定义主题色 css 变量
+      // Định nghĩa màu theme css Biến
       if (data.token.colorPrimary) {
         document.documentElement.style.setProperty('--j-global-primary-color', data.token.colorPrimary);
       }
     }
   };
-  // 代码逻辑说明: 【QQYUN-6366】升级到antd4.x
+  // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
   const appTheme: any = ref({});
   const { getDarkMode } = useRootSetting();
   watch(
@@ -54,7 +54,7 @@
       if (newValue === ThemeEnum.DARK) {
         appTheme.value.algorithm = theme.darkAlgorithm;
       }
-      // 代码逻辑说明: 【QQYUN-8570】生产环境暗黑模式下主题色不生效
+      // Giải thích logic mã: 【QQYUN-8570]Trong môi trường production, màu theme ở chế độ tối không có hiệu lực
       if (import.meta.env.PROD) {
         changeTheme(appStore.getProjectConfig.themeColor);
       }
@@ -100,7 +100,7 @@
 
 </script>
 <style lang="less">
-  // 代码逻辑说明: 【QQYUN-5839】windi会影响到html2canvas绘制的图片样式
+  // Giải thích logic mã: 【QQYUN-5839】windisẽ ảnh hưởng đếnhtml2canvasKiểu ảnh đã vẽ
   img {
     display: inline-block;
   }

@@ -7,7 +7,7 @@
 
       <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>
     </div>
-    <div>Copyright &copy;2021 JEECG开源社区 出品</div>
+    <div>Copyright &copy;2021 Sản phẩm của Cộng đồng mã nguồn mở JEECG</div>
   </Footer>
 </template>
 
@@ -38,7 +38,7 @@
 
       const footerRef = ref<ComponentRef>(null);
       const { setFooterHeight } = useLayoutHeight();
-      //当前主题
+      // Theme hiện tại
       const { getDarkMode } = useRootSetting();
       const isDark = computed(() => getDarkMode.value === ThemeEnum.DARK);
 
@@ -51,7 +51,7 @@
         }
         return unref(getShowFooter) && !unref(currentRoute).meta?.hiddenFooter;
       });
-      //鼠标移入的颜色设置
+      // Cài đặt màu khi di chuột vào
       const hoverColor = computed(() => {
         return unref(isDark) ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 0.85)';
       });
@@ -73,7 +73,7 @@
   @prefix-cls: ~'@{namespace}-layout-footer';
 
   @normal-color: rgba(0, 0, 0, 0.45);
-  // 代码逻辑说明: [issues/608] dark 模式下底部 footer 文字 hover 样式导致文字消失
+  // Giải thích logic mã: [issues/608] Ở chế độ dark, kiểu hover của chữ ở footer phía dưới khiến chữ biến mất
   @hover-color: v-bind(hoverColor);
   .@{prefix-cls} {
     color: @normal-color;

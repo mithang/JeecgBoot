@@ -3,9 +3,9 @@ import {defineStore} from 'pinia';
 import {defHttp} from "@/utils/http/axios";
 
 interface DefIndexState {
-  // 首页url
+  // URL trang chủ
   url: string,
-  // 首页组件
+  // Component trang chủ
   component: string
 }
 
@@ -17,7 +17,7 @@ export const useDefIndexStore = defineStore('defIndex', {
   getters: {},
   actions: {
     /**
-     * 查询默认主页配置
+     * Truy vấn cấu hình trang chủ mặc định
      */
     async query() {
       const config = await defIndexApi.query();
@@ -25,10 +25,10 @@ export const useDefIndexStore = defineStore('defIndex', {
       this.component = config.component;
     },
     /**
-     * 更新默认主页配置
-     * @param url 首页url
-     * @param component 首页组件
-     * @param isRoute 是否是路由
+     * Cập nhật cấu hình trang chủ mặc định
+     * @param url URL trang chủ
+     * @param component Component trang chủ
+     * @param isRoute Có phải route không
      */
     async update(url: string, component: string, isRoute: boolean) {
       await defIndexApi.update(url, component, isRoute);
@@ -47,26 +47,26 @@ export function useDefIndexStoreWithOut() {
 }
 
 /**
- * 默认首页配置API
+ * API cấu hình trang chủ mặc định
  */
 export const defIndexApi = {
   /**
-   * 查询默认首页配置
+   * Truy vấn cấu hình trang chủ mặc định
    */
   async query() {
     const url = '/sys/sysRoleIndex/queryDefIndex'
     return await defHttp.get({url});
   },
   /**
-   * 更新默认首页配置
-   * @param url 首页url
-   * @param component 首页组件
-   * @param isRoute 是否是路由
+   * Cập nhật cấu hình trang chủ mặc định
+   * @param url URL trang chủ
+   * @param component Component trang chủ
+   * @param isRoute Có phải route không
    */
   async update(url: string, component: string, isRoute: boolean) {
     let apiUrl = '/sys/sysRoleIndex/updateDefIndex'
     apiUrl += '?url=' + url
-    // 代码逻辑说明: 设置默认首页接口传参修改,增加encodeURIComponent，防止{{ window._CONFIG['domianURL'] }}/**保存不上
+    // Giải thích logic mã: Sửa truyền tham số API trang chủ mặc định, thêm encodeURIComponent, tránh trường hợp {{ window._CONFIG['domianURL'] }}/** không lưu được
     apiUrl += '&component=' + encodeURIComponent(component)
     apiUrl += '&isRoute=' + isRoute
     return await defHttp.put({url: apiUrl});

@@ -2,7 +2,7 @@ import type { MainAppProps } from "#/main";
 import 'uno.css';
 import '/@/design/index.less';
 import 'ant-design-vue/dist/reset.css';
-// 注册图标
+// Đăng ký biểu tượng
 import 'virtual:svg-icons-register';
 
 import App from './App.vue';
@@ -23,19 +23,19 @@ import { checkIsQiankunMicro } from "/@/qiankun/micro";
 import { autoUseQiankunMicro } from "/@/qiankun/micro/qiankunMicro";
 import { useAppStoreWithOut } from "@/store/modules/app";
 
-// 注册online模块lib
+// Đăng kýonlineModulelib
 import { registerPackages } from '/@/utils/monorepo/registerPackages';
 
-// 程序入口
+// Điểm vào chương trình
 async function main() {
   if (checkIsQiankunMicro()) {
-    // 【JEECG作为乾坤子应用】以乾坤子应用模式启动
+    // 【JEECGLà micro app Qiankun] Khởi động ở chế độ micro app Qiankun
     // await autoUseQiankunMicro(bootstrap)
     await autoUseQiankunMicro(bootstrap)
   } else {
-    // 获取参数
+    // Lấy tham số
     const props = getMainAppProps();
-    // 普通启动
+    // Khởi động thông thường
     await bootstrap(props)
   }
 }
@@ -43,68 +43,68 @@ async function main() {
 main();
 
 async function bootstrap(props?: MainAppProps) {
-  // 创建应用实例
+  // Tạo instance ứng dụng
   const app = createApp(App);
   // 【QQYUN-6329】
   window['JAppRootInstance'] = app;
 
-  // 创建路由
+  // Tạo route
   createRouter();
 
-  // 配置存储
+  // Cấu hình lưu trữ
   setupStore(app);
 
-  // 配置参数
+  // Cấu hình tham số
   setupProps(props);
 
-  // 多语言配置,异步情况:语言文件可以从服务器端获得
+  // Cấu hình đa ngôn ngữ,Trường hợp bất đồng bộ:Tệp ngôn ngữ có thể lấy từ phía server
   await setupI18n(app);
 
-  // 初始化内部系统配置
+  // Khởi tạo cấu hình hệ thống nội bộ
   initAppConfigStore();
 
-  // 注册外部模块路由(注册online模块lib)
+  // Đăng ký route module ngoài(Đăng kýonlineModulelib)
   registerPackages(app);
 
-  // 注册全局组件
+  // Đăng ký component toàn cục
   registerGlobComp(app);
 
-  //CAS单点登录
+  //CASĐăng nhập một lần
   await useSso().ssoLogin();
 
-  // 注册super应用路由
+  // Đăng kýsuperRoute ứng dụng
   await registerSuper(app);
   
-  // 配置路由
+  // Cấu hình route
   setupRouter(app);
 
-  // 路由保护
+  // Bảo vệ route
   setupRouterGuard(router);
 
-  // 注册全局指令
+  // Đăng ký chỉ thị toàn cục
   setupGlobDirectives(app);
 
-  // 配置全局错误处理
+  // Cấu hình xử lý lỗi toàn cục
   setupErrorHandle(app);
 
-  // 注册第三方组件
+  // Đăng ký component bên thứ ba
   await registerThirdComp(app);
 
-  // 配置electron
+  // Cấu hìnhelectron
   setupElectron(app)
 
-  // 当路由准备好时再执行挂载( https://next.router.vuejs.org/api/#isready)
+  // Khi route đã sẵn sàng mới thực thi mount( https://next.router.vuejs.org/api/#isready)
   await router.isReady();
 
-  // 挂载应用
+  // Mount ứng dụng
   app.mount(getMountContainer(props), true);
 
-  console.log(" vue3 app 加载完成！")
+  console.log(" vue3 app Tải xong!")
 
   return app
 }
 
-// 获取应用挂载容器
+// Lấy container mount ứng dụng
 function getMountContainer(props?: MainAppProps) {
   const id = '#app';
   if (!props?.container?.querySelector) {
@@ -113,15 +113,15 @@ function getMountContainer(props?: MainAppProps) {
   return props.container.querySelector(id) ?? id;
 }
 
-// 获取主应用参数
+// Lấy tham số ứng dụng chính
 function getMainAppProps(): MainAppProps {
-  // 从 queryString 中获取
+  // Từ queryString lấy trong
   const searchParams = new URLSearchParams(window.location.search);
-  // 隐藏侧边栏（菜单）
+  // Ẩn sidebar (menu)
   let hideSider = searchParams.get('hideSider') === 'true';
-  // 隐藏顶部
+  // Ẩn phần trên
   let hideHeader = searchParams.get('hideHeader') === 'true';
-  // 隐藏 多Tab 切换
+  // Ẩn NhiềuTab Chuyển đổi
   let hideMultiTabs = searchParams.get('hideMultiTabs') === 'true';
 
   return {
@@ -131,7 +131,7 @@ function getMainAppProps(): MainAppProps {
   }
 }
 
-// 配置主应用参数
+// Cấu hình tham số ứng dụng chính
 function setupProps(props?: MainAppProps) {
   if (!props) {
     return

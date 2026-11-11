@@ -1,24 +1,24 @@
 /**
- * @description: 默认四种菜单主题
+ * @description: Bốn chủ đề menu mặc định
  */
 export enum MenuTypeEnum {
-  // 左侧边菜单导航风格
+  // Kiểu điều hướng menu bên trái
   SIDEBAR = 'sidebar',
-  // 顶部栏导航风格
+  // Kiểu điều hướng thanh trên
   MIX = 'mix',
- // 侧边折叠导航风格
+ // Kiểu điều hướng thu gọn bên hông
   MIX_SIDEBAR = 'mix-sidebar',
-  //顶部混合导航风格
+  // Kiểu điều hướng hỗn hợp phía trên
   TOP_MENU = 'top-menu',
 }
 
-// 折叠触发器位置
+// Vị trí trigger thu gọn
 export enum TriggerEnum {
-  // 不显示
+  // Không hiển thị
   NONE = 'NONE',
-  // 菜单底部
+  // Dưới cùng của menu
   FOOTER = 'FOOTER',
-  // 头部
+  // Đầu trang
   HEADER = 'HEADER',
 }
 

@@ -16,7 +16,7 @@ export enum ExceptionEnum {
 
   // No data on the page. In fact, it is not an exception page
   PAGE_NOT_DATA = 10100,
-  //短信验证码次数太多失败code，用于判断是否打开弹窗
+  // Code lỗi khi gửi SMS mã xác thực thất bại quá nhiều lần, dùng để xác định có mở popup không
   PHONE_SMS_FAIL_CODE = 40002,
 }
 

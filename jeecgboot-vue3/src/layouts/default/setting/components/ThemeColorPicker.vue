@@ -52,7 +52,7 @@
       function handleClick(color: string) {
         props.event && baseHandler(props.event, color);
       }
-      // 代码逻辑说明: 【QQYUN-8927】暗黑主题下不允许切换顶栏主题和菜单主题
+      // Giải thích logic mã: 【QQYUN-8927】 Trong theme tối, không cho phép chuyển theme thanh trên cùng và theme menu
       watch(
         () => getDarkMode.value,
         (newValue) => {
@@ -76,7 +76,7 @@
     flex-wrap: wrap;
     margin: 16px 0;
     justify-content: space-around;
-    // 代码逻辑说明: 【QQYUN-7677】antd4兼容改造，勾选垂直居中
+    // Giải thích logic mã: 【QQYUN-7677】 Antd4 cải tạo tương thích, chọn căn giữa theo chiều dọc
     line-height: 1.3;
     &__item {
       width: 20px;

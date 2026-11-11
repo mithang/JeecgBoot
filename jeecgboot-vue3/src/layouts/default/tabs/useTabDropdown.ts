@@ -24,7 +24,7 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
   const getTargetTab = computed((): RouteLocationNormalized => {
     return unref(getIsTabs) ? tabContentProps.tabItem : unref(currentRoute);
   });
-  // 隐藏下拉菜单中的门户设计项
+  // Ẩn mục thiết kế portal trong menu dropdown
   const { getHideHomeDesign, isHideHomeDesign } = useHideHomeDesign(currentRoute);
 
   /**
@@ -48,11 +48,11 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
       if (index === 0) {
         return true;
       } else {
-        // 【TV360X-1039】当只有首页和另一个tab页时关闭左侧禁用
+        // Khi chỉ có trang chủ và một tab khác thì vô hiệu hóa đóng bên trái
         const validTabList = tabStore.getTabList.filter((item) => !item?.meta?.affix);
-        // update-begin--author:liaozhiyang---date:20251128---for：【issues/9098】tabs标签页关闭异常
+        // update-begin--author:liaozhiyang---date:20251128---for: 【issues/9098】Đóng tab bất thường
         return validTabList[0]?.path === state.current?.path;
-        // update-end--author:liaozhiyang---date:20251128---for：【issues/9098】tabs标签页关闭异常
+        // update-end--author:liaozhiyang---date:20251128---for: 【issues/9098】Đóng tab bất thường
       }
     };
     // Close other
@@ -60,7 +60,7 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
       if (tabStore.getTabList.length === 1) {
         return true;
       } else {
-        // 【TV360X-1039】当只有首页和另一个tab页时关闭其它禁用
+        // Khi chỉ có trang chủ và một tab khác thì vô hiệu hóa đóng các tab khác
         const validTabList = tabStore.getTabList.filter((item) => !item?.meta?.affix);
         return validTabList.length == 1;
       }
@@ -68,7 +68,7 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
 
     // Close right
     const closeRightDisabled = index === tabStore.getTabList.length - 1 && tabStore.getLastDragEndIndex >= 0;
-    // 隐藏下拉菜单中的门户设计项
+    // Ẩn mục thiết kế portal trong menu dropdown
     getHideHomeDesign(isCurItem, path);
     const dropMenuList: DropMenu[] = [
       {
@@ -96,7 +96,7 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
         icon: 'mdi:arrow-left',
         event: MenuEventEnum.CLOSE_LEFT,
         text: t('layout.multipleTab.closeLeft'),
-        // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+        // Giải thích logic mã: Khi không phải trang hiện tại, nhấp chuột phải để đóng bên trái, đóng bên phải, đóng các tab khác đều dùng bình thường
         disabled: closeLeftDisabled(),
         divider: false,
       },
@@ -111,7 +111,7 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
         icon: 'material-symbols:arrows-outward',
         event: MenuEventEnum.CLOSE_OTHER,
         text: t('layout.multipleTab.closeOther'),
-        // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+        // Giải thích logic mã: Khi không phải trang hiện tại, nhấp chuột phải để đóng bên trái, đóng bên phải, đóng các tab khác đều dùng bình thường
         disabled: closeOtherDisabled(),
       },
       // {

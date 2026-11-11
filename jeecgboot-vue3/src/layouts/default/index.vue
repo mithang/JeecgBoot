@@ -72,7 +72,7 @@
       const layoutMainClass = computed(() => {
         let cls: string[] = [`${prefixCls}-main`];
 
-        // 【JEECG作为乾坤子应用】
+        // 
         if (unref(isQiankunMicro)) {
           cls.push(`${prefixCls}-main--qiankun-micro`);
         }
@@ -105,7 +105,7 @@
     flex-direction: column;
 
     &--menu {
-      // 【JEECG作为乾坤子应用】
+      // 
       &-mix-sidebar {
 
         .@{namespace}-layout-mix-sider {
@@ -118,7 +118,7 @@
         }
       }
 
-      // 【JEECG作为乾坤子应用】
+      // 
       &-mix {
         .@{namespace}-multiple-tabs {
           margin-top: 0 !important;
@@ -132,10 +132,10 @@
 
     &-main {
       width: 100%;
-      // 代码逻辑说明:【issues/8709】LayoutContent样式多出1px
+      // Giải thích logic mã: 【issues/8709】Kiểu LayoutContent thừa ra 1px
       // margin-left: 1px;
 
-      // 【JEECG作为乾坤子应用】根 Layout 作为 absolute 定位的参照容器
+      // Layout gốc làm container tham chiếu định vị absolute
       &--qiankun-micro {
         position: relative;
 

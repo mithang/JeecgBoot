@@ -23,10 +23,10 @@
   import { TabsThemeEnum } from '/@/enums/appEnum';
   import { MenuTypeEnum } from '/@/enums/menuEnum';
 
-  // 代码逻辑说明: 【QQYUN-8774】网站header区域加高
+  // Giải thích logic mã: Tăng chiều cao khu vực header của trang web
   const HEADER_HEIGHT = 60;
 
-  // updateBy:sunjianlei---updateDate:2021-09-03---修改tab切换栏样式：更改高度
+  // updateBy:sunjianlei---updateDate:2021-09-03---Sửa kiểu thanh chuyển tab: thay đổi chiều cao
   const TABS_HEIGHT = 32;
   const TABS_HEIGHT_CARD = 50;
   const TABS_HEIGHT_SMOOTH = 50;
@@ -50,7 +50,7 @@
       const { getShowMultipleTab, getTabsTheme } = useMultipleTabSetting();
 
       const getShowHeader = computed(() => {
-        // 控制是否显示顶部
+        // Kiểm soát có hiển thị đầu trang không
         if (appStore.getLayoutHideHeader) {
           return false;
         }
@@ -58,7 +58,7 @@
       })
 
       const getShowTabs = computed(() => {
-        // 控制是否显示多Tabs切换
+        // Kiểm soát có hiển thị chuyển đổi nhiều tab không
         if (appStore.getLayoutHideMultiTabs) {
           return false;
         }
@@ -84,7 +84,7 @@
         return unref(getFixed) || unref(getShowFullHeaderRef);
       });
 
-      // updateBy:sunjianlei---updateDate:2021-09-08---根据主题的不同，动态计算tabs高度
+      // updateBy:sunjianlei---updateDate:2021-09-08---Tính động chiều cao tab theo theme khác nhau
       const getTabsThemeHeight = computed(() => {
         let tabsTheme = unref(getTabsTheme);
         if (tabsTheme === TabsThemeEnum.CARD) {
@@ -98,7 +98,7 @@
 
       const getPlaceholderDomStyle = computed((): CSSProperties => {
         let height = 0;
-        // 代码逻辑说明: 【issues/7561】主题切换为顶部混合模式时，页面顶部内容显示不出来，被遮盖
+        // Giải thích logic mã: Khi chuyển theme sang chế độ hỗn hợp phía trên, nội dung đầu trang không hiển thị, bị che khuất
         if ((unref(getShowFullHeaderRef) || !unref(getSplit)) && unref(getShowHeader) && !unref(getFullContent) || unref(getMenuType) == MenuTypeEnum.MIX) {
           height += HEADER_HEIGHT;
         }
@@ -114,7 +114,7 @@
       const getClass = computed(() => {
         return [prefixCls, `${prefixCls}--${unref(getHeaderTheme)}`, {
           [`${prefixCls}--fixed`]: unref(getIsFixed),
-          // 【JEECG作为乾坤子应用】
+          // 
           [`${prefixCls}--qiankun-micro`]: glob.isQiankunMicro,
         }];
       });
@@ -139,7 +139,7 @@
   .@{prefix-cls} {
     transition: width 0.2s;
     flex: 0 0 auto;
-    // 代码逻辑说明: 【issues/8709】LayoutContent样式多出1px
+    // Giải thích logic mã: 【issues/8709】Kiểu LayoutContent thừa ra 1px
     // &--dark {
     //   margin-left: -1px;
     // }
@@ -151,7 +151,7 @@
       width: 100%;
     }
 
-    // 【JEECG作为乾坤子应用】
+    // 
     &--qiankun-micro {
       position: absolute;
 

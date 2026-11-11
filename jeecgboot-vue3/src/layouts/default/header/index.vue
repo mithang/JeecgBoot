@@ -10,7 +10,7 @@
         :sider="false"
       />
       <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
-      <!-- 欢迎语 -->
+      <!-- Lời chào -->
       <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']"> {{t('layout.header.welcomeIn')}} {{ title }} </span>
     </div>
     <!-- left end -->
@@ -38,7 +38,7 @@
       <UserDropDown :theme="getHeaderTheme" />
 
       <SettingDrawer v-if="getShowSetting" :class="`${prefixCls}-action__item`" />
-      <!-- ai助手 -->
+      <!-- Trợ lý AI -->
       <Aide v-if="getAiIconShow"></Aide>
     </div>
   </Header>
@@ -133,7 +133,7 @@
             [`${prefixCls}--fixed`]: props.fixed,
             [`${prefixCls}--mobile`]: unref(getIsMobile),
             [`${prefixCls}--${theme}`]: theme,
-            // 【JEECG作为乾坤子应用】
+            // 
             [`${prefixCls}--qiankun-micro`]: isQiankunMicro,
           },
         ];
@@ -168,12 +168,12 @@
       });
 
       /**
-       * 首页多租户部门弹窗逻辑
+       * Logic popup phòng ban đa tenant trang chủ
        */
       const loginSelectRef = ref();
 
       function showLoginSelect() {
-        //判断是否是登陆进来
+        // Kiểm tra có phải đã đăng nhập vào không
         const loginInfo = toRaw(userStore.getLoginInfo) || {};
         if (!!loginInfo.isLogin) {
           loginSelectRef.value.show(loginInfo);
@@ -181,7 +181,7 @@
       }
 
       function loginSelectOk() {
-        console.log('成功。。。。。');
+        console.log('Thành công.....');
       }
 
       onMounted(() => {
@@ -223,13 +223,13 @@
 </script>
 <style lang="less">
   @import './index.less';
-  //顶部欢迎语展示样式
+  // Kiểu hiển thị lời chào ở phần trên
   @prefix-cls: ~'@{namespace}-layout-header';
 
   .ant-layout .@{prefix-cls} {
     display: flex;
     padding: 0 8px;
-    // 代码逻辑说明: 【QQYUN-8762】顶栏高度
+    // Giải thích logic mã: Chiều cao thanh trên cùng
     height: @header-height;
     align-items: center;
 

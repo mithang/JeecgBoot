@@ -14,9 +14,9 @@ const lsLocaleSetting = (ls.get(LOCALE_KEY) || localeSetting) as LocaleSetting;
 interface LocaleState {
   localInfo: LocaleSetting;
   pathTitleMap: object;
-  // myapps主题色（低代码应用列表首页）
+  // Màu theme của myapps (trang chủ danh sách ứng dụng low-code)
   appIndexTheme: string
-  // myapps - 跳转前路由地址
+  // myapps - Địa chỉ route trước khi chuyển
   appMainPth: string
 }
 
@@ -34,7 +34,7 @@ export const useLocaleStore = defineStore('app-locale', {
     getLocale(): LocaleType {
       return this.localInfo?.locale ?? 'zh_CN';
     },
-    // 代码逻辑说明: VUEN-1144 online 配置成菜单后，打开菜单，显示名称未展示为菜单名称
+    // Giải thích logic mã: VUEN-1144 online sau khi cấu hình thành menu, khi mở menu, tên hiển thị không hiển thị đúng tên menu
     getPathTitle: (state) => {
       return (path) => state.pathTitleMap[path];
     },
@@ -63,7 +63,7 @@ export const useLocaleStore = defineStore('app-locale', {
         ...this.localInfo,
       });
     },
-    // 代码逻辑说明: VUEN-1144 online 配置成菜单后，打开菜单，显示名称未展示为菜单名称
+    // Giải thích logic mã: VUEN-1144 online sau khi cấu hình thành menu, khi mở menu, tên hiển thị không hiển thị đúng tên menu
     setPathTitle(path, title) {
       this.pathTitleMap[path] = title;
     },

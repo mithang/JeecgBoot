@@ -7,10 +7,10 @@ const glob = useGlobSetting();
 const _PRELOAD_UTILS = ElectronEnum.ELECTRON_API;
 
 export const $electron = {
-  // 当前是否为Electron平台
+  // Hiện tại có phải là khôngElectronNền tảng
   isElectron: () => glob.isElectronPlatform,
 
-  // 通过浏览器打开链接
+  // Mở liên kết qua trình duyệt
   openInBrowser: bindUtils('openInBrowser') as (url: string) => void,
 
   resolveRoutePath,
@@ -24,21 +24,21 @@ function bindUtils(n: string) {
   return () => console.warn(`Electron preload util ${n} is not a function`);
 }
 
-// 解析路由路径
+// Phân tích đường dẫn route
 function resolveRoutePath(path: string) {
   return window.location.origin + window.location.pathname + router.resolve(path).href;
 }
 
 /**
- * 配置Electron
+ * Cấu hìnhElectron
  */
 export function setupElectron(_: App) {
-  // 非Electron平台不执行
+  // Không phảiElectronNền tảng không thực thi
   if (!$electron.isElectron()) {
     return;
   }
   hookWindowOpen();
-  // 代码逻辑说明: 【JHHB-13】桌面应用消息通知
+  // Giải thích logic mã: 【JHHB-13]Thông báo tin nhắn ứng dụng desktop
   hookNavigate();
 }
 function hookNavigate() {
@@ -48,25 +48,25 @@ function hookNavigate() {
   });
 }
 function hookWindowOpen() {
-  // 保存原生方法引用
+  // Lưu tham chiếu phương thức gốc
   const originFunc = window.open;
-  // 重写window.open方法
+  // Viết lạiwindow.openPhương thức
   window['open'] = function (url, windowName, windowFeatures) {
     url = typeof url === 'string' ? url.trim() : '';
     if (!url) {
       throw new Error('window.open: url is required');
     }
-    // 判断是否以http或https开头
+    // Kiểm tra có bắt đầu bằng khônghttphoặchttpsĐầu
     if (/^https?:\/\//.test(url)) {
-      // 判断是否为本地地址
+      // Kiểm tra có phải địa chỉ local không
       if (url.startsWith(window.location.origin) || url.startsWith(window['_CONFIG']['domianURL'])) {
-        // 直接打开
+        // Mở trực tiếp
         return originFunc(url, windowName, windowFeatures);
       }
-      // 调用Electron进行外部浏览器打开
+      // GọiElectronTiến hành mở bằng trình duyệt ngoài
       return $electron.openInBrowser(url) as any;
     }
-    // 自定义逻辑
+    // Logic tùy chỉnh
     return originFunc(url, windowName, windowFeatures)
   }
 }

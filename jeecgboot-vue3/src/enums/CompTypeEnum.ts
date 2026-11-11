@@ -1,32 +1,32 @@
 /**
- * 组件类型
+ * Loại component
  */
 export enum CompTypeEnum {
-  //单选
+  // Chọn một
   Radio = 'radio',
-  //按钮样式单选
+  // Chọn một kiểu nút
   RadioButton = 'radioButton',
-  //下拉框
+  // Dropdown
   Select = 'select',
-  //列表
+  // Danh sách
   List = 'list',
-  //开关
+  // Công tắc
   Switch = 'switch',
-  //下拉树
+  // Cây dropdown
   SelTree = 'sel_tree',
-  //分类字典树
+  // Cây từ điển phân loại
   CatTree = 'cat_tree',
-  //下拉搜索
+  // Tìm kiếm trong dropdown
   SelSearch = 'search',
-  //用户现在框
+  // Hộp chọn người dùng
   SelUser = 'sel_user',
-  //复选框
+  // Checkbox
   Checkbox = 'checkbox',
-  //多选列表
+  // Danh sách chọn nhiều
   ListMulti = 'list_multi',
-  //区域选择
+  // Chọn khu vực
   Pca = 'pca',
   Popup = 'popup',
-  //部门选择
+  // Chọn phòng ban
   SelDepart = 'sel_depart',
 }

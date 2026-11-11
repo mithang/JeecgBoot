@@ -7,20 +7,20 @@ export const LOCALE: { [key: string]: LocaleType } = {
 };
 
 export const localeSetting: LocaleSetting = {
-  // 是否显示语言选择器
+  // Có hiển thị bộ chọn ngôn ngữ không
   showPicker: true,
-  // 当前语言
+  // Ngôn ngữ hiện tại
   locale: LOCALE.ZH_CN,
-  // 默认语言
+  // Ngôn ngữ mặc định
   fallback: LOCALE.ZH_CN,
-  // 允许的语言
+  // Ngôn ngữ cho phép
   availableLocales: [LOCALE.ZH_CN, LOCALE.EN_US],
 };
 
-// 语言列表
+// Danh sách ngôn ngữ
 export const localeList: DropMenu[] = [
   {
-    text: '简体中文',
+    text: 'Tiếng Trung giản thể',
     event: LOCALE.ZH_CN,
   },
   {

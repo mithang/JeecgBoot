@@ -70,7 +70,7 @@
       const getIsShowLogo = computed(() => unref(getShowLogo) && unref(getIsSidebarType));
 
       const getUseScroll = computed(() => {
-        // 【JEECG作为乾坤子应用】在乾坤子应用下，菜单不固定
+        // Khi chạy dưới micro app Qiankun, menu không cố định
         if (glob.isQiankunMicro) {
           return false;
         }
@@ -83,7 +83,7 @@
 
       const getWrapperStyle = computed((): CSSProperties => {
         return {
-          // 代码逻辑说明: 【issues/7548】侧边栏导航模式时会导致下面菜单滚动显示不全
+          // Giải thích logic mã: Ở chế độ điều hướng thanh bên, menu phía dưới cuộn hiển thị không đầy đủ
           height: `calc(100% - ${unref(getIsShowLogo) ? '60px' : '0px'})`,
         };
       });
@@ -115,7 +115,7 @@
        * click menu
        * @param menu
        */
-      // 代码逻辑说明: VUEN-1144 online 配置成菜单后，打开菜单，显示名称未展示为菜单名称
+      // Giải thích logic mã: VUEN-1144 Sau khi cấu hình online thành menu, mở menu thì tên hiển thị không phải là tên menu
       const localeStore = useLocaleStore();
       function handleMenuClick(path: string, item) {
         if (item) {
@@ -172,7 +172,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【QQYUN-5872】菜单优化，上下滚动条去掉
+  // Giải thích logic mã: Tối ưu menu, bỏ thanh cuộn lên xuống
   .scroll-container :deep(.scrollbar__bar) {
     display: none;
   }

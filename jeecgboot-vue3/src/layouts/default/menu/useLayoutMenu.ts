@@ -36,14 +36,14 @@ export function useSplitMenu(splitType: Ref<MenuSplitTyeEnum>) {
       if (unref(splitNotLeft) || unref(getIsMobile)) return;
       const { meta } = unref(currentRoute);
       const currentActiveMenu = meta.currentActiveMenu as string;
-      // 顶部混合模式且顶部左侧组合菜单开始时
+      // Chế độ hỗn hợp phía trên, khi menu kết hợp bên trái phía trên bắt đầu
       if (unref(getMenuType) === MenuTypeEnum.MIX && unref(getSplit)) { 
-        // 404页面时，跳转到重定向的路径
+        // Khi ở trang 404, chuyển đến đường dẫn redirect
         if (unref(currentRoute).name === PAGE_NOT_FOUND_NAME_404 && unref(currentRoute)?.redirectedFrom?.path) {
           const menus = await getMenus();
           const findItem = menus.find((item:any) => item.redirect === unref(currentRoute).path);
           if (findItem) {
-            // 说明是从一级菜单重定向过来的
+            // Nghĩa là được chuyển hướng từ menu cấp một
             path = findItem.path;
           }
         }

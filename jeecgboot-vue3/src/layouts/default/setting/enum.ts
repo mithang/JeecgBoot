@@ -55,7 +55,7 @@ export enum HandlerEnum {
   AI_ICON_SHOW,
 }
 
-// 标签页样式
+// Kiểu tab
 export const tabsThemeOptions = [
   {
     value: TabsThemeEnum.SMOOTH,

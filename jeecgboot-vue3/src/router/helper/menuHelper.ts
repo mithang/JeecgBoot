@@ -7,11 +7,11 @@ import { RouteParams } from 'vue-router';
 import { toRaw } from 'vue';
 
 export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
-  // 原代码
+  // Mã gốc
   // const menuList = findPath(treeData, (n) => n.path === path) as Menu[];
-  // 先匹配不包含隐藏菜单的路径
+  // Khớp trước đường dẫn không chứa menu ẩn
   let menuList = findMenuPath(treeData, path, false);
-  // 如果没有匹配到，再匹配包含隐藏菜单的路径
+  // Nếu không khớp, khớp tiếp đường dẫn chứa menu ẩn
   if(!(menuList?.length)) {
     menuList = findMenuPath(treeData, path, true)
   }
@@ -19,15 +19,15 @@ export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
 }
 
 /**
- * 查找菜单路径
+ * Tìm đường dẫn menu
  *
  * @param treeData
  * @param path
- * @param matchHide 是否匹配隐藏菜单
+ * @param matchHide Có khớp menu ẩn không
  */
 function findMenuPath<T = Recordable>(treeData: T[], path: string, matchHide: boolean) {
   return findPath(treeData, (n) => {
-    // 隐藏菜单不参与匹配
+    // Menu ẩn không tham gia khớp
     if(!matchHide && n.hideMenu) {
       return false;
     }
@@ -35,19 +35,19 @@ function findMenuPath<T = Recordable>(treeData: T[], path: string, matchHide: bo
   }) as Menu[];
 }
 
-// 路径处理
+// Xử lý đường dẫn
 function joinParentPath(menus: Menu[], parentPath = '') {
   for (let index = 0; index < menus.length; index++) {
     const menu = menus[index];
     // https://next.router.vuejs.org/guide/essentials/nested-routes.html
     // Note that nested paths that start with / will be treated as a root path.
-    // 请注意，以 / 开头的嵌套路径将被视为根路径。
+    // Xin lưu ý, đường dẫn lồng nhau bắt đầu bằng / sẽ được xem là đường dẫn gốc.
     // This allows you to leverage the component nesting without having to use a nested URL.
-    // 这允许你利用组件嵌套，而无需使用嵌套 URL。
-    // 菜单未配置路径（如仅用于授权的隐藏菜单）时跳过拼接，避免 path 为 null 导致整站白屏
+    // Điều này cho phép bạn tận dụng việc lồng component mà không cần dùng URL lồng nhau.
+    // Khi menu chưa cấu hình đường dẫn (ví dụ menu ẩn chỉ dùng để ủy quyền) thì bỏ qua việc ghép, tránh path là null khiến toàn trang trắng
     if (menu.path && !(menu.path.startsWith('/') || isUrl(menu.path))) {
       // path doesn't start with /, nor is it a url, join parent path
-      // 路径不以 / 开头，也不是 url，加入父路径
+      // Đường dẫn không bắt đầu bằng / và cũng không phải url thì thêm đường dẫn cha
       menu.path = `${parentPath}/${menu.path}`;
     }
     if (menu?.children?.length) {
@@ -66,13 +66,13 @@ export function transformMenuModule(menuModule: MenuModule): Menu {
   return menuList[0];
 }
 
-// 将路由转换成菜单
+// Chuyển route thành menu
 export function transformRouteToMenu(routeModList: AppRouteModule[], routerMapping = false) {
-  // 借助 lodash 深拷贝
+  // Nhờ lodash sao chép sâu
   const cloneRouteModList = cloneDeep(routeModList);
   const routeList: AppRouteRecordRaw[] = [];
 
-  // 对路由项进行修改
+  // Chỉnh sửa các mục route
   cloneRouteModList.forEach((item) => {
     if (routerMapping && item.meta.hideChildrenInMenu && typeof item.redirect === 'string') {
       item.path = item.redirect;
@@ -85,7 +85,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
       routeList.push(item);
     }
   });
-  // 提取树指定结构
+  // Trích xuất cấu trúc đã chỉ định của cây
   const list = treeMap(routeList, {
     conversion: (node: AppRouteRecordRaw) => {
       const { meta: { title, hideMenu = false } = {} } = node;
@@ -102,7 +102,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
       };
     },
   });
-  // 路径处理
+  // Xử lý đường dẫn
   joinParentPath(list);
   return cloneDeep(list);
 }

@@ -1,31 +1,31 @@
-// 用于配置某些组件的常规配置，而无需修改组件
+// Dùng để cấu hình chung cho một số component, không cần sửa component
 
 import type { SorterResult } from '../components/Table';
 
 export default {
-  // 表格配置
+  // Cấu hình bảng
   table: {
-    // 表格接口请求通用配置，可在组件prop覆盖
-    // 支持 xxx.xxx.xxx格式
+    // Cấu hình chung cho request API của bảng, có thể ghi đè trong prop của component
+    // Hỗ trợ định dạng xxx.xxx.xxx
     fetchSetting: {
-      // 传给后台的当前页字段
+      // Trường trang hiện tại truyền cho backend
       pageField: 'pageNo',
-      // 传给后台的每页显示多少条的字段
+      // Trường số bản ghi hiển thị mỗi trang truyền cho backend
       sizeField: 'pageSize',
-      // 接口返回表格数据的字段
+      // Trường dữ liệu bảng mà API trả về
       listField: 'records',
-      // 接口返回表格总数的字段
+      // Trường tổng số mà API trả về
       totalField: 'total',
     },
-    // 可选的分页选项
+    // Các tùy chọn phân trang
     pageSizeOptions: ['10', '50', '80', '100'],
-    // 表格默认尺寸
+    // Kích thước mặc định của bảng
     defaultSize: 'middle',
-    //默认每页显示多少条
+    // Mặc định mỗi trang hiển thị bao nhiêu mục
     defaultPageSize: 10,
-    // 默认排序方法
+    // Phương thức sắp xếp mặc định
     defaultSortFn: (sortInfo: SorterResult) => {
-      // 代码逻辑说明: VUEN-2199【表单设计器】多字段排序
+      // Giải thích logic mã: VUEN-2199【Trình thiết kế biểu mẫu】Sắp xếp nhiều trường
       if(sortInfo instanceof Array){
         let sortInfoArray:any[] = []
         for(let item of sortInfo){
@@ -42,20 +42,20 @@ export default {
         return info || {}
       }
     },
-    // 自定义过滤方法
+    // Phương thức lọc tùy chỉnh
     defaultFilterFn: (data: Partial<Recordable<string[]>>) => {
       return data;
     },
-    // 代码逻辑说明: 【issues/1188】BasicTable加上scrollToFirstRowOnChange类型定义
+    // Giải thích logic mã: 【issues/1188】BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
     scrollToFirstRowOnChange: false,
   },
-  // 滚动组件配置
+  // Cấu hình component cuộn
   scrollbar: {
-    // 是否使用原生滚动样式
-    // 开启后，菜单，弹窗，抽屉会使用原生滚动条组件
+    // Có dùng kiểu cuộn gốc không
+    // Sau khi bật, menu, popup, drawer sẽ dùng component thanh cuộn gốc
     native: false,
   },
-  //表单配置
+  // Cấu hình biểu mẫu
   form: {
     labelCol: {
       xs: { span: 24 },
@@ -67,13 +67,13 @@ export default {
       xs: { span: 24 },
       sm: { span: 18 },
     },
-    //表单默认冒号
+    // Dấu hai chấm mặc định của biểu mẫu
     colon: true,
   },
 };
 
 /**
- * 获取排序信息
+ * Lấy thông tin sắp xếp
  * @param item
  */
 function getSort(item){
@@ -81,9 +81,9 @@ function getSort(item){
   if (field && order) {
     let sortType = 'ascend' == order ? 'asc' : 'desc';
     return {
-      // 排序字段
+      // Trường sắp xếp
       column: field,
-      // 排序方式 asc/desc
+      // Cách sắp xếp asc/desc
       order: sortType,
     };
   }

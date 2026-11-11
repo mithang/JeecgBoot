@@ -1,13 +1,13 @@
 // export const containerId = 'qiankun-content'
 //
 // /**
-//  *微应用apps
-//  * @name: 微应用名称 - 具有唯一性
-//  * @entry: 微应用入口.必选 - 通过该地址加载微应用，
-//  * @container: 微应用挂载节点 - 微应用加载完成后将挂载在该节点上
-//  * @activeRule: 微应用触发的路由规则 - 触发路由规则后将加载该微应用
+//  *Micro appapps
+//  * @name: Tên micro app - Có tính duy nhất
+//  * @entry: Điểm vào micro app.Bắt buộc - Tải micro app qua địa chỉ đó,
+//  * @container: Nút mount micro app - Sau khi micro app tải xong sẽ mount vào nút này
+//  * @activeRule: Quy tắc route do micro app kích hoạt - Sau khi kích hoạt quy tắc route sẽ tải micro app này
 //  */
-// //子应用列表
+// //Danh sách micro app
 // const _apps: Recordable[] = [];
 // for (const key in import.meta.env) {
 //   if (key.includes('VITE_APP_SUB_')) {

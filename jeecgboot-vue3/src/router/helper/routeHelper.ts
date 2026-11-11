@@ -7,7 +7,7 @@ import { warn } from '/@/utils/log';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { getTenantId, getToken } from "/@/utils/auth";
 import { URL_HASH_TAB, _eval } from '/@/utils';
-//引入online lib路由
+// Import route của online lib
 import { packageViews } from '/@/utils/monorepo/dynamicRouter';
 import { loadPackageComponent } from '/@/utils/monorepo/registerPackages';
 import { dynamicPages } from '/@/utils/dynamicPages';
@@ -21,7 +21,7 @@ const LayoutMap = new Map<string, () => Promise<typeof import('*.vue')>>();
 
 LayoutMap.set('LAYOUT', LAYOUT);
 LayoutMap.set('IFRAME', IFRAME);
-//微前端qiankun
+// Micro frontend qiankun
 LayoutMap.set('LayoutsContent', LayoutContent);
 
 let dynamicViewsModules: Record<string, () => Promise<Recordable>>;
@@ -29,53 +29,53 @@ let dynamicViewsModules: Record<string, () => Promise<Recordable>>;
 // Dynamic introduction
 function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
   if (!dynamicViewsModules) {
-    // update-begin--author:liaozhiyang---date:20260302---for:【QQYUN-14799】动态引入页面会生成两份及引入components下的组件文件
+    // update-begin--author:liaozhiyang---date:20260302---for:【QQYUN-14799】Import động trang sẽ tạo ra hai bản và import các tệp component bên dưới components
     dynamicViewsModules = dynamicPages as Record<string, () => Promise<Recordable>>;
-    // update-end--author:liaozhiyang---date:20260302---for:【QQYUN-14799】动态引入页面会生成两份及引入components下的组件文件
-    //合并online lib路由
+    // update-end--author:liaozhiyang---date:20260302---for:【QQYUN-14799】Import động trang sẽ tạo ra hai bản và import các tệp component bên dưới components
+    // Hợp nhất route của online lib
     dynamicViewsModules = Object.assign({}, dynamicViewsModules, packageViews);
   }
   if (!routes) return;
   routes.forEach((item) => {
 
-    //【jeecg-boot/issues/I5N2PN】左侧动态菜单怎么做国际化处理  2022-10-09
-    //菜单支持国际化翻译
+    // 【jeecg-boot/issues/I5N2PN】Menu động bên trái xử lý quốc tế hóa như thế nào 2022-10-09
+    // Menu hỗ trợ dịch i18n
     if (item?.meta?.title) {
       const { t } = useI18n();
       if(item.meta.title.includes('t(\'') && t){
-        // 代码逻辑说明: 【QQYUN-6390】eval替换成new Function，解决build警告
+        // Giải thích logic mã: 【QQYUN-6390】Thay eval thành new Function để giải quyết cảnh báo khi build
         item.meta.title = new Function('t', `return ${item.meta.title}`)(t);
       }
     }
-    // @ts-ignore 适配隐藏路由
+    // @ts-ignore Thích ứng với route ẩn
     if (item?.hidden) {
       item.meta.hideMenu = true;
-      //是否隐藏面包屑
+      // Có ẩn breadcrumb không
       item.meta.hideBreadcrumb = true;
     }
-    // @ts-ignore 添加忽略路由配置
+    // @ts-ignore Thêm cấu hình bỏ qua route
     if (item?.route == 0) {
       item.meta.ignoreRoute = true;
     }
-    // @ts-ignore 添加是否缓存路由配置
+    // @ts-ignore Thêm cấu hình route có được cache không
     item.meta.ignoreKeepAlive = !item?.meta.keepAlive;
     let token = getToken();
     let tenantId = getTenantId();
-    // URL支持{{ window.xxx }}占位符变量
-    // 代码逻辑说明: [VUEN-1638]菜单tenantId需要动态生成------------
+    // URL hỗ trợ biến placeholder {{ window.xxx }}
+    // Giải thích logic mã: [VUEN-1638] tenantId của menu cần tạo động------------
     item.component = (item.component || '').replace(/{{([^}}]+)?}}/g, (s1, s2) => _eval(s2)).replace('${token}', token).replace('${tenantId}', tenantId);
-    // 适配 iframe
+    // Thích ứng iframe
     if (/^\/?http(s)?/.test(item.component as string)) {
       item.component = item.component.substring(1, item.component.length);
     }
     if (/^http(s)?/.test(item.component as string)) {
       if (item.meta?.internalOrExternal) {
-        // @ts-ignore 外部打开
+        // @ts-ignore Mở bên ngoài
         item.path = item.component;
-        // 代码逻辑说明: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
+        // Giải thích logic mã: 【VUEN-656】Cấu hình URL ngoài không mở được, nguyên nhân là có ký tự #, cần thay thế
         item.path = item.path.replace('#', URL_HASH_TAB);
       } else {
-        // @ts-ignore 内部打开
+        // @ts-ignore Mở nội bộ
         item.meta.frameSrc = item.component;
       }
       delete item.component;
@@ -91,7 +91,7 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
         item.component = layoutFound;
       } else {
         if (component.indexOf('dashboard/') > -1) {
-          //当数据标sys_permission中component没有拼接index时前端需要拼接
+          // Khi dữ liệu đánh dấu sys_permission trong component chưa nối index thì frontend cần nối
           if (component.indexOf('/index') < 0) {
             component = component + '/index';
           }
@@ -108,10 +108,10 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
 function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recordable>>, component: string) {
   const keys = Object.keys(dynamicViewsModules);
   const matchKeys = keys.filter((key) => {
-    // update-begin--author:liaozhiyang---date:20260302---for:【QQYUN-14799】动态引入页面会生成两份及引入components下的组件文件
-    // 兼容两种前缀：dynamicPages 的 ../views 与 packageViews 的 ../../views
+    // update-begin--author:liaozhiyang---date:20260302---for:【QQYUN-14799】Import động trang sẽ tạo ra hai bản và import các tệp component bên dưới components
+    // Tương thích hai loại tiền tố: dynamicPages của ../views và packageViews của ../../views
     const k = key.replace(/^(\.\.\/)+views/, '');
-    // update-end--author:liaozhiyang---date:20260302---for:【QQYUN-14799】动态引入页面会生成两份及引入components下的组件文件
+    // update-end--author:liaozhiyang---date:20260302---for:【QQYUN-14799】Import động trang sẽ tạo ra hai bản và import các tệp component bên dưới components
     const startFlag = component.startsWith('/');
     const endFlag = component.endsWith('.vue') || component.endsWith('.tsx');
     const startIndex = startFlag ? 0 : 1;
@@ -127,10 +127,10 @@ function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recorda
     );
     return;
   }
-  // online/aiflow 本地未找到，尝试从懒加载包中按需加载
+  // Không tìm thấy online/aiflow ở local, thử tải theo nhu cầu từ gói lazy-load
   if (component.startsWith('/super/airag/aiflow/')) {
     return () => {
-      return loadPackageComponent(component).then((factory) => (factory ? factory() : Promise.reject(`组件 ${component} 未找到`)));
+      return loadPackageComponent(component).then((factory) => (factory ? factory() : Promise.reject(`Không tìm thấy component ${component}`)));
     };
   }
 }
@@ -154,7 +154,7 @@ export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteModul
         route.meta = meta;
       }
     } else {
-      warn('请正确配置路由：' + route?.name + '的component属性');
+      warn('Vui lòng cấu hình route đúng: thuộc tính component của ' + route?.name);
     }
     route.children && asyncImportRoute(route.children);
   });
@@ -162,7 +162,7 @@ export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteModul
 }
 
 /**
- *  将多级路由转换为二级
+ * Chuyển route nhiều cấp thành hai cấp
  */
 export function flatMultiLevelRoutes(routeModules: AppRouteModule[]) {
   const modules: AppRouteModule[] = cloneDeep(routeModules);
@@ -176,7 +176,7 @@ export function flatMultiLevelRoutes(routeModules: AppRouteModule[]) {
   return modules;
 }
 
-//提升路由级别
+// Nâng cấp bậc của route
 function promoteRouteLevel(routeModule: AppRouteModule) {
   // Use vue-router to splice menus
   let router: Router | null = createRouter({
@@ -228,7 +228,7 @@ function isMultipleRoute(routeModule: AppRouteModule) {
   return flag;
 }
 /**
- * 组件地址前加斜杠处理
+ * Xử lý thêm dấu gạch chéo trước địa chỉ component
  * @updateBy:lsq
  * @updateDate:2021-09-08
  */

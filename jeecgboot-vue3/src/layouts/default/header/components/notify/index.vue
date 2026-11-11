@@ -8,7 +8,7 @@
     <DetailModal @register="registerDetail" />
 
     <sys-message-modal @register="registerMessageModal" @refresh="reloadCount" :messageCount="messageCount"></sys-message-modal>
-    <!--  修改密码弹窗  -->
+    <!--  Popup đổi mật khẩu  -->
     <ChangePasswordModal @register="changePwdModal"></ChangePasswordModal>
   </div>
 </template>
@@ -70,17 +70,17 @@
       const [registerMessageModal, { openModal: openMessageModal }] = useModal();
       const [registerBookModal, { openModal: openBookModal }] = useModal();
       const [changePwdModal, { openModal: openPwdModal }] = useModal();
-      //通知消息类型
+      //Loại tin nhắn thông báo
       const noticeType = ref<string>('system');
-      //未读消息
+      //Tin nhắn chưa đọc
       const unReadNum = ref<any>({});
       
       function clickBadge(value){
-        // //消息列表弹窗前去除角标
+        // // Trước khi mở popup danh sách tin nhắn thì xóa badge
         // for (let i = 0; i < listData.value.length; i++) {
         //   listData.value[i].count = 0;
         // }
-        // 代码逻辑说明: 【QQYUN-12162】OA项目改造，系统重消息拆分，目前消息都在一起 需按分类进行拆分---
+        // Giải thích logic mã: 【QQYUN-12162】 OA cải tạo dự án, hệ thống tách lại tin nhắn, hiện tại tin nhắn đều ở cùng nhau, cần tách theo phân loại ---
         openMessageModal(true, { noticeType: value })
       }
 
@@ -99,7 +99,7 @@
         };
       }
 
-      // 获取系统消息
+      // Lấy tin nhắn hệ thống
       async function loadData() {
         try {
           // let { anntMsgList, sysMsgList, anntMsgTotal, sysMsgTotal } = await listCementByUser({
@@ -111,16 +111,16 @@
           // listData.value[1].count = sysMsgTotal;
           //let msgCount = anntMsgTotal+sysMsgTotal;
           let msgCount =  await getUnreadMessageCount();
-          // 代码逻辑说明: 【QQYUN-12162】OA项目改造，系统重消息拆分，目前消息都在一起 需按分类进行拆分---
+          // Giải thích logic mã: 【QQYUN-12162】 OA cải tạo dự án, hệ thống tách lại tin nhắn, hiện tại tin nhắn đều ở cùng nhau, cần tách theo phân loại ---
           unReadNum.value = msgCount;
           messageCount.value = msgCount.count?msgCount.count:0;
-          // 代码逻辑说明: 【JHHB-13】桌面应用消息通知
+          // Giải thích logic mã: 【JHHB-13】 Thông báo tin nhắn ứng dụng desktop
           if (glob.isElectronPlatform) {
             window[ElectronEnum.ELECTRON_API].sendNotifyFlash(messageCount.value);
             window[ElectronEnum.ELECTRON_API].trayFlash();
           }
         } catch (e) {
-          console.warn('系统消息通知异常：', e);
+          console.warn('Thông báo tin nhắn hệ thống bất thường:', e);
         }
       }
 
@@ -146,13 +146,13 @@
         popoverVisible.value = false;
       }
 
-      // 初始化 WebSocket
+      // Khởi tạo WebSocket
       function initWebSocket() {
         let token = getToken();
-        //将登录token生成一个短的标识
+        // Dùng token đăng nhập để tạo một định danh ngắn
         let wsClientId = md5(token);
         let userId = unref(userStore.getUserInfo).id + "_" + wsClientId;
-        // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
+        // WebSocket khác với giao thức dùng cho yêu cầu thông thường, ws tương đương với http, wss tương đương với https
         let url = glob.domainUrl?.replace('https://', 'wss://').replace('http://', 'ws://') + '/websocket/' + userId;
         connectWebSocket(url);
         onWebSocket(onWebSocketMessage);
@@ -160,50 +160,50 @@
 
       function onWebSocketMessage(data) {
         if (data.cmd === 'topic' || data.cmd === 'user') {
-          // 代码逻辑说明: VUEN-1674【严重bug】系统通知，为什么必须刷新右上角才提示
+          // Giải thích logic mã: VUEN-1674 [Nghiêm trọng bug] Thông báo hệ thống, tại sao phải làm mới góc trên bên phải mới nhắc
           if(data.noticeType){
             noticeType.value = data.noticeType;
           }
-          //后台保存数据太慢 前端延迟刷新消息
+          // Backend lưu dữ liệu quá chậm, Frontend làm mới tin nhắn chậm
           setTimeout(()=>{
-            // 代码逻辑说明: 【JHHB-13】桌面应用消息通知
+            // Giải thích logic mã: 【JHHB-13】 Thông báo tin nhắn ứng dụng desktop
             notification(data);
             loadData();
           }, 1000)
         }
       }
-      // 桌面应用通知
+      // Thông báo ứng dụng desktop
       function notification(data) {
         if (glob.isElectronPlatform && (data.noticeType || data.cmd == 'email')) {
-          // 流程、文件、日程、系统、会议
-          // flow、file、plan、system、meeting
+          // Quy trình, tệp, lịch trình, hệ thống, cuộc họp
+          // flow, file, plan, system, meeting
           let title = '';
           let msgTxt = '';
           let path = '';
           if (data.noticeType === 'flow') {
-            title = '流程';
+            title = 'Quy trình';
             path = '/task/myHandleTaskInfo';
           } else if (data.noticeType === 'file') {
-            title = '文件';
+            title = 'Tệp';
             path = '/file';
           } else if (data.noticeType === 'plan') {
-            title = '日程';
+            title = 'Lịch trình';
             path = '/plan/view';
           } else if (data.noticeType === 'system') {
-            title = '系统';
+            title = 'Hệ thống';
             path = '/monitor/mynews';
           } else if (data.noticeType === 'meeting') {
-            title = '会议';
+            title = 'Cuộc họp';
             path = '/meeting';
           } else if (data.cmd === 'email') {
-            title = '邮件';
+            title = 'Email';
             path = '/eoa/email?type=inbox';
           }
-          msgTxt = data.msgTxt ?? '查看详情';
-          window[ElectronEnum.ELECTRON_API].sendNotification(`有新的${title}消息`, msgTxt, path);
+          msgTxt = data.msgTxt ?? 'Xem chi tiết';
+          window[ElectronEnum.ELECTRON_API].sendNotification(`Có tin nhắn ${title} mới`, msgTxt, path);
         }
       }
-      // 清空消息
+      // Xóa sạch tin nhắn
       function onEmptyNotify() {
         popoverVisible.value = false;
         readAllMsg({}, loadData);
@@ -218,7 +218,7 @@
       }
 
       /**
-       * 获取消息未读数
+       * Lấy số tin nhắn chưa đọc
        */
       function getSystemUnreadNum() {
       }
@@ -228,7 +228,7 @@
       }
 
       /**
-       * 清除全部未读消息
+       * Xóa tất cả tin nhắn chưa đọc
        */
       function clearAllUnMessage() {
         clearAllUnReadMessage().then((res) =>{
@@ -238,11 +238,11 @@
         })
       }
 
-      //验证是否为默认密码
+      // Kiểm tra có phải mật khẩu mặc định không
       verifyIzDefaultPwd();
       
       /**
-       * 验证是否为默认密码
+       * Kiểm tra có phải mật khẩu mặc định không
        */
       function verifyIzDefaultPwd() {
         defHttp.get({ url: "/sys/user/verifyIzDefaultPwd" } ,{ isTransformResponse: false }).then((res) =>{
@@ -352,7 +352,7 @@
     }
   }
 
-  // 兼容黑暗模式
+  // Tương thích chế độ tối
   [data-theme='dark'] .@{prefix-cls} {
     &__overlay {
       .ant-list-item {

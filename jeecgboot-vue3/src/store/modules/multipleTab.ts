@@ -35,7 +35,7 @@ interface redirectPageParamType {
 
 function handleGotoPage(router: Router, path?) {
   const go = useGo(router);
-  // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+  // Giải thích logic mã: [TV360X-732] Ở trang không phải trang hiện tại, chức năng nhấp phải để đóng bên trái, đóng bên phải, đóng các tab khác hoạt động bình thường
   go(path || unref(router.currentRoute).path, true);
 }
 const getToTarget = (tabItem: RouteLocationNormalized) => {
@@ -50,7 +50,7 @@ const getToTarget = (tabItem: RouteLocationNormalized) => {
 /**
  * 2024-06-05
  * liaozhiyang
- * 关闭的tab中是否包含当前页面
+ * Tab đã đóng có chứa trang hiện tại không
  */
 const closeTabContainCurrentRoute = (router, pathList) => {
   const { currentRoute } = router;
@@ -68,7 +68,7 @@ const closeTabContainCurrentRoute = (router, pathList) => {
 /**
  * 2025-05-08
  * liaozhiyang
- * 【issues/8216】online生成的菜单sql 自动带上组件名称
+ * 【issues/8216】Menu do online tạo ra, SQL tự động mang theo tên component
  * */
 function getMatchingRoute(menus, path) {
   for (let i = 0, len = menus.length; i < len; i++) {
@@ -95,7 +95,7 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
     tabList: cacheTab ? Persistent.getLocal(MULTIPLE_TABS_KEY) || [] : [],
     // Index of the last moved tab
     lastDragEndIndex: 0,
-    // 重定向时存储的路由参数
+    // Tham số route lưu khi redirect
     redirectPageParam: null,
   }),
   getters: {
@@ -123,19 +123,19 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
         if (!needCache) {
           continue;
         }
-        // 代码逻辑说明: 【QQYUN-12348】online生成的菜单sql 自动带上组件名称
+        // Giải thích logic mã: 【QQYUN-12348】Menu do online tạo ra, SQL tự động mang theo tên component
         if (
           ['OnlineAutoList', 'DefaultOnlineList', 'CgformErpList', 'OnlCgformInnerTableList', 'OnlCgformTabList', 'OnlCgReportList', 'GraphreportAutoChart', 'AutoDesformDataList'].includes(item.name as string) &&
           allMenus?.length
         ) {
-          // update-begin--author:zhang--date:20260713--for：【性能】优先读 tab 自身的 meta.keepAlive，兼容路由配置驱动缓存（如 desformRouter.ts 设了 keepAlive:true）
+          // update-begin--author:zhang--date:20260713--for: 【Hiệu năng】 Ưu tiên đọc meta.keepAlive của chính tab, tương thích với cache do cấu hình route điều khiển (ví dụ desformRouter.ts đã đặt keepAlive:true)
           const route = getMatchingRoute(allMenus, item.path);
           if (item.meta?.keepAlive ?? route?.meta?.keepAlive) {
-            // 如果keepAlive为true，则添加到缓存中
+            // Nếu keepAlive là true thì thêm vào cache
           } else {
             continue;
           }
-          // update-end--author:zhang--date:20260713--for：【性能】优先读 tab 自身的 meta.keepAlive，兼容路由配置驱动缓存（如 desformRouter.ts 设了 keepAlive:true）
+          // update-end--author:zhang--date:20260713--for: 【Hiệu năng】 Ưu tiên đọc meta.keepAlive của chính tab, tương thích với cache do cấu hình route điều khiển (ví dụ desformRouter.ts đã đặt keepAlive:true)
         }
         const name = item.name as string;
         cacheMap.add(name);
@@ -159,7 +159,7 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
       await redo();
     },
     /**
-     * 修改设计模式
+     * Sửa chế độ thiết kế
      * changeDesign
      */
     async changeDesign(router: Router) {
@@ -229,7 +229,7 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
         curTab.fullPath = fullPath || curTab.fullPath;
         this.tabList.splice(updateIndex, 1, curTab);
       } else {
-        // 只比较path，忽略query
+        // Chỉ so sánh path, bỏ qua query
         const findIndex = this.tabList.findIndex((tab) => tab.path === path);
         const isTabExist = findIndex !== -1;
         if (isTabExist) {
@@ -237,16 +237,16 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
           return;
         }
         // Add tab
-        // 获取动态路由打开数，超过 0 即代表需要控制打开数
+        // Lấy số dynamic route đã mở, vượt quá 0 tức là cần kiểm soát số lượng mở
         const dynamicLevel = meta?.dynamicLevel ?? -1;
         if (dynamicLevel > 0) {
-          // 如果动态路由层级大于 0 了，那么就要限制该路由的打开数限制了
-          // 首先获取到真实的路由，使用配置方式减少计算开销.
+          // Nếu cấp route động lớn hơn 0 rồi, thì phải giới hạn số lượng mở của route đó
+          // Đầu tiên lấy route thật, dùng cách cấu hình để giảm chi phí tính toán.
           // const realName: string = path.match(/(\S*)\//)![1];
           const realPath = meta?.realPath ?? '';
-          // 获取到已经打开的动态路由数, 判断是否大于某一个值
+          // Lấy số dynamic route đã mở, kiểm tra xem có lớn hơn một giá trị nào đó không
           if (this.tabList.filter((e) => e.meta?.realPath ?? '' === realPath).length >= dynamicLevel) {
-            // 关闭第一个
+            // Đóng cái đầu tiên
             const index = this.tabList.findIndex((item) => item.meta.realPath === realPath);
             index !== -1 && this.tabList.splice(index, 1);
           }
@@ -308,11 +308,11 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
       if (index !== -1) {
         await this.closeTab(this.tabList[index], router);
         const { currentRoute, replace } = router;
-        // 检查当前路由是否存在于tabList中
+        // Kiểm tra route hiện tại có tồn tại trong tabList không
         const isActivated = this.tabList.findIndex((item) => {
           return item.fullPath === currentRoute.value.fullPath;
         });
-        // 如果当前路由不存在于TabList中，尝试切换到其它路由
+        // Nếu route hiện tại không tồn tại trong TabList, thử chuyển sang route khác
         if (isActivated === -1) {
           let pageIndex;
           if (index > 0) {
@@ -352,12 +352,12 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
             pathList.push(item.fullPath);
           }
         }
-        // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+        // Giải thích logic mã: [TV360X-732] Ở trang không phải trang hiện tại, chức năng nhấp phải để đóng bên trái, đóng bên phải, đóng các tab khác hoạt động bình thường
         isCloseCurrentTab = closeTabContainCurrentRoute(router, pathList);
         this.bulkCloseTabs(pathList);
       }
       this.updateCacheTab();
-      // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+      // Giải thích logic mã: [TV360X-732] Ở trang không phải trang hiện tại, chức năng nhấp phải để đóng bên trái, đóng bên phải, đóng các tab khác hoạt động bình thường
       if (isCloseCurrentTab) {
         handleGotoPage(router, route.path);
       } else {
@@ -379,12 +379,12 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
             pathList.push(item.fullPath);
           }
         }
-        // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+        // Giải thích logic mã: [TV360X-732] Ở trang không phải trang hiện tại, chức năng nhấp phải để đóng bên trái, đóng bên phải, đóng các tab khác hoạt động bình thường
         isCloseCurrentTab = closeTabContainCurrentRoute(router, pathList);
         this.bulkCloseTabs(pathList);
       }
       this.updateCacheTab();
-      // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+      // Giải thích logic mã: [TV360X-732] Ở trang không phải trang hiện tại, chức năng nhấp phải để đóng bên trái, đóng bên phải, đóng các tab khác hoạt động bình thường
       if (isCloseCurrentTab) {
         handleGotoPage(router, route.path);
       } else {
@@ -406,8 +406,8 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
       let isCloseCurrentTab = false;
       const pathList: string[] = [];
 
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1372】关闭其他不能关闭地址栏带有参数的页面
-      // 原先用 fullPath 去匹配 item.path，带 query 的页永远找不到，导致无法关闭
+      // update-begin--author:liaozhiyang---date:20260804---for: Đóng các trang khác, không đóng được trang có tham số trên thanh địa chỉ
+      // Trước đây dùng fullPath để khớp item.path, trang mang query không bao giờ tìm thấy nên không đóng được
       for (const item of this.tabList) {
         if (item.fullPath === route.fullPath) {
           continue;
@@ -417,11 +417,11 @@ export const useMultipleTabStore = defineStore('app-multiple-tab', {
           pathList.push(item.fullPath);
         }
       }
-      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1372】关闭其他不能关闭地址栏带有参数的页面
+      // update-end--author:liaozhiyang---date:20260804---for: Đóng các trang khác, không đóng được trang có tham số trên thanh địa chỉ
       isCloseCurrentTab = closeTabContainCurrentRoute(router, pathList);
       this.bulkCloseTabs(pathList);
       this.updateCacheTab();
-      // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+      // Giải thích logic mã: [TV360X-732] Ở trang không phải trang hiện tại, chức năng nhấp phải để đóng bên trái, đóng bên phải, đóng các tab khác hoạt động bình thường
       if (isCloseCurrentTab) {
         handleGotoPage(router, route.path);
       } else {

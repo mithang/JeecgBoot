@@ -1,8 +1,8 @@
 @import './pagination.less';
 @import './input.less';
-// update-begin--author:liaozhiyang---date:20240130---for：【issues/5857】Button color类型颜色失效
+// update-begin--author:liaozhiyang---date:20240130---for: 【issues/5857】Button colorMàu loại không có hiệu lực
 @import './btn.less';
-// update-end--author:liaozhiyang---date:20240130---for：【issues/5857】Button color类型颜色失效
+// update-end--author:liaozhiyang---date:20240130---for: 【issues/5857】Button colorMàu loại không có hiệu lực
 // @import './table.less';
 
 // TODO beta.11 fix
@@ -20,11 +20,11 @@
   vertical-align: 0.125em !important;
 }*/
 //update-end---author:scott ---date::2023-08-28  for����QQYUN-6374��UnoCSS���windicss����Ӧ����ʽ����--
-// update-begin--author:liaozhiyang---date:20261014---for：【LHZP-2204】修复表单设计器的关联记录、选择岗位等提示被遮挡
+// update-begin--author:liaozhiyang---date:20261014---for: 【LHZP-2204]Sửa gợi ý của bản ghi liên kết, chọn vị trí... trong trình thiết kế biểu mẫu bị che khuất
 .ant-message {
   z-index: 1011;
 }
-// update-end--author:liaozhiyang---date:20261014---for：【LHZP-2204】修复表单设计器的关联记录、选择岗位等提示被遮挡
+// update-end--author:liaozhiyang---date:20261014---for: 【LHZP-2204]Sửa gợi ý của bản ghi liên kết, chọn vị trí... trong trình thiết kế biểu mẫu bị che khuất
 .ant-back-top {
   right: 20px;
   bottom: 20px;
@@ -71,15 +71,15 @@
   border-left: 0 !important;
 }
 
-// update-begin--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
+// update-begin--author:liaozhiyang---date:20231218---for: 【QQYUN-6366]Nâng cấp lênantd4.x
 .ant-modal {
   .ant-modal-close {
-    // update-begin--author:liaozhiyang---date:20241010---for：【issues/7260】原生a-modal关闭按钮位置偏移
+    // update-begin--author:liaozhiyang---date:20241010---for: 【issues/7260]Gốca-modalVị trí nút đóng bị lệch
     // position: absolute;
     // top: 0;
     // right: 0;
     top: 13px;
-    // update-end--author:liaozhiyang---date:20241010---for：【issues/7260】原生a-modal关闭按钮位置偏移
+    // update-end--author:liaozhiyang---date:20241010---for: 【issues/7260]Gốca-modalVị trí nút đóng bị lệch
     width: auto;
     height: auto;
   }
@@ -111,16 +111,16 @@
   padding: 12px 0;
   color: #000000d9;
 }
-/** anticon-down跟3.x保持一致*/ 
+/** anticon-downtheo3.xGiữ nhất quán*/ 
 .ant-dropdown-trigger>.anticon.anticon-down, .ant-dropdown-link>.anticon.anticon-down, .ant-dropdown-button>.anticon.anticon-down {
   font-size: 10px;
   vertical-align: baseline;
 }
-/** 表格排序箭头尺寸保持跟3.x一致 */ 
+/** Kích thước mũi tên sắp xếp bảng giữ theo3.xNhất quán */ 
 .ant-table-wrapper .ant-table-column-sorter-up, .ant-table-wrapper .ant-table-column-sorter-down {
   font-size: 11px;
 }
- /** 表格头部文字颜色跟3.x版本保持一致 */
+ /** Màu chữ đầu bảng theo3.xPhiên bản giữ nhất quán */
 .ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
   color: #000000d9;
   font-weight: 500;
@@ -128,14 +128,14 @@
 html[data-theme='dark'] .ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
   color:rgba(255,255,255,.65);
 }
- /** 下拉菜单文字和图标折叠了 */
+ /** Chữ và biểu tượng menu dropdown bị gấp lại */
 .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-title-content, .ant-dropdown-menu-submenu .ant-dropdown-menu .ant-dropdown-menu-title-content{
   flex: auto;
   white-space:nowrap;
 }
-// update-end--author:liaozhiyang---date:20231218---for：【QQYUN-6366】升级到antd4.x
+// update-end--author:liaozhiyang---date:20231218---for: 【QQYUN-6366]Nâng cấp lênantd4.x
 
-// update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7493】多行文本内容过多时内容会覆盖掉清空按钮
+// update-end--author:liaozhiyang---date:20230105---for: 【QQYUN-7493]Khi nội dung văn bản nhiều dòng quá nhiều, nội dung sẽ che nút xóa
 .ant-input-affix-wrapper-textarea-with-clear-btn {
   .ant-input-clear-icon {
     background-color: #fff;
@@ -146,9 +146,9 @@ html[data-theme='dark'] .ant-input-affix-wrapper-textarea-with-clear-btn {
     background-color: #141414;
   }
 }
-// update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7493】多行文本内容过多时内容会覆盖掉清空按钮
+// update-end--author:liaozhiyang---date:20230105---for: 【QQYUN-7493]Khi nội dung văn bản nhiều dòng quá nhiều, nội dung sẽ che nút xóa
 
-// update-begin--author:liaozhiyang---date:20230108---for：【QQYUN-7855】table页码同步3.x页面效果
+// update-begin--author:liaozhiyang---date:20230108---for: 【QQYUN-7855】tableĐồng bộ số trang3.xHiệu ứng trang
 .ant-table-pagination.ant-pagination {
   .ant-pagination-item-active,
   .ant-pagination-item-active:hover {
@@ -168,9 +168,9 @@ html[data-theme='dark'] .ant-input-affix-wrapper-textarea-with-clear-btn {
     margin: 0 4px;
   }
 }
-// update-end--author:liaozhiyang---date:20230108---for：【QQYUN-7855】table页码同步3.x页面效果
+// update-end--author:liaozhiyang---date:20230108---for: 【QQYUN-7855】tableĐồng bộ số trang3.xHiệu ứng trang
 
-//update-begin--author:wangshuai---date:20240429---for：修改tinymce段落下拉框的字体和样式
+//update-begin--author:wangshuai---date:20240429---for: SửatinymcePhông chữ và kiểu của dropdown đoạn văn
 .tox .tox-tbtn__select-label{
   font-size: 14px;
 }
@@ -182,9 +182,9 @@ html[data-theme='dark'] .ant-input-affix-wrapper-textarea-with-clear-btn {
 .tox .tox-collection__item-label {
   font-size: 14px !important;
 }
-//update-end--author:wangshuai---date:20240429---for：修改tinymce段落下拉框的字体和样式
+//update-end--author:wangshuai---date:20240429---for: SửatinymcePhông chữ và kiểu của dropdown đoạn văn
 
-// update-begin--author:liaozhiyang---date:20240605---for：【TV360X-189】统一只读样式
+// update-begin--author:liaozhiyang---date:20240605---for: 【TV360X-189]Thống nhất kiểu chỉ đọc
 html[data-theme='light'] {
   .ant-form:not(.jeecg-form-detail-effect) {
     .ant-select.ant-select-disabled {
@@ -213,4 +213,4 @@ html[data-theme='dark'] {
     }
   }
 }
-// update-end--author:liaozhiyang---date:20240605---for：【TV360X-189】统一只读样式
+// update-end--author:liaozhiyang---date:20240605---for: 【TV360X-189]Thống nhất kiểu chỉ đọc

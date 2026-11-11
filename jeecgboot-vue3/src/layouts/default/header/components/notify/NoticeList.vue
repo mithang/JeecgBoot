@@ -22,17 +22,17 @@
           <template #avatar>
             <a-avatar v-if="item.avatar" class="avatar" :src="item.avatar" />
             <template v-else-if="item.priority">
-              <a-avatar v-if="item.priority === PriorityTypes.L" class="avatar priority-L" title="一般消息">
+              <a-avatar v-if="item.priority === PriorityTypes.L" class="avatar priority-L" title="Tin nhắn thông thường">
                 <template #icon>
                   <Icon icon="entypo:info" />
                 </template>
               </a-avatar>
-              <a-avatar v-if="item.priority === PriorityTypes.M" class="avatar priority-M" title="重要消息">
+              <a-avatar v-if="item.priority === PriorityTypes.M" class="avatar priority-M" title="Tin nhắn quan trọng">
                 <template #icon>
                   <Icon icon="bi:exclamation-lg" />
                 </template>
               </a-avatar>
-              <a-avatar v-if="item.priority === PriorityTypes.H" class="avatar priority-H" title="紧急消息">
+              <a-avatar v-if="item.priority === PriorityTypes.H" class="avatar priority-H" title="Tin nhắn khẩn cấp">
                 <template #icon>
                   <Icon icon="ant-design:warning-filled" />
                 </template>

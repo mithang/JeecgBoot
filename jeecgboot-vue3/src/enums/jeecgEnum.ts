@@ -1,27 +1,27 @@
 /**
- * JInput组件类型
+ * Loại component JInput
  */
 export enum JInputTypeEnum {
-  //模糊
+  // Khớp mờ
   JINPUT_QUERY_LIKE = 'like',
-  //非
+  // Khác (không bằng)
   JINPUT_QUERY_NE = 'ne',
-  //大于等于
+  // Lớn hơn hoặc bằng
   JINPUT_QUERY_GE = 'ge',
-  //小于等于
+  // Nhỏ hơn hoặc bằng
   JINPUT_QUERY_LE = 'le',
 }
 
 /**
- * 面板设计器需要的常量定义
+ * Định nghĩa hằng số cần cho trình thiết kế panel
  */
 export enum JDragConfigEnum {
   //baseURL
   DRAG_BASE_URL = 'drag-base-url',
-  //拖拽缓存前缀
+  // Tiền tố cache kéo thả
   DRAG_CACHE_PREFIX = 'drag-cache:',
 }
-// electron 枚举
+// Enum electron
 export enum ElectronEnum {
   ELECTRON_API = '_ELECTRON_PRELOAD_UTILS_',
 }

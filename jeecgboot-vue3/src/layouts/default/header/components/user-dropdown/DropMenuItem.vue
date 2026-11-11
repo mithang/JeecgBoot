@@ -25,7 +25,7 @@
     },
     setup(props) {
       const instance = getCurrentInstance();
-      // 代码逻辑说明: 【issues/6855】组件使用key作props报警告，改为itemKey
+      // Giải thích logic mã: 【issues/6855】 Sử dụng component key làm props sẽ báo cảnh báo, đổi thành itemKey
       const itemKey = computed(() => props.itemKey || instance?.vnode?.props?.itemKey);
       return { itemKey };
     },

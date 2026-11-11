@@ -34,32 +34,32 @@ interface UserState {
   tenantid?: string | number;
   shareTenantId?: Nullable<string | number>;
   loginInfo?: Nullable<LoginInfo>;
-  // 三级等保强密码开关
+  // Công tắc mật khẩu mạnh bảo mật cấp 3
   enableStrongPwd?: boolean;
 }
 
 export const useUserStore = defineStore('app-user', {
   state: (): UserState => ({
-    // 用户信息
+    // Thông tin người dùng
     userInfo: null,
     // token
     token: undefined,
-    // 角色列表
+    // Danh sách vai trò
     roleList: [],
-    // 字典
+    // Từ điển
     dictItems: null,
-    // session过期时间
+    // Thời gian hết hạn của session
     sessionTimeout: false,
     // Last fetch time
     lastUpdateTime: 0,
-    //租户id
+    // ID tenant
     tenantid: '',
-    // 分享租户ID
-    // 用于分享页面所属租户与当前用户登录租户不一致的情况
+    // ID tenant được chia sẻ
+    // Dùng cho trường hợp tenant của trang được chia sẻ không khớp với tenant đăng nhập của người dùng hiện tại
     shareTenantId: null,
-    //登录返回信息
+    // Thông tin trả về khi đăng nhập
     loginInfo: null,
-    // 三级等保强密码开关
+    // Công tắc mật khẩu mạnh bảo mật cấp 3
     enableStrongPwd: false,
   }),
   getters: {
@@ -90,11 +90,11 @@ export const useUserStore = defineStore('app-user', {
     getTenant(): string | number {
       return this.tenantid || getAuthCache<string | number>(TENANT_ID);
     },
-    // 是否有分享租户id
+    // Có ID tenant được chia sẻ không
     hasShareTenantId(): boolean {
       return this.shareTenantId != null && this.shareTenantId !== '';
     },
-    // 三级等保强密码开关
+    // Công tắc mật khẩu mạnh bảo mật cấp 3
     getEnableStrongPwd(): boolean {
       return this.enableStrongPwd ?? false;
     },
@@ -118,9 +118,9 @@ export const useUserStore = defineStore('app-user', {
       setAuthCache(LOGIN_INFO_KEY, info);
     },
     /**
-     * 设置全量字典缓存
-     * @param dictItems 字典数据
-     * @param dictVersion 字典版本号，与字典数据成对存储；不传则清空，下次刷新页面会重新拉取一次字典
+     * Cài đặt cache từ điển đầy đủ
+     * @param dictItems Dữ liệu từ điển
+     * @param dictVersion Phiên bản từ điển, lưu theo cặp với dữ liệu từ điển; không truyền thì xóa, lần làm mới trang sau sẽ kéo lại từ điển một lần
      */
     setAllDictItems(dictItems, dictVersion?: string | null) {
       this.dictItems = dictItems;
@@ -128,10 +128,10 @@ export const useUserStore = defineStore('app-user', {
       setAuthCache(DB_DICT_VERSION_KEY, dictVersion ?? null);
     },
     /**
-     * 后端字典版本号与本地不一致时，后台重新拉取全量字典
-     * @param dictVersion 后端返回的字典版本号
+     * Khi phiên bản từ điển backend không khớp với local, sẽ kéo lại toàn bộ từ điển từ backend
+     * @param dictVersion Phiên bản từ điển backend trả về
      * @author scott
-     * @since 2026-10-13 【issues/9838】管理员修改字典后，其他用户刷新页面即可同步最新字典
+     * @since 2026-10-13 [issues/9838] Sau khi quản trị viên sửa từ điển, người dùng khác làm mới trang sẽ đồng bộ được từ điển mới nhất
      */
     async refreshDictItemsIfChanged(dictVersion?: string) {
       if (!dictVersion || dictVersion === getAuthCache<string>(DB_DICT_VERSION_KEY)) {
@@ -143,7 +143,7 @@ export const useUserStore = defineStore('app-user', {
       }
     },
     setAllDictItemsByLocal() {
-      // 代码逻辑说明: 【QQYUN-8572】表格行选择卡顿问题（customRender中字典引起的）
+      // Giải thích logic mã: [QQYUN-8572] Vấn đề chọn hàng trong bảng bị giật (do customRender trong từ điển gây ra)
       if (!this.dictItems) {
         const allDictItems = getAuthCache(DB_DICT_DATA_KEY);
         if (allDictItems) {
@@ -169,7 +169,7 @@ export const useUserStore = defineStore('app-user', {
       this.sessionTimeout = false;
     },
     /**
-     * 登录事件
+     * Sự kiện đăng nhập
      */
     async login(
       params: LoginParams & {
@@ -190,7 +190,7 @@ export const useUserStore = defineStore('app-user', {
       }
     },
     /**
-     * 扫码登录事件
+     * Sự kiện đăng nhập bằng quét mã
      */
     async qrCodeLogin(token): Promise<GetUserInfoModel | null> {
       try {
@@ -202,18 +202,18 @@ export const useUserStore = defineStore('app-user', {
       }
     },
     /**
-     * 登录完成处理
+     * Xử lý hoàn thành đăng nhập
      * @param goHome
      */
     async afterLoginAction(goHome?: boolean, data?: any): Promise<any | null> {
       if (!this.getToken) return null;
-      //获取用户信息
+      // Lấy thông tin người dùng
       const userInfo = await this.getUserInfoAction();
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
       } else {
-        // // 构建后台菜单路由
+        // // Xây dựng route menu backend
         // const permissionStore = usePermissionStore();
         // if (!permissionStore.isDynamicAddedRoute) {
         //   const routes = await permissionStore.buildRoutesAction();
@@ -225,27 +225,27 @@ export const useUserStore = defineStore('app-user', {
         // }
         
         await this.setLoginInfo({ ...data, isLogin: true });
-        // 代码逻辑说明: 登录成功后缓存拖拽模块的接口前缀
+        // Giải thích logic mã: Sau khi đăng nhập thành công, cache tiền tố API của module kéo thả
         localStorage.setItem(JDragConfigEnum.DRAG_BASE_URL, useGlobSetting().domainUrl);
 
-        // 代码逻辑说明: 修复登录成功后，没有正确重定向的问题
+        // Giải thích logic mã: Sửa vấn đề sau khi đăng nhập thành công không chuyển hướng đúng
         let redirect = router.currentRoute.value?.query?.redirect as string;
-        // 判断是否有 redirect 重定向地址
-        // 代码逻辑说明: 【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
+        // Kiểm tra có địa chỉ redirect hay không
+        // Giải thích logic mã: [QQYUN-5195] Sau khi đăng nhập, làm mới trang trực tiếp khiến không vào được trang tạo tổ chức------------
         if (redirect && goHome) {
-          // router.options.history.base可替代之前的publicPath
-          // 当前页面打开
+          // router.options.history.base có thể thay thế publicPath trước đây
+          // Mở trang hiện tại
           window.open(`${router.options.history.base}${redirect}`, '_self');
           return data;
         }
 
-        // 代码逻辑说明: 【issues/1102】设置单点登录后页面，进入首页提示404，也没有绘制侧边栏 #1102---
+        // Giải thích logic mã: [issues/1102] Sau khi cài đặt đăng nhập một lần (SSO), vào trang thì báo 404 ở trang chủ và cũng không vẽ sidebar #1102---
         let ticket = getUrlParam('ticket');
         if(ticket){
-          //update-begin---wangshuai---date:20260810  for：[issues/9797]开启CAS验证，回跳地址错误------------
-          // CAS 校验成功后刷新当前业务地址，避免深层链接被用户首页覆盖（issues/9797）
+          //update-begin---wangshuai---date:20260810  for: [issues/9797] Bật kiểm tra CAS, địa chỉ quay lại sai------------
+          // Sau khi kiểm tra CAS thành công, làm mới địa chỉ nghiệp vụ hiện tại để tránh deep link bị trang chủ người dùng ghi đè (issues/9797)
           goHome && window.location.replace(getCasServiceUrl());
-          //update-end---author:wangshuai ---date:20260810  for：[issues/9797]开启CAS验证，回跳地址错误------------  
+          //update-end---author:wangshuai ---date:20260810  for: [issues/9797] Bật kiểm tra CAS, địa chỉ quay lại sai------------  
         }else{
           goHome && (await router.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
         }
@@ -253,7 +253,7 @@ export const useUserStore = defineStore('app-user', {
       return data;
     },
     /**
-     * 手机号登录
+     * Đăng nhập bằng số điện thoại
      * @param params
      */
     async phoneLogin(
@@ -265,7 +265,7 @@ export const useUserStore = defineStore('app-user', {
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await phoneLoginApi(loginParams, mode);
-        // 代码逻辑说明: 【issues/7488】手机号码登录，在请求头中无法获取租户id---
+        // Giải thích logic mã: [issues/7488] Đăng nhập bằng số điện thoại, không lấy được ID tenant trong header yêu cầu---
         const { token , userInfo } = data;
         this.setTenant(userInfo!.loginTenantId);
         // save token
@@ -276,7 +276,7 @@ export const useUserStore = defineStore('app-user', {
       }
     },
     /**
-     * 获取用户信息
+     * Lấy thông tin người dùng
      */
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) {
@@ -295,7 +295,7 @@ export const useUserStore = defineStore('app-user', {
         this.setUserInfo(userInfo);
       }
       /**
-       * 添加字典信息到缓存
+       * Thêm thông tin từ điển vào cache
        * @updateBy:lsq
        * @updateDate:2021-09-08
        */
@@ -306,14 +306,14 @@ export const useUserStore = defineStore('app-user', {
       return userInfo;
     },
     /**
-     * 退出登录
+     * Đăng xuất
      */
     async logout(goLogin = false) {
       if (this.getToken) {
         try {
           await doLogout();
         } catch {
-          console.log('注销Token失败');
+          console.log('Đăng xuất token thất bại');
         }
       }
 
@@ -328,29 +328,29 @@ export const useUserStore = defineStore('app-user', {
       this.setUserInfo(null);
       this.setLoginInfo(null);
       this.setTenant(null);
-      // 代码逻辑说明: 【TV360X-23】退出登录后会提示「Token时效，请重新登录」
+      // Giải thích logic mã: [TV360X-23] Sau khi đăng xuất sẽ nhắc “Token hết hiệu lực, vui lòng đăng nhập lại”
       setTimeout(() => {
         this.setAllDictItems(null);
       }, 1e3);
-      // 代码逻辑说明: 退出登录后清除拖拽模块的接口前缀
+      // Giải thích logic mã: Sau khi đăng xuất xóa tiền tố API của module kéo thả
       localStorage.removeItem(JDragConfigEnum.DRAG_BASE_URL);
 
-      //如果开启单点登录,则跳转到单点统一登录中心
+      // Nếu bật đăng nhập một lần (SSO), thì chuyển đến trung tâm đăng nhập thống nhất SSO
       const openSso = useGlobSetting().openSso;
       if (openSso == 'true') {
         await useSso().ssoLoginOut();
       }
-      //退出登录的时候需要用的应用id
+      // ID ứng dụng cần dùng khi đăng xuất
       if(isOAuth2AppEnv()){
         let tenantId = getAuthCache(OAUTH2_THIRD_LOGIN_TENANT_ID);
         removeAuthCache(OAUTH2_THIRD_LOGIN_TENANT_ID);
         goLogin && await router.push({ name:"Login",query:{ tenantId:tenantId }})
       }else{
-        // 代码逻辑说明: 修复登录成功后，没有正确重定向的问题
+        // Giải thích logic mã: Sửa vấn đề sau khi đăng nhập thành công không chuyển hướng đúng
         goLogin && (await router.push({
           path: PageEnum.BASE_LOGIN,
           query: {
-            // 传入当前的路由，登录成功后跳转到当前路由
+            // Truyền route hiện tại, sau khi đăng nhập thành công sẽ chuyển đến route hiện tại
             redirect: router.currentRoute.value.fullPath,
           }
         }));
@@ -358,7 +358,7 @@ export const useUserStore = defineStore('app-user', {
       }
     },
     /**
-     * 登录事件
+     * Sự kiện đăng nhập
      */
     async ThirdLogin(
       params: ThirdLoginParams & {
@@ -369,7 +369,7 @@ export const useUserStore = defineStore('app-user', {
       try {
         const { goHome = true, mode, ...ThirdLoginParams } = params;
         const data = await thirdLogin(ThirdLoginParams, mode);
-        // 代码逻辑说明: 【issues/6652】开启租户数据隔离，接入钉钉后登录默认租户为0了---
+        // Giải thích logic mã: [issues/6652] Bật cách ly dữ liệu tenant, sau khi tích hợp DingTalk, tenant mặc định khi đăng nhập thành 0---
         const { token, userInfo } = data;
         this.setTenant(userInfo?.loginTenantId);
         // save token
@@ -380,7 +380,7 @@ export const useUserStore = defineStore('app-user', {
       }
     },
     /**
-     * 退出询问
+     * Hỏi trước khi thoát
      */
     confirmLoginOut() {
       const { createConfirm } = useMessage();

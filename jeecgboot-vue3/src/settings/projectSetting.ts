@@ -12,191 +12,191 @@ import {
 } from '../enums/appEnum';
 import { darkMode } from '../settings/designSetting';
 import { getConfigByMenuType } from '../utils/getConfigByMenuType';
-// 修改此属性，实现默认的四个系统主题快速切换
+// Sửa thuộc tính này để chuyển nhanh giữa bốn theme hệ thống mặc định
 const menuType = MenuTypeEnum.SIDEBAR;
 
-// update-begin--author:liaozhiyang---date:20251201---for【QQYUN-14176】修改一个配置就能切换默认四个主题，不需要额外修改颜色等
+// update-begin--author:liaozhiyang---date:20251201---for【QQYUN-14176】Chỉ cần sửa một cấu hình là có thể chuyển đổi bốn theme mặc định, không cần sửa thêm màu sắc, v.v.
 const { themeColor, headerBgColor, sideBgColor, split, mode } = getConfigByMenuType(menuType);
-// update-end--author:liaozhiyang---date:20251201---for【QQYUN-14176】修改一个配置就能切换默认四个主题，不需要额外修改颜色等
-// ! 改动后需要清空浏览器缓存
+// update-end--author:liaozhiyang---date:20251201---for【QQYUN-14176】Chỉ cần sửa một cấu hình là có thể chuyển đổi bốn theme mặc định, không cần sửa thêm màu sắc, v.v.
+// ! Sau khi thay đổi cần xóa cache trình duyệt
 const setting: ProjectConfig = {
-  // 是否显示SettingButton
+  // Có hiển thị SettingButton không
   showSettingButton: true,
 
-  // 是否显示主题切换按钮
+  // Có hiển thị nút chuyển theme không
   showDarkModeToggle: true,
 
-  // 设置按钮位置 可选项
-  // SettingButtonPositionEnum.AUTO: 自动选择
-  // SettingButtonPositionEnum.HEADER: 位于头部
-  // SettingButtonPositionEnum.FIXED: 固定在右侧
+  // Vị trí nút Cài đặt
+  // SettingButtonPositionEnum.AUTO: Tự động chọn
+  // SettingButtonPositionEnum.HEADER: Ở đầu trang
+  // SettingButtonPositionEnum.FIXED: Cố định ở bên phải
   settingButtonPosition: SettingButtonPositionEnum.AUTO,
 
-  // 权限模式,默认前端角色权限模式
-  // ROUTE_MAPPING: 前端模式（菜单由路由生成，默认）
-  // ROLE：前端模式（菜单路由分开）
-  // BACK：后台模式
+  // Chế độ quyền, mặc định là chế độ quyền vai trò frontend
+  // ROUTE_MAPPING: Chế độ frontend (menu do route tạo, mặc định)
+  // ROLE: Chế độ frontend (route menu tách riêng)
+  // BACK: Chế độ backend
   permissionMode: PermissionModeEnum.BACK,
 
-  // 权限缓存存放位置。默认存放于localStorage
+  // Vị trí lưu cache quyền. Mặc định lưu tại localStorage
   permissionCacheType: CacheTypeEnum.LOCAL,
 
-  // 会话超时处理方案
-  // SessionTimeoutProcessingEnum.ROUTE_JUMP: 路由跳转到登录页
-  // SessionTimeoutProcessingEnum.PAGE_COVERAGE: 生成登录弹窗，覆盖当前页面
+  // Phương án xử lý hết phiên
+  // SessionTimeoutProcessingEnum.ROUTE_JUMP: Route chuyển đến trang đăng nhập
+  // SessionTimeoutProcessingEnum.PAGE_COVERAGE: Tạo popup đăng nhập, phủ trang hiện tại
   sessionTimeoutProcessing: SessionTimeoutProcessingEnum.ROUTE_JUMP,
-  // 项目主题色 - 根据导航栏模式确定主题色动态设置
+  // Màu chủ đề dự án - Xác định màu theme động theo chế độ thanh điều hướng
   themeColor: themeColor,
-  // 项目主题模式
+  // Chế độ chủ đề dự án
   themeMode: darkMode,
 
-  // 网站灰色模式，用于可能悼念的日期开启
+  // Chế độ xám của trang web, dùng để bật vào các ngày tưởng niệm
   grayMode: false,
 
-  // 色弱模式
+  // Chế độ mù màu
   colorWeak: false,
 
-  // 是否取消菜单,顶部,多标签页显示, 用于可能内嵌在别的系统内
+  // Có ẩn menu, phần trên và hiển thị nhiều tab không, dùng khi có thể nhúng vào hệ thống khác
   fullContent: false,
 
-  // 主题内容宽度
+  // Độ rộng nội dung theme
   contentMode: ContentEnum.FULL,
 
-  // 是否显示logo
+  // Có hiển thị logo không
   showLogo: true,
 
-  // 是否显示底部信息 copyright
+  // Có hiển thị thông tin copyright ở dưới cùng không
   showFooter: false,
 
-  // ai图标显示
+  // Có hiển thị biểu tượng AI không
   aiIconShow: false,
 
-  // 头部配置
+  // Cấu hình đầu trang
   headerSetting: {
-    // 背景色
+    // Màu nền
     bgColor: headerBgColor,
-    // 固定头部
+    // Cố định đầu trang
     fixed: true,
-    // 是否显示顶部
+    // Có hiển thị đầu trang không
     show: true,
-    // 主题
+    // Theme
     theme: ThemeEnum.LIGHT,
-    // 开启锁屏功能
+    // Bật chức năng khóa màn hình
     useLockPage: false,
-    // 显示全屏按钮
+    // Hiển thị nút toàn màn hình
     showFullScreen: false,
-    // 显示官网按钮
+    // Hiển thị nút trang web chính thức
     showDoc: false,
-    // 显示消息中心按钮
+    // Hiển thị nút trung tâm tin nhắn
     showNotice: true,
-    // 显示菜单搜索按钮
+    // Hiển thị nút tìm kiếm menu
     showSearch: true,
   },
 
-  // 菜单配置
+  // Cấu hình menu
   menuSetting: {
-    // 背景色
+    // Màu nền
     bgColor: sideBgColor,
-    // 是否固定住左侧菜单
+    // Có cố định menu bên trái không
     fixed: true,
-    // 菜单折叠
+    // Thu gọn menu
     collapsed: false,
-    // 折叠菜单时候是否显示菜单名
+    // Khi thu gọn menu có hiển thị tên menu không
     collapsedShowTitle: false,
-    // 是否可拖拽
+    // Có thể kéo thả không
     // Only limited to the opening of the left menu, the mouse has a drag bar on the right side of the menu
     canDrag: false,
     // Whether to show no dom
     show: true,
     // Whether to show dom
     hidden: false,
-    // 菜单宽度
+    // Chiều rộng menu
     menuWidth: 210,
-    // 菜单模式
+    // Chế độ menu
     mode,
-    // 菜单类型
+    // Loại menu
     type: menuType,
-    // 菜单主题
+    // Chủ đề menu
     theme: ThemeEnum.LIGHT,
-    // 左侧导航栏文字颜色调整区分彩色和暗黑 (不对应配置)
+    // Điều chỉnh màu chữ của thanh điều hướng bên trái để phân biệt chế độ màu sắc và chế độ tối (không tương ứng với cấu hình)
     isThemeBright: false,
-    // 分割菜单
+    // Tách menu
     split,
-    // 顶部菜单布局
+    // Bố cục menu phần trên
     topMenuAlign: 'center',
-    // 折叠触发器的位置
+    // Vị trí của trigger thu gọn
     trigger: TriggerEnum.HEADER,
-    // 手风琴模式，只展示一个菜单
+    // Chế độ accordion, chỉ hiển thị một menu
     accordion: true,
-    // 在路由切换的时候关闭左侧混合菜单展开菜单
+    // Khi chuyển route thì đóng menu mở rộng của menu hỗn hợp bên trái
     closeMixSidebarOnChange: false,
-    // 左侧混合菜单模块切换触发方式 ‘click’ |'hover'
+    // Cách kích hoạt chuyển module của menu hỗn hợp bên trái: 'click' | 'hover'
     mixSideTrigger: MixSidebarTriggerEnum.CLICK,
-    // 是否固定左侧混合菜单
+    // Có cố định menu hỗn hợp bên trái không
     mixSideFixed: false,
   },
 
-  // 多标签
+  // Nhiều tab
   multiTabsSetting: {
-    // 刷新后是否保留已经打开的标签页
+    // Sau khi làm mới có giữ các tab đã mở không
     cache: false,
-    // 开启
+    // Bật
     show: true,
-    // 是否可以拖拽
+    // Có thể kéo thả không
     canDrag: true,
-    // 开启快速操作
+    // Bật thao tác nhanh
     showQuick: true,
-    // 是否显示刷新按钮
+    // Có hiển thị nút làm mới không
     showRedo: true,
-    // 是否显示折叠按钮
+    // Có hiển thị nút thu gọn không
     showFold: true,
-    // 标签页样式
+    // Kiểu tab
     theme: TabsThemeEnum.CARD,
   },
 
-  // 动画配置
+  // Cấu hình animation
   transitionSetting: {
-    //  是否开启切换动画
+    //  Có bật animation chuyển đổi không
     // The disabled state will also disable pageLoading
     enable: true,
 
-    // 动画名 Route basic switching animation
+    // Tên animation chuyển đổi route cơ bản
     basicTransition: RouterTransitionEnum.FADE_SIDE,
 
-    // 是否打开页面切换loading
+    // Có bật loading khi chuyển trang không
     // Only open when enable=true
     openPageLoading: true,
 
-    //是否打开页面切换顶部进度条
+    // Có mở thanh tiến trình phía trên khi chuyển trang không
     openNProgress: true,
   },
 
-  // 是否开启KeepAlive缓存  开发时候最好关闭,不然每次都需要清除缓存
+  // Có bật cache KeepAlive không. Khi phát triển tốt nhất nên tắt, nếu không mỗi lần đều cần xóa cache
   openKeepAlive: true,
 
-  // 自动锁屏时间，为0不锁屏。 单位分钟 默认1个小时
+  // Thời gian tự động khóa màn hình, bằng 0 là không khóa màn hình. Đơn vị: phút, mặc định 1 giờ
   lockTime: 0,
 
-  // 显示面包屑
+  // Hiển thị breadcrumb
   showBreadCrumb: false,
 
-  // 显示面包屑图标
+  // Hiển thị biểu tượng breadcrumb
   showBreadCrumbIcon: true,
 
-  // 是否使用全局错误捕获
+  // Có dùng bắt lỗi toàn cục không
   useErrorHandle: false,
 
-  // 是否开启回到顶部
+  // Có bật quay lại đầu trang không
   useOpenBackTop: true,
 
-  // 是否可以嵌入iframe页面
+  // Có thể nhúng trang iframe không
   canEmbedIFramePage: true,
 
-  // 切换界面的时候是否删除未关闭的message及notify
+  // Khi chuyển giao diện có xóa các message và notify chưa đóng không
   closeMessageOnSwitch: true,
 
-  // 切换界面的时候是否取消已经发送但是未响应的http请求。
-  // 如果开启,想对单独接口覆盖。可以在单独接口设置
+  // Khi chuyển giao diện có hủy các yêu cầu http đã gửi nhưng chưa nhận phản hồi không.
+  // Nếu bật, muốn ghi đè cho API riêng lẻ thì có thể cài đặt tại API riêng lẻ đó
   removeAllHttpPending: false,
 };
 

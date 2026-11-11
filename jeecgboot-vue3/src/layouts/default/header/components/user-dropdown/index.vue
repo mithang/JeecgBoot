@@ -101,25 +101,25 @@
 
       const [register, { openModal }] = useModal();
       /**
-       * 多部门弹窗逻辑
+       * Logic popup nhiều phòng ban
        */
       const loginSelectRef = ref();
-      // 代码逻辑说明: 【QQYUN-6333】空路由问题—首次访问资源太大
+      // Giải thích logic mã: 【QQYUN-6333】 Vấn đề route trống — Lần đầu truy cập tài nguyên quá lớn
       async function handleLock() {
         await getRefPromise(lockActionRef);
         openModal(true);
       }
-      //  login out
+      // Đăng xuất
       function handleLoginOut() {
         userStore.confirmLoginOut();
       }
 
-      // open doc
+      // Mở tài liệu
       function openDoc() {
         openWindow(SITE_URL);
       }
 
-      // 清除缓存
+      // Xóa cache
       async function clearCache() {
         const result = await refreshCache();
         const dragRes = await refreshDragCache();
@@ -131,19 +131,19 @@
           removeAuthCache(DB_DICT_DATA_KEY);
           setAuthCache(DB_DICT_DATA_KEY, res.result);
           createMessage.success(t('layout.header.refreshCacheComplete'));
-          // 代码逻辑说明: 【issues/7433】vue3 数据字典优化建议
+          // Giải thích logic mã: 【issues/7433】 Vue3 đề xuất tối ưu từ điển dữ liệu
           userStore.setAllDictItems(res.result);
         } else {
           createMessage.error(t('layout.header.refreshCacheFailure'));
         }
       }
-      // 切换部门
+      // Chuyển phòng ban
       function updateCurrentDepart() {
         loginSelectRef.value.show();
       }
-      // 修改密码
+      // Đổi mật khẩu
       const updatePasswordRef = ref();
-      // 代码逻辑说明: 【QQYUN-6333】空路由问题—首次访问资源太大
+      // Giải thích logic mã: 【QQYUN-6333】 Vấn đề route trống — Lần đầu truy cập tài nguyên quá lớn
       async function updatePassword() {
         passwordVisible.value = true;
         await getRefPromise(updatePasswordRef);
@@ -170,7 +170,7 @@
             updatePassword();
             break;
           case 'account':
-            // 代码逻辑说明: 进入用户设置页面------------
+            // Giải thích logic mã: Vào trang cài đặt người dùng------------
             go(`/system/usersetting`);
             break;
         }
@@ -240,14 +240,14 @@
     }
 
     &-dropdown-overlay {
-      // 代码逻辑说明: 【QQYUN-7512】顶部账号划过首次弹出时位置会变更一下
+      // Giải thích logic mã: 【QQYUN-7512】 Khi di chuột qua tài khoản trên cùng, lần đầu popup vị trí sẽ thay đổi một chút
       width: 160px;
       .ant-dropdown-menu-item {
         min-width: 160px;
       }
     }
   }
-  // 代码逻辑说明: 【QQYUN-13013】切换到英文模式下拉菜单宽度有点窄
+  // Giải thích logic mã: 【QQYUN-13013】 Chuyển sang chế độ tiếng Anh, menu thả xuống hơi hẹp
   html[lang="en"] {
     .@{prefix-cls} {
       &-dropdown-overlay {
