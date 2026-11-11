@@ -2,32 +2,32 @@
   <div :class="prefixCls">
     <BasicTable @register="registerTable" :rowSelection="rowSelection" v-bind="$attrs">
       <template #tableTitle>
-        <a-button @click="onAdd" type="primary" preIcon="ant-design:plus">新增</a-button>
-        <a-button preIcon="bxs:bot" type="primary" style="margin-right: 5px" @click="onCreateByAi">AI生成图表</a-button>
+        <a-button @click="onAdd" type="primary" preIcon="ant-design:plus">Thêm mới</a-button>
+        <a-button preIcon="bxs:bot" type="primary" style="margin-right: 5px" @click="onCreateByAi">AITạo biểu đồ</a-button>
         <ExcelButton :config="excelConfig" />
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="onBatchDelete">
                 <a-icon type="delete" />
-                <span>删除</span>
+                <span>Xóa</span>
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            <span>批量操作</span>
+            <span>Thao tác hàng loạt</span>
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
   </div>
   <GraphreportModal @register="registerFormModal" @success="reload" />
-  <!-- 通过Ai生成图表 -->
+  <!-- Thông quaAiTạo biểu đồ -->
   <GraphreportAigcModal @register="registerAigcModal" @generate="onAigcGenerate" />
 </template>
 
@@ -48,41 +48,41 @@
     name: 'GraphreportList',
     components: {GraphreportAigcModal, ExcelButton, BasicTable, TableAction, GraphreportModal },
     setup() {
-      // 列表页面公共参数、方法
+      // Tham số, phương thức dùng chung của trang danh sách
       const { prefixCls, doRequest, doDeleteRecord, tableContext, createConfirm: $confirm } = useListPage({
         designScope: 'online-graphreport-list',
         tableProps: {
           api: list,
           columns: [
-            { title: '图表名称', dataIndex: 'name' },
-            { title: '编码', dataIndex: 'code' },
-            { title: '数据', dataIndex: 'cgrSql' },
+            { title: 'Tên biểu đồ', dataIndex: 'name' },
+            { title: 'Mã (code)', dataIndex: 'code' },
+            { title: 'Dữ liệu', dataIndex: 'cgrSql' },
             {
-              title: '数据源',
+              title: 'Nguồn dữ liệu',
               dataIndex: 'dbSource',
               customRender: ({ text, record }) => {
                 return record['dbSource_dictText'] ? record['dbSource_dictText'] : text;
               },
             },
-            { title: 'Y轴字段', dataIndex: 'yaxisField' },
-            { title: 'X轴字段', dataIndex: 'xaxisField' },
+            { title: 'YTrường trục', dataIndex: 'yaxisField' },
+            { title: 'XTrường trục', dataIndex: 'xaxisField' },
           ],
           formConfig: {
             //labelWidth: 200,
             schemas: [
-              { label: '图表名称', field: 'name', component: 'JInput' },
-              { label: '编码', field: 'code', component: 'JInput' },
+              { label: 'Tên biểu đồ', field: 'name', component: 'JInput' },
+              { label: 'Mã (code)', field: 'code', component: 'JInput' },
             ],
           },
         },
       });
       const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
       /**
-       * excel导入导出配置
+       * excelCấu hình nhập/xuất
        */
       const excelConfig = {
         export: {
-          name: 'Online图表',
+          name: 'OnlineBiểu đồ',
           url: Api.exportXls,
         },
         import: {
@@ -90,9 +90,9 @@
           success: reload,
         },
       };
-      // 注册编辑弹窗
+      // Đăng ký popup chỉnh sửa
       const [registerFormModal, formModal] = useModal();
-      // 注册Aigc弹窗
+      // Đăng kýAigcPopup
       const [registerAigcModal, aigcModal] = useModal();
 
       function onAdd() {
@@ -111,24 +111,24 @@
         formModal.openModal(true, { isUpdate: true, record });
       }
 
-      // 批量删除事件
+      // Sự kiện xóa hàng loạt
       async function onBatchDelete() {
         doRequest(() => doBatchDelete(selectedRowKeys.value));
       }
 
-      // 功能测试
+      // Kiểm thử chức năng
       function onGoToTest(record) {
         router.push('/online/graphreport/chart/' + record.id);
       }
 
       const { createCopyModal } = useCopyModal();
 
-      // 显示配置地址弹窗
+      // Hiển thị popup địa chỉ cấu hình
       async function onShowOnlineUrl(record) {
         let baseUrl = `/online/graphreport/chart/${record.id}`;
         let copyText = ref(baseUrl);
         createCopyModal({
-          title: `配置地址【${record.name}】`,
+          title: `Địa chỉ cấu hình 【${record.name}】`,
           content: () => h('div', {}, copyText.value),
           copyText: copyText,
           copyTitle: `${record.name}`,
@@ -146,20 +146,20 @@
       }
 
       /**
-       * 复制图表
+       * Sao chép biểu đồ
        * @param record
        */
       function onCopyReport(record) {
         $confirm({
-          title: '复制图表',
-          content: '是否确认复制该图表？',
+          title: 'Sao chép biểu đồ',
+          content: 'Có xác nhận sao chép biểu đồ này không?',
           iconType: 'warning',
           closable: true,
           onOk() {
             return doCopy(record.id)
               .then(() => {
-                // 成功提示由 defHttp 自动弹出（后端 Result 的 message），这里不再手动弹，避免重复提示
-                // 强制跳到第 1 页再刷新：新复制的图表落在第 1 页，普通 reload() 沿用 current 会看不到新数据
+                // Nhắc nhở thành công do defHttp Tự động bật ra (backend Result của message) , tại đây không bật thủ công nữa, tránh nhắc trùng lặp
+                // Bắt buộc nhảy tới thứ 1 trang rồi làm mới: biểu đồ mới sao chép rơi vào thứ 1 trang, thông thường reload() Dùng lại theo current sẽ không nhìn thấy dữ liệu mới
                 reload({ page: 1 });
               })
               .catch((err) => {
@@ -170,40 +170,40 @@
       }
 
       /**
-       * 操作栏
+       * Thanh thao tác
        */
       function getTableAction(record) {
         return [
           {
-            label: '编辑',
+            label: 'Chỉnh sửa',
             onClick: () => onEdit(record),
           },
         ];
       }
 
       /**
-       * 下拉操作栏
+       * Thanh thao tác dropdown
        */
       function getDropDownAction(record): ActionItem[] {
         return [
           {
-            label: '功能测试',
+            label: 'Kiểm thử chức năng',
             class: ['low-app-hide'],
             onClick: () => onGoToTest(record),
           },
           {
-            label: '配置地址',
+            label: 'Địa chỉ cấu hình',
             class: ['low-app-hide'],
             onClick: () => onShowOnlineUrl(record),
           },
           {
-            label: '复制',
+            label: 'Sao chép',
             onClick: () => onCopyReport(record),
           },
           {
-            label: '删除',
+            label: 'Xóa',
             popConfirm: {
-              title: '确定删除吗？',
+              title: 'Xác nhận xóa chứ?',
               placement: 'left',
               confirm: () => doDeleteRecord(() => doBatchDelete([record.id])),
             },

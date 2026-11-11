@@ -2,19 +2,19 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection" v-bind="$attrs">
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">录入</a-button>
-        <a-button preIcon="bxs:bot" type="primary" style="margin-right: 5px" @click="onCreateByAi">AI生成报表</a-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">Nhập liệu (ghi vào)</a-button>
+        <a-button preIcon="bxs:bot" type="primary" style="margin-right: 5px" @click="onCreateByAi">AITạo báo cáo</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
@@ -23,9 +23,9 @@
         <TableAction :actions="getAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
-    <!-- 表单区域 -->
+    <!-- Vùng biểu mẫu -->
     <CgreportModal @register="registerModal" @success="handleSuccess"></CgreportModal>
-    <!-- 通过Ai生成报表 -->
+    <!-- Thông quaAiTạo báo cáo -->
     <CgreportAigcModal @register="registerCgreportAigcModal" @generate="onAigcGenerate" />
   </div>
 </template>
@@ -44,7 +44,7 @@
   let router = useRouter();
   const [registerModal, { openModal }] = useModal();
 
-  // 列表页面公共参数、方法
+  // Tham số, phương thức dùng chung của trang danh sách
   const {
     prefixCls,
     tableContext,
@@ -54,7 +54,7 @@
     designScope: 'online-cgreport-list',
     pagination: true,
     tableProps: {
-      title: 'Online报表',
+      title: 'OnlineBáo cáo',
       api: list,
       rowKey: 'id',
       columns: columns,
@@ -68,10 +68,10 @@
 
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
-  // 注册Aigc弹窗
+  // Đăng kýAigcPopup
   const [registerCgreportAigcModal, cgreportAigcModal] = useModal();
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openModal(true, {
@@ -80,7 +80,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     openModal(true, {
@@ -95,13 +95,13 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteOne({ id: record.id }, reload);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDelete({ ids: selectedRowKeys.value }, () => {
@@ -111,7 +111,7 @@
   }
 
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     reload();
@@ -126,39 +126,39 @@
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
     ];
   }
   /**
-   * 下拉操作栏
+   * Thanh thao tác dropdown
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '功能测试',
+        label: 'Kiểm thử chức năng',
         class: ['low-app-hide'],
         onClick: () => onShowList(record.id),
       },
       {
-        label: '配置地址',
+        label: 'Địa chỉ cấu hình',
         class: ['low-app-hide'],
         onClick: () => onShowOnlineUrl(record),
       },
       {
-        label: '复制',
+        label: 'Sao chép',
         onClick: () => onCopyReport(record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa hay không',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -166,7 +166,7 @@
   }
 
   /**
-   * 功能测试
+   * Kiểm thử chức năng
    * @param id
    */
   function onShowList(id) {
@@ -174,19 +174,19 @@
   }
 
   /**
-   * 配置地址
+   * Địa chỉ cấu hình
    * @param record
    */
   function onShowOnlineUrl(record) {
     let id = record.id;
     let baseUrl = `/online/cgreport/${id}`;
-    // 生成插入菜单sql
+    // Tạo menu chènsql
     let insertMenuSql = `INSERT INTO sys_permission(id, parent_id, name, url, component, component_name, redirect, menu_type, perms, perms_type, sort_no, always_show, icon, is_route, is_leaf, keep_alive, hidden, hide_tab, description, status, del_flag, rule_flag, create_by, create_time, update_by, update_time, internal_or_external) 
                          VALUES ('${buildUUID()}', NULL, '${record.name}', '${baseUrl}', '1', 'OnlineAutoList', NULL, 0, NULL, '1', 0.00, 0, NULL, 0, 1, 0, 0, 0, NULL, '1', 0, 0, 'admin', null, NULL, NULL, 0)`;
     
     getReportParam(id)
       .then((arr) => {
-        // 处理参数
+        // Xử lý tham số
         let urlParam = '';
         if (arr && arr.length > 0) {
           for (let i of arr) {
@@ -199,19 +199,19 @@
         }
       })
       .catch(() => {
-        $message.warning('获取参数失败!');
+        $message.warning('Lấy tham số thất bại!');
       })
       .finally(() => {
-        // 无论获取失败与否 都弹框显示跳转地址
+        // Bất kể việc lấy có thất bại hay không Đều bật popup hiển thị địa chỉ chuyển hướng
         $confirm({
           iconType: 'info',
           width: 500,
-          title: `菜单链接【${record.name}】`,
+          title: `Liên kết menu 【${record.name}】`,
           content: baseUrl,
           closable: true,
           maskClosable: true,
-          cancelText: '复制SQL',
-          okText: '复制URL',
+          cancelText: 'Sao chépSQL',
+          okText: 'Sao chépURL',
           cancelButtonProps: {
             class: 'copy-this-sql',
             'data-clipboard-text': insertMenuSql,
@@ -225,11 +225,11 @@
               const clipboard = new Clipboard('.copy-this-text');
               clipboard.on('success', () => {
                 clipboard.destroy();
-                $message.success('复制URL成功');
+                $message.success('Sao chépURLThành công');
                 resolve();
               });
               clipboard.on('error', () => {
-                $message.error('该浏览器不支持自动复制');
+                $message.error('Trình duyệt này không hỗ trợ sao chép tự động');
                 clipboard.destroy();
                 resolve();
               });
@@ -240,11 +240,11 @@
               const clipboard = new Clipboard('.copy-this-sql');
               clipboard.on('success', () => {
                 clipboard.destroy();
-                $message.success('复制插入菜单SQL成功');
+                $message.success('Sao chép và chèn menuSQLThành công');
                 resolve();
               });
               clipboard.on('error', () => {
-                $message.error('该浏览器不支持自动复制');
+                $message.error('Trình duyệt này không hỗ trợ sao chép tự động');
                 clipboard.destroy();
                 resolve();
               });
@@ -255,21 +255,21 @@
   }
   
   /**
-   * 复制报表
+   * Sao chép báo cáo
    * @param record
    */
   function onCopyReport(record) {
     $confirm({
-      title: '复制报表',
-      content: '是否确认复制该报表？',
+      title: 'Sao chép báo cáo',
+      content: 'Có xác nhận sao chép báo cáo này không?',
       iconType: 'warning',
       closable: true,
       onOk() {
         return doCopy(record.id)
           .then(() => {
-            // 成功提示由 defHttp 自动弹出（后端 Result 的 message），这里不再手动弹，避免重复提示
-            // 强制跳到第 1 页再刷新：默认排序是 createTime desc，新复制的报表落在第 1 页，
-            // 如果用户当前在第 N 页，普通 reload() 会沿用 current，导致新数据看不到。
+            // Nhắc nhở thành công do defHttp Tự động bật ra (backend Result của message) , tại đây không bật thủ công nữa, tránh nhắc trùng lặp
+            // Bắt buộc nhảy tới thứ 1 trang rồi làm mới: sắp xếp mặc định là createTime desc, báo cáo mới sao chép rơi vào thứ 1 trang,
+            // Nếu người dùng hiện đang ở thứ N trang, thông thường reload() sẽ dùng lại theo current, dẫn đến không nhìn thấy dữ liệu mới.
             reload({ page: 1 });
           })
           .catch((err) => {
@@ -279,8 +279,8 @@
     });
   }
 
-  // 抛出方法，让外部可以调用
-  // 目前【lowApp】页面用到
+  // Ném phương thức ra, để bên ngoài có thể gọi
+  // Hiện tại 【lowApp】Trang dùng đến
   defineExpose({
     handleAdd,
   })

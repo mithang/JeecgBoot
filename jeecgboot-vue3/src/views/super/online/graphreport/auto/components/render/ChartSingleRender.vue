@@ -3,18 +3,18 @@
     <a-card v-bind="chartCardProps">
       <template #extra>
         <div :ignore-print="true">
-          <a-button v-if="showPrint" type="primary" ghost @click="onPrint">打印</a-button>
-          <a-button v-if="showDetail" type="primary" ghost @click="onGoToDetail">详情</a-button>
+          <a-button v-if="showPrint" type="primary" ghost @click="onPrint">In</a-button>
+          <a-button v-if="showDetail" type="primary" ghost @click="onGoToDetail">Chi tiết</a-button>
         </div>
       </template>
-      <!-- 排序显示图表 -->
+      <!-- Biểu đồ hiển thị sắp xếp -->
       <template v-for="(type, index) of chartTypes" :key="index">
         <LineMulti v-if="type === 'line'" v-bind="lineProps" />
         <BarMulti v-if="type === 'bar'" v-bind="barProps" />
         <Pie v-if="type === 'pie'" v-bind="pieProps" />
       </template>
     </a-card>
-    <!-- 数据列表 -->
+    <!-- Danh sách dữ liệu -->
     <a-card v-if="hasTable" v-bind="tableCardProps">
       <a-row>
         <a-col :ignore-print="true">

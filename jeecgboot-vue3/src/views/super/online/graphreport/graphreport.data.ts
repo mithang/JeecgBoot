@@ -4,15 +4,15 @@ import { bindMapFormSchema } from '/@/utils/common/compUtils';
 import { computed, ref } from 'vue';
 import { usePermissionStore } from '/@/store/modules/permission';
 
-// 弹窗表单
+// Biểu mẫu popup
 export function useFormSchemas(_, handler) {
   const permissionStore = usePermissionStore();
-  // 由于需要动态改变布局，所以使用 computed
+  // Do cần thay đổi bố cục động nên sử dụng computed
   type SpanType = 'one' | 'tow' | 'threeTow' | 'three';
-  // 动态布局
+  // Bố cục động
   const mapFormSchema = bindMapFormSchema<SpanType>(
     {
-      // 一列
+      // một cột
       one: {
         colProps: { xs: 24, sm: 24 },
         itemProps: {
@@ -20,7 +20,7 @@ export function useFormSchemas(_, handler) {
           wrapperCol: { xs: 24, sm: 22 },
         },
       },
-      // 两列
+      // hai cột
       tow: {
         colProps: { xs: 24, sm: 12 },
         itemProps: {
@@ -28,7 +28,7 @@ export function useFormSchemas(_, handler) {
           wrapperCol: { xs: 24, sm: 20 },
         },
       },
-      // 三分之二列
+      // cột hai phần ba
       threeTow: {
         colProps: { xs: 24, sm: 16 },
         itemProps: {
@@ -36,7 +36,7 @@ export function useFormSchemas(_, handler) {
           wrapperCol: { xs: 24, sm: 21 },
         },
       },
-      // 三列
+      // ba cột
       three: {
         colProps: { xs: 24, sm: 8 },
         itemProps: {
@@ -50,12 +50,12 @@ export function useFormSchemas(_, handler) {
 
   const dataType = ref('sql');
   const isCombination = ref('combination');
-  // 根据不同的值展示不同的form
+  // Căn cứ vào các giá trị khác nhau, hiển thị khác nhauform
   const formInfo = {
     cgrSql: {
-      sql: { label: '查询SQL', placeholder: '请输入查询SQL', language: 'sql' },
-      json: { label: '数据JSON', placeholder: '请输入数据JSON', language: 'javascript' },
-      api: { label: 'API接口', placeholder: '请输入API接口', language: 'javascript' },
+      sql: { label: 'Truy vấnSQL', placeholder: 'Vui lòng nhập truy vấnSQL', language: 'sql' },
+      json: { label: 'Dữ liệuJSON', placeholder: 'Vui lòng nhập dữ liệuJSON', language: 'javascript' },
+      api: { label: 'APIAPI (giao diện)', placeholder: 'Vui lòng nhậpAPIAPI (giao diện)', language: 'javascript' },
     },
   };
   const cgrSqlFormInfo = computed<typeof formInfo.cgrSql.sql>(() => {
@@ -65,22 +65,22 @@ export function useFormSchemas(_, handler) {
   const formSchemas = computed<FormSchema[]>(() => [
     { label: 'ID', field: 'id', component: 'Input', show: false },
     mapFormSchema({
-      label: '图表名称',
+      label: 'Tên biểu đồ',
       field: 'name',
       component: 'Input',
       required: true,
     }),
     mapFormSchema({
-      label: '编码',
+      label: 'Mã (code)',
       field: 'code',
       component: 'Input',
       dynamicRules({ model }) {
         return [
-          { required: true, message: '请输入编码!' },
+          { required: true, message: 'Vui lòng nhập mã!' },
           {
             async validator({}, value) {
               if (/[\u4E00-\u9FA5]/g.test(value)) {
-                return Promise.reject('编码不能为汉字');
+                return Promise.reject('Mã không được là chữ Hán');
               }
               let { success, message } = await duplicateCheckDelay({
                 tableName: 'onl_graphreport_head',
@@ -97,27 +97,27 @@ export function useFormSchemas(_, handler) {
       },
     }),
     mapFormSchema({
-      label: '展示模板',
+      label: 'Mẫu hiển thị',
       field: 'displayTemplate',
       component: 'Select',
       componentProps: {
         options: [
-          { label: 'Tab风格', value: 'tab' },
-          { label: '单排布局', value: 'single' },
-          { label: '双排布局', value: 'double' },
+          { label: 'TabPhong cách', value: 'tab' },
+          { label: 'Bố cục một hàng', value: 'single' },
+          { label: 'Bố cục hai hàng', value: 'double' },
         ],
       },
       defaultValue: 'tab',
     }),
     mapFormSchema({
-      label: 'X轴字段',
+      label: 'XTrường trục',
       field: 'xaxisField',
       component: 'Input',
       required: true,
     }),
     mapFormSchema(
       {
-        label: 'Y轴字段',
+        label: 'YTrường trục',
         field: 'yaxisField',
         component: 'JDictSelectTag',
         componentProps: {
@@ -130,7 +130,7 @@ export function useFormSchemas(_, handler) {
       'threeTow'
     ),
     mapFormSchema({
-      label: '数据类型',
+      label: 'Loại dữ liệu',
       field: 'dataType',
       component: 'JDictSelectTag',
       componentProps: {
@@ -141,18 +141,18 @@ export function useFormSchemas(_, handler) {
       defaultValue: 'sql',
     }),
     mapFormSchema({
-      label: '数据源',
+      label: 'Nguồn dữ liệu',
       field: 'dbSource',
       component: 'Select',
       componentProps: {
         options: handler.dbSourceOptions.value,
       },
-      rules: [{ required: permissionStore.sysSafeMode, message: '请选择数据源！' }],
+      rules: [{ required: permissionStore.sysSafeMode, message: 'Vui lòng chọn nguồn dữ liệu!' }],
       ifShow: ({ model }) => model.dataType === 'sql',
     }),
     mapFormSchema(
       {
-        label: '图表类型',
+        label: 'Loại biểu đồ',
         field: 'graphType',
         component: 'JDictSelectTag',
         componentProps: {
@@ -166,7 +166,7 @@ export function useFormSchemas(_, handler) {
     ),
     mapFormSchema(
       {
-        label: '描述',
+        label: 'Mô tả',
         field: 'content',
         component: 'Input',
       },
@@ -189,17 +189,17 @@ export function useFormSchemas(_, handler) {
           return [
             {
               required: true,
-              // 根据数据类型的不同显示不同的错误信息
+              // Căn cứ sự khác nhau của loại dữ liệu, hiển thị thông tin lỗi khác nhau
               message: cgrSqlFormInfo.value?.placeholder,
             },
             {
-              // 自定义校验：校验JSON字符串格式是否正确
+              // Kiểm chứng tùy chỉnh: kiểm chứngJSONĐịnh dạng chuỗi ký tự có đúng hay không
               async validator({}, value) {
                 if (value && dataType.value === 'json') {
                   try {
                     JSON.parse(value);
                   } catch {
-                    return Promise.reject('JSON格式不正确！');
+                    return Promise.reject('JSONĐịnh dạng không đúng!');
                   }
                 }
               },
@@ -211,7 +211,7 @@ export function useFormSchemas(_, handler) {
     ),
     mapFormSchema(
       {
-        label: ' ', // SQL解析
+        label: ' ', // SQLPhân tích (parse)
         field: 'cgrSql',
         component: 'Input',
         slot: 'SQLAnalyzeButton',
@@ -222,11 +222,11 @@ export function useFormSchemas(_, handler) {
     ),
     mapFormSchema(
       {
-        label: 'JS增强',
+        label: 'JSTăng cường',
         field: 'extendJs',
         component: 'JCodeEditor',
         componentProps: {
-          placeholder: 'JS增强',
+          placeholder: 'JSTăng cường',
           language: 'javascript',
           fullScreen: true,
           autoHeight: '!ie',

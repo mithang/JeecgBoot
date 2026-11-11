@@ -17,7 +17,7 @@ export function registerGraphreportRouter() {
         path: '/online/graphreport/chart/:code',
         name: 'GraphreportAutoChart',
         component: () => import('../auto/GraphreportAutoChart.vue'),
-        meta: {title: 'AUTO在线图表'},
+        meta: {title: 'AUTOBiểu đồ trực tuyến'},
       },
     ],
   })

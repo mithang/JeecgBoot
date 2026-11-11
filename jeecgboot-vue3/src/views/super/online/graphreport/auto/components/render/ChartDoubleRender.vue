@@ -3,11 +3,11 @@
     <a-card v-bind="chartCardProps">
       <template #extra>
         <div :ignore-print="true">
-          <a-button v-if="showPrint" type="primary" ghost @click="onPrint">打印</a-button>
-          <a-button v-if="showDetail" type="primary" ghost @click="onGoToDetail">详情</a-button>
+          <a-button v-if="showPrint" type="primary" ghost @click="onPrint">In</a-button>
+          <a-button v-if="showDetail" type="primary" ghost @click="onGoToDetail">Chi tiết</a-button>
         </div>
       </template>
-      <!-- 展示双列数据并排序 -->
+      <!-- Hiển thị dữ liệu hai cột và sắp xếp -->
       <a-row v-for="(type, index) of chartTypes" :key="type + index">
         <template v-if="index % 2 === 0" v-for="idx of [index, index + 1]" :key="idx">
           <a-col v-if="idx < chartTypes.length" v-bind="buildSpan(idx)">
@@ -44,7 +44,7 @@
 
       function buildSpan(idx) {
         let length = setup.chartTypes.value.length;
-        // 如果当前项是最后一个且length是奇数，则扩展到全屏
+        // Nếu mục hiện tại là mục cuối cùng vàlengthlà số lẻ, thì mở rộng ra toàn màn hình
         let span = idx + 1 === length && length % 2 !== 0 ? 24 : 12;
         return { xs: 24, md: span };
       }

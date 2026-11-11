@@ -13,26 +13,26 @@
       <BasicForm @register="registerForm">
         <template #SQLAnalyzeButton>
           <div style="flex: 1; text-align: right">
-            <a-button v-if="dataType === 'sql'" type="primary" @click="onSQLAnalyze">SQL解析</a-button>
-            <a-button v-if="dataType === 'json'" type="primary" @click="onJSONAnalyze">JSON解析</a-button>
-            <a-button v-if="dataType === 'api'" type="primary" @click="onAPIAnalyze">API解析</a-button>
+            <a-button v-if="dataType === 'sql'" type="primary" @click="onSQLAnalyze">SQLPhân tích (parse)</a-button>
+            <a-button v-if="dataType === 'json'" type="primary" @click="onJSONAnalyze">JSONPhân tích (parse)</a-button>
+            <a-button v-if="dataType === 'api'" type="primary" @click="onAPIAnalyze">APIPhân tích (parse)</a-button>
           </div>
         </template>
       </BasicForm>
-      <!-- 子表单区域 -->
+      <!-- Vùng biểu mẫu con -->
       <a-tabs animated v-model:activeKey="activeKey">
-        <a-tab-pane tab="列表字段" key="field" forceRender>
+        <a-tab-pane tab="Trường danh sách" key="field" forceRender>
           <FieldTable ref="fieldTableRef" :dataSource="fieldTable.dataSource" :disableSearch="dataType === 'json'" />
         </a-tab-pane>
-        <a-tab-pane tab="图表参数" key="params" forceRender>
+        <a-tab-pane tab="Tham số biểu đồ" key="params" forceRender>
           <ParamsTable ref="paramsTableRef" :dataSource="paramsTable.dataSource" />
         </a-tab-pane>
       </a-tabs>
     </a-spin>
 
     <template #footer>
-      <a-button @click="onCancel">关闭</a-button>
-      <a-button type="primary" :loading="confirmLoading" preIcon="ant-design:save" @click="onSubmit">保存</a-button>
+      <a-button @click="onCancel">Đóng</a-button>
+      <a-button type="primary" :loading="confirmLoading" preIcon="ant-design:save" @click="onSubmit">Lưu</a-button>
     </template>
   </BasicModal>
 </template>
@@ -70,18 +70,18 @@
     emits: ['register', 'success'],
     setup(props, { emit }) {
       const { createMessage: $message } = useMessage();
-      // 是否是更新模式
+      // Có phải chế độ cập nhật hay không
       const isUpdate = ref(false);
       const fieldTableRef = ref<InstanceType<typeof FieldTable>>();
       const paramsTableRef = ref<InstanceType<typeof ParamsTable>>();
-      // 编辑时存储的值
+      // Giá trị lưu trữ khi chỉnh sửa
       let model: Recordable = {};
-      const title = computed(() => (isUpdate.value ? '编辑' : '新增'));
-      // tabs当前活动的页面
+      const title = computed(() => (isUpdate.value ? 'Chỉnh sửa' : 'Thêm mới'));
+      // tabsTrang đang hoạt động hiện tại
       const activeKey = ref('field');
-      // 当前是否正在加载中
+      // Hiện tại có đang tải hay không
       const confirmLoading = ref(false);
-      // 数据源类型
+      // Loại nguồn dữ liệu
       const dbSourceOptions = ref<any[]>([]);
 
       const fieldTable = reactive({
@@ -91,7 +91,7 @@
         dataSource: [],
       });
 
-      //  注册弹窗
+      //  Popup đăng ký
       const [registerModal, { closeModal }] = useModalInner(async (data) => {
         isUpdate.value = data?.isUpdate ?? false;
         if (isUpdate.value) {
@@ -100,20 +100,20 @@
           await add();
         }
 
-        // 当传递了 aigc 时，说明是通过 ai 生成的报表
+        // Khi đã truyền aigc khi đó, chứng tỏ là thông qua ai Báo cáo đã tạo
         if (data?.aigc) {
           console.log('top - data.aigc :', data.aigc)
           await setFieldsValue({
             ...data.aigc,
           });
-          // 等待 0.5s 后，自动执行SQL解析
+          // Chờ đợi 0.5s sau đó, tự động thực thiSQLPhân tích (parse)
           setTimeout(() => onSQLAnalyze())
         }
       });
       const { formSchemas, dataType, isCombination } = useFormSchemas(props, {
         dbSourceOptions,
       });
-      // 注册表单
+      // Biểu mẫu đăng ký
       const [registerForm, { resetFields, clearValidate, setFieldsValue, validate, validateFields }] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
@@ -121,11 +121,11 @@
       });
 
       async function add() {
-        // 清空数据
+        // Xóa sạch dữ liệu
         fieldTable.dataSource = [];
         paramsTable.dataSource = [];
         await nextTick();
-        // 默认添加一行
+        // Mặc định thêm một hàng
         fieldTableRef.value?.tableRef?.addRows({}, { setActive: false });
         edit({});
       }
@@ -133,30 +133,30 @@
       async function edit(record) {
         confirmLoading.value = false;
         activeKey.value = 'field';
-        // 重置表单
+        // Đặt lại biểu mẫu
         await resetFields();
         model = Object.assign({}, record);
         model.dbSource = model.dbSource == null ? '' : model.dbSource;
-        // 如果是组合模式，那么就分割字符串成数组
+        // Nếu là chế độ kết hợp, thì chia chuỗi thành mảng
         if (isCombination.value === 'combination' && typeof model.graphType === 'string') {
           model.graphType = model.graphType.split(',');
         }
         if (typeof model.yaxisField === 'string') {
           model.yaxisField = model.yaxisField.split(',');
         }
-        // 给表单赋值
+        // Gán giá trị cho biểu mẫu
         await setFieldsValue(model);
         await clearValidate();
-        // 处理数据
+        // Xử lý dữ liệu
         dataType.value = model.dataType ?? 'sql';
         // isCombination.value = model.isCombination ?? 'combination'
-        // 加载子表数据
+        // Tải dữ liệu bảng con
         if (model.id) {
           requestSubData(model.id);
         }
       }
 
-      /** 查询子表数据 */
+      /** Truy vấn dữ liệu bảng con */
       function requestSubData(headId) {
         confirmLoading.value = true;
         requestTabData(FieldApi.list, { id: headId }, fieldTable).finally(() => {
@@ -165,47 +165,47 @@
         requestTabData(ParamsApi.list, { headId }, paramsTable);
       }
 
-      /** 查询某个tab的数据 */
+      /** Truy vấn một cái nào đótabdữ liệu của */
       function requestTabData(url, params, tab) {
         return defHttp.get({ url, params }).then((result) => {
           tab.dataSource = result || [];
         });
       }
 
-      /** SQL 解析 */
+      /** SQL Phân tích (parse) */
       async function onSQLAnalyze() {
         confirmLoading.value = true;
         try {
           let { cgrSql, dbSource } = await validate(['cgrSql', 'dbSource']);
           let result = await defHttp.get({ url: Api.sql, params: { sql: cgrSql, dbKey: dbSource || '' } });
-          $message.success('解析成功');
+          $message.success('Phân tích thành công');
           let newData = (result.fields || []).map((item) => {
             item.isShow = item.isShow === 1 ? 'Y' : 'N';
             return item;
           });
           let oldData = fieldTableRef.value?.tableRef?.getTableData();
           fieldTable.dataSource = getTableData(oldData, newData, 'fieldName');
-          // 解析参数
+          // Phân tích tham số
           paramsTable.dataSource = getTableData(paramsTable.dataSource, result.params || [], 'paramName');
         } finally {
           confirmLoading.value = false;
         }
       }
 
-      /** JSON 解析 */
+      /** JSON Phân tích (parse) */
       async function onJSONAnalyze() {
         await doBackAnalyze('JSON');
       }
 
-      /** API 解析 */
+      /** API Phân tích (parse) */
       async function onAPIAnalyze() {
         await doBackAnalyze('API');
       }
 
       /**
-       * 后台解析字段
+       * Backend phân tích trường
        *
-       * @param type 解析类型
+       * @param type Phân tích loại
        */
       async function doBackAnalyze(type: string) {
         let { cgrSql } = await validateFields(['cgrSql']);
@@ -217,32 +217,32 @@
         });
         let oldData = fieldTableRef.value?.tableRef?.getTableData();
         fieldTable.dataSource = getTableData(oldData, newData, 'fieldName');
-        // 解析参数
+        // Phân tích tham số
         if (Array.isArray(result?.params)) {
           paramsTable.dataSource = getTableData(paramsTable.dataSource, result.params, 'paramName');
         }
       }
 
-      /** 【重写】确定按钮点击事件 */
+      /** 【Viết lại】Sự kiện nhấp nút xác nhận */
       async function onSubmit() {
         try {
-          // 校验主表
+          // Kiểm chứng bảng chính
           let mainValues = await validate();
-          // 校验字段表
+          // Bảng trường kiểm chứng
           let errMap = await fieldTableRef.value?.tableRef?.validateTable();
           if (errMap) {
             activeKey.value = 'field';
             return;
           }
-          // 校验参数表
+          // Bảng tham số kiểm chứng
           errMap = await paramsTableRef.value?.tableRef?.validateTable();
           if (errMap) {
             activeKey.value = 'params';
             return;
           }
-          // 整理数据
+          // Sắp xếp dữ liệu
           let formData = classifyIntoFormData(mainValues);
-          // 发起请求
+          // Khởi tạo yêu cầu
           confirmLoading.value = true;
           await request(formData);
           emit('success');
@@ -252,7 +252,7 @@
         }
       }
 
-      /** 发起请求，自动判断是执行新增还是修改操作 */
+      /** Khởi tạo yêu cầu, tự động phán đoán là thực thi thao tác thêm mới hay thao tác sửa đổi */
       function request(params) {
         if (isUpdate.value) {
           return defHttp.put({ url: Api.edit, params });
@@ -261,15 +261,15 @@
         }
       }
 
-      /** 整理成formData */
+      /** Sắp xếp thànhformData */
       function classifyIntoFormData(mainValues) {
         let main = Object.assign(model, mainValues);
-        // update-begin--author:liaozhiyang---date:20260824---for：【LHZP-1055】online图表JSON方式禁用查询
+        // update-begin--author:liaozhiyang---date:20260824---for：【LHZP-1055】onlineBiểu đồJSONCách thức vô hiệu hóa truy vấn
         const fieldData = fieldTableRef.value?.tableRef?.getTableData() || [];
         if (main.dataType === 'json') {
           fieldData.forEach((item) => (item.searchFlag = 'N'));
         }
-        // update-end--author:liaozhiyang---date:20260824---for：【LHZP-1055】online图表JSON方式禁用查询
+        // update-end--author:liaozhiyang---date:20260824---for：【LHZP-1055】onlineBiểu đồJSONCách thức vô hiệu hóa truy vấn
         if (isArray(main.graphType)) {
           main.graphType = main.graphType.join(',');
         }
@@ -287,15 +287,15 @@
         closeModal();
       }
 
-      // 查询数据源类型
+      // Truy vấn loại nguồn dữ liệu
       async function queryDataSourceOptions() {
         let url = '/sys/dataSource/options';
         try {
           let result = await defHttp.get({ url });
           dbSourceOptions.value = result || [];
-          dbSourceOptions.value.unshift({ label: '请选择', value: '' });
+          dbSourceOptions.value.unshift({ label: 'Vui lòng chọn', value: '' });
         } catch {
-          dbSourceOptions.value = [{ label: '加载失败', value: undefined }];
+          dbSourceOptions.value = [{ label: 'Tải thất bại', value: undefined }];
         }
       }
 
@@ -322,10 +322,10 @@
   });
 
   /**
-   * 获取tab的table的datasource
-   * @param oldData 原datasource
-   * @param newData 从数据库查询出来的datasource
-   * @param columnName 字段列，用于比较数据是否相同
+   * Lấytabcủatablecủadatasource
+   * @param oldData gốcdatasource
+   * @param newData Truy vấn ra từ cơ sở dữ liệudatasource
+   * @param columnName Cột trường, dùng để so sánh dữ liệu có giống nhau hay không
    */
   function getTableData(oldData, newData, columnName) {
     newData.forEach((newItem) => {
@@ -341,12 +341,12 @@
 </script>
 
 <style lang="less" scoped>
-  // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】报表图表弹窗样式调整
+  // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】Điều chỉnh kiểu dáng popup biểu đồ báo cáo
   form {
     padding-right: 3.5%;
   }
   :deep(.ant-tabs-content-holder) {
     padding: 0 10px;
   }
-  // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】报表图表弹窗样式调整
+  // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】Điều chỉnh kiểu dáng popup biểu đồ báo cáo
 </style>

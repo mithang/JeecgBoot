@@ -17,7 +17,7 @@ export function registerCgreportRouter() {
         path: '/online/cgreport/:id',
         name: 'OnlCgReportList',
         component: () => import('../auto/OnlCgReportList.vue'),
-        meta: {title: 'AUTO在线报表'},
+        meta: {title: 'AUTOBáo cáo trực tuyến'},
       },
     ],
   })

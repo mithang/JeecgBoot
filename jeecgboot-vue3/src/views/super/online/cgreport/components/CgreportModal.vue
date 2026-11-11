@@ -9,36 +9,36 @@
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
   >
-    <!-- update-begin--author:liaozhiyang---date:20260824---for：【LHZP-984】online报表新增定位功能 -->
+    <!-- update-begin--author:liaozhiyang---date:20260824---for：【LHZP-984】onlineBáo cáo thêm chức năng định vị -->
     <template #insertFooter>
       <div class="positioning-area">
-        <a-input v-model:value="positioning" placeholder="搜索字段或备注" allowClear @pressEnter="handlePositioning" />
-        <a-button type="primary" ghost @click="handlePositioning">定位</a-button>
+        <a-input v-model:value="positioning" placeholder="Tìm kiếm trường hoặc ghi chú" allowClear @pressEnter="handlePositioning" />
+        <a-button type="primary" ghost @click="handlePositioning">Định vị</a-button>
       </div>
     </template>
-    <!-- update-end--author:liaozhiyang---date:20260824---for：【LHZP-984】online报表新增定位功能 -->
+    <!-- update-end--author:liaozhiyang---date:20260824---for：【LHZP-984】onlineBáo cáo thêm chức năng định vị -->
     <BasicForm @register="registerForm" ref="formRef">
       <template #analyseButton>
         <div style="flex: 1; text-align: left">
-          <a-popover title="使用指南" trigger="hover" style="margin: 0 10px 0 6px">
+          <a-popover title="Hướng dẫn sử dụng" trigger="hover" style="margin: 0 10px 0 6px">
             <template #content>
-              您可以键入“”作为一个参数，这里abc是参数的名称。例如：<br />
+              Bạn có thể nhập “” làm một tham số, tại đâyabclà tên của tham số. Ví dụ:<br />
               select * from table where id = ${abc}。<br />
-              select * from table where id like concat('%',${abc},'%')。(mysql模糊查询)<br />
-              select * from table where id like '%'||${abc}||'%'。(oracle模糊查询)<br />
-              select * from table where id like '%'+${abc}+'%'。(sqlserver模糊查询)<br />
-              <span style="color: red">注：参数只支持动态报表，popup暂不支持</span>
+              select * from table where id like concat('%',${abc},'%')。(mysqlTruy vấn mờ)<br />
+              select * from table where id like '%'||${abc}||'%'。(oracleTruy vấn mờ)<br />
+              select * from table where id like '%'+${abc}+'%'。(sqlserverTruy vấn mờ)<br />
+              <span style="color: red">Chú thích: tham số chỉ hỗ trợ báo cáo động,popupTạm thời chưa hỗ trợ</span>
             </template>
             <a-icon type="question-circle" />
           </a-popover>
-          <a-button style="margin-left: 10px" type="primary" @click="handleSQLAnalyze">SQL解析</a-button>
+          <a-button style="margin-left: 10px" type="primary" @click="handleSQLAnalyze">SQLPhân tích (parse)</a-button>
         </div>
       </template>
     </BasicForm>
     <a-divider style="margin: 1px 0" class="cust-divider"></a-divider>
-    <!-- 子表单区域 -->
+    <!-- Vùng biểu mẫu con -->
     <a-tabs v-model:activeKey="activeKey" animated @change="handleChangeTabs">
-      <a-tab-pane tab="动态报表配置明细" :key="refKeys[0]" :forceRender="true">
+      <a-tab-pane tab="Chi tiết cấu hình báo cáo động" :key="refKeys[0]" :forceRender="true">
         <JVxeTable
           keep-source
           dragSort
@@ -59,7 +59,7 @@
         />
       </a-tab-pane>
 
-      <a-tab-pane tab="报表参数" :key="refKeys[1]" :forceRender="true">
+      <a-tab-pane tab="Tham số báo cáo" :key="refKeys[1]" :forceRender="true">
         <JVxeTable
           keep-source
           resizable
@@ -92,10 +92,10 @@
   import { saveOrUpdate, onlCgreportParamList, onlCgreportItemList, analyzeSql } from '../cgreport.api';
   import { useMessage } from '/@/hooks/web/useMessage';
   const { createMessage, createInfoModal } = useMessage();
-  // Emits声明
+  // EmitsKhai báo
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
-  // 当前是否正在加载中
+  // Hiện tại có đang tải hay không
   const confirmLoading = ref(true);
   const refKeys = ref(['onlCgreportItem', 'onlCgreportParam']);
   const activeKey = ref('onlCgreportItem');
@@ -103,9 +103,9 @@
   const onlCgreportParam = ref();
   const onlCgreportItem = ref();
   const tableRefs = { onlCgreportItem, onlCgreportParam };
-  // 行编辑表格未就绪时，每次重试的等待间隔（毫秒）
+  // Khi bảng chỉnh sửa hàng chưa sẵn sàng, khoảng chờ mỗi lần thử lại (mili giây)
   const TABLE_READY_RETRY_INTERVAL = 50;
-  // 行编辑表格初始化的最大重试次数，避免无限等待
+  // Số lần thử lại tối đa khi khởi tạo bảng chỉnh sửa hàng, tránh chờ vô hạn
   const TABLE_READY_MAX_RETRY_COUNT = 50;
   const onlCgreportParamTable = reactive({
     loading: false,
@@ -117,41 +117,41 @@
     dataSource: <any[]>[],
     columns: onlCgreportItemColumns,
   });
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { setProps, resetFields, setFieldsValue, validate, validateFields }] = useForm({
     // labelWidth: 150,
     schemas: formSchema,
     showActionButtonGroup: false,
-    // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】报表图表弹窗样式调整
+    // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】Điều chỉnh kiểu dáng popup biểu đồ báo cáo
     labelWidth: 100,
     wrapperCol: null
-    // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9230】报表图表弹窗样式调整
+    // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9230】Điều chỉnh kiểu dáng popup biểu đồ báo cáo
   });
-  //表单赋值
+  //Gán giá trị biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await reset();
     setModalProps({ confirmLoading: false, showCancelBtn: data?.showFooter, showOkBtn: data?.showFooter });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      //表单赋值
+      //Gán giá trị biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
       requestSubTableData(onlCgreportParamList, { headId: data?.record?.id }, onlCgreportParamTable);
       requestSubTableData(onlCgreportItemList, { headId: data?.record?.id }, onlCgreportItemTable);
     }
-    // 隐藏底部时禁用整个表单
+    // Khi ẩn phần dưới cùng, vô hiệu hóa toàn bộ biểu mẫu
     setProps({ disabled: !data?.showFooter });
 
-    // 当传递了 aigc 时，说明是通过 ai 生成的报表
+    // Khi đã truyền aigc khi đó, chứng tỏ là thông qua ai Báo cáo đã tạo
     if (data?.aigc) {
-      const hideWaitLoading = createMessage.loading('正在生成报表字段，请稍后...', 0);
+      const hideWaitLoading = createMessage.loading('Đang tạo trường báo cáo, vui lòng chờ...', 0);
       try {
         await setFieldsValue({
           ...data.aigc,
         });
-        // 等待懒加载的行编辑表格初始化完成后，自动执行SQL解析
+        // Chờ bảng chỉnh sửa hàng tải lười khởi tạo hoàn tất, tự động thực thiSQLPhân tích (parse)
         if (await waitForTableReady()) {
           handleSQLAnalyze();
         }
@@ -160,7 +160,7 @@
       }
     }
   });
-  //方法配置
+  //Cấu hình phương thức
   const [handleChangeTabs, handleSubmit, requestSubTableData, formRef] = useJvxeMethod(
     requestAddOrEdit,
     classifyIntoFormData,
@@ -169,8 +169,8 @@
     refKeys
   );
 
-  //设置标题
-  const title = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
+  //Thiết lập tiêu đề
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
 
   async function reset() {
     await resetFields();
@@ -180,12 +180,12 @@
     onlCgreportItemTable.dataSource = [];
   }
 
-  // update-begin--author:liaozhiyang---date:20260824---for：【LHZP-984】online报表新增定位功能
-  /** 根据字段名或字段文本定位报表字段 */
+  // update-begin--author:liaozhiyang---date:20260824---for：【LHZP-984】onlineBáo cáo thêm chức năng định vị
+  /** Định vị trường báo cáo theo tên trường hoặc văn bản trường */
   async function handlePositioning() {
     const value = positioning.value.trim();
     if (!value) {
-      createMessage.warning('请输入字段或备注');
+      createMessage.warning('Vui lòng nhập trường hoặc ghi chú');
       return;
     }
     const xTable = onlCgreportItem.value?.getXTable?.();
@@ -197,7 +197,7 @@
     };
     const row = fullData.find((item) => matches(item, true)) || fullData.find((item) => matches(item));
     if (!row) {
-      createMessage.warning('未找到匹配字段');
+      createMessage.warning('Không tìm thấy trường khớp');
       return;
     }
     await xTable.scrollToRow(row);
@@ -208,39 +208,39 @@
       setTimeout(() => rowElement.classList.remove('customHighlight'), 1000);
     }
   }
-  // update-end--author:liaozhiyang---date:20260824---for：【LHZP-984】online报表新增定位功能
+  // update-end--author:liaozhiyang---date:20260824---for：【LHZP-984】onlineBáo cáo thêm chức năng định vị
 
-  /** 等待懒加载的行编辑表格实例初始化完成 */
+  /** Chờ instance bảng chỉnh sửa hàng tải lười khởi tạo hoàn tất */
   async function waitForTableReady() {
     for (let retryCount = 0; retryCount < TABLE_READY_MAX_RETRY_COUNT; retryCount++) {
       await nextTick();
       if (onlCgreportItem.value?.getTableData && onlCgreportParam.value?.getTableData) {
         return true;
       }
-      console.log('【AI生成报表】等待行编辑表格实例初始化完成，重试中...', retryCount + 1);
+      console.log('【AITạo báo cáo】Đang chờ instance bảng chỉnh sửa hàng khởi tạo hoàn tất, đang thử lại...', retryCount + 1);
       await new Promise((resolve) => setTimeout(resolve, TABLE_READY_RETRY_INTERVAL));
     }
-    console.warn('【AI生成报表】等待行编辑表格实例初始化完成超时，请手动执行SQL解析');
+    console.warn('【AITạo báo cáo】Chờ instance bảng chỉnh sửa hàng khởi tạo hoàn tất bị quá thời gian, vui lòng thực thi thủ côngSQLPhân tích (parse)');
     createInfoModal({
-      title: '报表字段暂未显示',
-      content: '系统未能自动加载报表字段，请点击上方“SQL解析”按钮重试。',
-      okText: '知道了',
+      title: 'Trường báo cáo tạm thời chưa hiển thị',
+      content: 'Hệ thống không thể tự động tải trường báo cáo, vui lòng nhấp phía trên “SQLnút Phân tích” để thử lại.',
+      okText: 'Đã hiểu',
     });
     return false;
   }
   function classifyIntoFormData(allValues) {
     let main = Object.assign({}, allValues.formValue);
     return {
-      ...main, // 展开
+      ...main, // Mở rộng
       onlCgreportParamList: allValues.tablesValue[1].tableData,
       onlCgreportItemList: allValues.tablesValue[0].tableData,
     };
   }
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function requestAddOrEdit(values) {
     try {
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       let params = [],
         items = [],
         head = {};
@@ -254,18 +254,18 @@
         }
       });
       let obj = { head, params, items };
-      console.log('报表配置保存请求参数', obj);
+      console.log('Tham số yêu cầu lưu cấu hình báo cáo', obj);
       await saveOrUpdate(obj, isUpdate.value);
-      //关闭弹窗
+      //Đóng popup
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });
     }
   }
 
-  //解析SQL
+  //Phân tích (parse)SQL
   function handleSQLAnalyze() {
     setModalProps({ confirmLoading: true });
     validateFields(['cgrSql', 'dbSource'])
@@ -278,14 +278,14 @@
         console.log('urlParam----', urlParam);
         analyzeSql(urlParam).then((res) => {
           if (res) {
-            createMessage.success('解析成功');
+            createMessage.success('Phân tích thành công');
             let { fields, params } = res;
             let newFields = fields.filter((item) => item.fieldName != '__row_number__');
-            // 从vxeTable中获取当前数据
+            // từvxeTablelấy dữ liệu hiện tại trong đó
             let itemDataSource = onlCgreportItem.value.getTableData()
-            // 合并后台数据
+            // Hợp nhất dữ liệu backend
             let newItemDataList = getTabData(itemDataSource, newFields || [], 'fieldName');
-            // 排序数据
+            // Dữ liệu sắp xếp
             newItemDataList = newItemDataList.sort((a, b) => a.orderNum - b.orderNum);
             onlCgreportItemTable.dataSource = newItemDataList;
 
@@ -297,7 +297,7 @@
         });
       })
       .catch(() => {
-        console.log('解析失败');
+        console.log('Phân tích thất bại');
       })
       .finally(() => {
         setModalProps({ confirmLoading: false });
@@ -305,10 +305,10 @@
   }
 
   /**
-   * 获取tab的table的datasource
-   * @param old_arr 原datasource
-   * @param new_arr 从数据库查询出来的datasource
-   * @param columnName 字段列
+   * Lấytabcủatablecủadatasource
+   * @param old_arr gốcdatasource
+   * @param new_arr Truy vấn ra từ cơ sở dữ liệudatasource
+   * @param columnName Cột trường
    */
   function getTabData(old_arr: any[], new_arr: any[], columnName: string): any[] {
     if (old_arr.length > 0) {
@@ -345,7 +345,7 @@
     }
   }
 
-  // 手动设置table的数据 解析后调用
+  // Thiết lập thủ côngtabledữ liệu của Gọi sau khi phân tích
   async function setDataSource(tableRef, data) {
     await nextTick();
     await tableRef.value!.getXTable().insert(data);
@@ -353,21 +353,21 @@
   }
 </script>
 <style lang='less' scoped>
-  // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】报表图表弹窗样式调整
+  // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】Điều chỉnh kiểu dáng popup biểu đồ báo cáo
   form {
     padding-right: 22px;
   }
   :deep(.ant-tabs-content-holder) {
     padding: 0 10px;
   }
-  // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9230】报表图表弹窗样式调整
+  // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9230】Điều chỉnh kiểu dáng popup biểu đồ báo cáo
   
-  // ==================== 滚动条优化 - 开始 ====================
-  // 目的：美化表格滚动条，减少视觉干扰
-  // 效果：更细的滚动条，更美观的样式
-  // 时间：2024年优化
+  // ==================== Tối ưu thanh cuộn - Bắt đầu ====================
+  // Mục đích: làm đẹp thanh cuộn của bảng, giảm nhiễu thị giác
+  // Hiệu quả: thanh cuộn mảnh hơn, kiểu dáng đẹp hơn
+  // Thời gian:2024Tối ưu năm
   :deep(.vxe-table--body-wrapper) {
-    // 自定义滚动条样式
+    // Kiểu dáng thanh cuộn tùy chỉnh
     &::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -392,7 +392,7 @@
     }
   }
   
-  // 优化表格容器，确保内容不会溢出
+  // Tối ưu container của bảng, đảm bảo nội dung không tràn ra ngoài
   :deep(.vxe-table) {
     .vxe-body--row.customHighlight {
       background-color: var(--vxe-ui-table-row-hover-background-color);
@@ -408,5 +408,5 @@
     gap: 8px;
     float: left;
   }
-  // ==================== 滚动条优化 - 结束 ====================
+  // ==================== Tối ưu thanh cuộn - Kết thúc ====================
 </style>

@@ -14,12 +14,12 @@ export enum Api {
 }
 
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 
-// 批量删除
+// Xóa hàng loạt
 export function doBatchDelete(idList: string[]) {
   return defHttp.delete(
     {
@@ -32,17 +32,17 @@ export function doBatchDelete(idList: string[]) {
 
 export const queryParamsList = (headId: string) => defHttp.get({ url: Api.paramsList, params: { headId } });
 
-// 查询图表数据
+// Truy vấn dữ liệu biểu đồ
 export const getChartsData = (params) => defHttp.get({ url: Api.getChartsData, params: params });
 export const getParamsInfo = (params) => defHttp.get({ url: Api.getParamsInfo, params: params });
 
 export const parseField = (type, data, params = {}) => defHttp.post({ url: Api.parseField, params: { type, data, ...params } });
 
 /**
- * 复制图表
- * @param id 图表id
+ * Sao chép biểu đồ
+ * @param id Biểu đồid
  */
 export const doCopy = (id) => {
-  // defHttp 的非 GET 请求会把 params 当作请求体 data，后端 @RequestParam 从 query 取参，因此把 id 拼到 URL 上
+  // defHttp cái không phải của GET Yêu cầu sẽ đưa params Coi như thân yêu cầu (request body) data, backend @RequestParam từ query lấy tham số, vì vậy đưa id ghép vào URL trên
   return defHttp.post({ url: `${Api.copy}?id=${id}` });
 };

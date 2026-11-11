@@ -5,13 +5,13 @@ import { InputNumber, Input, DatePicker } from 'ant-design-vue';
 type PSchema = Partial<FormSchema>;
 
 export function useParseFormSchemas(chartsData: Ref<any>, showSearchField: Ref<boolean>) {
-  // 解析查询条件 FormSchemas
+  // Phân tích điều kiện truy vấn FormSchemas
   async function parseFormSchemas() {
     let { head, items, dictOptions } = chartsData.value;
     if (head.dataType === 'sql') {
       let formSchemas: FormSchema[] = [];
       items.forEach((field) => {
-        // 判断是否查询
+        // Phán đoán có truy vấn hay không
         if (field.searchFlag !== 'Y') return;
         let isRange = field.searchMode === 'group';
         const fieldDictOptions = dictOptions?.[field.fieldName] ?? dictOptions?.[field.dictCode];
@@ -20,25 +20,25 @@ export function useParseFormSchemas(chartsData: Ref<any>, showSearchField: Ref<b
           : null;
         let schema: PSchema = {};
         let schemas: FormSchema[] = [];
-        // 判断是否有字典，字典组件不能范围查询
+        // Phán đoán có từ điển hay không, component từ điển không thể truy vấn theo phạm vi
         if (field.dictCode && selectOptions) {
           schema.component = 'JDictSelectTag';
           schema.componentProps = {
             options: selectOptions,
           };
         } else if (['Integer', 'Long'].includes(field.fieldType)) {
-          // 数字输入框
+          // Ô nhập số
           schema.component = 'InputNumber';
-          // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1033】图表查询日期/数字宽度适配
+          // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1033】Ngày truy vấn biểu đồ/Thích ứng độ rộng chữ số
           schema.componentProps = {
             style: { width: '100%' },
           };
-          // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1033】图表查询日期/数字宽度适配
+          // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1033】Ngày truy vấn biểu đồ/Thích ứng độ rộng chữ số
           if (isRange) {
             schema.render = getRangeRender(schemas, field, InputNumber);
           }
         } else if (field.fieldType === 'Date') {
-          // 日期选择组件
+          // Component chọn ngày
           schema.component = 'DatePicker';
           schema.componentProps = {
             format: 'YYYY-MM-DD',
@@ -49,7 +49,7 @@ export function useParseFormSchemas(chartsData: Ref<any>, showSearchField: Ref<b
             schema.render = getRangeRender(schemas, field, DatePicker);
           }
         } else {
-          // 普通文本框
+          // Ô văn bản thông thường
           schema.component = 'Input';
           if (isRange) {
             schema.render = getRangeRender(schemas, field, Input);
@@ -80,19 +80,19 @@ export function useParseFormSchemas(chartsData: Ref<any>, showSearchField: Ref<b
 }
 
 /**
- * 获取范围渲染方法
+ * Lấy phương thức render phạm vi
  *
- * @param schemas 显示名
- * @param fieldItem 字段
- * @param component vue 组件
+ * @param schemas Tên hiển thị
+ * @param fieldItem trường
+ * @param component vue Component
  */
 function getRangeRender(schemas: FormSchema[], fieldItem, component: any) {
   let { fieldTxt: label, fieldName: beginField } = fieldItem;
   let endField = beginField + '_end';
-  // 添加占位符
+  // Thêm phần giữ chỗ
   schemas.push({ label: '', field: endField, component: 'Input', show: false });
   return function ({ model }) {
-    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1033】图表查询日期/数字宽度适配
+    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1033】Ngày truy vấn biểu đồ/Thích ứng độ rộng chữ số
     const commonProps = {
       style: { flex: 1, width: '100%', minWidth: 0 },
       allowClear: true,
@@ -102,7 +102,7 @@ function getRangeRender(schemas: FormSchema[], fieldItem, component: any) {
         ...commonProps,
         value: model[beginField],
         'onUpdate:value': (v) => (model[beginField] = v),
-        placeholder: '请输入开始' + label,
+        placeholder: 'Vui lòng nhập bắt đầu' + label,
         format: 'YYYY-MM-DD',
         valueFormat: 'YYYY-MM-DD',
       }),
@@ -111,11 +111,11 @@ function getRangeRender(schemas: FormSchema[], fieldItem, component: any) {
         ...commonProps,
         value: model[endField],
         'onUpdate:value': (v) => (model[endField] = v),
-        placeholder: '请输入结束' + label,
+        placeholder: 'Vui lòng nhập kết thúc' + label,
         format: 'YYYY-MM-DD',
         valueFormat: 'YYYY-MM-DD',
       }),
     ]);
-    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1033】图表查询日期/数字宽度适配
+    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1033】Ngày truy vấn biểu đồ/Thích ứng độ rộng chữ số
   };
 }

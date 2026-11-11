@@ -17,23 +17,23 @@ enum Api {
 }
 
 /**
- * 查询子表数据
+ * Truy vấn dữ liệu bảng con
  * @param params
  */
 export const onlCgreportParamList = Api.onlCgreportParamList;
 /**
- * 查询子表数据
+ * Truy vấn dữ liệu bảng con
  * @param params
  */
 export const onlCgreportItemList = Api.onlCgreportItemList;
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 
 /**
- * 删除单个
+ * Xóa đơn lẻ
  */
 export const deleteOne = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteOne, params }, { joinParamsToUrl: true }).then(() => {
@@ -41,15 +41,15 @@ export const deleteOne = (params, handleSuccess) => {
   });
 };
 /**
- * 批量删除
+ * Xóa hàng loạt
  * @param params
  */
 export const batchDelete = (params, handleSuccess) => {
   createConfirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa dữ liệu đã chọn hay không',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     iconType: 'warning',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
@@ -59,7 +59,7 @@ export const batchDelete = (params, handleSuccess) => {
   });
 };
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
  */
 export const saveOrUpdate = (params, isUpdate) => {
@@ -71,7 +71,7 @@ export const saveOrUpdate = (params, isUpdate) => {
 };
 
 /**
- * 获取参数地址
+ * Lấy địa chỉ tham số
  * @param params
  */
 export const getReportParam = (id) => {
@@ -79,24 +79,24 @@ export const getReportParam = (id) => {
 };
 
 /**
- * 获取数据源列表
+ * Lấy danh sách nguồn dữ liệu
  */
 export const getDataSourceList = () => {
   return defHttp.get({ url: Api.getDataSourceList });
 };
 
 /**
- * 复制报表
- * @param id 报表id
+ * Sao chép báo cáo
+ * @param id Báo cáoid
  */
 export const doCopy = (id) => {
-  // 注意：defHttp 的非 GET 请求会把 params 当作请求体 data，后端 @RequestParam 从 query 取参，
-  // 因此这里把 id 直接拼到 URL 上（与 cgform 的 doCopyOnlineView 保持一致）
+  // Lưu ý:defHttp cái không phải của GET Yêu cầu sẽ đưa params Coi như thân yêu cầu (request body) data, backend @RequestParam từ query lấy tham số,
+  // Vì vậy, ở đây đưa id Nối trực tiếp vào URL phía trên (và cgform của doCopyOnlineView giữ nhất quán)
   return defHttp.post({ url: `${Api.copy}?id=${id}` });
 };
 
 /**
- * 解析sql
+ * Phân tích (parse)sql
  * @param params
  */
 export const analyzeSql = (params) => {

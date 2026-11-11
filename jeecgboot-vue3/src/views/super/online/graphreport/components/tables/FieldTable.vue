@@ -15,17 +15,17 @@
       <a-dropdown>
         <template #overlay>
           <a-menu>
-            <a-menu-item key="1" @click="fieldNameConvertCase('Upper', '大写')">
+            <a-menu-item key="1" @click="fieldNameConvertCase('Upper', 'Chữ hoa')">
               <a-icon type="sort-descending" />
-              <span>转换为大写</span>
+              <span>Chuyển đổi thành chữ hoa</span>
             </a-menu-item>
-            <a-menu-item key="2" @click="fieldNameConvertCase('Lower', '小写')">
+            <a-menu-item key="2" @click="fieldNameConvertCase('Lower', 'Chữ thường')">
               <a-icon type="sort-ascending" />
-              <span>转换为小写</span>
+              <span>Chuyển đổi thành chữ thường</span>
             </a-menu-item>
           </a-menu>
         </template>
-        <a-button preIcon="ant-design:down">转换字段名</a-button>
+        <a-button preIcon="ant-design:down">Chuyển đổi tên trường</a-button>
       </a-dropdown>
     </template>
   </JVxeTable>
@@ -47,38 +47,38 @@
       const tableRef = ref<JVxeTableInstance>();
       const columns = ref<JVxeColumn[]>([
         {
-          title: '字段名',
+          title: 'tên trường',
           key: 'fieldName',
           width: 180,
           type: JVxeTypes.input,
           defaultValue: '',
-          validateRules: [{ required: true, message: '${title}不能为空' }],
-          placeholder: '请输入${title}',
+          validateRules: [{ required: true, message: '${title}không được để trống' }],
+          placeholder: 'Vui lòng nhập${title}',
         },
         {
-          title: '字段文本',
+          title: 'Văn bản trường',
           key: 'fieldTxt',
           width: 180,
           type: JVxeTypes.input,
           defaultValue: '',
-          placeholder: '请输入${title}',
+          placeholder: 'Vui lòng nhập${title}',
         },
         {
-          title: '字段类型',
+          title: 'Loại trường',
           key: 'fieldType',
           width: 200,
           type: JVxeTypes.select,
           options: [
-            { title: '数值类型', value: 'Integer' },
-            { title: '日期类型', value: 'Date' },
-            { title: '字符类型', value: 'String' },
-            { title: '长整型', value: 'Long' },
+            { title: 'Loại giá trị số', value: 'Integer' },
+            { title: 'Loại ngày', value: 'Date' },
+            { title: 'Loại ký tự', value: 'String' },
+            { title: 'Số nguyên dài (long)', value: 'Long' },
           ],
           defaultValue: '',
-          placeholder: '请选择${title}',
+          placeholder: 'Vui lòng chọn${title}',
         },
         {
-          title: '计算总计',
+          title: 'Tính tổng cộng',
           key: 'isTotal',
           width: 80,
           type: JVxeTypes.checkbox,
@@ -86,7 +86,7 @@
           customValue: ['Y', 'N'],
         },
         {
-          title: '是否查询',
+          title: 'Có truy vấn hay không',
           key: 'searchFlag',
           width: 80,
           type: JVxeTypes.checkbox,
@@ -95,27 +95,27 @@
           customValue: ['Y', 'N'],
         },
         {
-          title: '查询模式',
+          title: 'Chế độ truy vấn',
           key: 'searchMode',
           width: 180,
           type: JVxeTypes.select,
           options: [
-            { title: '单条件查询', value: 'single' },
-            { title: '范围查询', value: 'group' },
+            { title: 'Truy vấn điều kiện đơn', value: 'single' },
+            { title: 'Truy vấn theo phạm vi', value: 'group' },
           ],
           defaultValue: '',
-          placeholder: '请选择${title}',
+          placeholder: 'Vui lòng chọn${title}',
         },
         {
-          title: '字典Code',
+          title: 'từ điểnCode',
           key: 'dictCode',
           width: 200,
           type: JVxeTypes.input,
           defaultValue: '',
-          placeholder: '请选择${title}',
+          placeholder: 'Vui lòng chọn${title}',
         },
         {
-          title: '是否显示',
+          title: 'Có hiển thị hay không',
           key: 'isShow',
           type: JVxeTypes.checkbox,
           defaultChecked: true,
@@ -124,8 +124,8 @@
       ]);
       const { createConfirm: $confirm } = useMessage();
 
-      // update-begin--author:liaozhiyang---date:20260824---for：【LHZP-1055】online图表JSON方式禁用查询
-      /** JSON 数据不支持查询条件，取消所有是否查询选项 */
+      // update-begin--author:liaozhiyang---date:20260824---for：【LHZP-1055】onlineBiểu đồJSONCách thức vô hiệu hóa truy vấn
+      /** JSON Dữ liệu không hỗ trợ điều kiện truy vấn, hủy tất cả tùy chọn có truy vấn hay không */
       async function clearSearchFlags() {
         await nextTick();
         const values = tableRef.value?.getTableData() || [];
@@ -159,14 +159,14 @@
           }
         }
       );
-      // update-end--author:liaozhiyang---date:20260824---for：【LHZP-1055】online图表JSON方式禁用查询
+      // update-end--author:liaozhiyang---date:20260824---for：【LHZP-1055】onlineBiểu đồJSONCách thức vô hiệu hóa truy vấn
 
-      /** 字段名转换大小写 */
+      /** Chuyển đổi chữ hoa/thường của tên trường */
       function fieldNameConvertCase(convertCase, name) {
         $confirm({
           iconType: 'info',
-          title: '转换字段名',
-          content: `确定要将所有的字段名都转换为${name}吗？`,
+          title: 'Chuyển đổi tên trường',
+          content: `Xác nhận muốn chuyển đổi tất cả tên trường thành${name}không?`,
           onOk() {
             let fn = `to${convertCase}Case`;
             let values = tableRef.value!.getTableData();

@@ -20,34 +20,34 @@
                 fill="currentColor"
             ></path>
           </svg>
-          <h3>创建报表需要专业建议？试试AI智能建表吧</h3>
+          <h3>Tạo báo cáo cần gợi ý chuyên nghiệp? Hãy thửAITạo bảng thông minh</h3>
         </div>
-        <p class="tip">请选择Online表单，并输入报表需求，例如：统计男生女生各自的数量</p>
+        <p class="tip">Vui lòng chọnOnlinebiểu mẫu, đồng thời nhập nhu cầu báo cáo, ví dụ: thống kê số lượng nam và nữ mỗi giới</p>
         <a-space class="content" direction="vertical">
           <a-select
               v-model:value="model.cgformTableName"
-              placeholder="请选择Online表单"
+              placeholder="Vui lòng chọnOnlineBiểu mẫu"
               show-search
               :filter-option="false"
-              not-found-content="没有符合的表单"
+              not-found-content="Không có biểu mẫu phù hợp"
               style="width: 100%"
               @search="handleCgformSearch"
           >
             <template v-for="item of cgformList">
               <a-select-option :value="item.value">{{ item.text }}</a-select-option>
             </template>
-            <a-select-option value="2">女</a-select-option>
+            <a-select-option value="2">Nữ</a-select-option>
           </a-select>
-          <a-textarea v-model:value.trim="model.prompt" placeholder="请输入报表需求" :rows="3"/>
+          <a-textarea v-model:value.trim="model.prompt" placeholder="Vui lòng nhập nhu cầu báo cáo" :rows="3"/>
         </a-space>
 
       </div>
     </a-spin>
 
     <template #footer>
-      <a-button @click="onCancel">关闭</a-button>
+      <a-button @click="onCancel">Đóng</a-button>
       <a-button type="primary" :loading="loading" preIcon="carbon:ai-generate" @click="onSubmit">
-        立即生成
+        Tạo ngay lập tức
       </a-button>
     </template>
   </BasicModal>
@@ -79,10 +79,10 @@ const model = ref<Recordable>({
   prompt: '',
   cgformTableName: void 0,
 });
-// 当前是否正在加载中
+// Hiện tại có đang tải hay không
 const loading = ref(true);
 
-// 注册弹窗
+// Popup đăng ký
 const [registerModal, {closeModal, setModalProps}] = useModalInner(() => {
   queryOnlineCgform();
   setLoading(false)
@@ -90,12 +90,12 @@ const [registerModal, {closeModal, setModalProps}] = useModalInner(() => {
   model.value.cgformTableName = void 0;
 });
 
-// 弹窗最终props
+// Popup cuối cùngprops
 const getProps = computed(() => {
   let modalProps: Partial<ModalProps> = {
     width: 600,
     height:  240,
-    title: '通过Ai生成报表',
+    title: 'Thông quaAiTạo báo cáo',
     maskClosable: false,
     canFullscreen: false,
     confirmLoading: unref(loading),
@@ -110,7 +110,7 @@ const getProps = computed(() => {
   return finalProps;
 });
 
-/** 设置加载状态*/
+/** Thiết lập trạng thái tải*/
 function setLoading(flag) {
   loading.value = flag;
   setModalProps({confirmLoading: flag});
@@ -138,11 +138,11 @@ async function onSubmit() {
 async function onStepGenerate() {
   const {cgformTableName, prompt} = model.value
   if (!cgformTableName) {
-    $message.warning('请选择Online表单');
+    $message.warning('Vui lòng chọnOnlineBiểu mẫu');
     return
   }
   if (!prompt) {
-    $message.warning('请输入报表需求');
+    $message.warning('Vui lòng nhập nhu cầu báo cáo');
     return
   }
   setLoading(true);
@@ -155,7 +155,7 @@ async function onStepGenerate() {
         emit('generate', result);
         closeModal();
       } else {
-        $message.warn('生成失败，Ai开小差了，请稍后重试…');
+        $message.warn('Tạo thất bại,Aiđang lơ đễnh, vui lòng thử lại sau…');
       }
     } else {
       $message.error(message);

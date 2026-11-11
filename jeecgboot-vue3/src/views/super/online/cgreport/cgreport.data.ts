@@ -5,28 +5,28 @@ import { duplicateCheckDelay } from '/@/views/system/user/user.api';
 import { getDataSourceList } from './cgreport.api';
 import {usePermissionStore} from "/@/store/modules/permission";
 const permissionStore = usePermissionStore();
-//列表数据
+//Dữ liệu danh sách
 export const columns: BasicColumn[] = [
   {
-    title: '报表名字',
+    title: 'Tên báo cáo',
     align: 'center',
     dataIndex: 'name',
     width: 120,
   },
   {
-    title: '报表编码',
+    title: 'Mã báo cáo',
     align: 'center',
     dataIndex: 'code',
     width: 120,
   },
   {
-    title: '报表SQL',
+    title: 'Báo cáoSQL',
     align: 'center',
     dataIndex: 'cgrSql',
     width: 360,
   },
   {
-    title: '数据源',
+    title: 'Nguồn dữ liệu',
     align: 'center',
     dataIndex: 'dbSource',
     customRender: ({ text, record }) => {
@@ -35,29 +35,29 @@ export const columns: BasicColumn[] = [
     width: 120,
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     align: 'center',
     dataIndex: 'createTime',
     width: 120,
   },
 ];
-//查询数据
+//Truy vấn dữ liệu
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '报表名称',
+    label: 'Tên báo cáo',
     field: 'name',
     component: 'JInput',
   },
   {
-    label: '报表编码',
+    label: 'Mã báo cáo',
     field: 'code',
     component: 'JInput',
   },
 ];
 
-// 编码校验 仅online报表用
+// Kiểm chứng mã chỉonlineBáo cáo dùng
 const codePattern = /^[a-z|A-Z][a-z|A-Z|\d|_|-]{0,}$/;
-//表单数据
+//Dữ liệu biểu mẫu
 export const formSchema: FormSchema[] = [
   {
     label: '',
@@ -66,7 +66,7 @@ export const formSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '报表编码',
+    label: 'Mã báo cáo',
     field: 'code',
     component: 'Input',
     colProps: {
@@ -85,10 +85,10 @@ export const formSchema: FormSchema[] = [
           validator: (_, value) => {
             return new Promise((resolve, reject) => {
               if (!value) {
-                return reject('请输入报表编码！');
+                return reject('Vui lòng nhập mã báo cáo!');
               }
               if (!codePattern.test(value)) {
-                return reject('编码必须以字母开头，可包含数字、下划线、横杠！');
+                return reject('Mã phải bắt đầu bằng chữ cái, có thể chứa số, dấu gạch dưới, dấu gạch ngang!');
               }
               let params = {
                 tableName: 'onl_cgreport_head',
@@ -98,10 +98,10 @@ export const formSchema: FormSchema[] = [
               };
               duplicateCheckDelay(params)
                 .then((res) => {
-                  res.success ? resolve() : reject('报表编码已存在!');
+                  res.success ? resolve() : reject('Mã báo cáo đã tồn tại!');
                 })
                 .catch((err) => {
-                  reject(err.message || '校验失败');
+                  reject(err.message || 'Kiểm chứng thất bại');
                 });
             });
           },
@@ -110,7 +110,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '报表名字',
+    label: 'Tên báo cáo',
     field: 'name',
     component: 'Input',
     colProps: {
@@ -122,11 +122,11 @@ export const formSchema: FormSchema[] = [
       xxl: 8,
     },
     dynamicRules: () => {
-      return [{ required: true, message: '请输入报表名字!' }];
+      return [{ required: true, message: 'Vui lòng nhập tên báo cáo!' }];
     },
   },
   {
-    label: '动态数据源',
+    label: 'Nguồn dữ liệu động',
     field: 'dbSource',
     colProps: {
       sm: 24,
@@ -137,7 +137,7 @@ export const formSchema: FormSchema[] = [
       xxl: 8,
     },
     component: 'ApiSelect',
-    rules: [{ required: permissionStore.sysSafeMode, message: '请选择数据源！' }],
+    rules: [{ required: permissionStore.sysSafeMode, message: 'Vui lòng chọn nguồn dữ liệu!' }],
     componentProps: {
       api: getDataSourceList,
     },
@@ -157,16 +157,16 @@ export const formSchema: FormSchema[] = [
         },
     },*/
   {
-    label: '报表SQL',
+    label: 'Báo cáoSQL',
     field: 'cgrSql',
     component: 'JCodeEditor',
-    rules: [{ required: true, message: '请填写报表SQL' }],
-    // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】报表图表弹窗样式调整
+    rules: [{ required: true, message: 'Vui lòng điền báo cáoSQL' }],
+    // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9230】Điều chỉnh kiểu dáng popup biểu đồ báo cáo
     // itemProps: {
     //   labelCol: { xs: 24, sm: 4, md: 2, lg: 2, xl: 3, xxl: 2 },
     //   wrapperCol: { xs: { span: 24 }, sm: { span: 18 }, md: { span: 24 } },
     // },
-    // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9230】报表图表弹窗样式调整
+    // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9230】Điều chỉnh kiểu dáng popup biểu đồ báo cáo
     componentProps: {
       height: '200px',
       fullScreen: true,
@@ -200,80 +200,80 @@ export const formSchema: FormSchema[] = [
     },
   },
 ];
-//子表表格配置
+//Cấu hình bảng dữ liệu của bảng con
 export const onlCgreportParamColumns: JVxeColumn[] = [
   {
-    title: '参数字段',
+    title: 'Trường tham số',
     key: 'paramName',
     type: JVxeTypes.input,
     width: '150px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
-    validateRules: [{ required: true, message: '${title}不能为空' }],
+    validateRules: [{ required: true, message: '${title}không được để trống' }],
   },
   {
-    title: '参数文本',
+    title: 'Văn bản tham số',
     key: 'paramTxt',
     type: JVxeTypes.input,
     width: '150px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
-    validateRules: [{ required: true, message: '${title}不能为空' }],
+    validateRules: [{ required: true, message: '${title}không được để trống' }],
   },
   {
-    title: '默认值',
+    title: 'Giá trị mặc định',
     key: 'paramValue',
     type: JVxeTypes.input,
     width: '150px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },
 ];
 export const onlCgreportItemColumns: JVxeColumn[] = [
   {
-    title: '字段名字',
+    title: 'Tên trường',
     key: 'fieldName',
     type: JVxeTypes.input,
     width: '160px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
-    validateRules: [{ required: true, message: '${title}不能为空' }],
+    validateRules: [{ required: true, message: '${title}không được để trống' }],
   },
   {
-    title: '字段文本',
+    title: 'Văn bản trường',
     key: 'fieldTxt',
     type: JVxeTypes.input,
     width: '160px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
-    validateRules: [{ required: true, message: '${title}不能为空' }],
+    validateRules: [{ required: true, message: '${title}không được để trống' }],
   },
   {
-    title: '宽度',
+    title: 'Độ rộng',
     key: 'fieldWidth',
     type: JVxeTypes.input,
     width: '80px',
     defaultValue: '',
   },
   {
-    title: '类型',
+    title: 'Loại',
     key: 'fieldType',
     width: '120px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
-    validateRules: [{ required: true, message: '${title}不能为空' }],
+    validateRules: [{ required: true, message: '${title}không được để trống' }],
     type: JVxeTypes.select,
     options: [
-      { title: '数值类型', value: 'Integer' },
-      { title: '字符类型', value: 'String' },
-      { title: '日期类型', value: 'Date' },
-      { title: '时间类型', value: 'Datetime' },
-      { title: '长整型', value: 'Long' },
-      { title: '图片类型', value: 'Image' },
+      { title: 'Loại giá trị số', value: 'Integer' },
+      { title: 'Loại ký tự', value: 'String' },
+      { title: 'Loại ngày', value: 'Date' },
+      { title: 'Loại thời gian', value: 'Datetime' },
+      { title: 'Số nguyên dài (long)', value: 'Long' },
+      { title: 'Loại hình ảnh', value: 'Image' },
     ],
   },
   {
-    title: '列显示',
+    title: 'Hiển thị cột',
     key: 'isShow',
     width: '80px',
     align: 'center',
@@ -282,15 +282,15 @@ export const onlCgreportItemColumns: JVxeColumn[] = [
     defaultChecked: true,
   },
   {
-    title: '字段href',
+    title: 'trườnghref',
     key: 'fieldHref',
     type: JVxeTypes.input,
     width: '120px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },
   {
-    title: '查询',
+    title: 'Truy vấn',
     key: 'isSearch',
     type: JVxeTypes.checkbox,
     customValue: ['1', '0'],
@@ -299,43 +299,43 @@ export const onlCgreportItemColumns: JVxeColumn[] = [
     defaultChecked: false,
   },
   {
-    title: '查询模式',
+    title: 'Chế độ truy vấn',
     key: 'searchMode',
     type: JVxeTypes.select,
     width: '120px',
-    placeholder: '请选择${title}',
+    placeholder: 'Vui lòng chọn${title}',
     options: [
-      { title: '单值查询', value: 'single' },
-      { title: '范围查询', value: 'group' },
+      { title: 'Truy vấn giá trị đơn', value: 'single' },
+      { title: 'Truy vấn theo phạm vi', value: 'group' },
     ],
   },
   {
-    title: '取值表达式',
+    title: 'Biểu thức lấy giá trị',
     key: 'replaceVal',
     type: JVxeTypes.input,
     width: '120px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },
   {
-    title: '字典code',
+    title: 'từ điểncode',
     key: 'dictCode',
     type: JVxeTypes.input,
     width: '120px',
-    titleSuffix: { content: '填写字典编码，或SQL：SELECT 字段 AS value, 字段 AS text FROM 表。人大金仓、PostgreSQL 下 text 是关键字，别名必须写 AS' },
-    placeholder: '请输入${title}',
+    titleSuffix: { content: 'Điền mã từ điển, hoặcSQL：SELECT trường AS value, trường AS text FROM bảng. KingbaseES,PostgreSQL dưới text là từ khóa, bí danh bắt buộc phải viết AS' },
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },
   {
-    title: '分组标题',
+    title: 'Tiêu đề nhóm',
     key: 'groupTitle',
     type: JVxeTypes.input,
     width: '120px',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },
   {
-    title: '合计列',
+    title: 'Cột tổng cộng',
     align: 'center',
     key: 'isTotal',
     type: JVxeTypes.checkbox,

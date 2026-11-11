@@ -15,11 +15,11 @@ import { isFunction } from '/@/utils/is';
 import { formatToDate } from '/@/utils/dateUtil';
 
 export const ChartRenderProps = {
-  // 图表标题
+  // Tiêu đề biểu đồ
   title: propTypes.string,
-  // 图表数据
+  // Dữ liệu biểu đồ
   chartsData: propTypes.object,
-  // 是否运行在组件模式
+  // Có đang chạy ở chế độ component hay không
   asComponent: propTypes.bool.def(false),
 };
 type PropsType = ExtractPropTypes<typeof ChartRenderProps>;
@@ -39,7 +39,7 @@ export const ChartRenderCommon = {
 };
 
 const errorText = {
-  jsonFormattingFailed: 'JSON字符串格式化失败',
+  jsonFormattingFailed: 'JSONĐịnh dạng chuỗi ký tự thất bại',
 };
 
 export function useChartRender(props: PropsType, { emit }) {
@@ -52,35 +52,35 @@ export function useChartRender(props: PropsType, { emit }) {
     createWarningModal: $warning,
   } = useMessage();
   const headId = ref(null);
-  // 图表的高度
+  // Chiều cao của biểu đồ
   const height = ref('400px');
-  // 当前显示的图表
+  // Biểu đồ đang hiển thị hiện tại
   const activeKey = ref('bar');
-  // 图表类型
+  // Loại biểu đồ
   const chartTypes = ref<string[]>([]);
-  // 是否开启分页
+  // Có bật phân trang hay không
   const pageSwitch = ref(true);
-  // 打印ID
+  // InID
   const printId = computed(() => `print-content-${headId.value}`);
-  // 曲线图参数配置
+  // Cấu hình tham số biểu đồ đường cong
   const lineParams = reactive({
     chartData: [] as Recordable[],
   });
-  // 柱状图参数配置
+  // Cấu hình tham số biểu đồ cột
   const barParams = reactive({
     chartData: [] as Recordable[],
   });
-  // 饼图参数配置
+  // Cấu hình tham số biểu đồ tròn
   const pieParams = reactive({
     chartData: [] as Recordable[],
   });
-  // 折柱图参数配置
+  // Cấu hình tham số biểu đồ gập/cột
   const barLineParams = reactive({
     dataSource: [] as Recordable[],
   });
-  // 表格参数配置
+  // Cấu hình tham số bảng
   const tableParams = reactive({
-    // 固定的列数据
+    // Dữ liệu cột cố định
     fixedColumns: [
       {
         title: '#',
@@ -89,7 +89,7 @@ export function useChartRender(props: PropsType, { emit }) {
         align: 'center',
         customRender: function ({ record, index }) {
           if (record.isTotal === true) {
-            return '总计';
+            return 'Tổng cộng';
           } else {
             return parseInt(index) + 1;
           }
@@ -99,9 +99,9 @@ export function useChartRender(props: PropsType, { emit }) {
     columns: [] as Recordable[],
     dataSource: [] as Recordable[],
   });
-  // 用户JS增强的事件暂存处（通过headId隔离）
+  // Người dùngJSNơi lưu tạm sự kiện của phần tăng cường (thông quaheadIdcách ly)
   const extendJsHandlerIsolation = reactive<Recordable>({});
-  // 当前图表的JS增强
+  // của biểu đồ hiện tạiJSTăng cường
   const extendJsHandler = computed<Nullable<Recordable>>({
     get() {
       if (headId.value == null) {
@@ -116,15 +116,15 @@ export function useChartRender(props: PropsType, { emit }) {
       }
     },
   });
-  // 是否包含曲线图
+  // Có bao gồm biểu đồ đường cong hay không
   const hasLine = computed(() => chartTypes.value.includes('line'));
-  // 是否包含柱状图
+  // Có bao gồm biểu đồ cột hay không
   const hasBar = computed(() => chartTypes.value.includes('bar'));
-  // 是否包含饼图
+  // Có bao gồm biểu đồ tròn (pie) hay không
   const hasPie = computed(() => chartTypes.value.includes('pie'));
-  // 是否包含数据表格
+  // Có bao gồm bảng dữ liệu hay không
   const hasTable = ref(false);
-  // 曲线图参数
+  // Tham số biểu đồ đường cong
   const lineProps = computed(() => {
     return {
       type: 'line',
@@ -136,7 +136,7 @@ export function useChartRender(props: PropsType, { emit }) {
       },
     };
   });
-  // 柱状图参数
+  // Tham số biểu đồ cột
   const barProps = computed(() => {
     return {
       height: height.value,
@@ -147,7 +147,7 @@ export function useChartRender(props: PropsType, { emit }) {
       },
     };
   });
-  // 饼图参数
+  // Tham số biểu đồ tròn
   const pieProps = computed(() => {
     return {
       height: height.value,
@@ -158,7 +158,7 @@ export function useChartRender(props: PropsType, { emit }) {
       },
     };
   });
-  // 折柱图参数
+  // Tham số biểu đồ gập/cột
   const barLineProps = computed(() => {
     return {
       height: height.value,
@@ -168,7 +168,7 @@ export function useChartRender(props: PropsType, { emit }) {
       },
     };
   });
-  // 图表区域 ACard 标签的固定属性
+  // Vùng biểu đồ ACard Thuộc tính cố định của nhãn
   const chartCardProps = computed(() => {
     return {
       title: props.title,
@@ -177,30 +177,30 @@ export function useChartRender(props: PropsType, { emit }) {
       bordered: !props.asComponent,
     };
   });
-  // 数据表格区域 ACard 标签的固定属性
+  // Vùng bảng dữ liệu ACard Thuộc tính cố định của nhãn
   const tableCardProps = computed(() => {
     return {
-      title: '数据明细',
+      title: 'Chi tiết dữ liệu',
       headStyle: { paddingLeft: '20px' },
       bodyStyle: { padding: '0' },
       style: { marginTop: '20px' },
       bordered: !props.asComponent,
     };
   });
-  // 导出按钮固定属性
+  // Thuộc tính cố định của nút xuất
   const exportButtonProps = computed(() => {
     return {
       type: 'primary',
       preIcon: 'ant-design:download',
-      text: '导出',
+      text: 'Xuất (export)',
       style: { margin: '12px' },
     };
   });
-  /** 分页开关固定属性 */
+  /** Thuộc tính cố định của công tắc phân trang */
   const pageSwitchProps = computed(() => {
     return {
-      checkedChildren: '分页',
-      unCheckedChildren: '分页',
+      checkedChildren: 'Phân trang',
+      unCheckedChildren: 'Phân trang',
       style: {
         position: 'absolute',
         top: '17px',
@@ -208,16 +208,16 @@ export function useChartRender(props: PropsType, { emit }) {
       },
     };
   });
-  // 数据表格的固定属性
+  // Thuộc tính cố định của bảng dữ liệu
   const tableProps = computed(() => {
-    // update-begin--author:liaozhiyang---date:20260720---for：【LHZP-1041】字段多时，表格内容挤压到一块了
-    // 根据列宽总和计算横向滚动宽度，字段过多时表格可横向滚动而不是压缩换行
+    // update-begin--author:liaozhiyang---date:20260720---for：【LHZP-1041】Khi có nhiều trường, nội dung bảng bị dồn ép vào một chỗ
+    // Tính độ rộng cuộn ngang theo tổng độ rộng cột, khi trường quá nhiều, bảng có thể cuộn ngang thay vì nén xuống dòng
     let scrollX = 0;
     for (const col of tableParams.columns) {
       const w = parseInt(col.width);
       scrollX += isNaN(w) ? 150 : w;
     }
-    // update-end--author:liaozhiyang---date:20260720---for：【LHZP-1041】字段多时，表格内容挤压到一块了
+    // update-end--author:liaozhiyang---date:20260720---for：【LHZP-1041】Khi có nhiều trường, nội dung bảng bị dồn ép vào một chỗ
     return {
       size: 'middle',
       rowKey: 'id',
@@ -229,9 +229,9 @@ export function useChartRender(props: PropsType, { emit }) {
       style: { borderTop: '1px solid #e8e8e8' },
     };
   });
-  // 是否显示打印按钮
+  // Có hiển thị nút in hay không
   const showPrint = computed(() => !props.asComponent);
-  // 是否显示详情按钮
+  // Có hiển thị nút chi tiết hay không
   const showDetail = computed(() => props.asComponent);
 
   watch(
@@ -240,16 +240,16 @@ export function useChartRender(props: PropsType, { emit }) {
     { immediate: true }
   );
 
-  /** 执行JS扩展 */
+  /** Thực thiJSMở rộng */
   function executeExtendJs(headId, jsCode) {
     if (!jsCode || !headId) {
       return;
     }
     let onClick = { line: null, bar: null, pie: null };
-    // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
-    // 执行JS增强
+    // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6390】evalthay thế thànhnew Function, giải quyếtbuildCảnh báo
+    // Thực thiJSTăng cường
     new Function('onClick', 'headId', `${jsCode}`)(onClick, headId);
-    // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
+    // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6390】evalthay thế thànhnew Function, giải quyếtbuildCảnh báo
     if (extendJsHandler.value == null) {
       extendJsHandler.value = { click: onClick };
     } else {
@@ -257,7 +257,7 @@ export function useChartRender(props: PropsType, { emit }) {
     }
   }
 
-  // click 事件的 this 指向
+  // click của sự kiện this Trỏ tới
   const onClickThis = {
     $router: router,
     $http: defHttp,
@@ -269,7 +269,7 @@ export function useChartRender(props: PropsType, { emit }) {
     $warning,
   };
 
-  /** 触发JS增强里定义的事件 */
+  /** Kích hoạtJSSự kiện được định nghĩa trong phần tăng cường */
   function emitExtendJsEvent(params) {
     if (extendJsHandler.value != null) {
       let clickType = params.seriesType;
@@ -281,7 +281,7 @@ export function useChartRender(props: PropsType, { emit }) {
     }
   }
 
-  /** 字典字段点击时，JS增强使用原始值，显示文本通过 displayName 获取 */
+  /** Khi nhấp vào trường từ điển,JSPhần tăng cường sử dụng giá trị gốc, văn bản hiển thị được truyền qua displayName Lấy */
   function normalizeExtendJsEventParams(params) {
     let rawName = params.data?.rawName;
     if (rawName === undefined && (params.seriesType === 'line' || params.seriesType === 'bar')) {
@@ -295,7 +295,7 @@ export function useChartRender(props: PropsType, { emit }) {
     }
   }
 
-  /** 解析 chartData */
+  /** Phân tích (parse) chartData */
   function parseChartsData(chartsData) {
     if (chartsData == null) return null;
     let { head, data, items, dictOptions } = chartsData;
@@ -319,7 +319,7 @@ export function useChartRender(props: PropsType, { emit }) {
     let yaxisFields: string[] = yaxisField.split(',');
     let fieldMap = new Map<string, Recordable>();
     items.forEach((item) => fieldMap.set(item.fieldName, item));
-    // 判断是否定义了数据表格，如果定义了则删除该项，不参与动态渲染，只显示在最底部
+    // Phán đoán có định nghĩa bảng dữ liệu hay không, nếu đã định nghĩa thì xóa mục đó, không tham gia render động, chỉ hiển thị ở dưới cùng
     let index = graphTypes.indexOf('table');
     hasTable.value = index !== -1;
     if (hasTable.value) {
@@ -343,7 +343,7 @@ export function useChartRender(props: PropsType, { emit }) {
     dictOptions;
   };
 
-  // 根据用户配置构造出通用数据
+  // Xây dựng dữ liệu dùng chung theo cấu hình của người dùng
   function parseCommonData(option: ParseDataOption) {
     let { data, fieldMap, xaxisField, yaxisFields, dictList } = option;
     let chartData: Recordable[] = [];
@@ -351,7 +351,7 @@ export function useChartRender(props: PropsType, { emit }) {
       for (let item of data) {
         const rawName = item[xaxisField];
         let name = rawName;
-        // 判断是否有字典
+        // Phán đoán có từ điển hay không
         if (dictList) {
           name = filterDictText(dictList, name);
         }
@@ -366,7 +366,7 @@ export function useChartRender(props: PropsType, { emit }) {
     return chartData;
   }
 
-  // 根据用户配置构造出 lineChartData
+  // Xây dựng theo cấu hình của người dùng lineChartData
   function parseLineData(option: ParseDataOption) {
     let { graphTypes } = option;
     if (graphTypes.includes('line')) {
@@ -374,7 +374,7 @@ export function useChartRender(props: PropsType, { emit }) {
     }
   }
 
-  // 根据用户配置构造出 barChartData
+  // Xây dựng theo cấu hình của người dùng barChartData
   function parseBarData(option: ParseDataOption) {
     let { graphTypes } = option;
     if (graphTypes.includes('bar')) {
@@ -382,7 +382,7 @@ export function useChartRender(props: PropsType, { emit }) {
     }
   }
 
-  // 根据用户配置构造出 pieChartData
+  // Xây dựng theo cấu hình của người dùng pieChartData
   function parsePicData(option: ParseDataOption) {
     let { graphTypes, data, xaxisField, yaxisFields, dictList } = option;
     let yField = yaxisFields[0];
@@ -391,7 +391,7 @@ export function useChartRender(props: PropsType, { emit }) {
       for (let item of data) {
         const rawName = item[xaxisField];
         let name = rawName;
-        // 判断是否有字典
+        // Phán đoán có từ điển hay không
         if (dictList) {
           name = filterDictText(dictList, name);
         }
@@ -405,7 +405,7 @@ export function useChartRender(props: PropsType, { emit }) {
     }
   }
 
-  // 根据用户配置构造出 tableData
+  // Xây dựng theo cấu hình của người dùng tableData
   function parseTableData(option: ParseDataOption) {
     let { data, items, xaxisField, yaxisFields, dictList, dictOptions } = option;
     if (hasTable.value) {
@@ -415,13 +415,13 @@ export function useChartRender(props: PropsType, { emit }) {
           item: item[xaxisField],
           count: item[yaxisFields[0]],
         };
-        // 判断是否有字典
+        // Phán đoán có từ điển hay không
         if (dictList) {
           pieData.item = filterDictText(dictList, pieData.item);
         }
         return item;
       });
-      // 根据用户配置构造出 tableColumns
+      // Xây dựng theo cấu hình của người dùng tableColumns
       let tableColumns: Recordable[] = cloneDeep(tableParams.fixedColumns);
       let isTotals: string[] = [];
       items.forEach((item) => {
@@ -439,30 +439,30 @@ export function useChartRender(props: PropsType, { emit }) {
             column.customRender = ({ text, record }) => (record.isTotal || !text ? text : formatToDate(text));
           }
           tableColumns.push(column);
-          // 判断是否计算总数
+          // Phán đoán có tính tổng số hay không
           if (item.isTotal === 'Y') isTotals.push(item.fieldName);
         }
       });
       tableParams.columns = tableColumns;
-      // 如果有计算需要的值就进行计算
+      // Nếu có giá trị cần cho việc tính toán thì tiến hành tính toán
       if (isTotals.length > 0) {
         let totalRow = { id: tableParams.dataSource.length, isTotal: true };
         isTotals.forEach((column) => {
           let count = 0;
           tableParams.dataSource.forEach((row) => {
-            // update-begin--author:liaozhiyang---date:20260805---for：【LHZP-1056】空字符串需过滤掉
+            // update-begin--author:liaozhiyang---date:20260805---for：【LHZP-1056】Chuỗi rỗng cần được lọc bỏ
             if (row[column]=='' || row[column]==null || isNaN(parseFloat(row[column]))) return;
-            // update-end--author:liaozhiyang---date:20260805---for：【LHZP-1056】空字符串需过滤掉
+            // update-end--author:liaozhiyang---date:20260805---for：【LHZP-1056】Chuỗi rỗng cần được lọc bỏ
             count += parseFloat(row[column]);
           });
-          totalRow[column] = isNaN(count) ? '包含非数字内容' : count.toFixed(2);
+          totalRow[column] = isNaN(count) ? 'Bao gồm nội dung không phải chữ số' : count.toFixed(2);
         });
         tableParams.dataSource.push(totalRow);
       }
     }
   }
 
-  // 导出Excel
+  // Xuất (export)Excel
   function onExportXls() {
     let fileName = props.title;
     defHttp
@@ -479,14 +479,14 @@ export function useChartRender(props: PropsType, { emit }) {
       )
       .then((data) => {
         if (!data || data.size == 0) {
-          $message.warning('导出失败！');
+          $message.warning('Xuất thất bại!');
           return;
         }
         downloadByData(data, fileName + '.xls');
       });
   }
 
-  // 打印
+  // In
   function onPrint() {
     printJS({
       type: 'html',
@@ -494,7 +494,7 @@ export function useChartRender(props: PropsType, { emit }) {
     });
   }
 
-  /** 跳转到详情页 */
+  /** Chuyển tới trang chi tiết */
   function onGoToDetail() {
     goToInfo(props.chartsData);
   }

@@ -5,9 +5,9 @@
   export default defineComponent({
     name: 'ErrorTip',
     props: {
-      // 提示文本
+      // Văn bản nhắc nhở
       tip: String,
-      // 外层标签名
+      // Tên nhãn ở tầng ngoài
       tag: { type: String, default: 'div' },
     },
     render() {

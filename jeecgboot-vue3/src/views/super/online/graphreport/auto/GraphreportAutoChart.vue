@@ -3,12 +3,12 @@
     <a-spin :spinning="loading">
       <ErrorTip v-if="errorTip" :tip="errorTip" />
       <template v-else>
-        <!--update-begin--author:liaozhiyang---date:20240316---for：【QQYUN-8426】图表查询区域适配暗黑色-->
+        <!--update-begin--author:liaozhiyang---date:20240316---for：【QQYUN-8426】Vùng truy vấn biểu đồ thích ứng với màu đen tối-->
         <Card v-if="showSearchField">
           <BasicForm @register="registerSearchForm" :model="searchFormModal" />
         </Card>
-        <!--update-end--author:liaozhiyang---date:20240316---for：【QQYUN-8426】图表查询区域适配暗黑色-->
-        <ErrorTip v-if="errors.resultIsEmpty" tip="没有查询到任何数据" />
+        <!--update-end--author:liaozhiyang---date:20240316---for：【QQYUN-8426】Vùng truy vấn biểu đồ thích ứng với màu đen tối-->
+        <ErrorTip v-if="errors.resultIsEmpty" tip="Không truy vấn được bất kỳ dữ liệu nào" />
         <ChartAutoRender v-else :chartsData="chartsData" />
       </template>
     </a-spin>
@@ -39,46 +39,46 @@
       const loading = ref(false);
       const code = ref<string>();
       const errorTip = ref<Nullable<string>>(null);
-      // 根据不同的运行时错误显示不同的提示信息
+      // Căn cứ vào các lỗi runtime khác nhau, hiển thị thông tin nhắc nhở khác nhau
       const errors = reactive({ resultIsEmpty: false });
       const chartsData = ref();
-      // 查询条件（map根据code隔离）
+      // Điều kiện truy vấn (mapCăn cứ theocodecách ly)
       const paramsMap = reactive({});
-      // 用户自定义查询条件（map根据code隔离）
+      // Điều kiện truy vấn tùy chỉnh của người dùng (mapCăn cứ theocodecách ly)
       const selfParamsMap = reactive({});
-      // 查询条件form（map根据code隔离）
+      // Điều kiện truy vấnform（mapCăn cứ theocodecách ly)
       const searchFormMap = reactive({});
-      // 多页面params缓存
+      // Nhiều trangparamsBộ nhớ đệm
       const paramsRef = getPageComputed<string>(paramsMap, '');
-      // 用户自定义查询条件
+      // Điều kiện truy vấn tùy chỉnh của người dùng
       const selfParamsRef = getPageComputed<Nullable<Recordable>>(selfParamsMap);
-      // 查询条件form
+      // Điều kiện truy vấnform
       const searchFormModal = getPageComputed(searchFormMap, {});
-      // 是否显示查询条件
+      // Có hiển thị điều kiện truy vấn hay không
       const showSearchField = ref(false);
-      // 自适应列配置
+      // Cấu hình cột thích ứng
       const adaptiveColProps = { xs: 24, sm: 12, md: 12, lg: 8, xl: 8, xxl: 6 };
       const [registerSearchForm, searchForm] = useForm({
         schemas: [],
-        // 紧凑模式
+        // Chế độ gọn (compact)
         compact: true,
-        // label默认宽度
+        // labelĐộ rộng mặc định
         labelWidth: 120,
-        // 按下回车后自动提交
+        // Sau khi nhấn Enter, tự động gửi
         autoSubmitOnEnter: true,
-        // 默认 row 配置
+        // Mặc định row Cấu hình
         rowProps: { gutter: 8 },
-        // 默认 col 配置
+        // Mặc định col Cấu hình
         baseColProps: {
           ...adaptiveColProps,
         },
         labelCol: { xs: 24, sm: 8, md: 6, lg: 8, xl: 6, xxl: 6 },
         wrapperCol: {},
-        // 是否显示 展开/收起 按钮
+        // Có hiển thị hay không Mở rộng/Thu gọn Nút
         showAdvancedButton: true,
-        // 超过指定列数默认折叠
+        // Vượt quá số cột chỉ định thì mặc định thu gọn
         autoAdvancedCol: 3,
-        // 操作按钮配置
+        // Cấu hình nút thao tác
         actionColOptions: {
           ...adaptiveColProps,
           style: { textAlign: 'left' },
@@ -87,12 +87,12 @@
         submitFunc: onSubmit,
       });
 
-      // 【VUEN-1554】缓存路由走Activated，没缓存的走Mounted，均只走一次
+      // 【VUEN-1554】Route bộ nhớ đệm đi quaActivated, cái chưa lưu bộ nhớ đệm thì đi quaMounted, đều chỉ đi qua một lần
       onMountedOrActivated(() => {
         code.value = $route.value.params.code as string;
       });
 
-      // 刷新参数放到这里去触发，就可以刷新相同界面了
+      // Đặt tham số làm mới vào đây để kích hoạt, là có thể làm mới cùng một giao diện
       watch(
         code,
         () => {
@@ -106,7 +106,7 @@
         errorTip.value = tip;
       }
 
-      // 加载图表数据
+      // Tải dữ liệu biểu đồ
       async function loadChartsData() {
         loading.value = true;
         if (!code.value) {
@@ -114,7 +114,7 @@
           return false;
         }
         let params = { id: code.value, params: paramsRef.value };
-        // 查询图表参数
+        // Truy vấn tham số biểu đồ
         if (selfParamsRef.value == null) {
           selfParamsRef.value = {};
           try {
@@ -157,7 +157,7 @@
 
       const { parseFormSchemas } = useParseFormSchemas(chartsData, showSearchField);
 
-      // 解析图表数据
+      // Phân tích dữ liệu biểu đồ
       async function parseChartsData() {
         let schemas = await parseFormSchemas();
         if (schemas && schemas.length>0) {
@@ -172,7 +172,7 @@
         loadChartsData();
       }
 
-      //表单提交
+      //Gửi biểu mẫu
       async function onSubmit() {
         const data = await searchForm.validate();
         let { items } = chartsData.value;
@@ -182,19 +182,19 @@
           let values: any = null;
           if (!field.searchMode) field.searchMode = 'single';
           if (field.searchMode === 'single') {
-            // 单条件查询
+            // Truy vấn điều kiện đơn
             values = data[field.fieldName];
           } else {
-            // 范围查询
+            // Truy vấn theo phạm vi
             let _begin = data[field.fieldName];
             let _end = data[`${field.fieldName}_end`];
             values = [_begin, _end];
           }
-          // 日期格式化
+          // Định dạng hóa ngày
           if (field.fieldType === 'Date') {
             values = formatDate(values);
           }
-          // 封装成 params
+          // Đóng gói thành params
           if (values != null && (values[0] != null || values[1] != null)) {
             params.push({
               value: values,
@@ -209,7 +209,7 @@
         loadChartsData();
       }
 
-      // 格式化日期
+      // Định dạng hóa ngày
       function formatDate(values) {
         if (values) {
           if (isArray(values)) {
@@ -246,14 +246,14 @@
       padding: 10px 20px;
     }
 
-    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1033】图表查询日期/数字宽度适配
+    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1033】Ngày truy vấn biểu đồ/Thích ứng độ rộng chữ số
     :deep(.ant-picker),
     :deep(.ant-calendar-picker),
     :deep(.ant-input-number) {
       width: 100%;
     }
 
-    // 范围查询：横向排列，左右各占一半
+    // Truy vấn theo phạm vi: sắp xếp ngang, trái phải mỗi bên chiếm một nửa
     :deep(.range-query) {
       .range-query-inner {
         display: flex;
@@ -278,6 +278,6 @@
         }
       }
     }
-    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1033】图表查询日期/数字宽度适配
+    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1033】Ngày truy vấn biểu đồ/Thích ứng độ rộng chữ số
   }
 </style>

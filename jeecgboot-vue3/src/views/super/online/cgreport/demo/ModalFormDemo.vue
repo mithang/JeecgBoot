@@ -14,12 +14,12 @@
       {
         field: 'name',
         component: 'Input',
-        label: '名称',
+        label: 'Tên',
       },
       {
         field: 'age',
         component: 'InputNumber',
-        label: '年龄',
+        label: 'Tuổi',
         componentProps: {
           style: {
             width: '100%',
@@ -28,7 +28,7 @@
       },
       {
         field: 'sex',
-        label: '性别',
+        label: 'Giới tính',
         component: 'JDictSelectTag',
         componentProps: {
           dictCode: 'sex',
@@ -37,7 +37,7 @@
       {
         field: 'birthday',
         component: 'DatePicker',
-        label: '生日',
+        label: 'Ngày sinh',
         componentProps: {
           valueFormat: 'YYYY-MM-DD',
           style: {
@@ -48,7 +48,7 @@
       {
         field: 'email',
         component: 'Input',
-        label: '邮箱',
+        label: 'Email',
       },
     ];
   };
@@ -57,7 +57,7 @@
     components: { BasicForm },
     props: ['id'],
     setup(props) {
-      //表单配置
+      //Cấu hình biểu mẫu
       const [registerForm, { setFieldsValue }] = useForm({
         schemas: getSchemas(),
         showActionButtonGroup: false,

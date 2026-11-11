@@ -8,31 +8,31 @@
 <script lang="ts">
   import { ref, watch, computed, inject, defineComponent } from 'vue';
   import ErrorTip from '../ErrorTip.vue';
-  // tabs 布局模板
+  // tabs Mẫu bố cục
   import ChartTabsRender from './ChartTabsRender.vue';
-  // 单排布局模板
+  // Mẫu bố cục một hàng
   import ChartSingleRender from './ChartSingleRender.vue';
-  // 双排布局模板
+  // Mẫu bố cục hai hàng
   import ChartDoubleRender from './ChartDoubleRender.vue';
-  // 组合布局
+  // Bố cục kết hợp
   // import ChartCombinationRender from './ChartCombinationRender.vue'
 
   export default defineComponent({
     name: 'ChartAutoRender',
     components: { ErrorTip, ChartTabsRender, ChartSingleRender, ChartDoubleRender },
     props: {
-      // 图表数据
+      // Dữ liệu biểu đồ
       chartsData: { type: Object, default: null },
-      // 是否是组合模式
+      // Có phải chế độ kết hợp hay không
       isCombination: { type: Boolean, default: false },
     },
     setup(props) {
       const setErrorTip = inject('setErrorTip') as Fn;
-      // 图表标题
+      // Tiêu đề biểu đồ
       const chartTitle = ref(null);
-      // 展示模板
+      // Mẫu hiển thị
       const displayTemplate = ref('tab');
-      // 数据源
+      // Nguồn dữ liệu
       const dataSource = ref<Recordable>({});
       const isTabs = computed(() => displayTemplate.value === 'tab');
       const isSingle = computed(() => displayTemplate.value === 'single');
@@ -40,7 +40,7 @@
       // const isCombination = computed(() => displayTemplate.value === 'combination')
       const templateProps = computed(() => {
         return {
-          // 组件模式下不显示 title
+          // Không hiển thị ở chế độ component title
           title: props.isCombination ? null : chartTitle.value,
           chartsData: props.chartsData,
           isCombination: props.isCombination,
@@ -54,14 +54,14 @@
         { immediate: true }
       );
 
-      // 解析图表数据
+      // Phân tích dữ liệu biểu đồ
       function parseChartsData(data) {
         if (data) {
           chartTitle.value = data.head.name;
           displayTemplate.value = data.head.displayTemplate;
           dataSource.value = data;
           if (!isTabs.value && !isDouble.value && !isSingle.value) {
-            setErrorTip('未识别的布局模式');
+            setErrorTip('Chế độ bố cục không nhận diện được');
           }
         }
       }

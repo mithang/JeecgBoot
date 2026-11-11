@@ -1,5 +1,5 @@
 <template>
-  <a-alert type="info" showIcon message="目前只有SQL模式才支持报表参数！" />
+  <a-alert type="info" showIcon message="Hiện tại chỉ cóSQLChỉ chế độ này mới hỗ trợ tham số báo cáo!" />
   <br />
   <JVxeTable
     ref="tableRef"
@@ -29,29 +29,29 @@
       const tableRef = ref<JVxeTableInstance>();
       const columns = ref<JVxeColumn[]>([
         {
-          title: '参数',
+          title: 'Tham số',
           key: 'paramName',
           width: 230,
           type: JVxeTypes.input,
           defaultValue: '',
-          placeholder: '请输入${title}',
-          validateRules: [{ required: true, message: '${title}不能为空' }],
+          placeholder: 'Vui lòng nhập${title}',
+          validateRules: [{ required: true, message: '${title}không được để trống' }],
         },
         {
-          title: '参数文本',
+          title: 'Văn bản tham số',
           key: 'paramTxt',
           width: 230,
           type: JVxeTypes.input,
           defaultValue: '',
-          placeholder: '请输入${title}',
-          validateRules: [{ required: true, message: '${title}不能为空' }],
+          placeholder: 'Vui lòng nhập${title}',
+          validateRules: [{ required: true, message: '${title}không được để trống' }],
         },
         {
-          title: '默认值',
+          title: 'Giá trị mặc định',
           key: 'paramValue',
           type: JVxeTypes.input,
           defaultValue: '',
-          placeholder: '请输入${title}',
+          placeholder: 'Vui lòng nhập${title}',
         },
       ]);
       return { tableRef, columns };
