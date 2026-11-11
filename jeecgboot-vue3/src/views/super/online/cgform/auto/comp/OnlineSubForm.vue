@@ -57,20 +57,20 @@
         type: String,
         default: '',
       },
-      // update-begin--author:liusq---date:20260731---for:【工单授权BPM】一对一子表接收主表传来的 modalClass，否则下拉/日期类组件的 popup 会挂到外层同名 modal 上导致点击无反应
+      // update-begin--author:liusq---date:20260731---for:【Ủy quyền phiếu công việcBPM】Bảng con một-một nhận dữ liệu do bảng chính truyền sang modalClass, nếu không dropdown/của component thuộc loại ngày popup sẽ gắn lên cùng tên ở tầng ngoài modal trên khiến việc nhấp không có phản hồi
       modalClass: {
         type: String,
         default: '',
       },
-      // update-end--author:liusq---date:20260731---for:【工单授权BPM】一对一子表接收主表传来的 modalClass，否则下拉/日期类组件的 popup 会挂到外层同名 modal 上导致点击无反应
+      // update-end--author:liusq---date:20260731---for:【Ủy quyền phiếu công việcBPM】Bảng con một-một nhận dữ liệu do bảng chính truyền sang modalClass, nếu không dropdown/của component thuộc loại ngày popup sẽ gắn lên cùng tên ở tầng ngoài modal trên khiến việc nhấp không có phản hồi
     },
     emits: ['formChange'],
     setup(props, { emit }) {
-      console.log('进入online子表表单页面》》》》' + props.table);
+      console.log('VàoonlineTrang biểu mẫu bảng con》》》》' + props.table);
 
-      // 表单ref
+      // Biểu mẫuref
       const onlineFormRef = ref(null);
-      // 表单是否渲染完成
+      // Biểu mẫu đã render xong hay chưa
       const formRendered = ref(false);
       const { createMessage: $message } = useMessage();
       const {
@@ -87,18 +87,18 @@
         wrapperCol,
         labelWidth,
       } = useFormItems(props, onlineFormRef);
-      //表单配置
+      //Cấu hình biểu mẫu
       const [registerForm, { setProps, validate, resetFields, setFieldsValue, getFieldsValue, updateSchema, scrollToField }] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
         baseColProps: baseColProps,
-        // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
         labelWidth,
-        // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-7632】 label栅格改成labelwidth固宽
-        // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+        // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
+        // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
         labelCol,
         wrapperCol
-        // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+        // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
       });
       const getFormItem = () => {
         return new Promise((resolve, reject) => {
@@ -116,15 +116,15 @@
         { immediate: true }
       );
 
-      //监听配置改变事件
+      //Lắng nghe sự kiện thay đổi cấu hình
       watch(
         () => props.properties,
         async (valueObj) => {
-          //重新渲染表单
-          console.log('主表properties改变', props.properties);
+          //Render lại biểu mẫu
+          console.log('bảng chínhpropertiesThay đổi', props.properties);
           formRendered.value = false;
           addFormChangeEvent();
-          // update-begin--author:liaozhiyang---date:20260318---for:【issues/9414】一对一子表设置label长度不生效
+          // update-begin--author:liaozhiyang---date:20260318---for:【issues/9414】Thiết lập bảng con một-mộtlabelĐộ dài không có hiệu lực
           if (!extConfigJson) {
               try {
               const data = await getFormItem();
@@ -137,20 +137,20 @@
               console.log(error);
             }
           }
-          // update-end--author:liaozhiyang---date:20260318---for:【issues/9414】一对一子表设置label长度不生效
+          // update-end--author:liaozhiyang---date:20260318---for:【issues/9414】Thiết lập bảng con một-mộtlabelĐộ dài không có hiệu lực
           createFormSchemas(props.properties, props.requiredFields, checkOnlyFieldValue, extConfigJson);
           formRendered.value = true;
         },
         { deep: true, immediate: true }
       );
 
-      //监听主表数据ID
+      //Lắng nghe dữ liệu bảng chínhID
       watch(
         () => props.mainId,
         (valueObj) => {
-          //重新加载子表数据
-          console.log('主表ID改变', props.mainId);
-          // 此处延迟100毫秒是为了让properties的监听先执行
+          //Tải lại dữ liệu bảng con
+          console.log('bảng chínhIDThay đổi', props.mainId);
+          // Độ trễ tại đây100mili giây là để chopropertiesViệc lắng nghe của thực thi trước
           setTimeout(() => {
             resetSubForm();
           }, 100);
@@ -166,24 +166,24 @@
       );
 
       /**
-       * 监听表单改变事件
+       * Lắng nghe sự kiện thay đổi biểu mẫu
        */
       async function addFormChangeEvent() {
         let formRefObject = await getRefPromise(onlineFormRef);
         formRefObject.$formValueChange = (field, value, changeFormData) => {
           let emitArgument = { [field]: value };
-          // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
-          // 一对一子表 关联记录和他表字段
+          // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
+          // bảng con một-một Bản ghi liên kết và trường bảng khác
           if(changeFormData){
             setFieldsValue(changeFormData);
           }
-          // update-end--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
+          // update-end--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
           emit('formChange', emitArgument);
         };
       }
 
       /**
-       * 当前表单默认值逻辑-进入新增页面触发
+       * Logic giá trị mặc định của biểu mẫu hiện tại-Kích hoạt khi vào trang thêm mới
        */
       function handleDefaultValue() {
         if (unref(props.isUpdate) === false) {
@@ -195,14 +195,14 @@
       }
 
       /**
-       * 当主表数据ID发生改变，子表重现获取数据
+       * Khi dữ liệu bảng chínhIDxảy ra thay đổi, bảng con lấy lại dữ liệu
        * @returns {Promise<void>}
        */
       async function resetSubForm() {
-        //TODO 填值规则
-        // update-begin--author:sunjianlei --- date:20191111 --- for: 每次加载数据的时候都重新执行一遍填值规则 -----------
+        //TODO Quy tắc điền giá trị
+        // update-begin--author:sunjianlei --- date:20191111 --- for: Mỗi lần tải dữ liệu đều thực thi lại quy tắc điền giá trị một lượt -----------
         //this.$emit('executeFillRule', {form:this.form, target: this})
-        // update-end--author:sunjianlei --- date:20191111 --- for: 每次加载数据的时候都重新执行一遍填值规则 -----------
+        // update-end--author:sunjianlei --- date:20191111 --- for: Mỗi lần tải dữ liệu đều thực thi lại quy tắc điền giá trị một lượt -----------
         await getRefPromise(formRendered);
         await resetFields();
         handleDefaultValue();
@@ -216,19 +216,19 @@
           // VUEN-1033
           await setFieldsValue(values);
         } catch (error) {
-          const message = error?.message || '子表数据加载失败';
-          console.error('子表数据加载失败:', error);
+          const message = error?.message || 'Tải dữ liệu bảng con thất bại';
+          console.error('Tải dữ liệu bảng con thất bại:', error);
           $message.error(message);
         }
       }
 
       async function loadData(table, mainId) {
         let url = `${baseUrl}/${table}/${mainId}`;
-        //console.log("loadData 子表数据 url:", url);
+        //console.log("loadData Dữ liệu bảng con url:", url);
         try {
           const res = await defHttp.get({ url }, { isTransformResponse: false });
           if (!res?.success) {
-            throw new Error(res?.message || '子表数据加载失败');
+            throw new Error(res?.message || 'Tải dữ liệu bảng con thất bại');
           }
           return res.result;
         } finally {
@@ -254,7 +254,7 @@
         });
       }
 
-      //获取表单事件对象 监听表单改变用到
+      //Lấy đối tượng sự kiện biểu mẫu Dùng khi lắng nghe thay đổi biểu mẫu
       function getFormEvent() {
         let row = getFieldsValue();
         if (!row.id) {
@@ -266,7 +266,7 @@
         };
       }
 
-      //设置表单的值
+      //Thiết lập giá trị của biểu mẫu
       function setValues(values) {
         setFieldsValue(values);
       }
@@ -279,7 +279,7 @@
         }, formData);
       }
 
-      // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-249】第二次打开新增弹窗，一对一子表的默认值没了
+      // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-249】Mở popup thêm mới lần thứ hai, giá trị mặc định của bảng con một-một bị mất
       async function resetAndApplyDefaultValue() {
         await resetFields();
         let fieldProperties = toRaw(defaultValueFields[tableName.value]);
@@ -287,7 +287,7 @@
           setFieldsValue(values);
         });
       }
-      // update-end--author:liaozhiyang---date:20260714---for：【LHZP-249】第二次打开新增弹窗，一对一子表的默认值没了
+      // update-end--author:liaozhiyang---date:20260714---for：【LHZP-249】Mở popup thêm mới lần thứ hai, giá trị mặc định của bảng con một-một bị mất
 
       const context = {
         onlineFormRef,
@@ -311,11 +311,11 @@
 </script>
 
 <style lang="less" scoped>
-  // update-begin--author:liaozhiyang---date:20240527---for：【TV360X-263】tab风格一对一子表上传组件有数据没渲染出来
+  // update-begin--author:liaozhiyang---date:20240527---for：【TV360X-263】tabPhong cách một-một, component tải lên của bảng con có dữ liệu nhưng không render ra
   :deep(.ant-upload-list-item-container) {
     &.ant-motion-collapse {
       height: auto !important;
     }
   }
-  // update-end--author:liaozhiyang---date:20240527---for：【TV360X-263】tab风格一对一子表上传组件有数据没渲染出来
+  // update-end--author:liaozhiyang---date:20240527---for：【TV360X-263】tabPhong cách một-một, component tải lên của bảng con có dữ liệu nhưng không render ra
 </style>

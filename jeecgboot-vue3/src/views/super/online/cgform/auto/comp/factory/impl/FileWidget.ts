@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 文件
+ * Tệp
  */
 export default class FileWidget extends IFormSchema {
   getItem(): FormSchema {

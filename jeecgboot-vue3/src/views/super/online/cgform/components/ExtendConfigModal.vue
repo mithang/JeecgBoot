@@ -2,7 +2,7 @@
   <ConfigProvider :theme="{ token: { fontSize: 13, controlHeight: 28 } }">
     <BasicModal
       @register="registerModal"
-      title="表单扩展配置项"
+      title="Mục cấu hình mở rộng biểu mẫu"
       :width="900"
       :bodyStyle="{ padding: '24px 28px 12px' }"
       @ok="handleOk"
@@ -39,12 +39,12 @@
         onJoinQueryChange,
         onReportPrintShowChange,
         onFormLabelLengthShow,
-        // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
+        // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
         onEnableMultiDataSourceChange,
-        // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
+        // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
       });
 
-      // 表单配置
+      // Cấu hình biểu mẫu
       const [registerForm, { resetFields, setFieldsValue, getFieldsValue, clearValidate, validate }] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
@@ -70,26 +70,26 @@
         closeModal();
       }
 
-      // 对接表单设计更改事件
+      // Sự kiện thay đổi thiết kế biểu mẫu khi kết nối
       function onIsDesformChange(value) {
         if (value === 'Y') {
           let { themeTemplate } = props.parentForm.getFieldsValue(['themeTemplate']);
           if ('erp' === themeTemplate) {
             props.parentForm.setFieldsValue({ themeTemplate: 'normal' });
-            $message.warning('请注意：erp风格不支持对接表单设计，已自动改为默认风格！');
+            $message.warning('Xin lưu ý:erpPhong cách không hỗ trợ kết nối thiết kế biểu mẫu, đã tự động đổi thành phong cách mặc định!');
           }
         } else {
           clearValidate('desFormCode');
         }
       }
 
-      // 默认提示积木报表地址
-      const defaultReportPrintUrl = `{{ window._CONFIG['domianURL'] }}/jmreport/view/{积木报表ID}`;
+      // Mặc định nhắc địa chỉ báo cáo Jimu
+      const defaultReportPrintUrl = `{{ window._CONFIG['domianURL'] }}/jmreport/view/{Báo cáo JimuID}`;
 
-      // 集成积木报表更改事件
+      // Sự kiện thay đổi tích hợp báo cáo Jimu
       async function onReportPrintShowChange(value) {
         let reportPrintUrl = getFieldsValue()['reportPrintUrl'];
-        // 0 = 关闭时，清空默认提示地址
+        // 0 = Khi đóng, xóa địa chỉ nhắc nhở mặc định
         if (value === 0) {
           if (reportPrintUrl === defaultReportPrintUrl) {
             await setFieldsValue({ reportPrintUrl: '' });
@@ -104,7 +104,7 @@
       /**
        * 2024-03-29
        * liaozhiyang
-       * 表单统一label长度关闭时,formLabelLength置空
+       * Thống nhất biểu mẫulabelKhi độ dài bị đóng,formLabelLengthĐặt thành trống
        */
       async function onFormLabelLengthShow(value) {
         if (value == 0) {
@@ -113,35 +113,35 @@
         await clearValidate('formLabelLength');
       }
 
-      // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源：关闭多数据源时清空已选数据源
+      // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu: khi tắt đa nguồn dữ liệu, xóa trống nguồn dữ liệu đã chọn
       async function onEnableMultiDataSourceChange(value) {
         if (value == 0) {
           await setFieldsValue({ dbSource: '' });
         }
         await clearValidate('dbSource');
       }
-      // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
+      // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
 
-      // 联合查询更改事件
+      // Sự kiện thay đổi truy vấn liên hợp
       function onJoinQueryChange(value) {
         if (value === 1) {
           let { themeTemplate, isTree, tableType } = props.parentForm.getFieldsValue(['themeTemplate', 'isTree', 'tableType']);
           if ('erp' === themeTemplate) {
-            $message.warning('请注意：erp风格不支持联合查询，配置无效!');
+            $message.warning('Xin lưu ý:erpPhong cách không hỗ trợ truy vấn liên hợp, cấu hình không có hiệu lực!');
             setFieldsValue({ joinQuery: 0 });
           }
           if ('innerTable' === themeTemplate) {
-            $message.warning('请注意：内嵌风格不支持联合查询，配置无效!');
+            $message.warning('Xin lưu ý: phong cách nhúng không hỗ trợ truy vấn liên hợp, cấu hình không có hiệu lực!');
             setFieldsValue({ joinQuery: 0 });
           }
           if (1 === tableType) {
-            $message.warning('请注意：单表不支持联合查询，配置无效!');
+            $message.warning('Xin lưu ý: bảng đơn không hỗ trợ truy vấn liên hợp, cấu hình không có hiệu lực!');
             setFieldsValue({ joinQuery: 0 });
           } else if (3 === tableType) {
-            $message.warning('请注意：当前表为附表，请在对应主表配置!');
+            $message.warning('Xin lưu ý: bảng hiện tại là bảng phụ, vui lòng cấu hình ở bảng chính tương ứng!');
             setFieldsValue({ joinQuery: 0 });
           } else if ('Y' === isTree) {
-            $message.warning('请注意：树形列表不支持联合查询，配置无效!');
+            $message.warning('Xin lưu ý: danh sách dạng cây không hỗ trợ truy vấn liên hợp, cấu hình không có hiệu lực!');
             setFieldsValue({ joinQuery: 0 });
           }
         }

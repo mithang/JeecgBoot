@@ -2,7 +2,7 @@ import { FormActionType, JCodeEditor } from '/@/components/Form';
 import { ref } from 'vue';
 
 export function useOnlineTest(data, methods, form: Nullable<FormActionType>) {
-  // Online单元测试开关
+  // OnlineCông tắc kiểm thử đơn vị (unit test)
   const aiTestMode = ref(false);
   const aiTestTable = ref([]);
   const aiTableList = ref([]);
@@ -10,36 +10,36 @@ export function useOnlineTest(data, methods, form: Nullable<FormActionType>) {
   function initVirtualData() {
   }
 
-  // 自定义按钮
-  // 开源版不含AI测试数据，此处为空实现；参数签名与 CustomButtonList.vue 的调用保持一致（LHZP-195）
+  // Nút tùy chỉnh
+  // Phiên bản mã nguồn mở không bao gồmAIDữ liệu kiểm thử, tại đây là triển khai rỗng; chữ ký tham số giống với CustomButtonList.vue giữ lời gọi của nhất quán (LHZP-195）
   async function genButtons(code, existingButtonCodes: string[] = []) {
   }
 
-  // 生成java增强
+  // Tạo rajavaTăng cường
   function genEnhanceJavaData(code) {
   }
 
-  // 生成js增强
+  // Tạo rajsTăng cường
   function genEnhanceJsData(tableName, type, codeEditor: InstanceType<typeof JCodeEditor>) {
   }
 
-  // 自定义sql增强
+  // Tùy chỉnhsqlTăng cường
   function genEnhanceSqlData(code, tableName) {
   }
 
   /**
-   * 加载配置信息
+   * Tải thông tin cấu hình
    */
   function setTaleConfig() {
   }
 
   function tableJsonGetHelper(pickAfter) {
-    console.log('表的配置信息', JSON.stringify(pickAfter));
+    console.log('Thông tin cấu hình của bảng', JSON.stringify(pickAfter));
     console.log('---------------------------------------');
   }
 
   /**
-   * json 获取小助手
+   * json Lấy trợ lý nhỏ
    * @param fields
    */
   function fieldsJsonGetHelper(fields) {

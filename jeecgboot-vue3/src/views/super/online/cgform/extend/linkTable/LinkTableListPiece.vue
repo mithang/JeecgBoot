@@ -6,7 +6,7 @@
 
 <script>
   /**
-   * 关联记录 在列表上显示的 小块
+   * bản ghi liên kết hiển thị trên danh sách Khối nhỏ
    */
   import { propTypes } from '/@/utils/propTypes';
   export default {

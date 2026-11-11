@@ -1,11 +1,11 @@
 <template>
   <div :id="tableName + '_form'">
-    <!-- 积木报表的打印按钮，只有配置了 reportUrl 才显示 -->
+    <!-- Nút in của báo cáo Jimu, chỉ khi đã cấu hình reportUrl mới hiển thị -->
     <div
       v-if="!!formData.id && !!onlineExtConfigJson.reportPrintShow"
       style="text-align: right; position: absolute; top: 15px; right: 20px; z-index: 999"
     >
-      <PrinterOutlined title="打印" @click="onOpenReportPrint" style="font-size: 16px" />
+      <PrinterOutlined title="In" @click="onOpenReportPrint" style="font-size: 16px" />
     </div>
 
     <a-tabs
@@ -13,13 +13,13 @@
       @change="onTabChange"
       v-model:activeKey="subActiveKey"
     >
-      <a-tab-pane tab="主表" :key="'-1'">
+      <a-tab-pane tab="bảng chính" :key="'-1'">
         <detail-form :schemas="detailFormSchemas" :data="formData" :span="formSpan" />
       </a-tab-pane>
       <template v-if="hasSubTable && showSub">
         <a-tab-pane v-for="(sub, index) in subTabInfo" :tab="sub.describe" :key="index + ''" :forceRender="true">
           <div :style="{ 'overflow-y': 'auto', 'overflow-x': 'hidden', 'max-height': subFormHeight + 'px' }" v-if="sub.relationType == 1">
-            <!-- 子表-一对一 -->
+            <!-- bảng con-một-một -->
             <online-sub-form-detail
               :key="subReloadKey"
               :table="sub.key"
@@ -30,7 +30,7 @@
             </online-sub-form-detail>
           </div>
           <div v-else>
-            <!-- 子表-一对多 -->
+            <!-- bảng con-một-nhiều -->
             <JVxeTable
               v-if="showStatus[sub.key]"
               :ref="refMap[sub.key]"
@@ -122,16 +122,16 @@
 
       const tableName = ref('');
       const single = ref(true);
-      // 加载状态
+      // Trạng thái tải
       const loading = ref(false);
       const tableType = ref(1);
       const formData = ref<any>({});
-      // update-begin-author:liaozhiyang---date:20240313---for：【QQYUN-9034】online弹窗一对一子表移动端内容高度设置不合理
+      // update-begin-author:liaozhiyang---date:20240313---for：【QQYUN-9034】onlinePopup: thiết lập chiều cao nội dung của bảng con một-một ở phía di động không hợp lý
       const subFormHeight = ref('auto');
-      // update-end-author:liaozhiyang---date:20240313---for：【QQYUN-9034】online弹窗一对一子表移动端内容高度设置不合理
+      // update-end-author:liaozhiyang---date:20240313---for：【QQYUN-9034】onlinePopup: thiết lập chiều cao nội dung của bảng con một-một ở phía di động không hợp lý
       const subReloadKey = ref(0);
-      // 子表表格高度
-      // 【VUEN-803】一对多子表固定340高度，修复自定义列组件被遮挡的问题
+      // Chiều cao bảng dữ liệu của bảng con
+      // 【VUEN-803】Cố định bảng con một-nhiều340chiều cao, sửa vấn đề component cột tùy chỉnh bị che khuất
       const subTableHeight = ref(340);
       const subActiveKey = ref('0');
 
@@ -142,7 +142,7 @@
         (value, oldValue) => {
           subActiveKey.value = value;
           if (oldValue) {
-            //第一次进来不执行，之后监听变化了才执行。(详情情界面序号错位了，点一下正常)
+            //Lần đầu vào không thực thi, sau đó khi lắng nghe thấy thay đổi mới thực thi.(Giao diện chi tiết số thứ tự bị lệch vị trí, nhấp một cái là bình thường)
             onTabChange();
           }
         },
@@ -151,7 +151,7 @@
         }
       );
       /**
-       * online表单扩展配置
+       * onlineCấu hình mở rộng biểu mẫu
        */
       const onlineExtConfigJson = reactive({
         reportPrintShow: 0,
@@ -165,7 +165,7 @@
         getDetailFormSchemas(props);
 
       /**
-       * 处理扩展配置
+       * Xử lý cấu hình mở rộng
        */
       function handleExtConfigJson(jsonStr) {
         let extConfigJson = { reportPrintShow: 0, reportPrintUrl: '', joinQuery: 0, modelFullscreen: 1, modalMinWidth: '' };
@@ -177,7 +177,7 @@
         });
       }
 
-      // 渲染表单
+      // Render biểu mẫu
       async function createRootProperties(data) {
         tableType.value = data.head.tableType;
         tableName.value = data.head.tableName;
@@ -188,15 +188,15 @@
       }
 
       /**
-       * status: 是否是修改页面
-       * record: 列表页面的行数据
-       * param： 树形列表添加子节点 传入的父级节点id
+       * status: Có phải trang sửa đổi hay không
+       * record: Dữ liệu hàng của trang danh sách
+       * param： Danh sách dạng cây thêm nút con nút cấp cha được truyền vàoid
        * */
       async function show(_status, record) {
-        console.log('进入表单详情》》form', record);
-        // -update-begin--author:liaozhiyang---date:20251209---for：【QQYUN-13970】一对一子表编辑之后查看详情不会更新
+        console.log('Vào chi tiết biểu mẫu 》》form', record);
+        // -update-begin--author:liaozhiyang---date:20251209---for：【QQYUN-13970】Sau khi chỉnh sửa bảng con một-một, xem chi tiết không được cập nhật
         subReloadKey.value++;
-        // -update-end--author:liaozhiyang---date:20251209---for：【QQYUN-13970】一对一子表编辑之后查看详情不会更新
+        // -update-end--author:liaozhiyang---date:20251209---for：【QQYUN-13970】Sau khi chỉnh sửa bảng con một-một, xem chi tiết không được cập nhật
         await edit(record);
         changeShowStatus(true);
       }
@@ -220,7 +220,7 @@
         });
       }
 
-      //update-begin-author:taoyan date:2023-2-13 for: QQYUN-4226【vue3】online 一对多子表 详情界面，序号错位了 点一下子表表格就正常了
+      //update-begin-author:taoyan date:2023-2-13 for: QQYUN-4226【vue3】online bảng con một-nhiều Giao diện chi tiết, số thứ tự bị lệch vị trí Nhấp một cái vào bảng của bảng con là bình thường trở lại
       function changeShowStatus(flag) {
         Object.keys(showStatus).map((k) => {
           showStatus[k] = flag;
@@ -233,18 +233,18 @@
           changeShowStatus(true);
         }, 300);
       }
-      //update-end-author:taoyan date:2023-2-13 for: QQYUN-4226【vue3】online 一对多子表 详情界面，序号错位了 点一下子表表格就正常了
+      //update-end-author:taoyan date:2023-2-13 for: QQYUN-4226【vue3】online bảng con một-nhiều Giao diện chi tiết, số thứ tự bị lệch vị trí Nhấp một cái vào bảng của bảng con là bình thường trở lại
 
       async function edit(record) {
         let temp: any = await getFormData(record.id);
-        //表单赋值
+        //Gán giá trị biểu mẫu
         formData.value = { ...temp };
         editSubVxeTableData(temp);
       }
 
       function editSubVxeTableData(record) {
         if (!record) {
-          // 新增页面需要清空子表数据
+          // Trang thêm mới cần xóa sạch dữ liệu bảng con
           record = {};
         }
         let keys = Object.keys(subDataSource.value);
@@ -261,7 +261,7 @@
         return 'online_' + table + ':';
       }
 
-      //跳转至积木报表页面
+      //Chuyển tới trang báo cáo Jimu
       function onOpenReportPrint() {
         let url = onlineExtConfigJson.reportPrintUrl;
         let temp: any = formData.value;
@@ -279,7 +279,7 @@
       }
 
       /**
-       * VUEN-1056 30、生成的一对多，编辑的时候，子表数据挂不上
+       * VUEN-1056 30、một-nhiều được tạo ra, khi chỉnh sửa thì dữ liệu bảng con không gắn lên được
        */
       function getValueIgnoreCase(data, key) {
         if (data) {
@@ -300,11 +300,11 @@
         formData,
         formSpan,
 
-        //主表
+        //bảng chính
         tableName,
         loading,
 
-        //子表
+        //bảng con
         hasSubTable,
         subTabInfo,
         subFormHeight,
@@ -312,15 +312,15 @@
         refMap,
         onTabChange,
         subReloadKey,
-        //一对多子表
+        //bảng con một-nhiều
         subDataSource,
         getSubTableAuthPre,
 
-        //父组件调用
+        //Lời gọi của component cha
         show,
         createRootProperties,
 
-        // 扩展配置
+        // Cấu hình mở rộng
         onOpenReportPrint,
         onlineExtConfigJson,
         getSubTableForeignKeyValue,

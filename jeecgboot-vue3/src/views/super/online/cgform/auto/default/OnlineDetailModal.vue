@@ -34,7 +34,7 @@
         required: false,
         default: '',
       },
-      // 为了区分来源，编码时主要是erp子表有特殊处理
+      // Để phân biệt nguồn gốc, khi mã hóa chủ yếu làerpBảng con có xử lý đặc biệt
       source: {
         type: String,
         default: '',
@@ -44,17 +44,17 @@
         default: () => {
           return {
             enabled: true,
-            buttonName: '关闭',
+            buttonName: 'Đóng',
             buttonIcon: '',
           }
         }
       },
-      // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
+      // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con
       isShare: {
         type: Boolean,
         default: false,
       },
-      // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
+      // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con
     },
     components: {
       BasicModal,
@@ -63,7 +63,7 @@
     },
     emits: ['success', 'register','formConfig'],
     setup(props, {emit}) {
-      console.log('进入表单弹框》》》》modal');
+      console.log('Vào popup biểu mẫu 》》》》modal');
 
       const commentPanelRef = ref();
       const commentSpan = ref(0);
@@ -71,11 +71,11 @@
         if(commentPanelRef.value)
           commentPanelRef.value.reload();
       }
-      // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-7】外部链接开启了评论后，编辑数据按钮错乱
+      // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-7】Sau khi liên kết ngoài bật bình luận, nút chỉnh sửa dữ liệu bị lộn xộn
       const handleCommentOpen = (visible, span) => {
         commentSpan.value = span;
       };
-      // update-end--author:liaozhiyang---date:20260807---for：【LHZP-7】外部链接开启了评论后，编辑数据按钮错乱
+      // update-end--author:liaozhiyang---date:20260807---for：【LHZP-7】Sau khi liên kết ngoài bật bình luận, nút chỉnh sửa dữ liệu bị lộn xộn
       
       const {
         title,
@@ -102,23 +102,23 @@
         themeTemplate,
       } = useAutoModal(false, { emit }, reloadComment);
 
-      // 监听id变化 表单重新渲染
+      // Lắng nghe (watch)idThay đổi Render lại biểu mẫu
       watch(() => props.id, renderFormItems, { immediate: true });
       async function renderFormItems() {
         formRendered.value = false;
         if (!props.id) {
           return;
         }
-        console.log('重新渲染表单》》》》modal');
-        // update-begin--author:liaozhiyang---date:20240426---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权查看从表新增和详情的数据
+        console.log('Render lại biểu mẫu 》》》》modal');
+        // update-begin--author:liaozhiyang---date:20240426---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xem dữ liệu thêm mới và chi tiết của bảng phụ thuộc
         let params: any = {};
-        //update-begin---author:wangshuai---date:2025-10-21---for:【issues/8933】内嵌子表主题（一对多）列表点+号展开明细提示：无权限访问(操作)---
+        //update-begin---author:wangshuai---date:2025-10-21---for:【issues/8933】Danh sách chủ đề bảng con nhúng (một-nhiều) nhấp+Số mở rộng chi tiết nhắc nhở: không có quyền truy cập(Thao tác)---
         if (props.source === ERPSUBTABLE || props.source === INNER_TABLE) {
-        //update-end---author:wangshuai---date:2025-10-21---for:【issues/8933】内嵌子表主题（一对多）列表点+号展开明细提示：无权限访问(操作)---
+        //update-end---author:wangshuai---date:2025-10-21---for:【issues/8933】Danh sách chủ đề bảng con nhúng (một-nhiều) nhấp+Số mở rộng chi tiết nhắc nhở: không có quyền truy cập(Thao tác)---
           params.tabletype = 3;
         }
         await handleFormConfig(props.id, params);
-        // update-end--author:liaozhiyang---date:20240426---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权查看从表新增和详情的数据
+        // update-end--author:liaozhiyang---date:20240426---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xem dữ liệu thêm mới và chi tiết của bảng phụ thuộc
       }
 
       const that = {

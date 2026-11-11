@@ -11,42 +11,42 @@ export interface OnlineEmitterContextProps {
 const key: InjectionKey<OnlineEmitterContextProps> = Symbol();
 
 /**
- * 事件编码-打开弹窗
+ * Mã sự kiện-Mở popup
  */
 export const EVENT_OPEN_CODE: string = 'openpopmodal';
 /**
- * 事件编码-关闭弹窗，获取表单数据
+ * Mã sự kiện-Đóng popup, lấy dữ liệu biểu mẫu
  */
 const EVENT_SUCCESS_CODE: string = 'successpopmodal';
 
 /**
- * 设置弹框事件-online列表
+ * Thiết lập sự kiện popup-onlineDanh sách
  * @param callback
  */
 export function useOnlineListPopEvent(callback){
   const emitter = mitt();
   function openPopModal(params){
     callback(params);
-    console.log('事件触发完成,', params)
+    console.log('Kích hoạt sự kiện hoàn tất,', params)
   }
 
   emitter.on(EVENT_OPEN_CODE, openPopModal)
 /*  onUnmounted(()=>{
     emitter.off(EVENT_OPEN_CODE, openPopModal)
-    console.log('事件解绑完成-createOpenPopModalEvent')
+    console.log('Gỡ gắn kết sự kiện hoàn tất-createOpenPopModalEvent')
   });
   onMounted(()=>{
    
-    console.log('事件绑完成-createOpenPopModalEvent')
+    console.log('Gắn sự kiện hoàn tất-createOpenPopModalEvent')
   });*/
   createOnlineEventContext({
     onlineEmitter: emitter
   });
-  console.log('事件绑完成,')
+  console.log('Gắn sự kiện hoàn tất,')
 }
 
 /**
- * 关闭弹窗，返回表单数据
+ * Đóng popup, trả về dữ liệu biểu mẫu
  * @param params
  */
 export function useOnlinePopFormEvent(){
@@ -61,7 +61,7 @@ export function useOnlinePopFormEvent(){
 
 
 /**
- * 关闭弹窗，返回表单数据
+ * Đóng popup, trả về dữ liệu biểu mẫu
  * @param params
  */
 export function useOnlineFormEvent(callback){
@@ -69,15 +69,15 @@ export function useOnlineFormEvent(callback){
   const { onlineEmitter } = context;
   function emitData(data){
     callback(data);
-    console.log('useOnlineFormEvent事件触发完成,', data)
+    console.log('useOnlineFormEventKích hoạt sự kiện hoàn tất,', data)
   }
   onUnmounted(()=>{
     onlineEmitter && onlineEmitter.off(EVENT_SUCCESS_CODE, emitData)
-    console.log('事件解绑完成-createOpenPopModalEvent')
+    console.log('Gỡ gắn kết sự kiện hoàn tất-createOpenPopModalEvent')
   });
   onMounted(()=>{
     onlineEmitter && onlineEmitter.on(EVENT_SUCCESS_CODE, emitData)
-    console.log('事件绑完成-createOpenPopModalEvent')
+    console.log('Gắn sự kiện hoàn tất-createOpenPopModalEvent')
   });
   function openPopModal(emitData){
     console.log('openPopModal', emitData)
@@ -89,7 +89,7 @@ export function useOnlineFormEvent(callback){
 }
 
 /**
- * 触发弹框事件
+ * Kích hoạt sự kiện popup
  * @param params
  */
 /*export function getOnlinePopEvent(){

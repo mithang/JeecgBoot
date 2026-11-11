@@ -1,18 +1,18 @@
 <template>
   <div>
-    <a-empty v-if="disabled" description="请先选中左侧角色/部门/用户" />
-    <a-empty v-else-if="treeData.length === 0" description="无权限信息" />
+    <a-empty v-if="disabled" description="Vui lòng chọn vai trò phía bên trái trước/Phòng ban/Người dùng" />
+    <a-empty v-else-if="treeData.length === 0" description="Không có thông tin quyền" />
     <template v-else>
       <div class="onl-auth-tree-btns">
-        <a-button @click="onRefresh" size="small" type="primary" preIcon="ant-design:redo" ghost>刷新</a-button>
-        <a-button @click="onExpandAll" size="small" type="primary" ghost><DownCircleOutlined />展开</a-button>
-        <a-button @click="onCloseAll" size="small" type="primary" ghost><UpCircleOutlined />折叠</a-button>
-        <a-button @click="onSave" size="small" type="primary" preIcon="ant-design:save" ghost>保存</a-button>
+        <a-button @click="onRefresh" size="small" type="primary" preIcon="ant-design:redo" ghost>Làm mới</a-button>
+        <a-button @click="onExpandAll" size="small" type="primary" ghost><DownCircleOutlined />Mở rộng</a-button>
+        <a-button @click="onCloseAll" size="small" type="primary" ghost><UpCircleOutlined />Gập lại</a-button>
+        <a-button @click="onSave" size="small" type="primary" preIcon="ant-design:save" ghost>Lưu</a-button>
 
-        <!-- update-begin-author:taoyan date:2022-5-25 for: VUEN-1102 字段授权 全选没有 -->
-        <a-button @click="onSelectAll" size="small" type="primary" ghost><CheckOutlined />全选</a-button>
-        <a-button @click="onClearSelected" size="small" type="primary" ghost><UndoOutlined />重置</a-button>
-        <!-- update-end-author:taoyan date:2022-5-25 for: VUEN-1102 字段授权 全选没有 -->
+        <!-- update-begin-author:taoyan date:2022-5-25 for: VUEN-1102 Ủy quyền trường Chọn tất cả không có -->
+        <a-button @click="onSelectAll" size="small" type="primary" ghost><CheckOutlined />Chọn tất cả</a-button>
+        <a-button @click="onClearSelected" size="small" type="primary" ghost><UndoOutlined />Đặt lại</a-button>
+        <!-- update-end-author:taoyan date:2022-5-25 for: VUEN-1102 Ủy quyền trường Chọn tất cả không có -->
       </div>
       <a-tree
         checkable
@@ -60,7 +60,7 @@
       async function loadTree() {
         if (!props.cgformId) return;
         let result = (await authFieldLoadTree(props.cgformId, authType.value)) as Recordable[];
-        // 1. 根据code找一级节点
+        // 1. Căn cứ theocodeTìm nút cấp một
         let trees: Recordable[] = [];
         let codes: string[] = [];
         result.forEach((item) => {
@@ -69,7 +69,7 @@
             trees.push({ key: item.code, title: item.title });
           }
         });
-        // 2.双重遍历，拼接树形数据
+        // 2.Duyệt hai lần, nối ghép dữ liệu dạng cây
         for (let node of trees) {
           let children: Recordable[] = [];
           for (let item of result) {
@@ -88,19 +88,19 @@
       function getTreeNodeTitle(item) {
         let str = '';
         if (item.page == 3) {
-          str += '列表';
+          str += 'Danh sách';
         } else if (item.page == 5) {
-          str += '表单';
+          str += 'Biểu mẫu';
         }
         if (item.control == 3) {
-          str += '可编辑';
+          str += 'Có thể chỉnh sửa';
         } else if (item.control == 5) {
-          str += '可见';
+          str += 'Hiển thị (có thể thấy)';
         }
         return str;
       }
 
-      // 给外部调用，加载当前选择的权限
+      // Cho bên ngoài gọi, tải quyền đang chọn hiện tại
       async function loadChecked($roleId, $authMode) {
         roleId.value = $roleId;
         authMode.value = $authMode;
@@ -117,7 +117,7 @@
 
       function clearChecked() {
         roleId.value = '';
-        // QQYUN-4284 【online表单】权限管理 开启按钮后，在角色授权中显示，当关闭时，再打开角色权限仍然显示，需刷新页面才不显示
+        // QQYUN-4284 【onlineBiểu mẫu 】Quản lý quyền Sau khi bật nút, hiển thị trong ủy quyền vai trò, khi tắt, mở lại quyền vai trò vẫn hiển thị, cần làm mới trang mới không hiển thị
         loadTree();
       }
 
@@ -132,7 +132,7 @@
           authId: JSON.stringify(ids),
           authMode: authMode.value,
         });
-        $message.success('保存成功');
+        $message.success('Lưu thành công');
       }
 
       function onExpandAll() {
@@ -153,12 +153,12 @@
         checkedKeys.value = [];
       }
 
-      // update-begin-author:taoyan date:2022-5-25 for: VUEN-1102 字段授权 全选没有
-      // 取消选中--重置
+      // update-begin-author:taoyan date:2022-5-25 for: VUEN-1102 Ủy quyền trường Chọn tất cả không có
+      // Hủy lựa chọn--Đặt lại
       function onClearSelected() {
         checkedKeys.value = [];
       }
-      // 全选
+      // Chọn tất cả
       function onSelectAll() {
         const selectFun = function (arr) {
           for (let node of arr) {
@@ -171,7 +171,7 @@
         checkedKeys.value = [];
         selectFun.call(null, unref(treeData));
       }
-      // update-end-author:taoyan date:2022-5-25 for: VUEN-1102 字段授权 全选没有
+      // update-end-author:taoyan date:2022-5-25 for: VUEN-1102 Ủy quyền trường Chọn tất cả không có
 
       return {
         loadChecked,

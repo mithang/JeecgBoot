@@ -1,16 +1,16 @@
 <template>
   <div :class="prefixCls">
-    <!--引用表格-->
+    <!--Bảng tham chiếu-->
     <BasicTable ref="tableRef" @register="registerTable" :rowSelection="rowSelection" v-bind="$attrs">
       <template #tableTitle>
-        <a-button :class="newAddBtn" @click="onAdd" type="primary" preIcon="ant-design:plus">新增</a-button>
-        <a-button :class="aiCreateTable" @click="onAiCreateTable" type="primary" preIcon="ant-design:plus">AI建表</a-button>
-        <a-button :class="customBtn" @click="onShowCustomButton" type="primary" preIcon="ant-design:highlight">自定义按钮</a-button>
-        <a-button :class="enhanceJsBtn" @click="onShowEnhanceJs" type="primary" preIcon="ant-design:strikethrough">JS增强</a-button>
-        <a-button :class="enhanceSqlBtn" @click="onShowEnhanceSql" type="primary" preIcon="ant-design:filter" v-auth="'online:form:enhanceSql:save'"> SQL增强 </a-button>
-        <a-button :class="enhanceJavaBtn" @click="onShowEnhanceJava" type="primary" preIcon="ant-design:tool">JAVA增强</a-button>
-        <a-button :class="exportDbBtn" @click="onImportDbTable" type="primary" preIcon="ant-design:database" v-auth="'online:form:importTable'">导入数据库表</a-button>
-        <a-button :class="codeGeneratorBtn" @click="onGenerateCode" type="primary" preIcon="bx:bx-code-alt" v-auth="'online:form:generateCode'"> 代码生成 </a-button>
+        <a-button :class="newAddBtn" @click="onAdd" type="primary" preIcon="ant-design:plus">Thêm mới</a-button>
+        <a-button :class="aiCreateTable" @click="onAiCreateTable" type="primary" preIcon="ant-design:plus">AITạo bảng</a-button>
+        <a-button :class="customBtn" @click="onShowCustomButton" type="primary" preIcon="ant-design:highlight">Nút tùy chỉnh</a-button>
+        <a-button :class="enhanceJsBtn" @click="onShowEnhanceJs" type="primary" preIcon="ant-design:strikethrough">JSTăng cường</a-button>
+        <a-button :class="enhanceSqlBtn" @click="onShowEnhanceSql" type="primary" preIcon="ant-design:filter" v-auth="'online:form:enhanceSql:save'"> SQLTăng cường </a-button>
+        <a-button :class="enhanceJavaBtn" @click="onShowEnhanceJava" type="primary" preIcon="ant-design:tool">JAVATăng cường</a-button>
+        <a-button :class="exportDbBtn" @click="onImportDbTable" type="primary" preIcon="ant-design:database" v-auth="'online:form:importTable'">Nhập bảng cơ sở dữ liệu</a-button>
+        <a-button :class="codeGeneratorBtn" @click="onGenerateCode" type="primary" preIcon="bx:bx-code-alt" v-auth="'online:form:generateCode'"> Sinh mã </a-button>
         <!--        <j-super-query :fieldList="superQueryFieldList" ref="superQueryModal"-->
         <!--                       @handleSuperQuery="handleSuperQuery"></j-super-query>-->
         <a-dropdown v-if="selectedRowKeys.length > 0">
@@ -18,23 +18,23 @@
             <a-menu>
               <a-menu-item key="1" @click="onDeleteBatch">
                 <a-icon type="delete" />
-                <span>删除</span>
+                <span>Xóa</span>
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            <span>批量操作</span>
+            <span>Thao tác hàng loạt</span>
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
       </template>
 
       <template #dbSync="{ text }">
-        <span v-if="text === 'Y'" style="color: limegreen">已同步</span>
-        <span v-if="text === 'N'" style="color: red">未同步</span>
+        <span v-if="text === 'Y'" style="color: limegreen">Đã đồng bộ</span>
+        <span v-if="text === 'N'" style="color: red">Chưa đồng bộ</span>
       </template>
 
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
@@ -130,13 +130,13 @@
       const { prefixCls, tableContext } = pageContext;
       const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
-      // 代码直接生成到前端，页面会自动加载刷新，给成功后提示
+      // Mã được sinh trực tiếp ra frontend, trang sẽ tự động tải và làm mới, sau khi thành công sẽ đưa ra nhắc nhở
       const genenrate_msg = $ls.get('code.genenrate.success.msg');
       console.log('genenrate_msg:', genenrate_msg);
       if (genenrate_msg) {
         $message.success({
           content: genenrate_msg,
-          duration: 10, // 停留10秒
+          duration: 10, // Dừng lại10giây
         });
       }
 

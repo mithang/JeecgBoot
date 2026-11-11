@@ -3,7 +3,7 @@ import IFormSchema from '../IFormSchema';
 
 /**
  * radio
- * 没有现成的 只能借用JDictSelectTag
+ * Không có sẵn Chỉ có thể mượn dùngJDictSelectTag
  */
 export default class RadioWidget extends IFormSchema {
   dictTable: string;
@@ -12,7 +12,7 @@ export default class RadioWidget extends IFormSchema {
 
   constructor(key, data) {
     super(key, data);
-    // 可以从这个里面取 但是换成临时加载的
+    // Có thể lấy từ trong này nhưng đổi thành cái được tải tạm thời
     //this.options = this.getOptions(data['enum'])
     this.dictTable = data['dictTable'];
     this.dictText = data['dictText'];
@@ -44,14 +44,14 @@ export default class RadioWidget extends IFormSchema {
 
   getComponentProps() {
     if (!this.dictTable && !this.dictCode) {
-      // 字典表 和 字典 都没填数据
+      // Bảng từ điển và từ điển Đều chưa điền dữ liệu
       return {};
     } else {
       if (!this.dictTable) {
         return {
-          // update-begin--author:liaozhiyang---date:20230110---for：【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
+          // update-begin--author:liaozhiyang---date:20230110---for：【QQYUN-7799】Component từ điển (trừ component gốc) thêm cấu hình màu sắc
           useDicColor: true,
-          // update-end--author:liaozhiyang---date:20230110---for：【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
+          // update-end--author:liaozhiyang---date:20230110---for：【QQYUN-7799】Component từ điển (trừ component gốc) thêm cấu hình màu sắc
           dictCode: this.dictCode,
           type: 'radio',
         };

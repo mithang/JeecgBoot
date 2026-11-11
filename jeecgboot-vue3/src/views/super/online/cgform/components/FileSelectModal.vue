@@ -1,8 +1,8 @@
 <template>
-  <BasicModal @register="registerModal" title="选择目录" :width="500" @ok="onSubmit" @cancel="onCancel">
+  <BasicModal @register="registerModal" title="Chọn thư mục" :width="500" @ok="onSubmit" @cancel="onCancel">
     <a-spin :spinning="loading">
       <div class="btnArea">
-        <a-button @click="hanldeRefresh">刷新</a-button>
+        <a-button @click="hanldeRefresh">Làm mới</a-button>
       </div>
       <a-directory-tree v-if="directoryTreeShow" :treeData="treeData" :loadData="onLoadData" @select="onSelect" />
     </a-spin>
@@ -66,13 +66,13 @@
       function onSelect(selectedKeys) {
         selectedKey.value = selectedKeys[0];
       }
-      // update-begin--author:liaozhiyang---date:20231017---for：【QQYUN-6102】新建文件夹需要刷新
+      // update-begin--author:liaozhiyang---date:20231017---for：【QQYUN-6102】Tạo thư mục mới cần làm mới
       const hanldeRefresh = () => {
         selectedKey.value = '';
         directoryTreeShow.value = false;
         loadRoot();
       };
-      // update-begin--author:liaozhiyang---date:20231017---for：【QQYUN-6102】新建文件夹需要刷新
+      // update-begin--author:liaozhiyang---date:20231017---for：【QQYUN-6102】Tạo thư mục mới cần làm mới
       return { loading, treeData, onLoadData, onSelect, onSubmit, onCancel, registerModal, hanldeRefresh, directoryTreeShow };
     },
   });

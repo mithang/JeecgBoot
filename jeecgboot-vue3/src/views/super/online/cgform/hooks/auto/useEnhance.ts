@@ -1,5 +1,5 @@
 /**
- * js增强
+ * jsTăng cường
  */
 import { reactive } from 'vue';
 import { defHttp } from '/@/utils/http/axios';
@@ -30,42 +30,42 @@ export function useEnhance(onlineTableContext, isList = true) {
     onlineTableContext['_postAction'] = postAction;
     onlineTableContext['_putAction'] = putAction;
     onlineTableContext['_deleteAction'] = deleteAction;
-    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8342】js增强提供useMessage方法
+    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8342】jsPhần tăng cường cung cấpuseMessagePhương thức
     onlineTableContext['_useMessage'] = useMessage;
-    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8342】js增强提供useMessage方法
+    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8342】jsPhần tăng cường cung cấpuseMessagePhương thức
   } else {
     onlineTableContext.addObject2Context('_getAction', getAction);
     onlineTableContext.addObject2Context('_postAction', postAction);
     onlineTableContext.addObject2Context('_putAction', putAction);
     onlineTableContext.addObject2Context('_deleteAction', deleteAction);
-    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8342】js增强提供useMessage方法
+    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8342】jsPhần tăng cường cung cấpuseMessagePhương thức
     onlineTableContext.addObject2Context('_useMessage', useMessage);
-    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8342】js增强提供useMessage方法
+    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8342】jsPhần tăng cường cung cấpuseMessagePhương thức
   }
 
   /**
-   * 初始化
+   * Khởi tạo
    * @param str (res.result.enhanceJs)
    */
   function initCgEnhanceJs(str: string) {
-    //console.log("--onlineList-js增强"+isList,str)
+    //console.log("--onlineList-jsTăng cường"+isList,str)
     if (str) {
-      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-338】js增强代码报错不能影响页面渲染
+      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-338】jsMã tăng cường báo lỗi không được ảnh hưởng đến việc render trang
       let Obj: any;
       let result;
       try {
-        // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
+        // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6390】evalthay thế thànhnew Function, giải quyếtbuildCảnh báo
         Obj = _eval(str);
-        // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
+        // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6390】evalthay thế thànhnew Function, giải quyếtbuildCảnh báo
         result = new Obj(getAction, postAction, deleteAction);
         //return new Function(str)(getAction,postAction,deleteAction);
       } catch (error) {
         result = {};
         const { createMessage } = useMessage();
-        createMessage.warning(`js增强代码有语法错误，请检查代码~ ${error}`);
+        createMessage.warning(`jsMã tăng cường có lỗi cú pháp, vui lòng kiểm tra mã~ ${error}`);
       }
       return result;
-      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-338】js增强代码报错不能影响页面渲染
+      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-338】jsMã tăng cường báo lỗi không được ảnh hưởng đến việc render trang
     } else {
       return {};
     }
@@ -73,7 +73,7 @@ export function useEnhance(onlineTableContext, isList = true) {
 
   /**
    * 【】
-   * 触发js增强方法
+   * Kích hoạtjsPhương thức tăng cường
    * @param that
    * @param formData
    */
@@ -84,8 +84,8 @@ export function useEnhance(onlineTableContext, isList = true) {
   }
 
   /**
-   * 【表单】
-   * 处理js增强 自定义 提交前事件
+   * 【Biểu mẫu】
+   * Xử lýjsTăng cường Tùy chỉnh Sự kiện trước khi gửi
    * @param that
    * @param formData
    */
@@ -98,7 +98,7 @@ export function useEnhance(onlineTableContext, isList = true) {
   }
 
   /**
-   * 删除前业务处理
+   * Xử lý nghiệp vụ trước khi xóa
    * @param that
    * @param record
    */

@@ -1,17 +1,17 @@
 import {ExtConfigDefaultJson} from "../cgform.data";
 
-// 初始化扩展JSON
+// Khởi tạo mở rộngJSON
 export function parseExtConfigJson(record: Recordable) {
-  // 解析扩展JSON
+  // Phân tích mở rộngJSON
   let parseJSON = {};
   if (record.extConfigJson) {
     try {
       parseJSON = JSON.parse(record.extConfigJson);
     } catch (e) {
-      console.error('online扩展JSON转换失败：', e);
+      console.error('onlineMở rộngJSONChuyển đổi thất bại:', e);
     }
   }
-  // 从数据库中取值，并合并
+  // Lấy giá trị từ cơ sở dữ liệu, đồng thời hợp nhất
   return Object.assign({}, ExtConfigDefaultJson, parseJSON, {
     isDesForm: record.isDesForm || 'N',
     desFormCode: record.desFormCode || '',

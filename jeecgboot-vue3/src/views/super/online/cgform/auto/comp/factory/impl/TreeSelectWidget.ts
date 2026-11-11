@@ -2,18 +2,18 @@ import IFormSchema from '../IFormSchema';
 import { FormSchema } from '/@/components/Form';
 
 /**
- * 自定义树
+ * Cây tùy chỉnh
  */
 export default class TreeSelectWidget extends IFormSchema {
-  /*表名、显示字段、存储字段*/
+  /*Tên bảng, trường hiển thị, trường lưu trữ*/
   dict: string;
-  /*父级ID的字段名*/
+  /*Cấp chaIDtên trường của*/
   pidField: string;
-  /*父级ID的字段值*/
+  /*Cấp chaIDgiá trị trường của*/
   pidValue: string;
-  /*是否有子节点*/
+  /*Có nút con hay không*/
   hasChildField: string;
-  /*是否转换（取反）是否有子节点的值*/
+  /*Có chuyển đổi (đảo ngược) giá trị có nút con hay không*/
   converIsLeafVal: number;
 
   constructor(key, data) {
@@ -21,9 +21,9 @@ export default class TreeSelectWidget extends IFormSchema {
     this.dict = data['dict'];
     this.pidField = data['pidField'];
     this.pidValue = data['pidValue'];
-    // update-begin--author:liaozhiyang---date:20240509---for：【issues/6197】解决自定义树组件是否含有子节点功能不生效
+    // update-begin--author:liaozhiyang---date:20240509---for：【issues/6197】Giải quyết chức năng kiểm tra component cây tùy chỉnh có chứa nút con hay không không có hiệu lực
     this.hasChildField = data['hasChildField'];
-    // update-end--author:liaozhiyang---date:20240509---for：【issues/6197】解决自定义树组件是否含有子节点功能不生效
+    // update-end--author:liaozhiyang---date:20240509---for：【issues/6197】Giải quyết chức năng kiểm tra component cây tùy chỉnh có chứa nút con hay không không có hiệu lực
     this.converIsLeafVal = data['converIsLeafVal'];
   }
 
@@ -35,9 +35,9 @@ export default class TreeSelectWidget extends IFormSchema {
         dict: this.dict,
         pidField: this.pidField,
         pidValue: this.pidValue,
-        // update-begin--author:liaozhiyang---date:20240509---for：【issues/6197】解决自定义树组件是否含有子节点功能不生效
+        // update-begin--author:liaozhiyang---date:20240509---for：【issues/6197】Giải quyết chức năng kiểm tra component cây tùy chỉnh có chứa nút con hay không không có hiệu lực
         hasChildField: this.hasChildField,
-        // update-end--author:liaozhiyang---date:20240509---for：【issues/6197】解决自定义树组件是否含有子节点功能不生效
+        // update-end--author:liaozhiyang---date:20240509---for：【issues/6197】Giải quyết chức năng kiểm tra component cây tùy chỉnh có chứa nút con hay không không có hiệu lực
         converIsLeafVal: this.converIsLeafVal,
       },
     });

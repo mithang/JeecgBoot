@@ -1,38 +1,38 @@
 <template>
-  <BasicModal @register="registerModal" title="SQL增强" :width="1200" defaultFullscreen @cancel="onCancel">
+  <BasicModal @register="registerModal" title="SQLTăng cường" :width="1200" defaultFullscreen @cancel="onCancel">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button @click="onAdd" type="primary" preIcon="ant-design:plus">新增</a-button>
+        <a-button @click="onAdd" type="primary" preIcon="ant-design:plus">Thêm mới</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="onBatchDelete">
                 <a-icon type="delete" />
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button style="margin-left: 8px">
-            批量操作
+            Thao tác hàng loạt
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
       </template>
 
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
 
     <template #footer>
-      <a-button @click="onCancel">关闭</a-button>
+      <a-button @click="onCancel">Đóng</a-button>
       <div v-if="aiTestMode" style="float: left">
-        <a-button @click="onGenEnhanceSqlData">生成测试数据</a-button>
+        <a-button @click="onGenEnhanceSqlData">Tạo dữ liệu kiểm thử</a-button>
       </div>
     </template>
 
-    <!-- 表单区域 -->
+    <!-- Vùng biểu mẫu -->
     <BasicModal v-bind="formModalProps">
       <a-spin :spinning="formModalProps.confirmLoading">
         <BasicForm class="popupForm" @register="registerForm" />
@@ -60,7 +60,7 @@
       const tableName = ref('');
       const btnList = ref<any[]>([]);
       const { columns } = useSqlColumns(btnList);
-      // 列表页面公共参数、方法
+      // Tham số, phương thức dùng chung của trang danh sách
       const { doRequest, doDeleteRecord, tableContext } = useListPage({
         tableProps: {
           api: async (params) => {
@@ -76,9 +76,9 @@
           },
         },
       });
-      // 注册table数据
+      // Đăng kýtableDữ liệu
       const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
-      // 注册弹窗
+      // Popup đăng ký
       const [registerModal, { closeModal }] = useModalInner(async (data) => {
         code.value = data.row.id;
         tableName.value = data.row.tableName;
@@ -86,12 +86,12 @@
       });
       // useOnlineAiTest
       const { aiTestMode, genEnhanceSqlData } = useOnlineTest({}, { reload }, null);
-      // 注册 form 弹窗
+      // Đăng ký form Popup
       const [registerFormModal, formModal] = useModal();
       const isUpdate = ref(false);
       const formModalProps = reactive({
         onRegister: registerFormModal,
-        title: computed(() => (isUpdate?.value ? '修改' : '新增')),
+        title: computed(() => (isUpdate?.value ? 'Chỉnh sửa' : 'Thêm mới')),
         width: 800,
         confirmLoading: false,
         onOk: onSubmit,
@@ -99,15 +99,15 @@
       });
       let formRecord: Recordable = {};
       const { formSchemas } = useSqlFormSchemas(btnList);
-      // 注册 form
+      // Đăng ký form
       const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
-        // update-begin--author:liaozhiyang---date:20231017---for：【issues/790】弹窗内文本框不居中问题
+        // update-begin--author:liaozhiyang---date:20231017---for：【issues/790】Vấn đề ô văn bản trong popup không căn giữa
         labelWidth: 80,
         labelCol: null,
         wrapperCol: null,
-        // update-end--author:liaozhiyang---date:20231017---for：【issues/790】弹窗内文本框不居中问题
+        // update-end--author:liaozhiyang---date:20231017---for：【issues/790】Vấn đề ô văn bản trong popup không căn giữa
       });
 
       function onCancel() {
@@ -117,9 +117,9 @@
       async function openFormModal(data) {
         isUpdate.value = data.isUpdate;
         formRecord = { ...(data.record ?? {}) };
-        // update-begin--author:jeecg---date:20260513---for：【QQYUN-15337】online表单SQL增强支持指定数据源：dbSource 为空/null 时归一为 ''，下拉回显「跟随表单数据源」
+        // update-begin--author:jeecg---date:20260513---for：【QQYUN-15337】onlineBiểu mẫuSQLPhần tăng cường hỗ trợ chỉ định nguồn dữ liệu:dbSource rỗng/null khi chuẩn hóa thành '', dropdown hiển thị lại 「Đi theo nguồn dữ liệu của biểu mẫu」
         formRecord.dbSource = formRecord.dbSource || '';
-        // update-end--author:jeecg---date:20260513---for：【QQYUN-15337】online表单SQL增强支持指定数据源
+        // update-end--author:jeecg---date:20260513---for：【QQYUN-15337】onlineBiểu mẫuSQLPhần tăng cường hỗ trợ chỉ định nguồn dữ liệu
         formModal.openModal();
         await nextTick();
         await resetFields();
@@ -130,7 +130,7 @@
         openFormModal({ isUpdate: false });
       }
 
-      // 编辑按钮
+      // Nút chỉnh sửa
       function onEdit(record) {
         openFormModal({ isUpdate: true, record });
       }
@@ -139,7 +139,7 @@
         genEnhanceSqlData(code.value, tableName.value);
       }
 
-      // 批量删除事件
+      // Sự kiện xóa hàng loạt
       async function onBatchDelete() {
         doRequest(() => doEnhanceSqlBatchDelete(selectedRowKeys.value));
       }
@@ -158,26 +158,26 @@
       }
 
       /**
-       * 操作栏
+       * Thanh thao tác
        */
       function getTableAction(record) {
         return [
           {
-            label: '编辑',
+            label: 'Chỉnh sửa',
             onClick: () => onEdit(record),
           },
         ];
       }
 
       /**
-       * 下拉操作栏
+       * Thanh thao tác dropdown
        */
       function getDropDownAction(record): ActionItem[] {
         return [
           {
-            label: '删除',
+            label: 'Xóa',
             popConfirm: {
-              title: '确定删除吗？',
+              title: 'Xác nhận xóa chứ?',
               placement: 'left',
               confirm: () => doDeleteRecord(() => doEnhanceSqlBatchDelete([record.id])),
             },

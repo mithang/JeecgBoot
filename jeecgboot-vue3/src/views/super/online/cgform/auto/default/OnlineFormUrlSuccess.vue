@@ -8,11 +8,11 @@
           p-id="1486"
         ></path>
       </svg>
-      <h1>提交成功</h1>
+      <h1>Gửi thành công</h1>
     </div>
     <div class="btnArea">
-      <a-button @click="getBack()">返回</a-button>
-      <a-button @click="getBack()">关闭</a-button>
+      <a-button @click="getBack()">Quay lại</a-button>
+      <a-button @click="getBack()">Đóng</a-button>
     </div>
   </div>
 </template>

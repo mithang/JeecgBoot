@@ -9,19 +9,19 @@ export function useFormUrl() {
   const createToken = ref('');
   const userStore = useUserStore();
   if (unref(token)) {
-    // 校验token是否合法
+    // Kiểm chứngtokenCó hợp pháp hay không
   } else {
     if (userStore.getToken) {
-      // 登录了系统弄，有了token
+      // đã đăng nhập hệ thống, cótoken
       token.value = userStore.getToken;
     } else {
-      // 既没登录，url也没token
+      // vừa chưa đăng nhập,urlcũng khôngtoken
       getToken();
     }
   }
-  // 没有token，通过接口去获取token，再缓存到本地并设置到url上重新渲染
+  // Không cótoken, thông qua interface để lấytoken, rồi lưu bộ nhớ đệm cục bộ và thiết lập vàourlrender lại ở phía trên
   function getToken() {
-    const hide = message.loading('获取token中...', 0);
+    const hide = message.loading('Lấytokentrong...', 0);
     setTimeout(() => {
       createToken.value =
         'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTAwMTc2NzUsInVzZXJuYW1lIjoiYWRtaW4ifQ.0q5ywkLF144SaqumsSgEXO5ERtqaYp8jqouIUxxhELc';

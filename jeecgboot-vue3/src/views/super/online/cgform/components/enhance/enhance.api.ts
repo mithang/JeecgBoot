@@ -17,7 +17,7 @@ export enum EnhanceSqlApi {
 }
 
 /**
- * 获取JS增强
+ * LấyJSTăng cường
  * @param code
  * @param type
  * @param params
@@ -40,10 +40,10 @@ export async function getEnhanceJsByCode(code: string, type: string, params?) {
 }
 
 /**
- * 保存 JS 增强
+ * Lưu JS Tăng cường
  * @param code
  * @param params
- * @param isUpdate 是否更新
+ * @param isUpdate Có cập nhật hay không
  */
 export const saveEnhanceJs = (code: string, params, isUpdate: boolean) => {
   let url = `${Api.enhanceJs}${code}`;
@@ -54,22 +54,22 @@ export const saveEnhanceJs = (code: string, params, isUpdate: boolean) => {
   }
 };
 
-// 加载Java增强数据
+// TảiJavaDữ liệu tăng cường
 export async function getEnhanceJavaByCode(code: string, params) {
-  // 先加载按钮
+  // Tải nút trước
   let btnRes = await defHttp.get({ url: Api.enhanceButton + code }, { isTransformResponse: false });
   let btnList = [];
   if (btnRes.success && isArray(btnRes.result)) {
-    // 按钮过滤 java增强只看action按钮
+    // Lọc nút javaPhần tăng cường chỉ xemactionNút
     btnList = btnRes.result.filter((item) => item.optType == 'action');
   }
-  // 再加载数据
+  // Tải lại dữ liệu
   let path = `${EnhanceJavaApi.enhanceJava}/${code}`;
   let dataSource = await defHttp.get({ url: path, params });
   return { btnList, dataSource };
 }
 
-// 执行删除操作
+// Thực thi thao tác xóa
 export function doEnhanceJavaBatchDelete(idList: string[]) {
   return defHttp.delete(
     {
@@ -83,10 +83,10 @@ export function doEnhanceJavaBatchDelete(idList: string[]) {
 }
 
 /**
- * 保存 Java 增强
+ * Lưu Java Tăng cường
  * @param code
  * @param params
- * @param isUpdate 是否更新
+ * @param isUpdate Có cập nhật hay không
  */
 export const saveEnhanceJava = (code: string, params, isUpdate: boolean) => {
   let url = `${EnhanceJavaApi.enhanceJava}/${code}`;
@@ -97,22 +97,22 @@ export const saveEnhanceJava = (code: string, params, isUpdate: boolean) => {
   }
 };
 
-// 加载Sql增强数据
+// TảiSqlDữ liệu tăng cường
 export async function getEnhanceSqlByCode(code: string, params) {
-  // 先加载按钮
+  // Tải nút trước
   let btnRes = await defHttp.get({ url: Api.enhanceButton + code }, { isTransformResponse: false });
   let btnList = [];
   if (btnRes.success && isArray(btnRes.result)) {
-    // 按钮过滤 java增强只看action按钮
+    // Lọc nút javaPhần tăng cường chỉ xemactionNút
     btnList = btnRes.result.filter((item) => item.optType == 'action');
   }
-  // 再加载数据
+  // Tải lại dữ liệu
   let path = `${EnhanceSqlApi.enhanceSql}/${code}`;
   let dataSource = await defHttp.get({ url: path, params });
   return { btnList, dataSource };
 }
 
-// 执行删除操作
+// Thực thi thao tác xóa
 export function doEnhanceSqlBatchDelete(idList: string[]) {
   return defHttp.delete(
     {
@@ -126,10 +126,10 @@ export function doEnhanceSqlBatchDelete(idList: string[]) {
 }
 
 /**
- * 保存 Java 增强
+ * Lưu Java Tăng cường
  * @param code
  * @param params
- * @param isUpdate 是否更新
+ * @param isUpdate Có cập nhật hay không
  */
 export const saveEnhanceSql = (code: string, params, isUpdate: boolean) => {
   let url = `${EnhanceSqlApi.enhanceSql}/${code}`;

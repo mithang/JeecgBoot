@@ -9,8 +9,8 @@ import FormSchemaFactory from '../factory/FormSchemaFactory';
 import {useExtendComponent} from '../../../hooks/auto/useExtendComponent'
 import { cloneDeep } from 'lodash-es';
 /**
- * 表单类型转换成查询类型
- * 普通查询和高级查询组件区别 ：高级查询不支持联动组件
+ * Chuyển loại biểu mẫu thành loại truy vấn
+ * Sự khác biệt giữa component truy vấn thông thường và truy vấn nâng cao : truy vấn nâng cao không hỗ trợ component liên động
  */
 const FORM_VIEW_TO_QUERY_VIEW = {
   "password": "text",
@@ -23,28 +23,28 @@ const FORM_VIEW_TO_QUERY_VIEW = {
   "radio": "list",
 }
 
-// 查询条件存储编码前缀
+// Tiền tố mã lưu trữ của điều kiện truy vấn
 const SAVE_CODE_PRE = 'JSuperQuerySaved_';
 
 /**
- * 查询项
+ * Mục truy vấn
  * */
 interface SuperQueryItem {
   field: string|undefined;
   rule: string|undefined;
   val: string|number;
   key: string;
-  // 解决inputNumber组件对不齐样式问题
+  // Giải quyếtinputNumberVấn đề kiểu dáng component không thẳng hàng
   curLineAlign: string | undefined;
   fileType: string;
-  // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-461】字段类型是string，控件是text，则默认模糊查询
+  // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-461】Loại trường làstring, control làtext, thì mặc định truy vấn mờ
   view: string;
-  // 最先原始的组件类型；view字段可能会被改变
+  // Loại component gốc đầu tiên nhất;viewTrường có thể bị thay đổi
   originView?: string;
-  // update-end--author:liaozhiyang---date:20240611---for：【TV360X-461】字段类型是string，控件是text，则默认模糊查询
+  // update-end--author:liaozhiyang---date:20240611---for：【TV360X-461】Loại trường làstring, control làtext, thì mặc định truy vấn mờ
 }
 /**
- * 查询项-第一个控件树model
+ * Mục truy vấn-Cây control đầu tiênmodel
  * */
 interface TreeModel {
   title: string,
@@ -54,14 +54,14 @@ interface TreeModel {
   children?: TreeModel[],
   order?: number,
   fieldType?: string;
-  // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-461】字段类型是string，控件是text，则默认模糊查询
+  // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-461】Loại trường làstring, control làtext, thì mặc định truy vấn mờ
   view: string;
   originView?: string;
-  // update-end--author:liaozhiyang---date:20240611---for：【TV360X-461】字段类型是string，控件是text，则默认模糊查询
+  // update-end--author:liaozhiyang---date:20240611---for：【TV360X-461】Loại trường làstring, control làtext, thì mặc định truy vấn mờ
 }
 
 /**
- * 查询信息保存结构
+ * Cấu trúc lưu thông tin truy vấn
  * */
 interface SaveModel{
   title: string,
@@ -70,46 +70,46 @@ interface SaveModel{
 }
 
 export function useSuperQuery(props){
-  // 添加表单组件
+  // Thêm component biểu mẫu
   const {linkTableCard2Select} = useExtendComponent();
   
   const { createMessage: $message } = useMessage();
-  /** 表单ref*/
+  /** Biểu mẫuref*/
   const formRef = ref<any>();
   
-  /** 数据*/
+  /** Dữ liệu*/
   const dynamicRowValues = reactive<{ values: SuperQueryItem[] }>({
     values: [],
   });
   /** and/or */
   const matchType = ref('and');
 
-  // 保存查询弹窗确定按钮loading状态
+  // Nút xác nhận của popup lưu truy vấnloadingTrạng thái
   const saveModalLoading = ref(false);
-  // 弹框显示
+  // Hiển thị popup
   const [registerModal, {setModalProps}] = useModalInner(() => {
     setModalProps({confirmLoading: false});
   })
   
-  // 高级查询类型不支持联动组件，需要额外设置联动组件的view为text
+  // Loại truy vấn nâng cao không hỗ trợ component liên động, cần thiết lập thêm của component liên độngviewlàtext
   const view2QueryViewMap = Object.assign({}, {"link_down":"text"}, FORM_VIEW_TO_QUERY_VIEW)
   
   /**
-   * 确认按钮事件
+   * Sự kiện nút xác nhận
    */
   function handleSubmit() {
     console.log('handleSubmit', dynamicRowValues.values)
   }
 
   /**
-   * 关闭按钮事件
+   * Sự kiện nút đóng
    */
   function handleCancel() {
     //closeModal();
   }
   
   /**
-   * val组件赋值
+   * valGán giá trị cho component
    */
   function setFormModel(key: string, value: any, item: any) {
     console.log('setFormModel', key, value)
@@ -117,42 +117,42 @@ export function useSuperQuery(props){
     item['val'] = value;
   }
 
-  // 字段-Properties
+  // trường-Properties
   const fieldProperties = ref<any>({})
-  // 字段-左侧查询项-树控件数据
+  // trường-Mục truy vấn phía bên trái-Dữ liệu control cây
   const fieldTreeData = ref<any>([])
-  // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-503】过滤图片，文件、密码组件
+  // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-503】Lọc các component hình ảnh, tệp, mật khẩu
   const filterComponent = (data) => {
     const { properties = {} } = data;
     Object.entries(properties).forEach(([field, value]) => {
       if (value.view === 'table') {
         filterComponent(value);
       }
-      // update-begin--author:liaozhiyang---date:20260713---for：过滤掉他表字段(link_table_field)，不作为高级查询条件
+      // update-begin--author:liaozhiyang---date:20260713---for: lọc bỏ trường của bảng khác(link_table_field), không làm điều kiện truy vấn nâng cao
       if (['link_down', 'link_table_field'].includes(value.originView || value.view)) {
         delete properties[field];
       }
-      // update-end--author:liaozhiyang---date:20260713---for：过滤掉他表字段(link_table_field)，不作为高级查询条件
+      // update-end--author:liaozhiyang---date:20260713---for: lọc bỏ trường của bảng khác(link_table_field), không làm điều kiện truy vấn nâng cao
     });
   };
-  // update-end--author:liaozhiyang---date:20240607---for：【TV360X-503】过滤图片，文件、密码组件
+  // update-end--author:liaozhiyang---date:20240607---for：【TV360X-503】Lọc các component hình ảnh, tệp, mật khẩu
   /**
-   * 初始化数据-最开始的方法
-   * 1.获取 表名@字段名-->配置 这样的一个map
-   * 2.获取树形结构的数据 显示:文本； 存储:表名@字段名
-   * 当树改变时，及时获取配置更新表单
+   * Khởi tạo dữ liệu-Phương thức ở lúc bắt đầu nhất
+   * 1.Lấy Tên bảng@tên trường-->Cấu hình một cái như thế nàymap
+   * 2.Lấy dữ liệu cấu trúc dạng cây Hiển thị:văn bản; Lưu trữ:Tên bảng@tên trường
+   * Khi cây thay đổi, kịp thời lấy cấu hình để cập nhật biểu mẫu
    * @param json
    */
   function init(json) {
     console.log('=============')
     console.log('=============', json)
     console.log('=============')
-    // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-503】过滤图片，文件、密码组件
+    // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-503】Lọc các component hình ảnh, tệp, mật khẩu
     filterComponent(json);
-    // update-end--author:liaozhiyang---date:20240607---for：【TV360X-503】过滤图片，文件、密码组件
+    // update-end--author:liaozhiyang---date:20240607---for：【TV360X-503】Lọc các component hình ảnh, tệp, mật khẩu
     let { allFields, treeData } = getAllFields(json);
     fieldProperties.value = allFields;
-    // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1005】有子表时结构化主表且超长省略
+    // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1005】Khi có bảng con, cấu trúc hóa bảng chính và rút gọn khi quá dài
     const properties = json.properties ?? {};
     const subTable: string[] = [];
     const tableName = json.table;
@@ -172,14 +172,14 @@ export function useSuperQuery(props){
           len--;
         }
       }
-      treeData.unshift({ title: '主表', value: tableName, disabled: true, order: 200, children: arr, view: 'table' });
+      treeData.unshift({ title: 'bảng chính', value: tableName, disabled: true, order: 200, children: arr, view: 'table' });
     }
-    // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1005】有子表时结构化主表且超长省略
+    // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1005】Khi có bảng con, cấu trúc hóa bảng chính và rút gọn khi quá dài
     fieldTreeData.value = treeData;
   }
 
   /**
-   * 左侧查询项 添加一行
+   * Mục truy vấn phía bên trái Thêm một hàng
    * @param index
    */
   function addOne(index) {
@@ -190,22 +190,22 @@ export function useSuperQuery(props){
       key: randomString(16)
     }
     if(index===false){
-      // 重置后需要调用
+      // Sau khi đặt lại cần gọi
       dynamicRowValues.values = []
       dynamicRowValues.values.push(item)
     }else if(index===true){
-      // 打开弹框是需要调用
+      // Khi mở popup cần gọi
       if(dynamicRowValues.values.length==0){
         dynamicRowValues.values.push(item)
       }
     }else{
-      // 其余就是 正常的点击加号增加行
+      // Phần còn lại chính là Nhấp dấu cộng bình thường để thêm hàng
       dynamicRowValues.values.splice(++index, 0, item)
     }
   }
 
   /**
-   * 左侧查询项 删除一行
+   * Mục truy vấn phía bên trái Xóa một hàng
    */
   function removeOne(item: SuperQueryItem) {
     let arr = toRaw(dynamicRowValues.values);
@@ -221,15 +221,15 @@ export function useSuperQuery(props){
     }
   }
 
-  // 默认的输入框
+  // Ô nhập mặc định
   const defaultInput = {
     field: "val",
-    label: "测试",
+    label: "Kiểm thử",
     component:"Input"
   }
 
   /**
-   * 左侧查询项 val组件 schema获取, 替代左侧字段树的change事件
+   * Mục truy vấn phía bên trái valComponent schemaLấy, Thay thế cây trường phía bên tráichangesự kiện
    * @param item
    * @param index
    */
@@ -240,13 +240,13 @@ export function useSuperQuery(props){
       return defaultInput
     }
     if(view2QueryViewMap[prop.view]){
-      // 如果出现查询条件联动组件出来的场景，请跟踪此处
+      // Nếu xuất hiện tình huống component liên động sinh ra từ điều kiện truy vấn, vui lòng theo dõi tại đây
       prop.view = view2QueryViewMap[prop.view]
     }
     let temp = FormSchemaFactory.createFormSchema(item.field, prop)
    // temp.setFormRef(formRef)
     temp.noChange()
-    // 查询条件中的 下拉框popContainer为parentNode
+    // trong điều kiện truy vấn Ô dropdownpopContainerlàparentNode
     temp.asSearchForm();
     temp.updateField(item.field+index)
     const setFieldValue = (values)=>{
@@ -255,29 +255,29 @@ export function useSuperQuery(props){
     temp.setFunctionForFieldValue(setFieldValue)
     let schema = temp.getFormItemSchema()
     //schema['valueField'] = 'val'
-    // 特殊规则，需要禁用组件
-    // 为空、不为空
+    // Quy tắc đặc biệt, cần vô hiệu hóa component
+    // Rỗng, không rỗng
     if (['empty', 'not_empty'].includes(item.rule)) {
       schema.componentProps = { ...schema.componentProps, disabled: true };
     }
     linkTableCard2Select(schema);
-    // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-389】普通查询关联记录去掉编辑按钮
+    // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-389】Truy vấn thông thường của bản ghi liên kết bỏ nút chỉnh sửa
     if (schema.component === 'LinkTableSelect') {
       let componentProps = schema.componentProps ?? {};
       schema.componentProps = { ...componentProps, editBtnShow: false };
-      // update-begin--author:scott---date:20260713---for：高级查询多选-关联记录在"在...中"/"等于"下语义是包含多个值，强制多选，不受字段单选配置限制
+      // update-begin--author:scott---date:20260713---for: truy vấn nâng cao chọn nhiều-Bản ghi liên kết ở"tại...trong"/"Bằng"Ngữ nghĩa ở dưới là bao hàm nhiều giá trị, bắt buộc chọn nhiều, không bị giới hạn bởi cấu hình chọn đơn của trường
       if (['in', 'eq'].includes(item.rule)) {
         schema.componentProps.multi = true;
       }
-      // update-end--author:scott---date:20260713---for：高级查询多选-关联记录在"在...中"/"等于"下语义是包含多个值，强制多选，不受字段单选配置限制
+      // update-end--author:scott---date:20260713---for: truy vấn nâng cao chọn nhiều-Bản ghi liên kết ở"tại...trong"/"Bằng"Ngữ nghĩa ở dưới là bao hàm nhiều giá trị, bắt buộc chọn nhiều, không bị giới hạn bởi cấu hình chọn đơn của trường
     }
-    // update-end--author:liaozhiyang---date:20240607---for：【TV360X-389】普通查询关联记录去掉编辑按钮
-    // update-begin--author:liaozhiyang---date:20231219---for：【QQYUN-7640】高级查询数字组件会偏移
+    // update-end--author:liaozhiyang---date:20240607---for：【TV360X-389】Truy vấn thông thường của bản ghi liên kết bỏ nút chỉnh sửa
+    // update-begin--author:liaozhiyang---date:20231219---for：【QQYUN-7640】Component số trong truy vấn nâng cao bị lệch
     if (schema && schema.component === 'InputNumber') {
       item.curLineAlign = 'start';
     }
-    // update-end--author:liaozhiyang---date:20231219---for：【QQYUN-7640】高级查询数字组件会偏移
-    // update-begin--author:liaozhiyang---date:20240223---for：【QQYUN-8229】高级选择自定义树下拉显示不全
+    // update-end--author:liaozhiyang---date:20231219---for：【QQYUN-7640】Component số trong truy vấn nâng cao bị lệch
+    // update-begin--author:liaozhiyang---date:20240223---for：【QQYUN-8229】Chọn nâng cao: dropdown cây tùy chỉnh hiển thị không đầy đủ
     if (schema?.component === 'JTreeSelect') {
       let componentProps: any = schema.componentProps;
       if (componentProps) {
@@ -286,8 +286,8 @@ export function useSuperQuery(props){
         schema.componentProps = { getPopupContainer: () => document.body }
       };
     }
-    // update-end--author:liaozhiyang---date:20240223---for：【QQYUN-8229】高级选择自定义树下拉显示不全
-    // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-499】高级查询开关组件换成下拉，用户组件不显示按钮
+    // update-end--author:liaozhiyang---date:20240223---for：【QQYUN-8229】Chọn nâng cao: dropdown cây tùy chỉnh hiển thị không đầy đủ
+    // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-499】Component công tắc truy vấn nâng cao đổi thành dropdown, component người dùng không hiển thị nút
     if (schema?.component === 'JSwitch') {
       const componentProps = schema.componentProps ?? {};
       schema.componentProps = { ...componentProps, query: true };
@@ -296,47 +296,47 @@ export function useSuperQuery(props){
       const componentProps = schema.componentProps ?? {};
       schema.componentProps = { ...componentProps, showButton: false };
     }
-    // update-end--author:liaozhiyang---date:20240529---for：【TV360X-499】高级查询开关换成下拉，用户组件不显示按钮
+    // update-end--author:liaozhiyang---date:20240529---for：【TV360X-499】Công tắc truy vấn nâng cao đổi thành dropdown, component người dùng không hiển thị nút
     return schema
   }
 
-  /*-----------------------右侧保存信息相关-begin---------------------------*/
+  /*-----------------------Liên quan đến thông tin lưu ở phía bên phải-begin---------------------------*/
 
   /**
-   * 右侧树 的 数据
+   * Cây phía bên phải của Dữ liệu
    */
   const saveTreeData = ref<any>('')
-  // 本地缓存
+  // Bộ nhớ đệm cục bộ
   const $ls = createLocalStorage();
-  //需要保存的信息（一条）
+  //Thông tin cần lưu (một mục)
   const saveInfo = reactive({
     visible: false,
     title: '',
     content: '',
     saveCode: ''
   });
-  //按钮loading
+  //Nútloading
   const loading = ref(false)
 
-  // 当前页面路由
+  // Route của trang hiện tại
   const route = useRoute();
-  // update-begin--author:liaozhiyang---date:20240514---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+  // update-begin--author:liaozhiyang---date:20240514---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
   if (props.isCustomSave) {
     watch(props.saveSearchData, () => {
       currentPageSavedArray.value = props.saveSearchData;
     });
   } else {
-    // 监听路由信息，路由发生改变，则重新获取保存的查询信息-->currentPageSavedArray
+    // Lắng nghe thông tin route, khi route thay đổi thì lấy lại thông tin truy vấn đã lưu-->currentPageSavedArray
     watch(()=>route.fullPath, (val)=>{
       console.log('fullpath', val);
         initSaveQueryInfoCode();
     });
   }
-  // update-end--author:liaozhiyang---date:20240514---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+  // update-end--author:liaozhiyang---date:20240514---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
   
-  // 当前页面存储的 查询信息
+  // được lưu trữ của trang hiện tại Thông tin truy vấn
   const currentPageSavedArray = ref<SaveModel[]>([]);
-  // 监听当前页面是否有新的数据保存了，然后更新右侧数据->saveTreeData
+  // Lắng nghe xem trang hiện tại có dữ liệu mới được lưu hay không, sau đó cập nhật dữ liệu phía bên phải->saveTreeData
   watch(()=>currentPageSavedArray.value, (val)=>{
     let temp:any[] = []
     if(val && val.length>0){
@@ -353,9 +353,9 @@ export function useSuperQuery(props){
   }, {immediate:true, deep: true})
 
 
-  // 重新获取保存的查询信息
+  // Lấy lại thông tin truy vấn đã lưu
   function initSaveQueryInfoCode(){
-    // update-begin--author:liaozhiyang---date:20240514---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+    // update-begin--author:liaozhiyang---date:20240514---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
     if (props.isCustomSave) {
       currentPageSavedArray.value = cloneDeep(props.saveSearchData);
     } else {
@@ -366,27 +366,27 @@ export function useSuperQuery(props){
         currentPageSavedArray.value = list
       }
     }
-    // update-end--author:liaozhiyang---date:20240514---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+    // update-end--author:liaozhiyang---date:20240514---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
   }
 
-  // 执行一次 获取保存的查询信息
+  // Thực thi một lần Lấy thông tin truy vấn đã lưu
   initSaveQueryInfoCode();
   
   /**
-   * 保存按钮事件
+   * Sự kiện nút lưu
    */
   function handleSave(){
-    // 获取实际数据转成字符串
+    // Lấy dữ liệu thực tế chuyển thành chuỗi
     let fieldArray = getQueryInfo();
     if(!fieldArray){
-      $message.warning('空条件不能保存')
+      $message.warning('Điều kiện trống không thể lưu')
       return;
     }
     let content = JSON.stringify(fieldArray)
     openSaveInfoModal(content)
   }
 
-  // 输入保存标题 弹框显示
+  // Nhập tiêu đề để lưu Hiển thị popup
   function openSaveInfoModal(content){
     saveInfo.visible = true;
     saveInfo.title = '';
@@ -394,17 +394,17 @@ export function useSuperQuery(props){
   }
 
   /**
-   * 确认保存查询信息
+   * Xác nhận lưu thông tin truy vấn
    */
   function doSaveQueryInfo(){
     let { title, content, saveCode } = saveInfo;
     let index = getTitleIndex(title);
     const saveSearchCondition = (type) => {
-      // update-begin--author:liaozhiyang---date:20240514---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+      // update-begin--author:liaozhiyang---date:20240514---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
       const curPageSave: any = cloneDeep(currentPageSavedArray.value);
       saveModalLoading.value = true;
       if (type) {
-        // 覆盖已有
+        // Ghi đè cái đã có
         curPageSave.splice(index, 1, {
           content,
           title,
@@ -419,7 +419,7 @@ export function useSuperQuery(props){
       }
       const run = () => {
         saveInfo.visible = false;
-        $message.success('保存成功');
+        $message.success('Lưu thành công');
         currentPageSavedArray.value = curPageSave;
         saveModalLoading.value = false;
       };
@@ -433,21 +433,21 @@ export function useSuperQuery(props){
             saveModalLoading.value = false;
           });
       } else {
-        // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8357】高级查询保存的查询条件缓存改成一个月
+        // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8357】Cache điều kiện truy vấn đã lưu của truy vấn nâng cao đổi thành một tháng
         const expire = 60 * 60 * 24 * 30;
-        // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8357】高级查询保存的查询条件缓存改成一个月
+        // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8357】Cache điều kiện truy vấn đã lưu của truy vấn nâng cao đổi thành một tháng
         $ls.set(saveCode, curPageSave, expire);
         run();
       }
-      // update-end--author:liaozhiyang---date:20240514---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+      // update-end--author:liaozhiyang---date:20240514---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
     };
     if (index >= 0) {
-      // 已存在是否覆盖
+      // Đã tồn tại, có ghi đè hay không
       Modal.confirm({
-        title: '提示',
-        content: `${title} 已存在，是否覆盖？`,
-        okText: '确认',
-        cancelText: '取消',
+        title: 'Nhắc nhở',
+        content: `${title} Đã tồn tại, có ghi đè hay không?`,
+        okText: 'Xác nhận',
+        cancelText: 'Hủy',
         onOk: () => {
           saveSearchCondition(1);
         },
@@ -457,7 +457,7 @@ export function useSuperQuery(props){
     }
   }
 
-  // 根据填入的 title找本地存储的信息，如果有需要询问是否覆盖
+  // Căn cứ vào cái đã điền titleTìm thông tin lưu trữ cục bộ, nếu có thì cần hỏi có ghi đè hay không
   function getTitleIndex(title){
     let savedArray = currentPageSavedArray.value
     let index = -1;
@@ -471,7 +471,7 @@ export function useSuperQuery(props){
   }
   
   /**
-   * 获取左侧所有查询条件，如果没有/或者条件无效则返回false
+   * Lấy mọi điều kiện truy vấn phía bên trái, nếu không có/hoặc điều kiện không hợp lệ thì trả vềfalse
    */
   function getQueryInfo(isEmit = false){
     let arr = dynamicRowValues.values;
@@ -484,7 +484,7 @@ export function useSuperQuery(props){
       let allowEmpty = ['empty', 'not_empty'].includes(item.rule!)
       if(item.field && (allowEmpty || item.val || item.val===0) && item.rule){
         let prop = fieldProps[item.field]
-        // 自定义格式化数据
+        // Dữ liệu định dạng hóa tùy chỉnh
         let formatValue = prop?.formatValue ?? (v => v)
         let tempVal:any = toRaw(item.val)
         if(tempVal instanceof Array){
@@ -500,7 +500,7 @@ export function useSuperQuery(props){
           fileType: item.fileType ,
         };
         if(isEmit===true){
-          //如果当前数据用于emit事件，需要设置dbtype和type
+          //Nếu dữ liệu hiện tại được dùng choemitsự kiện, cần thiết lậpdbtypevàtype
           let prop = fieldProps[item.field]
           if(prop){
             obj['type'] = prop.view
@@ -516,10 +516,10 @@ export function useSuperQuery(props){
     return fieldArray
   }
 
-  //update-begin-author:taoyan date:2022-5-31 for: VUEN-1148 主子联动下，高级查询查子表数据，无效
+  //update-begin-author:taoyan date:2022-5-31 for: VUEN-1148 Trong liên động chính-con, truy vấn nâng cao tra dữ liệu bảng con, không có hiệu lực
   /**
-   * 高级查询参数 字段名
-   * 获取后台需要的 字段名格式：表名,字段名
+   * Tham số truy vấn nâng cao tên trường
+   * Lấy cái backend cần Định dạng tên trường: tên bảng,tên trường
    * @param item
    */
   function getRealFieldName(item){
@@ -529,10 +529,10 @@ export function useSuperQuery(props){
     }
     return fieldName;
   }
-  //update-end-author:taoyan date:2022-5-31 for: VUEN-1148 主子联动下，高级查询查子表数据，无效
+  //update-end-author:taoyan date:2022-5-31 for: VUEN-1148 Trong liên động chính-con, truy vấn nâng cao tra dữ liệu bảng con, không có hiệu lực
 
   /**
-   * 右侧数据 点击事件，重新将数据显示到左侧
+   * Dữ liệu phía bên phải Sự kiện nhấp, hiển thị lại dữ liệu sang phía bên trái
    * @param key
    * @param node
    */
@@ -541,14 +541,14 @@ export function useSuperQuery(props){
     let title = node.dataRef.title
     let arr = currentPageSavedArray.value.filter(item=>item.title==title)
     if(arr && arr.length>0){
-      // 拿到数据渲染
+      // Lấy dữ liệu để render
       let { content, type } = arr[0]
       let data = JSON.parse(content)
       let rowsValues: SuperQueryItem[] = []
       for(let item of data){
-        // update-begin--author:liaozhiyang---date:20240108---for：【issues/962】高级查询保存的查询是子表，下次查询不出结果
+        // update-begin--author:liaozhiyang---date:20240108---for：【issues/962】Truy vấn đã lưu của truy vấn nâng cao là bảng con, lần sau truy vấn không ra kết quả
         item.field = item.field.replace(',','@');
-        // update-end--author:liaozhiyang---date:20240108---for：【issues/962】高级查询保存的查询是子表，下次查询不出结果
+        // update-end--author:liaozhiyang---date:20240108---for：【issues/962】Truy vấn đã lưu của truy vấn nâng cao là bảng con, lần sau truy vấn không ra kết quả
         rowsValues.push(Object.assign({}, {key: randomString(16)}, item))
       }
       dynamicRowValues.values = rowsValues
@@ -557,13 +557,13 @@ export function useSuperQuery(props){
   }
 
   /**
-   * 右侧数据 删除事件
+   * Dữ liệu phía bên phải Sự kiện xóa
    */
   function handleRemoveSaveInfo(title){
     console.log(title)
     let index = getTitleIndex(title)
     if(index>=0){
-      // update-begin--author:liaozhiyang---date:20240513---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+      // update-begin--author:liaozhiyang---date:20240513---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
       if (props.isCustomSave) {
         const curPageSave = cloneDeep(currentPageSavedArray.value);
         curPageSave.splice(index, 1);
@@ -573,21 +573,21 @@ export function useSuperQuery(props){
             currentPageSavedArray.value = curPageSave;
           })
           .catch((err) => {
-            console.log(`删除是吧~，${err}`);
+            console.log(`Xóa chứ gì~，${err}`);
           });
       } else {
         currentPageSavedArray.value.splice(index, 1);
         $ls.set(saveInfo.saveCode, currentPageSavedArray.value);
       }
-      // update-end--author:liaozhiyang---date:20240513---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+      // update-end--author:liaozhiyang---date:20240513---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
     }
   }
 
-  /*-----------------------右侧保存信息相关-end---------------------------*/
+  /*-----------------------Liên quan đến thông tin lưu ở phía bên phải-end---------------------------*/
 
-  // 获取所有字段配置信息
+  // Lấy thông tin mọi cấu hình trường
   function getAllFields(properties){
-    // 获取所有配置 查询字段 是否联合查询
+    // Lấy mọi cấu hình Trường truy vấn Có truy vấn liên hợp hay không
    // const {properties, table, title } = json;
     let allFields = {}
     let order = 1;
@@ -605,8 +605,8 @@ export function useSuperQuery(props){
     Object.keys(properties).map(field=>{
       let item = properties[field]
       if(item.view == 'table'){
-        // 子表字段
-        // 联合查询开启才需要子表字段作为查询条件
+        // trường của bảng con
+        // Chỉ khi bật truy vấn liên hợp mới cần trường của bảng con làm điều kiện truy vấn
         let subProps = item['properties'] || item['fields']
         let subTableOrder = order * 100;
         let subNode:TreeModel = {
@@ -615,13 +615,13 @@ export function useSuperQuery(props){
           disabled: true,
           children: [],
           order: subTableOrder,
-          // update-begin--author:liaozhiyang---date:20240306---for：【TV360X-461】字段类型是string，则默认模糊查询
+          // update-begin--author:liaozhiyang---date:20240306---for：【TV360X-461】Loại trường làstring, thì mặc định truy vấn mờ
           fieldType: item.type,
-          // update-end--author:liaozhiyang---date:20240306---for：【TV360X-461】字段类型是string，则默认模糊查询
+          // update-end--author:liaozhiyang---date:20240306---for：【TV360X-461】Loại trường làstring, thì mặc định truy vấn mờ
         }
         Object.keys(subProps).map(subField=>{
           let subItem = subProps[subField];
-          // 保证排序统一
+          // Đảm bảo sắp xếp thống nhất
           subItem['order'] = subTableOrder + subItem['order']
           let subFieldKey = field+'@'+subField
           allFields[subFieldKey] = subItem
@@ -630,18 +630,18 @@ export function useSuperQuery(props){
             value: subFieldKey,
             isLeaf: true,
             order: subItem['order'],
-            // update-begin--author:liaozhiyang---date:20240306---for：【TV360X-461】字段类型是string，则默认模糊查询
+            // update-begin--author:liaozhiyang---date:20240306---for：【TV360X-461】Loại trường làstring, thì mặc định truy vấn mờ
             fieldType: subItem.type,
             view: subItem.view,
             originView: subItem.view,
-            // update-end--author:liaozhiyang---date:20240306---for：【TV360X-461】字段类型是string，则默认模糊查询
+            // update-end--author:liaozhiyang---date:20240306---for：【TV360X-461】Loại trường làstring, thì mặc định truy vấn mờ
           })
         });
         orderField(subNode);
         treeData.push(subNode);
         order++;
       }else{
-        // 主表字段
+        // trường bảng chính
         //let fieldKey = table+'@'+field
         let fieldKey = field
         allFields[fieldKey] = item
@@ -650,11 +650,11 @@ export function useSuperQuery(props){
           value: fieldKey,
           isLeaf: true,
           order: item.order,
-          // update-begin--author:liaozhiyang---date:20240306---for：【TV360X-461】字段类型是string，则默认模糊查询
+          // update-begin--author:liaozhiyang---date:20240306---for：【TV360X-461】Loại trường làstring, thì mặc định truy vấn mờ
           fieldType: item.type,
           view: item.view,
           originView: item.view,
-          // update-end--author:liaozhiyang---date:20240306---for：【TV360X-461】字段类型是string，则默认模糊查询
+          // update-end--author:liaozhiyang---date:20240306---for：【TV360X-461】Loại trường làstring, thì mặc định truy vấn mờ
         });
       }
     });
@@ -662,7 +662,7 @@ export function useSuperQuery(props){
     return {allFields, treeData}
   }
   
-  //根据字段的order重新排序
+  //Căn cứ vào của trườngorderSắp xếp lại
   function orderField(data){
     let arr = data.children || data;
     arr.sort(function (a, b) {

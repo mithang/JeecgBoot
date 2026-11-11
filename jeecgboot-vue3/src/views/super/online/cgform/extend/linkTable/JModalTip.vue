@@ -3,9 +3,9 @@
       <div class="container">
           <div class="outer">
               <div class="inner">
-                  <span class="tip">正在修改表单数据 ···</span>
-                  <div class="cancel" v-on:click="$emit('cancel')">取消</div>
-                  <div class="save" v-on:click="$emit('save')">保存</div>
+                  <span class="tip">Đang sửa đổi dữ liệu biểu mẫu ···</span>
+                  <div class="cancel" v-on:click="$emit('cancel')">Hủy</div>
+                  <div class="save" v-on:click="$emit('save')">Lưu</div>
               </div>
           </div>
       </div>
@@ -110,7 +110,7 @@
       }
   }
 
-  // 【QQYUN-7481】【移动端ONLINE表单】关联记录列表页修改，确认修改tip展示未居中
+  // 【QQYUN-7481】【Di độngONLINEBiểu mẫu 】Trang danh sách bản ghi liên kết sửa đổi, xác nhận sửa đổitipHiển thị không căn giữa
   .mobile.jeecg-update-tip-bar {
     .container {
       .outer {

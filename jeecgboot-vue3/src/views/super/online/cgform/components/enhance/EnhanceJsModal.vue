@@ -1,5 +1,5 @@
 <template>
-  <BasicModal @register="registerModal" title="JS增强" :width="800" @fullScreen="handleFullScreenChange">
+  <BasicModal @register="registerModal" title="JSTăng cường" :width="800" @fullScreen="handleFullScreenChange">
     <a-tabs v-model:activeKey="enhanceType" @change="onChangeType">
       <a-tab-pane key="form" forceRender>
         <template #tab>
@@ -7,7 +7,7 @@
             <span class="title">form</span>
             <Tooltip>
               <template #title>
-                <span>表单js增强文档</span>
+                <span>Biểu mẫujsTài liệu tăng cường</span>
               </template>
               <QuestionCircleOutlined @click="handleGo('form')"/>
             </Tooltip>
@@ -24,7 +24,7 @@
           :language-change="false"
           @change="onCodeChange"
           :keywords="formKeyWords"
-          placeholder="代码提示技巧：&#10;全局对象: this.调用属性或方法&#10;事件方法：beforeSubmit、loaded、onlChange、getAction、postAction、putAction、deleteAction、deleteAction、openCustomModal等"
+          placeholder="Mẹo gợi ý mã:&#10;Đối tượng toàn cục: this.Gọi thuộc tính hoặc phương thức&#10;Phương thức sự kiện:beforeSubmit、loaded、onlChange、getAction、postAction、putAction、deleteAction、deleteAction、openCustomModalv.v."
         />
       </a-tab-pane>
       <a-tab-pane key="list" forceRender>
@@ -33,7 +33,7 @@
             <span class="title">list</span>
             <Tooltip>
               <template #title>
-                <span>列表js增强文档</span>
+                <span>Danh sáchjsTài liệu tăng cường</span>
               </template>
               <QuestionCircleOutlined @click="handleGo('list')"/>
             </Tooltip>
@@ -50,19 +50,19 @@
           :language-change="false"
           @change="onCodeChange"
           :keywords="listKeyWords"
-          placeholder="代码提示技巧：&#10;全局对象: this.调用属性或方法 &#10;事件方法：beforeDelete、beforeEdit、getAction、postAction、putAction、deleteAction、deleteAction、openCustomModal等"
+          placeholder="Mẹo gợi ý mã:&#10;Đối tượng toàn cục: this.Gọi thuộc tính hoặc phương thức &#10;Phương thức sự kiện:beforeDelete、beforeEdit、getAction、postAction、putAction、deleteAction、deleteAction、openCustomModalv.v."
         />
       </a-tab-pane>
     </a-tabs>
 
     <template #footer>
       <a-space>
-        <a-button @click="onCancel">关闭</a-button>
-        <a-button type="primary" @click="onSubmit">确定</a-button>
+        <a-button @click="onCancel">Đóng</a-button>
+        <a-button type="primary" @click="onSubmit">Xác nhận</a-button>
       </a-space>
       <a-space style="float: left">
-        <a-button v-if="showHistory" @click="onShowHistory">查看历史版本</a-button>
-        <a-button v-if="aiTestMode" @click="onGenTestData">生成测试数据</a-button>
+        <a-button v-if="showHistory" @click="onShowHistory">Xem phiên bản lịch sử</a-button>
+        <a-button v-if="aiTestMode" @click="onGenTestData">Tạo dữ liệu kiểm thử</a-button>
       </a-space>
     </template>
 
@@ -100,7 +100,7 @@
       const codeChange = ref(false);
       const tableName = ref('');
       const enhanceValues = reactive({ form: '', list: '' });
-      // 每个tab只获取一遍值
+      // mỗitabChỉ lấy giá trị một lượt
       const getFlag = { form: false, list: false };
       const reloading = ref(false);
       const listKeyWords = [ ...keywords.list, ...keywords.common];
@@ -132,7 +132,7 @@
         } else {
           onChangeType(enhanceType.value);
         }
-        // 【VUEN-48】代码编辑器，在弹窗里使用时，界面会显示错乱（解决方案参考JS增强，延时展示编辑器）
+        // 【VUEN-48】Trình soạn thảo mã, khi sử dụng trong popup, giao diện hiển thị lộn xộn (giải pháp tham khảoJStăng cường, hiển thị trình soạn thảo có độ trễ)
         reloading.value = true;
         setTimeout(() => (reloading.value = false), 150);
       }
@@ -140,7 +140,7 @@
       async function onSubmit() {
         await Promise.all([saveEnhanceJsByType('form'), saveEnhanceJsByType('list')]);
         closeModal();
-        $message.success('保存成功');
+        $message.success('Lưu thành công');
       }
 
       async function saveEnhanceJsByType(type) {
@@ -149,7 +149,7 @@
           cgJs: enhanceValues[type],
           cgJsType: type,
         };
-        // 如果从未获取过值，或未修改则不保存
+        // Nếu chưa từng lấy được giá trị, hoặc chưa sửa đổi thì không lưu
         if (!getFlag[type] || model.cgJs === params.cgJs) {
           return;
         }
@@ -182,7 +182,7 @@
         } catch (e) {
           console.error(e);
         }
-        //update-begin-author:taoyan date:2022-10-18 for: VUEN-2480【严重bug】online vue3测试的问题 8、online js增强样式问题
+        //update-begin-author:taoyan date:2022-10-18 for: VUEN-2480【Nghiêm trọngbug】online vue3Vấn đề của kiểm thử 8、online jsVấn đề kiểu dáng phần tăng cường
         setTimeout(()=>{
           if(type=='list'){
             listEditorRef.value.refresh();
@@ -190,7 +190,7 @@
             formEditorRef.value.refresh();
           }
         }, 150);
-        //update-end-author:taoyan date:2022-10-18 for: VUEN-2480【严重bug】online vue3测试的问题 8、online js增强样式问题
+        //update-end-author:taoyan date:2022-10-18 for: VUEN-2480【Nghiêm trọngbug】online vue3Vấn đề của kiểm thử 8、online jsVấn đề kiểu dáng phần tăng cường
       }
 
       function onShowHistory() {
@@ -200,17 +200,17 @@
         });
       }
 
-      // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-235】修复js增强历史版本年份不显示及新增应用
+      // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-235】Khắc phụcjsPhần tăng cường: năm của phiên bản lịch sử không hiển thị và các ứng dụng mới thêm
       function onApplyHistory({ type, str }) {
         enhanceType.value = type;
         enhanceValues[type] = str;
         codeChange.value = true;
         getFlag[type] = true;
-        // 强制重新渲染编辑器，确保应用后的值正确展示
+        // Bắt buộc render lại trình soạn thảo, đảm bảo giá trị sau khi áp dụng hiển thị đúng
         reloading.value = true;
         setTimeout(() => (reloading.value = false), 150);
       }
-      // update-end--author:liaozhiyang---date:20260713---for：【LHZP-235】修复js增强历史版本年份不显示及新增应用
+      // update-end--author:liaozhiyang---date:20260713---for：【LHZP-235】Khắc phụcjsPhần tăng cường: năm của phiên bản lịch sử không hiển thị và các ứng dụng mới thêm
 
       function onCodeChange(value) {
         if (enhanceValues[enhanceType.value] != value) {
@@ -219,7 +219,7 @@
         }
       }
 
-      // 生成测试数据
+      // Tạo dữ liệu kiểm thử
       function onGenTestData() {
         if (enhanceType.value === 'form') {
           genEnhanceJsData(tableName.value, enhanceType.value, formEditorRef.value!);
@@ -227,12 +227,12 @@
           genEnhanceJsData(tableName.value, enhanceType.value, listEditorRef.value!);
         }
       }
-      // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-8865】onlinejs强增标题加上icon链接到文档地址
+      // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-8865】onlinejsTự tăng mạnh: tiêu đề cộng thêmiconLiên kết tới địa chỉ tài liệu
       const handleGo = (params) => {
         window.open(`https://help.jeecg.com/java/online/enhanceJs/${params}`);
       };
-      // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-8865】onlinejs强增标题加上icon链接到文档地址
-      // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1251】online增强最大化代码框跟着变大
+      // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-8865】onlinejsTự tăng mạnh: tiêu đề cộng thêmiconLiên kết tới địa chỉ tài liệu
+      // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1251】onlinePhóng to tối đa phần tăng cường, khung mã sẽ lớn theo
       const handleFullScreenChange = (zoom) => {
         if (zoom) {
           codeEditorHeight.value = `${document.documentElement.clientHeight - 250}px`;
@@ -240,7 +240,7 @@
           codeEditorHeight.value = `240px`;
         }
       };
-      // update-end--author:liaozhiyang---date:20240617---for：【TV360X-1251】online增强最大化代码框跟着变大
+      // update-end--author:liaozhiyang---date:20240617---for：【TV360X-1251】onlinePhóng to tối đa phần tăng cường, khung mã sẽ lớn theo
       return {
         formEditorRef,
         listEditorRef,

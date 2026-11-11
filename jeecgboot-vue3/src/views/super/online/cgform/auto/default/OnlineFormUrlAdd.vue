@@ -4,7 +4,7 @@
       <spin :spinning="loading">
         <div :class="['wrap', `online-add-${ID}`]" ref="wrapRef">
           <OnlineForm v-if="false"></OnlineForm>
-          <!-- 新增(编辑)弹框 -->
+          <!-- Thêm mới(Chỉnh sửa)Popup -->
           <OnlineAutoModal
             v-if="token"
             :id="ID"
@@ -24,7 +24,7 @@
 <script setup lang="ts">
   import { ref, watch, unref } from 'vue';
   import { Card, Spin } from 'ant-design-vue';
-  // OnlineForm 这个必须引用，setup模式必须在template里面使用。否则url进入会报错
+  // OnlineForm Cái này bắt buộc phải tham chiếu,setupChế độ phải ởtemplatesử dụng ở bên trong. Nếu khôngurlVào sẽ báo lỗi
   import OnlineForm from '../comp/OnlineForm.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import OnlineAutoModal from './OnlineAutoModal.vue';
@@ -42,22 +42,22 @@
 
   const { token } = useFormUrl();
   if (!unref(token)) {
-    throw new Error('token不存在~');
+    throw new Error('tokenkhông tồn tại~');
   }
   if (!ID.value) {
-    $message.warning('地址错误, 配置ID不存在!');
-    throw new Error('地址错误, 配置ID不存在!');
+    $message.warning('Lỗi địa chỉ, Cấu hìnhIDkhông tồn tại!');
+    throw new Error('Lỗi địa chỉ, Cấu hìnhIDkhông tồn tại!');
   }
-  // 处理增强
+  // Xử lý phần tăng cường
   let { initCgEnhanceJs } = useEnhance(onlineTableContext);
   watch(
     () => wrapRef.value,
     (elem: HTMLElement) => {
-      // 获取页面实际高度
+      // Lấy chiều cao thực tế của trang
       contentHeight.value = elem.offsetHeight - 60;
     }
   );
-  // 处理列表button
+  // Xử lý danh sáchbutton
   const { registerModal, handleAdd } = useListButton(onlineTableContext, onlineExtConfigJson);
   const getContainer = (node) => {
     return document.querySelector(`.online-add-${ID.value}`);

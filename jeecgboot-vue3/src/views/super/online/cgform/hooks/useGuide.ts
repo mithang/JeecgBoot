@@ -17,59 +17,59 @@ export const useGuide = () => {
   const guide = () => {
     let boot = intro();
     boot.setOptions({
-      nextLabel: '下一步',
-      prevLabel: '上一步',
-      //skipLabel: '跳过',
-      doneLabel: '完成',
+      nextLabel: 'Bước tiếp theo',
+      prevLabel: 'Bước trước',
+      //skipLabel: 'Bỏ qua',
+      doneLabel: 'Hoàn thành',
       disableInteraction: true,
       steps: [
         {
-          title: '第一步',
+          title: 'Bước một',
           element: document.querySelector(`.${newAddBtn.value}`)!,
-          intro: '点击<strong>新增</strong>按钮，新建一个表。',
+          intro: 'Nhấp<strong>Thêm mới</strong>nút, tạo mới một bảng.',
         },
         {
-          title: '第二步',
-          intro: `在列表中找到刚才新建数据，在操作列点击<strong>"更多"</strong>，选择<strong>"同步数据库"</strong>。`,
+          title: 'Bước hai',
+          intro: `Tìm dữ liệu vừa mới tạo trong danh sách, tại cột thao tác nhấp vào<strong>"Thêm"</strong>, lựa chọn<strong>"Đồng bộ cơ sở dữ liệu"</strong>。`,
         },
         {
-          title: '第三步',
-          intro: `在列表中找到刚才新建数据，在操作列点击<strong>"更多"</strong>，选择<strong>"功能测试"</strong>。`,
+          title: 'Bước ba',
+          intro: `Tìm dữ liệu vừa mới tạo trong danh sách, tại cột thao tác nhấp vào<strong>"Thêm"</strong>, lựa chọn<strong>"Kiểm thử chức năng"</strong>。`,
         },
         {
-          title: 'AI建表',
+          title: 'AITạo bảng',
           element: document.querySelector(`.${aiCreateTable.value}`)!,
-          intro: `输入修饰词即可通过AI创建工作表`,
+          intro: `Nhập từ trang trí là có thể thông quaAITạo bảng làm việc`,
         },
         {
-          title: '代码生成',
+          title: 'Sinh mã',
           element: document.querySelector(`.${codeGeneratorBtn.value}`)!,
-          intro: `选中一条记录，通过代码生成可将已配置好的表单，一键生成前后端代码，复杂需求可在此基础上进行二次开发。`,
+          intro: `Chọn một bản ghi, thông qua sinh mã có thể đưa biểu mẫu đã cấu hình xong, tạo mã frontend và backend bằng một nhấp, nhu cầu phức tạp có thể phát triển tiếp trên cơ sở này.`,
         },
         {
-          title: '自定义按钮',
+          title: 'Nút tùy chỉnh',
           element: document.querySelector(`.${customBtn.value}`)!,
-          intro: `选中一条记录，点击自定义按钮，配置按钮相关信息即可在当前记录的<strong>"功能测试"</strong>页面新增一个按钮`,
+          intro: `Chọn một bản ghi, nhấp nút tùy chỉnh, cấu hình thông tin liên quan của nút là có thể ở bản ghi hiện tại<strong>"Kiểm thử chức năng"</strong>Trang thêm mới một nút`,
         },
         {
-          title: 'JS强增',
+          title: 'JSTự tăng mạnh (tăng cưỡng bức)',
           element: document.querySelector(`.${enhanceJsBtn.value}`)!,
-          intro: `选中一条记录，通过js增强可为<strong>"自定义按钮"</strong>添加不同操作，可操作列表和表单数据等，也可以添加表单前置事件。`,
+          intro: `Chọn một bản ghi, thông quajsPhần tăng cường có thể đóng vai trò<strong>"Nút tùy chỉnh"</strong>Thêm các thao tác khác nhau, có thể thao tác dữ liệu danh sách và biểu mẫu, v.v., cũng có thể thêm sự kiện tiền tố của biểu mẫu.`,
         },
         {
-          title: 'SQL增强',
+          title: 'SQLTăng cường',
           element: document.querySelector(`.${enhanceSqlBtn.value}`)!,
-          intro: `选中一条记录，通过增强SQL，可以关联修改业务数据。`,
+          intro: `Chọn một bản ghi, thông qua tăng cườngSQL, có thể liên kết sửa đổi dữ liệu nghiệp vụ.`,
         },
         {
-          title: 'java增强',
+          title: 'javaTăng cường',
           element: document.querySelector(`.${enhanceJavaBtn.value}`)!,
-          intro: `选中一条记录，通过Java增强可在表单的增加、修改、和删除数据时实现额外的功能，类似spring中的AOP切面编程。`,
+          intro: `Chọn một bản ghi, thông quaJavaPhần tăng cường có thể thực hiện các chức năng bổ sung khi biểu mẫu thêm mới, sửa đổi và xóa dữ liệu, tương tự nhưspringtrong đóAOPlập trình theo khía cạnh (AOP).`,
         },
         {
-          title: '导入数据库表',
+          title: 'Nhập bảng cơ sở dữ liệu',
           element: document.querySelector(`.${exportDbBtn.value}`)!,
-          intro: `可将已有数据库中的表，直接导入生成表单。`,
+          intro: `Có thể trực tiếp nhập các bảng đã có trong cơ sở dữ liệu để sinh biểu mẫu.`,
         },
       ],
     });

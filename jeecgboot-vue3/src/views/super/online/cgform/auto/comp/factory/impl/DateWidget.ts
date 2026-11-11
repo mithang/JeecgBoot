@@ -7,7 +7,7 @@ enum DateFormat {
 }
 
 /**
- * 日期、时间
+ * Ngày, thời gian
  */
 export default class DateWidget extends IFormSchema {
   format: string;
@@ -20,7 +20,7 @@ export default class DateWidget extends IFormSchema {
     super(key, data);
     this.format = DateFormat[data.view];
     this.showTime = data.view == 'date' ? false : true;
-    // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
+    // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
     let fieldExtendJson = data.fieldExtendJson;
     if (data.view == 'date' && fieldExtendJson) {
       fieldExtendJson = JSON.parse(fieldExtendJson);
@@ -30,8 +30,8 @@ export default class DateWidget extends IFormSchema {
         this.picker = undefined;
       }
     }
-    // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
-    // 只有等于和不等于才能选择预设范围（今天、昨天、本周等）
+    // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
+    // Chỉ khi bằng và không bằng mới có thể chọn phạm vi đặt trước (hôm nay, hôm qua, tuần này, v.v.)
     this.allowSelectRange = ['eq', 'ne'].includes(queryItem?.rule)
   }
 
@@ -40,13 +40,13 @@ export default class DateWidget extends IFormSchema {
     return Object.assign({}, item, {
       component: 'DatePickerInFilter',
       componentProps: {
-        placeholder: `请选择${this.label}`,
+        placeholder: `Vui lòng chọn${this.label}`,
         showTime: this.showTime,
         valueFormat: this.format,
         allowSelectRange: this.allowSelectRange,
-        // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
+        // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
         picker: this.picker,
-        // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
+        // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
         style: {
           width: '100%',
         },

@@ -22,8 +22,8 @@
           size: 'small',
           bordered: true,
           columns: [
-            { title: '角色编码', align: 'center', dataIndex: 'roleCode' },
-            { title: '角色名称', align: 'center', dataIndex: 'roleName' },
+            { title: 'Mã vai trò', align: 'center', dataIndex: 'roleCode' },
+            { title: 'Tên vai trò', align: 'center', dataIndex: 'roleName' },
           ],
           rowSelection: {
             type: 'radio',

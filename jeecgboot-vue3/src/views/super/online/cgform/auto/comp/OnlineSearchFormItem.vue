@@ -1,18 +1,18 @@
-<!-- 此文件已没有使用的地方 -->
+<!-- Tệp này đã không còn nơi sử dụng -->
 <template>
   <a-form-item :labelCol="labelCol" :class="'jeecg-online-search'">
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
 
-    <!-- 1.日期 -->
+    <!-- 1.Ngày -->
     <template v-if="item.view == 'date'">
       <template v-if="single_mode === item.mode">
         <a-date-picker
           style="width: 100%"
           :showTime="false"
           valueFormat="YYYY-MM-DD"
-          :placeholder="'请选择' + item.label"
+          :placeholder="'Vui lòng chọn' + item.label"
           v-model:value="innerValue"
         ></a-date-picker>
       </template>
@@ -20,7 +20,7 @@
         <a-date-picker
           :showTime="false"
           valueFormat="YYYY-MM-DD"
-          placeholder="开始日期"
+          placeholder="Ngày bắt đầu"
           v-model:value="beginValue"
           style="width: calc(50% - 15px)"
         ></a-date-picker>
@@ -28,21 +28,21 @@
         <a-date-picker
           :showTime="false"
           valueFormat="YYYY-MM-DD"
-          placeholder="结束日期"
+          placeholder="Ngày kết thúc"
           v-model:value="endValue"
           style="width: calc(50% - 15px)"
         ></a-date-picker>
       </template>
     </template>
 
-    <!-- 2.时间 -->
+    <!-- 2.Thời gian -->
     <template v-else-if="item.view == 'datetime'">
       <template v-if="single_mode === item.mode">
         <a-date-picker
           style="width: 100%"
           :showTime="true"
           valueFormat="YYYY-MM-DD hh:mm:ss"
-          :placeholder="'请选择' + item.label"
+          :placeholder="'Vui lòng chọn' + item.label"
           v-model:value="innerValue"
         ></a-date-picker>
       </template>
@@ -50,7 +50,7 @@
         <a-date-picker
           :showTime="true"
           valueFormat="YYYY-MM-DD hh:mm:ss"
-          placeholder="开始时间"
+          placeholder="Thời gian bắt đầu"
           v-model:value="beginValue"
           style="width: calc(50% - 15px)"
         ></a-date-picker>
@@ -58,29 +58,29 @@
         <a-date-picker
           :showTime="true"
           valueFormat="YYYY-MM-DD hh:mm:ss"
-          placeholder="结束时间"
+          placeholder="Thời gian kết thúc"
           v-model:value="endValue"
           style="width: calc(50% - 15px)"
         ></a-date-picker>
       </template>
     </template>
 
-    <!-- 3 TODO 时分秒 -->
+    <!-- 3 TODO giờ-phút-giây -->
 
-    <!-- 4.简单下拉框 -->
+    <!-- 4.Hộp dropdown đơn giản -->
     <template v-else-if="isEasySelect()">
-      <JDictSelectTag v-if="item.config === '1'" :placeholder="'请选择' + item.label" v-model:value="innerValue" :dictCode="getDictCode()" />
-      <a-select v-else :placeholder="'请选择' + item.label" v-model:value="innerValue">
+      <JDictSelectTag v-if="item.config === '1'" :placeholder="'Vui lòng chọn' + item.label" v-model:value="innerValue" :dictCode="getDictCode()" />
+      <a-select v-else :placeholder="'Vui lòng chọn' + item.label" v-model:value="innerValue">
         <template v-for="(obj, index) in dictOptions[getDictOptionKey(item)]" :key="index">
           <a-select-option :value="obj.value"> {{ obj.text }}</a-select-option>
         </template>
       </a-select>
     </template>
 
-    <!-- 5.下拉树 -->
+    <!-- 5.Cây dropdown -->
     <template v-else-if="item.view === 'sel_tree'">
       <JTreeSelect
-        :placeholder="'请选择' + item.label"
+        :placeholder="'Vui lòng chọn' + item.label"
         v-model:value="innerValue"
         :dict="item.dict"
         :pidField="item.pidField"
@@ -91,44 +91,44 @@
       </JTreeSelect>
     </template>
 
-    <!-- 6.分类树  -->
+    <!-- 6.Cây phân loại  -->
     <template v-else-if="item.view === 'cat_tree'">
       <JCategorySelect
         @change="handleCategoryTreeChange"
         :loadTriggleChange="true"
         :pcode="item.pcode"
         v-model:value="innerValue"
-        :placeholder="'请选择' + item.label"
+        :placeholder="'Vui lòng chọn' + item.label"
       />
     </template>
 
-    <!-- 7.下拉搜索 -->
+    <!-- 7.Tìm kiếm trong dropdown -->
     <template v-else-if="item.view === 'sel_search'">
-      <JDictSelectTag v-if="item.config === '1'" v-model:value="innerValue" :placeholder="'请选择' + item.label" :dict="getDictCode()" />
-      <JOnlineSearchSelect v-else v-model:value="innerValue" :placeholder="'请选择' + item.label" :sql="getSqlByDictCode()" />
+      <JDictSelectTag v-if="item.config === '1'" v-model:value="innerValue" :placeholder="'Vui lòng chọn' + item.label" :dict="getDictCode()" />
+      <JOnlineSearchSelect v-else v-model:value="innerValue" :placeholder="'Vui lòng chọn' + item.label" :sql="getSqlByDictCode()" />
     </template>
 
-    <!-- 8.用户 -->
+    <!-- 8.Người dùng -->
     <JSelectUser
       v-else-if="item.view == 'sel_user'"
       v-bind="userSelectProp"
       v-model:value="innerValue"
-      :placeholder="'请选择' + item.label"
+      :placeholder="'Vui lòng chọn' + item.label"
     ></JSelectUser>
 
-    <!-- 9.部门 -->
+    <!-- 9.Phòng ban -->
     <JSelectDept
       v-else-if="item.view == 'sel_depart'"
       :showButton="false"
       v-bind="depSelectProp"
       v-model:value="innerValue"
-      :placeholder="'请选择' + item.label"
+      :placeholder="'Vui lòng chọn' + item.label"
     />
 
     <!-- 10.popup -->
     <JPopup
       v-else-if="item.view == 'popup'"
-      :placeholder="'请选择' + item.label"
+      :placeholder="'Vui lòng chọn' + item.label"
       v-model:value="innerValue"
       :code="item.dictTable"
       :setFieldsValue="setFieldsValue"
@@ -137,25 +137,25 @@
     >
     </JPopup>
 
-    <!-- 11.省市区 -->
-    <JAreaSelect v-else-if="item.view == 'pca'" :placeholder="'请选择' + item.label" v-model:value="innerValue" />
+    <!-- 11.Tỉnh/Thành/Quận huyện -->
+    <JAreaSelect v-else-if="item.view == 'pca'" :placeholder="'Vui lòng chọn' + item.label" v-model:value="innerValue" />
 
-    <!-- 12.下拉多选 -->
+    <!-- 12.Dropdown chọn nhiều -->
     <template v-else-if="item.view == 'checkbox' || item.view == 'list_multi'" :label="item.label">
-      <JSelectMultiple :dictCode="getDictCode()" :placeholder="'请选择' + item.label" v-model:value="innerValue"></JSelectMultiple>
+      <JSelectMultiple :dictCode="getDictCode()" :placeholder="'Vui lòng chọn' + item.label" v-model:value="innerValue"></JSelectMultiple>
 
       <!--<JDictSelectTag mode="multiple" @change="handleSelectChange"  :dictCode="getDictCode()"/>-->
     </template>
 
-    <!-- 13.普通输入框 -->
+    <!-- 13.Ô nhập thông thường -->
     <template v-else>
       <template v-if="single_mode === item.mode">
-        <a-input :placeholder="'请选择' + item.label" v-model:value="innerValue"></a-input>
+        <a-input :placeholder="'Vui lòng chọn' + item.label" v-model:value="innerValue"></a-input>
       </template>
       <template v-else>
-        <a-input placeholder="开始值" v-model:value="beginValue" style="width: calc(50% - 15px)"></a-input>
+        <a-input placeholder="Giá trị bắt đầu" v-model:value="beginValue" style="width: calc(50% - 15px)"></a-input>
         <span class="group-query-strig">~</span>
-        <a-input placeholder="结束值" v-model:value="endValue" style="width: calc(50% - 15px)"></a-input>
+        <a-input placeholder="Giá trị kết thúc" v-model:value="endValue" style="width: calc(50% - 15px)"></a-input>
       </template>
     </template>
   </a-form-item>
@@ -217,7 +217,7 @@
     },
     emits: ['update:value', 'change'],
     setup(props, { emit }) {
-      // 定义查询条件 文本label的最大宽度 比起单纯的控制字体个数更好
+      // Định nghĩa điều kiện truy vấn Văn bảnlabelđộ rộng tối đa của Tốt hơn so với việc chỉ đơn thuần kiểm soát số lượng ký tự
       const labelTextMaxWidth = '120px';
       const labelCol = {
         style: {
@@ -233,7 +233,7 @@
         () => props.value,
         () => {
           if (isEasySelect()) {
-            // 下拉框这里设置空数组 不知道为什么会有警告
+            // Tại ô dropdown này thiết lập mảng rỗng không biết vì sao lại có cảnh báo
             innerValue.value = !!props.value ? props.value : undefined;
           } else {
             innerValue.value = props.value;
@@ -394,7 +394,7 @@
     text-align: center;
     display: inline-block;
   }
-  /* 查询条件左对齐样式设置 */
+  /* Thiết lập kiểu căn trái cho điều kiện truy vấn */
   .jeecg-online-search :deep(.ant-form-item-label) {
     flex: 0 0 auto !important;
     width: auto;
@@ -404,7 +404,7 @@
     padding-right: 16px;
   }
 
-  /* label显示宽度 超出显示... */
+  /* labelĐộ rộng hiển thị Hiển thị tràn ra ngoài... */
   .jeecg-online-search :deep(.label-text) {
     max-width: v-bind(labelTextMaxWidth);
     overflow: hidden;

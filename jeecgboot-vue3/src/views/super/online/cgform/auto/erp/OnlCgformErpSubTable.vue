@@ -1,9 +1,9 @@
 <template>
 
-  <!-- 加载中骨架屏 -->
+  <!-- Màn hình khung xương (skeleton) khi đang tải -->
   <a-skeleton v-if="tableReloading" active />
 
-  <!-- 查询条件 -->
+  <!-- Điều kiện truy vấn -->
   <online-query-form
       v-if="mainTableSelectedRowRcord"
       v-show="!tableReloading"
@@ -14,7 +14,7 @@
       @search="queryWithCondition"
   />
 
-  <!-- 列表 -->
+  <!-- Danh sách -->
   <BasicTable
     v-if="!tableReloading"
     ref="onlineTable"
@@ -64,7 +64,7 @@
         <span>{{cgBIBtnMap['export'].buttonName}}</span>
       </a-button>
 
-      <!-- 自定义按钮 -->
+      <!-- Nút tùy chỉnh -->
       <template v-if="btnShow && cgTopButtonList && cgTopButtonList.length > 0" v-for="(item, index) in cgTopButtonList">
         <a-button
           v-if="item.optType == 'js'"
@@ -97,24 +97,24 @@
     </template>
 
     <template #fileSlot="{ text, record, column }">
-      <span v-if="!text" style="font-size: 12px; font-style: italic">无文件</span>
+      <span v-if="!text" style="font-size: 12px; font-style: italic">Không có tệp</span>
       <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download" size="small" @click="downloadRowFile(text, record, column, ID)">
-        下载
+        Tải xuống
       </a-button>
     </template>
 
     <template #imgSlot="{ text }">
-      <span v-if="!text" style="font-size: 12px; font-style: italic">无图片</span>
-      <img v-else :src="getImgView(text)" alt="图片不存在" class="online-cell-image" @click="viewOnlineCellImage(text)" />
+      <span v-if="!text" style="font-size: 12px; font-style: italic">Không có hình ảnh</span>
+      <img v-else :src="getImgView(text)" alt="Hình ảnh không tồn tại" class="online-cell-image" @click="viewOnlineCellImage(text)" />
     </template>
 
     <template #htmlSlot="{ text, column, record }">
-      <!-- update-begin--author:liaozhiyang---date:20240517---for：【TV360X-129】增加富文本控件配置href跳转 -->
+      <!-- update-begin--author:liaozhiyang---date:20240517---for：【TV360X-129】Bổ sung cấu hình control văn bản giàu (rich text)hrefChuyển hướng (nhảy trang) -->
       <template v-if="column.fieldHref">
         <a v-html="sanitizeRichText(text)" @click="handleClickFieldHref(column.fieldHref, record)"></a>
       </template>
       <div v-else v-html="sanitizeRichText(text)"></div>
-      <!-- update-end--author:liaozhiyang---date:20240517---for：【TV360X-129】增加富文本控件配置href跳转 -->
+      <!-- update-end--author:liaozhiyang---date:20240517---for：【TV360X-129】Bổ sung cấu hình control văn bản giàu (rich text)hrefChuyển hướng (nhảy trang) -->
     </template>
 
     <template #pcaSlot="{ text, column }">
@@ -130,7 +130,7 @@
     </template>
   </BasicTable>
 
-  <!-- 表单新增、修改弹框 -->
+  <!-- Popup thêm mới, sửa đổi biểu mẫu -->
   <OnlineAutoModal
       @register="registerModal"
       :id="ID"
@@ -142,27 +142,27 @@
       @formConfig="handleFormConfig"
   />
 
-  <!-- 详情弹框 -->
+  <!-- Popup chi tiết -->
   <online-detail-modal :source="ERPSUBTABLE" :id="ID" @register="registerDetailModal" />
 
-  <!-- 导入 -->
+  <!-- Nhập (import) -->
   <JImportModal @register="registerImportModal" :url="importUrl()" @ok="reload" online></JImportModal>
 
-  <!-- 跳转Href的动态组件方式 -->
+  <!-- Chuyển hướng (nhảy trang)Hrefphương thức component động của -->
   <a-modal v-bind="hrefComponent.model" v-on="hrefComponent.on">
     <component :is="hrefComponent.is" v-bind="hrefComponent.params" />
   </a-modal>
 
-  <!-- 自定义弹窗 -->
+  <!-- Popup tùy chỉnh -->
   <online-custom-modal @register="registerCustomModal" @success="reload" />
 
-  <!-- 弹窗给href到另外一张表单用-详情表单 -->
+  <!-- Popup cấp chohrefdùng cho một biểu mẫu khác-Biểu mẫu chi tiết -->
   <online-detail-modal :id="hrefMainTableId" @register="registerOnlineHrefModal" :defaultFullscreen="false" />
 
-  <!-- 弹窗到另外一张表单用-可编辑表单-关联记录的字段可在列表上打开modal编辑数据 -->
+  <!-- Popup dùng cho một biểu mẫu khác-Biểu mẫu có thể chỉnh sửa-Trường của bản ghi liên kết có thể mở trên danh sáchmodalChỉnh sửa dữ liệu -->
   <online-pop-modal ref="onlinePopModalRef" :id="popTableId" @register="registerPopModal" @success="reload" request topTip></online-pop-modal>
 
-  <!-- 流程图查看modal -->
+  <!-- Xem sơ đồ quy trìnhmodal -->
   <BpmGraphicModal @register="registerBpmModal"></BpmGraphicModal>
 </template>
 
@@ -189,13 +189,13 @@
   const props = defineProps(['data', 'mainTableSelectedRowRcord']);
   const emit = defineEmits(['getSource']);
   const btnShow = ref(false);
-  // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-1004】erp风格列设置之后再次刷新展示内容不对
+  // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-1004】erpSau khi thiết lập cột phong cách, làm mới lại, nội dung trưng bày không đúng
   const tableSetting = {
     cacheKey: `online_erp_subTable_${props.data.currentTableName}`,
   };
-  // update-end--author:liaozhiyang---date:20240611---for：【TV360X-1004】erp风格列设置之后再次刷新展示内容不对
+  // update-end--author:liaozhiyang---date:20240611---for：【TV360X-1004】erpSau khi thiết lập cột phong cách, làm mới lại, nội dung trưng bày không đúng
   const { createMessage: $message } = useMessage();
-  // 这行代码应该在每次进入新的路由都会走，不管该路由有没有被缓存--
+  // Hàng mã này nên được chạy mỗi lần vào route mới, bất kể route đó có bị lưu bộ nhớ đệm hay không--
   const {
     ID,
     onlineTableContext,
@@ -215,9 +215,9 @@
   } = useOnlineTableContext({ code: props.data.code, themeTemplate: ERP });
   onlineTableContext['isErpSubTable'] = true;
 
-  // 处理增强
+  // Xử lý phần tăng cường
   let { initCgEnhanceJs } = useEnhance(onlineTableContext);
-  // 处理列表button
+  // Xử lý danh sáchbutton
   const {
     buttonSwitch,
     cgLinkButtonList,
@@ -248,18 +248,18 @@
 
   const exportLoading = ref(false);
 
-  // 重写导出方法，防止频繁点击
+  // Viết lại phương thức xuất, ngăn nhấp thường xuyên
   async function onExportExcelOverride() {
     try {
       exportLoading.value = true;
       await onExportExcel();
     } finally {
-      // 防止频繁点击，延迟1.5s关闭loading
+      // Ngăn nhấp thường xuyên, trì hoãn1.5sĐóngloading
       setTimeout(() => (exportLoading.value = false), 1500);
     }
   }
 
-  // 处理 BasicTable 的配置
+  // Xử lý BasicTable cấu hình của
   const {
     columns,
     actionColumn,
@@ -289,7 +289,7 @@
   const foreignKeys = props.data.foreignKeys;
   let $key;
   if (foreignKeys?.length) {
-    // 外键只有一个，但是给的是数组形式，只取第一个即可.
+    // Khóa ngoại chỉ có một cái, nhưng được đưa dưới dạng mảng, chỉ cần lấy cái đầu tiên.
     const item = foreignKeys[0];
     const field = item.field;
     $key = item.key;
@@ -302,15 +302,15 @@
   watch(
     () => props.mainTableSelectedRowRcord,
     (newVal) => {
-      // 切换重置状态
-      // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-188】erp风格子表分页改成不显示分页，网页报错无响应
+      // Chuyển đổi trạng thái đặt lại
+      // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-188】erpPhân trang bảng con của phong cách đổi thành không hiển thị phân trang, trang web báo lỗi không phản hồi
       if (pagination.value) pagination.value.current = 1;
-      // update-end--author:liaozhiyang---date:20260713---for：【LHZP-188】erp风格子表分页改成不显示分页，网页报错无响应
+      // update-end--author:liaozhiyang---date:20260713---for：【LHZP-188】erpPhân trang bảng con của phong cách đổi thành không hiển thị phân trang, trang web báo lỗi không phản hồi
       selectedKeys.value = [];
-      // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-124】erp风格，切换主表数据时，子表查询条件未清空
+      // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-124】erpPhong cách, khi chuyển dữ liệu bảng chính, điều kiện truy vấn của bảng con chưa được xóa trống
       onlineQueryFormOuter.value?.clearSearch();
-      // update-end--author:liaozhiyang---date:20240523---for：【TV360X-124】erp风格，切换主表数据时，子表查询条件未清空
-      // update-begin--author:liusq---date:20260113---for：【LHZP-118】主子表联动兜底：只有有效选中行(id !== undefined)才走加载分支
+      // update-end--author:liaozhiyang---date:20240523---for：【TV360X-124】erpPhong cách, khi chuyển dữ liệu bảng chính, điều kiện truy vấn của bảng con chưa được xóa trống
+      // update-begin--author:liusq---date:20260113---for：【LHZP-118】Liên động bảng chính-con (xử lý dự phòng): chỉ hàng được chọn hợp lệ(id !== undefined)mới đi theo nhánh tải
       if (newVal && newVal.id !== undefined) {
         if (onlineTableContext['foreignKeyField']) {
           const value = newVal[$key];
@@ -324,17 +324,17 @@
         });
       } else {
         btnShow.value = false;
-        // 显式清空 foreignKeyValue，避免 loadData 命中旧值仍去查询子表
+        // Xóa trống tường minh foreignKeyValue, tránh loadData Trúng giá trị cũ vẫn đi truy vấn bảng con
         onlineTableContext['foreignKeyValue'] = null;
         dataSource.value = [];
       }
-      // update-end--author:liusq---date:20260113---for：【LHZP-118】主子表联动兜底：只有有效选中行(id !== undefined)才走加载分支
+      // update-end--author:liusq---date:20260113---for：【LHZP-118】Liên động bảng chính-con (xử lý dự phòng): chỉ hàng được chọn hợp lệ(id !== undefined)mới đi theo nhánh tải
     },
     {
       immediate: true,
     }
   );
-  // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
+  // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
   watch(
     () => dataSource.value,
     () => {
@@ -342,36 +342,36 @@
     },
     { immediate: true }
   );
-  // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
-  /**重新加载online配置*/
+  // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
+  /**Tải lạionlineCấu hình*/
   async function initAutoList(data) {
-    // 1.列配置信息
+    // 1.Thông tin cấu hình cột
     handleTableConfig(data);
     loading.value = false;
-    // 2.加载数据
+    // 2.Tải dữ liệu
     // await loadData();
     // loading.value = false;
-    // 3.执行js增强 setup
+    // 3.Thực thijsTăng cường setup
     onlineTableContext.execButtonEnhance('setup');
   }
 
-  // 将查询结果转成 table渲染需要的配置
+  // Chuyển kết quả truy vấn thành tableCấu hình cần cho việc render
   function handleTableConfig(result) {
-    // js增强初始化
+    // jsKhởi tạo phần tăng cường
     let EnhanceJS = initCgEnhanceJs(result.enhanceJs);
     onlineTableContext['EnhanceJS'] = EnhanceJS;
-    // 自定义按钮设置
+    // Thiết lập nút tùy chỉnh
     initButtonList(result.cgButtonList);
-    // 页面按钮显示隐藏状态设置
+    // Thiết lập trạng thái hiển thị/ẩn của nút trang
     initButtonSwitch(result.hideColumns);
-    // 列配置
+    // cấu hình cột
     handleColumnResult(result);
-    // 表配置
+    // Cấu hình bảng
     handleSpecialConfig(result);
   }
   
   /**
-   * 查询控件 事件-执行查询
+   * Control truy vấn sự kiện-Thực thi truy vấn
    * @param data
    */
   function queryWithCondition(data) {
@@ -380,7 +380,7 @@
   }
 
   /**
-   * list页面打开 其他表单弹窗
+   * listMở trang Popup biểu mẫu khác
    * @param params
    */
   function openOnlinePopModal(params) {
@@ -395,21 +395,21 @@
     }
     openPopModal(true, data);
   }
-  //绑定弹窗事件
+  //Liên kết sự kiện popup
   useOnlineListPopEvent(openOnlinePopModal);
   const handleAddRcord = () => {
     if(props.data.relationType ==1 && dataSource.value.length) {
-      $message.warning('一对一的表只能新增一条数据');
+      $message.warning('Bảng một-một chỉ được thêm một bản ghi dữ liệu');
     } else {
       handleAdd();
     }
 
   }
 
-  // 导入事件 - 一对一关系校验（前端做 UX 拦截，真正的约束由后端把关）
+  // Sự kiện nhập - Kiểm chứng quan hệ một-một (làm ở frontend UX chặn lại, ràng buộc thực sự do backend đảm trách)
   const handleImportExcel = () => {
     if (props.data.relationType == 1 && dataSource.value.length) {
-      $message.warning(`一对一的表只能导入一条数据！`);
+      $message.warning(`Bảng một-một chỉ được nhập một bản ghi dữ liệu!`);
     } else {
       onImportExcel();
     }

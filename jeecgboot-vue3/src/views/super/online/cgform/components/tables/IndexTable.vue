@@ -35,34 +35,34 @@
     setup() {
       const columns = ref<JVxeColumn[]>([
         {
-          title: '索引名称',
+          title: 'Tên chỉ mục',
           key: 'indexName',
           width: 330,
           type: JVxeTypes.input,
           defaultValue: '',
-          placeholder: '请输入${title}',
+          placeholder: 'Vui lòng nhập${title}',
           validateRules: [
-            { required: true, message: '${title}不能为空' },
-            // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-1974】online索引名称增加校验
+            { required: true, message: '${title}không được để trống' },
+            // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-1974】onlineTên chỉ mục thêm kiểm chứng
             {
               pattern: /^[a-zA-Z][a-zA-Z0-9_-]*$/,
-              message: '命名规则：只能由字母、数字、下划线组成；必须以字母开头',
+              message: 'Quy tắc đặt tên: chỉ được cấu thành từ chữ cái, chữ số, dấu gạch dưới; phải bắt đầu bằng chữ cái',
             },
-            // update-end--author:liaozhiyang---date:20240807---for：【TV360X-1974】online索引名称增加校验
+            // update-end--author:liaozhiyang---date:20240807---for：【TV360X-1974】onlineTên chỉ mục thêm kiểm chứng
           ],
         },
         {
-          title: '索引栏位',
+          title: 'Ô chỉ mục',
           key: 'indexField',
           width: 330,
           type: JVxeTypes.selectMultiple,
           options: [],
           defaultValue: '',
-          placeholder: '请选择${title}',
-          validateRules: [{ required: true, message: '请选择${title}' }],
+          placeholder: 'Vui lòng chọn${title}',
+          validateRules: [{ required: true, message: 'Vui lòng chọn${title}' }],
         },
         {
-          title: '索引类型',
+          title: 'Loại chỉ mục',
           key: 'indexType',
           width: 330,
           type: JVxeTypes.select,
@@ -71,15 +71,15 @@
             { title: 'unique', value: 'unique' },
           ],
           defaultValue: 'normal',
-          placeholder: '请选择${title}',
-          validateRules: [{ required: true, message: '请选择${title}' }],
+          placeholder: 'Vui lòng chọn${title}',
+          validateRules: [{ required: true, message: 'Vui lòng chọn${title}' }],
         },
       ]);
 
       const setup = useTableSync(columns);
       const { tableRef, loading, dataSource, tableHeight, tableProps, setDataSource, validateData } = setup;
 
-      /** 同步列表 */
+      /** Đồng bộ danh sách */
       function syncTable(dbTable: Ref<CgformModal.DBAttributeTableType>) {
         let options: any[] = [];
         let data = dbTable.value!.tableRef!.getTableData();

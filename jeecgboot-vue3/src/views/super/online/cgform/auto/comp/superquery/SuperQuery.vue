@@ -1,11 +1,11 @@
 <template>
-    <!-- 按钮区域 -->
+    <!-- Vùng nút -->
     <div class="j-super-query-button">
         <a-tooltip v-if="superQueryFlag" :mouseLeaveDelay="0.2">
             <template #title>
-                <span>执行查询中...</span>
+                <span>Đang thực thi truy vấn...</span>
                 <divider type="vertical" style="background-color: #fff"/>
-                <a @click="handleStop">取消查询</a>
+                <a @click="handleStop">Hủy truy vấn</a>
             </template>
             <a-button-group>
                 <a-button type="primary" @click="handleOpen">
@@ -19,24 +19,24 @@
         </a-button>
     </div>
 
-    <!-- 高级查询弹框 -->
+    <!-- Popup truy vấn nâng cao -->
     <teleport to="body">
-        <BasicModal :title="queryBtnCfg.buttonName + '构造器'" wrap-class-name="j-super-query-modal" :canFullscreen="true" :width="850" @register="registerFormModal" @ok="handleSubmit" @fullScreen="handleFullScreen">
+        <BasicModal :title="queryBtnCfg.buttonName + 'Bộ xây dựng (constructor)'" wrap-class-name="j-super-query-modal" :canFullscreen="true" :width="850" @register="registerFormModal" @ok="handleSubmit" @fullScreen="handleFullScreen">
             <template #footer>
                 <div style="float: left">
-                    <a-button :loading="loading" @click="handleReset">清空</a-button>
-                    <a-button :loading="loading" @click="handleSave">保存查询</a-button>
+                    <a-button :loading="loading" @click="handleReset">Xóa sạch (làm trống)</a-button>
+                    <a-button :loading="loading" @click="handleSave">Lưu truy vấn</a-button>
                 </div>
 
-                <a-button key="submit" type="primary" @click="handleSubmit">执行查询</a-button>
-                <a-button key="back" @click="handleCancel">关闭</a-button>
+                <a-button key="submit" type="primary" @click="handleSubmit">Thực thi truy vấn</a-button>
+                <a-button key="back" @click="handleCancel">Đóng</a-button>
             </template>
 
             <a-empty v-if="dynamicRowValues.values.length == 0">
                 <div slot="description">
-                    <span>没有任何查询条件</span>
+                    <span>Không có bất kỳ điều kiện truy vấn nào</span>
                     <a-divider type="vertical"/>
-                    <a @click="addOne(-1)">点击新增</a>
+                    <a @click="addOne(-1)">Nhấp thêm mới</a>
                 </div>
             </a-empty>
 
@@ -44,10 +44,10 @@
                 <a-col :sm="24" :md="24">
                     <a-row v-show="dynamicRowValues.values.length > 0">
                         <a-col :md="12" :xs="24">
-                            <a-form-item label="匹配模式" :labelCol="{md: 6,xs:24}" :wrapperCol="{md: 18,xs:24}" style="width: 100%;">
+                            <a-form-item label="Chế độ khớp nối" :labelCol="{md: 6,xs:24}" :wrapperCol="{md: 18,xs:24}" style="width: 100%;">
                                 <a-select v-model:value="matchType" :getPopupContainer="node=>node?.parentNode" style="width: 100%;">
-                                    <a-select-option value="and">AND（所有条件匹配）</a-select-option>
-                                    <a-select-option value="or">OR（任意一个匹配）</a-select-option>
+                                    <a-select-option value="and">AND(mọi điều kiện khớp)</a-select-option>
+                                    <a-select-option value="or">OR(bất kỳ một cái nào khớp)</a-select-option>
                                 </a-select>
                             </a-form-item>
                         </a-col>
@@ -60,7 +60,7 @@
                                 <a-tree-select
                                         :popupClassName="getTreePopupClass"
                                         style="width:100%"
-                                        placeholder="请选择字段"
+                                        placeholder="Vui lòng chọn trường"
                                         v-model:value="item.field"
                                         show-search
                                         tree-node-filter-prop="title"
@@ -73,12 +73,12 @@
                                 </a-tree-select>
                             </a-form-item>
                             <a-form-item class="rule-clos" :name="['values', index, 'rule']">
-                                <a-select style="width:100%" placeholder="请选择匹配规则" v-model:value="item.rule">
+                                <a-select style="width:100%" placeholder="Vui lòng chọn quy tắc khớp" v-model:value="item.rule">
                                     <a-select-option :value="qItem.value" v-for="qItem in getQueryCondition(item)" :key="qItem.value">{{qItem.label}}</a-select-option>
-                                    <!-- 当前表单设计器内专用 -->
-                                   <!-- <a-select-option value="empty">为空</a-select-option>
-                                    <a-select-option value="not_empty">不为空</a-select-option>-->
-                                    <!-- 当前表单设计器内专用 -->
+                                    <!-- Chuyên dụng trong trình thiết kế biểu mẫu hiện tại -->
+                                   <!-- <a-select-option value="empty">rỗng</a-select-option>
+                                    <a-select-option value="not_empty">không rỗng</a-select-option>-->
+                                    <!-- Chuyên dụng trong trình thiết kế biểu mẫu hiện tại -->
                                 </a-select>
                             </a-form-item>
                             <a-form-item class="component-clos" :name="['values', index, 'val']">
@@ -97,14 +97,14 @@
                     </a-form>
                 </a-col>
             </a-row>
-          <!-- 查询记录 -->
+          <!-- Bản ghi truy vấn -->
           <a-card :class="['j-super-query-history-card', {'collapsed': historyCollapsed}]" :bordered="false">
-            <template #title><div>保存的查询</div></template>
+            <template #title><div>truy vấn đã lưu</div></template>
             <a-empty
                 v-if="saveTreeData.length === 0"
                 class="j-super-query-history-empty"
                 :image="simpleImage"
-                description="没有保存的查询"
+                description="Không có truy vấn đã lưu"
             />
             <a-tree
                 v-else
@@ -116,12 +116,12 @@
               <template #title="{title}">
                 <div>
                   <span :title="title">{{(title.length>10)?(title.substring(0, 10)+'...'):title }}</span>
-                  <a-popconfirm title="确定删除吗？" @confirm="handleRemoveSaveInfo(title)">
+                  <a-popconfirm title="Xác nhận xóa chứ?" @confirm="handleRemoveSaveInfo(title)">
                     <span class="icon-cancle" @click="(e)=>e.stopPropagation()"><close-circle-outlined /></span>
                   </a-popconfirm>
                 </div>
               </template>
-              <!-- antd-2是这么写的 升级到3会也许会改变写法 -->
+              <!-- antd-2được viết như vậy Nâng cấp lên3có thể sẽ thay đổi cách viết -->
               <template #custom>
                 <file-text-outlined/>
               </template>
@@ -134,10 +134,10 @@
         </BasicModal>
     </teleport>
 
-    <!-- 保存信息弹框 -->
-    <a-modal title="请输入保存的名称" :open="saveInfo.visible" @cancel="saveInfo.visible=false" @ok="doSaveQueryInfo" :confirmLoading="saveModalLoading">
+    <!-- Popup thông tin đã lưu -->
+    <a-modal title="Vui lòng nhập tên để lưu" :open="saveInfo.visible" @cancel="saveInfo.visible=false" @ok="doSaveQueryInfo" :confirmLoading="saveModalLoading">
         <div style="height:80px;line-height:75px;width:100%;text-align: center">
-            <a-input v-model:value="saveInfo.title" style="width:90%" placeholder="请输入保存的名称"></a-input>
+            <a-input v-model:value="saveInfo.title" style="width:90%" placeholder="Vui lòng nhập tên để lưu"></a-input>
         </div>
     </a-modal>
 </template>
@@ -171,7 +171,7 @@
         type: Boolean,
         default: false
       },
-      // update-begin--author:liaozhiyang---date:20240514---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+      // update-begin--author:liaozhiyang---date:20240514---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
       isCustomSave: {
         type: Boolean,
         default: false,
@@ -183,12 +183,12 @@
       save: {
         type: Function,
       },
-      // update-end--author:liaozhiyang---date:20240514---for：【issues/6205】高级查询组件增加保存条件自定义存储方式
+      // update-end--author:liaozhiyang---date:20240514---for：【issues/6205】Component truy vấn nâng cao bổ sung cách lưu trữ tùy chỉnh cho điều kiện đã lưu
       queryBtnCfg: {
         type: Object,
         default: () => {
           return {
-            buttonName: '高级查询',
+            buttonName: 'Truy vấn nâng cao',
             buttonIcon: 'ant-design:filter-outlined',
           }
         }
@@ -208,7 +208,7 @@
     emits:['search'],
     setup(props, {emit}) {
 
-      console.log("-------初始化  OnlineSuperQuery注册--------------")
+      console.log("-------Khởi tạo  OnlineSuperQueryĐăng ký--------------")
       
       const [registerFormModal, formModal] = useModal()
       const { createMessage: $message } = useMessage();
@@ -216,10 +216,10 @@
       const fieldTreeSelectHeight = ref(180);
       const { prefixCls } = useDesign('super-query');
       const treePopupClass = `${prefixCls}-tree-popup`;
-      // 保存的查询是否折叠
+      // Truy vấn đã lưu có gập lại hay không
       const historyCollapsed = ref(true)
       let currentQueryInfo = null;
-      // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-76】高级查询条件根据控件类型区分
+      // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-76】Điều kiện truy vấn nâng cao phân biệt theo loại control
       const { filterCondition } = useConditionFilter();
       const findFieldItem = (items: any[], field: string | undefined): any => {
         for (const item of items) {
@@ -235,53 +235,53 @@
         }
       };
       const getQueryCondition = (data) => {
-        // -update-begin--author:liaozhiyang---date:20260810---for：【LHZP-523】高级查询组件查询条件调整
+        // -update-begin--author:liaozhiyang---date:20260810---for：【LHZP-523】Điều chỉnh điều kiện truy vấn của component truy vấn nâng cao
         const findItem = findFieldItem(fieldTreeData.value, data.field) ?? {};
         return filterCondition({ view: findItem.originView || findItem.view, fieldType: findItem.fieldType });
-        // -update-end--author:liaozhiyang---date:20260810---for：【LHZP-523】高级查询组件查询条件调整
+        // -update-end--author:liaozhiyang---date:20260810---for：【LHZP-523】Điều chỉnh điều kiện truy vấn của component truy vấn nâng cao
       };
-      // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-76】高级查询条件根据控件类型区分
+      // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-76】Điều kiện truy vấn nâng cao phân biệt theo loại control
       /**
-       * 关闭按钮事件
+       * Sự kiện nút đóng
        */
       function handleCancel() {
         formModal.closeModal();
       }
 
       /**
-       * 确认按钮事件
+       * Sự kiện nút xác nhận
        */
       function handleSubmit() {
         if(props.online === true){
           let dataArray = getQueryInfo(true)
           if(dataArray && dataArray.length>0){
-            // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-86】年，年月，周查询出结果不准
+            // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-86】Năm, năm-tháng, tuần truy vấn cho kết quả không chính xác
             transformDateValus(dataArray);
-            // update-end--author:liaozhiyang---date:20240517---for：【TV360X-86】年，年月，周查询出结果不准
+            // update-end--author:liaozhiyang---date:20240517---for：【TV360X-86】Năm, năm-tháng, tuần truy vấn cho kết quả không chính xác
             emit('search', dataArray, matchType.value)
-            // update-begin--author:liaozhiyang---date:220230802---for：【QQYUN-5995】高级查询效果后关闭弹窗
+            // update-begin--author:liaozhiyang---date:220230802---for：【QQYUN-5995】Sau hiệu ứng truy vấn nâng cao thì đóng popup
             handleCancel()
-            // update-end--author:liaozhiyang---date:220230802---for：【QQYUN-5995】高级查询效果后关闭弹窗
+            // update-end--author:liaozhiyang---date:220230802---for：【QQYUN-5995】Sau hiệu ứng truy vấn nâng cao thì đóng popup
             currentQueryInfo = dataArray;
           }else{
-            $message.warning('空条件无法查询！')
+            $message.warning('Điều kiện trống không thể truy vấn!')
           }
         }else{
           //console.log('handleSubmit', dynamicRowValues.values)
           let dataArray = getQueryInfo(true)
           if(dataArray && dataArray.length>0){
-            //update-begin---author:wangshuai---date:2025-07-18---for:【issues/8548】代码生成的高级查询里日期-月控件不能正常展示---
+            //update-begin---author:wangshuai---date:2025-07-18---for:【issues/8548】Ngày trong truy vấn nâng cao của mã được sinh ra-Control tháng không hiển thị bình thường được---
             transformDateValus(dataArray);
-            //update-end---author:wangshuai---date:2025-07-18---for:【issues/8548】代码生成的高级查询里日期-月控件不能正常展示---
+            //update-end---author:wangshuai---date:2025-07-18---for:【issues/8548】Ngày trong truy vấn nâng cao của mã được sinh ra-Control tháng không hiển thị bình thường được---
             let result = getSuperQueryParams(dataArray);
-            //console.log('查询数据1', dataArray)
-            //console.log('查询数据2', result)
+            //console.log('Truy vấn dữ liệu1', dataArray)
+            //console.log('Truy vấn dữ liệu2', result)
             emit('search', result)
-            // update-begin--author:wangshuai---date:20251112---for：【issues/9060】superQuery高级组件，点击"查询后"不能自动关闭弹窗
+            // update-begin--author:wangshuai---date:20251112---for：【issues/9060】superQueryComponent nâng cao, nhấp"sau khi truy vấn"không thể tự động đóng popup
             handleCancel()
-            // update-end--author:wangshuai---date:20251112---for：【issues/9060】superQuery高级组件，点击"查询后"不能自动关闭弹窗
+            // update-end--author:wangshuai---date:20251112---for：【issues/9060】superQueryComponent nâng cao, nhấp"sau khi truy vấn"không thể tự động đóng popup
           }else{
-            $message.warning('空条件无法查询！')
+            $message.warning('Điều kiện trống không thể truy vấn!')
           }
         }
         historyCollapsed.value = true;
@@ -290,16 +290,16 @@
       /**
        * 2024-05-17
        * liaozhiyang
-       * 把年，年月，周等时间重置到当前格式的第一天，因为存的时候也是第一天
+       * Đặt lại các thời gian như năm, năm-tháng, tuần về ngày đầu tiên của định dạng hiện tại, vì khi lưu cũng là ngày đầu tiên
        */
       const transformDateValus = (date) => {
         date.forEach((item) => {
           const value = item['val'];
           if (item.type === 'date' && typeof value === 'string' && value != '') {
-            // update-begin--author:liusq---date:20260806---for：联合查询子表年/月/周字段提交后由@转为,，导致无法获取字段扩展配置
+            // update-begin--author:liusq---date:20260806---for: truy vấn liên hợp bảng con năm/Tháng/Trường tuần sau khi gửi sẽ do@Chuyển thành,, dẫn đến không thể lấy cấu hình mở rộng của trường
             const fieldKey = item.field.includes(',') ? item.field.replace(',', '@') : item.field;
             const obj = fieldProperties.value[fieldKey];
-            // update-end--author:liusq---date:20260806---for：联合查询子表年/月/周字段提交后由@转为,，导致无法获取字段扩展配置
+            // update-end--author:liusq---date:20260806---for: truy vấn liên hợp bảng con năm/Tháng/Trường tuần sau khi gửi sẽ do@Chuyển thành,, dẫn đến không thể lấy cấu hình mở rộng của trường
             if (obj) {
               let fieldExtendJson = obj.fieldExtendJson;
               if (fieldExtendJson) {
@@ -351,7 +351,7 @@
         emit('search', result)
       } 
       /**
-       * 重置按钮事件
+       * Sự kiện nút đặt lại
        */
       function handleReset(){
         dynamicRowValues.values = []
@@ -361,9 +361,9 @@
         historyCollapsed.value = true;
         emit('search', result)
       }
-      // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-524】高级查询增加放大功能
+      // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-524】Truy vấn nâng cao bổ sung chức năng phóng to
       const handleFullScreen = (val) => {
-        // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-810】高级查询放大之后树下拉框高一些多展示些字段
+        // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-810】Sau khi phóng to truy vấn nâng cao, dropdown cây cao hơn một chút, hiển thị nhiều trường hơn
         if (val) {
           const contentHeight = document.documentElement.clientHeight - 165;
           queryFormStyle.value = { maxHeight: `${contentHeight}px` };
@@ -372,9 +372,9 @@
           queryFormStyle.value = {};
           fieldTreeSelectHeight.value = 180;
         }
-        // update-end--author:liaozhiyang---date:20240603---for：【TV360X-810】高级查询放大之后树下拉框高一些多展示些字段
+        // update-end--author:liaozhiyang---date:20240603---for：【TV360X-810】Sau khi phóng to truy vấn nâng cao, dropdown cây cao hơn một chút, hiển thị nhiều trường hơn
       };
-      // update-end--author:liaozhiyang---date:20240524---for：【TV360X-524】高级查询增加放大功能
+      // update-end--author:liaozhiyang---date:20240524---for：【TV360X-524】Truy vấn nâng cao bổ sung chức năng phóng to
       const {
         formRef,
         init,
@@ -400,38 +400,38 @@
         fieldProperties,
       } = useSuperQuery(props)
 
-      /*--------------------按钮区域-beign------------------*/
+      /*--------------------Vùng nút-beign------------------*/
       const superQueryFlag = ref(false)
       watch(()=>props.status, (val)=>{
         superQueryFlag.value = val;
       }, {immediate: true});
       
       function handleOpen(){
-        // update-begin--author:liaozhiyang---date:20240604---for：【TV360X-204】修改内容没点确定，再次打开应该是恢复之前的内容
+        // update-begin--author:liaozhiyang---date:20240604---for：【TV360X-204】Nội dung đã sửa chưa nhấn xác nhận, khi mở lại phải khôi phục nội dung trước đó
         if (superQueryFlag.value && currentQueryInfo) {
           dynamicRowValues.values = cloneDeep(currentQueryInfo);
-          // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-505】当操作执行查询后，再次打开，当操作删除最后面的条件时，实际删除的是最前面的条件
+          // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-505】Sau khi thao tác thực thi truy vấn, mở lại, khi thao tác xóa điều kiện ở cuối cùng, thực tế lại xóa điều kiện ở đầu tiên
           if (dynamicRowValues.values.length > 0 && !dynamicRowValues.values[0].key) {
             dynamicRowValues.values.forEach((item) => {
               item.key = Math.random().toString(36).slice(2, 18);
             });
           }
-          // update-end--author:liaozhiyang---date:20260714---for：【LHZP-505】当操作执行查询后，再次打开，当操作删除最后面的条件时，实际删除的是最前面的条件
-          // update-begin--author:liaozhiyang---date:20260707---for：【LHZP-536】主子表，选择子表的字段查询，再次点开弹窗回显的不是label而是value
-          // 将子表字段名中的逗号还原为@，以便TreeSelect正确回显
+          // update-end--author:liaozhiyang---date:20260714---for：【LHZP-505】Sau khi thao tác thực thi truy vấn, mở lại, khi thao tác xóa điều kiện ở cuối cùng, thực tế lại xóa điều kiện ở đầu tiên
+          // update-begin--author:liaozhiyang---date:20260707---for：【LHZP-536】Bảng chính-con, chọn trường của bảng con để truy vấn, mở lại popup thì giá trị hiển thị không phải làlabelmà làvalue
+          // Khôi phục dấu phẩy trong tên trường của bảng con thành@, để tiệnTreeSelectHiển thị lại đúng
           dynamicRowValues.values.forEach(item => {
             if (item.field && item.field.includes(',')) {
               item.field = item.field.replace(',', '@');
             }
           });
-          // update-end--author:liaozhiyang---date:20260707---for：【LHZP-536】主子表，选择子表的字段查询，再次点开弹窗回显的不是label而是value
+          // update-end--author:liaozhiyang---date:20260707---for：【LHZP-536】Bảng chính-con, chọn trường của bảng con để truy vấn, mở lại popup thì giá trị hiển thị không phải làlabelmà làvalue
         }
-        // update-end--author:liaozhiyang---date:20240604---for：【TV360X-204】修改内容没点确定，再次打开应该是恢复之前的内容
+        // update-end--author:liaozhiyang---date:20240604---for：【TV360X-204】Nội dung đã sửa chưa nhấn xác nhận, khi mở lại phải khôi phục nội dung trước đó
         formModal.openModal();
         historyCollapsed.value = true;
         addOne(true)
       }
-      /*--------------------按钮区域-end------------------*/
+      /*--------------------Vùng nút-end------------------*/
 
 
       function getPopupContainer(){
@@ -443,24 +443,24 @@
       /**
        * 2024-06-04
        * liaozhiyang
-       * 【TV360X-461】字段类型是string，则默认模糊查询
+       * 【TV360X-461】Loại trường làstring, thì mặc định truy vấn mờ
        * */
       function handleChangeField(data) {
         data['val'] = '';
-        // -update-begin--author:liaozhiyang---date:20260810---for：【LHZP-523】高级查询组件查询条件调整
+        // -update-begin--author:liaozhiyang---date:20260810---for：【LHZP-523】Điều chỉnh điều kiện truy vấn của component truy vấn nâng cao
         const findItem = findFieldItem(fieldTreeData.value, data.field);
         if (findItem?.fieldType === 'string' && ['text'].includes(findItem?.originView || findItem?.view)) {
           data['rule'] = 'like';
         } else if (['file', 'image', 'password'].includes(findItem?.originView || findItem?.view)) {
           data['rule'] = 'empty';
         } else {
-          // update-begin--author:liaozhiyang---date:20260813---for：【LHZP-442】当前组件没有等于条件，默认使用当前组件的第一个条件
+          // update-begin--author:liaozhiyang---date:20260813---for：【LHZP-442】Component hiện tại không có điều kiện bằng, mặc định sử dụng điều kiện đầu tiên của component hiện tại
           const queryConditions = getQueryCondition(data);
           const defaultCondition = queryConditions.find((item) => item.value === 'eq') || queryConditions[0];
           data['rule'] = defaultCondition?.value;
-          // update-end--author:liaozhiyang---date:20260813---for：【LHZP-442】当前组件没有等于条件，默认使用当前组件的第一个条件
+          // update-end--author:liaozhiyang---date:20260813---for：【LHZP-442】Component hiện tại không có điều kiện bằng, mặc định sử dụng điều kiện đầu tiên của component hiện tại
         }
-        // -update-end--author:liaozhiyang---date:20260810---for：【LHZP-523】高级查询组件查询条件调整
+        // -update-end--author:liaozhiyang---date:20260810---for：【LHZP-523】Điều chỉnh điều kiện truy vấn của component truy vấn nâng cao
       }
 
       
@@ -478,12 +478,12 @@
           init(val);
         }
       }, {immediate: true});
-      // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-342】字段下拉样式调整
+      // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-342】Điều chỉnh kiểu dáng dropdown của trường
       const getTreePopupClass = computed(() => {
         const findItem = fieldTreeData.value.find((item) => item.children);
         return findItem ? `${treePopupClass} containTable` : `${treePopupClass} noTable`;
       });
-      // update-end--author:liaozhiyang---date:20240603---for：【TV360X-342】字段下拉样式调整
+      // update-end--author:liaozhiyang---date:20240603---for：【TV360X-342】Điều chỉnh kiểu dáng dropdown của trường
 
       return {
         formRef,
@@ -582,7 +582,7 @@
          .ant-card-body{
             padding: 0;
         }
-        // 保存查询样式宽度调整
+        // Điều chỉnh độ rộng kiểu dáng của truy vấn đã lưu
         .ant-tree-treenode { width: 100%;}
     }
 
@@ -592,14 +592,14 @@
       right: -0;
       bottom: 0;
       z-index: 2;
-      //【QQYUN-7526】两行移入时会挤成三行
+      //【QQYUN-7526】Khi di chuột vào hai hàng thì bị dồn thành ba hàng
       width: 180px;
       min-height: 200px;
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
       
       
       &.collapsed {
-        //【QQYUN-7526】两行移入时会挤成三行
+        //【QQYUN-7526】Khi di chuột vào hai hàng thì bị dồn thành ba hàng
         right: -180px;
       }
 
@@ -647,7 +647,7 @@
       }
     }
 
-    /*VUEN-1087 【移动端】高级查询显示不全 */
+    /*VUEN-1087 【Di động】Truy vấn nâng cao hiển thị không đầy đủ */
     @media only screen and(max-width: 1050px) {
         :deep(.jee-super-query-form){
             .ant-space{
@@ -663,7 +663,7 @@
             }
         }
     }
-    // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-524】高级查询增加放大功能
+    // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-524】Truy vấn nâng cao bổ sung chức năng phóng to
     .ant-form {
       & > .ant-space {
         width: 100%;
@@ -680,7 +680,7 @@
         }
       }
     }
-    // update-end--author:liaozhiyang---date:20240524---for：【TV360X-524】高级查询增加放大功能
+    // update-end--author:liaozhiyang---date:20240524---for：【TV360X-524】Truy vấn nâng cao bổ sung chức năng phóng to
 
     .containTable {
       :deep(.ant-select-tree-treenode) {
@@ -691,7 +691,7 @@
 <style lang="less">
   @tree-popup: ~'@{namespace}-super-query-tree-popup';
   .@{tree-popup} {
-    // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-342】字段下拉样式调整
+    // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-342】Điều chỉnh kiểu dáng dropdown của trường
     &.noTable {
       .ant-select-tree-treenode {
         > .ant-select-tree-switcher {
@@ -710,8 +710,8 @@
         }
       }
     }
-    // update-end--author:liaozhiyang---date:20240603---for：【TV360X-342】字段下拉样式调整
-    // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1005】有子表时结构化主表且超长省略
+    // update-end--author:liaozhiyang---date:20240603---for：【TV360X-342】Điều chỉnh kiểu dáng dropdown của trường
+    // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1005】Khi có bảng con, cấu trúc hóa bảng chính và rút gọn khi quá dài
     &.containTable {
       .ant-select-tree-indent-unit {
         display: none;
@@ -728,6 +728,6 @@
         white-space: nowrap;
       }
     }
-    // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1005】有子表时结构化主表且超长省略
+    // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1005】Khi có bảng con, cấu trúc hóa bảng chính và rút gọn khi quá dài
   }
 </style>

@@ -13,11 +13,11 @@
       <template v-if="active == 'one'">
         <div class="ai-header">
           <SvgIcon name="robot" size="40" />
-          <p class="title">添加字段需要专业建议？试试AI智能字段推荐吧</p>
-          <p class="tip">可输入相应修饰词，如：员工信息登记表</p>
+          <p class="title">Thêm trường cần gợi ý chuyên nghiệp? Hãy thửAIĐề xuất trường thông minh</p>
+          <p class="tip">Có thể nhập từ bổ nghĩa tương ứng, như: Bảng đăng ký thông tin nhân viên</p>
         </div>
         <div class="ai-body">
-          <a-input v-model:value.trim="one.qualifier" placeholder="请输入修饰词" @pressEnter="handleConfirm"></a-input>
+          <a-input v-model:value.trim="one.qualifier" placeholder="Vui lòng nhập từ trang trí" @pressEnter="handleConfirm"></a-input>
         </div>
       </template>
       <template v-else>
@@ -26,8 +26,8 @@
             <div class="field-row">
               <a-checkbox v-model:checked="two.checked" :indeterminate="two.indeterminate" @change="handleAllChange"></a-checkbox>
               <div class="field-list field-content">
-                <span class="dbFieldName">字段名称</span>
-                <span class="dbFieldTxt">字段备注</span>
+                <span class="dbFieldName">Tên trường</span>
+                <span class="dbFieldTxt">Ghi chú trường</span>
               </div>
             </div>
           </div>
@@ -35,8 +35,8 @@
             <div v-for="(item, index) in two.data" :key="index" class="field-row">
               <a-checkbox v-model:checked="item.checked" @change="handleItemChange"></a-checkbox>
               <div class="field-content">
-                <a-input class="dbFieldName" v-model:value="item.dbFieldName" placeholder="字段名称"></a-input>
-                <a-input class="dbFieldTxt" v-model:value="item.dbFieldTxt" placeholder="字段备注"></a-input>
+                <a-input class="dbFieldName" v-model:value="item.dbFieldName" placeholder="Tên trường"></a-input>
+                <a-input class="dbFieldTxt" v-model:value="item.dbFieldTxt" placeholder="Ghi chú trường"></a-input>
               </div>
             </div>
           </div>
@@ -45,11 +45,11 @@
     </div>
     <template #footer>
       <template v-if="active == 'one'">
-        <a-button @click="handleCancel">取消</a-button>
-        <a-button type="primary" @click="handleConfirm" :loading="one.loading">{{ one.loading ? '生成中...' : '生成建议' }}</a-button>
+        <a-button @click="handleCancel">Hủy</a-button>
+        <a-button type="primary" @click="handleConfirm" :loading="one.loading">{{ one.loading ? 'Đang tạo...' : 'Đề xuất tạo' }}</a-button>
       </template>
       <template v-else>
-        <a-button type="primary" @click="handleAdd" :disabled="!two.checked && !two.indeterminate">添加{{ count() }}个字段进online</a-button>
+        <a-button type="primary" @click="handleAdd" :disabled="!two.checked && !two.indeterminate">Thêm{{ count() }}trường vàoonline</a-button>
       </template>
     </template>
   </BasicModal>
@@ -72,12 +72,12 @@
   const [registerModal, { closeModal }] = useModalInner();
   const active = ref('one');
   const one = reactive({
-    title: 'AI字段建议',
+    title: 'AIĐề xuất trường',
     qualifier: '',
     loading: false,
   });
   const two = reactive({
-    title: '推荐字段',
+    title: 'Trường đề xuất',
     checked: false,
     indeterminate: false,
     data: [],
@@ -93,17 +93,17 @@
     }
   };
   const filter = (data: any = []) => {
-    // 过滤掉已存在的字段
+    // Lọc bỏ các trường đã tồn tại
     const filteredData = data.filter((item) => {
       return !props.DBtableRef.getTableData().some((existingItem) => existingItem.dbFieldName === item.dbFieldName);
     });
     if (data.length == 0 || filteredData.length == 0) {
-      createMessage.warn('请换一个修饰词再试~');
+      createMessage.warn('Vui lòng đổi một từ trang trí khác rồi thử lại~');
     } else {
-      // 设置剩余字段为选中状态
+      // Thiết lập các trường còn lại ở trạng thái đã chọn
       filteredData.forEach((item) => {
         item.checked = true;
-        // 设置其他规则
+        // Thiết lập quy tắc khác
         if (['Date', 'Datetime'].includes(item.dbType)) {
           item.fieldShowType = item.dbType == 'Datetime' ? 'datetime' : 'date';
         }
@@ -124,7 +124,7 @@
   };
   const handleConfirm = () => {
     if (one.qualifier.length == 0) {
-      createMessage.warn('请输入修饰词~');
+      createMessage.warn('Vui lòng nhập từ trang trí~');
       return;
     }
     one.loading = true;

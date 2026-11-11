@@ -1,19 +1,19 @@
 <template>
   <div class="auth-field-config">
-    <!-- update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索 -->
+    <!-- update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm -->
     <a-input-search
       v-model:value="fieldSearchText"
       class="field-search"
-      placeholder="搜索字段名称/描述"
+      placeholder="Tìm kiếm tên trường/Mô tả"
       allowClear
       @search="applyFieldSearch"
     />
-    <!-- update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索 -->
+    <!-- update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm -->
     <BasicTable @register="registerTable" @change="handleTableChange" :loading="tableLoading">
-      <!-- update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选 -->
+      <!-- update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả -->
       <template #headerCell="{ column }">
         <template v-if="column.dataIndex === 'switch'">
-          <a-switch :loading="allSloading" v-model:checked="allSwitch" size="small" @change="handleChangeSwitch"></a-switch>启用
+          <a-switch :loading="allSloading" v-model:checked="allSwitch" size="small" @change="handleChangeSwitch"></a-switch>Kích hoạt
         </template>
         <template v-else-if="column.dataIndex === 'list'">
           <a-checkbox :indeterminate="listIndeterminate" v-model:checked="allListControl" :disabled="!allSwitch" @change="handleChangeList">{{ column.customTitle }}</a-checkbox>
@@ -25,19 +25,19 @@
           {{ column.customTitle }}
         </template>
       </template>
-      <!-- update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选 -->
+      <!-- update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả -->
       <template #switch="{ text, record }">
         <a-switch size="small" :checked="record.status === 1" @change="(flag) => onUpdateStatus(flag, record)" />
       </template>
 
       <template #list="{ text, record }">
-        <a-checkbox :checked="record.listShow" :disabled="record.status === 0" @change="(e) => onCheckboxChange(e, record, 1)"> 可见 </a-checkbox>
+        <a-checkbox :checked="record.listShow" :disabled="record.status === 0" @change="(e) => onCheckboxChange(e, record, 1)"> Hiển thị (có thể thấy) </a-checkbox>
       </template>
 
       <template #form="{ text, record }">
-        <a-checkbox :checked="record.formShow" :disabled="record.status === 0" @change="(e) => onCheckboxChange(e, record, 2)"> 可见 </a-checkbox>
+        <a-checkbox :checked="record.formShow" :disabled="record.status === 0" @change="(e) => onCheckboxChange(e, record, 2)"> Hiển thị (có thể thấy) </a-checkbox>
         <a-checkbox :checked="record.formEditable" :disabled="record.status === 0" @change="(e) => onCheckboxChange(e, record, 3)">
-          可编辑
+          Có thể chỉnh sửa
         </a-checkbox>
       </template>
     </BasicTable>
@@ -70,7 +70,7 @@
       const tableLoading = ref(false);
       const formIndeterminate = ref(false);
       const listIndeterminate = ref(false);
-      // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索
+      // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm
       const fieldSearchText = ref('');
       const allFieldData = ref<any[]>([]);
 
@@ -81,21 +81,21 @@
         columns: authFieldColumns,
         showIndexColumn: false,
       });
-      // update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索
+      // update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm
 
       watch(
         () => props.headId,
         (headId) => {
           cgformId.value = headId.split('?')[0];
           fieldSearchText.value = '';
-          // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-149】点击权限控制进入页面后，分页没有重置
+          // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-149】Sau khi nhấp kiểm soát quyền để vào trang, phân trang không được đặt lại
           getTableRef().value && setPagination({ current: 1, pageSize: 10 });
-          // update-end--author:liaozhiyang---date:20240520---for：【TV360X-149】点击权限控制进入页面后，分页没有重置
+          // update-end--author:liaozhiyang---date:20240520---for：【TV360X-149】Sau khi nhấp kiểm soát quyền để vào trang, phân trang không được đặt lại
           reload().catch(() => null);
         },
         { immediate: true }
       );
-      // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索
+      // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm
       function filterFieldData(data: any[], keyword: string) {
         const kw = keyword.trim().toLowerCase();
         if (!kw) return data;
@@ -118,9 +118,9 @@
           applyFieldSearch();
         }
       });
-      // update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索
+      // update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm
 
-      // 加载数据
+      // Tải dữ liệu
       async function loadData(params) {
         const exclude = ['id'];
         let data = await authFieldLoadData(cgformId.value, params);
@@ -131,35 +131,35 @@
             if (item.isShowForm == 1 || item.isShowList == 1) {
               filterData.push(item);
             }
-            //update-begin-author:taoyan date:2022-8-9 for: VUEN-1957 【online】同步数据库新增字段未提交
+            //update-begin-author:taoyan date:2022-8-9 for: VUEN-1957 【online】Đồng bộ cơ sở dữ liệu: trường mới thêm chưa được gửi
             if (isAuthDataField(item)) {
               fields.push({
                 text: item.title,
                 value: item.code,
-                // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-201】权限管理条件根据控件过滤
+                // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-201】Điều kiện quản lý quyền lọc theo control
                 view: item.fieldShowType,
                 dbType: item.dbType,
-                // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-201】权限管理条件根据控件过滤
-                // -update-begin--author:scott---date:20260722---for：【数据权限】规则值根据规则字段控件类型自动切换下拉/字典选择
+                // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-201】Điều kiện quản lý quyền lọc theo control
+                // -update-begin--author:scott---date:20260722---for: 【Quyền dữ liệu】Giá trị quy tắc tự động chuyển dropdown theo loại control của trường quy tắc/Chọn từ điển
                 dictField: item.dictField,
                 dictTable: item.dictTable,
                 dictText: item.dictText,
                 fieldExtendJson: item.fieldExtendJson,
-                // -update-end--author:scott---date:20260722---for：【数据权限】规则值根据规则字段控件类型自动切换下拉/字典选择
+                // -update-end--author:scott---date:20260722---for: 【Quyền dữ liệu】Giá trị quy tắc tự động chuyển dropdown theo loại control của trường quy tắc/Chọn từ điển
               });
             }
-            //update-end-author:taoyan date:2022-8-9 for: VUEN-1957 【online】同步数据库新增字段未提交
+            //update-end-author:taoyan date:2022-8-9 for: VUEN-1957 【online】Đồng bộ cơ sở dữ liệu: trường mới thêm chưa được gửi
           }
         });
 
-        // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索
+        // update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm
         allFieldData.value = filterData;
         emit('update:authFields', fields);
         const displayData = filterFieldData(filterData, fieldSearchText.value);
-        // update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索
-        // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选
+        // update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm
+        // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả
         setCurDataStatus(params.pageNo, params.pageSize, displayData);
-        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选
+        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả
         return displayData;
       }
 
@@ -175,9 +175,9 @@
           record.listShow = true;
         }
         record.status = Math.abs(record.status - 1);
-        // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选
+        // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả
         itemChange();
-        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选
+        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả
       }
 
       async function onCheckboxChange(event, record, switchFlag) {
@@ -197,17 +197,17 @@
         } else if (switchFlag == 3) {
           record.formEditable = checked;
         }
-        // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-2087】依次去掉当前行的列表控制可见、表单控制可见、可编辑时启动状态没变
+        // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-2087】Lần lượt bỏ hiển thị control danh sách, hiển thị control biểu mẫu của hàng hiện tại, trạng thái kích hoạt khi có thể chỉnh sửa không thay đổi
         if (record.listShow === false && record.formShow === false && record.formEditable === false) {
           record.status = 0;
         }
-        // update-end--author:liaozhiyang---date:20240807---for：【TV360X-2087】依次去掉当前行的列表控制可见、表单控制可见、可编辑时启动状态没变
-        // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选
+        // update-end--author:liaozhiyang---date:20240807---for：【TV360X-2087】Lần lượt bỏ hiển thị control danh sách, hiển thị control biểu mẫu của hàng hiện tại, trạng thái kích hoạt khi có thể chỉnh sửa không thay đổi
+        // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả
         itemChange();
-        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选
+        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả
       }
-      // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选
-      // 加载每一页数据时设置状态
+      // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả
+      // Khi tải dữ liệu của mỗi trang, thiết lập trạng thái
       function setCurDataStatus(current, pageSize, data) {
         const result: any = [];
         if (data?.length) {
@@ -218,7 +218,7 @@
           }
         }
         if (result.length) {
-          // 默认都是true，只有一项为false则总开关即是false
+          // Mặc định đều làtrue, chỉ có một mục làfalsethì công tắc tổng chính làfalse
           allSwitch.value = true;
           allListControl.value = true;
           allFormControl.value = true;
@@ -259,14 +259,14 @@
           allFormControl.value = false;
         }
       }
-      // 单独项状态变动时
+      // Khi trạng thái của mục riêng lẻ thay đổi
       const itemChange = () => {
         const { current, pageSize } = getTableRef().value!.getPaginationRef();
         const allDataSource = getTableRef().value!.getDataSource();
         setCurDataStatus(current, pageSize, allDataSource);
       };
 
-      // 获取某页dataSource
+      // Lấy một trang nào đódataSource
       const getCurrentDataSource = (current, pageSize) => {
         const result: any = [];
         const allDataSource = getTableRef().value!.getDataSource();
@@ -279,7 +279,7 @@
         }
         return result;
       };
-      // 开关（表头|总的）
+      // Công tắc (tiêu đề bảng|tổng thể)
       const handleChangeSwitch = async (checked) => {
         tableLoading.value = true;
         allSwitch.value = checked;
@@ -294,14 +294,14 @@
           } else {
             item.status = 0;
           }
-          // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-1992】数据权限-字段权限全选启用，列表控制和表单控制勾选
+          // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-1992】Quyền dữ liệu-Quyền trường bật chọn tất cả, tích chọn kiểm soát danh sách và kiểm soát biểu mẫu
           if (!(item.formEditable || item.formShow || item.listShow)) {
             item.formEditable = true;
             item.formShow = true;
             item.listShow = true;
           }
         });
-        // update-end--author:liaozhiyang---date:20240807---for：【TV360X-1992】数据权限-字段权限全选启用，列表控制和表单控制勾选
+        // update-end--author:liaozhiyang---date:20240807---for：【TV360X-1992】Quyền dữ liệu-Quyền trường bật chọn tất cả, tích chọn kiểm soát danh sách và kiểm soát biểu mẫu
         allSloading.value = false;
         tableLoading.value = false;
         const allDataSource = getTableRef().value!.getDataSource();
@@ -317,12 +317,12 @@
         await batchAuthFieldUpdateCheckbox(params);
         dataSource.forEach((item) => {
           item.listShow = !!checked;
-          // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-2087】依次去掉当前行的列表控制可见、表单控制可见、可编辑时启动状态没变
+          // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-2087】Lần lượt bỏ hiển thị control danh sách, hiển thị control biểu mẫu của hàng hiện tại, trạng thái kích hoạt khi có thể chỉnh sửa không thay đổi
           if (item.listShow === false && item.formShow === false && item.formEditable === false) {
             item.status = 0;
             allSwitch.value = false;
           }
-          // update-end--author:liaozhiyang---date:20240807---for：【TV360X-2087】依次去掉当前行的列表控制可见、表单控制可见、可编辑时启动状态没变
+          // update-end--author:liaozhiyang---date:20240807---for：【TV360X-2087】Lần lượt bỏ hiển thị control danh sách, hiển thị control biểu mẫu của hàng hiện tại, trạng thái kích hoạt khi có thể chỉnh sửa không thay đổi
         });
         if (checked) {
           listIndeterminate.value = false;
@@ -342,29 +342,29 @@
         dataSource.forEach((item) => {
           item.formEditable = !!checked;
           item.formShow = !!checked;
-          // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-2087】依次去掉当前行的列表控制可见、表单控制可见、可编辑时启动状态没变
+          // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-2087】Lần lượt bỏ hiển thị control danh sách, hiển thị control biểu mẫu của hàng hiện tại, trạng thái kích hoạt khi có thể chỉnh sửa không thay đổi
           if (item.listShow === false && item.formShow === false && item.formEditable === false) {
             item.status = 0;
             allSwitch.value = false;
           }
-          // update-end--author:liaozhiyang---date:20240807---for：【TV360X-2087】依次去掉当前行的列表控制可见、表单控制可见、可编辑时启动状态没变
+          // update-end--author:liaozhiyang---date:20240807---for：【TV360X-2087】Lần lượt bỏ hiển thị control danh sách, hiển thị control biểu mẫu của hàng hiện tại, trạng thái kích hoạt khi có thể chỉnh sửa không thay đổi
         });
         if (checked) {
           formIndeterminate.value = false;
         }
         tableLoading.value = false;
       };
-      // 监听页码变动
+      // Lắng nghe biến động số trang
       const handleTableChange = (pagination) => {
         // const { current, pageSize } = pagination;
         // const dataSource = getCurrentDataSource(current, pageSize);
-        // // 先置初始值
+        // // Trước tiên đặt giá trị khởi tạo
         // allSwitch.value = false;
         // if(dataSource.length) {
 
         // }
       }
-      // update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】权限配置加全选
+      // update-end--author:liaozhiyang---date:20240612---for：【TV360X-148】Cấu hình quyền thêm chọn tất cả
       return {
         registerTable,
         onUpdateStatus,
@@ -388,12 +388,12 @@
 </script>
 
 <style lang="less" scoped>
-  /* update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索 */
+  /* update-begin--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm */
   .field-search {
     width: 260px;
     margin-bottom: 12px;
   }
-  /* update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】字段权限新增一个搜索 */
+  /* update-end--author:liaozhiyang---date:20260810---for：【LHZP-589】Quyền trường bổ sung một tìm kiếm */
   .auth-field-config :deep(.ant-checkbox + span) {
     padding-left: 2px;
   }

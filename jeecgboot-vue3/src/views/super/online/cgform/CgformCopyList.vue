@@ -1,20 +1,20 @@
 <template>
   <div :class="prefixCls">
-    <!--引用表格-->
+    <!--Bảng tham chiếu-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button @click="onShowCustomButton" type="primary" preIcon="ant-design:highlight">自定义按钮</a-button>
-        <a-button @click="onShowEnhanceJs" type="primary" preIcon="ant-design:strikethrough">JS增强</a-button>
-        <a-button @click="onShowEnhanceSql" type="primary" preIcon="ant-design:filter">SQL增强</a-button>
-        <a-button @click="onShowEnhanceJava" type="primary" preIcon="ant-design:tool">Java增强</a-button>
+        <a-button @click="onShowCustomButton" type="primary" preIcon="ant-design:highlight">Nút tùy chỉnh</a-button>
+        <a-button @click="onShowEnhanceJs" type="primary" preIcon="ant-design:strikethrough">JSTăng cường</a-button>
+        <a-button @click="onShowEnhanceSql" type="primary" preIcon="ant-design:filter">SQLTăng cường</a-button>
+        <a-button @click="onShowEnhanceJava" type="primary" preIcon="ant-design:tool">JavaTăng cường</a-button>
       </template>
 
       <template #dbSync="{ text }">
-        <span v-if="text === 'Y'" style="color: limegreen">已同步</span>
-        <span v-if="text === 'N'" style="color: red">未同步</span>
+        <span v-if="text === 'Y'" style="color: limegreen">Đã đồng bộ</span>
+        <span v-if="text === 'N'" style="color: red">Chưa đồng bộ</span>
       </template>
 
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
@@ -87,12 +87,12 @@
         pageType,
         designScope: 'online-cgform-list',
         columns: [
-          { title: '视图表名', dataIndex: 'tableName' },
-          { title: '视图表描述', dataIndex: 'tableTxt' },
-          { title: '原表版本', dataIndex: 'copyVersion' },
-          { title: '视图版本', dataIndex: 'tableVersion' },
+          { title: 'Tên bảng view', dataIndex: 'tableName' },
+          { title: 'Mô tả bảng view', dataIndex: 'tableTxt' },
+          { title: 'Phiên bản bảng gốc', dataIndex: 'copyVersion' },
+          { title: 'Phiên bản view', dataIndex: 'tableVersion' },
         ],
-        formSchemas: [{ label: '表名', field: 'tableName', component: 'JInput' }],
+        formSchemas: [{ label: 'Tên bảng', field: 'tableName', component: 'JInput' }],
       });
       const { prefixCls, tableContext } = pageContext;
       const [registerTable, { reload }, { rowSelection }] = tableContext;

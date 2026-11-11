@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 输入框-数字
+ * Ô nhập-Chữ số
  */
 export default class NumberWidget extends IFormSchema {
   dbPointLength: number;
@@ -19,7 +19,7 @@ export default class NumberWidget extends IFormSchema {
       validator: (_rule, value) => {
         if (value !== null && value !== undefined && value !== '') {
           if (value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER) {
-            return Promise.reject(`数值超出安全范围（${Number.MIN_SAFE_INTEGER}~${Number.MAX_SAFE_INTEGER}），精度将丢失，请重新输入`);
+            return Promise.reject(`Giá trị số vượt quá phạm vi an toàn (${Number.MIN_SAFE_INTEGER}~${Number.MAX_SAFE_INTEGER}) , độ chính xác sẽ bị mất, vui lòng nhập lại`);
           }
         }
         return Promise.resolve();
@@ -29,9 +29,9 @@ export default class NumberWidget extends IFormSchema {
     return Object.assign({}, item, {
       component: 'InputNumber',
       componentProps,
-      // update-begin--author:liaozhiyang---date:20260413---for:【QQYUN-9790】online中数字类型超出js语言数值范围加提示
+      // update-begin--author:liaozhiyang---date:20260413---for:【QQYUN-9790】onlineloại số trong đó vượt quájsPhạm vi giá trị ngôn ngữ thêm nhắc nhở
       rules: [...existingRules, safeIntRule],
-      // update-end--author:liaozhiyang---date:20260413---for:【QQYUN-9790】online中数字类型超出js语言数值范围加提示
+      // update-end--author:liaozhiyang---date:20260413---for:【QQYUN-9790】onlineloại số trong đó vượt quájsPhạm vi giá trị ngôn ngữ thêm nhắc nhở
     });
   }
 

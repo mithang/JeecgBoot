@@ -1,13 +1,13 @@
 <template>
   <div>
-    <a-empty v-if="disabled" description="请先选中左侧角色/部门/用户" />
-    <a-empty v-else-if="treeData.length === 0" description="无权限信息" />
+    <a-empty v-if="disabled" description="Vui lòng chọn vai trò phía bên trái trước/Phòng ban/Người dùng" />
+    <a-empty v-else-if="treeData.length === 0" description="Không có thông tin quyền" />
     <template v-else>
       <div class="onl-auth-tree-btns">
-        <a-button @click="onRefresh" size="small" type="primary" preIcon="ant-design:redo" ghost>刷新</a-button>
-        <a-button @click="onSave" size="small" type="primary" preIcon="ant-design:save" ghost>保存</a-button>
-        <a-button @click="onSelectAll" size="small" type="primary" ghost><CheckOutlined />全选</a-button>
-        <a-button @click="onClearSelected" size="small" type="primary" ghost><UndoOutlined />重置</a-button>
+        <a-button @click="onRefresh" size="small" type="primary" preIcon="ant-design:redo" ghost>Làm mới</a-button>
+        <a-button @click="onSave" size="small" type="primary" preIcon="ant-design:save" ghost>Lưu</a-button>
+        <a-button @click="onSelectAll" size="small" type="primary" ghost><CheckOutlined />Chọn tất cả</a-button>
+        <a-button @click="onClearSelected" size="small" type="primary" ghost><UndoOutlined />Đặt lại</a-button>
       </div>
       <a-tree
         checkable
@@ -68,7 +68,7 @@
 
       function clearChecked() {
         roleId.value = '';
-        // QQYUN-4284 【online表单】权限管理 开启按钮后，在角色授权中显示，当关闭时，再打开角色权限仍然显示，需刷新页面才不显示
+        // QQYUN-4284 【onlineBiểu mẫu 】Quản lý quyền Sau khi bật nút, hiển thị trong ủy quyền vai trò, khi tắt, mở lại quyền vai trò vẫn hiển thị, cần làm mới trang mới không hiển thị
         loadTree();
       }
 
@@ -82,7 +82,7 @@
           authId: JSON.stringify(checkedKeys.value),
           authMode: authMode.value,
         });
-        $message.success('保存成功');
+        $message.success('Lưu thành công');
       }
 
       function onExpand($expandedKeys) {

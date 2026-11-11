@@ -1,6 +1,6 @@
 <template>
-  <BasicModal :height="modalHeight" @register="registerModal" okText="" cancelText="关闭" :width="1200" :defaultFullscreen="true" :canFullscreen="false" @ok="onDownloadGenerateCode" :wrapClassName="prefixCls">
-    <template #title> <info-circle-two-tone /> 代码在线预览 </template>
+  <BasicModal :height="modalHeight" @register="registerModal" okText="" cancelText="Đóng" :width="1200" :defaultFullscreen="true" :canFullscreen="false" @ok="onDownloadGenerateCode" :wrapClassName="prefixCls">
+    <template #title> <info-circle-two-tone /> Xem trước mã trực tuyến </template>
     <div>
       <a-row class="code-gen">
         <div class="left" style="border-right: 1px solid #eee" :style="{width:`calc(${defaultLeftWidthRate}% - 2px)`}">
@@ -21,20 +21,20 @@
               :disabled="true"
               :language-change="true">
           </JCodeEditor>
-          <a-empty v-else style="margin-top: 50px" description="请选择左侧文件，显示详细代码" />
+          <a-empty v-else style="margin-top: 50px" description="Vui lòng chọn tệp phía bên trái, hiển thị mã chi tiết" />
         </div>
       </a-row>
     </div>
     <template #footer>
-      <a-button @click="handleClose">关闭</a-button>
-      <a-button type="primary" @click="onDownloadGenerateCode">下载到本地</a-button>
+      <a-button @click="handleClose">Đóng</a-button>
+      <a-button type="primary" @click="onDownloadGenerateCode">Tải xuống máy cục bộ</a-button>
     </template>
   </BasicModal>
 </template>
 
 <script lang="ts">
   /**
-   * online代码生成后支持在线预览
+   * onlineSau khi sinh mã, hỗ trợ xem trước trực tuyến
    */
   import {ref, defineComponent, reactive, onMounted} from 'vue';
   import { defHttp } from '/@/utils/http/axios';
@@ -99,7 +99,7 @@
       }
 
       /**
-       * 默认加载第一个文件
+       * Mặc định tải tệp đầu tiên
        * @param root
        */
       async function loadFirstFileContent(root){
@@ -174,7 +174,7 @@
                   }
                 }
                 if (i == arr2.length - 1) {
-                  //最后一个元素
+                  //Phần tử cuối cùng
                   item['isLeaf'] = true;
                   item['path'] = temp;
                 }
@@ -233,7 +233,7 @@
           };
           defHttp.get({ url: '/online/cgform/api/codeView', params }, { isTransformResponse: false }).then((data) => {
             if (!data || data.size === 0) {
-              message.warning('文件下载失败');
+              message.warning('Tải tệp xuống thất bại');
               return;
             }else{
               if (data.message) {
@@ -254,16 +254,16 @@
         });
       }
 
-      //update-begin---author:wangshuai---date:2025-08-25---for:【QQYUN-13519】代码预览这个允许左右拖动---
-      //距离左侧的宽度
+      //update-begin---author:wangshuai---date:2025-08-25---for:【QQYUN-13519】Phần xem trước mã này cho phép kéo sang trái/phải---
+      //Độ rộng tính từ phía bên trái
       const defaultLeftWidthRate = ref(24)
-      //左侧显示最低半分比
+      //Phía bên trái hiển thị tỷ lệ phần trăm tối thiểu
       const leftMin = ref<number>(14);
-      //右侧显示最低半分比
+      //Phía bên phải hiển thị tỷ lệ phần trăm tối thiểu
       const rightMin = ref<number>(30);
       
       /**
-       * div拖拽事件
+       * divSự kiện kéo thả
        * 
        */
       function dragDiv(){
@@ -271,52 +271,52 @@
         let box:any = document.getElementsByClassName('code-gen');
         let left:any = document.getElementsByClassName('left');
         for (let i = 0; i < resize.length; i++) {
-          // 鼠标按下事件
+          // Sự kiện nhấn chuột xuống
           resize[i].onmousedown = function (e: any) {
-            //整个div的宽度
+            //toàn bộdivđộ rộng của
             let boxWidth = box[i].offsetWidth;
-            //左侧的宽度
+            //Độ rộng của phía bên trái
             let leftWidth = left[i].offsetWidth;
-            // 开始位置
+            // Vị trí bắt đầu
             let startX = e.clientX;
-            // 鼠标拖动事件
+            // Sự kiện kéo chuột
             document.onmousemove = function (e: any) {
-              // 结束位置
+              // Vị trí kết thúc
               let endX = e.clientX;
-              // 得到鼠标拖动的宽高距离：取绝对值
+              // Lấy khoảng cách rộng/cao khi kéo chuột: lấy giá trị tuyệt đối
               let distX = Math.abs(endX - startX);
-              // 向右拖拽
+              // Kéo thả sang phải
               if (endX > startX) {
                 let moveLate = parseFloat(((leftWidth + distX) / boxWidth * 100).toFixed(4));
                 let right = parseFloat('100') - moveLate;
-                // 向右大于右侧的最小值才允许拖拽
+                // Kéo sang phải lớn hơn giá trị tối thiểu của phía bên phải mới cho phép kéo thả
                 if (right > rightMin.value) {
                   defaultLeftWidthRate.value = moveLate;
                 }
               }
-              // 向左拖拽
+              // Kéo thả sang trái
               if (endX < startX) {
                 let moveLate = parseFloat(((leftWidth - distX) / boxWidth * 100).toFixed(4));
-                // 向左大于左侧的最小值才允许拖拽
+                // Kéo sang trái lớn hơn giá trị tối thiểu của phía bên trái mới cho phép kéo thả
                 if (moveLate > leftMin.value) {
                   defaultLeftWidthRate.value = moveLate;
                 }
               }
             }
-            // 鼠标松开事件
+            // Sự kiện thả chuột ra
             document.onmouseup = function (e: any) {
               document.onmousemove = null;
               document.onmouseup = null;
-              //当你不在需要继续获得鼠标消息就要应该调用ReleaseCapture()释放掉
+              //Khi bạn không cần tiếp tục nhận thông điệp chuột nữa thì nên gọiReleaseCapture()Giải phóng bỏ
               resize[i].releaseCapture && resize[i].releaseCapture();
             }
-            //该函数在属于当前线程的指定窗口里设置鼠标捕获
+            //Hàm này thiết lập bắt chuột trong cửa sổ chỉ định thuộc về luồng hiện tại
             resize[i].setCapture && resize[i].setCapture();
             return false;
           }
         }
       }
-      //update-end---author:wangshuai---date:2025-08-25---for:【QQYUN-13519】代码预览这个允许左右拖动---
+      //update-end---author:wangshuai---date:2025-08-25---for:【QQYUN-13519】Phần xem trước mã này cho phép kéo sang trái/phải---
 
       return {
         registerModal,
@@ -338,7 +338,7 @@
 </script>
 
 <style lang="less">
-  // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-227】代码生成弹窗在线预览样式优化
+  // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-227】Tối ưu kiểu dáng xem trước trực tuyến trong popup sinh mã
   @prefix-cls: ~'@{namespace}-online-codeFileViewModal';
   .@{prefix-cls} {
     .scrollbar__wrap {
@@ -347,7 +347,7 @@
     .ant-modal-footer {
       padding-top: 32px;
     }
-     //update-begin---author:wangshuai---date:2025-08-25---for:【QQYUN-13519】代码预览这个允许左右拖动---
+     //update-begin---author:wangshuai---date:2025-08-25---for:【QQYUN-13519】Phần xem trước mã này cho phép kéo sang trái/phải---
      .code-gen .left {
       position: relative;
       width: calc(24% - 2px);
@@ -372,7 +372,7 @@
     .ant-tree-node-content-wrapper{
       display: flex;
     }
-    //update-end---author:wangshuai---date:2025-08-25---for:【QQYUN-13519】代码预览这个允许左右拖动---
+    //update-end---author:wangshuai---date:2025-08-25---for:【QQYUN-13519】Phần xem trước mã này cho phép kéo sang trái/phải---
   }
-  // update-end--author:liaozhiyang---date:20240617---for：【TV360X-227】代码生成弹窗在线预览样式优化
+  // update-end--author:liaozhiyang---date:20240617---for：【TV360X-227】Tối ưu kiểu dáng xem trước trực tuyến trong popup sinh mã
 </style>

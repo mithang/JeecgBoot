@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 日期、时间、数值-范围
+ * Ngày, thời gian, giá trị số-Phạm vi
  */
 export default class RangeWidget extends IFormSchema {
   

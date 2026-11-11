@@ -11,30 +11,30 @@ import { createImgPreview } from '/@/components/Preview/index';
 import { useMessage } from '/@/hooks/web/useMessage';
 
 /***
- * 表单字段的扩展配置解析结果
+ * Kết quả phân tích cấu hình mở rộng của trường biểu mẫu
  */
 interface FieldExtends {
-  //上传数量
+  //Số lượng tải lên
   uploadnum?: number | string;
 
-  //限制大文本在列表页面的展示长度
+  //Giới hạn độ dài trưng bày của văn bản lớn ở trang danh sách
   showLength?: number | string;
 
-  //popup是否支持多选
+  //popupCó hỗ trợ chọn nhiều hay không
   popupMulti?: boolean;
 
-  //部门、用户组件 用于存储的字段名
+  //Component phòng ban, người dùng Tên trường dùng để lưu trữ
   store?: string;
 
-  //部门、用户组件 用于展示的字段名
+  //Component phòng ban, người dùng Tên trường dùng để hiển thị
   text?: string;
 
-  //部门、用户组件 是否多选
+  //Component phòng ban, người dùng Có chọn nhiều hay không
   multiSelect?: boolean;
 
-  //查询排序规则
+  //Quy tắc sắp xếp truy vấn
   orderRule?: 'asc' | 'desc';
-  //关联记录展示类型
+  //Loại hiển thị bản ghi liên kết
   showType?:string;
 }
 
@@ -47,25 +47,25 @@ export interface DetailFormSchema {
   isImage?: boolean;
   isFile?: boolean;
   isCard?: boolean;
-  // update-begin--author:liaozhiyang---date:20260811---for:【LHZP-4】online详情关联记录加上图片显示及文件下载及图片预览
+  // update-begin--author:liaozhiyang---date:20260811---for:【LHZP-4】onlineBản ghi liên kết của chi tiết thêm hiển thị hình ảnh, tải tệp xuống và xem trước hình ảnh
   imageField?: string;
-  // update-end--author:liaozhiyang---date:20260811---for:【LHZP-4】online详情关联记录加上图片显示及文件下载及图片预览
+  // update-end--author:liaozhiyang---date:20260811---for:【LHZP-4】onlineBản ghi liên kết của chi tiết thêm hiển thị hình ảnh, tải tệp xuống và xem trước hình ảnh
   multi?:boolean;
   order?: any;
   dictTable?: string;
   dictText?: string;
   dictCode?: string;
   dict?: string;
-  // 是否树表父节点字段 1是 0否
+  // Có phải trường nút cha của bảng cây hay không 1là 0Không
   pidComponent?: number;
-  // 树根节点的父ID值，默认0
+  // Cha của nút gốc câyIDgiá trị, mặc định0
   pidValue?: string;
   fieldExtendJson?: string;
   ifShow?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);
-  // update-begin--author:liaozhiyang---date:20240425---for：【issues/6139】online详情支持js增强loaded事件及设置值、获取值、隐藏功能
-  // js增强隐藏
+  // update-begin--author:liaozhiyang---date:20240425---for：【issues/6139】onlineChi tiết hỗ trợjsTăng cườngloadedSự kiện cùng các chức năng đặt giá trị, lấy giá trị, ẩn
+  // jsẨn phần tăng cường
   hidden?: boolean;
-  // update-end--author:liaozhiyang---date:20240425---for：【issues/6139】online详情支持js增强loaded事件及设置值、获取值、隐藏功能
+  // update-end--author:liaozhiyang---date:20240425---for：【issues/6139】onlineChi tiết hỗ trợjsTăng cườngloadedSự kiện cùng các chức năng đặt giá trị, lấy giá trị, ẩn
 }
 
 /*interface DetailFormProps {
@@ -102,7 +102,7 @@ export function useDetailForm(props: any) {
             try {
               temp[field] = await getItemContent(item);
             } catch (e) {
-              console.error('字段【' + field + '】文本获取失败', e);
+              console.error('trường 【' + field + '】Lấy văn bản thất bại', e);
             }
           }
         }
@@ -126,19 +126,19 @@ export function useDetailForm(props: any) {
       } else if (view == 'sel_search') {
         str = await getTableDataText(item, formData);
       } else if (view == 'cat_tree') {
-        //分类字典树
+        //Cây từ điển phân loại
         str = await getCategoryDataText(item, formData);
       } else if (view == 'link_table') {
         str = await getLinkTableData(item, formData);
       } else if (view == 'sel_depart') {
-        //部门选择
+        //Chọn phòng ban
         str = await getDepartDataText(item, formData);
       } else if (view == 'sel_user') {
-        // 用户选择
+        // Lựa chọn của người dùng
         str = await getUserDataText(item, formData);
       } else if (view == 'pca') {
-        //省市区
-        // update-begin--author:liaozhiyang---date:20260227---for:【QQYUN-14788】online详情单独的省市没显示
+        //Tỉnh/Thành/Quận huyện
+        // update-begin--author:liaozhiyang---date:20260227---for:【QQYUN-14788】onlineTỉnh/thành riêng lẻ trong chi tiết không hiển thị
         let includeParent = true;
         let fieldExtendJson = item?.fieldExtendJson;
         let level = 3;
@@ -156,25 +156,25 @@ export function useDetailForm(props: any) {
           }
         }
         str = getAreaTextByCodeAnyLevel(value, includeParent, level as 1 | 2 | 3);
-        // update-end--author:liaozhiyang---date:20260227---for:【QQYUN-14788】online详情单独的省市没显示
+        // update-end--author:liaozhiyang---date:20260227---for:【QQYUN-14788】onlineTỉnh/thành riêng lẻ trong chi tiết không hiển thị
       } else if (view == 'link_down') {
-        //联动组件
+        //Component liên động
         str = await getLinkDownDataText(item, formData);
       } else if (view == 'sel_tree') {
-        //自定义树控件
+        //Control cây tùy chỉnh
         str = await getTreeDataText(item, formData);
       } else if (view == 'switch') {
-        //开关组件
+        //Component công tắc
         str = await getSwitchDataText(item, formData);
       } else if (view == 'image' || view == 'file') {
         str = getFileList(item, formData);
       } else if (view == 'popup_dict') {
-        // update-begin--author:liaozhiyang---date:20240402---for：【QQYUN-8833】JPopupDict的列表翻译
+        // update-begin--author:liaozhiyang---date:20240402---for：【QQYUN-8833】JPopupDictdịch danh sách của
         const ditc = formData[`${item.field}_dictText`];
         if (ditc !== undefined) {
           str = ditc;
         }
-        // update-end--author:liaozhiyang---date:20240402---for：【QQYUN-8833】JPopupDict的列表翻译
+        // update-end--author:liaozhiyang---date:20240402---for：【QQYUN-8833】JPopupDictdịch danh sách của
       } else {
         if (currentLinkFields.indexOf(item.field) >= 0) {
           let arr = dictOptionsMap[item.field];
@@ -188,9 +188,9 @@ export function useDetailForm(props: any) {
     return '';
   }
 
-  // 数据字典/表字典
+  // Từ điển dữ liệu/Từ điển bảng
   async function getSelectText(item, formData) {
-    // 先从缓存取
+    // Trước tiên lấy từ bộ nhớ đệm
     let dictCode = getRequestDictCode(item);
     let value = formData[item.field];
     if (!dictCode) {
@@ -204,7 +204,7 @@ export function useDetailForm(props: any) {
       if (dictOptionsMap[dictCode]) {
         dictRes = dictOptionsMap[dictCode];
       } else {
-        //取不到再请求
+        //Không lấy được thì yêu cầu lại
         dictRes = (await initDictOptions(dictCode)) || [];
       }
       if (dictRes && dictRes.length > 0) {
@@ -226,7 +226,7 @@ export function useDetailForm(props: any) {
     return temp;
   }
 
-  // 表字典-下拉搜索
+  // Từ điển bảng-Tìm kiếm trong dropdown
   async function getTableDataText(item, formData) {
     let dictCode = getRequestDictCode(item);
     let value = formData[item.field];
@@ -235,8 +235,8 @@ export function useDetailForm(props: any) {
     }
 
     let arr: any[] = [];
-    // update-begin--author:liaozhiyang---date:20250813---for：【issues/8689】online下拉搜索框详情时无法读取数据字典
-    // 系统字典
+    // update-begin--author:liaozhiyang---date:20250813---for：【issues/8689】onlineÔ tìm kiếm dropdown: khi xem chi tiết không đọc được từ điển dữ liệu
+    // Từ điển hệ thống
     if (dictCode.indexOf(',') === -1) {
       const options = await initDictOptions(dictCode);
       if (options && options.length > 0) {
@@ -247,15 +247,15 @@ export function useDetailForm(props: any) {
         });
       }
     } else {
-      // 表字典
+      // Từ điển bảng
       if (dictOptionsMap[dictCode+value]) {
         arr = dictOptionsMap[dictCode+value];
       } else {
-        //取不到再请求
+        //Không lấy được thì yêu cầu lại
         arr = (await defHttp.get({ url: `/sys/dict/loadDictItem/${dictCode}`, params: { key: value } })) || [];
       }
     }
-    // update-end--author:liaozhiyang---date:20250813---for：【issues/8689】online下拉搜索框详情时无法读取数据字典
+    // update-end--author:liaozhiyang---date:20250813---for：【issues/8689】onlineÔ tìm kiếm dropdown: khi xem chi tiết không đọc được từ điển dữ liệu
     if (arr && arr.length > 0) {
       dictOptionsMap[dictCode+value] = arr;
       return arr.join(',')
@@ -264,7 +264,7 @@ export function useDetailForm(props: any) {
     return '';
   }
 
-  // 分类字典
+  // Từ điển phân loại
   async function getCategoryDataText(item, formData) {
     let value = formData[item.field];
     if (!value) {
@@ -277,7 +277,7 @@ export function useDetailForm(props: any) {
     return '';
   }
 
-  // 部门数据
+  // Dữ liệu phòng ban
   async function getDepartDataText(item, formData) {
     let value = formData[item.field];
     if (!value) {
@@ -301,7 +301,7 @@ export function useDetailForm(props: any) {
     return '';
   }
 
-  //用户数据
+  //Dữ liệu người dùng
   async function getUserDataText(item, formData) {
     let value = formData[item.field];
     if (!value) {
@@ -342,7 +342,7 @@ export function useDetailForm(props: any) {
     return extend;
   }
 
-  // 联动组件
+  // Component liên động
   async function getLinkDownDataText(item, formData) {
     let { dictTable, field } = item;
     let arr: any[] = [];
@@ -376,15 +376,15 @@ export function useDetailForm(props: any) {
     return '';
   }
 
-  //自定义树
+  //Cây tùy chỉnh
   async function getTreeDataText(item, formData) {
     let { dict, field } = item;
-    // update-begin--author:liusq---date:20261102---for：online树表详情顶级节点的父节点显示0
-    // 树表父节点字段：顶级节点的父ID是根节点值(默认0)，没有对应的节点，不显示（与编辑页JTreeSelect一致）
+    // update-begin--author:liusq---date:20261102---for：onlineHiển thị nút cha của nút cấp cao nhất trong chi tiết bảng cây0
+    // Trường nút cha của bảng cây: cha của nút cấp cao nhấtIDlà giá trị nút gốc(Mặc định0), không có nút tương ứng, không hiển thị (với trang chỉnh sửaJTreeSelectnhất quán)
     if (item.pidComponent == 1 && formData[field] == (item.pidValue || '0')) {
       return '';
     }
-    // update-end--author:liusq---date:20261102---for：online树表详情顶级节点的父节点显示0
+    // update-end--author:liusq---date:20261102---for：onlineHiển thị nút cha của nút cấp cao nhất trong chi tiết bảng cây0
     let arr = [];
     if (dictOptionsMap[field]) {
       arr = dictOptionsMap[field];
@@ -400,28 +400,28 @@ export function useDetailForm(props: any) {
     return '';
   }
 
-  //开关
+  //Công tắc
   async function getSwitchDataText(item, formData) {
     let { fieldExtendJson, field } = item;
     let options = ['Y', 'N'];
     if (fieldExtendJson) {
-      //update-begin---author:wangshuai---date:2025-11-03---for:【issues/9036】online 表单开发， 设置字段 控件类型为开关时，查看详情页时 开关字段显示原始值---
+      //update-begin---author:wangshuai---date:2025-11-03---for:【issues/9036】online Phát triển biểu mẫu, Thiết lập trường Khi loại control là công tắc, lúc xem trang chi tiết Trường công tắc hiển thị giá trị gốc---
       const extendConfig = JSON.parse(fieldExtendJson);
-      // update-begin--author:liaozhiyang---date:20260813---for：【LHZP-4】online详情弹窗老数据开关没渲染出来
+      // update-begin--author:liaozhiyang---date:20260813---for：【LHZP-4】onlineCông tắc dữ liệu cũ trong popup chi tiết không render ra
       if (Array.isArray(extendConfig)) {
-        // 兼容旧数据：数组本身就是开关选项  现有数据：{switchOptions:[1,2]}   旧数据：[1,2]
+        // Tương thích dữ liệu cũ: bản thân mảng chính là tùy chọn công tắc  Dữ liệu hiện có:{switchOptions:[1,2]}   Dữ liệu cũ:[1,2]
         options = extendConfig;
       } else if (Array.isArray(extendConfig?.switchOptions)) {
         options = extendConfig.switchOptions;
       }
-      // update-end--author:liaozhiyang---date:20260813---for：【LHZP-4】online详情弹窗老数据开关没渲染出来
-      //update-end---author:wangshuai---date:2025-11-03---for:【issues/9036】online 表单开发， 设置字段 控件类型为开关时，查看详情页时 开关字段显示原始值---
+      // update-end--author:liaozhiyang---date:20260813---for：【LHZP-4】onlineCông tắc dữ liệu cũ trong popup chi tiết không render ra
+      //update-end---author:wangshuai---date:2025-11-03---for:【issues/9036】online Phát triển biểu mẫu, Thiết lập trường Khi loại control là công tắc, lúc xem trang chi tiết Trường công tắc hiển thị giá trị gốc---
     }
     let arr: any[] = [
-      { value: options[0], text: '是' },
-      { value: options[1], text: '否' },
-      { value: options[0]+'', text: '是' },
-      { value: options[1]+'', text: '否' },
+      { value: options[0], text: 'là' },
+      { value: options[1], text: 'Không' },
+      { value: options[0]+'', text: 'là' },
+      { value: options[1]+'', text: 'Không' },
     ];
     let value = formData[field];
     return filterDictText(arr, value);
@@ -459,7 +459,7 @@ export function useDetailForm(props: any) {
   function handleViewImage(field) {
     let values = detailFormData.value[field];
     if (!values || values.length == 0) {
-      createMessage.warning('无图片!');
+      createMessage.warning('Không có hình ảnh!');
       return;
     }
     createImgPreview({ imageList: values });
@@ -473,7 +473,7 @@ export function useDetailForm(props: any) {
   }
 
   /**
-   * VUEN-1772【vue3 online 详情】ai—ai_control_single 开关组件未翻译、字段为一行时，未居左对齐
+   * VUEN-1772【vue3 online Chi tiết 】ai—ai_control_single Component công tắc chưa được dịch, khi trường nằm trên một hàng, không căn trái
    */
   const span24ViewArray = ['file', 'image', 'markdown', 'umeditor'];
   function getLabelWidthClass(item) {
@@ -491,7 +491,7 @@ export function useDetailForm(props: any) {
     return ''
   }
   
-  // 关联记录
+  // bản ghi liên kết
   async function getLinkTableData(item, formData) {
     let value = formData[item.field];
     let extend = getExtendConfig(item);
@@ -531,8 +531,8 @@ export function useDetailForm(props: any) {
 }
 
 /**
- * TODO 尚未实现
- * 获取 DetailFormSchema[自定义开发用]
+ * TODO Chưa được triển khai
+ * Lấy DetailFormSchema[Dùng cho phát triển tùy chỉnh]
  */
 export function transDetailFormSchemas(formSchemas: FormSchema[]) {
   const detailFormSchemas = ref<DetailFormSchema[]>([]);

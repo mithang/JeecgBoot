@@ -9,9 +9,9 @@ import TextAreaWidget from './impl/TextAreaWidget';
 import SelectMultiWidget from './impl/SelectMultiWidget';
 import SelectSearchWidget from './impl/SelectSearchWidget';
 import PopupWidget from './impl/PopupWidget';
-// update-begin--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
+// update-begin--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDicttừ điển
 import PopupDictWidget from './impl/PopupDictWidget';
-// update-end--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
+// update-end--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDicttừ điển
 import TreeCategoryWidget from './impl/TreeCategoryWidget';
 import SelectDepartWidget from './impl/SelectDepartWidget';
 import SelectUserWidget from './impl/SelectUserWidget';
@@ -40,84 +40,84 @@ export default class FormSchemaFactory {
     let view = data.view;
     switch (view) {
       case 'password':
-        //2.密码输入框
+        //2.Ô nhập mật khẩu
         return new PasswordWidget(key, data);
       case 'list':
-        //3.下拉框
+        //3.Ô dropdown
         return new SelectWidget(key, data);
       case 'radio':
-        // 4. 单选
+        // 4. Chọn đơn
         return new RadioWidget(key, data);
       case 'checkbox':
-        // 5.多选
+        // 5.Chọn nhiều
         return new CheckboxWidget(key, data);
       case 'date':
       case 'datetime':
-        // 6.日期
-        // 7.日期时间
+        // 6.Ngày
+        // 7.Ngày giờ
         return new DateWidget(key, data, queryItem);
       case 'time':
-        // 8 时间
+        // 8 Thời gian
         return new TimeWidget(key, data);
       case 'file':
-        // 9.文件
+        // 9.Tệp
         return new FileWidget(key, data);
       case 'image':
-        // 10.图片
+        // 10.Hình ảnh
         return new ImageWidget(key, data);
       case 'textarea':
-        // 11.多行文本
+        // 11.Văn bản nhiều dòng
         return new TextAreaWidget(key, data);
       case 'list_multi':
-        // 12.下拉多选框
+        // 12.Ô dropdown chọn nhiều
         return new SelectMultiWidget(key, data);
       case 'sel_search':
-        // 13.下拉搜索框
+        // 13.Ô tìm kiếm dropdown
         return new SelectSearchWidget(key, data);
       case 'popup':
         // 14. popup
         return new PopupWidget(key, data);
       case 'cat_tree':
-        // 15.分类字典树
+        // 15.Cây từ điển phân loại
         return new TreeCategoryWidget(key, data);
       case 'sel_depart':
-        // 16.部门选择
+        // 16.Chọn phòng ban
         return new SelectDepartWidget(key, data);
       case 'sel_user':
-        // 17.用户选择
+        // 17.Lựa chọn của người dùng
         return new SelectUserWidget(key, data);
       case 'umeditor':
-        // 18.富文本
+        // 18.Văn bản giàu (rich text)
         return new EditorWidget(key, data);
       case 'markdown':
         // 19.MarkDown
         return new MarkdownWidget(key, data);
       case 'pca':
-        // 20.省市区
-        // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-501】省市区换新组件
+        // 20.Tỉnh/Thành/Quận huyện
+        // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-501】Đổi component mới cho tỉnh/thành/quận huyện
         //  return new PcaWidget(key, data);
         return new AreaLinkage(key, data);
-      // update-end--author:liaozhiyang---date:20240607---for：【TV360X-501】省市区换新组件
+      // update-end--author:liaozhiyang---date:20240607---for：【TV360X-501】Đổi component mới cho tỉnh/thành/quận huyện
       case 'link_down':
-        // 21.联动组件
+        // 21.Component liên động
         return new LinkDownWidget(key, data);
       case 'sel_tree':
-        // 22.自定义树控件
+        // 22.Control cây tùy chỉnh
         return new TreeSelectWidget(key, data);
       case 'switch':
-        // 23.开关组件
+        // 23.Component công tắc
         return new SwitchWidget(key, data);
       case 'link_table':
-        // 24.关联记录
+        // 24.bản ghi liên kết
         return new LinkTableWidget(key, data);
       case 'link_table_field':
-        // 25.他表字段
+        // 25.trường bảng khác
         return new LinkTableFieldWidget(key, data);
-      // update-begin--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
+      // update-begin--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDicttừ điển
       case 'popup_dict':
-        // 14. popup字典
+        // 14. popuptừ điển
         return new PopupDictWidget(key, data);
-      // update-end--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDict字典
+      // update-end--author:liaozhiyang---date:20240130---for：【QQYUN-7961】popupDicttừ điển
       case 'slot':
         // slot
         return new SlotWidget(key, data);
@@ -125,10 +125,10 @@ export default class FormSchemaFactory {
         return new LinkTableForQueryWidget(key, data);
       case 'CascaderPcaForQuery':
         return new CascaderPcaForQueryWidget(key, data, queryItem);
-      // update-begin--author:wangshuai---date:20260819---for：【LHZP-1983】【表单设计器】支持联动组件
+      // update-begin--author:wangshuai---date:20260819---for：【LHZP-1983】【Trình thiết kế biểu mẫu】Hỗ trợ component liên động
       case 'JCategoryLinkage':
         return new CategoryLinkageForQueryWidget(key, data);
-      // update-end--author:wangshuai---date:20260819---for：【LHZP-1983】【表单设计器】支持联动组件
+      // update-end--author:wangshuai---date:20260819---for：【LHZP-1983】【Trình thiết kế biểu mẫu】Hỗ trợ component liên động
       case 'select_user2':
         return new SelectUser2Widget(key, data);
       case 'rangeDate':
@@ -136,13 +136,13 @@ export default class FormSchemaFactory {
       case 'rangeNumber':
         return new RangeWidget(key, data);
       case 'hidden':
-        // 隐藏的控件  如分类树的文本
+        // Control đã ẩn  như văn bản của cây phân loại
         return new InputWidget(key, data).isHidden();
       default:
         if (data.type == 'number') {
           return new NumberWidget(key, data);
         } else {
-          //1.普通输入框
+          //1.Ô nhập thông thường
           return new InputWidget(key, data);
         }
     }
@@ -156,9 +156,9 @@ export default class FormSchemaFactory {
     } else if ('datetime' == view) {
       slotFs.groupDatetime();
     } else if ('time' == view) {
-      // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9348】增加online查询区域时间范围查询功能
+      // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9348】Bổ sungonlineChức năng truy vấn theo phạm vi thời gian của vùng truy vấn
       slotFs.groupTime();
-      // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9348】增加online查询区域时间范围查询功能
+      // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9348】Bổ sungonlineChức năng truy vấn theo phạm vi thời gian của vùng truy vấn
     } else {
       let type = data.type;
       if (type == 'number' || type == 'integer') {
@@ -169,7 +169,7 @@ export default class FormSchemaFactory {
   }
 
   /**
-   * 表单ID 默认是隐藏的
+   * Biểu mẫuID Mặc định là ẩn
    */
   static createIdField(): FormSchema {
     return {

@@ -14,7 +14,7 @@ function queryTableColumns(tableName, params){
   return defHttp.get({ url, params });
 }
 
-// update-begin--author:liusq---date:20260811---for：【online一对多】缓存关联表列配置供展示态复用关联记录转换逻辑
+// update-begin--author:liusq---date:20260811---for：【onlineMột-nhiều】Cache cấu hình cột của bảng liên quan để trạng thái hiển thị dùng lại logic chuyển đổi bản ghi liên kết
 const linkTableColumnCache = new Map<string, Promise<any>>();
 
 export function getLinkTableColumns(tableName: string, selectFields: string) {
@@ -24,7 +24,7 @@ export function getLinkTableColumns(tableName: string, selectFields: string) {
   }
   return linkTableColumnCache.get(cacheKey)!;
 }
-// update-end--author:liusq---date:20260811---for：【online一对多】缓存关联表列配置供展示态复用关联记录转换逻辑
+// update-end--author:liusq---date:20260811---for：【onlineMột-nhiều】Cache cấu hình cột của bảng liên quan để trạng thái hiển thị dùng lại logic chuyển đổi bản ghi liên kết
 
 function queryAllTableData(params: {
   tableName: string;
@@ -37,7 +37,7 @@ function queryAllTableData(params: {
   return defHttp.get({ url: '/sys/dict/queryTableDataForLinkRecord', params });
 }
 
-// update-begin--author:liusq---date:20260811---for：【online一对多】关联记录编辑态和展示态复用同一翻译逻辑
+// update-begin--author:liusq---date:20260811---for：【onlineMột-nhiều】Trạng thái chỉnh sửa và trạng thái hiển thị của bản ghi liên kết dùng chung một logic chuyển đổi
 export function transLinkTableRecord(data, columns, dictInfo) {
   for (const column of columns || []) {
     const { dataIndex, customRender } = column;
@@ -52,27 +52,27 @@ export function transLinkTableRecord(data, columns, dictInfo) {
   }
   return data;
 }
-// update-end--author:liusq---date:20260811---for：【online一对多】关联记录编辑态和展示态复用同一翻译逻辑
+// update-end--author:liusq---date:20260811---for：【onlineMột-nhiều】Trạng thái chỉnh sửa và trạng thái hiển thị của bản ghi liên kết dùng chung một logic chuyển đổi
 
 export function useLinkTable(props) {
-  // 当前页面已授权的 Online 表单编码，后端据此校验它是否真的配置了目标关联表。
+  // đã được ủy quyền của trang hiện tại Online Mã biểu mẫu, backend căn cứ vào đó kiểm chứng nó có thực sự cấu hình bảng liên kết đích hay không.
   const sourceFormCode = inject<Ref<string | null>>('tableId');
   
-  //TODO 目前只支持查询第一页的数据，可以输入关键字搜索
+  //TODO Hiện tại chỉ hỗ trợ truy vấn dữ liệu của trang đầu tiên, có thể nhập từ khóa để tìm kiếm
   const pageNo = ref('1');
-  // 查询列
+  // Cột truy vấn
   const baseParam = ref<any>({});
-  // 搜素条件
+  // Điều kiện tìm kiếm
   const searchParam = ref<any>({});
-  // 第一个文本列
+  // Cột văn bản đầu tiên
   const mainContentField = ref('');
-  //权限数据
+  //Dữ liệu quyền
   const auths = reactive({
     add: true,
     update: true
   });
 
-  //显示列
+  //Cột hiển thị
   const textFieldArray = computed(()=>{
     if(props.textField){
       return props.textField.split(',')
@@ -80,7 +80,7 @@ export function useLinkTable(props) {
     return []
   });
   const otherColumns = ref<any[]>([]);
-  // 展示的列 配置的很多列，但是只展示三行
+  // Cột hiển thị Cấu hình nhiều cột nhưng chỉ hiển thị ba hàng
   const realShowColumns = computed(()=>{
     let columns = otherColumns.value;
     if(props.multi == true){
@@ -93,7 +93,7 @@ export function useLinkTable(props) {
   watchEffect(async ()=>{
     let table = props.tableName;
     if(table){
-      // tableId 由 Online 页面挂载时写入；存在上下文时等待其就绪，避免先发出缺少源表单标识的请求。
+      // tableId Do Online Ghi vào khi trang được mount; khi tồn tại ngữ cảnh thì chờ nó sẵn sàng, tránh gửi trước yêu cầu thiếu định danh biểu mẫu nguồn.
       if (sourceFormCode && !sourceFormCode.value) {
         return;
       }
@@ -124,7 +124,7 @@ export function useLinkTable(props) {
       }
       baseParam.value = {
         linkTableSelectFields: arr.join(','),
-        // 非 Online 页面没有 tableId，保持原请求不变，继续按目标表自身权限处理。
+        // Không phải Online Trang không có tableId, giữ nguyên yêu cầu gốc, tiếp tục xử lý theo quyền của chính bảng đích.
         ...(sourceFormCode?.value ? { linkTableSourceCode: sourceFormCode.value } : {}),
       };
       await resetTableColumns()
@@ -151,7 +151,7 @@ export function useLinkTable(props) {
     };
   });
 
-  // 选项
+  // Tùy chọn
   const selectOptions = ref<any[]>([]);
   const tableColumns = ref<any[]>([]);
   const dictOptions = ref<any>({});
@@ -167,8 +167,8 @@ export function useLinkTable(props) {
       otherColumns.value = arr;
     }
     dictOptions.value = data.dictOptions;
-    // 权限数据
-    console.log('隐藏的按钮', data.hideColumns);
+    // Dữ liệu quyền
+    console.log('Nút đã ẩn', data.hideColumns);
     if(data.hideColumns){
       let hideCols = data.hideColumns;
       if(hideCols.indexOf('add')>=0){
@@ -203,15 +203,15 @@ export function useLinkTable(props) {
         dataList.push(result);
       }
     }
-    //添加一个空对象 为add操作占位
-    // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-1095】高级查询关联记录去掉编辑按钮及去掉记录按钮
+    //Thêm một đối tượng rỗng làaddGiữ chỗ thao tác
+    // update-begin--author:liaozhiyang---date:20240607---for：【TV360X-1095】Truy vấn nâng cao: bản ghi liên kết bỏ nút chỉnh sửa và bỏ nút ghi
     props.editBtnShow && dataList.push({});
-    // update-end--author:liaozhiyang---date:20240607---for：【TV360X-1095】高级查询关联记录去掉编辑按钮及去掉记录按钮
+    // update-end--author:liaozhiyang---date:20240607---for：【TV360X-1095】Truy vấn nâng cao: bản ghi liên kết bỏ nút chỉnh sửa và bỏ nút ghi
     selectOptions.value = dataList;
   }
 
   /**
-   * 数据简单翻译-字典
+   * Dịch dữ liệu đơn giản-từ điển
    * @param data
    */
   function transData(data) {
@@ -219,13 +219,13 @@ export function useLinkTable(props) {
   }
 
 
-  //获取加载数据的查询条件
+  //Lấy điều kiện truy vấn của dữ liệu tải
   function getLoadDataParams(){
     let params = Object.assign({pageSize: 100, pageNo: pageNo.value}, baseParam.value, searchParam.value);
     return params;
   }
 
-  //设置查询条件
+  //Thiết lập điều kiện truy vấn
   function addQueryParams(text){
     if(!text){
       searchParam.value = {}
@@ -274,7 +274,7 @@ export function useLinkTable(props) {
         const firstTextField = textFields[0] || props.valueField;
         return (value + '').split(',').filter(Boolean).map((v) => ({ [props.valueField]: v, [firstTextField]: v }));
       } catch (e) {
-        console.error('[useLinkTable] table loadOne 失败', e);
+        console.error('[useLinkTable] table loadOne Thất bại', e);
         return [];
       }
     }
@@ -304,7 +304,7 @@ export function useLinkTable(props) {
 
 
   /**
-   * true:数据一致；false:数据不一致
+   * true:Dữ liệu nhất quán;false:Dữ liệu không nhất quán
    * @param arr
    * @param value
    */
@@ -341,7 +341,7 @@ export function useLinkTable(props) {
     if(linkFieldArray && linkFieldArray.length>0){
       for(let str of linkFieldArray){
         let arr = str.split(',')
-        //["表单字段,表字典字段"]
+        //["Trường biểu mẫu,Trường từ điển bảng"]
         let field = arr[0];
         let dictField = arr[1];
         if(!formData[field]){
@@ -355,16 +355,16 @@ export function useLinkTable(props) {
   }
 
 
-  // 获取图片地址
+  // Lấy địa chỉ hình ảnh
   function getImageSrc(item){
     if(props.imageField){
       let url = item[props.imageField];
-      // update-begin--author:liaozhiyang---date:20250517---for：【TV360X-38】关联记录空间，被关联数据优多个图片时，封面图片不展示
+      // update-begin--author:liaozhiyang---date:20250517---for：【TV360X-38】Không gian bản ghi liên kết, khi dữ liệu được liên kết có nhiều hình ảnh, hình bìa không hiển thị
       if(typeof url === 'string') {
-        // 有多张图时默认取第一张
+        // Khi có nhiều hình, mặc định lấy hình đầu tiên
         url = url.split(',')[0]
       }
-      // update-end--author:liaozhiyang---date:20250517---for：【TV360X-38】关联记录空间，被关联数据优多个图片时，封面图片不展示
+      // update-end--author:liaozhiyang---date:20250517---for：【TV360X-38】Không gian bản ghi liên kết, khi dữ liệu được liên kết có nhiều hình ảnh, hình bìa không hiển thị
       return getFileAccessHttpUrl(url);
     }
     return ''

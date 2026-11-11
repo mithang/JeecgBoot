@@ -1,5 +1,5 @@
 <template>
-  <BasicModal wrapClassName="link-table-field-config-modal" v-bind="$attrs" title="他表字段配置" @register="registerModal" keyboard :canFullscreen="false" cancelText="关闭" @ok="handleSubmit">
+  <BasicModal wrapClassName="link-table-field-config-modal" v-bind="$attrs" title="Cấu hình trường bảng khác" @register="registerModal" keyboard :canFullscreen="false" cancelText="Đóng" @ok="handleSubmit">
     <a-spin :spinning="spinningLoading">
         <BasicForm @register="registerForm">
         </BasicForm>
@@ -44,11 +44,11 @@
         tableAndFieldsMap = data.tableAndFieldsMap;
         await initLinkTableOptions()
         await setFieldsValue({dictTable: data.record.dictTable});
-        // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-45】更关联记录中的其他字段，他表字段中显示字段没有更新
+        // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-45】Cập nhật các trường khác trong bản ghi liên kết, trường hiển thị trong trường bảng khác không cập nhật
         if (oldValue.dictTable) {
           handleChange(oldValue.dictTable);
         }
-        // update-end--author:liaozhiyang---date:20240517---for：【TV360X-45】更关联记录中的其他字段，他表字段中显示字段没有更新
+        // update-end--author:liaozhiyang---date:20240517---for：【TV360X-45】Cập nhật các trường khác trong bản ghi liên kết, trường hiển thị trong trường bảng khác không cập nhật
         setTimeout(async ()=>{
           let otherValue = omit(data.record, 'dictTable')
           await setFieldsValue(otherValue);
@@ -76,7 +76,7 @@
         if(fieldName){
           const {table, fields} = tableAndFieldsMap[fieldName];
           if(!table){
-            $message.warning('请先完善字段['+fieldName+']关联记录的配置')
+            $message.warning('Vui lòng hoàn thiện trường trước['+fieldName+']cấu hình của bản ghi liên kết')
             return;
           }
           const url = '/online/cgform/field/listByHeadCode';
@@ -88,15 +88,15 @@
                 value: item.dbFieldName
               }
             });
-            console.log('字段字典', arr);
+            console.log('Từ điển trường', arr);
             let fieldArray = fields.split(',')
-            // update-begin--author:liaozhiyang---date:20260323---for:【QQYUN-14951】一对多他表字段需能选择所有字段
+            // update-begin--author:liaozhiyang---date:20260323---for:【QQYUN-14951】Trường bảng khác một-nhiều cần chọn được tất cả các trường
             if (props.isSubTableOneToMany) {
               fieldOptions.value = arr;
             } else {
               fieldOptions.value = arr.filter(item=>fieldArray.includes(item.value));
             }
-            // update-end--author:liaozhiyang---date:20260323---for:【QQYUN-14951】一对多他表字段需能选择所有字段
+            // update-end--author:liaozhiyang---date:20260323---for:【QQYUN-14951】Trường bảng khác một-nhiều cần chọn được tất cả các trường
           }else{
             fieldOptions.value = []
           }
@@ -111,13 +111,13 @@
           show: false
         },
         {
-          label: '字段描述',
+          label: 'Mô tả trường',
           field: 'dbFieldTxt',
           component: 'Input',
           required: true
         },
         {
-          label: '关联记录',
+          label: 'bản ghi liên kết',
           field: 'dictTable',
           component: 'JSearchSelect',
           required: true,
@@ -141,7 +141,7 @@
           }
         },
         {
-          label: '显示字段',
+          label: 'Trường hiển thị',
           field: 'dictText',
           component: 'JSearchSelect',
           required: true,
@@ -156,7 +156,7 @@
         }
       ]
 
-      // 表单配置
+      // Cấu hình biểu mẫu
       const [ registerForm, {validate, setFieldsValue, clearValidate}] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
@@ -165,7 +165,7 @@
 
       async function handleSubmit(){
         const data = await validate()
- /*     dbFieldTxt: "姓名"
+ /*     dbFieldTxt: "Họ tên"
         dictTable: "test"
         multiSelect: false
         otherFields: "create_by,xxx"

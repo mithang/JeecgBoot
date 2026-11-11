@@ -1,34 +1,34 @@
-<!-- Online表单，配置地址弹窗 -->
+<!-- Onlinebiểu mẫu, popup cấu hình địa chỉ -->
 <template>
   <BasicModal
       @register="registerModal"
-      title="配置地址"
+      title="Địa chỉ cấu hình"
       :width="750"
       :canFullscreen="false"
       :showOkBtn="false"
-      cancelText="关闭"
+      cancelText="Đóng"
   >
     <div class="content">
       <a-collapse v-model:activeKey="collapseKey" class="j-collapse" :bordered="false" ghost>
-        <a-collapse-panel key="def" header="配置地址" class="j-collapse-panel no-header">
+        <a-collapse-panel key="def" header="Địa chỉ cấu hình" class="j-collapse-panel no-header">
           <a-row style="margin-bottom: 8px">
             <a-col :span="24">
-              <a-input :readOnly="true" addonBefore="数据列表地址" :value="getAddress.list">
+              <a-input :readOnly="true" addonBefore="Địa chỉ danh sách dữ liệu" :value="getAddress.list">
                 <template #addonAfter>
-                  <a :href="getAddress.list" target="_blank">打开</a>
+                  <a :href="getAddress.list" target="_blank">Mở</a>
                 </template>
               </a-input>
             </a-col>
           </a-row>
 
-          <a-button class="copy-sql" type="primary" size="small" @click="copySqlClick">复制菜单SQL</a-button>
+          <a-button class="copy-sql" type="primary" size="small" @click="copySqlClick">Sao chép menuSQL</a-button>
         </a-collapse-panel>
-        <a-collapse-panel v-if="enableExternalLink" key="external" header="外部链接">
+        <a-collapse-panel v-if="enableExternalLink" key="external" header="Liên kết ngoài">
           <a-row v-if="hasExtAction('add')" style="margin-bottom: 8px">
             <a-col :span="24">
-              <a-input :readOnly="true" addonBefore="外部新增地址" :value="getAddress.extLink.add">
+              <a-input :readOnly="true" addonBefore="Địa chỉ thêm mới bên ngoài" :value="getAddress.extLink.add">
                 <template #addonAfter>
-                  <a :href="getAddress.extLink.add + '?token=' + accessToken" target="_blank">打开</a>
+                  <a :href="getAddress.extLink.add + '?token=' + accessToken" target="_blank">Mở</a>
                 </template>
               </a-input>
             </a-col>
@@ -36,9 +36,9 @@
 
           <a-row v-if="hasExtAction('edit')" style="margin-bottom: 8px">
             <a-col :span="24">
-              <a-input :readOnly="true" addonBefore="外部修改地址" :value="getAddress.extLink.edit">
+              <a-input :readOnly="true" addonBefore="Địa chỉ chỉnh sửa bên ngoài" :value="getAddress.extLink.edit">
                 <template #addonAfter>
-                  <a @click="openPage(getAddress.extLink.edit)">打开</a>
+                  <a @click="openPage(getAddress.extLink.edit)">Mở</a>
                 </template>
               </a-input>
             </a-col>
@@ -46,26 +46,26 @@
 
           <a-row v-if="hasExtAction('detail')" style="margin-bottom: 8px">
             <a-col :span="24">
-              <a-input :readOnly="true" addonBefore="外部详情地址" :value="getAddress.extLink.detail">
+              <a-input :readOnly="true" addonBefore="Địa chỉ chi tiết bên ngoài" :value="getAddress.extLink.detail">
                 <template #addonAfter>
-                  <a @click="openPage(getAddress.extLink.detail)">打开</a>
+                  <a @click="openPage(getAddress.extLink.detail)">Mở</a>
                 </template>
               </a-input>
             </a-col>
           </a-row>
-          <div v-if="externalLinkActions.length === 0" style="color: rgba(0, 0, 0, 0.45)">未勾选允许的操作，请在表单配置【允许的操作】中勾选新增/编辑/详情</div>
-          <div v-if="hasExtAction('edit') || hasExtAction('detail')" style="text-align: right; color: red">注意：<span style="font-weight: bold">{dataId}</span> 为数据id</div>
+          <div v-if="externalLinkActions.length === 0" style="color: rgba(0, 0, 0, 0.45)">Chưa tích chọn thao tác được phép, vui lòng tích chọn thêm mới trong 【Thao tác được phép】 của cấu hình biểu mẫu/Chỉnh sửa/Chi tiết</div>
+          <div v-if="hasExtAction('edit') || hasExtAction('detail')" style="text-align: right; color: red">Lưu ý:<span style="font-weight: bold">{dataId}</span> là dữ liệuid</div>
         </a-collapse-panel>
       </a-collapse>
     </div>
   </BasicModal>
 
-  <!-- 让用户输入 dataId 的弹窗 -->
+  <!-- Cho người dùng nhập dataId popup của -->
   <BasicModal v-model:visible="dataIdProps.visible" v-bind="dataIdBind">
-    <a-input placeholder="请输入dataId" v-model:value="dataIdProps.value"></a-input>
+    <a-input placeholder="Vui lòng nhậpdataId" v-model:value="dataIdProps.value"></a-input>
     <template #footer>
       <a :href="dataIdHref" target="_blank">
-        <a-button type="primary" @click="onClickDataId">确定</a-button>
+        <a-button type="primary" @click="onClickDataId">Xác nhận</a-button>
       </a>
     </template>
   </BasicModal>
@@ -86,7 +86,7 @@ const accessToken = computed(() => getToken());
 
 const collapseKey = ref(['def'])
 const enableExternalLink = ref(false);
-// 外部链接允许的操作：add、edit、detail
+// Các thao tác mà liên kết ngoài cho phép:add、edit、detail
 const externalLinkActions = ref<string[]>([]);
 const themeTemplate = ref('normal');
 const isTree = ref(false);
@@ -102,13 +102,13 @@ const [registerModal] = useModalInner((data: Recordable) => {
   Object.assign(model, data, {
     formId: data.record.id,
   })
-  // 解析扩展JSON
+  // Phân tích mở rộngJSON
   const extConfigJson = parseExtConfigJson(data.record);
 
   enableExternalLink.value = extConfigJson.enableExternalLink === 1;
-  // update-begin--author:liaozhiyang---date:20261026---for：【LHZP-29】按钮根据详情/编辑/新增权限显示
+  // update-begin--author:liaozhiyang---date:20261026---for：【LHZP-29】Nút căn cứ theo chi tiết/Chỉnh sửa/Hiển thị quyền thêm mới
   externalLinkActions.value = (extConfigJson.externalLinkActions || '').split(',').filter((item) => !!item);
-  // update-end--author:liaozhiyang---date:20261026---for：【LHZP-29】按钮根据详情/编辑/新增权限显示
+  // update-end--author:liaozhiyang---date:20261026---for：【LHZP-29】Nút căn cứ theo chi tiết/Chỉnh sửa/Hiển thị quyền thêm mới
   themeTemplate.value = data.record.themeTemplate;
   isTree.value = data.record.isTree === 'Y';
   if (enableExternalLink.value) {
@@ -118,7 +118,7 @@ const [registerModal] = useModalInner((data: Recordable) => {
   }
 });
 
-// 是否允许某个外部链接操作
+// Có cho phép một thao tác liên kết ngoài nào đó hay không
 function hasExtAction(action: string) {
   return externalLinkActions.value.includes(action);
 }
@@ -140,10 +140,10 @@ const getAddress = computed(() => {
 });
 
 /**
- * 复制sql
+ * Sao chépsql
  */
   function copySqlClick() {
-    // update-begin--author:liaozhiyang---date:20240308---for：【QQYUN-12348】online生成的菜单sql 自动带上组件名称
+    // update-begin--author:liaozhiyang---date:20240308---for：【QQYUN-12348】onlineMenu đã tạosql Tự động mang theo tên component
     let component_name = 'OnlineAutoList';
     if (themeTemplate.value === 'normal') {
       component_name = 'OnlineAutoList';
@@ -157,21 +157,21 @@ const getAddress = computed(() => {
     if (isTree.value) {
       component_name = 'DefaultOnlineList';
     }
-    // update-end--author:liaozhiyang---date:20240308---for：【QQYUN-12348】online生成的菜单sql 自动带上组件名称
-    const insertMenuSql = `-- 插入菜单
+    // update-end--author:liaozhiyang---date:20240308---for：【QQYUN-12348】onlineMenu đã tạosql Tự động mang theo tên component
+    const insertMenuSql = `-- Chèn menu
 INSERT INTO sys_permission(id, parent_id, name, url, component, component_name, redirect, menu_type, perms, perms_type, sort_no, always_show, icon, is_route, is_leaf, keep_alive, hidden, hide_tab, description, status, del_flag, rule_flag, create_by, create_time, update_by, update_time, internal_or_external)
 VALUES ('${buildUUID()}', NULL, '${model.copyTitle}', '${model.copyText}', '1', '${component_name}', NULL, 0, NULL, '1', 0.00, 0, NULL, 0, 1, 0, 0, 0, NULL, '1', 0, 0, 'admin', null, NULL, NULL, 0)
 `;
   copyText(insertMenuSql);
 }
 
-// 复制文本到剪贴板
+// Sao chép văn bản vào bảng tạm (clipboard)
 function copyText(text: string) {
   const success = copyTextToClipboard(text)
   if (success) {
-    $message.success('复制成功！')
+    $message.success('Sao chép thành công!')
   } else {
-    $message.error('复制失败！')
+    $message.error('Sao chép thất bại!')
   }
   return success
 }
@@ -186,7 +186,7 @@ const dataIdHref = computed(() => {
 });
 const dataIdBind = computed(() => {
   return {
-    title: '请输入dataId',
+    title: 'Vui lòng nhậpdataId',
     minHeight: 120,
     centered: true,
     canFullscreen: false,
@@ -203,7 +203,7 @@ function openPage(url: string) {
 
 function onClickDataId() {
   if (!dataIdProps.value) {
-    $message.warn('请输入dataId');
+    $message.warn('Vui lòng nhậpdataId');
     return
   }
   dataIdProps.visible = false;

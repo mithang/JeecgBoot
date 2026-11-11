@@ -4,17 +4,17 @@ import {useMessage} from "@/hooks/web/useMessage";
 const {createConfirm} = useMessage()
 
 /**
- * 创建列表删除时的提示弹窗
- * @param deleteFn 删除方法
- * @param removeFn 移出方法
+ * Tạo popup nhắc nhở khi xóa danh sách
+ * @param deleteFn phương thức xóa
+ * @param removeFn phương thức loại bỏ
  */
 export function showListDeleteConfirm(deleteFn, removeFn) {
   const {destroy} = createConfirm({
-    title: '确认删除表单吗？',
+    title: 'Xác nhận xóa biểu mẫu chứ?',
     content: () => (
       <div style="font-size: 13px; color: #666; line-height: 1.8;">
-        <div>移除：仅删除配置，保留数据库表和数据</div>
-        <div>删除：同时删除数据库表和数据（不可恢复）</div>
+        <div>Loại bỏ: chỉ xóa cấu hình, giữ lại bảng cơ sở dữ liệu và dữ liệu</div>
+        <div>Xóa: đồng thời xóa bảng cơ sở dữ liệu và dữ liệu (không thể khôi phục)</div>
       </div>
     ),
     iconType: 'info',
@@ -24,9 +24,9 @@ export function showListDeleteConfirm(deleteFn, removeFn) {
     footer: () => (
       <div style="text-align: right; margin-top: 12px;">
         <Space>
-          <Button onClick={() => destroy()}>取消</Button>
-          <Button type="primary" ghost onClick={getFn(removeFn)}>移除表单</Button>
-          <Button type="primary" danger onClick={getFn(deleteFn)}>删除表单</Button>
+          <Button onClick={() => destroy()}>Hủy</Button>
+          <Button type="primary" ghost onClick={getFn(removeFn)}>Loại bỏ biểu mẫu</Button>
+          <Button type="primary" danger onClick={getFn(deleteFn)}>Xóa biểu mẫu</Button>
         </Space>
       </div>
     ),

@@ -24,12 +24,12 @@
     @valueChange="handleValueChange"
   >
     <template #toolbarSuffix>
-      <a-button type="primary" preIcon="ant-design:robot-outlined" @click="openAiModal">AI字段建议</a-button>
-      <!-- update-begin--author:liaozhiyang---date:20260824---for:【LHZP-1951】新增流程状态字段（在工具栏末尾按字段存在状态显示快捷按钮） -->
-      <a-tooltip title="新增流程状态字段">
-        <a-button v-if="actionButton && !hasBpmStatusField" type="primary" preIcon="ant-design:branches-outlined" @click="addBpmStatusField">流程状态字段</a-button>
+      <a-button type="primary" preIcon="ant-design:robot-outlined" @click="openAiModal">AIĐề xuất trường</a-button>
+      <!-- update-begin--author:liaozhiyang---date:20260824---for:【LHZP-1951】Thêm trường trạng thái quy trình (hiển thị nút tắt ở cuối thanh công cụ theo trạng thái tồn tại của trường) -->
+      <a-tooltip title="Thêm trường trạng thái quy trình">
+        <a-button v-if="actionButton && !hasBpmStatusField" type="primary" preIcon="ant-design:branches-outlined" @click="addBpmStatusField">Trường trạng thái quy trình</a-button>
       </a-tooltip>
-      <!-- update-end--author:liaozhiyang---date:20260824---for:【LHZP-1951】新增流程状态字段（在工具栏末尾按字段存在状态显示快捷按钮） -->
+      <!-- update-end--author:liaozhiyang---date:20260824---for:【LHZP-1951】Thêm trường trạng thái quy trình (hiển thị nút tắt ở cuối thanh công cụ theo trạng thái tồn tại của trường) -->
     </template>
   </JVxeTable>
   <AiModal
@@ -297,90 +297,90 @@
       const addBatching = ref(false);
       const columns = ref<JVxeColumn[]>([
         {
-          title: '字段名称',
+          title: 'Tên trường',
           key: 'dbFieldName',
           width: 140,
           type: JVxeTypes.input,
           defaultValue: '',
-          placeholder: '请输入${title}',
+          placeholder: 'Vui lòng nhập${title}',
           fixed: 'left',
           validateRules: [
-            { required: true, message: '${title}不能为空' },
+            { required: true, message: '${title}không được để trống' },
             {
               pattern: /^[a-zA-Z]{1}(?!_)[a-zA-Z0-9_\\$]+$/,
-              message: '命名规则：只能由字母、数字、下划线、$符号组成；必须以字母开头；不能以单个字母加下滑线开头',
+              message: 'Quy tắc đặt tên: chỉ được gồm chữ cái, chữ số, dấu gạch dưới,$ký tự hợp thành; phải bắt đầu bằng chữ cái; không được bắt đầu bằng một chữ cái đơn lẻ cộng dấu gạch dưới',
             },
-            { unique: true, message: '${title}不能重复' },
+            { unique: true, message: '${title}không được trùng lặp' },
             {
               handler({ cellValue }, callback) {
-                /* 判断是否是关键字 */
+                /* Phán đoán có phải từ khóa (keyword) hay không */
                 if (MySQLKeywords.includes(cellValue.toUpperCase())) {
-                  callback(false, cellValue + '是关键字，不能作为字段名称使用！');
+                  callback(false, cellValue + 'là từ khóa (keyword), không thể dùng làm tên trường!');
                 } else {
                   callback(true);
                 }
               },
             },
             { handler: validateExistIndex },
-            // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-631】表名字段名表描述字段备注长度校验
+            // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-631】Kiểm chứng độ dài của tên bảng, tên trường, mô tả bảng, ghi chú trường
             {
               handler({ cellValue }, callback) {
                 if (cellValue.length > 32) {
-                  callback(false, '字段名最长32个字符');
+                  callback(false, 'Tên trường dài nhất32ký tự');
                 } else {
                   callback(true);
                 }
               },
             },
-            // update-end--author:liaozhiyang---date:20240603---for：【TV360X-631】表名字段名表描述字段备注长度校验
+            // update-end--author:liaozhiyang---date:20240603---for：【TV360X-631】Kiểm chứng độ dài của tên bảng, tên trường, mô tả bảng, ghi chú trường
           ],
           disabled: !props.actionButton,
         },
         {
-          title: '字段备注',
+          title: 'Ghi chú trường',
           key: 'dbFieldTxt',
           width: 140,
           type: JVxeTypes.input,
           defaultValue: '',
-          placeholder: '请输入${title}',
+          placeholder: 'Vui lòng nhập${title}',
           fixed: 'left',
           validateRules: [
-            { required: true, message: '${title}不能为空' },
-            // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-631】表名字段名表描述字段备注长度校验
+            { required: true, message: '${title}không được để trống' },
+            // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-631】Kiểm chứng độ dài của tên bảng, tên trường, mô tả bảng, ghi chú trường
             {
               handler({ cellValue }, callback) {
                 if (cellValue.length > 200) {
-                  callback(false, '字段名最长200个字');
+                  callback(false, 'Tên trường dài nhất200ký tự');
                 } else {
                   callback(true);
                 }
               },
             },
-            // update-end--author:liaozhiyang---date:20240603---for：【TV360X-631】表名字段名表描述字段备注长度校验
+            // update-end--author:liaozhiyang---date:20240603---for：【TV360X-631】Kiểm chứng độ dài của tên bảng, tên trường, mô tả bảng, ghi chú trường
           ],
         },
         {
-          title: '字段长度',
+          title: 'Độ dài trường',
           key: 'dbLength',
           width: 120,
           type: JVxeTypes.inputNumber,
           defaultValue: 32,
-          placeholder: '请输入${title}',
-          validateRules: [{ required: true, message: '${title}不能为空' }],
+          placeholder: 'Vui lòng nhập${title}',
+          validateRules: [{ required: true, message: '${title}không được để trống' }],
           disabled: !props.actionButton,
         },
         {
-          title: '小数点',
+          title: 'Dấu thập phân',
           key: 'dbPointLength',
           width: 100,
           type: JVxeTypes.inputNumber,
           defaultValue: 0,
-          placeholder: '请输入${title}',
-          validateRules: [{ required: true, message: '${title}不能为空' }],
+          placeholder: 'Vui lòng nhập${title}',
+          validateRules: [{ required: true, message: '${title}không được để trống' }],
           disabled: !props.actionButton,
         },
         {
-          title: '默认值',
+          title: 'Giá trị mặc định',
           key: 'dbDefaultVal',
           width: 140,
           type: JVxeTypes.input,
@@ -388,7 +388,7 @@
           disabled: !props.actionButton,
         },
         {
-          title: '字段类型',
+          title: 'Loại trường',
           key: 'dbType',
           width: 140,
           type: JVxeTypes.select,
@@ -405,12 +405,12 @@
             { title: 'Blob', value: 'Blob' },
           ],
           defaultValue: 'string',
-          placeholder: '请选择${title}',
+          placeholder: 'Vui lòng chọn${title}',
           disabled: !props.actionButton,
-          validateRules: [{ required: true, message: '请选择${title}' }, { handler: validateFieldDbType }],
+          validateRules: [{ required: true, message: 'Vui lòng chọn${title}' }, { handler: validateFieldDbType }],
         },
         {
-          title: '主键',
+          title: 'Khóa chính',
           key: 'dbIsKey',
           width: 80,
           type: JVxeTypes.checkbox,
@@ -420,7 +420,7 @@
           disabled: !props.actionButton,
         },
         {
-          title: '允许空值',
+          title: 'Cho phép giá trị rỗng',
           key: 'dbIsNull',
           width: 80,
           type: JVxeTypes.checkbox,
@@ -429,7 +429,7 @@
           disabled: !props.actionButton,
         },
         {
-          title: '同步数据库',
+          title: 'Đồng bộ cơ sở dữ liệu',
           key: 'dbIsPersist',
           minWidth: 80,
           type: JVxeTypes.checkbox,
@@ -443,32 +443,32 @@
 
       const setup = useTableSync(columns);
       const { tableRef, loading, dataSource, tableHeight, tableProps, setDataSource, validateData } = setup;
-      // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-1951】新增流程状态字段（监听表格增删并控制快捷按钮显隐）
+      // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-1951】Thêm trường trạng thái quy trình (theo dõi thêm/xóa trong bảng và điều khiển ẩn/hiện nút tắt)
       const tableDataVersion = ref(0);
       const hasBpmStatusField = computed(() => {
         tableDataVersion.value;
         const tableData = tableRef.value?.getTableData() ?? dataSource.value;
         return tableData.some((row) => row.dbFieldName === 'bpm_status');
       });
-      // update-end--author:liaozhiyang---date:20260824---for:【LHZP-1951】新增流程状态字段（监听表格增删并控制快捷按钮显隐）
-      // update-begin--author:liaozhiyang---date:20250407---for：【QQYUN-11801】ai建表字段
+      // update-end--author:liaozhiyang---date:20260824---for:【LHZP-1951】Thêm trường trạng thái quy trình (theo dõi thêm/xóa trong bảng và điều khiển ẩn/hiện nút tắt)
+      // update-begin--author:liaozhiyang---date:20250407---for：【QQYUN-11801】aiTrường tạo bảng
       const aiModalShow = ref(false);
       const [registerAiModal, { openModal }] = useModal();
       const handleGenerate = (data) => {
         tableRef.value!.addRows(data);
       };
-      // update-end--author:liaozhiyang---date:20250407---for：【QQYUN-11801】ai建表字段
+      // update-end--author:liaozhiyang---date:20250407---for：【QQYUN-11801】aiTrường tạo bảng
 
-      // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-1951】新增流程状态字段（复用普通新增默认值并配置流程状态页面属性）
-      /** 按普通新增行的默认配置添加流程状态字段，仅覆盖流程字段要求的属性。 */
+      // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-1951】Thêm trường trạng thái quy trình (dùng lại giá trị mặc định thêm mới thông thường và cấu hình thuộc tính trang trạng thái quy trình)
+      /** Thêm trường trạng thái quy trình theo cấu hình mặc định của hàng thêm mới thông thường, chỉ ghi đè các thuộc tính mà trường quy trình yêu cầu. */
       function addBpmStatusField() {
         if (hasBpmStatusField.value) {
-          $message.warning('流程状态字段已存在');
+          $message.warning('Trường trạng thái quy trình đã tồn tại');
           return;
         }
         tableRef.value!.addRows({
           dbFieldName: 'bpm_status',
-          dbFieldTxt: '流程状态',
+          dbFieldTxt: 'Trạng thái quy trình',
           isShowList: '1',
           fieldShowType: 'list',
           dictField: 'bpm_status',
@@ -476,7 +476,7 @@
           sortFlag: '0',
         });
       }
-      // update-end--author:liaozhiyang---date:20260824---for:【LHZP-1951】新增流程状态字段（复用普通新增默认值并配置流程状态页面属性）
+      // update-end--author:liaozhiyang---date:20260824---for:【LHZP-1951】Thêm trường trạng thái quy trình (dùng lại giá trị mặc định thêm mới thông thường và cấu hình thuộc tính trang trạng thái quy trình)
 
       function handleAdded() {
         tableDataVersion.value++;
@@ -508,66 +508,66 @@
       function handleValueChange(event) {
         let { type, row, col, value, target, oldValue } = event;
         if (type === JVxeTypes.select && col.key === 'dbType') {
-          // 当字段类型改为Date时触发同步事件，同步控件类型为日期选择器
+          // Khi loại trường đổi thànhDatekhi kích hoạt sự kiện đồng bộ, loại control đồng bộ là bộ chọn ngày
           if (value === 'Date' || value === 'Datetime') {
             emit('syncDbType', { row, value, target: instance });
           }
 
-          // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7530】字段类型从Date和DateTime改成string，控件也变成文本框
+          // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7530】Loại trường từDatevàDateTimeđổi thànhstring, control cũng biến thành ô văn bản
           if ((value !== 'Date' || value !== 'Datetime') && (oldValue == 'Date' || oldValue == 'Datetime')) {
             emit('syncDbType', { row, value, target: instance });
           }
-          // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7530】字段类型从Date和DateTime改成string，控件也变成文本框
-          // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-516】blob类型字段的不让勾选查询
-          // Blob类型不支持查询，触发同步去掉查询勾选
+          // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7530】Loại trường từDatevàDateTimeđổi thànhstring, control cũng biến thành ô văn bản
+          // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-516】blobTrường loại không cho tích chọn truy vấn
+          // BlobLoại không hỗ trợ truy vấn, kích hoạt đồng bộ bỏ tích chọn truy vấn
           if (value === 'Blob') {
             emit('syncDbType', { row, value, target: instance });
           }
-          // update-end--author:liaozhiyang---date:20260713---for：【LHZP-516】blob类型字段的不让勾选查询
-          // 字段类型Blob、Date、Text 将字段长度改为0
+          // update-end--author:liaozhiyang---date:20260713---for：【LHZP-516】blobTrường loại không cho tích chọn truy vấn
+          // Loại trườngBlob、Date、Text Đổi độ dài trường thành0
           if (value === 'Blob' || value === 'Text' || value === 'Date') {
             target.setValues([{ rowKey: row.id, values: { dbLength: '0' } }]);
           } else if (value === 'string') {
-            // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-56】字段类型修改，改成string时给默认长度
+            // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-56】Sửa loại trường, đổi thànhstringkhi đó cấp độ dài mặc định
             target.setValues([{ rowKey: row.id, values: { dbLength: '32' } }]);
-            // update-end--author:liaozhiyang---date:20240517---for：【TV360X-56】字段类型修改，改成string时给默认长度
+            // update-end--author:liaozhiyang---date:20240517---for：【TV360X-56】Sửa loại trường, đổi thànhstringkhi đó cấp độ dài mặc định
           } else if (value === 'int' || value === 'double' || value === 'BigDecimal') {
             target.setValues([{ rowKey: row.id, values: { dbLength: '10' } }]);
-          //update-begin---author:wangshuai---date:2025-10-24---for:【QQYUN-13901】增加Long类型---
+          //update-begin---author:wangshuai---date:2025-10-24---for:【QQYUN-13901】Bổ sungLongLoại---
           } else if (value === 'long') {
             target.setValues([{ rowKey: row.id, values: { dbLength: '19' } }]);
-          //update-end---author:wangshuai---date:2025-10-24---for:【QQYUN-13901】增加Long类型---
+          //update-end---author:wangshuai---date:2025-10-24---for:【QQYUN-13901】Bổ sungLongLoại---
           } else if (row['dbLength'] === '0') {
             target.setValues([{ rowKey: row.id, values: { dbLength: '32' } }]);
           }
-          // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-160】字段类型是String且控件是文本框默认模糊查询（字段类型改变后通知页面属性更新查询类型）
+          // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-160】Loại trường làStringvà control là ô văn bản thì mặc định truy vấn mờ (sau khi loại trường thay đổi, thông báo thuộc tính trang cập nhật loại truy vấn)
           emit('syncQueryMode', { oldValue, row });
-          // update-end--author:liaozhiyang---date:20260824---for:【LHZP-160】字段类型是String且控件是文本框默认模糊查询（字段类型改变后通知页面属性更新查询类型）
+          // update-end--author:liaozhiyang---date:20260824---for:【LHZP-160】Loại trường làStringvà control là ô văn bản thì mặc định truy vấn mờ (sau khi loại trường thay đổi, thông báo thuộc tính trang cập nhật loại truy vấn)
         } else if (col.key === 'dbIsPersist') {
-          // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】不同步数据库的字段则去掉对应查询勾选
+          // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Trường không đồng bộ cơ sở dữ liệu thì bỏ dấu chọn truy vấn tương ứng
           emit('syncDbIsPersist', { row, value, target: instance });
-          // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】不同步数据库的字段则去掉对应查询勾选
+          // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Trường không đồng bộ cơ sở dữ liệu thì bỏ dấu chọn truy vấn tương ứng
         } else if (col.key === 'dbIsNull') {
-          // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】数据库不允许为空，校验默认相应勾上
+          // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Cơ sở dữ liệu không cho phép rỗng, kiểm chứng mặc định tích chọn tương ứng
           emit('syncDbIsNull', { row, value, target: instance });
-          // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】数据库不允许为空，校验默认相应勾上
+          // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Cơ sở dữ liệu không cho phép rỗng, kiểm chứng mặc định tích chọn tương ứng
         }
       }
 
-      // dbFieldName字段禁用
+      // dbFieldNameTrường bị vô hiệu hóa
       function handleDisabledDbFieldName(value, _row, rowIndex) {
-        // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-368】online视图插入一行禁用
+        // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-368】onlineView chèn một hàng bị vô hiệu hóa
         if (value === 'has_child' && props.isTree === 'Y') {
           return true;
         }
-        // update-end--author:liaozhiyang---date:20260713---for：【LHZP-368】online视图插入一行禁用
+        // update-end--author:liaozhiyang---date:20260713---for：【LHZP-368】onlineView chèn một hàng bị vô hiệu hóa
         if (value === 'id') {
-          // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-357】数据库属性其他行拖到id行之上时id可编辑了
+          // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-357】Kéo hàng khác trong thuộc tính cơ sở dữ liệu tớiidkhi ở trên hàngidđã có thể chỉnh sửa
           const { tables } = setup;
           const dataSource = tables.dbTable.value!.tableRef.getTableData() ?? [];
           const findIndex = dataSource.findIndex((item) => item.dbFieldName === 'id');
           const idIndex = findIndex === -1 ? 0 : findIndex;
-          // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-357】数据库属性其他行拖到id行之上时id可编辑了
+          // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-357】Kéo hàng khác trong thuộc tính cơ sở dữ liệu tớiidkhi ở trên hàngidđã có thể chỉnh sửa
           if (idIndex === rowIndex) {
             return true;
           }
@@ -575,10 +575,10 @@
         return false;
       }
 
-      /** 新增一行，并反馈给父组件 */
+      /** Thêm một hàng, đồng thời phản hồi cho component cha */
       function tableAddLine(newLine) {
         tableRef.value!.pushRows(newLine);
-        // 正在批量添加数据，不单独反馈
+        // Đang thêm dữ liệu hàng loạt, không phản hồi riêng lẻ
         if (!addBatching.value) {
           emit('added', instance);
         }
@@ -588,25 +588,25 @@
         return tableRef.value!.removeRowsById(ids);
       }
 
-      /** 开始批量添加数据，在此期间添加的数据不会反馈给父组件进行同步 */
+      /** Bắt đầu thêm dữ liệu hàng loạt, dữ liệu thêm trong khoảng thời gian này sẽ không phản hồi cho component cha để đồng bộ */
       function addBatchBegin() {
         addBatching.value = true;
         loading.value = true;
       }
 
-      /** 结束批量添加数据，会立即反馈给父组件进行同步数据 */
+      /** Kết thúc thêm dữ liệu hàng loạt, sẽ phản hồi ngay cho component cha để đồng bộ dữ liệu */
       function addBatchEnd() {
         addBatching.value = false;
         loading.value = false;
         emit('added', instance);
       }
 
-      //update-begin-author:taoyan date:2022-5-26 for: issues/I56ATQ Online代码功能，跨库数据库同步时报错（单库正常）：org.jeecg.modules.online.cgform.c.a:492
+      //update-begin-author:taoyan date:2022-5-26 for: issues/I56ATQ OnlineChức năng mã, khi đồng bộ cơ sở dữ liệu liên kho thì báo lỗi (kho đơn lẻ bình thường):org.jeecg.modules.online.cgform.c.a:492
       function validateExistIndex({ cellValue, row }, callback) {
         const { tables } = setup;
         if (tables) {
           let dataSource = tables.dbTable.value!.tableRef.dataSource;
-          //获取 table的原始数据
+          //Lấy tabledữ liệu gốc của
           let temp = dataSource.filter((item) => item.id === row.id);
           if (!temp || temp.length <= 0) {
             callback(true);
@@ -615,40 +615,40 @@
           if (dbFieldName == cellValue) {
             callback(true);
           }
-          //获取索引数据
+          //Lấy dữ liệu chỉ mục
           let arr = tables.idxTable.value!.tableRef.getTableData();
           for (let item of arr) {
             let indexField = item.indexField;
-            //索引字段可能是多个字段
+            //Trường chỉ mục có thể là nhiều trường
             let indexFieldArray = indexField.split(',');
             if (indexFieldArray.indexOf(dbFieldName) >= 0) {
-              callback(false, '当前字段存在索引配置，请先删除索引再修改字段');
+              callback(false, 'Trường hiện tại tồn tại cấu hình chỉ mục, vui lòng xóa chỉ mục trước rồi sửa trường');
             }
           }
         }
         callback(true);
       }
-      //update-end-author:taoyan date:2022-5-26 for: issues/I56ATQ Online代码功能，跨库数据库同步时报错（单库正常）：org.jeecg.modules.online.cgform.c.a:492
-      // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-278】设置了小数点不可设置integer类型
+      //update-end-author:taoyan date:2022-5-26 for: issues/I56ATQ OnlineChức năng mã, khi đồng bộ cơ sở dữ liệu liên kho thì báo lỗi (kho đơn lẻ bình thường):org.jeecg.modules.online.cgform.c.a:492
+      // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-278】Đã thiết lập số thập phân thì không thể thiết lậpintegerLoại
       function validateFieldDbType({ cellValue, row }, callback) {
         if (row.dbType == 'int' && row.dbPointLength > 0) {
-          callback(false, '设置了小数点不可设置integer类型');
+          callback(false, 'Đã thiết lập dấu thập phân thì không thể thiết lậpintegerLoại');
         } else if (row.dbType == 'long' && row.dbPointLength > 0 ) {
-          // update-begin--author:liaozhiyang---date:20240522---for：【LHZP-280】设置了小数点不可设置Long类型
-          callback(false, '设置了小数点不可设置Long类型');
-          // update-end--author:liaozhiyang---date:20240522---for：【LHZP-280】设置了小数点不可设置Long类型
+          // update-begin--author:liaozhiyang---date:20240522---for：【LHZP-280】Đã thiết lập số thập phân thì không thể thiết lậpLongLoại
+          callback(false, 'Đã thiết lập dấu thập phân thì không thể thiết lậpLongLoại');
+          // update-end--author:liaozhiyang---date:20240522---for：【LHZP-280】Đã thiết lập số thập phân thì không thể thiết lậpLongLoại
         }
         callback(true);
       }
-      // update-end--author:liaozhiyang---date:20240522---for：【TV360X-278】设置了小数点不可设置integer类型
-      // update-begin--author:liaozhiyang---date:20250407---for：【QQYUN-11801】ai建表字段
+      // update-end--author:liaozhiyang---date:20240522---for：【TV360X-278】Đã thiết lập số thập phân thì không thể thiết lậpintegerLoại
+      // update-begin--author:liaozhiyang---date:20250407---for：【QQYUN-11801】aiTrường tạo bảng
       const openAiModal = () => {
         aiModalShow.value = true;
         setTimeout(() => {
           openModal(true);
         }, 0);
       };
-      // update-end--author:liaozhiyang---date:20250407---for：【QQYUN-11801】ai建表字段
+      // update-end--author:liaozhiyang---date:20250407---for：【QQYUN-11801】aiTrường tạo bảng
       return {
         tableRef,
         loading,
@@ -681,7 +681,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-212】字段名称校验样式调整
+  // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-212】Điều chỉnh kiểu dáng kiểm chứng tên trường
   .dBAttributeTable {
     :deep(table) {
       tr {
@@ -693,5 +693,5 @@
       }
     }
   }
-  // update-end--author:liaozhiyang---date:20240521---for：【TV360X-212】字段名称校验样式调整
+  // update-end--author:liaozhiyang---date:20240521---for：【TV360X-212】Điều chỉnh kiểu dáng kiểm chứng tên trường
 </style>

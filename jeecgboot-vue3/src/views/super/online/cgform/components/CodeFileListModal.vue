@@ -1,15 +1,15 @@
 <template>
   <BasicModal @register="registerModal" :width="1200" :defaultFullscreen="false" :canFullscreen="false">
-    <template #title> <info-circle-two-tone /> 代码生成结果 </template>
+    <template #title> <info-circle-two-tone /> Kết quả sinh mã </template>
     <div :style="divStyle">
       <p>
         <template v-for="item in codeList"> {{ item }}<br /> </template>
       </p>
     </div>
     <template #footer>
-      <a-button @click="handleClose">关闭</a-button>
-      <a-button type="primary" ghost @click="handleView">在线预览</a-button>
-      <a-button type="primary" @click="onDownloadGenerateCode" :loading="loading">下载到本地</a-button>
+      <a-button @click="handleClose">Đóng</a-button>
+      <a-button type="primary" ghost @click="handleView">Xem trước trực tuyến</a-button>
+      <a-button type="primary" @click="onDownloadGenerateCode" :loading="loading">Tải xuống máy cục bộ</a-button>
     </template>
   </BasicModal>
   <code-file-view-modal @register="registerCodeViewModal" @download="onDownloadGenerateCode" @close="handleClose"></code-file-view-modal>
@@ -17,7 +17,7 @@
 
 <script>
   /**
-   * online代码生成后弹出的modal 文件列表
+   * onlinebật ra sau khi sinh mãmodal Danh sách tệp
    */
   import { ref, reactive, computed, nextTick, defineComponent } from 'vue';
   import { defHttp } from '/@/utils/http/axios';
@@ -58,15 +58,15 @@
         closeModal();
       }
       function onDownloadGenerateCode() {
-        //update-begin-author:taoyan date:2022-6-27 for:  VUEN-1433【vue3】一对多代码生成，点击下载失败
+        //update-begin-author:taoyan date:2022-6-27 for:  VUEN-1433【vue3】Sinh mã một-nhiều, nhấp tải xuống thất bại
         let codeFileList = codeList.value;
         if (!codeFileList || codeFileList.length == 0) {
-          $message.warning('无代码！');
+          $message.warning('Không có mã!');
           return;
         }
         let temp = codeFileList.join(',');
         //console.log(temp);
-        //update-end-author:taoyan date:2022-6-27 for:  VUEN-1433【vue3】一对多代码生成，点击下载失败
+        //update-end-author:taoyan date:2022-6-27 for:  VUEN-1433【vue3】Sinh mã một-nhiều, nhấp tải xuống thất bại
         return defHttp
           .post(
             {
@@ -81,10 +81,10 @@
           )
           .then((data) => {
             if (!data || data.size == 0) {
-              $message.warning('导出代码失败！');
+              $message.warning('Xuất mã thất bại!');
               return;
             }
-            let fileName = '导到生成代码_' + tableName.value + '_' + new Date().getTime() + '.zip';
+            let fileName = 'Dẫn tới mã được tạo ra_' + tableName.value + '_' + new Date().getTime() + '.zip';
             downloadByData(data, fileName, 'application/zip');
           });
       }

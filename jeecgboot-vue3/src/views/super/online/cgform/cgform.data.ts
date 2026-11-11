@@ -3,12 +3,12 @@ import { getDictItemsByCode } from '/@/utils/dict';
 import { filterDictText } from '/@/utils/dict/JDictSelectUtil';
 import { buildUUID } from '/@/utils/uuid';
 
-// 校验失败 flag
+// Kiểm chứng thất bại flag
 export const VALIDATE_FAILED = 'validate-failed';
 
 export const columns: BasicColumn[] = [
   {
-    title: '表类型',
+    title: 'Loại bảng',
     align: 'center',
     sorter: true,
     dataIndex: 'tableType',
@@ -17,10 +17,10 @@ export const columns: BasicColumn[] = [
       let tableTypeDictOptions = getDictItemsByCode('cgform_table_type');
       let tbTypeText = filterDictText(tableTypeDictOptions, text);
       if (record.isTree === 'Y') {
-        tbTypeText += '(树)';
+        tbTypeText += '(cây)';
       }
       if (record.themeTemplate === 'innerTable') {
-        tbTypeText += '(内嵌)';
+        tbTypeText += '(Nhúng)';
       } else if (record.themeTemplate === 'erp') {
         tbTypeText += '(ERP)';
       } else if (record.themeTemplate === 'tab') {
@@ -30,26 +30,26 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '表名',
+    title: 'Tên bảng',
     sorter: true,
     align: 'center',
     dataIndex: 'tableName',
     width: 240,
   },
   {
-    title: '表描述',
+    title: 'Mô tả bảng',
     align: 'center',
     dataIndex: 'tableTxt',
     width: 220,
   },
   {
-    title: '版本',
+    title: 'Phiên bản',
     align: 'center',
     dataIndex: 'tableVersion',
     width: 120,
   },
   {
-    title: '同步状态',
+    title: 'Trạng thái đồng bộ',
     align: 'center',
     sorter: true,
     dataIndex: 'isDbSynch',
@@ -57,7 +57,7 @@ export const columns: BasicColumn[] = [
     width: 120,
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     align: 'center',
     sorter: true,
     dataIndex: 'createTime',
@@ -67,12 +67,12 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '表名',
+    label: 'Tên bảng',
     field: 'tableName',
     component: 'JInput',
   },
   {
-    label: '表类型',
+    label: 'Loại bảng',
     field: 'tableType_MultiString',
     component: 'JDictSelectTag',
     componentProps: {
@@ -81,15 +81,15 @@ export const searchFormSchema: FormSchema[] = [
     },
   },
   {
-    label: '表描述',
+    label: 'Mô tả bảng',
     field: 'tableTxt',
     component: 'JInput',
   },
 ];
 
-/** 扩展JSON默认值 */
+/** Mở rộngJSONGiá trị mặc định */
 export const ExtConfigDefaultJson = {
-  // 对接报表打印
+  // Kết nối in báo cáo
   reportPrintShow: 0,
   reportPrintUrl: '',
   joinQuery: 0,
@@ -98,28 +98,28 @@ export const ExtConfigDefaultJson = {
   commentStatus: 0,
   tableFixedAction: 1,
   tableFixedActionType: 'right',
-  // Excel 图片导出方式（embed 嵌入图片，path 图片路径）
+  // Excel Cách thức xuất hình ảnh (embed Nhúng hình ảnh,path đường dẫn hình ảnh)
   imageExportMode: 'path',
-  // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+  // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
   formLabelLengthShow: 0,
   formLabelLength: null,
-  // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
-  // 是否启用外部链接
+  // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
+  // Có kích hoạt liên kết ngoài hay không
   enableExternalLink: 0,
   externalLinkActions: 'add,edit,detail',
-  // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
-  // 是否开启多数据源（仅UI状态，关闭时清空 dbSource；最终持久化到 onl_cgform_head.db_source 列）
+  // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
+  // Có bật đa nguồn dữ liệu hay không (chỉUITrạng thái, khi đóng thì xóa trống dbSource; cuối cùng lưu trữ bền vững vào onl_cgform_head.db_source cột)
   enableMultiDataSource: 0,
   dbSource: '',
-  // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
+  // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
 };
 
-/** 获取主表的初始化数据 */
+/** Lấy dữ liệu khởi tạo của bảng chính */
 export function useInitialData() {
   let initialData = [
     {
       dbFieldName: 'id',
-      dbFieldTxt: '主键',
+      dbFieldTxt: 'Khóa chính',
       dbLength: 36,
       dbPointLength: 0,
       dbDefaultVal: '',
@@ -137,7 +137,7 @@ export function useInitialData() {
     },
     {
       dbFieldName: 'create_by',
-      dbFieldTxt: '创建人',
+      dbFieldTxt: 'Người tạo',
       dbLength: 50,
       dbPointLength: 0,
       dbDefaultVal: '',
@@ -154,7 +154,7 @@ export function useInitialData() {
     },
     {
       dbFieldName: 'create_time',
-      dbFieldTxt: '创建日期',
+      dbFieldTxt: 'Ngày tạo',
       dbLength: 0,
       dbPointLength: 0,
       dbDefaultVal: '',
@@ -171,7 +171,7 @@ export function useInitialData() {
     },
     {
       dbFieldName: 'update_by',
-      dbFieldTxt: '更新人',
+      dbFieldTxt: 'Người cập nhật',
       dbLength: 50,
       dbPointLength: 0,
       dbDefaultVal: '',
@@ -188,7 +188,7 @@ export function useInitialData() {
     },
     {
       dbFieldName: 'update_time',
-      dbFieldTxt: '更新日期',
+      dbFieldTxt: 'Ngày cập nhật',
       dbLength: 0,
       dbPointLength: 0,
       dbDefaultVal: '',
@@ -205,7 +205,7 @@ export function useInitialData() {
     },
     {
       dbFieldName: 'sys_org_code',
-      dbFieldTxt: '所属部门',
+      dbFieldTxt: 'Phòng ban trực thuộc',
       dbLength: 64,
       dbPointLength: 0,
       dbDefaultVal: '',
@@ -222,7 +222,7 @@ export function useInitialData() {
     },
     // {
     //   dbFieldName: 'sys_org_code',
-    //   dbFieldTxt: '所属部门',
+    //   dbFieldTxt: 'Phòng ban trực thuộc',
     //   dbLength: 50,
     //   dbPointLength: 0,
     //   dbDefaultVal: '',
@@ -232,7 +232,7 @@ export function useInitialData() {
     // },
     // {
     //   dbFieldName: 'sys_company_code',
-    //   dbFieldTxt: '所属公司',
+    //   dbFieldTxt: 'Công ty trực thuộc',
     //   dbLength: 50,
     //   dbPointLength: 0,
     //   dbDefaultVal: '',
@@ -242,7 +242,7 @@ export function useInitialData() {
     // },
     // {
     //   dbFieldName: 'bpm_status',
-    //   dbFieldTxt: '流程状态',
+    //   dbFieldTxt: 'Trạng thái quy trình',
     //   dbLength: 32,
     //   dbPointLength: 0,
     //   dbDefaultVal: '',
@@ -251,7 +251,7 @@ export function useInitialData() {
     //   dbIsNull: true
     // }
   ];
-  // 临时 id，不保存到数据库
+  // tạm thời id, không lưu vào cơ sở dữ liệu
   let tempIds: string[] = [];
   initialData.forEach((record) => {
     record['id'] = buildUUID();
@@ -260,12 +260,12 @@ export function useInitialData() {
   return { initialData, tempIds };
 }
 
-/** 获取树的初始化数据 */
+/** Lấy dữ liệu khởi tạo của cây */
 export function useTreeNeedFields() {
   return [
     {
       dbFieldName: 'pid',
-      dbFieldTxt: '父级节点',
+      dbFieldTxt: 'Nút cấp cha',
       dbLength: 32,
       dbPointLength: 0,
       dbDefaultVal: '',
@@ -282,7 +282,7 @@ export function useTreeNeedFields() {
     },
     {
       dbFieldName: 'has_child',
-      dbFieldTxt: '是否有子节点',
+      dbFieldTxt: 'Có nút con hay không',
       dbLength: 3,
       dbPointLength: 0,
       dbDefaultVal: '',
@@ -303,13 +303,13 @@ export function useTreeNeedFields() {
 }
 
 /**
- * online 默认按钮
+ * online Nút mặc định
  */
 export const onlineDefaultButton = [
-  { code: 'add', title: '新增', status: 0 },
-  { code: 'edit', title: '编辑', status: 0 },
-  { code: 'delete', title: '删除', status: 0 },
-  { code: 'export', title: '导出', status: 0 },
-  { code: 'import', title: '导入', status: 0 },
-  { code: 'query', title: '查询', status: 0 },
+  { code: 'add', title: 'Thêm mới', status: 0 },
+  { code: 'edit', title: 'Chỉnh sửa', status: 0 },
+  { code: 'delete', title: 'Xóa', status: 0 },
+  { code: 'export', title: 'Xuất (export)', status: 0 },
+  { code: 'import', title: 'Nhập (import)', status: 0 },
+  { code: 'query', title: 'Truy vấn', status: 0 },
 ];

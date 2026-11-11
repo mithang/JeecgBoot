@@ -14,33 +14,33 @@ export enum Api {
   batchAuthButton = '/online/cgform/api/authButton/batch',
 }
 
-// 字段权限，查询数据
+// Quyền trường, truy vấn dữ liệu
 export const authFieldLoadData = (cgformId, params?) => defHttp.get({ url: `${Api.authField}/${cgformId}`, params });
-// 字段权限，更新启用状态
+// Quyền trường, cập nhật trạng thái kích hoạt
 export const authFieldUpdateStatus = (params) => defHttp.put({ url: Api.authField, params });
-// 字段权限，更新权限状态
+// Quyền trường, cập nhật trạng thái quyền
 export const authFieldUpdateCheckbox = (params) => defHttp.post({ url: Api.authField, params });
 
-// 字段权限，批量更新启用状态
+// Quyền trường, cập nhật hàng loạt trạng thái kích hoạt
 export const batchAuthFieldUpdateStatus = (params) => defHttp.put({ url: Api.batchAuthField, params });
-// 字段权限，批量更新权限状态
+// Quyền trường, cập nhật hàng loạt trạng thái quyền
 export const batchAuthFieldUpdateCheckbox = (params) => defHttp.post({ url: Api.batchAuthField, params });
 
 
-// 按钮权限，查询数据
+// Quyền nút, truy vấn dữ liệu
 export const authButtonLoadData = (cgformId, params?) => defHttp.get({ url: `${Api.authButton}/${cgformId}`, params });
-// 按钮权限，启用
+// Quyền nút, kích hoạt
 export const authButtonEnable = (params) => defHttp.post({ url: Api.authButton, params });
-// 按钮权限，禁用
+// Quyền nút, vô hiệu hóa
 export const authButtonDisable = (id: string, params?) => defHttp.put({ url: `${Api.authButton}/${id}`, params });
-// 按钮权限，批量更新启用状态
+// Quyền nút, cập nhật hàng loạt trạng thái kích hoạt
 export const batchAuthButtonUpdateStatus = (params) => defHttp.put({ url: Api.batchAuthButton, params });
 
-// 数据权限，查询数据
+// Quyền dữ liệu, truy vấn dữ liệu
 export const authDataLoadData = (cgformId, params?) => defHttp.get({ url: `${Api.authData}/${cgformId}`, params });
-// 数据权限，更新启用状态
+// Quyền dữ liệu, cập nhật trạng thái kích hoạt
 export const authDataUpdateStatus = (params) => defHttp.put({ url: Api.authData, params });
-// 数据权限，保存或修改
+// Quyền dữ liệu, lưu hoặc sửa đổi
 export const authDataSaveOrUpdate = (params, isUpdate: boolean) => {
   if (isUpdate) {
     return defHttp.put({ url: Api.authData, params });
@@ -48,7 +48,7 @@ export const authDataSaveOrUpdate = (params, isUpdate: boolean) => {
     return defHttp.post({ url: Api.authData, params });
   }
 };
-// 数据权限，删除
+// Quyền dữ liệu, xóa
 export const authDataDelete = (id: string, params?) => defHttp.delete({ url: `${Api.authData}/${id}`, params });
 
 export const authFieldLoadTree = (cgformId: string, authType: number, params?) => {

@@ -2,7 +2,7 @@ import IFormSchema from '../IFormSchema';
 import { FormSchema } from '/@/components/Form';
 
 /**
- * 部门选择
+ * Chọn phòng ban
  */
 export default class SelectDepartWidget extends IFormSchema {
   getItem(): FormSchema {
@@ -17,9 +17,9 @@ export default class SelectDepartWidget extends IFormSchema {
   getComponentProps() {
     let extend = this.getExtendData();
     let props = {
-      // update-begin--author:liaozhiyang---date:20260414---for:【QQYUN-9801】修复online点击展开全部，树节点没全部展开
+      // update-begin--author:liaozhiyang---date:20260414---for:【QQYUN-9801】Khắc phụconlineNhấp mở rộng tất cả, nút cây không mở rộng hết
       sync: false,
-      // update-end--author:liaozhiyang---date:20260414---for:【QQYUN-9801】修复online点击展开全部，树节点没全部展开
+      // update-end--author:liaozhiyang---date:20260414---for:【QQYUN-9801】Khắc phụconlineNhấp mở rộng tất cả, nút cây không mở rộng hết
       checkStrictly: true,
       showButton: false,
     };
@@ -38,7 +38,7 @@ export default class SelectDepartWidget extends IFormSchema {
     }
     props['maxTagCount'] = 3;
 
-     // 解决表单设计器高级查询 popup组件弹窗导致高级查询pop关闭
+     // Giải quyết truy vấn nâng cao của trình thiết kế biểu mẫu popupPopup của component dẫn đến truy vấn nâng caopopĐóng
     if(this.inPopover === true){
       props['getContainer'] = ()=>{
         return this.getModalAsContainer();

@@ -2,24 +2,24 @@
   <BasicModal
     wrapClassName="dict-config-modal"
     v-bind="$attrs"
-    title="字典配置"
+    title="Cấu hình từ điển"
     :width="560"
     @register="registerModal"
     keyboard
     :canFullscreen="false"
-    cancelText="关闭"
+    cancelText="Đóng"
     @ok="handleSubmit"
   >
     <BasicForm @register="registerForm" />
     <div class="dict-config-tip">
-      <p>· <b>系统字典</b>：仅填 Code（如 <code>sex</code>）</p>
-      <p>· <b>表字典</b>：Table=表名，Code=存值字段，Text=显示字段；带条件可在 Table 后加 <code>where ...</code></p>
-      <p>· <b>Popup 弹框</b>：Table=报表 code，Code=报表字段，Text=本表回填字段，多个用逗号</p>
-      <p>· <b>Popup 字典</b>：Table=报表 code，Code/Text 各一个字段</p>
-      <p>· <b>自定义树</b>：Text=<code>id,pid,显示字段,有子节点字段</code></p>
-      <p>· <b>联动下拉</b>：Table 填 JSON 串，Code/Text 留空</p>
-      <p>· <b>关联记录</b>：Table=关联表名，Code=存值字段（一般为 <code>id</code>），Text=标题字段,其他显示字段（如 <code>name,age,sex</code>，第一个为标题字段）</p>
-      <p>· <b>他表字段</b>：Table=本表关联记录字段名，Code 留空，Text=关联表中要显示的字段（如 <code>name</code>）</p>
+      <p>· <b>Từ điển hệ thống</b>: chỉ điền Code(ví dụ như <code>sex</code>）</p>
+      <p>· <b>Từ điển bảng</b>：Table=Tên bảng,Code=trường lưu trữ giá trị,Text=Trường hiển thị; có điều kiện thì có thể ở Table thêm vào sau <code>where ...</code></p>
+      <p>· <b>Popup Popup</b>：Table=Báo cáo code，Code=Trường báo cáo,Text=Trường điền ngược của bảng này, nhiều trường dùng dấu phẩy</p>
+      <p>· <b>Popup từ điển</b>：Table=Báo cáo code，Code/Text mỗi cái một trường</p>
+      <p>· <b>Cây tùy chỉnh</b>：Text=<code>id,pid,Trường hiển thị,Có trường nút con</code></p>
+      <p>· <b>Dropdown liên động</b>：Table điền JSON chuỗi,Code/Text Để trống</p>
+      <p>· <b>bản ghi liên kết</b>：Table=Tên bảng liên kết,Code=trường lưu trữ giá trị (thường là <code>id</code>），Text=Trường tiêu đề,Trường hiển thị khác (ví dụ <code>name,age,sex</code>, cái đầu tiên là trường tiêu đề)</p>
+      <p>· <b>trường bảng khác</b>：Table=Tên trường bản ghi liên kết của bảng này,Code Để trống,Text=Trường cần hiển thị trong bảng liên kết (ví dụ <code>name</code>）</p>
     </div>
   </BasicModal>
 </template>
@@ -42,7 +42,7 @@
 
       const formSchemas: any[] = [
         {
-          label: '字典Table',
+          label: 'từ điểnTable',
           field: 'dictTable',
           component: 'InputTextArea',
           componentProps: {
@@ -53,7 +53,7 @@
           },
         },
         {
-          label: '字典Code',
+          label: 'từ điểnCode',
           field: 'dictField',
           component: 'Input',
           componentProps: {
@@ -64,7 +64,7 @@
             {
               validator: (_, value) => {
                 if (fieldShowType.value === 'popup_dict' && value && value.indexOf(',') !== -1) {
-                  return Promise.reject('popup字典组件只允许填写一个字段');
+                  return Promise.reject('popupComponent từ điển chỉ cho phép điền một trường');
                 }
                 return Promise.resolve();
               },
@@ -73,7 +73,7 @@
           ],
         },
         {
-          label: '字典Text',
+          label: 'từ điểnText',
           field: 'dictText',
           component: 'Input',
           componentProps: {
@@ -84,7 +84,7 @@
             {
               validator: (_, value) => {
                 if (fieldShowType.value === 'popup_dict' && value && value.indexOf(',') !== -1) {
-                  return Promise.reject('popup字典组件只允许填写一个字段');
+                  return Promise.reject('popupComponent từ điển chỉ cho phép điền một trường');
                 }
                 return Promise.resolve();
               },

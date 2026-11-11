@@ -16,7 +16,7 @@
     @ok="handleSubmit"
     @commentOpen="handleCommentOpen"
   >
-    <!--update-begin--author:liaozhiyang---date:20230821---for：【QQYUN-6305】tab主题一对多-->
+    <!--update-begin--author:liaozhiyang---date:20230821---for：【QQYUN-6305】tabChủ đề một-nhiều-->
     <template v-if="themeTemplate === TAB" #title>
       <div class="titleArea">
         <div class="title">{{ title }}</div>
@@ -37,7 +37,7 @@
         </div>
       </div>
     </template>
-    <!--update-end--author:liaozhiyang---date:20230821---for：【QQYUN-6305】tab主题一对多-->
+    <!--update-end--author:liaozhiyang---date:20230821---for：【QQYUN-6305】tabChủ đề một-nhiều-->
     <template #footer>
       <a-row>
         <a-col :span='24 - commentSpan'>
@@ -69,7 +69,7 @@
                 restTabIndex();
               }
             "
-            >关闭</a-button
+            >Đóng</a-button
           >
         </a-col>
       </a-row>
@@ -120,7 +120,7 @@
         default: () => {
           return {
             enabled: true,
-            buttonName: '确定',
+            buttonName: 'Xác nhận',
             buttonIcon: '',
           }
         }
@@ -133,7 +133,7 @@
     },
     emits: ['success', 'register', 'formConfig'],
     setup(props, { emit }) {
-      console.log('进入表单弹框》》》》modal');
+      console.log('Vào popup biểu mẫu 》》》》modal');
       const commentPanelRef = ref();
       const tabNav = ref<any>([]);
       const tabIndex = ref<any>('-1');
@@ -173,19 +173,19 @@
       function handleSuccess(formData) {
         emit('success', formData);
         closeModal();
-        // 提交完成 触发关闭事件
+        // Gửi hoàn tất Kích hoạt sự kiện đóng
         onCloseEvent();
         restTabIndex();
       }
 
-      // 监听id变化 表单重新渲染
+      // Lắng nghe (watch)idThay đổi Render lại biểu mẫu
       watch(() => props.id, renderFormItems, { immediate: true });
       async function renderFormItems() {
         formRendered.value = false;
         if (!props.id) {
           return;
         }
-        console.log('重新渲染表单》》》》modal');
+        console.log('Render lại biểu mẫu 》》》》modal');
         await handleFormConfig(props.id, {}, (result) => {
           const nav: any = [];
           const sub: any = [];
@@ -205,12 +205,12 @@
         return String(index - 1);
       };
       const restTabIndex = () => {
-        // 关闭的时候把索引重置第一位（防止下一条数据打开还是同样的tab）
+        // Khi đóng, đặt lại chỉ mục về vị trí đầu tiên (ngăn dữ liệu tiếp theo mở ra vẫn là cùng mộttab）
         setTimeout(() => {
           tabIndex.value = '-1';
         }, 500);
       };
-      // 移动端且大于2条数据时显示下拉菜单
+      // Phía di động và lớn hơn2Khi có bản ghi dữ liệu thì hiển thị menu dropdown
       const showDropdownBtn = computed(() => {
         return getIsMobile.value && tabNav.value.length > 2;
       });
@@ -220,12 +220,12 @@
       const handleToggleTab = (key) => {
         tabIndex.value = key;
       };
-      // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
+      // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-485】Sau khi bật bình luận, nút popup nằm ở bên phải, cách một khoảng bằng một bình luận
       const handleCommentOpen =  (visible, span) => { 
-        console.log('评论是否展开：', visible);
+        console.log('Bình luận có mở rộng hay không:', visible);
         commentSpan.value = span;
       }
-      // update-end--author:liaozhiyang---date:20240528---for：【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
+      // update-end--author:liaozhiyang---date:20240528---for：【TV360X-485】Sau khi bật bình luận, nút popup nằm ở bên phải, cách một khoảng bằng một bình luận
       const that = {
         title,
         onlineFormCompRef,

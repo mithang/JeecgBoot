@@ -5,46 +5,46 @@ import { defHttp } from '/@/utils/http/axios';
 import {ONL_FORM_TABLE_NAME} from '../../types/onlineRender'
 import { useAppInject } from '/@/hooks/web/useAppInject';
 /**
- * 创建online表单弹窗用
+ * TạoonlineDùng cho popup biểu mẫu
  */
 export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:any) {
   const onlineFormCompRef = ref<any>(null);
-  // 是否隐藏确认按钮
+  // Có ẩn nút xác nhận hay không
   const disableSubmit = ref(false);
-  //表单风格 1列 2列 3列 决定了弹框的宽度
+  //Phong cách biểu mẫu 1cột 2cột 3cột quyết định độ rộng của popup
   const formTemplate = ref(1);
-  // 自定义按钮
+  // Nút tùy chỉnh
   const cgButtonList = ref([]);
-  // js增强
+  // jsTăng cường
   //const enhanceJsObject = ref<any>('')
-  // 表单是否渲染完成
+  // Biểu mẫu đã render xong hay chưa
   const formRendered = ref(false);
-  // 表单弹框最小宽度 取决于扩展配置
+  // Độ rộng tối thiểu của popup biểu mẫu Phụ thuộc vào cấu hình mở rộng
   const modalMinWidth = ref(0);
-  // 判断是否是树的表单- 【VUEN-1056 15、严重——online树表单，添加的时候，父亲节点是空的】
+  // Phán đoán có phải biểu mẫu dạng cây hay không- 【VUEN-1056 15、nghiêm trọng——onlineBiểu mẫu cây, khi thêm mới, nút cha đang trống】
   const isTreeForm = ref(false);
-  // 如果是树，父id字段对应的字段名-【VUEN-1056 15、严重——online树表单，添加的时候，父亲节点是空的】
+  // Nếu là cây, nút chaidTên trường tương ứng của trường-【VUEN-1056 15、nghiêm trọng——onlineBiểu mẫu cây, khi thêm mới, nút cha đang trống】
   const pidFieldName = ref('');
-  // VUEN-1105 表单 确定按钮可多次点击，保存多条数据
+  // VUEN-1105 Biểu mẫu Nút xác nhận có thể nhấp nhiều lần, lưu nhiều bản ghi dữ liệu
   const submitLoading = ref(false);
-  // 是否是修改页面
+  // Có phải trang sửa đổi hay không
   const isUpdate = ref(false);
-  // 是否是单表
+  // Có phải bảng đơn hay không
   const single = ref(true);
   // extConfigJson
   const extConfigJson = reactive<any>({});
-  // 显示子表- 详情页面modal 也会调用此hook，给详情页面用
+  // Hiển thị bảng con- Trang chi tiếtmodal cũng sẽ gọi cái nàyhook, cho trang chi tiết dùng
   const showSub = ref(true);
   const customTitle = ref('')
-  // 表单保存完后是否关闭modal
+  // Sau khi lưu biểu mẫu xong có đóng hay khôngmodal
   const successThenClose = ref(true);
-  // 提示是否保存
+  // Nhắc có lưu hay không
   const topTipVisible = ref(false)
-  // 弹窗高度控制
+  // Kiểm soát chiều cao popup
   const { popModalFixedWidth, resetBodyStyle, popBodyStyle } = useFixedHeightModal();
-  // 没有编辑权限: 默认false
+  // Không có quyền chỉnh sửa: Mặc địnhfalse
   const FORM_DISABLE_UPDATE = ref(false);
-  // 主题模板类型
+  // Loại mẫu giao diện
   const themeTemplate = ref('');
 
   const { getIsMobile } = useAppInject();
@@ -52,29 +52,29 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     handleOpenModal: (_data) => {},
   };
 
-  //评论区域参数
+  //Tham số vùng bình luận
   const tableId = ref('')
   const tableName = ref('')
   const formDataId = ref('')
   const enableComment = ref(false);
   let onlineExtConfig = {}
 
-  //弹框标题
+  //Tiêu đề popup
   const title = computed(() => {
     let temp = customTitle.value;
     if(temp){
       return temp;
     }
     if (unref(disableSubmit) === true) {
-      return '详情';
+      return 'Chi tiết';
     }
     if (unref(isUpdate) === true) {
-      return '编辑';
+      return 'Chỉnh sửa';
     }
-    return '新增';
+    return 'Thêm mới';
   });
 
-  // 弹框显示 触发onlineFormCompRef---show
+  // Hiển thị popup Kích hoạtonlineFormCompRef---show
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     customTitle.value = '';
     topTipVisible.value = false;
@@ -83,7 +83,7 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     } else {
       await handleOpenOnlineModal(data);
     }
-    // 调整modal宽高
+    // Điều chỉnhmodalChiều rộng và chiều cao
     resetBodyStyle();
     if(callback){
       callback();
@@ -91,7 +91,7 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
   });
 
   /**
-   * 用于控制关联记录的字段 在列表上的弹窗权限，若无编辑权限，只能打开详情页面
+   * Trường dùng để kiểm soát bản ghi liên kết Quyền popup trên danh sách, nếu không có quyền chỉnh sửa, chỉ có thể mở trang chi tiết
    */
   const loadItemSuccess = ref(false);
   async function getFormStatus(){
@@ -104,11 +104,11 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     setModalProps({ confirmLoading: false });
     isUpdate.value = data.isUpdate;
     disableSubmit.value = data.disableSubmit || false;
-    // href跳转的不需要查看子表
+    // hrefCái chuyển hướng không cần xem bảng con
     if(data?.hideSub===true){
       showSub.value = false;
     }
-    // 设置标题，支持从传入参数读取
+    // Thiết lập tiêu đề, hỗ trợ đọc từ tham số truyền vào
     if(data?.title){
       customTitle.value = data.title;
     }
@@ -120,34 +120,34 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     await nextTick(async () => {
       await getRefPromise(formRendered);
       
-      //必须等formRendered之后才能调用
+      //Bắt buộc phải chờformRenderedsau đó mới có thể gọi
       handleCommentConfig();
       await onlineFormCompRef.value.show(data?.isUpdate, data?.record, data?.param);
     });
   }
 
-  // 渲染完成改变状态
+  // Render hoàn tất, thay đổi trạng thái
   function renderSuccess(extConfig) {
     formRendered.value = true;
     modalMinWidth.value = extConfig.modalMinWidth;
     if (extConfig.modelFullscreen == 1) {
-      //如果全屏
+      //Nếu toàn màn hình
       setModalProps({ defaultFullscreen: true });
     } else {
       setModalProps({ defaultFullscreen: false });
     }
     onlineExtConfig = extConfig
-    // update-begin--author:liaozhiyang---date:20230327---for：【QQYUN-8644】移动端效果关闭聊天窗口（详情页）
+    // update-begin--author:liaozhiyang---date:20230327---for：【QQYUN-8644】Hiệu ứng phía di động khi đóng cửa sổ trò chuyện (trang chi tiết)
     if (getIsMobile.value) {
       onlineExtConfig['commentStatus'] = 0;
     }
-    // update-end--author:liaozhiyang---date:20230327---for：【QQYUN-8644】移动端效果关闭聊天窗口（详情页）
+    // update-end--author:liaozhiyang---date:20230327---for：【QQYUN-8644】Hiệu ứng phía di động khi đóng cửa sổ trò chuyện (trang chi tiết)
   }
 
-  // 评论区域相关配置
+  // Cấu hình liên quan vùng bình luận
   function handleCommentConfig(){
     let dataIdValue = formDataId.value;
-    //如果有评论配置 且 编辑/详情页面 才需要开启评论
+    //Nếu có cấu hình bình luận và Chỉnh sửa/Trang chi tiết mới cần bật bình luận
     if(onlineExtConfig['commentStatus'] == 1 && dataIdValue){
       enableComment.value = true;
       setModalProps({ defaultFullscreen: true });
@@ -159,15 +159,15 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
   const singleWidth = 800;
   const one2ManyWidth = 1100;
   const modalWidth = computed(() => {
-    // 不同的列数展示不同的宽度
+    // Số cột khác nhau thì hiển thị độ rộng khác nhau
     let diff = 200 * (formTemplate.value - 1);
-    // 基值加上阈值
+    // Giá trị cơ sở cộng thêm ngưỡng
     let width = (!unref(single) ? one2ManyWidth : singleWidth) + diff;
-    // 文本太长时，会遮挡页面【issues/I44F0R】
+    // Khi văn bản quá dài, sẽ che khuất trang 【issues/I44F0R】
     width = calcModalMixWidth(width);
     let minWidth = modalMinWidth.value;
     console.log({ minWidth });
-    //判断计算出来的宽度 是不是比扩展配置中的宽度参数小 如果是取扩展配置的参数
+    //Phán đoán độ rộng đã tính toán ra có nhỏ hơn tham số độ rộng trong cấu hình mở rộng hay không Nếu là lấy tham số của cấu hình mở rộng
     if (minWidth && width < minWidth) {
       width = minWidth;
     }
@@ -175,7 +175,7 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     return width;
   });
 
-  /** 计算弹窗最小宽度 */
+  /** Tính độ rộng tối thiểu của popup */
   function calcModalMixWidth(width) {
     let minWidth = extConfigJson.modalMinWidth;
     if (minWidth != null && minWidth !== '') {
@@ -191,18 +191,18 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     return width;
   }
 
-  // 自定义按钮 增强触发事件
+  // Nút tùy chỉnh Sự kiện kích hoạt phần tăng cường
   function handleCgButtonClick(optType, buttonCode) {
     onlineFormCompRef.value.handleCgButtonClick(optType, buttonCode);
   }
 
   function handleSubmit() {
-    //update-begin-author:taoyan date:2022-5-25 for:  VUEN-1105 表单 确定按钮可多次点击，保存多条数据
+    //update-begin-author:taoyan date:2022-5-25 for:  VUEN-1105 Biểu mẫu Nút xác nhận có thể nhấp nhiều lần, lưu nhiều bản ghi dữ liệu
     submitLoading.value = true;
     setTimeout(() => {
       submitLoading.value = false;
     }, 1500);
-    //update-end-author:taoyan date:2022-5-25 for:  VUEN-1105 表单 确定按钮可多次点击，保存多条数据
+    //update-end-author:taoyan date:2022-5-25 for:  VUEN-1105 Biểu mẫu Nút xác nhận có thể nhấp nhiều lần, lưu nhiều bản ghi dữ liệu
     onlineFormCompRef.value.handleSubmit();
   }
 
@@ -216,7 +216,7 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
       defHttp
         .get({ url, params }, { isTransformResponse: false })
         .then((res) => {
-          console.log('表单结果》》modal:', res);
+          console.log('Kết quả biểu mẫu 》》modal:', res);
           if (res.success) {
             resolve(res.result);
           } else {
@@ -230,7 +230,7 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
   }
 
   async function handleFormConfig(id, params, callBack?, taskId?, currentTableName?) {
-    // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
+    // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
     let result: any = null;
     if (taskId && currentTableName) {
       const url = `/online/cgform/api/getFormItemBytbname/${currentTableName}`;
@@ -239,8 +239,8 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     } else {
       result = await loadFormItems(id, params);
     }
-    // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
-    // modal页面只处理按钮、JS增强、弹框宽度
+    // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
+    // modalTrang chỉ xử lý nút,JSTăng cường, độ rộng popup
     let dataFormTemplate = result.head.formTemplate;
     formTemplate.value = dataFormTemplate ? Number(dataFormTemplate) : 1;
     cgButtonList.value = result.cgButtonList;
@@ -257,9 +257,9 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     }
     loadItemSuccess.value = true;
     emit && emit('formConfig', result);
-    // -update-begin--author:liaozhiyang---date:20230823---for：【QQYUN-6305】tab主题一对多--
+    // -update-begin--author:liaozhiyang---date:20230823---for：【QQYUN-6305】tabChủ đề một-nhiều--
     callBack && callBack(result);
-    // -update-end--author:liaozhiyang---date:20230823---for：【QQYUN-6305】tab主题一对多--
+    // -update-end--author:liaozhiyang---date:20230823---for：【QQYUN-6305】tabChủ đề một-nhiều--
     await nextTick(async () => {
       let myForm = (await getRefPromise(onlineFormCompRef)) as any;
       await myForm.createRootProperties(result);
@@ -267,37 +267,37 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
   }
 
   /**
-   * 表单保存完后的事件
+   * Sự kiện sau khi lưu biểu mẫu xong
    */
   function handleSuccess(formData) {
-    // 将表名设置到数据中
+    // Thiết lập tên bảng vào trong dữ liệu
     formData[ONL_FORM_TABLE_NAME] = tableName.value;
     emit('success', formData);
     if(successThenClose.value == true){
       closeModal();
     }else{
-      // 不关闭弹窗 提示成功
+      // không đóng popup Nhắc nhở thành công
     }
-    //恢复默认值
+    //Khôi phục giá trị mặc định
     topTipVisible.value = false;
     successThenClose.value = true;
   }
 
   /**
-   * modal关闭事件
+   * modalSự kiện đóng
    */
   function onCloseEvent(){
     if(onlineFormCompRef.value){
       onlineFormCompRef.value.onCloseModal();
     }
-    // update-begin--author:liaozhiyang---date:20240618---for：【TV360X-1305】打开评论编辑弹窗会全屏，关闭弹窗时把全屏去掉，否者会影响新增弹窗
+    // update-begin--author:liaozhiyang---date:20240618---for：【TV360X-1305】Mở popup chỉnh sửa bình luận sẽ toàn màn hình, khi đóng popup phải bỏ chế độ toàn màn hình, nếu không sẽ ảnh hưởng popup thêm mới
     if (isUpdate.value) {
       const extConfig: any = onlineExtConfig ?? {};
       if (extConfig.commentStatus == 1) {
         setModalProps({ defaultFullscreen: false });
       }
     }
-    // update-end--author:liaozhiyang---date:20240618---for：【TV360X-1305】打开评论编辑弹窗会全屏，关闭弹窗时把全屏去掉，否者会影响新增弹窗
+    // update-end--author:liaozhiyang---date:20240618---for：【TV360X-1305】Mở popup chỉnh sửa bình luận sẽ toàn màn hình, khi đóng popup phải bỏ chế độ toàn màn hình, nếu không sẽ ảnh hưởng popup thêm mới
   }
   
   return {
@@ -309,11 +309,11 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     modalObject,
     onCloseEvent,
 
-    // 自定义按钮
+    // Nút tùy chỉnh
     cgButtonList,
     handleCgButtonClick,
 
-    // 提交/关闭按钮
+    // Gửi/Nút đóng
     disableSubmit,
     handleSubmit,
     submitLoading,
@@ -322,7 +322,7 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     handleSuccess,
     topTipVisible,
 
-    //表单
+    //Biểu mẫu
     handleFormConfig,
     onlineFormCompRef,
     formTemplate,
@@ -334,7 +334,7 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
     showSub,
     themeTemplate,
 
-    // 评论区域参数
+    // Tham số vùng bình luận
     tableId,
     tableName,
     formDataId,
@@ -347,7 +347,7 @@ export function useAutoModal(isBpm?: boolean, { emit } = {} as any, callback?:an
 
 
 /**
- * 使用固定高度的modal
+ * Sử dụng chiều cao cố địnhmodal
  */
 export function useFixedHeightModal() {
   const minWidth = 800;
@@ -358,7 +358,7 @@ export function useFixedHeightModal() {
   }
   popModalFixedWidth.value = tempWidth;
 
-  // 弹窗高度控制
+  // Kiểm soát chiều cao popup
   const popBodyStyle = ref({});
   function resetBodyStyle(){
     let height = window.innerHeight - 210;

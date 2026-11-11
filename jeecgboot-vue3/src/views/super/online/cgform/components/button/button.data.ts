@@ -3,41 +3,41 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
 import {getButtonIconRender} from "./button.data.tsx";
 
 export const columns: BasicColumn[] = [
-  { title: '按钮编码', align: 'center', dataIndex: 'buttonCode' },
-  { title: '按钮名称', align: 'center', dataIndex: 'buttonName' },
+  { title: 'Mã nút', align: 'center', dataIndex: 'buttonCode' },
+  { title: 'Tên nút', align: 'center', dataIndex: 'buttonName' },
   {
-    title: '按钮样式',
+    title: 'Kiểu dáng nút',
     align: 'center',
     dataIndex: 'buttonStyle',
     customRender({ text, record }) {
       if (text === 'form') {
         let p = record.optPosition;
-        return text + '(' + (p == '2' ? '底部' : '侧面') + ')';
+        return text + '(' + (p == '2' ? 'Phần dưới' : 'Mặt bên') + ')';
       } else {
         return text;
       }
     },
   },
-  { title: '按钮类型', align: 'center', dataIndex: 'optType' },
-  { title: '排序', align: 'center', dataIndex: 'orderNum' },
+  { title: 'Loại nút', align: 'center', dataIndex: 'optType' },
+  { title: 'Sắp xếp', align: 'center', dataIndex: 'orderNum' },
   {
-    title: '按钮图标',
+    title: 'Biểu tượng nút',
     align: 'center',
     dataIndex: 'buttonIcon',
     customRender: ({text, record}) => {
       return getButtonIconRender({text, buttonCode: record.buttonCode});
     },
   },
-  { title: '表达式', align: 'center', dataIndex: 'exp' },
+  { title: 'Biểu thức', align: 'center', dataIndex: 'exp' },
   {
-    title: '按钮状态',
+    title: 'Trạng thái nút',
     align: 'center',
     dataIndex: 'buttonStatus',
     customRender({ text }) {
       if (text == 1) {
-        return '激活';
+        return 'Kích hoạt';
       } else {
-        return '未激活';
+        return 'Chưa kích hoạt';
       }
     },
   },
@@ -46,53 +46,53 @@ export const columns: BasicColumn[] = [
 export const formSchemas = ({ redoModalHeight }): FormSchema[] => {
   return [
     {
-      label: '按钮编码',
+      label: 'Mã nút',
       field: 'buttonCode',
       component: 'Input',
       required: true,
-      // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-139】按钮编码加上正则校验
+      // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-139】Mã nút thêm kiểm chứng bằng biểu thức chính quy
       dynamicRules: () => {
         return [
           {
             validator: (_, value) => {
-              //需要return 一个Promise对象
+              //Cầnreturn mộtPromiseđối tượng
               return new Promise((resolve, reject) => {
                 const reg = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
                 if (reg.test(value)) {
                   resolve();
                 } else {
-                  reject('编码只能包含字母、数字、下划线 (_) 和美元符号 ($)且不能以数字开头');
+                  reject('Mã chỉ có thể chứa chữ cái, số, dấu gạch dưới (_) và ký hiệu đô la Mỹ ($)và không được bắt đầu bằng chữ số');
                 }
               });
             },
           },
-          // update-begin--author:liaozhiyang---date:20240701---for：【TV360X-1693】自定义按钮编码排除sql和java系统内置编码
+          // update-begin--author:liaozhiyang---date:20240701---for：【TV360X-1693】Loại trừ mã nút tùy chỉnhsqlvàjavaMã tích hợp sẵn của hệ thống
           {
             validator: (_, value) => {
-              //需要return 一个Promise对象
+              //Cầnreturn mộtPromiseđối tượng
               return new Promise((resolve, reject) => {
                 const exclude = ['add', 'edit', 'detail', 'delete', 'batch_delete', 'import', 'export', 'query', 'reset', 'bpm', 'super_query', 'form_confirm'];
                 if (exclude.includes(value)) {
-                  reject('不可使用内置按钮编码，请在“管理内置按钮”中修改内置按钮');
+                  reject('Không được sử dụng mã nút tích hợp sẵn, vui lòng sửa nút tích hợp sẵn trong “Quản lý nút tích hợp sẵn”');
                 } else {
                   resolve();
                 }
               });
             },
           },
-          // update-end--author:liaozhiyang---date:20240701---for：【TV360X-1693】自定义按钮编码排除sql和java系统内置编码
+          // update-end--author:liaozhiyang---date:20240701---for：【TV360X-1693】Loại trừ mã nút tùy chỉnhsqlvàjavaMã tích hợp sẵn của hệ thống
         ];
       },
-      // update-end--author:liaozhiyang---date:20240521---for：【TV360X-139】按钮编码加上正则校验
+      // update-end--author:liaozhiyang---date:20240521---for：【TV360X-139】Mã nút thêm kiểm chứng bằng biểu thức chính quy
     },
     {
-      label: '按钮名称',
+      label: 'Tên nút',
       field: 'buttonName',
       component: 'Input',
       required: true,
     },
     {
-      label: '按钮样式',
+      label: 'Kiểu dáng nút',
       field: 'buttonStyle',
       component: 'Select',
       componentProps: {
@@ -101,30 +101,30 @@ export const formSchemas = ({ redoModalHeight }): FormSchema[] => {
           { label: 'Button', value: 'button' },
           { label: 'Form', value: 'form' },
         ],
-        // update-begin--author:liaozhiyang---date:20240618---for：【TV360X-1306】自定义按钮弹窗按钮样式切换是重置弹窗高度
+        // update-begin--author:liaozhiyang---date:20240618---for：【TV360X-1306】Nút tùy chỉnh: khi chuyển đổi kiểu nút popup thì đặt lại chiều cao popup
         onChange: () => {
           redoModalHeight();
         },
-        // update-end--author:liaozhiyang---date:20240618---for：【TV360X-1306】自定义按钮弹窗按钮样式切换是重置弹窗高度
+        // update-end--author:liaozhiyang---date:20240618---for：【TV360X-1306】Nút tùy chỉnh: khi chuyển đổi kiểu nút popup thì đặt lại chiều cao popup
       },
       defaultValue: 'link',
     },
     {
-      label: '按钮位置',
+      label: 'Vị trí nút',
       field: 'optPosition',
       component: 'Select',
       componentProps: {
         allowClear: false,
         options: [
-          // { label: '侧面', value: '1' },
-          { label: '底部', value: '2' },
+          // { label: 'Mặt bên', value: '1' },
+          { label: 'Phần dưới', value: '2' },
         ],
       },
       defaultValue: '2',
       show: ({ model }) => model.buttonStyle === 'form',
     },
     {
-      label: '按钮类型',
+      label: 'Loại nút',
       field: 'optType',
       component: 'Select',
       componentProps: {
@@ -137,7 +137,7 @@ export const formSchemas = ({ redoModalHeight }): FormSchema[] => {
       defaultValue: 'js',
     },
     {
-      label: '排序',
+      label: 'Sắp xếp',
       field: 'orderNum',
       component: 'InputNumber',
       componentProps: {
@@ -145,15 +145,15 @@ export const formSchemas = ({ redoModalHeight }): FormSchema[] => {
       },
     },
     {
-      label: '按钮图标',
+      label: 'Biểu tượng nút',
       field: 'buttonIcon',
-      // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-136】按钮图标改成图标组件选择
+      // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-136】Biểu tượng nút đổi thành chọn bằng component biểu tượng
       component: 'IconPicker',
       componentProps: {
         clearSelect: true,
         iconPrefixSave: false,
       },
-      // update-end--author:liaozhiyang---date:20240528---for：【TV360X-136】按钮图标改成图标组件选择
+      // update-end--author:liaozhiyang---date:20240528---for：【TV360X-136】Biểu tượng nút đổi thành chọn bằng component biểu tượng
       ifShow: ({ values, model }) => {
         if (values.buttonStyle == 'button' || values.buttonStyle == 'form') {
           return true;
@@ -164,10 +164,10 @@ export const formSchemas = ({ redoModalHeight }): FormSchema[] => {
       },
     },
     {
-      label: '表达式',
+      label: 'Biểu thức',
       field: 'exp',
       component: 'Input',
-      // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-89】自定义按钮样式是link时，展示表达式配置
+      // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-89】Kiểu nút tùy chỉnh làlinkkhi đó, hiển thị cấu hình biểu thức
       ifShow: ({ values, model }) => {
         if (values.buttonStyle == 'link') {
           return true;
@@ -176,16 +176,16 @@ export const formSchemas = ({ redoModalHeight }): FormSchema[] => {
           return false;
         }
       },
-      // update-end--author:liaozhiyang---date:20240603---for：【TV360X-89】自定义按钮样式是link时，展示表达式配置
+      // update-end--author:liaozhiyang---date:20240603---for：【TV360X-89】Kiểu nút tùy chỉnh làlinkkhi đó, hiển thị cấu hình biểu thức
     },
     {
-      label: '按钮状态',
+      label: 'Trạng thái nút',
       field: 'buttonStatus',
       component: 'RadioButtonGroup',
       componentProps: {
         options: [
-          { label: '激活', value: '1' },
-          { label: '未激活', value: '0' },
+          { label: 'Kích hoạt', value: '1' },
+          { label: 'Chưa kích hoạt', value: '0' },
         ],
       },
       defaultValue: '1',

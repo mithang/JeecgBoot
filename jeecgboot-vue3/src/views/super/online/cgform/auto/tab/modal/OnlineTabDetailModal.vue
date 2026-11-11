@@ -33,7 +33,7 @@
             restTabIndex();
           }
         "
-        >关闭</a-button
+        >Đóng</a-button
       >
     </template>
     <online-form-detail
@@ -76,7 +76,7 @@
     },
     emits: ['success', 'register', 'formConfig'],
     setup(props, { emit }) {
-      console.log('进入表单弹框》》》》modal');
+      console.log('Vào popup biểu mẫu 》》》》modal');
 
       const commentPanelRef = ref();
       const tabNav = ref<any>([]);
@@ -110,14 +110,14 @@
         themeTemplate,
       } = useAutoModal(false, { emit }, reloadComment);
 
-      // 监听id变化 表单重新渲染
+      // Lắng nghe (watch)idThay đổi Render lại biểu mẫu
       watch(() => props.id, renderFormItems, { immediate: true });
       async function renderFormItems() {
         formRendered.value = false;
         if (!props.id) {
           return;
         }
-        console.log('重新渲染表单》》》》modal');
+        console.log('Render lại biểu mẫu 》》》》modal');
         await handleFormConfig(props.id, {}, (result) => {
           const nav: any = [];
           const sub: any = [];
@@ -126,9 +126,9 @@
           nav.push({ tableName: head.tableName, tableTxt: head.tableTxt });
           Object.entries(properties).forEach(([key, value]: any) => {
             if (value.view == 'tab') {
-              //update-begin---author:chenrui ---date:2025/8/27  for：[issues/8760]online表单中，主题模板为“TAB主题”时，附表TAB页面的标题和内容不一致 #8760------------
+              //update-begin---author:chenrui ---date:2025/8/27  for：[issues/8760]onlineTrong biểu mẫu, mẫu chủ đề là “TABchủ đề”, bảng phụTABTiêu đề và nội dung của trang không nhất quán #8760------------
               sub.push({ tableName: key, tableTxt: value.describe,order: value.order });
-              //update-end---author:chenrui ---date:2025/8/27  for：[issues/8760]online表单中，主题模板为“TAB主题”时，附表TAB页面的标题和内容不一致 #8760------------
+              //update-end---author:chenrui ---date:2025/8/27  for：[issues/8760]onlineTrong biểu mẫu, mẫu chủ đề là “TABchủ đề”, bảng phụTABTiêu đề và nội dung của trang không nhất quán #8760------------
             }
           });
           sub.sort((a, b) => a.order - b.order);
@@ -139,7 +139,7 @@
         return String(index - 1);
       };
       const restTabIndex = () => {
-        // 关闭的时候把索引重置第一位（防止下一条数据打开还是同样的tab）
+        // Khi đóng, đặt lại chỉ mục về vị trí đầu tiên (ngăn dữ liệu tiếp theo mở ra vẫn là cùng mộttab）
         setTimeout(() => {
           tabIndex.value = '-1';
         }, 500);

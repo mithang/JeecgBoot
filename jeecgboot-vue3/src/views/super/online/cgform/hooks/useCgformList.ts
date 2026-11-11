@@ -25,7 +25,7 @@ import { getTenantId, getToken } from '/@/utils/auth';
 import { useGlobSetting } from '/@/hooks/setting';
 
 interface IOptions {
-  // 页面类型
+  // Loại trang
   pageType: CgformPageType;
   designScope: string;
   columns: BasicColumn[];
@@ -38,7 +38,7 @@ export function useCgformList(options: IOptions) {
   const glob = useGlobSetting();
   const cgformStore = useCgformStore();
   const tableRef = ref();
-  // 列表页面公共参数、方法
+  // Tham số, phương thức dùng chung của trang danh sách
   const pageContext = useListPage({
     designScope: options.designScope,
     tableProps: {
@@ -51,7 +51,7 @@ export function useCgformList(options: IOptions) {
       beforeFetch: (params) => {
         let copyType = isNormalPage ? 0 : 1;
         let physicId = isNormalPage ? undefined : router.currentRoute.value.params.code;
-        // TODO 等字典组件支持逗号分割后删除改代码【LOWCOD-2371】
+        // TODO Sau khi các component từ điển v.v. hỗ trợ phân tách bằng dấu phẩy, việc xóa sửa mã 【LOWCOD-2371】
         if (isArray(params.tableType_MultiString)) {
           params.tableType_MultiString = params.tableType_MultiString.join(',');
         }
@@ -60,28 +60,28 @@ export function useCgformList(options: IOptions) {
     },
   });
   const { tableContext, createMessage: $message, createConfirm: $confirm } = pageContext;
-  // 注册table数据
+  // Đăng kýtableDữ liệu
   const [, { reload, setLoading }, { selectedRowKeys, selectedRows }] = tableContext;
 
-  // 注册编辑弹窗
+  // Đăng ký popup chỉnh sửa
   const [registerCgformModal, cgformModal] = useModal();
-  // 注册从数据库导入表单
+  // Đăng ký nhập biểu mẫu từ cơ sở dữ liệu
   const [registerDbToOnlineModal, dbToOnlineModal] = useModal();
-  // 注册ai建表弹窗
+  // Đăng kýaiPopup tạo bảng
   const [registerAiToOnlineModal, aiToOnlineModal] = useModal();
-  // 注册代码生成弹窗
+  // Đăng ký popup sinh mã
   const [registerCodeGeneratorModal, codeGeneratorModal] = useModal();
-  // 注册自定义按钮弹窗
+  // Đăng ký popup nút tùy chỉnh
   const [registerCustomButtonModal, customButtonModal] = useModal();
-  // 注册JS增强弹窗
+  // Đăng kýJSPopup tăng cường
   const [registerEnhanceJsModal, enhanceJsModal] = useModal();
-  // 注册SQL增强弹窗
+  // Đăng kýSQLPopup tăng cường
   const [registerEnhanceSqlModal, enhanceSqlModal] = useModal();
-  // 注册Java增强弹窗
+  // Đăng kýJavaPopup tăng cường
   const [registerEnhanceJavaModal, enhanceJavaModal] = useModal();
-  // 注册权限管理抽屉
+  // Đăng ký ngăn kéo (drawer) quản lý quyền
   const [registerAuthManagerDrawer, authManagerDrawer] = useDrawer();
-  // 注册角色授权弹窗
+  // Đăng ký popup ủy quyền vai trò
   const [registerAuthSetterModal, authSetterModal] = useModal();
 
   function onAdd() {
@@ -97,9 +97,9 @@ export function useCgformList(options: IOptions) {
 
   async function onEdit(record) {
     thatRecord = record
-    // update-begin---author:liusq---date:20261013---for:【LHZP-1967】打印设计生成后表单扩展配置未带出报表地址
-    // 列表行数据可能已过期（打印设计会在后台回写 extConfigJson 中的报表地址），报表地址为空时重新查询一次最新配置，
-    // 避免弹窗显示旧值，且保存时用旧的 extConfigJson 覆盖掉后台已写入的报表地址
+    // update-begin---author:liusq---date:20261013---for:【LHZP-1967】Sau khi tạo thiết kế in, cấu hình mở rộng của biểu mẫu không mang theo địa chỉ báo cáo
+    // Dữ liệu hàng trong danh sách có thể đã hết hạn (thiết kế in sẽ ghi ngược lại ở backend extConfigJson địa chỉ báo cáo trong đó), khi địa chỉ báo cáo trống thì truy vấn lại một lần cấu hình mới nhất,
+    // Tránh popup hiển thị giá trị cũ, đồng thời khi lưu dùng cái cũ extConfigJson Ghi đè địa chỉ báo cáo mà backend đã ghi vào
     let latest = record;
     if (!getReportPrintUrl(record)) {
       try {
@@ -108,15 +108,15 @@ export function useCgformList(options: IOptions) {
           latest = { ...record, ...head };
         }
       } catch (e) {
-        console.warn('查询表单最新配置失败，使用列表数据', e);
+        console.warn('Lấy cấu hình mới nhất của biểu mẫu truy vấn thất bại, sử dụng dữ liệu danh sách', e);
       }
     }
     cgformModal.openModal(true, { isUpdate: true, record: latest });
-    // update-end---author:liusq---date:20261013---for:【LHZP-1967】打印设计生成后表单扩展配置未带出报表地址
+    // update-end---author:liusq---date:20261013---for:【LHZP-1967】Sau khi tạo thiết kế in, cấu hình mở rộng của biểu mẫu không mang theo địa chỉ báo cáo
   }
 
   /**
-   * 获取扩展配置中的报表地址
+   * Lấy địa chỉ báo cáo trong cấu hình mở rộng
    */
   function getReportPrintUrl(record) {
     try {
@@ -135,7 +135,7 @@ export function useCgformList(options: IOptions) {
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(id) {
     await doSingleDelete(id);
@@ -143,7 +143,7 @@ export function useCgformList(options: IOptions) {
   }
 
   /**
-   * 移除事件
+   * Loại bỏ sự kiện
    */
   async function handleRemove(id) {
     await doSingleRemove(id);
@@ -151,18 +151,18 @@ export function useCgformList(options: IOptions) {
   }
 
   /**
-   * 删除单条数据
+   * Xóa một bản ghi dữ liệu
    * @param record
    */
   function onDeleteRecord(record: Recordable) {
     return showListDeleteConfirm(() => handleDelete(record.id), () => handleRemove(record.id))
   }
 
-  // 批量删除
+  // Xóa hàng loạt
   function onDeleteBatch() {
     let idList = selectedRowKeys.value as string[];
     if (idList.length <= 0) {
-      $message.warning('请先选择一条记录！');
+      $message.warning('Vui lòng chọn một bản ghi trước!');
       return;
     }
     showListDeleteConfirm(
@@ -172,10 +172,10 @@ export function useCgformList(options: IOptions) {
   }
 
   /**
-   * 执行删除操作
-   * @param fn 删除方法
-   * @param idList 删除参数
-   * @param clearSelected 清空选择
+   * Thực thi thao tác xóa
+   * @param fn Phương thức xóa
+   * @param idList Tham số xóa
+   * @param clearSelected Xóa sạch lựa chọn
    */
   async function executeDelete(fn: Fn, idList: string[], clearSelected = false) {
     try {
@@ -192,68 +192,68 @@ export function useCgformList(options: IOptions) {
     return Promise.reject();
   }
 
-  // 显示自定义按钮弹窗
+  // Hiển thị popup nút tùy chỉnh
   function onShowCustomButton() {
     getSelectedRows(([row]) => customButtonModal.openModal(true, { row }));
   }
 
-  // 显示 js 增强弹窗
+  // Hiển thị js Popup tăng cường
   function onShowEnhanceJs() {
     getSelectedRows(([row]) => enhanceJsModal.openModal(true, { row }));
   }
 
-  // 显示 sql 增强弹窗
+  // Hiển thị sql Popup tăng cường
   function onShowEnhanceSql() {
     getSelectedRows(([row]) => enhanceSqlModal.openModal(true, { row }));
   }
 
-  // 显示 java 增强弹窗
+  // Hiển thị java Popup tăng cường
   function onShowEnhanceJava() {
     getSelectedRows(([row]) => enhanceJavaModal.openModal(true, { row }));
   }
 
-  // 显示导入数据库表弹窗
+  // Hiển thị popup nhập bảng cơ sở dữ liệu
   function onImportDbTable() {
     dbToOnlineModal.openModal(true, {});
   }
 
   function getSelectedRows(fn: Fn, min = 1, max = 1) {
     if (selectedRows.value.length < min) {
-      $message.warning(`请先至少选中 ${min} 条记录`);
+      $message.warning(`Vui lòng chọn ít nhất trước ${min} bản ghi`);
     } else if (selectedRows.value.length > max) {
-      $message.warning(`最多只能选中 ${min} 条记录`);
+      $message.warning(`Chỉ được chọn tối đa ${min} bản ghi`);
     } else {
       fn(selectedRows.value);
     }
   }
 
-  // 显示代码生成弹窗
+  // Hiển thị popup sinh mã
   function onGenerateCode() {
     if (selectedRows.value.length === 0) {
-      $message.warning('请先选中一条记录');
+      $message.warning('Vui lòng chọn một bản ghi trước');
     } else if (selectedRows.value.length > 1) {
-      $message.warning('代码生成只能选中一条记录');
+      $message.warning('Sinh mã chỉ được chọn một bản ghi');
     } else {
       let row = selectedRows.value[0];
       if (!row) {
-        $message.warning('请选中当前页的数据！');
+        $message.warning('Vui lòng chọn dữ liệu của trang hiện tại!');
       } else if (row.isDbSynch != 'Y') {
-        $message.warning('请先同步数据库！');
+        $message.warning('Vui lòng đồng bộ cơ sở dữ liệu trước!');
       } else if (row.tableType == 3) {
-        $message.warning('请选中该表对应的主表');
+        $message.warning('Vui lòng chọn bảng chính tương ứng với bảng này');
       } else {
         codeGeneratorModal.openModal(true, { code: row.id });
       }
     }
   }
 
-  // 功能测试
+  // Kiểm thử chức năng
   function onGoToTest(record) {
     console.log(record);
     if (record.isTree == 'Y') {
       router.push({ path: '/online/cgformTreeList/' + record.id });
     } else {
-      // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+      // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
       switch (record.themeTemplate) {
         case 'erp':
           router.push({ path: '/online/cgformErpList/' + record.id });
@@ -268,13 +268,13 @@ export function useCgformList(options: IOptions) {
           router.push({ path: '/online/cgformList/' + record.id });
           break;
       }
-      // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+      // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
     }
   }
 
-  // update-begin---author:wangshuai---date:20260831---for:【LHZP-1967】Online表单生成积木报表打印模板
+  // update-begin---author:wangshuai---date:20260831---for:【LHZP-1967】OnlineBiểu mẫu tạo mẫu in báo cáo Jimu
   /**
-   * 打开Online表单对应的积木报表设计页面。
+   * MởOnlineTrang thiết kế báo cáo Jimu tương ứng với biểu mẫu.
    */
   function onPrintTemplate(record, regeneration = false) {
     const openTemplate = () => {
@@ -291,21 +291,21 @@ export function useCgformList(options: IOptions) {
       return;
     }
     $confirm({
-      title: '重新生成打印报表',
-      content: '重新生成后报表样式将会重置，是否继续？',
+      title: 'Tạo lại báo cáo in',
+      content: 'Sau khi tạo lại, kiểu dáng báo cáo sẽ bị đặt lại, có tiếp tục không?',
       iconType: 'warning',
       onOk: openTemplate,
     });
   }
-  // update-end---author:wangshuai---date:20260831---for:【LHZP-1967】Online表单生成积木报表打印模板
+  // update-end---author:wangshuai---date:20260831---for:【LHZP-1967】OnlineBiểu mẫu tạo mẫu in báo cáo Jimu
 
-  // 同步数据库
+  // Đồng bộ cơ sở dữ liệu
   function onSyncDatabase(record) {
     const syncMethod = ref('normal');
     const disabled = ref(false);
     const modalFunc = $confirm({
       iconType: 'info',
-      title: '同步数据库',
+      title: 'Đồng bộ cơ sở dữ liệu',
       content: () =>
         h(
           'div',
@@ -319,29 +319,29 @@ export function useCgformList(options: IOptions) {
               disabled: disabled.value,
               'onUpdate:value': (v) => (syncMethod.value = v),
             },
-            () => [h(Radio, { value: 'normal' }, () => '普通同步（保留表数据）'), h(Radio, { value: 'force' }, () => '强制同步（删除表，重新生成）')]
+            () => [h(Radio, { value: 'normal' }, () => 'Đồng bộ thông thường (giữ dữ liệu bảng)'), h(Radio, { value: 'force' }, () => 'Đồng bộ bắt buộc (xóa bảng, tạo lại)')]
           )
         ),
       maskClosable: true,
-      okText: '开始同步',
+      okText: 'Bắt đầu đồng bộ',
       async onOk() {
         disabled.value = true;
         modalFunc.update({
           maskClosable: false,
           keyboard: false,
-          okText: '同步中…',
+          okText: 'Đang đồng bộ…',
           okButtonProps: { loading: disabled.value },
           cancelButtonProps: { disabled: disabled.value },
         });
         try {
           await doDatabaseSync(record.id, syncMethod.value);
         } catch (e: any) {
-          // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-244】同步数据库没权限时提示两次
+          // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-244】Đồng bộ cơ sở dữ liệu, khi không có quyền thì nhắc hai lần
           // $message.warn(e.message || e);
-          // update-end--author:liaozhiyang---date:20240521---for：【TV360X-244】同步数据库没权限时提示两次
+          // update-end--author:liaozhiyang---date:20240521---for：【TV360X-244】Đồng bộ cơ sở dữ liệu, khi không có quyền thì nhắc hai lần
         } finally {
           await reload();
-          // update-begin--author:liaozhiyang---date:20250318---for：【issues/7931】勾选后再同步数据库，再点击代码生成无法生成代码
+          // update-begin--author:liaozhiyang---date:20250318---for：【issues/7931】Sau khi tích chọn rồi đồng bộ cơ sở dữ liệu, nhấp sinh mã lại thì không sinh được mã
           nextTick(() => {
             if (selectedRows.value.length) {
               selectedRows.value.forEach((item) => {
@@ -353,7 +353,7 @@ export function useCgformList(options: IOptions) {
               });
             }
           });
-          // update-end--author:liaozhiyang---date:20250318---for：【issues/7931】勾选后再同步数据库，再点击代码生成无法生成代码
+          // update-end--author:liaozhiyang---date:20250318---for：【issues/7931】Sau khi tích chọn rồi đồng bộ cơ sở dữ liệu, nhấp sinh mã lại thì không sinh được mã
         }
       },
     });
@@ -362,7 +362,7 @@ export function useCgformList(options: IOptions) {
   // const { createCopyModal } = useCopyModal();
   const [registerAddressModal, addressModal] = useModal();
 
-  // 显示online地址弹窗
+  // Hiển thịonlinePopup địa chỉ
   function onShowOnlineUrl(record) {
     let onlineUrl: string;
     if (record.themeTemplate === 'erp') {
@@ -377,7 +377,7 @@ export function useCgformList(options: IOptions) {
       onlineUrl = `/online/cgformList/${record.id}`;
     }
     addressModal.openModal(true, {
-      title: `菜单链接【${record.tableTxt}】`,
+      title: `Liên kết menu 【${record.tableTxt}】`,
       content: onlineUrl,
       copyText: onlineUrl,
       copyTitle: `${record.tableTxt}`,
@@ -386,13 +386,13 @@ export function useCgformList(options: IOptions) {
   }
 
   /**
-   * 显示复制表弹窗
+   * Hiển thị popup sao chép bảng
    * @param record
    */
   function onCopyTable(record) {
     const tableName = ref(record.tableName + '_copy');
     $confirm({
-      title: '复制表',
+      title: 'Sao chép bảng',
       content: () =>
         h(
           'div',
@@ -400,7 +400,7 @@ export function useCgformList(options: IOptions) {
             style: 'margin: 20px 0;',
           },
           [
-            '请输入新表名：',
+            'Vui lòng nhập tên bảng mới:',
             h(Input, {
               value: tableName.value,
               'onUpdate:value': (v) => (tableName.value = v),
@@ -409,43 +409,43 @@ export function useCgformList(options: IOptions) {
         ),
       iconType: 'info',
       closable: true,
-      okText: '复制',
+      okText: 'Sao chép',
       onOk() {
         if (!tableName.value) {
-          $message.warning('请输入新表名');
-        //update-begin---wangshuai---date:20260713  for：【LHZP-465】点击复制之后，列表需要手动刷新一下才能看到数据------------
-            return Promise.reject(); // 阻止 modal 关闭
+          $message.warning('Vui lòng nhập tên bảng mới');
+        //update-begin---wangshuai---date:20260713  for：【LHZP-465】Sau khi nhấp sao chép, danh sách cần làm mới thủ công mới thấy dữ liệu------------
+            return Promise.reject(); // Ngăn chặn modal Đóng
         }
         if (tableName.value === record.tableName) {
-          $message.warning('新表名和旧表名不能一致');
-          return Promise.reject(); // 阻止 modal 关闭
+          $message.warning('Tên bảng mới và tên bảng cũ không được giống nhau');
+          return Promise.reject(); // Ngăn chặn modal Đóng
         }
         return new Promise((resolve, reject) => {
           doCopyTable(record.id, tableName.value)
             .then(() => {
-              $message.success('复制表成功');
-              // 强制跳到第 1 页再刷新：默认排序是 createTime desc，新复制的表落在第 1 页，
-              // 如果用户当前在第 N 页，普通 reload() 会沿用 current，导致新数据看不到。
+              $message.success('Sao chép bảng thành công');
+              // Bắt buộc nhảy tới thứ 1 trang rồi làm mới: sắp xếp mặc định là createTime desc, bảng mới sao chép rơi vào thứ 1 trang,
+              // Nếu người dùng hiện đang ở thứ N trang, thông thường reload() sẽ dùng lại theo current, dẫn đến không nhìn thấy dữ liệu mới.
               reload({ page: 1 });
               resolve(true);
             })
             .catch((err) => {
-              // 失败时把 promise reject，让 modal 不关闭、错误由 defHttp 的 errorMessageMode:'message' 自动提示
+              // Khi thất bại thì đưa promise reject, cho modal không đóng, lỗi do defHttp của errorMessageMode:'message' Gợi ý tự động
               reject(err);
             });
         });
-      //update-end---author:wangshuai ---date:20260713  for：【LHZP-465】点击复制之后，列表需要手动刷新一下才能看到数据------------
+      //update-end---author:wangshuai ---date:20260713  for：【LHZP-465】Sau khi nhấp sao chép, danh sách cần làm mới thủ công mới thấy dữ liệu------------
       },
     });
   }
 
   /**
-   * 删除视图
+   * Xóa view
    */
   function doDeleteView(record) {
     $confirm({
-      title: '删除',
-      content: '确定要删除该视图吗？',
+      title: 'Xóa',
+      content: 'Xác nhận muốn xóa view này chứ?',
       iconType: 'warning',
       closable: true,
       maskClosable: true,
@@ -456,66 +456,66 @@ export function useCgformList(options: IOptions) {
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: () => onEdit(record),
       },
     ];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác dropdown
    */
   function getDropDownAction(record): ActionItem[] {
     return [
       {
-        label: '同步数据库',
+        label: 'Đồng bộ cơ sở dữ liệu',
         onClick: () => onSyncDatabase(record),
         ifShow: () => isNormalPage && record.isDbSynch != 'Y',
       },
       {
-        // TODO 功能测试
-        label: '功能测试',
+        // TODO Kiểm thử chức năng
+        label: 'Kiểm thử chức năng',
         class: ['low-app-hide'],
         onClick: () => onGoToTest(record),
         ifShow: () => (isNormalPage ? record.isDbSynch == 'Y' && record.tableType !== 3 : true),
       },
       {
-        label: '配置地址',
+        label: 'Địa chỉ cấu hình',
         class: ['low-app-hide'],
         onClick: () => onShowOnlineUrl(record),
         ifShow: () => (isNormalPage ? record.isDbSynch == 'Y' && record.tableType !== 3 : true),
       },
       {
-        label: '权限控制',
+        label: 'Kiểm soát quyền',
         onClick: () => authManagerDrawer.openDrawer(true, { cgformId: record.id, tableType: record.tableType, isTree: record.isTree }),
       },
       {
-        label: '角色授权',
+        label: 'Ủy quyền vai trò',
         onClick: () => authSetterModal.openModal(true, { cgformId: record.id }),
       },
       {
-        label: '视图管理',
+        label: 'Quản lý view',
         class: ['low-app-hide'],
         onClick: () => router.push(`/online/copyform/${record.id}`),
         ifShow: () => isNormalPage && record.hascopy == 1,
       },
       {
-        label: '生成视图',
+        label: 'Tạo view (chế độ xem)',
         class: ['low-app-hide'],
         // @ts-ignore
         popConfirm: {
-          title: '确定生成视图吗？',
+          title: 'Xác nhận tạo view chứ?',
           placement: 'left',
           confirm: () => {
             setLoading(true);
             doCopyOnlineView(record.id)
               .then(() => {
-                $message.success('已成功生成视图');
+                $message.success('Đã tạo view thành công');
               })
               .finally(() => {
                 setLoading(false);
@@ -526,31 +526,31 @@ export function useCgformList(options: IOptions) {
         ifShow: () => isNormalPage,
       },
       {
-        label: '复制表',
+        label: 'Sao chép bảng',
         onClick: () => onCopyTable(record),
         ifShow: () => isNormalPage,
       },
-      // update-begin---author:wangshuai---date:20260831---for:【LHZP-1967】Online表单生成积木报表打印模板
+      // update-begin---author:wangshuai---date:20260831---for:【LHZP-1967】OnlineBiểu mẫu tạo mẫu in báo cáo Jimu
       {
-        label: '打印设计',
+        label: 'Thiết kế in',
         onClick: () => onPrintTemplate(record),
         ifShow: () => isNormalPage && record.isDbSynch == 'Y' && record.tableType !== 3,
       },
       {
-        label: '生成打印',
+        label: 'Tạo bản in',
         onClick: () => onPrintTemplate(record, true),
         ifShow: () => isNormalPage && record.isDbSynch == 'Y' && record.tableType !== 3,
       },
-      // update-end---author:wangshuai---date:20260831---for:【LHZP-1967】Online表单生成积木报表打印模板
-      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】online删除提示优化
+      // update-end---author:wangshuai---date:20260831---for:【LHZP-1967】OnlineBiểu mẫu tạo mẫu in báo cáo Jimu
+      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】onlineTối ưu nhắc nhở khi xóa
       {
-        label: '删除',
+        label: 'Xóa',
         onClick: () => onDeleteRecord(record),
         ifShow: () => isNormalPage,
       },
-      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】online删除提示优化
+      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】onlineTối ưu nhắc nhở khi xóa
       {
-        label: '删除视图',
+        label: 'Xóa view',
         onClick: () => doDeleteView(record),
         ifShow: () => !isNormalPage,
       },

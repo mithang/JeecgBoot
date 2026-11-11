@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 输入框
+ * Ô nhập
  */
 export default class InputWidget extends IFormSchema {
   getItem(): FormSchema {

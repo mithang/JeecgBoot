@@ -8,11 +8,11 @@ import { useRoute } from 'vue-router';
 import FormSchemaFactory from '../../auto/comp/factory/FormSchemaFactory';
 import { FORM_VIEW_TO_QUERY_VIEW } from '../../types/onlineRender';
 
-// 查询条件存储编码前缀
+// Tiền tố mã lưu trữ của điều kiện truy vấn
 const SAVE_CODE_PRE = 'JSuperQuerySaved_';
 
 /**
- * 查询项
+ * Mục truy vấn
  * */
 interface SuperQueryItem {
   field: string | undefined;
@@ -21,7 +21,7 @@ interface SuperQueryItem {
   key: string;
 }
 /**
- * 查询项-第一个控件树model
+ * Mục truy vấn-Cây control đầu tiênmodel
  * */
 interface TreeModel {
   title: string;
@@ -33,7 +33,7 @@ interface TreeModel {
 }
 
 /**
- * 查询信息保存结构
+ * Cấu trúc lưu thông tin truy vấn
  * */
 interface SaveModel {
   title: string;
@@ -43,40 +43,40 @@ interface SaveModel {
 
 export function useSuperQuery() {
   const { createMessage: $message } = useMessage();
-  /** 表单ref*/
+  /** Biểu mẫuref*/
   const formRef = ref<any>();
 
-  /** 数据*/
+  /** Dữ liệu*/
   const dynamicRowValues = reactive<{ values: SuperQueryItem[] }>({
     values: [],
   });
   /** and/or */
   const matchType = ref('and');
 
-  // 弹框显示
+  // Hiển thị popup
   const [registerModal, { setModalProps }] = useModalInner(() => {
     setModalProps({ confirmLoading: false });
   });
 
-  // 高级查询类型不支持联动组件，需要额外设置联动组件的view为text
+  // Loại truy vấn nâng cao không hỗ trợ component liên động, cần thiết lập thêm của component liên độngviewlàtext
   const view2QueryViewMap = Object.assign({}, { link_down: 'text' }, FORM_VIEW_TO_QUERY_VIEW);
 
   /**
-   * 确认按钮事件
+   * Sự kiện nút xác nhận
    */
   function handleSubmit() {
     console.log('handleSubmit', dynamicRowValues.values);
   }
 
   /**
-   * 关闭按钮事件
+   * Sự kiện nút đóng
    */
   function handleCancel() {
     //closeModal();
   }
 
   /**
-   * val组件赋值
+   * valGán giá trị cho component
    */
   function setFormModel(key: string, value: any, item: any) {
     console.log('setFormModel', key, value);
@@ -84,16 +84,16 @@ export function useSuperQuery() {
     item['val'] = value;
   }
 
-  // 字段-Properties
+  // trường-Properties
   const fieldProperties = ref<any>({});
-  // 字段-左侧查询项-树控件数据
+  // trường-Mục truy vấn phía bên trái-Dữ liệu control cây
   const fieldTreeData = ref<any>([]);
 
   /**
-   * 初始化数据-最开始的方法
-   * 1.获取 表名@字段名-->配置 这样的一个map
-   * 2.获取树形结构的数据 显示:文本； 存储:表名@字段名
-   * 当树改变时，及时获取配置更新表单
+   * Khởi tạo dữ liệu-Phương thức ở lúc bắt đầu nhất
+   * 1.Lấy Tên bảng@tên trường-->Cấu hình một cái như thế nàymap
+   * 2.Lấy dữ liệu cấu trúc dạng cây Hiển thị:văn bản; Lưu trữ:Tên bảng@tên trường
+   * Khi cây thay đổi, kịp thời lấy cấu hình để cập nhật biểu mẫu
    * @param json
    */
   function init(json) {
@@ -103,7 +103,7 @@ export function useSuperQuery() {
   }
 
   /**
-   * 左侧查询项 添加一行
+   * Mục truy vấn phía bên trái Thêm một hàng
    * @param index
    */
   function addOne(index) {
@@ -114,22 +114,22 @@ export function useSuperQuery() {
       key: randomString(16),
     };
     if (index === false) {
-      // 重置后需要调用
+      // Sau khi đặt lại cần gọi
       dynamicRowValues.values = [];
       dynamicRowValues.values.push(item);
     } else if (index === true) {
-      // 打开弹框是需要调用
+      // Khi mở popup cần gọi
       if (dynamicRowValues.values.length == 0) {
         dynamicRowValues.values.push(item);
       }
     } else {
-      // 其余就是 正常的点击加号增加行
+      // Phần còn lại chính là Nhấp dấu cộng bình thường để thêm hàng
       dynamicRowValues.values.splice(++index, 0, item);
     }
   }
 
   /**
-   * 左侧查询项 删除一行
+   * Mục truy vấn phía bên trái Xóa một hàng
    */
   function removeOne(item: SuperQueryItem) {
     let arr = toRaw(dynamicRowValues.values);
@@ -145,15 +145,15 @@ export function useSuperQuery() {
     }
   }
 
-  // 默认的输入框
+  // Ô nhập mặc định
   const defaultInput = {
     field: 'val',
-    label: '测试',
+    label: 'Kiểm thử',
     component: 'Input',
   };
 
   /**
-   * 左侧查询项 val组件 schema获取, 替代左侧字段树的change事件
+   * Mục truy vấn phía bên trái valComponent schemaLấy, Thay thế cây trường phía bên tráichangesự kiện
    * @param item
    * @param index
    */
@@ -164,13 +164,13 @@ export function useSuperQuery() {
       return defaultInput;
     }
     if (view2QueryViewMap[prop.view]) {
-      // 如果出现查询条件联动组件出来的场景，请跟踪此处
+      // Nếu xuất hiện tình huống component liên động sinh ra từ điều kiện truy vấn, vui lòng theo dõi tại đây
       prop.view = view2QueryViewMap[prop.view];
     }
     let temp = FormSchemaFactory.createFormSchema(item.field, prop);
     // temp.setFormRef(formRef)
     temp.noChange();
-    // 查询条件中的 下拉框popContainer为parentNode
+    // trong điều kiện truy vấn Ô dropdownpopContainerlàparentNode
     temp.asSearchForm();
     temp.updateField(item.field + index);
     const setFieldValue = (values) => {
@@ -182,27 +182,27 @@ export function useSuperQuery() {
     return schema;
   }
 
-  /*-----------------------右侧保存信息相关-begin---------------------------*/
+  /*-----------------------Liên quan đến thông tin lưu ở phía bên phải-begin---------------------------*/
 
   /**
-   * 右侧树 的 数据
+   * Cây phía bên phải của Dữ liệu
    */
   const saveTreeData = ref<any>('');
-  // 本地缓存
+  // Bộ nhớ đệm cục bộ
   const $ls = createLocalStorage();
-  //需要保存的信息（一条）
+  //Thông tin cần lưu (một mục)
   const saveInfo = reactive({
     visible: false,
     title: '',
     content: '',
     saveCode: '',
   });
-  //按钮loading
+  //Nútloading
   const loading = ref(false);
 
-  // 当前页面路由
+  // Route của trang hiện tại
   const route = useRoute();
-  // 监听路由信息，路由发生改变，则重新获取保存的查询信息-->currentPageSavedArray
+  // Lắng nghe thông tin route, khi route thay đổi thì lấy lại thông tin truy vấn đã lưu-->currentPageSavedArray
   watch(
     () => route.fullPath,
     (val) => {
@@ -211,9 +211,9 @@ export function useSuperQuery() {
     }
   );
 
-  // 当前页面存储的 查询信息
+  // được lưu trữ của trang hiện tại Thông tin truy vấn
   const currentPageSavedArray = ref<SaveModel[]>([]);
-  // 监听当前页面是否有新的数据保存了，然后更新右侧数据->saveTreeData
+  // Lắng nghe xem trang hiện tại có dữ liệu mới được lưu hay không, sau đó cập nhật dữ liệu phía bên phải->saveTreeData
   watch(
     () => currentPageSavedArray.value,
     (val) => {
@@ -233,7 +233,7 @@ export function useSuperQuery() {
     { immediate: true, deep: true }
   );
 
-  // 重新获取保存的查询信息
+  // Lấy lại thông tin truy vấn đã lưu
   function initSaveQueryInfoCode() {
     let code = SAVE_CODE_PRE + route.fullPath;
     saveInfo.saveCode = code;
@@ -243,24 +243,24 @@ export function useSuperQuery() {
     }
   }
 
-  // 执行一次 获取保存的查询信息
+  // Thực thi một lần Lấy thông tin truy vấn đã lưu
   initSaveQueryInfoCode();
 
   /**
-   * 保存按钮事件
+   * Sự kiện nút lưu
    */
   function handleSave() {
-    // 获取实际数据转成字符串
+    // Lấy dữ liệu thực tế chuyển thành chuỗi
     let fieldArray = getQueryInfo();
     if (!fieldArray) {
-      $message.warning('空条件不能保存');
+      $message.warning('Điều kiện trống không thể lưu');
       return;
     }
     let content = JSON.stringify(fieldArray);
     openSaveInfoModal(content);
   }
 
-  // 输入保存标题 弹框显示
+  // Nhập tiêu đề để lưu Hiển thị popup
   function openSaveInfoModal(content) {
     saveInfo.visible = true;
     saveInfo.title = '';
@@ -268,18 +268,18 @@ export function useSuperQuery() {
   }
 
   /**
-   * 确认保存查询信息
+   * Xác nhận lưu thông tin truy vấn
    */
   function doSaveQueryInfo() {
     let { title, content, saveCode } = saveInfo;
     let index = getTitleIndex(title);
     if (index >= 0) {
-      // 已存在是否覆盖
+      // Đã tồn tại, có ghi đè hay không
       Modal.confirm({
-        title: '提示',
-        content: `${title} 已存在，是否覆盖？`,
-        okText: '确认',
-        cancelText: '取消',
+        title: 'Nhắc nhở',
+        content: `${title} Đã tồn tại, có ghi đè hay không?`,
+        okText: 'Xác nhận',
+        cancelText: 'Hủy',
         onOk: () => {
           currentPageSavedArray.value.splice(index, 1, {
             content,
@@ -301,7 +301,7 @@ export function useSuperQuery() {
     }
   }
 
-  // 根据填入的 title找本地存储的信息，如果有需要询问是否覆盖
+  // Căn cứ vào cái đã điền titleTìm thông tin lưu trữ cục bộ, nếu có thì cần hỏi có ghi đè hay không
   function getTitleIndex(title) {
     let savedArray = currentPageSavedArray.value;
     let index = -1;
@@ -315,7 +315,7 @@ export function useSuperQuery() {
   }
 
   /**
-   * 获取左侧所有查询条件，如果没有/或者条件无效则返回false
+   * Lấy mọi điều kiện truy vấn phía bên trái, nếu không có/hoặc điều kiện không hợp lệ thì trả vềfalse
    */
   function getQueryInfo(isEmit = false) {
     let arr = dynamicRowValues.values;
@@ -336,7 +336,7 @@ export function useSuperQuery() {
           val: tempVal,
         };
         if (isEmit === true) {
-          //如果当前数据用于emit事件，需要设置dbtype和type
+          //Nếu dữ liệu hiện tại được dùng choemitsự kiện, cần thiết lậpdbtypevàtype
           let prop = fieldProps[item.field];
           if (prop) {
             obj['type'] = prop.view;
@@ -353,7 +353,7 @@ export function useSuperQuery() {
   }
 
   /**
-   * 右侧数据 点击事件，重新将数据显示到左侧
+   * Dữ liệu phía bên phải Sự kiện nhấp, hiển thị lại dữ liệu sang phía bên trái
    * @param key
    * @param node
    */
@@ -362,7 +362,7 @@ export function useSuperQuery() {
     let title = node.dataRef.title;
     let arr = currentPageSavedArray.value.filter((item) => item.title == title);
     if (arr && arr.length > 0) {
-      // 拿到数据渲染
+      // Lấy dữ liệu để render
       let { content, type } = arr[0];
       let data = JSON.parse(content);
       let rowsValues: SuperQueryItem[] = [];
@@ -375,7 +375,7 @@ export function useSuperQuery() {
   }
 
   /**
-   * 右侧数据 删除事件
+   * Dữ liệu phía bên phải Sự kiện xóa
    */
   function handleRemoveSaveInfo(title) {
     console.log(title);
@@ -386,11 +386,11 @@ export function useSuperQuery() {
     }
   }
 
-  /*-----------------------右侧保存信息相关-end---------------------------*/
+  /*-----------------------Liên quan đến thông tin lưu ở phía bên phải-end---------------------------*/
 
-  // 获取所有字段配置信息
+  // Lấy thông tin mọi cấu hình trường
   function getAllFields(json) {
-    // 获取所有配置 查询字段 是否联合查询
+    // Lấy mọi cấu hình Trường truy vấn Có truy vấn liên hợp hay không
     const { properties, table, title } = json;
     let allFields = {};
     let order = 1;
@@ -405,8 +405,8 @@ export function useSuperQuery() {
     Object.keys(properties).map((field) => {
       let item = properties[field];
       if (item.view == 'table') {
-        // 子表字段
-        // 联合查询开启才需要子表字段作为查询条件
+        // trường của bảng con
+        // Chỉ khi bật truy vấn liên hợp mới cần trường của bảng con làm điều kiện truy vấn
         let subProps = item['properties'];
         let subTableOrder = order * 100;
         let subNode: TreeModel = {
@@ -417,9 +417,9 @@ export function useSuperQuery() {
         };
         Object.keys(subProps).map((subField) => {
           let subItem = subProps[subField];
-          // 保证排序统一
+          // Đảm bảo sắp xếp thống nhất
           subItem['order'] = subTableOrder + subItem['order'];
-          // 子表的分隔符要改成逗号，后台才能识别
+          // Dấu phân tách của bảng con phải đổi thành dấu phẩy, backend mới nhận diện được
           let subFieldKey = field + ',' + subField;
           allFields[subFieldKey] = subItem;
           subNode.children!.push({
@@ -433,7 +433,7 @@ export function useSuperQuery() {
         treeData.push(subNode);
         order++;
       } else {
-        // 主表字段
+        // trường bảng chính
         let fieldKey = table + '@' + field;
         allFields[fieldKey] = item;
         mainNode.children!.push({
@@ -448,7 +448,7 @@ export function useSuperQuery() {
     return { allFields, treeData };
   }
 
-  //根据字段的order重新排序
+  //Căn cứ vào của trườngorderSắp xếp lại
   function orderField(data) {
     let arr = data.children;
     arr.sort(function (a, b) {

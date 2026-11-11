@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 关联记录
+ * bản ghi liên kết
  */
 export default class LinkTableWidget extends IFormSchema {
   dictTable: string;
@@ -38,26 +38,26 @@ export default class LinkTableWidget extends IFormSchema {
       valueField: this.dictCode,
     };
     let extend = this.getExtendData();
-    // 是否多选
+    // Có chọn nhiều hay không
     if (extend.multiSelect) {
       props['multi'] = true;
     }else{
       props['multi'] = false;
     }
-    //封面图
+    //Ảnh bìa
     if (extend.imageField) {
       props['imageField'] = extend.imageField;
     }else{
       props['imageField'] = ''
     }
-    //显示类型
+    //Loại hiển thị
     if (extend.showType=='select') {
       this.componentString = 'LinkTableSelect'
       let popContainer = this.getPopContainer();
       props['popContainer'] = popContainer
-      // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-604】关联记录下拉方式挂载在body上避免空间不足
+      // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-604】Bản ghi liên kết dạng dropdown được gắn trênbodyphía trên, tránh không đủ không gian
       props['getPopupContainer'] = () => document.body;
-      // update-end--author:liaozhiyang---date:20260807---for:【LHZP-604】关联记录下拉方式挂载在body上避免空间不足
+      // update-end--author:liaozhiyang---date:20260807---for:【LHZP-604】Bản ghi liên kết dạng dropdown được gắn trênbodyphía trên, tránh không đủ không gian
     }else{
       this.componentString = 'LinkTableCard'
     }
@@ -67,9 +67,9 @@ export default class LinkTableWidget extends IFormSchema {
     return props;
   }
 
-  // 他表字段用于翻译
+  // Trường bảng khác dùng để dịch
   setOtherInfo(arr){
-    // ["表单字段,表字典字段","表单字段,表字典字段"]
+    // ["Trường biểu mẫu,Trường từ điển bảng","Trường biểu mẫu,Trường từ điển bảng"]
       this.linkFields = arr;
   }
 }

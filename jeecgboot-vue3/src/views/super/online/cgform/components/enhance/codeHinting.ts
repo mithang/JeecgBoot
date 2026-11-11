@@ -1,145 +1,145 @@
 export const keywords: any = {
   list: [
-    //------  列表api -------
-    // 属性
-    { text: '.acceptHrefParams', displayText: 'acceptHrefParams', superiors: 'this', desc: '获取地址栏上的条件' },
-    { text: '.currentPage', displayText: 'currentPage', superiors: 'this', desc: '获取当前页数，默认1' },
-    { text: '.currentTableName', displayText: 'currentTableName', desc: '获取当前表名' },
-    { text: '.description', displayText: 'description', superiors: 'this', desc: '获取当前表描述' },
-    { text: '.hasChildrenField', displayText: 'hasChildrenField', superiors: 'this', desc: '如果是树形列表，获取是否有子节点字段名' },
-    { text: '.ID', displayText: 'ID', superiors: 'this', desc: '获取当前表的配置ID' },
-    { text: '.pageSize', displayText: 'pageSize', superiors: 'this', desc: '获取当前每页条数，默认10' },
-    { text: '.queryParam', displayText: 'queryParam', superiors: 'this', desc: '获取查询表单的查询条件' },
-    { text: '.selectedRowKeys', displayText: 'selectedRowKeys', superiors: 'this', desc: '获取选中行的id的数组' },
-    { text: '.selectedRows', displayText: 'selectedRows', superiors: 'this', desc: '获取选中行的数据数组' },
-    { text: '.sortField', displayText: 'sortField', superiors: 'this', desc: '获取排序字段，默认‘id’' },
-    { text: '.sortType', displayText: 'sortType', superiors: 'this', desc: '获取排序类型，默认升序‘asc’' },
-    { text: '.total', displayText: 'total', superiors: 'this', desc: '获取总条数' },
-    { text: '.loading', displayText: 'loading', superiors: 'this', desc: '设置/获取loading' },
-    // 方法
-    { text: '.loadData()', displayText: 'loadData()', superiors: 'this', desc: '加载数据' },
-    { text: '.clearSelectedRow()', displayText: 'clearSelectedRow()', superiors: 'this', desc: '清除选中的行' },
+    //------  Danh sáchapi -------
+    // thuộc tính
+    { text: '.acceptHrefParams', displayText: 'acceptHrefParams', superiors: 'this', desc: 'Lấy điều kiện trên thanh địa chỉ' },
+    { text: '.currentPage', displayText: 'currentPage', superiors: 'this', desc: 'Lấy số trang hiện tại, mặc định1' },
+    { text: '.currentTableName', displayText: 'currentTableName', desc: 'Lấy tên bảng hiện tại' },
+    { text: '.description', displayText: 'description', superiors: 'this', desc: 'Lấy mô tả bảng hiện tại' },
+    { text: '.hasChildrenField', displayText: 'hasChildrenField', superiors: 'this', desc: 'Nếu là danh sách dạng cây, lấy tên trường cho biết có nút con hay không' },
+    { text: '.ID', displayText: 'ID', superiors: 'this', desc: 'Lấy cấu hình của bảng hiện tạiID' },
+    { text: '.pageSize', displayText: 'pageSize', superiors: 'this', desc: 'Lấy số mục mỗi trang hiện tại, mặc định10' },
+    { text: '.queryParam', displayText: 'queryParam', superiors: 'this', desc: 'Lấy điều kiện truy vấn của biểu mẫu truy vấn' },
+    { text: '.selectedRowKeys', displayText: 'selectedRowKeys', superiors: 'this', desc: 'Lấy của hàng đã chọnidmảng của' },
+    { text: '.selectedRows', displayText: 'selectedRows', superiors: 'this', desc: 'Lấy mảng dữ liệu của hàng đã chọn' },
+    { text: '.sortField', displayText: 'sortField', superiors: 'this', desc: 'Lấy trường sắp xếp, mặc định ‘id’' },
+    { text: '.sortType', displayText: 'sortType', superiors: 'this', desc: 'Lấy loại sắp xếp, mặc định tăng dần ‘asc’' },
+    { text: '.total', displayText: 'total', superiors: 'this', desc: 'Lấy tổng số mục' },
+    { text: '.loading', displayText: 'loading', superiors: 'this', desc: 'Thiết lập/Lấyloading' },
+    // Phương thức
+    { text: '.loadData()', displayText: 'loadData()', superiors: 'this', desc: 'Tải dữ liệu' },
+    { text: '.clearSelectedRow()', displayText: 'clearSelectedRow()', superiors: 'this', desc: 'Xóa các hàng đã chọn' },
     {
       text: '.getLoadDataParams()',
       displayText: 'getLoadDataParams()',
       superiors: 'this',
-      desc: '获取所有的查询条件，返回一个对象，包括：查询表单，高级查询，地址栏参数，分页信息，排序信息等',
+      desc: 'Lấy mọi điều kiện truy vấn, trả về một đối tượng, bao gồm: biểu mẫu truy vấn, truy vấn nâng cao, tham số thanh địa chỉ, thông tin phân trang, thông tin sắp xếp, v.v.',
     },
-    { text: '.isTree()', displayText: 'isTree()', superiors: 'this', desc: '判断当前表是不是树，返回布尔值' },
-    // 事件(前置)
+    { text: '.isTree()', displayText: 'isTree()', superiors: 'this', desc: 'Phán đoán bảng hiện tại có phải dạng cây hay không, trả về giá trị boolean' },
+    // sự kiện(Tiền tố)
     {
       text: `beforeEdit(row){
   return new Promise((resolve, reject) => {
-    if(row.字段名 == '字段值'){
-      reject('测试~');
+    if(row.tenTruong == 'giaTriTruong'){
+      reject('Kiểm thử~');
     }else{
       resolve();
     }
   })     
 }`,
       displayText: 'beforeEdit(row){}',
-      desc: '点击操作列下的编辑按钮触发，返回promise对象',
+      desc: 'Kích hoạt khi nhấp nút chỉnh sửa dưới cột thao tác, trả vềpromiseđối tượng',
     },
     {
       text: `beforeDelete(row){
 	return new Promise((resolve, reject) => {
-  	if(row.字段名 == '字段值'){
-    	reject('测试~');
+  	if(row.tenTruong == 'giaTriTruong'){
+    	reject('Kiểm thử~');
     }else{
     	resolve();
     }
   })     
 }`,
       displayText: 'beforeDelete(row){}',
-      desc: '点击操作列下的删除按钮触发，返回promise对象',
+      desc: 'Kích hoạt khi nhấp nút xóa dưới cột thao tác, trả vềpromiseđối tượng',
     },
-    { text: 'console.log()', displayText: 'console.log()', desc: '打印日志' },
+    { text: 'console.log()', displayText: 'console.log()', desc: 'In nhật ký' },
   ],
   form: [
-    //------ 表单api -------
-    // 属性
-    { text: '.loading', displayText: 'loading', superiors: 'this', desc: '是否加载中，返回的是一个ref对象' },
-    { text: '.isUpdate', displayText: 'isUpdate', superiors: 'this', desc: '是否是编辑页面，返回的是一个ref对象' },
-    { text: '.onlineFormRef', displayText: 'onlineFormRef', superiors: 'this', desc: '主表/单表表单的ref对象' },
-    { text: '.refMap', displayText: 'refMap', superiors: 'this', desc: '子表表单/子表table的ref对象map，key为子表表名' },
-    { text: '.subActiveKey', displayText: 'subActiveKey', superiors: 'this', desc: '子表的激活的tab索引值对应的字符串，从‘0’开始，返回的是一个ref对象' },
-    { text: '.sh', displayText: 'sh', superiors: 'this', desc: '单表/主表字段的显示隐藏状态' },
-    { text: '.submitFlowFlag', displayText: 'submitFlowFlag', superiors: 'this', desc: '是否提交表单后自动提交流程，返回一个ref对象' },
-    { text: '.subFormHeight', displayText: 'subFormHeight', superiors: 'this', desc: '一对一子表表单的高度，不需要设置，返回一个ref对象' },
-    { text: '.subTableHeight', displayText: 'subTableHeight', superiors: 'this', desc: '一对多子表table的高度，不需要设置，返回一个ref对象' },
-    { text: '.tableName', displayText: 'tableName', superiors: 'this', desc: '当前表名，返回的是一个ref对象' },
-    { text: '.$nextTick', displayText: '$nextTick', superiors: 'this', desc: '调用的是vue3的nextTick' },
-    { text: '.字段名_load', displayText: '字段名_load', superiors: 'this', desc: '控制字段的加载与否，设置为false表示当前字段不加载' },
-    { text: '.字段名_disabled', displayText: '字段名_disabled', superiors: 'this', desc: '控制字段的禁用与否，设置为true表示当前字段禁用' },
-    // 方法
-    { text: '.addSubRows(tableName, rows)', displayText: 'addSubRows(tableName, rows)', superiors: 'this', desc: '往一对多子表table里添加数据' },
+    //------ Biểu mẫuapi -------
+    // thuộc tính
+    { text: '.loading', displayText: 'loading', superiors: 'this', desc: 'Có đang tải hay không, cái trả về là mộtrefđối tượng' },
+    { text: '.isUpdate', displayText: 'isUpdate', superiors: 'this', desc: 'Có phải trang chỉnh sửa hay không, cái trả về là mộtrefđối tượng' },
+    { text: '.onlineFormRef', displayText: 'onlineFormRef', superiors: 'this', desc: 'bảng chính/của biểu mẫu bảng đơnrefđối tượng' },
+    { text: '.refMap', displayText: 'refMap', superiors: 'this', desc: 'Biểu mẫu bảng con/bảng contablecủarefđối tượngmap，keylà tên bảng con' },
+    { text: '.subActiveKey', displayText: 'subActiveKey', superiors: 'this', desc: 'đang kích hoạt của bảng contabChuỗi tương ứng với giá trị chỉ mục, từ ‘0’bắt đầu, giá trị trả về là mộtrefđối tượng' },
+    { text: '.sh', displayText: 'sh', superiors: 'this', desc: 'bảng đơn/Trạng thái hiển thị/ẩn của trường bảng chính' },
+    { text: '.submitFlowFlag', displayText: 'submitFlowFlag', superiors: 'this', desc: 'Có tự động gửi quy trình sau khi gửi biểu mẫu hay không, trả về mộtrefđối tượng' },
+    { text: '.subFormHeight', displayText: 'subFormHeight', superiors: 'this', desc: 'chiều cao của biểu mẫu bảng con một-một, không cần thiết lập, trả về mộtrefđối tượng' },
+    { text: '.subTableHeight', displayText: 'subTableHeight', superiors: 'this', desc: 'bảng con một-nhiềutablechiều cao của, không cần thiết lập, trả về mộtrefđối tượng' },
+    { text: '.tableName', displayText: 'tableName', superiors: 'this', desc: 'Tên bảng hiện tại, cái trả về là mộtrefđối tượng' },
+    { text: '.$nextTick', displayText: '$nextTick', superiors: 'this', desc: 'Cái được gọi làvue3củanextTick' },
+    { text: '.tenTruong_load', displayText: 'tenTruong_load', superiors: 'this', desc: 'Kiểm soát việc tải trường hay không, thiết lập thànhfalseBiểu thị trường hiện tại không tải' },
+    { text: '.tenTruong_disabled', displayText: 'tenTruong_disabled', superiors: 'this', desc: 'Kiểm soát việc vô hiệu hóa trường hay không, thiết lập thànhtrueBiểu thị trường hiện tại bị vô hiệu hóa' },
+    // Phương thức
+    { text: '.addSubRows(tableName, rows)', displayText: 'addSubRows(tableName, rows)', superiors: 'this', desc: 'về phía bảng con một-nhiềutableThêm dữ liệu vào trong' },
     {
       text: '.changeOptions(field, options)',
       texdisplayTextt: 'changeOptions(field, options)',
       superiors: 'this',
-      desc: '改变单表/主笔 下拉控件的下拉选项',
+      desc: 'Thay đổi bảng đơn/bảng chính Tùy chọn dropdown của control dropdown',
     },
-    { text: '.clearSubRows(tableName)', displayText: 'clearSubRows(tableName)', superiors: 'this', desc: '清空一对多子表table的数据' },
+    { text: '.clearSubRows(tableName)', displayText: 'clearSubRows(tableName)', superiors: 'this', desc: 'Xóa sạch bảng con một-nhiềutabledữ liệu của' },
     {
       text: '.clearThenAddRows(tableName, rows)',
       displayText: 'clearThenAddRows(tableName, rows)',
       superiors: 'this',
-      desc: '先清空一对多子表table的数据，再往里添加数据',
+      desc: 'Trước tiên xóa sạch bảng con một-nhiềutabledữ liệu của, rồi thêm dữ liệu vào trong',
     },
-    { text: '.getFieldsValue()', displayText: 'getFieldsValue()', superiors: 'this', desc: '获取主表/单表 所有字段的值' },
+    { text: '.getFieldsValue()', displayText: 'getFieldsValue()', superiors: 'this', desc: 'Lấy bảng chính/bảng đơn Giá trị của tất cả các trường' },
     {
       text: '.getSubTableInstance(tableName)',
       displayText: 'getSubTableInstance(tableName)',
       superiors: 'this',
-      desc: '获取子表的实例对象，这个对象可以调用子表table的方法',
+      desc: 'Lấy đối tượng instance của bảng con, đối tượng này có thể gọi bảng contablephương thức của',
     },
-    { text: '.setFieldsValue(row)', displayText: 'setFieldsValue(row)', superiors: 'this', desc: '设置主表/单表 字段的值' },
+    { text: '.setFieldsValue(row)', displayText: 'setFieldsValue(row)', superiors: 'this', desc: 'Thiết lập bảng chính/bảng đơn Giá trị của trường' },
     {
       text: '.triggleChangeValues(values,id,target)',
       displayText: 'triggleChangeValues(values,id,target)',
       superiors: 'this',
-      desc: '改变单表/主表/子表 字段的值，一般用于change事件，其中id，target需要通过change事件的内置参数获取，如果不传id，target的值，则改变的是主表的字段',
+      desc: 'Thay đổi bảng đơn/bảng chính/bảng con Giá trị của trường, thường dùng chochangesự kiện, trong đóid，targetCần thông quachangelấy qua tham số tích hợp của sự kiện, nếu không truyềnid，targetgiá trị của, thì cái thay đổi là trường của bảng chính',
     },
-    { text: '.triggleChangeValue(field, value)', displayText: 'triggleChangeValue(field, value)', superiors: 'this', desc: '设置单表/主表 字段的值' },
+    { text: '.triggleChangeValue(field, value)', displayText: 'triggleChangeValue(field, value)', superiors: 'this', desc: 'Thiết lập bảng đơn/bảng chính Giá trị của trường' },
     {
       text: '.onlineFormValueChange(field, value, otherValus)',
       displayText: 'onlineFormValueChange(field, value, otherValus)',
       superiors: 'this',
-      desc: '定义后，当表单值改变的时候会触发该方法（因js增强hook方式不支持原来的onlChange，所以定义此方法）',
+      desc: 'Sau khi định nghĩa, khi giá trị biểu mẫu thay đổi sẽ kích hoạt phương thức này (vìjsTăng cườnghookCách thức này không hỗ trợ cách gốconlChange, vì vậy định nghĩa phương thức này)',
     },
     {
-      text: '.changeSubTableOptions(tableName，field，options)',
-      displayText: 'changeSubTableOptions(tableName，field，options)',
+      text: '.changeSubTableOptions(tableName, field, options)',
+      displayText: 'changeSubTableOptions(tableName, field, options)',
       superiors: 'this',
-      desc: '改变一对一子表下拉框options',
+      desc: 'Thay đổi ô dropdown của bảng con một-mộtoptions',
     },
     {
-      text: '.changeSubFormbleOptions(tableName，field，options)',
-      displayText: 'changeSubFormbleOptions(tableName，field，options)',
+      text: '.changeSubFormbleOptions(tableName, field, options)',
+      displayText: 'changeSubFormbleOptions(tableName, field, options)',
       superiors: 'this',
-      desc: '改变一对多子表下拉框options',
+      desc: 'Thay đổi ô dropdown của bảng con một-nhiềuoptions',
     },
     {
       text: '.changeRemoteOptions({ field, dict, label, type?, subTableName? })',
       displayText: 'changeRemoteOptions({ field, dict, label, type?, subTableName? })',
       superiors: 'this',
-      desc: '改变动态下拉框options',
+      desc: 'Thay đổi ô dropdown độngoptions',
     },
     {
       text: '.submitFormAndFlow()',
       displayText: 'submitFormAndFlow()',
       superiors: 'this',
-      desc: '表单提交且发起流程',
+      desc: 'Gửi biểu mẫu đồng thời khởi tạo quy trình',
     },
-    // 提交前置事件
+    // Sự kiện tiền tố khi gửi
     {
       text: `beforeSubmit(row){
 	return new Promise((resolve, reject)=>{
-    //此处模拟等待时间，可能需要发起请求
+    //Tại đây mô phỏng thời gian chờ, có thể cần khởi tạo yêu cầu
     setTimeout(()=>{
-      if(row.字段名 == '字段值'){
-        // 当某个字段不满足要求的时候可以reject 
-        reject('测试~');
+      if(row.tenTruong == 'giaTriTruong'){
+        // Khi một trường nào đó không thỏa mãn yêu cầu thì có thểreject 
+        reject('Kiểm thử~');
       }else{
         resolve();
       }
@@ -147,122 +147,122 @@ export const keywords: any = {
   })
 }`,
       displayText: 'beforeSubmit(row){}',
-      desc: '提交前置事件',
+      desc: 'Sự kiện tiền tố khi gửi',
     },
-    // 表单加载事件
+    // Sự kiện tải biểu mẫu
     {
       text: `loaded(){
   this.$nextTick(()=>{
-    // let text = '测试js增强设置默认值';
+    // let text = 'Kiểm thửjsPhần tăng cường thiết lập giá trị mặc định';
     // if(this.isUpdate.value === true){
-    //   text = '测试js增强修改表单值';
+    //   text = 'Kiểm thửjsPhần tăng cường sửa đổi giá trị biểu mẫu';
     // }
     this.setFieldsValue({
-      字段名: 修改的值
+      tenTruong: giaTriSauKhiSua
     })
   })
 }`,
       displayText: 'loaded(){}',
-      desc: '表单加载事件',
+      desc: 'Sự kiện tải biểu mẫu',
     },
-    // 单表#表单值改变事件
+    // bảng đơn#Sự kiện thay đổi giá trị biểu mẫu
     {
       text: `onlChange(){
   return {
-    字段名(){
+    tenTruong(){
       let value = event.value
       console.log(value)
-      this.triggleChangeValues({'字段名': '修改后的值'})
+      this.triggleChangeValues({'tenTruong': 'Giá trị sau khi sửa'})
     }
   }
  }`,
       displayText: 'onlChange(){}',
-      desc: '单表#表单值改变事件',
+      desc: 'bảng đơn#Sự kiện thay đổi giá trị biểu mẫu',
     },
-    // 子表#表单值改变事件
+    // bảng con#Sự kiện thay đổi giá trị biểu mẫu
     {
-      text: `子表名_onlChange(){
+      text: `tenBangCon_onlChange(){
   return {
-    字段名(){
+    tenTruong(){
       let value = event.value;
       console.log(value);
-      let row = {'字段名': '测试一对多值改变：'+value};
+      let row = {'tenTruong': 'Kiểm thử thay đổi giá trị một-nhiều:'+value};
       this.triggleChangeValues(row, event.row.id, event.target)
   }
   }
 }`,
-      displayText: '子表名_onlChange(){}',
-      desc: '子表#表单值改变事件',
+      displayText: 'tenBangCon_onlChange(){}',
+      desc: 'bảng con#Sự kiện thay đổi giá trị biểu mẫu',
     },
-    // 子改主#表单值改变事件
+    // Con sửa chính#Sự kiện thay đổi giá trị biểu mẫu
     {
-      text: `子表名_onlChange(){
+      text: `tenBangCon_onlChange(){
   return {
-    子表字段01(){
-      this.getSubTableInstance('子表名').getValues((err,values)=>{
-        this.triggleChangeValues({'主表字段名': '修改后的值'})
+    truongBangCon01(){
+      this.getSubTableInstance('tenBangCon').getValues((err,values)=>{
+        this.triggleChangeValues({'tenTruongBangChinh': 'Giá trị sau khi sửa'})
       }) 
     },
   }
 }
 `,
-      displayText: '子表名_onlChange(){}',
-      desc: '子改主#表单值改变事件',
+      displayText: 'tenBangCon_onlChange(){}',
+      desc: 'Con sửa chính#Sự kiện thay đổi giá trị biểu mẫu',
     },
-    // js增强实现下拉联动
+    // jsPhần tăng cường thực hiện liên động dropdown
     {
       text: `onlChange(){
   return {
-    字段名01(){
+    tenTruong01(){
       let value = event.value
-      this.changeOptions('字段名02', '修改后的值');
+      this.changeOptions('tenTruong02', 'Giá trị sau khi sửa');
     }
-    字段名02(){
+    tenTruong02(){
       let value = event.value
-      this.changeOptions('字段名03', '修改后的值');
+      this.changeOptions('tenTruong03', 'Giá trị sau khi sửa');
     }
   }
 }`,
       displayText: 'changeOptions()',
-      desc: 'js增强实现下拉联动',
+      desc: 'jsPhần tăng cường thực hiện liên động dropdown',
     },
-    { text: 'console.log()', displayText: 'console.log()', desc: '打印日志' },
+    { text: 'console.log()', displayText: 'console.log()', desc: 'In nhật ký' },
   ],
   common: [
-    // JS增强 http请求
+    // JSTăng cường httpYêu cầu
     {
-      text: `getAction('请求url', { 'key': 'value'}).then(res => {
+      text: `getAction('requestUrl', { 'key': 'value'}).then(res => {
   console.log(res)
 })`,
       displayText: 'getAction(url, param)',
-      desc: 'get请求',
+      desc: 'getYêu cầu',
     },
     {
-      text: `postAction('请求url', { 'key': 'value'}).then(res => {
+      text: `postAction('requestUrl', { 'key': 'value'}).then(res => {
   console.log(res)
 })`,
       displayText: 'postAction(url, param)',
-      desc: 'post请求',
+      desc: 'postYêu cầu',
     },
     {
-      text: `putAction('请求url', { 'key': 'value'}).then(res => {
+      text: `putAction('requestUrl', { 'key': 'value'}).then(res => {
   console.log(res)
 })`,
       displayText: 'putAction(url, param)',
-      desc: 'put请求',
+      desc: 'putYêu cầu',
     },
     {
-      text: `deleteAction('请求url', { 'key': 'value'}).then(res => {
+      text: `deleteAction('requestUrl', { 'key': 'value'}).then(res => {
   console.log(res)
 })`,
       displayText: 'deleteAction(url, param)',
-      desc: 'delete请求',
+      desc: 'deleteYêu cầu',
     },
-    { text: 'this', displayText: 'this', desc: '上下文' },
+    { text: 'this', displayText: 'this', desc: 'Ngữ cảnh' },
     {
       text: '.openCustomModal({title,width,row,formComponent,requestUrl,hide,show})',
       displayText: 'openCustomModal({title,width,row,formComponent,requestUrl,hide,show})',
-      desc: '打开一个弹窗-参考 Js增强打开自定义弹窗',
+      desc: 'Mở một popup-Tham khảo JsPhần tăng cường mở popup tùy chỉnh',
     },
   ],
 };

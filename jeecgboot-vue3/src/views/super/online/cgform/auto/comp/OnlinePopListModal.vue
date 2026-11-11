@@ -2,35 +2,35 @@
     <BasicModal @register="registerModal" :width="popModalFixedWidth" :dialogStyle="{top: '70px'}" :bodyStyle="popBodyStyle" :title="modalTitle" wrapClassName="jeecg-online-pop-list-modal">
         <template #footer>
             <div style="display: inline-block;width: calc(100% - 140px);text-align: left;">
-                <a-button v-if="addAuth" style="border-radius: 50px" type="primary" @click="handleAdd"><PlusOutlined/>新增记录</a-button>
+                <a-button v-if="addAuth" style="border-radius: 50px" type="primary" @click="handleAdd"><PlusOutlined/>Thêm bản ghi</a-button>
             </div>
-            <a-button key="back" @click="handleCancel">关闭</a-button>
-            <a-button :disabled="submitDisabled" key="submit" type="primary" @click="handleSubmit" :loading="submitLoading">确定</a-button>
+            <a-button key="back" @click="handleCancel">Đóng</a-button>
+            <a-button :disabled="submitDisabled" key="submit" type="primary" @click="handleSubmit" :loading="submitLoading">Xác nhận</a-button>
         </template>
         
         
         <BasicTable @register="registerTable" :rowSelection="rowSelection">
             
-            <!-- update-begin-author:taoyan date:2023-7-11 for: issues/4992 online表单开发 字段控件类型是关联记录 新增的时候选择列表可以添加查询么 -->
+            <!-- update-begin-author:taoyan date:2023-7-11 for: issues/4992 onlinePhát triển biểu mẫu Loại control của trường là bản ghi liên kết Khi thêm mới, danh sách lựa chọn có thể thêm truy vấn không -->
             <template #tableTitle>
-                <a-input-search v-model:value="searchText" @search="onSearch"  placeholder="请输入关键词，按回车搜索"  style="width: 240px" />
+                <a-input-search v-model:value="searchText" @search="onSearch"  placeholder="Vui lòng nhập từ khóa, nhấn Enter để tìm kiếm"  style="width: 240px" />
             </template>
-            <!-- update-end-author:taoyan date:2023-7-11 for: issues/4992 online表单开发 字段控件类型是关联记录 新增的时候选择列表可以添加查询么 -->
+            <!-- update-end-author:taoyan date:2023-7-11 for: issues/4992 onlinePhát triển biểu mẫu Loại control của trường là bản ghi liên kết Khi thêm mới, danh sách lựa chọn có thể thêm truy vấn không -->
             
-            <!--操作栏-->
+            <!--Thanh thao tác-->
             <template #action="{ record }">
                 <TableAction :actions="getTableAction(record)">
                 </TableAction>
             </template>
 
             <template #fileSlot="{ text }">
-                <span v-if="!text" style="font-size: 12px; font-style: italic">无文件</span>
-                <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download" size="small" @click="downloadRowFile(text)"> 下载 </a-button>
+                <span v-if="!text" style="font-size: 12px; font-style: italic">Không có tệp</span>
+                <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download" size="small" @click="downloadRowFile(text)"> Tải xuống </a-button>
             </template>
 
             <template #imgSlot="{ text }">
-                <span v-if="!text" style="font-size: 12px; font-style: italic">无图片</span>
-                <img v-else :src="getImgView(text)" alt="图片不存在" class="online-cell-image" @click="viewOnlineCellImage(text)" />
+                <span v-if="!text" style="font-size: 12px; font-style: italic">Không có hình ảnh</span>
+                <img v-else :src="getImgView(text)" alt="Hình ảnh không tồn tại" class="online-cell-image" @click="viewOnlineCellImage(text)" />
             </template>
 
             <template #htmlSlot="{ text }">
@@ -48,7 +48,7 @@
         </BasicTable>
     </BasicModal>
 
-    <!-- 弹窗到另外一张表单用-可编辑表单 -->
+    <!-- Popup dùng cho một biểu mẫu khác-Biểu mẫu có thể chỉnh sửa -->
     <online-pop-modal :id="id" @register="registerPopModal" @success="handleDataSave" topTip></online-pop-modal>
 </template>
 
@@ -69,7 +69,7 @@
   export default defineComponent({
     name: 'OnlinePopListModal',
     props: {
-      /**可以是表名 可以是ID*/
+      /**có thể là tên bảng có thể làID*/
       id: {
         type: String,
         default: '',
@@ -93,25 +93,25 @@
     emits: ['success', 'register'],
     setup(props, { emit }) {
       const { createMessage: $message } = useMessage();
-      // 弹窗仍属于当前 Online 表单上下文，携带源表单编码后才能走受控的关联记录只读授权。
+      // Popup vẫn thuộc về hiện tại Online Ngữ cảnh biểu mẫu, phải mang theo mã biểu mẫu nguồn mới có thể đi qua ủy quyền chỉ đọc có kiểm soát của bản ghi liên kết.
       const sourceFormCode = inject<Ref<string | null>>('tableId');
-      // 弹窗高度控制
+      // Kiểm soát chiều cao popup
       const { popModalFixedWidth, resetBodyStyle, popBodyStyle } = useFixedHeightModal();
       const searchText = ref('');
       const modalWidth = ref(800);
       //useModalInner
       const [registerModal, {closeModal}] = useModalInner((data) => {
         searchText.value = '';
-        // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-43】修复关联记录可以添加重复数据
+        // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-43】Khắc phục: bản ghi liên kết có thể thêm dữ liệu trùng lặp
         selectedRowKeys.value = data.selectedRowKeys;
         selectedRows.value = data.selectedRows;
-        // update-end--author:liaozhiyang---date:20240517---for：【TV360X-43】修复关联记录可以添加重复数据
+        // update-end--author:liaozhiyang---date:20240517---for：【TV360X-43】Khắc phục: bản ghi liên kết có thể thêm dữ liệu trùng lặp
         setPagination({current:1})
         reload();
         resetBodyStyle();
       });
 
-      // 用于 online表单中 弹出别的表单
+      // Dùng để onlineTrong biểu mẫu Bật ra biểu mẫu khác
       const [registerPopModal, { openModal: openPopModal }] = useModal();
       
       function handleCancel() {
@@ -137,9 +137,9 @@
         }, 200);
       }
       
-      //---------------------列表------------------------
+      //---------------------Danh sách------------------------
       /**
-       * 只为 Online 表单内的关联记录请求补充源表单编码；无上下文时完全保留原参数。
+       * chỉ để Online Yêu cầu bản ghi liên kết trong biểu mẫu bổ sung mã biểu mẫu nguồn; khi không có ngữ cảnh, giữ nguyên hoàn toàn tham số gốc.
        */
       function getLinkTableParams(params = {}) {
         return sourceFormCode?.value ? { ...params, linkTableSourceCode: sourceFormCode.value } : params;
@@ -169,7 +169,7 @@
       };
       const extConfigJson = ref<any>({});
 
-      // 处理 BasicTable 的配置
+      // Xử lý BasicTable cấu hình của
       const {
         columns,
         downloadRowFile,
@@ -183,7 +183,7 @@
 
 
       /**
-       * 查询table列信息 及其他配置
+       * Truy vấntableThông tin cột và các cấu hình khác
        */
       function getColumnList() {
         const url = '/online/cgform/api/getColumns/'+props.id;
@@ -239,12 +239,12 @@
       }, {immediate: true});
 
       /**
-       * 操作栏
+       * Thanh thao tác
        */
       function getTableAction(record) {
         return [
           {
-            label: '编辑',
+            label: 'Chỉnh sửa',
             onClick: handleUpdate.bind(null, record),
           }
         ];
@@ -283,7 +283,7 @@
               }else if(eqConditonTypes.indexOf(item.dbType)){
                 conditions.push({field: item.dataIndex, type:item.dbType.toLowerCase(), rule: 'eq', val: text})
               }else{
-                //text blob不做处理
+                //text blobkhông xử lý
               }
             }
           }
@@ -297,12 +297,12 @@
         openPopModal(true, {})
       }
       
-      // modal数据新增完成 直接关闭list，将新增的数据带回表单
+      // modalThêm mới dữ liệu hoàn tất Đóng trực tiếplist, đưa dữ liệu thêm mới trở lại biểu mẫu
       function handleDataSave(data){
         console.log('handleDateSave' ,data)
-        // update-begin--author:liaozhiyang---date:20250429---for：【issues/8163】关联记录新增丢失
+        // update-begin--author:liaozhiyang---date:20250429---for：【issues/8163】Thêm mới bản ghi liên kết bị mất dữ liệu
         let arr = [data, ...selectedRows.value];
-        // update-end--author:liaozhiyang---date:20250429---for：【issues/8163】关联记录新增丢失
+        // update-end--author:liaozhiyang---date:20250429---for：【issues/8163】Thêm mới bản ghi liên kết bị mất dữ liệu
         emit('success', arr);
         closeModal();
         //reload();

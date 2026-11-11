@@ -32,12 +32,12 @@
           componentProps = componentProps({schema, formModel}) ?? {};
         }
 
-        //update-begin---wangshuai---date:20260804  for：[LHZP-126]筛选 年、年月 快速选择不需要------------
+        //update-begin---wangshuai---date:20260804  for：[LHZP-126]Sàng lọc Năm, năm-tháng Chọn nhanh không cần------------
         const picker = componentProps.picker;
         if (schema.component === 'DatePickerInFilter' && ['year', 'month'].includes(picker)) {
           componentProps = { ...componentProps, allowSelectRange: false };
         }
-        //update-end---author:wangshuai ---date:20260804  for：[LHZP-126]筛选 年、年月 快速选择不需要------------
+        //update-end---author:wangshuai ---date:20260804  for：[LHZP-126]Sàng lọc Năm, năm-tháng Chọn nhanh không cần------------
         
         return componentProps as Recordable;
       });
@@ -85,9 +85,9 @@
 
         const isCreatePlaceholder = !propsData.disabled;
         
-        // RangePicker place是一个数组
+        // RangePicker placelà một mảng
         if (isCreatePlaceholder && component !== 'RangePicker' && component) {
-          //自动设置placeholder
+          //Thiết lập tự độngplaceholder
           propsData.placeholder =
             unref(getComponentsProps)?.placeholder ||
             createPlaceholderMessage(component) + props.schema.label;

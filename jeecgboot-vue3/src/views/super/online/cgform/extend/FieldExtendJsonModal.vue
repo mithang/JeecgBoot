@@ -2,11 +2,11 @@
   <BasicModal
     wrapClassName="field-extend-config-modal"
     v-bind="$attrs"
-    title="字段扩展配置项"
+    title="Mục cấu hình mở rộng của trường"
     @register="registerModal"
     keyboard
     :canFullscreen="false"
-    cancelText="关闭"
+    cancelText="Đóng"
     @ok="handleSubmit"
   >
     <a-spin :spinning="spinningLoading">
@@ -52,7 +52,7 @@
         extendConfig.validateError = '';
         extendConfig.labelLength = LABELLENGTH;
         extendConfig.displayLevel = 'all';
-        //是否标题字段
+        //Có phải trường tiêu đề hay không
         extendConfig.isTitleField = 0;
       }
 
@@ -74,7 +74,7 @@
       const rowKey = ref('');
       const sortFlag = ref('0');
       const dbType = ref('');
-      //是否子表
+      //Có phải bảng con hay không
       const isSubTable = ref(false);
 
       const formSchemas: any[] = [
@@ -85,7 +85,7 @@
           show: false,
         },
         {
-          label: '文件上传数量',
+          label: 'Số lượng tệp tải lên',
           field: 'uploadnum',
           component: 'InputNumber',
           componentProps: {
@@ -98,46 +98,46 @@
           },
         },
         {
-          label: '是否多选',
+          label: 'Có chọn nhiều hay không',
           field: 'popupMulti',
           component: 'RadioGroup',
           defaultValue: true,
           componentProps: {
             options: [
-              { label: '否', value: false },
-              { label: '是', value: true },
+              { label: 'Không', value: false },
+              { label: 'là', value: true },
             ],
           },
           ifShow: () => {
             return fieldShowType.value === 'popup' || fieldShowType.value === 'popup_dict';
           },
         },
-        // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-261】online下拉搜索支持多选
+        // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-261】onlineTìm kiếm dropdown hỗ trợ chọn nhiều
         {
-          label: '是否多选',
+          label: 'Có chọn nhiều hay không',
           field: 'multiple',
           component: 'RadioGroup',
           defaultValue: false,
           componentProps: {
             options: [
-              { label: '否', value: false },
-              { label: '是', value: true },
+              { label: 'Không', value: false },
+              { label: 'là', value: true },
             ],
           },
           ifShow: () => {
             return fieldShowType.value === 'sel_search';
           },
         },
-        // update-end--author:liaozhiyang---date:20260826---for:【LHZP-261】online下拉搜索支持多选
+        // update-end--author:liaozhiyang---date:20260826---for:【LHZP-261】onlineTìm kiếm dropdown hỗ trợ chọn nhiều
         {
-          label: '是否多选',
+          label: 'Có chọn nhiều hay không',
           field: 'multiSelect',
           component: 'RadioGroup',
           defaultValue: true,
           componentProps: {
             options: [
-              { label: '否', value: false },
-              { label: '是', value: true },
+              { label: 'Không', value: false },
+              { label: 'là', value: true },
             ],
           },
           ifShow: () => {
@@ -145,7 +145,7 @@
           },
         },
         {
-          label: '存储字段',
+          label: 'Trường lưu trữ',
           field: 'store',
           component: 'Input',
           ifShow: () => {
@@ -153,7 +153,7 @@
           },
         },
         {
-          label: '展示字段',
+          label: 'Trường hiển thị',
           field: 'text',
           component: 'Input',
           ifShow: () => {
@@ -161,134 +161,134 @@
           },
         },
         {
-          label: '默认排序',
+          label: 'Sắp xếp mặc định',
           field: 'orderRule',
           component: 'RadioGroup',
           defaultValue: '',
           componentProps: {
             options: [
-              { label: '降序', value: 'desc' },
-              { label: '升序', value: 'asc' },
-              { label: '不默认排序', value: '' },
+              { label: 'Giảm dần', value: 'desc' },
+              { label: 'Tăng dần', value: 'asc' },
+              { label: 'không sắp xếp theo mặc định', value: '' },
             ],
           },
           ifShow: () => {
-            // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-308】Datetime、string、Date,int、BigDecimal、double类型默认展示排序功能
+            // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-308】Datetime、string、Date,int、BigDecimal、doubleLoại mặc định hiển thị chức năng sắp xếp
             return sortFlag.value === '1' || ['Datetime', 'string', 'Date', 'int', 'BigDecimal', 'double', 'long'].includes(dbType.value);
-            // update-end--author:liaozhiyang---date:20240523---for：【TV360X-308】Datetime、string、Date,int、BigDecimal、double类型默认展示排序功能
+            // update-end--author:liaozhiyang---date:20240523---for：【TV360X-308】Datetime、string、Date,int、BigDecimal、doubleLoại mặc định hiển thị chức năng sắp xếp
           },
         },
         {
-          label: '校验提示',
+          label: 'Nhắc nhở kiểm chứng',
           field: 'validateError',
           component: 'Input',
           componentProps: {
-            placeholder: '请输入校验提示文本',
+            placeholder: 'Vui lòng nhập văn bản nhắc nhở kiểm chứng',
           },
         },
         {
-          label: () => h(Tooltip, { title: '显示文字的个数' }, { default: () => '查询label长度' }),
+          label: () => h(Tooltip, { title: 'Số lượng ký tự hiển thị' }, { default: () => 'Truy vấnlabelĐộ dài' }),
           field: 'labelLength',
           component: 'InputNumber',
           componentProps: {
-            placeholder: '请输入label长度',
+            placeholder: 'Vui lòng nhậplabelĐộ dài',
           },
         },
         {
-          label: '是否固定',
+          label: 'Có cố định hay không',
           field: 'isFixed',
           component: 'RadioGroup',
           defaultValue: 0,
           componentProps: {
             options: [
-              { label: '是', value: 1 },
-              { label: '否', value: 0 },
+              { label: 'là', value: 1 },
+              { label: 'Không', value: 0 },
             ],
           },
         },
-        // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+        // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
         {
-          label: '是否独占一行',
+          label: 'Có chiếm riêng một hàng hay không',
           field: 'isOneRow',
           component: 'RadioGroup',
           defaultValue: false,
           componentProps: {
             options: [
-              { label: '否', value: false },
-              { label: '是', value: true },
+              { label: 'Không', value: false },
+              { label: 'là', value: true },
             ],
           },
           ifShow: () => {
             return fieldShowType.value === 'markdown' || fieldShowType.value === 'umeditor';
           },
         },
-        // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
-        // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
+        // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
+        // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
         {
-          label: '日期格式',
+          label: 'Định dạng ngày',
           field: 'picker',
           component: 'RadioGroup',
           defaultValue: 'default',
           componentProps: {
             options: [
-              { label: '年', value: 'year' },
-              { label: '年月', value: 'month' },
-              { label: '年周', value: 'week' },
-              { label: '年季度', value: 'quarter' },
-              { label: '年月日', value: 'default' },
+              { label: 'Năm', value: 'year' },
+              { label: 'Năm-tháng', value: 'month' },
+              { label: 'Năm-tuần', value: 'week' },
+              { label: 'Năm-quý', value: 'quarter' },
+              { label: 'Năm-tháng-ngày', value: 'default' },
             ],
           },
           ifShow: () => {
             return fieldShowType.value === 'date';
           },
         },
-        // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
-        // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
+        // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
+        // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694】onlineHỗ trợ cấu hình độc lập tỉnh, thành phố, quận/huyện
         {
-          label: '显示级别',
+          label: 'Cấp hiển thị',
           field: 'displayLevel',
           component: 'RadioGroup',
           defaultValue: 'all',
           componentProps: {
             options: [
-              { label: '省市区', value: 'all' },
-              { label: '省', value: 'province' },
-              { label: '市', value: 'city' },
-              { label: '区', value: 'region' },
+              { label: 'Tỉnh/Thành/Quận huyện', value: 'all' },
+              { label: 'Tỉnh', value: 'province' },
+              { label: 'thành phố', value: 'city' },
+              { label: 'khu', value: 'region' },
             ],
           },
           ifShow: () => {
             return fieldShowType.value === 'pca';
           },
         },
-        // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
-        //update-begin---author:liusq ---date:20260519  for：【QQYUN-13645】online表单允许设置某个字段是标题字段
+        // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694】onlineHỗ trợ cấu hình độc lập tỉnh, thành phố, quận/huyện
+        //update-begin---author:liusq ---date:20260519  for：【QQYUN-13645】onlineBiểu mẫu cho phép thiết lập một trường nào đó là trường tiêu đề
         {
-          label: '是否标题字段',
+          label: 'Có phải trường tiêu đề hay không',
           field: 'isTitleField',
           component: 'RadioGroup',
           defaultValue: 0,
           componentProps: {
             options: [
-              { label: '是', value: 1 },
-              { label: '否', value: 0 },
+              { label: 'là', value: 1 },
+              { label: 'Không', value: 0 },
             ],
             onChange: (e) => {
               const newValue = e?.target?.value ?? e;
               if (newValue === 1) {
-                message.info('标题字段唯一，将覆盖其他已设置项');
+                message.info('Trường tiêu đề là duy nhất, sẽ ghi đè các mục khác đã thiết lập');
               }
             },
           },
           ifShow: () => {
-            //子表不配置标题字段
+            //Bảng con không cấu hình trường tiêu đề
             return !isSubTable.value;
           },
         },
-        //update-end---author:liusq ---date:20260519  for：【QQYUN-13645】online表单允许设置某个字段是标题字段
-        // update-begin--author:liaozhiyang---date:20240308---for：【TV360X-25】扩展参数配置中增加开关是否选项配置
+        //update-end---author:liusq ---date:20260519  for：【QQYUN-13645】onlineBiểu mẫu cho phép thiết lập một trường nào đó là trường tiêu đề
+        // update-begin--author:liaozhiyang---date:20240308---for：【TV360X-25】Bổ sung cấu hình tùy chọn công tắc có/không trong cấu hình tham số mở rộng
         {
-          label: '开关值',
+          label: 'Giá trị công tắc',
           field: 'switchOptions',
           component: 'Input',
           slot: 'switchOptions',
@@ -296,10 +296,10 @@
             return fieldShowType.value === 'switch';
           },
         },
-        // update-end--author:liaozhiyang---date:20240308---for：【TV360X-25】扩展参数配置中增加开关是否选项配置
+        // update-end--author:liaozhiyang---date:20240308---for：【TV360X-25】Bổ sung cấu hình tùy chọn công tắc có/không trong cấu hình tham số mở rộng
       ];
 
-      // 表单配置
+      // Cấu hình biểu mẫu
       const [registerForm, { validate, setFieldsValue, resetFields }] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
@@ -312,30 +312,30 @@
         initExtendConfig();
         if (data.jsonStr) {
           let json = JSON.parse(data.jsonStr);
-          // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-261】online下拉搜索支持多选
+          // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-261】onlineTìm kiếm dropdown hỗ trợ chọn nhiều
           if (data.fieldShowType === 'sel_search' && json.multiple == null) {
             extendConfig.multiple = false;
           }
-          // update-end--author:liaozhiyang---date:20260826---for:【LHZP-261】online下拉搜索支持多选
-          // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-519】开关设置默认值及兼容数组写法
+          // update-end--author:liaozhiyang---date:20260826---for:【LHZP-261】onlineTìm kiếm dropdown hỗ trợ chọn nhiều
+          // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-519】Công tắc thiết lập giá trị mặc định và tương thích cách viết mảng
           if (data.fieldShowType === 'switch') {
-            // 兼容[0,1]写法
+            // Tương thích[0,1]Cách viết
             if (isArray(json) && json.length == 2) {
               extendConfig.switchOptions = json;
             }
           }
-          // update-end--author:liaozhiyang---date:20240524---for：【TV360X-519】开关设置默认值及兼容数组写法
+          // update-end--author:liaozhiyang---date:20240524---for：【TV360X-519】Công tắc thiết lập giá trị mặc định và tương thích cách viết mảng
           Object.keys(json).map((k) => {
-            console.log('扩展参数:' + k + '=' + json[k]);
+            console.log('Tham số mở rộng:' + k + '=' + json[k]);
             extendConfig[k] = json[k];
           });
         } else {
-          // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-519】开关设置默认值及兼容数组写法
-          // 开关设置默认值
+          // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-519】Công tắc thiết lập giá trị mặc định và tương thích cách viết mảng
+          // Công tắc thiết lập giá trị mặc định
           if (data.fieldShowType === 'switch') {
             extendConfig.switchOptions = ['Y', 'N'];
           }
-          // update-end--author:liaozhiyang---date:20240524---for：【TV360X-519】开关设置默认值及兼容数组写法
+          // update-end--author:liaozhiyang---date:20240524---for：【TV360X-519】Công tắc thiết lập giá trị mặc định và tương thích cách viết mảng
         }
         fieldShowType.value = data.fieldShowType;
         rowKey.value = data.id;
@@ -370,50 +370,50 @@
         } else if (type === 'sel_search') {
           obj.multiple = data.multiple;
         }
-        // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-308】Datetime、string、Date,int、BigDecimal、double类型默认展示排序功能
+        // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-308】Datetime、string、Date,int、BigDecimal、doubleLoại mặc định hiển thị chức năng sắp xếp
         if (data.orderRule) {
           obj.orderRule = data.orderRule;
         }
-        // update-end--author:liaozhiyang---date:20240523---for：【TV360X-308】Datetime、string、Date,int、BigDecimal、double类型默认展示排序功能
+        // update-end--author:liaozhiyang---date:20240523---for：【TV360X-308】Datetime、string、Date,int、BigDecimal、doubleLoại mặc định hiển thị chức năng sắp xếp
         if (data.validateError) {
           obj.validateError = data.validateError;
         }
         if (data.labelLength) {
           obj.labelLength = data.labelLength;
         }
-        // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-4161】列支持固定功能
+        // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-4161】Cột hỗ trợ tính năng cố định
         if (data.isFixed) {
           obj.isFixed = data.isFixed;
         }
-        // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-4161】列支持固定功能
-        //update-begin---author:liusq ---date:20260519  for：【QQYUN-13645】online表单允许设置某个字段是标题字段
+        // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-4161】Cột hỗ trợ tính năng cố định
+        //update-begin---author:liusq ---date:20260519  for：【QQYUN-13645】onlineBiểu mẫu cho phép thiết lập một trường nào đó là trường tiêu đề
         if (!isSubTable.value && data.isTitleField) {
           obj.isTitleField = data.isTitleField;
         }
-        //update-end---author:liusq ---date:20260519  for：【QQYUN-13645】online表单允许设置某个字段是标题字段
-        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
-        // update-begin--author:liaozhiyang---date:20260827---for：【LHZP-371】富文本和Markdown独占一行选择否后正确保存
+        //update-end---author:liusq ---date:20260519  for：【QQYUN-13645】onlineBiểu mẫu cho phép thiết lập một trường nào đó là trường tiêu đề
+        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
+        // update-begin--author:liaozhiyang---date:20260827---for：【LHZP-371】Văn bản giàu vàMarkdownSau khi chọn Không cho chiếm riêng một hàng, lưu đúng
         if ((type === 'markdown' || type === 'umeditor') && typeof data.isOneRow === 'boolean') {
           obj.isOneRow = data.isOneRow;
         }
-        // update-end--author:liaozhiyang---date:20260827---for：【LHZP-371】富文本和Markdown独占一行选择否后正确保存
-        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+        // update-end--author:liaozhiyang---date:20260827---for：【LHZP-371】Văn bản giàu vàMarkdownSau khi chọn Không cho chiếm riêng một hàng, lưu đúng
+        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
         if (data.picker) {
           obj.picker = data.picker;
         }
-        // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-25】扩展参数配置中增加开关是否选项配置
+        // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-25】Bổ sung cấu hình tùy chọn công tắc có/không trong cấu hình tham số mở rộng
         if (data.switchOptions) {
           const arr = data.switchOptions.split(',');
           let Y = Number(arr[0]);
           let N = Number(arr[1]);
-          // 都能转成number就转，否则就是string
+          // Đều có thể chuyển thànhnumberthì chuyển đổi, nếu không thì làstring
           if (Number.isNaN(Y) || Number.isNaN(N)) {
             Y = arr[0];
             N = arr[1];
           }
           obj.switchOptions = [Y, N];
         }
-        // update-end--author:liaozhiyang---date:20240522---for：【TV360X-25】扩展参数配置中增加开关是否选项配置
+        // update-end--author:liaozhiyang---date:20240522---for：【TV360X-25】Bổ sung cấu hình tùy chọn công tắc có/không trong cấu hình tham số mở rộng
         if (data.displayLevel) {
           obj.displayLevel = data.displayLevel;
         }

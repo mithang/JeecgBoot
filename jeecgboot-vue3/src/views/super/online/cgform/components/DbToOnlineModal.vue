@@ -1,19 +1,19 @@
 <template>
-  <BasicModal @register="registerModal" :height="modalHeight" :width="500" title="从数据库导入表单" :confirmLoading="confirmLoading" @cancel="handleCancel" :wrapClassName="wrapClassName">
+  <BasicModal @register="registerModal" :height="modalHeight" :width="500" title="Nhập biểu mẫu từ cơ sở dữ liệu" :confirmLoading="confirmLoading" @cancel="handleCancel" :wrapClassName="wrapClassName">
     <a-spin :spinning="confirmLoading">
       <BasicTable @register="registerTable" :rowSelection="rowSelection" @tableRedo="queryTables">
         <template #tableTitle>
           <div>
-            注：导入表会排除配置前缀表
-            <a href="https://help.jeecg.com/java/online/more/exclusionTable?_highlight=%E6%95%B0%E6%8D%AE%E5%BA%93" target="_blank"> 参考文档</a>
+            Chú thích: việc nhập bảng sẽ loại trừ các bảng có tiền tố cấu hình
+            <a href="https://help.jeecg.com/java/online/more/exclusionTable?_highlight=%E6%95%B0%E6%8D%AE%E5%BA%93" target="_blank"> Tài liệu tham khảo</a>
           </div>
         </template>
       </BasicTable>
     </a-spin>
 
     <template #footer>
-      <a-button @click="handleCancel">关闭</a-button>
-      <a-button @click="handleTrans" type="primary" preIcon="ant-design:swap" :loading="confirmLoading || btnLoading"> 生成表单 </a-button>
+      <a-button @click="handleCancel">Đóng</a-button>
+      <a-button @click="handleTrans" type="primary" preIcon="ant-design:swap" :loading="confirmLoading || btnLoading"> Tạo biểu mẫu </a-button>
     </template>
   </BasicModal>
 </template>
@@ -38,7 +38,7 @@
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const { createMessage: $message } = useMessage();
-      const emptyText = ref('暂无数据');
+      const emptyText = ref('Không có dữ liệu');
       const confirmLoading = ref(false);
       const btnLoading = ref(false);
       const metaSource = ref<Recordable[]>([]);
@@ -52,7 +52,7 @@
 
       const [registerTable, { setPagination, getForm }, { rowSelection, selectedRowKeys }] = useListTable({
         bordered: true,
-        columns: [{ title: '表名', align: 'left', dataIndex: 'id' }],
+        columns: [{ title: 'Tên bảng', align: 'left', dataIndex: 'id' }],
         dataSource: dataSource,
         maxHeight: clientHeight - 400,
         locale: { emptyText: emptyText },
@@ -66,12 +66,12 @@
         formConfig: {
           schemas: [
             {
-              label: '表名',
+              label: 'Tên bảng',
               field: 'tableName',
               component: 'Input',
               componentProps: {
                 style: { width: '100%' },
-                placeholder: '请输入表名以模糊筛选',
+                placeholder: 'Vui lòng nhập tên bảng để sàng lọc mờ',
                 onChange: (e) => searchFilter(e.target.value),
               },
               disabledLabelWidth: true,
@@ -87,11 +87,11 @@
       });
 
       const [registerModal, { closeModal }] = useModalInner(() => {
-        // 重置form
+        // Đặt lạiform
         getForm()?.resetFields();
 
         btnLoading.value = false;
-        emptyText.value = '暂无数据';
+        emptyText.value = 'Không có dữ liệu';
         selectedRowKeys.value = [];
         queryTables();
       });
@@ -115,7 +115,7 @@
             },
             (e) => {
               if (e.message == 'noadminauth') {
-                emptyText.value = '非admin用户无权限操作！';
+                emptyText.value = 'Không phảiadminNgười dùng không có quyền thao tác!';
                 $message.warn(emptyText.value);
               } else {
                 console.error(e);
@@ -135,7 +135,7 @@
           dataSource.value = [...metaSource.value];
         } else {
           dataSource.value = metaSource.value.filter((item) => item.id.toLowerCase().includes(keyword.toLowerCase()));
-          emptyText.value = dataSource.value.length === 0 ? '无筛选结果' : '暂无数据';
+          emptyText.value = dataSource.value.length === 0 ? 'Không có kết quả sàng lọc' : 'Không có dữ liệu';
         }
         setPagination({ current: 1 });
       }
@@ -146,7 +146,7 @@
 
       function handleTrans() {
         if (!selectedRowKeys.value || selectedRowKeys.value.length == 0) {
-          $message.warning('请选择一张表');
+          $message.warning('Vui lòng chọn một bảng');
           return;
         } else {
           btnLoading.value = true;
@@ -183,7 +183,7 @@
 </script>
 
 <style lang="less">
-  // update-begin--author:liaozhiyang---date:20240110---for：【QQYUN-7838】online导入到表界面优化
+  // update-begin--author:liaozhiyang---date:20240110---for：【QQYUN-7838】onlineTối ưu giao diện nhập vào bảng
   @prefix-cls: ~'@{namespace}-online-db-import-form-modal';
   .@{prefix-cls} {
     .ant-table-wrapper .ant-table-pagination.ant-pagination {
@@ -201,5 +201,5 @@
     .ant-form-item-label {width:40px;}
     .ant-modal {top: 20px;}
   }
-  // update-end--author:liaozhiyang---date:20240110---for：【QQYUN-7838】online导入到表界面优化
+  // update-end--author:liaozhiyang---date:20240110---for：【QQYUN-7838】onlineTối ưu giao diện nhập vào bảng
 </style>

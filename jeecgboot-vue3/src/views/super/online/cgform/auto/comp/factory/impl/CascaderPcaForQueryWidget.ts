@@ -2,21 +2,21 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 表单设计器-省市区查询
+ * Trình thiết kế biểu mẫu-Truy vấn tỉnh/thành/quận huyện
  */
 export default class CascaderPcaForQueryWidget extends IFormSchema {
 
   schema: Recordable;
-  // 省市县联动级别
+  // Cấp liên động tỉnh/thành/huyện
   areaLevel: number;
-  // 是否允许更改级别
+  // Có cho phép thay đổi cấp bậc hay không
   allowChangeLevel: boolean;
 
   constructor(key: string, data: Recordable, queryItem: Recordable) {
     super(key, data);
     this.schema = data
     this.areaLevel = data['areaLevel'] ?? 3;
-    // 只有等于和不等于才能更改级别
+    // Chỉ khi bằng và không bằng mới có thể thay đổi cấp bậc
     this.allowChangeLevel = ['eq', 'ne'].includes(queryItem?.rule)
   }
 
@@ -27,7 +27,7 @@ export default class CascaderPcaForQueryWidget extends IFormSchema {
       componentProps:{
         areaLevel: this.areaLevel,
         allowChangeLevel: this.allowChangeLevel,
-        placeholder: '请选择…',
+        placeholder: 'Vui lòng chọn…',
         style: {
           width: '100%',
         }

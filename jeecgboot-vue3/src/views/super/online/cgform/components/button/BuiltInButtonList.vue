@@ -1,5 +1,5 @@
 <template>
-  <BasicModal @register="registerModal" title="内置按钮" :width="1200" @cancel="onCancel">
+  <BasicModal @register="registerModal" title="Nút tích hợp sẵn" :width="1200" @cancel="onCancel">
 
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #action="{ record }">
@@ -8,10 +8,10 @@
     </BasicTable>
 
     <template #footer>
-      <a-button @click="onCancel">关闭</a-button>
+      <a-button @click="onCancel">Đóng</a-button>
     </template>
 
-    <!-- 表单区域 -->
+    <!-- Vùng biểu mẫu -->
     <BasicModal v-bind="formModalProps">
       <a-spin :spinning="formModalProps.confirmLoading">
         <div style="margin-top: 20px;">
@@ -42,18 +42,18 @@ const props = defineProps({
 const emit = defineEmits(['register']);
 
 const code = computed(() => props.record?.id);
-// 1单表、2主表、3附表
+// 1bảng đơn,2bảng chính,3Bảng phụ
 const tableType = computed(() => props.record?.tableType);
 
 const isSingleTable = computed(() => tableType.value === 1);
 
-// 列表页面公共参数、方法
+// Tham số, phương thức dùng chung của trang danh sách
 const {tableContext} = useListPage({
   tableProps: {
     api: async (params) => {
       const list = await builtInList(code.value, params)
       if (isSingleTable.value) {
-        // 过滤包含 sub_ 的按钮，说明是附表按钮，单表时不显示
+        // Lọc bao gồm sub_ nút của, cho thấy là nút của bảng phụ, khi là bảng đơn thì không hiển thị
         return list.filter(item => !item.buttonCode.includes('sub_'));
       }
       return list;
@@ -64,17 +64,17 @@ const {tableContext} = useListPage({
     pagination: false,
   },
 });
-// 注册table数据
+// Đăng kýtableDữ liệu
 const [registerTable, {reload}, {rowSelection}] = tableContext;
-// 注册弹窗
+// Popup đăng ký
 const [registerModal, {closeModal}] = useModalInner(() => reload());
 
-// 注册 form 弹窗
+// Đăng ký form Popup
 const [registerFormModal, formModal] = useModal();
 const isUpdate = ref(false);
 const formModalProps = reactive({
   onRegister: registerFormModal,
-  title: computed(() => (isUpdate?.value ? '修改' : '新增')),
+  title: computed(() => (isUpdate?.value ? 'Chỉnh sửa' : 'Thêm mới')),
   width: 600,
   centered: true,
   confirmLoading: false,
@@ -103,18 +103,18 @@ const schemas = [
         iconPrefixSave: false,
         iconPrefix: formModel.buttonCode === 'aigc_mock_data' ? 'mdi' : 'ant-design',
       }),
-      // 以下按钮不允许设置图标
+      // Các nút dưới đây không cho phép thiết lập biểu tượng
       dynamicDisabled: ({values}) => ['bpm', 'edit', 'detail', 'delete'].includes(values.buttonCode),
     }
   }
   return schema
 });
 
-// 注册 form
+// Đăng ký form
 const [registerForm, {resetFields, setFieldsValue, validate}] = useForm({
-  // update-begin--author:liaozhiyang---date:20240618---for：【TV360X-1306】自定义按钮弹窗按钮样式切换是重置弹窗高度
+  // update-begin--author:liaozhiyang---date:20240618---for：【TV360X-1306】Nút tùy chỉnh: khi chuyển đổi kiểu nút popup thì đặt lại chiều cao popup
   schemas: schemas,
-  // update-end--author:liaozhiyang---date:20240618---for：【TV360X-1306】自定义按钮弹窗按钮样式切换是重置弹窗高度
+  // update-end--author:liaozhiyang---date:20240618---for：【TV360X-1306】Nút tùy chỉnh: khi chuyển đổi kiểu nút popup thì đặt lại chiều cao popup
   showActionButtonGroup: false,
 });
 
@@ -127,7 +127,7 @@ async function openFormModal(data: Recordable) {
   setFieldsValue(formRecord);
 }
 
-// 编辑按钮
+// Nút chỉnh sửa
 function onEdit(record: Recordable) {
   openFormModal({isUpdate: true, record});
 }
@@ -154,12 +154,12 @@ async function onSubmit() {
 }
 
 /**
- * 操作栏
+ * Thanh thao tác
  */
 function getTableAction(record: Recordable) {
   return [
     {
-      label: '编辑',
+      label: 'Chỉnh sửa',
       onClick: () => onEdit(record),
     },
   ];

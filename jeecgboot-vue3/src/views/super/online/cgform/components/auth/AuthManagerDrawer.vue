@@ -1,15 +1,15 @@
 <template>
-  <BasicDrawer class="online-auth-manager-drawer" @register="registerDrawer" title="权限管理" :width="800" @close="onClose">
+  <BasicDrawer class="online-auth-manager-drawer" @register="registerDrawer" title="Quản lý quyền" :width="800" @close="onClose">
     <a-tabs v-model:activeKey="activeKey">
-      <a-tab-pane tab="字段权限" key="field" forceRender>
+      <a-tab-pane tab="Quyền trường" key="field" forceRender>
         <AuthFieldConfig :headId="headId" v-model:authFields="authFields" />
       </a-tab-pane>
       <template v-if="hasDataAuth">
-        <a-tab-pane tab="按钮权限" key="button" forceRender>
+        <a-tab-pane tab="Quyền nút" key="button" forceRender>
           <AuthButtonConfig :headId="headId" :tableType="curTableType" :isTree="curIsTree" />
         </a-tab-pane>
-        <a-tab-pane tab="数据权限" key="data" forceRender>
-          <!-- 数据权限不需要实时刷新 故而此处传原表单ID -->
+        <a-tab-pane tab="Quyền dữ liệu" key="data" forceRender>
+          <!-- Quyền dữ liệu không cần làm mới theo thời gian thực Vì vậy tại đây truyền biểu mẫu gốcID -->
           <AuthDataConfig :cgformId="cgformId" :authFields="authFields" :tableType="curTableType" />
         </a-tab-pane>
       </template>
@@ -33,7 +33,7 @@
       AuthDataConfig,
     },
     props: {
-      // 1单表 2主表 3附表
+      // 1bảng đơn 2bảng chính 3Bảng phụ
       tableType: {
         type: Number,
         default: 1,
@@ -53,10 +53,10 @@
         cgformId.value = data.cgformId;
         headId.value = cgformId.value + '?' + new Date().getTime();
         activeKey.value = 'field';
-        // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-187】去掉子表权限管理中按钮权限的高级查询
+        // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-187】Bỏ truy vấn nâng cao của quyền nút trong quản lý quyền bảng con
         curTableType.value = data.tableType;
         curIsTree.value = data.isTree || 'N';
-        // update-end--author:liaozhiyang---date:20240520---for：【TV360X-187】去掉子表权限管理中按钮权限的高级查询
+        // update-end--author:liaozhiyang---date:20240520---for：【TV360X-187】Bỏ truy vấn nâng cao của quyền nút trong quản lý quyền bảng con
       });
 
       function onClose() {
@@ -79,11 +79,11 @@
 </script>
 
 <style lang="less">
-// update-begin--author:liaozhiyang---date:20260811---for：【LHZP-311】权限管理调整到50条/页时会出现两个滚动条
+// update-begin--author:liaozhiyang---date:20260811---for：【LHZP-311】Điều chỉnh quản lý quyền tới50mục (điều)/Khi ở trang sẽ xuất hiện hai thanh cuộn
 .online-auth-manager-drawer {
   .is-vertical {
     display: none;
   }
 }
-// update-end--author:liaozhiyang---date:20260811---for：【LHZP-311】权限管理调整到50条/页时会出现两个滚动条
+// update-end--author:liaozhiyang---date:20260811---for：【LHZP-311】Điều chỉnh quản lý quyền tới50mục (điều)/Khi ở trang sẽ xuất hiện hai thanh cuộn
 </style>

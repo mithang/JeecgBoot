@@ -66,7 +66,7 @@
         type: String,
         default: '',
       },
-      // 为了区分来源，编码时主要是erp子表有特殊处理
+      // Để phân biệt nguồn gốc, khi mã hóa chủ yếu làerpBảng con có xử lý đặc biệt
       source: {
         type: String,
         default: '',
@@ -78,7 +78,7 @@
         default: () => {
           return {
             enabled: true,
-            buttonName: '确定',
+            buttonName: 'Xác nhận',
             buttonIcon: '',
           }
         }
@@ -88,7 +88,7 @@
         default: () => {
           return {
             enabled: true,
-            buttonName: '关闭',
+            buttonName: 'Đóng',
             buttonIcon: '',
           }
         }
@@ -101,7 +101,7 @@
     },
     emits: ['success', 'register', 'formConfig'],
     setup(props, { emit }) {
-      console.log('进入表单弹框》》》》modal');
+      console.log('Vào popup biểu mẫu 》》》》modal');
       const commentPanelRef = ref();
       const commentSpan = ref(0);
       function reloadComment(){
@@ -137,32 +137,32 @@
       function handleSuccess(formData) {
         emit('success', formData);
         closeModal();
-        // 提交完成 触发关闭事件
+        // Gửi hoàn tất Kích hoạt sự kiện đóng
         onCloseEvent();
       }
 
-      // 监听id变化 表单重新渲染
+      // Lắng nghe (watch)idThay đổi Render lại biểu mẫu
       watch(() => props.id, renderFormItems, { immediate: true });
       async function renderFormItems() {
         formRendered.value = false;
         if (!props.id) {
           return;
         }
-        console.log('重新渲染表单》》》》modal');
-        // update-begin--author:liaozhiyang---date:20240426---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权查看从表新增和详情的数据
+        console.log('Render lại biểu mẫu 》》》》modal');
+        // update-begin--author:liaozhiyang---date:20240426---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xem dữ liệu thêm mới và chi tiết của bảng phụ thuộc
         const params: any = {};
         if (props.source === ERPSUBTABLE) {
           params.tabletype = 3;
         }
         await handleFormConfig(props.id, params);
-        // update-end--author:liaozhiyang---date:20240426---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权查看从表新增和详情的数据
+        // update-end--author:liaozhiyang---date:20240426---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xem dữ liệu thêm mới và chi tiết của bảng phụ thuộc
       }
-      // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
+      // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-485】Sau khi bật bình luận, nút popup nằm ở bên phải, cách một khoảng bằng một bình luận
       const handleCommentOpen =  (visible, span) => { 
-        console.log('评论是否展开：', visible);
+        console.log('Bình luận có mở rộng hay không:', visible);
         commentSpan.value = span;
       }
-      // update-end--author:liaozhiyang---date:20240528---for：【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
+      // update-end--author:liaozhiyang---date:20240528---for：【TV360X-485】Sau khi bật bình luận, nút popup nằm ở bên phải, cách một khoảng bằng một bình luận
       const that = {
         title,
         onlineFormCompRef,

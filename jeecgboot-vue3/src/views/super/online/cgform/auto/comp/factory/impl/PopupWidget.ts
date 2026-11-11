@@ -37,14 +37,14 @@ export default class PopupWidget extends IFormSchema {
     } else {
       props['setFieldsValue'] = this.setFieldsValue;
     }
-    // 解决表单设计器高级查询 popup组件弹窗导致高级查询pop关闭
+    // Giải quyết truy vấn nâng cao của trình thiết kế biểu mẫu popupPopup của component dẫn đến truy vấn nâng caopopĐóng
     if(this.inPopover === true){
       props['getContainer'] = ()=>{
         return this.getModalAsContainer();
       }
     }
 
-    // 获取表单数据
+    // Lấy dữ liệu biểu mẫu
     props['getFormValues'] = () => unref(this.formRef).getFieldsValue();
 
     return props;

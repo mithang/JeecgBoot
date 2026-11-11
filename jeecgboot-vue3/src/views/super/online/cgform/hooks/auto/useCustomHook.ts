@@ -6,17 +6,17 @@ import { randomString } from '/@/utils/common/compUtils';
 import * as HOOK_USERINFO from '/@/store/modules/user';
 import * as UTIL_AUTH from "/@/utils/auth";
 
-// 在这里定义JS增强里可以使用的内容
+// Định nghĩa tại đâyJSNội dung có thể sử dụng trong phần tăng cường
 const $exports = {
   vue,
   '@': {
     hooks: {
-      // 调用示例：@/hooks/useMessage
+      // Ví dụ gọi:@/hooks/useMessage
       useMessage: HOOK_MESSAGE,
       useUserStore: HOOK_USERINFO
     },
     utils: {
-      // 调用示例：@/utils/axios
+      // Ví dụ gọi:@/utils/axios
       axios: UTIL_AXIOS,
       cache: UTIL_CACHE,
       auth: UTIL_AUTH,
@@ -25,17 +25,17 @@ const $exports = {
 };
 
 /**
- * 用于处理js增强中自定义的hook代码
- * 增强定义方法：useCustomHook()，建议不要使用双引号
- * 其他导出对象
+ * Dùng để xử lýjstùy chỉnh trong phần tăng cườnghookMã (code)
+ * Phương thức định nghĩa phần tăng cường:useCustomHook(), khuyến nghị không sử dụng dấu ngoặc kép
+ * Đối tượng xuất khác
  * @param otherExports
  */
 export function useCustomHook(otherExports?: Recordable, context?: any) {
   const assignExports = Object.assign({}, $exports, otherExports);
 
   /**
-   * 自定义 import 方法
-   * @param path 引用路径
+   * Tùy chỉnh import Phương thức
+   * @param path Đường dẫn tham chiếu
    */
   function doImport(path: string) {
     if (path != null && path != '') {
@@ -52,19 +52,19 @@ export function useCustomHook(otherExports?: Recordable, context?: any) {
   function doExport() {}
 
   /**
-   * 执行JS增强代码
-   * @param code 要执行的代码
+   * Thực thiJSMã tăng cường
+   * @param code Mã cần thực thi
    */
   function executeJsEnhanced(code: string, row?) {
-    // 为了避免方法名冲突，所以使用随机方法名
+    // Để tránh xung đột tên phương thức, vì vậy sử dụng tên phương thức ngẫu nhiên
     let randomKey = randomString(6);
     // let importKey = '__import_' + randomKey
     //let importKey = 'customImport'
     let exportKey = '__export_' + randomKey;
-    // 替换 import 关键字
+    // Thay thế import Từ khóa
     //code = replaceImportKey(code, importKey)
     
-    //update-begin-author:taoyan date:2023-5-15 for: issues/516 自定义按钮_hook后的参数row未定义问题（参见#410） #516
+    //update-begin-author:taoyan date:2023-5-15 for: issues/516 Nút tùy chỉnh_hooktham số sau đórowVấn đề chưa xác định (xem#410） #516
     if(row){
       const executeCode = `return function (row, customImport, ${exportKey}) {"use strict"; ${code}}`;
       console.group('executeJsEnhanced');
@@ -80,14 +80,14 @@ export function useCustomHook(otherExports?: Recordable, context?: any) {
       const fun = new Function(executeCode)();
       fun.call(context, doImport, doExport);
     }
-    //update-end-author:taoyan date:2023-5-15 for: issues/516 自定义按钮_hook后的参数row未定义问题（参见#410） #516
+    //update-end-author:taoyan date:2023-5-15 for: issues/516 Nút tùy chỉnh_hooktham số sau đórowVấn đề chưa xác định (xem#410） #516
  
   }
 
   /**
-   * 替换 import 关键字
+   * Thay thế import Từ khóa
    * @param code
-   * @param fnKey import 方法的key
+   * @param fnKey import của phương thứckey
    */
   /*  function replaceImportKey(code: string, fnKey: string) {
     let lines = code.split('\n')
@@ -106,5 +106,5 @@ export function useCustomHook(otherExports?: Recordable, context?: any) {
   };
 }
 
-/**获取函数体的内容作为字符串*/
+/**Lấy nội dung thân hàm làm chuỗi*/
 export const GET_FUN_BODY_REG = /(?:\/\*[\s\S]*?\*\/|\/\/.*?\r?\n|[^{])+\{([\s\S]*)\}$/;

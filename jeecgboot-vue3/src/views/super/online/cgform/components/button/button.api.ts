@@ -12,7 +12,7 @@ export enum Api {
 
 export const list = (code: string, params) => defHttp.get({ url: Api.list + code, params });
 
-// 执行删除操作
+// Thực thi thao tác xóa
 export function doBatchDelete(idList: string[]) {
   return defHttp.delete(
     {
@@ -26,7 +26,7 @@ export function doBatchDelete(idList: string[]) {
 }
 
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  */
 export const saveOrUpdate = (params, isUpdate: boolean) => {
   if (isUpdate) {
@@ -37,6 +37,6 @@ export const saveOrUpdate = (params, isUpdate: boolean) => {
 };
 
 /**
- * 加载内置按钮列表
+ * Tải danh sách nút tích hợp sẵn
  */
 export const builtInList = (code: string, params) => defHttp.get({url: Api.builtInList + code, params});

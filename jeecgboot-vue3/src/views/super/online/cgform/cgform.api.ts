@@ -10,40 +10,40 @@ export enum Api {
   copyTable = '/online/cgform/head/copyOnlineTable',
   queryById = '/online/cgform/head/queryById',
 
-  // CgformModal页面API
+  // CgformModalTrangAPI
   addAll = '/online/cgform/api/addAll',
   editAll = '/online/cgform/api/editAll',
   queryField = '/online/cgform/field/listByHeadId',
   queryIndex = '/online/cgform/index/listByHeadId',
   checkOnlyTable = '/online/cgform/api/checkOnlyTable',
-  // 只修改表配置，不改字段
+  // Chỉ sửa cấu hình bảng, không sửa trường
   editHead = '/online/cgform/head/edit'
 }
 
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 
-// update-begin---author:liusq---date:20261013---for:【LHZP-1967】打印设计生成后表单扩展配置未带出报表地址
+// update-begin---author:liusq---date:20261013---for:【LHZP-1967】Sau khi tạo thiết kế in, cấu hình mở rộng của biểu mẫu không mang theo địa chỉ báo cáo
 /**
- * 根据ID查询表单配置（获取最新的 extConfigJson 等）
+ * Căn cứ theoIDCấu hình biểu mẫu truy vấn (lấy mới nhất extConfigJson v.v.)
  * @param id
  */
 export const queryHeadById = (id: string) => defHttp.get({ url: Api.queryById, params: { id } });
-// update-end---author:liusq---date:20261013---for:【LHZP-1967】打印设计生成后表单扩展配置未带出报表地址
+// update-end---author:liusq---date:20261013---for:【LHZP-1967】Sau khi tạo thiết kế in, cấu hình mở rộng của biểu mẫu không mang theo địa chỉ báo cáo
 
-// 批量移除（移除只会删除表单配置）
+// Loại bỏ hàng loạt (việc loại bỏ chỉ xóa cấu hình biểu mẫu)
 export const doBatchRemove = (idList: string[]) => doRemove(idList, 0);
 export const doSingleRemove = (pid) => defHttp.delete({ url: Api.removeRecord, params: { id: pid } },
   { joinParamsToUrl: true });
-// 批量删除（删除会删除对应的数据库表以及子表）
+// Xóa hàng loạt (việc xóa sẽ xóa bảng cơ sở dữ liệu tương ứng và cả bảng con)
 export const doBatchDelete = (idList: string[]) => doRemove(idList, 1);
 export const doSingleDelete = (pid) => defHttp.delete({ url: Api.delete, params: { id: pid } },
   { joinParamsToUrl: true });
 
-// 执行删除操作
+// Thực thi thao tác xóa
 function doRemove(idList: string[], flag: number) {
   return defHttp.delete(
     {
@@ -57,27 +57,27 @@ function doRemove(idList: string[], flag: number) {
   );
 }
 
-// 同步数据库
+// Đồng bộ cơ sở dữ liệu
 export const doDatabaseSync = (id, method) =>
-  defHttp.post({ url: `${Api.databaseSync}/${id}/${method}`, timeout: 12000, timeoutErrorMessage: '同步数据库超时，已自动刷新' });
+  defHttp.post({ url: `${Api.databaseSync}/${id}/${method}`, timeout: 12000, timeoutErrorMessage: 'Đồng bộ cơ sở dữ liệu quá thời gian, đã tự động làm mới' });
 
 export const doCopyOnlineView = (id) => defHttp.post({ url: `${Api.copyOnline}?code=${id}` });
 
 /**
- * 复制表
- * @param id 要复制的表的id
- * @param tableName 新的表名
- * @param params 其他参数
+ * Sao chép bảng
+ * @param id của bảng cần sao chépid
+ * @param tableName Tên bảng mới
+ * @param params Tham số khác
  */
 export const doCopyTable = (id, tableName, params?) => defHttp.get({ url: `${Api.copyTable}/${id}`, params: { tableName, ...params } });
 
-// 弹窗formApi
+// PopupformApi
 export const formApi = {
-  // 查询表字段
+  // Trường của bảng truy vấn
   doQueryField: (headId: string, params?) => defHttp.get({ url: Api.queryField, params: { headId, ...params } }),
-  // 查询表index配置
+  // Bảng truy vấnindexCấu hình
   doQueryIndexes: (headId: string, params?) => defHttp.get({ url: Api.queryIndex, params: { headId, ...params } }),
-  // 新增或修改
+  // Thêm mới hoặc sửa đổi
   doSaveOrUpdate: (params, isUpdate) => {
     if (isUpdate) {
       return defHttp.put({ url: Api.editAll, params });
@@ -85,7 +85,7 @@ export const formApi = {
       return defHttp.post({ url: Api.addAll, params });
     }
   },
-  //只是修改表配置不改字段
+  //Chỉ là sửa cấu hình bảng, không sửa trường
   editHead: (params)=>{
     return defHttp.put({ url: Api.editHead, params });
   }

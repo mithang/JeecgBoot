@@ -4,40 +4,40 @@
     :title="title"
     :width="modalWidth"
     :confirmLoading="confirmLoading"
-    okText="开始生成"
-    cancelText="取消"
+    okText="Bắt đầu tạo"
+    cancelText="Hủy"
     @ok="onSubmit"
     @cancel="onCancel"
     :wrapClassName="wrapClassName"
   >
     <a-spin :spinning="confirmLoading">
       <BasicForm @register="registerForm">
-        <!-- update-begin--author:liaozhiyang---date:20240612---for：【TV360X-1057】代码生成页面代码鼠标移入给说明 -->
+        <!-- update-begin--author:liaozhiyang---date:20240612---for：【TV360X-1057】Trang sinh mã: di chuột vào mã thì hiển thị phần thuyết minh -->
         <template #pageCode="{ model, field }">
           <a-radio-group v-model:value="model[field]">
             <a-tooltip placement="top">
               <template #title>
-                <span>深度封装表单，用户只需定义字段json即可渲染表单，优点简单便捷，缺点扩展有难度</span>
+                <span>Đóng gói sâu biểu mẫu, người dùng chỉ cần định nghĩa trườngjsonlà có thể render biểu mẫu, ưu điểm là đơn giản tiện lợi, nhược điểm là khó mở rộng</span>
               </template>
-              <a-radio value="vue3">封装表单(BasicForm)</a-radio>
+              <a-radio value="vue3">Biểu mẫu được đóng gói(BasicForm)</a-radio>
             </a-tooltip>
             <a-tooltip placement="top">
               <template #title>
-                <span>antd的原生表单，所有字段都需要硬编码，缺点编码繁琐，优点扩展容易</span>
+                <span>antdbiểu mẫu gốc của, mọi trường đều cần hardcode, nhược điểm là viết mã rườm rà, ưu điểm là dễ mở rộng</span>
               </template>
-             <a-radio value="vue3Native" v-if="!(model.jspMode == 'innerTable' || model.jspMode == 'tab')">原生表单(a-form)</a-radio>
+             <a-radio value="vue3Native" v-if="!(model.jspMode == 'innerTable' || model.jspMode == 'tab')">Biểu mẫu nguyên bản(a-form)</a-radio>
             </a-tooltip>
           </a-radio-group>
         </template>
-        <!-- update-end--author:liaozhiyang---date:20240612---for：【TV360X-1057】代码生成页面代码鼠标移入给说明 -->
+        <!-- update-end--author:liaozhiyang---date:20240612---for：【TV360X-1057】Trang sinh mã: di chuột vào mã thì hiển thị phần thuyết minh -->
       </BasicForm>
-      <a-card v-if="showSubTable" title="子表信息" size="small">
+      <a-card v-if="showSubTable" title="Thông tin bảng con" size="small">
         <JVxeTable ref="subTableRef" rowNumber :maxHeight="580" v-bind="subTable" />
       </a-card>
     </a-spin>
   </BasicModal>
   <FileSelectModal @register="registerFileSelectModal" @select="onFileSelect" />
-  <!-- 生成代码文件后弹窗显示 -->
+  <!-- Sau khi tạo tệp mã, popup hiển thị -->
   <code-file-list-modal @register="registerCodeFileListModal"></code-file-list-modal>
 </template>
 
@@ -75,7 +75,7 @@
       const single = ref(true);
       const subTableRef = ref<JVxeTableInstance>();
       const modalWidth = computed(() => (single.value ? 800 : 1200));
-      const title = ref('代码生成');
+      const title = ref('Sinh mã');
       const confirmLoading = ref(false);
       const { prefixCls } = useDesign('code-generator-modal');
       const wrapClassName = prefixCls;
@@ -92,28 +92,28 @@
       });
       const model = reactive<Recordable>({});
       const jspModeOptions = ref<any[]>([]);
-      // 子表配置
+      // Cấu hình bảng con
       const subTable = reactive({
         dataSource: [] as Recordable[],
         columns: [
           {
-            title: '子表名',
+            title: 'tên bảng con',
             key: 'tableName',
             type: JVxeTypes.input,
             disabled: true,
-            validateRules: [{ required: true, message: '请输入${title}' }],
+            validateRules: [{ required: true, message: 'Vui lòng nhập${title}' }],
           },
           {
-            title: '子表实体',
+            title: 'Thực thể bảng con',
             key: 'entityName',
             type: JVxeTypes.input,
-            validateRules: [{ required: true, message: '请输入${title}' }],
+            validateRules: [{ required: true, message: 'Vui lòng nhập${title}' }],
           },
           {
-            title: '功能说明',
+            title: 'Thuyết minh chức năng',
             key: 'ftlDescription',
             type: JVxeTypes.input,
-            validateRules: [{ required: true, message: '请输入${title}' }],
+            validateRules: [{ required: true, message: 'Vui lòng nhập${title}' }],
           },
         ] as JVxeColumn[],
       });
@@ -129,7 +129,7 @@
         single
       );
 
-      // 表单配置
+      // Cấu hình biểu mẫu
       const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
@@ -138,7 +138,7 @@
 
       const [registerModal, { closeModal }] = useModalInner(async (data) => {
         await resetFields();
-        // 当前主表ID
+        // Bảng chính hiện tạiID
         code.value = data.code;
         confirmLoading.value = false;
         subTable.dataSource = [];
@@ -153,12 +153,12 @@
           url: Api.tableInfo,
           params: { code: code.value },
         });
-        //update-begin-author:taoyan date:2022-5-17 for: vue3没有经典风格 默认是jvxe风格
+        //update-begin-author:taoyan date:2022-5-17 for: vue3Không có phong cách cổ điển Mặc định làjvxePhong cách
         let jspModeListForVue3: any[] = [];
         for (let mode of jspModeList) {
           const { code, note } = mode;
           if (code == 'many') {
-            //经典风格不需要
+            //Phong cách cổ điển không cần
           } else {
             jspModeListForVue3.push({
               label: note,
@@ -170,27 +170,27 @@
         if (main.isTree == 'Y') {
           model.jspMode = 'tree';
         } else {
-          // 获取主表风格
+          // Lấy phong cách bảng chính
           if (jspModeListForVue3.find(item => item.value === main.themeTemplate)) {
             model.jspMode = main.themeTemplate
           } else {
-            // 如果没有找到默认选中第一个
+            // Nếu không tìm thấy, mặc định chọn cái đầu tiên
             model.jspMode = jspModeListForVue3[0].value;
           }
         }
-        //update-end-author:taoyan date:2022-5-17 for: vue3没有经典风格 默认是jvxe风格
+        //update-end-author:taoyan date:2022-5-17 for: vue3Không có phong cách cổ điển Mặc định làjvxePhong cách
         single.value = main.tableType == 1;
-        title.value = '代码生成【' + main.tableName + '】';
+        title.value = 'Sinh mã 【' + main.tableName + '】';
         if (!model.projectPath) {
           model.projectPath = projectPath;
           window.localStorage.setItem(JEECG_ONL_PROJECT_PATH, projectPath);
         }
-        // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-1054】代码生成包名缓存
+        // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-1054】Cache tên gói khi sinh mã
         const projectName = localStorage.getItem(JEECG_ONL_PROJECT_NAME);
         if (projectName) {
           model.entityPackage = projectName;
         }
-        // update-end--author:liaozhiyang---date:20240611---for：【TV360X-1054】代码生成包名缓存
+        // update-end--author:liaozhiyang---date:20240611---for：【TV360X-1054】Cache tên gói khi sinh mã
         model.jformType = main.tableType + '';
         model.tableName_tmp = main.tableName;
         model.ftlDescription = main.tableTxt;
@@ -208,7 +208,7 @@
         }
       }
 
-      // 生成代码文件后弹窗显示
+      // Sau khi tạo tệp mã, popup hiển thị
       const [registerCodeFileListModal, {openModal: openCodeFileListModal}] = useModal();
 
       async function onSubmit() {
@@ -225,7 +225,7 @@
           confirmLoading.value = true;
         //  let codeList = await defHttp.post({ url: Api.codeGenerate, params });
           let res:any = await codeGen(params);
-          //打开文件列表弹窗
+          //Mở popup danh sách tệp
           openCodeFileListModal(true, {
             codeList: res.codeList,
             pathKey: res.pathKey,
@@ -233,23 +233,23 @@
           });
 
           //-----------------------------------------------------------------------------------------
-          // 前端代码直接生成vue3项目，会自动加载刷新，给有效期10秒的临时提示信息
+          // Mã frontend được sinh trực tiếpvue3Hạng mục, sẽ tự động tải làm mới, cho thời hạn hiệu lực10thông tin nhắc nhở tạm thời trong giây
           const hasViewPath = res.codeList.some(
             s => s.includes('src/views/') || s.includes('src\\views\\')
           );
           if(hasViewPath){
             $ls.set(
               'code.genenrate.success.msg',
-              `表【${values.tableName_tmp}】代码生成成功！前端代码已自动刷新，Java后台需重启生效！`,
+              `Bảng 【${values.tableName_tmp}】Sinh mã thành công! Mã frontend đã tự động làm mới,JavaBackend cần khởi động lại mới có hiệu lực!`,
               15
             );
           }else{
             notification.success({
-              message: `表【${values.tableName_tmp}】代码生成成功`,
+              message: `Bảng 【${values.tableName_tmp}】Sinh mã thành công`,
               description: h('div', [
-                '1. 前端代码请迁移到 VUE3项目', h('br'),
-                '2. 菜单SQL放到jeecg-system-start的flyway目录', h('br'),
-                '3. Java 后台需重启生效'
+                '1. Mã frontend vui lòng di chuyển tới VUE3Dự án (hạng mục)', h('br'),
+                '2. MenuSQLđặt vàojeecg-system-startcủaflywayThư mục', h('br'),
+                '3. Java Backend cần khởi động lại mới có hiệu lực'
               ]),
               duration: 5,
             });
@@ -257,9 +257,9 @@
           //-----------------------------------------------------------------------------------------
           
           closeModal();
-          // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-1054】代码生成包名缓存
+          // update-begin--author:liaozhiyang---date:20240611---for：【TV360X-1054】Cache tên gói khi sinh mã
           localStorage.setItem(JEECG_ONL_PROJECT_NAME, values.entityPackage);
-          // update-end--author:liaozhiyang---date:20240611---for：【TV360X-1054】代码生成包名缓存
+          // update-end--author:liaozhiyang---date:20240611---for：【TV360X-1054】Cache tên gói khi sinh mã
         } catch (e) {
           console.error(e);
         } finally {
@@ -289,7 +289,7 @@
         closeModal();
       }
 
-      // 注册文件选择弹窗
+      // Đăng ký popup chọn tệp
       const [registerFileSelectModal, fileSelectModal] = useModal();
 
       function onProjectPathSearch() {

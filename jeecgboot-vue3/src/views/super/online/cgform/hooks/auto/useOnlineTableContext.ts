@@ -14,38 +14,38 @@ import {useMultipleTabStore} from "/@/store/modules/multipleTab";
 import {useCgformStore} from "../../store/cgformState";
 import { getMenus } from '/@/router/menus';
 /**
- * context对象属性的描述
- * 控制台写js增强的时候 打印console.log(this)可以获取到该对象说明
+ * contextMô tả thuộc tính của đối tượng
+ * Ghi ở consolejsKhi tăng cường Inconsole.log(this)Có thể lấy được đối tượng này, chứng tỏ
  */
 const CONTEXT_PROP_DESCRIPTION = {
-  acceptHrefParams: '<p> 跳转时获取的参数信息',
-  currentPage: '<p> 当前页数',
-  currentTableName: '<p> 当前表名',
-  description: '<p> 当前表描述',
-  hasChildrenField: '<p> 是否有子节点的字段名，仅树形表单下有效',
+  acceptHrefParams: '<p> Thông tin tham số lấy khi chuyển hướng',
+  currentPage: '<p> Số trang hiện tại',
+  currentTableName: '<p> Tên bảng hiện tại',
+  description: '<p> Mô tả bảng hiện tại',
+  hasChildrenField: '<p> Tên trường cho biết có nút con hay không, chỉ có hiệu lực với biểu mẫu dạng cây',
   isDesForm: '<p> xx',
-  isTree: '<m> 是否是树形表单 ',
-  loadData: '<m> 加载列表数据',
-  pageSize: '<p> 每一页显示条数',
-  queryParam: '<p> 查询条件对象，每次点击查询后才会更新此数据',
-  selectedRowKeys: '<p> 选中的行的id数组',
-  sortField: '<p> 排序字段',
-  sortType: '<p> 排序规则',
-  total: '<p> 总页数',
-  foreignKeyValue: '<p> Erp一对多子表外键选中对应主表字段的值',
-  isErpSubTable: '<p> 是否Erp一对多子表',
-  foreignKeyField: '<p> Erp一对多子表外键字段',
-  themeTemplate: '<p> 主题模板',
-  isInnerSubTable: '<p> 是否内嵌一对多子表',
-  innerSubTableId: '<p>内嵌一对多子表ID',
-  innerSubTableName: '<p> 内嵌一对多子表名',
-  mTableSelectedRcordId: '<p>内嵌主表展开行的id',
-  innerSubTableFk: '<p>内嵌子表的外键字段',
-  loading: '<p> 设置/获取loading',
+  isTree: '<m> Có phải biểu mẫu dạng cây hay không ',
+  loadData: '<m> Tải dữ liệu danh sách',
+  pageSize: '<p> Số mục hiển thị mỗi trang',
+  queryParam: '<p> Đối tượng điều kiện truy vấn, mỗi lần nhấp truy vấn mới cập nhật dữ liệu này',
+  selectedRowKeys: '<p> của hàng đã chọnidmảng',
+  sortField: '<p> Trường sắp xếp',
+  sortType: '<p> Quy tắc sắp xếp',
+  total: '<p> Tổng số trang',
+  foreignKeyValue: '<p> Erpkhóa ngoại của bảng con một-nhiều chọn giá trị của trường bảng chính tương ứng',
+  isErpSubTable: '<p> Có hay khôngErpbảng con một-nhiều',
+  foreignKeyField: '<p> Erptrường khóa ngoại của bảng con một-nhiều',
+  themeTemplate: '<p> Mẫu giao diện',
+  isInnerSubTable: '<p> Có nhúng bảng con một-nhiều hay không',
+  innerSubTableId: '<p>Bảng con một-nhiều nhúngID',
+  innerSubTableName: '<p> Tên bảng con một-nhiều nhúng',
+  mTableSelectedRcordId: '<p>của hàng mở rộng trong bảng chính nhúngid',
+  innerSubTableFk: '<p>Trường khóa ngoại của bảng con nhúng',
+  loading: '<p> Thiết lập/Lấyloading',
 };
 
 /**
- * online地址-常量
+ * onlineĐịa chỉ-Hằng số
  */
 const onlineUrl = {
   getColumns: '/online/cgform/api/getColumns/',
@@ -58,11 +58,11 @@ const onlineUrl = {
   importXls: '/online/cgform/api/importXls/',
   startProcess: '/act/process/extActProcess/startMutilProcess',
   getErpColumns: '/online/cgform/api/getErpColumns/',
-  // 内嵌主题一对多子表数据请求接口
+  // API yêu cầu dữ liệu của bảng con một-nhiều trong chủ đề nhúng
   list: '/online/cgform/api/subform/list/',
 };
 
-// 没一张表配置的初始值
+// Giá trị khởi tạo được cấu hình cho mỗi bảng
 let config: SpecialConfig = {
   sortField: 'id',
   sortType: 'asc',
@@ -82,14 +82,14 @@ let config: SpecialConfig = {
 };
 
 /**
- * 分页配置
+ * Cấu hình phân trang
  */
 const metaPagination = {
   current: 1,
   pageSize: 10,
   pageSizeOptions: ['10', '20', '30'],
   showTotal: (total, range) => {
-    return range[0] + '-' + range[1] + ' 共' + total + '条';
+    return range[0] + '-' + range[1] + ' tổng cộng' + total + 'mục (điều)';
   },
   showQuickJumper: true,
   showSizeChanger: true,
@@ -97,39 +97,39 @@ const metaPagination = {
 };
 
 /**
- * 获取online 列表上下文
- * 1.常量，全局使用的- 请求url
- * 2.特殊参数-查询条件，排序方式，分页信息，选中行的keys（待测试，是否只和key有关，如果和row有关需去掉此配置）
- * 3.loadData方法，这个方法很多地方调用
- * setup最开头执行一次即可
+ * Lấyonline Ngữ cảnh danh sách
+ * 1.Hằng số, dùng toàn cục- Yêu cầuurl
+ * 2.Tham số đặc biệt-Điều kiện truy vấn, cách sắp xếp, thông tin phân trang, của hàng đã chọnkeys(chờ kiểm thử, có phải chỉ vớikeycó liên quan, nếu vàrowcó liên quan, cần bỏ cấu hình này)
+ * 3.loadDataphương thức, phương thức này được gọi ở nhiều nơi
+ * setupChỉ cần thực thi một lần ở ngay phần đầu
  */
 const { createMessage: $message, createErrorModal } = useMessage();
 
 export function useOnlineTableContext(params: any = {}) {
   console.log('-------------------------useOnlineTableContext----------------------->');
-  // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+  // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
   const tableId = params.code ?? '';
   const ID = ref(tableId);
   provide('tableId', ID);
-  // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+  // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
   const route = useRoute();
-  // 列表页面查询表单的ref
+  // của biểu mẫu truy vấn của trang danh sáchref
   const onlineQueryFormOuter = ref<any>();
-  // 高级查询按钮
+  // Nút truy vấn nâng cao
   const superQueryButtonRef = ref<any>();
-  // 分页配置
+  // Cấu hình phân trang
   const pagination = ref<Page | false>(false);
-  // table 数据 切换路由即发生数据改变 正常情况下会走一遍setup 缓存情况下 走事件onActivated----问题是不用重新请求column吗？ 只需要加载数据？ 待测试
+  // table Dữ liệu Chuyển route là dữ liệu thay đổi ngay Trong tình huống bình thường sẽ chạy qua một lượtsetup Trong tình huống có bộ nhớ đệm Đi qua sự kiệnonActivated----Vấn đề là không cần yêu cầu lạicolumnkhông? Chỉ cần tải dữ liệu? Chờ kiểm thử
   const dataSource = ref<Array<object>>([]);
-  // 当前列表数据是否由查询条件（普通查询或高级查询）查出
+  // Dữ liệu danh sách hiện tại có phải do điều kiện truy vấn (truy vấn thường hoặc truy vấn nâng cao) tra ra hay không
   const hasQueryCondition = ref(false);
-  // 表格是否重载
+  // Bảng có tải lại hay không
   const tableReloading = ref(true);
-  // online表单扩展配置
+  // onlineCấu hình mở rộng biểu mẫu
   const onlineExtConfigJson = ref<ExtConfigType>();
-  // Online表单全局状态
+  // OnlineTrạng thái toàn cục của biểu mẫu
   const cgformStore = useCgformStore();
-  // 多Tab状态
+  // nhiềuTabTrạng thái
   const tabStore = useMultipleTabStore();
 
   const isConfigCurRoute = ref(false);
@@ -147,26 +147,26 @@ export function useOnlineTableContext(params: any = {}) {
         }
       } else if (onlineTableContext[ENHANCEJS][code + '_hook']) {
 
-        //update-begin-author:taoyan date:2023-5-15 for: issues/516 自定义按钮_hook后的参数row未定义问题（参见#410） #516
+        //update-begin-author:taoyan date:2023-5-15 for: issues/516 Nút tùy chỉnh_hooktham số sau đórowVấn đề chưa xác định (xem#410） #516
         if(record){
           let row = toRaw(record);
           executeEnhanceJsHook(code + '_hook', row);
         }else{
           executeEnhanceJsHook(code + '_hook');
         }
-        //update-end-author:taoyan date:2023-5-15 for: issues/516 自定义按钮_hook后的参数row未定义问题（参见#410） #516
+        //update-end-author:taoyan date:2023-5-15 for: issues/516 Nút tùy chỉnh_hooktham số sau đórowVấn đề chưa xác định (xem#410） #516
         
       } else {
-        console.log('增强没找到!', code);
+        console.log('Không tìm thấy phần tăng cường!', code);
       }
     },
     /**
-     * get 是否是树形表单
-     * @param status 如果有值 则视为set方法
+     * get Có phải biểu mẫu dạng cây hay không
+     * @param status Nếu có giá trị thì coi làsetPhương thức
      */
     isTree: function (status?) {
       if (typeof status === 'boolean') {
-        //传了参数则设置值
+        //Đã truyền tham số thì thiết lập giá trị
         onlineTableContext['isTreeTable'] = status;
         return status;
       } else {
@@ -184,12 +184,12 @@ export function useOnlineTableContext(params: any = {}) {
     }
   }
   /**
-   * 定义数据代理 取值方便 onlineTableContext.queryParam
-   * 直接读取onlineTableContext 取到的是{}
+   * Định nghĩa proxy dữ liệu Lấy giá trị thuận tiện onlineTableContext.queryParam
+   * Đọc trực tiếponlineTableContext Cái lấy được là{}
    */
   const onlineTableContext: any = new Proxy(CONTEXT_PROP_DESCRIPTION, {
     get(_target: any, prop: string): any {
-      //console.log('从SpecialConfig中读取属性:'+prop)
+      //console.log('từSpecialConfigĐọc thuộc tính trong đó:'+prop)
       if (typeof methods[prop] === 'function') {
         return methods[prop];
       } else {
@@ -201,17 +201,17 @@ export function useOnlineTableContext(params: any = {}) {
       }
     },
     set(_target: any, prop: string, value: any): boolean {
-      //  console.log('设置SpecialConfig属性：'+ prop, value)
+      //  console.log('Thiết lậpSpecialConfigThuộc tính:'+ prop, value)
       let temp = getCurrentPageSpecialConfigMap();
       if (typeof value === 'function') {
-        // 如果是函数放到methods中去
+        // Nếu là hàm thì đặt vàomethodsvào trong
         return Reflect.set(methods, prop, value);
       } else {
         return Reflect.set(temp, prop, value);
       }
     },
     deleteProperty(_target, key) {
-      // 在路由切换、关闭页面的时候需要调用一下这个方法清除配置
+      // Khi chuyển đổi định tuyến, đóng trang, cần gọi phương thức này một lần để xóa cấu hình
       if (key === ID.value) {
         delete specialConfigMap[key];
         return true;
@@ -221,11 +221,11 @@ export function useOnlineTableContext(params: any = {}) {
     },
   });
 
-  // 新的js增强
+  // cái mớijsTăng cường
   const { executeJsEnhanced } = useCustomHook({}, onlineTableContext);
 
   /**
-   * 获取路由地址上的表单ID
+   * Lấy biểu mẫu trên địa chỉ routeID
    */
   function getTableId() {
     let idValue = route.params.id as string;
@@ -236,15 +236,15 @@ export function useOnlineTableContext(params: any = {}) {
   }
 
   onMountedOrActivated(({type}) => {
-    // 缓存路由走Activated，没缓存的走Mounted，均需走一次
+    // Đi qua route có bộ nhớ đệmActivated, cái chưa lưu bộ nhớ đệm thì đi quaMounted, đều cần đi qua một lần
     console.log('-------------------onMountedOrActivated-------------------');
-    // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-    //erp一对多子表的id不能从页面路由获取（当tableId存在时，不从页面路由获取）
+    // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+    //erpcủa bảng con một-nhiềuidkhông thể lấy từ route của trang (khitableIdkhi tồn tại, không lấy từ route của trang)
     !tableId && handlePageChange();
-    // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+    // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
 
     if (type === 'activated') {
-      // 【QQYUN-7151】表单修改后，已经打开的功能测试页面不会自动刷新
+      // 【QQYUN-7151】Sau khi sửa biểu mẫu, trang kiểm thử chức năng đã mở không tự động làm mới
       if (cgformStore.checkIsChanged(ID.value)) {
         tabStore.refreshPage(router)
       }
@@ -256,40 +256,40 @@ export function useOnlineTableContext(params: any = {}) {
 
   });
 
-  // 路由关闭前 清空map里面的配置
+  // Trước khi route đóng Xóa sạch (làm trống)mapCấu hình bên trong
   onBeforeUnmount(() => {
     console.log('-------------------onBeforeUnmount-------------------');
     delete specialConfigMap[ID.value];
-    // 如果缓存了  关闭时会调用
-    // 没有缓存 切换路由就会调用--这个没关系
-    // 但是测试online无此效果
+    // Nếu đã lưu vào bộ nhớ đệm  Khi đóng sẽ gọi
+    // Không có bộ nhớ đệm Chuyển route là sẽ gọi--Cái này không sao
+    // nhưng kiểm thửonlineKhông có hiệu ứng này
   });
 
   /**
-   * 获取当前页面配置
+   * Lấy cấu hình trang hiện tại
    */
   function getCurrentPageSpecialConfigMap() {
     let temp = specialConfigMap[ID.value];
     if (!temp) {
       let obj = Object.assign({}, config, { onlineUrl });
       temp = JSON.parse(JSON.stringify(obj));
-      // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+      // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
       if (params['themeTemplate'] == ERP) {
-        // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8387】Erp风格和其他风格同时在，导致其他风格当前页码不正常
+        // update-begin--author:liaozhiyang---date:20240306---for：【QQYUN-8387】ErpPhong cách và các phong cách khác cùng tồn tại, dẫn đến số trang hiện tại của phong cách khác không bình thường
         temp.pageSize = 5;
-        // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8387】Erp风格和其他风格同时在，导致其他风格当前页码不正常
+        // update-end--author:liaozhiyang---date:20240306---for：【QQYUN-8387】ErpPhong cách và các phong cách khác cùng tồn tại, dẫn đến số trang hiện tại của phong cách khác không bình thường
       }
-      // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-      // update-begin--author:liaozhiyang---date:20250423---for：【issues/8117】js增强可设置获取loading
+      // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+      // update-begin--author:liaozhiyang---date:20250423---for：【issues/8117】jsPhần tăng cường có thể thiết lập, lấyloading
       // @ts-ignore
       temp.loading = pageLoading;
-      // update-end--author:liaozhiyang---date:20250423---for：【issues/8117】js增强可设置获取loading
+      // update-end--author:liaozhiyang---date:20250423---for：【issues/8117】jsPhần tăng cường có thể thiết lập, lấyloading
       specialConfigMap[ID.value] = temp;
     }
     return temp;
   }
 
-  //接受URL参数
+  //Chấp nhậnURLTham số
   function handleAcceptHrefParams() {
     let acceptHrefParams = {};
     let hrefParam = route.query;
@@ -297,30 +297,30 @@ export function useOnlineTableContext(params: any = {}) {
       Object.keys(hrefParam).map((key) => {
         acceptHrefParams[key] = hrefParam[key];
       });
-      // queryParam.value raw对象
+      // queryParam.value rawđối tượng
       onlineTableContext['acceptHrefParams'] = acceptHrefParams;
     }
   }
 
   /**
-   * 查询table列信息 及其他配置
+   * Truy vấntableThông tin cột và các cấu hình khác
    */
   function getColumnList(themeTemplate = '') {
     let url;
-    // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+    // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
     if (themeTemplate == ERP) {
-      // Erp一对多获取主子表columns
+      // Erpmột-nhiều lấy bảng chính - bảng concolumns
       url = `${onlineTableContext.onlineUrl.getErpColumns}${ID.value}`;
     } else {
       url = `${onlineTableContext.onlineUrl.getColumns}${ID.value}`;
     }
-    // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+    // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
 
-    //update-begin---author:wangshuai---date:2025-10-21---for:【issues/8933】内嵌子表主题（一对多）列表点+号展开明细提示：无权限访问(操作)---
+    //update-begin---author:wangshuai---date:2025-10-21---for:【issues/8933】Danh sách chủ đề bảng con nhúng (một-nhiều) nhấp+Số mở rộng chi tiết nhắc nhở: không có quyền truy cập(Thao tác)---
     if(onlineTableContext['isInnerSubTable'] === true){
       url = url+ '?tabletype=3';
     }
-    //update-end---author:wangshuai---date:2025-10-21---for:【issues/8933】内嵌子表主题（一对多）列表点+号展开明细提示：无权限访问(操作)---
+    //update-end---author:wangshuai---date:2025-10-21---for:【issues/8933】Danh sách chủ đề bảng con nhúng (một-nhiều) nhấp+Số mở rộng chi tiết nhắc nhở: không có quyền truy cập(Thao tác)---
     return new Promise((resolve, reject) => {
       defHttp
         .get(
@@ -344,69 +344,69 @@ export function useOnlineTableContext(params: any = {}) {
     });
   }
 
-  //查询数据
+  //Truy vấn dữ liệu
   /**
-   * @param delNum number 删除的条数【批量删除，删除】调用会传
+   * @param delNum number Số bản ghi đã xóa 【xóa hàng loạt, xóa】 khi gọi sẽ truyền
    */
   function loadData(options = {}) {
     const { delNum } = options;
     return new Promise((resolve, reject) => {
-      // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-206】列表删除最后一页数据，页面跳到前一页数据为空
+      // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-206】Danh sách xóa dữ liệu ở trang cuối, khi trang nhảy về trang trước thì dữ liệu trống
       if (delNum != null) {
         const { total, pageSize, current } = pagination.value;
         const lastPage = Math.ceil(total / pageSize);
-        // 只有当前页是最后一页时删除数据才判断是否要跳到前一页
+        // Chỉ khi trang hiện tại là trang cuối cùng, việc xóa dữ liệu mới phán đoán có nhảy về trang trước hay không
         if (current === lastPage) {
           pagination.value.current = Math.ceil((total - delNum) / pageSize);
         }
       }
-      // update-end--author:liaozhiyang---date:20240528---for：【TV360X-206】列表删除最后一页数据，页面跳到前一页数据为空
+      // update-end--author:liaozhiyang---date:20240528---for：【TV360X-206】Danh sách xóa dữ liệu ở trang cuối, khi trang nhảy về trang trước thì dữ liệu trống
       let params = getLoadDataParams();
       let url = `${onlineTableContext.onlineUrl.getData}${ID.value}`;
       if (onlineTableContext.isTree() === true) {
         url = `${onlineTableContext.onlineUrl.getTreeData}${ID.value}`;
       } else if (onlineTableContext['isInnerSubTable'] === true) {
-        // update-begin--author:liaozhiyang---date:20230822---for：【QQYUN-6305】内嵌主题一对多
+        // update-begin--author:liaozhiyang---date:20230822---for：【QQYUN-6305】Chủ đề nhúng một-nhiều
         url = `${onlineTableContext.onlineUrl.getData}${onlineTableContext['innerSubTableId']}`;
         params = Object.assign(params,{pageSize: -521 });
-        // update-begin--author:liaozhiyang---date:20240514---for：【QQYUN-9340】内嵌子表数据都查出来了
+        // update-begin--author:liaozhiyang---date:20240514---for：【QQYUN-9340】Dữ liệu bảng con nhúng đều được truy vấn ra hết
         if (onlineTableContext['innerSubTableFk'] && onlineTableContext['mTableSelectedRcordId']) {
           params[onlineTableContext['innerSubTableFk']] = onlineTableContext['mTableSelectedRcordId'];
         }
-        // update-end--author:liaozhiyang---date:20240514---for：【QQYUN-9340】内嵌子表数据都查出来了
-        // update-end--author:liaozhiyang---date:20230822---for：【QQYUN-6305】内嵌主题一对多
-        //update-begin---author:wangshuai---date:2025-10-21---for:【issues/8933】内嵌子表主题（一对多）列表点+号展开明细提示：无权限访问(操作)---
+        // update-end--author:liaozhiyang---date:20240514---for：【QQYUN-9340】Dữ liệu bảng con nhúng đều được truy vấn ra hết
+        // update-end--author:liaozhiyang---date:20230822---for：【QQYUN-6305】Chủ đề nhúng một-nhiều
+        //update-begin---author:wangshuai---date:2025-10-21---for:【issues/8933】Danh sách chủ đề bảng con nhúng (một-nhiều) nhấp+Số mở rộng chi tiết nhắc nhở: không có quyền truy cập(Thao tác)---
         url = url+ '?tabletype=3';
-        //update-end---author:wangshuai---date:2025-10-21---for:【issues/8933】内嵌子表主题（一对多）列表点+号展开明细提示：无权限访问(操作)---
+        //update-end---author:wangshuai---date:2025-10-21---for:【issues/8933】Danh sách chủ đề bảng con nhúng (một-nhiều) nhấp+Số mở rộng chi tiết nhắc nhở: không có quyền truy cập(Thao tác)---
       }
-      // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-      // erp一对多子表查询需加参数
+      // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+      // erptruy vấn bảng con một-nhiều cần thêm tham số
       if (onlineTableContext['isErpSubTable'] === true) {
-        // update-begin--author:liaozhiyang---date:20250722---for：【issues/8575】erp默认选中第一个及没选中主表时子表不查询
+        // update-begin--author:liaozhiyang---date:20250722---for：【issues/8575】erpMặc định chọn cái đầu tiên và khi chưa chọn bảng chính thì bảng con không truy vấn
         if (onlineTableContext['foreignKeyValue'] == undefined) {
           return;
         }
-        // update-end--author:liaozhiyang---date:20250722---for：【issues/8575】erp默认选中第一个及没选中主表时子表不查询
+        // update-end--author:liaozhiyang---date:20250722---for：【issues/8575】erpMặc định chọn cái đầu tiên và khi chưa chọn bảng chính thì bảng con không truy vấn
         params[onlineTableContext['foreignKeyField']] = onlineTableContext['foreignKeyValue'];
-        // 【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权查看从表的数据
+        // 【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xem dữ liệu của bảng phụ thuộc
         params['tabletype'] = 3;
         delete params.hasQuery;
       }
-      // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-      console.log('------查询参数-----', params);
+      // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+      console.log('------Tham số truy vấn-----', params);
       defHttp
         .get({ url, params }, { isTransformResponse: false })
         .then((res) => {
-          console.log('--onlineList-查询列表数据', res);
+          console.log('--onlineList-Truy vấn dữ liệu danh sách', res);
           if (res.success) {
             handleDataResult(res.result);
             resolve(true);
           } else {
             if (res.message === 'NO_DB_SYNC') {
               createErrorModal({
-                title: '数据库未同步',
-                content: '请先同步数据库再查看此页面！',
-                // 点击确定后自动返回上一页
+                title: 'Cơ sở dữ liệu chưa đồng bộ',
+                content: 'Vui lòng đồng bộ cơ sở dữ liệu trước rồi xem trang này!',
+                // Sau khi nhấp xác nhận, tự động quay lại trang trước
                 onOk: () => router.back(),
               });
             } else {
@@ -416,7 +416,7 @@ export function useOnlineTableContext(params: any = {}) {
           }
         })
         .catch(() => {
-          let error = '请求列表数据异常!';
+          let error = 'Yêu cầu dữ liệu danh sách bất thường!';
           $message.warning(error);
           reject(false);
         });
@@ -424,25 +424,25 @@ export function useOnlineTableContext(params: any = {}) {
   }
 
   /**
-   * 获取查询条件
+   * Lấy điều kiện truy vấn
    */
   function getLoadDataParams() {
     const { sortField, sortType, acceptHrefParams, queryParam } = onlineTableContext;
-    // 树用到的参数
+    // Tham số cây dùng đến
     const treeParam = {
       hasQuery: 'true',
     };
     if (onlineTableContext.isTree() === true) {
-      // update-begin--author:liaozhiyang---date:20231205---for：【issues/888】online树表子节点搜索不生效且有警告
-      // update-begin--author:liusq---date:20260807---for：【树表查询】命中子级数据时返回子级及完整祖先层级
+      // update-begin--author:liaozhiyang---date:20231205---for：【issues/888】onlineTìm kiếm nút con của bảng cây không có hiệu lực và có cảnh báo
+      // update-begin--author:liusq---date:20260807---for: 【Truy vấn bảng cây】Khi trúng dữ liệu cấp con thì trả về cấp con và toàn bộ cấp bậc tổ tiên
       if (!hasTreeQueryCondition()) {
         treeParam['hasQuery'] = 'false';
       }
-      // update-end--author:liusq---date:20260807---for：【树表查询】命中子级数据时返回子级及完整祖先层级
-      // update-end--author:liaozhiyang---date:20231205---for：【issues/888】online树表子节点搜索不生效且有警告
+      // update-end--author:liusq---date:20260807---for: 【Truy vấn bảng cây】Khi trúng dữ liệu cấp con thì trả về cấp con và toàn bộ cấp bậc tổ tiên
+      // update-end--author:liaozhiyang---date:20231205---for：【issues/888】onlineTìm kiếm nút con của bảng cây không có hiệu lực và có cảnh báo
     }
     let params = Object.assign({}, treeParam, acceptHrefParams, queryParam, { column: sortField, order: sortType });
-    // TODO 范围查询 原固定值需要清楚 待删除
+    // TODO Truy vấn theo phạm vi Giá trị cố định gốc cần được làm rõ Chờ xóa
     /*let queryFields = queryFieldArray.value;
     for(let item of queryFields){
       if(item.mode!='single'){
@@ -450,16 +450,16 @@ export function useOnlineTableContext(params: any = {}) {
       }
     }*/
     if (pagination.value) {
-      //如果分页
+      //Nếu phân trang
       params.pageNo = pagination.value.current;
       params.pageSize = pagination.value.pageSize;
     } else {
-      // 不分页传一个固定值
+      // không phân trang thì truyền một giá trị cố định
       params['pageSize'] = -521;
     }
 
     let superQueryData = getSuperQueryData();
-    //高级查询
+    //Truy vấn nâng cao
     params.superQueryMatchType = superQueryData.matchType || '';
     params.superQueryParams = superQueryData.params || '';
     return filterObj(params);
@@ -468,27 +468,27 @@ export function useOnlineTableContext(params: any = {}) {
   /**
    * liaozhiyang
    * 20261026
-   * 【QQYUN-11801】生成测试数据按钮区分是否有查询条件（普通查询/高级查询）
-   * 当前是否有查询条件（普通查询 或 高级查询）
+   * 【QQYUN-11801】Nút tạo dữ liệu kiểm thử phân biệt có điều kiện truy vấn hay không (truy vấn thông thường/truy vấn nâng cao)
+   * Hiện tại có điều kiện truy vấn hay không (truy vấn thường hoặc truy vấn nâng cao)
    */
   function checkHasQueryCondition() {
     const { queryParam, superQuery } = onlineTableContext;
     const isEmpty = (value) => value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
-    // 普通查询：任一查询字段有值
+    // Truy vấn thông thường: bất kỳ trường truy vấn nào có giá trị
     const hasNormalQuery = !!queryParam && Object.values(queryParam).some((value) => !isEmpty(value));
-    // 高级查询：有查询条件项
+    // Truy vấn nâng cao: có mục điều kiện truy vấn
     const hasSuperQuery = Array.isArray(superQuery?.params) && superQuery.params.length > 0;
     return hasNormalQuery || hasSuperQuery;
   }
 
-  // 查询玩数据后 获取页面数据、数据总数
+  // Sau khi truy vấn dữ liệu xong Lấy dữ liệu trang, tổng số dữ liệu
   function handleDataResult(result) {
     hasQueryCondition.value = checkHasQueryCondition();
     let total = 0;
     if (Number(result.total) > 0) {
       if (onlineTableContext.isTree() === true) {
         dataSource.value = getTreeDataByResult(result.records);
-        // update-begin--author:liusq---date:20260807---for：【树表查询】查询时不回填历史展开节点的无关子级数据
+        // update-begin--author:liusq---date:20260807---for: 【Truy vấn bảng cây】Khi truy vấn không điền ngược dữ liệu cấp con không liên quan của các nút đã mở rộng trong lịch sử
         if (hasTreeQueryCondition()) {
           expandedRowKeys.value = [];
         } else {
@@ -496,14 +496,14 @@ export function useOnlineTableContext(params: any = {}) {
             loadDataByExpandedRows(dataSource.value);
           });
         }
-        // update-end--author:liusq---date:20260807---for：【树表查询】查询时不回填历史展开节点的无关子级数据
+        // update-end--author:liusq---date:20260807---for: 【Truy vấn bảng cây】Khi truy vấn không điền ngược dữ liệu cấp con không liên quan của các nút đã mở rộng trong lịch sử
       } else {
-        // update-begin--author:liaozhiyang---date:20250508---for：【issues/8168】id重复排序数据重了
+        // update-begin--author:liaozhiyang---date:20250508---for：【issues/8168】idSắp xếp trùng lặp, dữ liệu bị nặng
         dataSource.value = [];
         nextTick(() => {
           dataSource.value = result.records;
         });
-        // update-end--author:liaozhiyang---date:20250508---for：【issues/8168】id重复排序数据重了
+        // update-end--author:liaozhiyang---date:20250508---for：【issues/8168】idSắp xếp trùng lặp, dữ liệu bị nặng
       }
       total = Number(result.total);
     } else {
@@ -514,14 +514,14 @@ export function useOnlineTableContext(params: any = {}) {
     }
   }
 
-  //分页、排序、筛选变化时触发
+  //Kích hoạt khi phân trang, sắp xếp, sàng lọc thay đổi
   function handleChangeInTable($pagination, _filters, sorter) {
     if (sorter && sorter.order) {
-      // 需要排序，先获取排序规则
+      // Cần sắp xếp, lấy quy tắc sắp xếp trước
       onlineTableContext['sortField'] = sorter.field;
       onlineTableContext['sortType'] = 'ascend' == sorter.order ? 'asc' : 'desc';
     } else {
-      // 没有规则 走默认排序
+      // Không có quy tắc Đi qua sắp xếp mặc định
       onlineTableContext['sortField'] = 'id';
       onlineTableContext['sortType'] = 'asc';
     }
@@ -533,53 +533,53 @@ export function useOnlineTableContext(params: any = {}) {
   }
 
   /**
-   * 页面id改变后,执行查询loadData之前会执行该方法
-   * 根据查询的结果设置当前表信息、设置查询条件、设置高级查询条件、分页信息、排序信息
+   * Trangidsau khi thay đổi,Thực thi truy vấnloadDataTrước đó sẽ thực thi phương thức này
+   * Thiết lập thông tin bảng hiện tại theo kết quả truy vấn, thiết lập điều kiện truy vấn, thiết lập điều kiện truy vấn nâng cao, thông tin phân trang, thông tin sắp xếp
    * @param result
    */
   function handleSpecialConfig(result) {
-    //1.根据查询的结果设置当前表信息
+    //1.Thiết lập thông tin bảng hiện tại theo kết quả truy vấn
     onlineTableContext['description'] = result.description;
     onlineTableContext['currentTableName'] = result.currentTableName;
     onlineTableContext['isDesForm'] = result.isDesForm;
     onlineTableContext['desFormCode'] = result.desFormCode;
     onlineTableContext['ID'] = ID.value;
-    //2.设置查询条件
+    //2.Thiết lập điều kiện truy vấn
     let { acceptHrefParams, queryParam, superQuery, currentPage, pageSize } = onlineTableContext;
     handleAcceptHrefParams();
     if (!queryParam) {
       onlineTableContext['queryParam'] = {};
     } else {
-      // 加强判断，防止没有查询
+      // Tăng cường phán đoán, ngăn ngừa trường hợp không có truy vấn
       if (onlineQueryFormOuter.value) {
         onlineQueryFormOuter.value.initDefaultValues(queryParam, acceptHrefParams);
       }
     }
-    //3.设置高级查询条件
+    //3.Thiết lập điều kiện truy vấn nâng cao
     if (!superQuery) {
       onlineTableContext['superQuery'] = { params: '', matchType: '' };
     } else {
-      // erp一对多子表没有高级查询按钮
+      // erpbảng con một-nhiều không có nút truy vấn nâng cao
       if (superQueryButtonRef.value) {
         superQueryButtonRef.value.initDefaultValues(superQuery);
       }
     }
-    //4.分页信息
+    //4.Thông tin phân trang
     if (result.paginationFlag == 'Y') {
-      // update-begin--author:liaozhiyang---date:20240527---for：【TV360X-332】erp默认每页5条，切换之后每页5条没了
+      // update-begin--author:liaozhiyang---date:20240527---for：【TV360X-332】erpMặc định mỗi trang5mục, sau khi chuyển đổi mỗi trang5mục bị mất
       let pageSizeOptions: any = metaPagination.pageSizeOptions;
       if (params['themeTemplate'] == ERP) {
         pageSizeOptions = ['5', '10', '30'];
       }
-      // update-end--author:liaozhiyang---date:20240527---for：【TV360X-332】erp默认每页5条，切换之后每页5条没了
+      // update-end--author:liaozhiyang---date:20240527---for：【TV360X-332】erpMặc định mỗi trang5mục, sau khi chuyển đổi mỗi trang5mục bị mất
       pagination.value = { ...metaPagination, ...{ current: currentPage, pageSize, pageSizeOptions } };
     } else {
       pagination.value = false;
     }
-    //5.排序信息 不需要设置 没有显示声明，所以缺点是：界面上看不出来哪一列被排序了
+    //5.Thông tin sắp xếp không cần thiết lập Không có khai báo hiển thị, vì vậy nhược điểm là: trên giao diện không nhìn ra cột nào đã được sắp xếp
   }
 
-  /** 重载表格，在columns等信息变化时需要调用 */
+  /** Tải lại bảng, tạicolumnsKhi thông tin v.v. thay đổi, cần gọi */
   async function reloadTable() {
     tableReloading.value = true;
     await nextTick();
@@ -595,32 +595,32 @@ export function useOnlineTableContext(params: any = {}) {
     onlineTableContext[key] = add2Context[key];
   });
 
-  //----------------------------------- 以下为查询相关的--------------------------------
+  //----------------------------------- Dưới đây là những nội dung liên quan đến truy vấn--------------------------------
 
-  // 查询加载状态
+  // Trạng thái tải truy vấn
   let loading = ref(false);
-  // 查询首页
+  // Truy vấn trang chủ
   async function reload(parameter:any = {}) {
     if (pagination.value) {
-      // update-begin--author:liaozhiyang---date:20231207---for：【QQYUN-7414】online操作除了查询其他数据刷新都是当前页（包括新增）
+      // update-begin--author:liaozhiyang---date:20231207---for：【QQYUN-7414】onlineThao tác ngoại trừ truy vấn, các lần làm mới dữ liệu khác đều ở trang hiện tại (bao gồm thêm mới)
       pagination.value = { ...pagination.value, current: parameter.mode == 'search' || !pagination.value.current ? 1 : pagination.value.current };
-      // update-end--author:liaozhiyang---date:20231207---for：【QQYUN-7414】online操作除了查询其他数据刷新都是当前页（包括新增）
+      // update-end--author:liaozhiyang---date:20231207---for：【QQYUN-7414】onlineThao tác ngoại trừ truy vấn, các lần làm mới dữ liệu khác đều ở trang hiện tại (bao gồm thêm mới)
     }
-    // update-begin--author:liusq---date:20260713---for：【LHZP-118】搜索时清空主表选中，确保子表同步
+    // update-begin--author:liusq---date:20260713---for：【LHZP-118】Khi tìm kiếm, xóa lựa chọn ở bảng chính, đảm bảo bảng con đồng bộ
     if (parameter.mode === 'search') {
       onlineTableContext.clearSelectedRow();
-      // update-end--author:liaozhiyang---date:20260713---for：【LHZP-118】搜索时清空主表选中，确保子表同步
+      // update-end--author:liaozhiyang---date:20260713---for：【LHZP-118】Khi tìm kiếm, xóa lựa chọn ở bảng chính, đảm bảo bảng con đồng bộ
     } else if (params['themeTemplate'] !== ERP) {
-      // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
+      // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
       onlineTableContext.clearSelectedRow();
-      // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
+      // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
     }
     //loading.value = true
     await loadData();
     //loading.value = false
   }
 
-  //------------------------树形列表--------------------------
+  //------------------------Danh sách dạng cây--------------------------
   function hasTreeQueryCondition() {
     const { queryParam, superQuery } = onlineTableContext;
     const hasBasicQuery = !!queryParam && Object.values(queryParam).some((value) => value !== undefined && value !== null && value !== '');
@@ -630,12 +630,12 @@ export function useOnlineTableContext(params: any = {}) {
   function getTreeDataByResult(result) {
     if (result) {
       return result.map((item) => {
-        // 查询结果已包含祖先链时保留真实子节点，不能再替换成懒加载占位节点
+        // Khi kết quả truy vấn đã bao gồm chuỗi tổ tiên, giữ lại nút con thật, không được thay thế thành nút giữ chỗ tải lười nữa
         if (Array.isArray(item.children) && item.children.length > 0) {
           item.children = getTreeDataByResult(item.children);
           return item;
         }
-        //判断是否标记了带有子节点
+        //Phán đoán có đánh dấu là mang nút con hay không
         let hasChildrenField = onlineTableContext['hasChildrenField'];
         if (item[hasChildrenField] == '1') {
           let loadChild = { id: item.id + '_loadChild', name: 'loading...', isLoading: true };
@@ -655,14 +655,14 @@ export function useOnlineTableContext(params: any = {}) {
     expandedRowKeys.value = expandedRowKeysValue;
   }
 
-  // 根据已展开的行查询数据（用于保存后刷新时异步加载子级的数据）
+  // Truy vấn dữ liệu theo các hàng đã mở rộng (dùng để tải bất đồng bộ dữ liệu cấp con khi làm mới sau khi lưu)
   function loadDataByExpandedRows(dataList) {
     let expandedRowKeysValue = expandedRowKeys.value;
     if (expandedRowKeysValue.length > 0) {
       const { sortField, sortType, pidField } = onlineTableContext;
       let params = Object.assign({}, { column: sortField, order: sortType });
       params['hasQuery'] = 'in';
-      //已展开节点批量查询子节点
+      //Truy vấn hàng loạt nút con của các nút đã mở rộng
       let superParams = Object.assign({});
       superParams.rule = 'in';
       superParams.type = 'text';
@@ -673,13 +673,13 @@ export function useOnlineTableContext(params: any = {}) {
       params['superQueryMatchType'] = 'and';
       params['batchFlag'] = 'true';
       let url = `${onlineTableContext.onlineUrl.getTreeData}${ID.value}`;
-      console.log('--onlineList-查询子节点参数', superParams);
+      console.log('--onlineList-Tham số truy vấn nút con', superParams);
       defHttp
         .get({ url, params }, { isTransformResponse: false })
         .then((res) => {
-          console.log('--onlineList-查询子节点列表数据', res);
+          console.log('--onlineList-Truy vấn dữ liệu danh sách nút con', res);
           if (res.success && res.result.records && res.result.records.length > 0) {
-            //已展开的数据批量子节点
+            //Các nút con hàng loạt của dữ liệu đã mở rộng
             let records = res.result.records;
             const listMap = new Map();
             for (let item of records) {
@@ -708,7 +708,7 @@ export function useOnlineTableContext(params: any = {}) {
           }
         })
         .catch(() => {
-          let error = 'loadDataByExpandedRows请求列表数据异常!';
+          let error = 'loadDataByExpandedRowsYêu cầu dữ liệu danh sách bất thường!';
           $message.warning(error);
         });
     } else {
@@ -717,7 +717,7 @@ export function useOnlineTableContext(params: any = {}) {
   }
 
   /**
-   * 获取高级查询条件
+   * Lấy điều kiện truy vấn nâng cao
    */
   function getSuperQueryData() {
     if (!onlineTableContext.superQuery) {
@@ -740,45 +740,45 @@ export function useOnlineTableContext(params: any = {}) {
       }
     }
     let str = arr.length > 0 ? JSON.stringify(arr) : '';
-    console.log('高级查询条件', arr, matchType);
+    console.log('Điều kiện truy vấn nâng cao', arr, matchType);
     return {
       params: encodeURIComponent(str),
       matchType,
     };
   }
 
-  /**高级查询状态-是否有查询条件*/
+  /**Trạng thái truy vấn nâng cao-Có điều kiện truy vấn hay không*/
   const superQueryStatus = ref(false);
 
   /**
-   * 高级查询对象
-   * 1.执行高级查询组件的search事件，需要将值赋值给context
-   * 2.查询的时候从context中获取参数值
-   * 3.id发生改变需要做点什么？nothing，状态值需要改变
+   * Đối tượng truy vấn nâng cao
+   * 1.Thực thi của component truy vấn nâng caosearchsự kiện, cần gán giá trị chocontext
+   * 2.Khi truy vấn, từcontextlấy giá trị tham số trong đó
+   * 3.idKhi xảy ra thay đổi thì cần làm gì đó?nothing, giá trị trạng thái cần thay đổi
    */
   function handleSuperQuery(params, matchType) {
-    // params一定是个数组，可能size为0
+    // paramschắc chắn là một mảng, có thểsizelà0
     onlineTableContext['superQuery'] = {
       params,
       matchType,
     };
-    // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7309】online高级查询第二次按钮没动画
+    // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7309】onlineTruy vấn nâng cao, nút lần thứ hai không có hiệu ứng động
     if (params.length == 0 || params.length == undefined) {
       superQueryStatus.value = false;
     } else {
       superQueryStatus.value = true;
     }
-    // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7309】online高级查询第二次按钮没动画
-    // update-begin--author:liaozhiyang---date:20231207---for：【QQYUN-7414】online操作除了查询其他数据刷新都是当前页（包括新增）
+    // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7309】onlineTruy vấn nâng cao, nút lần thứ hai không có hiệu ứng động
+    // update-begin--author:liaozhiyang---date:20231207---for：【QQYUN-7414】onlineThao tác ngoại trừ truy vấn, các lần làm mới dữ liệu khác đều ở trang hiện tại (bao gồm thêm mới)
     pagination.value.current = 1;
-    // update-end--author:liaozhiyang---date:20231207---for：【QQYUN-7414】online操作除了查询其他数据刷新都是当前页（包括新增）
+    // update-end--author:liaozhiyang---date:20231207---for：【QQYUN-7414】onlineThao tác ngoại trừ truy vấn, các lần làm mới dữ liệu khác đều ở trang hiện tại (bao gồm thêm mới)
     loadData();
   }
 
-  /*------------------------自定义弹窗------------------------------*/
+  /*------------------------Popup tùy chỉnh------------------------------*/
   const [registerCustomModal, { openModal: doOpenCustomModal }] = useModal();
   /**
-   * 自定义按钮 触发弹框
+   * Nút tùy chỉnh Kích hoạt popup
    * @param param
    */
   function openCustomModal(param) {
@@ -788,7 +788,7 @@ export function useOnlineTableContext(params: any = {}) {
     if (!param.row) {
       let rows = onlineTableContext['selectedRows'];
       if (!rows || rows.length == 0 || rows.length > 1) {
-        $message.warning('请选择一条数据');
+        $message.warning('Vui lòng chọn một bản ghi dữ liệu');
         return;
       }
       param.row = rows[0];
@@ -797,25 +797,25 @@ export function useOnlineTableContext(params: any = {}) {
     doOpenCustomModal(true, param);
   }
   onlineTableContext['openCustomModal'] = openCustomModal;
-  /*------------------------自定义弹窗------------------------------*/
+  /*------------------------Popup tùy chỉnh------------------------------*/
 
   /**
-   * 页面发生改变的时候触发
+   * Kích hoạt khi trang thay đổi
    */
   function handlePageChange() {
     let idValue = getTableId();
     ID.value = idValue;
   }
-  // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-  //erp子表的id不能从页面路由获取（当tableId存在时，不从页面路由获取）
+  // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+  //erpcủa bảng conidkhông thể lấy từ route của trang (khitableIdkhi tồn tại, không lấy từ route của trang)
   if (!tableId && !ID.value) {
     handlePageChange()
   }
-  // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+  // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
 
-  /** 表单配置查询成功后触发的事件（不用等表单打开才触发） */
+  /** Sự kiện kích hoạt sau khi truy vấn cấu hình biểu mẫu thành công (không cần đợi biểu mẫu mở mới kích hoạt) */
   function handleFormConfig(formConfig) {
-    // 处理扩展参数
+    // Xử lý tham số mở rộng
     let extConfigJson = formConfig.head.extConfigJson;
     if (extConfigJson) {
       onlineExtConfigJson.value = JSON.parse(extConfigJson);
@@ -824,8 +824,8 @@ export function useOnlineTableContext(params: any = {}) {
   /**
    * liaozhiyang
    * 20250407
-   * 【QQYUN-11801】生成测试数据
-   *  判断是配置的菜单还是功能测试打开的
+   * 【QQYUN-11801】Tạo dữ liệu kiểm thử
+   *  Phán đoán là menu đã cấu hình hay mở từ kiểm thử chức năng
    * */
   async function isConfigUrl() {
     const getMatchingisConfigUrl = (menus, path) => {
@@ -877,7 +877,7 @@ export function useOnlineTableContext(params: any = {}) {
 }
 
 /**
- * 兼容老版js增强 封装对象--暂不支持
+ * Tương thích phiên bản cũjsTăng cường Đóng gói đối tượng--Tạm thời chưa hỗ trợ
  *
  */
 export function useCompatibleOldVersion(context) {
@@ -894,7 +894,7 @@ export function useCompatibleOldVersion(context) {
 }
 
 /**
- * 链式调用？？
+ * Gọi chuỗi??
  */
 export class AopSetup {
   before: Function = () => {};
@@ -933,9 +933,9 @@ export class AopSetup {
     return async function () {
       //console.log('this2', this)
       let res1 = await _that.before(arguments);
-      console.log('before返回值', res1);
+      console.log('beforeGiá trị trả về', res1);
       if (res1) {
-        console.log('错误信息', res1);
+        console.log('Thông tin lỗi', res1);
         return;
       }
       let result = await targetFunction.apply(context, arguments);

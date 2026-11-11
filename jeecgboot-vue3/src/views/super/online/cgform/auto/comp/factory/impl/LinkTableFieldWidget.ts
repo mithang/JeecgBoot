@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 他表字段
+ * trường bảng khác
  */
 export default class LinkTableFieldWidget extends IFormSchema {
 
@@ -33,7 +33,7 @@ export default class LinkTableFieldWidget extends IFormSchema {
   }
 
   /**
-   * 获取他表字段的关联信息
+   * Lấy thông tin liên kết của trường bảng khác
    */
   getLinkFieldInfo(){
     let arr = [this.dictTable, `${this.field},${this.dictText}`];

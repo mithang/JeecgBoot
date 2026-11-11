@@ -2,11 +2,11 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 下拉联动- 原理是：
- * 使用JDictSelectTag组件(2022-03-09测试可行版 后续如有改动请注意)
- * 监听表单的change事件，清空下级表单值，并改变props
- * 问题在于1.没有code的时候 不需要设置选项
- * 优势在于： 可以不考虑组件位置（但是需要改后台接口）
+ * Liên động dropdown- Nguyên lý là:
+ * Sử dụngJDictSelectTagComponent(2022-03-09Bản khả thi để kiểm thử Sau này nếu có thay đổi, xin lưu ý)
+ * Lắng nghe của biểu mẫuchangesự kiện, xóa giá trị biểu mẫu cấp dưới, đồng thời thay đổiprops
+ * Vấn đề nằm ở1.Không cócodekhi không cần thiết lập tùy chọn
+ * Ưu điểm nằm ở: Có thể không cần xét vị trí component (nhưng cần sửa API phía backend)
  */
 export default class LinkDownWidget extends IFormSchema {
   /*title-value*/
@@ -31,7 +31,7 @@ export default class LinkDownWidget extends IFormSchema {
     this.pidField = pidField;
     this.origin = origin;
     this.condition = condition;
-    // 都是空数组
+    // Đều là mảng rỗng
     this.options = [];
     this.next = data.next || '';
     this.type = data.type;
@@ -59,11 +59,11 @@ export default class LinkDownWidget extends IFormSchema {
         width: '100%',
       },
       onChange: (value) => {
-        console.log('级联组件-onChange', value);
+        console.log('Component phân cấp-onChange', value);
         this.valueChange(value);
       },
       onNext: (pidValue) => {
-        console.log('级联组件-onNext', pidValue);
+        console.log('Component phân cấp-onNext', pidValue);
         this.nextOptionsChange(pidValue);
       },
     };
@@ -75,7 +75,7 @@ export default class LinkDownWidget extends IFormSchema {
 
   async nextOptionsChange(pidValue) {
     if (!this.formRef) {
-      console.error('表单引用找不到');
+      console.error('Không tìm thấy tham chiếu biểu mẫu');
       return;
     }
     if (!this.next) {
@@ -92,17 +92,17 @@ export default class LinkDownWidget extends IFormSchema {
 
   async valueChange(value) {
     if (!this.formRef) {
-      console.error('表单引用找不到');
+      console.error('Không tìm thấy tham chiếu biểu mẫu');
       return;
     }
-    // update-begin--author:liaozhiyang---date:20240717---for：【TV360X-1856】联动组件最后一个js增强onchang方法不生效
+    // update-begin--author:liaozhiyang---date:20240717---for：【TV360X-1856】Component liên động cuối cùngjsTăng cườngonchangPhương thức không có hiệu lực
     let ref = this.formRef.value;
-    // 触发form层级的change事件
+    // Kích hoạtformThuộc về cấp độchangesự kiện
     ref.$formValueChange(this.field, value);
     if (this.next) {
-      // 重置value
+      // Đặt lạivalue
       await ref.setFieldsValue({ [this.next]: '' });
     }
-    // update-end--author:liaozhiyang---date:20240717---for：【TV360X-1856】联动组件最后一个js增强onchang方法不生效
+    // update-end--author:liaozhiyang---date:20240717---for：【TV360X-1856】Component liên động cuối cùngjsTăng cườngonchangPhương thức không có hiệu lực
   }
 }

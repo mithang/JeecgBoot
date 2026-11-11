@@ -3,8 +3,8 @@ import { h } from 'vue';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 下拉框
- * //待处理： 表字典取数据可以考虑传参前端再请求
+ * Ô dropdown
+ * //Chờ xử lý: Từ điển bảng lấy dữ liệu có thể cân nhắc truyền tham số để frontend yêu cầu lại
  */
 export default class SelectWidget extends IFormSchema {
   schema: Recordable;
@@ -18,7 +18,7 @@ export default class SelectWidget extends IFormSchema {
   constructor(key, data) {
     super(key, data);
     this.schema = data;
-    // 静态数据选项（enum）转换为 JSelectSingle 所需格式
+    // Tùy chọn dữ liệu tĩnh (enum) chuyển đổi thành JSelectSingle Định dạng yêu cầu
     this.options = data['enum'] ? this.getOptions(data['enum'], '') : [];
     this.dictTable = data['dictTable'];
     this.dictText = data['dictText'];
@@ -38,14 +38,14 @@ export default class SelectWidget extends IFormSchema {
   }
 
   getFormComponent(){
-    // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307】online下拉加载表字典需滚动加载
+    // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307】onlineDropdown khi tải từ điển bảng cần tải theo cuộn
     // if(this.options.length>0){
     //   return  'Select'
     // }else{
     //   return 'JDictSelectTag'
     // }
     return 'JSelectSingle'
-    // update-end--author:liaozhiyang---date:20260204---for:【issues/9307】online下拉加载表字典需滚动加载
+    // update-end--author:liaozhiyang---date:20260204---for:【issues/9307】onlineDropdown khi tải từ điển bảng cần tải theo cuộn
   }
 
   setFormRef(ref) {
@@ -73,42 +73,42 @@ export default class SelectWidget extends IFormSchema {
       getPopupContainer: (_node) => {
         return this.getModalAsContainer();
       },
-       // update-begin--author:liaozhiyang---date:20260203---for:【issues/9307】online下拉加载表字典需滚动加载
-      // 下拉框展开/关闭的回调
+       // update-begin--author:liaozhiyang---date:20260203---for:【issues/9307】onlineDropdown khi tải từ điển bảng cần tải theo cuộn
+      // Mở ra ô dropdown/Callback của việc đóng
       // onDropdownVisibleChange: (visible: boolean)=> {
       //   if (visible && typeof this.schema.updateOptions === 'function') {
       //     this.schema.updateOptions()
       //   }
       // },
-      // update-end--author:liaozhiyang---date:20260203---for:【issues/9307】online下拉加载表字典需滚动加载
+      // update-end--author:liaozhiyang---date:20260203---for:【issues/9307】onlineDropdown khi tải từ điển bảng cần tải theo cuộn
     }
-    // 是否启用远程搜索+滚动加载（查询工作表模式）
+    // Có kích hoạt tìm kiếm từ xa hay không+Tải theo cuộn (chế độ bảng làm việc truy vấn)
     const loadMore = this.schema['loadMore'] || this._data['loadMore'];
     if (typeof loadMore === 'function') {
       props['remoteLoad'] = true;
       props['onLoad'] = (params: { keyword: string; pageNo: number; pageSize: number }) => {
         return loadMore(params.keyword, params.pageNo);
       };
-      // 透传真实每页条数，否则 JSelectSingle 按默认值 10 判断末页，会多发一次空页请求
+      // Truyền xuyên suốt số mục mỗi trang thật, nếu không JSelectSingle Theo giá trị mặc định 10 Phán đoán trang cuối, sẽ gửi thêm một yêu cầu trang trống
       const pageSize = this.schema['pageSize'] || this._data['pageSize'];
       if (pageSize) {
         props['pageSize'] = pageSize;
       }
-      delete props.options; // remoteLoad 模式下不用静态 options
+      delete props.options; // remoteLoad Ở chế độ này không dùng tĩnh options
     } else {
-      // 普通搜索模式
+      // Chế độ tìm kiếm thông thường
       const filterable = this.schema['filterable'] || this._data['filterable'];
       if (filterable) {
         props['showSearch'] = true;
       }
     }
-    // update-begin--author:liaozhiyang---date:20260203---for:【issues/9307】online下拉加载表字典需滚动加载
+    // update-begin--author:liaozhiyang---date:20260203---for:【issues/9307】onlineDropdown khi tải từ điển bảng cần tải theo cuộn
     if (!this.dictTable) {
       props['dictCode'] = this.dictCode;
-      // update-begin--author:liaozhiyang---date:20230110---for：【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
+      // update-begin--author:liaozhiyang---date:20230110---for：【QQYUN-7799】Component từ điển (trừ component gốc) thêm cấu hình màu sắc
       props['useDicColor'] = true;
-      // update-end--author:liaozhiyang---date:20230110---for：【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
-      // 静态数据（无 dictCode）时，将 enum 选项直接传给组件
+      // update-end--author:liaozhiyang---date:20230110---for：【QQYUN-7799】Component từ điển (trừ component gốc) thêm cấu hình màu sắc
+      // Dữ liệu tĩnh (không có dictCode) thì, đưa enum Tùy chọn truyền trực tiếp cho component
       if (!this.dictCode && !loadMore && this.options.length > 0) {
         props['options'] = this.options;
       }
@@ -117,7 +117,7 @@ export default class SelectWidget extends IFormSchema {
       props['scrollLoad'] = true;
       delete props.onDropdownVisibleChange;
     }
-    // update-end--author:liaozhiyang---date:20260203---for:【issues/9307】online下拉加载表字典需滚动加载
+    // update-end--author:liaozhiyang---date:20260203---for:【issues/9307】onlineDropdown khi tải từ điển bảng cần tải theo cuộn
     return props
   }
 
@@ -152,9 +152,9 @@ export default class SelectWidget extends IFormSchema {
     let isNum = 'number' == type;
     let arr: any[] = [];
     for (let item of array) {
-      // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9359】加强判断，防止数据有null报错
+      // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9359】Tăng cường phán đoán, ngăn dữ liệu cónullBáo lỗi
       if (item == null) break;
-      // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9359】加强判断，防止数据有null报错
+      // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9359】Tăng cường phán đoán, ngăn dữ liệu cónullBáo lỗi
       let value = item.value;
       if(isNum){
         value = parseInt(value)

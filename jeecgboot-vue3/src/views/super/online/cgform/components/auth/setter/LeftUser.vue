@@ -22,8 +22,8 @@
           size: 'small',
           bordered: true,
           columns: [
-            { title: '账号', dataIndex: 'username', width: 200 },
-            { title: '姓名', dataIndex: 'realname', width: 200 },
+            { title: 'Tài khoản', dataIndex: 'username', width: 200 },
+            { title: 'Họ tên', dataIndex: 'realname', width: 200 },
           ],
           rowSelection: {
             type: 'radio',
@@ -36,21 +36,21 @@
           formConfig: {
             schemas: [
               {
-                label: '账号',
+                label: 'Tài khoản',
                 field: 'username',
                 component: 'JInput',
                 colProps: { class: 'onl-auth-user-query-item' },
                 componentProps: {
-                  placeholder: '输入账号',
+                  placeholder: 'Nhập tài khoản',
                 },
               },
               {
-                label: '姓名',
+                label: 'Họ tên',
                 field: 'realname',
                 component: 'JInput',
                 colProps: { class: 'onl-auth-user-query-item' },
                 componentProps: {
-                  placeholder: '输入姓名',
+                  placeholder: 'Nhập họ tên',
                 },
               },
             ],

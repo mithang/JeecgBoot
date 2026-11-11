@@ -2,7 +2,7 @@ import IFormSchema from '../IFormSchema';
 import { FormSchema } from '/@/components/Form';
 
 /**
- * 省市区
+ * Tỉnh/Thành/Quận huyện
  */
 export default class PcaWidget extends IFormSchema {
   getItem(): FormSchema {

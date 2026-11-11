@@ -12,52 +12,52 @@ export function useTableSync(columns: Ref<JVxeColumn[]>) {
   const tableRef = ref<JVxeTableInstance>();
   const loading = ref(false);
   const dataSource = ref<Recordable[]>([]);
-  // 表格动态高度
+  // Chiều cao động của bảng
   const tableHeight = computed(() => ({
-    // 正常表格高度
+    // Chiều cao bảng bình thường
     normal: fullScreenRef?.value ? vxetableHeight?.value : 260,
-    // 没有 toolbar 的表格高度
+    // Không có toolbar chiều cao bảng của
     noToolbar: fullScreenRef?.value ? vxetableHeight?.value : 320,
   }));
 
-  // 当前表的所有列字段key
+  // Tất cả trường cột của bảng hiện tạikey
   const columnKeys = computed<string[]>(() => ['id'].concat(columns.value.map((col) => col.key)));
 
-  // 表格其他props
+  // Bảng khácprops
   const tableProps = computed(() => {
     return {
-      // 针对Online表单对虚拟滚动做出优化
-      // 虚拟滚动配置，y轴（行数）大于xx条数据时启用虚拟滚动
-      // update-begin--author:liaozhiyang---date:20231025---for：【QQYUN-6808】online编辑字段多了卡顿
+      // Nhắm vàoOnlineBiểu mẫu tối ưu hóa cho cuộn ảo
+      // Cấu hình cuộn ảo,yTrục (số hàng) lớn hơnxxKhi có nhiều bản ghi dữ liệu thì bật cuộn ảo
+      // update-begin--author:liaozhiyang---date:20231025---for：【QQYUN-6808】onlineChỉnh sửa nhiều trường bị giật lag
       scrollY: {
         enabled: true,
         gt: 15,
       },
-      // 列数
+      // Số cột
       scrollX: {
         enabled: true,
         gt: 20,
       },
-      // update-begin--author:liaozhiyang---date:20231025---for：【QQYUN-6808】online编辑字段多了卡顿
+      // update-begin--author:liaozhiyang---date:20231025---for：【QQYUN-6808】onlineChỉnh sửa nhiều trường bị giật lag
     };
   });
 
-  // 校验并获取表格数据
+  // Kiểm chứng đồng thời lấy dữ liệu bảng
   async function validateData(activeKey: string) {
     let instance = tableRef.value!;
     let errMap = await instance.fullValidateTable();
     if (errMap) {
       throw { code: VALIDATE_FAILED, activeKey };
     }
-    // 过滤掉当前表中不存在的字段，以防止多个表冲突
+    // Lọc bỏ các trường không tồn tại trong bảng hiện tại, để tránh nhiều bảng xung đột
     let tableData = instance.getTableData().map((data) => pick(data, columnKeys.value));
-    // 获取被删除的ID
+    // Lấy cái bị xóaID
     let deleteIds = instance.getDeleteData().map((d) => d.id);
     return { tableData, deleteIds };
   }
 
   /**
-   * 设置数据源
+   * Thiết lập nguồn dữ liệu
    * @param data
    * @param insert
    */
@@ -70,15 +70,15 @@ export function useTableSync(columns: Ref<JVxeColumn[]>) {
       tableRef.value!.recalcDisableRows();
     } else {
       dataSource.value = data;
-      // update-begin--author:liaozhiyang---date:20240705---for：【TV360X-1762】解决编辑时id可删除
+      // update-begin--author:liaozhiyang---date:20240705---for：【TV360X-1762】Giải quyết khi chỉnh sửaidCó thể xóa
       await nextTick();
       tableRef.value!.recalcDisableRows();
-      // update-end--author:liaozhiyang---date:20240705---for：【TV360X-1762】解决编辑时id可删除
+      // update-end--author:liaozhiyang---date:20240705---for：【TV360X-1762】Giải quyết khi chỉnh sửaidCó thể xóa
     }
   }
 
   /**
-   * 同步列表，可以同步新增、修改、删除
+   * Đồng bộ danh sách, có thể đồng bộ thêm mới, sửa đổi, xóa
    * @param dbTable
    */
   function syncTable(dbTable: Ref<CgformModal.DBAttributeTableType | undefined>) {
@@ -88,39 +88,39 @@ export function useTableSync(columns: Ref<JVxeColumn[]>) {
     let removeIds = dbTable.value!.getRemoveIds();
     let sourceData = sourceTable.getXTable().internalData.tableFullData;
     let targetData = targetTable.getXTable().internalData.tableFullData;
-    // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
-    // 用 Map 索引 targetData，将查找从 O(N) 降到 O(1)
+    // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetableTối ưu
+    // Dùng Map Chỉ mục (index) targetData, đưa việc tìm kiếm từ O(N) Giảm xuống O(1)
     const targetMap = new Map<string, Recordable>();
     targetData.forEach((targetValue) => {
       if (targetValue.id) {
         targetMap.set(targetValue.id, targetValue);
       }
     });
-    // 用 Set 索引 removeIds，将查找从 O(K) 降到 O(1)
+    // Dùng Set Chỉ mục (index) removeIds, đưa việc tìm kiếm từ O(K) Giảm xuống O(1)
     const removeIdSet = new Set<string>(removeIds);
-    // update-begin--author:liaozhiyang---date:20240724---for：【TV360X-1852】新增时删除所有字段再新增一个字段，保存报错
-    // 先收集需要删除的ID，最后统一删除，避免在遍历中修改数组
+    // update-begin--author:liaozhiyang---date:20240724---for：【TV360X-1852】Khi thêm mới, xóa tất cả trường rồi thêm một trường, lưu thì báo lỗi
+    // Trước tiên thu thập những mục cần xóaID, cuối cùng xóa thống nhất, tránh sửa đổi mảng trong lúc duyệt
     const toRemoveIds: string[] = [];
-    // update-end--author:liaozhiyang---date:20240724---for：【TV360X-1852】新增时删除所有字段再新增一个字段，保存报错
-    // 批量收集需要修改的值，最后一次性调用 setValues
+    // update-end--author:liaozhiyang---date:20240724---for：【TV360X-1852】Khi thêm mới, xóa tất cả trường rồi thêm một trường, lưu thì báo lỗi
+    // Thu thập hàng loạt các giá trị cần sửa, cuối cùng gọi một lần duy nhất setValues
     const batchSetValues: { rowKey: string; values: Recordable }[] = [];
-    // update-begin--author:liaozhiyang---date:20250407---for：【QQYUN-11801】ai建表字段
-    // 提前缓存列默认值映射，避免新增每行时重复遍历 columns
+    // update-begin--author:liaozhiyang---date:20250407---for：【QQYUN-11801】aiTrường tạo bảng
+    // Lưu đệm trước ánh xạ giá trị mặc định của cột, tránh duyệt lặp lại khi thêm mỗi hàng columns
     const columnDefaults: { key: string; defaultValue: any }[] = [];
     columns.value.forEach((column) => {
       if (column.key !== 'dbFieldName' && column.key !== 'dbFieldTxt') {
         columnDefaults.push({ key: column.key, defaultValue: column.defaultValue });
       }
     });
-    // update-end--author:liaozhiyang---date:20250407---for：【QQYUN-11801】ai建表字段
+    // update-end--author:liaozhiyang---date:20250407---for：【QQYUN-11801】aiTrường tạo bảng
     sourceData.forEach((sourceValue) => {
       const targetValue = targetMap.get(sourceValue.id);
       if (targetValue) {
-        // 判断是否修改了值
+        // Phán đoán giá trị có bị sửa hay không
         let dbFieldName = targetValue['dbFieldName'];
         let dbFieldTxt = targetValue['dbFieldTxt'];
         if (sourceValue.dbFieldName !== dbFieldName || sourceValue.dbFieldTxt !== dbFieldTxt) {
-          // 收集修改字段，稍后批量同步
+          // Thu thập các trường sửa đổi, lát nữa đồng bộ hàng loạt
           batchSetValues.push({
             rowKey: targetValue.id,
             values: {
@@ -130,24 +130,24 @@ export function useTableSync(columns: Ref<JVxeColumn[]>) {
           });
         }
       } else {
-        // target中不存在，说明是新增的
+        // targetkhông tồn tại trong đó, chứng tỏ là mới thêm
         let record = Object.assign({}, sourceValue);
-        // update-begin--author:liaozhiyang---date:20250407---for：【QQYUN-11801】ai建表字段
+        // update-begin--author:liaozhiyang---date:20250407---for：【QQYUN-11801】aiTrường tạo bảng
         for (const { key, defaultValue } of columnDefaults) {
           if (record[key] == undefined) {
             record[key] = defaultValue;
           }
         }
-        // update-end--author:liaozhiyang---date:20250407---for：【QQYUN-11801】ai建表字段
+        // update-end--author:liaozhiyang---date:20250407---for：【QQYUN-11801】aiTrường tạo bảng
         targetTable.addRows(record);
       }
     });
-    // 批量同步修改
+    // Đồng bộ sửa đổi hàng loạt
     if (batchSetValues.length > 0) {
       targetTable.setValues(batchSetValues);
     }
-    // 处理删除：target中存在但已被删除的行
-    // update-begin--author:liaozhiyang---date:20240724---for：【TV360X-1852】新增时删除所有字段再新增一个字段，保存报错
+    // Xử lý việc xóa:targethàng tồn tại trong đó nhưng đã bị xóa
+    // update-begin--author:liaozhiyang---date:20240724---for：【TV360X-1852】Khi thêm mới, xóa tất cả trường rồi thêm một trường, lưu thì báo lỗi
     targetData.forEach((targetValue) => {
       if (targetValue.id && removeIdSet.has(targetValue.id)) {
         toRemoveIds.push(targetValue.id);
@@ -158,8 +158,8 @@ export function useTableSync(columns: Ref<JVxeColumn[]>) {
         toRemoveIds.forEach((id) => targetTable.removeRowsById(id));
       }, 0);
     }
-    // update-end--author:liaozhiyang---date:20240724---for：【TV360X-1852】新增时删除所有字段再新增一个字段，保存报错
-    // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+    // update-end--author:liaozhiyang---date:20240724---for：【TV360X-1852】Khi thêm mới, xóa tất cả trường rồi thêm một trường, lưu thì báo lỗi
+    // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetableTối ưu
     return nextTick();
   }
 

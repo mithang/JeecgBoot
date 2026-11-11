@@ -2,7 +2,7 @@ import {defineStore} from 'pinia';
 import {store} from '/@/store';
 
 interface CgformState {
-  // 近期被修改过的表，存储表id
+  // Bảng được sửa đổi gần đây, bảng lưu trữid
   changedTables: string[];
 }
 
@@ -13,8 +13,8 @@ export const useCgformStore = defineStore('cgform-state', {
   getters: {},
   actions: {
     /**
-     * 检查是否同步过数据库
-     * @param tableId 表id
+     * Kiểm tra cơ sở dữ liệu đã đồng bộ hay chưa
+     * @param tableId Bảngid
      */
     checkIsChanged(tableId: string) {
       return this.changedTables.includes(tableId);
@@ -31,7 +31,7 @@ export const useCgformStore = defineStore('cgform-state', {
   },
 });
 
-// 在 setup 之外使用
+// tại setup sử dụng ở bên ngoài
 export function useCgformStoreWithOut() {
   return useCgformStore(store);
 }

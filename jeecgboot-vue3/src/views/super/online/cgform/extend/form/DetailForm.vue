@@ -8,9 +8,9 @@
           <div class="item-content" v-if="item.view === 'markdown'">
              <MarkdownViewer v-model:value="detailFormData[item.field]" placeholder="" />
           </div>
-          <!-- update-begin--author:scott---date:20261031---for：【GHSA-867f-2922-wj26】详情直接 v-html 字段值导致存储型XSS，富文本先净化 -->
+          <!-- update-begin--author:scott---date:20261031---for：【GHSA-867f-2922-wj26】Chi tiết trực tiếp v-html Giá trị trường dẫn đến kiểu lưu trữXSS, văn bản giàu làm sạch trước -->
           <div class="item-content" :class="item.view" v-else-if="item.isHtml" v-html="sanitizeRichText(detailFormData[item.field])"></div>
-          <!-- update-end--author:scott---date:20261031---for：【GHSA-867f-2922-wj26】详情直接 v-html 字段值导致存储型XSS，富文本先净化 -->
+          <!-- update-end--author:scott---date:20261031---for：【GHSA-867f-2922-wj26】Chi tiết trực tiếp v-html Giá trị trường dẫn đến kiểu lưu trữXSS, văn bản giàu làm sạch trước -->
           <div class="item-content" v-else-if="item.view == 'textarea'" v-html="textareaLineBreak(detailFormData[item.field])"></div>
           <div class="item-content" style="display: block;padding-top:10px" v-else-if="item.isCard">
             <span v-if="!detailFormData[item.field]"></span>
@@ -23,7 +23,7 @@
                   <span>
                     <div class="ant-upload-list-width ant-upload-list-picture-border ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card" data-has-actions="true">
                       <div class="ant-upload-list-item-thumbnail ant-upload-list-item-info">
-                        <img :src="url" alt="图片不存在" class="ant-upload-list-item-image" @click="handleViewImage(item.field)" />
+                        <img :src="url" alt="Hình ảnh không tồn tại" class="ant-upload-list-item-image" @click="handleViewImage(item.field)" />
                       </div>
                       <span class="ant-upload-list-item-actions">
                         <eye-outlined @click="handleViewImage(item.field)" />
@@ -89,15 +89,15 @@
     },
     props: {
       span: propTypes.number.def(24),
-      //表单配置
+      //Cấu hình biểu mẫu
       schemas: propTypes.array.def([]),
-      //表单数据
+      //Dữ liệu biểu mẫu
       data: propTypes.object.def({}),
       containerClass: propTypes.string.def(''),
     },
     setup(props) {
       const { formContainerClass, detailFormData, getItemSpan, handleDownloadFile, handleViewImage, getFilename, getLabelWidthClass } = useDetailForm(props);
-      // update-begin--author:liaozhiyang---date:20230925---for：【QQYUN-6647】页面配置中高级配置中设置的label长度，在列表与详情界面无效
+      // update-begin--author:liaozhiyang---date:20230925---for：【QQYUN-6647】Được thiết lập trong cấu hình nâng cao của cấu hình tranglabelĐộ dài, không có hiệu lực ở giao diện danh sách và chi tiết
       const filterLable = (item) => {
         if (item.fieldExtendJson) {
           const json = JSON.parse(item.fieldExtendJson);
@@ -107,26 +107,26 @@
         }
         return item.label;
       };
-      // update-end--author:liaozhiyang---date:20230925---for：【QQYUN-6647】页面配置中高级配置中设置的label长度，在列表与详情界面无效
-      // update-begin--author:liusq---date:20240527---for：【TV360X-464】多行文本换行显示
+      // update-end--author:liaozhiyang---date:20230925---for：【QQYUN-6647】Được thiết lập trong cấu hình nâng cao của cấu hình tranglabelĐộ dài, không có hiệu lực ở giao diện danh sách và chi tiết
+      // update-begin--author:liusq---date:20240527---for：【TV360X-464】Văn bản nhiều dòng hiển thị xuống dòng
       const textareaLineBreak = (content) => {
-        // update-begin--author:scott---date:20261031---for：【GHSA-867f-2922-wj26】多行文本只换行不转义，v-html 渲染导致存储型XSS，先转义再换行
+        // update-begin--author:scott---date:20261031---for：【GHSA-867f-2922-wj26】Văn bản nhiều dòng chỉ xuống dòng mà không escape，v-html Render dẫn đến kiểu lưu trữXSS, chuyển nghĩa (escape) trước rồi mới xuống dòng
         if (content == null || content === '') {
           return content;
         }
         content = escapeHtml(content);
-        // update-end--author:scott---date:20261031---for：【GHSA-867f-2922-wj26】多行文本只换行不转义，v-html 渲染导致存储型XSS，先转义再换行
+        // update-end--author:scott---date:20261031---for：【GHSA-867f-2922-wj26】Văn bản nhiều dòng chỉ xuống dòng mà không escape，v-html Render dẫn đến kiểu lưu trữXSS, chuyển nghĩa (escape) trước rồi mới xuống dòng
         if (content && content.includes('\n')) {
           content = content.replace(/\n/g, '<br>');
         }
         return content;
       };
-      // update-end--author:liusq---date:20240527---for：【TV360X-464】多行文本换行显示
-      // update-begin--author:liaozhiyang---date:20230110---for：【QQYUN-7636】online详情oracle数据库日期类型字段会默认带上时分秒
+      // update-end--author:liusq---date:20240527---for：【TV360X-464】Văn bản nhiều dòng hiển thị xuống dòng
+      // update-begin--author:liaozhiyang---date:20230110---for：【QQYUN-7636】onlineChi tiếtoracleTrường loại ngày của cơ sở dữ liệu mặc định sẽ mang theo giờ-phút-giây
       const filter = (value, type, item) => {
         if (type == 'date' && typeof value === 'string') {
-          // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
-          // 【TV360X-29】数据是空的，日期如果是年、年月、年周、年季度详情里面是NAN
+          // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
+          // 【TV360X-29】Dữ liệu trống, ngày nếu là năm, năm-tháng, năm-tuần, năm-quý thì trong chi tiết làNAN
           if (!value) {
             return '';
           }
@@ -138,14 +138,14 @@
               return result[fieldExtendJson.picker];
             }
           }
-          // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
-          // oracle数据库日期类型字段会带上时分秒
+          // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
+          // oracleTrường loại ngày của cơ sở dữ liệu sẽ mang theo giờ-phút-giây
           return value.split(' ').shift();
         } else {
           return value;
         }
       };
-      // update-end--author:liaozhiyang---date:20230110---for：【QQYUN-7636】online详情oracle数据库日期类型字段会默认带上时分秒
+      // update-end--author:liaozhiyang---date:20230110---for：【QQYUN-7636】onlineChi tiếtoracleTrường loại ngày của cơ sở dữ liệu mặc định sẽ mang theo giờ-phút-giây
       return {
         formContainerClass,
         detailFormData,
@@ -175,9 +175,9 @@
       line-height: 24px;
       border-bottom: 1px solid @border-color-split;
       height: 100%;
-      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-21】多行文本框在详情弹框中不换行
+      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-21】Ô văn bản nhiều dòng trong popup chi tiết không xuống dòng
       word-break: break-all;
-      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-21】多行文本框在详情弹框中不换行
+      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-21】Ô văn bản nhiều dòng trong popup chi tiết không xuống dòng
       .item-title {
         display: flex;
         align-items: center;
@@ -205,11 +205,11 @@
         &.span6{
           width: 6%;
         }
-        // update-begin--author:liaozhiyang---date:20231228---for：【QQYUN-7769】详情label加上背景色和字体颜色
+        // update-begin--author:liaozhiyang---date:20231228---for：【QQYUN-7769】Chi tiếtlabelThêm màu nền và màu chữ
         background: #fafafa;
         color: #000;
         font-weight: 500;
-        // update-end--author:liaozhiyang---date:20231228---for：【QQYUN-7769】详情label加上背景色和字体颜色
+        // update-end--author:liaozhiyang---date:20231228---for：【QQYUN-7769】Chi tiếtlabelThêm màu nền và màu chữ
       }
       .item-content {
         border-right: 1px solid @border-color-split;
@@ -218,11 +218,11 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7470】富文本详情中纵向显示
+        // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7470】Hiển thị theo chiều dọc trong chi tiết văn bản giàu
         &.umeditor {
           display: block;
         }
-        // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7470】富文本详情中纵向显示
+        // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7470】Hiển thị theo chiều dọc trong chi tiết văn bản giàu
         .anticon {
           &:hover {
             color: #40a9ff;
@@ -253,7 +253,7 @@
       }
     }
   }
-  // update-begin--author:liaozhiyang---date:20231228---for：【QQYUN-7769】详情label加上背景色和字体颜色
+  // update-begin--author:liaozhiyang---date:20231228---for：【QQYUN-7769】Chi tiếtlabelThêm màu nền và màu chữ
   @darkBorderColor: #3a3a3a;
   html[data-theme='dark'] {
     .jeecg-detail-form {
@@ -269,12 +269,12 @@
       }
     }
   }
-  // update-end--author:liaozhiyang---date:20231228---for：【QQYUN-7769】详情label加上背景色和字体颜色
-  // update-begin--author:liaozhiyang---date:20240516---for：【TV360X-15】详情文件和图片样式美化
+  // update-end--author:liaozhiyang---date:20231228---for：【QQYUN-7769】Chi tiếtlabelThêm màu nền và màu chữ
+  // update-begin--author:liaozhiyang---date:20240516---for：【TV360X-15】Làm đẹp kiểu dáng tệp và hình ảnh trong chi tiết
   .ant-upload-list-text {
     .ant-upload-span {
       display: flex;
-      // update-begin--author:liaozhiyang---date:20260811---for:【LHZP-4】online详情关联记录加上图片显示及文件下载及图片预览
+      // update-begin--author:liaozhiyang---date:20260811---for:【LHZP-4】onlineBản ghi liên kết của chi tiết thêm hiển thị hình ảnh, tải tệp xuống và xem trước hình ảnh
       .ant-upload-list-item-name {
         margin: 0 6px;
         min-width: 0;
@@ -287,7 +287,7 @@
         padding-right: 8px;
         cursor: pointer;
       }
-      // update-end--author:liaozhiyang---date:20260811---for:【LHZP-4】online详情关联记录加上图片显示及文件下载及图片预览
+      // update-end--author:liaozhiyang---date:20260811---for:【LHZP-4】onlineBản ghi liên kết của chi tiết thêm hiển thị hình ảnh, tải tệp xuống và xem trước hình ảnh
       a {
         color: rgba(51, 51, 51, 0.88);
       }
@@ -303,7 +303,7 @@
           max-width: 120px;
           cursor: pointer;
         }
-        // update-begin--author:liaozhiyang---date:20260811---for:【LHZP-4】online详情关联记录加上图片显示及文件下载及图片预览
+        // update-begin--author:liaozhiyang---date:20260811---for:【LHZP-4】onlineBản ghi liên kết của chi tiết thêm hiển thị hình ảnh, tải tệp xuống và xem trước hình ảnh
         .ant-upload-list-item-actions {
           display: none;
           position: absolute;
@@ -318,12 +318,12 @@
         &:hover .ant-upload-list-item-actions {
           display: flex;
         }
-        // update-end--author:liaozhiyang---date:20260811---for:【LHZP-4】online详情关联记录加上图片显示及文件下载及图片预览
+        // update-end--author:liaozhiyang---date:20260811---for:【LHZP-4】onlineBản ghi liên kết của chi tiết thêm hiển thị hình ảnh, tải tệp xuống và xem trước hình ảnh
       }
     }
-    // update-begin--author:liaozhiyang---date:20231228---for：【TV360X-15】详情文件和图片样式美化
+    // update-begin--author:liaozhiyang---date:20231228---for：【TV360X-15】Làm đẹp kiểu dáng tệp và hình ảnh trong chi tiết
 
-  //update-begin---author:wangshuai---date:2025-08-26---for:【issues/8759】online表单的图片控件多图片显示问题---
+  //update-begin---author:wangshuai---date:2025-08-26---for:【issues/8759】onlineVấn đề hiển thị nhiều hình của control hình ảnh trong biểu mẫu---
   .ant-upload-list-picture-border {
     position: relative;
     height: 100%;
@@ -353,5 +353,5 @@
     margin-inline: 0 8px;
     vertical-align: top;
   }
-  //update-end---author:wangshuai---date:2025-08-26---for:【issues/8759】online表单的图片控件多图片显示问题---
+  //update-end---author:wangshuai---date:2025-08-26---for:【issues/8759】onlineVấn đề hiển thị nhiều hình của control hình ảnh trong biểu mẫu---
 </style>

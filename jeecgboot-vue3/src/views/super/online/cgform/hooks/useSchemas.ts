@@ -10,10 +10,10 @@ const { isDisabledAuth } = usePermission();
 
 export function useFormSchemas(_props, expandingConfig, handlers) {
   type SpanType = 'one' | 'tow' | 'three';
-  // 动态布局
+  // Bố cục động
   const mapFormSchema = bindMapFormSchema<SpanType>(
     {
-      // 一列
+      // một cột
       one: {
         colProps: { xs: 24, sm: 24 },
         itemProps: {
@@ -21,7 +21,7 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
           wrapperCol: { xs: 24, sm: 22 },
         },
       },
-      // 两列
+      // hai cột
       tow: {
         colProps: { xs: 24, sm: 12 },
         itemProps: {
@@ -29,7 +29,7 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
           wrapperCol: { xs: 24, sm: 20 },
         },
       },
-      // 三列
+      // ba cột
       three: {
         colProps: { xs: 24, sm: 8 },
         itemProps: {
@@ -41,61 +41,61 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
     'three'
   );
 
-  // 表单 FormSchemas
+  // Biểu mẫu FormSchemas
   const formSchemas: FormSchema[] = [
     { label: '', field: 'id', component: 'Input', show: false },
     { label: '', field: 'tableVersion', component: 'Input', show: false },
     mapFormSchema({
-      label: '表名',
+      label: 'Tên bảng',
       field: 'tableName',
       component: 'Input',
       required: true,
-      // 如果版本号为1 表示未曾修改 未曾同步 可以修改表名
+      // Nếu số phiên bản là1 Biểu thị chưa từng sửa đổi Chưa từng đồng bộ Có thể sửa tên bảng
       dynamicDisabled: ({ model }) => model.tableVersion && model.tableVersion != 1,
       dynamicRules: ({ model, schema }) => {
-        // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8492】online表名校验不允许输入中文
+        // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8492】onlineKiểm chứng tên bảng không cho phép nhập tiếng Trung
         return [
           {
             validator: (_, value) => {
               return new Promise((resolve, reject) => {
                 let reg = /[\u4E00-\u9FA5]/g;
                 if (reg.test(value)) {
-                  reject('不允许输入中文');
+                  reject('không cho phép nhập tiếng Trung');
                 }
                 resolve();
               });
             },
           },
-          // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-631】表名字段名表描述字段备注长度校验
+          // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-631】Kiểm chứng độ dài của tên bảng, tên trường, mô tả bảng, ghi chú trường
           {
             validator: (_, value) => {
               return new Promise((resolve, reject) => {
                 if (value.length > 50) {
-                  reject('表名最长50个字符');
+                  reject('Tên bảng dài nhất50ký tự');
                 }
                 resolve();
               });
             },
           },
-          // update-end--author:liaozhiyang---date:20240603---for：【TV360X-631】表名字段名表描述字段备注长度校验
+          // update-end--author:liaozhiyang---date:20240603---for：【TV360X-631】Kiểm chứng độ dài của tên bảng, tên trường, mô tả bảng, ghi chú trường
           ...rules.duplicateCheckRule('onl_cgform_head', 'table_name', model, schema, true),
         ];
-        // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8492】online表名校验不允许输入中文
+        // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8492】onlineKiểm chứng tên bảng không cho phép nhập tiếng Trung
       },
     }),
     mapFormSchema({
-      label: '表描述',
+      label: 'Mô tả bảng',
       field: 'tableTxt',
       component: 'Input',
       required: true,
-      // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-631】表名字段名表描述字段备注长度校验
+      // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-631】Kiểm chứng độ dài của tên bảng, tên trường, mô tả bảng, ghi chú trường
       dynamicRules: ({ model, schema }) => {
         return [
           {
             validator: (_, value) => {
               return new Promise((resolve, reject) => {
                 if (value.length > 200) {
-                  reject('表描述最长200个字');
+                  reject('Mô tả bảng dài nhất200ký tự');
                 }
                 resolve();
               });
@@ -103,24 +103,24 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
           },
         ];
       },
-      // update-end--author:liaozhiyang---date:20240603---for：【TV360X-631】表名字段名表描述字段备注长度校验
+      // update-end--author:liaozhiyang---date:20240603---for：【TV360X-631】Kiểm chứng độ dài của tên bảng, tên trường, mô tả bảng, ghi chú trường
     }),
     mapFormSchema({
-      label: '表类型',
+      label: 'Loại bảng',
       field: 'tableType',
       component: 'Select',
       defaultValue: 1,
       componentProps: {
         options: [
-          { label: '单表', value: 1 },
-          { label: '主表', value: 2 },
-          { label: '附表', value: 3 },
+          { label: 'bảng đơn', value: 1 },
+          { label: 'bảng chính', value: 2 },
+          { label: 'Bảng phụ', value: 3 },
         ],
         onChange: handlers.onTableTypeChange,
         allowClear: false,
       },
     }),
-    // 此处为占位符，用于将 relationType 顶到最右边
+    // Tại đây là phần giữ chỗ, dùng để đưa relationType Đẩy tới phía bên phải nhất
     {
       label: '',
       field: 'relationType',
@@ -136,8 +136,8 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
       defaultValue: 0,
       componentProps: {
         options: [
-          { label: '一对多', value: 0 },
-          { label: '一对一', value: 1 },
+          { label: 'một-nhiều', value: 0 },
+          { label: 'một-một', value: 1 },
         ],
         allowClear: false,
         onChange: handlers.onRelationTypeChange,
@@ -151,7 +151,7 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
       ifShow: fieldIfShow,
     }),
     mapFormSchema({
-      label: '序号',
+      label: 'Số thứ tự',
       field: 'tabOrderNum',
       component: 'InputNumber',
       componentProps: {
@@ -167,7 +167,7 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
       ifShow: fieldIfShow,
     }),
     mapFormSchema({
-      label: '表单分类',
+      label: 'Phân loại biểu mẫu',
       field: 'formCategory',
       component: 'JDictSelectTag',
       defaultValue: 'temp',
@@ -177,56 +177,56 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
       },
     }),
     mapFormSchema({
-      label: '主键策略',
+      label: 'Chiến lược khóa chính',
       field: 'idType',
       component: 'Select',
       defaultValue: 'UUID',
       componentProps: {
         options: [
-          { label: 'ID_WORKER(分布式自增)', value: 'UUID' },
-          // { label: 'NATIVE(自增长方式)', value: 'NATIVE' },
-          // { label: 'SEQUENCE(序列方式)', value: 'SEQUENCE' },
+          { label: 'ID_WORKER(Tự tăng phân tán)', value: 'UUID' },
+          // { label: 'NATIVE(Cách tăng tự động)', value: 'NATIVE' },
+          // { label: 'SEQUENCE(Cách thức dãy (sequence))', value: 'SEQUENCE' },
         ],
         allowClear: false,
       },
     }),
     mapFormSchema({
-      label: '序号名称',
+      label: 'Tên số thứ tự',
       field: 'idSequence',
       component: 'Input',
       componentProps: {},
       ifShow: fieldIfShow,
     }),
     mapFormSchema({
-      label: '显示复选框',
+      label: 'Hiển thị ô kiểm',
       field: 'isCheckbox',
       component: 'Select',
       defaultValue: 'Y',
       componentProps: {
         options: [
-          { label: '是', value: 'Y' },
-          { label: '否', value: 'N' },
+          { label: 'là', value: 'Y' },
+          { label: 'Không', value: 'N' },
         ],
         allowClear: false,
       },
     }),
     mapFormSchema({
-      label: '主题模板',
+      label: 'Mẫu giao diện',
       field: 'themeTemplate',
       component: 'Select',
       defaultValue: 'normal',
       componentProps: {
         options: [
-          { label: '默认主题', value: 'normal' },
-          { label: 'ERP主题(一对多)', value: 'erp' },
-          { label: '内嵌子表主题(一对多)', value: 'innerTable' },
-          { label: 'TAB主题(一对多)', value: 'tab' },
+          { label: 'Chủ đề mặc định', value: 'normal' },
+          { label: 'ERPChủ đề (theme)(một-nhiều)', value: 'erp' },
+          { label: 'Chủ đề bảng con nhúng(một-nhiều)', value: 'innerTable' },
+          { label: 'TABChủ đề (theme)(một-nhiều)', value: 'tab' },
         ],
         allowClear: false,
       },
-      // 单表时禁用该字段
+      // Khi là bảng đơn thì vô hiệu hóa trường này
       dynamicDisabled: ({ model }) => model.tableType === 1,
-      // update-begin--author:liaozhiyang---date:20231123---for：【QQYUN-7073】提示ERP、内嵌子表不支持联合查询
+      // update-begin--author:liaozhiyang---date:20231123---for：【QQYUN-7073】Nhắc nhởERP、bảng con nhúng không hỗ trợ truy vấn liên hợp
       dynamicRules() {
         return [
           {
@@ -234,11 +234,11 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
               const data = expandingConfig.value;
               if (value === 'erp') {
                 if (data.joinQuery) {
-                  return Promise.reject('ERP不支持联合查询功能');
+                  return Promise.reject('ERPkhông hỗ trợ chức năng truy vấn liên hợp');
                 }
               } else if (value === 'innerTable') {
                 if (data.joinQuery) {
-                  return Promise.reject('内嵌子表不支持联合查询功能');
+                  return Promise.reject('Bảng con nhúng không hỗ trợ chức năng truy vấn liên hợp');
                 }
               }
               return Promise.resolve();
@@ -246,74 +246,74 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
           },
         ];
       },
-      // update-end--author:liaozhiyang---date:20231123---for：【QQYUN-7073】提示ERP、内嵌子表不支持联合查询
+      // update-end--author:liaozhiyang---date:20231123---for：【QQYUN-7073】Nhắc nhởERP、bảng con nhúng không hỗ trợ truy vấn liên hợp
     }),
     mapFormSchema({
-      label: '表单风格',
+      label: 'Phong cách biểu mẫu',
       field: 'formTemplate',
       component: 'Select',
       defaultValue: '1',
       componentProps: {
         options: [
-          { label: '一列', value: '1' },
-          { label: '两列', value: '2' },
-          { label: '三列', value: '3' },
-          { label: '四列', value: '4' },
+          { label: 'một cột', value: '1' },
+          { label: 'hai cột', value: '2' },
+          { label: 'ba cột', value: '3' },
+          { label: 'bốn cột', value: '4' },
         ],
-        placeholder: '请选择PC表单风格',
+        placeholder: 'Vui lòng chọnPCPhong cách biểu mẫu',
         allowClear: false,
       },
     }),
     mapFormSchema({
-      label: '移动表单风格',
+      label: 'Phong cách biểu mẫu di động',
       field: 'formTemplateMobile',
       component: 'Select',
       defaultValue: '1',
       componentProps: {
         options: [
-          { label: 'AntDesign模板', value: '1' },
-          { label: 'Bootstrap模板', value: '2' },
+          { label: 'AntDesignMẫu (template)', value: '1' },
+          { label: 'BootstrapMẫu (template)', value: '2' },
         ],
-        placeholder: '请选择移动表单风格',
+        placeholder: 'Vui lòng chọn phong cách biểu mẫu di động',
       },
-      // 暂时先隐藏
+      // Tạm thời ẩn trước
       ifShow: false,
     }),
     mapFormSchema({
-      label: '滚动条',
+      label: 'Thanh cuộn',
       field: 'scroll',
       component: 'Select',
       defaultValue: 1,
       componentProps: {
         options: [
-          { label: '有', value: 1 },
-          { label: '无', value: 0 },
+          { label: 'Có', value: 1 },
+          { label: 'Không có', value: 0 },
         ],
         allowClear: false,
       },
     }),
     mapFormSchema({
-      label: '是否分页',
+      label: 'Có phân trang hay không',
       field: 'isPage',
       component: 'Select',
       defaultValue: 'Y',
       componentProps: {
         options: [
-          { label: '是', value: 'Y' },
-          { label: '否', value: 'N' },
+          { label: 'là', value: 'Y' },
+          { label: 'Không', value: 'N' },
         ],
         allowClear: false,
       },
     }),
     mapFormSchema({
-      label: '是否树',
+      label: 'Có phải cây hay không',
       field: 'isTree',
       component: 'Select',
       defaultValue: 'N',
       componentProps: {
         options: [
-          { label: '是', value: 'Y' },
-          { label: '否', value: 'N' },
+          { label: 'là', value: 'Y' },
+          { label: 'Không', value: 'N' },
         ],
         onChange: handlers.onIsTreeChange,
         allowClear: false,
@@ -323,7 +323,7 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
           {
             validator({}, value) {
               if (value === 'Y' && (model.tableType == 2 || model.tableType == 3)) {
-                return Promise.reject('主表和附表不支持树类型！');
+                return Promise.reject('Bảng chính và bảng phụ không hỗ trợ loại cây!');
               } else {
               }
               return Promise.resolve();
@@ -331,7 +331,7 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
           },
         ];
       },
-      // update-begin--author:liaozhiyang---date:20240604---for：【TV360X-125】选择主表和附表时隐藏树表配置
+      // update-begin--author:liaozhiyang---date:20240604---for：【TV360X-125】Khi chọn bảng chính và bảng phụ thì ẩn cấu hình bảng cây
       show({ model, values }) {
         if (model.tableType == 2 || model.tableType == 3) {
           model.isTree = 'N';
@@ -340,32 +340,32 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
         }
         return true;
       },
-      // update-end--author:liaozhiyang---date:20240604---for：【TV360X-125】选择主表和附表时隐藏树表配置
+      // update-end--author:liaozhiyang---date:20240604---for：【TV360X-125】Khi chọn bảng chính và bảng phụ thì ẩn cấu hình bảng cây
     }),
     mapFormSchema({
-      // 空格不要删，否则布局会乱
-      label: ' ', // 扩展配置
+      // Đừng xóa khoảng trắng, nếu không bố cục sẽ bị loạn
+      label: ' ', // Cấu hình mở rộng
       field: 'extConfigJson',
       component: 'Input',
       slot: 'extConfigButton',
       itemProps: { colon: false },
-      // 一对多子表时隐藏扩展配置按钮
+      // khi là bảng con một-nhiều thì ẩn nút cấu hình mở rộng
       ifShow: ({ model }) => !(model.tableType === 3 && model.relationType === 0),
     }),
     mapFormSchema({
-      label: '树表单父ID',
+      label: 'Cha của biểu mẫu câyID',
       field: 'treeParentIdField',
       component: 'Input',
       ifShow: fieldIfShow,
     }),
     mapFormSchema({
-      label: '是否有子节点字段',
+      label: 'Có trường nút con hay không',
       field: 'treeIdField',
       component: 'Input',
       show: false,
     }),
     mapFormSchema({
-      label: '树开表单列',
+      label: 'Danh sách mở biểu mẫu của cây',
       field: 'treeFieldname',
       required: true,
       component: 'Input',
@@ -373,7 +373,7 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
     }),
     mapFormSchema(
       {
-        label: '附表',
+        label: 'Bảng phụ',
         field: 'subTableStr',
         component: 'Input',
         componentProps: {
@@ -387,7 +387,7 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
     ),
   ];
 
-  // 控制字段是否显示
+  // Kiểm soát trường có hiển thị hay không
   function fieldIfShow({ field, model }: RenderCallbackParams) {
     switch (field) {
       case 'relationType':
@@ -406,10 +406,10 @@ export function useFormSchemas(_props, expandingConfig, handlers) {
   return { formSchemas };
 }
 
-/** 获取 扩展参数 FormSchemas */
+/** Lấy Tham số mở rộng FormSchemas */
 export function useExtendConfigFormSchemas(_props, handlers) {
   type SpanType = 'left' | 'right';
-  // formItem 的绑定值，统一布局
+  // formItem giá trị liên kết của, thống nhất bố cục
   const mapFormSchema = bindMapFormSchema<SpanType>(
     {
       left: {
@@ -432,31 +432,31 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     'left'
   );
 
-  // 一对一子表时只显示固定操作列、列宽拖动、表单Label长度
+  // khi là bảng con một-một chỉ hiển thị cố định cột thao tác, kéo độ rộng cột, biểu mẫuLabelĐộ dài
   function isNotOneToOneSub() {
     const { tableType, relationType } = _props.parentForm.getFieldsValue(['tableType', 'relationType']);
     return !(tableType === 3 && relationType === 1);
   }
 
-  // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源（附表跟随主表，不单独配置）
+  // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu (bảng phụ đi theo bảng chính, không cấu hình riêng)
   function isNotSubTable() {
     const { tableType } = _props.parentForm.getFieldsValue(['tableType']);
     return tableType !== 3;
   }
-  // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
+  // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
 
   const baseFormSchemas: FormSchema[] = [
-    // 弹窗
+    // Popup
     mapFormSchema(
       {
-        label: '弹窗默认全屏',
+        label: 'Popup toàn màn hình mặc định',
         field: 'modelFullscreen',
         ifShow: isNotOneToOneSub,
         component: 'RadioButtonGroup',
         componentProps: {
           options: [
-            { label: '开启', value: 1 },
-            { label: '关闭', value: 0 },
+            { label: 'Bật', value: 1 },
+            { label: 'Đóng', value: 0 },
           ],
           buttonStyle: 'solid',
         },
@@ -465,38 +465,38 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     ),
     mapFormSchema(
       {
-        label: '弹窗宽度',
+        label: 'Độ rộng popup',
         field: 'modalMinWidth',
         component: 'InputNumber',
         ifShow: isNotOneToOneSub,
         componentProps: {
           style: 'width: 70%',
-          placeholder: '弹窗最小宽度（单位：px）',
+          placeholder: 'Độ rộng tối thiểu của popup (đơn vị:px）',
         },
-        // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-77】弹窗全屏后，输入宽度框禁用
+        // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-77】Sau khi popup toàn màn hình, ô nhập độ rộng bị vô hiệu hóa
         dynamicDisabled: ({ model }) => !!model.modelFullscreen,
-        // update-end--author:liaozhiyang---date:20240520---for：【TV360X-77】弹窗全屏后，输入宽度框禁用
+        // update-end--author:liaozhiyang---date:20240520---for：【TV360X-77】Sau khi popup toàn màn hình, ô nhập độ rộng bị vô hiệu hóa
       },
       'right'
     ),
-    //----------------------------表单评论 begin-----------------------------------------
+    //----------------------------Bình luận biểu mẫu begin-----------------------------------------
     mapFormSchema(
       {
-        label: '开启表单评论',
+        label: 'Bật bình luận biểu mẫu',
         field: 'commentStatus',
         component: 'RadioButtonGroup',
         ifShow: isNotOneToOneSub,
         componentProps: {
           options: [
-            { label: '开启', value: 1 },
-            { label: '关闭', value: 0 },
+            { label: 'Bật', value: 1 },
+            { label: 'Đóng', value: 0 },
           ],
           buttonStyle: 'solid',
         },
       },
       'left'
     ),
-    // 此处为占位符
+    // Tại đây là phần giữ chỗ (placeholder)
     mapFormSchema(
       {
         label: '',
@@ -507,17 +507,17 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'right'
     ),
-    // 启用联合查询
+    // Kích hoạt truy vấn liên hợp
     mapFormSchema(
       {
-        label: '启用联合查询',
+        label: 'Kích hoạt truy vấn liên hợp',
         field: 'joinQuery',
         component: 'RadioButtonGroup',
         ifShow: isNotOneToOneSub,
         componentProps: {
           options: [
-            { label: '开启', value: 1 },
-            { label: '关闭', value: 0 },
+            { label: 'Bật', value: 1 },
+            { label: 'Đóng', value: 0 },
           ],
           buttonStyle: 'solid',
           onChange: handlers.onJoinQueryChange,
@@ -525,7 +525,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'left'
     ),
-    // 此处为占位符
+    // Tại đây là phần giữ chỗ (placeholder)
     mapFormSchema(
       {
         label: '',
@@ -536,17 +536,17 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'right'
     ),
-    // 积木报表打印
+    // In báo cáo Jimu
     mapFormSchema(
       {
-        label: '集成积木报表',
+        label: 'Tích hợp báo cáo Jimu',
         field: 'reportPrintShow',
         component: 'RadioButtonGroup',
         ifShow: isNotOneToOneSub,
         componentProps: {
           options: [
-            { label: '开启', value: 1 },
-            { label: '关闭', value: 0 },
+            { label: 'Bật', value: 1 },
+            { label: 'Đóng', value: 0 },
           ],
           buttonStyle: 'solid',
           onChange: handlers.onReportPrintShowChange,
@@ -556,7 +556,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     ),
     mapFormSchema(
       {
-        label: '报表地址',
+        label: 'Địa chỉ báo cáo',
         field: 'reportPrintUrl',
         component: 'Input',
         ifShow: isNotOneToOneSub,
@@ -566,11 +566,11 @@ export function useExtendConfigFormSchemas(_props, handlers) {
         dynamicDisabled: ({ model }) => !model.reportPrintShow,
         dynamicRules: ({ model }) => {
           return [
-            { required: !!model.reportPrintShow, message: '请输入报表地址！' },
+            { required: !!model.reportPrintShow, message: 'Vui lòng nhập địa chỉ báo cáo!' },
             {
               validator({}, value) {
-                if (/\/jmreport\/view\/{积木报表ID}/.test(value)) {
-                  return Promise.reject('请将{积木报表ID}替换为真实的积木报表ID！');
+                if (/\/jmreport\/view\/{Báo cáo JimuID}/.test(value)) {
+                  return Promise.reject('Vui lòng đưa{Báo cáo JimuID}Thay thế bằng báo cáo Jimu thậtID！');
                 }
                 return Promise.resolve();
               },
@@ -580,16 +580,16 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'right'
     ),
-    // update-begin--author:liaozhiyang---date:20231213---for：【QQYUN-7421】vue3先注释集成设计表单功能
+    // update-begin--author:liaozhiyang---date:20231213---for：【QQYUN-7421】vue3Trước tiên ghi chú (comment) chức năng biểu mẫu thiết kế tích hợp
     // mapFormSchema(
     //   {
-    //     label: '集成设计表单',
+    //     label: 'Tích hợp thiết kế biểu mẫu',
     //     field: 'isDesForm',
     //     component: 'RadioButtonGroup',
     //     componentProps: {
     //       options: [
-    //         { label: '开启', value: 'Y' },
-    //         { label: '关闭', value: 'N' },
+    //         { label: 'Bật', value: 'Y' },
+    //         { label: 'Đóng', value: 'N' },
     //       ],
     //       buttonStyle: 'solid',
     //       onChange: handlers.onIsDesformChange,
@@ -599,7 +599,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     // ),
     // mapFormSchema(
     //   {
-    //     label: '表单编码',
+    //     label: 'Mã biểu mẫu',
     //     field: 'desFormCode',
     //     component: 'Input',
     //     componentProps: {
@@ -607,64 +607,64 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     //     },
     //     dynamicDisabled: ({ model }) => model.isDesForm !== 'Y',
     //     dynamicRules: ({ model }) => {
-    //       return [{ required: model.isDesForm === 'Y', message: '请输入表单编码！' }];
+    //       return [{ required: model.isDesForm === 'Y', message: 'Vui lòng nhập mã biểu mẫu!' }];
     //     },
     //   },
     //   'right'
     // ),
-    // update-end--author:liaozhiyang---date:20231213---for：【QQYUN-7421】vue3先注释集成设计表单功能
-    // 列表操作列
+    // update-end--author:liaozhiyang---date:20231213---for：【QQYUN-7421】vue3Trước tiên ghi chú (comment) chức năng biểu mẫu thiết kế tích hợp
+    // Cột thao tác của danh sách
     mapFormSchema(
       {
-        label: '固定操作列',
+        label: 'Cố định cột thao tác',
         field: 'tableFixedAction',
         component: 'RadioButtonGroup',
         componentProps: {
           options: [
-            { label: '开启', value: 1 },
-            { label: '关闭', value: 0 },
+            { label: 'Bật', value: 1 },
+            { label: 'Đóng', value: 0 },
           ],
           buttonStyle: 'solid',
         },
         defaultValue: 1,
-        // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-69】树表时固定操作列禁用
+        // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-69】Khi là bảng cây, vô hiệu hóa cố định cột thao tác
         dynamicDisabled: () => _props.parentForm.getFieldsValue(['isTree']).isTree === 'Y',
-        // update-end--author:liaozhiyang---date:20260713---for：【LHZP-69】树表时固定操作列禁用
+        // update-end--author:liaozhiyang---date:20260713---for：【LHZP-69】Khi là bảng cây, vô hiệu hóa cố định cột thao tác
       },
       'left'
     ),
     mapFormSchema(
       {
-        label: '固定方式',
+        label: 'Cách cố định',
         field: 'tableFixedActionType',
         component: 'Select',
         componentProps: {
           options: [
-            { label: '固定到右侧', value: 'right' },
-            { label: '固定到左侧', value: 'left' },
+            { label: 'Cố định sang phía bên phải', value: 'right' },
+            { label: 'Cố định sang phía bên trái', value: 'left' },
           ],
           style: 'width: 70%',
         },
         defaultValue: 'right',
-        // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-69】树表时固定方式禁用
+        // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-69】Khi là bảng cây, vô hiệu hóa cách cố định
         dynamicDisabled: ({ model }) => !model.tableFixedAction || _props.parentForm.getFieldsValue(['isTree']).isTree === 'Y',
-        // update-end--author:liaozhiyang---date:20260713---for：【LHZP-69】树表时固定方式禁用
+        // update-end--author:liaozhiyang---date:20260713---for：【LHZP-69】Khi là bảng cây, vô hiệu hóa cách cố định
         dynamicRules: ({ model }) => {
-          return [{ required: !!model.tableFixedAction, message: '请选择固定方式！' }];
+          return [{ required: !!model.tableFixedAction, message: 'Vui lòng chọn cách cố định!' }];
         },
       },
       'right'
     ),
-    // 列宽拖动调整
+    // Kéo để điều chỉnh độ rộng cột
     mapFormSchema(
       {
-        label: '列宽拖动',
+        label: 'Kéo độ rộng cột',
         field: 'canResizeColumn',
         component: 'RadioButtonGroup',
         componentProps: {
           options: [
-            { label: '开启', value: 1 },
-            { label: '关闭', value: 0 },
+            { label: 'Bật', value: 1 },
+            { label: 'Đóng', value: 0 },
           ],
           buttonStyle: 'solid',
         },
@@ -672,7 +672,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'left'
     ),
-    // 此处为占位符
+    // Tại đây là phần giữ chỗ (placeholder)
     mapFormSchema(
       {
         label: '',
@@ -682,18 +682,18 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'right'
     ),
-    //--------------------------表单评论 end-----------------------------------------
-    // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+    //--------------------------Bình luận biểu mẫu end-----------------------------------------
+    // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
     mapFormSchema(
       {
-        label: '表单Label长度',
+        label: 'Biểu mẫuLabelĐộ dài',
         field: 'formLabelLengthShow',
         component: 'RadioButtonGroup',
-        helpMessage: '字段备注的文字个数',
+        helpMessage: 'Số lượng ký tự văn bản của ghi chú trường',
         componentProps: {
           options: [
-            { label: '开启', value: 1 },
-            { label: '关闭', value: 0 },
+            { label: 'Bật', value: 1 },
+            { label: 'Đóng', value: 0 },
           ],
           buttonStyle: 'solid',
           onChange: handlers.onFormLabelLengthShow,
@@ -703,31 +703,31 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     ),
     mapFormSchema(
       {
-        label: 'Label长度',
+        label: 'LabelĐộ dài',
         field: 'formLabelLength',
         component: 'InputNumber',
         componentProps: {
           style: 'width: 70%',
-          placeholder: '自定义表单Label长度',
+          placeholder: 'Biểu mẫu tùy chỉnhLabelĐộ dài',
         },
         dynamicDisabled: ({ model }) => !model.formLabelLengthShow,
         dynamicRules: ({ model }) => {
-          return [{ required: !!model.formLabelLengthShow, message: '请填写表单label长度' }];
+          return [{ required: !!model.formLabelLengthShow, message: 'Vui lòng điền biểu mẫulabelĐộ dài' }];
         },
       },
       'right'
     ),
-    // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+    // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
     mapFormSchema(
       {
-        label: '启用外部链接',
+        label: 'Kích hoạt liên kết ngoài',
         field: 'enableExternalLink',
         component: 'RadioButtonGroup',
         ifShow: isNotOneToOneSub,
         componentProps: {
           options: [
-            {label: '开启', value: 1},
-            {label: '关闭', value: 0},
+            {label: 'Bật', value: 1},
+            {label: 'Đóng', value: 0},
           ],
           buttonStyle: 'solid',
           defaultValue: 0,
@@ -738,35 +738,35 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     ),
     mapFormSchema(
       {
-        label: '允许的操作',
+        label: 'Thao tác được cho phép',
         field: 'externalLinkActions',
         component: 'JCheckbox',
         ifShow: isNotOneToOneSub,
         itemProps: { colon: true },
         componentProps: {
           options: [
-            {label: '新增', value: 'add'},
-            {label: '编辑', value: 'edit'},
-            {label: '详情', value: 'detail'},
+            {label: 'Thêm mới', value: 'add'},
+            {label: 'Chỉnh sửa', value: 'edit'},
+            {label: 'Chi tiết', value: 'detail'},
           ],
         },
         dynamicDisabled: ({model}) => !model.enableExternalLink,
       },
       'right'
     ),
-    // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
+    // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
     mapFormSchema(
       {
-        label: '开启多数据源',
+        label: 'Bật đa nguồn dữ liệu',
         field: 'enableMultiDataSource',
         component: 'RadioButtonGroup',
         ifShow: isNotSubTable,
-        // update-begin--author:jeecg---date:20260513---for：【QQYUN-15337】开启多数据源处增加使用说明/注意事项
+        // update-begin--author:jeecg---date:20260513---for：【QQYUN-15337】Bổ sung phần thuyết minh sử dụng tại vị trí bật đa nguồn dữ liệu/Những điểm cần lưu ý
         helpMessage: [
-          '开启后：本表单的同步建表、数据增删改查、列表查询、导入导出都走选定的数据源；附表自动跟随主表。',
-          '✓ 关联记录/下拉关联已支持多数据源，会自动按被关联表所属表单的数据源路由，无需额外配置。',
-          '⚠ 对接了流程审批(BPM)的表单不要配数据源——流程引擎走主库，请把对接流程的表单放在主库（不开启多数据源）。',
-          '⚠ 数据源变更后该表单及其附表会被置为"未同步"，需重新同步建表；物理表不会自动迁库，旧库的表/数据需自行清理。',
+          'Sau khi bật: việc tạo bảng đồng bộ, thêm/xóa/sửa/tra dữ liệu, truy vấn danh sách, nhập/xuất của biểu mẫu này đều đi qua nguồn dữ liệu đã chọn; bảng phụ tự động theo bảng chính.',
+          '✓ bản ghi liên kết/Bản ghi liên kết dropdown đã hỗ trợ đa nguồn dữ liệu, sẽ tự động định tuyến theo nguồn dữ liệu của biểu mẫu chứa bảng được liên kết, không cần cấu hình thêm.',
+          '⚠ Đã kết nối với phê duyệt quy trình(BPM)Biểu mẫu của không nên cấu hình nguồn dữ liệu — engine quy trình đi qua cơ sở dữ liệu chính, vui lòng đặt biểu mẫu kết nối quy trình vào cơ sở dữ liệu chính (không bật đa nguồn dữ liệu).',
+          '⚠ Sau khi nguồn dữ liệu thay đổi, biểu mẫu này và bảng phụ của nó sẽ bị đặt thành"Chưa đồng bộ", cần đồng bộ tạo bảng lại; bảng vật lý sẽ không tự động chuyển kho, bảng của kho cũ/Dữ liệu cần tự dọn dẹp.',
         ],
         helpComponentProps: {
           maxWidth: '550px',
@@ -775,11 +775,11 @@ export function useExtendConfigFormSchemas(_props, handlers) {
           color: '#4e5969',
           backgroundColor: '#ffffff',
         },
-        // update-end--author:jeecg---date:20260513---for：【QQYUN-15337】开启多数据源处增加使用说明/注意事项
+        // update-end--author:jeecg---date:20260513---for：【QQYUN-15337】Bổ sung phần thuyết minh sử dụng tại vị trí bật đa nguồn dữ liệu/Những điểm cần lưu ý
         componentProps: {
           options: [
-            { label: '开启', value: 1 },
-            { label: '关闭', value: 0 },
+            { label: 'Bật', value: 1 },
+            { label: 'Đóng', value: 0 },
           ],
           buttonStyle: 'solid',
           defaultValue: 0,
@@ -790,7 +790,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     ),
     mapFormSchema(
       {
-        label: '选择数据源',
+        label: 'Chọn nguồn dữ liệu',
         field: 'dbSource',
         component: 'JDictSelectTag',
         ifShow: isNotSubTable,
@@ -798,22 +798,22 @@ export function useExtendConfigFormSchemas(_props, handlers) {
         componentProps: {
           dictCode: 'sys_data_source,name,code',
           style: 'width: 70%',
-          // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】允许不选数据源（不选时走默认数据源）
-          placeholder: '请选择数据源（不选则走默认数据源；同步建表与数据增删改查均走该数据源）',
-          // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】允许不选数据源（不选时走默认数据源）
+          // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】Cho phép không chọn nguồn dữ liệu (khi không chọn thì dùng nguồn dữ liệu mặc định)
+          placeholder: 'Vui lòng chọn nguồn dữ liệu (nếu không chọn thì đi qua nguồn dữ liệu mặc định; đồng bộ tạo bảng và thêm/xóa/sửa/truy vấn dữ liệu đều đi qua nguồn dữ liệu này)',
+          // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】Cho phép không chọn nguồn dữ liệu (khi không chọn thì dùng nguồn dữ liệu mặc định)
         },
         dynamicDisabled: ({ model }) => !model.enableMultiDataSource,
       },
       'right'
     ),
-    // 附表：仅当已继承到主表数据源时，只读展示该数据源（未继承/默认数据源时不展示此字段）
+    // Bảng phụ: chỉ khi đã kế thừa được nguồn dữ liệu của bảng chính, mới hiển thị chỉ đọc nguồn dữ liệu đó (chưa kế thừa/Khi là nguồn dữ liệu mặc định thì không trưng bày trường này)
     mapFormSchema(
       {
-        label: '数据源',
+        label: 'Nguồn dữ liệu',
         field: 'dbSource',
         component: 'JDictSelectTag',
         ifShow: ({ model }) => !isNotSubTable() && !!model.dbSource,
-        helpMessage: '附表的数据源跟随主表，请在对应主表的扩展配置中设置',
+        helpMessage: 'Nguồn dữ liệu của bảng phụ đi theo bảng chính, vui lòng thiết lập trong cấu hình mở rộng của bảng chính tương ứng',
         componentProps: {
           dictCode: 'sys_data_source,name,code',
           disabled: true,
@@ -821,7 +821,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'left'
     ),
-    // 占位符，与上面的只读数据源凑成一行
+    // Phần giữ chỗ, ghép thành một hàng với nguồn dữ liệu chỉ đọc ở trên
     mapFormSchema(
       {
         label: '',
@@ -832,19 +832,19 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'right'
     ),
-    // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
-    // 图片导出方式
+    // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
+    // Cách thức xuất hình ảnh
     mapFormSchema(
       {
-        label: '图片导出方式',
+        label: 'Cách thức xuất hình ảnh',
         field: 'imageExportMode',
         component: 'RadioButtonGroup',
-        helpMessage: '嵌入图片会增大 Excel 文件体积；图片路径适合仅保留文件地址的场景',
+        helpMessage: 'Việc nhúng hình ảnh sẽ làm tăng Excel dung lượng tệp; đường dẫn hình ảnh phù hợp với trường hợp chỉ giữ địa chỉ tệp',
         itemProps: { class: 'image-export-mode' },
         componentProps: {
           options: [
-            { label: '嵌入图片', value: 'embed' },
-            { label: '图片路径', value: 'path' },
+            { label: 'Nhúng hình ảnh', value: 'embed' },
+            { label: 'Đường dẫn hình ảnh', value: 'path' },
           ],
           buttonStyle: 'solid',
         },
@@ -852,7 +852,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
       'left'
     ),
-    // 此处为占位符
+    // Tại đây là phần giữ chỗ (placeholder)
     mapFormSchema(
       {
         label: '',
@@ -864,7 +864,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
     ),
   ];
 
-  // update-begin--author:jeecg---date:20260810---for：【LHZP-122】一对多附表仅允许配置弹窗默认全屏、弹窗宽度和表单 Label 长度，其余扩展配置统一禁用
+  // update-begin--author:jeecg---date:20260810---for：【LHZP-122】Bảng phụ một-nhiều chỉ cho phép cấu hình popup toàn màn hình mặc định, độ rộng popup và biểu mẫu Label Độ dài, các cấu hình mở rộng còn lại thống nhất vô hiệu hóa
   const oneToManySubEnabledFields = new Set(['modelFullscreen', 'modalMinWidth', 'formLabelLengthShow', 'formLabelLength']);
   const formSchemas = baseFormSchemas.map((schema) => {
     if (oneToManySubEnabledFields.has(schema.field)) {
@@ -882,17 +882,17 @@ export function useExtendConfigFormSchemas(_props, handlers) {
       },
     };
   });
-  // update-end--author:jeecg---date:20260810---for：【LHZP-122】一对多附表仅允许配置弹窗默认全屏、弹窗宽度和表单 Label 长度，其余扩展配置统一禁用
+  // update-end--author:jeecg---date:20260810---for：【LHZP-122】Bảng phụ một-nhiều chỉ cho phép cấu hình popup toàn màn hình mặc định, độ rộng popup và biểu mẫu Label Độ dài, các cấu hình mở rộng còn lại thống nhất vô hiệu hóa
   return { formSchemas };
 }
 
-/** 获取 代码生成 FormSchemas */
+/** Lấy Sinh mã FormSchemas */
 export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
   type SpanType = 'one' | 'tow' | 'towOne';
-  // 动态布局
+  // Bố cục động
   const mapFormSchema = bindMapFormSchema<SpanType>(
     {
-      // 一列
+      // một cột
       one: {
         colProps: { xs: 24, sm: 24 },
         itemProps: {
@@ -900,7 +900,7 @@ export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
           wrapperCol: { xs: 24, sm: 16 },
         },
       },
-      // 两列中的一列
+      // một cột trong hai cột
       towOne: {
         colProps: { xs: 24, sm: 24 },
         itemProps: {
@@ -908,7 +908,7 @@ export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
           wrapperCol: { xs: 24, sm: 20 },
         },
       },
-      // 两列
+      // hai cột
       tow: {
         colProps: { xs: 24, sm: 12 },
         itemProps: {
@@ -920,11 +920,11 @@ export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
     'one'
   );
   const getColSize = computed<SpanType>(() => (single.value ? 'one' : 'tow'));
-  // 由于需要动态改变布局，所以使用 computed
+  // Do cần thay đổi bố cục động nên sử dụng computed
   const formSchemas = computed<FormSchema[]>(() => [
     mapFormSchema(
       {
-        label: '代码生成目录',
+        label: 'Thư mục sinh mã',
         field: 'projectPath',
         render: ({ model, field }) =>
           h(
@@ -947,7 +947,7 @@ export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
                     disabled: isDisabledAuth('online:codeGenerate:projectPath'),
                   },
                   {
-                    default: () => '浏览',
+                    default: () => 'Duyệt xem',
                     icon: () => h(FolderOpenOutlined),
                   }
                 ),
@@ -955,36 +955,36 @@ export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
           ),
         component: 'InputSearch',
         required: true,
-        // 如果版本号为1 表示未曾修改 未曾同步 可以修改表名
+        // Nếu số phiên bản là1 Biểu thị chưa từng sửa đổi Chưa từng đồng bộ Có thể sửa tên bảng
       },
       single.value ? 'one' : 'towOne'
     ),
     mapFormSchema(
       {
-        label: '页面风格',
+        label: 'Phong cách trang',
         field: 'jspMode',
         component: 'Select',
         componentProps: {
           options: handlers.jspModeOptions.value,
-          // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-895】页面风格去掉x
+          // update-begin--author:liaozhiyang---date:20240603---for：【TV360X-895】Bỏ kiểu trangx
           allowClear: false,
-          // update-end--author:liaozhiyang---date:20240603---for：【TV360X-895】页面风格去掉x
+          // update-end--author:liaozhiyang---date:20240603---for：【TV360X-895】Bỏ kiểu trangx
         },
       },
       getColSize.value
     ),
     mapFormSchema(
       {
-        label: '功能说明',
+        label: 'Thuyết minh chức năng',
         field: 'ftlDescription',
         component: 'Input',
       },
       getColSize.value
     ),
-    { label: '数据模型', field: 'jformType', component: 'Input', show: false },
+    { label: 'Mô hình dữ liệu', field: 'jformType', component: 'Input', show: false },
     mapFormSchema(
       {
-        label: '表名',
+        label: 'Tên bảng',
         field: 'tableName_tmp',
         required: true,
         dynamicDisabled: true,
@@ -994,35 +994,35 @@ export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
     ),
     mapFormSchema(
       {
-        label: '实体类名',
+        label: 'Tên lớp thực thể',
         field: 'entityName',
         required: true,
         component: 'Input',
         componentProps: {
-          placeholder: '请输入实体类名(首字母大写)',
+          placeholder: 'Vui lòng nhập tên lớp thực thể (entity)(Viết hoa chữ cái đầu)',
         },
       },
       getColSize.value
     ),
     mapFormSchema(
       {
-        label: '包名(小写)',
+        label: 'Tên gói(Chữ thường)',
         field: 'entityPackage',
         component: 'Input',
-        rules: [{ required: true, pattern: /^[a-zA-Z0-9._]*$/, message: '包名必填，且只允许字母、数字、下划线、小数点组合' }],
+        rules: [{ required: true, pattern: /^[a-zA-Z0-9._]*$/, message: 'Tên gói bắt buộc điền, và chỉ cho phép kết hợp chữ cái, chữ số, dấu gạch dưới, dấu chấm' }],
       },
       getColSize.value
     ),
     mapFormSchema(
       {
-        label: '代码分层样式',
+        label: 'Kiểu dáng phân tầng mã',
         field: 'packageStyle',
         component: 'Select',
         componentProps: {
           disabled: true,
           options: [
-            { label: '业务分层', value: 'service' },
-            { label: '代码分层', value: 'project' },
+            { label: 'Phân tầng nghiệp vụ', value: 'service' },
+            { label: 'Phân tầng mã', value: 'project' },
           ],
         },
       },
@@ -1030,7 +1030,7 @@ export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
     ),
     mapFormSchema(
       {
-        label: '页面代码',
+        label: 'Mã trang',
         field: 'vueStyle',
         required: true,
         component: 'Input',
@@ -1039,29 +1039,29 @@ export function useCodeGeneratorFormSchemas(_, handlers, single: Ref<boolean>) {
         // componentProps: {
         //   options: [
         //     { label: 'Vue3(BasicForm)', value: 'vue3' },
-        //     { label: 'Vue3原生(a-form)', value: 'vue3Native' },
+        //     { label: 'Vue3Nguyên bản (native)(a-form)', value: 'vue3Native' },
         //     { label: 'Vue2', value: 'vue' },
         //   ],
         // },
-        // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-1057】代码生成页面代码鼠标移入给说明
+        // update-begin--author:liaozhiyang---date:20240612---for：【TV360X-1057】Trang sinh mã: di chuột vào mã thì hiển thị phần thuyết minh
         // dynamicPropskey: 'options',
         // dynamicPropsVal: ({ model }) => {
         //   if (model.jspMode && (model.jspMode == 'innerTable' || model.jspMode == 'tab')) {
         //     return [
-        //       { value: 'vue3', label: '封装表单(BasicForm)' },
+        //       { value: 'vue3', label: 'Biểu mẫu được đóng gói(BasicForm)' },
         //     ];
         //   } else {
         //     return [
-        //       { value: 'vue3', label: '封装表单(BasicForm)' },
-        //       { value: 'vue3Native', label: '原生表单(a-form)' },
+        //       { value: 'vue3', label: 'Biểu mẫu được đóng gói(BasicForm)' },
+        //       { value: 'vue3Native', label: 'Biểu mẫu nguyên bản(a-form)' },
         //     ];
         //   }
         // },
-        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1057】代码生成页面代码鼠标移入给说明
+        // update-end--author:liaozhiyang---date:20240612---for：【TV360X-1057】Trang sinh mã: di chuột vào mã thì hiển thị phần thuyết minh
       },
       getColSize.value
     ),
-    { label: '需要生成的代码', field: 'codeTypes', component: 'Input', show: false },
+    { label: 'Mã cần tạo', field: 'codeTypes', component: 'Input', show: false },
   ]);
 
   return { formSchemas };

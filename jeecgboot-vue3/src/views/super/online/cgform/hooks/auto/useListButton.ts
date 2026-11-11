@@ -13,19 +13,19 @@ import { getToken } from '/@/utils/auth';
 import { goJmReportViewPage } from '/@/utils'
 import { Tree } from '../../util/constant';
 
-/**工作流编码前缀*/
+/**Tiền tố mã quy trình làm việc*/
 const FLOW_CODE_PRE = 'onl_';
 /**
- * 负责列表页面按钮及其事件--在initAutoList之后执行,必须先获取按钮信息
- * - 这个是所有风格都通用的且必须要有的
+ * Phụ trách nút của trang danh sách và sự kiện của chúng--tạiinitAutoListthực thi sau đó,Bắt buộc phải lấy thông tin nút trước
+ * - Cái này dùng chung cho mọi phong cách và bắt buộc phải có
  */
 export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigType | undefined>, extraParameter = {}) {
   const buttonStatus = {
     add: true,
     addSub: true,
-    // edit = 编辑按钮的code
+    // edit = của nút chỉnh sửacode
     edit: true,
-    // update = 编辑按钮的老code
+    // update = cái cũ của nút chỉnh sửacode
     update: true,
     delete: true,
     batch_delete: true,
@@ -38,26 +38,26 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     super_query: true,
     bpm: true,
     form_confirm: true,
-    // 子表新增
+    // Thêm mới bảng con
     form_sub_add: true,
-    // 子表删除
+    // Xóa bảng con
     form_sub_batch_delete: true,
-    // 子表新增
+    // Thêm mới bảng con
     form_sub_open_add: true,
-    // 子表编辑
+    // Chỉnh sửa bảng con
     form_sub_open_edit: true,
-    // 生成测试数据
+    // Tạo dữ liệu kiểm thử
     aigc_mock_data: true,
   };
 
-  // 弹框事件
+  // Sự kiện popup
   const [registerModal, { openModal }] = useModal();
   const [registerImportModal, { openModal: openImportModal }] = useModal();
   const [registerDetailModal, { openModal: openDetailModal }] = useModal();
   const [registerBpmModal, { openModal: openBpmModal }] = useModal();
   const { createMessage: $message } = useMessage();
 
-  // 按钮相关
+  // Liên quan đến nút
   const buttonSwitch = reactive(buttonStatus);
   const cgLinkButtonList = reactive<CgFormButton[]>([]);
   const cgTopButtonList = reactive<CgFormButton[]>([]);
@@ -66,16 +66,16 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     enabled: boolean,
   }
 
-  // Online表单内置按钮列表
+  // OnlineDanh sách nút tích hợp sẵn của biểu mẫu
   const cgBIBtnMap = reactive<Record<string, CgBIBtnType>>({});
 
-  // 创建内置按钮配置（用于控制按钮权限）
+  // Tạo cấu hình nút tích hợp sẵn (dùng để kiểm soát quyền nút)
   const createBIButtonCfg = (btnKey: string) => computed(() => buttonSwitch[btnKey] === true ? cgBIBtnMap[btnKey] : {enabled: false})
-  // 查询按钮配置
+  // Cấu hình nút truy vấn
   const getQueryButtonCfg = createBIButtonCfg('query')
-  // 重置按钮配置
+  // Cấu hình nút đặt lại
   const getResetButtonCfg = createBIButtonCfg('reset')
-  // 表单弹窗的确定按钮配置
+  // Cấu hình nút xác nhận của popup biểu mẫu
   const getFormConfirmButtonCfg = createBIButtonCfg('form_confirm')
 
   const testDataLoading = ref(false);
@@ -84,7 +84,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     testDataBtnShow.value = false;
   }, 4e3);
   /**
-   * 根据配置获取 button和link
+   * Lấy theo cấu hình buttonvàlink
    */
   function initButtonList(btnList) {
     cgLinkButtonList.length = 0;
@@ -108,7 +108,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   * 根据配置设置按钮的 显示/隐藏 状态
+   * Thiết lập của nút theo cấu hình Hiển thị/Ẩn Trạng thái
    */
   function initButtonSwitch(hideColumns) {
     Object.keys(buttonSwitch).forEach((key) => {
@@ -123,7 +123,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     }
   }
 
-  // 增加事件
+  // Thêm sự kiện
   function handleAdd(param) {
     let data = { isUpdate: false };
     if (param) {
@@ -132,7 +132,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     openModal(true, data);
   }
 
-  // 修改事件
+  // Sửa sự kiện
   function handleEdit(record) {
     onlineTableContext
       .beforeEdit(record)
@@ -149,20 +149,20 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
 
   /**
    *
-   * [更多]下拉项中的 [删除]
+   * [Thêm]trong mục dropdown [Xóa]
    */
   const getDeleteButton = (record) => {
     return {
       label: cgBIBtnMap['delete'].buttonName,
       ifShow: () => cgBIBtnMap['delete'].enabled,
       popConfirm: {
-        title: '是否删除？',
+        title: 'Có xóa hay không?',
         confirm: handleDeleteOne.bind(null, record),
       },
     };
   };
 
-  // 删除事件
+  // Sự kiện xóa
   function handleDeleteOne(record) {
     onlineTableContext
       .beforeDelete(record)
@@ -175,28 +175,28 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
-    //update-begin-author:taoyan date:2022-10-17 for: VUEN-2351【vue3 online表单】online表单 发起流程后，仍然可以编辑数据
+    //update-begin-author:taoyan date:2022-10-17 for: VUEN-2351【vue3 onlineBiểu mẫu 】onlineBiểu mẫu Sau khi khởi tạo quy trình, vẫn có thể chỉnh sửa dữ liệu
     let bpmStatusValue = getBpmStatusValue(record);
-    // 允许编辑的情况--> bpm有值且值为1，bpm没有值, 
-    //update-begin-author:taoyan date:2023-2-6 for:  QQYUN-4135【online】审批完成的流程和取回作废的流程，可以编辑
+    // Trường hợp cho phép chỉnh sửa--> bpmCó giá trị và giá trị là1，bpmKhông có giá trị, 
+    //update-begin-author:taoyan date:2023-2-6 for:  QQYUN-4135【online】Quy trình đã phê duyệt xong và quy trình đã thu hồi/hủy bỏ thì có thể chỉnh sửa
     let canEdit = (bpmStatusValue && (bpmStatusValue=='1' || bpmStatusValue=='3' || bpmStatusValue=='4')) || !bpmStatusValue;
-    //update-end-author:taoyan date:2023-2-6 for:  QQYUN-4135【online】审批完成的流程和取回作废的流程，可以编辑
+    //update-end-author:taoyan date:2023-2-6 for:  QQYUN-4135【online】Quy trình đã phê duyệt xong và quy trình đã thu hồi/hủy bỏ thì có thể chỉnh sửa
     if ((toRaw(buttonSwitch.edit) === true && toRaw(buttonSwitch.update) === true) && canEdit) {
-    //update-end-author:taoyan date:2022-10-17 for: VUEN-2351【vue3 online表单】online表单 发起流程后，仍然可以编辑数据
+    //update-end-author:taoyan date:2022-10-17 for: VUEN-2351【vue3 onlineBiểu mẫu 】onlineBiểu mẫu Sau khi khởi tạo quy trình, vẫn có thể chỉnh sửa dữ liệu
       return [
         {
           label: cgBIBtnMap['edit'].buttonName,
           ifShow: () => cgBIBtnMap['edit'].enabled,
           onClick: (e) => {
-            // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
-            // erp主表点击编辑时需要防止当前选中数据反选
+            // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
+            // erpKhi nhấp chỉnh sửa ở bảng chính, cần ngăn việc đảo lựa chọn của dữ liệu đang được chọn hiện tại
             extraParameter['editClickCallback'] && extraParameter['editClickCallback'](record.id, e);
             handleEdit(record);
-            // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
+            // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
           },
         },
       ];
@@ -205,38 +205,38 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   *  操作列[提交流程]
+   *  Cột thao tác[Gửi quy trình]
    */
   function getSubmitFlowButton(record) {
     return {
       label: cgBIBtnMap['bpm'].buttonName,
       ifShow: () => cgBIBtnMap['bpm'].enabled,
       popConfirm: {
-        title: '确认提交流程吗？',
+        title: 'Xác nhận gửi quy trình chứ?',
         confirm: handleSubmitFlow.bind(null, record),
       },
     };
   }
 
   /**
-   * 操作列[审批进度]
+   * Cột thao tác[Tiến độ phê duyệt]
    * @param record
    */
   function getViewBpmGraphicButton(record){
     return {
-      label: '审批进度',
+      label: 'Tiến độ phê duyệt',
       onClick: handleViewGraphic.bind(null, record),
     };
   }
 
   /**
-   * 查看流程图
+   * Xem sơ đồ quy trình
    * @param record
    */
   function handleViewGraphic(record){
     const { currentTableName } = onlineTableContext;
     
-    //判断 currentTableName如果是视图，截掉后缀
+    //Phán đoán currentTableNameNếu là view, cắt bỏ hậu tố
     let currentTableNameVariable = currentTableName;
     if (currentTableName.includes('$')) {
       currentTableNameVariable = currentTableName.split('$')[0];
@@ -251,7 +251,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   *  操作列[更多下拉项]
+   *  Cột thao tác[Thêm mục dropdown]
    */
   function getDropDownActions(record, params = {} ) {
     let arr: any = [];
@@ -262,26 +262,26 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
         onClick: handleDetail.bind(null, record),
       });
     }
-    // update-begin--author:liaozhiyang---date:20240724---for：【TV360X-1101】树表放开提交流程按钮且加上审批详情弹窗
+    // update-begin--author:liaozhiyang---date:20240724---for：【TV360X-1101】Bảng cây mở nút gửi quy trình và thêm popup chi tiết phê duyệt
     if (onlineTableContext['hasBpmStatus'] === true && toRaw(buttonSwitch.bpm) === true) {
-      // 提交流程按钮显示条件： 有bpm_status字段，并且有操作bpm按钮的权限
+      // Điều kiện hiển thị nút gửi quy trình: Cóbpm_statustrường, đồng thời có thao tácbpmQuyền của nút
       let bpmStatusValue = getBpmStatusValue(record);
       if (!bpmStatusValue || bpmStatusValue == '1') {
-        //并且 bpm_status的值为1 或者为空
+        //đồng thời bpm_statusgiá trị của là1 hoặc để trống
         arr.push(getSubmitFlowButton(record));
       }else{
         arr.push(getViewBpmGraphicButton(record))
       }
     }
-    // update-end--author:liaozhiyang---date:20240724---for：【TV360X-1101】树表放开提交流程按钮且加上审批详情弹窗
-    // 对接积木报表打印
+    // update-end--author:liaozhiyang---date:20240724---for：【TV360X-1101】Bảng cây mở nút gửi quy trình và thêm popup chi tiết phê duyệt
+    // Kết nối in báo cáo Jimu
     if (extConfigJson.value) {
       let { reportPrintShow, reportPrintUrl } = extConfigJson.value;
       if (reportPrintShow && reportPrintUrl && toRaw(buttonSwitch.print) === true && cgBIBtnMap['print']?.enabled !== false) {
         arr.push({
-          label: '打印',
+          label: 'In',
           onClick() {
-            //跳转至积木报表页面
+            //Chuyển tới trang báo cáo Jimu
             let url = reportPrintUrl;
             let id = record.id;
             let token = getToken();
@@ -290,12 +290,12 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
         });
       }
     }
-    //update-begin-author:taoyan date:2022-10-17 for: VUEN-2351【vue3 online表单】online表单 发起流程后，仍然可以编辑数据
-    // 允许删除的情况--> bpm有值且值为1，bpm没有值
+    //update-begin-author:taoyan date:2022-10-17 for: VUEN-2351【vue3 onlineBiểu mẫu 】onlineBiểu mẫu Sau khi khởi tạo quy trình, vẫn có thể chỉnh sửa dữ liệu
+    // Trường hợp cho phép xóa--> bpmCó giá trị và giá trị là1，bpmKhông có giá trị
     let bpmStatusValue = getBpmStatusValue(record);
     let canDelete = (bpmStatusValue && bpmStatusValue=='1') || !bpmStatusValue;
     if (toRaw(buttonSwitch.delete) === true && canDelete) {
-    //update-end-author:taoyan date:2022-10-17 for: VUEN-2351【vue3 online表单】online表单 发起流程后，仍然可以编辑数据
+    //update-end-author:taoyan date:2022-10-17 for: VUEN-2351【vue3 onlineBiểu mẫu 】onlineBiểu mẫu Sau khi khởi tạo quy trình, vẫn có thể chỉnh sửa dữ liệu
       arr.push(getDeleteButton(record));
     }
     let buttonList = cgLinkButtonList;
@@ -313,7 +313,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   * 获取bpm_status的值 大小写都获取一遍
+   * Lấybpm_statusgiá trị của Chữ hoa và chữ thường đều lấy một lượt
    * @param record
    */
   function getBpmStatusValue(record) {
@@ -326,7 +326,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   * 查看详情
+   * Xem chi tiết
    * @param record
    */
   function handleDetail(record) {
@@ -338,7 +338,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   * 提交流程请求
+   * Yêu cầu gửi quy trình
    * @param record
    */
   function startProcess(record) {
@@ -347,7 +347,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
       onlineUrl: { startProcess },
     } = onlineTableContext;
     
-    //判断 currentTableName如果是视图，截掉后缀
+    //Phán đoán currentTableNameNếu là view, cắt bỏ hậu tố
     let currentTableNameVariable = currentTableName;
     if (currentTableName.includes('$')) {
       currentTableNameVariable = currentTableName.split('$')[0];
@@ -358,7 +358,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
       params: {
         flowCode: FLOW_CODE_PRE + currentTableNameVariable,
         id: record.id,
-        // TODO 流程表单没有
+        // TODO Biểu mẫu quy trình không có
         formUrl: 'modules/bpm/task/form/OnlineFormDetail',
         formUrlMobile: 'check/onlineForm/detail',
       },
@@ -378,7 +378,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   * 提交流程按钮触发事件
+   * Sự kiện kích hoạt của nút gửi quy trình
    * @param record
    */
   async function handleSubmitFlow(record) {
@@ -386,15 +386,15 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     onlineTableContext.loadData();
   }
 
-  //删除请求
+  //Yêu cầu xóa
   function handleDelete(dataId: String, isBatch = true) {
-    console.log('删除数据id值', dataId);
+    console.log('Xóa dữ liệuidgiá trị', dataId);
     let url = `${onlineTableContext.onlineUrl.optPre}${onlineTableContext.ID}/${dataId}`;
-    // update-begin--author:liaozhiyang---date:20240428---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权删除和导出从表数据
+    // update-begin--author:liaozhiyang---date:20240428---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xóa và xuất dữ liệu bảng phụ thuộc
     if (onlineTableContext['isErpSubTable'] === true) {
       url = `${url}?tabletype=3`;
     }
-    // update-end--author:liaozhiyang---date:20240428---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权删除和导出从表数据
+    // update-end--author:liaozhiyang---date:20240428---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xóa và xuất dữ liệu bảng phụ thuộc
     return new Promise((resolve, reject) => {
       defHttp
         .delete(
@@ -406,15 +406,15 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
         .then((res) => {
           if (res.success) {
             $message.success(res.message);
-            // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-206】列表删除最后一页数据，页面跳到前一页数据为空
+            // update-begin--author:liaozhiyang---date:20240528---for：【TV360X-206】Danh sách xóa dữ liệu ở trang cuối, khi trang nhảy về trang trước thì dữ liệu trống
             onlineTableContext.loadData({ delNum: dataId.split(',').length });
-            // update-end--author:liaozhiyang---date:20240528---for：【TV360X-206】列表删除最后一页数据，页面跳到前一页数据为空
-            // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
-            // erp主表记录选中时被删除需要清空选中的key
+            // update-end--author:liaozhiyang---date:20240528---for：【TV360X-206】Danh sách xóa dữ liệu ở trang cuối, khi trang nhảy về trang trước thì dữ liệu trống
+            // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
+            // erpKhi bản ghi của bảng chính đang được chọn bị xóa, cần xóa lựa chọnkey
             if (!isBatch) {
               extraParameter['singleDelCallback'] && extraParameter['singleDelCallback'](dataId);
             }
-            // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
+            // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
             resolve(true);
           } else {
             $message.warning(res.message);
@@ -424,14 +424,14 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     });
   }
 
-  // 批量删除事件
+  // Sự kiện xóa hàng loạt
   async function handleBatchDelete() {
     let arr = onlineTableContext['selectedRowKeys'];
     if (arr.length <= 0) {
-      $message.warning('请选择一条记录！');
+      $message.warning('Vui lòng chọn một bản ghi!');
       return false;
     } else {
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-839】批量删除与「更多-删除」一致，流程已发起的记录不可删
+      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-839】Xóa hàng loạt và「Thêm-xóa」nhất quán, bản ghi đã khởi tạo quy trình thì không thể xóa
       const selectedRows = onlineTableContext['selectedRows'] || [];
       const rowMap = new Map();
       selectedRows.forEach((row) => {
@@ -439,17 +439,17 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
           rowMap.set(String(row.id), row);
         }
       });
-      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-839】批量删除与「更多-删除」一致，流程已发起的记录不可删
+      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-839】Xóa hàng loạt và「Thêm-xóa」nhất quán, bản ghi đã khởi tạo quy trình thì không thể xóa
       let idSet: any = [];
       let skippedCount = 0;
       arr.forEach(function (val) {
         let temp = val;
-        //树形列表 key后面会带有_loadChild
+        //Danh sách dạng cây keyPhía sau sẽ mang theo_loadChild
         if (temp && temp.endsWith('_loadChild')) {
           temp = temp.replace('_loadChild', '');
         }
-        // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-839】批量删除与「更多-删除」一致，流程已发起的记录不可删
-        // 允许删除：bpm_status 为空，或值为 1（待提交）
+        // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-839】Xóa hàng loạt và「Thêm-xóa」nhất quán, bản ghi đã khởi tạo quy trình thì không thể xóa
+        // Cho phép xóa:bpm_status rỗng, hoặc giá trị là 1(chờ gửi)
         const record = rowMap.get(String(temp));
         if (record) {
           const bpmStatusValue = getBpmStatusValue(record);
@@ -459,27 +459,27 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
             return;
           }
         }
-        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-839】批量删除与「更多-删除」一致，流程已发起的记录不可删
-        // 去重
+        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-839】Xóa hàng loạt và「Thêm-xóa」nhất quán, bản ghi đã khởi tạo quy trình thì không thể xóa
+        // Khử trùng lặp
         if (idSet.indexOf(temp) < 0) {
           idSet.push(temp);
         }
       });
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-839】批量删除与「更多-删除」一致，流程已发起的记录不可删
+      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-839】Xóa hàng loạt và「Thêm-xóa」nhất quán, bản ghi đã khởi tạo quy trình thì không thể xóa
       if (idSet.length <= 0) {
-        $message.warning('选中数据均不可删除（流程已发起）！');
+        $message.warning('Dữ liệu đã chọn đều không thể xóa (quy trình đã khởi tạo)!');
         return false;
       }
       if (skippedCount > 0) {
-        $message.warning(`有 ${skippedCount} 条流程已发起的数据不可删除，将跳过`);
+        $message.warning(`Có ${skippedCount} bản ghi dữ liệu đã khởi tạo quy trình không thể xóa, sẽ bỏ qua`);
       }
-      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-839】批量删除与「更多-删除」一致，流程已发起的记录不可删
-      // update-begin--author:liaozhiyang---date:20261028---for：【LHZP-226】批量删除也执行JS增强的删除前置事件beforeDelete
+      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-839】Xóa hàng loạt và「Thêm-xóa」nhất quán, bản ghi đã khởi tạo quy trình thì không thể xóa
+      // update-begin--author:liaozhiyang---date:20261028---for：【LHZP-226】Xóa hàng loạt cũng thực thiJSSự kiện tiền tố trước khi xóa của phần tăng cườngbeforeDelete
       const beforeDelete = onlineTableContext['beforeDelete'];
       if (typeof beforeDelete === 'function') {
         const results = await Promise.allSettled(
           idSet.map((id) => {
-            // 跨页选中时当前页可能没有完整行数据，仅传id
+            // Khi chọnข้าม trang, trang hiện tại có thể không có dữ liệu hàng đầy đủ, chỉ truyềnid
             const record = rowMap.get(String(id)) || { id };
             return Promise.resolve().then(() => beforeDelete(record));
           })
@@ -499,20 +499,20 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
         if (enhanceSkippedCount > 0) {
           const reason = rejectMsgs.length > 0 ? `：${rejectMsgs.join('；')}` : '';
           if (idSet.length <= 0) {
-            $message.warning(`选中数据均不可删除${reason}`);
+            $message.warning(`Dữ liệu đã chọn đều không thể xóa${reason}`);
             return false;
           }
-          $message.warning(`有 ${enhanceSkippedCount} 条数据不可删除，将跳过${reason}`);
+          $message.warning(`Có ${enhanceSkippedCount} bản ghi dữ liệu không thể xóa, sẽ bỏ qua${reason}`);
           skippedCount += enhanceSkippedCount;
         }
       }
-      // update-end--author:liaozhiyang---date:20261028---for：【LHZP-226】批量删除也执行JS增强的删除前置事件beforeDelete
+      // update-end--author:liaozhiyang---date:20261028---for：【LHZP-226】Xóa hàng loạt cũng thực thiJSSự kiện tiền tố trước khi xóa của phần tăng cườngbeforeDelete
       let ids = idSet.join(',');
       Modal.confirm({
-        title: '确认删除',
-        content: skippedCount > 0 ? `是否删除可删除的 ${idSet.length} 条数据？` : '是否删除选中数据',
-        okText: '确认',
-        cancelText: '取消',
+        title: 'Xác nhận xóa',
+        content: skippedCount > 0 ? `Có xóa những mục có thể xóa hay không ${idSet.length} bản ghi dữ liệu?` : 'Có xóa dữ liệu đã chọn hay không',
+        okText: 'Xác nhận',
+        cancelText: 'Hủy',
         onOk: async () => {
           await handleDelete(ids);
           onlineTableContext.clearSelectedRow();
@@ -523,7 +523,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   /*
    * liaozhiyang
    * 20250403
-   * 【QQYUN-11801】生成测试数据
+   * 【QQYUN-11801】Tạo dữ liệu kiểm thử
    * */
   const handleAddTestData = (currentTableName, reload) => {
     testDataLoading.value = true;
@@ -531,7 +531,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
       .post({ url: `/online/cgform/api/aigc/mock/data/${currentTableName}`, timeout: 120000 }, { isTransformResponse: false })
       .then((res) => {
         if (res.code == 200) {
-          $message.success('生成测试数据成功~');
+          $message.success('Tạo dữ liệu kiểm thử thành công~');
           reload();
         } else {
           $message.warn(res.message);
@@ -545,7 +545,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   * 自定义按钮触发事件-link按钮
+   * Sự kiện kích hoạt nút tùy chỉnh-linkNút
    * @param record
    * @param buttonCode
    * @param optType js/bus
@@ -559,7 +559,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
         buttonCode: buttonCode,
         dataId: record.id,
       };
-      //console.log("自定义按钮link请求后台参数：",params)
+      //console.log("Nút tùy chỉnhlinkTham số yêu cầu backend:",params)
       let url = `${onlineTableContext.onlineUrl.buttonAction}`;
       defHttp
         .post(
@@ -572,7 +572,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
         .then((res) => {
           if (res.success) {
             onlineTableContext.loadData();
-            $message.success('处理完成!');
+            $message.success('Xử lý hoàn tất!');
           } else {
             $message.warning(res.message);
           }
@@ -581,22 +581,22 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   * 列表上方按钮 -js事件
+   * Nút phía trên danh sách -jssự kiện
    * @param buttonCode
    */
   function cgButtonJsHandler(buttonCode) {
-    // 待测
+    // Chờ kiểm thử
     onlineTableContext['execButtonEnhance'](buttonCode);
   }
 
   /**
-   * 列表上方按钮 -action事件
+   * Nút phía trên danh sách -actionsự kiện
    * @param buttonCode
    */
   function cgButtonActionHandler(buttonCode) {
     let arr = onlineTableContext['selectedRowKeys'];
     if (!arr || arr.length == 0) {
-      $message.warning('请先选中一条记录');
+      $message.warning('Vui lòng chọn một bản ghi trước');
       return false;
     }
     let dataId = arr.join(',');
@@ -605,7 +605,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
       buttonCode: buttonCode,
       dataId: dataId,
     };
-    //console.log("自定义按钮请求后台参数：",params)
+    //console.log("Tham số yêu cầu backend của nút tùy chỉnh:",params)
     let url = `${onlineTableContext.onlineUrl.buttonAction}`;
     defHttp
       .post(
@@ -619,16 +619,16 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
         if (res.success) {
           onlineTableContext.loadData();
           onlineTableContext.clearSelectedRow();
-          $message.success('处理完成!');
+          $message.success('Xử lý hoàn tất!');
         } else {
           $message.warning(res.message);
         }
       });
   }
 
-  // 导入事件
+  // Sự kiện nhập
   function onImportExcel() {
-    // update-begin--author:liaozhiyang---date:20240429---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权导入从表数据
+    // update-begin--author:liaozhiyang---date:20240429---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền nhập dữ liệu bảng phụ thuộc
     if (onlineTableContext['foreignKeyField'] && onlineTableContext['foreignKeyValue']) {
       openImportModal(true, {
         [onlineTableContext['foreignKeyField']]: onlineTableContext['foreignKeyValue'],
@@ -636,12 +636,12 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     } else {
       openImportModal(true);
     }
-    // update-end--author:liaozhiyang---date:20240429---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权导入从表数据
+    // update-end--author:liaozhiyang---date:20240429---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền nhập dữ liệu bảng phụ thuộc
   }
 
-  // 导入地址
+  // Địa chỉ nhập
   const importUrl = () => {
-    // update-begin--author:liaozhiyang---date:20240428---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权删除和导出从表数据
+    // update-begin--author:liaozhiyang---date:20240428---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xóa và xuất dữ liệu bảng phụ thuộc
     let url = `${onlineTableContext.onlineUrl.importXls}${onlineTableContext.ID}`;
     if (onlineTableContext['isErpSubTable'] === true) {
       url = `${url}?tabletype=3`;
@@ -649,10 +649,10 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
       url = `${url}?tabletype=2`;
     }
     return url;
-    // update-end--author:liaozhiyang---date:20240428---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权删除和导出从表数据
+    // update-end--author:liaozhiyang---date:20240428---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xóa và xuất dữ liệu bảng phụ thuộc
   };
 
-  // 导出事件
+  // Sự kiện xuất
   const { handleExportXlsx } = useMethods();
   function onExportExcel() {
     let params = onlineTableContext.getLoadDataParams();
@@ -660,21 +660,21 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     if (selections && selections.length > 0) {
       params['selections'] = selections.join(',');
     }
-    // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+    // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
     let tabletype = {};
     if (onlineTableContext['isErpSubTable'] === true) {
-      // update-begin--author:liaozhiyang---date:20240428---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权删除和导出从表数据
+      // update-begin--author:liaozhiyang---date:20240428---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xóa và xuất dữ liệu bảng phụ thuộc
       tabletype = { tabletype: 3 };
-      // update-end--author:liaozhiyang---date:20240428---for：【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权删除和导出从表数据
+      // update-end--author:liaozhiyang---date:20240428---for：【issues/6124】Khi người dùng không có【OnlinePhát triển biểu mẫu】Khi có quyền của trang, người dùng không có quyền xóa và xuất dữ liệu bảng phụ thuộc
       if (onlineTableContext['foreignKeyField'] && onlineTableContext['foreignKeyValue']) {
         params[onlineTableContext['foreignKeyField']] = onlineTableContext['foreignKeyValue'];
       }
     } else if (onlineTableContext.isTree() === true) {
-      // 树表导出需携带类型，后端据此保留节点层级并在文件中写入导入规则说明。
+      // Việc xuất bảng cây cần mang theo loại, backend căn cứ vào đó giữ lại cấp bậc nút và ghi thuyết minh quy tắc nhập vào tệp.
       tabletype = { tabletype: 2 };
     }
-    // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-    //console.log("导出参数",params)
+    // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+    //console.log("Tham số xuất",params)
     let paramsStr = JSON.stringify(filterObj(params));
     let url = `${onlineTableContext.onlineUrl.exportXls}${onlineTableContext.ID}`;
     const description = onlineTableContext.description;
@@ -685,7 +685,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   /**
    * liaozhiyang
    * 20231008
-   * 先把自定义表单是转成布尔值，再利用new Function换算真正的规则
+   * Trước tiên chuyển biểu mẫu tùy chỉnh thành giá trị boolean, rồi sử dụngnew FunctionQuy đổi quy tắc thực sự
    */
   function multipleLinkButtonOfExpression(expression, row) {
     const gather: any = [];
@@ -700,13 +700,13 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
       gather.push(arr.join('&&'));
     });
     const r = gather.join('||');
-    console.log('---多个表达式---', r);
+    console.log('---Nhiều biểu thức---', r);
     return new Function(`return ${r}`)();
   }
   /**
    * liaozhiyang
    * 20231008
-   * 区分有是否有表达式
+   * Phân biệt có biểu thức hay không
    */
   function showLinkButtonOfExpression(expression, row) {
     if (!expression || expression == '') {
@@ -720,21 +720,21 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
   }
 
   /**
-   *  用于处理 link按钮的表达式 返回布尔值
-   * @param expression 表达式
-   * @param row 所在行的数据
+   *  Dùng để xử lý linkBiểu thức của nút Trả về giá trị boolean
+   * @param expression Biểu thức
+   * @param row Dữ liệu của hàng đang ở
    */
   function oneLinkButtonOfExpression(expression: string, row: any): boolean {
     if (!expression || expression == '') {
       return true;
     }
-    // 字段名#条件#值
+    // tên trường#Điều kiện#giá trị
     let arr = expression.split('#');
-    //获取字段值
+    //Lấy giá trị trường
     let fieldValue = row[arr[0]];
-    //获取表达式
+    //Lấy biểu thức
     let exp = arr[1].toLowerCase();
-    //判断表达式
+    //Biểu thức phán đoán
     if (exp === 'eq') {
       return fieldValue == arr[2];
     } else if (exp === 'ne') {

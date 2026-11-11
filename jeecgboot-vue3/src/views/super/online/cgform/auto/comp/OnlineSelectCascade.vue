@@ -1,5 +1,5 @@
 <template>
-  <!-- 级联下拉框 form组件 暂且只在online使用 不对外提供api -->
+  <!-- Hộp dropdown phân cấp (cascade) formComponent Tạm thời chỉ ởonlineSử dụng không cung cấp ra bên ngoàiapi -->
   <a-select show-search :filter-option="filterOption" :placeholder="placeholder" :value="selectedValue" @change="handleChange" allowClear style="width: 100%">
     <a-select-option v-for="(item, index) in dictOptions" :key="index" :value="item.store">
       <span style="display: inline-block; width: 100%" :title="item.label">{{ item.label }}</span>
@@ -12,7 +12,7 @@
   import { defHttp } from '/@/utils/http/axios';
   import { useMessage } from '/@/hooks/web/useMessage';
 
-  /**获取下拉选项*/
+  /**Lấy các tùy chọn dropdown*/
   const SELECT_OPTIONS_URL = '/online/cgform/api/querySelectOptions';
 
   export default defineComponent({
@@ -28,26 +28,26 @@
       condition: { type: String, default: '' },
       value: { type: String, default: '' },
       isNumber: { type: Boolean, default: false },
-      placeholder: { type: String, default: '请选择' },
+      placeholder: { type: String, default: 'Vui lòng chọn' },
     },
     emits: ['change', 'next'],
     setup(props, { emit }) {
       const { createMessage: $message } = useMessage();
-      // 选中值
+      // Giá trị đã chọn
       const selectedValue = ref<any>('');
-      // 选项数组
+      // Mảng tùy chọn
       const dictOptions = ref<any[]>([]);
       const optionsLoad = ref(true);
-      // 选项改变事件
+      // Sự kiện thay đổi tùy chọn
       function handleChange(value) {
         console.log('handleChange', value);
-        // 这个value是 存储的值 实际还需要获取id值
+        // Cái nàyvaluelà Giá trị được lưu trữ Thực tế còn cần lấyidgiá trị
         let temp = value || '';
         emit('change', temp);
         valueChangeThenEmitNext(temp);
       }
 
-      // 第一个节点 选项加载走condition
+      // Nút đầu tiên Tải tùy chọn đi quacondition
       watch(
         () => props.condition,
         (val) => {
@@ -59,7 +59,7 @@
         { immediate: true }
       );
 
-      // 被联动节点 选项加载走pidValue
+      // Nút bị liên động Tải tùy chọn đi quapidValue
       watch(
         () => props.pidValue,
         (val) => {
@@ -71,25 +71,25 @@
         }
       );
 
-      // 值回显
+      // Hiển thị lại giá trị
       watch(
         () => props.value,
         (newVal, oldVal) => {
-          console.log('值改变事件', newVal, oldVal);
+          console.log('Sự kiện thay đổi giá trị', newVal, oldVal);
           if (!newVal) {
-            // value不存在的时候--
+            // valuekhi không tồn tại--
             selectedValue.value = [];
             if (oldVal) {
-              // 如果oldVal存在， 需要往上抛事件
+              // NếuoldValtồn tại, Cần ném sự kiện lên trên
               emit('change', '');
               emit('next', '-1');
             }
           } else {
-            // value存在的时候
+            // valuekhi tồn tại
             selectedValue.value = newVal;
           }
           if (newVal && !oldVal) {
-            // 有新值没有旧值 表单第一次加载赋值 需要往外抛一个事件 触发下级options的加载
+            // Có giá trị mới, không có giá trị cũ Gán giá trị khi biểu mẫu tải lần đầu Cần ném một sự kiện ra ngoài Kích hoạt cấp dướioptionstải của
             handleFirstValueSetting(newVal);
           }
         },
@@ -97,19 +97,19 @@
       );
 
       /**
-       * 第一次加载赋值
+       * Gán giá trị khi tải lần đầu
        */
       async function handleFirstValueSetting(value) {
         if (props.idField === props.store) {
-          // 如果id字段就是存储字段 那么可以不用调用请求
+          // NếuidTrường chính là trường lưu trữ Vậy thì có thể không cần gọi yêu cầu
           emit('next', value);
         } else {
           if (props.origin === true) {
-            // 如果是联动组件的第一个组件，等待options加载完后从options中取值
+            // Nếu là component đầu tiên của component liên động, hãy chờoptionssau khi tải xong, từoptionslấy giá trị trong đó
             await getSelfOptions();
             valueChangeThenEmitNext(value);
           } else {
-            // 如果是联动组件的后续组件，根据选中的value加载一遍数据
+            // Nếu là component tiếp sau của component liên động, căn cứ vào mục đã chọnvalueTải dữ liệu một lượt
             let arr = await loadValueText();
             valueChangeThenEmitNext(value, arr);
           }
@@ -123,14 +123,14 @@
         } else {
           params['pidValue'] = props.pidValue;
         }
-        console.log('请求参数', params);
+        console.log('Tham số yêu cầu', params);
         dictOptions.value = [];
         defHttp.get({ url: SELECT_OPTIONS_URL, params }, { isTransformResponse: false }).then((res) => {
           if (res.success) {
             dictOptions.value = [...res.result];
-            console.log('请求结果', res.result, dictOptions);
+            console.log('Kết quả yêu cầu', res.result, dictOptions);
           } else {
-            $message.warning('联动组件数据加载失败,请检查配置!');
+            $message.warning('Tải dữ liệu component liên động thất bại,Vui lòng kiểm tra cấu hình!');
           }
         });
       }
@@ -162,7 +162,7 @@
               if (res.success) {
                 resolve(res.result);
               } else {
-                $message.warning('联动组件数据加载失败,请检查配置!');
+                $message.warning('Tải dữ liệu component liên động thất bại,Vui lòng kiểm tra cấu hình!');
                 resolve([]);
               }
             });
@@ -171,7 +171,7 @@
       }
 
       /**
-       * 获取下拉选项
+       * Lấy các tùy chọn dropdown
        */
       function getSelfOptions() {
         return new Promise((resolve) => {
@@ -193,7 +193,7 @@
       }
 
       /**
-       * 值改变后 需要往外抛事件 触发下级节点的选项改变
+       * sau khi giá trị thay đổi Cần ném sự kiện ra ngoài Kích hoạt thay đổi tùy chọn của nút cấp dưới
        */
       function valueChangeThenEmitNext(value, arr: any = []) {
         if (value && value.length > 0) {
@@ -209,7 +209,7 @@
       }
 
       /**
-       * 下拉框筛选
+       * Sàng lọc ô dropdown
        * @param input
        * @param option
        */

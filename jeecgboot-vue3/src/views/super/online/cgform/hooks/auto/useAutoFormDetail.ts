@@ -2,16 +2,16 @@
 import { nextTick } from 'vue';
 
 /***
- * 表单上下文
+ * Ngữ cảnh biểu mẫu
  */
 export function useOnlineFormDetailContext() {
   const that = {};
   const CONTEXT_DESCRIPTION = {
-    setFieldsValue: '<m> 设置表单控件的值',
-    getFieldsValue: '<m> 获取表单控件的值',
-    sh: '<p> 表单控件的显示隐藏状态',
-    isUpdate: '<p> 判断是否为编辑模式',
-    isDetail: '<p> 判断是否为详情模式',
+    setFieldsValue: '<m> Thiết lập giá trị của control biểu mẫu',
+    getFieldsValue: '<m> Lấy giá trị của control biểu mẫu',
+    sh: '<p> Trạng thái hiển thị/ẩn của control biểu mẫu',
+    isUpdate: '<p> Phán đoán có phải chế độ chỉnh sửa hay không',
+    isDetail: '<p> Phán đoán có phải chế độ chi tiết hay không',
   };
   const onlineFormDetailContext = new Proxy(CONTEXT_DESCRIPTION, {
     get(_target: any, prop: string): any {

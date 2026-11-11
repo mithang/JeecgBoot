@@ -15,7 +15,7 @@
       @change="item.onChange?.($event)"
     />
     <template v-if="[1, 2].includes(formModel.tableType)">
-      <!-- 非附表条件字段（单表/主表） -->
+      <!-- Trường điều kiện không phải bảng phụ (bảng đơn/bảng chính) -->
       <CgformFieldItem
         v-for="item in conditionalFields"
         v-show="item.show !== false"
@@ -31,16 +31,16 @@
         @update:model-value="(formModel as Recordable)[item.field] = $event"
         @change="item.onChange?.($event)"
       />
-      <!-- 非附表类型按钮 -->
+      <!-- Nút loại không phải bảng phụ -->
       <div v-if="formModel.tableType !== 3" class="cgf-item cgf-item--buttons">
-        <a-button preIcon="ant-design:setting" @click="onOpenExtConfig">扩展配置</a-button>
+        <a-button preIcon="ant-design:setting" @click="onOpenExtConfig">Cấu hình mở rộng</a-button>
         <a-button type="link" :preIcon="expandStatus ? 'ant-design:up-outlined' : 'ant-design:down-outlined'" @click="expandStatus = !expandStatus">{{
-          expandStatus ? '收起' : '展开'
+          expandStatus ? 'Thu gọn' : 'Mở rộng'
         }}</a-button>
       </div>
     </template>
     <template v-if="formModel.tableType === 3">
-      <!-- 附表类型展开：row2=显示复选框+表单风格+关联类型+序号 -->
+      <!-- Loại bảng phụ mở rộng:row2=Hiển thị ô kiểm+Phong cách biểu mẫu+Loại liên kết+Số thứ tự -->
       <template v-if="expandStatus">
         <CgformFieldItem
           v-for="item in preGroupFields"
@@ -54,12 +54,12 @@
         <div class="cgf-item cgf-item--group">
           <div class="cgf-item--group-left">
             <a-radio-group v-model:value="formModel.relationType" :options="relationTypeOptions" @change="onRelationTypeChange" />
-            <label class="cgf-label cgf-label--inline">序号</label>
+            <label class="cgf-label cgf-label--inline">Số thứ tự</label>
             <a-input-number v-model:value="formModel.tabOrderNum" />
           </div>
           <div class="cgf-item--group-right">
-            <a-button preIcon="ant-design:setting" :disabled="formModel.relationType === 1" @click="onOpenExtConfig">扩展配置</a-button>
-            <a-button type="link" preIcon="ant-design:up-outlined" @click="expandStatus = !expandStatus">收起</a-button>
+            <a-button preIcon="ant-design:setting" :disabled="formModel.relationType === 1" @click="onOpenExtConfig">Cấu hình mở rộng</a-button>
+            <a-button type="link" preIcon="ant-design:up-outlined" @click="expandStatus = !expandStatus">Thu gọn</a-button>
           </div>
         </div>
         <CgformFieldItem
@@ -72,19 +72,19 @@
           @update:model-value="(formModel as Recordable)[item.field] = $event"
         />
       </template>
-      <!-- 附表类型收起：col1+col2空格 + col3全部内容-->
+      <!-- Loại bảng phụ thu gọn:col1+col2Khoảng trắng + col3Toàn bộ nội dung-->
       <template v-else>
         <div class="cgf-spacer"></div>
         <div class="cgf-spacer"></div>
         <div class="cgf-item cgf-item--group">
           <div class="cgf-item--group-left">
             <a-radio-group v-model:value="formModel.relationType" :options="relationTypeOptions" @change="onRelationTypeChange" />
-            <label class="cgf-label cgf-label--inline">序号</label>
+            <label class="cgf-label cgf-label--inline">Số thứ tự</label>
             <a-input-number v-model:value="formModel.tabOrderNum" style="width: 50px" />
           </div>
           <div class="cgf-item--group-right">
-            <a-button preIcon="ant-design:setting" :disabled="formModel.relationType === 1" @click="onOpenExtConfig">扩展配置</a-button>
-            <a-button type="link" preIcon="ant-design:down-outlined" @click="expandStatus = !expandStatus">展开</a-button>
+            <a-button preIcon="ant-design:setting" :disabled="formModel.relationType === 1" @click="onOpenExtConfig">Cấu hình mở rộng</a-button>
+            <a-button type="link" preIcon="ant-design:down-outlined" @click="expandStatus = !expandStatus">Mở rộng</a-button>
           </div>
         </div>
       </template>
@@ -136,47 +136,47 @@
 
   const expandStatus = ref(false);
 
-  // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-328】视图进入的编辑弹窗中的表类型和是否树都需禁用
+  // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-328】Trong popup chỉnh sửa mở từ view, loại bảng và có phải dạng cây hay không đều phải vô hiệu hóa
   const cgformPageType = inject('cgformPageType', CgformPageType.normal);
   const isCopyMode = computed(() => cgformPageType === CgformPageType.copy);
-  // update-end--author:liaozhiyang---date:20260713---for：【LHZP-328】视图进入的编辑弹窗中的表类型和是否树都需禁用
+  // update-end--author:liaozhiyang---date:20260713---for：【LHZP-328】Trong popup chỉnh sửa mở từ view, loại bảng và có phải dạng cây hay không đều phải vô hiệu hóa
 
   const tableTypeOptions = [
-    { label: '单表', value: 1 },
-    { label: '主表', value: 2 },
-    { label: '附表', value: 3 },
+    { label: 'bảng đơn', value: 1 },
+    { label: 'bảng chính', value: 2 },
+    { label: 'Bảng phụ', value: 3 },
   ];
   const relationTypeOptions = [
-    { label: '一对多', value: 0 },
-    { label: '一对一', value: 1 },
+    { label: 'một-nhiều', value: 0 },
+    { label: 'một-một', value: 1 },
   ];
   const isCheckboxOptions = [
-    { label: '显示', value: 'Y' },
-    { label: '不显示', value: 'N' },
+    { label: 'Hiển thị', value: 'Y' },
+    { label: 'không hiển thị', value: 'N' },
   ];
   const themeTemplateOptions = [
-    { label: '默认主题', value: 'normal' },
-    { label: 'ERP主题(一对多)', value: 'erp' },
-    { label: '内嵌子表主题(一对多)', value: 'innerTable' },
-    { label: 'TAB主题(一对多)', value: 'tab' },
+    { label: 'Chủ đề mặc định', value: 'normal' },
+    { label: 'ERPChủ đề (theme)(một-nhiều)', value: 'erp' },
+    { label: 'Chủ đề bảng con nhúng(một-nhiều)', value: 'innerTable' },
+    { label: 'TABChủ đề (theme)(một-nhiều)', value: 'tab' },
   ];
   const formTemplateOptions = [
-    { label: '一列', value: '1' },
-    { label: '两列', value: '2' },
-    { label: '三列', value: '3' },
-    { label: '四列', value: '4' },
+    { label: 'một cột', value: '1' },
+    { label: 'hai cột', value: '2' },
+    { label: 'ba cột', value: '3' },
+    { label: 'bốn cột', value: '4' },
   ];
   const scrollOptions = [
-    { label: '有', value: 1 },
-    { label: '无', value: 0 },
+    { label: 'Có', value: 1 },
+    { label: 'Không có', value: 0 },
   ];
   const isPageOptions = [
-    { label: '显示', value: 'Y' },
-    { label: '不显示', value: 'N' },
+    { label: 'Hiển thị', value: 'Y' },
+    { label: 'không hiển thị', value: 'N' },
   ];
   const isTreeOptions = [
-    { label: '是', value: 'Y' },
-    { label: '否', value: 'N' },
+    { label: 'là', value: 'Y' },
+    { label: 'Không', value: 'N' },
   ];
 
   const DEFAULT_FORM_MODEL = {
@@ -228,10 +228,10 @@
       fieldErrors.tableName = 'error';
     } else if (/[\u4E00-\u9FA5]/g.test(val)) {
       fieldErrors.tableName = 'error';
-      msg = '表名不允许输入中文';
+      msg = 'Tên bảng không cho phép nhập tiếng Trung';
     } else if (val.length > 50) {
       fieldErrors.tableName = 'error';
-      msg = '表名最长50个字符';
+      msg = 'Tên bảng dài nhất50ký tự';
     } else {
       fieldErrors.tableName = '';
     }
@@ -245,10 +245,10 @@
     fieldErrors.tableTxt = !val || val.length > 200 ? 'error' : '';
   }
 
-  // 基础字段（始终显示）
+  // Trường cơ bản (luôn hiển thị)
   const baseFields = computed<FieldItem[]>(() => [
     {
-      label: '表名',
+      label: 'Tên bảng',
       field: 'tableName',
       type: 'input',
       required: true,
@@ -258,7 +258,7 @@
       onChange: (e: any) => validateTableNameSync(e?.target?.value ?? e ?? ''),
     },
     {
-      label: '表描述',
+      label: 'Mô tả bảng',
       field: 'tableTxt',
       type: 'input',
       required: true,
@@ -267,7 +267,7 @@
       onChange: (e: any) => validateTableTxtSync(e?.target?.value ?? e ?? ''),
     },
     {
-      label: '表类型',
+      label: 'Loại bảng',
       field: 'tableType',
       type: 'select',
       options: tableTypeOptions,
@@ -276,81 +276,81 @@
     },
   ]);
 
-  // 附表字段
+  // Trường bảng phụ
   const subTableField: FieldItem = {
-    label: '附表',
+    label: 'Bảng phụ',
     field: 'subTableStr',
     type: 'input',
     disabled: true,
   };
 
-  // 关联类型字段
+  // Trường loại liên kết
   // const relationTypeField: FieldItem = {
-  //   label: '关联类型',
+  //   label: 'Loại liên kết',
   //   field: 'relationType',
   //   type: 'radio-group',
   //   options: relationTypeOptions,
   //   onChange: onRelationTypeChange,
   // };
 
-  // 序号字段
+  // Trường số thứ tự
   // const tabOrderNumField: FieldItem = {
-  //   label: '序号',
+  //   label: 'Số thứ tự',
   //   field: 'tabOrderNum',
   //   type: 'input-number',
   // };
 
-  // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-183】主题模板为ERP时禁用复选框配置
+  // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-183】Mẫu giao diện làERPkhi vô hiệu hóa thì cấu hình ô kiểm
   function onThemeTemplateChange(value: string) {
-    // ERP 风格列表固定需要行选中，复选框强制显示且不可改
+    // ERP Danh sách phong cách cố định cần chọn hàng, hộp kiểm ép hiển thị và không thể sửa
     if (value === 'erp') {
       formModel.isCheckbox = 'Y';
     }
   }
-  // update-end--author:liaozhiyang---date:20260804---for：【LHZP-183】主题模板为ERP时禁用复选框配置
+  // update-end--author:liaozhiyang---date:20260804---for：【LHZP-183】Mẫu giao diện làERPkhi vô hiệu hóa thì cấu hình ô kiểm
 
-  // 展开后的通用字段
+  // Trường dùng chung sau khi mở rộng
   const expandCommonFields = computed<FieldItem[]>(() => [
-    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-183】主题模板为ERP时禁用复选框配置
-    { label: '复选框', field: 'isCheckbox', type: 'select', options: isCheckboxOptions, disabled: formModel.themeTemplate === 'erp' },
-    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-183】主题模板为ERP时禁用复选框配置
-    { label: '表单风格', field: 'formTemplate', type: 'select', options: formTemplateOptions },
-    { label: '滚动条', field: 'scroll', type: 'select', options: scrollOptions },
-    { label: '分页', field: 'isPage', type: 'select', options: isPageOptions },
+    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-183】Mẫu giao diện làERPkhi vô hiệu hóa thì cấu hình ô kiểm
+    { label: 'Ô kiểm (checkbox)', field: 'isCheckbox', type: 'select', options: isCheckboxOptions, disabled: formModel.themeTemplate === 'erp' },
+    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-183】Mẫu giao diện làERPkhi vô hiệu hóa thì cấu hình ô kiểm
+    { label: 'Phong cách biểu mẫu', field: 'formTemplate', type: 'select', options: formTemplateOptions },
+    { label: 'Thanh cuộn', field: 'scroll', type: 'select', options: scrollOptions },
+    { label: 'Phân trang', field: 'isPage', type: 'select', options: isPageOptions },
   ]);
 
-  // 条件字段，根据 tableType 和 expandStatus 动态变化
+  // Trường điều kiện, căn cứ theo tableType và expandStatus Thay đổi động
   const conditionalFields = computed<FieldItem[]>(() => {
     const { tableType, isTree } = formModel;
     const expanded = expandStatus.value;
 
-    // 附表 (tableType === 3)：完全由模板中的 preGroupFields/postGroupFields 处理
+    // Bảng phụ (tableType === 3): hoàn toàn do trong mẫu preGroupFields/postGroupFields Xử lý
     if (tableType === 3) return [];
 
-    // 主表 (tableType === 2)
+    // bảng chính (tableType === 2)
     if (tableType === 2) {
       const fields: FieldItem[] = [{ ...subTableField, show: !!formModel.subTableStr }];
       if (expanded) {
-        // update-begin--author:liaozhiyang---date:20260804---for【LHZP-183】主题模板为ERP时禁用复选框配置
+        // update-begin--author:liaozhiyang---date:20260804---for【LHZP-183】Mẫu giao diện làERPkhi vô hiệu hóa thì cấu hình ô kiểm
         fields.push(
           ...expandCommonFields.value,
-          { label: '主题模板', field: 'themeTemplate', type: 'select', options: themeTemplateOptions, onChange: onThemeTemplateChange }
+          { label: 'Mẫu giao diện', field: 'themeTemplate', type: 'select', options: themeTemplateOptions, onChange: onThemeTemplateChange }
         );
-        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-183】主题模板为ERP时禁用复选框配置
+        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-183】Mẫu giao diện làERPkhi vô hiệu hóa thì cấu hình ô kiểm
       }
       return fields;
     }
 
-    // 单表 (tableType === 1)
+    // bảng đơn (tableType === 1)
     if (expanded) {
       const fields: FieldItem[] = [
         ...expandCommonFields.value,
-        { label: '是否树', field: 'isTree', type: 'select', options: isTreeOptions, onChange: onIsTreeChange, disabled: isCopyMode.value },
+        { label: 'Có phải cây hay không', field: 'isTree', type: 'select', options: isTreeOptions, onChange: onIsTreeChange, disabled: isCopyMode.value },
       ];
       if (isTree === 'Y') {
         fields.push(
-          { label: '树父ID', field: 'treeParentIdField', type: 'input' },
-          { label: '树表单列', field: 'treeFieldname', type: 'input', required: true, status: fieldErrors.treeFieldname }
+          { label: 'Cha của câyID', field: 'treeParentIdField', type: 'input' },
+          { label: 'Cột biểu mẫu cây', field: 'treeFieldname', type: 'input', required: true, status: fieldErrors.treeFieldname }
         );
       }
       return fields;
@@ -359,19 +359,19 @@
     return [];
   });
 
-  // 附表展开：关联类型+序号 group 前面的字段（isCheckbox, formTemplate → row2 col1-2）
+  // Bảng phụ mở rộng: loại liên kết+Số thứ tự group trường phía trước (isCheckbox, formTemplate → row2 col1-2）
   const preGroupFields = computed<FieldItem[]>(() => {
     if (formModel.tableType !== 3 || !expandStatus.value) return [];
     return expandCommonFields.value.slice(0, 2);
   });
 
-  // 附表展开：关联类型+序号 group 后面的字段（scroll, isPage → row3 col1-2）
+  // Bảng phụ mở rộng: loại liên kết+Số thứ tự group trường phía sau (scroll, isPage → row3 col1-2）
   const postGroupFields = computed<FieldItem[]>(() => {
     if (formModel.tableType !== 3 || !expandStatus.value) return [];
     return expandCommonFields.value.slice(2);
   });
 
-  // 按钮是否与基础字段在同一行（无条件字段时）
+  // Nút có nằm cùng hàng với trường cơ bản hay không (khi không có trường điều kiện)
   const isInlineLayout = computed(() => {
     if (expandStatus.value) return false;
     if (formModel.tableType === 1) return true;
@@ -388,20 +388,20 @@
   }
 
   function setFieldsValue(values: Recordable) {
-    // update-begin--author:liaozhiyang---date:20260520---for:【QQYUN-15469】新加的表，创建时间是已打开过的表单的时间
-    // 只接收白名单内的字段，避免被编辑的 record 的多余字段污染 formModel
+    // update-begin--author:liaozhiyang---date:20260520---for:【QQYUN-15469】Bảng mới thêm, thời gian tạo là thời gian của biểu mẫu đã mở trước đó
+    // Chỉ tiếp nhận các trường trong danh sách trắng, tránh các trường bị chỉnh sửa record ô nhiễm bởi trường dư thừa của formModel
     if (!values) return;
     for (const key of FORM_FIELD_KEYS) {
       if (key in values) {
         (formModel as Recordable)[key] = values[key];
       }
     }
-    // update-end--author:liaozhiyang---date:20260520---for:【QQYUN-15469】新加的表，创建时间是已打开过的表单的时间
-    // update-begin--author:liaozhiyang---date:20260804---for：主题模板为ERP时禁用复选框配置
+    // update-end--author:liaozhiyang---date:20260520---for:【QQYUN-15469】Bảng mới thêm, thời gian tạo là thời gian của biểu mẫu đã mở trước đó
+    // update-begin--author:liaozhiyang---date:20260804---for: mẫu chủ đề làERPkhi vô hiệu hóa thì cấu hình ô kiểm
     if (formModel.themeTemplate === 'erp') {
       formModel.isCheckbox = 'Y';
     }
-    // update-end--author:liaozhiyang---date:20260804---for：主题模板为ERP时禁用复选框配置
+    // update-end--author:liaozhiyang---date:20260804---for: mẫu chủ đề làERPkhi vô hiệu hóa thì cấu hình ô kiểm
   }
 
   function getFieldsValue(fields?: string[]) {
@@ -417,49 +417,49 @@
     fieldErrors.treeFieldname = '';
     if (!formModel.tableName) {
       fieldErrors.tableName = 'error';
-      return Promise.reject('请输入表名');
+      return Promise.reject('Vui lòng nhập tên bảng');
     }
     if (/[\u4E00-\u9FA5]/g.test(formModel.tableName)) {
       fieldErrors.tableName = 'error';
-      return Promise.reject('表名不允许输入中文');
+      return Promise.reject('Tên bảng không cho phép nhập tiếng Trung');
     }
     if (formModel.tableName.length > 50) {
       fieldErrors.tableName = 'error';
-      return Promise.reject('表名最长50个字符');
+      return Promise.reject('Tên bảng dài nhất50ký tự');
     }
     try {
       await duplicateValidate('onl_cgform_head', 'table_name', formModel.tableName, formModel.id);
     } catch (e: any) {
       fieldErrors.tableName = 'error';
-      return Promise.reject('表名已存在');
+      return Promise.reject('Tên bảng đã tồn tại');
     }
     if (!formModel.tableTxt) {
       fieldErrors.tableTxt = 'error';
-      return Promise.reject('请输入表描述');
+      return Promise.reject('Vui lòng nhập mô tả bảng');
     }
     if (formModel.tableTxt.length > 200) {
       fieldErrors.tableTxt = 'error';
-      return Promise.reject('表描述最长200个字');
+      return Promise.reject('Mô tả bảng dài nhất200ký tự');
     }
     if (formModel.isTree === 'Y' && formModel.tableType === 1 && !formModel.treeFieldname) {
       fieldErrors.treeFieldname = 'error';
       expandStatus.value = true;
-      return Promise.reject('请填写树表单列');
+      return Promise.reject('Vui lòng điền cột biểu mẫu cây');
     }
     if (extConfigJson.joinQuery && ['erp'].includes(formModel.themeTemplate)) {
-      return Promise.reject('ERP不支持联合查询功能');
+      return Promise.reject('ERPkhông hỗ trợ chức năng truy vấn liên hợp');
     }
     if (extConfigJson.joinQuery && ['innerTable'].includes(formModel.themeTemplate)) {
-      return Promise.reject('内嵌子表不支持联合查询功能');
+      return Promise.reject('Bảng con nhúng không hỗ trợ chức năng truy vấn liên hợp');
     }
     return getFieldsValue();
   }
 
-  // 扩展配置 JSON
+  // Cấu hình mở rộng JSON
   let extConfigJson: Recordable = {};
   const [registerExtendConfigModal, extendConfigModal] = useModal();
 
-  // ExtendConfigModal 需要的 parentForm 接口
+  // ExtendConfigModal cái cần parentForm API (giao diện)
   const formActionForModal = {
     getFieldsValue,
     setFieldsValue,
@@ -471,10 +471,10 @@
     extConfigJson = Object.assign({}, ExtConfigDefaultJson, parseJSON, {
       isDesForm: record.isDesForm || 'N',
       desFormCode: record.desFormCode || '',
-      // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源（dbSource 为 onl_cgform_head 独立列）
+      // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu (dbSource là onl_cgform_head cột độc lập)
       dbSource: record.dbSource || '',
       enableMultiDataSource: record.dbSource ? 1 : 0,
-      // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
+      // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
     });
   }
 
@@ -523,7 +523,7 @@
       display: flex;
       align-items: center;
       padding: 4px 8px;
-      // 附表收起时固定宽度（不 flex-grow）
+      // Khi bảng phụ thu gọn, cố định độ rộng (không flex-grow）
       &-fixed {
         flex: 0 0 33.333%;
         min-width: unset;
@@ -551,7 +551,7 @@
         align-items: center;
       }
     }
-    // 无条件字段时，按钮与基础字段同行（单表收起 / 主表无附表收起）
+    // Khi không có trường điều kiện, nút nằm cùng hàng với trường cơ bản (bảng đơn thu gọn / bảng chính không có bảng phụ thì thu gọn)
     &--inline {
       flex-wrap: nowrap;
       :deep(.cgf-item) {

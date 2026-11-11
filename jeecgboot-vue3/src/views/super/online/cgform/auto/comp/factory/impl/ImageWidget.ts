@@ -3,7 +3,7 @@ import IFormSchema from '../IFormSchema';
 import { UploadTypeEnum } from '/@/components/Form/src/jeecg/components/JUpload';
 
 /**
- * 图片
+ * Hình ảnh
  */
 export default class ImageWidget extends IFormSchema {
   getItem(): FormSchema {

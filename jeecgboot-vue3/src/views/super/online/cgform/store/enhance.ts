@@ -34,7 +34,7 @@ export const useEnhanceStore = defineStore('online-cgform-enhance', {
   },
 });
 
-// 在setup函数之外使用
+// tạisetupSử dụng bên ngoài hàm
 export function useEnhanceStoreWithOut() {
   return useEnhanceStore(store);
 }

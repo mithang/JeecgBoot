@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 表单设计器-关联记录查询 使用下拉搜索
+ * Trình thiết kế biểu mẫu-Truy vấn bản ghi liên kết Sử dụng tìm kiếm dropdown
  */
 export default class LinkTableForQueryWidget extends IFormSchema {
 

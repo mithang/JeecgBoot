@@ -24,19 +24,19 @@
       actionButton: { type: Boolean, default: true },
     },
     setup() {
-      // 定义列信息
+      // Định nghĩa thông tin cột
       const columns = ref<JVxeColumn[]>([
-        { title: '字段名称', key: 'dbFieldName', width: 160 },
-        { title: '字段备注', key: 'dbFieldTxt', width: 160 },
+        { title: 'Tên trường', key: 'dbFieldName', width: 160 },
+        { title: 'Ghi chú trường', key: 'dbFieldTxt', width: 160 },
         {
-          title: '主表名',
+          title: 'Tên bảng chính',
           key: 'mainTable',
           width: 280,
           type: JVxeTypes.input,
           defaultValue: '',
         },
         {
-          title: '主表字段',
+          title: 'trường bảng chính',
           key: 'mainField',
           width: 280,
           type: JVxeTypes.input,

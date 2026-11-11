@@ -6,7 +6,7 @@ import ForeignKeyTable from '../components/tables/ForeignKeyTable.vue';
 import IndexTable from '../components/tables/IndexTable.vue';
 import QueryTable from '../components/tables/QueryTable.vue';
 
-// 定义弹窗form的类型
+// Định nghĩa popupformloại của
 export namespace CgformModal {
   export type DBAttributeTableType = InstanceType<typeof DBAttributeTable>;
   export type PageAttributeTableType = InstanceType<typeof PageAttributeTable>;
@@ -25,32 +25,32 @@ export namespace CgformModal {
   };
 }
 
-// 定义页面类型，normal = 普通页面，copy=视图页面
+// Định nghĩa loại trang,normal = Trang thông thường,copy=Trang view
 export enum CgformPageType {
   normal,
   copy,
 }
 
 /**
- * Online扩展配置类型
+ * OnlineLoại cấu hình mở rộng
  */
 export type ExtConfigType = Partial<{
-  // 是否启用积木报表打印（0否，1是）
+  // Có kích hoạt in báo cáo Jimu hay không (0Không,1là)
   reportPrintShow: number,
-  // 积木报表地址
+  // Địa chỉ báo cáo Jimu
   reportPrintUrl: string,
-  // 是否启用联合查询（0否，1是）
+  // Có kích hoạt truy vấn liên hợp hay không (0Không,1là)
   joinQuery: number,
-  // 弹窗是否默认全屏（0否，1是）
+  // Popup có toàn màn hình mặc định hay không (0Không,1là)
   modelFullscreen: number,
-  // 弹窗的最小宽度（px）
+  // Độ rộng tối thiểu của popup (px）
   modalMinWidth: string,
-  // 是否固定操作列（0否，1是）
+  // Có cố định cột thao tác hay không (0Không,1là)
   tableFixedAction: number,
-  // 操作列固定方式
+  // Cách cố định cột thao tác
   tableFixedActionType: 'left' | 'right',
-  // 是否允许调整列表列宽
+  // Có cho phép điều chỉnh độ rộng cột danh sách hay không
   canResizeColumn?: number,
-  // Excel 图片导出方式
+  // Excel Cách thức xuất hình ảnh
   imageExportMode?: 'embed' | 'path',
 }>

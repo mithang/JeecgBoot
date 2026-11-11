@@ -3,7 +3,7 @@
         <a-select
                 v-model:value="selectValue"
                 style="width: 100%"
-                placeholder="请选择"
+                placeholder="Vui lòng chọn"
                 option-label-prop="label"
                 popupClassName="table-link-select"
                 allowClear
@@ -15,7 +15,7 @@
                 @search="handleSearch"
                 @change="handleChange">
             
-            <!-- antD 3.0之后使用此渲染tag
+            <!-- antD 3.0Sau đó sử dụng cách render nàytag
             <template #tagRender="{ value: val, label, closable, onClose, option }">
                 <a-tag :closable="closable" style="margin-right: 3px" @close="onClose">
                     {{ label }}&nbsp;&nbsp;
@@ -25,10 +25,10 @@
             -->
             <template #option="item">
                 <div v-if="!item.value && auths.add" class="opt-add" v-on:click="handleClickAdd">
-                    <PlusOutlined/> 记录
+                    <PlusOutlined/> Bản ghi
                 </div>
                 <div v-else class="online-select-item">
-                    <!-- 扩展配置后可设置左侧图片-->
+                    <!-- Sau khi cấu hình mở rộng, có thể thiết lập hình ảnh phía bên trái-->
                     <div class="left-avatar" v-if="showImage">
                         <img v-if="getImageSrc(item)" :src="getImageSrc(item)" alt="" @error="handleImageError">
                         <img v-else :src="placeholderImage" alt="">
@@ -49,7 +49,7 @@
             </template>
         </a-select>
 
-        <!-- 弹窗到另外一张表单用-可编辑表单 -->
+        <!-- Popup dùng cho một biểu mẫu khác-Biểu mẫu có thể chỉnh sửa -->
         <online-pop-modal v-if="popFormModalShow" :id="popTableName" @register="registerPopModal" @success="getFormData" topTip></online-pop-modal>
     </div>
 </template>
@@ -83,25 +83,25 @@
       value: propTypes.oneOfType([propTypes.string, propTypes.number, propTypes.array]),
       linkFields: propTypes.array.def([]),
       imageField: propTypes.string.def(''),
-      // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-389】普通查询关联记录去掉编辑按钮
+      // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-389】Truy vấn thông thường của bản ghi liên kết bỏ nút chỉnh sửa
       editBtnShow: propTypes.bool.def(true),
-      // update-end--author:liaozhiyang---date:20240530---for：【TV360X-389】普通查询关联记录去掉编辑按钮
+      // update-end--author:liaozhiyang---date:20240530---for：【TV360X-389】Truy vấn thông thường của bản ghi liên kết bỏ nút chỉnh sửa
     },
     emits:['change','update:value'],
     setup(props, { emit, attrs }){
-      // 当前表单id
+      // Biểu mẫu hiện tạiid
       const tableId = inject<Ref<string | null>>('tableId', ref(null));
       const boxRef = ref<HTMLDivElement>();
-      // 选中的值
+      // Giá trị đã chọn
       const selectValue = ref<string[]>([]);
       const {auths, mainContentField, textFieldArray, selectOptions, reloadTableLinkOptions, addQueryParams, formatData, initFormData, getImageSrc,showImage } = useLinkTable(props);
         
-      // 用于 online表单中 弹出别的表单
+      // Dùng để onlineTrong biểu mẫu Bật ra biểu mẫu khác
       const [registerPopModal, { openModal: openPopModal }] = useModal();
-      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
-      // 加上了online一对多关联记录、他表字段必须懒加载，否则构建循环调用了报错
+      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
+      // đã thêm vàoonlineBản ghi liên kết một-nhiều và trường bảng khác phải tải lười (lazy load), nếu không việc xây dựng sẽ gọi vòng lặp và báo lỗi
       const popFormModalShow = ref(false);
-      // update-end--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
+      // update-end--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
       const popTableName = computed(()=>{
         return props.tableName
       });
@@ -109,23 +109,23 @@
       const bindValue = computed(()=>{
         if(props.multi === true){
           return {
-            // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-988】关联记录组件下拉风格禁用未生效
+            // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-988】Vô hiệu hóa kiểu dropdown của component bản ghi liên kết không có hiệu lực
             ...attrs,
-            // update-end--author:liaozhiyang---date:20240617---for：【TV360X-988】关联记录组件下拉风格禁用未生效
+            // update-end--author:liaozhiyang---date:20240617---for：【TV360X-988】Vô hiệu hóa kiểu dropdown của component bản ghi liên kết không có hiệu lực
             mode: 'multiple',
           }
         }else{
           return {
-            // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-988】关联记录组件下拉风格禁用未生效
+            // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-988】Vô hiệu hóa kiểu dropdown của component bản ghi liên kết không có hiệu lực
             ...attrs,
-            // update-end--author:liaozhiyang---date:20240617---for：【TV360X-988】关联记录组件下拉风格禁用未生效
+            // update-end--author:liaozhiyang---date:20240617---for：【TV360X-988】Vô hiệu hóa kiểu dropdown của component bản ghi liên kết không có hiệu lực
           }
         }
       });
       
-      // 新增记录
+      // Thêm bản ghi
       function handleClickAdd(e){
-        // 弹窗新增表单
+        // Biểu mẫu thêm mới bằng popup
         e?.stopPropagation();
         e?.preventDefault();
         popFormModalShow.value = true;
@@ -133,11 +133,11 @@
       }
 
       function handleClickEdit(e, record){
-        // 弹窗编辑表单
+        // Biểu mẫu chỉnh sửa bằng popup
         e?.stopPropagation();
         e?.preventDefault();
         if(auths.update == false){
-          console.error('当前用户无编辑权限!');
+          console.error('Người dùng hiện tại không có quyền chỉnh sửa!');
           return;
         }
         popFormModalShow.value = true;
@@ -162,16 +162,16 @@
       })
 
       /**
-       * 自定义刷新事件，用于刷新下拉项
+       * Sự kiện làm mới tùy chỉnh, dùng để làm mới các mục dropdown
        */
       function handleCustomReload() {
         reloadTableLinkOptions();
       }
 
-      //要想数据回显，必须表单里存在props.valueField对应的字段
+      //Muốn dữ liệu hiển thị lại, trong biểu mẫu phải tồn tạiprops.valueFieldTrường tương ứng
       async function getFormData(data) {
         try {
-          // 【QQYUN-7153】给当前表单下所有的查询区域的下拉关联记录组件推送刷新数据事件
+          // 【QQYUN-7153】Đẩy sự kiện làm mới dữ liệu cho tất cả component bản ghi liên kết dropdown trong vùng truy vấn thuộc biểu mẫu hiện tại
           const queryFormLinkTables = document.querySelectorAll(`.online-list-${tableId.value} .jeecg-basic-table-form-container.online-query-form .link-table-select-box`);
           if (queryFormLinkTables && queryFormLinkTables.length > 0) {
             queryFormLinkTables.forEach((item) => item.dispatchEvent(new Event(CUSTOM_RELOAD_EVENT)))
@@ -180,16 +180,16 @@
           console.error(e)
         }
 
-        //1.刷新下拉项
+        //1.Làm mới các mục dropdown
         await reloadTableLinkOptions();
-        //2.重置下拉值
+        //2.Đặt lại giá trị dropdown
         let temp = data[props.valueField];
         if (props.multi === true) {
           selectValue.value = [temp];
         } else {
           selectValue.value = temp;
         }
-        //3.触发change事件
+        //3.Kích hoạtchangesự kiện
         handleChange(selectValue.value)
       }
       
@@ -245,7 +245,7 @@
         emit('update:value', textArray.join(',')||'')
       }
       
-      //合并数据
+      //Hợp nhất dữ liệu
       function hebing(oldObj, newObj){
         let record = {}
         Object.keys(oldObj).map(k=>{
@@ -261,7 +261,7 @@
           }else{
             selectValue.value = val;
           }
-          //保证表单其他值回显成功
+          //Đảm bảo các giá trị khác của biểu mẫu hiển thị lại thành công
           if(props.linkFields && props.linkFields.length>0){
             emitValue(val);
           }
@@ -271,7 +271,7 @@
       }, {immediate: true})
 
 
-      //保证编辑页面 第一次进入表单能回显成功
+      //Đảm bảo trang chỉnh sửa Lần đầu vào biểu mẫu có thể hiển thị lại thành công
       watch(()=>selectOptions.value, (val)=>{
         if(val && val.length>0){
           if(props.linkFields && props.linkFields.length>0){
@@ -281,11 +281,11 @@
           }
         }
       });
-      // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-389】下拉和卡片关联记录图裂开给个默认图片
+      // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-389】Hình của bản ghi liên kết dạng dropdown và dạng thẻ bị vỡ, hãy cấp một hình mặc định
       const handleImageError = (event) => {
         event.target.src = placeholderImage;
       };
-      // update-end--author:liaozhiyang---date:20240529---for：【TV360X-389】下拉和卡片关联记录图裂开给个默认图片
+      // update-end--author:liaozhiyang---date:20240529---for：【TV360X-389】Hình của bản ghi liên kết dạng dropdown và dạng thẻ bị vỡ, hãy cấp một hình mặc định
 
       return {
         boxRef,
@@ -351,11 +351,11 @@
                 -ms-flex: 1;
                 -webkit-box-sizing: border-box;
                 box-sizing: border-box;
-                // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-389】普通查询关联记录去掉编辑按钮
+                // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-389】Truy vấn thông thường của bản ghi liên kết bỏ nút chỉnh sửa
                 .noEditBtn {
                   padding-left: 6px;
                 }
-                // update-end--author:liaozhiyang---date:20240530---for：【TV360X-389】普通查询关联记录去掉编辑按钮
+                // update-end--author:liaozhiyang---date:20240530---for：【TV360X-389】Truy vấn thông thường của bản ghi liên kết bỏ nút chỉnh sửa
                 .anticon-edit{
                     &:hover{
                         color: #0c8fcf;
@@ -395,7 +395,7 @@
                         padding: 0 7px;
                         text-overflow: ellipsis;
                         word-break: break-all;
-                        // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-389】普通查询关联记录去掉编辑按钮
+                        // update-begin--author:liaozhiyang---date:20240530---for：【TV360X-389】Truy vấn thông thường của bản ghi liên kết bỏ nút chỉnh sửa
                         &:first-child,
                         &:last-child {
                           border-right: none;
@@ -403,7 +403,7 @@
                         &:nth-child(2) {
                           padding-left: 0;
                         }
-                        // update-end--author:liaozhiyang---date:20240530---for：【TV360X-389】普通查询关联记录去掉编辑按钮
+                        // update-end--author:liaozhiyang---date:20240530---for：【TV360X-389】Truy vấn thông thường của bản ghi liên kết bỏ nút chỉnh sửa
                     }
                 }
             }

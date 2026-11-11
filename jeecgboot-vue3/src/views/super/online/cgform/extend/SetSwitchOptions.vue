@@ -1,7 +1,7 @@
 <template>
   <div class="setSwitchOptions">
-    <p><span>是</span><a-input v-model:value="valueY" @change="handleChange" /></p>
-    <p><span>否</span><a-input v-model:value="valueN" @change="handleChange" /></p>
+    <p><span>là</span><a-input v-model:value="valueY" @change="handleChange" /></p>
+    <p><span>Không</span><a-input v-model:value="valueN" @change="handleChange" /></p>
   </div>
 </template>
 
@@ -42,7 +42,7 @@
   const send = () => {
     let Y = Number(valueY.value);
     let N = Number(valueN.value);
-    // 都能转成number就转，否则就是string
+    // Đều có thể chuyển thànhnumberthì chuyển đổi, nếu không thì làstring
     if (Number.isNaN(Y) || Number.isNaN(N)) {
       Y = valueY.value;
       N = valueN.value;
@@ -50,7 +50,7 @@
     emit('change', [Y, N]);
     emit('update:value', [Y, N]);
   };
-  // 进入组件就把默认值外传
+  // Vừa vào component là truyền giá trị mặc định ra ngoài
   onMounted(() => {
     send();
   })

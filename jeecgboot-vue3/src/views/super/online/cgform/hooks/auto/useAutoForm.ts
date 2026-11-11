@@ -31,46 +31,46 @@ export interface OnlSubTab {
   id?:string;
 }
 /**
- * 获取实际表单的配置信息
+ * Lấy thông tin cấu hình của biểu mẫu thực tế
  */
 export function useFormItems(props, onlineFormRef) {
-  // 添加表单组件-专门给 online 表单用
+  // Thêm component biểu mẫu-chuyên dành cho online Dùng cho biểu mẫu
   useExtendComponent();
   
-  // 下拉框等组件需要通过此class作为父级container
+  // Các component như ô dropdown cần thông qua đâyclasslàm cấp chacontainer
   const modalClass = props.modalClass;
-  // 表单渲染用到的配置
+  // Cấu hình dùng khi render biểu mẫu
   const formSchemas = ref<any>([]);
-  // 表名
+  // Tên bảng
   const tableName = ref('');
-  // 编辑页面 数据库原数据
+  // Trang chỉnh sửa Dữ liệu gốc của cơ sở dữ liệu
   const dbData = ref<any>({});
-  // 字段展示状态
+  // Trạng thái hiển thị của trường
   const fieldDisplayStatus = reactive<any>({});
   const hasSubTable = ref(false);
 
   const subTabInfo = ref<OnlSubTab[]>([]);
   const subDataSource = ref({});
   const refMap = {};
-  // 联动组件列表
+  // Danh sách component liên động
   const linkDownList = ref<any>([]);
   /**
-   * 有表单默认值的字段
-   * 表名: [{field, value, type}]
+   * Trường có giá trị mặc định của biểu mẫu
+   * Tên bảng: [{field, value, type}]
    */
   const defaultValueFields = reactive<any>({});
-  // 表单栅格
+  // Lưới biểu mẫu
   const baseColProps = ref<any>('');
   baseColProps.value = { sm: 24, xs: 24, md: 12, lg: 12, xl: 12, xxl: 12 };
-  // update-begin--author:liaozhiyang---date:20240311---for：【QQYUN-8440】小屏幕居中(跟vue2栅格同步)
+  // update-begin--author:liaozhiyang---date:20240311---for：【QQYUN-8440】Căn giữa trên màn hình nhỏ(Theovue2Đồng bộ lưới (grid))
   const labelCol = ref<any>({ xs: { span: 24 }, sm: { span: 4 }, md: { span: 4 }, lg: { span: 4 }, xl: { span: 4 }, xxl: { span: 4 } });
-  // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+  // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
   const wrapperCol = ref<any>(null);
-  // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
-  // update-end--author:liaozhiyang---date:20240311---for：【QQYUN-8440】小屏幕居中(跟vue2栅格同步)
-  // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+  // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
+  // update-end--author:liaozhiyang---date:20240311---for：【QQYUN-8440】Căn giữa trên màn hình nhỏ(Theovue2Đồng bộ lưới (grid))
+  // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
   const labelWidth = ref<any>(6 * 14 + 10);
-  // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+  // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
 
   function createFormSchemas(properties: any[], required, checkOnlyFieldValue, onlineExtConfigJson = {}) {
     //let properties:any[] = result.schema.properties
@@ -83,7 +83,7 @@ export function useFormItems(props, onlineFormRef) {
     let tableLinkInfo:any = {}
     Object.keys(properties).map((key) => {
       const item = properties[key];
-      // uiSchema 无用
+      // uiSchema Vô dụng
       //const uiItem = this.uiSchema[key];// method、formTemplate、url
       if (item.view == 'tab') {
         hasSubTable.value = true;
@@ -91,7 +91,7 @@ export function useFormItems(props, onlineFormRef) {
         let temp: OnlSubTab = {
           key,
           formTemplate: Number(item.formTemplate || 1),
-          // 这个foreignKey是主表的字段
+          // Cái nàyforeignKeylà trường của bảng chính
           foreignKey: item['foreignKey'],
           describe: item.describe,
           relationType: item.relationType,
@@ -107,36 +107,36 @@ export function useFormItems(props, onlineFormRef) {
           refMap[key] = ref<JVxeTableInstance>();
           temp['columns'] = item.columns;
           dataSourceObj[key] = [];
-          // TODO 处理子表的新增删除按钮权限
+          // TODO Xử lý quyền nút thêm mới/xóa của bảng con
           //this.handleSubTableButtonAuth(item)
         }
         subInfo.push(temp);
-        // 记录子表按钮权限
+        // Ghi lại quyền nút của bảng con
         handleSubTableButtonAuth(key, item);
       } else {
         initDefValueConfig(key, item, defaultValueFields[tableName.value]);
         if (item.view === LINK_DOWN) {
           let array = handleLinkDown(item, key);
           for (let linkDownItem of array) {
-            // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-314】联动组件添加组件默认值
+            // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-314】Component liên động thêm giá trị mặc định của component
             const fItem = linkDownItem.key == key ? item : item.others?.find((item) => item.field === linkDownItem.key);
             fItem && initDefValueConfig(linkDownItem.key, fItem, defaultValueFields[tableName.value]);
-            // update-end--author:liaozhiyang---date:20240522---for：【TV360X-314】联动组件添加组件默认值
+            // update-end--author:liaozhiyang---date:20240522---for：【TV360X-314】Component liên động thêm giá trị mặc định của component
             fieldDisplayStatus[linkDownItem.key] = true;
             fieldDisplayStatus[linkDownItem.key + '_load'] = true;
-            // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-75】表单label长度设置，联动组件没生效
+            // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-75】Biểu mẫulabelThiết lập độ dài, component liên động chưa có hiệu lực
             setFieldExtend(onlineExtConfigJson, linkDownItem);
-            // update-end--author:liaozhiyang---date:20240521---for：【TV360X-75】表单label长度设置，联动组件没生效
+            // update-end--author:liaozhiyang---date:20240521---for：【TV360X-75】Biểu mẫulabelThiết lập độ dài, component liên động chưa có hiệu lực
             let temp = FormSchemaFactory.createFormSchema(linkDownItem.key, linkDownItem);
-            // update-begin--author:liaozhiyang---date:20251230---for：【issues/9223】js增强，用loaded方法里加入某个字段隐藏，导致打开窗口时其他已经设置只读字段，恢复成可写
+            // update-begin--author:liaozhiyang---date:20251230---for：【issues/9223】jstăng cường, dùngloadedTrong phương thức thêm ẩn một trường nào đó, khiến khi mở cửa sổ, các trường khác đã thiết lập chỉ đọc lại khôi phục thành có thể ghi
             fieldDisplayStatus[linkDownItem.key + '_disabled'] = temp.disabled ?? false;
-            // update-end--author:liaozhiyang---date:20251230---for：【issues/9223】js增强，用loaded方法里加入某个字段隐藏，导致打开窗口时其他已经设置只读字段，恢复成可写
+            // update-end--author:liaozhiyang---date:20251230---for：【issues/9223】jstăng cường, dùngloadedTrong phương thức thêm ẩn một trường nào đó, khiến khi mở cửa sổ, các trường khác đã thiết lập chỉ đọc lại khôi phục thành có thể ghi
             if (checkOnlyFieldValue) {
               temp.setOnlyValidateFun(checkOnlyFieldValue);
             }
             temp.isRequired(required);
             temp.setFormRef(onlineFormRef);
-            // 联动控件 只读由第一个控件的只读状态决定
+            // Control liên động Tính chỉ đọc do trạng thái chỉ đọc của control đầu tiên quyết định
             temp.handleWidgetAttr(item);
             let tempIndex = getFieldIndex(arr, linkDownItem.key);
             if (tempIndex == -1) {
@@ -146,20 +146,20 @@ export function useFormItems(props, onlineFormRef) {
             }
           }
         } else {
-          // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-314】联动组件添加组件默认值
+          // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-314】Component liên động thêm giá trị mặc định của component
           initDefValueConfig(key, item, defaultValueFields[tableName.value]);
-          // update-end--author:liaozhiyang---date:20240522---for：【TV360X-314】联动组件添加组件默认值
+          // update-end--author:liaozhiyang---date:20240522---for：【TV360X-314】Component liên động thêm giá trị mặc định của component
           fieldDisplayStatus[key] = true;
           fieldDisplayStatus[key + '_load'] = true;
           let tempIndex = getFieldIndex(arr, key);
           if (tempIndex == -1) {
-            // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+            // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
             setFieldExtend(onlineExtConfigJson, item);
-            // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+            // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
             let temp = FormSchemaFactory.createFormSchema(key, item);
-            // update-begin--author:liaozhiyang---date:20251230---for：【issues/9223】js增强，用loaded方法里加入某个字段隐藏，导致打开窗口时其他已经设置只读字段，恢复成可写
+            // update-begin--author:liaozhiyang---date:20251230---for：【issues/9223】jstăng cường, dùngloadedTrong phương thức thêm ẩn một trường nào đó, khiến khi mở cửa sổ, các trường khác đã thiết lập chỉ đọc lại khôi phục thành có thể ghi
             fieldDisplayStatus[key + '_disabled'] = temp.disabled ?? false;
-            // update-end--author:liaozhiyang---date:20251230---for：【issues/9223】js增强，用loaded方法里加入某个字段隐藏，导致打开窗口时其他已经设置只读字段，恢复成可写
+            // update-end--author:liaozhiyang---date:20251230---for：【issues/9223】jstăng cường, dùngloadedTrong phương thức thêm ẩn một trường nào đó, khiến khi mở cửa sổ, các trường khác đã thiết lập chỉ đọc lại khôi phục thành có thể ghi
             if (checkOnlyFieldValue) {
               temp.setOnlyValidateFun(checkOnlyFieldValue);
             }
@@ -168,8 +168,8 @@ export function useFormItems(props, onlineFormRef) {
             arr.push(temp);
             hideFields.push(...temp.getRelatedHideFields());
             
-            //update-begin-author:taoyan date:2022-8-5 for: 获取他表字段信息
-            //如果是他表字段获取关联信息
+            //update-begin-author:taoyan date:2022-8-5 for: Lấy thông tin trường của bảng khác
+            //Nếu là trường bảng khác thì lấy thông tin liên kết
             if(item.view === LINK_TABLE_FIELD){
               let tempInfo = temp.getLinkFieldInfo();
               if(tempInfo){
@@ -181,18 +181,18 @@ export function useFormItems(props, onlineFormRef) {
                 }
               }
             }
-            //update-end-author:taoyan date:2022-8-5 for: 获取他表字段信息
+            //update-end-author:taoyan date:2022-8-5 for: Lấy thông tin trường của bảng khác
             
           }
         }
         //fp.checkOnlyMethod = this.$Jdebounce(this.checkOnlyFieldValue, 1000);
       }
     });
-    // 1.对arr排序
+    // 1.Đối vớiarrSắp xếp
     arr.sort(function (a, b) {
       return a.order - b.order;
     });
-    // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+    // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
     const oneRowData: any = [];
     (() => {
       for (let i = 0, len = arr.length; i < len; i++) {
@@ -205,20 +205,20 @@ export function useFormItems(props, onlineFormRef) {
       }
     })();
     arr = [...arr,...oneRowData];
-    // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
-    // 2.获取真实表单配置
+    // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
+    // 2.Lấy cấu hình biểu mẫu thật
     let formSchemaArray: FormSchema[] = [];
     formSchemaArray.push(FormSchemaFactory.createIdField());
     let longestLabelComponet: any = null;
     let isComponetRequired = false;
     for (let a of arr) {
-      // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+      // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
       const curLabelLen = a.label.length;
       if (longestLabelComponet) {
         if (longestLabelComponet.label.length < curLabelLen) {
           longestLabelComponet = a;
         } else if(longestLabelComponet.label.length === curLabelLen) {
-          // 文字labael相同，则判断是否必填。（必填*占13像素）
+          // Văn tự (chữ)labaelgiống nhau, thì phán đoán có bắt buộc điền hay không. (Bắt buộc điền*chiếm13pixel)
           if(!longestLabelComponet.required && a.required) {
             longestLabelComponet = a;
           }
@@ -226,35 +226,35 @@ export function useFormItems(props, onlineFormRef) {
       } else {
         longestLabelComponet = a;
       }
-      // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
-      // update-begin--author:liaozhiyang---date:20230105---for：【TV360X-209】表单label长度设置了且字段有必填宽度计算不正确
+      // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
+      // update-begin--author:liaozhiyang---date:20230105---for：【TV360X-209】Biểu mẫulabelĐộ dài đã thiết lập và trường có bắt buộc điền, độ rộng tính không đúng
       if (a.required) {
         isComponetRequired = true;
       }
-      // update-end--author:liaozhiyang---date:20230105---for：【TV360X-209】表单label长度设置了且字段有必填宽度计算不正确
-      //update-begin-author:taoyan date:2022-8-5 for: 将他表字段的配置信息 添加至 关联字段上
-      //关联记录字段设置新的配置
+      // update-end--author:liaozhiyang---date:20230105---for：【TV360X-209】Biểu mẫulabelĐộ dài đã thiết lập và trường có bắt buộc điền, độ rộng tính không đúng
+      //update-begin-author:taoyan date:2022-8-5 for: Đưa thông tin cấu hình của trường bảng khác Thêm vào tới trên trường liên kết
+      //Trường bản ghi liên kết thiết lập cấu hình mới
       if(a['view'] && a['view']==LINK_TABLE){
         if(tableLinkInfo[a.field]){
           a.setOtherInfo(tableLinkInfo[a.field])
         }
       }
-      //update-end-author:taoyan date:2022-8-5 for: 将他表字段的配置信息 添加至 关联字段上
-      //设置hidden的字段
+      //update-end-author:taoyan date:2022-8-5 for: Đưa thông tin cấu hình của trường bảng khác Thêm vào tới trên trường liên kết
+      //Thiết lậphiddentrường của
       if (hideFields.indexOf(a.field) >= 0) {
         a.isHidden();
       }
-      // popModal-下拉框的父级容器需要自定义，否则会被遮挡
+      // popModal-Container cấp cha của ô dropdown cần tùy chỉnh, nếu không sẽ bị che khuất
       if(modalClass){
         a.setCustomPopContainer(modalClass)
       }
-      // update-begin--author:liaozhiyang---date:20231222---for：【QQYUN-7515】online 下拉字典、单选组件options跟随数据库类型
+      // update-begin--author:liaozhiyang---date:20231222---for：【QQYUN-7515】online Từ điển dropdown, component chọn đơn (radio)optionsĐi theo loại cơ sở dữ liệu
       const result = a.getFormItemSchema();
       if (result.component === 'JDictSelectTag' && ['number', 'integer'].includes(a?._data?.type)) {
         result.componentProps.stringToNumber = true;
       }
-      // update-end-author:liaozhiyang---date:20231222---for：【QQYUN-7515】online 下拉字典、单选组件options跟随数据库类型
-      // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+      // update-end-author:liaozhiyang---date:20231222---for：【QQYUN-7515】online Từ điển dropdown, component chọn đơn (radio)optionsĐi theo loại cơ sở dữ liệu
+      // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
       if (props.formTemplate > 1 && getFieldExtend(a?._data, 'isOneRow')) {
         result.colProps = { span: 24 };
         const colGrid = getFormItemColProps();
@@ -271,30 +271,30 @@ export function useFormItems(props, onlineFormRef) {
         });
         result.itemProps = { labelCol: itemLabelCol, wrapperCol: itemWrapperCol };
       }
-      // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
-      // update-begin--author:liaozhiyang---date:20251011---for：【issues/8791】js增强popup弹框的onlChange()没生效
+      // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
+      // update-begin--author:liaozhiyang---date:20251011---for：【issues/8791】jsTăng cườngpopupcủa popuponlChange()Chưa có hiệu lực
       if (result.component === 'JPopup') {
          result.changeEvent = 'popUpChange';
       }
-      // update-end--author:liaozhiyang---date:20251011---for：【issues/8791】js增强popup弹框的onlChange()没生效
+      // update-end--author:liaozhiyang---date:20251011---for：【issues/8791】jsTăng cườngpopupcủa popuponlChange()Chưa có hiệu lực
       formSchemaArray.push(result);
     }
     formSchemas.value = formSchemaArray;
     //return formSchemaArray;
-    //update-begin-author:taoyan date:2022-5-31 for: VUEN-1147 主子表 子表顺序并不是按照设置顺序排列
+    //update-begin-author:taoyan date:2022-5-31 for: VUEN-1147 bảng chính-con Thứ tự của bảng con không sắp xếp theo thứ tự thiết lập
     subInfo.sort(function (a, b) {
       return a.order - b.order;
     });
-    //update-end-author:taoyan date:2022-5-31 for: VUEN-1147 主子表 子表顺序并不是按照设置顺序排列
-    // update-begin--author:liaozhiyang---date:20231009---for：【issues/5371】一对多子表popup增加多选
+    //update-end-author:taoyan date:2022-5-31 for: VUEN-1147 bảng chính-con Thứ tự của bảng con không sắp xếp theo thứ tự thiết lập
+    // update-begin--author:liaozhiyang---date:20231009---for：【issues/5371】Bảng con một-nhiềupopupThêm chọn nhiều
     subInfo.forEach((sItem) => {
       const columns: any = sItem.columns;
       if(sItem.columns){
         columns.forEach((cItem) => {
-          // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-452】一对多子表popup默认多选没生效
+          // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-452】Bảng con một-nhiềupopupChọn nhiều mặc định chưa có hiệu lực
           if (sItem.relationType == 0) {
             if (['popup', 'popup_dict'].includes(cItem.type)) {
-              // 只有1对多才需要处理，1对1或者单表直接组件中处理了。
+              // Chỉ có1Chỉ quan hệ đối-nhiều mới cần xử lý,1Đối với1hoặc đã được xử lý trong component trực tiếp của bảng đơn.
               let popupMulti = true;
               if (cItem.fieldExtendJson) {
                 const fieldExtendJson = JSON.parse(cItem.fieldExtendJson);
@@ -304,29 +304,29 @@ export function useFormItems(props, onlineFormRef) {
               cItem.props = { ...props, multi: popupMulti };
             }
           }
-          // update-end--author:liaozhiyang---date:20240529---for：【TV360X-452】一对多子表popup默认多选没生效
-          // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9205】一对多(jVxetable组件date)支持年，年月，年度度，年周
+          // update-end--author:liaozhiyang---date:20240529---for：【TV360X-452】Bảng con một-nhiềupopupChọn nhiều mặc định chưa có hiệu lực
+          // update-begin--author:liaozhiyang---date:20240509---for：【QQYUN-9205】Một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm, năm-tuần
           if (cItem.type === 'date' && cItem.fieldExtendJson) {
             const fieldExtendJson = JSON.parse(cItem.fieldExtendJson);
             if (fieldExtendJson.picker && fieldExtendJson.picker != 'default') {
               Object.assign(cItem, { picker: fieldExtendJson.picker });
             }
           }
-          // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9205】一对多(jVxetable组件date)支持年，年月，年度度，年周
+          // update-end--author:liaozhiyang---date:20240509---for：【QQYUN-9205】Một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm, năm-tuần
         });
       }
     });
-    // update-end--author:liaozhiyang---date:20231009---for：【issues/5371】一对多子表popup增加多选
+    // update-end--author:liaozhiyang---date:20231009---for：【issues/5371】Bảng con một-nhiềupopupThêm chọn nhiều
     subTabInfo.value = subInfo;
     subDataSource.value = dataSourceObj;
-    // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+    // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
     if (onlineExtConfigJson.formLabelLengthShow && onlineExtConfigJson.formLabelLength) {
-      // 14是文字size，24是间隙
+      // 14là văn tựsize，24là khoảng hở (gap)
       labelWidth.value = onlineExtConfigJson.formLabelLength * 14 + 10 + (+`${isComponetRequired ? 13 : 0}`);
       wrapperCol.value = null;
     } else {
-      // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
-      // num这个值是label没截取之前真实长度，如果大于初始值则还是得使用初始值
+      // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
+      // numGiá trị này làlabelĐộ dài thực trước khi cắt, nếu lớn hơn giá trị khởi tạo thì vẫn phải sử dụng giá trị khởi tạo
       if (longestLabelComponet) {
         let realLabelLen = longestLabelComponet.label.length;
         realLabelLen = realLabelLen > LABELLENGTH ? LABELLENGTH : realLabelLen;
@@ -334,9 +334,9 @@ export function useFormItems(props, onlineFormRef) {
         const num = realLabelLen * 14 + 10 + (+`${required ? 13 : 0}`);
         labelWidth.value = num;
       }
-      // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+      // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
     }
-    // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+    // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
   }
   
   watch(
@@ -356,14 +356,14 @@ export function useFormItems(props, onlineFormRef) {
           if (map.hasOwnProperty(loadKey)) {
             item['ifShow'] = map[loadKey];
           }
-          // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-8537】js增强，控制表单字段的禁用
+          // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-8537】jstăng cường, kiểm soát việc vô hiệu hóa trường của biểu mẫu
           let disabledKey = k + '_disabled';
           if (map.hasOwnProperty(disabledKey)) {
             item['dynamicDisabled'] = () => {
               return map[disabledKey];
             };
           }
-          // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-8537】js增强，控制表单字段的禁用
+          // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-8537】jstăng cường, kiểm soát việc vô hiệu hóa trường của biểu mẫu
           arr.push(item);
         }
       });
@@ -382,7 +382,7 @@ export function useFormItems(props, onlineFormRef) {
   /*
    2024-03-06
    liaozhiyang
-   表单中的扩展参数的labelLength设置为onlineExtConfigJson.formLabelLength
+   của tham số mở rộng trong biểu mẫulabelLengthThiết lập thànhonlineExtConfigJson.formLabelLength
   */
   function setFieldExtend(onlineExtConfigJson, data, key = 'labelLength') {
     const { formLabelLengthShow, formLabelLength } = onlineExtConfigJson;
@@ -396,18 +396,18 @@ export function useFormItems(props, onlineFormRef) {
       }
       data.fieldExtendJson = JSON.stringify(fieldExtendJson);
     } else if (data?.fieldExtendJson) {
-      // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-34】查询label设置的长度应该只对查询区域的字符长度生效，不应该对表单长度生效
+      // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-34】Truy vấnlabelĐộ dài thiết lập chỉ nên có hiệu lực với độ dài ký tự của vùng truy vấn, không nên có hiệu lực với độ dài biểu mẫu
       const fieldExtendJson = JSON.parse(data?.fieldExtendJson);
       delete fieldExtendJson.labelLength;
       data.fieldExtendJson = JSON.stringify(fieldExtendJson);
-      // update-end--author:liaozhiyang---date:20260714---for：【LHZP-34】查询label设置的长度应该只对查询区域的字符长度生效，不应该对表单长度生效
+      // update-end--author:liaozhiyang---date:20260714---for：【LHZP-34】Truy vấnlabelĐộ dài thiết lập chỉ nên có hiệu lực với độ dài ký tự của vùng truy vấn, không nên có hiệu lực với độ dài biểu mẫu
     }
   }
 
   /*
    2024-01-05
    liaozhiyang
-   获取扩展参数
+   Lấy tham số mở rộng
   */
   function getFieldExtend(data: any = {}, key: string) {
     let fieldExtendJson = data?.fieldExtendJson;
@@ -417,11 +417,11 @@ export function useFormItems(props, onlineFormRef) {
     }
   }
 
-  //监听主表表单的formTemplate
+  //Lắng nghe của biểu mẫu bảng chínhformTemplate
   watch(
     () => props.formTemplate,
     () => {
-      //重新渲染表单
+      //Render lại biểu mẫu
       const result = getFormItemColProps()
       baseColProps.value = result.baseColProps;
       labelCol.value = result.labelCol;
@@ -432,58 +432,58 @@ export function useFormItems(props, onlineFormRef) {
 
   function getFormItemColProps() {
     let temp = props.formTemplate;
-    // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
-    // update-begin--author:liaozhiyang---date:20240311---for：【QQYUN-8440】小屏幕居中(跟vue2栅格同步)
+    // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
+    // update-begin--author:liaozhiyang---date:20240311---for：【QQYUN-8440】Căn giữa trên màn hình nhỏ(Theovue2Đồng bộ lưới (grid))
     // const form: any = componentSetting.form || {};
     // const { labelCol = {} } = form;
     // const { wrapperCol = {} } = form;
-    // update-end--author:liaozhiyang---date:20240311---for：【QQYUN-8440】小屏幕居中(跟vue2栅格同步)
+    // update-end--author:liaozhiyang---date:20240311---for：【QQYUN-8440】Căn giữa trên màn hình nhỏ(Theovue2Đồng bộ lưới (grid))
     if (temp == 2) {
-      // update-begin--author:liaozhiyang---date:20240311---for：【QQYUN-8440】小屏幕居中(跟vue2栅格同步)
+      // update-begin--author:liaozhiyang---date:20240311---for：【QQYUN-8440】Căn giữa trên màn hình nhỏ(Theovue2Đồng bộ lưới (grid))
       return {
         baseColProps: { sm: 24, xs: 24, md: 12, lg: 12, xl: 12, xxl: 12 },
-        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
         // labelCol: { xs: { span: 24 }, sm: { span: 4 }, md: { span: 4 }, lg: { span: 4 }, xl: { span: 4 }, xxl: { span: 4 } },
         // wrapperCol: { xs: { span: 24 }, sm: { span: 19 }, md: { span: 19 }, lg: { span: 19 }, xl: { span: 19 }, xxl: { span: 19 } },
-        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
       };
-      // update-end--author:liaozhiyang---date:20240311---for：【QQYUN-8440】小屏幕居中(跟vue2栅格同步)
+      // update-end--author:liaozhiyang---date:20240311---for：【QQYUN-8440】Căn giữa trên màn hình nhỏ(Theovue2Đồng bộ lưới (grid))
     } else if (temp == 3) {
       return {
         baseColProps: { sm: 24, xs: 24, md: 8, lg: 8, xl: 8, xxl: 8 },
-        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
         // labelCol: { xs: { span: 24 }, sm: { span: 6 }, md: { span: 6 }, lg: { span: 6 }, xl: { span: 6 }, xxl: { span: 6 } },
         // wrapperCol: { xs: { span: 24 }, sm: { span: 17 }, md: { span: 17 }, lg: { span: 17 }, xxl: { span: 17 } },
-        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
       };
     } else if (temp == 4) {
       return {
         baseColProps: { sm: 24, xs: 24, md: 6, lg: 6, xl: 6, xxl: 6 },
-        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
         // labelCol: { xs: { span: 24 }, sm: { span: 4 }, md: { span: 4 }, lg: { span: 4 }, xl: { span: 4 }, xxl: { span: 4 } },
         // wrapperCol: { xs: { span: 24 }, sm: { span: 18 }, md: { span: 18 }, lg: { span: 18 }, xl: { span: 18 }, xxl: { span: 18 } },
-        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
       };
     } else {
-      // update-begin--author:liaozhiyang---date:20240311---for：【QQYUN-8440】小屏幕居中(跟vue2栅格同步)
+      // update-begin--author:liaozhiyang---date:20240311---for：【QQYUN-8440】Căn giữa trên màn hình nhỏ(Theovue2Đồng bộ lưới (grid))
       return {
         baseColProps: { sm: 24, xs: 24, md: 24, lg: 24, xl: 24, xxl: 24 },
-        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
         // labelCol: { xs: { span: 24 }, sm: { span: 4 }, md: { span: 4 }, lg: { span: 4 }, xl: { span: 4 }, xxl: { span: 4 } },
         // wrapperCol:{ xs: { span: 24 }, sm: { span: 18 }, md: { span: 18 }, lg: { span: 18 }, xl: { span: 18 }, xxl: { span: 18 } },
-        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+        // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
       };
-      // update-end--author:liaozhiyang---date:20240311---for：【QQYUN-8440】小屏幕居中(跟vue2栅格同步)
+      // update-end--author:liaozhiyang---date:20240311---for：【QQYUN-8440】Căn giữa trên màn hình nhỏ(Theovue2Đồng bộ lưới (grid))
     }
-    // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+    // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
   }
-  // 唯一校验
+  // Kiểm chứng tính duy nhất
   function checkOnlyFieldValue(rule, value) {
     return new Promise((resolve) => {
       if (!value) {
         resolve('');
       }
-      //对于视图 需要将表名后的$+数字 取掉
+      //Đối với view Cần đưa của sau tên bảng$+Chữ số Bỏ đi
       let realTableName = tableName.value.replace(/\$\d+/, '');
       let param = {
         tableName: realTableName,
@@ -494,7 +494,7 @@ export function useFormItems(props, onlineFormRef) {
       if (formData.id) {
         param['dataId'] = formData.id;
       }
-      //console.log("唯一校验---》",param)
+      //console.log("Kiểm chứng tính duy nhất---》",param)
       duplicateCheck(param)
         .then((res) => {
           if (res.success) {
@@ -510,7 +510,7 @@ export function useFormItems(props, onlineFormRef) {
   }
 
   /**
-   * 有些数据是数组格式的 强转成字符串
+   * Một số dữ liệu ở định dạng mảng Ép chuyển thành chuỗi
    */
   function changeDataIfArray2String(data) {
     Object.keys(data).map((k) => {
@@ -545,12 +545,12 @@ export function useFormItems(props, onlineFormRef) {
 }
 
 /**
- * 处理online子表 jvxeTable的列配置信息
+ * Xử lýonlinebảng con jvxeTablethông tin cấu hình cột của
  */
 export function useOnlineVxeTableColumns(subInfo, callback?){
   const uploadColumnMinWidth = 180;
   const uploadColumnTypes = ['image', 'file'];
-  // 新旧jvxetable 列的类型不一致
+  // mới và cũjvxetable Loại của các cột không nhất quán
   const vxeTypeMap = {
     inputNumber: 'input-number',
     sel_depart: 'depart-select',
@@ -561,14 +561,14 @@ export function useOnlineVxeTableColumns(subInfo, callback?){
     'select-dict-search': 'selectDictSearch',
   };
   
-  //一对多子表如果为单选按钮改为下拉框
+  //bảng con một-nhiều nếu là nút radio thì đổi thành dropdown
   subInfo.columns.forEach((column) => {
     if (column.type === 'radio') {
       column.type = 'select';
     } else if (vxeTypeMap[column.type]) {
       const originalType = column.type;
       column.type = vxeTypeMap[originalType];
-      // Online数字字段的小数位数传递给JVxeTable，确保行编辑与弹窗编辑的精度处理一致
+      // OnlineSố chữ số thập phân của trường số được truyền choJVxeTable, bảo đảm xử lý độ chính xác của chỉnh sửa hàng và chỉnh sửa popup nhất quán
       if (originalType === 'inputNumber' && typeof column.dbPointLength === 'number') {
         column.props = {
           ...(column.props ?? {}),
@@ -578,7 +578,7 @@ export function useOnlineVxeTableColumns(subInfo, callback?){
     } else if (column.type === 'popup') {
       handleSubPopup(column);
     } else if (column.type === 'popup_dict') {
-      // update-begin--author:liaozhiyang---date:20260507---for：【issues/7617】vxetable子表支持popup字典
+      // update-begin--author:liaozhiyang---date:20260507---for：【issues/7617】vxetableBảng con hỗ trợpopuptừ điển
       const { dictTable, dictCode, dictText } = column;
       column.fieldConfig = `${dictTable},${dictText ?? ''},${dictCode ?? ''}`;
       column.type = 'popupDict';
@@ -591,35 +591,35 @@ export function useOnlineVxeTableColumns(subInfo, callback?){
             column.multi = false;
           }
         } catch (e) {
-          console.log('子表获取popupdict的扩展配置出现错误', e);
+          console.log('Bảng con lấypopupdictCấu hình mở rộng của xuất hiện lỗi', e);
         }
       }
-      // update-end--author:liaozhiyang---date:20260507---for：【issues/7617】vxetable子表支持popup字典
+      // update-end--author:liaozhiyang---date:20260507---for：【issues/7617】vxetableBảng con hỗ trợpopuptừ điển
     } else if (column.type === 'link_table') {
       handleSubLinkTable(column, subInfo.columns);
     } else if (column.type === 'link_table_field') {
-      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
+      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
       column.type = 'input';
       column.flag = 'link-table-field';
       column.props = {
         ...(column.props ?? {}),
         disabled: true,
       };
-      // update-end--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
+      // update-end--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
     }
-    // 部门树选择组件需要设置 父子节点不关联
+    // Component chọn cây phòng ban cần thiết lập Nút cha và nút con không liên kết
     if (column.type === 'depart-select') {
       column['checkStrictly'] = true;
     }
-    // 子表用户选择 控制是否多选
+    // Lựa chọn người dùng trong bảng con Kiểm soát có chọn nhiều hay không
     if (column.type === 'user-select') {
       handleSubUserSelect(column);
     }
     if (column.type === 'pca') {
       column.width = '230px';
     }
-    // update-begin--author:liaozhiyang---date:20260413---for:【issues/7633】online子表支持分类字典树，自定义树
-    // 自定义树
+    // update-begin--author:liaozhiyang---date:20260413---for:【issues/7633】onlineBảng con hỗ trợ cây từ điển phân loại, cây tùy chỉnh
+    // Cây tùy chỉnh
     if (column.type === 'sel_tree') {
       const { dictTable, dictCode, dictText } = column;
       const [id, pid, name, child] = dictText.split(',');
@@ -632,31 +632,31 @@ export function useOnlineVxeTableColumns(subInfo, callback?){
       delete column.dictCode;
       delete column.dictTable;
     }
-    // 分类字典书
+    // Cây từ điển phân loại
     if (column.type === 'cat_tree') {
        const { dictCode } = column;
       column.type = 'cat-tree';
       column.pcode = dictCode ?? '0';
       delete column.dictCode;
     }
-    // update-end--author:liaozhiyang---date:20260413---for:【issues/7633】online子表支持分类字典树，自定义树
-    //update-begin-author:taoyan date:2022-4-24 for: VUEN-855 对多子表 文件、图片右侧少个边框
-    // 图片、附件列需要为上传图标、按钮文字和单元格内边距预留空间，避免内容被裁剪
+    // update-end--author:liaozhiyang---date:20260413---for:【issues/7633】onlineBảng con hỗ trợ cây từ điển phân loại, cây tùy chỉnh
+    //update-begin-author:taoyan date:2022-4-24 for: VUEN-855 Bảng con quan hệ đối-nhiều Tệp, hình ảnh phía bên phải thiếu một đường viền
+    // Cột hình ảnh, tệp đính kèm cần chừa không gian cho biểu tượng tải lên, chữ trên nút và lề trong của ô, tránh nội dung bị cắt xén
     const columnWidth = Number.parseFloat(column.width);
     if (uploadColumnTypes.includes(column.type) && columnWidth > 0 && columnWidth < uploadColumnMinWidth) {
       column.width = `${uploadColumnMinWidth}px`;
     }
-    //如果没有宽度 默认设置一个宽度
+    //Nếu không có độ rộng Mặc định thiết lập một độ rộng
     if (!column.width) {
       column.width = '200px';
     }
     if(callback){
       callback(column)
     }
-    //update-end-author:taoyan date:2022-4-24 for: VUEN-855 对多子表 文件、图片右侧少个边框
+    //update-end-author:taoyan date:2022-4-24 for: VUEN-855 Bảng con quan hệ đối-nhiều Tệp, hình ảnh phía bên phải thiếu một đường viền
   });
 
-  // 子表popup特殊处理
+  // bảng conpopupXử lý đặc biệt
   function handleSubPopup(column) {
     let { destFields, orgFields } = column;
     let fieldConfig: any[] = [];
@@ -674,7 +674,7 @@ export function useOnlineVxeTableColumns(subInfo, callback?){
     column.fieldConfig = fieldConfig;
   }
 
-  // 子表 用户选择特殊处理
+  // bảng con Xử lý đặc biệt cho lựa chọn của người dùng
   function handleSubUserSelect(column) {
     let str = column.fieldExtendJson;
     let isRadioSelection = false;
@@ -685,14 +685,14 @@ export function useOnlineVxeTableColumns(subInfo, callback?){
           isRadioSelection = true;
         }
       } catch (e) {
-        console.log('子表获取用户组件的扩展配置出现错误', e);
+        console.log('Bảng con lấy cấu hình mở rộng của component người dùng xảy ra lỗi', e);
       }
     }
     column.isRadioSelection = isRadioSelection;
   }
   /**
    * 20260317
-   * 【QQYUN-9441】online一对多加上关联记录和他表字段
+   * 【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
    * liaozhiang
    * */
   function handleSubLinkTable(column, columns) {
@@ -718,7 +718,7 @@ export function useOnlineVxeTableColumns(subInfo, callback?){
           column.multi = true;
         }
       } catch (e) {
-        console.log('子表获取关联记录组件的扩展配置出现错误', e);
+        console.log('Bảng con lấy cấu hình mở rộng của component bản ghi liên kết xảy ra lỗi', e);
       }
     }
     if (!column.width || column.width === '200px') {
@@ -729,43 +729,43 @@ export function useOnlineVxeTableColumns(subInfo, callback?){
 }
 
 /***
- * 表单上下文
+ * Ngữ cảnh biểu mẫu
  */
 export function useOnlineFormContext(props) {
   let that = {};
   const CONTEXT_DESCRIPTION = {
-      addSubRows: '<m> 一对多子表，新增自定义行',
-      changeOptions: '<m> 改变下拉框选项',
-      clearSubRows: '<m> 清空一对多子表行',
-      clearThenAddRows: '<m> 清空一对多子表行，然后新增自定义行',
-      executeMainFillRule: '<m> 刷新主表的增值规制值',
-      executeSubFillRule: '<m> 刷新子表的增值规制值',
-      getFieldsValue: '<m> 获取表单控件的值',
-      getSubTableInstance: '<m> 获取子表实例',
-      isUpdate: '<p> 判断是否为编辑模式',
-      loading: '<p> 页面加载状态',
-      onlineFormRef: '<p> 当前表单ref对象',
-      refMap: '<p> 子表ref对象map',
-      setFieldsValue: '<m> 设置表单控件的值',
-      sh: '<p> 表单控件的显示隐藏状态',
-      subActiveKey: '<p> 子表激活tab，对应子表表名',
-      subFormHeight: '<p> 一对一子表表单高度',
-      submitFlowFlag: '<p> 是否提交流程状态',
-      subTableHeight: '<p> 一对多子表表格高度',
-      tableName: '<p> 当前表名',
-      triggleChangeValues: '<m> 修改多个表单值',
-      triggleChangeValue: '<m> 修改表单值',
-      updateSchema: '<m> 修改表单控件配置',
-      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8350】js增强根据主表限制子表options
-      changeSubTableOptions: '<m> 改变一对多子表下拉框选项',
-      changeSubFormbleOptions: '<m> 改变一对一子表下拉框选项',
-      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8350】js增强根据主表限制子表options
-      // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-5806】js增强改变下拉搜索options
-      changeRemoteOptions:'<m> 改变远程下拉框选项',
-     // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-5806】js增强改变下拉搜索options
-     // update-begin--author:liaozhiyang---date:20240705---for：【TV360X-1754】js增强-提交表单并且发起流程
-     submitFormAndFlow: '<m> 提交表单且发起流程',
-    // update-end--author:liaozhiyang---date:20240705---for：【TV360X-1754】js增强-提交表单并且发起流程
+      addSubRows: '<m> bảng con một-nhiều, thêm hàng tùy chỉnh',
+      changeOptions: '<m> Thay đổi tùy chọn ô dropdown',
+      clearSubRows: '<m> Xóa sạch các hàng của bảng con một-nhiều',
+      clearThenAddRows: '<m> Xóa sạch các hàng của bảng con một-nhiều, sau đó thêm hàng tùy chỉnh',
+      executeMainFillRule: '<m> Làm mới giá trị quy tắc gia tăng của bảng chính',
+      executeSubFillRule: '<m> Làm mới giá trị quy tắc gia tăng của bảng con',
+      getFieldsValue: '<m> Lấy giá trị của control biểu mẫu',
+      getSubTableInstance: '<m> Lấy instance của bảng con',
+      isUpdate: '<p> Phán đoán có phải chế độ chỉnh sửa hay không',
+      loading: '<p> Trạng thái tải trang',
+      onlineFormRef: '<p> Biểu mẫu hiện tạirefđối tượng',
+      refMap: '<p> bảng conrefđối tượngmap',
+      setFieldsValue: '<m> Thiết lập giá trị của control biểu mẫu',
+      sh: '<p> Trạng thái hiển thị/ẩn của control biểu mẫu',
+      subActiveKey: '<p> Kích hoạt bảng contab, tương ứng tên bảng của bảng con',
+      subFormHeight: '<p> chiều cao biểu mẫu bảng con một-một',
+      submitFlowFlag: '<p> Có gửi trạng thái quy trình hay không',
+      subTableHeight: '<p> chiều cao bảng của bảng con một-nhiều',
+      tableName: '<p> Tên bảng hiện tại',
+      triggleChangeValues: '<m> Sửa nhiều giá trị biểu mẫu',
+      triggleChangeValue: '<m> Sửa giá trị biểu mẫu',
+      updateSchema: '<m> Sửa cấu hình control của biểu mẫu',
+      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8350】jsPhần tăng cường giới hạn bảng con theo bảng chínhoptions
+      changeSubTableOptions: '<m> Thay đổi tùy chọn ô dropdown của bảng con một-nhiều',
+      changeSubFormbleOptions: '<m> Thay đổi tùy chọn ô dropdown của bảng con một-một',
+      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8350】jsPhần tăng cường giới hạn bảng con theo bảng chínhoptions
+      // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-5806】jsPhần tăng cường thay đổi tìm kiếm dropdownoptions
+      changeRemoteOptions:'<m> Thay đổi tùy chọn ô dropdown từ xa',
+     // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-5806】jsPhần tăng cường thay đổi tìm kiếm dropdownoptions
+     // update-begin--author:liaozhiyang---date:20240705---for：【TV360X-1754】jsTăng cường-Gửi biểu mẫu đồng thời khởi tạo quy trình
+     submitFormAndFlow: '<m> Gửi biểu mẫu và khởi tạo quy trình',
+    // update-end--author:liaozhiyang---date:20240705---for：【TV360X-1754】jsTăng cường-Gửi biểu mẫu đồng thời khởi tạo quy trình
   };
   const onlineFormContext = new Proxy(CONTEXT_DESCRIPTION, {
     get(_target: any, prop: string): any {
@@ -785,7 +785,7 @@ export function useOnlineFormContext(props) {
   addObject2Context('$nextTick', nextTick);
   addObject2Context('addObject2Context', addObject2Context);
 
-  // 自定义按钮
+  // Nút tùy chỉnh
   const createBIButtonCfg = (btnKey, defBtn) => computed(() => {
     const {buttonSwitch} = props
     const cfg = {
@@ -801,10 +801,10 @@ export function useOnlineFormContext(props) {
     return cgBIBtnMap?.[btnKey] ? cgBIBtnMap[btnKey] : cfg
   })
 
-  const getSubAddBtnCfg = createBIButtonCfg('form_sub_add', ['ant-design:plus-outlined', '新增'])
-  const getSubRemoveBtnCfg = createBIButtonCfg('form_sub_batch_delete', ['ant-design:minus-outlined', '删除'])
-  const getSubOpenAddBtnCfg = createBIButtonCfg('form_sub_open_add', ['ant-design:form-outlined', '新增'])
-  const getSubOpenEditBtnCfg = createBIButtonCfg('form_sub_open_edit', ['ant-design:form-outlined', '弹窗编辑'])
+  const getSubAddBtnCfg = createBIButtonCfg('form_sub_add', ['ant-design:plus-outlined', 'Thêm mới'])
+  const getSubRemoveBtnCfg = createBIButtonCfg('form_sub_batch_delete', ['ant-design:minus-outlined', 'Xóa'])
+  const getSubOpenAddBtnCfg = createBIButtonCfg('form_sub_open_add', ['ant-design:form-outlined', 'Thêm mới'])
+  const getSubOpenEditBtnCfg = createBIButtonCfg('form_sub_open_edit', ['ant-design:form-outlined', 'Chỉnh sửa bằng popup'])
 
   return {
     onlineFormContext,
@@ -819,7 +819,7 @@ export function useOnlineFormContext(props) {
 }
 
 /**
- * 找联动组件
+ * Tìm component liên động
  * @param properties
  */
 export function handleLinkDown(item, field) {
@@ -877,7 +877,7 @@ export function handleLinkDown(item, field) {
 }
 
 /**
- * 获取 字段的索引
+ * Lấy Chỉ mục của trường
  * @param arr
  * @param key
  */
@@ -894,7 +894,7 @@ export function getFieldIndex(arr: IFormSchema[], key: string) {
 }
 
 /**
- * 轮询获取 ref 对象的值，获取为true或是真实存在 就执行下一步逻辑，可用于判断状态或组件的加载是否完成
+ * Lấy bằng vòng thăm dò (polling) ref Giá trị của đối tượng, lấy thànhtruehoặc thực sự tồn tại thì thực thi logic bước tiếp theo, có thể dùng để phán đoán trạng thái hoặc việc tải của component đã hoàn tất hay chưa
  * @param componentRef
  */
 export function getRefPromise(componentRef) {
@@ -918,9 +918,9 @@ function clearObj(obj) {
   });
 }
 
-//update-begin-author:taoyan date:2022-6-1 for:  VUEN-1162 子表按钮没控制
+//update-begin-author:taoyan date:2022-6-1 for:  VUEN-1162 Nút của bảng con không được kiểm soát
 /**
- * 记录子表按钮权限-隐藏的按钮编码
+ * Ghi lại quyền nút của bảng con-Mã nút đã ẩn
  */
 const permissionStore = usePermissionStore();
 function handleSubTableButtonAuth(tableName, item) {
@@ -931,12 +931,12 @@ function handleSubTableButtonAuth(tableName, item) {
   }
   permissionStore.setOnlineSubTableAuth(code, arr);
 }
-//update-end-author:taoyan date:2022-6-1 for:  VUEN-1162 子表按钮没控制
+//update-end-author:taoyan date:2022-6-1 for:  VUEN-1162 Nút của bảng con không được kiểm soát
 
 
 
 /**
- * 获取 DetailFormSchema[online用]
+ * Lấy DetailFormSchema[onlineDùng]
  */
 export function getDetailFormSchemas(props) {
   const detailFormSchemas = ref<DetailFormSchema[]>([]);
@@ -950,11 +950,11 @@ export function getDetailFormSchemas(props) {
   const { getIsMobile } = useAppInject();
   const formSpan = computed(() => {
     let temp = props.formTemplate;
-    // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-82】详情页移动端只显示一列
+    // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-82】Trang chi tiết phía di động chỉ hiển thị một cột
     if (getIsMobile.value) {
       return 24;
     }
-    // update-end--author:liaozhiyang---date:20240522---for：【TV360X-82】详情页移动端只显示一列
+    // update-end--author:liaozhiyang---date:20240522---for：【TV360X-82】Trang chi tiết phía di động chỉ hiển thị một cột
     if (temp == '2') {
       return 12;
     } else if (temp == '3') {
@@ -972,19 +972,19 @@ export function getDetailFormSchemas(props) {
     console.log('111', properties);
     let arr: DetailFormSchema[] = [];
     let dataSourceObj = {};
-    // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+    // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
     const tableLinkInfo: any = {};
-    // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+    // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
     Object.keys(properties).map((key) => {
       const item = properties[key];
-      // uiSchema 无用
+      // uiSchema Vô dụng
       //const uiItem = this.uiSchema[key];// method、formTemplate、url
       if (item.view == 'tab') {
         hasSubTable.value = true;
         let temp: OnlSubTab = {
           key,
           formTemplate: Number(item.formTemplate || 1),
-          // 这个foreignKey是主表的字段
+          // Cái nàyforeignKeylà trường của bảng chính
           foreignKey: item['foreignKey'],
           describe: item.describe,
           relationType: item.relationType,
@@ -1022,11 +1022,11 @@ export function getDetailFormSchemas(props) {
             }
           }
         } else if (item.view == 'hidden') {
-          //隐藏的不处理
+          //Cái đã ẩn không xử lý
         } else {
           let tempIndex = getFieldIndex(arr, key);
           if (tempIndex == -1) {
-            // update-begin--author:liusq---date:20261102---for：online树表详情顶级节点的父节点显示0，带上pidComponent/pidValue用于识别树表父节点字段
+            // update-begin--author:liusq---date:20261102---for：onlineHiển thị nút cha của nút cấp cao nhất trong chi tiết bảng cây0, mang theopidComponent/pidValueDùng để nhận diện trường nút cha của bảng cây
             let temp = Object.assign(
               {
                 field: key,
@@ -1034,7 +1034,7 @@ export function getDetailFormSchemas(props) {
               },
               pick(item, ['view', 'order', 'fieldExtendJson', 'dictTable', 'dictText', 'dictCode', 'dict', 'pidComponent', 'pidValue'])
             );
-            // update-end--author:liusq---date:20261102---for：online树表详情顶级节点的父节点显示0，带上pidComponent/pidValue用于识别树表父节点字段
+            // update-end--author:liusq---date:20261102---for：onlineHiển thị nút cha của nút cấp cao nhất trong chi tiết bảng cây0, mang theopidComponent/pidValueDùng để nhận diện trường nút cha của bảng cây
             if (item.view == 'file') {
               temp['span'] = 24;
               temp['isFile'] = true;
@@ -1044,7 +1044,7 @@ export function getDetailFormSchemas(props) {
               temp['isImage'] = true;
             }
             if (item.view == 'link_table') {
-              // 判断是不是卡片
+              // Phán đoán có phải thẻ (card) hay không
               if(item.fieldExtendJson){
                 try{
                   let json = JSON.parse(item.fieldExtendJson);
@@ -1055,13 +1055,13 @@ export function getDetailFormSchemas(props) {
                   if(json.multiSelect==true){
                     temp['multi'] = true;
                   }
-                  // update-begin--author:liaozhiyang---date:20260811---for:【LHZP-4】online详情关联记录加上图片显示及文件下载及图片预览
+                  // update-begin--author:liaozhiyang---date:20260811---for:【LHZP-4】onlineBản ghi liên kết của chi tiết thêm hiển thị hình ảnh, tải tệp xuống và xem trước hình ảnh
                   if(json.imageField){
                     temp['imageField'] = json.imageField;
                   }
-                  // update-end--author:liaozhiyang---date:20260811---for:【LHZP-4】online详情关联记录加上图片显示及文件下载及图片预览
+                  // update-end--author:liaozhiyang---date:20260811---for:【LHZP-4】onlineBản ghi liên kết của chi tiết thêm hiển thị hình ảnh, tải tệp xuống và xem trước hình ảnh
                 }catch (e) {
-                  console.error('解析json字符串出错', item.fieldExtendJson)
+                  console.error('Phân tích (parse)jsonChuỗi ký tự xảy ra lỗi', item.fieldExtendJson)
                 }
               }
             }
@@ -1070,30 +1070,30 @@ export function getDetailFormSchemas(props) {
               temp['span'] = 24;
             }
             arr.push(temp);
-            // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+            // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
             if (item.view === 'link_table_field') {
               if (!tableLinkInfo[item.dictTable]) {
                 tableLinkInfo[item.dictTable] = [];
               }
               tableLinkInfo[item.dictTable].push(`${key},${item.dictText}`);
             }
-            // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+            // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
           }
         }
       }
     });
-    // 1.对arr排序
+    // 1.Đối vớiarrSắp xếp
     arr.sort(function (a, b) {
       return a.order - b.order;
     });
-    // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+    // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
     arr.forEach((item) => {
       if (item.view === 'link_table' && tableLinkInfo[item.field]) {
         item['linkFields'] = tableLinkInfo[item.field];
       }
     });
-    // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
-    // 2.对子表排序
+    // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
+    // 2.Sắp xếp cho bảng con
     subInfo.sort(function (a, b) {
       return a.order - b.order;
     });

@@ -7,25 +7,25 @@ import weekOfYear from 'dayjs/plugin/weekOfYear';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 dayjs.extend(weekOfYear);
 dayjs.extend(quarterOfYear);
-// 获取所有用户自定义表达式的Key
+// Lấy của mọi biểu thức tùy chỉnh của người dùngKey
 const ceKeys = Object.keys(CustomExpression);
-// 将key用逗号拼接，可以拼接成方法参数，例：a,b,c --> function(a,b,c){}
+// sẽkeyNối bằng dấu phẩy, có thể nối thành tham số phương thức, ví dụ:a,b,c --> function(a,b,c){}
 const ceJoin = ceKeys.join(',');
-// 将用户自定义的表达式按key的顺序放到数组中，可以使用 apply 传递给方法直接调用
+// Lấy biểu thức tùy chỉnh của người dùng theokeyĐặt thứ tự của vào mảng, có thể sử dụng apply Truyền cho phương thức để gọi trực tiếp
 const $CE$ = ceKeys.map((key) => CustomExpression[key]);
 
-/** 普通规则表达式 #{...} */
+/** Biểu thức quy tắc thông thường #{...} */
 const normalRegExp = /#{([^}]+)?}/g;
-/** 用户自定义规则表达式 {{...}} */
+/** Biểu thức quy tắc tùy chỉnh của người dùng {{...}} */
 const customRegExp = /{{([^}]+)?}}/g;
-/** 填值规则表达式 ${...} */
+/** Biểu thức quy tắc điền giá trị ${...} */
 const fillRuleRegExp = /\${([^}]+)?}/g;
 
-/** action 类型 */
+/** action Loại */
 export const ACTION_TYPES = { ADD: 'add', EDIT: 'edit', DETAIL: 'detail', RELOAD: 'reload' };
 
 /**
- * 将主表/一对一子表 默认值配置信息暂存
+ * Đưa bảng chính/bảng con một-một Lưu tạm thông tin cấu hình giá trị mặc định
  * @param field
  * @param item
  * @param config
@@ -33,7 +33,7 @@ export const ACTION_TYPES = { ADD: 'add', EDIT: 'edit', DETAIL: 'detail', RELOAD
 export function initDefValueConfig(field, item, config) {
   if (hasEffectiveValue(item.defVal)) {
     const obj = { field: field, type: item.type, value: item.defVal, view: item.view, fieldExtendJson: item.fieldExtendJson }
-    // 避免重复添加
+    // Tránh thêm trùng lặp
     const index = config.findIndex((c) => c.field === field);
     if (index === -1) {
       config.push(obj);
@@ -44,7 +44,7 @@ export function initDefValueConfig(field, item, config) {
 }
 
 /**
- * 将一对多子表 默认值配置信息暂存
+ * Đưa bảng con một-nhiều Lưu tạm thông tin cấu hình giá trị mặc định
  * @param item
  * @param config
  */
@@ -55,10 +55,10 @@ export function initSubTableDefValueConfig(item, config) {
 }
 
 /**
- * 加载form组件默认值-仅用于新增页面
- * @param properties 字段配置
- * @param callback 回调传值
- * @param formData 表单值 
+ * TảiformGiá trị mặc định của component-Chỉ dùng cho trang thêm mới
+ * @param properties Cấu hình trường
+ * @param callback Callback truyền giá trị
+ * @param formData Giá trị biểu mẫu 
  */
 export async function loadFormFieldsDefVal(properties, callback, formData?) {
   if (Array.isArray(properties) && properties.length > 0) {
@@ -66,15 +66,15 @@ export async function loadFormFieldsDefVal(properties, callback, formData?) {
     for (let prop of properties) {
       let { value, type, field } = prop;
       value = await handleDefaultValue(value, ACTION_TYPES.ADD, formData||{});
-      // 处理数字类型，如果type=number并且value有值
+      // Xử lý loại số, nếutype=numberđồng thờivalueCó giá trị
       if ('number' === type && value) {
-        // parseFloat() 可以直接处理字符串、整数、小数、null和undefined，
-        // 非数字类型直接返回NaN，不必担心报错
+        // parseFloat() Có thể xử lý trực tiếp chuỗi, số nguyên, số thập phân,nullvàundefined，
+        // Loại không phải số thì trả về trực tiếpNaN, không cần lo báo lỗi
         value = Number.parseFloat(value);
       }
-      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-321】日期组件(date)中设置了年，年月，年周，年季度等格式的默认值需要转化成YYYY-MM-DD
+      // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-321】Component ngày(date)giá trị mặc định của các định dạng như năm, năm-tháng, năm-tuần, năm-quý đã thiết lập trong đó cần chuyển đổi thànhYYYY-MM-DD
       value = transformDefValDate(prop, value);
-      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-321】日期组件(date)中设置了年，年月，年周，年季度等格式的默认值需要转化成YYYY-MM-DD
+      // update-end--author:liaozhiyang---date:20240517---for：【TV360X-321】Component ngày(date)giá trị mặc định của các định dạng như năm, năm-tháng, năm-tuần, năm-quý đã thiết lập trong đó cần chuyển đổi thànhYYYY-MM-DD
       formValues[field] = value;
     }
     callback(formValues);
@@ -84,7 +84,7 @@ export async function loadFormFieldsDefVal(properties, callback, formData?) {
 /**
  * 2024-05-22
  * liaozhiyang
- * 日期组件(date)中设置了年，年月，年周，年季度等格式的默认值需要转化成YYYY-MM-DD
+ * Component ngày(date)giá trị mặc định của các định dạng như năm, năm-tháng, năm-tuần, năm-quý đã thiết lập trong đó cần chuyển đổi thànhYYYY-MM-DD
  */
 function transformDefValDate(prop, value, mode?) {
   const { type, field, view, fieldExtendJson } = prop;
@@ -92,7 +92,7 @@ function transformDefValDate(prop, value, mode?) {
     const extendJson = JSON.parse(fieldExtendJson);
     const { picker } = extendJson;
     if (picker && picker != 'default' && value) {
-      // 范围查询默认值，形如 "2023,2024" / "2023-01,2023-12" / "2023-01-01,2023-12-31"
+      // Giá trị mặc định của truy vấn theo phạm vi, dạng như "2023,2024" / "2023-01,2023-12" / "2023-01-01,2023-12-31"
       if (mode === 'group' && typeof value === 'string' && value.indexOf(',') !== -1) {
         return value
           .split(',')
@@ -107,35 +107,35 @@ function transformDefValDate(prop, value, mode?) {
 }
 
 /**
- * 把年 / 月 / 周 / 季度格式的字符串转换为 YYYY-MM-DD
+ * Đưa năm / Tháng / Tuần / Chuyển đổi chuỗi định dạng quý thành YYYY-MM-DD
  * @param picker year | month | week | quarter
- * @param value  例如 "2023" / "2023-07" / "2023-19周" / "2024-Q4"
+ * @param value  Ví dụ "2023" / "2023-07" / "2023-19Tuần" / "2024-Q4"
  */
 function transformPickerValue(picker, value) {
   try {
     if (picker === 'year') {
-      // 年 (2023)
+      // Năm (2023)
       const data = value.split('-');
       const y = data[0];
       return dayjs().year(y).format('YYYY-MM-DD');
     }
     if (picker === 'month') {
-      // 年 - 月 (2023-07)，dayjs.month 是 0 索引，7 月对应索引 6
+      // Năm - Tháng (2023-07)，dayjs.month là 0 Chỉ mục,7 Chỉ mục tương ứng của tháng 6
       const data = value.split('-');
       const y = data[0];
       const m = +data[1] - 1;
       return dayjs().year(y).month(m).format('YYYY-MM-DD');
     }
     if (picker === 'week') {
-      // 年 - 周 (2023-19周)，兼容无"周"后缀
+      // Năm - Tuần (2023-19Tuần), tương thích không có"Tuần"Hậu tố
       const data = value.split('-');
       const y = data[0];
-      const matchResult = data[1].match(/^(\d+)周?$/);
+      const matchResult = data[1].match(/^(\d+)Tuần?$/);
       const w = matchResult ? matchResult[1] : data[1];
       return dayjs().year(y).week(w).format('YYYY-MM-DD');
     }
     if (picker === 'quarter') {
-      // 年 - 季度 (2024-Q4)
+      // Năm - Quý (2024-Q4)
       const data = value.split('-');
       const y = data[0];
       const matchResult = data[1].match(/^[Qq](\d)$/);
@@ -153,7 +153,7 @@ export async function loadOneFieldDefVal(field, item, formValues) {
   if (hasEffectiveValue(defVal)) {
     let value = await handleDefaultValue(defVal, ACTION_TYPES.ADD, {});
     if ('number' === type && value) {
-      // update-begin--author:liaozhiyang---date:20240618---for：online普通查询默认值范围查询不好使
+      // update-begin--author:liaozhiyang---date:20240618---for：onlineTruy vấn theo phạm vi với giá trị mặc định của truy vấn thông thường không hoạt động
       if (item.mode == 'group' && typeof value === 'string' && value.indexOf(',') != -1) {
         const arr = value.split(',');
         value = [];
@@ -166,7 +166,7 @@ export async function loadOneFieldDefVal(field, item, formValues) {
       } else {
         value = Number.parseFloat(value);
       }
-      // update-end--author:liaozhiyang---date:20240618---for：online普通查询默认值范围查询不好使
+      // update-end--author:liaozhiyang---date:20240618---for：onlineTruy vấn theo phạm vi với giá trị mặc định của truy vấn thông thường không hoạt động
     }
     value = transformDefValDate(item, value, item.mode);
     formValues[field] = value;
@@ -174,7 +174,7 @@ export async function loadOneFieldDefVal(field, item, formValues) {
 }
 
 /**
- * 判断给定的值是不是有效的
+ * Phán đoán giá trị cho trước có hợp lệ hay không
  */
 function hasEffectiveValue(val) {
   if (val || val === 0) {
@@ -183,7 +183,7 @@ function hasEffectiveValue(val) {
   return false;
 }
 
-/** 加载JEditableTable组件默认值 */
+/** TảiJEditableTableGiá trị mặc định của component */
 export function loadFieldDefValForSubTable({ subForms, subTable, row, action, getFormData }) {
   if (subTable && Array.isArray(subTable.columns) && subTable.columns.length > 0) {
     subTable.columns.forEach(async (column) => {
@@ -195,10 +195,10 @@ export function loadFieldDefValForSubTable({ subForms, subTable, row, action, ge
           if (subForms.form) {
             subForms.form.setFieldsValue({ [key]: value });
           } else {
-            // update-begin---author:sunjianlei  Date:20200725 for：online功能测试，行操作切换成新的行编辑-----------
+            // update-begin---author:sunjianlei  Date:20200725 for：onlineKiểm thử chức năng, thao tác hàng chuyển thành chỉnh sửa hàng mới-----------
             let v = [{ rowKey: row.id, values: { [key]: value } }];
             (subForms.jvt || subForms.jet).setValues(v);
-            // update-end---author:sunjianlei    Date:20200725 for：online功能测试，行操作切换成新的行编辑------------
+            // update-end---author:sunjianlei    Date:20200725 for：onlineKiểm thử chức năng, thao tác hàng chuyển thành chỉnh sửa hàng mới------------
           }
         },
         getFormData
@@ -209,7 +209,7 @@ export function loadFieldDefValForSubTable({ subForms, subTable, row, action, ge
 
 async function eachHandler(defVal, action, callback, getFormData) {
   if (defVal != null) {
-    // 检查类型，如果类型错误则不继续运行
+    // Kiểm tra loại, nếu loại sai thì không tiếp tục chạy
     if (checkExpressionType(defVal)) {
       let value = await getDefaultValue(defVal, action, getFormData);
       if (value != null) {
@@ -217,21 +217,21 @@ async function eachHandler(defVal, action, callback, getFormData) {
         return value;
       }
     } else {
-      // 不合法的表达式直接返回不解析
+      // Biểu thức không hợp lệ thì trả về trực tiếp, không phân tích
       callback(defVal);
     }
   }
 }
 
 /**
- * 处理默认值
+ * Xử lý giá trị mặc định
  * @param defVal
  * @param action
  * @param getFormData
  */
 async function handleDefaultValue(defVal, action, getFormData) {
   if (defVal != null) {
-    // 检查类型，如果类型错误则不继续运行
+    // Kiểm tra loại, nếu loại sai thì không tiếp tục chạy
     if (checkExpressionType(defVal)) {
       let value = await getDefaultValue(defVal, action, getFormData);
       if (value != null) {
@@ -243,33 +243,33 @@ async function handleDefaultValue(defVal, action, getFormData) {
 }
 
 /**
- * 检查表达式类型是否合法，规则：
- * 1、填值规则表达式不能和其他表达式混用
- * 2、每次只能填写一个填值规则表达式
- * 3、普通表达式和用户自定义表达式可以混用
+ * Kiểm tra loại biểu thức có hợp pháp hay không, quy tắc:
+ * 1、biểu thức quy tắc điền giá trị không được dùng lẫn với các biểu thức khác
+ * 2、mỗi lần chỉ được điền một biểu thức quy tắc điền giá trị
+ * 3、biểu thức thông thường và biểu thức tùy chỉnh của người dùng có thể dùng lẫn nhau
  */
 export function checkExpressionType(defVal) {
-  // 获取各个表达式的数量
+  // Lấy số lượng của từng biểu thức
   let normalCount = 0,
     customCount = 0,
     fillRuleCount = 0;
   defVal.replace(fillRuleRegExp, () => fillRuleCount++);
   if (fillRuleCount > 1) {
-    logWarn(`表达式[${defVal}]不合法：只能同时填写一个填值规则表达式！`);
+    logWarn(`Biểu thức[${defVal}]Không hợp lệ: chỉ được điền đồng thời một biểu thức quy tắc điền giá trị!`);
     return false;
   }
   defVal.replace(normalRegExp, () => normalCount++);
   defVal.replace(customRegExp, () => customCount++);
-  // 除填值规则外其他规则的数量
+  // Số lượng các quy tắc khác ngoài quy tắc điền giá trị
   let fillRuleOtherCount = normalCount + customCount;
   if (fillRuleCount > 0 && fillRuleOtherCount > 0) {
-    logWarn(`表达式[${defVal}]不合法：填值规则表达式不能和其他表达式混用！`);
+    logWarn(`Biểu thức[${defVal}]Không hợp lệ: biểu thức quy tắc điền giá trị không được dùng lẫn với các biểu thức khác!`);
     return false;
   }
   return true;
 }
 
-/** 获取所有匹配的表达式 */
+/** Lấy mọi biểu thức khớp */
 function getRegExpMap(text, exp) {
   let map = new Map();
   text.replace(exp, function (match, param) {
@@ -279,21 +279,21 @@ function getRegExpMap(text, exp) {
   return map;
 }
 
-/** 获取默认值，可以执行表达式，可以执行用户自定义方法，可以异步获取用户信息等 */
+/** Lấy giá trị mặc định, có thể thực thi biểu thức, có thể thực thi phương thức tùy chỉnh của người dùng, có thể lấy bất đồng bộ thông tin người dùng, v.v. */
 async function getDefaultValue(defVal, action, getFormData) {
-  // 只有在 add 和 reload 模式下才执行填值规则
+  // Chỉ khi ở add và reload Chỉ ở chế độ này mới thực thi quy tắc điền giá trị
   if (action === ACTION_TYPES.ADD || action === ACTION_TYPES.RELOAD) {
-    // 判断是否是填值规则表达式，如果是就执行填值规则
+    // Phán đoán có phải biểu thức quy tắc điền giá trị hay không, nếu phải thì thực thi quy tắc điền giá trị
     if (fillRuleRegExp.test(defVal)) {
       let arr: any[] = [getFormData];
       return await executeRegExp(defVal, fillRuleRegExp, executeFillRuleExpression, arr);
     }
   }
-  // 只有在 add 模式下才执行其他表达式
+  // Chỉ khi ở add Chỉ ở chế độ này mới thực thi các biểu thức khác
   if (action === ACTION_TYPES.ADD) {
-    // 获取并替换所有常规表达式
+    // Lấy và thay thế mọi biểu thức thông thường
     defVal = await executeRegExp(defVal, normalRegExp, executeNormalExpression);
-    // 获取并替换所有用户自定义表达式
+    // Lấy và thay thế mọi biểu thức tùy chỉnh của người dùng
     defVal = await executeRegExp(defVal, customRegExp, executeCustomExpression);
     return defVal;
   }
@@ -305,7 +305,7 @@ async function executeRegExp(defVal, regExp, execFun, otherParams: any[] = []) {
   for (let origin of map.keys()) {
     let exp = map.get(origin);
     let result = await execFun.apply(null, [exp, origin, ...otherParams]);
-    // 如果只有一个表达式，那么就不替换（因为一旦替换，类型就会被转成String），直接返回执行结果，保证返回的类型不变
+    // Nếu chỉ có một biểu thức, thì không thay thế (vì một khi thay thế, kiểu sẽ bị chuyển thànhString) , trực tiếp trả về kết quả thực thi, bảo đảm loại trả về không thay đổi
     if (origin === defVal) {
       return result;
     }
@@ -314,7 +314,7 @@ async function executeRegExp(defVal, regExp, execFun, otherParams: any[] = []) {
   return defVal;
 }
 
-/** 执行【普通表达式】#{xxx} */
+/** Thực thi 【biểu thức thông thường】#{xxx} */
 async function executeNormalExpression(expression, origin) {
   switch (expression) {
     case 'date':
@@ -324,17 +324,17 @@ async function executeNormalExpression(expression, origin) {
     case 'datetime':
       return dayjs().format('YYYY-MM-DD HH:mm:ss');
     default:
-      // 获取当前登录用户的信息
+      // Lấy thông tin của người dùng đang đăng nhập hiện tại
       let result = getUserInfoByExpression(expression);
       if (result != null) {
         return result;
       }
-      // 没有符合条件的表达式，返回原始值
+      // Không có biểu thức thỏa mãn điều kiện, trả về giá trị gốc
       return origin;
   }
 }
 
-/** 根据表达式获取相应的用户信息 */
+/** Lấy thông tin người dùng tương ứng theo biểu thức */
 function getUserInfoByExpression(expression) {
   const userStore = useUserStore();
   let userInfo = userStore.getUserInfo;
@@ -342,14 +342,14 @@ function getUserInfoByExpression(expression) {
     switch (expression) {
       case 'sysUserId':
         return userInfo.id;
-      // 当前登录用户登录账号
+      // Tài khoản đăng nhập của người dùng đang đăng nhập hiện tại
       case 'sysUserCode':
       case 'sys_user_code':
         return userInfo.username;
-      // 当前登录用户真实名称
+      // Tên thật của người dùng đang đăng nhập hiện tại
       case 'sysUserName':
         return userInfo.realname;
-      // 当前登录用户部门编号
+      // Mã phòng ban của người dùng đang đăng nhập hiện tại
       case 'sysOrgCode':
       case 'sys_org_code':
         return userInfo.orgCode;
@@ -358,23 +358,23 @@ function getUserInfoByExpression(expression) {
   return null;
 }
 
-/** 执行【用户自定义表达式】 {{xxx}} */
+/** Thực thi 【biểu thức tùy chỉnh của người dùng】 {{xxx}} */
 async function executeCustomExpression(expression, origin) {
-  // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
-  // 利用 eval 生成一个方法，这个方法的参数就是用户自定义的所有的表达式
+  // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6390】evalthay thế thànhnew Function, giải quyếtbuildCảnh báo
+  // Sử dụng eval Tạo ra một phương thức, tham số của phương thức này chính là tất cả biểu thức tùy chỉnh của người dùng
   let fn = _eval(`(function (${ceJoin}){ return ${expression} })`);
-  // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
+  // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6390】evalthay thế thànhnew Function, giải quyếtbuildCảnh báo
   try {
-    // 然后调用这个方法，并把表达式传递进去，从而完成表达式的执行
+    // Sau đó gọi phương thức này, đồng thời truyền biểu thức vào, từ đó hoàn thành việc thực thi biểu thức
     return fn.apply(null, $CE$);
   } catch (e) {
-    // 执行失败，输出错误并返回原始值
+    // Thực thi thất bại, xuất lỗi và trả về giá trị gốc
     logError(e);
     return origin;
   }
 }
 
-/** 执行【填值规则表达式】 ${xxx} */
+/** Thực thi 【biểu thức quy tắc điền giá trị】 ${xxx} */
 async function executeFillRuleExpression(expression, origin, getFormData) {
   let formData = {};
   if (typeof getFormData === 'function') {
@@ -382,19 +382,19 @@ async function executeFillRuleExpression(expression, origin, getFormData) {
   }else if(getFormData){
     formData = {...getFormData}
   }
-  // 解析 url 参数
+  // Phân tích (parse) url Tham số
   expression = handleFillRuleQueryString(expression).exp;
   let url = `/sys/fillRule/executeRuleByCode/${expression}`;
   let { success, message, result } = await defHttp.put({ url, params: formData }, { isTransformResponse: false });
   if (success) {
     return result;
   } else {
-    logError(`填值规则（${expression}）执行失败：${message}`);
+    logError(`Quy tắc điền giá trị (${expression}) thực thi thất bại:${message}`);
     return origin;
   }
 }
 
-// 处理填值规则 queryString 参数
+// Xử lý quy tắc điền giá trị queryString Tham số
 export function handleFillRuleQueryString(expression: string) {
   let arr = expression.split('?');
   if (arr.length > 1) {
@@ -405,7 +405,7 @@ export function handleFillRuleQueryString(expression: string) {
     pairs.forEach((pair, idx) => {
       let [key, value] = pair.split('=');
       value = value.trim();
-      // 取出监听的字段，多个用逗号分隔
+      // Lấy ra các trường đang được theo dõi, nhiều trường thì phân tách bằng dấu phẩy
       if (key === 'onl_watch') {
         watchFields = value.split(',');
       } else {
@@ -431,11 +431,11 @@ export function handleFillRuleWatchKeysMap(properties: Recordable[]) {
       if (defVal == null || defVal == '') {
         continue;
       }
-      // 检查类型，如果类型错误则不继续运行
+      // Kiểm tra loại, nếu loại sai thì không tiếp tục chạy
       if (!checkExpressionType(defVal)) {
         continue;
       }
-      // 判断是否是填值规则，如果是就解析填值规则
+      // Phán đoán có phải quy tắc điền giá trị hay không, nếu phải thì phân tích quy tắc điền giá trị
       if (fillRuleRegExp.test(defVal)) {
         let map = getRegExpMap(defVal, fillRuleRegExp);
         for (let origin of map.keys()) {

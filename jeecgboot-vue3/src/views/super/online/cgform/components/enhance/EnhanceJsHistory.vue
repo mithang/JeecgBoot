@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     @register="registerModal"
-    title="JS增强历史记录"
+    title="JSBản ghi lịch sử phần tăng cường"
     :width="1200"
     :maskClosable="false"
     :confirmLoading="confirmLoading"
@@ -14,17 +14,17 @@
           <a-list bordered :dataSource="dataList" :class="'enhance-list'">
             <template #header>
               <div>
-                <a-divider style="margin: 0">保存时间</a-divider>
+                <a-divider style="margin: 0">Thời gian lưu</a-divider>
               </div>
             </template>
             <template #renderItem="{ item }">
               <a-list-item :class="activeIndex === item.index ? 'bg-blue' : ''">
-                <!-- update-begin--author:liaozhiyang---date:20260713---for：【LHZP-235】修复js增强历史版本年份不显示及新增应用 -->
+                <!-- update-begin--author:liaozhiyang---date:20260713---for：【LHZP-235】Khắc phụcjsPhần tăng cường: năm của phiên bản lịch sử không hiển thị và các ứng dụng mới thêm -->
                 <div class="history-item">
                   <a class="history-time" @click="fullCode(item)">{{ getFormatDate(item.date) }}</a>
-                  <a-button type="link" size="small" class="history-apply" @click.stop="onApply(item)">应用</a-button>
+                  <a-button type="link" size="small" class="history-apply" @click.stop="onApply(item)">Ứng dụng</a-button>
                 </div>
-                <!-- update-end--author:liaozhiyang---date:20260713---for【LHZP-235】修复js增强历史版本年份不显示及新增应用 -->
+                <!-- update-end--author:liaozhiyang---date:20260713---for【LHZP-235】Khắc phụcjsPhần tăng cường: năm của phiên bản lịch sử không hiển thị và các ứng dụng mới thêm -->
               </a-list-item>
             </template>
           </a-list>
@@ -38,7 +38,7 @@
     </a-spin>
 
     <template #footer>
-      <a-button @click="onCancel">关闭</a-button>
+      <a-button @click="onCancel">Đóng</a-button>
     </template>
   </BasicModal>
 </template>
@@ -100,12 +100,12 @@
         codeEditorRef.value!.setValue(item.str);
       }
 
-      // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-235】修复js增强历史版本年份不显示及新增应用
+      // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-235】Khắc phụcjsPhần tăng cường: năm của phiên bản lịch sử không hiển thị và các ứng dụng mới thêm
       function onApply(item) {
         emit('apply', { type: item.type, str: item.str });
         closeModal();
       }
-      // update-end--author:liaozhiyang---date:20260713---for：【LHZP-235】修复js增强历史版本年份不显示及新增应用
+      // update-end--author:liaozhiyang---date:20260713---for：【LHZP-235】Khắc phụcjsPhần tăng cường: năm của phiên bản lịch sử không hiển thị và các ứng dụng mới thêm
 
       return {
         codeEditorRef,
@@ -159,7 +159,7 @@
     }
   }
 
-  // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-235】修复js增强历史版本年份不显示及新增应用
+  // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-235】Khắc phụcjsPhần tăng cường: năm của phiên bản lịch sử không hiển thị và các ứng dụng mới thêm
   .history-item {
     display: flex;
     align-items: center;
@@ -190,5 +190,5 @@
       display: block;
     }
   }
-  // update-end--author:liaozhiyang---date:20260713---for：【LHZP-235】修复js增强历史版本年份不显示及新增应用
+  // update-end--author:liaozhiyang---date:20260713---for：【LHZP-235】Khắc phụcjsPhần tăng cường: năm của phiên bản lịch sử không hiển thị và các ứng dụng mới thêm
 </style>

@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 日期、时间
+ * Ngày, thời gian
  */
 export default class TimeWidget extends IFormSchema {
   getItem(): FormSchema {
@@ -10,7 +10,7 @@ export default class TimeWidget extends IFormSchema {
     return Object.assign({}, item, {
       component: 'TimePicker',
       componentProps: {
-        placeholder: `请选择${this.label}`,
+        placeholder: `Vui lòng chọn${this.label}`,
         valueFormat: 'HH:mm:ss',
         getPopupContainer: (_node) => {
           return this.getModalAsContainer();

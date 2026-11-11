@@ -34,7 +34,7 @@
   const OnlinePopListModal = defineAsyncComponent(() => import('../../auto/comp/OnlinePopListModal.vue'));
   const OnlinePopModal = defineAsyncComponent(() => import('../../auto/comp/OnlinePopModal.vue'));
   const AllTableListModal = defineAsyncComponent(() => import('/@/components/Form/src/jeecg/components/JLinkTableCard/components/AllTableListModal.vue'));
-  // 给vxetable使用
+  // ChovxetableSử dụng
   defineOptions({ name: 'LinkTable' });
   const props = defineProps({
     valueField: { type: String, default: 'id' },
@@ -42,7 +42,7 @@
     tableName: { type: String, default: '' },
     multi: { type: Boolean, default: false },
     value: { type: [String, Number] },
-    // ["表单字段,表字典字段","表单字段,表字典字段"]
+    // ["Trường biểu mẫu,Trường từ điển bảng","Trường biểu mẫu,Trường từ điển bảng"]
     linkFields: { type: Array, default: () => [] },
     imageField: { type: String, default: '' },
     queryMode: { type: String, default: 'online' },
@@ -55,7 +55,7 @@
   const [registerListModal, { openModal: openListModal }] = useModal();
   const [registerFormModal, { openModal: openFormModal }] = useModal();
 
-  // ---- 数据 ----
+  // ---- Dữ liệu ----
   const selectRecords = ref([]);
   const popTableName = computed(() => props.tableName);
 
@@ -69,7 +69,7 @@
     return selectRecords.value.map((r) => r[field] ?? '').join(', ');
   });
 
-  // ---- 操作 ----
+  // ---- Thao tác ----
   function handleAddRecord() {
     popListModalShow.value = true;
     setTimeout(() => {
@@ -123,7 +123,7 @@
     emit('update:value', text);
   }
 
-  // ---- 监听 value 回显 ----
+  // ---- Lắng nghe (watch) value Hiển thị lại ----
   watch(
     () => props.value,
     async (val) => {

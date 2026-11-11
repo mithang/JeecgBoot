@@ -1,10 +1,10 @@
 <template>
   <div class="p-2">
 
-    <!-- 加载中骨架屏 -->
+    <!-- Màn hình khung xương (skeleton) khi đang tải -->
     <a-skeleton v-if="tableReloading" active />
 
-    <!-- 查询条件 -->
+    <!-- Điều kiện truy vấn -->
     <online-query-form
         v-show="!tableReloading"
         ref="onlineQueryFormOuter"
@@ -15,7 +15,7 @@
         @loaded="onQueryFormLoaded"
     />
 
-    <!-- 列表-树形列表前五个配置不一样【树】 -->
+    <!-- Danh sách-Năm cấu hình đầu tiên của danh sách dạng cây khác nhau 【Cây】 -->
     <BasicTable
       v-if="!tableReloading"
       ref="onlineTreeTableRef"
@@ -65,22 +65,22 @@
         >
           <span>{{cgBIBtnMap['export'].buttonName}}</span>
         </a-button>
-        <!-- update-begin--author:liusq---date:20261102---for：【QQYUN-11801】树表列表补充生成测试数据按钮 -->
+        <!-- update-begin--author:liusq---date:20261102---for：【QQYUN-11801】Danh sách bảng cây bổ sung nút tạo dữ liệu kiểm thử -->
         <a-tooltip
           v-if="!isConfigCurRoute && (tableType == 1 || tableType == 2) && buttonSwitch.aigc_mock_data && cgBIBtnMap['aigc_mock_data']?.enabled && dataSource.length == 0 && !hasQueryCondition && !loading"
           :open="false"
           placement="bottom"
         >
           <template #title>
-            <span>当有数据、有查询条件或生成测试数据后该按钮会隐藏</span>
+            <span>Khi có dữ liệu, có điều kiện truy vấn hoặc sau khi tạo dữ liệu kiểm thử, nút này sẽ ẩn</span>
           </template>
           <a-button preIcon="mdi:robot-love-outline" :loading="testDataLoading" @click="handleAddTestData(currentTableName, reload)">
             {{ cgBIBtnMap['aigc_mock_data'].buttonName }}
           </a-button>
         </a-tooltip>
-        <!-- update-end--author:liusq---date:20261102---for：【QQYUN-11801】树表列表补充生成测试数据按钮 -->
+        <!-- update-end--author:liusq---date:20261102---for：【QQYUN-11801】Danh sách bảng cây bổ sung nút tạo dữ liệu kiểm thử -->
 
-        <!-- 自定义按钮 -->
+        <!-- Nút tùy chỉnh -->
         <template v-if="cgTopButtonList && cgTopButtonList.length > 0" v-for="(item, index) in cgTopButtonList">
           <a-button
             v-if="item.optType == 'js'"
@@ -122,24 +122,24 @@
       </template>
 
       <template #fileSlot="{ text, record, column }">
-        <span v-if="!text" style="font-size: 12px; font-style: italic">无文件</span>
+        <span v-if="!text" style="font-size: 12px; font-style: italic">Không có tệp</span>
         <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download" size="small" @click="downloadRowFile(text, record, column, ID)">
-          下载
+          Tải xuống
         </a-button>
       </template>
 
       <template #imgSlot="{ text }">
-        <span v-if="!text" style="font-size: 12px; font-style: italic">无图片</span>
-        <img v-else :src="getImgView(text)" alt="图片不存在" class="online-cell-image" @click="viewOnlineCellImage(text)" />
+        <span v-if="!text" style="font-size: 12px; font-style: italic">Không có hình ảnh</span>
+        <img v-else :src="getImgView(text)" alt="Hình ảnh không tồn tại" class="online-cell-image" @click="viewOnlineCellImage(text)" />
       </template>
 
       <template #htmlSlot="{ text, column, record }">
-        <!-- update-begin--author:liaozhiyang---date:20240517---for：【TV360X-129】增加富文本控件配置href跳转 -->
+        <!-- update-begin--author:liaozhiyang---date:20240517---for：【TV360X-129】Bổ sung cấu hình control văn bản giàu (rich text)hrefChuyển hướng (nhảy trang) -->
         <template v-if="column.fieldHref">
           <a v-html="sanitizeRichText(text)" @click="handleClickFieldHref(column.fieldHref, record)"></a>
         </template>
         <div v-else v-html="sanitizeRichText(text)"></div>
-        <!-- update-end--author:liaozhiyang---date:20240517---for：【TV360X-129】增加富文本控件配置href跳转 -->
+        <!-- update-end--author:liaozhiyang---date:20240517---for：【TV360X-129】Bổ sung cấu hình control văn bản giàu (rich text)hrefChuyển hướng (nhảy trang) -->
       </template>
 
       <template #pcaSlot="{ text, column }">
@@ -155,7 +155,7 @@
       </template>
     </BasicTable>
 
-    <!-- 表单新增、修改弹框 -->
+    <!-- Popup thêm mới, sửa đổi biểu mẫu -->
     <OnlineAutoModal
         @register="registerModal"
         :id="ID"
@@ -166,29 +166,29 @@
         @formConfig="handleFormConfig"
     />
 
-    <!-- 导入 -->
+    <!-- Nhập (import) -->
     <JImportModal @register="registerImportModal" :url="importUrl()" @ok="reload" online></JImportModal>
 
-    <!-- 跳转Href的动态组件方式 -->
+    <!-- Chuyển hướng (nhảy trang)Hrefphương thức component động của -->
     <a-modal v-bind="hrefComponent.model" v-on="hrefComponent.on">
       <component :is="hrefComponent.is" v-bind="hrefComponent.params" />
     </a-modal>
 
-    <!-- 自定义弹窗 -->
+    <!-- Popup tùy chỉnh -->
     <online-custom-modal @register="registerCustomModal" @success="reload" />
 
-    <!-- 详情弹框 -->
+    <!-- Popup chi tiết -->
     <online-detail-modal :id="ID" @register="registerDetailModal"/>
 
-    <!-- 弹窗给href到另外一张表单用-详情表单 -->
+    <!-- Popup cấp chohrefdùng cho một biểu mẫu khác-Biểu mẫu chi tiết -->
     <online-detail-modal :id="hrefMainTableId" @register="registerOnlineHrefModal" :defaultFullscreen="false"/>
 
-    <!-- 弹窗到另外一张表单用-可编辑表单-关联记录的字段可在列表上打开modal编辑数据 -->
+    <!-- Popup dùng cho một biểu mẫu khác-Biểu mẫu có thể chỉnh sửa-Trường của bản ghi liên kết có thể mở trên danh sáchmodalChỉnh sửa dữ liệu -->
     <online-pop-modal ref="onlinePopModalRef" :id="popTableId" @register="registerPopModal" @success="reload" request topTip></online-pop-modal>
 
-    <!-- 流程图查看modal -->
+    <!-- Xem sơ đồ quy trìnhmodal -->
     <BpmGraphicModal @register="registerBpmModal"></BpmGraphicModal>
-    <!-- 页面loading[主要为了js增强使用] -->
+    <!-- Trangloading[chủ yếu đểjsPhần tăng cường sử dụng] -->
     <Loading :loading="pageLoading" :absolute="true" />
   </div>
 </template>
@@ -232,12 +232,12 @@
     setup() {
       const { createMessage: $message } = useMessage();
       const onlineTreeTableRef = ref();
-      // update-begin--author:liusq---date:20261102---for：【QQYUN-11801】树表列表补充生成测试数据按钮
+      // update-begin--author:liusq---date:20261102---for：【QQYUN-11801】Danh sách bảng cây bổ sung nút tạo dữ liệu kiểm thử
       const currentTableName = ref('');
       const tableType = ref('');
-      // update-end--author:liusq---date:20261102---for：【QQYUN-11801】树表列表补充生成测试数据按钮
+      // update-end--author:liusq---date:20261102---for：【QQYUN-11801】Danh sách bảng cây bổ sung nút tạo dữ liệu kiểm thử
 
-      // 树形列表增加了最后3个配置项【树】
+      // Danh sách dạng cây đã thêm vào cuối cùng3mục cấu hình 【Cây】
       const {
         ID,
         onlineTableContext,
@@ -266,17 +266,17 @@
       } = useOnlineTableContext();
 
       if (!ID.value) {
-        $message.warning('地址错误, 配置ID不存在!');
-        // update-begin--author:liaozhiyang---date:20230825---for：【QQYUN-6326】部分代码找不到引用
-        throw new Error('地址错误, 配置ID不存在!');
-        // update-end--author:liaozhiyang---date:20230825---for：【QQYUN-6326】部分代码找不到引用
+        $message.warning('Lỗi địa chỉ, Cấu hìnhIDkhông tồn tại!');
+        // update-begin--author:liaozhiyang---date:20230825---for：【QQYUN-6326】Một phần mã không tìm thấy tham chiếu
+        throw new Error('Lỗi địa chỉ, Cấu hìnhIDkhông tồn tại!');
+        // update-end--author:liaozhiyang---date:20230825---for：【QQYUN-6326】Một phần mã không tìm thấy tham chiếu
       }
-      // 树列表特定方法调用
+      // Lời gọi phương thức chuyên dụng của danh sách cây
       onlineTableContext.isTree(true);
 
-      // 处理增强
+      // Xử lý phần tăng cường
       let { initCgEnhanceJs } = useEnhance(onlineTableContext);
-      // 处理列表button
+      // Xử lý danh sáchbutton
       const {
         buttonSwitch,
         cgLinkButtonList,
@@ -307,7 +307,7 @@
         registerBpmModal,
       } = useListButton(onlineTableContext, onlineExtConfigJson);
 
-      // 处理table的配置
+      // Xử lýtablecấu hình của
       const {
         columns,
         actionColumn,
@@ -341,53 +341,53 @@
 
       async function initAutoList() {
         loading.value = true;
-        // 1.列配置信息
+        // 1.Thông tin cấu hình cột
         let columnResult: any = await getColumnList(Tree);
         handleTableConfig(columnResult);
         currentTableName.value = columnResult.currentTableName;
         tableType.value = columnResult.tableType;
-        // 2.加载数据
+        // 2.Tải dữ liệu
         await loadData();
         loading.value = false;
-        // 3.执行js增强 setup
+        // 3.Thực thijsTăng cường setup
         onlineTableContext.execButtonEnhance('setup');
       }
 
-      // 将查询结果转成 table渲染需要的配置
+      // Chuyển kết quả truy vấn thành tableCấu hình cần cho việc render
       function handleTableConfig(result) {
-        // js增强初始化
+        // jsKhởi tạo phần tăng cường
         let EnhanceJS = initCgEnhanceJs(result.enhanceJs);
         onlineTableContext['EnhanceJS'] = EnhanceJS;
-        // 自定义按钮设置
+        // Thiết lập nút tùy chỉnh
         initButtonList(result.cgButtonList);
-        // 页面按钮显示隐藏状态设置
+        // Thiết lập trạng thái hiển thị/ẩn của nút trang
         initButtonSwitch(result.hideColumns);
-        // 列配置
+        // cấu hình cột
         handleColumnResult(result);
-        // 表配置
+        // Cấu hình bảng
         handleSpecialConfig(result);
-        //是否有子节点列-树列表特定【树】
+        //Có cột nút con hay không-Danh sách cây chuyên dụng 【Cây】
         onlineTableContext['hasChildrenField'] = result.hasChildrenField;
         onlineTableContext['pidField'] = result.pidField;
       }
 
       /**
-       * 查询控件 事件-执行查询
+       * Control truy vấn sự kiện-Thực thi truy vấn
        * @param data
        */
       function queryWithCondition(data, status) {
         onlineTableContext['queryParam'] = data;
         if (status === true) {
-          // 正常查询
+          // Truy vấn bình thường
           reload({mode:'search'});
         } else {
-          //重置查询【树】
+          //Đặt lại truy vấn 【Cây】
           searchReset();
         }
       }
 
       /**
-       * 查询组件加载完成事件，获取高级查询需要的字段信息
+       * Sự kiện component truy vấn tải hoàn tất, lấy thông tin trường cần cho truy vấn nâng cao
        */
       async function onQueryFormLoaded(json) {
         await getRefPromise(superQueryButtonRef)
@@ -395,7 +395,7 @@
       }
 
       /**
-       * list页面打开 其他表单弹窗
+       * listMở trang Popup biểu mẫu khác
        * @param params
        */
       function openOnlinePopModal(params) {
@@ -410,14 +410,14 @@
         }
         openPopModal(true, data);
       }
-      //绑定弹窗事件
+      //Liên kết sự kiện popup
       useOnlineListPopEvent(openOnlinePopModal);
 
-      /*-------------------------------以下方法是树列表专有的，或复写或新增-【树】----------------------------*/
+      /*-------------------------------Các phương thức dưới đây là chuyên dụng cho danh sách cây, hoặc ghi đè hoặc thêm mới-【Cây】----------------------------*/
 
-      // 展开节点调用
+      // Lời gọi mở rộng nút
       function handleExpand(expanded, record) {
-        // 判断是否是展开状态
+        // Phán đoán có phải trạng thái mở rộng hay không
         let expandedRowKeysValue = expandedRowKeys.value;
         if (expanded) {
           addExpandedRowKey(record.id);
@@ -445,7 +445,7 @@
                 }
               })
               .catch(() => {
-                $message.warning('加载子节点失败!');
+                $message.warning('Tải nút con thất bại!');
               });
           }
         } else {
@@ -457,7 +457,7 @@
       }
 
       /**
-       * 添加展开项的id
+       * Thêm của mục mở rộngid
        * */
       function addExpandedRowKey(key) {
         let arr = expandedRowKeys.value;
@@ -467,7 +467,7 @@
         expandedRowKeys.value = arr;
       }
 
-      // 重置查询条件
+      // Đặt lại điều kiện truy vấn
       async function searchReset() {
         if (onlineTableContext.isTree() === true) {
           expandedRowKeys.value = [];
@@ -477,7 +477,7 @@
       }
 
       /**
-       * 树表单新增、修改完成后 列表页面的回调事件
+       * Sau khi biểu mẫu cây thêm mới, sửa đổi hoàn tất Sự kiện callback của trang danh sách
        */
       function handlerFormSuccess(formData) {
         console.log('expandedRowKeys.value', expandedRowKeys.value);
@@ -496,11 +496,11 @@
 
       /**
        *
-       * [更多]下拉项中的 [添加子节点]
+       * [Thêm]trong mục dropdown [Thêm nút con]
        */
       const addChildButton = (record) => {
         return {
-          label: '添加下级',
+          label: 'Thêm cấp dưới',
           onClick: handleAddChild.bind(null, record),
         };
       };
@@ -515,7 +515,7 @@
       }
 
       /**
-       *  操作列[更多下拉项]
+       *  Cột thao tác[Thêm mục dropdown]
        */
       function getTreeDropDownActions(record) {
         let arr = getDropDownActions(record, {'themeTemplate': Tree});
@@ -528,18 +528,18 @@
       const that = {
         sanitizeRichText,
         ID,
-        // 查询区域
+        // Vùng truy vấn
         onlineQueryFormOuter,
         queryWithCondition,
         onQueryFormLoaded,
         reload,
 
-        //高级查询
+        //Truy vấn nâng cao
         superQueryButtonRef,
         superQueryStatus,
         handleSuperQuery,
 
-        // table区域
+        // tableKhu vực
         loading,
         columns,
         actionColumn,
@@ -552,7 +552,7 @@
         enableScrollBar,
         handleChangeInTable,
 
-        //按钮
+        //Nút
         buttonSwitch,
         handleAdd,
         handleEdit,
@@ -580,11 +580,11 @@
         getPcaText,
         getFormatDate,
 
-        // 操作列
+        // Cột thao tác
         getActions,
         getTreeDropDownActions,
 
-        // 弹窗
+        // Popup
         registerModal,
         registerCustomModal,
         registerImportModal,
@@ -596,13 +596,13 @@
         registerPopModal,
         popTableId,
 
-        //其他
+        //Khác
         tableReloading,
         handleSubmitFlow,
         hrefComponent,
         viewOnlineCellImage,
 
-        //树特定的配置
+        //Cấu hình đặc thù của cây
         onlineTreeTableRef,
         handlerFormSuccess,
         searchReset,
@@ -619,21 +619,21 @@
       return that;
     },
 
-    // 1引入了loadsh   console.log(that.simpleDateFormat(new Date().getTime(),'yyyy-MM-dd'));
-    // 2. value的问题
-    // 3. 变量位置改变后需要 重写api
+    // 1Đã đưa vàoloadsh   console.log(that.simpleDateFormat(new Date().getTime(),'yyyy-MM-dd'));
+    // 2. valuevấn đề của
+    // 3. Sau khi vị trí của biến thay đổi, cần Viết lại (override)api
 
-    // 1添加按钮的时候 预留出样式对象 然后js增强中设置样式对象
-    // 2直接设置css字符串 然后通过js document 往head里面增加css片段 全局生效
+    // 1Khi thêm nút Chừa ra đối tượng kiểu dáng sau đójsThiết lập đối tượng kiểu dáng trong phần tăng cường
+    // 2Thiết lập trực tiếpcssChuỗi ký tự Sau đó thông quajs document về phíaheadThêm vào bên trongcssĐoạn (fragment) Có hiệu lực toàn cục
 
-    // TODO 清空高级查询
-    // TODO 积木报表打印地址
+    // TODO Xóa sạch truy vấn nâng cao
+    // TODO Địa chỉ in báo cáo Jimu
     // const reportPrintUrl = ref('')
   };
 </script>
 
 <style lang="less">
-  /** [表格主题样式一] 表格强制列不换行 */
+  /** [Kiểu dáng chủ đề bảng một] Bảng ép cột không xuống dòng */
   .j-table-force-nowrap {
     td,
     th {
@@ -644,7 +644,7 @@
       padding: 12px 22px !important;
     }
 
-    /** 列自适应，弊端会导致列宽失效 */
+    /** Cột tự thích ứng, nhược điểm là sẽ khiến độ rộng cột mất hiệu lực */
     &.ant-table-wrapper .ant-table-content {
       overflow-x: auto;
     }

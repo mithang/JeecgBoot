@@ -6,7 +6,7 @@ import OnlineSelectCascade from '../../auto/comp/OnlineSelectCascade.vue';
 const componentKeyMap = {};
 
 /**
- * 用于往form中添加组件
+ * Dùng để sangformthêm component trong đó
  */
 export function useExtendComponent() {
 
@@ -15,7 +15,7 @@ export function useExtendComponent() {
   addComponent('LinkTableCard', LinkTableCard);
 
   /**
-   * 避免重复添加
+   * Tránh thêm trùng lặp
    */
   function addComponent(key, comp) {
     if(!componentKeyMap[key]){
@@ -25,7 +25,7 @@ export function useExtendComponent() {
   }
 
   /**
-   * 关联记录的查询控件不宜用卡片模式 统一使用下拉模式 
+   * Control truy vấn của bản ghi liên kết không nên dùng chế độ thẻ Thống nhất sử dụng chế độ dropdown 
    */
   function linkTableCard2Select(schema) {
     if("LinkTableCard"==schema.component){

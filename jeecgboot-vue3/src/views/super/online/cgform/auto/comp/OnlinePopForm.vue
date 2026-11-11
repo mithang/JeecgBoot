@@ -66,12 +66,12 @@
         type: String,
         default: '',
       },
-      //是否发送请求-即表单的保存/编辑请求，false则只将表单数据抛出去
+      //Có gửi yêu cầu hay không-tức là việc lưu của biểu mẫu/Yêu cầu chỉnh sửa,falsethì chỉ đưa dữ liệu biểu mẫu ra ngoài
       request: {
         type: Boolean,
         default: true
       },
-      // 是否是vxeTable上方按钮点击打开的表单数据
+      // Có phải làvxeTableDữ liệu biểu mẫu được mở bằng cách nhấp nút phía trên
       isVxeTableData: {
         type: Boolean,
         default: false
@@ -84,18 +84,18 @@
 
       const [registerVxeFormModal, { openModal:openVxeFormModal }] = useModal();
       const vxeTableId = ref('');
-      // 表单ref
+      // Biểu mẫuref
       const onlineFormRef = ref(null);
       const single = ref(true);
-      // 加载状态
+      // Trạng thái tải
       const loading = ref(false);
       const tableType = ref(1);
-      // 表单提交且提交流程
+      // Gửi biểu mẫu đồng thời gửi quy trình
       const submitFlowFlag = ref(false);
       const isUpdate = ref(false);
 
       /**
-       * online表单扩展配置
+       * onlineCấu hình mở rộng biểu mẫu
        */
       const onlineExtConfigJson = reactive({
         reportPrintShow: 0,
@@ -107,10 +107,10 @@
 
       const { onlineFormContext, resetContext } = useOnlineFormContext();
 
-      // update-begin--author:liaozhiyang---date:20260519---for：【QQYUN-9773】online一对多内部弹窗新增js增强
-      // 由父 OnlineForm 注入；非弹窗使用场景（如关联记录单独弹窗）下为 null，所有打通逻辑自动 no-op
+      // update-begin--author:liaozhiyang---date:20260519---for：【QQYUN-9773】onlineThêm mới trong popup nội bộ của một-nhiềujsTăng cường
+      // Do cha OnlineForm Tiêm vào; trong tình huống sử dụng không phải popup (như popup riêng của bản ghi liên kết) là null, mọi logic thông suốt tự động no-op
       const parentOnlineForm: any = inject('parentOnlineForm', null);
-      // update-end--author:liaozhiyang---date:20260519---for：【QQYUN-9773】online一对多内部弹窗新增js增强
+      // update-end--author:liaozhiyang---date:20260519---for：【QQYUN-9773】onlineThêm mới trong popup nội bộ của một-nhiềujsTăng cường
 
       const {
         formSchemas,
@@ -132,21 +132,21 @@
       } = useFormItems(props, onlineFormRef);
       let { EnhanceJS, initCgEnhanceJs } = useEnhance(onlineFormContext, false);
 
-      //表单配置
+      //Cấu hình biểu mẫu
       const [registerForm, { setProps, validate, resetFields, setFieldsValue, updateSchema, getFieldsValue, scrollToField }] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
         baseColProps: baseColProps,
-        // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+        // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
         labelWidth,
-        // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
-        // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+        // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
+        // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
         labelCol,
         wrapperCol
-        // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+        // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
       });
 
-      // 表单禁用
+      // Vô hiệu hóa biểu mẫu
       const onlineFormDisabled = ref(false);
       function handleFormDisabled() {
         let flag = props.disabled;
@@ -155,37 +155,37 @@
       }
 
       /**
-       * status: 是否是修改页面
-       * record: 列表页面的行数据
-       * param： 树形列表添加子节点 传入的父级节点id
+       * status: Có phải trang sửa đổi hay không
+       * record: Dữ liệu hàng của trang danh sách
+       * param： Danh sách dạng cây thêm nút con nút cấp cha được truyền vàoid
        * */
       async function show(status, record, param) {
-        console.log('onlinepopform新增编辑进入表单》》form', record);
+        console.log('onlinepopformThêm mới/chỉnh sửa đi vào biểu mẫu》》form', record);
         await resetFields();
         dbData.value = '';
         let flag = unref(status);
         isUpdate.value = flag;
         if (flag) {
-          // 编辑页面
+          // Trang chỉnh sửa
           await edit(record);
         }
         await nextTick(() => {
           if (!flag && param) {
-            //如果是新增页面 且 param传入有值 需要设置表单
+            //Nếu là trang thêm mới và paramTruyền vào có giá trị Cần thiết lập biểu mẫu
             setFieldsValue(param);
           }
           handleDefaultValue();
-          // 所有信息加载完毕 触发loaded事件
+          // Tất cả thông tin đã tải xong Kích hoạtloadedsự kiện
           handleCgButtonClick('js', 'loaded');
           replayParentMainOnlChange();
-          //处理表单的禁用效果
+          //Xử lý hiệu quả vô hiệu hóa của biểu mẫu
           handleFormDisabled();
         });
       }
      
 
       /**
-       * 当前表单默认值逻辑-进入新增页面触发
+       * Logic giá trị mặc định của biểu mẫu hiện tại-Kích hoạt khi vào trang thêm mới
        */
       function handleDefaultValue() {
         if (unref(isUpdate) === false) {
@@ -197,17 +197,17 @@
       }
 
       async function edit(record) {
-        // 查询数据库
+        // Truy vấn cơ sở dữ liệu
         let formData:any = await getFormData(record.id);
         if(!formData || Object.keys(formData).length==0){
-          //没有查询出数据
+          //Không truy vấn ra dữ liệu
           formData = {...toRaw(record)}
         }
         dbData.value = Object.assign({}, formData);
-        //表单赋值
+        //Gán giá trị biểu mẫu
         let arr = realFormFieldNames.value;
         let values = pick(formData, ...arr);
-        // 如果是vxetable上方按钮打开的表单，那么表单值以record为主，而不是数据库查询的数据,否则第一次修改后第二次打开表单，表单值和数据库一致但是和当前页面不一致
+        // Nếu làvxetableBiểu mẫu do nút phía trên mở ra, khi đó giá trị biểu mẫu lấy theorecordlàm chuẩn, chứ không phải dữ liệu truy vấn từ cơ sở dữ liệu,Nếu không, sau lần sửa đổi đầu tiên, mở biểu mẫu lần thứ hai, giá trị biểu mẫu khớp với cơ sở dữ liệu nhưng không khớp với trang hiện tại
         if(props.isVxeTableData === true){
           values = Object.assign({},values, record)
         }
@@ -217,7 +217,7 @@
 
       function editSubVxeTableData(record) {
         if (!record) {
-          // 新增页面需要清空子表数据
+          // Trang thêm mới cần xóa sạch dữ liệu bảng con
           record = {};
         }
         let keys = Object.keys(subDataSource.value);
@@ -258,7 +258,7 @@
         });
       }
 
-      // 渲染表单
+      // Render biểu mẫu
       async function createRootProperties(data) {
         tableType.value = data.head.tableType;
         tableName.value = data.head.tableName;
@@ -269,19 +269,19 @@
         EnhanceJS = initCgEnhanceJs(data.enhanceJs);
         emit('rendered', onlineExtConfigJson);
 
-        //监听表单改变事件
+        //Lắng nghe sự kiện thay đổi biểu mẫu
         let formRefObject:any = await getRefPromise(onlineFormRef);
         formRefObject.$formValueChange = (field, value, changeFormData) => {
           onValuesChange(field, value);
           if(changeFormData){
-            //如果存在其他表单控件的数据，直接设置该值
+            //Nếu tồn tại dữ liệu của control biểu mẫu khác, hãy trực tiếp thiết lập giá trị đó
             setFieldsValue(changeFormData)
           }
         };
       }
 
       /**
-       * 处理扩展配置
+       * Xử lý cấu hình mở rộng
        */
       function handleExtConfigJson(jsonStr) {
         let extConfigJson = { reportPrintShow: 0, reportPrintUrl: '', joinQuery: 0, modelFullscreen: 1, modalMinWidth: '', formLabelLength: null };
@@ -308,18 +308,18 @@
         });
       }
 
-      // 触发所有表单验证
+      // Kích hoạt mọi kiểm chứng biểu mẫu
       function validateAll() {
         let temp = {};
         return new Promise((resolve, reject) => {
-          // 验证主表表单
+          // Xác thực biểu mẫu bảng chính
           validate().then(
             (values) => resolve(values),
             ({ errorFields }) => {
               reject({
                 code: VALIDATE_FAILED,
                 key: tableName.value,
-                // 滚动到未通过校验的字段上
+                // Cuộn tới trường chưa thông qua kiểm chứng
                 scrollToField: () => errorFields[0] && scrollToField(errorFields[0].name, { behavior: 'smooth', block: 'center' }),
               });
             }
@@ -335,7 +335,7 @@
           })
           .catch((e) => {
             if (e === VALIDATE_FAILED || e?.code === VALIDATE_FAILED) {
-              $message.warning('校验未通过');
+              $message.warning('Kiểm chứng chưa thông qua');
               if (e.key) {
                 changeTab(e.key);
                 if (e.scrollToField) {
@@ -350,7 +350,7 @@
       }
 
       /**
-       * 切换tab到出现校验错误的页面
+       * Chuyển đổitabtới trang xuất hiện lỗi kiểm chứng
        * */
       function changeTab(key) {
         let arr = subTabInfo.value;
@@ -362,7 +362,7 @@
         }
       }
 
-      // 验证子表
+      // Xác thực bảng con
       function validateSubTableFields() {
         return new Promise(async (resolve, reject) => {
           let subData = {};
@@ -371,7 +371,7 @@
             for (let i = 0; i < arr.length; i++) {
               let key = arr[i].key;
               let instance = refMap[key].value;
-              // 兼容写法:如果取到的是一个数组类型，则取第一个元素
+              // Cách viết tương thích:Nếu cái lấy được là kiểu mảng, thì lấy phần tử đầu tiên
               if (instance instanceof Array) {
                 instance = instance[0];
               }
@@ -399,7 +399,7 @@
       }
 
       /**
-       * 表单提交-单表
+       * Gửi biểu mẫu-bảng đơn
        */
       async function handleSingleSubmit() {
         try {
@@ -409,7 +409,7 @@
           loading.value = true;
           handleApplyRequest(values);
         } catch (error) {
-          // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-420】关联记录校验不通过的项在可视区外时点击保存没任何效果
+          // update-begin--author:liaozhiyang---date:20240524---for：【TV360X-420】Khi mục không qua kiểm chứng của bản ghi liên kết nằm ngoài vùng hiển thị, nhấp lưu không có tác dụng gì
           if (isObject(error)) {
             const errorFields = error.errorFields;
             if (errorFields?.length && errorFields[0].errors) {
@@ -418,13 +418,13 @@
             }
           }
           console.log(error);
-          // update-end--author:liaozhiyang---date:20240524---for：【TV360X-420】关联记录校验不通过的项在可视区外时点击保存没任何效果
+          // update-end--author:liaozhiyang---date:20240524---for：【TV360X-420】Khi mục không qua kiểm chứng của bản ghi liên kết nằm ngoài vùng hiển thị, nhấp lưu không có tác dụng gì
         } finally {
           loading.value = false;
         } 
       }
 
-      //提交数据前 先走一下自定义的JS校验
+      //Trước khi gửi dữ liệu Trước tiên chạy qua phần tùy chỉnh một lượtJSKiểm chứng
       function handleApplyRequest(formData) {
         customBeforeSubmit(context, formData)
           .then(() => {
@@ -439,10 +439,10 @@
       function triggleChangeValues(values, id, target) {
         if (id && target) {
           if (target.setValues) {
-            //一对一子表
+            //bảng con một-một
             target.setValues(values);
           } else {
-            //一对多子表
+            //bảng con một-nhiều
             target.setValues([
               {
                 rowKey: id,
@@ -451,7 +451,7 @@
             ]);
           }
         } else {
-          //主表
+          //bảng chính
           setFieldsValue(values);
         }
       }
@@ -461,11 +461,11 @@
         setFieldsValue(obj);
       }
 
-      // 一对多子表Tab的Key，用于校验未通过时自动跳转
+      // bảng con một-nhiềuTabcủaKey, dùng để tự động chuyển hướng khi kiểm chứng chưa thông qua
       const subActiveKey = ref('0');
       const subFormHeight = ref(300);
-      // 子表表格高度
-      // 【VUEN-803】一对多子表固定340高度，修复自定义列组件被遮挡的问题
+      // Chiều cao bảng dữ liệu của bảng con
+      // 【VUEN-803】Cố định bảng con một-nhiều340chiều cao, sửa vấn đề component cột tùy chỉnh bị che khuất
       const subTableHeight = ref(340);
 
       function getSubTableForeignKeyValue(key) {
@@ -477,7 +477,7 @@
       }
 
       /**
-       * VUEN-1056 30、生成的一对多，编辑的时候，子表数据挂不上
+       * VUEN-1056 30、một-nhiều được tạo ra, khi chỉnh sửa thì dữ liệu bảng con không gắn lên được
        */
       function getValueIgnoreCase(data, key) {
         if (data) {
@@ -493,7 +493,7 @@
         return '';
       }
 
-      //处理一对一子表的表单改变事件
+      //Xử lý sự kiện thay đổi biểu mẫu của bảng con một-một
       function handleSubFormChange(valueObj, tableKey) {
         if (EnhanceJS && EnhanceJS[tableKey + '_onlChange']) {
           let tableChangeObj = EnhanceJS[tableKey + '_onlChange']();
@@ -514,7 +514,7 @@
         }
       }
 
-      //处理一对多子表的改变事件
+      //Xử lý sự kiện thay đổi của bảng con một-nhiều
       function handleValueChange(event, tableKey) {
         if (EnhanceJS && EnhanceJS[tableKey + '_onlChange']) {
           let tableChangeObj = EnhanceJS[tableKey + '_onlChange'](onlineFormContext);
@@ -524,22 +524,22 @@
         }
       }
 
-      // 当行编辑新增完成后触发的事件
+      // Sự kiện được kích hoạt sau khi chỉnh sửa hàng và thêm mới hoàn tất
       function handleAdded(sub, event) {
         console.log('handleAdded', sub, event)
-        //update-begin-author:taoyan date:2022-6-26 for: 控制台警告 这里直接调用函数 不触发事件了
+        //update-begin-author:taoyan date:2022-6-26 for: Cảnh báo console Tại đây gọi hàm trực tiếp không kích hoạt sự kiện nữa
        // event.target.emit('executeFillRule', event);
-        //update-end-author:taoyan date:2022-6-26 for: 控制台警告 这里直接调用函数 不触发事件了
+        //update-end-author:taoyan date:2022-6-26 for: Cảnh báo console Tại đây gọi hàm trực tiếp không kích hoạt sự kiện nữa
       }
 
       function getSubTableAuthPre(table) {
         return 'online_' + table + ':';
       }
 
-      //监听表单改变事件
+      //Lắng nghe sự kiện thay đổi biểu mẫu
       async function onValuesChange(columnKey, value) {
         //console.log('columnKey-value', `${columnKey}-${value}`)
-        // 将老数据和新数据比较 如果不同 往外抛出改变事件
+        // So sánh dữ liệu cũ và dữ liệu mới Nếu khác nhau Ném sự kiện thay đổi ra ngoài
         let oldFormData = dbData.value;
         if(oldFormData[columnKey]!=value){
           emit('dataChange', columnKey);
@@ -549,7 +549,7 @@
           return false;
         }
 
-        // 1) 弹窗自己（子表 head）的 enhanceJs.onlChange —— 保留原有行为
+        // 1) Bản thân popup (bảng con head) của enhanceJs.onlChange —— Giữ nguyên hành vi vốn có
         if (EnhanceJS && EnhanceJS['onlChange']) {
           //let tableChangeObj = EnhanceJS["onlChange"].call(onlineFormContext);
           let tableChangeObj = EnhanceJS['onlChange']();
@@ -567,12 +567,12 @@
         await triggerParentSubOnlChange(columnKey, value);
       }
 
-      // update-begin--author:liaozhiyang---date:20260519---for：【QQYUN-9773】online一对多内部弹窗新增js增强
-      // 父组件用 provide 注入 onlineFormContext + enhanceJs + 当前子表 key，弹窗 inject
-      // 后做两件事：
-      //   ① 弹窗字段变化   → 调主表「子表名_onlChange[字段]」（与 VxeTable 行内编辑等价）
-      //   ② 弹窗打开 loaded → 重放主表「onlChange[已选字段]」（让"主表分类→当前子表 options"联动立刻生效）
-      // 两条路径都用 wrapParentCtxForPop 包装 this：写"当前行字段"的 API 自动落到弹窗，避免污染主表。
+      // update-begin--author:liaozhiyang---date:20260519---for：【QQYUN-9773】onlineThêm mới trong popup nội bộ của một-nhiềujsTăng cường
+      // Component cha dùng provide Tiêm vào (inject) onlineFormContext + enhanceJs + Bảng con hiện tại key, popup inject
+      // sau đó làm hai việc:
+      //   ① Thay đổi trường trong popup   → Gọi bảng chính 「tên bảng con_onlChange[trường]」(và VxeTable Chỉnh sửa trong hàng tương đương)
+      //   ② Mở popup loaded → Phát lại bảng chính 「onlChange[Trường đã chọn]」(để"Phân loại bảng chính→Bảng con hiện tại options"Liên động có hiệu lực ngay lập tức)
+      // cả hai đường dẫn đều dùng wrapParentCtxForPop Đóng gói this: viết"Trường của hàng hiện tại"của API Tự động rơi vào popup, tránh ô nhiễm bảng chính.
       function wrapParentCtxForPop(parentCtx, currentSubKey) {
         const popOverrides: Record<string, Function> = {
           triggleChangeValues: (values, rowId?, vxeTarget?) => {
@@ -587,7 +587,7 @@
             if (param?.subTableName !== currentSubKey) {
               return parentCtx.changeRemoteOptions?.(param);
             }
-            // 等价于父表"单表/主表分支"：用本弹窗 updateSchema 改远程下拉的 dict
+            // Tương đương với bảng cha"bảng đơn/nhánh bảng chính": dùng popup này updateSchema sửa dropdown từ xa dict
             const _dict = String(param.dict || '').split(',').map(encodeURIComponent).join(',');
             const schemaPatch: any = { field: param.field, componentProps: { dict: _dict } };
             if (param.label) schemaPatch.label = param.label;
@@ -600,7 +600,7 @@
             prop in popOverrides ? popOverrides[prop] : Reflect.get(target, prop),
         });
       }
-      /** 弹窗字段变化时，调用主表的「子表名_onlChange[字段]」—— 与 VxeTable 行内编辑等价 */
+      /** Khi trường trong popup thay đổi, gọi của bảng chính「tên bảng con_onlChange[trường]」—— và VxeTable Chỉnh sửa trong hàng tương đương */
       async function triggerParentSubOnlChange(columnKey, value) {
         const subKey = unref(parentOnlineForm?.subTableKey);
         if (!subKey) return;
@@ -616,18 +616,18 @@
           row: await getFieldsValue(),
           column: { key: columnKey },
           value,
-          target: undefined,   // 弹窗模式标记：无 VxeTable 实例
+          target: undefined,   // Đánh dấu chế độ popup: không VxeTable Thực thể (instance)
           type: undefined,
         };
         try {
           handler.call(wrappedCtx, wrappedCtx, event);
         } catch (e) {
-          console.error(`[OnlinePopForm] 调用主表 ${subKey}_onlChange.${columnKey} 失败：`, e);
+          console.error(`[OnlinePopForm] Gọi bảng chính ${subKey}_onlChange.${columnKey} Thất bại:`, e);
         }
       }
 
       /**
-       * 弹窗打开时重放一次主表「onlChange[主表已选字段]」。
+       * Khi popup mở, phát lại một lần「của bảng chínhonlChange[Trường đã chọn của bảng chính]」。
        */
       function replayParentMainOnlChange() {
         const subKey = unref(parentOnlineForm?.subTableKey);
@@ -640,7 +640,7 @@
         try {
           handlers = mainOnlChange();
         } catch (e) {
-          console.error('[OnlinePopForm] 解析主表 onlChange 失败：', e);
+          console.error('[OnlinePopForm] Phân tích bảng chính onlChange Thất bại:', e);
           return;
         }
         if (!handlers || typeof handlers !== 'object') return;
@@ -651,7 +651,7 @@
 
         for (const [field, handler] of Object.entries(handlers)) {
           const val = mainValues[field];
-          // 主表该字段没值就不重放（避免空触发，也跳过新增模式下未填的字段）
+          // Trường này của bảng chính không có giá trị thì không phát lại (tránh kích hoạt rỗng, đồng thời bỏ qua các trường chưa điền ở chế độ thêm mới)
           if (val === undefined || val === null || val === '') continue;
           if (typeof handler !== 'function') continue;
 
@@ -659,13 +659,13 @@
           try {
             (handler as Function).call(wrappedCtx, wrappedCtx, event);
           } catch (e) {
-            console.error(`[OnlinePopForm] 重放主表 onlChange.${field} 失败：`, e);
+            console.error(`[OnlinePopForm] Phát lại bảng chính onlChange.${field} Thất bại:`, e);
           }
         }
       }
-      // update-end--author:liaozhiyang---date:20260519---for：【QQYUN-9773】online一对多内部弹窗新增js增强
+      // update-end--author:liaozhiyang---date:20260519---for：【QQYUN-9773】onlineThêm mới trong popup nội bộ của một-nhiềujsTăng cường
 
-      // 自定义按钮 增强触发事件
+      // Nút tùy chỉnh Sự kiện kích hoạt phần tăng cường
       function handleCgButtonClick(optType, buttonCode) {
         if ('js' == optType) {
           if (EnhanceJS && EnhanceJS[buttonCode]) {
@@ -679,7 +679,7 @@
             dataId: formData.id,
             uiFormData: Object.assign({}, formData),
           };
-          //console.log("自定义按钮请求后台参数：",params)
+          //console.log("Tham số yêu cầu backend của nút tùy chỉnh:",params)
           defHttp
             .post(
               {
@@ -690,18 +690,18 @@
             )
             .then((res) => {
               if (res.success) {
-                $message.success('处理完成!');
+                $message.success('Xử lý hoàn tất!');
               } else {
-                $message.warning('处理失败!');
+                $message.warning('Xử lý thất bại!');
               }
             });
         }
       }
 
-      // --------------------增强-------------------------
+      // --------------------Tăng cường-------------------------
 
       /**
-       * 清除子表数据
+       * Xóa bỏ dữ liệu bảng con
        * @param tbname
        */
       function clearSubRows(tbname) {
@@ -718,9 +718,9 @@
       }
 
       /**
-       * 添加子表数据
+       * Thêm dữ liệu bảng con
        * @param tbname
-       * @param rows 可以是数组也可以是对象
+       * @param rows có thể là mảng, cũng có thể là đối tượng
        * @returns {boolean}
        */
       function addSubRows(tbname, rows) {
@@ -731,12 +731,12 @@
         if (typeof rows == 'object') {
           instance.addRows(rows, true);
         } else {
-          $message.error('添加子表数据,参数不识别!');
+          $message.error('Thêm dữ liệu bảng con,Tham số không nhận diện được!');
         }
       }
 
       /**
-       * 先删除后添加
+       * Xóa trước rồi thêm sau
        * @param tbname
        * @param rows
        */
@@ -746,7 +746,7 @@
       }
 
       /**
-       * 修改下拉框的下拉选项
+       * Sửa tùy chọn dropdown của ô dropdown
        * @param field
        * @param options
        */
@@ -768,7 +768,7 @@
       }
 
       /**
-       * 表单提交前事件
+       * Sự kiện trước khi gửi biểu mẫu
        * @param that
        * @param formData
        * @returns {Promise<void>|*}
@@ -782,7 +782,7 @@
       }
 
       /**
-       * 处理自定义弹框 字段的显示隐藏
+       * Xử lý popup tùy chỉnh Việc hiển thị/ẩn của trường
        * @param show
        * @param hide
        */
@@ -804,21 +804,21 @@
       }
 
       async function handleCustomFormEdit(record) {
-        console.log('自定义弹窗打开online表单》》form', record);
+        console.log('Mở popup tùy chỉnhonlineBiểu mẫu 》》form', record);
         await resetFields();
         dbData.value = '';
         isUpdate.value = true;
-        // 编辑数据
+        // Chỉnh sửa dữ liệu
         await edit(record);
         await nextTick(() => {
-          // 所有信息加载完毕 触发loaded事件
+          // Tất cả thông tin đã tải xong Kích hoạtloadedsự kiện
           handleCgButtonClick('js', 'loaded');
         });
       }
 
       /**
        * VUEN-1036
-       * 获取子表的实例对象 可以直接调用子表的方法
+       * Lấy đối tượng instance của bảng con Có thể gọi trực tiếp phương thức của bảng con
        */
       function getSubTableInstance(tableName) {
         let instance = refMap[tableName].value;
@@ -828,7 +828,7 @@
         return instance;
       }
       
-      //跳转至积木报表页面
+      //Chuyển tới trang báo cáo Jimu
       function onOpenReportPrint(){
         let url = onlineExtConfigJson.reportPrintUrl;
         let id = dbData.value.id;
@@ -848,11 +848,11 @@
       }
 
       /**
-       * 保存数据
+       * Lưu dữ liệu
        * @param formData
        */
       function doApplyRequest(formData) {
-        // 数组没有元素直接置空
+        // Mảng không có phần tử thì trực tiếp đặt trống
         Object.keys(formData).map((key) => {
           if (Array.isArray(formData[key])) {
             if (formData[key].length == 0) {
@@ -860,21 +860,21 @@
             }
           }
         });
-        console.log('提交pop表单数据》》》form:', formData);
+        console.log('GửipopDữ liệu biểu mẫu 》》》form:', formData);
         if(props.request == false){
           emit('success', formData);
         }else{
           let url = `${urlObject.optPre}${props.id}?tabletype=${tableType.value}`;
 
-          console.log('提交pop表单url》》》url:', url);
-          // 如果需要提交流程 需要额外设置一个参数
+          console.log('GửipopBiểu mẫuurl》》》url:', url);
+          // Nếu cần gửi quy trình Cần thiết lập thêm một tham số
           if (submitFlowFlag.value === true) {
             formData[SUBMIT_FLOW_KEY] = 1;
           }
           let method:Method = isUpdate.value === true ? 'put' : 'post';
           defHttp.request({ url, method, params: formData }, { isTransformResponse: false })
             .then((res) => {
-              //console.log('表单提交完成', res)
+              //console.log('Gửi biểu mẫu hoàn tất', res)
               if (res.success) {
                 if (res.result) {
                   //formData[SUBMIT_FLOW_ID] = res.result;
@@ -882,12 +882,12 @@
                     formData['id'] = res.result;
                   }
                 }
-                //刷新列表
+                //Làm mới danh sách
                 emit('success', formData);
                 dbData.value = formData;
                 isUpdate.value = true;
-                $message.success('操作成功!')
-                // 工单申请提交的表单也会走这个逻辑，保存成功不需要提示信息
+                $message.success('Thao tác thành công!')
+                // Biểu mẫu gửi trong đơn yêu cầu công việc cũng đi theo logic này, lưu thành công không cần thông tin nhắc nhở
               } else {
                 $message.warning(res.message);
               }
@@ -900,7 +900,7 @@
 
 
       /**
-       * 数据恢复到 dbdata
+       * Khôi phục dữ liệu về dbdata
        */
       async function recoverFormData(){
         let record = dbData.value;
@@ -941,25 +941,25 @@
       resetContext(context);
 
       return {
-        //主表
+        //bảng chính
         tableName,
         onlineFormRef,
         registerForm,
         loading,
 
-        //子表
+        //bảng con
         subActiveKey,
         hasSubTable,
         subTabInfo,
         refMap,
 
-        //一对一子表
+        //bảng con một-một
         subFormHeight,
         getSubTableForeignKeyValue,
         isUpdate,
         handleSubFormChange,
 
-        //一对多子表
+        //bảng con một-nhiều
         subTableHeight,
         onlineFormDisabled,
         subDataSource,
@@ -971,7 +971,7 @@
         registerVxeFormModal,
         vxeTableId,
 
-        //父组件调用
+        //Lời gọi của component cha
         show,
         createRootProperties,
         handleSubmit,
@@ -979,7 +979,7 @@
         handleCgButtonClick,
         handleCustomFormSh,
         handleCustomFormEdit,
-        //跳转
+        //Chuyển hướng (nhảy trang)
         dbData,
         onOpenReportPrint,
         onlineExtConfigJson,
@@ -991,9 +991,9 @@
 
 <style lang="less" scoped>
   .onlinePopFormWrap {
-    // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+    // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
     padding: 0 1.5%;
-    // update-begin--author:liaozhiyang---date:20240506---for：【QQYUN-9229】间隔调整
+    // update-begin--author:liaozhiyang---date:20240506---for：【QQYUN-9229】Điều chỉnh khoảng cách
     &.formTemplate_1 {
       > form {
         padding-left: 5%;
@@ -1006,7 +1006,7 @@
         padding-right: 1%;
       }
     }
-    // update-end--author:liaozhiyang---date:20240506---for：【QQYUN-9229】间隔调整
+    // update-end--author:liaozhiyang---date:20240506---for：【QQYUN-9229】Điều chỉnh khoảng cách
     :deep(.ant-form) {
       > .ant-row {
         > .ant-col {
@@ -1014,6 +1014,6 @@
         }
       }
     }
-    // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+    // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
   }
 </style>

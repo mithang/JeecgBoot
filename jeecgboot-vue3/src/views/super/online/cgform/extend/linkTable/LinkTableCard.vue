@@ -3,7 +3,7 @@
         <div class="table-link-card">
             <div style="width: 100%; height: 100%">
                 <div class="card-button" v-if="showButton">
-                    <a-button @click="handleAddRecord"><PlusOutlined />记 录</a-button>
+                    <a-button @click="handleAddRecord"><PlusOutlined />ghi ghi</a-button>
                 </div>
 
                 <a-row>
@@ -38,7 +38,7 @@
         </div>
 
         <online-pop-list-modal v-if="popListModalShow" @register="registerListModal" :multi="multi" :id="popTableName" :addAuth="auths.add" @success="addCard"></online-pop-list-modal>
-        <!-- 弹窗到另外一张表单用-可编辑表单 -->
+        <!-- Popup dùng cho một biểu mẫu khác-Biểu mẫu có thể chỉnh sửa -->
         <online-pop-modal v-if="popFormModalShow" :id="popTableName" @register="registerFormModal" @success="updateCardData" topTip></online-pop-modal>
     </div>
 </template>
@@ -61,11 +61,11 @@
       tableName: propTypes.string.def(''),
       multi: propTypes.bool.def(false),
       value: propTypes.oneOfType([propTypes.string, propTypes.number]),
-      // ["表单字段,表字典字段","表单字段,表字典字段"]
+      // ["Trường biểu mẫu,Trường từ điển bảng","Trường biểu mẫu,Trường từ điển bảng"]
       linkFields: propTypes.array.def([]),
-      //是否是禁用页面
+      //Có phải trang vô hiệu hóa hay không
       disabled: propTypes.bool.def(false),
-      // 是否是detail页面
+      // Có phải làdetailTrang
       detail: propTypes.bool.def(false),
       imageField: propTypes.string.def(''),
     },
@@ -82,11 +82,11 @@
       });
       const [registerListModal, { openModal: openListModal }] = useModal();
       const [registerFormModal, { openModal: openFormModal }] = useModal();
-      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
-      // 加上了online一对多关联记录、他表字段必须懒加载，否则构建循环调用了报错
+      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
+      // đã thêm vàoonlineBản ghi liên kết một-nhiều và trường bảng khác phải tải lười (lazy load), nếu không việc xây dựng sẽ gọi vòng lặp và báo lỗi
       const popListModalShow = ref(false);
       const popFormModalShow = ref(false);
-      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
+      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
       
       const selectValue = ref([]);
       const selectRecords = ref([]);
@@ -98,7 +98,7 @@
           return false;
         }
         if(props.multi===false){
-          //单选且有值
+          //Chọn đơn và có giá trị
           if(selectRecords.value.length>0){
             return false;
           }
@@ -139,7 +139,7 @@
       function handleClickEdit(e, record) {
         prevent(e);
         if(auths.update == false){
-          console.error('当前用户无编辑权限!');
+          console.error('Người dùng hiện tại không có quyền chỉnh sửa!');
           return;
         }
         if(props.disabled==false){
@@ -155,18 +155,18 @@
        // prevent(e);
         popListModalShow.value = true;
         setTimeout(() => openListModal(true, {
-          // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-43】修复关联记录可以添加重复数据
+          // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-43】Khắc phục: bản ghi liên kết có thể thêm dữ liệu trùng lặp
           selectedRowKeys: selectRecords.value.map((item) => item.id),
           selectedRows: [...selectRecords.value],
-          // update-end--author:liaozhiyang---date:20240517---for：【TV360X-43】修复关联记录可以添加重复数据
+          // update-end--author:liaozhiyang---date:20240517---for：【TV360X-43】Khắc phục: bản ghi liên kết có thể thêm dữ liệu trùng lặp
         }), 100);
       }
 
       
       function addCard(data){
-        // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-43】修复关联记录可以添加重复数据
+        // update-begin--author:liaozhiyang---date:20240517---for：【TV360X-43】Khắc phục: bản ghi liên kết có thể thêm dữ liệu trùng lặp
         let arr = [];
-        // update-end--author:liaozhiyang---date:20240517---for：【TV360X-43】修复关联记录可以添加重复数据
+        // update-end--author:liaozhiyang---date:20240517---for：【TV360X-43】Khắc phục: bản ghi liên kết có thể thêm dữ liệu trùng lặp
         for(let item of data){
           let temp = {...item}
           transData(temp)
@@ -227,7 +227,7 @@
             let arr = await loadOne(val);
             selectRecords.value = arr;
           }
-          //保证表单其他值回显成功
+          //Đảm bảo các giá trị khác của biểu mẫu hiển thị lại thành công
           if(props.linkFields && props.linkFields.length>0){
             emitValue();
           }
@@ -237,17 +237,17 @@
       }, {immediate: true})
       
       onMounted(() => {
-        // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-281】分辨率小时关联记录文字被图片挤没了
+        // update-begin--author:liaozhiyang---date:20240522---for：【TV360X-281】Khi độ phân giải nhỏ, chữ của bản ghi liên kết bị hình ảnh chèn mất
         if (tableLinkCardRef.value.offsetWidth < 250) {
           fixedSpan.value = 24;
         }
-        // update-end--author:liaozhiyang---date:20240522---for：【TV360X-281】分辨率小时关联记录文字被图片挤没了
+        // update-end--author:liaozhiyang---date:20240522---for：【TV360X-281】Khi độ phân giải nhỏ, chữ của bản ghi liên kết bị hình ảnh chèn mất
       });
-      // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-389】下拉和卡片关联记录图裂开给个默认图片
+      // update-begin--author:liaozhiyang---date:20240529---for：【TV360X-389】Hình của bản ghi liên kết dạng dropdown và dạng thẻ bị vỡ, hãy cấp một hình mặc định
       const handleImageError = (event) => {
         event.target.src = placeholderImage;
       };
-      // update-end--author:liaozhiyang---date:20240529---for：【TV360X-389】下拉和卡片关联记录图裂开给个默认图片
+      // update-end--author:liaozhiyang---date:20240529---for：【TV360X-389】Hình của bản ghi liên kết dạng dropdown và dạng thẻ bị vỡ, hãy cấp một hình mặc định
 
       return {
         popTableName,

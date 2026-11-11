@@ -2,7 +2,7 @@ import IFormSchema from '../IFormSchema';
 import { FormSchema } from '/@/components/Form';
 
 /**
- * 用户选择
+ * Lựa chọn của người dùng
  */
 export default class SelectUser2Widget extends IFormSchema {
 
@@ -14,7 +14,7 @@ export default class SelectUser2Widget extends IFormSchema {
     super(key, data);
     this.multi = data.multi === true ? true : false;
     this.store = data.store||'';
-    // 是否是查询条件，查询条件显示为输入框样式
+    // Có phải điều kiện truy vấn hay không, điều kiện truy vấn hiển thị theo kiểu ô nhập
     this.query = data.query||false;
   }
   
@@ -33,7 +33,7 @@ export default class SelectUser2Widget extends IFormSchema {
       store: this.store,
       query: this.query,
     }
-    // 解决表单设计器高级查询 popup组件弹窗导致高级查询pop关闭
+    // Giải quyết truy vấn nâng cao của trình thiết kế biểu mẫu popupPopup của component dẫn đến truy vấn nâng caopopĐóng
     if(this.inPopover === true){
       props['getContainer'] = ()=>{
         return this.getModalAsContainer();

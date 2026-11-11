@@ -1,4 +1,4 @@
-<!-- online查询条件中的下拉搜索 -->
+<!-- onlineTìm kiếm dropdown trong điều kiện truy vấn -->
 <template>
   <a-select
     :value="selected"
@@ -43,7 +43,7 @@
         type: String,
         required: true,
       },
-      // online CgReport id，用于按具体报表菜单鉴权
+      // online CgReport id, dùng để xác thực quyền theo menu báo cáo cụ thể
       reportId: {
         type: String,
         required: false,
@@ -80,7 +80,7 @@
       /**
        * 2024-07-17
        * liaozhiyang
-       * 【TV360X-1813】online报表查询支持滚动加载
+       * 【TV360X-1813】onlineTruy vấn báo cáo hỗ trợ tải theo cuộn
        * */
       const handleSearch = useDebounceFn((keyword) => {
         searchKeyword = keyword;
@@ -92,10 +92,10 @@
       /**
        * 2024-07-17
        * liaozhiyang
-       * 【TV360X-1813】online报表查询支持滚动加载
+       * 【TV360X-1813】onlineTruy vấn báo cáo hỗ trợ tải theo cuộn
        * */
       async function searchByKeyword(keyword = '') {
-        //update-begin---author:scott ---date:20260811  for：【LHZP-1148】查询字典接口按报表菜单权限鉴权-----------
+        //update-begin---author:scott ---date:20260811  for：【LHZP-1148】API từ điển truy vấn xác thực quyền theo quyền menu báo cáo-----------
         if (!props.reportId) {
           return;
         }
@@ -106,7 +106,7 @@
           pageNo: pageNo.value,
         };
         let url = `/online/cgreport/api/getReportDictList/${props.reportId}`;
-        //update-end---author:scott ---date:20260811  for：【LHZP-1148】查询字典接口按报表菜单权限鉴权-----------
+        //update-end---author:scott ---date:20260811  for：【LHZP-1148】API từ điển truy vấn xác thực quyền theo quyền menu báo cáo-----------
         await defHttp
           .get({ url: url, params }, { isTransformResponse: false })
           .then((res) => {
@@ -135,24 +135,24 @@
 
       function handleChange(value) {
         emit('update:value', value);
-        //点击clear按钮,重置下拉项
+        //NhấpclearNút,Đặt lại mục dropdown
         if (!value || value == '') {
           resetOptions();
         }
       }
       function resetOptions() {
         selectOptions.value = [];
-        // update-begin--author:liaozhiyang---date:20240717---for：【TV360X-1813】online报表查询支持滚动加载
+        // update-begin--author:liaozhiyang---date:20240717---for：【TV360X-1813】onlineTruy vấn báo cáo hỗ trợ tải theo cuộn
         pageNo.value = 1;
         isHasData = true;
         searchKeyword = '';
-        // update-end--author:liaozhiyang---date:20240717---for：【TV360X-1813】online报表查询支持滚动加载
+        // update-end--author:liaozhiyang---date:20240717---for：【TV360X-1813】onlineTruy vấn báo cáo hỗ trợ tải theo cuộn
         searchByKeyword();
       }
       /**
        * 2024-07-17
        * liaozhiyang
-       * 【TV360X-1813】online报表查询支持滚动加载
+       * 【TV360X-1813】onlineTruy vấn báo cáo hỗ trợ tải theo cuộn
        * */
       const handlePopupScroll = async (e) => {
         const { target } = e;

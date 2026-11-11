@@ -1,10 +1,10 @@
 <template>
   <div class="p-2">
 
-    <!-- 加载中骨架屏 -->
+    <!-- Màn hình khung xương (skeleton) khi đang tải -->
     <a-skeleton v-if="tableReloading" active />
 
-    <!-- 查询条件 -->
+    <!-- Điều kiện truy vấn -->
     <online-query-form
         v-show="!tableReloading"
         ref="onlineQueryFormOuter"
@@ -15,7 +15,7 @@
         @loaded="onQueryFormLoaded"
     />
 
-    <!-- 列表 -->
+    <!-- Danh sách -->
     <BasicTable
       v-if="!tableReloading"
       ref="onlineTable"
@@ -63,7 +63,7 @@
           <span>{{cgBIBtnMap['export'].buttonName}}</span>
         </a-button>
 
-        <!-- 自定义按钮 -->
+        <!-- Nút tùy chỉnh -->
         <template v-if="cgTopButtonList && cgTopButtonList.length > 0" v-for="(item, index) in cgTopButtonList">
           <a-button
             v-if="item.optType == 'js'"
@@ -105,24 +105,24 @@
       </template>
 
       <template #fileSlot="{ text, record, column }">
-        <span v-if="!text" style="font-size: 12px; font-style: italic">无文件</span>
+        <span v-if="!text" style="font-size: 12px; font-style: italic">Không có tệp</span>
         <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download" size="small" @click="downloadRowFile(text, record, column, ID)">
-          下载
+          Tải xuống
         </a-button>
       </template>
 
       <template #imgSlot="{ text }">
-        <span v-if="!text" style="font-size: 12px; font-style: italic">无图片</span>
-        <img v-else :src="getImgView(text)" alt="图片不存在" class="online-cell-image" @click="viewOnlineCellImage(text)" />
+        <span v-if="!text" style="font-size: 12px; font-style: italic">Không có hình ảnh</span>
+        <img v-else :src="getImgView(text)" alt="Hình ảnh không tồn tại" class="online-cell-image" @click="viewOnlineCellImage(text)" />
       </template>
 
       <template #htmlSlot="{ text, column, record }">
-        <!-- update-begin--author:liaozhiyang---date:20240517---for：【TV360X-129】增加富文本控件配置href跳转 -->
+        <!-- update-begin--author:liaozhiyang---date:20240517---for：【TV360X-129】Bổ sung cấu hình control văn bản giàu (rich text)hrefChuyển hướng (nhảy trang) -->
         <template v-if="column.fieldHref">
           <a v-html="sanitizeRichText(text)" @click="handleClickFieldHref(column.fieldHref, record)"></a>
         </template>
         <div v-else v-html="sanitizeRichText(text)"></div>
-        <!-- update-end--author:liaozhiyang---date:20240517---for：【TV360X-129】增加富文本控件配置href跳转 -->
+        <!-- update-end--author:liaozhiyang---date:20240517---for：【TV360X-129】Bổ sung cấu hình control văn bản giàu (rich text)hrefChuyển hướng (nhảy trang) -->
       </template>
 
       <template #pcaSlot="{ text, column }">
@@ -138,7 +138,7 @@
       </template>
     </BasicTable>
 
-    <!-- 表单新增、修改弹框 -->
+    <!-- Popup thêm mới, sửa đổi biểu mẫu -->
     <OnlineAutoModal
         @register="registerModal"
         :id="ID"
@@ -149,29 +149,29 @@
         @formConfig="handleFormConfig"
     />
 
-    <!-- 详情弹框 -->
+    <!-- Popup chi tiết -->
     <online-detail-modal :id="ID" @register="registerDetailModal" />
 
-    <!-- 导入 -->
+    <!-- Nhập (import) -->
     <JImportModal @register="registerImportModal" :url="importUrl()" @ok="reload" online></JImportModal>
 
-    <!-- 跳转Href的动态组件方式 -->
+    <!-- Chuyển hướng (nhảy trang)Hrefphương thức component động của -->
     <a-modal v-bind="hrefComponent.model" v-on="hrefComponent.on">
       <component :is="hrefComponent.is" v-bind="hrefComponent.params" />
     </a-modal>
 
-    <!-- 自定义弹窗 -->
+    <!-- Popup tùy chỉnh -->
     <online-custom-modal @register="registerCustomModal" @success="reload" />
 
-    <!-- 弹窗给href到另外一张表单用-详情表单 -->
+    <!-- Popup cấp chohrefdùng cho một biểu mẫu khác-Biểu mẫu chi tiết -->
     <online-detail-modal :id="hrefMainTableId" @register="registerOnlineHrefModal" :defaultFullscreen="false" />
 
-    <!-- 弹窗到另外一张表单用-可编辑表单-关联记录的字段可在列表上打开modal编辑数据 -->
+    <!-- Popup dùng cho một biểu mẫu khác-Biểu mẫu có thể chỉnh sửa-Trường của bản ghi liên kết có thể mở trên danh sáchmodalChỉnh sửa dữ liệu -->
     <online-pop-modal ref="onlinePopModalRef" :id="popTableId" @register="registerPopModal" @success="reload" request topTip></online-pop-modal>
 
-    <!-- 流程图查看modal -->
+    <!-- Xem sơ đồ quy trìnhmodal -->
     <BpmGraphicModal @register="registerBpmModal"></BpmGraphicModal>
-    <!-- 页面loading[主要为了js增强使用] -->
+    <!-- Trangloading[chủ yếu đểjsPhần tăng cường sử dụng] -->
     <Loading :loading="pageLoading" :absolute="true" />
   </div>
 </template>
@@ -198,7 +198,7 @@
   import { sanitizeRichText } from '/@/utils/htmlSanitizer';
 
   const { createMessage: $message } = useMessage();
-  // 这行代码应该在每次进入新的路由都会走，不管该路由有没有被缓存--
+  // Hàng mã này nên được chạy mỗi lần vào route mới, bất kể route đó có bị lưu bộ nhớ đệm hay không--
   const {
     ID,
     onlineTableContext,
@@ -221,16 +221,16 @@
     pageLoading,
   } = useOnlineTableContext();
 
-  // 判断 若ID不存在就终止后续逻辑
+  // Phán đoán NếuIDkhông tồn tại thì chấm dứt logic tiếp theo
   if (!ID.value) {
-    $message.warning('地址错误, 配置ID不存在!');
-    // update-begin--author:liaozhiyang---date:20230825---for：【QQYUN-6326】部分代码找不到引用
-    throw new Error('地址错误, 配置ID不存在!');
-    // update-end--author:liaozhiyang---date:20230825---for：【QQYUN-6326】部分代码找不到引用
+    $message.warning('Lỗi địa chỉ, Cấu hìnhIDkhông tồn tại!');
+    // update-begin--author:liaozhiyang---date:20230825---for：【QQYUN-6326】Một phần mã không tìm thấy tham chiếu
+    throw new Error('Lỗi địa chỉ, Cấu hìnhIDkhông tồn tại!');
+    // update-end--author:liaozhiyang---date:20230825---for：【QQYUN-6326】Một phần mã không tìm thấy tham chiếu
   }
-  // 处理增强
+  // Xử lý phần tăng cường
   let { initCgEnhanceJs } = useEnhance(onlineTableContext);
-  // 处理列表button
+  // Xử lý danh sáchbutton
   const {
     buttonSwitch,
     cgBIBtnMap,
@@ -257,18 +257,18 @@
 
   const exportLoading = ref(false);
 
-  // 重写导出方法，防止频繁点击
+  // Viết lại phương thức xuất, ngăn nhấp thường xuyên
   async function onExportExcelOverride() {
     try {
       exportLoading.value = true;
       await onExportExcel();
     } finally {
-      // 防止频繁点击，延迟1.5s关闭loading
+      // Ngăn nhấp thường xuyên, trì hoãn1.5sĐóngloading
       setTimeout(() => (exportLoading.value = false), 1500);
     }
   }
 
-  // 处理 BasicTable 的配置
+  // Xử lý BasicTable cấu hình của
   const {
     columns,
     actionColumn,
@@ -292,7 +292,7 @@
     handleClickFieldHref,
   } = useTableColumns(onlineTableContext, onlineExtConfigJson);
 
-  // 监听表单配置ID
+  // Lắng nghe cấu hình biểu mẫuID
   watch(
     ID,
     () => {
@@ -302,14 +302,14 @@
     { immediate: true }
   );
 
-  /**重新加载online配置*/
+  /**Tải lạionlineCấu hình*/
   async function initAutoList() {
     loading.value = true;
-    // 1.列配置信息
+    // 1.Thông tin cấu hình cột
     let columnResult = await getColumnList(TAB);
     handleTableConfig(columnResult);
-    // 2.加载数据
-   // update-begin--author:liaozhiyang---date:20260715---for：【LHZP-219】修复有默认值查询的场景下会调用两次接口，让只调用最后一次查询接口
+    // 2.Tải dữ liệu
+   // update-begin--author:liaozhiyang---date:20260715---for：【LHZP-219】Khắc phục: trường hợp truy vấn có giá trị mặc định sẽ gọi API hai lần, hãy chỉ gọi API truy vấn ở lần cuối cùng
     let hasDefaultQuery = false;
     try {
       const queryForm = await getRefPromise(onlineQueryFormOuter);
@@ -322,29 +322,29 @@
     if (!hasDefaultQuery) {
       await loadData();
     }
-    // update-end--author:liaozhiyang---date:20260715---for：【LHZP-219】修复有默认值查询的场景下会调用两次接口，让只调用最后一次查询接口
+    // update-end--author:liaozhiyang---date:20260715---for：【LHZP-219】Khắc phục: trường hợp truy vấn có giá trị mặc định sẽ gọi API hai lần, hãy chỉ gọi API truy vấn ở lần cuối cùng
     loading.value = false;
-    // 3.执行js增强 setup
+    // 3.Thực thijsTăng cường setup
     onlineTableContext.execButtonEnhance('setup');
   }
 
-  // 将查询结果转成 table渲染需要的配置
+  // Chuyển kết quả truy vấn thành tableCấu hình cần cho việc render
   function handleTableConfig(result) {
-    // js增强初始化
+    // jsKhởi tạo phần tăng cường
     let EnhanceJS = initCgEnhanceJs(result.enhanceJs);
     onlineTableContext['EnhanceJS'] = EnhanceJS;
-    // 自定义按钮设置
+    // Thiết lập nút tùy chỉnh
     initButtonList(result.cgButtonList);
-    // 页面按钮显示隐藏状态设置
+    // Thiết lập trạng thái hiển thị/ẩn của nút trang
     initButtonSwitch(result.hideColumns);
-    // 列配置
+    // cấu hình cột
     handleColumnResult(result);
-    // 表配置
+    // Cấu hình bảng
     handleSpecialConfig(result);
   }
 
   /**
-   * 查询控件 事件-执行查询
+   * Control truy vấn sự kiện-Thực thi truy vấn
    * @param data
    */
   function queryWithCondition(data) {
@@ -353,7 +353,7 @@
   }
 
   /**
-   * 查询组件加载完成事件，获取高级查询需要的字段信息
+   * Sự kiện component truy vấn tải hoàn tất, lấy thông tin trường cần cho truy vấn nâng cao
    */
   async function onQueryFormLoaded(json) {
     console.log('onQueryFormLoaded', json);
@@ -362,7 +362,7 @@
   }
 
   /**
-   * list页面打开 其他表单弹窗
+   * listMở trang Popup biểu mẫu khác
    * @param params
    */
   function openOnlinePopModal(params) {
@@ -377,12 +377,12 @@
     }
     openPopModal(true, data);
   }
-  //绑定弹窗事件
+  //Liên kết sự kiện popup
   useOnlineListPopEvent(openOnlinePopModal);
 </script>
 
 <style lang="less">
-  /** [表格主题样式一] 表格强制列不换行 */
+  /** [Kiểu dáng chủ đề bảng một] Bảng ép cột không xuống dòng */
   .j-table-force-nowrap {
     td,
     th {
@@ -393,7 +393,7 @@
       padding: 12px 22px !important;
     }
 
-    /** 列自适应，弊端会导致列宽失效 */
+    /** Cột tự thích ứng, nhược điểm là sẽ khiến độ rộng cột mất hiệu lực */
     &.ant-table-wrapper .ant-table-content {
       overflow-x: auto;
     }

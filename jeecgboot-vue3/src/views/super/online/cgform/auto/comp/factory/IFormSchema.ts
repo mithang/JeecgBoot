@@ -4,8 +4,8 @@ import { FieldExtends, POP_CONTAINER } from '../../../types/onlineRender';
 import { LABELLENGTH } from '../../../util/constant';
 import {replaceUserInfoByExpression} from "@/utils/common/compUtils";
 /**
- * 1.部门选择/用户选择 无：单选配置
- * 控件类
+ * 1.Chọn phòng ban/Lựa chọn của người dùng Không: cấu hình chọn đơn
+ * Loại control
  */
 export default abstract class IFormSchema {
   _data;
@@ -28,7 +28,7 @@ export default abstract class IFormSchema {
   onlyInteger: boolean;
 
   constructor(key, data) {
-    // 考虑不需要存data
+    // Cân nhắc không cần lưudata
     this._data = data;
     this.field = key;
     this.label = data.title;
@@ -55,7 +55,7 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 获取最终的表单配置项，外面获取调用此方法
+   * Lấy mục cấu hình biểu mẫu cuối cùng, bên ngoài gọi phương thức này để lấy
    */
   getFormItemSchema(): FormSchema {
     let schema = this.getItem();
@@ -64,7 +64,7 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 获取表单配置，子类重写此方法
+   * Lấy cấu hình biểu mẫu, lớp con ghi đè phương thức này
    */
   getItem(): FormSchema {
     let fs: FormSchema = {
@@ -89,8 +89,8 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 设置表单ref
-   * popup、分类树需要关联设置其他表单值的时候用到
+   * Thiết lập biểu mẫuref
+   * popup、dùng khi cây phân loại cần liên kết để thiết lập giá trị của biểu mẫu khác
    * @param ref
    */
   setFormRef(ref) {
@@ -98,7 +98,7 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 设置表单元素隐藏
+   * Thiết lập ẩn phần tử biểu mẫu
    */
   isHidden() {
     this.hidden = true;
@@ -106,11 +106,11 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 设置是否必填项
+   * Thiết lập có phải mục bắt buộc điền hay không
    * @param array
    */
   isRequired(array) {
-    // 子表必填   TODO
+    // Bảng con bắt buộc điền   TODO
     if (array && array.length > 0) {
       if (array.indexOf(this.field) >= 0) {
         this.required = true;
@@ -120,7 +120,7 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 初始化 label长度
+   * Khởi tạo labelĐộ dài
    */
   initLabelLength(){
     let obj = this.getExtendData()
@@ -130,7 +130,7 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 获取扩展参数
+   * Lấy tham số mở rộng
    */
   getExtendData() {
     let extend: FieldExtends = {};
@@ -149,7 +149,7 @@ export default abstract class IFormSchema {
   }
 
   /***
-   * 获取和此字段相关的其他字段 需要设置其为隐藏
+   * Lấy các trường khác liên quan đến trường này Cần thiết lập nó thành ẩn
    */
   getRelatedHideFields(): string[] {
     return [];
@@ -159,8 +159,8 @@ export default abstract class IFormSchema {
    * placeholder
    */
   getPlaceholder(view) {
-    let text = '请输入';
-    // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-218】针对组件分别提示对应的校验语
+    let text = 'Vui lòng nhập';
+    // update-begin--author:liaozhiyang---date:20240521---for：【TV360X-218】Đối với từng component, nhắc câu kiểm chứng tương ứng riêng
     if (
       [
         'list',
@@ -190,16 +190,16 @@ export default abstract class IFormSchema {
         'rangeNumber',
       ].includes(view)
     ) {
-      text = '请选择';
+      text = 'Vui lòng chọn';
     } else if (['file', 'image'].includes(view)) {
-      text = '请上传';
+      text = 'Vui lòng tải lên';
     }
-    // update-end--author:liaozhiyang---date:20240521---for：【TV360X-218】针对组件分别提示对应的校验语
+    // update-end--author:liaozhiyang---date:20240521---for：【TV360X-218】Đối với từng component, nhắc câu kiểm chứng tương ứng riêng
     return text + this.label;
   }
 
   /**
-   * 唯一校验
+   * Kiểm chứng tính duy nhất
    */
   setOnlyValidateFun(validateFun) {
     if (validateFun) {
@@ -215,30 +215,30 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 获取校验规则
+   * Lấy quy tắc kiểm chứng
    */
   getRule(): any[] {
     let rules: Rule[] = [];
     const { view, errorInfo, pattern, type, fieldExtendJson } = this._data;
     if (this.required === true) {
       let msg = this.getPlaceholder(view);
-      // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-80】扩展参数配置中的校验提示不生效
+      // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-80】Nhắc kiểm chứng trong cấu hình tham số mở rộng không có hiệu lực
       if (fieldExtendJson) {
         const json = JSON.parse(fieldExtendJson);
         if (json.validateError) {
           msg = json.validateError;
         }
       }
-      // update-end--author:liaozhiyang---date:20240520---for：【TV360X-80】扩展参数配置中的校验提示不生效
+      // update-end--author:liaozhiyang---date:20240520---for：【TV360X-80】Nhắc kiểm chứng trong cấu hình tham số mở rộng không có hiệu lực
       if (errorInfo) {
         msg = errorInfo;
       }
       if (view == 'sel_depart' || view == 'sel_user') {
-        //如果是部门和用户组件 使用 required：true
+        //Nếu là component phòng ban và người dùng Sử dụng required：true
         this.schemaProp['required'] = true;
-        // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-9109】online使用部门和用户组件必填时label前面没有必填的*号
+        // update-begin--author:liaozhiyang---date:20240429---for：【QQYUN-9109】onlineKhi sử dụng component phòng ban và người dùng ở dạng bắt buộc điềnlabelPhía trước không có mục bắt buộc điền*số
         rules.push({ required: true, message: msg });
-        // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-9109】online使用部门和用户组件必填时label前面没有必填的*号
+        // update-end--author:liaozhiyang---date:20240429---for：【QQYUN-9109】onlineKhi sử dụng component phòng ban và người dùng ở dạng bắt buộc điềnlabelPhía trước không có mục bắt buộc điền*số
       } else {
         rules.push({ required: true, message: msg });
       }
@@ -262,12 +262,12 @@ export default abstract class IFormSchema {
       } else if (pattern === 'z') {
         if (type == 'number' || type == 'integer') {
           this.onlyInteger = true;
-          rules.push({ pattern: /^-?\d+$/, message: '请输入整数' });
+          rules.push({ pattern: /^-?\d+$/, message: 'Vui lòng nhập số nguyên' });
         } else {
-          rules.push({ pattern: /^-?\d+$/, message: '请输入整数' });
+          rules.push({ pattern: /^-?\d+$/, message: 'Vui lòng nhập số nguyên' });
         }
       } else {
-        let msg = errorInfo || '正则校验失败';
+        let msg = errorInfo || 'Kiểm chứng biểu thức chính quy thất bại';
         let reg
         try {
           reg = new RegExp(pattern);
@@ -284,7 +284,7 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 添加默认的change事件
+   * Thêm cái mặc địnhchangesự kiện
    * @param schema
    */
   addDefaultChangeEvent(schema) {
@@ -292,36 +292,36 @@ export default abstract class IFormSchema {
       if (!schema.componentProps) {
         schema.componentProps = {};
       }
-      //update-begin-author:taoyan date:2022-5-24 for: VUEN-1095 只读未控制住
+      //update-begin-author:taoyan date:2022-5-24 for: VUEN-1095 Chỉ đọc chưa được kiểm soát chặt
       if (this.disabled == true) {
         schema.componentProps.disabled = true;
       }
-      //update-end-author:taoyan date:2022-5-24 for: VUEN-1095 只读未控制住
+      //update-end-author:taoyan date:2022-5-24 for: VUEN-1095 Chỉ đọc chưa được kiểm soát chặt
       if (!schema.componentProps.hasOwnProperty('onChange')) {
         schema.componentProps['onChange'] = (value, formData) => {
           if (value instanceof Event) {
-            // 输入框 value是event对象
+            // Ô nhập valuelàeventđối tượng
             value = (value.target as any).value;
           }
-          // 部门组件抛出事件的value是数组
+          // của sự kiện component phòng ban ném ravaluelà mảng
           if (value instanceof Array) {
             value = value.join(',');
           }
-          // VUEN-1467【vue3 工作流】流程处理 一对多表单 子表tab切换后，关闭不了 导致整个浏览器无法操作 多操作几次，不一定每次必现---
+          // VUEN-1467【vue3 Quy trình làm việc】Xử lý quy trình biểu mẫu một-nhiều bảng contabSau khi chuyển đổi, không đóng được Khiến toàn bộ trình duyệt không thể thao tác được Thao tác thêm vài lần, không nhất thiết lần nào cũng tái hiện---
           if(!this.formRef || !this.formRef.value || !this.formRef.value.$formValueChange){
-            console.log('当前表单无法触发change事件,field：'+this.field)
+            console.log('Biểu mẫu hiện tại không thể kích hoạtchangesự kiện,field：'+this.field)
           }else{
             this.formRef.value.$formValueChange(this.field, value, formData)
           }
         };
-        // update-begin--author:liaozhiyang---date:20251011---for：【issues/8791】js增强popup弹框的onlChange()没生效
+        // update-begin--author:liaozhiyang---date:20251011---for：【issues/8791】jsTăng cườngpopupcủa popuponlChange()Chưa có hiệu lực
         if (schema.component === 'JPopup') {
           schema.componentProps['onPopUpChange'] = schema.componentProps['onChange']
         }
-        // update-end--author:liaozhiyang---date:20251011---for：【issues/8791】js增强popup弹框的onlChange()没生效
+        // update-end--author:liaozhiyang---date:20251011---for：【issues/8791】jsTăng cườngpopupcủa popuponlChange()Chưa có hiệu lực
       }
     }
-    // 顺带处理其他的 schemaProp
+    // Tiện thể xử lý các khác schemaProp
     Object.keys(this.schemaProp).map((k) => {
       schema[k] = this.schemaProp[k];
     });
@@ -336,7 +336,7 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 高级查询 没有表单ref对象 手动设置setFieldValue方法用于 popup设置表单值
+   * Truy vấn nâng cao Không có biểu mẫurefđối tượng Thiết lập thủ côngsetFieldValuePhương thức dùng cho popupThiết lập giá trị biểu mẫu
    */
   setFunctionForFieldValue(func) {
     if (func) {
@@ -348,10 +348,10 @@ export default abstract class IFormSchema {
     this.searchForm = true;
   }
 
-  /**获取modal作为类下拉组件pop的父容器*/
+  /**Lấymodallàm component dropdown dạng classpopcontainer cha của*/
   getModalAsContainer() {
     let ele = this.getPopContainer();
-    // update-begin--author:liaozhiyang---date:20231205---for：【QQYUN-7150】online缓存路由打开多页导致下拉类型的组件打不开
+    // update-begin--author:liaozhiyang---date:20231205---for：【QQYUN-7150】onlineRoute có bộ nhớ đệm mở nhiều trang dẫn đến component loại dropdown không mở được
     if (ele != 'body') {
       const elems = document.querySelectorAll(ele);
       if (elems && elems.length > 1) {
@@ -366,11 +366,11 @@ export default abstract class IFormSchema {
         }
       }
     }
-    // update-end--author:liaozhiyang---date:20231205---for：【QQYUN-7150】online缓存路由打开多页导致下拉类型的组件打不开
+    // update-end--author:liaozhiyang---date:20231205---for：【QQYUN-7150】onlineRoute có bộ nhớ đệm mở nhiều trang dẫn đến component loại dropdown không mở được
     return document.querySelector(ele);
   }
 
-  /**区分modal表单和查询表单*/
+  /**Phân biệtmodalBiểu mẫu và biểu mẫu truy vấn*/
   getPopContainer() {
     if (this.searchForm === true) {
       return 'body';
@@ -394,24 +394,24 @@ export default abstract class IFormSchema {
   }
 
   /**
-   * 设置 popContainer
+   * Thiết lập popContainer
    */
   setCustomPopContainer(modalClass){
     this.popContainer = modalClass;
   }
 
-  //update-begin-author:taoyan date:2022-8-5 for: 他表字段/关联记录用
-  // 获取他表字段的 配置信息
+  //update-begin-author:taoyan date:2022-8-5 for: trường bảng khác/Bản ghi liên kết dùng
+  // Lấy của trường bảng khác Thông tin cấu hình
   getLinkFieldInfo():any{
     return '';
   }
 
-  // 1.将他表字段的配置信息设置到关联记录字段上
+  // 1.Thiết lập thông tin cấu hình của trường bảng khác lên trường của bản ghi liên kết
   setOtherInfo(_arg){
   }
-  //update-end-author:taoyan date:2022-8-5 for: 他表字段/关联记录用
+  //update-end-author:taoyan date:2022-8-5 for: trường bảng khác/Bản ghi liên kết dùng
   
-  // 表单设计器高级查询用
+  // Dùng cho truy vấn nâng cao của trình thiết kế biểu mẫu
   isInPopover(){
     this.inPopover = true;
   }
@@ -428,7 +428,7 @@ export default abstract class IFormSchema {
     if (!matches || matches.length == 0) {
       return
     }
-    // 去除 ${}
+    // Loại bỏ ${}
     const keys = matches.map((item: string) => item.replace('${', '').replace('}', ''))
     const values = computed(() => {
       const formModel = this.formRef.value.formModel
@@ -441,7 +441,7 @@ export default abstract class IFormSchema {
       }
       timer = setTimeout(() => {
         const formModel = this.formRef.value.formModel
-        // 替换动态参数，如果有 ${xxx} 则替换为实际值
+        // Thay thế tham số động, nếu có ${xxx} thì thay thế bằng giá trị thực tế
         let tempDictTable = dictTable.replace(/\${([^}]+)}/g, (_$0, $1) => {
           if (formModel[$1] == null) {
             return ''
@@ -454,17 +454,17 @@ export default abstract class IFormSchema {
   }
 
   updateDictTable(_dictTable: string) {
-    console.log('请在子类实现 updateDictTable 方法')
+    console.log('Vui lòng triển khai ở lớp con updateDictTable Phương thức')
   }
 
   /**
-   * 获取表字典的编码，可替换系统变量
+   * Lấy mã của từ điển bảng, có thể thay thế biến hệ thống
    * @param dictTable
    * @param dictText
    * @param dictCode
    */
   genDictTableCode(dictTable: string, dictText: string, dictCode: string) {
-    // 替换系统变量
+    // Thay thế biến hệ thống
     dictTable = replaceUserInfoByExpression(dictTable)
     return encodeURI(`${dictTable},${dictText},${dictCode}`);
   }

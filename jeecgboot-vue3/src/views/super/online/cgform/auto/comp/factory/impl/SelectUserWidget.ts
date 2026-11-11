@@ -2,7 +2,7 @@ import IFormSchema from '../IFormSchema';
 import { FormSchema } from '/@/components/Form';
 
 /**
- * 用户选择
+ * Lựa chọn của người dùng
  */
 export default class SelectUserWidget extends IFormSchema {
 
@@ -42,7 +42,7 @@ export default class SelectUserWidget extends IFormSchema {
     }
     props['maxTagCount'] = 3;
 
-    // 解决表单设计器高级查询 popup组件弹窗导致高级查询pop关闭
+    // Giải quyết truy vấn nâng cao của trình thiết kế biểu mẫu popupPopup của component dẫn đến truy vấn nâng caopopĐóng
     if(this.inPopover === true){
       props['getContainer'] = ()=>{
         return this.getModalAsContainer();

@@ -12,7 +12,7 @@ export default class SlotWidget extends IFormSchema {
   constructor(key, data) {
     super(key, data);
     this.slot = '';
-    // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-180】范围查询年，年月，周，季度
+    // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-180】Truy vấn theo phạm vi theo năm, năm-tháng, tuần, quý
     let fieldExtendJson = data.fieldExtendJson;
     if (data.view == 'date' && fieldExtendJson) {
       fieldExtendJson = JSON.parse(fieldExtendJson);
@@ -22,10 +22,10 @@ export default class SlotWidget extends IFormSchema {
         this.picker = undefined;
       }
     }
-    // update-end--author:liaozhiyang---date:20240520---for：【TV360X-180】范围查询年，年月，周，季度
-    // update-begin--author:liaozhiyang---date:20240606---for：【TV360X-214】范围查询控件没有根据配置格式化
+    // update-end--author:liaozhiyang---date:20240520---for：【TV360X-180】Truy vấn theo phạm vi theo năm, năm-tháng, tuần, quý
+    // update-begin--author:liaozhiyang---date:20240606---for：【TV360X-214】Control truy vấn theo phạm vi không định dạng theo cấu hình
     this.precision = data.dbPointLength;
-    // update-end--author:liaozhiyang---date:20240606---for：【TV360X-214】范围查询控件没有根据配置格式化
+    // update-end--author:liaozhiyang---date:20240606---for：【TV360X-214】Control truy vấn theo phạm vi không định dạng theo cấu hình
   }
 
   getItem(): FormSchema {
@@ -33,15 +33,15 @@ export default class SlotWidget extends IFormSchema {
     let slot = this.slot;
     const componentProps: any = {};
     this.picker && (componentProps.picker = this.picker);
-    // update-begin--author:liaozhiyang---date:20240606---for：【TV360X-214】范围查询控件没有根据配置格式化
+    // update-begin--author:liaozhiyang---date:20240606---for：【TV360X-214】Control truy vấn theo phạm vi không định dạng theo cấu hình
     this.precision && (componentProps.precision = this.precision);
-    // update-end--author:liaozhiyang---date:20240606---for：【TV360X-214】范围查询控件没有根据配置格式化
-    // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-180】范围查询年，年月，周，季度
+    // update-end--author:liaozhiyang---date:20240606---for：【TV360X-214】Control truy vấn theo phạm vi không định dạng theo cấu hình
+    // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-180】Truy vấn theo phạm vi theo năm, năm-tháng, tuần, quý
     return Object.assign({}, item, {
       slot,
       componentProps,
     });
-    // update-end--author:liaozhiyang---date:20240520---for：【TV360X-180】范围查询年，年月，周，季度
+    // update-end--author:liaozhiyang---date:20240520---for：【TV360X-180】Truy vấn theo phạm vi theo năm, năm-tháng, tuần, quý
   }
 
   groupDate() {
@@ -55,10 +55,10 @@ export default class SlotWidget extends IFormSchema {
   }
 
   groupTime() {
-    // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9348】增加online查询区域时间范围查询功能
+    // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9348】Bổ sungonlineChức năng truy vấn theo phạm vi thời gian của vùng truy vấn
     this.slot = 'groupTime';
     return this;
-    // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9348】增加online查询区域时间范围查询功能
+    // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9348】Bổ sungonlineChức năng truy vấn theo phạm vi thời gian của vùng truy vấn
   }
 
   groupNumber() {

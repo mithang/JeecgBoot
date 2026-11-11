@@ -14,7 +14,7 @@
     <template #fieldValidType="props">
       <a-row type="flex" :class="['row-valid-type', { full: !isCustomRegexp(props.value) }]">
         <a-col :class="['left']" @click="isCustomRegexp(props.value) ? onChangeCustomRegexp(props) : undefined">
-          <a-select :value="props.value" :options="validTypeOptions" placeholder="空" style="width: 100%" @change="props.triggerChange" :virtual="false" :open="isCustomRegexp(props.value) ? false : undefined">
+          <a-select :value="props.value" :options="validTypeOptions" placeholder="Trống" style="width: 100%" @change="props.triggerChange" :virtual="false" :open="isCustomRegexp(props.value) ? false : undefined">
             <template #dropdownRender="{ menuNode }">
               <div class="menu">
                 <VNodes :vnodes="menuNode" />
@@ -24,14 +24,14 @@
                 class="custom-option-list rc-virtual-list-holder-inner"
                 style="border-top: 1px solid #dfdfdf"
               >
-                <div class="ant-select-item ant-select-item-option" title="使用自定义正则表达式作为校验规则" @click="onAddCustomRegexp(props)" @mousedown="e => e.preventDefault()">
-                  正则表达式
+                <div class="ant-select-item ant-select-item-option" title="Sử dụng biểu thức chính quy tùy chỉnh làm quy tắc kiểm chứng" @click="onAddCustomRegexp(props)" @mousedown="e => e.preventDefault()">
+                  Biểu thức chính quy
                 </div>
               </div>
             </template>
           </a-select>
         </a-col>
-        <a-col class="right" title="修改自定义正则表达式">
+        <a-col class="right" title="Sửa biểu thức chính quy tùy chỉnh">
           <a-button preIcon="ant-design:edit" @click="() => onChangeCustomRegexp(props)" />
         </a-col>
       </a-row>
@@ -55,29 +55,29 @@
     setup() {
       const { prefixCls } = useDesign('cgform-check-dict-table');
       const { createMessage: $message } = useMessage();
-      // 定义列信息
+      // Định nghĩa thông tin cột
       const columns = ref<JVxeColumn[]>([
-        { title: '字段名称', key: 'dbFieldName', width: 100 },
-        { title: '字段备注', key: 'dbFieldTxt', width: 100 },
+        { title: 'Tên trường', key: 'dbFieldName', width: 100 },
+        { title: 'Ghi chú trường', key: 'dbFieldTxt', width: 100 },
         {
-          title: '字段Href',
+          title: 'trườngHref',
           key: 'fieldHref',
           width: 130,
           type: JVxeTypes.textarea,
           defaultValue: '',
         },
         {
-          title: '验证规则',
+          title: 'Quy tắc xác thực',
           key: 'fieldValidType',
           width: 170,
           type: JVxeTypes.slot,
           slotName: 'fieldValidType',
           allowInput: true,
           defaultValue: '',
-          placeholder: '空',
+          placeholder: 'Trống',
         },
         {
-          title: '校验必填',
+          title: 'Kiểm chứng mục bắt buộc điền',
           key: 'fieldMustInput',
           width: 80,
           type: JVxeTypes.checkbox,
@@ -86,7 +86,7 @@
           defaultChecked: false,
         },
         {
-          title: '定义转换器',
+          title: 'Định nghĩa bộ chuyển đổi',
           key: 'converter',
           width: 350,
           type: JVxeTypes.input,
@@ -98,20 +98,20 @@
       const { tableRef } = setup;
       
       const validTypeOptions = ref([
-        { label: '空', value: '' },
-        { label: '唯一校验', value: 'only' },
-        { label: '6到16位数字', value: 'n6-16' },
-        { label: '6到18位字母', value: 's6-18' },
-        { label: '6到16位任意字符', value: '*6-16' },
-        { label: '网址', value: 'url' },
-        { label: '电子邮件', value: 'e' },
-        { label: '手机号码', value: 'm' },
-        { label: '邮政编码', value: 'p' },
-        { label: '字母', value: 's' },
-        { label: '数字', value: 'n' },
-        { label: '整数', value: 'z' },
-        { label: '非空', value: '*' },
-        { label: '金额', value: 'money' },
+        { label: 'Trống', value: '' },
+        { label: 'Kiểm chứng tính duy nhất', value: 'only' },
+        { label: '6tới16chữ số', value: 'n6-16' },
+        { label: '6tới18chữ cái', value: 's6-18' },
+        { label: '6tới16ký tự bất kỳ', value: '*6-16' },
+        { label: 'Địa chỉ web', value: 'url' },
+        { label: 'Thư điện tử (email)', value: 'e' },
+        { label: 'Số điện thoại di động', value: 'm' },
+        { label: 'Mã bưu chính', value: 'p' },
+        { label: 'Chữ cái', value: 's' },
+        { label: 'Chữ số', value: 'n' },
+        { label: 'Số nguyên', value: 'z' },
+        { label: 'Không rỗng', value: '*' },
+        { label: 'Số tiền', value: 'money' },
       ]);
       const validTypeValues = computed(() => {
         return validTypeOptions.value.map((opt) => opt.value);
@@ -120,51 +120,51 @@
       const { createJPrompt } = useJPrompt();
 
       /**
-       * 判断是否是自定义正则表达式
+       * Phán đoán có phải biểu thức chính quy tùy chỉnh hay không
        * @param value
        */
       function isCustomRegexp(value) {
         return value != null && !validTypeValues.value.includes(value);
       }
 
-      // 添加自定义正则表达式
+      // Thêm biểu thức chính quy tùy chỉnh
       function onAddCustomRegexp(props) {
         createJPrompt({
-          title: '自定义正则表达式',
-          placeholder: '请输入正则表达式',
-          rules: [{ required: true, message: '正则表达式不能为空！' }, { validator: validatorCustomRegexp }],
+          title: 'Biểu thức chính quy tùy chỉnh',
+          placeholder: 'Vui lòng nhập biểu thức chính quy',
+          rules: [{ required: true, message: 'Biểu thức chính quy không được để trống!' }, { validator: validatorCustomRegexp }],
           onOk: (value) => {
             props.triggerChange(value);
-            $message.success('添加成功');
+            $message.success('Thêm thành công');
           },
         });
       }
 
-      // 更改自定义正则表达式
+      // Thay đổi biểu thức chính quy tùy chỉnh
       function onChangeCustomRegexp(props) {
         createJPrompt({
-          title: '修改自定义正则表达式',
+          title: 'Sửa biểu thức chính quy tùy chỉnh',
           defaultValue: props.value,
-          placeholder: '请输入正则表达式',
-          rules: [{ required: true, message: '正则表达式不能为空！' }, { validator: validatorCustomRegexp }],
+          placeholder: 'Vui lòng nhập biểu thức chính quy',
+          rules: [{ required: true, message: 'Biểu thức chính quy không được để trống!' }, { validator: validatorCustomRegexp }],
           onOk: (value) => {
             props.triggerChange(value);
             if (value !== props.value) {
-              $message.success('修改成功');
+              $message.success('Sửa thành công');
             }
           },
         });
       }
 
-      // 校验自定义正则表达式
+      // Kiểm chứng biểu thức chính quy tùy chỉnh
       function validatorCustomRegexp(_, value) {
         if (isCustomRegexp(value)) {
           return Promise.resolve();
         } else {
-          return Promise.reject('当前校验已存在');
+          return Promise.reject('Kiểm chứng hiện tại đã tồn tại');
         }
       }
-      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】数据库不允许为空，校验默认相应勾上
+      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Cơ sở dữ liệu không cho phép rỗng, kiểm chứng mặc định tích chọn tương ứng
       function syncFieldMustInput(row) {
         if (row.dbIsNull === '0') {
           tableRef.value!.setValues([
@@ -175,7 +175,7 @@
           ]);
         }
       }
-      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】数据库不允许为空，校验默认相应勾上
+      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Cơ sở dữ liệu không cho phép rỗng, kiểm chứng mặc định tích chọn tương ứng
       return {
         ...setup,
         prefixCls,
@@ -193,7 +193,7 @@
 </script>
 <style lang="less" scoped>
   //noinspection LessUnresolvedVariable
-  // --------------------- begin 自定义正则表达式插槽样式 ------------------
+  // --------------------- begin Kiểu dáng slot của biểu thức chính quy tùy chỉnh ------------------
   .row-valid-type {
     .left,
     .right {
@@ -249,7 +249,7 @@
       }
     }
   }
-  // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-497】表单校验类型选择最后项，二次打开偶尔显示不全
+  // update-begin--author:liaozhiyang---date:20240807---for：【TV360X-497】Chọn mục cuối cùng của loại kiểm chứng biểu mẫu, mở lần thứ hai thỉnh thoảng hiển thị không đầy đủ
   .menu {
     :deep(.rc-virtual-list-holder) {
       overflow-y: hidden !important;
@@ -261,6 +261,6 @@
       }
     }
   }
-  // update-end--author:liaozhiyang---date:20240807---for：【TV360X-497】表单校验类型选择最后项，二次打开偶尔显示不全
-  // --------------------- end 自定义正则表达式插槽样式 ------------------
+  // update-end--author:liaozhiyang---date:20240807---for：【TV360X-497】Chọn mục cuối cùng của loại kiểm chứng biểu mẫu, mở lần thứ hai thỉnh thoảng hiển thị không đầy đủ
+  // --------------------- end Kiểu dáng slot của biểu thức chính quy tùy chỉnh ------------------
 </style>

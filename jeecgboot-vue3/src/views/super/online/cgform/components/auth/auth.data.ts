@@ -5,57 +5,57 @@ import { getAreaTextByCodeAnyLevel } from '/@/components/Form/src/utils/Area';
 import { provinceOptions, provinceAndCityData, regionData } from '/@/components/Form/src/utils/areaDataUtil';
 import { useConditionFilter } from '/@/utils/index';
 
-// 字段权限列配置
+// Cấu hình cột quyền trường
 export const authFieldColumns: BasicColumn[] = [
   {
-    title: '启用',
+    title: 'Kích hoạt',
     dataIndex: 'switch',
     width: 100,
     align: 'center',
     slots: { customRender: 'switch' },
   },
   {
-    title: '字段名称',
+    title: 'Tên trường',
     width: 200,
     dataIndex: 'code',
   },
   {
-    title: '字段描述',
+    title: 'Mô tả trường',
     // width: 200,
     dataIndex: 'title',
   },
   {
-    title: '列表控制',
+    title: 'Kiểm soát danh sách',
     dataIndex: 'list',
     width: 120,
     slots: { customRender: 'list' },
   },
   {
-    title: '表单控制',
+    title: 'Kiểm soát biểu mẫu',
     dataIndex: 'form',
     width: 180,
     slots: { customRender: 'form' },
   },
 ];
 
-// 按钮权限列配置
+// Cấu hình cột quyền nút
 export const authButtonColumns: BasicColumn[] = [
   {
-    title: '启用',
+    title: 'Kích hoạt',
     dataIndex: 'switch',
     width: 80,
     slots: { customRender: 'switch' },
   },
   {
-    title: '名称',
+    title: 'Tên',
     dataIndex: 'title',
   },
   {
-    title: '编码',
+    title: 'Mã (code)',
     dataIndex: 'code',
   },
   {
-    title: '权限控制',
+    title: 'Kiểm soát quyền',
     dataIndex: 'control',
     width: 180,
     slots: { customRender: 'control' },
@@ -63,25 +63,25 @@ export const authButtonColumns: BasicColumn[] = [
 ];
 
 export const authButtonFixedList = [
-  { code: 'add', title: '新增', status: 0 },
-  { code: 'addSub', title: '添加下级', status: 0 },
-  { code: 'edit', title: '编辑', status: 0 },
-  { code: 'detail', title: '详情', status: 0 },
-  { code: 'delete', title: '删除', status: 0 },
-  { code: 'batch_delete', title: '批量删除', status: 0 },
-  { code: 'export', title: '导出', status: 0 },
-  { code: 'import', title: '导入', status: 0 },
-  { code: 'print', title: '打印', status: 0 },
-  { code: 'query', title: '查询', status: 0 },
-  { code: 'reset', title: '重置', status: 0 },
-  { code: 'aigc_mock_data', title: '生成测试数据', status: 0 },
-  { code: 'bpm', title: '提交流程', status: 0 },
-  { code: 'super_query', title: '高级查询', status: 0 },
-  { code: 'form_confirm', title: '确定', status: 0 },
-  // update-begin--author:liusq---date:20250721---for：【LHZP-540】一对多子表按钮权限控制
-  { code: 'popup_add', title: '弹窗新增', status: 0 },
-  { code: 'popup_update', title: '弹窗编辑', status: 0 },
-  // update-end--author:liusq---date:20250721---for：【LHZP-540】一对多子表按钮权限控制
+  { code: 'add', title: 'Thêm mới', status: 0 },
+  { code: 'addSub', title: 'Thêm cấp dưới', status: 0 },
+  { code: 'edit', title: 'Chỉnh sửa', status: 0 },
+  { code: 'detail', title: 'Chi tiết', status: 0 },
+  { code: 'delete', title: 'Xóa', status: 0 },
+  { code: 'batch_delete', title: 'Xóa hàng loạt', status: 0 },
+  { code: 'export', title: 'Xuất (export)', status: 0 },
+  { code: 'import', title: 'Nhập (import)', status: 0 },
+  { code: 'print', title: 'In', status: 0 },
+  { code: 'query', title: 'Truy vấn', status: 0 },
+  { code: 'reset', title: 'Đặt lại', status: 0 },
+  { code: 'aigc_mock_data', title: 'Tạo dữ liệu kiểm thử', status: 0 },
+  { code: 'bpm', title: 'Gửi quy trình', status: 0 },
+  { code: 'super_query', title: 'Truy vấn nâng cao', status: 0 },
+  { code: 'form_confirm', title: 'Xác nhận', status: 0 },
+  // update-begin--author:liusq---date:20250721---for：【LHZP-540】Kiểm soát quyền nút của bảng con một-nhiều
+  { code: 'popup_add', title: 'Thêm mới bằng popup', status: 0 },
+  { code: 'popup_update', title: 'Chỉnh sửa bằng popup', status: 0 },
+  // update-end--author:liusq---date:20250721---for：【LHZP-540】Kiểm soát quyền nút của bảng con một-nhiều
 ];
 
 export const USE_SQL_RULES = 'USE_SQL_RULES';
@@ -102,16 +102,16 @@ const FUZZY_RULE_VIEWS = [
   'pca',
 ];
 const FUZZY_RULE_OPTIONS = [
-  { label: '模糊', value: 'LIKE' },
-  { label: '以..开始', value: 'RIGHT_LIKE' },
-  { label: '以..结尾', value: 'LEFT_LIKE' },
+  { label: 'Mờ (fuzzy)', value: 'LIKE' },
+  { label: 'bằng..Bắt đầu', value: 'RIGHT_LIKE' },
+  { label: 'bằng..Kết thúc (phần cuối)', value: 'LEFT_LIKE' },
 ];
 
 export function isFuzzyRuleOperator(operator) {
   return FUZZY_RULE_OPERATORS.includes(operator);
 }
 
-/** 为保存编码/键值的选择类字段补充模糊匹配条件，不影响全局条件过滤规则。 */
+/** là mã lưu trữ/Trường loại lựa chọn theo cặp khóa-giá trị bổ sung điều kiện khớp mờ, không ảnh hưởng quy tắc lọc điều kiện toàn cục. */
 export function supplementAuthFuzzyConditions(view, options) {
   if (!FUZZY_RULE_VIEWS.includes(view)) return options;
   const missingOptions = FUZZY_RULE_OPTIONS.filter((option) => !options.some((item) => item.value === option.value));
@@ -121,29 +121,29 @@ export function supplementAuthFuzzyConditions(view, options) {
   return [...options.slice(0, insertIndex), ...missingOptions, ...options.slice(insertIndex)];
 }
 
-/** 数据权限规则字段仅支持已同步数据库的非 popup 字段。 */
+/** Trường quy tắc quyền dữ liệu chỉ hỗ trợ cái không phải của cơ sở dữ liệu đã đồng bộ popup trường. */
 export function isAuthDataField(field) {
   return Number(field?.dbIsPersist) === 1 && String(field?.fieldShowType || '').toLowerCase() !== 'popup';
 }
 
-// update-begin--author:scott---date:20260722---for：【数据权限】规则值/条件规则根据规则字段控件类型自动适配，参考FormSchemaFactory的控件映射方式
-// 系统字典驱动的控件（下拉、单选、多选、下拉多选）
+// update-begin--author:scott---date:20260722---for: 【Quyền dữ liệu】Giá trị quy tắc/Quy tắc điều kiện tự động thích ứng theo loại control của trường quy tắc, tham khảoFormSchemaFactoryphương thức ánh xạ control của
+// Control do từ điển hệ thống điều khiển (dropdown, chọn đơn, chọn nhiều, dropdown chọn nhiều)
 const DICT_CODE_VIEWS = ['list', 'list_multi', 'radio', 'checkbox'];
-// 表字典驱动的控件，其 dictTable/dictText/dictField 语义与系统表字典一致，可直接复用 table,text,code 格式
-// （关联记录和 Popup 字典使用各自的专用组件；cat_tree 的字典配置格式不同，暂不纳入自动转换）
+// Control do từ điển bảng điều khiển, của nó dictTable/dictText/dictField Ngữ nghĩa nhất quán với từ điển bảng hệ thống, có thể dùng lại trực tiếp table,text,code Định dạng
+// (bản ghi liên kết và Popup Từ điển sử dụng component chuyên dụng riêng của mỗi loại;cat_tree định dạng cấu hình từ điển của khác nhau, tạm thời không đưa vào chuyển đổi tự động)
 const DICT_TABLE_VIEWS = ['sel_search'];
-// 日期时间类控件
+// Control thuộc loại ngày giờ
 const DATE_TIME_VIEWS = ['date', 'datetime', 'time', 'date_year', 'date_month', 'date_week', 'date_quarter'];
 
 function buildDictCode(dictField, dictTable, dictText) {
   if (dictTable) {
-    // 表字典，格式与 SelectWidget/LinkTableWidget 保持一致：table,text,code
+    // Từ điển bảng, định dạng giống với SelectWidget/LinkTableWidget Giữ nhất quán:table,text,code
     return encodeURI(`${dictTable},${dictText || dictField},${dictField}`);
   }
   return dictField;
 }
 
-/** 获取规则字段对应的字典编码，列表展示与规则值组件共用同一字典配置。 */
+/** Lấy mã từ điển tương ứng với trường quy tắc, hiển thị danh sách và component giá trị quy tắc dùng chung cùng một cấu hình từ điển. */
 export function getRuleValueDictCode(field) {
   if (!field) return '';
   const { view, dictField, dictTable, dictText } = field;
@@ -154,7 +154,7 @@ export function getRuleValueDictCode(field) {
     return buildDictCode(dictField, dictTable, dictText);
   }
   if (view === 'link_table' && dictTable && dictField) {
-    // 关联记录可配置多个显示字段，表字典翻译只取第一个，确保生成 table,text,code 三段式编码
+    // Bản ghi liên kết có thể cấu hình nhiều trường hiển thị, việc dịch từ điển bảng chỉ lấy trường đầu tiên, đảm bảo tạo ra table,text,code mã hóa ba đoạn
     const firstTextField = (dictText || dictField).split(',')[0];
     return buildDictCode(dictField, dictTable, firstTextField);
   }
@@ -168,13 +168,13 @@ function dictSelectWidget(dictCode, multiple = false) {
       dictCode,
       allowClear: true,
       getPopupContainer: () => document.body,
-      // IN 条件时多选，多值以逗号分隔存储
+      // IN Khi có điều kiện thì chọn nhiều, nhiều giá trị lưu trữ phân tách bằng dấu phẩy
       ...(multiple ? { mode: 'multiple' } : {}),
     },
   };
 }
 
-// 关联记录，参考 JLinkTableCard 的 table 模式
+// Bản ghi liên kết, tham khảo JLinkTableCard của table Chế độ
 function linkTableWidget(field, multiple = false) {
   const { dictTable, dictField, dictText, fieldExtendJson } = field;
   if (!dictTable || !dictField || !dictText) return null;
@@ -195,7 +195,7 @@ function linkTableWidget(field, multiple = false) {
   };
 }
 
-/** 获取 Popup 字典配置，格式与 PopupDictWidget 保持一致：报表编码,显示字段,存值字段。 */
+/** Lấy Popup Cấu hình từ điển, định dạng giống với PopupDictWidget Giữ nhất quán: mã báo cáo,Trường hiển thị,trường lưu trữ giá trị. */
 export function getPopupDictConfig(field) {
   const { dictTable, dictField, dictText } = field;
   if (!dictTable || !dictField || !dictText) return null;
@@ -207,7 +207,7 @@ export function getPopupDictConfig(field) {
   };
 }
 
-// Popup 字典
+// Popup từ điển
 function popupDictWidget(field, multiple = false) {
   const config = getPopupDictConfig(field);
   if (!config) return null;
@@ -223,7 +223,7 @@ function popupDictWidget(field, multiple = false) {
 
 const AREA_DISPLAY_LEVELS = ['province', 'city', 'region', 'all'];
 
-/** 从字段扩展配置中读取有效的省市区展示层级，非法 JSON 按未配置处理。 */
+/** Đọc cấp hiển thị tỉnh/thành/quận huyện hợp lệ từ cấu hình mở rộng của trường, không hợp lệ JSON Xử lý theo chưa cấu hình. */
 function getAreaDisplayLevel(fieldExtendJson) {
   try {
     const displayLevel = fieldExtendJson ? JSON.parse(fieldExtendJson).displayLevel : undefined;
@@ -233,7 +233,7 @@ function getAreaDisplayLevel(fieldExtendJson) {
   }
 }
 
-/** 将级联地区树展开为多选下拉项，并保留完整层级名称避免同名地区混淆。 */
+/** Mở rộng cây khu vực dạng thác đổ thành các mục dropdown chọn nhiều, đồng thời giữ nguyên tên cấp độ đầy đủ để tránh nhầm lẫn giữa các khu vực trùng tên. */
 function flattenAreaOptions(options, parentLabels: string[] = []) {
   return options.flatMap((option) => {
     const labels = [...parentLabels, option.label];
@@ -244,14 +244,14 @@ function flattenAreaOptions(options, parentLabels: string[] = []) {
   });
 }
 
-/** 根据字段展示层级选择省、市或区县数据源。 */
+/** Căn cứ cấp hiển thị của trường, chọn nguồn dữ liệu tỉnh, thành phố hoặc quận/huyện. */
 function getAreaOptions(displayLevel) {
   if (displayLevel === 'province') return provinceOptions;
   if (displayLevel === 'city') return flattenAreaOptions(provinceAndCityData);
   return flattenAreaOptions(regionData);
 }
 
-// 省市区，参考 auto/comp/factory/impl/AreaLinkage.ts；IN 条件使用扁平多选，值仍保存地区编码
+// Tỉnh/thành/quận huyện, tham khảo auto/comp/factory/impl/AreaLinkage.ts；IN Điều kiện sử dụng chọn nhiều dạng phẳng, giá trị vẫn lưu mã khu vực
 function areaWidget(fieldExtendJson, multiple = false) {
   const displayLevel = getAreaDisplayLevel(fieldExtendJson);
   if (multiple) {
@@ -277,7 +277,7 @@ function areaWidget(fieldExtendJson, multiple = false) {
   };
 }
 
-// 日期、时间（含年/月/周/季度选择器），参考 auto/comp/factory/impl/DateWidget.ts
+// Ngày, thời gian (bao gồm năm/Tháng/Tuần/bộ chọn quý), tham khảo auto/comp/factory/impl/DateWidget.ts
 function dateTimeWidget(view, fieldExtendJson) {
   const viewPicker = view.startsWith('date_') ? view.substring(5) : undefined;
   const normalizedView = viewPicker ? 'date' : view;
@@ -301,7 +301,7 @@ function dateTimeWidget(view, fieldExtendJson) {
     } catch (_error) {}
   }
   const displayFormatMap = { year: 'YYYY', month: 'YYYY-MM', week: 'YYYY-wo', quarter: 'YYYY-[Q]Q' };
-  // picker 特殊格式只用于显示；规则值统一保存为标准日期，避免 antd 内部解析 Q/wo 格式时抛错
+  // picker Định dạng đặc biệt chỉ dùng để hiển thị; giá trị quy tắc thống nhất lưu thành ngày tiêu chuẩn, tránh antd Phân tích nội bộ Q/wo Khi định dạng thì ném lỗi
   const valueFormat = normalizedView === 'datetime' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
   return {
     component: 'DatePicker',
@@ -316,10 +316,10 @@ function dateTimeWidget(view, fieldExtendJson) {
   };
 }
 
-//update-begin--author:wangshuai---date:20260723---for：【LHZP-1267】年/年月规则值保存时归一化为当年/当月第一天
+//update-begin--author:wangshuai---date:20260723---for：【LHZP-1267】Năm/Khi lưu, giá trị quy tắc năm-tháng được chuẩn hóa thành năm hiện tại/Ngày đầu tiên của tháng hiện tại
 /**
- * 年/年月日期控件的规则值归一化：年保存为当年1月1日，年月保存为当月1日。
- * 年/年月选择器选中后 valueFormat 输出的是面板当天日期，直接保存会导致后端比较范围偏差。
+ * Năm/Chuẩn hóa giá trị quy tắc của control ngày năm-tháng: năm lưu thành năm hiện tại1Tháng1ngày, năm-tháng lưu thành tháng hiện tại1ngày.
+ * Năm/Sau khi bộ chọn năm-tháng được chọn valueFormat Cái xuất ra là ngày trong ngày của panel, lưu trực tiếp sẽ khiến backend so sánh phạm vi bị lệch.
  */
 export function normalizeDateRuleValue(field, value) {
   if (!field || !value || typeof value !== 'string' || value.startsWith('#{')) return value;
@@ -334,16 +334,16 @@ export function normalizeDateRuleValue(field, value) {
   if (picker === 'year') return `${value.substring(0, 4)}-01-01`;
   if (picker === 'month') return `${value.substring(0, 7)}-01`;
   if (picker === 'week') {
-    // 周选择器保存为当周第一天（周一），按星期偏移计算
+    // Bộ chọn tuần lưu thành ngày đầu tiên của tuần hiện tại (Thứ Hai), tính theo độ lệch thứ trong tuần
     const date = dayjs(value);
     if (!date.isValid()) return value;
     return date.subtract((date.day() + 6) % 7, 'day').format('YYYY-MM-DD');
   }
   return value;
 }
-//update-end--author:wangshuai---date:20260723---for：【LHZP-1267】年/年月规则值保存时归一化为当年/当月第一天
+//update-end--author:wangshuai---date:20260723---for：【LHZP-1267】Năm/Khi lưu, giá trị quy tắc năm-tháng được chuẩn hóa thành năm hiện tại/Ngày đầu tiên của tháng hiện tại
 
-// 解析用户/部门选择控件在字段扩展配置中指定的存储字段与展示字段
+// Phân tích người dùng/Control chọn phòng ban, trường lưu trữ và trường hiển thị được chỉ định trong cấu hình mở rộng của trường
 export function getUserDepartExtend(field) {
   if (!field?.fieldExtendJson) return {};
   try {
@@ -353,7 +353,7 @@ export function getUserDepartExtend(field) {
   }
 }
 
-// 用户选择，参考 auto/comp/factory/impl/SelectUserWidget.ts（规则值为逗号分隔存储字段；IN 条件时允许多选，否则单选）
+// Lựa chọn của người dùng, tham khảo auto/comp/factory/impl/SelectUserWidget.ts(giá trị quy tắc là trường lưu trữ phân tách bằng dấu phẩy;IN khi có điều kiện thì cho phép chọn nhiều, nếu không thì chọn đơn)
 function userWidget(field, multiple = false) {
   const extend = getUserDepartExtend(field);
   const componentProps: any = {
@@ -362,7 +362,7 @@ function userWidget(field, multiple = false) {
     allowClear: true,
     showButton: true,
   };
-  // 使用字段扩展配置中的存储字段/展示字段，与 Online 表单保存值保持一致
+  // Sử dụng trường lưu trữ trong cấu hình mở rộng của trường/Trường hiển thị, và Online Giữ giá trị lưu của biểu mẫu nhất quán
   if (extend.store) {
     componentProps.rowKey = extend.store;
   }
@@ -375,7 +375,7 @@ function userWidget(field, multiple = false) {
   };
 }
 
-// 部门选择，参考 auto/comp/factory/impl/SelectDepartWidget.ts（规则值为逗号分隔存储字段；IN 条件时允许多选，否则单选）
+// Chọn phòng ban, tham khảo auto/comp/factory/impl/SelectDepartWidget.ts(giá trị quy tắc là trường lưu trữ phân tách bằng dấu phẩy;IN khi có điều kiện thì cho phép chọn nhiều, nếu không thì chọn đơn)
 function departWidget(field, multiple = false) {
   const extend = getUserDepartExtend(field);
   const componentProps: any = {
@@ -383,7 +383,7 @@ function departWidget(field, multiple = false) {
     multiple,
     showButton: true,
   };
-  // 使用字段扩展配置中的存储字段/展示字段，与 Online 表单保存值保持一致
+  // Sử dụng trường lưu trữ trong cấu hình mở rộng của trường/Trường hiển thị, và Online Giữ giá trị lưu của biểu mẫu nhất quán
   if (extend.store) {
     componentProps.rowKey = extend.store;
   }
@@ -397,13 +397,13 @@ function departWidget(field, multiple = false) {
 }
 
 /**
- * 根据"规则字段"对应的控件类型，计算出"规则值"应使用的组件及componentProps
- * 非字典类控件（文本、popup等）返回 null，沿用原来的 JInputSelect 输入框
+ * Căn cứ theo"Trường quy tắc"loại control tương ứng, tính toán ra"Giá trị quy tắc"Component nên sử dụng vàcomponentProps
+ * Control không thuộc loại từ điển (văn bản,popupv.v.) trả về null, dùng lại theo cái gốc JInputSelect Ô nhập
  */
 export function getRuleValueWidget(field, ruleOperator?) {
   if (!field) return null;
   if (isFuzzyRuleOperator(ruleOperator)) return null;
-  // 条件规则为"在...中"(IN)时，字典/用户/部门类控件切换为多选（多值以逗号分隔存储，后端按逗号拆分拼 in 条件）
+  // Quy tắc điều kiện là"tại...trong"(IN)khi đó, từ điển/Người dùng/Control loại phòng ban chuyển sang chọn nhiều (nhiều giá trị lưu trữ phân tách bằng dấu phẩy, backend tách theo dấu phẩy rồi nối in điều kiện)
   const isIn = ruleOperator === 'IN';
   const { view, fieldExtendJson } = field;
   if (view === 'popup_dict') {
@@ -431,24 +431,24 @@ export function getRuleValueWidget(field, ruleOperator?) {
   return null;
 }
 
-// 默认的规则值输入组件（文本输入 + 可选系统变量）
+// Component nhập giá trị quy tắc mặc định (nhập văn bản + biến hệ thống tùy chọn)
 const DEFAULT_SYS_VAR_OPTIONS = [
-  { label: '当前用户账号', value: '#{sys_user_code}' },
-  { label: '当前用户名称', value: '#{sys_user_name}' },
-  { label: '当前日期', value: '#{sys_date}' },
-  { label: '当前时间', value: '#{sys_time}' },
-  { label: '当前用户部门', value: '#{sys_org_code}' },
-  { label: '登录用户部门ID', value: '#{sys_org_id}' },
-  { label: '当前用户所有部门', value: '#{sys_multi_org_code}' },
-  { label: '当前租户', value: '#{tenant_id}' },
+  { label: 'Tài khoản của người dùng hiện tại', value: '#{sys_user_code}' },
+  { label: 'Tên người dùng hiện tại', value: '#{sys_user_name}' },
+  { label: 'Ngày hiện tại', value: '#{sys_date}' },
+  { label: 'Thời gian hiện tại', value: '#{sys_time}' },
+  { label: 'Phòng ban của người dùng hiện tại', value: '#{sys_org_code}' },
+  { label: 'Phòng ban của người dùng đăng nhậpID', value: '#{sys_org_id}' },
+  { label: 'Tất cả phòng ban của người dùng hiện tại', value: '#{sys_multi_org_code}' },
+  { label: 'Đơn vị thuê hiện tại', value: '#{tenant_id}' },
 ];
 
-/** 获取系统变量的中文名称，仅用于界面展示。 */
+/** Lấy tên tiếng Trung của biến hệ thống, chỉ dùng để hiển thị giao diện. */
 export function getSysVarLabel(value) {
   return DEFAULT_SYS_VAR_OPTIONS.find((item) => item.value === value)?.label;
 }
 
-/** 根据字段控件类型转换列表中的规则值文本。 */
+/** Chuyển đổi văn bản giá trị quy tắc trong danh sách theo loại control của trường. */
 export function getRuleValueDisplayText(field, value, ruleOperator?) {
   const rawValue = Array.isArray(value) ? value.join(',') : String(value ?? '');
   if (isFuzzyRuleOperator(ruleOperator)) return rawValue;
@@ -471,22 +471,22 @@ export function getRuleValueDisplayText(field, value, ruleOperator?) {
 export const DEFAULT_RULE_VALUE_WIDGET = {
   component: 'JAuthRuleValue' as const,
   componentProps: {
-    selectPlaceholder: '系统变量',
-    inputPlaceholder: '请输入',
+    selectPlaceholder: 'Biến hệ thống',
+    inputPlaceholder: 'Vui lòng nhập',
     getPopupContainer: () => document.body,
     options: DEFAULT_SYS_VAR_OPTIONS,
   },
 };
 
 /**
- * 将具体规则值组件包装到 JAuthRuleValue 中，使其仍然可以切换系统变量
+ * Đóng gói component giá trị quy tắc cụ thể vào JAuthRuleValue trong đó, khiến nó vẫn có thể chuyển đổi biến hệ thống
  * @param widget {component, componentProps}
  */
 export function wrapRuleValueWidget(widget) {
   return {
     component: 'JAuthRuleValue' as const,
     componentProps: {
-      selectPlaceholder: '系统变量',
+      selectPlaceholder: 'Biến hệ thống',
       inputPlaceholder: undefined,
       getPopupContainer: () => document.body,
       options: DEFAULT_SYS_VAR_OPTIONS,
@@ -494,22 +494,22 @@ export function wrapRuleValueWidget(widget) {
     },
   };
 }
-// update-end--author:scott---date:20260722---for：【数据权限】规则值/条件规则根据规则字段控件类型自动适配，参考FormSchemaFactory的控件映射方式
-// 数据权限列配置
+// update-end--author:scott---date:20260722---for: 【Quyền dữ liệu】Giá trị quy tắc/Quy tắc điều kiện tự động thích ứng theo loại control của trường quy tắc, tham khảoFormSchemaFactoryphương thức ánh xạ control của
+// Cấu hình cột quyền dữ liệu
 export const authDataColumns: BasicColumn[] = [
   {
-    title: '启用',
+    title: 'Kích hoạt',
     dataIndex: 'switch',
     width: 80,
     slots: { customRender: 'switch' },
   },
   {
-    title: '规则名称',
+    title: 'Tên quy tắc',
     dataIndex: 'ruleName',
     width: 130,
   },
   {
-    title: '规则描述',
+    title: 'Mô tả quy tắc',
     dataIndex: 'description',
     align: 'left',
     slots: { customRender: 'description' },
@@ -519,7 +519,7 @@ export const authDataColumns: BasicColumn[] = [
 export function useAuthDataFormSchemas(props, methods) {
   const formSchemas = computed<FormSchema[]>(() => [
     {
-      label: '规则名称',
+      label: 'Tên quy tắc',
       field: 'ruleName',
       required: true,
       component: 'Input',
@@ -528,7 +528,7 @@ export function useAuthDataFormSchemas(props, methods) {
       },
     },
     {
-      label: '规则字段',
+      label: 'Trường quy tắc',
       field: 'ruleColumn',
       component: 'JSearchSelect',
       componentProps: {
@@ -537,13 +537,13 @@ export function useAuthDataFormSchemas(props, methods) {
         onChange: methods.onRuleColumnChange,
       },
       dynamicRules({ model }) {
-        return [{ required: model.ruleOperator != USE_SQL_RULES, message: '请输入规则字段' }];
+        return [{ required: model.ruleOperator != USE_SQL_RULES, message: 'Vui lòng nhập trường quy tắc' }];
       },
       show: ({ model }) => model.ruleOperator != USE_SQL_RULES,
     },
-    // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-201】权限管理条件根据控件过滤
+    // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-201】Điều kiện quản lý quyền lọc theo control
     {
-      label: '条件规则',
+      label: 'Quy tắc điều kiện',
       field: 'ruleOperator',
       required: true,
       component: 'JDictSelectTag',
@@ -569,15 +569,15 @@ export function useAuthDataFormSchemas(props, methods) {
             value: item.val ?? item.value,
           }));
           const result = supplementAuthFuzzyConditions(findItem.view, filteredOptions);
-          result.push({ value: 'USE_SQL_RULES', label: '自定义SQL' });
+          result.push({ value: 'USE_SQL_RULES', label: 'Tùy chỉnhSQL' });
           return result;
         } else {
-          return [{ value: 'USE_SQL_RULES', label: '自定义SQL' }];
+          return [{ value: 'USE_SQL_RULES', label: 'Tùy chỉnhSQL' }];
         }
       },
     },
     // {
-    //   label: '条件规则',
+    //   label: 'Quy tắc điều kiện',
     //   field: 'ruleOperator',
     //   required: true,
     //   component: 'JDictSelectTag',
@@ -587,11 +587,11 @@ export function useAuthDataFormSchemas(props, methods) {
     //     getPopupContainer: () => document.body,
     //   },
     // },
-    // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-201】权限管理条件根据控件过滤
+    // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-201】Điều kiện quản lý quyền lọc theo control
     {
-      label: '规则值',
+      label: 'Giá trị quy tắc',
       field: 'ruleValue',
-      // -update-begin--author:liaozhiyang---date:20260713---for：【LHZP-600】条件规则为空和不为空时，规则值则隐藏
+      // -update-begin--author:liaozhiyang---date:20260713---for：【LHZP-600】Khi quy tắc điều kiện rỗng và không rỗng, giá trị quy tắc sẽ bị ẩn
       dynamicRules({ model }) {
         if (['EMPTY', 'NOT_EMPTY'].includes(model.ruleOperator)) {
           return [];
@@ -600,28 +600,28 @@ export function useAuthDataFormSchemas(props, methods) {
           {
             required: true,
             validator: (_rule, value) => {
-              // IN 条件下多选组件的值为数组，需兼容数组判空
+              // IN Trong điều kiện, giá trị của component chọn nhiều là mảng, cần tương thích việc xét mảng rỗng
               const isEmpty = value == null || value === '' || (Array.isArray(value) && value.length === 0);
-              return isEmpty ? Promise.reject(new Error('请输入规则值')) : Promise.resolve();
+              return isEmpty ? Promise.reject(new Error('Vui lòng nhập giá trị quy tắc')) : Promise.resolve();
             },
           },
         ];
       },
       show: ({ model }) => !['EMPTY', 'NOT_EMPTY'].includes(model.ruleOperator),
-      // -update-end--author:liaozhiyang---date:20260713---for：【LHZP-600】条件规则为空和不为空时，规则值则隐藏
-      // -update-begin--author:liaozhiyang---date:20240607---for：【TV360X-536】数据权限配置配置优化及新增JInputSelect组件
+      // -update-end--author:liaozhiyang---date:20260713---for：【LHZP-600】Khi quy tắc điều kiện rỗng và không rỗng, giá trị quy tắc sẽ bị ẩn
+      // -update-begin--author:liaozhiyang---date:20240607---for：【TV360X-536】Tối ưu cấu hình quyền dữ liệu và bổ sungJInputSelectComponent
       ...DEFAULT_RULE_VALUE_WIDGET,
-      // -update-end--author:liaozhiyang---date:20240607---for：【TV360X-536】数据权限配置配置优化及新增JInputSelect组件
+      // -update-end--author:liaozhiyang---date:20240607---for：【TV360X-536】Tối ưu cấu hình quyền dữ liệu và bổ sungJInputSelectComponent
     },
     {
-      label: '状态',
+      label: 'Trạng thái',
       field: 'status',
       required: true,
       component: 'RadioButtonGroup',
       componentProps: {
         options: [
-          { label: '启用', value: 1 },
-          { label: '不启用', value: 0 },
+          { label: 'Kích hoạt', value: 1 },
+          { label: 'Không kích hoạt', value: 0 },
         ],
       },
       defaultValue: 1,

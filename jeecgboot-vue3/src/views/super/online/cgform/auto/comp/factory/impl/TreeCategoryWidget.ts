@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 分类字典
+ * Từ điển phân loại
  */
 export default class TreeCategoryWidget extends IFormSchema {
   pid: string;
@@ -28,13 +28,13 @@ export default class TreeCategoryWidget extends IFormSchema {
   }
 
   /**
-   * 1. 不带返回值的
-   * 2. 带文本返回的
+   * 1. không có giá trị trả về
+   * 2. Có trả về văn bản
    */
   getComponentProps() {
-    // VUEN-1049 分类字典保存后，列表不展示 单表 树表 --> 配错编码后，表单界面还显示分类字典选项，可直接不显示字典选项
+    // VUEN-1049 Sau khi lưu từ điển phân loại, danh sách không hiển thị bảng đơn Bảng cây --> Sau khi cấu hình sai mã, giao diện biểu mẫu vẫn hiển thị tùy chọn từ điển phân loại, có thể trực tiếp không hiển thị tùy chọn từ điển
     let param = {
-      placeholder: '请选择' + this.label
+      placeholder: 'Vui lòng chọn' + this.label
     }
     if(this.pcode){
       param['pcode'] = this.pcode;

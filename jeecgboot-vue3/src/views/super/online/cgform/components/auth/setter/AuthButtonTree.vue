@@ -1,13 +1,13 @@
 <template>
   <div>
-    <a-empty v-if="disabled" description="请先选中左侧角色/部门/用户" />
-    <a-empty v-else-if="treeData.length === 0" description="无权限信息" />
+    <a-empty v-if="disabled" description="Vui lòng chọn vai trò phía bên trái trước/Phòng ban/Người dùng" />
+    <a-empty v-else-if="treeData.length === 0" description="Không có thông tin quyền" />
     <template v-else>
       <div class="onl-auth-tree-btns">
-        <a-button @click="onRefresh" size="small" type="primary" preIcon="ant-design:redo" ghost>刷新</a-button>
-        <a-button @click="onSave" size="small" type="primary" preIcon="ant-design:save" ghost>保存</a-button>
-        <a-button @click="onSelectAll" size="small" type="primary" ghost><CheckOutlined />全选</a-button>
-        <a-button @click="onClearSelected" size="small" type="primary" ghost><UndoOutlined />重置</a-button>
+        <a-button @click="onRefresh" size="small" type="primary" preIcon="ant-design:redo" ghost>Làm mới</a-button>
+        <a-button @click="onSave" size="small" type="primary" preIcon="ant-design:save" ghost>Lưu</a-button>
+        <a-button @click="onSelectAll" size="small" type="primary" ghost><CheckOutlined />Chọn tất cả</a-button>
+        <a-button @click="onClearSelected" size="small" type="primary" ghost><UndoOutlined />Đặt lại</a-button>
       </div>
       <a-tree
         checkable
@@ -50,7 +50,7 @@
       async function loadTree() {
         if (!props.cgformId) return;
         let result = (await authButtonLoadTree(props.cgformId, authType.value)) as Recordable[];
-        //1.遍历第一次 根据code设置默认按钮名称
+        //1.Duyệt lần đầu tiên Căn cứ theocodeThiết lập tên nút mặc định
         result.forEach((item) => {
           for (const btn of authButtonFixedList) {
             if (item.code == btn.code) {
@@ -61,7 +61,7 @@
             }
           }
         });
-        //2.拼树形数据
+        //2.Ghép dữ liệu dạng cây
         let trees: Recordable[] = [];
         for (let item of result) {
           let title = getTreeNodeTitle(item);
@@ -75,7 +75,7 @@
         loadChecked(roleId.value, authMode.value);
       }
 
-      // 给外部调用，加载当前选择的权限
+      // Cho bên ngoài gọi, tải quyền đang chọn hiện tại
       async function loadChecked($roleId, $authMode) {
         roleId.value = $roleId;
         authMode.value = $authMode;
@@ -92,7 +92,7 @@
 
       function clearChecked() {
         roleId.value = '';
-        // QQYUN-4284 【online表单】权限管理 开启按钮后，在角色授权中显示，当关闭时，再打开角色权限仍然显示，需刷新页面才不显示
+        // QQYUN-4284 【onlineBiểu mẫu 】Quản lý quyền Sau khi bật nút, hiển thị trong ủy quyền vai trò, khi tắt, mở lại quyền vai trò vẫn hiển thị, cần làm mới trang mới không hiển thị
         loadTree();
       }
 
@@ -105,17 +105,17 @@
           if (success) {
             if (Array.isArray(result?.disabledNames)) {
               createSuccessModal({
-                title: '保存成功',
-                content: `由于以下按钮未激活，所以权限未生效。<br>${result.disabledNames.join('<br>')}`,
+                title: 'Lưu thành công',
+                content: `Do các nút sau chưa được kích hoạt nên quyền chưa có hiệu lực.<br>${result.disabledNames.join('<br>')}`,
               });
             } else {
-              $message.success('保存成功');
+              $message.success('Lưu thành công');
             }
           } else {
             $message.error(message);
           }
         } catch (e) {
-          $message.error('保存出现异常');
+          $message.error('Lưu xuất hiện bất thường');
           console.error(e);
         }
       }
@@ -123,14 +123,14 @@
       function getTreeNodeTitle(item) {
         let str = item.title + '-';
         if (item.code && item.code.includes('form_sub')) {
-          // 【TV360X-2711】当 code 以 form_sub 开头时，说明是附表
-          str += '表单可见（附表）'
+          // 【TV360X-2711】Khi code bằng form_sub Khi ở phần đầu, chứng tỏ là bảng phụ
+          str += 'Biểu mẫu hiển thị (bảng phụ)'
         } else if (item.code === 'form_confirm') {
-          str += '表单可见';
+          str += 'Biểu mẫu hiển thị';
         } else if (item.page == 3) {
-          str += '列表可见';
+          str += 'Danh sách hiển thị';
         } else if (item.page == 5) {
-          str += '表单可见';
+          str += 'Biểu mẫu hiển thị';
         }
         return str;
       }

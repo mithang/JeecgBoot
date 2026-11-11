@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 输入框-textarea
+ * Ô nhập-textarea
  */
 export default class TextAreaWidget extends IFormSchema {
   getItem(): FormSchema {

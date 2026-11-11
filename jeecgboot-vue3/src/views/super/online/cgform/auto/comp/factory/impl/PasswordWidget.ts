@@ -2,7 +2,7 @@ import { FormSchema } from '/@/components/Form';
 import IFormSchema from '../IFormSchema';
 
 /**
- * 输入框- 密码
+ * Ô nhập- Mật khẩu
  */
 export default class PasswordWidget extends IFormSchema {
   getItem(): FormSchema {

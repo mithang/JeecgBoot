@@ -7,12 +7,12 @@
     @ok="handleSubmit"
   >
     <template #footer>
-      <a-button key="submit" type="primary" @click="handleSubmit"> {{modalProps.okText ?? '确定'}}</a-button>
-      <a-button key="back" @click="handleCancel">{{ modalProps.cancelText ?? '关闭' }}</a-button>
+      <a-button key="submit" type="primary" @click="handleSubmit"> {{modalProps.okText ?? 'Xác nhận'}}</a-button>
+      <a-button key="back" @click="handleCancel">{{ modalProps.cancelText ?? 'Đóng' }}</a-button>
     </template>
 
     <a-spin :spinning="confirmLoading">
-      <!-- online表单 -->
+      <!-- onlineBiểu mẫu -->
       <online-form
         v-if="isOnlineForm"
         ref="onlineFormCompRef"
@@ -24,7 +24,7 @@
       >
       </online-form>
 
-      <!-- 自定义表单 -->
+      <!-- Biểu mẫu tùy chỉnh -->
       <component
         v-else
         ref="customFormRef"
@@ -48,7 +48,7 @@
   import { omit } from 'lodash-es';
 
   /**
-   * open函数的参数
+   * openTham số của hàm
    */
   interface ModalConfig {
     row: any;
@@ -62,7 +62,7 @@
   }
 
   /**
-   * 默认配置
+   * Cấu hình mặc định
    */
   const DEF_CONFIG: ModalConfig = {
     code: '',
@@ -75,7 +75,7 @@
     formComponent: '',
   };
   /**
-   * 自定义弹窗
+   * Popup tùy chỉnh
    */
   export default defineComponent({
     name: 'OnlineCustomModal',
@@ -86,13 +86,13 @@
     setup(_props, { emit, attrs }) {
       const onlineFormCompRef = ref();
       const modalProps = ref({});
-      // online表单的配置id
+      // onlineCấu hình của biểu mẫuid
       const id = ref('');
 
       let onlineHideFields = [];
       let onlineShowFields = [];
       let onlineFormEditUrl = '';
-      // 当前编辑的数据
+      // Dữ liệu đang chỉnh sửa hiện tại
       let currentRowData = {};
       const url = {
         loadFormItems: '/online/cgform/api/getFormItem/',
@@ -101,23 +101,23 @@
       const modalStyle = { position: 'relative' };
 
       const confirmLoading = ref(false);
-      // 表单是否渲染完成
+      // Biểu mẫu đã render xong hay chưa
       const formRendered = ref(false);
-      // 渲染完成改变状态
+      // Render hoàn tất, thay đổi trạng thái
       function renderSuccess() {
         formRendered.value = true;
       }
 
-      //是否是online表单
+      //Có phải làonlineBiểu mẫu
       const isOnlineForm = ref(true);
 
-      // 弹框显示 触发onlineFormCompRef---show
+      // Hiển thị popup Kích hoạtonlineFormCompRef---show
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (params) => {
         setModalProps({ confirmLoading: false });
         resetParams(params);
         await nextTick(async () => {
           if (!params.formComponent) {
-            //没有申明组件 走online表单
+            //Không có component được khai báo Đi quaonlineBiểu mẫu
             await showOnlineForm();
           } else {
             showCustomForm(params.formComponent);
@@ -126,21 +126,21 @@
       });
 
       /**
-       * 打开弹窗
+       * Mở popup
        * @param params
        */
       function resetParams(params) {
         // code row formComponent hide show
         let options = Object.assign({}, DEF_CONFIG, params);
         id.value = options.code;
-        // update-begin--author:liaozhiyang---date:20250818---for：【issues/8672】js增强弹窗支持basicModal的props
+        // update-begin--author:liaozhiyang---date:20250818---for：【issues/8672】jsPopup tăng cường hỗ trợbasicModalcủaprops
         modalProps.value = {
-          title: '自定义弹框',
+          title: 'Popup tùy chỉnh',
           width: 600,
           ...attrs,
           ...omit(params, ['row', 'formComponent', 'hide', 'show', 'requestUrl']),
         };
-        // update-end--author:liaozhiyang---date:20250818---for：【issues/8672】js增强弹窗支持basicModal的props
+        // update-end--author:liaozhiyang---date:20250818---for：【issues/8672】jsPopup tăng cường hỗ trợbasicModalcủaprops
         onlineHideFields = options.hide || [];
         onlineShowFields = options.show || [];
         onlineFormEditUrl = getOnlineFormEditUrl(options.requestUrl);
@@ -148,7 +148,7 @@
       }
 
       /**
-       * 获取表单数据编辑地址-对两个表单都有效
+       * Lấy địa chỉ chỉnh sửa dữ liệu biểu mẫu-Có hiệu lực với cả hai biểu mẫu
        */
       function getOnlineFormEditUrl(requestUrl) {
         if (requestUrl) {
@@ -180,32 +180,32 @@
         closeModal();
       }
 
-      /*-------------------------------------online表单-----------------------------------------------*/
+      /*-------------------------------------onlineBiểu mẫu-----------------------------------------------*/
 
       /**
-       * 显示online表单
+       * Hiển thịonlineBiểu mẫu
        */
       async function showOnlineForm() {
         isOnlineForm.value = true;
         await getRefPromise(formRendered);
-        //处理字段显示隐藏
+        //Xử lý việc hiển thị/ẩn trường
         onlineFormCompRef.value.handleCustomFormSh(onlineShowFields, onlineHideFields);
-        //回显表单数据
+        //Hiển thị lại dữ liệu biểu mẫu
         onlineFormCompRef.value.handleCustomFormEdit(currentRowData, onlineFormEditUrl);
       }
 
-      // 模板风格-默认1列
+      // Phong cách mẫu-Mặc định1cột
       const formTemplate = ref(1);
-      // 监听id变化 表单重新渲染
+      // Lắng nghe (watch)idThay đổi Render lại biểu mẫu
       watch(id, renderFormItems, { immediate: true });
       async function renderFormItems() {
         formRendered.value = false;
         if (!id.value) {
           return;
         }
-        console.log('重新渲染表单》》》》modal');
+        console.log('Render lại biểu mẫu 》》》》modal');
         let result: any = await loadFormItems();
-        // modal页面只处理按钮、JS增强、弹框宽度
+        // modalTrang chỉ xử lý nút,JSTăng cường, độ rộng popup
         let dataFormTemplate = result.head.formTemplate;
         formTemplate.value = dataFormTemplate ? Number(dataFormTemplate) : 1;
         nextTick(async () => {
@@ -220,7 +220,7 @@
           defHttp
             .get({ url }, { isTransformResponse: false })
             .then((res) => {
-              console.log('表单结果》》modal:', res);
+              console.log('Kết quả biểu mẫu 》》modal:', res);
               if (res.success) {
                 resolve(res.result);
               } else {
@@ -232,9 +232,9 @@
             });
         });
       }
-      /*-------------------------------------online表单-----------------------------------------------*/
+      /*-------------------------------------onlineBiểu mẫu-----------------------------------------------*/
 
-      /*-------------------------------------自定义表单-----------------------------------------------*/
+      /*-------------------------------------Biểu mẫu tùy chỉnh-----------------------------------------------*/
       const customFormRef = ref();
 
       const customFormComponent = reactive({
@@ -244,7 +244,7 @@
       });
 
       /**
-       * 显示自定义表单
+       * Hiển thị biểu mẫu tùy chỉnh
        */
       function showCustomForm(formComponent) {
         isOnlineForm.value = false;
@@ -252,7 +252,7 @@
         customFormComponent.row = currentRowData;
         customFormComponent.is = markRaw(defineAsyncComponent(() => importViewsFile(formComponent)));
       }
-      /*-------------------------------------自定义表单-----------------------------------------------*/
+      /*-------------------------------------Biểu mẫu tùy chỉnh-----------------------------------------------*/
 
       return {
         //modal
@@ -262,17 +262,17 @@
         handleSubmit,
         handleCancel,
 
-        // online表单
+        // onlineBiểu mẫu
         id,
         onlineFormCompRef,
         formTemplate,
         renderSuccess,
 
-        //自定义表单
+        //Biểu mẫu tùy chỉnh
         customFormRef,
         customFormComponent,
 
-        //通用
+        //Dùng chung
         open,
         isOnlineForm,
         confirmLoading,

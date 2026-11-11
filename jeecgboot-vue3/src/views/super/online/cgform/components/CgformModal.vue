@@ -30,7 +30,7 @@
         </div>
         <a-spin :spinning="tableLoading || hideTabs">
           <a-tabs v-show="!hideTabs" v-model:activeKey="activeKey" @change="onTabsChange">
-            <a-tab-pane tab="数据库属性" key="dbTable" forceRender>
+            <a-tab-pane tab="Thuộc tính cơ sở dữ liệu" key="dbTable" forceRender>
               <DBAttributeTable
                 ref="dbTable"
                 :isUpdate="isUpdate"
@@ -47,24 +47,24 @@
                 @syncDbIsNull="onTableSyncDbIsNull"
               />
             </a-tab-pane>
-            <a-tab-pane tab="页面属性" key="pageTable" forceRender>
+            <a-tab-pane tab="Thuộc tính trang" key="pageTable" forceRender>
               <PageAttributeTable ref="pageTable" />
             </a-tab-pane>
-            <a-tab-pane tab="校验字段" key="checkTable" forceRender>
+            <a-tab-pane tab="Trường kiểm chứng" key="checkTable" forceRender>
               <CheckDictTable ref="checkTable" />
             </a-tab-pane>
-            <a-tab-pane tab="外键" key="fkTable" forceRender>
+            <a-tab-pane tab="Khóa ngoại" key="fkTable" forceRender>
               <ForeignKeyTable ref="fkTable" :actionButton="actionButton" />
             </a-tab-pane>
-            <a-tab-pane tab="索引" key="idxTable" forceRender>
+            <a-tab-pane tab="Chỉ mục (index)" key="idxTable" forceRender>
               <IndexTable ref="idxTable" :actionButton="actionButton" />
             </a-tab-pane>
             <a-tab-pane key="queryTable" forceRender>
               <template #tab>
                 <span>
-                  个性查询配置
+                  Cấu hình truy vấn cá nhân hóa
                   <a-tooltip>
-                    <template #title>允许自定义，查询表单字段控件类型！</template>
+                    <template #title>Cho phép tùy chỉnh, loại control của trường trong biểu mẫu truy vấn!</template>
                     <Icon class="query-help-icon" icon="bx:help-circle"></Icon>
                   </a-tooltip>
                 </span>
@@ -79,14 +79,14 @@
     <template #footer>
       <div class="footer-area">
         <div class="rightArea">
-          <a-button @click="onCancel">关闭</a-button>
-          <a-button type="primary" :loading="confirmLoading" preIcon="ant-design:save" @click="onSubmit">保存</a-button>
+          <a-button @click="onCancel">Đóng</a-button>
+          <a-button type="primary" :loading="confirmLoading" preIcon="ant-design:save" @click="onSubmit">Lưu</a-button>
         </div>
         <div class="leftArea">
           <div v-if="aiTestMode && !isUpdate">
             <a-select
               v-model:value="aiTestTable"
-              placeholder="请选择测试的数据模型"
+              placeholder="Vui lòng chọn mô hình dữ liệu để kiểm thử"
               :getPopupContainer="(n) => n?.parentElement"
               style="width: 300px; margin: 0 10px 0 0;text-align: left;"
             >
@@ -94,11 +94,11 @@
                 <a-select-option :value="item.name">{{ item.title + '（' + item.name + '）' }}</a-select-option>
               </template>
             </a-select>
-            <a-button type="primary" ghost @click="initVirtualData">生成数据&gt;&gt;</a-button>
+            <a-button type="primary" ghost @click="initVirtualData">Tạo dữ liệu&gt;&gt;</a-button>
           </div>
           <div v-if="isUpdate" class="positioning-area">
-            <a-input v-model:value="positioning" placeholder="搜索字段或备注" allowClear @pressEnter="handlePositioning"></a-input>
-            <a-button type="primary" ghost @click="handlePositioning">定位</a-button>
+            <a-input v-model:value="positioning" placeholder="Tìm kiếm trường hoặc ghi chú" allowClear @pressEnter="handlePositioning"></a-input>
+            <a-button type="primary" ghost @click="handlePositioning">Định vị</a-button>
           </div>
         </div>
       </div>
@@ -152,20 +152,20 @@
       const { createMessage: $message } = useMessage();
       const modalRef = ref();
       const spinRef = ref();
-      // 是否是更新模式
+      // Có phải chế độ cập nhật hay không
       const isUpdate = ref(false);
-      // 编辑时存储的值
+      // Giá trị lưu trữ khi chỉnh sửa
       let model: Recordable = {};
-      const title = computed(() => (isUpdate.value ? '编辑' : '新增'));
-      // 当前是否正在加载中
+      const title = computed(() => (isUpdate.value ? 'Chỉnh sửa' : 'Thêm mới'));
+      // Hiện tại có đang tải hay không
       const confirmLoading = ref(true);
-      // 表格区域正在加载中
+      // Vùng bảng đang tải
       const tableLoading = ref(false);
-      // tabs当前活动的页面
+      // tabsTrang đang hoạt động hiện tại
       const activeKey = ref('dbTable');
-      // 解决打开弹窗速度缓慢的问题
+      // Giải quyết vấn đề tốc độ mở popup chậm
       const hideTabs = ref(true);
-      // 标记是否已经初始化过（v-show模式下组件不会被销毁）
+      // Đánh dấu đã khởi tạo hay chưa (v-showỞ chế độ này component sẽ không bị hủy)
       let tabsInitialized = false;
       // table refs
       const tables: CgformModal.TablesRef = {
@@ -176,14 +176,14 @@
         idxTable: ref<CgformModal.IndexTableType>(),
         queryTable: ref<CgformModal.QueryTableType>(),
       };
-      // 当前是否是全屏状态
+      // Hiện tại có phải trạng thái toàn màn hình hay không
       const fullScreenRef = computed(() => modalRef.value?.fullScreenRef ?? false);
       provide('tables', tables);
       provide('fullScreenRef', fullScreenRef);
       const positioning = ref('');
       const onlFormContentRef = ref<HTMLElement>();
 
-      //update-begin-author:liaozhiyang date:2026-05-12 for:【QQYUN-9789】鼠标点击时去掉 vxe-table 的蓝框，键盘导航（Tab/Enter/方向键）时正常显示
+      //update-begin-author:liaozhiyang date:2026-05-12 for:【QQYUN-9789】Khi nhấp chuột thì bỏ đi vxe-table khung màu xanh của, điều hướng bằng bàn phím (Tab/Enter/phím mũi tên) thì hiển thị bình thường
       const inputMethod = ref<'mouse' | 'keyboard'>('mouse');
       const KEYBOARD_NAV_KEYS = new Set(['Tab', 'Enter', 'Escape', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
       function onInputKeyDown(e: KeyboardEvent) {
@@ -191,9 +191,9 @@
           inputMethod.value = 'keyboard';
         }
       }
-      //update-end-author:liaozhiyang date:2026-05-12 for：【QQYUN-9789】鼠标点击时去掉 vxe-table 的蓝框，键盘导航（Tab/Enter/方向键）时正常显示
+      //update-end-author:liaozhiyang date:2026-05-12 for：【QQYUN-9789】Khi nhấp chuột thì bỏ đi vxe-table khung màu xanh của, điều hướng bằng bàn phím (Tab/Enter/phím mũi tên) thì hiển thị bình thường
       const onlFormContentFormRef = ref<HTMLElement>();
-      /** `.onlForm-content-form` 当前高度（随布局/展开收起等变化） */
+      /** `.onlForm-content-form` Chiều cao hiện tại (theo bố cục/thay đổi như mở rộng/thu gọn) */
       const onlFormContentFormHeight = ref(0);
       const vxetableHeight = ref(0);
       provide('vxetableHeight', vxetableHeight);
@@ -205,17 +205,17 @@
         }
       });
 
-      // 头部表单子组件 ref
+      // Component con của biểu mẫu phần đầu ref
       const cgformHeadFormRef = ref<InstanceType<typeof CgformHeadForm>>();
       const isTree = ref<string>('N');
-      // 代理 formAction 供 ExtendConfigModal 和 useOnlineTest 使用
+      // Proxy formAction cho ExtendConfigModal và useOnlineTest Sử dụng
       const formAction = {
         getFieldsValue: (fields?: string[]) => cgformHeadFormRef.value?.getFieldsValue(fields) ?? {},
         setFieldsValue: (values: Recordable) => cgformHeadFormRef.value?.setFieldsValue(values),
         validateFields: (_fields?: string[]) => Promise.resolve(),
         resetFields: () => cgformHeadFormRef.value?.resetFields(),
       };
-      // 表单赋值
+      // Gán giá trị biểu mẫu
       const [registerModal, { closeModal }] = useModalInner((data) => {
         isUpdate.value = data?.isUpdate ?? false;
         if (isUpdate.value) {
@@ -224,17 +224,17 @@
           add();
         }
       });
-      // 旧表名
+      // Tên bảng cũ
       const oldTableName = ref('');
-      // 立即同步所有 table（防抖版）
+      // Đồng bộ ngay lập tức tất cả table(bản chống rung debounce)
       const syncAllTableNowDebounce = simpleDebounce(() => syncAllTableNowPromise(), 150);
-      // 临时数据ID，不提交到后台
+      // Dữ liệu tạm thờiID, không gửi lên backend
       let fieldTempIds: string[] = [];
-      // 是否显示附表字段
+      // Có hiển thị trường bảng phụ hay không
       let showSubTableStr = false;
-      // 是否已添加树表单字段
+      // Đã thêm trường biểu mẫu cây hay chưa
       let treeFieldAdded = false;
-      // 已添加的树表单字段ID
+      // Trường biểu mẫu cây đã thêmID
       let treeFieldIds: string[] = [];
       let interval: any = null;
 
@@ -258,24 +258,24 @@
       async function edit(record) {
         confirmLoading.value = false;
         activeKey.value = 'dbTable';
-        // 重置表单
+        // Đặt lại biểu mẫu
         cgformHeadFormRef.value?.resetFields();
         model = Object.assign({}, record);
         initialAllShowItem(model);
-        // 重置定位内容
+        // Đặt lại nội dung định vị
         positioning.value = '';
         
-        // 便于 ai test data 复制
+        // thuận tiện cho việc ai test data Sao chép
         tableJsonGetHelper(model);
 
         cgformHeadFormRef.value?.initialExtConfigJson(model);
         cgformHeadFormRef.value?.setFieldsValue(model);
         oldTableName.value = model.tableName;
-        // update-begin--author:liaozhiyang---date:20260330---for:【QQYUN-13610】解决online打开慢的问题
-        // 解决打开弹窗速度缓慢的问题（第一次延迟显示，后续直接显示）
+        // update-begin--author:liaozhiyang---date:20260330---for:【QQYUN-13610】Giải quyếtonlineVấn đề mở chậm
+        // Giải quyết vấn đề tốc độ mở popup chậm (lần đầu hiển thị trì hoãn, các lần sau hiển thị trực tiếp)
         if (tabsInitialized) {
           hideTabs.value = false;
-          // v-show模式下组件不会被销毁，需要先清空所有表的旧数据
+          // v-showỞ chế độ này component sẽ không bị hủy, cần xóa sạch dữ liệu cũ của mọi bảng trước
           clearAllTableData();
         } else {
           sleep(1, () => {
@@ -283,34 +283,34 @@
             tabsInitialized = true;
           });
         }
-        // update-end--author:liaozhiyang---date:20260330---for:【QQYUN-13610】解决online打开慢的问题
-        // update模式，加载数据库中的数据
+        // update-end--author:liaozhiyang---date:20260330---for:【QQYUN-13610】Giải quyếtonlineVấn đề mở chậm
+        // updateChế độ, tải dữ liệu trong cơ sở dữ liệu
         if (isUpdate.value) {
-          // update-begin--author:liaozhiyang---date:20260210---for:【QQYUN-13658】Jvxetable、vxetable按需加载
+          // update-begin--author:liaozhiyang---date:20260210---for:【QQYUN-13658】Jvxetable、vxetableTải theo nhu cầu
           await getRefPromise(tables.dbTable);
-          // update-end--author:liaozhiyang---date:20260209---for:【QQYUN-13658】Jvxetable、vxetable按需加载
+          // update-end--author:liaozhiyang---date:20260209---for:【QQYUN-13658】Jvxetable、vxetableTải theo nhu cầu
           tables.dbTable.value?.setDataSource([]);
           await loadFields(model.id);
-          // 加载index的数据，由于默认不可见，所以可以分开加载，提升加载效率
+          // Tảiindexdữ liệu của, do mặc định không nhìn thấy nên có thể tải tách ra, nâng cao hiệu quả tải
           await loadIndexes(model.id);
-          // 设置子表下拉选择
+          // Thiết lập chọn dropdown của bảng con
           getRefPromise(tables.pageTable).then(() => {
             tables.pageTable.value!.changePageType(model.tableType == 3, model.relationType);
           });
         } else {
-          // 添加初始数据
+          // Thêm dữ liệu khởi tạo
           let { initialData, tempIds } = useInitialData();
           await setAllTableData(initialData, true);
           fieldTempIds = tempIds;
         }
       }
 
-      // 加载表字段配置
+      // Tải cấu hình trường của bảng
       async function loadFields(headId) {
         tableLoading.value = true;
         try {
           let fields = await formApi.doQueryField(headId);
-          // 便于 ai test data 复制
+          // thuận tiện cho việc ai test data Sao chép
           console.log("online fields:", fields)
           tableLoading.value = false;
           await setAllTableData(fields);
@@ -319,26 +319,26 @@
         }
       }
 
-      // 加载表索引配置
+      // Tải cấu hình chỉ mục của bảng
       async function loadIndexes(headId) {
         let indexes = await formApi.doQueryIndexes(headId);
-        // 便于 ai test data 复制
+        // thuận tiện cho việc ai test data Sao chép
         console.log("online indexs:", indexes)
-        // update-begin--author:liaozhiyang---date:20260210---for:【QQYUN-13658】Jvxetable、vxetable按需加载
+        // update-begin--author:liaozhiyang---date:20260210---for:【QQYUN-13658】Jvxetable、vxetableTải theo nhu cầu
         await getRefPromise(tables.idxTable);
-        // update-end--author:liaozhiyang---date:20260209---for:【QQYUN-13658】Jvxetable、vxetable按需加载
+        // update-end--author:liaozhiyang---date:20260209---for:【QQYUN-13658】Jvxetable、vxetableTải theo nhu cầu
         tables.idxTable.value!.setDataSource(indexes);
       }
 
       function initialAllShowItem(model) {
         treeFieldAdded = model.isTree == 'Y';
         showSubTableStr = model.tableType === 2;
-        // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-68】树表时has_child禁用，非树表时has_child字段不禁用
+        // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-68】Khi là bảng câyhas_childVô hiệu hóa, khi không phải bảng câyhas_childTrường không bị vô hiệu hóa
         isTree.value = model.isTree || 'N';
-        // update-end--author:liaozhiyang---date:20260713---for：【LHZP-68】树表时has_child禁用，非树表时has_child字段不禁用
+        // update-end--author:liaozhiyang---date:20260713---for：【LHZP-68】Khi là bảng câyhas_childVô hiệu hóa, khi không phải bảng câyhas_childTrường không bị vô hiệu hóa
       }
-      // update-begin--author:liaozhiyang---date:20260330---for:【QQYUN-13610】解决online打开慢的问题
-      // 清空所有表的数据（v-show模式下切换数据前调用，避免旧ID匹配报错）
+      // update-begin--author:liaozhiyang---date:20260330---for:【QQYUN-13610】Giải quyếtonlineVấn đề mở chậm
+      // Xóa sạch dữ liệu của mọi bảng (v-showỞ chế độ này, gọi trước khi chuyển dữ liệu, tránh cái cũIDkhớp nối báo lỗi)
       function clearAllTableData() {
         const { dbTable, pageTable, checkTable, fkTable, idxTable, queryTable } = tables;
         dbTable.value?.setDataSource([]);
@@ -348,17 +348,17 @@
         idxTable.value?.setDataSource([]);
         queryTable.value?.setDataSource([]);
       }
-      // update-end--author:liaozhiyang---date:20260330---for:【QQYUN-13610】解决online打开慢的问题
+      // update-end--author:liaozhiyang---date:20260330---for:【QQYUN-13610】Giải quyếtonlineVấn đề mở chậm
 
-      // 设置除索引配置之外所有的JVxeTable的数据
+      // Thiết lập mọi thứ ngoài cấu hình chỉ mụcJVxeTabledữ liệu của
       async function setAllTableData(data: Recordable[], insert?) {
         const { dbTable, pageTable, checkTable, fkTable, queryTable } = tables;
-        // update-begin--author:liaozhiyang---date:20260210---for:【QQYUN-13658】Jvxetable、vxetable按需加载
+        // update-begin--author:liaozhiyang---date:20260210---for:【QQYUN-13658】Jvxetable、vxetableTải theo nhu cầu
         await getRefPromise(dbTable);
-        // update-end--author:liaozhiyang---date:20260209---for:【QQYUN-13658】Jvxetable、vxetable按需加载
+        // update-end--author:liaozhiyang---date:20260209---for:【QQYUN-13658】Jvxetable、vxetableTải theo nhu cầu
         dbTable.value!.setDataSource(data, insert);
-        // 先加载第一个tab的数据，延时加载其他tab，可以使打开速度的视觉效果更好
-        // update-begin--author:liaozhiyang---date:20260210---for:【QQYUN-13658】Jvxetable、vxetable按需加载
+        // Tải cái đầu tiên trướctabdữ liệu của, tải trì hoãn các kháctab, có thể làm hiệu quả thị giác của tốc độ mở tốt hơn
+        // update-begin--author:liaozhiyang---date:20260210---for:【QQYUN-13658】Jvxetable、vxetableTải theo nhu cầu
         setTimeout(async () => {
           await Promise.all([
             getRefPromise(pageTable),
@@ -366,7 +366,7 @@
             getRefPromise(fkTable),
             getRefPromise(queryTable),
           ]);
-          // update-end--author:liaozhiyang---date:20260209---for:【QQYUN-13658】Jvxetable、vxetable按需加载
+          // update-end--author:liaozhiyang---date:20260209---for:【QQYUN-13658】Jvxetable、vxetableTải theo nhu cầu
           pageTable.value!.setDataSource(data, insert);
           checkTable.value!.setDataSource(data, insert);
           fkTable.value!.setDataSource(data, insert);
@@ -374,47 +374,47 @@
         }, 10);
       }
 
-      /** ATab切换事件 */
+      /** ATabSự kiện chuyển đổi */
       function onTabsChange(activeKey) {
-        // 当切换了选项卡的时候只同步修改当前所能看到的table
+        // Khi đã chuyển tab, chỉ đồng bộ sửa đổi phần hiện đang nhìn thấytable
         if (['pageTable', 'checkTable', 'fkTable', 'idxTable', 'queryTable'].indexOf(activeKey) !== -1) {
           const dbTable = tables.dbTable;
           const table = tables[activeKey];
           dbTable.value!.tableRef!.resetScrollTop();
-          // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+          // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetableTối ưu
           clearInterval(interval);
           interval = setTimeout(() => {
             table.value.syncTable(dbTable);
           }, 200);
-          // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+          // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetableTối ưu
         }
       }
 
-      // 表类型tableType字段change事件（由子组件 emit 触发，formModel 已在子组件内更新）
+      // Loại bảngtableTypetrườngchangesự kiện (do component con emit Kích hoạt,formModel đã cập nhật trong component con)
       function onTableTypeChange(value) {
         const relationType = cgformHeadFormRef.value?.formModel.relationType ?? 0;
         tables.pageTable.value!.changePageType(value == 3, relationType);
       }
-      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
-      // 关联类型relationType字段change事件
+      // update-begin--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
+      // Loại liên kếtrelationTypetrườngchangesự kiện
       function onRelationTypeChange(value) {
         const tableType = cgformHeadFormRef.value?.formModel.tableType ?? 1;
         tables.pageTable.value!.changePageType(tableType == 3, value);
       }
-      // update-end--author:liaozhiyang---date:20260317---for:【QQYUN-9441】online一对多加上关联记录和他表字段
+      // update-end--author:liaozhiyang---date:20260317---for:【QQYUN-9441】onlineMột-nhiều cộng thêm bản ghi liên kết và trường bảng khác
 
-      // 是否树isTree字段change事件
+      // Có phải cây hay khôngisTreetrườngchangesự kiện
       function onIsTreeChange(value) {
         isTree.value = value;
         value === 'Y' ? addTreeNeedField() : deleteTreeNeedField();
       }
 
-      /** 立即主动同步所有table */
+      /** Đồng bộ chủ động ngay lập tức tất cảtable */
       function syncAllTableNow() {
         syncAllTableNowDebounce();
       }
 
-      // 立即同步所有 table
+      // Đồng bộ ngay lập tức tất cả table
       async function syncAllTableNowPromise() {
         let { dbTable, pageTable, checkTable, fkTable, queryTable } = tables;
         await pageTable.value!.syncTable(dbTable);
@@ -423,12 +423,12 @@
         await queryTable.value!.syncTable(dbTable);
       }
 
-      // update-begin--author:liaozhiyang---date:20260414---for：【QQYUN-15128】新增字段时系统字段永远在最下面
+      // update-begin--author:liaozhiyang---date:20260414---for：【QQYUN-15128】Khi thêm trường mới, trường hệ thống luôn nằm ở dưới cùng
       const SYS_BUILT_IN_FIELDS = ['create_by', 'create_time', 'update_by', 'update_time', 'sys_org_code'];
-      // update-end--author:liaozhiyang---date:20260414---for：【QQYUN-15128】新增字段时系统字段永远在最下面
+      // update-end--author:liaozhiyang---date:20260414---for：【QQYUN-15128】Khi thêm trường mới, trường hệ thống luôn nằm ở dưới cùng
 
-      // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-1858】online表老数据新增字段用户自定义字段下面新增
-      /** 老数据布局：系统字段在前，其后还有用户自定义字段（新增时不应插到系统字段前，以免拆散自定义字段） */
+      // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-1858】onlineDữ liệu cũ của bảng, trường thêm mới, thêm ở phía dưới trường tùy chỉnh của người dùng
+      /** Bố cục dữ liệu cũ: trường hệ thống ở phía trước, phía sau còn có trường tùy chỉnh của người dùng (khi thêm mới không nên chèn vào trước trường hệ thống, tránh làm tan rã các trường tùy chỉnh) */
       function hasCustomFieldsAfterSystemFields(fullData: Recordable[]) {
         const lastSysIndex = fullData.reduce(
           (max, row, index) => (SYS_BUILT_IN_FIELDS.includes(row.dbFieldName) ? Math.max(max, index) : max),
@@ -446,14 +446,14 @@
         }
         return false;
       }
-      // update-end--author:liaozhiyang---date:20260807---for：【LHZP-1858】online表老数据新增字段用户自定义字段下面新增
+      // update-end--author:liaozhiyang---date:20260807---for：【LHZP-1858】onlineDữ liệu cũ của bảng, trường thêm mới, thêm ở phía dưới trường tùy chỉnh của người dùng
 
-      // update-begin--author:liaozhiyang---date:20260506---for:【issues/9593】树表的页面属性中子节点和父节点的属性串了
+      // update-begin--author:liaozhiyang---date:20260506---for:【issues/9593】Trong thuộc tính trang của bảng cây, thuộc tính của nút con và nút cha bị lẫn với nhau
       let onTableAddedQueue: Promise<unknown> = Promise.resolve();
-      // update-end--author:liaozhiyang---date:20260506---for:【issues/9593】树表的页面属性中子节点和父节点的属性串了
+      // update-end--author:liaozhiyang---date:20260506---for:【issues/9593】Trong thuộc tính trang của bảng cây, thuộc tính của nút con và nút cha bị lẫn với nhau
 
-      // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-160】字段类型是String且控件是文本框默认模糊查询（补齐直接插入页面属性行的默认查询类型）
-      /** 新增页面属性行时，只在未明确配置查询类型的 String 文本框上应用模糊查询默认值。 */
+      // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-160】Loại trường làStringvà control là ô văn bản thì mặc định truy vấn mờ (bổ sung loại truy vấn mặc định cho hàng thuộc tính trang được chèn trực tiếp)
+      /** Khi thêm hàng thuộc tính trang, chỉ khi chưa cấu hình rõ loại truy vấn String Áp dụng giá trị mặc định truy vấn mờ trên ô văn bản. */
       function withPageQueryModeDefault(row: Recordable) {
         const isTextControl = !row.fieldShowType || row.fieldShowType === 'text';
         if (row.dbType === 'string' && isTextControl && !row.queryMode) {
@@ -461,41 +461,41 @@
         }
         return row;
       }
-      // update-end--author:liaozhiyang---date:20260824---for:【LHZP-160】字段类型是String且控件是文本框默认模糊查询（补齐直接插入页面属性行的默认查询类型）
+      // update-end--author:liaozhiyang---date:20260824---for:【LHZP-160】Loại trường làStringvà control là ô văn bản thì mặc định truy vấn mờ (bổ sung loại truy vấn mặc định cho hàng thuộc tính trang được chèn trực tiếp)
 
-      /** 当新增了的时候应立即同步 */
+      /** Khi có thêm mới thì nên đồng bộ ngay lập tức */
       function onTableAdded() {
-        // update-begin--author:liaozhiyang---date:20260506---for: 【issues/9593】树表的页面属性中子节点和父节点的属性串了
+        // update-begin--author:liaozhiyang---date:20260506---for: 【issues/9593】Trong thuộc tính trang của bảng cây, thuộc tính của nút con và nút cha bị lẫn với nhau
         onTableAddedQueue = onTableAddedQueue.then(async () => {
-          // update-begin--author:liaozhiyang---date:20260414---for：【QQYUN-15128】新增行时系统字段永远在最下面（系统字段被删除时退化为正常追加）
+          // update-begin--author:liaozhiyang---date:20260414---for：【QQYUN-15128】Khi thêm hàng mới, trường hệ thống luôn ở dưới cùng (khi trường hệ thống bị xóa thì suy biến thành thêm vào thông thường)
           const dbJVxeRef = tables.dbTable.value?.tableRef;
           if (dbJVxeRef) {
             const fullData = dbJVxeRef.getXTable().internalData.tableFullData;
             const sysIndex = fullData.findIndex((row) => SYS_BUILT_IN_FIELDS.includes(row.dbFieldName));
             const lastIndex = fullData.length - 1;
-            // 末尾是新增行，且在系统字段后面，且本身不是系统字段
+            // Ở cuối là hàng thêm mới, và nằm sau trường hệ thống, đồng thời bản thân không phải trường hệ thống
             if (sysIndex !== -1 && lastIndex > sysIndex && !SYS_BUILT_IN_FIELDS.includes(fullData[lastIndex]?.dbFieldName)) {
-              // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-1858】online表老数据新增字段用户自定义字段下面新增
-              // 老数据：系统字段在前、自定义在后，新增字段保持在末尾
+              // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-1858】onlineDữ liệu cũ của bảng, trường thêm mới, thêm ở phía dưới trường tùy chỉnh của người dùng
+              // Dữ liệu cũ: trường hệ thống ở trước, tùy chỉnh ở sau, trường thêm mới giữ ở cuối
               if (hasCustomFieldsAfterSystemFields(fullData)) {
                 syncAllTableNow();
                 return;
               }
-              // update-end--author:liaozhiyang---date:20260807---for：【LHZP-1858】online表老数据新增字段用户自定义字段下面新增
+              // update-end--author:liaozhiyang---date:20260807---for：【LHZP-1858】onlineDữ liệu cũ của bảng, trường thêm mới, thêm ở phía dưới trường tùy chỉnh của người dùng
               const newRowData = { ...fullData[lastIndex] };
-              // 在 dbTable 中把末尾新行移到第一个系统字段前面
+              // tại dbTable chuyển hàng mới ở cuối tới trước trường hệ thống đầu tiên trong đó
               await dbJVxeRef.rowResort(lastIndex, sysIndex);
-              // 对其他 tables 直接在系统字段前面插入，不走 syncAllTableNow 的追加逻辑
+              // Đối với cái khác tables Chèn trực tiếp vào phía trước trường hệ thống, không đi qua syncAllTableNow logic bổ sung thêm của
               const { pageTable, checkTable, fkTable, queryTable } = tables;
               for (const t of [pageTable, checkTable, fkTable, queryTable]) {
                 const jvxeRef = t.value?.tableRef;
                 if (!jvxeRef) continue;
                 const tFullData = jvxeRef.getXTable().internalData.tableFullData;
                 const tSysIndex = tFullData.findIndex((row) => SYS_BUILT_IN_FIELDS.includes(row.dbFieldName));
-                // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-160】字段类型是String且控件是文本框默认模糊查询（系统字段前新增时设置页面属性默认查询类型）
+                // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-160】Loại trường làStringvà control là ô văn bản thì mặc định truy vấn mờ (khi thêm mới trước trường hệ thống, thiết lập loại truy vấn mặc định cho thuộc tính trang)
                 const targetRowData = t === pageTable ? withPageQueryModeDefault(newRowData) : newRowData;
-                // update-end--author:liaozhiyang---date:20260824---for:【LHZP-160】字段类型是String且控件是文本框默认模糊查询（系统字段前新增时设置页面属性默认查询类型）
-                // 串行 await 附表 insertRows/addRows，确保下一次队列任务读到的是完全收尾后的状态
+                // update-end--author:liaozhiyang---date:20260824---for:【LHZP-160】Loại trường làStringvà control là ô văn bản thì mặc định truy vấn mờ (khi thêm mới trước trường hệ thống, thiết lập loại truy vấn mặc định cho thuộc tính trang)
+                // nối tiếp (serial) await Bảng phụ insertRows/addRows, bảo đảm tác vụ hàng đợi lần sau đọc được trạng thái đã kết thúc hoàn toàn
                 if (tSysIndex !== -1) {
                   await jvxeRef.insertRows(targetRowData, tSysIndex);
                 } else {
@@ -505,28 +505,28 @@
               return;
             }
           }
-          // update-end--author:liaozhiyang---date:20260414---for：【QQYUN-15128】新增行时系统字段永远在最下面（系统字段被删除时退化为正常追加）
+          // update-end--author:liaozhiyang---date:20260414---for：【QQYUN-15128】Khi thêm hàng mới, trường hệ thống luôn ở dưới cùng (khi trường hệ thống bị xóa thì suy biến thành thêm vào thông thường)
           syncAllTableNow();
         });
-        // 兜底：队列异常不阻塞后续调用
+        // Dự phòng: bất thường của hàng đợi không chặn các lần gọi tiếp theo
         onTableAddedQueue = onTableAddedQueue.catch((e) => {
           console.error('[onTableAdded] queue error:', e);
         });
-        // update-end--author:liaozhiyang---date:20260506---for: 【issues/9593】树表的页面属性中子节点和父节点的属性串了
+        // update-end--author:liaozhiyang---date:20260506---for: 【issues/9593】Trong thuộc tính trang của bảng cây, thuộc tính của nút con và nút cha bị lẫn với nhau
       }
 
-      /** 当删除的时候也应立即同步 */
+      /** Khi xóa cũng nên đồng bộ ngay lập tức */
       function onTableRemoved() {
         syncAllTableNow();
       }
 
-      /** 当拖动后立即同步 */
+      /** Khi sau khi kéo thì đồng bộ ngay lập tức */
       function onTableDragged(event) {
         let { oldIndex, newIndex } = event;
         syncAllOrderNumNow(oldIndex, newIndex);
       }
 
-      /** 当插入后立即同步 */
+      /** Khi sau khi chèn thì đồng bộ ngay lập tức */
       async function onTableInserted(event) {
         let { insertIndex, row } = event;
         let { pageTable, checkTable, fkTable, queryTable } = tables;
@@ -536,7 +536,7 @@
         queryTable.value!.tableRef!.insertRows(row, insertIndex);
       }
 
-      /** 立即同步所有的表的排序顺序 */
+      /** Đồng bộ ngay lập tức thứ tự sắp xếp của mọi bảng */
       function syncAllOrderNumNow(oldIndex: number, newIndex: number) {
         let { pageTable, checkTable, fkTable, queryTable } = tables;
         pageTable.value!.tableRef!.rowResort(oldIndex, newIndex);
@@ -545,34 +545,34 @@
         queryTable.value!.tableRef!.rowResort(oldIndex, newIndex);
       }
 
-      /** 当value变化时同步 date */
+      /** KhivalueĐồng bộ khi thay đổi date */
       function onTableSyncDbType(event) {
         tables.pageTable.value!.syncFieldShowType(event.row);
       }
-      // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-160】字段类型是String且控件是文本框默认模糊查询（数据库字段类型变化时同步页面查询类型）
-      /** 数据库字段类型变化时同步页面属性的默认查询类型。 */
+      // update-begin--author:liaozhiyang---date:20260824---for:【LHZP-160】Loại trường làStringvà control là ô văn bản thì mặc định truy vấn mờ (khi loại trường cơ sở dữ liệu thay đổi, đồng bộ loại truy vấn của trang)
+      /** Khi loại trường cơ sở dữ liệu thay đổi, đồng bộ loại truy vấn mặc định của thuộc tính trang. */
       function onTableSyncQueryMode(event) {
         tables.pageTable.value!.syncQueryMode(event);
       }
-      // update-end--author:liaozhiyang---date:20260824---for:【LHZP-160】字段类型是String且控件是文本框默认模糊查询（数据库字段类型变化时同步页面查询类型）
-      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】不同步数据库的字段则去掉对应查询勾选
-      /** 当dbIsPersist（同步数据库） value变化时同步 查询去掉勾选 */
+      // update-end--author:liaozhiyang---date:20260824---for:【LHZP-160】Loại trường làStringvà control là ô văn bản thì mặc định truy vấn mờ (khi loại trường cơ sở dữ liệu thay đổi, đồng bộ loại truy vấn của trang)
+      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Trường không đồng bộ cơ sở dữ liệu thì bỏ dấu chọn truy vấn tương ứng
+      /** KhidbIsPersist(đồng bộ cơ sở dữ liệu) valueĐồng bộ khi thay đổi Truy vấn bỏ tích chọn */
       function onTableSyncDbIsPersist(event) {
         tables.pageTable.value!.syncIsQuery(event.row);
       }
-      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】不同步数据库的字段则去掉对应查询勾选
-      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】数据库不允许为空，校验默认相应勾上
-      /** 当dbIsNull(不允许空值) value变化时同步 校验必填 */
+      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Trường không đồng bộ cơ sở dữ liệu thì bỏ dấu chọn truy vấn tương ứng
+      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Cơ sở dữ liệu không cho phép rỗng, kiểm chứng mặc định tích chọn tương ứng
+      /** KhidbIsNull(không cho phép giá trị rỗng) valueĐồng bộ khi thay đổi Kiểm chứng mục bắt buộc điền */
       function onTableSyncDbIsNull(event) {
         tables.checkTable.value!.syncFieldMustInput(event.row);
       }
-      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】数据库不允许为空，校验默认相应勾上
+      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8485】Cơ sở dữ liệu không cho phép rỗng, kiểm chứng mặc định tích chọn tương ứng
 
       function onTableQuery(id) {
         tables.pageTable.value!.enableQuery(id);
       }
 
-      /** 添加树字段 */
+      /** Thêm trường cây */
       function addTreeNeedField() {
         if (!treeFieldAdded) {
           let { dbTable, pageTable, checkTable } = tables;
@@ -588,10 +588,10 @@
             newData.id = uuidTemp;
           });
           dbTable.value!.tableRef!.addRows(treeFields, { setActive: false });
-          // update-begin--author:liaozhiyang---date:20260506---for: 【issues/9593】树表的页面属性中子节点和父节点的属性串了
+          // update-begin--author:liaozhiyang---date:20260506---for: 【issues/9593】Trong thuộc tính trang của bảng cây, thuộc tính của nút con và nút cha bị lẫn với nhau
           // pageTable.value!.tableRef!.addRows(treeFields, { setActive: false });
           // checkTable.value!.tableRef!.addRows(treeFields, { setActive: false });
-          // update-end--author:liaozhiyang---date:20260506---for: 【issues/9593】树表的页面属性中子节点和父节点的属性串了
+          // update-end--author:liaozhiyang---date:20260506---for: 【issues/9593】Trong thuộc tính trang của bảng cây, thuộc tính của nút con và nút cha bị lẫn với nhau
           nextTick(() => syncAllTableNow());
           treeFieldAdded = true;
         }
@@ -603,7 +603,7 @@
         });
       }
 
-      /** 删除树字段 */
+      /** Xóa trường cây */
       function deleteTreeNeedField() {
         if (treeFieldIds && treeFieldIds.length > 0) {
           let { dbTable } = tables;
@@ -613,11 +613,11 @@
         }
       }
 
-      // 触发所有表单验证
+      // Kích hoạt mọi kiểm chứng biểu mẫu
       function validateAll() {
         let options = {};
         return new Promise((resolve, reject) => {
-          // 验证主表表单
+          // Xác thực biểu mẫu bảng chính
           cgformHeadFormRef.value!.validate().then(
             (values) => resolve({ values }),
             (errMsg) => {
@@ -637,17 +637,17 @@
           })
           .catch((e) => {
             if (e === VALIDATE_FAILED || e?.code === VALIDATE_FAILED) {
-              // 表单校验失败时消息已在 validate() 内提示，此处不重复
+              // Khi kiểm chứng biểu mẫu thất bại, thông báo đã ở validate() đã nhắc ở bên trong, tại đây không lặp lại
             } else {
-              // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7503】附表配置多个外键，保存失败没提示
+              // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7503】Bảng phụ cấu hình nhiều khóa ngoại, lưu thất bại mà không có nhắc nhở
               e?.msg ? $message.warning(e.msg) : console.error(e);
-              // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7503】附表配置多个外键，保存失败没提示
+              // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7503】Bảng phụ cấu hình nhiều khóa ngoại, lưu thất bại mà không có nhắc nhở
             }
             return Promise.reject(null);
           });
       }
 
-      /** 验证并获取所有表的数据 */
+      /** Xác thực đồng thời lấy dữ liệu của mọi bảng */
       function validateTableFields() {
         return new Promise(async (resolve, reject) => {
           let tableKeys = Object.keys(tables);
@@ -659,7 +659,7 @@
               allTableData[key] = await table.value!.validateData(key);
             } catch (e: any) {
               if (e.code === VALIDATE_FAILED) {
-                // 未通过就跳转到相应的tab选项卡
+                // Chưa thông qua thì chuyển tới tương ứngtabThẻ tab
                 activeKey.value = e.activeKey;
               } else {
                 console.error(e);
@@ -672,9 +672,9 @@
         });
       }
 
-      /** 将所有表的数据整理整合成后台识别的formData */
+      /** Sắp xếp và tích hợp dữ liệu của tất cả các bảng thành dạng mà backend nhận diện đượcformData */
       function classifyIntoFormData(options) {
-        // 整理数据
+        // Sắp xếp dữ liệu
         let formData = {
           head: {} as Recordable,
           fields: [] as any[],
@@ -683,25 +683,25 @@
           deleteIndexIds: [] as any[],
         };
         formData.head = Object.assign(model, options.values);
-        // update-begin--author:liaozhiyang---date:20260401---for：【QQYUN-14949】online配置中尽可能多的显示vxetable字段
+        // update-begin--author:liaozhiyang---date:20260401---for：【QQYUN-14949】onlineTrong cấu hình hiển thị càng nhiều càng tốtvxetabletrường
         formData.head.formCategory = 'temp';
         formData.head.idType = 'UUID';
-        // update-end--author:liaozhiyang---date:20260401---for：【QQYUN-14949】online配置中尽可能多的显示vxetable字段
-        // 整理online表单扩展JSON
+        // update-end--author:liaozhiyang---date:20260401---for：【QQYUN-14949】onlineTrong cấu hình hiển thị càng nhiều càng tốtvxetabletrường
+        // Sắp xếp, sắp xếp lạionlineMở rộng biểu mẫuJSON
         const extConfigJson = { ...cgformHeadFormRef.value?.getExtConfigJson() };
         formData.head.isDesForm = extConfigJson.isDesForm;
         formData.head.desFormCode = extConfigJson.desFormCode;
         delete extConfigJson.isDesForm;
         delete extConfigJson.desFormCode;
-        // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源：dbSource 持久化到 onl_cgform_head.db_source 列
+        // update-begin--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu:dbSource Lưu bền vững (persist) tới onl_cgform_head.db_source cột
         formData.head.dbSource = extConfigJson.enableMultiDataSource ? extConfigJson.dbSource || '' : '';
         delete extConfigJson.dbSource;
         delete extConfigJson.enableMultiDataSource;
-        // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】online表单支持多数据源
+        // update-end--author:jeecg---date:20260512---for：【QQYUN-15337】onlineBiểu mẫu hỗ trợ đa nguồn dữ liệu
         formData.head.extConfigJson = JSON.stringify(extConfigJson);
-        // 整理 fields
+        // Sắp xếp, sắp xếp lại fields
         options.dbTable.tableData.forEach((item, index) => {
-          // ID 以 dbTable 的 ID 为准
+          // ID bằng dbTable của ID làm chuẩn
           let rowId = item.id;
           let fields = Object.assign({}, item);
 
@@ -717,13 +717,13 @@
           let queryTable = options.queryTable.tableData[index];
           fields = Object.assign(queryTable, fields);
 
-          // 如果 dbTable 没有返回id，则代表是新增的数据
+          // Nếu dbTable Không có trả vềid, thì có nghĩa là dữ liệu thêm mới
           if (rowId == null || rowId === '') {
             delete fields.id;
           } else {
             fields.id = rowId;
           }
-          // 去掉临时ID
+          // Bỏ phần tạm thờiID
           let tempIds = ([] as string[]).concat(fieldTempIds, treeFieldIds);
           if (tempIds.includes(fields.id)) {
             delete fields.id;
@@ -731,17 +731,17 @@
           formData.fields.push(fields);
         });
         formData.deleteFieldIds = options.dbTable.deleteIds;
-        // 整理 index
+        // Sắp xếp, sắp xếp lại index
         formData.indexs = options.idxTable.tableData;
         formData.deleteIndexIds = options.idxTable.deleteIds;
         return formData;
       }
 
-      /** 外键配置校验 只能配置一个 */
+      /** Kiểm chứng cấu hình khóa ngoại Chỉ có thể cấu hình một cái */
       function validateForeignKey(formData) {
-        // 1.配置两个 校验
-        // 2.配置一个后，保存，再配置新的 删除老的 校验
-        // 3.配置一个后，保存,修改当前为新的 校验
+        // 1.Cấu hình hai cái Kiểm chứng
+        // 2.Sau khi cấu hình một cái, lưu, rồi cấu hình cái mới Xóa cái cũ Kiểm chứng
+        // 3.Sau khi cấu hình một cái, lưu,Sửa cái hiện tại thành cái mới Kiểm chứng
         return new Promise((resolve, reject) => {
           let fields = formData.fields;
           let saved = true;
@@ -762,20 +762,20 @@
           } else {
             reject({
               code: -1,
-              msg: '外键只允许配置一个!',
+              msg: 'Khóa ngoại chỉ cho phép cấu hình một cái!',
               error: VALIDATE_FAILED,
             });
           }
         });
       }
 
-      // 表单提交事件
+      // Sự kiện gửi biểu mẫu
       function onSubmit() {
         confirmLoading.value = true;
         validateAll()
           .then(
             async (formData: any) => {
-              // 表字段转小写
+              // Trường bảng chuyển thành chữ thường
               if (formData.fields && formData.fields.length > 0) {
                 for (let field of formData.fields) {
                   field.dbFieldName = field.dbFieldName.toLowerCase().trim();
@@ -784,11 +784,11 @@
               if (formData.head?.tableName) {
                 formData.head.tableName = formData.head.tableName.toLowerCase().trim();
               }
-              // 发起请求
+              // Khởi tạo yêu cầu
               await formApi.doSaveOrUpdate(formData, isUpdate.value);
               refreshCacheTableName(oldTableName.value, formData.head['tableName']);
               emit('success');
-              // 解决关闭弹窗时会闪一下的问题，因为同时加载多个JVxeTable造成的卡顿影响了弹窗关闭效果
+              // Giải quyết vấn đề popup nhấp nháy một cái khi đóng, vì đồng thời tải nhiềuJVxeTableSự giật lag gây ra đã ảnh hưởng hiệu quả đóng popup
               sleep(1, () => onCancel());
             },
             (e) => {
@@ -800,7 +800,7 @@
           });
       }
 
-      //update-begin-author:taoyan date:2022-8-15 for: VUEN-1891 online表单编辑时 修改了扩展配置能否 确认即保存，不用再点整个表单得确定
+      //update-begin-author:taoyan date:2022-8-15 for: VUEN-1891 onlineKhi chỉnh sửa biểu mẫu Đã sửa cấu hình mở rộng, có thể hay không Xác nhận là lưu ngay, không cần nhấp xác nhận của toàn bộ biểu mẫu nữa
       async function onExtConfigSaved(values) {
         if (isUpdate.value) {
           const params = {
@@ -811,17 +811,17 @@
           emit('success');
         }
       }
-      //update-end-author:taoyan date:2022-8-15 for: VUEN-1891 online表单编辑时 修改了扩展配置能否 确认即保存，不用再点整个表单得确定
+      //update-end-author:taoyan date:2022-8-15 for: VUEN-1891 onlineKhi chỉnh sửa biểu mẫu Đã sửa cấu hình mở rộng, có thể hay không Xác nhận là lưu ngay, không cần nhấp xác nhận của toàn bộ biểu mẫu nữa
 
       function onCancel() {
         hideTabs.value = true;
-        // 解决关闭弹窗时会闪一下的问题，因为同时加载多个JVxeTable造成的卡顿影响了弹窗关闭效果
+        // Giải quyết vấn đề popup nhấp nháy một cái khi đóng, vì đồng thời tải nhiềuJVxeTableSự giật lag gây ra đã ảnh hưởng hiệu quả đóng popup
         sleep(1, () => closeModal());
       }
       /**
        * 2024-07-17
        * liaozhiyang
-       * 【TV360X-829】根据字典名称和字段备注快速定位到行
+       * 【TV360X-829】Định vị nhanh tới hàng theo tên từ điển và ghi chú trường
        * */
       const handlePositioning = () => {
         const val = positioning.value.trim();
@@ -829,11 +829,11 @@
           const jVxe_instance = tables[activeKey.value].value.tableRef;
           const vxe_instance = jVxe_instance.getXTable();
           const fullData = vxe_instance.getTableData().fullData;
-          // 先精确，再模糊
+          // Chính xác trước, mờ sau
           const preciseIndex = fullData.findIndex((item) => val === item.dbFieldName || val === item.dbFieldTxt);
           let index = -1;
           if (preciseIndex == -1) {
-            // 模糊
+            // Mờ (fuzzy)
             const dimIndex = fullData.findIndex((item) => item.dbFieldName.includes(positioning.value) || item.dbFieldTxt.includes(positioning.value));
             index = dimIndex;
           } else {
@@ -854,20 +854,20 @@
                   }, 1e3);
                 }
               }
-              // update-begin--author:liaozhiyang---date:20260330---for：【QQYUN-15058】解决字段定位在小屏幕上看不见的问题
-              // 将弹窗竖向滚动条滚动到最底部
+              // update-begin--author:liaozhiyang---date:20260330---for：【QQYUN-15058】Giải quyết vấn đề định vị trường không nhìn thấy được trên màn hình nhỏ
+              // Cuộn thanh cuộn dọc của popup xuống tận dưới cùng
               const spinEl = spinRef.value?.$el || spinRef.value;
               const scrollContainer = spinEl?.closest('.scrollbar__wrap');
               if (scrollContainer) {
                 scrollContainer.scrollTop = scrollContainer.scrollHeight;
               }
-              // update-end--author:liaozhiyang---date:20260330---for：【QQYUN-15058】解决字段定位在小屏幕上看不见的问题
+              // update-end--author:liaozhiyang---date:20260330---for：【QQYUN-15058】Giải quyết vấn đề định vị trường không nhìn thấy được trên màn hình nhỏ
             });
           } else {
-            $message.warning('未找到匹配字段');
+            $message.warning('Không tìm thấy trường khớp');
           }
         } else {
-          $message.warning('请输入字段或备注');
+          $message.warning('Vui lòng nhập trường hoặc ghi chú');
         }
       };
       function getRefPromise(componentRef) {
@@ -921,7 +921,7 @@
         handlePositioning,
         oldTableName,
         onIsTreeChange,
-        // 头部表单子组件
+        // Component con của biểu mẫu phần đầu
         cgformHeadFormRef,
         onTableTypeChange,
         onRelationTypeChange,
@@ -939,14 +939,14 @@
   .query-help-icon {
     color: #a8b0bb;
   }
-  //update-begin-author:liaozhiyang date:2026-05-12 for: 【QQYUN-9789】鼠标点击时去掉 vxe-table 的蓝框，键盘导航（Tab/Enter/方向键）时正常显示
+  //update-begin-author:liaozhiyang date:2026-05-12 for: 【QQYUN-9789】Khi nhấp chuột thì bỏ đi vxe-table khung màu xanh của, điều hướng bằng bàn phím (Tab/Enter/phím mũi tên) thì hiển thị bình thường
   .onlForm-content[data-input-method='mouse'] {
     :deep(.vxe-body--column.col--selected) {
       box-shadow: none;
     }
   }
-  //update-end-author:liaozhiyang date:2026-05-12 for:【QQYUN-9789】鼠标点击时去掉 vxe-table 的蓝框，键盘导航（Tab/Enter/方向键）时正常显示
-  // update-begin--author:liaozhiyang---date:20240717---for：【TV360X-829】根据字典名称和字段备注快速定位到行
+  //update-end-author:liaozhiyang date:2026-05-12 for:【QQYUN-9789】Khi nhấp chuột thì bỏ đi vxe-table khung màu xanh của, điều hướng bằng bàn phím (Tab/Enter/phím mũi tên) thì hiển thị bình thường
+  // update-begin--author:liaozhiyang---date:20240717---for：【TV360X-829】Định vị nhanh tới hàng theo tên từ điển và ghi chú trường
   .footer-area {
     display: flex;
     justify-content: space-between;
@@ -973,5 +973,5 @@
       background-color: var(--vxe-ui-table-row-hover-background-color);
     }
   }
-  // update-begin--author:liaozhiyang---date:20240717---for：【TV360X-829】根据字典名称和字段备注快速定位到行
+  // update-begin--author:liaozhiyang---date:20240717---for：【TV360X-829】Định vị nhanh tới hàng theo tên từ điển và ghi chú trường
 </style>

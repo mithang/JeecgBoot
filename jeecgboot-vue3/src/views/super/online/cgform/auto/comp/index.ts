@@ -8,6 +8,6 @@ export const registerOnlineComp = {
     app.component('JOnlineSearchSelect', JOnlineSearchSelect);
     app.component('SuperQuery', SuperQuery);
 
-    console.log("---初始化---， 全局注册Online部分组件--------------")
+    console.log("---Khởi tạo---， Đăng ký toàn cụcOnlineMột phần component--------------")
   },
 };

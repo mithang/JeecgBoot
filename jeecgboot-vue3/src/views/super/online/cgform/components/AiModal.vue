@@ -27,12 +27,12 @@
             fill="currentColor"
           ></path>
         </svg>
-        <h3>创建工作表字段需要专业建议?试试AI智能推荐吧</h3>
+        <h3>Tạo trường cho bảng làm việc cần gợi ý chuyên nghiệp?Hãy thửAIĐề xuất thông minh</h3>
       </div>
-      <p class="tip">可尝试添加修饰词，如:智能家居行业的生产计划表</p>
+      <p class="tip">Có thể thử thêm từ bổ nghĩa, như:Bảng kế hoạch sản xuất của ngành nhà thông minh</p>
       <div class="content">
-        <a-input v-model:value.trim="inputValue" placeholder="请输入修饰词" /><a-button :loading="loading" type="primary" @click="handleCreate"
-          >生成表</a-button
+        <a-input v-model:value.trim="inputValue" placeholder="Vui lòng nhập từ trang trí" /><a-button :loading="loading" type="primary" @click="handleCreate"
+          >Tạo bảng</a-button
         >
       </div>
     </div>
@@ -52,18 +52,18 @@
   const { createMessage } = useMessage();
   const inputValue = ref('');
   const loading = ref(false);
-  const title = ref('ai创建表');
+  const title = ref('aiTạo bảng');
   
   const handleCancel = () => {
     closeModal();
   };
   const handleCreate = () => {
     if (inputValue.value.trim() === '') {
-      createMessage.warning('请输入修饰词~');
+      createMessage.warning('Vui lòng nhập từ trang trí~');
     } else {
       loading.value = true;
       defHttp
-        // timeout：超时时间 5 分钟
+        // timeout: thời gian quá hạn (timeout) 5 phút
         .post({ url: `${configUrl.aigc}?prompt=${inputValue.value}`, timeout: 1e3 * 60 * 5 })
         .then((res) => {
           loading.value = false;

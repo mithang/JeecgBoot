@@ -41,7 +41,7 @@
     },
     emits: ['formChange'],
     setup(props) {
-      // 表单是否渲染完成
+      // Biểu mẫu đã render xong hay chưa
       const formRendered = ref(false);
       const { createMessage: $message } = useMessage();
       const tableName = ref('');
@@ -56,12 +56,12 @@
         { immediate: true }
       );
 
-      //监听配置改变事件
+      //Lắng nghe sự kiện thay đổi cấu hình
       watch(
         () => props.properties,
         () => {
-          //重新渲染表单
-          console.log('主表properties改变', props.properties);
+          //Render lại biểu mẫu
+          console.log('bảng chínhpropertiesThay đổi', props.properties);
           formRendered.value = false;
           createFormSchemas(props.properties);
           formRendered.value = true;
@@ -69,13 +69,13 @@
         { deep: true, immediate: true }
       );
 
-      //监听主表数据ID
+      //Lắng nghe dữ liệu bảng chínhID
       watch(
         () => props.mainId,
         () => {
-          //重新加载子表数据
-          console.log('主表ID改变', props.mainId);
-          // 此处延迟100毫秒是为了让properties的监听先执行
+          //Tải lại dữ liệu bảng con
+          console.log('bảng chínhIDThay đổi', props.mainId);
+          // Độ trễ tại đây100mili giây là để chopropertiesViệc lắng nghe của thực thi trước
           setTimeout(() => {
             resetSubForm();
           }, 100);
@@ -84,7 +84,7 @@
       );
 
       /**
-       * 当主表数据ID发生改变，子表重现获取数据
+       * Khi dữ liệu bảng chínhIDxảy ra thay đổi, bảng con lấy lại dữ liệu
        * @returns {Promise<void>}
        */
       async function resetSubForm() {
@@ -94,15 +94,15 @@
         if (!table || !mainId) {
           return;
         }
-        // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+        // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
         let data: any = (await loadData(table, mainId)) || {};
         await fillLinkTableFields(data);
         subFormData.value = data;
-        // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+        // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
       }
-      // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+      // update-begin--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
       /**
-       * 详情页一对一子表中，根据关联记录字段(link_table)的值查询关联数据，自动填充他表字段(link_table_field)的值
+       * Trong bảng con một-một của trang chi tiết, căn cứ theo trường bản ghi liên kết(link_table)giá trị của để truy vấn dữ liệu liên kết, tự động điền trường của bảng khác(link_table_field)giá trị của
        */
       async function fillLinkTableFields(data) {
         const schemas = detailFormSchemas.value;
@@ -121,7 +121,7 @@
                 superQueryParams: encodeURI(JSON.stringify([{ field: valueField, rule: 'in', val: fieldValue }])),
               };
               try {
-                // update-begin--author:liusq---date:20260811---for：【online一对一详情】他表字段复用关联记录转换逻辑
+                // update-begin--author:liusq---date:20260811---for：【onlineChi tiết một-một】Trường bảng khác dùng lại logic chuyển đổi của bản ghi liên kết
                 const linkTableName = (schema as any).dictTable;
                 const [result, columns] = await Promise.all([
                   defHttp.get({ url: '/online/cgform/api/getData/' + linkTableName, params }),
@@ -137,15 +137,15 @@
                     data[formField] = '';
                   }
                 }
-                // update-end--author:liusq---date:20260811---for：【online一对一详情】他表字段复用关联记录转换逻辑
+                // update-end--author:liusq---date:20260811---for：【onlineChi tiết một-một】Trường bảng khác dùng lại logic chuyển đổi của bản ghi liên kết
               } catch (e) {
-                console.warn('填充他表字段失败:', e);
+                console.warn('Điền trường bảng khác thất bại:', e);
               }
             }
           }
         }
       }
-      // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】一对一他表字段详情没值
+      // update-end--author:liaozhiyang---date:20260413---for：【QQYUN-14951】Chi tiết trường bảng khác một-một không có giá trị
       
 
       async function loadData(table, mainId) {
@@ -160,7 +160,7 @@
             }
           });
         }).catch((e) => {
-          console.warn('子表获取数据失败:', e);
+          console.warn('Bảng con lấy dữ liệu thất bại:', e);
           return Promise.resolve({});
         });
       }

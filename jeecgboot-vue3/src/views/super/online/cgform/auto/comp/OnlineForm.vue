@@ -1,21 +1,21 @@
 <template>
   <div ref="printRef" :id="tableName + '_form'" class="onlineFormWrap" :class="[`formTemplate_${formTemplate}`]">
-    <!-- update-begin--author:liaozhiyang---date:20240401---for：【QQYUN-8721】编辑页面不显示打印（配置了积木报表） -->
-    <!-- 积木报表的打印按钮，只有配置了 reportUrl 才显示 -->
+    <!-- update-begin--author:liaozhiyang---date:20240401---for：【QQYUN-8721】Trang chỉnh sửa không hiển thị in (đã cấu hình báo cáo Jimu) -->
+    <!-- Nút in của báo cáo Jimu, chỉ khi đã cấu hình reportUrl mới hiển thị -->
     <!-- <div v-if="!!dbData.id && !!onlineExtConfigJson.reportPrintShow" style="text-align: right;position: absolute;top: 6px;right: 20px;z-index: 999">
-      <PrinterOutlined title="打印" @click="onOpenReportPrint" style="font-size: 16px"/>
+      <PrinterOutlined title="In" @click="onOpenReportPrint" style="font-size: 16px"/>
     </div> -->
-     <!-- update-end--author:liaozhiyang---date:20240401---for：【QQYUN-8721】编辑页面不显示打印（配置了积木报表） -->
+     <!-- update-end--author:liaozhiyang---date:20240401---for：【QQYUN-8721】Trang chỉnh sửa không hiển thị in (đã cấu hình báo cáo Jimu) -->
 
     <BasicForm ref="onlineFormRef" @register="registerForm" :name="'online-form_' + tableName"/>
 
-    <!-- 子表 -->
-    <!-- update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表 -->
+    <!-- bảng con -->
+    <!-- update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con -->
     <a-tabs v-model:activeKey="subActiveKey" v-if="hasSubTable && (isShare || themeTemplate !== ERP)">
-    <!-- update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表 -->
+    <!-- update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con -->
       <a-tab-pane v-for="(sub, index) in subTabInfo" :tab="sub.describe" :key="index + ''" :forceRender="true">
         <div ref="subFormWrapRef" :style="{ 'overflow-y': 'auto', 'overflow-x': 'hidden', 'max-height': subFormHeight + 'px' }" v-if="sub.relationType == 1">
-          <!-- 子表-一对一 -->
+          <!-- bảng con-một-một -->
           <online-sub-form
             :ref="refMap[sub.key]"
             :table="sub.key"
@@ -31,7 +31,7 @@
           />
         </div>
         <div v-else>
-          <!-- 子表-一对多 -->
+          <!-- bảng con-một-nhiều -->
           <JVxeTable
             :ref="refMap[sub.key]"
             toolbar
@@ -39,7 +39,7 @@
             :row-number="rowNumber"
             row-selection
             :height="
-              // 【VUEN-803】一对多子表固定340高度，修复自定义列组件被遮挡的问题
+              // 【VUEN-803】Cố định bảng con một-nhiều340chiều cao, sửa vấn đề component cột tùy chỉnh bị che khuất
               subTableHeight
             "
             :disabled="onlineFormDisabled"
@@ -55,7 +55,7 @@
 
             <template #toolbarAfterAdd="{ selectedRowIds }">
               <a-button-group class="sub-popup-button-group">
-                <!-- 子表内弹出新增按钮 -->
+                <!-- Nút thêm mới hiển thị dạng popup trong bảng con -->
                 <a-button
                     v-if="!onlineFormDisabled && getSubOpenAddBtnCfg.enabled && getBtnAuth('add', sub.key)"
                     :preIcon="getSubOpenAddBtnCfg.buttonIcon"
@@ -63,7 +63,7 @@
                 >
                   <span>{{getSubOpenAddBtnCfg.buttonName}}</span>
                 </a-button>
-                <!-- 子表内弹出编辑按钮 -->
+                <!-- Nút chỉnh sửa hiển thị dạng popup trong bảng con -->
                 <a-button
                     v-if="!onlineFormDisabled && getSubOpenEditBtnCfg.enabled && getBtnAuth('update', sub.key) && selectedRowIds.length === 1"
                     :preIcon="getSubOpenEditBtnCfg.buttonIcon"
@@ -80,10 +80,10 @@
       </a-tab-pane>
     </a-tabs>
     <Loading :loading="loading" :absolute="false" />
-    <!-- 表单中可以通过slot自定义提交按钮，流程表单中用到 -->
+    <!-- Trong biểu mẫu có thể thông quaslotNút gửi tùy chỉnh, dùng trong biểu mẫu quy trình -->
     <slot name="bottom"></slot>
 
-    <!-- 弹窗到另外一张表单用-可编辑表单 -->
+    <!-- Popup dùng cho một biểu mẫu khác-Biểu mẫu có thể chỉnh sửa -->
     <online-pop-modal formTableType="3" :request="popModalRequest" :id="popTableId" @register="registerPopModal" @success="getPopFormData" :taskId="taskId" :tableName="popTableName" topTip isVxeTableData></online-pop-modal>
   </div>
 </template>
@@ -170,59 +170,59 @@
         type: String,
         default: '',
       },
-      // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
-      // erp风格会传来所有子表数据
+      // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
+      // erpPhong cách sẽ truyền tới mọi dữ liệu bảng con
       subTableSource: {
         default: () => ({}),
       },
-      // update-end-author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
-      // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
-      // 流程会传taskId
+      // update-end-author:liaozhiyang---date:20231128---for：【QQYUN-7260】erpKhi chỉnh sửa bảng chính, lưu các bản ghi của bảng con
+      // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
+      // Quy trình sẽ truyềntaskId
       taskId: {
         type: String,
       },
-      // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
+      // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
       cgBIBtnMap: Object,
       buttonSwitch: Object,
-      // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
+      // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con
       isShare: {
         type: Boolean,
         default: false,
       },
-      // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
+      // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con
     },
     emits: ['success', 'rendered', 'close','validate'],
     setup(props, { emit }) {
       console.log('onlineForm-setup》》');
       const { createMessage: $message } = useMessage();
 
-      // 打印表单ref
+      // In biểu mẫuref
       const printRef = ref(null);
-      // 表单ref
+      // Biểu mẫuref
       const onlineFormRef = ref(null);
       const single = ref(true);
-      // 加载状态
+      // Trạng thái tải
       const loading = ref(false);
-      // 显示提示
+      // Hiển thị nhắc nhở
       const showTip = ref(true);
       const tableType = ref(1);
-      // 自定义弹窗的编辑提交地址
+      // Địa chỉ gửi chỉnh sửa của popup tùy chỉnh
       const customEditSubmitUrl = ref('');
 
-      // 表单提交且提交流程
+      // Gửi biểu mẫu đồng thời gửi quy trình
       const submitFlowFlag = ref(false);
       const isUpdate = ref(false);
       const { getIsMobile } = useAppInject();
       const isSetFormLabelLength = ref(false);
-      // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-      // erp子表获取外键
+      // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+      // erpBảng con lấy khóa ngoại
       const foreignkey = inject("foreignkey", {value:{}});
-      // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+      // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
       const rowNumber = ref(getIsMobile.value ? false : true);
       const subFormWrapRef = ref(null);
       let formItemData = null;
       /**
-       * online表单扩展配置
+       * onlineCấu hình mở rộng biểu mẫu
        */
       const onlineExtConfigJson = reactive({
         reportPrintShow: 0,
@@ -263,7 +263,7 @@
         labelWidth
       } = useFormItems(props, onlineFormRef);
       let { EnhanceJS, initCgEnhanceJs } = useEnhance(onlineFormContext, false);
-      // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-8405】移动端可视区展示三个字段
+      // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-8405】Vùng hiển thị phía di động hiển thị ba trường
       watch(
         [subTabInfo, getIsMobile],
         () => {
@@ -279,25 +279,25 @@
         },
         { immediate: true }
       );
-      // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-8405】移动端可视区展示三个字段
-      // 新的js增强
+      // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-8405】Vùng hiển thị phía di động hiển thị ba trường
+      // cái mớijsTăng cường
       const { executeJsEnhanced } = useCustomHook({}, onlineFormContext);
 
-      //表单配置
+      //Cấu hình biểu mẫu
       const [registerForm, { setProps, validate, resetFields, clearValidate, setFieldsValue, updateSchema, getFieldsValue, scrollToField }] = useForm({
         schemas: formSchemas,
         showActionButtonGroup: false,
         baseColProps: baseColProps,
-        // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
+        // update-begin--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
         labelWidth,
-        // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】online表单label较长优化
-        // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+        // update-end--author:liaozhiyang---date:20240329---for：【QQYUN-7872】onlineBiểu mẫulabelTối ưu khi dài
+        // update-begin--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
         labelCol,
         wrapperCol
-        // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】多列风格富文本、markdown增加独占一行功能
+        // update-end--author:liaozhiyang---date:20240105---for：【QQYUN-7499】Văn bản giàu kiểu nhiều cột、markdownThêm chức năng chiếm riêng một hàng
       });
 
-      // 表单禁用
+      // Vô hiệu hóa biểu mẫu
       const onlineFormDisabled = ref(false);
       function handleFormDisabled() {
         let flag = props.disabled;
@@ -306,68 +306,68 @@
       }
 
       /**
-       * status: 是否是修改页面
-       * record: 列表页面的行数据
-       * param： 树形列表添加子节点 传入的父级节点id
+       * status: Có phải trang sửa đổi hay không
+       * record: Dữ liệu hàng của trang danh sách
+       * param： Danh sách dạng cây thêm nút con nút cấp cha được truyền vàoid
        * */
       async function show(status, record, param) {
-        console.log('新增编辑进入表单》》form', record);
-        //update-begin-author:taoyan date:2022-5-17 for: VUEN-1056 15、严重——online树表单，添加的时候，父亲节点是空的
-        //如果是树 需要重新设置pid的formSchema 让他刷新树控件的数据
+        console.log('Thêm mới/chỉnh sửa đi vào biểu mẫu》》form', record);
+        //update-begin-author:taoyan date:2022-5-17 for: VUEN-1056 15、nghiêm trọng——onlineBiểu mẫu cây, khi thêm mới, nút cha đang trống
+        //Nếu là cây Cần thiết lập lạipidcủaformSchema Cho nó làm mới dữ liệu của control cây
         await updatePidFieldDict();
-        //update-end-author:taoyan date:2022-5-17 for: VUEN-1056 15、严重——online树表单，添加的时候，父亲节点是空的
-        //重置自定义弹窗的表单提交地址
+        //update-end-author:taoyan date:2022-5-17 for: VUEN-1056 15、nghiêm trọng——onlineBiểu mẫu cây, khi thêm mới, nút cha đang trống
+        //Đặt lại địa chỉ gửi biểu mẫu của popup tùy chỉnh
         customEditSubmitUrl.value = '';
         await resetFields();
-        // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9345】点击编辑再点击新增一下组件会直接触发验证
+        // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9345】Nhấp chỉnh sửa rồi nhấp thêm mới, component sẽ trực tiếp kích hoạt kiểm chứng
         setTimeout(() => {
           clearValidate();
         }, 0);
-        // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9345】点击编辑再点击新增一下组件会直接触发验证
+        // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9345】Nhấp chỉnh sửa rồi nhấp thêm mới, component sẽ trực tiếp kích hoạt kiểm chứng
         dbData.value = '';
         let flag = unref(status);
         isUpdate.value = flag;
-        // update-begin--author:liaozhiyang---date:20240301---for：【QQYUN-8401】新增弹窗一对一子表清空上次的数据
+        // update-begin--author:liaozhiyang---date:20240301---for：【QQYUN-8401】Popup thêm mới của bảng con một-một xóa dữ liệu lần trước
         restSubForm();
-        // update-end--author:liaozhiyang---date:20240301---for：【QQYUN-8401】新增弹窗一对一子表清空上次的数据
+        // update-end--author:liaozhiyang---date:20240301---for：【QQYUN-8401】Popup thêm mới của bảng con một-một xóa dữ liệu lần trước
         if (flag) {
-          // 编辑页面
+          // Trang chỉnh sửa
           await edit(record);
         } else {
-          // 新增页面
+          // Trang thêm mới
           editSubVxeTableData();
         }
         nextTick(() => {
           if (!flag && param) {
-            //如果是新增页面 且 param传入有值 需要设置表单
+            //Nếu là trang thêm mới và paramTruyền vào có giá trị Cần thiết lập biểu mẫu
             setFieldsValue(param);
             props.izCopy && setSubTableFieldsValue(param);
           }
           handleDefaultValue();
-          // 所有信息加载完毕 触发loaded事件
+          // Tất cả thông tin đã tải xong Kích hoạtloadedsự kiện
           handleCgButtonClick('js', 'loaded');
-          //处理表单的禁用效果
+          //Xử lý hiệu quả vô hiệu hóa của biểu mẫu
           handleFormDisabled();
-          // update-begin--author:liaozhiyang---date:20240527---for【TV360X-114】一对一子表编辑时滚动条回到顶部
+          // update-begin--author:liaozhiyang---date:20240527---for【TV360X-114】Khi chỉnh sửa bảng con một-một, thanh cuộn quay về đầu trang
           if (subFormWrapRef.value?.length) {
             subFormWrapRef.value[0].scrollTop = 0;
           }
-          // update-end--author:liaozhiyang---date:20240527---for【TV360X-114】一对一子表编辑时滚动条回到顶部
+          // update-end--author:liaozhiyang---date:20240527---for【TV360X-114】Khi chỉnh sửa bảng con một-một, thanh cuộn quay về đầu trang
         });
       }
-      //update-begin-author:taoyan date:2022-5-17 for: VUEN-1056 15、严重——online树表单，添加的时候，父亲节点是空的
+      //update-begin-author:taoyan date:2022-5-17 for: VUEN-1056 15、nghiêm trọng——onlineBiểu mẫu cây, khi thêm mới, nút cha đang trống
       /**
-       * 刷新表单中的 JTreeSelect 树数据
-       * - 树表：刷新父节点字段，并清空 hiddenNodeKey
-       * - 普通表：每次进入表单（含第二次新增/编辑）重新加载自定义树控件
+       * Làm mới trong biểu mẫu JTreeSelect Dữ liệu cây
+       * - Bảng cây: làm mới trường nút cha, đồng thời xóa trống hiddenNodeKey
+       * - Bảng thông thường: mỗi lần vào biểu mẫu (bao gồm lần thêm mới thứ hai/chỉnh sửa) tải lại control cây tùy chỉnh
        */
       async function updatePidFieldDict() {
         let arr = formSchemas.value;
         if (!arr || arr.length === 0) {
-          console.log('没有拿到表单配置信息，可能是第一次打开新增页面');
+          console.log('Không lấy được thông tin cấu hình biểu mẫu, có thể là lần đầu mở trang thêm mới');
           return;
         }
-        // update-begin--author:liaozhiyang---date:20260804---for：Online表单第二次进入时 JTreeSelect 重新加载树数据
+        // update-begin--author:liaozhiyang---date:20260804---for：OnlineKhi vào biểu mẫu lần thứ hai JTreeSelect Tải lại dữ liệu cây
         const treeSelectSchemas = arr.filter((item) => item.component === 'JTreeSelect');
         if (treeSelectSchemas.length > 0) {
           const reload = new Date().getTime();
@@ -375,7 +375,7 @@
           await updateSchema(
             treeSelectSchemas.map((item) => {
               const componentProps = { reload };
-              // 树表父节点字段：清空 hiddenNodeKey，编辑时再按当前节点过滤
+              // Trường nút cha của bảng cây: xóa trống hiddenNodeKey, khi chỉnh sửa mới lọc theo nút hiện tại
               if (pidFieldName && item.field === pidFieldName) {
                 componentProps.hiddenNodeKey = '';
               }
@@ -386,9 +386,9 @@
             })
           );
         }
-        // update-end--author:liaozhiyang---date:20260804---for：Online表单第二次进入时 JTreeSelect 重新加载树数据
+        // update-end--author:liaozhiyang---date:20260804---for：OnlineKhi vào biểu mẫu lần thứ hai JTreeSelect Tải lại dữ liệu cây
       }
-      //update-end-author:taoyan date:2022-5-17 for: VUEN-1056 15、严重——online树表单，添加的时候，父亲节点是空的
+      //update-end-author:taoyan date:2022-5-17 for: VUEN-1056 15、nghiêm trọng——onlineBiểu mẫu cây, khi thêm mới, nút cha đang trống
 
       const watchDefValParamMap = {
         keys: [],
@@ -397,7 +397,7 @@
       };
 
       /**
-       * 当前表单默认值逻辑-进入新增页面触发
+       * Logic giá trị mặc định của biểu mẫu hiện tại-Kích hoạt khi vào trang thêm mới
        */
       function handleDefaultValue() {
         let fieldProperties = toRaw(defaultValueFields[tableName.value]);
@@ -406,7 +406,7 @@
             setFieldsValue(values);
           });
         }
-        // 处理填值规则默认值中的动态参数
+        // Xử lý tham số động trong giá trị mặc định của quy tắc điền giá trị
         const watchKeyMap = handleFillRuleWatchKeysMap(fieldProperties)
         watchDefValParamMap.keys = [...watchKeyMap.keys()]
         watchDefValParamMap.map = watchKeyMap
@@ -414,14 +414,14 @@
       }
 
       /**
-       * 当前表单默认值逻辑-值变化时重新计算
+       * Logic giá trị mặc định của biểu mẫu hiện tại-Khi giá trị thay đổi thì tính toán lại
        */
       function recalcDefaultValue(field, value) {
-        // 判断当前更改的字段是否在监听keys中
+        // Phán đoán trường đang thay đổi hiện tại có đang được theo dõi hay khôngkeystrong
         if (watchDefValParamMap.keys.includes(field)) {
           let fn = watchDefValParamMap.calcFn.get(field)
           if (typeof fn !== 'function') {
-            // 防抖100ms
+            // Chống rung (debounce)100ms
             fn = debounce(() => {
               let fieldProp = toRaw(defaultValueFields[tableName.value]);
               if (Array.isArray(fieldProp) && fieldProp.length > 0) {
@@ -444,10 +444,10 @@
       }
 
       /**
-       * 子表默认值-子表新增行的时候触发此逻辑
+       * Giá trị mặc định của bảng con-Khi bảng con thêm hàng mới thì kích hoạt logic này
        */
       function handleSubTableDefaultValue(sub, $event) {
-        //console.log('填值规则', sub, $event)
+        //console.log('Quy tắc điền giá trị', sub, $event)
         let subFieldProperties = toRaw(defaultValueFields[sub.key]);
         loadFormFieldsDefVal(subFieldProperties, (values) => {
           const { row, target } = $event;
@@ -458,15 +458,15 @@
 
       async function edit(record) {
         let formData = await getFormData(record.id);
-        //update-begin-author:taoyan date:2022-5-31 for: VUEN-1194 【online】字段填写完成后，设置权限不显示，再次编辑数据，则把原来的值替换成了空
+        //update-begin-author:taoyan date:2022-5-31 for: VUEN-1194 【online】Sau khi điền xong trường, thiết lập quyền thành không hiển thị, khi chỉnh sửa dữ liệu lần nữa thì giá trị gốc bị thay bằng rỗng
         dbData.value = Object.assign({}, record, formData);
-        //update-end-author:taoyan date:2022-5-31 for: VUEN-1194 【online】字段填写完成后，设置权限不显示，再次编辑数据，则把原来的值替换成了空
-        //表单赋值
+        //update-end-author:taoyan date:2022-5-31 for: VUEN-1194 【online】Sau khi điền xong trường, thiết lập quyền thành không hiển thị, khi chỉnh sửa dữ liệu lần nữa thì giá trị gốc bị thay bằng rỗng
+        //Gán giá trị biểu mẫu
         let arr = realFormFieldNames.value;
-        //update-begin-author:taoyan date:2022-7-11 for:  2、online 查看详情还提示必填
+        //update-begin-author:taoyan date:2022-7-11 for:  2、online Xem chi tiết vẫn nhắc bắt buộc điền
         let values = pick(formData, ...arr);
         if(props.disabled){
-          //详情页面 将空的数据丢弃
+          //Trang chi tiết Loại bỏ dữ liệu trống
           Object.keys(values).map(k=>{
             if(!values[k] && values[k]!==0 && values[k]!=='0'){
               delete values[k]
@@ -474,16 +474,16 @@
           })
         }
         await setFieldsValue(values);
-        // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+        // update-begin--author:liaozhiyang---date:20240523---for：【TV360X-87】Khi chỉnh sửa bảng cây, không được chọn chính nó và các nút con cháu làm nút cha
         treeTablefilterNode(record.id);
-        // update-end--author:liaozhiyang---date:20240523---for：【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
-        //update-end-author:taoyan date:2022-7-11 for:  2、online 查看详情还提示必填
+        // update-end--author:liaozhiyang---date:20240523---for：【TV360X-87】Khi chỉnh sửa bảng cây, không được chọn chính nó và các nút con cháu làm nút cha
+        //update-end-author:taoyan date:2022-7-11 for:  2、online Xem chi tiết vẫn nhắc bắt buộc điền
         editSubVxeTableData(formData);
       }
 
       function editSubVxeTableData(record) {
         if (!record) {
-          // 新增页面需要清空子表数据
+          // Trang thêm mới cần xóa sạch dữ liệu bảng con
           record = {};
         }
         let keys = Object.keys(subDataSource.value);
@@ -498,8 +498,8 @@
       /**
        * 2024-05-23
        * liaozhiyang
-       * 【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
-       * @param id (当前节点)
+       * 【TV360X-87】Khi chỉnh sửa bảng cây, không được chọn chính nó và các nút con cháu làm nút cha
+       * @param id (Nút hiện tại)
        */
       function treeTablefilterNode(id) {
         if (props.isTree === true) {
@@ -526,30 +526,30 @@
       /**
        * 2024-03-01
        * liaozhiyang
-       * 重置一对一子表form数据
+       * Đặt lại bảng con một-mộtformDữ liệu
        */
       function restSubForm(){
         subTabInfo.value?.forEach(item=>{
           if(item.relationType == 1){
-            // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-8563】erp风格配置的默认值表达式 未显示
+            // update-begin--author:liaozhiyang---date:20240321---for：【QQYUN-8563】erpBiểu thức giá trị mặc định được cấu hình của phong cách Chưa hiển thị
             if (refMap[item.key].value) {
-              // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-249】第二次打开新增弹窗，一对一子表的默认值没了
+              // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-249】Mở popup thêm mới lần thứ hai, giá trị mặc định của bảng con một-một bị mất
               if (unref(isUpdate) === false && typeof refMap[item.key].value[0]?.resetAndApplyDefaultValue === 'function') {
                 refMap[item.key].value[0].resetAndApplyDefaultValue();
               } else {
                 refMap[item.key].value[0].resetFields();
               }
-              // update-end--author:liaozhiyang---date:20260714---for：【LHZP-249】第二次打开新增弹窗，一对一子表的默认值没了
+              // update-end--author:liaozhiyang---date:20260714---for：【LHZP-249】Mở popup thêm mới lần thứ hai, giá trị mặc định của bảng con một-một bị mất
             }
-            // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-5803】erp风格配置的默认值表达式 未显示
+            // update-end--author:liaozhiyang---date:20240321---for：【QQYUN-5803】erpBiểu thức giá trị mặc định được cấu hình của phong cách Chưa hiển thị
           }
         });
       }
       /**
-       * 设置子表的数据
+       * Thiết lập dữ liệu của bảng con
        */
       function setSubTableFieldsValue(param){
-        //处理一对一子表数据
+        //Xử lý dữ liệu bảng con một-một
         subTabInfo.value?.forEach(item=>{
           if(item.relationType == 1){
             if (refMap[item.key].value && param[item.key]) {
@@ -560,7 +560,7 @@
             }
           }
         });
-        //处理一对多子表数据
+        //Xử lý dữ liệu bảng con một-nhiều
         let keys = Object.keys(subDataSource.value);
         if (keys && keys.length > 0) {
           let obj = {};
@@ -605,7 +605,7 @@
         });
       }
 
-      // 渲染表单
+      // Render biểu mẫu
       async function createRootProperties(data) {
         tableType.value = data.head.tableType;
         tableName.value = data.head.tableName;
@@ -616,18 +616,18 @@
         EnhanceJS = initCgEnhanceJs(data.enhanceJs);
         emit('rendered', onlineExtConfigJson);
 
-        //监听表单改变事件
+        //Lắng nghe sự kiện thay đổi biểu mẫu
         let formRefObject = await getRefPromise(onlineFormRef);
         formRefObject.$formValueChange = (field, value, changeFormData) => {
           onValuesChange(field, value);
           if(changeFormData){
-            //如果存在其他表单控件的数据，直接设置该值
+            //Nếu tồn tại dữ liệu của control biểu mẫu khác, hãy trực tiếp thiết lập giá trị đó
             setFieldsValue(changeFormData)
           }
           onChangeEvent(field, value, changeFormData)
           recalcDefaultValue(field, value)
         };
-        // QQYUN-5315【online表单】online表单也需要支持hook增强
+        // QQYUN-5315【onlineBiểu mẫu 】onlineBiểu mẫu cũng cần hỗ trợhookTăng cường
         if(EnhanceJS && EnhanceJS["setup"]){
           executeEnhanceFormJsHook(EnhanceJS["setup"])
         }
@@ -635,30 +635,30 @@
         formItemData = data;
       }
 
-      //  触发表单change事件 区别于老的onlchange
+      //  Kích hoạt biểu mẫuchangesự kiện khác với cái cũonlchange
       function onChangeEvent(field, value, changeFormData) {
         onlineFormContext.changEvent(field, value, changeFormData)
       }
 
-      // 添加表单change事件
+      // Thêm biểu mẫuchangesự kiện
       function onlineFormValueChange(callback) {
         onlineFormContext.addObject2Context("changEvent", callback)
       }
 
       /**
-       * 处理扩展配置
+       * Xử lý cấu hình mở rộng
        */
       function handleExtConfigJson(jsonStr) {
-        //update-begin-author:taoyan date:2023-2-6 for: QQYUN-4082 默认打开online表单，默认全屏
+        //update-begin-author:taoyan date:2023-2-6 for: QQYUN-4082 Mặc định mởonlinebiểu mẫu, mặc định toàn màn hình
         let extConfigJson = { reportPrintShow: 0, reportPrintUrl: '', joinQuery: 0, modelFullscreen: 0, modalMinWidth: '', commentStatus: 0, formLabelLength: null };
-        //update-end-author:taoyan date:2023-2-6 for: QQYUN-4082 默认打开online表单，默认全屏
+        //update-end-author:taoyan date:2023-2-6 for: QQYUN-4082 Mặc định mởonlinebiểu mẫu, mặc định toàn màn hình
         if (jsonStr) {
           extConfigJson = JSON.parse(jsonStr);
-          // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8644】移动端效果关闭聊天窗口
+          // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8644】Hiệu ứng phía di động khi đóng cửa sổ trò chuyện
           if (getIsMobile.value) {
             extConfigJson.commentStatus = 0;
           }
-          // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8644】移动端效果关闭聊天窗口
+          // update-begin--author:liaozhiyang---date:20240326---for：【QQYUN-8644】Hiệu ứng phía di động khi đóng cửa sổ trò chuyện
         }
         isSetFormLabelLength.value = !!extConfigJson.formLabelLength;
         Object.keys(extConfigJson).map((k) => {
@@ -666,7 +666,7 @@
         });
       }
 
-      // 提交表单和流程
+      // Gửi biểu mẫu và quy trình
       function submitFormAndFlow() {
         submitFlowFlag.value = true;
         handleSubmit();
@@ -680,7 +680,7 @@
           handleOne2ManySubmit();
         }
       }
-      //校验必填
+      //Kiểm chứng mục bắt buộc điền
       async function handleValidate() {
         if (single.value === true) {
           try {
@@ -701,22 +701,22 @@
         });
       }
 
-      // 触发所有表单验证
+      // Kích hoạt mọi kiểm chứng biểu mẫu
       function validateAll() {
         let temp = {};
         return new Promise((resolve, reject) => {
-          // 验证主表表单
+          // Xác thực biểu mẫu bảng chính
           validate().then(
             (values) => resolve(values),
             ({ errorFields, values }) => {
               reject({
-                // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-496】使用数值类型，金额校验，控件默认值得出的是小数导致校验过不去给提示
+                // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-496】Dùng loại số, kiểm chứng số tiền, giá trị mặc định của control tính ra số thập phân khiến kiểm chứng không qua được, cần đưa ra nhắc nhở
                 errorFields,
                 values,
-                // update-end--author:liaozhiyang---date:20240617---for：【TV360X-496】使用数值类型，金额校验，控件默认值得出的是小数导致校验过不去给提示
+                // update-end--author:liaozhiyang---date:20240617---for：【TV360X-496】Dùng loại số, kiểm chứng số tiền, giá trị mặc định của control tính ra số thập phân khiến kiểm chứng không qua được, cần đưa ra nhắc nhở
                 code: VALIDATE_FAILED,
                 key: tableName.value,
-                // 滚动到未通过校验的字段上
+                // Cuộn tới trường chưa thông qua kiểm chứng
                 scrollToField: () => errorFields[0] && scrollToField(errorFields[0].name, { behavior: 'smooth', block: 'center' }),
               });
             }
@@ -724,17 +724,17 @@
         })
           .then((result) => {
             Object.assign(temp, changeDataIfArray2String(result));
-            // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-            // erp 列表入口：弹窗内无子表，子表在列表页单独维护；分享入口 isShare 会展示子表 Tab，必须一并校验并提交，否则主子表关联不上
-            // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
-            // 分享入口 ERP 新建主子表未关联
+            // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+            // erp Lối vào danh sách: trong popup không có bảng con, bảng con được duy trì riêng tại trang danh sách; lối vào chia sẻ isShare sẽ hiển thị bảng con Tab, bắt buộc phải kiểm chứng và gửi cùng nhau, nếu không bảng chính-con không liên kết được
+            // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con
+            // Lối vào chia sẻ ERP Tạo mới bảng chính-con chưa liên kết
             if (props.themeTemplate === ERP && !props.isShare) {
               return Promise.resolve({});
             } else {
               return validateSubTableFields();
             }
-            // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
-            // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+            // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con
+            // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
           })
           .then((allTableData) => {
             Object.assign(temp, allTableData);
@@ -742,13 +742,13 @@
           })
           .catch((e) => {
             if (e === VALIDATE_FAILED || e?.code === VALIDATE_FAILED) {
-              // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-496】使用数值类型，金额校验，控件默认值得出的是小数导致校验过不去给提示
+              // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-496】Dùng loại số, kiểm chứng số tiền, giá trị mặc định của control tính ra số thập phân khiến kiểm chứng không qua được, cần đưa ra nhắc nhở
               analysisErrorInfo(e.errorFields, e.values, single.value, e.key).then((val) => {
                 if (!val) {
-                  $message.warning('校验未通过');
+                  $message.warning('Kiểm chứng chưa thông qua');
                 }
               });
-              // update-end--author:liaozhiyang---date:20240617---for：【TV360X-496】使用数值类型，金额校验，控件默认值得出的是小数导致校验过不去给提示
+              // update-end--author:liaozhiyang---date:20240617---for：【TV360X-496】Dùng loại số, kiểm chứng số tiền, giá trị mặc định của control tính ra số thập phân khiến kiểm chứng không qua được, cần đưa ra nhắc nhở
               if (e.key) {
                 changeTab(e.key);
                 if (e.scrollToField) {
@@ -764,30 +764,30 @@
       }
 
       /**
-       * 切换tab到出现校验错误的页面
+       * Chuyển đổitabtới trang xuất hiện lỗi kiểm chứng
        * */
       function changeTab(key) {
         let arr = subTabInfo.value;
         for (let i = 0; i < arr.length; i++) {
           if (key == arr[i].key) {
-            // update-begin-author:sunjianlei date:2022-7-7 for:【VUEN-1425】【vue3】对多子表中校验不通过不提示
+            // update-begin-author:sunjianlei date:2022-7-7 for:【VUEN-1425】【vue3】Trong bảng con đối-nhiều, kiểm chứng không qua mà không nhắc
             let activeKey = i + '';
             if (subActiveKey.value === activeKey) {
               break;
             }
             subActiveKey.value = activeKey;
-            // 如果切换的目标tab是一对多子表，则需要再次校验一下
+            // Nếu mục tiêu được chuyển đổitablà bảng con một-nhiều, thì cần kiểm chứng lại một lần
             if (arr[i].relationType === 0) {
               let instance = getSubTableInstance(key);
               sleep(300, () => instance?.validateTable());
             }
-            // update-end-author:sunjianlei date:2022-7-7 for:【VUEN-1425】【vue3】对多子表中校验不通过不提示
+            // update-end-author:sunjianlei date:2022-7-7 for:【VUEN-1425】【vue3】Trong bảng con đối-nhiều, kiểm chứng không qua mà không nhắc
             break;
           }
         }
       }
 
-      // 验证子表
+      // Xác thực bảng con
       function validateSubTableFields() {
         return new Promise(async (resolve, reject) => {
           let subData = {};
@@ -820,7 +820,7 @@
       }
 
       /**
-       * 表单提交-单表
+       * Gửi biểu mẫu-bảng đơn
        */
       async function handleSingleSubmit() {
         try {
@@ -831,11 +831,11 @@
           handleApplyRequest(values);
         } catch (e) {
           if (Array.isArray(e?.errorFields) && e.errorFields[0]) {
-            // 滚动到未通过校验的字段上
+            // Cuộn tới trường chưa thông qua kiểm chứng
             scrollToField(e.errorFields[0].name, { behavior: 'smooth', block: 'center' });
-            // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-496】使用数值类型，金额校验，控件默认值得出的是小数导致校验过不去给提示
+            // update-begin--author:liaozhiyang---date:20240617---for：【TV360X-496】Dùng loại số, kiểm chứng số tiền, giá trị mặc định của control tính ra số thập phân khiến kiểm chứng không qua được, cần đưa ra nhắc nhở
             analysisErrorInfo(e.errorFields, e.values, single.value);
-            // update-end--author:liaozhiyang---date:20240617---for：【TV360X-496】使用数值类型，金额校验，控件默认值得出的是小数导致校验过不去给提示
+            // update-end--author:liaozhiyang---date:20240617---for：【TV360X-496】Dùng loại số, kiểm chứng số tiền, giá trị mặc định của control tính ra số thập phân khiến kiểm chứng không qua được, cần đưa ra nhắc nhở
             emit('validate',{passed:false})
           }
         } finally {
@@ -846,7 +846,7 @@
       /**
        * 2024-06-17
        * liaozhiyang
-       * 解析错误信息看是否有组件是input-number，默认值有小数引起的校验错误
+       * Phân tích thông tin lỗi xem có component nào làinput-number, lỗi kiểm chứng do giá trị mặc định có số thập phân gây ra
        */
       async function analysisErrorInfo(errorFields, values, single, curTableName = null) {
         let result = false;
@@ -856,10 +856,10 @@
           const errorField = errorFields[0].name[0];
           let curField;
           if (single || curTableName === tableName.value) {
-            // 单表或者主表
+            // bảng đơn hoặc bảng chính
             curField = properties[errorField];
           } else {
-            // 一对一or一对多(一对多可以排除，因为一对多就是显示的原始值)
+            // một-mộtormột-nhiều(Một-nhiều có thể loại trừ, vì một-nhiều chính là hiển thị giá trị gốc)
             const subSchema = properties[curTableName];
             const { properties: subProperties = {} } = subSchema;
             curField = subProperties[errorField];
@@ -876,7 +876,7 @@
               ],
               (res) => {
                 if (res[errorField] === values[errorField]) {
-                  $message.warning(`${curField.title}的默认值是：${values[errorField]}，导致校验通不过，需要正确配置默认值！`);
+                  $message.warning(`${curField.title}Giá trị mặc định của là:${values[errorField]}, dẫn đến kiểm chứng không thông qua, cần cấu hình đúng giá trị mặc định!`);
                   result = true;
                 }
               }
@@ -886,9 +886,9 @@
         return result;
       }
 
-      //提交数据前 先走一下自定义的JS校验
+      //Trước khi gửi dữ liệu Trước tiên chạy qua phần tùy chỉnh một lượtJSKiểm chứng
       function handleApplyRequest(formData) {
-        // 【issues/7190】【issues/9873】ERP列表子表是分页数据，由子表接口独立维护，禁止随主表全量提交
+        // 【issues/7190】【issues/9873】ERPBảng con trong danh sách là dữ liệu phân trang, do API bảng con duy trì độc lập, cấm gửi toàn bộ cùng với bảng chính
         customBeforeSubmit(context, formData)
           .then(() => {
             doApplyRequest(formData);
@@ -900,7 +900,7 @@
       /**
        * 2024-04-30
        * liaozhiyang
-       * 把日期(年月日)组件选择了年和年月的格式，数据提交前重置到该格式的第一天。
+       * Đưa ngày(Năm-tháng-ngày)Component đã chọn định dạng năm và năm-tháng, trước khi gửi dữ liệu, đặt lại về ngày đầu tiên của định dạng đó.
        */
       const changeDateValue = (formData) => {
         const { schema } = formItemData;
@@ -910,17 +910,17 @@
             const item = properties[key];
             if (item) {
               if (item.view === 'tab' && isArray(value)) {
-                // 子表(一对一)
+                // bảng con(một-một)
                 if (item.properties) {
                   value.forEach((vItem) => {
                     recursion(vItem, item.properties);
                   });
                 }
-                // 子表（一对多）
+                // Bảng con (một-nhiều)
                 if (item.columns?.length) {
                   const findArr = cloneDeep(item.columns.filter((cItem) => cItem.type === 'date' && cItem.fieldExtendJson));
                   if (findArr.length) {
-                    // 把结构处理成跟一对一一样；
+                    // Xử lý cấu trúc thành giống như một-một;
                     const buildProperties = {};
                     findArr.forEach((fItem) => {
                       buildProperties[fItem.key] = {
@@ -934,22 +934,22 @@
                   }
                 };
               } else if (item.view === 'date' && typeof value === 'string' && value !== '') {
-                // 日期组件
+                // Component ngày
                 let fieldExtendJson = item.fieldExtendJson;
                 if (fieldExtendJson) {
                   fieldExtendJson = JSON.parse(fieldExtendJson);
                   if (fieldExtendJson.picker && fieldExtendJson.picker !== 'default') {
                     /**
-                     * 需要把年、年月、设置成这段时间内的第一天（[年季度]不需要处理antd回传的就是该季度的第一天，[年周]也不处理）
-                     * 例如日期格式是年，传给数据库的时间必须是20240101
-                     * 例如日期格式是年月（选择了202502），传给数据库的时间必须是20250201
+                     * Cần đặt năm, năm-tháng thành ngày đầu tiên trong khoảng thời gian này ([Năm-quý]không cần xử lýantdCái được truyền về chính là ngày đầu tiên của quý đó,[Năm-tuần]cũng không xử lý)
+                     * Ví dụ định dạng ngày là năm, thời gian truyền cho cơ sở dữ liệu phải là20240101
+                     * Ví dụ định dạng ngày là năm-tháng (đã chọn202502) , thời gian truyền cho cơ sở dữ liệu phải là20250201
                      */
                     if (fieldExtendJson.picker === 'year') {
                       formData[key] = dayjs(value).set('month', 0).set('date', 1).format('YYYY-MM-DD');
                     } else if (fieldExtendJson.picker === 'month') {
                       formData[key] = dayjs(value).set('date', 1).format('YYYY-MM-DD');
                     } else if (fieldExtendJson.picker === 'week') {
-                      // 【TV360X-28】周也得重置到第一天，否则查询不出结果
+                      // 【TV360X-28】Tuần cũng phải đặt lại về ngày đầu tiên, nếu không sẽ không truy vấn ra kết quả
                       formData[key] = dayjs(value).startOf('week').format('YYYY-MM-DD');
                     }
                   }
@@ -961,11 +961,11 @@
         recursion(formData, properties);
       };
       /**
-       * 发起请求
+       * Khởi tạo yêu cầu
        * @param formData
        */
       function doApplyRequest(formData) {
-        // 数组没有元素直接置空
+        // Mảng không có phần tử thì trực tiếp đặt trống
         Object.keys(formData).map((key) => {
           if (Array.isArray(formData[key])) {
             if (formData[key].length == 0) {
@@ -973,37 +973,37 @@
             }
           }
         });
-        // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
+        // update-begin--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
         changeDateValue(formData);
-        // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online 日期(年月日)控件增加年、年月，年周，年季度等格式
-        console.log('提交表单数据》》》form:', formData);
+        // update-end--author:liaozhiyang---date:20240430---for：【issues/6094】online Ngày(Năm-tháng-ngày)Control bổ sung các định dạng như năm, năm-tháng, năm-tuần, năm-quý
+        console.log('Gửi dữ liệu biểu mẫu》》》form:', formData);
         let customUrl = customEditSubmitUrl.value;
         let url = `${urlObject.optPre}${props.id}?tabletype=${tableType.value}`;
         if (customUrl) {
           url = `${customUrl}?tabletype=${tableType.value}`;
         }
-        // 如果需要提交流程 需要额外设置一个参数
+        // Nếu cần gửi quy trình Cần thiết lập thêm một tham số
         if (submitFlowFlag.value === true) {
           formData[SUBMIT_FLOW_KEY] = 1;
         }
-        // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-        // 如果外键有则需要加上
+        // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+        // Nếu có khóa ngoại thì cần cộng thêm
         if (foreignkey.value.field && foreignkey.value.value) {
           formData[foreignkey.value.field] = foreignkey.value.value;
         }
-        // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+        // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
         let method = isUpdate.value === true ? 'put' : 'post';
         defHttp
           .request({ url, method, params: formData }, { isTransformResponse: false })
           .then((res) => {
-            //console.log('表单提交完成', res)
+            //console.log('Gửi biểu mẫu hoàn tất', res)
             if (res.success) {
               if (res.result) {
                 formData[SUBMIT_FLOW_ID] = res.result;
               }
-              //刷新列表
+              //Làm mới danh sách
               emit('success', formData);
-              // 工单申请提交的表单也会走这个逻辑，保存成功不需要提示信息
+              // Biểu mẫu gửi trong đơn yêu cầu công việc cũng đi theo logic này, lưu thành công không cần thông tin nhắc nhở
               if(props.submitTip === true && showTip.value === true){
                 $message.success(res.message)
               }
@@ -1020,7 +1020,7 @@
       function triggleChangeValues(values, id, target) {
         if (id && target) {
           if (target.vxeProps) {
-            //一对多子表
+            //bảng con một-nhiều
             target.setValues([
               {
                 rowKey: id,
@@ -1028,11 +1028,11 @@
               },
             ]);
           } else {
-            //一对一子表
+            //bảng con một-một
             target.setValues(values);
           }
         } else {
-          //主表
+          //bảng chính
           setFieldsValue(values);
         }
       }
@@ -1042,13 +1042,13 @@
         setFieldsValue(obj);
       }
 
-      // 一对多子表Tab的Key，用于校验未通过时自动跳转
+      // bảng con một-nhiềuTabcủaKey, dùng để tự động chuyển hướng khi kiểm chứng chưa thông qua
       const subActiveKey = ref('0');
-      // update-begin-author:liaozhiyang---date:20240313---for：【QQYUN-9034】online弹窗一对一子表移动端内容高度设置不合理
+      // update-begin-author:liaozhiyang---date:20240313---for：【QQYUN-9034】onlinePopup: thiết lập chiều cao nội dung của bảng con một-một ở phía di động không hợp lý
       const subFormHeight = ref(getIsMobile.value ? 'auto' : 500);
-      // update-end-author:liaozhiyang---date:20240313---for：【QQYUN-9034】online弹窗一对一子表移动端内容高度设置不合理
-      // 子表表格高度
-      // 【VUEN-803】一对多子表固定340高度，修复自定义列组件被遮挡的问题
+      // update-end-author:liaozhiyang---date:20240313---for：【QQYUN-9034】onlinePopup: thiết lập chiều cao nội dung của bảng con một-một ở phía di động không hợp lý
+      // Chiều cao bảng dữ liệu của bảng con
+      // 【VUEN-803】Cố định bảng con một-nhiều340chiều cao, sửa vấn đề component cột tùy chỉnh bị che khuất
       const subTableHeight = ref(340);
 
       function getSubTableForeignKeyValue(key) {
@@ -1060,7 +1060,7 @@
       }
 
       /**
-       * VUEN-1056 30、生成的一对多，编辑的时候，子表数据挂不上
+       * VUEN-1056 30、một-nhiều được tạo ra, khi chỉnh sửa thì dữ liệu bảng con không gắn lên được
        */
       function getValueIgnoreCase(data, key) {
         if (data) {
@@ -1076,7 +1076,7 @@
         return '';
       }
 
-      //处理一对一子表的表单改变事件
+      //Xử lý sự kiện thay đổi biểu mẫu của bảng con một-một
       function handleSubFormChange(valueObj, tableKey) {
         if (EnhanceJS && EnhanceJS[tableKey + '_onlChange']) {
           let tableChangeObj = EnhanceJS[tableKey + '_onlChange']();
@@ -1094,11 +1094,11 @@
         }
       }
 
-      //处理一对多子表的改变事件
+      //Xử lý sự kiện thay đổi của bảng con một-nhiều
       function handleValueChange(event, tableKey) {
         if (EnhanceJS && EnhanceJS[tableKey + '_onlChange']) {
           let tableChangeObj = EnhanceJS[tableKey + '_onlChange'](onlineFormContext);
-          //update-begin-author:taoyan date:2022-8-12 for: VUEN-1892【online子表弹框】有主从关联js时，子表弹框修改了数据，主表字段未修改
+          //update-begin-author:taoyan date:2022-8-12 for: VUEN-1892【onlinePopup bảng con】có quan hệ liên kết chính-phụjskhi đó, popup bảng con đã sửa dữ liệu, trường bảng chính chưa sửa
           if(event.column === 'all'){
             let keys = Object.keys(tableChangeObj);
             if(keys.length>0){
@@ -1109,21 +1109,21 @@
           }else{
             let columnKey = event.column.key || event.col.key
             if (tableChangeObj[columnKey]) {
-              //event.row.id 加这个条件是： popform添加数据到vxetable的时候 不需要触发改变事件
+              //event.row.id Thêm điều kiện này là vì: popformThêm dữ liệu vàovxetablekhi không cần kích hoạt sự kiện thay đổi
               if(event.row && event.row.id){
                 tableChangeObj[columnKey].call(onlineFormContext, onlineFormContext, event);
               }
             }
           }
-          //update-end-author:taoyan date:2022-8-12 for: VUEN-1892【online子表弹框】有主从关联js时，子表弹框修改了数据，主表字段未修改
+          //update-end-author:taoyan date:2022-8-12 for: VUEN-1892【onlinePopup bảng con】có quan hệ liên kết chính-phụjskhi đó, popup bảng con đã sửa dữ liệu, trường bảng chính chưa sửa
         }
       }
 
       /**
        * 2024-07-30
        * liaozhiyang
-       * 【TV360X-1958】一对多子表删除时js增强 子表名_onlChange 事件没触发
-       *  处理一对多子表的删除事件
+       * 【TV360X-1958】Khi xóa bảng con một-nhiềujsTăng cường tên bảng con_onlChange Sự kiện không được kích hoạt
+       *  Xử lý sự kiện xóa của bảng con một-nhiều
        * */
       function handleRemoved(event, tableKey) {
         if (EnhanceJS && EnhanceJS[tableKey + '_onlChange']) {
@@ -1137,22 +1137,22 @@
         }
       }
 
-      // 当行编辑新增完成后触发的事件
+      // Sự kiện được kích hoạt sau khi chỉnh sửa hàng và thêm mới hoàn tất
       function handleAdded(sub, event) {
         console.log('handleAdded', sub, event)
-        //update-begin-author:taoyan date:2022-6-26 for: 控制台警告 这里直接调用函数 不触发事件了
+        //update-begin-author:taoyan date:2022-6-26 for: Cảnh báo console Tại đây gọi hàm trực tiếp không kích hoạt sự kiện nữa
        // event.target.emit('executeFillRule', event);
         if(!event.isModalData){
           handleSubTableDefaultValue(sub, event)
         }
-        //update-end-author:taoyan date:2022-6-26 for: 控制台警告 这里直接调用函数 不触发事件了
+        //update-end-author:taoyan date:2022-6-26 for: Cảnh báo console Tại đây gọi hàm trực tiếp không kích hoạt sự kiện nữa
       }
 
       function getSubTableAuthPre(table) {
         return 'online_' + table + ':';
       }
 
-      //监听表单改变事件
+      //Lắng nghe sự kiện thay đổi biểu mẫu
       async function onValuesChange(columnKey, value) {
         //console.log('columnKey-value', `${columnKey}-${value}`)
         if (!EnhanceJS || !EnhanceJS['onlChange']) {
@@ -1164,7 +1164,7 @@
         //let tableChangeObj = EnhanceJS["onlChange"].call(onlineFormContext);
         let tableChangeObj = EnhanceJS['onlChange']();
         if (tableChangeObj[columnKey]) {
-          // update-begin--author:liaozhiyang---date:20250106---for：【issues/7642】js增强onlchange事件event.row.字段获取的是变化前的值
+          // update-begin--author:liaozhiyang---date:20250106---for：【issues/7642】jsTăng cườngonlchangesự kiệnevent.row.Trường lấy giá trị trước khi thay đổi
           setTimeout(async () => {
             let formData = await getFieldsValue();
             let event = {
@@ -1174,13 +1174,13 @@
             };
             tableChangeObj[columnKey].call(onlineFormContext, onlineFormContext, event);
           }, 0);
-          // update-end--author:liaozhiyang---date:20250106---for：【issues/7642】js增强onlchange事件event.row.字段获取的是变化前的值
+          // update-end--author:liaozhiyang---date:20250106---for：【issues/7642】jsTăng cườngonlchangesự kiệnevent.row.Trường lấy giá trị trước khi thay đổi
         }
       }
 
       /**
-       * 执行online表单的 hook
-       * QQYUN-5315【online表单】online表单也需要支持hook增强
+       * Thực thionlinecủa biểu mẫu hook
+       * QQYUN-5315【onlineBiểu mẫu 】onlineBiểu mẫu cũng cần hỗ trợhookTăng cường
        */
       function executeEnhanceFormJsHook(funStr) {
         let str = funStr.toLocaleString();
@@ -1191,7 +1191,7 @@
         }
       }
 
-      // 自定义按钮 增强触发事件
+      // Nút tùy chỉnh Sự kiện kích hoạt phần tăng cường
       function handleCgButtonClick(optType, buttonCode) {
         if ('js' == optType) {
           let hookFunName = buttonCode+"_hook";
@@ -1208,7 +1208,7 @@
             dataId: formData.id,
             uiFormData: Object.assign({}, formData),
           };
-          //console.log("自定义按钮请求后台参数：",params)
+          //console.log("Tham số yêu cầu backend của nút tùy chỉnh:",params)
           defHttp
             .post(
               {
@@ -1219,19 +1219,19 @@
             )
             .then((res) => {
               if (res.success) {
-                $message.success('处理完成!');
+                $message.success('Xử lý hoàn tất!');
                 emit('success', formData);
               } else {
-                $message.warning('处理失败!');
+                $message.warning('Xử lý thất bại!');
               }
             });
         }
       }
 
-      // --------------------增强-------------------------
+      // --------------------Tăng cường-------------------------
 
       /**
-       * 清除子表数据
+       * Xóa bỏ dữ liệu bảng con
        * @param tbname
        */
       function clearSubRows(tbname) {
@@ -1248,9 +1248,9 @@
       }
 
       /**
-       * 添加子表数据
+       * Thêm dữ liệu bảng con
        * @param tbname
-       * @param rows 可以是数组也可以是对象
+       * @param rows có thể là mảng, cũng có thể là đối tượng
        * @returns {boolean}
        */
       function addSubRows(tbname, rows) {
@@ -1261,12 +1261,12 @@
         if (typeof rows == 'object') {
           instance.addRows(rows, true);
         } else {
-          this.$message.error('添加子表数据,参数不识别!');
+          this.$message.error('Thêm dữ liệu bảng con,Tham số không nhận diện được!');
         }
       }
 
       /**
-       * 先删除后添加
+       * Xóa trước rồi thêm sau
        * @param tbname
        * @param rows
        */
@@ -1276,7 +1276,7 @@
       }
 
       /**
-       * 修改下拉框的下拉选项
+       * Sửa tùy chọn dropdown của ô dropdown
        * @param field
        * @param options
        */
@@ -1299,7 +1299,7 @@
       /**
        * 2024-03-21
        * liaozhiyang
-       * js增强，改变下拉搜索options
+       * jstăng cường, thay đổi tìm kiếm dropdownoptions
        */
       function changeRemoteOptions({ field, dict, label, type, subTableName }) {
         const _dict = dict
@@ -1307,7 +1307,7 @@
           .map((item) => encodeURIComponent(item))
           .join(',');
         if (type == 'subTable') {
-          // 一对多
+          // một-nhiều
           const findSubTableInfo = subTabInfo.value.find((sub) => sub.key === subTableName);
           if (findSubTableInfo) {
             const findIndex = findSubTableInfo.columns.findIndex((item) => item.key === field);
@@ -1325,7 +1325,7 @@
             }
           }
         } else if (type == 'subForm') {
-          // 一对一
+          // một-một
           if (refMap[subTableName]?.value?.[0]) {
             const result = {
               field,
@@ -1337,7 +1337,7 @@
             refMap[subTableName].value[0].updateSchema(result);
           }
         } else {
-          // 单表
+          // bảng đơn
           const result = {
             field,
             componentProps: {
@@ -1348,11 +1348,11 @@
           updateSchema(result);
         }
       }
-      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8350】js增强根据主表限制子表options
+      // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8350】jsPhần tăng cường giới hạn bảng con theo bảng chínhoptions
       /**
        * 2024-03-13
        * liaozhiyang
-       * 改变一对多子表某个字段的options选项（彼时是为了提供给js增强使用）
+       * Thay đổi của một trường nào đó trong bảng con một-nhiềuoptionsTùy chọn (khi đó là để cung cấp chojsphần tăng cường sử dụng)
        */
       function changeSubTableOptions(subTableName, field, options) {
         const findSubTableInfo = subTabInfo.value.find((sub) => sub.key === subTableName);
@@ -1375,7 +1375,7 @@
       /**
        * 2024-03-13
        * liaozhiyang
-       * 改变一对一子表某个字段的options选项（彼时是为了提供给js增强使用）
+       * Thay đổi của một trường nào đó trong bảng con một-mộtoptionsTùy chọn (khi đó là để cung cấp chojsphần tăng cường sử dụng)
        */
       function changeSubFormbleOptions(subTableName, field, options) {
         if (refMap[subTableName]?.value?.[0]) {
@@ -1396,9 +1396,9 @@
           });
         }
       }
-      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8350】js增强根据主表限制子表options
+      // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8350】jsPhần tăng cường giới hạn bảng con theo bảng chínhoptions
       /**
-       * 表单提交前事件
+       * Sự kiện trước khi gửi biểu mẫu
        * @param that
        * @param formData
        * @returns {Promise<void>|*}
@@ -1412,21 +1412,21 @@
       }
 
       /**
-       * 处理自定义弹框 字段的显示隐藏
+       * Xử lý popup tùy chỉnh Việc hiển thị/ẩn của trường
        * @param show
        * @param hide
        */
       function handleCustomFormSh(show, hide) {
         let plain = toRaw(fieldDisplayStatus);
-        // update-begin--author:liaozhiyang---date:20241101---for：【issues/7387】js增强使用openCustomModal超过两个时show显示错误
+        // update-begin--author:liaozhiyang---date:20241101---for：【issues/7387】jsPhần tăng cường sử dụngopenCustomModalKhi vượt quá haishowHiển thị lỗi
         Object.keys(plain).map((k) => {
           if (k.endsWith('_load') || k.endsWith('_disabled')) {
-            // 不处理（不是字段）；
+            // Không xử lý (không phải trường);
           } else {
             fieldDisplayStatus[k] = true;
           }
         });
-        // update-end--author:liaozhiyang---date:20241101---for：【issues/7387】js增强使用openCustomModal超过两个时show显示错误
+        // update-end--author:liaozhiyang---date:20241101---for：【issues/7387】jsPhần tăng cường sử dụngopenCustomModalKhi vượt quá haishowHiển thị lỗi
         if (show && show.length > 0) {
           Object.keys(plain).map((k) => {
             if (!k.endsWith('_load') && show.indexOf(k) < 0) {
@@ -1443,22 +1443,22 @@
       }
 
       async function handleCustomFormEdit(record, editSubmitUrl) {
-        console.log('自定义弹窗打开online表单2》》form', record);
+        console.log('Mở popup tùy chỉnhonlineBiểu mẫu2》》form', record);
         customEditSubmitUrl.value = editSubmitUrl;
         await resetFields();
         dbData.value = '';
         isUpdate.value = true;
-        // 编辑数据
+        // Chỉnh sửa dữ liệu
         await edit(record);
         await nextTick(() => {
-          // 所有信息加载完毕 触发loaded事件
+          // Tất cả thông tin đã tải xong Kích hoạtloadedsự kiện
           handleCgButtonClick('js', 'loaded');
         });
       }
 
       /**
        * VUEN-1036
-       * 获取子表的实例对象 可以直接调用子表的方法
+       * Lấy đối tượng instance của bảng con Có thể gọi trực tiếp phương thức của bảng con
        */
       function getSubTableInstance(tableName) {
         let instance = refMap[tableName].value;
@@ -1466,22 +1466,22 @@
           instance = instance[0];
         }
         if(!instance){
-          $message.warning('子表ref找不到:'+tableName);
+          $message.warning('bảng conrefKhông tìm thấy:'+tableName);
           return;
         }
         return instance;
       }
 
-      //跳转至积木报表页面
+      //Chuyển tới trang báo cáo Jimu
       function onOpenReportPrint(){
         let url = onlineExtConfigJson.reportPrintUrl;
         let id = dbData.value.id;
         let token = getToken();
         goJmReportViewPage(url, id, token)
       }
-      //打印表单组件
+      //Component in biểu mẫu
       function onCompPrint(){
-        //组件打印
+        //In component
         setTimeout(() => {
           if (!printRef.value) return;
 
@@ -1492,13 +1492,13 @@
           const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
           if (!iframeDoc) return;
 
-          // 复制样式和内容
+          // Sao chép kiểu dáng và nội dung
           iframeDoc.open();
           iframeDoc.write(`
           <!DOCTYPE html>
           <html>
             <head>
-              <title>打印表单</title>
+              <title>In biểu mẫu</title>
               ${Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
               .map((tag) => tag.outerHTML)
               .join('')}
@@ -1508,7 +1508,7 @@
             </body>
           </html>
         `);
-          // 添加打印样式
+          // Thêm kiểu dáng in
           const scrollHeight = printRef.value.scrollHeight;
           const style = iframeDoc.createElement('style');
           style.innerHTML = `
@@ -1535,75 +1535,75 @@
           iframeDoc.head.appendChild(style);
           iframeDoc.close();
 
-          // 打印后移除 iframe
+          // Loại bỏ sau khi in iframe
           iframe.contentWindow?.addEventListener('afterprint', () => {
             document.body.removeChild(iframe);
           });
 
-          // 触发打印
+          // Kích hoạt in
           setTimeout(() => {
             iframe.contentWindow?.print();
           }, 200);
         }, 10);
       }
 
-      //-----------------------------------一对多子表弹窗操作数据-begin-------------------------------------------------------------
+      //-----------------------------------thao tác dữ liệu trong popup của bảng con một-nhiều-begin-------------------------------------------------------------
       const [registerPopModal, { openModal: openPopModal }] = useModal();
-      // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
-      // 表ID
+      // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
+      // BảngID
       const popTableId = ref('');
-      // 表名
+      // Tên bảng
       const popTableName = ref('');
-      // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
-      // 是否发起请求
+      // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
+      // Có khởi tạo yêu cầu hay không
       const popModalRequest = ref(true);
 
-      // update-begin--author:liaozhiyang---date:20260519---for：【QQYUN-9773】online一对多内部弹窗新增js增强
-      // 父→子注入：主表 context + enhanceJs（用 getter 取最新值，因为 EnhanceJS 在 createRootProperties 里后赋值）+ 当前打开的子表 key
+      // update-begin--author:liaozhiyang---date:20260519---for：【QQYUN-9773】onlineThêm mới trong popup nội bộ của một-nhiềujsTăng cường
+      // cha→Tiêm vào phía con: bảng chính context + enhanceJs(dùng getter Lấy giá trị mới nhất, vì EnhanceJS tại createRootProperties sau khi vào trong thì gán giá trị)+ Bảng con đang mở hiện tại key
       provide('parentOnlineForm', {
         context: onlineFormContext,
         getEnhanceJs: () => EnhanceJS,
         subTableKey: popTableName,
       });
-      // update-end--author:liaozhiyang---date:20260519---for：【QQYUN-9773】online一对多内部弹窗新增js增强
+      // update-end--author:liaozhiyang---date:20260519---for：【QQYUN-9773】onlineThêm mới trong popup nội bộ của một-nhiềujsTăng cường
 
       /**
-       * 新增
+       * Thêm mới
        * @param sub
        */
       function openSubFormModalForAdd(sub){
         console.log('openSubFormModalForAdd', sub)
-        // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
+        // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
         popTableId.value = sub.id;
         popTableName.value = sub.key;
-        // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
+        // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
         popModalRequest.value = false;
         openPopModal(true,{isUpdate: false, tableType: '3'})
       }
 
       /**
-       * 编辑
+       * Chỉnh sửa
        * @param sub
        */
       function openSubFormModalForEdit(sub){
         let ref = getSubTableInstance(sub.key)
         let arr = ref.getSelectedData();
         if(arr.length!=1){
-          $message.warning('请选择一条数据');
+          $message.warning('Vui lòng chọn một bản ghi dữ liệu');
           return;
         }
-        // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
+        // -update-begin--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
         popTableId.value = sub.id;
-        //update-begin-author:liusq---date:2024-08-28--for: [TV360X-2262]online表单对接流程权限，设置字段不可编辑，但是这俩按钮可以修改
+        //update-begin-author:liusq---date:2024-08-28--for: [TV360X-2262]onlineBiểu mẫu kết nối quyền quy trình, thiết lập trường không thể chỉnh sửa, nhưng hai nút này có thể sửa đổi
         popTableName.value = sub.key;
-        //update-end-author:liusq---date:2024-08-28--for: [TV360X-2262]online表单对接流程权限，设置字段不可编辑，但是这俩按钮可以修改
-        // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】流程一对多走流程的接口
+        //update-end-author:liusq---date:2024-08-28--for: [TV360X-2262]onlineBiểu mẫu kết nối quyền quy trình, thiết lập trường không thể chỉnh sửa, nhưng hai nút này có thể sửa đổi
+        // -update-end--author:liaozhiyang---date:20240613---for：【TV360X-1000】Quy trình một-nhiều đi qua API của quy trình
         popModalRequest.value = false;
         openPopModal(true,{isUpdate:true, record: arr[0]})
       }
 
       /**
-       * 将数据回填到当前vxe table
+       * Điền ngược dữ liệu vào mục hiện tạivxe table
        * @param data
        */
       function getPopFormData(data){
@@ -1620,21 +1620,21 @@
           instance.addRows(record, {isOnlineJS: false, setActive:false, emitChange: true, isModalData: true});
         }
       }
-      //-----------------------------------一对多子表弹窗操作数据-end-------------------------------------------------------------
+      //-----------------------------------thao tác dữ liệu trong popup của bảng con một-nhiều-end-------------------------------------------------------------
 
-      //update-begin-author:taoyan date:2022-10-17 for: VUEN-2480【严重bug】online vue3测试的问题 6、勾中弹窗编辑后，再次打开，发现不能取消勾中
+      //update-begin-author:taoyan date:2022-10-17 for: VUEN-2480【Nghiêm trọngbug】online vue3Vấn đề của kiểm thử 6、sau khi chỉnh sửa popup đã chọn, mở lại thì thấy không thể bỏ chọn
       function onCloseModal(){
-        // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
-        // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
-        // 分享入口 ERP 新建主子表未关联
+        // update-begin--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
+        // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con
+        // Lối vào chia sẻ ERP Tạo mới bảng chính-con chưa liên kết
         if (props.themeTemplate === ERP && !props.isShare) return;
-        // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
-        // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】online一对多Erp风格
+        // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】Khắc phụcerpLiên kết ngoài của phong cách không có bảng con
+        // update-end--author:liaozhiyang---date:20230818---for：【QQYUN-5803】onlinemột-nhiềuErpPhong cách
         let arr  = subTabInfo.value;
         if(arr && arr.length>0){
           for(let item of arr){
             if(item.relationType==1){
-              //1对1忽略
+              //1Đối với1Bỏ qua
             }else{
               let inst = getSubTableInstance(item.key);
               if(inst){
@@ -1644,9 +1644,9 @@
           }
         }
       }
-      //update-end-author:taoyan date:2022-10-17 for: VUEN-2480【严重bug】online vue3测试的问题 6、勾中弹窗编辑后，再次打开，发现不能取消勾中
+      //update-end-author:taoyan date:2022-10-17 for: VUEN-2480【Nghiêm trọngbug】online vue3Vấn đề của kiểm thử 6、sau khi chỉnh sửa popup đã chọn, mở lại thì thấy không thể bỏ chọn
 
-      /** 供 js 增强调用：重新执行主表的填值规则  */
+      /** cho js Lời gọi tăng cường: thực thi lại quy tắc điền giá trị của bảng chính  */
       function executeMainFillRule() {
         let formData = getFieldsValue();
         let fieldProperties = toRaw(defaultValueFields[tableName.value]);
@@ -1655,21 +1655,21 @@
         }, formData);
       }
 
-      /** 供 js 增强调用：重新执行子表的填值规则  */
+      /** cho js Lời gọi tăng cường: thực thi lại quy tắc điền giá trị của bảng con  */
       function executeSubFillRule(subKey, $event){
         let subList = subTabInfo.value;
         if(subList && subList.length>0){
           let arr = subList.filter(sub=>sub.key === subKey);
           if(arr.length==0){
-            console.error('没找到与之匹配的子表', subKey)
+            console.error('Không tìm thấy bảng con khớp với nó', subKey)
             return;
           }
           if(arr[0].relationType == 1){
-            //一对一
+            //một-một
             let subInstance = getSubTableInstance(subKey);
             subInstance.executeFillRule();
           }else{
-            // 一对多
+            // một-nhiều
             let subFieldProperties = toRaw(defaultValueFields[subKey]);
             let row = toRaw($event.row)
             loadFormFieldsDefVal(subFieldProperties,(values) => {
@@ -1706,19 +1706,19 @@
         updateSchema,
         executeMainFillRule,
         executeSubFillRule,
-        // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8350】js增强根据主表限制子表options
+        // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8350】jsPhần tăng cường giới hạn bảng con theo bảng chínhoptions
         changeSubTableOptions,
         changeSubFormbleOptions,
-        // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8350】js增强根据主表限制子表options
+        // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8350】jsPhần tăng cường giới hạn bảng con theo bảng chínhoptions
         changeRemoteOptions,
         changEvent: ()=>{},
         onlineFormValueChange,
-        // update-begin--author:liaozhiyang---date:20240705---for：【TV360X-1754】js增强-提交表单并且发起流程
+        // update-begin--author:liaozhiyang---date:20240705---for：【TV360X-1754】jsTăng cường-Gửi biểu mẫu đồng thời khởi tạo quy trình
         submitFormAndFlow,
-        // update-end--author:liaozhiyang---date:20240705---for：【TV360X-1754】js增强-提交表单并且发起流程
+        // update-end--author:liaozhiyang---date:20240705---for：【TV360X-1754】jsTăng cường-Gửi biểu mẫu đồng thời khởi tạo quy trình
       };
       resetContext(context);
-      // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-1017】一对多新增、编辑钮根据权限控制
+      // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-1017】Các nút thêm, sửa của một-nhiều được kiểm soát theo quyền
       const getBtnAuth = (code, tableName) => {
         const prefix = getSubTableAuthPre(tableName);
         const permissionStore = usePermissionStore();
@@ -1729,28 +1729,28 @@
         }
         return true;
       };
-      // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-1017】一对多新增、编辑钮根据权限控制
+      // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-1017】Các nút thêm, sửa của một-nhiều được kiểm soát theo quyền
 
       return {
-        //主表
+        //bảng chính
         tableName,
         onlineFormRef,
         registerForm,
         loading,
 
-        //子表
+        //bảng con
         subActiveKey,
         hasSubTable,
         subTabInfo,
         refMap,
 
-        //一对一子表
+        //bảng con một-một
         subFormHeight,
         getSubTableForeignKeyValue,
         isUpdate,
         handleSubFormChange,
 
-        //一对多子表
+        //bảng con một-nhiều
         subTableHeight,
         onlineFormDisabled,
         subDataSource,
@@ -1762,7 +1762,7 @@
         openSubFormModalForEdit,
         getBtnAuth,
         handleRemoved,
-        //父组件调用
+        //Lời gọi của component cha
         show,
         createRootProperties,
         handleSubmit,
@@ -1771,13 +1771,13 @@
         handleCgButtonClick,
         handleCustomFormSh,
         handleCustomFormEdit,
-        //跳转
+        //Chuyển hướng (nhảy trang)
         dbData,
         onOpenReportPrint,
         onlineExtConfigJson,
         onCompPrint,
         printRef,
-        //一对多子表弹窗操作数据
+        //thao tác dữ liệu trong popup của bảng con một-nhiều
         registerPopModal,
         popTableId,
         popTableName,
@@ -1800,9 +1800,9 @@
 
 <style lang="less" scoped>
   .onlineFormWrap {
-    // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+    // update-begin--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
     padding: 20px 1.5% 0;
-    // update-begin--author:liaozhiyang---date:20240506---for：【QQYUN-9229】间隔调整
+    // update-begin--author:liaozhiyang---date:20240506---for：【QQYUN-9229】Điều chỉnh khoảng cách
     &.formTemplate_1 {
       > form {
         padding-left: 5%;
@@ -1815,7 +1815,7 @@
         padding-right: 1%;
       }
     }
-    // update-end--author:liaozhiyang---date:20240506---for：【QQYUN-9229】间隔调整
+    // update-end--author:liaozhiyang---date:20240506---for：【QQYUN-9229】Điều chỉnh khoảng cách
     :deep(.ant-form) {
       > .ant-row {
         > .ant-col {
@@ -1823,7 +1823,7 @@
         }
       }
     }
-    // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 label栅格改成labelwidth固宽
+    // update-end--author:liaozhiyang---date:20230105---for：【QQYUN-7632】 labelLưới đổi thànhlabelwidthĐộ rộng cố định
     :deep(.vxe-buttons--wrapper) {
       > div {
         display: flex;
@@ -1836,10 +1836,10 @@
         margin-right: 0;
       }
     }
-    // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9353】markdown全屏之后，弹窗的关闭和全屏按钮在markdown上面
+    // update-begin--author:liaozhiyang---date:20240517---for：【QQYUN-9353】markdownSau khi toàn màn hình, nút đóng và nút toàn màn hình của popup nằm ởmarkdownphía trên
     :deep(.vditor--fullscreen) {
       z-index: 1011 !important;
     }
-    // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9353】markdown全屏之后，弹窗的关闭和全屏按钮在markdown上面
+    // update-end--author:liaozhiyang---date:20240517---for：【QQYUN-9353】markdownSau khi toàn màn hình, nút đóng và nút toàn màn hình của popup nằm ởmarkdownphía trên
   }
 </style>

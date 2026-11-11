@@ -2,7 +2,7 @@ import IFormSchema from '../IFormSchema';
 import { FormSchema } from '/@/components/Form';
 
 /**
- * 富文本
+ * Văn bản giàu (rich text)
  */
 export default class EditorWidget extends IFormSchema {
   getItem(): FormSchema {
@@ -10,11 +10,11 @@ export default class EditorWidget extends IFormSchema {
     return Object.assign({}, item, {
       component: 'JEditor',
       componentProps: {
-        //update-begin-author:taoyan date:2022-6-1 for: VUEN-1159 第一次加载时，点击第一个输入框，光标会跑到富文本输入框
+        //update-begin-author:taoyan date:2022-6-1 for: VUEN-1159 Khi tải lần đầu, nhấp vào ô nhập đầu tiên, con trỏ sẽ chạy sang ô nhập văn bản giàu
         options: {
           auto_focus: false,
         },
-        //update-end-author:taoyan date:2022-6-1 for: VUEN-1159 第一次加载时，点击第一个输入框，光标会跑到富文本输入框
+        //update-end-author:taoyan date:2022-6-1 for: VUEN-1159 Khi tải lần đầu, nhấp vào ô nhập đầu tiên, con trỏ sẽ chạy sang ô nhập văn bản giàu
         // fileMax:1,
         // showImageUpload:false,
         // width:"966px",
