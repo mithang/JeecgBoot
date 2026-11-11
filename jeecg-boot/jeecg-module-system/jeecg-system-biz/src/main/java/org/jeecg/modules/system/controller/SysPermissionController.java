@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * 菜单权限表 前端控制器
+ * Bảng quyền hạn menu — Controller frontend
  * </p>
  *
  * @Author scott
@@ -75,12 +75,12 @@ public class SysPermissionController {
 	private ISysDictService sysDictService;
 
     /**
-     * 子菜单
+     * Menu con
      */
 	private static final String CHILDREN = "children";
 
 	/**
-	 * 加载数据节点
+	 * Tải nút dữ liệu
 	 *
 	 * @return
 	 */
@@ -94,7 +94,7 @@ public class SysPermissionController {
 			query.eq(SysPermission::getDelFlag, CommonConstant.DEL_FLAG_0);
 			query.orderByAsc(SysPermission::getSortNo);
 			
-			//支持通过菜单名字或url，模糊查询
+			//Hỗ trợ truy vấn mờ theo tên menu hoặc url
 			if(oConvertUtils.isNotEmpty(sysPermission.getName())){
 				query.and(wrapper -> wrapper
 					.like(SysPermission::getName, sysPermission.getName())
@@ -105,7 +105,7 @@ public class SysPermissionController {
 			List<SysPermission> list = sysPermissionService.list(query);
 			List<SysPermissionTree> treeList = new ArrayList<>();
 
-			//如果有菜单名查询条件，则平铺数据 不做上下级
+			//Nếu có điều kiện truy vấn theo tên menu thì trải phẳng dữ liệu, không phân cấp trên dưới
 			if(oConvertUtils.isNotEmpty(sysPermission.getName())){
 				if(list!=null && list.size()>0){
 					treeList = list.stream().map(e -> {
@@ -118,16 +118,16 @@ public class SysPermissionController {
 			}
 			result.setResult(treeList);
 			result.setSuccess(true);
-            log.debug("======获取全部菜单数据=====耗时:" + (System.currentTimeMillis() - start) + "毫秒");
+            log.debug("======Lấy tất cả dữ liệu menu=====Thời gian tốn:" + (System.currentTimeMillis() - start) + "Mili giây");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 		return result;
 	}
 
-	/*update_begin author:wuxianquan date:20190908 for:先查询一级菜单，当用户点击展开菜单时加载子菜单 */
+	/*update_begin author:wuxianquan date:20190908 for:Truy vấn menu cấp một trước, khi người dùng nhấn mở rộng menu thì tải menu con */
 	/**
-	 * 系统菜单列表(一级菜单)
+	 * Danh sách menu hệ thống(Menu cấp 1)
 	 *
 	 * @return
 	 */
@@ -151,12 +151,12 @@ public class SysPermissionController {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
-        log.info("======获取一级菜单数据=====耗时:" + (System.currentTimeMillis() - start) + "毫秒");
+        log.info("======Lấy dữ liệu menu cấp một=====Thời gian tốn:" + (System.currentTimeMillis() - start) + "Mili giây");
 		return result;
 	}
 
 	/**
-	 * 查询子菜单
+	 * Tìm kiếm menu con
 	 * @param parentId
 	 * @return
 	 */
@@ -181,13 +181,13 @@ public class SysPermissionController {
 		}
 		return result;
 	}
-	/*update_end author:wuxianquan date:20190908 for:先查询一级菜单，当用户点击展开菜单时加载子菜单 */
+	/*update_end author:wuxianquan date:20190908 for:Truy vấn menu cấp một trước, khi người dùng nhấn mở rộng menu thì tải menu con */
 
 	/**
-	 * 查询子菜单
+	 * Tìm kiếm menu con
 	 *
-	 * @param parentIds 父ID（多个采用半角逗号分割）
-	 * @return 返回 key-value 的 Map
+	 * @param parentIds ID cha (nhiều ID dùng dấu phẩy nửa chiều rộng để phân tách)
+	 * @return Trả về Map key-value
 	 */
 	@GetMapping("/getSystemSubmenuBatch")
 	public Result getSystemSubmenuBatch(@RequestParam("parentIds") String parentIds) {
@@ -213,12 +213,12 @@ public class SysPermissionController {
 			return Result.ok(listMap);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			return Result.error("批量查询子菜单失败：" + e.getMessage());
+			return Result.error("Truy vấn hàng loạt menu con thất bại:" + e.getMessage());
 		}
 	}
 
 //	/**
-//	 * 查询用户拥有的菜单权限和按钮权限（根据用户账号）
+//	 * Truy vấn quyền menu và quyền nút bấm mà người dùng sở hữu (theo tài khoản người dùng)
 //	 * 
 //	 * @return
 //	 */
@@ -231,16 +231,16 @@ public class SysPermissionController {
 //			JSONArray jsonArray = new JSONArray();
 //			this.getPermissionJsonArray(jsonArray, metaList, null);
 //			result.setResult(jsonArray);
-//			result.success("查询成功");
+//			result.success("Tìm kiếm thành công");
 //		} catch (Exception e) {
-//			result.error500("查询失败:" + e.getMessage());
+//			result.error500("Tìm kiếm thất bại:" + e.getMessage());
 //			log.error(e.getMessage(), e);
 //		}
 //		return result;
 //	}
 
 	/**
-	 * 查询用户拥有的菜单权限和按钮权限
+	 * Truy vấn quyền menu và quyền nút mà người dùng sở hữu
 	 *
 	 * @return
 	 */
@@ -249,22 +249,22 @@ public class SysPermissionController {
 	public Result<?> getUserPermissionByToken(HttpServletRequest request) {
 		Result<JSONObject> result = new Result<JSONObject>();
 		try {
-			//直接获取当前用户不适用前端token
+			//Lấy trực tiếp người dùng hiện tại, không áp dụng cho token giao diện token
 			LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 			if (oConvertUtils.isEmpty(loginUser)) {
-				return Result.error("请登录系统！");
+				return Result.error("Vui lòng đăng nhập hệ thống!");
 			}
 			List<SysPermission> metaList = sysPermissionService.queryByUser(loginUser.getId());
-			//添加首页路由
+			//Thêm route trang chủ
 
-			// 代码逻辑说明: 自定义首页地址 LOWCOD-1578
+			// Giải thích logic mã: Địa chỉ trang chủ tùy chỉnh LOWCOD-1578
 			String version = request.getHeader(CommonConstant.VERSION);
 			SysRoleIndex defIndexCfg = sysUserService.getDynamicIndexByUserRole(loginUser.getUsername(), version);
 			if (defIndexCfg == null) {
 				defIndexCfg = sysRoleIndexService.initDefaultIndex();
 			}
 
-			// 如果没有授权角色首页，则自动添加首页路由
+			// Nếu chưa ủy quyền trang chủ vai trò thì tự động thêm route trang chủ
 			if (!PermissionDataUtil.hasIndexPage(metaList, defIndexCfg)) {
 				LambdaQueryWrapper<SysPermission> indexQueryWrapper = new LambdaQueryWrapper<>();
 				indexQueryWrapper.eq(SysPermission::getUrl, defIndexCfg.getUrl());
@@ -277,7 +277,7 @@ public class SysPermissionController {
 					indexMenu.setName(DefIndexConst.DEF_INDEX_NAME);
 					indexMenu.setMenuType(0);
 				}
-				// 如果没有授权一级菜单，则自身变为一级菜单
+				// Nếu chưa ủy quyền menu cấp một thì bản thân trở thành menu cấp một
 				if (indexMenu.getParentId() != null && !PermissionDataUtil.hasMenuById(metaList, indexMenu.getParentId())) {
 					indexMenu.setMenuType(0);
 					indexMenu.setParentId(null);
@@ -288,14 +288,14 @@ public class SysPermissionController {
 				metaList.add(0, indexMenu);
 			}
 
-/* TODO 注： 这段代码的主要作用是：把首页菜单的组件替换成角色菜单的组件，由于现在的逻辑如果角色菜单不存在则自动插入一条，所以这段代码暂时不需要
+/* TODO Lưu ý: tác dụng chính của đoạn mã này là thay component của menu trang chủ bằng component của menu vai trò; do logic hiện tại nếu menu vai trò không tồn tại sẽ tự động chèn một bản ghi nên đoạn mã này tạm thời không cần dùng
 			List<SysPermission> menus = metaList.stream().filter(sysPermission -> {
 				if (defIndexCfg.getUrl().equals(sysPermission.getUrl())) {
 					return true;
 				}
 				return defIndexCfg.getUrl().equals(sysPermission.getUrl());
 			}).collect(Collectors.toList());
-			// 代码逻辑说明: 设置自定义首页地址和组件----------
+			// Giải thích logic mã: Đặt địa chỉ trang chủ tùy chỉnh và component----------
 			if (menus.size() == 1) {
 				String component = defIndexCfg.getComponent();
 				String routeUrl = defIndexCfg.getUrl();
@@ -313,12 +313,12 @@ public class SysPermissionController {
 			JSONObject json = new JSONObject();
 			JSONArray menujsonArray = new JSONArray();
 			this.getPermissionJsonArray(menujsonArray, metaList, null);
-			//一级菜单下的子菜单全部是隐藏路由，则一级菜单不显示
+			//Nếu tất cả menu con dưới menu cấp một đều là route ẩn thì menu cấp một sẽ không hiển thị
 			this.handleFirstLevelMenuHidden(menujsonArray);
 
 			JSONArray authjsonArray = new JSONArray();
 			this.getAuthJsonArray(authjsonArray, metaList);
-			//查询所有的权限
+			//Truy vấn tất cả quyền hạn
 			LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>().select( SysPermission::getName, SysPermission::getPermsType, SysPermission::getPerms, SysPermission::getStatus);
 			query.eq(SysPermission::getDelFlag, CommonConstant.DEL_FLAG_0);
 			query.eq(SysPermission::getMenuType, CommonConstant.MENU_TYPE_2);
@@ -326,55 +326,55 @@ public class SysPermissionController {
 			List<SysPermission> allAuthList = sysPermissionService.list(query);
 			JSONArray allauthjsonArray = new JSONArray();
 			this.getAllAuthJsonArray(allauthjsonArray, allAuthList);
-			//路由菜单
+			//Menu route
 			json.put("menu", menujsonArray);
-			//按钮权限（用户拥有的权限集合）
+			//Quyền nút bấm (tập hợp quyền mà người dùng sở hữu)
 			json.put("auth", authjsonArray);
-			// 按钮权限（用户拥有的权限集合）
+			// Quyền nút bấm (tập hợp quyền mà người dùng sở hữu)
 			List<String> codeList = metaList.stream()
 					.filter((permission) -> CommonConstant.MENU_TYPE_2.equals(permission.getMenuType()) && CommonConstant.STATUS_1.equals(permission.getStatus()))
 					.collect(ArrayList::new, (list, permission) -> list.add(permission.getPerms()), ArrayList::addAll);
-			// 所拥有的权限编码(vue3专用)
+			// Mã quyền hạn sở hữu(vue3 dành riêng)
 			json.put("codeList", codeList);
-			//全部权限配置集合（按钮权限，访问权限）
+			//Tập hợp toàn bộ cấu hình quyền hạn (quyền nút, quyền truy cập)
 			json.put("allAuth", allauthjsonArray);
-			//数据源安全模式
+			//Chế độ an toàn của nguồn dữ liệu
 			json.put("sysSafeMode", jeecgBaseConfig.getFirewall()!=null? jeecgBaseConfig.getFirewall().getDataSourceSafe(): false);
-			//update-begin---author:scott ---date:20261013  for：【issues/9838】返回字典版本号，前端刷新页面时比对，变化才重新拉取字典缓存-----------
+			//update-begin---author:scott ---date:20261013  for：【issues/9838] Trả về số phiên bản danh mục, frontend so sánh khi làm mới trang, chỉ khi thay đổi mới tải lại bộ nhớ đệm danh mục-----------
 			json.put("dictVersion", sysDictService.getDictVersion());
-			//update-end---author:scott ---date:20261013  for：【issues/9838】返回字典版本号，前端刷新页面时比对，变化才重新拉取字典缓存-----------
+			//update-end---author:scott ---date:20261013  for：【issues/9838] Trả về số phiên bản danh mục, frontend so sánh khi làm mới trang, chỉ khi thay đổi mới tải lại bộ nhớ đệm danh mục-----------
 			result.setResult(json);
 		} catch (Exception e) {
-			result.error500("查询失败:" + e.getMessage());  
+			result.error500("Tìm kiếm thất bại:" + e.getMessage());  
 			log.error(e.getMessage(), e);
 		}
 		return result;
 	}
 
 	/**
-	 * 【vue3专用】获取
-	 * 1、查询用户拥有的按钮/表单访问权限
-	 * 2、所有权限 (菜单权限配置)
-	 * 3、系统安全模式 (开启则online报表的数据源必填)
+	 * 【Dành riêng cho vue3】Lấy
+	 * 1, Truy vấn nút người dùng sở hữu/Quyền truy cập biểu mẫu
+	 * 2, Tất cả quyền hạn (Cấu hình quyền hạn menu)
+	 * 3, Chế độ an toàn hệ thống (Khi bật thì nguồn dữ liệu của báo cáo online là bắt buộc)
 	 */
 	@RequestMapping(value = "/getPermCode", method = RequestMethod.GET)
 	public Result<?> getPermCode() {
 		try {
-			// 直接获取当前用户
+			// Lấy trực tiếp người dùng hiện tại
 			LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 			if (oConvertUtils.isEmpty(loginUser)) {
-				return Result.error("请登录系统！");
+				return Result.error("Vui lòng đăng nhập hệ thống!");
 			}
-			// 获取当前用户的权限集合
+			// Lấy tập hợp quyền hạn của người dùng hiện tại
 			List<SysPermission> metaList = sysPermissionService.queryByUser(loginUser.getId());
-            // 按钮权限（用户拥有的权限集合）
+            // Quyền nút bấm (tập hợp quyền mà người dùng sở hữu)
             List<String> codeList = metaList.stream()
                     .filter((permission) -> CommonConstant.MENU_TYPE_2.equals(permission.getMenuType()) && CommonConstant.STATUS_1.equals(permission.getStatus()))
                     .collect(ArrayList::new, (list, permission) -> list.add(permission.getPerms()), ArrayList::addAll);
             //
 			JSONArray authArray = new JSONArray();
 			this.getAuthJsonArray(authArray, metaList);
-			// 查询所有的权限
+			// Truy vấn tất cả quyền hạn
 			LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>().select( SysPermission::getName, SysPermission::getPermsType, SysPermission::getPerms, SysPermission::getStatus);
 			query.eq(SysPermission::getDelFlag, CommonConstant.DEL_FLAG_0);
 			query.eq(SysPermission::getMenuType, CommonConstant.MENU_TYPE_2);
@@ -382,23 +382,23 @@ public class SysPermissionController {
 			JSONArray allAuthArray = new JSONArray();
 			this.getAllAuthJsonArray(allAuthArray, allAuthList);
 			JSONObject result = new JSONObject();
-            // 所拥有的权限编码
+            // Mã quyền hạn sở hữu
 			result.put("codeList", codeList);
-			//按钮权限（用户拥有的权限集合）
+			//Quyền nút bấm (tập hợp quyền mà người dùng sở hữu)
 			result.put("auth", authArray);
-			//全部权限配置集合（按钮权限，访问权限）
+			//Tập hợp toàn bộ cấu hình quyền hạn (quyền nút, quyền truy cập)
 			result.put("allAuth", allAuthArray);
-            //数据源安全模式
+            //Chế độ an toàn của nguồn dữ liệu
 			result.put("sysSafeMode", jeecgBaseConfig.getFirewall()!=null? jeecgBaseConfig.getFirewall().getDataSourceSafe(): null);
             return Result.OK(result);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-            return Result.error("查询失败:" + e.getMessage());
+            return Result.error("Tìm kiếm thất bại:" + e.getMessage());
 		}
 	}
 
 	/**
-	  * 添加菜单
+	  * Thêm menu
 	 * @param permission
 	 * @return
 	 */
@@ -409,16 +409,16 @@ public class SysPermissionController {
 		try {
 			permission = PermissionDataUtil.intelligentProcessData(permission);
 			sysPermissionService.addPermission(permission);
-			result.success("添加成功！");
+			result.success("Thêm thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 
 	/**
-	  * 编辑菜单
+	  * Chỉnh sửa menu
 	 * @param permission
 	 * @return
 	 */
@@ -429,16 +429,16 @@ public class SysPermissionController {
 		try {
 			permission = PermissionDataUtil.intelligentProcessData(permission);
 			sysPermissionService.editPermission(permission);
-			result.success("修改成功！");
+			result.success("Chỉnh sửa thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 
 	/**
-	 * 检测菜单路径是否存在
+	 * Kiểm tra đường dẫn menu có tồn tại hay không
 	 * @param id
 	 * @param url
 	 * @return
@@ -449,18 +449,18 @@ public class SysPermissionController {
 		try {
 			boolean check=sysPermissionService.checkPermDuplication(id,url,alwaysShow);
 			if(check){
-				return Result.ok("该值可用！");
+				return Result.ok("Giá trị này khả dụng!");
 			}
-			return Result.error("访问路径不允许重复，请重定义！");
+			return Result.error("Đường dẫn truy cập không được trùng lặp, vui lòng định nghĩa lại!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 
 	/**
-	  * 删除菜单
+	  * Xóa menu
 	 * @param id
 	 * @return
 	 */
@@ -470,7 +470,7 @@ public class SysPermissionController {
 		Result<SysPermission> result = new Result<>();
 		try {
 			sysPermissionService.deletePermission(id);
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			result.error500(e.getMessage());
@@ -479,7 +479,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	  * 批量删除菜单
+	  * Xóa menu hàng loạt
 	 * @param ids
 	 * @return
 	 */
@@ -494,7 +494,7 @@ public class SysPermissionController {
 					try {
 						sysPermissionService.deletePermission(id);
 					} catch (JeecgBootException e) {
-						if(e.getMessage()!=null && e.getMessage().contains("未找到菜单信息")){
+						if(e.getMessage()!=null && e.getMessage().contains("Không tìm thấy thông tin menu")){
 							log.warn(e.getMessage());
 						}else{
 							throw e;
@@ -502,23 +502,23 @@ public class SysPermissionController {
 					}
 				}
 			}
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("删除失败!");
+			result.error500("Xóa thất bại!");
 		}
 		return result;
 	}
 
 	/**
-	 * 获取全部的权限树
+	 * Lấy toàn bộ cây quyền hạn
 	 *
 	 * @return
 	 */
 	@RequestMapping(value = "/queryTreeList", method = RequestMethod.GET)
 	public Result<Map<String, Object>> queryTreeList() {
 		Result<Map<String, Object>> result = new Result<>();
-		// 全部权限ids
+		// Tất cả quyền hạn ids
 		List<String> ids = new ArrayList<>();
 		try {
 			LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
@@ -532,9 +532,9 @@ public class SysPermissionController {
 			getTreeModelList(treeList, list, null);
 
 			Map<String, Object> resMap = new HashMap<String, Object>(5);
-            // 全部树节点数据
+            // Toàn bộ dữ liệu nút cây
 			resMap.put("treeList", treeList);
-            // 全部树ids
+            // Toàn bộ cây ids
 			resMap.put("ids", ids);
 			result.setResult(resMap);
 			result.setSuccess(true);
@@ -545,7 +545,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 异步加载数据节点 [接口是废的,没有用到]
+	 * Tải bất đồng bộ nút dữ liệu [Giao diện đã bị bỏ,không được sử dụng]
 	 *
 	 * @return
 	 */
@@ -555,7 +555,7 @@ public class SysPermissionController {
 		try {
 			List<TreeModel> list = sysPermissionService.queryListByParentId(parentId);
 			if (list == null || list.size() <= 0) {
-				result.error500("未找到角色信息");
+				result.error500("Không tìm thấy thông tin vai trò");
 			} else {
 				result.setResult(list);
 				result.setSuccess(true);
@@ -568,7 +568,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 查询角色授权
+	 * Truy vấn ủy quyền vai trò
 	 *
 	 * @return
 	 */
@@ -586,7 +586,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 保存角色授权
+	 * Lưu ủy quyền vai trò
 	 *
 	 * @return
 	 */
@@ -600,20 +600,20 @@ public class SysPermissionController {
 			String permissionIds = json.getString("permissionIds");
 			String lastPermissionIds = json.getString("lastpermissionIds");
 			this.sysRolePermissionService.saveRolePermission(roleId, permissionIds, lastPermissionIds);
-			// 代码逻辑说明: [VUEN-234]用户管理角色授权添加敏感日志------------
+			// Giải thích logic mã: [VUEN-234]Ủy quyền vai trò quản lý người dùng thêm nhật ký nhạy cảm------------
             LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-			baseCommonService.addLog("修改角色ID: "+roleId+" 的权限配置，操作人： " +loginUser.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
-			result.success("保存成功！");
-			log.info("======角色授权成功=====耗时:" + (System.currentTimeMillis() - start) + "毫秒");
+			baseCommonService.addLog("Chỉnh sửa vai trò ID: "+roleId+" cấu hình quyền hạn, người thực hiện: " +loginUser.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
+			result.success("Lưu thành công!");
+			log.info("======Cấp quyền vai trò thành công=====Thời gian tốn:" + (System.currentTimeMillis() - start) + "Mili giây");
 
-			// 清除当前用户的授权缓存信息
+			// Xóa thông tin bộ nhớ đệm ủy quyền của người dùng hiện tại
 			Subject currentUser = SecurityUtils.getSubject();
 			if (currentUser.isAuthenticated()) {
 				shiroRealm.clearCache(currentUser.getPrincipals());
 			}
 
 		} catch (Exception e) {
-			result.error500("授权失败！");
+			result.error500("Cấp quyền thất bại!");
 			log.error(e.getMessage(), e);
 		}
 		return result;
@@ -658,7 +658,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 一级菜单的子菜单全部是隐藏路由，则一级菜单不显示
+	 * Nếu tất cả menu con của menu cấp một đều là route ẩn thì menu cấp một sẽ không hiển thị
 	 * @param jsonArray
 	 */
 	private void handleFirstLevelMenuHidden(JSONArray jsonArray) {
@@ -671,7 +671,7 @@ public class SysPermissionController {
                 if(childrens==null || childrens.size()==0){
                     jsonObj.put("hidden",true);
 
-                    //vue3版本兼容代码
+                    //vue3 Mã tương thích phiên bản
                     JSONObject meta = new JSONObject();
                     meta.put("hideMenu",true);
                     jsonObj.put("meta", meta);
@@ -683,7 +683,7 @@ public class SysPermissionController {
 
 
 	/**
-	  *  获取权限JSON数组
+	  *  Lấy mảng JSON quyền hạn
 	 * @param jsonArray
 	 * @param allList
 	 */
@@ -693,7 +693,7 @@ public class SysPermissionController {
 			json = new JSONObject();
 			json.put("action", permission.getPerms());
 			json.put("status", permission.getStatus());
-			//1显示2禁用
+			//1 1 hiển thị 2 vô hiệu hóa
 			json.put("type", permission.getPermsType());
 			json.put("describe", permission.getName());
 			jsonArray.add(json);
@@ -701,7 +701,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	  *  获取权限JSON数组
+	  *  Lấy mảng JSON quyền hạn
 	 * @param jsonArray
 	 * @param metaList
 	 */
@@ -721,7 +721,7 @@ public class SysPermissionController {
 		}
 	}
 	/**
-	  *  获取菜单JSON数组
+	  *  Lấy mảng JSON menu
 	 * @param jsonArray
 	 * @param metaList
 	 * @param parentJson
@@ -742,7 +742,7 @@ public class SysPermissionController {
 					getPermissionJsonArray(jsonArray, metaList, json);
 				}
 			} else if (parentJson != null && oConvertUtils.isNotEmpty(tempPid) && tempPid.equals(parentJson.getString("id"))) {
-				// 类型( 0：一级菜单 1：子菜单 2：按钮 )
+				// Loại( 0: 0: Menu cấp 1, 1: Menu con, 2: Nút bấm )
 				if (permission.getMenuType().equals(CommonConstant.MENU_TYPE_2)) {
 					JSONObject metaJson = parentJson.getJSONObject("meta");
 					if (metaJson.containsKey("permissionList")) {
@@ -752,7 +752,7 @@ public class SysPermissionController {
 						permissionList.add(json);
 						metaJson.put("permissionList", permissionList);
 					}
-					// 类型( 0：一级菜单 1：子菜单 2：按钮 )
+					// Loại( 0: 0: Menu cấp 1, 1: Menu con, 2: Nút bấm )
 				} else if (permission.getMenuType().equals(CommonConstant.MENU_TYPE_1) || permission.getMenuType().equals(CommonConstant.MENU_TYPE_0)) {
 					if (parentJson.containsKey("children")) {
 						parentJson.getJSONArray("children").add(json);
@@ -772,13 +772,13 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 根据菜单配置生成路由json
+	 * Tạo route theo cấu hình menu json
 	 * @param permission
 	 * @return
 	 */
 		private JSONObject getPermissionJsonObject(SysPermission permission) {
 		JSONObject json = new JSONObject();
-		// 类型(0：一级菜单 1：子菜单 2：按钮)
+		// Loại(0: 0: Menu cấp 1, 1: Menu con, 2: Nút bấm)
 		if (permission.getMenuType().equals(CommonConstant.MENU_TYPE_2)) {
 			//json.put("action", permission.getPerms());
 			//json.put("type", permission.getPermsType());
@@ -787,10 +787,10 @@ public class SysPermissionController {
 		} else if (permission.getMenuType().equals(CommonConstant.MENU_TYPE_0) || permission.getMenuType().equals(CommonConstant.MENU_TYPE_1)) {
 			json.put("id", permission.getId());
 			if (permission.isRoute()) {
-                //表示生成路由
+                //có nghĩa là tạo route
 				json.put("route", "1");
 			} else {
-                //表示不生成路由
+                //Nghĩa là không sinh route
 				json.put("route", "0");
 			}
 
@@ -800,7 +800,7 @@ public class SysPermissionController {
 				json.put("path", permission.getUrl());
 			}
 
-			// 重要规则：路由name (通过URL生成路由name,路由name供前端开发，页面跳转使用)
+			// Quy tắc quan trọng: tên route name (Tạo route qua URL name,Tên route để frontend phát triển, dùng khi chuyển trang)
 			if (oConvertUtils.isNotEmpty(permission.getComponentName())) {
 				json.put("name", permission.getComponentName());
 			} else {
@@ -808,43 +808,43 @@ public class SysPermissionController {
 			}
 
 			JSONObject meta = new JSONObject();
-			// 是否隐藏路由，默认都是显示的
+			// Có ẩn route hay không, mặc định đều hiển thị
 			if (permission.isHidden()) {
 				json.put("hidden", true);
-                //vue3版本兼容代码
+                //vue3 Mã tương thích phiên bản
                 meta.put("hideMenu",true);
 			}
-			// 聚合路由
+			// Route tổng hợp
 			if (permission.isAlwaysShow()) {
 				json.put("alwaysShow", true);
 			}
 			json.put("component", permission.getComponent());
-			// 由用户设置是否缓存页面 用布尔值
+			// Do người dùng đặt có cache trang hay không, dùng giá trị boolean
 			if (permission.isKeepAlive()) {
 				meta.put("keepAlive", true);
 			} else {
 				meta.put("keepAlive", false);
 			}
 
-			/*update_begin author:wuxianquan date:20190908 for:往菜单信息里添加外链菜单打开方式 */
-			//外链菜单打开方式
+			/*update_begin author:wuxianquan date:20190908 for:Thêm cách mở menu liên kết ngoài vào thông tin menu */
+			//Cách mở menu liên kết ngoài
 			if (permission.isInternalOrExternal()) {
 				meta.put("internalOrExternal", true);
 			} else {
 				meta.put("internalOrExternal", false);
 			}
-			/* update_end author:wuxianquan date:20190908 for: 往菜单信息里添加外链菜单打开方式*/
+			/* update_end author:wuxianquan date:20190908 for: Thêm cách mở menu liên kết ngoài vào thông tin menu*/
 
 			meta.put("title", permission.getName());
 
-			// 代码逻辑说明: 路由缓存问题，关闭了tab页时再打开就不刷新 #842
+			// Giải thích logic mã: Vấn đề cache route, sau khi đóng tab rồi mở lại thì không làm mới #842
 			String component = permission.getComponent();
 			if(oConvertUtils.isNotEmpty(permission.getComponentName()) || oConvertUtils.isNotEmpty(component)){
 				meta.put("componentName", oConvertUtils.getString(permission.getComponentName(),component.substring(component.lastIndexOf("/")+1)));
 			}
 
 			if (oConvertUtils.isEmpty(permission.getParentId())) {
-				// 一级菜单跳转地址
+				// Địa chỉ chuyển hướng menu cấp một
 				json.put("redirect", permission.getRedirect());
 				if (oConvertUtils.isNotEmpty(permission.getIcon())) {
 					meta.put("icon", permission.getIcon());
@@ -857,7 +857,7 @@ public class SysPermissionController {
 			if (isWwwHttpUrl(permission.getUrl())) {
 				meta.put("url", permission.getUrl());
 			}
-			// 代码逻辑说明: 新增适配vue3项目的隐藏tab功能
+			// Giải thích logic mã: Thêm tính năng ẩn tab tương thích với dự án vue3
 			if (permission.isHideTab()) {
 				meta.put("hideTab", true);
 			}
@@ -868,8 +868,8 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 判断是否外网URL 例如： http://localhost:8080/jeecg-boot/swagger-ui.html#/ 支持特殊格式： {{
-	 * window._CONFIG['domianURL'] }}/druid/ {{ JS代码片段 }}，前台解析会自动执行JS代码片段
+	 * Xác định có phải URL mạng ngoài hay không, ví dụ: http://localhost:8080/jeecg-boot/swagger-ui.html#/ Hỗ trợ định dạng đặc biệt: {{
+	 * window._CONFIG['domianURL'] }}/druid/ {{ JS Đoạn mã }}, frontend phân tích sẽ tự động thực thi đoạn mã JS
 	 *
 	 * @return
 	 */
@@ -882,7 +882,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 通过URL生成路由name（去掉URL前缀斜杠，替换内容中的斜杠‘/’为-） 举例： URL = /isystem/role RouteName =
+	 * Tạo tên route qua URL (bỏ dấu gạch chéo tiền tố của URL, thay dấu gạch chéo trong nội dung ‘/’ thành-) Ví dụ: URL = /isystem/role RouteName =
 	 * isystem-role
 	 *
 	 * @return
@@ -894,7 +894,7 @@ public class SysPermissionController {
 			}
 			url = url.replace("/", "-");
 
-			// 特殊标记
+			// Đánh dấu đặc biệt
 			url = url.replace(":", "@");
 			return url;
 		} else {
@@ -903,7 +903,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 根据菜单id来获取其对应的权限数据
+	 * Theo id menu, lấy dữ liệu quyền hạn tương ứng của nó
 	 *
 	 * @param sysPermissionDataRule
 	 * @return
@@ -918,7 +918,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 添加菜单权限数据
+	 * Thêm dữ liệu quyền hạn menu
 	 *
 	 * @param sysPermissionDataRule
 	 * @return
@@ -930,10 +930,10 @@ public class SysPermissionController {
 		try {
 			sysPermissionDataRule.setCreateTime(new Date());
 			sysPermissionDataRuleService.savePermissionDataRule(sysPermissionDataRule);
-			result.success("添加成功！");
+			result.success("Thêm thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
@@ -944,16 +944,16 @@ public class SysPermissionController {
 		Result<SysPermissionDataRule> result = new Result<SysPermissionDataRule>();
 		try {
 			sysPermissionDataRuleService.saveOrUpdate(sysPermissionDataRule);
-			result.success("更新成功！");
+			result.success("Cập nhật thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 
 	/**
-	 * 删除菜单权限数据
+	 * Xóa dữ liệu quyền hạn menu
 	 *
 	 * @param id
 	 * @return
@@ -964,16 +964,16 @@ public class SysPermissionController {
 		Result<SysPermissionDataRule> result = new Result<SysPermissionDataRule>();
 		try {
 			sysPermissionDataRuleService.deletePermissionDataRule(id);
-			result.success("删除成功！");
+			result.success("Xóa thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 
 	/**
-	 * 查询菜单权限数据
+	 * Truy vấn dữ liệu quyền hạn menu
 	 *
 	 * @param sysPermissionDataRule
 	 * @return
@@ -986,13 +986,13 @@ public class SysPermissionController {
 			result.setResult(permRuleList);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 
 	/**
-	 * 部门权限表
+	 * Bảng quyền hạn phòng ban
 	 * @param departId
 	 * @return
 	 */
@@ -1010,7 +1010,7 @@ public class SysPermissionController {
 	}
 
 	/**
-	 * 保存部门授权
+	 * Lưu ủy quyền phòng ban
 	 *
 	 * @return
 	 */
@@ -1024,10 +1024,10 @@ public class SysPermissionController {
 			String permissionIds = json.getString("permissionIds");
 			String lastPermissionIds = json.getString("lastpermissionIds");
 			this.sysDepartPermissionService.saveDepartPermission(departId, permissionIds, lastPermissionIds);
-			result.success("保存成功！");
-			log.info("======部门授权成功=====耗时:" + (System.currentTimeMillis() - start) + "毫秒");
+			result.success("Lưu thành công!");
+			log.info("======Cấp quyền phòng ban thành công=====Thời gian tốn:" + (System.currentTimeMillis() - start) + "Mili giây");
 		} catch (Exception e) {
-			result.error500("授权失败！");
+			result.error500("Cấp quyền thất bại!");
 			log.error(e.getMessage(), e);
 		}
 		return result;

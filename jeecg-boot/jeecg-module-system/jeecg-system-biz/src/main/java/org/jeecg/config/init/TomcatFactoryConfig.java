@@ -13,12 +13,12 @@ import java.nio.file.Files;
 /**
  * @Description: TomcatFactoryConfig
  * @author: scott
- * @date: 2021年01月25日 11:40
+ * @date: 2021 năm 01 tháng 25 ngày 11:40
  */
 @Configuration
 public class TomcatFactoryConfig {
     /**
-     * tomcat-embed-jasper引用后提示jar找不到的问题
+     * tomcat-embed-jasper Vấn đề nhắc jar không tìm thấy sau khi tham chiếu
      */
     @Bean
     public TomcatServletWebServerFactory tomcatFactory() {
@@ -32,8 +32,8 @@ public class TomcatFactoryConfig {
             connector.setProperty("relaxedPathChars", "[]{}");
             connector.setProperty("relaxedQueryChars", "[]{}");
         });
-        //update-begin---author:scott ---date:20260710  for：【issues】升级Tomcat11后work目录生成在项目目录问题-----------
-        // 自定义Bean覆盖了SpringBoot自动配置，yml里的basedir不生效，Tomcat11默认落到./work，需手动指定系统临时目录
+        //update-begin---author:scott ---date:20260710  for: [issues] Vấn đề thư mục work được tạo trong thư mục dự án sau khi nâng cấp lên Tomcat11-----------
+        // Bean tùy chỉnh đã ghi đè cấu hình tự động của SpringBoot, basedir trong yml không có hiệu lực, Tomcat11 mặc định rơi vào./work, cần chỉ định thủ công thư mục tạm của hệ thống
         try {
             File tomcatTmpDir = Files.createTempDirectory("tomcat.jeecg.").toFile();
             tomcatTmpDir.deleteOnExit();
@@ -41,7 +41,7 @@ public class TomcatFactoryConfig {
         } catch (IOException e) {
             // ignore, fallback to tomcat default
         }
-        //update-end---author:scott ---date:20260710  for：【issues】升级Tomcat11后work目录生成在项目目录问题-----------
+        //update-end---author:scott ---date:20260710  for: [issues] Vấn đề thư mục work được tạo trong thư mục dự án sau khi nâng cấp lên Tomcat11-----------
         return factory;
     }
 }

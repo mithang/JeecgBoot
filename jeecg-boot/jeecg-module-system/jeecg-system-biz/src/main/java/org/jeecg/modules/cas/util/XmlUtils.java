@@ -25,7 +25,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 解析cas,ST验证后的xml
+ * Phân tích cú pháp cas,ST sau khi xác minh xml
  * @author: jeecg-boot
  */
 @Slf4j
@@ -70,14 +70,14 @@ public final class XmlUtils {
      */
     public static XMLReader getXmlReader() {
         try {
-            //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9422】XmlUtils.extractCustomAttributes可能存在疑似的外部实体依赖漏洞---
+            //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9422】XmlUtils.extractCustomAttributes Có thể tồn tại lỗ hổng phụ thuộc thực thể bên ngoài đáng ngờ---
             final SAXParserFactory spf = SAXParserFactory.newInstance();
             spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
             spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             final XMLReader reader = spf.newSAXParser().getXMLReader();
-            //update-end---author:wangshuai---date:2026-03-30---for:【issues/9422】XmlUtils.extractCustomAttributes可能存在疑似的外部实体依赖漏洞---
+            //update-end---author:wangshuai---date:2026-03-30---for:【issues/9422】XmlUtils.extractCustomAttributes Có thể tồn tại lỗ hổng phụ thuộc thực thể bên ngoài đáng ngờ---
             reader.setFeature("http://xml.org/sax/features/namespaces", true);
             reader.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
             return reader;
@@ -202,12 +202,12 @@ public final class XmlUtils {
         spf.setNamespaceAware(true);
         spf.setValidating(false);
         try {
-            //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9422】XmlUtils.extractCustomAttributes可能存在疑似的外部实体依赖漏洞---
+            //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9422】XmlUtils.extractCustomAttributes Có thể tồn tại lỗ hổng phụ thuộc thực thể bên ngoài đáng ngờ---
             spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
             spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-            //update-end---author:wangshuai---date:2026-03-30---for:【issues/9422】XmlUtils.extractCustomAttributes可能存在疑似的外部实体依赖漏洞---
+            //update-end---author:wangshuai---date:2026-03-30---for:【issues/9422】XmlUtils.extractCustomAttributes Có thể tồn tại lỗ hổng phụ thuộc thực thể bên ngoài đáng ngờ---
             final SAXParser saxParser = spf.newSAXParser();
             final XMLReader xmlReader = saxParser.getXMLReader();
             final CustomAttributeHandler handler = new CustomAttributeHandler();
@@ -300,7 +300,7 @@ public final class XmlUtils {
 				"</cas:serviceResponse>";
 		
 		String errorRes = "<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>\r\n" + 
-				"    <cas:authenticationFailure code=\"INVALID_TICKET\">未能够识别出目标 &#39;ST-5-1g-9cNES6KXNRwq-GuRET103sm0-DESKTOP-VKLS8B3&#39;票根</cas:authenticationFailure>\r\n" + 
+				"    <cas:authenticationFailure code=\"INVALID_TICKET\">Không thể nhận dạng được mục tiêu &#39;ST-5-1g-9cNES6KXNRwq-GuRET103sm0-DESKTOP-VKLS8B3&#39;ticket</cas:authenticationFailure>\r\n" + 
 				"</cas:serviceResponse>";
 		
 		String error = XmlUtils.getTextForElement(errorRes, "authenticationFailure");

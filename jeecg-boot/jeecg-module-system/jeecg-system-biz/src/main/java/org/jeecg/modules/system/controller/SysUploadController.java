@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * minio文件上传示例
+ * minio Ví dụ tải file lên
  * @author: jeecg-boot
  */
 @Slf4j
@@ -30,33 +30,33 @@ public class SysUploadController {
     private IOssFileService ossFileService;
 
     /**
-     * 上传
+     * Tải lên
      * @param request
      */
     @RequiresPermissions("system:ossFile:uploadMinio")
     @PostMapping(value = "/uploadMinio")
     public Result<?> uploadMinio(HttpServletRequest request) throws Exception {
         Result<?> result = new Result<>();
-        // 获取业务路径
+        // Lấy đường dẫn nghiệp vụ
         String bizPath = request.getParameter("biz");
-        // 获取上传文件对象
+        // Lấy đối tượng tệp tải lên
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile file = multipartRequest.getFile("file");
         
-        // 文件安全校验，防止上传漏洞文件
+        // Kiểm tra an toàn tệp, ngăn tải lên tệp có lỗ hổng
         SsrfFileTypeFilter.checkUploadFileType(file, bizPath);
 
         if(oConvertUtils.isEmpty(bizPath)){
             bizPath = "";
         }
-        // 获取文件名
+        // Lấy tên tệp
         String orgName = file.getOriginalFilename();
         orgName = CommonUtils.getFileName(orgName);
         String fileUrl =  MinioUtil.upload(file,bizPath);
         if(oConvertUtils.isEmpty(fileUrl)){
-            return Result.error("上传失败,请检查配置信息是否正确!");
+            return Result.error("Tải lên thất bại,Vui lòng kiểm tra thông tin cấu hình có chính xác hay không!");
         }
-        //保存文件信息
+        //Lưu thông tin tệp
         OssFile minioFile = new OssFile();
         minioFile.setFileName(orgName);
         minioFile.setUrl(fileUrl);

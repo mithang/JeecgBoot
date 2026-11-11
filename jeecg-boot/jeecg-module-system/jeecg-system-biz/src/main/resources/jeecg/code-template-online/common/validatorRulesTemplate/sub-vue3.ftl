@@ -3,17 +3,17 @@
         validateRules: [
         <#if col.fieldName != 'id'>
             <#assign subFieldValidType = col.fieldValidType!''>
-        <#-- 非空校验 -->
+        <#-- Kiểm tra không rỗng -->
             <#if col.nullable == 'N' || subFieldValidType == '*'>
-          { required: true, message: '${'$'}{title}不能为空' },
+          { required: true, message: '${'$'}{title}Không được trống' },
             <#elseif subFieldValidType!=''>
           { required: false},
             </#if>
-        <#-- 其他情况下，只要有值就被认为是正则校验 -->
+        <#-- Trong các trường hợp khác, chỉ cần có giá trị thì được coi là kiểm tra regex -->
             <#if subFieldValidType?length gt 0>
-            <#assign subMessage = '格式不正确'>
+            <#assign subMessage = 'Định dạng không đúng'>
             <#if subFieldValidType == 'only' >
-                <#assign subMessage = '不能重复'>
+                <#assign subMessage = 'không được trùng lặp'>
             </#if>
           { pattern: "${subFieldValidType}", message: "${'$'}{title}${subMessage}" }
                 <#t>

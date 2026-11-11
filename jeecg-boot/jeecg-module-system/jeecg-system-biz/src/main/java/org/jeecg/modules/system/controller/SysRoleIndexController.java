@@ -31,13 +31,13 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Arrays;
 
 /**
- * @Description: 角色首页配置
+ * @Description: Cấu hình trang chủ vai trò
  * @Author: jeecg-boot
  * @Date: 2022-03-25
  * @Version: V1.0
  */
 @Slf4j
-@Tag(name = "角色首页配置")
+@Tag(name = "Cấu hình trang chủ vai trò")
 @RestController
 @RequestMapping("/sys/sysRoleIndex")
 public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRoleIndexService> {
@@ -53,7 +53,7 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
     @Autowired
     private BaseCommonService baseCommonService;
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param sysRoleIndex
      * @param pageNo
@@ -61,8 +61,8 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
      * @param req
      * @return
      */
-    @AutoLog(value = "角色首页配置-分页列表查询")
-    @Operation(summary = "角色首页配置-分页列表查询")
+    @AutoLog(value = "Cấu hình trang chủ vai trò-Truy vấn danh sách phân trang")
+    @Operation(summary = "Cấu hình trang chủ vai trò-Truy vấn danh sách phân trang")
     @GetMapping(value = "/list")
     public Result<?> queryPageList(SysRoleIndex sysRoleIndex,
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
@@ -71,20 +71,20 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
         QueryWrapper<SysRoleIndex> queryWrapper = QueryGenerator.initQueryWrapper(sysRoleIndex, req.getParameterMap());
         Page<SysRoleIndex> page = new Page<SysRoleIndex>(pageNo, pageSize);
         IPage<SysRoleIndex> pageList = sysRoleIndexService.page(page, queryWrapper);
-        // 翻译用户/角色名称
+        // Dịch người dùng/Tên vai trò
         sysRoleIndexService.fillRelationName(pageList.getRecords());
         return Result.OK(pageList);
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param sysRoleIndex
      * @return
      */
     @RequiresPermissions("system:roleindex:add")
-    @AutoLog(value = "角色首页配置-添加")
-    @Operation(summary = "角色首页配置-添加")
+    @AutoLog(value = "Cấu hình trang chủ vai trò-Thêm")
+    @Operation(summary = "Cấu hình trang chủ vai trò-Thêm")
     @PostMapping(value = "/add")
     //@DynamicTable(value = DynamicTableConstant.SYS_ROLE_INDEX)
     public Result<?> add(@RequestBody SysRoleIndex sysRoleIndex,HttpServletRequest request) {
@@ -93,21 +93,21 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
             sysRoleIndex.setRelationType(CommonConstant.HOME_RELATION_ROLE);
         }
         sysRoleIndexService.save(sysRoleIndex);
-        //更新其他全局配置的状态
+        //Cập nhật trạng thái của các cấu hình toàn cục khác
         sysRoleIndexService.updateOtherDefaultStatus(sysRoleIndex.getRoleCode(),sysRoleIndex.getStatus(),sysRoleIndex.getId());
         sysRoleIndexService.cleanDefaultIndexCache();
-        return Result.OK("添加成功！");
+        return Result.OK("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param sysRoleIndex
      * @return
      */
     @RequiresPermissions("system:roleindex:edit")
-    @AutoLog(value = "角色首页配置-编辑")
-    @Operation(summary = "角色首页配置-编辑")
+    @AutoLog(value = "Cấu hình trang chủ vai trò-Chỉnh sửa")
+    @Operation(summary = "Cấu hình trang chủ vai trò-Chỉnh sửa")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     //@DynamicTable(value = DynamicTableConstant.SYS_ROLE_INDEX)
     public Result<?> edit(@RequestBody SysRoleIndex sysRoleIndex,HttpServletRequest request) {
@@ -116,51 +116,51 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
             sysRoleIndex.setRelationType(CommonConstant.HOME_RELATION_ROLE);
         }
         sysRoleIndexService.updateById(sysRoleIndex);
-        //更新其他全局配置的状态
+        //Cập nhật trạng thái của các cấu hình toàn cục khác
         sysRoleIndexService.updateOtherDefaultStatus(sysRoleIndex.getRoleCode(),sysRoleIndex.getStatus(),sysRoleIndex.getId());
         sysRoleIndexService.cleanDefaultIndexCache();
-        return Result.OK("编辑成功!");
+        return Result.OK("Chỉnh sửa thành công!");
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "角色首页配置-通过id删除")
-    @Operation(summary = "角色首页配置-通过id删除")
+    @AutoLog(value = "Cấu hình trang chủ vai trò-Xóa theo id")
+    @Operation(summary = "Cấu hình trang chủ vai trò-Xóa theo id")
     @RequiresPermissions("system:roleindex:delete")
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         sysRoleIndexService.removeById(id);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
      */
-    @AutoLog(value = "角色首页配置-批量删除")
-    @Operation(summary = "角色首页配置-批量删除")
+    @AutoLog(value = "Cấu hình trang chủ vai trò-Xóa hàng loạt")
+    @Operation(summary = "Cấu hình trang chủ vai trò-Xóa hàng loạt")
     @RequiresPermissions("system:roleindex:deleteBatch")
     @DeleteMapping(value = "/deleteBatch")
     public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
-        baseCommonService.addLog("批量删除用户， ids： " +ids ,CommonConstant.LOG_TYPE_2, 3);
+        baseCommonService.addLog("Xóa hàng loạt người dùng, ids: " +ids ,CommonConstant.LOG_TYPE_2, 3);
         this.sysRoleIndexService.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.OK("批量删除成功！");
+        return Result.OK("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "角色首页配置-通过id查询")
-    @Operation(summary = "角色首页配置-通过id查询")
+    @AutoLog(value = "Cấu hình trang chủ vai trò-Tìm kiếm theo id")
+    @Operation(summary = "Cấu hình trang chủ vai trò-Tìm kiếm theo id")
     @GetMapping(value = "/queryById")
     public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
         SysRoleIndex sysRoleIndex = sysRoleIndexService.getById(id);
@@ -168,7 +168,7 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param sysRoleIndex
@@ -176,11 +176,11 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
     @RequiresPermissions("system:roleindex:exportXls")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysRoleIndex sysRoleIndex) {
-        return super.exportXls(request, sysRoleIndex, SysRoleIndex.class, "角色首页配置");
+        return super.exportXls(request, sysRoleIndex, SysRoleIndex.class, "Cấu hình trang chủ vai trò");
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -193,13 +193,13 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
     }
 
     /**
-     * 通过code查询
+     * Truy vấn theo code
      *
      * @param roleCode
      * @return
      */
-    @AutoLog(value = "角色首页配置-通过code查询")
-    @Operation(summary = "角色首页配置-通过code查询")
+    @AutoLog(value = "Cấu hình trang chủ vai trò-Truy vấn theo code")
+    @Operation(summary = "Cấu hình trang chủ vai trò-Truy vấn theo code")
     @GetMapping(value = "/queryByCode")
     //@DynamicTable(value = DynamicTableConstant.SYS_ROLE_INDEX)
     public Result<?> queryByCode(@RequestParam(name = "roleCode", required = true) String roleCode,HttpServletRequest request) {
@@ -208,7 +208,7 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
     }
 
     /**
-     * 查询默认首页配置
+     * Truy vấn cấu hình trang chủ mặc định
      */
     @GetMapping("/queryDefIndex")
     public Result<SysRoleIndex> queryDefIndex() {
@@ -217,7 +217,7 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
     }
 
     /**
-     * 更新默认首页配置
+     * Cập nhật cấu hình trang chủ mặc định
      */
     @RequiresPermissions("system:permission:setDefIndex")
     @PutMapping("/updateDefIndex")
@@ -228,13 +228,13 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
     ) {
         boolean success = sysRoleIndexService.updateDefaultIndex(url, component, isRoute);
         if (success) {
-            return Result.OK("设置成功");
+            return Result.OK("Cài đặt thành công");
         } else {
-            return Result.error("设置失败");
+            return Result.error("Cài đặt thất bại");
         }
     }
     /**
-     * 切换默认门户
+     * Chuyển đổi cổng mặc định
      *
      * @param sysRoleIndex
      * @return
@@ -244,7 +244,7 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
         String username = JwtUtil.getUserNameByToken(request);
         sysRoleIndex.setRoleCode(username);
         sysRoleIndexService.changeDefHome(sysRoleIndex);
-        // 代码逻辑说明: 切换完成后的homePath获取
+        // Giải thích logic mã: Lấy homePath sau khi chuyển đổi hoàn tất
         String version = request.getHeader(CommonConstant.VERSION);
         String homePath = null;
         SysRoleIndex defIndexCfg = sysUserService.getDynamicIndexByUserRole(username, version);
@@ -260,7 +260,7 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
         return Result.OK(homePath);
     }
     /**
-     * 获取门户类型
+     * Lấy loại cổng thông tin
      *
      * @return
      */
@@ -272,7 +272,7 @@ public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRo
     }
 
     /**
-     * 清除缓存
+     * Xóa cache
      *
      * @return
      */

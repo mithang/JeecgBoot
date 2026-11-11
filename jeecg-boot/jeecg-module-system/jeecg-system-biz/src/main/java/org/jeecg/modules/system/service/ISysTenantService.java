@@ -16,13 +16,13 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @Description: 租户service接口
+ * @Description: Giao diện service Tenant
  * @author: jeecg-boot
  */
 public interface ISysTenantService extends IService<SysTenant> {
 
     /**
-     * 查询有效的租户
+     * Truy vấn tenant hiệu lực
      *
      * @param idList
      * @return
@@ -30,7 +30,7 @@ public interface ISysTenantService extends IService<SysTenant> {
     List<SysTenant> queryEffectiveTenant(Collection<Integer> idList);
 
     /**
-     * 返回某个租户被多少个用户引用了
+     * Trả về số người dùng đã tham chiếu đến một tenant nào đó
      *
      * @param id
      * @return
@@ -38,7 +38,7 @@ public interface ISysTenantService extends IService<SysTenant> {
     Long countUserLinkTenant(String id);
 
     /**
-     * 根据ID删除租户，会判断是否已被引用
+     * Xóa tenant theo ID, sẽ phán đoán xem đã bị tham chiếu hay chưa
      *
      * @param id
      * @return
@@ -46,7 +46,7 @@ public interface ISysTenantService extends IService<SysTenant> {
     boolean removeTenantById(String id);
 
     /**
-     * 邀请用户加入租户,通过手机号
+     * Mời người dùng tham gia tenant,qua số điện thoại
      * @param ids
      * @param phone
      * @param username
@@ -54,34 +54,34 @@ public interface ISysTenantService extends IService<SysTenant> {
     void invitationUserJoin(String ids, String phone,String username);
 
     /**
-     * 请离用户（租户）
+     * Mời người dùng rời khỏi (tenant)
      * @param userIds
      * @param tenantId
      */
     void leaveTenant(String userIds, String tenantId);
 
     /**
-     * 添加租户，并将创建的用户加入关系表
+     * Thêm tenant và đưa người dùng vừa tạo vào bảng quan hệ
      * @param sysTenant
      * @param userId
      */
     Integer saveTenantJoinUser(SysTenant sysTenant, String userId);
 
     /**
-     * 保存租户
+     * Lưu tenant
      * @param sysTenant
      */
     void saveTenant(SysTenant sysTenant);
 
     /**
-     * 通过门牌号加入租户
+     * Tham gia Tenant qua số nhà
      * @param sysTenant
      * @param userId
      */
     Integer joinTenantByHouseNumber(SysTenant sysTenant, String userId);
 
     /**
-     * 统计一个人创建了多少个租户
+     * Thống kê một người đã tạo bao nhiêu tenant
      * 
      * @param userId
      * @return
@@ -89,7 +89,7 @@ public interface ISysTenantService extends IService<SysTenant> {
     Integer countCreateTenantNum(String userId);
 
     /**
-     * 获取租户回收站的数据
+     * Lấy dữ liệu thùng rác của Tenant
      * @param page
      * @param sysTenant
      * @return
@@ -97,19 +97,19 @@ public interface ISysTenantService extends IService<SysTenant> {
     IPage<SysTenant> getRecycleBinPageList(Page<SysTenant> page, SysTenant sysTenant);
 
     /**
-     * 彻底删除租户
+     * Xóa hoàn toàn tenant
      * @param ids
      */
     void deleteTenantLogic(String ids);
 
     /**
-     * 还原租户
+     * Khôi phục tenant
      * @param ids
      */
     void revertTenantLogic(String ids);
 
     /**
-     * 退出租户
+     * Thoát tenant
      * @param userId
      * @param userId
      * @param username
@@ -117,14 +117,14 @@ public interface ISysTenantService extends IService<SysTenant> {
     void exitUserTenant(String userId, String username, String tenantId);
 
     /**
-     * 变更租户拥有者
+     * Thay đổi chủ sở hữu tenant
      * @param userId
      * @param tenantId
      */
     void changeOwenUserTenant(String userId, String tenantId);
 
     /**
-     * 邀请用户到租户。通过手机号匹配
+     * Mời người dùng vào tenant. Khớp theo số điện thoại
      * @param phone
      * @param departId
      * @return
@@ -132,7 +132,7 @@ public interface ISysTenantService extends IService<SysTenant> {
     Result<String> invitationUser(String phone, String departId);
 
     /**
-     * 进入应用组织页面 查询用户是否有 超级管理员的权限
+     * Vào trang tổ chức của ứng dụng, truy vấn xem người dùng có quyền siêu quản trị viên hay không
      * @param tenantId
      * @return
      */
@@ -140,63 +140,63 @@ public interface ISysTenantService extends IService<SysTenant> {
 
 
     /**
-     * 获取 租户产品包-3个默认admin的人员数量
+     * Lấy gói sản phẩm tenant-3 Số lượng nhân sự admin mặc định
      * @param tenantId
      * @return
      */
     List<TenantPackUserCount> queryTenantPackUserCount(Integer tenantId);
 
     /**
-     * 查询租户产品包信息
+     * Truy vấn thông tin gói sản phẩm của Tenant
      * @param model
      * @return
      */
     TenantPackModel queryTenantPack(TenantPackModel model);
 
     /**
-     * 添加多个用户和产品包的关系数据
+     * Thêm dữ liệu quan hệ giữa nhiều người dùng và gói sản phẩm
      * @param sysTenantPackUser
      */
     void addBatchTenantPackUser(SysTenantPackUser sysTenantPackUser);
 
     /**
-     * 添加用户和产品包的关系数据 带日志记录的
+     * Thêm dữ liệu quan hệ người dùng - gói sản phẩm, có ghi log
      * @param sysTenantPackUser
      */
     void addTenantPackUser(SysTenantPackUser sysTenantPackUser);
 
     /**
-     * 移除用户和产品包的关系数据 带日志记录的
+     * Xóa dữ liệu quan hệ người dùng - gói sản phẩm, có ghi log
      * @param sysTenantPackUser
      */
     void deleteTenantPackUser(SysTenantPackUser sysTenantPackUser);
 
 
     /**
-     * 查询申请的用户列表
+     * Truy vấn danh sách người dùng đã đăng ký
      */
     List<TenantPackUser> getTenantPackApplyUsers(Integer tenantId);
 
     /**
-     * 个人 申请成为管理员
+     * Cá nhân — Đăng ký trở thành quản trị viên
      * @param sysTenantPackUser
      */
     void doApplyTenantPackUser(SysTenantPackUser sysTenantPackUser);
 
     /**
-     * 申请通过 成为管理员
+     * Đơn đăng ký được duyệt — Trở thành quản trị viên
      * @param sysTenantPackUser
      */
     void passApply(SysTenantPackUser sysTenantPackUser);
 
     /**
-     * 拒绝申请 成为管理员
+     * Từ chối đơn đăng ký trở thành quản trị viên
      * @param sysTenantPackUser
      */
     void deleteApply(SysTenantPackUser sysTenantPackUser);
 
     /**
-     * 产品包用户列表
+     * Danh sách người dùng gói sản phẩm
      * @param tenantId
      * @param packId
      * @param status
@@ -206,13 +206,13 @@ public interface ISysTenantService extends IService<SysTenant> {
     IPage<TenantPackUser> queryTenantPackUserList(String tenantId, String packId, Integer status, Page<TenantPackUser> page);
 
     /**
-     * 查看是否已经申请过了管理员
+     * Xem đã từng xin làm quản trị viên hay chưa
      * @return
      */
     Long getApplySuperAdminCount();
 
     /**
-     * 发送同意或者拒绝消息
+     * Gửi tin nhắn đồng ý hoặc từ chối
      * 
      * @param user 
      * @param content 
@@ -220,7 +220,7 @@ public interface ISysTenantService extends IService<SysTenant> {
     void sendMsgForAgreeAndRefuseJoin(SysUser user, String content);
 
     /**
-     * 根据密码删除当前用户
+     * Xóa người dùng hiện tại theo mật khẩu
      * 
      * @param sysUser
      * @param tenantId
@@ -228,21 +228,21 @@ public interface ISysTenantService extends IService<SysTenant> {
     void deleteUserByPassword(SysUser sysUser, Integer tenantId);
 
     /**
-     * 根据用户id获取租户信息
+     * Lấy thông tin Tenant theo ID người dùng
      * @param userId
      * @return
      */
     List<SysTenant> getTenantListByUserId(String userId);
 
     /**
-     * 删除用户
+     * Xóa người dùng
      * @param sysUser
      * @param tenantId
      */
     void deleteUser(SysUser sysUser, Integer tenantId);
 
     /**
-     * 为用户添加租户下所有套餐
+     * Thêm tất cả các gói thuộc tenant cho người dùng
      * @param userId
      * @param tenantId
      */

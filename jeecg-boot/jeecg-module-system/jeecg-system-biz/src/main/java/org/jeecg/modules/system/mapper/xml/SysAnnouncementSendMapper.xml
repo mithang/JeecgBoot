@@ -51,11 +51,11 @@
 	   		and sa.titile LIKE concat(concat('%',#{announcementSendModel.titile}),'%')
 	   </if>
 	   <if test="announcementSendModel.sender !=null and announcementSendModel.sender != ''">
-	   		<!-- update-begin author:wangshuai date:20261102 for：【LHZP-1240】【消息中心】我的消息 发布人未翻译 -->
-	   		<!-- 发布人：列表显示的是姓名，所以按账号原值或用户姓名都能模糊查询 -->
+	   		<!-- update-begin author:wangshuai date:20261102 for：【LHZP-1240】Tin nhắn của tôi, người đăng chưa được dịch -->
+	   		<!-- Người phát hành: danh sách hiển thị họ tên, nên có thể truy vấn mờ theo giá trị gốc của tài khoản hoặc theo tên người dùng -->
 	   		and (sa.sender LIKE concat(concat('%',#{announcementSendModel.sender}),'%')
 	   			or sa.sender in (select su.username from sys_user su where su.realname LIKE concat(concat('%',#{announcementSendModel.sender}),'%')))
-	   		<!-- update-end author:wangshuai date:20261102 for：【LHZP-1240】【消息中心】我的消息 发布人未翻译 -->
+	   		<!-- update-end author:wangshuai date:20261102 for：【LHZP-1240】Tin nhắn của tôi, người đăng chưa được dịch -->
 	   </if>
 		<if test="announcementSendModel.noticeType !=null and announcementSendModel.noticeType != ''">
 			and sa.notice_type = #{announcementSendModel.noticeType}
@@ -87,7 +87,7 @@
 
 
 
-	<!-- 查询一条消息 -->
+	<!-- Truy vấn một tin nhắn -->
 	<select id="getOne" parameterType="String" resultMap="AnnouncementSendModel">
 		select
 		sas.id,
@@ -112,7 +112,7 @@
 	</select>
 
 
-	<!-- 修改为已读消息 -->
+	<!-- Sửa thành tin nhắn đã đọc -->
 	<update id="updateReaded">
 		update sys_announcement_send set read_flag = 1
 		 where user_id = #{userId} 
@@ -123,13 +123,13 @@
 	</update>
 	
 	
-	<!--清除所有未读消息-->
+	<!--Xóa tất cả tin nhắn chưa đọc-->
 	<update id="clearAllUnReadMessage">
 		update sys_announcement_send set read_flag = 1
 		where user_id = #{userId} and read_flag = 0
 	</update>
 
-    <!-- 根据用户id和阅读表的id获取所有阅读的数据 -->
+    <!-- Lấy tất cả dữ liệu đã đọc theo id người dùng và id của bảng đọc -->
 	<select id="getReadAnnSendByUserId" resultType="java.lang.String">
         select id from sys_announcement_send
         where user_id = #{userId} and read_flag = 1
@@ -139,7 +139,7 @@
         </foreach>
     </select>
 
-	<!-- 根据用户id、业务id和业务类型获取未读消息 -->
+	<!-- Lấy tin nhắn chưa đọc theo id người dùng, id nghiệp vụ và loại nghiệp vụ -->
 	<select id="getUnReadAnnByBusAndUserId" resultType="java.lang.String">
 		SELECT
 		  sas.annt_id

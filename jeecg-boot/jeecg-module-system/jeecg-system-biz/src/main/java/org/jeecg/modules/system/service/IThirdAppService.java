@@ -6,81 +6,81 @@ import org.jeecg.modules.system.vo.thirdapp.SyncInfoVo;
 import java.util.List;
 
 /**
- * 第三方App对接
+ * Kết nối ứng dụng bên thứ ba
  * @author: jeecg-boot
  */
 public interface IThirdAppService {
 
     /**
-     * 获取AccessToken
+     * Lấy AccessToken
      * @return String
      */
     String getAccessToken();
 
     /**
-     * 将本地部门同步到第三方App<br>
-     * 同步方向：本地 --> 第三方APP
-     * 同步逻辑：<br>
-     * 1. 先判断是否同步过，有则修改，无则创建；<br>
-     * 2. 本地没有但第三方App里有则删除第三方App里的。
+     * Đồng bộ phòng ban cục bộ sang bên thứ ba App<br>
+     * Hướng đồng bộ: Local --> Bên thứ ba APP
+     * Logic đồng bộ:<br>
+     * 1. Trước tiên phán đoán đã đồng bộ hay chưa, có thì sửa, không thì tạo mới;<br>
+     * 2. Nếu local không có nhưng app bên thứ ba có thì xóa trong app bên thứ ba.
      * @param ids
-     * @return 成功返回true
+     * @return thành công thì trả về true
      */
     SyncInfoVo syncLocalDepartmentToThirdApp(String ids);
 
 //    /**
-//     * 将第三方App部门同步到本地<br>
-//     * 同步方向：第三方APP --> 本地
-//     * 同步逻辑：<br>
-//     * 1. 先判断是否同步过，有则修改，无则创建；<br>
-//     * 2. 本地没有但第三方App里有则删除第三方App里的。
+//     * Đồng bộ phòng ban App bên thứ ba về cục bộ<br>
+//     * Hướng đồng bộ: bên thứ ba APP --> Cục bộ
+//     * Logic đồng bộ:<br>
+//     * 1. Trước tiên phán đoán đã đồng bộ hay chưa, có thì sửa, không thì tạo mới;<br>
+//     * 2. Nếu local không có nhưng app bên thứ ba có thì xóa trong app bên thứ ba.
 //     * @param ids
-//     * @return 成功返回true
+//     * @return thành công thì trả về true
 //     */
 //    SyncInfoVo syncThirdAppDepartmentToLocal(String ids);
 
     /**
-     * 将本地用户同步到第三方App<br>
-     * 同步方向：本地 --> 第三方APP <br>
-     * 同步逻辑：先判断是否同步过，有则修改、无则创建<br>
-     * 注意：同步人员的状态，比如离职、禁用、逻辑删除等。
-     * (特殊点：1、目前逻辑特意做的不删除用户，防止企业微信提前上线，用户已经存在，但是平台无此用户。
-     *  企业微信支持禁用账号；钉钉不支持
-     *  2、企业微信里面是手机号激活，只能用户自己改，不允许通过接口改)
+     * Đồng bộ người dùng cục bộ sang bên thứ ba App<br>
+     * Hướng đồng bộ: Local --> Bên thứ ba APP <br>
+     * Logic đồng bộ: kiểm tra trước xem đã đồng bộ hay chưa, có rồi thì sửa, chưa có thì tạo mới<br>
+     * Lưu ý: đồng bộ trạng thái của nhân sự, ví dụ như nghỉ việc, bị vô hiệu hóa, xóa logic, v.v.
+     * (Điểm đặc biệt: 1. Logic hiện tại cố tình không xóa người dùng, để phòng trường hợp WeChat Doanh nghiệp triển khai sớm, người dùng đã tồn tại nhưng trên nền tảng không có người dùng này.
+     *  WeChat Doanh nghiệp hỗ trợ vô hiệu hóa tài khoản; DingTalk không hỗ trợ
+     *  2, trong WeChat Doanh nghiệp việc kích hoạt dùng số điện thoại, chỉ người dùng tự sửa được, không cho phép sửa qua API)
      * @param ids
-     * @return 成功返回空数组，失败返回错误信息
+     * @return Thành công trả về mảng rỗng, thất bại trả về thông tin lỗi
      */
     SyncInfoVo syncLocalUserToThirdApp(String ids);
 
 //    /**
-//     * 将第三方App用户同步到本地<br>
-//     * 同步方向：第三方APP --> 本地 <br>
-//     * 同步逻辑：先判断是否同步过，有则修改、无则创建<br>
-//     * 注意：同步人员的状态，比如离职、禁用、逻辑删除等。
+//     * Đồng bộ người dùng App bên thứ ba về cục bộ<br>
+//     * Hướng đồng bộ: bên thứ ba APP --> Cục bộ <br>
+//     * Logic đồng bộ: kiểm tra trước xem đã đồng bộ hay chưa, có rồi thì sửa, chưa có thì tạo mới<br>
+//     * Lưu ý: đồng bộ trạng thái của nhân sự, ví dụ như nghỉ việc, bị vô hiệu hóa, xóa logic, v.v.
 //     *
-//     * @return 成功返回空数组，失败返回错误信息
+//     * @return Thành công trả về mảng rỗng, thất bại trả về thông tin lỗi
 //     */
 //    SyncInfoVo syncThirdAppUserToLocal();
 
     /**
-     * 根据本地用户ID，删除第三方APP的用户
+     * Xóa người dùng của APP bên thứ ba theo ID người dùng local
      *
-     * @param userIdList 本地用户ID列表
-     * @return 0表示成功，其他值表示失败
+     * @param userIdList Danh sách ID người dùng cục bộ
+     * @return 0 0 nghĩa là thành công, các giá trị khác nghĩa là thất bại
      */
     int removeThirdAppUser(List<String> userIdList);
 
     /**
-     * 发送消息
+     * Gửi tin nhắn
      *
      * @param message
-     * @param verifyConfig 是否验证配置（未启用的APP会拒绝发送）
+     * @param verifyConfig Có kiểm tra cấu hình hay không (APP chưa bật sẽ từ chối gửi)
      * @return
      */
     boolean sendMessage(MessageDTO message, boolean verifyConfig);
 
     /**
-     * 发送消息
+     * Gửi tin nhắn
      * @param message
      * @return boolean
      */

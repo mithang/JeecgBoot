@@ -4,7 +4,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.jeecgframework.poi.excel.export.styler.ExcelExportStylerDefaultImpl;
 
 /**
- * @Description: 导入用户获取标题头部样式 覆盖默认样式
+ * @Description: Nhập người dùng lấy kiểu tiêu đề header, ghi đè kiểu mặc định
  *
  * @author: wangshuai
  * @date: 2025/8/28 14:05
@@ -16,7 +16,7 @@ public class ExcelExportSysUserStyle extends ExcelExportStylerDefaultImpl {
     }
 
     /**
-     * 获取标题样式
+     * Lấy kiểu tiêu đề
      *
      * @param color
      * @return

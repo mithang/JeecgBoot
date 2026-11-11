@@ -26,7 +26,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Description: 系统数据日志
+ * @Description: Nhật ký dữ liệu hệ thống
  * @author: jeecg-boot
  */
 @RestController
@@ -45,17 +45,17 @@ public class SysDataLogController {
 		QueryWrapper<SysDataLog> queryWrapper = QueryGenerator.initQueryWrapper(dataLog, req.getParameterMap());
 		Page<SysDataLog> page = new Page<SysDataLog>(pageNo, pageSize);
 		IPage<SysDataLog> pageList = service.page(page, queryWrapper);
-		log.info("查询当前页："+pageList.getCurrent());
-		log.info("查询当前页数量："+pageList.getSize());
-		log.info("查询结果数量："+pageList.getRecords().size());
-		log.info("数据总数："+pageList.getTotal());
+		log.info("Truy vấn trang hiện tại: "+pageList.getCurrent());
+		log.info("Truy vấn số lượng trang hiện tại:"+pageList.getSize());
+		log.info("Số lượng kết quả truy vấn:"+pageList.getRecords().size());
+		log.info("Tổng số dữ liệu:"+pageList.getTotal());
 		result.setSuccess(true);
 		result.setResult(pageList);
 		return result;
 	}
 	
 	/**
-	 * 查询对比数据
+	 * Truy vấn dữ liệu so sánh
 	 * @param req
 	 * @return
 	 */
@@ -79,34 +79,34 @@ public class SysDataLogController {
 	}
 	
 	/**
-	 * 查询版本信息
+	 * Truy vấn thông tin phiên bản
 	 * @param req
 	 * @return
 	 */
 	@RequestMapping(value = "/queryDataVerList", method = RequestMethod.GET)
 	public Result<List<SysDataLog>> queryDataVerList(HttpServletRequest req) {
-		//update-begin---author:wangshuai ---date:2026-10-25  for：【GHSA-p4f8-h832-99pw】数据日志含业务数据快照，除评论组件查询的评论日志(type=comment)外需 system:dataLog:queryDataVerList 按钮权限-----------
+		//update-begin---author:wangshuai ---date:2026-10-25  for：【GHSA-p4f8-h832-99pw] Nhật ký dữ liệu chứa snapshot dữ liệu nghiệp vụ, trừ nhật ký bình luận mà component bình luận truy vấn(type=comment)ngoài ra, cần system:dataLog:queryDataVerList Quyền hạn nút-----------
 		if (!CommonConstant.DATA_LOG_TYPE_COMMENT.equals(req.getParameter("type")) && !SecurityUtils.getSubject().isPermitted("system:dataLog:queryDataVerList")) {
-			return Result.noauth("没有权限，请联系管理员分配权限！");
+			return Result.noauth("Không có quyền, vui lòng liên hệ quản trị viên để được cấp quyền!");
 		}
-		//update-end---author:wangshuai ---date:2026-10-25  for：【GHSA-p4f8-h832-99pw】数据日志含业务数据快照，除评论组件查询的评论日志(type=comment)外需 system:dataLog:queryDataVerList 按钮权限-----------
+		//update-end---author:wangshuai ---date:2026-10-25  for：【GHSA-p4f8-h832-99pw] Nhật ký dữ liệu chứa snapshot dữ liệu nghiệp vụ, trừ nhật ký bình luận mà component bình luận truy vấn(type=comment)ngoài ra, cần system:dataLog:queryDataVerList Quyền hạn nút-----------
 		Result<List<SysDataLog>> result = new Result<>();
 		String dataTable = req.getParameter("dataTable");
 		String dataId = req.getParameter("dataId");
 		QueryWrapper<SysDataLog> queryWrapper = new QueryWrapper<SysDataLog>();
 		queryWrapper.eq("data_table", dataTable);
 		queryWrapper.eq("data_id", dataId);
-		// 代码逻辑说明: 新增查询条件-type
+		// Giải thích logic mã: Thêm điều kiện truy vấn-type
 		String type = req.getParameter("type");
 		if (oConvertUtils.isNotEmpty(type)) {
 			queryWrapper.eq("type", type);
 		}
-		// 按时间倒序排
+		// Sắp xếp theo thời gian giảm dần
 		queryWrapper.orderByDesc("create_time");
 
 		List<SysDataLog> list = service.list(queryWrapper);
 		if(list==null||list.size()<=0) {
-			result.error500("未找到版本信息");
+			result.error500("Không tìm thấy thông tin phiên bản");
 		}else {
 			result.setResult(list);
 			result.setSuccess(true);

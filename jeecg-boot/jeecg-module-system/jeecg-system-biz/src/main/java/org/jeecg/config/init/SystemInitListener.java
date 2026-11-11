@@ -13,7 +13,7 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 /**
- * @desc: 启动程序，初始化路由配置
+ * @desc: Khởi động chương trình, khởi tạo cấu hình route
  * @author: flyme
  */
 @Slf4j
@@ -29,7 +29,7 @@ public class SystemInitListener implements ApplicationListener<ApplicationReadyE
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
 
-        log.info(" 服务已启动，初始化路由配置 ###################");
+        log.info(" Dịch vụ đã khởi động, khởi tạo cấu hình route ###################");
         String context = "AnnotationConfigServletWebServerApplicationContext";
         if (applicationReadyEvent.getApplicationContext().getDisplayName().indexOf(context) > -1) {
             sysGatewayRouteService.addRoute2Redis(CacheConstant.GATEWAY_ROUTES);

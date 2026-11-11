@@ -7,7 +7,7 @@
   <#if po.fieldDbName == tableVo.extendParams.hasChildren>
     <#assign hasChildrenField = po.fieldName>
   </#if>
-  <#-- begin 【vue3专用】 -->
+  <#-- begin 【Dành riêng cho vue3】 -->
   <#if po.fieldDbName == tableVo.extendParams.pidField>
     <#assign pidFieldName = po.fieldName>
     <#assign pidDbFieldName = po.fieldDbName>
@@ -16,7 +16,7 @@
     <#assign textFieldName = po.fieldName>
     <#assign textDbFieldName = po.fieldDbName>
   </#if>
-  <#-- end 【vue3专用】 -->
+  <#-- end 【Dành riêng cho vue3】 -->
 </#list>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -26,7 +26,7 @@
 		update ${tableName} set ${Format.humpToUnderline(hasChildrenField)} = ${r'#'}{status} where id = ${r'#'}{id}
 	</update>
 
-  	<!-- 【vue3专用】 -->
+  	<!-- 【Dành riêng cho vue3】 -->
 	<select id="queryListByPid" parameterType="java.lang.Object" resultType="org.jeecg.common.system.vo.SelectTreeModel">
 		select
 		  id as "key",

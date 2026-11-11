@@ -6,16 +6,16 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @Description: 用户组vo
+ * @Description: Nhóm người dùng vo
  * @author: jeecg-boot
  */
 @Data
 public class SysUserGroupVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	/**用户组id*/
+	/**Nhóm người dùng id*/
 	private String groupId;
-	/**对应的用户id集合*/
+	/**Tập hợp id người dùng tương ứng*/
 	private List<String> userIdList;
 
 	public SysUserGroupVO() {

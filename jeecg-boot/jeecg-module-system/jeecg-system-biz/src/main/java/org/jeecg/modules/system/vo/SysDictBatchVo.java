@@ -6,14 +6,14 @@ import org.jeecg.modules.system.entity.SysDictItem;
 import java.util.List;
 
 /**
- * @Description: 批量字典VO
+ * @Description: Danh mục hàng loạt VO
  * @author: zzl
  */
 @Data
 public class SysDictBatchVo {
 
     /**
-     * 字典列表
+     * Danh sách danh mục
      */
     private List<SysDictPage> dictList;
 

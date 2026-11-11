@@ -9,7 +9,7 @@ import java.util.Map;
 import org.jeecg.modules.system.entity.SysPermission;
 
 /**
-  * 树形列表用到
+  * Dùng cho danh sách dạng cây
   * @author: jeecg-boot
  */
 public class TreeModel implements Serializable {

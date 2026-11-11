@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: 消息模板
+ * @Description: Mẫu tin nhắn
  * @Author: jeecg-boot
  * @Date:  2019-04-09
  * @Version: V1.0
@@ -20,27 +20,27 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("sys_sms_template")
 public class SysMessageTemplate extends JeecgEntity{
-	/**模板CODE*/
-	@Excel(name = "模板CODE", width = 15)
+	/**Mẫu CODE*/
+	@Excel(name = "Mẫu CODE", width = 15)
 	private java.lang.String templateCode;
-	/**模板标题*/
-	@Excel(name = "模板标题", width = 30)
+	/**Tiêu đề mẫu*/
+	@Excel(name = "Tiêu đề mẫu", width = 30)
 	private java.lang.String templateName;
-	/**模板内容*/
-	@Excel(name = "模板内容", width = 50)
+	/**Nội dung mẫu*/
+	@Excel(name = "Nội dung mẫu", width = 50)
 	private java.lang.String templateContent;
-	/**模板测试json*/
-	@Excel(name = "模板测试json", width = 15)
+	/**Kiểm thử mẫu json*/
+	@Excel(name = "Kiểm thử mẫu json", width = 15)
 	private java.lang.String templateTestJson;
-	/**模板类型*/
-	@Excel(name = "模板类型", width = 15)
+	/**Loại mẫu*/
+	@Excel(name = "Loại mẫu", width = 15)
 	private java.lang.String templateType;
-	/**模板分类*/
-	@Excel(name = "模板类型(notice通知公告 other其他)", width = 15)
+	/**Phân loại mẫu*/
+	@Excel(name = "Loại mẫu(notice Thông báo other khác)", width = 15)
 	private java.lang.String templateCategory;
 
-	/**已经应用/未应用  1是0否*/
-	@Excel(name = "应用状态", width = 15)
+	/**Đã áp dụng/Chưa áp dụng  1 là có, 0 là không*/
+	@Excel(name = "Trạng thái ứng dụng", width = 15)
 	private String useStatus;
 
 }

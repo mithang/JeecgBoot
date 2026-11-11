@@ -14,7 +14,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 职务级别
+ * @Description: Cấp bậc chức danh
  * @Author: jeecg-boot
  * @Date: 2019-09-19
  * @Version: V1.0
@@ -23,7 +23,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName("sys_position")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(description="职务级别表")
+@Schema(description="Bảng cấp bậc chức vụ")
 public class SysPosition {
 
     /**
@@ -33,59 +33,59 @@ public class SysPosition {
     @Schema(description = "id")
     private java.lang.String id;
     /**
-     * 职务编码
+     * Mã chức vụ
      */
-    @Excel(name = "职务编码", width = 15)
-    @Schema(description = "职务编码")
+    @Excel(name = "Mã chức vụ", width = 15)
+    @Schema(description = "Mã chức vụ")
     private java.lang.String code;
     /**
-     * 职务级别名称
+     * Tên cấp bậc chức vụ
      */
-    @Excel(name = "职务级别名称", width = 15)
-    @Schema(description = "职务级别名称")
+    @Excel(name = "Tên cấp bậc chức vụ", width = 15)
+    @Schema(description = "Tên cấp bậc chức vụ")
     private java.lang.String name;
     /**
-     * 职级
+     * Cấp bậc
      */
-    //@Excel(name = "职级", width = 15,dicCode ="position_rank")
-    @Schema(description = "职务等级")
+    //@Excel(name = "Cấp bậc", width = 15,dicCode ="position_rank")
+    @Schema(description = "Cấp bậc chức vụ")
     private java.lang.Integer postLevel;
     /**
-     * 公司id
+     * Công ty id
      */
-    @Schema(description = "公司id")
+    @Schema(description = "Công ty id")
     private java.lang.String companyId;
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     private java.lang.String createBy;
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private java.util.Date createTime;
     /**
-     * 修改人
+     * Người sửa đổi
      */
-    @Schema(description = "修改人")
+    @Schema(description = "Người sửa đổi")
     private java.lang.String updateBy;
     /**
-     * 修改时间
+     * Thời gian chỉnh sửa
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "修改时间")
+    @Schema(description = "Thời gian chỉnh sửa")
     private java.util.Date updateTime;
     /**
-     * 组织机构编码
+     * Mã cơ quan tổ chức
      */
-    @Schema(description = "组织机构编码")
+    @Schema(description = "Mã cơ quan tổ chức")
     private java.lang.String sysOrgCode;
 
-    /**租户ID*/
-    @Schema(description = "租户ID")
+    /**Tenant ID*/
+    @Schema(description = "Tenant ID")
     private java.lang.Integer tenantId;
 }

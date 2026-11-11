@@ -6,16 +6,16 @@ import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 
 /**
- * @Description: 密码加密解密
+ * @Description: Mã hóa và giải mã mật khẩu
  * @author: lsq
- * @date: 2020年09月07日 14:26
+ * @date: 2020 năm 09 tháng 07 ngày 14:26
  */
 public class SecurityUtil {
-    /**加密key*/
+    /**Mã hóa key*/
     private static String key = "JEECGBOOT1423670";
 
-    //---AES加密---------begin---------
-    /**加密
+    //---AES Mã hóa---------begin---------
+    /**Mã hóa
      * @param content
      * @return
      */
@@ -25,27 +25,27 @@ public class SecurityUtil {
             return encryptResultStr;
     }
 
-    /**解密
+    /**Giải mã
      * @param encryptResultStr
      * @return
      */
     public static String jiemi(String encryptResultStr){
         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, key.getBytes());
-        //解密为字符串
+        //Giải mã thành chuỗi
         String decryptResult = aes.decryptStr(encryptResultStr, CharsetUtil.CHARSET_UTF_8);
         return  decryptResult;
     }
-    //---AES加密---------end---------
+    //---AES Mã hóa---------end---------
     /**
-     * 主函数
+     * Hàm chính
      */
     public static void main(String[] args) {
         String content="test1111";
         String encrypt = jiami(content);
         System.out.println(encrypt);
-        //构建
+        //Xây dựng
         String decrypt = jiemi(encrypt);
-        //解密为字符串
+        //Giải mã thành chuỗi
         System.out.println(decrypt);
     }
 }

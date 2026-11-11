@@ -3,9 +3,9 @@ package org.jeecg.modules.system.vo;
 import lombok.Data;
 
 /**
- * 用户-租户ID映射VO，用于批量查询用户所属租户（消除N+1查询）
+ * Người dùng-VO ánh xạ ID thuê bao, dùng để truy vấn hàng loạt thuê bao mà người dùng thuộc về (loại bỏ N+1 truy vấn)
  * @author scott
- * @since 2026-07-01 listAll接口N+1查询改造
+ * @since 2026-07-01 listAll API N+1 Cải tiến truy vấn
  */
 @Data
 public class SysUserTenantIdVo {

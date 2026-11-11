@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 云存储示例 DEMO
+ * Ví dụ lưu trữ đám mây DEMO
  * @author: jeecg-boot
  */
 @Slf4j
@@ -54,11 +54,11 @@ public class OssFileController {
 		Result result = new Result();
 		try {
 			ossFileService.upload(multipartFile);
-			result.success("上传成功！");
+			result.success("Tải lên thành công!");
 		}
 		catch (Exception ex) {
 			log.info(ex.getMessage(), ex);
-			result.error500("上传失败");
+			result.error500("Tải lên thất bại");
 		}
 		return result;
 	}
@@ -70,16 +70,16 @@ public class OssFileController {
 		Result result = new Result();
 		OssFile file = ossFileService.getById(id);
 		if (file == null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			boolean ok = ossFileService.delete(file);
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		return result;
 	}
 
 	/**
-	 * 通过id查询.
+	 * Tìm kiếm theo id.
 	 */
 	@ResponseBody
 	@GetMapping("/queryById")
@@ -87,7 +87,7 @@ public class OssFileController {
 		Result<OssFile> result = new Result<>();
 		OssFile file = ossFileService.getById(id);
 		if (file == null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}
 		else {
 			result.setResult(file);

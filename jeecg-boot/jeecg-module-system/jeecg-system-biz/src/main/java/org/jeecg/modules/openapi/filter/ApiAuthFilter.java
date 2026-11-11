@@ -44,8 +44,8 @@ public class ApiAuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        //update-begin---author:jeecg---for：【GHSA-3c5r-mgw9-jq74】OPTIONS 预检只应答 CORS，不得进入后续业务链路，否则可绕过签名/AK/授权校验---
-        // OPTIONS 预检请求：仅回写 CORS 响应头并结束，绝不放行到 filterChain（防止 OPTIONS 绕过 OpenApi 签名鉴权）
+        //update-begin---author:jeecg---for：【GHSA-3c5r-mgw9-jq74] Preflight OPTIONS chỉ trả lời CORS, không được vào chuỗi nghiệp vụ tiếp theo, nếu không có thể vượt qua chữ ký/AK/Kiểm tra ủy quyền---
+        // OPTIONS Yêu cầu preflight: chỉ ghi lại header phản hồi CORS rồi kết thúc, tuyệt đối không cho đi qua filterChain (ngăn OPTIONS vượt qua xác thực chữ ký OpenApi)
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             String origin = request.getHeader("Origin");
             if (StringUtils.hasText(origin)) {
@@ -60,7 +60,7 @@ public class ApiAuthFilter implements Filter {
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
-        //update-end---author:jeecg---for：【GHSA-3c5r-mgw9-jq74】OPTIONS 预检只应答 CORS，不得进入后续业务链路---
+        //update-end---author:jeecg---for：【GHSA-3c5r-mgw9-jq74] Preflight OPTIONS chỉ trả lời CORS, không được đi vào chuỗi nghiệp vụ tiếp theo---
 
         String ip = IpUtils.getIpAddr(request);
 
@@ -70,9 +70,9 @@ public class ApiAuthFilter implements Filter {
         String requestPath = request.getRequestURI();
         String requestMethod = request.getMethod();
         String requestParams = buildParamsSummary(request);
-        //update-begin---author:jeecg ---date:2026-05-27  for：【增加header日志记录】采集请求Header信息-----------
+        //update-begin---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Thu thập thông tin Header của yêu cầu-----------
         String requestHeaders = buildHeadersSummary(request);
-        //update-end---author:jeecg ---date:2026-05-27  for：【增加header日志记录】采集请求Header信息-----------
+        //update-end---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Thu thập thông tin Header của yêu cầu-----------
 
         OpenApi openApi = null;
         OpenApiAuth openApiAuth = null;
@@ -81,14 +81,14 @@ public class ApiAuthFilter implements Filter {
 
         try {
             openApi = findOpenApi(request);
-            // IP 白名单核验
+            // IP Kiểm tra danh sách trắng
             checkWhiteList(openApi, ip);
-            // 签名核验
+            // Xác minh chữ ký
             checkSignValid(appkey, signature, timestamp);
             openApiAuth = openApiAuthService.getByAppkey(appkey);
-            // 认证信息核验
+            // Kiểm tra thông tin xác thực
             checkSignature(appkey, signature, timestamp, openApiAuth);
-            // 业务核验
+            // Kiểm tra nghiệp vụ
             checkPermission(openApi, openApiAuth);
 
             filterChain.doFilter(servletRequest, servletResponse);
@@ -100,18 +100,18 @@ public class ApiAuthFilter implements Filter {
         } catch (Exception e) {
             responseCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
             errorMsg = e.getMessage();
-            writeErrorResponse(response, request.getHeader("Origin"), responseCode, "服务器内部错误");
+            writeErrorResponse(response, request.getHeader("Origin"), responseCode, "Lỗi nội bộ máy chủ");
         } finally {
             long endTime = System.currentTimeMillis();
-            //update-begin---author:jeecg ---date:2026-05-27  for：【增加header日志记录】传入requestHeaders参数-----------
+            //update-begin---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Truyền vào tham số requestHeaders-----------
             saveLog(openApi, openApiAuth, appkey, requestPath, requestMethod, ip, requestParams,
                     requestHeaders, responseCode, errorMsg, callTime, endTime - startTime);
-            //update-end---author:jeecg ---date:2026-05-27  for：【增加header日志记录】传入requestHeaders参数-----------
+            //update-end---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Truyền vào tham số requestHeaders-----------
         }
     }
 
     /**
-     * 保存调用记录
+     * Lưu bản ghi gọi
      * @param openApi
      * @param openApiAuth
      * @param callerAk
@@ -124,7 +124,7 @@ public class ApiAuthFilter implements Filter {
      * @param callTime
      * @param usedTime
      */
-    //update-begin---author:jeecg ---date:2026-05-27  for：【增加header日志记录】saveLog方法新增requestHeaders参数-----------
+    //update-begin---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Phương thức saveLog thêm tham số requestHeaders-----------
     private void saveLog(OpenApi openApi, OpenApiAuth openApiAuth, String callerAk,
                          String requestPath, String requestMethod, String sourceIp,
                          String requestParams, String requestHeaders, int responseCode, String errorMsg,
@@ -146,13 +146,13 @@ public class ApiAuthFilter implements Filter {
             openApiLog.setResponseTime(new Date());
             openApiLogService.save(openApiLog);
         } catch (Exception e) {
-            log.error("保存OpenAPI调用日志失败:{}",e.getMessage(), e);
+            log.error("Lưu nhật ký gọi OpenAPI thất bại:{}",e.getMessage(), e);
         }
     }
-    //update-end---author:jeecg ---date:2026-05-27  for：【增加header日志记录】saveLog方法新增requestHeaders参数-----------
+    //update-end---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Phương thức saveLog thêm tham số requestHeaders-----------
 
     /**
-     * 向响应写入 JSON 错误体，并携带 CORS 头（确保跨域调用方如 Swagger UI 能读取错误信息）
+     * Ghi body lỗi JSON vào phản hồi, kèm theo header CORS (đảm bảo bên gọi cross-domain như Swagger UI có thể đọc được thông tin lỗi)
      */
     private void writeErrorResponse(HttpServletResponse response, String origin, int status, String message) {
         try {
@@ -162,11 +162,11 @@ public class ApiAuthFilter implements Filter {
             }
             response.setStatus(status);
             response.setContentType("application/json;charset=UTF-8");
-            // 转义双引号，防止 message 中含有引号破坏 JSON
+            // Escape dấu ngoặc kép để tránh dấu ngoặc trong message phá vỡ JSON
             String safeMsg = message != null ? message.replace("\"", "\\\"") : "";
             response.getWriter().write("{\"success\":false,\"code\":" + status + ",\"message\":\"" + safeMsg + "\"}");
         } catch (IOException ex) {
-            log.error("写入OpenAPI错误响应失败", ex);
+            log.error("Ghi phản hồi lỗi OpenAPI thất bại", ex);
         }
     }
 
@@ -178,7 +178,7 @@ public class ApiAuthFilter implements Filter {
         return null;
     }
 
-    //update-begin---author:jeecg ---date:2026-05-27  for：【增加header日志记录】构建请求Header摘要（JSON格式，最多2000字符）-----------
+    //update-begin---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Xây dựng tóm tắt Header của yêu cầu (định dạng JSON, tối đa 2000 ký tự)-----------
     private String buildHeadersSummary(HttpServletRequest request) {
         StringBuilder sb = new StringBuilder("{");
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -200,7 +200,7 @@ public class ApiAuthFilter implements Filter {
         String result = sb.toString();
         return result.length() > 2000 ? result.substring(0, 2000) + "...}" : result;
     }
-    //update-end---author:jeecg ---date:2026-05-27  for：【增加header日志记录】构建请求Header摘要（JSON格式，最多2000字符）-----------
+    //update-end---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Xây dựng tóm tắt Header của yêu cầu (định dạng JSON, tối đa 2000 ký tự)-----------
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -212,9 +212,9 @@ public class ApiAuthFilter implements Filter {
         this.openApiPermissionService = applicationContext.getBean(OpenApiPermissionService.class);
     }
 
-    //update-begin---author:scott ---date:20260416  for：【PR/9083】OpenAPI白名单增强，支持CIDR网段和通配符匹配-----------
+    //update-begin---author:scott ---date:20260416  for：【PR/9083] Tăng cường whitelist OpenAPI, hỗ trợ khớp dải CIDR và ký tự đại diện-----------
     /**
-     * IP 白名单核验，支持精确IP、CIDR网段（如192.168.1.0/24）、通配符（如10.2.3.*）
+     * IP Kiểm tra whitelist, hỗ trợ IP chính xác, dải CIDR (ví dụ 192.168.1.0/24), ký tự đại diện (ví dụ 10.2.3.*）
      * @param openApi
      * @param ip
      */
@@ -233,14 +233,14 @@ public class ApiAuthFilter implements Filter {
                 return;
             }
         }
-        throw new JeecgBootException("IP[" + ip + "]不在白名单中，禁止访问");
+        throw new JeecgBootException("IP[" + ip + "]Không nằm trong danh sách trắng, cấm truy cập");
     }
 
     /**
-     * IP匹配：支持精确匹配、CIDR网段匹配、通配符匹配
-     * @param ip 客户端IP
-     * @param pattern 白名单条目（IP/CIDR/通配符）
-     * @return 是否匹配
+     * IP Khớp: hỗ trợ khớp chính xác, khớp dải CIDR, khớp ký tự đại diện
+     * @param ip Máy khách IP
+     * @param pattern Mục trong danh sách trắng (IP/CIDR/ký tự đại diện)
+     * @return Có khớp không
      */
     private boolean isIpMatch(String ip, String pattern) {
         if (!ip.contains(".") || !pattern.contains(".")) {
@@ -256,7 +256,7 @@ public class ApiAuthFilter implements Filter {
     }
 
     /**
-     * CIDR网段匹配（仅IPv4），如 192.168.1.0/24
+     * CIDR Khớp dải mạng (chỉ IPv4), ví dụ 192.168.1.0/24
      */
     private boolean isCidrMatch(String ip, String cidr) {
         String[] parts = cidr.split("/");
@@ -273,13 +273,13 @@ public class ApiAuthFilter implements Filter {
             long mask = prefixLength == 0 ? 0 : (-1L << (32 - prefixLength));
             return (ipLong & mask) == (cidrLong & mask);
         } catch (Exception e) {
-            log.warn("CIDR匹配解析失败: cidr={}, ip={}", cidr, ip);
+            log.warn("CIDR Phân tích cú pháp khớp thất bại: cidr={}, ip={}", cidr, ip);
             return false;
         }
     }
 
     /**
-     * 通配符匹配，如 10.2.3.*
+     * Khớp ký tự đại diện, ví dụ 10.2.3.*
      */
     private boolean isWildcardMatch(String ip, String pattern) {
         String[] ipParts = ip.split("\\.");
@@ -299,12 +299,12 @@ public class ApiAuthFilter implements Filter {
     }
 
     /**
-     * IPv4地址转long
+     * IPv4 Chuyển đổi địa chỉ long
      */
     private long ipToLong(String ip) {
         String[] parts = ip.split("\\.");
         if (parts.length != 4) {
-            throw new IllegalArgumentException("非法IPv4地址: " + ip);
+            throw new IllegalArgumentException("Địa chỉ IPv4 không hợp lệ: " + ip);
         }
         long result = 0;
         for (int i = 0; i < 4; i++) {
@@ -312,10 +312,10 @@ public class ApiAuthFilter implements Filter {
         }
         return result;
     }
-    //update-end---author:scott ---date:20260416  for：【PR/9083】OpenAPI白名单增强，支持CIDR网段和通配符匹配-----------
+    //update-end---author:scott ---date:20260416  for：【PR/9083] Tăng cường whitelist OpenAPI, hỗ trợ khớp dải CIDR và ký tự đại diện-----------
 
     /**
-     * 签名验证
+     * Xác thực chữ ký
      * @param appkey
      * @param signature
      * @param timestamp
@@ -323,24 +323,24 @@ public class ApiAuthFilter implements Filter {
      */
     protected void checkSignValid(String appkey, String signature, String timestamp) {
         if (!StringUtils.hasText(appkey)) {
-            throw new JeecgBootException("appkey为空");
+            throw new JeecgBootException("appkey Trống");
         }
         if (!StringUtils.hasText(signature)) {
-            throw new JeecgBootException("signature为空");
+            throw new JeecgBootException("signature Trống");
         }
         if (!StringUtils.hasText(timestamp)) {
-            throw new JeecgBootException("timastamp时间戳为空");
+            throw new JeecgBootException("timastamp dấu thời gian trống");
         }
         if (!timestamp.matches("[0-9]*")) {
-            throw new JeecgBootException("timastamp时间戳不合法");
+            throw new JeecgBootException("timastamp Dấu thời gian không hợp lệ");
         }
         if (System.currentTimeMillis() - Long.parseLong(timestamp) > 5 * 60 * 1000) {
-            throw new JeecgBootException("signature签名已过期(超过五分钟)");
+            throw new JeecgBootException("signature chữ ký đã hết hạn(quá năm phút)");
         }
     }
 
     /**
-     * 认证信息核验
+     * Kiểm tra thông tin xác thực
      * @param appKey
      * @param signature
      * @param timestamp
@@ -350,21 +350,21 @@ public class ApiAuthFilter implements Filter {
      */
     protected void checkSignature(String appKey, String signature, String timestamp, OpenApiAuth openApiAuth) {
         if(openApiAuth==null){
-            throw new JeecgBootException("不存在认证信息");
+            throw new JeecgBootException("Không tồn tại thông tin xác thực");
         }
 
-        //update-begin---author:scott ---date:20261014  for：【GHSA-qv87-c4w6-699m/GHSA-5jhm-3x8j-wwhr】SK为空时签名退化为md5(appKey+timestamp)，知道AK即可伪造，空SK一律拒绝-----------
+        //update-begin---author:scott ---date:20261014  for：【GHSA-qv87-c4w6-699m/GHSA-5jhm-3x8j-wwhr] khi SK trống, chữ ký sẽ suy giảm thành md5(appKey+timestamp), chỉ cần biết AK là có thể giả mạo, SK trống sẽ bị từ chối toàn bộ-----------
         if (!StringUtils.hasText(openApiAuth.getSk())) {
-            throw new JeecgBootException("该凭据未配置SK，请在【OpenAPI-授权管理】重新生成AK/SK");
+            throw new JeecgBootException("Thông tin xác thực này chưa cấu hình SK, vui lòng vào [OpenAPI-Quản lý ủy quyền】tạo lại AK/SK");
         }
-        //update-end---author:scott ---date:20261014  for：【GHSA-qv87-c4w6-699m/GHSA-5jhm-3x8j-wwhr】SK为空时签名退化为md5(appKey+timestamp)，知道AK即可伪造，空SK一律拒绝-----------
+        //update-end---author:scott ---date:20261014  for：【GHSA-qv87-c4w6-699m/GHSA-5jhm-3x8j-wwhr] khi SK trống, chữ ký sẽ suy giảm thành md5(appKey+timestamp), chỉ cần biết AK là có thể giả mạo, SK trống sẽ bị từ chối toàn bộ-----------
 
         if(!appKey.equals(openApiAuth.getAk())){
-            throw new JeecgBootException("appkey错误");
+            throw new JeecgBootException("appkey Lỗi");
         }
 
         if (!signature.equals(md5(appKey + openApiAuth.getSk() + timestamp))) {
-            throw new JeecgBootException("signature签名错误");
+            throw new JeecgBootException("signature Lỗi chữ ký");
         }
     }
 
@@ -380,14 +380,14 @@ public class ApiAuthFilter implements Filter {
         }
 
         if (!hasPermission) {
-            throw new JeecgBootException("该appKey未授权当前接口");
+            throw new JeecgBootException("appKey này chưa được ủy quyền cho giao diện hiện tại");
         }
     }
 
     /**
-     * @return String    返回类型
+     * @return String    Kiểu trả về
      * @Title: MD5
-     * @Description: 【MD5加密】
+     * @Description: 【Mã hóa MD5】
      */
     protected static String md5(String sourceStr) {
         String result = "";
@@ -409,7 +409,7 @@ public class ApiAuthFilter implements Filter {
             }
             result = buf.toString();
         } catch (Exception e) {
-            log.error("sign签名错误", e);
+            log.error("sign Lỗi chữ ký", e);
         }
         return result;
     }

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * 角色权限表 Mapper 接口
+ * Giao diện Mapper bảng quyền vai trò
  * </p>
  *
  * @Author scott

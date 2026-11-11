@@ -4,9 +4,9 @@ import org.jeecg.common.api.dto.AiragFlowDTO;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
- * airag工作流运行API
- * 供system等基础模块软依赖AI工作流能力，实现由jeecg-boot-module-airag-flow模块提供；
- * 未集成AI模块时无实现bean，注入方使用ObjectProvider判空即可正常启动
+ * airag Chạy quy trình làm việc API
+ * Để các module cơ sở như system phụ thuộc mềm vào khả năng AI workflow, phần triển khai do jeecg-boot-module-airag-flow mô-đun cung cấp;
+ * Khi chưa tích hợp module AI thì không có bean triển khai, bên inject dùng ObjectProvider để kiểm tra null là có thể khởi động bình thường
  *
  * @author zhang
  * @date 2026-09-10
@@ -14,18 +14,18 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public interface IAiragFlowApi {
 
 	/**
-	 * 运行AI工作流
+	 * Chạy quy trình AI
 	 *
-	 * @param airagFlowDTO 流程运行参数
-	 * @return 流程执行结果
+	 * @param airagFlowDTO Tham số chạy quy trình
+	 * @return Kết quả thực thi quy trình
 	 */
 	Object runFlow(AiragFlowDTO airagFlowDTO);
 
 	/**
-	 * 流式运行AI工作流
+	 * Chạy luồng AI theo dạng streaming
 	 *
-	 * @param airagFlowDTO 流程运行参数
-	 * @return SSE流
+	 * @param airagFlowDTO Tham số chạy quy trình
+	 * @return Luồng SSE
 	 */
 	SseEmitter runFlowStream(AiragFlowDTO airagFlowDTO);
 }

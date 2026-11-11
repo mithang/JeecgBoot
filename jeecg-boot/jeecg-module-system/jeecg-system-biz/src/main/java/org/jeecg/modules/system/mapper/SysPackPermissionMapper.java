@@ -7,7 +7,7 @@ import org.jeecg.modules.system.entity.SysPackPermission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @Description: 产品包菜单关系表
+ * @Description: Bảng quan hệ menu gói sản phẩm
  * @Author: jeecg-boot
  * @Date:   2022-12-31
  * @Version: V1.0
@@ -15,14 +15,14 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface SysPackPermissionMapper extends BaseMapper<SysPackPermission> {
 
     /**
-     * 通过产品包id获取菜单id
+     * Lấy menu theo id gói sản phẩm id
      * @param packId
      * @return
      */
     List<String> getPermissionsByPackId(@Param("packId") String packId);
 
     /**
-     * 删除产品包对应的菜单权限
+     * Xóa quyền hạn menu tương ứng với gói sản phẩm
      *
      * @param tenantIdList
      */

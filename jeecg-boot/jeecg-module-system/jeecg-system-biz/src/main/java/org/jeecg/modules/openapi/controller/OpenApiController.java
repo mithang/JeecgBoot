@@ -62,7 +62,7 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     private JeecgBaseConfig jeecgBaseConfig;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param openApi
      * @param pageNo
@@ -80,7 +80,7 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param openApi
      * @return
@@ -89,15 +89,15 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     @PostMapping(value = "/add")
     public Result<?> add(@RequestBody OpenApi openApi) {
         if (openApi == null) {
-            return Result.error("请求参数不能为空");
+            return Result.error("Tham số yêu cầu không được để trống");
         }
         validOriginUrl(openApi.getOriginUrl());
         service.save(openApi);
-        return Result.ok("添加成功！");
+        return Result.ok("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param openApi
      * @return
@@ -106,16 +106,16 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     @PutMapping(value = "/edit")
     public Result<?> edit(@RequestBody OpenApi openApi) {
         if (openApi == null) {
-            return Result.error("请求参数不能为空");
+            return Result.error("Tham số yêu cầu không được để trống");
         }
         validOriginUrl(openApi.getOriginUrl());
         service.updateById(openApi);
-        return Result.ok("修改成功!");
+        return Result.ok("Chỉnh sửa thành công!");
 
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
@@ -124,11 +124,11 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         service.removeById(id);
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
@@ -138,11 +138,11 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
 
         this.service.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.ok("批量删除成功！");
+        return Result.ok("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
@@ -154,20 +154,20 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     }
 
     /**
-     * 接口调用
+     * Gọi API
      * @param path
      * @return
      */
-    //update-begin---author:scott ---date:20261024  for：【GHSA-m3rc-w9wv-5qmw】/call 不再接受 OPTIONS、TRACE，OPTIONS 不能再作为转发入口绕过认证-----------
+    //update-begin---author:scott ---date:20261024  for：【GHSA-m3rc-w9wv-5qmw】/call Không còn chấp nhận OPTIONS, TRACE; OPTIONS không thể dùng làm lối vào chuyển tiếp để vượt qua xác thực nữa-----------
     @RequestMapping(value = "/call/{path}", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT,RequestMethod.PATCH,RequestMethod.HEAD})
-    //update-end---author:scott ---date:20261024  for：【GHSA-m3rc-w9wv-5qmw】/call 不再接受 OPTIONS、TRACE-----------
+    //update-end---author:scott ---date:20261024  for：【GHSA-m3rc-w9wv-5qmw】/call Không còn chấp nhận OPTIONS,TRACE-----------
     public Result<?> call(@PathVariable String path, @RequestBody(required = false) String json, HttpServletRequest request) {
         OpenApi openApi = service.findByPath(path);
         if (Objects.isNull(openApi)) {
             Map<String, Object> result = new HashMap<>();
             result.put("code", 404);
             result.put("data", null);
-            return Result.error("失败", result);
+            return Result.error("Thất bại", result);
         }
         HttpHeaders httpHeaders = new HttpHeaders();
         if (StrUtil.isNotEmpty(openApi.getHeadersJson())) {
@@ -180,7 +180,7 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
         }
 
         String url = openApi.getOriginUrl();
-        // 校验原始接口路径是否合法
+        // Kiểm tra đường dẫn giao diện gốc có hợp lệ hay không
         validOriginUrl(url);
         String method = openApi.getRequestMethod();
         String appkey = request.getHeader("appkey");
@@ -190,16 +190,16 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
         httpHeaders.put("X-Access-Token", Lists.newArrayList(token));
         httpHeaders.put("Content-Type",Lists.newArrayList("application/json"));
         HttpEntity<String> httpEntity = new HttpEntity<>(json, httpHeaders);
-        //update-begin---author:scott ---date:20260430  for：【issues/9590】微服务nginx部署openApi接口访问不到-----------
-        // originUrl 支持两种形式：
-        //  1) 相对路径（如 /house/houseTest/list）：默认拼接当前请求的 baseUrl；
-        //     使用 CommonUtils.getBaseUrl(request)（而非 RestUtil.getBaseUrl()），
-        //     可读取 X-Gateway-Base-Path 请求头，兼容微服务网关下的真实 base path。
-        //     Docker / K8s NodePort / 反向代理等入站端口与容器监听端口不一致时，
-        //     可通过配置 jeecg.domainUrl.back 显式指定本机自代理地址。
-        //  2) 完整URL（http(s)://host:port/path）：直接使用，适用于微服务模式下接口部署在其他微服务模块（如 erp 7003）的场景
+        //update-begin---author:scott ---date:20260430  for：【issues/9590] Khi triển khai microservice bằng nginx, không truy cập được interface openApi-----------
+        // originUrl Hỗ trợ hai dạng:
+        //  1) Đường dẫn tương đối (ví dụ như /house/houseTest/list): Mặc định nối baseUrl của yêu cầu hiện tại;
+        //     Sử dụng CommonUtils.getBaseUrl(request)(chứ không phải RestUtil.getBaseUrl()），
+        //     Có thể đọc X-Gateway-Base-Path Header yêu cầu, tương thích với base path thực tế dưới gateway microservice.
+        //     Docker / K8s NodePort / Khi cổng vào như reverse proxy không nhất quán với cổng lắng nghe của container,
+        //     Có thể thông qua cấu hình jeecg.domainUrl.back Chỉ định rõ ràng địa chỉ tự proxy của máy cục bộ.
+        //  2) URL đầy đủ (http(s)://host:port/path): Dùng trực tiếp, phù hợp với kịch bản API được triển khai ở module microservice khác (ví dụ erp 7003) trong chế độ microservice
         String lowerUrl = url.toLowerCase();
-        //update-begin---author:zhang ---date:20260806  for：【issues/9794】OpenAPI 相对 originUrl 自代理使用入站 Host/port，Docker 端口映射时 Connection refused-----------
+        //update-begin---author:zhang ---date:20260806  for：【issues/9794] OpenAPI tự proxy tương đối so với originUrl, dùng inbound Host/port, khi ánh xạ cổng Docker Connection refused-----------
         if (!lowerUrl.startsWith("http://") && !lowerUrl.startsWith("https://")) {
             String baseUrl = null;
             if (jeecgBaseConfig.getDomainUrl() != null && oConvertUtils.isNotEmpty(jeecgBaseConfig.getDomainUrl().getBack())) {
@@ -210,12 +210,12 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
             CommonUtils.checkInternalUrl(baseUrl);
             url = baseUrl + url;
         }
-        //update-end---author:zhang ---date:20260806  for：【issues/9794】OpenAPI 相对 originUrl 自代理使用入站 Host/port，Docker 端口映射时 Connection refused-----------
-        //update-end---author:wangshuai ---date:20260616  for：【issues/9695】修复SSRF漏洞，校验baseUrl必须为内网地址-----------
-        //update-end---author:scott ---date:20260430  for：【issues/9590】微服务nginx部署openApi接口访问不到-----------
+        //update-end---author:zhang ---date:20260806  for：【issues/9794] OpenAPI tự proxy tương đối so với originUrl, dùng inbound Host/port, khi ánh xạ cổng Docker Connection refused-----------
+        //update-end---author:wangshuai ---date:20260616  for：【issues/9695] Sửa lỗ hổng SSRF, kiểm tra baseUrl phải là địa chỉ mạng nội bộ-----------
+        //update-end---author:scott ---date:20260430  for：【issues/9590] Khi triển khai microservice bằng nginx, không truy cập được interface openApi-----------
 
-        // 将 originUrl 中的路径占位符 {key} 替换为调用方传入的 query 参数值，
-        // 替换过的 key 收集到 pathVarKeys，后续不再重复追加到 query string
+        // Thay thế placeholder đường dẫn trong originUrl {key} Thay thế bằng giá trị tham số query do phía gọi truyền vào,
+        // Các key đã thay thế được thu thập vào pathVarKeys, về sau không thêm trùng lặp vào query string
         Set<String> pathVarKeys = new HashSet<>();
         if (url.contains("{")) {
             for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
@@ -233,14 +233,14 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
                 || HttpMethod.HEAD.matches(method)
                 || HttpMethod.OPTIONS.matches(method)
                 || HttpMethod.TRACE.matches(method)) {
-            //拼接参数
+            //Ghép tham số
             if (!request.getParameterMap().isEmpty()) {
                 if (StrUtil.isNotEmpty(openApi.getParamsJson())) {
                     List<OpenApiParam> params = JSON.parseArray(openApi.getParamsJson(),OpenApiParam.class);
                     if (params.size()>0) {
                         Map<String, OpenApiParam> openApiParamMap = params.stream().collect(Collectors.toMap(p -> p.getParamKey(), p -> p, (e, r) -> e));
                         request.getParameterMap().forEach((k, v) -> {
-                            // 已作为路径参数替换的 key 不再追加到 query string
+                            // Key đã được thay thế làm tham số đường dẫn sẽ không còn được thêm vào query string
                             if (pathVarKeys.contains(k)) {
                                 return;
                             }
@@ -264,7 +264,7 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     }
 
     /**
-     * 生成接口访问令牌 Token
+     * Tạo token truy cập giao diện Token
      *
      * @param USERNAME
      * @param PASSWORD
@@ -278,69 +278,69 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     }
 
     /**
-     * 校验原始接口路径是否合法：
-     *  - 相对路径：必须以 / 开头，不允许 // 和 .. 防止路径穿越
-     *  - 完整URL：仅允许 http/https 协议，禁止 file/ftp/gopher/jar/netdoc 等其它协议（用于微服务模式跨模块调用）
+     * Kiểm tra đường dẫn giao diện gốc có hợp lệ hay không:
+     *  - Đường dẫn tương đối: phải bắt đầu bằng / ở đầu, không cho phép // và .. Ngăn chặn vượt qua đường dẫn
+     *  - URL đầy đủ: chỉ cho phép http/https giao thức, cấm file/ftp/gopher/jar/netdoc và các giao thức khác (dùng để gọi liên mô-đun trong chế độ microservice)
      */
     private void validOriginUrl(String originUrl) {
         if (oConvertUtils.isEmpty(originUrl)) {
-            throw new JeecgBootBizTipException("原始接口路径不能为空");
+            throw new JeecgBootBizTipException("Đường dẫn API gốc không được để trống");
         }
         String decoded;
         try {
             decoded = java.net.URLDecoder.decode(originUrl, "UTF-8");
-            // 二次解码，防止 %252f 这类双重编码绕过
+            // Giải mã lần hai, ngăn chặn %252f Việc bỏ qua bằng mã hóa kép dạng này
             decoded = java.net.URLDecoder.decode(decoded, "UTF-8");
         } catch (Exception e) {
-            throw new JeecgBootBizTipException("原始接口路径包含非法字符");
+            throw new JeecgBootBizTipException("Đường dẫn giao diện gốc chứa ký tự không hợp lệ");
         }
-        //update-begin---author:scott ---date:20260430  for：【issues/9590】微服务nginx部署openApi接口访问不到-----------
-        // 微服务部署时，OpenAPI 配置的接口可能位于其他微服务模块（如 erp 7003），允许 originUrl 直接配置完整 http(s) URL
+        //update-begin---author:scott ---date:20260430  for：【issues/9590] Khi triển khai microservice bằng nginx, không truy cập được interface openApi-----------
+        // Khi triển khai microservice, API được cấu hình trong OpenAPI có thể nằm ở module microservice khác (ví dụ erp 7003), cho phép originUrl cấu hình trực tiếp đầy đủ http(s) URL
         String lower = decoded.toLowerCase();
         boolean isFullHttpUrl = lower.startsWith("http://") || lower.startsWith("https://");
         if (!isFullHttpUrl) {
             if (!decoded.startsWith("/")) {
-                throw new JeecgBootBizTipException("原始接口路径必须以 / 开头，或填写完整的 http(s) URL");
+                throw new JeecgBootBizTipException("Đường dẫn API gốc phải bắt đầu bằng / ở đầu, hoặc điền đầy đủ http(s) URL");
             }
             if (decoded.startsWith("//") || decoded.startsWith("/\\")) {
-                throw new JeecgBootBizTipException("原始接口路径不能以 // 或 /\\ 开头");
+                throw new JeecgBootBizTipException("Đường dẫn giao diện gốc không được bắt đầu bằng // hoặc /\\ Đầu");
             }
             if (lower.contains("://") || lower.startsWith("file:") || lower.startsWith("ftp:") || lower.startsWith("gopher:")
                     || lower.startsWith("jar:") || lower.startsWith("netdoc:")) {
-                throw new JeecgBootBizTipException("原始接口路径仅支持相对路径或 http(s) 完整URL");
+                throw new JeecgBootBizTipException("Đường dẫn giao diện gốc chỉ hỗ trợ đường dẫn tương đối hoặc http(s) đầy đủ URL");
             }
         } else {
-            // 即便是完整URL，也禁止其它危险协议（防止 http://x@file:/... 之类的绕过场景）
+            // Ngay cả khi là URL đầy đủ, cũng cấm các giao thức nguy hiểm khác (ngăn chặn http://x@file:/...  các tình huống vượt qua tương tự）
             String afterScheme = lower.substring(lower.indexOf("://") + 3);
             if (afterScheme.contains("file:") || afterScheme.contains("ftp:") || afterScheme.contains("gopher:")
                     || afterScheme.contains("jar:") || afterScheme.contains("netdoc:")) {
-                throw new JeecgBootBizTipException("原始接口路径不允许嵌套 file/ftp/gopher/jar/netdoc 等协议");
+                throw new JeecgBootBizTipException("Đường dẫn giao diện gốc không được phép lồng nhau file/ftp/gopher/jar/netdoc các giao thức");
             }
-            //update-begin---author:liusq ---date:2026-06-29  for：【issues/9726】修复存储型SSRF，完整URL必须校验host，仅放行内网地址-----------
-            // 仅校验协议无法阻止 SSRF：完整URL的host可指向回环/内网/云元数据。这里复用两套互补校验，
-            // 交集只放行 RFC1918 内网（兼容微服务跨模块调用，如 erp:7003），拦死回环、链路本地、公网：
-            //  1) checkSsrfHttpUrl：拦回环(127.x/::1)与链路本地(169.254.x，含云元数据 169.254.169.254)
+            //update-begin---author:liusq ---date:2026-06-29  for：【issues/9726] Sửa SSRF lưu trữ: URL đầy đủ phải kiểm tra host, chỉ cho qua địa chỉ mạng nội bộ-----------
+            // Chỉ kiểm tra giao thức không ngăn được SSRF: host của URL đầy đủ có thể trỏ tới loopback/Mạng nội bộ/Siêu dữ liệu đám mây. Ở đây tái sử dụng hai bộ kiểm tra bổ sung cho nhau,
+            // Giao nhau chỉ cho phép mạng nội bộ RFC1918 (tương thích với gọi liên module của microservice, ví dụ erp:7003), chặn chết loopback, link-local, mạng công cộng:
+            //  1) checkSsrfHttpUrl: Chặn loopback(127.x/::1)với liên kết cục bộ(169.254.x，chứa siêu dữ liệu đám mây 169.254.169.254)
             SsrfFileTypeFilter.checkSsrfHttpUrl(decoded);
-            //  2) checkInternalUrl：拦公网地址，host 必须解析为内网（回环/局域网/链路本地）
+            //  2) checkInternalUrl: Chặn địa chỉ mạng công cộng, host phải được phân giải thành mạng nội bộ (loopback/Mạng LAN/link-local)
             CommonUtils.checkInternalUrl(decoded);
-            //update-end---author:liusq ---date:2026-06-29  for：【issues/9726】修复存储型SSRF，完整URL必须校验host，仅放行内网地址-----------
+            //update-end---author:liusq ---date:2026-06-29  for：【issues/9726] Sửa SSRF lưu trữ: URL đầy đủ phải kiểm tra host, chỉ cho qua địa chỉ mạng nội bộ-----------
         }
         if (decoded.contains("..")) {
-            throw new JeecgBootBizTipException("原始接口路径不能包含 ..");
+            throw new JeecgBootBizTipException("Đường dẫn API gốc không được chứa ..");
         }
-        //update-end---author:scott ---date:20260430  for：【issues/9590】微服务nginx部署openApi接口访问不到-----------
+        //update-end---author:scott ---date:20260430  for：【issues/9590] Khi triển khai microservice bằng nginx, không truy cập được interface openApi-----------
     }
 
     @GetMapping("/json")
     public SwaggerModel swaggerModel(HttpServletRequest request) {
-        // 从当前请求动态解析 host/basePath/scheme，兼容网关和反向代理场景
+        // Phân tích động từ request hiện tại host/basePath/scheme, tương thích với kịch bản gateway và reverse proxy
         String baseUrl = CommonUtils.getBaseUrl(request);
         String host;
-        // 优先取 request.getContextPath()：
-        //  - 单体模式 server.servlet.context-path=/jeecg-boot → basePath=/jeecg-boot
-        //  - 微服务网关模式 system 容器无 context-path → basePath=""（request 实际 path 为 "/openapi/json"，会被 uri.getPath() 覆盖为空）
-        // 修复【issues/微服务下 OpenAPI 文档 URL 误带 /jeecg-boot】：原实现硬编码默认 "/jeecg-boot"，
-        // 导致微服务网关（gateway:9999）下文档 Request URL 始终带 /jeecg-boot 而实际网关无该前缀，curl 报 404。
+        // Ưu tiên lấy request.getContextPath()：
+        //  - Chế độ đơn thể server.servlet.context-path=/jeecg-boot → basePath=/jeecg-boot
+        //  - Chế độ gateway microservice: container system không có context-path → basePath=""(đường dẫn thực tế của request là "/openapi/json", sẽ bị uri.getPath() bị ghi đè thành rỗng)
+        // Sửa【issues/URL tài liệu OpenAPI bị mang nhầm tiền tố trong môi trường vi dịch vụ /jeecg-boot】: Triển khai ban đầu hard-code mặc định "/jeecg-boot"，
+        // Dẫn đến cổng microservice (gateway:9999) tài liệu bên dưới Request URL luôn mang theo /jeecg-boot trong khi gateway thực tế không có tiền tố này, curl báo lỗi 404.
         String basePath = request.getContextPath() == null ? "" : request.getContextPath();
         try {
             java.net.URI uri = new java.net.URI(baseUrl);
@@ -382,7 +382,7 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
             operation.setProduces(Lists.newArrayList("application/json"));
             parameters(operation, openApi);
 
-            // body入参
+            // body Tham số đầu vào
             if (StringUtils.hasText(openApi.getRequestBody())) {
                 SwaggerDefinition definition = new SwaggerDefinition();
                 definition.setType("object");
@@ -399,7 +399,7 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
                         }
                     }
                 }
-                // body的definition构建完成
+                // body definition đã được xây dựng xong
                 definitions.put(openApi.getRequestUrl()+"Using"+openApi.getRequestMethod()+"body", definition);
 
                 SwaggerOperationParameter bodyParameter = new SwaggerOperationParameter();
@@ -412,12 +412,12 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
                 bodySchema.put("$ref", "#/definitions/" + openApi.getRequestUrl()+"Using"+openApi.getRequestMethod()+"body");
                 bodyParameter.setSchema(bodySchema);
 
-                // 构建参数构建完成
+                // Xây dựng tham số hoàn tất
                 operation.getParameters().add(bodyParameter);
 
             }
 
-            // 响应
+            // Phản hồi
             Map<String, SwaggerOperationResponse> responses = new HashMap<>();
             SwaggerOperationResponse resp200 = new SwaggerOperationResponse();
             resp200.setDescription("OK");
@@ -445,7 +445,7 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
             resp404.setSchema(emptySchema);
             responses.put("404", resp404);
 
-            // 构建响应definition
+            // Xây dựng phản hồi definition
             SwaggerDefinition respDefinition = new SwaggerDefinition();
             respDefinition.setType("object");
 
@@ -454,23 +454,23 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
 
             SwaggerDefinitionProperties codeProperties = new SwaggerDefinitionProperties();
             codeProperties.setType("integer");
-            codeProperties.setDescription("返回代码");
+            codeProperties.setDescription("Mã trả về");
             definitionProperties.put("code", codeProperties);
             SwaggerDefinitionProperties messageProperties = new SwaggerDefinitionProperties();
             messageProperties.setType("string");
-            messageProperties.setDescription("返回处理消息");
+            messageProperties.setDescription("Trả về thông báo xử lý");
             definitionProperties.put("message", messageProperties);
             SwaggerDefinitionProperties resultProperties = new SwaggerDefinitionProperties();
             resultProperties.setType("object");
-            resultProperties.setDescription("返回数据对象");
+            resultProperties.setDescription("Trả về đối tượng dữ liệu");
             definitionProperties.put("result", resultProperties);
             SwaggerDefinitionProperties successProperties = new SwaggerDefinitionProperties();
             successProperties.setType("boolean");
-            successProperties.setDescription("成功标志");
+            successProperties.setDescription("Cờ thành công");
             definitionProperties.put("success", successProperties);
             SwaggerDefinitionProperties timestampProperties = new SwaggerDefinitionProperties();
             timestampProperties.setType("integer");
-            timestampProperties.setDescription("时间戳");
+            timestampProperties.setDescription("Dấu thời gian");
             definitionProperties.put("timestamp", timestampProperties);
 
             definitions.put("OpenApiResult", respDefinition);
@@ -493,13 +493,13 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
             List<OpenApiParam> openApiParams = JSON.parseArray(openApi.getParamsJson(), OpenApiParam.class);
             for (OpenApiParam openApiParam : openApiParams) {
                 SwaggerOperationParameter parameter = new SwaggerOperationParameter();
-                // 外部调用统一使用 query 传参；若该参数在原始接口路径中以 {key} 形式出现，加备注说明
+                // Gọi từ bên ngoài thống nhất dùng query để truyền tham số; nếu tham số đó trong đường dẫn API gốc bắt đầu bằng {key} xuất hiện dưới dạng, thêm ghi chú giải thích
                 boolean isPathVar = originUrl.contains("{" + openApiParam.getParamKey() + "}");
                 parameter.setIn("query");
                 parameter.setName(openApiParam.getParamKey());
                 parameter.setRequired(openApiParam.getRequired() == 1);
                 String desc = openApiParam.getNote() != null ? openApiParam.getNote() : "";
-                parameter.setDescription(isPathVar ? desc + (desc.isEmpty() ? "" : " ") + "[路径参数]" : desc);
+                parameter.setDescription(isPathVar ? desc + (desc.isEmpty() ? "" : " ") + "[Tham số đường dẫn]" : desc);
                 parameters.add(parameter);
             }
         }
@@ -520,9 +520,9 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     private SwaggerInfo swaggerInfo() {
         SwaggerInfo info = new SwaggerInfo();
 
-        info.setDescription("OpenAPI 接口列表");
+        info.setDescription("OpenAPI Danh sách API");
         info.setVersion("3.9.6");
-        info.setTitle("OpenAPI 接口列表");
+        info.setTitle("OpenAPI Danh sách API");
         //info.setTermsOfService("https://jeecg.com");
 
         SwaggerInfoContact contact = new SwaggerInfoContact();
@@ -540,7 +540,7 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
     }
 
     /**
-     * 生成接口路径
+     * Tạo đường dẫn giao diện
      * @return
      */
     @GetMapping("genPath")

@@ -23,10 +23,10 @@ public class AuthStateRedisCache implements AuthStateCache {
     }
 
     /**
-     * 存入缓存，默认3分钟
+     * Lưu vào bộ nhớ đệm, mặc định 3 phút
      *
-     * @param key   缓存key
-     * @param value 缓存内容
+     * @param key   Cache key
+     * @param value Nội dung bộ nhớ đệm
      */
     @Override
     public void cache(String key, String value) {
@@ -34,11 +34,11 @@ public class AuthStateRedisCache implements AuthStateCache {
     }
 
     /**
-     * 存入缓存
+     * Lưu vào bộ nhớ đệm
      *
-     * @param key     缓存key
-     * @param value   缓存内容
-     * @param timeout 指定缓存过期时间（毫秒）
+     * @param key     Cache key
+     * @param value   Nội dung bộ nhớ đệm
+     * @param timeout Chỉ định thời gian hết hạn của bộ nhớ đệm (mili giây)
      */
     @Override
     public void cache(String key, String value, long timeout) {
@@ -46,10 +46,10 @@ public class AuthStateRedisCache implements AuthStateCache {
     }
 
     /**
-     * 获取缓存内容
+     * Lấy nội dung bộ nhớ đệm
      *
-     * @param key 缓存key
-     * @return 缓存内容
+     * @param key Cache key
+     * @return Nội dung bộ nhớ đệm
      */
     @Override
     public String get(String key) {
@@ -57,10 +57,10 @@ public class AuthStateRedisCache implements AuthStateCache {
     }
 
     /**
-     * 是否存在key，如果对应key的value值已过期，也返回false
+     * Có tồn tại key hay không; nếu value của key tương ứng đã hết hạn thì cũng trả về false
      *
-     * @param key 缓存key
-     * @return true：存在key，并且value没过期；false：key不存在或者已过期
+     * @param key Cache key
+     * @return true: Tồn tại key và value chưa hết hạn; false: key không tồn tại hoặc đã hết hạn
      */
     @Override
     public boolean containsKey(String key) {

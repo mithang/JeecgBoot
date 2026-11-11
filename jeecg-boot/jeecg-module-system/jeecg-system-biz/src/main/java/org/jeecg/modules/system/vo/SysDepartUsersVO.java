@@ -6,16 +6,16 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * @Description: 系统部门VO
+ * @Description: Phòng ban hệ thống VO
  * @author: jeecg-boot
  */
 @Data
 public class SysDepartUsersVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	/**部门id*/
+	/**Phòng ban id*/
 	private String depId;
-	/**对应的用户id集合*/
+	/**Tập hợp id người dùng tương ứng*/
 	private List<String> userIdList;
 	public SysDepartUsersVO(String depId, List<String> userIdList) {
 		super();

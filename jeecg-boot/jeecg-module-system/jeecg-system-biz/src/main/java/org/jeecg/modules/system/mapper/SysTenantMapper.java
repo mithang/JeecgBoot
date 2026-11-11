@@ -14,19 +14,19 @@ import org.jeecg.modules.system.vo.tenant.UserPosition;
 import java.util.List;
 
 /**
- * @Description: 租户mapper接口
+ * @Description: Giao diện mapper Tenant
  * @author: jeecg-boot
  */
 public interface SysTenantMapper extends BaseMapper<SysTenant> {
 
     /**
-     * 获取最大值id
+     * Lấy giá trị lớn nhất id
      */
     @Select("select MAX(id) id FROM sys_tenant")
     Integer getMaxTenantId();
     
     /**
-     * 获取租户回收站的数据假删除
+     * Lấy dữ liệu xóa giả trong thùng rác của tenant
      * @param page
      * @param sysTenant
      * @return
@@ -34,27 +34,27 @@ public interface SysTenantMapper extends BaseMapper<SysTenant> {
     List<SysTenant> getRecycleBinPageList(@Param("page") Page<SysTenant> page, @Param("sysTenant") SysTenant sysTenant);
     
     /**
-     * 彻底删除租户
+     * Xóa hoàn toàn tenant
      * @param tenantId
      */
     Integer deleteByTenantId(@Param("tenantIds") List<Integer> tenantId);
 
     /**
-     * 租户还原
+     * Khôi phục tenant
      * @param list
      * @return
      */
     Integer revertTenantLogic(@Param("tenantIds")List<Integer> list);
 
     /**
-     * 用于统计 租户产品包的人员数量
+     * Dùng để thống kê số lượng nhân sự của gói sản phẩm tenant
      * @param tenantId
      * @return
      */
     List<TenantPackUserCount> queryTenantPackUserCount(@Param("tenantId") Integer tenantId);
 
     /**
-     * 查询人员是不是租户产品包的 超级管理员
+     * Truy vấn xem nhân viên có phải là siêu quản trị viên của gói sản phẩm tenant hay không
      * @param tenantId
      * @param userId
      * @return
@@ -62,7 +62,7 @@ public interface SysTenantMapper extends BaseMapper<SysTenant> {
     Integer querySuperAdminCount(@Param("tenantId") Integer tenantId, @Param("userId") String userId);
 
     /**
-     * 查询人员的产品包编码
+     * Truy vấn mã gói sản phẩm của nhân sự
      * @param tenantId
      * @param userId
      * @return
@@ -70,7 +70,7 @@ public interface SysTenantMapper extends BaseMapper<SysTenant> {
     List<String> queryUserPackCode(@Param("tenantId") Integer tenantId, @Param("userId") String userId);
 
     /**
-     * 查询产品包关联的用户列表
+     * Truy vấn danh sách người dùng liên kết với gói sản phẩm
      * @param tenantId
      * @param packId
      * @param packUserStatus
@@ -80,21 +80,21 @@ public interface SysTenantMapper extends BaseMapper<SysTenant> {
 
 
     /**
-     * 根据用户ID 查询部门
+     * Truy vấn phòng ban theo ID người dùng
      * @param userIdList
      * @return
      */
     List<UserDepart> queryUserDepartList(@Param("userIdList") List<String> userIdList);
 
     /**
-     * 根据用户ID 查询职位
+     * Truy vấn chức vụ theo ID người dùng
      * @param userIdList
      * @return
      */
     List<UserPosition> queryUserPositionList(@Param("userIdList") List<String> userIdList);
 
     /**
-     * 查询产品包关联的用户列表
+     * Truy vấn danh sách người dùng liên kết với gói sản phẩm
      * @param page
      * @param tenantId
      * @param packId
@@ -105,7 +105,7 @@ public interface SysTenantMapper extends BaseMapper<SysTenant> {
 
 
     /**
-     * 根据租户ID 查询租户
+     * Truy vấn Tenant theo ID Tenant
      * @param id
      * @return
      */
@@ -113,7 +113,7 @@ public interface SysTenantMapper extends BaseMapper<SysTenant> {
     SysTenant querySysTenant(@Param("id") Integer id);
 
     /**
-     * 查看是否已经申请过了超级管理员
+     * Kiểm tra đã đăng ký quản trị viên cấp cao chưa
      * @param userId
      * @param tenantId
      * @return
@@ -121,7 +121,7 @@ public interface SysTenantMapper extends BaseMapper<SysTenant> {
     Long getApplySuperAdminCount(@Param("userId") String userId, @Param("tenantId") Integer tenantId);
 
     /**
-     * 租户是否存在
+     * Tenant có tồn tại hay không
      * @param tenantId
      * @return
      */
@@ -129,7 +129,7 @@ public interface SysTenantMapper extends BaseMapper<SysTenant> {
     Long tenantIzExist(@Param("tenantId") Integer tenantId);
 
     /**
-     * 根据用户id获取租户
+     * Lấy Tenant theo id người dùng
      * @param userId
      * @return
      */

@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
-* @Description: 用户更新提醒job
+* @Description: Nhắc nhở cập nhật người dùng job
 *
 * @author: wangshuai
 * @date: 2025/9/13 16:20
@@ -33,12 +33,12 @@ public class UserUpadtePwdJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) {
-        //获取当前时间5个月前的时间
-        // 获取当前日期
+        //Lấy thời gian 5 tháng trước thời gian hiện tại
+        // Lấy ngày hiện tại
         Calendar calendar = Calendar.getInstance();
-        // 减去5个月
+        // Trừ đi 5 tháng
         calendar.add(Calendar.MONTH, -5);
-        // 格式化输出
+        // Định dạng đầu ra
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = sdf.format(calendar.getTime());
         String startTime = formattedDate + " 00:00:00";
@@ -56,11 +56,11 @@ public class UserUpadtePwdJob implements Job {
     
 
     /**
-     * 发送系统消息
+     * Gửi tin nhắn hệ thống
      */
     private void sendSysMessage(String username, String realname) {
         String fromUser = "system";
-        String title = "尊敬的"+realname+"您的密码已经5个月未修改了，请修改密码";
+        String title = "Kính gửi "+realname+"Mật khẩu của bạn đã 5 tháng chưa được thay đổi, vui lòng thay đổi mật khẩu";
         MessageDTO messageDTO = new MessageDTO(fromUser, username, title, title);
         messageDTO.setNoticeType(NoticeTypeEnum.NOTICE_TYPE_PLAN.getValue());
         sysBaseAPI.sendSysAnnouncement(messageDTO);

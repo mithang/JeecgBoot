@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.system.mapper.SysUserPositionMapper">
 
-    <!--获取职位用户列表-->
+    <!--Lấy danh sách người dùng chức vụ-->
     <select id="getPositionUserList" resultType="org.jeecg.modules.system.entity.SysUser">
         SELECT su.realname,su.id,su.username,su.email,su.phone,su.work_no
         FROM sys_user_position sup
@@ -12,7 +12,7 @@
         ORDER BY sup.create_time DESC
     </select>
 
-    <!--根据用户id查询职位id-->
+    <!--Truy vấn chức vụ theo id người dùng id-->
     <select id="getPositionIdByUserId" resultType="java.lang.String">
         SELECT position_id FROM sys_user_position
         WHERE
@@ -20,7 +20,7 @@
         ORDER BY create_time DESC
     </select>
 
-    <!--根据用户ID和租户ID获取职位id-->
+    <!--Lấy chức vụ theo ID người dùng và ID tenant id-->
     <select id="getPositionIdByUserTenantId" resultType="java.lang.String">
         SELECT sp.id FROM sys_user_position sup
         LEFT JOIN sys_position sp ON sup.position_id = sp.id
@@ -32,7 +32,7 @@
         order by sup.create_time desc
     </select>
 
-    <!--职位列表移除成员-->
+    <!--Danh sách chức vụ loại bỏ thành viên-->
     <update id="removePositionUser">
         DELETE FROM sys_user_position
         WHERE
@@ -43,7 +43,7 @@
         </foreach>
     </update>
     
-    <!--根据用户id获取用户职位-->
+    <!--Lấy chức vụ người dùng theo ID người dùng-->
     <select id="getPositionIdByUsersTenantId" resultType="org.jeecg.modules.system.vo.SysUserPositionVo">
         SELECT sp.name,sup.user_id FROM sys_position sp
         RIGHT JOIN sys_user_position sup on sup.position_id = sp.id
@@ -54,7 +54,7 @@
         AND sp.tenant_id = #{tenantId}
     </select>
     
-    <!--批量查询多个用户的职位IDs（含用户ID映射，消除N+1），since 2026-07-01-->
+    <!--Truy vấn hàng loạt các ID vị trí của nhiều người dùng (kèm ánh xạ ID người dùng, loại bỏ N+1），since 2026-07-01-->
     <select id="getPositionIdsByUserIds" resultType="org.jeecg.modules.system.vo.SysUserPositionVo">
         SELECT sp.id, sup.user_id FROM sys_user_position sup
         LEFT JOIN sys_position sp ON sup.position_id = sp.id
@@ -68,7 +68,7 @@
         ORDER BY sup.create_time DESC
     </select>
 
-    <!--根据职位名称和租户id，删除用户职位关系表-->
+    <!--Xóa bảng quan hệ người dùng - vị trí theo tên vị trí và id tenant-->
     <delete id="deleteUserPosByNameAndTenantId">
         DELETE FROM sys_user_position
         WHERE user_id = #{userId} 

@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * <p>
- * 角色表 服务类
+ * Bảng vai trò - Lớp dịch vụ
  * </p>
  *
  * @Author scott
@@ -22,7 +22,7 @@ import java.util.List;
  */
 public interface ISysRoleService extends IService<SysRole> {
     /**
-     * 查询全部的角色（不做租户隔离）
+     * Truy vấn tất cả vai trò (không cách ly theo tenant)
      * @param page
      * @param role
      * @return
@@ -30,7 +30,7 @@ public interface ISysRoleService extends IService<SysRole> {
     Page<SysRole> listAllSysRole(@Param("page") Page<SysRole> page, SysRole role);
 
     /**
-     * 查询角色是否存在不做租户隔离
+     * Truy vấn vai trò có tồn tại hay không, không thực hiện cách ly tenant
      *
      * @param roleCode
      * @return
@@ -38,7 +38,7 @@ public interface ISysRoleService extends IService<SysRole> {
     SysRole getRoleNoTenant(@Param("roleCode") String roleCode);
     
     /**
-     * 导入 excel ，检查 roleCode 的唯一性
+     * Import Excel, kiểm tra tính duy nhất của roleCode
      *
      * @param file
      * @param params
@@ -48,28 +48,28 @@ public interface ISysRoleService extends IService<SysRole> {
     Result importExcelCheckRoleCode(MultipartFile file, ImportParams params) throws Exception;
 
     /**
-     * 删除角色
+     * Xóa vai trò
      * @param roleid
      * @return
      */
     public boolean deleteRole(String roleid);
 
     /**
-     * 批量删除角色
+     * Xóa vai trò hàng loạt
      * @param roleids
      * @return
      */
     public boolean deleteBatchRole(String[] roleids);
 
     /**
-     * 根据角色id和当前租户判断当前角色是否存在这个租户中
+     * Dựa theo id vai trò và thuê bao hiện tại để xác định vai trò hiện tại có tồn tại trong thuê bao này hay không
      * @param id
      * @return
      */
     Long getRoleCountByTenantId(String id, Integer tenantId);
 
     /**
-     * 验证是否为admin角色
+     * Xác minh có phải vai trò admin hay không
      * 
      * @param ids
      */

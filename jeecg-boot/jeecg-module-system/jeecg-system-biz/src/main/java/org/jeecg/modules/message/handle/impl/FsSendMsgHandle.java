@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 发飞书消息模板
+ * Gửi mẫu tin nhắn Feishu
  *
  * @author jeecg-boot
  */

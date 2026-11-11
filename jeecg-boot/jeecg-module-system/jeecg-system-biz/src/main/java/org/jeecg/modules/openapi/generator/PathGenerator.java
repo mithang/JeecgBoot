@@ -10,11 +10,11 @@ import java.util.Random;
 @UtilityClass
 public class PathGenerator {
 
-    // Base62字符集
+    // Base62 Bộ ký tự
     private static final String BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     /**
-     * 生成随机路径
+     * Tạo đường dẫn ngẫu nhiên
      * @return
      */
     public static String genPath() {

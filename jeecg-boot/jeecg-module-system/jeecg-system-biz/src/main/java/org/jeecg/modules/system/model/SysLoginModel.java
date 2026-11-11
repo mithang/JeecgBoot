@@ -4,22 +4,22 @@ package org.jeecg.modules.system.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * 登录表单
+ * Biểu mẫu đăng nhập
  *
  * @Author scott
  * @since  2019-01-18
  */
-@Schema(description="登录对象")
+@Schema(description="Đối tượng đăng nhập")
 public class SysLoginModel {
-	@Schema(description = "账号")
+	@Schema(description = "Tài khoản")
     private String username;
-	@Schema(description = "密码")
+	@Schema(description = "Mật khẩu")
     private String password;
-	@Schema(description = "登录部门")
+	@Schema(description = "Phòng ban đăng nhập")
     private String loginOrgCode;
-	@Schema(description = "验证码")
+	@Schema(description = "Mã xác thực")
     private String captcha;
-	@Schema(description = "验证码key")
+	@Schema(description = "Mã xác thực key")
     private String checkKey;
 
     public String getUsername() {

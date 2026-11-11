@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
- * @Description: 定时任务在线管理
+ * @Description: Quản lý trực tuyến tác vụ định kỳ
  * @Author: jeecg-boot
  * @Date:  2019-01-02
  * @Version: V1.0
@@ -28,34 +28,34 @@ public class QuartzJob implements Serializable {
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
 	private java.lang.String id;
-	/**创建人*/
+	/**Người tạo*/
 	private java.lang.String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createTime;
-	/**删除状态*/
+	/**Trạng thái xóa*/
 	private java.lang.Integer delFlag;
-	/**修改人*/
+	/**Người sửa đổi*/
 	private java.lang.String updateBy;
-	/**修改时间*/
+	/**Thời gian chỉnh sửa*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private java.util.Date updateTime;
-	/**任务类名*/
-	@Excel(name="任务类名",width=40)
+	/**Tên lớp nhiệm vụ*/
+	@Excel(name="Tên lớp nhiệm vụ",width=40)
 	private java.lang.String jobClassName;
-	/**cron表达式*/
-	@Excel(name="cron表达式",width=30)
+	/**cron Biểu thức*/
+	@Excel(name="cron Biểu thức",width=30)
 	private java.lang.String cronExpression;
-	/**参数*/
-	@Excel(name="参数",width=15)
+	/**Tham số*/
+	@Excel(name="Tham số",width=15)
 	private java.lang.String parameter;
-	/**描述*/
-	@Excel(name="描述",width=40)
+	/**Mô tả*/
+	@Excel(name="Mô tả",width=40)
 	private java.lang.String description;
-	/**状态 0正常 -1停止*/
-	@Excel(name="状态",width=15,dicCode="quartz_status")
+	/**Trạng thái 0: bình thường -1 Dừng*/
+	@Excel(name="Trạng thái",width=15,dicCode="quartz_status")
 	@Dict(dicCode = "quartz_status")
 	private java.lang.Integer status;
 

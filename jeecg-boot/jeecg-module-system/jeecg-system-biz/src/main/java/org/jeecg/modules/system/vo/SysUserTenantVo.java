@@ -8,119 +8,119 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @Description: 用户租户类(用户数据租户数据)
+ * @Description: Lớp tenant người dùng(Dữ liệu người dùng, dữ liệu tenant)
  * @author: wangshuai
- * @date: 2023年01月08日 17:27
+ * @date: 2023 năm 01 tháng 08 ngày 17:27
  */
 @Data
 public class SysUserTenantVo {
 
     /**
-     * 用户id
+     * Người dùng id
      */
     private String id;
 
     /**
-     * 用户账号
+     * Tài khoản người dùng
      */
     private String username;
 
     /**
-     * 用户昵称
+     * Biệt danh người dùng
      */
     private String realname;
 
     /**
-     * 工号
+     * Mã nhân viên
      */
     private String workNo;
     
     /**
-     * 邮箱
+     * Email
      */
     private String email; 
     
     /**
-     * 手机号
+     * Số điện thoại
      */
     private String phone;   
     
     /**
-     * 头像
+     * Ảnh đại diện
      */
     private String avatar;
 
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     
     /**
-     * 职位
+     * Chức vụ
      */
     @Dict(dictTable ="sys_position",dicText = "name",dicCode = "id")
     private String post;
 
     /**
-     * 审核状态
+     * Trạng thái phê duyệt
      */
     private String status;
 
     /**
-     * 部门名称
+     * Tên phòng ban
      */
     private String orgCodeTxt;
 
     /**
-     * 部门code
+     * Phòng ban code
      */
     private String orgCode;
 
     /**
-     * 租户id
+     * Tenant id
      */
     private String relTenantIds;
 
     /**
-     * 租户创建人
+     * Người tạo tenant
      */
     private String createBy;
 
     /**
-     * 用户租户状态
+     * Trạng thái tenant của người dùng
      */
     private String userTenantStatus;
 
     /**
-     * 用户租户id
+     * Tenant của người dùng id
      */
     private String tenantUserId;
 
     /**
-     * 租户名称
+     * Tên tenant
      */
     private String name;
 
     /**
-     * 所属行业
+     * Ngành nghề
      */
     @Dict(dicCode = "trade")
     private String trade;
     
     /**
-     * 门牌号
+     * Số nhà
      */
     private String houseNumber;
 
     /**
-     * 是否为会员
+     * Có phải là thành viên không
      */
     private String memberType;
 
     /**
-     * 是否为租户管理员
+     * Có phải quản trị viên tenant không
      */
     private Boolean tenantAdmin = false;
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * <P>
- * 对应部门的表,处理并查找树级数据
+ * Bảng của phòng ban tương ứng,Xử lý và tìm dữ liệu dạng cây
  * <P>
  * 
  * @Author: Steve
@@ -21,19 +21,19 @@ import java.util.List;
  */
 public class FindsDepartsChildrenUtil {
 
-	//部门树信息-树结构
+	//Thông tin cây phòng ban-Cấu trúc cây
 	//private static List<SysDepartTreeModel> sysDepartTreeList = new ArrayList<SysDepartTreeModel>();
 	
-	//部门树id-树结构
+	//Cây phòng ban id-Cấu trúc cây
     //private static List<DepartIdModel> idList = new ArrayList<>();
 
 
     /**
-     * queryTreeList的子方法 ====1=====
-     * 该方法是s将SysDepart类型的list集合转换成SysDepartTreeModel类型的集合
+     * queryTreeList (phương thức con) ====1=====
+     * Phương thức này chuyển tập hợp list kiểu SysDepart thành tập hợp kiểu SysDepartTreeModel
      */
     public static List<SysDepartTreeModel> wrapTreeDataToTreeList(List<SysDepart> recordList) {
-        // 在该方法每请求一次,都要对全局list集合进行一次清理
+        // Mỗi lần yêu cầu phương thức này,Mỗi lần phương thức này được yêu cầu một lần, đều phải dọn dẹp tập hợp list toàn cục một lần
         //idList.clear();
     	List<DepartIdModel> idList = new ArrayList<DepartIdModel>();
         List<SysDepartTreeModel> records = new ArrayList<>();
@@ -47,12 +47,12 @@ public class FindsDepartsChildrenUtil {
     }
 
     /**
-     * 获取 DepartIdModel
+     * Lấy DepartIdModel
      * @param recordList
      * @return
      */
     public static List<DepartIdModel> wrapTreeDataToDepartIdTreeList(List<SysDepart> recordList) {
-        // 在该方法每请求一次,都要对全局list集合进行一次清理
+        // Mỗi lần yêu cầu phương thức này,Mỗi lần phương thức này được yêu cầu một lần, đều phải dọn dẹp tập hợp list toàn cục một lần
         //idList.clear();
         List<DepartIdModel> idList = new ArrayList<DepartIdModel>();
         List<SysDepartTreeModel> records = new ArrayList<>();
@@ -65,8 +65,8 @@ public class FindsDepartsChildrenUtil {
     }
 
     /**
-     * queryTreeList的子方法 ====2=====
-     * 该方法是找到并封装顶级父类的节点到TreeList集合
+     * queryTreeList (phương thức con) ====2=====
+     * Phương thức này tìm và đóng gói nút của lớp cha cấp cao nhất vào tập hợp TreeList
      */
     private static List<SysDepartTreeModel> findChildren(List<SysDepartTreeModel> recordList,
                                                          List<DepartIdModel> departIdList) {
@@ -87,8 +87,8 @@ public class FindsDepartsChildrenUtil {
     }
 
     /**
-     * queryTreeList的子方法====3====
-     *该方法是找到顶级父类下的所有子节点集合并封装到TreeList集合
+     * queryTreeList (phương thức con)====3====
+     *Phương thức này tìm tất cả các node con thuộc lớp cha cấp cao nhất và đóng gói vào tập hợp TreeList
      */
     private static void getGrandChildren(List<SysDepartTreeModel> treeList,List<SysDepartTreeModel> recordList,List<DepartIdModel> idList) {
 
@@ -110,8 +110,8 @@ public class FindsDepartsChildrenUtil {
     
 
     /**
-     * queryTreeList的子方法 ====4====
-     * 该方法是将子节点为空的List集合设置为Null值
+     * queryTreeList (phương thức con) ====4====
+     * Phương thức này đặt tập hợp List có nút con rỗng thành giá trị Null
      */
     private static void setEmptyChildrenAsNull(List<SysDepartTreeModel> treeList) {
 

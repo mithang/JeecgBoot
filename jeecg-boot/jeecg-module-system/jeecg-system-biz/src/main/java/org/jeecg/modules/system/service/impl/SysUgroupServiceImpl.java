@@ -14,7 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import java.util.List;
 
 /**
- * @Description: 用户组表
+ * @Description: Bảng nhóm người dùng
  * @Author: jeecg-boot
  * @Date:   2026-02-27
  * @Version: V1.0

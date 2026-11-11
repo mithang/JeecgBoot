@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 /**
- * @Description: OSS云存储实现类
+ * @Description: OSS Lớp triển khai lưu trữ đám mây
  * @author: jeecg-boot
  */
 @Service("ossFileService")
@@ -28,9 +28,9 @@ public class OssFileServiceImpl extends ServiceImpl<OssFileMapper, OssFile> impl
 		ossFile.setFileName(fileName);
 		String url = OssBootUtil.upload(multipartFile,"upload/test");
 		if(oConvertUtils.isEmpty(url)){
-			throw new JeecgBootException("上传文件失败! ");
+			throw new JeecgBootException("Tải tệp lên thất bại! ");
 		}
-		// 返回阿里云原生域名前缀URL
+		// Trả về tiền tố tên miền gốc của Alibaba Cloud URL
 		ossFile.setUrl(OssBootUtil.getOriginalUrl(url));
 		this.save(ossFile);
 	}

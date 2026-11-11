@@ -33,7 +33,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Description: 邮箱发送信息
+ * @Description: Thông tin gửi email
  * @author: jeecg-boot
  */
 @Slf4j
@@ -55,11 +55,11 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
     private SysMessageMapper sysMessageMapper;
 
     /**
-     * 真实姓名变量
+     * Biến tên thật
      */
     private static final String  realNameExp = "{REALNAME}";
     /**
-     * 线程池用于异步发送消息
+     * Thread pool dùng để gửi tin nhắn bất đồng bộ
      */
     public static ExecutorService cachedThreadPool = new ThreadPoolExecutor(0, 1024, 60L, TimeUnit.SECONDS, new SynchronousQueue<>());
 
@@ -68,24 +68,24 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
     public void sendMsg(String esReceiver, String esTitle, String esContent) {
         JavaMailSender mailSender = (JavaMailSender) SpringContextUtils.getBean("mailSender");
         MimeMessage message = mailSender.createMimeMessage();
-        // 代码逻辑说明: 配置类数据获取
+        // Giải thích logic mã: Lấy dữ liệu dạng cấu hình
         if(oConvertUtils.isEmpty(emailFrom)){
             StaticConfig staticConfig = SpringContextUtils.getBean(StaticConfig.class);
             setEmailFrom(staticConfig.getEmailFrom());
         }
         cachedThreadPool.execute(()->{
             try {
-                log.info("============> 开始邮件发送，接收人："+esReceiver);
+                log.info("============> Bắt đầu gửi email, người nhận:"+esReceiver);
                 MimeMessageHelper helper = new MimeMessageHelper(message, true);
-                // 设置发送方邮箱地址
+                // Thiết lập địa chỉ email người gửi
                 helper.setFrom(emailFrom);
                 helper.setTo(esReceiver);
                 helper.setSubject(esTitle);
                 helper.setText(esContent, true);
                 mailSender.send(message);
-                log.info("============> 邮件发送成功，接收人："+esReceiver);
+                log.info("============> Gửi email thành công, người nhận:"+esReceiver);
             } catch (MessagingException e) {
-                log.error("============> 邮件发送失败，接收人："+esReceiver, e.getMessage());
+                log.error("============> Gửi email thất bại, người nhận:"+esReceiver, e.getMessage());
             }
         });
     }
@@ -94,7 +94,7 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
     public void sendMessage(MessageDTO messageDTO) {
         String content = messageDTO.getContent();
         String title = messageDTO.getTitle();
-        // 代码逻辑说明: 【QQYUN-8523】敲敲云发邮件通知，不稳定---
+        // Giải thích logic mã: 【QQYUN-8523】QiaoQiaoYun gửi thông báo email, không ổn định---
         boolean timeJobSendEmail = this.isTimeJobSendEmail(messageDTO.getToUser(), title, content);
         if(timeJobSendEmail){
             return;
@@ -103,7 +103,7 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
     }
 
     /**
-     * 直接发送邮件
+     * Gửi email trực tiếp
      * 
      * @param messageDTO
      */
@@ -119,28 +119,28 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
                 continue;
             }
             content=replaceContent(user,content);
-            log.info("邮件内容："+ content);
+            log.info("Nội dung email:"+ content);
             sendMsg(email, title, content);
         }
         
-        // 代码逻辑说明: QQYUN-5557【简流】通知节点 发送邮箱 表单上有一个邮箱字段，流程中，邮件发送节点，邮件接收人 不可选择邮箱
+        // Giải thích logic mã: QQYUN-5557[JianLiu] Node thông báo — Gửi email: trên form có một trường email, trong quy trình, tại node gửi email, người nhận email không được chọn email
         Set<String> toEmailList = messageDTO.getToEmailList();
         if(toEmailList!=null && toEmailList.size()>0){
             for(String email: toEmailList){
                 if (ObjectUtils.isEmpty(email)) {
                     continue;
                 }
-                log.info("邮件内容："+ content);
+                log.info("Nội dung email:"+ content);
                 sendMsg(email, title, content);
             }
         }
         
-        //发送给抄送人
+        //Gửi cho người được CC
         sendMessageToCopyUser(messageDTO);
     }
 
     /**
-     * 发送邮件给抄送人
+     * Gửi email cho người nhận CC
      * @param messageDTO
      */
     public void sendMessageToCopyUser(MessageDTO messageDTO) {
@@ -157,9 +157,9 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
                     continue;
                 }
                 content=replaceContent(user,content);
-                log.info("邮件内容：" + content);
+                log.info("Nội dung email:" + content);
                 
-            // 代码逻辑说明: QQYUN-5557【简流】通知节点 发送邮箱 表单上有一个邮箱字段，流程中，邮件发送节点，邮件接收人 不可选择邮箱
+            // Giải thích logic mã: QQYUN-5557[JianLiu] Node thông báo — Gửi email: trên form có một trường email, trong quy trình, tại node gửi email, người nhận email không được chọn email
                 sendEmail(email, content, title);
             }
 
@@ -169,7 +169,7 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
                     if (ObjectUtils.isEmpty(email)) {
                         continue;
                     }
-                    log.info("邮件内容："+ content);
+                    log.info("Nội dung email:"+ content);
                     sendEmail(email, content, title);
                 }
             }
@@ -178,7 +178,7 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
     }
 
     /**
-     * 发送邮件给抄送人调用
+     * Gửi email cho người nhận CC
      * @param email
      * @param content
      * @param title
@@ -193,24 +193,24 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
         cachedThreadPool.execute(()->{
             try {
                 MimeMessageHelper helper = new MimeMessageHelper(message, true);
-                // 设置发送方邮箱地址
+                // Thiết lập địa chỉ email người gửi
                 helper.setFrom(emailFrom);
                 helper.setTo(email);
-                //设置抄送人
+                //Đặt người nhận CC
                 helper.setCc(email);
                 helper.setSubject(title);
                 helper.setText(content, true);
                 mailSender.send(message);
-                log.info("============> 邮件发送成功，接收人："+email);
+                log.info("============> Gửi email thành công, người nhận:"+email);
             } catch (MessagingException e) {
-                log.warn("============> 邮件发送失败，接收人："+email, e.getMessage());
+                log.warn("============> Gửi email thất bại, người nhận:"+email, e.getMessage());
             }
         });
     }
     
 
     /**
-     * 替换邮件内容变量
+     * Thay thế biến nội dung email
      * @param user
      * @param content
      * @return
@@ -224,28 +224,28 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
             try {
                 content = content.replace(CommonConstant.LOGIN_TOKEN, URLEncoder.encode(token, "UTF-8"));
             } catch (UnsupportedEncodingException e) {
-                log.error("邮件消息token编码失败", e.getMessage());
+                log.error("Mã hóa token tin nhắn email thất bại", e.getMessage());
             }
         }
         return content;
     }
 
     /**
-     * 获取token
+     * Lấy token
      * @param user
      * @return
      */
     private String getToken(SysUser user) {
-        // 生成token
+        // Tạo token
         String token = JwtUtil.sign(user.getUsername(), user.getPassword(), CommonConstant.CLIENT_TYPE_PC);
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-        // 设置超时时间 1个小时
+        // Đặt thời gian timeout là 1 giờ
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 1 / 1000);
         return token;
     }
 
     /**
-     * 是否定时发送邮箱
+     * Có gửi email định kỳ không
      * @param toUser
      * @param title
      * @param content
@@ -262,7 +262,7 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
     }
     
     /**
-     * 保存到短信发送表
+     * Lưu vào bảng gửi SMS
      */
     private void addSysSmsSend(String toUser, String title, String content) {
         SysMessage sysMessage = new SysMessage();

@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * airag工作流运行API 降级工厂
+ * airag Factory hạ cấp API chạy workflow
  *
  * @author zhang
  * @date 2026-09-10

@@ -8,7 +8,7 @@ import org.jeecg.common.system.base.entity.JeecgEntity;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
 /**
- * @Description: oss云存储实体类
+ * @Description: oss Lớp thực thể lưu trữ đám mây
  * @author: jeecg-boot
  */
 @Data
@@ -19,10 +19,10 @@ public class OssFile extends JeecgEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Excel(name = "文件名称")
+	@Excel(name = "Tên tệp")
 	private String fileName;
 
-	@Excel(name = "文件地址")
+	@Excel(name = "Địa chỉ tệp")
 	private String url;
 
 }

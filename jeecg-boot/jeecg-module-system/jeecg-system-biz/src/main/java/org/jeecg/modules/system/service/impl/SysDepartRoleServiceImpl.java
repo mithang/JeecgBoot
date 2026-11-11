@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * @Description: 部门角色
+ * @Description: Vai trò phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-12
  * @Version: V1.0
@@ -34,7 +34,7 @@ public class SysDepartRoleServiceImpl extends ServiceImpl<SysDepartRoleMapper, S
     }
 
     /**
-     * 删除部门角色和对应关联表信息
+     * Xóa vai trò phòng ban và thông tin bảng liên kết tương ứng
      * @param ids
      */
     @Override

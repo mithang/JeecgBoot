@@ -6,7 +6,7 @@ import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.entity.SysUserPosition;
 import com.baomidou.mybatisplus.extension.service.IService;
 /**
- * @Description: 用户职位关系表
+ * @Description: Bảng quan hệ người dùng - vị trí công việc
  * @Author: jeecg-boot
  * @Date:   2023-02-14
  * @Version: V1.0
@@ -14,7 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ISysUserPositionService extends IService<SysUserPosition> {
 
     /**
-     * 获取职位用户列表
+     * Lấy danh sách người dùng chức vụ
      * @param page
      * @param positionId
      * @return
@@ -22,20 +22,20 @@ public interface ISysUserPositionService extends IService<SysUserPosition> {
     IPage<SysUser> getPositionUserList(Page<SysUser> page, String positionId);
 
     /**
-     * 添加成员到用户职位关系表
+     * Thêm thành viên vào bảng quan hệ người dùng-chức vụ
      * @param userIds
      * @param positionId
      */
     void saveUserPosition(String userIds, String positionId);
 
     /**
-     * 通过职位id删除用户职位关系表
+     * Xóa bảng quan hệ chức vụ người dùng theo id chức vụ
      * @param positionId
      */
     void removeByPositionId(String positionId);
 
     /**
-     * 移除成员
+     * Loại bỏ thành viên
      * @param userIds
      * @param positionId
      */

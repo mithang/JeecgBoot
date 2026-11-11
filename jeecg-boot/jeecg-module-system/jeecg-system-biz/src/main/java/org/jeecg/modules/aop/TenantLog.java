@@ -6,11 +6,11 @@ import org.jeecg.common.constant.enums.ModuleType;
 import java.lang.annotation.*;
 
 /**
- * 系统日志注解
+ * Chú thích nhật ký hệ thống
  * 
  * @Author scott
  * @email jeecgos@163.com
- * @Date 2019年1月14日
+ * @Date 14/01/2019
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 public @interface TenantLog {
 
 	/**
-	 * 操作日志类型（1查询，2添加，3修改，4删除）
+	 * Loại nhật ký thao tác (1: truy vấn, 2: thêm mới, 3: sửa, 4: xóa)
 	 * 
 	 * @return
 	 */

@@ -19,22 +19,22 @@ import java.net.URLDecoder;
 import java.util.*;
 
 /**
- * 通用情况的白名单处理，若有无法处理的情况，可以单独写实现类
+ * Xử lý whitelist cho trường hợp chung; nếu có trường hợp không xử lý được thì có thể viết riêng class triển khai
  */
 @Slf4j
 @Component("dictTableWhiteListHandlerImpl")
 public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler {
 
     /**
-     * key-表名
-     * value-字段名，多个逗号隔开
-     * 两种配置方式-- 全部配置成小写
-     * whiteTablesRuleMap.put("sys_user", "*")  sys_user所有的字段都支持查询
-     * whiteTablesRuleMap.put("sys_user", "username,password")  sys_user中的username和password支持查询
+     * key-Tên bảng
+     * value-Tên trường, phân tách bằng nhiều dấu phẩy
+     * Hai cách cấu hình-- Tất cả cấu hình thành chữ thường
+     * whiteTablesRuleMap.put("sys_user", "*")  sys_user Tất cả các trường đều hỗ trợ truy vấn
+     * whiteTablesRuleMap.put("sys_user", "username,password")  sys_user username và password trong sys_user hỗ trợ truy vấn
      */
     private static final Map<String, String> whiteTablesRuleMap = new HashMap<>();
     /**
-     * LowCode 是否为 dev 模式
+     * LowCode Có phải chế độ dev hay không
      */
     private static Boolean LOW_CODE_IS_DEV = null;
 
@@ -46,17 +46,17 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
 
     
     /**
-     * 初始化 whiteTablesRuleMap 方法
+     * Khởi tạo phương thức whiteTablesRuleMap
      */
     private void init() {
-        // 如果当前为dev模式，则每次都查询数据库，防止缓存
+        // Nếu hiện tại là chế độ dev thì mỗi lần đều truy vấn cơ sở dữ liệu, tránh bộ nhớ đệm
         if (this.isDev()) {
             DictTableWhiteListHandlerImpl.whiteTablesRuleMap.clear();
         }
-        // 如果map为空，则从数据库中查询
+        // Nếu map trống thì truy vấn từ cơ sở dữ liệu
         if (DictTableWhiteListHandlerImpl.whiteTablesRuleMap.isEmpty()) {
             Map<String, String> ruleMap = sysTableWhiteListService.getAllConfigMap();
-            log.debug("表字典白名单初始化完成：{}", ruleMap);
+            log.debug("Khởi tạo danh sách trắng danh mục bảng hoàn tất:{}", ruleMap);
             DictTableWhiteListHandlerImpl.whiteTablesRuleMap.putAll(ruleMap);
         }
     }
@@ -67,24 +67,24 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
         try {
             parsedMap = MiniDaoUtil.parseAllSelectTable(sql);
         } catch (Exception e) {
-            log.warn("校验sql语句，解析报错：{}", e.getMessage());
+            log.warn("Kiểm tra câu lệnh sql, lỗi phân tích:{}", e.getMessage());
         }
-        // 如果sql有问题，则肯定执行不了，所以直接返回true
+        // Nếu SQL có vấn đề thì chắc chắn không thực thi được, vì vậy trả về trực tiếp true
         if (parsedMap == null) {
             return true;
         }
-        log.debug("获取select sql信息 ：{} ", parsedMap);
-        // 遍历当前sql中的所有表名，如果有其中一个表或表的字段不在白名单中，则不通过
+        log.debug("Lấy thông tin select sql:{} ", parsedMap);
+        // Duyệt tất cả tên bảng trong SQL hiện tại; nếu có một bảng hoặc trường của bảng không nằm trong whitelist thì không đạt
         for (Map.Entry<String, SelectSqlInfo> entry : parsedMap.entrySet()) {
             SelectSqlInfo sqlInfo = entry.getValue();
             String tableName = entry.getKey();
             if (sqlInfo.isSelectAll()) {
-                // select * 只有整表字段已授权时才允许；dev 模式沿用自动补充白名单逻辑
+                // select * Chỉ cho phép khi toàn bộ trường của bảng đã được ủy quyền; chế độ dev vẫn dùng logic tự động bổ sung whitelist
                 this.checkWhiteList(tableName, Collections.singleton(SymbolConstant.ASTERISK));
                 continue;
             }
             Set<String> queryFields = sqlInfo.getAllRealSelectFields();
-            // 校验表名和字段是否允许查询
+            // Kiểm tra tên bảng và trường có được phép truy vấn hay không
             if (!this.checkWhiteList(tableName, queryFields)) {
                 return false;
             }
@@ -98,31 +98,31 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
             return true;
         }
         try {
-            // 针对转义字符进行解码
+            // Giải mã ký tự escape
             dictCodeString = URLDecoder.decode(dictCodeString, "UTF-8");
         } catch (Exception e) {
             log.warn(e.getMessage());
-            //this.throwException("字典code解码失败，可能是使用了非法字符，请检查！");
+            //this.throwException("Giải mã code từ điển thất bại, có thể đã dùng ký tự không hợp lệ, vui lòng kiểm tra!");
         }
         dictCodeString = dictCodeString.trim();
         String[] arr = dictCodeString.split(SymbolConstant.COMMA);
-        // 获取表名
+        // Lấy tên bảng
         String tableName = this.getTableName(arr[0]);
-        // 获取查询字段
+        // Lấy trường tìm kiếm
         arr = Arrays.copyOfRange(arr, 1, arr.length);
-        // distinct的作用是去重，相当于 Set<String>
+        // distinct có tác dụng khử trùng lặp, tương đương với Set<String>
         String[] fields = Arrays.stream(arr).map(String::trim).distinct().toArray(String[]::new);
-        // 校验表名和字段是否允许查询
+        // Kiểm tra tên bảng và trường có được phép truy vấn hay không
         return this.isPassByDict(tableName, fields);
     }
 
     @Override
     public boolean isPassByDict(String tableName, String... fields) {
-        //update-begin---author:scott ---date:20261027  for：【GHSA-g87f-mgx5-wj9c】字面量null表名不能当空表名放行-----------
+        //update-begin---author:scott ---date:20261027  for：【GHSA-g87f-mgx5-wj9c】Tên bảng dạng literal null không được cho qua như tên bảng trống-----------
         if (tableName != null && "null".equalsIgnoreCase(tableName.trim())) {
             return false;
         }
-        //update-end---author:scott ---date:20261027  for：【GHSA-g87f-mgx5-wj9c】字面量null表名不能当空表名放行-----------
+        //update-end---author:scott ---date:20261027  for：【GHSA-g87f-mgx5-wj9c】Tên bảng dạng literal null không được cho qua như tên bảng trống-----------
         if (oConvertUtils.isEmpty(tableName)) {
             return true;
         }
@@ -130,20 +130,20 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
             fields = new String[]{"*"};
         }
         String sql = "select " + String.join(",", fields) + " from " + tableName;
-        log.debug("字典拼接的查询SQL：{}", sql);
+        log.debug("Câu SQL truy vấn được ghép từ danh mục:{}", sql);
         try {
-            // 进行SQL解析
+            // Thực hiện phân tích SQL
             MiniDaoUtil.parseSelectSqlInfo(sql);
         } catch (Exception e) {
-            // 如果SQL解析失败，则通过字段名和表名进行校验
+            // Nếu phân tích SQL thất bại thì kiểm tra thông qua tên trường và tên bảng
             return checkWhiteList(tableName, new HashSet<>(Arrays.asList(fields)));
         }
-        // 通过SQL解析进行校验，可防止SQL注入
+        // Kiểm tra bằng cách phân tích SQL, có thể ngăn chặn SQL injection
         return this.isPassBySql(sql);
     }
 
     /**
-     * 校验表名和字段是否在白名单内
+     * Kiểm tra tên bảng và trường có nằm trong danh sách trắng không
      *
      * @param tableName
      * @param queryFields
@@ -151,63 +151,63 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
      */
     public boolean checkWhiteList(String tableName, Set<String> queryFields) {
         this.init();
-        // 1、判断“表名”是否通过校验，如果为空则未通过校验
+        // 1, kiểm tra xem "tên bảng" có qua kiểm tra hay không, nếu rỗng thì chưa qua kiểm tra
         if (oConvertUtils.isEmpty(tableName)) {
-            log.error("白名单校验：表名为空");
+            log.error("Kiểm tra danh sách trắng: Tên bảng trống");
             this.throwException();
         }
-        // 统一转成小写
+        // Chuyển thống nhất thành chữ thường
         tableName = tableName.toLowerCase();
         String allowFieldStr = DictTableWhiteListHandlerImpl.whiteTablesRuleMap.get(tableName);
         log.debug("checkWhiteList tableName: {}", tableName);
         if (oConvertUtils.isEmpty(allowFieldStr)) {
-            // 如果是dev模式，自动向数据库里添加数据
+            // Nếu là chế độ dev, tự động thêm dữ liệu vào cơ sở dữ liệu
             if (this.isDev()) {
                 this.autoAddWhiteList(tableName, String.join(",", queryFields));
                 allowFieldStr = DictTableWhiteListHandlerImpl.whiteTablesRuleMap.get(tableName);
             } else {
-                // prod模式下，直接抛出异常
-                log.error("白名单校验：表\"{}\"未通过校验", tableName);
+                // prod ở chế độ này, ném ngoại lệ trực tiếp
+                log.error("Kiểm tra whitelist: Bảng\"{}\"Không đạt kiểm chứng", tableName);
                 this.throwException();
             }
         }
-        // 2、判断“字段名”是否通过校验
-        // 统一转成小写
+        // 2, kiểm tra xem "tên trường" có vượt qua kiểm tra không
+        // Chuyển thống nhất thành chữ thường
         allowFieldStr = allowFieldStr.toLowerCase();
         Set<String> allowFields = new HashSet<>(Arrays.asList(allowFieldStr.split(",")));
-        // 配置 * 代表允许查询当前表的所有字段
+        // Cấu hình * Nghĩa là cho phép truy vấn tất cả các trường của bảng hiện tại
         if (allowFields.contains(SymbolConstant.ASTERISK)) {
             return true;
         }
-        // 需要合并的字段
+        // Trường cần gộp
         Set<String> waitMergerFields = new HashSet<>();
         for (String field : queryFields) {
             if(oConvertUtils.isEmpty(field)){
                 continue;
             }
-            // 统一转成小写
+            // Chuyển thống nhất thành chữ thường
             field = field.toLowerCase();
-            // 如果允许的字段里不包含查询的字段，则直接抛出异常
+            // Nếu trong các trường được phép không chứa trường cần truy vấn thì ném ngoại lệ trực tiếp
             if (!allowFields.contains(field)) {
-                // 如果是dev模式，记录需要合并的字段
+                // Nếu là chế độ dev, ghi lại các trường cần hợp nhất
                 if (this.isDev()) {
                     waitMergerFields.add(field);
                 } else {
-                    log.error("白名单校验：字段 {} 不在 {} 范围内，拒绝访问！", field, allowFields);
+                    log.error("Kiểm tra danh sách trắng: trường {} Không ở {} trong phạm vi, từ chối truy cập!", field, allowFields);
                     this.throwException();
                 }
             }
         }
-        // 自动向数据库中合并未通过的字段
+        // Tự động gộp các trường chưa vượt qua vào cơ sở dữ liệu
         if (!waitMergerFields.isEmpty()) {
             this.autoAddWhiteList(tableName, String.join(",", waitMergerFields));
         }
-        log.debug("白名单校验：查询表\"{}\"，查询字段 {} 通过校验", tableName, queryFields);
+        log.debug("Kiểm tra whitelist: truy vấn bảng\"{}\", trường truy vấn {} Vượt qua kiểm tra", tableName, queryFields);
         return true;
     }
 
     /**
-     * 自动添加白名单，如果数据库已有，则字段会自动合并
+     * Tự động thêm whitelist, nếu cơ sở dữ liệu đã có thì trường sẽ tự động gộp
      *
      * @param tableName
      * @param allowFieldStr
@@ -216,15 +216,15 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
         try {
             SysTableWhiteList entity = sysTableWhiteListService.autoAdd(tableName, allowFieldStr);
             DictTableWhiteListHandlerImpl.whiteTablesRuleMap.put(tableName, entity.getFieldName());
-            log.warn("表\"{}\"未通过校验，且当前为 dev 模式，已自动向数据库中增加白名单数据。查询字段：{}", tableName, allowFieldStr);
+            log.warn("Bảng\"{}\"Chưa vượt qua kiểm tra, và hiện đang ở chế độ dev, đã tự động thêm dữ liệu whitelist vào cơ sở dữ liệu. Trường truy vấn: {}", tableName, allowFieldStr);
         } catch (Exception e) {
-            log.error("表\"{}\"未通过校验，且当前为 dev 模式，但自动向数据库中增加白名单数据失败，请排查后重试。错误原因：{}", tableName, e.getMessage(), e);
+            log.error("Bảng\"{}\"Chưa vượt qua kiểm tra, và hiện đang ở chế độ dev, nhưng tự động thêm dữ liệu whitelist vào cơ sở dữ liệu thất bại, vui lòng kiểm tra rồi thử lại. Nguyên nhân lỗi: {}", tableName, e.getMessage(), e);
             this.throwException();
         }
     }
 
     /**
-     * 判断当前 LowCode 是否为 dev 模式
+     * Kiểm tra LowCode hiện tại có phải chế độ dev hay không
      */
     private boolean isDev() {
         if (DictTableWhiteListHandlerImpl.LOW_CODE_IS_DEV == null) {
@@ -232,7 +232,7 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
                 String lowCodeMode = this.jeecgBaseConfig.getFirewall().getLowCodeMode();
                 DictTableWhiteListHandlerImpl.LOW_CODE_IS_DEV = LowCodeModeInterceptor.LOW_CODE_MODE_DEV.equals(lowCodeMode);
             } else {
-                // 如果没有 firewall 配置，则默认为 false
+                // Nếu không có cấu hình firewall thì mặc định là false
                 DictTableWhiteListHandlerImpl.LOW_CODE_IS_DEV = false;
             }
         }
@@ -247,7 +247,7 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
 
     
     /**
-     * 取where前面的为：table name
+     * Lấy phần trước where làm:table name
      *
      * @param str
      * @see DictQueryBlackListHandler#getTableName(String)
@@ -256,7 +256,7 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
     private String getTableName(String str) {
         String[] arr = str.split("\\s+(?i)where\\s+");
         String tableName = arr[0].trim();
-        //【20230814】解决使用参数tableName=sys_user t&复测，漏洞仍然存在
+        //Giải quyết vấn đề dùng tham số tableName=sys_user t&Kiểm tra lại, lỗ hổng vẫn tồn tại
         if (tableName.contains(".")) {
             tableName = tableName.substring(tableName.indexOf(".") + 1, tableName.length()).trim();
         }
@@ -283,7 +283,7 @@ public class DictTableWhiteListHandlerImpl implements IDictTableWhiteListHandler
 
     @Override
     public String getErrorMsg() {
-        return "白名单校验未通过！";
+        return "Kiểm tra whitelist không đạt!";
     }
 
 }

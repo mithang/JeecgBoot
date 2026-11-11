@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.system.entity.SysUgroupUser;
 
 /**
- * @Description: 用户组关系表
+ * @Description: Bảng quan hệ nhóm người dùng
  * @Author: jeecg-boot
  * @Date:   2026-02-27
  * @Version: V1.0

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @Author scott
  * @Date 2019/12/9 11:32
- * @Description: 分类字典编码生成规则
+ * @Description: Quy tắc tạo mã danh mục phân loại
  */
 @Slf4j
 public class CategoryCodeRule implements IFillRuleHandler {
@@ -25,7 +25,7 @@ public class CategoryCodeRule implements IFillRuleHandler {
 
     @Override
     public Object execute(JSONObject params, JSONObject formData) {
-        log.info("系统自定义编码规则[category_code_rule]，params：{} ，formData： {}", params, formData);
+        log.info("Quy tắc mã hóa tùy chỉnh của hệ thống[category_code_rule]，params：{} ，formData： {}", params, formData);
 
         String categoryPid = ROOT_PID_VALUE;
         String categoryCode = null;
@@ -45,27 +45,27 @@ public class CategoryCodeRule implements IFillRuleHandler {
         }
 
         /*
-         * 分成三种情况
-         * 1.数据库无数据 调用YouBianCodeUtil.getNextYouBianCode(null);
-         * 2.添加子节点，无兄弟元素 YouBianCodeUtil.getSubYouBianCode(parentCode,null);
-         * 3.添加子节点有兄弟元素 YouBianCodeUtil.getNextYouBianCode(lastCode);
+         * Chia thành ba trường hợp
+         * 1.Cơ sở dữ liệu không có dữ liệu, gọi YouBianCodeUtil.getNextYouBianCode(null);
+         * 2.Thêm nút con, không có phần tử anh em YouBianCodeUtil.getSubYouBianCode(parentCode,null);
+         * 3.Thêm nút con khi có phần tử anh em YouBianCodeUtil.getNextYouBianCode(lastCode);
          * */
-        //找同类 确定上一个最大的code值
+        //Tìm cùng loại, xác định giá trị code lớn nhất trước đó
         SysCategoryMapper baseMapper = (SysCategoryMapper) SpringContextUtils.getBean("sysCategoryMapper");
-        // 代码逻辑说明: 【issues/4846】开启saas多租户功能后，租户管理员在添加分类字典时，报错------------
+        // Giải thích logic mã: 【issues/4846] Sau khi bật tính năng đa thuê bao SaaS, quản trị viên thuê bao gặp lỗi khi thêm danh mục phân loại------------
         Page<SysCategory> page = new Page<>(1,1);
         List<SysCategory> list = baseMapper.getMaxCategoryCodeByPage(page,categoryPid);
         if (list == null || list.size() == 0) {
             if (ROOT_PID_VALUE.equals(categoryPid)) {
-                //情况1
+                //Trường hợp 1
                 categoryCode = YouBianCodeUtil.getNextYouBianCode(null);
             } else {
-                //情况2
+                //Trường hợp 2
                 SysCategory parent = (SysCategory) baseMapper.selectSysCategoryById(categoryPid);
                 categoryCode = YouBianCodeUtil.getSubYouBianCode(parent.getCode(), null);
             }
         } else {
-            //情况3
+            //Trường hợp 3
             categoryCode = YouBianCodeUtil.getNextYouBianCode(list.get(0).getCode());
         }
         return categoryCode;

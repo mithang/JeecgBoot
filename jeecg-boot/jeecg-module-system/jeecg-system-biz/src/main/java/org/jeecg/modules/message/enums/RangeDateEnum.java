@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 用于消息数据查询【vue3】
- * 新版系统通知查询条件
+ * Dùng để truy vấn dữ liệu tin nhắn 【vue3】
+ * Điều kiện truy vấn thông báo hệ thống phiên bản mới
  * @Author taoYan
  * @Date 2022/8/19 20:41
  **/
@@ -20,15 +20,15 @@ import java.util.List;
 @EnumDict("rangeDate")
 public enum RangeDateEnum {
 
-    JT("jt", "今天"),
-    ZT("zt", "昨天"),
-    QT("qt", "前天"),
-    BZ("bz","本周"),
-    SZ("sz", "上周"),
-    BY("by", "本月"),
-    SY("sy", "上月"),
-    SEVENDAYS("7day", "7日"),
-    ZDY("zdy", "自定义日期");
+    JT("jt", "Hôm nay"),
+    ZT("zt", "Hôm qua"),
+    QT("qt", "Hôm kia"),
+    BZ("bz","Tuần này"),
+    SZ("sz", "Tuần trước"),
+    BY("by", "Tháng này"),
+    SY("sy", "Tháng trước"),
+    SEVENDAYS("7day", "7 ngày"),
+    ZDY("zdy", "Ngày tùy chỉnh");
 
     String key;
 
@@ -40,7 +40,7 @@ public enum RangeDateEnum {
     }
 
     /**
-     * 获取字典数据
+     * Lấy dữ liệu danh mục
      * @return
      */
     public static List<DictModel> getDictList(){
@@ -56,7 +56,7 @@ public enum RangeDateEnum {
     }
 
     /**
-     * 根据key 获取范围时间值
+     * Lấy giá trị thời gian trong phạm vi theo key
      * @param key
      * @return
      */
@@ -66,46 +66,46 @@ public enum RangeDateEnum {
         Date[] array = new Date[2];
         boolean flag = false;
         if(JT.key.equals(key)){
-            //今天
+            //Hôm nay
         } else if(ZT.key.equals(key)){
-            //昨天
+            //Hôm qua
             calendar1.add(Calendar.DAY_OF_YEAR, -1);
             calendar2.add(Calendar.DAY_OF_YEAR, -1);
         } else if(QT.key.equals(key)){
-            //前天
+            //Hôm kia
             calendar1.add(Calendar.DAY_OF_YEAR, -2);
             calendar2.add(Calendar.DAY_OF_YEAR, -2);
         } else if(BZ.key.equals(key)){
-            //本周
+            //Tuần này
             calendar1.set(Calendar.DAY_OF_WEEK, 2);
 
             calendar2.add(Calendar.WEEK_OF_MONTH,1);
             calendar2.add(Calendar.DAY_OF_WEEK,-1);
         } else if(SZ.key.equals(key)){
-            //本周一减一周
+            //Thứ Hai tuần này trừ đi một tuần
             calendar1.set(Calendar.DAY_OF_WEEK, 2);
             calendar1.add(Calendar.WEEK_OF_MONTH, -1);
 
-            // 本周一减一天
+            // Thứ Hai tuần này trừ đi một ngày
             calendar2.set(Calendar.DAY_OF_WEEK, 2);
             calendar2.add(Calendar.DAY_OF_WEEK,-1);
         } else if(BY.key.equals(key)){
-            //本月
+            //Tháng này
             calendar1.set(Calendar.DAY_OF_MONTH, 1);
 
             calendar2.set(Calendar.DAY_OF_MONTH, 1);
             calendar2.add(Calendar.MONTH, 1);
             calendar2.add(Calendar.DAY_OF_MONTH, -1);
         } else if(SY.key.equals(key)){
-            //本月第一天减一月
+            //Ngày đầu tiên của tháng này trừ một tháng
             calendar1.set(Calendar.DAY_OF_MONTH, 1);
             calendar1.add(Calendar.MONTH, -1);
 
-            //本月第一天减一天
+            //Ngày đầu tiên của tháng này trừ một ngày
             calendar2.set(Calendar.DAY_OF_MONTH, 1);
             calendar2.add(Calendar.DAY_OF_MONTH, -1);
         } else if (SEVENDAYS.key.equals(key)){
-            //七日第一天
+            //Ngày đầu tiên của 7 ngày
             calendar1.setTime(new Date());
             calendar1.add(Calendar.DATE, -7);
         }else{
@@ -114,7 +114,7 @@ public enum RangeDateEnum {
         if(flag){
             return null;
         }
-        // 开始时间00:00:00 结束时间23:59:59
+        // Thời gian bắt đầu 00:00:00 Thời gian kết thúc 23:59:59
         calendar1.set(Calendar.HOUR_OF_DAY, 0);
         calendar1.set(Calendar.MINUTE, 0);
         calendar1.set(Calendar.SECOND, 0);

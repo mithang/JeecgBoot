@@ -27,7 +27,7 @@ import java.util.Set;
 
 /**
  * <p>
- * 用户表 服务类
+ * Bảng người dùng - Lớp dịch vụ
  * </p>
  *
  * @Author scott
@@ -36,7 +36,7 @@ import java.util.Set;
 public interface ISysUserService extends IService<SysUser> {
 
 	/**
-	 * 查询用户数据列表
+	 * Truy vấn danh sách dữ liệu người dùng
 	 * 
 	 * @param req
 	 * @param queryWrapper
@@ -47,7 +47,7 @@ public interface ISysUserService extends IService<SysUser> {
 	Result<IPage<SysUser>> queryPageList(HttpServletRequest req, QueryWrapper<SysUser> queryWrapper, Integer pageSize, Integer pageNo);
 	
 	/**
-	 * 重置密码
+	 * Đặt lại mật khẩu
 	 *
 	 * @param username
 	 * @param oldpassword
@@ -58,7 +58,7 @@ public interface ISysUserService extends IService<SysUser> {
 	public Result<?> resetPassword(String username, String oldpassword, String newpassword, String confirmpassword);
 
 	/**
-	 * 修改密码
+	 * Đổi mật khẩu
 	 *
 	 * @param sysUser
 	 * @return
@@ -66,28 +66,28 @@ public interface ISysUserService extends IService<SysUser> {
 	public Result<?> changePassword(SysUser sysUser);
 
 	/**
-	 * 删除用户
+	 * Xóa người dùng
 	 * @param userId
 	 * @return
 	 */
 	public boolean deleteUser(String userId);
 
 	/**
-	 * 批量删除用户
+	 * Xóa người dùng hàng loạt
 	 * @param userIds
 	 * @return
 	 */
 	public boolean deleteBatchUsers(String userIds);
 
     /**
-     * 根据用户名查询
-     * @param username 用户名
+     * Truy vấn theo tên người dùng
+     * @param username Tên người dùng
      * @return SysUser
      */
 	public SysUser getUserByName(String username);
 	
 	/**
-	 * 添加用户和用户角色关系
+	 * Thêm người dùng và quan hệ vai trò của người dùng
 	 * @param user
 	 * @param roles
 	 */
@@ -95,30 +95,30 @@ public interface ISysUserService extends IService<SysUser> {
 	
 	
 	/**
-	 * 修改用户和用户角色关系
+	 * Sửa quan hệ giữa người dùng và vai trò người dùng
 	 * @param user
 	 * @param roles
 	 */
 	public void editUserWithRole(SysUser user,String roles);
 
 	/**
-	 * 获取用户的授权角色
+	 * Lấy vai trò được ủy quyền của người dùng
 	 * @param username
 	 * @return
 	 */
 	public List<String> getRole(String username);
 
 	/**
-	 * 获取根据登录用户的角色获取动态首页
+	 * Lấy trang chủ động theo vai trò của người dùng đã đăng nhập
 	 *
 	 * @param username
-	 * @param version 前端UI版本
+	 * @param version Phiên bản giao diện frontend
 	 * @return
 	 */
 	public SysRoleIndex getDynamicIndexByUserRole(String username,String version);
 	
 	/**
-	  * 查询用户信息包括 部门信息
+	  * Truy vấn thông tin người dùng bao gồm thông tin phòng ban
 	 * @param username
 	 * @return
 	 */
@@ -126,33 +126,33 @@ public interface ISysUserService extends IService<SysUser> {
 	public SysUserCacheInfo getCacheUser(String username);
 
 	/**
-	 * 根据部门Id查询
+	 * Truy vấn theo Id phòng ban
 	 * @param page
-     * @param departId 部门id
-     * @param username 用户账户名称
+     * @param departId Phòng ban id
+     * @param username Tên tài khoản người dùng
 	 * @return
 	 */
 	public IPage<SysUser> getUserByDepId(Page<SysUser> page, String departId, String username);
 
 	/**
-	 * 根据部门Ids查询
+	 * Truy vấn theo Ids phòng ban
 	 * @param page
-     * @param departIds  部门id集合
-     * @param username 用户账户名称
-	 * @param realname 用户姓名
+     * @param departIds  Tập hợp id phòng ban
+     * @param username Tên tài khoản người dùng
+	 * @param realname Họ tên người dùng
 	 * @return
 	 */
 	public IPage<SysUser> getUserByDepIds(Page<SysUser> page, List<String> departIds, String username, String realname);
 
 	/**
-	 * 根据 userIds查询，查询用户所属部门的名称（多个部门名逗号隔开）
+	 * Truy vấn theo userIds, lấy tên phòng ban trực thuộc của người dùng (nhiều tên phòng ban phân tách bằng dấu phẩy)
 	 * @param userIds
 	 * @return
 	 */
 	public Map<String,String> getDepNamesByUserIds(List<String> userIds);
 
     /**
-     * 根据部门 Id 和 QueryWrapper 查询
+     * Truy vấn theo Id phòng ban và QueryWrapper
      *
      * @param page
      * @param departId
@@ -162,189 +162,189 @@ public interface ISysUserService extends IService<SysUser> {
     // public IPage<SysUser> getUserByDepartIdAndQueryWrapper(Page<SysUser> page, String departId, QueryWrapper<SysUser> queryWrapper);
 
 	/**
-	 * 根据 orgCode 查询用户，包括子部门下的用户
+	 * Truy vấn người dùng theo orgCode, bao gồm cả người dùng thuộc các phòng ban con
 	 *
 	 * @param orgCode
-	 * @param userParams 用户查询条件，可为空
-	 * @param page 分页参数
+	 * @param userParams Điều kiện truy vấn người dùng, có thể để trống
+	 * @param page Tham số phân trang
 	 * @return
 	 */
 	IPage<SysUserSysDepartModel> queryUserByOrgCode(String orgCode, SysUser userParams, IPage page);
 
 	/**
-	 * 根据角色Id查询
+	 * Truy vấn theo Id vai trò
 	 * @param page
-     * @param roleId 角色id
-     * @param username 用户账户
-     * @param realname 用户姓名
+     * @param roleId Vai trò id
+     * @param username Tài khoản người dùng
+     * @param realname Họ tên người dùng
 	 * @return
 	 */
 	public IPage<SysUser> getUserByRoleId(Page<SysUser> page,String roleId, String username, String realname);
 
 	/**
-	 * 通过用户名获取用户角色集合
+	 * Lấy tập hợp vai trò người dùng qua tên người dùng
 	 *
-	 * @param username 用户名
-	 * @return 角色集合
+	 * @param username Tên người dùng
+	 * @return Tập hợp vai trò
 	 */
 	Set<String> getUserRolesSet(String username);
 	
 	/**
-	 * 通过用户名获取用户角色集合
+	 * Lấy tập hợp vai trò người dùng qua tên người dùng
 	 *
-	 * @param userId 用户id
-	 * @return 角色集合
+	 * @param userId Người dùng id
+	 * @return Tập hợp vai trò
 	 */
 	Set<String> getUserRoleSetById(String userId);
 
 	/**
-	 * 通过用户名获取用户权限集合
+	 * Lấy tập hợp quyền hạn người dùng qua tên người dùng
 	 *
-	 * @param userId 用户id
-	 * @return 权限集合
+	 * @param userId Người dùng id
+	 * @return Tập hợp quyền hạn
 	 */
 	Set<String> getUserPermissionsSet(String userId);
 	
 	/**
-	 * 根据用户名设置部门ID
+	 * Thiết lập phòng ban theo tên người dùng ID
 	 * @param username
 	 * @param orgCode
 	 */
 	void updateUserDepart(String username,String orgCode,Integer loginTenantId);
 	
 	/**
-	 * 根据手机号获取用户名和密码
-     * @param phone 手机号
+	 * Lấy tên người dùng và mật khẩu theo số điện thoại
+     * @param phone Số điện thoại
      * @return SysUser
 	 */
 	public SysUser getUserByPhone(String phone);
 
 
 	/**
-	 * 根据邮箱获取用户
-     * @param email 邮箱
+	 * Lấy người dùng theo email
+     * @param email Email
      * @return SysUser
      */
 	public SysUser getUserByEmail(String email);
 
 
 	/**
-	 * 添加用户和用户部门关系
+	 * Thêm người dùng và quan hệ phòng ban của người dùng
 	 * @param user
 	 * @param selectedParts
 	 */
 	void addUserWithDepart(SysUser user, String selectedParts);
 
 	/**
-	 * 编辑用户和用户部门关系
+	 * Chỉnh sửa người dùng và quan hệ phòng ban của người dùng
 	 * @param user
 	 * @param departs
 	 */
 	void editUserWithDepart(SysUser user, String departs);
 	
 	/**
-	   * 校验用户是否有效
+	   * Kiểm tra người dùng có hợp lệ không
 	 * @param sysUser
 	 * @return
 	 */
 	Result checkUserIsEffective(SysUser sysUser);
 
-	//update-begin---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】登录失败计数与密码校验统一，用户不存在也计入失败次数，防止用户枚举-----------
+	//update-begin---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Thống nhất việc đếm lần đăng nhập thất bại với kiểm tra mật khẩu; người dùng không tồn tại cũng được tính vào số lần thất bại, ngăn liệt kê người dùng-----------
 	/**
-	 * 校验登录密码，用户不存在与密码错误统一视为失败并计入失败次数
-	 * @param sysUser 按用户名查到的用户，可为空
-	 * @param username 登录账号
-	 * @param password 明文密码
-	 * @return 密码正确返回true
+	 * Kiểm tra mật khẩu đăng nhập; người dùng không tồn tại và mật khẩu sai đều được tính là thất bại và cộng vào số lần thất bại
+	 * @param sysUser Người dùng tra cứu theo tên người dùng, có thể trống
+	 * @param username Tài khoản đăng nhập
+	 * @param password Mật khẩu dạng văn bản thuần
+	 * @return mật khẩu đúng sẽ trả về true
 	 */
 	boolean verifyLoginPassword(SysUser sysUser, String username, String password);
 
 	/**
-	 * 登录失败次数是否超限（超限锁定10分钟）
-	 * @param key 用户名或手机号
+	 * Số lần đăng nhập thất bại có vượt giới hạn hay không (vượt giới hạn sẽ khóa 10 phút)
+	 * @param key Tên người dùng hoặc số điện thoại
 	 * @return
 	 */
 	boolean isLoginFailOvertimes(String key);
 
 	/**
-	 * 记录登录失败次数
-	 * @param key 用户名或手机号
+	 * Ghi số lần đăng nhập thất bại
+	 * @param key Tên người dùng hoặc số điện thoại
 	 */
 	void addLoginFailOvertimes(String key);
-	//update-end---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】登录失败计数与密码校验统一，用户不存在也计入失败次数，防止用户枚举-----------
+	//update-end---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Thống nhất việc đếm lần đăng nhập thất bại với kiểm tra mật khẩu; người dùng không tồn tại cũng được tính vào số lần thất bại, ngăn liệt kê người dùng-----------
 
 	/**
-	 * 查询被逻辑删除的用户
+	 * Truy vấn người dùng đã bị xóa logic
      * @return List<SysUser>
 	 */
 	List<SysUser> queryLogicDeleted();
 
 	/**
-	 * 查询被逻辑删除的用户（可拼装查询条件）
+	 * Truy vấn người dùng đã bị xóa logic (có thể ghép điều kiện truy vấn)
      * @param wrapper
      * @return List<SysUser>
 	 */
 	List<SysUser> queryLogicDeleted(LambdaQueryWrapper<SysUser> wrapper);
 
 	/**
-	 * 还原被逻辑删除的用户
-     * @param userIds  存放用户id集合
+	 * Khôi phục người dùng đã bị xóa logic
+     * @param userIds  Tập hợp id người dùng được lưu trữ
      * @param updateEntity
      * @return boolean
 	 */
 	boolean revertLogicDeleted(List<String> userIds, SysUser updateEntity);
 
 	/**
-	 * 彻底删除被逻辑删除的用户
-     * @param userIds 存放用户id集合
+	 * Xóa hoàn toàn người dùng đã bị xóa logic
+     * @param userIds Tập hợp id người dùng được lưu trữ
      * @return boolean
 	 */
 	boolean removeLogicDeleted(List<String> userIds);
 
     /**
-     * 更新手机号、邮箱空字符串为 null
+     * Cập nhật số điện thoại, email từ chuỗi trống thành null
      * @return boolean
      */
     @Transactional(rollbackFor = Exception.class)
     boolean updateNullPhoneEmail();
 
 	/**
-	 * 保存第三方用户信息
+	 * Lưu thông tin người dùng bên thứ ba
 	 * @param sysUser
 	 */
 	void saveThirdUser(SysUser sysUser);
 
 	/**
-	 * 根据部门Ids查询
-	 * @param departIds 部门id集合
-     * @param username 用户账户名称
+	 * Truy vấn theo Ids phòng ban
+	 * @param departIds Tập hợp id phòng ban
+     * @param username Tên tài khoản người dùng
 	 * @return
 	 */
 	List<SysUser> queryByDepIds(List<String> departIds, String username);
 
 	/**
-     * 保存用户
+     * Lưu người dùng
      *
-     * @param user            用户
-     * @param selectedRoles   选择的角色id，多个以逗号隔开
-     * @param selectedDeparts 选择的部门id，多个以逗号隔开
-     * @param relTenantIds    多个租户id
-     * @param izSyncPack 是否需要同步租户套餐包
+     * @param user            Người dùng
+     * @param selectedRoles   Id vai trò đã chọn, nhiều id phân tách bằng dấu phẩy
+     * @param selectedDeparts Id phòng ban đã chọn, nhiều id phân tách bằng dấu phẩy
+     * @param relTenantIds    Nhiều tenant id
+     * @param izSyncPack Có cần đồng bộ gói sản phẩm của Tenant hay không
      */
 	void saveUser(SysUser user, String selectedRoles, String selectedDeparts, String relTenantIds, boolean izSyncPack);
 
 	/**
-	 * 编辑用户
-	 * @param user 用户
-	 * @param roles 选择的角色id，多个以逗号隔开
-	 * @param departs 选择的部门id，多个以逗号隔开
-	 * @param relTenantIds 多个租户id
-	 * @param updateFromPage 更新来自的页面 [TV360X-1686]
+	 * Chỉnh sửa người dùng
+	 * @param user Người dùng
+	 * @param roles Id vai trò đã chọn, nhiều id phân tách bằng dấu phẩy
+	 * @param departs Id phòng ban đã chọn, nhiều id phân tách bằng dấu phẩy
+	 * @param relTenantIds Nhiều tenant id
+	 * @param updateFromPage Trang mà bản cập nhật đến từ [TV360X-1686]
 	 */
 	void editUser(SysUser user, String roles, String departs, String relTenantIds, String updateFromPage);
 
 	/**
-     * userId转为username
+     * userId chuyển thành username
      * @param userIdList
      * @return List<String>
      */
@@ -352,76 +352,76 @@ public interface ISysUserService extends IService<SysUser> {
 
 
 	/**
-	 * 获取用户信息 字段信息是加密后的 【加密用户信息】
+	 * Lấy thông tin người dùng; thông tin trường đã được mã hóa [Thông tin người dùng đã mã hóa]
 	 * @param username
 	 * @return
 	 */
 	LoginUser getEncodeUserInfo(String username);
 
     /**
-     * 用户离职
+     * Người dùng nghỉ việc
      * @param username
      */
     void userQuit(String username);
 
     /**
-     * 获取离职人员列表
-	 * @param tenantId 租户id
+     * Lấy danh sách nhân viên đã rời khỏi
+	 * @param tenantId Tenant id
      * @return
      */
     List<SysUser> getQuitList(Integer tenantId);
 
     /**
-     * 更新刪除状态和离职状态
-     * @param userIds  存放用户id集合
+     * Cập nhật trạng thái xóa và trạng thái nghỉ việc
+     * @param userIds  Tập hợp id người dùng được lưu trữ
      * @param sysUser
      * @return boolean
      */
     void updateStatusAndFlag(List<String> userIds, SysUser sysUser);
 
 	/**
-	 * 设置登录租户
+	 * Đặt tenant đăng nhập
 	 * @param sysUser
 	 * @return
 	 */
 	Result<JSONObject>  setLoginTenant(SysUser sysUser, JSONObject obj, String username, Result<JSONObject> result);
 
-	//--- author:taoyan date:20221231 for: QQYUN-3515【应用】应用下的组织机构管理功能，细节实现 ---
+	//--- author:taoyan date:20221231 for: QQYUN-3515【Ứng dụng】Chức năng quản lý tổ chức thuộc ứng dụng, chi tiết triển khai ---
 	/**
-	 * 批量编辑用户信息
+	 * Chỉnh sửa hàng loạt thông tin người dùng
 	 * @param json
 	 */
 	void batchEditUsers(JSONObject json);
 
 	/**
-	 * 根据关键词查询用户和部门
+	 * Truy vấn người dùng và phòng ban theo từ khóa
 	 * @param keyword
 	 * @return
 	 */
 	DepartAndUserInfo searchByKeyword(String keyword);
 
 	/**
-	 * 查询 部门修改的信息
+	 * Truy vấn thông tin sửa đổi của phòng ban
 	 * @param departId
 	 * @return
 	 */
 	UpdateDepartInfo getUpdateDepartInfo(String departId);
 
 	/**
-	 * 修改部门相关信息
+	 * Sửa thông tin liên quan đến phòng ban
 	 * @param updateDepartInfo
 	 */
 	void doUpdateDepartInfo(UpdateDepartInfo updateDepartInfo);
 
 	/**
-	 * 设置负责人 取消负责人
+	 * Đặt người phụ trách / Hủy người phụ trách
 	 * @param json
 	 */
 	void changeDepartChargePerson(JSONObject json);
-	//--- author:taoyan date:20221231 for: QQYUN-3515【应用】应用下的组织机构管理功能，细节实现 ---
+	//--- author:taoyan date:20221231 for: QQYUN-3515【Ứng dụng】Chức năng quản lý tổ chức thuộc ứng dụng, chi tiết triển khai ---
 	
 	/**
-	 * 编辑租户用户
+	 * Chỉnh sửa người dùng tenant
 	 * @param sysUser
 	 * @param tenantId
 	 * @param departs
@@ -429,34 +429,34 @@ public interface ISysUserService extends IService<SysUser> {
 	void editTenantUser(SysUser sysUser, String tenantId, String departs, String roles);
 
 /**
-	 * 修改用户账号状态
-	 * @param id 账号id
-	 * @param status 账号状态
+	 * Sửa trạng thái tài khoản người dùng
+	 * @param id Tài khoản id
+	 * @param status Trạng thái tài khoản
 	 */
 	void updateStatus(String id, String status);
 
 	/**
-	 * 导出应用下的用户Excel
+	 * Xuất người dùng thuộc ứng dụng Excel
 	 * @param request
 	 * @return
 	 */
 	ModelAndView exportAppUser(HttpServletRequest request);
 
 	/**
-	 * 导入应用下的用户
+	 * Nhập người dùng thuộc ứng dụng
 	 * @param request
 	 * @return
 	 */
 	Result<?> importAppUser(HttpServletRequest request);
 
 	/**
-	 * 验证用户是否为管理员
+	 * Xác minh người dùng có phải quản trị viên hay không
 	 * @param ids
 	 */
 	void checkUserAdminRejectDel(String ids);
 
 	/**
-	 * 修改手机号
+	 * Thay đổi số điện thoại
 	 * 
 	 * @param json
 	 * @param username
@@ -464,16 +464,16 @@ public interface ISysUserService extends IService<SysUser> {
     void changePhone(JSONObject json, String username);
 
 	/**
-	 * 发送短信验证码
+	 * Gửi mã xác minh SMS
 	 * 
 	 * @param jsonObject
-	 * @param username 用户名
-	 * @param ipAddress ip地址
+	 * @param username Tên người dùng
+	 * @param ipAddress ip Địa chỉ
 	 */
 	void sendChangePhoneSms(JSONObject jsonObject, String username, String ipAddress);
 
 	/**
-	 * 发送注销用户手机号验证密码[敲敲云专用]
+	 * Gửi mật khẩu xác minh số điện thoại để hủy tài khoản người dùng[Dành riêng cho QiaoQiaoYun]
 	 * @param jsonObject
 	 * @param username
 	 * @param ipAddress
@@ -481,27 +481,27 @@ public interface ISysUserService extends IService<SysUser> {
 	void sendLogOffPhoneSms(JSONObject jsonObject, String username, String ipAddress);
 
 	/**
-	 * 用户注销[敲敲云专用]
+	 * Hủy tài khoản người dùng[Dành riêng cho QiaoQiaoYun]
 	 * @param jsonObject
 	 * @param username
 	 */
 	void userLogOff(JSONObject jsonObject, String username);
 
     /**
-     * 获取部门和用户关系的导出信息
+     * Lấy thông tin xuất quan hệ giữa phòng ban và người dùng
      * @param pageList
      */
     List<SysUserExportVo> getDepartAndRoleExportMsg(List<SysUser> pageList);
 
     /**
-     * 导入用户
+     * Nhập người dùng
      *
      * @param request
      */
     Result<?> importSysUser(HttpServletRequest request);
 
     /**
-     * 没有绑定手机号 直接修改密码
+     * Chưa liên kết số điện thoại, đổi mật khẩu trực tiếp
      *
      * @param oldPassword
      * @param password
@@ -510,14 +510,14 @@ public interface ISysUserService extends IService<SysUser> {
     void updatePasswordNotBindPhone(String oldPassword, String password, String username);
 
 	/**
-	 * 根据用户名称查询用户和部门信息
+	 * Truy vấn thông tin người dùng và phòng ban theo tên người dùng
 	 * @param userName
 	 * @return
 	 */
 	Map<String, String> queryUserAndDeptByName(String userName);
 
     /**
-     * 查询部门、岗位下的用户 包括子部门下的用户
+     * Truy vấn người dùng thuộc phòng ban, vị trí, bao gồm cả người dùng thuộc phòng ban cấp dưới
      * 
      * @param orgCode
      * @param userParams
@@ -527,20 +527,20 @@ public interface ISysUserService extends IService<SysUser> {
     IPage<SysUserSysDepPostModel> queryDepartPostUserByOrgCode(String orgCode, SysUser userParams, IPage page);
 
     /**
-     * 将用户移出部门或岗位（只删除关联关系，不删除用户），只处理当前部门/岗位的直属成员
-     * 部门：删除所属部门关系，清理已不在其它所属部门下的主岗位、兼职岗位，并取消该部门的负责人
-     * 岗位：清空主岗位、删除兼职岗位
+     * Chuyển người dùng ra khỏi phòng ban hoặc vị trí (chỉ xóa quan hệ liên kết, không xóa người dùng), chỉ xử lý phòng ban hiện tại/Thành viên trực thuộc của vị trí công việc
+     * Phòng ban: xóa quan hệ phòng ban trực thuộc, dọn dẹp vị trí chính và vị trí kiêm nhiệm đã không còn thuộc các phòng ban trực thuộc khác, đồng thời hủy người phụ trách của phòng ban đó
+     * Vị trí: xóa vị trí chính, xóa vị trí kiêm nhiệm
      *
-     * @param depId   部门或岗位id
-     * @param userIds 用户id
-     * @return 实际移出的用户id
+     * @param depId   Phòng ban hoặc vị trí id
+     * @param userIds Người dùng id
+     * @return Người dùng thực tế bị di chuyển ra id
      * @author wangshuai
-     * @since 2026-10-30 【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作
+     * @since 2026-10-30 【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không
      */
     List<String> removeDepartUser(String depId, List<String> userIds);
 
     /**
-     * 根据 orgCode 查询用户信息（部门全路径，主岗位和兼职岗位的信息），包括公司、子公司、部门
+     * Truy vấn thông tin người dùng theo orgCode (đường dẫn đầy đủ của phòng ban, thông tin vị trí chính và vị trí kiêm nhiệm), bao gồm công ty, công ty con, phòng ban
      *
      * @param orgCode
      * @param userParams
@@ -550,7 +550,7 @@ public interface ISysUserService extends IService<SysUser> {
     IPage<SysUserSysDepPostModel> queryDepartUserByOrgCode(String orgCode, SysUser userParams, IPage page);
 
     /**
-     * 通讯录点击用户获取用户详情（包含用户基本信息、部门全路径、主岗位兼职岗位全路径）
+     * Trong danh bạ, bấm vào người dùng để lấy chi tiết người dùng (bao gồm thông tin cơ bản của người dùng, đường dẫn đầy đủ của phòng ban, đường dẫn đầy đủ của vị trí chính và vị trí kiêm nhiệm)
      *
      * @param userId
      * @return
@@ -558,27 +558,27 @@ public interface ISysUserService extends IService<SysUser> {
     SysUserSysDepPostModel getUserDetailByUserId(String userId);
 
 	/**
-	 * 登录获取用户部门信息
+	 * Đăng nhập — Lấy thông tin phòng ban của người dùng
 	 * @param jsonObject
 	 * @return
 	 */
     Result loginGetUserDeparts(JSONObject jsonObject);
 
 	/**
-	 * 根据用户名查询重置成系统密码
+	 * Truy vấn theo tên người dùng để đặt lại thành mật khẩu hệ thống
 	 * @param usernames
 	 */
 	void resetToSysPassword(String usernames);
 
 	/**
-	 * 更新用户设备ID
+	 * Cập nhật thiết bị người dùng ID
 	 * @param clientId
 	 * @param userId
 	 */
     void updateClientId(String clientId,String userId);
 
 	/**
-	 * 根据用户组查询用户列表
+	 * Truy vấn danh sách người dùng theo nhóm người dùng
 	 * @param page
 	 * @param groupId
 	 * @param username

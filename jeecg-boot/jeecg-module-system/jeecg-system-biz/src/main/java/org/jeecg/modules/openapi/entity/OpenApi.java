@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 接口表
+ * Bảng giao diện
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -28,89 +28,89 @@ public class OpenApi  implements Serializable {
     private String id;
 
     /**
-     * 接口名称
+     * Tên API
      */
     private String name;
 
     /**
-     * 请求方式，如POST、GET
+     * Phương thức yêu cầu, ví dụ POST,GET
      */
     private String requestMethod;
 
     /**
-     * 对外开放的相对接口路径
+     * Đường dẫn giao diện tương đối được mở ra bên ngoài
      */
     private String requestUrl;
 
     /**
-     * IP 白名单
+     * IP Danh sách trắng
      */
     private String whiteList;
 
-    //update-begin---author:scott ---date:20260417  for：【PR/9083】OpenAPI新增白名单备注字段-----------
+    //update-begin---author:scott ---date:20260417  for：【PR/9083】OpenAPI thêm trường ghi chú vào danh sách trắng-----------
     /**
-     * 白名单备注说明
+     * Ghi chú giải thích whitelist
      */
     private String remarks;
-    //update-end---author:scott ---date:20260417  for：【PR/9083】OpenAPI新增白名单备注字段-----------
-    //update-begin---author:liusq ---date:20260805  for：LHZP-1356 接口描述-----------
+    //update-end---author:scott ---date:20260417  for：【PR/9083】OpenAPI thêm trường ghi chú vào danh sách trắng-----------
+    //update-begin---author:liusq ---date:20260805  for：LHZP-1356 Mô tả API-----------
     /**
-     * 接口描述
+     * Mô tả API
      */
     private String description;
-    //update-end---author:liusq ---date:20260805  for：LHZP-1356 接口描述-----------
+    //update-end---author:liusq ---date:20260805  for：LHZP-1356 Mô tả API-----------
     /**
-     * 请求头json
+     * Request header json
      */
     private String headersJson;
     /**
-     * 请求参数json
+     * Tham số yêu cầu json
      */
     private String paramsJson;
 
 
     /**
-     * 目前仅支持json
+     * Hiện tại chỉ hỗ trợ json
      */
     private String requestBody;
 
     /**
-     * 原始接口路径
+     * Đường dẫn giao diện gốc
      */
     private String originUrl;
 
     /**
-     * 状态(1：正常  2：废弃 ）
+     * Trạng thái(1：Bình thường  2：Đã loại bỏ ）
      */
     private Integer status;
 
     /**
-     * 删除状态（0，正常，1已删除）
+     * Trạng thái xóa (0 bình thường, 1 đã xóa)
      */
     @TableLogic
     private Integer delFlag;
 
     /**
-     * 创建人
+     * Người tạo
      */
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     private Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
     private String updateBy;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     private Date updateTime;
     /**
-     * 历史已选接口
+     * Giao diện đã chọn trước đây
      */
     @TableField(exist = false)
     private String ifCheckBox = "0";

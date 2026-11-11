@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * 第三方App对接：钉钉实现类
+ * Kết nối App bên thứ ba: lớp triển khai DingTalk
  * @author: jeecg-boot
  */
 @Slf4j
@@ -83,40 +83,40 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     private SysTenantMapper tenantMapper;
 
     /**
-     * 第三方APP类型，当前固定为 dingtalk
+     * Loại APP bên thứ ba, hiện tại cố định là dingtalk
      */
     public final String THIRD_TYPE = "dingtalk";
 
     @Override
     public String getAccessToken() {
-        // 代码逻辑说明: [QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
+        // Giải thích logic mã: [QQYUN-3440]Tạo mới bảng cấu hình WeCom và DingTalk, cách ly theo chế độ tenant------------
         SysThirdAppConfig config = getDingThirdAppConfig();
         if(null != config){
             return getTenantAccessToken(config);
         }
-        log.warn("租户下未配置钉钉");
+        log.warn("Tenant chưa cấu hình DingTalk");
         return null;
     }
 
-    // update：2022-1-21，updateBy：sunjianlei; for 【JTC-704】【钉钉】部门同步成功，实际没成，后台提示ip白名单
+    // update：2022-1-21，updateBy：sunjianlei; for 【JTC-704][DingTalk] Đồng bộ phòng ban báo thành công nhưng thực tế không thành, backend nhắc whitelist IP
     @Override
     public SyncInfoVo syncLocalDepartmentToThirdApp(String ids) {
         SyncInfoVo syncInfo = new SyncInfoVo();
         String accessToken = this.getAccessToken();
         if (accessToken == null) {
-            syncInfo.addFailInfo("accessToken获取失败！");
+            syncInfo.addFailInfo("accessToken Lấy thất bại!");
             return syncInfo;
         }
-        // 获取【钉钉】所有的部门
+        // Lấy tất cả phòng ban của 【DingTalk】
         List<Response<Department>> departments = JdtDepartmentAPI.listAllResponse(accessToken);
-        // 删除钉钉有但本地没有的部门（以本地部门数据为主）（钉钉不能创建同名部门，只能先删除）
+        // Xóa các phòng ban có trên DingTalk nhưng không có ở local (lấy dữ liệu phòng ban local làm chủ) (DingTalk không thể tạo phòng ban trùng tên, chỉ có thể xóa trước)
         List<SysDepart> sysDepartList = sysDepartService.list();
         for1:
         for (Response<Department> departmentRes : departments) {
-            // 判断部门是否查询成功
+            // Xác định phòng ban có truy vấn thành công hay không
             if (!departmentRes.isSuccess()) {
                 syncInfo.addFailInfo(departmentRes.getErrmsg());
-                // 88 是 ip 不在白名单的错误码，如果遇到此错误码，后面的操作都可以不用进行了，因为肯定都是失败的
+                // 88 là mã lỗi IP không nằm trong whitelist; nếu gặp mã lỗi này thì các thao tác phía sau đều không cần thực hiện nữa, vì chắc chắn đều thất bại
                 if (new Integer(88).equals(departmentRes.getErrcode())) {
                     return syncInfo;
                 }
@@ -124,15 +124,15 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             }
             Department department = departmentRes.getResult();
             for (SysDepart depart : sysDepartList) {
-                // id相同，代表已存在，不删除
+                // id Giống nhau nghĩa là đã tồn tại, không xóa
                 String sourceIdentifier = department.getSource_identifier();
                 if (sourceIdentifier != null && sourceIdentifier.equals(depart.getId())) {
                     continue for1;
                 }
             }
-            // 循环到此说明本地没有，删除
+            // Lặp đến đây nghĩa là cục bộ không có, xóa
             int deptId = department.getDept_id();
-            // 钉钉不允许删除带有用户的部门，所以需要判断下，将有用户的部门的用户移动至根部门
+            // DingTalk không cho phép xóa phòng ban có người dùng, nên cần kiểm tra và chuyển người dùng của phòng ban có người dùng về phòng ban gốc
             Response<List<String>> userIdRes = JdtUserAPI.getUserListIdByDeptId(deptId, accessToken);
             if (userIdRes.isSuccess() && userIdRes.getResult().size() > 0) {
                 for (String userId : userIdRes.getResult()) {
@@ -144,19 +144,19 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             }
             JdtDepartmentAPI.delete(deptId, accessToken);
         }
-        // 获取本地所有部门树结构
+        // Lấy cấu trúc cây tất cả phòng ban cục bộ
         List<SysDepartTreeModel> sysDepartsTree = sysDepartService.queryTreeList();
-        // -- 钉钉不能创建新的顶级部门，所以新的顶级部门的parentId就为1
+        // -- DingTalk không thể tạo phòng ban cấp cao nhất mới, nên parentId của phòng ban cấp cao nhất mới sẽ là 1
         Department parent = new Department();
         parent.setDept_id(1);
-        // 递归同步部门
+        // Đồng bộ đệ quy phòng ban
         departments = JdtDepartmentAPI.listAllResponse(accessToken);
         this.syncDepartmentRecursion(sysDepartsTree, departments, parent, accessToken, syncInfo);
         return syncInfo;
     }
 
     /**
-     * 递归同步部门到本地
+     * Đồng bộ đệ quy phòng ban về local
      * @param sysDepartsTree
      * @param departments
      * @param parent
@@ -168,38 +168,38 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             for1:
             for (SysDepartTreeModel depart : sysDepartsTree) {
                 for (Response<Department> departmentRes : departments) {
-                    // 判断部门是否查询成功
+                    // Xác định phòng ban có truy vấn thành công hay không
                     if (!departmentRes.isSuccess()) {
                         syncInfo.addFailInfo(departmentRes.getErrmsg());
                         continue;
                     }
                     Department department = departmentRes.getResult();
-                    // id相同，代表已存在，执行修改操作
+                    // id giống nhau, nghĩa là đã tồn tại, thực hiện thao tác sửa đổi
                     String sourceIdentifier = department.getSource_identifier();
                     if (sourceIdentifier != null && sourceIdentifier.equals(depart.getId())) {
                         this.sysDepartToDtDepartment(depart, department, parent.getDept_id());
                         Response<JSONObject> response = JdtDepartmentAPI.update(department, accessToken);
                         if (response.isSuccess()) {
-                            // 紧接着同步子级
+                            // Ngay sau đó đồng bộ cấp con
                             this.syncDepartmentRecursion(depart.getChildren(), departments, department, accessToken, syncInfo);
                         }
-                        // 收集错误信息
+                        // Thu thập thông tin lỗi
                         this.syncDepartCollectErrInfo(response, depart, syncInfo);
-                        // 跳出外部循环
+                        // Thoát khỏi vòng lặp bên ngoài
                         continue for1;
                     }
                 }
-                // 循环到此说明是新部门，直接调接口创建
+                // Lặp đến đây nghĩa là phòng ban mới, gọi trực tiếp giao diện để tạo
                 Department newDepartment = this.sysDepartToDtDepartment(depart, parent.getDept_id());
                 Response<Integer> response = JdtDepartmentAPI.create(newDepartment, accessToken);
-                // 创建成功，将返回的id绑定到本地
+                // Tạo thành công, liên kết id trả về với dữ liệu cục bộ
                 if (response.getResult() != null) {
                     Department newParent = new Department();
                     newParent.setDept_id(response.getResult());
-                    // 紧接着同步子级
+                    // Ngay sau đó đồng bộ cấp con
                     this.syncDepartmentRecursion(depart.getChildren(), departments, newParent, accessToken, syncInfo);
                 }
-                // 收集错误信息
+                // Thu thập thông tin lỗi
                 this.syncDepartCollectErrInfo(response, depart, syncInfo);
             }
         }
@@ -210,14 +210,14 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 //        SyncInfoVo syncInfo = new SyncInfoVo();
 //        String accessToken = this.getAccessToken();
 //        if (accessToken == null) {
-//            syncInfo.addFailInfo("accessToken获取失败！");
+//            syncInfo.addFailInfo("accessToken Lấy thất bại!");
 //            return syncInfo;
 //        }
-//        // 获取【钉钉】所有的部门
+//        // Lấy tất cả phòng ban của 【DingTalk】
 //        List<Department> departments = JdtDepartmentAPI.listAll(accessToken);
 //        String username = JwtUtil.getUserNameByToken(SpringContextUtils.getHttpServletRequest());
 //        List<JdtDepartmentTreeVo> departmentTreeList = JdtDepartmentTreeVo.listToTree(departments);
-//        // 递归同步部门
+//        // Đồng bộ đệ quy phòng ban
 //        this.syncDepartmentToLocalRecursion(departmentTreeList, null, username, syncInfo, accessToken,false);
 //        return syncInfo;
 //    }
@@ -225,46 +225,46 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     public void syncDepartmentToLocalRecursion(List<JdtDepartmentTreeVo> departmentTreeList, String sysParentId, String username, SyncInfoVo syncInfo, String accessToken,Boolean syncUser,Integer tenantId) {
 
         if (departmentTreeList != null && departmentTreeList.size() != 0) {
-            // 记录已经同步过的用户id，当有多个部门的情况时，只同步一次
+            // Ghi lại id người dùng đã đồng bộ; khi có nhiều phòng ban thì chỉ đồng bộ một lần
             Set<String> syncedUserIdSet = new HashSet<>();
             for (JdtDepartmentTreeVo departmentTree : departmentTreeList) {
                 LambdaQueryWrapper<SysDepart> queryWrapper = new LambdaQueryWrapper<>();
-                // 根据 source_identifier 字段查询
-                // 代码逻辑说明: 【issues/6017】钉钉同步部门时没有最顶层的部门名，同步用户时，用户没有部门信息---
+                // Theo source_identifier Truy vấn theo trường
+                // Giải thích logic mã: 【issues/6017] Khi DingTalk đồng bộ phòng ban thì không có tên phòng ban cấp cao nhất; khi đồng bộ người dùng, người dùng không có thông tin phòng ban---
                 queryWrapper.and(item -> item.eq(SysDepart::getId, departmentTree.getSource_identifier()).or().eq(SysDepart::getDingIdentifier,oConvertUtils.getString(departmentTree.getDept_id())));
                 SysDepart sysDepart = sysDepartService.getOne(queryWrapper);
                 if (sysDepart != null) {
-                    //  执行更新操作
+                    //  Thực thi thao tác cập nhật
                     SysDepart updateSysDepart = this.dtDepartmentToSysDepart(departmentTree, sysDepart);
                     if (sysParentId != null) {
                         updateSysDepart.setParentId(sysParentId);
-                        //更新父级部门不是叶子结点
+                        //Cập nhật phòng ban cấp trên không phải là nút lá
                         sysDepartService.updateIzLeaf(sysParentId,CommonConstant.NOT_LEAF);
                     }
                     try {
                         sysDepartService.updateDepartDataById(updateSysDepart, username);
-                        String str = String.format("部门 %s 更新成功！", updateSysDepart.getDepartName());
+                        String str = String.format("Phòng ban %s Cập nhật thành công!", updateSysDepart.getDepartName());
                         syncInfo.addSuccessInfo(str);
                     } catch (Exception e) {
                         this.syncDepartCollectErrInfo(e, departmentTree, syncInfo);
                     }
                     if (departmentTree.hasChildren()) {
-                        // 紧接着同步子级
+                        // Ngay sau đó đồng bộ cấp con
                         this.syncDepartmentToLocalRecursion(departmentTree.getChildren(), updateSysDepart.getId(), username, syncInfo, accessToken,syncUser,tenantId);
                     }
-                    //判断是否需要同步用户
+                    //Xác định có cần đồng bộ người dùng hay không
                     if(syncUser){
                         this.addDepartUser(updateSysDepart.getId(),departmentTree.getDept_id(), accessToken, syncInfo, syncedUserIdSet,tenantId);
                     }
                 } else {
-                    //  执行新增操作
+                    //  Thực thi thao tác thêm mới
                     SysDepart newSysDepart = this.dtDepartmentToSysDepart(departmentTree, null);
                     if (sysParentId != null) {
                         newSysDepart.setParentId(sysParentId);
-                        // 2 = 组织机构
+                        // 2 = Tổ chức
                         newSysDepart.setOrgCategory("2");
                     } else {
-                        // 1 = 公司
+                        // 1 = Công ty
                         newSysDepart.setOrgCategory("1");
                     }
                     try {
@@ -273,27 +273,27 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
                         }
                         newSysDepart.setTenantId(tenantId);
                         sysDepartService.saveDepartData(newSysDepart, username);
-                        // 更新钉钉 source_identifier
+                        // Cập nhật DingTalk source_identifier
                         Department updateDtDepart = new Department();
                         updateDtDepart.setDept_id(departmentTree.getDept_id());
                         updateDtDepart.setSource_identifier(newSysDepart.getId());
-                        //为空说明是最顶级部门，最顶级部门不允许修改操作
+                        //Rỗng nghĩa là phòng ban cấp cao nhất, phòng ban cấp cao nhất không được phép sửa
                         if(oConvertUtils.isNotEmpty(newSysDepart.getParentId())){
                             Response response = JdtDepartmentAPI.update(updateDtDepart, accessToken);
                             if (!response.isSuccess()) {
                                 throw new RuntimeException(response.getErrmsg());
                             }
                         }
-                        String str = String.format("部门 %s 创建成功！", newSysDepart.getDepartName());
+                        String str = String.format("Phòng ban %s Tạo thành công!", newSysDepart.getDepartName());
                         syncInfo.addSuccessInfo(str);
-                        //判断是否需要同步用户
+                        //Xác định có cần đồng bộ người dùng hay không
                         if(syncUser){
                             this.addDepartUser(newSysDepart.getId(),departmentTree.getDept_id(), accessToken, syncInfo, syncedUserIdSet,tenantId);
                         }
                     } catch (Exception e) {
                         this.syncDepartCollectErrInfo(e, departmentTree, syncInfo);
                     }
-                    // 紧接着同步子级
+                    // Ngay sau đó đồng bộ cấp con
                     if (departmentTree.hasChildren()) {
                         this.syncDepartmentToLocalRecursion(departmentTree.getChildren(), newSysDepart.getId(), username, syncInfo, accessToken,syncUser,tenantId);
                     }
@@ -309,21 +309,21 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         } else {
             msg = e.getMessage();
         }
-        String str = String.format("部门 %s(%s) 同步失败！错误信息：%s", department.getName(), department.getDept_id(), msg);
+        String str = String.format("Phòng ban %s(%s) Đồng bộ thất bại! Thông tin lỗi:%s", department.getName(), department.getDept_id(), msg);
         syncInfo.addFailInfo(str);
         return false;
     }
 
     /**
-     * 【同步部门】收集同步过程中的错误信息
+     * Thu thập thông tin lỗi trong quá trình đồng bộ
      */
     private boolean syncDepartCollectErrInfo(Response<?> response, SysDepartTreeModel depart, SyncInfoVo syncInfo) {
         if (!response.isSuccess()) {
-            String str = String.format("部门 %s(%s) 同步失败！错误码：%s——%s", depart.getDepartName(), depart.getOrgCode(), response.getErrcode(), response.getErrmsg());
+            String str = String.format("Phòng ban %s(%s) Đồng bộ thất bại! Mã lỗi：%s——%s", depart.getDepartName(), depart.getOrgCode(), response.getErrcode(), response.getErrmsg());
             syncInfo.addFailInfo(str);
             return false;
         } else {
-            String str = String.format("部门户 %s(%s) 同步成功！", depart.getDepartName(), depart.getOrgCode());
+            String str = String.format("Phòng ban %s(%s) Đồng bộ thành công!", depart.getDepartName(), depart.getOrgCode());
             syncInfo.addSuccessInfo(str);
             return true;
         }
@@ -334,7 +334,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         SyncInfoVo syncInfo = new SyncInfoVo();
         String accessToken = this.getAccessToken();
         if (accessToken == null) {
-            syncInfo.addFailInfo("accessToken获取失败！");
+            syncInfo.addFailInfo("accessToken Lấy thất bại!");
             return syncInfo;
         }
         List<SysUser> sysUsers;
@@ -342,23 +342,23 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             String[] idList = ids.split(",");
             LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.in(SysUser::getId, (Object[]) idList);
-            // 获取本地指定用户
+            // Lấy người dùng cục bộ được chỉ định
             sysUsers = userMapper.selectList(queryWrapper);
         } else {
-            // 获取本地所有用户
+            // Lấy tất cả người dùng cục bộ
             sysUsers = userMapper.selectList(Wrappers.emptyWrapper());
         }
         if (CollectionUtils.isEmpty(sysUsers)) {
             return syncInfo;
         }
-        //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+        //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
         List<String> userIds = sysUsers.stream().map(SysUser::getId).collect(Collectors.toList());
-        // ① 批量预加载 sys_third_account → Map<sysUserId, SysThirdAccount>
+        // ① Tải trước hàng loạt sys_third_account → Map<sysUserId, SysThirdAccount>
         Map<String, SysThirdAccount> thirdAccountMap = sysThirdAccountService
                 .listBySysUserIds(userIds, THIRD_TYPE)
                 .stream()
                 .collect(Collectors.toMap(SysThirdAccount::getSysUserId, a -> a, (a, b) -> a));
-        // ② 批量预加载用户-部门关系 → Map<userId, List<departId>>
+        // ② Tải trước hàng loạt người dùng-Quan hệ phòng ban → Map<userId, List<departId>>
         LambdaQueryWrapper<SysUserDepart> udQw = new LambdaQueryWrapper<>();
         udQw.in(SysUserDepart::getUserId, userIds);
         Map<String, List<String>> userDepartIdsMap = sysUserDepartService.list(udQw)
@@ -367,7 +367,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
                         SysUserDepart::getUserId,
                         Collectors.mapping(SysUserDepart::getDepId, Collectors.toList())
                 ));
-        // ③ 批量预加载所有涉及的部门 → Map<departId, SysDepart>
+        // ③ Tải trước hàng loạt tất cả các phòng ban liên quan → Map<departId, SysDepart>
         Set<String> allDepartIds = userDepartIdsMap.values().stream()
                 .flatMap(Collection::stream).collect(Collectors.toSet());
         Map<String, SysDepart> departMap = Collections.emptyMap();
@@ -376,70 +376,70 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
                     .stream()
                     .collect(Collectors.toMap(SysDepart::getId, d -> d, (a, b) -> a));
         }
-        // ④ 批量预加载职位 → Map<userId, List<SysPositionVO>>
+        // ④ Tải trước hàng loạt vị trí công việc → Map<userId, List<SysPositionVO>>
         Map<String, List<SysPositionVO>> positionMap = sysPositionService
                 .getPositionListByUserIds(userIds)
                 .stream()
                 .collect(Collectors.groupingBy(SysPositionVO::getUserId));
-        //update-end---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+        //update-end---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
 
-        // 查询钉钉所有的部门，用于同步用户和部门的关系
+        // Truy vấn tất cả phòng ban của DingTalk, dùng để đồng bộ quan hệ giữa người dùng và phòng ban
         List<Department> allDepartment = JdtDepartmentAPI.listAll(accessToken);
 
         for (SysUser sysUser : sysUsers) {
-            // 外部模拟登陆临时账号，不同步
+            // Tài khoản tạm đăng nhập mô phỏng bên ngoài, không đồng bộ
             if ("_reserve_user_external".equals(sysUser.getUsername())) {
                 continue;
             }
-            // 钉钉用户信息，不为null代表已同步过
+            // Thông tin người dùng DingTalk, khác null nghĩa là đã đồng bộ
             Response<User> dtUserInfo;
             /*
-             * 判断是否同步过的逻辑：
-             * 1. 查询 sys_third_account（第三方账号表）是否有数据，如果有代表已同步
-             * 2. 本地表里没有，就先用手机号判断，不通过再用username(用户账号)判断。
+             * Logic kiểm tra đã đồng bộ hay chưa:
+             * 1. Truy vấn sys_third_account(Bảng tài khoản bên thứ ba) có dữ liệu hay không, nếu có nghĩa là đã đồng bộ
+             * 2. Trong bảng local không có thì trước tiên phán đoán bằng số điện thoại, không qua thì dùng tiếp username(Tài khoản người dùng)đánh giá.
              */
-            //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+            //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
             SysThirdAccount sysThirdAccount = thirdAccountMap.get(sysUser.getId());
-            //update-end---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+            //update-end---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
             if (sysThirdAccount != null && oConvertUtils.isNotEmpty(sysThirdAccount.getThirdUserId())) {
-                // sys_third_account 表匹配成功，通过第三方userId查询出第三方userInfo
+                // sys_third_account Bảng khớp thành công, truy vấn ra bên thứ ba qua userId bên thứ ba userInfo
                 dtUserInfo = JdtUserAPI.getUserById(sysThirdAccount.getThirdUserId(), accessToken);
             } else {
-                // 手机号匹配
+                // Khớp số điện thoại
                 Response<String> thirdUserId = JdtUserAPI.getUseridByMobile(sysUser.getPhone(), accessToken);
-                // 手机号匹配成功
+                // Khớp số điện thoại thành công
                 if (thirdUserId.isSuccess() && oConvertUtils.isNotEmpty(thirdUserId.getResult())) {
-                    // 通过查询到的userId查询用户详情
+                    // Truy vấn chi tiết người dùng qua userId đã tìm được
                     dtUserInfo = JdtUserAPI.getUserById(thirdUserId.getResult(), accessToken);
                 } else {
-                    // 手机号匹配失败，尝试使用username匹配
+                    // Khớp số điện thoại thất bại, thử khớp bằng username
                     dtUserInfo = JdtUserAPI.getUserById(sysUser.getUsername(), accessToken);
                 }
             }
             String dtUserId;
-            // api 接口是否执行成功
+            // api Giao diện có thực thi thành công không
             boolean apiSuccess;
-            // 已同步就更新，否则就创建
+            // Đã đồng bộ thì cập nhật, nếu không thì tạo mới
             if (dtUserInfo != null && dtUserInfo.isSuccess() && dtUserInfo.getResult() != null) {
                 User dtUser = dtUserInfo.getResult();
                 dtUserId = dtUser.getUserid();
-                //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+                //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
                 User updateQwUser = this.sysUserToDtUser(sysUser, dtUser, allDepartment, userDepartIdsMap, departMap, positionMap);
-                //update-end---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+                //update-end---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
                 Response<JSONObject> updateRes = JdtUserAPI.update(updateQwUser, accessToken);
-                // 收集成功/失败信息
+                // Thu thập thành công/Thông tin thất bại
                 apiSuccess = this.syncUserCollectErrInfo(updateRes, sysUser, syncInfo);
             } else {
-                //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+                //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
                 User newQwUser = this.sysUserToDtUser(sysUser, allDepartment, userDepartIdsMap, departMap, positionMap);
-                //update-end---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+                //update-end---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
                 Response<String> createRes = JdtUserAPI.create(newQwUser, accessToken);
                 dtUserId = createRes.getResult();
-                // 收集成功/失败信息
+                // Thu thập thành công/Thông tin thất bại
                 apiSuccess = this.syncUserCollectErrInfo(createRes, sysUser, syncInfo);
             }
 
-            // api 接口执行成功，并且 sys_third_account 表匹配失败，就向 sys_third_account 里插入一条数据
+            // api Giao diện thực thi thành công, và sys_third_account Bảng khớp thất bại, thì chèn vào sys_third_account chèn một bản ghi vào
             boolean flag = (sysThirdAccount == null || oConvertUtils.isEmpty(sysThirdAccount.getThirdUserId()));
             if (apiSuccess && flag) {
                 if (sysThirdAccount == null) {
@@ -449,7 +449,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
                     sysThirdAccount.setDelFlag(0);
                     sysThirdAccount.setThirdType(THIRD_TYPE);
                 }
-                // 设置第三方app用户ID
+                // Đặt người dùng app bên thứ ba ID
                 sysThirdAccount.setThirdUserId(dtUserId);
                 sysThirdAccountService.saveOrUpdate(sysThirdAccount);
             }
@@ -462,18 +462,18 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 //        SyncInfoVo syncInfo = new SyncInfoVo();
 //        String accessToken = this.getAccessToken();
 //        if (accessToken == null) {
-//            syncInfo.addFailInfo("accessToken获取失败！");
+//            syncInfo.addFailInfo("accessToken Lấy thất bại!");
 //            return syncInfo;
 //        }
 //
-//        // 获取本地用户
+//        // Lấy người dùng cục bộ
 //        List<SysUser> sysUsersList = userMapper.selectList(Wrappers.emptyWrapper());
 //
-//        // 查询钉钉所有的部门，用于同步用户和部门的关系
+//        // Truy vấn tất cả phòng ban của DingTalk, dùng để đồng bộ quan hệ giữa người dùng và phòng ban
 //        List<Department> allDepartment = JdtDepartmentAPI.listAll(accessToken);
-//        // 根据钉钉部门查询所有钉钉用户，用于反向同步到本地
+//        // Truy vấn tất cả người dùng DingTalk theo phòng ban DingTalk, dùng để đồng bộ ngược về local
 //        List<User> ddUserList = this.getDtAllUserByDepartment(allDepartment, accessToken);
-//        // 记录已经同步过的用户id，当有多个部门的情况时，只同步一次
+//        // Ghi lại id người dùng đã đồng bộ; khi có nhiều phòng ban thì chỉ đồng bộ một lần
 //        Set<String> syncedUserIdSet = new HashSet<>();
 //
 //        for (User dtUserInfo : ddUserList) {
@@ -486,28 +486,28 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 //                                                                 ).collect(Collectors.toList());
 //            if (collect != null && collect.size() > 0) {
 //                SysUser sysUserTemp = collect.get(0);
-//                // 循环到此说明用户匹配成功，进行更新操作
+//                // Lặp đến đây nghĩa là khớp người dùng thành công, thực hiện thao tác cập nhật
 //                SysUser updateSysUser = this.dtUserToSysUser(dtUserInfo, sysUserTemp);
 //                try {
 //                    userMapper.updateById(updateSysUser);
-//                    String str = String.format("用户 %s(%s) 更新成功！", updateSysUser.getRealname(), updateSysUser.getUsername());
+//                    String str = String.format("Người dùng %s(%s) Cập nhật thành công!", updateSysUser.getRealname(), updateSysUser.getUsername());
 //                    syncInfo.addSuccessInfo(str);
 //                } catch (Exception e) {
 //                    this.syncUserCollectErrInfo(e, dtUserInfo, syncInfo);
 //                }
-//                //第三方账号关系表
+//                //Bảng quan hệ tài khoản bên thứ ba
 //                this.thirdAccountSaveOrUpdate(sysThirdAccount, updateSysUser.getId(), dtUserInfo.getUserid());
 //            }else{
-//                // 如果没有匹配到用户，则走创建逻辑
+//                // Nếu không khớp được người dùng thì đi theo logic tạo mới
 //                SysUser newSysUser = this.dtUserToSysUser(dtUserInfo);
 //                try {
 //                    userMapper.insert(newSysUser);
-//                    String str = String.format("用户 %s(%s) 创建成功！", newSysUser.getRealname(), newSysUser.getUsername());
+//                    String str = String.format("Người dùng %s(%s) Tạo thành công!", newSysUser.getRealname(), newSysUser.getUsername());
 //                    syncInfo.addSuccessInfo(str);
 //                } catch (Exception e) {
 //                    this.syncUserCollectErrInfo(e, dtUserInfo, syncInfo);
 //                }
-//                //第三方账号关系表
+//                //Bảng quan hệ tài khoản bên thứ ba
 //                this.thirdAccountSaveOrUpdate(null, newSysUser.getId(), dtUserInfo.getUserid());
 //            }
 //        }
@@ -515,7 +515,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 //    }
 
 //    private List<User> getDtAllUserByDepartment(List<Department> allDepartment, String accessToken) {
-//        // 根据钉钉部门查询所有钉钉用户，用于反向同步到本地
+//        // Truy vấn tất cả người dùng DingTalk theo phòng ban DingTalk, dùng để đồng bộ ngược về local
 //        List<User> userList = new ArrayList<>();
 //        for (Department department : allDepartment) {
 //            this.getUserListByDeptIdRecursion(department.getDept_id(), 0, userList, accessToken);
@@ -524,10 +524,10 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 //    }
 
     /**
-     * 递归查询所有用户
+     * Truy vấn đệ quy tất cả người dùng
      */
     private void getUserListByDeptIdRecursion(int deptId, int cursor, List<User> userList, String accessToken) {
-        // 根据钉钉部门查询所有钉钉用户，用于反向同步到本地
+        // Truy vấn tất cả người dùng DingTalk theo phòng ban DingTalk, dùng để đồng bộ ngược về local
         GetUserListBody getUserListBody = new GetUserListBody(deptId, cursor, 100);
         Response<PageResult<User>> response = JdtUserAPI.getUserListByDeptId(getUserListBody, accessToken);
         if (response.isSuccess()) {
@@ -540,11 +540,11 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 保存或修改第三方登录表
+     * Lưu hoặc sửa bảng đăng nhập bên thứ ba
      *
-     * @param sysThirdAccount 第三方账户表对象，为null就新增数据，否则就修改
-     * @param sysUserId       本地系统用户ID
-     * @param user            钉钉用户
+     * @param sysThirdAccount Đối tượng bảng tài khoản bên thứ ba, nếu null thì thêm dữ liệu mới, nếu không thì sửa
+     * @param sysUserId       Người dùng hệ thống cục bộ ID
+     * @param user            Người dùng DingTalk
      */
     private void thirdAccountSaveOrUpdate(SysThirdAccount sysThirdAccount, String sysUserId, User user, Integer tenantId) {
         if (sysThirdAccount == null) {
@@ -564,22 +564,22 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 【同步用户】收集同步过程中的错误信息
+     * Thu thập thông tin lỗi trong quá trình đồng bộ
      */
     private boolean syncUserCollectErrInfo(Response<?> response, SysUser sysUser, SyncInfoVo syncInfo) {
         if (!response.isSuccess()) {
-            String str = String.format("用户 %s(%s) 同步失败！错误码：%s——%s", sysUser.getUsername(), sysUser.getRealname(), response.getErrcode(), response.getErrmsg());
+            String str = String.format("Người dùng %s(%s) Đồng bộ thất bại! Mã lỗi：%s——%s", sysUser.getUsername(), sysUser.getRealname(), response.getErrcode(), response.getErrmsg());
             syncInfo.addFailInfo(str);
             return false;
         } else {
-            String str = String.format("用户 %s(%s) 同步成功！", sysUser.getUsername(), sysUser.getRealname());
+            String str = String.format("Người dùng %s(%s) Đồng bộ thành công!", sysUser.getUsername(), sysUser.getRealname());
             syncInfo.addSuccessInfo(str);
             return true;
         }
     }
 
     /**
-     * 【同步用户】收集同步过程中的错误信息
+     * Thu thập thông tin lỗi trong quá trình đồng bộ
      */
     private boolean syncUserCollectErrInfo(Exception e, User dtUser, SyncInfoVo syncInfo) {
         String msg;
@@ -587,53 +587,53 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             msg = e.getCause().getMessage();
             String emailUniq = "uniq_sys_user_email";
             if(msg.contains(emailUniq)){
-                msg = "邮箱重复，请更换邮箱";
+                msg = "Email bị trùng, vui lòng đổi email khác";
             }
             String workNoUniq="uniq_sys_user_work_no";
             if(msg.contains(workNoUniq)){
-                msg = "工号重复，请更换工号";
+                msg = "Mã nhân viên bị trùng, vui lòng đổi mã nhân viên";
             }
         } else {
             msg = e.getMessage();
         }
-        String str = String.format("用户 %s(%s) 同步失败！错误信息：%s", dtUser.getUserid(), dtUser.getName(), msg);
+        String str = String.format("Người dùng %s(%s) Đồng bộ thất bại! Thông tin lỗi:%s", dtUser.getUserid(), dtUser.getName(), msg);
         syncInfo.addFailInfo(str);
         return false;
     }
 
 
     /**
-     * 【同步用户】将SysUser转为【钉钉】的User对象（创建新用户）
+     * [Đồng bộ người dùng] Chuyển SysUser thành đối tượng User của [DingTalk] (tạo người dùng mới)
      */
     private User sysUserToDtUser(SysUser sysUser, List<Department> allDepartment) {
         User user = new User();
-        // 通过 username 来关联
+        // Liên kết qua username
         user.setUserid(sysUser.getUsername());
         return this.sysUserToDtUser(sysUser, user, allDepartment);
     }
 
     /**
-     * 【同步用户】将SysUser转为【钉钉】的User对象（更新旧用户）
+     * [Đồng bộ người dùng] Chuyển SysUser thành đối tượng User của [DingTalk] (cập nhật người dùng cũ)
      */
     private User sysUserToDtUser(SysUser sysUser, User user, List<Department> allDepartment) {
         user.setName(sysUser.getRealname());
         user.setMobile(sysUser.getPhone());
         user.setTelephone(sysUser.getTelephone());
         user.setJob_number(sysUser.getWorkNo());
-        // 职务翻译
-        //获取用户职位名称
+        // Dịch chức vụ
+        //Lấy tên chức vụ người dùng
         List<SysPosition> positionList = sysPositionService.getPositionList(sysUser.getId());
         if(null != positionList && positionList.size()>0){
             String positionName = positionList.stream().map(SysPosition::getName).collect(Collectors.joining(SymbolConstant.COMMA));
             user.setTitle(positionName);
         }
         user.setEmail(sysUser.getEmail());
-        // 查询并同步用户部门关系
+        // Truy vấn và đồng bộ quan hệ người dùng-phòng ban
         List<SysDepart> departList = this.getUserDepart(sysUser);
         if (departList != null) {
             List<Integer> departmentIdList = new ArrayList<>();
             for (SysDepart sysDepart : departList) {
-                // 企业微信的部门id
+                // Phòng ban WeChat doanh nghiệp id
                 Department department = this.getDepartmentByDepartId(sysDepart.getId(), allDepartment);
                 if (department != null) {
                     departmentIdList.add(department.getDept_id());
@@ -643,20 +643,20 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             user.setDept_order_list(null);
         }
         if (oConvertUtils.isEmpty(user.getDept_id_list())) {
-            // 没有找到匹配部门，同步到根部门下
+            // Không tìm thấy phòng ban khớp, đồng bộ xuống dưới phòng ban gốc
             user.setDept_id_list(1);
             user.setDept_order_list(null);
         }
-        // --- 钉钉没有逻辑删除功能
+        // --- DingTalk không có chức năng xóa logic
         // sysUser.getDelFlag()
-        // --- 钉钉没有冻结、启用禁用功能
+        // --- DingTalk không có chức năng đóng băng, bật/tắt
         // sysUser.getStatus()
         return user;
     }
 
-    //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+    //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
     /**
-     * 【同步用户】将SysUser转为【钉钉】的User对象（创建新用户，使用批量预加载Map，消除N+1查询）
+     * [Đồng bộ người dùng] Chuyển SysUser thành đối tượng User của [DingTalk] (tạo người dùng mới, dùng Map preload hàng loạt để loại bỏ N+1 truy vấn)
      */
     private User sysUserToDtUser(SysUser sysUser, List<Department> allDepartment,
                                  Map<String, List<String>> userDepartIdsMap, Map<String, SysDepart> departMap,
@@ -667,7 +667,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 【同步用户】将SysUser转为【钉钉】的User对象（更新旧用户，使用批量预加载Map，消除N+1查询）
+     * [Đồng bộ người dùng] Chuyển SysUser thành đối tượng User của [DingTalk] (cập nhật người dùng cũ, dùng Map preload hàng loạt để loại bỏ N+1 truy vấn)
      */
     private User sysUserToDtUser(SysUser sysUser, User user, List<Department> allDepartment,
                                  Map<String, List<String>> userDepartIdsMap, Map<String, SysDepart> departMap,
@@ -676,14 +676,14 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         user.setMobile(sysUser.getPhone());
         user.setTelephone(sysUser.getTelephone());
         user.setJob_number(sysUser.getWorkNo());
-        // 职务翻译（使用预加载Map替代单次查询）
+        // Dịch chức vụ (sử dụng Map tải trước thay cho truy vấn đơn lẻ)
         List<SysPositionVO> positionList = positionMap.getOrDefault(sysUser.getId(), Collections.emptyList());
         if (!positionList.isEmpty()) {
             String positionName = positionList.stream().map(SysPositionVO::getName).collect(Collectors.joining(SymbolConstant.COMMA));
             user.setTitle(positionName);
         }
         user.setEmail(sysUser.getEmail());
-        // 查询并同步用户部门关系（使用预加载Map替代单次查询）
+        // Truy vấn và đồng bộ quan hệ phòng ban của người dùng (dùng Map tải trước thay cho truy vấn từng lần)
         List<SysDepart> departList = this.getUserDepart(sysUser, userDepartIdsMap, departMap);
         if (departList != null) {
             List<Integer> departmentIdList = new ArrayList<>();
@@ -702,18 +702,18 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         }
         return user;
     }
-    //update-end---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+    //update-end---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
 
 
     /**
-     * 【同步用户】将【钉钉】的User对象转为SysUser（创建新用户）
+     * [Đồng bộ người dùng] Chuyển đối tượng User của [DingTalk] thành SysUser (tạo người dùng mới)
      */
     private SysUser dtUserToSysUser(User dtUser) {
         SysUser sysUser = new SysUser();
         sysUser.setDelFlag(0);
-        // 通过 username 来关联
+        // Liên kết qua username
         sysUser.setUsername(dtUser.getMobile());
-        // 密码默认为为手机号加门牌号，随机加盐
+        // Mật khẩu mặc định là số điện thoại cộng số nhà, thêm muối ngẫu nhiên
         String password = "", salt = oConvertUtils.randomGen(8);
         int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
         if(tenantId>0){
@@ -725,61 +725,61 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         String passwordEncode = PasswordUtil.encrypt(sysUser.getUsername(), password, salt);
         sysUser.setSalt(salt);
         sysUser.setPassword(passwordEncode);
-        // 代码逻辑说明: 钉钉同步到本地的人员没有状态，导致同步之后无法登录 #I3ZC2L
+        // Giải thích logic mã: Nhân sự DingTalk đồng bộ về local không có trạng thái, khiến sau khi đồng bộ không thể đăng nhập #I3ZC2L
         sysUser.setStatus(1);
         sysUser.setLastPwdUpdateTime(new Date());
         return this.dtUserToSysUser(dtUser, sysUser);
     }
 
     /**
-     * 【同步用户】将【钉钉】的User对象转为SysUser（更新旧用户）
+     * [Đồng bộ người dùng] Chuyển đối tượng User của [DingTalk] thành SysUser (cập nhật người dùng cũ)
      */
     private SysUser dtUserToSysUser(User dtUser, SysUser oldSysUser) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(oldSysUser, sysUser);
         sysUser.setTelephone(dtUser.getTelephone());
-        //如果真实姓名为空的情况下，才会改真实姓名
+        //Chỉ khi tên thật rỗng thì mới đổi tên thật
         if(oConvertUtils.isEmpty(oldSysUser.getRealname())){
             sysUser.setRealname(dtUser.getName());
         }
-        // 因为唯一键约束的原因，如果原数据和旧数据相同，就不更新
+        // Do ràng buộc khóa duy nhất, nếu dữ liệu gốc và dữ liệu cũ giống nhau thì không cập nhật
         if (oConvertUtils.isNotEmpty(dtUser.getEmail()) && !dtUser.getEmail().equals(sysUser.getEmail())) {
             sysUser.setEmail(dtUser.getEmail());
         } else {
             sysUser.setEmail(null);
         }
-        // 因为唯一键约束的原因，如果原数据和旧数据相同，就不更新
+        // Do ràng buộc khóa duy nhất, nếu dữ liệu gốc và dữ liệu cũ giống nhau thì không cập nhật
         if (oConvertUtils.isNotEmpty(dtUser.getMobile()) && !dtUser.getMobile().equals(sysUser.getPhone())) {
             sysUser.setPhone(dtUser.getMobile());
         } else {
             sysUser.setPhone(null);
         }
-        // 设置工号，如果工号为空，则使用username
+        // Đặt mã nhân viên, nếu mã nhân viên trống thì sử dụng username
         if (oConvertUtils.isEmpty(dtUser.getJob_number())) {
             sysUser.setWorkNo(dtUser.getUserid());
         } else {
             sysUser.setWorkNo(dtUser.getJob_number());
         }
-        // --- 钉钉没有逻辑删除功能
+        // --- DingTalk không có chức năng xóa logic
         // sysUser.getDelFlag()
-        // --- 钉钉没有冻结、启用禁用功能
+        // --- DingTalk không có chức năng đóng băng, bật/tắt
         // sysUser.getStatus()
         return sysUser;
     }
 
 
     /**
-     * 查询用户和部门的关系
+     * Truy vấn quan hệ giữa người dùng và phòng ban
      */
     private List<SysDepart> getUserDepart(SysUser sysUser) {
-        // 根据用户部门关系表查询出用户的部门
+        // Theo bảng quan hệ người dùng - phòng ban, truy vấn ra phòng ban của người dùng
         LambdaQueryWrapper<SysUserDepart> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysUserDepart::getUserId, sysUser.getId());
         List<SysUserDepart> sysUserDepartList = sysUserDepartService.list(queryWrapper);
         if (sysUserDepartList.size() == 0) {
             return null;
         }
-        // 根据用户部门
+        // Theo phòng ban của người dùng
         LambdaQueryWrapper<SysDepart> departQueryWrapper = new LambdaQueryWrapper<>();
         List<String> departIdList = sysUserDepartList.stream().map(SysUserDepart::getDepId).collect(Collectors.toList());
         departQueryWrapper.in(SysDepart::getId, departIdList);
@@ -787,9 +787,9 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         return departList.size() == 0 ? null : departList;
     }
 
-    //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+    //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
     /**
-     * 查询用户和部门的关系（使用批量预加载Map，消除N+1查询）
+     * Truy vấn quan hệ giữa người dùng và phòng ban (dùng Map tải trước hàng loạt, loại bỏ N+1 truy vấn)
      */
     private List<SysDepart> getUserDepart(SysUser sysUser, Map<String, List<String>> userDepartIdsMap,
                                           Map<String, SysDepart> departMap) {
@@ -803,10 +803,10 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
                 .collect(Collectors.toList());
         return departList.isEmpty() ? null : departList;
     }
-    //update-end---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+    //update-end---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
 
     /**
-     * 根据sysDepartId查询钉钉的部门
+     * Truy vấn phòng ban DingTalk theo sysDepartId
      */
     private Department getDepartmentByDepartId(String departId, List<Department> allDepartment) {
         for (Department department : allDepartment) {
@@ -819,7 +819,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 
 
     /**
-     * 【同步部门】将SysDepartTreeModel转为【钉钉】的Department对象（创建新部门）
+     * [Đồng bộ phòng ban] Chuyển SysDepartTreeModel thành đối tượng Department của [DingTalk] (tạo phòng ban mới)
      */
     private Department sysDepartToDtDepartment(SysDepartTreeModel departTree, Integer parentId) {
         Department department = new Department();
@@ -828,7 +828,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 【同步部门】将SysDepartTreeModel转为【钉钉】的Department对象
+     * [Đồng bộ phòng ban] Chuyển SysDepartTreeModel thành đối tượng Department của [DingTalk]
      */
     private Department sysDepartToDtDepartment(SysDepartTreeModel departTree, Department department, Integer parentId) {
         department.setName(departTree.getDepartName());
@@ -839,7 +839,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 
 
     /**
-     * 【同步部门】将【钉钉】的Department对象转为SysDepartTreeModel
+     * [Đồng bộ phòng ban] Chuyển đối tượng Department của [DingTalk] thành SysDepartTreeModel
      */
     private SysDepart dtDepartmentToSysDepart(Department department, SysDepart departTree) {
         SysDepart sysDepart = new SysDepart();
@@ -854,14 +854,14 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 
     @Override
     public int removeThirdAppUser(List<String> userIdList) {
-        // 判断启用状态
+        // Đánh giá trạng thái bật
         SysThirdAppConfig appConfig = getDingThirdAppConfig();
         if (null == appConfig) {
             return -1;
         }
         int count = 0;
         if (userIdList != null && userIdList.size() > 0) {
-            // 代码逻辑说明: [QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
+            // Giải thích logic mã: [QQYUN-3440]Tạo mới bảng cấu hình WeCom và DingTalk, cách ly theo chế độ tenant------------
             String accessToken = this.getTenantAccessToken(appConfig);
             if (accessToken == null) {
                 return count;
@@ -869,13 +869,13 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             LambdaQueryWrapper<SysThirdAccount> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(SysThirdAccount::getThirdType, THIRD_TYPE);
             queryWrapper.in(SysThirdAccount::getSysUserId, userIdList);
-            // 根据userId，获取第三方用户的id
+            // Theo userId, lấy id của người dùng bên thứ ba id
             List<SysThirdAccount> thirdAccountList = sysThirdAccountService.list(queryWrapper);
             List<String> thirdUserIdList = thirdAccountList.stream().map(SysThirdAccount::getThirdUserId).collect(Collectors.toList());
 
             for (String thirdUserId : thirdUserIdList) {
                 if (oConvertUtils.isNotEmpty(thirdUserId)) {
-                    // 没有批量删除的接口
+                    // Không có giao diện xóa hàng loạt
                     Response<JSONObject> response = JdtUserAPI.delete(thirdUserId, accessToken);
                     if (response.getErrcode() == 0) {
                         count++;
@@ -893,7 +893,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 发送消息
+     * Gửi tin nhắn
      *
      * @param message
      * @param verifyConfig
@@ -914,7 +914,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 发送Markdown消息
+     * Gửi tin nhắn Markdown
      * @param message
      * @param verifyConfig
      * @return
@@ -928,7 +928,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         if (accessToken == null) {
             return null;
         }
-        // 封装钉钉消息
+        // Đóng gói tin nhắn DingTalk
         String title = message.getTitle();
         String content = message.getContent();
         String agentId = config.getAgentId();
@@ -937,7 +937,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             mdMessage.setTo_all_user(true);
         } else {
             String[] toUsers = message.getToUser().split(",");
-            // 通过第三方账号表查询出第三方userId
+            // Truy vấn ra bên thứ ba qua bảng tài khoản bên thứ ba userId
             int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), CommonConstant.TENANT_ID_DEFAULT_VALUE);
             List<SysThirdAccount> thirdAccountList = sysThirdAccountService.listThirdUserIdByUsername(toUsers, THIRD_TYPE,tenantId);
             List<String> dtUserIds = thirdAccountList.stream().map(SysThirdAccount::getThirdUserId).collect(Collectors.toList());
@@ -955,7 +955,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         if (accessToken == null) {
             return null;
         }
-        // 封装钉钉消息
+        // Đóng gói tin nhắn DingTalk
         String content = message.getContent();
         String agentId = config.getAgentId();
         Message<TextMessage> textMessage = new Message<>(agentId, new TextMessage(content));
@@ -963,7 +963,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             textMessage.setTo_all_user(true);
         } else {
             String[] toUsers = message.getToUser().split(",");
-            // 通过第三方账号表查询出第三方userId
+            // Truy vấn ra bên thứ ba qua bảng tài khoản bên thứ ba userId
             int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), CommonConstant.TENANT_ID_DEFAULT_VALUE);
             List<SysThirdAccount> thirdAccountList = sysThirdAccountService.listThirdUserIdByUsername(toUsers, THIRD_TYPE, tenantId);
             List<String> dtUserIds = thirdAccountList.stream().map(SysThirdAccount::getThirdUserId).collect(Collectors.toList());
@@ -981,13 +981,13 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 撤回消息
+     * Thu hồi tin nhắn
      *
      * @param msgTaskId
      * @return
      */
     public Response<JSONObject> recallMessageResponse(String msgTaskId) {
-        // 代码逻辑说明: [QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
+        // Giải thích logic mã: [QQYUN-3440]Tạo mới bảng cấu hình WeCom và DingTalk, cách ly theo chế độ tenant------------
         SysThirdAppConfig config = this.getDingThirdAppConfig();
         String accessToken = this.getTenantAccessToken(config);
         if (accessToken == null) {
@@ -998,15 +998,15 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 发送卡片消息（SysAnnouncement定制）
+     * Gửi tin nhắn thẻ (tùy chỉnh theo SysAnnouncement)
      *
      * @param announcement
-     * @param ddMobileUrl 钉钉打开网页地址
-     * @param verifyConfig 是否验证配置（未启用的APP会拒绝发送）
+     * @param ddMobileUrl Địa chỉ trang web mở bằng DingTalk
+     * @param verifyConfig Có kiểm tra cấu hình hay không (APP chưa bật sẽ từ chối gửi)
      * @return
      */
     public Response<String> sendActionCardMessage(SysAnnouncement announcement, String ddMobileUrl, boolean verifyConfig) {
-        // 代码逻辑说明: [QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
+        // Giải thích logic mã: [QQYUN-3440]Tạo mới bảng cấu hình WeCom và DingTalk, cách ly theo chế độ tenant------------
         SysThirdAppConfig config = this.getDingThirdAppConfig();
         if (verifyConfig && null == config) {
             return null;
@@ -1019,35 +1019,35 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         String emptySuffix = null;
         if (oConvertUtils.isNotEmpty(announcement.getMsgAbstract())) {
             String msgAbstract = announcement.getMsgAbstract().trim();
-            log.info("获取钉钉通知参数，msgAbstract: {}", msgAbstract);
+            log.info("Lấy tham số thông báo DingTalk,msgAbstract: {}", msgAbstract);
             if (msgAbstract.startsWith("{") && msgAbstract.endsWith("}")) {
-                //如果摘要存的是业务扩展参数json，则取公告内容
+                //Nếu tóm tắt lưu tham số mở rộng nghiệp vụ dạng JSON thì lấy nội dung thông báo
                 emptySuffix = announcement.getMsgContent();
             } else {
-                //如果摘要不为空且是文本格式，则使用摘要
+                //Nếu tóm tắt không rỗng và là định dạng văn bản thì sử dụng tóm tắt
                 emptySuffix = msgAbstract;
             }
         } else {
-            emptySuffix = "空";
+            emptySuffix = "Trống";
         }
         
         String markdown = "### " + announcement.getTitile() + "\n" + emptySuffix;
-        log.info("钉钉推送参数, markdown: {}", markdown);
+        log.info("Tham số đẩy DingTalk, markdown: {}", markdown);
         ActionCardMessage actionCard = new ActionCardMessage(markdown);
         actionCard.setTitle(announcement.getTitile());
-        actionCard.setSingle_title("详情");
+        actionCard.setSingle_title("Chi tiết");
         String baseUrl = null;
-        //优先通过请求获取basepath，获取不到读取 jeecg.domainUrl.pc
+        //Ưu tiên lấy basepath qua yêu cầu, nếu không lấy được thì đọc jeecg.domainUrl.pc
         try {
             baseUrl = RestUtil.getBaseUrl();
         } catch (Exception e) {
-            //非Web请求上下文（如定时任务线程）无法从request获取baseUrl，降级使用 jeecg.domainUrl.pc 配置
-            log.debug("当前线程无请求上下文，获取baseUrl失败，降级使用 jeecg.domainUrl.pc 配置: {}", e.getMessage());
+            //Bối cảnh yêu cầu không phải Web (ví dụ luồng tác vụ định kỳ) không thể lấy baseUrl từ request, dùng phương án dự phòng jeecg.domainUrl.pc Cấu hình
+            log.debug("Luồng hiện tại không có ngữ cảnh yêu cầu, lấy baseUrl thất bại, hạ cấp sử dụng jeecg.domainUrl.pc Cấu hình: {}", e.getMessage());
             baseUrl =  jeecgBaseConfig.getDomainUrl().getPc();
             //e.printStackTrace();
         }
 
-        log.info("获取钉钉打开网页地址，参数 ddMobileUrl: {}", ddMobileUrl);
+        log.info("Lấy địa chỉ trang web mở bằng DingTalk, tham số ddMobileUrl: {}", ddMobileUrl);
         String ddSingleUrl = null;
         if (oConvertUtils.isNotEmpty(ddMobileUrl)) {
             ddSingleUrl = ddMobileUrl;
@@ -1055,14 +1055,14 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             ddSingleUrl = baseUrl + "/sys/annountCement/show/" + announcement.getId();
         }
         actionCard.setSingle_url(ddSingleUrl);
-        log.info("获取钉钉打开网页地址，最终地址 ddSingleUrl: {}", ddSingleUrl);
+        log.info("Lấy địa chỉ trang web DingTalk mở, địa chỉ cuối cùng ddSingleUrl: {}", ddSingleUrl);
         
         Message<ActionCardMessage> actionCardMessage = new Message<>(agentId, actionCard);
         if (CommonConstant.MSG_TYPE_ALL.equals(announcement.getMsgType())) {
             actionCardMessage.setTo_all_user(true);
             return JdtMessageAPI.sendActionCardMessage(actionCardMessage, accessToken);
         } else {
-            // 将userId转为username
+            // Chuyển userId thành username
             String[] userIds = null;
             String userId = announcement.getUserIds();
             if(oConvertUtils.isNotEmpty(userId)){
@@ -1080,7 +1080,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
                 List<SysUser> userList = userMapper.selectList(queryWrapper);
                 String[] usernameList = userList.stream().map(SysUser::getUsername).toArray(String[] :: new);
 
-                // 通过第三方账号表查询出第三方userId
+                // Truy vấn ra bên thứ ba qua bảng tài khoản bên thứ ba userId
                 int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), CommonConstant.TENANT_ID_DEFAULT_VALUE);
                 List<SysThirdAccount> thirdAccountList = sysThirdAccountService.listThirdUserIdByUsername(usernameList, THIRD_TYPE, tenantId);
                 List<String> dtUserIds = thirdAccountList.stream().map(SysThirdAccount::getThirdUserId).collect(Collectors.toList());
@@ -1092,53 +1092,53 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * OAuth2登录，成功返回登录的SysUser，失败返回null
+     * OAuth2 Đăng nhập, thành công trả về SysUser đã đăng nhập, thất bại trả về null
      */
     public SysUser oauth2Login(String authCode,Integer tenantId) {
         this.tenantIzExist(tenantId);
-        // 代码逻辑说明: [QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
+        // Giải thích logic mã: [QQYUN-3440]Tạo mới bảng cấu hình WeCom và DingTalk, cách ly theo chế độ tenant------------
         SysThirdAppConfig dtConfig = configMapper.getThirdConfigByThirdType(tenantId, MessageTypeEnum.DD.getType());
-        // 1. 根据免登授权码获取用户 AccessToken
+        // 1. Lấy người dùng theo mã ủy quyền đăng nhập không cần mật khẩu AccessToken
         String userAccessToken = JdtOauth2API.getUserAccessToken(dtConfig.getClientId(), dtConfig.getClientSecret(), authCode);
         if (userAccessToken == null) {
             log.error("oauth2Login userAccessToken is null");
-            throw new JeecgBootException("请查看应用key和应用秘钥是否正确，组织ID是否匹配");
+            throw new JeecgBootException("Vui lòng kiểm tra xem app key và khóa bí mật ứng dụng có đúng không, ID tổ chức có khớp không");
         }
-        // 2. 根据用户 AccessToken 获取当前用户的基本信息（不包括userId）
+        // 2. Lấy thông tin cơ bản của người dùng hiện tại theo AccessToken của người dùng (không bao gồm userId)
         ContactUser contactUser = JdtOauth2API.getContactUsers("me", userAccessToken);
         if (contactUser == null) {
             log.error("oauth2Login contactUser is null");
-            throw new JeecgBootException("获取钉钉用户信息失败");
+            throw new JeecgBootException("Lấy thông tin người dùng DingTalk thất bại");
         }
         String unionId = contactUser.getUnionId();
-        // 3. 根据获取到的 unionId 换取用户 userId
+        // 3. Theo unionId đã lấy được, đổi lấy người dùng userId
         String accessToken = this.getTenantAccessToken(dtConfig);
         if (accessToken == null) {
             log.error("oauth2Login accessToken is null");
-            throw new JeecgBootException("请查看应用key和应用秘钥是否正确，组织ID是否匹配");
+            throw new JeecgBootException("Vui lòng kiểm tra xem app key và khóa bí mật ứng dụng có đúng không, ID tổ chức có khớp không");
         }
         Response<String> getUserIdRes = JdtUserAPI.getUseridByUnionid(unionId, accessToken);
         if (!getUserIdRes.isSuccess()) {
             log.error("oauth2Login getUseridByUnionid failed: " + JSON.toJSONString(getUserIdRes));
-            throw new JeecgBootException("获取钉钉用户信息失败");
+            throw new JeecgBootException("Lấy thông tin người dùng DingTalk thất bại");
         }
         String appUserId = getUserIdRes.getResult();
         log.info("appUserId: " + appUserId);
         if (appUserId != null) {
-            // 判断第三方用户表有没有这个人
+            // Kiểm tra bảng người dùng bên thứ ba có người này không
             LambdaQueryWrapper<SysThirdAccount> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(SysThirdAccount::getThirdType, THIRD_TYPE);
             queryWrapper.eq(SysThirdAccount::getTenantId, tenantId);
-            // 代码逻辑说明: auth登录需要联查一下---
+            // Giải thích logic mã: auth Đăng nhập cần kiểm tra liên kết---
             queryWrapper.and((wrapper)->wrapper.eq(SysThirdAccount::getThirdUserUuid,appUserId).or().eq(SysThirdAccount::getThirdUserId,appUserId));
             SysThirdAccount thirdAccount = sysThirdAccountService.getOne(queryWrapper);
             if (thirdAccount != null) {
                 return this.getSysUserByThird(thirdAccount, null, appUserId, accessToken,tenantId);
             } else {
-                // 直接创建新账号
+                // Tạo trực tiếp tài khoản mới
                 User appUser = JdtUserAPI.getUserById(appUserId, accessToken).getResult();
-                //代码逻辑说明: [QQYUN-4883]钉钉auth登录同一个租户下有同一个用户id------------
-                //应该存uuid
+                //Giải thích logic mã: [QQYUN-4883]Đăng nhập auth DingTalk có cùng một người dùng trong cùng một tenant id------------
+                //Nên lưu uuid
                 ThirdLoginModel tlm = new ThirdLoginModel(THIRD_TYPE, appUser.getUnionid(), appUser.getName(), appUser.getAvatar());
                 thirdAccount = sysThirdAccountService.saveThirdUser(tlm,tenantId);
                 return this.getSysUserByThird(thirdAccount, appUser, null, null,tenantId);
@@ -1148,7 +1148,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 根据第三方账号获取本地账号，如果不存在就创建
+     * Lấy tài khoản local theo tài khoản bên thứ ba, nếu không tồn tại thì tạo mới
      *
      * @param thirdAccount
      * @param appUser
@@ -1162,33 +1162,33 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         if (oConvertUtils.isNotEmpty(sysUserId)) {
             return userMapper.selectById(sysUserId);
         } else {
-            // 如果没有 sysUserId ，说明没有绑定账号，获取到手机号之后进行绑定
+            // Nếu không có sysUserId thì nghĩa là chưa gắn tài khoản; sau khi lấy được số điện thoại thì tiến hành gắn kết
             if (appUser == null) {
                 appUser = JdtUserAPI.getUserById(appUserId, accessToken).getResult();
             }
-            // 判断系统里是否有这个手机号的用户
+            // Phán đoán trong hệ thống có người dùng mang số điện thoại này hay không
             SysUser sysUser = userMapper.getUserByPhone(appUser.getMobile());
             if (sysUser != null) {
                 thirdAccount.setAvatar(appUser.getAvatar());
                 thirdAccount.setRealname(appUser.getName());
                 thirdAccount.setThirdUserId(appUser.getUserid());
-                // 代码逻辑说明: [QQYUN-4883]钉钉auth登录同一个租户下有同一个用户id------------
+                // Giải thích logic mã: [QQYUN-4883]Đăng nhập auth DingTalk có cùng một người dùng trong cùng một tenant id------------
                 thirdAccount.setThirdUserUuid(appUser.getUnionid());
                 thirdAccount.setSysUserId(sysUser.getId());
                 sysThirdAccountService.updateById(thirdAccount);
                 return sysUser;
             } else {
-                // 没有就走创建逻辑
+                // Nếu không có thì đi theo logic tạo mới
                 return sysThirdAccountService.createUser(appUser.getMobile(), appUser.getUnionid(),tenantId);
             }
 
         }
     }
 
-    //========================begin 应用低代码钉钉同步用户部门专用 ====================
+    //========================begin Chuyên dùng cho ứng dụng low-code đồng bộ phòng ban người dùng DingTalk ====================
 
     /**
-     * 根据类型和租户id获取钉钉配置
+     * Lấy cấu hình DingTalk theo loại và tenant id
      * @return
      */
     private SysThirdAppConfig getDingThirdAppConfig(){
@@ -1198,7 +1198,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 获取钉钉accessToken
+     * Lấy DingTalk accessToken
      * @param config
      * @return
      */
@@ -1210,21 +1210,21 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         if (accessToken != null) {
             return accessToken.getAccessToken();
         }
-        log.warn("获取AccessToken失败");
+        log.warn("Lấy AccessToken thất bại");
         return null;
     }
 
     /**
-     * 添加或保存用户租户
+     * Thêm hoặc lưu Tenant người dùng
      * @param userId
-     * @param isUpdate 是否是新增
+     * @param isUpdate Có phải là mới thêm không
      */
     private void createUserTenant(String userId,Boolean isUpdate){
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
             int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
-            //判断当前用户是否已在该租户下面
+            //Kiểm tra người dùng hiện tại đã ở dưới tenant đó chưa
             Integer count = userTenantMapper.userTenantIzExist(userId, tenantId);
-            //count 为0 新增租户用户,否则不用新增
+            //count Bằng 0 thì thêm mới người dùng Tenant,nếu không thì không cần thêm mới
             if(count == 0){
                 SysUserTenant userTenant = new SysUserTenant();
                 userTenant.setTenantId(tenantId);
@@ -1236,35 +1236,35 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 同步用户和部门
+     * Đồng bộ người dùng và phòng ban
      * @return
      */
     public SyncInfoVo syncThirdAppDepartmentUserToLocal() {
         SyncInfoVo syncInfo = new SyncInfoVo();
         String accessToken = this.getAccessToken();
         if (accessToken == null) {
-            syncInfo.addFailInfo("accessToken获取失败！");
+            syncInfo.addFailInfo("accessToken Lấy thất bại!");
             return syncInfo;
         }
-        // 获取【钉钉】所有的部门
+        // Lấy tất cả phòng ban của 【DingTalk】
         List<Department> departments = JdtDepartmentAPI.listAll(accessToken);
-        // 代码逻辑说明: 【TV360X-1316】钉钉同步提示消息不正确---
+        // Giải thích logic mã: 【TV360X-1316】Tin nhắn nhắc đồng bộ DingTalk không chính xác---
         if(departments.isEmpty()){
-            throw new JeecgBootBizTipException("请查看配置参数和白名单是否配置！");
+            throw new JeecgBootBizTipException("Vui lòng kiểm tra xem tham số cấu hình và danh sách trắng đã được cấu hình chưa!");
         }
         String username = JwtUtil.getUserNameByToken(SpringContextUtils.getHttpServletRequest());
         List<JdtDepartmentTreeVo> departmentTreeList = JdtDepartmentTreeVo.listToTree(departments);
         int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
-        // 递归同步部门
+        // Đồng bộ đệ quy phòng ban
         this.syncDepartmentToLocalRecursion(departmentTreeList, null, username, syncInfo, accessToken,true,tenantId);
         return syncInfo;
     }
 
 
     /**
-     * 添加用户及用户部门关系
-     * @param departId 部门id
-     * @param dingDepartId 钉钉部门id
+     * Thêm người dùng và quan hệ phòng ban của người dùng
+     * @param departId Phòng ban id
+     * @param dingDepartId Phòng ban DingTalk id
      * @param accessToken
      * @param syncInfo
      * @param syncedUserIdSet
@@ -1274,7 +1274,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         getUserListByDeptIdRecursion(dingDepartId, 0, userList, accessToken);
         for (User user : userList) {
             if (syncedUserIdSet.contains(user.getUserid())) {
-                //需要同步用户部门
+                //Cần đồng bộ phòng ban người dùng
                 this.syncAddOrUpdateUserDepart(user.getUserid(),departId);
                 continue;
             }
@@ -1282,81 +1282,81 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             SysUser userByPhone = userMapper.getUserByPhone(user.getMobile());
             SysThirdAccount sysThirdAccount = sysThirdAccountService.getOneByUuidAndThirdType(user.getUnionid(), THIRD_TYPE,tenantId,user.getUserid());
             if (null != userByPhone) {
-                // 循环到此说明用户匹配成功，进行更新操作
+                // Lặp đến đây nghĩa là khớp người dùng thành công, thực hiện thao tác cập nhật
                 SysUser updateSysUser = this.dtUserToSysUser(user, userByPhone);
                 try {
                     userMapper.updateById(updateSysUser);
-                    String str = String.format("用户 %s(%s) 更新成功！", updateSysUser.getRealname(), updateSysUser.getUsername());
-                    // 代码逻辑说明: 【TV360X-1317】钉钉同步 同步成功之后 重复提示---
+                    String str = String.format("Người dùng %s(%s) Cập nhật thành công!", updateSysUser.getRealname(), updateSysUser.getUsername());
+                    // Giải thích logic mã: 【TV360X-1317】Đồng bộ DingTalk, sau khi đồng bộ thành công lại nhắc lặp lại---
                     if(!syncInfo.getSuccessInfo().contains(str)){
                         syncInfo.addSuccessInfo(str);
                     }
                 } catch (Exception e) {
                     this.syncUserCollectErrInfo(e, user, syncInfo);
                 }
-                //第三方账号关系表
+                //Bảng quan hệ tài khoản bên thứ ba
                 this.thirdAccountSaveOrUpdate(sysThirdAccount, updateSysUser.getId(), user, tenantId);
-                //创建当前租户
+                //Tạo tenant hiện tại
                 this.createUserTenant(updateSysUser.getId(),true);
-                //需要同步用户部门
+                //Cần đồng bộ phòng ban người dùng
                 this.syncAddOrUpdateUserDepart(updateSysUser.getId(),departId);
             } else {
-                // 如果没有匹配到用户，则走创建逻辑
+                // Nếu không khớp được người dùng thì đi theo logic tạo mới
                 SysUser newSysUser = this.dtUserToSysUser(user);
                 try {
                     userMapper.insert(newSysUser);
-                    String str = String.format("用户 %s(%s) 创建成功！", newSysUser.getRealname(), newSysUser.getUsername());
+                    String str = String.format("Người dùng %s(%s) Tạo thành công!", newSysUser.getRealname(), newSysUser.getUsername());
                     syncInfo.addSuccessInfo(str);
                 } catch (Exception e) {
                     this.syncUserCollectErrInfo(e, user, syncInfo);
                 }
-                //第三方账号关系表
+                //Bảng quan hệ tài khoản bên thứ ba
                 this.thirdAccountSaveOrUpdate(sysThirdAccount, newSysUser.getId(), user,tenantId);
-                //创建当前租户
+                //Tạo tenant hiện tại
                 this.createUserTenant(newSysUser.getId(),false);
-                //需要同步用户部门
+                //Cần đồng bộ phòng ban người dùng
                 this.syncAddOrUpdateUserDepart(newSysUser.getId(),departId);
             }
         }
     }
 
     /**
-     * 通过用户id和部门id新增用户部门关系表
+     * Thêm bảng quan hệ người dùng - phòng ban theo id người dùng và id phòng ban
      * @param userId
      * @param departId
      */
     private void syncAddOrUpdateUserDepart(String userId, String departId) {
-        //查询用户是否在部门里面
+        //Truy vấn người dùng có ở trong phòng ban hay không
         LambdaQueryWrapper<SysUserDepart> query = new LambdaQueryWrapper<>();
         query.eq(SysUserDepart::getDepId,departId);
         query.eq(SysUserDepart::getUserId,userId);
         long count = sysUserDepartService.count(query);
         if(count == 0){
-            //不存在，则新增部门用户关系
+            //Không tồn tại thì thêm mới quan hệ người dùng phòng ban
             SysUserDepart sysUserDepart = new SysUserDepart(null,userId,departId);
             sysUserDepartService.save(sysUserDepart);
         }
     }
 
-    //========================end 应用低代码钉钉同步用户部门专用 ====================
+    //========================end Chuyên dùng cho ứng dụng low-code đồng bộ phòng ban người dùng DingTalk ====================
 
     /**
-     * 验证租户是否存在
+     * Xác minh tenant có tồn tại không
      * @param tenantId
      */
     public void tenantIzExist(Integer tenantId){
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
             Long count = tenantMapper.tenantIzExist(tenantId);
             if(ObjectUtil.isEmpty(count) || 0 == count){
-                throw new JeecgBootException("租户ID:" + tenantId + "无效，平台中不存在！");
+                throw new JeecgBootException("Tenant ID:" + tenantId + "không hợp lệ, không tồn tại trong hệ thống!");
             }
         }
     }
 
-    //=================================== begin 新版钉钉登录 ============================================
+    //=================================== begin Đăng nhập DingTalk phiên bản mới ============================================
     /**
-     * 钉钉登录获取用户信息
-     * 【QQYUN-9421】钉钉登录后打开了敲敲云，换其他账号登录后，再打开敲敲云显示的是原来账号的应用
+     * Đăng nhập DingTalk để lấy thông tin người dùng
+     * 【QQYUN-9421]Sau khi đăng nhập DingTalk rồi mở Qiaoqiao Cloud, đổi tài khoản khác đăng nhập rồi mở lại Qiaoqiao Cloud vẫn hiển thị ứng dụng của tài khoản cũ
      * @param authCode
      * @param tenantId
      * @return
@@ -1364,12 +1364,12 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
     public SysUser oauthDingDingLogin(String authCode, Integer tenantId) {
         Long count = tenantMapper.tenantIzExist(tenantId);
         if(ObjectUtil.isEmpty(count) || 0 == count){
-            throw new JeecgBootException("租户不存在！");
+            throw new JeecgBootException("Tenant không tồn tại!");
         }
         SysThirdAppConfig config = configMapper.getThirdConfigByThirdType(tenantId, MessageTypeEnum.DD.getType());
         String accessToken = this.getTenantAccessToken(config);
         if(StringUtils.isEmpty(accessToken)){
-            throw new JeecgBootBizTipException("accessToken获取失败");
+            throw new JeecgBootBizTipException("accessToken Lấy thất bại");
         }
         String getUserInfoUrl = "https://oapi.dingtalk.com/topapi/v2/user/getuserinfo?access_token=" + accessToken;
         Map<String,String> params = new HashMap<>();
@@ -1377,7 +1377,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         Response<JSONObject> userInfoResponse = HttpUtil.post(getUserInfoUrl, JSON.toJSONString(params));
         if (userInfoResponse.isSuccess()) {
             String userId = userInfoResponse.getResult().getString("userid");
-            // 判断第三方用户表有没有这个人
+            // Kiểm tra bảng người dùng bên thứ ba có người này không
             LambdaQueryWrapper<SysThirdAccount> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(SysThirdAccount::getThirdType, THIRD_TYPE);
             queryWrapper.eq(SysThirdAccount::getTenantId, tenantId);
@@ -1386,15 +1386,15 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             if (thirdAccount != null) {
                 return this.getSysUserByThird(thirdAccount, null, userId, accessToken, tenantId);
             }else{
-                throw new JeecgBootException("该用户没有同步，请先同步！");
+                throw new JeecgBootException("Người dùng này chưa được đồng bộ, vui lòng đồng bộ trước!");
             }
         }
         return null;
     }
 
     /**
-     * 根据租户id获取企业id和应用id
-     * 【QQYUN-9421】钉钉登录后打开了敲敲云，换其他账号登录后，再打开敲敲云显示的是原来账号的应用
+     * Lấy id doanh nghiệp và ứng dụng theo tenant id id
+     * 【QQYUN-9421]Sau khi đăng nhập DingTalk rồi mở Qiaoqiao Cloud, đổi tài khoản khác đăng nhập rồi mở lại Qiaoqiao Cloud vẫn hiển thị ứng dụng của tài khoản cũ
      * @param tenantId
      */
     public SysThirdAppConfig getCorpIdClientId(Integer tenantId) {
@@ -1404,5 +1404,5 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         queryWrapper.select(SysThirdAppConfig::getCorpId,SysThirdAppConfig::getClientId);
         return configMapper.selectOne(queryWrapper);
     }
-    //=================================== end 新版钉钉登录 ============================================
+    //=================================== end Đăng nhập DingTalk phiên bản mới ============================================
 }

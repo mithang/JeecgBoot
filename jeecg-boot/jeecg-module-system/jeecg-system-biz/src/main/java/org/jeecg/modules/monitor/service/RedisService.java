@@ -9,13 +9,13 @@ import org.jeecg.modules.monitor.domain.RedisInfo;
 import org.jeecg.modules.monitor.exception.RedisConnectException;
 
 /**
- * @Description: redis信息service接口
+ * @Description: redis Giao diện service thông tin
  * @author: jeecg-boot
  */
 public interface RedisService {
 
 	/**
-	 * 获取 redis 的详细信息
+	 * Lấy thông tin chi tiết của redis
 	 *
 	 * @return List
      * @throws RedisConnectException
@@ -23,7 +23,7 @@ public interface RedisService {
 	List<RedisInfo> getRedisInfo() throws RedisConnectException;
 
 	/**
-	 * 获取 redis key 数量
+	 * Lấy số lượng redis key
 	 *
 	 * @return Map
      * @throws RedisConnectException
@@ -31,14 +31,14 @@ public interface RedisService {
 	Map<String, Object> getKeysSize() throws RedisConnectException;
 
 	/**
-	 * 获取 redis 内存信息
+	 * Lấy thông tin bộ nhớ redis
 	 *
 	 * @return Map
      * @throws RedisConnectException
 	 */
 	Map<String, Object> getMemoryInfo() throws RedisConnectException;
 	/**
-	 * 获取 报表需要个redis信息
+	 * Lấy thông tin redis mà báo cáo cần
 	 * @param type
 	 * @return Map
      * @throws RedisConnectException
@@ -46,7 +46,7 @@ public interface RedisService {
 	Map<String, JSONArray> getMapForReport(String type) throws RedisConnectException ;
 
 	/**
-	 * 获取历史性能指标
+	 * Lấy chỉ số hiệu năng lịch sử
 	 * @return
 	 * @author chenrui
 	 * @date 2024/5/14 14:57

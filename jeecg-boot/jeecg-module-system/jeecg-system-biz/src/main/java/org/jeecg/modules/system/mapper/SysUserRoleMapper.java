@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * 用户角色表 Mapper 接口
+ * Giao diện Mapper bảng vai trò người dùng
  * </p>
  *
  * @Author scott
@@ -17,24 +17,24 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
 
     /**
-     * 通过用户账号查询角色集合
-     * @param username 用户账号名称
+     * Truy vấn tập hợp vai trò qua tài khoản người dùng
+     * @param username Tên tài khoản người dùng
      * @return List<String>
      */
 	@Select("select role_code from sys_role where id in (select role_id from sys_user_role where user_id = (select id from sys_user where username=#{username}))")
 	List<String> getRoleByUserName(@Param("username") String username);
 	
     /**
-     * 通过用户账号查询角色集合
-     * @param userId 用户id
+     * Truy vấn tập hợp vai trò qua tài khoản người dùng
+     * @param userId Người dùng id
      * @return List<String>
      */
 	@Select("select role_code from sys_role where id in (select role_id from sys_user_role where user_id = #{userId})")
 	List<String> getRoleCodeByUserId(@Param("userId") String userId);
 
 	/**
-     * 通过用户账号查询角色Id集合
-     * @param username 用户账号名称
+     * Truy vấn tập hợp Id vai trò qua tài khoản người dùng
+     * @param username Tên tài khoản người dùng
      * @return List<String>
      */
 	@Select("select id from sys_role where id in (select role_id from sys_user_role where user_id = (select id from sys_user where username=#{username}))")

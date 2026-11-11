@@ -6,7 +6,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 import java.util.Date;
 
 /**
-* @Description: 应用用户与部门 用户导出/导入实体类
+* @Description: Xuất người dùng ứng dụng và phòng ban/Lớp thực thể nhập
 *
 * @author: wangshuai
 * @date: 2023/6/14 16:42
@@ -14,35 +14,35 @@ import java.util.Date;
 @Data
 public class AppExportUserVo {
 
-    /**用户编号*/
-    @Excel(name="用户编号",width=30)
+    /**Mã số người dùng*/
+    @Excel(name="Mã số người dùng",width=30)
     private String id;
 
-    /**姓名*/
-    @Excel(name="姓名",width=30)
+    /**Họ tên*/
+    @Excel(name="Họ tên",width=30)
     private String realname;
     
-    /**职位*/
-    @Excel(name = "职位",width = 30)
+    /**Chức vụ*/
+    @Excel(name = "Chức vụ",width = 30)
     private String position;
 
-    /**部门*/
-    @Excel(name = "部门",width = 30)
+    /**Phòng ban*/
+    @Excel(name = "Phòng ban",width = 30)
     private String depart;
 
-    /**工号*/
-    @Excel(name = "工号",width = 30)
+    /**Mã nhân viên*/
+    @Excel(name = "Mã nhân viên",width = 30)
     private String workNo;
     
-    /**手机号*/
-    @Excel(name = "手机号",width = 30)
+    /**Số điện thoại*/
+    @Excel(name = "Số điện thoại",width = 30)
     private String phone;
     
-    /**邮箱*/
-    @Excel(name = "邮箱",width = 30)
+    /**Email*/
+    @Excel(name = "Email",width = 30)
     private String email;
 
-    /**加入时间*/
-    @Excel(name = "加入时间",width = 30, format = "yyyy-MM-dd")
+    /**Thời gian tham gia*/
+    @Excel(name = "Thời gian tham gia",width = 30, format = "yyyy-MM-dd")
     private Date createTime;
 }

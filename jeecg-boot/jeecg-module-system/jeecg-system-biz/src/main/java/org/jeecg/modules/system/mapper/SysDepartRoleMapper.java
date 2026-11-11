@@ -7,14 +7,14 @@ import org.jeecg.modules.system.entity.SysDepartRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @Description: 部门角色
+ * @Description: Vai trò phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-12
  * @Version: V1.0
  */
 public interface SysDepartRoleMapper extends BaseMapper<SysDepartRole> {
     /**
-     * 根据用户id，部门id查询可授权所有部门角色
+     * Truy vấn tất cả vai trò phòng ban có thể ủy quyền theo id người dùng, id phòng ban
      * @param orgCode
      * @param userId
      * @return

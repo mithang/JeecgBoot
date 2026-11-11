@@ -10,7 +10,7 @@ import org.jeecg.modules.system.entity.SysTenantPackUser;
 import java.util.List;
 
 /**
- * @Description: 租户产品包用户关系
+ * @Description: Quan hệ người dùng gói sản phẩm Tenant
  * @Author: jeecg-boot
  * @Date:   2023-02-16
  * @Version: V1.0
@@ -19,7 +19,7 @@ public interface SysTenantPackUserMapper extends BaseMapper<SysTenantPackUser> {
 
 
     /**
-     * 查询租户下 特定角色的人员列表
+     * Truy vấn danh sách nhân sự có vai trò cụ thể thuộc tenant
      * @param tenantId
      * @param packCodeList
      * @return
@@ -28,7 +28,7 @@ public interface SysTenantPackUserMapper extends BaseMapper<SysTenantPackUser> {
     List<String> queryTenantPackUserNameList(@Param("tenantId") Integer tenantId, @Param("packCodeList") List<String> packCodeList); 
 
     /**
-     * 判断当前用户在该租户下是否拥有管理员的权限
+     * Phán đoán xem người dùng hiện tại có quyền quản trị viên trong tenant này hay không
      * @param userId
      * @param tenantId
      * @return
@@ -36,19 +36,19 @@ public interface SysTenantPackUserMapper extends BaseMapper<SysTenantPackUser> {
     Long izHaveBuyAuth(@Param("userId") String userId, @Param("tenantId") Integer tenantId);
 
     /**
-     * 根据租户id 删除租户产品包下的 用户
+     * Theo id tenant, xóa người dùng thuộc gói sản phẩm của tenant
      * @param tenantId
      */
     void deletePackUserByTenantId(@Param("tenantId") Integer tenantId, @Param("userIds") List<String> userIds);
 
     /**
-     * 根据多个租户id 删除租户产品包下的 用户
+     * Xóa người dùng thuộc gói sản phẩm tenant theo nhiều id tenant
      * @param
      */
     void deletePackUserByTenantIds(@Param("tenantIds") List<Integer> tenantIds);
 
     /**
-     * 根据用户id和租户id获取当前租户用户下的产品包id
+     * Lấy gói sản phẩm của người dùng thuộc thuê bao hiện tại theo id người dùng và id thuê bao id
      *
      * @param tenantId
      * @param userId
@@ -58,7 +58,7 @@ public interface SysTenantPackUserMapper extends BaseMapper<SysTenantPackUser> {
     List<String> getPackIdByTenantIdAndUserId(@Param("tenantId") Integer tenantId, @Param("userId") String userId);
     
     /**
-     * 根据租户id获取用户的产品包列表
+     * Lấy danh sách gói sản phẩm của người dùng theo tenant id
      * 
      * @param tenantId
      * @return

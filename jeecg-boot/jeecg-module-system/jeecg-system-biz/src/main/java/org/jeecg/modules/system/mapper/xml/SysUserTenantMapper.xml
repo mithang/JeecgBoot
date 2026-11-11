@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.system.mapper.SysUserTenantMapper">
 
-    <!-- 通过租户id获取数据 -->
+    <!-- Lấy dữ liệu theo id Tenant -->
     <select id="getPageUserList" resultType="org.jeecg.modules.system.entity.SysUser">
         SELECT su.id,su.username,su.realname,su.sex,su.phone FROM sys_user su
         JOIN sys_user_tenant str ON str.user_id = su.id and str.status = '1'
@@ -21,7 +21,7 @@
         ORDER BY su.create_time DESC
     </select>
 
-    <!--根据租户id获取用户ids-->
+    <!--Lấy người dùng theo id Tenant ids-->
     <select id="getUserIdsByTenantId" resultType="java.lang.String">
         SELECT user_id FROM sys_user_tenant
         WHERE
@@ -30,14 +30,14 @@
         tenant_id = #{tenantId}
     </select>
     
-    <!--通过用户id获取租户ids-->
+    <!--Lấy Tenant theo id người dùng ids-->
     <select id="getTenantIdsByUserId" resultType="java.lang.Integer">
         SELECT tenant_id FROM sys_user_tenant
         WHERE status = '1'
         and user_id = #{userId}
     </select>
 
-    <!--通过用户id获取租户列表-->
+    <!--Lấy danh sách Tenant qua ID người dùng-->
     <select id="getTenantListByUserId" resultType="org.jeecg.modules.system.vo.SysUserTenantVo">
         SELECT st.id as tenantUserId,st.name,st.trade,st.house_number,st.create_by,sut.status as userTenantStatus,sut.user_id as id
         FROM sys_user_tenant sut
@@ -53,7 +53,7 @@
         </if>
     </select>
 
-    <!--通过状态、当前登录人的用户名，租户id，查询用户id-->
+    <!--Truy vấn người dùng theo trạng thái, tên người dùng của người đang đăng nhập và id thuê bao id-->
     <select id="getUserIdsByCreateBy" resultType="java.lang.String">
         SELECT sut.user_id 
         FROM sys_user_tenant sut
@@ -68,7 +68,7 @@
         </if>
     </select>
     
-    <!--联查用户和租户审核状态-->
+    <!--Tra cứu liên kết người dùng và trạng thái xét duyệt Tenant-->
     <select id="getUserTenantPageList" resultType="org.jeecg.modules.system.vo.SysUserTenantVo">
         SELECT su.id,su.realname,su.username,su.email,su.phone,su.avatar,su.work_no,su.org_code,sut.status,su.create_time,st.create_by
         FROM sys_user_tenant sut
@@ -96,19 +96,19 @@
         </foreach>
     </select>
     
-    <!--根据用户id获取租户id，没有状态-->
+    <!--Theo id người dùng, lấy id tenant, không có trạng thái-->
     <select id="getTenantIdsNoStatus" resultType="java.lang.Integer">
         SELECT tenant_id FROM sys_user_tenant
         WHERE
         user_id = #{userId}
     </select>
     
-    <!-- 统计一个人创建了多少个租户 -->
+    <!-- Thống kê một người đã tạo bao nhiêu tenant -->
     <select id="countCreateTenantNum" resultType="java.lang.Integer">
         select count(*) count from sys_tenant where create_by = #{userId} and del_flag = 0 and status = 1
     </select>
 
-    <!--判断当前用户是否已在该租户下面-->
+    <!--Kiểm tra người dùng hiện tại đã ở dưới tenant đó chưa-->
     <select id="userTenantIzExist" resultType="java.lang.Integer">
         select count(*) count from sys_user_tenant
         where
@@ -116,7 +116,7 @@
         and tenant_id = #{tenantId}
     </select>
     
-    <!--查询未被注销的租户-->
+    <!--Truy vấn Tenant chưa bị hủy-->
     <select id="getTenantNoCancel" resultType="org.jeecg.modules.system.entity.SysTenant">
         SELECT st.id,st.name FROM sys_user_tenant sut
         JOIN sys_tenant st ON sut.tenant_id = st.id AND st.del_flag = 0 AND st.status = 1
@@ -124,7 +124,7 @@
         user_id = #{userId}
     </select>
 
-    <!--用户租户取消离职-->
+    <!--Người dùng tenant hủy rời khỏi-->
     <update id="putCancelQuit">
         update sys_user_tenant set status='1'
         where
@@ -136,7 +136,7 @@
     </update>
 
 
-    <!--根据用户id获取我的租户-->
+    <!--Lấy Tenant của tôi theo ID người dùng-->
     <select id="getTenantPageListByUserId" resultType="org.jeecg.modules.system.entity.SysTenant">
         SELECT st.id,st.name,st.status,st.trade,st.company_size,st.company_address,st.company_logo,st.house_number,st.work_place,st.position,st.department,st.create_by FROM sys_user_tenant sut
         JOIN sys_tenant st ON sut.tenant_id = st.id AND st.del_flag = 0 AND st.status = 1
@@ -155,7 +155,7 @@
         order by st.create_time desc
     </select>
 
-    <!--批量查询多个用户的租户IDs（VO版，跨数据库兼容，消除N+1），since 2026-07-01-->
+    <!--Truy vấn hàng loạt các ID thuê bao của nhiều người dùng (bản VO, tương thích đa cơ sở dữ liệu, loại bỏ N+1），since 2026-07-01-->
     <select id="getTenantIdVosByUserIds" resultType="org.jeecg.modules.system.vo.SysUserTenantIdVo">
         SELECT user_id, tenant_id FROM sys_user_tenant
         WHERE status = '1'
@@ -165,7 +165,7 @@
         </foreach>
     </select>
 
-    <!-- 删除租户下的用户 -->
+    <!-- Xóa người dùng thuộc tenant -->
     <delete id="deleteUserByTenantId">
         DELETE FROM sys_user_tenant
         WHERE
@@ -175,14 +175,14 @@
         </foreach>
     </delete>
 
-    <!-- 获取租户下的成员数量 -->
+    <!-- Lấy số lượng thành viên thuộc Tenant -->
     <select id="getUserCount" resultType="java.lang.Long">
         SELECT count(1) FROM sys_user_tenant sut JOIN sys_user su on sut.user_id = su.id and su.del_flag = 0 and su.status = 1
         WHERE sut.status = #{tenantStatus} 
         AND sut.tenant_id = #{tenantId}
     </select>
 
-    <!--根据租户id和名称获取用户数据-->
+    <!--Lấy dữ liệu người dùng theo tenant id và tên-->
     <select id="getUsersByTenantIdAndName" resultType="org.jeecg.modules.system.vo.thirdapp.JwUserDepartVo">
         <choose>
             <when test="tenantId == null or tenantId == 0">

@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * 权限规则 Mapper 接口
+ * Interface Mapper quy tắc quyền hạn
  * </p>
  *
  * @Author huangzhilin
@@ -18,10 +18,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface SysPermissionDataRuleMapper extends BaseMapper<SysPermissionDataRule> {
 	
 	/**
-	  * 根据用户名和权限id查询
+	  * Truy vấn theo tên người dùng và ID quyền hạn
 	 * @param username
 	 * @param permissionId
-	 * @param tenantId 当前租户ID（请求头 tenant-id），不为空时追加该租户套餐包的数据规则
+	 * @param tenantId ID Tenant hiện tại (header yêu cầu tenant-id), khi không trống sẽ bổ sung thêm quy tắc dữ liệu của gói sản phẩm tenant đó
 	 * @return
 	 */
 	public List<String> queryDataRuleIds(@Param("username") String username,@Param("permissionId") String permissionId,@Param("tenantId") Integer tenantId);

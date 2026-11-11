@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @Description: 多数据源管理
+ * @Description: Quản lý nhiều nguồn dữ liệu
  * @Author: jeecg-boot
  * @Date: 2019-12-25
  * @Version: V1.0
@@ -16,14 +16,14 @@ import java.util.List;
 public interface ISysDataSourceService extends IService<SysDataSource> {
 
     /**
-     * 添加数据源
+     * Thêm nguồn dữ liệu
      * @param sysDataSource
      * @return
      */
     Result saveDataSource(SysDataSource sysDataSource);
 
     /**
-     * 修改数据源
+     * Chỉnh sửa nguồn dữ liệu
      * @param sysDataSource
      * @return
      */
@@ -31,26 +31,26 @@ public interface ISysDataSourceService extends IService<SysDataSource> {
 
 
     /**
-     * 删除数据源
+     * Xóa nguồn dữ liệu
      * @param id
      * @return
      */
     Result deleteDataSource(String id);
 
     /**
-     * 【QQYUN-15337 多数据源】确保指定编码的数据源已注册到 baomidou 动态数据源池（已注册则跳过）。
-     * 用于在 push 数据源上下文前确保该数据源可用，主要给唯一性校验、复制等"未走 /online/cgform/api/** 请求"
-     * 但又需要操作 online 表单物理表的入口使用。
+     * 【QQYUN-15337 Nhiều nguồn dữ liệu] Đảm bảo nguồn dữ liệu có mã được chỉ định đã đăng ký vào pool nguồn dữ liệu động của baomidou (đã đăng ký thì bỏ qua).
+     * Dùng để đảm bảo nguồn dữ liệu đó khả dụng trước khi push bối cảnh nguồn dữ liệu, chủ yếu phục vụ kiểm tra tính duy nhất, sao chép, v.v."không đi qua /online/cgform/api/** Yêu cầu"
+     * nhưng lại cần dùng làm lối vào để thao tác với bảng vật lý của biểu mẫu online.
      *
      * @param code sys_data_source.code
      */
     void ensureRegistered(String code);
 
     /**
-     * 导入数据源，单行失败不影响其他数据。
+     * Nhập nguồn dữ liệu, một dòng thất bại không ảnh hưởng đến các dữ liệu khác.
      *
-     * @param dataSources 待导入数据源
-     * @return 导入统计结果
+     * @param dataSources Nguồn dữ liệu chờ nhập
+     * @return Kết quả thống kê nhập
      */
     Result<?> importDataSources(List<SysDataSource> dataSources) throws IOException;
 }

@@ -8,7 +8,7 @@ import org.jeecg.modules.system.vo.thirdapp.JwUserDepartVo;
 import java.util.List;
 
 /**
- * @Description: 第三方登录账号表
+ * @Description: Bảng tài khoản đăng nhập bên thứ ba
  * @Author: jeecg-boot
  * @Date: 2020-11-17
  * @Version: V1.0
@@ -16,16 +16,16 @@ import java.util.List;
 public interface SysThirdAccountMapper extends BaseMapper<SysThirdAccount> {
 
     /**
-     * 通过 sysUsername 集合批量查询
+     * Truy vấn hàng loạt qua tập hợp sysUsername
      *
-     * @param sysUsernameArr username集合
-     * @param thirdType       第三方类型
+     * @param sysUsernameArr username tập hợp
+     * @param thirdType       Loại bên thứ ba
      * @return
      */
     List<SysThirdAccount> selectThirdIdsByUsername(@Param("sysUsernameArr") String[] sysUsernameArr, @Param("thirdType") String thirdType, @Param("tenantId") Integer tenantId);
     
     /**
-     * 查询被绑定的用户
+     * Truy vấn người dùng đã liên kết
      * @param tenantId
      * @param thirdType
      * @return

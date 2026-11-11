@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description: 部门岗位用户
+ * @Description: Người dùng vị trí phòng ban
  * @author: wangshuai
  * @date: 2025/9/5 11:45
  */
@@ -23,52 +23,52 @@ public class SysUserDepPost implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * Khóa chính id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键id")
+    @Schema(description = "Khóa chính id")
     private String id;
     /**
-     * 用户id
+     * Người dùng id
      */
-    @Schema(description = "用户id")
+    @Schema(description = "Người dùng id")
     private String userId;
     /**
-     * 部门岗位id
+     * Vị trí phòng ban id
      */
-    @Schema(description = "部门岗位id")
+    @Schema(description = "Vị trí phòng ban id")
     private String depId;
 
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private Date createTime;
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
+    @Schema(description = "Người cập nhật")
     private String updateBy;
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间")
+    @Schema(description = "Thời gian cập nhật")
     private Date updateTime;
     /**
-     * 机构编码
+     * Mã tổ chức
      */
-    @Excel(name = "机构编码", width = 15)
-    @Schema(description = "机构编码")
+    @Excel(name = "Mã tổ chức", width = 15)
+    @Schema(description = "Mã tổ chức")
     private String orgCode;
 
     public SysUserDepPost(String id, String userId, String depId) {

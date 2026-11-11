@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 租户信息
+ * Thông tin tenant
  * @author: jeecg-boot
  */
 @Data
@@ -21,99 +21,99 @@ public class SysTenant implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 编码
+     * Mã
      */
     private Integer id;
     
     /**
-     * 名称
+     * Tên
      */
     private String name;
     
 
     /**
-     * 创建人
+     * Người tạo
      */
     @Dict(dictTable ="sys_user",dicText = "realname",dicCode = "username")
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
-     * 开始时间
+     * Thời gian bắt đầu
      */
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date beginDate;
 
     /**
-     * 结束时间
+     * Thời gian kết thúc
      */
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date endDate;
 
     /**
-     * 状态 1正常 0冻结
+     * Trạng thái: 1 Bình thường, 0 Đóng băng
      */
     @Dict(dicCode = "tenant_status")
     private Integer status;
 
     /**
-     * 所属行业
+     * Ngành nghề
      */
     @Dict(dicCode = "trade")
     private String trade;
 
     /**
-     * 公司规模
+     * Quy mô công ty
      */
     @Dict(dicCode = "company_size")
     private String companySize;
 
     /**
-     * 公司地址
+     * Địa chỉ công ty
      */
     private String companyAddress;
 
     /**
-     * 公司logo
+     * Công ty logo
      */
     private String companyLogo;
 
     /**
-     * 门牌号
+     * Số nhà
      */
     private String houseNumber;
 
     /**
-     * 工作地点
+     * Địa điểm làm việc
      */
     private String workPlace;
 
     /**
-     * 二级域名(暂时无用,预留字段)
+     * Tên miền cấp hai(Tạm thời không dùng,Trường dự phòng)
      */
     private String secondaryDomain;
 
     /**
-     * 登录背景图片(暂时无用，预留字段)
+     * Hình nền đăng nhập(Tạm thời không dùng, trường dự phòng)
      */
     private String loginBkgdImg;
 
     /**
-     * 职级
+     * Cấp bậc
      */
     @Dict(dicCode = "company_rank")
     private String position;
 
     /**
-     * 部门
+     * Phòng ban
      */
     @Dict(dicCode = "company_department")
     private String department;
@@ -121,16 +121,16 @@ public class SysTenant implements Serializable {
     @TableLogic
     private Integer delFlag;
 
-    /**更新人登录名称*/
+    /**Tên đăng nhập của người cập nhật*/
     private String updateBy;
     
-    /**更新日期*/
+    /**Ngày cập nhật*/
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     /**
-     * 允许申请管理员 1允许 0不允许
+     * Cho phép đăng ký quản trị viên: 1 cho phép, 0 không cho phép
      */
     private Integer applyStatus;
     

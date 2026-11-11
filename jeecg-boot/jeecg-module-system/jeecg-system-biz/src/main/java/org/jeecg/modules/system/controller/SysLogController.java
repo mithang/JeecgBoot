@@ -37,7 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * <p>
- * 系统日志表 前端控制器
+ * Bảng nhật ký hệ thống — Controller frontend
  * </p>
  *
  * @Author zhangweijian
@@ -52,18 +52,18 @@ public class SysLogController extends JeecgController<SysLog, ISysLogService> {
 	private ISysLogService sysLogService;
 
     /**
-     * for [issues/8699]AutoPoi在使用@ExcelEntity当设置show=true并且该项为null时报错
+     * for [issues/8699]AutoPoi khi sử dụng@ExcelEntity Khi đặt show=true và báo lỗi khi mục này là null
      */
     @Resource
     private JeecgBaseConfig jeecgBaseConfig;
 
     /**
-     * 全部清除
+     * Xóa toàn bộ
      */
 	private static final String ALL_ClEAR = "allclear";
 
 	/**
-	 * @功能：查询日志记录
+	 * @Chức năng: Truy vấn bản ghi log
 	 * @param syslog
 	 * @param pageNo
 	 * @param pageSize
@@ -77,27 +77,27 @@ public class SysLogController extends JeecgController<SysLog, ISysLogService> {
 		Result<IPage<SysLog>> result = new Result<IPage<SysLog>>();
 		QueryWrapper<SysLog> queryWrapper = QueryGenerator.initQueryWrapper(syslog, req.getParameterMap());
 		Page<SysLog> page = new Page<SysLog>(pageNo, pageSize);
-		//日志关键词
+		//Từ khóa nhật ký
 		String keyWord = req.getParameter("keyWord");
 		if(oConvertUtils.isNotEmpty(keyWord)) {
 			queryWrapper.like("log_content",keyWord);
 		}
-		//TODO 过滤逻辑处理
-		//TODO begin、end逻辑处理
-		//TODO 一个强大的功能，前端传一个字段字符串，后台只返回这些字符串对应的字段
-		//创建时间/创建人的赋值
+		//TODO Xử lý logic lọc
+		//TODO begin、xử lý logic end
+		//TODO Một tính năng mạnh mẽ: frontend truyền một chuỗi trường, backend chỉ trả về các trường tương ứng với các chuỗi đó
+		//Thời gian tạo/Gán giá trị cho người tạo
 		IPage<SysLog> pageList = sysLogService.page(page, queryWrapper);
-		log.debug("查询当前页："+pageList.getCurrent());
-		log.debug("查询当前页数量："+pageList.getSize());
-		log.debug("查询结果数量："+pageList.getRecords().size());
-		log.debug("数据总数："+pageList.getTotal());
+		log.debug("Truy vấn trang hiện tại: "+pageList.getCurrent());
+		log.debug("Truy vấn số lượng trang hiện tại:"+pageList.getSize());
+		log.debug("Số lượng kết quả truy vấn:"+pageList.getRecords().size());
+		log.debug("Tổng số dữ liệu:"+pageList.getTotal());
 		result.setSuccess(true);
 		result.setResult(pageList);
 		return result;
 	}
 	
 	/**
-	 * @功能：删除单个日志记录
+	 * @Chức năng: Xóa một bản ghi nhật ký
 	 * @param id
 	 * @return
 	 */
@@ -107,18 +107,18 @@ public class SysLogController extends JeecgController<SysLog, ISysLogService> {
 		Result<SysLog> result = new Result<SysLog>();
 		SysLog sysLog = sysLogService.getById(id);
 		if(sysLog==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			boolean ok = sysLogService.removeById(id);
 			if(ok) {
-				result.success("删除成功!");
+				result.success("Xóa thành công!");
 			}
 		}
 		return result;
 	}
 	
 	/**
-	 * @功能：批量，全部清空日志记录
+	 * @Chức năng: hàng loạt, xóa toàn bộ bản ghi nhật ký
 	 * @param ids
 	 * @return
 	 */
@@ -127,49 +127,49 @@ public class SysLogController extends JeecgController<SysLog, ISysLogService> {
 	public Result<SysRole> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<SysRole> result = new Result<SysRole>();
 		if(ids==null || "".equals(ids.trim())) {
-			result.error500("参数不识别！");
+			result.error500("Không nhận dạng được tham số!");
 		}else {
 			if(ALL_ClEAR.equals(ids)) {
 				this.sysLogService.removeAll();
-				result.success("清除成功!");
+				result.success("Xóa thành công!!");
 			}
 			this.sysLogService.removeByIds(Arrays.asList(ids.split(",")));
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		return result;
 	}
 
 	/**
-	 * 导出excel
-	 * for [QQYUN-13431]【jeecg】日志管理中添加大数据导出功能
+	 * Xuất excel
+	 * for [QQYUN-13431]【jeecg】Thêm chức năng xuất dữ liệu lớn trong quản lý nhật ký
 	 * @param request
 	 * @param syslog
 	 */
 	@RequiresPermissions("system:log:exportXls")
 	@RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysLog syslog) {
-        // 复制参数，移除排序相关键（column/order 等）防止前端传入排序影响导出顺序
+        // Sao chép tham số, loại bỏ các khóa liên quan đến sắp xếp (column/order v.v.) để tránh việc frontend truyền sắp xếp làm ảnh hưởng đến thứ tự xuất
         java.util.Map<String, String[]> rawMap = request.getParameterMap();
         java.util.Map<String, String[]> paramMap = new java.util.HashMap<>(rawMap);
-        // 剔除自定义排序参数
+        // Loại bỏ tham số sắp xếp tùy chỉnh
         paramMap.remove("column");
         paramMap.remove("order");
-        // 组装查询条件（已剔除排序参数）
+        // Lắp ráp điều kiện truy vấn (đã loại bỏ tham số sắp xếp)
         QueryWrapper<SysLog> queryWrapper = QueryGenerator.initQueryWrapper(syslog, paramMap);
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        // 过滤选中数据
+        // Lọc dữ liệu đã chọn
         String selections = request.getParameter("selections");
         if (oConvertUtils.isNotEmpty(selections)) {
             List<String> selectionList = Arrays.asList(selections.split(","));
             queryWrapper.in("id", selectionList);
         }
-        // 定义IExcelExportServer
+        // Định nghĩa IExcelExportServer
         IExcelExportServerEnhanced<SysLog> excelExportServer = new IExcelExportServerEnhanced<>() {
 
             @Override
             public List<SysLog> selectListForExcelExport(Object queryParams, SysLog lastRecord, int pageSize) {
                 QueryWrapper<SysLog> originalWrapper = (QueryWrapper<SysLog>) queryParams;
-                // 克隆原始条件，避免多次迭代污染
+                // Sao chép điều kiện gốc, tránh ô nhiễm khi lặp nhiều lần
                 QueryWrapper<SysLog> batchWrapper = null;
                 try {
                     batchWrapper = (QueryWrapper<SysLog>) originalWrapper.clone();
@@ -181,20 +181,20 @@ public class SysLogController extends JeecgController<SysLog, ISysLogService> {
                 if (lastRecord != null) {
                     lastId = lastRecord.getId();
                     final String cursorLastId = lastId;
-                    // 仅基于雪花ID（全局唯一，数值递增）作为游标，提升索引利用与性能
-                    // 条件：id < 上一批最后一条的ID，实现“从大到小”倒序分页
+                    // Chỉ dựa trên ID tuyết hoa (duy nhất toàn cục, tăng dần theo số) làm con trỏ, nâng cao hiệu quả sử dụng index và hiệu năng
+                    // Điều kiện:id < ID của bản ghi cuối cùng trong lô trước, thực hiện phân trang ngược "từ lớn đến nhỏ"
                     batchWrapper.lt("id", cursorLastId);
                 }
 
-                // 排序：按 id DESC（雪花ID递增，倒序可获取最新数据）
+                // Sắp xếp: theo id DESC (ID Snowflake tăng dần, sắp xếp ngược để lấy dữ liệu mới nhất)
                 batchWrapper.orderByDesc("id");
                 Page<SysLog> cursorPage = new Page<>(1, pageSize);
                 List<SysLog> list = service.page(cursorPage, batchWrapper).getRecords();
 
-                log.info("系统日志游标导出(ID游标) - lastId: {} batchSize: {} 返回: {}", lastId, pageSize, list.size());
+                log.info("Xuất nhật ký hệ thống theo con trỏ(ID con trỏ) - lastId: {} batchSize: {} Trả về: {}", lastId, pageSize, list.size());
                 if (!list.isEmpty()) {
                     SysLog endRecord = list.get(list.size() - 1);
-                    log.debug("本批次最后一条记录游标ID -> id: {}", endRecord.getId());
+                    log.debug("Con trỏ bản ghi cuối cùng của lô này ID -> id: {}", endRecord.getId());
                 }
                 return list;
             }
@@ -205,13 +205,13 @@ public class SysLogController extends JeecgController<SysLog, ISysLogService> {
             }
         };
 
-        String title = "系统日志";
-        // AutoPoi 导出Excel
+        String title = "Nhật ký hệ thống";
+        // AutoPoi Xuất Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-        //此处设置的filename无效 ,前端会重更新设置一下
+        //filename được đặt ở đây không có hiệu lực ,Frontend sẽ cập nhật lại thiết lập
         mv.addObject(NormalExcelConstants.FILE_NAME, title);
         mv.addObject(NormalExcelConstants.CLASS, SysLog.class);
-        ExportParams exportParams = new ExportParams(title + "报表", "导出人:" + sysUser.getRealname(), title, jeecgBaseConfig.getPath().getUpload());
+        ExportParams exportParams = new ExportParams(title + "Báo cáo", "Người xuất:" + sysUser.getRealname(), title, jeecgBaseConfig.getPath().getUpload());
         mv.addObject(NormalExcelConstants.PARAMS, exportParams);
         mv.addObject(NormalExcelConstants.EXPORT_SERVER, excelExportServer);
         mv.addObject(NormalExcelConstants.QUERY_PARAMS, queryWrapper);

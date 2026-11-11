@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * CAS单点登录客户端登录认证
+ * CAS Xác thực đăng nhập của client đăng nhập một lần
  * </p>
  *
  * @Author zhoujf
@@ -72,18 +72,18 @@ public class CasClientController {
 	            throw new Exception("No principal was found in the response from the CAS server.");
 	        }
 			log.info("-------token----username---"+principal);
-		    //1. 校验用户是否有效
+		    //1. Kiểm tra người dùng có hợp lệ không
 	  		SysUser sysUser = sysUserService.getUserByName(principal);
 	  		result = sysUserService.checkUserIsEffective(sysUser);
 	  		if(!result.isSuccess()) {
 	  			return result;
 	  		}
 	 		String token = JwtUtil.sign(sysUser.getUsername(), sysUser.getPassword(), CommonConstant.CLIENT_TYPE_PC);
-	 		// 设置超时时间
+	 		// Đặt thời gian chờ
 	 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 	 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
 
-	 		//获取用户部门信息
+	 		//Lấy thông tin phòng ban người dùng
 			JSONObject obj = new JSONObject();
 			List<SysDepart> departs = sysDepartService.queryUserDeparts(sysUser.getId());
 			obj.put("departs", departs);
@@ -98,7 +98,7 @@ public class CasClientController {
 			obj.put("token", token);
 			obj.put("userInfo", sysUser);
 			result.setResult(obj);
-			result.success("登录成功");
+			result.success("Đăng nhập thành công");
 	  		
 		} catch (Exception e) {
 			//e.printStackTrace();

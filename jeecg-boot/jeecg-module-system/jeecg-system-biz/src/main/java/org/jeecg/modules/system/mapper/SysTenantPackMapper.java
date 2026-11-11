@@ -8,7 +8,7 @@ import org.jeecg.modules.system.entity.SysTenantPack;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @Description: 租户产品包
+ * @Description: Gói sản phẩm tenant
  * @Author: jeecg-boot
  * @Date:   2022-12-31
  * @Version: V1.0
@@ -16,14 +16,14 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface SysTenantPackMapper extends BaseMapper<SysTenantPack> {
 
     /**
-     * 删除租户产品包
+     * Xóa gói sản phẩm tenant
      *
      * @param tenantIdList
      */
     void deletePackByTenantIds(@Param("tenantIdList") List<Integer> tenantIdList);
 
     /**
-     * 根据租户id和产品包的code获取租户套餐id
+     * Lấy gói dịch vụ tenant theo id tenant và code của gói sản phẩm id
      *
      * @param tenantId
      */
@@ -31,7 +31,7 @@ public interface SysTenantPackMapper extends BaseMapper<SysTenantPack> {
     List<String> getPackIdByPackCodeAndTenantId(@Param("tenantId") Integer tenantId);
 
     /**
-     * 是否为拥有管理用户权限【accountAdmin，superAdmin】
+     * Có phải là người có quyền quản lý người dùng [accountAdmin, superAdmin] hay không
      * @param tenantId
      * @param userId
      * @return

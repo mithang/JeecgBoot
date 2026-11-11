@@ -1,10 +1,10 @@
 <#---->
-<#-- freemarker 的一些工具方法 -->
+<#-- freemarker một số phương thức tiện ích của freemarker -->
 <#---->
-<#-- 驼峰转其他字符 -->
-<#-- @param str       待转换的文本 -->
-<#-- @param character 要转换成的字符 -->
-<#-- @param case      转换大小写（normal 不转换，lower 小写，upper 大写） -->
+<#-- Chuyển camelCase thành ký tự khác -->
+<#-- @param str       Văn bản cần chuyển đổi -->
+<#-- @param character Ký tự cần chuyển đổi thành -->
+<#-- @param case      Chuyển đổi chữ hoa/thường (normal không chuyển đổi, lower chữ thường, upper chữ hoa) -->
 <#function camelToChar(str, character, case='normal')>
   <#assign text=str?replace("([a-z])([A-Z]+)","$1${character}$2","r")/>
   <#if case=="upper">
@@ -15,7 +15,7 @@
     <#return text>
   </#if>
 </#function>
-<#--下划线转驼峰-->
+<#--Chuyển gạch dưới sang camelCase-->
 <#function dashedToCamel(str)>
     <#assign text=""/>
     <#assign strlist = str?split("_")/>
@@ -24,21 +24,21 @@
     </#list>
     <#return text?uncap_first>
 </#function>
-<#-- 驼峰转下划线 -->
+<#-- Chuyển camelCase sang snake_case -->
 <#function camelToDashed(str, case='lower')>
   <#return camelToChar(str, "_", case)>
 </#function>
 <#---->
-<#-- 驼峰转横线 -->
+<#-- Chuyển camelCase sang kebab-case -->
 <#function camelToHorizontal(str, case='normal')>
   <#return camelToChar(str, "-", case)>
 </#function>
 <#---->
-<#-- 获取 v-model 属性 -->
+<#-- Lấy v-model Thuộc tính -->
 <#function getVModel po,suffix="">
   <#return "v-model=\"queryParam.${po.fieldName}${suffix}\"">
 </#function>
-<#-- 获取 placeholder 属性 -->
+<#-- Lấy thuộc tính placeholder -->
 <#function getPlaceholder po,prefix,fillComment=true>
   <#if fillComment>
     <#return "placeholder=\"${prefix}${po.filedComment}\"">
@@ -46,7 +46,7 @@
     <#return "placeholder=\"${prefix}\"">
   </#if>
 </#function>
-<#-- ** 判断某字段是否配置了校验 * -->
+<#-- ** Xác định một trường nào đó có được cấu hình kiểm tra hay không * -->
 <#function poHasCheck po>
   <#if (po.fieldValidType!'')?trim?length gt 0 || po.nullable == 'N'>
     <#if po.fieldName != 'id'>
@@ -72,7 +72,7 @@
   </#if>
   <#return false>
 </#function>
-<#-- ** 如果配置了校验就显示 validatorRules * -->
+<#-- ** Nếu đã cấu hình kiểm tra thì hiển thị validatorRules * -->
 <#function autoWriteRules po>
   <#if poHasCheck(po)>
     <#return ", validatorRules.${po.fieldName}">
@@ -81,7 +81,7 @@
   </#if>
 </#function>
 
-<#-- ** 如果Blob就显示 String * -->
+<#-- ** Nếu là Blob thì hiển thị String * -->
 <#function autoStringSuffix po>
   <#if  po.fieldDbType=='Blob'>
     <#return "'${po.fieldName}String'">
@@ -90,7 +90,7 @@
   </#if>
 </#function>
 
-<#-- ** 如果Blob就显示model方式 String * -->
+<#-- ** Nếu là Blob thì hiển thị theo kiểu model String * -->
 <#function autoStringSuffixForModel po>
     <#if  po.fieldDbType=='Blob'>
         <#return "${po.fieldName}String">
@@ -99,7 +99,7 @@
     </#if>
 </#function>
 
-<#-- ** 高级查询生成 * -->
+<#-- ** Tạo truy vấn nâng cao * -->
 <#function superQueryFieldList po>
     <#assign superQuery_dictTable="">
     <#assign superQuery_dictText="">
@@ -131,27 +131,27 @@
       </#if>
   </#if>
 </#function>
-<#-- update-begin---author:chenrui ---date:20231228  for:[QQYUN-7527]vue3代码生成默认带上高级查询---------- -->
-<#-- ** 高级查询生成(Vue3 * -->
+<#-- update-begin---author:chenrui ---date:20231228  for:[QQYUN-7527]vue3 Tạo mã mặc định kèm theo truy vấn nâng cao---------- -->
+<#-- ** Tạo truy vấn nâng cao(Vue3 * -->
 <#function superQueryFieldListForVue3(po,order)>
-<#-- 高级查询日期格式化 -->
+<#-- Định dạng ngày truy vấn nâng cao -->
     <#assign picker=''>
     <#if po.extendParams?exists && po.extendParams.picker?exists>
         <#assign picker='fieldExtendJson:"{\\"picker\\":\\"${po.extendParams.picker}\\"}",'>
     </#if>
-<#-- 字段展示/DB类型 -->
+<#-- Hiển thị trường/DB Loại -->
     <#assign baseAttrs="view: '${po.classType}', type: 'string',">
     <#if po.fieldDbType=='int' || po.fieldDbType=='long' || po.fieldDbType=='double' || po.fieldDbType=='BigDecimal'>
         <#assign baseAttrs="view: 'number', type: 'number',">
     </#if>
 
-<#-- 特殊类型控件扩展字段 -->
+<#-- Trường mở rộng của điều khiển loại đặc biệt -->
     <#assign extAttrs="">
     <#assign dictCode="">
     <#if po.dictTable?default('')?trim?length gt 1 && po.dictText?default('')?trim?length gt 1 && po.dictField?default("")?trim?length gt 1>
-        <#-- update-begin---author:chenrui ---date:20231228  for:fix 带条件字典存在单引号导致js编译错误---------- -->
+        <#-- update-begin---author:chenrui ---date:20231228  for:fix Danh mục có điều kiện chứa dấu nháy đơn gây lỗi biên dịch js---------- -->
         <#assign dictCode="dictTable: \"${po.dictTable}\", dictCode: '${po.dictField}', dictText: '${po.dictText}'">
-        <#-- update-begin---author:chenrui ---date:20231228  for:fix 带条件字典存在单引号导致js编译错误---------- -->
+        <#-- update-begin---author:chenrui ---date:20231228  for:fix Danh mục có điều kiện chứa dấu nháy đơn gây lỗi biên dịch js---------- -->
     <#elseif po.dictField?default("")?trim?length gt 1>
         <#assign dictCode="dictCode: '${po.dictField}'">
     <#else>
@@ -161,14 +161,14 @@
     <#if po.classType=='list' || po.classType=='list_multi' || po.classType=='sel_search' || po.classType=='checkbox' || po.classType=='radio'>
         <#assign extAttrs="${dictCode},">
     <#elseif po.classType=='cat_tree'>
-    <#-- 分类字典树 -->
-        <#-- update-begin---author:chenrui ---date:20240109  for：[issue/5787]增加非空判断防止代码生成时空指针异常---------- -->
+    <#-- Cây từ điển phân loại -->
+        <#-- update-begin---author:chenrui ---date:20240109  for：[issue/5787]Thêm phán đoán khác rỗng để tránh ngoại lệ con trỏ null khi sinh mã---------- -->
         <#assign extAttrs="pcode: '${po.dictField?default('')}',">
-        <#-- update-end---author:chenrui ---date:20240109  for：[issue/5787]增加非空判断防止代码生成时空指针异常---------- -->
+        <#-- update-end---author:chenrui ---date:20240109  for：[issue/5787]Thêm phán đoán khác rỗng để tránh ngoại lệ con trỏ null khi sinh mã---------- -->
     <#elseif po.classType=='sel_tree'>
-    <#-- 自定义树 -->
+    <#-- Cây tùy chỉnh -->
         <#if po.dictText??>
-        <#-- dictText示例:id,pid,name,has_child -->
+        <#-- dictText Ví dụ:id,pid,name,has_child -->
             <#if po.dictText?split(',')[2]?? && po.dictText?split(',')[0]??>
                 <#assign extAttrs="dict: '${po.dictTable},${po.dictText?split(',')[2]},${po.dictText?split(',')[0]}'">
             <#elseif po.dictText?split(',')[1]??>
@@ -177,15 +177,15 @@
                 <#assign extAttrs="hasChildField: '${po.dictText?split(',')[3]}'">
             </#if>
         </#if>
-        <#-- update-begin---author:chenrui ---date:20240109  for：[issue/5787]增加非空判断防止代码生成时空指针异常---------- -->
+        <#-- update-begin---author:chenrui ---date:20240109  for：[issue/5787]Thêm phán đoán khác rỗng để tránh ngoại lệ con trỏ null khi sinh mã---------- -->
         <#assign extAttrs="${extAttrs}, pidValue: '${po.dictField?default('')}',">
-        <#-- update-end---author:chenrui ---date:20240109  for：[issue/5787]增加非空判断防止代码生成时空指针异常---------- -->
+        <#-- update-end---author:chenrui ---date:20240109  for：[issue/5787]Thêm phán đoán khác rỗng để tránh ngoại lệ con trỏ null khi sinh mã---------- -->
     <#elseif po.classType=='popup'>
     <#-- popup -->
-        <#-- update-begin---author:chenrui ---date:20240109  for：[issue/5787]增加非空判断防止代码生成时空指针异常---------- -->
+        <#-- update-begin---author:chenrui ---date:20240109  for：[issue/5787]Thêm phán đoán khác rỗng để tránh ngoại lệ con trỏ null khi sinh mã---------- -->
         <#if po.dictText?default("")?trim?length gt 1 && po.dictText?index_of(',') gt 0 && po.dictField?default("")?trim?length gt 1>
-        <#-- update-begin---author:chenrui ---date:20240109  for：[issue/5787]增加非空判断防止代码生成时空指针异常---------- -->
-        <#-- 如果有多个回填字段,找到popup字段对应的来源字段 -->
+        <#-- update-begin---author:chenrui ---date:20240109  for：[issue/5787]Thêm phán đoán khác rỗng để tránh ngoại lệ con trỏ null khi sinh mã---------- -->
+        <#-- Nếu có nhiều trường điền lại,Tìm trường nguồn tương ứng với trường popup -->
             <#assign orgFieldIx=po.dictText?split(',')?seq_index_of(po.fieldDbName)>
             <#assign orgField=po.dictField?split(',')[orgFieldIx]>
         <#else>
@@ -193,21 +193,21 @@
         </#if>
         <#assign extAttrs="code: '${po.dictTable?default('')}', orgFields: '${orgField}', destFields: '${po.fieldName}', popupMulti: false,">
     <#elseif po.classType=='popup_dict'>
-    <#-- popup字典 -->
-    <#-- author:wangshuai--- date:20260831--for: 【LHZP-1027】代码生成 高级查询 popup字典生成的不对，没有生成字典项/【LHZP-1028】代码生成高级查询 关联记录生成没有生成字典项  -->
+    <#-- popup Từ điển -->
+    <#-- author:wangshuai--- date:20260831--for: 【LHZP-1027] Tạo mã — truy vấn nâng cao: popup danh mục được tạo không đúng, không tạo ra mục danh mục/【LHZP-1028] Sinh code truy vấn nâng cao: bản ghi liên kết chưa sinh mục từ điển  -->
         <#assign extAttrs="${dictCode}, code: '${po.dictTable?default('')}', orgFields: '${po.dictField?default('')}', destFields: '${po.dictText?default('')}', popupMulti: ${po.extendParams.popupMulti?c},">
     <#elseif po.classType=='link_table'>
-    <#-- 关联记录在高级查询中按表字典加载可选项 -->
+    <#-- Bản ghi liên kết tải các tùy chọn theo danh mục bảng trong truy vấn nâng cao -->
         <#assign extAttrs="${dictCode},">
-    <#-- author:wangshuai--- date:20260831--for: 【LHZP-1027】代码生成 高级查询 popup字典生成的不对，没有生成字典项/【LHZP-1028】代码生成高级查询 关联记录生成没有生成字典项  -->
+    <#-- author:wangshuai--- date:20260831--for: 【LHZP-1027] Tạo mã — truy vấn nâng cao: popup danh mục được tạo không đúng, không tạo ra mục danh mục/【LHZP-1028] Sinh code truy vấn nâng cao: bản ghi liên kết chưa sinh mục từ điển  -->
     </#if>
 
     <#return "${po.fieldName}: {title: '${po.filedComment}',order: ${order},${baseAttrs}${extAttrs}${picker}}" >
 </#function>
-<#-- update-end---author:chenrui ---date:20231228  for:[QQYUN-7527]vue3代码生成默认带上高级查询---------- -->
+<#-- update-end---author:chenrui ---date:20231228  for:[QQYUN-7527]vue3 Tạo mã mặc định kèm theo truy vấn nâng cao---------- -->
 
 
-<#-- vue3 获取表单modal的宽度-->
+<#-- vue3 Lấy chiều rộng của modal biểu mẫu-->
 <#function getModalWidth fieldRowNum>
     <#assign modal_width = 800>
     <#if fieldRowNum==2>
@@ -220,7 +220,7 @@
     <#return modal_width>
 </#function>
 
-<#-- vue3 获取表单 colspan -->
+<#-- vue3 Lấy biểu mẫu colspan -->
 <#function getFormSpan fieldRowNum>
     <#assign form_span = 24>
     <#if fieldRowNum==2>
@@ -233,7 +233,7 @@
     <#return form_span>
 </#function>
 
-<#-- vue3 native 判断字段名不是 pidField  -->
+<#-- vue3 native Kiểm tra tên trường không phải là pidField  -->
 <#function isNotPidField(tableVo, fieldDbName) >
   <#assign flag = true>
   <#if tableVo??>
@@ -246,7 +246,7 @@
   <#return flag>
 </#function>
 
-<#-- vue3 native 获取范围字段 -->
+<#-- vue3 native Lấy trường phạm vi -->
 <#function getRangeField(columns) >
   <#assign rangeField = "">
   <#list columns as po>

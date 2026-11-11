@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.system.entity.SysUserDepPost;
 
 /**
- * @Description: 部门岗位用户表
+ * @Description: Bảng người dùng theo phòng ban - vị trí công việc
  * @author: wangshuai
  * @date: 2025/9/5 11:45
  */

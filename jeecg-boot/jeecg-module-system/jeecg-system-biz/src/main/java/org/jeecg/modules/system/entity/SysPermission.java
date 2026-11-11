@@ -13,7 +13,7 @@ import org.jeecg.modules.system.constant.DefIndexConst;
 
 /**
  * <p>
- * 菜单权限表
+ * Bảng quyền hạn menu
  * </p>
  *
  * @Author scott
@@ -33,133 +33,133 @@ public class SysPermission implements Serializable {
 	private String id;
 
 	/**
-	 * 父id
+	 * id cha
 	 */
 	private String parentId;
 
 	/**
-	 * 菜单名称
+	 * Tên menu
 	 */
 	private String name;
 
 	/**
-	 * 菜单权限编码，例如：“sys:schedule:list,sys:schedule:info”,多个逗号隔开
+	 * Mã quyền hạn menu, ví dụ: “sys:schedule:list,sys:schedule:info”,Tách bằng nhiều dấu phẩy
 	 */
 	private String perms;
 	/**
-	 * 权限策略1显示2禁用
+	 * Chính sách quyền hạn: 1 Hiển thị, 2 Vô hiệu hóa
 	 */
 	private String permsType;
 
 	/**
-	 * 菜单图标
+	 * Biểu tượng menu
 	 */
 	private String icon;
 
 	/**
-	 * 组件
+	 * Component
 	 */
 	private String component;
 	
 	/**
-	 * 组件名字
+	 * Tên thành phần
 	 */
 	private String componentName;
 
 	/**
-	 * 路径
+	 * Đường dẫn
 	 */
 	private String url;
 	/**
-	 * 一级菜单跳转地址
+	 * Địa chỉ chuyển hướng menu cấp một
 	 */
 	private String redirect;
 
 	/**
-	 * 菜单排序
+	 * Sắp xếp menu
 	 */
 	private Double sortNo;
 
 	/**
-	 * 类型（0：一级菜单；1：子菜单 ；2：按钮权限）
+	 * Loại (0: menu cấp một; 1: menu con; 2: quyền nút bấm)
 	 */
 	@Dict(dicCode = "menu_type")
 	private Integer menuType;
 
 	/**
-	 * 是否叶子节点: 1:是  0:不是
+	 * Có phải nút lá hay không: 1:Có  0:Không
 	 */
 	@TableField(value="is_leaf")
 	private boolean leaf;
 	
 	/**
-	 * 是否路由菜单: 0:不是  1:是（默认值1）
+	 * Có phải menu định tuyến hay không: 0:Không  1: là (mặc định là 1)
 	 */
 	@TableField(value="is_route")
 	private boolean route;
 
 
 	/**
-	 * 是否缓存页面: 0:不是  1:是（默认值1）
+	 * Có lưu trang vào bộ nhớ đệm hay không: 0:Không  1: là (mặc định là 1)
 	 */
 	@TableField(value="keep_alive")
 	private boolean keepAlive;
 
 	/**
-	 * 描述
+	 * Mô tả
 	 */
 	private String description;
 
 	/**
-	 * 创建人
+	 * Người tạo
 	 */
 	private String createBy;
 
 	/**
-	 * 删除状态 0正常 1已删除
+	 * Trạng thái xóa: 0 bình thường, 1 đã xóa
 	 */
 	private Integer delFlag;
 	
 	/**
-	 * 是否配置菜单的数据权限 1是0否 默认0
+	 * Có cấu hình quyền dữ liệu của menu hay không: 1 là có, 0 là không, mặc định 0
 	 */
 	private Integer ruleFlag;
 	
 	/**
-	 * 是否隐藏路由菜单: 0否,1是（默认值0）
+	 * Có ẩn menu định tuyến không: 0 Không,1 là (mặc định là 0)
 	 */
 	private boolean hidden;
 
 	/**
-	 * 是否隐藏Tab: 0否,1是（默认值0）
+	 * Có ẩn hay không Tab: 0 Không,1 là (mặc định là 0)
 	 */
 	private boolean hideTab;
 
 	/**
-	 * 创建时间
+	 * Thời gian tạo
 	 */
 	private Date createTime;
 
 	/**
-	 * 更新人
+	 * Người cập nhật
 	 */
 	private String updateBy;
 
 	/**
-	 * 更新时间
+	 * Thời gian cập nhật
 	 */
 	private Date updateTime;
 	
-	/**按钮权限状态(0无效1有效)*/
+	/**Trạng thái quyền nút bấm(0 không hợp lệ 1 hợp lệ)*/
 	private java.lang.String status;
 	
 	/**alwaysShow*/
     private boolean alwaysShow;
 
-	/*update_begin author:wuxianquan date:20190908 for:实体增加字段 */
-    /** 外链菜单打开方式 0/内部打开 1/外部打开 */
+	/*update_begin author:wuxianquan date:20190908 for:Thực thể thêm trường */
+    /** Cách mở menu liên kết ngoài 0/Mở nội bộ 1/Mở bên ngoài */
     private boolean internalOrExternal;
-	/*update_end author:wuxianquan date:20190908 for:实体增加字段 */
+	/*update_end author:wuxianquan date:20190908 for:Thực thể thêm trường */
 
     public SysPermission() {
     	

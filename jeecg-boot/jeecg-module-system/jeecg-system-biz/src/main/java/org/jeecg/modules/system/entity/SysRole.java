@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 角色表
+ * Bảng vai trò
  * </p>
  *
  * @Author scott
@@ -36,47 +36,47 @@ public class SysRole implements Serializable {
     private String id;
     
     /**
-     * 角色名称
+     * Tên vai trò
      */
-    @Excel(name="角色名",width=15)
+    @Excel(name="Tên vai trò",width=15)
     private String roleName;
     
     /**
-     * 角色编码
+     * Mã vai trò
      */
-    @Excel(name="角色编码",width=15)
+    @Excel(name="Mã vai trò",width=15)
     private String roleCode;
     
     /**
-          * 描述
+          * Mô tả
      */
-    @Excel(name="描述",width=60)
+    @Excel(name="Mô tả",width=60)
     private String description;
 
     /**
-     * 创建人
+     * Người tạo
      */
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
     private String updateBy;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
-    /**租户ID*/
+    /**Tenant ID*/
     private java.lang.Integer tenantId;
 }

@@ -54,7 +54,7 @@ import java.util.*;
 
 /**
  * <p>
- * 部门表 前端控制器
+ * Bảng phòng ban Controller frontend
  * <p>
  * 
  * @Author: Steve @Since： 2019-01-22
@@ -77,7 +77,7 @@ public class SysDepartController {
 	@Autowired
 	private ISysUserTenantService userTenantService;
 	/**
-	 * 查询数据 查出我的部门,并以树结构数据格式响应给前端
+	 * Truy vấn dữ liệu, lấy phòng ban của tôi,Và phản hồi cho frontend dưới định dạng dữ liệu cấu trúc cây
 	 *
 	 * @return
 	 */
@@ -87,7 +87,7 @@ public class SysDepartController {
 		LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		try {
 			if(oConvertUtils.isNotEmpty(user.getUserIdentity()) && user.getUserIdentity().equals( CommonConstant.USER_IDENTITY_2 )){
-				// 代码逻辑说明: 部门查询ids为空后的前端显示问题 issues/I3UD06
+				// Giải thích logic mã: Vấn đề hiển thị ở frontend khi ids truy vấn phòng ban trống issues/I3UD06
 				String departIds = user.getDepartIds();
 				if(StringUtils.isNotBlank(departIds)){
 					List<SysDepartTreeModel> list = sysDepartService.queryMyDeptTreeList(departIds);
@@ -106,7 +106,7 @@ public class SysDepartController {
 	}
 
 	/**
-	 * 查询数据 查出所有部门,并以树结构数据格式响应给前端
+	 * Truy vấn dữ liệu, lấy tất cả các phòng ban,Và phản hồi cho frontend dưới định dạng dữ liệu cấu trúc cây
 	 * 
 	 * @return
 	 */
@@ -114,7 +114,7 @@ public class SysDepartController {
 	public Result<List<SysDepartTreeModel>> queryTreeList(@RequestParam(name = "ids", required = false) String ids) {
 		Result<List<SysDepartTreeModel>> result = new Result<>();
 		try {
-			// 从内存中读取
+			// Đọc từ bộ nhớ
 //			List<SysDepartTreeModel> list =FindsDepartsChildrenUtil.getSysDepartTreeList();
 //			if (CollectionUtils.isEmpty(list)) {
 //				list = sysDepartService.queryTreeList();
@@ -134,10 +134,10 @@ public class SysDepartController {
 	}
 
 	/**
-	 * 异步查询部门list
-	 * @param parentId 父节点 异步加载时传递
-	 * @param ids 前端回显是传递
-	 * @param primaryKey 主键字段（id或者orgCode）
+	 * Truy vấn phòng ban bất đồng bộ list
+	 * @param parentId Nút cha — truyền khi tải bất đồng bộ
+	 * @param ids Frontend hiển thị lại là giá trị được truyền
+	 * @param primaryKey Trường khóa chính (id hoặc orgCode)
 	 * @return
 	 */
 	@RequestMapping(value = "/queryDepartTreeSync", method = RequestMethod.GET)
@@ -150,16 +150,16 @@ public class SysDepartController {
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 			result.setSuccess(false);
-			result.setMessage("查询失败");
+			result.setMessage("Tìm kiếm thất bại");
 		}
 		return result;
 	}
 
     /**
-     * 异步查询部门和岗位list
-     * @param parentId 父节点 异步加载时传递
-     * @param ids 前端回显是传递
-     * @param primaryKey 主键字段（id或者orgCode）
+     * Truy vấn bất đồng bộ phòng ban và chức vụ list
+     * @param parentId Nút cha — truyền khi tải bất đồng bộ
+     * @param ids Frontend hiển thị lại là giá trị được truyền
+     * @param primaryKey Trường khóa chính (id hoặc orgCode)
      * @return
      */
     @RequestMapping(value = "/queryDepartAndPostTreeSync", method = RequestMethod.GET)
@@ -176,16 +176,16 @@ public class SysDepartController {
         } catch (Exception e) {
             log.error(e.getMessage(),e);
             result.setSuccess(false);
-            result.setMessage("查询失败");
+            result.setMessage("Tìm kiếm thất bại");
         }
         return result;
     }
 
 	/**
-	 * 获取某个部门的所有父级部门的ID
+	 * Lấy tất cả các phòng ban cấp cha của một phòng ban ID
 	 *
-	 * @param departId 根据departId查
-	 * @param orgCode  根据orgCode查，departId和orgCode必须有一个不为空
+	 * @param departId Truy vấn theo departId
+	 * @param orgCode  Truy vấn theo orgCode; departId và orgCode phải có ít nhất một cái không rỗng
 	 */
 	@GetMapping("/queryAllParentId")
 	public Result queryParentIds(
@@ -198,7 +198,7 @@ public class SysDepartController {
 			} else if (oConvertUtils.isNotEmpty(orgCode)) {
 				data = sysDepartService.queryAllParentIdByOrgCode(orgCode);
 			} else {
-				return Result.error("departId 和 orgCode 不能都为空！");
+				return Result.error("departId và orgCode không được cùng để trống!");
 			}
 			return Result.OK(data);
 		} catch (Exception e) {
@@ -208,7 +208,7 @@ public class SysDepartController {
 	}
 
 	/**
-	 * 添加新数据 添加用户新建的部门对象数据,并保存到数据库
+	 * Thêm dữ liệu mới: thêm dữ liệu đối tượng phòng ban do người dùng mới tạo,và lưu vào cơ sở dữ liệu
 	 * 
 	 * @param sysDepart
 	 * @return
@@ -222,19 +222,19 @@ public class SysDepartController {
 		try {
 			sysDepart.setCreateBy(username);
 			sysDepartService.saveDepartData(sysDepart, username);
-			//清除部门树内存
+			//Xóa bộ nhớ cây phòng ban
 			// FindsDepartsChildrenUtil.clearSysDepartTreeList();
 			// FindsDepartsChildrenUtil.clearDepartIdModel();
-			result.success("添加成功！");
+			result.success("Thêm thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 
 	/**
-	 * 编辑数据 编辑部门的部分数据,并保存到数据库
+	 * Chỉnh sửa dữ liệu: chỉnh sửa một phần dữ liệu phòng ban,và lưu vào cơ sở dữ liệu
 	 * 
 	 * @param sysDepart
 	 * @return
@@ -248,22 +248,22 @@ public class SysDepartController {
 		Result<SysDepart> result = new Result<SysDepart>();
 		SysDepart sysDepartEntity = sysDepartService.getById(sysDepart.getId());
 		if (sysDepartEntity == null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		} else {
 			boolean ok = sysDepartService.updateDepartDataById(sysDepart, username);
-			// TODO 返回false说明什么？
+			// TODO Trả về false nghĩa là gì?
 			if (ok) {
-				//清除部门树内存
+				//Xóa bộ nhớ cây phòng ban
 				//FindsDepartsChildrenUtil.clearSysDepartTreeList();
 				//FindsDepartsChildrenUtil.clearDepartIdModel();
-				result.success("修改成功!");
+				result.success("Chỉnh sửa thành công!");
 			}
 		}
 		return result;
 	}
 	
 	 /**
-     *   通过id删除
+     *   Xóa theo id
     * @param id
     * @return
     */
@@ -275,20 +275,20 @@ public class SysDepartController {
        Result<SysDepart> result = new Result<SysDepart>();
        SysDepart sysDepart = sysDepartService.getById(id);
        if(sysDepart==null) {
-           result.error500("未找到对应实体");
+           result.error500("Không tìm thấy thực thể tương ứng");
        }else {
            sysDepartService.deleteDepart(id);
-			//清除部门树内存
+			//Xóa bộ nhớ cây phòng ban
 		   //FindsDepartsChildrenUtil.clearSysDepartTreeList();
 		   // FindsDepartsChildrenUtil.clearDepartIdModel();
-		   result.success("删除成功!");
+		   result.success("Xóa thành công!");
        }
        return result;
    }
 
 
 	/**
-	 * 批量删除 根据前端请求的多个ID,对数据库执行删除相关部门数据的操作
+	 * Xóa hàng loạt theo nhiều ID mà frontend yêu cầu ID,Xóa hàng loạt: theo nhiều ID mà frontend yêu cầu, thực hiện thao tác xóa dữ liệu phòng ban liên quan trong cơ sở dữ liệu
 	 * 
 	 * @param ids
 	 * @return
@@ -300,16 +300,16 @@ public class SysDepartController {
 
 		Result<SysDepart> result = new Result<SysDepart>();
 		if (ids == null || "".equals(ids.trim())) {
-			result.error500("参数不识别！");
+			result.error500("Không nhận dạng được tham số!");
 		} else {
 			this.sysDepartService.deleteBatchWithChildren(Arrays.asList(ids.split(",")));
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		return result;
 	}
 
 	/**
-	 * 查询数据 添加或编辑页面对该方法发起请求,以树结构形式加载所有部门的名称,方便用户的操作
+	 * Truy vấn dữ liệu, trang thêm mới hoặc chỉnh sửa gửi yêu cầu đến phương thức này,Tải tên của tất cả phòng ban dưới dạng cấu trúc cây,Thuận tiện cho thao tác của người dùng
 	 * 
 	 * @return
 	 */
@@ -347,7 +347,7 @@ public class SysDepartController {
 	 
 	/**
 	 * <p>
-	 * 部门搜索功能方法,根据关键字模糊搜索相关部门
+	 * Phương thức chức năng tìm kiếm phòng ban,Tìm kiếm mờ các phòng ban liên quan theo từ khóa
 	 * </p>
 	 * 
 	 * @param keyWord
@@ -359,7 +359,7 @@ public class SysDepartController {
                                                      @RequestParam(name = "orgCategory", required = false) String orgCategory,
                                                      @RequestParam(name = "departIds", required = false) String depIds) {
 		Result<List<SysDepartTreeModel>> result = new Result<List<SysDepartTreeModel>>();
-		//部门查询，myDeptSearch为1时为我的部门查询，登录用户为上级时查只查负责部门下数据
+		//Truy vấn phòng ban, khi myDeptSearch bằng 1 là truy vấn phòng ban của tôi; khi người dùng đăng nhập là cấp trên thì chỉ truy vấn dữ liệu thuộc các phòng ban phụ trách
 		LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		String departIds = null;
 		if(oConvertUtils.isNotEmpty(user.getUserIdentity()) && user.getUserIdentity().equals( CommonConstant.USER_IDENTITY_2 )){
@@ -368,7 +368,7 @@ public class SysDepartController {
 		List<SysDepartTreeModel> treeList = this.sysDepartService.searchByKeyWord(keyWord,myDeptSearch,departIds,orgCategory,depIds);
 		if (treeList == null || treeList.size() == 0) {
 			result.setSuccess(false);
-			result.setMessage("未查询匹配数据！");
+			result.setMessage("Không truy vấn được dữ liệu khớp!");
 			return result;
 		}
 		result.setResult(treeList);
@@ -377,7 +377,7 @@ public class SysDepartController {
 
 
 	/**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      */
@@ -385,43 +385,43 @@ public class SysDepartController {
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(SysDepart sysDepart,HttpServletRequest request) {
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			sysDepart.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
 		//------------------------------------------------------------------------------------------------
 		
-		//// Step.1 组装查询条件
+		//// Step.1 Lắp ráp điều kiện truy vấn
 		//QueryWrapper<SysDepart> queryWrapper = QueryGenerator.initQueryWrapper(sysDepart, request.getParameterMap());
-		//Step.1 AutoPoi 导出Excel
+		//Step.1 AutoPoi Xuất Excel
 		ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
         //List<SysDepart> pageList = sysDepartService.list(queryWrapper);
-        //按字典排序
+        //Sắp xếp theo danh mục
         //Collections.sort(pageList, new Comparator<SysDepart>() {
             //@Override
 			//public int compare(SysDepart arg0, SysDepart arg1) {
 				//return arg0.getOrgCode().compareTo(arg1.getOrgCode());
 			//}
 		//});
-		// 过滤选中数据
+		// Lọc dữ liệu đã chọn
 		String selections = request.getParameter("selections");
 		List<String> idList = new ArrayList<>();
 		if (oConvertUtils.isNotEmpty(selections)) {
 			idList = Arrays.asList(selections.split(","));
 		}
-		//step.2 组装导出数据
+		//step.2 Lắp ráp dữ liệu xuất
 		Integer tenantId = sysDepart == null ? null : sysDepart.getTenantId();
-		// 代码逻辑说明: 【TV360X-1671】部门管理不支持选中的记录导出---
+		// Giải thích logic mã: 【TV360X-1671] Quản lý phòng ban không hỗ trợ xuất các bản ghi đã chọn---
 		List<SysDepartExportVo> sysDepartExportVos = sysDepartService.getExportDepart(tenantId,idList);
-        //导出文件名称
-        mv.addObject(NormalExcelConstants.FILE_NAME, "部门列表");
+        //Tên file xuất
+        mv.addObject(NormalExcelConstants.FILE_NAME, "Danh sách phòng ban");
         mv.addObject(NormalExcelConstants.CLASS, SysDepartExportVo.class);
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        ExportParams exportParams = new ExportParams("导入规则：\n" +
-                "1、标题为第三行，部门路径和部门名称的标题不允许修改，否则会匹配失败；第四行为数据填写范围;\n" +
-                "2、部门路径用英文字符/分割，部门名称为部门路径的最后一位;\n" +
-                "3、部门从一级名称开始创建，如果有同级就需要多添加一行，如研发部/研发一部;研发部/研发二部;\n" +
-                "4、自定义的部门编码需要满足规则才能导入。如一级部门编码为A01,那么子部门为A01A01,同级子部门为A01A02,编码固定为三位，首字母为A-Z,后两位为数字0-99，依次递增;", "导出人:" + user.getRealname(), "导出信息", ExcelType.XSSF);
+        ExportParams exportParams = new ExportParams("Quy tắc nhập:\n" +
+                "1, tiêu đề ở dòng thứ ba, tiêu đề của đường dẫn phòng ban và tên phòng ban không được phép sửa, nếu không sẽ khớp thất bại; dòng thứ tư là phạm vi điền dữ liệu;\n" +
+                "2, đường dẫn phòng ban dùng ký tự tiếng Anh/phân tách, tên phòng ban là phần cuối cùng của đường dẫn phòng ban;\n" +
+                "3, phòng ban được tạo bắt đầu từ tên cấp một; nếu có cùng cấp thì cần thêm một dòng, ví dụ phòng R&D/Phòng Nghiên cứu và Phát triển 1;Phòng Nghiên cứu và Phát triển/Phòng Nghiên cứu và Phát triển 2;\n" +
+                "4, mã phòng ban tùy chỉnh cần thỏa mãn quy tắc mới được import. Ví dụ mã phòng ban cấp một là A01,thì phòng ban con là A01A01,Phòng ban con cùng cấp là A01A02,Mã được cố định 3 ký tự, ký tự đầu tiên là A-Z,hai ký tự cuối là số 0-99, tăng dần theo thứ tự;", "Người xuất:" + user.getRealname(), "Thông tin xuất", ExcelType.XSSF);
         exportParams.setTitleHeight((short)70);
         exportParams.setStyle(ExcelExportSysUserStyle.class);
         mv.addObject(NormalExcelConstants.PARAMS, exportParams);
@@ -431,9 +431,9 @@ public class SysDepartController {
     }
 
     /**
-     * 通过excel导入数据
-	 * 部门导入方案1: 通过机构编码来计算出部门的父级ID,维护上下级关系;
-	 * 部门导入方案2: 你也可以改造下程序,机构编码直接导入,先不设置父ID;全部导入后,写一个sql,补下父ID;
+     * Nhập dữ liệu qua Excel
+	 * Phương án nhập phòng ban 1: Tính cấp cha của phòng ban qua mã tổ chức ID,Duy trì quan hệ cấp trên - cấp dưới;
+	 * Phương án nhập phòng ban 2: Bạn cũng có thể sửa đổi chương trình,Nhập trực tiếp mã tổ chức,Chưa đặt cấp cha trước ID;Sau khi nhập toàn bộ,Viết một sql,bổ sung ID;
      *
      * @param request
      * @param response
@@ -449,17 +449,17 @@ public class SysDepartController {
 		List<SysDepartExportVo> listSysDeparts = null;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
             MultipartFile file = entity.getValue();
             ImportParams params = new ImportParams();
             params.setTitleRows(2);
             params.setHeadRows(1);
             params.setNeedSave(true);
             try {
-//            	// orgCode编码长度
+//            	// orgCode Độ dài mã
 //            	int codeLength = YouBianCodeUtil.ZHANWEI_LENGTH;
 //                listSysDeparts = ExcelImportUtil.importExcel(file.getInputStream(), SysDepart.class, params);
-//                //按长度排序
+//                //Sắp xếp theo độ dài
 //                Collections.sort(listSysDeparts, new Comparator<SysDepart>() {
 //                    @Override
 //					public int compare(SysDepart arg0, SysDepart arg1) {
@@ -478,13 +478,13 @@ public class SysDepartController {
 //                		SysDepart parentDept = sysDepartService.getOne(queryWrapper);
 //                		if(!parentDept.equals(null)) {
 //							sysDepart.setParentId(parentDept.getId());
-//							//更新父级部门不是叶子结点
+//							//Cập nhật phòng ban cấp trên không phải là nút lá
 //							sysDepartService.updateIzLeaf(parentDept.getId(),CommonConstant.NOT_LEAF);
 //						} else {
 //							sysDepart.setParentId("");
 //						}
 //                		}catch (Exception e) {
-//                			//没有查找到parentDept
+//                			//Không tìm thấy parentDept
 //                		}
 //                	}else{
 //                		sysDepart.setParentId("");
@@ -498,11 +498,11 @@ public class SysDepartController {
 //					num++;
 //                }
 				
-				// 代码逻辑说明: 【QQYUN-5482】系统的部门导入导出也可以改成敲敲云模式的部门路径---
+				// Giải thích logic mã: 【QQYUN-5482] Import/export phòng ban của hệ thống cũng có thể đổi sang đường dẫn phòng ban ở chế độ QiaoQiaoYun---
 				listSysDeparts = ExcelImportUtil.importExcel(file.getInputStream(), SysDepartExportVo.class, params);
 				sysDepartService.importSysDepart(listSysDeparts,errorMessageList);
 				
-				//清空部门缓存
+				//Xóa bộ nhớ đệm phòng ban
 				List<String> keys3 = redisUtil.scan(CacheConstant.SYS_DEPARTS_CACHE + "*");
 				List<String> keys4 = redisUtil.scan(CacheConstant.SYS_DEPART_IDS_CACHE + "*");
 				redisTemplate.delete(keys3);
@@ -510,7 +510,7 @@ public class SysDepartController {
 				return ImportExcelUtil.imporReturnRes(errorMessageList.size(), listSysDeparts.size() - errorMessageList.size(), errorMessageList);
             } catch (Exception e) {
                 log.error(e.getMessage(),e);
-                return Result.error("文件导入失败:"+e.getMessage());
+                return Result.error("Nhập file thất bại:"+e.getMessage());
             } finally {
                 try {
                     file.getInputStream().close();
@@ -519,12 +519,12 @@ public class SysDepartController {
                 }
             }
         }
-        return Result.error("文件导入失败！");
+        return Result.error("Nhập tệp thất bại!");
     }
 
 
 	/**
-	 * 查询所有部门信息
+	 * Truy vấn tất cả thông tin phòng ban
 	 * @return
 	 */
 	@GetMapping("listAll")
@@ -542,7 +542,7 @@ public class SysDepartController {
 		return result;
 	}
 	/**
-	 * 查询数据 查出所有部门,并以树结构数据格式响应给前端
+	 * Truy vấn dữ liệu, lấy tất cả các phòng ban,Và phản hồi cho frontend dưới định dạng dữ liệu cấu trúc cây
 	 *
 	 * @return
 	 */
@@ -552,21 +552,21 @@ public class SysDepartController {
 		try {
 			Map<String,Object> map=new HashMap(5);
 			List<SysDepartTreeModel> list = sysDepartService.queryTreeByKeyWord(keyWord);
-			//根据keyWord获取用户信息
+			//Lấy thông tin người dùng theo keyWord
 			LambdaQueryWrapper<SysUser> queryUser = new LambdaQueryWrapper<SysUser>();
 			queryUser.eq(SysUser::getDelFlag,CommonConstant.DEL_FLAG_0);
 			queryUser.and(i -> i.like(SysUser::getUsername, keyWord).or().like(SysUser::getRealname, keyWord));
-			//update-begin---author:scott ---date:20261014  for：【安全 GHSA-2h34-xh29-7w95】多租户模式下只查当前租户的用户，防止按关键字跨租户搜索用户信息-----------
+			//update-begin---author:scott ---date:20261014  for: 【Bảo mật GHSA-2h34-xh29-7w95] Ở chế độ đa tenant chỉ truy vấn người dùng của tenant hiện tại, ngăn tìm kiếm thông tin người dùng xuyên tenant theo từ khóa-----------
 			if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 				Integer tenantId = oConvertUtils.getInt(TokenUtils.getTenantIdByRequest(request), 0);
 				List<String> userIds = userTenantService.getUserIdsByTenantId(tenantId);
 				if (oConvertUtils.listIsNotEmpty(userIds)) {
 					queryUser.in(SysUser::getId, userIds);
 				} else {
-					queryUser.eq(SysUser::getId, "通过租户查询不到任何用户");
+					queryUser.eq(SysUser::getId, "Không tìm thấy người dùng nào qua tenant");
 				}
 			}
-			//update-end---author:scott ---date:20261014  for：【安全 GHSA-2h34-xh29-7w95】多租户模式下只查当前租户的用户，防止按关键字跨租户搜索用户信息-----------
+			//update-end---author:scott ---date:20261014  for: 【Bảo mật GHSA-2h34-xh29-7w95] Ở chế độ đa tenant chỉ truy vấn người dùng của tenant hiện tại, ngăn tìm kiếm thông tin người dùng xuyên tenant theo từ khóa-----------
 			List<SysUser> sysUsers = this.sysUserService.list(queryUser);
 			map.put("userList",sysUsers);
 			map.put("departList",list);
@@ -579,7 +579,7 @@ public class SysDepartController {
 	}
 
 	/**
-	 * 根据部门编码获取部门信息
+	 * Lấy thông tin phòng ban theo mã phòng ban
 	 *
 	 * @param orgCode
 	 * @return
@@ -596,7 +596,7 @@ public class SysDepartController {
 	}
 
 	/**
-	 * 根据部门id获取用户信息
+	 * Lấy thông tin người dùng theo ID phòng ban
 	 *
 	 * @param id
 	 * @return
@@ -611,7 +611,7 @@ public class SysDepartController {
 	}
 
 	/**
-	 * @功能：根据id 批量查询
+	 * @Chức năng: truy vấn hàng loạt theo id
 	 * @param deptIds
 	 * @return
 	 */
@@ -621,7 +621,7 @@ public class SysDepartController {
 		String[] ids = deptIds.split(",");
 		Collection<String> idList = Arrays.asList(ids);
 		Collection<SysDepart> deptList = sysDepartService.listByIds(idList);
-		// 设置部门路径名称
+		// Đặt tên đường dẫn phòng ban
 		for (SysDepart depart : deptList) {
 			String departPathName = sysDepartService.getDepartPathNameByOrgCode(depart.getOrgCode(),null);
 			depart.setDepartPathName(departPathName);
@@ -638,8 +638,8 @@ public class SysDepartController {
     }
 
 	/**
-	 * 异步查询部门list
-	 * @param parentId 父节点 异步加载时传递
+	 * Truy vấn phòng ban bất đồng bộ list
+	 * @param parentId Nút cha — truyền khi tải bất đồng bộ
 	 * @return
 	 */
 	@RequestMapping(value = "/queryBookDepTreeSync", method = RequestMethod.GET)
@@ -658,7 +658,7 @@ public class SysDepartController {
 	}
 
 	/**
-	 * 通过部门id和租户id获取用户 【低代码应用: 用于选择部门负责人】
+	 * Lấy người dùng theo id phòng ban và id tenant [Ứng dụng low-code: dùng để chọn người phụ trách phòng ban】
 	 * @param departId
 	 * @return
 	 */
@@ -670,28 +670,28 @@ public class SysDepartController {
 	}
 
 	/**
-	 * 导出excel【低代码应用: 用于导出部门】
+	 * Xuất excel 【Ứng dụng low-code: Dùng để xuất phòng ban】
 	 *
 	 * @param request
 	 */
 	@RequestMapping(value = "/appExportXls")
 	public ModelAndView appExportXls(SysDepart sysDepart,HttpServletRequest request) {
-		// Step.1 组装查询条件
+		// Step.1 Lắp ráp điều kiện truy vấn
 		int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
 		ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
 		List<ExportDepartVo> pageList = sysDepartService.getExcelDepart(tenantId);
-		//Step.2 AutoPoi 导出Excel
-		//导出文件名称
-		mv.addObject(NormalExcelConstants.FILE_NAME, "部门列表");
+		//Step.2 AutoPoi Xuất Excel
+		//Tên file xuất
+		mv.addObject(NormalExcelConstants.FILE_NAME, "Danh sách phòng ban");
 		mv.addObject(NormalExcelConstants.CLASS, ExportDepartVo.class);
 		LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-		mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("部门列表数据", "导出人:"+user.getRealname(), "导出信息"));
+		mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("Dữ liệu danh sách phòng ban", "Người xuất:"+user.getRealname(), "Thông tin xuất"));
 		mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
 		return mv;
 	}
 
 	/**
-	 * 导入excel【低代码应用: 用于导出部门】
+	 * Nhập excel 【Ứng dụng low-code: Dùng để xuất phòng ban】
 	 *
 	 * @param request
 	 */
@@ -703,7 +703,7 @@ public class SysDepartController {
 		List<ExportDepartVo> listSysDeparts = null;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-			// 获取上传文件对象
+			// Lấy đối tượng tệp tải lên
 			MultipartFile file = entity.getValue();
 			ImportParams params = new ImportParams();
 			params.setTitleRows(2);
@@ -712,7 +712,7 @@ public class SysDepartController {
 			try {
 				listSysDeparts = ExcelImportUtil.importExcel(file.getInputStream(), ExportDepartVo.class, params);
 				sysDepartService.importExcel(listSysDeparts,errorMessageList);
-				//清空部门缓存
+				//Xóa bộ nhớ đệm phòng ban
 				List<String> keys3 = redisUtil.scan(CacheConstant.SYS_DEPARTS_CACHE + "*");
 				List<String> keys4 = redisUtil.scan(CacheConstant.SYS_DEPART_IDS_CACHE + "*");
 				redisTemplate.delete(keys3);
@@ -720,7 +720,7 @@ public class SysDepartController {
 				return ImportExcelUtil.imporReturnRes(errorMessageList.size(), listSysDeparts.size() - errorMessageList.size(), errorMessageList);
 			} catch (Exception e) {
 				log.error(e.getMessage(),e);
-				return Result.error("文件导入失败:"+e.getMessage());
+				return Result.error("Nhập file thất bại:"+e.getMessage());
 			} finally {
 				try {
 					file.getInputStream().close();
@@ -729,11 +729,11 @@ public class SysDepartController {
 				}
 			}
 		}
-		return Result.error("文件导入失败！");
+		return Result.error("Nhập tệp thất bại!");
 	}
 
     /**
-     * 根据部门id和职级id获取岗位信息
+     * Theo id phòng ban và id cấp bậc, lấy thông tin vị trí
      */
     @GetMapping("/getPositionByDepartId")
 	public Result<List<SysPositionSelectTreeVo>> getPositionByDepartId(@RequestParam(name = "parentId") String parentId,
@@ -744,7 +744,7 @@ public class SysDepartController {
     }
 
     /**
-     * 获取职级关系
+     * Lấy quan hệ cấp bậc
      * @param departId
      * @return
      */
@@ -754,7 +754,7 @@ public class SysDepartController {
         return Result.ok(list);
     }
     /**
-     * 获取ALL职级关系
+     * Lấy quan hệ cấp bậc ALL
      * @param departId
      * @return
      */
@@ -765,11 +765,11 @@ public class SysDepartController {
     }
 
     /**
-     * 根据部门code获取当前和上级部门名称
+     * Theo code phòng ban, lấy tên phòng ban hiện tại và phòng ban cấp trên
      *
      * @param orgCode
      * @param depId
-     * @return String 部门名称
+     * @return String Tên phòng ban
      */
     @GetMapping("/getDepartPathNameByOrgCode")
     public Result<String> getDepartPathNameByOrgCode(@RequestParam(name = "orgCode", required = false) String orgCode,
@@ -779,10 +779,10 @@ public class SysDepartController {
     }
 
     /**
-     * 批量获取部门路径名称（根据多个depId一次性查询）
+     * Lấy hàng loạt tên đường dẫn phòng ban (truy vấn một lần theo nhiều depId)
      *
-     * @param depIds 逗号分隔的部门/岗位ID
-     * @return Map<depId, 部门路径名称>
+     * @param depIds Phòng ban/vị trí công việc phân tách bằng dấu phẩy/Vị trí công tác ID
+     * @return Map<depId, Tên đường dẫn phòng ban>
      */
     @GetMapping("/batchGetDepartPathName")
     public Result<Map<String, String>> batchGetDepartPathName(@RequestParam(name = "depIds") String depIds) {
@@ -804,9 +804,9 @@ public class SysDepartController {
     }
 
     /**
-     * 根据部门id获取部门下的岗位id
+     * Lấy các vị trí thuộc phòng ban theo id phòng ban id
      *
-     * @param depIds 当前选择的公司、子公司、部门id
+     * @param depIds Công ty, công ty con, phòng ban đang chọn id
      * @return
      */
     @GetMapping("/getDepPostIdByDepId")
@@ -816,7 +816,7 @@ public class SysDepartController {
     }
 
     /**
-     * 更新改变后的部门数据
+     * Cập nhật dữ liệu phòng ban sau khi thay đổi
      * 
      * @param changeDepartVo
      * @return
@@ -826,11 +826,11 @@ public class SysDepartController {
     @RequiresRoles({"admin"})
     public Result<String> updateChangeDepart(@RequestBody SysChangeDepartVo changeDepartVo) {
         sysDepartService.updateChangeDepart(changeDepartVo);
-    	return Result.ok("调整部门位置成功！");
+    	return Result.ok("Điều chỉnh vị trí phòng ban thành công!");
     }
 
     /**
-     * 获取部门负责人
+     * Lấy người phụ trách phòng ban
      * 
      * @param departId
      * @return
@@ -845,11 +845,11 @@ public class SysDepartController {
     }
 
     /**
-     * 部门管理页面专用搜索接口，搜索结果支持展开下级并去除父子重复节点。
+     * API tìm kiếm chuyên dùng cho trang quản lý phòng ban; kết quả tìm kiếm hỗ trợ mở rộng cấp dưới và loại bỏ node cha-con trùng lặp.
      *
-     * @param keyWord 关键字
-     * @param orgCategory 组织机构类型
-     * @return 部门树节点
+     * @param keyWord Từ khóa
+     * @param orgCategory Loại cơ quan tổ chức
+     * @return Nút cây phòng ban
      */
     @GetMapping("/searchByDepartManage")
     public Result<List<SysDepartTreeModel>> searchByDepartManage(
@@ -857,7 +857,7 @@ public class SysDepartController {
             @RequestParam(name = "orgCategory", required = false) String orgCategory) {
         List<SysDepartTreeModel> treeList = sysDepartService.searchByKeyWordForDepartManage(keyWord, orgCategory);
         if (treeList == null || treeList.size() == 0) {
-            return Result.error("未查询匹配数据！");
+            return Result.error("Không truy vấn được dữ liệu khớp!");
         }
         return Result.ok(treeList);
     }

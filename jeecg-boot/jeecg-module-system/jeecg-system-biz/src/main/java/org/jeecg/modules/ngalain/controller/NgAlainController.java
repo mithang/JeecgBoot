@@ -47,7 +47,7 @@
 //        j.put("menu",ngAlainService.getMenu(user.getUsername()));
 //        JSONObject app = new JSONObject();
 //        app.put("name", "jeecg-boot-angular");
-//        app.put("description", "jeecg+ng-alain整合版本");
+//        app.put("description", "jeecg+ng-alain Phiên bản tích hợp");
 //        j.put("app", app);
 //        return j;
 //    }
@@ -63,7 +63,7 @@
 //            result.setResult(ls);
 //        } catch (Exception e) {
 //            log.error(e.getMessage(),e);
-//            result.error500("操作失败");
+//            result.error500("Thao tác thất bại");
 //            return result;
 //        }
 //        List<JSONObject> dictlist=new ArrayList<>();

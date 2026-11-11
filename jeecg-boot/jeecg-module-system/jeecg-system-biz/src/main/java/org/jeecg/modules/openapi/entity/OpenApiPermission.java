@@ -24,32 +24,32 @@ public class OpenApiPermission implements Serializable {
     private String id;
 
     /**
-     * 接口ID
+     * API ID
      */
     private String apiId;
 
     /**
-     * 认证ID
+     * Xác thực ID
      */
     private String apiAuthId;
 
     /**
-     * 创建人
+     * Người tạo
      */
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     private Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
     private String updateBy;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     private Date updateTime;
 }

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.system.entity.SysFormFile;
 
 /**
- * @Description: 表单评论文件
+ * @Description: Tệp bình luận biểu mẫu
  * @Author: jeecg-boot
  * @Date: 2022-07-21
  * @Version: V1.0

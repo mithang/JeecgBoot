@@ -3,9 +3,9 @@ package org.jeecg.modules.system.vo;
 import lombok.Data;
 
 /**
- * 用户-部门ID映射VO，用于批量查询用户所属部门（消除N+1查询）
+ * Người dùng-VO ánh xạ ID phòng ban, dùng để truy vấn hàng loạt phòng ban mà người dùng thuộc về (loại bỏ N+1 truy vấn)
  * @author scott
- * @since 2026-07-01 listAll接口N+1查询改造
+ * @since 2026-07-01 listAll API N+1 Cải tiến truy vấn
  */
 @Data
 public class SysUserDepartIdVo {

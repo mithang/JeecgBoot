@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * <p>
- * 角色表 Mapper 接口
+ * Interface Mapper bảng vai trò
  * </p>
  *
  * @Author scott
@@ -23,7 +23,7 @@ import java.util.List;
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
     /**
-     * 查询全部的角色（不做租户隔离）
+     * Truy vấn tất cả vai trò (không cách ly theo tenant)
      * @param page
      * @param role
      * @return
@@ -32,7 +32,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     List<SysRole> listAllSysRole(@Param("page") Page<SysRole> page, @Param("role") SysRole role);
 
     /**
-     * 查询角色是否存在不做租户隔离
+     * Truy vấn vai trò có tồn tại hay không, không thực hiện cách ly tenant
      *
      * @param roleCode
      * @return
@@ -41,7 +41,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     SysRole getRoleNoTenant(@Param("roleCode") String roleCode);
 
     /**
-     * 根据用户id查询用户拥有的角色Code
+     * Truy vấn vai trò mà người dùng sở hữu theo id người dùng Code
      *
      * @param userId
      * @param tenantId
@@ -50,7 +50,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     List<SysRole> getRoleCodeListByUserId(@Param("userId") String userId, @Param("tenantId") Integer tenantId);
 
     /**
-     * 删除角色与用户关系
+     * Xóa quan hệ vai trò và người dùng
      * @Author scott
      * @Date 2019/12/13 16:12
      * @param roleId
@@ -60,7 +60,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
 
 
     /**
-     * 删除角色与权限关系
+     * Xóa quan hệ vai trò và quyền hạn
      * @Author scott
      * @param roleId
      * @Date 2019/12/13 16:12
@@ -69,7 +69,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     void deleteRolePermissionRelation(@Param("roleId") String roleId);
 
     /**
-     * 根据角色id和当前租户判断当前角色是否存在这个租户中
+     * Dựa theo id vai trò và thuê bao hiện tại để xác định vai trò hiện tại có tồn tại trong thuê bao này hay không
      * @param id
      * @return
      */
@@ -77,7 +77,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     Long getRoleCountByTenantId(@Param("id") String id, @Param("tenantId") Integer tenantId);
 
     /**
-     * 根据用户id获取角色信息
+     * Lấy thông tin vai trò theo ID người dùng
      * 
      * @param userList
      * @return

@@ -35,13 +35,13 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- *  前端控制器
+ *  Bộ điều khiển frontend
  * </p>
  *
  * @Author zhangweijian
  * @since 2018-12-28
  */
-@Tag(name = "数据字典")
+@Tag(name = "Danh mục dữ liệu")
 @RestController
 @RequestMapping("/sys/dictItem")
 @Slf4j
@@ -53,7 +53,7 @@ public class SysDictItemController {
 	private ISysDictService sysDictService;
 	
 	/**
-	 * @功能：查询字典数据
+	 * @Chức năng: Truy vấn dữ liệu danh mục
 	 * @param sysDictItem
 	 * @param pageNo
 	 * @param pageSize
@@ -74,7 +74,7 @@ public class SysDictItemController {
 	}
 	
 	/**
-	 * @功能：新增
+	 * @Chức năng: Thêm mới
 	 * @return
 	 */
     @RequiresPermissions("system:dict:item:add")
@@ -86,16 +86,16 @@ public class SysDictItemController {
 			sysDictItem.setCreateTime(new Date());
 			sysDictItemService.save(sysDictItem);
 			sysDictService.refreshDictVersion();
-			result.success("保存成功！");
+			result.success("Lưu thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 	
 	/**
-	 * @功能：编辑
+	 * @Chức năng: Chỉnh sửa
 	 * @param sysDictItem
 	 * @return
 	 */
@@ -106,21 +106,21 @@ public class SysDictItemController {
 		Result<SysDictItem> result = new Result<SysDictItem>();
 		SysDictItem sysdict = sysDictItemService.getById(sysDictItem.getId());
 		if(sysdict==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			sysDictItem.setUpdateTime(new Date());
 			boolean ok = sysDictItemService.updateById(sysDictItem);
-			//TODO 返回false说明什么？
+			//TODO Trả về false nghĩa là gì?
 			if(ok) {
 				sysDictService.refreshDictVersion();
-				result.success("编辑成功!");
+				result.success("Chỉnh sửa thành công!");
 			}
 		}
 		return result;
 	}
 	
 	/**
-	 * @功能：删除字典数据
+	 * @Chức năng: Xóa dữ liệu danh mục
 	 * @param id
 	 * @return
 	 */
@@ -131,19 +131,19 @@ public class SysDictItemController {
 		Result<SysDictItem> result = new Result<SysDictItem>();
 		SysDictItem joinSystem = sysDictItemService.getById(id);
 		if(joinSystem==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			boolean ok = sysDictItemService.removeById(id);
 			if(ok) {
 				sysDictService.refreshDictVersion();
-				result.success("删除成功!");
+				result.success("Xóa thành công!");
 			}
 		}
 		return result;
 	}
 	
 	/**
-	 * @功能：批量删除字典数据
+	 * @Chức năng: Xóa hàng loạt dữ liệu danh mục
 	 * @param ids
 	 * @return
 	 */
@@ -153,40 +153,40 @@ public class SysDictItemController {
 	public Result<SysDictItem> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<SysDictItem> result = new Result<SysDictItem>();
 		if(ids==null || "".equals(ids.trim())) {
-			result.error500("参数不识别！");
+			result.error500("Không nhận dạng được tham số!");
 		}else {
 			this.sysDictItemService.removeByIds(Arrays.asList(ids.split(",")));
 			sysDictService.refreshDictVersion();
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		return result;
 	}
 
 	/**
-	 * 字典值重复校验
+	 * Kiểm tra trùng lặp giá trị danh mục
 	 * @param sysDictItem
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/dictItemCheck", method = RequestMethod.GET)
-	@Operation(summary="字典重复校验接口")
+	@Operation(summary="Giao diện kiểm tra trùng lặp danh mục")
 	public Result<Object> doDictItemCheck(SysDictItem sysDictItem, HttpServletRequest request) {
 		Long num = Long.valueOf(0);
 		LambdaQueryWrapper<SysDictItem> queryWrapper = new LambdaQueryWrapper<SysDictItem>();
 		queryWrapper.eq(SysDictItem::getItemValue,sysDictItem.getItemValue());
 		queryWrapper.eq(SysDictItem::getDictId,sysDictItem.getDictId());
 		if (StringUtils.isNotBlank(sysDictItem.getId())) {
-			// 编辑页面校验
+			// Chỉnh sửa kiểm tra trang
 			queryWrapper.ne(SysDictItem::getId,sysDictItem.getId());
 		}
 		num = sysDictItemService.count(queryWrapper);
 		if (num == 0) {
-			// 该值可用
-			return Result.ok("该值可用！");
+			// Giá trị này khả dụng
+			return Result.ok("Giá trị này khả dụng!");
 		} else {
-			// 该值不可用
-			log.info("该值不可用，系统中已存在！");
-			return Result.error("该值不可用，系统中已存在！");
+			// Giá trị này không khả dụng
+			log.info("Giá trị này không khả dụng, đã tồn tại trong hệ thống!");
+			return Result.error("Giá trị này không khả dụng, đã tồn tại trong hệ thống!");
 		}
 	}
 	

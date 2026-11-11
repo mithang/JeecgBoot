@@ -8,7 +8,7 @@ import org.jeecg.modules.system.entity.SysDepart;
 
 /**
  * <p>
- * 部门表 封装树结构的部门的名称的实体类
+ * Bảng phòng ban: lớp thực thể tên phòng ban đóng gói cấu trúc cây
  * <p>
  * 
  * @Author Steve
@@ -20,28 +20,28 @@ public class DepartIdModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键ID
+     * Khóa chính ID
      */
     private String key;
 
     /**
-     * 主键ID
+     * Khóa chính ID
      */
     private String value;
     /**
-     * 部门编码
+     * Mã phòng ban
      */
     private String code;
 
     /**
-     * 部门名称
+     * Tên phòng ban
      */
     private String title;
     
     List<DepartIdModel> children = new ArrayList<>();
     
     /**
-     * 将SysDepartTreeModel的部分数据放在该对象当中
+     * Đặt một phần dữ liệu của SysDepartTreeModel vào đối tượng này
      * @param treeModel
      * @return
      */
@@ -53,7 +53,7 @@ public class DepartIdModel implements Serializable {
     }
     
     /**
-     * 该方法为用户部门的实现类所使用
+     * Phương thức này được lớp triển khai phòng ban người dùng sử dụng
      * @param sysDepart
      * @return
      */

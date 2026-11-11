@@ -6,12 +6,12 @@ import org.jeecg.modules.system.entity.SysDataLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @Description: 系统数据日志Mapper接口
+ * @Description: Interface Mapper nhật ký dữ liệu hệ thống
  * @author: jeecg-boot
  */
 public interface SysDataLogMapper extends BaseMapper<SysDataLog>{
 	/**
-	 * 通过表名及数据Id获取最大版本
+	 * Lấy phiên bản lớn nhất theo tên bảng và Id dữ liệu
 	 * @param tableName
 	 * @param dataId
 	 * @return

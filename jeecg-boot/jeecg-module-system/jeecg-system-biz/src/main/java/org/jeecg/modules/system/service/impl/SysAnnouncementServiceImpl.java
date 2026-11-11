@@ -40,7 +40,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Description: 系统通告表
+ * @Description: Bảng thông báo hệ thống
  * @Author: jeecg-boot
  * @Date:  2019-01-02
  * @Version: V1.0
@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMapper, SysAnnouncement> implements ISysAnnouncementService {
 	/**
-	 * 补数据改成后台模式
+	 * Bổ sung dữ liệu đổi sang chế độ backend
 	 */
 	public static ExecutorService completeNoteThreadPool = new ThreadPoolExecutor(0, 1024, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 	
@@ -70,11 +70,11 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 		if(sysAnnouncement.getMsgType().equals(CommonConstant.MSG_TYPE_ALL)) {
 			sysAnnouncementMapper.insert(sysAnnouncement);
 		}else {
-			// 1.插入通告表记录
+			// 1.Chèn bản ghi vào bảng thông báo
 			sysAnnouncementMapper.insert(sysAnnouncement);
-			// 2.插入用户通告阅读标记表记录
+			// 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
 			String userId = sysAnnouncement.getUserIds();
-            // 代码逻辑说明: [issues/5503]【公告】通知无法接收
+            // Giải thích logic mã: [issues/5503]【Thông báo】Không thể nhận thông báo
 			if(StringUtils.isNotBlank(userId) && userId.endsWith(",")){
 				userId = userId.substring(0, (userId.length()-1));
 			}
@@ -93,16 +93,16 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 	}
 	
 	/**
-	 * @功能：编辑消息信息
+	 * @Chức năng: Chỉnh sửa thông tin tin nhắn
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean upDateAnnouncement(SysAnnouncement sysAnnouncement) {
-		// 1.更新系统信息表数据
+		// 1.Cập nhật dữ liệu bảng thông tin hệ thống
 		sysAnnouncementMapper.updateById(sysAnnouncement);
 		String userId = sysAnnouncement.getUserIds();
 		if(oConvertUtils.isNotEmpty(userId)&&sysAnnouncement.getMsgType().equals(CommonConstant.MSG_TYPE_UESR)) {
-			// 2.补充新的通知用户数据
+			// 2.Bổ sung dữ liệu người dùng thông báo mới
 			String[] userIds = userId.substring(0, (userId.length()-1)).split(",");
 			String anntId = sysAnnouncement.getId();
 			Date refDate = new Date();
@@ -120,7 +120,7 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 					sysAnnouncementSendMapper.insert(announcementSend);
 				}
 			}
-			// 3. 删除多余通知用户数据
+			// 3. Xóa dữ liệu người dùng thông báo thừa
 			Collection<String> delUserIds = Arrays.asList(userIds);
 			LambdaQueryWrapper<SysAnnouncementSend> queryWrapper = new LambdaQueryWrapper<SysAnnouncementSend>();
 			queryWrapper.notIn(SysAnnouncementSend::getUserId, delUserIds);
@@ -131,9 +131,9 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 	}
 
     /**
-     * 流程执行完成保存消息通知
-     * @param title 标题
-     * @param msgContent 信息内容
+     * Sau khi quy trình thực thi xong, lưu thông báo tin nhắn
+     * @param title Tiêu đề
+     * @param msgContent Nội dung thông tin
      */
 	@Override
 	public void saveSysAnnouncement(String title, String msgContent) {
@@ -186,17 +186,17 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 	@Override
 	public void batchInsertSysAnnouncementSend(String commentId, Integer tenantId) {
 		if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL && oConvertUtils.isNotEmpty(tenantId)) {
-			log.info("补全公告与用户的关系数据，租户ID = {}", tenantId);
+			log.info("Bổ sung dữ liệu quan hệ giữa thông báo và người dùng, tenant ID = {}", tenantId);
 		} else {
 			tenantId = null;
 		}
 
-		//update-begin---author:Claude ---date:2026-08-05---for: 【公告】全员发布撤销重发后sys_announcement_send产生重复记录，按anntId先清后插---
-		// 先按公告id删除该公告已有的发送记录，避免撤销后再次发布时同一用户产生多条未读
+		//update-begin---author:Claude ---date:2026-08-05---for: 【Thông báo】Sau khi thu hồi và phát lại cho toàn thể nhân viên sys_announcement_send Phát sinh bản ghi trùng lặp, xóa trước rồi chèn theo anntId---
+		// Xóa trước các bản ghi gửi đã có của thông báo đó theo id thông báo, tránh sau khi thu hồi rồi phát hành lại thì cùng một người dùng phát sinh nhiều bản ghi chưa đọc
 		LambdaQueryWrapper<SysAnnouncementSend> delQw = new LambdaQueryWrapper<>();
 		delQw.eq(SysAnnouncementSend::getAnntId, commentId);
 		sysAnnouncementSendService.remove(delQw);
-		//update-end---author:Claude ---date:2026-08-05---for: 【公告】全员发布撤销重发后sys_announcement_send产生重复记录，按anntId先清后插---
+		//update-end---author:Claude ---date:2026-08-05---for: 【Thông báo】Sau khi thu hồi và phát lại cho toàn thể nhân viên sys_announcement_send Phát sinh bản ghi trùng lặp, xóa trước rồi chèn theo anntId---
 
 		List<String> userIdList = sysUserMapper.getTenantUserIdList(tenantId);
 		List<SysAnnouncementSend> sysAnnouncementSendList = new ArrayList<>();
@@ -210,20 +210,20 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 			}
 		}
 		if (!CollectionUtils.isEmpty(sysAnnouncementSendList)) {
-			log.info("补全公告与用户的关系数据，sysAnnouncementSendList size = {}", sysAnnouncementSendList.size());
+			log.info("Bổ sung đầy đủ dữ liệu quan hệ giữa thông báo và người dùng,sysAnnouncementSendList size = {}", sysAnnouncementSendList.size());
 			sysAnnouncementSendService.saveBatch(sysAnnouncementSendList);
 		}
 	}
 
 	@Override
 	public List<SysAnnouncement> querySysMessageList(int pageSize, int pageNo, String fromUser, String starFlag, String busType, String msgCategory, Date beginDate, Date endDate, String noticeType) {
-//		//1. 补全send表的数据
+//		//1. Bổ sung đầy đủ dữ liệu bảng send
 //		completeNoteThreadPool.execute(()->{
 //			completeAnnouncementSendInfo();
 //		});
 		
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-		log.debug(" 获取登录人 LoginUser id: {}", sysUser.getId());
+		log.debug(" Lấy người đăng nhập LoginUser id: {}", sysUser.getId());
 		Page<SysAnnouncement> page = new Page<SysAnnouncement>(pageNo,pageSize);
 		List<SysAnnouncement> list = baseMapper.queryAllMessageList(page, sysUser.getId(), fromUser, starFlag, busType, msgCategory,beginDate, endDate, noticeType);
 		return list;
@@ -242,7 +242,7 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 	}
 
 	/**
-	 * 查询用户未读的通知公告，防止SQL注入写法调整
+	 * Truy vấn thông báo chưa đọc của người dùng, điều chỉnh cách viết để tránh SQL injection
 	 * @param userId
 	 * @return
 	 */
@@ -253,7 +253,7 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 	}
 
 	/**
-	 * 更新访问量
+	 * Cập nhật lượt truy cập
 	 * @param id
 	 * @param increaseCount
 	 */
@@ -265,69 +265,69 @@ public class SysAnnouncementServiceImpl extends ServiceImpl<SysAnnouncementMappe
 			int totalValue = increaseCount + visits;
 			sysAnnouncement.setVisitsNum(totalValue);
 			sysAnnouncementMapper.updateById(sysAnnouncement);
-			log.info("通知公告：{} 访问次数+1，总访问数量：{}", sysAnnouncement.getTitile(), sysAnnouncement.getVisitsNum());
+			log.info("Thông báo:{} Số lần truy cập+1, tổng số lượt truy cập:{}", sysAnnouncement.getTitile(), sysAnnouncement.getVisitsNum());
 		}
 	}
 
 	/**
-	 * 批量下载文件
+	 * Tải file hàng loạt
 	 * @param id
 	 * @param request
 	 * @param response
 	 */
 	@Override
 	public void downLoadFiles(String id, HttpServletRequest request, HttpServletResponse response) {
-		// 参数校验
+		// Kiểm tra tham số
 		if (oConvertUtils.isEmpty(id)) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 
-		// 获取文章信息
+		// Lấy thông tin bài viết
 		SysAnnouncement sysAnnouncement = this.baseMapper.selectById(id);
 		if (oConvertUtils.isEmpty(sysAnnouncement)) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
-		//设置HTTP响应头：准备文件下载
+		//Đặt header phản hồi HTTP: chuẩn bị tải tệp xuống
 		response.reset();
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("application/force-download");
 		ZipArchiveOutputStream zous = null;
 		try {
-			// 生成ZIP文件名：使用文章标题+时间戳避免重名
+			// Tạo tên tệp ZIP: sử dụng tiêu đề bài viết+Dùng timestamp để tránh trùng tên
 			String title = sysAnnouncement.getTitile() + new Date().getTime();
 			String zipName = URLEncoder.encode( title + ".zip", "UTF-8").replaceAll("\\+", "%20");
 			response.setHeader("Content-Disposition", "attachment;filename*=utf-8''" + zipName);
-			// 创建ZIP输出流：直接输出到HTTP响应流
+			// Tạo luồng xuất ZIP: xuất trực tiếp ra luồng phản hồi HTTP
 			zous = new ZipArchiveOutputStream(response.getOutputStream());
-			zous.setUseZip64(Zip64Mode.AsNeeded);// 支持大文件
+			zous.setUseZip64(Zip64Mode.AsNeeded);// Hỗ trợ tệp lớn
 
-			// 批量下载文件
+			// Tải file hàng loạt
 			String[] fileUrls = sysAnnouncement.getFiles().split(",");
-			// 遍历所有文件URL
+			// Duyệt qua tất cả các tệp URL
 			for (int i = 0; i < fileUrls.length; i++) {
 				String fileUrl = fileUrls[i].trim();
 				if (oConvertUtils.isEmpty(fileUrl)) {
 					continue;
 				}
-				// 【安全校验】防止路径遍历攻击
+				// [Kiểm tra an toàn] Ngăn tấn công duyệt đường dẫn
 				SsrfFileTypeFilter.checkPathTraversal(fileUrl);
-				// 生成ZIP内文件名：避免重名，添加序号
+				// Tạo tên tệp trong ZIP: tránh trùng tên, thêm số thứ tự
 				String fileName = FileDownloadUtils.generateFileName(fileUrl, i, fileUrls.length);
 				String uploadUrl = jeecgBaseConfig.getPath().getUpload();
-				// 下载单个文件并添加到ZIP
+				// Tải xuống từng tệp và thêm vào ZIP
 				FileDownloadUtils.downLoadSingleFile(fileUrl,fileName,uploadUrl, zous);
 			}
-			// 完成ZIP写入
+			// Hoàn tất ghi ZIP
 			zous.finish();
-			// 刷新缓冲区确保数据发送
+			// Làm mới bộ đệm để đảm bảo dữ liệu được gửi
 			response.flushBuffer();
 		} catch (IOException e) {
-			log.error("文件下载失败"+e.getMessage(), e);
+			log.error("Tải xuống tệp thất bại"+e.getMessage(), e);
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		} finally {
-			// 确保流关闭，防止资源泄漏
+			// Đảm bảo đóng luồng, tránh rò rỉ tài nguyên
 			IoUtil.close(zous);
 		}
 	}

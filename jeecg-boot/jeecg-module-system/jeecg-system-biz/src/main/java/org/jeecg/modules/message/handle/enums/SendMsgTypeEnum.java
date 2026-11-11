@@ -3,25 +3,25 @@ package org.jeecg.modules.message.handle.enums;
 import org.jeecg.common.util.oConvertUtils;
 
 /**
- * 发送消息类型枚举
+ * Enum loại gửi tin nhắn
  * @author: jeecg-boot
  */
 public enum SendMsgTypeEnum {
 
     /**
-     * 短信
+     * Tin nhắn SMS
      */
 	SMS("1", "org.jeecg.modules.message.handle.impl.SmsSendMsgHandle"),
     /**
-     * 邮件
+     * Email
      */
 	EMAIL("2", "org.jeecg.modules.message.handle.impl.EmailSendMsgHandle"),
     /**
-     * 微信
+     * WeChat
      */
 	WX("3","org.jeecg.modules.message.handle.impl.WxSendMsgHandle"),
     /**
-     * 系统消息
+     * Tin nhắn hệ thống
      */
 	SYSTEM_MESSAGE("4","org.jeecg.modules.message.handle.impl.SystemSendMsgHandle");
 

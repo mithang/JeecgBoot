@@ -4,7 +4,7 @@ import org.jeecg.common.system.base.service.JeecgService;
 import org.jeecg.modules.message.entity.SysMessage;
 
 /**
- * @Description: 消息
+ * @Description: Tin nhắn
  * @Author: jeecg-boot
  * @Date:  2019-04-09
  * @Version: V1.0

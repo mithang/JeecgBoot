@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- * excel导入 实现类
+ * excel Lớp triển khai nhập
  * @author: jeecg-boot
  */
 @Slf4j
@@ -27,7 +27,7 @@ public class ImportFileServiceImpl implements ImportFileServiceI {
 
     @Override
     public String doUpload(byte[] data, String saveUrl) {
-        // 代码逻辑说明: [QQYUN-10902]AutoPoi Excel表格导入有问题，还会报个错。 #7703------------
+        // Giải thích logic mã: [QQYUN-10902]AutoPoi Excel Nhập bảng có vấn đề, còn báo thêm lỗi. #7703------------
         String bizPath = "import";
         if(null != saveUrl && !saveUrl.isEmpty()){
             bizPath = saveUrl;

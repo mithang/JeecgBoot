@@ -8,26 +8,26 @@ import org.jeecg.modules.system.entity.SysGatewayRoute;
 import java.util.List;
 
 /**
- * @Description: gateway路由管理
+ * @Description: gateway Quản lý route
  * @Author: jeecg-boot
  * @Date:   2020-05-26
  * @Version: V1.0
  */
 public interface SysGatewayRouteMapper extends BaseMapper<SysGatewayRoute> {
     /**
-     * 还原逻辑删除
+     * Khôi phục xóa logic
      * @param ids
      */
     int revertLogicDeleted(@Param("ids") List<String> ids);
 
     /**
-     *彻底删除
+     *Xóa hoàn toàn
      * @param ids
      */
     int deleteLogicDeleted(@Param("ids") List<String> ids);
 
     /**
-     * 查询删除的列表
+     * Truy vấn danh sách đã xóa
      * @return
      */
     @Select("select * from sys_gateway_route where del_flag = 1")

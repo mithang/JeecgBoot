@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
- * @Description: 产品包菜单关系表
+ * @Description: Bảng quan hệ menu gói sản phẩm
  * @Author: jeecg-boot
  * @Date:   2022-12-31
  * @Version: V1.0

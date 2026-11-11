@@ -7,7 +7,7 @@ import org.jeecg.modules.message.service.ISysMessageService;
 import org.springframework.stereotype.Service;
 
 /**
- * @Description: 消息
+ * @Description: Tin nhắn
  * @Author: jeecg-boot
  * @Date:  2019-04-09
  * @Version: V1.0

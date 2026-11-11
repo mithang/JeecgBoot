@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 用户角色表 服务类
+ * Bảng vai trò người dùng Lớp Service
  * </p>
  *
  * @Author scott

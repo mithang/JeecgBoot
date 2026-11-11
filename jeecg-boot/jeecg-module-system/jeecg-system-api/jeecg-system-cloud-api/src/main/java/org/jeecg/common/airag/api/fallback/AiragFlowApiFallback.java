@@ -6,7 +6,7 @@ import org.jeecg.common.api.dto.AiragFlowDTO;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
- * airag工作流运行API 降级实现
+ * airag Triển khai hạ cấp API chạy workflow
  *
  * @author zhang
  * @date 2026-09-10

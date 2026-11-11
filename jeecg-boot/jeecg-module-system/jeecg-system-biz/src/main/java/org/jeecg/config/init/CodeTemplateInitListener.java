@@ -14,9 +14,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 自动初始化代码生成器模板
+ * Tự động khởi tạo mẫu của trình tạo mã
  * <p>
- * 解决JAR发布需要手工配置代码生成器模板问题
+ * Khắc phục vấn đề khi phát hành JAR cần cấu hình thủ công mẫu trình tạo mã
  * @author zhang
  */
 @Slf4j
@@ -26,22 +26,22 @@ public class CodeTemplateInitListener implements ApplicationListener<Application
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         try {
-            long startTime = System.currentTimeMillis(); // 记录开始时间
-            log.info(" Init Code Generate Template [ 检测如果是JAR启动，Copy模板到config目录 ] ");
+            long startTime = System.currentTimeMillis(); // Ghi lại thời gian bắt đầu
+            log.info(" Init Code Generate Template [ Kiểm tra nếu khởi động bằng JAR thì copy template vào thư mục config ] ");
             this.initJarConfigCodeGeneratorTemplate();
-            long endTime = System.currentTimeMillis(); // 记录结束时间
-            log.info(" Init Code Generate Template completed in " + (endTime - startTime) + " ms"); // 计算并记录耗时
+            long endTime = System.currentTimeMillis(); // Ghi lại thời gian kết thúc
+            log.info(" Init Code Generate Template completed in " + (endTime - startTime) + " ms"); // Tính và ghi lại thời gian đã dùng
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * ::Jar包启动模式下::
-     * 初始化代码生成器模板文件
+     * ::Jar chế độ khởi động bằng gói::
+     * Khởi tạo tệp mẫu của trình tạo mã
      */
     private void initJarConfigCodeGeneratorTemplate() throws Exception {
-        //1.获取jar同级下的config路径
+        //1.Lấy đường dẫn config cùng cấp với jar
         String configPath = System.getProperty("user.dir") + File.separator + "config" + File.separator;
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Resource[] resources = resolver.getResources("classpath*:jeecg/code-template-online/**/*");
@@ -52,11 +52,11 @@ public class CodeTemplateInitListener implements ApplicationListener<Application
             filepath = java.net.URLDecoder.decode(filepath, "utf-8");
             //System.out.println("decode url= " + filepath);
 
-            //2.在config下，创建jeecg/code-template-online/*模板
+            //2.Trong config, tạo jeecg/code-template-online/*Mẫu
             String createFilePath = configPath + filepath.substring(filepath.indexOf("jeecg/code-template-online"));
 
-            // 非jar模式不生成模板
-            // 不生成目录，只生成具体模板文件
+            // Chế độ không phải jar thì không tạo mẫu
+            // Không tạo thư mục, chỉ tạo tệp mẫu cụ thể
             if ((!filepath.contains(".jar!/BOOT-INF/lib/") && !filepath.contains(".jar/!BOOT-INF/lib/")) || !createFilePath.contains(".")) {
                 continue;
             }

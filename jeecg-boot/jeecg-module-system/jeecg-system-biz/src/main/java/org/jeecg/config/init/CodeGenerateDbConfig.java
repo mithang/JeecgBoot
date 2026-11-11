@@ -10,15 +10,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 /**
- * @Description: 代码生成器,自定义DB配置
- * 【加了此类，则online模式DB连接，使用平台的配置，jeecg_database.properties配置无效;
- *  但是使用GUI模式代码生成，还是走jeecg_database.properties配置】
- *  提醒： 达梦数据库需要修改下面的参数${spring.datasource.dynamic.datasource.master.url:}配置
+ * @Description: Trình tạo mã,Cấu hình DB tùy chỉnh
+ * [Sau khi thêm class này, kết nối DB ở chế độ online sẽ dùng cấu hình của nền tảng,jeecg_database.properties Cấu hình không hợp lệ;
+ *  Nhưng khi sinh mã ở chế độ GUI thì vẫn đi theo jeecg_database.properties Cấu hình】
+ *  Nhắc nhở: Cơ sở dữ liệu Dameng cần sửa các tham số dưới đây${spring.datasource.dynamic.datasource.master.url:}Cấu hình
  * @author: scott
- * @date: 2021年02月18日 16:30
+ * @date: 2021 năm 02 tháng 18 ngày 16:30
  * 
- * 重要说明：此类改路径或者名称，需要同步修改
- *  org/jeecg/interceptor/OnlineRepairCodeGenerateDbConfig.java里面的注解
+ * Lưu ý quan trọng: Nếu lớp này đổi đường dẫn hoặc tên thì cần đồng bộ sửa đổi
+ *  org/jeecg/interceptor/OnlineRepairCodeGenerateDbConfig.java annotation bên trong
  *  @ConditionalOnMissingClass("org.jeecg.config.init.CodeGenerateDbConfig")
  */
 @Slf4j
@@ -45,7 +45,7 @@ public class CodeGenerateDbConfig {
                     password = ConfigTools.decrypt(publicKey, password);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    log.error(" 代码生成器数据库连接，数据库密码解密失败！");
+                    log.error(" Kết nối cơ sở dữ liệu của trình tạo mã, giải mã mật khẩu cơ sở dữ liệu thất bại!");
                 }
             }
             CodegenDatasourceConfig.initDbConfig(driverClassName,url, username, password);

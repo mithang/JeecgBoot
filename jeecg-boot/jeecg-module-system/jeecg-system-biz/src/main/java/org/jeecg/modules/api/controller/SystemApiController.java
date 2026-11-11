@@ -26,10 +26,10 @@ import java.util.Set;
 
 
 /**
- * 服务化 system模块 对外接口请求类
+ * Lớp yêu cầu giao diện đối ngoại của module system dạng dịch vụ
  * <p>
- * 仅供微服务 Feign 内部调用。单体模式下 ISysBaseAPI 为进程内调用，无需对外暴露，
- * 故只在类路径存在 jeecg-boot-starter-cloud（微服务模式）时加载，防止 /sys/api/** 被普通登录用户直接调用
+ * Chỉ dùng cho gọi nội bộ Feign của microservice. Ở chế độ monolith, ISysBaseAPI là gọi trong tiến trình, không cần expose ra ngoài,
+ * Vì vậy chỉ tồn tại trong classpath jeecg-boot-starter-cloud(Chế độ microservice) thì tải, để ngăn chặn /sys/api/** bị người dùng đăng nhập thông thường gọi trực tiếp
  * （2026-10-14 GHSA-vrqv-3gwg-423j / GHSA-hh6j-6p7c-8hrf / GHSA-483m-f38h-369m / GHSA-5q28-hq94-q2fj）
  * @author: jeecg-boot
  */
@@ -45,7 +45,7 @@ public class SystemApiController {
     private ISysUserService sysUserService;
 
 	/**
-	 * 批量查询 Popup 字典项。
+	 * Truy vấn hàng loạt mục danh mục Popup.
 	 */
 	@GetMapping("/queryPopupDictItems")
 	public List<DictModel> queryPopupDictItems(@RequestParam("reportCode") String reportCode,
@@ -56,8 +56,8 @@ public class SystemApiController {
 	}
 
     /**
-     * 发送系统消息
-     * @param message 使用构造器赋值参数 如果不设置category(消息类型)则默认为2 发送系统消息
+     * Gửi tin nhắn hệ thống
+     * @param message Sử dụng constructor để gán tham số, nếu không đặt category(Loại tin nhắn)Thì mặc định là 2, gửi tin nhắn hệ thống
      */
     @PostMapping("/sendSysAnnouncement")
     public void sendSysAnnouncement(@RequestBody MessageDTO message){
@@ -65,8 +65,8 @@ public class SystemApiController {
     }
 
     /**
-     * 发送消息 附带业务参数
-     * @param message 使用构造器赋值参数
+     * Gửi tin nhắn kèm theo tham số nghiệp vụ
+     * @param message Dùng constructor để gán tham số
      */
     @PostMapping("/sendBusAnnouncement")
     public void sendBusAnnouncement(@RequestBody BusMessageDTO message){
@@ -74,8 +74,8 @@ public class SystemApiController {
     }
 
     /**
-     * 通过模板发送消息
-     * @param message 使用构造器赋值参数
+     * Gửi tin nhắn theo mẫu
+     * @param message Dùng constructor để gán tham số
      */
     @PostMapping("/sendTemplateAnnouncement")
     public void sendTemplateAnnouncement(@RequestBody TemplateMessageDTO message){
@@ -83,8 +83,8 @@ public class SystemApiController {
     }
 
     /**
-     * 通过模板发送消息 附带业务参数
-     * @param message 使用构造器赋值参数
+     * Gửi tin nhắn qua mẫu, kèm tham số nghiệp vụ
+     * @param message Dùng constructor để gán tham số
      */
     @PostMapping("/sendBusTemplateAnnouncement")
     public void sendBusTemplateAnnouncement(@RequestBody BusTemplateMessageDTO message){
@@ -92,8 +92,8 @@ public class SystemApiController {
     }
 
     /**
-     * 通过消息中心模板，生成推送内容
-     * @param templateDTO 使用构造器赋值参数
+     * Tạo nội dung đẩy qua mẫu của trung tâm tin nhắn
+     * @param templateDTO Dùng constructor để gán tham số
      * @return
      */
     @PostMapping("/parseTemplateByCode")
@@ -102,7 +102,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据业务类型busType及业务busId修改消息已读
+     * Đổi trạng thái đã đọc của tin nhắn theo loại nghiệp vụ busType và busId nghiệp vụ
      */
     @GetMapping("/updateSysAnnounReadFlag")
     public void updateSysAnnounReadFlag(@RequestParam("busType") String busType, @RequestParam("busId")String busId){
@@ -110,14 +110,14 @@ public class SystemApiController {
     }
 
     /**
-     * 根据用户账号查询用户信息
+     * Truy vấn thông tin người dùng theo tài khoản người dùng
      * @param username
      * @return
      */
     @GetMapping("/getUserByName")
     public LoginUser getUserByName(@RequestParam("username") String username){
         LoginUser loginUser = sysBaseApi.getUserByName(username);
-        //用户信息加密
+        //Mã hóa thông tin người dùng
         try {
             SensitiveInfoUtil.handlerObject(loginUser, true);
         } catch (IllegalAccessException e) {
@@ -127,7 +127,7 @@ public class SystemApiController {
     }
     
     /**
-     * 根据用户账号查询用户ID
+     * Truy vấn người dùng theo tài khoản người dùng ID
      * @param username
      * @return
      */
@@ -138,14 +138,14 @@ public class SystemApiController {
     }
 
     /**
-     * 根据用户id查询用户信息
+     * Truy vấn thông tin người dùng theo ID người dùng
      * @param id
      * @return
      */
     @GetMapping("/getUserById")
     LoginUser getUserById(@RequestParam("id") String id){
         LoginUser loginUser = sysBaseApi.getUserById(id);
-        //用户信息加密
+        //Mã hóa thông tin người dùng
         try {
             SensitiveInfoUtil.handlerObject(loginUser, true);
         } catch (IllegalAccessException e) {
@@ -155,7 +155,7 @@ public class SystemApiController {
     }
 
     /**
-     * 通过用户账号查询角色集合
+     * Truy vấn tập hợp vai trò qua tài khoản người dùng
      * @param username
      * @return
      */
@@ -165,7 +165,7 @@ public class SystemApiController {
     }
     
     /**
-     * 通过用户账号查询角色集合
+     * Truy vấn tập hợp vai trò qua tài khoản người dùng
      * @param userId
      * @return
      */
@@ -175,9 +175,9 @@ public class SystemApiController {
     }
 
     /**
-     * 通过用户账号查询部门集合
+     * Truy vấn tập hợp phòng ban qua tài khoản người dùng
      * @param username
-     * @return 部门 id
+     * @return Phòng ban id
      */
     @GetMapping("/getDepartIdsByUsername")
     List<String> getDepartIdsByUsername(@RequestParam("username") String username){
@@ -185,9 +185,9 @@ public class SystemApiController {
     }
     
     /**
-     * 通过用户账号查询部门集合
+     * Truy vấn tập hợp phòng ban qua tài khoản người dùng
      * @param userId
-     * @return 部门 id
+     * @return Phòng ban id
      */
     @GetMapping("/getDepartIdsByUserId")
     List<String> getDepartIdsByUserId(@RequestParam("userId") String userId){
@@ -195,9 +195,9 @@ public class SystemApiController {
     }
 
     /**
-     * 通过用户账号查询部门父ID集合
+     * Truy vấn tập hợp ID cha của phòng ban theo tài khoản người dùng
      * @param username
-     * @return 部门 id
+     * @return Phòng ban id
      */
     @GetMapping("/getDepartParentIdsByUsername")
     Set<String>  getDepartParentIdsByUsername(@RequestParam("username") String username){
@@ -205,9 +205,9 @@ public class SystemApiController {
     }
 
     /**
-     * 查询部门父ID集合
+     * Truy vấn tập hợp ID cha của phòng ban
      * @param depIds
-     * @return 部门 id
+     * @return Phòng ban id
      */
     @GetMapping("/getDepartParentIdsByDepIds")
     Set<String> getDepartParentIdsByDepIds(@RequestParam("depIds") Set<String> depIds){
@@ -215,10 +215,10 @@ public class SystemApiController {
     }
 
     /**
-     * 通过 userIds 查询部门ID列表
+     * Truy vấn danh sách ID phòng ban qua userIds
      *
      * @param userIds
-     * @return key = userId; value = 用户拥有的部门ID列表
+     * @return key = userId; value = Danh sách ID phòng ban mà người dùng sở hữu
      */
     @GetMapping("/getDepartIdsByUserIds")
     Map<String, List<String>> getDepartIdsByUserIds(@RequestParam("userIds") Collection<String> userIds) {
@@ -226,9 +226,9 @@ public class SystemApiController {
     }
 
     /**
-     * 通过用户账号查询部门 name
+     * Truy vấn phòng ban theo tài khoản người dùng name
      * @param username
-     * @return 部门 name
+     * @return Phòng ban name
      */
     @GetMapping("/getDepartNamesByUsername")
     List<String> getDepartNamesByUsername(@RequestParam("username") String username){
@@ -237,7 +237,7 @@ public class SystemApiController {
 
 
     /**
-     * 获取数据字典
+     * Lấy từ điển dữ liệu
      * @param code
      * @return
      */
@@ -247,7 +247,7 @@ public class SystemApiController {
     }
 
     /**
-     * 获取有效的数据字典
+     * Lấy danh mục dữ liệu hợp lệ
      * @param code
      * @return
      */
@@ -257,22 +257,22 @@ public class SystemApiController {
     }
 
 
-    /** 查询所有的父级字典，按照create_time排序 */
+    /** Truy vấn tất cả các danh mục cấp cha, sắp xếp theo create_time Sắp xếp */
     @GetMapping("/queryAllDict")
     List<DictModel> queryAllDict(){
 //        try{
-//            //睡10秒，gateway网关5秒超时，会触发熔断降级操作
+//            //Ngủ 10 giây, gateway timeout sau 5 giây sẽ kích hoạt thao tác circuit breaker và hạ cấp
 //            Thread.sleep(10000);
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
 
-        log.info("--我是jeecg-system服务节点，微服务接口queryAllDict被调用--");
+        log.info("--Tôi là jeecg-system nút dịch vụ, interface microservice queryAllDict được gọi--");
         return sysBaseApi.queryAllDict();
     }
 
     /**
-     * 查询所有分类字典
+     * Truy vấn tất cả danh mục phân loại
      * @return
      */
     @GetMapping("/queryAllSysCategory")
@@ -282,7 +282,7 @@ public class SystemApiController {
 
 
     /**
-     * 查询所有部门 作为字典信息 id -->value,departName -->text
+     * Truy vấn tất cả phòng ban làm thông tin danh mục id -->value,departName -->text
      * @return
      */
     @GetMapping("/queryAllDepartBackDictModel")
@@ -291,8 +291,8 @@ public class SystemApiController {
     }
 
     /**
-     * 获取所有角色 带参
-     * roleIds 默认选中角色
+     * Lấy tất cả vai trò, có tham số
+     * roleIds Vai trò được chọn mặc định
      * @return
      */
     @GetMapping("/queryAllRole")
@@ -305,7 +305,7 @@ public class SystemApiController {
     }
 
     /**
-     * 通过用户账号查询角色Id集合
+     * Truy vấn tập hợp Id vai trò qua tài khoản người dùng
      * @param username
      * @return
      */
@@ -315,7 +315,7 @@ public class SystemApiController {
     }
 
     /**
-     * 通过部门编号查询部门id
+     * Truy vấn phòng ban theo mã số phòng ban id
      * @param orgCode
      * @return
      */
@@ -325,7 +325,7 @@ public class SystemApiController {
     }
 
     /**
-     * 查询所有部门
+     * Truy vấn tất cả phòng ban
      * @return
      */
     @GetMapping("/getAllSysDepart")
@@ -334,7 +334,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据 id 查询数据库中存储的 DynamicDataSourceModel
+     * Truy vấn theo id dữ liệu được lưu trong cơ sở dữ liệu DynamicDataSourceModel
      *
      * @param dbSourceId
      * @return
@@ -347,7 +347,7 @@ public class SystemApiController {
 
 
     /**
-     * 根据部门Id获取部门负责人
+     * Lấy người phụ trách phòng ban theo Id phòng ban
      * @param deptId
      * @return
      */
@@ -357,7 +357,7 @@ public class SystemApiController {
     }
 
     /**
-     * 查找父级部门
+     * Tìm phòng ban cấp trên
      * @param departId
      * @return
      */
@@ -367,7 +367,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据 code 查询数据库中存储的 DynamicDataSourceModel
+     * Theo code, truy vấn dữ liệu đã lưu trong cơ sở dữ liệu DynamicDataSourceModel
      *
      * @param dbSourceCode
      * @return
@@ -378,7 +378,7 @@ public class SystemApiController {
     }
 
     /**
-     * 给指定用户发消息
+     * Gửi tin nhắn cho người dùng được chỉ định
      * @param userIds
      * @param cmd
      */
@@ -389,7 +389,7 @@ public class SystemApiController {
 
 
     /**
-     * 根据id获取所有参与用户
+     * Lấy tất cả người dùng tham gia theo id
      * userIds
      * @return
      */
@@ -399,7 +399,7 @@ public class SystemApiController {
     }
 
     /**
-     * 查询所有用户 返回ComboModel
+     * Truy vấn tất cả người dùng, trả về ComboModel
      * @return
      */
     @GetMapping("/queryAllUserBackCombo")
@@ -408,7 +408,7 @@ public class SystemApiController {
     }
 
     /**
-     * 分页查询用户 返回JSONObject
+     * Truy vấn phân trang người dùng, trả về JSONObject
      * @return
      */
     @GetMapping("/queryAllUser")
@@ -419,7 +419,7 @@ public class SystemApiController {
 
 
     /**
-     * 将会议签到信息推动到预览
+     * Đẩy thông tin điểm danh cuộc họp sang bản xem trước
      * userIds
      * @return
      * @param userId
@@ -430,7 +430,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据name获取所有参与用户
+     * Lấy tất cả người dùng tham gia theo name
      * userNames
      * @return
      */
@@ -440,7 +440,7 @@ public class SystemApiController {
     }
 
     /**
-     * 获取用户的角色集合
+     * Lấy tập hợp vai trò của người dùng
      * @param username
      * @return
      */
@@ -450,7 +450,7 @@ public class SystemApiController {
     }
     
     /**
-     * 获取用户的角色集合
+     * Lấy tập hợp vai trò của người dùng
      * @param userId
      * @return
      */
@@ -460,8 +460,8 @@ public class SystemApiController {
     }
 
     /**
-     * 获取用户的权限集合
-     * @param userId 用户表ID
+     * Lấy tập hợp quyền hạn của người dùng
+     * @param userId Bảng người dùng ID
      * @return
      */
     @GetMapping("/getUserPermissionSet")
@@ -472,7 +472,7 @@ public class SystemApiController {
     //-----
 
     /**
-     * 判断是否有online访问的权限
+     * Phán đoán có quyền truy cập online hay không
      * @param onlineAuthDTO
      * @return
      */
@@ -482,7 +482,7 @@ public class SystemApiController {
     }
 
     /**
-     * 查询用户角色信息
+     * Truy vấn thông tin vai trò người dùng
      * @param username
      * @return
      */
@@ -492,7 +492,7 @@ public class SystemApiController {
     }
     
     /**
-     * 查询用户角色信息
+     * Truy vấn thông tin vai trò người dùng
      * @param userId
      * @return
      */
@@ -503,7 +503,7 @@ public class SystemApiController {
 
 
     /**
-     * 查询用户权限信息
+     * Truy vấn thông tin quyền hạn người dùng
      * @param userId
      * @return
      */
@@ -513,7 +513,7 @@ public class SystemApiController {
     }
 
     /**
-     * 通过部门id获取部门全部信息
+     * Lấy toàn bộ thông tin phòng ban qua id phòng ban
      */
     @GetMapping("/selectAllById")
     public SysDepartModel selectAllById(@RequestParam("id") String id){
@@ -521,7 +521,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据用户id查询用户所属公司下所有用户ids
+     * Theo id người dùng, truy vấn tất cả người dùng thuộc công ty của người dùng đó ids
      * @param userId
      * @return
      */
@@ -532,7 +532,7 @@ public class SystemApiController {
 
 
     /**
-     * 查询数据权限
+     * Truy vấn quyền dữ liệu
      * @return
      */
     @GetMapping("/queryPermissionDataRule")
@@ -541,7 +541,7 @@ public class SystemApiController {
     }
 
     /**
-     * 查询用户信息
+     * Truy vấn thông tin người dùng
      * @param username
      * @return
      */
@@ -551,7 +551,7 @@ public class SystemApiController {
     }
 
     /**
-     * 普通字典的翻译
+     * Dịch danh mục thông thường
      * @param code
      * @param key
      * @return
@@ -563,7 +563,7 @@ public class SystemApiController {
 
 
     /**
-     * 36根据多个用户账号(逗号分隔)，查询返回多个用户信息
+     * 36 Theo nhiều tài khoản người dùng(phân tách bằng dấu phẩy), truy vấn trả về thông tin của nhiều người dùng
      * @param usernames
      * @return
      */
@@ -573,7 +573,7 @@ public class SystemApiController {
     }
 
     /**
-     * 37根据多个用户id(逗号分隔)，查询返回多个用户信息
+     * 37 Theo nhiều người dùng id(phân tách bằng dấu phẩy), truy vấn trả về thông tin của nhiều người dùng
      * @param ids
      * @return
      */
@@ -583,7 +583,7 @@ public class SystemApiController {
     }
 
     /**
-     * 38根据多个部门编码(逗号分隔)，查询返回多个部门信息
+     * 38 Theo nhiều mã phòng ban(phân tách bằng dấu phẩy), truy vấn trả về thông tin của nhiều phòng ban
      * @param orgCodes
      * @return
      */
@@ -593,7 +593,7 @@ public class SystemApiController {
     }
 
     /**
-     * 39根据多个部门ID(逗号分隔)，查询返回多个部门信息
+     * 39 Theo nhiều phòng ban ID(phân tách bằng dấu phẩy), truy vấn trả về thông tin của nhiều phòng ban
      * @param ids
      * @return
      */
@@ -603,7 +603,7 @@ public class SystemApiController {
     }
 
     /**
-     * 40发送邮件消息
+     * 40 Gửi tin nhắn email
      * @param email
      * @param title
      * @param content
@@ -613,28 +613,28 @@ public class SystemApiController {
          this.sysBaseApi.sendEmailMsg(email,title,content);
     };
     /**
-     * 发送html模版邮件消息
+     * Gửi tin nhắn email mẫu html
      * @param email
      * @param title
-     * @param emailTemplateEnum 邮件模版枚举
-     * @param params            模版参数
+     * @param emailTemplateEnum Enum mẫu email
+     * @param params            Tham số mẫu
      */
     @GetMapping("/sendHtmlTemplateEmail")
     public void sendHtmlTemplateEmail(@RequestParam("email")String email, @RequestParam("title")String title, @RequestParam("emailEnum") EmailTemplateEnum emailTemplateEnum, @RequestParam("params") JSONObject params){
          this.sysBaseApi.sendHtmlTemplateEmail(email,title,emailTemplateEnum,params);
     };
     /**
-     * 发送短信消息
-     * @param phone  手机号码
-     * @param params  模版参数
-     * @param dySmsEnum 短信模版枚举
+     * Gửi tin nhắn SMS
+     * @param phone  Số điện thoại
+     * @param params  Tham số mẫu
+     * @param dySmsEnum Enum mẫu SMS
      */
     @GetMapping("/sendSmsMsg")
     public void sendSmsMsg(@RequestParam("phone")String phone, @RequestParam("params") JSONObject params, @RequestParam("dySmsEnum") DySmsEnum dySmsEnum){
          this.sysBaseApi.sendSmsMsg(phone,params,dySmsEnum);
     };
     /**
-     * 41 获取公司下级部门和公司下所有用户信息
+     * 41 Lấy phòng ban cấp dưới của công ty và thông tin tất cả người dùng thuộc công ty
      * @param orgCode
      */
     @GetMapping("/getDeptUserByOrgCode")
@@ -643,9 +643,9 @@ public class SystemApiController {
     }
 
     /**
-     * 查询分类字典翻译
+     * Truy vấn bản dịch danh mục phân loại
      *
-     * @param ids 分类字典表id
+     * @param ids Bảng danh mục phân loại id
      * @return
      */
     @GetMapping("/loadCategoryDictItem")
@@ -654,9 +654,9 @@ public class SystemApiController {
     }
 
     /**
-     * 反向翻译分类字典，用于导入
+     * Dịch ngược danh mục phân loại, dùng để nhập
      *
-     * @param names 名称，逗号分割
+     * @param names Tên, phân tách bằng dấu phẩy
      * @return
      */
     @GetMapping("/loadCategoryDictItemByNames")
@@ -665,10 +665,10 @@ public class SystemApiController {
     }
 
     /**
-     * 根据字典code加载字典text
+     * Tải danh mục theo code danh mục text
      *
-     * @param dictCode 顺序：tableName,text,code
-     * @param keys     要查询的key
+     * @param dictCode Thứ tự: tableName,text,code
+     * @param keys     cần truy vấn key
      * @return
      */
     @GetMapping("/loadDictItem")
@@ -677,12 +677,12 @@ public class SystemApiController {
     }
 
     /**
-     * 复制应用下的所有字典配置到新的租户下
+     * Sao chép toàn bộ cấu hình danh mục của ứng dụng sang tenant mới
      *
-     * @param originalAppId 原始低代码应用ID
-     * @param appId         新的低代码应用ID
-     * @param tenantId      新的租户ID
-     * @return Map<String, String>  Map<原字典编码, 新字典编码>
+     * @param originalAppId Ứng dụng low-code gốc ID
+     * @param appId         Ứng dụng low-code mới ID
+     * @param tenantId      tenant mới ID
+     * @return Map<String, String>  Map<Mã danh mục gốc, Mã danh mục mới>
      */
     @GetMapping("/copyLowAppDict")
     Map<String, String> copyLowAppDict(@RequestParam("originalAppId") String originalAppId, @RequestParam("appId") String appId, @RequestParam("tenantId") String tenantId) {
@@ -690,10 +690,10 @@ public class SystemApiController {
     }
     
     /**
-     * 根据字典code查询字典项
+     * Truy vấn mục từ điển theo code từ điển
      *
-     * @param dictCode 顺序：tableName,text,code
-     * @param dictCode 要查询的key
+     * @param dictCode Thứ tự: tableName,text,code
+     * @param dictCode cần truy vấn key
      * @return
      */
     @GetMapping("/getDictItems")
@@ -702,10 +702,10 @@ public class SystemApiController {
     }
 
     /**
-     * 根据多个字典code查询多个字典项
+     * Theo nhiều code danh mục, truy vấn nhiều mục danh mục
      *
      * @param dictCodeList
-     * @return key = dictCode ； value=对应的字典项
+     * @return key = dictCode ； value=Mục danh mục tương ứng
      */
     @RequestMapping("/getManyDictItems")
     public Map<String, List<DictModel>> getManyDictItems(@RequestParam("dictCodeList") List<String> dictCodeList) {
@@ -713,11 +713,11 @@ public class SystemApiController {
     }
 
     /**
-     * 【下拉搜索】
-     * 大数据量的字典表 走异步加载，即前端输入内容过滤数据
+     * 【Tìm kiếm thả xuống】
+     * Bảng từ điển có lượng dữ liệu lớn sẽ tải bất đồng bộ, tức là frontend nhập nội dung để lọc dữ liệu
      *
-     * @param dictCode 字典code格式：table,text,code
-     * @param keyword  过滤关键字
+     * @param dictCode Định dạng code từ điển:table,text,code
+     * @param keyword  Lọc từ khóa
      * @return
      */
     @GetMapping("/loadDictItemByKeyword")
@@ -729,7 +729,7 @@ public class SystemApiController {
     }
 
     /**
-     * 48 普通字典的翻译，根据多个dictCode和多条数据，多个以逗号分割
+     * 48 Dịch danh mục thông thường, theo nhiều dictCode và nhiều bản ghi dữ liệu, nhiều mục phân tách bằng dấu phẩy
      * @param dictCodes
      * @param keys
      * @return
@@ -741,8 +741,8 @@ public class SystemApiController {
 
 
     /**
-     * 获取表数据字典 【接口签名验证】
-     * @param tableFilterSql 表名可以带where条件
+     * Lấy danh mục dữ liệu bảng [Xác minh chữ ký giao diện]
+     * @param tableFilterSql Tên bảng có thể kèm điều kiện where
      * @param text
      * @param code
      * @return
@@ -753,7 +753,7 @@ public class SystemApiController {
     }
 
     /**
-     * 查询表字典 支持过滤数据 【接口签名验证】
+     * Truy vấn danh mục bảng, hỗ trợ lọc dữ liệu [Xác minh chữ ký giao diện]
      * @param table
      * @param text
      * @param code
@@ -766,8 +766,8 @@ public class SystemApiController {
     }
 
     /**
-     * 【接口签名验证】
-     * 查询指定table的 text code 获取字典，包含text和value
+     * 【Xác minh chữ ký giao diện】
+     * Truy vấn text, code của table được chỉ định để lấy danh mục, bao gồm text và value
      * @param table
      * @param text
      * @param code
@@ -782,7 +782,7 @@ public class SystemApiController {
 
 
     /**
-     * 字典表的 翻译【接口签名验证】
+     * Dịch bảng danh mục [Xác minh chữ ký giao diện]
      * @param table
      * @param text
      * @param code
@@ -796,14 +796,14 @@ public class SystemApiController {
 
 
     /**
-     * 【接口签名验证】
-     * 49 字典表的 翻译，可批量
+     * 【Xác minh chữ ký giao diện】
+     * 49 Dịch danh mục bảng, có thể thực hiện hàng loạt
      *
      * @param table
      * @param text
      * @param code
-     * @param keys  多个用逗号分割
-     * @param ds 数据源
+     * @param keys  Nhiều mục phân tách bằng dấu phẩy
+     * @param ds Nguồn dữ liệu
      * @return
      */
     @GetMapping("/translateDictFromTableByKeys")
@@ -812,7 +812,7 @@ public class SystemApiController {
     }
 
     /**
-     * 发送模板信息
+     * Gửi thông tin mẫu
      * @param message
      */
     @PostMapping("/sendTemplateMessage")
@@ -821,7 +821,7 @@ public class SystemApiController {
     }
 
     /**
-     * 获取消息模板内容
+     * Lấy nội dung mẫu tin nhắn
      * @param code
      * @return
      */
@@ -831,7 +831,7 @@ public class SystemApiController {
     }
 
     /**
-     * 保存数据日志
+     * Lưu nhật ký dữ liệu
      * @param dataLogDto
      */
     @PostMapping("/saveDataLog")
@@ -840,7 +840,7 @@ public class SystemApiController {
     }
 
     /**
-     * 更新头像
+     * Cập nhật ảnh đại diện
      * @param loginUser
      * @return
      */
@@ -850,7 +850,7 @@ public class SystemApiController {
     }
 
     /**
-     * 向app端 websocket推送聊天刷新消息
+     * Đẩy tin nhắn làm mới trò chuyện tới WebSocket phía app
      * @param userId
      * @return
      */
@@ -860,7 +860,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据roleCode查询角色信息，可逗号分隔多个
+     * Truy vấn thông tin vai trò theo roleCode, có thể phân tách nhiều cái bằng dấu phẩy
      *
      * @param roleCodes
      * @return
@@ -871,7 +871,7 @@ public class SystemApiController {
     }
 
     /**
-     * 获取消息模板内容
+     * Lấy nội dung mẫu tin nhắn
      * @param id
      * @return
      */
@@ -881,8 +881,8 @@ public class SystemApiController {
     }
     
     /**
-     * VUEN-2584【issue】平台sql注入漏洞几个问题
-     * 部分特殊函数 可以将查询结果混夹在错误信息中，导致数据库的信息暴露
+     * VUEN-2584【issue】Một số vấn đề về lỗ hổng SQL injection của nền tảng
+     * Một số hàm đặc biệt có thể trộn kết quả truy vấn vào thông tin lỗi, dẫn đến lộ thông tin cơ sở dữ liệu
      * @param e
      * @return
      */
@@ -892,13 +892,13 @@ public class SystemApiController {
         String extractvalue = "extractvalue";
         String updatexml = "updatexml";
         if(msg!=null && (msg.toLowerCase().indexOf(extractvalue)>=0 || msg.toLowerCase().indexOf(updatexml)>=0)){
-            return Result.error("校验失败，sql解析异常！");
+            return Result.error("Kiểm tra thất bại, lỗi phân tích sql!");
         }
-        return Result.error("校验失败，sql解析异常！" + msg);
+        return Result.error("Kiểm tra thất bại, lỗi phân tích sql!" + msg);
     }
 
     /**
-     * 根据高级查询条件查询用户
+     * Truy vấn người dùng theo điều kiện truy vấn nâng cao
      * @param superQuery
      * @param matchType
      * @return
@@ -909,7 +909,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据id条件查询用户
+     * Truy vấn người dùng theo điều kiện id
      * @param id
      * @return
      */
@@ -919,7 +919,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据高级查询条件查询部门
+     * Truy vấn phòng ban theo điều kiện truy vấn nâng cao
      * @param superQuery
      * @param matchType
      * @return
@@ -930,7 +930,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据高级查询条件查询角色
+     * Truy vấn vai trò theo điều kiện truy vấn nâng cao
      * @param superQuery
      * @param matchType
      * @return
@@ -942,8 +942,8 @@ public class SystemApiController {
 
 
     /**
-     * 根据租户ID查询用户ID
-     * @param tenantId 租户ID
+     * Truy vấn người dùng theo ID Tenant ID
+     * @param tenantId Tenant ID
      * @return List<String>
      */
     @GetMapping("/selectUserIdByTenantId")
@@ -953,7 +953,7 @@ public class SystemApiController {
 
 
     /**
-     * 根据部门ID查询用户ID
+     * Truy vấn người dùng theo ID phòng ban ID
      * @param deptIds
      * @return
      */
@@ -963,7 +963,7 @@ public class SystemApiController {
     }
     
     /**
-     * 根据部门岗位ID查询用户ID
+     * Truy vấn người dùng theo ID chức vụ của phòng ban ID
      * @param deptPostIds
      * @return
      */
@@ -973,7 +973,7 @@ public class SystemApiController {
     }
     
     /**
-     * 根据部门ID查询用户ID
+     * Truy vấn người dùng theo ID phòng ban ID
      * @param deptIds
      * @return
      */
@@ -983,7 +983,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据角色编码 查询用户ID
+     * Truy vấn người dùng theo mã vai trò ID
      * @param roleCodes
      * @return
      */
@@ -993,7 +993,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据用户ID查询用户名
+     * Truy vấn tên người dùng theo ID người dùng
      * @param userIds
      * @return
      */
@@ -1003,7 +1003,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据岗位的职级ID查询用户ID
+     * Truy vấn người dùng theo ID cấp bậc của vị trí ID
      * @param departPositIds
      * @return
      */
@@ -1013,7 +1013,7 @@ public class SystemApiController {
     }
     
     /**
-     * 根据职务ID查询用户ID
+     * Truy vấn người dùng theo ID chức vụ ID
      * @param positionIds
      * @return
      */
@@ -1024,9 +1024,9 @@ public class SystemApiController {
 
 
     /**
-     * 根据部门和子部门下的所有用户账号
+     * Theo tất cả tài khoản người dùng thuộc phòng ban và các phòng ban con
      *
-     * @param orgCode 部门编码
+     * @param orgCode Mã phòng ban
      * @return
      */
     @GetMapping("/getUserAccountsByDepCode")
@@ -1035,7 +1035,7 @@ public class SystemApiController {
     }
 
     /**
-     * 检查查询sql的表和字段是否在白名单中
+     * Kiểm tra xem bảng và trường của câu lệnh sql truy vấn có nằm trong danh sách trắng hay không
      *
      * @param selectSql
      * @return
@@ -1046,10 +1046,10 @@ public class SystemApiController {
     }
 
     /**
-     * 根据字典表或者字典编码，校验是否在白名单中
+     * Kiểm tra xem có nằm trong whitelist hay không theo bảng danh mục hoặc mã danh mục
      *
-     * @param tableOrDictCode 表名或dictCode
-     * @param fields          如果传的是dictCode，则该参数必须传null
+     * @param tableOrDictCode Tên bảng hoặc dictCode
+     * @param fields          Nếu truyền vào là dictCode thì tham số này bắt buộc phải truyền null
      * @return
      */
     @GetMapping("/dictTableWhiteListCheckByDict")
@@ -1060,10 +1060,10 @@ public class SystemApiController {
         return sysBaseApi.dictTableWhiteListCheckByDict(tableOrDictCode, fields);
     }
     /**
-     * 自动发布通告
+     * Tự động phát hành thông báo
      *
-     * @param dataId 通告ID
-     * @param currentUserName 发送人
+     * @param dataId Thông báo ID
+     * @param currentUserName Người gửi
      * @return
      */
     @GetMapping("/announcementAutoRelease")
@@ -1075,8 +1075,8 @@ public class SystemApiController {
     }
 
     /**
-     * 根据部门编码查询公司信息
-     * @param orgCode 部门编码
+     * Truy vấn thông tin công ty theo mã phòng ban
+     * @param orgCode Mã phòng ban
      * @return
      * @author chenrui
      * @date 2025/8/12 14:45
@@ -1087,10 +1087,10 @@ public class SystemApiController {
     }
 
     /**
-     * 根据部门编码和层次查询上级公司
+     * Truy vấn công ty cấp trên theo mã phòng ban và cấp bậc
      *
-     * @param orgCode 部门编码
-     * @param level 可以传空 默认为1级 最小值为1
+     * @param orgCode Mã phòng ban
+     * @param level Có thể truyền rỗng, mặc định là cấp 1, giá trị tối thiểu là 1
      * @return
      */
     @GetMapping(value = "/queryCompByOrgCodeAndLevel")
@@ -1099,10 +1099,10 @@ public class SystemApiController {
     }
 
     /**
-     * 运行AIRag流程
-     * for  [QQYUN-13634]在baseapi里面封装方法，方便其他模块调用
+     * Chạy quy trình AIRag
+     * for  [QQYUN-13634]Đóng gói phương thức trong baseapi để các module khác gọi tiện lợi
      * @param airagFlowDTO
-     * @return 流程执行结果,可能是String或者Map
+     * @return Kết quả thực thi quy trình,Có thể là String hoặc Map
      * @return
      */
     @PostMapping(value = "/runAiragFlow")
@@ -1111,11 +1111,11 @@ public class SystemApiController {
     }
 
     /**
-     * 流式运行AIRag流程
-     * for  [QQYUN-13634]在baseapi里面封装方法，方便其他模块调用
+     * Chạy luồng AIRag theo dạng streaming
+     * for  [QQYUN-13634]Đóng gói phương thức trong baseapi để các module khác gọi tiện lợi
      *
      * @param airagFlowDTO
-     * @return 流程执行结果,可能是String或者Map
+     * @return Kết quả thực thi quy trình,Có thể là String hoặc Map
      * @return
      */
     @PostMapping(value = "/runAiragFlowStream")
@@ -1124,11 +1124,11 @@ public class SystemApiController {
     }
 
     /**
-     * 根据部门code或部门id获取部门名称(当前和上级部门)
+     * Theo code phòng ban hoặc id phòng ban, lấy tên phòng ban(phòng ban hiện tại và phòng ban cấp trên)
      *
-     * @param orgCode 部门编码
-     * @param depId 部门id
-     * @return String 部门名称
+     * @param orgCode Mã phòng ban
+     * @param depId Phòng ban id
+     * @return String Tên phòng ban
      */
     @GetMapping(value = "/getDepartPathNameByOrgCode")
     String getDepartPathNameByOrgCode(@RequestParam(name = "orgCode", required = false) String orgCode, @RequestParam(name = "depId", required = false) String depId) {
@@ -1136,7 +1136,7 @@ public class SystemApiController {
     }
 
     /**
-     * 根据部门ID查询用户ID
+     * Truy vấn người dùng theo ID phòng ban ID
      * @param deptIds
      * @return
      */
@@ -1145,7 +1145,7 @@ public class SystemApiController {
         return sysBaseApi.queryUserIdsByCascadeDeptIds(deptIds);
     }
     /**
-     * 推送uniapp 消息
+     * Đẩy tin nhắn uniapp
      * @param pushMessageDTO
      * @return
      */
@@ -1155,14 +1155,14 @@ public class SystemApiController {
     }
 
     /**
-     * 根据用户名查询用户主部门信息。
+     * Truy vấn thông tin phòng ban chính của người dùng theo tên người dùng.
      * <p>
-     * 逻辑：取用户的主岗位（mainDepPostId），再查询该岗位节点在 sys_depart 中的父节点，
-     * 父节点即为用户的主部门，返回其信息。
+     * Logic: lấy vị trí chính của người dùng (mainDepPostId), rồi truy vấn node vị trí đó tại sys_depart node cha trong đó,
+     * Nút cha chính là phòng ban chính của người dùng, trả về thông tin của nó.
      * <p>
      *
-     * @param username 用户账号
-     * @return 主部门信息，若用户未配置主岗位则返回 {@code null}
+     * @param username Tài khoản người dùng
+     * @return Thông tin phòng ban chính, nếu người dùng chưa cấu hình vị trí chính thì trả về {@code null}
      */
     @GetMapping("/queryMainDepartByUsername")
     SysDepartModel queryMainDepartByUsername(@RequestParam("username") String username) {

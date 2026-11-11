@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description: 发企业微信消息模板
+ * @Description: Gửi mẫu tin nhắn WeChat doanh nghiệp
  * @author: jeecg-boot
  */
 @Slf4j
@@ -20,7 +20,7 @@ public class QywxSendMsgHandle implements ISendMsgHandle {
 
 	@Override
 	public void sendMsg(String esReceiver, String esTitle, String esContent) {
-		log.info("发微信消息模板");
+		log.info("Gửi mẫu tin nhắn WeChat");
 		MessageDTO messageDTO = new MessageDTO();
 		messageDTO.setToUser(esReceiver);
 		messageDTO.setTitle(esTitle);

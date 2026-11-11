@@ -7,14 +7,14 @@ import org.jeecg.modules.system.entity.SysPermissionDataRule;
 import java.util.List;
 
 /**
- * @Description: 部门权限表
+ * @Description: Bảng quyền hạn phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-11
  * @Version: V1.0
  */
 public interface ISysDepartPermissionService extends IService<SysDepartPermission> {
     /**
-     * 保存授权 将上次的权限和这次作比较 差异处理提高效率
+     * Lưu ủy quyền: so sánh quyền hạn lần trước với lần này, xử lý phần khác biệt để nâng cao hiệu quả
      * @param departId
      * @param permissionIds
      * @param lastPermissionIds
@@ -22,9 +22,9 @@ public interface ISysDepartPermissionService extends IService<SysDepartPermissio
     public void saveDepartPermission(String departId,String permissionIds,String lastPermissionIds);
 
     /**
-     * 根据部门id，菜单id获取数据规则
-     * @param permissionId 菜单id
-     * @param departId 部门id
+     * Theo id phòng ban, id menu, lấy quy tắc dữ liệu
+     * @param permissionId Menu id
+     * @param departId Phòng ban id
      * @return
      */
     List<SysPermissionDataRule> getPermRuleListByDeptIdAndPermId(String departId,String permissionId);

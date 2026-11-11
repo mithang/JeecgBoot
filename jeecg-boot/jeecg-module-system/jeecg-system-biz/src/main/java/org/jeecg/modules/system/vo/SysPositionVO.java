@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.jeecg.modules.system.entity.SysPosition;
 
 /**
- * 职务VO，扩展了userId字段，用于批量查询职位时携带用户ID（供全量同步批量预加载场景）
+ * VO chức vụ, mở rộng thêm trường userId, dùng để mang theo ID người dùng khi truy vấn hàng loạt chức vụ (dành cho kịch bản preload hàng loạt khi đồng bộ toàn lượng)
  *
  * @author sjlei
  * @version V1.0
@@ -16,7 +16,7 @@ import org.jeecg.modules.system.entity.SysPosition;
 public class SysPositionVO extends SysPosition {
 
     /**
-     * 批量查询时携带的用户ID（非数据库字段，仅用于查询结果分组）
+     * ID người dùng mang theo khi truy vấn hàng loạt (không phải trường cơ sở dữ liệu, chỉ dùng để nhóm kết quả truy vấn)
      */
     private String userId;
 

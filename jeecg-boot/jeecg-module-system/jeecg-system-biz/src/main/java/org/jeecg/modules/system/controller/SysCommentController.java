@@ -31,12 +31,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Description: 系统评论回复表
+ * @Description: Bảng trả lời bình luận hệ thống
  * @Author: jeecg-boot
  * @Date: 2022-07-19
  * @Version: V1.0
  */
-@Tag(name = "系统评论回复表")
+@Tag(name = "Bảng trả lời bình luận hệ thống")
 @RestController
 @RequestMapping("/sys/comment")
 @Slf4j
@@ -50,18 +50,18 @@ public class SysCommentController extends JeecgController<SysComment, ISysCommen
 
 
     /**
-     * 在线预览文件地址
+     * Địa chỉ xem trước tệp trực tuyến
      */
     @Value("${jeecg.file-view-domain}/onlinePreview")
     private String onlinePreviewDomain;
 
     /**
-     * 查询评论+文件
+     * Truy vấn bình luận+Tệp
      *
      * @param sysComment
      * @return
      */
-    @Operation(summary = "系统评论回复表-列表查询")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Truy vấn danh sách")
     @GetMapping(value = "/listByForm")
     public Result<IPage<SysCommentVO>> queryListByForm(SysComment sysComment) {
         List<SysCommentVO> list = sysCommentService.queryFormCommentInfo(sysComment);
@@ -71,12 +71,12 @@ public class SysCommentController extends JeecgController<SysComment, ISysCommen
     }
 
     /**
-     * 查询文件
+     * Truy vấn tệp
      *
      * @param sysComment
      * @return
      */
-    @Operation(summary = "系统评论回复表-列表查询")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Truy vấn danh sách")
     @GetMapping(value = "/fileList")
     public Result<IPage<SysCommentFileVo>> queryFileList(SysComment sysComment) {
         List<SysCommentFileVo> list = sysCommentService.queryFormFileList(sysComment.getTableName(), sysComment.getTableDataId());
@@ -85,70 +85,70 @@ public class SysCommentController extends JeecgController<SysComment, ISysCommen
         return Result.OK(pageList);
     }
 
-    @Operation(summary = "系统评论表-添加文本")
+    @Operation(summary = "Bảng bình luận hệ thống-Thêm văn bản")
     @PostMapping(value = "/addText")
     public Result<String> addText(@RequestBody SysComment sysComment) {
-        // 对评论内容做 XSS 过滤，防止存储型 XSS 进入数据库并在前端 v-html 时执行
+        // Lọc XSS đối với nội dung bình luận, ngăn XSS lưu trữ vào cơ sở dữ liệu và hiển thị ở frontend v-html khi thực thi
         String content = XssUtils.richTextXss(sysComment.getCommentContent());
         sysComment.setCommentContent(content);
         String commentId = sysCommentService.saveOne(sysComment);
         return Result.OK(commentId);
     }
 
-    @Operation(summary = "系统评论表-添加文件")
+    @Operation(summary = "Bảng bình luận hệ thống-Thêm tệp")
     @PostMapping(value = "/addFile")
     public Result<String> addFile(HttpServletRequest request) {
         try {
             sysCommentService.saveOneFileComment(request);
             return Result.OK("success");
         } catch (Exception e) {
-            log.error("评论文件上传失败：{}", e.getMessage());
-            return Result.error("操作失败," + e.getMessage());
+            log.error("Tải lên file bình luận thất bại：{}", e.getMessage());
+            return Result.error("Thao tác thất bại," + e.getMessage());
         }
     }
 
     /**
-     * app端添加评论表
+     * app Bảng thêm bình luận trên app
      * @param request
      * @return
      */
-    @Operation(summary = "系统评论表-添加文件")
+    @Operation(summary = "Bảng bình luận hệ thống-Thêm tệp")
     @PostMapping(value = "/appAddFile")
     public Result<String> appAddFile(HttpServletRequest request) {
         try {
             sysCommentService.appSaveOneFileComment(request);
             return Result.OK("success");
         } catch (Exception e) {
-            log.error("评论文件上传失败：{}", e.getMessage());
-            return Result.error("操作失败," + e.getMessage());
+            log.error("Tải lên file bình luận thất bại：{}", e.getMessage());
+            return Result.error("Thao tác thất bại," + e.getMessage());
         }
     }
 
-    @Operation(summary = "系统评论回复表-通过id删除")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Xóa theo id")
     @DeleteMapping(value = "/deleteOne")
     public Result<String> deleteOne(@RequestParam(name = "id", required = true) String id) {
         SysComment comment = sysCommentService.getById(id);
         if(comment==null){
-            return Result.error("该评论已被删除！");
+            return Result.error("Bình luận này đã bị xóa!");
         }
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         String username = sysUser.getUsername();
         String admin = "admin";
-        //除了admin外 其他人只能删除自己的评论
+        //Ngoài admin ra, người khác chỉ được xóa bình luận của chính mình
         if((!admin.equals(username)) && !username.equals(comment.getCreateBy())){
-            return Result.error("只能删除自己的评论！");
+            return Result.error("Chỉ được xóa bình luận của chính mình!");
         }
         sysCommentService.deleteOne(id);
-        //删除评论添加日志
-        String logContent = "删除了评论， "+ comment.getCommentContent();
+        //Xóa bình luận và thêm nhật ký
+        String logContent = "Đã xóa bình luận,  "+ comment.getCommentContent();
         DataLogDTO dataLog = new DataLogDTO(comment.getTableName(), comment.getTableDataId(), logContent, CommonConstant.DATA_LOG_TYPE_COMMENT);
         sysBaseAPI.saveDataLog(dataLog);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
 
     /**
-     * 获取文件预览的地址
+     * Lấy địa chỉ xem trước file
      * @return
      */
     @GetMapping(value = "/getFileViewDomain")
@@ -158,7 +158,7 @@ public class SysCommentController extends JeecgController<SysComment, ISysCommen
 
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param sysComment
      * @param pageNo
@@ -166,8 +166,8 @@ public class SysCommentController extends JeecgController<SysComment, ISysCommen
      * @param req
      * @return
      */
-    //@AutoLog(value = "系统评论回复表-分页列表查询")
-    @Operation(summary = "系统评论回复表-分页列表查询")
+    //@AutoLog(value = "Bảng trả lời bình luận hệ thống-Truy vấn danh sách phân trang")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Truy vấn danh sách phân trang")
     @RequiresPermissions("system:comment:list")
     @GetMapping(value = "/list")
     public Result<IPage<SysComment>> queryPageList(SysComment sysComment,
@@ -182,148 +182,148 @@ public class SysCommentController extends JeecgController<SysComment, ISysCommen
 
 
     /**
-     * 添加
+     * Thêm
      *
      * @param sysComment
      * @return
      */
-    @Operation(summary = "系统评论回复表-添加")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Thêm")
     @PostMapping(value = "/add")
     public Result<String> add(@RequestBody SysComment sysComment) {
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (sysUser == null) {
-            return Result.error("用户未登录！");
+            return Result.error("Người dùng chưa đăng nhập!");
         }
         sysComment.setFromUserId(sysUser.getId());
         sysComment.setCreateBy(null);
         sysComment.setCreateTime(null);
         sysComment.setUpdateBy(null);
         sysComment.setUpdateTime(null);
-        // 对评论内容做 XSS 过滤
+        // Lọc XSS cho nội dung bình luận
         sysComment.setCommentContent(XssUtils.richTextXss(sysComment.getCommentContent()));
         sysCommentService.save(sysComment);
-        return Result.OK("添加成功！");
+        return Result.OK("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param sysComment
      * @return
      */
-    //@AutoLog(value = "系统评论回复表-编辑")
-    @Operation(summary = "系统评论回复表-编辑")
+    //@AutoLog(value = "Bảng trả lời bình luận hệ thống-Chỉnh sửa")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Chỉnh sửa")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<String> edit(@RequestBody SysComment sysComment) {
         if (sysComment == null || sysComment.getId() == null || sysComment.getId().isEmpty()) {
-            return Result.error("评论ID不能为空！");
+            return Result.error("ID bình luận không được để trống!");
         }
         SysComment origin = sysCommentService.getById(sysComment.getId());
         if (origin == null) {
-            return Result.error("该评论不存在或已删除！");
+            return Result.error("Bình luận này không tồn tại hoặc đã bị xóa!");
         }
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (sysUser == null) {
-            return Result.error("用户未登录！");
+            return Result.error("Người dùng chưa đăng nhập!");
         }
         String username = sysUser.getUsername();
         String admin = "admin";
         if (!admin.equals(username) && !username.equals(origin.getCreateBy())) {
-            return Result.error("只能编辑自己的评论！");
+            return Result.error("Chỉ được chỉnh sửa bình luận của chính mình!");
         }
         sysComment.setFromUserId(origin.getFromUserId());
         sysComment.setToUserId(origin.getToUserId());
         sysComment.setCreateBy(origin.getCreateBy());
         sysComment.setCreateTime(origin.getCreateTime());
         sysCommentService.updateById(sysComment);
-        return Result.OK("编辑成功!");
+        return Result.OK("Chỉnh sửa thành công!");
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    //@AutoLog(value = "系统评论回复表-通过id删除")
-    @Operation(summary = "系统评论回复表-通过id删除")
+    //@AutoLog(value = "Bảng trả lời bình luận hệ thống-Xóa theo id")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Xóa theo id")
     @DeleteMapping(value = "/delete")
     public Result<String> delete(@RequestParam(name = "id", required = true) String id) {
-        //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9684】修复评论删除越权漏洞，校验只能删除自己的评论-----------
+        //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9684] Sửa lỗ hổng vượt quyền khi xóa bình luận, kiểm tra chỉ được xóa bình luận của chính mình-----------
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (sysUser == null) {
-            return Result.error("用户未登录！");
+            return Result.error("Người dùng chưa đăng nhập!");
         }
         SysComment comment = sysCommentService.getById(id);
         if (comment == null) {
-            return Result.error("该评论已被删除！");
+            return Result.error("Bình luận này đã bị xóa!");
         }
         String username = sysUser.getUsername();
         String admin = "admin";
-        //除了admin外 其他人只能删除自己的评论
+        //Ngoài admin ra, người khác chỉ được xóa bình luận của chính mình
         if (!admin.equals(username) && !username.equals(comment.getCreateBy())) {
-            return Result.error("只能删除自己的评论！");
+            return Result.error("Chỉ được xóa bình luận của chính mình!");
         }
-        //通过deleteOne删除，同时清理关联文件
+        //Xóa bằng deleteOne, đồng thời dọn dẹp tệp liên quan
         sysCommentService.deleteOne(id);
-        //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9684】修复评论删除越权漏洞，校验只能删除自己的评论-----------
-        return Result.OK("删除成功!");
+        //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9684] Sửa lỗ hổng vượt quyền khi xóa bình luận, kiểm tra chỉ được xóa bình luận của chính mình-----------
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
      */
-    //@AutoLog(value = "系统评论回复表-批量删除")
-    @Operation(summary = "系统评论回复表-批量删除")
+    //@AutoLog(value = "Bảng trả lời bình luận hệ thống-Xóa hàng loạt")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Xóa hàng loạt")
     @DeleteMapping(value = "/deleteBatch")
     public Result<String> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
-        //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9684】修复评论批量删除越权漏洞，校验只能删除自己的评论-----------
+        //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9684] Sửa lỗ hổng vượt quyền khi xóa hàng loạt bình luận, kiểm tra chỉ được xóa bình luận của chính mình-----------
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (sysUser == null) {
-            return Result.error("用户未登录！");
+            return Result.error("Người dùng chưa đăng nhập!");
         }
         String username = sysUser.getUsername();
         String admin = "admin";
         List<String> idList = Arrays.asList(ids.split(","));
-        //非admin需逐一校验评论归属，只能删除自己的评论
+        //Người không phải admin cần kiểm tra từng quyền sở hữu bình luận, chỉ được xóa bình luận của chính mình
         if (!admin.equals(username)) {
             for (String id : idList) {
                 SysComment comment = sysCommentService.getById(id);
                 if (comment != null && !username.equals(comment.getCreateBy())) {
-                    return Result.error("只能删除自己的评论！");
+                    return Result.error("Chỉ được xóa bình luận của chính mình!");
                 }
             }
         }
-        //逐一删除，同时清理关联文件
+        //Xóa từng mục một, đồng thời dọn dẹp tệp liên quan
         for (String id : idList) {
             sysCommentService.deleteOne(id);
         }
-        //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9684】修复评论批量删除越权漏洞，校验只能删除自己的评论-----------
-        return Result.OK("批量删除成功!");
+        //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9684] Sửa lỗ hổng vượt quyền khi xóa hàng loạt bình luận, kiểm tra chỉ được xóa bình luận của chính mình-----------
+        return Result.OK("Xóa hàng loạt thành công!!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
-    //@AutoLog(value = "系统评论回复表-通过id查询")
-    @Operation(summary = "系统评论回复表-通过id查询")
+    //@AutoLog(value = "Bảng trả lời bình luận hệ thống-Tìm kiếm theo id")
+    @Operation(summary = "Bảng trả lời bình luận hệ thống-Tìm kiếm theo id")
     @GetMapping(value = "/queryById")
     public Result<SysComment> queryById(@RequestParam(name = "id", required = true) String id) {
         SysComment sysComment = sysCommentService.getById(id);
         if (sysComment == null) {
-            return Result.error("未找到对应数据");
+            return Result.error("Không tìm thấy dữ liệu tương ứng");
         }
         return Result.OK(sysComment);
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param sysComment
@@ -331,11 +331,11 @@ public class SysCommentController extends JeecgController<SysComment, ISysCommen
     @RequiresPermissions("system:comment:exportXls")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysComment sysComment) {
-        return super.exportXls(request, sysComment, SysComment.class, "系统评论回复表");
+        return super.exportXls(request, sysComment, SysComment.class, "Bảng trả lời bình luận hệ thống");
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response

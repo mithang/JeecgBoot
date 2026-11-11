@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 字典表 Mapper 接口
+ * Interface Mapper bảng danh mục
  * </p>
  *
  * @Author zhangweijian
@@ -28,7 +28,7 @@ import java.util.Map;
 public interface SysDictMapper extends BaseMapper<SysDict> {
 	
 	/**
-	 * 重复检查SQL
+	 * Kiểm tra trùng lặp SQL
      * @param duplicateCheckVo
 	 * @return
 	 */
@@ -36,7 +36,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 	public Long duplicateCheckCountSql(DuplicateCheckVo duplicateCheckVo);
 
     /**
-     * 重复校验 sql语句
+     * Câu lệnh sql kiểm tra trùng lặp
      * @param duplicateCheckVo
      * @return
      */
@@ -44,22 +44,22 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 	public Long duplicateCheckCountSqlNoDataId(DuplicateCheckVo duplicateCheckVo);
 
 	/**
-	 * 【QQYUN-15337 多数据源】按表名查 online 表单(onl_cgform_head)上配置的 db_source，
-	 * 仅返回 db_source 非空的记录；找不到 / 该表不是online表 / 未配数据源 时返回空列表。
-	 * 失败由调用方 try/catch（如果运行环境没装 online 模块、onl_cgform_head 不存在）。
+	 * 【QQYUN-15337 Đa nguồn dữ liệu】Tra biểu mẫu online theo tên bảng(onl_cgform_head)đã cấu hình trên db_source，
+	 * Chỉ trả về db_source bản ghi không rỗng; không tìm thấy / Bảng này không phải là bảng online / Khi chưa cấu hình nguồn dữ liệu thì trả về danh sách trống.
+	 * Thất bại do bên gọi try/catch(Nếu môi trường chạy chưa cài module online,onl_cgform_head không tồn tại）。
 	 */
 	@Select("SELECT db_source FROM onl_cgform_head WHERE table_name = #{tableName} AND db_source IS NOT NULL AND db_source != ''")
 	public List<String> findOnlineFormDbSourceByTableName(@Param("tableName") String tableName);
 
     /**
-     * 通过字典code获取字典数据
-     * @param code 字典code
+     * Lấy dữ liệu danh mục qua code danh mục
+     * @param code Từ điển code
      * @return  List<DictModel>
      */
 	public List<DictModel> queryDictItemsByCode(@Param("code") String code);
 
 	/**
-	 * 查询有效的数据字典项
+	 * Truy vấn mục danh mục dữ liệu hợp lệ
 	 * @param code
 	 * @return
 	 */
@@ -67,7 +67,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 
 
 	/**
-	 * 通过多个字典code获取字典数据
+	 * Lấy dữ liệu danh mục qua nhiều code danh mục
 	 *
 	 * @param dictCodeList
 	 * @return
@@ -75,7 +75,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 	public List<DictModelMany> queryDictItemsByCodeList(@Param("dictCodeList") List<String> dictCodeList);
 
     /**
-     * 通过字典code获取字典数据
+     * Lấy dữ liệu danh mục qua code danh mục
      * @param code
      * @param key
      * @return
@@ -83,33 +83,33 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 	public String queryDictTextByKey(@Param("code") String code,@Param("key") String key);
 
 	/**
-	 * 可通过多个字典code查询翻译文本
-	 * @param dictCodeList 多个字典code
-	 * @param keys 数据列表
+	 * Có thể truy vấn văn bản dịch qua nhiều code danh mục
+	 * @param dictCodeList Nhiều danh mục code
+	 * @param keys Danh sách dữ liệu
 	 * @return
 	 */
 	List<DictModelMany> queryManyDictByKeys(@Param("dictCodeList") List<String> dictCodeList, @Param("keys") List<String> keys);
 
 	/**
-	 * 查询系统所有字典项
+	 * Truy vấn tất cả mục danh mục của hệ thống
 	 * @return
 	 */
 	public List<DictModelMany> queryAllDictItems(List<Integer> tenantIdList);
 	
 	/**
-	 * 查询所有部门 作为字典信息 id -->value,departName -->text
+	 * Truy vấn tất cả phòng ban làm thông tin danh mục id -->value,departName -->text
 	 * @return
 	 */
 	public List<DictModel> queryAllDepartBackDictModel();
 	
 	/**
-	 * 查询所有用户  作为字典信息 username -->value,realname -->text
+	 * Truy vấn tất cả người dùng làm thông tin danh mục username -->value,realname -->text
 	 * @return
 	 */
 	public List<DictModel> queryAllUserBackDictModel();
 	
 	/**
-	  * 根据表名、显示字段名、存储字段名 查询树
+	  * Truy vấn cây theo tên bảng, tên trường hiển thị, tên trường lưu trữ
 	 * @param table
 	 * @param text
 	 * @param code
@@ -125,21 +125,21 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 										@Param("converIsLeafVal") int converIsLeafVal);
 
 	/**
-	 * 删除
+	 * Xóa
 	 * @param id
 	 */
 	@Select("delete from sys_dict where id = #{id}")
 	public void deleteOneById(@Param("id") String id);
 
 	/**
-	 * 查询被逻辑删除的数据
+	 * Truy vấn dữ liệu đã bị xóa logic
 	 * @return
 	 */
 	@Select("select * from sys_dict where del_flag = 1")
 	public List<SysDict> queryDeleteList();
 
 	/**
-	 * 修改状态值
+	 * Chỉnh sửa giá trị trạng thái
 	 * @param delFlag
 	 * @param id
 	 */
@@ -148,7 +148,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 
 
 	/**
-	 * 分页查询字典表数据
+	 * Truy vấn phân trang dữ liệu bảng danh mục
 	 * @param page
 	 * @param query
 	 * @return
@@ -158,7 +158,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 
 
 	/**
-	 * 查询 字典表数据 支持查询条件 分页
+	 * Truy vấn dữ liệu bảng danh mục, hỗ trợ điều kiện truy vấn và phân trang
 	 * @param page
 	 * @param table
 	 * @param text
@@ -170,7 +170,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 	IPage<DictModel> queryPageTableDictWithFilter(Page<DictModel> page, @Param("table") String table, @Param("text") String text, @Param("code") String code, @Param("filterSql") String filterSql);
 
 	/**
-	 * 查询 字典表数据 支持查询条件 查询所有
+	 * Truy vấn dữ liệu bảng danh mục, hỗ trợ điều kiện truy vấn, truy vấn tất cả
 	 * @param table
 	 * @param text
 	 * @param code
@@ -181,12 +181,12 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 	List<DictModel> queryTableDictWithFilter(@Param("table") String table, @Param("text") String text, @Param("code") String code, @Param("filterSql") String filterSql);
 
 	/**
-	 * 查询字典表的数据
-	 * @param table 表名
-	 * @param text   显示字段名
-	 * @param code   存储字段名
-	 * @param filterSql 条件sql
-	 * @param codeValues 存储字段值 作为查询条件in
+	 * Truy vấn dữ liệu bảng danh mục
+	 * @param table Tên bảng
+	 * @param text   Tên trường hiển thị
+	 * @param code   Tên trường lưu trữ
+	 * @param filterSql Điều kiện sql
+	 * @param codeValues Lưu giá trị trường làm điều kiện truy vấn in
 	 * @return
 	 */
 	@Deprecated
@@ -194,16 +194,16 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 													 @Param("codeValues") List<String> codeValues);
 
 	/**
-	 * 关联记录专用：多字段分页查询任意表数据
-	 * 由 SysDictService.queryTableData() 调用，调用前已做 SQL 注入校验
+	 * Dành riêng cho bản ghi liên kết: Truy vấn phân trang đa trường dữ liệu của bất kỳ bảng nào
+	 * Được SysDictService.queryTableData() gọi, trước khi gọi đã thực hiện kiểm tra SQL Injection
 	 *
-	 * @param page      分页参数
-	 * @param table     表名（已转义）
-	 * @param fields    SELECT 字段列表（已转义，逗号分隔）
-	 * @param valueField  回显字段（已转义）
-	 * @param keyValues   回显值，参数绑定
-	 * @param likeFields  模糊搜索字段（已转义）
-	 * @param likeKeyword 模糊搜索关键词（含%），参数绑定
+	 * @param page      Tham số phân trang
+	 * @param table     Tên bảng (đã escape)
+	 * @param fields    SELECT Danh sách trường (đã escape, phân tách bằng dấu phẩy)
+	 * @param valueField  Trường hiển thị lại (đã escape)
+	 * @param keyValues   Giá trị hiển thị lại, ràng buộc tham số
+	 * @param likeFields  Trường tìm kiếm mờ (đã escape)
+	 * @param likeKeyword Từ khóa tìm kiếm mờ (bao gồm%）, tham số được gắn kết
 	 */
 	IPage<Map<String, Object>> queryPageTableWithFields(Page<Map<String, Object>> page,
 		@Param("table") String table,
@@ -214,13 +214,13 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 		@Param("likeKeyword") String likeKeyword);
 
 	/**
-	 * 关联记录专用：统计满足条件的记录总数
+	 * Chuyên dùng cho bản ghi liên kết: thống kê tổng số bản ghi thỏa điều kiện
 	 *
-	 * @param table     表名（已转义）
-	 * @param valueField  回显字段（已转义）
-	 * @param keyValues   回显值，参数绑定
-	 * @param likeFields  模糊搜索字段（已转义）
-	 * @param likeKeyword 模糊搜索关键词（含%），参数绑定
+	 * @param table     Tên bảng (đã escape)
+	 * @param valueField  Trường hiển thị lại (đã escape)
+	 * @param keyValues   Giá trị hiển thị lại, ràng buộc tham số
+	 * @param likeFields  Trường tìm kiếm mờ (đã escape)
+	 * @param likeKeyword Từ khóa tìm kiếm mờ (bao gồm%）, tham số được gắn kết
 	 */
 	Long countTableWithFields(@Param("table") String table,
 		@Param("valueField") String valueField,
@@ -229,7 +229,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 		@Param("likeKeyword") String likeKeyword);
 
 	/**
-	 * 根据应用id获取字典列表和详情
+	 * Lấy danh sách và chi tiết danh mục theo id ứng dụng
 	 * @param lowAppId
 	 * @param tenantId
 	 * @return
@@ -238,21 +238,21 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
     List<SysDict> getDictListByLowAppId(@Param("lowAppId") String lowAppId, @Param("tenantId") Integer tenantId);
 
 	/**
-	 * 查询被逻辑删除的数据（根据租户id）
+	 * Truy vấn dữ liệu đã bị xóa logic (theo id tenant)
 	 * @return
 	 */
 	@Select("select * from sys_dict where del_flag = 1 and tenant_id = #{tenantId}")
 	List<SysDict> queryDeleteListBtTenantId(@Param("tenantId") Integer tenantId);
 
 	/**
-	 * 还原被逻辑删除的数据（根据id）
+	 * Khôi phục dữ liệu đã bị xóa logic (theo id)
 	 * @param ids
 	 * @return
 	 */
 	int revertLogicDeleted(@Param("ids") List<String> ids);
 
 	/**
-	 *  彻底删除的数据（根据ids）
+	 *  Dữ liệu bị xóa hoàn toàn (theo ids)
 	 * @param ids
 	 * @return
 	 */

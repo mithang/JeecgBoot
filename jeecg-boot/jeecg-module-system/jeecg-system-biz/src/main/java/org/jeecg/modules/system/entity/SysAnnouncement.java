@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 
 /**
- * @Description: 系统通告表
+ * @Description: Bảng thông báo hệ thống
  * @Author: jeecg-boot
  * @Date:  2019-01-02
  * @Version: V1.0
@@ -28,166 +28,166 @@ public class SysAnnouncement implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     private java.lang.String id;
     /**
-     * 标题
+     * Tiêu đề
      */
-    @Excel(name = "标题", width = 15)
+    @Excel(name = "Tiêu đề", width = 15)
     private java.lang.String titile;
     /**
-     * 内容
+     * Nội dung
      */
-    @Excel(name = "内容", width = 30)
+    @Excel(name = "Nội dung", width = 30)
     private java.lang.String msgContent;
     /**
-     * 开始时间
+     * Thời gian bắt đầu
      */
-    @Excel(name = "开始时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "Thời gian bắt đầu", width = 15, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date startTime;
     /**
-     * 结束时间
+     * Thời gian kết thúc
      */
-    @Excel(name = "结束时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "Thời gian kết thúc", width = 15, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date endTime;
     /**
-     * 发布人
+     * Người đăng
      */
-    @Excel(name = "发布人", width = 15)
+    @Excel(name = "Người đăng", width = 15)
     @Dict(dictTable = "sys_user",dicCode = "username",dicText = "realname")
     private java.lang.String sender;
     /**
-     * 优先级（L低，M中，H高）
+     * Mức độ ưu tiên (L thấp, M trung bình, H cao)
      */
-    @Excel(name = "优先级", width = 15, dicCode = "priority")
+    @Excel(name = "Mức ưu tiên", width = 15, dicCode = "priority")
     @Dict(dicCode = "priority")
     private java.lang.String priority;
     
     /**
-     * 消息类型1:通知公告2:系统消息
+     * Loại tin nhắn 1:Thông báo 2:Tin nhắn hệ thống
      */
-    @Excel(name = "消息类型", width = 15, dicCode = "msg_category")
+    @Excel(name = "Loại tin nhắn", width = 15, dicCode = "msg_category")
     @Dict(dicCode = "msg_category")
     private java.lang.String msgCategory;
     /**
-     * 通告对象类型（USER:指定用户，ALL:全体用户）
+     * Loại đối tượng thông báo (USER:Người dùng chỉ định，ALL:Toàn bộ người dùng）
      */
-    @Excel(name = "通告对象类型", width = 15, dicCode = "msg_type")
+    @Excel(name = "Loại đối tượng thông báo", width = 15, dicCode = "msg_type")
     @Dict(dicCode = "msg_type")
     private java.lang.String msgType;
     /**
-     * 发布状态（0未发布，1已发布，2已撤销）
+     * Trạng thái phát hành (0 chưa phát hành, 1 đã phát hành, 2 đã thu hồi)
      */
-    @Excel(name = "发布状态", width = 15, dicCode = "send_status")
+    @Excel(name = "Trạng thái phát hành", width = 15, dicCode = "send_status")
     @Dict(dicCode = "send_status")
     private java.lang.String sendStatus;
     /**
-     * 发布时间
+     * Thời gian đăng
      */
-    @Excel(name = "发布时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "Thời gian đăng", width = 15, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date sendTime;
     /**
-     * 撤销时间
+     * Thời gian hủy
      */
-    @Excel(name = "撤销时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "Thời gian hủy", width = 15, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date cancelTime;
     /**
-     * 删除状态（0，正常，1已删除）
+     * Trạng thái xóa (0 bình thường, 1 đã xóa)
      */
     private java.lang.String delFlag;
     /**
-     * 创建人
+     * Người tạo
      */
     private java.lang.String createBy;
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date createTime;
     /**
-     * 更新人
+     * Người cập nhật
      */
     private java.lang.String updateBy;
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date updateTime;
     /**
-     * 指定用户
+     * Người dùng được chỉ định
      **/
     private java.lang.String userIds;
     /**
-     * 业务类型(email:邮件 bpm:流程 tenant_invite:租户邀请)
+     * Loại nghiệp vụ(email:Email bpm:Quy trình tenant_invite:Lời mời tenant)
      */
     private java.lang.String busType;
     /**
-     * 业务id
+     * Nghiệp vụ id
      */
     private java.lang.String busId;
     /**
-     * 打开方式 组件：component 路由：url
+     * Cách mở: Component: component; Route:url
      */
     private java.lang.String openType;
     /**
-     * 组件/路由 地址
+     * Component/Địa chỉ route
      */
     private java.lang.String openPage;
     /**
-     * 摘要/扩展业务参数
+     * Tóm tắt/Tham số nghiệp vụ mở rộng
      * 
-     * 示例：
-     * 1 摘要值
-     *  放假安排
-     * 2 跳转流程的参数值
+     * Ví dụ:
+     * 1 Giá trị tóm tắt
+     *  Lịch nghỉ lễ
+     * 2 Giá trị tham số của quy trình chuyển hướng
      * {"taskDetail":true,"procInsId":"1706547306004377602","taskId":"task630958764530507776"}
      */
     private java.lang.String msgAbstract;
     /**
-     * 钉钉task_id，用于撤回消息
+     * DingTalk task_id, dùng để thu hồi tin nhắn
      */
     private String dtTaskId;
 
     /**
-     * 阅读状态 1表示已经阅读
+     * Trạng thái đã đọc: 1 nghĩa là đã đọc
      */
     private transient String readFlag;
 
     /**
-     * 标星状态 1表示标星
+     * Trạng thái đánh dấu sao: 1 là đã đánh dấu sao
      */
     private transient String starFlag;
 
     /**
-     * 发送记录ID
+     * Bản ghi gửi ID
      */
     private transient String sendId;
 
-    /**租户ID*/
+    /**Tenant ID*/
     private java.lang.Integer tenantId;
     
     /** 
-     * 枚举：org.jeecg.common.constant.enums.NoticeTypeEnum
-     * 通知类型(system:系统消息、file:知识库、flow:流程、plan:日程计划、meeting:会议)
+     * Enum:org.jeecg.common.constant.enums.NoticeTypeEnum
+     * Loại thông báo(system:Tin nhắn hệ thống、file:Cơ sở tri thức、flow:Quy trình、plan:Lịch trình、meeting:Cuộc họp)
      */
     private String noticeType;
-    /**附件字段*/
+    /**Trường tệp đính kèm*/
     private java.lang.String files;
-    /**访问次数*/
+    /**Số lần truy cập*/
     private java.lang.Integer visitsNum;
-    /**是否置顶（0否 1是）*/
+    /**Có ghim lên đầu hay không (0: Không, 1: Có)*/
     private java.lang.Integer izTop;
-    /**是否审批（0否 1是）*/
+    /**Có phê duyệt hay không (0: Không, 1: Có)*/
     private java.lang.String izApproval;
-    /**流程状态*/
+    /**Trạng thái quy trình*/
     private java.lang.String bpmStatus;
-    /**消息归类*/
+    /**Phân loại tin nhắn*/
     private java.lang.String msgClassify;
 }

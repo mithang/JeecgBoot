@@ -13,7 +13,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 第三方登录账号表
+ * @Description: Bảng tài khoản đăng nhập bên thứ ba
  * @Author: jeecg-boot
  * @Date:   2020-11-17
  * @Version: V1.0
@@ -22,62 +22,62 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName("sys_third_account")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(description="第三方登录账号表")
+@Schema(description="Bảng tài khoản đăng nhập bên thứ ba")
 public class SysThirdAccount {
  
-	/**编号*/
+	/**Mã*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "编号")
+    @Schema(description = "Mã")
 	private java.lang.String id;
-	/**第三方登录id*/
-	@Excel(name = "第三方登录id", width = 15)
-	@Schema(description = "第三方登录id")
+	/**Đăng nhập bên thứ ba id*/
+	@Excel(name = "Đăng nhập bên thứ ba id", width = 15)
+	@Schema(description = "Đăng nhập bên thứ ba id")
 	private java.lang.String sysUserId;
-	/**登录来源*/
-	@Excel(name = "登录来源", width = 15)
-	@Schema(description = "登录来源")
+	/**Nguồn đăng nhập*/
+	@Excel(name = "Nguồn đăng nhập", width = 15)
+	@Schema(description = "Nguồn đăng nhập")
 	private java.lang.String thirdType;
-	/**头像*/
-	@Excel(name = "头像", width = 15)
-	@Schema(description = "头像")
+	/**Ảnh đại diện*/
+	@Excel(name = "Ảnh đại diện", width = 15)
+	@Schema(description = "Ảnh đại diện")
 	private java.lang.String avatar;
-	/**状态(1-正常,2-冻结)*/
-	@Excel(name = "状态(1-正常,2-冻结)", width = 15)
-	@Schema(description = "状态(1-正常,2-冻结)")
+	/**Trạng thái(1-Bình thường,2-Đóng băng)*/
+	@Excel(name = "Trạng thái(1-Bình thường,2-Đóng băng)", width = 15)
+	@Schema(description = "Trạng thái(1-Bình thường,2-Đóng băng)")
 	private java.lang.Integer status;
-	/**删除状态(0-正常,1-已删除)*/
-	@Excel(name = "删除状态(0-正常,1-已删除)", width = 15)
-	@Schema(description = "删除状态(0-正常,1-已删除)")
+	/**Trạng thái xóa(0-Bình thường,1-Đã xóa)*/
+	@Excel(name = "Trạng thái xóa(0-Bình thường,1-Đã xóa)", width = 15)
+	@Schema(description = "Trạng thái xóa(0-Bình thường,1-Đã xóa)")
 	private java.lang.Integer delFlag;
-	/**真实姓名*/
-	@Excel(name = "真实姓名", width = 15)
-	@Schema(description = "真实姓名")
+	/**Họ tên thật*/
+	@Excel(name = "Họ tên thật", width = 15)
+	@Schema(description = "Họ tên thật")
 	private java.lang.String realname;
-	/**第三方用户uuid*/
-	@Excel(name = "第三方用户uuid", width = 15)
-	@Schema(description = "第三方用户uuid")
+	/**Người dùng bên thứ ba uuid*/
+	@Excel(name = "Người dùng bên thứ ba uuid", width = 15)
+	@Schema(description = "Người dùng bên thứ ba uuid")
 	private java.lang.String thirdUserUuid;
-	/**第三方用户账号*/
-	@Excel(name = "第三方用户账号", width = 15)
-	@Schema(description = "第三方用户账号")
+	/**Tài khoản người dùng bên thứ ba*/
+	@Excel(name = "Tài khoản người dùng bên thứ ba", width = 15)
+	@Schema(description = "Tài khoản người dùng bên thứ ba")
 	private java.lang.String thirdUserId;
-    /**创建人*/
-    @Excel(name = "创建人", width = 15)
+    /**Người tạo*/
+    @Excel(name = "Người tạo", width = 15)
     private java.lang.String createBy;
-    /**创建日期*/
-    @Excel(name = "创建日期", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+    /**Ngày tạo*/
+    @Excel(name = "Ngày tạo", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private java.util.Date createTime;
-    /**修改人*/
-    @Excel(name = "修改人", width = 15)
+    /**Người sửa đổi*/
+    @Excel(name = "Người sửa đổi", width = 15)
     private java.lang.String updateBy;
-    /**修改日期*/
-    @Excel(name = "修改日期", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+    /**Ngày chỉnh sửa*/
+    @Excel(name = "Ngày chỉnh sửa", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private java.util.Date updateTime;
 
-	/**租户id*/
+	/**Tenant id*/
 	private java.lang.Integer tenantId;
 }

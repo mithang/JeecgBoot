@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: VO 评论信息+文件信息
+ * @Description: VO Thông tin bình luận+Thông tin tệp
  * @Author: jeecg-boot
  * @Date: 2022-07-19
  * @Version: V1.0
@@ -25,62 +25,62 @@ public class SysCommentVO implements Serializable {
      */
     private String id;
     /**
-     * 表名
+     * Tên bảng
      */
     private String tableName;
     /**
-     * 数据id
+     * Dữ liệu id
      */
     private String tableDataId;
     /**
-     * 来源用户id
+     * Người dùng nguồn id
      */
     private String fromUserId;
     /**
-     * 回复内容
+     * Nội dung trả lời
      */
     private String commentContent;
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private Date createTime;
 
     /**
-     * 文件信息
+     * Thông tin tệp
      */
     private List<SysCommentFileVo> fileList;
 
     /**
-     * 发送给用户id(允许为空)
+     * Gửi cho người dùng id(Cho phép để trống)
      */
     @Dict(dictTable = "sys_user", dicCode = "id", dicText = "realname")
     private String toUserId;
     
     /**
-     * 评论id(允许为空，不为空时，则为回复)
+     * Bình luận id(Cho phép trống, khi không trống thì là trả lời)
      */
     private String commentId;
 
     /**
-     * 发消息人的realname
+     * của người gửi tin nhắn realname
      */
     private String fromUserId_dictText;
 
     /**
-     * 被回复消息人的realname
+     * của người được trả lời tin nhắn realname
      */
     private String toUserId_dictText;
 
     /**
-     * 发消息人的头像
+     * Ảnh đại diện của người gửi tin nhắn
      */
     private String fromUserAvatar;
 
     /**
-     * 被回复消息人的头像
+     * Ảnh đại diện của người được trả lời tin nhắn
      */
     private String toUserAvatar;
     

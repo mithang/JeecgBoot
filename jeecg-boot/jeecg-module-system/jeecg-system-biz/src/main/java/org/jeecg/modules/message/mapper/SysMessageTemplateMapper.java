@@ -7,7 +7,7 @@ import org.jeecg.modules.message.entity.SysMessageTemplate;
 import java.util.List;
 
 /**
- * @Description: 消息模板
+ * @Description: Mẫu tin nhắn
  * @Author: jeecg-boot
  * @Date:  2019-04-09
  * @Version: V1.0
@@ -15,8 +15,8 @@ import java.util.List;
 public interface SysMessageTemplateMapper extends BaseMapper<SysMessageTemplate> {
 
     /**
-     * 通过模板CODE查询消息模板
-     * @param code 模板CODE
+     * Truy vấn mẫu tin nhắn qua CODE mẫu
+     * @param code Mẫu CODE
      * @return List<SysMessageTemplate>
      */
     @Select("SELECT * FROM SYS_SMS_TEMPLATE WHERE TEMPLATE_CODE = #{code}")

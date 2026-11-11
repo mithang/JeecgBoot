@@ -25,9 +25,9 @@ import java.util.Date;
 import java.util.Map;
 
 /**
-* @Description: 发送系统消息
+* @Description: Gửi tin nhắn hệ thống
 * @Author: wangshuai
-* @Date: 2022年3月22日 18:48:20
+* @Date: 22/03/2022 18:48:20
 */
 @Component("systemSendMsgHandle")
 public class SystemSendMsgHandle implements ISendMsgHandle {
@@ -47,15 +47,15 @@ public class SystemSendMsgHandle implements ISendMsgHandle {
     private WebSocket webSocket;
 
     /**
-     * 该方法会发送3种消息：系统消息、企业微信 钉钉
-     * @param esReceiver 发送人
-     * @param esTitle 标题
-     * @param esContent 内容
+     * Phương thức này sẽ gửi 3 loại tin nhắn: tin nhắn hệ thống, WeChat doanh nghiệp, DingTalk
+     * @param esReceiver Người gửi
+     * @param esTitle Tiêu đề
+     * @param esContent Nội dung
      */
     @Override
     public void sendMsg(String esReceiver, String esTitle, String esContent) {
         if(oConvertUtils.isEmpty(esReceiver)){
-            throw  new JeecgBootException("被发送人不能为空");
+            throw  new JeecgBootException("Người nhận không được để trống");
         }
         ISysBaseAPI sysBaseApi = SpringContextUtils.getBean(ISysBaseAPI.class);
         MessageDTO messageDTO = new MessageDTO(FROM_USER,esReceiver,esTitle,esContent);
@@ -63,19 +63,19 @@ public class SystemSendMsgHandle implements ISendMsgHandle {
     }
 
     /**
-     * 仅发送系统消息
+     * Chỉ gửi tin nhắn hệ thống
      * @param messageDTO
      */
     @Override
     public void sendMessage(MessageDTO messageDTO) {
-        //原方法不支持 sysBaseApi.sendSysAnnouncement(messageDTO);  有企业微信消息逻辑，
+        //Phương thức gốc không hỗ trợ sysBaseApi.sendSysAnnouncement(messageDTO);  Có logic tin nhắn WeChat Doanh nghiệp,
         String title = messageDTO.getTitle();
         String content = messageDTO.getContent();
         String fromUser = messageDTO.getFromUser();
         Map<String,Object> data = messageDTO.getData();
         String[] arr = messageDTO.getToUser().split(",");
         for(String username: arr){
-            // 代码逻辑说明: 【QQYUN-12162】OA项目改造，系统重消息拆分，目前消息都在一起 需按分类进行拆分---
+            // Giải thích logic mã: 【QQYUN-12162] Cải tạo dự án OA, tách hệ thống tin nhắn nặng; hiện các tin nhắn đang ở chung với nhau, cần tách theo danh mục---
             doSend(title, content, fromUser, username, data, messageDTO.getNoticeType());
         }
     }
@@ -83,12 +83,12 @@ public class SystemSendMsgHandle implements ISendMsgHandle {
     private void doSend(String title, String msgContent, String fromUser, String toUser, Map<String, Object> data, String noticeType){
         SysAnnouncement announcement = new SysAnnouncement();
         if(data!=null){
-            //摘要信息
+            //Thông tin tóm tắt
             Object msgAbstract = data.get(CommonConstant.NOTICE_MSG_SUMMARY);
             if(msgAbstract!=null){
                 announcement.setMsgAbstract(msgAbstract.toString());
             }
-            // 任务节点ID
+            // Nút tác vụ ID
             Object taskId = data.get(CommonConstant.NOTICE_MSG_BUS_ID);
             if(taskId!=null){
                 announcement.setBusId(taskId.toString());
@@ -96,7 +96,7 @@ public class SystemSendMsgHandle implements ISendMsgHandle {
                 noticeType = NoticeTypeEnum.NOTICE_TYPE_FLOW.getValue();
             }
 
-            // 流程内消息节点 发消息会传一个busType
+            // Nút tin nhắn trong quy trình, khi gửi tin nhắn sẽ truyền một busType
             Object busType = data.get(CommonConstant.NOTICE_MSG_BUS_TYPE);
             if(busType!=null){
                 announcement.setBusType(busType.toString());
@@ -110,7 +110,7 @@ public class SystemSendMsgHandle implements ISendMsgHandle {
         announcement.setMsgType(CommonConstant.MSG_TYPE_UESR);
         announcement.setSendStatus(CommonConstant.HAS_SEND);
         announcement.setSendTime(new Date());
-        //系统消息
+        //Tin nhắn hệ thống
         announcement.setMsgCategory("2");
         announcement.setDelFlag(String.valueOf(CommonConstant.DEL_FLAG_0));
         if(oConvertUtils.isEmpty(noticeType)){
@@ -119,7 +119,7 @@ public class SystemSendMsgHandle implements ISendMsgHandle {
         announcement.setNoticeType(noticeType);
         announcement.setIzTop(CommonConstant.IZ_TOP_0);
         sysAnnouncementMapper.insert(announcement);
-        // 2.插入用户通告阅读标记表记录
+        // 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
         String userId = toUser;
         String[] userIds = userId.split(",");
         String anntId = announcement.getId();

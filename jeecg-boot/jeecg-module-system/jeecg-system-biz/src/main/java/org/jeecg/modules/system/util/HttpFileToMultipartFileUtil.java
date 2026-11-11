@@ -13,14 +13,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * @Description: http文件转MultipartFile
+ * @Description: http Chuyển đổi tệp MultipartFile
  * @author: wangshuai
  * @date: 2025/11/5 17:55
  */
 public class HttpFileToMultipartFileUtil {
 
     /**
-     * 获取
+     * Lấy
      *
      * @param fileUrl
      * @param filename
@@ -28,17 +28,17 @@ public class HttpFileToMultipartFileUtil {
      * @throws Exception
      */
     public static MultipartFile httpFileToMultipartFile(String fileUrl, String filename) throws Exception {
-        //update-begin---author:liusq ---date:2026-06-29  for：【issues/9725】修复SSRF重定向绕过漏洞(CWE-918)，改用禁止自动跳转并逐跳SSRF校验的安全下载-----------
-        // 原实现仅在下载前对 fileUrl 做一次 SSRF 校验，而 HttpURLConnection 默认自动跟随 3xx 重定向且不再复检，
-        // 攻击者可用 302 跳转到 127.0.0.1 / 169.254.169.254 等内网或云元数据地址绕过校验。
-        // 改用 FileDownloadUtils.download2BytesFromNet，其内部禁止自动跳转并对初始URL及每一跳重定向目标都做SSRF校验。
+        //update-begin---author:liusq ---date:2026-06-29  for：【issues/9725] Sửa lỗ hổng vượt qua chuyển hướng SSRF(CWE-918), chuyển sang dùng tải xuống an toàn với cấm tự động chuyển hướng và kiểm tra SSRF từng bước nhảy-----------
+        // Bản triển khai gốc chỉ kiểm tra SSRF đối với fileUrl một lần trước khi tải xuống, trong khi HttpURLConnection mặc định tự động theo chuyển hướng 3xx và không kiểm tra lại,
+        // Kẻ tấn công có thể dùng 302 để chuyển hướng đến 127.0.0.1 / 169.254.169.254 và các địa chỉ nội bộ hoặc địa chỉ metadata đám mây khác để vượt qua kiểm tra.
+        // Đổi sang dùng FileDownloadUtils.download2BytesFromNet, bên trong cấm tự động chuyển hướng và thực hiện kiểm tra SSRF đối với URL ban đầu và từng đích chuyển hướng.
         byte[] bytes = FileDownloadUtils.download2BytesFromNet(fileUrl);
-        //update-end---author:liusq ---date:2026-06-29  for：【issues/9725】修复SSRF重定向绕过漏洞(CWE-918)，改用禁止自动跳转并逐跳SSRF校验的安全下载-----------
+        //update-end---author:liusq ---date:2026-06-29  for：【issues/9725] Sửa lỗ hổng vượt qua chuyển hướng SSRF(CWE-918), chuyển sang dùng tải xuống an toàn với cấm tự động chuyển hướng và kiểm tra SSRF từng bước nhảy-----------
         return convertByteToMultipartFile(bytes, filename);
     }
 
     /**
-     * 下载图片数据
+     * Tải dữ liệu hình ảnh
      */
     private static byte[] downloadImageData(String fileUrl) throws IOException {
         URL url = new URL(fileUrl);
@@ -53,7 +53,7 @@ public class HttpFileToMultipartFileUtil {
 
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new IOException("HTTP请求失败，响应码: " + responseCode);
+            throw new IOException("HTTP Yêu cầu thất bại, mã phản hồi: " + responseCode);
         }
 
         try (InputStream inputStream = connection.getInputStream();
@@ -73,7 +73,7 @@ public class HttpFileToMultipartFileUtil {
     }
 
     /**
-     * byte转 MultipartFile
+     * Chuyển byte thành MultipartFile
      *
      * @param data
      * @param fileName
@@ -91,7 +91,7 @@ public class HttpFileToMultipartFileUtil {
                 os.write(buffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            throw new RuntimeException("字节数组转换失败", e);
+            throw new RuntimeException("Chuyển đổi mảng byte thất bại", e);
         }
 
         try {

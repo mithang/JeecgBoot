@@ -17,22 +17,22 @@ import java.util.List;
 public class PermissionDataUtil {
 
     /**
-     * 路径：views/
+     * Đường dẫn: views/
      */
     private static final String PATH_VIEWS = "views/";
 
     /**
-     * 路径：src/views/
+     * Đường dẫn: src/views/
      */
     private static final String PATH_SRC_VIEWS = "src/views/";
 
     /**
-     * .vue后缀
+     * .vue Hậu tố
      */
     private static final String VUE_SUFFIX = ".vue";
 
 	/**
-	 * 智能处理错误数据，简化用户失误操作
+	 * Xử lý thông minh dữ liệu lỗi, đơn giản hóa thao tác sai sót của người dùng
 	 * 
 	 * @param permission
 	 */
@@ -41,7 +41,7 @@ public class PermissionDataUtil {
 			return null;
 		}
 
-		// 组件
+		// Component
 		if (oConvertUtils.isNotEmpty(permission.getComponent())) {
 			String component = permission.getComponent();
 			if (component.startsWith(SymbolConstant.SINGLE_SLASH)) {
@@ -59,7 +59,7 @@ public class PermissionDataUtil {
 			permission.setComponent(component);
 		}
 		
-		// 请求URL
+		// Yêu cầu URL
 		if (oConvertUtils.isNotEmpty(permission.getUrl())) {
 			String url = permission.getUrl();
 			if (url.endsWith(VUE_SUFFIX)) {
@@ -71,16 +71,16 @@ public class PermissionDataUtil {
 			permission.setUrl(url);
 		}
 		
-		// 一级菜单默认组件
+		// Component mặc định của menu cấp một
 		if (0 == permission.getMenuType() && oConvertUtils.isEmpty(permission.getComponent())) {
-			// 一级菜单默认组件
+			// Component mặc định của menu cấp một
 			permission.setComponent("layouts/RouteView");
 		}
 		return permission;
 	}
 	
 	/**
-	 * 如果没有index页面 需要new 一个放到list中
+	 * Nếu không có trang index thì cần new một cái đưa vào list
 	 * @param metaList
 	 */
 	public static void addIndexPage(List<SysPermission> metaList) {
@@ -98,7 +98,7 @@ public class PermissionDataUtil {
 	}
 
 	/**
-	 * 判断是否授权首页
+	 * Kiểm tra xem có ủy quyền trang chủ không
 	 * @param metaList
 	 * @return
 	 */
@@ -114,7 +114,7 @@ public class PermissionDataUtil {
 	}
 
 	/**
-	 * 通过id判断是否授权某个页面
+	 * Xác định có ủy quyền cho một trang nào đó hay không qua id
 	 *
 	 * @param metaList
 	 * @return
@@ -129,7 +129,7 @@ public class PermissionDataUtil {
 	}
 
 	/**
-	 * 获取默认首页配置
+	 * Lấy cấu hình trang chủ mặc định
 	 */
 	public static SysRoleIndex getDefIndexConfig() {
 		ISysRoleIndexService sysRoleIndexService = SpringContextUtils.getBean(ISysRoleIndexService.class);

@@ -17,7 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
 /**
- * @Description: 角色首页配置
+ * @Description: Cấu hình trang chủ vai trò
  * @Author: liusq
  * @Date:   2022-03-25
  * @Version: V1.0
@@ -26,74 +26,74 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @TableName("sys_role_index")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(description="角色首页配置")
+@Schema(description="Cấu hình trang chủ vai trò")
 public class SysRoleIndex {
     
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "id")
 	private java.lang.String id;
-	/**角色编码*/
-	@Excel(name = "角色编码", width = 15)
-    @Schema(description = "角色编码")
+	/**Mã vai trò*/
+	@Excel(name = "Mã vai trò", width = 15)
+    @Schema(description = "Mã vai trò")
 	private java.lang.String roleCode;
-	/**路由地址*/
-	@Excel(name = "路由地址", width = 15)
-    @Schema(description = "路由地址")
+	/**Địa chỉ route*/
+	@Excel(name = "Địa chỉ route", width = 15)
+    @Schema(description = "Địa chỉ route")
 	private java.lang.String url;
-	/**路由地址*/
-	@Excel(name = "路由地址", width = 15)
-    @Schema(description = "组件")
+	/**Địa chỉ route*/
+	@Excel(name = "Địa chỉ route", width = 15)
+    @Schema(description = "Component")
 	private java.lang.String component;
 	/**
-	 * 是否路由菜单: 0:不是  1:是（默认值1）
+	 * Có phải menu định tuyến hay không: 0:Không  1: là (mặc định là 1)
 	 */
-	@Excel(name = "是否路由菜单", width = 15)
-	@Schema(description = "是否路由菜单")
+	@Excel(name = "Có phải menu định tuyến hay không", width = 15)
+	@Schema(description = "Có phải menu định tuyến hay không")
 	@TableField(value="is_route")
 	private Boolean route;
-	/**优先级*/
-	@Excel(name = "优先级", width = 15)
-    @Schema(description = "优先级")
+	/**Mức ưu tiên*/
+	@Excel(name = "Mức ưu tiên", width = 15)
+    @Schema(description = "Mức ưu tiên")
 	private java.lang.Integer priority;
-	/**路由地址*/
-	@Excel(name = "状态", width = 15)
-	@Schema(description = "状态")
+	/**Địa chỉ route*/
+	@Excel(name = "Trạng thái", width = 15)
+	@Schema(description = "Trạng thái")
 	private java.lang.String status;
-	/**创建人登录名称*/
-	@Excel(name = "创建人登录名称", width = 15)
-    @Schema(description = "创建人登录名称")
+	/**Tên đăng nhập của người tạo*/
+	@Excel(name = "Tên đăng nhập của người tạo", width = 15)
+    @Schema(description = "Tên đăng nhập của người tạo")
 	private java.lang.String createBy;
-	/**创建日期*/
-	@Excel(name = "创建日期", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+	/**Ngày tạo*/
+	@Excel(name = "Ngày tạo", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
 	private java.util.Date createTime;
-	/**更新人登录名称*/
-	@Excel(name = "更新人登录名称", width = 15)
-    @Schema(description = "更新人登录名称")
+	/**Tên đăng nhập của người cập nhật*/
+	@Excel(name = "Tên đăng nhập của người cập nhật", width = 15)
+    @Schema(description = "Tên đăng nhập của người cập nhật")
 	private java.lang.String updateBy;
-	/**更新日期*/
-	@Excel(name = "更新日期", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+	/**Ngày cập nhật*/
+	@Excel(name = "Ngày cập nhật", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
 	private java.util.Date updateTime;
-	/**所属部门*/
-	@Excel(name = "所属部门", width = 15)
-    @Schema(description = "所属部门")
+	/**Phòng ban trực thuộc*/
+	@Excel(name = "Phòng ban trực thuộc", width = 15)
+    @Schema(description = "Phòng ban trực thuộc")
 	private java.lang.String sysOrgCode;
 
-	/**关联类型(ROLE:角色 USER:表示用户)*/
-    @Schema(description = "关联类型")
-	@Excel(name = "关联类型", width = 15, dicCode = "relation_type")
+	/**Loại liên kết(ROLE:Vai trò USER:đại diện cho người dùng)*/
+    @Schema(description = "Loại liên kết")
+	@Excel(name = "Loại liên kết", width = 15, dicCode = "relation_type")
 	@Dict(dicCode = "relation_type")
 	private java.lang.String relationType;
 
-	/**关联用户/角色名称(翻译字段，非数据库字段)*/
+	/**Người dùng liên kết/Tên vai trò(Trường dịch, không phải trường cơ sở dữ liệu)*/
 	@TableField(exist = false)
-	@Schema(description = "关联用户/角色名称")
+	@Schema(description = "Người dùng liên kết/Tên vai trò")
 	private java.lang.String relationName;
 
 

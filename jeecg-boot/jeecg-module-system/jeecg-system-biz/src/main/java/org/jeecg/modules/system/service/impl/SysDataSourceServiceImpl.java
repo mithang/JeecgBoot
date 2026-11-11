@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: 多数据源管理
+ * @Description: Quản lý nhiều nguồn dữ liệu
  * @Author: jeecg-boot
  * @Date: 2019-12-25
  * @Version: V1.0
@@ -44,7 +44,7 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
         try {
             long count = checkDbCode(sysDataSource.getCode());
             if (count > 0) {
-                return Result.error("数据源编码已存在");
+                return Result.error("Mã nguồn dữ liệu đã tồn tại");
             }
             String dbPassword = sysDataSource.getDbPassword();
             if (StringUtils.isNotBlank(dbPassword)) {
@@ -53,13 +53,13 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
             }
             boolean result = save(sysDataSource);
             if (result) {
-                //动态创建数据源
+                //Tạo động nguồn dữ liệu
                 //addDynamicDataSource(sysDataSource, dbPassword);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Result.OK("添加成功！");
+        return Result.OK("Thêm thành công!");
     }
 
     @Override
@@ -67,43 +67,43 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
         try {
             SysDataSource d = getById(sysDataSource.getId());
             DataSourceCachePool.removeCache(d.getCode());
-            //update-begin---author:jeecg ---date:20260512  for：【QQYUN-15337】online表单支持多数据源，数据源编辑后移除已注册的动态数据源，下次使用时按新配置重新注册-----------
+            //update-begin---author:jeecg ---date:20260512  for：【QQYUN-15337] Form online hỗ trợ nhiều nguồn dữ liệu; sau khi chỉnh sửa nguồn dữ liệu sẽ gỡ bỏ nguồn dữ liệu động đã đăng ký, lần dùng sau đăng ký lại theo cấu hình mới-----------
             removeDynamicDataSource(d.getCode());
-            //update-end---author:jeecg ---date:20260512  for：【QQYUN-15337】online表单支持多数据源，数据源编辑后移除已注册的动态数据源，下次使用时按新配置重新注册-----------
+            //update-end---author:jeecg ---date:20260512  for：【QQYUN-15337] Form online hỗ trợ nhiều nguồn dữ liệu; sau khi chỉnh sửa nguồn dữ liệu sẽ gỡ bỏ nguồn dữ liệu động đã đăng ký, lần dùng sau đăng ký lại theo cấu hình mới-----------
             String dbPassword = sysDataSource.getDbPassword();
             if (StringUtils.isNotBlank(dbPassword)) {
                 String encrypt = SecurityUtil.jiami(dbPassword);
                 sysDataSource.setDbPassword(encrypt);
             } else {
-                // 密码留空表示不修改，置 null 避免被 updateById 以空串覆盖原密码
+                // Để trống mật khẩu nghĩa là không sửa; đặt thành null để tránh bị updateById ghi đè mật khẩu gốc bằng chuỗi rỗng
                 sysDataSource.setDbPassword(null);
             }
             Boolean result=updateById(sysDataSource);
             if(result){
-                //先删除老的数据源
+                //Xóa nguồn dữ liệu cũ trước
                // removeDynamicDataSource(d.getCode());
-                //添加新的数据源
+                //Thêm nguồn dữ liệu mới
                 //addDynamicDataSource(sysDataSource,dbPassword);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Result.OK("编辑成功!");
+        return Result.OK("Chỉnh sửa thành công!");
     }
 
     @Override
     public Result deleteDataSource(String id) {
         SysDataSource sysDataSource = getById(id);
         DataSourceCachePool.removeCache(sysDataSource.getCode());
-        //update-begin---author:jeecg ---date:20260512  for：【QQYUN-15337】online表单支持多数据源，数据源删除后同步移除已注册的动态数据源-----------
+        //update-begin---author:jeecg ---date:20260512  for：【QQYUN-15337] Form online hỗ trợ nhiều nguồn dữ liệu; sau khi xóa nguồn dữ liệu thì đồng bộ gỡ bỏ nguồn dữ liệu động đã đăng ký-----------
         removeDynamicDataSource(sysDataSource.getCode());
-        //update-end---author:jeecg ---date:20260512  for：【QQYUN-15337】online表单支持多数据源，数据源删除后同步移除已注册的动态数据源-----------
+        //update-end---author:jeecg ---date:20260512  for：【QQYUN-15337] Form online hỗ trợ nhiều nguồn dữ liệu; sau khi xóa nguồn dữ liệu thì đồng bộ gỡ bỏ nguồn dữ liệu động đã đăng ký-----------
         removeById(id);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 导入数据源，逐行保存并汇总错误。
+     * Nhập nguồn dữ liệu, lưu từng dòng và tổng hợp lỗi.
      */
     @Override
     public Result<?> importDataSources(List<SysDataSource> dataSources) throws IOException {
@@ -113,26 +113,26 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
             SysDataSource dataSource = dataSources.get(i);
             try {
                 if (checkDbCode(dataSource.getCode()) > 0) {
-                    errorMessages.add("第" + (i + 1) + "行：数据源编码[" + dataSource.getCode() + "]已存在，忽略导入。");
+                    errorMessages.add("" + (i + 1) + "Dòng: Mã nguồn dữ liệu[" + dataSource.getCode() + "]đã tồn tại, bỏ qua nhập.");
                     continue;
                 }
                 if (!save(dataSource)) {
-                    throw new JeecgBootException("数据保存失败");
+                    throw new JeecgBootException("Lưu dữ liệu thất bại");
                 }
                 successLines++;
             } catch (Exception e) {
-                errorMessages.add("第" + (i + 1) + "行：" + e.getMessage());
-                log.error("导入数据源失败，行号：{}", i + 1, e);
+                errorMessages.add("" + (i + 1) + "dòng: " + e.getMessage());
+                log.error("Nhập nguồn dữ liệu thất bại, số dòng:{}", i + 1, e);
             }
         }
         return ImportExcelUtil.imporReturnRes(errorMessages.size(), successLines, errorMessages);
     }
 
     /**
-     * 动态添加数据源 【注册mybatis动态数据源】
+     * Thêm nguồn dữ liệu động [Đăng ký nguồn dữ liệu động MyBatis]
      *
-     * @param sysDataSource 添加数据源数据对象
-     * @param dbPassword    未加密的密码
+     * @param sysDataSource Thêm đối tượng dữ liệu nguồn dữ liệu
+     * @param dbPassword    Mật khẩu chưa mã hóa
      */
     private void addDynamicDataSource(SysDataSource sysDataSource, String dbPassword) {
         DataSourceProperty dataSourceProperty = new DataSourceProperty();
@@ -150,11 +150,11 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
     }
 
     /**
-     * 删除数据源
+     * Xóa nguồn dữ liệu
      * @param code
      */
     private void removeDynamicDataSource(String code) {
-        //update-begin---author:jeecg ---date:20260512  for：【QQYUN-15337】online表单支持多数据源，移除前先判断是否已注册，避免移除不存在的数据源时抛异常-----------
+        //update-begin---author:jeecg ---date:20260512  for：【QQYUN-15337] Form online hỗ trợ nhiều nguồn dữ liệu; trước khi gỡ bỏ hãy kiểm tra xem đã đăng ký chưa, tránh ném ngoại lệ khi gỡ bỏ nguồn dữ liệu không tồn tại-----------
         try {
             if (!(dataSource instanceof DynamicRoutingDataSource)) {
                 return;
@@ -164,13 +164,13 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
                 ds.removeDataSource(code);
             }
         } catch (Exception e) {
-            log.warn("移除动态数据源[{}]失败：{}", code, e.getMessage());
+            log.warn("Gỡ bỏ nguồn dữ liệu động[{}]Thất bại:{}", code, e.getMessage());
         }
-        //update-end---author:jeecg ---date:20260512  for：【QQYUN-15337】online表单支持多数据源，移除前先判断是否已注册，避免移除不存在的数据源时抛异常-----------
+        //update-end---author:jeecg ---date:20260512  for：【QQYUN-15337] Form online hỗ trợ nhiều nguồn dữ liệu; trước khi gỡ bỏ hãy kiểm tra xem đã đăng ký chưa, tránh ném ngoại lệ khi gỡ bỏ nguồn dữ liệu không tồn tại-----------
     }
 
     /**
-     * 检查数据源编码是否存在
+     * Kiểm tra mã nguồn dữ liệu có tồn tại hay không
      *
      * @param dbCode
      * @return
@@ -181,7 +181,7 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
         return count(qw);
     }
 
-    //update-begin---author:jeecg ---date:20260513  for：【QQYUN-15337】online表单多数据源：唯一性校验等场景需要按 code 把 sys_data_source 数据源懒注册到 baomidou 动态数据源池-----------
+    //update-begin---author:jeecg ---date:20260513  for：【QQYUN-15337] Form online nhiều nguồn dữ liệu: các kịch bản như kiểm tra tính duy nhất cần theo code để sys_data_source Nguồn dữ liệu được đăng ký lười (lazy) vào pool nguồn dữ liệu động của Baomidou-----------
     @Override
     public void ensureRegistered(String code) {
         if (StringUtils.isBlank(code)) {
@@ -191,7 +191,7 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
             return;
         }
         DynamicRoutingDataSource ds = (DynamicRoutingDataSource) dataSource;
-        // 已注册过 → 直接复用
+        // Đã đăng ký rồi → Tái sử dụng trực tiếp
         if (ds.getDataSources() != null && ds.getDataSources().containsKey(code)) {
             return;
         }
@@ -200,19 +200,19 @@ public class SysDataSourceServiceImpl extends ServiceImpl<SysDataSourceMapper, S
                     new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<SysDataSource>()
                             .eq(SysDataSource::getCode, code));
             if (d == null) {
-                log.warn("ensureRegistered 失败：sys_data_source 不存在 code=[{}]", code);
+                log.warn("ensureRegistered Thất bại:sys_data_source Không tồn tại code=[{}]", code);
                 return;
             }
-            // 解密密码后注册
+            // Giải mã mật khẩu rồi đăng ký
             String dbPassword = d.getDbPassword();
             if (StringUtils.isNotBlank(dbPassword)) {
                 dbPassword = SecurityUtil.jiemi(dbPassword);
             }
             addDynamicDataSource(d, dbPassword);
         } catch (Exception e) {
-            log.warn("ensureRegistered 注册动态数据源[{}]失败：{}", code, e.getMessage());
+            log.warn("ensureRegistered Đăng ký nguồn dữ liệu động[{}]Thất bại:{}", code, e.getMessage());
         }
     }
-    //update-end---author:jeecg ---date:20260513  for：【QQYUN-15337】online表单多数据源：唯一性校验等场景需要按 code 把 sys_data_source 数据源懒注册到 baomidou 动态数据源池-----------
+    //update-end---author:jeecg ---date:20260513  for：【QQYUN-15337] Form online nhiều nguồn dữ liệu: các kịch bản như kiểm tra tính duy nhất cần theo code để sys_data_source Nguồn dữ liệu được đăng ký lười (lazy) vào pool nguồn dữ liệu động của Baomidou-----------
 
 }

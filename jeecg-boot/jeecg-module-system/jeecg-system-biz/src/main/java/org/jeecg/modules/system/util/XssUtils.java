@@ -5,9 +5,9 @@ import org.springframework.web.util.HtmlUtils;
 import java.util.regex.Pattern;
 
 /**
- * @Description: 工具类XSSUtils，现在的做法是替换成空字符，CSDN的是进行转义，比如文字开头的"<"转成&lt;
+ * @Description: Lớp tiện ích XSSUtils, cách làm hiện tại là thay bằng ký tự rỗng, còn cách của CSDN là escape, ví dụ ký tự mở đầu của văn bản"<"chuyển thành&lt;
  * @author: lsq
- * @date: 2021年07月26日 19:13
+ * @date: 2021 năm 07 tháng 26 ngày 19:13
  */
 public class XssUtils {
 
@@ -32,31 +32,31 @@ public class XssUtils {
         Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
     };
 
-    //update-begin---author:liusq ---date:2025-04-13  for：【issues/9521】富文本msgContent字段存储型XSS过滤-----------
+    //update-begin---author:liusq ---date:2025-04-13  for：【issues/9521] Lọc XSS dạng lưu trữ của trường rich text msgContent-----------
     /**
-     * 针对富文本HTML内容的XSS过滤：移除危险脚本和事件处理器，保留合法HTML标签和样式。
-     * 与 scriptXss() 的区别：本方法不对HTML实体进行全局转义，适用于富文本内容（如公告正文）。
+     * Lọc XSS cho nội dung HTML rich text: loại bỏ script nguy hiểm và trình xử lý sự kiện, giữ lại các thẻ HTML và kiểu hợp lệ.
+     * scriptXss() Điểm khác biệt: phương thức này không escape toàn cục các thực thể HTML, phù hợp với nội dung rich text (ví dụ nội dung chính của thông báo).
      */
     private static final Pattern[] RICH_TEXT_PATTERNS = new Pattern[]{
-        // <script> 标签及其内容
+        // <script> Thẻ và nội dung của nó
         Pattern.compile("<script[^>]*>[\\s\\S]*?</script>", Pattern.CASE_INSENSITIVE),
-        // 自闭合 <script/>
+        // Tự đóng <script/>
         Pattern.compile("<script[^>]*/>", Pattern.CASE_INSENSITIVE),
-        //update-begin---author:wangshuai ---date:2026-10-21  for：事件属性前不一定是空白（"/"分隔、紧跟引号），属性名里可能夹带实体编码-----------
-        // 所有内联事件处理器属性，如 onerror= onclick= onmouseover= 等
-        // 前面可以是空白，也可以紧跟在 "/" 或引号后面（<img/src="x"/onerror=…>、<img src="x"onerror=…>）；名称里允许 & # ; 以匹配 on&#101;rror=
+        //update-begin---author:wangshuai ---date:2026-10-21  for: trước thuộc tính sự kiện không nhất thiết là khoảng trắng ("/"phân tách, ngay sau dấu ngoặc kép), tên thuộc tính có thể chứa mã thực thể-----------
+        // Tất cả thuộc tính bộ xử lý sự kiện nội tuyến, ví dụ onerror= onclick= onmouseover= v.v.
+        // Phía trước có thể là khoảng trắng, cũng có thể theo sát ngay sau "/" hoặc ngay sau dấu ngoặc kép (<img/src="x"/onerror=…>、<img src="x"onerror=…>); Tên được phép chứa & # ; để khớp với on&#101;rror=
         Pattern.compile("(?:\\s+|(?<=[/\"']))on[\\w&#;-]+\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|(?:[^\\s>]*[^\\s>\"'])?)", Pattern.CASE_INSENSITIVE),
-        //update-end---author:wangshuai ---date:2026-10-21  for：事件属性前不一定是空白（"/"分隔、紧跟引号），属性名里可能夹带实体编码-----------
-        // javascript: 协议
+        //update-end---author:wangshuai ---date:2026-10-21  for: trước thuộc tính sự kiện không nhất thiết là khoảng trắng ("/"phân tách, ngay sau dấu ngoặc kép), tên thuộc tính có thể chứa mã thực thể-----------
+        // javascript: Giao thức
         Pattern.compile("javascript\\s*:", Pattern.CASE_INSENSITIVE),
-        // vbscript: 协议
+        // vbscript: Giao thức
         Pattern.compile("vbscript\\s*:", Pattern.CASE_INSENSITIVE),
-        // CSS expression()（IE 特有）
+        // CSS expression()(đặc thù của IE)
         Pattern.compile("expression\\s*\\(", Pattern.CASE_INSENSITIVE),
-        // <iframe> 标签（防止内嵌恶意页面）
+        // <iframe> Thẻ (ngăn nhúng trang độc hại)
         Pattern.compile("<iframe[^>]*>[\\s\\S]*?</iframe>", Pattern.CASE_INSENSITIVE),
         Pattern.compile("<iframe[^>]*/>", Pattern.CASE_INSENSITIVE),
-        // <object> / <embed> 标签
+        // <object> / <embed> Nhãn
         Pattern.compile("<object[^>]*>[\\s\\S]*?</object>", Pattern.CASE_INSENSITIVE),
         Pattern.compile("<embed[^>]*>", Pattern.CASE_INSENSITIVE),
     };
@@ -70,7 +70,7 @@ public class XssUtils {
         }
         return value;
     }
-    //update-end---author:liusq ---date:2025-04-13  for：【issues/9521】富文本msgContent字段存储型XSS过滤-----------
+    //update-end---author:liusq ---date:2025-04-13  for：【issues/9521] Lọc XSS dạng lưu trữ của trường rich text msgContent-----------
 
     public static String scriptXss(String value) {
         if (value != null) {

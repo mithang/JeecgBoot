@@ -18,45 +18,45 @@ import lombok.Data;
 @Data
 public class SysUserOnlineVO {
     /**
-     * 会话id
+     * Phiên id
      */
     private String id;
 
     /**
-     * 会话编号
+     * Mã phiên
      */
     private String token;
 
     /**
-     * 用户名
+     * Tên người dùng
      */
     private String username;
 
     /**
-     * 用户名
+     * Tên người dùng
      */
     private String realname;
 
     /**
-     * 头像
+     * Ảnh đại diện
      */
     private String avatar;
 
     /**
-     * 生日
+     * Ngày sinh
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     /**
-     * 性别（1：男 2：女）
+     * Giới tính (1: Nam, 2: Nữ)
      */
     @Dict(dicCode = "sex")
     private Integer sex;
 
     /**
-     * 手机号
+     * Số điện thoại
      */
     private String phone;
 }

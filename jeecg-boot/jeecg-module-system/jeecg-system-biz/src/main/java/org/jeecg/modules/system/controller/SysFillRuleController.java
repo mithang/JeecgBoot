@@ -29,13 +29,13 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * @Description: 填值规则
+ * @Description: Quy tắc điền giá trị
  * @Author: jeecg-boot
  * @Date: 2019-11-07
  * @Version: V1.0
  */
 @Slf4j
-@Tag(name = "填值规则")
+@Tag(name = "Quy tắc điền giá trị")
 @RestController
 @RequestMapping("/sys/fillRule")
 public class SysFillRuleController extends JeecgController<SysFillRule, ISysFillRuleService> {
@@ -43,7 +43,7 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
     private ISysFillRuleService sysFillRuleService;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param sysFillRule
      * @param pageNo
@@ -51,8 +51,8 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
      * @param req
      * @return
      */
-    @AutoLog(value = "填值规则-分页列表查询")
-    @Operation(summary = "填值规则-分页列表查询")
+    @AutoLog(value = "Quy tắc điền giá trị-Truy vấn danh sách phân trang")
+    @Operation(summary = "Quy tắc điền giá trị-Truy vấn danh sách phân trang")
     @RequiresRoles({"admin"})
     @GetMapping(value = "/list")
     public Result<?> queryPageList(SysFillRule sysFillRule,
@@ -66,7 +66,7 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
     }
 
     /**
-     * 测试 ruleCode
+     * Kiểm tra ruleCode
      *
      * @param ruleCode
      * @return
@@ -79,73 +79,73 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param sysFillRule
      * @return
      */
-    @AutoLog(value = "填值规则-添加")
-    @Operation(summary = "填值规则-添加")
+    @AutoLog(value = "Quy tắc điền giá trị-Thêm")
+    @Operation(summary = "Quy tắc điền giá trị-Thêm")
     @RequiresRoles({"admin"})
     @PostMapping(value = "/add")
     public Result<?> add(@RequestBody SysFillRule sysFillRule) {
         sysFillRuleService.save(sysFillRule);
-        return Result.ok("添加成功！");
+        return Result.ok("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param sysFillRule
      * @return
      */
-    @AutoLog(value = "填值规则-编辑")
-    @Operation(summary = "填值规则-编辑")
+    @AutoLog(value = "Quy tắc điền giá trị-Chỉnh sửa")
+    @Operation(summary = "Quy tắc điền giá trị-Chỉnh sửa")
     @RequiresRoles({"admin"})
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
     public Result<?> edit(@RequestBody SysFillRule sysFillRule) {
         sysFillRuleService.updateById(sysFillRule);
-        return Result.ok("编辑成功!");
+        return Result.ok("Chỉnh sửa thành công!");
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "填值规则-通过id删除")
-    @Operation(summary = "填值规则-通过id删除")
+    @AutoLog(value = "Quy tắc điền giá trị-Xóa theo id")
+    @Operation(summary = "Quy tắc điền giá trị-Xóa theo id")
     @RequiresRoles({"admin"})
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         sysFillRuleService.removeById(id);
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
      */
-    @AutoLog(value = "填值规则-批量删除")
-    @Operation(summary = "填值规则-批量删除")
+    @AutoLog(value = "Quy tắc điền giá trị-Xóa hàng loạt")
+    @Operation(summary = "Quy tắc điền giá trị-Xóa hàng loạt")
     @RequiresRoles({"admin"})
     @DeleteMapping(value = "/deleteBatch")
     public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
         this.sysFillRuleService.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.ok("批量删除成功！");
+        return Result.ok("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "填值规则-通过id查询")
-    @Operation(summary = "填值规则-通过id查询")
+    @AutoLog(value = "Quy tắc điền giá trị-Tìm kiếm theo id")
+    @Operation(summary = "Quy tắc điền giá trị-Tìm kiếm theo id")
     @RequiresRoles({"admin"})
     @GetMapping(value = "/queryById")
     public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
@@ -154,7 +154,7 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param sysFillRule
@@ -162,11 +162,11 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
     @RequiresRoles({"admin"})
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysFillRule sysFillRule) {
-        return super.exportXls(request, sysFillRule, SysFillRule.class, "填值规则");
+        return super.exportXls(request, sysFillRule, SysFillRule.class, "Quy tắc điền giá trị");
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -175,7 +175,7 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
     @RequiresRoles({"admin"})
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-        //update-begin---author:wangshuai ---date:20260803  for：【LHZP-1265】系统编码规则导入重复编码时提示具体Excel行号-----------
+        //update-begin---author:wangshuai ---date:20260803  for：【LHZP-1265] Khi import quy tắc mã hệ thống bị trùng mã, hiển thị số dòng Excel cụ thể-----------
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
@@ -187,19 +187,19 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
                 return sysFillRuleService.importExcelCheckRuleCode(entry.getValue(), params);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                return Result.error("文件导入失败：" + e.getMessage());
+                return Result.error("Nhập tệp thất bại:" + e.getMessage());
             }
         }
-        return Result.error("文件导入失败：未找到上传文件");
-        //update-end---author:wangshuai ---date:20260803  for：【LHZP-1265】系统编码规则导入重复编码时提示具体Excel行号-----------
+        return Result.error("Nhập tệp thất bại: không tìm thấy tệp đã tải lên");
+        //update-end---author:wangshuai ---date:20260803  for：【LHZP-1265] Khi import quy tắc mã hệ thống bị trùng mã, hiển thị số dòng Excel cụ thể-----------
     }
 
     /**
-     * 通过 ruleCode 执行自定义填值规则
+     * Thực thi quy tắc điền giá trị tùy chỉnh qua ruleCode
      *
-     * @param ruleCode 要执行的填值规则编码
-     * @param formData 表单数据，可根据表单数据的不同生成不同的填值结果
-     * @return 运行后的结果
+     * @param ruleCode Mã quy tắc điền giá trị cần thực thi
+     * @param formData Dữ liệu biểu mẫu, có thể sinh các kết quả điền giá trị khác nhau tùy theo dữ liệu biểu mẫu
+     * @return Kết quả sau khi chạy
      */
     @PutMapping("/executeRuleByCode/{ruleCode}")
     public Result executeByRuleCode(@PathVariable("ruleCode") String ruleCode, @RequestBody JSONObject formData) {
@@ -209,28 +209,28 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
 
 
     /**
-     * 批量通过 ruleCode 执行自定义填值规则
+     * Thực thi hàng loạt quy tắc điền giá trị tùy chỉnh theo ruleCode
      *
-     * @param ruleData 要执行的填值规则JSON数组：
-     *                 示例： { "commonFormData": {}, rules: [ { "ruleCode": "xxx", "formData": null } ] }
-     * @return 运行后的结果，返回示例： [{"ruleCode": "order_num_rule", "result": "CN2019111117212984"}]
+     * @param ruleData Mảng JSON quy tắc điền giá trị cần thực thi:
+     *                 Ví dụ: { "commonFormData": {}, rules: [ { "ruleCode": "xxx", "formData": null } ] }
+     * @return Kết quả sau khi chạy, ví dụ trả về: [{"ruleCode": "order_num_rule", "result": "CN2019111117212984"}]
      *
      */
     @PutMapping("/executeRuleByCodeBatch")
     public Result executeByRuleCodeBatch(@RequestBody JSONObject ruleData) {
         JSONObject commonFormData = ruleData.getJSONObject("commonFormData");
         JSONArray rules = ruleData.getJSONArray("rules");
-        // 遍历 rules ，批量执行规则
+        // Duyệt rules, thực thi hàng loạt quy tắc
         JSONArray results = new JSONArray(rules.size());
         for (int i = 0; i < rules.size(); i++) {
             JSONObject rule = rules.getJSONObject(i);
             String ruleCode = rule.getString("ruleCode");
             JSONObject formData = rule.getJSONObject("formData");
-            // 如果没有传递 formData，就用common的
+            // Nếu không truyền formData thì dùng cái chung (common)
             if (formData == null) {
                 formData = commonFormData;
             }
-            // 执行填值规则
+            // Thực thi quy tắc điền giá trị
             Object result = FillRuleUtil.executeRule(ruleCode, formData);
             JSONObject obj = new JSONObject(rules.size());
             obj.put("ruleCode", ruleCode);

@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 请求头表
+ * Bảng request header
  * @date 2024/12/10 14:37
  */
 @Data
@@ -23,17 +23,17 @@ public class OpenApiHeader implements Serializable {
     private String headerKey;
 
     /**
-     * 是否必填(0:否，1：是)
+     * Có bắt buộc không(0:Không, 1: Có)
      */
     private Integer required;
 
     /**
-     * 默认值
+     * Giá trị mặc định
      */
     private String defaultValue;
 
     /**
-     * 说明
+     * Giải thích
      */
     private String note;
 }

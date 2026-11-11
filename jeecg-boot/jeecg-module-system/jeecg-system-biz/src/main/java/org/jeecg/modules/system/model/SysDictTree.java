@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 字典表
+ * Bảng từ điển
  * </p>
  *
  * @Author zhangweijian
@@ -37,49 +37,49 @@ public class SysDictTree implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     private String id;
     /**
-     * 字典类型,0 string,1 number类型,2 boolean
-     * 前端js对stirng类型和number类型 boolean 类型敏感，需要区分。在select 标签匹配的时候会用到
-     * 默认为string类型
+     * Loại danh mục,0 string,1 number Loại,2 boolean
+     * JS phía frontend nhạy cảm với kiểu stirng, kiểu number và kiểu boolean, cần phân biệt. Sẽ dùng đến khi khớp thẻ select
+     * Mặc định là kiểu string
      */
     private Integer type;
     
     /**
-     * 字典名称
+     * Tên danh mục
      */
     private String dictName;
 
     /**
-     * 字典编码
+     * Mã từ điển
      */
     private String dictCode;
 
     /**
-     * 描述
+     * Mô tả
      */
     private String description;
 
     /**
-     * 删除状态
+     * Trạng thái xóa
      */
     private Integer delFlag;
 
     /**
-     * 创建人
+     * Người tạo
      */
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     private Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
     private String updateBy;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     private Date updateTime;
     

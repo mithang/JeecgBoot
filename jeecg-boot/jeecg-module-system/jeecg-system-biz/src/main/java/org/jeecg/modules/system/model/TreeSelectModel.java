@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
-  * 树形下拉框
+  * Hộp thả xuống dạng cây
   * @author: jeecg-boot
  */
 public class TreeSelectModel implements Serializable {
@@ -15,7 +15,7 @@ public class TreeSelectModel implements Serializable {
 	
 	private String title;
 	/**
-	 * 是否叶子节点
+	 * Có phải nút lá hay không
 	 */
 	private boolean isLeaf;
 	

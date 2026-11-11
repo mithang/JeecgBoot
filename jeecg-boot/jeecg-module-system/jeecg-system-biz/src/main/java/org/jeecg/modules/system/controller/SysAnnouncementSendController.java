@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 
  /**
  * @Title: Controller
- * @Description: 用户通告阅读标记表
+ * @Description: Bảng đánh dấu đã đọc thông báo của người dùng
  * @Author: jeecg-boot
  * @Date:  2019-02-21
  * @Version: V1.0
@@ -54,14 +54,14 @@ public class SysAnnouncementSendController {
 	private WebSocket webSocket;
 
 	/**
-	  * 分页列表查询
+	  * Truy vấn danh sách phân trang
 	 * @param sysAnnouncementSend
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	// update---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】该接口前端与服务端均未使用，整体注释停用，避免越权列出全部用户的消息发送记录
+	// update---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj] API này cả frontend và phía server đều chưa dùng, tạm dừng toàn bộ bằng chú thích, tránh liệt kê trái phép bản ghi gửi tin nhắn của toàn bộ người dùng
 	// @GetMapping(value = "/list")
 	// public Result<IPage<SysAnnouncementSend>> queryPageList(SysAnnouncementSend sysAnnouncementSend,
 									  // @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -70,7 +70,7 @@ public class SysAnnouncementSendController {
 		// Result<IPage<SysAnnouncementSend>> result = new Result<IPage<SysAnnouncementSend>>();
 		// QueryWrapper<SysAnnouncementSend> queryWrapper = new QueryWrapper<SysAnnouncementSend>(sysAnnouncementSend);
 		// Page<SysAnnouncementSend> page = new Page<SysAnnouncementSend>(pageNo,pageSize);
-		// //排序逻辑 处理
+		// //Xử lý logic sắp xếp
 		// String column = req.getParameter("column");
 		// String order = req.getParameter("order");
 //
@@ -82,33 +82,33 @@ public class SysAnnouncementSendController {
 			// }
 		// }
 		// IPage<SysAnnouncementSend> pageList = sysAnnouncementSendService.page(page, queryWrapper);
-		// //log.info("查询当前页："+pageList.getCurrent());
-		// //log.info("查询当前页数量："+pageList.getSize());
-		// //log.info("查询结果数量："+pageList.getRecords().size());
-		// //log.info("数据总数："+pageList.getTotal());
+		// //log.info("Truy vấn trang hiện tại: "+pageList.getCurrent());
+		// //log.info("Truy vấn số lượng trang hiện tại:"+pageList.getSize());
+		// //log.info("Số lượng kết quả truy vấn:"+pageList.getRecords().size());
+		// //log.info("Tổng số dữ liệu:"+pageList.getTotal());
 		// result.setSuccess(true);
 		// result.setResult(pageList);
 		// return result;
 	// }
-	// update-end---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】未使用接口注释停用
+	// update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj】Giao diện không sử dụng được ghi chú dừng
 
-	// update---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】该接口前端与服务端均未使用，整体注释停用，避免为他人伪造消息记录
+	// update---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj] API này cả frontend và phía server đều chưa dùng, tạm dừng toàn bộ bằng chú thích, tránh giả mạo bản ghi tin nhắn cho người khác
 	// @PostMapping(value = "/add")
 	// public Result<SysAnnouncementSend> add(@RequestBody SysAnnouncementSend sysAnnouncementSend) {
 		// Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
 		// try {
 			// sysAnnouncementSendService.save(sysAnnouncementSend);
-			// result.success("添加成功！");
+			// result.success("Thêm thành công!");
 		// } catch (Exception e) {
 			// log.error(e.getMessage(),e);
-			// result.error500("操作失败");
+			// result.error500("Thao tác thất bại");
 		// }
 		// return result;
 	// }
-	// update-end---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】未使用接口注释停用
+	// update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj】Giao diện không sử dụng được ghi chú dừng
 	
 	/**
-	  *  编辑
+	  *  Chỉnh sửa
 	 * @param sysAnnouncementSend
 	 * @return
 	 */
@@ -117,18 +117,18 @@ public class SysAnnouncementSendController {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
 		SysAnnouncementSend sysAnnouncementSendEntity = sysAnnouncementSendService.getById(sysAnnouncementSend.getId());
 		if(sysAnnouncementSendEntity==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
-			//update-begin---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】只能修改本人的消息发送记录，防止越权篡改他人记录-----------
+			//update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj] Chỉ được sửa bản ghi gửi tin nhắn của chính mình, tránh vượt quyền sửa bản ghi của người khác-----------
 			LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 			if(!loginUser.getId().equals(sysAnnouncementSendEntity.getUserId())){
-				return result.error500("无权修改他人的消息记录");
+				return result.error500("Không có quyền sửa bản ghi tin nhắn của người khác");
 			}
-			//update-end---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】只能修改本人的消息发送记录，防止越权篡改他人记录-----------
+			//update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj] Chỉ được sửa bản ghi gửi tin nhắn của chính mình, tránh vượt quyền sửa bản ghi của người khác-----------
 			boolean ok = sysAnnouncementSendService.updateById(sysAnnouncementSend);
-			//TODO 返回false说明什么？
+			//TODO Trả về false nghĩa là gì?
 			if(ok) {
-				result.success("操作成功!");
+				result.success("Thao tác thành công!");
 			}
 		}
 		
@@ -136,21 +136,21 @@ public class SysAnnouncementSendController {
 	}
 	
 	/**
-	  *   通过id删除
+	  *   Xóa theo id
 	 * @param id
 	 * @return
 	 */
 	@DeleteMapping(value = "/delete")
 	public Result<SysAnnouncementSend> delete(@RequestParam(name="id",required=true) String id) {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
-        //根据用户id和通告阅读表的id获取当前用户已阅读的数量
+        //Lấy số lượng người dùng hiện tại đã đọc theo id người dùng và id của bảng đọc thông báo
 		long count = sysAnnouncementSendService.getReadCountByUserId(id);
 		if(0 == count) {
-			result.error500("删除失败，该数据不存在或尚未标记为“已读”");
+			result.error500("Xóa thất bại, dữ liệu này không tồn tại hoặc chưa được đánh dấu là “đã đọc”");
 		}else {
 			boolean ok = sysAnnouncementSendService.removeById(id);
 			if(ok) {
-				result.success("删除成功!");
+				result.success("Xóa thành công!");
 			}
 		}
 		
@@ -158,7 +158,7 @@ public class SysAnnouncementSendController {
 	}
 	
 	/**
-	  *  批量删除
+	  *  Xóa hàng loạt
 	 * @param ids
 	 * @return
 	 */
@@ -166,36 +166,36 @@ public class SysAnnouncementSendController {
 	public Result<SysAnnouncementSend> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
 		if(ids==null || "".equals(ids.trim())) {
-			result.error500("参数不识别！");
+			result.error500("Không nhận dạng được tham số!");
 		}else {
 			this.sysAnnouncementSendService.deleteBatchByIds(ids);
-			result.success("已阅读的消息删除成功!");
+			result.success("Xóa tin nhắn đã đọc thành công!!");
 		}
 		return result;
 	}
 	
 	/**
-	  * 通过id查询
+	  * Tìm kiếm theo id
 	 * @param id
 	 * @return
 	 */
-	// update---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】该接口前端与服务端均未使用，整体注释停用，避免越权查看他人的消息发送记录
+	// update---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj] API này cả frontend và phía server đều chưa dùng, tạm dừng toàn bộ bằng chú thích, tránh xem trái phép bản ghi gửi tin nhắn của người khác
 	// @GetMapping(value = "/queryById")
 	// public Result<SysAnnouncementSend> queryById(@RequestParam(name="id",required=true) String id) {
 		// Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
 		// SysAnnouncementSend sysAnnouncementSend = sysAnnouncementSendService.getById(id);
 		// if(sysAnnouncementSend==null) {
-			// result.error500("未找到对应实体");
+			// result.error500("Không tìm thấy thực thể tương ứng");
 		// }else {
 			// result.setResult(sysAnnouncementSend);
 			// result.setSuccess(true);
 		// }
 		// return result;
 	// }
-	// update-end---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】未使用接口注释停用
+	// update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj】Giao diện không sử dụng được ghi chú dừng
 	
 	/**
-	 * @功能：更新用户系统消息阅读状态
+	 * @Chức năng: Cập nhật trạng thái đọc tin nhắn hệ thống của người dùng
 	 * @param json
 	 * @return
 	 */
@@ -208,7 +208,7 @@ public class SysAnnouncementSendController {
 		LambdaUpdateWrapper<SysAnnouncementSend> updateWrapper = new UpdateWrapper().lambda();
 		updateWrapper.set(SysAnnouncementSend::getReadFlag, CommonConstant.HAS_READ_FLAG);
 		updateWrapper.set(SysAnnouncementSend::getReadTime, new Date());
-		// 代码逻辑说明: 系统模块存在的sql漏洞写法
+		// Giải thích logic mã: Cách viết lỗ hổng sql tồn tại trong module hệ thống
 		updateWrapper.eq(SysAnnouncementSend::getAnntId,anntId);
 		updateWrapper.eq(SysAnnouncementSend::getUserId,userId);
 		//updateWrapper.last("where annt_id ='"+anntId+"' and user_id ='"+userId+"'");
@@ -219,7 +219,7 @@ public class SysAnnouncementSendController {
 	}
 	
 	/**
-	 * @功能：获取我的消息
+	 * @Chức năng: Lấy tin nhắn của tôi
 	 * @return
 	 */
 	@GetMapping(value = "/getMyAnnouncementSend")
@@ -232,7 +232,7 @@ public class SysAnnouncementSendController {
 		announcementSendModel.setUserId(userId);
 		announcementSendModel.setPageNo((pageNo-1)*pageSize);
 		announcementSendModel.setPageSize(pageSize);
-		// 代码逻辑说明: 【TV360X-545】我的消息列表不能通过时间范围查询---
+		// Giải thích logic mã: 【TV360X-545]Danh sách tin nhắn của tôi không thể truy vấn theo khoảng thời gian---
 		if(StringUtils.isNotEmpty(announcementSendModel.getSendTimeBegin())){
 			announcementSendModel.setSendTimeBegin(announcementSendModel.getSendTimeBegin() + " 00:00:00");
 		}
@@ -247,7 +247,7 @@ public class SysAnnouncementSendController {
 	}
 
 	/**
-	 * @功能：一键已读
+	 * @Chức năng: Đánh dấu đã đọc tất cả
 	 * @return
 	 */
 	@PutMapping(value = "/readAll")
@@ -266,37 +266,37 @@ public class SysAnnouncementSendController {
 		socketParams.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_TOPIC);
 		webSocket.sendMessage(socketParams.toJSONString());
 		result.setSuccess(true);
-		result.setMessage("全部已读");
+		result.setMessage("Đã đọc tất cả");
 		return result;
 	}
 
 
 	 /**
-	  * 根据消息发送记录ID获取消息内容
+	  * Lấy nội dung tin nhắn theo ID bản ghi gửi tin nhắn
 	  * @param sendId
 	  * @return
 	  */
 	 @GetMapping(value = "/getOne")
 	 public Result<AnnouncementSendModel> getOne(@RequestParam(name="sendId",required=true) String sendId) {
-		 //update-begin---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】按sendId获取消息正文前校验归属，只能查看本人收到的消息-----------
+		 //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj] Kiểm tra quyền sở hữu trước khi lấy nội dung tin nhắn theo sendId, chỉ được xem tin nhắn do chính mình nhận-----------
 		 LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		 SysAnnouncementSend sendEntity = sysAnnouncementSendService.getById(sendId);
 		 if(sendEntity==null || !loginUser.getId().equals(sendEntity.getUserId())){
-			 return Result.error("无权查看该消息");
+			 return Result.error("Không có quyền xem tin nhắn này");
 		 }
-		 //update-end---author:scott ---date:20261013  for：【安全 GHSA-63v7-3c98-c3mj】按sendId获取消息正文前校验归属，只能查看本人收到的消息-----------
+		 //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-63v7-3c98-c3mj] Kiểm tra quyền sở hữu trước khi lấy nội dung tin nhắn theo sendId, chỉ được xem tin nhắn do chính mình nhận-----------
 		 AnnouncementSendModel model = sysAnnouncementSendService.getOne(sendId);
-		 //update-begin---author:jeecg---for：【安全 GHSA-fp4f-qhf5-hqj8】校验消息归属，只能查看本人站内信---
+		 //update-begin---author:jeecg---for: 【Bảo mật GHSA-fp4f-qhf5-hqj8】Kiểm tra quyền sở hữu tin nhắn, chỉ được xem thư nội bộ của bản thân---
 		 LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		 if (model != null && !sysUser.getId().equals(model.getUserId())) {
-			 return Result.error("无权查看该消息");
+			 return Result.error("Không có quyền xem tin nhắn này");
 		 }
-		 //update-end---author:jeecg---for：【安全 GHSA-fp4f-qhf5-hqj8】校验消息归属---
+		 //update-end---author:jeecg---for: 【Bảo mật GHSA-fp4f-qhf5-hqj8】Kiểm tra quyền sở hữu tin nhắn---
 		 return Result.ok(model);
 	 }
 
 	 /**
-	  * 根据业务类型和ID修改阅读状态
+	  * Sửa trạng thái đọc theo loại nghiệp vụ và ID
 	  * @param busType
 	  * @return
 	  */
@@ -304,10 +304,10 @@ public class SysAnnouncementSendController {
 	 public Result<AnnouncementSendModel> updateSysAnnounReadFlag(
 			 @RequestParam(name="busId",required=true) String busId,
 			 @RequestParam(name="busType",required=false) String busType) {
-		 //更新阅读状态
+		 //Cập nhật trạng thái đã đọc
 		 boolean updateFlag = sysAnnouncementSendService.updateReadFlagByBusId(busId,busType);
 		 if(updateFlag){
-			//刷新未读数量
+			//Làm mới số lượng chưa đọc
 			JSONObject obj = new JSONObject();
 			obj.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_USER);
 			LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();

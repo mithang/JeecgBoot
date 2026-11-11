@@ -25,38 +25,38 @@
         </dependency>
 
 
-        <!-- 企业微信/钉钉 api -->
+        <!-- WeCom/DingTalk api -->
         <dependency>
             <groupId>org.jeecgframework</groupId>
             <artifactId>weixin4j</artifactId>
         </dependency>
-        <!-- 积木报表 -->
+        <!-- Báo cáo Jimu -->
         <dependency>
             <groupId>org.jeecgframework.jimureport</groupId>
             <artifactId>jimureport-spring-boot4-starter</artifactId>
         </dependency>
-		<!-- 积木chat2bi -->
+		<!-- Jimu chat2bi -->
 		<dependency>
 			<groupId>org.jeecgframework.jimureport</groupId>
 			<artifactId>jimuchatbi-spring-boot4-starter</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-        <!-- 积木报表 csv excel ES JSON mongodbSQL redis支持包
+        <!-- Gói hỗ trợ báo cáo Jimu: csv, excel, ES, JSON, mongodb, SQL, redis
         <dependency>
             <groupId>org.jeecgframework.jimureport</groupId>
 			<artifactId>jimureport-nosql-starter3</artifactId>
         </dependency>-->
-        <!-- 后台导出接口Echart图表支持包，按需引入 
+        <!-- Gói hỗ trợ biểu đồ Echart cho giao diện xuất ở backend, import theo nhu cầu 
         <dependency>
             <groupId>org.jeecgframework.jimureport</groupId>
             <artifactId>jimureport-echarts-starter</artifactId>
         </dependency>-->
-        <!-- 积木BI -->
+        <!-- Jimu BI -->
         <dependency>
             <groupId>org.jeecgframework.jimureport</groupId>
             <artifactId>jimubi-spring-boot4-starter</artifactId>
         </dependency>
-        <!-- AI大模型管理 -->
+        <!-- AI Quản lý mô hình lớn -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-module-airag</artifactId>

@@ -3,7 +3,7 @@ package org.jeecg.modules.system.vo.tenant;
 import lombok.Data;
 
 /**
- * 用于统计 租户产品包的人员数量
+ * Dùng để thống kê số lượng nhân sự của gói sản phẩm tenant
  * @Author taoYan
  * @Date 2023/2/16 15:59
  **/
@@ -11,12 +11,12 @@ import lombok.Data;
 public class TenantPackUserCount {
 
     /**
-     * 租户产品包编码
+     * Mã gói sản phẩm tenant
      */
     private String packCode;
 
     /**
-     * 用户数量
+     * Số lượng người dùng
      */
     private String userCount;
     

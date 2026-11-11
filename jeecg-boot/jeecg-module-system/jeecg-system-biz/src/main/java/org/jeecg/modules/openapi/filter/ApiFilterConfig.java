@@ -12,7 +12,7 @@ public class ApiFilterConfig {
 
     /**
      *
-     * @Description: 【注册api加密过滤器】
+     * @Description: 【Bộ lọc mã hóa api đăng ký】
      */
     @Bean
     public FilterRegistrationBean<ApiAuthFilter> authFilter() {

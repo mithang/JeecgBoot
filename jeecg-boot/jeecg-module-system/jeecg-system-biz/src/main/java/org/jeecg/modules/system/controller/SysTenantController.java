@@ -45,7 +45,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * 租户配置信息
+ * Thông tin cấu hình tenant
  * @author: jeecg-boot
  */
 @Slf4j
@@ -78,7 +78,7 @@ public class SysTenantController {
     private ISysPermissionDataRuleService sysPermissionDataRuleService;
 
     /**
-     * 获取列表数据
+     * Lấy dữ liệu danh sách
      * @param sysTenant
      * @param pageNo
      * @param pageSize
@@ -91,7 +91,7 @@ public class SysTenantController {
 	public Result<IPage<SysTenant>> queryPageList(SysTenant sysTenant,@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 									  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,HttpServletRequest req) {
 		Result<IPage<SysTenant>> result = new Result<IPage<SysTenant>>();
-        //---author:zhangyafei---date:20210916-----for: 租户管理添加日期范围查询---
+        //---author:zhangyafei---date:20210916-----for: Quản lý Tenant: thêm truy vấn theo khoảng ngày---
         Date beginDate=null;
         Date endDate=null;
         if(oConvertUtils.isNotEmpty(sysTenant)) {
@@ -100,14 +100,14 @@ public class SysTenantController {
             sysTenant.setBeginDate(null);
             sysTenant.setEndDate(null);
         }
-        //---author:zhangyafei---date:20210916-----for: 租户管理添加日期范围查询---
+        //---author:zhangyafei---date:20210916-----for: Quản lý Tenant: thêm truy vấn theo khoảng ngày---
         QueryWrapper<SysTenant> queryWrapper = QueryGenerator.initQueryWrapper(sysTenant, req.getParameterMap());
-        //---author:zhangyafei---date:20210916-----for: 租户管理添加日期范围查询---
+        //---author:zhangyafei---date:20210916-----for: Quản lý Tenant: thêm truy vấn theo khoảng ngày---
         if(oConvertUtils.isNotEmpty(sysTenant)){
             queryWrapper.ge(oConvertUtils.isNotEmpty(beginDate),"begin_date",beginDate);
             queryWrapper.le(oConvertUtils.isNotEmpty(endDate),"end_date",endDate);
         }
-        //---author:zhangyafei---date:20210916-----for: 租户管理添加日期范围查询---
+        //---author:zhangyafei---date:20210916-----for: Quản lý Tenant: thêm truy vấn theo khoảng ngày---
 		Page<SysTenant> page = new Page<SysTenant>(pageNo, pageSize);
 		IPage<SysTenant> pageList = sysTenantService.page(page, queryWrapper);
 		result.setSuccess(true);
@@ -116,7 +116,7 @@ public class SysTenantController {
 	}
 
     /**
-     * 获取租户删除的列表
+     * Lấy danh sách Tenant đã xóa
      * @param sysTenant
      * @param pageNo
      * @param pageSize
@@ -136,7 +136,7 @@ public class SysTenantController {
     }
     
     /**
-     *   添加
+     *   Thêm
      * @param
      * @return
      */
@@ -145,22 +145,22 @@ public class SysTenantController {
     public Result<SysTenant> add(@RequestBody SysTenant sysTenant) {
         Result<SysTenant> result = new Result();
         if(sysTenant!=null && oConvertUtils.isNotEmpty(sysTenant.getId()) && sysTenantService.getById(sysTenant.getId())!=null){
-            return result.error500("该编号已存在!");
+            return result.error500("Mã số này đã tồn tại!");
         }
         try {
             sysTenantService.saveTenant(sysTenant);
-            //添加默认产品包
+            //Thêm gói sản phẩm mặc định
             sysTenantPackService.addTenantDefaultPack(sysTenant.getId());
-            result.success("添加成功！");
+            result.success("Thêm thành công!");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            result.error500("操作失败");
+            result.error500("Thao tác thất bại");
         }
         return result;
     }
 
     /**
-     * [QQYUN-11032]【jeecg】租户套餐管理增加初始化套餐包按钮
+     * [QQYUN-11032][Jeecg] Quản lý gói dịch vụ thuê bao thêm nút khởi tạo gói dịch vụ
      * @param tenantId
      * @return
      * @author chenrui
@@ -169,13 +169,13 @@ public class SysTenantController {
     @RequiresPermissions("system:tenant:syncDefaultPack")
     @PostMapping(value = "/syncDefaultPack")
     public Result<?> syncDefaultPack(@RequestParam(name="tenantId",required=true) Integer tenantId) {
-        //同步默认产品包
+        //Đồng bộ gói sản phẩm mặc định
         sysTenantPackService.syncDefaultPack(tenantId);
-        return Result.OK("操作成功");
+        return Result.OK("Thao tác thành công");
     }
 
     /**
-     *  编辑
+     *  Chỉnh sửa
      * @param
      * @return
      */
@@ -185,20 +185,20 @@ public class SysTenantController {
         Result<SysTenant> result = new Result();
         SysTenant sysTenant = sysTenantService.getById(tenant.getId());
         if(sysTenant==null) {
-           return result.error500("未找到对应实体");
+           return result.error500("Không tìm thấy thực thể tương ứng");
         }
         if(oConvertUtils.isEmpty(sysTenant.getHouseNumber())){
             tenant.setHouseNumber(RandomUtil.randomStringUpper(6));
         }
         boolean ok = sysTenantService.updateById(tenant);
         if(ok) {
-            result.success("修改成功!");
+            result.success("Chỉnh sửa thành công!");
         }
         return result;
     }
 
     /**
-     *   通过id删除
+     *   Xóa theo id
      * @param id
      * @return
      */
@@ -206,27 +206,27 @@ public class SysTenantController {
     @RequestMapping(value = "/delete", method ={RequestMethod.DELETE, RequestMethod.POST})
     public Result<?> delete(@RequestParam(name="id",required=true) String id) {
         //------------------------------------------------------------------
-        //如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+        //Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
-            //获取当前用户
+            //Lấy người dùng hiện tại
             LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
             SysTenant sysTenant = sysTenantService.getById(id);
 
             String username = "admin";
             String createdBy = sysUser.getUsername();
             if (!sysTenant.getCreateBy().equals(createdBy) && !username.equals(createdBy)) {
-                baseCommonService.addLog("未经授权，不能删除非自己创建的租户，租户ID：" + id + "，操作人：" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_3);
-                return Result.error("删除租户失败,当前操作人不是租户的创建人！");
+                baseCommonService.addLog("Chưa được ủy quyền, không thể xóa thuê bao không phải do mình tạo, ID thuê bao:" + id + ", người thực hiện:" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_3);
+                return Result.error("Xóa tenant thất bại,Người thao tác hiện tại không phải là người tạo tenant!");
             }
         }
         //------------------------------------------------------------------
                 
         sysTenantService.removeTenantById(id);
-        return Result.ok("删除成功");
+        return Result.ok("Xóa thành công");
     }
 
     /**
-     *  批量删除
+     *  Xóa hàng loạt
      * @param ids
      * @return
      */
@@ -235,66 +235,66 @@ public class SysTenantController {
     public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
         Result<?> result = new Result<>();
         if(oConvertUtils.isEmpty(ids)) {
-            result.error500("未选中租户！");
+            result.error500("Chưa chọn tenant!");
         }else {
             String[] ls = ids.split(",");
-            // 过滤掉已被引用的租户
+            // Lọc bỏ Tenant đã được tham chiếu
             List<Integer> idList = new ArrayList<>();
             for (String id : ls) {
                 //------------------------------------------------------------------
-                //如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+                //Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
                 if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
-                    //获取当前用户
+                    //Lấy người dùng hiện tại
                     LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
                     SysTenant sysTenant = sysTenantService.getById(id);
 
                     String username = "admin";
                     String createdBy = sysUser.getUsername();
                     if (!sysTenant.getCreateBy().equals(createdBy) && !username.equals(createdBy)) {
-                        baseCommonService.addLog("未经授权，不能删除非自己创建的租户，租户ID：" + id + "，操作人：" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_3);
-                        return Result.error("删除租户失败,当前操作人不是租户的创建人！");
+                        baseCommonService.addLog("Chưa được ủy quyền, không thể xóa thuê bao không phải do mình tạo, ID thuê bao:" + id + ", người thực hiện:" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_3);
+                        return Result.error("Xóa tenant thất bại,Người thao tác hiện tại không phải là người tạo tenant!");
                     }
                 }
                 //------------------------------------------------------------------
                 
                 idList.add(Integer.parseInt(id));
             }
-            // 代码逻辑说明: 【QQYUN-5723】3、租户删除直接删除，不删除中间表------------
+            // Giải thích logic mã: 【QQYUN-5723】3. Xóa tenant thì xóa trực tiếp, không xóa bảng trung gian------------
             sysTenantService.removeByIds(idList);
-            result.success("删除成功！");
+            result.success("Xóa thành công!");
         }
         return result;
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      * @param id
      * @return
      */
     @SignatureCheck
     @RequestMapping(value = "/queryById", method = RequestMethod.GET)
     public Result<SysTenant> queryById(@RequestParam(name="id",required=true) String id) {
-        log.info("【敏感接口】查询租户信息，租户ID：{}", id);
+        log.info("Truy vấn thông tin tenant, ID tenant:{}", id);
         
         Result<SysTenant> result = new Result<SysTenant>();
         if(oConvertUtils.isEmpty(id)){
-            result.error500("参数为空！");
+            result.error500("Tham số trống!");
         }
         //------------------------------------------------------------------------------------------------
-        //获取登录用户信息
+        //Lấy thông tin người dùng đăng nhập
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】, admin给特权可以管理所有租户
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS], admin cấp đặc quyền có thể quản lý tất cả Tenant
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL && !"admin".equals(sysUser.getUsername())){
             Integer loginSessionTenant = oConvertUtils.getInt(TenantContext.getTenant());
             if(loginSessionTenant!=null && !loginSessionTenant.equals(Integer.valueOf(id))){
-                result.error500("无权限访问他人租户！");
+                result.error500("Không có quyền truy cập Tenant của người khác!");
                 return result;
             }
         }
         //------------------------------------------------------------------------------------------------
         SysTenant sysTenant = sysTenantService.getById(id);
         if(sysTenant==null) {
-            result.error500("未找到对应实体");
+            result.error500("Không tìm thấy thực thể tương ứng");
         }else {
             result.setResult(sysTenant);
             result.setSuccess(true);
@@ -304,7 +304,7 @@ public class SysTenantController {
 
 
     /**
-     * 查询有效的 租户数据
+     * Truy vấn dữ liệu Tenant hợp lệ
      * @return
      */
     @RequiresPermissions("system:tenant:queryList")
@@ -316,7 +316,7 @@ public class SysTenantController {
         if(oConvertUtils.isNotEmpty(ids)){
             query.in(SysTenant::getId, ids.split(","));
         }
-        //此处查询忽略时间条件
+        //Truy vấn tại đây bỏ qua điều kiện thời gian
         List<SysTenant> ls = sysTenantService.list(query);
         result.setSuccess(true);
         result.setResult(ls);
@@ -324,7 +324,7 @@ public class SysTenantController {
     }
 
     /**
-     * 产品包分页列表查询
+     * Truy vấn danh sách phân trang gói sản phẩm
      *
      * @param sysTenantPack
      * @param pageNo
@@ -349,7 +349,7 @@ public class SysTenantController {
     }
 
     /**
-     * 创建租户产品包
+     * Tạo gói sản phẩm tenant
      *
      * @param sysTenantPack
      * @return
@@ -358,11 +358,11 @@ public class SysTenantController {
     @RequiresPermissions("system:tenant:add:pack")
     public Result<String> addPackPermission(@RequestBody SysTenantPack sysTenantPack) {
         sysTenantPackService.addPackPermission(sysTenantPack);
-        return Result.ok("创建租户产品包成功");
+        return Result.ok("Tạo gói sản phẩm Tenant thành công");
     }
 
     /**
-     * 创建租户产品包
+     * Tạo gói sản phẩm tenant
      *
      * @param sysTenantPack
      * @return
@@ -371,23 +371,23 @@ public class SysTenantController {
     @RequiresPermissions("system:tenant:edit:pack")
     public Result<String> editPackPermission(@RequestBody SysTenantPack sysTenantPack) {
         sysTenantPackService.editPackPermission(sysTenantPack);
-        return Result.ok("修改租户产品包成功");
+        return Result.ok("Sửa gói sản phẩm Tenant thành công");
     }
 
     /**
-     * 查询套餐包菜单的数据规则
+     * Truy vấn quy tắc dữ liệu của menu gói sản phẩm
      *
-     * @param permissionId 菜单id
-     * @param packId 套餐包id
-     * @return datarule：菜单下的数据规则，drChecked：套餐包已选的数据规则
+     * @param permissionId Menu id
+     * @param packId Gói sản phẩm id
+     * @return datarule: Quy tắc dữ liệu dưới menu, drChecked: quy tắc dữ liệu đã chọn của gói dịch vụ
      * @author scott
-     * @since 2026-10-12 【issues/9820】租户套餐包菜单支持分配数据规则
+     * @since 2026-10-12 【issues/9820】Menu gói sản phẩm tenant hỗ trợ gán quy tắc dữ liệu
      */
     @GetMapping(value = "/packDatarule/{permissionId}/{packId}")
     public Result<?> loadPackDatarule(@PathVariable("permissionId") String permissionId, @PathVariable("packId") String packId) {
         List<SysPermissionDataRule> list = sysPermissionDataRuleService.getPermRuleListByPermId(permissionId);
         if (list == null || list.size() == 0) {
-            return Result.error("未找到权限配置信息");
+            return Result.error("Không tìm thấy thông tin cấu hình quyền hạn");
         }
         Map<String, Object> map = new HashMap<>(5);
         map.put("datarule", list);
@@ -405,12 +405,12 @@ public class SysTenantController {
     }
 
     /**
-     * 保存数据规则至套餐包菜单关联表
+     * Lưu quy tắc dữ liệu vào bảng liên kết menu của gói tenant
      *
-     * @param jsonObject permissionId 菜单id，packId 套餐包id，dataRuleIds 数据规则id
+     * @param jsonObject permissionId id menu, packId id gói sản phẩm, dataRuleIds quy tắc dữ liệu id
      * @return
      * @author scott
-     * @since 2026-10-12 【issues/9820】租户套餐包菜单支持分配数据规则
+     * @since 2026-10-12 【issues/9820】Menu gói sản phẩm tenant hỗ trợ gán quy tắc dữ liệu
      */
     @PostMapping(value = "/packDatarule")
     @RequiresPermissions("system:tenant:edit:pack")
@@ -418,23 +418,23 @@ public class SysTenantController {
         String permissionId = jsonObject.getString("permissionId");
         String packId = jsonObject.getString("packId");
         String dataRuleIds = jsonObject.getString("dataRuleIds");
-        log.info("保存套餐包数据规则>>菜单ID:{}，套餐包ID:{}，数据权限ID:{}", permissionId, packId, dataRuleIds);
+        log.info("Lưu quy tắc dữ liệu gói sản phẩm>>Menu ID:{}，gói sản phẩm ID:{}, quyền hạn dữ liệu ID:{}", permissionId, packId, dataRuleIds);
         LambdaQueryWrapper<SysPackPermission> query = new LambdaQueryWrapper<SysPackPermission>()
                 .eq(SysPackPermission::getPermissionId, permissionId)
                 .eq(SysPackPermission::getPackId, packId);
         List<SysPackPermission> packPermissions = sysPackPermissionMapper.selectList(query);
         if (packPermissions.isEmpty()) {
-            return Result.error("请先保存套餐包菜单权限!");
+            return Result.error("Vui lòng lưu quyền hạn menu của gói sản phẩm trước!!");
         }
         for (SysPackPermission packPermission : packPermissions) {
             packPermission.setDataRuleIds(dataRuleIds);
             sysPackPermissionMapper.updateById(packPermission);
         }
-        return Result.ok("保存成功!");
+        return Result.ok("Lưu thành công!");
     }
 
     /**
-     * 批量删除用户菜单
+     * Xóa hàng loạt menu người dùng
      *
      * @param ids
      * @return
@@ -443,14 +443,14 @@ public class SysTenantController {
     @RequiresPermissions("system:tenant:delete:pack")
     public Result<String> deleteTenantPack(@RequestParam(value = "ids") String ids) {
         sysTenantPackService.deleteTenantPack(ids);
-        return Result.ok("删除租户产品包成功");
+        return Result.ok("Xóa gói sản phẩm Tenant thành công");
     }
     
 
 
-    //===========【低代码应用，前端专用接口 —— 加入限制只能维护和查看自己拥有的租户】==========================================================
+    //===========[Ứng dụng low-code, API chuyên dùng cho frontend — thêm giới hạn chỉ được duy trì và xem tenant mà mình sở hữu]==========================================================
     /**
-     *  查询当前用户的所有有效租户【低代码应用专用接口】
+     *  Truy vấn tất cả thuê bao hợp lệ của người dùng hiện tại [Interface chuyên dụng cho ứng dụng low-code]
      * @return
      */
     @RequestMapping(value = "/getCurrentUserTenant", method = RequestMethod.GET)
@@ -458,11 +458,11 @@ public class SysTenantController {
         Result<Map<String,Object>> result = new Result<Map<String,Object>>();
         try {
             LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-            // 代码逻辑说明: [QQYUN-3371]租户逻辑改造，改成关系表------------
+            // Giải thích logic mã: [QQYUN-3371]Cải tạo logic Tenant, đổi sang bảng quan hệ------------
             List<Integer> tenantIdList = relationService.getTenantIdsByUserId(sysUser.getId());
             Map<String,Object> map = new HashMap(5);
             if (null!=tenantIdList && tenantIdList.size()>0) {
-                // 该方法仅查询有效的租户，如果返回0个就说明所有的租户均无效。
+                // Phương thức này chỉ truy vấn các thuê bao hợp lệ, nếu trả về 0 tức là tất cả thuê bao đều không hợp lệ.
                 List<SysTenant> tenantList = sysTenantService.queryEffectiveTenant(tenantIdList);
                 map.put("list", tenantList);
             }
@@ -470,13 +470,13 @@ public class SysTenantController {
             result.setResult(map);
         }catch(Exception e) {
             log.error(e.getMessage(), e);
-            result.error500("查询失败！");
+            result.error500("Tìm kiếm thất bại!");
         }
         return result;
     }
 
     /**
-     * 邀请用户【低代码应用专用接口】
+     * Mời người dùng [Giao diện chuyên dùng cho ứng dụng low-code]
      * @param ids
      * @param phone
      * @return
@@ -486,14 +486,14 @@ public class SysTenantController {
     @RequiresPermissions("system:tenant:invitation:user")
     public Result<String> invitationUserJoin(@RequestParam("ids") String ids,@RequestParam(value = "phone", required = false) String phone, @RequestParam(value = "username", required = false) String username){
         if(oConvertUtils.isEmpty(phone) && oConvertUtils.isEmpty(username)){
-            return Result.error("手机号和用户账号不能同时为空！");
+            return Result.error("Số điện thoại và tài khoản người dùng không được đồng thời để trống!");
         }
         sysTenantService.invitationUserJoin(ids,phone,username);
-        return Result.ok("邀请用户成功");
+        return Result.ok("Mời người dùng thành công");
     }
 
     /**
-     * 获取用户列表数据【低代码应用专用接口】
+     * Lấy dữ liệu danh sách người dùng 
      * @param user
      * @param pageNo
      * @param pageSize
@@ -516,7 +516,7 @@ public class SysTenantController {
     }
 
     /**
-     * 请离用户租户【低代码应用专用接口】
+     * Mời người dùng rời khỏi tenant 
      * @param userIds
      * @param tenantId
      * @return
@@ -526,21 +526,21 @@ public class SysTenantController {
     public Result<String> leaveTenant(@RequestParam("userIds") String userIds,
                                       @RequestParam("tenantId") String tenantId){
         Result<String> result = new Result<>();
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL && !"admin".equals(sysUser.getUsername())){
             Integer loginSessionTenant = oConvertUtils.getInt(TenantContext.getTenant());
             if(loginSessionTenant!=null && !loginSessionTenant.equals(Integer.valueOf(tenantId))){
-                result.error500("无权限访问他人租户！");
+                result.error500("Không có quyền truy cập Tenant của người khác!");
                 return result;
             }
         }
         sysTenantService.leaveTenant(userIds,tenantId);
-        return Result.ok("请离成功");
+        return Result.ok("Rời khỏi thành công");
     }
 
     /**
-     *  编辑（只允许修改自己拥有的租户）【低代码应用专用接口】
+     *  Chỉnh sửa (chỉ được phép sửa thuê bao mà mình sở hữu) [Interface chuyên dụng cho ứng dụng low-code]
      * @param
      * @return
      */
@@ -549,35 +549,35 @@ public class SysTenantController {
         Result<SysTenant> result = new Result();
         String tenantId = TokenUtils.getTenantIdByRequest(req);
         if(!tenantId.equals(tenant.getId().toString())){
-            return result.error500("无权修改他人租户！");
+            return result.error500("Không có quyền sửa Tenant của người khác!");
         }
 
         SysTenant sysTenant = sysTenantService.getById(tenant.getId());
         if(sysTenant==null) {
-            return result.error500("未找到对应实体");
+            return result.error500("Không tìm thấy thực thể tương ứng");
         }
-        //update-begin---author:scott ---date:20261013  for：【安全 GHSA-23w8-29xc-fpfh/GHSA-xpvg-j72w-356p】只有租户拥有者、租户管理员或admin才能编辑，且不允许修改拥有者、状态、删除标记-----------
+        //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-23w8-29xc-fpfh/GHSA-xpvg-j72w-356p] Chỉ chủ sở hữu tenant, quản trị viên tenant hoặc admin mới được chỉnh sửa, và không được phép sửa chủ sở hữu, trạng thái, cờ xóa-----------
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (!loginUser.getUsername().equals(sysTenant.getCreateBy()) && !SecurityUtils.getSubject().hasRole("admin")) {
-            // 非当前租户的组织账户管理员或超级管理员时抛出异常
+            // Ném ngoại lệ khi không phải quản trị viên tài khoản tổ chức hoặc siêu quản trị viên của thuê bao hiện tại
             sysTenantPackService.izHaveManageUserAuth(tenant.getId().toString());
         }
         tenant.setCreateBy(null);
         tenant.setStatus(null);
         tenant.setDelFlag(null);
-        //update-end---author:scott ---date:20261013  for：【安全 GHSA-23w8-29xc-fpfh/GHSA-xpvg-j72w-356p】只有租户拥有者、租户管理员或admin才能编辑，且不允许修改拥有者、状态、删除标记-----------
+        //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-23w8-29xc-fpfh/GHSA-xpvg-j72w-356p] Chỉ chủ sở hữu tenant, quản trị viên tenant hoặc admin mới được chỉnh sửa, và không được phép sửa chủ sở hữu, trạng thái, cờ xóa-----------
         if(oConvertUtils.isEmpty(sysTenant.getHouseNumber())){
             tenant.setHouseNumber(RandomUtil.randomStringUpper(6));
         }
         boolean ok = sysTenantService.updateById(tenant);
         if(ok) {
-            result.success("修改成功!");
+            result.success("Chỉnh sửa thành công!");
         }
         return result;
     }
     
     /**
-     * 创建租户并且将用户保存到中间表【低代码应用专用接口】
+     * Tạo thuê bao và lưu người dùng vào bảng trung gian [Interface chuyên dụng cho ứng dụng low-code]
      * @param sysTenant
      */
     @PostMapping("/saveTenantJoinUser")
@@ -586,13 +586,13 @@ public class SysTenantController {
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         Integer tenantId = sysTenantService.saveTenantJoinUser(sysTenant, sysUser.getId());
         result.setSuccess(true);
-        result.setMessage("创建成功");
+        result.setMessage("Tạo thành công");
         result.setResult(tenantId);
         return result;
     }
 
     /**
-     * 申请加入租户通过门牌号【低代码应用专用接口】
+     * Xin gia nhập tenant qua số nhà [Giao diện chuyên dùng cho ứng dụng low-code]
      * @param sysTenant
      */
     @SignatureCheck
@@ -602,19 +602,19 @@ public class SysTenantController {
         Integer tenantId = sysTenantService.joinTenantByHouseNumber(sysTenant, sysUser.getId());
         Result<Integer> result = new Result<>();
         if(tenantId != 0){
-            result.setMessage("申请加入组织成功");
+            result.setMessage("Đăng ký tham gia tổ chức thành công");
             result.setSuccess(true);
             result.setResult(tenantId);
             return result;
         }else{
-            result.setMessage("该门牌号不存在");
+            result.setMessage("Số nhà này không tồn tại");
             result.setSuccess(false);
             return result;
         }
     }
     
     /**
-     * 分页获取租户用户数据(vue3用户租户页面)【低代码应用专用接口】
+     * Lấy dữ liệu người dùng Tenant theo phân trang(vue3 Trang tenant của người dùng)【Giao diện chuyên dụng cho ứng dụng low-code】
      *
      * @param pageNo
      * @param pageSize
@@ -639,9 +639,9 @@ public class SysTenantController {
     }
 
     /**
-     * 通过用户id获取租户列表【低代码应用专用接口】
+     * Lấy danh sách tenant theo id người dùng [Giao diện chuyên dùng cho ứng dụng low-code]
      *
-     * @param userTenantStatus 关系表的状态
+     * @param userTenantStatus Trạng thái của bảng quan hệ
      * @return
      */
     @GetMapping("/getTenantListByUserId")
@@ -652,29 +652,29 @@ public class SysTenantController {
         if (oConvertUtils.isNotEmpty(userTenantStatus)) {
             list = Arrays.asList(userTenantStatus.split(SymbolConstant.COMMA));
         }
-        //租户状态，用户id,租户用户关系状态
+        //Trạng thái tenant, người dùng id,Trạng thái quan hệ người dùng tenant
         List<SysUserTenantVo> sysTenant = relationService.getTenantListByUserId(sysUser.getId(), list);
         return Result.ok(sysTenant);
     }
 
     /**
-     * 【敲敲云管理员】 同意申请者加入租户
+     * Đồng ý cho người đăng ký tham gia tenant
      * 
-     * 更新用户租户关系状态【低代码应用专用接口】
+     * Cập nhật trạng thái quan hệ người dùng - tenant [Giao diện chuyên dùng cho ứng dụng low-code]
      */
     @PutMapping("/updateUserTenantStatus")
     @RequiresPermissions("system:tenant:updateUserTenantStatus")
     public Result<String> updateUserTenantStatus(@RequestBody SysUserTenant userTenant) {
         String tenantId = TenantContext.getTenant();
         if (oConvertUtils.isEmpty(tenantId)) {
-            return Result.error("未找到当前租户信息"); 
+            return Result.error("Không tìm thấy thông tin Tenant hiện tại"); 
         }
         relationService.updateUserTenantStatus(userTenant.getUserId(), tenantId, userTenant.getStatus());
-        return Result.ok("更新用户租户状态成功");
+        return Result.ok("Cập nhật trạng thái Tenant của người dùng thành công");
     }
 
     /**
-     * 同意或者拒绝用户加入（敲敲云专用）
+     * Đồng ý hoặc từ chối người dùng tham gia (chuyên dùng cho QiaoQiaoYun)
      * @param userTenant
      * @return
      */
@@ -682,15 +682,15 @@ public class SysTenantController {
     public Result<String> agreeOrRejectUserJoin(@RequestBody SysUserTenant userTenant) {
         String tenantId = TenantContext.getTenant();
         if (oConvertUtils.isEmpty(tenantId)) {
-            return Result.error("未找到当前租户信息");
+            return Result.error("Không tìm thấy thông tin Tenant hiện tại");
         }
         sysTenantPackService.izHaveManageUserAuth(tenantId);
         relationService.updateUserTenantStatus(userTenant.getUserId(), tenantId, userTenant.getStatus());
-        return Result.ok("更新用户租户状态成功");
+        return Result.ok("Cập nhật trạng thái Tenant của người dùng thành công");
     }
 
     /**
-     * 注销租户【低代码应用专用接口】
+     * Hủy tenant [Giao diện chuyên dùng cho ứng dụng low-code]
      *
      * @param sysTenant
      * @return
@@ -701,30 +701,30 @@ public class SysTenantController {
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         SysTenant tenant = sysTenantService.getById(sysTenant.getId());
         if (null == tenant) {
-            return Result.error("未找到当前租户信息");
+            return Result.error("Không tìm thấy thông tin Tenant hiện tại");
         }
         if (!sysUser.getUsername().equals(tenant.getCreateBy())) {
-            return Result.error("无权限，只能注销自己创建的租户！");
+            return Result.error("Không có quyền hạn, chỉ được hủy tenant do chính mình tạo!");
         }
         SysUser userById = sysUserService.getById(sysUser.getId());
         String loginPassword = request.getParameter("loginPassword");
         String passwordEncode = PasswordUtil.encrypt(sysUser.getUsername(),loginPassword, userById.getSalt());
         if (!passwordEncode.equals(userById.getPassword())) {
-            return Result.error("密码不正确");
+            return Result.error("Mật khẩu không đúng");
         }
         sysTenantService.removeById(sysTenant.getId());
-        return Result.ok("注销成功");
+        return Result.ok("Đăng xuất thành công");
     }
 
     /**
-     * 获取租户用户不同状态下的数量【低代码应用专用接口】
+     * Lấy số lượng người dùng thuê bao theo từng trạng thái [Interface chuyên dụng cho ứng dụng low-code]
      * @return
      */
     @GetMapping("/getTenantStatusCount")
     public Result<Long> getTenantStatusCount(@RequestParam(value = "status",defaultValue = "1") String status, HttpServletRequest req){
         String tenantId = TokenUtils.getTenantIdByRequest(req);
         if (null == tenantId) {
-            return Result.error("未找到当前租户信息");
+            return Result.error("Không tìm thấy thông tin Tenant hiện tại");
         }
         LambdaQueryWrapper<SysUserTenant> query = new LambdaQueryWrapper<>();
         query.eq(SysUserTenant::getTenantId,tenantId);
@@ -734,7 +734,7 @@ public class SysTenantController {
     }
 
     /**
-     * 用户取消租户申请【低代码应用专用接口】
+     * Người dùng hủy yêu cầu tham gia tenant 
      * @param tenantId
      * @return
      */
@@ -742,13 +742,13 @@ public class SysTenantController {
     public Result<String> cancelApplyTenant(@RequestParam("tenantId") String tenantId){
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         sysTenantService.leaveTenant(sysUser.getId(),tenantId);
-        return Result.ok("取消申请成功");
+        return Result.ok("Hủy đơn đăng ký thành công");
     }
 
-    //===========【低代码应用，前端专用接口 —— 加入限制只能维护和查看自己拥有的租户】==========================================================
+    //===========[Ứng dụng low-code, API chuyên dùng cho frontend — thêm giới hạn chỉ được duy trì và xem tenant mà mình sở hữu]==========================================================
 
     /**
-     * 彻底删除租户
+     * Xóa hoàn toàn tenant
      * @param ids
      * @return
      */
@@ -756,11 +756,11 @@ public class SysTenantController {
     @RequiresPermissions("system:tenant:deleteTenantLogic")
     public Result<String> deleteTenantLogic(@RequestParam("ids") String ids){
         sysTenantService.deleteTenantLogic(ids);
-        return Result.ok("彻底删除成功");
+        return Result.ok("Xóa hoàn toàn thành công");
     }
 
     /**
-     * 还原删除的租户
+     * Khôi phục tenant đã xóa
      * @param ids
      * @return
      */
@@ -768,11 +768,11 @@ public class SysTenantController {
     @RequiresPermissions("system:tenant:revertTenantLogic")
     public Result<String> revertTenantLogic(@RequestParam("ids") String ids){
         sysTenantService.revertTenantLogic(ids);
-        return Result.ok("还原成功");
+        return Result.ok("Khôi phục thành công");
     }
 
     /**
-     * 退出租户【低代码应用专用接口】
+     * Rời khỏi tenant [Giao diện chuyên dùng cho ứng dụng low-code]
      * @param sysTenant
      * @param request
      * @return
@@ -780,25 +780,25 @@ public class SysTenantController {
     @DeleteMapping("/exitUserTenant")
     public Result<String> exitUserTenant(@RequestBody SysTenant sysTenant,HttpServletRequest request){
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        //验证用户是否已存在
+        //Xác minh người dùng đã tồn tại hay chưa
         Integer count = relationService.userTenantIzExist(sysUser.getId(),sysTenant.getId());
         if (count == 0) {
-            return Result.error("此租户下没有当前用户");
+            return Result.error("Tenant này không có người dùng hiện tại");
         }
-        //验证密码
+        //Xác minh mật khẩu
         String loginPassword = request.getParameter("loginPassword");
         SysUser userById = sysUserService.getById(sysUser.getId());
         String passwordEncode = PasswordUtil.encrypt(sysUser.getUsername(),loginPassword, userById.getSalt());
         if (!passwordEncode.equals(userById.getPassword())) {
-            return Result.error("密码不正确");
+            return Result.error("Mật khẩu không đúng");
         }
-        //退出登录
+        //Đăng xuất
         sysTenantService.exitUserTenant(sysUser.getId(),sysUser.getUsername(),String.valueOf(sysTenant.getId()));
-        return Result.ok("退出租户成功");
+        return Result.ok("Thoát tenant thành công");
     }
 
     /**
-     * 变更租户拥有者【低代码应用专用接口】
+     * Thay đổi chủ sở hữu tenant 
      * @param userId
      * @return
      */
@@ -806,11 +806,11 @@ public class SysTenantController {
     public Result<String> changeOwenUserTenant(@RequestParam("userId") String userId,
                                                @RequestParam("tenantId") String tenantId){
         sysTenantService.changeOwenUserTenant(userId,tenantId);
-        return Result.ok("退出租户成功");
+        return Result.ok("Thoát tenant thành công");
     }
 
     /**
-     * 邀请用户到租户,通过手机号匹配 【低代码应用专用接口】
+     * Mời người dùng vào tenant,Khớp qua số điện thoại 
      * @param phone
      * @param departId
      * @return
@@ -825,7 +825,7 @@ public class SysTenantController {
 
 
     /**
-     * 获取 租户产品包-3个默认admin的人员数量
+     * Lấy gói sản phẩm tenant-3 Số lượng nhân sự admin mặc định
      * @param tenantId
      * @return
      */
@@ -836,7 +836,7 @@ public class SysTenantController {
     }
 
     /**
-     * 查询租户产品包信息
+     * Truy vấn thông tin gói sản phẩm của Tenant
      * @param packModel
      * @return
      */
@@ -848,47 +848,47 @@ public class SysTenantController {
 
 
     /**
-     * 添加用户和产品包的关系数据
+     * Thêm dữ liệu quan hệ giữa người dùng và gói sản phẩm
      * @param sysTenantPackUser
      * @return
      */
     @PostMapping("/addTenantPackUser")
     public Result<?> addTenantPackUser(@RequestBody SysTenantPackUser sysTenantPackUser){
-        //update-begin---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】产品包成员管理须为admin或本租户管理员，防止越权把自己加入超管产品包-----------
+        //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Quản lý thành viên gói sản phẩm phải là admin hoặc quản trị viên của tenant này, ngăn tự thêm mình vào gói sản phẩm siêu quản trị trái phép-----------
         assertTenantPackManager(String.valueOf(sysTenantPackUser.getTenantId()));
-        //update-end---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】产品包成员管理须为admin或本租户管理员，防止越权把自己加入超管产品包-----------
+        //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Quản lý thành viên gói sản phẩm phải là admin hoặc quản trị viên của tenant này, ngăn tự thêm mình vào gói sản phẩm siêu quản trị trái phép-----------
         sysTenantService.addBatchTenantPackUser(sysTenantPackUser);
-        return Result.ok("操作成功！");
+        return Result.ok("Thao tác thành công!");
     }
 
     /**
-     * 从产品包移除用户
+     * Xóa người dùng khỏi gói sản phẩm
      * @param sysTenantPackUser
      * @return
      */
     @PutMapping("/deleteTenantPackUser")
     public Result<?> deleteTenantPackUser(@RequestBody SysTenantPackUser sysTenantPackUser){
-        //update-begin---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】产品包成员管理须为admin或本租户管理员-----------
+        //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Quản lý thành viên gói sản phẩm phải là admin hoặc quản trị viên của tenant này-----------
         assertTenantPackManager(String.valueOf(sysTenantPackUser.getTenantId()));
-        //update-end---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】产品包成员管理须为admin或本租户管理员-----------
+        //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Quản lý thành viên gói sản phẩm phải là admin hoặc quản trị viên của tenant này-----------
         sysTenantService.deleteTenantPackUser(sysTenantPackUser);
-        return Result.ok("操作成功！");
+        return Result.ok("Thao tác thành công!");
     }
 
 
     /**
-     * 修改申请状态
+     * Chỉnh sửa trạng thái đơn đăng ký
      * @param sysTenant
      * @return
      */
     @PutMapping("/updateApplyStatus")
     public Result<?> updateApplyStatus(@RequestBody SysTenant sysTenant){
-        //update-begin---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】修改产品包申请开关须为admin或本租户管理员-----------
+        //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Sửa công tắc đăng ký gói sản phẩm phải là admin hoặc quản trị viên của thuê bao này-----------
         assertTenantPackManager(String.valueOf(sysTenant.getId()));
-        //update-end---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】修改产品包申请开关须为admin或本租户管理员-----------
+        //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Sửa công tắc đăng ký gói sản phẩm phải là admin hoặc quản trị viên của thuê bao này-----------
         SysTenant entity = this.sysTenantService.getById(sysTenant.getId());
         if(entity==null){
-            return Result.error("租户不存在!");
+            return Result.error("Tenant không tồn tại!");
         }
         entity.setApplyStatus(sysTenant.getApplyStatus());
         sysTenantService.updateById(entity);
@@ -897,7 +897,7 @@ public class SysTenantController {
 
 
     /**
-     * 获取产品包人员申请列表
+     * Lấy danh sách đơn đăng ký nhân sự của gói sản phẩm
      * @param tenantId
      * @return
      */
@@ -908,62 +908,62 @@ public class SysTenantController {
     }
 
     /**
-     * 个人 申请成为管理员
+     * Cá nhân — Đăng ký trở thành quản trị viên
      * @param sysTenantPackUser
      * @return
      */
     @PostMapping("/doApplyTenantPackUser")
     public Result<?> doApplyTenantPackUser(@RequestBody SysTenantPackUser sysTenantPackUser){
         sysTenantService.doApplyTenantPackUser(sysTenantPackUser);
-        return Result.ok("申请成功！");
+        return Result.ok("Gửi yêu cầu thành công!");
     }
 
     /**
-     * 申请通过 成为管理员
+     * Đơn đăng ký được duyệt — Trở thành quản trị viên
      * @param sysTenantPackUser
      * @return
      */
     @PutMapping("/passApply")
     public Result<?> passApply(@RequestBody SysTenantPackUser sysTenantPackUser){
-        //update-begin---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】审批产品包申请须为admin或本租户管理员-----------
+        //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Phê duyệt đơn xin gói sản phẩm phải là admin hoặc quản trị viên của tenant này-----------
         assertTenantPackManager(String.valueOf(sysTenantPackUser.getTenantId()));
-        //update-end---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】审批产品包申请须为admin或本租户管理员-----------
+        //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Phê duyệt đơn xin gói sản phẩm phải là admin hoặc quản trị viên của tenant này-----------
         sysTenantService.passApply(sysTenantPackUser);
-        return Result.ok("操作成功！");
+        return Result.ok("Thao tác thành công!");
     }
 
     /**
-     *  拒绝申请 成为管理员
+     *  Từ chối đơn đăng ký trở thành quản trị viên
      * @param sysTenantPackUser
      * @return
      */
     @PutMapping("/deleteApply")
     public Result<?> deleteApply(@RequestBody SysTenantPackUser sysTenantPackUser){
-        //update-begin---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】拒绝产品包申请须为admin或本租户管理员-----------
+        //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Từ chối đơn xin gói sản phẩm phải là admin hoặc quản trị viên của tenant này-----------
         assertTenantPackManager(String.valueOf(sysTenantPackUser.getTenantId()));
-        //update-end---author:scott ---date:20261013  for：【安全 GHSA-g5c8-qx87-hqcf】拒绝产品包申请须为admin或本租户管理员-----------
+        //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-g5c8-qx87-hqcf] Từ chối đơn xin gói sản phẩm phải là admin hoặc quản trị viên của tenant này-----------
         sysTenantService.deleteApply(sysTenantPackUser);
         return Result.ok("");
     }
 
     /**
-     * 校验当前用户能否管理指定租户的产品包成员（添加/删除/审批）：admin放行，否则须为该租户的组织账户管理员或超级管理员。
+     * Kiểm tra người dùng hiện tại có thể quản lý thành viên gói sản phẩm của thuê bao được chỉ định hay không (thêm/Xóa/Phê duyệt): admin được cho qua, nếu không thì phải là quản trị viên tài khoản tổ chức hoặc siêu quản trị viên của tenant đó.
      *
-     * @param tenantId 租户ID
+     * @param tenantId Tenant ID
      * @author scott
-     * @since 2026-10-13 【安全 GHSA-g5c8-qx87-hqcf】防止低权限用户越权把自己加入租户超管产品包
+     * @since 2026-10-13 【Bảo mật GHSA-g5c8-qx87-hqcf] Ngăn người dùng quyền thấp vượt quyền tự thêm mình vào gói sản phẩm siêu quản trị tenant
      */
     private void assertTenantPackManager(String tenantId) {
-        // admin或系统租户管理员(zuhuadmin,后台授予)直接放行；SaaS注册用户默认不含这两个系统角色
+        // admin Hoặc quản trị viên tenant hệ thống(zuhuadmin,được cấp ở phía quản trị)Cho qua trực tiếp; người dùng đăng ký SaaS mặc định không có hai vai trò hệ thống này
         if (SysRoleEnum.hasAnyRole(SysRoleEnum.ADMIN, SysRoleEnum.TENANT_ADMIN)) {
             return;
         }
-        // 非该租户的组织账户管理员或超级管理员时抛出异常
+        // Ném ngoại lệ khi không phải quản trị viên tài khoản tổ chức hoặc quản trị viên cấp cao của tenant đó
         sysTenantPackService.izHaveManageUserAuth(tenantId);
     }
 
     /**
-     * 查看是否已经申请过了超级管理员
+     * Kiểm tra đã đăng ký quản trị viên cấp cao chưa
      * @return
      */
     @GetMapping("/getApplySuperAdminCount")
@@ -973,7 +973,7 @@ public class SysTenantController {
     }
 
     /**
-     * 进入应用组织页面 查询租户信息及当前用户是否有 管理员的权限--
+     * Vào trang tổ chức của ứng dụng, truy vấn thông tin thuê bao và xem người dùng hiện tại có quyền quản trị viên hay không--
      * @param id
      * @return
      */
@@ -984,7 +984,7 @@ public class SysTenantController {
     }
 
     /**
-     * 获取产品包下的用户列表(分页)
+     * Lấy danh sách người dùng thuộc gói sản phẩm(Phân trang)
      * @param tenantId
      * @param packId
      * @param status
@@ -1004,14 +1004,14 @@ public class SysTenantController {
     }
 
     /**
-     * 获取当前租户下的部门和成员数量
+     * Lấy số lượng phòng ban và thành viên thuộc tenant hiện tại
      */
     @GetMapping("/getTenantCount")
     public Result<Map<String,Long>> getTenantCount(HttpServletRequest request){
         Map<String,Long> map = new HashMap<>();
-        // 代码逻辑说明: 【QQYUN-7177】用户数量显示不正确---
+        // Giải thích logic mã: 【QQYUN-7177】Số lượng người dùng hiển thị không chính xác---
         if(oConvertUtils.isEmpty(TokenUtils.getTenantIdByRequest(request))){
-            return Result.error("当前租户为空，禁止访问！");
+            return Result.error("Tenant hiện tại trống, cấm truy cập!");
         }
         Integer tenantId = oConvertUtils.getInt(TokenUtils.getTenantIdByRequest(request));
         Long userCount = relationService.getUserCount(tenantId,CommonConstant.USER_TENANT_NORMAL);
@@ -1019,7 +1019,7 @@ public class SysTenantController {
         LambdaQueryWrapper<SysDepart> departQuery = new LambdaQueryWrapper<>();
         departQuery.eq(SysDepart::getDelFlag,String.valueOf(CommonConstant.DEL_FLAG_0));
         departQuery.eq(SysDepart::getTenantId,tenantId);
-        //部门状态暂时没用，先注释掉
+        //Trạng thái phòng ban tạm thời chưa dùng, tạm ghi chú lại
         //departQuery.eq(SysDepart::getStatus,CommonConstant.STATUS_1);
         long departCount = sysDepartService.count(departQuery);
         map.put("departCount",departCount);
@@ -1027,7 +1027,7 @@ public class SysTenantController {
     }
 
     /**
-     * 通过用户id获取租户列表（分页）
+     * Lấy danh sách tenant theo id người dùng (phân trang)
      *
      * @param sysUserTenantVo
      * @return
@@ -1047,59 +1047,59 @@ public class SysTenantController {
         return Result.ok(pageList);
     }
 
-    /** 【被邀请人使用】
-     * 同意或拒绝加入租户
+    /** 【Dành cho người được mời】
+     * Đồng ý hoặc từ chối tham gia Tenant
      */
     @SignatureCheck
     @PutMapping("/agreeOrRefuseJoinTenant")
     public Result<String> agreeOrRefuseJoinTenant(@RequestParam("tenantId") Integer tenantId, 
                                                   @RequestParam("status") String status){
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         String userId = sysUser.getId();
         SysTenant tenant = sysTenantService.getById(tenantId);
         if(null == tenant){
-            return Result.error("不存在该组织");
+            return Result.error("Tổ chức này không tồn tại");
         }
         SysUserTenant sysUserTenant = relationService.getUserTenantByTenantId(userId, tenantId);
         if (null == sysUserTenant) {
-            return Result.error("该用户不存在该组织中，无权修改");
+            return Result.error("Người dùng đó không tồn tại trong tổ chức này, không có quyền sửa đổi");
         }
         String content = "";
         SysUser user = new SysUser();
         user.setUsername(sysUserTenant.getCreateBy());
         String realname = oConvertUtils.getString(sysUser.getRealname(),sysUser.getUsername());
-        //成功加入
+        //Tham gia thành công
         if(CommonConstant.USER_TENANT_NORMAL.equals(status)){
-            //修改租户状态
+            //Chỉnh sửa trạng thái tenant
             relationService.agreeJoinTenant(userId,tenantId);
-            content = content + realname + "已同意您发送的加入 " + tenant.getName() + " 的邀请";
+            content = content + realname + "đã đồng ý yêu cầu tham gia mà bạn đã gửi " + tenant.getName() + "  lời mời";
             sysTenantService.sendMsgForAgreeAndRefuseJoin(user, content);
-            return Result.OK("您已同意该组织的邀请");
+            return Result.OK("Bạn đã đồng ý lời mời của tổ chức này");
         }else if(CommonConstant.USER_TENANT_REFUSE.equals(status)){
-            //直接删除关系表即可
+            //Xóa trực tiếp bảng quan hệ là được
             relationService.refuseJoinTenant(userId,tenantId);
-            content = content + realname + "拒绝了您发送的加入 " + tenant.getName() + " 的邀请";
+            content = content + realname + "đã từ chối yêu cầu tham gia mà bạn đã gửi " + tenant.getName() + "  lời mời";
             sysTenantService.sendMsgForAgreeAndRefuseJoin(user, content);
-            return Result.OK("您已成功拒绝该组织的邀请");
+            return Result.OK("Bạn đã từ chối thành công lời mời của tổ chức này");
         }
-        return Result.error("类型不匹配，禁止修改数据");
+        return Result.error("Loại không khớp, cấm sửa dữ liệu");
     }
     
     /**
-     * 目前只给敲敲云租户下删除用户使用
+     * Hiện chỉ dùng để xóa người dùng thuộc tenant QiaoQiaoYun
      * 
-     * 根据密码删除用户
+     * Xóa người dùng theo mật khẩu
      */
     @DeleteMapping("/deleteUserByPassword")
     public Result<String> deleteUserByPassword(@RequestBody SysUser sysUser,HttpServletRequest request){
         Integer tenantId = oConvertUtils.getInteger(TokenUtils.getTenantIdByRequest(request), null);
         sysTenantService.deleteUserByPassword(sysUser, tenantId);
-        return Result.ok("删除用户成功");
+        return Result.ok("Xóa người dùng thành công");
     }
 
     /**
-     *  查询当前用户的所有有效租户【知识库专用接口】
+     *  Truy vấn tất cả tenant hợp lệ của người dùng hiện tại [Giao diện chuyên dùng cho cơ sở tri thức]
      * @return
      */
     @RequestMapping(value = "/getCurrentUserTenantForFile", method = RequestMethod.GET)
@@ -1109,7 +1109,7 @@ public class SysTenantController {
             LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
             List<SysTenant> tenantList = sysTenantService.getTenantListByUserId(sysUser.getId());
             Map<String,Object> map = new HashMap<>(5);
-            //在开启saas租户隔离的时候并且租户数据不为空，则返回租户信息
+            //Khi bật cách ly tenant SaaS và dữ liệu tenant không rỗng thì trả về thông tin tenant
             if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL && CollectionUtil.isNotEmpty(tenantList)) {
                 map.put("list", tenantList);
             }
@@ -1117,25 +1117,25 @@ public class SysTenantController {
             result.setResult(map);
         }catch(Exception e) {
             log.error(e.getMessage(), e);
-            result.error500("查询失败！");
+            result.error500("Tìm kiếm thất bại!");
         }
         return result;
     }
 
     /**
-     * 目前只给敲敲云人员与部门下的用户删除使用
+     * Hiện tại chỉ cho nhân viên QiaoQiaoYun và người dùng thuộc phòng ban xóa
      *
-     * 删除用户
+     * Xóa người dùng
      */
     @DeleteMapping("/deleteUser")
     public Result<String> deleteUser(@RequestBody SysUser sysUser,HttpServletRequest request){
         Integer tenantId = oConvertUtils.getInteger(TokenUtils.getTenantIdByRequest(request), null);
         sysTenantService.deleteUser(sysUser, tenantId);
-        return Result.ok("删除用户成功");
+        return Result.ok("Xóa người dùng thành công");
     }
 
     /**
-     * 根据租户id和用户id获取用户的产品包列表和当前用户下的产品包id
+     * Lấy danh sách gói sản phẩm của người dùng và gói sản phẩm thuộc người dùng hiện tại theo id tenant và id người dùng id
      *
      * @param tenantId
      * @param request

@@ -16,7 +16,7 @@ import java.util.Objects;
 
 /**
  * <p>
- * 部门表
+ * Bảng phòng ban
  * <p>
  * 
  * @Author Steve
@@ -30,100 +30,100 @@ public class SysDepart implements Serializable {
 	/**ID*/
 	@TableId(type = IdType.ASSIGN_ID)
 	private String id;
-	/**父机构ID*/
+	/**Cơ quan cấp trên ID*/
 	private String parentId;
-	/**机构/部门名称*/
-	@Excel(name="机构/部门名称",width=15)
+	/**Tổ chức/Tên phòng ban*/
+	@Excel(name="Tổ chức/Tên phòng ban",width=15)
 	private String departName;
-	/**机构/部门路径名称（非持久化字段）*/
+	/**Tổ chức/Tên đường dẫn phòng ban (trường không lưu trữ)*/
 	@TableField(exist = false)
 	private String departPathName;
-	/**英文名*/
-	@Excel(name="英文名",width=15)
+	/**Tên tiếng Anh*/
+	@Excel(name="Tên tiếng Anh",width=15)
 	private String departNameEn;
-	/**缩写*/
+	/**Tên viết tắt*/
 	private String departNameAbbr;
-	/**排序*/
-	@Excel(name="排序",width=15)
+	/**Sắp xếp*/
+	@Excel(name="Sắp xếp",width=15)
 	private Integer departOrder;
-	/**描述*/
-	@Excel(name="描述",width=15)
+	/**Mô tả*/
+	@Excel(name="Mô tả",width=15)
 	private String description;
-	/**机构类别 1=公司，2=组织机构，3=岗位 4=子公司*/
-	@Excel(name="机构类别",width=15,dicCode="org_category")
+	/**Loại hình tổ chức 1=Công ty，2=Cơ quan tổ chức，3=Vị trí công tác 4=Công ty con*/
+	@Excel(name="Loại hình tổ chức",width=15,dicCode="org_category")
 	private String orgCategory;
-	/**机构类型*/
+	/**Loại tổ chức*/
 	private String orgType;
-	/**机构编码*/
-	@Excel(name="机构编码",width=15)
+	/**Mã tổ chức*/
+	@Excel(name="Mã tổ chức",width=15)
 	private String orgCode;
-	/**手机号*/
-	@Excel(name="手机号",width=15)
+	/**Số điện thoại*/
+	@Excel(name="Số điện thoại",width=15)
 	private String mobile;
-	/**传真*/
-	@Excel(name="传真",width=15)
+	/**Fax*/
+	@Excel(name="Fax",width=15)
 	private String fax;
-	/**地址*/
-	@Excel(name="地址",width=15)
+	/**Địa chỉ*/
+	@Excel(name="Địa chỉ",width=15)
 	private String address;
-	/**备注*/
-	@Excel(name="备注",width=15)
+	/**Ghi chú*/
+	@Excel(name="Ghi chú",width=15)
 	private String memo;
-	/**状态（1启用，0不启用）*/
+	/**Trạng thái (1 bật, 0 không bật)*/
 	@Dict(dicCode = "depart_status")
 	private String status;
-	/**删除状态（0，正常，1已删除）*/
+	/**Trạng thái xóa (0 bình thường, 1 đã xóa)*/
 	@Dict(dicCode = "del_flag")
 	private String delFlag;
-	/**对接企业微信的ID*/
+	/**Tích hợp WeChat Doanh nghiệp ID*/
 	private String qywxIdentifier;
-	/**对接钉钉的部门ID*/
+	/**Phòng ban tích hợp DingTalk ID*/
 	private String dingIdentifier;
-	/**对接飞书的部门ID*/
+	/**Phòng ban tích hợp Feishu ID*/
 	private String feishuIdentifier;
-	/**创建人*/
+	/**Người tạo*/
 	private String createBy;
-	/**创建日期*/
+	/**Ngày tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
-	/**更新人*/
+	/**Người cập nhật*/
 	private String updateBy;
-	/**更新日期*/
+	/**Ngày cập nhật*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date updateTime;
-	/**租户ID*/
+	/**Tenant ID*/
 	private java.lang.Integer tenantId;
 
-	/**是否有叶子节点: 1是0否*/
+	/**Có nút lá không: 1 là có, 0 là không*/
 	private Integer izLeaf;
 
-    //update-begin---author:wangshuai ---date:20200308  for：[JTC-119]在部门管理菜单下设置部门负责人，新增字段负责人ids和旧的负责人ids
-    /**部门负责人的ids*/
+    //update-begin---author:wangshuai ---date:20200308  for：[JTC-119]Đặt người phụ trách phòng ban trong menu quản lý phòng ban, thêm trường ids người phụ trách và người phụ trách cũ ids
+    /**của người phụ trách phòng ban ids*/
 	@TableField(exist = false)
 	private String directorUserIds;
-    /**旧的部门负责人的ids(用于比较删除和新增)*/
+    /**Của người phụ trách phòng ban cũ ids(Dùng để so sánh xóa và thêm mới)*/
 	@TableField(exist = false)
     private String oldDirectorUserIds;
-    //update-end---author:wangshuai ---date:20200308  for：[JTC-119]新增字段负责人ids和旧的负责人ids
+    //update-end---author:wangshuai ---date:20200308  for：[JTC-119]Thêm mới trường ids người phụ trách và ids người phụ trách cũ ids
 
     /**
-     * 职级id
+     * Cấp bậc id
      */
-    @Excel(name="职级",width=15,dictTable = "sys_position", dicCode = "id", dicText = "name")
+    @Excel(name="Cấp bậc",width=15,dictTable = "sys_position", dicCode = "id", dicText = "name")
     @Dict(dictTable = "sys_position", dicCode = "id", dicText = "name")
     private String positionId;
 
     /**
-     * 部门岗位id
+     * Vị trí phòng ban id
      */
-    @Excel(name="上级岗位",width=15,dictTable = "sys_depart", dicCode = "id", dicText = "depart_name")
+    @Excel(name="Vị trí cấp trên",width=15,dictTable = "sys_depart", dicCode = "id", dicText = "depart_name")
     @Dict(dictTable = "sys_depart", dicCode = "id", dicText = "depart_name")
     private String depPostParentId;
     
 	/**
-	 * 重写equals方法
+	 * Ghi đè phương thức equals
 	 */
     @Override
     public boolean equals(Object o) {
@@ -161,7 +161,7 @@ public class SysDepart implements Serializable {
     }
 
     /**
-     * 重写hashCode方法
+     * Ghi đè phương thức hashCode
      */
     @Override
     public int hashCode() {

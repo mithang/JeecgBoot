@@ -7,11 +7,11 @@ import org.jeecg.common.util.oConvertUtils;
 import java.util.Collection;
 
 /**
- * Shiro 权限缓存工具
- * 角色授权变更后清理相关用户的权限缓存，使其无需重新登录即生效
+ * Shiro Công cụ bộ nhớ đệm quyền hạn
+ * Sau khi thay đổi phân quyền vai trò, xóa bộ nhớ đệm quyền hạn của người dùng liên quan để có hiệu lực mà không cần đăng nhập lại
  *
  * @author scott
- * @since 2026-10-29 【LHZP-1129】角色/部门角色授权后清理相关用户权限缓存
+ * @since 2026-10-29 【LHZP-1129】Vai trò/Sau khi ủy quyền vai trò/phòng ban, xóa bộ nhớ đệm quyền hạn của người dùng liên quan
  */
 public class ShiroAuthCacheUtil {
 
@@ -19,11 +19,11 @@ public class ShiroAuthCacheUtil {
     }
 
     /**
-     * 清理用户的Shiro权限缓存
-     * @param redisUtil redis工具
-     * @param userIds 用户id集合
+     * Xóa bộ nhớ đệm quyền hạn Shiro của người dùng
+     * @param redisUtil redis Công cụ
+     * @param userIds Tập hợp ID người dùng
      * @author scott
-     * @since 2026-10-29 【LHZP-1129】角色/部门角色授权后清理相关用户权限缓存
+     * @since 2026-10-29 【LHZP-1129】Vai trò/Sau khi ủy quyền vai trò/phòng ban, xóa bộ nhớ đệm quyền hạn của người dùng liên quan
      */
     public static void clearUserAuthCache(RedisUtil redisUtil, Collection<String> userIds) {
         if (userIds == null || userIds.isEmpty()) {

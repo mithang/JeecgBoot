@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 部门权限表
+ * @Description: Bảng quyền hạn phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-11
  * @Version: V1.0
@@ -41,7 +41,7 @@ public class SysDepartPermissionServiceImpl extends ServiceImpl<SysDepartPermiss
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveDepartPermission(String departId, String permissionIds, String lastPermissionIds) {
-        //1.对比要新增的权限
+        //1.So sánh quyền hạn cần thêm
         List<String> add = getDiff(lastPermissionIds,permissionIds);
         if(add!=null && add.size()>0) {
             List<SysDepartPermission> list = new ArrayList<SysDepartPermission>();
@@ -53,21 +53,21 @@ public class SysDepartPermissionServiceImpl extends ServiceImpl<SysDepartPermiss
             }
             this.saveBatch(list);
         }
-        //2.对比要删除的权限
+        //2.So sánh quyền hạn cần xóa
         List<String> delete = getDiff(permissionIds,lastPermissionIds);
         if(delete!=null && delete.size()>0) {
             for (String permissionId : delete) {
-                //2.1 删除部门对应的权限
+                //2.1 Xóa quyền hạn tương ứng với phòng ban
                 this.remove(new QueryWrapper<SysDepartPermission>().lambda()
                         .eq(SysDepartPermission::getDepartId, departId)
                         .eq(SysDepartPermission::getPermissionId, permissionId));
-                //2.2 删除部门权限时，删除部门角色中已授权的权限
+                //2.2 Khi xóa quyền phòng ban, xóa quyền đã được ủy quyền trong vai trò phòng ban
                 List<SysDepartRole> sysDepartRoleList = sysDepartRoleMapper.selectList(new LambdaQueryWrapper<SysDepartRole>().eq(SysDepartRole::getDepartId,departId));
                 List<String> roleIds = sysDepartRoleList.stream().map(SysDepartRole::getId).collect(Collectors.toList());
                 if(roleIds != null && roleIds.size()>0){
                     departRolePermissionMapper.delete(new LambdaQueryWrapper<SysDepartRolePermission>()
                             .eq(SysDepartRolePermission::getPermissionId,permissionId)
-                        // 代码逻辑说明: [issue/#5339]部门管理下部门赋权代码逻辑缺少判断条件
+                        // Giải thích logic mã: [issue/#5339]Logic gán quyền phòng ban trong quản lý phòng ban thiếu điều kiện phán đoán
                             .in(SysDepartRolePermission::getRoleId,roleIds)
                     );
                 }
@@ -90,7 +90,7 @@ public class SysDepartPermissionServiceImpl extends ServiceImpl<SysDepartPermiss
     }
 
     /**
-     * 从diff中找出main中没有的元素
+     * Tìm các phần tử có trong diff nhưng không có trong main
      * @param main
      * @param diff
      * @return

@@ -3,7 +3,7 @@ package org.jeecg.modules.system.vo.thirdapp;
 import lombok.Data;
 
 /**
-* @Description: 企业微信用户同步工具类
+* @Description: Lớp tiện ích đồng bộ người dùng WeChat Work
 *
 * @author: wangshuai
 * @date: 2023/11/28 18:17
@@ -12,37 +12,37 @@ import lombok.Data;
 public class JwUserDepartVo {
     
     /**
-     * 用户id
+     * Người dùng id
      */
     private String userId;
 
     /**
-     * 用户头像
+     * Ảnh đại diện người dùng
      */
     private String avatar;
 
     /**
-     * 真实姓名
+     * Họ tên thật
      */
     private String realName;
 
     /**
-     * 企业微信的名字
+     * Tên WeChat doanh nghiệp
      */
     private String wechatRealName;
 
     /**
-     * 企业微信对应的部门
+     * Phòng ban tương ứng với WeChat doanh nghiệp
      */
     private String wechatDepartId;
 
     /**
-     * 企业微信对应的用户id
+     * Người dùng tương ứng với WeChat doanh nghiệp id
      */
     private String wechatUserId;
 
     /**
-     * 第三方id
+     * Bên thứ ba id
      */
     private String thirdId;
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
- * @Description: 系统数据日志实现类
+ * @Description: Lớp triển khai log dữ liệu hệ thống
  * @author: jeecg-boot
  */
 @Service
@@ -17,7 +17,7 @@ public class SysDataLogServiceImpl extends ServiceImpl<SysDataLogMapper,SysDataL
 	private SysDataLogMapper logMapper;
 
 	/**
-	 * 添加数据日志
+	 * Thêm nhật ký dữ liệu
 	 */
 	@Override
 	public void addDataLog(String tableName, String dataId, String dataContent) {

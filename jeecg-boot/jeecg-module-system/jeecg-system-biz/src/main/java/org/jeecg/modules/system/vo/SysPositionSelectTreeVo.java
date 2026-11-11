@@ -9,36 +9,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* @Description: 岗位下拉选择树
+* @Description: Cây chọn thả xuống của vị trí công việc
 *
 * @author: wangshuai
 * @date: 2025/8/18 9:40
 */
 @Data
 public class SysPositionSelectTreeVo {
-    /** 对应SysDepart中的id字段,前端数据树中的value*/
+    /** Tương ứng với trường id trong SysDepart,trong cây dữ liệu frontend value*/
     private String value;
 
-    /** 对应depart_name字段,前端数据树中的title*/
+    /** Tương ứng với depart_name Trường,trong cây dữ liệu frontend title*/
     private String title;
     private boolean isLeaf;
-    /** 是否显示复选框 */
+    /** Có hiển thị hộp kiểm không */
     private boolean checkable;
-    /** 是否禁用 */
+    /** Có vô hiệu hóa hay không */
     private boolean disabled;
-    // 以下所有字段均与SysDepart相同
+    // Tất cả các trường dưới đây đều giống với SysDepart
     private String id;
-    /**父级id*/
+    /**Cấp cha id*/
     private String parentId;
-    /**部门类别*/
+    /**Loại phòng ban*/
     private String orgCategory;
-    /**部门编码*/
+    /**Mã phòng ban*/
     private String orgCode;
     
     private List<SysPositionSelectTreeVo> children = new ArrayList<>();
 
     /**
-     * 将SysDepart对象转换成SysDepartTreeModel对象
+     * Chuyển đối tượng SysDepart thành đối tượng SysDepartTreeModel
      * @param sysDepart
      */
     public SysPositionSelectTreeVo(SysDepart sysDepart) {

@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RestController
 @RequestMapping("/sys")
-@Tag(name="用户登录")
+@Tag(name="Đăng nhập người dùng")
 @Slf4j
 public class LoginController {
 	@Autowired
@@ -76,68 +76,68 @@ public class LoginController {
 	
 	private final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
 	/**
-	 * 线程池用于异步发送纪要
+	 * Thread pool dùng để gửi biên bản bất đồng bộ
 	 */
 	public static ExecutorService cachedThreadPool = new ShiroThreadPoolExecutor(0, 1024, 60L, TimeUnit.SECONDS, new SynchronousQueue<>());
 
 	
 
-	@Operation(summary="登录接口")
+	@Operation(summary="API đăng nhập")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public Result<JSONObject> login(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request){
 		Result<JSONObject> result = new Result<>();
 		String username = sysLoginModel.getUsername();
-		// 密码加密传输(尝试 AES解密，失败视为明文)
+		// Truyền mật khẩu đã mã hóa(Thử giải mã AES, thất bại thì coi là văn bản thuần)
 		String password  = AesEncryptUtil.resolvePassword(sysLoginModel.getPassword());
-		log.debug("登录密码，原始密码:{}，解密密码:{}" , sysLoginModel.getPassword(), password);
+		log.debug("Mật khẩu đăng nhập, mật khẩu gốc:{}, mật khẩu đã giải mã:{}" , sysLoginModel.getPassword(), password);
 
-		//step.1 登录失败超出次数5次锁定用户10分钟
+		//step.1 Đăng nhập thất bại vượt quá 5 lần sẽ khóa người dùng trong 10 phút
 		if(isLoginFailOvertimes(username)){
-			return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
+			return result.error500("Người dùng này đã đăng nhập thất bại quá nhiều lần, vui lòng đăng nhập lại sau 10 phút!");
 		}
 
-		// step.2 验证码check
+		// step.2 Kiểm tra mã xác thực
         String realKey = validateCaptcha(sysLoginModel, result);
         if (realKey == null) {
             return result;
         }
 		
-		//update-begin---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】先校验密码再校验用户状态，用户不存在与密码错误统一提示并计入失败次数，防止用户枚举-----------
-		// step.3 校验用户名或密码是否正确
+		//update-begin---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Kiểm tra mật khẩu trước rồi mới kiểm tra trạng thái người dùng; người dùng không tồn tại và mật khẩu sai dùng chung một thông báo và được tính vào số lần thất bại, ngăn liệt kê người dùng-----------
+		// step.3 Kiểm tra tên người dùng hoặc mật khẩu có đúng hay không
 		LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
 		queryWrapper.eq(SysUser::getUsername,username);
 		SysUser sysUser = sysUserService.getOne(queryWrapper);
 		if (!sysUserService.verifyLoginPassword(sysUser, username, password)) {
-			result.error500("用户名或密码错误");
+			result.error500("Tên người dùng hoặc mật khẩu sai");
 			return result;
 		}
 
-		// step.4 校验用户是否有效
+		// step.4 Kiểm tra người dùng có hợp lệ không
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
 			return result;
 		}
-		//update-end---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】先校验密码再校验用户状态，用户不存在与密码错误统一提示并计入失败次数，防止用户枚举-----------
+		//update-end---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Kiểm tra mật khẩu trước rồi mới kiểm tra trạng thái người dùng; người dùng không tồn tại và mật khẩu sai dùng chung một thông báo và được tính vào số lần thất bại, ngăn liệt kê người dùng-----------
 
-		// step.5 登录成功获取用户信息
+		// step.5 Đăng nhập thành công — Lấy thông tin người dùng
 		String loginOrgCode = sysLoginModel.getLoginOrgCode();
 		sysUser.setLoginOrgCode(loginOrgCode);
 		userInfo(sysUser, result, request, CommonConstant.CLIENT_TYPE_PC);
 
-		// step.6  登录成功删除验证码
+		// step.6  Đăng nhập thành công, xóa mã xác minh
 		redisUtil.del(realKey);
 		redisUtil.del(CommonConstant.LOGIN_FAIL + username);
 
-		// step.7 记录用户登录日志
+		// step.7 Ghi nhật ký đăng nhập người dùng
 		LoginUser loginUser = new LoginUser();
 		BeanUtils.copyProperties(sysUser, loginUser);
-		baseCommonService.addLog("用户名: " + username + ",登录成功！", CommonConstant.LOG_TYPE_1, null,loginUser);
+		baseCommonService.addLog("Tên người dùng: " + username + ",Đăng nhập thành công!", CommonConstant.LOG_TYPE_1, null,loginUser);
 		return result;
 	}
 
 
 	/**
-	 * 【vue3专用】获取用户信息
+	 * [Chuyên dùng cho vue3] Lấy thông tin người dùng
 	 */
 	@GetMapping("/user/getUserInfo")
 	public Result<JSONObject> getUserInfo(HttpServletRequest request){
@@ -145,12 +145,12 @@ public class LoginController {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String  username = JwtUtil.getUserNameByToken(request);
 		if(oConvertUtils.isNotEmpty(username)) {
-			// 根据用户名查询用户信息
+			// Truy vấn thông tin người dùng theo tên người dùng
 			SysUser sysUser = sysUserService.getUserByName(username);
 			JSONObject obj=new JSONObject();
-			log.debug("1 获取用户信息耗时（用户基础信息）" + (System.currentTimeMillis() - start) + "毫秒");
+			log.debug("1 Thời gian lấy thông tin người dùng (thông tin cơ bản của người dùng)" + (System.currentTimeMillis() - start) + "Mili giây");
 
-			// 代码逻辑说明: vue3前端，支持自定义首页-----------
+			// Giải thích logic mã: vue3 Frontend hỗ trợ trang chủ tùy chỉnh-----------
 			String vue3Version = request.getHeader(CommonConstant.VERSION);
 			SysRoleIndex roleIndex = sysUserService.getDynamicIndexByUserRole(username, vue3Version);
 			if (oConvertUtils.isNotEmpty(vue3Version) && roleIndex != null && oConvertUtils.isNotEmpty(roleIndex.getUrl())) {
@@ -160,93 +160,93 @@ public class LoginController {
 				}
 				sysUser.setHomePath(homePath);
 			}
-			log.debug("2 获取用户信息耗时 (首页面配置)" + (System.currentTimeMillis() - start) + "毫秒");
+			log.debug("2 Thời gian lấy thông tin người dùng (Cấu hình trang đầu)" + (System.currentTimeMillis() - start) + "Mili giây");
 			
 			obj.put("userInfo",sysUser);
-			//update-begin---author:scott ---date:20261013  for：【issues/9838】返回字典版本号；先取版本号再查字典，避免期间字典变更导致前端拿到新版本号+旧数据-----------
+			//update-begin---author:scott ---date:20261013  for：【issues/9838] Trả về số phiên bản danh mục; lấy số phiên bản trước rồi mới tra danh mục, tránh trong khoảng đó danh mục thay đổi khiến frontend nhận số phiên bản mới+Dữ liệu cũ-----------
 			obj.put("dictVersion", sysDictService.getDictVersion());
-			//update-end---author:scott ---date:20261013  for：【issues/9838】返回字典版本号；先取版本号再查字典，避免期间字典变更导致前端拿到新版本号+旧数据-----------
+			//update-end---author:scott ---date:20261013  for：【issues/9838] Trả về số phiên bản danh mục; lấy số phiên bản trước rồi mới tra danh mục, tránh trong khoảng đó danh mục thay đổi khiến frontend nhận số phiên bản mới+Dữ liệu cũ-----------
 			obj.put("sysAllDictItems", sysDictService.queryAllDictItems());
-			log.debug("3 获取用户信息耗时 (字典数据)" + (System.currentTimeMillis() - start) + "毫秒");
+			log.debug("3 Thời gian lấy thông tin người dùng (Dữ liệu từ điển)" + (System.currentTimeMillis() - start) + "Mili giây");
 
-			//update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】三级等保密码强度开关，返回给前端-----------
+			//update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】Công tắc độ mạnh mật khẩu theo cấp bảo mật ba, trả về cho frontend-----------
 			boolean enableStrongPwd = jeecgBaseConfig.getFirewall() != null
 					&& Boolean.TRUE.equals(jeecgBaseConfig.getFirewall().getEnableStrongPwd());
 			obj.put("enableStrongPwd", enableStrongPwd);
-			//update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】三级等保密码强度开关，返回给前端-----------
+			//update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】Công tắc độ mạnh mật khẩu theo cấp bảo mật ba, trả về cho frontend-----------
 
 			result.setResult(obj);
 			result.success("");
 		}
-		log.debug("end 获取用户信息耗时 " + (System.currentTimeMillis() - start) + "毫秒");
+		log.debug("end Thời gian lấy thông tin người dùng " + (System.currentTimeMillis() - start) + "Mili giây");
 		return result;
 
 	}
 	
 	/**
-	 * 退出登录
+	 * Đăng xuất
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping(value = "/logout")
 	public Result<Object> logout(HttpServletRequest request,HttpServletResponse response) {
-		//用户退出逻辑
+		//Logic thoát của người dùng
 	    String token = request.getHeader(CommonConstant.X_ACCESS_TOKEN);
 	    if(oConvertUtils.isEmpty(token)) {
-	    	return Result.error("退出登录失败！");
+	    	return Result.error("Đăng xuất thất bại!");
 	    }
 	    String username = JwtUtil.getUsername(token);
 		LoginUser sysUser = sysBaseApi.getUserByName(username);
 	    if(sysUser!=null) {
-			//update-begin---author:zhangdaihao ---date:2026-04-15  for：【issue/9517】校验token签名，防止伪造token强制他人下线(DoS)-----------
+			//update-begin---author:zhangdaihao ---date:2026-04-15  for：【issue/9517] Kiểm tra chữ ký token, tránh giả mạo token để ép người khác offline(DoS)-----------
 			if (!JwtUtil.verify(token, username, sysUser.getPassword())) {
-				return Result.error("Token无效!");
+				return Result.error("Token Không hợp lệ!");
 			}
-			//update-end---author:zhangdaihao ---date:2026-04-15  for：【issue/9517】校验token签名，防止伪造token强制他人下线(DoS)-----------
-			asyncClearLogoutCache(token, sysUser); // 异步清理
+			//update-end---author:zhangdaihao ---date:2026-04-15  for：【issue/9517] Kiểm tra chữ ký token, tránh giả mạo token để ép người khác offline(DoS)-----------
+			asyncClearLogoutCache(token, sysUser); // Dọn dẹp không đồng bộ
 			SecurityUtils.getSubject().logout();
-	    	return Result.ok("退出登录成功！");
+	    	return Result.ok("Đăng xuất thành công!");
 	    }else {
-	    	return Result.error("Token无效!");
+	    	return Result.error("Token Không hợp lệ!");
 	    }
 	}
 
 	/**
-	 * 清理用户缓存
+	 * Dọn bộ nhớ đệm người dùng
 	 * 
 	 * @param token
 	 * @param sysUser
 	 */
 	private void asyncClearLogoutCache(String token, LoginUser sysUser) {
 		cachedThreadPool.execute(()->{
-			//清空用户登录Token缓存
+			//Xóa bộ nhớ đệm Token đăng nhập của người dùng
 			redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + token);
-			//清空用户登录Shiro权限缓存
+			//Xóa cache quyền Shiro khi người dùng đăng nhập
 			redisUtil.del(CommonConstant.PREFIX_USER_SHIRO_CACHE + sysUser.getId());
-			//清空用户的缓存信息（包括部门信息），例如sys:cache:user::<username>
+			//Xóa thông tin cache của người dùng (bao gồm thông tin phòng ban), ví dụ sys:cache:user::<username>
 			redisUtil.del(String.format("%s::%s", CacheConstant.SYS_USERS_CACHE, sysUser.getUsername()));
-			//清空是否允许同一账号多地同时登录缓存（PC端和APP端）
+			//Xóa bộ nhớ đệm cho phép cùng một tài khoản đăng nhập đồng thời ở nhiều nơi (phía PC và phía APP)
 			redisUtil.del(CommonConstant.PREFIX_USER_TOKEN_PC + sysUser.getUsername());
 			redisUtil.del(CommonConstant.PREFIX_USER_TOKEN_APP + sysUser.getUsername());
 			redisUtil.del(CommonConstant.PREFIX_USER_TOKEN_PHONE + sysUser.getUsername());
 
-			// 清空用户的默认首页缓存
+			// Xóa bộ nhớ đệm trang chủ mặc định của người dùng
 			redisUtil.del(DefIndexConst.CACHE_TYPE + sysUser.getUsername());
-			baseCommonService.addLog("用户名: "+sysUser.getRealname()+",退出成功！", CommonConstant.LOG_TYPE_1, null, sysUser);
-			log.debug("【退出成功操作】异步处理，退出后，清理用户缓存： "+sysUser.getRealname());
+			baseCommonService.addLog("Tên người dùng: "+sysUser.getRealname()+",Đăng xuất thành công!", CommonConstant.LOG_TYPE_1, null, sysUser);
+			log.debug("[Thao tác thoát thành công] Xử lý bất đồng bộ, sau khi thoát thì dọn bộ nhớ đệm người dùng: "+sysUser.getRealname());
 		});
 	}
 	
 	/**
-	 * 获取访问量
+	 * Lấy lượng truy cập
 	 * @return
 	 */
 	@GetMapping("loginfo")
 	public Result<JSONObject> loginfo() {
 		Result<JSONObject> result = new Result<JSONObject>();
 		JSONObject obj = new JSONObject();
-		// 获取一天的开始和结束时间
+		// Lấy thời gian bắt đầu và kết thúc của một ngày
 		Calendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
@@ -255,7 +255,7 @@ public class LoginController {
 		Date dayStart = calendar.getTime();
 		calendar.add(Calendar.DATE, 1);
 		Date dayEnd = calendar.getTime();
-		// 获取系统访问记录
+		// Lấy bản ghi truy cập hệ thống
 		Long totalVisitCount = logService.findTotalVisitCount();
 		obj.put("totalVisitCount", totalVisitCount);
 		Long todayVisitCount = logService.findTodayVisitCount(dayStart,dayEnd);
@@ -263,12 +263,12 @@ public class LoginController {
 		Long todayIp = logService.findTodayIp(dayStart,dayEnd);
 		obj.put("todayIp", todayIp);
 		result.setResult(obj);
-		result.success("登录成功");
+		result.success("Đăng nhập thành công");
 		return result;
 	}
 	
 	/**
-	 * 获取访问量
+	 * Lấy lượng truy cập
 	 * @return
 	 */
 	@GetMapping("/visitInfo")
@@ -290,46 +290,46 @@ public class LoginController {
 	
 	
 	/**
-	 * 登陆成功选择用户当前部门
+	 * Đăng nhập thành công, chọn phòng ban hiện tại của người dùng
 	 * @param user
 	 * @return
 	 */
 	@RequestMapping(value = "/selectDepart", method = RequestMethod.PUT)
 	public Result<JSONObject> selectDepart(@RequestBody SysUser user) {
 		Result<JSONObject> result = new Result<JSONObject>();
-		//update-begin---author:zhangdaihao ---date:20260506  for：【issue/9597】selectDepart越权漏洞修复：强制使用当前登录用户，校验orgCode/loginTenantId归属-----------
+		//update-begin---author:zhangdaihao ---date:20260506  for：【issue/9597] Sửa lỗ hổng vượt quyền selectDepart: bắt buộc dùng người dùng đang đăng nhập, kiểm tra orgCode/loginTenantId thuộc về-----------
 		LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		if (loginUser == null) {
-			return Result.error("用户未登录");
+			return Result.error("Người dùng chưa đăng nhập");
 		}
-		// 强制使用当前登录用户的username，忽略请求体传入的username，防止越权修改他人当前部门/租户
+		// Bắt buộc dùng username của người dùng đang đăng nhập, bỏ qua username truyền vào trong request body, ngăn sửa trái phép phòng ban hiện tại của người khác/Tenant
 		String username = loginUser.getUsername();
 
-		//获取登录部门
+		//Lấy phòng ban đăng nhập
 		String orgCode = user.getOrgCode();
-		//获取登录租户
+		//Lấy tenant đăng nhập
 		Integer tenantId = user.getLoginTenantId();
 
-		// 校验 orgCode 必须属于当前用户所在部门
+		// Kiểm tra orgCode phải thuộc phòng ban của người dùng hiện tại
 		if (oConvertUtils.isNotEmpty(orgCode)) {
 			List<SysDepart> userDeparts = sysDepartService.queryUserDeparts(loginUser.getId());
 			boolean orgOwned = userDeparts != null && userDeparts.stream()
 					.anyMatch(d -> orgCode.equals(d.getOrgCode()));
 			if (!orgOwned) {
-				return Result.error("无权切换到非本人所属的部门");
+				return Result.error("Không có quyền chuyển sang phòng ban không thuộc về bản thân");
 			}
 		}
 
-		// 校验 loginTenantId 必须属于当前用户所属租户
+		// Kiểm tra loginTenantId phải thuộc thuê bao của người dùng hiện tại
 		if (tenantId != null && tenantId != 0) {
 			List<Integer> userTenantIds = sysUserTenantService.getTenantIdsByUserId(loginUser.getId());
 			if (userTenantIds == null || !userTenantIds.contains(tenantId)) {
-				return Result.error("无权切换到非本人所属的租户");
+				return Result.error("Không có quyền chuyển sang tenant không thuộc về bản thân");
 			}
 		}
-		//update-end---author:zhangdaihao ---date:20260506  for：【issue/9597】selectDepart越权漏洞修复：强制使用当前登录用户，校验orgCode/loginTenantId归属-----------
+		//update-end---author:zhangdaihao ---date:20260506  for：【issue/9597] Sửa lỗ hổng vượt quyền selectDepart: bắt buộc dùng người dùng đang đăng nhập, kiểm tra orgCode/loginTenantId thuộc về-----------
 
-		//设置用户登录部门和登录租户
+		//Thiết lập phòng ban đăng nhập và tenant đăng nhập của người dùng
 		this.sysUserService.updateUserDepart(username, orgCode,tenantId);
 		SysUser sysUser = sysUserService.getUserByName(username);
 		JSONObject obj = new JSONObject();
@@ -339,7 +339,7 @@ public class LoginController {
 	}
 
 	/**
-	 * 短信登录接口
+	 * API đăng nhập bằng SMS
 	 * 
 	 * @param jsonObject
 	 * @return
@@ -349,83 +349,83 @@ public class LoginController {
 		Result<String> result = new Result<String>();
 		String clientIp = IpUtils.getIpAddr(request);
 		String mobile = jsonObject.get("mobile").toString();
-		//手机号模式 登录模式: "2"  注册模式: "1"
+		//Chế độ số điện thoại — Chế độ đăng nhập: "2"  Chế độ đăng ký: "1"
 		String smsmode=jsonObject.get("smsmode").toString();
-		log.info("-------- IP:{}, 手机号：{}，获取绑定验证码", clientIp, mobile);
+		log.info("-------- IP:{}, Số điện thoại:{}, lấy mã xác minh liên kết", clientIp, mobile);
 		
 		if(oConvertUtils.isEmpty(mobile)){
-			result.setMessage("手机号不允许为空！");
+			result.setMessage("Số điện thoại không được để trống!");
 			result.setSuccess(false);
 			return result;
 		}
 		
-		// VUEN-2245【漏洞】发现新漏洞待处理20220906
+		// VUEN-2245【Lỗ hổng】Phát hiện lỗ hổng mới đang chờ xử lý 20220906
 		String redisKey = CommonConstant.PHONE_REDIS_KEY_PRE+mobile;
 		Object object = redisUtil.get(redisKey);
 		
 		if (object != null) {
-			result.setMessage("验证码10分钟内，仍然有效！");
+			result.setMessage("Mã xác minh vẫn còn hiệu lực trong 10 phút!");
 			result.setSuccess(false);
 			return result;
 		}
 
 		//-------------------------------------------------------------------------------------
-		//增加 check防止恶意刷短信接口
+		//Thêm check để ngăn chặn việc gửi SMS ác ý
 		if(!DySmsLimit.canSendSms(clientIp)){
-			log.warn("--------[警告] IP地址:{}, 短信接口请求太多-------", clientIp);
-			result.setMessage("短信接口请求太多，请稍后再试！");
+			log.warn("--------[Cảnh báo] IP Địa chỉ:{}, Yêu cầu giao diện SMS quá nhiều-------", clientIp);
+			result.setMessage("Yêu cầu giao diện SMS quá nhiều, vui lòng thử lại sau!");
 			result.setCode(CommonConstant.PHONE_SMS_FAIL_CODE);
 			result.setSuccess(false);
 			return result;
 		}
-		//update-begin---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流，不依赖客户端IP-----------
+		//update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-5qr3-c98m-9767】Thêm giới hạn tốc độ theo số điện thoại, không phụ thuộc vào IP máy khách IP-----------
 		if(!DySmsLimit.canSendSmsToPhone(mobile)){
-			result.setMessage("短信发送过于频繁，请稍后再试！");
+			result.setMessage("Gửi SMS quá thường xuyên, vui lòng thử lại sau!");
 			result.setCode(CommonConstant.PHONE_SMS_FAIL_CODE);
 			result.setSuccess(false);
 			return result;
 		}
-		//update-end---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流，不依赖客户端IP-----------
+		//update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-5qr3-c98m-9767】Thêm giới hạn tốc độ theo số điện thoại, không phụ thuộc vào IP máy khách IP-----------
 		//-------------------------------------------------------------------------------------
 
-		//随机数
+		//Số ngẫu nhiên
 		String captcha = RandomUtil.randomNumbers(6);
 		JSONObject obj = new JSONObject();
     	obj.put("code", captcha);
 		try {
 			boolean b = false;
-			//注册模板
+			//Mẫu đăng ký
 			if (CommonConstant.SMS_TPL_TYPE_1.equals(smsmode)) {
 				SysUser sysUser = sysUserService.getUserByPhone(mobile);
 				if(sysUser!=null) {
-					result.error500(" 手机号已经注册，请直接登录！");
-					baseCommonService.addLog("手机号已经注册，请直接登录！", CommonConstant.LOG_TYPE_1, null);
+					result.error500(" Số điện thoại đã được đăng ký, vui lòng đăng nhập trực tiếp!");
+					baseCommonService.addLog("Số điện thoại đã được đăng ký, vui lòng đăng nhập trực tiếp!", CommonConstant.LOG_TYPE_1, null);
 					return result;
 				}
 				b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.REGISTER_TEMPLATE_CODE);
 			}else {
-				//登录模式，校验用户有效性
+				//Chế độ đăng nhập, kiểm tra tính hợp lệ của người dùng
 				SysUser sysUser = sysUserService.getUserByPhone(mobile);
 				result = sysUserService.checkUserIsEffective(sysUser);
 				if(!result.isSuccess()) {
 					String message = result.getMessage();
-					String userNotExist="该用户不存在，请注册";
+					String userNotExist="Người dùng này không tồn tại, vui lòng đăng ký";
 					if(userNotExist.equals(message)){
-						result.error500("该用户不存在或未绑定手机号");
+						result.error500("Người dùng này không tồn tại hoặc chưa liên kết số điện thoại");
 					}
 					return result;
 				}
 				
 				/**
-				 * smsmode 短信模板方式  0 .登录模板、1.注册模板、2.忘记密码模板
+				 * smsmode Phương thức mẫu SMS  0 .Mẫu đăng nhập、1.Mẫu đăng ký、2.Mẫu quên mật khẩu
 				 */
 				if (CommonConstant.SMS_TPL_TYPE_0.equals(smsmode)) {
-					//登录模板
+					//Mẫu đăng nhập
 					b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.LOGIN_TEMPLATE_CODE);
 				} else if(CommonConstant.SMS_TPL_TYPE_2.equals(smsmode)) {
-					//忘记密码模板
+					//Mẫu quên mật khẩu
 					b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.FORGET_PASSWORD_TEMPLATE_CODE);
-                    // 代码逻辑说明: 【issues/8567】严重：修改密码存在水平越权问题。---
+                    // Giải thích logic mã: 【issues/8567】Nghiêm trọng: sửa mật khẩu tồn tại vấn đề vượt quyền theo chiều ngang.---
                     if(b){
                         String username = sysUser.getUsername();
                         obj.put("username",username);
@@ -437,18 +437,18 @@ public class LoginController {
 			}
 
 			if (b == false) {
-				result.setMessage("短信验证码发送失败,请稍后重试");
+				result.setMessage("Gửi mã xác minh SMS thất bại,Vui lòng thử lại sau");
 				result.setSuccess(false);
 				return result;
 			}
 			
-			//验证码10分钟内有效
+			//Mã xác minh có hiệu lực trong 10 phút
 			redisUtil.set(redisKey, captcha, 600);
 			result.setSuccess(true);
 
 		} catch (ClientException e) {
 			e.printStackTrace();
-			result.error500(" 短信接口未配置，请联系管理员！");
+			result.error500(" Giao diện SMS chưa được cấu hình, vui lòng liên hệ quản trị viên!");
 			return result;
 		}
 		return result;
@@ -456,22 +456,22 @@ public class LoginController {
 	
 
 	/**
-	 * 手机号登录接口
+	 * API đăng nhập bằng số điện thoại
 	 * 
 	 * @param jsonObject
 	 * @return
 	 */
-	@Operation(summary="手机号登录接口")
+	@Operation(summary="API đăng nhập bằng số điện thoại")
 	@PostMapping("/phoneLogin")
 	public Result<JSONObject> phoneLogin(@RequestBody JSONObject jsonObject, HttpServletRequest request) {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String phone = jsonObject.getString("mobile");
-		// 平台用户登录失败锁定用户
+		// Khóa người dùng khi người dùng nền tảng đăng nhập thất bại
 		if(isLoginFailOvertimes(phone)){
-			return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
+			return result.error500("Người dùng này đã đăng nhập thất bại quá nhiều lần, vui lòng đăng nhập lại sau 10 phút!");
 		}
 		
-		//校验用户有效性
+		//Kiểm tra tính hợp lệ của người dùng
 		SysUser sysUser = sysUserService.getUserByPhone(phone);
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
@@ -480,27 +480,27 @@ public class LoginController {
 		
 		String smscode = jsonObject.getString("captcha");
 
-		// 代码逻辑说明: VUEN-2245 【漏洞】发现新漏洞待处理20220906
+		// Giải thích logic mã: VUEN-2245 【Lỗ hổng】Phát hiện lỗ hổng mới đang chờ xử lý 20220906
 		String redisKey = CommonConstant.PHONE_REDIS_KEY_PRE+phone;
 		Object code = redisUtil.get(redisKey);
 
 		if (!smscode.equals(code)) {
 			addLoginFailOvertimes(phone);
-			return Result.error("手机验证码错误");
+			return Result.error("Mã xác minh điện thoại sai");
 		}
-		//用户信息
+		//Thông tin người dùng
 		String loginOrgCode = jsonObject.getString("loginOrgCode");
 		sysUser.setLoginOrgCode(loginOrgCode);
 		userInfo(sysUser, result, request, CommonConstant.CLIENT_TYPE_PHONE);
-		//添加日志
-		baseCommonService.addLog("用户名: " + sysUser.getUsername() + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
+		//Thêm nhật ký
+		baseCommonService.addLog("Tên người dùng: " + sysUser.getUsername() + ",Đăng nhập thành công!", CommonConstant.LOG_TYPE_1, null);
         redisUtil.removeAll(redisKey);
 		return result;
 	}
 
 
 	/**
-	 * 用户信息
+	 * Thông tin người dùng
 	 *
 	 * @param sysUser
 	 * @param result
@@ -511,29 +511,29 @@ public class LoginController {
 		String syspassword = sysUser.getPassword();
 		JSONObject obj = new JSONObject(new LinkedHashMap<>());
 
-		//1.生成token，并设置超时时间
+		//1.Tạo token và đặt thời gian timeout
 		String token = JwtUtil.sign(username, syspassword, clientType);
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-		// 根据客户端类型设置对应的过期时间
+		// Đặt thời gian hết hạn tương ứng theo loại client
 		long expireTime = CommonConstant.CLIENT_TYPE_APP.equalsIgnoreCase(clientType) 
 			? JwtUtil.APP_EXPIRE_TIME * 2 / 1000 
 			: JwtUtil.EXPIRE_TIME * 2 / 1000;
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, expireTime);
 		obj.put("token", token);
 
-		// 是否允许同一账号多地同时登录，踢掉之前的登录
+		// Có cho phép cùng một tài khoản đăng nhập đồng thời ở nhiều nơi hay không, đăng xuất phiên đăng nhập trước đó
 		handleSingleSignOn(username, token, clientType);
 
-		//2.设置登录租户
+		//2.Đặt tenant đăng nhập
 		Result<JSONObject> loginTenantError = sysUserService.setLoginTenant(sysUser, obj, username,result);
 		if (loginTenantError != null) {
 			return loginTenantError;
 		}
 
-		//3.设置登录用户信息
+		//3.Đặt thông tin người dùng đăng nhập
 		obj.put("userInfo", sysUser);
 		
-		//4.设置登录部门
+		//4.Đặt phòng ban đăng nhập
 		List<SysDepart> departs = sysDepartService.queryUserDeparts(sysUser.getId());
 		obj.put("departs", departs);
 		if (departs == null || departs.size() == 0) {
@@ -543,23 +543,23 @@ public class LoginController {
 			sysUserService.updateUserDepart(username, departs.get(0).getOrgCode(),null);
 			obj.put("multi_depart", 1);
 		} else {
-			//查询当前是否有登录部门
+			//Truy vấn hiện tại có phòng ban đăng nhập hay không
 			SysUser sysUserById = sysUserService.getById(sysUser.getId());
-			//【部门切换】支持登录页面选择部门
+			//Hỗ trợ chọn phòng ban ở trang đăng nhập
 			String loginOrgCode = sysUser.getLoginOrgCode();
 
-			// 判断上次登录部门orgCode是否在departs中
+			// Kiểm tra orgCode của phòng ban đăng nhập lần trước có nằm trong departs hay không
 			boolean orgCodeInDeparts = departs.stream().anyMatch(d -> sysUserById.getOrgCode() != null && sysUserById.getOrgCode().equalsIgnoreCase(d.getOrgCode()));
 			if (!orgCodeInDeparts) {
 				sysUserById.setOrgCode(null);
 			}
 
-			// 如果未设置登录部门，则将登录部门设置为用户选择的 loginOrgCode（优先），否则设置为默认的第一个部门
+			// Nếu chưa thiết lập phòng ban đăng nhập, hãy đặt phòng ban đăng nhập thành loginOrgCode mà người dùng đã chọn (ưu tiên), nếu không thì đặt thành phòng ban đầu tiên mặc định
 			if(oConvertUtils.isEmpty(sysUserById.getOrgCode())){
 				String orgCode = oConvertUtils.isNotEmpty(loginOrgCode) ? loginOrgCode : departs.get(0).getOrgCode();
 				sysUserService.updateUserDepart(username, orgCode, null);
 			} else {
-				// 已设置登录部门，若用户本次登录选择了不同的部门，则优先使用用户选择的 loginOrgCode 更新登录部门
+				// Đã thiết lập phòng ban đăng nhập; nếu lần đăng nhập này người dùng chọn phòng ban khác thì ưu tiên dùng loginOrgCode mà người dùng đã chọn để cập nhật phòng ban đăng nhập
 				String orgCode = sysUserById.getOrgCode();
 				if(oConvertUtils.isNotEmpty(loginOrgCode) && !orgCode.equalsIgnoreCase(loginOrgCode)){
 					sysUserService.updateUserDepart(username, loginOrgCode, null);
@@ -568,41 +568,41 @@ public class LoginController {
 			obj.put("multi_depart", 2);
 		}
 
-		// 5.vue3版本不加载字典数据，vue2下加载字典
+		// 5.vue3 Phiên bản không tải dữ liệu danh mục, dưới vue2 mới tải danh mục
 		String vue3Version = request.getHeader(CommonConstant.VERSION);
 		if(oConvertUtils.isEmpty(vue3Version)){
-			//update-begin---author:scott ---date:20261013  for：【issues/9838】返回字典版本号；先取版本号再查字典，避免期间字典变更导致前端拿到新版本号+旧数据-----------
+			//update-begin---author:scott ---date:20261013  for：【issues/9838] Trả về số phiên bản danh mục; lấy số phiên bản trước rồi mới tra danh mục, tránh trong khoảng đó danh mục thay đổi khiến frontend nhận số phiên bản mới+Dữ liệu cũ-----------
 			obj.put("dictVersion", sysDictService.getDictVersion());
-			//update-end---author:scott ---date:20261013  for：【issues/9838】返回字典版本号；先取版本号再查字典，避免期间字典变更导致前端拿到新版本号+旧数据-----------
+			//update-end---author:scott ---date:20261013  for：【issues/9838] Trả về số phiên bản danh mục; lấy số phiên bản trước rồi mới tra danh mục, tránh trong khoảng đó danh mục thay đổi khiến frontend nhận số phiên bản mới+Dữ liệu cũ-----------
 			obj.put("sysAllDictItems", sysDictService.queryAllDictItems());
 		}
 		
 		result.setResult(obj);
-		result.success("登录成功");
+		result.success("Đăng nhập thành công");
 		return result;
 	}
 
 	/**
-	 * 同一账号在同一客户端类型只能登录一次
+	 * Một tài khoản chỉ được đăng nhập một lần trên cùng một loại máy khách
 	 * 
 	 * @author scott
 	 * @date 2025-10-31
-	 * PC端、APP端、手机号登录分别独立，互不影响
+	 * PC Đăng nhập bằng PC, APP và số điện thoại độc lập với nhau, không ảnh hưởng lẫn nhau
 	 * 
-	 * @param username 用户名
-	 * @param newToken 新生成的token
-	 * @param clientType 客户端类型（PC、APP、PHONE）
+	 * @param username Tên người dùng
+	 * @param newToken mới được tạo token
+	 * @param clientType Loại client (PC, APP, PHONE)
 	 */
 	private void handleSingleSignOn(String username, String newToken, String clientType) {
-		// 检查是否允许并发登录
+		// Kiểm tra có cho phép đăng nhập đồng thời hay không
 		if (jeecgBaseConfig.getFirewall() == null || jeecgBaseConfig.getFirewall().getIsConcurrent()==null || Boolean.TRUE.equals(jeecgBaseConfig.getFirewall().getIsConcurrent())) {
-			// 允许并发登录，只设置当前用户的token缓存，不踢掉之前的登录
-			log.debug("并发登录已启用：用户[{}]在{}端允许多地同时登录", username, clientType);
+			// Cho phép đăng nhập đồng thời, chỉ đặt cache token của người dùng hiện tại, không đá các lần đăng nhập trước ra
+			log.debug("Đã bật đăng nhập đồng thời: Người dùng[{}]trên{}cho phép đăng nhập đồng thời nhiều nơi", username, clientType);
 			return;
 		}
 		
-		log.info("【并发登录限制已开启】 用户[{}]在{}端不允许多地同时登录", username, clientType);
-		// 根据客户端类型选择对应的Redis key前缀
+		log.info("[Giới hạn đăng nhập đồng thời đã bật] Người dùng[{}]trên{}thiết bị không cho phép đăng nhập đồng thời nhiều nơi", username, clientType);
+		// Chọn tiền tố Redis key tương ứng theo loại client
 		String redisKeyPrefix;
 		if (CommonConstant.CLIENT_TYPE_APP.equalsIgnoreCase(clientType)) {
 			redisKeyPrefix = CommonConstant.PREFIX_USER_TOKEN_APP;
@@ -614,24 +614,24 @@ public class LoginController {
 		
 		String userTokenKey = redisKeyPrefix + username;
 		
-		// 获取该用户在当前客户端类型下之前的token
+		// Lấy token trước đó của người dùng đó dưới loại máy khách hiện tại token
 		Object oldTokenObj = redisUtil.get(userTokenKey);
 		if (oldTokenObj != null && !oldTokenObj.equals(newToken)) {
 			String oldToken = oldTokenObj.toString();
-			// 清除旧登录token的缓存（设置 1 小时过期时间）
+			// Xóa bộ nhớ đệm của token đăng nhập cũ (đặt thời gian hết hạn là 1 giờ)
 			redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + oldToken);
-			redisUtil.set(CommonConstant.PREFIX_USER_TOKEN_ERROR_MSG + oldToken, "不允许同一账号多地同时登录，当前登录被踢掉！", 60 * 1 * 60);
-			log.info("【并发登录限制已开启】用户[{}]在{}端的旧登录已被踢下线！", username, clientType);
-			log.info("【并发登录限制已开启】用户被踢下线，新token: {}，旧token：{}", newToken, oldToken);
+			redisUtil.set(CommonConstant.PREFIX_USER_TOKEN_ERROR_MSG + oldToken, "Không cho phép cùng một tài khoản đăng nhập đồng thời ở nhiều nơi, phiên đăng nhập hiện tại đã bị đăng xuất!", 60 * 1 * 60);
+			log.info("【Giới hạn đăng nhập đồng thời đã bật】Người dùng[{}]trên{}phiên đăng nhập cũ trên thiết bị đã bị đăng xuất!", username, clientType);
+			log.info("【Đã bật giới hạn đăng nhập đồng thời】Người dùng bị đăng xuất, token mới token: {}, token cũ:{}", newToken, oldToken);
 		}
 		
-		// 保存新的token到单点登录缓存
+		// Lưu token mới vào bộ nhớ đệm đăng nhập một lần
 		redisUtil.set(userTokenKey, newToken);
 		redisUtil.expire(userTokenKey, JwtUtil.EXPIRE_TIME * 2 / 1000);
 	}
 
 	/**
-	 * 获取加密字符串
+	 * Lấy chuỗi đã mã hóa
 	 * @return
 	 */
 	@GetMapping(value = "/getEncryptedString")
@@ -645,36 +645,36 @@ public class LoginController {
 	}
 
 	/**
-	 * 后台生成图形验证码 ：有效
+	 * Hệ thống tạo mã xác minh hình ảnh: hiệu lực
 	 * @param response
 	 * @param key
 	 */
-	@Operation(summary="获取验证码")
+	@Operation(summary="Lấy mã xác thực")
 	@GetMapping(value = "/randomImage/{key}")
 	public Result<String> randomImage(HttpServletResponse response,@PathVariable("key") String key){
 		Result<String> res = new Result<String>();
 		try {
-			//生成验证码，存到redis中
+			//Tạo mã xác minh, lưu vào redis
 			String code = RandomUtil.randomString(BASE_CHECK_CODES,4);
 			String lowerCaseCode = code.toLowerCase();
 			String keyPrefix = Md5Util.md5Encode(key + jeecgBaseConfig.getSignatureSecret(), "utf-8");
 			String realKey = keyPrefix + lowerCaseCode;
 			redisUtil.removeAll(keyPrefix);
 			redisUtil.set(realKey, lowerCaseCode, 60);
-			log.debug("获取验证码，Redis key = {}，checkCode = {}", realKey, code);
+			log.debug("Lấy mã xác minh，Redis key = {}，checkCode = {}", realKey, code);
 			String base64 = RandImageUtil.generate(code);
 			res.setSuccess(true);
 			res.setResult(base64);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			res.error500("获取验证码失败,请检查redis配置!");
+			res.error500("Lấy mã xác minh thất bại,Vui lòng kiểm tra cấu hình Redis!");
 			return res;
 		}
 		return res;
 	}
 
 //	/**
-//	 * 切换菜单表为vue3的表
+//	 * Chuyển bảng menu thành bảng của vue3
 //	 */
 //	@RequiresRoles({"admin"})
 //	@GetMapping(value = "/switchVue3Menu")
@@ -685,7 +685,7 @@ public class LoginController {
 //	}
 	
 	/**
-	 * app登录
+	 * app Đăng nhập
 	 * @param sysLoginModel
 	 * @return
 	 * @throws Exception
@@ -694,38 +694,38 @@ public class LoginController {
 	public Result<JSONObject> mLogin(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request) throws Exception {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String username = sysLoginModel.getUsername();
-		// 密码加密传输(尝试 AES解密，失败视为明文)
+		// Truyền mật khẩu đã mã hóa(Thử giải mã AES, thất bại thì coi là văn bản thuần)
 		String password  = AesEncryptUtil.resolvePassword(sysLoginModel.getPassword());
-		log.debug("登录密码，原始密码:{}，解密密码:{}" , sysLoginModel.getPassword(), password);
+		log.debug("Mật khẩu đăng nhập, mật khẩu gốc:{}, mật khẩu đã giải mã:{}" , sysLoginModel.getPassword(), password);
 
 		JSONObject obj = new JSONObject();
 		
-		// 1.平台用户登录失败锁定用户
+		// 1.Khóa người dùng khi người dùng nền tảng đăng nhập thất bại
 		if(isLoginFailOvertimes(username)){
-			return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
+			return result.error500("Người dùng này đã đăng nhập thất bại quá nhiều lần, vui lòng đăng nhập lại sau 10 phút!");
 		}
-		//update-begin---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】先校验密码再校验用户状态，用户不存在与密码错误统一提示并计入失败次数，防止用户枚举-----------
-		// 2.校验用户名或密码是否正确
+		//update-begin---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Kiểm tra mật khẩu trước rồi mới kiểm tra trạng thái người dùng; người dùng không tồn tại và mật khẩu sai dùng chung một thông báo và được tính vào số lần thất bại, ngăn liệt kê người dùng-----------
+		// 2.Kiểm tra tên người dùng hoặc mật khẩu có đúng hay không
 		SysUser sysUser = sysUserService.getUserByName(username);
 		if (!sysUserService.verifyLoginPassword(sysUser, username, password)) {
-			result.error500("用户名或密码错误");
+			result.error500("Tên người dùng hoặc mật khẩu sai");
 			return result;
 		}
 		String syspassword = sysUser.getPassword();
 
-		// 3.校验用户是否有效
+		// 3.Kiểm tra người dùng có hợp lệ không
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
 			return result;
 		}
-		//update-end---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】先校验密码再校验用户状态，用户不存在与密码错误统一提示并计入失败次数，防止用户枚举-----------
+		//update-end---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Kiểm tra mật khẩu trước rồi mới kiểm tra trạng thái người dùng; người dùng không tồn tại và mật khẩu sai dùng chung một thông báo và được tính vào số lần thất bại, ngăn liệt kê người dùng-----------
 		
-		//4.设置登录部门
+		//4.Đặt phòng ban đăng nhập
 		String orgCode = sysUser.getOrgCode();
-		//登录设置的组织
+		//Tổ chức được đặt khi đăng nhập
 		String loginOrgCode = sysLoginModel.getLoginOrgCode();
 		if(oConvertUtils.isEmpty(orgCode)) {
-			//如果当前用户无选择部门 查看部门关联信息
+			//Nếu người dùng hiện tại chưa chọn phòng ban thì xem thông tin liên kết phòng ban
 			if(oConvertUtils.isNotEmpty(loginOrgCode)){
 				sysUser.setOrgCode(loginOrgCode);
 				this.sysUserService.updateUserDepart(username, loginOrgCode,null);
@@ -744,15 +744,15 @@ public class LoginController {
 			}
 		}
 
-		//5. 设置登录租户
+		//5. Đặt tenant đăng nhập
 		Result<JSONObject> loginTenantError = sysUserService.setLoginTenant(sysUser, obj, username, result);
 		if (loginTenantError != null) {
 			return loginTenantError;
 		}
-		// 设置登录用户信息
+		// Đặt thông tin người dùng đăng nhập
 		obj.put("userInfo", sysUser);
 
-		//6. 生成token，并设置超时时间
+		//6. Tạo token và đặt thời gian timeout
 		String token = JwtUtil.sign(username, syspassword, CommonConstant.CLIENT_TYPE_APP);
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.APP_EXPIRE_TIME*2 / 1000);
@@ -761,16 +761,16 @@ public class LoginController {
 		result.setSuccess(true);
 		result.setCode(200);
 
-		// 7.是否允许同一账号多地同时登录(APP端登录，踢掉之前的APP端登录)
+		// 7.Có cho phép cùng một tài khoản đăng nhập đồng thời ở nhiều nơi không(APP đăng nhập ở đầu, đá phiên đăng nhập APP trước đó ra)
 		handleSingleSignOn(username, token, CommonConstant.CLIENT_TYPE_APP);
 		
-		// 8.登录成功记录日志
-		baseCommonService.addLog("用户名: " + username + ",登录成功[移动端]！", CommonConstant.LOG_TYPE_1, null);
+		// 8.Đăng nhập thành công, ghi nhật ký
+		baseCommonService.addLog("Tên người dùng: " + username + ",Đăng nhập thành công[Thiết bị di động]！", CommonConstant.LOG_TYPE_1, null);
 		return result;
 	}
 
 	/**
-	 * 图形验证码
+	 * Mã xác minh hình ảnh
 	 * @param sysLoginModel
 	 * @return
 	 */
@@ -779,68 +779,68 @@ public class LoginController {
 		String captcha = sysLoginModel.getCaptcha();
 		String checkKey = sysLoginModel.getCheckKey();
 		if(captcha==null){
-			return Result.error("验证码无效");
+			return Result.error("Mã xác minh không hợp lệ");
 		}
 		String lowerCaseCaptcha = captcha.toLowerCase();
 		String realKey = Md5Util.md5Encode(lowerCaseCaptcha+checkKey, "utf-8");
 		Object checkCode = redisUtil.get(realKey);
 		if(checkCode==null || !checkCode.equals(lowerCaseCaptcha)) {
-			return Result.error("验证码错误");
+			return Result.error("Mã xác minh không đúng");
 		}
 		return Result.ok();
 	}
 	/**
-	 * 登录二维码
+	 * Mã QR đăng nhập
 	 */
-	@Operation(summary = "登录二维码")
+	@Operation(summary = "Mã QR đăng nhập")
 	@GetMapping("/getLoginQrcode")
 	public Result<?>  getLoginQrcode() {
-		//update-begin---author:jeecg---for：【GHSA-gm36-7vvp-c5jh】qrcodeId 改用不可预测的随机串（原雪花ID可被枚举窃取他人token）---
+		//update-begin---author:jeecg---for：【GHSA-gm36-7vvp-c5jh] qrcodeId đổi sang dùng chuỗi ngẫu nhiên không thể đoán trước (ID tuyết hoa gốc có thể bị liệt kê để đánh cắp token của người khác)---
 		String qrcodeId = CommonConstant.LOGIN_QRCODE_PRE + java.util.UUID.randomUUID().toString().replace("-", "");
-		//update-end---author:jeecg---for：【GHSA-gm36-7vvp-c5jh】qrcodeId 改用不可预测的随机串---
-		//定义二维码参数
+		//update-end---author:jeecg---for：【GHSA-gm36-7vvp-c5jh] qrcodeId đổi sang dùng chuỗi ngẫu nhiên không thể dự đoán---
+		//Định nghĩa tham số mã QR
 		Map params = new HashMap(5);
 		params.put("qrcodeId", qrcodeId);
-		//存放二维码唯一标识30秒有效
+		//Lưu định danh duy nhất của mã QR, hiệu lực 30 giây
 		redisUtil.set(CommonConstant.LOGIN_QRCODE + qrcodeId, qrcodeId, 30);
 		return Result.OK(params);
 	}
 	/**
-	 * 扫码二维码
+	 * Quét mã QR
 	 */
-	@Operation(summary = "扫码登录二维码")
+	@Operation(summary = "Mã QR đăng nhập bằng quét mã")
 	@PostMapping("/scanLoginQrcode")
 	public Result<?> scanLoginQrcode(@RequestParam String qrcodeId, @RequestParam String token) {
 		Object check = redisUtil.get(CommonConstant.LOGIN_QRCODE + qrcodeId);
 		if (oConvertUtils.isNotEmpty(check)) {
-			//存放token给前台读取
+			//Lưu token để giao diện đọc
 			redisUtil.set(CommonConstant.LOGIN_QRCODE_TOKEN+qrcodeId, token, 60);
 		} else {
-			return Result.error("二维码已过期,请刷新后重试");
+			return Result.error("Mã QR đã hết hạn,Vui lòng làm mới rồi thử lại");
 		}
-		return Result.OK("扫码成功");
+		return Result.OK("Quét mã thành công");
 	}
 
 
 	/**
-	 * 获取用户扫码后保存的token
+	 * Lấy token đã lưu sau khi người dùng quét mã token
 	 */
-	@Operation(summary = "获取用户扫码后保存的token")
+	@Operation(summary = "Lấy token đã lưu sau khi người dùng quét mã token")
 	@GetMapping("/getQrcodeToken")
 	public Result getQrcodeToken(@RequestParam String qrcodeId) {
 		Object token = redisUtil.get(CommonConstant.LOGIN_QRCODE_TOKEN + qrcodeId);
 		Map result = new HashMap(5);
 		Object qrcodeIdExpire = redisUtil.get(CommonConstant.LOGIN_QRCODE + qrcodeId);
 		if (oConvertUtils.isEmpty(qrcodeIdExpire)) {
-			//二维码过期通知前台刷新
+			//Mã QR hết hạn, thông báo cho giao diện làm mới
 			result.put("token", "-2");
 			return Result.OK(result);
 		}
 		if (oConvertUtils.isNotEmpty(token)) {
-			//update-begin---author:jeecg---for：【GHSA-gm36-7vvp-c5jh】token 一次性读取，读到即删，防止被重复轮询窃取---
+			//update-begin---author:jeecg---for：【GHSA-gm36-7vvp-c5jh] Token chỉ đọc một lần, đọc được là xóa ngay, tránh bị đánh cắp do polling lặp lại---
 			redisUtil.del(CommonConstant.LOGIN_QRCODE_TOKEN + qrcodeId);
 			redisUtil.del(CommonConstant.LOGIN_QRCODE + qrcodeId);
-			//update-end---author:jeecg---for：【GHSA-gm36-7vvp-c5jh】token 一次性读取---
+			//update-end---author:jeecg---for：【GHSA-gm36-7vvp-c5jh】Đọc token một lần---
 			result.put("success", true);
 			result.put("token", token);
 		} else {
@@ -850,26 +850,26 @@ public class LoginController {
 	}
 
 	/**
-	 * 登录失败超出次数5 返回true
+	 * Đăng nhập thất bại vượt quá 5 lần, trả về true
 	 * @param username
 	 * @return
 	 */
-	//update-begin---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】失败计数逻辑移到service，与登录前查部门接口共用-----------
+	//update-begin---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Chuyển logic đếm số lần thất bại sang service, dùng chung với interface tra cứu phòng ban trước khi đăng nhập-----------
 	private boolean isLoginFailOvertimes(String username){
 		return sysUserService.isLoginFailOvertimes(username);
 	}
 
 	/**
-	 * 记录登录失败次数
+	 * Ghi số lần đăng nhập thất bại
 	 * @param username
 	 */
 	private void addLoginFailOvertimes(String username){
 		sysUserService.addLoginFailOvertimes(username);
 	}
-	//update-end---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】失败计数逻辑移到service，与登录前查部门接口共用-----------
+	//update-end---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Chuyển logic đếm số lần thất bại sang service, dùng chung với interface tra cứu phòng ban trước khi đăng nhập-----------
 
 	/**
-	 * 发送短信验证码接口(修改密码)
+	 * Giao diện gửi mã xác minh SMS(Đổi mật khẩu)
 	 *
 	 * @param jsonObject
 	 * @return
@@ -879,7 +879,7 @@ public class LoginController {
 		Result<String> result = new Result<>();
 		String mobile = jsonObject.get("mobile").toString();
 		if (oConvertUtils.isEmpty(mobile)) {
-			result.setMessage("手机号不允许为空！");
+			result.setMessage("Số điện thoại không được để trống!");
 			result.setSuccess(false);
 			return result;
 		}
@@ -889,40 +889,40 @@ public class LoginController {
 		query.eq(SysUser::getUsername, username).eq(SysUser::getPhone, mobile);
 		SysUser user = sysUserService.getOne(query);
 		if (null == user) {
-			return Result.error("当前登录用户和绑定的手机号不匹配，无法修改密码！");
+			return Result.error("Người dùng đang đăng nhập và số điện thoại đã liên kết không khớp, không thể đổi mật khẩu!");
 		}
 		String redisKey = CommonConstant.PHONE_REDIS_KEY_PRE + mobile;
 		Object object = redisUtil.get(redisKey);
 		if (object != null) {
-			result.setMessage("验证码10分钟内，仍然有效！");
+			result.setMessage("Mã xác minh vẫn còn hiệu lực trong 10 phút!");
 			result.setSuccess(false);
 			return result;
 		}
-		//update-begin---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流-----------
+		//update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-5qr3-c98m-9767】Thêm giới hạn theo số điện thoại-----------
 		if (!DySmsLimit.canSendSmsToPhone(mobile)) {
-			result.setMessage("短信发送过于频繁，请稍后再试！");
+			result.setMessage("Gửi SMS quá thường xuyên, vui lòng thử lại sau!");
 			result.setSuccess(false);
 			return result;
 		}
-		//update-end---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流-----------
-		//随机数
+		//update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-5qr3-c98m-9767】Thêm giới hạn theo số điện thoại-----------
+		//Số ngẫu nhiên
 		String captcha = RandomUtil.randomNumbers(6);
 		JSONObject obj = new JSONObject();
 		obj.put("code", captcha);
 		try {
 			boolean b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.CHANGE_PASSWORD_TEMPLATE_CODE);
 			if (!b) {
-				result.setMessage("短信验证码发送失败,请稍后重试");
+				result.setMessage("Gửi mã xác minh SMS thất bại,Vui lòng thử lại sau");
 				result.setSuccess(false);
 				return result;
 			}
-            //【issues/8567】严重：修改密码存在水平越权问题
+            //【issues/8567】Nghiêm trọng: sửa mật khẩu tồn tại vấn đề vượt quyền theo chiều ngang
             obj.put("username",username);
             redisUtil.set(redisKey, obj.toJSONString(), 300);
 			result.setSuccess(true);
 		} catch (ClientException e) {
 			e.printStackTrace();
-			result.error500(" 短信接口未配置，请联系管理员！");
+			result.error500(" Giao diện SMS chưa được cấu hình, vui lòng liên hệ quản trị viên!");
 			return result;
 		}
 		return result;
@@ -930,7 +930,7 @@ public class LoginController {
 
 	
 	/**
-	 * 图形验证码
+	 * Mã xác minh hình ảnh
 	 * @param sysLoginModel
 	 * @return
 	 */
@@ -939,22 +939,22 @@ public class LoginController {
 		String captcha = sysLoginModel.getCaptcha();
 		String checkKey = sysLoginModel.getCheckKey();
 		if(captcha==null){
-			return Result.error("验证码无效");
+			return Result.error("Mã xác minh không hợp lệ");
 		}
 		String lowerCaseCaptcha = captcha.toLowerCase();
 		String realKey = Md5Util.md5Encode(lowerCaseCaptcha+checkKey+jeecgBaseConfig.getSignatureSecret(), "utf-8");
 		Object checkCode = redisUtil.get(realKey);
 		if(checkCode==null || !checkCode.equals(lowerCaseCaptcha)) {
-			return Result.error("验证码错误");
+			return Result.error("Mã xác minh không đúng");
 		}
 		String clientIp = IpUtils.getIpAddr(request);
-		//清空短信记录数量
+		//Xóa số lượng bản ghi SMS
 		DySmsLimit.clearSendSmsCount(clientIp);
 		redisUtil.removeAll(realKey);
 		return Result.ok();
 	}
 	/**
-	 * 登录获取用户部门信息
+	 * Đăng nhập — Lấy thông tin phòng ban của người dùng
 	 *
 	 * @param jsonObject
 	 * @return
@@ -966,18 +966,18 @@ public class LoginController {
 	}
 	
 	/**
-     * 校验验证码工具方法，校验失败直接返回Result，校验通过返回realKey
+     * Phương thức tiện ích kiểm tra mã xác minh; kiểm tra thất bại thì trả về trực tiếp Result, kiểm tra thành công thì trả về realKey
      */
     private String validateCaptcha(SysLoginModel sysLoginModel, Result<JSONObject> result) {
-		// 判断是否启用登录验证码校验
+		// Xác định có bật kiểm tra mã xác minh đăng nhập hay không
 		if (jeecgBaseConfig.getFirewall() != null && Boolean.FALSE.equals(jeecgBaseConfig.getFirewall().getEnableLoginCaptcha())) {
-			log.warn("关闭了登录验证码校验，跳过验证码校验！");
+			log.warn("Đã tắt kiểm tra mã xác minh đăng nhập, bỏ qua kiểm tra mã xác minh!");
 			return "LoginWithoutVerifyCode";
 		}
 		
         String captcha = sysLoginModel.getCaptcha();
         if (captcha == null) {
-            result.error500("验证码无效");
+            result.error500("Mã xác minh không hợp lệ");
             return null;
         }
         String lowerCaseCaptcha = captcha.toLowerCase();
@@ -985,14 +985,14 @@ public class LoginController {
         String realKey = keyPrefix + lowerCaseCaptcha;
         Object checkCode = redisUtil.get(realKey);
         if (checkCode == null || !checkCode.toString().equals(lowerCaseCaptcha)) {
-            log.warn("验证码错误，key= {} , Ui checkCode= {}, Redis checkCode = {}", sysLoginModel.getCheckKey(), lowerCaseCaptcha, checkCode);
-            result.error500("验证码错误");
+            log.warn("Mã xác minh không đúng，key= {} , Ui checkCode= {}, Redis checkCode = {}", sysLoginModel.getCheckKey(), lowerCaseCaptcha, checkCode);
+            result.error500("Mã xác minh không đúng");
             result.setCode(HttpStatus.PRECONDITION_FAILED.value());
             return null;
         }
-        //update-begin---author:scott ---date:20261013  for：【安全】图形验证码校验通过后立即作废（一次一用），防止同一验证码被反复用于尝试登录-----------
+        //update-begin---author:scott ---date:20261013  for: [Bảo mật] Sau khi mã xác minh hình ảnh được kiểm tra thành công thì hủy ngay (dùng một lần), ngăn cùng một mã xác minh bị dùng lặp lại để thử đăng nhập-----------
         redisUtil.del(realKey);
-        //update-end---author:scott ---date:20261013  for：【安全】图形验证码校验通过后立即作废（一次一用），防止同一验证码被反复用于尝试登录-----------
+        //update-end---author:scott ---date:20261013  for: [Bảo mật] Sau khi mã xác minh hình ảnh được kiểm tra thành công thì hủy ngay (dùng một lần), ngăn cùng một mã xác minh bị dùng lặp lại để thử đăng nhập-----------
         return realKey;
     }
 }

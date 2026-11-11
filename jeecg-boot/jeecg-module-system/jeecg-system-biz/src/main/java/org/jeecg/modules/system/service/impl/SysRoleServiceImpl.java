@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * <p>
- * 角色表 服务实现类
+ * Bảng vai trò Lớp triển khai Service
  * </p>
  *
  * @Author scott
@@ -55,20 +55,20 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         int totalCount = listSysRoles.size();
         List<String> errorStrs = new ArrayList<>();
 
-        // 去除 listSysRoles 中重复的数据
+        // Loại bỏ dữ liệu trùng lặp trong listSysRoles
         for (int i = 0; i < listSysRoles.size(); i++) {
             String roleCodeI =((SysRole)listSysRoles.get(i)).getRoleCode();
             for (int j = i + 1; j < listSysRoles.size(); j++) {
                 String roleCodeJ =((SysRole)listSysRoles.get(j)).getRoleCode();
-                // 发现重复数据
+                // Phát hiện dữ liệu trùng lặp
                 if (roleCodeI.equals(roleCodeJ)) {
-                    errorStrs.add("第 " + (j + 1) + " 行的 roleCode 值：" + roleCodeI + " 已存在，忽略导入");
+                    errorStrs.add(" " + (j + 1) + " Giá trị roleCode của dòng:" + roleCodeI + " Đã tồn tại, bỏ qua khi nhập");
                     listSysRoles.remove(j);
                     break;
                 }
             }
         }
-        // 去掉 sql 中的重复数据
+        // Loại bỏ dữ liệu trùng lặp trong sql
         Integer errorLines=0;
         Integer successLines=0;
         List<String> list = ImportExcelUtil.importDateSave(listSysRoles, ISysRoleService.class, errorStrs, CommonConstant.SQL_INDEX_UNIQ_SYS_ROLE_CODE);
@@ -80,11 +80,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteRole(String roleid) {
-        //1.删除角色和用户关系
+        //1.Xóa quan hệ vai trò và người dùng
         sysRoleMapper.deleteRoleUserRelation(roleid);
-        //2.删除角色和权限关系
+        //2.Xóa quan hệ vai trò và quyền hạn
         sysRoleMapper.deleteRolePermissionRelation(roleid);
-        //3.删除角色
+        //3.Xóa vai trò
         this.removeById(roleid);
         return true;
     }
@@ -92,11 +92,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteBatchRole(String[] roleIds) {
-        //1.删除角色和用户关系
+        //1.Xóa quan hệ vai trò và người dùng
         sysUserMapper.deleteBathRoleUserRelation(roleIds);
-        //2.删除角色和权限关系
+        //2.Xóa quan hệ vai trò và quyền hạn
         sysUserMapper.deleteBathRolePermissionRelation(roleIds);
-        //3.删除角色
+        //3.Xóa vai trò
         this.removeByIds(Arrays.asList(roleIds));
         return true;
     }
@@ -113,7 +113,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         query.eq(SysRole::getRoleCode,"admin");
         Long adminRoleCount = sysRoleMapper.selectCount(query);
         if(adminRoleCount>0){
-            throw new JeecgBootException("admin角色，不允许删除！");
+            throw new JeecgBootException("admin vai trò, không được phép xóa!");
         }
     }
 }

@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * @Description: 部门角色权限
+ * @Description: Quyền vai trò phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-12
  * @Version: V1.0
@@ -32,9 +32,9 @@ public class SysDepartRolePermissionServiceImpl extends ServiceImpl<SysDepartRol
     public void saveDeptRolePermission(String roleId, String permissionIds, String lastPermissionIds) {
         String ip = "";
         try {
-            //获取request
+            //Lấy request
             HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
-            //获取IP地址
+            //Lấy địa chỉ IP
             ip = IpUtils.getIpAddr(request);
         } catch (Exception e) {
             ip = "127.0.0.1";
@@ -59,13 +59,13 @@ public class SysDepartRolePermissionServiceImpl extends ServiceImpl<SysDepartRol
                 this.remove(new QueryWrapper<SysDepartRolePermission>().lambda().eq(SysDepartRolePermission::getRoleId, roleId).eq(SysDepartRolePermission::getPermissionId, permissionId));
             }
         }
-        //update-begin---author:scott ---date:20261029  for：【LHZP-1129】部门角色授权后清理相关用户Shiro权限缓存，无需重新登录即生效-----------
+        //update-begin---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò phòng ban, dọn cache quyền Shiro của người dùng liên quan, có hiệu lực ngay mà không cần đăng nhập lại-----------
         sysDepartRoleUserService.clearDeptRoleUserAuthCache(roleId);
-        //update-end---author:scott ---date:20261029  for：【LHZP-1129】部门角色授权后清理相关用户Shiro权限缓存，无需重新登录即生效-----------
+        //update-end---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò phòng ban, dọn cache quyền Shiro của người dùng liên quan, có hiệu lực ngay mà không cần đăng nhập lại-----------
     }
 
     /**
-     * 从diff中找出main中没有的元素
+     * Tìm các phần tử có trong diff nhưng không có trong main
      * @param main
      * @param diff
      * @return

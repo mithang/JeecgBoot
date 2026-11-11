@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 字典表 服务类
+ * Bảng danh mục - Lớp dịch vụ
  * </p>
  *
  * @Author zhangweijian
@@ -23,7 +23,7 @@ import java.util.Map;
 public interface ISysDictService extends IService<SysDict> {
 
 	/**
-	 *  校验数据是否可用，不存在重复数据
+	 *  Kiểm tra dữ liệu có khả dụng không, không tồn tại dữ liệu trùng lặp
 	 *  
 	 * @param duplicateCheckVo
 	 * @return
@@ -32,50 +32,50 @@ public interface ISysDictService extends IService<SysDict> {
 	public boolean duplicateCheckData(DuplicateCheckVo duplicateCheckVo);
 
     /**
-     * 通过字典code获取字典数据
+     * Lấy dữ liệu danh mục qua code danh mục
      * @param code
      * @return
      */
     public List<DictModel> queryDictItemsByCode(String code);
 
 	/**
-	 * 查询有效的数据字典项
+	 * Truy vấn mục danh mục dữ liệu hợp lệ
 	 * @param code
 	 * @return
 	 */
 	List<DictModel> queryEnableDictItemsByCode(String code);
 
 	/**
-	 * 通过多个字典code获取字典数据
+	 * Lấy dữ liệu danh mục qua nhiều code danh mục
 	 *
 	 * @param dictCodeList
-	 * @return key = 字典code，value=对应的字典选项
+	 * @return key = mã danh mục,value=các tùy chọn danh mục tương ứng
 	 */
 	Map<String, List<DictModel>> queryDictItemsByCodeList(List<String> dictCodeList);
 
     /**
-     * 登录加载系统字典
+     * Đăng nhập tải danh mục hệ thống
      * @return
      */
     public Map<String,List<DictModel>> queryAllDictItems();
 
     /**
-     * 获取系统字典版本号（前端据此判断本地字典缓存是否过期）
+     * Lấy số phiên bản từ điển hệ thống (frontend dựa vào đó để xác định bộ nhớ đệm từ điển local có hết hạn hay không)
      * @return
      * @author scott
-     * @since 2026-10-13 【issues/9838】管理员修改字典后，其他用户刷新页面自动同步最新字典
+     * @since 2026-10-13 【issues/9838] Sau khi quản trị viên sửa từ điển, người dùng khác làm mới trang sẽ tự động đồng bộ từ điển mới nhất
      */
     String getDictVersion();
 
     /**
-     * 刷新系统字典版本号（字典或字典项变更后调用）
+     * Làm mới số phiên bản danh mục hệ thống (gọi sau khi danh mục hoặc mục danh mục thay đổi)
      * @author scott
-     * @since 2026-10-13 【issues/9838】管理员修改字典后，其他用户刷新页面自动同步最新字典
+     * @since 2026-10-13 【issues/9838] Sau khi quản trị viên sửa từ điển, người dùng khác làm mới trang sẽ tự động đồng bộ từ điển mới nhất
      */
     void refreshDictVersion();
 
     /**
-     * 查通过查询指定table的 text code 获取字典
+     * Truy vấn từ điển bằng cách truy vấn text code của table được chỉ định
      * @param tableFilterSql
      * @param text
      * @param code
@@ -85,7 +85,7 @@ public interface ISysDictService extends IService<SysDict> {
     List<DictModel> queryTableDictItemsByCode(String tableFilterSql, String text, String code);
 
     /**
-     * 通过查询指定table的 text code 获取字典（指定查询条件）
+     * Lấy danh mục bằng cách truy vấn text, code của table được chỉ định (chỉ định điều kiện truy vấn)
      * @param table
      * @param text
      * @param code
@@ -96,7 +96,7 @@ public interface ISysDictService extends IService<SysDict> {
 	public List<DictModel> queryTableDictItemsByCodeAndFilter(String table, String text, String code, String filterSql);
 
     /**
-     * 通过字典code及字典项的value获取字典文本
+     * Lấy văn bản từ điển theo code từ điển và value của mục từ điển
      * @param code
      * @param key
      * @return
@@ -104,15 +104,15 @@ public interface ISysDictService extends IService<SysDict> {
     public String queryDictTextByKey(String code, String key);
 
 	/**
-	 * 可通过多个字典code查询翻译文本
-	 * @param dictCodeList 多个字典code
-	 * @param keys 数据列表
+	 * Có thể truy vấn văn bản dịch qua nhiều code danh mục
+	 * @param dictCodeList Nhiều danh mục code
+	 * @param keys Danh sách dữ liệu
 	 * @return
 	 */
 	Map<String, List<DictModel>> queryManyDictByKeys(List<String> dictCodeList, List<String> keys);
 
     /**
-     * 通过查询指定table的 text code key 获取字典值
+     * Lấy giá trị danh mục bằng cách truy vấn text, code, key của table được chỉ định
      * @param table
      * @param text
      * @param code
@@ -123,20 +123,20 @@ public interface ISysDictService extends IService<SysDict> {
 	String queryTableDictTextByKey(String table, String text, String code, String key);
 
 	/**
-	 * 通过查询指定table的 text code key 获取字典值，可批量查询
+	 * Lấy giá trị danh mục bằng cách truy vấn text, code, key của table được chỉ định, có thể truy vấn hàng loạt
 	 *
 	 * @param table
 	 * @param text
 	 * @param code
 	 * @param keys
-	 * @param dataSource 数据源
+	 * @param dataSource Nguồn dữ liệu
 	 * @return
 	 */
 	List<DictModel> queryTableDictTextByKeys(String table, String text, String code, List<String> keys, String dataSource);
 
     /**
-     * 通过查询指定table的 text code key 获取字典值，包含value
-     * @param table 表名
+     * Lấy giá trị danh mục bằng cách truy vấn text, code, key của table được chỉ định, bao gồm value
+     * @param table Tên bảng
      * @param text
      * @param code
      * @param keys
@@ -146,7 +146,7 @@ public interface ISysDictService extends IService<SysDict> {
 	List<String> queryTableDictByKeys(String table, String text, String code, String keys);
 
     /**
-     * 通过查询指定table的 text code key 获取字典值，包含value
+     * Lấy giá trị danh mục bằng cách truy vấn text, code, key của table được chỉ định, bao gồm value
      * @param table
      * @param text
      * @param code
@@ -158,7 +158,7 @@ public interface ISysDictService extends IService<SysDict> {
 	List<String> queryTableDictByKeys(String table, String text, String code, String keys,boolean delNotExist);
 
     /**
-     * 根据字典类型删除关联表中其对应的数据
+     * Theo loại danh mục, xóa dữ liệu tương ứng của nó trong bảng liên kết
      *
      * @param sysDict
      * @return
@@ -166,7 +166,7 @@ public interface ISysDictService extends IService<SysDict> {
     boolean deleteByDictId(SysDict sysDict);
 
     /**
-     * 添加一对多
+     * Thêm một-nhiều
      * @param sysDict
      * @param sysDictItemList
      * @return Integer
@@ -174,19 +174,19 @@ public interface ISysDictService extends IService<SysDict> {
     public Integer saveMain(SysDict sysDict, List<SysDictItem> sysDictItemList);
 
     /**
-	 * 查询所有部门 作为字典信息 id -->value,departName -->text
+	 * Truy vấn tất cả phòng ban làm thông tin danh mục id -->value,departName -->text
 	 * @return
 	 */
 	public List<DictModel> queryAllDepartBackDictModel();
 
 	/**
-	 * 查询所有用户  作为字典信息 username -->value,realname -->text
+	 * Truy vấn tất cả người dùng làm thông tin danh mục username -->value,realname -->text
 	 * @return
 	 */
 	public List<DictModel> queryAllUserBackDictModel();
 
 //	/**
-//	 * 通过关键字查询字典表
+//	 * Truy vấn bảng danh mục theo từ khóa
 //	 * @param table
 //	 * @param text
 //	 * @param code
@@ -197,20 +197,20 @@ public interface ISysDictService extends IService<SysDict> {
 //	public List<DictModel> queryTableDictItems(String table, String text, String code,String keyword);
 
 	/**
-	 * 查询字典表数据 只查询前10条
+	 * Truy vấn dữ liệu bảng danh mục, chỉ truy vấn 10 bản ghi đầu
 	 * @param table
 	 * @param text
 	 * @param code
 	 * @param keyword
      * @param condition
-     * @param pageSize 每页条数
+     * @param pageSize Số bản ghi mỗi trang
 	 * @return
 	 */
 	@Deprecated
 	public List<DictModel> queryLittleTableDictItems(String table, String text, String code, String condition, String keyword, int pageNo, int pageSize);
 
 	/**
-	 * 查询字典表所有数据
+	 * Truy vấn tất cả dữ liệu bảng danh mục
 	 * @param table
 	 * @param text
 	 * @param code
@@ -221,7 +221,7 @@ public interface ISysDictService extends IService<SysDict> {
 	@Deprecated
 	public List<DictModel> queryAllTableDictItems(String table, String text, String code, String condition, String keyword);
 	/**
-	  * 根据表名、显示字段名、存储字段名 查询树
+	  * Truy vấn cây theo tên bảng, tên trường hiển thị, tên trường lưu trữ
 	 * @param table
 	 * @param text
 	 * @param code
@@ -235,26 +235,26 @@ public interface ISysDictService extends IService<SysDict> {
 	List<TreeSelectModel> queryTreeList(Map<String, String> query,String table, String text, String code, String pidField,String pid,String hasChildField,int converIsLeafVal);
 
 	/**
-	 * 真实删除
+	 * Xóa thực sự
 	 * @param id
 	 */
 	public void deleteOneDictPhysically(String id);
 
 	/**
-	 * 修改delFlag
+	 * Sửa delFlag
 	 * @param delFlag
 	 * @param id
 	 */
 	public void updateDictDelFlag(int delFlag,String id);
 
 	/**
-	 * 查询被逻辑删除的数据
+	 * Truy vấn dữ liệu đã bị xóa logic
 	 * @return
 	 */
 	public List<SysDict> queryDeleteList(String tenantId);
 
 	/**
-	 * 分页查询
+	 * Truy vấn phân trang
 	 * @param query
 	 * @param pageSize
 	 * @param pageNo
@@ -264,70 +264,70 @@ public interface ISysDictService extends IService<SysDict> {
 	public List<DictModel> queryDictTablePageList(DictQuery query,int pageSize, int pageNo);
 
     /**
-     * 获取字典数据
-     * @param dictCode 字典code
-     * @param dictCode 表名,文本字段,code字段  | 举例：sys_user,realname,id
+     * Lấy dữ liệu danh mục
+     * @param dictCode Từ điển code
+     * @param dictCode Tên bảng,Trường văn bản,code Trường  | Ví dụ:sys_user,realname,id
      * @return
      */
     List<DictModel> getDictItems(String dictCode);
 
     /**
-     * 【JSearchSelectTag下拉搜索组件专用接口】
-     * 大数据量的字典表 走异步加载  即前端输入内容过滤数据
+     * [Interface chuyên dụng cho component tìm kiếm thả xuống JSearchSelectTag]
+     * Bảng từ điển có lượng dữ liệu lớn sẽ tải bất đồng bộ, tức là frontend nhập nội dung để lọc dữ liệu
      *
-     * @param dictCode 字典code格式：table,text,code
+     * @param dictCode Định dạng code từ điển:table,text,code
      * @param keyword
      * @param pageNo
-     * @param pageSize 每页条数
+     * @param pageSize Số bản ghi mỗi trang
      * @return
      */
     List<DictModel> loadDict(String dictCode, String keyword, Integer pageNo, Integer pageSize);
 
 	/**
-	 * 根据应用id获取字典列表和详情
+	 * Lấy danh sách và chi tiết danh mục theo id ứng dụng
 	 * @param lowAppId
 	 * @return
 	 */
 	List<SysDictVo> getDictListByLowAppId(String lowAppId);
 
 	/**
-	 * 创建字典
+	 * Tạo danh mục
 	 * @param sysDictVo
 	 */
 	String addDictByLowAppId(SysDictVo sysDictVo);
 
 	/**
-	 * 编辑字典
+	 * Chỉnh sửa danh mục
 	 * @param sysDictVo
 	 */
 	void editDictByLowAppId(SysDictVo sysDictVo);
 
 	/**
-	 * 还原逻辑删除
+	 * Khôi phục xóa logic
 	 * @param ids
 	 */
 	boolean revertLogicDeleted(List<String> ids);
 
 	/**
-	 * 彻底删除数据
+	 * Xóa hoàn toàn dữ liệu
 	 * @param ids
 	 */
 	boolean removeLogicDeleted(List<String> ids);
 
 	/**
-	 * 关联记录专用：多字段分页查询任意数据库表数据（一次请求返回所有指定字段）
+	 * Chuyên dùng cho bản ghi liên kết: truy vấn phân trang nhiều trường đối với dữ liệu của bất kỳ bảng cơ sở dữ liệu nào (một lần yêu cầu trả về tất cả các trường được chỉ định)
 	 *
-	 * @param tableName    表名
-	 * @param showFields   展示字段，逗号分隔，如 realname,username,avater
-	 * @param valueField   值字段，如 id
-	 * @param keyword      关键词搜索（可为 null）
-	 * @param keyValues    按 valueField 精确查找的值，逗号分隔（用于回显，可为 null）
-	 * @param pageNo       页码
-	 * @param pageSize     每页大小
-	 * @return 包含 records（List<Map>）和 total、size、current 的 Map
+	 * @param tableName    Tên bảng
+	 * @param showFields   Các trường hiển thị, phân tách bằng dấu phẩy, ví dụ realname,username,avater
+	 * @param valueField   Trường giá trị, ví dụ id
+	 * @param keyword      Tìm kiếm theo từ khóa (có thể là null)
+	 * @param keyValues    Giá trị tra cứu chính xác theo valueField, phân tách bằng dấu phẩy (dùng để hiển thị lại, có thể null)
+	 * @param pageNo       Số trang
+	 * @param pageSize     Kích thước mỗi trang
+	 * @return Bao gồm records (List<Map>) và total, size, current Map
 	 */
-	//update-begin---author:liusq ---date:2026-05-27  for：【优化】去掉无用参数searchFields、condition-----------
+	//update-begin---author:liusq ---date:2026-05-27  for: [Tối ưu] Bỏ tham số vô dụng searchFields,condition-----------
 	Map<String, Object> queryTableDataForLinkRecord(String tableName, String showFields, String valueField,
 		String keyword, String keyValues, Integer pageNo, Integer pageSize);
-	//update-end---author:liusq ---date:2026-05-27  for：【优化】去掉无用参数searchFields、condition-----------
+	//update-end---author:liusq ---date:2026-05-27  for: [Tối ưu] Bỏ tham số vô dụng searchFields,condition-----------
 }

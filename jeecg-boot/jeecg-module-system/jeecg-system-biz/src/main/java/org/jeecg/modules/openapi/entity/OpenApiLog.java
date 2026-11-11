@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 调用记录表
+ * Bảng ghi nhật ký gọi
  * @date 2024/12/10 9:41
  */
 @Data
@@ -26,69 +26,69 @@ public class OpenApiLog implements Serializable {
     private String id;
 
     /**
-     * 接口ID
+     * API ID
      */
     private String apiId;
 
     /**
-     * 调用ID
+     * Gọi ID
      */
     private String callAuthId;
 
     /**
-     * 调用者AK
+     * Người gọi AK
      */
     private String callerAk;
 
     /**
-     * 请求路径
+     * Đường dẫn yêu cầu
      */
     private String requestPath;
 
     /**
-     * 来源IP
+     * Nguồn IP
      */
     private String ip;
 
     /**
-     * HTTP 请求方式（GET/POST/PUT/DELETE 等）
+     * HTTP Phương thức yêu cầu (GET/POST/PUT/DELETE v.v.)
      */
     private String requestMethod;
 
     /**
-     * 请求参数摘要（Query String，最多500字符）
+     * Tóm tắt tham số yêu cầu (Query String, tối đa 500 ký tự)
      */
     private String requestParams;
 
     /**
-     * 响应状态码
+     * Mã trạng thái phản hồi
      */
     private Integer responseCode;
 
     /**
-     * 失败原因（认证/授权异常时的错误描述）
+     * Nguyên nhân thất bại (xác thực/mô tả lỗi khi xảy ra ngoại lệ ủy quyền)
      */
     private String errorMsg;
 
     /**
-     * 调用时间
+     * Thời gian gọi
      */
     private Date callTime;
 
     /**
-     * 耗时
+     * Thời gian tốn
      */
     private Long usedTime;
 
     /**
-     * 响应时间
+     * Thời gian phản hồi
      */
     private Date responseTime;
 
-    //update-begin---author:jeecg ---date:2026-05-27  for：【增加header日志记录】保存请求Header信息-----------
+    //update-begin---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Lưu thông tin Header của yêu cầu-----------
     /**
-     * 请求头信息（JSON格式，最多2000字符）
+     * Thông tin header yêu cầu (định dạng JSON, tối đa 2000 ký tự)
      */
     private String requestHeaders;
-    //update-end---author:jeecg ---date:2026-05-27  for：【增加header日志记录】保存请求Header信息-----------
+    //update-end---author:jeecg ---date:2026-05-27  for: [Thêm ghi log header] Lưu thông tin Header của yêu cầu-----------
 }

@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 定时任务在线管理
+ * @Description: Quản lý trực tuyến tác vụ định kỳ
  * @Author: jeecg-boot
  * @Date: 2019-01-02
  * @Version:V1.0
@@ -48,7 +48,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys/quartzJob")
 @Slf4j
-@Tag(name = "定时任务接口")
+@Tag(name = "Giao diện nhiệm vụ định kỳ")
 public class QuartzJobController {
 	@Autowired
 	private IQuartzJobService quartzJobService;
@@ -56,7 +56,7 @@ public class QuartzJobController {
 	private Scheduler scheduler;
 
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 * 
 	 * @param quartzJob
 	 * @param pageNo
@@ -75,7 +75,7 @@ public class QuartzJobController {
 	}
 
 	/**
-	 * 添加定时任务
+	 * Thêm nhiệm vụ định kỳ
 	 * 
 	 * @param quartzJob
 	 * @return
@@ -85,11 +85,11 @@ public class QuartzJobController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public Result<?> add(@RequestBody QuartzJob quartzJob) {
 		quartzJobService.saveAndScheduleJob(quartzJob);
-		return Result.ok("创建定时任务成功");
+		return Result.ok("Tạo tác vụ định kỳ thành công");
 	}
 
 	/**
-	 * 更新定时任务
+	 * Cập nhật nhiệm vụ định kỳ
 	 * 
 	 * @param quartzJob
 	 * @return
@@ -102,13 +102,13 @@ public class QuartzJobController {
 			quartzJobService.editAndScheduleJob(quartzJob);
 		} catch (SchedulerException e) {
 			log.error(e.getMessage(),e);
-			return Result.error("更新定时任务失败!");
+			return Result.error("Cập nhật tác vụ định kỳ thất bại!");
 		}
-	    return Result.ok("更新定时任务成功!");
+	    return Result.ok("Cập nhật tác vụ định kỳ thành công!");
 	}
 
 	/**
-	 * 通过id删除
+	 * Xóa theo id
 	 * 
 	 * @param id
 	 * @return
@@ -119,15 +119,15 @@ public class QuartzJobController {
 	public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
 		QuartzJob quartzJob = quartzJobService.getById(id);
 		if (quartzJob == null) {
-			return Result.error("未找到对应实体");
+			return Result.error("Không tìm thấy thực thể tương ứng");
 		}
 		quartzJobService.deleteAndStopJob(quartzJob);
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
 
 	}
 
 	/**
-	 * 批量删除
+	 * Xóa hàng loạt
 	 * 
 	 * @param ids
 	 * @return
@@ -137,17 +137,17 @@ public class QuartzJobController {
 	@RequestMapping(value = "/deleteBatch", method = RequestMethod.DELETE)
 	public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
 		if (ids == null || "".equals(ids.trim())) {
-			return Result.error("参数不识别！");
+			return Result.error("Không nhận dạng được tham số!");
 		}
 		for (String id : Arrays.asList(ids.split(SymbolConstant.COMMA))) {
 			QuartzJob job = quartzJobService.getById(id);
 			quartzJobService.deleteAndStopJob(job);
 		}
-        return Result.ok("删除定时任务成功!");
+        return Result.ok("Xóa tác vụ định kỳ thành công!");
 	}
 
 	/**
-	 * 暂停定时任务
+	 * Tạm dừng nhiệm vụ định kỳ
 	 * 
 	 * @param id
 	 * @return
@@ -155,18 +155,18 @@ public class QuartzJobController {
 	//@RequiresRoles("admin")
     @RequiresPermissions("system:quartzJob:pause")
 	@GetMapping(value = "/pause")
-	@Operation(summary = "停止定时任务")
+	@Operation(summary = "Dừng nhiệm vụ định kỳ")
 	public Result<Object> pauseJob(@RequestParam(name = "id") String id) {
 		QuartzJob job = quartzJobService.getById(id);
 		if (job == null) {
-			return Result.error("定时任务不存在！");
+			return Result.error("Tác vụ định kỳ không tồn tại!");
 		}
 		quartzJobService.pause(job);
-		return Result.ok("停止定时任务成功");
+		return Result.ok("Dừng nhiệm vụ định kỳ thành công");
 	}
 
 	/**
-	 * 启动定时任务
+	 * Khởi động nhiệm vụ định kỳ
 	 * 
 	 * @param id
 	 * @return
@@ -174,19 +174,19 @@ public class QuartzJobController {
 	//@RequiresRoles("admin")
     @RequiresPermissions("system:quartzJob:resume")
 	@GetMapping(value = "/resume")
-	@Operation(summary = "启动定时任务")
+	@Operation(summary = "Khởi động nhiệm vụ định kỳ")
 	public Result<Object> resumeJob(@RequestParam(name = "id") String id) {
 		QuartzJob job = quartzJobService.getById(id);
 		if (job == null) {
-			return Result.error("定时任务不存在！");
+			return Result.error("Tác vụ định kỳ không tồn tại!");
 		}
 		quartzJobService.resumeJob(job);
 		//scheduler.resumeJob(JobKey.jobKey(job.getJobClassName().trim()));
-		return Result.ok("启动定时任务成功");
+		return Result.ok("Khởi động tác vụ định kỳ thành công");
 	}
 
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 * 
 	 * @param id
 	 * @return
@@ -198,7 +198,7 @@ public class QuartzJobController {
 	}
 
 	/**
-	 * 导出excel
+	 * Xuất excel
 	 * 
 	 * @param request
 	 * @param quartzJob
@@ -206,29 +206,29 @@ public class QuartzJobController {
     @RequiresPermissions("system:quartzJob:exportXls")
 	@RequestMapping(value = "/exportXls")
 	public ModelAndView exportXls(HttpServletRequest request, QuartzJob quartzJob) {
-		// Step.1 组装查询条件
+		// Step.1 Lắp ráp điều kiện truy vấn
 		QueryWrapper<QuartzJob> queryWrapper = QueryGenerator.initQueryWrapper(quartzJob, request.getParameterMap());
-		// 过滤选中数据
+		// Lọc dữ liệu đã chọn
 		String selections = request.getParameter("selections");
 		if (oConvertUtils.isNotEmpty(selections)) {
 			List<String> selectionList = Arrays.asList(selections.split(","));
 			queryWrapper.in("id",selectionList);
 		}
-		// Step.2 AutoPoi 导出Excel
+		// Step.2 AutoPoi Xuất Excel
 		ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
 		List<QuartzJob> pageList = quartzJobService.list(queryWrapper);
-		// 导出文件名称
-		mv.addObject(NormalExcelConstants.FILE_NAME, "定时任务列表");
+		// Tên file xuất
+		mv.addObject(NormalExcelConstants.FILE_NAME, "Danh sách tác vụ định kỳ");
 		mv.addObject(NormalExcelConstants.CLASS, QuartzJob.class);
-        //获取当前登录用户
+        //Lấy người dùng đang đăng nhập
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-		mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("定时任务列表数据", "导出人:"+user.getRealname(), "导出信息"));
+		mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("Dữ liệu danh sách tác vụ định kỳ", "Người xuất:"+user.getRealname(), "Thông tin xuất"));
         mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
 		return mv;
 	}
 
 	/**
-	 * 通过excel导入数据
+	 * Nhập dữ liệu qua Excel
 	 * 
 	 * @param request
 	 * @param response
@@ -239,11 +239,11 @@ public class QuartzJobController {
 	public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-		// 错误信息
+		// Thông tin lỗi
 		List<String> errorMessage = new ArrayList<>();
 		int successLines = 0, errorLines = 0;
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
 			MultipartFile file = entity.getValue();
 			ImportParams params = new ImportParams();
 			params.setTitleRows(2);
@@ -251,17 +251,17 @@ public class QuartzJobController {
 			params.setNeedSave(true);
 			try {
 				List<QuartzJob> listQuartzJobs = ExcelImportUtil.importExcel(file.getInputStream(), QuartzJob.class, params);
-				//add-begin-author:taoyan date:20210909 for:导入定时任务，并不会被启动和调度，需要手动点击启动，才会加入调度任务中 #2986
+				//add-begin-author:taoyan date:20210909 for:Import tác vụ định kỳ sẽ không được khởi động và lập lịch, cần bấm khởi động thủ công mới được đưa vào tác vụ lập lịch #2986
 				for(QuartzJob job: listQuartzJobs){
 					job.setStatus(CommonConstant.STATUS_DISABLE);
 				}
 				List<String> list = ImportExcelUtil.importDateSave(listQuartzJobs, IQuartzJobService.class, errorMessage,CommonConstant.SQL_INDEX_UNIQ_JOB_CLASS_NAME);
-				//add-end-author:taoyan date:20210909 for:导入定时任务，并不会被启动和调度，需要手动点击启动，才会加入调度任务中 #2986
+				//add-end-author:taoyan date:20210909 for:Import tác vụ định kỳ sẽ không được khởi động và lập lịch, cần bấm khởi động thủ công mới được đưa vào tác vụ lập lịch #2986
 				errorLines+=list.size();
 				successLines+=(listQuartzJobs.size()-errorLines);
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				return Result.error("文件导入失败！");
+				return Result.error("Nhập tệp thất bại!");
 			} finally {
 				try {
 					file.getInputStream().close();
@@ -274,7 +274,7 @@ public class QuartzJobController {
 	}
 
 	/**
-	 * 立即执行
+	 * Thực thi ngay
 	 * @param id
 	 * @return
 	 */
@@ -284,16 +284,16 @@ public class QuartzJobController {
 	public Result<?> execute(@RequestParam(name = "id", required = true) String id) {
 		QuartzJob quartzJob = quartzJobService.getById(id);
 		if (quartzJob == null) {
-			return Result.error("未找到对应实体");
+			return Result.error("Không tìm thấy thực thể tương ứng");
 		}
 		try {
 			quartzJobService.execute(quartzJob);
 		} catch (Exception e) {
 			//e.printStackTrace();
-			log.info("定时任务 立即执行失败>>"+e.getMessage());
-			return Result.error("执行失败!");
+			log.info("Tác vụ định kỳ thực thi ngay thất bại>>"+e.getMessage());
+			return Result.error("Thực thi thất bại!");
 		}
-		return Result.ok("执行成功!");
+		return Result.ok("Thực thi thành công!");
 	}
 
 }

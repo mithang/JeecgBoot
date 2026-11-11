@@ -3,7 +3,7 @@ package org.jeecg.modules.system.vo.tenant;
 import lombok.Data;
 
 /**
- * 租户产品包 关联权限详情
+ * Chi tiết quyền hạn liên kết của gói sản phẩm Tenant
  * @Author taoYan
  * @Date 2023/2/16 21:02
  **/
@@ -11,18 +11,18 @@ import lombok.Data;
 public class TenantPackAuth {
 
     /**
-     * 一级菜单
+     * Menu cấp 1
      */
     private String category;
 
     /**
-     * 权限菜单名称
+     * Tên menu quyền hạn
      */
     private String authName;
 
 
     /**
-     * 权限菜单描述
+     * Mô tả menu quyền hạn
      */
     private String authNote;
 }

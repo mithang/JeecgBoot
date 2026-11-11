@@ -41,13 +41,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 多数据源管理
+ * @Description: Quản lý nhiều nguồn dữ liệu
  * @Author: jeecg-boot
  * @Date: 2019-12-25
  * @Version: V1.0
  */
 @Slf4j
-@Tag(name = "多数据源管理")
+@Tag(name = "Quản lý nhiều nguồn dữ liệu")
 @RestController
 @RequestMapping("/sys/dataSource")
 public class SysDataSourceController extends JeecgController<SysDataSource, ISysDataSourceService> {
@@ -57,7 +57,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
 
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param sysDataSource
      * @param pageNo
@@ -65,8 +65,8 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
      * @param req
      * @return
      */
-    @AutoLog(value = "多数据源管理-分页列表查询")
-    @Operation(summary = "多数据源管理-分页列表查询")
+    @AutoLog(value = "Quản lý nhiều nguồn dữ liệu-Truy vấn danh sách phân trang")
+    @Operation(summary = "Quản lý nhiều nguồn dữ liệu-Truy vấn danh sách phân trang")
     @RequiresPermissions("system:datasource:list")
     @GetMapping(value = "/list")
     public Result<?> queryPageList(
@@ -75,7 +75,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
             HttpServletRequest req) {
         //------------------------------------------------------------------------------------------------
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
             sysDataSource.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
         }
@@ -87,7 +87,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     }
 
     /**
-     * 下拉选项数据 (online报表使用)
+     * Dữ liệu tùy chọn thả xuống (online sử dụng cho báo cáo)
      * @param sysDataSource
      * @param req
      * @return
@@ -97,7 +97,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     @GetMapping(value = "/options")
     public Result<?> queryOptions(SysDataSource sysDataSource, HttpServletRequest req) {
         //------------------------------------------------------------------------------------------------
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
             sysDataSource.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
         }
@@ -117,57 +117,57 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param sysDataSource
      * @return
      */
-    @AutoLog(value = "多数据源管理-添加")
-    @Operation(summary = "多数据源管理-添加")
+    @AutoLog(value = "Quản lý nhiều nguồn dữ liệu-Thêm")
+    @Operation(summary = "Quản lý nhiều nguồn dữ liệu-Thêm")
     @RequiresPermissions("system:datasource:add")
     @PostMapping(value = "/add")
     public Result<?> add(@RequestBody SysDataSource sysDataSource) {
-        // 代码逻辑说明: jdbc连接地址漏洞问题
+        // Giải thích logic mã: jdbc Vấn đề lỗ hổng địa chỉ kết nối
         try {
             JdbcSecurityUtil.validate(sysDataSource.getDbUrl());
             JdbcSecurityUtil.validateDriver(sysDataSource.getDbDriver());
         }catch (JeecgBootException e){
             log.error(e.toString());
-            return Result.error("操作失败：" + e.getMessage());
+            return Result.error("Thao tác thất bại:" + e.getMessage());
         }
         return sysDataSourceService.saveDataSource(sysDataSource);
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param sysDataSource
      * @return
      */
-    @AutoLog(value = "多数据源管理-编辑")
-    @Operation(summary = "多数据源管理-编辑")
+    @AutoLog(value = "Quản lý nhiều nguồn dữ liệu-Chỉnh sửa")
+    @Operation(summary = "Quản lý nhiều nguồn dữ liệu-Chỉnh sửa")
     @RequiresPermissions("system:datasource:edit")
     @RequestMapping(value = "/edit", method ={RequestMethod.PUT, RequestMethod.POST})
     public Result<?> edit(@RequestBody SysDataSource sysDataSource) {
-        // 代码逻辑说明: jdbc连接地址漏洞问题
+        // Giải thích logic mã: jdbc Vấn đề lỗ hổng địa chỉ kết nối
         try {
             JdbcSecurityUtil.validate(sysDataSource.getDbUrl());
             JdbcSecurityUtil.validateDriver(sysDataSource.getDbDriver());
         } catch (JeecgBootException e) {
             log.error(e.toString());
-            return Result.error("操作失败：" + e.getMessage());
+            return Result.error("Thao tác thất bại:" + e.getMessage());
         }
         return sysDataSourceService.editDataSource(sysDataSource);
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "多数据源管理-通过id删除")
-    @Operation(summary = "多数据源管理-通过id删除")
+    @AutoLog(value = "Quản lý nhiều nguồn dữ liệu-Xóa theo id")
+    @Operation(summary = "Quản lý nhiều nguồn dữ liệu-Xóa theo id")
     @RequiresPermissions("system:datasource:delete")
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id") String id) {
@@ -175,13 +175,13 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
      */
-    @AutoLog(value = "多数据源管理-批量删除")
-    @Operation(summary = "多数据源管理-批量删除")
+    @AutoLog(value = "Quản lý nhiều nguồn dữ liệu-Xóa hàng loạt")
+    @Operation(summary = "Quản lý nhiều nguồn dữ liệu-Xóa hàng loạt")
     @RequiresPermissions("system:datasource:delete")
     @DeleteMapping(value = "/deleteBatch")
     public Result<?> deleteBatch(@RequestParam(name = "ids") String ids) {
@@ -191,27 +191,27 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
             DataSourceCachePool.removeCache(sysDataSource.getCode());
         });
         this.sysDataSourceService.removeByIds(idList);
-        return Result.ok("批量删除成功！");
+        return Result.ok("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "多数据源管理-通过id查询")
-    @Operation(summary = "多数据源管理-通过id查询")
+    @AutoLog(value = "Quản lý nhiều nguồn dữ liệu-Tìm kiếm theo id")
+    @Operation(summary = "Quản lý nhiều nguồn dữ liệu-Tìm kiếm theo id")
     @RequiresPermissions("system:datasource:list")
     @GetMapping(value = "/queryById")
     public Result<?> queryById(@RequestParam(name = "id") String id) {
         SysDataSource sysDataSource = sysDataSourceService.getById(id);
-        // 出于安全考虑，不向前端返回数据库密码（密码字段已通过 @JsonProperty(WRITE_ONLY) 屏蔽序列化，编辑时密码留空表示不修改）
+        // Vì lý do an toàn, không trả mật khẩu cơ sở dữ liệu về frontend (trường mật khẩu đã được @JsonProperty(WRITE_ONLY) Chặn serialization, khi chỉnh sửa để trống mật khẩu nghĩa là không sửa đổi)
         return Result.ok(sysDataSource);
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param sysDataSource
@@ -220,16 +220,16 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysDataSource sysDataSource) {
         //------------------------------------------------------------------------------------------------
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
             sysDataSource.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
         }
         //------------------------------------------------------------------------------------------------
-        return super.exportXls(request, sysDataSource, SysDataSource.class, "多数据源管理");
+        return super.exportXls(request, sysDataSource, SysDataSource.class, "Quản lý nhiều nguồn dữ liệu");
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -250,11 +250,11 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
                 List<SysDataSource> dataSources = ExcelImportUtil.importExcel(file.getInputStream(), SysDataSource.class, params);
                 return sysDataSourceService.importDataSources(dataSources);
             } catch (Exception e) {
-                log.error("文件导入失败", e);
-                return Result.error("文件导入失败:" + e.getMessage());
+                log.error("Nhập file thất bại", e);
+                return Result.error("Nhập file thất bại:" + e.getMessage());
             }
         }
-        return Result.error("文件导入失败！");
+        return Result.error("Nhập tệp thất bại!");
     }
 
 

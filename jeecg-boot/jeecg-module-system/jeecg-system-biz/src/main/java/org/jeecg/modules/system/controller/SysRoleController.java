@@ -60,7 +60,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * 角色表 前端控制器
+ * Bảng vai trò Controller frontend
  * </p>
  *
  * @Author scott
@@ -90,7 +90,7 @@ public class SysRoleController {
 	private JeecgRedisClient jeecgRedisClient;
 	
 	/**
-	  * 分页列表查询 【系统角色，不做租户隔离】
+	  * Truy vấn danh sách phân trang [Vai trò hệ thống, không cách ly tenant]
 	 * @param role
 	 * @param pageNo
 	 * @param pageSize
@@ -104,7 +104,7 @@ public class SysRoleController {
 									  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 									  @RequestParam(name="isMultiTranslate", required = false) Boolean isMultiTranslate,
 									  HttpServletRequest req) {
-        // 代码逻辑说明: 【issues/7948】角色解决根据id查询回显不对---
+        // Giải thích logic mã: 【issues/7948] Vai trò giải quyết việc truy vấn theo id hiển thị lại không đúng---
         if(null != isMultiTranslate && isMultiTranslate){
             pageSize = 100;
         }
@@ -112,7 +112,7 @@ public class SysRoleController {
 		//QueryWrapper<SysRole> queryWrapper = QueryGenerator.initQueryWrapper(role, req.getParameterMap());
 		//IPage<SysRole> pageList = sysRoleService.page(page, queryWrapper);
 		Page<SysRole> page = new Page<SysRole>(pageNo, pageSize);
-		//换成不做租户隔离的方法，实际上还是存在缺陷（缺陷：如果开启租户隔离，虽然能看到其他租户下的角色，编辑会提示报错）
+		//Đổi sang phương thức không thực hiện cách ly tenant, thực tế vẫn còn khiếm khuyết (khiếm khuyết: nếu bật cách ly tenant, tuy có thể thấy vai trò của tenant khác nhưng khi chỉnh sửa sẽ báo lỗi)
 		IPage<SysRole> pageList = sysRoleService.listAllSysRole(page, role);
 		result.setSuccess(true);
 		result.setResult(pageList);
@@ -120,7 +120,7 @@ public class SysRoleController {
 	}
 	
 	/**
-	 * 分页列表查询【租户角色，做租户隔离】
+	 * Truy vấn danh sách phân trang 
 	 * @param role
 	 * @param pageNo
 	 * @param pageSize
@@ -133,7 +133,7 @@ public class SysRoleController {
 												@RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 												HttpServletRequest req) {
 		Result<IPage<SysRole>> result = new Result<IPage<SysRole>>();
-		//此接口必须通过租户来隔离查询
+		//Giao diện này phải truy vấn cách ly theo tenant
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 			role.setTenantId(oConvertUtils.getInt(!"0".equals(TenantContext.getTenant()) ? TenantContext.getTenant() : "", -1));
 		}
@@ -147,7 +147,7 @@ public class SysRoleController {
 	}
 	
 	/**
-	  *   添加
+	  *   Thêm
 	 * @param role
 	 * @return
 	 */
@@ -156,24 +156,24 @@ public class SysRoleController {
 	public Result<SysRole> add(@RequestBody SysRole role) {
 		Result<SysRole> result = new Result<SysRole>();
 		try {
-			//开启多租户隔离,角色id自动生成10位
-			// 代码逻辑说明: 【TV360X-42】角色新增时设置的编码，保存后不一致---
+			//Bật cách ly đa tenant,Id vai trò tự động tạo 10 ký tự
+			// Giải thích logic mã: 【TV360X-42】Mã đã đặt khi thêm mới vai trò, sau khi lưu không khớp---
 			if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL && oConvertUtils.isEmpty(role.getRoleCode())){
 				role.setRoleCode(RandomUtil.randomString(10));
 			}
 			role.setCreateTime(new Date());
 			role.setUpdateTime(new Date());
 			sysRoleService.save(role);
-			result.success("添加成功！");
+			result.success("Thêm thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 	
 	/**
-	  *  编辑
+	  *  Chỉnh sửa
 	 * @param role
 	 * @return
 	 */
@@ -183,75 +183,75 @@ public class SysRoleController {
 		Result<SysRole> result = new Result<SysRole>();
 		SysRole sysrole = sysRoleService.getById(role.getId());
 		if(sysrole==null) {
-			result.error500("未找到对应角色！");
+			result.error500("Không tìm thấy vai trò tương ứng!");
 		}else {
 			role.setUpdateTime(new Date());
 
 			//------------------------------------------------------------------
-			//如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+			//Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
 			if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
-				//获取当前用户
+				//Lấy người dùng hiện tại
 				LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 				Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
 				String username = "admin";
 				if (!tenantId.equals(sysrole.getTenantId()) && !username.equals(sysUser.getUsername())) {
-					baseCommonService.addLog("未经授权，修改非本租户下的角色ID：" + role.getId() + "，操作人：" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_3);
-					return Result.error("修改角色失败,当前角色不在此租户中。");
+					baseCommonService.addLog("Chưa được ủy quyền, sửa ID vai trò không thuộc tenant này:" + role.getId() + ", người thực hiện:" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_3);
+					return Result.error("Chỉnh sửa vai trò thất bại,Vai trò hiện tại không thuộc Tenant này.");
 				}
 			}
 			//------------------------------------------------------------------
 			
 			boolean ok = sysRoleService.updateById(role);
 			if(ok) {
-				result.success("修改成功!");
+				result.success("Chỉnh sửa thành công!");
 			}
 		}
 		return result;
 	}
 	
 	/**
-	  *   通过id删除
+	  *   Xóa theo id
 	 * @param id
 	 * @return
 	 */
     @RequiresPermissions("system:role:delete")
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-    	//如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+    	//Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
     	if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
-			//获取当前用户
+			//Lấy người dùng hiện tại
 			LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 			int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
 			Long getRoleCount = sysRoleService.getRoleCountByTenantId(id, tenantId);
 			String username = "admin";
 			if(getRoleCount == 0 && !username.equals(sysUser.getUsername())){
-				baseCommonService.addLog("未经授权，删除非本租户下的角色ID：" + id + "，操作人：" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_4);
-				return Result.error("删除角色失败,当前角色不在此租户中。");
+				baseCommonService.addLog("Chưa được ủy quyền, xóa ID vai trò không thuộc tenant này:" + id + ", người thực hiện:" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_4);
+				return Result.error("Xóa vai trò thất bại,Vai trò hiện tại không thuộc Tenant này.");
 			}
 		}
     	
-		//是否存在admin角色
+		//Có tồn tại vai trò admin hay không
 		sysRoleService.checkAdminRoleRejectDel(id);
     	
 		sysRoleService.deleteRole(id);
 
-		return Result.ok("删除角色成功");
+		return Result.ok("Xóa vai trò thành công");
 	}
 	
 	/**
-	  *  批量删除
+	  *  Xóa hàng loạt
 	 * @param ids
 	 * @return
 	 */
     @RequiresPermissions("system:role:deleteBatch")
 	@RequestMapping(value = "/deleteBatch", method = RequestMethod.DELETE)
 	public Result<SysRole> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		baseCommonService.addLog("删除角色操作，角色ids：" + ids, CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_4);
+		baseCommonService.addLog("Thao tác xóa vai trò, ids vai trò:" + ids, CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_4);
 		Result<SysRole> result = new Result<SysRole>();
 		if(oConvertUtils.isEmpty(ids)) {
-			result.error500("未选中角色！");
+			result.error500("Chưa chọn vai trò!");
 		}else {
-			//如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+			//Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
 			if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 				int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
 				String[] roleIds = ids.split(SymbolConstant.COMMA);
@@ -259,23 +259,23 @@ public class SysRoleController {
 				String username = "admin";
 				for (String id:roleIds) {
 					Long getRoleCount = sysRoleService.getRoleCountByTenantId(id, tenantId);
-					//如果存在角色id为0，即不存在，则删除角色
+					//Nếu tồn tại id vai trò bằng 0, tức là không tồn tại, thì xóa vai trò
 					if(getRoleCount == 0 && !username.equals(sysUser.getUsername()) ){
-						baseCommonService.addLog("未经授权，删除非本租户下的角色ID：" + id + "，操作人：" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_4);
-						return Result.error("批量删除角色失败,存在角色不在此租户中，禁止批量删除");
+						baseCommonService.addLog("Chưa được ủy quyền, xóa ID vai trò không thuộc tenant này:" + id + ", người thực hiện:" + sysUser.getUsername(), CommonConstant.LOG_TYPE_2, CommonConstant.OPERATE_TYPE_4);
+						return Result.error("Xóa hàng loạt vai trò thất bại,Tồn tại vai trò không thuộc tenant này, cấm xóa hàng loạt");
 					}
 				}
 			}
-			//验证是否为admin角色
+			//Xác minh có phải vai trò admin hay không
 			sysRoleService.checkAdminRoleRejectDel(ids);
 			sysRoleService.deleteBatchRole(ids.split(","));
-			result.success("删除角色成功!");
+			result.success("Xóa vai trò thành công!");
 		}
 		return result;
 	}
 	
 	/**
-	  * 通过id查询
+	  * Tìm kiếm theo id
 	 * @param id
 	 * @return
 	 */
@@ -284,7 +284,7 @@ public class SysRoleController {
 		Result<SysRole> result = new Result<SysRole>();
 		SysRole sysrole = sysRoleService.getById(id);
 		if(sysrole==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			result.setResult(sysrole);
 			result.setSuccess(true);
@@ -293,7 +293,7 @@ public class SysRoleController {
 	}
 
 	/**
-	 * 查询全部角色（参与租户隔离）
+	 * Truy vấn tất cả vai trò (tham gia cách ly tenant)
 	 * 
 	 * @return
 	 */
@@ -302,14 +302,14 @@ public class SysRoleController {
 		Result<List<SysRole>> result = new Result<>();
 		LambdaQueryWrapper<SysRole> query = new LambdaQueryWrapper<SysRole>();
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			query.eq(SysRole::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
 		//------------------------------------------------------------------------------------------------
 		List<SysRole> list = sysRoleService.list(query);
 		if(list==null||list.size()<=0) {
-			result.error500("未找到角色信息");
+			result.error500("Không tìm thấy thông tin vai trò");
 		}else {
 			result.setResult(list);
 			result.setSuccess(true);
@@ -318,7 +318,7 @@ public class SysRoleController {
 	}
 
 	/**
-	 * 查询全部系统角色（不做租户隔离）
+	 * Truy vấn tất cả vai trò hệ thống (không cách ly theo tenant)
 	 *
 	 * @return
 	 */
@@ -329,7 +329,7 @@ public class SysRoleController {
 		LambdaQueryWrapper<SysRole> query = new LambdaQueryWrapper<SysRole>();
 		List<SysRole> list = sysRoleService.list(query);
 		if(list==null||list.size()<=0) {
-			result.error500("未找到角色信息");
+			result.error500("Không tìm thấy thông tin vai trò");
 		}else {
 			result.setResult(list);
 			result.setSuccess(true);
@@ -338,14 +338,14 @@ public class SysRoleController {
 	}
 	
 	/**
-	  * 校验角色编码唯一
+	  * Kiểm tra mã vai trò duy nhất
 	 */
 	@RequestMapping(value = "/checkRoleCode", method = RequestMethod.GET)
 	public Result<Boolean> checkUsername(String id,String roleCode) {
 		Result<Boolean> result = new Result<>();
-        //如果此参数为false则程序发生异常
+        //Nếu tham số này là false thì chương trình xảy ra ngoại lệ
 		result.setResult(true);
-		log.info("--验证角色编码是否唯一---id:"+id+"--roleCode:"+roleCode);
+		log.info("--Xác minh mã vai trò có duy nhất hay không---id:"+id+"--roleCode:"+roleCode);
 		try {
 			SysRole role = null;
 			if(oConvertUtils.isNotEmpty(id)) {
@@ -354,16 +354,16 @@ public class SysRoleController {
 			//SysRole newRole = sysRoleService.getOne(new QueryWrapper<SysRole>().lambda().eq(SysRole::getRoleCode, roleCode));
 			SysRole newRole = sysRoleService.getRoleNoTenant(roleCode);
 			if(newRole!=null) {
-				//如果根据传入的roleCode查询到信息了，那么就需要做校验了。
+				//Nếu truy vấn được thông tin theo roleCode truyền vào thì cần thực hiện kiểm tra.
 				if(role==null) {
-					//role为空=>新增模式=>只要roleCode存在则返回false
+					//role Trống=>Chế độ thêm mới=>Chỉ cần roleCode tồn tại thì trả về false
 					result.setSuccess(false);
-					result.setMessage("角色编码已存在");
+					result.setMessage("Mã vai trò đã tồn tại");
 					return result;
 				}else if(!id.equals(newRole.getId())) {
-					//否则=>编辑模式=>判断两者ID是否一致-
+					//Nếu không=>Chế độ chỉnh sửa=>Xác định ID của hai bên có giống nhau hay không-
 					result.setSuccess(false);
-					result.setMessage("角色编码已存在");
+					result.setMessage("Mã vai trò đã tồn tại");
 					return result;
 				}
 			}
@@ -378,32 +378,32 @@ public class SysRoleController {
 	}
 
 	/**
-	 * 导出excel
+	 * Xuất excel
 	 * @param request
 	 */
 	@RequiresPermissions("system:role:exportXls")
 	@RequestMapping(value = "/exportXls")
 	public ModelAndView exportXls(SysRole sysRole,HttpServletRequest request) {
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			sysRole.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
 		//------------------------------------------------------------------------------------------------
 		
-		// Step.1 组装查询条件
+		// Step.1 Lắp ráp điều kiện truy vấn
 		QueryWrapper<SysRole> queryWrapper = QueryGenerator.initQueryWrapper(sysRole, request.getParameterMap());
-		//Step.2 AutoPoi 导出Excel
+		//Step.2 AutoPoi Xuất Excel
 		ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
 		List<SysRole> pageList = sysRoleService.list(queryWrapper);
-		//导出文件名称
-		mv.addObject(NormalExcelConstants.FILE_NAME,"角色列表");
+		//Tên file xuất
+		mv.addObject(NormalExcelConstants.FILE_NAME,"Danh sách vai trò");
 		mv.addObject(NormalExcelConstants.CLASS,SysRole.class);
 		LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        //导出支持xlsx
-		mv.addObject(NormalExcelConstants.PARAMS,new ExportParams("角色列表数据","导出人:"+user.getRealname(),"导出信息", ExcelType.XSSF));
+        //Xuất hỗ trợ xlsx
+		mv.addObject(NormalExcelConstants.PARAMS,new ExportParams("Dữ liệu danh sách vai trò","Người xuất:"+user.getRealname(),"Thông tin xuất", ExcelType.XSSF));
 		mv.addObject(NormalExcelConstants.DATA_LIST,pageList);
-        //角色支持指定字段导出
+        //Vai trò hỗ trợ xuất trường chỉ định
         String exportFields = request.getParameter(NormalExcelConstants.EXPORT_FIELDS);
         if(oConvertUtils.isNotEmpty(exportFields)){
             mv.addObject(NormalExcelConstants.EXPORT_FIELDS, exportFields);
@@ -412,7 +412,7 @@ public class SysRoleController {
 	}
 
 	/**
-	 * 通过excel导入数据
+	 * Nhập dữ liệu qua Excel
 	 * @param request
 	 * @param response
 	 * @return
@@ -423,7 +423,7 @@ public class SysRoleController {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
 			MultipartFile file = entity.getValue();
 			ImportParams params = new ImportParams();
 			params.setTitleRows(2);
@@ -433,7 +433,7 @@ public class SysRoleController {
 				return sysRoleService.importExcelCheckRoleCode(file, params);
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				return Result.error("文件导入失败:" + e.getMessage());
+				return Result.error("Nhập file thất bại:" + e.getMessage());
 			} finally {
 				try {
 					file.getInputStream().close();
@@ -442,17 +442,17 @@ public class SysRoleController {
 				}
 			}
 		}
-		return Result.error("文件导入失败！");
+		return Result.error("Nhập tệp thất bại!");
 	}
 	
 	/**
-	 * 查询数据规则数据
+	 * Truy vấn dữ liệu quy tắc dữ liệu
 	 */
 	@GetMapping(value = "/datarule/{permissionId}/{roleId}")
 	public Result<?> loadDatarule(@PathVariable("permissionId") String permissionId,@PathVariable("roleId") String roleId) {
 		List<SysPermissionDataRule> list = sysPermissionDataRuleService.getPermRuleListByPermId(permissionId);
 		if(list==null || list.size()==0) {
-			return Result.error("未找到权限配置信息");
+			return Result.error("Không tìm thấy thông tin cấu hình quyền hạn");
 		}else {
 			Map<String,Object> map = new HashMap(5);
 			map.put("datarule", list);
@@ -462,7 +462,7 @@ public class SysRoleController {
 					.eq(SysRolePermission::getRoleId,roleId);
 			SysRolePermission sysRolePermission = sysRolePermissionService.getOne(query);
 			if(sysRolePermission==null) {
-				//return Result.error("未找到角色菜单配置信息");
+				//return Result.error("Không tìm thấy thông tin cấu hình menu vai trò");
 			}else {
 				String drChecked = sysRolePermission.getDataRuleIds();
 				if(oConvertUtils.isNotEmpty(drChecked)) {
@@ -470,12 +470,12 @@ public class SysRoleController {
 				}
 			}
 			return Result.ok(map);
-			//TODO 以后按钮权限的查询也走这个请求 无非在map中多加两个key
+			//TODO Về sau truy vấn quyền nút bấm cũng đi qua yêu cầu này, chẳng qua chỉ cần thêm hai key vào map key
 		}
 	}
 	
 	/**
-	 * 保存数据规则至角色菜单关联表
+	 * Lưu quy tắc dữ liệu vào bảng liên kết menu vai trò
 	 */
 	@RequiresPermissions("system:permission:saveRole")
 	@PostMapping(value = "/datarule")
@@ -484,34 +484,34 @@ public class SysRoleController {
 			String permissionId = jsonObject.getString("permissionId");
 			String roleId = jsonObject.getString("roleId");
 			String dataRuleIds = jsonObject.getString("dataRuleIds");
-			log.info("保存数据规则>>"+"菜单ID:"+permissionId+"角色ID:"+ roleId+"数据权限ID:"+dataRuleIds);
+			log.info("Lưu quy tắc dữ liệu>>"+"Menu ID:"+permissionId+"Vai trò ID:"+ roleId+"Quyền hạn dữ liệu ID:"+dataRuleIds);
 			LambdaQueryWrapper<SysRolePermission> query = new LambdaQueryWrapper<SysRolePermission>()
 					.eq(SysRolePermission::getPermissionId, permissionId)
 					.eq(SysRolePermission::getRoleId,roleId);
 			SysRolePermission sysRolePermission = sysRolePermissionService.getOne(query);
 			if(sysRolePermission==null) {
-				return Result.error("请先保存角色菜单权限!");
+				return Result.error("Vui lòng lưu quyền hạn menu của vai trò trước!!");
 			}else {
 				sysRolePermission.setDataRuleIds(dataRuleIds);
 				this.sysRolePermissionService.updateById(sysRolePermission);
 			}
 		} catch (Exception e) {
-			log.error("SysRoleController.saveDatarule()发生异常：" + e.getMessage(),e);
-			return Result.error("保存失败");
+			log.error("SysRoleController.saveDatarule()Đã xảy ra ngoại lệ:" + e.getMessage(),e);
+			return Result.error("Lưu thất bại");
 		}
-		return Result.ok("保存成功!");
+		return Result.ok("Lưu thành công!");
 	}
 	
 	
 	/**
-	 * 用户角色授权功能，查询菜单权限树
+	 * Chức năng phân quyền vai trò người dùng, truy vấn cây quyền menu
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/queryTreeList", method = RequestMethod.GET)
 	public Result<Map<String,Object>> queryTreeList(HttpServletRequest request) {
 		Result<Map<String,Object>> result = new Result<>();
-		//全部权限ids
+		//Tất cả quyền hạn ids
 		List<String> ids = new ArrayList<>();
 		try {
 			LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
@@ -524,9 +524,9 @@ public class SysRoleController {
 			List<TreeModel> treeList = new ArrayList<>();
 			getTreeModelList(treeList, list, null);
 			Map<String,Object> resMap = new HashMap(5);
-            //全部树节点数据
+            //Toàn bộ dữ liệu nút cây
 			resMap.put("treeList", treeList);
-            //全部树ids
+            //Toàn bộ cây ids
 			resMap.put("ids", ids);
 			result.setResult(resMap);
 			result.setSuccess(true);
@@ -556,7 +556,7 @@ public class SysRoleController {
 	}
 
     /**
-     * 分页获取全部角色列表（包含每个角色的数量）
+     * Lấy danh sách phân trang tất cả vai trò (bao gồm số lượng của mỗi vai trò)
      * @return
      */
     @RequestMapping(value = "/queryPageRoleCount", method = RequestMethod.GET)
@@ -565,7 +565,7 @@ public class SysRoleController {
         Result<IPage<SysUserRoleCountVo>> result = new Result<>();
 		LambdaQueryWrapper<SysRole> query = new LambdaQueryWrapper<SysRole>();
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			query.eq(SysRole::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
@@ -575,7 +575,7 @@ public class SysRoleController {
         List<SysRole> records = pageList.getRecords();
         IPage<SysUserRoleCountVo> sysRoleCountPage = new PageDTO<>();
         List<SysUserRoleCountVo> sysCountVoList = new ArrayList<>();
-        //循环角色数据获取每个角色下面对应的角色数量
+        //Lặp dữ liệu vai trò để lấy số lượng vai trò tương ứng dưới mỗi vai trò
         for (SysRole role:records) {
             LambdaQueryWrapper<SysUserRole> countQuery = new LambdaQueryWrapper<>();
 			countQuery.eq(SysUserRole::getRoleId,role.getId());

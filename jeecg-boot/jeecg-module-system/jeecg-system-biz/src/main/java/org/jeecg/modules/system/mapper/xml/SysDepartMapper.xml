@@ -6,7 +6,7 @@
 	   select * from sys_depart where id IN ( select dep_id from sys_user_depart where user_id = #{userId} )
 	</select>
 
-    <!-- 根据username查询所拥有的部门 -->
+    <!-- Theo username, truy vấn các phòng ban sở hữu -->
     <select id="queryDepartsByUsername" parameterType="String" resultType="org.jeecg.modules.system.entity.SysDepart">
         SELECT *
         FROM sys_depart
@@ -21,7 +21,7 @@
         )
     </select>
 
-    <!-- 根据 userId 查询所拥有的部门 -->
+    <!-- Theo userId, truy vấn các phòng ban sở hữu -->
     <select id="queryDepartsByUserId" parameterType="String" resultType="java.lang.String">
         SELECT id
         FROM sys_depart
@@ -32,7 +32,7 @@
         )
     </select>
 
-    <!-- 根据 userIds 查询所拥有的部门 -->
+    <!-- Truy vấn phòng ban sở hữu theo userIds -->
     <select id="queryDepartIdsByUserIds" parameterType="String" resultType="java.util.Map">
         SELECT sd.id       depart_id,
                sud.user_id user_id
@@ -44,7 +44,7 @@
         </foreach>
     </select>
 
-    <!-- 批量查询用户所属部门IDs（VO版，跨数据库兼容，消除N+1查询），since 2026-07-01 -->
+    <!-- Truy vấn hàng loạt các ID phòng ban mà người dùng thuộc về (bản VO, tương thích đa cơ sở dữ liệu, loại bỏ N+1 truy vấn),since 2026-07-01 -->
     <select id="queryDepartIdVosByUserIds" parameterType="String" resultType="org.jeecg.modules.system.vo.SysUserDepartIdVo">
         SELECT sd.id       depart_id,
                sud.user_id user_id
@@ -56,7 +56,7 @@
         </foreach>
     </select>
 
-    <!-- 根据username和分类查询所拥有的部门/岗位/公司 -->
+    <!-- Truy vấn phòng ban sở hữu theo username và phân loại/Vị trí công tác/Công ty -->
     <select id="queryDeptByUserAndCategory" parameterType="String" resultType="org.jeecg.modules.system.entity.SysDepart">
         SELECT *
         FROM sys_depart
@@ -74,19 +74,19 @@
         </if>
     </select>
 
-    <!-- 根据部门Id查询,当前和下级所有部门IDS -->
+    <!-- Truy vấn theo Id phòng ban,Phòng ban hiện tại và tất cả phòng ban cấp dưới IDS -->
     <select id="getSubDepIdsByDepId" resultType="java.lang.String">
 		select id from sys_depart where del_flag = '0' and org_code like concat((select org_code from sys_depart where id=#{departId}),'%')
 	</select>
 
-    <!--根据部门编码获取我的部门下所有部门ids -->
+    <!--Theo mã phòng ban, lấy tất cả phòng ban thuộc phòng ban của tôi ids -->
     <select id="getSubDepIdsByOrgCodes" resultType="java.lang.String">
 		select id from sys_depart where del_flag = '0' and
         <foreach collection="orgCodes" item="item" index="index"  open="(" separator="or" close=")">
             org_code LIKE CONCAT(#{item},'%')
         </foreach>
 	</select>
-     <!--根据parent_id查询下级部门-->
+     <!--Theo parent_id Truy vấn phòng ban cấp dưới-->
     <select id="queryTreeListByPid" parameterType="Object"  resultType="org.jeecg.modules.system.entity.SysDepart">
         SELECT * FROM  sys_depart where del_flag = '0'
         <choose>
@@ -100,12 +100,12 @@
         order by depart_order
     </select>
 
-    <!-- 根据OrgCod查询公司信息 -->
+    <!-- Truy vấn thông tin công ty theo OrgCode -->
     <select id="queryCompByOrgCode" resultType="org.jeecg.modules.system.entity.SysDepart">
 		select * from sys_depart where del_flag = '0' and org_category='1' and org_code= #{orgCode,jdbcType=VARCHAR}
 	</select>
     
-    <!--通过父级id和租户id查询部门-->
+    <!--Truy vấn phòng ban theo id cấp cha và tenant id-->
     <select id="queryBookDepTreeSync" resultType="org.jeecg.modules.system.entity.SysDepart">
         SELECT * FROM sys_depart
         WHERE
@@ -130,7 +130,7 @@
         ORDER BY depart_order DESC
     </select>
 
-    <!--获取部门orgCode最大值的部门信息-->
+    <!--Lấy thông tin phòng ban có giá trị orgCode lớn nhất-->
     <select id="getMaxCodeDepart" resultType="org.jeecg.modules.system.entity.SysDepart">
         SELECT * FROM sys_depart
         WHERE
@@ -145,7 +145,7 @@
         ORDER BY org_code DESC
     </select>
     
-    <!--获取父级部门的数据-->
+    <!--Lấy dữ liệu phòng ban cấp cha-->
     <select id="getDepartList" resultType="org.jeecg.modules.system.vo.lowapp.ExportDepartVo">
         SELECT id,depart_name,parent_id FROM sys_depart
         WHERE
@@ -162,7 +162,7 @@
         ORDER BY depart_order DESC
     </select>
     
-    <!--根据部门名称和租户id获取部门数据-->
+    <!--Theo tên phòng ban và id tenant, lấy dữ liệu phòng ban-->
     <select id="getDepartByName" resultType="org.jeecg.modules.system.entity.SysDepart">
         SELECT id,depart_name,org_code,parent_id FROM sys_depart 
         where
@@ -176,7 +176,7 @@
         order by create_time desc
     </select>
     
-    <!--根据用户id获取用户id和部门名称-->
+    <!--Theo id người dùng, lấy id người dùng và tên phòng ban-->
     <select id="getUserDepartByTenantUserId" resultType="org.jeecg.modules.system.vo.SysUserDepVo">
         SELECT sd.depart_name, sud.user_id, sd.id as deptId, sd.parent_id
         FROM sys_depart sd
@@ -189,7 +189,7 @@
         order by sd.org_code
     </select>
     
-    <!--根据部门名称和租户id获取分页部门数据-->
+    <!--Theo tên phòng ban và id tenant, lấy dữ liệu phòng ban phân trang-->
     <select id="getDepartPageByName" resultType="org.jeecg.modules.system.entity.SysDepart">
         SELECT id,depart_name,org_code,parent_id FROM sys_depart
         where
@@ -207,7 +207,7 @@
         ORDER BY create_time DESC
     </select>
     
-    <!--通过部门id，查询部门下的用户的账号 -->
+    <!--Theo id phòng ban, truy vấn tài khoản của người dùng thuộc phòng ban -->
     <select id="queryUserAccountByDepartIds" resultType="java.lang.String">
         select username from sys_user where id in (select user_id from sys_user_depart where dep_id in
         <foreach  item="item" index="index" collection="departIds" open="(" separator="," close=" )">
@@ -216,7 +216,7 @@
         )
     </select>
     
-    <!--系统后台导出，根据父级id和租户id查询部门数据-->
+    <!--Xuất ở phía backend hệ thống, truy vấn dữ liệu phòng ban theo id cấp cha và id thuê bao-->
     <select id="getSysDepartList" resultType="org.jeecg.modules.system.vo.SysDepartExportVo">
         SELECT id,depart_name,parent_id,depart_name_en,depart_name_abbr,depart_order,description,org_category,org_code,mobile,fax,address,memo, position_id FROM sys_depart
         WHERE
@@ -239,11 +239,11 @@
         ORDER BY depart_order DESC
     </select>
     
-    <!--根据多个部门id获取部门数据-->
+    <!--Lấy dữ liệu phòng ban theo nhiều id phòng ban-->
 	<select id="getDepartByIds" resultType="org.jeecg.modules.system.vo.SysUserDepVo">
-        <!-- update-begin author:wangshuai date:20260803 for：【LHZP-1133】部门管理 导入 提示导入成功，数据库已有数据 页面上点开下级时没数据了 -->
+        <!-- update-begin author:wangshuai date:20260803 for：【LHZP-1133] Quản lý phòng ban — Import báo import thành công, cơ sở dữ liệu đã có dữ liệu nhưng trên trang mở cấp dưới thì không có dữ liệu -->
         SELECT id AS deptId,depart_name,org_code,parent_id,org_category FROM sys_depart
-        <!-- update-end author:wangshuai date:20260803 for：【LHZP-1133】部门管理 导入 提示导入成功，数据库已有数据 页面上点开下级时没数据了 -->
+        <!-- update-end author:wangshuai date:20260803 for：【LHZP-1133] Quản lý phòng ban — Import báo import thành công, cơ sở dữ liệu đã có dữ liệu nhưng trên trang mở cấp dưới thì không có dữ liệu -->
         where
         1=1
         <if test="departIds != null and !departIds.isEmpty()">
@@ -254,7 +254,7 @@
         </if>
     </select>
     
-    <!--根据用户id获取部门信息-->
+    <!--Lấy thông tin phòng ban theo ID người dùng-->
 	<select id="getUserDepartByUserId" resultType="org.jeecg.modules.system.vo.SysUserDepVo">
         SELECT sd.depart_name, sud.user_id, sd.id as deptId, sd.parent_id, sd.org_category
         FROM sys_depart sd
@@ -266,7 +266,7 @@
         order by sd.org_code
     </select>
     
-    <!--根据父级id/职级/部门id获取部门岗位信息-->
+    <!--Theo cấp cha id/Cấp bậc/Lấy thông tin chức vụ của phòng ban theo ID phòng ban-->
 	<select id="getDepartPositionByParentId" resultType="org.jeecg.modules.system.entity.SysDepart">
         select sd.depart_name, sd.id, sd.iz_leaf, sd.org_category, sd.parent_id, sd.org_code from sys_depart sd left join sys_position sp on sd.position_id = sp.id
         where sd.parent_id = #{parentId}
@@ -280,13 +280,13 @@
         order by sd.depart_order,sd.create_time desc
     </select>
     
-    <!--根据部门id获取部门信息-->
+    <!--Lấy thông tin phòng ban theo ID phòng ban-->
 	<select id="getDepartPostByDepartId" resultType="org.jeecg.modules.system.vo.SysDepartPositionVo">
         select depart_name as positionName,id,iz_leaf,parent_id,org_category,org_code, dep_post_parent_id from sys_depart
         where id = #{departId}
     </select>
     
-    <!--根据部门编码查询部门信息-->
+    <!--Truy vấn thông tin phòng ban theo mã phòng ban-->
 	<select id="getDepartPostByOrgCode" resultType="org.jeecg.modules.system.vo.SysDepartPositionVo">
         select depart_name as positionName,id,iz_leaf,parent_id,org_category,org_code, dep_post_parent_id from sys_depart
         where org_code like #{orgCode} 
@@ -294,7 +294,7 @@
         order by depart_order,create_time desc
     </select>
     
-    <!--根据部门id获取部门编码-->
+    <!--Lấy mã phòng ban theo ID phòng ban-->
 	<select id="getDepCodeByDepIds" resultType="java.lang.String">
         SELECT org_code
         FROM sys_depart
@@ -304,7 +304,7 @@
         </foreach>
     </select>
     
-    <!--  根据父级部门id和职务名称查找部门id  -->
+    <!--  Theo id phòng ban cha và tên chức vụ, tìm phòng ban id  -->
 	<select id="getDepIdByDepIdAndPostName" resultType="java.lang.String">
         SELECT id FROM sys_depart
         WHERE parent_id = #{parentId}
@@ -314,13 +314,13 @@
         and del_flag = 0
     </select>
 
-    <!--根据部门id获取职级名称-->
+    <!--Lấy tên cấp bậc theo ID phòng ban-->
 	<select id="getPostNameByPostId" resultType="java.lang.String">
         select sp.name from sys_depart sd join sys_position sp on sd.position_id = sp.id
         where sd.id = #{depId}
     </select>
     
-    <!-- 根据部门父id获取部门岗位数据 -->
+    <!-- Lấy dữ liệu vị trí phòng ban theo id cha của phòng ban -->
 	<select id="getDepartPositionByParentIds" resultType="org.jeecg.modules.system.entity.SysDepart">
         select sd.depart_name, sd.id, sd.iz_leaf, sd.org_category, sd.parent_id, sd.org_code from sys_depart sd left join sys_position sp on sd.position_id = sp.id
         where sd.parent_id in
@@ -331,7 +331,7 @@
         order by sd.depart_order,sd.create_time desc
     </select>
     
-    <!-- 根据用户id集合获取用户的兼职岗位信息 -->
+    <!-- Theo tập hợp id người dùng, lấy thông tin vị trí kiêm nhiệm của người dùng -->
 	<select id="getDepartOtherPostByUserIds" resultType="org.jeecg.modules.system.model.SysUserSysDepPostModel">
         select sudp.user_id as id, sudp.dep_id as otherDepPostId, sd.org_code
         from sys_user_dep_post sudp
@@ -342,7 +342,7 @@
         </foreach>
     </select>
     
-    <!-- 获取负责部门 -->
+    <!-- Lấy phòng ban phụ trách -->
     <select id="getDepartmentHead" resultType="org.jeecg.modules.system.entity.SysUser">
         select id, realname, avatar, sex, telephone, phone, main_dep_post_id, iz_hide_contact, sort, create_time from sys_user
         where status = 1 and del_flag = 0
@@ -351,7 +351,7 @@
         order by sort,create_time desc
     </select>
 
-    <!--获取所有顶级公司部门信息-->
+    <!--Lấy thông tin tất cả các phòng ban công ty cấp cao nhất-->
     <select id="getAllDepartPost" resultType="org.jeecg.modules.system.vo.SysDepartPositionVo">
         select depart_name as positionName,id,iz_leaf,parent_id,org_category,org_code, dep_post_parent_id from sys_depart
         where (parent_id IS NULL OR parent_id = '')

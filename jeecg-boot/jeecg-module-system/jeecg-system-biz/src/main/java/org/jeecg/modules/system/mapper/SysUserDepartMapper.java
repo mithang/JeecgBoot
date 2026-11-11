@@ -11,20 +11,20 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.system.model.SysUserSysDepPostModel;
 
 /**
- * @Description: 用户部门mapper接口
+ * @Description: Giao diện mapper phòng ban-người dùng
  * @author: jeecg-boot
  */
 public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
 
     /**
-     * 通过用户id查询部门用户
-     * @param userId 用户id
+     * Truy vấn người dùng phòng ban qua ID người dùng
+     * @param userId Người dùng id
      * @return List<SysUserDepart>
      */
 	List<SysUserDepart> getUserDepartByUid(@Param("userId") String userId);
 
 	/**
-	 *  查询指定部门下的用户 并且支持用户真实姓名模糊查询
+	 *  Truy vấn người dùng thuộc phòng ban được chỉ định, đồng thời hỗ trợ tìm kiếm mờ theo tên thật của người dùng
 	 * @param orgCode
 	 * @param realname
 	 * @return
@@ -32,7 +32,7 @@ public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
 	List<SysUser> queryDepartUserList(@Param("orgCode") String orgCode, @Param("realname") String realname, @Param("status") Integer status);
 
 	/**
-	 * 根据部门查询部门用户
+	 * Truy vấn người dùng phòng ban theo phòng ban
 	 * @param page
 	 * @param orgCode
 	 * @param username
@@ -42,7 +42,7 @@ public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
 	IPage<SysUser> queryDepartUserPageList(Page<SysUser> page, @Param("orgCode") String orgCode, @Param("username") String username, @Param("realname") String realname);
 
     /**
-     * 获取用户信息
+     * Lấy thông tin người dùng
      * @param page
      * @param orgCode
      * @param keyword
@@ -52,7 +52,7 @@ public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
 
 
 	/**
-	 * 获取用户信息
+	 * Lấy thông tin người dùng
 	 * @param page
 	 * @param orgCode
 	 * @param keyword
@@ -61,7 +61,7 @@ public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
 	IPage<SysUser> getProcessUserList(Page<SysUser> page,  @Param("orgCode") String orgCode,  @Param("keyword") String keyword,  @Param("tenantId") Integer tenantId, @Param("excludeUserIdList") List<String> excludeUserIdList);
 
 	/**
-	 * 获取租户下的部门通过前台传过来的部门id
+	 * Lấy các phòng ban thuộc tenant theo phòng ban mà frontend truyền sang id
 	 * @param departIds
 	 * @param tenantId
 	 * @return
@@ -69,7 +69,7 @@ public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
     List<String> getTenantDepart(@Param("departIds") List<String> departIds, @Param("tenantId") String tenantId);
 
 	/**
-	 * 根据当前租户和用户id查询用户部门数据
+	 * Truy vấn dữ liệu phòng ban của người dùng theo tenant hiện tại và id người dùng
 	 * @param userId
 	 * @param tenantId
 	 * @return
@@ -77,14 +77,14 @@ public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
 	List<SysUserDepart> getTenantUserDepart(@Param("userId") String userId, @Param("tenantId") String tenantId);
 
 	/**
-	 * 根据用户id和租户id,删除用户部门数据
+	 * Theo id người dùng và tenant id,Xóa dữ liệu phòng ban người dùng
 	 * @param userId
 	 * @param tenantId
 	 */
 	void deleteUserDepart(@Param("userId") String userId, @Param("tenantId") String tenantId);
 
 	/**
-	 * 通过部门id和租户id获取用户
+	 * Lấy người dùng theo id phòng ban và tenant id
 	 * @param departId
 	 * @param tenantId
 	 * @return
@@ -92,7 +92,7 @@ public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
     List<SysUser> getUsersByDepartTenantId(@Param("departId") String departId, @Param("tenantId") Integer tenantId);
 
 	/**
-	 * 根据用户id和部门id获取数量,用于查看用户是否存在用户部门关系表中
+	 * Lấy số lượng theo id người dùng và id phòng ban,Dùng để xem người dùng có tồn tại trong bảng quan hệ người dùng - phòng ban hay không
 	 * @param userId
 	 * @param departId
 	 * @return
@@ -101,7 +101,7 @@ public interface SysUserDepartMapper extends BaseMapper<SysUserDepart>{
     Long getCountByDepartIdAndUserId(String userId, String departId);
 
     /**
-     * 通过用户id集合获取用户id和部门code
+     * Theo tập hợp id người dùng, lấy id người dùng và phòng ban code
      * 
      * @param userIdList
      * @return

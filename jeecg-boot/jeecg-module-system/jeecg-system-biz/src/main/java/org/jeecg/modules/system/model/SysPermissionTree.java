@@ -7,7 +7,7 @@ import java.util.List;
 import org.jeecg.modules.system.entity.SysPermission;
 
 /**
- * @Description: 菜单树，封装树结构
+ * @Description: Cây menu, đóng gói cấu trúc cây
  * @author: jeecg-boot
  */
 public class SysPermissionTree implements Serializable {
@@ -23,125 +23,125 @@ public class SysPermissionTree implements Serializable {
 	private String title;
 
 	/**
-	 * 父id
+	 * id cha
 	 */
 	private String parentId;
 
 	/**
-	 * 菜单名称
+	 * Tên menu
 	 */
 	private String name;
 
 	/**
-	 * 菜单权限编码
+	 * Mã quyền hạn menu
 	 */
 	private String perms;
 	/**
-	 * 权限策略1显示2禁用
+	 * Chính sách quyền hạn: 1 Hiển thị, 2 Vô hiệu hóa
 	 */
 	private String permsType;
 
 	/**
-	 * 菜单图标
+	 * Biểu tượng menu
 	 */
 	private String icon;
 
 	/**
-	 * 组件
+	 * Component
 	 */
 	private String component;
 
 	/**
-	 * 组件名字
+	 * Tên thành phần
 	 */
 	private String componentName;
 
 	/**
-	 * 跳转网页链接
+	 * Chuyển đến liên kết trang web
 	 */
 	private String url;
 	
 	/**
-	 * 一级菜单跳转地址
+	 * Địa chỉ chuyển hướng menu cấp một
 	 */
 	private String redirect;
 
 	/**
-	 * 菜单排序
+	 * Sắp xếp menu
 	 */
 	private Double sortNo;
 
 	/**
-	 * 类型（0：一级菜单；1：子菜单 ；2：按钮权限）
+	 * Loại (0: menu cấp một; 1: menu con; 2: quyền nút bấm)
 	 */
 	private Integer menuType;
 
 	/**
-	 * 是否叶子节点: 1:是 0:不是
+	 * Có phải nút lá hay không: 1:Có 0:Không
 	 */
 	private boolean isLeaf;
 	
 	/**
-	 * 是否路由菜单: 0:不是  1:是（默认值1）
+	 * Có phải menu định tuyến hay không: 0:Không  1: là (mặc định là 1)
 	 */
 	private boolean route;
 
 
 	/**
-	 * 是否路缓存页面: 0:不是  1:是（默认值1）
+	 * Có phải trang route được cache không: 0:Không  1: là (mặc định là 1)
 	 */
 	private boolean keepAlive;
 
 
 	/**
-	 * 描述
+	 * Mô tả
 	 */
 	private String description;
 
 	/**
-	 * 删除状态 0正常 1已删除
+	 * Trạng thái xóa: 0 bình thường, 1 đã xóa
 	 */
 	private Integer delFlag;
 
 	/**
-	 * 创建人
+	 * Người tạo
 	 */
 	private String createBy;
 
 	/**
-	 * 创建时间
+	 * Thời gian tạo
 	 */
 	private Date createTime;
 
 	/**
-	 * 更新人
+	 * Người cập nhật
 	 */
 	private String updateBy;
 
 	/**
-	 * 更新时间
+	 * Thời gian cập nhật
 	 */
 	private Date updateTime;
 
 	/**alwaysShow*/
     private boolean alwaysShow;
-    /**是否隐藏路由菜单: 0否,1是（默认值0）*/
+    /**Có ẩn menu định tuyến không: 0 Không,1 là (mặc định là 0)*/
     private boolean hidden;
     
-    /**按钮权限状态(0无效1有效)*/
+    /**Trạng thái quyền nút bấm(0 không hợp lệ 1 hợp lệ)*/
 	private java.lang.String status;
 
-	/*update_begin author:wuxianquan date:20190908 for:model增加字段 */
-	/** 外链菜单打开方式 0/内部打开 1/外部打开 */
+	/*update_begin author:wuxianquan date:20190908 for:model Thêm trường */
+	/** Cách mở menu liên kết ngoài 0/Mở nội bộ 1/Mở bên ngoài */
 	private boolean internalOrExternal;
-	/*update_end author:wuxianquan date:20190908 for:model增加字段 */
+	/*update_end author:wuxianquan date:20190908 for:model Thêm trường */
 
-	/*update_begin author:liusq date:20230601 for:【issues/4986】model增加hideTab字段 */
+	/*update_begin author:liusq date:20230601 for:【issues/4986】model thêm trường hideTab */
 	/**
-	 * 是否隐藏Tab: 0否,1是（默认值0）
+	 * Có ẩn hay không Tab: 0 Không,1 là (mặc định là 0)
 	 */
 	private boolean hideTab;
-	/*update_end author:liusq date:20230601 for:【issues/4986】model增加hideTab字段 */
+	/*update_end author:liusq date:20230601 for:【issues/4986】model thêm trường hideTab */
 
 	public SysPermissionTree() {
 	}
@@ -171,13 +171,13 @@ public class SysPermissionTree implements Serializable {
 		this.route = permission.isRoute();
 		this.keepAlive = permission.isKeepAlive();
 		this.alwaysShow= permission.isAlwaysShow();
-		/*update_begin author:wuxianquan date:20190908 for:赋值 */
+		/*update_begin author:wuxianquan date:20190908 for:Gán giá trị */
 		this.internalOrExternal = permission.isInternalOrExternal();
-		/*update_end author:wuxianquan date:20190908 for:赋值 */
+		/*update_end author:wuxianquan date:20190908 for:Gán giá trị */
 		this.title=permission.getName();
-		/*update_end author:liusq date:20230601 for:【issues/4986】model增加hideTab字段 */
+		/*update_end author:liusq date:20230601 for:【issues/4986】model thêm trường hideTab */
 		this.hideTab = permission.isHideTab();
-		/*update_end author:liusq date:20230601 for:【issues/4986】model增加hideTab字段 */
+		/*update_end author:liusq date:20230601 for:【issues/4986】model thêm trường hideTab */
 		if (!permission.isLeaf()) {
 			this.children = new ArrayList<SysPermissionTree>();
 		}
@@ -409,7 +409,7 @@ public class SysPermissionTree implements Serializable {
 		this.status = status;
 	}
 
-	/*update_begin author:wuxianquan date:20190908 for:get set方法 */
+	/*update_begin author:wuxianquan date:20190908 for:get set Phương thức */
 	public boolean isInternalOrExternal() {
 		return internalOrExternal;
 	}
@@ -417,7 +417,7 @@ public class SysPermissionTree implements Serializable {
 	public void setInternalOrExternal(boolean internalOrExternal) {
 		this.internalOrExternal = internalOrExternal;
 	}
-	/*update_end author:wuxianquan date:20190908 for:get set 方法 */
+	/*update_end author:wuxianquan date:20190908 for:get set Phương thức */
 
 	public boolean isHideTab() {
 		return hideTab;

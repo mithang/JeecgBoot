@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: 消息
+ * @Description: Tin nhắn
  * @Author: jeecg-boot
  * @Date:  2019-04-09
  * @Version: V1.0
@@ -23,40 +23,40 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("sys_sms")
 public class SysMessage extends JeecgEntity {
-	/**推送内容*/
-	@Excel(name = "推送内容", width = 15)
+	/**Nội dung đẩy*/
+	@Excel(name = "Nội dung đẩy", width = 15)
 	private java.lang.String esContent;
-	/**推送所需参数Json格式*/
-	@Excel(name = "推送所需参数Json格式", width = 15)
+	/**Định dạng Json của các tham số cần thiết để đẩy*/
+	@Excel(name = "Định dạng Json của các tham số cần thiết để đẩy", width = 15)
 	private java.lang.String esParam;
-	/**接收人*/
-	@Excel(name = "接收人", width = 15)
+	/**Người nhận*/
+	@Excel(name = "Người nhận", width = 15)
 	private java.lang.String esReceiver;
-	/**推送失败原因*/
-	@Excel(name = "推送失败原因", width = 15)
+	/**Lý do đẩy thất bại*/
+	@Excel(name = "Lý do đẩy thất bại", width = 15)
 	private java.lang.String esResult;
-	/**发送次数*/
-	@Excel(name = "发送次数", width = 15)
+	/**Số lần gửi*/
+	@Excel(name = "Số lần gửi", width = 15)
 	private java.lang.Integer esSendNum;
-	/**推送状态 0未推送 1推送成功 2推送失败*/
-	@Excel(name = "推送状态 0未推送 1推送成功 2推送失败", width = 15)
+	/**Trạng thái đẩy: 0 chưa đẩy, 1 đẩy thành công, 2 đẩy thất bại*/
+	@Excel(name = "Trạng thái đẩy: 0 chưa đẩy, 1 đẩy thành công, 2 đẩy thất bại", width = 15)
 	@Dict(dicCode = "msgSendStatus")
 	private java.lang.String esSendStatus;
-	/**推送时间*/
-	@Excel(name = "推送时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+	/**Thời gian đẩy*/
+	@Excel(name = "Thời gian đẩy", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private java.util.Date esSendTime;
-	/**消息标题*/
-	@Excel(name = "消息标题", width = 15)
+	/**Tiêu đề tin nhắn*/
+	@Excel(name = "Tiêu đề tin nhắn", width = 15)
 	private java.lang.String esTitle;
 	/**
-	 * 推送方式：参考枚举类MessageTypeEnum
+	 * Phương thức đẩy: tham khảo lớp enum MessageTypeEnum
 	 */
-	@Excel(name = "推送方式", width = 15)
+	@Excel(name = "Phương thức đẩy", width = 15)
 	@Dict(dicCode = "messageType")
 	private java.lang.String esType;
-	/**备注*/
-	@Excel(name = "备注", width = 15)
+	/**Ghi chú*/
+	@Excel(name = "Ghi chú", width = 15)
 	private java.lang.String remark;
 }

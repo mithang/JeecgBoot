@@ -5,8 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 租户产品包信息
- *  包括+ 用户信息 + 权限信息
+ * Thông tin gói sản phẩm tenant
+ *  Bao gồm+ Thông tin người dùng + Thông tin quyền hạn
  * @Author taoYan
  * @Date 2023/2/16 21:01
  **/
@@ -14,36 +14,36 @@ import java.util.List;
 public class TenantPackModel {
 
     /**
-     * 租户Id
+     * Tenant Id
      */
     private Integer tenantId;
     /**
-     * 产品包编码
+     * Mã gói sản phẩm
      */
     private String packCode;
 
     /**
-     * 产品包ID
+     * Gói sản phẩm ID
      */
     private String packId;
 
     /**
-     * 产品包名称
+     * Tên gói sản phẩm
      */
     private String packName;
 
     /**
-     * 产品包 权限信息
+     * Gói sản phẩm Thông tin quyền hạn
      */
     private List<TenantPackAuth> authList;
 
     /**
-     * 产品包 用户列表
+     * Gói sản phẩm Danh sách người dùng
      */
     private List<TenantPackUser> userList;
 
     /**
-     * 状态 正常状态1 申请状态0
+     * Trạng thái: trạng thái bình thường 1, trạng thái đăng ký 0
      */
     private Integer packUserStatus;
     

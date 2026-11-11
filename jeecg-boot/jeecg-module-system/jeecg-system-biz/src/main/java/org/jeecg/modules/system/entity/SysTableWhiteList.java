@@ -13,7 +13,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 系统表白名单
+ * @Description: Danh sách trắng bảng hệ thống
  * @Author: jeecg-boot
  * @Date: 2023-09-12
  * @Version: V1.0
@@ -22,59 +22,59 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName("sys_table_white_list")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(description="系统表白名单")
+@Schema(description="Danh sách trắng bảng hệ thống")
 public class SysTableWhiteList {
 
     /**
-     * 主键id
+     * Khóa chính id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键id")
+    @Schema(description = "Khóa chính id")
     private java.lang.String id;
     /**
-     * 允许的表名
+     * Tên bảng được phép
      */
-    @Excel(name = "允许的表名", width = 15)
-    @Schema(description = "允许的表名")
+    @Excel(name = "Tên bảng được phép", width = 15)
+    @Schema(description = "Tên bảng được phép")
     private java.lang.String tableName;
     /**
-     * 允许的字段名，多个用逗号分割
+     * Tên trường được phép, nhiều trường phân tách bằng dấu phẩy
      */
-    @Excel(name = "允许的字段名", width = 15)
-    @Schema(description = "允许的字段名")
+    @Excel(name = "Tên trường được phép", width = 15)
+    @Schema(description = "Tên trường được phép")
     private java.lang.String fieldName;
     /**
-     * 状态，1=启用，0=禁用
+     * Trạng thái，1=Bật，0=Vô hiệu hóa
      */
-    @Excel(name = "状态", width = 15)
-    @Schema(description = "状态")
+    @Excel(name = "Trạng thái", width = 15)
+    @Schema(description = "Trạng thái")
     private java.lang.String status;
     /**
-     * 创建人
+     * Người tạo
      */
-    @Excel(name = "创建人", width = 15)
-    @Schema(description = "创建人")
+    @Excel(name = "Người tạo", width = 15)
+    @Schema(description = "Người tạo")
     private java.lang.String createBy;
     /**
-     * 创建时间
+     * Thời gian tạo
      */
-    @Excel(name = "创建时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "Thời gian tạo", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private java.util.Date createTime;
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Excel(name = "更新人", width = 15)
-    @Schema(description = "更新人")
+    @Excel(name = "Người cập nhật", width = 15)
+    @Schema(description = "Người cập nhật")
     private java.lang.String updateBy;
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
-    @Excel(name = "更新时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "Thời gian cập nhật", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间")
+    @Schema(description = "Thời gian cập nhật")
     private java.util.Date updateTime;
 }

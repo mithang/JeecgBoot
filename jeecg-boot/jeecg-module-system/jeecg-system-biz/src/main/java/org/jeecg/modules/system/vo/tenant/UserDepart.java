@@ -3,7 +3,7 @@ package org.jeecg.modules.system.vo.tenant;
 import lombok.Data;
 
 /**
- * 用户与部门信息
+ * Thông tin người dùng và phòng ban
  * @Author taoYan
  * @Date 2023/2/17 10:10
  **/
@@ -11,12 +11,12 @@ import lombok.Data;
 public class UserDepart {
 
     /**
-     * 用户ID
+     * Người dùng ID
      */
     private String userId;
 
     /**
-     * 部门名称
+     * Tên phòng ban
      */
     private String departName;
 }

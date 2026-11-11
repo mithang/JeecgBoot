@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
- * @Description: 企业微信证书验证
+ * @Description: Xác minh chứng chỉ WeChat doanh nghiệp
  * @author: wangshuai
  * @date: 2023/12/6 10:42
  */
@@ -20,12 +20,12 @@ import java.io.PrintWriter;
 public class WechatVerifyController {
 
     /**
-     * 企业微信验证
+     * Xác minh WeChat Doanh nghiệp
      */
     @RequestMapping(value = "/WW_verify_{code}.txt")
     public void mpVerify(@PathVariable("code") String code, HttpServletResponse response) {
         if(StringUtils.isEmpty(code)){
-            log.error("企业微信证书验证失败！(code为空)");
+            log.error("Xác minh chứng chỉ WeChat Work thất bại!(code Trống)");
             return;
         }
         try {
@@ -34,7 +34,7 @@ public class WechatVerifyController {
             writer.write(code);
             writer.close();
         } catch (Exception e) {
-            log.error("企业微信证书验证失败！");
+            log.error("Xác minh chứng chỉ WeChat Work thất bại!");
             log.error(e.getMessage(), e);
             e.printStackTrace();
         }

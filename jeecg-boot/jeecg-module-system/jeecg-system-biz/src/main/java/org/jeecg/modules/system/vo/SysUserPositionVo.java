@@ -3,7 +3,7 @@ package org.jeecg.modules.system.vo;
 import lombok.Data;
 
 /**
-* @Description: 用户职位实体类
+* @Description: Lớp thực thể người dùng - vị trí công việc
 *
 * @author: wangshuai
 * @date: 2023/6/14 16:41
@@ -11,12 +11,12 @@ import lombok.Data;
 @Data
 public class SysUserPositionVo {
     
-    /**职位id*/
+    /**Chức vụ id*/
     private String id;
 
-    /**职务名称*/
+    /**Tên chức danh*/
     private String name;
     
-    /**用户id*/
+    /**Người dùng id*/
     private String userId;
 }

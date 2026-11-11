@@ -39,7 +39,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Description: 消息模板
+ * @Description: Mẫu tin nhắn
  * @Author: jeecg-boot
  * @Sate: 2019-04-09
  * @Version: V1.0
@@ -57,7 +57,7 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 	private ISysBaseAPI sysBaseApi;
 
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 * 
 	 * @param sysMessageTemplate
 	 * @param pageNo
@@ -75,7 +75,7 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 	}
 
 	/**
-	 * 添加
+	 * Thêm
 	 * 
 	 * @param sysMessageTemplate
 	 * @return
@@ -84,11 +84,11 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody SysMessageTemplate sysMessageTemplate) {
 		sysMessageTemplateService.save(sysMessageTemplate);
-        return Result.ok("添加成功！");
+        return Result.ok("Thêm thành công!");
 	}
 
 	/**
-	 * 编辑
+	 * Chỉnh sửa
 	 * 
 	 * @param sysMessageTemplate
 	 * @return
@@ -97,11 +97,11 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody SysMessageTemplate sysMessageTemplate) {
 		sysMessageTemplateService.updateById(sysMessageTemplate);
-        return Result.ok("更新成功！");
+        return Result.ok("Cập nhật thành công!");
 	}
 
 	/**
-	 * 通过id删除
+	 * Xóa theo id
 	 * 
 	 * @param id
 	 * @return
@@ -110,11 +110,11 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
 		sysMessageTemplateService.removeById(id);
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
 	}
 
 	/**
-	 * 批量删除
+	 * Xóa hàng loạt
 	 * 
 	 * @param ids
 	 * @return
@@ -123,11 +123,11 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
 		this.sysMessageTemplateService.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.ok("批量删除成功！");
+        return Result.ok("Xóa hàng loạt thành công!");
 	}
 
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 * 
 	 * @param id
 	 * @return
@@ -139,18 +139,18 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 	}
 
 	/**
-	 * 导出excel
+	 * Xuất excel
 	 *
 	 * @param request
 	 */
 	@RequiresPermissions("system:messageTemplate:exportXls")
 	@GetMapping(value = "/exportXls")
 	public ModelAndView exportXls(HttpServletRequest request,SysMessageTemplate sysMessageTemplate) {
-		return super.exportXls(request, sysMessageTemplate, SysMessageTemplate.class,"推送消息模板");
+		return super.exportXls(request, sysMessageTemplate, SysMessageTemplate.class,"Mẫu tin nhắn đẩy");
 	}
 
 	/**
-	 * excel导入
+	 * excel Import
 	 *
 	 * @param request
 	 * @param response
@@ -170,14 +170,14 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 				return sysMessageTemplateService.importExcelCheckTemplateCode(entry.getValue(), params);
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				return Result.error("文件导入失败：" + e.getMessage());
+				return Result.error("Nhập tệp thất bại:" + e.getMessage());
 			}
 		}
-		return Result.error("文件导入失败：未找到上传文件");
+		return Result.error("Nhập tệp thất bại: không tìm thấy tệp đã tải lên");
 	}
 
 	/**
-	 * 发送消息
+	 * Gửi tin nhắn
 	 */
 	@RequiresPermissions("system:messageTemplate:sendMsg")
 	@PostMapping(value = "/sendMsg")
@@ -186,7 +186,7 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 		try {
 			MessageDTO md = new MessageDTO();
 			md.setToAll(false);
-			md.setTitle("消息发送测试");
+			md.setTitle("Kiểm thử gửi tin nhắn");
 			md.setTemplateCode(msgParams.getTemplateCode());
 			md.setToUser(msgParams.getReceiver());
 			md.setType(msgParams.getMsgType());
@@ -196,10 +196,10 @@ public class SysMessageTemplateController extends JeecgController<SysMessageTemp
 				md.setData(data);
 			}
 			sysBaseApi.sendTemplateMessage(md);
-			return result.success("消息发送成功！");
+			return result.success("Gửi tin nhắn thành công!");
 		} catch (Exception e) {
-			log.error("发送消息出错：" + e.getMessage(), e);
-			return result.error500("发送消息出错！");
+			log.error("Gửi tin nhắn bị lỗi:" + e.getMessage(), e);
+			return result.error500("Gửi tin nhắn bị lỗi!");
 		}
 	}
 }

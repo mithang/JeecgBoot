@@ -34,7 +34,7 @@ public class OpenApiPermissionServiceImpl extends ServiceImpl<OpenApiPermissionM
     public Result<?> getOpenApi(String apiAuthId) {
         List<OpenApi> openApis = openApiService.list();
         if (CollectionUtil.isEmpty(openApis)) {
-            return Result.error("接口不存在");
+            return Result.error("API không tồn tại");
         }
         List<OpenApiPermission> openApiPermissions = baseMapper.selectList(Wrappers.<OpenApiPermission>lambdaQuery().eq(OpenApiPermission::getApiAuthId, apiAuthId));
         if (CollectionUtil.isNotEmpty(openApiPermissions)) {

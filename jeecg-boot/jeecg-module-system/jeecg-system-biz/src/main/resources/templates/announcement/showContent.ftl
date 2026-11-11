@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>通告详情</title>
+    <title>Chi tiết thông báo</title>
     <style>
 
         body {
@@ -80,7 +80,7 @@
             height: auto;
         }
 
-        /* 滚动条优化 start */
+        /* Tối ưu thanh cuộn start */
         ::-webkit-scrollbar{
             width:8px;
             height:8px;
@@ -99,7 +99,7 @@
         ::-webkit-scrollbar-corner {
             background: #f6f6f6;
         }
-        /* 滚动条优化 end */
+        /* Tối ưu thanh cuộn end */
 
     </style>
 </head>
@@ -114,13 +114,13 @@
             </#if>
             <span class="rich_media_meta priority ${priClass}">
                 <#if data.priority == "H">
-                    高
+                    Cao
                 <#elseif data.priority == "M">
-                    中
+                    Trung bình
                 <#elseif data.priority == "L">
-                    低
+                    Thấp
                 <#else >
-                    未知
+                    Không xác định
                 </#if>
             </span>
         </#if>
@@ -128,43 +128,43 @@
         <span class="rich_media_meta text">${data.sender}</span>
         </#if>
         <#if data.sendTime??>
-        <span class="rich_media_meta text">${data.sendTime?string('yyyy年MM月dd日')}</span>
+        <span class="rich_media_meta text">${data.sendTime?string('dd/MM/yyyy')}</span>
         </#if>
         <#if data.visitsNum??>
-            <span class="rich_media_meta text">访问量:${data.visitsNum}</span>
+            <span class="rich_media_meta text">Lượt truy cập:${data.visitsNum}</span>
         </#if>
     </div>
 </div>
 <div id="content"></div>
 <script>
-    //update-begin-author:liusq---date:2023-10-30--for: 【QQYUN-6802】查看公告详情，此段端渲染有问题
-    // 获取富文本内容的容器元素
+    //update-begin-author:liusq---date:2023-10-30--for: 【QQYUN-6802】Xem chi tiết thông báo, đoạn này hiển thị ở phía thiết bị có vấn đề
+    // Lấy phần tử chứa nội dung rich text
     let contentContainer = document.getElementById('content');
 
-    // 富文本内容
+    // Nội dung văn bản phong phú
     let richText = `${data.msgContent!""}`;
     if(richText.includes("&lt;") || richText.includes("&gt;")){
         richText = richText.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
     }
-    // 将富文本内容插入到容器中
+    // Chèn nội dung rich text vào container
     contentContainer.innerHTML = richText;
-    // 找到所有的iframe元素
+    // Tìm tất cả các phần tử iframe
     let iframes = contentContainer.getElementsByTagName('iframe');
 
-    // 动态加载和渲染每个iframe
+    // Tải và render động từng iframe
     Array.prototype.forEach.call(iframes, function(iframe) {
         iframe.onload = function() {
-            // iframe加载完成后，调整它的高度以适应内容
+            // iframe Sau khi iframe tải xong, điều chỉnh chiều cao của nó cho vừa với nội dung
             iframe.style.width = '100%';
             iframe.style.height = iframe.contentWindow.document.body.scrollHeight +'px';
         };
         iframe.src = iframe.getAttribute('src');
     });
-    //update-end-author:liusq---date:2023-10-30--for: 【QQYUN-6802】查看公告详情，此段端渲染有问题
+    //update-end-author:liusq---date:2023-10-30--for: 【QQYUN-6802】Xem chi tiết thông báo, đoạn này hiển thị ở phía thiết bị có vấn đề
 
-    // 监听父窗口发来的消息
+    // Lắng nghe tin nhắn từ cửa sổ cha gửi đến
     window.addEventListener('message', (event) => {
-        // 1. 验证消息结构
+        // 1. Xác minh cấu trúc tin nhắn
         let { type,printSessionId } = event.data
         if(type == "action:print" && printSessionId ){
             window.print();

@@ -7,7 +7,7 @@
 		WHERE user_id = #{userId, jdbcType=VARCHAR}
     </select>
 
-	<!-- 查询指定部门下的用户 并且支持用户账号模糊查询 -->
+	<!-- Truy vấn người dùng thuộc phòng ban được chỉ định, đồng thời hỗ trợ tìm kiếm mờ theo tài khoản người dùng -->
 	<select id="queryDepartUserList" resultType="org.jeecg.modules.system.entity.SysUser">
 		SELECT * FROM (
 			select DISTINCT a.* from sys_user a
@@ -16,7 +16,7 @@
 			<bind name="bindOrgCode" value="orgCode+'%'"/>
 			                   
 			where a.del_flag = 0 and c.org_code like #{bindOrgCode}
-			<!-- update by lvdandan 20260818【LHZP-864】【流程】指定下一步处理人，没有排除已经冻结的账号  -->
+			<!-- update by lvdandan 20260818【LHZP-864][Quy trình] Chỉ định người xử lý bước tiếp theo nhưng chưa loại trừ các tài khoản đã bị đóng băng  -->
 			<if test="status!=null and status!=''">
 				and a.status = #{status}
 			</if>
@@ -29,7 +29,7 @@
 		ORDER BY t.sort, t.create_time DESC
 	</select>
 
-	<!-- 根据部门查询部门用户 分页 -->
+	<!-- Truy vấn người dùng phòng ban theo phòng ban, phân trang -->
 	<select id="queryDepartUserPageList" resultType="org.jeecg.modules.system.entity.SysUser">
 		SELECT * FROM (
 			select DISTINCT a.* from sys_user a
@@ -49,7 +49,7 @@
 		ORDER BY t.sort, t.create_time DESC
 	</select>
 
-    <!--获取用户信息（聊天专用）-->
+    <!--Lấy thông tin người dùng (dành riêng cho trò chuyện)-->
     <select id="getUserInformation" resultType="org.jeecg.modules.system.entity.SysUser">
 			SELECT * FROM (
         select DISTINCT a.* from sys_user a
@@ -68,7 +68,7 @@
 			) t
     </select>
 
-	<!--获取用户信息（简版流程专用）-->
+	<!--Lấy thông tin người dùng (dùng riêng cho quy trình đơn giản)-->
 	<select id="getProcessUserList" resultType="org.jeecg.modules.system.entity.SysUser">
 		SELECT * FROM (
 			select DISTINCT a.* from sys_user a
@@ -88,7 +88,7 @@
 					select user_id from sys_user_tenant where tenant_id = #{tenantId} and status = '1'
 				)
 			</if>
-			<!--【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页 需要将不符合的用户id排除-->
+			<!--【QQYUN-8239] Vai trò người dùng, khi thêm người dùng trả về 2 trang dữ liệu nhưng thực tế chỉ hiển thị một trang, cần loại bỏ các id người dùng không phù hợp-->
 			<if test="excludeUserIdList!=null and excludeUserIdList.size()>0">
 				and a.id not in
 				<foreach collection="excludeUserIdList" item="userId" open="(" close=")" separator=",">
@@ -99,7 +99,7 @@
 		ORDER BY t.sort, t.create_time DESC
 	</select>
 	
-	<!--获取租户下的部门-通过前台传过来的部门id-->
+	<!--Lấy phòng ban thuộc tenant-Phòng ban được truyền từ frontend id-->
     <select id="getTenantDepart" resultType="java.lang.String">
 		select id from sys_depart
 		where
@@ -110,7 +110,7 @@
 		and tenant_id = #{tenantId}
 	</select>
 	
-	<!--根据当前租户和用户id查询用户部门数据-->
+	<!--Truy vấn dữ liệu phòng ban của người dùng theo tenant hiện tại và id người dùng-->
 	<select id="getTenantUserDepart" resultType="org.jeecg.modules.system.entity.SysUserDepart">
 		select * from sys_user_depart
 		where
@@ -120,7 +120,7 @@
 		)
 	</select>
 
-	<!--通过部门id和租户id获取用户-->
+	<!--Lấy người dùng theo id phòng ban và tenant id-->
 	<select id="getUsersByDepartTenantId" resultType="org.jeecg.modules.system.entity.SysUser">
 		select su.id,su.realname from sys_user_depart sud
 		INNER JOIN sys_user su ON sud.user_id = su.id
@@ -131,7 +131,7 @@
 		AND sut.status = '1'
 	</select>
 
-	<!--根据用户id和租户id,删除用户部门数据-->
+	<!--Theo id người dùng và tenant id,Xóa dữ liệu phòng ban người dùng-->
     <delete id="deleteUserDepart">
 		delete from sys_user_depart
 		where
@@ -141,7 +141,7 @@
 		)
 	</delete>
     
-    <!-- 通过用户id集合获取用户id和部门code -->
+    <!-- Theo tập hợp id người dùng, lấy id người dùng và phòng ban code -->
     <select id="getUserDepPostByUserIds" resultType="org.jeecg.modules.system.model.SysUserSysDepPostModel">
         select su.id,sd.org_code from sys_user_depart sud
         JOIN sys_user su ON sud.user_id = su.id

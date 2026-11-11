@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @Description: 表单评论文件
+ * @Description: Tệp bình luận biểu mẫu
  * @Author: jeecg-boot
  * @Date:   2022-07-21
  * @Version: V1.0
@@ -23,37 +23,37 @@ import java.util.Date;
 @TableName("sys_form_file")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(description="表单评论文件")
+@Schema(description="Tệp bình luận biểu mẫu")
 public class SysFormFile {
     
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "id")
 	private String id;
-	/**表名*/
-	@Excel(name = "表名", width = 15)
-    @Schema(description = "表名")
+	/**Tên bảng*/
+	@Excel(name = "Tên bảng", width = 15)
+    @Schema(description = "Tên bảng")
 	private String tableName;
-	/**数据id*/
-	@Excel(name = "数据id", width = 15)
-    @Schema(description = "数据id")
+	/**Dữ liệu id*/
+	@Excel(name = "Dữ liệu id", width = 15)
+    @Schema(description = "Dữ liệu id")
 	private String tableDataId;
-	/**关联文件id*/
-	@Excel(name = "关联文件id", width = 15)
-    @Schema(description = "关联文件id")
+	/**Tệp liên kết id*/
+	@Excel(name = "Tệp liên kết id", width = 15)
+    @Schema(description = "Tệp liên kết id")
 	private String fileId;
-	/**文档类型（folder:文件夹 excel:excel doc:word pp:ppt image:图片  archive:其他文档 video:视频）*/
-	@Excel(name = "文档类型（folder:文件夹 excel:excel doc:word pp:ppt image:图片  archive:其他文档 video:视频）", width = 15)
-	@Schema(description = "文档类型（folder:文件夹 excel:excel doc:word pp:ppt image:图片  archive:其他文档 video:视频）")
+	/**Loại tài liệu（folder:Thư mục excel:excel doc:word pp:ppt image:Hình ảnh  archive:Tài liệu khác video:Video）*/
+	@Excel(name = "Loại tài liệu（folder:Thư mục excel:excel doc:word pp:ppt image:Hình ảnh  archive:Tài liệu khác video:Video）", width = 15)
+	@Schema(description = "Loại tài liệu（folder:Thư mục excel:excel doc:word pp:ppt image:Hình ảnh  archive:Tài liệu khác video:Video）")
 	private String fileType;
-	/**创建人登录名称*/
-	@Excel(name = "创建人登录名称", width = 15)
-    @Schema(description = "创建人登录名称")
+	/**Tên đăng nhập của người tạo*/
+	@Excel(name = "Tên đăng nhập của người tạo", width = 15)
+    @Schema(description = "Tên đăng nhập của người tạo")
 	private String createBy;
-	/**创建日期*/
-	@Excel(name = "创建日期", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+	/**Ngày tạo*/
+	@Excel(name = "Ngày tạo", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
 	private Date createTime;
 }

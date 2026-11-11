@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class OpenApiLogController extends JeecgController<OpenApiLog, OpenApiLogService> {
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param OpenApiLog
      * @param pageNo
@@ -41,7 +41,7 @@ public class OpenApiLogController extends JeecgController<OpenApiLog, OpenApiLog
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param OpenApiLog
      * @return
@@ -50,11 +50,11 @@ public class OpenApiLogController extends JeecgController<OpenApiLog, OpenApiLog
     @PostMapping(value = "/add")
     public Result<?> add(@RequestBody OpenApiLog OpenApiLog) {
         service.save(OpenApiLog);
-        return Result.ok("添加成功！");
+        return Result.ok("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param OpenApiLog
      * @return
@@ -63,12 +63,12 @@ public class OpenApiLogController extends JeecgController<OpenApiLog, OpenApiLog
     @PutMapping(value = "/edit")
     public Result<?> edit(@RequestBody OpenApiLog OpenApiLog) {
         service.updateById(OpenApiLog);
-        return Result.ok("修改成功!");
+        return Result.ok("Chỉnh sửa thành công!");
 
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
@@ -77,11 +77,11 @@ public class OpenApiLogController extends JeecgController<OpenApiLog, OpenApiLog
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         service.removeById(id);
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
@@ -91,11 +91,11 @@ public class OpenApiLogController extends JeecgController<OpenApiLog, OpenApiLog
     public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
 
         this.service.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.ok("批量删除成功！");
+        return Result.ok("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return

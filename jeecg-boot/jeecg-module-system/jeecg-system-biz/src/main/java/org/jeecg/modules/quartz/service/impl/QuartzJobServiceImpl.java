@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 定时任务在线管理
+ * @Description: Quản lý trực tuyến tác vụ định kỳ
  * @Author: jeecg-boot
  * @Date: 2019-04-28
  * @Version: V1.1
@@ -31,7 +31,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 	private Scheduler scheduler;
 
 	/**
-	 * 立即执行的任务分组
+	 * Nhóm nhiệm vụ thực thi ngay
 	 */
 	private static final String JOB_TEST_GROUP = "test_group";
 
@@ -41,17 +41,17 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 	}
 
 	/**
-	 * 保存&启动定时任务
+	 * Lưu&Khởi động nhiệm vụ định kỳ
 	 */
 	@Override
 	@Transactional(rollbackFor = JeecgBootException.class)
 	public boolean saveAndScheduleJob(QuartzJob quartzJob) {
-		// DB设置修改
+		// DB Sửa cài đặt
 		quartzJob.setDelFlag(CommonConstant.DEL_FLAG_0);
 		boolean success = this.save(quartzJob);
 		if (success) {
 			if (CommonConstant.STATUS_NORMAL.equals(quartzJob.getStatus())) {
-				// 定时器添加
+				// Thêm bộ hẹn giờ
 				this.schedulerAdd(quartzJob.getId(), quartzJob.getJobClassName().trim(), quartzJob.getCronExpression().trim(), quartzJob.getParameter());
 			}
 		}
@@ -59,7 +59,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 	}
 
 	/**
-	 * 恢复定时任务
+	 * Khôi phục nhiệm vụ định kỳ
 	 */
 	@Override
 	@Transactional(rollbackFor = JeecgBootException.class)
@@ -71,7 +71,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 	}
 
 	/**
-	 * 编辑&启停定时任务
+	 * Chỉnh sửa&Bật/tắt nhiệm vụ định kỳ
 	 * @throws SchedulerException 
 	 */
 	@Override
@@ -87,7 +87,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 	}
 
 	/**
-	 * 删除&停止删除定时任务
+	 * Xóa&Dừng & xóa nhiệm vụ định kỳ
 	 */
 	@Override
 	@Transactional(rollbackFor = JeecgBootException.class)
@@ -103,19 +103,19 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 		Date startDate = new Date();
 		String ymd = DateUtils.date2Str(startDate,DateUtils.yyyymmddhhmmss.get());
 		String identity =  jobName + ymd;
-		//3秒后执行 只执行一次
-		// 代码逻辑说明: 定时任务立即执行，延迟3秒改成0.1秒-------
+		//3 giây sau thực thi, chỉ thực thi một lần
+		// Giải thích logic mã: Nhiệm vụ định kỳ thực thi ngay, đổi độ trễ 3 giây thành 0.1 giây-------
 		startDate.setTime(startDate.getTime() + 100L);
-		// 定义一个Trigger
+		// Định nghĩa một Trigger
 		SimpleTrigger trigger = (SimpleTrigger)TriggerBuilder.newTrigger()
 				.withIdentity(identity, JOB_TEST_GROUP)
 				.startAt(startDate)
 				.build();
-		// 构建job信息
+		// Xây dựng thông tin job
 		JobDetail jobDetail = JobBuilder.newJob(getClass(jobName).getClass()).withIdentity(identity).usingJobData("parameter", quartzJob.getParameter()).build();
-		// 将trigger和 jobDetail 加入这个调度
+		// Thêm trigger và jobDetail vào lịch trình này
 		scheduler.scheduleJob(jobDetail, trigger);
-		// 启动scheduler
+		// Khởi động scheduler
 		scheduler.start();
 	}
 
@@ -128,7 +128,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 	}
 
 	/**
-	 * 添加定时任务
+	 * Thêm nhiệm vụ định kỳ
 	 *
 	 * @param jobClassName
 	 * @param cronExpression
@@ -136,30 +136,30 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 	 */
 	private void schedulerAdd(String id, String jobClassName, String cronExpression, String parameter) {
 		try {
-			// 启动调度器
+			// Khởi động bộ lập lịch
 			scheduler.start();
 
-			// 构建job信息
+			// Xây dựng thông tin job
 			JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(id).usingJobData("parameter", parameter).build();
 
-			// 表达式调度构建器(即任务执行的时间)
+			// Bộ xây dựng lịch biểu thức(Tức là thời gian thực thi tác vụ)
 			CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
 
-			// 按新的cronExpression表达式构建一个新的trigger
+			// Xây dựng một trigger mới theo biểu thức cronExpression mới trigger
 			CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(id).withSchedule(scheduleBuilder).build();
 
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (SchedulerException e) {
-			throw new JeecgBootException("创建定时任务失败", e);
+			throw new JeecgBootException("Tạo tác vụ định kỳ thất bại", e);
 		} catch (RuntimeException e) {
 			throw new JeecgBootException(e.getMessage(), e);
 		}catch (Exception e) {
-			throw new JeecgBootException("后台找不到该类名：" + jobClassName, e);
+			throw new JeecgBootException("Backend không tìm thấy tên class này：" + jobClassName, e);
 		}
 	}
 
 	/**
-	 * 删除定时任务
+	 * Xóa nhiệm vụ định kỳ
 	 * 
 	 * @param id
 	 */
@@ -170,24 +170,24 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 			scheduler.deleteJob(JobKey.jobKey(id));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new JeecgBootException("删除定时任务失败");
+			throw new JeecgBootException("Xóa tác vụ định kỳ thất bại");
 		}
 	}
 
 	/**
-	 * 安全加载Job类：仅允许 org.jeecg. 包下的类，且必须实现 org.quartz.Job 接口
+	 * Tải an toàn lớp Job: chỉ cho phép org.jeecg. lớp trong package, và phải triển khai org.quartz.Job API
 	 */
 	private static Job getClass(String classname) throws Exception {
-		// 包名白名单校验，防止任意类实例化导致RCE
+		// Kiểm tra danh sách trắng tên gói, ngăn chặn việc khởi tạo lớp tùy ý gây ra RCE
 		if (classname == null || !classname.startsWith("org.jeecg.")) {
-			throw new IllegalArgumentException("非法的任务类名：" + classname + "，仅允许 org.jeecg 包下的Job类");
+			throw new IllegalArgumentException("Tên lớp tác vụ không hợp lệ:" + classname + "，chỉ cho phép org.jeecg  trong package Job");
 		}
-		//update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName使用上下文类加载器，增强部署兼容性-----------
+		//update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
 		Class<?> clazz = Class.forName(classname, true, Thread.currentThread().getContextClassLoader());
-		//update-end---author:scott ---date:20260416  for：【PR#9538】Class.forName使用上下文类加载器，增强部署兼容性-----------
-		// 校验是否实现了 org.quartz.Job 接口
+		//update-end---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
+		// Kiểm tra có triển khai org.quartz.Job API
 		if (!Job.class.isAssignableFrom(clazz)) {
-			throw new IllegalArgumentException("非法的任务类：" + classname + "，必须实现 org.quartz.Job 接口");
+			throw new IllegalArgumentException("Lớp tác vụ không hợp lệ:" + classname + ", phải triển khai org.quartz.Job API");
 		}
 		return (Job) clazz.getDeclaredConstructor().newInstance();
 	}

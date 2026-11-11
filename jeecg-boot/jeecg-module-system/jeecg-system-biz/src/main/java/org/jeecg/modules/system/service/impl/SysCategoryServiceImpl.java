@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 分类字典
+ * @Description: Danh mục phân loại
  * @Author: jeecg-boot
  * @Date:   2019-05-29
  * @Version: V1.0
@@ -38,7 +38,7 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 		if(oConvertUtils.isNotEmpty(sysCategory.getPid())){
 			categoryPid = sysCategory.getPid();
 
-			//PID 不是根节点 说明需要设置父节点 hasChild 为1
+			//PID Không phải nút gốc, nghĩa là cần đặt hasChild của nút cha thành 1
 			if(!ISysCategoryService.ROOT_PID_VALUE.equals(categoryPid)){
 				SysCategory parent = baseMapper.selectById(categoryPid);
 				if(parent!=null){
@@ -50,7 +50,7 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 				}
 			}
 		}
-		// 代码逻辑说明: 分类字典编码规则生成器做成公用配置
+		// Giải thích logic mã: Đưa bộ tạo quy tắc mã danh mục phân loại thành cấu hình dùng chung
 		JSONObject formData = new JSONObject();
 		formData.put("pid",categoryPid);
 		categoryCode = (String) FillRuleUtil.executeRule(FillRuleConstant.CATEGORY,formData);
@@ -64,7 +64,7 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 			json.put("parentCode", parentCode);
 			return json;
 		} else {
-			throw new JeecgBootBizTipException("添加失败");
+			throw new JeecgBootBizTipException("Thêm thất bại");
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 		if(oConvertUtils.isEmpty(sysCategory.getPid())){
 			sysCategory.setPid(ISysCategoryService.ROOT_PID_VALUE);
 		}else{
-			//如果当前节点父ID不为空 则设置父节点的hasChild 为1
+			//Nếu ID cha của nút hiện tại không rỗng thì đặt hasChild của nút cha thành 1
 			SysCategory parent = baseMapper.selectById(sysCategory.getPid());
 			if(parent!=null && !ISysCategoryService.HAS_CHILD.equals(parent.getHasChild())){
 				parent.setHasChild(ISysCategoryService.HAS_CHILD);
@@ -89,10 +89,10 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 		if(oConvertUtils.isNotEmpty(pcode)) {
 			List<SysCategory> list = baseMapper.selectList(new LambdaQueryWrapper<SysCategory>().eq(SysCategory::getCode, pcode));
 			if(list==null || list.size() ==0) {
-				throw new JeecgBootException("该编码【"+pcode+"】不存在，请核实!");
+				throw new JeecgBootException("Mã này【"+pcode+"】Không tồn tại, vui lòng kiểm tra!");
 			}
 			if(list.size()>1) {
-				throw new JeecgBootException("该编码【"+pcode+"】存在多个，请核实!");
+				throw new JeecgBootException("Mã này【"+pcode+"】Tồn tại nhiều bản ghi, vui lòng kiểm tra!");
 			}
 			pid = list.get(0).getId();
 		}
@@ -125,9 +125,9 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 	public void deleteSysCategory(String ids) {
 		String allIds = this.queryTreeChildIds(ids);
 		String pids = this.queryTreePids(ids);
-		//1.删除时将节点下所有子节点一并删除
+		//1.Khi xóa, xóa đồng thời tất cả các nút con thuộc nút đó
 		this.baseMapper.deleteBatchIds(Arrays.asList(allIds.split(",")));
-		//2.将父节点中已经没有下级的节点，修改为没有子节点
+		//2.Đổi các nút trong nút cha đã không còn cấp dưới thành không có nút con
 		if(oConvertUtils.isNotEmpty(pids)){
 			LambdaUpdateWrapper<SysCategory> updateWrapper = new UpdateWrapper<SysCategory>()
 					.lambda()
@@ -183,7 +183,7 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 	}
 
 	/**
-	 * 递归追加当前分类及其子节点
+	 * Đệ quy thêm vào danh mục hiện tại và các nút con của nó
 	 */
 	private void appendWithChildren(SysCategory category, Map<String, List<SysCategory>> childrenByPid, Set<String> visitedIds, List<SysCategory> result) {
 		if (!visitedIds.add(category.getId())) {
@@ -196,12 +196,12 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 	}
 
 	/**
-	 * 查询节点下所有子节点
+	 * Truy vấn tất cả nút con thuộc nút
 	 * @param ids
 	 * @return
 	 */
 	private String queryTreeChildIds(String ids) {
-		//获取id数组
+		//Lấy mảng id
 		String[] idArr = ids.split(",");
 		StringBuffer sb = new StringBuffer();
 		for (String pidVal : idArr) {
@@ -219,20 +219,20 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 	}
 
 	/**
-	 * 查询需修改标识的父节点ids
+	 * Truy vấn nút cha cần sửa dấu hiệu ids
 	 * @param ids
 	 * @return
 	 */
 	private String queryTreePids(String ids) {
 		StringBuffer sb = new StringBuffer();
-		//获取id数组
+		//Lấy mảng id
 		String[] idArr = ids.split(",");
 		for (String id : idArr) {
 			if(id != null){
 				SysCategory category = this.baseMapper.selectById(id);
-				//根据id查询pid值
+				//Truy vấn giá trị pid theo id
 				String metaPid = category.getPid();
-				//查询此节点上一级是否还有其他子节点
+				//Truy vấn xem cấp trên của nút này còn nút con nào khác hay không
 				LambdaQueryWrapper<SysCategory> queryWrapper = new LambdaQueryWrapper<>();
 				queryWrapper.eq(SysCategory::getPid,metaPid);
 				queryWrapper.notIn(SysCategory::getId,Arrays.asList(idArr));
@@ -240,7 +240,7 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
                 boolean flag = (dataList == null || dataList.size()==0) && !Arrays.asList(idArr).contains(metaPid)
                         && !sb.toString().contains(metaPid);
                 if(flag){
-					//如果当前节点原本有子节点 现在木有了，更新状态
+					//Nếu nút hiện tại vốn có nút con mà giờ không còn nữa thì cập nhật trạng thái
 					sb.append(metaPid).append(",");
 				}
 			}
@@ -252,7 +252,7 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 	}
 
 	/**
-	 * 递归 根据父id获取子节点id
+	 * Đệ quy lấy nút con theo id cha id
 	 * @param pidVal
 	 * @param sb
 	 * @return
@@ -282,11 +282,11 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 		String[] idArray = ids.split(",");
 		LambdaQueryWrapper<SysCategory> query = new LambdaQueryWrapper<>();
 		query.in(SysCategory::getId, Arrays.asList(idArray));
-		// 查询数据
+		// Truy vấn dữ liệu
 		List<SysCategory> list = super.list(query);
-		// 取出name并返回
+		// Lấy name và trả về
 		List<String> textList;
-		// 代码逻辑说明: 新增delNotExist参数，设为false不删除数据库里不存在的key ----
+		// Giải thích logic mã: Thêm tham số delNotExist, đặt thành false thì không xóa những mục không tồn tại trong cơ sở dữ liệu key ----
 		if (delNotExist) {
 			textList = list.stream().map(SysCategory::getName).collect(Collectors.toList());
 		} else {
@@ -305,9 +305,9 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 		LambdaQueryWrapper<SysCategory> query = new LambdaQueryWrapper<>();
 		query.select(SysCategory::getId, SysCategory::getName);
 		query.in(SysCategory::getName, nameList);
-		// 查询数据
+		// Truy vấn dữ liệu
 		List<SysCategory> list = super.list(query);
-		// 取出id并返回
+		// Lấy id rồi trả về
 		return nameList.stream().map(name -> {
 			SysCategory res = list.stream().filter(i -> name.equals(i.getName())).findFirst().orElse(null);
 			if (res == null) {

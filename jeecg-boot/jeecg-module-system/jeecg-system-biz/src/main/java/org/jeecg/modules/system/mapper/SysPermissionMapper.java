@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * 菜单权限表 Mapper 接口
+ * Giao diện Mapper bảng quyền menu
  * </p>
  *
  * @Author scott
@@ -21,40 +21,40 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysPermissionMapper extends BaseMapper<SysPermission> {
 	/**
-	   * 通过父菜单ID查询子菜单
+	   * Truy vấn menu con qua ID menu cha
 	 * @param parentId
 	 * @return
 	 */
 	public List<TreeModel> queryListByParentId(@Param("parentId") String parentId);
 	
 	/**
-	 * 根据用户查询用户权限
-     * @param userId 用户ID
+	 * Truy vấn quyền hạn người dùng theo người dùng
+     * @param userId Người dùng ID
      * @return List<SysPermission>
 	 */
 	public List<SysPermission> queryByUser(@Param("userId") String userId);
 
-	//update-begin---author:scott ---date:2026-04-16  for：【pull/9445】开启多租户模式时，获取用户权限时加入tenant_id判断-----------
+	//update-begin---author:scott ---date:2026-04-16  for：【pull/9445] Khi bật chế độ đa tenant, khi lấy quyền người dùng sẽ thêm tenant_id Kiểm tra-----------
 	/**
-	 * 根据用户id和租户id查询用户权限
-	 * @param userId 用户ID
-	 * @param tenantId 租户ID
+	 * Theo id người dùng và id tenant, truy vấn quyền hạn của người dùng
+	 * @param userId Người dùng ID
+	 * @param tenantId Tenant ID
 	 * @return List<SysPermission>
 	 */
 	public List<SysPermission> queryByUserWithTenantId(@Param("userId") String userId, @Param("tenantId") Integer tenantId);
-	//update-end---author:scott ---date:2026-04-16  for：【pull/9445】开启多租户模式时，获取用户权限时加入tenant_id判断-----------
+	//update-end---author:scott ---date:2026-04-16  for：【pull/9445] Khi bật chế độ đa tenant, khi lấy quyền người dùng sẽ thêm tenant_id Kiểm tra-----------
 
 	/**
-	 * 修改菜单状态字段： 是否子节点
-     * @param id 菜单id
-     * @param leaf 叶子节点
+	 * Sửa trường trạng thái menu: có phải nút con không
+     * @param id Menu id
+     * @param leaf Nút lá
      * @return int
 	 */
 	@Update("update sys_permission set is_leaf=#{leaf} where id = #{id}")
 	public int setMenuLeaf(@Param("id") String id,@Param("leaf") int leaf);
 
 	/**
-	 * 切换vue3菜单
+	 * Chuyển đổi menu Vue3
 	 */
 	@Update("alter table sys_permission rename to sys_permission_v2")
 	public void backupVue2Menu();
@@ -62,7 +62,7 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
 	public void changeVue3Menu();
 	
 	/**
-	 * 获取模糊匹配规则的数据权限URL
+	 * Lấy quyền hạn dữ liệu theo quy tắc khớp mờ URL
      * @return List<String>
 	 */
 	@Select("SELECT url FROM sys_permission WHERE del_flag = 0 and menu_type = 2 and url like '%*%'")
@@ -70,7 +70,7 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
 
 
 	/**
-	 * 根据用户账号查询菜单权限
+	 * Truy vấn quyền hạn menu theo tài khoản người dùng
 	 * @param sysPermission
 	 * @param username
 	 * @return
@@ -79,14 +79,14 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
 
 
 	/**
-	 * 查询部门权限数据
+	 * Truy vấn dữ liệu quyền hạn phòng ban
 	 * @param departId
 	 * @return
 	 */
 	List<SysPermission> queryDepartPermissionList(@Param("departId") String departId);
 
 	/**
-	 * 根据用户名称和test角色id查询权限
+	 * Theo tên người dùng và id vai trò test, truy vấn quyền hạn
 	 * @return
 	 */
 	@InterceptorIgnore(tenantLine = "true")

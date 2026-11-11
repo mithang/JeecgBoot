@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 字典处理
+ * @Description: Xử lý danh mục
  * @Author: lsq
  * @Date:2023-01-09
  * @Version:V1.0
@@ -39,9 +39,9 @@ public class JimuDragExternalServiceImpl implements IOnlDragExternalService {
     @Lazy
     private ISysBaseAPI sysBaseApi;
     /**
-     *  根据多个字典code查询多个字典项
+     *  Theo nhiều code danh mục, truy vấn nhiều mục danh mục
      * @param codeList
-     * @return key = dictCode ； value=对应的字典项
+     * @return key = dictCode ； value=Mục danh mục tương ứng
      */
     @Override
     public Map<String, List<DragDictModel>> getManyDictItems(List<String> codeList, List<JSONObject> tableDictList) {
@@ -99,7 +99,7 @@ public class JimuDragExternalServiceImpl implements IOnlDragExternalService {
     }
 
     /**
-     * 添加日志
+     * Thêm nhật ký
      * @param dragLogDTO
      */
     @Override
@@ -112,7 +112,7 @@ public class JimuDragExternalServiceImpl implements IOnlDragExternalService {
     }
 
     /**
-     * 保存日志
+     * Lưu nhật ký
      * @param logMsg
      * @param logType
      * @param operateType

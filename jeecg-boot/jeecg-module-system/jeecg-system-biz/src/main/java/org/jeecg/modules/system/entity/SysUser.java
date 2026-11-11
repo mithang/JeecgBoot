@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户表
+ * Bảng người dùng
  * </p>
  *
  * @Author scott
@@ -42,236 +42,236 @@ public class SysUser implements Serializable {
     private String id;
 
     /**
-     * 登录账号
+     * Tài khoản đăng nhập
      */
-    @Excel(name = "登录账号", width = 15)
+    @Excel(name = "Tài khoản đăng nhập", width = 15)
     private String username;
 
     /**
-     * 真实姓名
+     * Họ tên thật
      */
-    @Excel(name = "真实姓名", width = 15)
+    @Excel(name = "Họ tên thật", width = 15)
     private String realname;
 
     /**
-     * 密码
+     * Mật khẩu
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @QueryConditionIgnore
     private String password;
 
     /**
-     * md5密码盐
+     * md5 Muối mật khẩu
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @QueryConditionIgnore
     private String salt;
 
     /**
-     * 头像
+     * Ảnh đại diện
      */
-    @Excel(name = "头像", width = 15,type = 2)
+    @Excel(name = "Ảnh đại diện", width = 15,type = 2)
     private String avatar;
 
     /**
-     * 生日
+     * Ngày sinh
      */
-    @Excel(name = "生日", width = 15, format = "yyyy-MM-dd")
+    @Excel(name = "Ngày sinh", width = 15, format = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     /**
-     * 性别（1：男 2：女）
+     * Giới tính (1: Nam, 2: Nữ)
      */
-    @Excel(name = "性别", width = 15,dicCode="sex")
+    @Excel(name = "Giới tính", width = 15,dicCode="sex")
     @Dict(dicCode = "sex")
     private Integer sex;
 
     /**
-     * 电子邮件
+     * Email
      */
-    @Excel(name = "电子邮件", width = 15)
+    @Excel(name = "Email", width = 15)
     private String email;
 
     /**
-     * 电话
+     * Điện thoại
      */
-    @Excel(name = "电话", width = 15)
+    @Excel(name = "Điện thoại", width = 15)
     private String phone;
 
     /**
-     * 登录选择部门编码
+     * Mã phòng ban được chọn khi đăng nhập
      */
     private String orgCode;
     /**
-     * 登录选择租户ID
+     * Tenant được chọn khi đăng nhập ID
      */
     private Integer loginTenantId;
 
-    /**部门名称*/
+    /**Tên phòng ban*/
     private transient String orgCodeTxt;
 
     /**
-     * 状态(1：正常  2：冻结 ）
+     * Trạng thái(1：Bình thường  2：Đóng băng ）
      */
-    @Excel(name = "状态", width = 15,dicCode="user_status")
+    @Excel(name = "Trạng thái", width = 15,dicCode="user_status")
     @Dict(dicCode = "user_status")
     private Integer status;
 
     /**
-     * 删除状态（0，正常，1已删除）
+     * Trạng thái xóa (0 bình thường, 1 đã xóa)
      */
-    @Excel(name = "删除状态", width = 15,dicCode="del_flag")
+    @Excel(name = "Trạng thái xóa", width = 15,dicCode="del_flag")
     @TableLogic
     private Integer delFlag;
 
     /**
-     * 工号，唯一键
+     * Mã nhân viên, khóa duy nhất
      */
-    @Excel(name = "工号", width = 15)
+    @Excel(name = "Mã nhân viên", width = 15)
     private String workNo;
 
     /**
-     * 职务，关联职务表
+     * Chức vụ, liên kết bảng chức vụ
      */
-    @Excel(name = "职务", width = 15)
+    @Excel(name = "Chức danh", width = 15)
     @Dict(dictTable ="sys_position",dicText = "name",dicCode = "id")
     @TableField(exist = false)
     private String post;
 
     /**
-     * 座机号
+     * Số điện thoại bàn
      */
-    @Excel(name = "座机号", width = 15)
+    @Excel(name = "Số điện thoại bàn", width = 15)
     private String telephone;
 
     /**
-     * 创建人
+     * Người tạo
      */
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     private Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
     private String updateBy;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     private Date updateTime;
     /**
-     * 同步工作流引擎1同步0不同步
+     * Đồng bộ engine workflow: 1 đồng bộ, 0 không đồng bộ
      */
     private Integer activitiSync;
 
     /**
-     * 身份（0 普通成员 1 上级）
+     * Thân phận (0 thành viên thường, 1 cấp trên)
      */
-    @Excel(name="（1普通成员 2上级）",width = 15)
+    @Excel(name="(1 Thành viên thường 2 Cấp trên)",width = 15)
     private Integer userIdentity;
 
     /**
-     * 负责部门
+     * Phòng ban phụ trách
      */
-    @Excel(name="负责部门",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
+    @Excel(name="Phòng ban phụ trách",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     @Dict(dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     private String departIds;
 
     /**
-     * 多租户ids临时用，不持久化数据库(数据库字段不存在)
+     * Ids nhiều tenant dùng tạm thời, không lưu lâu dài vào cơ sở dữ liệu(Trường cơ sở dữ liệu không tồn tại)
      */
     @TableField(exist = false)
     private String relTenantIds;
 
-    /**设备id uniapp推送用*/
+    /**id thiết bị, dùng để đẩy thông báo uniapp*/
     private String clientId;
 
     /**
-     * 登录首页地址
+     * Địa chỉ trang chủ sau khi đăng nhập
      */
     @TableField(exist = false)
     private String homePath;
 
     /**
-     * 职位名称
+     * Tên chức vụ
      */
     @TableField(exist = false)
     private String postText;
 
     /**
-     * 流程状态
+     * Trạng thái quy trình
      */
     private String bpmStatus;
 
     /**
-     * 是否已经绑定第三方
+     * Đã liên kết bên thứ ba hay chưa
      */
     @TableField(exist = false)
     private boolean izBindThird;
 
     /**
-     * 个性签名
+     * Chữ ký cá nhân
      */
     private String sign;
 
     /**
-     * 是否开启个性签名
+     * Có bật chữ ký cá nhân không
      */
     private Integer signEnable;
 
     /**
-     * 主岗位
+     * Vị trí chính
      */
-    @Excel(name="主岗位",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
+    @Excel(name="Vị trí chính",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     @Dict(dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     private String mainDepPostId;
 
     /**
-     * 兼职岗位
+     * Vị trí kiêm nhiệm
      */
-    @Excel(name="兼职岗位",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
+    @Excel(name="Vị trí kiêm nhiệm",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     @Dict(dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     @TableField(exist = false)
     private String otherDepPostId;
 
     /**
-     * 职务(字典)
+     * Chức danh(Từ điển)
      */
-    @Excel(name = "职务", width = 15, dicCode = "user_position")
+    @Excel(name = "Chức danh", width = 15, dicCode = "user_position")
     @Dict(dicCode = "user_position")
     private String positionType;
 
     /**
-     * 上一次修改密码的时间
+     * Thời gian đổi mật khẩu lần trước
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastPwdUpdateTime;
 
     /**
-     * 登录时，选择的部门，临时用，不持久化数据库(数据库字段不存在)
+     * Khi đăng nhập, phòng ban được chọn chỉ dùng tạm thời, không lưu bền vào cơ sở dữ liệu(Trường cơ sở dữ liệu không tồn tại)
      */
     @TableField(exist = false)
     private String loginOrgCode;
 
     /**
-     * 排序
+     * Sắp xếp
      */
     private Integer sort;
     
     /**
-     * 是否隐藏联系方式 0否1是
+     * Có ẩn thông tin liên hệ hay không: 0 không, 1 có
      */
     private String izHideContact;
 
     /**
-     * 所属部门的id
+     * của phòng ban thuộc về id
      */
     @TableField(exist = false)
     private String belongDepIds;

@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: 租户产品包
+ * @Description: Gói sản phẩm tenant
  * @Author: jeecg-boot
  * @Date:   2022-12-31
  * @Version: V1.0
@@ -23,65 +23,65 @@ import lombok.experimental.Accessors;
 @TableName("sys_tenant_pack")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="租户产品包")
+@Schema(description="Gói sản phẩm tenant")
 public class SysTenantPack implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键id*/
+	/**Khóa chính id*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键id")
+    @Schema(description = "Khóa chính id")
     private String id;
-	/**租户id*/
-	@Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+	/**Tenant id*/
+	@Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private Integer tenantId;
-	/**产品包名*/
-	@Excel(name = "产品包名", width = 15)
-    @Schema(description = "产品包名")
+	/**Tên gói sản phẩm*/
+	@Excel(name = "Tên gói sản phẩm", width = 15)
+    @Schema(description = "Tên gói sản phẩm")
     private String packName;
-	/**开启状态(0 未开启 1开启)*/
-	@Excel(name = "开启状态(0 未开启 1开启)", width = 15)
-    @Schema(description = "开启状态(0 未开启 1开启)")
+	/**Trạng thái bật(0  chưa bật 1 bật)*/
+	@Excel(name = "Trạng thái bật(0  chưa bật 1 bật)", width = 15)
+    @Schema(description = "Trạng thái bật(0  chưa bật 1 bật)")
     private String status;
-	/**备注*/
-	@Excel(name = "备注", width = 15)
-    @Schema(description = "备注")
+	/**Ghi chú*/
+	@Excel(name = "Ghi chú", width = 15)
+    @Schema(description = "Ghi chú")
     private String remarks;
-	/**创建人*/
-    @Schema(description = "创建人")
+	/**Người tạo*/
+    @Schema(description = "Người tạo")
     private String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private Date createTime;
-	/**更新人*/
-    @Schema(description = "更新人")
+	/**Người cập nhật*/
+    @Schema(description = "Người cập nhật")
     private String updateBy;
-	/**更新时间*/
+	/**Thời gian cập nhật*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间")
+    @Schema(description = "Thời gian cập nhật")
     private Date updateTime;
-    /**产品包类型(default 默认产品包 custom 自定义产品包)*/
-    @Excel(name = "产品包类型", width = 15)
-    @Schema(description = "产品包类型")
+    /**Loại gói sản phẩm(default Gói sản phẩm mặc định default, gói sản phẩm tùy chỉnh custom)*/
+    @Excel(name = "Loại gói sản phẩm", width = 15)
+    @Schema(description = "Loại gói sản phẩm")
 	private String packType;
 
     /**
-     * 是否自动分配给用户(0 否 1是)
+     * Có tự động phân bổ cho người dùng hay không(0 Không 1 Có)
      */
-    @Excel(name = "是否自动分配给用户(0 否 1是)", width = 15)
-    @Schema(description = "是否自动分配给用户")
+    @Excel(name = "Có tự động phân bổ cho người dùng hay không(0 Không 1 Có)", width = 15)
+    @Schema(description = "Có tự động phân bổ cho người dùng hay không")
     private String izSysn;
     
-    /**菜单id 临时字段用于新增编辑菜单id传递*/
+    /**Id menu là trường tạm thời dùng để truyền id menu khi thêm mới/chỉnh sửa*/
     @TableField(exist = false)
     private String permissionIds;
     
     
     /**
-     * 编码
+     * Mã
      */
     private String packCode;
     

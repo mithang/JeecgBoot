@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.system.vo.SysUserPositionVo;
 
 /**
- * @Description: 用户职位关系表
+ * @Description: Bảng quan hệ người dùng - vị trí công việc
  * @Author: jeecg-boot
  * @Date:   2023-02-14
  * @Version: V1.0
@@ -21,7 +21,7 @@ import org.jeecg.modules.system.vo.SysUserPositionVo;
 public interface SysUserPositionMapper extends BaseMapper<SysUserPosition> {
 
     /**
-     * 获取职位用户列表
+     * Lấy danh sách người dùng chức vụ
      * @param page
      * @param positionId
      * @return
@@ -29,7 +29,7 @@ public interface SysUserPositionMapper extends BaseMapper<SysUserPosition> {
     List<SysUser> getPositionUserList(@Param("page") Page<SysUser> page, @Param("positionId") String positionId);
 
     /**
-     * 获取成员是否存在职位中
+     * Lấy thông tin thành viên có tồn tại trong chức vụ hay không
      * @param userId
      * @param positionId
      * @return
@@ -38,21 +38,21 @@ public interface SysUserPositionMapper extends BaseMapper<SysUserPosition> {
     Long getUserPositionCount(@Param("userId") String userId, @Param("positionId") String positionId);
 
     /**
-     * 通过职位id删除用户职位关系表
+     * Xóa bảng quan hệ chức vụ người dùng theo id chức vụ
      * @param positionId
      */
     @Delete("DELETE FROM sys_user_position WHERE position_id = #{positionId} ")
     void removeByPositionId(@Param("positionId") String positionId);
 
     /**
-     * 职位列表移除成员
+     * Danh sách chức vụ loại bỏ thành viên
      * @param userIdList
      * @param positionId
      */
     void removePositionUser(@Param("userIdList") List<String> userIdList, @Param("positionId") String positionId);
 
     /**
-     * 根据用户id查询职位id
+     * Truy vấn chức vụ theo id người dùng id
      * @param userId
      * @return
      */
@@ -60,7 +60,7 @@ public interface SysUserPositionMapper extends BaseMapper<SysUserPosition> {
 
 
     /**
-     * 根据用户ID和租户ID获取职位id
+     * Lấy chức vụ theo ID người dùng và ID tenant id
      * @param userId
      * @param tenantId
      * @return
@@ -69,7 +69,7 @@ public interface SysUserPositionMapper extends BaseMapper<SysUserPosition> {
     List<String> getPositionIdByUserTenantId(@Param("userId")String userId, @Param("tenantId")Integer tenantId);
 
     /**
-     * 根据用户id获取用户职位
+     * Lấy chức vụ người dùng theo ID người dùng
      * @param userIdList
      * @param tenantId
      * @return
@@ -77,7 +77,7 @@ public interface SysUserPositionMapper extends BaseMapper<SysUserPosition> {
     List<SysUserPositionVo> getPositionIdByUsersTenantId(@Param("userIdList") List<SysUser> userIdList, @Param("tenantId") Integer tenantId);
 
     /**
-     * 根据职位名称和租户id，删除用户职位关系表
+     * Xóa bảng quan hệ người dùng - vị trí theo tên vị trí và id tenant
      * @param positionNames
      * @param tenantId
      * @param userId
@@ -85,12 +85,12 @@ public interface SysUserPositionMapper extends BaseMapper<SysUserPosition> {
     void deleteUserPosByNameAndTenantId(@Param("positionNames") List<String> positionNames, @Param("tenantId") Integer tenantId, @Param("userId") String userId);
 
     /**
-     * 批量查询多个用户的职位IDs（含用户ID映射，用于消除N+1查询）
+     * Truy vấn hàng loạt các ID vị trí của nhiều người dùng (kèm ánh xạ ID người dùng, dùng để loại bỏ N+1 truy vấn)
      * @author scott
-     * @since 2026-07-01 listAll接口N+1查询改造
-     * @param userIds  用户ID列表
-     * @param tenantId 租户ID，为null时不按租户过滤
-     * @return 每条含 id（职位ID）和 userId
+     * @since 2026-07-01 listAll API N+1 Cải tiến truy vấn
+     * @param userIds  Danh sách ID người dùng
+     * @param tenantId ID tenant, khi là null thì không lọc theo tenant
+     * @return Mỗi dòng chứa id (ID chức vụ) và userId
      */
     @InterceptorIgnore(tenantLine = "true")
     List<SysUserPositionVo> getPositionIdsByUserIds(@Param("userIds") List<String> userIds, @Param("tenantId") Integer tenantId);

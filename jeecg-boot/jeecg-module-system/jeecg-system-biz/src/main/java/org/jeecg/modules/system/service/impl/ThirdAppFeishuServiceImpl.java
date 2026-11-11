@@ -40,9 +40,9 @@ import org.springframework.stereotype.Service;
 import java.net.URLEncoder;
 import java.util.*;
 
-//update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成-----------
+//update-begin---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu-----------
 /**
- * 第三方App对接：飞书实现类
+ * Kết nối App bên thứ ba: lớp triển khai Feishu
  *
  * @author jeecg-boot
  * @date 2026-05-13
@@ -51,36 +51,36 @@ import java.util.*;
 @Service
 public class ThirdAppFeishuServiceImpl implements IThirdAppService {
 
-    // ==================== 飞书 OpenAPI 常量 ====================
+    // ==================== Hằng số OpenAPI của Feishu ====================
 
     private static final String FEISHU_BASE = "https://open.feishu.cn";
-    /** 获取应用 app_access_token（用于 OAuth2 登录时换取用户 token） */
+    /** Lấy ứng dụng app_access_token(dùng để đổi lấy token người dùng khi đăng nhập OAuth2) */
     private static final String APP_ACCESS_TOKEN_URL = FEISHU_BASE + "/open-apis/auth/v3/app_access_token/internal";
-    /** 获取应用 tenant_access_token（用于通讯录同步、消息发送等企业级接口） */
+    /** Lấy ứng dụng tenant_access_token(dùng cho các giao diện cấp doanh nghiệp như đồng bộ danh bạ, gửi tin nhắn) */
     private static final String APP_TOKEN_URL     = FEISHU_BASE + "/open-apis/auth/v3/tenant_access_token/internal";
-    /** OAuth2 code 换 user_access_token（新版 OIDC 接口，Authorization: Bearer app_access_token） */
+    /** OAuth2 code đổi lấy user_access_token(giao diện OIDC phiên bản mới, Authorization: Bearer app_access_token） */
     private static final String USER_TOKEN_URL    = FEISHU_BASE + "/open-apis/authen/v1/oidc/access_token";
-    /** 获取已登录用户信息 */
+    /** Lấy thông tin người dùng đã đăng nhập */
     private static final String USER_INFO_URL     = FEISHU_BASE + "/open-apis/authen/v1/user_info";
-    /** OAuth2 授权地址（新版，替代已废弃的 /authen/v1/index） */
+    /** OAuth2 Địa chỉ ủy quyền (phiên bản mới, thay thế địa chỉ đã bị loại bỏ /authen/v1/index） */
     private static final String AUTHORIZE_URL     = FEISHU_BASE + "/open-apis/authen/v1/authorize";
-    /** 发送消息（单发，receive_id_type=open_id） */
+    /** Gửi tin nhắn (gửi đơn,receive_id_type=open_id） */
     private static final String SEND_MSG_URL      = FEISHU_BASE + "/open-apis/im/v1/messages";
-    /** 获取子部门列表（分页） */
+    /** Lấy danh sách phòng ban con (phân trang) */
     private static final String DEPT_CHILDREN_URL = FEISHU_BASE + "/open-apis/contact/v3/departments/%s/children";
-    /** 获取单个部门详情（用于获取根部门 open_department_id） */
+    /** Lấy chi tiết một phòng ban (dùng để lấy phòng ban gốc open_department_id） */
     private static final String DEPT_DETAIL_URL   = FEISHU_BASE + "/open-apis/contact/v3/departments/%s";
-    /** 获取租户信息（含公司名称，虚拟根部门"0"本身无名称，需从此接口取公司名） */
+    /** Lấy thông tin tenant (bao gồm tên công ty, phòng ban gốc ảo"0"bản thân không có tên, cần lấy tên công ty từ giao diện này) */
     private static final String TENANT_INFO_URL   = FEISHU_BASE + "/open-apis/tenant/v2/tenant/query";
-    /** 获取部门下直属用户（分页） */
+    /** Lấy người dùng trực thuộc phòng ban (phân trang) */
     private static final String DEPT_USERS_URL    = FEISHU_BASE + "/open-apis/contact/v3/users";
-    //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用feishuIdentifier字段存储部门ID，废弃memo前缀方案-----------
-    //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用feishuIdentifier字段存储部门ID，废弃memo前缀方案-----------
+    //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, đổi sang dùng trường feishuIdentifier để lưu ID phòng ban, bỏ phương án tiền tố memo-----------
+    //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, đổi sang dùng trường feishuIdentifier để lưu ID phòng ban, bỏ phương án tiền tố memo-----------
 
-    /** 第三方类别固定值，对应 sys_third_app_config.third_type */
+    /** Giá trị cố định của loại bên thứ ba, tương ứng với sys_third_app_config.third_type */
     public static final String THIRD_TYPE = MessageTypeEnum.FS.getType();
 
-    // ==================== 依赖注入 ====================
+    // ==================== Tiêm phụ thuộc ====================
 
     @Autowired
     private SysThirdAppConfigMapper configMapper;
@@ -96,44 +96,44 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
     private ISysDepartService sysDepartService;
     @Autowired
     private ISysUserDepartService sysUserDepartService;
-    //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，注入公告发送记录mapper-----------
+    //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, inject bản ghi gửi thông báo mapper-----------
     @Autowired
     private SysAnnouncementSendMapper sysAnnouncementSendMapper;
-    //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，注入公告发送记录mapper-----------
-    //update-begin---author:jeecg ---date:2026-05-18  for：【QQYUN-12767】飞书集成，注入justauth配置用于yml fallback-----------
+    //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, inject bản ghi gửi thông báo mapper-----------
+    //update-begin---author:jeecg ---date:2026-05-18  for：【QQYUN-12767] Tích hợp Feishu, inject cấu hình justauth để dùng cho yml fallback-----------
     @Autowired(required = false)
     private JustAuthProperties justAuthProperties;
-    //update-end---author:jeecg ---date:2026-05-18  for：【QQYUN-12767】飞书集成，注入justauth配置用于yml fallback-----------
+    //update-end---author:jeecg ---date:2026-05-18  for：【QQYUN-12767] Tích hợp Feishu, inject cấu hình justauth để dùng cho yml fallback-----------
     @Autowired
     private SysUserTenantMapper userTenantMapper;
 
-    // ==================== IThirdAppService 接口实现 ====================
+    // ==================== IThirdAppService Triển khai giao diện ====================
 
     @Override
     public String getAccessToken() {
-        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用统一配置获取方法-----------
+        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】Tích hợp Feishu, đổi sang dùng phương pháp lấy cấu hình thống nhất-----------
         SysThirdAppConfig config = getFeishuThirdAppConfig();
-        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用统一配置获取方法-----------
+        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】Tích hợp Feishu, đổi sang dùng phương pháp lấy cấu hình thống nhất-----------
         if (config != null) {
             return getTenantAccessToken(config);
         }
-        log.warn("当前租户未配置飞书应用");
+        log.warn("Tenant hiện tại chưa cấu hình ứng dụng Feishu");
         return null;
     }
 
-    /** 本地→飞书 部门同步（飞书暂不支持写回，预留接口） */
+    /** Cục bộ→Đồng bộ phòng ban Feishu (Feishu tạm thời không hỗ trợ ghi ngược, giữ lại giao diện) */
     @Override
     public SyncInfoVo syncLocalDepartmentToThirdApp(String ids) {
         SyncInfoVo syncInfo = new SyncInfoVo();
-        syncInfo.addFailInfo("飞书暂不支持本地→飞书方向的部门同步，请在飞书管理后台维护通讯录，再执行飞书→本地同步");
+        syncInfo.addFailInfo("Feishu tạm thời không hỗ trợ hướng cục bộ→Đồng bộ phòng ban theo hướng Feishu, vui lòng quản lý danh bạ trong trang quản trị Feishu rồi mới thực hiện đồng bộ Feishu→Đồng bộ cục bộ");
         return syncInfo;
     }
 
-    /** 本地→飞书 用户同步（飞书暂不支持写回，预留接口） */
+    /** Cục bộ→Đồng bộ người dùng Feishu (Feishu tạm thời không hỗ trợ ghi ngược, giữ lại giao diện) */
     @Override
     public SyncInfoVo syncLocalUserToThirdApp(String ids) {
         SyncInfoVo syncInfo = new SyncInfoVo();
-        syncInfo.addFailInfo("飞书暂不支持本地→飞书方向的用户同步，请在飞书管理后台维护通讯录，再执行飞书→本地同步");
+        syncInfo.addFailInfo("Feishu tạm thời không hỗ trợ hướng cục bộ→Đồng bộ người dùng theo hướng Feishu, vui lòng quản lý danh bạ trong trang quản trị Feishu rồi mới thực hiện đồng bộ Feishu→Đồng bộ cục bộ");
         return syncInfo;
     }
 
@@ -156,18 +156,18 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             SysThirdAppConfig config = getFeishuThirdAppConfig();
             if (config == null) {
                 if (verifyConfig) {
-                    log.warn("飞书应用未配置，跳过消息发送");
+                    log.warn("Ứng dụng Feishu chưa được cấu hình, bỏ qua gửi tin nhắn");
                 }
                 return false;
             }
             String appToken = getTenantAccessToken(config);
             if (appToken == null) {
-                log.error("飞书获取 tenant_access_token 失败，消息发送中止");
+                log.error("Feishu lấy tenant_access_token thất bại, việc gửi tin nhắn bị dừng");
                 return false;
             }
             String toUser = message.getToUser();
             if (StringUtils.isEmpty(toUser)) {
-                log.warn("飞书消息接收者为空，跳过发送");
+                log.warn("Người nhận tin nhắn Feishu trống, bỏ qua gửi");
                 return false;
             }
             boolean allSuccess = true;
@@ -177,7 +177,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                 }
                 SysUser sysUser = sysUserService.getUserByName(username.trim());
                 if (sysUser == null) {
-                    log.warn("飞书消息发送：用户不存在，username={}", username);
+                    log.warn("Gửi tin nhắn Feishu: người dùng không tồn tại,username={}", username);
                     allSuccess = false;
                     continue;
                 }
@@ -185,22 +185,22 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                 query.eq(SysThirdAccount::getThirdType, THIRD_TYPE);
                 query.eq(SysThirdAccount::getTenantId, tenantId);
                 query.eq(SysThirdAccount::getSysUserId, sysUser.getId());
-                //update-begin---author:liusq ---date:2026-10-19  for：【QQYUN-12767】存在重复的飞书第三方账号时不再抛 TooManyResultsException，取第一条发送-----------
+                //update-begin---author:liusq ---date:2026-10-19  for：【QQYUN-12767] Khi tồn tại tài khoản bên thứ ba Feishu trùng lặp thì không ném TooManyResultsException nữa, lấy bản ghi đầu tiên để gửi-----------
                 SysThirdAccount thirdAccount = sysThirdAccountService.getOne(query, false);
-                //update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767】存在重复的飞书第三方账号时不再抛 TooManyResultsException，取第一条发送-----------
+                //update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767] Khi tồn tại tài khoản bên thứ ba Feishu trùng lặp thì không ném TooManyResultsException nữa, lấy bản ghi đầu tiên để gửi-----------
                 if (thirdAccount == null || StringUtils.isEmpty(thirdAccount.getThirdUserUuid())) {
-                    log.warn("飞书消息发送：用户[{}]未绑定飞书账号", username);
+                    log.warn("Feishu gửi tin nhắn: người dùng[{}]Chưa liên kết tài khoản Feishu", username);
                     allSuccess = false;
                     continue;
                 }
-                //update-begin---author:scott ---date:2026-10-09  for：【敲敲云】简流 通知 对接飞书，Markdown 内容改发卡片消息，避免飞书里显示 Markdown 原文-----------
+                //update-begin---author:scott ---date:2026-10-09  for: [QiaoQiaoYun] JianLiu — thông báo tích hợp Feishu, nội dung Markdown đổi sang gửi tin nhắn dạng thẻ, tránh hiển thị văn bản Markdown gốc trong Feishu-----------
                 boolean sent = message.isMarkdown()
                         ? doSendMarkdownCardMessage(appToken, thirdAccount.getThirdUserUuid(), message.getTitle(), message.getContent())
                         : doSendTextMessage(appToken, thirdAccount.getThirdUserUuid(), message.getContent());
                 if (!sent) {
                     allSuccess = false;
                 }
-                //update-end---author:scott ---date:2026-10-09  for：【敲敲云】简流 通知 对接飞书，Markdown 内容改发卡片消息，避免飞书里显示 Markdown 原文-----------
+                //update-end---author:scott ---date:2026-10-09  for: [QiaoQiaoYun] JianLiu — thông báo tích hợp Feishu, nội dung Markdown đổi sang gửi tin nhắn dạng thẻ, tránh hiển thị văn bản Markdown gốc trong Feishu-----------
             }
             return allSuccess;
         } catch (Exception e) {
@@ -208,16 +208,16 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         }
     }
 
-    // ==================== 飞书 OAuth2 登录 ====================
+    // ==================== Đăng nhập Feishu OAuth2 ====================
 
     /**
-     * 构建飞书 OAuth2 扫码登录授权地址（新版 /authen/v1/authorize）
-     * <p>替代 JustAuth 1.16.1 使用的已废弃 /authen/v1/index 端点</p>
+     * Xây dựng địa chỉ ủy quyền đăng nhập quét mã OAuth2 Feishu (phiên bản mới /authen/v1/authorize）
+     * <p>Thay thế JustAuth 1.16.1 đã bị loại bỏ mà JustAuth 1.16.1 từng dùng /authen/v1/index endpoint</p>
      *
-     * @param config      数据库中的飞书应用配置
-     * @param redirectUri 回调地址（须与飞书开发者后台安全设置一致）
-     * @param state       随机状态值，用于防 CSRF 及透传租户信息
-     * @return 飞书授权页面 URL
+     * @param config      Cấu hình ứng dụng Feishu trong cơ sở dữ liệu
+     * @param redirectUri Địa chỉ callback (phải nhất quán với cài đặt bảo mật ở hậu trường nhà phát triển Feishu)
+     * @param state       Giá trị trạng thái ngẫu nhiên, dùng để chống CSRF và truyền xuyên suốt thông tin tenant
+     * @return Trang ủy quyền Feishu URL
      */
     public String buildAuthorizeUrl(SysThirdAppConfig config, String redirectUri, String state) {
         try {
@@ -226,65 +226,65 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                     + "&redirect_uri=" + URLEncoder.encode(redirectUri, "UTF-8")
                     + "&state=" + URLEncoder.encode(state, "UTF-8");
         } catch (Exception e) {
-            log.error("构建飞书授权地址失败", e);
+            log.error("Tạo địa chỉ ủy quyền Feishu thất bại", e);
             return null;
         }
     }
 
     /**
-     * 飞书 OAuth2 登录主流程：code → user_access_token → 用户信息 → 系统用户绑定
-     * <p>直接调用飞书新版 API，绕过 JustAuth 1.16.1 中已废弃的接口</p>
+     * Luồng chính đăng nhập OAuth2 của Feishu:code → user_access_token → Thông tin người dùng → Liên kết người dùng hệ thống
+     * <p>Gọi trực tiếp API phiên bản mới của Feishu, bỏ qua JustAuth 1.16.1 Giao diện đã bị loại bỏ trong</p>
      *
-     * @param code        飞书回调返回的授权码
-     * @param tenantId    当前租户 ID
-     * @param redirectUri 回调地址（须与授权请求中一致）
-     * @return 绑定的系统用户
+     * @param code        Mã ủy quyền Feishu callback trả về
+     * @param tenantId    Tenant hiện tại ID
+     * @param redirectUri Địa chỉ callback (phải nhất quán với yêu cầu ủy quyền)
+     * @return Người dùng hệ thống đã liên kết
      */
     public SysUser oauth2Login(String code, Integer tenantId, String redirectUri) {
-        //update-begin---author:liusq ---date:2026-05-15  for：【QQYUN-12767】飞书扫码登录改用yml配置，委托给带配置参数的重载方法（null=读数据库）-----------
+        //update-begin---author:liusq ---date:2026-05-15  for：【QQYUN-12767] Đăng nhập quét mã Feishu đổi sang dùng cấu hình yml, ủy thác cho phương thức nạp chồng có tham số cấu hình (null=đọc cơ sở dữ liệu)-----------
         return oauth2Login(code, tenantId, redirectUri, null);
-        //update-end---author:liusq ---date:2026-05-15  for：【QQYUN-12767】飞书扫码登录改用yml配置，委托给带配置参数的重载方法（null=读数据库）-----------
+        //update-end---author:liusq ---date:2026-05-15  for：【QQYUN-12767] Đăng nhập quét mã Feishu đổi sang dùng cấu hình yml, ủy thác cho phương thức nạp chồng có tham số cấu hình (null=đọc cơ sở dữ liệu)-----------
     }
 
-    //update-begin---author:liusq ---date:2026-05-15  for：【QQYUN-12767】飞书扫码登录改用yml配置，新增重载方法支持外部传入配置-----------
+    //update-begin---author:liusq ---date:2026-05-15  for：【QQYUN-12767] Đăng nhập quét mã Feishu đổi sang dùng cấu hình yml, thêm phương thức nạp chồng hỗ trợ truyền cấu hình từ bên ngoài vào-----------
     /**
-     * 飞书 OAuth2 登录主流程：支持外部传入应用配置
-     * <p>扫码登录传入从 yml 读取的配置；OAuth2 内嵌登录传 null，自动从 sys_third_app_config 查询</p>
+     * Luồng chính đăng nhập OAuth2 Feishu: hỗ trợ truyền cấu hình ứng dụng từ bên ngoài vào
+     * <p>Đăng nhập quét mã truyền vào cấu hình đọc từ yml; đăng nhập nhúng OAuth2 truyền null, tự động lấy từ sys_third_app_config Truy vấn</p>
      *
-     * @param code           飞书回调返回的授权码
-     * @param tenantId       当前租户 ID
-     * @param redirectUri    回调地址（须与授权请求中一致）
-     * @param externalConfig 外部传入配置（null 时从数据库查询）
-     * @return 绑定的系统用户
+     * @param code           Mã ủy quyền Feishu callback trả về
+     * @param tenantId       Tenant hiện tại ID
+     * @param redirectUri    Địa chỉ callback (phải nhất quán với yêu cầu ủy quyền)
+     * @param externalConfig Cấu hình truyền vào từ bên ngoài (khi null thì truy vấn từ cơ sở dữ liệu)
+     * @return Người dùng hệ thống đã liên kết
      */
     public SysUser oauth2Login(String code, Integer tenantId, String redirectUri, SysThirdAppConfig externalConfig) {
         SysThirdAppConfig config = (externalConfig != null) ? externalConfig : configMapper.getThirdConfigByThirdType(tenantId, THIRD_TYPE);
         if (config == null) {
-            throw new JeecgBootException("飞书应用未配置，请联系管理员");
+            throw new JeecgBootException("Ứng dụng Feishu chưa được cấu hình, vui lòng liên hệ quản trị viên");
         }
-        // Step1: code 换 user_access_token
+        // Step1: code đổi lấy user_access_token
         String userAccessToken = getUserAccessToken(config, code, redirectUri);
         if (userAccessToken == null) {
-            throw new JeecgBootException("飞书获取 user_access_token 失败，请检查应用配置及回调地址");
+            throw new JeecgBootException("Feishu lấy user_access_token Thất bại, vui lòng kiểm tra cấu hình ứng dụng và địa chỉ callback");
         }
-        // Step2: 获取用户信息
+        // Step2: Lấy thông tin người dùng
         JSONObject userInfo = getFeishuUserInfo(userAccessToken);
         if (userInfo == null) {
-            throw new JeecgBootException("飞书获取用户信息失败，请检查应用权限");
+            throw new JeecgBootException("Lấy thông tin người dùng Feishu thất bại, vui lòng kiểm tra quyền hạn của ứng dụng");
         }
         String openId = userInfo.getString("open_id");
         String name   = userInfo.getString("name");
         String avatar = userInfo.getString("avatar_url");
-        log.info("【飞书】OAuth2 登录，用户: openId={}, name={}", openId, name);
+        log.info("Đăng nhập OAuth2, người dùng: openId={}, name={}", openId, name);
 
-        // Step3: 检查租户有效性
+        // Step3: Kiểm tra tính hợp lệ của tenant
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             Long count = tenantMapper.tenantIzExist(tenantId);
             if (ObjectUtil.isEmpty(count) || 0 == count) {
-                throw new JeecgBootException("租户不存在！");
+                throw new JeecgBootException("Tenant không tồn tại!");
             }
         }
-        // Step4: 查找或创建第三方账号记录
+        // Step4: Tìm hoặc tạo bản ghi tài khoản bên thứ ba
         LambdaQueryWrapper<SysThirdAccount> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysThirdAccount::getThirdType, THIRD_TYPE);
         queryWrapper.eq(SysThirdAccount::getTenantId, tenantId);
@@ -296,30 +296,30 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             ThirdLoginModel tlm = new ThirdLoginModel(THIRD_TYPE, openId, name, avatar);
             thirdAccount = sysThirdAccountService.saveThirdUser(tlm, tenantId);
         }
-        // Step5: 检查是否已绑定系统用户
+        // Step5: Kiểm tra đã liên kết người dùng hệ thống hay chưa
         if (StringUtils.isEmpty(thirdAccount.getSysUserId())) {
-            throw new JeecgBootException("该飞书账号尚未绑定系统用户，请先同步或绑定！openId=" + openId);
+            throw new JeecgBootException("Tài khoản Feishu này chưa liên kết với người dùng hệ thống, vui lòng đồng bộ hoặc liên kết trước!openId=" + openId);
         }
         SysUser sysUser = sysUserService.getById(thirdAccount.getSysUserId());
         if (sysUser == null || sysUser.getStatus() == null || sysUser.getStatus() == 2) {
-            throw new JeecgBootException("对应系统用户已停用或不存在，请联系管理员");
+            throw new JeecgBootException("Người dùng hệ thống tương ứng đã bị dừng hoặc không tồn tại, vui lòng liên hệ quản trị viên");
         }
         return sysUser;
     }
-    //update-end---author:liusq ---date:2026-05-15  for：【QQYUN-12767】飞书扫码登录改用yml配置，新增重载方法支持外部传入配置-----------
+    //update-end---author:liusq ---date:2026-05-15  for：【QQYUN-12767] Đăng nhập quét mã Feishu đổi sang dùng cấu hình yml, thêm phương thức nạp chồng hỗ trợ truyền cấu hình từ bên ngoài vào-----------
 
     /**
-     * 用授权码换取 user_access_token（飞书新版 OIDC 接口）
-     * <p>飞书要求：Authorization: Bearer app_access_token（先获取 app_access_token，再换用户 token）</p>
+     * Dùng mã ủy quyền để đổi lấy user_access_token(Giao diện OIDC phiên bản mới của Feishu)
+     * <p>Feishu yêu cầu:Authorization: Bearer app_access_token(lấy trước app_access_token, sau đó đổi sang token người dùng)</p>
      */
     private String getUserAccessToken(SysThirdAppConfig config, String code, String redirectUri) {
-        // Step1: 获取 app_access_token（应用身份 token，区别于 tenant_access_token）
+        // Step1: Lấy app_access_token(token định danh ứng dụng, khác với tenant_access_token）
         String appAccessToken = getAppAccessToken(config);
         if (appAccessToken == null) {
-            log.error("飞书获取 app_access_token 失败，无法换取用户 token");
+            log.error("Feishu lấy app_access_token thất bại, không thể đổi lấy token người dùng token");
             return null;
         }
-        // Step2: 用 app_access_token 换取 user_access_token
+        // Step2: Dùng app_access_token đổi lấy user_access_token
         JSONObject body = new JSONObject();
         body.put("grant_type", "authorization_code");
         body.put("code", code);
@@ -333,23 +333,23 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             httpPost.setEntity(new StringEntity(body.toJSONString(), ContentType.APPLICATION_JSON));
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
                 String responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
-                log.debug("飞书 user_access_token 响应: {}", responseBody);
+                log.debug("Feishu user_access_token Phản hồi: {}", responseBody);
                 JSONObject result = JSON.parseObject(responseBody);
                 if (result != null && result.getIntValue("code") == 0) {
                     JSONObject data = result.getJSONObject("data");
                     return data != null ? data.getString("access_token") : null;
                 }
-                log.error("飞书获取 user_access_token 失败: {}", responseBody);
+                log.error("Feishu lấy user_access_token Thất bại: {}", responseBody);
                 return null;
             }
         } catch (Exception e) {
-            log.error("飞书获取 user_access_token 异常", e);
+            log.error("Feishu lấy user_access_token Ngoại lệ", e);
             return null;
         }
     }
 
     /**
-     * 获取飞书应用级 app_access_token（用于 OAuth2 登录换用户 token）
+     * Lấy cấp ứng dụng Feishu app_access_token(dùng để đổi token người dùng khi đăng nhập OAuth2)
      */
     private String getAppAccessToken(SysThirdAppConfig config) {
         JSONObject body = new JSONObject();
@@ -359,75 +359,75 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         if (result != null && result.getIntValue("code") == 0) {
             return result.getString("app_access_token");
         }
-        log.error("飞书获取 app_access_token 失败: {}", result);
+        log.error("Feishu lấy app_access_token Thất bại: {}", result);
         return null;
     }
 
     /**
-     * 用 user_access_token 获取当前登录用户信息
+     * Dùng user_access_token Lấy thông tin người dùng đang đăng nhập
      */
     private JSONObject getFeishuUserInfo(String userAccessToken) {
         JSONObject result = doGet(USER_INFO_URL, userAccessToken);
         if (result != null && result.getIntValue("code") == 0) {
             return result.getJSONObject("data");
         }
-        log.error("飞书获取用户信息失败: {}", result);
+        log.error("Feishu lấy thông tin người dùng thất bại: {}", result);
         return null;
     }
 
-    // ==================== 飞书→本地 通讯录同步 ====================
+    // ==================== Feishu→Đồng bộ danh bạ cục bộ ====================
 
     /**
-     * 飞书通讯录同步到本地（部门 + 用户）
+     * Đồng bộ danh bạ Feishu về cục bộ (phòng ban + người dùng)
      * <p>
-     * 所需飞书应用权限（在飞书开放平台 → 应用详情 → 权限管理中开通）：<br>
-     * - 获取部门信息：contact:department:read<br>
-     * - 获取用户基本信息（姓名/邮箱/头像）：contact:user.base:readonly<br>
-     * - 获取用户手机号：contact:user.phone:readonly（同步手机号必须开通）<br>
-     * - 获取租户信息（公司名称）：tenant:readable<br>
-     * 若手机号未同步，请检查是否已开通 contact:user.phone:readonly 权限并重新发布应用版本。
+     * Quyền hạn ứng dụng Feishu cần thiết (bật trong nền tảng mở Feishu → Chi tiết ứng dụng → mở trong quản lý quyền hạn）：<br>
+     * - Lấy thông tin phòng ban:contact:department:read<br>
+     * - Lấy thông tin cơ bản của người dùng (Họ tên/Email/Ảnh đại diện):contact:user.base:readonly<br>
+     * - Lấy số điện thoại người dùng:contact:user.phone:readonly(Đồng bộ số điện thoại phải được bật)<br>
+     * - Lấy thông tin tenant (tên công ty):tenant:readable<br>
+     * Nếu số điện thoại chưa được đồng bộ, vui lòng kiểm tra xem đã bật contact:user.phone:readonly quyền hạn và phát hành lại phiên bản ứng dụng.
      *
-     * @param tenantId 租户 ID
+     * @param tenantId Tenant ID
      */
     public SyncInfoVo syncFeishuDeptAndUserToLocal(Integer tenantId) {
         SyncInfoVo syncInfo = new SyncInfoVo();
         SysThirdAppConfig config = configMapper.getThirdConfigByThirdType(tenantId, THIRD_TYPE);
         if (config == null) {
-            syncInfo.addFailInfo("飞书应用未配置，请先在第三方集成中配置飞书应用");
+            syncInfo.addFailInfo("Ứng dụng Feishu chưa được cấu hình, vui lòng cấu hình ứng dụng Feishu trong tích hợp bên thứ ba trước");
             return syncInfo;
         }
         String appToken = getTenantAccessToken(config);
         if (appToken == null) {
-            syncInfo.addFailInfo("获取飞书 tenant_access_token 失败，请检查 AppID 和 AppSecret");
+            syncInfo.addFailInfo("Lấy Feishu tenant_access_token Thất bại, vui lòng kiểm tra AppID và AppSecret");
             return syncInfo;
         }
-        log.info("开始飞书通讯录同步，tenantId={}", tenantId);
+        log.info("Bắt đầu đồng bộ danh bạ Feishu,tenantId={}", tenantId);
 
-        //update-begin---author:liusq ---date:2026-06-02  for：【QQYUN-12767】修复根部门（公司节点）及其直属成员未被同步的问题
-        // Step1: 构建「飞书 open_department_id → 本地 SysDepart」映射
-        // 先同步根部门本身（北京敲敲云科技有限公司），再以其本地 id 作为父节点递归同步子部门
+        //update-begin---author:liusq ---date:2026-06-02  for：【QQYUN-12767] Sửa vấn đề phòng ban gốc (nút công ty) và các thành viên trực thuộc của nó chưa được đồng bộ
+        // Step1: Xây dựng「Feishu open_department_id → Ánh xạ SysDepart cục bộ」
+        // Đồng bộ trước chính phòng ban gốc (Công ty TNHH Khoa học Công nghệ QiaoQiaoYun Bắc Kinh), sau đó lấy id cục bộ của nó làm node cha để đồng bộ đệ quy các phòng ban con
         Map<String, SysDepart> feishuDeptMap = new LinkedHashMap<>();
         SysDepart rootDepart = syncFeishuRootDept(appToken, tenantId, syncInfo);
         String rootLocalId = null;
         if (rootDepart != null) {
             feishuDeptMap.put(rootDepart.getFeishuIdentifier(), rootDepart);
             rootLocalId = rootDepart.getId();
-            log.info("飞书根部门同步完成：{}", rootDepart.getDepartName());
+            log.info("Đồng bộ phòng ban gốc Feishu hoàn tất：{}", rootDepart.getDepartName());
         }
         syncFeishuDepts(appToken, "0", rootLocalId, tenantId, feishuDeptMap, syncInfo);
-        //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767】修复根部门（公司节点）及其直属成员未被同步的问题
-        log.info("飞书部门同步完成，共处理 {} 个部门", feishuDeptMap.size());
+        //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767] Sửa vấn đề phòng ban gốc (nút công ty) và các thành viên trực thuộc của nó chưa được đồng bộ
+        log.info("Đồng bộ phòng ban Feishu hoàn tất, đã xử lý tổng cộng {}  phòng ban", feishuDeptMap.size());
 
-        // Step2: 遍历部门，同步用户
+        // Step2: Duyệt phòng ban, đồng bộ người dùng
         Set<String> syncedOpenIds = new HashSet<>();
         for (Map.Entry<String, SysDepart> entry : feishuDeptMap.entrySet()) {
             syncFeishuDeptUsers(appToken, entry.getKey(), entry.getValue(), tenantId, syncedOpenIds, syncInfo);
         }
-        log.info("飞书用户同步完成，共处理 {} 个用户", syncedOpenIds.size());
+        log.info("Đồng bộ người dùng Feishu hoàn tất, đã xử lý tổng cộng {} người dùng", syncedOpenIds.size());
 
-        //update-begin---author:liusq ---date:2026-05-18  for：【QQYUN-12767】飞书同步增加删除逻辑：飞书侧已删除的部门/用户同步清理本地数据
-        // Step3: 删除本地有 feishuIdentifier 但飞书中已不存在的部门
-        // 仅在本次同步无 API 调用失败时执行，避免因接口异常导致数据被误删
+        //update-begin---author:liusq ---date:2026-05-18  for：【QQYUN-12767] Đồng bộ Feishu thêm logic xóa: phòng ban phía Feishu đã xóa/Đồng bộ người dùng dọn dẹp dữ liệu cục bộ
+        // Step3: Xóa các phòng ban có feishuIdentifier ở local nhưng không còn tồn tại trong Feishu
+        // Chỉ thực thi khi lần đồng bộ này không có lỗi gọi API, tránh dữ liệu bị xóa nhầm do API gặp lỗi
         if (syncInfo.getFailInfo().isEmpty()) {
             LambdaQueryWrapper<SysDepart> deptQuery = new LambdaQueryWrapper<SysDepart>()
                     .isNotNull(SysDepart::getFeishuIdentifier)
@@ -440,14 +440,14 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             for (SysDepart dept : localFeishuDepts) {
                 if (!feishuDeptMap.containsKey(dept.getFeishuIdentifier())) {
                     sysDepartService.deleteDepart(dept.getId());
-                    syncInfo.addSuccessInfo("删除部门：" + dept.getDepartName());
-                    log.info("飞书同步删除部门：{}，feishuIdentifier={}", dept.getDepartName(), dept.getFeishuIdentifier());
+                    syncInfo.addSuccessInfo("Xóa phòng ban:" + dept.getDepartName());
+                    log.info("Feishu đồng bộ xóa phòng ban：{}，feishuIdentifier={}", dept.getDepartName(), dept.getFeishuIdentifier());
                 }
             }
         }
 
-        // Step4: 停用本地有 feishu 绑定但飞书中已不存在的用户（设为停用状态，不直接删除账号）
-        // 同样仅在无 API 错误时执行
+        // Step4: Vô hiệu hóa người dùng có gắn kết feishu ở local nhưng không còn tồn tại trong Feishu (đặt thành trạng thái vô hiệu, không xóa trực tiếp tài khoản)
+        // Tương tự chỉ thực thi khi không có lỗi API
         if (syncInfo.getFailInfo().isEmpty()) {
             LambdaQueryWrapper<SysThirdAccount> accountQuery = new LambdaQueryWrapper<SysThirdAccount>()
                     .eq(SysThirdAccount::getThirdType, THIRD_TYPE)
@@ -462,57 +462,57 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                     if (user != null && user.getStatus() != 2) {
                         user.setStatus(2);
                         sysUserService.updateById(user);
-                        syncInfo.addSuccessInfo("停用已离职用户：" + user.getRealname());
-                        log.info("飞书同步停用用户：{}，openId={}", user.getRealname(), account.getThirdUserUuid());
+                        syncInfo.addSuccessInfo("Vô hiệu hóa người dùng đã nghỉ việc：" + user.getRealname());
+                        log.info("Feishu đồng bộ vô hiệu hóa người dùng：{}，openId={}", user.getRealname(), account.getThirdUserUuid());
                     }
                 }
             }
         }
-        //update-end---author:liusq ---date:2026-05-18  for：【QQYUN-12767】飞书同步增加删除逻辑：飞书侧已删除的部门/用户同步清理本地数据
+        //update-end---author:liusq ---date:2026-05-18  for：【QQYUN-12767] Đồng bộ Feishu thêm logic xóa: phòng ban phía Feishu đã xóa/Đồng bộ người dùng dọn dẹp dữ liệu cục bộ
 
         return syncInfo;
     }
 
-    //update-begin---author:liusq ---date:2026-06-02  for：【QQYUN-12767】修复根部门（公司节点）及其直属成员未被同步的问题
+    //update-begin---author:liusq ---date:2026-06-02  for：【QQYUN-12767] Sửa vấn đề phòng ban gốc (nút công ty) và các thành viên trực thuộc của nó chưa được đồng bộ
     /**
-     * 同步飞书根部门（即公司顶级节点，department_id="0"）到本地。
+     * Đồng bộ phòng ban gốc Feishu (tức là nút cấp cao nhất của công ty,department_id="0") về máy cục bộ.
      * <p>
-     * 飞书的根部门不会出现在 children 列表中，需通过部门详情接口单独获取其
-     * open_department_id 和名称，在本地创建或更新对应的 SysDepart 记录，
-     * 并以其本地 id 作为所有一级子部门的父节点，保证本地树形结构与飞书一致。
+     * Phòng ban gốc của Feishu sẽ không xuất hiện trong danh sách children, cần lấy riêng thông qua API chi tiết phòng ban
+     * open_department_id và tên, tạo mới hoặc cập nhật bản ghi SysDepart tương ứng tại local,
+     * Và lấy id cục bộ của nó làm node cha của tất cả các phòng ban con cấp một, đảm bảo cấu trúc cây ở local khớp với Feishu.
      * </p>
      */
     private SysDepart syncFeishuRootDept(String appToken, Integer tenantId, SyncInfoVo syncInfo) {
-        // 飞书 department_id="0" 表示根部门，使用 department_id 类型查询
+        // Feishu department_id="0" Biểu thị phòng ban gốc, sử dụng department_id Truy vấn theo loại
         String url = String.format(DEPT_DETAIL_URL, "0") + "?department_id_type=department_id";
         JSONObject resp = doGet(url, appToken);
         if (resp == null || resp.getIntValue("code") != 0) {
-            String errMsg = resp != null ? resp.getString("msg") : "网络异常";
-            syncInfo.addFailInfo("获取飞书根部门信息失败: " + errMsg);
+            String errMsg = resp != null ? resp.getString("msg") : "Lỗi mạng";
+            syncInfo.addFailInfo("Lấy thông tin phòng ban gốc Feishu thất bại: " + errMsg);
             return null;
         }
         JSONObject data = resp.getJSONObject("data");
         if (data == null) {
-            syncInfo.addFailInfo("获取飞书根部门信息返回数据为空");
+            syncInfo.addFailInfo("Lấy thông tin phòng ban gốc Feishu, dữ liệu trả về trống");
             return null;
         }
         JSONObject deptObj = data.getJSONObject("department");
         if (deptObj == null) {
-            syncInfo.addFailInfo("获取飞书根部门信息返回 department 字段为空");
+            syncInfo.addFailInfo("Lấy thông tin phòng ban gốc của Feishu, trả về trường department rỗng");
             return null;
         }
         String openDeptId = deptObj.getString("open_department_id");
-        //update-begin---author:liusq ---date:2026-06-02  for：【QQYUN-12767】飞书虚拟根部门"0"本身无名称，按优先级三级回退获取公司名
-        // 优先级1：department.name
+        //update-begin---author:liusq ---date:2026-06-02  for：【QQYUN-12767】Phòng ban gốc ảo Feishu"0"Bản thân không có tên, lấy tên công ty theo cơ chế fallback ba cấp theo mức độ ưu tiên
+        // Ưu tiên 1：department.name
         String deptName = deptObj.getString("name");
-        // 优先级2：department.i18n_name.zh_cn
+        // Ưu tiên 2：department.i18n_name.zh_cn
         if (StringUtils.isEmpty(deptName)) {
             JSONObject i18nName = deptObj.getJSONObject("i18n_name");
             if (i18nName != null) {
                 deptName = i18nName.getString("zh_cn");
             }
         }
-        // 优先级3：租户信息接口（虚拟根"0"无名称时，公司名存于租户配置中）
+        // Ưu tiên 3: Giao diện thông tin tenant (gốc ảo"0"Khi không có tên, tên công ty được lưu trong cấu hình tenant)
         if (StringUtils.isEmpty(deptName)) {
             JSONObject tenantResp = doGet(TENANT_INFO_URL, appToken);
             if (tenantResp != null && tenantResp.getIntValue("code") == 0) {
@@ -526,10 +526,10 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             }
         }
         if (StringUtils.isEmpty(deptName)) {
-            syncInfo.addFailInfo("获取飞书根部门名称失败：department.name、i18n_name.zh_cn 和租户接口均未返回有效名称");
+            syncInfo.addFailInfo("Lấy tên phòng ban gốc Feishu thất bại:department.name、i18n_name.zh_cn Và giao diện tenant đều chưa trả về tên hợp lệ");
             return null;
         }
-        //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767】飞书虚拟根部门"0"本身无名称，按优先级三级回退获取公司名
+        //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767】Phòng ban gốc ảo Feishu"0"Bản thân không có tên, lấy tên công ty theo cơ chế fallback ba cấp theo mức độ ưu tiên
 
         SysDepart localDepart = findLocalDeptByFeishuId(openDeptId, tenantId);
         if (localDepart == null) {
@@ -538,9 +538,9 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         if (localDepart == null) {
             localDepart = createLocalDepart(deptName, null, openDeptId, tenantId);
             if (localDepart != null) {
-                syncInfo.addSuccessInfo("新增根部门：" + deptName);
+                syncInfo.addSuccessInfo("Thêm phòng ban gốc: " + deptName);
             } else {
-                syncInfo.addFailInfo("创建根部门失败：" + deptName);
+                syncInfo.addFailInfo("Tạo phòng ban gốc thất bại:" + deptName);
                 return null;
             }
         } else {
@@ -556,14 +556,14 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             if (changed) {
                 sysDepartService.updateDepartDataById(localDepart, "admin");
             }
-            syncInfo.addSuccessInfo("更新根部门：" + deptName);
+            syncInfo.addSuccessInfo("Cập nhật phòng ban gốc: " + deptName);
         }
         return localDepart;
     }
-    //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767】修复根部门（公司节点）及其直属成员未被同步的问题
+    //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767] Sửa vấn đề phòng ban gốc (nút công ty) và các thành viên trực thuộc của nó chưa được đồng bộ
 
     /**
-     * 递归同步飞书部门到本地
+     * Đồng bộ đệ quy phòng ban Feishu về cục bộ
      */
     private void syncFeishuDepts(String appToken, String parentOpenDeptId, String localParentId,
                                   Integer tenantId, Map<String, SysDepart> feishuDeptMap, SyncInfoVo syncInfo) {
@@ -575,8 +575,8 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             }
             JSONObject resp = doGet(url, appToken);
             if (resp == null || resp.getIntValue("code") != 0) {
-                String errMsg = resp != null ? resp.getString("msg") : "网络异常";
-                syncInfo.addFailInfo("获取飞书部门[" + parentOpenDeptId + "]子部门失败: " + errMsg);
+                String errMsg = resp != null ? resp.getString("msg") : "Lỗi mạng";
+                syncInfo.addFailInfo("Lấy phòng ban Feishu[" + parentOpenDeptId + "]phòng ban con thất bại: " + errMsg);
                 return;
             }
             JSONObject data = resp.getJSONObject("data");
@@ -597,13 +597,13 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                     if (localDepart == null) {
                         localDepart = createLocalDepart(deptName, localParentId, openDeptId, tenantId);
                         if (localDepart != null) {
-                            syncInfo.addSuccessInfo("新增部门：" + deptName);
+                            syncInfo.addSuccessInfo("Thêm phòng ban mới:" + deptName);
                         } else {
-                            syncInfo.addFailInfo("创建部门失败：" + deptName);
+                            syncInfo.addFailInfo("Tạo phòng ban thất bại:" + deptName);
                             continue;
                         }
                     } else {
-                        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，更新时同步修正parentId和feishuIdentifier，修复部门层级丢失问题-----------
+                        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, khi cập nhật đồng thời sửa parentId và feishuIdentifier, sửa lỗi mất phân cấp phòng ban-----------
                         boolean changed = false;
                         if (!openDeptId.equals(localDepart.getFeishuIdentifier())) {
                             localDepart.setFeishuIdentifier(openDeptId);
@@ -613,20 +613,20 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                             localDepart.setParentId(localParentId);
                             changed = true;
                         }
-                        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，更新时同步修正parentId和feishuIdentifier，修复部门层级丢失问题-----------
-                        //update-begin---author:liusq ---date:2026-05-18  for：【QQYUN-12767】飞书同步部门时补充名称更新，飞书改名后本地同步更新-----------
+                        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, khi cập nhật đồng thời sửa parentId và feishuIdentifier, sửa lỗi mất phân cấp phòng ban-----------
+                        //update-begin---author:liusq ---date:2026-05-18  for：【QQYUN-12767] Khi đồng bộ phòng ban Feishu thì bổ sung cập nhật tên; sau khi đổi tên trên Feishu, local sẽ đồng bộ cập nhật-----------
                         if (!deptName.equals(localDepart.getDepartName())) {
                             localDepart.setDepartName(deptName);
                             changed = true;
                         }
-                        //update-end---author:liusq ---date:2026-05-18  for：【QQYUN-12767】飞书同步部门时补充名称更新，飞书改名后本地同步更新-----------
+                        //update-end---author:liusq ---date:2026-05-18  for：【QQYUN-12767] Khi đồng bộ phòng ban Feishu thì bổ sung cập nhật tên; sau khi đổi tên trên Feishu, local sẽ đồng bộ cập nhật-----------
                         if (changed) {
                             if (StringUtils.isNotEmpty(localParentId)) {
                                 sysDepartService.updateIzLeaf(localParentId, CommonConstant.NOT_LEAF);
                             }
                             sysDepartService.updateDepartDataById(localDepart, "admin");
                         }
-                        syncInfo.addSuccessInfo("更新部门：" + deptName);
+                        syncInfo.addSuccessInfo("Cập nhật phòng ban:" + deptName);
                     }
                     feishuDeptMap.put(openDeptId, localDepart);
                     syncFeishuDepts(appToken, openDeptId, localDepart.getId(), tenantId, feishuDeptMap, syncInfo);
@@ -638,7 +638,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 同步飞书某部门下的直属用户到本地
+     * Đồng bộ người dùng trực thuộc một phòng ban Feishu về local
      */
     private void syncFeishuDeptUsers(String appToken, String openDeptId, SysDepart localDepart,
                                       Integer tenantId, Set<String> syncedOpenIds, SyncInfoVo syncInfo) {
@@ -651,8 +651,8 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             }
             JSONObject resp = doGet(url, appToken);
             if (resp == null || resp.getIntValue("code") != 0) {
-                String errMsg = resp != null ? resp.getString("msg") : "网络异常";
-                syncInfo.addFailInfo("获取飞书部门[" + openDeptId + "]用户列表失败: " + errMsg);
+                String errMsg = resp != null ? resp.getString("msg") : "Lỗi mạng";
+                syncInfo.addFailInfo("Lấy phòng ban Feishu[" + openDeptId + "]danh sách người dùng thất bại: " + errMsg);
                 return;
             }
             JSONObject data = resp.getJSONObject("data");
@@ -678,33 +678,33 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                     String unionId   = userObj.getString("union_id");
                     JSONObject avatar = userObj.getJSONObject("avatar");
                     String avatarUrl = avatar != null ? avatar.getString("avatar_72") : null;
-                    //update-begin---author:liusq ---date:2026-06-02  for：【QQYUN-12767】手机号为空时打印warn，引导用户检查飞书应用权限
+                    //update-begin---author:liusq ---date:2026-06-02  for：【QQYUN-12767] Khi số điện thoại rỗng thì in warn, hướng dẫn người dùng kiểm tra quyền ứng dụng Feishu
                     if (StringUtils.isEmpty(mobile)) {
-                        log.warn("飞书用户[{}]手机号未返回，请确认飞书应用已开通 contact:user.phone:readonly 权限并重新发布应用版本", name);
+                        log.warn("Người dùng Feishu[{}]Số điện thoại chưa được trả về, vui lòng xác nhận ứng dụng Feishu đã bật contact:user.phone:readonly quyền hạn và phát hành lại phiên bản ứng dụng", name);
                     }
-                    //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767】手机号为空时打印warn，引导用户检查飞书应用权限
+                    //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767] Khi số điện thoại rỗng thì in warn, hướng dẫn người dùng kiểm tra quyền ứng dụng Feishu
 
-                    //update-begin---author:liusq ---date:2026-10-18  for：【QQYUN-12767】飞书同步单个用户异常时记录失败信息并继续，避免一条脏数据中断整次同步-----------
+                    //update-begin---author:liusq ---date:2026-10-18  for：【QQYUN-12767] Khi đồng bộ từng người dùng Feishu gặp lỗi, ghi lại thông tin thất bại rồi tiếp tục, tránh một bản ghi lỗi làm gián đoạn toàn bộ lần đồng bộ-----------
                     try {
                         LambdaQueryWrapper<SysThirdAccount> query = new LambdaQueryWrapper<>();
                         query.eq(SysThirdAccount::getThirdType, THIRD_TYPE);
                         query.eq(SysThirdAccount::getTenantId, tenantId);
                         query.and(w -> w.eq(SysThirdAccount::getThirdUserUuid, openId)
                                 .or().eq(SysThirdAccount::getThirdUserId, openId));
-                        //update-begin---author:liusq ---date:2026-10-18  for：【QQYUN-12767】存在重复的飞书第三方账号时不再抛 TooManyResultsException，优先取已绑定系统用户的记录-----------
+                        //update-begin---author:liusq ---date:2026-10-18  for：【QQYUN-12767] Khi tồn tại tài khoản bên thứ ba Feishu trùng lặp thì không ném TooManyResultsException nữa, ưu tiên lấy bản ghi đã gắn với người dùng hệ thống-----------
                         List<SysThirdAccount> thirdAccounts = sysThirdAccountService.list(query);
                         if (thirdAccounts.size() > 1) {
-                            log.warn("飞书用户[{}]存在 {} 条重复的第三方账号记录，请清理 sys_third_account 重复数据，openId={}", name, thirdAccounts.size(), openId);
+                            log.warn("Người dùng Feishu[{}]có {} bản ghi tài khoản bên thứ ba trùng lặp, vui lòng dọn dẹp sys_third_account dữ liệu trùng lặp,openId={}", name, thirdAccounts.size(), openId);
                         }
                         SysThirdAccount thirdAccount = thirdAccounts.stream()
                                 .filter(a -> StringUtils.isNotEmpty(a.getSysUserId()))
                                 .findFirst()
                                 .orElse(thirdAccounts.isEmpty() ? null : thirdAccounts.get(0));
-                        //update-end---author:liusq ---date:2026-10-18  for：【QQYUN-12767】存在重复的飞书第三方账号时不再抛 TooManyResultsException，优先取已绑定系统用户的记录-----------
+                        //update-end---author:liusq ---date:2026-10-18  for：【QQYUN-12767] Khi tồn tại tài khoản bên thứ ba Feishu trùng lặp thì không ném TooManyResultsException nữa, ưu tiên lấy bản ghi đã gắn với người dùng hệ thống-----------
 
-                        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，已绑定用户执行信息更新（姓名/手机/邮箱/头像），修复同步时已存在用户被跳过不更新的问题-----------
+                        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, người dùng đã liên kết thực hiện cập nhật thông tin (họ tên/Điện thoại/Email/ảnh đại diện), sửa vấn đề người dùng đã tồn tại bị bỏ qua không cập nhật khi đồng bộ-----------
                         if (thirdAccount != null && StringUtils.isNotEmpty(thirdAccount.getSysUserId())) {
-                            // 已有绑定关系，更新用户基本信息
+                            // Đã có quan hệ liên kết, cập nhật thông tin cơ bản của người dùng
                             SysUser existUser = sysUserService.getById(thirdAccount.getSysUserId());
                             if (existUser != null) {
                                 existUser.setRealname(name);
@@ -718,26 +718,26 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                                     existUser.setAvatar(avatarUrl);
                                 }
                                 sysUserService.updateById(existUser);
-                                //update-begin---author:liusq ---date:2026-10-19  for：【QQYUN-12767】飞书同步用户未关联当前租户，补齐历史同步缺失的租户关系-----------
+                                //update-begin---author:liusq ---date:2026-10-19  for：【QQYUN-12767] Người dùng đồng bộ Feishu chưa liên kết với thuê bao hiện tại, bổ sung quan hệ thuê bao còn thiếu trong lịch sử đồng bộ-----------
                                 createUserTenant(existUser.getId(), false, tenantId);
-                                //update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767】飞书同步用户未关联当前租户，补齐历史同步缺失的租户关系-----------
+                                //update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767] Người dùng đồng bộ Feishu chưa liên kết với thuê bao hiện tại, bổ sung quan hệ thuê bao còn thiếu trong lịch sử đồng bộ-----------
                             }
-                            syncInfo.addSuccessInfo("更新已存在用户：" + name);
+                            syncInfo.addSuccessInfo("Cập nhật người dùng đã tồn tại:" + name);
                             if (localDepart != null) {
                                 linkUserToDepart(openId, tenantId, localDepart.getId());
                             }
                             continue;
                         }
-                        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，已绑定用户执行信息更新（姓名/手机/邮箱/头像），修复同步时已存在用户被跳过不更新的问题-----------
+                        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, người dùng đã liên kết thực hiện cập nhật thông tin (họ tên/Điện thoại/Email/ảnh đại diện), sửa vấn đề người dùng đã tồn tại bị bỏ qua không cập nhật khi đồng bộ-----------
 
-                        //update-begin---author:jeecg ---date:2026-08-04  for：【QQYUN-12767】飞书同步按手机号查重：手机号已存在的本地用户直接绑定，不新增用户-----------
-                        // 兜底逻辑：未通过 thirdUserUuid/thirdUserId 找到绑定记录时，先按手机号匹配本地用户
-                        // 命中则直接将飞书 openId 绑定到该现有用户，避免重复创建账号（对齐钉钉 addDepartUser 行为）
+                        //update-begin---author:jeecg ---date:2026-08-04  for：【QQYUN-12767] Đồng bộ Feishu kiểm tra trùng theo số điện thoại: người dùng local đã có số điện thoại thì gắn trực tiếp, không tạo thêm người dùng-----------
+                        // Logic dự phòng: không tìm thấy qua thirdUserUuid/thirdUserId Khi tìm thấy bản ghi liên kết, trước tiên khớp người dùng local theo số điện thoại
+                        // Nếu trùng khớp thì trực tiếp gắn openId Feishu vào người dùng hiện có, tránh tạo trùng tài khoản (căn chỉnh theo hành vi addDepartUser của DingTalk)
                         String strippedMobile = StringUtils.isNotEmpty(mobile) ? mobile.replaceAll("^\\+86\\s*", "").trim() : null;
                         SysUser userByPhone = StringUtils.isNotEmpty(strippedMobile) ? userMapper.getUserByPhone(strippedMobile) : null;
                         if (userByPhone != null) {
                             try {
-                                // 1. 用飞书最新信息更新本地已有用户（仅更新邮箱/头像；姓名由业务自行维护，飞书姓名可能与系统姓名不一致，不覆盖）
+                                // 1. Cập nhật người dùng local hiện có bằng thông tin mới nhất của Feishu (chỉ cập nhật email/Ảnh đại diện; họ tên do nghiệp vụ tự duy trì, tên trên Feishu có thể không khớp với tên trong hệ thống, không ghi đè)
                                 boolean userChanged = false;
                                 if (StringUtils.isNotEmpty(email) && !email.equals(userByPhone.getEmail())) {
                                     userByPhone.setEmail(email);
@@ -750,7 +750,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                                 if (userChanged) {
                                     sysUserService.updateById(userByPhone);
                                 }
-                                // 2. 复用或创建第三方账号记录，并将 sysUserId 绑定到该现有用户
+                                // 2. Tái sử dụng hoặc tạo bản ghi tài khoản bên thứ ba, và gắn sysUserId vào người dùng hiện có đó
                                 SysThirdAccount accountToBind;
                                 if (thirdAccount == null) {
                                     ThirdLoginModel tlm = new ThirdLoginModel(THIRD_TYPE, openId, name, avatarUrl);
@@ -770,23 +770,23 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                                     accountToBind.setSysUserId(userByPhone.getId());
                                     sysThirdAccountService.updateById(accountToBind);
                                 }
-                                //update-begin---author:jeecg ---date:2026-10-19  for：【QQYUN-12767】飞书同步用户未关联当前租户，按手机号匹配的已有用户加入租户（审核中，对齐钉钉）-----------
+                                //update-begin---author:jeecg ---date:2026-10-19  for：【QQYUN-12767] Khi đồng bộ người dùng Feishu chưa liên kết với tenant hiện tại, người dùng đã có khớp theo số điện thoại sẽ được thêm vào tenant (đang xét duyệt, căn chỉnh theo DingTalk)-----------
                                 createUserTenant(userByPhone.getId(), true, tenantId);
-                                //update-end---author:jeecg ---date:2026-10-19  for：【QQYUN-12767】飞书同步用户未关联当前租户，按手机号匹配的已有用户加入租户（审核中，对齐钉钉）-----------
-                                // 3. 关联部门
+                                //update-end---author:jeecg ---date:2026-10-19  for：【QQYUN-12767] Khi đồng bộ người dùng Feishu chưa liên kết với tenant hiện tại, người dùng đã có khớp theo số điện thoại sẽ được thêm vào tenant (đang xét duyệt, căn chỉnh theo DingTalk)-----------
+                                // 3. Liên kết phòng ban
                                 if (localDepart != null) {
                                     linkUserToDepart(openId, tenantId, localDepart.getId());
                                 }
-                                syncInfo.addSuccessInfo("按手机号绑定已有用户：" + name + "（" + strippedMobile + "）");
-                                log.info("飞书同步按手机号绑定已有用户：openId={}, phone={}, sysUserId={}",
+                                syncInfo.addSuccessInfo("Liên kết người dùng hiện có theo số điện thoại:" + name + "（" + strippedMobile + "）");
+                                log.info("Đồng bộ Feishu liên kết người dùng hiện có theo số điện thoại:openId={}, phone={}, sysUserId={}",
                                         openId, strippedMobile, userByPhone.getId());
                             } catch (Exception e) {
-                                log.error("飞书同步按手机号绑定用户异常，name={}", name, e);
-                                syncInfo.addFailInfo("按手机号绑定用户[" + name + "]异常：" + e.getMessage());
+                                log.error("Đồng bộ Feishu liên kết người dùng theo số điện thoại xảy ra ngoại lệ,name={}", name, e);
+                                syncInfo.addFailInfo("Liên kết người dùng theo số điện thoại[" + name + "]Ngoại lệ:" + e.getMessage());
                             }
                             continue;
                         }
-                        //update-end---author:jeecg ---date:2026-08-04  for：【QQYUN-12767】飞书同步按手机号查重：手机号已存在的本地用户直接绑定，不新增用户-----------
+                        //update-end---author:jeecg ---date:2026-08-04  for：【QQYUN-12767] Đồng bộ Feishu kiểm tra trùng theo số điện thoại: người dùng local đã có số điện thoại thì gắn trực tiếp, không tạo thêm người dùng-----------
 
                         SysUser newUser = createLocalUser(name, email, mobile, openId, unionId, avatarUrl, tenantId);
                         if (newUser != null) {
@@ -794,23 +794,23 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                             SysThirdAccount saved = sysThirdAccountService.saveThirdUser(tlm, tenantId);
                             saved.setSysUserId(newUser.getId());
                             sysThirdAccountService.updateById(saved);
-                            //update-begin---author:liusq ---date:2026-10-19  for：【QQYUN-12767】飞书同步用户未关联当前租户，新建用户加入当前租户-----------
+                            //update-begin---author:liusq ---date:2026-10-19  for：【QQYUN-12767] Người dùng đồng bộ Feishu chưa liên kết với thuê bao hiện tại, người dùng mới tạo sẽ được thêm vào thuê bao hiện tại-----------
                             createUserTenant(newUser.getId(), false, tenantId);
-                            //update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767】飞书同步用户未关联当前租户，新建用户加入当前租户-----------
+                            //update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767] Người dùng đồng bộ Feishu chưa liên kết với thuê bao hiện tại, người dùng mới tạo sẽ được thêm vào thuê bao hiện tại-----------
                             if (localDepart != null) {
                                 SysUserDepart userDepart = new SysUserDepart(newUser.getId(), localDepart.getId());
                                 sysUserDepartService.save(userDepart);
                             }
-                            syncInfo.addSuccessInfo("新增用户：" + name
+                            syncInfo.addSuccessInfo("Người dùng mới:" + name
                                     + (StringUtils.isNotEmpty(email) ? "（" + email + "）" : ""));
                         } else {
-                            syncInfo.addFailInfo("创建用户失败：" + name);
+                            syncInfo.addFailInfo("Tạo người dùng thất bại:" + name);
                         }
                     } catch (Exception e) {
-                        log.error("飞书用户同步异常，name={}, openId={}", name, openId, e);
-                        syncInfo.addFailInfo("同步用户[" + name + "]异常：" + e.getMessage());
+                        log.error("Feishu đồng bộ người dùng bất thường,name={}, openId={}", name, openId, e);
+                        syncInfo.addFailInfo("Đồng bộ người dùng[" + name + "]Ngoại lệ:" + e.getMessage());
                     }
-                    //update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767】飞书同步单个用户异常时记录失败信息并继续，避免一条脏数据中断整次同步-----------
+                    //update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767] Khi đồng bộ từng người dùng Feishu gặp lỗi, ghi lại thông tin thất bại rồi tiếp tục, tránh một bản ghi lỗi làm gián đoạn toàn bộ lần đồng bộ-----------
                 }
             }
             boolean hasMore = Boolean.TRUE.equals(data.getBoolean("has_more"));
@@ -818,13 +818,13 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         } while (pageToken != null);
     }
 
-    // ==================== 本地数据操作辅助方法 ====================
+    // ==================== Phương thức hỗ trợ thao tác dữ liệu cục bộ ====================
 
     private SysDepart findLocalDeptByFeishuId(String openDeptId, Integer tenantId) {
         LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<>();
-        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用feishuIdentifier字段查询，与企业微信/钉钉保持一致-----------
+        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, đổi sang truy vấn bằng trường feishuIdentifier, giống như WeChat Doanh nghiệp/Đồng nhất với DingTalk-----------
         query.eq(SysDepart::getFeishuIdentifier, openDeptId);
-        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用feishuIdentifier字段查询，与企业微信/钉钉保持一致-----------
+        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, đổi sang truy vấn bằng trường feishuIdentifier, giống như WeChat Doanh nghiệp/Đồng nhất với DingTalk-----------
         query.eq(SysDepart::getDelFlag, "0");
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             query.eq(SysDepart::getTenantId, tenantId);
@@ -854,23 +854,23 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             depart.setDepartName(departName);
             depart.setParentId(parentId);
             depart.setStatus("1");
-            //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用feishuIdentifier字段存储部门ID-----------
+            //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, đổi sang dùng trường feishuIdentifier để lưu trữ phòng ban ID-----------
             depart.setFeishuIdentifier(openDeptId);
-            //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用feishuIdentifier字段存储部门ID-----------
+            //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, đổi sang dùng trường feishuIdentifier để lưu trữ phòng ban ID-----------
             depart.setTenantId(tenantId);
-            // 根部门（无父级）设为公司类型，子部门设为组织机构类型，与钉钉/企业微信同步保持一致
+            // Phòng ban gốc (không có cấp cha) đặt thành loại công ty, phòng ban con đặt thành loại tổ chức, đồng bộ với DingTalk/Giữ đồng bộ nhất quán với WeChat Doanh nghiệp
             if (StringUtils.isEmpty(parentId)) {
                 depart.setOrgCategory("1");
             } else {
                 depart.setOrgCategory("2");
             }
-            //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，使用saveDepartData正确生成orgCode和层级树结构，修复同步后部门层级丢失的问题-----------
-            // saveDepartData 会自动生成 orgCode、orgType、izLeaf，并更新父节点 izLeaf，保证树结构正确
-            // 若同级存在格式异常的 orgCode 导致 saveDepartData 抛异常，则回退到手动设值保存，确保 parentId/izLeaf 至少正确
+            //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, dùng saveDepartData để tạo đúng orgCode và cấu trúc cây phân cấp, sửa lỗi mất phân cấp phòng ban sau khi đồng bộ-----------
+            // saveDepartData Sẽ tự động tạo orgCode, orgType, izLeaf và cập nhật izLeaf của node cha, đảm bảo cấu trúc cây đúng
+            // Nếu cùng cấp tồn tại orgCode có định dạng bất thường khiến saveDepartData ném ngoại lệ thì quay lại lưu bằng cách đặt giá trị thủ công, đảm bảo parentId/izLeaf Ít nhất là chính xác
             try {
                 sysDepartService.saveDepartData(depart, "admin");
             } catch (Exception saveEx) {
-                log.warn("saveDepartData 生成 orgCode 失败（可能存在格式异常的同级部门），回退手动保存，departName={}", departName, saveEx);
+                log.warn("saveDepartData Tạo orgCode thất bại (có thể tồn tại phòng ban cùng cấp có định dạng bất thường), quay lại lưu thủ công,departName={}", departName, saveEx);
                 depart.setId(com.baomidou.mybatisplus.core.toolkit.IdWorker.getIdStr(depart));
                 depart.setOrgCode("FS" + System.currentTimeMillis() % 100000);
                 depart.setOrgType(StringUtils.isNotEmpty(parentId) ? "2" : "1");
@@ -882,10 +882,10 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                 }
                 sysDepartService.save(depart);
             }
-            //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，使用saveDepartData正确生成orgCode和层级树结构，修复同步后部门层级丢失的问题-----------
+            //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, dùng saveDepartData để tạo đúng orgCode và cấu trúc cây phân cấp, sửa lỗi mất phân cấp phòng ban sau khi đồng bộ-----------
             return depart;
         } catch (Exception e) {
-            log.error("创建本地部门失败，departName={}", departName, e);
+            log.error("Tạo phòng ban local thất bại,departName={}", departName, e);
             return null;
         }
     }
@@ -908,18 +908,18 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                 sysUserDepartService.save(ud);
             }
         } catch (Exception e) {
-            log.warn("补充用户部门关联失败，openId={}, deptId={}", openId, localDeptId, e);
+            log.warn("Bổ sung liên kết phòng ban của người dùng thất bại,openId={}, deptId={}", openId, localDeptId, e);
         }
     }
 
-    //update-begin---author:jeecg ---date:2026-10-16  for：【QQYUN-12767】飞书同步用户未关联当前租户，补充写入 sys_user_tenant-----------
+    //update-begin---author:jeecg ---date:2026-10-16  for：【QQYUN-12767] Đồng bộ người dùng Feishu chưa liên kết tenant hiện tại, bổ sung ghi sys_user_tenant-----------
     /**
-     * 将用户加入租户（sys_user_tenant），已存在关系则跳过；未开启多租户时不处理。
-     * <p>对齐钉钉 / 企业微信同步中的 createUserTenant 逻辑。</p>
+     * Thêm người dùng vào tenant (sys_user_tenant), nếu quan hệ đã tồn tại thì bỏ qua; khi chưa bật đa tenant thì không xử lý.
+     * <p>Đồng bộ với DingTalk / Logic createUserTenant trong đồng bộ WeChat Work.</p>
      *
-     * @param userId      系统用户 ID
-     * @param underReview true=审核中（按手机号匹配到的已有用户，需租户管理员审核，对齐钉钉）；false=正常
-     * @param tenantId    租户 ID
+     * @param userId      Người dùng hệ thống ID
+     * @param underReview true=Đang xét duyệt (người dùng đã có được khớp theo số điện thoại, cần quản trị viên tenant xét duyệt, căn chỉnh theo DingTalk);false=Bình thường
+     * @param tenantId    Tenant ID
      */
     private void createUserTenant(String userId, boolean underReview, Integer tenantId) {
         if (!MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL || StringUtils.isEmpty(userId)) {
@@ -934,7 +934,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             userTenantMapper.insert(userTenant);
         }
     }
-    //update-end---author:jeecg ---date:2026-10-16  for：【QQYUN-12767】飞书同步用户未关联当前租户，补充写入 sys_user_tenant-----------
+    //update-end---author:jeecg ---date:2026-10-16  for：【QQYUN-12767] Đồng bộ người dùng Feishu chưa liên kết tenant hiện tại, bổ sung ghi sys_user_tenant-----------
 
     private SysUser createLocalUser(String name, String email, String mobile,
                                      String openId, String unionId, String avatar, Integer tenantId) {
@@ -960,36 +960,36 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             sysUserService.addUserWithRole(user, "");
             return user;
         } catch (Exception e) {
-            log.error("创建本地用户失败，name={}", name, e);
+            log.error("Tạo người dùng local thất bại,name={}", name, e);
             return null;
         }
     }
 
-    // ==================== 飞书 API 工具方法 ====================
+    // ==================== Phương thức tiện ích API Feishu ====================
 
-    //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，统一获取飞书配置，未开启多租户时使用默认租户-----------
+    //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, thống nhất lấy cấu hình Feishu; khi chưa bật đa thuê bao thì dùng thuê bao mặc định-----------
     /**
-     * 根据当前租户获取飞书配置。
-     * <p>未开启多租户（OPEN_SYSTEM_TENANT_CONTROL=false）时，固定使用 tenantId=0 查询默认配置，
-     * 对齐钉钉 getDingThirdAppConfig() / 企业微信 getWeChatThirdAppConfig() 的处理方式。</p>
-     * <p>若数据库中不存在配置，则 fallback 到 justauth yml 中的 FEISHU 配置项（client-id/client-secret）。</p>
+     * Lấy cấu hình Feishu theo tenant hiện tại.
+     * <p>Chưa bật đa tenant (OPEN_SYSTEM_TENANT_CONTROL=false) khi đó, cố định dùng tenantId=0 truy vấn cấu hình mặc định,
+     * Đồng bộ với DingTalk getDingThirdAppConfig() / WeCom getWeChatThirdAppConfig() cách xử lý.</p>
+     * <p>Nếu trong cơ sở dữ liệu không tồn tại cấu hình thì fallback sang mục cấu hình FEISHU trong justauth yml (client-id/client-secret）。</p>
      */
     private SysThirdAppConfig getFeishuThirdAppConfig() {
         int tenantId = MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL
                 ? oConvertUtils.getInt(TenantContext.getTenant(), 0)
                 : 0;
         SysThirdAppConfig config = configMapper.getThirdConfigByThirdType(tenantId, THIRD_TYPE);
-        //update-begin---author:jeecg ---date:2026-05-18  for：【QQYUN-12767】飞书集成，数据库无配置时fallback到yml配置项-----------
+        //update-begin---author:jeecg ---date:2026-05-18  for：【QQYUN-12767] Tích hợp Feishu, khi cơ sở dữ liệu không có cấu hình thì fallback sang mục cấu hình yml-----------
         if (config == null) {
             config = buildFeishuConfigFromYaml();
         }
-        //update-end---author:jeecg ---date:2026-05-18  for：【QQYUN-12767】飞书集成，数据库无配置时fallback到yml配置项-----------
+        //update-end---author:jeecg ---date:2026-05-18  for：【QQYUN-12767] Tích hợp Feishu, khi cơ sở dữ liệu không có cấu hình thì fallback sang mục cấu hình yml-----------
         return config;
     }
 
     /**
-     * 从 justauth yml 配置中读取飞书 app_id/app_secret，构建临时 SysThirdAppConfig。
-     * client-id 为空或为占位符 "??" 时返回 null。
+     * Đọc Feishu từ cấu hình justauth yml app_id/app_secret, xây dựng SysThirdAppConfig tạm thời.
+     * client-id Trống hoặc là placeholder "??"  sẽ trả về null.
      */
     private SysThirdAppConfig buildFeishuConfigFromYaml() {
         if (justAuthProperties == null || justAuthProperties.getType() == null) {
@@ -1005,40 +1005,40 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         config.setTenantId(CommonConstant.TENANT_ID_DEFAULT_VALUE);
         return config;
     }
-    //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，统一获取飞书配置，未开启多租户时使用默认租户-----------
+    //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, thống nhất lấy cấu hình Feishu; khi chưa bật đa thuê bao thì dùng thuê bao mặc định-----------
 
-    //update-begin---author:jeecg ---date:2026-05-18  for：【QQYUN-12767】飞书集成，新增HTML转飞书post富文本工具方法-----------
+    //update-begin---author:jeecg ---date:2026-05-18  for：【QQYUN-12767] Tích hợp Feishu, thêm phương thức tiện ích chuyển HTML sang rich text post của Feishu-----------
     /**
-     * 将 HTML 富文本转换为飞书 post 消息的多行标签结构（contentRows）。
+     * Chuyển đổi rich text HTML thành cấu trúc thẻ nhiều dòng của tin nhắn post Feishu (contentRows).
      * <p>
-     * 支持转换规则：
+     * Hỗ trợ quy tắc chuyển đổi:
      * <ul>
-     *   <li>{@code <br>}、{@code </p>}、{@code </div>}、{@code </li>} → 换行（新增一行）</li>
-     *   <li>{@code <b>}、{@code <strong>} → 加粗文本</li>
-     *   <li>{@code <i>}、{@code <em>} → 斜体文本</li>
-     *   <li>{@code <u>} → 下划线文本</li>
-     *   <li>{@code <a href="...">} → 超链接（tag: a）</li>
-     *   <li>{@code <li>} → 自动前置项目符号 "• "</li>
-     *   <li>其余未识别标签：剥掉标签保留文字内容</li>
-     *   <li>HTML 实体：{@code &nbsp;} → 空格，{@code &amp;} → &，{@code &lt;} → <，{@code &gt;} → ></li>
+     *   <li>{@code <br>}、{@code </p>}、{@code </div>}、{@code </li>} → Xuống dòng (thêm một dòng mới)</li>
+     *   <li>{@code <b>}、{@code <strong>} → Văn bản in đậm</li>
+     *   <li>{@code <i>}、{@code <em>} → Văn bản in nghiêng</li>
+     *   <li>{@code <u>} → Văn bản gạch dưới</li>
+     *   <li>{@code <a href="...">} → Siêu liên kết (tag: a）</li>
+     *   <li>{@code <li>} → Tự động thêm ký hiệu đầu mục ở phía trước "• "</li>
+     *   <li>Các thẻ chưa nhận dạng còn lại: bóc thẻ, giữ lại nội dung văn bản</li>
+     *   <li>HTML Thực thể:{@code &nbsp;} → khoảng trắng，{@code &amp;} → &，{@code &lt;} → <，{@code &gt;} → ></li>
      * </ul>
      *
-     * @param html 原始 HTML 字符串
-     * @return 飞书 post content 多行结构（每行为 JSONArray，行内为各标签 JSONObject）
+     * @param html Chuỗi HTML gốc
+     * @return Cấu trúc nhiều dòng của Feishu post content (mỗi dòng là một JSONArray, trong dòng là các thẻ JSONObject)
      */
     private JSONArray htmlToFeishuPostRows(String html) {
         JSONArray rows = new JSONArray();
         if (html == null || html.trim().isEmpty()) {
             return rows;
         }
-        // Step1：将块级换行标签转换为 \n，<li> 追加项目符号
+        // Step1: Chuyển đổi thẻ xuống dòng cấp khối thành \n，<li> Thêm ký hiệu đầu mục
         String normalized = html
                 .replaceAll("(?i)<br\\s*/?>", "\n")
                 .replaceAll("(?i)</p\\s*>", "\n")
                 .replaceAll("(?i)</div\\s*>", "\n")
                 .replaceAll("(?i)</li\\s*>", "\n")
                 .replaceAll("(?i)<li[^>]*>", "• ");
-        // Step2：按换行切行，逐行解析内联标签
+        // Step2: Cắt dòng theo ký tự xuống dòng, phân tích từng dòng thẻ nội tuyến
         String[] lines = normalized.split("\n");
         for (String line : lines) {
             line = line.trim();
@@ -1050,7 +1050,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                 rows.add(row);
             }
         }
-        // 兜底：若解析结果为空，将所有标签剥掉后作为单行纯文本输出
+        // Phương án dự phòng: nếu kết quả phân tích rỗng, loại bỏ tất cả các thẻ rồi xuất ra dưới dạng văn bản thuần một dòng
         if (rows.isEmpty()) {
             String plain = html.replaceAll("<[^>]+>", "")
                     .replaceAll("&nbsp;", " ").replaceAll("&amp;", "&")
@@ -1065,8 +1065,8 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 解析单行 HTML 中的内联标签，返回该行的飞书 tag 列表。
-     * 处理：{@code <b>/<strong>}、{@code <i>/<em>}、{@code <u>}、{@code <a href>}，其余标签忽略。
+     * Phân tích các thẻ nội tuyến trong một dòng HTML, trả về danh sách tag Feishu của dòng đó.
+     * Xử lý:{@code <b>/<strong>}、{@code <i>/<em>}、{@code <u>}、{@code <a href>}, các thẻ còn lại sẽ bị bỏ qua.
      */
     private JSONArray parseInlineHtml(String line) {
         JSONArray row = new JSONArray();
@@ -1080,7 +1080,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         while (m.find()) {
             String token = m.group();
             if (token.charAt(0) == '<') {
-                // HTML 标签
+                // HTML Nhãn
                 String lower = token.toLowerCase().trim();
                 if (lower.equals("<b>") || lower.equals("<strong>") || lower.startsWith("<strong ")) {
                     bold = true;
@@ -1111,7 +1111,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                             tag.put("href", hrefPending);
                             row.add(tag);
                         } else {
-                            // 没有 href，退化为普通文本
+                            // Không có href, hạ cấp thành văn bản thường
                             addFeishuTextTag(row, lt, bold, italic, underline);
                         }
                     }
@@ -1119,9 +1119,9 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                     hrefPending = null;
                     linkText.setLength(0);
                 }
-                // 其余标签：忽略标签本身，文字内容会在下一次 text token 时处理
+                // Các thẻ còn lại: bỏ qua bản thân thẻ, nội dung văn bản sẽ được xử lý ở lần text token tiếp theo
             } else {
-                // 纯文本片段，进行简单 HTML 实体解码
+                // Đoạn văn bản thuần, thực hiện giải mã thực thể HTML đơn giản
                 String text = token
                         .replaceAll("&nbsp;", " ").replaceAll("&amp;", "&")
                         .replaceAll("&lt;", "<").replaceAll("&gt;", ">");
@@ -1136,7 +1136,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
     }
 
     /**
-     * 向飞书 post 行（row）中追加一个文本 tag，按需设置 bold/italic/underline。
+     * Thêm một text tag vào dòng (row) post của Feishu, đặt theo nhu cầu bold/italic/underline。
      */
     private void addFeishuTextTag(JSONArray row, String text, boolean bold, boolean italic, boolean underline) {
         if (text == null || text.isEmpty()) {
@@ -1156,10 +1156,10 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         }
         row.add(tag);
     }
-    //update-end---author:jeecg ---date:2026-05-18  for：【QQYUN-12767】飞书集成，新增HTML转飞书post富文本工具方法-----------
+    //update-end---author:jeecg ---date:2026-05-18  for：【QQYUN-12767] Tích hợp Feishu, thêm phương thức tiện ích chuyển HTML sang rich text post của Feishu-----------
 
     /**
-     * 获取飞书应用级 tenant_access_token（用于通讯录同步、消息发送等应用身份接口）
+     * Lấy cấp ứng dụng Feishu tenant_access_token(dùng cho các giao diện danh tính ứng dụng như đồng bộ danh bạ, gửi tin nhắn)
      */
     public String getTenantAccessToken(SysThirdAppConfig config) {
         if (config == null) {
@@ -1172,12 +1172,12 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         if (result != null && result.getIntValue("code") == 0) {
             return result.getString("tenant_access_token");
         }
-        log.error("飞书获取 tenant_access_token 失败: {}", result);
+        log.error("Feishu lấy tenant_access_token Thất bại: {}", result);
         return null;
     }
 
     /**
-     * 向指定飞书用户（open_id）发送文本消息
+     * Gửi tới người dùng Feishu được chỉ định (open_id) gửi tin nhắn văn bản
      */
     private boolean doSendTextMessage(String appToken, String openId, String content) {
         String url = SEND_MSG_URL + "?receive_id_type=open_id";
@@ -1189,18 +1189,18 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         body.put("content", msgContent.toJSONString());
         JSONObject result = doPost(url, appToken, body.toJSONString());
         if (result != null && result.getIntValue("code") == 0) {
-            log.info("飞书消息发送成功: openId={}", openId);
+            log.info("Gửi tin nhắn Feishu thành công: openId={}", openId);
             return true;
         }
-        log.error("飞书消息发送失败: openId={}, result={}", openId, result);
+        log.error("Gửi tin nhắn Feishu thất bại: openId={}, result={}", openId, result);
         return false;
     }
 
-    //update-begin---author:scott ---date:2026-10-09  for：【敲敲云】简流 通知 对接飞书，Markdown 内容改发卡片消息，避免飞书里显示 Markdown 原文-----------
+    //update-begin---author:scott ---date:2026-10-09  for: [QiaoQiaoYun] JianLiu — thông báo tích hợp Feishu, nội dung Markdown đổi sang gửi tin nhắn dạng thẻ, tránh hiển thị văn bản Markdown gốc trong Feishu-----------
     /**
-     * 单发 Markdown 卡片消息（msg_type=interactive，卡片内 markdown 组件渲染内容）
+     * Gửi một tin nhắn thẻ Markdown (msg_type=interactive, nội dung được hiển thị bởi component markdown trong thẻ)
      *
-     * @param title 卡片标题，为空时不显示标题栏
+     * @param title Tiêu đề thẻ, khi trống thì không hiển thị thanh tiêu đề
      */
     private boolean doSendMarkdownCardMessage(String appToken, String openId, String title, String content) {
         String url = SEND_MSG_URL + "?receive_id_type=open_id";
@@ -1229,18 +1229,18 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         body.put("content", card.toJSONString());
         JSONObject result = doPost(url, appToken, body.toJSONString());
         if (result != null && result.getIntValue("code") == 0) {
-            log.info("飞书卡片消息发送成功: openId={}", openId);
+            log.info("Gửi tin nhắn thẻ Feishu thành công: openId={}", openId);
             return true;
         }
-        log.error("飞书卡片消息发送失败: openId={}, result={}", openId, result);
+        log.error("Gửi tin nhắn thẻ Feishu thất bại: openId={}, result={}", openId, result);
         return false;
     }
-    //update-end---author:scott ---date:2026-10-09  for：【敲敲云】简流 通知 对接飞书，Markdown 内容改发卡片消息，避免飞书里显示 Markdown 原文-----------
+    //update-end---author:scott ---date:2026-10-09  for: [QiaoQiaoYun] JianLiu — thông báo tích hợp Feishu, nội dung Markdown đổi sang gửi tin nhắn dạng thẻ, tránh hiển thị văn bản Markdown gốc trong Feishu-----------
 
-    // ==================== HTTP 工具方法（供同步/消息使用）====================
+    // ==================== HTTP Phương thức tiện ích (dùng cho đồng bộ/sử dụng tin nhắn）====================
 
     /**
-     * POST 请求（JSON body），bearerToken 为空时不携带 Authorization 头
+     * POST yêu cầu (JSON body), khi bearerToken rỗng thì không mang theo header Authorization
      */
     private JSONObject doPost(String url, String bearerToken, String jsonBody) {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -1252,57 +1252,57 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             httpPost.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
                 String responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
-                log.debug("飞书 POST {} 响应: {}", url, responseBody);
+                log.debug("Feishu POST {} Phản hồi: {}", url, responseBody);
                 return JSON.parseObject(responseBody);
             }
         } catch (Exception e) {
-            log.error("飞书 POST 请求异常: url={}", url, e);
+            log.error("Yêu cầu POST Feishu bất thường: url={}", url, e);
             return null;
         }
     }
 
-    //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，新增公告消息发送方法，对齐钉钉sendActionCardMessage和企业微信sendTextCardMessage-----------
+    //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, thêm phương thức gửi tin nhắn thông báo, căn chỉnh theo sendActionCardMessage của DingTalk và WeChat Doanh nghiệp sendTextCardMessage-----------
     /**
-     * 向飞书用户发送公告消息（富文本 post 类型），对齐钉钉 sendActionCardMessage / 企业微信 sendTextCardMessage
+     * Gửi tin nhắn thông báo tới người dùng Feishu (dạng rich text post), đồng bộ với DingTalk sendActionCardMessage / WeCom sendTextCardMessage
      *
-     * @param announcement  公告对象
-     * @param mobileOpenUrl 移动端跳转链接（可为 null）
-     * @param verifyConfig  true 时配置未就绪则静默跳过
-     * @return 是否全部发送成功
+     * @param announcement  Đối tượng thông báo
+     * @param mobileOpenUrl Liên kết chuyển hướng trên thiết bị di động (có thể là null)
+     * @param verifyConfig  true khi cấu hình chưa sẵn sàng thì bỏ qua trong im lặng
+     * @return Có gửi thành công tất cả không
      */
     public boolean sendAnnouncementMessage(SysAnnouncement announcement, String mobileOpenUrl, boolean verifyConfig) {
-        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用统一配置获取方法-----------
+        //update-begin---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】Tích hợp Feishu, đổi sang dùng phương pháp lấy cấu hình thống nhất-----------
         int tenantId = MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL
                 ? oConvertUtils.getInt(TenantContext.getTenant(), 0) : 0;
         SysThirdAppConfig config = getFeishuThirdAppConfig();
-        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，改用统一配置获取方法-----------
+        //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】Tích hợp Feishu, đổi sang dùng phương pháp lấy cấu hình thống nhất-----------
         if (config == null) {
             if (verifyConfig) {
-                log.debug("飞书应用未配置，跳过公告消息发送！");
+                log.debug("Ứng dụng Feishu chưa được cấu hình, bỏ qua việc gửi tin nhắn thông báo!");
             }
             return false;
         }
         String appToken = getTenantAccessToken(config);
         if (appToken == null) {
-            log.error("飞书获取 tenant_access_token 失败，公告消息发送中止");
+            log.error("Feishu lấy tenant_access_token thất bại, việc gửi thông báo đã bị hủy");
             return false;
         }
-        // 确定摘要文本
+        // Xác định văn bản tóm tắt
         String summary;
         if (oConvertUtils.isNotEmpty(announcement.getMsgAbstract())) {
             String msgAbstract = announcement.getMsgAbstract().trim();
-            // 如果摘要是 JSON 格式的业务扩展参数，取公告正文
+            // Nếu tóm tắt là tham số mở rộng nghiệp vụ dạng JSON thì lấy nội dung chính của thông báo
             summary = (msgAbstract.startsWith("{") && msgAbstract.endsWith("}"))
                     ? announcement.getMsgContent() : msgAbstract;
         } else {
             summary = oConvertUtils.getString(announcement.getMsgContent(), "");
         }
-        //update-begin---author:jeecg ---date:2026-05-18  for：【QQYUN-12767】飞书公告消息修复：两种内容构建方式，可按需选择-----------
+        //update-begin---author:jeecg ---date:2026-05-18  for：【QQYUN-12767] Sửa tin nhắn thông báo Feishu: hai cách xây dựng nội dung, có thể chọn theo nhu cầu-----------
         // -----------------------------------------------------------------------
-        // 方式一（纯文本，当前注释）：去掉所有 HTML 标签后以单行纯文本发送。
-        //   优点：实现简单，兼容性最好。
-        //   缺点：丢失加粗、换行、超链接等富文本格式。
-        //   启用方式：取消下方注释，同时注释掉"方式二"代码块。
+        // Cách 1 (văn bản thuần, hiện đang chú thích): loại bỏ tất cả các thẻ HTML rồi gửi dưới dạng văn bản thuần một dòng.
+        //   Ưu điểm: triển khai đơn giản, tương thích tốt nhất.
+        //   Nhược điểm: Mất định dạng rich text như in đậm, xuống dòng, siêu liên kết.
+        //   Cách bật: bỏ ghi chú ở đoạn dưới, đồng thời ghi chú lại"Cách 2"Khối mã.
         // -----------------------------------------------------------------------
         // String plainSummary = summary.replaceAll("<[^>]+>", "").trim();
         // JSONArray contentRows = new JSONArray();
@@ -1314,34 +1314,34 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
         // contentRows.add(textRow);
 
         // -----------------------------------------------------------------------
-        // 方式二（HTML 转飞书 post 富文本，当前启用）：将 HTML 解析为飞书 post 多行标签结构。
-        //   支持：<br>/<p> 换行、<b>/<strong> 加粗、<i>/<em> 斜体、<u> 下划线、<a href> 超链接。
-        //   其余未识别标签剥掉标签保留文字内容。
-        //   启用方式：保持下方代码不变；若切回方式一，注释掉本方式并取消方式一的注释。
+        // Cách 2 (chuyển HTML sang rich text post của Feishu, hiện đang bật): phân tích HTML thành cấu trúc thẻ nhiều dòng của post Feishu.
+        //   Hỗ trợ:<br>/<p> xuống dòng、<b>/<strong> in đậm、<i>/<em> in nghiêng、<u> Gạch dưới,<a href> Siêu liên kết.
+        //   Các thẻ chưa nhận dạng còn lại: bóc thẻ, giữ lại nội dung văn bản.
+        //   Cách bật: giữ nguyên đoạn mã bên dưới; nếu chuyển lại sang cách một thì chú thích lại cách này và bỏ chú thích của cách một.
         // -----------------------------------------------------------------------
         JSONArray contentRows = htmlToFeishuPostRows(summary);
 
-        // 追加跳转链接行（两种方式共用）
+        // Thêm dòng liên kết chuyển hướng (dùng chung cho hai cách)
         String linkUrl = oConvertUtils.isNotEmpty(mobileOpenUrl) ? mobileOpenUrl
                 : oConvertUtils.getString(announcement.getOpenPage(), "");
         if (oConvertUtils.isNotEmpty(linkUrl)) {
             JSONArray linkRow = new JSONArray();
             JSONObject linkTag = new JSONObject();
             linkTag.put("tag", "a");
-            linkTag.put("text", "查看详情");
+            linkTag.put("text", "Xem chi tiết");
             linkTag.put("href", linkUrl);
             linkRow.add(linkTag);
             contentRows.add(linkRow);
         }
         JSONObject zhContent = new JSONObject();
-        zhContent.put("title", oConvertUtils.getString(announcement.getTitile(), "系统通知"));
+        zhContent.put("title", oConvertUtils.getString(announcement.getTitile(), "Thông báo hệ thống"));
         zhContent.put("content", contentRows);
-        // 飞书 API：msg_type=post 时 content 字段结构为 {"zh_cn":{"title":"...","content":[[...]]}}
+        // API Feishu:msg_type=post thì cấu trúc trường content là {"zh_cn":{"title":"...","content":[[...]]}}
         JSONObject contentWrapper = new JSONObject();
         contentWrapper.put("zh_cn", zhContent);
-        //update-end---author:jeecg ---date:2026-05-18  for：【QQYUN-12767】飞书公告消息修复：两种内容构建方式，可按需选择-----------
+        //update-end---author:jeecg ---date:2026-05-18  for：【QQYUN-12767] Sửa tin nhắn thông báo Feishu: hai cách xây dựng nội dung, có thể chọn theo nhu cầu-----------
 
-        // 确定接收人
+        // Xác định người nhận
         boolean isToAll = CommonConstant.MSG_TYPE_ALL.equals(announcement.getMsgType());
         List<String> openIds = new ArrayList<>();
         if (!isToAll) {
@@ -1374,7 +1374,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             }
         }
         if (isToAll) {
-            log.warn("飞书暂不支持全员广播公告，跳过 toAll 发送");
+            log.warn("Feishu tạm thời chưa hỗ trợ phát thông báo toàn thể, bỏ qua gửi toAll");
             return false;
         }
         boolean allSuccess = true;
@@ -1386,18 +1386,18 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             body.put("content", contentWrapper.toJSONString());
             JSONObject result = doPost(msgUrl, appToken, body.toJSONString());
             if (result == null || result.getIntValue("code") != 0) {
-                log.error("飞书公告消息发送失败: openId={}, result={}", openId, result);
+                log.error("Gửi tin nhắn thông báo Feishu thất bại: openId={}, result={}", openId, result);
                 allSuccess = false;
             } else {
-                log.info("飞书公告消息发送成功: openId={}", openId);
+                log.info("Gửi tin nhắn thông báo Feishu thành công: openId={}", openId);
             }
         }
         return allSuccess;
     }
-    //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767】飞书集成，新增公告消息发送方法，对齐钉钉sendActionCardMessage和企业微信sendTextCardMessage-----------
+    //update-end---author:jeecg ---date:2026-05-15  for：【QQYUN-12767] Tích hợp Feishu, thêm phương thức gửi tin nhắn thông báo, căn chỉnh theo sendActionCardMessage của DingTalk và WeChat Doanh nghiệp sendTextCardMessage-----------
 
     /**
-     * GET 请求，bearerToken 为空时不携带 Authorization 头
+     * GET yêu cầu, khi bearerToken rỗng thì không mang theo header Authorization
      */
     private JSONObject doGet(String url, String bearerToken) {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -1408,13 +1408,13 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             }
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 String responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
-                log.debug("飞书 GET {} 响应: {}", url, responseBody);
+                log.debug("Feishu GET {} Phản hồi: {}", url, responseBody);
                 return JSON.parseObject(responseBody);
             }
         } catch (Exception e) {
-            log.error("飞书 GET 请求异常: url={}", url, e);
+            log.error("Yêu cầu GET Feishu gặp ngoại lệ: url={}", url, e);
             return null;
         }
     }
 }
-//update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】飞书集成-----------
+//update-end---author:jeecg ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu-----------

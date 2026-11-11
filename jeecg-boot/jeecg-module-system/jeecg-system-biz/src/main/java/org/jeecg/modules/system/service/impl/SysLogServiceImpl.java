@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
  * <p>
- * 系统日志表 服务实现类
+ * Bảng nhật ký hệ thống — Lớp triển khai Service
  * </p>
  *
  * @Author zhangweijian
@@ -33,7 +33,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 	private SysLogMapper sysLogMapper;
 	
 	/**
-	 * @功能：清空所有日志记录
+	 * @Chức năng: Xóa tất cả bản ghi nhật ký
 	 */
 	@Override
 	public void removeAll() {

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * 发送消息任务
+ * Nhiệm vụ gửi tin nhắn
  * @author: jeecg-boot
  */
 
@@ -32,17 +32,17 @@ public class SendMsgJob implements Job {
 	@Override
 	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-		log.info(String.format(" Jeecg-Boot 发送消息任务 SendMsgJob !  时间:" + DateUtils.getTimestamp()));
+		log.info(String.format(" Jeecg-Boot Nhiệm vụ gửi tin nhắn SendMsgJob !  Thời gian:" + DateUtils.getTimestamp()));
 
-		// 1.读取消息中心数据，只查询未发送的和发送失败不超过次数的
+		// 1.Đọc dữ liệu trung tâm tin nhắn, chỉ truy vấn những tin chưa gửi và những tin gửi thất bại chưa vượt quá số lần
 		QueryWrapper<SysMessage> queryWrapper = new QueryWrapper<SysMessage>();
 		queryWrapper.eq("es_send_status", SendMsgStatusEnum.WAIT.getCode())
 				.or(i -> i.eq("es_send_status", SendMsgStatusEnum.FAIL.getCode()).lt("es_send_num", 6));
 		List<SysMessage> sysMessages = sysMessageService.list(queryWrapper);
 		System.out.println(sysMessages);
-		// 2.根据不同的类型走不通的发送实现类
+		// 2.Đi theo lớp triển khai gửi khác nhau tùy theo loại hình
 		for (SysMessage sysMessage : sysMessages) {
-			// 代码逻辑说明: 模板消息发送测试调用方法修改
+			// Giải thích logic mã: Sửa đổi phương thức gọi kiểm tra gửi tin nhắn mẫu
 			Integer sendNum = sysMessage.getEsSendNum();
 			try {
 				MessageDTO md = new MessageDTO();
@@ -51,18 +51,18 @@ public class SendMsgJob implements Job {
 				md.setToUser(sysMessage.getEsReceiver());
 				md.setType(sysMessage.getEsType());
 				md.setToAll(false);
-				// 代码逻辑说明: 【QQYUN-8523】敲敲云发邮件通知，不稳定---
+				// Giải thích logic mã: 【QQYUN-8523】QiaoQiaoYun gửi thông báo email, không ổn định---
 				md.setIsTimeJob(true);
 				sysBaseAPI.sendTemplateMessage(md);
-				//发送消息成功
+				//Gửi tin nhắn thành công
 				sysMessage.setEsSendStatus(SendMsgStatusEnum.SUCCESS.getCode());
 			} catch (Exception e) {
 				e.printStackTrace();
-				// 发送消息出现异常
+				// Gửi tin nhắn xảy ra ngoại lệ
 				sysMessage.setEsSendStatus(SendMsgStatusEnum.FAIL.getCode());
 			}
 			sysMessage.setEsSendNum(++sendNum);
-			// 发送结果回写到数据库
+			// Ghi kết quả gửi trở lại cơ sở dữ liệu
 			sysMessageService.updateById(sysMessage);
 		}
 

@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 字典组件 执行sql前校验 只校验表字典
- * dictCodeString格式如：
+ * Component danh mục kiểm tra trước khi thực thi SQL, chỉ kiểm tra danh mục bảng
+ * dictCodeString Định dạng ví dụ:
  * table,text,code
  * table where xxx,text,code
  * table,text,code, where xxx
@@ -24,7 +24,7 @@ public class DictQueryBlackListHandler extends AbstractQueryBlackListHandler {
 
     @Override
     protected List<QueryTable> getQueryTableInfo(String dictCodeString) {
-        //针对转义字符进行解码
+        //Giải mã ký tự escape
         try {
             if (dictCodeString.contains("%")) {
                 dictCodeString = URLDecoder.decode(dictCodeString, "UTF-8");
@@ -34,20 +34,20 @@ public class DictQueryBlackListHandler extends AbstractQueryBlackListHandler {
         }
         dictCodeString = dictCodeString.trim();
         
-        // 无论什么场景 第二、三个元素一定是表的字段，直接add
+        // Dù trong tình huống nào, phần tử thứ hai và thứ ba nhất định là trường của bảng, trực tiếp add
         if (dictCodeString != null && dictCodeString.indexOf(SymbolConstant.COMMA) > 0) {
             String[] arr = dictCodeString.split(SymbolConstant.COMMA);
             if (arr.length != 3 && arr.length != 4) {
                 return null;
             }
             
-            //获取表名
+            //Lấy tên bảng
             String tableName = getTableName(arr[0]);
             QueryTable table = new QueryTable(tableName, "");
-            // 无论什么场景 第二、三个元素一定是表的字段，直接add
-            //参数字段1
+            // Dù trong tình huống nào, phần tử thứ hai và thứ ba nhất định là trường của bảng, trực tiếp add
+            //Trường tham số 1
             table.addField(arr[1].trim());
-            //参数字段2
+            //Trường tham số 2
             String filed = arr[2].trim();
             if (oConvertUtils.isNotEmpty(filed)) {
                 table.addField(filed);
@@ -60,7 +60,7 @@ public class DictQueryBlackListHandler extends AbstractQueryBlackListHandler {
     }
 
     /**
-     * 取where前面的为：table name
+     * Lấy phần trước where làm:table name
      *
      * @param str
      * @return
@@ -68,7 +68,7 @@ public class DictQueryBlackListHandler extends AbstractQueryBlackListHandler {
     private String getTableName(String str) {
         String[] arr = str.split("\\s+(?i)where\\s+");
         String tableName = arr[0].trim();
-        //【20230814】解决使用参数tableName=sys_user t&复测，漏洞仍然存在
+        //Giải quyết vấn đề dùng tham số tableName=sys_user t&Kiểm tra lại, lỗ hổng vẫn tồn tại
         if (tableName.contains(".")) {
             tableName = tableName.substring(tableName.indexOf(".")+1, tableName.length()).trim();
         }

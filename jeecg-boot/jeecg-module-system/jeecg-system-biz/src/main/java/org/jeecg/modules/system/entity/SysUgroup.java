@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 
 /**
- * @Description: 用户组表
+ * @Description: Bảng nhóm người dùng
  * @Author: jeecg-boot
  * @Date:   2026-02-27
  * @Version: V1.0
@@ -23,40 +23,40 @@ import java.io.Serializable;
 @TableName("sys_ugroup")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="用户组表")
+@Schema(description="Bảng nhóm người dùng")
 public class SysUgroup implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键id*/
+	/**Khóa chính id*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键id")
+    @Schema(description = "Khóa chính id")
     private java.lang.String id;
-	/**角色名称*/
-	@Excel(name = "用户组名称", width = 15)
-    @Schema(description = "用户组名称")
+	/**Tên vai trò*/
+	@Excel(name = "Tên nhóm người dùng", width = 15)
+    @Schema(description = "Tên nhóm người dùng")
     private java.lang.String groupName;
-	/**描述*/
-	@Excel(name = "描述", width = 15)
-    @Schema(description = "描述")
+	/**Mô tả*/
+	@Excel(name = "Mô tả", width = 15)
+    @Schema(description = "Mô tả")
     private java.lang.String description;
-	/**创建人*/
-    @Schema(description = "创建人")
+	/**Người tạo*/
+    @Schema(description = "Người tạo")
     private java.lang.String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private java.util.Date createTime;
-	/**更新人*/
-    @Schema(description = "更新人")
+	/**Người cập nhật*/
+    @Schema(description = "Người cập nhật")
     private java.lang.String updateBy;
-	/**更新时间*/
+	/**Thời gian cập nhật*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间")
+    @Schema(description = "Thời gian cập nhật")
     private java.util.Date updateTime;
-	/**租户ID*/
-	@Excel(name = "租户ID", width = 15)
-    @Schema(description = "租户ID")
+	/**Tenant ID*/
+	@Excel(name = "Tenant ID", width = 15)
+    @Schema(description = "Tenant ID")
     private java.lang.Integer tenantId;
 }

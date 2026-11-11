@@ -22,13 +22,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 /**
- * @Description: 表单评论文件
+ * @Description: Tệp bình luận biểu mẫu
  * @Author: jeecg-boot
  * @Date: 2022-07-21
  * @Version: V1.0
  */
 @Slf4j
-@Tag(name = "表单评论文件")
+@Tag(name = "Tệp bình luận biểu mẫu")
 @RestController
 @RequestMapping("/sys/formFile")
 public class SysFormFileController extends JeecgController<SysFormFile, ISysFormFileService> {
@@ -36,7 +36,7 @@ public class SysFormFileController extends JeecgController<SysFormFile, ISysForm
     private ISysFormFileService sysFormFileService;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param sysFormFile
      * @param pageNo
@@ -44,8 +44,8 @@ public class SysFormFileController extends JeecgController<SysFormFile, ISysForm
      * @param req
      * @return
      */
-    @AutoLog(value = "表单评论文件-分页列表查询")
-    @Operation(summary = "表单评论文件-分页列表查询")
+    @AutoLog(value = "Tệp bình luận biểu mẫu-Truy vấn danh sách phân trang")
+    @Operation(summary = "Tệp bình luận biểu mẫu-Truy vấn danh sách phân trang")
     @RequiresPermissions("system:formFile:list")
     @GetMapping(value = "/list")
     public Result<?> queryPageList(SysFormFile sysFormFile,
@@ -59,73 +59,73 @@ public class SysFormFileController extends JeecgController<SysFormFile, ISysForm
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param sysFormFile
      * @return
      */
-    @AutoLog(value = "表单评论文件-添加")
-    @Operation(summary = "表单评论文件-添加")
+    @AutoLog(value = "Tệp bình luận biểu mẫu-Thêm")
+    @Operation(summary = "Tệp bình luận biểu mẫu-Thêm")
     @RequiresPermissions("system:formFile:add")
     @PostMapping(value = "/add")
     public Result<?> add(@RequestBody SysFormFile sysFormFile) {
         sysFormFileService.save(sysFormFile);
-        return Result.OK("添加成功！");
+        return Result.OK("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param sysFormFile
      * @return
      */
-    @AutoLog(value = "表单评论文件-编辑")
-    @Operation(summary = "表单评论文件-编辑")
+    @AutoLog(value = "Tệp bình luận biểu mẫu-Chỉnh sửa")
+    @Operation(summary = "Tệp bình luận biểu mẫu-Chỉnh sửa")
     @RequiresPermissions("system:formFile:edit")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> edit(@RequestBody SysFormFile sysFormFile) {
         sysFormFileService.updateById(sysFormFile);
-        return Result.OK("编辑成功!");
+        return Result.OK("Chỉnh sửa thành công!");
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "表单评论文件-通过id删除")
-    @Operation(summary = "表单评论文件-通过id删除")
+    @AutoLog(value = "Tệp bình luận biểu mẫu-Xóa theo id")
+    @Operation(summary = "Tệp bình luận biểu mẫu-Xóa theo id")
     @RequiresPermissions("system:formFile:delete")
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         sysFormFileService.removeById(id);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
      */
-    @AutoLog(value = "表单评论文件-批量删除")
-    @Operation(summary = "表单评论文件-批量删除")
+    @AutoLog(value = "Tệp bình luận biểu mẫu-Xóa hàng loạt")
+    @Operation(summary = "Tệp bình luận biểu mẫu-Xóa hàng loạt")
     @RequiresPermissions("system:formFile:deleteBatch")
     @DeleteMapping(value = "/deleteBatch")
     public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
         this.sysFormFileService.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.OK("批量删除成功！");
+        return Result.OK("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "表单评论文件-通过id查询")
-    @Operation(summary = "表单评论文件-通过id查询")
+    @AutoLog(value = "Tệp bình luận biểu mẫu-Tìm kiếm theo id")
+    @Operation(summary = "Tệp bình luận biểu mẫu-Tìm kiếm theo id")
     @RequiresPermissions("system:formFile:queryById")
     @GetMapping(value = "/queryById")
     public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
@@ -134,7 +134,7 @@ public class SysFormFileController extends JeecgController<SysFormFile, ISysForm
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param sysFormFile
@@ -142,11 +142,11 @@ public class SysFormFileController extends JeecgController<SysFormFile, ISysForm
     @RequiresPermissions("system:formFile:exportXls")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysFormFile sysFormFile) {
-        return super.exportXls(request, sysFormFile, SysFormFile.class, "表单评论文件");
+        return super.exportXls(request, sysFormFile, SysFormFile.class, "Tệp bình luận biểu mẫu");
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response

@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface IAiragBaseApi {
 
     /**
-     * 知识库写入文本文档（支持自定义分段策略）
+     * Ghi tài liệu văn bản vào cơ sở tri thức (hỗ trợ chiến lược phân đoạn tùy chỉnh)
      *
-     * @param knowledgeId   知识库ID
-     * @param title         文档标题
-     * @param content       文档内容
-     * @param segmentConfig 【可选】分段策略配置JSON
-     * @return 新增的文档ID
+     * @param knowledgeId   Kho tri thức ID
+     * @param title         Tiêu đề tài liệu
+     * @param content       Nội dung tài liệu
+     * @param segmentConfig 【Tùy chọn】Cấu hình chiến lược phân đoạn JSON
+     * @return Tài liệu mới thêm ID
      * @author sjlei
      * @date 2025-12-30
      */
@@ -39,13 +39,13 @@ public interface IAiragBaseApi {
     );
 
     /**
-     * 知识库写入文件文档（支持自定义分段策略）
+     * Ghi tài liệu tệp vào cơ sở tri thức (hỗ trợ chiến lược phân đoạn tùy chỉnh)
      *
-     * @param knowledgeId   知识库ID
-     * @param title         文档标题
-     * @param filePath      文件URL
-     * @param segmentConfig 【可选】分段策略配置JSON
-     * @return 新增的文档ID
+     * @param knowledgeId   Kho tri thức ID
+     * @param title         Tiêu đề tài liệu
+     * @param filePath      Tệp URL
+     * @param segmentConfig 【Tùy chọn】Cấu hình chiến lược phân đoạn JSON
+     * @return Tài liệu mới thêm ID
      */
     @PostMapping("/airag/api/knowledgeWriteFileDocument")
     String knowledgeWriteFileDocument(
@@ -56,13 +56,13 @@ public interface IAiragBaseApi {
     );
 
     /**
-     * 批量查询知识库文档向量化状态
+     * Truy vấn hàng loạt trạng thái vector hóa tài liệu kho tri thức
      */
     @PostMapping("/airag/api/checkKnowledgeDocsVectorizeStatus")
     String checkKnowledgeDocsVectorizeStatus(@RequestParam("documentIds") String documentIds);
 
     /**
-     * 读取会话变量
+     * Đọc biến phiên
      */
     @PostMapping("/airag/api/getChatVariable")
     String getChatVariable(
@@ -72,7 +72,7 @@ public interface IAiragBaseApi {
     );
 
     /**
-     * 设置会话变量
+     * Đặt biến phiên
      */
     @PostMapping("/airag/api/setChatVariable")
     void setChatVariable(
@@ -83,19 +83,19 @@ public interface IAiragBaseApi {
     );
 
     /**
-     * 根据应用ID查询记忆库ID
+     * Truy vấn kho ghi nhớ theo ID ứng dụng ID
      */
     @PostMapping("/airag/api/getMemoryIdByAppId")
     String getMemoryIdByAppId(@RequestParam("appId") String appId);
 
     /**
-     * 根据提示词ID查询提示词内容
+     * Truy vấn nội dung prompt theo ID prompt
      */
     @PostMapping("/airag/api/getPromptContent")
     String getPromptContent(@RequestParam("promptId") String promptId);
 
     /**
-     * 解析本地、MinIO或OSS文件内容。
+     * Phân tích nội dung tệp cục bộ, MinIO hoặc OSS.
      */
     @PostMapping("/airag/api/parseFileContent")
     String parseFileContent(@RequestParam("filePath") String filePath);

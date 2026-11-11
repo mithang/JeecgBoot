@@ -1,34 +1,34 @@
 package org.jeecg.modules.system.constant;
 
 /**
- * 默认首页常量
+ * Hằng số trang chủ mặc định
  */
 public interface DefIndexConst {
 
     /**
-     * 默认首页的roleCode
+     * của trang chủ mặc định roleCode
      */
     String DEF_INDEX_ALL = "DEF_INDEX_ALL";
 
     /**
-     * 默认首页的缓存key
+     * Cache của trang chủ mặc định key
      */
     String CACHE_KEY = "sys:cache:def_index";
     /**
-     * 缓存默认首页的类型前缀
+     * Tiền tố loại của trang chủ mặc định trong bộ nhớ đệm
      */
     String CACHE_TYPE = "sys:cache:home_type::";
     /**
-     * 默认首页类型
+     * Loại trang chủ mặc định
      */
     String HOME_TYPE_SYSTEM = "system";
     String HOME_TYPE_PERSONAL = "personal";
     String HOME_TYPE_MENU = "menuHome";
 
     /**
-     * 默认首页的初始值
+     * Giá trị ban đầu của trang chủ mặc định
      */
-    String DEF_INDEX_NAME = "首页";
+    String DEF_INDEX_NAME = "Trang chủ";
     String DEF_INDEX_URL = "/dashboard/analysis";
     String DEF_INDEX_COMPONENT = "dashboard/Analysis";
 

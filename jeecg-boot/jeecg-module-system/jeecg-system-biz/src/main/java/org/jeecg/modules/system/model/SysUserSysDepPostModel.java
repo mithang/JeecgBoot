@@ -11,165 +11,165 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @Description: 部门用户和部门岗位用户的Model
+ * @Description: Model của người dùng phòng ban và người dùng chức vụ phòng ban Model
  * @author: wangshuai
  * @date: 2025/9/5 16:43
  */
 @Data
 public class SysUserSysDepPostModel {
     /**
-     * 用户ID
+     * Người dùng ID
      */
     private String id;
 
     /**
-     * 用户名
+     * Tên người dùng
      */
     private String username;
     
-    /* 真实姓名 */
+    /* Họ tên thật */
     private String realname;
 
     /**
-     * 头像
+     * Ảnh đại diện
      */
-    @Excel(name = "头像", width = 15, type = 2)
+    @Excel(name = "Ảnh đại diện", width = 15, type = 2)
     private String avatar;
     /**
-     * 生日
+     * Ngày sinh
      */
-    @Excel(name = "生日", width = 15, format = "yyyy-MM-dd")
+    @Excel(name = "Ngày sinh", width = 15, format = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     /**
-     * 性别（1：男 2：女）
+     * Giới tính (1: Nam, 2: Nữ)
      */
-    @Excel(name = "性别", width = 15, dicCode = "sex")
+    @Excel(name = "Giới tính", width = 15, dicCode = "sex")
     @Dict(dicCode = "sex")
     private Integer sex;
 
     /**
-     * 电子邮件
+     * Email
      */
-    @Excel(name = "电子邮件", width = 15)
+    @Excel(name = "Email", width = 15)
     private String email;
 
     /**
-     * 电话
+     * Điện thoại
      */
-    @Excel(name = "电话", width = 15)
+    @Excel(name = "Điện thoại", width = 15)
     private String phone;
 
     /**
-     * 状态(1：正常  2：冻结 ）
+     * Trạng thái(1：Bình thường  2：Đóng băng ）
      */
-    @Excel(name = "状态", width = 15, dicCode = "user_status")
+    @Excel(name = "Trạng thái", width = 15, dicCode = "user_status")
     @Dict(dicCode = "user_status")
     private Integer status;
 
     /**
-     * 删除状态（0，正常，1已删除）
+     * Trạng thái xóa (0 bình thường, 1 đã xóa)
      */
-    @Excel(name = "删除状态", width = 15, dicCode = "del_flag")
+    @Excel(name = "Trạng thái xóa", width = 15, dicCode = "del_flag")
     @TableLogic
     private Integer delFlag;
 
     /**
-     * 座机号
+     * Số điện thoại bàn
      */
-    @Excel(name = "座机号", width = 15)
+    @Excel(name = "Số điện thoại bàn", width = 15)
     private String telephone;
 
     /**
-     * 身份（0 普通成员 1 上级）
+     * Thân phận (0 thành viên thường, 1 cấp trên)
      */
-    @Excel(name = "（1普通成员 2上级）", width = 15)
+    @Excel(name = "(1 Thành viên thường 2 Cấp trên)", width = 15)
     private Integer userIdentity;
 
     /**
-     * 负责部门
+     * Phòng ban phụ trách
      */
-    @Excel(name = "负责部门", width = 15, dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
+    @Excel(name = "Phòng ban phụ trách", width = 15, dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
     @Dict(dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
     private String departIds;
 
     /**
-     * 多租户ids临时用，不持久化数据库(数据库字段不存在)
+     * Ids nhiều tenant dùng tạm thời, không lưu lâu dài vào cơ sở dữ liệu(Trường cơ sở dữ liệu không tồn tại)
      */
     private String relTenantIds;
 
     /**
-     * 同步工作流引擎(1-同步 0-不同步)
+     * Đồng bộ công cụ quy trình làm việc(1-Đồng bộ 0-Không đồng bộ)
      */
     private String activitiSync;
     /**
-     * 主岗位
+     * Vị trí chính
      */
-    @Excel(name = "主岗位", width = 15, dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
+    @Excel(name = "Vị trí chính", width = 15, dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
     @Dict(dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
     private String mainDepPostId;
 
     /**
-     * 兼职岗位
+     * Vị trí kiêm nhiệm
      */
-    @Excel(name = "兼职岗位", width = 15, dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
+    @Excel(name = "Vị trí kiêm nhiệm", width = 15, dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
     @Dict(dictTable = "sys_depart", dicText = "depart_name", dicCode = "id")
     @TableField(exist = false)
     private String otherDepPostId;
 
     /**
-     * 部门名称
+     * Tên phòng ban
      */
     private String departName;
     /**
-     * 主岗位
+     * Vị trí chính
      */
     private String postName;
     
     /**
-     * 兼职岗位
+     * Vị trí kiêm nhiệm
      */
     private String otherPostName;
 
     /**
-     * 部门text
+     * Phòng ban text
      */
     private String orgCodeTxt;
 
     /**
-     * 职务
+     * Chức danh
      */
     private String post;
 
     /**
-     * 部门编码
+     * Mã phòng ban
      */
     private String orgCode;
 
     /**
-     * 职务（字典）
+     * Chức vụ (danh mục)
      */
     private String positionType;
 
     /**
-     * 排序
+     * Sắp xếp
      */
     private Integer sort;
 
     /**
-     * 是否隐藏联系方式 0否1是
+     * Có ẩn thông tin liên hệ hay không: 0 không, 1 có
      */
     private String izHideContact;
 
     /**
-     * 工号
+     * Mã nhân viên
      */
     private String workNo;
 
     /**
-     * 是否为当前部门/岗位下的用户，不含下级部门、岗位的用户（部门：所属部门是当前部门；岗位：主岗位或兼职岗位是当前岗位）
+     * Có phải phòng ban hiện tại không/Người dùng thuộc vị trí, không bao gồm người dùng của phòng ban cấp dưới và vị trí (phòng ban: phòng ban trực thuộc là phòng ban hiện tại; vị trí: vị trí chính hoặc vị trí kiêm nhiệm là vị trí hiện tại)
      */
     private Boolean izCurrentDepartPost;
 }

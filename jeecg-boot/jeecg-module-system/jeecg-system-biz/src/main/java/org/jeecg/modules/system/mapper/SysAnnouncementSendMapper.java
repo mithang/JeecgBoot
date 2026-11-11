@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
- * @Description: 用户通告阅读标记表
+ * @Description: Bảng đánh dấu đã đọc thông báo của người dùng
  * @Author: jeecg-boot
  * @Date:  2019-02-21
  * @Version: V1.0
@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public interface SysAnnouncementSendMapper extends BaseMapper<SysAnnouncementSend> {
 
 	/**
-	 * 获取我的消息
+	 * Lấy tin nhắn của tôi
 	 * @param announcementSendModel
 	 * @param page
 	 * @return
@@ -27,7 +27,7 @@ public interface SysAnnouncementSendMapper extends BaseMapper<SysAnnouncementSen
 	public List<AnnouncementSendModel> getMyAnnouncementSendList(Page<AnnouncementSendModel> page,@Param("announcementSendModel") AnnouncementSendModel announcementSendModel);
 
 	/**
-	 * 获取一条记录
+	 * Lấy một bản ghi
 	 * @param sendId
 	 * @return
 	 */
@@ -35,18 +35,18 @@ public interface SysAnnouncementSendMapper extends BaseMapper<SysAnnouncementSen
 
 
 	/**
-	 * 修改为已读消息
+	 * Sửa thành tin nhắn đã đọc
 	 */
 	void updateReaded(@Param("userId") String userId, @Param("annoceIdList") List<String> annoceIdList);
 
 	/**
-	 * 清除所有未读消息
+	 * Xóa tất cả tin nhắn chưa đọc
 	 * @param userId
 	 */
 	void clearAllUnReadMessage(@Param("userId") String userId);
 
     /**
-     * 根据用户id和通告阅读表的id获取当前用户已阅读的数量
+     * Lấy số lượng người dùng hiện tại đã đọc theo id người dùng và id của bảng đọc thông báo
      * 
      * @param id
      * @param userId
@@ -55,7 +55,7 @@ public interface SysAnnouncementSendMapper extends BaseMapper<SysAnnouncementSen
     long getReadCountByUserId(@Param("id") String id, @Param("userId") String userId);
 
     /**
-     * 根据用户id和阅读表的id获取所有阅读的数据
+     * Lấy tất cả dữ liệu đã đọc theo id người dùng và id của bảng đọc
      * 
      * @param ids
      * @param userId
@@ -64,7 +64,7 @@ public interface SysAnnouncementSendMapper extends BaseMapper<SysAnnouncementSen
     List<String> getReadAnnSendByUserId(@Param("ids") List<String> ids, @Param("userId") String userId);
 
 	/**
-	 * 根据业务id、业务类型和用户id获取未读消息
+	 * Lấy tin nhắn chưa đọc theo id nghiệp vụ, loại nghiệp vụ và id người dùng
 	 * @param busId
 	 * @param busType
 	 * @param userId

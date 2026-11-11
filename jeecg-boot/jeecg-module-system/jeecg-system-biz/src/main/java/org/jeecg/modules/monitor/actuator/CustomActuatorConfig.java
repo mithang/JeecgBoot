@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 自定义健康监控配置类
+ * Lớp cấu hình giám sát sức khỏe tùy chỉnh
  *
  * @Author: chenrui
  * @Date: 2024/5/13 17:20
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 public class CustomActuatorConfig {
 
     /**
-     * 请求追踪
+     * Theo dõi yêu cầu
      * @return
      * @author chenrui
      * @date 2024/5/14 14:52

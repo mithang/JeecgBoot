@@ -3,7 +3,7 @@ package org.jeecg.modules.system.vo;
 import lombok.Data;
 
 /**
-* @Description: 部门职务
+* @Description: Chức vụ phòng ban
 *
 * @author: wangshuai
 * @date: 2025/8/18 10:11
@@ -12,42 +12,42 @@ import lombok.Data;
 public class SysDepartPositionVo {
 
     /**
-     * 部门id
+     * Phòng ban id
      */
     private String id;
 
     /**
-     * 是否为叶子节点(数据返回)
+     * Có phải nút lá không(Dữ liệu trả về)
      */
     private Integer izLeaf;
     
     /**
-     * 部门名称
+     * Tên phòng ban
      */
     private String departName;
 
     /**
-     * 职务名称
+     * Tên chức danh
      */
     private String positionName;
 
     /**
-     * 父级id
+     * Cấp cha id
      */
     private String parentId;
 
     /**
-     * 部门编码
+     * Mã phòng ban
      */
     private String orgCode;
 
     /**
-     * 机构类型
+     * Loại tổ chức
      */
     private String orgCategory;
 
     /**
-     * 上级岗位id
+     * Vị trí cấp trên id
      */
     private String depPostParentId;
 }

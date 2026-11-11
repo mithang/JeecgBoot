@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 职务表
+ * @Description: Bảng chức vụ
  * @Author: jeecg-boot
  * @Date: 2019-09-19
  * @Version: V1.0
@@ -54,7 +54,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         return "";
     }
 
-    //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+    //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
     @Override
     public List<SysPositionVO> getPositionListByUserIds(List<String> userIds) {
         if (userIds == null || userIds.isEmpty()) {
@@ -62,24 +62,24 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         }
         return this.baseMapper.getPositionListByUserIds(userIds);
     }
-    //update-end---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+    //update-end---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
 
     @Override
     public Integer checkPositionAuth(String permission, boolean allowTenantAdmin) {
-        //当前用户有没有 admin 或 zuhuadmin 角色或者有对应按钮权限直接放行
+        //Người dùng hiện tại có vai trò admin hoặc zuhuadmin hay có quyền nút tương ứng thì cho qua trực tiếp
           if (SysRoleEnum.hasAnyRole(SysRoleEnum.ADMIN, SysRoleEnum.TENANT_ADMIN) || SecurityUtils.getSubject().isPermitted(permission)) {
             return null;
         }
-        //是否需要判断租户管理员，比如导入、导出就不需要敲敲云没有用的地方
+        //Có cần kiểm tra quản trị viên tenant hay không, ví dụ import, export thì không cần ở những chỗ QiaoQiaoYun không dùng đến
         String tenantId = TenantContext.getTenant();
         if (!allowTenantAdmin || oConvertUtils.isEmpty(tenantId)) {
-            throw new UnauthorizedException("没有权限，请联系管理员分配权限！");
+            throw new UnauthorizedException("Không có quyền, vui lòng liên hệ quản trị viên để được cấp quyền!");
         }
-        // 非当前租户的组织账户管理员或超级管理员时抛出异常
+        // Ném ngoại lệ khi không phải quản trị viên tài khoản tổ chức hoặc siêu quản trị viên của thuê bao hiện tại
         try {
             sysTenantPackService.izHaveManageUserAuth(tenantId);
         } catch (Exception e) {
-            throw new JeecgBootBizTipException("没有权限，请联系管理员分配权限！");
+            throw new JeecgBootBizTipException("Không có quyền, vui lòng liên hệ quản trị viên để được cấp quyền!");
         }
         return oConvertUtils.getInt(tenantId, 0);
     }

@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 进入fallback的方法 检查是否token未设置
+ * Vào phương thức fallback, kiểm tra xem token đã được thiết lập chưa
  * @author: jeecg-boot
  */
 @Slf4j
@@ -31,33 +31,33 @@ public class SysBaseAPIFallback implements ISysBaseAPI {
 
 	@Override
 	public List<DictModel> queryPopupDictItems(String reportCode, String dictCode, String dictText, String dataList) {
-		log.error("查询popup字典项失败", cause);
+		log.error("Truy vấn mục danh mục popup thất bại", cause);
 		return List.of();
 	}
 
     @Override
     public void sendSysAnnouncement(MessageDTO message) {
-        log.error("发送消息失败 {}", cause);
+        log.error("Gửi tin nhắn thất bại {}", cause);
     }
 
     @Override
     public void sendBusAnnouncement(BusMessageDTO message) {
-        log.error("发送消息失败 {}", cause);
+        log.error("Gửi tin nhắn thất bại {}", cause);
     }
 
     @Override
     public void sendTemplateAnnouncement(TemplateMessageDTO message) {
-        log.error("发送消息失败 {}", cause);
+        log.error("Gửi tin nhắn thất bại {}", cause);
     }
 
     @Override
     public void sendBusTemplateAnnouncement(BusTemplateMessageDTO message) {
-        log.error("发送消息失败 {}", cause);
+        log.error("Gửi tin nhắn thất bại {}", cause);
     }
 
     @Override
     public String parseTemplateByCode(TemplateDTO templateDTO) {
-        log.error("通过模板获取消息内容失败 {}", cause);
+        log.error("Lấy nội dung tin nhắn qua mẫu thất bại {}", cause);
         return null;
     }
 
@@ -118,7 +118,7 @@ public class SysBaseAPIFallback implements ISysBaseAPI {
 
     @Override
     public List<DictModel> queryAllDict() {
-        log.error("fegin接口queryAllDict失败："+cause.getMessage(), cause);
+        log.error("fegin Giao diện Feign queryAllDict thất bại:"+cause.getMessage(), cause);
         return null;
     }
 
@@ -149,7 +149,7 @@ public class SysBaseAPIFallback implements ISysBaseAPI {
 
     @Override
     public List<String> queryTableDictByKeys(String table, String text, String code, String[] keyArray) {
-        log.error("queryTableDictByKeys查询失败 {}", cause);
+        log.error("queryTableDictByKeys Tìm kiếm thất bại {}", cause);
         return null;
     }
 
@@ -165,7 +165,7 @@ public class SysBaseAPIFallback implements ISysBaseAPI {
 
     @Override
     public List<ComboModel> queryAllRole(String[] roleIds) {
-        log.error("获取角色信息失败 {}", cause);
+        log.error("Lấy thông tin vai trò thất bại {}", cause);
         return null;
     }
 
@@ -271,7 +271,7 @@ public class SysBaseAPIFallback implements ISysBaseAPI {
 
     @Override
     public LoginUser getUserByName(String username) {
-        log.error("jeecg-system服务节点不通，导致获取登录用户信息失败： " + cause.getMessage(), cause);
+        log.error("jeecg-system Nút dịch vụ không thông, dẫn đến lấy thông tin người dùng đăng nhập thất bại: " + cause.getMessage(), cause);
         return null;
     }
 
@@ -297,7 +297,7 @@ public class SysBaseAPIFallback implements ISysBaseAPI {
 
     @Override
     public SysUserCacheInfo getCacheUser(String username) {
-        log.error("获取用户信息失败 {}", cause);
+        log.error("Lấy thông tin người dùng thất bại {}", cause);
         return null;
     }
 
@@ -326,7 +326,7 @@ public class SysBaseAPIFallback implements ISysBaseAPI {
         return null;
     }
 
-    // 代码逻辑说明: [issues/#5643]解决分布式下表字典跨库无法查询问题------------
+    // Giải thích logic mã: [issues/#5643]Giải quyết vấn đề danh mục bảng liên cơ sở dữ liệu không truy vấn được trong môi trường phân tán------------
     @Override
     public List<DictModel> translateDictFromTableByKeys(String table, String text, String code, String keys, String dataSource) {
         return null;

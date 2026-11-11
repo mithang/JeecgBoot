@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 系统日志表 服务类
+ * Bảng log hệ thống Lớp Service
  * </p>
  *
  * @Author zhangweijian
@@ -19,19 +19,19 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ISysLogService extends IService<SysLog> {
 
 	/**
-	 * 清空所有日志记录
+	 * Xóa tất cả bản ghi nhật ký
 	 */
 	public void removeAll();
 	
 	/**
-	 * 获取系统总访问次数
+	 * Lấy tổng số lần truy cập hệ thống
 	 *
 	 * @return Long
 	 */
 	Long findTotalVisitCount();
 
 	/**
-	 * 获取系统今日访问次数
+	 * Lấy số lần truy cập hệ thống hôm nay
      * @param dayStart
 	 * @param dayEnd
 	 * @return Long
@@ -39,15 +39,15 @@ public interface ISysLogService extends IService<SysLog> {
 	Long findTodayVisitCount(Date dayStart, Date dayEnd);
 
 	/**
-	 * 获取系统今日访问 IP数
-	 * @param dayStart 开始时间
-     * @param dayEnd 结束时间
+	 * Lấy số lượng IP truy cập hệ thống hôm nay
+	 * @param dayStart Thời gian bắt đầu
+     * @param dayEnd Thời gian kết thúc
 	 * @return Long
 	 */
 	Long findTodayIp(Date dayStart, Date dayEnd);
 	
 	/**
-	 *   首页：根据时间统计访问数量/ip数量
+	 *   Trang chủ: thống kê số lượt truy cập theo thời gian/ip Số lượng
 	 * @param dayStart
 	 * @param dayEnd
 	 * @return

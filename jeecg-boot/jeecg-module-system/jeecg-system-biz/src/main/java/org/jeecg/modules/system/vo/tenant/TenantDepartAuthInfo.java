@@ -6,7 +6,7 @@ import org.jeecg.modules.system.entity.SysTenant;
 import java.util.List;
 
 /**
- * 进入租户组织页面 查询租户信息及操作权限
+ * Vào trang tổ chức tenant để truy vấn thông tin tenant và quyền thao tác
  * @Author taoYan
  * @Date 2023/2/16 16:18
  **/
@@ -14,22 +14,22 @@ import java.util.List;
 public class TenantDepartAuthInfo {
 
     /**
-     * 当前用户是不是 超级管理员
+     * Người dùng hiện tại có phải là siêu quản trị viên không
      */
     private boolean superAdmin;
 
     /**
-     * 租户信息
+     * Thông tin tenant
      */
     private SysTenant sysTenant;
 
     /**
-     * 统计租户产品包人员数量
+     * Thống kê số lượng nhân sự trong gói sản phẩm Tenant
      */
     private List<TenantPackUserCount> packCountList;
 
     /**
-     * 租户产品包 编码(这个编码只有3个admin产品包有，便于区分)
+     * Mã gói sản phẩm tenant(Mã này chỉ có 3 gói sản phẩm admin mới có, để tiện phân biệt)
      */
     private List<String> packCodes;
     

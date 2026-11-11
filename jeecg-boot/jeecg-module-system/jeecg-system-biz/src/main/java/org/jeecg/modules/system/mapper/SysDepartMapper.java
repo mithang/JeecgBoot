@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 部门 Mapper 接口
+ * Giao diện Mapper phòng ban
  * <p>
  * 
  * @Author: Steve
@@ -30,14 +30,14 @@ import java.util.Map;
 public interface SysDepartMapper extends BaseMapper<SysDepart> {
 	
 	/**
-	 * 根据用户ID查询部门集合
-     * @param userId 用户id
+	 * Truy vấn tập hợp phòng ban theo ID người dùng
+     * @param userId Người dùng id
      * @return List<SysDepart>
 	 */
 	public List<SysDepart> queryUserDeparts(@Param("userId") String userId);
 
 	/**
-	 * 根据用户名查询部门
+	 * Truy vấn phòng ban theo tên người dùng
 	 *
 	 * @param username
 	 * @return
@@ -45,7 +45,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
 	public List<SysDepart> queryDepartsByUsername(@Param("username") String username);
 	
 	/**
-	 * 根据 userId 查询部门
+	 * Truy vấn phòng ban theo userId
 	 *
 	 * @param userId
 	 * @return
@@ -53,80 +53,80 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
 	public List<String> queryDepartsByUserId(@Param("userId") String userId);
 
     /**
-     * 根据 userIds 查询部门ID
+     * Truy vấn phòng ban theo userIds ID
      *
-     * @param userIds 用户ID列表
+     * @param userIds Danh sách ID người dùng
      * @return
      */
     List<Map<String, String>> queryDepartIdsByUserIds(@Param("userIds") Collection<String> userIds);
 
     /**
-     * 批量查询用户所属部门IDs（VO版，跨数据库兼容，消除N+1查询）
+     * Truy vấn hàng loạt các ID phòng ban mà người dùng thuộc về (bản VO, tương thích đa cơ sở dữ liệu, loại bỏ N+1 truy vấn)
      * @author scott
-     * @since 2026-07-01 listAll接口N+1查询改造
-     * @param userIds 用户ID列表
-     * @return 每条含 userId 和 departId
+     * @since 2026-07-01 listAll API N+1 Cải tiến truy vấn
+     * @param userIds Danh sách ID người dùng
+     * @return Mỗi bản ghi chứa userId và departId
      */
     List<SysUserDepartIdVo> queryDepartIdVosByUserIds(@Param("userIds") Collection<String> userIds);
 
     /**
-     * 通过部门编码获取部门id
-     * @param orgCode 部门编码
+     * Lấy phòng ban theo mã phòng ban id
+     * @param orgCode Mã phòng ban
      * @return String
      */
 	@Select("select id from sys_depart where org_code=#{orgCode}")
 	public String queryDepartIdByOrgCode(@Param("orgCode") String orgCode);
 	
     /**
-     * 通过部门id，查询部门下的用户的账号
-     * @param departIds 部门ID集合
+     * Theo id phòng ban, truy vấn tài khoản của người dùng thuộc phòng ban
+     * @param departIds Tập hợp ID phòng ban
      * @return String
      */
 	public List<String> queryUserAccountByDepartIds(@Param("departIds") List<String> departIds);
 
     /**
-     * 通过部门id 查询部门id,父id
-     * @param departId 部门id
+     * Truy vấn phòng ban theo id phòng ban id,id cha
+     * @param departId Phòng ban id
      * @return
      */
 	@Select("select id,parent_id from sys_depart where id=#{departId}")
 	public SysDepart getParentDepartId(@Param("departId") String departId);
 
 	/**
-	 *  根据部门Id查询,当前和下级所有部门IDS
+	 *  Truy vấn theo Id phòng ban,Phòng ban hiện tại và tất cả phòng ban cấp dưới IDS
 	 * @param departId
 	 * @return
 	 */
 	List<String> getSubDepIdsByDepId(@Param("departId") String departId);
 
 	/**
-	 * 根据部门编码获取部门下所有IDS
+	 * Lấy tất cả các mục thuộc phòng ban theo mã phòng ban IDS
 	 * @param orgCodes
 	 * @return
 	 */
 	List<String> getSubDepIdsByOrgCodes(@org.apache.ibatis.annotations.Param("orgCodes") String[] orgCodes);
 
     /**
-     * 根据parent_id查询下级部门
-     * @param parentId 父id
+     * Theo parent_id Truy vấn phòng ban cấp dưới
+     * @param parentId id cha
      * @return List<SysDepart>
      */
     List<SysDepart> queryTreeListByPid(@Param("parentId") String parentId);
 	/**
-	 * 根据id下级部门数量
+	 * Số lượng phòng ban cấp dưới theo id
 	 * @param parentId
 	 * @return
 	 */
 	@Select("SELECT count(*) FROM sys_depart where del_flag ='0' AND parent_id = #{parentId,jdbcType=VARCHAR}")
     Integer queryCountByPid(@Param("parentId")String parentId);
 	/**
-	 * 根据OrgCod查询所属公司信息
+	 * Truy vấn thông tin công ty trực thuộc theo OrgCod
 	 * @param orgCode
 	 * @return
 	 */
 	SysDepart queryCompByOrgCode(@Param("orgCode")String orgCode);
 	/**
-	 * 根据id下级部门
+	 * Phòng ban cấp dưới theo id
 	 * @param parentId
 	 * @return
 	 */
@@ -134,7 +134,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
 	List<SysDepart> queryDeptByPid(@Param("parentId")String parentId);
 
 	/**
-	 * 通过父级id和租户id查询部门
+	 * Truy vấn phòng ban theo id cấp cha và tenant id
 	 * @param parentId
 	 * @param tenantId
 	 * @return
@@ -150,16 +150,16 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
 	List<SysDepart> getMaxCodeDepart(@Param("page") Page<SysDepart> page, @Param("parentId") String parentId);
 
 	/**
-	 * 修改部门状态字段： 是否子节点
-	 * @param id 部门id
-	 * @param leaf 叶子节点
+	 * Sửa trường trạng thái phòng ban: có phải nút con không
+	 * @param id Phòng ban id
+	 * @param leaf Nút lá
 	 * @return int
 	 */
 	@Update("UPDATE sys_depart SET iz_leaf=#{leaf} WHERE id = #{id}")
 	int setMainLeaf(@Param("id") String id, @Param("leaf") Integer leaf);
 
 	/**
-	 * 获取租户id和部门父id获取的部门数据
+	 * Lấy dữ liệu phòng ban theo id tenant và id phòng ban cha
 	 * @param tenantId
 	 * @param parentId
 	 * @return
@@ -167,7 +167,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<ExportDepartVo> getDepartList(@Param("parentId") String parentId, @Param("tenantId") Integer tenantId);
 
 	/**
-	 * 根据部门名称和租户id获取部门数据
+	 * Theo tên phòng ban và id tenant, lấy dữ liệu phòng ban
 	 * @param departName
 	 * @param tenantId
 	 * @return
@@ -175,14 +175,14 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
 	List<SysDepart> getDepartByName(@Param("departName")String departName, @Param("tenantId")Integer tenantId,@Param("parentId") String parentId);
 
 	/**
-	 * 根据部门id获取用户id和部门名称
+	 * Theo id phòng ban, lấy id người dùng và tên phòng ban
 	 * @param userList
 	 * @return
 	 */
 	List<SysUserDepVo> getUserDepartByTenantUserId(@Param("userList") List<SysUser> userList, @Param("tenantId") Integer tenantId);
 
 	/**
-	 * 根据部门名称和租户id获取分页部门数据
+	 * Theo tên phòng ban và id tenant, lấy dữ liệu phòng ban phân trang
 	 * @param page
 	 * @param departName
 	 * @param tenantId
@@ -192,7 +192,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
 	List<SysDepart> getDepartPageByName(@Param("page") Page<SysDepart> page, @Param("departName") String departName, @Param("tenantId") Integer tenantId, @Param("parentId") String parentId);
 
 	/**
-	 * 获取租户id和部门父id获取的部门数据
+	 * Lấy dữ liệu phòng ban theo id tenant và id phòng ban cha
 	 * @param tenantId
 	 * @param parentId
 	 * @return
@@ -200,7 +200,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysDepartExportVo> getSysDepartList(@Param("parentId") String parentId,@Param("tenantId") Integer tenantId, List<String> idList);
 
     /**
-     * 根据多个部门id获取部门数据
+     * Lấy dữ liệu phòng ban theo nhiều id phòng ban
      * 
      * @param departIds
      * @return
@@ -208,7 +208,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysUserDepVo> getDepartByIds(List<String> departIds);
 
     /**
-     * 根据用户id获取部门数据
+     * Lấy dữ liệu phòng ban theo ID người dùng
      *
      * @param userList
      * @return
@@ -217,7 +217,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysUserDepVo> getUserDepartByUserId(@Param("userList")List<SysUser> userList);
 
     /**
-     * 根据父级id/职级/部门id获取部门岗位信息
+     * Theo cấp cha id/Cấp bậc/Lấy thông tin chức vụ của phòng ban theo ID phòng ban
      * 
      * @param parentId
      * @param postLevel
@@ -226,7 +226,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysDepart> getDepartPositionByParentId(@Param("parentId") String parentId, @Param("postLevel") Integer postLevel, @Param("departId") String departId);
 
     /**
-     * 根据父级id获取部门中的数据
+     * Lấy dữ liệu trong phòng ban theo id cấp cha
      * @param parentId
      * @return
      */
@@ -234,30 +234,30 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysDepart> getDepartByParentId(@Param("parentId") String parentId);
 
     /**
-     * 根据部门id查询部门信息
+     * Truy vấn thông tin phòng ban theo ID phòng ban
      
      * @param departId
-     * @return 部门岗位信息
+     * @return Thông tin vị trí phòng ban
      */
     SysDepartPositionVo getDepartPostByDepartId(@Param("departId") String departId);
 
     /**
-     * 根据父级部门id查询部门信息
+     * Truy vấn thông tin phòng ban theo id phòng ban cấp cha
      
      * @param orgCode
-     * @return 部门岗位信息
+     * @return Thông tin vị trí phòng ban
      */
     List<SysDepartPositionVo> getDepartPostByOrgCode(@Param("orgCode") String orgCode);
 
     /**
-     * 根据部门id获取部门code
+     * Lấy phòng ban theo id phòng ban code
      * @param idList
      * @return
      */
     List<String> getDepCodeByDepIds(@Param("idList") List<String> idList);
 
     /**
-     * 根据父级部门id和职务名称查找部门id
+     * Theo id phòng ban cha và tên chức vụ, tìm phòng ban id
      * 
      * @param parentId
      * @param postName
@@ -267,7 +267,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     String getDepIdByDepIdAndPostName(@Param("parentId") String parentId, @Param("postName") String postName, @Param("tenantId") Integer tenantId);
 
     /**
-     * 根据部门id 获取职级名称
+     * Lấy tên cấp bậc theo id phòng ban
      * 
      * @param depId
      * @return
@@ -275,7 +275,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     String getPostNameByPostId(@Param("depId") String depId);
 
     /**
-     * 根据部门code获取部门数据
+     * Lấy dữ liệu phòng ban theo code phòng ban
      * 
      * @param orgCode
      * @return
@@ -284,7 +284,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     SysDepart queryDepartByOrgCode(@Param("orgCode") String orgCode);
 
     /**
-     * 根据部门父id获取部门岗位数据
+     * Lấy dữ liệu vị trí phòng ban theo id cha của phòng ban
      * 
      * @param parentIds
      * @return
@@ -292,7 +292,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysDepart> getDepartPositionByParentIds(@Param("parentIds") List<String> parentIds);
 
     /**
-     * 根据用户id集合获取用户的兼职岗位信息
+     * Theo tập hợp id người dùng, lấy thông tin vị trí kiêm nhiệm của người dùng
      * 
      * @param userIdList
      * @return
@@ -300,7 +300,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysUserSysDepPostModel> getDepartOtherPostByUserIds(@Param("userIdList") List<String> userIdList);
 
     /**
-     * 获取没有父级id的部门数据
+     * Lấy dữ liệu phòng ban không có id cấp cha
      * 
      * @return
      */
@@ -308,7 +308,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysDepart> getDepartNoParent();
 
     /**
-     * 根据父级id统计子节点数量
+     * Thống kê số lượng nút con theo id cấp cha
      * 
      * @param parentId
      * @return
@@ -317,7 +317,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     long countByParentId(@Param("parentId") String parentId);
 
 	/**
-	 * 根据用户名和分类查询
+	 * Truy vấn theo tên người dùng và phân loại
 	 * @param username
 	 * @param category
 	 * @return
@@ -325,7 +325,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
 	List<SysDepart> queryDeptByUserAndCategory(@Param("username")String username, @Param("category")String category);
 
     /**
-     * 获取负责部门
+     * Lấy phòng ban phụ trách
      * 
      * @param page
      * @param departId
@@ -334,7 +334,7 @@ public interface SysDepartMapper extends BaseMapper<SysDepart> {
     List<SysUser> getDepartmentHead(@Param("page") Page<SysUser> page, @Param("departId") String departId);
 
 	/**
-	 *获取所有部门
+	 *Lấy tất cả phòng ban
 	 * @param departId
 	 * @return
 	 */

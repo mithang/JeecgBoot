@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 权限表
+ * Bảng quyền hạn
  * @date 2024/12/10 9:38
  */
 @Data
@@ -28,7 +28,7 @@ public class OpenApiAuth implements Serializable {
     private String id;
 
     /**
-     * 受权名称
+     * Tên được ủy quyền
      */
     private String name;
 
@@ -43,28 +43,28 @@ public class OpenApiAuth implements Serializable {
     private String sk;
 
     /**
-     * 系统用户ID
+     * Người dùng hệ thống ID
      */
     @Dict(dictTable = "sys_user",dicCode = "id",dicText = "username")
     private String systemUserId;
 
     /**
-     * 创建人
+     * Người tạo
      */
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     private Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
     private String updateBy;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     private Date updateTime;
 }

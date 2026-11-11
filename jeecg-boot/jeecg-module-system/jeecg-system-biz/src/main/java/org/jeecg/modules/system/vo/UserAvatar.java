@@ -4,7 +4,7 @@ import lombok.Data;
 import org.jeecg.modules.system.entity.SysUser;
 
 /**
- *  用户名和头像信息
+ *  Thông tin tên người dùng và ảnh đại diện
  * @Author taoYan
  * @Date 2022/8/8 17:06
  **/

@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @Description: 系统评论回复表
+ * @Description: Bảng trả lời bình luận hệ thống
  * @Author: jeecg-boot
  * @Date: 2022-07-19
  * @Version: V1.0
@@ -18,21 +18,21 @@ public interface ISysCommentService extends IService<SysComment> {
 
 
     /**
-     * 保存评论 返回评论ID
+     * Lưu bình luận, trả về bình luận ID
      *
      * @param sysComment
      */
     String saveOne(SysComment sysComment);
 
     /**
-     * 删除
+     * Xóa
      *
      * @param id
      */
     void deleteOne(String id);
 
     /**
-     * 根据表名和数据id查询表单评论及文件信息
+     * Truy vấn bình luận biểu mẫu và thông tin tệp theo tên bảng và id dữ liệu
      *
      * @param sysComment
      * @return
@@ -41,7 +41,7 @@ public interface ISysCommentService extends IService<SysComment> {
 
 
     /**
-     * 保存文件+评论
+     * Lưu tệp+Bình luận
      *
      * @param req
      */
@@ -49,7 +49,7 @@ public interface ISysCommentService extends IService<SysComment> {
 
 
     /**
-     * 查询当前表单的文件列表
+     * Truy vấn danh sách tệp của biểu mẫu hiện tại
      *
      * @param tableName
      * @param formDataId
@@ -57,7 +57,7 @@ public interface ISysCommentService extends IService<SysComment> {
      */
     List<SysCommentFileVo> queryFormFileList(String tableName, String formDataId);
     /**
-     * app端 保存文件+评论
+     * app Lưu file trên app+Bình luận
      *
      * @param request
      */

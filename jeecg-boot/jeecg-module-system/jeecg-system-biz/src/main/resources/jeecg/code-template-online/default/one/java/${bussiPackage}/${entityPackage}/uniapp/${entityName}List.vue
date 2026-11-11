@@ -1,11 +1,11 @@
 <template>
 	<view>
-	   <!--标题和返回-->
+	   <!--Tiêu đề và quay lại-->
 		<cu-custom :bgColor="NavBarColor" isBack>
-			<block slot="backText">返回</block>
+			<block slot="backText">Trả về</block>
 			<block slot="content">${tableVo.ftlDescription}</block>
 		</cu-custom>
-		<!--滚动加载列表-->
+		<!--Tải danh sách khi cuộn-->
 		<mescroll-body ref="mescrollRef" bottom="88"  @init="mescrollInit" :up="upOption" :down="downOption" @down="downCallback" @up="upCallback">
 		    <view class="cu-list menu">
 				<view class="cu-item" v-for="(item,index) in list" :key="index" @click="goHome">

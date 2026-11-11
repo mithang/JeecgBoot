@@ -27,7 +27,7 @@ import java.io.*;
 
 /**
  * <p>
- * 用户表 前端控制器
+ * Bảng người dùng Controller frontend
  * </p>
  *
  * @Author scott
@@ -42,7 +42,7 @@ public class CommonController {
     private String uploadpath;
 
     /**
-     * 本地：local minio：minio 阿里：alioss
+     * Local: local, MinIO: minio, Alibaba Cloud:alioss
      */
     @Value(value="${jeecg.uploadType}")
     private String uploadType;
@@ -53,11 +53,11 @@ public class CommonController {
      */
     @GetMapping("/403")
     public Result<?> noauth()  {
-        return Result.error("没有权限，请联系管理员分配权限！");
+        return Result.error("Không có quyền, vui lòng liên hệ quản trị viên để được cấp quyền!");
     }
 
     /**
-     * 文件上传统一方法
+     * Phương thức tải tệp lên thống nhất
      * @param request
      * @param response
      * @return
@@ -70,7 +70,7 @@ public class CommonController {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile file = multipartRequest.getFile("file");
         
-        // 文件安全校验，防止上传漏洞文件
+        // Kiểm tra an toàn tệp, ngăn tải lên tệp có lỗ hổng
         SsrfFileTypeFilter.checkUploadFileType(file, bizPath);
   
         if (oConvertUtils.isEmpty(bizPath)) {
@@ -83,25 +83,25 @@ public class CommonController {
         }
         if(oConvertUtils.isNotEmpty(savePath)){
             
-            //添加到文件表
+            //Thêm vào bảng file
             String orgName = file.getOriginalFilename();
-            // 获取文件名
+            // Lấy tên tệp
             orgName = CommonUtils.getFileName(orgName);
             String type = orgName.substring(orgName.lastIndexOf(SymbolConstant.SPOT));
             FileTypeEnum fileType = FileTypeEnum.getByType(type);
             result.setMessage(savePath);
             result.setSuccess(true);
         }else {
-            result.setMessage("上传失败！");
+            result.setMessage("Tải lên thất bại!");
             result.setSuccess(false);
         }
         return result;
     }
 
     /**
-     * 本地文件上传
-     * @param mf 文件
-     * @param bizPath  自定义路径
+     * Tải file lên cục bộ
+     * @param mf Tệp
+     * @param bizPath  Đường dẫn tùy chỉnh
      * @return
      */
     private String uploadLocal(MultipartFile mf,String bizPath){
@@ -110,10 +110,10 @@ public class CommonController {
             String fileName = null;
             File file = new File(ctxPath + File.separator + bizPath + File.separator );
             if (!file.exists()) {
-                // 创建文件根目录
+                // Tạo thư mục gốc của tệp
                 file.mkdirs();
             }
-            // 获取文件名
+            // Lấy tên tệp
             String orgName = mf.getOriginalFilename();
             orgName = CommonUtils.getFileName(orgName);
             if(orgName.indexOf(SymbolConstant.SPOT)!=-1){
@@ -154,11 +154,11 @@ public class CommonController {
 //			String nowday = new SimpleDateFormat("yyyyMMdd").format(new Date());
 //			File file = new File(ctxPath + File.separator + bizPath + File.separator + nowday);
 //			if (!file.exists()) {
-//				file.mkdirs();// 创建文件根目录
+//				file.mkdirs();// Tạo thư mục gốc của tệp
 //			}
 //			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-//			MultipartFile mf = multipartRequest.getFile("file");// 获取上传文件对象
-//			String orgName = mf.getOriginalFilename();// 获取文件名
+//			MultipartFile mf = multipartRequest.getFile("file");// Lấy đối tượng tệp tải lên
+//			String orgName = mf.getOriginalFilename();// Lấy tên tệp
 //			fileName = orgName.substring(0, orgName.lastIndexOf(".")) + "_" + System.currentTimeMillis() + orgName.substring(orgName.indexOf("."));
 //			String savePath = file.getPath() + File.separator + fileName;
 //			File savefile = new File(savePath);
@@ -178,15 +178,15 @@ public class CommonController {
 //	}
 
     /**
-     * 预览图片&下载文件
-     * 请求地址：http://localhost:8080/common/static/{user/20190119/e1fe9925bc315c60addea1b98eb1cb1349547719_1547866868179.jpg}
+     * Xem trước hình ảnh&Tải xuống tệp
+     * Địa chỉ yêu cầu:http://localhost:8080/common/static/{user/20190119/e1fe9925bc315c60addea1b98eb1cb1349547719_1547866868179.jpg}
      *
      * @param request
      * @param response
      */
     @GetMapping(value = "/static/**")
     public void view(HttpServletRequest request, HttpServletResponse response) {
-        // ISO-8859-1 ==> UTF-8 进行编码转换
+        // ISO-8859-1 ==> UTF-8 Thực hiện chuyển đổi mã hóa
         String imgPath = extractPathFromPattern(request);
         if(oConvertUtils.isEmpty(imgPath) || CommonConstant.STRING_NULL.equals(imgPath)){
             return;
@@ -197,22 +197,22 @@ public class CommonController {
             if (imgPath.endsWith(SymbolConstant.COMMA)) {
                 imgPath = imgPath.substring(0, imgPath.length() - 1);
             }
-            // 代码逻辑说明: 检查下载文件类型--------------
+            // Giải thích logic mã: Kiểm tra loại tệp tải xuống--------------
             SsrfFileTypeFilter.checkDownloadFileType(imgPath);
 
             String filePath = uploadpath + File.separator + imgPath;
             File file = new File(filePath);
             if(!file.exists()){
                 response.setStatus(404);
-                log.warn("文件["+imgPath+"]不存在..");
+                log.warn("Tệp["+imgPath+"]Không tồn tại..");
                 return;
                 //throw new RuntimeException();
             }
-            // 设置强制下载不打开
+            // Thiết lập tải xuống bắt buộc, không mở
             response.setContentType("application/force-download");
             response.addHeader("Content-Disposition", "attachment;fileName=" + new String(file.getName().getBytes("UTF-8"),"iso-8859-1"));
             
-            // 结合 StreamingResponseBody 的流式写法
+            // Kết hợp cách viết streaming của StreamingResponseBody
             try (InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
                  OutputStream outputStream = response.getOutputStream()) {
                 byte[] buf = new byte[8192];
@@ -223,7 +223,7 @@ public class CommonController {
                 outputStream.flush();
             }
         } catch (IOException e) {
-            log.error("预览文件失败" + e.getMessage());
+            log.error("Xem trước tệp thất bại" + e.getMessage());
             response.setStatus(404);
             e.printStackTrace();
         }
@@ -231,8 +231,8 @@ public class CommonController {
     }
 
 //	/**
-//	 * 下载文件
-//	 * 请求地址：http://localhost:8080/common/download/{user/20190119/e1fe9925bc315c60addea1b98eb1cb1349547719_1547866868179.jpg}
+//	 * Tải xuống tệp
+//	 * Địa chỉ yêu cầu:http://localhost:8080/common/download/{user/20190119/e1fe9925bc315c60addea1b98eb1cb1349547719_1547866868179.jpg}
 //	 *
 //	 * @param request
 //	 * @param response
@@ -240,9 +240,9 @@ public class CommonController {
 //	 */
 //	@GetMapping(value = "/download/**")
 //	public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		// ISO-8859-1 ==> UTF-8 进行编码转换
+//		// ISO-8859-1 ==> UTF-8 Thực hiện chuyển đổi mã hóa
 //		String filePath = extractPathFromPattern(request);
-//		// 其余处理略
+//		// Các xử lý còn lại lược bỏ
 //		InputStream inputStream = null;
 //		OutputStream outputStream = null;
 //		try {
@@ -254,7 +254,7 @@ public class CommonController {
 //			String downloadFilePath = localPath + File.separator + filePath;
 //			File file = new File(downloadFilePath);
 //	         if (file.exists()) {
-//	         	response.setContentType("application/force-download");// 设置强制下载不打开            
+//	         	response.setContentType("application/force-download");// Thiết lập tải xuống bắt buộc, không mở            
 //	 			response.addHeader("Content-Disposition", "attachment;fileName=" + new String(file.getName().getBytes("UTF-8"),"iso-8859-1"));
 //	 			inputStream = new BufferedInputStream(new FileInputStream(file));
 //	 			outputStream = response.getOutputStream();
@@ -267,7 +267,7 @@ public class CommonController {
 //	         }
 //
 //		} catch (Exception e) {
-//			log.info("文件下载失败" + e.getMessage());
+//			log.info("Tải xuống tệp thất bại" + e.getMessage());
 //			// e.printStackTrace();
 //		} finally {
 //			if (inputStream != null) {
@@ -289,7 +289,7 @@ public class CommonController {
 //	}
 
     /**
-     * @功能：pdf预览Iframe
+     * @Chức năng: xem trước PDF Iframe
      * @param modelAndView
      * @return
      */
@@ -300,8 +300,8 @@ public class CommonController {
     }
 
     /**
-     *  把指定URL后的字符串全部截断当成参数
-     *  这么做是为了防止URL中包含中文或者特殊字符（/等）时，匹配不了的问题
+     *  Cắt toàn bộ chuỗi sau URL được chỉ định để làm tham số
+     *  Làm như vậy là để tránh trường hợp URL chứa ký tự Trung Quốc hoặc ký tự đặc biệt (/v.v.) thì không khớp được
      * @param request
      * @return
      */
@@ -312,7 +312,7 @@ public class CommonController {
     }
 
     /**
-     * 根据网路图片地址上传到服务器
+     * Tải lên máy chủ theo địa chỉ ảnh trên mạng
      * @param jsonObject
      * @param request
      * @return
@@ -325,7 +325,7 @@ public class CommonController {
         try {
             String savePath = "";
             MultipartFile file = HttpFileToMultipartFileUtil.httpFileToMultipartFile(fileUrl, filename);
-            // 文件安全校验，防止上传漏洞文件
+            // Kiểm tra an toàn tệp, ngăn tải lên tệp có lỗ hổng
             SsrfFileTypeFilter.checkUploadFileType(file, bizPath);
             if (oConvertUtils.isEmpty(bizPath)) {
                 bizPath = CommonConstant.UPLOAD_TYPE_OSS.equals(uploadType) ? "upload" : "";

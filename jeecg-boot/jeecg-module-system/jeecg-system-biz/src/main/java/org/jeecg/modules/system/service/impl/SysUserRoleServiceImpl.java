@@ -18,7 +18,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
  * <p>
- * 用户角色表 服务实现类
+ * Bảng vai trò người dùng — Lớp triển khai Service
  * </p>
  *
  * @Author scott

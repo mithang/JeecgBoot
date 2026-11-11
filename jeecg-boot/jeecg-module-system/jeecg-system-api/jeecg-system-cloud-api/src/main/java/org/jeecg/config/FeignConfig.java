@@ -55,7 +55,7 @@
 //public class FeignConfig {
 //
 //    /**
-//     * 设置feign header参数
+//     * Đặt tham số feign header
 //     * 【X_ACCESS_TOKEN】【X_SIGN】【X_TIMESTAMP】
 //     * @return
 //     */
@@ -66,7 +66,7 @@
 //            if (null != attributes) {
 //                HttpServletRequest request = attributes.getRequest();
 //                log.debug("Feign request: {}", request.getRequestURI());
-//                // 将token信息放入header中
+//                // Đưa thông tin token vào header
 //                String token = request.getHeader(CommonConstant.X_ACCESS_TOKEN);
 //                if(token==null || "".equals(token)){
 //                    token = request.getParameter("token");
@@ -74,14 +74,14 @@
 //                log.info("Feign Login Request token: {}", token);
 //                requestTemplate.header(CommonConstant.X_ACCESS_TOKEN, token);
 //            }else{
-//                //解决后台任务、MQ中调用feign接口，无会话token的问题
+//                //Giải quyết vấn đề gọi API feign trong tác vụ nền, MQ mà không có token phiên
 //                String  token = UserTokenContext.getToken();
 //                log.info("Feign No Login token: {}", token);
 //                requestTemplate.header(CommonConstant.X_ACCESS_TOKEN, token);
 //            }
 //
 //            //================================================================================================================
-//            //针对特殊接口，进行加签验证 ——根据URL地址过滤请求 【字典表参数签名验证】
+//            //Đối với các API đặc biệt, thực hiện xác minh chữ ký — lọc yêu cầu theo địa chỉ URL [Xác minh chữ ký tham số bảng danh mục]
 //            if (PathMatcherUtil.matches(Arrays.asList(SignAuthConfiguration.SIGN_URL_LIST),requestTemplate.path())) {
 //                try {
 //                    log.info("============================ [begin] fegin api url ============================");
@@ -113,12 +113,12 @@
 //
 //
 //    /**
-//     * Feign 客户端的日志记录，默认级别为NONE
-//     * Logger.Level 的具体级别如下：
-//     * NONE：不记录任何信息
-//     * BASIC：仅记录请求方法、URL以及响应状态码和执行时间
-//     * HEADERS：除了记录 BASIC级别的信息外，还会记录请求和响应的头信息
-//     * FULL：记录所有请求与响应的明细，包括头信息、请求体、元数据
+//     * Feign Ghi nhật ký của client, cấp độ mặc định là NONE
+//     * Logger.Level Các cấp độ cụ thể như sau:
+//     * NONE: không ghi lại bất kỳ thông tin nào
+//     * BASIC: Chỉ ghi lại phương thức yêu cầu, URL cùng mã trạng thái phản hồi và thời gian thực thi
+//     * HEADERS: Ngoài việc ghi thông tin ở cấp BASIC, còn ghi cả thông tin header của yêu cầu và phản hồi
+//     * FULL: Ghi lại chi tiết của tất cả yêu cầu và phản hồi, bao gồm thông tin header, body yêu cầu và metadata
 //     */
 //    @Bean
 //    Logger.Level feignLoggerLevel() {
@@ -126,7 +126,7 @@
 //    }
 //
 //    /**
-//     * Feign支持文件上传
+//     * Feign Hỗ trợ tải file lên
 //     * @param messageConverters
 //     * @return
 //     */
@@ -138,7 +138,7 @@
 //    }
 //
 //    /**
-//     * 给 Feign 添加 FastJson 的解析支持
+//     * Thêm hỗ trợ phân tích FastJson cho Feign
 //     */
 //    @Bean
 //    public Encoder feignEncoder() {
@@ -151,7 +151,7 @@
 //    }
 //
 //    /**
-//     * 设置解码器为fastjson
+//     * Đặt bộ giải mã thành fastjson
 //     *
 //     * @return
 //     */

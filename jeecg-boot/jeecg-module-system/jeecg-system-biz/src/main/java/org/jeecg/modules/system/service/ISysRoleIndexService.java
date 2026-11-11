@@ -6,7 +6,7 @@ import org.jeecg.modules.system.entity.SysRoleIndex;
 import java.util.List;
 
 /**
- * @Description: 角色首页配置
+ * @Description: Cấu hình trang chủ vai trò
  * @Author: jeecg-boot
  * @Date: 2022-03-25
  * @Version: V1.0
@@ -14,42 +14,42 @@ import java.util.List;
 public interface ISysRoleIndexService extends IService<SysRoleIndex> {
 
     /**
-     * 查询默认首页
+     * Truy vấn trang chủ mặc định
      *
      * @return
      */
     SysRoleIndex queryDefaultIndex();
 
     /**
-     * 更新默认首页
+     * Cập nhật trang chủ mặc định
      *
      * @param url
      * @param component
-     * @param isRoute   是否是路由页面
+     * @param isRoute   Có phải trang route không
      * @return
      */
     boolean updateDefaultIndex(String url, String component, boolean isRoute);
 
     /**
-     * 创建最原始的默认首页配置
+     * Tạo cấu hình trang chủ mặc định nguyên thủy nhất
      *
      * @return
      */
     SysRoleIndex initDefaultIndex();
 
     /**
-     * 清理默认首页的redis缓存
+     * Xóa bộ nhớ đệm redis của trang chủ mặc định
      */
     void cleanDefaultIndexCache();
 
     /**
-     * 切换默认门户
+     * Chuyển đổi cổng mặc định
      * @param sysRoleIndex
      */
     void changeDefHome(SysRoleIndex sysRoleIndex);
 
     /**
-     * 更新其他全局默认的状态值
+     * Cập nhật giá trị trạng thái mặc định toàn cục khác
      *
      * @param roleCode
      * @param status
@@ -58,9 +58,9 @@ public interface ISysRoleIndexService extends IService<SysRoleIndex> {
     void updateOtherDefaultStatus(String roleCode, String status, String id);
 
     /**
-     * 翻译关联的用户/角色名称，写入relationName（roleCode保持原编码不变）
+     * Dịch tên người dùng/vai trò liên quan/Tên vai trò, ghi vào relationName (roleCode giữ nguyên mã gốc)
      *
-     * @param records 首页配置列表
+     * @param records Danh sách cấu hình trang chủ
      */
     void fillRelationName(List<SysRoleIndex> records);
 }

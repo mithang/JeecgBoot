@@ -21,12 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
  /**
- * @Description: 用户组关系表
+ * @Description: Bảng quan hệ nhóm người dùng
  * @Author: jeecg-boot
  * @Date:   2026-02-27
  * @Version: V1.0
  */
-@Tag(name="用户组关系表")
+@Tag(name="Bảng quan hệ nhóm người dùng")
 @RestController
 @RequestMapping("/system/sysUgroupUser")
 @Slf4j
@@ -35,7 +35,7 @@ public class SysUgroupUserController extends JeecgController<SysUgroupUser, ISys
 	private ISysUgroupUserService sysUgroupUserService;
 	
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 *
 	 * @param sysUgroupUser
 	 * @param pageNo
@@ -43,8 +43,8 @@ public class SysUgroupUserController extends JeecgController<SysUgroupUser, ISys
 	 * @param req
 	 * @return
 	 */
-	//@AutoLog(value = "用户组关系表-分页列表查询")
-	@Operation(summary="用户组关系表-分页列表查询")
+	//@AutoLog(value = "Bảng quan hệ nhóm người dùng-Truy vấn danh sách phân trang")
+	@Operation(summary="Bảng quan hệ nhóm người dùng-Truy vấn danh sách phân trang")
 	@GetMapping(value = "/list")
 	public Result<IPage<SysUgroupUser>> queryPageList(SysUgroupUser sysUgroupUser,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -59,85 +59,85 @@ public class SysUgroupUserController extends JeecgController<SysUgroupUser, ISys
 	}
 	
 	/**
-	 *   添加
+	 *   Thêm
 	 *
 	 * @param sysUgroupUser
 	 * @return
 	 */
-	@AutoLog(value = "用户组关系表-添加")
-	@Operation(summary="用户组关系表-添加")
+	@AutoLog(value = "Bảng quan hệ nhóm người dùng-Thêm")
+	@Operation(summary="Bảng quan hệ nhóm người dùng-Thêm")
 	@RequiresPermissions("system:sys_ugroup_user:add")
 	@PostMapping(value = "/add")
 	public Result<String> add(@RequestBody SysUgroupUser sysUgroupUser) {
 		sysUgroupUserService.save(sysUgroupUser);
 
-		return Result.OK("添加成功！");
+		return Result.OK("Thêm thành công!");
 	}
 	
 	/**
-	 *  编辑
+	 *  Chỉnh sửa
 	 *
 	 * @param sysUgroupUser
 	 * @return
 	 */
-	@AutoLog(value = "用户组关系表-编辑")
-	@Operation(summary="用户组关系表-编辑")
+	@AutoLog(value = "Bảng quan hệ nhóm người dùng-Chỉnh sửa")
+	@Operation(summary="Bảng quan hệ nhóm người dùng-Chỉnh sửa")
 	@RequiresPermissions("system:sys_ugroup_user:edit")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<String> edit(@RequestBody SysUgroupUser sysUgroupUser) {
 		sysUgroupUserService.updateById(sysUgroupUser);
-		return Result.OK("编辑成功!");
+		return Result.OK("Chỉnh sửa thành công!");
 	}
 	
 	/**
-	 *   通过id删除
+	 *   Xóa theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "用户组关系表-通过id删除")
-	@Operation(summary="用户组关系表-通过id删除")
+	@AutoLog(value = "Bảng quan hệ nhóm người dùng-Xóa theo id")
+	@Operation(summary="Bảng quan hệ nhóm người dùng-Xóa theo id")
 	@RequiresPermissions("system:sys_ugroup_user:delete")
 	@DeleteMapping(value = "/delete")
 	public Result<String> delete(@RequestParam(name="id",required=true) String id) {
 		sysUgroupUserService.removeById(id);
-		return Result.OK("删除成功!");
+		return Result.OK("Xóa thành công!");
 	}
 	
 	/**
-	 *  批量删除
+	 *  Xóa hàng loạt
 	 *
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "用户组关系表-批量删除")
-	@Operation(summary="用户组关系表-批量删除")
+	@AutoLog(value = "Bảng quan hệ nhóm người dùng-Xóa hàng loạt")
+	@Operation(summary="Bảng quan hệ nhóm người dùng-Xóa hàng loạt")
 	@RequiresPermissions("system:sys_ugroup_user:deleteBatch")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<String> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.sysUgroupUserService.removeByIds(Arrays.asList(ids.split(",")));
-		return Result.OK("批量删除成功!");
+		return Result.OK("Xóa hàng loạt thành công!!");
 	}
 	
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	//@AutoLog(value = "用户组关系表-通过id查询")
-	@Operation(summary="用户组关系表-通过id查询")
+	//@AutoLog(value = "Bảng quan hệ nhóm người dùng-Tìm kiếm theo id")
+	@Operation(summary="Bảng quan hệ nhóm người dùng-Tìm kiếm theo id")
 	@GetMapping(value = "/queryById")
 	public Result<SysUgroupUser> queryById(@RequestParam(name="id",required=true) String id) {
 		SysUgroupUser sysUgroupUser = sysUgroupUserService.getById(id);
 		if(sysUgroupUser==null) {
-			return Result.error("未找到对应数据");
+			return Result.error("Không tìm thấy dữ liệu tương ứng");
 		}
 		return Result.OK(sysUgroupUser);
 	}
 
     /**
-    * 导出excel
+    * Xuất excel
     *
     * @param request
     * @param sysUgroupUser
@@ -145,11 +145,11 @@ public class SysUgroupUserController extends JeecgController<SysUgroupUser, ISys
     @RequiresPermissions("system:sys_ugroup_user:exportXls")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysUgroupUser sysUgroupUser) {
-        return super.exportXls(request, sysUgroupUser, SysUgroupUser.class, "用户组关系表");
+        return super.exportXls(request, sysUgroupUser, SysUgroupUser.class, "Bảng quan hệ nhóm người dùng");
     }
 
     /**
-      * 通过excel导入数据
+      * Nhập dữ liệu qua Excel
     *
     * @param request
     * @param response

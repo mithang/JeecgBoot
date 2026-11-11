@@ -23,7 +23,7 @@
         </collection>
     </resultMap>
 
-    <!-- 根据表名和数据id查询表单评论信息及文件 -->
+    <!-- Truy vấn thông tin bình luận biểu mẫu và tệp theo tên bảng và id dữ liệu -->
     <select id="queryCommentList" resultMap="commentResult">
 	   select
             a.id,
@@ -49,7 +49,7 @@
 	   order by a.create_time asc
 	</select>
 
-    <!-- 根据表名和数据id查询表单文件 -->
+    <!-- Truy vấn tệp biểu mẫu theo tên bảng và id dữ liệu -->
     <select id="queryFormFileList" resultType="org.jeecg.modules.system.vo.SysCommentFileVo">
 	   select
             b.id as sys_form_file_id,
@@ -68,7 +68,7 @@
 	   order by a.create_time asc
 	</select>
 
-    <!-- 根据用户名获取用户信息 -->
+    <!-- Lấy thông tin người dùng theo tên người dùng -->
     <select id="queryUserAvatarList" resultType="org.jeecg.modules.system.vo.UserAvatar">
 	   select id,  avatar, realname from sys_user
         WHERE id IN 

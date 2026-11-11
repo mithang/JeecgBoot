@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 第三方App对接
+ * Kết nối ứng dụng bên thứ ba
  * @author: jeecg-boot
  */
 @Slf4j
@@ -62,31 +62,31 @@ public class ThirdAppController {
     @Autowired
     private ISysThirdAccountService sysThirdAccountService;
 
-    //update-begin---author:scott ---date:20261020  for：新增第三方集成配置管理权限校验（本租户组织账户管理员分支用）-----------
+    //update-begin---author:scott ---date:20261020  for: Thêm kiểm tra quyền quản lý cấu hình tích hợp bên thứ ba (dùng cho nhánh quản trị viên tài khoản tổ chức của tenant này)-----------
     @Autowired
     private ISysTenantPackService sysTenantPackService;
     //update-end---author:scott ---date:20261020  for：-----------
 
     /**
-     * 获取启用的系统
+     * Lấy hệ thống đang bật
      */
     @GetMapping("/getEnabledType")
     public Result getEnabledType() {
         Map<String, Boolean> enabledMap = new HashMap(5);
         int tenantId;
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             tenantId = oConvertUtils.getInt(TenantContext.getTenant(), -1);
         } else {
             tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
         }
-        //查询当前租户下的第三方配置
+        //Truy vấn cấu hình bên thứ ba thuộc tenant hiện tại
         List<SysThirdAppConfig> list = appConfigService.getThirdConfigListByThirdType(tenantId);
-        //钉钉是否已配置
+        //DingTalk đã được cấu hình chưa
         boolean dingConfig = false;
-        //企业微信是否已配置
+        //WeChat doanh nghiệp đã được cấu hình hay chưa
         boolean qywxConfig = false;
-        //飞书是否已配置
+        //Feishu đã được cấu hình chưa
         boolean feishuConfig = false;
         if(null != list && list.size()>0){
             for (SysThirdAppConfig config:list) {
@@ -111,207 +111,207 @@ public class ThirdAppController {
     }
 
     /**
-     * 同步本地[用户]到【企业微信】
+     * Đồng bộ cục bộ[Người dùng]đến 
      *
      * @param ids
      * @return
      */
     @GetMapping("/sync/wechatEnterprise/user/toApp")
     public Result syncWechatEnterpriseUserToApp(@RequestParam(value = "ids", required = false) String ids) {
-        //获取企业微信配置
+        //Lấy cấu hình WeChat doanh nghiệp
         Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant(),0);
         SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.QYWX.getType());
         if (null != config) {
-        // 代码逻辑说明: [QQYUN-3440]通过租户模式隔离 ------------
+        // Giải thích logic mã: [QQYUN-3440]Cách ly theo chế độ tenant ------------
             SyncInfoVo syncInfo = wechatEnterpriseService.syncLocalUserToThirdApp(ids);
             if (syncInfo.getFailInfo().size() == 0) {
-                return Result.OK("同步成功", syncInfo);
+                return Result.OK("Đồng bộ thành công", syncInfo);
             } else {
-                return Result.error("同步失败", syncInfo);
+                return Result.error("Đồng bộ thất bại", syncInfo);
             }
         }
-        return Result.error("企业微信尚未配置,请配置企业微信");
+        return Result.error("WeChat doanh nghiệp chưa được cấu hình,Vui lòng cấu hình WeChat Doanh nghiệp");
     }
 
     /**
-     * 同步【企业微信】[用户]到本地
+     * Đồng bộ 【WeChat doanh nghiệp】[Người dùng]về máy local
      *
-     * @param ids 作废
+     * @param ids Hủy bỏ
      * @return
      */
     @GetMapping("/sync/wechatEnterprise/user/toLocal")
     public Result syncWechatEnterpriseUserToLocal(@RequestParam(value = "ids", required = false) String ids) {
-        return Result.error("由于企业微信接口调整，同步到本地功能已失效");
+        return Result.error("Do điều chỉnh giao diện WeChat doanh nghiệp, chức năng đồng bộ về local đã không còn hiệu lực");
 
 //        if (thirdAppConfig.isWechatEnterpriseEnabled()) {
 //            SyncInfoVo syncInfo = wechatEnterpriseService.syncThirdAppUserToLocal();
 //            if (syncInfo.getFailInfo().size() == 0) {
-//                return Result.OK("同步成功", syncInfo);
+//                return Result.OK("Đồng bộ thành công", syncInfo);
 //            } else {
-//                return Result.error("同步失败", syncInfo);
+//                return Result.error("Đồng bộ thất bại", syncInfo);
 //            }
 //        }
-//        return Result.error("企业微信同步功能已禁用");
+//        return Result.error("Chức năng đồng bộ WeChat Work đã bị vô hiệu hóa");
     }
 
     /**
-     * 同步本地[部门]到【企业微信】
+     * Đồng bộ cục bộ[Phòng ban]đến 
      *
      * @param ids
      * @return
      */
     @GetMapping("/sync/wechatEnterprise/depart/toApp")
     public Result syncWechatEnterpriseDepartToApp(@RequestParam(value = "ids", required = false) String ids) {
-        //获取企业微信配置
+        //Lấy cấu hình WeChat doanh nghiệp
         Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant(),0);
         SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.QYWX.getType());
         if (null != config) {
             SyncInfoVo syncInfo = wechatEnterpriseService.syncLocalDepartmentToThirdApp(ids);
             if (syncInfo.getFailInfo().size() == 0) {
-                return Result.OK("同步成功", null);
+                return Result.OK("Đồng bộ thành công", null);
             } else {
-                return Result.error("同步失败", syncInfo);
+                return Result.error("Đồng bộ thất bại", syncInfo);
             }
         }
-        return Result.error("企业微信尚未配置,请配置企业微信");
+        return Result.error("WeChat doanh nghiệp chưa được cấu hình,Vui lòng cấu hình WeChat Doanh nghiệp");
     }
 
     /**
-     * 同步【企业微信】[部门]到本地
+     * Đồng bộ 【WeChat doanh nghiệp】[Phòng ban]về máy local
      *
      * @param ids
      * @return
      */
     @GetMapping("/sync/wechatEnterprise/depart/toLocal")
     public Result syncWechatEnterpriseDepartToLocal(@RequestParam(value = "ids", required = false) String ids) {
-        return Result.error("由于企业微信接口调整，企业微信同步本地部门失效");
-//        //获取企业微信配置
+        return Result.error("Do điều chỉnh giao diện WeChat doanh nghiệp, việc đồng bộ phòng ban local của WeChat doanh nghiệp không còn hiệu lực");
+//        //Lấy cấu hình WeChat doanh nghiệp
 //        Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant(),0);
 //        SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.QYWX.getType());
 //        if (null != config) {
 //            SyncInfoVo syncInfo = wechatEnterpriseService.syncThirdAppDepartmentToLocal(ids);
 //            if (syncInfo.getFailInfo().size() == 0) {
-//                return Result.OK("同步成功", syncInfo);
+//                return Result.OK("Đồng bộ thành công", syncInfo);
 //            } else {
-//                return Result.error("同步失败", syncInfo);
+//                return Result.error("Đồng bộ thất bại", syncInfo);
 //            }
 //        }
-//        return Result.error("企业微信尚未配置,请配置企业微信");
+//        return Result.error("WeChat doanh nghiệp chưa được cấu hình,Vui lòng cấu hình WeChat Doanh nghiệp");
     }
 
     /**
-     * 同步本地[部门]到【钉钉】
+     * Đồng bộ cục bộ[Phòng ban]đến【DingTalk】
      *
      * @param ids
      * @return
      */
     @GetMapping("/sync/dingtalk/depart/toApp")
     public Result syncDingtalkDepartToApp(@RequestParam(value = "ids", required = false) String ids) {
-        //获取钉钉配置
+        //Lấy cấu hình DingTalk
         Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant(),0);
         SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.DD.getType());
         if (null != config) {
             SyncInfoVo syncInfo = dingtalkService.syncLocalDepartmentToThirdApp(ids);
             if (syncInfo.getFailInfo().size() == 0) {
-                return Result.OK("同步成功", null);
+                return Result.OK("Đồng bộ thành công", null);
             } else {
-                return Result.error("同步失败", syncInfo);
+                return Result.error("Đồng bộ thất bại", syncInfo);
             }
         }
-        return Result.error("钉钉尚未配置,请配置钉钉");
+        return Result.error("DingTalk chưa được cấu hình,Vui lòng cấu hình DingTalk");
     }
 
 //    /**
-//     * 同步【钉钉】[部门]到本地
+//     * Đồng bộ 【DingTalk】[Phòng ban]về máy local
 //     *
 //     * @param ids
 //     * @return
 //     */
 //   @GetMapping("/sync/dingtalk/depart/toLocal")
 //    public Result syncDingtalkDepartToLocal(@RequestParam(value = "ids", required = false) String ids) {
-//        //获取钉钉配置
+//        //Lấy cấu hình DingTalk
 //        Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant(),0);
 //        SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.DD.getType());
 //        if (null!= config) {
 //            SyncInfoVo syncInfo = dingtalkService.syncThirdAppDepartmentToLocal(ids);
 //            if (syncInfo.getFailInfo().size() == 0) {
-//                return Result.OK("同步成功", syncInfo);
+//                return Result.OK("Đồng bộ thành công", syncInfo);
 //            } else {
-//                return Result.error("同步失败", syncInfo);
+//                return Result.error("Đồng bộ thất bại", syncInfo);
 //            }
 //        }
-//        return Result.error("钉钉尚未配置,请配置钉钉");
+//        return Result.error("DingTalk chưa được cấu hình,Vui lòng cấu hình DingTalk");
 //    }
 
     /**
-     * 同步本地[用户]到【钉钉】
+     * Đồng bộ cục bộ[Người dùng]đến【DingTalk】
      *
      * @param ids
      * @return
      */
     @GetMapping("/sync/dingtalk/user/toApp")
     public Result syncDingtalkUserToApp(@RequestParam(value = "ids", required = false) String ids) {
-        //获取钉钉配置
+        //Lấy cấu hình DingTalk
         int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
-        //根据租户id和第三方类别获取租户数据
+        //Theo id tenant và loại bên thứ ba, lấy dữ liệu tenant
         SysThirdAppConfig appConfig = appConfigService.getThirdConfigByThirdType(tenantId,MessageTypeEnum.DD.getType());
         if(null != appConfig){
             SyncInfoVo syncInfo = dingtalkService.syncLocalUserToThirdApp(ids);
             if (syncInfo.getFailInfo().size() == 0) {
-                return Result.OK("同步成功", syncInfo);
+                return Result.OK("Đồng bộ thành công", syncInfo);
             } else {
-                return Result.error("同步失败", syncInfo);
+                return Result.error("Đồng bộ thất bại", syncInfo);
             }
         }
-        return Result.error("钉钉尚未配置,请配置钉钉");
+        return Result.error("DingTalk chưa được cấu hình,Vui lòng cấu hình DingTalk");
     }
 
 //    /**
-//     * 同步【钉钉】[用户]到本地
+//     * Đồng bộ 【DingTalk】[Người dùng]về máy local
 //     *
-//     * @param ids 作废
+//     * @param ids Hủy bỏ
 //     * @return
 //     */
 //    @GetMapping("/sync/dingtalk/user/toLocal")
 //    public Result syncDingtalkUserToLocal(@RequestParam(value = "ids", required = false) String ids) {
-//        //获取钉钉配置
+//        //Lấy cấu hình DingTalk
 //        Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant(),0);
 //        SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.DD.getType());
 //        if (null != config) {
 //            SyncInfoVo syncInfo = dingtalkService.syncThirdAppUserToLocal();
 //            if (syncInfo.getFailInfo().size() == 0) {
-//                return Result.OK("同步成功", syncInfo);
+//                return Result.OK("Đồng bộ thành công", syncInfo);
 //            } else {
-//                return Result.error("同步失败", syncInfo);
+//                return Result.error("Đồng bộ thất bại", syncInfo);
 //            }
 //        }
-//        return Result.error("钉钉尚未配置,请配置钉钉");
+//        return Result.error("DingTalk chưa được cấu hình,Vui lòng cấu hình DingTalk");
 //    }
 
     /**
-     * 发送消息测试
+     * Kiểm thử gửi tin nhắn
      *
      * @return
      */
     @PostMapping("/sendMessageTest")
     public Result sendMessageTest(@RequestBody JSONObject params, HttpServletRequest request) {
-        /* 获取前台传递的参数 */
-        // 第三方app的类型
+        /* Lấy tham số truyền từ frontend */
+        // Loại app bên thứ ba
         String app = params.getString("app");
-        // 是否发送给全部人
+        // Có gửi cho tất cả mọi người không
         boolean sendAll = params.getBooleanValue("sendAll");
-        // 消息接收者，传sys_user表的username字段，多个用逗号分割
+        // Người nhận tin nhắn, truyền sys_user Trường username của bảng, nhiều giá trị phân tách bằng dấu phẩy
         String receiver = params.getString("receiver");
-        // 消息内容
+        // Nội dung tin nhắn
         String content = params.getString("content");
-        // 租户id
+        // Tenant id
         int tenantId = oConvertUtils.getInt(TenantContext.getTenant(),0);
 
         String fromUser = JwtUtil.getUserNameByToken(request);
-        String title = "第三方APP消息测试";
+        String title = "Kiểm tra tin nhắn APP bên thứ ba";
         MessageDTO message = new MessageDTO(fromUser, receiver, title, content);
         message.setToAll(sendAll);
-        // 代码逻辑说明: [QQYUN-3440]钉钉、企业微信通过租户模式隔离 ------------
+        // Giải thích logic mã: [QQYUN-3440]DingTalk, WeChat doanh nghiệp cách ly theo chế độ tenant ------------
         String weChatType = MessageTypeEnum.QYWX.getType();
         String dingType = MessageTypeEnum.DD.getType();
         if (weChatType.toUpperCase().equals(app)) {
@@ -320,65 +320,65 @@ public class ThirdAppController {
                 JSONObject response = wechatEnterpriseService.sendMessageResponse(message, false);
                 return Result.OK(response);
             }
-            return Result.error("企业微信尚未配置,请配置企业微信");
+            return Result.error("WeChat doanh nghiệp chưa được cấu hình,Vui lòng cấu hình WeChat Doanh nghiệp");
         } else if (dingType.toUpperCase().equals(app)) {
             SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, dingType);
             if (null != config) {
                 Response<String> response = dingtalkService.sendMessageResponse(message, false);
                 return Result.OK(response);
             }
-            return Result.error("钉钉尚未配置,请配置钉钉");
+            return Result.error("DingTalk chưa được cấu hình,Vui lòng cấu hình DingTalk");
         }
         String feishuType = MessageTypeEnum.FS.getType();
         if (feishuType.toUpperCase().equals(app) || CommonConstant.FEISHU.equals(app)) {
             SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, feishuType);
             if (null != config) {
                 boolean success = feishuService.sendMessage(message, false);
-                return success ? Result.OK("飞书消息发送成功") : Result.error("飞书消息发送失败，请检查接收者是否已绑定飞书账号");
+                return success ? Result.OK("Gửi tin nhắn Feishu thành công") : Result.error("Gửi tin nhắn Feishu thất bại, vui lòng kiểm tra người nhận đã liên kết tài khoản Feishu hay chưa");
             }
-            return Result.error("飞书尚未配置，请配置飞书应用");
+            return Result.error("Feishu chưa được cấu hình, vui lòng cấu hình ứng dụng Feishu");
         }
-        return Result.error("不识别的第三方APP");
+        return Result.error("Không nhận dạng được ứng dụng bên thứ ba APP");
     }
 
     /**
-     * 撤回消息测试
+     * Kiểm thử thu hồi tin nhắn
      *
      * @return
      */
     @PostMapping("/recallMessageTest")
     public Result recallMessageTest(@RequestBody JSONObject params) {
-        /* 获取前台传递的参数 */
-        // 第三方app的类型
+        /* Lấy tham số truyền từ frontend */
+        // Loại app bên thứ ba
         String app = params.getString("app");
-        // 消息id
+        // Tin nhắn id
         String msgTaskId = params.getString("msg_task_id");
-        //租户id
+        //Tenant id
         int tenantId = oConvertUtils.getInt(TenantContext.getTenant(),0);
         if (CommonConstant.WECHAT_ENTERPRISE.equals(app)) {
             SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.QYWX.getType());
             if (null != config) {
-                return Result.error("企业微信不支持撤回消息");
+                return Result.error("WeChat Work không hỗ trợ thu hồi tin nhắn");
             }
-            return Result.error("企业微信尚未配置,请配置企业微信");
+            return Result.error("WeChat doanh nghiệp chưa được cấu hình,Vui lòng cấu hình WeChat Doanh nghiệp");
         } else if (CommonConstant.DINGTALK.equals(app)) {
             SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.DD.getType());
             if (null != config) {
                 Response<JSONObject> response = dingtalkService.recallMessageResponse(msgTaskId);
                 if (response.isSuccess()) {
-                    return Result.OK("撤回成功", response);
+                    return Result.OK("Thu hồi thành công", response);
                 } else {
-                    return Result.error("撤回失败：" + response.getErrcode() + "——" + response.getErrmsg(), response);
+                    return Result.error("Thu hồi thất bại:" + response.getErrcode() + "——" + response.getErrmsg(), response);
                 }
             }
-            return Result.error("钉钉尚未配置,请配置钉钉");
+            return Result.error("DingTalk chưa được cấu hình,Vui lòng cấu hình DingTalk");
         }
-        return Result.error("不识别的第三方APP");
+        return Result.error("Không nhận dạng được ứng dụng bên thứ ba APP");
     }
 
-    //========================begin 应用低代码钉钉/企业微信同步用户部门专用 =============================
+    //========================begin Ứng dụng low-code DingTalk/Dùng riêng để đồng bộ phòng ban người dùng WeChat doanh nghiệp =============================
     /**
-     * 添加第三方app配置
+     * Thêm cấu hình app bên thứ ba
      *
      * @param appConfig
      * @return
@@ -386,36 +386,36 @@ public class ThirdAppController {
     @RequestMapping(value = "/addThirdAppConfig", method = RequestMethod.POST)
     public Result<String> addThirdAppConfig(@RequestBody SysThirdAppConfig appConfig) {
         Result<String> result = new Result<>();
-        //根据当前登录租户id和第三方类别判断是否已经创建
+        //Dựa theo id thuê bao đang đăng nhập và loại bên thứ ba để xác định đã tạo hay chưa
         Integer tenantId = oConvertUtils.isNotEmpty(appConfig.getTenantId()) ? appConfig.getTenantId() : oConvertUtils.getInt(TenantContext.getTenant(), 0);
-        //update-begin---author:scott ---date:20261020  for：权限+对象级双重校验：admin/system:third:config:add权限码/本租户组织账户管理员三选一放行，防止任意登录用户新建其他租户的第三方配置-----------
+        //update-begin---author:scott ---date:20261020  for: quyền hạn+Kiểm tra kép cấp đối tượng:admin/system:third:config:add Mã quyền hạn/Một trong ba quản trị viên tài khoản tổ chức của tenant này được cho qua, ngăn người dùng đăng nhập tùy ý tạo cấu hình bên thứ ba của tenant khác-----------
         assertThirdConfigManager(tenantId, "system:third:config:add");
         //update-end---author:scott ---date:20261020  for：-----------
         SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, appConfig.getThirdType());
         if (null != config) {
-            result.error500("操作失败,同一个租户下只允许绑定一个钉钉或者企业微信");
+            result.error500("Thao tác thất bại,Trong cùng một tenant chỉ cho phép liên kết một DingTalk hoặc một WeChat doanh nghiệp");
             return result;
         }
         String clientId = appConfig.getClientId();
-        //通过应用key获取第三方配置
+        //Lấy cấu hình bên thứ ba qua key ứng dụng
         List<SysThirdAppConfig> thirdAppConfigByClientId = appConfigService.getThirdAppConfigByClientId(clientId);
         if(CollectionUtil.isNotEmpty(thirdAppConfigByClientId)){
-            result.error500("AppKey已存在，请勿重复添加");
+            result.error500("AppKey Đã tồn tại, vui lòng không thêm lặp lại");
             return result;
         }
         try {
             appConfig.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(),0));
             appConfigService.save(appConfig);
-            result.success("添加成功！");
+            result.success("Thêm thành công!");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            result.error500("操作失败");
+            result.error500("Thao tác thất bại");
         }
         return result;
     }
 
     /**
-     * 编辑第三方app配置
+     * Chỉnh sửa cấu hình app bên thứ ba
      *
      * @param appConfig
      * @return
@@ -425,23 +425,23 @@ public class ThirdAppController {
         Result<String> result = new Result<>();
         SysThirdAppConfig config = appConfigService.getById(appConfig.getId());
         if (null == config) {
-            result.error500("数据不存在");
+            result.error500("Dữ liệu không tồn tại");
             return result;
         }
-        //update-begin---author:wangshuai ---date:20261021  for：校验当前用户能否管理指定租户的第三方集成配置-----------
+        //update-begin---author:wangshuai ---date:20261021  for: Kiểm tra xem người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của tenant được chỉ định hay không-----------
         assertThirdConfigManager(config.getTenantId(), "system:third:config:edit");
-        //update-end---author:wangshuai ---date:20261021  for：校验当前用户能否管理指定租户的第三方集成配置-----------
+        //update-end---author:wangshuai ---date:20261021  for: Kiểm tra xem người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của tenant được chỉ định hay không-----------
         String clientId = appConfig.getClientId();
-        //如果编辑的应用key,和数据库中的不一致，需要判断应用key是否已存在
+        //Nếu ứng dụng đang chỉnh sửa key,không khớp với trong cơ sở dữ liệu thì cần kiểm tra app key đã tồn tại hay chưa
         if(!clientId.equals(config.getClientId())){
-            //通过应用key获取第三方配置
+            //Lấy cấu hình bên thứ ba qua key ứng dụng
             List<SysThirdAppConfig> thirdAppConfigByClientId = appConfigService.getThirdAppConfigByClientId(clientId);
             if(CollectionUtil.isNotEmpty(thirdAppConfigByClientId)){
-                result.error500("AppKey已存在，请勿重复添加");
+                result.error500("AppKey Đã tồn tại, vui lòng không thêm lặp lại");
                 return result;
             }
         }
-        //update-begin---author:wangshuai ---date:20261021  for：校验当前用户能否管理指定租户的第三方集成配置-----------
+        //update-begin---author:wangshuai ---date:20261021  for: Kiểm tra xem người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của tenant được chỉ định hay không-----------
         config.setAgentId(appConfig.getAgentId());
         config.setClientId(clientId);
         if (oConvertUtils.isNotEmpty(appConfig.getClientSecret())) {
@@ -449,19 +449,19 @@ public class ThirdAppController {
         }
         config.setCorpId(appConfig.getCorpId());
         config.setStatus(appConfig.getStatus());
-        //update-end---author:wangshuai ---date:20261021  for：校验当前用户能否管理指定租户的第三方集成配置-----------
+        //update-end---author:wangshuai ---date:20261021  for: Kiểm tra xem người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của tenant được chỉ định hay không-----------
         try {
             appConfigService.updateById(config);
-            result.success("修改成功！");
+            result.success("Chỉnh sửa thành công!");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            result.error500("操作失败");
+            result.error500("Thao tác thất bại");
         }
         return result;
     }
 
     /**
-     * 根据id删除第三方配置表
+     * Xóa bảng cấu hình bên thứ ba theo id
      * @param id
      * @return
      */
@@ -471,22 +471,22 @@ public class ThirdAppController {
         Result<String> result = new Result<>();
         SysThirdAppConfig config = appConfigService.getById(id);
         if (null == config) {
-            result.error500("数据不存在");
+            result.error500("Dữ liệu không tồn tại");
             return result;
         }
         try {
             appConfigService.removeById(id);
-            result.success("解绑成功！");
+            result.success("Hủy liên kết thành công!");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            result.error500("操作失败");
+            result.error500("Thao tác thất bại");
         }
         return result;
     }
     
 
     /**
-     * 根据租户id和第三方类型获取第三方app配置信息
+     * Lấy thông tin cấu hình app bên thứ ba theo id thuê bao và loại bên thứ ba
      *
      * @param tenantId
      * @param thirdType
@@ -497,17 +497,17 @@ public class ThirdAppController {
                                                            @RequestParam(name = "thirdType") String thirdType) {
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             if (tenantId == null) {
-                return Result.error("开启多租户模式，租户ID参数不允许为空！");
+                return Result.error("Đã bật chế độ đa tenant, tham số ID tenant không được phép rỗng!");
             }
         } else {
-            //租户未传递，则采用平台的
+            //Nếu Tenant không được truyền vào, sẽ dùng của nền tảng
             if (tenantId == null) {
                 tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
             }
         }
-        //update-begin---author:wangshuai ---date:20261021  for：校验当前用户能否管理指定租户的第三方集成配置-----------
+        //update-begin---author:wangshuai ---date:20261021  for: Kiểm tra xem người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của tenant được chỉ định hay không-----------
         assertThirdConfigManager(tenantId, "system:third:config:query");
-        //update-end---author:wangshuai ---date:20261021  for：校验当前用户能否管理指定租户的第三方集成配置-----------
+        //update-end---author:wangshuai ---date:20261021  for: Kiểm tra xem người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của tenant được chỉ định hay không-----------
         Result<SysThirdAppConfig> result = new Result<>();
         LambdaQueryWrapper<SysThirdAppConfig> query = new LambdaQueryWrapper<>();
         query.eq(SysThirdAppConfig::getThirdType,thirdType);
@@ -519,7 +519,7 @@ public class ThirdAppController {
     }
 
     /**
-     * 同步【钉钉】[部门和用户]到本地
+     * Đồng bộ 【DingTalk】[Phòng ban và người dùng]về máy local
      *
      * @param ids
      * @return
@@ -531,17 +531,17 @@ public class ThirdAppController {
         if (null != config) {
             SyncInfoVo syncInfo = dingtalkService.syncThirdAppDepartmentUserToLocal();
             if (syncInfo.getFailInfo().size() == 0) {
-                return Result.OK("同步成功", syncInfo);
+                return Result.OK("Đồng bộ thành công", syncInfo);
             } else {
-                return Result.error("同步失败", syncInfo);
+                return Result.error("Đồng bộ thất bại", syncInfo);
             }
         }
-        return Result.error("钉钉尚未配置,请配置钉钉");
+        return Result.error("DingTalk chưa được cấu hình,Vui lòng cấu hình DingTalk");
     }
-    //update-begin---author:liusq ---date:2026-05-13  for：【QQYUN-12767】飞书集成-同步飞书部门和用户到本地-----------
+    //update-begin---author:liusq ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu-Đồng bộ phòng ban và người dùng Feishu về cục bộ-----------
     /**
-     * 同步【飞书】通讯录（部门 + 用户）到本地
-     * 飞书应用需开通权限：contact:department:read、contact:user.base:readonly
+     * Đồng bộ danh bạ 【Feishu】 (phòng ban + người dùng) về máy cục bộ
+     * Ứng dụng Feishu cần mở quyền hạn：contact:department:read、contact:user.base:readonly
      */
     @GetMapping("/sync/feishu/departAndUser/toLocal")
     public Result<SyncInfoVo> syncFeishuDepartAndUserToLocal(HttpServletRequest request) {
@@ -550,21 +550,21 @@ public class ThirdAppController {
         if (null != config) {
             SyncInfoVo syncInfo = feishuService.syncFeishuDeptAndUserToLocal(tenantId);
             if (syncInfo.getFailInfo().isEmpty()) {
-                return Result.OK("同步成功", syncInfo);
+                return Result.OK("Đồng bộ thành công", syncInfo);
             } else {
-                return Result.error("同步完成（含失败项，请查看详情）", syncInfo);
+                return Result.error("Đồng bộ hoàn tất (bao gồm mục thất bại, vui lòng xem chi tiết)", syncInfo);
             }
         }
-        return Result.error("飞书尚未配置，请配置飞书应用");
+        return Result.error("Feishu chưa được cấu hình, vui lòng cấu hình ứng dụng Feishu");
     }
-    //update-end---author:liusq ---date:2026-05-13  for：【QQYUN-12767】飞书集成-同步飞书部门和用户到本地-----------
+    //update-end---author:liusq ---date:2026-05-13  for：【QQYUN-12767】Tích hợp Feishu-Đồng bộ phòng ban và người dùng Feishu về cục bộ-----------
 
-    //========================end 应用低代码钉钉/企业微信同步用户部门专用 ========================
+    //========================end Ứng dụng low-code DingTalk/Dùng riêng để đồng bộ phòng ban người dùng WeChat doanh nghiệp ========================
 
 
-    //========================begin 应用低代码账号设置第三方账号绑定 ================================
+    //========================begin Ứng dụng low-code: thiết lập liên kết tài khoản bên thứ ba cho tài khoản ================================
     /**
-     * 获取第三方账号
+     * Lấy tài khoản bên thứ ba
      * @param thirdType
      * @return
      */
@@ -572,11 +572,11 @@ public class ThirdAppController {
     public Result<List<SysThirdAccount>> getThirdAccountByUserId(@RequestParam(name="thirdType") String thirdType){
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<SysThirdAccount> query = new LambdaQueryWrapper<>();
-        //根据id查询
+        //Truy vấn theo id
         query.eq(SysThirdAccount::getSysUserId,sysUser.getId());
-        //扫码登录只有租户为0
+        //Đăng nhập bằng mã QR chỉ khi tenant là 0
         query.eq(SysThirdAccount::getTenantId,CommonConstant.TENANT_ID_DEFAULT_VALUE);
-        //根据第三方类别查询
+        //Truy vấn theo loại bên thứ ba
         if(oConvertUtils.isNotEmpty(thirdType)){
             query.in(SysThirdAccount::getThirdType, Arrays.asList(thirdType.split(SymbolConstant.COMMA)));
         }
@@ -585,7 +585,7 @@ public class ThirdAppController {
     }
 
     /**
-     * 绑定第三方账号
+     * Liên kết tài khoản bên thứ ba
      * @return
      */
     @PostMapping("/bindThirdAppAccount")
@@ -595,7 +595,7 @@ public class ThirdAppController {
     }
 
     /**
-     * 删除第三方用户信息
+     * Xóa thông tin người dùng bên thứ ba
      * @param sysThirdAccount
      * @return
      */
@@ -603,36 +603,36 @@ public class ThirdAppController {
     public Result<String> deleteThirdAccountById(@RequestBody SysThirdAccount sysThirdAccount){
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if(!sysUser.getId().equals(sysThirdAccount.getSysUserId())){
-            return Result.error("无权修改他人信息");
+            return Result.error("Không có quyền sửa thông tin của người khác");
         }
         SysThirdAccount thirdAccount = sysThirdAccountService.getById(sysThirdAccount.getId());
         if(null == thirdAccount){
-            return Result.error("未找到改第三方账户信息");
+            return Result.error("Không tìm thấy thông tin tài khoản bên thứ ba đó");
         }
         sysThirdAccountService.removeById(thirdAccount.getId());
-        return Result.ok("解绑成功");
+        return Result.ok("Hủy liên kết thành công");
     }
-    //========================end 应用低代码账号设置第三方账号绑定 ================================
+    //========================end Ứng dụng low-code: thiết lập liên kết tài khoản bên thứ ba cho tài khoản ================================
 
     /**
-     * 获取企业微信绑定的用户信息
+     * Lấy thông tin người dùng đã liên kết WeChat doanh nghiệp
      * @param request
      * @return
      */
     @GetMapping("/getThirdUserByWechat")
     public Result<JwSysUserDepartVo> getThirdUserByWechat(HttpServletRequest request){
-        //获取企业微信配置
+        //Lấy cấu hình WeChat doanh nghiệp
         Integer tenantId = oConvertUtils.getInt(TokenUtils.getTenantIdByRequest(request),0);
         SysThirdAppConfig config = appConfigService.getThirdConfigByThirdType(tenantId, MessageTypeEnum.QYWX.getType());
         if (null != config) {
             JwSysUserDepartVo list = wechatEnterpriseService.getThirdUserByWechat(tenantId);
             return Result.ok(list);
         }
-        return Result.error("企业微信尚未配置,请配置企业微信"); 
+        return Result.error("WeChat doanh nghiệp chưa được cấu hình,Vui lòng cấu hình WeChat Doanh nghiệp"); 
     }
 
     /**
-     * 同步企业微信部门和用户到本地
+     * Đồng bộ phòng ban và người dùng WeChat doanh nghiệp về cục bộ
      * @param jwUserDepartJson
      * @param request
      * @return
@@ -645,7 +645,7 @@ public class ThirdAppController {
     }
 
     /**
-     * 查询被绑定的企业微信用户
+     * Truy vấn người dùng WeChat Work đã được liên kết
      * @param request
      * @return
      */
@@ -656,13 +656,13 @@ public class ThirdAppController {
         return Result.ok(jwSysUserDepartVos);
     }
 
-    //update-begin---author:wangshuai ---date:2026101  for：校验当前用户能否管理指定租户的第三方集成配置 ---
+    //update-begin---author:wangshuai ---date:2026101  for: Kiểm tra xem người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của tenant được chỉ định hay không ---
     /*
-     * 校验当前用户能否管理指定租户的第三方集成配置：admin/系统租户管理员放行，持有 permCodes 中任一权限码放行，
-     * 否则须为该租户的组织账户管理员或超级管理员（敲敲云组织页自助配置用，对应 sys_tenant_pack_user）。
+     * Kiểm tra người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của thuê bao được chỉ định hay không:admin/Quản trị viên tenant hệ thống được cho qua; người giữ bất kỳ mã quyền nào trong permCodes được cho qua,
+     * Nếu không thì phải là quản trị viên tài khoản tổ chức hoặc siêu quản trị viên của tenant đó (dùng cho tự cấu hình tại trang tổ chức QiaoQiaoYun, tương ứng sys_tenant_pack_user）。
      *
-     * @param tenantId  租户ID
-     * @param permCodes 允许放行的按钮权限码（新增/编辑/查询各自独立的权限码，调用方按自己的动作传对应的码）
+     * @param tenantId  Tenant ID
+     * @param permCodes Mã quyền hạn nút được phép cho qua (thêm mới/Chỉnh sửa/Truy vấn các mã quyền hạn độc lập của từng bên, phía gọi truyền mã tương ứng theo hành động của mình)
      * @author wangshuai
      */
     private void assertThirdConfigManager(Integer tenantId, String... permCodes) {
@@ -677,8 +677,8 @@ public class ThirdAppController {
         try {
             sysTenantPackService.izHaveManageUserAuth(String.valueOf(tenantId));
         } catch (Exception e) {
-            throw new JeecgBootBizTipException("无权限，请联系管理员");
+            throw new JeecgBootBizTipException("Không có quyền hạn, vui lòng liên hệ quản trị viên");
         }
     }
-    //update-end---author:wangshuai ---date:20261021  for：校验当前用户能否管理指定租户的第三方集成配置-----------
+    //update-end---author:wangshuai ---date:20261021  for: Kiểm tra xem người dùng hiện tại có thể quản lý cấu hình tích hợp bên thứ ba của tenant được chỉ định hay không-----------
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.system.mapper.SysGatewayRouteMapper">
 
-    <!-- 还原被逻辑删除的路由 -->
+    <!-- Khôi phục route đã bị xóa logic -->
     <update id="revertLogicDeleted">
         UPDATE
         sys_gateway_route
@@ -16,7 +16,7 @@
         </foreach>
     </update>
 
-    <!-- 彻底删除路由 -->
+    <!-- Xóa hoàn toàn route -->
     <delete id="deleteLogicDeleted">
         DELETE FROM sys_gateway_route
         WHERE

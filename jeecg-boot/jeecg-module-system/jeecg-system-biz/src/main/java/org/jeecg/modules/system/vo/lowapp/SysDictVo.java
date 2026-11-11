@@ -11,33 +11,33 @@ import java.util.List;
 @Data
 public class SysDictVo {
     /**
-     * 字典id
+     * Từ điển id
      */
     @TableId(type = IdType.ASSIGN_ID)
     private String id;
 
     /**
-     * 字典名称
+     * Tên danh mục
      */
     private String dictName;
 
     /**
-     * 字典编码
+     * Mã từ điển
      */
     private String dictCode;
 
     /**
-     * 应用id
+     * Ứng dụng id
      */
     private String lowAppId;
     
     /**
-     * 租户ID
+     * Tenant ID
      */
     private Integer tenantId;
 
     /**
-     * 字典子项
+     * Mục con của danh mục
      */
     private List<SysDictItem> dictItemsList;
 }

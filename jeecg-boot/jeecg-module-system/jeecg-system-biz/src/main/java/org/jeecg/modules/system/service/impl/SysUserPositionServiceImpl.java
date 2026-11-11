@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @Description: 用户职位关系表
+ * @Description: Bảng quan hệ người dùng - vị trí công việc
  * @Author: jeecg-boot
  * @Date: 2023-02-14
  * @Version: V1.0
@@ -42,13 +42,13 @@ public class SysUserPositionServiceImpl extends ServiceImpl<SysUserPositionMappe
     @Override
     public void saveUserPosition(String userIds, String positionId) {
         String[] userIdArray = userIds.split(SymbolConstant.COMMA);
-        //存在的用户
+        //Người dùng đã tồn tại
         StringBuilder userBuilder = new StringBuilder();
         for (String userId : userIdArray) {
-            //获取成员是否存在于职位中
+            //Lấy thông tin thành viên có tồn tại trong chức vụ hay không
             Long count = sysUserPositionMapper.getUserPositionCount(userId, positionId);
             if (count == 0) {
-                //插入到用户职位关系表里面
+                //Chèn vào bảng quan hệ người dùng-chức vụ
                 SysUserPosition userPosition = new SysUserPosition();
                 userPosition.setPositionId(positionId);
                 userPosition.setUserId(userId);
@@ -57,13 +57,13 @@ public class SysUserPositionServiceImpl extends ServiceImpl<SysUserPositionMappe
                 userBuilder.append(userId).append(SymbolConstant.COMMA);
             }
         }
-        //如果用户id存在，说明已存在用户职位关系表中,提示用户已存在
+        //Nếu id người dùng tồn tại, nghĩa là đã tồn tại trong bảng quan hệ người dùng - vị trí,Nhắc người dùng đã tồn tại
         String uIds = userBuilder.toString();
         if (oConvertUtils.isNotEmpty(uIds)) {
-            //查询用户列表
+            //Truy vấn danh sách người dùng
             List<SysUser> sysUsers = userMapper.selectBatchIds(Arrays.asList(uIds.split(SymbolConstant.COMMA)));
             String realnames = sysUsers.stream().map(SysUser::getRealname).collect(Collectors.joining(SymbolConstant.COMMA));
-            throw new JeecgBootException(realnames + "已存在该职位中");
+            throw new JeecgBootException(realnames + "đã tồn tại trong vị trí công việc này");
         }
     }
 

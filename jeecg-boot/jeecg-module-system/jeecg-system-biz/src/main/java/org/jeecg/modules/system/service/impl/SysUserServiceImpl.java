@@ -76,7 +76,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * 用户表 服务实现类
+ * Bảng người dùng Lớp triển khai Service
  * </p>
  *
  * @Author: scott
@@ -140,18 +140,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	private JeecgBaseConfig jeecgBaseConfig;
 
 	/**
-	 * 管理员账号
+	 * Tài khoản quản trị viên
 	 */
 	public static final String[] ADMIN_ACCOUNT = new String[]{"admin"};
 
 	@Override
 	public Result<IPage<SysUser>> queryPageList(HttpServletRequest req, QueryWrapper<SysUser> queryWrapper, Integer pageSize, Integer pageNo) {
 		Result<IPage<SysUser>> result = new Result<IPage<SysUser>>();
-		//部门ID
+		//Phòng ban ID
 		String departId = req.getParameter("departId");
 		if (oConvertUtils.isNotEmpty(departId)) {
-            //代码逻辑说明:【JHHB-762】用户管理需要支持按组织架构查询用户（支持多选）---
-            //兼容多个部门id
+            //Giải thích logic mã:【JHHB-762] Quản lý người dùng cần hỗ trợ truy vấn người dùng theo cơ cấu tổ chức (hỗ trợ chọn nhiều)---
+            //Tương thích nhiều phòng ban id
             LambdaQueryWrapper<SysUserDepart> query = new LambdaQueryWrapper<>();
             if(departId.contains(SymbolConstant.COMMA)) {
                 query.in(SysUserDepart::getDepId, Arrays.asList(departId.split(SymbolConstant.COMMA)));
@@ -160,27 +160,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
             List<SysUserDepart> list = sysUserDepartMapper.selectList(query);
 			List<String> userIds = list.stream().map(SysUserDepart::getUserId).collect(Collectors.toList());
-			// 代码逻辑说明: [issues/I4XTYB]查询用户时，当部门id 下没有分配用户时接口报错------------
+			// Giải thích logic mã: [issues/I4XTYB]Khi truy vấn người dùng, nếu dưới id phòng ban chưa phân bổ người dùng thì interface báo lỗi------------
 			if (oConvertUtils.listIsNotEmpty(userIds)) {
 				queryWrapper.in("id", userIds);
 			} else {
 				return Result.OK();
 			}
 		}
-		//用户ID
+		//Người dùng ID
 		String code = req.getParameter("code");
 		if (oConvertUtils.isNotEmpty(code)) {
 			queryWrapper.in("id", Arrays.asList(code.split(",")));
 			pageSize = code.split(",").length;
 		}
 
-		// 代码逻辑说明: JTC-372 【用户冻结问题】 online授权、用户组件，选择用户都能看到被冻结的用户
+		// Giải thích logic mã: JTC-372 [Vấn đề đóng băng người dùng] Khi ủy quyền online, component người dùng, lúc chọn người dùng đều có thể thấy người dùng đã bị đóng băng
 		String status = req.getParameter("status");
 		if (oConvertUtils.isNotEmpty(status)) {
 			queryWrapper.eq("status", Integer.parseInt(status));
 		}
 
-		// 代码逻辑说明: 【QQYUN-8110】在线通讯录支持设置权限(只能看分配的技术支持)---
+		// Giải thích logic mã: 【QQYUN-8110】Danh bạ trực tuyến hỗ trợ thiết lập quyền hạn(Chỉ xem được hỗ trợ kỹ thuật được phân công)---
 		String tenantId = TokenUtils.getTenantIdByRequest(req);
 		String lowAppId = TokenUtils.getLowAppIdByRequest(req);
 //		Object bean = ResourceUtil.getImplementationClass(DataEnhanceEnum.getClassPath(tenantId,lowAppId));
@@ -193,10 +193,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 //			}
 //		}
 		
-		//TODO 外部模拟登陆临时账号，列表不显示
+		//TODO Tài khoản tạm thời đăng nhập mô phỏng bên ngoài, không hiển thị trong danh sách
 		queryWrapper.ne("username", "_reserve_user_external");
-        // 代码逻辑说明: 【JHHB-765】需要能设置排序---
-        // 逐字段判断是否已由 QueryGenerator 追加，避免 ORDER BY 出现重复列（SQL Server 报错 169）
+        // Giải thích logic mã: 【JHHB-765】Cần có thể thiết lập thứ tự sắp xếp---
+        // Kiểm tra từng trường xem đã được QueryGenerator thêm vào hay chưa, tránh ORDER BY xuất hiện cột trùng lặp (SQL Server báo lỗi 169)
         String column = req.getParameter("column");
         if (!"sort".equals(column)) {
             queryWrapper.orderByAsc("sort");
@@ -207,15 +207,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		Page<SysUser> page = new Page<SysUser>(pageNo, pageSize);
 		IPage<SysUser> pageList = this.page(page, queryWrapper);
 
-		//批量查询用户的所属部门
-		//step.1 先拿到全部的 useids
-		//step.2 通过 useids，一次性查询用户的所属部门名字
+		//Truy vấn hàng loạt phòng ban của người dùng
+		//step.1 Trước tiên, lấy toàn bộ useids
+		//step.2 Truy vấn một lần tên phòng ban mà người dùng thuộc về thông qua useids
 		List<String> userIds = pageList.getRecords().stream().map(SysUser::getId).collect(Collectors.toList());
 		if (userIds != null && userIds.size() > 0) {
 			Map<String, String> useDepNames = this.getDepNamesByUserIds(userIds);
 
-			//update-begin---author:scott ---date:20260701  for：【性能优化】listAll接口N+1查询改造，批量预加载关联数据消除N+1-----------
-			// 批量查询所属部门IDs（消除N+1：N次queryDepartsByUserId → 1次批量查询）
+			//update-begin---author:scott ---date:20260701  for: [Tối ưu hiệu năng] giao diện listAll N+1 Cải tạo truy vấn, tải trước hàng loạt dữ liệu liên quan để loại bỏ N+1-----------
+			// Truy vấn hàng loạt IDs phòng ban trực thuộc (loại bỏ N+1: N lần queryDepartsByUserId → 1 lần truy vấn hàng loạt)
 			List<SysUserDepartIdVo> departIdVos = sysDepartMapper.queryDepartIdVosByUserIds(userIds);
 			Map<String, List<String>> userDepartIdsMap = new HashMap<>();
 			for (SysUserDepartIdVo vo : departIdVos) {
@@ -224,7 +224,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				}
 			}
 
-			// 批量查询租户IDs（消除N+1：N次getTenantIdsByUserId → 1次批量查询）
+			// Truy vấn hàng loạt các Tenant ID (loại bỏ N+1: N lần getTenantIdsByUserId → 1 lần truy vấn hàng loạt)
 			List<SysUserTenantIdVo> tenantIdVos = userTenantMapper.getTenantIdVosByUserIds(userIds);
 			Map<String, List<Integer>> userTenantIdsMap = new HashMap<>();
 			for (SysUserTenantIdVo vo : tenantIdVos) {
@@ -233,8 +233,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				}
 			}
 
-			// 批量查询职位IDs（消除N+1：N次getPositionIdByUserTenantId → 1次批量查询）
-			// 代码逻辑说明: 【QQYUN-7028】用户职务保存后未回显---
+			// Truy vấn hàng loạt các ID chức vụ (loại bỏ N+1: N lần getPositionIdByUserTenantId → 1 lần truy vấn hàng loạt)
+			// Giải thích logic mã: 【QQYUN-7028] sau khi lưu chức vụ của người dùng không hiển thị lại---
 			Integer posTenantId = null;
 			if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 				posTenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
@@ -247,7 +247,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				}
 			}
 
-			// 批量查询兼职岗位IDs（消除N+1：N次getDepPostByUserId → 1次批量查询）
+			// Truy vấn hàng loạt IDs vị trí kiêm nhiệm (loại bỏ N+1: N lần getDepPostByUserId → 1 lần truy vấn hàng loạt)
 			List<SysUserDepPostVo> depPostVos = depPostMapper.getDepPostByUserIds(userIds);
 			Map<String, List<String>> userDepPostIdsMap = new HashMap<>();
 			for (SysUserDepPostVo vo : depPostVos) {
@@ -256,7 +256,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				}
 			}
 
-			// 批量查询钉钉绑定状态（消除N+1：SAAS模式下N次list → 1次批量查询）
+			// Truy vấn hàng loạt trạng thái liên kết DingTalk (loại bỏ N+1：Trong chế độ SAAS thực hiện N lần list → 1 lần truy vấn hàng loạt)
 			Map<String, Boolean> userBindThirdMap = new HashMap<>();
 			if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 				LambdaQueryWrapper<SysThirdAccount> thirdQuery = new LambdaQueryWrapper<>();
@@ -271,32 +271,32 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 			pageList.getRecords().forEach(item -> {
 				item.setOrgCodeTxt(useDepNames.get(item.getId()));
-				// 所属部门IDs
+				// Phòng ban trực thuộc IDs
 				List<String> departs = userDepartIdsMap.getOrDefault(item.getId(), Collections.emptyList());
 				if (!departs.isEmpty()) {
 					item.setBelongDepIds(String.join(SymbolConstant.COMMA, departs));
 				}
-				// 租户IDs
+				// Tenant IDs
 				List<Integer> tenants = userTenantIdsMap.getOrDefault(item.getId(), Collections.emptyList());
 				if (!tenants.isEmpty()) {
 					item.setRelTenantIds(StringUtils.join(tenants.toArray(), SymbolConstant.COMMA));
 				} else {
 					item.setRelTenantIds("");
 				}
-				// 职位IDs
+				// Chức vụ IDs
 				List<String> positions = userPositionIdsMap.getOrDefault(item.getId(), Collections.emptyList());
 				item.setPost(CommonUtils.getSplitText(positions, SymbolConstant.COMMA));
-				// 钉钉绑定状态
+				// Trạng thái liên kết DingTalk
 				if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 					item.setIzBindThird(userBindThirdMap.getOrDefault(item.getId(), false));
 				}
-				// 兼职岗位IDs
+				// Vị trí kiêm nhiệm IDs
 				List<String> depPosts = userDepPostIdsMap.getOrDefault(item.getId(), Collections.emptyList());
 				if (!depPosts.isEmpty()) {
 					item.setOtherDepPostId(StringUtils.join(depPosts.toArray(), SymbolConstant.COMMA));
 				}
 			});
-			//update-end---author:scott ---date:20260701  for：【性能优化】listAll接口N+1查询改造，批量预加载关联数据消除N+1-----------
+			//update-end---author:scott ---date:20260701  for: [Tối ưu hiệu năng] giao diện listAll N+1 Cải tạo truy vấn, tải trước hàng loạt dữ liệu liên quan để loại bỏ N+1-----------
 		}
 
 		result.setSuccess(true);
@@ -312,17 +312,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser user = userMapper.getUserByName(username);
         String passwordEncode = PasswordUtil.encrypt(username, oldpassword, user.getSalt());
         if (!user.getPassword().equals(passwordEncode)) {
-            return Result.error("旧密码输入错误!");
+            return Result.error("Mật khẩu cũ nhập sai!");
         }
         if (oConvertUtils.isEmpty(newpassword)) {
-            return Result.error("新密码不允许为空!");
+            return Result.error("Mật khẩu mới không được để trống!");
         }
         if (!newpassword.equals(confirmpassword)) {
-            return Result.error("两次输入密码不一致!");
+            return Result.error("Hai lần nhập mật khẩu không nhất quán!");
         }
         String password = PasswordUtil.encrypt(username, newpassword, user.getSalt());
         this.userMapper.update(new SysUser().setPassword(password), new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, user.getId()));
-        return Result.ok("密码重置成功!");
+        return Result.ok("Đặt lại mật khẩu thành công!!");
     }
 
     @Override
@@ -335,18 +335,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setPassword(passwordEncode);
         sysUser.setLastPwdUpdateTime(new Date());
         this.userMapper.updateById(sysUser);
-        return Result.ok("密码修改成功!");
+        return Result.ok("Đổi mật khẩu thành công!!");
     }
 
     @Override
     @CacheEvict(value={CacheConstant.SYS_USERS_CACHE}, allEntries=true)
 	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteUser(String userId) {
-		//1.验证当前用户是管理员账号 admin
-		//验证用户是否为管理员
+		//1.Xác minh người dùng hiện tại là tài khoản quản trị viên admin
+		//Xác minh người dùng có phải quản trị viên hay không
 		this.checkUserAdminRejectDel(userId);
 		
-		//2.删除用户
+		//2.Xóa người dùng
 		this.removeById(userId);
 		return false;
 	}
@@ -355,9 +355,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @CacheEvict(value={CacheConstant.SYS_USERS_CACHE}, allEntries=true)
 	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteBatchUsers(String userIds) {
-		//1.验证当前用户是管理员账号 admin
+		//1.Xác minh người dùng hiện tại là tài khoản quản trị viên admin
 		this.checkUserAdminRejectDel(userIds);
-		//2.删除用户
+		//2.Xóa người dùng
 		this.removeByIds(Arrays.asList(userIds.split(",")));
 		return false;
 	}
@@ -365,7 +365,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	public SysUser getUserByName(String username) {
 		SysUser sysUser = userMapper.getUserByName(username);
-		//查询用户的租户ids
+		//Truy vấn các tenant của người dùng ids
 		if(sysUser!=null){
 			List<Integer> list = userTenantMapper.getTenantIdsByUserId(sysUser.getId());
 			if (oConvertUtils.isNotEmpty(list)) {
@@ -396,7 +396,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Transactional(rollbackFor = Exception.class)
 	public void editUserWithRole(SysUser user, String roles) {
 		this.updateById(user);
-		//先删后加
+		//Xóa trước rồi thêm
 		sysUserRoleMapper.delete(new QueryWrapper<SysUserRole>().lambda().eq(SysUserRole::getUserId, user.getId()));
 		if(oConvertUtils.isNotEmpty(roles)) {
 			String[] arr = roles.split(",");
@@ -414,7 +414,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 获取动态首页路由配置
+	 * Lấy cấu hình route trang chủ động
 	 *
 	 * @param username
 	 * @param version
@@ -423,12 +423,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	public SysRoleIndex getDynamicIndexByUserRole(String username, String version) {
 		SysRoleIndex roleIndex = new SysRoleIndex();
-		//只有 X-Version=v3 的时候，才读取sys_role_index表获取角色首页配置
+		//Chỉ khi X-Version=v3 khi đó, mới đọc bảng sys_role_index để lấy cấu hình trang chủ theo vai trò sys_role_index Bảng lấy cấu hình trang chủ của vai trò
 		boolean isV3 = CommonConstant.VERSION_V3.equals(version);
 		if (isV3) {
 			if(oConvertUtils.isNotEmpty(username)){
-				//update-begin---author:lvdandan ---date:20260901  for：【LHZP-1145】【vue3】首页配置，用户和角色应该需支持多选
-				//1.先查询 用户USER级别 的所有首页配置
+				//update-begin---author:lvdandan ---date:20260901  for：【LHZP-1145][Vue 3] Cấu hình trang chủ, người dùng và vai trò nên hỗ trợ chọn nhiều
+				//1.Trước tiên truy vấn tất cả cấu hình trang chủ cấp USER của người dùng
 				LambdaQueryWrapper<SysRoleIndex> personalIndexQuery = new LambdaQueryWrapper<>();
 				personalIndexQuery.eq(SysRoleIndex::getRelationType, CommonConstant.HOME_RELATION_USER);
 				personalIndexQuery.eq(SysRoleIndex::getRoleCode, username);
@@ -442,10 +442,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 					queryRoleIndex = false;
 				} else {
 					LambdaQueryWrapper<SysRoleIndex> routeIndexUserQuery = new LambdaQueryWrapper<>();
-					//角色首页状态0：未开启  1：开启
+					//Trạng thái trang chủ vai trò: 0: chưa bật 1: đã bật
 					routeIndexUserQuery.eq(SysRoleIndex::getStatus, CommonConstant.STATUS_1);
 					routeIndexUserQuery.eq(SysRoleIndex::getRelationType, CommonConstant.HOME_RELATION_USER);
-					//优先级正序排序
+					//Sắp xếp tăng dần theo mức độ ưu tiên
 					routeIndexUserQuery.orderByAsc(SysRoleIndex::getPriority);
 					list = sysRoleIndexService.list(routeIndexUserQuery).stream()
 							.filter(item -> containsAnyRelationCode(item.getRoleCode(), Collections.singleton(username)))
@@ -456,23 +456,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 					}
 				}
 				if (queryRoleIndex) {
-				   //2.用户没有配置，再查询 角色ROLE级别 的所有首页配置
+				   //2.Người dùng chưa có cấu hình thì truy vấn tiếp tất cả cấu hình trang chủ ở cấp vai trò ROLE
 					LambdaQueryWrapper<SysRoleIndex> routeIndexQuery = new LambdaQueryWrapper<>();
-					//角色首页状态0：未开启  1：开启
+					//Trạng thái trang chủ vai trò: 0: chưa bật 1: đã bật
 					routeIndexQuery.eq(SysRoleIndex::getStatus, CommonConstant.STATUS_1);
-					//角色所有首页配置
+					//Tất cả cấu hình trang chủ của vai trò
 					routeIndexQuery.eq(SysRoleIndex::getRelationType, CommonConstant.HOME_RELATION_ROLE);
-					//当前用户角色
+					//Vai trò của người dùng hiện tại
 					List<String> roles = sysUserRoleMapper.getRoleByUserName(username);
 					String componentUrl = RoleIndexConfigEnum.getIndexByRoles(roles);
 					roleIndex = new SysRoleIndex(componentUrl);
-					//用户所有角色
-					//优先级正序排序
+					//Tất cả vai trò của người dùng
+					//Sắp xếp tăng dần theo mức độ ưu tiên
 					routeIndexQuery.orderByAsc(SysRoleIndex::getPriority);
 					list = sysRoleIndexService.list(routeIndexQuery).stream()
 							.filter(item -> containsAnyRelationCode(item.getRoleCode(), roles))
 							.collect(Collectors.toList());
-					//update-end---author:lvdandan ---date:20260901  for：【LHZP-1145】【vue3】首页配置，用户和角色应该需支持多选
+					//update-end---author:lvdandan ---date:20260901  for：【LHZP-1145][Vue 3] Cấu hình trang chủ, người dùng và vai trò nên hỗ trợ chọn nhiều
 					if (CollectionUtils.isNotEmpty(list)) {
 						roleIndex = list.get(0);
 					}
@@ -482,10 +482,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 		if (oConvertUtils.isEmpty(roleIndex.getComponent())) {
 			if (isV3) {
-				// 如果角色没有配置首页，则使用默认首页
+				// Nếu vai trò chưa cấu hình trang chủ thì dùng trang chủ mặc định
 				return sysRoleIndexService.queryDefaultIndex();
 			} else {
-				// 非v3返回null
+				// Không phải v3 thì trả về null
 				return null;
 			}
 		}
@@ -493,11 +493,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 判断逗号分隔的关联编码是否与目标编码存在交集
+	 * Phán đoán xem mã liên kết phân tách bằng dấu phẩy có giao nhau với mã đích hay không
 	 *
-	 * @param relationCodes 逗号分隔的用户或角色编码
-	 * @param targetCodes 目标用户或角色编码
-	 * @return true：存在匹配编码，false：不存在匹配编码
+	 * @param relationCodes Mã người dùng hoặc vai trò được phân tách bằng dấu phẩy
+	 * @param targetCodes Mã người dùng hoặc vai trò đích
+	 * @return true: tồn tại mã khớp, false: không tồn tại mã khớp
 	 */
 	private boolean containsAnyRelationCode(String relationCodes, Collection<String> targetCodes) {
 		if (oConvertUtils.isEmpty(relationCodes) || CollectionUtil.isEmpty(targetCodes)) {
@@ -514,42 +514,42 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 通过用户名获取用户角色集合
-	 * @param username 用户名
-     * @return 角色集合
+	 * Lấy tập hợp vai trò người dùng qua tên người dùng
+	 * @param username Tên người dùng
+     * @return Tập hợp vai trò
 	 */
 	@Override
 	public Set<String> getUserRolesSet(String username) {
-		// 查询用户拥有的角色集合
+		// Truy vấn tập hợp vai trò mà người dùng sở hữu
 		List<String> roles = sysUserRoleMapper.getRoleByUserName(username);
-		log.info("-------通过数据库读取用户拥有的角色Rules------username： " + username + ",Roles size: " + (roles == null ? 0 : roles.size()));
+		log.info("-------Đọc các vai trò mà người dùng sở hữu qua cơ sở dữ liệu Rules------username： " + username + ",Roles size: " + (roles == null ? 0 : roles.size()));
 		return new HashSet<>(roles);
 	}
 	
 	/**
-	 * 通过用户名获取用户角色集合
-	 * @param userId 用户ID
-     * @return 角色集合
+	 * Lấy tập hợp vai trò người dùng qua tên người dùng
+	 * @param userId Người dùng ID
+     * @return Tập hợp vai trò
 	 */
 	@Override
 	public Set<String> getUserRoleSetById(String userId) {
-		// 查询用户拥有的角色集合
+		// Truy vấn tập hợp vai trò mà người dùng sở hữu
 		List<String> roles = sysUserRoleMapper.getRoleCodeByUserId(userId);
-		log.info("-------通过数据库读取用户拥有的角色Rules------userId： " + userId + ",Roles size: " + (roles == null ? 0 : roles.size()));
+		log.info("-------Đọc các vai trò mà người dùng sở hữu qua cơ sở dữ liệu Rules------userId： " + userId + ",Roles size: " + (roles == null ? 0 : roles.size()));
 		return new HashSet<>(roles);
 	}
 
 	/**
-	 * 通过用户名获取用户权限集合
+	 * Lấy tập hợp quyền hạn người dùng qua tên người dùng
 	 *
-	 * @param userId 用户ID
-	 * @return 权限集合
+	 * @param userId Người dùng ID
+	 * @return Tập hợp quyền hạn
 	 */
 	@Override
 	public Set<String> getUserPermissionsSet(String userId) {
 		Set<String> permissionSet = new HashSet<>();
 		List<SysPermission> permissionList = sysPermissionMapper.queryByUser(userId);
-		//================= begin 开启租户的时候 如果没有test角色，默认加入test角色================
+		//================= begin Khi bật thuê bao, nếu không có vai trò test thì mặc định thêm vai trò test================
 		if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 			if (permissionList == null) {
 				permissionList = new ArrayList<>();
@@ -557,9 +557,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			List<SysPermission> testRoleList = sysPermissionMapper.queryPermissionByTestRoleId();
 			permissionList.addAll(testRoleList);
 		}
-		//================= end 开启租户的时候 如果没有test角色，默认加入test角色================
+		//================= end Khi bật thuê bao, nếu không có vai trò test thì mặc định thêm vai trò test================
 		for (SysPermission po : permissionList) {
-//			// TODO URL规则有问题？
+//			// TODO URL Quy tắc có vấn đề?
 //			if (oConvertUtils.isNotEmpty(po.getUrl())) {
 //				permissionSet.add(po.getUrl());
 //			}
@@ -567,12 +567,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				permissionSet.add(po.getPerms());
 			}
 		}
-		log.info("-------通过数据库读取用户拥有的权限Perms------userId： "+ userId+",Perms size: "+ (permissionSet==null?0:permissionSet.size()) );
+		log.info("-------Đọc các quyền hạn mà người dùng sở hữu qua cơ sở dữ liệu Perms------userId： "+ userId+",Perms size: "+ (permissionSet==null?0:permissionSet.size()) );
 		return permissionSet;
 	}
 
 	/**
-	 * 升级SpringBoot2.6.6,不允许循环依赖
+	 * Nâng cấp SpringBoot2.6.6,Không cho phép phụ thuộc vòng tròn
 	 * @author:qinfeng
 	 * @update: 2022-04-07
 	 * @param username
@@ -586,7 +586,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			return null;
 		}
 
-		//查询用户信息
+		//Truy vấn thông tin người dùng
 		SysUser sysUser = userMapper.getUserByName(username);
 		if(sysUser!=null) {
 			info.setSysUserCode(sysUser.getUsername());
@@ -594,11 +594,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			info.setSysOrgCode(sysUser.getOrgCode());
 		}
 		
-		//多部门支持in查询
+		//Nhiều phòng ban hỗ trợ truy vấn in
 		List<SysDepart> list = sysDepartMapper.queryUserDeparts(sysUser.getId());
 		List<String> sysMultiOrgCode = new ArrayList<String>();
 		if(list==null || list.size()==0) {
-			//当前用户无部门
+			//Người dùng hiện tại không có phòng ban
 			//sysMultiOrgCode.add("0");
 		}else if(list.size()==1) {
 			sysMultiOrgCode.add(list.get(0).getOrgCode());
@@ -614,10 +614,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
     /**
-     * 根据部门Id查询
+     * Truy vấn theo Id phòng ban
      * @param page
-     * @param departId 部门id
-     * @param username 用户账户名称
+     * @param departId Phòng ban id
+     * @param username Tên tài khoản người dùng
      * @return
      */
 	@Override
@@ -627,7 +627,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	@Override
 	public IPage<SysUser> getUserByDepIds(Page<SysUser> page, List<String> departIds, String username, String realname) {
-        //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1141]【系统管理】我的部门编辑用户关联信息未正确回显------------
+        //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1141][Quản lý hệ thống] Thông tin liên kết người dùng khi chỉnh sửa phòng ban của tôi chưa hiển thị lại đúng------------
         IPage<SysUser> pageList = userMapper.getUserByDepIds(page, departIds, username, realname);
 		List<String> userIds = pageList.getRecords().stream().map(SysUser::getId).collect(Collectors.toList());
 		if (CollectionUtil.isEmpty(userIds)) {
@@ -639,7 +639,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 					? StringUtils.join(depPostList.toArray(), SymbolConstant.COMMA) : "");
 		});
 		return pageList;
-        //update-end---author:wangshuai ---date:20260811  for：[LHZP-1141]【系统管理】我的部门编辑用户关联信息未正确回显------------
+        //update-end---author:wangshuai ---date:20260811  for：[LHZP-1141][Quản lý hệ thống] Thông tin liên kết người dùng khi chỉnh sửa phòng ban của tôi chưa hiển thị lại đúng------------
     }
 
 	@Override
@@ -671,7 +671,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	public IPage<SysUserSysDepartModel> queryUserByOrgCode(String orgCode, SysUser userParams, IPage page) {
 		List<SysUserSysDepartModel> list = baseMapper.getUserByOrgCode(page, orgCode, userParams);
-		//根据部门orgCode查询部门，需要将职位id进行传递
+		//Truy vấn phòng ban theo orgCode của phòng ban, cần truyền id vị trí
 		for (SysUserSysDepartModel model:list) {
 			List<String> positionList = sysUserPositionMapper.getPositionIdByUserId(model.getId());
 			model.setPost(CommonUtils.getSplitText(positionList,SymbolConstant.COMMA));
@@ -685,25 +685,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
     /**
-     * 根据角色Id查询
+     * Truy vấn theo Id vai trò
      * @param page
-     * @param roleId 角色id
-     * @param username 用户账户名称
-     * @param realname 用户姓名
+     * @param roleId Vai trò id
+     * @param username Tên tài khoản người dùng
+     * @param realname Họ tên người dùng
      * @return
      */
 	@Override
 	public IPage<SysUser> getUserByRoleId(Page<SysUser> page, String roleId, String username, String realname) {
-		// 代码逻辑说明: [QQYUN-3980]组织管理中 职位功能 职位表加租户id 加职位-用户关联表------------
+		// Giải thích logic mã: [QQYUN-3980]Trong quản lý tổ chức, chức năng vị trí: bảng vị trí thêm tenant id, thêm vị trí-Bảng liên kết người dùng------------
 		IPage<SysUser> userRoleList = userMapper.getUserByRoleId(page, roleId, username,realname);
 		List<SysUser> records = userRoleList.getRecords();
 		if (null != records && records.size() > 0) {
 			List<String> userIds = records.stream().map(SysUser::getId).collect(Collectors.toList());
 			Map<String, String> useDepNames = this.getDepNamesByUserIds(userIds);
 			for (SysUser sysUser : userRoleList.getRecords()) {
-				//设置部门
+				//Cài đặt phòng ban
 				sysUser.setOrgCodeTxt(useDepNames.get(sysUser.getId()));
-				//设置用户职位id
+				//Đặt vị trí người dùng id
 				this.userPositionId(sysUser);
 			}
 		}
@@ -732,7 +732,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void addUserWithDepart(SysUser user, String selectedParts) {
-//		this.save(user);  //保存角色的时候已经添加过一次了
+//		this.save(user);  //Khi lưu vai trò đã thêm một lần rồi
 		if(oConvertUtils.isNotEmpty(selectedParts)) {
 			String[] arr = selectedParts.split(",");
 			for (String deaprtId : arr) {
@@ -747,17 +747,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Transactional(rollbackFor = Exception.class)
 	@CacheEvict(value={CacheConstant.SYS_USERS_CACHE}, allEntries=true)
 	public void editUserWithDepart(SysUser user, String departs) {
-        //更新角色的时候已经更新了一次了，可以再跟新一次
+        //Khi cập nhật vai trò đã cập nhật một lần rồi, có thể cập nhật thêm một lần nữa
 		this.updateById(user);
 		String[] arr = {};
 		if(oConvertUtils.isNotEmpty(departs)){
 			arr = departs.split(",");
 		}
-		//查询已关联部门
+		//Truy vấn phòng ban đã liên kết
 		List<SysUserDepart> userDepartList = sysUserDepartMapper.selectList(new QueryWrapper<SysUserDepart>().lambda().eq(SysUserDepart::getUserId, user.getId()));
 		if(userDepartList != null && userDepartList.size()>0){
 			for(SysUserDepart depart : userDepartList ){
-				//修改已关联部门删除部门用户角色关系
+				//Sửa quan hệ người dùng - vai trò của phòng ban khi xóa phòng ban đã liên kết
 				if(!Arrays.asList(arr).contains(depart.getDepId())){
 					List<SysDepartRole> sysDepartRoleList = sysDepartRoleMapper.selectList(
 							new QueryWrapper<SysDepartRole>().lambda().eq(SysDepartRole::getDepartId,depart.getDepId()));
@@ -769,7 +769,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				}
 			}
 		}
-		//先删后加
+		//Xóa trước rồi thêm
 		sysUserDepartMapper.delete(new QueryWrapper<SysUserDepart>().lambda().eq(SysUserDepart::getUserId, user.getId()));
 		if(oConvertUtils.isNotEmpty(departs)) {
 			for (String departId : arr) {
@@ -781,40 +781,40 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 
 	/**
-	   * 校验用户是否有效
+	   * Kiểm tra người dùng có hợp lệ không
 	 * @param sysUser
 	 * @return
 	 */
 	@Override
 	public Result<?> checkUserIsEffective(SysUser sysUser) {
 		Result<?> result = new Result<Object>();
-		//情况1：根据用户信息查询，该用户不存在
+		//Trường hợp 1: Truy vấn theo thông tin người dùng, người dùng này không tồn tại
 		if (sysUser == null) {
-			result.error500("该用户不存在，请注册");
-			baseCommonService.addLog("用户登录失败，用户不存在！", CommonConstant.LOG_TYPE_1, null);
+			result.error500("Người dùng này không tồn tại, vui lòng đăng ký");
+			baseCommonService.addLog("Người dùng đăng nhập thất bại, người dùng không tồn tại!", CommonConstant.LOG_TYPE_1, null);
 			return result;
 		}
-		//情况2：根据用户信息查询，该用户已注销
-		// 代码逻辑说明: if条件永远为falsebug------------
+		//Trường hợp 2: Truy vấn theo thông tin người dùng, người dùng này đã bị hủy
+		// Giải thích logic mã: if Điều kiện luôn là falsebug------------
 		if (CommonConstant.DEL_FLAG_1.equals(sysUser.getDelFlag())) {
-			baseCommonService.addLog("用户登录失败，用户名:" + sysUser.getUsername() + "已注销！", CommonConstant.LOG_TYPE_1, null);
-			result.error500("该用户已注销");
+			baseCommonService.addLog("Đăng nhập người dùng thất bại, tên người dùng:" + sysUser.getUsername() + "Đã bị hủy!", CommonConstant.LOG_TYPE_1, null);
+			result.error500("Người dùng này đã bị hủy tài khoản");
 			return result;
 		}
-		//情况3：根据用户信息查询，该用户已冻结
+		//Trường hợp 3: Truy vấn theo thông tin người dùng, người dùng này đã bị đóng băng
 		if (CommonConstant.USER_FREEZE.equals(sysUser.getStatus())) {
-			baseCommonService.addLog("用户登录失败，用户名:" + sysUser.getUsername() + "已冻结！", CommonConstant.LOG_TYPE_1, null);
-			result.error500("该用户已冻结");
+			baseCommonService.addLog("Đăng nhập người dùng thất bại, tên người dùng:" + sysUser.getUsername() + "Đã bị đóng băng!", CommonConstant.LOG_TYPE_1, null);
+			result.error500("Người dùng này đã bị đóng băng");
 			return result;
 		}
 		return result;
 	}
 
-	//update-begin---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】登录失败计数与密码校验统一，用户不存在也计入失败次数，防止用户枚举-----------
+	//update-begin---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Thống nhất việc đếm lần đăng nhập thất bại với kiểm tra mật khẩu; người dùng không tồn tại cũng được tính vào số lần thất bại, ngăn liệt kê người dùng-----------
 	@Override
 	public boolean verifyLoginPassword(SysUser sysUser, String username, String password) {
 		if (sysUser == null) {
-			baseCommonService.addLog("用户登录失败，用户不存在！", CommonConstant.LOG_TYPE_1, null);
+			baseCommonService.addLog("Người dùng đăng nhập thất bại, người dùng không tồn tại!", CommonConstant.LOG_TYPE_1, null);
 			addLoginFailOvertimes(username);
 			return false;
 		}
@@ -837,14 +837,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		String redisKey = CommonConstant.LOGIN_FAIL + key;
 		Object failTime = redisUtil.get(redisKey);
 		int val = failTime != null ? Integer.parseInt(failTime.toString()) : 0;
-		// 10分钟，一分钟为60s
+		// 10 phút, một phút là 60s
 		redisUtil.set(redisKey, ++val, 600);
 	}
-	//update-end---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】登录失败计数与密码校验统一，用户不存在也计入失败次数，防止用户枚举-----------
+	//update-end---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] Thống nhất việc đếm lần đăng nhập thất bại với kiểm tra mật khẩu; người dùng không tồn tại cũng được tính vào số lần thất bại, ngăn liệt kê người dùng-----------
 
 	@Override
 	public List<SysUser> queryLogicDeleted() {
-        // 代码逻辑说明: 回收站查询未离职的------------
+        // Giải thích logic mã: Thùng rác truy vấn người chưa nghỉ việc------------
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.ne(SysUser::getStatus, CommonConstant.USER_QUIT);
         return this.queryLogicDeleted(wrapper);
@@ -868,23 +868,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean removeLogicDeleted(List<String> userIds) {
-		// 1. 删除用户
+		// 1. Xóa người dùng
 		int line = userMapper.deleteLogicDeleted(userIds);
-		// 2. 删除用户部门关系
+		// 2. Xóa quan hệ phòng ban người dùng
 		line += sysUserDepartMapper.delete(new LambdaQueryWrapper<SysUserDepart>().in(SysUserDepart::getUserId, userIds));
-		//3. 删除用户角色关系
+		//3. Xóa quan hệ vai trò người dùng
 		line += sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getUserId, userIds));
-		//4.同步删除第三方App的用户
+		//4.Đồng bộ xóa người dùng của App bên thứ ba
 		try {
 			dingtalkService.removeThirdAppUser(userIds);
 			wechatEnterpriseService.removeThirdAppUser(userIds);
 		} catch (Exception e) {
-			log.error("同步删除第三方App的用户失败：", e);
+			log.error("Đồng bộ xóa người dùng của App bên thứ ba thất bại:", e);
 		}
-		//5. 删除第三方用户表（因为第4步需要用到第三方用户表，所以在他之后删）
+		//5. Xóa bảng người dùng bên thứ ba (vì bước 4 cần dùng đến bảng người dùng bên thứ ba nên xóa sau bước đó)
 		line += sysThirdAccountMapper.delete(new LambdaQueryWrapper<SysThirdAccount>().in(SysThirdAccount::getSysUserId, userIds));
 
-		//6. 删除租户用户中间表的数据
+		//6. Xóa dữ liệu bảng trung gian người dùng tenant
 		line += userTenantMapper.delete(new LambdaQueryWrapper<SysUserTenant>().in(SysUserTenant::getUserId,userIds));
 		
 		return line != 0;
@@ -900,13 +900,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	@Override
 	public void saveThirdUser(SysUser sysUser) {
-		//保存用户
+		//Lưu người dùng
 		String userid = UUIDGenerator.generate();
 		sysUser.setId(userid);
 		baseMapper.insert(sysUser);
-		//获取第三方角色
+		//Lấy vai trò bên thứ ba
 		SysRole sysRole = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleCode, "third_role"));
-		//保存用户角色
+		//Lưu vai trò người dùng
 		SysUserRole userRole = new SysUserRole();
 		userRole.setRoleId(sysRole.getId());
 		userRole.setUserId(userid);
@@ -924,11 +924,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if(null == user.getSort()){
             user.setSort(CommonConstant.DEFAULT_USER_SORT);
         }
-        //step.1 保存用户
+        //step.1 Lưu người dùng
 		this.save(user);
-		//获取用户保存前台传过来的租户id并添加到租户
+		//Lấy id tenant do frontend truyền qua khi người dùng lưu và thêm vào tenant
         this.saveUserTenant(user.getId(),relTenantIds, izSyncPack);
-		//step.2 保存角色
+		//step.2 Lưu vai trò
 		if(oConvertUtils.isNotEmpty(selectedRoles)) {
 			String[] arr = selectedRoles.split(",");
 			for (String roleId : arr) {
@@ -937,7 +937,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			}
 		}
 		
-		//step.3 保存所属部门
+		//step.3 Lưu phòng ban trực thuộc
 		if(oConvertUtils.isNotEmpty(selectedDeparts)) {
 			String[] arr = selectedDeparts.split(",");
 			for (String deaprtId : arr) {
@@ -946,9 +946,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			}
 		}
 
-		//step.4 保存职位
+		//step.4 Lưu vị trí
 		this.saveUserPosition(user.getId(),user.getPost());
-        //step5 保存兼职岗位
+        //step5 Lưu vị trí công việc kiêm nhiệm
         this.saveUserOtherDepPost(user.getId(),user.getOtherDepPostId());
 	}
 
@@ -956,16 +956,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Transactional(rollbackFor = Exception.class)
 	@CacheEvict(value={CacheConstant.SYS_USERS_CACHE}, allEntries=true)
 	public void editUser(SysUser user, String roles, String departs, String relTenantIds, String updateFromPage) {
-		//获取用户编辑前台传过来的租户id
+		//Lấy tenant mà giao diện truyền tới khi người dùng chỉnh sửa id
         this.editUserTenants(user.getId(),relTenantIds);
         if(null == user.getSort()){
             user.setSort(CommonConstant.DEFAULT_USER_SORT);
         }
-		//step.1 修改用户基础信息
+		//step.1 Sửa thông tin cơ bản của người dùng
 		this.updateById(user);
-		//step.2 修改角色
+		//step.2 Chỉnh sửa vai trò
 		if (oConvertUtils.isEmpty(updateFromPage) || !"deptUsers".equalsIgnoreCase(updateFromPage)) {
-			// 处理用户角色 先删后加 , 如果是在部门用户页面修改用户,不处理用户角色,因为该页面无法编辑用户角色.
+			// Xử lý vai trò người dùng: xóa trước rồi thêm , Nếu đang sửa người dùng trên trang người dùng của phòng ban,Không xử lý vai trò người dùng,Vì trang này không thể chỉnh sửa vai trò người dùng.
 			sysUserRoleMapper.delete(new QueryWrapper<SysUserRole>().lambda().eq(SysUserRole::getUserId, user.getId()));
 			if (oConvertUtils.isNotEmpty(roles)) {
 				String[] arr = roles.split(",");
@@ -976,16 +976,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			}
 		}
 
-		//step.3 修改部门
+		//step.3 Chỉnh sửa phòng ban
 		String[] arr = {};
 		if(oConvertUtils.isNotEmpty(departs)){
 			arr = departs.split(",");
 		}
-		//查询已关联部门
+		//Truy vấn phòng ban đã liên kết
 		List<SysUserDepart> userDepartList = sysUserDepartMapper.selectList(new QueryWrapper<SysUserDepart>().lambda().eq(SysUserDepart::getUserId, user.getId()));
 		if(userDepartList != null && userDepartList.size()>0){
 			for(SysUserDepart depart : userDepartList ){
-				//修改已关联部门删除部门用户角色关系
+				//Sửa quan hệ người dùng - vai trò của phòng ban khi xóa phòng ban đã liên kết
 				if(!Arrays.asList(arr).contains(depart.getDepId())){
 					List<SysDepartRole> sysDepartRoleList = sysDepartRoleMapper.selectList(
 							new QueryWrapper<SysDepartRole>().lambda().eq(SysDepartRole::getDepartId,depart.getDepId()));
@@ -997,7 +997,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				}
 			}
 		}
-		//先删后加
+		//Xóa trước rồi thêm
 		sysUserDepartMapper.delete(new QueryWrapper<SysUserDepart>().lambda().eq(SysUserDepart::getUserId, user.getId()));
 		if(oConvertUtils.isNotEmpty(departs)) {
 			for (String departId : arr) {
@@ -1005,24 +1005,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				sysUserDepartMapper.insert(userDepart);
 			}
 		}
-		//step.4 修改手机号和邮箱
-		// 更新手机号、邮箱空字符串为 null
+		//step.4 Sửa số điện thoại và email
+		// Cập nhật số điện thoại, email từ chuỗi trống thành null
 		userMapper.updateNullByEmptyString("email");
 		userMapper.updateNullByEmptyString("phone");
 
-		//step.5 修改职位
+		//step.5 Chỉnh sửa vị trí
 		this.editUserPosition(user.getId(),user.getPost());
 
-        //代码逻辑说明: 兼职岗位改造成中间表的方式---
-        //step6 修改兼职岗位
-        //先删后加
+        //Giải thích logic mã: Chuyển đổi vị trí kiêm nhiệm sang dạng bảng trung gian---
+        //step6 Chỉnh sửa vị trí kiêm nhiệm
+        //Xóa trước rồi thêm
         depPostMapper.delete(new QueryWrapper<SysUserDepPost>().lambda().eq(SysUserDepPost::getUserId, user.getId()));
         this.saveUserOtherDepPost(user.getId(),user.getOtherDepPostId());
 	}
 
 
     /**
-     * 保存兼职岗位
+     * Lưu vị trí công việc kiêm nhiệm
      *
      * @param userId
      * @param otherDepPostId
@@ -1054,17 +1054,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		}
 		LoginUser loginUser = new LoginUser();
 		SysUser sysUser = userMapper.getUserByName(username);
-		//查询用户的租户ids
+		//Truy vấn các tenant của người dùng ids
 		this.setUserTenantIds(sysUser);
-		//设置职位id
+		//Cài đặt chức vụ id
 		this.userPositionId(sysUser);
 		if(sysUser==null) {
 			return null;
 		}
 		BeanUtils.copyProperties(sysUser, loginUser);
-		// 查询当前登录用户的部门id
+		// Truy vấn phòng ban của người dùng đang đăng nhập id
 		loginUser.setOrgId(this.getDepartIdByOrCode(sysUser.getOrgCode()));
-		// 查询当前登录用户的角色code（多个逗号分割）
+		// Truy vấn role code của người dùng đang đăng nhập (nhiều cái phân tách bằng dấu phẩy)
 		loginUser.setRoleCode(this.getJoinRoleCodeByUserId(sysUser.getId()));
 		return loginUser;
 	}
@@ -1075,13 +1075,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void userQuit(String username) {
         SysUser sysUser = userMapper.getUserByName(username);
         if(null == sysUser){
-            throw new JeecgBootException("离职失败，该用户已不存在");
+            throw new JeecgBootException("Nghỉ việc thất bại, người dùng này không còn tồn tại");
         }
-		// 代码逻辑说明: [QQYUN-3951]租户用户离职重构------------
+		// Giải thích logic mã: [QQYUN-3951]Tái cấu trúc người dùng tenant rời khỏi------------
 		int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
-		//更新用户租户表的状态为离职状态
+		//Cập nhật trạng thái bảng tenant của người dùng thành trạng thái đã nghỉ việc
 		if(tenantId==0){
-			throw new JeecgBootException("离职失败，租户不存在");
+			throw new JeecgBootException("Nghỉ việc thất bại, Tenant không tồn tại");
 		}
 		LambdaQueryWrapper<SysUserTenant> query = new LambdaQueryWrapper<>();
 		query.eq(SysUserTenant::getUserId,sysUser.getId());
@@ -1102,20 +1102,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
 	/**
-	 * 设置登录租户
+	 * Đặt tenant đăng nhập
 	 * @param sysUser
 	 * @return
 	 */
 	@Override
 	public Result<JSONObject>  setLoginTenant(SysUser sysUser, JSONObject obj, String username, Result<JSONObject> result){
-		//用户有哪些租户
+		//Người dùng có những tenant nào
 //		List<SysTenant> tenantList = null;
-		// 代码逻辑说明: [QQYUN-3371]租户逻辑改造，改成关系表
+		// Giải thích logic mã: [QQYUN-3371]Cải tạo logic Tenant, đổi sang bảng quan hệ
 		List<SysTenant> tenantList = relationMapper.getTenantNoCancel(sysUser.getId());
 		obj.put("tenantList", tenantList);
 //		if (null!=tenantIdList && tenantIdList.size()>0) {
 //			//-------------------------------------------------------------------------------------
-//			//查询有效的租户集合
+//			//Truy vấn tập hợp Tenant hợp lệ
 //			LambdaQueryWrapper<SysTenant> queryWrapper = new LambdaQueryWrapper<>();
 //			queryWrapper.in(SysTenant::getId, tenantIdList);
 //			queryWrapper.eq(SysTenant::getStatus, Integer.valueOf(CommonConstant.STATUS_1));
@@ -1123,33 +1123,33 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 //			//-------------------------------------------------------------------------------------
 //
 //			if (tenantList.size() == 0) {
-//				return result.error500("与该用户关联的租户均已被冻结，无法登录！");
+//				return result.error500("Các tenant liên kết với người dùng này đều đã bị đóng băng, không thể đăng nhập!");
 //			} else {
 //				obj.put("tenantList", tenantList);
 //			}
 //		}
 
 
-		//登录会话租户ID，有效性重置
+		//ID tenant của phiên đăng nhập, đặt lại tính hiệu lực
 		if (tenantList != null && tenantList.size() > 0) {
 			if (tenantList.size() == 1) {
 				sysUser.setLoginTenantId(tenantList.get(0).getId());
 			} else {
 				List<SysTenant> listAfterFilter = tenantList.stream().filter(s -> s.getId().equals(sysUser.getLoginTenantId())).collect(Collectors.toList());
 				if (listAfterFilter == null || listAfterFilter.size() == 0) {
-					//如果上次登录租户ID，在用户拥有的租户集合里面没有了，则随机取用户拥有的第一个租户ID
+					//Nếu ID tenant của lần đăng nhập trước không còn trong tập hợp tenant mà người dùng sở hữu nữa thì lấy ngẫu nhiên tenant đầu tiên mà người dùng sở hữu ID
 					sysUser.setLoginTenantId(tenantList.get(0).getId());
 				}
 			}
 		} else {
-			//无租户的时候，设置为 0
+			//Khi không có Tenant, đặt thành 0
 			sysUser.setLoginTenantId(0);
 		}
-		//设置用户登录缓存租户
+		//Đặt Tenant cache khi người dùng đăng nhập
 		this.updateUserDepart(username, null,sysUser.getLoginTenantId());
-		log.debug(" 登录接口用户的租户ID = {}", sysUser.getLoginTenantId());
+		log.debug(" Tenant của người dùng giao diện đăng nhập ID = {}", sysUser.getLoginTenantId());
 		if(sysUser.getLoginTenantId()!=null){
-			//登录的时候需要手工设置下会话中的租户ID,不然登录接口无法通过租户隔离查询到数据
+			//Khi đăng nhập cần đặt thủ công tenant trong phiên ID,Nếu không, giao diện đăng nhập không thể tra được dữ liệu qua cách ly tenant
 			TenantContext.setTenant(sysUser.getLoginTenantId()+"");
 		}
 		return null;
@@ -1157,7 +1157,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 
     /**
-     * 获取租户id
+     * Lấy tenant id
      * @param sysUser
      */
     private void setUserTenantIds(SysUser sysUser) {
@@ -1172,11 +1172,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 保存租户
+     * Lưu tenant
      *
      * @param userId
      * @param relTenantIds
-     * @param izSyncPack 是否需要将用户同步当前产品包下
+     * @param izSyncPack Có cần đồng bộ người dùng vào gói sản phẩm hiện tại không
      */
     private void saveUserTenant(String userId, String relTenantIds, boolean izSyncPack) {
         if (oConvertUtils.isNotEmpty(relTenantIds)) {
@@ -1197,14 +1197,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				}else{
 					relationMapper.insert(relation);
                     ISysTenantService currentService = SpringContextUtils.getApplicationContext().getBean(ISysTenantService.class);
-                    //默认添加当前用户到租户套餐中
+                    //Mặc định thêm người dùng hiện tại vào gói tenant
                     currentService.addPackUser(userId,tenantId);
 				}
             }
         }else{
-			//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+			//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 			if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
-				// 代码逻辑说明: 判断当前用户是否在当前租户里面，如果不存在在新增------------
+				// Giải thích logic mã: Kiểm tra người dùng hiện tại có nằm trong thuê bao hiện tại hay không, nếu không tồn tại thì thêm mới------------
 				String tenantId = TenantContext.getTenant();
 				if(oConvertUtils.isNotEmpty(tenantId)){
 					Integer count = relationMapper.userTenantIzExist(userId, Integer.parseInt(tenantId));
@@ -1216,7 +1216,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 						relationMapper.insert(relation);
                         if(izSyncPack){
                             ISysTenantService currentService = SpringContextUtils.getApplicationContext().getBean(ISysTenantService.class);
-                            //自动为用户，添加租户下所有套餐
+                            //Tự động thêm tất cả gói cước thuộc tenant cho người dùng
                             currentService.addPackUser(userId,tenantId);
                         }
 					}
@@ -1226,25 +1226,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 编辑租户
+     * Chỉnh sửa tenant
      * @param userId
      * @param relTenantIds
      */
     private void editUserTenants(String userId, String relTenantIds) {
         LambdaQueryWrapper<SysUserTenant> query = new LambdaQueryWrapper<>();
         query.eq(SysUserTenant::getUserId, userId);
-        //数据库的租户id
+        //tenant của cơ sở dữ liệu id
 		List<Integer> oldTenantIds = relationMapper.getTenantIdsByUserId(userId);
-        //如果传过来的租户id为空，那么就删除租户
+        //Nếu id tenant truyền qua rỗng thì xóa tenant
         if (oConvertUtils.isEmpty(relTenantIds) && CollectionUtils.isNotEmpty(oldTenantIds)) {
             this.deleteTenantByUserId(userId, null);
         } else if (oConvertUtils.isNotEmpty(relTenantIds) && CollectionUtils.isEmpty(oldTenantIds)) {
-            //如果传过来的租户id不为空但是数据库的租户id为空，那么就新增
+            //Nếu id tenant truyền sang không rỗng nhưng id tenant trong cơ sở dữ liệu rỗng thì thêm mới
             this.saveUserTenant(userId, relTenantIds, false);
         } else {
-			//都不为空，需要比较，进行添加或删除
+			//Cả hai đều không trống thì cần so sánh để thêm hoặc xóa
 			if(oConvertUtils.isNotEmpty(relTenantIds) && CollectionUtils.isNotEmpty(oldTenantIds)){
-				//找到新的租户id与原来的租户id不同之处，进行删除
+				//Tìm điểm khác nhau giữa id thuê bao mới và id thuê bao cũ, rồi thực hiện xóa
 				String[] relTenantIdArray = relTenantIds.split(SymbolConstant.COMMA);
 				List<String> relTenantIdList = Arrays.asList(relTenantIdArray);
 				
@@ -1252,7 +1252,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				for (Integer tenantId : deleteTenantIdList) {
 					this.deleteTenantByUserId(userId, tenantId);
 				}
-				//找到原来租户的用户id与新的租户id不同之处，进行新增
+				//Tìm điểm khác nhau giữa id người dùng của thuê bao cũ và id thuê bao mới, rồi thực hiện thêm mới
 				String tenantIds = relTenantIdList.stream().filter(item -> !oldTenantIds.contains(Integer.valueOf(item))).collect(Collectors.joining(","));
 				this.saveUserTenant(userId, tenantIds, false);
 			}
@@ -1260,7 +1260,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 删除租户通过用户id
+     * Xóa tenant theo id người dùng id
      * @param tenantId
      * @param userId
      */
@@ -1271,7 +1271,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             query.eq(SysUserTenant::getTenantId, tenantId);
         }
         relationMapper.delete(query);
-        //删除产品包用户关联
+        //Xóa liên kết người dùng gói sản phẩm
         LambdaQueryWrapper<SysTenantPackUser> packUserQuery = new LambdaQueryWrapper<>();
         packUserQuery.eq(SysTenantPackUser::getUserId, userId);
         if(oConvertUtils.isNotEmpty(tenantId)){
@@ -1286,27 +1286,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	public void batchEditUsers(JSONObject json) {
 		String userIds = json.getString("userIds");
 		List<String> idList = JSONArray.parseArray(userIds, String.class);
-		//部门
+		//Phòng ban
 		String selecteddeparts = json.getString("selecteddeparts");
-		//职位
+		//Chức vụ
 		String post = json.getString("post");
-		//工作地点? 没有这个字段
+		//Địa điểm làm việc? Không có trường này
 		String workAddress = json.getString("workAddress");
-		//批量修改用户职位
+		//Chỉnh sửa hàng loạt chức vụ người dùng
 		if(oConvertUtils.isNotEmpty(post)) {
-			//修改职位用户关系表
+			//Sửa bảng quan hệ người dùng chức vụ
 			for (String userId:idList) {
 				this.editUserPosition(userId,post);
 			}
 		}
 		if(oConvertUtils.isNotEmpty(selecteddeparts)) {
-			//查询当前租户的部门列表
+			//Truy vấn danh sách phòng ban của Tenant hiện tại
 			Integer currentTenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
 			LambdaQueryWrapper<SysDepart> departQuery = new LambdaQueryWrapper<SysDepart>()
 					.eq(SysDepart::getTenantId, currentTenantId);
 			List<SysDepart> departList = sysDepartMapper.selectList(departQuery);
 			if(departList==null || departList.size()==0){
-				log.error("batchEditUsers 根据租户ID没有找到部门>"+currentTenantId);
+				log.error("batchEditUsers Không tìm thấy phòng ban theo ID Tenant>"+currentTenantId);
 				return;
 			}
 			List<String> departIdList = new ArrayList<String>();
@@ -1318,7 +1318,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 					}
 				}
 			}
-			//删除人员的部门关联
+			//Xóa liên kết phòng ban của nhân viên
 			LambdaQueryWrapper<SysUserDepart> query = new LambdaQueryWrapper<SysUserDepart>()
 					.in(SysUserDepart::getUserId, idList)
 					.in(SysUserDepart::getDepId, departIdList);
@@ -1326,7 +1326,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			
 			String[] arr = selecteddeparts.split(",");
 			
-			//再新增
+			//Thêm mới lại
 			for (String deaprtId : arr) {
 				for(String userId: idList){
 					SysUserDepart userDepart = new SysUserDepart(userId, deaprtId);
@@ -1391,7 +1391,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			if(subList!=null && subList.size()>0){
 				info.setHasSub(true);
 			}
-			//获取部门负责人信息
+			//Lấy thông tin người phụ trách phòng ban
 			LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<SysUser>()
 					.eq(SysUser::getUserIdentity, 2)
 					.like(SysUser::getDepartIds, depart.getId());
@@ -1410,7 +1410,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		String departId = info.getDepartId();
 		SysDepart depart = sysDepartMapper.selectById(departId);
 		if(depart!=null){
-			//修改部门信息-上级和部门名称
+			//Chỉnh sửa thông tin phòng ban-Tên cấp trên và phòng ban
 			if(!depart.getParentId().equals(info.getParentId())){
 				String pid = info.getParentId();
 				SysDepart parentDepart = sysDepartMapper.selectById(pid);
@@ -1422,10 +1422,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			}
 			depart.setDepartName(info.getDepartName());
 			sysDepartMapper.updateById(depart);
-			//先查询这个部门的负责人
+			//Truy vấn trước người phụ trách của phòng ban này
 			List<SysUser> departChargeUsers = queryDepartChargePersons(departId);
 			List<String> departChargeUserIdList = departChargeUsers.stream().map(i -> i.getId()).collect(Collectors.toList());
-			//修改部门负责人
+			//Sửa người phụ trách phòng ban
 			List<String> userIdList = info.getChargePersonList();
 			if(userIdList!=null && userIdList.size()>0){
 				for(String userId: userIdList){
@@ -1449,11 +1449,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 						this.baseMapper.updateById(user);
 					}
 				}
-			// 代码逻辑说明: 部门负责人不能被删除------------
+			// Giải thích logic mã: Người phụ trách phòng ban không thể bị xóa------------
 				this.removeDepartmentManager(departChargeUserIdList,departChargeUsers,departId);
 			}else{
 				if(CollectionUtil.isNotEmpty(departChargeUsers)){
-					//前端传过来用户列表id为空，说明数据库的负责部门人员均需要删除
+					//Danh sách id người dùng mà frontend truyền sang rỗng, nghĩa là toàn bộ nhân viên của phòng ban phụ trách trong cơ sở dữ liệu đều cần xóa
 					this.removeDepartmentManager(departChargeUserIdList,departChargeUsers,departId);
 				}
 				
@@ -1463,7 +1463,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	private List<SysUser> queryDepartChargePersons(String departId){
     	List<SysUser> result = new ArrayList<>();
-		// 代码逻辑说明: 部门负责人不能被删除------------
+		// Giải thích logic mã: Người phụ trách phòng ban không thể bị xóa------------
 		LambdaQueryWrapper<SysUser> userQuery = new LambdaQueryWrapper<>();
 		userQuery.like(SysUser::getDepartIds,departId);
 		List<SysUser> userList = userMapper.selectList(userQuery);
@@ -1484,7 +1484,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 	
 	/**
-	 * 变更父级部门 修改编码
+	 * Thay đổi phòng ban cấp trên, sửa mã
 	 * @param parentId
 	 * @return
 	 */
@@ -1504,25 +1504,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		if(user!=null){
 			String ids = user.getDepartIds();
 			if(status==true){
-				//设置部门负责人
+				//Đặt người phụ trách phòng ban
 				if(oConvertUtils.isEmpty(ids)){
-					//设置为上级
+					//Đặt làm cấp trên
 					user.setUserIdentity(CommonConstant.USER_IDENTITY_2);
 					user.setDepartIds(departId);
 				}else{
 					List<String> list = new ArrayList<String>(Arrays.asList(ids.split(",")));
 					if(list.indexOf(departId)>=0){
-						//啥也不干
+						//Không làm gì cả
 					}else{
 						list.add(departId);
 						String newIds = String.join(",", list);
-						//设置为上级
+						//Đặt làm cấp trên
 						user.setUserIdentity(CommonConstant.USER_IDENTITY_2);
 						user.setDepartIds(newIds);
 					}
 				}
 			}else{
-				// 取消负责人
+				// Hủy người phụ trách
 				if(oConvertUtils.isNotEmpty(ids)){
 					List<String> list = new ArrayList<String>();
 					for(String temp: ids.split(",")){
@@ -1537,7 +1537,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 					if(list.size()>0){
 						newIds = String.join(",", list);
 					}else{
-						//负责部门为空时，说明已经是普通用户
+						//Khi phòng ban phụ trách trống, nghĩa là đã là người dùng thông thường
 						user.setUserIdentity(CommonConstant.USER_IDENTITY_1);
 					}
 					user.setDepartIds(newIds);
@@ -1548,7 +1548,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 找上级部门
+	 * Tìm phòng ban cấp trên
 	 * @param depart
 	 * @param orgName
 	 * @param orgId
@@ -1571,22 +1571,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		user.setWorkNo(sysUser.getWorkNo());
 		user.setId(sysUser.getId());
 		this.updateById(user);
-		// 代码逻辑说明: 【QQYUN-5251】人员与部门：部门删除不掉------------
+		// Giải thích logic mã: 【QQYUN-5251】Nhân sự và phòng ban: không xóa được phòng ban------------
 		if(oConvertUtils.isEmpty(departs)){
-			//直接删除用户下的的租户部门
+			//Xóa trực tiếp phòng ban tenant thuộc người dùng
 			sysUserDepartMapper.deleteUserDepart(user.getId(),tenantId);
 		}else{
-			//修改租户用户下的部门
+			//Sửa phòng ban thuộc người dùng Tenant
 			this.updateTenantDepart(user, tenantId, departs);
 		}
-		//修改用户下的职位
+		//Sửa chức vụ thuộc người dùng
 		this.editUserPosition(sysUser.getId(),sysUser.getPost());
 	}
 
 	/**
-	 * 修改账号状态
-	 * @param id 账号id
-	 * @param status 账号状态
+	 * Chỉnh sửa trạng thái tài khoản
+	 * @param id Tài khoản id
+	 * @param status Trạng thái tài khoản
 	 */
 	@Override
 	@CacheEvict(value={CacheConstant.SYS_USERS_CACHE}, allEntries=true)
@@ -1596,23 +1596,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 修改租户下的部门
+	 * Sửa phòng ban thuộc Tenant
 	 * @param departs
 	 */
 	public void updateTenantDepart(SysUser user, String tenantId, String departs) {
 		List<String> departList = new ArrayList<>();
 		long startTime = System.currentTimeMillis();
 		if (oConvertUtils.isNotEmpty(departs)) {
-			//获取当前租户下的部门id,根据前台
+			//Lấy phòng ban thuộc Tenant hiện tại id,theo giao diện
 			departList = sysUserDepartMapper.getTenantDepart(Arrays.asList(departs.split(SymbolConstant.COMMA)), tenantId);
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("查询用户部门用时：" + (endTime - startTime) + "ms");
-		//查询当前租户下部门和用户已关联的部门
+		System.out.println("Thời gian truy vấn phòng ban người dùng：" + (endTime - startTime) + "ms");
+		//Truy vấn các phòng ban mà phòng ban và người dùng thuộc tenant hiện tại đã liên kết
 		List<SysUserDepart> userDepartList = sysUserDepartMapper.getTenantUserDepart(user.getId(), tenantId);
 		if (userDepartList != null && userDepartList.size() > 0 && departList.size() > 0) {
 			for (SysUserDepart depart : userDepartList) {
-				//修改已关联部门删除部门用户角色关系
+				//Sửa quan hệ người dùng - vai trò của phòng ban khi xóa phòng ban đã liên kết
 				if (!departList.contains(depart.getDepId())) {
 					List<SysDepartRole> sysDepartRoleList = sysDepartRoleMapper.selectList(
 							new QueryWrapper<SysDepartRole>().lambda().eq(SysDepartRole::getDepartId, depart.getDepId()));
@@ -1625,23 +1625,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			}
 		}
 		long endTime1 = System.currentTimeMillis();
-		System.out.println("修改部门角色用时：" + (endTime1 - startTime) + "ms");
+		System.out.println("Thời gian sửa vai trò phòng ban：" + (endTime1 - startTime) + "ms");
 		
 		if (departList.size() > 0) {
-			//删除用户下的部门
+			//Xóa phòng ban của người dùng
 			sysUserDepartMapper.deleteUserDepart(user.getId(), tenantId);
 			for (String departId : departList) {
-				//添加部门
+				//Thêm phòng ban
 				SysUserDepart userDepart = new SysUserDepart(user.getId(), departId);
 				sysUserDepartMapper.insert(userDepart);
 			}
 		}
 		long endTime2 = System.currentTimeMillis();
-		System.out.println("修改用户部门用时：" + (endTime2 - startTime) + "ms");
+		System.out.println("Thời gian sửa phòng ban người dùng：" + (endTime2 - startTime) + "ms");
 	}
 
 	/**
-	 * 保存用户职位
+	 * Lưu vị trí công việc của người dùng
 	 *
 	 * @param userId
 	 * @param positionIds
@@ -1659,22 +1659,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 编辑用户职位
+	 * Chỉnh sửa chức vụ người dùng
 	 *
 	 * @param userId
 	 * @param positionIds
 	 */
 	private void editUserPosition(String userId, String positionIds) {
-		//先删除
+		//Xóa trước
 		LambdaQueryWrapper<SysUserPosition> query = new LambdaQueryWrapper<>();
 		query.eq(SysUserPosition::getUserId, userId);
 		sysUserPositionMapper.delete(query);
-		//后新增数据
+		//Dữ liệu mới thêm sau
 		this.saveUserPosition(userId, positionIds);
 	}
 
 	/**
-	 * 设置用户职位id(已逗号拼接起来)
+	 * Đặt vị trí người dùng id(Đã nối bằng dấu phẩy)
 	 * @param sysUser
 	 */
 	private void userPositionId(SysUser sysUser) {
@@ -1685,7 +1685,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 查询用户当前登录部门的id
+	 * Truy vấn ID phòng ban đăng nhập hiện tại của người dùng id
 	 *
 	 * @param orgCode
 	 */
@@ -1704,7 +1704,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 查询用户的角色code（多个逗号分割）
+	 * Truy vấn code vai trò của người dùng (nhiều giá trị phân tách bằng dấu phẩy)
 	 *
 	 * @param userId
 	 */
@@ -1712,10 +1712,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		if (oConvertUtils.isEmpty(userId)) {
 			return null;
 		}
-		// 判断是否开启saas模式，根据租户id过滤
+		// Phán đoán có bật chế độ SaaS hay không, lọc theo id tenant
 		Integer tenantId = null;
 		if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
-			// 开启了但是没有租户ID，默认-1，使其查询不到任何数据
+			// Đã bật nhưng không có tenant ID, mặc định-1, để không truy vấn được bất kỳ dữ liệu nào
 			tenantId = oConvertUtils.getInt(TenantContext.getTenant(), -1);
 		}
 		List<SysRole> roleList = sysRoleMapper.getRoleCodeListByUserId(userId, tenantId);
@@ -1726,13 +1726,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 移除部门负责人
+	 * Gỡ bỏ người phụ trách phòng ban
 	 * @param departChargeUserIdList
 	 * @param departChargeUsers
 	 * @param departId
 	 */
 	private void removeDepartmentManager(List<String> departChargeUserIdList,List<SysUser> departChargeUsers,String departId){
-		//移除部门负责人
+		//Gỡ bỏ người phụ trách phòng ban
 		for(String chargeUserId: departChargeUserIdList){
 			for(SysUser chargeUser: departChargeUsers){
 				if(chargeUser.getId().equals(chargeUserId)){
@@ -1748,32 +1748,32 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		}
 	}
 
-	//======================================= begin 用户与部门 用户列表导出 =========================================
+	//======================================= begin Xuất danh sách người dùng của người dùng và phòng ban =========================================
 	@Override
 	public ModelAndView exportAppUser(HttpServletRequest request) {
 		Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant());
-		// Step.1 组装查询条件，导出选中的部门id数据
+		// Step.1 Ghép điều kiện truy vấn, xuất dữ liệu id phòng ban đã chọn
 		String departIds = request.getParameter("departIds");
 		List<String> list = new ArrayList<>();
 		if(oConvertUtils.isNotEmpty(departIds)){
 			list = Arrays.asList(departIds.split(SymbolConstant.COMMA));
 		}
-		//查询用户数据
+		//Truy vấn dữ liệu người dùng
 		List<SysUser> userList = userMapper.getUserByDepartsTenantId(list, tenantId);
-        //获取部门名称
+        //Lấy tên phòng ban
         List<SysUserDepVo> userDepVos = new ArrayList<>();
         if(CollectionUtil.isNotEmpty(userList)){
             userDepVos = sysDepartMapper.getUserDepartByTenantUserId(userList, tenantId);
         }
-		//获取职位
+		//Lấy chức vụ
 		List<SysUserPositionVo> positionVos = sysUserPositionMapper.getPositionIdByUsersTenantId(userList, tenantId);
-		// step2 根据用户id进行分类
-		//循环用户数据将数据整合导出
+		// step2 Phân loại theo id người dùng
+		//Lặp dữ liệu người dùng để tổng hợp và xuất dữ liệu
 		List<AppExportUserVo> exportUserVoList = new ArrayList<>();
 		for (SysUser sysUser : userList) {
 			AppExportUserVo exportUserVo = new AppExportUserVo();
 			BeanUtils.copyProperties(sysUser, exportUserVo);
-            // 代码逻辑说明: 【QQYUN-10926】组织管理——用户导出时，部门没有导出上下级关系---
+            // Giải thích logic mã: 【QQYUN-10926] Quản lý tổ chức — khi xuất người dùng, phòng ban không xuất quan hệ cấp trên - cấp dưới---
             Map<String, String> departMap = this.getDepartNamesAndCategory(userDepVos, sysUser);
             String departNames = departMap.get("departNames");
             exportUserVo.setDepart(departNames.toString());
@@ -1781,24 +1781,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			exportUserVo.setPosition(posNames);
 			exportUserVoList.add(exportUserVo);
 		}
-		//step3 封装导出excel参数
+		//step3 Đóng gói tham số xuất excel
 		ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-		//导出文件名称
-		mv.addObject(NormalExcelConstants.FILE_NAME, "用户列表");
+		//Tên file xuất
+		mv.addObject(NormalExcelConstants.FILE_NAME, "Danh sách người dùng");
 		mv.addObject(NormalExcelConstants.CLASS, AppExportUserVo.class);
 		LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-		ExportParams exportParams = new ExportParams("导入规则：\n" +
-				"1、存在用户编号时，数据会根据用户编号进行匹配，匹配成功后只会更新职位和工号;\n" +
-				"2、不存在用户编号时，支持手机号、邮箱、姓名、部们、职位、工号导入,其中手机号必填;\n" +
-				"3、上下级部门用英文字符 / 连接，如 财务部/财务一部，多个部门或者职位用英文字符 ; 进行连接,如 财务部;研发部", "导出人:" + user.getRealname(), "导出信息");
+		ExportParams exportParams = new ExportParams("Quy tắc nhập:\n" +
+				"1, khi tồn tại mã số người dùng, dữ liệu sẽ khớp theo mã số người dùng; sau khi khớp thành công chỉ cập nhật chức vụ và mã nhân viên;\n" +
+				"2, khi không tồn tại mã số người dùng, hỗ trợ import theo số điện thoại, email, họ tên, phòng ban, chức vụ, mã nhân viên,trong đó số điện thoại di động là bắt buộc;\n" +
+				"3, các phòng ban cấp trên/cấp dưới dùng ký tự tiếng Anh / nối bằng /, ví dụ: Phòng Tài chính/Phòng Tài chính 1, nhiều phòng ban hoặc chức vụ dùng ký tự tiếng Anh ; Tiến hành kết nối,như Phòng Tài chính;Phòng Nghiên cứu và Phát triển", "Người xuất:" + user.getRealname(), "Thông tin xuất");
 		mv.addObject(NormalExcelConstants.PARAMS, exportParams);
 		mv.addObject(NormalExcelConstants.DATA_LIST, exportUserVoList);
 		return mv;
 	}
 
     /**
-     * 获取部门名称和部门类型
-     * for：【QQYUN-10926】组织管理——用户导出时，部门没有导出上下级关系
+     * Lấy tên phòng ban và loại phòng ban
+     * for：【QQYUN-10926] Quản lý tổ chức — khi xuất người dùng, phòng ban không xuất quan hệ cấp trên - cấp dưới
      *
      * @param userDepVos
      * @param sysUser
@@ -1815,21 +1815,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     userDepVo.setOrgCategory(DepartCategoryEnum.getNameByValue(item.getOrgCategory()));
                     return userDepVo;
                 }).collect(Collectors.toList());
-        //循环SysUserDepVoList,如果存在父级id的情况下，需要将父级id的部门名称查询出来
+        //Lặp lại SysUserDepVoList,Trong trường hợp tồn tại id cấp cha, cần truy vấn tên phòng ban của id cấp cha
         StringBuilder departNames = new StringBuilder();
         StringBuilder departOrgCategorys = new StringBuilder();
         for (SysUserDepVo sysUserDepVo : SysUserDepVoList) {
             if(oConvertUtils.isEmpty(sysUserDepVo.getDepartName())){
                 continue;
             }
-            //用于查询父级的部门名称
+            //Dùng để truy vấn tên phòng ban cấp cha
             List<String> departNameList = new LinkedList<>();
-            //用于查询父级的部门类型
+            //Dùng để truy vấn loại phòng ban cấp cha
             List<String> departOrgCategoryList = new LinkedList<>();
             departNameList.add(sysUserDepVo.getDepartName());
             departOrgCategoryList.add(sysUserDepVo.getOrgCategory());
             if (StringUtils.isNotEmpty(sysUserDepVo.getParentId())) {
-                //递归查询部门名称
+                //Truy vấn đệ quy tên phòng ban
                 this.getDepartNameByParentId(sysUserDepVo.getParentId(), departNameList, departOrgCategoryList);
             }
             Collections.reverse(departNameList);
@@ -1845,7 +1845,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
             departOrgCategorys.append(orgCatrgory);
         }
-        // 代码逻辑说明: 【QQYUN-13617】导入时 部门添加层级不对了---
+        // Giải thích logic mã: 【QQYUN-13617] Khi nhập, cấp bậc thêm phòng ban không đúng---
         Map<String,String> map = new HashMap<>();
         map.put("departNames", departNames.toString());
         map.put("departOrgCategorys",departOrgCategorys.toString());
@@ -1853,8 +1853,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 根据父级id查询父级的部门名称和部门类型
-     * for：【QQYUN-10926】组织管理——用户导出时，部门没有导出上下级关系
+     * Truy vấn tên phòng ban và loại phòng ban của cấp trên theo id cấp trên
+     * for：【QQYUN-10926] Quản lý tổ chức — khi xuất người dùng, phòng ban không xuất quan hệ cấp trên - cấp dưới
      *
      * @param parentId
      * @param departNameList
@@ -1871,16 +1871,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
     }
 
-    //======================================= end 用户与部门 用户列表导出 =========================================
+    //======================================= end Xuất danh sách người dùng của người dùng và phòng ban =========================================
 
-	//======================================= begin 用户与部门 用户列表导入 =========================================
+	//======================================= begin Nhập danh sách người dùng của người dùng và phòng ban =========================================
 	@Override
 	public Result<?> importAppUser(HttpServletRequest request) {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant());
 		SysTenant sysTenant = sysTenantMapper.selectById(tenantId);
-		// 错误信息
+		// Thông tin lỗi
 		List<String> errorMessage = new ArrayList<>();
 		int successLines = 0, errorLines = 0;
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
@@ -1889,16 +1889,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			params.setTitleRows(2);
 			params.setHeadRows(1);
 			params.setNeedSave(true);
-			//存放职位的map;key为名称 value为职位id。避免多次导入和查询
+			//Lưu trữ vị trí công việc map;key là tên, value là id vị trí. Tránh import và truy vấn nhiều lần
 			Map<String, String> positionMap = new HashMap<>();
-			//存放部门的map;key为名称 value为SysDepart对象。避免多次导入和查询
+			//Lưu trữ phòng ban map;key là tên, value là đối tượng SysDepart. Tránh import và truy vấn nhiều lần
 			Map<String, SysDepart> departMap = new HashMap<>();
 			try {
 				List<AppExportUserVo> listSysUsers = ExcelImportUtil.importExcel(file.getInputStream(), AppExportUserVo.class, params);
 				for (int i = 0; i < listSysUsers.size(); i++) {
-					//记录现在是多少行
+					//Ghi lại hiện tại là dòng thứ mấy
 					int lineNumber = i + 1;
-					//记录是编辑还是添加
+					//Ghi lại là chỉnh sửa hay thêm mới
 					boolean isEdit = false;
 					AppExportUserVo sysUserExcel = listSysUsers.get(i);
 					String id = sysUserExcel.getId();
@@ -1909,18 +1909,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 					String depart = sysUserExcel.getDepart();
 					String position = sysUserExcel.getPosition();
 					SysUser sysUser = new SysUser();
-					//判断id是否存在，如果存在的话就是更新
+					//Phán đoán id có tồn tại hay không, nếu tồn tại thì là cập nhật
 					if (oConvertUtils.isNotEmpty(id)) {
 						SysUser user = userMapper.selectById(id);
 						if (null == user) {
 							errorLines++;
-							errorMessage.add("第 " + lineNumber + " 行：用户不存在，请查看编号是否已修改，忽略导入。");
+							errorMessage.add(" " + lineNumber + " Dòng: người dùng không tồn tại, vui lòng kiểm tra xem mã số đã bị sửa hay chưa, bỏ qua import.");
 							continue;
 						}
 						isEdit = true;
 						sysUser.setId(id);
 					} else {
-						//处理租户中是否已存在，用户是否已存在，已存在的用户直接更新
+						//Xử lý việc thuê bao đã tồn tại hay chưa, người dùng đã tồn tại hay chưa; người dùng đã tồn tại thì cập nhật trực tiếp
 						isEdit = false;
 					}
 					if (oConvertUtils.isNotEmpty(workNo)) {
@@ -1931,16 +1931,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 							userMapper.updateById(sysUser);
 						} else {
 							if (oConvertUtils.isEmpty(phone)) {
-								errorMessage.add("第 " + lineNumber + " 行：手机号为空，忽略导入。");
+								errorMessage.add(" " + lineNumber + " Dòng: số điện thoại trống, bỏ qua khi nhập.");
 								errorLines++;
 								continue;
 							}
 							SysUser userByPhone = userMapper.getUserByPhone(phone);
 							if (null != userByPhone) {
-								//查看看是否已经存在此租户中，存在禁止导入，否则直接更新即可
+								//Kiểm tra xem đã tồn tại trong thuê bao này hay chưa; nếu đã tồn tại thì cấm import, nếu không thì cập nhật trực tiếp
 								Integer tenantCount = userTenantMapper.userTenantIzExist(userByPhone.getId(), tenantId);
 								if (tenantCount > 0) {
-									errorMessage.add("第 " + lineNumber + " 行：成员已存在该组织中，如果列表中不存在，请确认该成员是否在审核中或者已离职，忽略导入。");
+									errorMessage.add(" " + lineNumber + "  dòng: Thành viên đã tồn tại trong tổ chức này, nếu không có trong danh sách, vui lòng xác nhận thành viên đó có đang trong quá trình xét duyệt hay đã nghỉ việc không, bỏ qua khi import.");
 									errorLines++;
 									continue;
 								}
@@ -1948,11 +1948,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 								userMapper.updateById(sysUser);
 								this.addUserTenant(sysUser.getId(), tenantId, userByPhone.getUsername(),sysTenant.getName());
 							} else {
-								// 密码默认为 “租户门牌号+手机号”
+								// Mật khẩu mặc định là "số nhà của tenant+Số điện thoại”
 								String password = sysTenant.getHouseNumber()+phone;
 								String salt = oConvertUtils.randomGen(8);
 								sysUser.setSalt(salt);
-								// 密码加密加盐
+								// Mã hóa mật khẩu kèm salt
 								String passwordEncode = PasswordUtil.encrypt(phone, password, salt);
 								sysUser.setPassword(passwordEncode);
 								sysUser.setUsername(phone);
@@ -1966,13 +1966,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 								this.addUserTenant(sysUser.getId(), tenantId, sysUser.getUsername(),sysTenant.getName());
 							}
 						}
-						//新增或编辑职位
+						//Thêm mới hoặc chỉnh sửa vị trí công việc
 						if (oConvertUtils.isNotEmpty(position)) {
 							this.addOrEditPosition(sysUser.getId(), position, isEdit, tenantId, positionMap);
 						}
-						//新增的时候才可以添加部门
+						//Chỉ khi thêm mới mới được thêm phòng ban
 						if (!isEdit) {
-							//新增或编辑部门
+							//Thêm mới hoặc chỉnh sửa phòng ban
 							this.addOrEditDepart(sysUser.getId(), depart, tenantId, departMap);
 						}
 						successLines++;
@@ -1980,25 +1980,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 						errorLines++;
 						String message = e.getMessage().toLowerCase();
 
-						// 通过索引名判断出错信息
+						// Xác định thông tin lỗi qua tên chỉ mục
 						if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_USERNAME)) {
-							errorMessage.add("第 " + lineNumber + " 行：用户名已经存在，忽略导入。");
+							errorMessage.add(" " + lineNumber + " Dòng: Tên người dùng đã tồn tại, bỏ qua nhập.");
 						} else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_WORK_NO)) {
-							errorMessage.add("第 " + lineNumber + " 行：工号已经存在，忽略导入。");
+							errorMessage.add(" " + lineNumber + " Dòng: mã nhân viên đã tồn tại, bỏ qua khi nhập.");
 						} else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_PHONE)) {
-							errorMessage.add("第 " + lineNumber + " 行：手机号已经存在，忽略导入。");
+							errorMessage.add(" " + lineNumber + " Dòng: Số điện thoại đã tồn tại, bỏ qua nhập.");
 						} else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_EMAIL)) {
-							errorMessage.add("第 " + lineNumber + " 行：电子邮件已经存在，忽略导入。");
+							errorMessage.add(" " + lineNumber + " Dòng: Email đã tồn tại, bỏ qua nhập.");
 						} else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER)) {
-							errorMessage.add("第 " + lineNumber + " 行：违反表唯一性约束。");
+							errorMessage.add(" " + lineNumber + " Dòng: Vi phạm ràng buộc duy nhất của bảng.");
 						} else {
-							errorMessage.add("第 " + lineNumber + " 行：未知错误，忽略导入");
+							errorMessage.add(" " + lineNumber + " Dòng: Lỗi không xác định, bỏ qua việc nhập");
 							log.error(e.getMessage(), e);
 						}
 					}
 				}
 			} catch (Exception e) {
-				errorMessage.add("发生异常：" + e.getMessage());
+				errorMessage.add("Đã xảy ra ngoại lệ:" + e.getMessage());
 				log.error(e.getMessage(), e);
 			} finally {
 				try {
@@ -2017,21 +2017,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 新增或者编辑职位
+	 * Thêm mới hoặc chỉnh sửa chức vụ
 	 *
-	 * @param userId      用户id
-	 * @param position    职位名称 已/拼接
-	 * @param isEdit      新增或编辑
-	 * @param positionMap 职位map key为name，value为职位id
+	 * @param userId      Người dùng id
+	 * @param position    Tên chức vụ đã/đã ghép nối
+	 * @param isEdit      Thêm mới hoặc chỉnh sửa
+	 * @param positionMap Map vị trí có key là name, value là vị trí id
 	 */
 	private void addOrEditPosition(String userId, String position, Boolean isEdit, Integer tenantId, Map<String, String> positionMap) {
 		Page<SysPosition> page = new Page<>(1, 1);
 		String[] positions = position.split(SymbolConstant.SEMICOLON);
 		List<String> positionList = Arrays.asList(positions);
 		positionList = positionList.stream().distinct().collect(Collectors.toList());
-		//删除当前租户下的职位，根据职位名称、租户id、用户id
+		//Xóa vị trí thuộc thuê bao hiện tại, dựa theo tên vị trí, id thuê bao, người dùng id
 		sysUserPositionMapper.deleteUserPosByNameAndTenantId(positionList, tenantId, userId);
-		//循环需要添加或修改的数据
+		//Lặp qua dữ liệu cần thêm hoặc sửa
 		for (String pos : positionList) {
 			String posId = "";
 			if (positionMap.containsKey(pos)) {
@@ -2044,15 +2044,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				}
 			}
 
-			//职位id不为空直接新增
+			//Nếu id chức vụ không trống thì thêm mới trực tiếp
 			if (oConvertUtils.isNotEmpty(posId)) {
 				this.addSysUserPosition(userId, posId);
 				continue;
 			}
 
-			//不是编辑的情况下职位才会新增
+			//Chỉ khi không phải trường hợp chỉnh sửa thì chức vụ mới được thêm
 			if (!isEdit) {
-				//新增职位和用户职位关系
+				//Thêm chức vụ và quan hệ người dùng-chức vụ
 				SysPosition sysPosition = new SysPosition();
 				sysPosition.setName(pos);
 				sysPosition.setCode(RandomUtil.randomString(10));
@@ -2065,7 +2065,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 添加用户职位
+	 * Thêm chức vụ cho người dùng
 	 */
 	private void addSysUserPosition(String userId, String positionId) {
 		Long count = sysUserPositionMapper.getUserPositionCount(userId, positionId);
@@ -2078,43 +2078,43 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 新增或编辑部门
+	 * Thêm mới hoặc chỉnh sửa phòng ban
 	 *
-	 * @param userId    用户id
-	 * @param depart    部门名称
-	 * @param tenantId  租户id
-	 * @param departMap 存放部门的map;key为名称 value为SysDepart对象。
+	 * @param userId    Người dùng id
+	 * @param depart    Tên phòng ban
+	 * @param tenantId  Tenant id
+	 * @param departMap Lưu trữ phòng ban map;key là tên, value là đối tượng SysDepart.
 	 */
 	private void addOrEditDepart(String userId, String depart, Integer tenantId, Map<String, SysDepart> departMap) {
-		//批量将部门和用户信息建立关联关系
+		//Thiết lập quan hệ liên kết giữa phòng ban và thông tin người dùng hàng loạt
 		if (StringUtils.isNotEmpty(depart)) {
 			Page<SysDepart> page = new Page<>(1, 1);
-			//多个部门分离开
+			//Tách nhiều phòng ban ra
 			String[] departNames = depart.split(SymbolConstant.SEMICOLON);
 			List<String> departNameList = Arrays.asList(departNames);
 			departNameList = departNameList.stream().distinct().collect(Collectors.toList());
 			for (String departName : departNameList) {
-                //部门id
+                //Phòng ban id
                 String parentId = "";
 				String[] names = departName.split(SymbolConstant.SINGLE_SLASH);
-				//部门名称拼接
+				//Nối tên phòng ban
 				String nameStr = "";
 				for (int i = 0; i < names.length; i++) {
 					String name = names[i];
-					//拼接name
+					//đã ghép nối name
 					if (oConvertUtils.isNotEmpty(nameStr)) {
 						nameStr = nameStr + SymbolConstant.SINGLE_SLASH + name;
 					} else {
 						nameStr = name;
 					}
 					SysDepart sysDepart = null;
-					//判断map中是否存在该部门名称
+					//Kiểm tra trong map có tồn tại tên phòng ban đó không
 					if (departMap.containsKey(nameStr)) {
 						sysDepart = departMap.get(nameStr);
 					} else {
-						//不存在需要去查询
+						//Không tồn tại cần đi truy vấn
 						List<SysDepart> departPageByName = sysDepartMapper.getDepartPageByName(page, name, tenantId, parentId);
-						//部门为空需要新增部门
+						//Phòng ban trống, cần thêm mới phòng ban
 						if (CollectionUtil.isEmpty(departPageByName)) {
 							JSONObject formData = new JSONObject();
 							formData.put("parentId", parentId);
@@ -2132,14 +2132,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 						} else {
 							sysDepart = departPageByName.get(0);
 						}
-						//父级id不为空那么就将父级部门改成不是叶子节点
+						//Nếu id cấp trên không rỗng thì đổi phòng ban cấp trên thành không phải nút lá
 						if (oConvertUtils.isNotEmpty(parentId)) {
 							sysDepartMapper.setMainLeaf(parentId, CommonConstant.NOT_LEAF);
 						}
 						parentId = sysDepart.getId();
 						departMap.put(nameStr, sysDepart);
 					}
-					//最后一位新增部门用户关系表
+					//Vị trí cuối cùng thêm bảng quan hệ người dùng phòng ban
 					if (i == names.length - 1) {
 						Long count = sysUserDepartMapper.getCountByDepartIdAndUserId(userId, sysDepart.getId());
 						if(count == 0){
@@ -2154,12 +2154,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 添加用户租户
+	 * Thêm tenant cho người dùng
 	 *
 	 * @param userId
 	 * @param tenantId
-	 * @param invitedUsername 被邀请人的账号
-	 * @param tenantName 租户名称 
+	 * @param invitedUsername Tài khoản của người được mời
+	 * @param tenantName Tên tenant 
 	 */
 	private void addUserTenant(String userId, Integer tenantId, String invitedUsername, String tenantName) {
 		SysUserTenant userTenant = new SysUserTenant();
@@ -2167,13 +2167,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		userTenant.setUserId(userId);
 		userTenant.setStatus(CommonConstant.USER_TENANT_INVITE);
 		userTenantMapper.insert(userTenant);
-		//发送系统消息通知
+		//Gửi thông báo tin nhắn hệ thống
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		MessageDTO messageDTO = new MessageDTO();
-		String title = sysUser.getRealname() + " 邀请您加入 " + tenantName + "。";
+		String title = sysUser.getRealname() + " mời bạn tham gia " + tenantName + "。";
 		messageDTO.setTitle(title);
 		Map<String, Object> data = new HashMap<>();
-		// 代码逻辑说明: 【QQYUN-8425】用户导入成功后 消息提醒 跳转至同意页面---
+		// Giải thích logic mã: 【QQYUN-8425] Sau khi nhập người dùng thành công, nhắc nhở bằng tin nhắn và chuyển đến trang đồng ý---
 		data.put(CommonConstant.NOTICE_MSG_BUS_TYPE,SysAnnmentTypeEnum.TENANT_INVITE.getType());
 		messageDTO.setData(data);
 		messageDTO.setContent(title);
@@ -2181,7 +2181,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		messageDTO.setFromUser("system");
 		systemSendMsgHandle.sendMessage(messageDTO);
 	}
-	//======================================= end 用户与部门 用户列表导入 =========================================
+	//======================================= end Nhập danh sách người dùng của người dùng và phòng ban =========================================
 	
 	@Override
 	public void checkUserAdminRejectDel(String userIds) {
@@ -2189,9 +2189,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		query.in(SysUser::getId,Arrays.asList(userIds.split(SymbolConstant.COMMA)));
 		query.eq(SysUser::getUsername,"admin");
 		Long adminRoleCount = this.baseMapper.selectCount(query);
-		//大于0说明存在管理员用户，不允许删除
+		//Lớn hơn 0 nghĩa là tồn tại người dùng quản trị viên, không cho phép xóa
 		if(adminRoleCount>0){
-			throw new JeecgBootException("admin用户，不允许删除！");
+			throw new JeecgBootException("admin người dùng, không được phép xóa!");
 		}
 	}
 
@@ -2201,36 +2201,36 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		String phone = json.getString("phone");
 		String type = json.getString("type");
 		if(oConvertUtils.isEmpty(phone)){
-			throw new JeecgBootException("请填写原手机号！");
+			throw new JeecgBootException("Vui lòng điền số điện thoại gốc!");
 		}
 		if(oConvertUtils.isEmpty(smscode)){
-			throw new JeecgBootException("请填写验证码！");
+			throw new JeecgBootException("Vui lòng nhập mã xác minh!");
 		}
-		//step1 验证原手机号是否和当前用户匹配
+		//step1 Xác minh số điện thoại gốc có khớp với người dùng hiện tại không
 		SysUser sysUser = userMapper.getUserByNameAndPhone(phone,username);
 		if (null == sysUser){
-			throw new JeecgBootException("原手机号不匹配，无法修改密码！");
+			throw new JeecgBootException("Số điện thoại gốc không khớp, không thể thay đổi mật khẩu!");
 		}
-		//step2 根据类型判断是验证原手机号的验证码还是新手机号的验证码
-		//验证原手机号
+		//step2 Dựa theo loại để xác định là xác minh mã của số điện thoại cũ hay mã của số điện thoại mới
+		//Xác minh số điện thoại gốc
 		if(CommonConstant.VERIFY_ORIGINAL_PHONE.equals(type)){
 			this.verifyPhone(phone, smscode);
 		}else if(CommonConstant.UPDATE_PHONE.equals(type)){
-			//修改手机号
+			//Thay đổi số điện thoại
 			String newPhone = json.getString("newPhone");
-			//需要验证新手机号和原手机号是否一致，一致不让修改
+			//Cần xác minh số điện thoại mới và số điện thoại cũ có giống nhau không, nếu giống nhau thì không cho sửa
 			if(newPhone.equals(phone)){
-				throw new JeecgBootException("新手机号与原手机号一致，无法修改！");
+				throw new JeecgBootException("Số điện thoại mới trùng với số điện thoại gốc, không thể sửa!");
 			}
 			this.verifyPhone(newPhone, smscode);
-			//step3 新手机号验证码验证成功之后即可修改手机号
+			//step3 Sau khi mã xác minh của số điện thoại mới được xác thực thành công thì có thể thay đổi số điện thoại
 			sysUser.setPhone(newPhone);
 			userMapper.updateById(sysUser);
 		}
 	}
 	
 	/**
-	 * 验证手机号
+	 * Xác minh số điện thoại
 	 *
 	 * @param phone
 	 * @param smsCode
@@ -2240,12 +2240,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		String phoneKey = CommonConstant.CHANGE_PHONE_REDIS_KEY_PRE + phone;
 		Object phoneCode = redisUtil.get(phoneKey);
 		if(null == phoneCode){
-			throw new JeecgBootException("验证码失效，请重新发送验证码！");
+			throw new JeecgBootException("Mã xác minh đã hết hạn, vui lòng gửi lại mã xác minh!");
 		}
 		if(!smsCode.equals(phoneCode.toString())) {
-			throw new JeecgBootException("短信验证码不匹配！");
+			throw new JeecgBootException("Mã xác minh SMS không khớp!");
 		}
-		//验证完成之后清空手机验证码
+		//Sau khi xác minh xong thì xóa mã xác minh điện thoại
 		redisUtil.removeAll(phoneKey);
 	}
 	
@@ -2254,23 +2254,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		String type = jsonObject.getString("type");
 		String phone = jsonObject.getString("phone");
 		if(oConvertUtils.isEmpty(phone)){
-			throw new JeecgBootException("请填写手机号！");
+			throw new JeecgBootException("Vui lòng nhập số điện thoại!");
 		}
-		//step1 根据类型判断是发送旧手机号验证码还是新的手机号验证码
+		//step1 Dựa theo loại để xác định là gửi mã xác minh của số điện thoại cũ hay số điện thoại mới
 		if(CommonConstant.VERIFY_ORIGINAL_PHONE.equals(type)){
-			//step2 旧手机号验证码需要验证手机号是否匹配
+			//step2 Mã xác thực của số điện thoại cũ cần kiểm tra xem số điện thoại có khớp hay không
 			SysUser sysUser = userMapper.getUserByNameAndPhone(phone, username);
 			if(null == sysUser){
-				throw new JeecgBootException("旧手机号不匹配，无法修改手机号！");
+				throw new JeecgBootException("Số điện thoại cũ không khớp, không thể thay đổi số điện thoại!");
 			}
 		}else if(CommonConstant.UPDATE_PHONE.equals(type)){
-			//step3 新手机号需要验证手机号码是否已注册过
+			//step3 Số điện thoại mới cần kiểm tra xem số điện thoại đã được đăng ký hay chưa
 			SysUser userByPhone = userMapper.getUserByPhone(phone);
 			if(null != userByPhone){
-				throw new JeecgBootException("手机号已被注册，请尝试其他手机号！");
+				throw new JeecgBootException("Số điện thoại đã được đăng ký, vui lòng thử số điện thoại khác!");
 			}
 		}
-		//step4 发送短信验证码
+		//step4 Gửi mã xác minh SMS
 		String redisKey = CommonConstant.CHANGE_PHONE_REDIS_KEY_PRE+phone;
 		this.sendPhoneSms(phone, ipAddress,redisKey);
 	}
@@ -2278,10 +2278,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	public void sendLogOffPhoneSms(JSONObject jsonObject, String username, String ipAddress) {
 		String phone = jsonObject.getString("phone");
-		//通过用户名查询数据库中的手机号
+		//Truy vấn số điện thoại trong cơ sở dữ liệu theo tên người dùng
 		SysUser userByNameAndPhone = userMapper.getUserByNameAndPhone(phone, username);
 		if (null == userByNameAndPhone) {
-			throw new JeecgBootException("当前用户手机号不匹配，无法修改！");
+			throw new JeecgBootException("Số điện thoại của người dùng hiện tại không khớp, không thể sửa!");
 		}
 		String code = CommonConstant.LOG_OFF_PHONE_REDIS_KEY_PRE + phone;
 		this.sendPhoneSms(phone, ipAddress, code);
@@ -2292,18 +2292,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	public void userLogOff(JSONObject jsonObject, String username) {
 		String phone = jsonObject.getString("phone");
 		String smsCode = jsonObject.getString("smscode");
-		//通过用户名查询数据库中的手机号
+		//Truy vấn số điện thoại trong cơ sở dữ liệu theo tên người dùng
 		SysUser userByNameAndPhone = userMapper.getUserByNameAndPhone(phone, username);
 		if (null == userByNameAndPhone) {
-			throw new JeecgBootException("当前用户手机号不匹配，无法注销！");
+			throw new JeecgBootException("Số điện thoại của người dùng hiện tại không khớp, không thể hủy tài khoản!");
 		}
 		String code = CommonConstant.LOG_OFF_PHONE_REDIS_KEY_PRE + phone;
 		Object redisSmdCode = redisUtil.get(code);
 		if (null == redisSmdCode) {
-			throw new JeecgBootException("验证码失效，无法注销！");
+			throw new JeecgBootException("Mã xác minh đã hết hạn, không thể hủy tài khoản!");
 		}
 		if (!redisSmdCode.toString().equals(smsCode)) {
-			throw new JeecgBootException("验证码不匹配，无法注销！");
+			throw new JeecgBootException("Mã xác minh không khớp, không thể hủy tài khoản!");
 		}
 		this.deleteUser(userByNameAndPhone.getId());
 		redisUtil.removeAll(code);
@@ -2311,60 +2311,60 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 发送短信验证码
+	 * Gửi mã xác minh SMS
 	 * @param phone
 	 */
 	private void sendPhoneSms(String phone, String clientIp,String redisKey) {
 		Object object = redisUtil.get(redisKey);
 
 		if (object != null) {
-			throw new JeecgBootException("验证码10分钟内，仍然有效！");
+			throw new JeecgBootException("Mã xác minh vẫn còn hiệu lực trong 10 phút!");
 		}
 
-		//增加 check防止恶意刷短信接口
+		//Thêm check để ngăn chặn việc gửi SMS ác ý
 		if(!DySmsLimit.canSendSms(clientIp)){
-			log.warn("--------[警告] IP地址:{}, 短信接口请求太多-------", clientIp);
-			throw new JeecgBootException("短信接口请求太多，请稍后再试！", CommonConstant.PHONE_SMS_FAIL_CODE);
+			log.warn("--------[Cảnh báo] IP Địa chỉ:{}, Yêu cầu giao diện SMS quá nhiều-------", clientIp);
+			throw new JeecgBootException("Yêu cầu giao diện SMS quá nhiều, vui lòng thử lại sau!", CommonConstant.PHONE_SMS_FAIL_CODE);
 		}
-		//update-begin---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流-----------
+		//update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-5qr3-c98m-9767】Thêm giới hạn theo số điện thoại-----------
 		if(!DySmsLimit.canSendSmsToPhone(phone)){
-			throw new JeecgBootException("短信发送过于频繁，请稍后再试！", CommonConstant.PHONE_SMS_FAIL_CODE);
+			throw new JeecgBootException("Gửi SMS quá thường xuyên, vui lòng thử lại sau!", CommonConstant.PHONE_SMS_FAIL_CODE);
 		}
-		//update-end---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流-----------
+		//update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-5qr3-c98m-9767】Thêm giới hạn theo số điện thoại-----------
 		
-		//随机数
+		//Số ngẫu nhiên
 		String captcha = RandomUtil.randomNumbers(6);
 		JSONObject obj = new JSONObject();
 		obj.put("code", captcha);
 		try {
 			boolean sendSmsSuccess = DySmsHelper.sendSms(phone, obj, DySmsEnum.LOGIN_TEMPLATE_CODE);
 			if(!sendSmsSuccess){
-				throw new JeecgBootException("短信验证码发送失败,请稍后重试！");
+				throw new JeecgBootException("Gửi mã xác minh SMS thất bại,Vui lòng thử lại sau!");
 			}
-			//验证码10分钟内有效
+			//Mã xác minh có hiệu lực trong 10 phút
 			redisUtil.set(redisKey, captcha, 600);
 		} catch (ClientException e) {
 			log.error(e.getMessage(),e);
-			throw new JeecgBootException("短信接口未配置，请联系管理员！");
+			throw new JeecgBootException("Giao diện SMS chưa được cấu hình, vui lòng liên hệ quản trị viên!");
 		}
 	}
 
-    //================================================= begin 低代码部门导入导出 ================================================================
+    //================================================= begin Nhập/xuất phòng ban low-code ================================================================
     @Override
     public List<SysUserExportVo> getDepartAndRoleExportMsg(List<SysUser> userList) {
         List<SysUserExportVo> list = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(userList)) {
-            //获取部门
+            //Lấy phòng ban
             List<SysUserDepVo> userDepVos = sysDepartMapper.getUserDepartByUserId(userList);
-            //获取角色
+            //Lấy vai trò
             List<SysUserPositionVo> sysRoles = sysRoleMapper.getUserRoleByUserId(userList);
-            //存放职位名称的map，key：主岗位的id value: 职级的名称
+            //Map lưu tên vị trí, key: id của vị trí chính id value: Tên cấp bậc
             Map<String, String> postNameMap = new HashMap<>();
-            //组装数据并返回
+            //Lắp ráp dữ liệu rồi trả về
             for (SysUser sysUser : userList) {
                 SysUserExportVo userExportVo = new SysUserExportVo();
                 BeanUtils.copyProperties(sysUser, userExportVo);
-                // 代码逻辑说明: 【QQYUN-13617】导入时 部门添加层级不对了---
+                // Giải thích logic mã: 【QQYUN-13617] Khi nhập, cấp bậc thêm phòng ban không đúng---
                 Map<String, String> departMap = this.getDepartNamesAndCategory(userDepVos, sysUser);
                 String departNames = departMap.get("departNames");
                 userExportVo.setDepartNames(departNames);
@@ -2387,7 +2387,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     userExportVo.setPostName(postName);
                     postNameMap.put(sysUser.getMainDepPostId(), postName);
                 }
-                // 代码逻辑说明: 兼职岗位改造成中间表的方式---
+                // Giải thích logic mã: Chuyển đổi vị trí kiêm nhiệm sang dạng bảng trung gian---
                 List<String> depPost = depPostMapper.getDepPostByUserId(sysUser.getId());
                 if(CollectionUtil.isNotEmpty(depPost)){
                     userExportVo.setOtherDepPostId(String.join(SymbolConstant.COMMA, depPost));
@@ -2403,18 +2403,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         String fileKey = multipartRequest.getParameter("fileKey");
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        // 错误信息
+        // Thông tin lỗi
         List<String> errorMessage = new ArrayList<>();
         int successLines = 0, errorLines = 0;
-        //存放部门的map;key为名称 value为SysDepart对象。避免多次导入和查询
+        //Lưu trữ phòng ban map;key là tên, value là đối tượng SysDepart. Tránh import và truy vấn nhiều lần
         Map<String, SysDepart> departMap = new HashMap<>();
-        //职级map key: 职级名称 value: 职级id
+        //Cấp bậc map key: Tên cấp bậc value: Cấp bậc id
         Map<String, String> positionMap = new HashMap<>();
-        //岗位map key：岗位名称 + 部门id value：岗位（部门id）
+        //map vị trí key: tên vị trí + value id phòng ban: vị trí (id phòng ban)
         Map<String,String> postMap = new HashMap<>();
         String tenantId = TokenUtils.getTenantIdByRequest(request);
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            MultipartFile file = entity.getValue();// 获取上传文件对象
+            MultipartFile file = entity.getValue();// Lấy đối tượng tệp tải lên
             ImportParams params = new ImportParams();
             params.setTitleRows(2);
             params.setHeadRows(1);
@@ -2429,22 +2429,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     if (oConvertUtils.isEmpty(sysUser.getUsername())) {
                         errorLines += 1;
                         int lineNumber = i + 1;
-                        errorMessage.add("第 " + lineNumber + " 行：用户账号为空，忽略导入。");
+                        errorMessage.add(" " + lineNumber + " Dòng: tài khoản người dùng trống, bỏ qua khi nhập.");
                         continue;
                     }
                     try {
                         String username = sysUser.getUsername();
-                        //根据用户名程序，为空则添加用户
+                        //Theo tên người dùng, nếu trống thì thêm người dùng
                         SysUser userByName = userMapper.getUserByName(username);
                         if (null != userByName) {
                             errorLines += 1;
                             int lineNumber = i + 1;
-                            errorMessage.add("第 " + lineNumber + " 行：用户名已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Tên người dùng đã tồn tại, bỏ qua nhập.");
                             continue;
                         } else {
-                            // 密码默认为 “123456”
+                            // Mật khẩu mặc định là “123456”
                             sysUser.setPassword(PasswordConstant.DEFAULT_PASSWORD);
-                            // 密码加密加盐
+                            // Mã hóa mật khẩu kèm salt
                             String salt = oConvertUtils.randomGen(8);
                             sysUser.setSalt(salt);
                             String passwordEncode = PasswordUtil.encrypt(sysUserExcel.getUsername(), sysUser.getPassword(), salt);
@@ -2459,50 +2459,50 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 							if(null == sysUser.getSort()){
 								sysUser.setSort(CommonConstant.DEFAULT_USER_SORT);
 							}
-							//update-begin---author:wangshuai---date:20260805---for:【LHZP-1185】导入用户 隐藏联系方式默认应该为否---
+							//update-begin---author:wangshuai---date:20260805---for:【LHZP-1185】Nhập người dùng: ẩn thông tin liên hệ mặc định nên là không---
 							if (oConvertUtils.isEmpty(sysUser.getIzHideContact())) {
 								sysUser.setIzHideContact(CommonConstant.STATUS_0);
 							}
-							//update-end---author:wangshuai---date:20260805---for:【LHZP-1185】导入用户 隐藏联系方式默认应该为否---
+							//update-end---author:wangshuai---date:20260805---for:【LHZP-1185】Nhập người dùng: ẩn thông tin liên hệ mặc định nên là không---
                             this.save(sysUser);
                         }
-                        //添加部门
+                        //Thêm phòng ban
                         String departNames = sysUserExcel.getDepartNames();
                         String orgCategorys = sysUserExcel.getOrgCategorys();
-                        //新增或编辑部门
+                        //Thêm mới hoặc chỉnh sửa phòng ban
                         Integer tenantIdInt = 0;
                         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
                             tenantIdInt = oConvertUtils.getInt(tenantId, 0);
                         }
                         this.lowAddOrEditDepart(sysUser.getId(), departNames, tenantIdInt, departMap, orgCategorys, sysUserExcel.getPostName(), sysUserExcel.getMainDepPostId(),postMap,positionMap, sysUserExcel.getOtherDepPostId());
-                        //新增或编辑角色
+                        //Thêm mới hoặc chỉnh sửa vai trò
                         String roleNames = sysUserExcel.getRoleNames();
                         this.saveOrEditRole(sysUser.getId(), roleNames, tenantIdInt);
-                        //新增或编辑职位
+                        //Thêm mới hoặc chỉnh sửa vị trí công việc
                        /* String position = sysUserExcel.getPost();
                         if (oConvertUtils.isNotEmpty(position)) {
                             this.addOrEditPosition(sysUser.getId(), position, false, tenantIdInt, positionMap);
                         }*/
-                        //添加负责部门
+                        //Thêm phòng ban phụ trách
                         this.saveChargeDepart(sysUser, sysUserExcel.getDepartIds(), departMap);
                         successLines++;
                     } catch (Exception e) {
                         errorLines++;
                         String message = e.getMessage().toLowerCase();
                         int lineNumber = i + 1;
-                        // 通过索引名判断出错信息
+                        // Xác định thông tin lỗi qua tên chỉ mục
                         if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_USERNAME)) {
-                            errorMessage.add("第 " + lineNumber + " 行：用户名已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Tên người dùng đã tồn tại, bỏ qua nhập.");
                         } else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_WORK_NO)) {
-                            errorMessage.add("第 " + lineNumber + " 行：工号已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: mã nhân viên đã tồn tại, bỏ qua khi nhập.");
                         } else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_PHONE)) {
-                            errorMessage.add("第 " + lineNumber + " 行：手机号已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Số điện thoại đã tồn tại, bỏ qua nhập.");
                         } else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_EMAIL)) {
-                            errorMessage.add("第 " + lineNumber + " 行：电子邮件已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Email đã tồn tại, bỏ qua nhập.");
                         } else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER)) {
-                            errorMessage.add("第 " + lineNumber + " 行：违反表唯一性约束。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Vi phạm ràng buộc duy nhất của bảng.");
                         } else {
-                            errorMessage.add("第 " + lineNumber + " 行：未知错误，忽略导入");
+                            errorMessage.add(" " + lineNumber + " Dòng: Lỗi không xác định, bỏ qua việc nhập");
                             log.error(e.getMessage(), e);
                         }
                     }
@@ -2510,7 +2510,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 }
             } catch (Exception e) {
                 ImportSysUserCache.removeImportLowAppMap(fileKey);
-                errorMessage.add("发生异常：" + e.getMessage());
+                errorMessage.add("Đã xảy ra ngoại lệ:" + e.getMessage());
                 log.error(e.getMessage(), e);
             } finally {
                 try {
@@ -2524,7 +2524,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         try {
             departMap.clear();
             departMap = null;
-            //最终导入完成
+            //Nhập cuối cùng hoàn tất
             ImportSysUserCache.setImportSysUserMap(fileKey,1,1,"user");
             return ImportExcelUtil.imporReturnRes(errorLines, successLines, errorMessage);
         } catch (IOException e) {
@@ -2533,73 +2533,73 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
     }
 
-    //================================================================ begin 【用户导入】导入时 部门添加层级不对了======================================================================
+    //================================================================ begin 【Nhập người dùng】Khi nhập, cấp của phòng ban được thêm không đúng======================================================================
     /**
-     * 低代码下添加部门和用户
+     * Thêm phòng ban và người dùng trong low-code
      *
-     * @param userId          用户id
-     * @param depart          部门名称
-     * @param tenantId        租户id
-     * @param departMap       存放部门的map;key为名称 value为SysDepart对象。
-     * @param orgCategorys    部门类型
-     * @param postName        职级名称
-     * @param mainDepPostName 主岗位名称
-     * @param postMap         key: 岗位名称 + 部门id value：岗位（部门id）
-     * @param positionMap     key: 职级名称  value: 职级id
-     * @param otherDepPostName 兼职岗位名称
-     * @Description 和敲敲云分割处理，原因：因低代码岗位等改造，有级别，故添加部门分开处理
+     * @param userId          Người dùng id
+     * @param depart          Tên phòng ban
+     * @param tenantId        Tenant id
+     * @param departMap       Lưu trữ phòng ban map;key là tên, value là đối tượng SysDepart.
+     * @param orgCategorys    Loại phòng ban
+     * @param postName        Tên cấp bậc
+     * @param mainDepPostName Tên vị trí chính
+     * @param postMap         key: Tên vị trí + value id phòng ban: vị trí (id phòng ban)
+     * @param positionMap     key: Tên cấp bậc  value: Cấp bậc id
+     * @param otherDepPostName Tên vị trí kiêm nhiệm
+     * @Description Xử lý tách riêng với QiaoQiaoYun, nguyên nhân: do cải tạo vị trí low-code v.v. có cấp bậc nên thêm phòng ban để xử lý tách riêng
      */
     private void lowAddOrEditDepart(String userId, String depart, Integer tenantId, Map<String, SysDepart> departMap, String orgCategorys, String postName, String mainDepPostName, Map<String, String> postMap, Map<String, String> positionMap, String otherDepPostName) {
-        //批量将部门和用户信息建立关联关系
+        //Thiết lập quan hệ liên kết giữa phòng ban và thông tin người dùng hàng loạt
         if (StringUtils.isNotEmpty(depart)) {
             Page<SysDepart> page = new Page<>(1, 1);
-            //多个部门分离开
+            //Tách nhiều phòng ban ra
             String[] departNames = depart.split(SymbolConstant.SEMICOLON);
             List<String> departNameList = Arrays.asList(departNames);
-            //部门类型
+            //Loại phòng ban
             List<String> categoryList = new ArrayList<>();
             if (oConvertUtils.isNotEmpty(orgCategorys)) {
                 categoryList = Arrays.asList(orgCategorys.split(SymbolConstant.SEMICOLON));
             }
             departNameList = departNameList.stream().distinct().collect(Collectors.toList());
-            //当下部门循环下标
+            //Chỉ số vòng lặp của phòng ban hiện tại
             int index = 0;
-            //是否已导入岗位，岗位只导入第一个部门下
+            //Đã nhập vị trí hay chưa, vị trí chỉ nhập dưới phòng ban đầu tiên
             boolean izImportPost = false;
             for (String departName : departNameList) {
-                //部门id
+                //Phòng ban id
                 String parentId = "";
                 String[] names = departName.split(SymbolConstant.SINGLE_SLASH);
-                //部门名称拼接
+                //Nối tên phòng ban
                 String nameStr = "";
-                //部门类型
+                //Loại phòng ban
                 String[] orgCategory = null;
                 if (categoryList != null && categoryList.size() > index) {
                     orgCategory = categoryList.get(index).split(SymbolConstant.SINGLE_SLASH);
                 }
                 for (int i = 0; i < names.length; i++) {
                     String name = names[i];
-                    //拼接name
+                    //đã ghép nối name
                     if (oConvertUtils.isNotEmpty(nameStr)) {
                         nameStr = nameStr + SymbolConstant.SINGLE_SLASH + name;
                     } else {
                         nameStr = name;
                     }
                     SysDepart sysDepart = null;
-                    //默认部门
+                    //Phòng ban mặc định
                     String category = DepartCategoryEnum.DEPART_CATEGORY_DEPART.getValue();
                     if (null != orgCategory && orgCategory.length > i) {
                         category = orgCategory[i];
                     }
-                    //判断map中是否存在该部门名称
+                    //Kiểm tra trong map có tồn tại tên phòng ban đó không
                     if (departMap.containsKey(nameStr)) {
                         sysDepart = departMap.get(nameStr);
                         parentId = sysDepart.getId();
                     } else {
-                        //不存在需要去查询
-						//update-begin---author:wangshuai---date:20260805---for:【LHZP-1071】系统用户导入复用已有公司和部门---
+                        //Không tồn tại cần đi truy vấn
+						//update-begin---author:wangshuai---date:20260805---for:【LHZP-1071】Nhập người dùng hệ thống, tái sử dụng công ty và phòng ban đã có---
 						SysDepart importDepart = this.getImportDepartByName(name, tenantId, parentId);
-                        //部门为空需要新增部门
+                        //Phòng ban trống, cần thêm mới phòng ban
 						if (null == importDepart) {
                             JSONObject formData = new JSONObject();
                             formData.put("parentId", parentId);
@@ -2618,26 +2618,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                         } else {
 							sysDepart = importDepart;
                         }
-						//update-end---author:wangshuai---date:20260805---for:【LHZP-1071】系统用户导入复用已有公司和部门---
-                        //父级id不为空那么就将父级部门改成不是叶子节点
+						//update-end---author:wangshuai---date:20260805---for:【LHZP-1071】Nhập người dùng hệ thống, tái sử dụng công ty và phòng ban đã có---
+                        //Nếu id cấp trên không rỗng thì đổi phòng ban cấp trên thành không phải nút lá
                         if (oConvertUtils.isNotEmpty(parentId)) {
                             sysDepartMapper.setMainLeaf(parentId, CommonConstant.NOT_LEAF);
                         }
                         parentId = sysDepart.getId();
                         departMap.put(nameStr, sysDepart);
                     }
-                    //最后一位新增部门用户关系表
+                    //Vị trí cuối cùng thêm bảng quan hệ người dùng phòng ban
                     if (i == names.length - 1 && !izImportPost) {
                         Long count = sysUserDepartMapper.getCountByDepartIdAndUserId(userId, sysDepart.getId());
                         if (count == 0) {
                             SysUserDepart userDepart = new SysUserDepart(userId, sysDepart.getId());
                             sysUserDepartMapper.insert(userDepart);
                         }
-                        //添加岗位
+                        //Thêm vị trí công việc
                         if (oConvertUtils.isNotEmpty(mainDepPostName)) {
                             this.insertDepartPost(userId, parentId ,postName, mainDepPostName, postMap, tenantId, positionMap);
                         }
-                        //添加兼职岗位
+                        //Thêm vị trí kiêm nhiệm
                         if(oConvertUtils.isNotEmpty(otherDepPostName)){
                             this.insertOtherDepartPost(userId,parentId,postName, otherDepPostName, postMap, tenantId, positionMap);
                         }
@@ -2650,53 +2650,53 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 添加部门岗位
+     * Thêm vị trí phòng ban
      *
-     * @param mainDepPost 岗位名称
-     * @param userId      用户id
-     * @param departId    部门id【上级部门id】
-     * @param postName    职级名称
-     * @param mainDepPostName    岗位名称
-     * @param postMap     岗位map key：岗位名称 + 部门id value：岗位（部门id）
-     * @param tenantId    租户id
-     * @param postionMap  职级map key: 职级名称 value: 职级id
+     * @param mainDepPost Tên vị trí
+     * @param userId      Người dùng id
+     * @param departId    ID phòng ban [ID phòng ban cấp trên]
+     * @param postName    Tên cấp bậc
+     * @param mainDepPostName    Tên vị trí
+     * @param postMap     map vị trí key: tên vị trí + value id phòng ban: vị trí (id phòng ban)
+     * @param tenantId    Tenant id
+     * @param postionMap  Cấp bậc map key: Tên cấp bậc value: Cấp bậc id
      */
     private void insertDepartPost(String userId, String depId, String postName, String mainDepPostName, Map<String, String> postMap, Integer tenantId, Map<String, String> postionMap) {
         if(mainDepPostName.contains(SymbolConstant.COMMA)){
             mainDepPostName = mainDepPostName.split(SymbolConstant.COMMA)[0];
         }
-        //update-begin---wangshuai---date:20260804  for：[LHZP-1071]1.已有的公司和部门又重新创建了 2.岗位上的职级和上级岗位没配对------------
+        //update-begin---wangshuai---date:20260804  for：[LHZP-1071]1.Công ty và phòng ban đã có lại được tạo mới 2.Cấp bậc trên vị trí và vị trí cấp trên chưa được ghép đôi------------
         String departId = this.getOrCreateDepartPost(depId, tenantId, mainDepPostName, postName, postMap, postionMap);
         if(oConvertUtils.isNotEmpty(departId)){
-            //无论岗位是新增还是复用，都要为当前用户设置主岗位
+            //Dù vị trí là thêm mới hay tái sử dụng thì đều phải đặt vị trí chính cho người dùng hiện tại
             SysUser user = new SysUser();
             user.setId(userId);
             user.setMainDepPostId(departId);
             userMapper.updateById(user);
         }
-        //update-end---author:wangshuai ---date:20260804  for：[LHZP-1071]1.已有的公司和部门又重新创建了 2.岗位上的职级和上级岗位没配对------------
+        //update-end---author:wangshuai ---date:20260804  for：[LHZP-1071]1.Công ty và phòng ban đã có lại được tạo mới 2.Cấp bậc trên vị trí và vị trí cấp trên chưa được ghép đôi------------
     }
 
     /**
-     * 获取或创建部门岗位；复用已有岗位时保留其上级岗位关系，并同步职级。
+     * Lấy hoặc tạo vị trí của phòng ban; khi tái sử dụng vị trí đã có thì giữ quan hệ vị trí cấp trên của nó và đồng bộ cấp bậc.
      */
     private String getOrCreateDepartPost(String depId, Integer tenantId, String departPostName, String postName, Map<String, String> postMap, Map<String, String> positionMap) {
         String postMapKey = departPostName + depId;
         String departPostId = postMap.get(postMapKey);
         if (oConvertUtils.isEmpty(departPostId)) {
-            //更具部门id和岗位名称查询部门岗位id
-			//update-begin---author:wangshuai---date:20260805---for:【LHZP-1071】系统用户导入按租户和部门复用已有岗位---
+            //Truy vấn vị trí phòng ban theo id phòng ban và tên vị trí id
+			//update-begin---author:wangshuai---date:20260805---for:【LHZP-1071] Nhập người dùng hệ thống tái sử dụng vị trí đã có theo tenant và phòng ban---
 			departPostId = this.getImportDepartPostId(depId, departPostName, tenantId);
-			//update-end---author:wangshuai---date:20260805---for:【LHZP-1071】系统用户导入按租户和部门复用已有岗位---
+			//update-end---author:wangshuai---date:20260805---for:【LHZP-1071] Nhập người dùng hệ thống tái sử dụng vị trí đã có theo tenant và phòng ban---
         }
         if (oConvertUtils.isEmpty(departPostId)) {
-            //添加部门岗位
+            //Thêm vị trí phòng ban
             return this.addCommontDepartPost(depId, tenantId, departPostName, positionMap, postName, postMap);
         }
         postMap.put(postMapKey, departPostId);
-        //获取职级并更新
+        //Lấy cấp bậc rồi cập nhật
         String positionId = this.getPositionId(tenantId, postName, positionMap);
-        //更新部门职级
+        //Cập nhật cấp bậc phòng ban
         if (oConvertUtils.isNotEmpty(positionId)) {
             SysDepart departPost = new SysDepart();
             departPost.setId(departPostId);
@@ -2707,17 +2707,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 根据职级名称获取职级ID，并缓存本次导入结果。
-     * @param positionMap 存放职级的map
-     * @param postName 岗位名称
-     * @param tenantId 租户id
+     * Lấy ID cấp bậc theo tên cấp bậc và lưu cache kết quả nhập lần này.
+     * @param positionMap Lưu trữ cấp bậc map
+     * @param postName Tên vị trí
+     * @param tenantId Tenant id
      */
     private String getPositionId(Integer tenantId, String postName, Map<String, String> positionMap) {
-		//update-begin---author:wangshuai---date:20260805---for:【LHZP-1071】系统用户导入职级名称去除首尾空格---
+		//update-begin---author:wangshuai---date:20260805---for:【LHZP-1071】Nhập người dùng hệ thống, tên cấp bậc bỏ khoảng trắng đầu và cuối---
 		if (oConvertUtils.isEmpty(postName)) {
 			return "";
 		}
-		//update-end---author:wangshuai---date:20260805---for:【LHZP-1071】系统用户导入职级名称去除首尾空格---
+		//update-end---author:wangshuai---date:20260805---for:【LHZP-1071】Nhập người dùng hệ thống, tên cấp bậc bỏ khoảng trắng đầu và cuối---
         if (positionMap.containsKey(postName)) {
             return positionMap.get(postName);
         }
@@ -2727,7 +2727,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 导入通用添加部门岗位方法
+     * Nhập phương thức chung thêm vị trí phòng ban
      *
      * @param depId
      * @param tenantId
@@ -2739,7 +2739,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     private String addCommontDepartPost(String depId, Integer tenantId, String mainDepPostName, Map<String, String> postionMap, String postName, Map<String, String> postMap) {
-        //新增岗位
+        //Thêm vị trí
         SysDepart sysDepart = new SysDepart();
         JSONObject formData = new JSONObject();
         formData.put("parentId", depId);
@@ -2753,56 +2753,56 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysDepart.setDelFlag(String.valueOf(CommonConstant.DEL_FLAG_0));
         sysDepart.setStatus(CommonConstant.STATUS_1);
         sysDepart.setOrgCategory(DepartCategoryEnum.DEPART_CATEGORY_POST.getValue());
-        //获取职级id
-        //update-begin---wangshuai---date:20260804  for：[LHZP-1071]1.已有的公司和部门又重新创建了 2.岗位上的职级和上级岗位没配对------------
+        //Lấy cấp bậc id
+        //update-begin---wangshuai---date:20260804  for：[LHZP-1071]1.Công ty và phòng ban đã có lại được tạo mới 2.Cấp bậc trên vị trí và vị trí cấp trên chưa được ghép đôi------------
         String positionId = this.getPositionId(tenantId, postName, postionMap);
-        //update-end---wangshuai---date:20260804  for：[LHZP-1071]1.已有的公司和部门又重新创建了 2.岗位上的职级和上级岗位没配对------------
+        //update-end---wangshuai---date:20260804  for：[LHZP-1071]1.Công ty và phòng ban đã có lại được tạo mới 2.Cấp bậc trên vị trí và vị trí cấp trên chưa được ghép đôi------------
         sysDepart.setPositionId(positionId);
         sysDepartMapper.insert(sysDepart);
         sysDepartMapper.setMainLeaf(depId, CommonConstant.NOT_LEAF);
         postMap.put(mainDepPostName + depId, sysDepart.getId());
-        //需要将用户表的主岗位进行关联
+        //Cần liên kết vị trí chính trong bảng người dùng
         return sysDepart.getId();
     }
 
     /**
-     * 添加兼职岗位
+     * Thêm vị trí kiêm nhiệm
      *
-     * @param userId           用户id
-     * @param departId         部门id【上级部门id】
-     * @param postName         职级名称
-     * @param otherDepPostName 兼职岗位名称
-     * @param postMap          岗位map key：岗位名称 + 部门id value：岗位（部门id）
-     * @param tenantId         租户id
-     * @param postionMap       职级map key: 职级名称 value: 职级id
+     * @param userId           Người dùng id
+     * @param departId         ID phòng ban [ID phòng ban cấp trên]
+     * @param postName         Tên cấp bậc
+     * @param otherDepPostName Tên vị trí kiêm nhiệm
+     * @param postMap          map vị trí key: tên vị trí + value id phòng ban: vị trí (id phòng ban)
+     * @param tenantId         Tenant id
+     * @param postionMap       Cấp bậc map key: Tên cấp bậc value: Cấp bậc id
      */
     private void insertOtherDepartPost(String userId, String depId, String postName, String otherDepPostName, Map<String, String> postMap, Integer tenantId, Map<String, String> positionMap) {
         String[] otherDepPostNames = otherDepPostName.split(SymbolConstant.SEMICOLON);
         for (int i = 0; i < otherDepPostNames.length; i++) {
-            //update-begin---wangshuai---date:20260804  for：[LHZP-1071]1.已有的公司和部门又重新创建了 2.岗位上的职级和上级岗位没配对------------
+            //update-begin---wangshuai---date:20260804  for：[LHZP-1071]1.Công ty và phòng ban đã có lại được tạo mới 2.Cấp bậc trên vị trí và vị trí cấp trên chưa được ghép đôi------------
             String departId = this.getOrCreateDepartPost(depId, tenantId, otherDepPostNames[i], postName, postMap, positionMap);
-            //update-end---wangshuai---date:20260804  for：[LHZP-1071]1.已有的公司和部门又重新创建了 2.岗位上的职级和上级岗位没配对------------
-            //插入用岗位第三方中间表
+            //update-end---wangshuai---date:20260804  for：[LHZP-1071]1.Công ty và phòng ban đã có lại được tạo mới 2.Cấp bậc trên vị trí và vị trí cấp trên chưa được ghép đôi------------
+            //Chèn vào bảng trung gian bên thứ ba của chức vụ
             if (oConvertUtils.isNotEmpty(departId)) {
                 try {
                     SysUserDepPost depPost = new SysUserDepPost(userId, departId);
                     depPostMapper.insert(depPost);
                 } catch (Exception e) {
-                    log.error("当前岗位插入失败：" + e.getMessage(), e);
+                    log.error("Chèn chức vụ hiện tại thất bại：" + e.getMessage(), e);
                 }
             }
         }
     }
 
     /**
-     * 获取职务信息
+     * Lấy thông tin chức vụ
      *
      * @param tenantId
      * @param postName
      * @return
      */
     private String getSysPosition(Integer tenantId, String postName) {
-		//update-begin---author:wangshuai---date:20260805---for:【LHZP-1071】系统用户导入按租户匹配组织、岗位和职级---
+		//update-begin---author:wangshuai---date:20260805---for:【LHZP-1071] Nhập người dùng hệ thống khớp tổ chức, vị trí và cấp bậc theo tenant---
 		Integer normalizedTenantId = oConvertUtils.getInt(tenantId,0);
         Page<SysPosition> page = new Page<>(1, 1);
 		LambdaQueryWrapper<SysPosition> queryWrapper = new LambdaQueryWrapper<>();
@@ -2815,13 +2815,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		IPage<SysPosition> positionPage = sysPositionMapper.selectPage(page, queryWrapper);
 		if (CollectionUtil.isNotEmpty(positionPage.getRecords())) {
 			return positionPage.getRecords().get(0).getId();
-        //update-end---author:wangshuai---date:20260805---for:【LHZP-1071】系统用户导入按租户匹配组织、岗位和职级---
+        //update-end---author:wangshuai---date:20260805---for:【LHZP-1071] Nhập người dùng hệ thống khớp tổ chức, vị trí và cấp bậc theo tenant---
         }
         return "";
     }
 
 	/**
-	 * 按导入所属租户和完整父子层级匹配已有公司或部门。
+	 * Khớp công ty hoặc phòng ban đã có theo thuê bao thuộc về khi import và theo đầy đủ cấp cha - con.
 	 */
 	private SysDepart getImportDepartByName(String departName, Integer tenantId, String parentId) {
 		LambdaQueryWrapper<SysDepart> queryWrapper = new LambdaQueryWrapper<>();
@@ -2844,7 +2844,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 按导入所属租户、部门和岗位名称匹配已有岗位。
+	 * Khớp vị trí đã có theo tenant, phòng ban và tên vị trí thuộc về dữ liệu nhập.
 	 */
 	private String getImportDepartPostId(String parentId, String postName, Integer tenantId) {
 		LambdaQueryWrapper<SysDepart> queryWrapper = new LambdaQueryWrapper<>();
@@ -2862,16 +2862,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		IPage<SysDepart> postPage = sysDepartMapper.selectPage(new Page<>(1, 1), queryWrapper);
 		return CollectionUtil.isEmpty(postPage.getRecords()) ? "" : postPage.getRecords().get(0).getId();
 	}
-    //================================================================ end 【用户导入】导入时 部门添加层级不对了======================================================================
+    //================================================================ end 【Nhập người dùng】Khi nhập, cấp của phòng ban được thêm không đúng======================================================================
     
     private void saveChargeDepart(SysUser sysUser, String departIds, Map<String, SysDepart> departMap) {
-        //判断那些部门没有，即没有加入到部门，则不能成为负责部门人员
+        //Kiểm tra những phòng ban nào chưa có, tức là chưa được thêm vào phòng ban, thì không thể trở thành người phụ trách phòng ban
         if (oConvertUtils.isEmpty(departIds)) {
             return;
         }
-        //多个部门用;分隔开
+        //Nhiều phòng ban dùng;phân tách bằng
         String[] split = departIds.split(SymbolConstant.SEMICOLON);
-        //负责部门id
+        //Phòng ban phụ trách id
         StringBuilder departIdBulider = new StringBuilder();
         for (String name : split) {
             if (departMap.containsKey(name)) {
@@ -2879,7 +2879,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 departIdBulider.append(sysDepart.getId()).append(",");
             }
         }
-        // 检查并删除最后一个逗号
+        // Kiểm tra và xóa dấu phẩy cuối cùng
         if (departIdBulider.length() > 0 && departIdBulider.charAt(departIdBulider.length() - 1) == ',') {
             departIdBulider.deleteCharAt(departIdBulider.length() - 1);
         }
@@ -2890,7 +2890,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 保存或编辑角色
+     * Lưu hoặc chỉnh sửa vai trò
      *
      * @param userId
      * @param roleNames
@@ -2901,11 +2901,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return;
         }
         String[] roleNameArray = roleNames.split(SymbolConstant.SEMICOLON);
-        //删除用户下的角色
+        //Xóa vai trò của người dùng
         LambdaQueryWrapper<SysUserRole> deleteQuery = new LambdaQueryWrapper<>();
         deleteQuery.eq(SysUserRole::getUserId, userId);
         sysUserRoleMapper.delete(deleteQuery);
-        //通过名字获取角色
+        //Lấy vai trò theo tên
         LambdaQueryWrapper<SysRole> roleQuery = new LambdaQueryWrapper<>();
         roleQuery.orderByDesc(SysRole::getCreateTime);
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
@@ -2930,33 +2930,33 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             sysUserRoleMapper.insert(sysUserRole);
         }
     }
-    //================================================= end 低代码部门导入导出 ================================================================
+    //================================================= end Nhập/xuất phòng ban low-code ================================================================
 
     @Override
     public void updatePasswordNotBindPhone(String oldPassword, String password, String username) {
         LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
-        //step1 只能修改自己的密码
+        //step1 Chỉ được sửa mật khẩu của chính mình
         if(!sysUser.getUsername().equals(username)){
-            throw new JeecgBootBizTipException("只允许修改自己的密码！");
+            throw new JeecgBootBizTipException("Chỉ được phép sửa mật khẩu của chính mình!");
         }
-        //step2 用户不存在禁止修改密码
+        //step2 Người dùng không tồn tại, cấm đổi mật khẩu
         SysUser user = this.getUserByName(username);
         if(null == user){
-            throw new JeecgBootBizTipException("用户不存在，无法修改密码！");
+            throw new JeecgBootBizTipException("Người dùng không tồn tại, không thể đổi mật khẩu!");
         }
-        //setp3 如果手机号存在需要用手机号修改密码的方式
+        //setp3 Nếu số điện thoại tồn tại thì cần dùng cách đổi mật khẩu bằng số điện thoại
         if(oConvertUtils.isNotEmpty(user.getPhone())){
-            throw new JeecgBootBizTipException("手机号不为空，请根据手机号进行修改密码操作！");
+            throw new JeecgBootBizTipException("Số điện thoại không rỗng, vui lòng thực hiện thao tác đổi mật khẩu theo số điện thoại!");
         }
-        //step4 判断旧密码是否正确
+        //step4 Kiểm tra mật khẩu cũ có đúng hay không
         String passwordEncode = PasswordUtil.encrypt(username, oldPassword, user.getSalt());
         if (!user.getPassword().equals(passwordEncode)) {
-            throw new JeecgBootBizTipException("旧密码输入错误!");
+            throw new JeecgBootBizTipException("Mật khẩu cũ nhập sai!");
         }
         if (oConvertUtils.isEmpty(password)) {
-            throw new JeecgBootBizTipException("新密码不允许为空!");
+            throw new JeecgBootBizTipException("Mật khẩu mới không được để trống!");
         }
-        //step5 修改密码
+        //step5 Đổi mật khẩu
         String newPassWord = PasswordUtil.encrypt(username, password, user.getSalt());
         this.userMapper.update(new SysUser().setPassword(newPassWord).setLastPwdUpdateTime(new Date()), new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, user.getId()));
     }
@@ -2968,30 +2968,30 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	 */
 	@Override
 	public Map<String, String> queryUserAndDeptByName(String userName) {
-		// 返回用户和部门信息（根据需求调整）
+		// Trả về thông tin người dùng và phòng ban (điều chỉnh theo yêu cầu)
 		Map<String, String> result = new HashMap<>();
 		SysUser user = this.getUserByName(userName);
 		result.put("userId", user.getId());
 		result.put("username", user.getUsername());
-		//用户的部门信息
+		//Thông tin phòng ban của người dùng
 		String orgCode = user.getOrgCode();
 		if (oConvertUtils.isEmpty(orgCode)) {
 			return result;
 		}
 
-		// 查询公司部门
+		// Truy vấn phòng ban công ty
 		String companyName  = Optional.ofNullable(sysDepartMapper.queryCompByOrgCode(orgCode))
 				.map(SysDepart::getDepartName)
 				.orElse("");
 
-		// 查询用户部门并匹配
+		// Truy vấn phòng ban của người dùng và khớp
 		String userDeptName = sysDepartMapper.queryDepartsByUsername(userName).stream()
 				.filter(depart -> orgCode.equals(depart.getOrgCode()))
 				.findFirst()
 				.map(SysDepart::getDepartName)
 				.orElse("");
 
-		// 设置部门显示文本
+		// Đặt văn bản hiển thị phòng ban
 		String compDepart;
 		if (StringUtils.isNotEmpty(companyName) && StringUtils.isNotEmpty(userDeptName)) {
 			compDepart = companyName.equals(userDeptName)
@@ -3005,7 +3005,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
     /**
-     * 查询部门、岗位下的用户 包括子部门下的用户
+     * Truy vấn người dùng thuộc phòng ban, vị trí, bao gồm cả người dùng thuộc phòng ban cấp dưới
      * 
      * @param orgCode
      * @param userParams
@@ -3017,28 +3017,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysUserSysDepPostModel> sysDepartModels = baseMapper.queryDepartPostUserByOrgCode(page, orgCode, userParams);
         if(CollectionUtil.isNotEmpty(sysDepartModels)){
             List<String> userIds = sysDepartModels.stream().map(SysUserSysDepPostModel::getId).toList();
-            //获取部门名称
+            //Lấy tên phòng ban
             Map<String, String> useDepNames = this.getDepNamesByUserIds(userIds);
-            //update-begin---author:wangshuai ---date:20261030  for：【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作-----------
-            //当前部门/岗位下的用户（列表中还包含下级部门、岗位的用户）
+            //update-begin---author:wangshuai ---date:20261030  for：【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không-----------
+            //Phòng ban hiện tại/Người dùng thuộc vị trí (danh sách còn bao gồm người dùng của phòng ban, vị trí cấp dưới)
             Set<String> currentDepartPostUserIds = this.getCurrentDepartPostUserIdsByOrgCode(orgCode, userIds);
-            //update-end---author:wangshuai ---date:20261030  for：【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作-----------
+            //update-end---author:wangshuai ---date:20261030  for：【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không-----------
             sysDepartModels.forEach(item -> {
-                //update-begin---author:wangshuai ---date:20261030  for：【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作-----------
-                //追加是否为当前部门或当前职位下的用户，前端才会显示移出的操作按钮
+                //update-begin---author:wangshuai ---date:20261030  for：【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không-----------
+                //Thêm vào thông tin có phải là người dùng thuộc phòng ban hiện tại hoặc chức vụ hiện tại hay không, frontend mới hiển thị nút thao tác di chuyển ra
                 item.setIzCurrentDepartPost(currentDepartPostUserIds.contains(item.getId()));
-                //update-end---author:wangshuai ---date:20261030  for：【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作-----------
+                //update-end---author:wangshuai ---date:20261030  for：【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không-----------
                 List<String> positionList = sysUserPositionMapper.getPositionIdByUserId(item.getId());
                 item.setPost(CommonUtils.getSplitText(positionList,SymbolConstant.COMMA));
                 item.setOrgCodeTxt(useDepNames.get(item.getId()));
-                //查询用户的租户ids
+                //Truy vấn các tenant của người dùng ids
                 List<Integer> list = userTenantMapper.getTenantIdsByUserId(item.getId());
                 if (oConvertUtils.isNotEmpty(list)) {
                     item.setRelTenantIds(StringUtils.join(list.toArray(), SymbolConstant.COMMA));
                 } else {
                     item.setRelTenantIds("");
                 }
-                //兼职岗位
+                //Vị trí kiêm nhiệm
                 List<String> depPostList = depPostMapper.getDepPostByUserId(item.getId());
                 if(CollectionUtil.isNotEmpty(depPostList)){
                     item.setOtherDepPostId(StringUtils.join(depPostList.toArray(), SymbolConstant.COMMA));
@@ -3049,13 +3049,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 根据部门/岗位编码获取当前部门/岗位下的用户id（不含下级部门、岗位的用户）
+     * Theo phòng ban/Lấy phòng ban hiện tại theo mã chức vụ/Id người dùng thuộc vị trí (không bao gồm người dùng của phòng ban cấp dưới, vị trí)
      *
-     * @param orgCode 部门/岗位编码
-     * @param userIds 用户id
+     * @param orgCode Phòng ban/Mã vị trí
+     * @param userIds Người dùng id
      * @return
      * @author wangshuai
-     * @since 2026-10-30 【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作
+     * @since 2026-10-30 【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không
      */
     private Set<String> getCurrentDepartPostUserIdsByOrgCode(String orgCode, List<String> userIds) {
         if (oConvertUtils.isEmpty(orgCode)) {
@@ -3067,19 +3067,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (depart == null) {
             return new HashSet<>();
         }
-        ///回去当前部门和岗位下的用户id
+        ///Lấy người dùng thuộc phòng ban và vị trí hiện tại id
         return this.getCurrentDepartPostUserIds(depart, userIds);
     }
 
     /**
-     * 获取当前部门/岗位下的用户id（不含下级部门、岗位的用户）
-     * 公司、子公司、部门：所属部门是当前部门；岗位：主岗位或兼职岗位是当前岗位
+     * Lấy phòng ban hiện tại/Id người dùng thuộc vị trí (không bao gồm người dùng của phòng ban cấp dưới, vị trí)
+     * Công ty, công ty con, phòng ban: phòng ban trực thuộc là phòng ban hiện tại; vị trí: vị trí chính hoặc vị trí kiêm nhiệm là vị trí hiện tại
      *
-     * @param depart  部门/岗位
-     * @param userIds 用户id
+     * @param depart  Phòng ban/Vị trí công tác
+     * @param userIds Người dùng id
      * @return
      * @author wangshuai
-     * @since 2026-10-30 【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作
+     * @since 2026-10-30 【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không
      */
     private Set<String> getCurrentDepartPostUserIds(SysDepart depart, List<String> userIds) {
         Set<String> currentDepartPostUserIds = new HashSet<>();
@@ -3089,7 +3089,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String depId = depart.getId();
         boolean isPost = DepartCategoryEnum.DEPART_CATEGORY_POST.getValue().equals(depart.getOrgCategory());
         if (isPost) {
-            //岗位：主岗位是当前岗位
+            //Chức vụ: chức vụ chính là chức vụ hiện tại
             LambdaQueryWrapper<SysUser> userQuery = new LambdaQueryWrapper<>();
             userQuery.select(SysUser::getId);
             userQuery.eq(SysUser::getMainDepPostId, depId);
@@ -3098,7 +3098,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             for (SysUser user : userList) {
                 currentDepartPostUserIds.add(user.getId());
             }
-            //岗位：兼职岗位是当前岗位
+            //Chức vụ: chức vụ kiêm nhiệm là chức vụ hiện tại
             LambdaQueryWrapper<SysUserDepPost> depPostQuery = new LambdaQueryWrapper<>();
             depPostQuery.select(SysUserDepPost::getUserId);
             depPostQuery.eq(SysUserDepPost::getDepId, depId);
@@ -3108,7 +3108,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 currentDepartPostUserIds.add(depPostUserId);
             }
         } else {
-            //公司、子公司、部门：所属部门是当前部门
+            //Công ty, công ty con, phòng ban: phòng ban thuộc về là phòng ban hiện tại
             LambdaQueryWrapper<SysUserDepart> userDepartQuery = new LambdaQueryWrapper<>();
             userDepartQuery.select(SysUserDepart::getUserId);
             userDepartQuery.eq(SysUserDepart::getDepId, depId);
@@ -3122,13 +3122,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 将用户移出部门或岗位（只删除关联关系，不删除用户）
+     * Chuyển người dùng ra khỏi phòng ban hoặc vị trí (chỉ xóa quan hệ liên kết, không xóa người dùng)
      *
-     * @param depId   部门或岗位id
-     * @param userIds 用户id
-     * @return 实际移出的用户id
+     * @param depId   Phòng ban hoặc vị trí id
+     * @param userIds Người dùng id
+     * @return Người dùng thực tế bị di chuyển ra id
      * @author wangshuai
-     * @since 2026-10-30 【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作
+     * @since 2026-10-30 【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -3139,96 +3139,96 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (depart == null) {
             return removeUserIds;
         }
-        //只移出当前部门/岗位下的用户，下级部门、岗位的用户不处理
+        //Chỉ di chuyển ra khỏi phòng ban hiện tại/Người dùng thuộc vị trí, người dùng của phòng ban cấp dưới và vị trí không xử lý
         Set<String> currentDepartPostUserIds = this.getCurrentDepartPostUserIds(depart, userIds);
         if (currentDepartPostUserIds.isEmpty()) {
             return removeUserIds;
         }
         removeUserIds.addAll(currentDepartPostUserIds);
         boolean isPost = DepartCategoryEnum.DEPART_CATEGORY_POST.getValue().equals(depart.getOrgCategory());
-        //岗位
+        //Vị trí công tác
         if (isPost) {
-            //step.1 移出岗位：清空主岗位
-            //使用LambdaUpdateWrapper，避免为空时受全局 updateStrategy 影响导致不更新
+            //step.1 Rời khỏi chức vụ: Xóa chức vụ chính
+            //Dùng LambdaUpdateWrapper để tránh khi rỗng bị ảnh hưởng bởi updateStrategy toàn cục dẫn đến không cập nhật
             LambdaUpdateWrapper<SysUser> userUpdate = new LambdaUpdateWrapper<>();
             userUpdate.in(SysUser::getId, removeUserIds);
             userUpdate.eq(SysUser::getMainDepPostId, depId);
             userUpdate.set(SysUser::getMainDepPostId, null);
             userMapper.update(userUpdate);
-            //step.2 移出岗位：删除兼职岗位
+            //step.2 Rời khỏi chức vụ: Xóa chức vụ kiêm nhiệm
             LambdaQueryWrapper<SysUserDepPost> depPostQuery = new LambdaQueryWrapper<>();
             depPostQuery.in(SysUserDepPost::getUserId, removeUserIds);
             depPostQuery.eq(SysUserDepPost::getDepId, depId);
             depPostMapper.delete(depPostQuery);
         } else {
-            //step.1 移出公司、子公司、部门：删除所属部门关系
+            //step.1 Di chuyển ra khỏi công ty, công ty con, phòng ban: xóa quan hệ phòng ban thuộc về
             LambdaQueryWrapper<SysUserDepart> userDepartQuery = new LambdaQueryWrapper<>();
             userDepartQuery.eq(SysUserDepart::getDepId, depId);
             userDepartQuery.in(SysUserDepart::getUserId, removeUserIds);
             sysUserDepartMapper.delete(userDepartQuery);
-            //step.2 清理已不在其它所属部门下的主岗位、兼职岗位（与用户编辑页修改所属部门时的规则一致），要在删除所属部门关系之后执行
-            //已不再当前部门、公司了 下面的岗位需要清掉，因为岗位是根据公司和部门来的
+            //step.2 Dọn dẹp vị trí chính và vị trí kiêm nhiệm đã không còn thuộc các phòng ban trực thuộc khác (khớp với quy tắc khi sửa phòng ban trực thuộc tại trang chỉnh sửa người dùng), phải thực thi sau khi xóa quan hệ phòng ban trực thuộc
+            //Đã không còn ở phòng ban, công ty hiện tại nữa thì các vị trí bên dưới cần xóa, vì vị trí được xác định theo công ty và phòng ban
             this.removeDepPostOutOfDepart(depart, removeUserIds);
-            //step.3 取消该部门的负责人（负责部门只能从所属部门中选择）
+            //step.3 Hủy người phụ trách của phòng ban này (phòng ban phụ trách chỉ được chọn trong các phòng ban trực thuộc)
             this.removeChargeDepart(depId, removeUserIds);
         }
         return removeUserIds;
     }
 
     /**
-     * 移出部门后，清理用户在该部门下、且已不在其它所属部门下的主岗位和兼职岗位
+     * Sau khi rời khỏi phòng ban, dọn dẹp vị trí chính và vị trí kiêm nhiệm của người dùng tại phòng ban đó mà đã không còn thuộc các phòng ban trực thuộc khác
      *
-     * @param depart  移出的部门
-     * @param userIds 用户id
+     * @param depart  Phòng ban đã di chuyển ra
+     * @param userIds Người dùng id
      * @author wangshuai
-     * @since 2026-10-30 【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作
+     * @since 2026-10-30 【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không
      */
     private void removeDepPostOutOfDepart(SysDepart depart, List<String> userIds) {
-        //step.1 查询用户的主岗位
+        //step.1 Truy vấn vị trí chính của người dùng
         LambdaQueryWrapper<SysUser> userQuery = new LambdaQueryWrapper<>();
         userQuery.select(SysUser::getId, SysUser::getMainDepPostId);
         userQuery.in(SysUser::getId, userIds);
         List<SysUser> userList = userMapper.selectList(userQuery);
-        //step.2 查询用户的兼职岗位
+        //step.2 Truy vấn chức vụ kiêm nhiệm của người dùng
         LambdaQueryWrapper<SysUserDepPost> depPostQuery = new LambdaQueryWrapper<>();
         depPostQuery.select(SysUserDepPost::getId, SysUserDepPost::getUserId, SysUserDepPost::getDepId);
         depPostQuery.in(SysUserDepPost::getUserId, userIds);
         List<SysUserDepPost> depPostList = depPostMapper.selectList(depPostQuery);
-        //step.3 查询用户移出后剩余的所属部门
+        //step.3 Truy vấn các phòng ban còn thuộc về sau khi người dùng được di chuyển ra
         LambdaQueryWrapper<SysUserDepart> userDepartQuery = new LambdaQueryWrapper<>();
         userDepartQuery.select(SysUserDepart::getUserId, SysUserDepart::getDepId);
         userDepartQuery.in(SysUserDepart::getUserId, userIds);
         List<SysUserDepart> userDepartList = sysUserDepartMapper.selectList(userDepartQuery);
-        //step.4 查询岗位和剩余所属部门的编号
+        //step.4 Truy vấn mã số của vị trí và các phòng ban còn thuộc về
         Set<String> departIds = new HashSet<>();
-        //主岗位
+        //Vị trí chính
         for (SysUser user : userList) {
             if (oConvertUtils.isNotEmpty(user.getMainDepPostId())) {
                 departIds.add(user.getMainDepPostId());
             }
         }
-        //兼职岗位
+        //Vị trí kiêm nhiệm
         for (SysUserDepPost depPost : depPostList) {
             departIds.add(depPost.getDepId());
         }
-        //所属的用户部门
+        //Phòng ban của người dùng
         for (SysUserDepart userDepart : userDepartList) {
             departIds.add(userDepart.getDepId());
         }
         if (departIds.isEmpty()) {
             return;
         }
-        //根据要删除的部门id查询部门编码
+        //Truy vấn mã phòng ban theo id phòng ban cần xóa
         LambdaQueryWrapper<SysDepart> departQuery = new LambdaQueryWrapper<>();
         departQuery.select(SysDepart::getId, SysDepart::getOrgCode);
         departQuery.in(SysDepart::getId, departIds);
         List<SysDepart> departList = sysDepartMapper.selectList(departQuery);
-        //key：部门/岗位id，value：编码
+        //key: phòng ban/id vị trí, value: mã
         Map<String, String> orgCodeMap = new HashMap<>();
         for (SysDepart sysDepart : departList) {
             orgCodeMap.put(sysDepart.getId(), sysDepart.getOrgCode());
         }
-        //key：用户id，value：用户剩余所属部门的编码
+        //key: id người dùng, value: mã của phòng ban còn lại mà người dùng thuộc về
         Map<String, List<String>> userOrgCodeMap = new HashMap<>();
         for (SysUserDepart userDepart : userDepartList) {
             String orgCode = orgCodeMap.get(userDepart.getDepId());
@@ -3242,7 +3242,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
             userOrgCodes.add(orgCode);
         }
-        //step.5 清空主岗位
+        //step.5 Xóa vị trí chính
         List<String> clearMainPostUserIds = new ArrayList<>();
         for (SysUser user : userList) {
             if (oConvertUtils.isEmpty(user.getMainDepPostId())) {
@@ -3255,13 +3255,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
         }
         if (!clearMainPostUserIds.isEmpty()) {
-            //使用LambdaUpdateWrapper，避免为空时受全局 updateStrategy 影响导致不更新
+            //Dùng LambdaUpdateWrapper để tránh khi rỗng bị ảnh hưởng bởi updateStrategy toàn cục dẫn đến không cập nhật
             LambdaUpdateWrapper<SysUser> userUpdate = new LambdaUpdateWrapper<>();
             userUpdate.in(SysUser::getId, clearMainPostUserIds);
             userUpdate.set(SysUser::getMainDepPostId, null);
             userMapper.update(userUpdate);
         }
-        //step.6 删除兼职岗位
+        //step.6 Xóa vị trí kiêm nhiệm
         List<String> removeDepPostIds = new ArrayList<>();
         for (SysUserDepPost depPost : depPostList) {
             String postOrgCode = orgCodeMap.get(depPost.getDepId());
@@ -3278,30 +3278,30 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 岗位是否在移出的部门下，且已不在用户其它所属部门下
+     * Vị trí có thuộc phòng ban bị chuyển ra hay không, và đã không còn thuộc các phòng ban khác của người dùng nữa hay chưa
      *
-     * @param postOrgCode   岗位编码 A01A01
-     * @param departOrgCode 移出的部门编码 A01
-     * @param userOrgCodes  用户剩余所属部门的编码
+     * @param postOrgCode   Mã vị trí A01A01
+     * @param departOrgCode Mã phòng ban bị di chuyển ra A01
+     * @param userOrgCodes  Mã phòng ban còn lại mà người dùng thuộc về
      * @return
      * @author wangshuai
-     * @since 2026-10-30 【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作
+     * @since 2026-10-30 【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không
      */
     private boolean isDepPostOutOfDepart(String postOrgCode, String departOrgCode, List<String> userOrgCodes) {
-        //岗位不在移出的部门下，不处理
+        //Vị trí không thuộc phòng ban bị di chuyển ra, không xử lý
         if (postOrgCode == null || !postOrgCode.startsWith(departOrgCode)) {
             return false;
         }
-        //用户已经没有其它所属部门
+        //Người dùng đã không còn phòng ban trực thuộc nào khác
         if (userOrgCodes == null) {
             return true;
         }
-        //岗位还在用户其它所属部门下，保留
+        //Vị trí vẫn còn thuộc phòng ban khác của người dùng, giữ lại
         for (String userOrgCode : userOrgCodes) {
-            //编码是逐级拼接的，岗位编码以所属部门的编码开头，就说明岗位在这个部门下
-            //例：公司 A01 下有部门 A01A01，部门下有岗位 A01A01A01，用户从部门 A01A01 移出
-            //用户还在公司 A01：A01A01A01 以 A01 开头，岗位还在公司下，返回 false，岗位保留
-            //用户只剩部门 A01A02：A01A01A01 不以 A01A02 开头，循环结束后返回 true，岗位移除
+            //Mã được nối từng cấp; mã vị trí bắt đầu bằng mã của phòng ban trực thuộc thì nghĩa là vị trí đó thuộc phòng ban này
+            //Ví dụ: công ty A01 có phòng ban A01A01, dưới phòng ban có vị trí A01A01A01, người dùng rời khỏi phòng ban A01A01
+            //Người dùng vẫn còn ở công ty A01: A01A01A01 bắt đầu bằng A01, vị trí vẫn nằm trong công ty, trả về false, vị trí được giữ lại
+            //Người dùng chỉ còn phòng ban A01A02: A01A01A01 không bắt đầu bằng A01A02, sau khi vòng lặp kết thúc trả về true, vị trí bị gỡ bỏ
             if (postOrgCode.startsWith(userOrgCode)) {
                 return false;
             }
@@ -3310,12 +3310,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 取消用户在该部门的负责人
+     * Hủy người phụ trách phòng ban của người dùng trong phòng ban này
      *
-     * @param depId   部门id
-     * @param userIds 用户id
+     * @param depId   Phòng ban id
+     * @param userIds Người dùng id
      * @author wangshuai
-     * @since 2026-10-30 【LHZP-1194】部门管理 用户列表 是不是少一个移出的操作
+     * @since 2026-10-30 【LHZP-1194] Quản lý phòng ban, danh sách người dùng có phải thiếu một thao tác di chuyển ra không
      */
     private void removeChargeDepart(String depId, List<String> userIds) {
         LambdaQueryWrapper<SysUser> userQuery = new LambdaQueryWrapper<>();
@@ -3324,7 +3324,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         userQuery.like(SysUser::getDepartIds, depId);
         List<SysUser> userList = userMapper.selectList(userQuery);
         for (SysUser user : userList) {
-            //去掉当前部门后的负责部门
+            //Phòng ban phụ trách sau khi loại bỏ phòng ban hiện tại
             List<String> newDepartIds = new ArrayList<>();
             boolean isChargeDepart = false;
             String[] departIds = user.getDepartIds().split(SymbolConstant.COMMA);
@@ -3338,15 +3338,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     newDepartIds.add(departId);
                 }
             }
-            //防止 like 匹配到其它部门id，不是当前部门的负责人时跳过
+            //Ngăn like khớp nhầm sang id phòng ban khác; khi không phải người phụ trách của phòng ban hiện tại thì bỏ qua
             if (!isChargeDepart) {
                 continue;
             }
-            //使用LambdaUpdateWrapper，避免为空时受全局 updateStrategy 影响导致不更新
+            //Dùng LambdaUpdateWrapper để tránh khi rỗng bị ảnh hưởng bởi updateStrategy toàn cục dẫn đến không cập nhật
             LambdaUpdateWrapper<SysUser> userUpdate = new LambdaUpdateWrapper<>();
             userUpdate.eq(SysUser::getId, user.getId());
             if (newDepartIds.isEmpty()) {
-                //负责部门为空时，说明已经是普通用户
+                //Khi phòng ban phụ trách trống, nghĩa là đã là người dùng thông thường
                 userUpdate.set(SysUser::getDepartIds, null);
                 userUpdate.set(SysUser::getUserIdentity, CommonConstant.USER_IDENTITY_1);
             } else {
@@ -3357,7 +3357,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 据 orgCode 查询用户信息（部门全路径，主岗位和兼职岗位的信息），包括公司、子公司、部门
+     * Truy vấn thông tin người dùng theo orgCode (đường dẫn đầy đủ của phòng ban, thông tin vị trí chính và vị trí kiêm nhiệm), bao gồm công ty, công ty con, phòng ban
      *
      * @param orgCode
      * @param userParams
@@ -3367,18 +3367,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public IPage<SysUserSysDepPostModel> queryDepartUserByOrgCode(String orgCode, SysUser userParams, IPage page) {
         List<SysUserSysDepPostModel> sysDepartModels = baseMapper.queryDepartUserByOrgCode(page, orgCode, userParams);
-        //用户id
+        //Người dùng id
         List<String> userIdList = sysDepartModels.stream().map(SysUserSysDepPostModel::getId).toList();
         if (CollectionUtil.isNotEmpty(userIdList)) {
-            //根据用户ids获取部门名称 key 用户id value 部门名称
+            //Lấy tên phòng ban theo ids người dùng; key là id người dùng, value là tên phòng ban
             Map<String, String> departNameMap = this.getDepartNamesByUserIds(userIdList, SymbolConstant.COMMA);
-            //获取兼职岗位
+            //Lấy vị trí kiêm nhiệm
             Map<String, String> departPostMap = this.getDepartOtherPostByUserIds(userIdList, SymbolConstant.COMMA);
             ISysDepartService service = SpringContextUtils.getBean(SysDepartServiceImpl.class);
             sysDepartModels.forEach(item -> {
                 item.setDepartName(departNameMap.get(item.getId()));
                 item.setOtherPostName(departPostMap.get(item.getId()));
-                //获取主岗位全路径
+                //Lấy toàn bộ đường dẫn vị trí chính
                 if (oConvertUtils.isNotEmpty(item.getMainDepPostId())) {
                     SysDepart departById = sysDepartMapper.getDepartById(item.getMainDepPostId());
                     if (null != departById) {
@@ -3392,7 +3392,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 通讯录点击用户获取用户详情（包含用户基本信息、部门全路径、主岗位兼职岗位全路径）
+     * Trong danh bạ, bấm vào người dùng để lấy chi tiết người dùng (bao gồm thông tin cơ bản của người dùng, đường dẫn đầy đủ của phòng ban, đường dẫn đầy đủ của vị trí chính và vị trí kiêm nhiệm)
      *
      * @param userId
      * @return
@@ -3403,13 +3403,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (null != sysUser) {
             SysUserSysDepPostModel userModel = new SysUserSysDepPostModel();
             BeanUtils.copyProperties(sysUser, userModel);
-            //获取部门名称
+            //Lấy tên phòng ban
             List<String> userIds = new ArrayList<>();
             userIds.add(userId);
             Map<String, String> departNameMap = this.getDepartNamesByUserIds(userIds, "__");
             userModel.setDepartName(departNameMap.get(userId));
             ISysDepartService service = SpringContextUtils.getBean(SysDepartServiceImpl.class);
-            //获取主岗位全路径
+            //Lấy toàn bộ đường dẫn vị trí chính
             if (oConvertUtils.isNotEmpty(sysUser.getMainDepPostId())) {
                 SysDepart departById = sysDepartMapper.getDepartById(sysUser.getMainDepPostId());
                 if (null != departById) {
@@ -3417,7 +3417,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     userModel.setPostName(departPathName);
                 }
             }
-            //获取兼职岗位全路径
+            //Lấy toàn bộ đường dẫn chức vụ kiêm nhiệm
             Map<String, String> departPostMap = this.getDepartOtherPostByUserIds(userIds, "__");
             userModel.setOtherPostName(departPostMap.get(userId));
             return userModel;
@@ -3426,63 +3426,63 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
 	/**
-	 * 登录获取用户部门信息
+	 * Đăng nhập — Lấy thông tin phòng ban của người dùng
 	 * @param jsonObject
 	 * @return
 	 */
 	@Override
 	public Result loginGetUserDeparts(JSONObject jsonObject) {
 		Result result = new Result<>();
-		//返回内容
+		//Nội dung trả về
 		JSONObject obj = new JSONObject(new LinkedHashMap<>());
-		// 登录方式 phone:手机 account:账号密码
+		// Phương thức đăng nhập phone:Điện thoại account:Mật khẩu tài khoản
 		String loginType = jsonObject.getString("loginType");
 		String username = jsonObject.getString("username");
 		String source = oConvertUtils.getString(jsonObject.getString("source"),"PC");
-		//update-begin---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】登录前查部门接口可匿名调用：增加失败计数与锁定，用户不存在与密码/验证码错误统一提示，防止无限次猜密码和爆破短信验证码；APP端（无图形验证码）保留跳过验证码，手机分支兼容captcha参数名-----------
-		// 手机号登录校验
+		//update-begin---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] API tra phòng ban trước khi đăng nhập có thể gọi ẩn danh: thêm đếm thất bại và khóa, người dùng không tồn tại và mật khẩu/Lỗi mã xác minh dùng chung một thông báo, ngăn đoán mật khẩu vô hạn lần và tấn công brute-force mã xác minh SMS; phía APP (không có mã xác minh hình ảnh) giữ việc bỏ qua mã xác minh, nhánh điện thoại tương thích tên tham số captcha-----------
+		// Kiểm tra đăng nhập bằng số điện thoại
 		if("phone".equalsIgnoreCase(loginType)){
 			String phone = jsonObject.getString("mobile");
 			if (oConvertUtils.isEmpty(phone)) {
-				return Result.error("手机验证码错误");
+				return Result.error("Mã xác minh điện thoại sai");
 			}
 			if (isLoginFailOvertimes(phone)) {
-				return Result.error("该用户登录失败次数过多，请于10分钟后再次登录！");
+				return Result.error("Người dùng này đã đăng nhập thất bại quá nhiều lần, vui lòng đăng nhập lại sau 10 phút!");
 			}
-			//1.校验验证码（APP端短信验证码参数名为captcha）
+			//1.Kiểm tra mã xác minh (tên tham số mã xác minh SMS phía APP là captcha)
 			SysUser sysUser = baseMapper.getUserByPhone(phone);
 			String smscode = oConvertUtils.getString(jsonObject.getString("smscode"), jsonObject.getString("captcha"));
 			Object code = redisUtil.get(CommonConstant.PHONE_REDIS_KEY_PRE + phone);
 			if (sysUser == null || oConvertUtils.isEmpty(smscode) || !smscode.equals(code)) {
 				addLoginFailOvertimes(phone);
-				return Result.error("手机验证码错误");
+				return Result.error("Mã xác minh điện thoại sai");
 			}
-			//2.校验用户有效性
+			//2.Kiểm tra tính hợp lệ của người dùng
 			result = this.checkUserIsEffective(sysUser);
 			if(!result.isSuccess()) {
 				return result;
 			}
-			//3.当前登录账号
+			//3.Tài khoản hiện đang đăng nhập
 			username = sysUser.getUsername();
 			String orgCode = sysUser.getOrgCode();
 			obj.put("currentOrgCode", orgCode);
 		}else{
 			if (oConvertUtils.isEmpty(username)) {
-				return Result.error("用户名或密码错误");
+				return Result.error("Tên người dùng hoặc mật khẩu sai");
 			}
 			if (isLoginFailOvertimes(username)) {
-				return Result.error("该用户登录失败次数过多，请于10分钟后再次登录！");
+				return Result.error("Người dùng này đã đăng nhập thất bại quá nhiều lần, vui lòng đăng nhập lại sau 10 phút!");
 			}
 			String password  = AesEncryptUtil.resolvePassword(jsonObject.getString("password"));
-			log.debug("登录密码，原始密码:{}，解密密码:{}" , jsonObject.getString("password"), password);
+			log.debug("Mật khẩu đăng nhập, mật khẩu gốc:{}, mật khẩu đã giải mã:{}" , jsonObject.getString("password"), password);
 			String realKey = null;
-			// 手机端没有验证码，不做校验（靠失败计数与锁定防暴力破解，与/sys/mLogin一致）
+			// Phía mobile không có mã xác minh, không kiểm tra (dựa vào đếm số lần thất bại và khóa để chống brute-force, giống với/sys/mLogin nhất quán)
 			if(!"APP".equalsIgnoreCase(source)){
-				// step.1 验证码check
+				// step.1 Kiểm tra mã xác thực
 				String inputCode = jsonObject.getString("inputCode");
 				String checkKey = jsonObject.getString("checkKey");
 				if (inputCode == null) {
-					result.error500("验证码无效");
+					result.error500("Mã xác minh không hợp lệ");
 					return result;
 				}
 				String lowerCaseCaptcha = inputCode.toLowerCase();
@@ -3490,24 +3490,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				realKey = keyPrefix + lowerCaseCaptcha;
 				Object checkCode = redisUtil.get(realKey);
 				if (checkCode == null || !checkCode.toString().equals(lowerCaseCaptcha)) {
-					log.warn("验证码错误，key= {} , Ui checkCode= {}, Redis checkCode = {}", checkKey, lowerCaseCaptcha, checkCode);
-					result.error500("验证码错误");
+					log.warn("Mã xác minh không đúng，key= {} , Ui checkCode= {}, Redis checkCode = {}", checkKey, lowerCaseCaptcha, checkCode);
+					result.error500("Mã xác minh không đúng");
 					result.setCode(HttpStatus.PRECONDITION_FAILED.value());
 					return result;
 				}
 			}
 
-			// step.2 校验用户名或密码是否正确（密码错误时作废验证码；密码正确时保留，随后的登录接口还要用）
+			// step.2 Kiểm tra tên người dùng hoặc mật khẩu có đúng không (khi mật khẩu sai thì hủy mã xác minh; khi mật khẩu đúng thì giữ lại, API đăng nhập tiếp theo còn dùng đến)
 			SysUser sysUser = baseMapper.getUserByName(username);
 			if (!verifyLoginPassword(sysUser, username, password)) {
 				if (realKey != null) {
 					redisUtil.del(realKey);
 				}
-				result.error500("用户名或密码错误");
+				result.error500("Tên người dùng hoặc mật khẩu sai");
 				return result;
 			}
 
-			// step.3 校验用户是否有效
+			// step.3 Kiểm tra người dùng có hợp lệ không
 			result = this.checkUserIsEffective(sysUser);
 			if(!result.isSuccess()) {
 				return result;
@@ -3515,8 +3515,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			String orgCode = sysUser.getOrgCode();
 			obj.put("currentOrgCode", orgCode);
 		}
-		//update-end---author:scott ---date:20261014  for：【安全 GHSA-6mmg-j26w-hxfx】登录前查部门接口可匿名调用：增加失败计数与锁定，用户不存在与密码/验证码错误统一提示，防止无限次猜密码和爆破短信验证码；APP端（无图形验证码）保留跳过验证码，手机分支兼容captcha参数名-----------
-		//  step.4 获取用户部门信息，仅限部门
+		//update-end---author:scott ---date:20261014  for: 【Bảo mật GHSA-6mmg-j26w-hxfx] API tra phòng ban trước khi đăng nhập có thể gọi ẩn danh: thêm đếm thất bại và khóa, người dùng không tồn tại và mật khẩu/Lỗi mã xác minh dùng chung một thông báo, ngăn đoán mật khẩu vô hạn lần và tấn công brute-force mã xác minh SMS; phía APP (không có mã xác minh hình ảnh) giữ việc bỏ qua mã xác minh, nhánh điện thoại tương thích tên tham số captcha-----------
+		//  step.4 Lấy thông tin phòng ban của người dùng, chỉ giới hạn ở phòng ban
 		List<SysDepart> departList = sysDepartMapper.queryDeptByUserAndCategory(username,DepartCategoryEnum.DEPART_CATEGORY_DEPART.getValue());
 		if (CollectionUtil.isNotEmpty(departList)) {
 			ISysDepartService service = SpringContextUtils.getBean(SysDepartServiceImpl.class);
@@ -3525,7 +3525,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 						oConvertUtils.isNotEmpty(depart.getOrgCode()))
 				.map(depart -> {
 					String departName = depart.getDepartNameAbbr();
-					//简称是空的情况下，查询全路径名称
+					//Trong trường hợp tên viết tắt trống, truy vấn tên đường dẫn đầy đủ
 					if(oConvertUtils.isEmpty(departName)){
 						departName = service.getDepartPathNameByOrgCode(depart.getOrgCode(), "");
 					}
@@ -3542,21 +3542,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 批量重置密码为系统密码
+	 * Đặt lại mật khẩu hàng loạt thành mật khẩu hệ thống
 	 * @param usernames
 	 */
 	@Override
 	public void resetToSysPassword(String usernames) {
-		//1.判断是否存在admin账户
+		//1.Xác định có tồn tại tài khoản admin hay không
 		if(hasAdminIntersection(usernames)){
-			throw new JeecgBootException("所选用户中包含管理员，管理员账号不允许重置密码！！");
+			throw new JeecgBootException("Trong số người dùng đã chọn có quản trị viên, tài khoản quản trị viên không được phép đặt lại mật khẩu!!");
 		}
 		List<String> userArr = Arrays.asList(usernames.split(","));
 		userArr.stream().forEach(username -> {
 			if(oConvertUtils.isNotEmpty(username)){
 				String salt = oConvertUtils.randomGen(8);
 				String passwordEncode = PasswordUtil.encrypt(username, PasswordConstant.DEFAULT_PASSWORD, salt);
-				//重置密码
+				//Đặt lại mật khẩu
 				UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
 				updateWrapper
 						.eq("username", username)
@@ -3569,14 +3569,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 更新设备信息
+	 * Cập nhật thông tin thiết bị
 	 * @param clientId
 	 * @param userId
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void updateClientId(String clientId,String userId) {
-		//解绑之前的设备账户
+		//Hủy liên kết tài khoản thiết bị trước đó
 		if(oConvertUtils.isNotEmpty(clientId)){
 			UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
 			updateWrapper
@@ -3584,7 +3584,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 					.set("client_id", null);
 			this.baseMapper.update(null, updateWrapper);
 		}
-		//设置新的绑定
+		//Đặt liên kết mới
 		SysUser sysUser = new SysUser();
 		sysUser.setClientId(clientId);
 		sysUser.setId(userId);
@@ -3592,7 +3592,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 根据用户组查询用户列表
+	 * Truy vấn danh sách người dùng theo nhóm người dùng
 	 * @param page
 	 * @param groupId
 	 * @param username
@@ -3607,9 +3607,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			List<String> userIds = records.stream().map(SysUser::getId).collect(Collectors.toList());
 			Map<String, String> useDepNames = this.getDepNamesByUserIds(userIds);
 			for (SysUser sysUser : userGroupList.getRecords()) {
-				//设置部门
+				//Cài đặt phòng ban
 				sysUser.setOrgCodeTxt(useDepNames.get(sysUser.getId()));
-				//设置用户职位id
+				//Đặt vị trí người dùng id
 				this.userPositionId(sysUser);
 			}
 		}
@@ -3617,13 +3617,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	/**
-	 * 是否有交集
+	 * Có giao nhau không
 	 */
 	public static boolean hasAdminIntersection(String usernames) {
 		if (oConvertUtils.isEmpty(usernames)) {
 			return false;
 		}
-		// 使用HashSet提高查找效率
+		// Sử dụng HashSet để nâng cao hiệu quả tra cứu
 		Set<String> adminSet = Arrays.stream(ADMIN_ACCOUNT)
 				.map(String::toLowerCase)
 				.collect(Collectors.toSet());
@@ -3634,7 +3634,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 				.anyMatch(adminSet::contains);
 	}
 	/**
-     * 根据用户ids获取部门名称
+     * Lấy tên phòng ban theo ids người dùng
      *
      * @param userIdList
      * @param symbol
@@ -3660,7 +3660,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 根据用户ids获取部门名称
+     * Lấy tên phòng ban theo ids người dùng
      *
      * @param userIdList
      * @param symbol

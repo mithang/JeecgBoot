@@ -5,18 +5,18 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 企业微信的实现类
+ * Lớp triển khai WeChat doanh nghiệp
  */
 @Data
 public class JwSysUserDepartVo {
 
     /**
-     * 企业微信和用户的映射类
+     * Lớp ánh xạ giữa WeChat Work và người dùng
      */
     private List<JwUserDepartVo> jwUserDepartVos;
 
     /**
-     * 用户列表
+     * Danh sách người dùng
      */
     private List<JwUserDepartVo> userList;
 

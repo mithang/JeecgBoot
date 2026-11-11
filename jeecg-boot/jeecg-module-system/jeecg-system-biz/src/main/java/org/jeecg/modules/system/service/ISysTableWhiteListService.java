@@ -6,7 +6,7 @@ import org.jeecg.modules.system.entity.SysTableWhiteList;
 import java.util.Map;
 
 /**
- * @Description: 系统表白名单
+ * @Description: Danh sách trắng bảng hệ thống
  * @Author: jeecg-boot
  * @Date: 2023-09-12
  * @Version: V1.0
@@ -14,7 +14,7 @@ import java.util.Map;
 public interface ISysTableWhiteListService extends IService<SysTableWhiteList> {
 
     /**
-     * 新增
+     * Thêm mới
      *
      * @param sysTableWhiteList
      * @return
@@ -22,7 +22,7 @@ public interface ISysTableWhiteListService extends IService<SysTableWhiteList> {
     boolean add(SysTableWhiteList sysTableWhiteList);
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param sysTableWhiteList
      * @return
@@ -30,15 +30,15 @@ public interface ISysTableWhiteListService extends IService<SysTableWhiteList> {
     boolean edit(SysTableWhiteList sysTableWhiteList);
 
     /**
-     * 通过id删除，可批量删除
+     * Xóa theo id, có thể xóa hàng loạt
      *
-     * @param ids 多个使用逗号分割
+     * @param ids Nhiều mục dùng dấu phẩy để phân tách
      * @return
      */
     boolean deleteByIds(String ids);
 
     /**
-     * 自动添加到数据库中
+     * Tự động thêm vào cơ sở dữ liệu
      *
      * @param tableName
      * @param fieldName
@@ -47,7 +47,7 @@ public interface ISysTableWhiteListService extends IService<SysTableWhiteList> {
     SysTableWhiteList autoAdd(String tableName, String fieldName);
 
     /**
-     * 以map的方式获取所有数据
+     * Lấy tất cả dữ liệu theo dạng map
      * key=tableName，value=fieldName
      *
      * @return

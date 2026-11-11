@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * @Description: 用户通告阅读标记表
+ * @Description: Bảng đánh dấu đã đọc thông báo của người dùng
  * @Author: jeecg-boot
  * @Date:  2019-02-21
  * @Version: V1.0
@@ -17,22 +17,22 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ISysAnnouncementSendService extends IService<SysAnnouncementSend> {
 
 	/**
-	 * 获取我的消息
+	 * Lấy tin nhắn của tôi
 	 * @param announcementSendModel
-     * @param page 当前页数
+     * @param page Số trang hiện tại
 	 * @return
 	 */
 	public Page<AnnouncementSendModel> getMyAnnouncementSendPage(Page<AnnouncementSendModel> page,AnnouncementSendModel announcementSendModel);
 
 	/**
-	 * 根据消息发送记录ID获取消息内容
+	 * Lấy nội dung tin nhắn theo ID bản ghi gửi tin nhắn
 	 * @return
 	 */
 	AnnouncementSendModel getOne(String sendId);
 	
 
     /**
-     * 获取当前用户已阅读的内容
+     * Lấy nội dung người dùng hiện tại đã đọc
      * 
      * @param id
      * @return
@@ -40,14 +40,14 @@ public interface ISysAnnouncementSendService extends IService<SysAnnouncementSen
     long getReadCountByUserId(String id);
 
     /**
-     * 根据多个id批量删除已阅读的数量
+     * Xóa hàng loạt số lượng đã đọc theo nhiều id
      * 
      * @param ids
      */
     void deleteBatchByIds(String ids);
 
 	/**
-	 * 根据id更新阅读状态
+	 * Cập nhật trạng thái đã đọc theo id
 	 * @param busId
 	 * @param busType
 	 */

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.system.mapper.SysPermissionDataRuleMapper">
 
-	<!--  查询权限 TODO 这里是不是可以不关联查找 sys_role 表 -->
+	<!--  Truy vấn quyền hạn TODO Có phải ở đây có thể không cần liên kết để tra không sys_role bảng -->
 	<select id="queryDataRuleIds" resultType="java.lang.String">
 		select data_rule_ids 
 			from sys_role_permission a 
@@ -11,7 +11,7 @@
 			join sys_user_role d on d.role_id = c.id
 			join sys_user e on d.user_id = e.id
 			where e.username = #{username} and b.id =  #{permissionId}
-		<!--update begin Author:lvdandan  Date:20200213 for：加入部门权限 -->
+		<!--update begin Author:lvdandan  Date:20200213 for: thêm quyền hạn phòng ban -->
 		union
 		select data_rule_ids
 			from sys_depart_role_permission a
@@ -20,8 +20,8 @@
 			join sys_depart_role_user d on d.drole_id = c.id
 			join sys_user e on d.user_id = e.id
 			where e.username = #{username} and b.id = #{permissionId}
-		<!--update end Author:lvdandan  Date:20200213 for：加入部门权限 -->
-		<!-- update-begin author:scott date:20261012 for：【issues/9820】租户套餐包菜单的数据规则，只取当前租户下的套餐包 -->
+		<!--update end Author:lvdandan  Date:20200213 for: thêm quyền hạn phòng ban -->
+		<!-- update-begin author:scott date:20261012 for：【issues/9820] Quy tắc dữ liệu của menu gói dịch vụ thuê bao, chỉ lấy gói dịch vụ thuộc thuê bao hiện tại -->
 		<if test="tenantId != null">
 		union
 		select a.data_rule_ids
@@ -32,7 +32,7 @@
 			join sys_user e on c.user_id = e.id
 			where e.username = #{username} and a.permission_id = #{permissionId} and b.tenant_id = #{tenantId}
 		</if>
-		<!-- update-end author:scott date:20261012 for：【issues/9820】租户套餐包菜单的数据规则，只取当前租户下的套餐包 -->
+		<!-- update-end author:scott date:20261012 for：【issues/9820] Quy tắc dữ liệu của menu gói dịch vụ thuê bao, chỉ lấy gói dịch vụ thuộc thuê bao hiện tại -->
 
 	</select>
 

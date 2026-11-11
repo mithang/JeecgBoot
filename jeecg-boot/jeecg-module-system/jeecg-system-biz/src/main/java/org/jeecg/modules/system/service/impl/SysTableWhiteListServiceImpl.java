@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * @Description: 系统表白名单
+ * @Description: Danh sách trắng bảng hệ thống
  * @Author: jeecg-boot
  * @Date: 2023-09-12
  * @Version: V1.0
@@ -34,7 +34,7 @@ public class SysTableWhiteListServiceImpl extends ServiceImpl<SysTableWhiteListM
     public boolean add(SysTableWhiteList sysTableWhiteList) {
         this.checkEntity(sysTableWhiteList);
         if (super.save(sysTableWhiteList)) {
-            // 清空缓存
+            // Xóa bộ nhớ đệm
             whiteListHandler.clear();
             return true;
         }
@@ -45,7 +45,7 @@ public class SysTableWhiteListServiceImpl extends ServiceImpl<SysTableWhiteListM
     public boolean edit(SysTableWhiteList sysTableWhiteList) {
         this.checkEntity(sysTableWhiteList);
         if (super.updateById(sysTableWhiteList)) {
-            // 清空缓存
+            // Xóa bộ nhớ đệm
             whiteListHandler.clear();
             return true;
         }
@@ -53,24 +53,24 @@ public class SysTableWhiteListServiceImpl extends ServiceImpl<SysTableWhiteListM
     }
 
     /**
-     * 检查需要新增或更新的实体是否符合规范
+     * Kiểm tra thực thể cần thêm mới hoặc cập nhật có phù hợp với quy chuẩn hay không
      *
      * @param sysTableWhiteList
      */
     private void checkEntity(SysTableWhiteList sysTableWhiteList) {
         if (sysTableWhiteList == null) {
-            throw new JeecgBootException("操作失败，实体为空！");
+            throw new JeecgBootException("Thao tác thất bại, thực thể trống!");
         }
         if (oConvertUtils.isEmpty(sysTableWhiteList.getTableName())) {
-            throw new JeecgBootException("操作失败，表名不能为空！");
+            throw new JeecgBootException("Thao tác thất bại, tên bảng không được để trống!");
         }
         if (oConvertUtils.isEmpty(sysTableWhiteList.getFieldName())) {
-            throw new JeecgBootException("操作失败，字段名不能为空！");
+            throw new JeecgBootException("Thao tác thất bại, tên trường không được để trống!");
         }
-        // 将表名和字段名转换成小写
+        // Chuyển tên bảng và tên trường thành chữ thường
         sysTableWhiteList.setTableName(sysTableWhiteList.getTableName().toLowerCase());
         sysTableWhiteList.setFieldName(sysTableWhiteList.getFieldName().toLowerCase());
-        // 如果status为空，则默认启用
+        // Nếu status trống thì mặc định là bật
         if (oConvertUtils.isEmpty(sysTableWhiteList.getStatus())) {
             sysTableWhiteList.setStatus(CommonConstant.STATUS_1);
         }
@@ -83,7 +83,7 @@ public class SysTableWhiteListServiceImpl extends ServiceImpl<SysTableWhiteListM
         }
         List<String> idList = Arrays.asList(ids.split(","));
         if (super.removeByIds(idList)) {
-            // 清空缓存
+            // Xóa bộ nhớ đệm
             whiteListHandler.clear();
             return true;
         }
@@ -93,41 +93,41 @@ public class SysTableWhiteListServiceImpl extends ServiceImpl<SysTableWhiteListM
     @Override
     public SysTableWhiteList autoAdd(String tableName, String fieldName) {
         if (oConvertUtils.isEmpty(tableName)) {
-            throw new JeecgBootException("操作失败，表名不能为空！");
+            throw new JeecgBootException("Thao tác thất bại, tên bảng không được để trống!");
         }
         if (oConvertUtils.isEmpty(fieldName)) {
-            throw new JeecgBootException("操作失败，字段名不能为空！");
+            throw new JeecgBootException("Thao tác thất bại, tên trường không được để trống!");
         }
-        // 统一转换成小写
+        // Thống nhất chuyển thành chữ thường
         tableName = tableName.toLowerCase();
         fieldName = fieldName.toLowerCase();
-        // 查询是否已经存在
+        // Truy vấn xem đã tồn tại chưa
         LambdaQueryWrapper<SysTableWhiteList> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysTableWhiteList::getTableName, tableName);
         SysTableWhiteList getEntity = super.getOne(queryWrapper);
         if (getEntity != null) {
-            // 如果已经存在，并且已禁用，则抛出异常
+            // Nếu đã tồn tại và đã bị vô hiệu hóa thì ném ra ngoại lệ
             if (CommonConstant.STATUS_0.equals(getEntity.getStatus())) {
-                throw new JeecgBootException("[白名单] 表名已存在，但是已被禁用，请先启用！tableName=" + tableName);
+                throw new JeecgBootException("[Danh sách trắng] Tên bảng đã tồn tại nhưng đã bị vô hiệu hóa, vui lòng bật lên trước!tableName=" + tableName);
             }
-            // 合并字段
+            // Gộp trường
             Set<String> oldFieldSet = new HashSet<>(Arrays.asList(getEntity.getFieldName().split(",")));
             Set<String> newFieldSet = new HashSet<>(Arrays.asList(fieldName.split(",")));
             oldFieldSet.addAll(newFieldSet);
             getEntity.setFieldName(String.join(",", oldFieldSet));
             this.checkEntity(getEntity);
             super.updateById(getEntity);
-            log.info("修改表单白名单项，表名：{}，oldFieldSet： {}，newFieldSet：{}", tableName, oldFieldSet.toArray(), newFieldSet.toArray());
+            log.info("Sửa mục trong danh sách trắng của biểu mẫu, tên bảng:{}，oldFieldSet： {}，newFieldSet：{}", tableName, oldFieldSet.toArray(), newFieldSet.toArray());
             return getEntity;
         } else {
-            // 新增白名单项
+            // Thêm mục vào danh sách trắng
             SysTableWhiteList saveEntity = new SysTableWhiteList();
             saveEntity.setTableName(tableName);
             saveEntity.setFieldName(fieldName);
             saveEntity.setStatus(CommonConstant.STATUS_1);
             this.checkEntity(saveEntity);
             super.save(saveEntity);
-            log.info("新增表单白名单项: 表名：{}，配置 > {}", tableName, saveEntity.toString());
+            log.info("Thêm mục danh sách trắng biểu mẫu: Tên bảng: {}, cấu hình > {}", tableName, saveEntity.toString());
             return saveEntity;
         }
     }
@@ -137,9 +137,9 @@ public class SysTableWhiteListServiceImpl extends ServiceImpl<SysTableWhiteListM
         Map<String, String> map = new HashMap<>();
         List<SysTableWhiteList> allData = super.list();
         for (SysTableWhiteList item : allData) {
-            // 只有启用的才放入map
+            // Chỉ đưa vào những mục đã bật map
             if (CommonConstant.STATUS_1.equals(item.getStatus())) {
-                // 表名和字段名都转成小写，防止大小写不一致
+                // Tên bảng và tên trường đều chuyển thành chữ thường, tránh không nhất quán về chữ hoa/thường
                 map.put(item.getTableName().toLowerCase(), item.getFieldName().toLowerCase());
             }
         }

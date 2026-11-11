@@ -13,27 +13,27 @@ public class SysUserDepVo {
     private String userId;
     private String departName;
     /**
-     * 部门id
+     * Phòng ban id
      */
     private String deptId;
 
     /**
-     * 部门的父级id
+     * Cấp cha của phòng ban id
      */
     private String parentId;
 
     /**
-     * 部门类型
+     * Loại phòng ban
      */
     private String orgCategory;
 
     /**
-     * 职级
+     * Cấp bậc
      */
     private String positionId;
 
     /**
-     * 部门编码
+     * Mã phòng ban
      */
     private String orgCode;
 }

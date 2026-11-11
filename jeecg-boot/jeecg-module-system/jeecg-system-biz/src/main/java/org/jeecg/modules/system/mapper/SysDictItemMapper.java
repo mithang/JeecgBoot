@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * <p>
- * Mapper 接口
+ * Mapper API
  * </p>
  *
  * @Author zhangweijian
@@ -17,8 +17,8 @@ import java.util.List;
 public interface SysDictItemMapper extends BaseMapper<SysDictItem> {
 
     /**
-     * 通过字典id查询字典项
-     * @param mainId 字典id
+     * Truy vấn mục danh mục theo id danh mục
+     * @param mainId Từ điển id
      * @return
      */
     @Select("SELECT * FROM sys_dict_item WHERE DICT_ID = #{mainId} order by sort_order asc, item_value asc")

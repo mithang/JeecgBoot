@@ -19,22 +19,22 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @Author scott
  * @Date 2019/11/29 9:41
- * @Description: 此注解相当于设置访问URL
+ * @Description: Annotation này tương đương với việc đặt quyền truy cập URL
  */
 @Component
 @Slf4j
 @ServerEndpoint("/websocket/{userId}")
 public class WebSocket {
     
-    /**线程安全Map*/
+    /**An toàn luồng Map*/
     private static ConcurrentHashMap<String, Session> sessionPool = new ConcurrentHashMap<>();
 
     /**
-     * Redis触发监听名字
+     * Redis Tên trình lắng nghe được kích hoạt
      */
     public static final String REDIS_TOPIC_NAME = "socketHandler";
 
-    //避免初次调用出现空指针的情况
+    //Tránh trường hợp lần gọi đầu tiên xuất hiện con trỏ null
     private static JeecgRedisClient jeecgRedisClient;
     @Autowired
     private void setJeecgRedisClient(JeecgRedisClient jeecgRedisClient){
@@ -42,12 +42,12 @@ public class WebSocket {
     }
 
 
-    //==========【websocket接受、推送消息等方法 —— 具体服务节点推送ws消息】========================================================================================
+    //==========[Các phương thức websocket nhận, đẩy tin nhắn, v.v. — node dịch vụ cụ thể đẩy tin nhắn ws]========================================================================================
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "userId") String userId) {
         try {
             sessionPool.put(userId, session);
-            log.debug("【系统 WebSocket】有新的连接，总数为:" + sessionPool.size());
+            log.debug("[WebSocket hệ thống] Có kết nối mới, tổng số là:" + sessionPool.size());
         } catch (Exception e) {
         }
     }
@@ -56,29 +56,29 @@ public class WebSocket {
     public void onClose(@PathParam("userId") String userId) {
         try {
             sessionPool.remove(userId);
-            log.debug("【系统 WebSocket】连接断开，总数为:" + sessionPool.size());
+            log.debug("【Hệ thống WebSocket】Kết nối đã ngắt, tổng số là:" + sessionPool.size());
         } catch (Exception e) {
-            log.error("【系统 WebSocket】连接断开异常", e);
+            log.error("【Hệ thống WebSocket】Ngoại lệ ngắt kết nối", e);
         }
     }
 
     /**
-     * ws推送消息
+     * ws Tin nhắn đẩy
      *
      * @param userId
      * @param message
      */
     public void pushMessage(String userId, String message) {
         for (Map.Entry<String, Session> item : sessionPool.entrySet()) {
-            //userId key值= {用户id + "_"+ 登录token的md5串}
-            //update-begin---author:scott ---date:20261013  for：【安全 GHSA-5j5w-pm5g-5wr8】由contains子串匹配改为精确匹配，防止userId互为子串时错发给他人(如"1"命中"11")-----------
+            //userId key= {Người dùng id + "_"+ chuỗi md5 của token đăng nhập}
+            //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-5j5w-pm5g-5wr8] Đổi từ khớp chuỗi con bằng contains sang khớp chính xác, ngăn gửi nhầm cho người khác khi các userId là chuỗi con của nhau(ví dụ "1" trùng khớp"11")-----------
             if (item.getKey().equals(userId) || item.getKey().startsWith(userId + "_")) {
-            //update-end---author:scott ---date:20261013  for：【安全 GHSA-5j5w-pm5g-5wr8】由contains子串匹配改为精确匹配，防止userId互为子串时错发给他人(如"1"命中"11")-----------
+            //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-5j5w-pm5g-5wr8] Đổi từ khớp chuỗi con bằng contains sang khớp chính xác, ngăn gửi nhầm cho người khác khi các userId là chuỗi con của nhau(ví dụ "1" trùng khớp"11")-----------
                 Session session = item.getValue();
                 try {
-                    // 代码逻辑说明: websocket报错 https://gitee.com/jeecg/jeecg-boot/issues/I4C0MU
+                    // Giải thích logic mã: websocket Báo lỗi https://gitee.com/jeecg/jeecg-boot/issues/I4C0MU
                     synchronized (session){
-                        log.debug("【系统 WebSocket】推送单人消息:" + message);
+                        log.debug("【Hệ thống WebSocket】Đẩy tin nhắn cho một người:" + message);
                         session.getBasicRemote().sendText(message);
                     }
                 } catch (Exception e) {
@@ -89,7 +89,7 @@ public class WebSocket {
     }
 
     /**
-     * ws遍历群发消息
+     * ws Duyệt tin nhắn gửi hàng loạt qua ws
      */
     public void pushMessage(String message) {
         try {
@@ -100,7 +100,7 @@ public class WebSocket {
                     log.error(e.getMessage(), e);
                 }
             }
-            log.debug("【系统 WebSocket】群发消息:" + message);
+            log.debug("Gửi tin nhắn hàng loạt:" + message);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -108,55 +108,55 @@ public class WebSocket {
 
 
     /**
-     * ws接受客户端消息
+     * ws nhận tin nhắn từ client
      */
     @OnMessage
     public void onMessage(String message, @PathParam(value = "userId") String userId) {
         if(!"ping".equals(message) && !WebsocketConst.CMD_CHECK.equals(message)){
-            log.debug("【系统 WebSocket】收到客户端消息:" + message);
+            log.debug("【Hệ thống WebSocket】Đã nhận tin nhắn từ client:" + message);
         }else{
-            log.debug("【系统 WebSocket】收到客户端消息:" + message);
-            // 代码逻辑说明: 【issues/1161】前端websocket因心跳导致监听不起作用---
+            log.debug("【Hệ thống WebSocket】Đã nhận tin nhắn từ client:" + message);
+            // Giải thích logic mã: 【issues/1161] WebSocket phía frontend không lắng nghe được do heartbeat---
             this.sendMessage(userId, "ping");
         }
         
 //        //------------------------------------------------------------------------------
 //        JSONObject obj = new JSONObject();
-//        //业务类型
+//        //Loại nghiệp vụ
 //        obj.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_CHECK);
-//        //消息内容
-//        obj.put(WebsocketConst.MSG_TXT, "心跳响应");
+//        //Nội dung tin nhắn
+//        obj.put(WebsocketConst.MSG_TXT, "Phản hồi heartbeat");
 //        this.pushMessage(userId, obj.toJSONString());
 //        //------------------------------------------------------------------------------
     }
 
     /**
-     * 配置错误信息处理
+     * Xử lý thông tin lỗi cấu hình
      *
      * @param session
      * @param t
      */
     @OnError
     public void onError(Session session, Throwable t) {
-        // ClosedChannelException / EOFException 是应用关闭时 Tomcat 主动断开连接的正常现象，降级为 debug
+        // ClosedChannelException / EOFException là hiện tượng bình thường khi ứng dụng đóng và Tomcat chủ động ngắt kết nối, hạ cấp thành debug
         Throwable cause = t.getCause() != null ? t.getCause() : t;
         if (cause instanceof ClosedChannelException || cause instanceof EOFException) {
-            log.debug("【系统 WebSocket】连接已关闭（正常关闭）: {}", t.getMessage());
+            log.debug("[WebSocket hệ thống] Kết nối đã đóng (đóng bình thường): {}", t.getMessage());
         } else {
-            log.warn("【系统 WebSocket】消息出现错误", t);
+            log.warn("【Hệ thống WebSocket】Tin nhắn gặp lỗi", t);
         }
     }
-    //==========【系统 WebSocket接受、推送消息等方法 —— 具体服务节点推送ws消息】========================================================================================
+    //==========[Hệ thống — các phương thức WebSocket nhận, đẩy tin nhắn, v.v. — node dịch vụ cụ thể đẩy tin nhắn ws]========================================================================================
     
 
-    //==========【采用redis发布订阅模式——推送消息】========================================================================================
+    //==========【Sử dụng chế độ publish/subscribe của Redis — đẩy tin nhắn】========================================================================================
     /**
-     * 后台发送消息到redis
+     * Backend gửi tin nhắn đến redis
      *
      * @param message
      */
     public void sendMessage(String message) {
-        //log.debug("【系统 WebSocket】广播消息:" + message);
+        //log.debug("Phát tin nhắn quảng bá:" + message);
         BaseMap baseMap = new BaseMap();
         baseMap.put("userId", "");
         baseMap.put("message", message);
@@ -164,7 +164,7 @@ public class WebSocket {
     }
 
     /**
-     * 此为单点消息 redis
+     * Đây là tin nhắn điểm đơn redis
      *
      * @param userId
      * @param message
@@ -177,7 +177,7 @@ public class WebSocket {
     }
 
     /**
-     * 此为单点消息(多人) redis
+     * Đây là tin nhắn điểm đơn(nhiều người) redis
      *
      * @param userIds
      * @param message
@@ -187,6 +187,6 @@ public class WebSocket {
             sendMessage(userId, message);
         }
     }
-    //=======【采用redis发布订阅模式——推送消息】==========================================================================================
+    //=======【Sử dụng chế độ publish/subscribe của Redis — đẩy tin nhắn】==========================================================================================
     
 }

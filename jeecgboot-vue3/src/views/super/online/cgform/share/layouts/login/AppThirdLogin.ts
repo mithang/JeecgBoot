@@ -42,9 +42,9 @@ export function useThirdLogin(emit) {
       let token = event.data;
       if (typeof token === 'string') {
         //Nếu là kiểu chuỗi Cho thấy làtokenThông tin
-        if (token === '登录失败') {
+        if (token === 'Đăng nhập thất bại') {
           createMessage.warning(token);
-        } else if (token.includes('绑定手机号')) {
+        } else if (token.includes('Liên kết số điện thoại')) {
           bindingAccount.value = true;
           let strings = token.split(',');
           thirdUserUuid.value = strings[1];

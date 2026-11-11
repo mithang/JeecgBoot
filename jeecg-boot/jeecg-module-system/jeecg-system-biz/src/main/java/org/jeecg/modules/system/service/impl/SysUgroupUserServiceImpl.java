@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
- * @Description: 用户组关系表
+ * @Description: Bảng quan hệ nhóm người dùng
  * @Author: jeecg-boot
  * @Date:   2026-02-27
  * @Version: V1.0

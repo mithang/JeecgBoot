@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 企业微信树结构的部门
+ * Phòng ban có cấu trúc cây của WeChat Doanh nghiệp
  *
  * @author sunjianlei
  */
@@ -30,7 +30,7 @@ public class JwDepartmentTreeVo extends Department {
     }
 
     /**
-     * 是否有子项
+     * Có mục con không
      */
     public boolean hasChildren() {
         return children != null && children.size() > 0;
@@ -44,19 +44,19 @@ public class JwDepartmentTreeVo extends Department {
     }
 
     /**
-     * 静态辅助方法，将list转为tree结构
+     * Phương thức hỗ trợ tĩnh, chuyển list thành cấu trúc tree
      */
     public static List<JwDepartmentTreeVo> listToTree(List<Department> allDepartment) {
-        // 先找出所有的父级
+        // Trước tiên, tìm tất cả các cấp cha
         List<JwDepartmentTreeVo> treeList = getByParentId("1", allDepartment);
         Optional<Department> departmentOptional = allDepartment.stream().filter(item -> "0".equals(item.getParentid())).findAny();
         Department department = new Department();
-        //判断是否找到数据
+        //Kiểm tra xem có tìm thấy dữ liệu không
         if(departmentOptional.isPresent()){
             department = departmentOptional.get();
         }
         getChildrenRecursion(treeList, allDepartment);
-        // 代码逻辑说明: 【issues/6017】企业微信同步部门时没有最顶层的部门名，同步用户时，用户没有部门信息---
+        // Giải thích logic mã: 【issues/6017] Khi WeChat Doanh nghiệp đồng bộ phòng ban thì không có tên phòng ban cấp cao nhất; khi đồng bộ người dùng, người dùng không có thông tin phòng ban---
         JwDepartmentTreeVo treeVo = new JwDepartmentTreeVo(department);
         treeVo.setChildren(treeList);
         List<JwDepartmentTreeVo> list = new ArrayList<>();
@@ -76,7 +76,7 @@ public class JwDepartmentTreeVo extends Department {
 
     private static void getChildrenRecursion(List<JwDepartmentTreeVo> treeList, List<Department> allDepartment) {
         for (JwDepartmentTreeVo departmentTree : treeList) {
-            // 递归寻找子级
+            // Tìm đệ quy cấp con
             List<JwDepartmentTreeVo> children = getByParentId(departmentTree.getId(), allDepartment);
             if (children.size() > 0) {
                 departmentTree.setChildren(children);

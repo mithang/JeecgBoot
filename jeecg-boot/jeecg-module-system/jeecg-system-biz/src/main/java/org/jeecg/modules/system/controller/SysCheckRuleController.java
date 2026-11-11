@@ -29,13 +29,13 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * @Description: 编码校验规则
+ * @Description: Quy tắc kiểm tra mã
  * @Author: jeecg-boot
  * @Date: 2020-02-04
  * @Version: V1.0
  */
 @Slf4j
-@Tag(name = "编码校验规则")
+@Tag(name = "Quy tắc kiểm tra mã")
 @RestController
 @RequestMapping("/sys/checkRule")
 public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCheckRuleService> {
@@ -44,7 +44,7 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
     private ISysCheckRuleService sysCheckRuleService;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param sysCheckRule
      * @param pageNo
@@ -52,8 +52,8 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
      * @param request
      * @return
      */
-    @AutoLog(value = "编码校验规则-分页列表查询")
-    @Operation(summary = "编码校验规则-分页列表查询")
+    @AutoLog(value = "Quy tắc kiểm tra mã-Truy vấn danh sách phân trang")
+    @Operation(summary = "Quy tắc kiểm tra mã-Truy vấn danh sách phân trang")
     @GetMapping(value = "/list")
     public Result queryPageList(
             SysCheckRule sysCheckRule,
@@ -69,13 +69,13 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
 
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param ruleCode
      * @return
      */
-    @AutoLog(value = "编码校验规则-通过Code校验传入的值")
-    @Operation(summary = "编码校验规则-通过Code校验传入的值")
+    @AutoLog(value = "Quy tắc kiểm tra mã-Kiểm tra giá trị truyền vào qua Code")
+    @Operation(summary = "Quy tắc kiểm tra mã-Kiểm tra giá trị truyền vào qua Code")
     @GetMapping(value = "/checkByCode")
     public Result checkByCode(
             @RequestParam(name = "ruleCode") String ruleCode,
@@ -83,7 +83,7 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
     ) throws UnsupportedEncodingException {
         SysCheckRule sysCheckRule = sysCheckRuleService.getByCode(ruleCode);
         if (sysCheckRule == null) {
-            return Result.error("该编码不存在");
+            return Result.error("Mã này không tồn tại");
         }
         JSONObject errorResult = sysCheckRuleService.checkValue(sysCheckRule, URLDecoder.decode(value, "UTF-8"));
         if (errorResult == null) {
@@ -96,75 +96,75 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param sysCheckRule
      * @return
      */
-    @AutoLog(value = "编码校验规则-添加")
-    @Operation(summary = "编码校验规则-添加")
+    @AutoLog(value = "Quy tắc kiểm tra mã-Thêm")
+    @Operation(summary = "Quy tắc kiểm tra mã-Thêm")
     @RequiresPermissions("system:checkRule:add")
     @PostMapping(value = "/add")
     public Result add(@RequestBody SysCheckRule sysCheckRule) {
         sysCheckRule.setCreateBy(null);
         sysCheckRule.setCreateTime(null);
         sysCheckRuleService.save(sysCheckRule);
-        return Result.ok("添加成功！");
+        return Result.ok("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param sysCheckRule
      * @return
      */
-    @AutoLog(value = "编码校验规则-编辑")
-    @Operation(summary = "编码校验规则-编辑")
+    @AutoLog(value = "Quy tắc kiểm tra mã-Chỉnh sửa")
+    @Operation(summary = "Quy tắc kiểm tra mã-Chỉnh sửa")
     @RequiresPermissions("system:checkRule:edit")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
     public Result edit(@RequestBody SysCheckRule sysCheckRule) {
         sysCheckRuleService.updateById(sysCheckRule);
-        return Result.ok("编辑成功!");
+        return Result.ok("Chỉnh sửa thành công!");
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "编码校验规则-通过id删除")
-    @Operation(summary = "编码校验规则-通过id删除")
+    @AutoLog(value = "Quy tắc kiểm tra mã-Xóa theo id")
+    @Operation(summary = "Quy tắc kiểm tra mã-Xóa theo id")
     @RequiresPermissions("system:checkRule:delete")
     @DeleteMapping(value = "/delete")
     public Result delete(@RequestParam(name = "id", required = true) String id) {
         sysCheckRuleService.removeById(id);
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
      */
-    @AutoLog(value = "编码校验规则-批量删除")
-    @Operation(summary = "编码校验规则-批量删除")
+    @AutoLog(value = "Quy tắc kiểm tra mã-Xóa hàng loạt")
+    @Operation(summary = "Quy tắc kiểm tra mã-Xóa hàng loạt")
     @RequiresPermissions("system:checkRule:deleteBatch")
     @DeleteMapping(value = "/deleteBatch")
     public Result deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
         this.sysCheckRuleService.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.ok("批量删除成功！");
+        return Result.ok("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "编码校验规则-通过id查询")
-    @Operation(summary = "编码校验规则-通过id查询")
+    @AutoLog(value = "Quy tắc kiểm tra mã-Tìm kiếm theo id")
+    @Operation(summary = "Quy tắc kiểm tra mã-Tìm kiếm theo id")
     @GetMapping(value = "/queryById")
     public Result queryById(@RequestParam(name = "id", required = true) String id) {
         SysCheckRule sysCheckRule = sysCheckRuleService.getById(id);
@@ -172,7 +172,7 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param sysCheckRule
@@ -180,11 +180,11 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
     @RequiresPermissions("system:checkRule:exportXls")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysCheckRule sysCheckRule) {
-        return super.exportXls(request, sysCheckRule, SysCheckRule.class, "编码校验规则");
+        return super.exportXls(request, sysCheckRule, SysCheckRule.class, "Quy tắc kiểm tra mã");
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -204,10 +204,10 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
                 return sysCheckRuleService.importExcel(entry.getValue(), params);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                return Result.error("文件导入失败：" + e.getMessage());
+                return Result.error("Nhập tệp thất bại:" + e.getMessage());
             }
         }
-        return Result.error("文件导入失败：未找到上传文件");
+        return Result.error("Nhập tệp thất bại: không tìm thấy tệp đã tải lên");
     }
 
 }

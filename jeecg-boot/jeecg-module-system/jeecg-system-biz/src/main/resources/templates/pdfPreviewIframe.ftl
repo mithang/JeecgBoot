@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-store"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<title>PDF预览</title>
+<title>PDF Xem trước</title>
 </head>
 <body>
 <script type="text/javascript">

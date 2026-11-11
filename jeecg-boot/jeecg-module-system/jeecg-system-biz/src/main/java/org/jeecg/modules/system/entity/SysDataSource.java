@@ -15,7 +15,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 多数据源管理
+ * @Description: Quản lý nhiều nguồn dữ liệu
  * @Author: jeecg-boot
  * @Date: 2019-12-25
  * @Version: V1.0
@@ -24,7 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName("sys_data_source")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(description="多数据源管理")
+@Schema(description="Quản lý nhiều nguồn dữ liệu")
 public class SysDataSource {
 
     /**
@@ -34,93 +34,93 @@ public class SysDataSource {
     @Schema(description = "id")
     private java.lang.String id;
     /**
-     * 数据源编码
+     * Mã nguồn dữ liệu
      */
-    @Excel(name = "数据源编码", width = 15)
-    @Schema(description = "数据源编码")
+    @Excel(name = "Mã nguồn dữ liệu", width = 15)
+    @Schema(description = "Mã nguồn dữ liệu")
     private java.lang.String code;
     /**
-     * 数据源名称
+     * Tên nguồn dữ liệu
      */
-    @Excel(name = "数据源名称", width = 15)
-    @Schema(description = "数据源名称")
+    @Excel(name = "Tên nguồn dữ liệu", width = 15)
+    @Schema(description = "Tên nguồn dữ liệu")
     private java.lang.String name;
     /**
-     * 描述
+     * Mô tả
      */
-    @Excel(name = "备注", width = 15)
-    @Schema(description = "备注")
+    @Excel(name = "Ghi chú", width = 15)
+    @Schema(description = "Ghi chú")
     private java.lang.String remark;
     /**
-     * 数据库类型
+     * Loại cơ sở dữ liệu
      */
     @Dict(dicCode = "database_type")
-    @Excel(name = "数据库类型", width = 15, dicCode = "database_type")
-    @Schema(description = "数据库类型")
+    @Excel(name = "Loại cơ sở dữ liệu", width = 15, dicCode = "database_type")
+    @Schema(description = "Loại cơ sở dữ liệu")
     private java.lang.String dbType;
     /**
-     * 驱动类
+     * Lớp driver
      */
-    @Excel(name = "驱动类", width = 15)
-    @Schema(description = "驱动类")
+    @Excel(name = "Lớp driver", width = 15)
+    @Schema(description = "Lớp driver")
     private java.lang.String dbDriver;
     /**
-     * 数据源地址
+     * Địa chỉ nguồn dữ liệu
      */
-    @Excel(name = "数据源地址", width = 15)
-    @Schema(description = "数据源地址")
+    @Excel(name = "Địa chỉ nguồn dữ liệu", width = 15)
+    @Schema(description = "Địa chỉ nguồn dữ liệu")
     private java.lang.String dbUrl;
     /**
-     * 数据库名称
+     * Tên cơ sở dữ liệu
      */
-    @Excel(name = "数据库名称", width = 15)
-    @Schema(description = "数据库名称")
+    @Excel(name = "Tên cơ sở dữ liệu", width = 15)
+    @Schema(description = "Tên cơ sở dữ liệu")
     private java.lang.String dbName;
     /**
-     * 用户名
+     * Tên người dùng
      */
-    @Excel(name = "用户名", width = 15)
-    @Schema(description = "用户名")
+    @Excel(name = "Tên người dùng", width = 15)
+    @Schema(description = "Tên người dùng")
     private java.lang.String dbUsername;
     /**
-     * 密码
+     * Mật khẩu
      */
-    // 密码为敏感凭据，不参与Excel导出（同SysUser.password处理），编辑时密码留空表示不修改
-    @Schema(description = "密码")
+    // Mật khẩu là thông tin xác thực nhạy cảm, không tham gia xuất Excel (giống SysUser.password xử lý), khi chỉnh sửa, để trống mật khẩu nghĩa là không sửa đổi
+    @Schema(description = "Mật khẩu")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private java.lang.String dbPassword;
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     private java.lang.String createBy;
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private java.util.Date createTime;
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
+    @Schema(description = "Người cập nhật")
     private java.lang.String updateBy;
     /**
-     * 更新日期
+     * Ngày cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private java.util.Date updateTime;
     /**
-     * 所属部门
+     * Phòng ban trực thuộc
      */
-    @Excel(name = "所属部门", width = 15)
-    @Schema(description = "所属部门")
+    @Excel(name = "Phòng ban trực thuộc", width = 15)
+    @Schema(description = "Phòng ban trực thuộc")
     private java.lang.String sysOrgCode;
 
-    /**租户ID*/
-    @Schema(description = "租户ID")
+    /**Tenant ID*/
+    @Schema(description = "Tenant ID")
     private java.lang.Integer tenantId;
 }

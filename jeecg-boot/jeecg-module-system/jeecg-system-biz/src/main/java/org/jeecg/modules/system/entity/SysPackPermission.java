@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: 产品包菜单关系表
+ * @Description: Bảng quan hệ menu gói sản phẩm
  * @Author: jeecg-boot
  * @Date:   2022-12-31
  * @Version: V1.0
@@ -24,39 +24,39 @@ import lombok.experimental.Accessors;
 @TableName("sys_tenant_pack_perms")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="产品包菜单关系表")
+@Schema(description="Bảng quan hệ menu gói sản phẩm")
 public class SysPackPermission implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键编号*/
+	/**Mã khóa chính*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键编号")
+    @Schema(description = "Mã khóa chính")
     private String id;
-	/**租户产品包名称*/
-	@Excel(name = "租户产品包名称", width = 15)
-    @Schema(description = "租户产品包名称")
+	/**Tên gói sản phẩm tenant*/
+	@Excel(name = "Tên gói sản phẩm tenant", width = 15)
+    @Schema(description = "Tên gói sản phẩm tenant")
     private String packId;
-	/**菜单id*/
-	@Excel(name = "菜单id", width = 15)
-    @Schema(description = "菜单id")
+	/**Menu id*/
+	@Excel(name = "Menu id", width = 15)
+    @Schema(description = "Menu id")
     private String permissionId;
-	/**数据权限ids（【issues/9820】租户套餐包菜单支持分配数据规则）*/
-    @Schema(description = "数据权限ids")
+	/**ids quyền dữ liệu（【issues/9820】Menu gói sản phẩm tenant hỗ trợ gán quy tắc dữ liệu)*/
+    @Schema(description = "Quyền hạn dữ liệu ids")
     private String dataRuleIds;
-	/**创建人*/
-    @Schema(description = "创建人")
+	/**Người tạo*/
+    @Schema(description = "Người tạo")
     private String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private Date createTime;
-	/**更新人*/
-    @Schema(description = "更新人")
+	/**Người cập nhật*/
+    @Schema(description = "Người cập nhật")
     private String updateBy;
-	/**更新时间*/
+	/**Thời gian cập nhật*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "更新时间")
+    @Schema(description = "Thời gian cập nhật")
     private Date updateTime;
 }

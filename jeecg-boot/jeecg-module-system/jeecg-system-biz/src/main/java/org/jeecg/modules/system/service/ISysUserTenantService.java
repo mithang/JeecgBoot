@@ -19,7 +19,7 @@ import java.util.List;
 public interface ISysUserTenantService extends IService<SysUserTenant> {
 
     /**
-     * 通过租户id获取数据
+     * Lấy dữ liệu theo id Tenant
      * @param page
      * @param userTenantId
      * @param user
@@ -28,28 +28,28 @@ public interface ISysUserTenantService extends IService<SysUserTenant> {
     Page<SysUser> getPageUserList(Page<SysUser> page, Integer userTenantId, SysUser user);
 
     /**
-     * 设置租户id
+     * Cài đặt tenant id
      * @param records
      * @return
      */
     List<SysUser> setUserTenantIds(List<SysUser> records);
 
     /**
-     * 获取租户id获取用户ids
+     * Lấy người dùng theo id Tenant ids
      * @param tenantId
      * @return
      */
     List<String> getUserIdsByTenantId(Integer tenantId);
 
     /**
-     * 通过用户id获取租户ids
+     * Lấy Tenant theo id người dùng ids
      * @param userId
      * @return
      */
     List<Integer> getTenantIdsByUserId(String userId);
     
     /**
-     * 通过用户id获取租户列表
+     * Lấy danh sách Tenant qua ID người dùng
      * @param userId
      * @param userTenantStatus
      * @return
@@ -57,7 +57,7 @@ public interface ISysUserTenantService extends IService<SysUserTenant> {
     List<SysUserTenantVo> getTenantListByUserId(String userId, List<String>  userTenantStatus);
     
     /**
-     * 更新用户租户状态
+     * Cập nhật trạng thái tenant người dùng
      * @param id
      * @param tenantId
      * @param userTenantStatus
@@ -65,23 +65,23 @@ public interface ISysUserTenantService extends IService<SysUserTenant> {
     void updateUserTenantStatus(String id, String tenantId, String userTenantStatus);
 
     /**
-     * 联查用户和租户审核状态
+     * Tra cứu liên kết người dùng và trạng thái xét duyệt Tenant
      * @param page
-     * @param status 租户用户状态，默认为1正常
+     * @param status Trạng thái người dùng tenant, mặc định là 1 bình thường
      * @param user
      * @return
      */
     IPage<SysUserTenantVo> getUserTenantPageList(Page<SysUserTenantVo> page, List<String> status, SysUser user, Integer tenantId);
 
     /**
-     * 取消离职
+     * Hủy nghỉ việc
      * @param userIds
      * @param tenantId
      */
     void putCancelQuit(List<String> userIds, Integer tenantId);
 
     /**
-     * 验证用户是否已存在
+     * Xác minh người dùng đã tồn tại hay chưa
      * @param userId
      * @param tenantId
      * @return
@@ -89,7 +89,7 @@ public interface ISysUserTenantService extends IService<SysUserTenant> {
     Integer userTenantIzExist(String userId, Integer tenantId);
 
     /**
-     * 根据用户id获取我的租户
+     * Lấy Tenant của tôi theo ID người dùng
      *
      * @param page
      * @param userId
@@ -100,21 +100,21 @@ public interface ISysUserTenantService extends IService<SysUserTenant> {
     IPage<SysTenant> getTenantPageListByUserId(Page<SysTenant> page, String userId, List<String> userTenantStatus,SysUserTenantVo sysUserTenantVo);
 
     /**
-     * 同意加入租户
+     * Đồng ý tham gia tenant
      * @param userId
      * @param tenantId
      */
     void agreeJoinTenant(String userId, Integer tenantId);
 
     /**
-     * 拒绝加入租户
+     * Từ chối tham gia tenant
      * @param userId
      * @param tenantId
      */
     void refuseJoinTenant(String userId, Integer tenantId);
 
     /**
-     * 根据用户id和租户id获取用户租户中间表信息
+     * Lấy thông tin bảng trung gian người dùng - tenant theo id người dùng và id tenant
      * @param userId
      * @param tenantId
      * @return
@@ -122,7 +122,7 @@ public interface ISysUserTenantService extends IService<SysUserTenant> {
     SysUserTenant getUserTenantByTenantId(String userId, Integer tenantId);
 
     /**
-     * 获取租户下的成员数量
+     * Lấy số lượng thành viên thuộc Tenant
      * @param tenantId
      * @param tenantStatus
      * @return

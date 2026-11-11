@@ -33,7 +33,7 @@ public class ActuatorRedisController {
     private RedisService redisService;
 
     /**
-     * Redis详细信息
+     * Redis Thông tin chi tiết
      * @return
      * @throws Exception
      */
@@ -46,7 +46,7 @@ public class ActuatorRedisController {
     }
 
 	/**
-	 * Redis历史性能指标查询(过去一小时)
+	 * Redis Truy vấn chỉ số hiệu năng lịch sử(một giờ qua)
 	 * @return
 	 * @throws Exception
 	 * @author chenrui
@@ -66,7 +66,7 @@ public class ActuatorRedisController {
     }
 
     /**
-     * 获取redis key数量 for 报表
+     * Lấy số lượng redis key cho báo cáo
      * @return
      * @throws Exception
      */
@@ -76,7 +76,7 @@ public class ActuatorRedisController {
 		return redisService.getMapForReport("1");
     }
     /**
-     * 获取redis 内存 for 报表
+     * Lấy bộ nhớ redis cho báo cáo
      *
      * @return
      * @throws Exception
@@ -87,7 +87,7 @@ public class ActuatorRedisController {
 		return redisService.getMapForReport("2");
     }
     /**
-     * 获取redis 全部信息 for 报表
+     * Lấy toàn bộ thông tin redis cho báo cáo
      * @return
      * @throws Exception
      */
@@ -104,7 +104,7 @@ public class ActuatorRedisController {
     }
     
   	/**
-  	 * @功能：获取磁盘信息
+  	 * @Chức năng: Lấy thông tin ổ đĩa
   	 * @param request
   	 * @param response
   	 * @return
@@ -114,11 +114,11 @@ public class ActuatorRedisController {
   	public Result<List<Map<String,Object>>> queryDiskInfo(HttpServletRequest request, HttpServletResponse response){
   		Result<List<Map<String,Object>>> res = new Result<>();
   		try {
-  			// 当前文件系统类
+  			// Lớp hệ thống tệp hiện tại
   	        FileSystemView fsv = FileSystemView.getFileSystemView();
-  	        // 列出所有windows 磁盘
+  	        // Liệt kê tất cả ổ đĩa windows
   	        File[] fs = File.listRoots();
-  	        log.info("查询磁盘信息:"+fs.length+"个");
+  	        log.info("Truy vấn thông tin ổ đĩa:"+fs.length+" cái");
   	        List<Map<String,Object>> list = new ArrayList<>();
   	        
   	        for (int i = 0; i < fs.length; i++) {
@@ -134,9 +134,9 @@ public class ActuatorRedisController {
   	        	log.info(map.toString());
   	        }
   	        res.setResult(list);
-  	        res.success("查询成功");
+  	        res.success("Tìm kiếm thành công");
   		} catch (Exception e) {
-  			res.error500("查询失败"+e.getMessage());
+  			res.error500("Tìm kiếm thất bại"+e.getMessage());
   		}
   		return res;
   	}

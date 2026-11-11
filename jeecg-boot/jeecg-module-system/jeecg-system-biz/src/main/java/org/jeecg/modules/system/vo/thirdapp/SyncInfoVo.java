@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 同步结果信息，包含成功的信息和失败的信息
+ * Thông tin kết quả đồng bộ, bao gồm thông tin thành công và thông tin thất bại
  *
  * @author sunjianlei
  */
@@ -14,11 +14,11 @@ import java.util.List;
 public class SyncInfoVo {
 
     /**
-     * 成功的信息
+     * Thông tin thành công
      */
     private List<String> successInfo;
     /**
-     * 失败的信息
+     * Thông tin thất bại
      */
     private List<String> failInfo;
 

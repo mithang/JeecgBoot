@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * @Description: gateway路由管理
+ * @Description: gateway Quản lý route
  * @Author: jeecg-boot
  * @Date: 2020-05-26
  * @Version: V1.0
@@ -44,11 +44,11 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
     private static final String STRING_STATUS = "status";
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMdd");
     /**
-     * 路由 uri 允许的协议
+     * Các giao thức được phép cho uri của route
      */
     private static final List<String> ROUTE_URI_SCHEMES = List.of("lb://", "lb:ws://", "lb:wss://", "http://", "https://", "ws://", "wss://", "forward:", "no://op");
     /**
-     * 允许的 SpEL 写法：仅 Bean 引用，如限流过滤器的 #{@ipKeyResolver}
+     * Cách viết SpEL được phép: chỉ tham chiếu Bean, ví dụ như của bộ lọc giới hạn tốc độ #{@ipKeyResolver}
      */
     private static final Pattern SPEL_BEAN_REF = Pattern.compile("#\\{@[A-Za-z_$][\\w$]*}");
     @Override
@@ -59,30 +59,30 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
 
     @Override
     public void deleteById(String id) {
-        //1.将状态修改成禁用
+        //1.Đổi trạng thái thành vô hiệu hóa
         SysGatewayRoute route = new SysGatewayRoute();
         route.setId(id);
         route.setStatus(0);
         this.baseMapper.updateById(route);
         this.removeById(id);
-        //2.刷新路由
+        //2.Làm mới route
         this.resreshRouter(id);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateAll(JSONObject json) {
-        log.info("--gateway 路由配置修改--");
-        //update-begin---author:scott ---date:20261026  for：【GHSA-9h56-m6g6-7g8r】路由配置保存前校验：禁止在断言/过滤器参数中写 SpEL 表达式（仅放行 #{@beanName} 引用），uri 限定协议-----------
+        log.info("--gateway Sửa đổi cấu hình route--");
+        //update-begin---author:scott ---date:20261026  for：【GHSA-9h56-m6g6-7g8r】Kiểm tra trước khi lưu cấu hình route: cấm viết biểu thức SpEL trong assertion/Viết biểu thức SpEL trong tham số bộ lọc (chỉ cho phép #{@beanName} tham chiếu), uri giới hạn giao thức-----------
         JSONObject router = json.getJSONObject("router");
         if (router != null) {
             checkRouteConfig(router.getString("uri"), router.getString("predicates"), router.getString("filters"));
         }
-        //update-end---author:scott ---date:20261026  for：【GHSA-9h56-m6g6-7g8r】路由配置保存前校验：禁止在断言/过滤器参数中写 SpEL 表达式（仅放行 #{@beanName} 引用），uri 限定协议-----------
+        //update-end---author:scott ---date:20261026  for：【GHSA-9h56-m6g6-7g8r】Kiểm tra trước khi lưu cấu hình route: cấm viết biểu thức SpEL trong assertion/Viết biểu thức SpEL trong tham số bộ lọc (chỉ cho phép #{@beanName} tham chiếu), uri giới hạn giao thức-----------
         try {
             json = json.getJSONObject("router");
             String id = json.getString("id");
-            // 代码逻辑说明: oracle路由网关新增小bug /issues/I4EV2J
+            // Giải thích logic mã: oracle gateway route oracle thêm mới có lỗi nhỏ bug /issues/I4EV2J
             SysGatewayRoute route;
             if(oConvertUtils.isEmpty(id)){
                 route = new SysGatewayRoute();
@@ -95,7 +95,7 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
             route.setRouterId(json.getString("routerId"));
             route.setName(json.getString("name"));
             route.setPredicates(json.getString("predicates"));
-            //初始化删除状态
+            //Khởi tạo trạng thái xóa
             route.setDelFlag(CommonConstant.DEL_FLAG_0);
             String filters = json.getString("filters");
             if (ObjectUtil.isEmpty(filters)) {
@@ -111,22 +111,22 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
             this.saveOrUpdate(route);
             resreshRouter(null);
         } catch (Exception e) {
-            log.error("路由配置解析失败", e);
+            log.error("Phân tích cấu hình định tuyến thất bại", e);
             resreshRouter(null);
             e.printStackTrace();
         }
     }
 
     /**
-     * 更新redis路由缓存
+     * Cập nhật bộ nhớ đệm route của Redis
      */
     private void resreshRouter(String delRouterId) {
-        //更新redis路由缓存
+        //Cập nhật bộ nhớ đệm route của Redis
         addRoute2Redis(CacheConstant.GATEWAY_ROUTES);
         BaseMap params = new BaseMap();
         params.put(GlobalConstants.HANDLER_NAME, GlobalConstants.LODER_ROUDER_HANDLER);
         params.put("delRouterId", delRouterId);
-        //刷新网关
+        //Làm mới gateway
         redisTemplate.convertAndSend(GlobalConstants.REDIS_TOPIC_NAME, params);
     }
 
@@ -136,7 +136,7 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
     }
 
     /**
-     * 还原逻辑删除
+     * Khôi phục xóa logic
      * @param ids
      */
     @Override
@@ -146,7 +146,7 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
     }
 
     /**
-     * 彻底删除
+     * Xóa hoàn toàn
      * @param ids
      */
     @Override
@@ -156,25 +156,25 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
     }
 
     /**
-     * 路由复制
+     * Sao chép route
      * @param id
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysGatewayRoute copyRoute(String id) {
-        log.info("--gateway 路由复制--");
+        log.info("--gateway Sao chép route--");
         SysGatewayRoute targetRoute = new SysGatewayRoute();
         try {
             SysGatewayRoute sourceRoute = this.baseMapper.selectById(id);
-            //1.复制路由
+            //1.Sao chép route
             BeanUtils.copyProperties(sourceRoute,targetRoute);
-            //1.1 获取当前日期
+            //1.1 Lấy ngày hiện tại
             String formattedDate = dateFormat.format(new Date());
             String copyRouteName = sourceRoute.getName() + "_copy_";
-            //1.2 判断数据库是否存在
+            //1.2 Kiểm tra cơ sở dữ liệu có tồn tại hay không
             Long count = this.baseMapper.selectCount(new LambdaQueryWrapper<SysGatewayRoute>().eq(SysGatewayRoute::getName, copyRouteName + formattedDate));
-            //1.3 新的路由名称
+            //1.3 Tên route mới
             copyRouteName +=  count > 0?RandomUtil.randomNumbers(4):formattedDate;
 
             targetRoute.setId(null);
@@ -183,10 +183,10 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
             targetRoute.setStatus(0);
             targetRoute.setDelFlag(CommonConstant.DEL_FLAG_0);
             this.baseMapper.insert(targetRoute);
-            //2.刷新路由
+            //2.Làm mới route
             resreshRouter(null);
         } catch (Exception e) {
-            log.error("路由配置解析失败", e);
+            log.error("Phân tích cấu hình định tuyến thất bại", e);
             resreshRouter(null);
             e.printStackTrace();
         }
@@ -194,7 +194,7 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
     }
 
     /**
-     * 查询删除列表
+     * Truy vấn danh sách đã xóa
      * @return
      */
     @Override
@@ -203,33 +203,33 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
     }
 
     /**
-     * 校验路由配置：Spring Cloud Gateway 会把 #{...} 形式的参数当作 SpEL 执行，uri 决定转发目标
+     * Kiểm tra cấu hình route: Spring Cloud Gateway sẽ coi #{...} tham số dạng này được coi như SpEL để thực thi, uri quyết định đích chuyển tiếp
      *
-     * @param uri        路由地址
-     * @param predicates 路由断言（JSON 数组字符串）
-     * @param filters    过滤器（JSON 数组字符串）
+     * @param uri        Địa chỉ route
+     * @param predicates Khẳng định định tuyến (chuỗi mảng JSON)
+     * @param filters    Bộ lọc (chuỗi mảng JSON)
      * @author scott
-     * @since 2026-10-26 【GHSA-9h56-m6g6-7g8r】路由配置 SpEL 注入防护
+     * @since 2026-10-26 【GHSA-9h56-m6g6-7g8r] Phòng chống injection SpEL trong cấu hình định tuyến
      */
     private static void checkRouteConfig(String uri, String predicates, String filters) {
         if (oConvertUtils.isNotEmpty(uri)) {
             String lowerUri = uri.trim().toLowerCase();
             if (ROUTE_URI_SCHEMES.stream().noneMatch(lowerUri::startsWith)) {
-                throw new JeecgBootException("路由地址只支持 lb://、http(s)://、ws(s)://、forward: 协议");
+                throw new JeecgBootException("Địa chỉ route chỉ hỗ trợ lb://、http(s)://、ws(s)://、forward: Giao thức");
             }
         }
-        checkNoSpel(predicates, "路由条件");
-        checkNoSpel(filters, "过滤器");
+        checkNoSpel(predicates, "Điều kiện route");
+        checkNoSpel(filters, "Bộ lọc");
     }
 
     /**
-     * 断言/过滤器参数中禁止出现 SpEL 表达式（仅放行 #{@beanName} 引用）。
-     * 先按 JSON 解析再序列化，避免用 Unicode 转义写法绕过
+     * Khẳng định/Cấm xuất hiện biểu thức SpEL trong tham số bộ lọc (chỉ cho phép #{@beanName} tham chiếu).
+     * Phân tích theo JSON trước rồi mới tuần tự hóa, tránh bị vượt qua bằng cách viết escape Unicode
      *
-     * @param text  JSON 数组字符串
-     * @param label 提示名称
+     * @param text  JSON Chuỗi mảng
+     * @param label Tên gợi ý
      * @author scott
-     * @since 2026-10-26 【GHSA-9h56-m6g6-7g8r】路由配置 SpEL 注入防护
+     * @since 2026-10-26 【GHSA-9h56-m6g6-7g8r] Phòng chống injection SpEL trong cấu hình định tuyến
      */
     private static void checkNoSpel(String text, String label) {
         if (oConvertUtils.isEmpty(text)) {
@@ -239,10 +239,10 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
         try {
             normalized = JSONArray.parseArray(text).toJSONString();
         } catch (Exception e) {
-            throw new JeecgBootException(label + "格式错误");
+            throw new JeecgBootException(label + "Lỗi định dạng");
         }
         if (SPEL_BEAN_REF.matcher(normalized).replaceAll("").contains("#{")) {
-            throw new JeecgBootException(label + "参数不允许使用表达式 #{...}（仅支持 #{@beanName} 引用）");
+            throw new JeecgBootException(label + "Tham số không được phép sử dụng biểu thức #{...}(chỉ hỗ trợ #{@beanName} tham chiếu)");
         }
     }
 }

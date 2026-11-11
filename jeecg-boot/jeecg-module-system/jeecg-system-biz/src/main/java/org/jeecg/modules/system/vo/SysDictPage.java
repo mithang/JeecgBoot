@@ -8,38 +8,38 @@ import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 import java.util.List;
 
 /**
- * @Description: 系统字典分页
+ * @Description: Phân trang danh mục hệ thống
  * @author: jeecg-boot
  */
 @Data
 public class SysDictPage {
 
     /**
-     * 主键
+     * Khóa chính
      */
     private String id;
     /**
-     * 字典名称
+     * Tên danh mục
      */
-    @Excel(name = "字典名称", width = 20)
+    @Excel(name = "Tên danh mục", width = 20)
     private String dictName;
 
     /**
-     * 字典编码
+     * Mã từ điển
      */
-    @Excel(name = "字典编码", width = 30)
+    @Excel(name = "Mã từ điển", width = 30)
     private String dictCode;
     /**
-     * 删除状态
+     * Trạng thái xóa
      */
     private Integer delFlag;
     /**
-     * 描述
+     * Mô tả
      */
-    @Excel(name = "描述", width = 30)
+    @Excel(name = "Mô tả", width = 30)
     private String description;
 
-    @ExcelCollection(name = "字典列表")
+    @ExcelCollection(name = "Danh sách danh mục")
     private List<SysDictItem> sysDictItemList;
 
 }

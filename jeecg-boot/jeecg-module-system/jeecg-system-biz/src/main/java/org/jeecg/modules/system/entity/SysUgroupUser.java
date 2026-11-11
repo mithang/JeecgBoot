@@ -12,7 +12,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 import java.io.Serializable;
 
 /**
- * @Description: 用户组关系表
+ * @Description: Bảng quan hệ nhóm người dùng
  * @Author: jeecg-boot
  * @Date:   2026-02-27
  * @Version: V1.0
@@ -21,25 +21,25 @@ import java.io.Serializable;
 @TableName("sys_ugroup_user")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="用户组关系表")
+@Schema(description="Bảng quan hệ nhóm người dùng")
 public class SysUgroupUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键id*/
+	/**Khóa chính id*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键id")
+    @Schema(description = "Khóa chính id")
     private java.lang.String id;
-	/**用户id*/
-	@Excel(name = "用户id", width = 15)
-    @Schema(description = "用户id")
+	/**Người dùng id*/
+	@Excel(name = "Người dùng id", width = 15)
+    @Schema(description = "Người dùng id")
     private java.lang.String userId;
-	/**用户组id*/
-	@Excel(name = "用户组id", width = 15)
-    @Schema(description = "用户组id")
+	/**Nhóm người dùng id*/
+	@Excel(name = "Nhóm người dùng id", width = 15)
+    @Schema(description = "Nhóm người dùng id")
     private java.lang.String groupId;
-	/**租户ID*/
-	@Excel(name = "租户ID", width = 15)
-    @Schema(description = "租户ID")
+	/**Tenant ID*/
+	@Excel(name = "Tenant ID", width = 15)
+    @Schema(description = "Tenant ID")
     private java.lang.Integer tenantId;
 
     public SysUgroupUser() {

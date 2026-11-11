@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @Description: 系统评论回复表
+ * @Description: Bảng trả lời bình luận hệ thống
  * @Author: jeecg-boot
  * @Date: 2022-07-19
  * @Version: V1.0
@@ -22,7 +22,7 @@ public interface SysCommentMapper extends BaseMapper<SysComment> {
     List<SysCommentVO> queryCommentList(@Param("tableName") String tableName, @Param("formDataId") String formDataId);
 
     /**
-     * 根据表名和数据id查询表单文件
+     * Truy vấn tệp biểu mẫu theo tên bảng và id dữ liệu
      *
      * @param tableName
      * @param formDataId
@@ -31,7 +31,7 @@ public interface SysCommentMapper extends BaseMapper<SysComment> {
     List<SysCommentFileVo> queryFormFileList(@Param("tableName") String tableName, @Param("formDataId") String formDataId);
 
     /**
-     * 根据用户名获取用户信息
+     * Lấy thông tin người dùng theo tên người dùng
      * @param idSet
      * @return
      */

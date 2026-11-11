@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @Description: 第三方配置表
+ * @Description: Bảng cấu hình bên thứ ba
  * @Author: jeecg-boot
  * @Date:   2023-02-03
  * @Version: V1.0

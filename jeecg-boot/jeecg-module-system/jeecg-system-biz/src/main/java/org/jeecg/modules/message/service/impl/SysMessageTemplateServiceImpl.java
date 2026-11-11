@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: 消息模板
+ * @Description: Mẫu tin nhắn
  * @Author: jeecg-boot
  * @Date:  2019-04-09
  * @Version: V1.0
@@ -52,18 +52,18 @@ public class SysMessageTemplateServiceImpl extends JeecgServiceImpl<SysMessageTe
             messageTemplate.setUpdateBy(null);
 			int excelRowNumber = params.getTitleRows() + params.getHeadRows() + i + 1;
 			if (isTemplateCodeExists(messageTemplate.getTemplateCode())) {
-				errorMessages.add(excelRowNumber + "_模板编码【" + messageTemplate.getTemplateCode() + "】重复，忽略导入。");
+				errorMessages.add(excelRowNumber + "_Mã mẫu【" + messageTemplate.getTemplateCode() + "】Trùng lặp, bỏ qua nhập.");
 				continue;
 			}
 			try {
 				if (save(messageTemplate)) {
 					successLines++;
 				} else {
-					errorMessages.add(excelRowNumber + "_数据保存失败，忽略导入。");
+					errorMessages.add(excelRowNumber + "_Lưu dữ liệu thất bại, bỏ qua lần nhập này.");
 				}
 			} catch (Exception e) {
 				if (isDuplicateKeyException(e)) {
-					errorMessages.add(excelRowNumber + "_模板编码【" + messageTemplate.getTemplateCode() + "】重复，忽略导入。");
+					errorMessages.add(excelRowNumber + "_Mã mẫu【" + messageTemplate.getTemplateCode() + "】Trùng lặp, bỏ qua nhập.");
 				} else {
 					throw e;
 				}

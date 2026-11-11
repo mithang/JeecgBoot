@@ -7,7 +7,7 @@ import org.jeecg.modules.system.entity.SysThirdAppConfig;
 import java.util.List;
 
 /**
- * @Description: 第三方配置表
+ * @Description: Bảng cấu hình bên thứ ba
  * @Author: jeecg-boot
  * @Date:   2023-02-03
  * @Version: V1.0
@@ -15,14 +15,14 @@ import java.util.List;
 public interface ISysThirdAppConfigService extends IService<SysThirdAppConfig>{
 
     /**
-     * 根据租户id获取钉钉/企业微信配置
+     * Lấy cấu hình DingTalk theo id Tenant/cấu hình WeChat Doanh nghiệp
      * @param tenantId
      * @return
      */
     List<SysThirdAppConfig> getThirdConfigListByThirdType(int tenantId);
 
     /**
-     * 根据租户id和第三方类别获取第三方配置
+     * Theo id tenant và loại bên thứ ba, lấy cấu hình bên thứ ba
      * @param tenantId
      * @param thirdType
      * @return
@@ -30,7 +30,7 @@ public interface ISysThirdAppConfigService extends IService<SysThirdAppConfig>{
     SysThirdAppConfig getThirdConfigByThirdType(Integer tenantId, String thirdType);
 
     /**
-     * 根据应用key获取第三方表配置
+     * Lấy cấu hình bảng bên thứ ba theo key ứng dụng
      * @param clientId
      */
     List<SysThirdAppConfig> getThirdAppConfigByClientId(String clientId);

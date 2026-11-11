@@ -29,7 +29,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Description: 消息
+ * @Description: Tin nhắn
  * @author: jeecg-boot
  * @date: 2019-04-09
  * @version: V1.0
@@ -42,7 +42,7 @@ public class SysMessageController extends JeecgController<SysMessage, ISysMessag
 	private ISysMessageService sysMessageService;
 
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 * 
 	 * @param sysMessage
 	 * @param pageNo
@@ -61,7 +61,7 @@ public class SysMessageController extends JeecgController<SysMessage, ISysMessag
 	}
 
 	/**
-	 * 添加
+	 * Thêm
 	 * 
 	 * @param sysMessage
 	 * @return
@@ -70,11 +70,11 @@ public class SysMessageController extends JeecgController<SysMessage, ISysMessag
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody SysMessage sysMessage) {
 		sysMessageService.save(sysMessage);
-		return Result.ok("添加成功！");
+		return Result.ok("Thêm thành công!");
 	}
 
 	/**
-	 * 编辑
+	 * Chỉnh sửa
 	 * 
 	 * @param sysMessage
 	 * @return
@@ -83,12 +83,12 @@ public class SysMessageController extends JeecgController<SysMessage, ISysMessag
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody SysMessage sysMessage) {	
 		sysMessageService.updateById(sysMessage);
-        return Result.ok("修改成功!");
+        return Result.ok("Chỉnh sửa thành công!");
 
 	}
 
 	/**
-	 * 通过id删除
+	 * Xóa theo id
 	 * 
 	 * @param id
 	 * @return
@@ -97,11 +97,11 @@ public class SysMessageController extends JeecgController<SysMessage, ISysMessag
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
 		sysMessageService.removeById(id);
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
 	}
 
 	/**
-	 * 批量删除
+	 * Xóa hàng loạt
 	 * 
 	 * @param ids
 	 * @return
@@ -111,11 +111,11 @@ public class SysMessageController extends JeecgController<SysMessage, ISysMessag
 	public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
 
 		this.sysMessageService.removeByIds(Arrays.asList(ids.split(",")));
-	    return Result.ok("批量删除成功！");
+	    return Result.ok("Xóa hàng loạt thành công!");
 	}
 
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 * 
 	 * @param id
 	 * @return
@@ -128,18 +128,18 @@ public class SysMessageController extends JeecgController<SysMessage, ISysMessag
 	}
 
 	/**
-	 * 导出excel
+	 * Xuất excel
 	 *
 	 * @param request
 	 */
 	@RequiresPermissions("system:message:exportXls")
 	@GetMapping(value = "/exportXls")
 	public ModelAndView exportXls(HttpServletRequest request, SysMessage sysMessage) {
-		return super.exportXls(request,sysMessage,SysMessage.class, "推送消息模板");
+		return super.exportXls(request,sysMessage,SysMessage.class, "Mẫu tin nhắn đẩy");
 	}
 
 	/**
-	 * excel导入
+	 * excel Import
 	 *
 	 * @param request
 	 * @param response

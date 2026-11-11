@@ -24,9 +24,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * 自定义积木报表鉴权(如果不进行自定义，则所有请求不做权限控制)
- *  * 1.自定义获取登录token
- *  * 2.自定义获取登录用户
+ * Xác thực báo cáo Jimu tùy chỉnh(Nếu không tùy chỉnh thì mọi yêu cầu đều không kiểm soát quyền hạn)
+ *  * 1.Tùy chỉnh lấy thông tin đăng nhập token
+ *  * 2.Tùy chỉnh lấy người dùng đăng nhập
  * @author: jeecg-boot
  */
 
@@ -73,45 +73,45 @@ public class JimuReportTokenService implements JmReportTokenServiceI {
     public Map<String, Object> getUserInfo(String token) {
         Map<String, Object> map = new HashMap(5);
         String username = JwtUtil.getUsername(token);
-        //此处通过token只能拿到一个信息 用户账号  后面的就是根据账号获取其他信息 查询数据或是走redis 用户根据自身业务可自定义
+        //Tại đây thông qua token chỉ lấy được một thông tin là tài khoản người dùng, phần sau là lấy các thông tin khác theo tài khoản, truy vấn dữ liệu hoặc đi qua redis; người dùng có thể tự tùy chỉnh theo nghiệp vụ của mình
         SysUserCacheInfo userInfo = null;
         try {
             userInfo = sysBaseApi.getCacheUser(username);
         } catch (Exception e) {
-            log.error("获取用户信息异常:"+ e.getMessage());
+            log.error("Lấy thông tin người dùng xảy ra ngoại lệ:"+ e.getMessage());
             return map;
         }
-        //设置账号名
+        //Đặt tên tài khoản
         map.put(SYS_USER_CODE, userInfo.getSysUserCode());
-        //设置用户名称（中文名）
+        //Đặt tên người dùng (tên tiếng Trung)
         map.put(sysUserName, userInfo.getSysUserName());
-        //设置部门编码
+        //Đặt mã phòng ban
         map.put(SYS_ORG_CODE, userInfo.getSysOrgCode());
-        //设置用户拥有的所有部门编码
+        //Thiết lập tất cả mã phòng ban mà người dùng sở hữu
         map.put("sysMultiOrgCode", userInfo.getSysMultiOrgCode());
-        // 将所有信息存放至map 解析sql/api会根据map的键值解析
+        // Lưu tất cả thông tin vào map để phân tích sql/api Sẽ phân tích theo cặp khóa-giá trị của map
         return map;
     }
 
     /**
-     * 将jeecgboot平台的权限传递给积木报表
+     * Truyền quyền hạn của nền tảng JeecgBoot cho JimuReport
      * @param token
      * @return
      */
     @Override
     public String[] getPermissions(String token) {
-        // 获取用户信息
+        // Lấy thông tin người dùng
         String username = JwtUtil.getUsername(token);
         SysUserCacheInfo userInfo = null;
         try {
             userInfo = sysBaseApi.getCacheUser(username);
         } catch (Exception e) {
-            log.error("获取用户信息异常:"+ e.getMessage());
+            log.error("Lấy thông tin người dùng xảy ra ngoại lệ:"+ e.getMessage());
         }
         if(userInfo == null){
             return null;
         }
-        // 查询权限
+        // Truy vấn quyền hạn
         Set<String> userPermissions = sysBaseApi.getUserPermissionSet(userInfo.getSysUserId());
         if(CollectionUtils.isEmpty(userPermissions)){
             return null;
@@ -119,7 +119,7 @@ public class JimuReportTokenService implements JmReportTokenServiceI {
         return userPermissions.toArray(new String[0]);
     }
     
-    //TODO 待升级积木报表依赖版本后启用
+    //TODO Bật sau khi nâng cấp phiên bản dependency của Jimu Report
 //    @Override
     public List<JmDictModel> getDictItems(String dictCode) {
         List<JmDictModel> dictItems  = new ArrayList<>();

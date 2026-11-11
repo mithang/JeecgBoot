@@ -7,7 +7,7 @@ import org.jeecg.modules.system.entity.SysGatewayRoute;
 import java.util.List;
 
 /**
- * @Description: gateway路由管理
+ * @Description: gateway Quản lý route
  * @Author: jeecg-boot
  * @Date:   2020-05-26
  * @Version: V1.0
@@ -15,49 +15,49 @@ import java.util.List;
 public interface ISysGatewayRouteService extends IService<SysGatewayRoute> {
 
     /**
-     * 添加所有的路由信息到redis
+     * Thêm tất cả thông tin route vào redis
      * @param key
      */
      void addRoute2Redis(String key);
 
     /**
-     * 删除路由
+     * Xóa route
      * @param id
      */
      void deleteById(String id);
 
     /**
-     * 保存路由配置
+     * Lưu cấu hình route
      * @param array
      */
     void updateAll(JSONObject array);
 
     /**
-     * 清空redis中的route信息
+     * Xóa thông tin route trong redis
      */
     void clearRedis();
 
     /**
-     * 还原逻辑删除
+     * Khôi phục xóa logic
      * @param ids
      */
     void revertLogicDeleted(List<String> ids);
 
     /**
-     * 彻底删除
+     * Xóa hoàn toàn
      * @param ids
      */
     void deleteLogicDeleted(List<String> ids);
 
     /**
-     * 复制路由
+     * Sao chép route
      * @param id
      * @return
      */
     SysGatewayRoute copyRoute(String id);
 
     /**
-     * 获取删除列表
+     * Lấy danh sách đã xóa
      * @return
      */
     List<SysGatewayRoute> getDeletelist();

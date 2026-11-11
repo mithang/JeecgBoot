@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @Title: DuplicateCheckAction
- * @Description: 重复校验工具
+ * @Description: Công cụ kiểm tra trùng lặp
  * @Author 张代浩
  * @Date 2019-03-25
  * @Version V1.0
@@ -24,39 +24,39 @@ import jakarta.servlet.http.HttpServletRequest;
 @Slf4j
 @RestController
 @RequestMapping("/sys/duplicate")
-@Tag(name="重复校验")
+@Tag(name="Kiểm tra trùng lặp")
 public class DuplicateCheckController {
 
 	@Autowired
 	ISysDictService sysDictService;
 
 	/**
-	 * 校验数据是否在系统中是否存在
+	 * Kiểm tra dữ liệu có tồn tại trong hệ thống hay không
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "/check", method = RequestMethod.GET)
-	@Operation(summary="重复校验接口")
+	@Operation(summary="Giao diện kiểm tra trùng lặp")
 	public Result<String> doDuplicateCheck(DuplicateCheckVo duplicateCheckVo, HttpServletRequest request) {
 		log.debug("----duplicate check------："+ duplicateCheckVo.toString());
 		
-		// 1.填值为空，直接返回
+		// 1.Giá trị điền vào trống, trả về trực tiếp
 		if(StringUtils.isEmpty(duplicateCheckVo.getFieldVal())){
 			Result rs = new Result();
 			rs.setCode(500);
 			rs.setSuccess(true);
-			rs.setMessage("数据为空,不作处理！");
+			rs.setMessage("Dữ liệu trống,Không xử lý!");
 			return rs;
 		}
 		
-		// 2.返回结果
+		// 2.Trả về kết quả
 		if (sysDictService.duplicateCheckData(duplicateCheckVo)) {
-			// 该值可用
-			return Result.ok("该值可用！");
+			// Giá trị này khả dụng
+			return Result.ok("Giá trị này khả dụng!");
 		} else {
-			// 该值不可用
-			log.info("该值不可用，系统中已存在！");
-			return Result.error("该值不可用，系统中已存在！");
+			// Giá trị này không khả dụng
+			log.info("Giá trị này không khả dụng, đã tồn tại trong hệ thống!");
+			return Result.error("Giá trị này không khả dụng, đã tồn tại trong hệ thống!");
 		}
 	}
 

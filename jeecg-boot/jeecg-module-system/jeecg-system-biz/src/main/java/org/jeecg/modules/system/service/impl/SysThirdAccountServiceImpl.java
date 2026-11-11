@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 第三方登录账号表
+ * @Description: Bảng tài khoản đăng nhập bên thứ ba
  * @Author: jeecg-boot
  * @Date:   2020-11-17
  * @Version: V1.0
@@ -60,15 +60,15 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
     
     @Override
     public void updateThirdUserId(SysUser sysUser,String thirdUserUuid) {
-        //修改第三方登录账户表使其进行添加用户id
+        //Sửa bảng tài khoản đăng nhập bên thứ ba để thêm người dùng id
         LambdaQueryWrapper<SysThirdAccount> query = new LambdaQueryWrapper<>();
         query.eq(SysThirdAccount::getThirdUserUuid,thirdUserUuid);
-        //扫码登录更新用户创建的时候存的是默认租户，更新的时候也需要根据默认租户来查询，同一个公司下UUID是一样的，不同应用需要区分租户。
+        //Khi quét mã đăng nhập để cập nhật người dùng, lúc tạo mới sẽ lưu tenant mặc định; lúc cập nhật cũng cần truy vấn theo tenant mặc định. Trong cùng một công ty, UUID là giống nhau, các ứng dụng khác nhau cần phân biệt tenant.
         query.eq(SysThirdAccount::getTenantId,CommonConstant.TENANT_ID_DEFAULT_VALUE);
         SysThirdAccount account = sysThirdAccountMapper.selectOne(query);
         SysThirdAccount sysThirdAccount = new SysThirdAccount();
         sysThirdAccount.setSysUserId(sysUser.getId());
-        //根据当前用户id和登录方式查询第三方登录表
+        //Truy vấn bảng đăng nhập bên thứ ba theo id người dùng hiện tại và phương thức đăng nhập
         LambdaQueryWrapper<SysThirdAccount> thirdQuery = new LambdaQueryWrapper<>();
         thirdQuery.eq(SysThirdAccount::getSysUserId,sysUser.getId());
         thirdQuery.eq(SysThirdAccount::getThirdType,account.getThirdType());
@@ -79,32 +79,32 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
             sysThirdAccount.setThirdUserId(sysThirdAccounts.getThirdUserId());
             sysThirdAccountMapper.deleteById(sysThirdAccounts.getId());
         }
-        //更新用户账户表sys_user_id
+        //Cập nhật bảng tài khoản người dùng sys_user_id
         sysThirdAccountMapper.update(sysThirdAccount,query);
     }
     
     @Override
     public SysUser createUser(String phone, String thirdUserUuid, Integer tenantId) {
-       //先查询第三方，获取登录方式
+       //Truy vấn bên thứ ba trước, lấy phương thức đăng nhập
         LambdaQueryWrapper<SysThirdAccount> query = new LambdaQueryWrapper<>();
         query.eq(SysThirdAccount::getThirdUserUuid,thirdUserUuid);
         query.eq(SysThirdAccount::getTenantId,tenantId);
         SysThirdAccount account = sysThirdAccountMapper.selectOne(query);
-        //通过用户名查询数据库是否已存在
+        //Truy vấn cơ sở dữ liệu theo tên người dùng xem đã tồn tại chưa
         SysUser userByName = sysUserMapper.getUserByName(thirdUserUuid);
         if(null!=userByName){
-            //如果账号存在的话，则自动加上一个时间戳
+            //Nếu tài khoản tồn tại thì tự động thêm một dấu thời gian
             String format = DateUtils.yyyymmddhhmmss.get().format(new Date());
             thirdUserUuid = thirdUserUuid + format;
         }
-        //添加用户
+        //Thêm người dùng
         SysUser user = new SysUser();
         user.setActivitiSync(CommonConstant.ACT_SYNC_1);
         user.setDelFlag(CommonConstant.DEL_FLAG_0);
         user.setStatus(1);
         user.setUsername(thirdUserUuid);
         user.setPhone(phone);
-        //设置初始密码
+        //Đặt mật khẩu ban đầu
         String salt = oConvertUtils.randomGen(8);
         user.setSalt(salt);
         String passwordEncode = PasswordUtil.encrypt(user.getUsername(), "123456", salt);
@@ -112,7 +112,7 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
         user.setRealname(account.getRealname());
         user.setAvatar(account.getAvatar());
         String s = this.saveThirdUser(user);
-        //更新用户第三方账户表的userId
+        //Cập nhật userId của bảng tài khoản bên thứ ba của người dùng userId
         SysThirdAccount sysThirdAccount = new SysThirdAccount();
         sysThirdAccount.setSysUserId(s);
         sysThirdAccount.setTenantId(tenantId);
@@ -121,13 +121,13 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
     }
     
     public String saveThirdUser(SysUser sysUser) {
-        //保存用户
+        //Lưu người dùng
         String userid = UUIDGenerator.generate();
         sysUser.setId(userid);
         sysUserMapper.insert(sysUser);
-        //获取第三方角色
+        //Lấy vai trò bên thứ ba
         SysRole sysRole = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleCode, "third_role"));
-        //保存用户角色
+        //Lưu vai trò người dùng
         SysUserRole userRole = new SysUserRole();
         userRole.setRoleId(sysRole.getId());
         userRole.setUserId(userid);
@@ -152,7 +152,7 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
         return super.getOne(queryWrapper);
     }
 
-    //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+    //update-begin---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
     @Override
     public List<SysThirdAccount> listBySysUserIds(List<String> sysUserIds, String thirdType) {
         if (sysUserIds == null || sysUserIds.isEmpty()) {
@@ -163,7 +163,7 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
         qw.eq(SysThirdAccount::getThirdType, thirdType);
         return list(qw);
     }
-    //update-end---author:sjlei ---date:2026-04-17  for：【#9496】全量同步N+1查询性能优化-----------
+    //update-end---author:sjlei ---date:2026-04-17  for：【#9496】Đồng bộ toàn bộ N+1 Tối ưu hiệu năng truy vấn-----------
 
     @Override
     public List<SysThirdAccount> listThirdUserIdByUsername(String[] sysUsernameArr, String thirdType, Integer tenantId) {
@@ -180,7 +180,7 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
         user.setRealname(tlm.getUsername());
         user.setThirdUserUuid(tlm.getUuid());
         user.setTenantId(tenantId);
-        //=============begin 判断如果是钉钉的情况下，需要将第三方的用户id查询出来，发送模板的时候有用==========
+        //=============begin Xác định nếu là trường hợp DingTalk thì cần tra ra id người dùng bên thứ ba, dùng khi gửi mẫu==========
         if(CommonConstant.DINGTALK.toLowerCase().equals(tlm.getSource())){
             AccessToken accessToken = JdtBaseAPI.getAccessToken(dingTalkClientId, dingTalkClientSecret);
             Response<String> getUserIdRes = JdtUserAPI.getUseridByUnionid(tlm.getUuid(), accessToken.getAccessToken());
@@ -189,7 +189,7 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
             }else{
                 user.setThirdUserId(tlm.getUuid());
             }
-        //=============end 判断如果是钉钉的情况下，需要将第三方的用户id查询出来，发送模板的时候有用==========
+        //=============end Xác định nếu là trường hợp DingTalk thì cần tra ra id người dùng bên thứ ba, dùng khi gửi mẫu==========
         }else{
             user.setThirdUserId(tlm.getUuid());
         }
@@ -201,26 +201,26 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
     public SysThirdAccount bindThirdAppAccountByUserId(SysThirdAccount sysThirdAccount) {
         String thirdUserUuid = sysThirdAccount.getThirdUserUuid();
         String thirdType = sysThirdAccount.getThirdType();
-        //获取当前登录用户
+        //Lấy người dùng đang đăng nhập
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        //当前第三方用户已被其他用户所绑定
+        //Người dùng bên thứ ba hiện tại đã bị người dùng khác liên kết
         SysThirdAccount oneByThirdUserId = this.getOneByUuidAndThirdType(thirdUserUuid, thirdType,CommonConstant.TENANT_ID_DEFAULT_VALUE, null);
         if(null != oneByThirdUserId){
-            //如果不为空，并且第三方表和当前登录的用户一致，直接返回
+            //Nếu không rỗng và bảng bên thứ ba khớp với người dùng đang đăng nhập thì trả về trực tiếp
             if(oConvertUtils.isNotEmpty(oneByThirdUserId.getSysUserId()) && oneByThirdUserId.getSysUserId().equals(sysUser.getId())){
                 return oneByThirdUserId;
             }else if(oConvertUtils.isNotEmpty(oneByThirdUserId.getSysUserId())){
-                //如果第三方表的用户id不为空，那就说明已经绑定过了
-                throw new JeecgBootException("该敲敲云账号已被其它第三方账号绑定,请解绑或绑定其它敲敲云账号");
+                //Nếu id người dùng trong bảng bên thứ ba không rỗng thì nghĩa là đã liên kết rồi
+                throw new JeecgBootException("Tài khoản QiaoQiaoYun này đã bị tài khoản bên thứ ba khác liên kết,Vui lòng hủy liên kết hoặc liên kết tài khoản QiaoQiaoYun khác");
             }else{
-                //更新第三方表信息用户id
+                //Cập nhật thông tin người dùng trong bảng bên thứ ba id
                 oneByThirdUserId.setSysUserId(sysUser.getId());
                 oneByThirdUserId.setThirdType(thirdType);
                 sysThirdAccountMapper.updateById(oneByThirdUserId);
                 return oneByThirdUserId;
             }
         }else{
-            throw new JeecgBootException("账号绑定失败,请稍后重试");
+            throw new JeecgBootException("Liên kết tài khoản thất bại,Vui lòng thử lại sau");
         }
     }
 
@@ -228,7 +228,7 @@ public class SysThirdAccountServiceImpl extends ServiceImpl<SysThirdAccountMappe
     public SysThirdAccount getOneByUuidAndThirdType(String unionid, String thirdType,Integer tenantId,String thirdUserId) {
         LambdaQueryWrapper<SysThirdAccount> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysThirdAccount::getThirdType, thirdType);
-        // 代码逻辑说明: 如果第三方用户id为空那么就不走第三方用户查询逻辑，因为扫码登录third_user_id是唯一的，没有重复的情况---
+        // Giải thích logic mã: Nếu id người dùng bên thứ ba rỗng thì không đi theo logic truy vấn người dùng bên thứ ba, vì đăng nhập quét mã third_user_id là duy nhất, không có trường hợp trùng lặp---
         if(oConvertUtils.isNotEmpty(thirdUserId)){
             queryWrapper.and((wrapper) ->wrapper.eq(SysThirdAccount::getThirdUserUuid,unionid).or().eq(SysThirdAccount::getThirdUserId,thirdUserId));
         }else{

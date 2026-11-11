@@ -26,9 +26,9 @@
       JSelectDept,
 </#if>
 <#if need_dept_user>
-<#-- update-begin---author:chenrui ---date:20240102  for：[issue/#5711]修复用户选择组件在生成代码后变成部门用户选择组件---------- -->
+<#-- update-begin---author:chenrui ---date:20240102  for：[issue/#5711]Sửa lỗi component chọn người dùng sau khi sinh code bị biến thành component chọn người dùng theo phòng ban---------- -->
       JSelectUser,
-<#-- update-end---author:chenrui ---date:20240102  for：[issue/#5711]修复用户选择组件在生成代码后变成部门用户选择组件---------- -->
+<#-- update-end---author:chenrui ---date:20240102  for：[issue/#5711]Sửa lỗi component chọn người dùng sau khi sinh code bị biến thành component chọn người dùng theo phòng ban---------- -->
 </#if>
 <#if need_select_tree>
       JTreeSelect,

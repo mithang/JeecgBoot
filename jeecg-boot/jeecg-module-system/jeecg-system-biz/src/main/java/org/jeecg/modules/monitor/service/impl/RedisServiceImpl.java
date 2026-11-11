@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Redis 监控信息获取
+ * Redis Lấy thông tin giám sát
  *
  * @Author MrBird
  */
@@ -32,17 +32,17 @@ public class RedisServiceImpl implements RedisService {
 	private RedisConnectionFactory redisConnectionFactory;
 
     /**
-     * redis信息
+     * redis Thông tin
      */
     private static final String REDIS_MESSAGE = "3";
 
 	/**
-	 * redis性能信息记录
+	 * redis Ghi lại thông tin hiệu năng
 	 */
 	private static final Map<String,List<Map<String, Object>>> REDIS_METRICS = new HashMap<>(2);
 
 	/**
-	 * Redis详细信息
+	 * Redis Thông tin chi tiết
 	 */
 	@Override
 	public List<RedisInfo> getRedisInfo() throws RedisConnectException {
@@ -86,8 +86,8 @@ public class RedisServiceImpl implements RedisService {
 	}
 
     /**
-     * 查询redis信息for报表
-     * @param type 1redis key数量 2 占用内存 3redis信息
+     * Truy vấn thông tin redis cho báo cáo
+     * @param type 1redis key Số lượng 2 Bộ nhớ đã dùng 3 Thông tin redis
      * @return
      * @throws RedisConnectException
      */
@@ -129,7 +129,7 @@ public class RedisServiceImpl implements RedisService {
 	}
 
 	/**
-	 * 获取历史性能指标
+	 * Lấy chỉ số hiệu năng lịch sử
 	 * @return
 	 * @author chenrui
 	 * @date 2024/5/14 14:57
@@ -140,8 +140,8 @@ public class RedisServiceImpl implements RedisService {
 	}
 
 	/**
-	 * 记录近一小时redis监控数据 <br/>
-	 * 60s一次,,记录存储keysize和内存
+	 * Ghi dữ liệu giám sát redis trong gần một giờ <br/>
+	 * 60s một lần,,Ghi lại keysize và bộ nhớ đã lưu trữ
 	 * @throws RedisConnectException
 	 * @author chenrui
 	 * @date 2024/5/14 14:09

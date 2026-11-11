@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 
 /**
- * @Description: app系统配置
+ * @Description: app Cấu hình hệ thống
  * @Author: jeecg-boot
  * @Date:   2021-07-07
  * @Version: V1.0
@@ -23,65 +23,65 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="app系统配置")
+@Schema(description="app Cấu hình hệ thống")
 public class SysAppVersion implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键*/
+	/**Khóa chính*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键")
+    @Schema(description = "Khóa chính")
     private String id;
-	/**创建人*/
-    @Schema(description = "创建人")
+	/**Người tạo*/
+    @Schema(description = "Người tạo")
     private String createBy;
-	/**创建日期*/
+	/**Ngày tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private java.util.Date createTime;
-	/**更新人*/
-    @Schema(description = "更新人")
+	/**Người cập nhật*/
+    @Schema(description = "Người cập nhật")
     private String updateBy;
-	/**更新日期*/
+	/**Ngày cập nhật*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private java.util.Date updateTime;
-	/**所属部门*/
-    @Schema(description = "所属部门")
+	/**Phòng ban trực thuộc*/
+    @Schema(description = "Phòng ban trực thuộc")
     private String sysOrgCode;
-	/**标题*/
-	@Excel(name = "标题", width = 15)
-    @Schema(description = "标题")
+	/**Tiêu đề*/
+	@Excel(name = "Tiêu đề", width = 15)
+    @Schema(description = "Tiêu đề")
     private String appTitle;
 	/**logo*/
 	@Excel(name = "logo", width = 15)
     @Schema(description = "logo")
     private String appLogo;
-	/**首页轮播图*/
-	@Excel(name = "首页轮播图", width = 15)
-    @Schema(description = "首页轮播图")
+	/**Hình luân chuyển trang chủ*/
+	@Excel(name = "Hình luân chuyển trang chủ", width = 15)
+    @Schema(description = "Hình luân chuyển trang chủ")
     private String carouselImgJson;
-	/**首页菜单图*/
-	@Excel(name = "首页菜单图", width = 15)
-    @Schema(description = "首页菜单图")
+	/**Hình menu trang chủ*/
+	@Excel(name = "Hình menu trang chủ", width = 15)
+    @Schema(description = "Hình menu trang chủ")
     private String routeImgJson;
-    /**app版本*/
-    @Schema(description = "版本")
+    /**app Phiên bản*/
+    @Schema(description = "Phiên bản")
     private String appVersion;
-    /**版本编码*/
-    @Schema(description = "版本编码")
+    /**Mã phiên bản*/
+    @Schema(description = "Mã phiên bản")
     private Integer versionNum;
-    /**app下载路径*/
-    @Schema(description = "app下载路径")
+    /**app Đường dẫn tải xuống*/
+    @Schema(description = "app Đường dẫn tải xuống")
     private String downloadUrl;
-    /**热更新路径*/
-    @Schema(description = "热更新路径")
+    /**Đường dẫn cập nhật nóng*/
+    @Schema(description = "Đường dẫn cập nhật nóng")
     private String wgtUrl;
-    /**热更新路径*/
-    @Schema(description = "桌面端下载路径")
+    /**Đường dẫn cập nhật nóng*/
+    @Schema(description = "Đường dẫn tải xuống trên máy tính")
     private String webDownloadUrl;
-    /**更新内容*/
-    @Schema(description = "更新内容")
+    /**Nội dung cập nhật*/
+    @Schema(description = "Nội dung cập nhật")
     private String updateNote;
 }

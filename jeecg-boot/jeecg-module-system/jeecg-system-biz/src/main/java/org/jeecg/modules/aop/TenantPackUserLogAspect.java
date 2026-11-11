@@ -37,7 +37,7 @@ public class TenantPackUserLogAspect {
 
     @Around("tenantLogPointCut()")
     public Object aroundMethod(ProceedingJoinPoint joinPoint)throws Throwable {
-        //System.out.println("环绕通知>>>>>>>>>");
+        //System.out.println("Thông báo bao quanh>>>>>>>>>");
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -47,16 +47,16 @@ public class TenantPackUserLogAspect {
             Integer logType = null;
             String content = null;
             Integer tenantId = null;
-            //获取参数
+            //Lấy tham số
             Object[] args = joinPoint.getArgs();
             if(args.length>0){
                 for(Object obj: args){
                     if(obj instanceof SysTenantPack){
-                        // logType=3 租户操作日志
+                        // logType=3 Nhật ký thao tác tenant
                         logType = CommonConstant.LOG_TYPE_3;
                         SysTenantPack pack = (SysTenantPack)obj;
                         if(opType==2){
-                            content = "创建了角色权限 "+ pack.getPackName();
+                            content = "Đã tạo quyền hạn vai trò "+ pack.getPackName();
                         }
                         tenantId = pack.getTenantId();
                         break;
@@ -64,9 +64,9 @@ public class TenantPackUserLogAspect {
                         logType = CommonConstant.LOG_TYPE_3;
                         SysTenantPackUser packUser = (SysTenantPackUser)obj;
                         if(opType==2){
-                            content = "将 "+packUser.getRealname()+" 添加到角色 "+ packUser.getPackName();
+                            content = ""+packUser.getRealname()+" Thêm vào vai trò "+ packUser.getPackName();
                         }else if(opType==4){
-                            content = "移除了 "+packUser.getPackName()+" 成员 "+ packUser.getRealname();
+                            content = "Đã loại bỏ  "+packUser.getPackName()+" Thành viên "+ packUser.getRealname();
                         }
                         tenantId = packUser.getTenantId();
                     }
@@ -78,7 +78,7 @@ public class TenantPackUserLogAspect {
                 dto.setLogContent(content);
                 dto.setOperateType(opType);
                 dto.setTenantId(tenantId);
-                //获取登录用户信息
+                //Lấy thông tin người dùng đăng nhập
                 LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
                 if(sysUser!=null){
                     dto.setUserid(sysUser.getUsername());
@@ -86,7 +86,7 @@ public class TenantPackUserLogAspect {
 
                 }
                 dto.setCreateTime(new Date());
-                //保存系统日志
+                //Lưu nhật ký hệ thống
                 baseCommonService.addLog(dto);
             }
         }
@@ -95,6 +95,6 @@ public class TenantPackUserLogAspect {
 
     @AfterThrowing("tenantLogPointCut()")
     public void afterThrowing()throws Throwable{
-        System.out.println("异常通知");
+        System.out.println("Thông báo ngoại lệ");
     }
 }

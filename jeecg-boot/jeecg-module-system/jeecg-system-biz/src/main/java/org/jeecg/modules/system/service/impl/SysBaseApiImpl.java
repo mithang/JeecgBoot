@@ -93,7 +93,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 底层共通业务API，提供其他独立模块调用
+ * @Description: API nghiệp vụ chung tầng dưới, cung cấp cho các module độc lập khác gọi
  * @Author: scott
  * @Date:2019-4-20 
  * @Version:V1.0
@@ -101,14 +101,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class SysBaseApiImpl implements ISysBaseAPI {
-	/** 当前系统数据库类型 */
+	/** Loại cơ sở dữ liệu của hệ thống hiện tại */
 	private static String DB_TYPE = "";
 
-	/** 钉钉/企业微信/飞书/短信 异步发送线程池 */
+	/** DingTalk/WeCom/Feishu/Thread pool gửi SMS bất đồng bộ */
 	private static final ExecutorService MSG_THREAD_POOL = new ThreadPoolExecutor(
 			0, 1024, 60L, TimeUnit.SECONDS, new SynchronousQueue<>());
 
-	// uniapp 推送调用api地址
+	// uniapp Địa chỉ api gọi đẩy
 	@Value("${jeecg.unicloud.pushUrl:}")
 	private String jeecgPushUrl;
 
@@ -186,13 +186,13 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	@Override
 	//@SensitiveDecode
 	public LoginUser getUserByName(String username) {
-		// 代码逻辑说明: VUEN-1276 【v3流程图】测试bug 1、通过我发起的流程或者流程实例，查看历史，流程图预览问题
+		// Giải thích logic mã: VUEN-1276 [Sơ đồ quy trình v3] Bug kiểm thử 1. Qua quy trình do tôi khởi tạo hoặc instance quy trình, xem lịch sử, vấn đề xem trước sơ đồ quy trình
 		if (oConvertUtils.isEmpty(username)) {
 			return null;
 		}
 		LoginUser user = sysUserService.getEncodeUserInfo(username);
 
-		//相同类中方法间调用时脱敏解密 Aop会失效，获取用户信息太重要，此处采用原生解密方法，不采用@SensitiveDecodeAble注解方式
+		//Khi các phương thức trong cùng một class gọi nhau, AOP giải mã khử nhạy cảm sẽ mất hiệu lực; việc lấy thông tin người dùng quá quan trọng nên tại đây dùng phương pháp giải mã gốc, không dùng@SensitiveDecodeAble Phương thức annotation
 		try {
 			SensitiveInfoUtil.handlerObject(user, false);
 		} catch (IllegalAccessException e) {
@@ -228,20 +228,20 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	public List<SysPermissionDataRuleModel> queryPermissionDataRule(String component, String requestPath, String username) {
 		List<SysPermission> currentSyspermission = null;
 		if(oConvertUtils.isNotEmpty(component)) {
-			//1.通过注解属性pageComponent 获取菜单
+			//1.Lấy menu thông qua thuộc tính annotation pageComponent
 			LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
 			query.eq(SysPermission::getDelFlag,0);
 			query.eq(SysPermission::getComponent, component);
 			currentSyspermission = sysPermissionMapper.selectList(query);
 		}else {
-			//1.直接通过前端请求地址查询菜单
+			//1.Truy vấn trực tiếp menu qua địa chỉ yêu cầu của giao diện
 			LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
 			query.eq(SysPermission::getMenuType,2);
 			query.eq(SysPermission::getDelFlag,0);
 			
-			// 代码逻辑说明: 解决参数顺序问题
+			// Giải thích logic mã: Giải quyết vấn đề thứ tự tham số
 			List<String> allPossiblePaths = this.getOnlinePossiblePaths(requestPath);
-			log.debug("获取的菜单地址= {}", allPossiblePaths.toString());
+			log.debug("Địa chỉ menu lấy được= {}", allPossiblePaths.toString());
 			if(allPossiblePaths.size()==1){
 				query.eq(SysPermission::getUrl, requestPath);
 			}else{
@@ -249,12 +249,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			}
 			
 			currentSyspermission = sysPermissionMapper.selectList(query);
-			//2.未找到 再通过自定义匹配URL 获取菜单
+			//2.Không tìm thấy thì lấy menu qua URL khớp tùy chỉnh
 			if(currentSyspermission==null || currentSyspermission.size()==0) {
-				//通过自定义URL匹配规则 获取菜单（实现通过菜单配置数据权限规则，实际上针对获取数据接口进行数据规则控制）
+				//Lấy menu thông qua quy tắc khớp URL tùy chỉnh (thực hiện cấu hình quy tắc quyền dữ liệu qua menu, thực chất là kiểm soát quy tắc dữ liệu đối với API lấy dữ liệu)
 				String userMatchUrl = UrlMatchEnum.getMatchResultByUrl(requestPath);
 				LambdaQueryWrapper<SysPermission> queryQserMatch = new LambdaQueryWrapper<SysPermission>();
-				// 代码逻辑说明:  online菜单如果配置成一级菜单 权限查询不到 取消menuType = 1
+				// Giải thích logic mã:  online Nếu menu được cấu hình thành menu cấp một thì không tra được quyền hạn, hủy bỏ menuType = 1
 				//queryQserMatch.eq(SysPermission::getMenuType, 1);
 				queryQserMatch.eq(SysPermission::getDelFlag, 0);
 				queryQserMatch.eq(SysPermission::getUrl, userMatchUrl);
@@ -262,9 +262,9 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 					currentSyspermission = sysPermissionMapper.selectList(queryQserMatch);
 				}
 			}
-			//3.未找到 再通过正则匹配获取菜单
+			//3.Không tìm thấy, tiếp tục lấy menu bằng cách khớp regex
 			if(currentSyspermission==null || currentSyspermission.size()==0) {
-				//通过正则匹配权限配置
+				//Khớp cấu hình quyền hạn bằng regex
 				String regUrl = getRegexpUrl(requestPath);
 				if(regUrl!=null) {
 					currentSyspermission = sysPermissionMapper.selectList(new LambdaQueryWrapper<SysPermission>().eq(SysPermission::getMenuType,2).eq(SysPermission::getUrl, regUrl).eq(SysPermission::getDelFlag,0));
@@ -274,7 +274,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		if(currentSyspermission!=null && currentSyspermission.size()>0){
 			List<SysPermissionDataRuleModel> dataRules = new ArrayList<SysPermissionDataRuleModel>();
 			for (SysPermission sysPermission : currentSyspermission) {
-				// 代码逻辑说明: 数据权限规则编码不规范，项目存在相同包名和类名 #722
+				// Giải thích logic mã: Mã quy tắc quyền dữ liệu không đúng chuẩn, dự án tồn tại tên package và tên class giống nhau #722
 				List<SysPermissionDataRule> temp = sysPermissionDataRuleService.queryPermissionDataRules(username, sysPermission.getId());
 				if(temp!=null && temp.size()>0) {
 					//dataRules.addAll(temp);
@@ -287,10 +287,10 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 匹配前端传过来的地址 匹配成功返回正则地址
-	 * AntPathMatcher匹配地址
-	 *()* 匹配0个或多个字符
-	 *()**匹配0个或多个目录
+	 * Khớp địa chỉ do frontend truyền qua, khớp thành công thì trả về địa chỉ regex
+	 * AntPathMatcher Khớp địa chỉ
+	 *()* Khớp 0 hoặc nhiều ký tự
+	 *()**Khớp 0 hoặc nhiều thư mục
 	 */
 	private String getRegexpUrl(String url) {
 		List<String> list = sysPermissionMapper.queryPermissionUrlWithStar();
@@ -312,7 +312,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		LoginUser user = this.getUserByName(username);
 
 //		try {
-//			//相同类中方法间调用时脱敏@SensitiveDecodeAble解密 Aop失效处理
+//			//Khử nhạy cảm khi các phương thức trong cùng một lớp gọi nhau@SensitiveDecodeAble Xử lý AOP giải mã không hiệu lực
 //			SensitiveInfoUtil.handlerObject(user, false);
 //		} catch (IllegalAccessException e) {
 //			e.printStackTrace();
@@ -328,11 +328,11 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		}else{
 			return null;
 		}
-		//多部门支持in查询
+		//Nhiều phòng ban hỗ trợ truy vấn in
 		List<SysDepart> list = departMapper.queryUserDeparts(user.getId());
 		List<String> sysMultiOrgCode = new ArrayList<String>();
 		if(list==null || list.size()==0) {
-			//当前用户无部门
+			//Người dùng hiện tại không có phòng ban
 			//sysMultiOrgCode.add("0");
 		}else if(list.size()==1) {
 			sysMultiOrgCode.add(list.get(0).getOrgCode());
@@ -357,7 +357,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			return null;
 		}
 		BeanUtils.copyProperties(sysUser, loginUser);
-		//去掉用户敏感信息
+		//Loại bỏ thông tin nhạy cảm của người dùng
 		loginUser.setPassword(null);
 		loginUser.setRelTenantIds(null);
 		loginUser.setDepartIds(null);
@@ -434,17 +434,17 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		if (oConvertUtils.isEmpty(username)) {
 			return null;
 		}
-		// 根据用户名查询主部门信息
+		// Truy vấn thông tin phòng ban chính theo tên người dùng
 		SysDepart mainDepart = userMapper.getMainDepartByUsername(username);
 		if (mainDepart == null) {
 			return null;
 		}
 
-		// 复制部门信息到模型对象
+		// Sao chép thông tin phòng ban vào đối tượng model
 		SysDepartModel model = new SysDepartModel();
 		BeanUtils.copyProperties(mainDepart, model);
 
-		// 设置部门路径名称
+		// Đặt tên đường dẫn phòng ban
 		String departPathName = sysDepartService.getDepartPathNameByOrgCode(model.getOrgCode(), null);
 		model.setDepartPathName(departPathName);
 
@@ -472,7 +472,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
 	@Override
 	public List<DictModel> queryTableDictItemsByCode(String tableFilterSql, String text, String code) {
-		//【Online+系统】字典表加权限控制机制逻辑，想法不错 LOWCOD-799
+		//【Online+Hệ thống】Thêm cơ chế kiểm soát quyền cho bảng danh mục, ý tưởng hay LOWCOD-799
 		if(tableFilterSql.indexOf(SymbolConstant.SYS_VAR_PREFIX)>=0){
 			tableFilterSql = QueryGenerator.getSqlRuleValue(tableFilterSql);
 		}
@@ -493,12 +493,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 				message.getCategory(),
                 message.getNoticeType());
 		try {
-			// 同步发送第三方APP消息
+			// Đồng bộ gửi tin nhắn APP bên thứ ba
 			wechatEnterpriseService.sendMessage(message, true);
 			dingtalkService.sendMessage(message, true);
 			feishuService.sendMessage(message, true);
 		} catch (Exception e) {
-			log.error("同步发送第三方APP消息失败！", e);
+			log.error("Gửi đồng bộ tin nhắn App bên thứ ba thất bại!", e);
 		}
 	}
 
@@ -513,12 +513,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 				message.getBusId(),
 				message.getNoticeType());
 		try {
-			// 同步发送第三方APP消息
+			// Đồng bộ gửi tin nhắn APP bên thứ ba
 			wechatEnterpriseService.sendMessage(message, true);
 			dingtalkService.sendMessage(message, true);
 			feishuService.sendMessage(message, true);
 		} catch (Exception e) {
-			log.error("同步发送第三方APP消息失败！", e);
+			log.error("Gửi đồng bộ tin nhắn App bên thứ ba thất bại!", e);
 		}
 	}
 
@@ -532,12 +532,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
 		List<SysMessageTemplate> sysSmsTemplates = sysMessageTemplateService.selectByCode(templateCode);
 		if(sysSmsTemplates==null||sysSmsTemplates.size()==0){
-			throw new JeecgBootException("消息模板不存在，模板编码："+templateCode);
+			throw new JeecgBootException("Mẫu tin nhắn không tồn tại, mã mẫu:"+templateCode);
 		}
 		SysMessageTemplate sysSmsTemplate = sysSmsTemplates.get(0);
-		//模板标题
+		//Tiêu đề mẫu
 		title = title==null?sysSmsTemplate.getTemplateName():title;
-		//模板内容
+		//Nội dung mẫu
 		String content = sysSmsTemplate.getTemplateContent();
 		if(tmplateParam!=null) {
 			for (Map.Entry<String, String> entry : tmplateParam.entrySet()) {
@@ -562,10 +562,10 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		announcement.setSendTime(new Date());
 		announcement.setMsgCategory(CommonConstant.MSG_CATEGORY_2);
 		announcement.setDelFlag(String.valueOf(CommonConstant.DEL_FLAG_0));
-       // 代码逻辑说明: [QQYUN-12999]系统通知，系统通知时间更新，但是排到下面了
+       // Giải thích logic mã: [QQYUN-12999]Thông báo hệ thống, thời gian thông báo hệ thống được cập nhật nhưng lại bị xếp xuống dưới
 		announcement.setIzTop(CommonConstant.IZ_TOP_0);
   		sysAnnouncementMapper.insert(announcement);
-		// 2.插入用户通告阅读标记表记录
+		// 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
 		String userId = toUser;
 		String[] userIds = userId.split(",");
 		String anntId = announcement.getId();
@@ -589,12 +589,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			}
 		}
 		try {
-			// 同步企业微信、钉钉的消息通知
+			// Đồng bộ thông báo tin nhắn của WeChat doanh nghiệp, DingTalk
 			dingtalkService.sendActionCardMessage(announcement, mobileOpenUrl, true);
 			wechatEnterpriseService.sendTextCardMessage(announcement, mobileOpenUrl, true);
 			feishuService.sendAnnouncementMessage(announcement, mobileOpenUrl, true);
 		} catch (Exception e) {
-			log.error("同步发送第三方APP消息失败！", e);
+			log.error("Gửi đồng bộ tin nhắn App bên thứ ba thất bại!", e);
 		}
 
 	}
@@ -611,12 +611,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
 		List<SysMessageTemplate> sysSmsTemplates = sysMessageTemplateService.selectByCode(templateCode);
 		if(sysSmsTemplates==null||sysSmsTemplates.size()==0){
-			throw new JeecgBootException("消息模板不存在，模板编码："+templateCode);
+			throw new JeecgBootException("Mẫu tin nhắn không tồn tại, mã mẫu:"+templateCode);
 		}
 		SysMessageTemplate sysSmsTemplate = sysSmsTemplates.get(0);
-		//模板标题
+		//Tiêu đề mẫu
 		title = title==null?sysSmsTemplate.getTemplateName():title;
-		//模板内容
+		//Nội dung mẫu
 		String content = sysSmsTemplate.getTemplateContent();
 		if(tmplateParam!=null) {
 			for (Map.Entry<String, String> entry : tmplateParam.entrySet()) {
@@ -635,7 +635,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		announcement.setMsgType(CommonConstant.MSG_TYPE_UESR);
 		announcement.setSendStatus(CommonConstant.HAS_SEND);
 		announcement.setSendTime(new Date());
-		// 代码逻辑说明: [QQYUN-12999]系统通知，系统通知时间更新，但是排到下面了
+		// Giải thích logic mã: [QQYUN-12999]Thông báo hệ thống, thời gian thông báo hệ thống được cập nhật nhưng lại bị xếp xuống dưới
 		announcement.setIzTop(CommonConstant.IZ_TOP_0);
 		if(tmplateParam!=null && oConvertUtils.isNotEmpty(tmplateParam.get(CommonSendStatus.MSG_ABSTRACT_JSON))){
 			announcement.setMsgAbstract(tmplateParam.get(CommonSendStatus.MSG_ABSTRACT_JSON));
@@ -645,9 +645,9 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			mobileOpenUrl = tmplateParam.get(CommonConstant.MSG_HREF_URL);
 		}
 
-		// 如果传递扩展json，说明是个性化业务，有意见remark则设置为通知内容
+		// Nếu truyền JSON mở rộng thì nghĩa là nghiệp vụ cá nhân hóa; nếu có remark góp ý thì đặt làm nội dung thông báo
 		if(oConvertUtils.isJson(announcement.getMsgAbstract())) {
-			// 获取announcement.getMsgAbstract()的字段remark
+			// Lấy announcement.getMsgAbstract() trường remark
 			JSONObject jsonObject = JSON.parseObject(announcement.getMsgAbstract());
 			String remark = jsonObject.containsKey("remark")? jsonObject.getString("remark"): null;
 			if(oConvertUtils.isNotEmpty(remark)){
@@ -659,15 +659,15 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		announcement.setDelFlag(String.valueOf(CommonConstant.DEL_FLAG_0));
 		announcement.setBusId(busId);
 		announcement.setBusType(busType);
-		//update-begin---author:liusq ---date:2026-10-13  for：【LHZP-2388】【敲敲云】委托后，催办没收到系统通知-----------
+		//update-begin---author:liusq ---date:2026-10-13  for：【LHZP-2388】【QiaoQiaoYun】Sau khi ủy quyền, thúc giục không nhận được thông báo hệ thống-----------
 		if(SysAnnmentTypeEnum.BPM.getType().equals(busType)){
 			announcement.setNoticeType(NoticeTypeEnum.NOTICE_TYPE_FLOW.getValue());
 		}
-		//update-end---author:liusq ---date:2026-10-13  for：【LHZP-2388】【敲敲云】委托后，催办没收到系统通知-----------
+		//update-end---author:liusq ---date:2026-10-13  for：【LHZP-2388】【QiaoQiaoYun】Sau khi ủy quyền, thúc giục không nhận được thông báo hệ thống-----------
 		announcement.setOpenType(SysAnnmentTypeEnum.getByType(busType).getOpenType());
 		announcement.setOpenPage(SysAnnmentTypeEnum.getByType(busType).getOpenPage());
 		sysAnnouncementMapper.insert(announcement);
-		// 2.插入用户通告阅读标记表记录
+		// 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
 		String userId = toUser;
 		String[] userIds = userId.split(",");
 		String anntId = announcement.getId();
@@ -691,12 +691,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			}
 		}
 		try {
-			// 钉钉的消息通知
+			// Thông báo tin nhắn DingTalk
 			dingtalkService.sendActionCardMessage(announcement, mobileOpenUrl, true);
-			// 企业微信通知
+			// Thông báo WeChat Doanh nghiệp
 			wechatEnterpriseService.sendTextCardMessage(announcement, mobileOpenUrl, true);
 			feishuService.sendAnnouncementMessage(announcement, mobileOpenUrl, true);
-			// Uniapp手机端消息推送
+			// Uniapp Đẩy tin nhắn trên điện thoại di động
 			PushMessageDTO pushMessageDTO = new PushMessageDTO();
 			pushMessageDTO.setTitle(announcement.getTitile());
 			pushMessageDTO.setContent(announcement.getMsgContent());
@@ -704,7 +704,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			pushMessageDTO.setUsernames(Arrays.asList(toUser));
 			this.uniPushMsgToUser(pushMessageDTO);
 		} catch (Exception e) {
-			log.error("同步发送第三方APP消息失败！", e);
+			log.error("Gửi đồng bộ tin nhắn App bên thứ ba thất bại!", e);
 		}
 
 	}
@@ -715,10 +715,10 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		Map<String, String> map = templateDTO.getTemplateParam();
 		List<SysMessageTemplate> sysSmsTemplates = sysMessageTemplateService.selectByCode(templateCode);
 		if(sysSmsTemplates==null||sysSmsTemplates.size()==0){
-			throw new JeecgBootException("消息模板不存在，模板编码："+templateCode);
+			throw new JeecgBootException("Mẫu tin nhắn không tồn tại, mã mẫu:"+templateCode);
 		}
 		SysMessageTemplate sysSmsTemplate = sysSmsTemplates.get(0);
-		//模板内容
+		//Nội dung mẫu
 		String content = sysSmsTemplate.getTemplateContent();
 		if(map!=null) {
 			for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -747,7 +747,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 获取数据库类型
+	 * Lấy loại cơ sở dữ liệu
 	 * @param dataSource
 	 * @return
 	 * @throws SQLException
@@ -769,8 +769,8 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 				}else if(dbType.indexOf(DataBaseConstant.DB_TYPE_MARIADB.toLowerCase())>=0) {
 					DB_TYPE = DataBaseConstant.DB_TYPE_MARIADB;
 				}else {
-					log.error("数据库类型:[" + dbType + "]不识别!");
-					//throw new JeecgBootException("数据库类型:["+dbType+"]不识别!");
+					log.error("Loại cơ sở dữ liệu:[" + dbType + "]Không nhận dạng được!");
+					//throw new JeecgBootException("Loại cơ sở dữ liệu:["+dbType+"]Không nhận dạng được!");
 				}
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
@@ -784,11 +784,11 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
 	@Override
 	public List<DictModel> queryAllDict() {
-		// 查询并排序
+		// Tìm kiếm và sắp xếp
 		QueryWrapper<SysDict> queryWrapper = new QueryWrapper<SysDict>();
 		queryWrapper.orderByAsc("create_time");
 		List<SysDict> dicts = sysDictService.list(queryWrapper);
-		// 封装成 model
+		// Đóng gói thành model
 		List<DictModel> list = new ArrayList<DictModel>();
 		for (SysDict dict : dicts) {
 			list.add(new DictModel(dict.getDictCode(), dict.getDictName()));
@@ -936,22 +936,22 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
 	@Override
 	public List<String> getDeptHeadByDepId(String deptId) {
-		log.debug(" getDeptHeadByDepId 根据部门ID获取负责人，deptId：{}", deptId);
+		log.debug(" getDeptHeadByDepId Theo ID phòng ban, lấy người phụ trách, deptId:{}", deptId);
 		if(oConvertUtils.isEmpty(deptId)){
 			return null;
 		}
 		
 		QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().eq("status", 1).eq("del_flag", 0);
 
-		// 支持逗号分割传递多个部门id
+		// Hỗ trợ truyền nhiều phòng ban, phân tách bằng dấu phẩy id
 		if (oConvertUtils.isNotEmpty(deptId) && deptId.contains(SymbolConstant.COMMA)) {
 			String[] vals = deptId.split(SymbolConstant.COMMA);
 
-			// 先trim去除空格，再过滤空字符串，最后去重
+			// Trước tiên trim để loại bỏ khoảng trắng, sau đó lọc chuỗi rỗng, cuối cùng khử trùng lặp
 			List<String> validDeptIds = Arrays.stream(vals)
 					.map(String::trim)
 					.filter(oConvertUtils::isNotEmpty)
-					.distinct()  // 去重处理
+					.distinct()  // Xử lý loại bỏ trùng lặp
 					.collect(Collectors.toList());
 
 			if (!validDeptIds.isEmpty()) {
@@ -965,12 +965,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 				});
 			}
 		} else if (oConvertUtils.isNotEmpty(deptId)) {
-			queryWrapper.like("depart_ids", deptId.trim());  // 单个值也要trim
+			queryWrapper.like("depart_ids", deptId.trim());  // Giá trị đơn lẻ cũng cần trim
 		}
 
 		List<SysUser> userList = userMapper.selectList(queryWrapper);
 
-		// 对结果也进行去重处理
+		// Cũng xử lý khử trùng lặp cho kết quả
 		return userList.stream()
 				.map(SysUser::getUsername)
 				.distinct()
@@ -999,7 +999,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 推送签到人员信息
+	 * Đẩy thông tin nhân viên điểm danh
 	 * @param userId
 	 */
 	@Override
@@ -1007,7 +1007,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		JSONObject obj = new JSONObject();
 		obj.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_SIGN);
 		obj.put(WebsocketConst.MSG_USER_ID,userId);
-		//TODO 目前全部推送，后面修改
+		//TODO Hiện tại đẩy toàn bộ, sửa sau
 		webSocket.sendMessage(obj.toJSONString());
 	}
 
@@ -1036,7 +1036,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		List<SysUser> list= sysUserService.list(queryWrapper);
 		if(ObjectUtils.isNotEmpty(list)){
 		
-			// 代码逻辑说明: QQYUN-5326【简流】获取组织人员 单/多 筛选条件 没有部门筛选
+			// Giải thích logic mã: QQYUN-5326【Luồng đơn giản】Lấy nhân sự tổ chức, đơn/Nhiều điều kiện lọc, không có lọc theo phòng ban
 			String departKey = "depart";
 			QueryCondition departCondition = null;
 			try {
@@ -1049,7 +1049,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 					}
 				}
 			} catch (UnsupportedEncodingException e) {
-				log.error("查询用户信息，查询条件json转化失败", e);
+				log.error("Truy vấn thông tin người dùng, chuyển đổi JSON điều kiện truy vấn thất bại", e);
 			}
 			
 			for (SysUser user : list) {
@@ -1073,8 +1073,8 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 判断用户的部门是否满足条件 -等于/不等于/在--中/不在--中/为空/不为空
-	 * QQYUN-5326【简流】获取组织人员 单/多 筛选条件 没有部门筛选
+	 * Xác định phòng ban của người dùng có thỏa mãn điều kiện hay không -Bằng/Không bằng/trong danh sách/Không ở--Trung bình/Trống/Không trống
+	 * QQYUN-5326【Luồng đơn giản】Lấy nhân sự tổ chức, đơn/Nhiều điều kiện lọc, không có lọc theo phòng ban
 	 * @param departCondition
 	 * @param departIds
 	 * @return
@@ -1193,12 +1193,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		List<String> userIds = new ArrayList<>();
 		List<SysUserDepart> userDepartList = sysUserDepartService.list(new QueryWrapper<SysUserDepart>().eq("user_id",userId));
 		if(userDepartList != null){
-			//查找所属公司
+			//Tìm công ty trực thuộc
 			String orgCodes = "";
 			StringBuilder orgCodesBuilder = new StringBuilder();
             orgCodesBuilder.append(orgCodes);
 			for(SysUserDepart userDepart : userDepartList){
-				//查询所属公司编码
+				//Truy vấn mã công ty trực thuộc
 				SysDepart depart = sysDepartService.getById(userDepart.getDepId());
 				int length = YouBianCodeUtil.ZHANWEI_LENGTH;
 				String compyOrgCode = "";
@@ -1225,34 +1225,34 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 查询用户拥有的角色集合
+	 * Truy vấn tập hợp vai trò mà người dùng sở hữu
 	 * @param username
 	 * @return
 	 */
 	@Override
 	public Set<String> getUserRoleSet(String username) {
-		// 查询用户拥有的角色集合
+		// Truy vấn tập hợp vai trò mà người dùng sở hữu
 		List<String> roles = sysUserRoleMapper.getRoleByUserName(username);
-		log.debug("-------通过数据库读取用户拥有的角色Rules------username： " + username + ",Roles size: " + (roles == null ? 0 : roles.size()));
+		log.debug("-------Đọc các vai trò mà người dùng sở hữu qua cơ sở dữ liệu Rules------username： " + username + ",Roles size: " + (roles == null ? 0 : roles.size()));
 		return new HashSet<>(roles);
 	}
 	
 	
 	/**
-	 * 查询用户拥有的角色集合
+	 * Truy vấn tập hợp vai trò mà người dùng sở hữu
 	 * @param useId
 	 * @return
 	 */
 	@Override
 	public Set<String> getUserRoleSetById(String useId) {
-		// 查询用户拥有的角色集合
+		// Truy vấn tập hợp vai trò mà người dùng sở hữu
 		List<String> roles = sysUserRoleMapper.getRoleCodeByUserId(useId);
-		log.debug("-------通过数据库读取用户拥有的角色Rules------useId： " + useId + ",Roles size: " + (roles == null ? 0 : roles.size()));
+		log.debug("-------Đọc các vai trò mà người dùng sở hữu qua cơ sở dữ liệu Rules------useId： " + useId + ",Roles size: " + (roles == null ? 0 : roles.size()));
 		return new HashSet<>(roles);
 	}
 
 	/**
-	 * 查询用户拥有的权限集合
+	 * Truy vấn tập hợp quyền hạn mà người dùng sở hữu
 	 * @param userId
 	 * @return
 	 */
@@ -1260,7 +1260,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	public Set<String> getUserPermissionSet(String userId) {
 		Set<String> permissionSet = new HashSet<>();
 		List<SysPermission> permissionList = sysPermissionMapper.queryByUser(userId);
-		//================= begin 开启租户的时候 如果没有test角色，默认加入test角色================
+		//================= begin Khi bật thuê bao, nếu không có vai trò test thì mặc định thêm vai trò test================
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			if (permissionList == null) {
 				permissionList = new ArrayList<>();
@@ -1268,9 +1268,9 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			List<SysPermission> testRoleList = sysPermissionMapper.queryPermissionByTestRoleId();
 			permissionList.addAll(testRoleList);
 		}
-		//================= end 开启租户的时候 如果没有test角色，默认加入test角色================
+		//================= end Khi bật thuê bao, nếu không có vai trò test thì mặc định thêm vai trò test================
 		for (SysPermission po : permissionList) {
-//			// TODO URL规则有问题？
+//			// TODO URL Quy tắc có vấn đề?
 //			if (oConvertUtils.isNotEmpty(po.getUrl())) {
 //				permissionSet.add(po.getUrl());
 //			}
@@ -1278,12 +1278,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 				permissionSet.add(po.getPerms());
 			}
 		}
-		log.debug("-------通过数据库读取用户拥有的权限Perms------userId： "+ userId+",Perms size: "+ (permissionSet==null?0:permissionSet.size()) );
+		log.debug("-------Đọc các quyền hạn mà người dùng sở hữu qua cơ sở dữ liệu Perms------userId： "+ userId+",Perms size: "+ (permissionSet==null?0:permissionSet.size()) );
 		return permissionSet;
 	}
 
 	/**
-	 * 判断online菜单是否有权限
+	 * Kiểm tra menu online có quyền hay không
 	 * @param onlineAuthDTO
 	 * @return
 	 */
@@ -1292,18 +1292,18 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		String username = onlineAuthDTO.getUsername();
 		List<String> possibleUrl = onlineAuthDTO.getPossibleUrl();
 		String onlineFormUrl = onlineAuthDTO.getOnlineFormUrl();
-		//查询菜单
+		//Truy vấn menu
 		LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
 		query.eq(SysPermission::getDelFlag, 0);
 		query.in(SysPermission::getUrl, possibleUrl);
 		List<SysPermission> permissionList = sysPermissionMapper.selectList(query);
 		if (permissionList == null || permissionList.size() == 0) {
-			//没有配置菜单 找online表单菜单地址
+			//Chưa cấu hình menu thì tìm địa chỉ menu biểu mẫu online
 			SysPermission sysPermission = new SysPermission();
 			sysPermission.setUrl(onlineFormUrl);
 			int count = sysPermissionMapper.queryCountByUsername(username, sysPermission);
 			if(count<=0){
-				// 代码逻辑说明: [QQYUN-7992]【online】工单申请下的online表单，未配置online表单开发菜单，操作报错无权限------------
+				// Giải thích logic mã: [QQYUN-7992][online] Form online thuộc đơn công việc, chưa cấu hình menu phát triển form online, thao tác báo lỗi không có quyền------------
 				sysPermission.setUrl(onlineAuthDTO.getOnlineWorkOrderUrl());
 				count = sysPermissionMapper.queryCountByUsername(username, sysPermission);
 				if(count<=0) {
@@ -1311,19 +1311,19 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 				}
 			}
 		} else {
-			//找到菜单了
+			//Đã tìm thấy menu
 			boolean has = false;
 			for (SysPermission p : permissionList) {
 				int count = sysPermissionMapper.queryCountByUsername(username, p);
 				has = has || (count>0);
 			}
 			if (!has) {
-				//没有配置菜单 找online表单菜单地址
+				//Chưa cấu hình menu thì tìm địa chỉ menu biểu mẫu online
 				SysPermission sysPermission = new SysPermission();
 				sysPermission.setUrl(onlineFormUrl);
 				int count = sysPermissionMapper.queryCountByUsername(username, sysPermission);
 				if (count <= 0) {
-					// 代码逻辑说明: [QQYUN-7992]【online】工单申请下的online表单，未配置online表单开发菜单，操作报错无权限------------
+					// Giải thích logic mã: [QQYUN-7992][online] Form online thuộc đơn công việc, chưa cấu hình menu phát triển form online, thao tác báo lỗi không có quyền------------
 					sysPermission.setUrl(onlineAuthDTO.getOnlineWorkOrderUrl());
 					count = sysPermissionMapper.queryCountByUsername(username, sysPermission);
 					if (count > 0) {
@@ -1339,7 +1339,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 查询用户拥有的角色集合 common api 里面的接口实现
+	 * Truy vấn tập hợp vai trò mà người dùng sở hữu — triển khai interface trong common api
 	 * @param username
 	 * @return
 	 */
@@ -1354,7 +1354,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 查询用户拥有的权限集合 common api 里面的接口实现
+	 * Truy vấn tập hợp quyền hạn mà người dùng sở hữu — triển khai interface trong common api
 	 * @param userId
 	 * @return
 	 */
@@ -1364,7 +1364,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 36根据多个用户账号(逗号分隔)，查询返回多个用户信息
+	 * 36 Theo nhiều tài khoản người dùng(phân tách bằng dấu phẩy), truy vấn trả về thông tin của nhiều người dùng
 	 * @param usernames
 	 * @return
 	 */
@@ -1383,7 +1383,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 37根据多个部门编码(逗号分隔)，查询返回多个部门信息
+	 * 37 Theo nhiều mã phòng ban(phân tách bằng dấu phẩy), truy vấn trả về thông tin của nhiều phòng ban
 	 * @param orgCodes
 	 * @return
 	 */
@@ -1402,7 +1402,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-     * 发消息
+     * Gửi tin nhắn
      *
      * @param fromUser
      * @param toUser
@@ -1422,14 +1422,14 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		announcement.setSendTime(new Date());
 		announcement.setMsgCategory(setMsgCategory);
 		announcement.setDelFlag(String.valueOf(CommonConstant.DEL_FLAG_0));
-		// 代码逻辑说明: [QQYUN-12999]系统通知，系统通知时间更新，但是排到下面了
+		// Giải thích logic mã: [QQYUN-12999]Thông báo hệ thống, thời gian thông báo hệ thống được cập nhật nhưng lại bị xếp xuống dưới
 		announcement.setIzTop(CommonConstant.IZ_TOP_0);
 		if(oConvertUtils.isEmpty(noticeType)){
             noticeType = NoticeTypeEnum.NOTICE_TYPE_SYSTEM.getValue();
         }
         announcement.setNoticeType(noticeType);
 		sysAnnouncementMapper.insert(announcement);
-		// 2.插入用户通告阅读标记表记录
+		// 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
 		String userId = toUser;
 		String[] userIds = userId.split(",");
 		String anntId = announcement.getId();
@@ -1457,7 +1457,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 发消息 带业务参数
+	 * Gửi tin nhắn, kèm tham số nghiệp vụ
 	 * @param fromUser
 	 * @param toUser
 	 * @param title
@@ -1465,7 +1465,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	 * @param setMsgCategory
 	 * @param busType
 	 * @param busId
-	 * @param noticeType 消息类型,for [JHHB-136]【vue3】协同工作系统消息需要添加一个类型
+	 * @param noticeType Loại tin nhắn,for [JHHB-136]【vue3】Tin nhắn hệ thống làm việc cộng tác cần thêm một loại
 	 */
 	private void sendBusAnnouncement(String fromUser, String toUser, String title, String msgContent, String setMsgCategory, String busType, String busId, String noticeType) {
 		SysAnnouncement announcement = new SysAnnouncement();
@@ -1481,21 +1481,21 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		announcement.setBusId(busId);
 		announcement.setBusType(busType);
 
-		// 代码逻辑说明: busType为空时，报错
+		// Giải thích logic mã: busType khi trống, báo lỗi
 		if(oConvertUtils.isNotEmpty(busType)){
 			announcement.setOpenType(SysAnnmentTypeEnum.getByType(busType).getOpenType());
 			announcement.setOpenPage(SysAnnmentTypeEnum.getByType(busType).getOpenPage());
 		}
 
-		// 代码逻辑说明: [JHHB-136]【vue3】协同工作系统消息需要添加一个类型------------
+		// Giải thích logic mã: [JHHB-136]【vue3】Tin nhắn hệ thống làm việc cộng tác cần thêm một loại------------
 		if(oConvertUtils.isEmpty(noticeType)){
 			noticeType = NoticeTypeEnum.NOTICE_TYPE_FLOW.getValue();
 		}
 		announcement.setNoticeType(noticeType);
-		// 代码逻辑说明: [QQYUN-12999]系统通知，系统通知时间更新，但是排到下面了
+		// Giải thích logic mã: [QQYUN-12999]Thông báo hệ thống, thời gian thông báo hệ thống được cập nhật nhưng lại bị xếp xuống dưới
 		announcement.setIzTop(CommonConstant.IZ_TOP_0);
 		sysAnnouncementMapper.insert(announcement);
-		// 2.插入用户通告阅读标记表记录
+		// 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
 		String userId = toUser;
 		String[] userIds = userId.split(",");
 		String anntId = announcement.getId();
@@ -1522,7 +1522,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 发送邮件消息
+	 * Gửi tin nhắn email
 	 * @param email
 	 * @param title
 	 * @param content
@@ -1533,16 +1533,16 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			emailHandle.sendMsg(email, title, content);
 	}
 	/**
-	 * 发送短信消息
-	 * @param phone 手机号
-	 * @param param 模版参数
-	 * @param dySmsEnum 短信模版
+	 * Gửi tin nhắn SMS
+	 * @param phone Số điện thoại
+	 * @param param Tham số mẫu
+	 * @param dySmsEnum Mẫu SMS
 	 */
 	@Override
 	public void sendSmsMsg(String phone, JSONObject param,DySmsEnum dySmsEnum) {
         try {
-			log.info(" 发送短信消息 phone = {}", phone);
-			log.info(" 发送短信消息 param = {}", param);
+			log.info(" Gửi tin nhắn SMS phone = {}", phone);
+			log.info(" Gửi tin nhắn SMS param = {}", param);
             DySmsHelper.sendSms(phone, param,dySmsEnum);
         } catch (ClientException e) {
 			e.printStackTrace();
@@ -1550,7 +1550,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
     }
 
 	/**
-	 * 发送html模版邮件消息
+	 * Gửi tin nhắn email mẫu html
 	 * @param email
 	 * @param title
 	 * @param emailTemplateEnum
@@ -1561,17 +1561,17 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		EmailSendMsgHandle emailHandle=new EmailSendMsgHandle();
 		String htmlText="";
 		try{
-			//获取模板实例
+			//Lấy thể hiện mẫu
 			Configuration configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-			//设置模板文件的目录
+			//Thiết lập thư mục file mẫu
 			String url = emailTemplateEnum.getUrl();
 			configuration.setClassForTemplateLoading(this.getClass(), url.substring(0,url.lastIndexOf("/")));
 			configuration.setDefaultEncoding("UTF-8");
-			//空值报错设置
+			//Cài đặt báo lỗi giá trị trống
 			configuration.setClassicCompatible(true);
 			configuration.setNewBuiltinClassResolver(TemplateClassResolver.SAFER_RESOLVER);
 			Template template = configuration.getTemplate(url.substring(url.lastIndexOf("/")));
-			//解析模板文件
+			//Phân tích tệp mẫu
 			htmlText= FreeMarkerTemplateUtils.processTemplateIntoString(template, params);
 		}catch(IOException e){
 			e.printStackTrace();
@@ -1586,27 +1586,27 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 获取公司下级部门和所有用户id信息
+	 * Lấy phòng ban cấp dưới của công ty và thông tin id của tất cả người dùng
 	 * @param orgCode
 	 * @return
 	 */
 	@Override
 	public List<Map> getDeptUserByOrgCode(String orgCode) {
-		//1.获取公司信息
+		//1.Lấy thông tin công ty
 		SysDepart comp=sysDepartService.queryCompByOrgCode(orgCode);
 		if(comp!=null){
-			//2.获取公司下级部门
+			//2.Lấy phòng ban cấp dưới của công ty
 			List<SysDepart> departs=sysDepartService.queryDeptByPid(comp.getId());
-			//3.获取部门下的人员信息
+			//3.Lấy thông tin nhân sự thuộc phòng ban
 			 List<Map> list=new ArrayList();
-			 //4.处理部门和下级用户数据
+			 //4.Xử lý dữ liệu phòng ban và người dùng cấp dưới
 			for (SysDepart dept:departs) {
 				Map map=new HashMap(5);
-				//部门名称
+				//Tên phòng ban
 				String departName = dept.getDepartName();
-				//根据部门编码获取下级部门id
+				//Lấy các phòng ban cấp dưới theo mã phòng ban id
 				List<String> listIds = departMapper.getSubDepIdsByDepId(dept.getId());
-				//根据下级部门ids获取下级部门的所有用户
+				//Lấy tất cả người dùng của phòng ban cấp dưới theo ids phòng ban cấp dưới
 				List<SysUserDepart> userList = sysUserDepartService.list(new QueryWrapper<SysUserDepart>().in("dep_id",listIds));
 				List<String> userIds = new ArrayList<>();
 				for(SysUserDepart userDepart : userList){
@@ -1624,9 +1624,9 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 查询分类字典翻译
+	 * Truy vấn bản dịch danh mục phân loại
 	 *
-	 * @param ids 分类字典表id
+	 * @param ids Bảng danh mục phân loại id
 	 * @return
 	 */
 	@Override
@@ -1640,10 +1640,10 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 根据字典code加载字典text
+	 * Tải danh mục theo code danh mục text
 	 *
-	 * @param dictCode 顺序：tableName,text,code
-	 * @param keys     要查询的key
+	 * @param dictCode Thứ tự: tableName,text,code
+	 * @param keys     cần truy vấn key
 	 * @return
 	 */
 	@Override
@@ -1664,15 +1664,15 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			dictCodeMapping.put(vo.getDictCode(), newDictCode);
 		}
 
-		log.info(" --- 批量复制应用下的字典到新租户下 —— 原应用ID:{}，新应用ID:{}，新租户ID：{}，字典个数：{} --- ", originalAppId, appId, tenantId, dictCodeMapping.size());
+		log.info(" --- Sao chép hàng loạt danh mục dưới ứng dụng sang tenant mới —— Ứng dụng gốc ID:{}，ứng dụng mới ID:{}, ID tenant mới:{}，số lượng danh mục：{} --- ", originalAppId, appId, tenantId, dictCodeMapping.size());
 		return dictCodeMapping;
 	}
 
 	/**
-	 * 根据字典code查询字典项
+	 * Truy vấn mục từ điển theo code từ điển
 	 *
-	 * @param dictCode 顺序：tableName,text,code
-	 * @param dictCode 要查询的key
+	 * @param dictCode Thứ tự: tableName,text,code
+	 * @param dictCode cần truy vấn key
 	 * @return
 	 */
 	@Override
@@ -1685,10 +1685,10 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 根据多个字典code查询多个字典项
+	 * Theo nhiều code danh mục, truy vấn nhiều mục danh mục
 	 *
 	 * @param dictCodeList
-	 * @return key = dictCode ； value=对应的字典项
+	 * @return key = dictCode ； value=Mục danh mục tương ứng
 	 */
 	@Override
 	public Map<String, List<DictModel>> getManyDictItems(List<String> dictCodeList) {
@@ -1696,11 +1696,11 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 【下拉搜索】
-	 * 大数据量的字典表 走异步加载，即前端输入内容过滤数据
+	 * 【Tìm kiếm thả xuống】
+	 * Bảng từ điển có lượng dữ liệu lớn sẽ tải bất đồng bộ, tức là frontend nhập nội dung để lọc dữ liệu
 	 *
-	 * @param dictCode 字典code格式：table,text,code
-	 * @param keyword  过滤关键字
+	 * @param dictCode Định dạng code từ điển:table,text,code
+	 * @param keyword  Lọc từ khóa
 	 * @return
 	 */
 	@Override
@@ -1712,11 +1712,11 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	public Map<String, List<DictModel>> translateManyDict(String dictCodes, String keys) {
 		List<String> dictCodeList = Arrays.asList(dictCodes.split(","));
 		List<String> values = Arrays.asList(keys.split(","));
-		// 代码逻辑说明: [issues/#5643]解决分布式下表字典跨库无法查询问题------------
+		// Giải thích logic mã: [issues/#5643]Giải quyết vấn đề danh mục bảng liên cơ sở dữ liệu không truy vấn được trong môi trường phân tán------------
 		return sysDictService.queryManyDictByKeys(dictCodeList, values);
 	}
 
-	// 代码逻辑说明: [issues/#5643]解决分布式下表字典跨库无法查询问题------------
+	// Giải thích logic mã: [issues/#5643]Giải quyết vấn đề danh mục bảng liên cơ sở dữ liệu không truy vấn được trong môi trường phân tán------------
 	@Override
 	public List<DictModel> translateDictFromTableByKeys(String table, String text, String code, String keys, String dataSource) {
 		return sysDictService.queryTableDictTextByKeys(table, text, code, Arrays.asList(keys.split(",")), dataSource);
@@ -1727,12 +1727,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		try {
 			return onlineBaseExtApi.cgreportGetDataPackage(reportCode, dictText, dictCode, dataList);
 		} catch (Exception e) {
-			log.warn("数据字典加载失败, reportCode: {}", reportCode, e);
+			log.warn("Tải danh mục dữ liệu thất bại, reportCode: {}", reportCode, e);
 			return Collections.emptyList();
 		}
 	}
 
-	//-------------------------------------流程节点发送模板消息-----------------------------------------------
+	//-------------------------------------Nút quy trình gửi tin nhắn mẫu-----------------------------------------------
 	@Autowired
 	private QywxSendMsgHandle qywxSendMsgHandle;
 
@@ -1752,8 +1752,8 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	@Override
 	public void sendTemplateMessage(MessageDTO message) {
 		String messageType = message.getType();
-		log.debug(" 【万能通用】推送消息 messageType = {}", messageType);
-		// 代码逻辑说明: 将模板解析代码移至消息发送, 而不是调用的地方
+		log.debug(" 【Chung đa năng】Đẩy tin nhắn messageType = {}", messageType);
+		// Giải thích logic mã: Chuyển mã phân tích mẫu sang khâu gửi tin nhắn, Mà không phải nơi gọi
 		String templateCode = message.getTemplateCode();
 		if(oConvertUtils.isNotEmpty(templateCode)){
 			SysMessageTemplate templateEntity = getTemplateEntity(templateCode);
@@ -1766,22 +1766,22 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			message.setContent(content);
 		}
 		if(oConvertUtils.isEmpty(message.getContent())){
-			log.error("发送消息失败,消息内容为空！");
-			throw new JeecgBootException("发送消息失败,消息内容为空！");
+			log.error("Gửi tin nhắn thất bại,Nội dung tin nhắn trống!");
+			throw new JeecgBootException("Gửi tin nhắn thất bại,Nội dung tin nhắn trống!");
 		}
 
 		if(MessageTypeEnum.XT.getType().equals(messageType)){
 			if (message.isMarkdown()) {
-				// 系统消息要解析Markdown
+				// Tin nhắn hệ thống cần phân tích cú pháp Markdown
 				message.setContent(HTMLUtils.parseMarkdown(message.getContent()));
 			}
 			systemSendMsgHandle.sendMessage(message);
 		}else if(MessageTypeEnum.YJ.getType().equals(messageType)){
 			if (message.isMarkdown()) {
-				// 邮件消息要解析Markdown
+				// Tin nhắn email cần phân tích cú pháp Markdown
 				message.setContent(HTMLUtils.parseMarkdown(message.getContent()));
 			}
-			// 代码逻辑说明: 【QQYUN-8523】敲敲云发邮件通知，不稳定---
+			// Giải thích logic mã: 【QQYUN-8523】QiaoQiaoYun gửi thông báo email, không ổn định---
 			if(message.getIsTimeJob() != null && message.getIsTimeJob()){
 				emailSendMsgHandle.sendEmailMessage(message);
 			}else{
@@ -1798,12 +1798,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		}
 	}
 
-	//update-begin---author:liusq ---date:2026-10-19  for：【QQYUN-12767】钉钉/企业微信/飞书/短信异步发送时传递租户ID，修复流程消息在线程池中取到租户0的问题-----------
+	//update-begin---author:liusq ---date:2026-10-19  for：【QQYUN-12767】DingTalk/WeCom/Feishu/Khi gửi SMS bất đồng bộ thì truyền ID tenant, sửa lỗi tin nhắn quy trình lấy được tenant 0 trong thread pool-----------
 	/**
-	 * 提交到消息异步线程池，并把当前线程的租户ID传递到异步线程。
-	 * <p>TenantContext 是普通 ThreadLocal，切换到线程池后取不到值，钉钉/企业微信/飞书会按租户 0 查询应用配置和第三方绑定账号，导致消息发不出去。</p>
+	 * Gửi vào pool luồng bất đồng bộ của tin nhắn, đồng thời truyền ID thuê bao của luồng hiện tại sang luồng bất đồng bộ.
+	 * <p>TenantContext là ThreadLocal thông thường, sau khi chuyển sang pool luồng sẽ không lấy được giá trị, DingTalk/WeCom/Feishu sẽ truy vấn cấu hình ứng dụng và tài khoản gắn kết bên thứ ba theo tenant 0, khiến tin nhắn không gửi được.</p>
 	 *
-	 * @param task 发送任务
+	 * @param task Gửi tác vụ
 	 */
 	private void executeWithTenant(Runnable task) {
 		String tenantId = TenantContext.getTenant();
@@ -1812,12 +1812,12 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			try {
 				task.run();
 			} finally {
-				// 线程池的线程会复用，必须清理，避免后续任务串租户
+				// Luồng trong pool sẽ được tái sử dụng, bắt buộc phải dọn sạch để tránh các tác vụ sau bị lẫn thuê bao
 				TenantContext.clear();
 			}
 		});
 	}
-	//update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767】钉钉/企业微信/飞书/短信异步发送时传递租户ID，修复流程消息在线程池中取到租户0的问题-----------
+	//update-end---author:liusq ---date:2026-10-19  for：【QQYUN-12767】DingTalk/WeCom/Feishu/Khi gửi SMS bất đồng bộ thì truyền ID tenant, sửa lỗi tin nhắn quy trình lấy được tenant 0 trong thread pool-----------
 
 	@Override
 	public String getTemplateContent(String code) {
@@ -1829,7 +1829,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 获取模板内容，解析markdown
+	 * Lấy nội dung mẫu, phân tích markdown
 	 *
 	 * @param code
 	 * @return
@@ -1842,7 +1842,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		return list.get(0);
 	}
 
-	//-------------------------------------流程节点发送模板消息-----------------------------------------------
+	//-------------------------------------Nút quy trình gửi tin nhắn mẫu-----------------------------------------------
 
 	@Override
 	public void saveDataLog(DataLogDTO dataLogDto) {
@@ -1871,10 +1871,10 @@ public class SysBaseApiImpl implements ISysBaseAPI {
     @Override
     public void updateAvatar(LoginUser loginUser) {
 		SysUser sysUser = new SysUser();
-		// 创建UpdateWrapper对象
+		// Tạo đối tượng UpdateWrapper
 		UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
-		updateWrapper.eq("id", loginUser.getId()); // 设置更新条件
-		sysUser.setAvatar(loginUser.getAvatar()); // 设置要更新的字段
+		updateWrapper.eq("id", loginUser.getId()); // Đặt điều kiện cập nhật
+		sysUser.setAvatar(loginUser.getAvatar()); // Đặt trường cần cập nhật
 		sysUserService.update(sysUser, updateWrapper);
     }
 
@@ -1904,7 +1904,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
 		queryWrapper.in(SysRole::getRoleCode, codeList);
 		List<SysRole> list = roleMapper.selectList(queryWrapper);
-		// 转换成SysRoleVo
+		// Chuyển đổi thành SysRoleVo
 		return list.stream().map(sysRole -> {
 			DictModel model = new DictModel();
 			model.setText(sysRole.getRoleName());
@@ -1918,7 +1918,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		QueryWrapper<SysUserDepart> queryWrapper = new QueryWrapper<>();
 		queryWrapper.lambda().select(SysUserDepart::getUserId).in(true,SysUserDepart::getDepId,deptIds);
 		List<String> userIds = sysUserDepartService.listObjs(queryWrapper,e->e.toString());
-		//update-begin---author:zhangdaiscott ---date:2026-07-16  for：【LHZP-789】过滤sys_user_depart关系表中用户已被删除/禁用的垃圾数据-----------
+		//update-begin---author:zhangdaiscott ---date:2026-07-16  for：【LHZP-789】Lọc sys_user_depart Người dùng trong bảng quan hệ đã bị xóa/Dữ liệu rác của người dùng đã bị xóa/vô hiệu hóa-----------
 		if (userIds == null || userIds.isEmpty()) {
 			return userIds;
 		}
@@ -1926,7 +1926,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		userQueryWrapper.lambda().select(SysUser::getId).eq(SysUser::getStatus,Integer.parseInt(CommonConstant.STATUS_1))
 				.eq(SysUser::getDelFlag,CommonConstant.DEL_FLAG_0).in(SysUser::getId,userIds);
 		return sysUserService.listObjs(userQueryWrapper,e->e.toString());
-		//update-end---author:zhangdaiscott ---date:2026-07-16  for：【LHZP-789】过滤sys_user_depart关系表中用户已被删除/禁用的垃圾数据-----------
+		//update-end---author:zhangdaiscott ---date:2026-07-16  for：【LHZP-789】Lọc sys_user_depart Người dùng trong bảng quan hệ đã bị xóa/Dữ liệu rác của người dùng đã bị xóa/vô hiệu hóa-----------
 	}
 
 	@Override
@@ -1964,7 +1964,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			QueryWrapper<SysUserRole> queryWrapper = new QueryWrapper<>();
 			queryWrapper.lambda().select(SysUserRole::getUserId).in(true,SysUserRole::getRoleId, idList);
 			List<String> userIds = sysUserRoleService.listObjs(queryWrapper,e->e.toString());
-			//update-begin---author:zhangdaiscott ---date:2026-07-16  for：【LHZP-789】过滤sys_user_role关系表中用户已被删除/禁用的垃圾数据-----------
+			//update-begin---author:zhangdaiscott ---date:2026-07-16  for：【LHZP-789】Lọc sys_user_role Người dùng trong bảng quan hệ đã bị xóa/Dữ liệu rác của người dùng đã bị xóa/vô hiệu hóa-----------
 			if (userIds == null || userIds.isEmpty()) {
 				return userIds;
 			}
@@ -1972,27 +1972,27 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			userQueryWrapper.lambda().select(SysUser::getId).eq(SysUser::getStatus,Integer.parseInt(CommonConstant.STATUS_1))
 					.eq(SysUser::getDelFlag,CommonConstant.DEL_FLAG_0).in(SysUser::getId,userIds);
 			return sysUserService.listObjs(userQueryWrapper,e->e.toString());
-			//update-end---author:zhangdaiscott ---date:2026-07-16  for：【LHZP-789】过滤sys_user_role关系表中用户已被删除/禁用的垃圾数据-----------
+			//update-end---author:zhangdaiscott ---date:2026-07-16  for：【LHZP-789】Lọc sys_user_role Người dùng trong bảng quan hệ đã bị xóa/Dữ liệu rác của người dùng đã bị xóa/vô hiệu hóa-----------
 		}
 		return null;
 	}
 
 	@Override
 	public List<String> queryUserIdsByDeptPostIds(List<String> deptPostIds) {
-		// 1.查询兼职岗位对应的用户
+		// 1.Truy vấn người dùng tương ứng với chức vụ kiêm nhiệm
 		QueryWrapper<SysUserDepPost> queryWrapper = new QueryWrapper<>();
 		queryWrapper.lambda().select(SysUserDepPost::getUserId).in(true,SysUserDepPost::getDepId,deptPostIds);
 		List<String> otherDepartPostUserIds = sysUserDepPostService.listObjs(queryWrapper,e->e.toString());
-		log.info("兼职岗位对应的用户 otherDepartPostUserIds = "+ JSON.toJSONString(otherDepartPostUserIds));
+		log.info("Người dùng tương ứng với chức vụ kiêm nhiệm otherDepartPostUserIds = "+ JSON.toJSONString(otherDepartPostUserIds));
 
-		// 2.查询主岗位对应的用户
+		// 2.Truy vấn người dùng tương ứng với chức vụ chính
 		QueryWrapper<SysUser> mainQueryWrapper = new QueryWrapper<>();
 		mainQueryWrapper.lambda().select(SysUser::getId).eq(SysUser::getStatus,Integer.parseInt(CommonConstant.STATUS_1)).eq(SysUser::getDelFlag,CommonConstant.DEL_FLAG_0)
 				.and(wrapper -> wrapper.in(SysUser::getMainDepPostId, deptPostIds));
 		List<String> mainDepartPostUserIds =  sysUserService.listObjs(mainQueryWrapper,e->e.toString());
-		log.info("主岗位对应的用户 mainDepartPostUserIds = "+ JSON.toJSONString(mainDepartPostUserIds));
+		log.info("Người dùng tương ứng với chức vụ chính mainDepartPostUserIds = "+ JSON.toJSONString(mainDepartPostUserIds));
 		
-		// 3.合并主岗位和兼职岗位对应的用户
+		// 3.Gộp người dùng tương ứng với vị trí chính và vị trí kiêm nhiệm
 		Set<String> userIdSet = new HashSet<>();
 		if (otherDepartPostUserIds != null && !otherDepartPostUserIds.isEmpty()) {
 			userIdSet.addAll(otherDepartPostUserIds);
@@ -2000,19 +2000,19 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		if (mainDepartPostUserIds != null && !mainDepartPostUserIds.isEmpty()) {
 			userIdSet.addAll(mainDepartPostUserIds);
 		}
-		log.info("主岗位和兼职岗位，对应的用户 userIdSet = "+ JSON.toJSONString(userIdSet));
+		log.info("Vị trí chính và vị trí kiêm nhiệm, người dùng tương ứng userIdSet = "+ JSON.toJSONString(userIdSet));
 		return new ArrayList<>(userIdSet);
 	}
 
 	@Override
 	public List<String> queryUsernameByDepartPositIds(List<String> deptPostIds) {
-		// 1.查询兼职岗位对应的用户
+		// 1.Truy vấn người dùng tương ứng với chức vụ kiêm nhiệm
 		QueryWrapper<SysUserDepPost> otherQueryWrapper = new QueryWrapper<>();
 		otherQueryWrapper.lambda().select(SysUserDepPost::getUserId).in(true, SysUserDepPost::getDepId, deptPostIds);
 		List<String> otherUserIds = sysUserDepPostService.listObjs(otherQueryWrapper, e -> e.toString());
-		log.info("兼职岗位对应的用户 otherUserIds = {}，size = {}" + JSON.toJSONString(otherUserIds), oConvertUtils.getCollectionSize(otherUserIds));
+		log.info("Người dùng tương ứng với chức vụ kiêm nhiệm otherUserIds = {}，size = {}" + JSON.toJSONString(otherUserIds), oConvertUtils.getCollectionSize(otherUserIds));
 
-		// 2.查询主岗位和兼职岗位，对应的用户
+		// 2.Truy vấn người dùng tương ứng với vị trí chính và vị trí kiêm nhiệm
 		QueryWrapper<SysUser> mainQueryWrapper = new QueryWrapper<>();
 		mainQueryWrapper.lambda().select(SysUser::getUsername).eq(SysUser::getStatus, Integer.parseInt(CommonConstant.STATUS_1)).eq(SysUser::getDelFlag, CommonConstant.DEL_FLAG_0)
 				.and(wrapper -> wrapper
@@ -2021,7 +2021,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 						.in(otherUserIds != null && !otherUserIds.isEmpty(), SysUser::getId, otherUserIds)
 				);
 		List<String> allUsernames = sysUserService.listObjs(mainQueryWrapper, e -> e.toString());
-		log.info("主岗位和兼职岗位，对应的用户账号 allUsernames = {}，size = {}" ,JSON.toJSONString(allUsernames), oConvertUtils.getCollectionSize(allUsernames));
+		log.info("Vị trí chính và vị trí kiêm nhiệm, tài khoản người dùng tương ứng allUsernames = {}，size = {}" ,JSON.toJSONString(allUsernames), oConvertUtils.getCollectionSize(allUsernames));
 		return allUsernames;
 	}
 
@@ -2033,8 +2033,8 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 	
 	/**
-	 * 获取带参数的报表地址，因为多个参数可能顺序会变，所以要将参数顺序重排，获取所有可能的地址集合
-	 * 如下：参数顺序调整使用in查询，就能查询出菜单数据
+	 * Lấy địa chỉ báo cáo có tham số; vì thứ tự của nhiều tham số có thể thay đổi nên cần sắp xếp lại thứ tự tham số để lấy tập hợp tất cả các địa chỉ có thể
+	 * Như sau: điều chỉnh thứ tự tham số để dùng truy vấn in thì có thể truy vấn ra dữ liệu menu
 	 *  /online/cgreport/1624393012494286850?name=1&age=16
 	 *  /online/cgreport/1624393012494286850?age=16&name=1
 	 * @param path
@@ -2044,7 +2044,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		List<String> result = new ArrayList<>();
 		log.debug(" path = "+ path);
 		if (path.indexOf("?") >= 0 && (path.contains("/online/cgreport/") || path.contains("/online/cgformList/") || path.contains("/online/graphreport/"))) {
-			//包含?说明有多个参数
+			//Chứa?Cho thấy có nhiều tham số
 			String[] pathArray = path.split("\\?");
 			if(oConvertUtils.isNotEmpty(pathArray[1])){
 				String[] params = pathArray[1].split("&");
@@ -2064,7 +2064,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
 
 	/**
-	 * 获取数组元素的 不同排列 a(n,m)
+	 * Lấy các hoán vị khác nhau của các phần tử trong mảng a(n,m)
 	 * @param list
 	 * @return
 	 */
@@ -2121,33 +2121,33 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 自动发布流程
+	 * Tự động phát hành quy trình
 	 * @param dataId
 	 * @param currentUserName
 	 */
 	@Override
 	public void announcementAutoRelease(String dataId, String currentUserName) {
-		//根据ID查询通知公告
+		//Truy vấn thông báo theo ID
 		SysAnnouncement sysAnnouncement = sysAnnouncementService.getById(dataId);
-		//流程通过后自动发布通告
+		//Sau khi quy trình được phê duyệt sẽ tự động phát hành thông báo
 		sysAnnouncement.setSendStatus(CommonSendStatus.PUBLISHED_STATUS_1);
 		sysAnnouncement.setSendTime(new Date());
 		sysAnnouncement.setSender(currentUserName);
 		boolean ok = sysAnnouncementService.updateById(sysAnnouncement);
-		//推送通知消息
+		//Đẩy tin nhắn thông báo
 		if(ok) {
 			if(sysAnnouncement.getMsgType().equals(CommonConstant.MSG_TYPE_ALL)) {
-				// 补全公告和用户之前的关系
+				// Bổ sung quan hệ giữa thông báo và người dùng
 				sysAnnouncementService.batchInsertSysAnnouncementSend(sysAnnouncement.getId(), sysAnnouncement.getTenantId());
 
-				// 推送websocket通知
+				// Đẩy thông báo websocket
 				JSONObject obj = new JSONObject();
 				obj.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_TOPIC);
 				obj.put(WebsocketConst.MSG_ID, sysAnnouncement.getId());
 				obj.put(WebsocketConst.MSG_TXT, sysAnnouncement.getTitile());
 				webSocket.sendMessage(obj.toJSONString());
 			}else {
-				// 2.插入用户通告阅读标记表记录
+				// 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
 				String userId = sysAnnouncement.getUserIds();
 				String[] userIds = userId.substring(0, (userId.length()-1)).split(",");
 				JSONObject obj = new JSONObject();
@@ -2157,7 +2157,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 				webSocket.sendMessage(userIds, obj.toJSONString());
 			}
 			try {
-				// 同步企业微信、钉钉的消息通知
+				// Đồng bộ thông báo tin nhắn của WeChat doanh nghiệp, DingTalk
 				Response<String> dtResponse = dingtalkService.sendActionCardMessage(sysAnnouncement, null, true);
 				wechatEnterpriseService.sendTextCardMessage(sysAnnouncement, null,true);
 				feishuService.sendAnnouncementMessage(sysAnnouncement, null, true);
@@ -2168,17 +2168,17 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 					sysAnnouncementService.updateById(sysAnnouncement);
 				}
 			} catch (Exception e) {
-				log.error("同步发送第三方APP消息失败：", e);
+				log.error("Gửi đồng bộ tin nhắn App bên thứ ba thất bại:", e);
 			}
 		}
 	}
 
 	@Override
 	public SysDepartModel queryCompByOrgCode(String orgCode) {
-		AssertUtils.assertNotEmpty("请输入部门编码",orgCode);
+		AssertUtils.assertNotEmpty("Vui lòng nhập mã phòng ban",orgCode);
 		SysDepart comp = sysDepartService.queryCompByOrgCode(orgCode);
 		if(comp == null) {
-			log.error("未查询到对应的公司信息");
+			log.error("Không truy vấn được thông tin công ty tương ứng");
 			return null;
 		}
 		SysDepartModel respData = new SysDepartModel();
@@ -2187,10 +2187,10 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
     /**
-     * 根据部门编码和层次查询上级公司
+     * Truy vấn công ty cấp trên theo mã phòng ban và cấp bậc
      * 
-     * @param orgCode 部门编码
-     * @param level 可以传空 默认为1 最小值为1
+     * @param orgCode Mã phòng ban
+     * @param level Có thể truyền rỗng, mặc định là 1, giá trị tối thiểu là 1
      * @return
      */
     @Override
@@ -2200,14 +2200,14 @@ public class SysBaseApiImpl implements ISysBaseAPI {
         }
         int codeNum = YouBianCodeUtil.ZHANWEI_LENGTH;
 
-        //先判断父级code
+        //Kiểm tra cấp cha trước code
         String parendCode = "";
         if (orgCode.length() > codeNum) {
             parendCode = orgCode.substring(0, codeNum);
         } else {
             return null;
         }
-        //根据部门编码查询公司和子公司的数据
+        //Theo mã phòng ban, truy vấn dữ liệu của công ty và công ty con
         List<String> categoryList = new ArrayList<>();
         categoryList.add(DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue());
         categoryList.add(DepartCategoryEnum.DEPART_CATEGORY_SUB_COMPANY.getValue());
@@ -2217,7 +2217,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
         query.orderByAsc(SysDepart::getOrgType);
         List<SysDepart> sysDepartList = sysDepartService.list(query);
         if (!CollectionUtils.isEmpty(sysDepartList)) {
-            //获取上级公司
+            //Lấy công ty cấp trên
             SysDepart depart = getParentCompanyByOrgCode(orgCode, sysDepartList, level, 1);
             if(depart == null){
                 depart = sysDepartList.get(0);
@@ -2232,7 +2232,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
     @Override
     public Object runAiragFlow(AiragFlowDTO airagFlowDTO) {
         if(oConvertUtils.isEmpty(airagFlowDTO.getFlowId())) {
-            throw new JeecgBootException("流程ID不能为空");
+            throw new JeecgBootException("ID quy trình không được để trống");
         }
         Result<Object> o = (Result<Object>)airagFlowService.runFlow(airagFlowDTO);
         return o.getResult();
@@ -2241,32 +2241,32 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	@Override
 	public SseEmitter runAiragFlowStream(AiragFlowDTO airagFlowDTO) {
 		if (oConvertUtils.isEmpty(airagFlowDTO.getFlowId())) {
-			throw new JeecgBootException("流程ID不能为空");
+			throw new JeecgBootException("ID quy trình không được để trống");
 		}
 		return airagFlowService.runFlowStream(airagFlowDTO);
 	}
 
 	/**
-	 * uniPush推送消息给APP用户
+	 * uniPush Đẩy tin nhắn cho người dùng APP
 	 * @param pushMessageDTO
 	 */
 	@Override
 	public void uniPushMsgToUser(PushMessageDTO pushMessageDTO) {
-		//jeecg.unicloud.pushUrl 未配置时视为推送功能未启用，直接跳过（避免定时消息等场景反复刷警告日志）
+		//jeecg.unicloud.pushUrl Khi chưa cấu hình thì coi như chức năng đẩy chưa được bật, bỏ qua trực tiếp (tránh các kịch bản như tin nhắn định kỳ liên tục ghi log cảnh báo)
 		if(oConvertUtils.isEmpty(jeecgPushUrl) || "''".equals(jeecgPushUrl) || "??".equals(jeecgPushUrl) ){
-			log.warn("yml配置项: jeecg.unicloud.pushUrl 未设置，APP消息UniPush推送功能未启用！");
+			log.warn("yml Mục cấu hình: jeecg.unicloud.pushUrl Chưa được thiết lập, tính năng đẩy tin nhắn UniPush của APP chưa được bật!");
 			return;
 		}
-		log.info("UniappPush推送URL:{}", jeecgPushUrl);
+		log.info("UniappPush đẩy URL:{}", jeecgPushUrl);
 		try {
-			// 获取推送的用户信息
+			// Lấy thông tin người dùng được đẩy
 			List<String> usernames = pushMessageDTO.getUsernames();
 			List<String> userIds = pushMessageDTO.getUserIds();
 
-			// 构建clientIds
+			// Xây dựng clientIds
 			List<String> clientIds = getClientIds(usernames, userIds);
 
-			// 构建请求参数
+			// Xây dựng tham số yêu cầu
 			Map<String, Object> requestBody = new HashMap<>();
 			requestBody.put("title", pushMessageDTO.getTitle());
 			requestBody.put("content", pushMessageDTO.getContent());
@@ -2276,33 +2276,33 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 
-			// 全用户推送不需要clientIds，指定用户推送需要设置clientIds
+			// Đẩy cho toàn bộ người dùng không cần clientIds, đẩy cho người dùng chỉ định cần thiết lập clientIds
 			boolean isAllUserPush = CommonConstant.MSG_TYPE_ALL.equals(pushMessageDTO.getPushType());
 			if (!isAllUserPush) {
 				if (CollectionUtils.isEmpty(clientIds)) {
-					log.warn("UniPush消息推送clientIds为空");
+					log.warn("UniPush clientIds đẩy tin nhắn trống");
 					return;
 				}
 				requestBody.put("cids", clientIds);
 			}
 
-			// 统一推送逻辑
+			// Logic đẩy thống nhất
 			HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
 			ResponseEntity<Map> response = restTemplate.postForEntity(jeecgPushUrl, request, Map.class);
 
-			// 统一处理响应
-			String pushType = isAllUserPush ? "全用户" : "单用户";
+			// Xử lý phản hồi thống nhất
+			String pushType = isAllUserPush ? "Tất cả người dùng" : "Người dùng đơn lẻ";
 			if (response.getStatusCode().is2xxSuccessful()) {
-				log.info("{} UniPush消息推送成功 返回response:{}", pushType, response.getBody());
+				log.info("{} UniPush Đẩy tin nhắn thành công, trả về response:{}", pushType, response.getBody());
 			} else {
-				log.error("{} UniPush消息推送失败 返回response:{}", pushType, response.getBody());
+				log.error("{} UniPush Đẩy tin nhắn thất bại, trả về response:{}", pushType, response.getBody());
 			}
 		} catch (RestClientException e) {
-			log.warn("UniAPP 消息推送异常："+ e.getMessage());
+			log.warn("UniAPP Đẩy tin nhắn bất thường:"+ e.getMessage());
 		}
 	}
 	/**
-	 * 根据用户名或用户ID获取clientIds
+	 * Lấy clientIds theo tên người dùng hoặc ID người dùng clientIds
 	 */
 	private List<String> getClientIds(List<String> usernames, List<String> userIds) {
 		if (!CollectionUtils.isEmpty(usernames)) {
@@ -2314,7 +2314,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-	 * 从用户信息中提取clientIds
+	 * Trích xuất clientIds từ thông tin người dùng clientIds
 	 */
 	private List<String> extractClientIds(List<JSONObject> users) {
 		return users.stream()
@@ -2324,22 +2324,22 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	}
 
 	/**
-     * 根据orgCode找上级
+     * Tìm cấp trên theo orgCode
      * 
      * @param orgCode
      * @param sysDepartList
-     * @param level 指定那第几级 从下往上
+     * @param level Chỉ định cấp thứ mấy, tính từ dưới lên trên
      * @param nowLevel
      * @return
      */
     public SysDepart getParentCompanyByOrgCode(String orgCode,List<SysDepart> sysDepartList, int level, int nowLevel) {
-        //获取上一级公司的编码
+        //Lấy mã công ty cấp trên
         String code = this.getPrefix(orgCode);
         if(oConvertUtils.isEmpty(code)) {
             return null;
         }
         List<SysDepart> list = sysDepartList.stream().filter(sysDepart -> sysDepart.getOrgCode().equals(code)).toList();
-        //判断去上级的级别
+        //Xác định cấp độ của cấp trên
         if(!CollectionUtils.isEmpty(list) && nowLevel == level) {
             return list.get(0);
         } else {
@@ -2351,29 +2351,29 @@ public class SysBaseApiImpl implements ISysBaseAPI {
     }
 
     /**
-     * 根据指定值获取编码前缀（每级固定YouBianCodeUtil.ZHANWEI_LENGTH位）
+     * Lấy tiền tố mã theo giá trị chỉ định (mỗi cấp cố định YouBianCodeUtil.ZHANWEI_LENGTH ký tự）
      *
-     * @param fullCode 完整编码（如"A01A01A01"）
-     * @return 提取后的前缀编码（如"A01A01"）
+     * @param fullCode Mã đầy đủ (ví dụ như"A01A01A01"）
+     * @return Mã tiền tố sau khi trích xuất (ví dụ"A01A01"）
      */
     private String getPrefix(String fullCode) {
         if(fullCode.length() < YouBianCodeUtil.ZHANWEI_LENGTH){
             return "";
         }
-        // 计算总层级数,根据ZHANWEI_LENGTH
+        // Tính tổng số cấp,Theo ZHANWEI_LENGTH
         int totalLevels = fullCode.length() / YouBianCodeUtil.ZHANWEI_LENGTH;
         int keepLevels = totalLevels - 1;
-        // 计算需要截取的长度（保留层级数 × YouBianCodeUtil.ZHANWEI_LENGTH）
+        // Tính độ dài cần cắt (giữ lại số cấp × YouBianCodeUtil.ZHANWEI_LENGTH）
         int prefixLength = keepLevels * YouBianCodeUtil.ZHANWEI_LENGTH;
         return prefixLength == 0 ? "" : fullCode.substring(0, prefixLength);
     }
 
     /**
-     * 根据部门code或部门id获取部门名称(当前和上级部门)
+     * Theo code phòng ban hoặc id phòng ban, lấy tên phòng ban(phòng ban hiện tại và phòng ban cấp trên)
      *
-     * @param orgCode 部门编码
-     * @param depId 部门id
-     * @return String 部门名称
+     * @param orgCode Mã phòng ban
+     * @param depId Phòng ban id
+     * @return String Tên phòng ban
      */
     @Override
     public String getDepartPathNameByOrgCode(String orgCode, String depId) {

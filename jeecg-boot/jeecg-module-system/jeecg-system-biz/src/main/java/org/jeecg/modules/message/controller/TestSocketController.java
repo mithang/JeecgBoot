@@ -33,7 +33,7 @@ public class TestSocketController {
 		obj.put(WebsocketConst.MSG_ID, "M0001");
 		obj.put(WebsocketConst.MSG_TXT, message);
     	webSocket.sendMessage(obj.toJSONString());
-        result.setResult("群发！");
+        result.setResult("Gửi hàng loạt!");
         return result;
     }
 
@@ -48,7 +48,7 @@ public class TestSocketController {
 		obj.put(WebsocketConst.MSG_ID, "M0001");
 		obj.put(WebsocketConst.MSG_TXT, message);
         webSocket.sendMessage(userId, obj.toJSONString());
-        result.setResult("单发");
+        result.setResult("Gửi đơn lẻ");
         return result;
     }
 

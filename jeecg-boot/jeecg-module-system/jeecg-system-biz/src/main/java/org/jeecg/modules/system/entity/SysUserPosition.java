@@ -13,42 +13,42 @@ import java.util.Date;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * @Description: 用户职位关系表
+ * @Description: Bảng quan hệ người dùng - vị trí công việc
  * @Author: jeecg-boot
  * @Date:   2023-02-14
  * @Version: V1.0
  */
-@Schema(description="用户职位关系表")
+@Schema(description="Bảng quan hệ người dùng - vị trí công việc")
 @Data
 @TableName("sys_user_position")
 public class SysUserPosition implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键*/
+	/**Khóa chính*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键")
+    @Schema(description = "Khóa chính")
     private String id;
-	/**用户id*/
-	@Excel(name = "用户id", width = 15)
-    @Schema(description = "用户id")
+	/**Người dùng id*/
+	@Excel(name = "Người dùng id", width = 15)
+    @Schema(description = "Người dùng id")
     private String userId;
-	/**职位id*/
-    @Schema(description = "职位id")
+	/**Chức vụ id*/
+    @Schema(description = "Chức vụ id")
     private String positionId;
-	/**创建人*/
-    @Schema(description = "创建人")
+	/**Người tạo*/
+    @Schema(description = "Người tạo")
     private String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private Date createTime;
-	/**修改人*/
-    @Schema(description = "修改人")
+	/**Người sửa đổi*/
+    @Schema(description = "Người sửa đổi")
     private String updateBy;
-	/**修改时间*/
+	/**Thời gian chỉnh sửa*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "修改时间")
+    @Schema(description = "Thời gian chỉnh sửa")
     private Date updateTime;
 }

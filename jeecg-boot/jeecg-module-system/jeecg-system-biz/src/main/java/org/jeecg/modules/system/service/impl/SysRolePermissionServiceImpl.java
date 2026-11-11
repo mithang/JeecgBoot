@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * 角色权限表 服务实现类
+ * Bảng quyền hạn vai trò — Lớp triển khai Service
  * </p>
  *
  * @Author scott
@@ -43,9 +43,9 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
 	public void saveRolePermission(String roleId, String permissionIds) {
 		String ip = "";
 		try {
-			//获取request
+			//Lấy request
 			HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
-			//获取IP地址
+			//Lấy địa chỉ IP
 			ip = IpUtils.getIpAddr(request);
 		} catch (Exception e) {
 			ip = "127.0.0.1";
@@ -63,18 +63,18 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
 			}
 		}
 		this.saveBatch(list);
-		//update-begin---author:scott ---date:20261029  for：【LHZP-1129】角色授权后清理该角色下用户Shiro权限缓存，无需重新登录即生效-----------
+		//update-begin---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò, dọn cache quyền Shiro của người dùng thuộc vai trò đó, có hiệu lực ngay mà không cần đăng nhập lại-----------
 		clearRoleUserAuthCache(roleId);
-		//update-end---author:scott ---date:20261029  for：【LHZP-1129】角色授权后清理该角色下用户Shiro权限缓存，无需重新登录即生效-----------
+		//update-end---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò, dọn cache quyền Shiro của người dùng thuộc vai trò đó, có hiệu lực ngay mà không cần đăng nhập lại-----------
 	}
 
 	@Override
 	public void saveRolePermission(String roleId, String permissionIds, String lastPermissionIds) {
 		String ip = "";
 		try {
-			//获取request
+			//Lấy request
 			HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
-			//获取IP地址
+			//Lấy địa chỉ IP
 			ip = IpUtils.getIpAddr(request);
 		} catch (Exception e) {
 			ip = "127.0.0.1";
@@ -99,16 +99,16 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
 				this.remove(new QueryWrapper<SysRolePermission>().lambda().eq(SysRolePermission::getRoleId, roleId).eq(SysRolePermission::getPermissionId, permissionId));
 			}
 		}
-		//update-begin---author:scott ---date:20261029  for：【LHZP-1129】角色授权后清理该角色下用户Shiro权限缓存，无需重新登录即生效-----------
+		//update-begin---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò, dọn cache quyền Shiro của người dùng thuộc vai trò đó, có hiệu lực ngay mà không cần đăng nhập lại-----------
 		clearRoleUserAuthCache(roleId);
-		//update-end---author:scott ---date:20261029  for：【LHZP-1129】角色授权后清理该角色下用户Shiro权限缓存，无需重新登录即生效-----------
+		//update-end---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò, dọn cache quyền Shiro của người dùng thuộc vai trò đó, có hiệu lực ngay mà không cần đăng nhập lại-----------
 	}
 
 	/**
-	 * 清理角色下所有用户的Shiro权限缓存
-	 * @param roleId 角色id
+	 * Xóa bộ nhớ đệm quyền hạn Shiro của tất cả người dùng thuộc vai trò
+	 * @param roleId Vai trò id
 	 * @author scott
-	 * @since 2026-10-29 【LHZP-1129】角色授权后清理该角色下用户权限缓存，无需重新登录即生效
+	 * @since 2026-10-29 【LHZP-1129] Sau khi phân quyền vai trò, xóa bộ nhớ đệm quyền hạn của người dùng thuộc vai trò đó, có hiệu lực mà không cần đăng nhập lại
 	 */
 	private void clearRoleUserAuthCache(String roleId) {
 		if (oConvertUtils.isEmpty(roleId)) {
@@ -119,7 +119,7 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
 	}
 	
 	/**
-	 * 从diff中找出main中没有的元素
+	 * Tìm các phần tử có trong diff nhưng không có trong main
 	 * @param main
 	 * @param diff
 	 * @return

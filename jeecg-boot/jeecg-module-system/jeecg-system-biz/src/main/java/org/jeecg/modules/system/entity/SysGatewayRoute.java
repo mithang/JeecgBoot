@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description: gateway路由管理
+ * @Description: gateway Quản lý route
  * @Author: jeecg-boot
  * @Date:   2020-05-26
  * @Version: V1.0
@@ -27,92 +27,92 @@ import java.util.Date;
 @TableName("sys_gateway_route")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="gateway路由管理")
+@Schema(description="gateway Quản lý route")
 public class SysGatewayRoute implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    /**主键*/
+    /**Khóa chính*/
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键")
+    @Schema(description = "Khóa chính")
     private String id;
 
     /**routerKEy*/
-    @Schema(description = "路由ID")
+    @Schema(description = "Route ID")
     private String routerId;
 
-    /**服务名*/
-    @Excel(name = "服务名", width = 15)
-    @Schema(description = "服务名")
+    /**Tên dịch vụ*/
+    @Excel(name = "Tên dịch vụ", width = 15)
+    @Schema(description = "Tên dịch vụ")
     private String name;
 
-    /**服务地址*/
-    @Excel(name = "服务地址", width = 15)
-    @Schema(description = "服务地址")
+    /**Địa chỉ dịch vụ*/
+    @Excel(name = "Địa chỉ dịch vụ", width = 15)
+    @Schema(description = "Địa chỉ dịch vụ")
     private String uri;
 
     /**
-     * 断言配置
+     * Cấu hình assertion
      */
     private String predicates;
 
     /**
-     * 过滤配置
+     * Cấu hình lọc
      */
     private String filters;
 
-    /**是否忽略前缀0-否 1-是*/
-    @Excel(name = "忽略前缀", width = 15)
-    @Schema(description = "忽略前缀")
+    /**Có bỏ qua tiền tố hay không 0-Không 1-Có*/
+    @Excel(name = "Bỏ qua tiền tố", width = 15)
+    @Schema(description = "Bỏ qua tiền tố")
     @Dict(dicCode = "yn")
     private Integer stripPrefix;
 
-    /**是否重试0-否 1-是*/
-    @Excel(name = "是否重试", width = 15)
-    @Schema(description = "是否重试")
+    /**Có thử lại không 0-Không 1-Có*/
+    @Excel(name = "Có thử lại không", width = 15)
+    @Schema(description = "Có thử lại không")
     @Dict(dicCode = "yn")
     private Integer retryable;
 
-    /**是否为保留数据:0-否 1-是*/
-    @Excel(name = "保留数据", width = 15)
-    @Schema(description = "保留数据")
+    /**Có phải dữ liệu giữ lại không:0-Không 1-Có*/
+    @Excel(name = "Giữ lại dữ liệu", width = 15)
+    @Schema(description = "Giữ lại dữ liệu")
     @Dict(dicCode = "yn")
     private Integer persistable;
 
-    /**是否在接口文档中展示:0-否 1-是*/
-    @Excel(name = "在接口文档中展示", width = 15)
-    @Schema(description = "在接口文档中展示")
+    /**Có hiển thị trong tài liệu API hay không:0-Không 1-Có*/
+    @Excel(name = "Hiển thị trong tài liệu API", width = 15)
+    @Schema(description = "Hiển thị trong tài liệu API")
     @Dict(dicCode = "yn")
     private Integer showApi;
 
-    /**状态 1有效 0无效*/
-    @Excel(name = "状态", width = 15)
-    @Schema(description = "状态")
+    /**Trạng thái: 1 Có hiệu lực, 0 Vô hiệu*/
+    @Excel(name = "Trạng thái", width = 15)
+    @Schema(description = "Trạng thái")
     @Dict(dicCode = "yn")
     private Integer status;
 
-    /**创建人*/
-    @Schema(description = "创建人")
+    /**Người tạo*/
+    @Schema(description = "Người tạo")
     private String createBy;
-    /**创建日期*/
+    /**Ngày tạo*/
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private Date createTime;
 
     /**
-     * 删除状态（0未删除，1已删除）
+     * Trạng thái xóa (0 chưa xóa, 1 đã xóa)
      */
     @TableLogic
     private Integer delFlag;
-    /*    *//**更新人*//*
-    @Schema(description = "更新人")
+    /*    *//**Người cập nhật*//*
+    @Schema(description = "Người cập nhật")
     private String updateBy;
-    *//**更新日期*//*
+    *//**Ngày cập nhật*//*
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private Date updateTime;
-    *//**所属部门*//*
-    @Schema(description = "所属部门")
+    *//**Phòng ban trực thuộc*//*
+    @Schema(description = "Phòng ban trực thuộc")
     private String sysOrgCode;*/
 }

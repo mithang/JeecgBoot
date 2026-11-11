@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 租户产品包
+ * @Description: Gói sản phẩm tenant
  * @Author: jeecg-boot
  * @Date: 2022-12-31
  * @Version: V1.0
@@ -53,7 +53,7 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
     
     @Override
     public void addPackPermission(SysTenantPack sysTenantPack) {
-        //如果是默认租户套餐包，则需要设置code编码，再编辑默认套餐找自定义套餐的时候用到
+        //Nếu là gói tenant mặc định thì cần đặt mã code, dùng khi chỉnh sửa gói mặc định để tìm gói tùy chỉnh
         if(CommonConstant.TENANT_PACK_DEFAULT.equals(sysTenantPack.getPackType())){
             String packCode = CommonConstant.TENANT_PACK_DEFAULT + RandomUtil.randomNumbers(4).toLowerCase();
             sysTenantPack.setPackCode(packCode);
@@ -68,18 +68,18 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
             }
         }
 
-        //如果是自定义套餐包的情况下再将新增套餐和用户关系
+        //Trong trường hợp là gói dịch vụ tùy chỉnh thì mới thêm quan hệ giữa gói dịch vụ mới và người dùng
         if(!CommonConstant.TENANT_PACK_DEFAULT.equals(sysTenantPack.getPackType())) {
-            //如果需要自动分配给用户时候再去添加用户与套餐的关系数据
+            //Nếu cần tự động phân bổ cho người dùng thì mới thêm dữ liệu quan hệ giữa người dùng và gói dịch vụ
             if(oConvertUtils.isNotEmpty(sysTenantPack.getIzSysn()) && CommonConstant.STATUS_1.equals(sysTenantPack.getIzSysn())) {
-                //根据租户id和套餐id添加用户与套餐关系数据
+                //Thêm dữ liệu quan hệ người dùng - gói dịch vụ theo id tenant và id gói
                 this.addPackUserByPackTenantId(sysTenantPack.getTenantId(), sysTenantPack.getId());
             }
         }
     }
 
     /**
-     * 根据租户id和套餐id添加用户与套餐关系数据
+     * Thêm dữ liệu quan hệ người dùng - gói dịch vụ theo id tenant và id gói
      *
      * @param tenantId
      * @param packId
@@ -88,17 +88,17 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
         if (null != tenantId && tenantId != 0) {
             List<String> userIds = sysUserTenantMapper.getUserIdsByTenantId(tenantId);
             if (CollectionUtil.isNotEmpty(userIds)) {
-                // 查询已存在的用户
+                // Truy vấn người dùng đã tồn tại
                 LambdaQueryWrapper<SysTenantPackUser> query = new LambdaQueryWrapper<>();
                 query.eq(SysTenantPackUser::getTenantId, tenantId);
                 query.eq(SysTenantPackUser::getPackId, packId);
                 query.in(SysTenantPackUser::getUserId, userIds);
                 List<SysTenantPackUser> existingUsers = sysTenantPackUserMapper.selectList(query);
-                // 提取已存在的用户ID
+                // Trích xuất người dùng đã tồn tại ID
                 List<String> existingUserIds = existingUsers.stream()
                         .map(SysTenantPackUser::getUserId)
                         .toList();
-                // 过滤出需要新增的用户ID
+                // Lọc ra người dùng cần thêm mới ID
                 List<String> newUserIds = userIds.stream()
                         .filter(userId -> !existingUserIds.contains(userId))
                         .toList();
@@ -124,45 +124,45 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
 
     @Override
     public void editPackPermission(SysTenantPack sysTenantPack) {
-        //数据库汇总的id
+        //đã tổng hợp từ cơ sở dữ liệu id
         List<String> oldPermissionIds = sysPackPermissionMapper.getPermissionsByPackId(sysTenantPack.getId());
-        //前台传过来的需要修改的id
+        //ID cần sửa được truyền từ giao diện id
         String permissionIds = sysTenantPack.getPermissionIds();
-        //如果传过来的菜单id为空，那么就删除数据库中所有菜单
+        //Nếu id menu truyền tới rỗng thì xóa tất cả menu trong cơ sở dữ liệu
         if (oConvertUtils.isEmpty(permissionIds)) {
             this.deletePackPermission(sysTenantPack.getId(), null);
-            //如果是默认套餐包，需要删除其他关联默认产品包下的角色与菜单的关系
+            //Nếu là gói mặc định, cần xóa quan hệ vai trò và menu của các gói sản phẩm mặc định liên quan khác
             if(CommonConstant.TENANT_PACK_DEFAULT.equals(sysTenantPack.getPackType())){
                 this.deleteDefaultPackPermission(sysTenantPack.getPackCode(), null);
             }
         } else if (oConvertUtils.isNotEmpty(permissionIds) && oConvertUtils.isEmpty(oldPermissionIds)) {
-            //如果传过来的菜单id不为空但是数据库的菜单id为空，那么就新增
+            //Nếu id menu truyền sang không rỗng nhưng id menu trong cơ sở dữ liệu rỗng thì thêm mới
             this.addPermission(sysTenantPack.getId(), permissionIds);
-            //如果是默认套餐包，需要新增其他关联默认产品包下的角色与菜单的关系
+            //Nếu là gói mặc định, cần thêm mới quan hệ vai trò và menu của các gói sản phẩm mặc định liên quan khác
             if(CommonConstant.TENANT_PACK_DEFAULT.equals(sysTenantPack.getPackType())){
                 this.addDefaultPackPermission(sysTenantPack.getPackCode(), permissionIds);
             }
         } else {
-            //都不为空，需要比较，进行添加或删除
+            //Cả hai đều không trống thì cần so sánh để thêm hoặc xóa
             if (oConvertUtils.isNotEmpty(oldPermissionIds)) {
-                //找到新的租户id与原来的租户id不同之处，进行删除
+                //Tìm điểm khác nhau giữa id thuê bao mới và id thuê bao cũ, rồi thực hiện xóa
                 List<String> permissionList = oldPermissionIds.stream().filter(item -> !permissionIds.contains(item)).collect(Collectors.toList());
                 if (permissionList.size() > 0) {
                     for (String permission : permissionList) {
                         this.deletePackPermission(sysTenantPack.getId(), permission);
-                        //如果是默认套餐包，需要删除其他关联默认产品包下的角色与菜单的关系
+                        //Nếu là gói mặc định, cần xóa quan hệ vai trò và menu của các gói sản phẩm mặc định liên quan khác
                         if(CommonConstant.TENANT_PACK_DEFAULT.equals(sysTenantPack.getPackType())){
                             this.deleteDefaultPackPermission(sysTenantPack.getPackCode(), permission);
                         }
                     }
                 }
 
-                //找到原来菜单id与新的菜单id不同之处,进行新增
+                //Tìm điểm khác nhau giữa id menu cũ và id menu mới,Tiến hành thêm mới
                 List<String> permissionAddList = Arrays.stream(permissionIds.split(SymbolConstant.COMMA)).filter(item -> !oldPermissionIds.contains(item)).collect(Collectors.toList());
                 if (permissionAddList.size() > 0) {
                     for (String permission : permissionAddList) {
                         this.addPermission(sysTenantPack.getId(), permission);
-                        //如果是默认套餐包，需要新增其他关联默认产品包下的角色与菜单的关系
+                        //Nếu là gói mặc định, cần thêm mới quan hệ vai trò và menu của các gói sản phẩm mặc định liên quan khác
                         if(CommonConstant.TENANT_PACK_DEFAULT.equals(sysTenantPack.getPackType())){
                             this.addDefaultPackPermission(sysTenantPack.getPackCode(), permission);
                         }
@@ -171,17 +171,17 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
             }
         }
         sysTenantPackMapper.updateById(sysTenantPack);
-        //如果是默认套餐包，则更新和当前匹配默认套餐包匹配的数据
+        //Nếu là gói dịch vụ mặc định thì cập nhật dữ liệu khớp với gói dịch vụ mặc định hiện tại
         if(CommonConstant.TENANT_PACK_DEFAULT.equals(sysTenantPack.getPackType())){
-            //同步同 packCode 下的相关套餐包数据
+            //Đồng bộ dữ liệu gói dịch vụ liên quan dưới cùng packCode
             this.syncRelatedPackDataByDefaultPack(sysTenantPack);
         }
 
-        //如果是自定义套餐包的情况下再将新增套餐和用户关系
+        //Trong trường hợp là gói dịch vụ tùy chỉnh thì mới thêm quan hệ giữa gói dịch vụ mới và người dùng
         if(!CommonConstant.TENANT_PACK_DEFAULT.equals(sysTenantPack.getPackType())) {
-            //如果需要自动分配给用户时候再去添加用户与套餐的关系数据
+            //Nếu cần tự động phân bổ cho người dùng thì mới thêm dữ liệu quan hệ giữa người dùng và gói dịch vụ
             if(oConvertUtils.isNotEmpty(sysTenantPack.getIzSysn()) && CommonConstant.STATUS_1.equals(sysTenantPack.getIzSysn())) {
-                //根据租户id和套餐id添加用户与套餐关系数据
+                //Thêm dữ liệu quan hệ người dùng - gói dịch vụ theo id tenant và id gói
                 this.addPackUserByPackTenantId(sysTenantPack.getTenantId(), sysTenantPack.getId());
             }
         }
@@ -193,7 +193,7 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
         String[] idsArray = ids.split(SymbolConstant.COMMA);
         for (String id : idsArray) {
             this.deletePackPermission(id,null);
-            //删除产品包下面的用户
+            //Xóa người dùng thuộc gói sản phẩm
             this.deletePackUser(id);
             sysTenantPackMapper.deleteById(id);
         }
@@ -207,10 +207,10 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
     @Override
     public void addDefaultTenantPack(Integer tenantId) {
         ISysTenantPackService currentService = SpringContextUtils.getApplicationContext().getBean(ISysTenantPackService.class);
-        // 创建租户超级管理员
-        SysTenantPack superAdminPack = new SysTenantPack(tenantId, "超级管理员", TenantConstant.SUPER_ADMIN);
+        // Tạo quản trị viên cấp cao của Tenant
+        SysTenantPack superAdminPack = new SysTenantPack(tenantId, "Siêu quản trị viên", TenantConstant.SUPER_ADMIN);
         superAdminPack.setIzSysn(CommonConstant.STATUS_0);
-        //step.1 创建租户套餐包（超级管理员）
+        //step.1 Tạo gói tenant (quản trị viên cấp cao)
         LambdaQueryWrapper<SysTenantPack> query = new LambdaQueryWrapper<>();
         query.eq(SysTenantPack::getTenantId,tenantId);
         query.eq(SysTenantPack::getPackCode, TenantConstant.SUPER_ADMIN);
@@ -221,33 +221,33 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
         }else{
             packId = sysTenantPackSuperAdmin.getId();
         }
-        //step.1.2 补充人员与套餐包的关系数据
+        //step.1.2 Bổ sung dữ liệu quan hệ giữa nhân sự và gói sản phẩm
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         SysTenantPackUser packUser = new SysTenantPackUser(tenantId, packId, sysUser.getId());
         packUser.setRealname(sysUser.getRealname());
         packUser.setPackName(superAdminPack.getPackName());
         currentService.savePackUser(packUser);
         
-        //step.2 创建租户套餐包(组织账户管理员)和 添加人员关系数据
+        //step.2 Tạo gói dịch vụ tenant(Quản trị viên tài khoản của tổ chức)và thêm dữ liệu quan hệ nhân sự
         query = new LambdaQueryWrapper<>();
         query.eq(SysTenantPack::getTenantId,tenantId);
         query.eq(SysTenantPack::getPackCode, TenantConstant.ACCOUNT_ADMIN);
         SysTenantPack sysTenantPackAccountAdmin = currentService.getOne(query);
         if(null == sysTenantPackAccountAdmin){
-            // 创建组织账户管理员
-            SysTenantPack accountAdminPack = new SysTenantPack(tenantId, "组织账户管理员", TenantConstant.ACCOUNT_ADMIN);
+            // Tạo quản trị viên tài khoản tổ chức
+            SysTenantPack accountAdminPack = new SysTenantPack(tenantId, "Quản trị viên tài khoản của tổ chức", TenantConstant.ACCOUNT_ADMIN);
             accountAdminPack.setIzSysn(CommonConstant.STATUS_0);
             currentService.saveOne(accountAdminPack);
         }
 
-        //step.3 创建租户套餐包(组织应用管理员)
+        //step.3 Tạo gói dịch vụ tenant(Quản trị viên ứng dụng của tổ chức)
         query = new LambdaQueryWrapper<>();
         query.eq(SysTenantPack::getTenantId,tenantId);
         query.eq(SysTenantPack::getPackCode, TenantConstant.APP_ADMIN);
         SysTenantPack sysTenantPackAppAdmin = currentService.getOne(query);
         if(null == sysTenantPackAppAdmin){
-            // 创建组织应用管理员
-            SysTenantPack appAdminPack = new SysTenantPack(tenantId, "组织应用管理员", TenantConstant.APP_ADMIN);
+            // Tạo quản trị viên ứng dụng tổ chức
+            SysTenantPack appAdminPack = new SysTenantPack(tenantId, "Quản trị viên ứng dụng của tổ chức", TenantConstant.APP_ADMIN);
             appAdminPack.setIzSysn(CommonConstant.STATUS_0);
             currentService.saveOne(appAdminPack);
         }
@@ -284,7 +284,7 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
     }
 
     /**
-     * 添加菜单
+     * Thêm menu
      *
      * @param packId
      * @param permissionId
@@ -297,7 +297,7 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
     }
 
     /**
-     * 根据包名id和菜单id删除关系表
+     * Xóa bảng quan hệ theo id tên gói và id menu
      *
      * @param packId
      * @param permissionId
@@ -316,36 +316,36 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
         LambdaQueryWrapper<SysTenantPack> query = new LambdaQueryWrapper<>();
         query.eq(SysTenantPack::getPackType,"default");
         List<SysTenantPack> sysTenantPacks = sysTenantPackMapper.selectList(query);
-        // 取当前租户用户列表
+        // Lấy danh sách người dùng Tenant hiện tại
         List<String> userIds = sysUserTenantMapper.getUserIdsByTenantId(tenantId);
         for (SysTenantPack sysTenantPack: sysTenantPacks) {
-            // 代码逻辑说明: 【QQYUN-14007】演示系统，初始化租户套餐很慢---
+            // Giải thích logic mã: 【QQYUN-14007] Hệ thống demo, khởi tạo gói tenant rất chậm---
             syncDefaultPack2CurrentTenant(tenantId, sysTenantPack, userIds);
         }
     }
 
     @Override
     public void syncDefaultPack(Integer tenantId) {
-        // 查询默认套餐包
+        // Truy vấn gói dịch vụ mặc định
         LambdaQueryWrapper<SysTenantPack> query = new LambdaQueryWrapper<>();
         query.eq(SysTenantPack::getPackType,"default");
         List<SysTenantPack> sysDefaultTenantPacks = sysTenantPackMapper.selectList(query);
-        // 查询当前租户套餐包
+        // Truy vấn gói sản phẩm của Tenant hiện tại
         query = new LambdaQueryWrapper<>();
         query.eq(SysTenantPack::getPackType,"custom");
         query.eq(SysTenantPack::getTenantId, tenantId);
         List<SysTenantPack> currentTenantPacks = sysTenantPackMapper.selectList(query);
-        // 代码逻辑说明: 【QQYUN-14007】演示系统，初始化租户套餐很慢---
+        // Giải thích logic mã: 【QQYUN-14007] Hệ thống demo, khởi tạo gói tenant rất chậm---
         Map<String, SysTenantPack> currentTenantPackMap;
         if (oConvertUtils.listIsNotEmpty(currentTenantPacks)) {
             currentTenantPackMap = currentTenantPacks.stream().collect(Collectors.toMap(SysTenantPack::getPackName, o -> o, (existing, replacement) -> existing));
         } else {
             currentTenantPackMap = new HashMap<String, SysTenantPack>();
         }
-        // 预取当前租户用户列表，避免在循环中重复查询
+        // Tải trước danh sách người dùng của tenant hiện tại, tránh truy vấn lặp lại trong vòng lặp
         List<String> userIds = sysUserTenantMapper.getUserIdsByTenantId(tenantId);
-        //update-begin---wangshuai---date:20260807  for：【LHZP-1369】默认套餐在授权页面 授权之后，在多租户里面点击初始化同步套餐，权限没有同步过来------------
-        // 同步默认套餐包，已存在的套餐也需要刷新权限
+        //update-begin---wangshuai---date:20260807  for：【LHZP-1369] Gói mặc định sau khi ủy quyền tại trang ủy quyền, bấm khởi tạo đồng bộ gói trong đa tenant thì quyền không được đồng bộ sang------------
+        // Đồng bộ gói dịch vụ mặc định, gói đã tồn tại cũng cần làm mới quyền hạn
         sysDefaultTenantPacks.parallelStream().forEach(defaultPack -> {
             SysTenantPack currentPack = currentTenantPackMap.get(defaultPack.getPackName());
             if (currentPack == null) {
@@ -364,15 +364,15 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
                     sysPackPermissionMapper.insert(permissionList);
                 }
             }
-            //update-end---author:wangshuai ---date:20260807  for：【LHZP-1369】默认套餐在授权页面 授权之后，在多租户里面点击初始化同步套餐，权限没有同步过来------------
+            //update-end---author:wangshuai ---date:20260807  for：【LHZP-1369] Gói mặc định sau khi ủy quyền tại trang ủy quyền, bấm khởi tạo đồng bộ gói trong đa tenant thì quyền không được đồng bộ sang------------
         });
     }
 
     /**
-     * 同步默认套餐包到当前租户
-     * for [QQYUN-11032]【jeecg】租户套餐管理增加初始化套餐包按钮
-     * @param tenantId 目标租户
-     * @param defaultPacks 默认套餐包
+     * Đồng bộ gói sản phẩm mặc định sang tenant hiện tại
+     * for [QQYUN-11032][Jeecg] Quản lý gói dịch vụ thuê bao thêm nút khởi tạo gói dịch vụ
+     * @param tenantId Tenant đích
+     * @param defaultPacks Gói dịch vụ mặc định
      * @author chenrui
      * @date 2025/2/5 19:41
      */
@@ -394,12 +394,12 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
         if(CollectionUtil.isNotEmpty(permissionList)){
             sysPackPermissionMapper.insert(permissionList);
         }
-        //如果需要自动分配给用户时候再去添加用户与套餐的关系数据
+        //Nếu cần tự động phân bổ cho người dùng thì mới thêm dữ liệu quan hệ giữa người dùng và gói dịch vụ
         if(oConvertUtils.isNotEmpty(defaultPacks.getIzSysn()) && CommonConstant.STATUS_1.equals(defaultPacks.getIzSysn())) {
             List<SysTenantPackUser> packUserList = new ArrayList<>();
             if (oConvertUtils.isNotEmpty(userIds)) {
                 for (String userId : userIds) {
-                    //根据租户id和套餐id添加用户与套餐关系数据
+                    //Thêm dữ liệu quan hệ người dùng - gói dịch vụ theo id tenant và id gói
                     SysTenantPackUser tenantPackUser = new SysTenantPackUser(tenantId, pack.getId(), userId);
                     packUserList.add(tenantPackUser);
                 }
@@ -409,7 +409,7 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
     }
 
     /**
-     * 删除产品包下面的用户
+     * Xóa người dùng thuộc gói sản phẩm
      * @param packId
      */
     private void deletePackUser(String packId) {
@@ -429,7 +429,7 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
     }
 
     /**
-     * 根据套餐包的code 新增其他关联默认产品包下的角色与菜单的关系
+     * Thêm mới quan hệ vai trò và menu của các gói sản phẩm mặc định liên quan khác theo code của gói
      *
      * @param packCode
      * @param permission
@@ -438,19 +438,19 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
         if (oConvertUtils.isEmpty(packCode)) {
             return;
         }
-        //查询当前匹配非默认套餐包的其他默认套餐包
+        //Truy vấn các gói dịch vụ mặc định khác không phải gói mặc định đang khớp hiện tại
         LambdaQueryWrapper<SysTenantPack> query = new LambdaQueryWrapper<>();
         query.ne(SysTenantPack::getPackType, CommonConstant.TENANT_PACK_DEFAULT);
         query.eq(SysTenantPack::getPackCode, packCode);
         List<SysTenantPack> otherDefaultPacks = sysTenantPackMapper.selectList(query);
         for (SysTenantPack pack : otherDefaultPacks) {
-            //新增套餐包用户菜单权限
+            //Thêm quyền hạn menu người dùng của gói sản phẩm
             this.addPermission(pack.getId(), permission);
         }
     }
 
     /**
-     * 根据套餐包的code 删除其他关联默认套餐包下的角色与菜单的关系
+     * Xóa quan hệ vai trò và menu của các gói mặc định liên quan khác theo code của gói
      *
      * @param packCode
      * @param permissionId
@@ -459,36 +459,36 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
         if (oConvertUtils.isEmpty(packCode)) {
             return;
         }
-        //查询当前匹配非默认套餐包的其他默认套餐包
+        //Truy vấn các gói dịch vụ mặc định khác không phải gói mặc định đang khớp hiện tại
         LambdaQueryWrapper<SysTenantPack> query = new LambdaQueryWrapper<>();
         query.ne(SysTenantPack::getPackType, CommonConstant.TENANT_PACK_DEFAULT);
         query.eq(SysTenantPack::getPackCode, packCode);
         List<SysTenantPack> defaultPacks = sysTenantPackMapper.selectList(query);
         for (SysTenantPack pack : defaultPacks) {
-            //删除套餐权限
+            //Xóa quyền hạn gói
             deletePackPermission(pack.getId(), permissionId);
         }
     }
 
     /**
-     * 同步同 packCode 下的相关套餐包数据
+     * Đồng bộ dữ liệu gói dịch vụ liên quan dưới cùng packCode
      *
      * @param sysTenantPack
      */
     private void syncRelatedPackDataByDefaultPack(SysTenantPack sysTenantPack) {
-        //查询与默认套餐相同code的套餐
+        //Truy vấn gói cước có code giống với gói cước mặc định
         LambdaQueryWrapper<SysTenantPack> query = new LambdaQueryWrapper<>();
         query.ne(SysTenantPack::getPackType, CommonConstant.TENANT_PACK_DEFAULT);
         query.eq(SysTenantPack::getPackCode, sysTenantPack.getPackCode());
         List<SysTenantPack> relatedPacks = sysTenantPackMapper.selectList(query);
         for (SysTenantPack pack : relatedPacks) {
-            //更新自定义套餐
+            //Cập nhật gói dịch vụ tùy chỉnh
             pack.setPackName(sysTenantPack.getPackName());
             pack.setStatus(sysTenantPack.getStatus());
             pack.setRemarks(sysTenantPack.getRemarks());
             pack.setIzSysn(sysTenantPack.getIzSysn());
             sysTenantPackMapper.updateById(pack);
-            //同步默认套餐报下的所有用户已
+            //Đồng bộ tất cả người dùng thuộc gói mặc định đã
             if (oConvertUtils.isNotEmpty(sysTenantPack.getIzSysn()) && CommonConstant.STATUS_1.equals(sysTenantPack.getIzSysn())) {
                 this.addPackUserByPackTenantId(pack.getTenantId(), pack.getId());
             }
@@ -497,7 +497,7 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
 
 
     /**
-     * 是否为拥有管理用户权限【accountAdmin，superAdmin】
+     * Có phải là người có quyền quản lý người dùng [accountAdmin, superAdmin] hay không
      * @param tenantId
      */
     @Override
@@ -505,7 +505,7 @@ public class SysTenantPackServiceImpl extends ServiceImpl<SysTenantPackMapper, S
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         long count = sysTenantPackMapper.izHaveManageUserAuth(tenantId,sysUser.getId());
         if(count == 0){
-            throw new JeecgBootBizTipException("你不是当前租户的组织账户管理员或超级管理员，无法进行此操作！");
+            throw new JeecgBootBizTipException("Bạn không phải quản trị viên tài khoản tổ chức hay siêu quản trị viên của thuê bao hiện tại, không thể thực hiện thao tác này!");
         }
     }
 }

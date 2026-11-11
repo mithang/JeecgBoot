@@ -38,13 +38,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 
  /**
- * @Description: 部门权限表
+ * @Description: Bảng quyền hạn phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-11
  * @Version: V1.0
  */
 @Slf4j
-@Tag(name="部门权限表")
+@Tag(name="Bảng quyền hạn phòng ban")
 @RestController
 @RequestMapping("/sys/sysDepartPermission")
 public class SysDepartPermissionController extends JeecgController<SysDepartPermission, ISysDepartPermissionService> {
@@ -64,7 +64,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
      private BaseCommonService baseCommonService;
 	 
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 *
 	 * @param sysDepartPermission
 	 * @param pageNo
@@ -72,7 +72,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	 * @param req
 	 * @return
 	 */
-	@Operation(summary="部门权限表-分页列表查询")
+	@Operation(summary="Bảng quyền hạn phòng ban-Truy vấn danh sách phân trang")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(SysDepartPermission sysDepartPermission,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -85,68 +85,68 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	}
 	
 	/**
-	 * 添加
+	 * Thêm
 	 *
 	 * @param sysDepartPermission
 	 * @return
 	 */
-	@Operation(summary="部门权限表-添加")
+	@Operation(summary="Bảng quyền hạn phòng ban-Thêm")
 	@RequiresPermissions("system:permission:saveDepart")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody SysDepartPermission sysDepartPermission) {
 		sysDepartPermissionService.save(sysDepartPermission);
-		return Result.ok("添加成功！");
+		return Result.ok("Thêm thành công!");
 	}
 	
 	/**
-	 * 编辑
+	 * Chỉnh sửa
 	 *
 	 * @param sysDepartPermission
 	 * @return
 	 */
-	@Operation(summary="部门权限表-编辑")
+	@Operation(summary="Bảng quyền hạn phòng ban-Chỉnh sửa")
 	@RequiresPermissions("system:permission:saveDepart")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<?> edit(@RequestBody SysDepartPermission sysDepartPermission) {
 		sysDepartPermissionService.updateById(sysDepartPermission);
-		return Result.ok("编辑成功!");
+		return Result.ok("Chỉnh sửa thành công!");
 	}
 	
 	/**
-	 * 通过id删除
+	 * Xóa theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	@Operation(summary="部门权限表-通过id删除")
+	@Operation(summary="Bảng quyền hạn phòng ban-Xóa theo id")
 	@RequiresPermissions("system:permission:saveDepart")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		sysDepartPermissionService.removeById(id);
-		return Result.ok("删除成功!");
+		return Result.ok("Xóa thành công!");
 	}
 	
 	/**
-	 * 批量删除
+	 * Xóa hàng loạt
 	 *
 	 * @param ids
 	 * @return
 	 */
-	@Operation(summary="部门权限表-批量删除")
+	@Operation(summary="Bảng quyền hạn phòng ban-Xóa hàng loạt")
 	@RequiresPermissions("system:permission:saveDepart")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.sysDepartPermissionService.removeByIds(Arrays.asList(ids.split(",")));
-		return Result.ok("批量删除成功！");
+		return Result.ok("Xóa hàng loạt thành công!");
 	}
 	
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	@Operation(summary="部门权限表-通过id查询")
+	@Operation(summary="Bảng quyền hạn phòng ban-Tìm kiếm theo id")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		SysDepartPermission sysDepartPermission = sysDepartPermissionService.getById(id);
@@ -154,7 +154,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	}
 
 	/**
-	* 导出excel
+	* Xuất excel
 	*
 	* @param request
 	* @param sysDepartPermission
@@ -162,11 +162,11 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	@RequiresPermissions("system:depart:permission:exportXls")
 	@RequestMapping(value = "/exportXls")
 	public ModelAndView exportXls(HttpServletRequest request, SysDepartPermission sysDepartPermission) {
-	  return super.exportXls(request, sysDepartPermission, SysDepartPermission.class, "部门权限表");
+	  return super.exportXls(request, sysDepartPermission, SysDepartPermission.class, "Bảng quyền hạn phòng ban");
 	}
 
 	/**
-	* 通过excel导入数据
+	* Nhập dữ liệu qua Excel
 	*
 	* @param request
 	* @param response
@@ -179,13 +179,13 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	}
 
 	/**
-	* 部门管理授权查询数据规则数据
+	* Dữ liệu quy tắc dữ liệu truy vấn ủy quyền quản lý phòng ban
 	*/
 	@GetMapping(value = "/datarule/{permissionId}/{departId}")
 	public Result<?> loadDatarule(@PathVariable("permissionId") String permissionId,@PathVariable("departId") String departId) {
 		List<SysPermissionDataRule> list = sysPermissionDataRuleService.getPermRuleListByPermId(permissionId);
 		if(list==null || list.size()==0) {
-			return Result.error("未找到权限配置信息");
+			return Result.error("Không tìm thấy thông tin cấu hình quyền hạn");
 		}else {
 			Map<String,Object> map = new HashMap(5);
 			map.put("datarule", list);
@@ -194,7 +194,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 				 .eq(SysDepartPermission::getDepartId,departId);
 			SysDepartPermission sysDepartPermission = sysDepartPermissionService.getOne(query);
 			if(sysDepartPermission==null) {
-			 //return Result.error("未找到角色菜单配置信息");
+			 //return Result.error("Không tìm thấy thông tin cấu hình menu vai trò");
 			}else {
 				String drChecked = sysDepartPermission.getDataRuleIds();
 				if(oConvertUtils.isNotEmpty(drChecked)) {
@@ -202,12 +202,12 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 				}
 			}
 			return Result.ok(map);
-			//TODO 以后按钮权限的查询也走这个请求 无非在map中多加两个key
+			//TODO Về sau truy vấn quyền nút bấm cũng đi qua yêu cầu này, chẳng qua chỉ cần thêm hai key vào map key
 		}
 	}
 
 	/**
-	* 保存数据规则至部门菜单关联表
+	* Lưu quy tắc dữ liệu vào bảng liên kết menu phòng ban
 	*/
 	@RequiresPermissions("system:permission:saveDepart")
 	@PostMapping(value = "/datarule")
@@ -216,26 +216,26 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 			String permissionId = jsonObject.getString("permissionId");
 			String departId = jsonObject.getString("departId");
 			String dataRuleIds = jsonObject.getString("dataRuleIds");
-			log.info("保存数据规则>>"+"菜单ID:"+permissionId+"部门ID:"+ departId+"数据权限ID:"+dataRuleIds);
+			log.info("Lưu quy tắc dữ liệu>>"+"Menu ID:"+permissionId+"Phòng ban ID:"+ departId+"Quyền hạn dữ liệu ID:"+dataRuleIds);
 			LambdaQueryWrapper<SysDepartPermission> query = new LambdaQueryWrapper<SysDepartPermission>()
 				 .eq(SysDepartPermission::getPermissionId, permissionId)
 				 .eq(SysDepartPermission::getDepartId,departId);
 			SysDepartPermission sysDepartPermission = sysDepartPermissionService.getOne(query);
 			if(sysDepartPermission==null) {
-				return Result.error("请先保存部门菜单权限!");
+				return Result.error("Vui lòng lưu quyền hạn menu của phòng ban trước!!");
 			}else {
 				sysDepartPermission.setDataRuleIds(dataRuleIds);
 			 	this.sysDepartPermissionService.updateById(sysDepartPermission);
 			}
 		} catch (Exception e) {
-		 	log.error("SysDepartPermissionController.saveDatarule()发生异常：" + e.getMessage(),e);
-		 	return Result.error("保存失败");
+		 	log.error("SysDepartPermissionController.saveDatarule()Đã xảy ra ngoại lệ:" + e.getMessage(),e);
+		 	return Result.error("Lưu thất bại");
 		}
-		return Result.ok("保存成功!");
+		return Result.ok("Lưu thành công!");
 	}
 
 	 /**
-	  * 查询角色授权
+	  * Truy vấn ủy quyền vai trò
 	  *
 	  * @return
 	  */
@@ -253,7 +253,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	 }
 
 	 /**
-	  * 保存角色授权
+	  * Lưu ủy quyền vai trò
 	  *
 	  * @return
 	  */
@@ -267,27 +267,27 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 			 String permissionIds = json.getString("permissionIds");
 			 String lastPermissionIds = json.getString("lastpermissionIds");
 			 this.sysDepartRolePermissionService.saveDeptRolePermission(roleId, permissionIds, lastPermissionIds);
-			 result.success("保存成功！");
-             // 代码逻辑说明: [VUEN-234]部门角色授权添加敏感日志------------
+			 result.success("Lưu thành công!");
+             // Giải thích logic mã: [VUEN-234]Ủy quyền vai trò phòng ban: thêm nhật ký nhạy cảm------------
              LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-             baseCommonService.addLog("修改部门角色ID:"+roleId+"的权限配置，操作人： " +loginUser.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
-             log.info("======部门角色授权成功=====耗时:" + (System.currentTimeMillis() - start) + "毫秒");
+             baseCommonService.addLog("Chỉnh sửa vai trò phòng ban ID:"+roleId+"cấu hình quyền hạn, người thực hiện: " +loginUser.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
+             log.info("======Ủy quyền vai trò phòng ban thành công=====Thời gian tốn:" + (System.currentTimeMillis() - start) + "Mili giây");
 		 } catch (Exception e) {
-			 result.error500("授权失败！");
+			 result.error500("Cấp quyền thất bại!");
 			 log.error(e.getMessage(), e);
 		 }
 		 return result;
 	 }
 
 	 /**
-	  * 用户角色授权功能，查询菜单权限树
+	  * Chức năng phân quyền vai trò người dùng, truy vấn cây quyền menu
 	  * @param request
 	  * @return
 	  */
 	 @RequestMapping(value = "/queryTreeListForDeptRole", method = RequestMethod.GET)
 	 public Result<Map<String,Object>> queryTreeListForDeptRole(@RequestParam(name="departId",required=true) String departId,HttpServletRequest request) {
 		 Result<Map<String,Object>> result = new Result<>();
-		 //全部权限ids
+		 //Tất cả quyền hạn ids
 		 List<String> ids = new ArrayList<>();
 		 try {
 			 List<SysPermission> list = sysPermissionService.queryDepartPermissionList(departId);
@@ -297,9 +297,9 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 			 List<TreeModel> treeList = new ArrayList<>();
 			 getTreeModelList(treeList, list, null);
 			 Map<String,Object> resMap = new HashMap(5);
-             //全部树节点数据
+             //Toàn bộ dữ liệu nút cây
 			 resMap.put("treeList", treeList);
-             //全部树ids
+             //Toàn bộ cây ids
 			 resMap.put("ids", ids);
 			 result.setResult(resMap);
 			 result.setSuccess(true);

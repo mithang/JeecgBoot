@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
 /**
- * @Description: 部门角色权限
+ * @Description: Quyền vai trò phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-12
  * @Version: V1.0
@@ -25,36 +25,36 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @TableName("sys_depart_role_permission")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(description="部门角色权限")
+@Schema(description="Quyền vai trò phòng ban")
 public class SysDepartRolePermission {
     
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "id")
 	private java.lang.String id;
-	/**部门id*/
-	@Excel(name = "部门id", width = 15)
-    @Schema(description = "部门id")
+	/**Phòng ban id*/
+	@Excel(name = "Phòng ban id", width = 15)
+    @Schema(description = "Phòng ban id")
 	private java.lang.String departId;
-	/**角色id*/
-	@Excel(name = "角色id", width = 15)
-    @Schema(description = "角色id")
+	/**Vai trò id*/
+	@Excel(name = "Vai trò id", width = 15)
+    @Schema(description = "Vai trò id")
 	private java.lang.String roleId;
-	/**权限id*/
-	@Excel(name = "权限id", width = 15)
-    @Schema(description = "权限id")
+	/**Quyền hạn id*/
+	@Excel(name = "Quyền hạn id", width = 15)
+    @Schema(description = "Quyền hạn id")
 	private java.lang.String permissionId;
 	/**dataRuleIds*/
 	@Excel(name = "dataRuleIds", width = 15)
     @Schema(description = "dataRuleIds")
 	private java.lang.String dataRuleIds;
-	/** 操作时间 */
-	@Excel(name = "操作时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+	/** Thời gian thao tác */
+	@Excel(name = "Thời gian thao tác", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	@Schema(description = "操作时间")
+	@Schema(description = "Thời gian thao tác")
 	private java.util.Date operateDate;
-	/** 操作ip */
+	/** Thao tác ip */
 	private java.lang.String operateIp;
 
 	public SysDepartRolePermission() {

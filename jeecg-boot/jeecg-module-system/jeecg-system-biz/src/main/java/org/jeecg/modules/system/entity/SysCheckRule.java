@@ -15,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @Description: 编码校验规则
+ * @Description: Quy tắc kiểm tra mã
  * @Author: jeecg-boot
  * @Date: 2020-02-04
  * @Version: V1.0
@@ -24,65 +24,65 @@ import java.util.Date;
 @TableName("sys_check_rule")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Schema(description="编码校验规则")
+@Schema(description="Quy tắc kiểm tra mã")
 public class SysCheckRule {
 
     /**
-     * 主键id
+     * Khóa chính id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键id")
+    @Schema(description = "Khóa chính id")
     private String id;
     /**
-     * 规则名称
+     * Tên quy tắc
      */
-    @Excel(name = "规则名称", width = 15)
-    @Schema(description = "规则名称")
+    @Excel(name = "Tên quy tắc", width = 15)
+    @Schema(description = "Tên quy tắc")
     private String ruleName;
     /**
-     * 规则Code
+     * Quy tắc Code
      */
-    @Excel(name = "规则Code", width = 15)
-    @Schema(description = "规则Code")
+    @Excel(name = "Quy tắc Code", width = 15)
+    @Schema(description = "Quy tắc Code")
     private String ruleCode;
     /**
-     * 规则JSON
+     * Quy tắc JSON
      */
-    @Excel(name = "规则JSON", width = 15)
-    @Schema(description = "规则JSON")
+    @Excel(name = "Quy tắc JSON", width = 15)
+    @Schema(description = "Quy tắc JSON")
     private String ruleJson;
     /**
-     * 规则描述
+     * Mô tả quy tắc
      */
-    @Excel(name = "规则描述", width = 15)
-    @Schema(description = "规则描述")
+    @Excel(name = "Mô tả quy tắc", width = 15)
+    @Schema(description = "Mô tả quy tắc")
     private String ruleDescription;
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Excel(name = "更新人", width = 15,dictTable = "sys_user",dicCode = "username",dicText = "realname")
-    @Schema(description = "更新人")
+    @Excel(name = "Người cập nhật", width = 15,dictTable = "sys_user",dicCode = "username",dicText = "realname")
+    @Schema(description = "Người cập nhật")
     private String updateBy;
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
-    @Excel(name = "更新时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "Thời gian cập nhật", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间")
+    @Schema(description = "Thời gian cập nhật")
     private Date updateTime;
     /**
-     * 创建人
+     * Người tạo
      */
-    @Excel(name = "创建人", width = 15,dictTable = "sys_user",dicCode = "username",dicText = "realname")
-    @Schema(description = "创建人")
+    @Excel(name = "Người tạo", width = 15,dictTable = "sys_user",dicCode = "username",dicText = "realname")
+    @Schema(description = "Người tạo")
     private String createBy;
     /**
-     * 创建时间
+     * Thời gian tạo
      */
-    @Excel(name = "创建时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "Thời gian tạo", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private Date createTime;
 }

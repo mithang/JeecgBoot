@@ -26,7 +26,7 @@ import org.jeecg.modules.system.vo.thirdapp.JwUserDepartVo;
 public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
 
     /**
-     * 通过租户id获取数据
+     * Lấy dữ liệu theo id Tenant
      * @param page
      * @param userTenantId
      * @return
@@ -34,14 +34,14 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     List<SysUser> getPageUserList(@Param("page") Page<SysUser> page,@Param("userTenantId") Integer userTenantId,@Param("user") SysUser user);
 
     /**
-     * 根据租户id获取用户ids
+     * Lấy người dùng theo id Tenant ids
      * @param tenantId
      * @return
      */
     List<String> getUserIdsByTenantId(@Param("tenantId") Integer tenantId);
 
     /**
-     * 通过用户id获取租户ids
+     * Lấy Tenant theo id người dùng ids
      * @param userId
      * @return
      */
@@ -51,14 +51,14 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     
     //==============================================================================================================================
     /**
-     * 通过用户id获取租户列表
+     * Lấy danh sách Tenant qua ID người dùng
      * @param userId
      * @return
      */
     List<SysUserTenantVo> getTenantListByUserId(@Param("userId") String userId, @Param("userTenantStatus") List<String> userTenantStatus);
     
     /**
-     * 通过状态、当前登录人的用户名，租户id，查询用户id
+     * Truy vấn người dùng theo trạng thái, tên người dùng của người đang đăng nhập và id thuê bao id
      * @param tenantId
      * @param statusList
      * @param username
@@ -67,7 +67,7 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     List<String> getUserIdsByCreateBy(@Param("tenantId") Integer tenantId, @Param("userTenantStatus")  List<String> statusList, @Param("username") String username);
 
     /**
-     * 联查用户和租户审核状态
+     * Tra cứu liên kết người dùng và trạng thái xét duyệt Tenant
      * @param page
      * @param status
      * @param tenantId
@@ -76,7 +76,7 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     List<SysUserTenantVo> getUserTenantPageList(@Param("page") Page<SysUserTenantVo> page, @Param("status") List<String> status, @Param("user") SysUser user, @Param("tenantId") Integer tenantId);
 
     /**
-     * 根据用户id获取租户id，没有状态值(如获取租户已经存在，只不过是被拒绝或者审批中)
+     * Theo id người dùng, lấy id tenant, không có giá trị trạng thái(Ví dụ tenant lấy được đã tồn tại, chỉ là đã bị từ chối hoặc đang trong quá trình phê duyệt)
      * @param userId
      * @return
      */
@@ -84,7 +84,7 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     //==============================================================================================================================
 
     /**
-     * 统计一个人创建了多少个租户
+     * Thống kê một người đã tạo bao nhiêu tenant
      *
      * @param userId
      * @return
@@ -92,28 +92,28 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     Integer countCreateTenantNum(String userId);
 
     /**
-     * 取消离职
+     * Hủy nghỉ việc
      * @param userIds
      * @param tenantId
      */
     void putCancelQuit(@Param("userIds") List<String> userIds, @Param("tenantId") Integer tenantId);
 
     /**
-     * 判断当前用户是否已在该租户下面
+     * Kiểm tra người dùng hiện tại đã ở dưới tenant đó chưa
      * @param userId
      * @param tenantId
      */
     Integer userTenantIzExist(@Param("userId") String userId, @Param("tenantId") int tenantId);
 
     /**
-     * 查询未被注销的租户
+     * Truy vấn Tenant chưa bị hủy
      * @param userId
      * @return
      */
     List<SysTenant> getTenantNoCancel(@Param("userId") String userId);
 
     /**
-     * 根据用户id获取我的租户
+     * Lấy Tenant của tôi theo ID người dùng
      * @param page
      * @param userId
      * @param userTenantStatus
@@ -122,7 +122,7 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     List<SysTenant> getTenantPageListByUserId(@Param("page") Page<SysTenant> page, @Param("userId") String userId, @Param("userTenantStatus") List<String> userTenantStatus,@Param("sysUserTenantVo") SysUserTenantVo sysUserTenantVo);
 
     /**
-     * 同意加入租户
+     * Đồng ý tham gia tenant
      * @param userId
      * @param tenantId
      */
@@ -130,7 +130,7 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     void agreeJoinTenant(@Param("userId") String userId, @Param("tenantId") Integer tenantId);
 
     /**
-     * 拒绝加入租户
+     * Từ chối tham gia tenant
      * @param userId
      * @param tenantId
      */
@@ -138,7 +138,7 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     void refuseJoinTenant(@Param("userId") String userId, @Param("tenantId") Integer tenantId);
 
     /**
-     * 根据用户id和租户id获取用户租户中间表信息
+     * Lấy thông tin bảng trung gian người dùng - tenant theo id người dùng và id tenant
      *
      * @param userId
      * @param tenantId
@@ -148,14 +148,14 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     SysUserTenant getUserTenantByTenantId(@Param("userId") String userId, @Param("tenantId") Integer tenantId);
 
     /**
-     * 删除租户下的用户
+     * Xóa người dùng thuộc tenant
      *
      * @param tenantIds
      */
     void deleteUserByTenantId(@Param("tenantIds") List<Integer> tenantIds);
 
     /**
-     * 获取租户下的成员数量
+     * Lấy số lượng thành viên thuộc Tenant
      *
      * @param tenantId
      * @param tenantStatus
@@ -164,14 +164,14 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     Long getUserCount(Integer tenantId, String tenantStatus);
     
     /**
-     * 根据租户id和名称获取用户数据
+     * Lấy dữ liệu người dùng theo tenant id và tên
      * @param tenantId
      * @return
      */
     List<JwUserDepartVo> getUsersByTenantIdAndName(@Param("tenantId") Integer tenantId);
 
     /**
-     * 根据多个用户id获取租户id
+     * Lấy Tenant theo nhiều ID người dùng id
      *
      * @param userIds
      * @return
@@ -179,11 +179,11 @@ public interface SysUserTenantMapper extends BaseMapper<SysUserTenant> {
     List<Integer> getTenantIdsByUserIds(@Param("userIds") List<String> userIds);
 
     /**
-     * 批量查询多个用户的租户IDs（含用户ID映射，跨数据库兼容，消除N+1查询）
+     * Truy vấn hàng loạt các tenant ID của nhiều người dùng (chứa ánh xạ ID người dùng, tương thích đa cơ sở dữ liệu, loại bỏ N+1 truy vấn)
      * @author scott
-     * @since 2026-07-01 listAll接口N+1查询改造
-     * @param userIds 用户ID列表
-     * @return 每条含 userId 和 tenantId
+     * @since 2026-07-01 listAll API N+1 Cải tiến truy vấn
+     * @param userIds Danh sách ID người dùng
+     * @return Mỗi bản ghi chứa userId và tenantId
      */
     List<SysUserTenantIdVo> getTenantIdVosByUserIds(@Param("userIds") List<String> userIds);
 }

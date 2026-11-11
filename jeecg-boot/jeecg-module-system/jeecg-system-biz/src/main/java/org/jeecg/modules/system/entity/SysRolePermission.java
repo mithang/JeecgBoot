@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
- * 角色权限表
+ * Bảng quyền hạn vai trò
  * </p>
  *
  * @Author scott
@@ -34,29 +34,29 @@ public class SysRolePermission implements Serializable {
     private String id;
     
     /**
-     * 角色id
+     * Vai trò id
      */
     private String roleId;
 
     /**
-     * 权限id
+     * Quyền hạn id
      */
     private String permissionId;
     
     /**
-     * 数据权限
+     * Quyền hạn dữ liệu
      */
     private String dataRuleIds;
 
     /**
-     * 操作时间
+     * Thời gian thao tác
      */
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date operateDate;
 
     /**
-     * 操作ip
+     * Thao tác ip
      */
     private String operateIp;
 

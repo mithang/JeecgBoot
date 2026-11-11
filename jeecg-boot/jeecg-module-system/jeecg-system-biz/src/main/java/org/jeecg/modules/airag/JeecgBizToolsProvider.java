@@ -32,14 +32,14 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 /**
- * for [QQYUN-13565]【AI助手】新增创建用户和查询用户的工具扩展
- * @Description: jeecg llm工具提供者
+ * for [QQYUN-13565]【Trợ lý AI】Mở rộng công cụ tạo người dùng và truy vấn người dùng mới
+ * @Description: jeecg llm Nhà cung cấp công cụ
  * @Author: chenrui
  * @Date: 2025/8/26 18:06
  */
 @Slf4j
 @Component
-// AI工具提供者：仅在classpath存在airag模块(JeecgToolsProvider接口)时装配，去AI依赖后跳过注册，不影响应用启动
+// AI Nhà cung cấp công cụ: chỉ khi classpath tồn tại module airag(JeecgToolsProvider API)sẽ được lắp ráp, sau khi gỡ phụ thuộc AI sẽ bỏ qua đăng ký, không ảnh hưởng đến khởi động ứng dụng
 @ConditionalOnClass(name = "org.jeecg.modules.airag.llm.handler.JeecgToolsProvider")
 public class JeecgBizToolsProvider implements JeecgToolsProvider {
 
@@ -66,134 +66,134 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
     private RedisUtil redisUtil;
 
     public Map<ToolSpecification, ToolExecutor> getDefaultTools() {
-       log.info("--------【AI工具】创建用户和查询用户工具扩展------------------");
+       log.info("--------【Công cụ AI】Mở rộng công cụ tạo người dùng và truy vấn người dùng------------------");
         Map<ToolSpecification, ToolExecutor> tools = new HashMap<>();
 
-        // 改为从当前 HTTP 请求的 JWT 解析用户名，再按 userId 查权限码集合用于鉴权。
+        // Đổi sang phân tích tên người dùng từ JWT của HTTP request hiện tại, rồi tra cứu tập hợp mã quyền theo userId để xác thực quyền.
         Set<String> perms = currentUserPermissions();
         if (perms.isEmpty()) {
-            // 匿名访问或登录态无效，不暴露任何业务工具
-            log.info("【AI工具】当前为匿名/未登录会话，跳过所有业务工具注册");
+            // Truy cập ẩn danh hoặc trạng thái đăng nhập không hợp lệ sẽ không lộ bất kỳ công cụ nghiệp vụ nào
+            log.info("【Công cụ AI】Hiện tại là ẩn danh/Phiên chưa đăng nhập, bỏ qua việc đăng ký tất cả công cụ nghiệp vụ");
             return tools;
         }
 
         if (perms.contains("system:user:listAll")) {
-            // 查询所有用户工具
+            // Công cụ truy vấn tất cả người dùng
             JeecgLlmTools userTool = queryUserTool(perms);
             tools.put(userTool.getToolSpecification(), userTool.getToolExecutor());
         } else {
-            log.info("【AI工具】当前用户无 system:user:listAll 权限，跳过 query_user_by_name 工具注册");
+            log.info("【Công cụ AI】Người dùng hiện tại không có system:user:listAll quyền hạn, bỏ qua query_user_by_name đăng ký công cụ");
         }
 
         if (perms.contains("system:user:add")) {
-            // 添加用户工具
+            // Công cụ thêm người dùng
             JeecgLlmTools addUser = addUserTool(perms);
             tools.put(addUser.getToolSpecification(), addUser.getToolExecutor());
         } else {
-            log.info("【AI工具】当前用户无 system:user:add 权限，跳过 add_user 工具注册");
+            log.info("【Công cụ AI】Người dùng hiện tại không có system:user:add quyền hạn, bỏ qua add_user đăng ký công cụ");
         }
 
         if (perms.contains("system:role:list")) {
-            // 查询所有角色
+            // Truy vấn tất cả vai trò
             JeecgLlmTools queryRoles = queryAllRolesTool(perms);
             tools.put(queryRoles.getToolSpecification(), queryRoles.getToolExecutor());
         } else {
-            log.info("【AI工具】当前用户无 system:role:list 权限，跳过 query_all_roles 工具注册");
+            log.info("【Công cụ AI】Người dùng hiện tại không có system:role:list quyền hạn, bỏ qua query_all_roles đăng ký công cụ");
         }
 
         if (perms.contains("system:user:addUserRole")) {
-            // 给用户授予角色
+            // Cấp vai trò cho người dùng
             JeecgLlmTools grantRoles = grantUserRolesTool(perms);
             tools.put(grantRoles.getToolSpecification(), grantRoles.getToolExecutor());
         } else {
-            log.info("【AI工具】当前用户无 system:user:addUserRole 权限，跳过 grant_user_roles 工具注册");
+            log.info("【Công cụ AI】Người dùng hiện tại không có system:user:addUserRole quyền hạn, bỏ qua grant_user_roles đăng ký công cụ");
         }
 
         return tools;
     }
 
     /**
-     * 解析当前 HTTP 请求 JWT 对应用户的权限码集合。
-     * 因为 /airag/chat/send 入口标了 @IgnoreAuth，Shiro 过滤器被跳过，
-     * 当前线程的 Subject 是匿名的，无法用 SecurityUtils.getSubject().isPermitted(...) 鉴权。
+     * Phân tích tập hợp mã quyền hạn của người dùng tương ứng với JWT của yêu cầu HTTP hiện tại.
+     * Vì /airag/chat/send Điểm vào đã được đánh dấu @IgnoreAuth, bộ lọc Shiro bị bỏ qua,
+     * Subject của luồng hiện tại là ẩn danh, không thể dùng SecurityUtils.getSubject().isPermitted(...) Xác thực quyền.
      *
-     * @return 当前登录用户的权限码集合；未登录、token 无效或解析失败时返回空集合
+     * @return Tập hợp mã quyền của người dùng đang đăng nhập; khi chưa đăng nhập, token không hợp lệ hoặc phân tích thất bại thì trả về tập hợp rỗng
      */
     private Set<String> currentUserPermissions() {
         try {
             HttpServletRequest req = SpringContextUtils.getHttpServletRequest();
             if (req == null) {
-                log.info("【AI工具】未获取到当前 HTTP 请求上下文，按匿名处理（无业务工具权限）");
+                log.info("[Công cụ AI] Chưa lấy được bối cảnh HTTP request hiện tại, xử lý theo dạng ẩn danh (không có quyền công cụ nghiệp vụ)");
                 return Collections.emptySet();
             }
-            //update-begin---author:scott ---date:20261013  for：【安全 GHSA-9qp4-7428-wvm7/GHSA-44fq-8xcf-3m3h】与入口鉴权取同一个token并验签，防止伪造header中的JWT冒充admin-----------
+            //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-9qp4-7428-wvm7/GHSA-44fq-8xcf-3m3h] Lấy cùng một token với bước xác thực tại lối vào và kiểm tra chữ ký, ngăn giả mạo JWT trong header admin-----------
             String token = TokenUtils.getTokenByRequest(req);
             if (StringUtils.isBlank(token)) {
-                log.info("【AI工具】请求缺少 token，按匿名处理（无业务工具权限）");
+                log.info("[Công cụ AI] Yêu cầu thiếu token, xử lý theo dạng ẩn danh (không có quyền công cụ nghiệp vụ)");
                 return Collections.emptySet();
             }
-            // 校验签名、有效期与redis会话，失败抛异常走下方catch按匿名处理
+            // Kiểm tra chữ ký, thời hạn hiệu lực và phiên redis; thất bại thì ném ngoại lệ, đi xuống catch bên dưới để xử lý theo dạng ẩn danh
             TokenUtils.verifyToken(token, commonApi, redisUtil);
-            //update-end---author:scott ---date:20261013  for：【安全 GHSA-9qp4-7428-wvm7/GHSA-44fq-8xcf-3m3h】与入口鉴权取同一个token并验签，防止伪造header中的JWT冒充admin-----------
+            //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-9qp4-7428-wvm7/GHSA-44fq-8xcf-3m3h] Lấy cùng một token với bước xác thực tại lối vào và kiểm tra chữ ký, ngăn giả mạo JWT trong header admin-----------
             String username = JwtUtil.getUsername(token);
             if (StringUtils.isBlank(username)) {
-                log.info("【AI工具】X-Access-Token 解析不到 username，按匿名处理（无业务工具权限）");
+                log.info("【Công cụ AI】X-Access-Token Không phân tích được username, xử lý theo dạng ẩn danh (không có quyền công cụ nghiệp vụ)");
                 return Collections.emptySet();
             }
             SysUser user = sysUserService.getUserByName(username);
             if (user == null) {
-                log.warn("【AI工具】token 中的用户在系统中不存在: username={}，按匿名处理", username);
+                log.warn("[Công cụ AI] Người dùng trong token không tồn tại trong hệ thống: username={}，xử lý dưới dạng ẩn danh", username);
                 return Collections.emptySet();
             }
             Set<String> perms = sysUserService.getUserPermissionsSet(user.getId());
             if (perms == null || perms.isEmpty()) {
-                log.info("【AI工具】用户无任何权限码: username={}, userId={}", username, user.getId());
+                log.info("[Công cụ AI] Người dùng không có bất kỳ mã quyền nào: username={}, userId={}", username, user.getId());
                 return Collections.emptySet();
             }
-            log.info("【AI工具】当前用户权限解析完成: username={}, perms.size={}", username, perms.size());
+            log.info("Đã phân tích xong quyền hạn của người dùng hiện tại: username={}, perms.size={}", username, perms.size());
             return perms;
         } catch (Exception e) {
-            log.warn("【AI工具】解析当前用户权限失败: {}", e.getMessage());
+            log.warn("Phân tích quyền hạn của người dùng hiện tại thất bại: {}", e.getMessage());
             return Collections.emptySet();
         }
     }
 
     /**
-     * 添加用户
+     * Thêm người dùng
      * @return
      * @author chenrui
      * @date 2025/8/27 09:51
      */
     private JeecgLlmTools addUserTool(Set<String> perms){
-        log.info("--------【AI工具】添加用户工具------------------");
+        log.info("--------【Công cụ AI】Công cụ thêm người dùng------------------");
         ToolSpecification toolSpecification = ToolSpecification.builder()
                 .name("add_user")
-                .description("添加用户,返回添加结果;" +
-                        "\n\n - 缺少必要字段时,请向用户索要." +
-                        "\n\n - 你应该提前判断用户的输入是否合法,比如用户名是否符合规范,手机号和邮箱是否正确等." +
-                        "\n\n - 提前使用用户名查询用户是否存在,如果存在则不能添加." +
-                        "\n\n - 添加成功后返回成功消息,如果失败则返回失败原因." +
-                        "\n\n - 用户名,手机号均要求唯一,提前通过查询用户工具确认唯一性." )
+                .description("Thêm người dùng,Trả về kết quả thêm;" +
+                        "\n\n - Khi thiếu trường bắt buộc,Vui lòng hỏi người dùng." +
+                        "\n\n - Bạn nên phán đoán trước xem dữ liệu người dùng nhập vào có hợp lệ hay không,ví dụ tên người dùng có đúng quy chuẩn hay không,số điện thoại và email có đúng không, v.v.." +
+                        "\n\n - Dùng tên người dùng truy vấn trước xem người dùng có tồn tại không,Nếu đã tồn tại thì không thể thêm." +
+                        "\n\n - Sau khi thêm thành công thì trả về thông báo thành công,Nếu thất bại thì trả về lý do thất bại." +
+                        "\n\n - Tên người dùng,Số điện thoại đều yêu cầu duy nhất,Xác nhận tính duy nhất trước bằng công cụ truy vấn người dùng." )
                 .parameters(
                         JsonObjectSchema.builder()
-                                .addStringProperty("username", "用户名,必填,只允许使用字母、数字、下划线，且必须以字母开头,唯一")
-                                .addStringProperty("password", "用户密码,必填")
-                                .addStringProperty("realname", "真实姓名,必填")
-                                //.addStringProperty("email", "邮箱,必填,唯一")
-                                .addStringProperty("phone", "手机号,必填,唯一")
+                                .addStringProperty("username", "Tên người dùng,Bắt buộc,Chỉ được dùng chữ cái, chữ số, dấu gạch dưới và phải bắt đầu bằng chữ cái,Duy nhất")
+                                .addStringProperty("password", "Mật khẩu người dùng,Bắt buộc")
+                                .addStringProperty("realname", "Họ tên thật,Bắt buộc")
+                                //.addStringProperty("email", "Email,Bắt buộc,Duy nhất")
+                                .addStringProperty("phone", "Số điện thoại,Bắt buộc,Duy nhất")
                                 .required("username","password","realname","phone")
                                 .build()
                 )
                 .build();
 
-        // 鉴权改用调用方传入的权限集合（来自 JWT→userId→sysUserService.getUserPermissionsSet）
+        // Xác thực quyền đổi sang dùng tập hợp quyền hạn do bên gọi truyền vào (từ JWT→userId→sysUserService.getUserPermissionsSet）
         final boolean hasAddPermission = perms != null && perms.contains("system:user:add");
 
         ToolExecutor toolExecutor = (toolExecutionRequest, memoryId) -> {
-            // 权限校验（使用提前捕获的结果，避免在异步线程中调用 Shiro）
+            // Kiểm tra quyền (dùng kết quả đã bắt trước, tránh gọi Shiro trong luồng bất đồng bộ)
             if (!hasAddPermission) {
-                log.warn("【AI工具】add_user 调用被拒绝：当前用户无 system:user:add 权限");
-                return "无权限：您没有添加用户的权限（system:user:add）";
+                log.warn("【Công cụ AI】add_user Lời gọi bị từ chối: Người dùng hiện tại không có system:user:add Quyền hạn");
+                return "Không có quyền: Bạn không có quyền thêm người dùng (system:user:add）";
             }
             JSONObject arguments = JSONObject.parseObject(toolExecutionRequest.arguments());
             arguments.put("confirmPassword",arguments.get("password"));
@@ -202,28 +202,28 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
             arguments.put("departIds","");
             String selectedRoles = arguments.getString("selectedroles");
             String selectedDeparts = arguments.getString("selecteddeparts");
-            String msg = "添加用户失败";
+            String msg = "Thêm người dùng thất bại";
             try {
                 SysUser user = JSON.parseObject(arguments.toJSONString(), SysUser.class);
-                user.setCreateTime(new Date());//设置创建时间
+                user.setCreateTime(new Date());//Đặt thời gian tạo
                 String salt = oConvertUtils.randomGen(8);
                 user.setSalt(salt);
                 String passwordEncode = PasswordUtil.encrypt(user.getUsername(), user.getPassword(), salt);
                 user.setPassword(passwordEncode);
                 user.setStatus(1);
                 user.setDelFlag(CommonConstant.DEL_FLAG_0);
-                //用户表字段org_code不能在这里设置他的值
+                //Trường bảng người dùng org_code Không thể đặt giá trị của nó tại đây
                 user.setOrgCode(null);
-                // 保存用户走一个service 保证事务
-                //获取租户ids
+                // Lưu người dùng qua một service để đảm bảo transaction
+                //Lấy tenant ids
                 String relTenantIds = arguments.getString("relTenantIds");
                 sysUserService.saveUser(user, selectedRoles, selectedDeparts, relTenantIds, false);
-                baseCommonService.addLog("添加用户，username： " +user.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
-                msg = "添加用户成功";
-                // 用户变更，触发同步工作流
+                baseCommonService.addLog("Thêm người dùng, username: " +user.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
+                msg = "Thêm người dùng thành công";
+                // Người dùng thay đổi, kích hoạt workflow đồng bộ
             } catch (Exception e) {
                 e.printStackTrace();
-                msg = "添加用户失败";
+                msg = "Thêm người dùng thất bại";
             }
             return msg;
         };
@@ -231,34 +231,34 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
     }
 
     /**
-     * 查询用户信息
+     * Truy vấn thông tin người dùng
      *
-     * @return 用户列表JSON字符串
+     * @return Chuỗi JSON danh sách người dùng
      * @author chenrui
      * @date 2025/8/26 18:52
      */
     private JeecgLlmTools queryUserTool(Set<String> perms) {
         ToolSpecification toolSpecification = ToolSpecification.builder()
                 .name("query_user_by_name")
-                .description("查询用户详细信息，返回json数组。支持用户名、真实姓名、邮箱、手机号 多字段组合查询，用户名、真实姓名、邮箱、手机号均为模糊查询。无条件则返回全部用户。")
+                .description("Truy vấn thông tin chi tiết của người dùng, trả về mảng JSON. Hỗ trợ truy vấn kết hợp nhiều trường gồm tên người dùng, họ tên thật, email, số điện thoại; các trường tên người dùng, họ tên thật, email, số điện thoại đều là truy vấn mờ. Không có điều kiện thì trả về toàn bộ người dùng.")
                 .parameters(
                         JsonObjectSchema.builder()
-                                .addStringProperty("username", "用户名")
-                                .addStringProperty("realname", "真实姓名")
-                                .addStringProperty("email", "电子邮件")
-                                .addStringProperty("phone", "手机号")
+                                .addStringProperty("username", "Tên người dùng")
+                                .addStringProperty("realname", "Họ tên thật")
+                                .addStringProperty("email", "Email")
+                                .addStringProperty("phone", "Số điện thoại")
                                 .build()
                 )
                 .build();
 
-        // 鉴权改用调用方传入的权限集合
+        // Xác thực chuyển sang dùng tập hợp quyền hạn do bên gọi truyền vào
         final boolean hasListPermission = perms != null && perms.contains("system:user:listAll");
 
         ToolExecutor toolExecutor = (toolExecutionRequest, memoryId) -> {
-            // 权限校验（使用提前捕获的结果，避免在异步线程中调用 Shiro）
+            // Kiểm tra quyền (dùng kết quả đã bắt trước, tránh gọi Shiro trong luồng bất đồng bộ)
             if (!hasListPermission) {
-                log.warn("【AI工具】query_user_by_name 调用被拒绝：当前用户无 system:user:listAll 权限");
-                return "无权限：您没有查询用户列表的权限";
+                log.warn("【Công cụ AI】query_user_by_name Lời gọi bị từ chối: Người dùng hiện tại không có system:user:listAll Quyền hạn");
+                return "Không có quyền hạn: bạn không có quyền truy vấn danh sách người dùng";
             }
             SysUser args = JSONObject.parseObject(toolExecutionRequest.arguments(), SysUser.class);
             QueryWrapper<SysUser> qw = new QueryWrapper<>();
@@ -286,7 +286,7 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
     }
 
     /**
-     * 查询所有角色
+     * Truy vấn tất cả vai trò
      * @return
      * @author chenrui
      * @date 2025/8/27 09:52
@@ -294,25 +294,25 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
     private JeecgLlmTools queryAllRolesTool(Set<String> perms) {
         ToolSpecification spec = ToolSpecification.builder()
                 .name("query_all_roles")
-                .description("查询所有角色，返回json数组。包含字段：id、roleName、roleCode；默认按创建时间/排序号规则由后端决定。")
+                .description("Truy vấn tất cả vai trò, trả về mảng JSON. Bao gồm các trường: id, roleName, roleCode; mặc định sắp xếp theo thời gian tạo/Quy tắc số thứ tự do backend quyết định.")
                 .parameters(
                         JsonObjectSchema.builder()
-                                .addStringProperty("roleName", "角色姓名")
-                                .addStringProperty("roleCode", "角色编码")
+                                .addStringProperty("roleName", "Tên vai trò")
+                                .addStringProperty("roleCode", "Mã vai trò")
                                 .build()
                 )
                 .build();
 
-        // 鉴权改用调用方传入的权限集合
+        // Xác thực chuyển sang dùng tập hợp quyền hạn do bên gọi truyền vào
         final boolean hasRoleListPermission = perms != null && perms.contains("system:role:list");
 
         ToolExecutor exec = (toolExecutionRequest, memoryId) -> {
-            // 权限校验（使用提前捕获的结果，避免在异步线程中调用 Shiro）
+            // Kiểm tra quyền (dùng kết quả đã bắt trước, tránh gọi Shiro trong luồng bất đồng bộ)
             if (!hasRoleListPermission) {
-                log.warn("【AI工具】query_all_roles 调用被拒绝：当前用户无 system:role:list 权限");
-                return "无权限：您没有查询角色列表的权限";
+                log.warn("【Công cụ AI】query_all_roles Lời gọi bị từ chối: Người dùng hiện tại không có system:role:list Quyền hạn");
+                return "Không có quyền: Bạn không có quyền truy vấn danh sách vai trò";
             }
-            // 做租户隔离查询（若开启）
+            // Thực hiện truy vấn cách ly tenant (nếu đã bật)
             SysRole sysRole = JSONObject.parseObject(toolExecutionRequest.arguments(), SysRole.class);
             QueryWrapper<SysRole> qw = Wrappers.query();
             if (StringUtils.isNotBlank(sysRole.getRoleName())) {
@@ -321,9 +321,9 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
             if (StringUtils.isNotBlank(sysRole.getRoleCode())) {
                 qw.like("role_code", sysRole.getRoleCode());
             }
-            // 未删除
+            // Chưa xóa
             List<SysRole> roles = sysRoleService.list(qw);
-            // 仅返回核心字段
+            // Chỉ trả về trường cốt lõi
             JSONArray arr = new JSONArray();
             for (SysRole r : roles) {
                 JSONObject o = new JSONObject();
@@ -338,7 +338,7 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
     }
 
     /**
-     * 给用户授予角色
+     * Cấp vai trò cho người dùng
      * @return
      * @author chenrui
      * @date 2025/8/27 09:52
@@ -346,35 +346,35 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
     private JeecgLlmTools grantUserRolesTool(Set<String> perms) {
         ToolSpecification spec = ToolSpecification.builder()
                 .name("grant_user_roles")
-                .description("给用户授予角色，支持一次授予多个角色；如果关系已存在则跳过。返回授予结果统计。")
+                .description("Cấp vai trò cho người dùng, hỗ trợ cấp nhiều vai trò trong một lần; nếu quan hệ đã tồn tại thì bỏ qua. Trả về thống kê kết quả cấp.")
                 .parameters(
                         JsonObjectSchema.builder()
-                                .addStringProperty("userId", "用户ID，必填")
-                                .addStringProperty("roleIds", "角色ID列表，必填，使用英文逗号分隔")
+                                .addStringProperty("userId", "ID người dùng, bắt buộc")
+                                .addStringProperty("roleIds", "Danh sách ID vai trò, bắt buộc, dùng dấu phẩy tiếng Anh để phân tách")
                                 .required("userId","roleIds")
                                 .build()
                 )
                 .build();
 
-        // 鉴权改用调用方传入的权限集合
+        // Xác thực chuyển sang dùng tập hợp quyền hạn do bên gọi truyền vào
         final boolean hasGrantPermission = perms != null
                 && (perms.contains("system:user:addUserRole") || perms.contains("system:user:edit"));
 
         ToolExecutor exec = (toolExecutionRequest, memoryId) -> {
-            // 权限校验（使用提前捕获的结果，避免在异步线程中调用 Shiro）
+            // Kiểm tra quyền (dùng kết quả đã bắt trước, tránh gọi Shiro trong luồng bất đồng bộ)
             if (!hasGrantPermission) {
-                log.warn("【AI工具】grant_user_roles 调用被拒绝：当前用户无 system:user:addUserRole 或 system:user:edit 权限");
-                return "无权限：您没有给用户授予角色的权限";
+                log.warn("【Công cụ AI】grant_user_roles Lời gọi bị từ chối: Người dùng hiện tại không có system:user:addUserRole hoặc system:user:edit Quyền hạn");
+                return "Không có quyền hạn: bạn không có quyền gán vai trò cho người dùng";
             }
             JSONObject args = JSONObject.parseObject(toolExecutionRequest.arguments());
             String userId = args.getString("userId");
             String roleIdsStr = args.getString("roleIds");
             if (StringUtils.isAnyBlank(userId, roleIdsStr)) {
-                return "参数缺失：userId 或 roleIds";
+                return "Thiếu tham số: userId hoặc roleIds";
             }
             SysUser user = sysUserService.getById(userId);
             if (user == null) {
-                return "用户不存在：" + userId;
+                return "Người dùng không tồn tại: " + userId;
             }
             String[] roleIds = roleIdsStr.split(",");
             int added = 0, existed = 0, invalid = 0;
@@ -394,7 +394,7 @@ public class JeecgBizToolsProvider implements JeecgToolsProvider {
                     existed++;
                 }
             }
-            return String.format("授予完成：新增%d，已存在%d，无效/失败%d", added, existed, invalid);
+            return String.format("Cấp quyền hoàn tất: Đã thêm mới%d，đã tồn tại%d, không hợp lệ/Thất bại%d", added, existed, invalid);
         };
         return new JeecgLlmTools(spec, exec);
     }

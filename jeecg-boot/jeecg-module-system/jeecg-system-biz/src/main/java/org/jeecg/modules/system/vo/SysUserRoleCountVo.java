@@ -5,28 +5,28 @@ import lombok.Data;
 /**
  * @Description:
  * @author: wangshuai
- * @date: 2022年12月07日 16:41
+ * @date: 2022 năm 12 tháng 07 ngày 16:41
  */
 @Data
 public class SysUserRoleCountVo {
     /**
-     * 角色id
+     * Vai trò id
      */
     private String id;
     /**
-     * 角色名称
+     * Tên vai trò
      */
     private String roleName;
     /**
-     * 角色描述
+     * Mô tả vai trò
      */
     private String description;
     /**
-     * 角色编码
+     * Mã vai trò
      */
     private String roleCode;
     /**
-     * 角色下的用户数量
+     * Số lượng người dùng thuộc vai trò
      */
     private Long count;
 }

@@ -10,46 +10,46 @@
 //import java.util.concurrent.atomic.LongAdder;
 //
 ///**
-// * 自定义undertow监控指标工具类
-// * for [QQYUN-11902]tomcat 替换undertow 这里的功能还没修改
+// * Lớp tiện ích chỉ số giám sát undertow tùy chỉnh
+// * for [QQYUN-11902]tomcat Thay thế undertow, chức năng ở đây vẫn chưa được sửa
 // * @author chenrui
 // * @date 2025/4/8 19:06
 // */
 //@Component("jeecgCustomUndertowMetricsHandler")
 //public class CustomUndertowMetricsHandler {
 //
-//    // 用于统计已创建的 session 数量
+//    // Dùng để thống kê số lượng session đã tạo
 //    private final LongAdder sessionsCreated = new LongAdder();
 //
-//    // 用于统计已销毁的 session 数量
+//    // Dùng để thống kê số lượng session đã hủy
 //    private final LongAdder sessionsExpired = new LongAdder();
 //
-//    // 当前活跃的 session 数量
+//    // Số lượng session đang hoạt động hiện tại
 //    private final AtomicInteger activeSessions = new AtomicInteger();
 //
-//    // 历史最大活跃 session 数
+//    // Số session hoạt động tối đa trong lịch sử
 //    private final AtomicInteger maxActiveSessions = new AtomicInteger();
 //
-//    // Undertow 内存 session 管理器（用于创建与管理 session）
+//    // Undertow Trình quản lý session trong bộ nhớ (dùng để tạo và quản lý session)
 //    private final InMemorySessionManager sessionManager = new InMemorySessionManager("undertow-session-manager");
 //
-//    // 使用 Cookie 存储 session ID
+//    // Sử dụng Cookie để lưu trữ session ID
 //    private final SessionConfig sessionConfig = new SessionCookieConfig();
 //
 //    /**
-//     * 构造函数
+//     * Hàm khởi tạo
 //     * @param meterRegistry
 //     * @author chenrui
 //     * @date 2025/4/8 19:07
 //     */
 //    public CustomUndertowMetricsHandler(MeterRegistry meterRegistry) {
-//        // 注册 Micrometer 指标
+//        // Đăng ký chỉ số Micrometer
 //        meterRegistry.gauge("undertow.sessions.created", sessionsCreated, LongAdder::longValue);
 //        meterRegistry.gauge("undertow.sessions.expired", sessionsExpired, LongAdder::longValue);
 //        meterRegistry.gauge("undertow.sessions.active.current", activeSessions, AtomicInteger::get);
 //        meterRegistry.gauge("undertow.sessions.active.max", maxActiveSessions, AtomicInteger::get);
 //
-//        // 添加 session 生命周期监听器，统计 session 创建与销毁
+//        // Thêm listener vòng đời session, thống kê việc tạo và hủy session
 //        sessionManager.registerSessionListener(new SessionListener() {
 //            @Override
 //            public void sessionCreated(Session session, HttpServerExchange exchange) {
@@ -67,7 +67,7 @@
 //    }
 //
 //    /**
-//     * 包装 Undertow 的 HttpHandler，实现 session 自动创建逻辑
+//     * Bọc HttpHandler của Undertow, triển khai logic tự động tạo session
 //     * @param next
 //     * @return
 //     * @author chenrui
@@ -75,13 +75,13 @@
 //     */
 //    public HttpHandler wrap(HttpHandler next) {
 //        return exchange -> {
-//            // 获取当前 session，如果不存在则创建
+//            // Lấy session hiện tại, nếu không tồn tại thì tạo mới
 //            Session session = sessionManager.getSession(exchange, sessionConfig);
 //            if (session == null) {
 //                sessionManager.createSession(exchange, sessionConfig);
 //            }
 //
-//            // 执行下一个 Handler
+//            // Thực thi tiếp theo Handler
 //            next.handleRequest(exchange);
 //        };
 //    }

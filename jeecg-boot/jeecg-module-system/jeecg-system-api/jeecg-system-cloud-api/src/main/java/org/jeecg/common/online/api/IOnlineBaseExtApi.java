@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 【Online】online表单对外 Feign API接口
+ * @Description: [Online] API Feign đối ngoại của form online
  *
- * @ConditionalOnMissingClass("org.jeecg.modules.online.cgform.service.impl.OnlineBaseExtApiImpl") => 有实现类的时候，不实例化Feign接口
+ * @ConditionalOnMissingClass("org.jeecg.modules.online.cgform.service.impl.OnlineBaseExtApiImpl") => Khi có lớp triển khai, không khởi tạo interface Feign
  * @author: jeecg-boot
  */
 @Component
@@ -25,8 +25,8 @@ import java.util.Map;
 public interface IOnlineBaseExtApi {
 
     /**
-     * 【Online】 表单设计器专用：同步新增
-     * @param tableName 表名
+     * 【Online】 Dành riêng cho trình thiết kế biểu mẫu: Đồng bộ thêm mới
+     * @param tableName Tên bảng
      * @param jsonObject
      * @throws Exception
      * @return String
@@ -35,8 +35,8 @@ public interface IOnlineBaseExtApi {
     String cgformPostCrazyForm(@PathVariable("name") String tableName, @RequestBody JSONObject jsonObject) throws Exception;
 
     /**
-     * 【Online】 表单设计器专用：同步编辑
-     * @param tableName 表名
+     * 【Online】 Dành riêng cho trình thiết kế biểu mẫu: Đồng bộ chỉnh sửa
+     * @param tableName Tên bảng
      * @param jsonObject
      * @throws Exception
      * @return String
@@ -45,29 +45,29 @@ public interface IOnlineBaseExtApi {
     String cgformPutCrazyForm(@PathVariable("name") String tableName, @RequestBody JSONObject jsonObject) throws Exception;
 
     /**
-     * 通过online表名查询数据，同时查询出子表的数据
+     * Truy vấn dữ liệu theo tên bảng online, đồng thời truy vấn ra dữ liệu của bảng con
      *
-     * @param tableName online表名
-     * @param dataIds   online数据ID
+     * @param tableName online Tên bảng
+     * @param dataIds   online Dữ liệu ID
      * @return
      */
     @GetMapping(value = "/online/api/cgform/queryAllDataByTableName")
     JSONObject cgformQueryAllDataByTableName(@RequestParam("tableName") String tableName, @RequestParam("dataIds") String dataIds);
 
     /**
-     * online表单删除数据
+     * online Dữ liệu xóa biểu mẫu
      *
-     * @param cgformCode Online表单code
-     * @param dataIds    数据ID，可逗号分割
+     * @param cgformCode Online Biểu mẫu code
+     * @param dataIds    ID dữ liệu, có thể phân tách bằng dấu phẩy
      * @return
      */
     @DeleteMapping("/online/api/cgform/cgformDeleteDataByCode")
     String cgformDeleteDataByCode(@RequestParam("cgformCode") String cgformCode, @RequestParam("dataIds") String dataIds);
 
     /**
-     * 【cgreport】通过 head code 获取 sql语句，并执行该语句返回查询数据
+     * [cgreport] Lấy câu lệnh SQL qua head code và thực thi câu lệnh đó để trả về dữ liệu truy vấn
      *
-     * @param code     报表Code，如果没传ID就通过code查
+     * @param code     Code báo cáo, nếu không truyền ID thì tra cứu qua code
      * @param forceKey
      * @param dataList
      * @return
@@ -76,7 +76,7 @@ public interface IOnlineBaseExtApi {
     Map<String, Object> cgreportGetData(@RequestParam("code") String code, @RequestParam("forceKey") String forceKey, @RequestParam("dataList") String dataList);
 
     /**
-     * 【cgreport】对 cgreportGetData 的返回值做优化，封装 DictModel 集合
+     * [cgreport] Tối ưu giá trị trả về của cgreportGetData, đóng gói thành tập hợp DictModel
      * @param code
      * @param dictText
      * @param dictCode

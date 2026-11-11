@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * @Description: 职务表
+ * @Description: Bảng chức vụ
  * @Author: jeecg-boot
  * @Date: 2019-09-19
  * @Version: V1.0
@@ -18,21 +18,21 @@ import java.util.List;
 public interface SysPositionMapper extends BaseMapper<SysPosition> {
 
     /**
-     * 通过用户id获取职位名称
+     * Lấy tên chức vụ qua ID người dùng
      * @param userId
      * @return
      */
     List<SysPosition> getPositionList(@Param("userId") String userId);
 
     /**
-     * 通过职位id获取职位名称
+     * Lấy tên chức vụ qua ID chức vụ
      * @param postList
      * @return
      */
     List<SysPosition> getPositionName(@Param("postList") List<String> postList);
 
     /**
-     * 根据职位名称获取职位id
+     * Lấy chức vụ theo tên chức vụ id
      * @param name
      * @return
      */
@@ -40,10 +40,10 @@ public interface SysPositionMapper extends BaseMapper<SysPosition> {
     List<String> getPositionIdByName(@Param("name") String name, @Param("tenantId") Integer tenantId, @Param("page") Page<SysPosition> page);
 
     /**
-     * 批量通过用户id列表查询职位（含userId字段，用于批量同步场景）
+     * Truy vấn hàng loạt chức vụ theo danh sách id người dùng (chứa trường userId, dùng trong kịch bản đồng bộ hàng loạt)
      *
-     * @param userIds 用户id列表
-     * @return 职位VO列表（每条记录含userId字段，供调用方分组）
+     * @param userIds Danh sách ID người dùng
+     * @return Danh sách VO vị trí (mỗi bản ghi chứa trường userId để phía gọi nhóm lại)
      */
     List<SysPositionVO> getPositionListByUserIds(@Param("userIds") List<String> userIds);
 

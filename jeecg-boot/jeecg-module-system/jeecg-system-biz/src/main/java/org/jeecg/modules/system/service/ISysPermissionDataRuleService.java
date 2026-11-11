@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 菜单权限规则 服务类
+ * Quy tắc quyền hạn menu — Lớp Service
  * </p>
  *
  * @Author huangzhilin
@@ -17,7 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ISysPermissionDataRuleService extends IService<SysPermissionDataRule> {
 
 	/**
-	 * 根据菜单id查询其对应的权限数据
+	 * Truy vấn dữ liệu quyền tương ứng theo id menu
 	 * 
 	 * @param permissionId
      * @return List<SysPermissionDataRule>
@@ -25,7 +25,7 @@ public interface ISysPermissionDataRuleService extends IService<SysPermissionDat
 	List<SysPermissionDataRule> getPermRuleListByPermId(String permissionId);
 
 	/**
-	 * 根据页面传递的参数查询菜单权限数据
+	 * Theo tham số trang truyền sang, truy vấn dữ liệu quyền hạn menu
 	 * @param permRule
 	 * @return
 	 */
@@ -33,7 +33,7 @@ public interface ISysPermissionDataRuleService extends IService<SysPermissionDat
 	
 	
 	/**
-	  * 根据菜单ID和用户名查找数据权限配置信息
+	  * Tìm thông tin cấu hình quyền dữ liệu theo ID menu và tên người dùng
 	 * @param permissionId
 	 * @param username
 	 * @return
@@ -41,13 +41,13 @@ public interface ISysPermissionDataRuleService extends IService<SysPermissionDat
 	List<SysPermissionDataRule> queryPermissionDataRules(String username,String permissionId);
 	
 	/**
-	 * 新增菜单权限配置 修改菜单rule_flag
+	 * Thêm cấu hình quyền hạn menu, sửa menu rule_flag
 	 * @param sysPermissionDataRule
 	 */
 	public void savePermissionDataRule(SysPermissionDataRule sysPermissionDataRule);
 	
 	/**
-	 * 删除菜单权限配置 判断菜单还有无权限
+	 * Xóa cấu hình quyền hạn menu, phán đoán menu còn quyền hạn hay không
 	 * @param dataRuleId
 	 */
 	public void deletePermissionDataRule(String dataRuleId);

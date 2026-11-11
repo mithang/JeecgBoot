@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.system.mapper.SysPositionMapper">
 
-    <!--通过用户id获取职位数据-->
+    <!--Lấy dữ liệu chức vụ qua ID người dùng-->
     <select id="getPositionList" resultType="org.jeecg.modules.system.entity.SysPosition">
         SELECT sp.name,sp.id FROM sys_position sp
         INNER JOIN sys_user_position sup on sp.id = sup.position_id
@@ -10,7 +10,7 @@
         sup.user_id = #{userId}
     </select>
 
-    <!--通过职位id获取职位名称-->
+    <!--Lấy tên chức vụ qua ID chức vụ-->
     <select id="getPositionName" resultType="org.jeecg.modules.system.entity.SysPosition">
         SELECT name FROM sys_position
         WHERE
@@ -20,7 +20,7 @@
         </foreach>
     </select>
 
-    <!--批量通过用户id列表查询职位，结果含userId字段，供批量同步场景分组使用-->
+    <!--Truy vấn hàng loạt chức vụ theo danh sách id người dùng, kết quả chứa trường userId, dùng để nhóm trong kịch bản đồng bộ hàng loạt-->
     <select id="getPositionListByUserIds" resultType="org.jeecg.modules.system.vo.SysPositionVO">
         SELECT sp.name, sp.id, sup.user_id AS userId
         FROM sys_position sp

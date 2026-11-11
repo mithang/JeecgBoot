@@ -5,13 +5,13 @@ import org.jeecg.modules.system.entity.SysDataLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * @Description: 数据日志service接口
+ * @Description: Interface service nhật ký dữ liệu
  * @author: jeecg-boot
  */
 public interface ISysDataLogService extends IService<SysDataLog> {
 	
 	/**
-	 * 添加数据日志
+	 * Thêm nhật ký dữ liệu
 	 * @param tableName
 	 * @param dataId
 	 * @param dataContent

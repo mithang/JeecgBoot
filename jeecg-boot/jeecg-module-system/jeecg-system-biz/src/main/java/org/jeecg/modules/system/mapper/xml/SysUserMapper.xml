@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.system.mapper.SysUserMapper">
 
-	<!-- 根据用户名查询 -->
+	<!-- Truy vấn theo tên người dùng -->
 	<select id="getUserByName" resultType="org.jeecg.modules.system.entity.SysUser">
 		select * from  sys_user  where username = #{username} and del_flag = 0
 	</select>
 	
-	<!-- 根据用户名查询用户ID -->
+	<!-- Truy vấn người dùng theo tên người dùng ID -->
 	<select id="getUserIdByName" resultType="String">
 		select id from  sys_user  where username = #{username} and del_flag = 0
 	</select>
 	
-	<!-- 根据用户ids批量查询用户账号 -->
+	<!-- Truy vấn hàng loạt tài khoản người dùng theo ids người dùng -->
 	<select id="getUsernameByIds" resultType="String">
 		select username from  sys_user  where del_flag = 0 and status = 1 and id in
 		<foreach collection="userIds" index="index" item="id" open="(" separator="," close=")">
@@ -20,7 +20,7 @@
 		</foreach>
 	</select>
 
-	<!-- 根据部门Id查询 -->
+	<!-- Truy vấn theo Id phòng ban -->
 	<select id="getUserByDepId" resultType="org.jeecg.modules.system.entity.SysUser">
 		select * from sys_user where del_flag = 0 and id in (select user_id from sys_user_depart where dep_id=#{departId})
 		<if test="username!=null and username!=''">
@@ -28,7 +28,7 @@
 		</if>
 	</select>
 
-	<!-- 查询部门和子部门下的所有用户账号 -->
+	<!-- Truy vấn tất cả tài khoản người dùng thuộc phòng ban và các phòng ban con -->
 	<select id="getUserAccountsByDepCode" resultType="String">
 		<if test="orgCode != null">
 			<bind name="bindOrgCode" value="orgCode+'%'"/>
@@ -36,7 +36,7 @@
 		select username from sys_user where del_flag = 0 and id in (select user_id from sys_user_depart where dep_id in (select id from sys_depart where org_code LIKE #{bindOrgCode}))
 	</select>
 
-	<!-- 查询用户的所属部门名称信息 -->
+	<!-- Truy vấn thông tin tên phòng ban thuộc về của người dùng -->
 	<select id="getDepNamesByUserIds" resultType="org.jeecg.modules.system.vo.SysUserDepVo">
 		select d.depart_name,ud.user_id from sys_user_depart ud,sys_depart d where d.id = ud.dep_id and ud.user_id in
 		<foreach collection="userIds" index="index" item="id" open="(" separator="," close=")">
@@ -44,7 +44,7 @@
 		</foreach>
 	</select>
 
-	<!-- 通过多个部门IDS，查询部门下的用户信息 -->
+	<!-- Truy vấn thông tin người dùng thuộc phòng ban qua nhiều IDS phòng ban -->
 	<select id="getUserByDepIds" resultType="org.jeecg.modules.system.entity.SysUser">
 		select * from sys_user where del_flag = 0
 		<if test="departIds!=null  and departIds.size()>0">
@@ -64,7 +64,7 @@
 		</if>
 	</select>
 
-	<!-- 根据角色Id查询 -->
+	<!-- Truy vấn theo Id vai trò -->
 	<select id="getUserByRoleId" resultType="org.jeecg.modules.system.entity.SysUser">
 		select * from sys_user where del_flag = 0 and id in (select user_id from sys_user_role where role_id=#{roleId})
 		<if test="username!=null and username!=''">
@@ -75,10 +75,10 @@
 		</if>
 	</select>
 
-	<!-- 根据用户组Id查询 -->
+	<!-- Truy vấn theo Id nhóm người dùng -->
 	<select id="getUserByUgroupId" resultType="org.jeecg.modules.system.entity.SysUser">
 		select * from sys_user where del_flag = 0 and id in (select user_id from sys_ugroup_user where group_id=#{groupId})		
-		<!-- update by lvdandan 20260818【LHZP-864】【流程】指定下一步处理人，没有排除已经冻结的账号  -->                         
+		<!-- update by lvdandan 20260818【LHZP-864][Quy trình] Chỉ định người xử lý bước tiếp theo nhưng chưa loại trừ các tài khoản đã bị đóng băng  -->                         
 		<if test="status!=null and status!=''">
 			and status = #{status}
 		</if>
@@ -90,7 +90,7 @@
 		</if>
 	</select>
 
-	<!--  修改用户部门code -->
+	<!--  Chỉnh sửa phòng ban người dùng code -->
 	<update id="updateUserDepart">
 		UPDATE sys_user SET
 		<if test="orgCode!=null and loginTenantId!=null">
@@ -109,17 +109,17 @@
 		where username = #{username}
 	</update>
 
-	<!-- 根据手机号查询 -->
+	<!-- Truy vấn theo số điện thoại -->
 	<select id="getUserByPhone"  resultType="org.jeecg.modules.system.entity.SysUser">
 		select * from  sys_user  where phone = #{phone} and del_flag = 0
 	</select>
 	
-	<!-- 根据邮箱查询用户信息 -->
+	<!-- Truy vấn thông tin người dùng theo email -->
 	<select id="getUserByEmail" resultType="org.jeecg.modules.system.entity.SysUser">
 	select * from  sys_user  where email = #{email} and del_flag = 0
 	</select>
 
-	<!-- SQL片段：getUserByOrgCode 的 FROM 和 WHERE 部分 -->
+	<!-- SQL Đoạn: phần FROM và WHERE của getUserByOrgCode -->
 	<sql id="getUserByOrgCodeFromSql">
 		FROM
 		sys_depart
@@ -144,7 +144,7 @@
 		</if>
 	</sql>
 
-	<!-- 根据 orgCode 查询用户，包括子部门下的用户 -->
+	<!-- Truy vấn người dùng theo orgCode, bao gồm cả người dùng thuộc các phòng ban con -->
 	<select id="getUserByOrgCode" resultType="org.jeecg.modules.system.model.SysUserSysDepartModel">
 		SELECT
 			sys_user.id AS id,
@@ -163,12 +163,12 @@
             sys_user.sort,sys_user.create_time desc
 	</select>
 
-	<!-- 查询 getUserByOrgCode 的总数-->
+	<!-- Truy vấn tổng số của getUserByOrgCode-->
 	<select id="getUserByOrgCodeTotal" resultType="java.lang.Integer">
 		SELECT COUNT(1) <include refid="getUserByOrgCodeFromSql"/>
 	</select>
 
-	<!-- 批量删除角色的与用户关系-->
+	<!-- Xóa hàng loạt quan hệ giữa vai trò và người dùng-->
 	<update id="deleteBathRoleUserRelation">
 		delete from sys_user_role
 		where role_id in
@@ -176,7 +176,7 @@
 			#{id}
 		</foreach>
 	</update>
-	<!-- 批量删除角色的与权限关系-->
+	<!-- Xóa hàng loạt quan hệ giữa vai trò và quyền hạn-->
 	<update id="deleteBathRolePermissionRelation">
 		delete from sys_role_permission
 		where role_id in
@@ -185,12 +185,12 @@
 		</foreach>
 	</update>
 
-	<!-- 查询被逻辑删除的用户 -->
+	<!-- Truy vấn người dùng đã bị xóa logic -->
 	<select id="selectLogicDeleted" resultType="org.jeecg.modules.system.entity.SysUser">
 		SELECT * FROM sys_user ${ew.customSqlSegment}
 	</select>
 
-	<!-- 更新被逻辑删除的用户 -->
+	<!-- Cập nhật người dùng đã bị xóa logic -->
 	<update id="revertLogicDeleted">
 		UPDATE
 			sys_user
@@ -206,7 +206,7 @@
 			</foreach>
 	</update>
 
-	<!-- 彻底删除被逻辑删除的用户 -->
+	<!-- Xóa hoàn toàn người dùng đã bị xóa logic -->
 	<delete id="deleteLogicDeleted">
 		DELETE FROM sys_user WHERE del_flag = 1 AND id IN
 		<foreach collection="userIds" item="userId" open="(" close=")" separator="," >
@@ -214,7 +214,7 @@
 		</foreach>
 	</delete>
 
-	<!-- 更新空字符串为null -->
+	<!-- Cập nhật chuỗi rỗng thành null -->
 	<update id="updateNullByEmptyString">
 		UPDATE sys_user
 		<if test="fieldName == 'email'">
@@ -225,7 +225,7 @@
 		</if>
 	</update>
 
-	<!-- 通过多个部门IDS，查询部门下的用户信息 -->
+	<!-- Truy vấn thông tin người dùng thuộc phòng ban qua nhiều IDS phòng ban -->
 	<select id="queryByDepIds" resultType="org.jeecg.modules.system.entity.SysUser">
 		select * from sys_user where del_flag = 0
 		<if test="departIds!=null  and departIds.size()>0">
@@ -240,7 +240,7 @@
 		</if>
 	</select>
 
-	<!--根据角色查询用户-->
+	<!--Truy vấn người dùng theo vai trò-->
 	<select id="selectUserListByRoleId" resultType="org.jeecg.modules.system.entity.SysUser">
 		select DISTINCT a.* from sys_user a
 		left join sys_user_role sur on sur.user_id = a.id
@@ -259,7 +259,7 @@
 			)
 		</if>
 		  
-		<!--【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页 需要将不符合的用户id排除-->
+		<!--【QQYUN-8239] Vai trò người dùng, khi thêm người dùng trả về 2 trang dữ liệu nhưng thực tế chỉ hiển thị một trang, cần loại bỏ các id người dùng không phù hợp-->
 		<if test="excludeUserIdList!=null and excludeUserIdList.size()>0">
 			and a.id not in
 			<foreach collection="excludeUserIdList" item="userId" open="(" close=")" separator=",">
@@ -269,7 +269,7 @@
 		order by a.sort, a.create_time desc
 	</select>
 
-	<!--获取租户下的用户离职列表信息-->
+	<!--Lấy thông tin danh sách người dùng đã nghỉ việc thuộc tenant-->
 	<select id="getTenantQuitList" resultType="org.jeecg.modules.system.entity.SysUser">
 		select su.id,su.username,su.realname,su.sex,su.avatar,su.create_time,sut.create_by from sys_user su
 		join sys_user_tenant sut on sut.user_id = su.id and sut.status = '2'
@@ -281,7 +281,7 @@
 		</if>
 	</select>
 
-	<!--获取租户下的有效用户ids信息-->
+	<!--Lấy thông tin ids người dùng hợp lệ thuộc tenant-->
 	<select id="getTenantUserIdList" resultType="java.lang.String" parameterType="java.lang.Integer">
 		SELECT DISTINCT( su.id ) id
 		FROM sys_user su
@@ -300,7 +300,7 @@
 		</choose>
 	</select>
 	
-  <!--更新刪除状态和离职状态-->
+  <!--Cập nhật trạng thái xóa và trạng thái nghỉ việc-->
   <update id="updateStatusAndFlag">
     UPDATE
     sys_user
@@ -317,7 +317,7 @@
     </foreach>
   </update>
 
-	<!--根据部门id获取用户数据-->
+	<!--Lấy dữ liệu người dùng theo ID phòng ban-->
 	<select id="getUserByDepartsTenantId" resultType="org.jeecg.modules.system.entity.SysUser">
 		select su.* from sys_user su
 		join sys_user_tenant sut on su.id = sut.user_id
@@ -335,7 +335,7 @@
 	</select>
     
 
-    <!-- SQL片段：getDepPostListByIdUserName WHERE 部分 -->
+    <!-- SQL Đoạn: phần WHERE của getDepPostListByIdUserName -->
     <sql id="getDepPostListByIdUserNameSql">
         WHERE
         su.status = 1
@@ -360,7 +360,7 @@
         </if>
     </sql>
     
-    <!-- 根据部门id和用户名获取部门岗位用户分页列表 -->
+    <!-- Lấy danh sách phân trang người dùng theo vị trí phòng ban theo id phòng ban và tên người dùng -->
 	<select id="getDepPostListByIdUserName" resultType="org.jeecg.modules.system.entity.SysUser">
         SELECT su.* from
         (
@@ -374,7 +374,7 @@
         order by su.sort,su.create_time desc
     </select>
 
-    <!-- SQL片段：getDepartPostListByIdUserRealName WHERE部分 -->
+    <!-- SQL Đoạn: phần WHERE của getDepartPostListByIdUserRealName -->
     <sql id="getDepartPostListByIdUserRealNameSql">
         WHERE
         su.status = 1
@@ -394,7 +394,7 @@
         </if>
     </sql>
     
-    <!-- 根据部门id、用户名和真实姓名获取部门岗位用户分页列表 -->
+    <!-- Lấy danh sách phân trang người dùng theo vị trí phòng ban dựa trên id phòng ban, tên người dùng và tên thật -->
 	<select id="getDepartPostListByIdUserRealName" resultType="org.jeecg.modules.system.entity.SysUser">
         SELECT su.* from
         (
@@ -410,7 +410,7 @@
         order by su.sort,su.create_time desc
     </select>
 
-    <!-- SQL片段：queryDepartPostUserByOrgCode WHERE部分 -->
+    <!-- SQL Đoạn: phần WHERE của queryDepartPostUserByOrgCode -->
     <sql id="queryDepartPostUserByOrgCodeSql">
         WHERE
         <if test="orgCode == null">
@@ -423,7 +423,7 @@
         su.del_flag = 0 AND sd.org_code LIKE #{bindOrgCode}
     
         <if test="userParams != null">
-			<!-- update by lvdandan 20260818【LHZP-864】【流程】指定下一步处理人，没有排除已经冻结的账号  -->
+			<!-- update by lvdandan 20260818【LHZP-864][Quy trình] Chỉ định người xử lý bước tiếp theo nhưng chưa loại trừ các tài khoản đã bị đóng băng  -->
 			<if test="userParams.status != null and userParams.status!= ''">
 				AND su.status = #{userParams.status}
 			</if>
@@ -437,7 +437,7 @@
             </if>
         </if>
     </sql>
-    <!-- 查询部门、岗位下的用户 包括子部门下的用户 -->
+    <!-- Truy vấn người dùng thuộc phòng ban, vị trí, bao gồm cả người dùng thuộc phòng ban cấp dưới -->
 	<select id="queryDepartPostUserByOrgCode" resultType="org.jeecg.modules.system.model.SysUserSysDepPostModel">
         SELECT su.* from
         (
@@ -464,7 +464,7 @@
         order by su.sort,su.create_time desc
     </select>
     
-    <!--查询部门下的用户包括子部门下的用户-->
+    <!--Truy vấn người dùng thuộc phòng ban, bao gồm cả người dùng thuộc phòng ban con-->
 	<select id="queryDepartUserByOrgCode" resultType="org.jeecg.modules.system.model.SysUserSysDepPostModel">
 		SELECT user_info.* FROM (
 			SELECT DISTINCT su.id, su.realname, su.avatar, su.sex, su.birthday, su.telephone, su.email, su.phone, su.main_dep_post_id, su.iz_hide_contact, su.sort, su.create_time
@@ -491,7 +491,7 @@
 		order by user_info.sort,user_info.create_time desc
     </select>
 
-		<!-- 根据用户名查询用户的主部门信息 -->
+		<!-- Truy vấn thông tin phòng ban chính của người dùng theo tên người dùng -->
 		<select id="getMainDepartByUsername" resultType="org.jeecg.modules.system.entity.SysDepart" parameterType="java.lang.String">
 			SELECT sdp.* FROM sys_depart sdp
 			WHERE EXISTS (

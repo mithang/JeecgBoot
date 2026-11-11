@@ -10,14 +10,14 @@ import java.util.List;
 import org.jeecg.modules.system.vo.SysUserDepPostVo;
 
 /**
- * @Description: 部门岗位用户关联表 Mapper
+ * @Description: Bảng liên kết người dùng chức vụ phòng ban Mapper
  * @author: wangshuai
  * @date: 2025/9/5 12:01
  */
 public interface SysUserDepPostMapper extends BaseMapper<SysUserDepPost> {
 
     /**
-     * 通过用户id查询部门岗位用户
+     * Truy vấn người dùng theo vị trí phòng ban qua id người dùng
      *
      * @param userId
      * @return
@@ -26,11 +26,11 @@ public interface SysUserDepPostMapper extends BaseMapper<SysUserDepPost> {
     List<String> getDepPostByUserId(@Param("userId") String userId);
 
     /**
-     * 批量查询多个用户的兼职部门ID（含用户ID映射，跨数据库兼容，消除N+1查询）
+     * Truy vấn hàng loạt ID phòng ban kiêm nhiệm của nhiều người dùng (chứa ánh xạ ID người dùng, tương thích đa cơ sở dữ liệu, loại bỏ N+1 truy vấn)
      * @author scott
-     * @since 2026-07-01 listAll接口N+1查询改造
-     * @param userIds 用户ID列表
-     * @return 每条含 userId 和 depId
+     * @since 2026-07-01 listAll API N+1 Cải tiến truy vấn
+     * @param userIds Danh sách ID người dùng
+     * @return Mỗi bản ghi chứa userId và depId
      */
     List<SysUserDepPostVo> getDepPostByUserIds(@Param("userIds") List<String> userIds);
 }

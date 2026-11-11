@@ -11,35 +11,35 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 分类字典
+ * @Description: Danh mục phân loại
  * @Author: jeecg-boot
  * @Date:   2019-05-29
  * @Version: V1.0
  */
 public interface ISysCategoryService extends IService<SysCategory> {
 
-	/**根节点父ID的值*/
+	/**Giá trị ID cha của nút gốc*/
 	public static final String ROOT_PID_VALUE = "0";
 
     /**
-     * 存在子节点
+     * Tồn tại nút con
      */
     public static final String HAS_CHILD = "1";
 
     /**
-     * 添加分类字典
+     * Thêm danh mục phân loại
      * @param sysCategory
      */
 	JSONObject addSysCategory(SysCategory sysCategory);
 
     /**
-     * 修改分类字典
+     * Chỉnh sửa danh mục phân loại
      * @param sysCategory
      */
 	void updateSysCategory(SysCategory sysCategory);
 	
 	/**
-     * 根据父级编码加载分类字典的数据
+     * Tải dữ liệu danh mục phân loại theo mã cấp cha
 	 * @param pcode
 	 * @return
      * @throws JeecgBootException
@@ -47,14 +47,14 @@ public interface ISysCategoryService extends IService<SysCategory> {
 	public List<TreeSelectModel> queryListByCode(String pcode) throws JeecgBootException;
 	
 	/**
-	  * 根据pid查询子节点集合
+	  * Truy vấn tập hợp nút con theo pid
 	 * @param pid
 	 * @return
 	 */
 	public List<TreeSelectModel> queryListByPid(String pid);
 
 	/**
-	 * 根据pid查询子节点集合,支持查询条件
+	 * Truy vấn tập hợp nút con theo pid,Hỗ trợ điều kiện truy vấn
 	 * @param pid
 	 * @param condition
 	 * @return
@@ -62,37 +62,37 @@ public interface ISysCategoryService extends IService<SysCategory> {
 	public List<TreeSelectModel> queryListByPid(String pid, Map<String,String> condition);
 
 	/**
-	 * 根据code查询id
+	 * Truy vấn theo code id
 	 * @param code
 	 * @return
 	 */
 	public String queryIdByCode(String code);
 
 	/**
-	 * 删除节点时同时删除子节点及修改父级节点
+	 * Khi xóa nút đồng thời xóa nút con và sửa nút cha
 	 * @param ids
 	 */
 	void deleteSysCategory(String ids);
 
 	/**
-	 * 从分类列表中筛选选中节点及其全部子节点
+	 * Lọc nút đã chọn và tất cả nút con của nó từ danh sách phân loại
 	 *
-	 * @param categoryList 分类列表
-	 * @param selectedIds 选中节点ID
-	 * @return 选中节点及其全部子节点
+	 * @param categoryList Danh sách phân loại
+	 * @param selectedIds Nút đã chọn ID
+	 * @return Nút đã chọn và toàn bộ nút con của nó
 	 */
 	List<SysCategory> filterSelectionWithChildren(List<SysCategory> categoryList, Collection<String> selectedIds);
 
 	/**
-	 * 按父子层级排列分类列表
+	 * Sắp xếp danh sách phân loại theo cấp cha-con
 	 *
-	 * @param categoryList 分类列表
-	 * @return 父节点在前、子节点紧随其后的分类列表
+	 * @param categoryList Danh sách phân loại
+	 * @return Danh sách phân loại mà nút cha đứng trước, nút con theo sát ngay sau
 	 */
 	List<SysCategory> sortByHierarchy(List<SysCategory> categoryList);
 
 	/**
-	 * 分类字典控件数据回显[表单页面]
+	 * Hiển thị lại dữ liệu điều khiển danh mục phân loại[Trang biểu mẫu]
 	 *
 	 * @param ids
 	 * @return
@@ -100,19 +100,19 @@ public interface ISysCategoryService extends IService<SysCategory> {
 	List<String> loadDictItem(String ids);
 
 	/**
-	 * 分类字典控件数据回显[表单页面]
+	 * Hiển thị lại dữ liệu điều khiển danh mục phân loại[Trang biểu mẫu]
 	 *
 	 * @param ids
-	 * @param delNotExist 是否移除不存在的项，设为false如果某个key不存在数据库中，则直接返回key本身
+	 * @param delNotExist Có gỡ bỏ các mục không tồn tại hay không; đặt thành false thì nếu một key nào đó không tồn tại trong cơ sở dữ liệu sẽ trả về trực tiếp chính key đó
 	 * @return
 	 */
 	List<String> loadDictItem(String ids, boolean delNotExist);
 
 	/**
-	 * 【仅导入使用】分类字典控件反向翻译
+	 * Điều khiển danh mục phân loại dịch ngược
 	 *
 	 * @param names
-	 * @param delNotExist 是否移除不存在的项，设为false如果某个key不存在数据库中，则直接返回key本身
+	 * @param delNotExist Có gỡ bỏ các mục không tồn tại hay không; đặt thành false thì nếu một key nào đó không tồn tại trong cơ sở dữ liệu sẽ trả về trực tiếp chính key đó
 	 * @return
 	 */
 	List<String> loadDictItemByNames(String names, boolean delNotExist);

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
- * airag工作流运行API（微服务Feign版）
- * 单体模式下由airag-flow模块的AiragFlowApiImpl直接实现，本Feign接口不生效；
- * 微服务模式下通过Feign远程调用airag-flow服务暴露的HTTP端点
+ * airag API chạy workflow (bản Feign vi dịch vụ)
+ * Trong chế độ đơn thể, do airag-flow AiragFlowApiImpl của module triển khai trực tiếp, API Feign này không có hiệu lực;
+ * Trong chế độ microservice, gọi từ xa qua Feign airag-flow Endpoint HTTP mà dịch vụ cung cấp
  *
  * @author zhang
  * @date 2026-09-10
@@ -24,19 +24,19 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public interface IAiragFlowApi {
 
 	/**
-	 * 运行AI工作流
+	 * Chạy quy trình AI
 	 *
-	 * @param airagFlowDTO 流程运行参数
-	 * @return 流程执行结果
+	 * @param airagFlowDTO Tham số chạy quy trình
+	 * @return Kết quả thực thi quy trình
 	 */
 	@PostMapping("/airag/flow/api/runFlow")
 	Object runFlow(@RequestBody AiragFlowDTO airagFlowDTO);
 
 	/**
-	 * 流式运行AI工作流
+	 * Chạy luồng AI theo dạng streaming
 	 *
-	 * @param airagFlowDTO 流程运行参数
-	 * @return SSE流
+	 * @param airagFlowDTO Tham số chạy quy trình
+	 * @return Luồng SSE
 	 */
 	@PostMapping("/airag/flow/api/runFlowStream")
 	SseEmitter runFlowStream(@RequestBody AiragFlowDTO airagFlowDTO);

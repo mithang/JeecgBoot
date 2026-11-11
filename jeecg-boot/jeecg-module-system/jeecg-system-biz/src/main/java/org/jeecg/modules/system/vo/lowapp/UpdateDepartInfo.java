@@ -32,7 +32,7 @@ public class UpdateDepartInfo {
     }
 
     /**
-     * 部门负责人ID
+     * Người phụ trách phòng ban ID
      */
     private List<String> chargePersonList;
 }

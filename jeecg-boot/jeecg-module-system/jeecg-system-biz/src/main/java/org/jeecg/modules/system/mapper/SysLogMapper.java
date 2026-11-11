@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * 系统日志表 Mapper 接口
+ * Giao diện Mapper bảng nhật ký hệ thống
  * </p>
  *
  * @Author zhangweijian
@@ -20,35 +20,35 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface SysLogMapper extends BaseMapper<SysLog> {
 
 	/**
-	 * 清空所有日志记录
+	 * Xóa tất cả bản ghi nhật ký
 	 */
 	public void removeAll();
 
 	/**
-	 * 获取系统总访问次数
+	 * Lấy tổng số lần truy cập hệ thống
 	 *
 	 * @return Long
 	 */
 	Long findTotalVisitCount();
 
 	/**
-	 * 获取系统今日访问次数
-	 * @param dayStart 开始时间
-     * @param dayEnd 结束时间
+	 * Lấy số lần truy cập hệ thống hôm nay
+	 * @param dayStart Thời gian bắt đầu
+     * @param dayEnd Thời gian kết thúc
 	 * @return Long
 	 */
 	Long findTodayVisitCount(@Param("dayStart") Date dayStart, @Param("dayEnd") Date dayEnd);
 
 	/**
-	 * 获取系统今日访问 IP数
-	 * @param dayStart 开始时间
-     * @param dayEnd 结束时间
+	 * Lấy số lượng IP truy cập hệ thống hôm nay
+	 * @param dayStart Thời gian bắt đầu
+     * @param dayEnd Thời gian kết thúc
 	 * @return Long
 	 */
 	Long findTodayIp(@Param("dayStart") Date dayStart, @Param("dayEnd") Date dayEnd);
 	
 	/**
-	 *   首页：根据时间统计访问数量/ip数量
+	 *   Trang chủ: thống kê số lượt truy cập theo thời gian/ip Số lượng
 	 * @param dayStart
 	 * @param dayEnd
      * @param dbType

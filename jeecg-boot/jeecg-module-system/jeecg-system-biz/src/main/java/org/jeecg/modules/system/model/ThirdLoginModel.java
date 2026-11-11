@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 第三方登录 信息存储
+ * Đăng nhập bên thứ ba — Lưu trữ thông tin
  * @author: jeecg-boot
  */
 @Data
@@ -13,32 +13,32 @@ public class ThirdLoginModel implements Serializable {
     private static final long serialVersionUID = 4098628709290780891L;
 
     /**
-     * 第三方登录 来源
+     * Nguồn đăng nhập bên thứ ba
      */
     private String source;
 
     /**
-     * 第三方登录 uuid
+     * Đăng nhập bên thứ ba uuid
      */
     private String uuid;
 
     /**
-     * 第三方登录 username
+     * Đăng nhập bên thứ ba username
      */
     private String username;
 
     /**
-     * 第三方登录 头像
+     * Ảnh đại diện đăng nhập bên thứ ba
      */
     private String avatar;
 
     /**
-     * 账号 后缀第三方登录 防止账号重复
+     * Tài khoản, hậu tố đăng nhập bên thứ ba, tránh trùng lặp tài khoản
      */
     private String suffix;
 
     /**
-     * 操作码 防止被攻击
+     * Mã thao tác, ngăn chặn bị tấn công
      */
     private String operateCode;
 
@@ -47,7 +47,7 @@ public class ThirdLoginModel implements Serializable {
     }
 
     /**
-     * 构造器
+     * Hàm khởi tạo
      * @param source
      * @param uuid
      * @param username
@@ -61,7 +61,7 @@ public class ThirdLoginModel implements Serializable {
     }
 
     /**
-     * 获取登录账号名
+     * Lấy tên tài khoản đăng nhập
      * @return
      */
     public String getUserLoginAccount(){

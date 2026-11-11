@@ -8,7 +8,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @Description: 编码校验规则
+ * @Description: Quy tắc kiểm tra mã
  * @Author: jeecg-boot
  * @Date: 2020-02-04
  * @Version: V1.0
@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ISysCheckRuleService extends IService<SysCheckRule> {
 
     /**
-     * 通过 code 获取规则
+     * Lấy quy tắc qua code
      *
      * @param ruleCode
      * @return
@@ -25,16 +25,16 @@ public interface ISysCheckRuleService extends IService<SysCheckRule> {
 
 
     /**
-     * 通过用户设定的自定义校验规则校验传入的值
+     * Kiểm tra giá trị truyền vào bằng quy tắc kiểm tra tùy chỉnh do người dùng đặt
      *
      * @param checkRule
      * @param value
-     * @return 返回 null代表通过校验，否则就是返回的错误提示文本
+     * @return Trả về null nghĩa là đã qua kiểm tra, nếu không thì trả về nội dung thông báo lỗi
      */
     JSONObject checkValue(SysCheckRule checkRule, String value);
 
     /**
-     * 导入系统校验规则。
+     * Nhập quy tắc kiểm tra hệ thống.
      */
     Result<?> importExcel(MultipartFile file, ImportParams params) throws Exception;
 

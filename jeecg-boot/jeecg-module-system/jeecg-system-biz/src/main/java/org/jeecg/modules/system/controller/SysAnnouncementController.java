@@ -64,7 +64,7 @@ import static org.jeecg.common.constant.CommonConstant.ANNOUNCEMENT_SEND_STATUS_
 
 /**
  * @Title: Controller
- * @Description: 系统通告表
+ * @Description: Bảng thông báo hệ thống
  * @Author: jeecg-boot
  * @Date: 2019-01-02
  * @Version: V1.0
@@ -92,22 +92,22 @@ public class SysAnnouncementController {
 	private RedisUtil redisUtil;
 	@Autowired
 	public RedisTemplate redisTemplate;
-	//常规报错定义
-	private static final String SPECIAL_CHAR_ERROR = "保存失败:消息内容包含数据库不支持的特殊字符，请检查并修改内容!";
-	private static final String CONTENT_TOO_LONG_ERROR = "保存失败:消息内容超过最大长度限制，请缩减内容长度!";
-	private static final String DEFAULT_ERROR = "操作失败，请稍后重试或联系管理员!";
+	//Định nghĩa lỗi thông thường
+	private static final String SPECIAL_CHAR_ERROR = "Lưu thất bại:Nội dung tin nhắn chứa ký tự đặc biệt mà cơ sở dữ liệu không hỗ trợ, vui lòng kiểm tra và sửa nội dung!!";
+	private static final String CONTENT_TOO_LONG_ERROR = "Lưu thất bại:Nội dung tin nhắn vượt quá giới hạn độ dài tối đa, vui lòng rút ngắn nội dung!";
+	private static final String DEFAULT_ERROR = "Thao tác thất bại, vui lòng thử lại sau hoặc liên hệ quản trị viên!";
 	/**
-	 * 通告缓存
+	 * Bộ nhớ đệm thông báo
 	 */
 	String ANNO_CACHE_KEY = "sys:cache:announcement";
 	/**
-	 * QQYUN-5072【性能优化】线上通知消息打开有点慢
+	 * QQYUN-5072 Mở tin nhắn thông báo trực tuyến hơi chậm
 	 */
 	public static ExecutorService cachedThreadPool = new ShiroThreadPoolExecutor(0, 1024,60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 	public static ExecutorService completeNoteThreadPool = new ShiroThreadPoolExecutor(0, 1024,60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 
 	/**
-	  * 分页列表查询
+	  * Truy vấn danh sách phân trang
 	 * @param sysAnnouncement
 	 * @param pageNo
 	 * @param pageSize
@@ -121,7 +121,7 @@ public class SysAnnouncementController {
 									  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 									  HttpServletRequest req) {
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			sysAnnouncement.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
@@ -137,7 +137,7 @@ public class SysAnnouncementController {
 	}
 
 	/**
-	  *   添加
+	  *   Thêm
 	 * @param sysAnnouncement
 	 * @return
 	 */
@@ -146,31 +146,31 @@ public class SysAnnouncementController {
 	public Result<SysAnnouncement> add(@RequestBody SysAnnouncement sysAnnouncement) {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
 		try {
-			// 代码逻辑说明: priority 枚举白名单，防止存入非法 payload 到 sys_announcement.priority 触发存储型 XSS
+			// Giải thích logic mã: priority Whitelist enum, ngăn chặn lưu payload bất hợp pháp vào sys_announcement.priority kích hoạt dạng lưu trữ XSS
 			String pri = sysAnnouncement.getPriority();
 			if (pri != null && !pri.isEmpty()
 					&& !CommonConstant.PRIORITY_H.equals(pri)
 					&& !CommonConstant.PRIORITY_M.equals(pri)
 					&& !CommonConstant.PRIORITY_L.equals(pri)) {
-				return result.error500("priority 参数非法，仅允许 H/M/L");
+				return result.error500("priority Tham số không hợp lệ, chỉ cho phép H/M/L");
 			}
-			// 代码逻辑说明: 标题处理xss攻击的问题
+			// Giải thích logic mã: Vấn đề xử lý tấn công XSS trong tiêu đề
 			String title = XssUtils.scriptXss(sysAnnouncement.getTitile());
 			sysAnnouncement.setTitile(title);
-			//update-begin---author:liusq ---date:2025-04-13  for：【issues/9521】富文本msgContent字段未做XSS过滤，存在存储型XSS漏洞-----------
+			//update-begin---author:liusq ---date:2025-04-13  for：【issues/9521] Trường msgContent rich text chưa được lọc XSS, tồn tại lỗ hổng XSS lưu trữ-----------
 			String msgContent = XssUtils.richTextXss(sysAnnouncement.getMsgContent());
 			sysAnnouncement.setMsgContent(msgContent);
-			//update-end---author:liusq ---date:2025-04-13  for：【issues/9521】富文本msgContent字段未做XSS过滤，存在存储型XSS漏洞-----------
-			// 【安全校验】校验附件文件名，防止路径遍历攻击
+			//update-end---author:liusq ---date:2025-04-13  for：【issues/9521] Trường msgContent rich text chưa được lọc XSS, tồn tại lỗ hổng XSS lưu trữ-----------
+			// 【Kiểm tra bảo mật】Kiểm tra tên tệp đính kèm, ngăn chặn tấn công path traversal
 			SsrfFileTypeFilter.checkPathTraversalBatch(sysAnnouncement.getFiles());
 			sysAnnouncement.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
-            //未发布
+            //Chưa phát hành
 			sysAnnouncement.setSendStatus(CommonSendStatus.UNPUBLISHED_STATUS_0);
-            //流程状态
+            //Trạng thái quy trình
 			sysAnnouncement.setBpmStatus("1");
             sysAnnouncement.setNoticeType(NoticeTypeEnum.NOTICE_TYPE_SYSTEM.getValue());
 			sysAnnouncementService.saveAnnouncement(sysAnnouncement);
-			result.success("添加成功！");
+			result.success("Thêm thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 			result.error500(determineErrorMessage(e));
@@ -179,7 +179,7 @@ public class SysAnnouncementController {
 	}
 
 	/**
-	  *  编辑
+	  *  Chỉnh sửa
 	 * @param sysAnnouncement
 	 * @return
 	 */
@@ -190,30 +190,30 @@ public class SysAnnouncementController {
 		SysAnnouncement sysAnnouncementEntity = sysAnnouncementService.getById(sysAnnouncement.getId());
 		try{
 			if(sysAnnouncementEntity==null) {
-				result.error500("未找到对应实体");
+				result.error500("Không tìm thấy thực thể tương ứng");
 			}else {
-				// 代码逻辑说明: priority 枚举白名单，防止存入非法 payload 到 sys_announcement.priority 触发存储型 XSS
+				// Giải thích logic mã: priority Whitelist enum, ngăn chặn lưu payload bất hợp pháp vào sys_announcement.priority kích hoạt dạng lưu trữ XSS
 				String pri = sysAnnouncement.getPriority();
 				if (pri != null && !pri.isEmpty()
 						&& !CommonConstant.PRIORITY_H.equals(pri)
 						&& !CommonConstant.PRIORITY_M.equals(pri)
 						&& !CommonConstant.PRIORITY_L.equals(pri)) {
-					return result.error500("priority 参数非法，仅允许 H/M/L");
+					return result.error500("priority Tham số không hợp lệ, chỉ cho phép H/M/L");
 				}
-				// 代码逻辑说明: 标题处理xss攻击的问题
+				// Giải thích logic mã: Vấn đề xử lý tấn công XSS trong tiêu đề
 				String title = XssUtils.scriptXss(sysAnnouncement.getTitile());
 				sysAnnouncement.setTitile(title);
-				//update-begin---author:liusq ---date:2025-04-13  for：【issues/9521】富文本msgContent字段未做XSS过滤，存在存储型XSS漏洞-----------
+				//update-begin---author:liusq ---date:2025-04-13  for：【issues/9521] Trường msgContent rich text chưa được lọc XSS, tồn tại lỗ hổng XSS lưu trữ-----------
 				String msgContent = XssUtils.richTextXss(sysAnnouncement.getMsgContent());
 				sysAnnouncement.setMsgContent(msgContent);
-				//update-end---author:liusq ---date:2025-04-13  for：【issues/9521】富文本msgContent字段未做XSS过滤，存在存储型XSS漏洞-----------
-				// 【安全校验】校验附件文件名，防止路径遍历攻击
+				//update-end---author:liusq ---date:2025-04-13  for：【issues/9521] Trường msgContent rich text chưa được lọc XSS, tồn tại lỗ hổng XSS lưu trữ-----------
+				// 【Kiểm tra bảo mật】Kiểm tra tên tệp đính kèm, ngăn chặn tấn công path traversal
 				SsrfFileTypeFilter.checkPathTraversalBatch(sysAnnouncement.getFiles());
 				sysAnnouncement.setNoticeType(NoticeTypeEnum.NOTICE_TYPE_SYSTEM.getValue());
 				boolean ok = sysAnnouncementService.upDateAnnouncement(sysAnnouncement);
-				//TODO 返回false说明什么？
+				//TODO Trả về false nghĩa là gì?
 				if(ok) {
-					result.success("修改成功!");
+					result.success("Chỉnh sửa thành công!");
 				}
 			}
 		} catch (Exception e) {
@@ -223,7 +223,7 @@ public class SysAnnouncementController {
 		return result;
 	}
 	/**
-	  *  简单编辑
+	  *  Chỉnh sửa đơn giản
 	 * @param sysAnnouncement
 	 * @return
 	 */
@@ -233,18 +233,18 @@ public class SysAnnouncementController {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
 		SysAnnouncement sysAnnouncementEntity = sysAnnouncementService.getById(sysAnnouncement.getId());
 		if(sysAnnouncementEntity==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			Integer izTop = sysAnnouncement.getIzTop();
 			sysAnnouncementEntity.setIzTop(oConvertUtils.getInt(izTop,CommonConstant.IZ_TOP_0));
 			sysAnnouncementService.updateById(sysAnnouncementEntity);
-			result.success("修改成功!");
+			result.success("Chỉnh sửa thành công!");
 		}
 		return result;
 	}
 
 	/**
-	  *   通过id删除
+	  *   Xóa theo id
 	 * @param id
 	 * @return
 	 */
@@ -254,12 +254,12 @@ public class SysAnnouncementController {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
 		SysAnnouncement sysAnnouncement = sysAnnouncementService.getById(id);
 		if(sysAnnouncement==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			sysAnnouncement.setDelFlag(CommonConstant.DEL_FLAG_1.toString());
 			boolean ok = sysAnnouncementService.updateById(sysAnnouncement);
 			if(ok) {
-				result.success("删除成功!");
+				result.success("Xóa thành công!");
 			}
 		}
 
@@ -267,7 +267,7 @@ public class SysAnnouncementController {
 	}
 
 	/**
-	  *  批量删除
+	  *  Xóa hàng loạt
 	 * @param ids
 	 * @return
 	 */
@@ -276,7 +276,7 @@ public class SysAnnouncementController {
 	public Result<SysAnnouncement> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
 		if(ids==null || "".equals(ids.trim())) {
-			result.error500("参数不识别！");
+			result.error500("Không nhận dạng được tham số!");
 		}else {
 			String[] id = ids.split(",");
 			for(int i=0;i<id.length;i++) {
@@ -284,13 +284,13 @@ public class SysAnnouncementController {
 				announcement.setDelFlag(CommonConstant.DEL_FLAG_1.toString());
 				sysAnnouncementService.updateById(announcement);
 			}
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		return result;
 	}
 
 	/**
-	  * 通过id查询
+	  * Tìm kiếm theo id
 	 * @param id
 	 * @return
 	 */
@@ -299,7 +299,7 @@ public class SysAnnouncementController {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
 		SysAnnouncement sysAnnouncement = sysAnnouncementService.getById(id);
 		if(sysAnnouncement==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			result.setResult(sysAnnouncement);
 			result.setSuccess(true);
@@ -308,7 +308,7 @@ public class SysAnnouncementController {
 	}
 
 	/**
-	 *	 更新发布操作
+	 *	 Cập nhật thao tác phát hành
 	 * @param id
 	 * @return
 	 */
@@ -318,9 +318,9 @@ public class SysAnnouncementController {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
 		SysAnnouncement sysAnnouncement = sysAnnouncementService.getById(id);
 		if(sysAnnouncement==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
-            //发布中
+            //Đang phát hành
 			sysAnnouncement.setSendStatus(CommonSendStatus.PUBLISHED_STATUS_1);
 			sysAnnouncement.setSendTime(new Date());
 			String currentUserName = JwtUtil.getUserNameByToken(request);
@@ -330,27 +330,27 @@ public class SysAnnouncementController {
                 sysAnnouncement.setNoticeType(NoticeTypeEnum.NOTICE_TYPE_SYSTEM.getValue());
             }
 			if(ok) {
-				result.success("系统通知推送成功");
+				result.success("Đẩy thông báo hệ thống thành công");
 				if(sysAnnouncement.getMsgType().equals(CommonConstant.MSG_TYPE_ALL)) {
-					// 补全公告和用户之前的关系
+					// Bổ sung quan hệ giữa thông báo và người dùng
 					sysAnnouncementService.batchInsertSysAnnouncementSend(sysAnnouncement.getId(), sysAnnouncement.getTenantId());
 					
-					// 推送websocket通知
+					// Đẩy thông báo websocket
 					JSONObject obj = new JSONObject();
 			    	obj.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_TOPIC);
 					obj.put(WebsocketConst.MSG_ID, sysAnnouncement.getId());
 					obj.put(WebsocketConst.MSG_TXT, sysAnnouncement.getTitile());
 					obj.put(CommonConstant.NOTICE_TYPE, sysAnnouncement.getNoticeType());
 			    	webSocket.sendMessage(obj.toJSONString());
-					//update-begin-author:liusq---date:2025-11-13--for: JHHB-827 【审批消息】移动端需要有推送 -全推送
+					//update-begin-author:liusq---date:2025-11-13--for: JHHB-827 [Tin nhắn phê duyệt] Thiết bị di động cần có đẩy tin -Đẩy toàn bộ
 					PushMessageDTO pushMessageDTO = new PushMessageDTO();
 					pushMessageDTO.setTitle(sysAnnouncement.getTitile());
 					pushMessageDTO.setPushType(CommonConstant.MSG_TYPE_ALL);
 					pushMessageDTO.setContent(sysAnnouncement.getMsgAbstract());
 					sysBaseApi.uniPushMsgToUser(pushMessageDTO);
-					//update-begin-author:liusq---date:2025-11-13--for: JHHB-827 【审批消息】移动端需要有推送 -全推送
+					//update-begin-author:liusq---date:2025-11-13--for: JHHB-827 [Tin nhắn phê duyệt] Thiết bị di động cần có đẩy tin -Đẩy toàn bộ
 				}else {
-					// 2.插入用户通告阅读标记表记录
+					// 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
 					String userId = sysAnnouncement.getUserIds();
 					String[] userIds = userId.substring(0, (userId.length()-1)).split(",");
 					String anntId = sysAnnouncement.getId();
@@ -361,16 +361,16 @@ public class SysAnnouncementController {
 					obj.put(WebsocketConst.MSG_TXT, sysAnnouncement.getTitile());
                     obj.put(CommonConstant.NOTICE_TYPE, sysAnnouncement.getNoticeType());
 			    	webSocket.sendMessage(userIds, obj.toJSONString());
-					//update-begin-author:liusq---date:2025-11-13--for: JHHB-827 【审批消息】移动端需要有推送
+					//update-begin-author:liusq---date:2025-11-13--for: JHHB-827 [Tin nhắn phê duyệt] Thiết bị di động cần có đẩy tin
 					PushMessageDTO pushMessageDTO = new PushMessageDTO();
 					pushMessageDTO.setTitle(sysAnnouncement.getTitile());
 					pushMessageDTO.setUserIds(Arrays.asList(userIds));
 					pushMessageDTO.setContent(sysAnnouncement.getMsgAbstract());
 					sysBaseApi.uniPushMsgToUser(pushMessageDTO);
-					//update-begin-author:liusq---date:2025-11-13--for: JHHB-827 【审批消息】移动端需要有推送
+					//update-begin-author:liusq---date:2025-11-13--for: JHHB-827 [Tin nhắn phê duyệt] Thiết bị di động cần có đẩy tin
 				}
 				try {
-					// 同步企业微信、钉钉的消息通知
+					// Đồng bộ thông báo tin nhắn của WeChat doanh nghiệp, DingTalk
 					Response<String> dtResponse = dingtalkService.sendActionCardMessage(sysAnnouncement, null, true);
 					wechatEnterpriseService.sendTextCardMessage(sysAnnouncement, null,true);
 					feishuService.sendAnnouncementMessage(sysAnnouncement, null, true);
@@ -381,7 +381,7 @@ public class SysAnnouncementController {
 						sysAnnouncementService.updateById(sysAnnouncement);
 					}
 				} catch (Exception e) {
-					log.error("同步发送第三方APP消息失败：", e);
+					log.error("Gửi đồng bộ tin nhắn App bên thứ ba thất bại:", e);
 				}
 			}
 		}
@@ -390,7 +390,7 @@ public class SysAnnouncementController {
 	}
 
 	/**
-	 *	 更新撤销操作
+	 *	 Cập nhật thao tác thu hồi
 	 * @param id
 	 * @return
 	 */
@@ -400,19 +400,19 @@ public class SysAnnouncementController {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
 		SysAnnouncement sysAnnouncement = sysAnnouncementService.getById(id);
 		if(sysAnnouncement==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
-            //撤销发布
+            //Hủy phát hành
 			sysAnnouncement.setSendStatus(CommonSendStatus.REVOKE_STATUS_2);
 			sysAnnouncement.setCancelTime(new Date());
 			boolean ok = sysAnnouncementService.updateById(sysAnnouncement);
 			if(ok) {
-				result.success("该系统通知撤销成功");
+				result.success("Thông báo hệ thống này đã thu hồi thành công");
 				if (oConvertUtils.isNotEmpty(sysAnnouncement.getDtTaskId())) {
 					try {
 						dingtalkService.recallMessage(sysAnnouncement.getDtTaskId());
 					} catch (Exception e) {
-						log.error("第三方APP撤回消息失败：", e);
+						log.error("Thu hồi tin nhắn của APP bên thứ ba thất bại:", e);
 					}
 				}
 			}
@@ -422,7 +422,7 @@ public class SysAnnouncementController {
 	}
 
 	/**
-	 * @功能：补充用户数据，并返回系统消息
+	 * @Chức năng: bổ sung dữ liệu người dùng và trả về tin nhắn hệ thống
 	 * @return
 	 */
 	@RequestMapping(value = "/listByUser", method = RequestMethod.GET)
@@ -434,31 +434,31 @@ public class SysAnnouncementController {
 		String userId = sysUser.getId();
 
 
-		// 获取上个月的第一天（只查近两个月的通知）
+		// Lấy ngày đầu tiên của tháng trước (chỉ tra thông báo trong gần hai tháng)
 		Date lastMonthStartDay = DateRangeUtils.getLastMonthStartDay();
-		log.info("-----查询近两个月收到的未读通知-----，近2月的第一天：{}", lastMonthStartDay);
+		log.info("-----Truy vấn thông báo chưa đọc nhận được trong gần hai tháng-----，ngày đầu tiên của 2 tháng gần nhất：{}", lastMonthStartDay);
 		
-//		//补推送数据（用户和通知的关系表）
+//		//Bổ sung dữ liệu đẩy (bảng quan hệ giữa người dùng và thông báo)
 //		completeNoteThreadPool.execute(()->{
 //			sysAnnouncementService.completeAnnouncementSendInfo();
 //		});
 		
-		// 2.查询用户未读的系统消息
+		// 2.Truy vấn tin nhắn hệ thống chưa đọc của người dùng
 		Page<SysAnnouncement> anntMsgList = new Page<SysAnnouncement>(0, pageSize);
-        //通知公告消息
+        //Tin nhắn thông báo
 		anntMsgList = sysAnnouncementService.querySysCementPageByUserId(anntMsgList,userId,"1",null, lastMonthStartDay);
 		sysMsgMap.put("anntMsgList", anntMsgList.getRecords());
 		sysMsgMap.put("anntMsgTotal", anntMsgList.getTotal());
 
-		log.info("begin 获取用户近2个月的系统公告 (通知)" + (System.currentTimeMillis() - start) + "毫秒");
+		log.info("begin Lấy thông báo hệ thống của người dùng trong gần 2 tháng (Thông báo)" + (System.currentTimeMillis() - start) + "Mili giây");
 		
-        //系统消息
+        //Tin nhắn hệ thống
 		Page<SysAnnouncement> sysMsgList = new Page<SysAnnouncement>(0, pageSize);
 		sysMsgList = sysAnnouncementService.querySysCementPageByUserId(sysMsgList,userId,"2",null, lastMonthStartDay);
 		sysMsgMap.put("sysMsgList", sysMsgList.getRecords());
 		sysMsgMap.put("sysMsgTotal", sysMsgList.getTotal());
 
-		log.info("end 获取用户2个月的系统公告 (系统消息)" + (System.currentTimeMillis() - start) + "毫秒");
+		log.info("end Lấy thông báo hệ thống trong 2 tháng của người dùng (Tin nhắn hệ thống)" + (System.currentTimeMillis() - start) + "Mili giây");
 		
 		result.setSuccess(true);
 		result.setResult(sysMsgMap);
@@ -467,7 +467,7 @@ public class SysAnnouncementController {
 
 
 	/**
-	 * 获取未读消息通知数量
+	 * Lấy số lượng thông báo tin nhắn chưa đọc
 	 *
 	 * @return
 	 */
@@ -476,21 +476,21 @@ public class SysAnnouncementController {
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		String userId = sysUser.getId();
 
-		// 获取上个月的第一天（只查近两个月的通知）
+		// Lấy ngày đầu tiên của tháng trước (chỉ tra thông báo trong gần hai tháng)
 		Date lastMonthStartDay = DateRangeUtils.getLastMonthStartDay();
-		log.debug(" ------查询近两个月收到的未读通知消息数量------，近2月的第一天：{}", lastMonthStartDay);
-        // 代码逻辑说明: 【QQYUN-12162】OA项目改造，系统重消息拆分，目前消息都在一起 需按分类进行拆分---
+		log.debug(" ------Truy vấn số lượng tin nhắn thông báo chưa đọc nhận được trong gần hai tháng------，ngày đầu tiên của 2 tháng gần nhất：{}", lastMonthStartDay);
+        // Giải thích logic mã: 【QQYUN-12162] Cải tạo dự án OA, tách hệ thống tin nhắn nặng; hiện các tin nhắn đang ở chung với nhau, cần tách theo danh mục---
         Map<String,Integer> unreadMessageCount = new HashMap<>();
-        //系统消息数量
+        //Số lượng tin nhắn hệ thống
         Integer systemCount = sysAnnouncementService.getUnreadMessageCountByUserId(userId, lastMonthStartDay, NoticeTypeEnum.NOTICE_TYPE_SYSTEM.getValue());
         unreadMessageCount.put("systemCount",systemCount);
-        //流程数量
+        //Số lượng quy trình
         Integer flowCount = sysAnnouncementService.getUnreadMessageCountByUserId(userId, lastMonthStartDay, NoticeTypeEnum.NOTICE_TYPE_FLOW.getValue());
         unreadMessageCount.put("flowCount",flowCount);
-        //文件数量
+        //Số lượng tệp
         Integer fileCount = sysAnnouncementService.getUnreadMessageCountByUserId(userId, lastMonthStartDay,  NoticeTypeEnum.NOTICE_TYPE_FILE.getValue());
         unreadMessageCount.put("fileCount",fileCount);
-        //日程计划数量
+        //Số lượng kế hoạch lịch trình
         Integer planCount = sysAnnouncementService.getUnreadMessageCountByUserId(userId, lastMonthStartDay,  NoticeTypeEnum.NOTICE_TYPE_PLAN.getValue());
         unreadMessageCount.put("planCount",planCount);
         Integer count = systemCount + flowCount + fileCount + planCount;
@@ -500,30 +500,30 @@ public class SysAnnouncementController {
 
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      */
     @RequiresPermissions("system:sysAnnouncement:exportXls")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(SysAnnouncement sysAnnouncement,HttpServletRequest request) {
-        // Step.1 组装查询条件
+        // Step.1 Lắp ráp điều kiện truy vấn
         LambdaQueryWrapper<SysAnnouncement> queryWrapper = new LambdaQueryWrapper<SysAnnouncement>(sysAnnouncement);
-        //Step.2 AutoPoi 导出Excel
+        //Step.2 AutoPoi Xuất Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
 		queryWrapper.eq(SysAnnouncement::getDelFlag,CommonConstant.DEL_FLAG_0.toString());
         List<SysAnnouncement> pageList = sysAnnouncementService.list(queryWrapper);
-        //导出文件名称
-        mv.addObject(NormalExcelConstants.FILE_NAME, "系统通告列表");
+        //Tên file xuất
+        mv.addObject(NormalExcelConstants.FILE_NAME, "Danh sách thông báo hệ thống");
         mv.addObject(NormalExcelConstants.CLASS, SysAnnouncement.class);
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("系统通告列表数据", "导出人:"+user.getRealname(), "导出信息"));
+        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("Dữ liệu danh sách thông báo hệ thống", "Người xuất:"+user.getRealname(), "Thông tin xuất"));
         mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
         return mv;
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -535,7 +535,7 @@ public class SysAnnouncementController {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
             MultipartFile file = entity.getValue();
             ImportParams params = new ImportParams();
             params.setTitleRows(2);
@@ -552,10 +552,10 @@ public class SysAnnouncementController {
 					}
                     sysAnnouncementService.save(sysAnnouncementExcel);
                 }
-                return Result.ok("文件导入成功！数据行数：" + listSysAnnouncements.size());
+                return Result.ok("Nhập tệp thành công! Số dòng dữ liệu:" + listSysAnnouncements.size());
             } catch (Exception e) {
                 log.error(e.getMessage(),e);
-                return Result.error("文件导入失败！");
+                return Result.error("Nhập tệp thất bại!");
             } finally {
                 try {
                     file.getInputStream().close();
@@ -564,10 +564,10 @@ public class SysAnnouncementController {
                 }
             }
         }
-        return Result.error("文件导入失败！");
+        return Result.error("Nhập tệp thất bại!");
     }
 	/**
-	 *同步消息
+	 *Đồng bộ tin nhắn
 	 * @param anntId
 	 * @return
 	 */
@@ -579,7 +579,7 @@ public class SysAnnouncementController {
 		if(StringUtils.isNotBlank(anntId)){
 			SysAnnouncement sysAnnouncement = sysAnnouncementService.getById(anntId);
 			if(sysAnnouncement==null) {
-				result.error500("未找到对应实体");
+				result.error500("Không tìm thấy thực thể tương ứng");
 			}else {
 				if(sysAnnouncement.getMsgType().equals(CommonConstant.MSG_TYPE_ALL)) {
 					obj.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_TOPIC);
@@ -587,7 +587,7 @@ public class SysAnnouncementController {
 					obj.put(WebsocketConst.MSG_TXT, sysAnnouncement.getTitile());
 					webSocket.sendMessage(obj.toJSONString());
 				}else {
-					// 2.插入用户通告阅读标记表记录
+					// 2.Chèn bản ghi bảng đánh dấu đã đọc thông báo của người dùng
 					String userId = sysAnnouncement.getUserIds();
 					if(oConvertUtils.isNotEmpty(userId)){
 						String[] userIds = userId.substring(0, (userId.length()-1)).split(",");
@@ -600,14 +600,14 @@ public class SysAnnouncementController {
 			}
 		}else{
 			obj.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_TOPIC);
-			obj.put(WebsocketConst.MSG_TXT, "批量设置已读");
+			obj.put(WebsocketConst.MSG_TXT, "Đặt đã đọc hàng loạt");
 			webSocket.sendMessage(obj.toJSONString());
 		}
 		return result;
 	}
 
 	/**
-	 * 通告查看详情页面（用于第三方APP）
+	 * Trang xem chi tiết thông báo (dùng cho APP bên thứ ba)
 	 * @param modelAndView
 	 * @param id
 	 * @return
@@ -618,12 +618,12 @@ public class SysAnnouncementController {
         if (announcement != null) {
             boolean tokenOk = false;
             try {
-                // 验证Token有效性
+                // Xác minh tính hợp lệ của Token
                 tokenOk = TokenUtils.verifyToken(request, sysBaseApi, redisUtil);
             } catch (Exception ignored) {
             }
-            // 判断是否传递了Token，并且Token有效，如果传了就不做查看限制，直接返回
-            // 如果Token无效，就做查看限制：只能查看已发布的
+            // Xác định có truyền Token hay không và Token có hợp lệ không; nếu đã truyền thì không áp giới hạn xem, trả về trực tiếp
+            // Nếu token không hợp lệ thì thực hiện giới hạn xem: chỉ được xem những nội dung đã phát hành
             if (tokenOk || ANNOUNCEMENT_SEND_STATUS_1.equals(announcement.getSendStatus())) {
 				LoginUser user = sysBaseApi.getUserByName(announcement.getSender());
 				if(oConvertUtils.isNotEmpty(user)){
@@ -639,7 +639,7 @@ public class SysAnnouncementController {
     }
 
 	/**
-	 * 【vue3用】 消息列表查询
+	 * [Dùng cho vue3] Truy vấn danh sách tin nhắn
 	 * @param fromUser
 	 * @param busType
 	 * @param starFlag
@@ -661,12 +661,12 @@ public class SysAnnouncementController {
 												  @RequestParam(name="pageNo", defaultValue="1") Integer pageNo, 
 												  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
                                                   @RequestParam(name= "noticeType", required = false) String noticeType) {
-		long calStartTime = System.currentTimeMillis(); // 记录开始时间
+		long calStartTime = System.currentTimeMillis(); // Ghi lại thời gian bắt đầu
 		
-		// 1、获取日期查询条件，开始时间和结束时间
+		// 1, lấy điều kiện truy vấn theo ngày, thời gian bắt đầu và thời gian kết thúc
 		Date beginTime = null, endTime = null;
 		if (RangeDateEnum.ZDY.getKey().equals(rangeDateKey)) {
-			// 自定义日期范围查询
+			// Truy vấn phạm vi ngày tùy chỉnh
 			if (oConvertUtils.isNotEmpty(beginDate)) {
 				beginTime = DateUtils.parseDatetime(beginDate);
 			}
@@ -674,7 +674,7 @@ public class SysAnnouncementController {
 				endTime = DateUtils.parseDatetime(endDate);
 			}
 		} else {
-			// 日期段落查询
+			// Truy vấn theo đoạn ngày
 			Date[] arr = RangeDateEnum.getRangeArray(rangeDateKey);
 			if (arr != null) {
 				beginTime = arr[0];
@@ -682,12 +682,12 @@ public class SysAnnouncementController {
 			}
 		}
 		
-		// 2、根据条件查询用户的通知消息
+		// 2, truy vấn tin nhắn thông báo của người dùng theo điều kiện
 		List<SysAnnouncement> ls = this.sysAnnouncementService.querySysMessageList(pageSize, pageNo, fromUser, starFlag,busType, msgCategory, beginTime, endTime, noticeType);
 
-		// 3、设置当前页的消息为已读
+		// 3, đặt tin nhắn của trang hiện tại thành đã đọc
 		if (!CollectionUtils.isEmpty(ls)) {
-			// 设置已读
+			// Đánh dấu đã đọc
 			String readed = "1";
 			List<String> annoceIdList = ls.stream().filter(item -> !readed.equals(item.getReadFlag())).map(item -> item.getId()).collect(Collectors.toList());
 			if (!CollectionUtils.isEmpty(annoceIdList)) {
@@ -702,17 +702,17 @@ public class SysAnnouncementController {
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		webSocket.sendMessage(sysUser.getId(), obj.toJSONString());
 
-		// 4、性能统计耗时
-		long calEndTime = System.currentTimeMillis(); // 记录结束时间
-		long duration = calEndTime - calStartTime; // 计算耗时
-		//System.out.println("耗时：" + duration + " 毫秒");
+		// 4, thống kê thời gian thực thi hiệu năng
+		long calEndTime = System.currentTimeMillis(); // Ghi lại thời gian kết thúc
+		long duration = calEndTime - calStartTime; // Tính thời gian thực hiện
+		//System.out.println("Thời gian thực hiện:" + duration + " Mili giây");
 		
 		return Result.ok(ls);
 	}
 
 
     /**
-     * 根据用户id获取最新一条消息发送时间(创建时间)
+     * Theo id người dùng, lấy thời gian gửi tin nhắn mới nhất(Thời gian tạo)
      * @param userId
      * @return
      */
@@ -720,10 +720,10 @@ public class SysAnnouncementController {
 	public Result<Page<SysAnnouncementSend>> getLastAnnountTime(@RequestParam(name = "userId") String userId,@RequestParam(name="noticeType",required = false) String noticeType){
 		Result<Page<SysAnnouncementSend>> result = new Result<>();
 		//----------------------------------------------------------------------------------------
-		// step.1 此接口过慢，可以采用缓存一小时方案
+		// step.1 Giao diện này quá chậm, có thể dùng phương án lưu đệm một giờ
 		String keyString = String.format(CommonConstant.CACHE_KEY_USER_LAST_ANNOUNT_TIME_1HOUR, userId) + "_" + noticeType;
 		if (redisTemplate.hasKey(keyString)) {
-			log.debug("[SysAnnouncementSend Redis] 通过Redis缓存查询用户最后一次收到系统通知时间，userId={}", userId);
+			log.debug("[SysAnnouncementSend Redis] Truy vấn qua bộ nhớ đệm Redis thời gian người dùng nhận thông báo hệ thống lần cuối,userId={}", userId);
 			Page<SysAnnouncementSend> pageList = (Page<SysAnnouncementSend>) redisTemplate.opsForValue().get(keyString);
 			result.setSuccess(true);
 			result.setResult(pageList);
@@ -734,15 +734,15 @@ public class SysAnnouncementController {
 		Page<SysAnnouncementSend> page = new Page<>(1,1);
         LambdaQueryWrapper<SysAnnouncementSend> query = new LambdaQueryWrapper<>();
         query.eq(SysAnnouncementSend::getUserId,userId);
-        //只查询上个月和本月，的通知的数据
+        //Chỉ truy vấn dữ liệu thông báo của tháng trước và tháng này
 		query.ne(SysAnnouncementSend::getCreateTime, DateRangeUtils.getLastMonthStartDay());
-        query.select(SysAnnouncementSend::getCreateTime); // 提高查询效率
+        query.select(SysAnnouncementSend::getCreateTime); // Nâng cao hiệu quả truy vấn
         query.orderByDesc(SysAnnouncementSend::getCreateTime);
         Page<SysAnnouncementSend> pageList = sysAnnouncementSendService.page(page, query);
 
 		//----------------------------------------------------------------------------------------
 		if (pageList != null && pageList.getSize() > 0) {
-			// step.3 保留1小时redis缓存
+			// step.3 Giữ bộ nhớ đệm redis trong 1 giờ
 			redisTemplate.opsForValue().set(keyString, pageList, 3600, TimeUnit.SECONDS);
 		}
 		//----------------------------------------------------------------------------------------
@@ -753,17 +753,17 @@ public class SysAnnouncementController {
     }
 
 	/**
-	 * 清除当前用户所有未读消息
+	 * Xóa tất cả tin nhắn chưa đọc của người dùng hiện tại
 	 * @return
 	 */
 	@PostMapping("/clearAllUnReadMessage")
     public Result<String> clearAllUnReadMessage(){
 		sysAnnouncementService.clearAllUnReadMessage();
-		return Result.ok("清除未读消息成功");
+		return Result.ok("Xóa tin nhắn chưa đọc thành công");
 	}
 
 	/**
-	 * 添加访问次数
+	 * Thêm số lần truy cập
 	 * @param id
 	 * @return
 	 */
@@ -776,14 +776,14 @@ public class SysAnnouncementController {
 			cachedThreadPool.execute(() -> {
 				sysAnnouncementService.updateVisitsNum(id, count);
 			});
-			// 重置访问次数
+			// Đặt lại số lần truy cập
 			redisUtil.del(ANNO_CACHE_KEY+id);
 		}
-		return Result.ok("公告消息访问次数+1次");
+		return Result.ok("Số lần truy cập thông báo+1 lần");
 	}
 
 	/**
-	 * 批量下载文件
+	 * Tải file hàng loạt
 	 * @param id
 	 * @param request
 	 * @param response
@@ -795,7 +795,7 @@ public class SysAnnouncementController {
 		sysAnnouncementService.downLoadFiles(id,request,response);
 	}
 	/**
-	 * 根据异常信息确定友好的错误提示
+	 * Xác định thông báo lỗi thân thiện theo thông tin ngoại lệ
 	 */
 	private String determineErrorMessage(Exception e) {
 		String errorMsg = e.getMessage();
@@ -808,7 +808,7 @@ public class SysAnnouncementController {
 		}
 	}
 	/**
-	 * 判断是否为特殊字符错误
+	 * Kiểm tra có phải lỗi ký tự đặc biệt hay không
 	 */
 	private boolean isSpecialCharacterError(String errorMsg) {
 		return errorMsg != null
@@ -817,7 +817,7 @@ public class SysAnnouncementController {
 	}
 
 	/**
-	 * 判断是否为内容过长错误
+	 * Kiểm tra có phải lỗi nội dung quá dài hay không
 	 */
 	private boolean isContentTooLongError(String errorMsg) {
 		return errorMsg != null

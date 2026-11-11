@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
  * <p>
- * 菜单权限规则  服务实现类
+ * Lớp triển khai service quy tắc quyền hạn menu
  * </p>
  *
  * @Author huangzhilin
@@ -38,7 +38,7 @@ public class SysPermissionDataRuleImpl extends ServiceImpl<SysPermissionDataRule
 	private SysPermissionMapper sysPermissionMapper;
 
 	/**
-	 * 根据菜单id查询其对应的权限数据
+	 * Truy vấn dữ liệu quyền tương ứng theo id menu
 	 */
 	@Override
 	public List<SysPermissionDataRule> getPermRuleListByPermId(String permissionId) {
@@ -50,7 +50,7 @@ public class SysPermissionDataRuleImpl extends ServiceImpl<SysPermissionDataRule
 	}
 
 	/**
-	 * 根据前端传递的权限名称和权限值参数来查询权限数据
+	 * Truy vấn dữ liệu quyền hạn theo tham số tên quyền và giá trị quyền mà frontend truyền tới
 	 */
 	@Override
 	public List<SysPermissionDataRule> queryPermissionRule(SysPermissionDataRule permRule) {
@@ -61,12 +61,12 @@ public class SysPermissionDataRuleImpl extends ServiceImpl<SysPermissionDataRule
 
 	@Override
 	public List<SysPermissionDataRule> queryPermissionDataRules(String username,String permissionId) {
-		//update-begin---author:scott ---date:20261012  for：【issues/9820】追加当前租户套餐包菜单的数据规则（套餐包按租户隔离，只取请求头中当前租户的）-----------
+		//update-begin---author:scott ---date:20261012  for：【issues/9820] Thêm quy tắc dữ liệu của menu gói tenant hiện tại (gói được cách ly theo tenant, chỉ lấy tenant hiện tại trong request header)-----------
 		int tenant = oConvertUtils.getInt(TenantContext.getTenant(), -1);
 		Integer tenantId = tenant != -1 ? tenant : null;
 		List<String> idsList = this.baseMapper.queryDataRuleIds(username, permissionId, tenantId);
-		//update-end---author:scott ---date:20261012  for：【issues/9820】追加当前租户套餐包菜单的数据规则（套餐包按租户隔离，只取请求头中当前租户的）-----------
-		// 代码逻辑说明: 数据权限失效问题处理--------------------
+		//update-end---author:scott ---date:20261012  for：【issues/9820] Thêm quy tắc dữ liệu của menu gói tenant hiện tại (gói được cách ly theo tenant, chỉ lấy tenant hiện tại trong request header)-----------
+		// Giải thích logic mã: Xử lý vấn đề quyền hạn dữ liệu hết hiệu lực--------------------
 		if(idsList==null || idsList.size()==0) {
 			return null;
 		}
@@ -107,7 +107,7 @@ public class SysPermissionDataRuleImpl extends ServiceImpl<SysPermissionDataRule
 		if(dataRule!=null) {
 			this.removeById(dataRuleId);
 			Long count =  this.baseMapper.selectCount(new LambdaQueryWrapper<SysPermissionDataRule>().eq(SysPermissionDataRule::getPermissionId, dataRule.getPermissionId()));
-			//注:同一个事务中删除后再查询是会认为数据已被删除的 若事务回滚上述删除无效
+			//Ghi chú:Trong cùng một transaction, sau khi xóa rồi truy vấn thì sẽ coi dữ liệu đã bị xóa; nếu transaction rollback thì thao tác xóa trên sẽ vô hiệu
 			if(count==null || count==0) {
 				SysPermission permission = sysPermissionMapper.selectById(dataRule.getPermissionId());
 				if(permission!=null && permission.getRuleFlag().equals(CommonConstant.RULE_FLAG_1)) {

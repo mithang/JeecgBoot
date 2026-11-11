@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 监听消息(通过redis发布订阅，推送消息)
- * 此方案：解决集群部署的问题，多实例节点（也就是发送消息端先发送消息到redis中，每个服务节点收到redis消息，再触发具体的ws推送）
+ * Lắng nghe tin nhắn(Đẩy tin nhắn thông qua publish/subscribe của redis)
+ * Phương án này: giải quyết vấn đề triển khai cụm, nhiều node instance (tức là phía gửi tin nhắn gửi tin nhắn vào redis trước, mỗi node dịch vụ nhận được tin nhắn redis rồi mới kích hoạt đẩy ws cụ thể)
  * @author: jeecg-boot
  */
 @Slf4j
@@ -22,17 +22,17 @@ public class SocketHandler implements JeecgRedisListener {
 
     @Override
     public void onMessage(BaseMap map) {
-        log.debug("【Redis发布订阅模式】redis Listener: {}，参数：{}",WebSocket.REDIS_TOPIC_NAME, map.toString());
+        log.debug("【Chế độ publish-subscribe của Redis】redis Listener: {}，tham số:{}",WebSocket.REDIS_TOPIC_NAME, map.toString());
 
         String userId = map.get("userId");
         String message = map.get("message");
         if (ObjectUtil.isNotEmpty(userId)) {
-            //pc端消息推送具体人
+            //pc Đẩy tin nhắn trên PC tới người cụ thể
             webSocket.pushMessage(userId, message);
-            //app端消息推送具体人
+            //app Đẩy tin nhắn trên PC tới người cụ thể
             webSocket.pushMessage(userId+CommonSendStatus.APP_SESSION_SUFFIX, message);
         } else {
-            //推送全部
+            //Đẩy tất cả
             webSocket.pushMessage(message);
         }
 

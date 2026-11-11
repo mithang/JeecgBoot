@@ -8,7 +8,7 @@ import org.jeecg.modules.quartz.entity.QuartzJob;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @Description: 定时任务在线管理
+ * @Description: Quản lý trực tuyến tác vụ định kỳ
  * @Author: jeecg-boot
  * @Date:  2019-01-02
  * @Version: V1.0
@@ -16,8 +16,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface QuartzJobMapper extends BaseMapper<QuartzJob> {
 
     /**
-     * 根据jobClassName查询
-     * @param jobClassName 任务类名
+     * Truy vấn theo jobClassName
+     * @param jobClassName Tên lớp nhiệm vụ
      * @return
      */
 	public List<QuartzJob> findByJobClassName(@Param("jobClassName") String jobClassName);

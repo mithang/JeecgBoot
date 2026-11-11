@@ -7,7 +7,7 @@ import org.jeecg.modules.system.entity.SysTenantPackUser;
 import java.util.List;
 
 /**
- * @Description: 租户产品包
+ * @Description: Gói sản phẩm tenant
  * @Author: jeecg-boot
  * @Date:   2022-12-31
  * @Version: V1.0
@@ -15,58 +15,58 @@ import java.util.List;
 public interface ISysTenantPackService extends IService<SysTenantPack> {
 
     /**
-     * 新增产品包并将菜单插入关系表
+     * Thêm gói sản phẩm mới và chèn menu vào bảng quan hệ
      * @param sysTenantPack
      */
     void addPackPermission(SysTenantPack sysTenantPack);
 
     /**
-     * 设置菜单id
+     * Cài đặt menu id
      * @param records
      * @return
      */
     List<SysTenantPack> setPermissions(List<SysTenantPack> records);
 
     /**
-     * 编辑产品包并将菜单插入关系表
+     * Chỉnh sửa gói sản phẩm và chèn menu vào bảng quan hệ
      * @param sysTenantPack
      */
     void editPackPermission(SysTenantPack sysTenantPack);
 
     /**
-     * 删除租户产品包
+     * Xóa gói sản phẩm tenant
      * @param ids
      */
     void deleteTenantPack(String ids);
 
     /**
-     * 退出租户
+     * Thoát tenant
      * @param tenantId
      * @param s
      */
     void exitTenant(String tenantId, String s);
 
     /**
-     * 创建租户的时候默认创建3个 产品包
+     * Khi tạo tenant, mặc định tạo 3 gói sản phẩm
      * @param tenantId
      */
     void addDefaultTenantPack(Integer tenantId);
 
     /**
-     * 保存产品包
+     * Lưu gói sản phẩm
      * @param sysTenantPack
      */
     String saveOne(SysTenantPack sysTenantPack);
 
 
     /**
-     * 保存产品包和人员的关系
+     * Lưu quan hệ giữa gói sản phẩm và nhân sự
      * @param sysTenantPackUser
      */
     void savePackUser(SysTenantPackUser sysTenantPackUser);
 
     /**
-     * 根据租户ID和编码查询
+     * Truy vấn theo ID Tenant và mã
      * @param tenantId
      * @param packCode
      * @return
@@ -74,14 +74,14 @@ public interface ISysTenantPackService extends IService<SysTenantPack> {
     SysTenantPack getSysTenantPack(Integer tenantId ,String packCode);
    
     /**
-     * 添加由管理员创建的默认产品包
+     * Thêm gói sản phẩm mặc định do quản trị viên tạo
      * @param id
      */
     void addTenantDefaultPack(Integer id);
 
     /**
-     * 同步默认的套餐
-     * for [QQYUN-11032]【jeecg】租户套餐管理增加初始化套餐包按钮
+     * Đồng bộ gói dịch vụ mặc định
+     * for [QQYUN-11032][Jeecg] Quản lý gói dịch vụ thuê bao thêm nút khởi tạo gói dịch vụ
      * @param tenantId
      * @author chenrui
      * @date 2025/2/5 19:08
@@ -89,7 +89,7 @@ public interface ISysTenantPackService extends IService<SysTenantPack> {
     void syncDefaultPack(Integer tenantId);
 
     /**
-     * 根据用户id和当前的租户id获取产品包的id
+     * Lấy gói sản phẩm theo id người dùng và id tenant hiện tại id
      *
      * @param userId
      * @param tenantId
@@ -98,7 +98,7 @@ public interface ISysTenantPackService extends IService<SysTenantPack> {
     List<String> getPackIdByUserIdAndTenantId(String userId, Integer tenantId);
 
     /**
-     * 根据租户id获取用户的产品包列表
+     * Lấy danh sách gói sản phẩm của người dùng theo tenant id
      *
      * @param tenantId
      * @return
@@ -106,7 +106,7 @@ public interface ISysTenantPackService extends IService<SysTenantPack> {
     List<SysTenantPack> getPackListByTenantId(String tenantId);
 
     /**
-     * 是否为拥有管理用户权限【accountAdmin，superAdmin】
+     * Có phải là người có quyền quản lý người dùng [accountAdmin, superAdmin] hay không
      * 
      * @param tenantId
      */

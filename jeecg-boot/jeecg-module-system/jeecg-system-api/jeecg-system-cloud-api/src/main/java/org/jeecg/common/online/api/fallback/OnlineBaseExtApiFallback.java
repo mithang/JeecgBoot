@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 进入fallback的方法 检查是否token未设置
+ * Vào phương thức fallback, kiểm tra xem token đã được thiết lập chưa
  * @author: jeecg-boot
  */
 @Slf4j

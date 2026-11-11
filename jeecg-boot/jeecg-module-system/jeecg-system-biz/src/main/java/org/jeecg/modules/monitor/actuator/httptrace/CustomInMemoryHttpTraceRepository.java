@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @Description: 自定义内存请求追踪存储
+ * @Description: Bộ nhớ tùy chỉnh lưu trữ theo dõi yêu cầu
  * @Author: chenrui
  * @Date: 2024/5/13 17:02
  */
@@ -26,43 +26,43 @@ public class CustomInMemoryHttpTraceRepository extends InMemoryHttpExchangeRepos
     }
 
     /**
-     * for [issues/8309]系统监控>请求追踪，列表每刷新一下，总数据就减一#8309
+     * for [issues/8309]Giám sát hệ thống>Theo dõi yêu cầu, mỗi lần làm mới danh sách thì tổng dữ liệu lại giảm đi một#8309
      * @param trace
      * @author chenrui
      * @date 2025/6/4 19:38
      */
     @Override
     public void add(HttpExchange trace) {
-        // 只有当请求不是OPTIONS方法，并且URI不包含httptrace时才记录数据
+        // Chỉ ghi dữ liệu khi yêu cầu không phải là phương thức OPTIONS và URI không chứa httptrace
         if (!"OPTIONS".equals(trace.getRequest().getMethod()) &&
                 !trace.getRequest().getUri().toString().contains("httptrace")) {
-            //update-begin---author:scott ---date:20261023  for：【GHSA-2899-g99h-hq64】请求追踪记录前脱敏，避免他人token、cookie等凭据经追踪接口泄露------------
+            //update-begin---author:scott ---date:20261023  for：【GHSA-2899-g99h-hq64] Khử nhạy cảm trước khi ghi log theo dõi yêu cầu, tránh token, cookie và các thông tin xác thực khác của người khác bị rò rỉ qua API theo dõi------------
             super.add(desensitize(trace));
-            //update-end---author:scott ---date:20261023  for：【GHSA-2899-g99h-hq64】请求追踪记录前脱敏------------
+            //update-end---author:scott ---date:20261023  for：【GHSA-2899-g99h-hq64】Khử nhạy cảm trước khi ghi lại dấu vết yêu cầu------------
         }
     }
 
     /**
-     * 脱敏占位符
+     * Trình giữ chỗ khử nhạy cảm
      */
     private static final String MASK = "******";
 
     /**
-     * 需要脱敏的请求头/响应头（小写比较）
+     * Header yêu cầu cần ẩn nhạy cảm/Header phản hồi (so sánh chữ thường)
      */
     private static final Set<String> SENSITIVE_HEADERS = Set.of(
             "x-access-token", "authorization", "proxy-authorization", "cookie", "set-cookie", "x-sign");
 
     /**
-     * URL 上携带凭据的参数，如 ?token=xxx
+     * URL tham số mang thông tin xác thực trên URL, ví dụ ?token=xxx
      */
     private static final Pattern SENSITIVE_QUERY = Pattern.compile("(?i)([?&](?:token|access_token|x-access-token)=)[^&#]*");
 
     /**
-     * 复制一份请求追踪记录，把请求/响应中的凭据替换为占位符后再存储
+     * Sao chép một bản ghi theo dõi yêu cầu, thay thế thông tin xác thực trong yêu cầu/Sao chép một bản ghi theo dõi yêu cầu, thay các thông tin xác thực trong yêu cầu/phản hồi bằng ký tự giữ chỗ rồi lưu trữ
      *
      * @author scott
-     * @since 2026-10-23 【GHSA-2899-g99h-hq64】请求追踪接口泄露他人 X-Access-Token
+     * @since 2026-10-23 【GHSA-2899-g99h-hq64] giao diện theo dõi yêu cầu làm lộ token của người khác X-Access-Token
      */
     private static HttpExchange desensitize(HttpExchange trace) {
         HttpExchange.Request request = trace.getRequest();
@@ -75,10 +75,10 @@ public class CustomInMemoryHttpTraceRepository extends InMemoryHttpExchangeRepos
     }
 
     /**
-     * 请求头/响应头脱敏：命中 SENSITIVE_HEADERS 的头（不区分大小写）值替换为占位符
+     * Request header/Ẩn nhạy cảm header phản hồi: trùng khớp SENSITIVE_HEADERS giá trị của header (không phân biệt chữ hoa chữ thường) sẽ được thay bằng ký tự giữ chỗ
      *
      * @author scott
-     * @since 2026-10-23 【GHSA-2899-g99h-hq64】请求追踪接口泄露他人 X-Access-Token
+     * @since 2026-10-23 【GHSA-2899-g99h-hq64] giao diện theo dõi yêu cầu làm lộ token của người khác X-Access-Token
      */
     private static Map<String, List<String>> maskHeaders(Map<String, List<String>> headers) {
         if (headers == null || headers.isEmpty()) {
@@ -91,10 +91,10 @@ public class CustomInMemoryHttpTraceRepository extends InMemoryHttpExchangeRepos
     }
 
     /**
-     * URL 脱敏：token/access_token/x-access-token 参数值替换为占位符
+     * URL Che giấu thông tin nhạy cảm:token/access_token/x-access-token Thay giá trị tham số bằng placeholder
      *
      * @author scott
-     * @since 2026-10-23 【GHSA-2899-g99h-hq64】请求追踪接口泄露他人 X-Access-Token
+     * @since 2026-10-23 【GHSA-2899-g99h-hq64] giao diện theo dõi yêu cầu làm lộ token của người khác X-Access-Token
      */
     private static URI maskUri(URI uri) {
         if (uri == null || uri.getRawQuery() == null) {
@@ -103,7 +103,7 @@ public class CustomInMemoryHttpTraceRepository extends InMemoryHttpExchangeRepos
         try {
             return URI.create(SENSITIVE_QUERY.matcher(uri.toString()).replaceAll("$1" + MASK));
         } catch (IllegalArgumentException e) {
-            //替换后无法解析时，宁可丢掉查询参数也不记录原值
+            //Khi sau khi thay thế không thể phân tích được, thà bỏ tham số truy vấn chứ không ghi lại giá trị gốc
             return URI.create(uri.toString().split("\\?", 2)[0]);
         }
     }

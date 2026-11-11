@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ *  Lớp dịch vụ
  * </p>
  *
  * @Author zhangweijian
@@ -16,8 +16,8 @@ import java.util.List;
 public interface ISysDictItemService extends IService<SysDictItem> {
 
     /**
-     * 通过字典id查询字典项
-     * @param mainId 字典id
+     * Truy vấn mục danh mục theo id danh mục
+     * @param mainId Từ điển id
      * @return
      */
     public List<SysDictItem> selectItemsByMainId(String mainId);

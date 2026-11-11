@@ -23,7 +23,7 @@
                 </otherwise>
             </choose>
         </if>
-        <!--增加id查询 for:【issues/7948】角色解决根据id查询回显不对-->
+        <!--Thêm truy vấn theo id for:【issues/7948] Vai trò giải quyết việc truy vấn theo id hiển thị lại không đúng-->
         <if test="role.id!='' and role.id!=null">
             <choose>
                 <when test="role.id.indexOf(',') != -1">
@@ -46,7 +46,7 @@
         WHERE role_code = #{roleCode}
     </select>
 
-    <!-- 根据用户id查询用户拥有的角色 -->
+    <!-- Truy vấn vai trò mà người dùng sở hữu theo id người dùng -->
     <select id="getRoleCodeListByUserId" resultType="org.jeecg.modules.system.entity.SysRole">
         SELECT id, role_code from sys_role
         WHERE id in (SELECT role_id from sys_user_role WHERE user_id = #{userId})
@@ -55,7 +55,7 @@
         </if>
     </select>
     
-    <!--根据用户id获取角色信息-->
+    <!--Lấy thông tin vai trò theo ID người dùng-->
     <select id="getUserRoleByUserId" resultType="org.jeecg.modules.system.vo.SysUserPositionVo">
         SELECT sr.role_name as name,sur.user_id FROM sys_role sr
         RIGHT JOIN sys_user_role sur on sur.role_id = sr.id

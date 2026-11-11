@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 /**
- * @Description: 部门角色
+ * @Description: Vai trò phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-12
  * @Version: V1.0
@@ -14,7 +14,7 @@ import java.util.List;
 public interface ISysDepartRoleService extends IService<SysDepartRole> {
 
     /**
-     * 根据用户id，部门id查询可授权所有部门角色
+     * Truy vấn tất cả vai trò phòng ban có thể ủy quyền theo id người dùng, id phòng ban
      * @param orgCode
      * @param userId
      * @return
@@ -22,7 +22,7 @@ public interface ISysDepartRoleService extends IService<SysDepartRole> {
     List<SysDepartRole> queryDeptRoleByDeptAndUser(String orgCode, String userId);
 
     /**
-     *  删除部门角色和对应关联表信息
+     *  Xóa vai trò phòng ban và thông tin bảng liên kết tương ứng
      * @param ids
      */
     void deleteDepartRole(List<String> ids);

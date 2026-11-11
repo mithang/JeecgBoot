@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @Description: 低代码用户导出
+ * @Description: Xuất người dùng low-code
  * @author: wangshuai
  * @date: 2025/3/28 12:01
  */
@@ -17,128 +17,128 @@ import java.util.Date;
 public class SysUserExportVo {
 
     /**
-     * 登录账号
+     * Tài khoản đăng nhập
      */
-    @Excel(name = "登录账号", width = 15)
+    @Excel(name = "Tài khoản đăng nhập", width = 15)
     private String username;
 
     /**
-     * 真实姓名
+     * Họ tên thật
      */
-    @Excel(name = "真实姓名", width = 15)
+    @Excel(name = "Họ tên thật", width = 15)
     private String realname;
 
     /**
-     * 头像
+     * Ảnh đại diện
      */
-    @Excel(name = "头像", width = 15, type = 2)
+    @Excel(name = "Ảnh đại diện", width = 15, type = 2)
     private String avatar;
 
     /**
-     * 生日
+     * Ngày sinh
      */
-    @Excel(name = "生日", width = 15, format = "yyyy-MM-dd")
+    @Excel(name = "Ngày sinh", width = 15, format = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     /**
-     * 性别（1：男 2：女）
+     * Giới tính (1: Nam, 2: Nữ)
      */
-    @Excel(name = "性别", width = 15, dicCode = "sex")
+    @Excel(name = "Giới tính", width = 15, dicCode = "sex")
     private Integer sex;
 
     /**
-     * 电子邮件
+     * Email
      */
-    @Excel(name = "电子邮件", width = 15)
+    @Excel(name = "Email", width = 15)
     private String email;
 
     /**
-     * 电话
+     * Điện thoại
      */
-    @Excel(name = "电话", width = 15)
+    @Excel(name = "Điện thoại", width = 15)
     private String phone;
 
     /**
-     * 状态(1：正常  2：冻结 ）
+     * Trạng thái(1：Bình thường  2：Đóng băng ）
      */
-    @Excel(name = "状态", width = 15, dicCode = "user_status")
+    @Excel(name = "Trạng thái", width = 15, dicCode = "user_status")
     private Integer status;
 
     /**
-     * 删除状态（0，正常，1已删除）
+     * Trạng thái xóa (0 bình thường, 1 đã xóa)
      */
-    @Excel(name = "删除状态", width = 15, dicCode = "del_flag")
+    @Excel(name = "Trạng thái xóa", width = 15, dicCode = "del_flag")
     private Integer delFlag;
 
     /**
-     * 工号，唯一键
+     * Mã nhân viên, khóa duy nhất
      */
-    @Excel(name = "工号", width = 15)
+    @Excel(name = "Mã nhân viên", width = 15)
     private String workNo;
     
     /**
-     * 主岗位
+     * Vị trí chính
      */
-    @Excel(name="主岗位",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
+    @Excel(name="Vị trí chính",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     @Dict(dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     private String mainDepPostId;
 
     /**
-     * 职级
+     * Cấp bậc
      */
-    @Excel(name="职级", width = 15)
+    @Excel(name="Cấp bậc", width = 15)
     private String postName;
 
     /**
-     * 兼职岗位
+     * Vị trí kiêm nhiệm
      */
-    @Excel(name="兼职岗位",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
+    @Excel(name="Vị trí kiêm nhiệm",width = 15,dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     @Dict(dictTable ="sys_depart",dicText = "depart_name",dicCode = "id")
     private String otherDepPostId;
 
     /**
-     * 座机号
+     * Số điện thoại bàn
      */
-    @Excel(name = "座机号", width = 15)
+    @Excel(name = "Số điện thoại bàn", width = 15)
     private String telephone;
 
 
     /**
-     * 身份（0 普通成员 1 上级）
+     * Thân phận (0 thành viên thường, 1 cấp trên)
      */
-    @Excel(name = "（1普通成员 2上级）", width = 15)
+    @Excel(name = "(1 Thành viên thường 2 Cấp trên)", width = 15)
     private Integer userIdentity;
 
     /**
-     * 角色名称
+     * Tên vai trò
      */
-    @Excel(name = "角色", width = 15)
+    @Excel(name = "Vai trò", width = 15)
     private String roleNames;
 
     /**
-     * 部门名称
+     * Tên phòng ban
      */
-    @Excel(name = "所属部门", width = 15)
+    @Excel(name = "Phòng ban trực thuộc", width = 15)
     private String departNames;
 
     /**
-     * 机构类型
-     * 公司(1)、部门(2)、岗位(3)、子公司(4)
+     * Loại tổ chức
+     * Công ty(1)、phòng ban(2)、vị trí công việc(3), công ty con(4)
      */
-    @Excel(name = "部门类型(1-公司,2-部门,3-岗位,4-子公司)",width = 15)
+    @Excel(name = "Loại phòng ban(1-Công ty,2-Phòng ban,3-Vị trí công tác,4-Công ty con)",width = 15)
     private String orgCategorys;
 
     /**
-     * 负责部门
+     * Phòng ban phụ trách
      */
-    @Excel(name = "负责部门", width = 15)
+    @Excel(name = "Phòng ban phụ trách", width = 15)
     private String departIds;
 
     /**
-     * 职务
+     * Chức danh
      */
-    @Excel(name="职务", dicCode = "user_position")
+    @Excel(name="Chức danh", dicCode = "user_position")
     private String positionType;
 }

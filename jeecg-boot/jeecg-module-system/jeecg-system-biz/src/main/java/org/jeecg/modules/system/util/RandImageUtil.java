@@ -12,79 +12,79 @@ import java.util.Base64;
 import java.util.Random;
 
 /**
- * 登录验证码工具类
+ * Lớp tiện ích mã xác minh đăng nhập
  * @date  2025-09-11
- * @author AI优化
+ * @author AI tối ưu hóa
  */
 public class RandImageUtil {
 
-    // 静态初始化块，解决无头环境字体配置问题
+    // Khối khởi tạo tĩnh, giải quyết vấn đề cấu hình phông chữ trong môi trường không có giao diện
     static {
         System.setProperty("java.awt.headless", "true");
     }
 
     public static final String KEY = "JEECG_LOGIN_KEY";
 
-    /** 验证码图片宽度 */
+    /** Chiều rộng hình ảnh mã xác minh */
     private static final int WIDTH = 105;
     
-    /** 验证码图片高度 */
+    /** Chiều cao hình ảnh mã xác minh */
     private static final int HEIGHT = 35;
     
-    /** 干扰线数量 */
+    /** Số lượng đường nhiễu */
     private static final int INTERFERENCE_LINE_COUNT = 200;
     
-    /** 干扰线宽度 */
+    /** Độ rộng đường nhiễu */
     private static final int LINE_WIDTH = 2;
     
-    /** 图片格式 */
+    /** Định dạng hình ảnh */
     private static final String IMG_FORMAT = "JPEG";
     
-    /** base64 图片前缀 */
+    /** base64 Tiền tố hình ảnh */
     private static final String BASE64_PREFIX = "data:image/jpg;base64,";
     
-    /** 字符间距 */
+    /** Khoảng cách ký tự */
     private static final int CHAR_SPACING = 23;
     
-    /** 字体大小 */
+    /** Cỡ chữ */
     private static final int FONT_SIZE = 24;
     
-    /** 字符Y轴偏移 */
+    /** Độ lệch trục Y của ký tự */
     private static final int CHAR_Y_OFFSET = 26;
     
-    /** 字符X轴起始偏移 */
+    /** Độ lệch bắt đầu trục X của ký tự */
     private static final int CHAR_X_OFFSET = 8;
 
     /**
-     * 直接通过response输出验证码图片
+     * Xuất trực tiếp hình ảnh mã xác thực qua response
      * 
-     * @param response HTTP响应对象
-     * @param verifyCode 验证码字符串
-     * @throws IOException 输出异常
+     * @param response HTTP Đối tượng phản hồi
+     * @param verifyCode Chuỗi mã xác minh
+     * @throws IOException Ngoại lệ đầu ra
      */
     public static void generate(HttpServletResponse response, String verifyCode) throws IOException {
         if (response == null || verifyCode == null || verifyCode.trim().isEmpty()) {
-            throw new IllegalArgumentException("参数不能为空");
+            throw new IllegalArgumentException("Tham số không được để trống");
         }
         
         try {
             BufferedImage image = createVerifyCodeImage(verifyCode);
             ImageIO.write(image, IMG_FORMAT, response.getOutputStream());
         } catch (Exception e) {
-            throw new IOException("生成验证码图片失败", e);
+            throw new IOException("Tạo hình ảnh mã xác minh thất bại", e);
         }
     }
 
     /**
-     * 生成验证码的base64字符串
+     * Tạo chuỗi base64 của mã xác minh
      * 
-     * @param verifyCode 验证码字符串
-     * @return base64编码的图片字符串
-     * @throws IOException 生成异常
+     * @param verifyCode Chuỗi mã xác minh
+     * @return base64 Chuỗi hình ảnh đã mã hóa base64
+     * @throws IOException Ngoại lệ khi tạo
      */
     public static String generate(String verifyCode) throws IOException {
         if (verifyCode == null || verifyCode.trim().isEmpty()) {
-            throw new IllegalArgumentException("验证码不能为空");
+            throw new IllegalArgumentException("Mã xác minh không được để trống");
         }
         
         try {
@@ -94,20 +94,20 @@ public class RandImageUtil {
                 ImageIO.write(image, IMG_FORMAT, byteStream);
                 byte[] bytes = byteStream.toByteArray();
                 String base64 = Base64.getEncoder().encodeToString(bytes).trim();
-                // 清理换行符
+                // Dọn dẹp ký tự xuống dòng
                 base64 = base64.replaceAll("[\r\n]", "");
                 return BASE64_PREFIX + base64;
             }
         } catch (Exception e) {
-            throw new IOException("生成验证码base64失败", e);
+            throw new IOException("Tạo mã xác minh base64 thất bại", e);
         }
     }
 
     /**
-     * 创建验证码图像
+     * Tạo hình ảnh mã xác minh
      * 
-     * @param verifyCode 验证码字符串
-     * @return 验证码图像
+     * @param verifyCode Chuỗi mã xác minh
+     * @return Hình ảnh mã xác minh
      */
     private static BufferedImage createVerifyCodeImage(String verifyCode) {
         BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -116,26 +116,26 @@ public class RandImageUtil {
         try {
             graphics = (Graphics2D) image.getGraphics();
             
-            // 设置图形渲染质量
+            // Đặt chất lượng hiển thị đồ họa
             setupRenderingHints(graphics);
             
-            // 绘制背景
+            // Vẽ nền
             drawBackground(graphics);
             
-            // 绘制边框
+            // Vẽ viền
             drawBorder(graphics);
             
-            // 获取安全的随机数生成器
+            // Lấy bộ tạo số ngẫu nhiên an toàn
             SecureRandom random = createSecureRandom();
             
-            // 绘制干扰线
+            // Vẽ đường nhiễu
             drawInterferenceLines(graphics, random);
             
-            // 绘制验证码字符
+            // Vẽ ký tự mã xác minh
             drawVerifyCodeText(graphics, verifyCode);
             
         } catch (Exception e) {
-            // 如果绘制失败，创建简单的错误图像
+            // Nếu vẽ thất bại, tạo hình ảnh lỗi đơn giản
             return createErrorImage(verifyCode);
         } finally {
             if (graphics != null) {
@@ -147,7 +147,7 @@ public class RandImageUtil {
     }
 
     /**
-     * 设置图形渲染质量
+     * Đặt chất lượng hiển thị đồ họa
      */
     private static void setupRenderingHints(Graphics2D graphics) {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -156,7 +156,7 @@ public class RandImageUtil {
     }
 
     /**
-     * 绘制白色背景
+     * Vẽ nền trắng
      */
     private static void drawBackground(Graphics2D graphics) {
         graphics.setColor(Color.WHITE);
@@ -164,7 +164,7 @@ public class RandImageUtil {
     }
 
     /**
-     * 绘制边框
+     * Vẽ viền
      */
     private static void drawBorder(Graphics2D graphics) {
         graphics.setColor(Color.GRAY);
@@ -172,7 +172,7 @@ public class RandImageUtil {
     }
 
     /**
-     * 创建安全的随机数生成器
+     * Tạo trình tạo số ngẫu nhiên an toàn
      */
     private static SecureRandom createSecureRandom() {
         try {
@@ -183,13 +183,13 @@ public class RandImageUtil {
     }
 
     /**
-     * 绘制干扰线
+     * Vẽ đường nhiễu
      */
     private static void drawInterferenceLines(Graphics2D graphics, SecureRandom random) {
         for (int i = 0; i < INTERFERENCE_LINE_COUNT; i++) {
             graphics.setColor(getRandomColor(150, 200, random));
             
-            // 确保干扰线在边框内
+            // Đảm bảo đường nhiễu nằm trong viền
             int x1 = random.nextInt(WIDTH - LINE_WIDTH - 1) + 1;
             int y1 = random.nextInt(HEIGHT - LINE_WIDTH - 1) + 1;
             int x2 = x1 + random.nextInt(LINE_WIDTH);
@@ -200,7 +200,7 @@ public class RandImageUtil {
     }
 
     /**
-     * 绘制验证码文本
+     * Vẽ văn bản mã xác minh
      */
     private static void drawVerifyCodeText(Graphics2D graphics, String verifyCode) {
         graphics.setColor(Color.BLACK);
@@ -215,10 +215,10 @@ public class RandImageUtil {
     }
 
     /**
-     * 创建安全的字体，避免字体配置问题
+     * Tạo phông chữ an toàn, tránh vấn đề cấu hình phông chữ
      */
     private static Font createSafeFont() {
-        // 使用逻辑字体名称，在所有平台都可用
+        // Dùng tên phông chữ logic, có thể dùng được trên mọi nền tảng
         String[] safeFontNames = {Font.SERIF, Font.SANS_SERIF, Font.MONOSPACED, "Dialog"};
         
         for (String fontName : safeFontNames) {
@@ -228,16 +228,16 @@ public class RandImageUtil {
                     return font;
                 }
             } catch (Exception e) {
-                // 继续尝试下一个字体
+                // Tiếp tục thử phông chữ tiếp theo
             }
         }
         
-        // 最后的回退方案
+        // Phương án dự phòng cuối cùng
         return new Font(Font.MONOSPACED, Font.BOLD, FONT_SIZE);
     }
 
     /**
-     * 创建错误图像（当正常绘制失败时使用）
+     * Tạo hình ảnh lỗi (dùng khi vẽ bình thường thất bại)
      */
     private static BufferedImage createErrorImage(String verifyCode) {
         BufferedImage errorImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -246,15 +246,15 @@ public class RandImageUtil {
         try {
             graphics = (Graphics2D) errorImage.getGraphics();
             
-            // 白色背景
+            // Nền trắng
             graphics.setColor(Color.WHITE);
             graphics.fillRect(0, 0, WIDTH, HEIGHT);
             
-            // 黑色边框
+            // Viền đen
             graphics.setColor(Color.BLACK);
             graphics.drawRect(0, 0, WIDTH - 1, HEIGHT - 1);
             
-            // 尝试绘制验证码
+            // Thử vẽ mã xác minh
             try {
                 graphics.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
                 graphics.setColor(Color.BLUE);
@@ -263,7 +263,7 @@ public class RandImageUtil {
                                       i * CHAR_SPACING + CHAR_X_OFFSET, CHAR_Y_OFFSET);
                 }
             } catch (Exception fontException) {
-                // 如果连基本字体都失败，显示ERROR
+                // Nếu ngay cả phông chữ cơ bản cũng thất bại, hiển thị ERROR
                 graphics.setColor(Color.RED);
                 graphics.drawString("ERROR", 10, 20);
             }
@@ -277,15 +277,15 @@ public class RandImageUtil {
     }
 
     /**
-     * 获取指定范围内的随机颜色
+     * Lấy màu ngẫu nhiên trong phạm vi được chỉ định
      * 
-     * @param minColorValue 最小颜色值
-     * @param maxColorValue 最大颜色值
-     * @param random 随机数生成器
-     * @return 随机颜色
+     * @param minColorValue Giá trị màu tối thiểu
+     * @param maxColorValue Giá trị màu tối đa
+     * @param random Bộ tạo số ngẫu nhiên
+     * @return Màu ngẫu nhiên
      */
     private static Color getRandomColor(int minColorValue, int maxColorValue, Random random) {
-        // 确保颜色值在有效范围内
+        // Đảm bảo giá trị màu nằm trong phạm vi hợp lệ
         int min = Math.max(0, Math.min(minColorValue, 255));
         int max = Math.max(min, Math.min(maxColorValue, 255));
         

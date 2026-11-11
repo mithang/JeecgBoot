@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @Description: 在线用户
+ * @Description: Người dùng trực tuyến
  * @Author: chenli
  * @Date: 2020-06-07
  * @Version: V1.0
@@ -60,15 +60,15 @@ public class SysUserOnlineController {
             String token = (String)redisUtil.get(key);
             if (StringUtils.isNotEmpty(token)) {
                 SysUserOnlineVO online = new SysUserOnlineVO();
-                // 强退需要使用 Redis key 中的原始 Token，不能使用续期后的 value
+                // Buộc đăng xuất cần dùng Token gốc trong Redis key, không được dùng Token sau khi gia hạn value
                 String originalToken = key.substring(CommonConstant.PREFIX_USER_TOKEN.length());
                 online.setToken(originalToken);
-                //TODO 改成一次性查询
+                //TODO Đổi thành truy vấn một lần
                 LoginUser loginUser = sysBaseApi.getUserByName(JwtUtil.getUsername(token));
                 if (loginUser != null && !"_reserve_user_external".equals(loginUser.getUsername())) {
-                    //验证用户名是否与传过来的用户名相同
+                    //Kiểm tra tên người dùng có khớp với tên người dùng được truyền vào hay không
                     boolean isMatchUsername=true;
-                    //判断用户名是否为空，并且当前循环的用户不包含传过来的用户名，那么就设成false
+                    //Xác định tên người dùng có rỗng hay không, và người dùng trong vòng lặp hiện tại không chứa tên người dùng truyền vào thì đặt thành false
                     if(oConvertUtils.isNotEmpty(username) && !loginUser.getUsername().contains(username)){
                         isMatchUsername = false;
                     }
@@ -87,7 +87,7 @@ public class SysUserOnlineController {
         Page<SysUserOnlineVO> page = new Page<SysUserOnlineVO>(pageNo, pageSize);
         int count = onlineList.size();
         List<SysUserOnlineVO> pages = new ArrayList<>();
-        // 计算当前页第一条数据的下标
+        // Tính chỉ số của bản ghi đầu tiên trên trang hiện tại
         int currId = pageNo > 1 ? (pageNo - 1) * pageSize : 0;
         for (int i = 0; i < pageSize && i < count - currId; i++) {
             pages.add(onlineList.get(currId + i));
@@ -95,7 +95,7 @@ public class SysUserOnlineController {
         page.setSize(pageSize);
         page.setCurrent(pageNo);
         page.setTotal(count);
-        // 计算分页总页数
+        // Tính tổng số trang phân trang
         page.setPages(count % 10 == 0 ? count / 10 : count / 10 + 1);
         page.setRecords(pages);
 
@@ -106,31 +106,31 @@ public class SysUserOnlineController {
     }
 
     /**
-     * 强退用户
+     * Buộc đăng xuất người dùng
      */
     @RequiresPermissions("system:online:forceLogout")
     @RequestMapping(value = "/forceLogout",method = RequestMethod.POST)
     public Result<Object> forceLogout(@RequestBody SysUserOnlineVO online) {
-        //用户退出逻辑
+        //Logic thoát của người dùng
         if(oConvertUtils.isEmpty(online.getToken())) {
-            return Result.error("退出登录失败！");
+            return Result.error("Đăng xuất thất bại!");
         }
         String username = JwtUtil.getUsername(online.getToken());
         LoginUser sysUser = sysBaseApi.getUserByName(username);
         if(sysUser!=null) {
-            baseCommonService.addLog("强制: "+sysUser.getRealname()+"退出成功！", CommonConstant.LOG_TYPE_1, null,sysUser);
-            log.info(" 强制  "+sysUser.getRealname()+"退出成功！ ");
-            //清空用户登录Token缓存
+            baseCommonService.addLog("Buộc: "+sysUser.getRealname()+"Đăng xuất thành công!", CommonConstant.LOG_TYPE_1, null,sysUser);
+            log.info(" Buộc  "+sysUser.getRealname()+"Đăng xuất thành công! ");
+            //Xóa bộ nhớ đệm Token đăng nhập của người dùng
             redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + online.getToken());
-            //清空用户登录Shiro权限缓存
+            //Xóa cache quyền Shiro khi người dùng đăng nhập
             redisUtil.del(CommonConstant.PREFIX_USER_SHIRO_CACHE + sysUser.getId());
-            //清空用户的缓存信息（包括部门信息），例如sys:cache:user::<username>
+            //Xóa thông tin cache của người dùng (bao gồm thông tin phòng ban), ví dụ sys:cache:user::<username>
             redisUtil.del(String.format("%s::%s", CacheConstant.SYS_USERS_CACHE, sysUser.getUsername()));
-            //调用shiro的logout
+            //Gọi logout của Shiro logout
             SecurityUtils.getSubject().logout();
-            return Result.ok("退出登录成功！");
+            return Result.ok("Đăng xuất thành công!");
         }else {
-            return Result.error("Token无效!");
+            return Result.error("Token Không hợp lệ!");
         }
     }
 }

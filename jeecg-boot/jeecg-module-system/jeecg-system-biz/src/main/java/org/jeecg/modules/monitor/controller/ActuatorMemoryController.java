@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description: 内存健康检查
+ * @Description: Kiểm tra sức khỏe bộ nhớ
  * @author: chenrui
  */
 @Slf4j
@@ -25,7 +25,7 @@ public class ActuatorMemoryController {
 
 
     /**
-     * 内存详情
+     * Chi tiết bộ nhớ
      * @return
      */
     @RequiresRoles("admin")
@@ -38,7 +38,7 @@ public class ActuatorMemoryController {
 		result.put("memory.runtime.max", runtime.totalMemory() - runtime.freeMemory());
 		result.put("memory.runtime.free", runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory());
 		result.put("memory.runtime.usage", NumberUtil.div(runtime.totalMemory() - runtime.freeMemory(), runtime.totalMemory()));
-		// 代码逻辑说明: [TV360X-1695]内存信息-立即更新 功能报错 #6635------------
+		// Giải thích logic mã: [TV360X-1695]Thông tin bộ nhớ-Cập nhật ngay, chức năng báo lỗi #6635------------
 		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 		if (operatingSystemMXBean instanceof com.sun.management.OperatingSystemMXBean) {
 			com.sun.management.OperatingSystemMXBean opBean = (com.sun.management.OperatingSystemMXBean) operatingSystemMXBean;

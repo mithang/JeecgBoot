@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * 部门表 服务实现类
+ * Bảng phòng ban Lớp triển khai Service
  * <p>
  * 
  * @Author Steve
@@ -74,10 +74,10 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     
 	@Override
 	public List<SysDepartTreeModel> queryMyDeptTreeList(String departIds) {
-		//根据部门id获取所负责部门
+		//Lấy phòng ban phụ trách theo id phòng ban
 		LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<SysDepart>();
 		String[] codeArr = this.getMyDeptParentOrgCode(departIds);
-		// 代码逻辑说明: 【QQYUN-7320】查询部门没数据，导致报错空指针---
+		// Giải thích logic mã: 【QQYUN-7320】Truy vấn phòng ban không có dữ liệu, gây lỗi con trỏ null---
 		if(ArrayUtil.isEmpty(codeArr)){
 			return null;
 		}
@@ -87,14 +87,14 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		query.eq(SysDepart::getDelFlag, CommonConstant.DEL_FLAG_0.toString());
         query.ne(SysDepart::getOrgCategory,DepartCategoryEnum.DEPART_CATEGORY_POST.getValue());
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的 SASS 控制
+		//Có bật kiểm soát SASS của module quản lý hệ thống hay không
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			query.eq(SysDepart::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
 		//------------------------------------------------------------------------------------------------
 		
 		query.orderByAsc(SysDepart::getDepartOrder);
-		//将父节点ParentId设为null
+		//Đặt ParentId của nút cha thành null
 		List<SysDepart> listDepts = this.list(query);
 		for(int i=0;i<codeArr.length;i++){
 			for(SysDepart dept : listDepts){
@@ -103,51 +103,51 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 				}
 			}
 		}
-		// 调用wrapTreeDataToTreeList方法生成树状数据
+		// Gọi phương thức wrapTreeDataToTreeList để tạo dữ liệu dạng cây
 		List<SysDepartTreeModel> listResult = FindsDepartsChildrenUtil.wrapTreeDataToTreeList(listDepts);
 		return listResult;
 	}
 
 	/**
-	 * queryTreeList 对应 queryTreeList 查询所有的部门数据,以树结构形式响应给前端
+	 * queryTreeList Tương ứng với queryTreeList, truy vấn tất cả dữ liệu phòng ban,Trả về cho frontend dưới dạng cấu trúc cây
 	 */
 	@Override
 	//@Cacheable(value = CacheConstant.SYS_DEPARTS_CACHE)
 	public List<SysDepartTreeModel> queryTreeList() {
 		LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<SysDepart>();
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			query.eq(SysDepart::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}   
 		//------------------------------------------------------------------------------------------------
 		query.eq(SysDepart::getDelFlag, CommonConstant.DEL_FLAG_0.toString());
-        // 代码逻辑说明: 【QQYUN-13427】部门选择组件修改:需要过滤掉岗位 只保留 公司 子公司 部门---
+        // Giải thích logic mã: 【QQYUN-13427】Sửa đổi component chọn phòng ban:Cần lọc bỏ vị trí, chỉ giữ lại công ty, công ty con, phòng ban---
         query.ne(SysDepart::getOrgCategory, DepartCategoryEnum.DEPART_CATEGORY_POST.getValue());
 		query.orderByAsc(SysDepart::getDepartOrder);
 		List<SysDepart> list = this.list(query);
-		//设置用户id,让前台显示
+		//Cài đặt người dùng id,để giao diện hiển thị
         this.setUserIdsByDepList(list);
-		// 调用wrapTreeDataToTreeList方法生成树状数据
+		// Gọi phương thức wrapTreeDataToTreeList để tạo dữ liệu dạng cây
 		List<SysDepartTreeModel> listResult = FindsDepartsChildrenUtil.wrapTreeDataToTreeList(list);
 		return listResult;
 	}
 
 	/**
-	 * queryTreeList 根据部门id查询,前端回显调用
+	 * queryTreeList Truy vấn theo id phòng ban,Frontend gọi để hiển thị lại
 	 */
 	@Override
 	public List<SysDepartTreeModel> queryTreeList(String ids) {
 		List<SysDepartTreeModel> listResult=new ArrayList<>();
 		LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<SysDepart>();
 		query.eq(SysDepart::getDelFlag, CommonConstant.DEL_FLAG_0.toString());
-        // 代码逻辑说明: 【QQYUN-13427】部门选择组件修改:需要过滤掉岗位 只保留 公司 子公司 部门---
+        // Giải thích logic mã: 【QQYUN-13427】Sửa đổi component chọn phòng ban:Cần lọc bỏ vị trí, chỉ giữ lại công ty, công ty con, phòng ban---
          query.ne(SysDepart::getOrgCategory,DepartCategoryEnum.DEPART_CATEGORY_POST.getValue());
 		if(oConvertUtils.isNotEmpty(ids)){
 			query.in(true,SysDepart::getId,ids.split(","));
 		}
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			query.eq(SysDepart::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
@@ -167,38 +167,38 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<SysDepart>();
 		query.eq(SysDepart::getDelFlag, CommonConstant.DEL_FLAG_0.toString());
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			query.eq(SysDepart::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
 		//------------------------------------------------------------------------------------------------
 		query.orderByAsc(SysDepart::getDepartOrder);
 		List<SysDepart> list = this.list(query);
-		// 调用wrapTreeDataToTreeList方法生成树状数据
+		// Gọi phương thức wrapTreeDataToTreeList để tạo dữ liệu dạng cây
 		List<DepartIdModel> listResult = FindsDepartsChildrenUtil.wrapTreeDataToDepartIdTreeList(list);
 		return listResult;
 	}
 
 	/**
-	 * saveDepartData 对应 add 保存用户在页面添加的新的部门对象数据
+	 * saveDepartData Tương ứng với add, lưu dữ liệu đối tượng phòng ban mới mà người dùng thêm trên trang
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void saveDepartData(SysDepart sysDepart, String username) {
 		if (sysDepart != null && username != null) {
-			// 代码逻辑说明: [QQYUN-4163]给部门表加个是否有子节点------------
+			// Giải thích logic mã: [QQYUN-4163]Thêm vào bảng phòng ban trường có nút con hay không------------
 			if (oConvertUtils.isEmpty(sysDepart.getParentId())) {
 				sysDepart.setParentId("");
 			}else{
-				//将父部门的设成不是叶子结点
+				//Đặt phòng ban cha thành không phải nút lá
 				departMapper.setMainLeaf(sysDepart.getParentId(),CommonConstant.NOT_LEAF);
 			}
 			//String s = UUID.randomUUID().toString().replace("-", "");
 			sysDepart.setId(IdWorker.getIdStr(sysDepart));
-			// 先判断该对象有无父级ID,有则意味着不是最高级,否则意味着是最高级
-			// 获取父级ID
+			// Trước tiên xác định đối tượng có cấp cha hay không ID,Nếu có nghĩa là không phải cấp cao nhất,Ngược lại có nghĩa là cấp cao nhất
+			// Lấy cấp cha ID
 			String parentId = sysDepart.getParentId();
-			// 代码逻辑说明: 部门编码规则生成器做成公用配置
+			// Giải thích logic mã: Trình tạo quy tắc mã phòng ban làm thành cấu hình dùng chung
 			JSONObject formData = new JSONObject();
 			formData.put("parentId",parentId);
 			String[] codeArray = (String[]) FillRuleUtil.executeRule(FillRuleConstant.DEPART,formData);
@@ -207,9 +207,9 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 			sysDepart.setOrgType(String.valueOf(orgType));
 			sysDepart.setCreateTime(new Date());
 			sysDepart.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
-			//新添加的部门是叶子节点
+			//Phòng ban mới thêm là nút lá
 			sysDepart.setIzLeaf(CommonConstant.IS_LEAF);
-			// 【QQYUN-7172】数据库默认值兼容
+			// 【QQYUN-7172】Tương thích giá trị mặc định của cơ sở dữ liệu
 			if (oConvertUtils.isEmpty(sysDepart.getOrgCategory())) {
 				if (oConvertUtils.isEmpty(sysDepart.getParentId())) {
 					sysDepart.setOrgCategory("1");
@@ -218,7 +218,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 				}
 			}
 			this.save(sysDepart);
-			//新增部门的时候新增负责部门
+			//Khi thêm phòng ban mới thì thêm phòng ban phụ trách
             if(oConvertUtils.isNotEmpty(sysDepart.getDirectorUserIds())){
 			    this.addDepartByUserIds(sysDepart,sysDepart.getDirectorUserIds());
             }
@@ -227,27 +227,27 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 	
 	/**
-	 * saveDepartData 的调用方法,生成部门编码和部门类型（作废逻辑）
+	 * saveDepartData phương thức gọi,Tạo mã phòng ban và loại phòng ban (logic đã bỏ)
 	 * @deprecated
 	 * @param parentId
 	 * @return
 	 */
 	private String[] generateOrgCode(String parentId) {	
-				// 代码逻辑说明: 组织机构添加数据代码调整
+				// Giải thích logic mã: Điều chỉnh mã thêm dữ liệu tổ chức
 				LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<SysDepart>();
 				LambdaQueryWrapper<SysDepart> query1 = new LambdaQueryWrapper<SysDepart>();
 				String[] strArray = new String[2];
-		        // 创建一个List集合,存储查询返回的所有SysDepart对象
+		        // Tạo một tập hợp List,Lưu trữ tất cả đối tượng SysDepart do truy vấn trả về
 		        List<SysDepart> departList = new ArrayList<>();
-				// 定义新编码字符串
+				// Định nghĩa chuỗi mã mới
 				String newOrgCode = "";
-				// 定义旧编码字符串
+				// Định nghĩa chuỗi mã cũ
 				String oldOrgCode = "";
-				// 定义部门类型
+				// Định nghĩa loại phòng ban
 				String orgType = "";
-				// 如果是最高级,则查询出同级的org_code, 调用工具类生成编码并返回
+				// Nếu là cấp cao nhất,thì truy vấn ra các org_code cùng cấp org_code, Gọi lớp tiện ích để tạo mã và trả về
 				if (StringUtil.isNullOrEmpty(parentId)) {
-					// 线判断数据库中的表是否为空,空则直接返回初始编码
+					// Trước tiên xác định bảng trong cơ sở dữ liệu có trống hay không,Nếu trống thì trả về trực tiếp mã ban đầu
 					query1.eq(SysDepart::getParentId, "").or().isNull(SysDepart::getParentId);
 					query1.orderByDesc(SysDepart::getOrgCode);
 					departList = this.list(query1);
@@ -261,31 +261,31 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 					orgType = depart.getOrgType();
 					newOrgCode = YouBianCodeUtil.getNextYouBianCode(oldOrgCode);
 					}
-				} else { // 反之则查询出所有同级的部门,获取结果后有两种情况,有同级和没有同级
-					// 封装查询同级的条件
+				} else { // Ngược lại thì truy vấn tất cả các phòng ban cùng cấp,Sau khi lấy kết quả có hai trường hợp,Có cấp ngang và không có cấp ngang
+					// Đóng gói điều kiện truy vấn cùng cấp
 					query.eq(SysDepart::getParentId, parentId);
-					// 降序排序
+					// Sắp xếp giảm dần
 					query.orderByDesc(SysDepart::getOrgCode);
-					// 查询出同级部门的集合
+					// Truy vấn tập hợp phòng ban cùng cấp
 					List<SysDepart> parentList = this.list(query);
-					// 查询出父级部门
+					// Truy vấn ra phòng ban cấp cha
 					SysDepart depart = this.getById(parentId);
-					// 获取父级部门的Code
+					// Lấy của phòng ban cấp cha Code
 					String parentCode = depart.getOrgCode();
-					// 根据父级部门类型算出当前部门的类型
+					// Theo loại phòng ban cha, tính ra loại của phòng ban hiện tại
 					orgType = String.valueOf(Integer.valueOf(depart.getOrgType()) + 1);
-					// 处理同级部门为null的情况
+					// Xử lý trường hợp phòng ban cùng cấp là null
 					if (parentList == null || parentList.size() == 0) {
-						// 直接生成当前的部门编码并返回
+						// Tạo trực tiếp mã phòng ban hiện tại và trả về
 						newOrgCode = YouBianCodeUtil.getSubYouBianCode(parentCode, null);
-					} else { //处理有同级部门的情况
-						// 获取同级部门的编码,利用工具类
+					} else { //Xử lý trường hợp có phòng ban cùng cấp
+						// Lấy mã của phòng ban cùng cấp,Sử dụng lớp công cụ
 						String subCode = parentList.get(0).getOrgCode();
-						// 返回生成的当前部门编码
+						// Trả về mã phòng ban hiện tại đã tạo
 						newOrgCode = YouBianCodeUtil.getSubYouBianCode(parentCode, subCode);
 					}
 				}
-				// 返回最终封装了部门编码和部门类型的数组
+				// Trả về mảng cuối cùng đã đóng gói mã phòng ban và loại phòng ban
 				strArray[0] = newOrgCode;
 				strArray[1] = orgType;
 				return strArray;
@@ -293,19 +293,19 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 
 	
 	/**
-	 * removeDepartDataById 对应 delete方法 根据ID删除相关部门数据
+	 * removeDepartDataById Tương ứng với phương thức delete, xóa dữ liệu phòng ban liên quan theo ID
 	 * 
 	 */
 	/*
 	 * @Override
 	 * 
 	 * @Transactional public boolean removeDepartDataById(String id) {
-	 * System.out.println("要删除的ID 为=============================>>>>>"+id); boolean
+	 * System.out.println("ID cần xóa là=============================>>>>>"+id); boolean
 	 * flag = this.removeById(id); return flag; }
 	 */
 
 	/**
-	 * updateDepartDataById 对应 edit 根据部门主键来更新对应的部门数据
+	 * updateDepartDataById Tương ứng với edit, cập nhật dữ liệu phòng ban tương ứng theo khóa chính của phòng ban
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -313,12 +313,12 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		if (sysDepart != null && username != null) {
 			sysDepart.setUpdateTime(new Date());
 			sysDepart.setUpdateBy(username);
-            //验证部门类型
+            //Xác minh loại phòng ban
             this.verifyOrgCategory(sysDepart);
 			this.updateById(sysDepart);
-			//修改部门管理的时候，修改负责部门
+			//Khi sửa quản lý phòng ban, đồng thời sửa phòng ban phụ trách
             this.updateChargeDepart(sysDepart);
-            //redis清除缓存key
+            //redis Xóa cache key
             redisUtil.removeAll(CommonConstant.DEPART_NAME_REDIS_KEY_PRE);
 			return true;
 		} else {
@@ -328,20 +328,20 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
     /**
-     * 验证部门类型
+     * Xác minh loại phòng ban
      *
      * @param sysDepart
      */
     private void verifyOrgCategory(SysDepart sysDepart) {
-        //update-begin---author:wangshuai---date:2025-08-21---for: 当部门类型为岗位的时候，需要查看是否存在下级，存在下级无法变更为岗位---
-        //如果是岗位的情况下，不能存在子级
+        //update-begin---author:wangshuai---date:2025-08-21---for: Khi loại phòng ban là vị trí, cần kiểm tra có tồn tại cấp dưới hay không; nếu có cấp dưới thì không thể đổi thành vị trí---
+        //Nếu là trường hợp vị trí thì không được tồn tại cấp con
         if (oConvertUtils.isNotEmpty(sysDepart.getOrgCategory()) && DepartCategoryEnum.DEPART_CATEGORY_POST.getValue().equals(sysDepart.getOrgCategory())) {
             long count = this.count(new QueryWrapper<SysDepart>().lambda().eq(SysDepart::getParentId, sysDepart.getId()));
             if (count > 0) {
-                throw new JeecgBootBizTipException("当前子公司/部门下存在子级，无法变更为岗位!");
+                throw new JeecgBootBizTipException("Công ty con hiện tại/Dưới phòng ban tồn tại cấp con, không thể đổi thành vị trí!");
             }
         }
-        //如果是子公司的情况下，则上级不能为部门或者岗位
+        //Trong trường hợp là công ty con thì cấp trên không được là phòng ban hoặc vị trí
         if (oConvertUtils.isNotEmpty(sysDepart.getOrgCategory()) && DepartCategoryEnum.DEPART_CATEGORY_SUB_COMPANY.getValue().equals(sysDepart.getOrgCategory())
                 && oConvertUtils.isNotEmpty(sysDepart.getParentId())) {
             LambdaQueryWrapper<SysDepart> queryWrapper = new LambdaQueryWrapper<>();
@@ -349,17 +349,17 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
             queryWrapper.in(SysDepart::getOrgCategory, DepartCategoryEnum.DEPART_CATEGORY_POST.getValue(), DepartCategoryEnum.DEPART_CATEGORY_DEPART.getValue());
             long count = this.count(queryWrapper);
             if (count > 0) {
-                throw new JeecgBootBizTipException("当前父级为部门或岗位，无法变更为子公司!");
+                throw new JeecgBootBizTipException("Cấp trên hiện tại là phòng ban hoặc vị trí, không thể đổi thành công ty con!");
             }
         }
-        //如果是部门的情况下，下级不能为子公司或者公司
+        //Nếu là trường hợp phòng ban thì cấp dưới không thể là công ty con hoặc công ty
         if (oConvertUtils.isNotEmpty(sysDepart.getOrgCategory()) && DepartCategoryEnum.DEPART_CATEGORY_DEPART.getValue().equals(sysDepart.getOrgCategory())) {
             LambdaQueryWrapper<SysDepart> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(SysDepart::getParentId, sysDepart.getId());
             queryWrapper.in(SysDepart::getOrgCategory, DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue(), DepartCategoryEnum.DEPART_CATEGORY_SUB_COMPANY.getValue());
             long count = this.count(queryWrapper);
             if (count > 0) {
-                throw new JeecgBootBizTipException("当前子级存在子公司，无法变更为部门!");
+                throw new JeecgBootBizTipException("Cấp con hiện tại tồn tại công ty con, không thể đổi thành phòng ban!!");
             }
         }
     }
@@ -367,15 +367,15 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     @Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteBatchWithChildren(List<String> ids) {
-		//存放子级的id
+		//Lưu trữ của cấp con id
 		List<String> idList = new ArrayList<String>();
-		//存放父级的id
+		//Lưu trữ của cấp cha id
 		List<String> parentIdList = new ArrayList<>();
 		for(String id: ids) {
 			idList.add(id);
-			//此步骤是为了删除子级
+			//Bước này để xóa cấp con
 			this.checkChildrenExists(id, idList);
-			// 代码逻辑说明: 【QQYUN-5757】批量删除部门时未正确置为叶子节点 ------------
+			// Giải thích logic mã: 【QQYUN-5757】Xóa hàng loạt phòng ban nhưng chưa đặt đúng thành nút lá ------------
 			SysDepart depart = this.getDepartById(id);
 			if (oConvertUtils.isNotEmpty(depart.getParentId())) {
 				if (!parentIdList.contains(depart.getParentId())) {
@@ -384,9 +384,9 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 			}
 		}
 		this.removeByIds(idList);
-		//再删除前需要获取父级id，不然会一直为空
+		//Trước khi xóa cần lấy id cấp trên, nếu không sẽ luôn rỗng
 		this.setParentDepartIzLeaf(parentIdList);
-		//根据部门id获取部门角色id
+		//Lấy vai trò phòng ban theo ID phòng ban id
 		List<String> roleIdList = new ArrayList<>();
 		LambdaQueryWrapper<SysDepartRole> query = new LambdaQueryWrapper<>();
 		query.select(SysDepartRole::getId).in(SysDepartRole::getDepartId, idList);
@@ -394,19 +394,19 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		for(SysDepartRole deptRole : depRoleList){
 			roleIdList.add(deptRole.getId());
 		}
-		//根据部门id删除用户与部门关系
+		//Xóa quan hệ giữa người dùng và phòng ban theo id phòng ban
 		userDepartMapper.delete(new LambdaQueryWrapper<SysUserDepart>().in(SysUserDepart::getDepId,idList));
-		//根据部门id删除部门授权
+		//Xóa ủy quyền phòng ban theo ID phòng ban
 		departPermissionMapper.delete(new LambdaQueryWrapper<SysDepartPermission>().in(SysDepartPermission::getDepartId,idList));
-		//根据部门id删除部门角色
+		//Xóa vai trò phòng ban theo ID phòng ban
 		sysDepartRoleMapper.delete(new LambdaQueryWrapper<SysDepartRole>().in(SysDepartRole::getDepartId,idList));
 		if(roleIdList != null && roleIdList.size()>0){
-			//根据角色id删除部门角色授权
+			//Xóa ủy quyền vai trò phòng ban theo id vai trò
 			departRolePermissionMapper.delete(new LambdaQueryWrapper<SysDepartRolePermission>().in(SysDepartRolePermission::getRoleId,roleIdList));
-			//根据角色id删除部门角色用户信息
+			//Xóa thông tin người dùng vai trò phòng ban theo id vai trò
 			departRoleUserMapper.delete(new LambdaQueryWrapper<SysDepartRoleUser>().in(SysDepartRoleUser::getDroleId,roleIdList));
 		}
-        //删除岗位信息
+        //Xóa thông tin vị trí
         this.deleteDepartPostByDepIds(idList);
 	}
 
@@ -417,7 +417,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 
 	@Override
 	public List<String> getMySubDepIdsByDepId(String departIds) {
-		//根据部门id获取所负责部门
+		//Lấy phòng ban phụ trách theo id phòng ban
 		String[] codeArr = this.getMyDeptParentOrgCode(departIds);
 		if(codeArr==null || codeArr.length==0){
 			return null;
@@ -427,7 +427,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 
 	/**
 	 * <p>
-	 * 根据关键字搜索相关的部门数据
+	 * Tìm kiếm dữ liệu phòng ban liên quan theo từ khóa
 	 * </p>
 	 */
 	@Override
@@ -441,23 +441,23 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 根据关键字搜索组织机构。
+	 * Tìm kiếm tổ chức theo từ khóa.
 	 *
-	 * @param departManageSearch 是否为部门管理页面搜索
+	 * @param departManageSearch Có phải tìm kiếm trên trang quản lý phòng ban hay không
 	 */
 	private List<SysDepartTreeModel> searchByKeyWord(String keyWord, String myDeptSearch, String departIds,
 											  String orgCategory, String depIds, boolean departManageSearch) {
 		LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<SysDepart>();
 		List<SysDepartTreeModel> newList = new ArrayList<>();
-		//myDeptSearch不为空时为我的部门搜索，只搜索所负责部门
+		//myDeptSearch Khi không rỗng là tìm kiếm trong phòng ban của tôi, chỉ tìm các phòng ban mình phụ trách
 		if(!StringUtil.isNullOrEmpty(myDeptSearch)){
-			//departIds 为空普通用户或没有管理部门
+			//departIds Trống nghĩa là người dùng thường hoặc không có phòng ban quản lý
 			if(StringUtil.isNullOrEmpty(departIds)){
 				return newList;
 			}
-			//根据部门id获取所负责部门
+			//Lấy phòng ban phụ trách theo id phòng ban
 			String[] codeArr = this.getMyDeptParentOrgCode(departIds);
-			// 代码逻辑说明: /issues/3311 当用户属于两个部门的时候，且这两个部门没有上下级关系，我的部门-部门名称查询条件模糊搜索失效！
+			// Giải thích logic mã: /issues/3311 Khi người dùng thuộc hai phòng ban và hai phòng ban này không có quan hệ cấp trên/cấp dưới, phòng ban của tôi-Tìm kiếm mờ điều kiện truy vấn tên phòng ban bị lỗi!
 			if (codeArr != null && codeArr.length > 0) {
 				query.nested(i -> {
 					for (String s : codeArr) {
@@ -468,13 +468,13 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 			query.eq(SysDepart::getDelFlag, CommonConstant.DEL_FLAG_0.toString());
 		}
 		query.like(SysDepart::getDepartName, keyWord);
-        //需要根据部门类型进行数据筛选
+        //Cần lọc dữ liệu theo loại phòng ban
         if(oConvertUtils.isNotEmpty(orgCategory)){
             query.in(SysDepart::getOrgCategory, Arrays.asList(orgCategory.split(SymbolConstant.COMMA)));
         }else{
             query.ne(SysDepart::getOrgCategory,DepartCategoryEnum.DEPART_CATEGORY_POST.getValue());
         }
-        //如果前端传过来的部门id不为空的时候，说明是系统用户根据所属部门选择主岗位或者兼职岗位，需要进行数据过滤
+        //Nếu id phòng ban mà frontend truyền sang không rỗng, nghĩa là người dùng hệ thống đang chọn vị trí chính hoặc vị trí kiêm nhiệm theo phòng ban trực thuộc, cần thực hiện lọc dữ liệu
         if(oConvertUtils.isNotEmpty(depIds)){
             List<String> codeList = baseMapper.getDepCodeByDepIds(Arrays.asList(depIds.split(SymbolConstant.COMMA)));
             if(CollectionUtil.isNotEmpty(codeList)){
@@ -485,11 +485,11 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                 });
             }
         }
-        // 代码逻辑说明: [bugfree号]组织机构搜索回显优化--------------------
+        // Giải thích logic mã: [bugfree号]Tối ưu hiển thị lại khi tìm kiếm tổ chức--------------------
 		List<SysDepart> departList = this.list(query);
-        // update-begin--author:wangshuai---date:20260813---for：【LHZP-1075】【系统管理】部门 搜索后 如果是公司或部门 不能展开下级
+        // update-begin--author:wangshuai---date:20260813---for：【LHZP-1075][Quản lý hệ thống] Sau khi tìm kiếm phòng ban, nếu là công ty hoặc phòng ban thì không được mở rộng cấp dưới
 		if(CollectionUtil.isNotEmpty(departList) && departManageSearch) {
-			// 搜索结果按ID去重；父级和子级同时命中时仅保留父级，避免展开后子级重复展示。
+			// Kết quả tìm kiếm loại trùng theo ID; khi cả cấp cha và cấp con cùng trúng thì chỉ giữ cấp cha, tránh hiển thị trùng cấp con sau khi mở rộng.
 			Map<String, SysDepart> departMap = departList.stream().collect(Collectors.toMap(
 					SysDepart::getId, depart -> depart, (first, second) -> first, LinkedHashMap::new));
 			List<SysDepart> distinctDepartList = new ArrayList<>(departMap.values());
@@ -502,14 +502,14 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 								&& parent.getOrgCode().length() < orgCode.length()
 								&& orgCode.startsWith(parent.getOrgCode()));
 				if (!hasMatchedParent) {
-					// 保留izLeaf计算出的叶子状态，非叶子节点仍可通过前端懒加载展开下级。
+					// Giữ trạng thái lá được tính từ izLeaf; node không phải lá vẫn có thể mở cấp dưới bằng lazy loading ở frontend.
 					newList.add(new SysDepartTreeModel(depart));
 				}
                 
             }
 			return newList;
 		}
-        // update-end--author:wangshuai---date:20260813---for：【LHZP-1075】【系统管理】部门 搜索后 如果是公司或部门 不能展开下级
+        // update-end--author:wangshuai---date:20260813---for：【LHZP-1075][Quản lý hệ thống] Sau khi tìm kiếm phòng ban, nếu là công ty hoặc phòng ban thì không được mở rộng cấp dưới
         SysDepartTreeModel model = new SysDepartTreeModel();
 		if(departList.size() > 0) {
 			for(SysDepart depart : departList) {
@@ -523,7 +523,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 根据部门id删除并且删除其可能存在的子级任何部门
+	 * Xóa theo id phòng ban, đồng thời xóa mọi phòng ban con có thể tồn tại của nó
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -531,10 +531,10 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		List<String> idList = new ArrayList<>();
 		idList.add(id);
 		this.checkChildrenExists(id, idList);
-		//清空部门树内存
+		//Xóa bộ nhớ cây phòng ban
 		//FindsDepartsChildrenUtil.clearDepartIdModel();
 		boolean ok = this.removeByIds(idList);
-		//根据部门id获取部门角色id
+		//Lấy vai trò phòng ban theo ID phòng ban id
 		List<String> roleIdList = new ArrayList<>();
 		LambdaQueryWrapper<SysDepartRole> query = new LambdaQueryWrapper<>();
 		query.select(SysDepartRole::getId).in(SysDepartRole::getDepartId, idList);
@@ -542,23 +542,23 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		for(SysDepartRole deptRole : depRoleList){
 			roleIdList.add(deptRole.getId());
 		}
-		//根据部门id删除用户与部门关系
+		//Xóa quan hệ giữa người dùng và phòng ban theo id phòng ban
 		userDepartMapper.delete(new LambdaQueryWrapper<SysUserDepart>().in(SysUserDepart::getDepId,idList));
-		//根据部门id删除部门授权
+		//Xóa ủy quyền phòng ban theo ID phòng ban
 		departPermissionMapper.delete(new LambdaQueryWrapper<SysDepartPermission>().in(SysDepartPermission::getDepartId,idList));
-		//根据部门id删除部门角色
+		//Xóa vai trò phòng ban theo ID phòng ban
 		sysDepartRoleMapper.delete(new LambdaQueryWrapper<SysDepartRole>().in(SysDepartRole::getDepartId,idList));
 		if(roleIdList != null && roleIdList.size()>0){
-			//根据角色id删除部门角色授权
+			//Xóa ủy quyền vai trò phòng ban theo id vai trò
 			departRolePermissionMapper.delete(new LambdaQueryWrapper<SysDepartRolePermission>().in(SysDepartRolePermission::getRoleId,roleIdList));
-			//根据角色id删除部门角色用户信息
+			//Xóa thông tin người dùng vai trò phòng ban theo id vai trò
 			departRoleUserMapper.delete(new LambdaQueryWrapper<SysDepartRoleUser>().in(SysDepartRoleUser::getDroleId,roleIdList));
 		}
 		return ok;
 	}
 	
 	/**
-	 * delete 方法调用
+	 * delete Gọi phương thức
 	 * @param id
 	 * @param idList
 	 */
@@ -617,12 +617,12 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 根据用户所负责部门ids获取父级部门编码
+	 * Lấy mã phòng ban cấp trên theo ids phòng ban mà người dùng phụ trách
 	 * @param departIds
 	 * @return
 	 */
 	private String[] getMyDeptParentOrgCode(String departIds){
-		//根据部门id查询所负责部门
+		//Truy vấn phòng ban phụ trách theo id phòng ban
 		LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<SysDepart>();
 		query.eq(SysDepart::getDelFlag, CommonConstant.DEL_FLAG_0.toString());
 		if(oConvertUtils.isNotEmpty(departIds)){
@@ -630,14 +630,14 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		}
 		
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			query.eq(SysDepart::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
 		//------------------------------------------------------------------------------------------------
 		query.orderByAsc(SysDepart::getOrgCode);
 		List<SysDepart> list = this.list(query);
-		//查找根部门
+		//Tìm phòng ban gốc
 		if(list == null || list.size()==0){
 			return null;
 		}
@@ -647,13 +647,13 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 获取负责部门父节点
+	 * Lấy nút cha của phòng ban phụ trách
 	 * @param list
 	 * @return
 	 */
 	private String getMyDeptParentNode(List<SysDepart> list){
 		Map<String,String> map = new HashMap(5);
-		//1.先将同一公司归类
+		//1.Trước tiên, nhóm các công ty giống nhau lại
 		for(SysDepart dept : list){
 			String code = dept.getOrgCode().substring(0,3);
 			if(map.containsKey(code)){
@@ -664,7 +664,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 			}
 		}
 		StringBuffer parentOrgCode = new StringBuffer();
-		//2.获取同一公司的根节点
+		//2.Lấy nút gốc của cùng một công ty
 		for(String str : map.values()){
 			String[] arrStr = str.split(",");
 			parentOrgCode.append(",").append(this.getMinLengthNode(arrStr));
@@ -673,7 +673,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 获取同一公司中部门编码长度最小的部门
+	 * Lấy phòng ban có độ dài mã phòng ban nhỏ nhất trong cùng một công ty
 	 * @param str
 	 * @return
 	 */
@@ -689,7 +689,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		return orgCodeBuilder.toString();
 	}
     /**
-     * 获取部门树信息根据关键字
+     * Lấy thông tin cây phòng ban theo từ khóa
      * @param keyWord
      * @return
      */
@@ -699,7 +699,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
         query.eq(SysDepart::getDelFlag, CommonConstant.DEL_FLAG_0.toString());
         query.orderByAsc(SysDepart::getDepartOrder);
         List<SysDepart> list = this.list(query);
-        // 调用wrapTreeDataToTreeList方法生成树状数据
+        // Gọi phương thức wrapTreeDataToTreeList để tạo dữ liệu dạng cây
         List<SysDepartTreeModel> listResult = FindsDepartsChildrenUtil.wrapTreeDataToTreeList(list);
         List<SysDepartTreeModel> treelist =new ArrayList<>();
         if(StringUtils.isNotBlank(keyWord)){
@@ -711,10 +711,10 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
 	/**
-	 * 根据parentId查询部门树
+	 * Truy vấn cây phòng ban theo parentId
 	 * @param parentId
-	 * @param ids 前端回显传递
-	 * @param primaryKey 主键字段（id或者orgCode）
+	 * @param ids Frontend truyền lại để hiển thị
+	 * @param primaryKey Trường khóa chính (id hoặc orgCode)
 	 * @return
 	 */
 	@Override
@@ -736,37 +736,37 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		};
 		LambdaQueryWrapper<SysDepart> lqw=new LambdaQueryWrapper<>();
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的 SASS 控制
+		//Có bật kiểm soát SASS của module quản lý hệ thống hay không
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			lqw.eq(SysDepart::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
 		//------------------------------------------------------------------------------------------------
 		lqw.eq(true,SysDepart::getDelFlag,CommonConstant.DEL_FLAG_0.toString());
-		// 按 orgCategory 过滤：传入则精确匹配，否则默认排除岗位
+		// Lọc theo orgCategory: nếu truyền vào thì khớp chính xác, nếu không thì mặc định loại trừ vị trí
 		if (oConvertUtils.isNotEmpty(orgCategory)) {
 			lqw.in(SysDepart::getOrgCategory, (Object[]) orgCategory.split(SymbolConstant.COMMA));
 		} else {
-			// 代码逻辑说明: 【QQYUN-13427】部门选择组件修改:需要过滤掉岗位 只保留 公司 子公司 部门---
+			// Giải thích logic mã: 【QQYUN-13427】Sửa đổi component chọn phòng ban:Cần lọc bỏ vị trí, chỉ giữ lại công ty, công ty con, phòng ban---
 			lqw.ne(SysDepart::getOrgCategory, DepartCategoryEnum.DEPART_CATEGORY_POST.getValue());
 		}
 		lqw.func(square);
-        // 代码逻辑说明: [VUEN-1143]排序不对，vue3和2应该都有问题，应该按照升序排------------
+        // Giải thích logic mã: [VUEN-1143]Sắp xếp không đúng, Vue 3 và Vue 2 đều có vấn đề, nên sắp xếp theo thứ tự tăng dần------------
 		lqw.orderByAsc(SysDepart::getDepartOrder);
 		List<SysDepart> list = list(lqw);
-        //设置用户id,让前台显示
+        //Cài đặt người dùng id,để giao diện hiển thị
         this.setUserIdsByDepList(list);
 		List<SysDepartTreeModel> records = new ArrayList<>();
-		//update-begin---author:scott ---date:20261030  for：【LHZP-1974】部门树每个节点单独查一次子部门数量，SQL Server下办理页加载慢，改为一次查出有子部门的节点-----------
+		//update-begin---author:scott ---date:20261030  for：【LHZP-1974] Cây phòng ban: mỗi node truy vấn riêng một lần số lượng phòng ban con, trang xử lý tải chậm trên SQL Server, đổi thành truy vấn một lần các node có phòng ban con-----------
 		Set<String> hasChildIds = getHasNoPostChildParentIds(list.stream().map(SysDepart::getId).collect(Collectors.toList()));
 		for (int i = 0; i < list.size(); i++) {
 			SysDepart depart = list.get(i);
-            // 代码逻辑说明: 【QQYUN-13427】部门选择组件修改:需要过滤掉岗位 只保留 公司 子公司 部门---
+            // Giải thích logic mã: 【QQYUN-13427】Sửa đổi component chọn phòng ban:Cần lọc bỏ vị trí, chỉ giữ lại công ty, công ty con, phòng ban---
             if(!hasChildIds.contains(depart.getId())){
                 depart.setIzLeaf(CommonConstant.IS_LEAF);
             }
-		//update-end---author:scott ---date:20261030  for：【LHZP-1974】部门树每个节点单独查一次子部门数量，SQL Server下办理页加载慢，改为一次查出有子部门的节点-----------
+		//update-end---author:scott ---date:20261030  for：【LHZP-1974] Cây phòng ban: mỗi node truy vấn riêng một lần số lượng phòng ban con, trang xử lý tải chậm trên SQL Server, đổi thành truy vấn một lần các node có phòng ban con-----------
             SysDepartTreeModel treeModel = new SysDepartTreeModel(depart);
-            //TODO 异步树加载key拼接__+时间戳,以便于每次展开节点会刷新数据
+            //TODO Ghép key khi tải cây bất đồng bộ__+Dấu thời gian,Để mỗi lần mở rộng nút sẽ làm mới dữ liệu
 			//treeModel.setKey(treeModel.getKey()+"__"+System.currentTimeMillis());
             records.add(treeModel);
         }
@@ -774,15 +774,15 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
     /**
-     * 一次查出哪些部门下有子部门（不含岗位），用于判断树节点是否叶子，替代逐个部门 count
-     * @param departIds 部门ID
-     * @return 有子部门的部门ID
+     * Truy vấn một lần xem những phòng ban nào có phòng ban con (không bao gồm vị trí), dùng để xác định node cây có phải lá hay không, thay cho việc truy vấn từng phòng ban count
+     * @param departIds Phòng ban ID
+     * @return Phòng ban có phòng ban con ID
      * @author scott
-     * @since 2026-10-30 【LHZP-1974】部门树每个节点单独查一次子部门数量，SQL Server下办理页加载慢
+     * @since 2026-10-30 【LHZP-1974] Cây phòng ban: mỗi node truy vấn riêng một lần số lượng phòng ban con, trang xử lý tải chậm trên SQL Server
      */
     private Set<String> getHasNoPostChildParentIds(List<String> departIds) {
         Set<String> parentIds = new HashSet<>();
-        // 分批查询，避免 SQL Server 等数据库 IN 参数个数超限
+        // Truy vấn theo từng đợt, tránh vượt quá giới hạn số lượng tham số IN của các cơ sở dữ liệu như SQL Server
         for (int i = 0; i < departIds.size(); i += 1000) {
             LambdaQueryWrapper<SysDepart> queryNoPosition = new LambdaQueryWrapper<>();
             queryNoPosition.select(SysDepart::getParentId);
@@ -794,7 +794,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 部门管理异步树
+     * Cây bất đồng bộ quản lý phòng ban
      *
      * @param parentId
      * @param ids
@@ -814,7 +814,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                 }
             } else {
                 if(oConvertUtils.isEmpty(parentId)){
-                    // 代码逻辑说明: 如果前端传过来的部门id不为空的时候，说明是系统用户根据所属部门选择主岗位或者兼职岗位---
+                    // Giải thích logic mã: Nếu id phòng ban mà frontend truyền sang không rỗng, nghĩa là người dùng hệ thống đang chọn vị trí chính hoặc vị trí kiêm nhiệm theo phòng ban trực thuộc---
                     if(oConvertUtils.isNotEmpty(departIds)){
                         i.in(SysDepart::getId,Arrays.asList(departIds.split(SymbolConstant.COMMA)));
                     }else{
@@ -830,7 +830,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
             }
         };
         LambdaQueryWrapper<SysDepart> lqw=new LambdaQueryWrapper<>();
-        //是否开启系统管理模块的 SASS 控制
+        //Có bật kiểm soát SASS của module quản lý hệ thống hay không
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
             lqw.eq(SysDepart::getTenantId, oConvertUtils.getInt(TenantContext.getTenant(), 0));
         }
@@ -838,17 +838,17 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
         lqw.func(square);
         lqw.orderByAsc(SysDepart::getDepartOrder);
         List<SysDepart> list = list(lqw);
-        //设置用户id,让前台显示
+        //Cài đặt người dùng id,để giao diện hiển thị
         this.setUserIdsByDepList(list);
         List<String> departIdList = new ArrayList<>();
-        //如果前端传过来的部门id不为空的时候，说明是系统用户根据所属部门选择主岗位或者兼职岗位
+        //Nếu id phòng ban mà frontend truyền sang không rỗng, nghĩa là người dùng hệ thống đang chọn vị trí chính hoặc vị trí kiêm nhiệm theo phòng ban trực thuộc
         if(oConvertUtils.isNotEmpty(departIds) && oConvertUtils.isEmpty(parentId)){
             departIdList = list.stream().map(SysDepart::getId).toList();
         }
         List<SysDepartTreeModel> records = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             SysDepart depart = list.get(i);
-            //如果部门id和父级部门id再同一列的时候，不用添加到树结构里面去了
+            //Nếu id phòng ban và id phòng ban cha ở cùng một cột thì không cần thêm vào cấu trúc cây nữa
             if(oConvertUtils.isNotEmpty(departIds) && oConvertUtils.isEmpty(parentId)
                && departIdList.contains(depart.getParentId())){
                 continue;
@@ -880,23 +880,23 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 查询某个部门的所有父ID信息
+	 * Truy vấn thông tin tất cả ID cha của một phòng ban
 	 *
-	 * @param fieldName 字段名
-	 * @param value     值
+	 * @param fieldName Tên trường
+	 * @param value     Giá trị
 	 */
 	private JSONObject queryAllParentId(String fieldName, String value) {
 		JSONObject data = new JSONObject();
-		// 父ID集合，有序
+		// Tập hợp ID cha, có thứ tự
 		data.put("parentIds", new JSONArray());
-		// 父ID的部门数据，key是id，value是数据
+		// Dữ liệu phòng ban của ID cha, key là id, value là dữ liệu
 		data.put("parentMap", new JSONObject());
 		this.queryAllParentIdRecursion(fieldName, value, data);
 		return data;
 	}
 
 	/**
-	 * 递归调用查询父部门接口
+	 * Gọi đệ quy API truy vấn phòng ban cha
 	 */
 	private void queryAllParentIdRecursion(String fieldName, String value, JSONObject data) {
 		QueryWrapper<SysDepart> queryWrapper = new QueryWrapper<>();
@@ -918,7 +918,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		return this.baseMapper.queryCompByOrgCode(compyOrgCode);
 	}
 	/**
-	 * 根据id查询下级部门
+	 * Truy vấn phòng ban cấp dưới theo id
 	 * @param pid
 	 * @return
 	 */
@@ -927,7 +927,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		return this.baseMapper.queryDeptByPid(pid);
 	}
 	/**
-     * 根据关键字筛选部门信息
+     * Lọc thông tin phòng ban theo từ khóa
      * @param keyWord
      * @return
      */
@@ -943,19 +943,19 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
     
     /**
-     * 通过用户id设置负责部门
-     * @param sysDepart SysDepart部门对象
-     * @param userIds 多个负责用户id
+     * Đặt phòng ban phụ trách qua ID người dùng
+     * @param sysDepart SysDepart Đối tượng phòng ban
+     * @param userIds Nhiều người dùng phụ trách id
      */
     public void addDepartByUserIds(SysDepart sysDepart, String userIds) {
-        //获取部门id,保存到用户
+        //Lấy phòng ban id,Lưu vào người dùng
         String departId = sysDepart.getId();
-        //循环用户id
+        //Lặp qua người dùng id
         String[] userIdArray = userIds.split(",");
         for (String userId:userIdArray) {
-            //查询用户表增加负责部门
+            //Truy vấn bảng người dùng để thêm phòng ban phụ trách
             SysUser sysUser = sysUserMapper.selectById(userId);
-            //如果部门id不为空，那么就需要拼接
+            //Nếu id phòng ban không trống thì cần nối thêm
             if(oConvertUtils.isNotEmpty(sysUser.getDepartIds())){
                 if(!sysUser.getDepartIds().contains(departId)) {
                     sysUser.setDepartIds(sysUser.getDepartIds() + "," + departId);
@@ -963,14 +963,14 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
             }else{
                 sysUser.setDepartIds(departId);
             }
-            //设置身份为上级
+            //Đặt vai trò là cấp trên
             sysUser.setUserIdentity(CommonConstant.USER_IDENTITY_2);
-            //跟新用户表
+            //Cập nhật bảng người dùng
             sysUserMapper.updateById(sysUser);
-            //判断当前用户是否包含所属部门
+            //Kiểm tra người dùng hiện tại có bao gồm phòng ban trực thuộc không
             List<SysUserDepart> userDepartList = userDepartMapper.getUserDepartByUid(userId);
             boolean isExistDepId = userDepartList.stream().anyMatch(item -> departId.equals(item.getDepId()));
-            //如果不存在需要设置所属部门
+            //Nếu không tồn tại cần thiết lập phòng ban thuộc về
             if(!isExistDepId){
                 userDepartMapper.insert(new SysUserDepart(userId,departId));
             }
@@ -978,29 +978,29 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
     
     /**
-     * 修改用户负责部门
-     * @param sysDepart SysDepart对象
+     * Sửa phòng ban phụ trách của người dùng
+     * @param sysDepart SysDepart Đối tượng
      */
     private void updateChargeDepart(SysDepart sysDepart) {
-        //新的用户id
+        //người dùng mới id
         String directorIds = sysDepart.getDirectorUserIds();
-        //旧的用户id（数据库中存在的）
+        //Id người dùng cũ (đã tồn tại trong cơ sở dữ liệu)
         String oldDirectorIds = sysDepart.getOldDirectorUserIds();
         String departId = sysDepart.getId();
-        //如果用户id为空,那么用户的负责部门id应该去除
+        //Nếu id người dùng trống,Vậy id phòng ban phụ trách của người dùng nên được loại bỏ
         if(oConvertUtils.isEmpty(directorIds)){
             this.deleteChargeDepId(departId,null);
         }else if(oConvertUtils.isNotEmpty(directorIds) && oConvertUtils.isEmpty(oldDirectorIds)){
-            //如果用户id不为空但是用户原来负责部门的用户id为空
+            //Nếu id người dùng không rỗng nhưng id người dùng phụ trách phòng ban ban đầu của người dùng lại rỗng
             this.addDepartByUserIds(sysDepart,directorIds);
         }else{
-            //都不为空，需要比较，进行添加或删除
-            //找到新的负责部门用户id与原来负责部门的用户id，进行删除
+            //Cả hai đều không trống thì cần so sánh để thêm hoặc xóa
+            //Tìm id người dùng phụ trách phòng ban mới và id người dùng phụ trách phòng ban cũ, rồi thực hiện xóa
             List<String> userIdList = Arrays.stream(oldDirectorIds.split(",")).filter(item -> !directorIds.contains(item)).collect(Collectors.toList());
             for (String userId:userIdList){
                 this.deleteChargeDepId(departId,userId);
             }
-            //找到原来负责部门的用户id与新的负责部门用户id，进行新增
+            //Tìm id người dùng phụ trách phòng ban cũ và id người dùng phụ trách phòng ban mới, rồi thực hiện thêm mới
             String addUserIds = Arrays.stream(directorIds.split(",")).filter(item -> !oldDirectorIds.contains(item)).collect(Collectors.joining(","));
             if(oConvertUtils.isNotEmpty(addUserIds)){
                 this.addDepartByUserIds(sysDepart,addUserIds); 
@@ -1009,25 +1009,25 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 删除用户负责部门
-     * @param departId 部门id
-     * @param userId 用户id
+     * Xóa phòng ban phụ trách của người dùng
+     * @param departId Phòng ban id
+     * @param userId Người dùng id
      */
     private void deleteChargeDepId(String departId,String userId){
-        //先查询负责部门的用户id,因为负责部门的id使用逗号拼接起来的
+        //Trước tiên truy vấn người dùng phụ trách phòng ban id,Vì id của phòng ban phụ trách được nối với nhau bằng dấu phẩy
         LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<>();
         query.like(SysUser::getDepartIds,departId);
-        //删除全部的情况下用户id不存在
+        //Trong trường hợp xóa toàn bộ, id người dùng không tồn tại
         if(oConvertUtils.isNotEmpty(userId)){
             query.eq(SysUser::getId,userId); 
         }
         List<SysUser> userList = sysUserMapper.selectList(query);
         for (SysUser sysUser:userList) {
-            //将不存在的部门id删除掉
+            //Xóa các ID phòng ban không tồn tại
             String departIds = sysUser.getDepartIds();
             List<String> list = new ArrayList<>(Arrays.asList(departIds.split(",")));
             list.remove(departId);
-            //删除之后再将新的id用逗号拼接起来进行更新
+            //Sau khi xóa sẽ nối các id mới bằng dấu phẩy để cập nhật
             String newDepartIds = String.join(",",list);
             sysUser.setDepartIds(newDepartIds);
             sysUserMapper.updateById(sysUser);
@@ -1035,21 +1035,21 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 通过部门集合为部门设置用户id，用于前台展示
-     * @param departList 部门集合
+     * Đặt id người dùng cho phòng ban qua tập hợp phòng ban, dùng để hiển thị ở frontend
+     * @param departList Tập hợp phòng ban
      */
     private void setUserIdsByDepList(List<SysDepart> departList) {
-        //查询负责部门不为空的情况
+        //Truy vấn trường hợp phòng ban phụ trách không trống
         LambdaQueryWrapper<SysUser> query  = new LambdaQueryWrapper<>();
         query.isNotNull(SysUser::getDepartIds);
         List<SysUser> users = sysUserMapper.selectList(query);
         Map<String,Object> map = new HashMap(5);
-        //先循环一遍找到不同的负责部门id
+        //Lặp một vòng trước để tìm các phòng ban phụ trách khác nhau id
         for (SysUser user:users) {
             String departIds = user.getDepartIds();
             String[] departIdArray = departIds.split(",");
             for (String departId:departIdArray) {
-                //mao中包含部门key，负责用户直接拼接
+                //mao chứa key phòng ban, người dùng phụ trách nối trực tiếp
                 if(map.containsKey(departId)){
                     String userIds = map.get(departId) + "," + user.getId();
                     map.put(departId,userIds);
@@ -1058,7 +1058,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                 }
             }
         }
-        //循环部门集合找到部门id对应的负责用户
+        //Lặp tập hợp phòng ban để tìm người phụ trách tương ứng với id phòng ban
         for (SysDepart sysDepart:departList) {
             if(map.containsKey(sysDepart.getId())){
                 sysDepart.setDirectorUserIds(map.get(sysDepart.getId()).toString()); 
@@ -1067,19 +1067,19 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 获取我的部门已加入的公司
+     * Lấy các công ty mà phòng ban của tôi đã tham gia
      * @return
      */
     @Override
     public List<SysDepart> getMyDepartList() {
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         String userId = user.getId();
-        //字典code集合
+        //Tập hợp code danh mục
         List<String> list = new ArrayList<>();
-        //查询我加入的部门
+        //Truy vấn phòng ban tôi đã tham gia
         List<SysDepart> sysDepartList = this.baseMapper.queryUserDeparts(userId);
         for (SysDepart sysDepart : sysDepartList) {
-            //获取一级部门编码
+            //Lấy mã phòng ban cấp một
             String orgCode = sysDepart.getOrgCode();
             if (YouBianCodeUtil.ZHANWEI_LENGTH <= orgCode.length()) {
                 int length = YouBianCodeUtil.ZHANWEI_LENGTH;
@@ -1087,9 +1087,9 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                 list.add(companyOrgCode);
             }
         }
-        //字典code集合不为空
+        //Tập hợp code danh mục không trống
         if (oConvertUtils.isNotEmpty(list)) {
-            //查询一级部门的数据
+            //Truy vấn dữ liệu phòng ban cấp một
             LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<>();
             query.select(SysDepart::getDepartName, SysDepart::getId, SysDepart::getOrgCode);
             query.eq(SysDepart::getDelFlag, String.valueOf(CommonConstant.DEL_FLAG_0));
@@ -1101,10 +1101,10 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 
 	@Override
 	public void deleteDepart(String id) {
-    	//删除部门设置父级的叶子结点
+    	//Xóa phòng ban, thiết lập nút lá của cấp cha
 		this.setIzLeaf(id);
 		this.delete(id);
-		//删除部门用户关系表
+		//Xóa bảng quan hệ người dùng phòng ban
 		LambdaQueryWrapper<SysUserDepart> query = new LambdaQueryWrapper<SysUserDepart>()
 				.eq(SysUserDepart::getDepId, id);
 		this.userDepartMapper.delete(query);
@@ -1138,7 +1138,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 设置父级节点是否存在叶子结点
+	 * Thiết lập nút cấp cha có tồn tại nút lá hay không
 	 * @param id
 	 */
 	private void setIzLeaf(String id) {
@@ -1147,32 +1147,32 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		if(oConvertUtils.isNotEmpty(parentId)){
 			Long count = this.count(new QueryWrapper<SysDepart>().lambda().eq(SysDepart::getParentId, parentId));
 			if(count == 1){
-				//若父节点无其他子节点，则该父节点是叶子节点
+				//Nếu nút cha không còn nút con nào khác thì nút cha đó là nút lá
 				departMapper.setMainLeaf(parentId, CommonConstant.IS_LEAF);
 			}
 		}
 	}
 
-	//========================begin 零代码下部门与人员导出 ==================================================================
+	//========================begin Xuất phòng ban và nhân sự trong chế độ No-code ==================================================================
 
 	@Override
 	public List<ExportDepartVo> getExcelDepart(int tenantId) {
-		//获取父级部门
+		//Lấy phòng ban cấp cha
 		List<ExportDepartVo> parentDepart = departMapper.getDepartList("",tenantId);
-		//子部门
+		//Phòng ban con
 		List<ExportDepartVo> childrenDepart = new ArrayList<>();
-		//把一级部门名称放在里面
+		//Đặt tên phòng ban cấp một vào trong
 		List<ExportDepartVo> exportDepartVoList = new ArrayList<>();
-		//存放部门一级id避免重复
+		//Lưu id cấp một của phòng ban để tránh trùng lặp
 		List<String> departIdList = new ArrayList<>();
 		for (ExportDepartVo departVo:parentDepart) {
 			departIdList.add(departVo.getId());
 			departVo.setDepartNameUrl(departVo.getDepartName());
 			exportDepartVoList.add(departVo);
-			//创建路径
+			//Tạo đường dẫn
 			List<String> path = new ArrayList<>();
 			path.add(departVo.getDepartName());
-			//创建子部门路径
+			//Tạo đường dẫn phòng ban con
 			findPath(departVo, path, tenantId,childrenDepart,departIdList);
 			path.clear();
 		}
@@ -1183,17 +1183,17 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 寻找部门路径
-	 * @param departVo 部门vo
-	 * @param path 部门路径
-	 * @param tenantId 租户id
-	 * @param childrenDepart 子部门
-	 * @param departIdList 部门id集合
+	 * Tìm đường dẫn phòng ban
+	 * @param departVo Phòng ban vo
+	 * @param path Đường dẫn phòng ban
+	 * @param tenantId Tenant id
+	 * @param childrenDepart Phòng ban con
+	 * @param departIdList Tập hợp id phòng ban
 	 */
 	private void findPath(ExportDepartVo departVo, List<String> path,Integer tenantId,List<ExportDepartVo> childrenDepart,List<String> departIdList) {
-		//获取租户id和部门父id获取的部门数据
+		//Lấy dữ liệu phòng ban theo id tenant và id phòng ban cha
 		List<ExportDepartVo> departList = departMapper.getDepartList(departVo.getId(), tenantId);
-		//部门为空判断
+		//Kiểm tra phòng ban trống
 		if (departList == null || departList.size() <= 0) {
 			if(!departIdList.contains(departVo.getId())){
 				departVo.setDepartNameUrl(String.join(SymbolConstant.SINGLE_SLASH,path));
@@ -1204,7 +1204,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 
 		for (int i = 0; i < departList.size(); i++) {
 			ExportDepartVo exportDepartVo = departList.get(i);
-			//存放子级路径
+			//Lưu đường dẫn cấp con
 			List<String> cPath = new ArrayList<>();
 			cPath.addAll(path);
 			cPath.add(exportDepartVo.getDepartName());
@@ -1216,15 +1216,15 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 			findPath(exportDepartVo,cPath ,tenantId, childrenDepart,departIdList);
 		}
 	}
-	//========================end 零代码下部门与人员导出 ==================================================================
+	//========================end Xuất phòng ban và nhân sự trong chế độ No-code ==================================================================
 
-	//========================begin 零代码下部门与人员导入 ==================================================================
+	//========================begin Nhập phòng ban và nhân sự trong chế độ No-code ==================================================================
 	@Override
 	public void importExcel(List<ExportDepartVo> listSysDeparts, List<String> errorMessageList) {
 		int num = 0;
 		int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
 		
-		//部门路径排序
+		//Sắp xếp đường dẫn phòng ban
 		Collections.sort(listSysDeparts, new Comparator<ExportDepartVo>() {
 			@Override
 			public int compare(ExportDepartVo o1, ExportDepartVo o2) {
@@ -1237,20 +1237,20 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 				}
 			}
 		});
-		//存放部门数据的map
+		//Lưu dữ liệu phòng ban map
 		Map<String,SysDepart> departMap = new HashMap<>();
-		//循环第二遍导入数据
+		//Lặp lại lần thứ hai để nhập dữ liệu
 		for (ExportDepartVo exportDepartVo : listSysDeparts) {
 			SysDepart sysDepart = new SysDepart();
-			// orgCode编码长度
+			// orgCode Độ dài mã
 			int codeLength = YouBianCodeUtil.ZHANWEI_LENGTH;
 			Boolean izExport = false;
 			try {
 				izExport = this.addDepartByName(exportDepartVo.getDepartNameUrl(),exportDepartVo.getDepartName(),sysDepart,errorMessageList,tenantId,departMap,num);
 			} catch (Exception e) {
-				//没有查找到parentDept
+				//Không tìm thấy parentDept
 			}
-			//没有错误的时候才会导入数据
+			//Chỉ nhập dữ liệu khi không có lỗi
 			if(izExport){
 				sysDepart.setOrgType(sysDepart.getOrgCode().length()/codeLength+"");
 				sysDepart.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
@@ -1264,87 +1264,87 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 添加部门
-	 * @param departNameUrl 部门路径
-	 * @param departName 部门名称
-	 * @param sysDepart 部门类
-	 * @param errorMessageList 错误集合
-	 * @param tenantId 租户id
-	 * @param departMap 部门数组。避免存在部门信息再次查询 key 存放部门路径 value 存放部门对象
-	 * @param num 判断第几行有错误信息
+	 * Thêm phòng ban
+	 * @param departNameUrl Đường dẫn phòng ban
+	 * @param departName Tên phòng ban
+	 * @param sysDepart Lớp phòng ban
+	 * @param errorMessageList Tập hợp lỗi
+	 * @param tenantId Tenant id
+	 * @param departMap Mảng phòng ban. Tránh truy vấn lại khi đã có thông tin phòng ban; key lưu đường dẫn phòng ban, value lưu đối tượng phòng ban
+	 * @param num Xác định dòng nào có thông tin lỗi
 	 */
 	private Boolean addDepartByName(String departNameUrl,String departName,SysDepart sysDepart,List<String> errorMessageList,Integer tenantId,Map<String,SysDepart> departMap, int num) {
 		int lineNumber = num + 1;
 		if(oConvertUtils.isEmpty(departNameUrl) && oConvertUtils.isEmpty(departName)){
-			//部门路径为空
-			errorMessageList.add("第 " + lineNumber + " 行：记录部门路径或者部门名称为空禁止导入");
+			//Đường dẫn phòng ban trống
+			errorMessageList.add(" " + lineNumber + " dòng: Bản ghi có đường dẫn phòng ban hoặc tên phòng ban trống thì cấm nhập");
 			return false;
 		}
-		//获取部门名称路径
+		//Lấy đường dẫn tên phòng ban
 		String name = "";
 		if(departNameUrl.contains(SymbolConstant.SINGLE_SLASH)){
-			//获取分割的部门名称
+			//Lấy tên phòng ban đã tách
 			name = departNameUrl.substring(departNameUrl.lastIndexOf(SymbolConstant.SINGLE_SLASH)+1);
 		}else{
 			name = departNameUrl;
 		}
 		
 		if(!name.equals(departName)){
-			//部门名称已存在
-			errorMessageList.add("第 " + lineNumber + " 行：记录部门路径:”"+departNameUrl+"“"+"和部门名称：“"+departName+"“不一致，请检查！");
+			//Tên phòng ban đã tồn tại
+			errorMessageList.add(" " + lineNumber + " Dòng: ghi lại đường dẫn phòng ban:”"+departNameUrl+"“"+"và tên phòng ban: “"+departName+"“ không nhất quán, vui lòng kiểm tra!");
 			return false;
 		}else{
 			String parentId = "";
-			//判断是否包含“/”
+			//Kiểm tra có chứa “/”
 			if(departNameUrl.contains(SymbolConstant.SINGLE_SLASH)){
-				//获取最后一个斜杠之前的路径
+				//Lấy đường dẫn trước dấu gạch chéo cuối cùng
 				String departNames = departNameUrl.substring(0,departNameUrl.lastIndexOf(SymbolConstant.SINGLE_SLASH));
-				//判断是否已经包含部门路径
+				//Xác định đã chứa đường dẫn phòng ban hay chưa
 				if(departMap.containsKey(departNames)){
 					SysDepart depart = departMap.get(departNames);
 					if(null != depart){
 						parentId = depart.getId();
 					}
 				}else{
-					//分割斜杠路径，查看数据库中是否存在此路径
+					//Tách đường dẫn dấu gạch chéo, kiểm tra xem đường dẫn này có tồn tại trong cơ sở dữ liệu hay không
 					String[] departNameUrls = departNameUrl.split(SymbolConstant.SINGLE_SLASH);
 					String departUrlName = departNameUrls[0];
-					//判断是否为最后一位
+					//Kiểm tra có phải vị trí cuối cùng hay không
 					int count = 0;
 					SysDepart depart  = new SysDepart();
 					depart.setId("");
 					String parentIdByName = this.getDepartListByName(departUrlName,tenantId,depart,departNameUrls,count,departNameUrls.length-1,name,departMap);
-					//如果parentId不为空
+					//Nếu parentId không trống
 					if(oConvertUtils.isNotEmpty(parentIdByName)){
 						parentId = parentIdByName;
 					}else{
-						//部门名称已存在
-						errorMessageList.add("第 " + lineNumber + " 行：记录部门名称“"+departName+"”上级不存在，请检查！");
+						//Tên phòng ban đã tồn tại
+						errorMessageList.add(" " + lineNumber + " dòng: ghi tên phòng ban“"+departName+"”Cấp trên không tồn tại, vui lòng kiểm tra!");
 						return false;
 					}
 				}
 			}
-			//查询部门名称是否已存在
+			//Truy vấn tên phòng ban đã tồn tại hay chưa
 			SysDepart parentDept = null;
-			// 代码逻辑说明: 一个租户部门名称可能有多个------------
+			// Giải thích logic mã: Tên phòng ban của một tenant có thể có nhiều------------
 			List<SysDepart> sysDepartList = departMapper.getDepartByName(departName,tenantId,parentId);
 			if(CollectionUtil.isNotEmpty(sysDepartList)){
 				parentDept = sysDepartList.get(0);
 			}
 			if(null != parentDept) {
-				//部门名称已存在
-				errorMessageList.add("第 " + lineNumber + " 行：记录部门名称“"+departName+"”已存在，请检查！");
+				//Tên phòng ban đã tồn tại
+				errorMessageList.add(" " + lineNumber + " dòng: ghi tên phòng ban“"+departName+"” đã tồn tại, vui lòng kiểm tra!");
 				return false;
 			}else{
 				Page<SysDepart> page = new Page<>(1,1);
-				//需要获取父级id，查看父级是否已经存在
-				//获取一级部门的最大orgCode
+				//Cần lấy id cấp cha để xem cấp cha đã tồn tại hay chưa
+				//Lấy orgCode lớn nhất của phòng ban cấp một orgCode
 				List<SysDepart> records = departMapper.getMaxCodeDepart(page, parentId);
 				String newOrgCode = "";
 				if(CollectionUtil.isNotEmpty(records)){
 					newOrgCode = YouBianCodeUtil.getNextYouBianCode(records.get(0).getOrgCode());
 				}else{
-					//查询父id
+					//Truy vấn cấp cha id
 					if(oConvertUtils.isNotEmpty(parentId)){
 						SysDepart departById = departMapper.getDepartById(parentId);
 						newOrgCode = YouBianCodeUtil.getSubYouBianCode(departById.getOrgCode(), null);
@@ -1365,39 +1365,39 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 获取部门名称url（下级）
-	 * @param departName 部门名称
-	 * @param tenantId 租户id
-	 * @param sysDepart 部门对象
-	 * @param count 部门路径下标
-	 * @param departNameUrls 部门路径
-	 * @param departNum 部门路径的数量
-	 * @param name 部门路径的数量
-	 * @param departMap 存放部门的数据 key 存放部门路径 value 存放部门对象
+	 * Lấy url tên phòng ban (cấp dưới)
+	 * @param departName Tên phòng ban
+	 * @param tenantId Tenant id
+	 * @param sysDepart Đối tượng phòng ban
+	 * @param count Chỉ số đường dẫn phòng ban
+	 * @param departNameUrls Đường dẫn phòng ban
+	 * @param departNum Số lượng đường dẫn phòng ban
+	 * @param name Số lượng đường dẫn phòng ban
+	 * @param departMap Lưu dữ liệu phòng ban; key lưu đường dẫn phòng ban, value lưu đối tượng phòng ban
 	 */
 	private String getDepartListByName(String departName, Integer tenantId, SysDepart sysDepart,String[] departNameUrls, int count, int departNum,String name,Map<String,SysDepart> departMap) {
-		//递归查找下一级
-		// 代码逻辑说明: 一个租户部门名称可能有多个------------
+		//Tìm đệ quy cấp tiếp theo
+		// Giải thích logic mã: Tên phòng ban của một tenant có thể có nhiều------------
 		SysDepart parentDept = null;
 		List<SysDepart> departList = departMapper.getDepartByName(departName,tenantId,sysDepart.getId());
 		if(CollectionUtil.isNotEmpty(departList)){
 			parentDept = departList.get(0);
 		}
-		//判断是否包含/
+		//Đánh giá có chứa hay không/
 		if(oConvertUtils.isNotEmpty(name)){
 			name = name + SymbolConstant.SINGLE_SLASH + departName;
 		}else{
 			name = departName;
 		}
 		if(null != parentDept){
-			//如果名称路径key不再在，添加一个，避免再次查询
+			//Nếu key đường dẫn tên không còn tồn tại thì thêm một cái để tránh truy vấn lại
 			if(!departMap.containsKey(name)){
 				departMap.put(name,parentDept);
 			}
-			//查询出来的部门名称和部门路径中的部门名称作比较，如果不存在直接返回空
+			//So sánh tên phòng ban truy vấn được với tên phòng ban trong đường dẫn phòng ban; nếu không tồn tại thì trả về rỗng trực tiếp
 			if(parentDept.getDepartName().equals(departNameUrls[count])){
 				count = count + 1;
-				//数量和部门数量相等说明已经到最后一位了，直接返回部门id
+				//Số lượng bằng số lượng phòng ban nghĩa là đã tới vị trí cuối cùng, trả về phòng ban trực tiếp id
 				if(count == departNum){
 					return parentDept.getId();
 				}else{
@@ -1410,21 +1410,21 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 			return "";
 		}
 	}
-	//========================end 零代码下部门与人员导入 ==================================================================
+	//========================end Nhập phòng ban và nhân sự trong chế độ No-code ==================================================================
 
 	/**
-	 * 清空部门id
+	 * Xóa phòng ban id
 	 *
 	 * @param parentIdList
 	 */
 	private void setParentDepartIzLeaf(List<String> parentIdList) {
 		if (CollectionUtil.isNotEmpty(parentIdList)) {
 			for (String parentId : parentIdList) {
-				//查询父级id没有子级的时候跟新为叶子节点
+				//Khi truy vấn id cấp trên không có cấp dưới thì cập nhật thành nút lá
 				LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<>();
 				query.eq(SysDepart::getParentId, parentId);
 				Long count = departMapper.selectCount(query);
-				//当子级都不存在时，设置当前部门为叶子节点
+				//Khi không còn cấp dưới nào, đặt phòng ban hiện tại thành nút lá
 				if (count == 0) {
 					departMapper.setMainLeaf(parentId, CommonConstant.IS_LEAF);
 				}
@@ -1432,42 +1432,42 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		}
 	}
 
-	//========================begin 系统下部门与人员导入 ==================================================================
+	//========================begin Nhập phòng ban và nhân sự trong hệ thống ==================================================================
 	/**
-	 * 系统部门导出
+	 * Xuất phòng ban hệ thống
 	 * @param tenantId
-	 * @param idList 需要查询部门sql的id集合
+	 * @param idList Tập hợp id sql của phòng ban cần truy vấn
 	 * @return
 	 */
 	@Override
 	public List<SysDepartExportVo> getExportDepart(Integer tenantId, List<String> idList) {
         String parentId = "";
         if(CollectionUtil.isEmpty(idList)){
-            //-1代表父级部门为空的数据
+            //-1 Dữ liệu đại diện cho phòng ban cấp trên trống
             parentId = "-1";
         }
-		//获取父级部门
+		//Lấy phòng ban cấp cha
 		List<SysDepartExportVo> parentDepart = departMapper.getSysDepartList(parentId, tenantId, idList);
-		//子部门
+		//Phòng ban con
 		List<SysDepartExportVo> childrenDepart = new ArrayList<>();
-		//把一级部门名称放在里面
+		//Đặt tên phòng ban cấp một vào trong
 		List<SysDepartExportVo> exportDepartVoList = new ArrayList<>();
-		//存放部门一级id避免重复
+		//Lưu id cấp một của phòng ban để tránh trùng lặp
 		List<String> departIdList = new ArrayList<>();
 		for (SysDepartExportVo sysDepart : parentDepart) {
             if(CollectionUtil.isNotEmpty(departIdList) && departIdList.contains(sysDepart.getId())){
                 continue;
             }
-			//step 1.添加第一级部门
+			//step 1.Thêm phòng ban cấp một
 			departIdList.add(sysDepart.getId());
 			sysDepart.setDepartNameUrl(sysDepart.getDepartName());
 			exportDepartVoList.add(sysDepart);
-			//step 2.添加自己部门路径，用/分离
-			//创建路径
+			//step 2.Thêm đường dẫn phòng ban của mình, dùng/phân tách
+			//Tạo đường dẫn
 			List<String> path = new ArrayList<>();
 			path.add(sysDepart.getDepartName());
-			//创建子级部门路径
-            // 代码逻辑说明: 【JHHB-222】导出，选中最顶级部门，只能导出选中的部门---
+			//Tạo đường dẫn phòng ban cấp con
+            // Giải thích logic mã: 【JHHB-222] Xuất, khi chọn phòng ban cấp cao nhất thì chỉ xuất phòng ban đã chọn---
 			findSysDepartPath(sysDepart, path, tenantId, childrenDepart, departIdList);
 			path.clear();
 		}
@@ -1478,7 +1478,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 系统部门导入
+	 * Nhập phòng ban hệ thống
 	 * @param listSysDeparts
 	 * @param errorMessageList
 	 */
@@ -1489,11 +1489,11 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 			tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
 		}
-		//部门路径排序
+		//Sắp xếp đường dẫn phòng ban
 		Collections.sort(listSysDeparts, new Comparator<SysDepartExportVo>() {
 			@Override
 			public int compare(SysDepartExportVo o1, SysDepartExportVo o2) {
-                //update-begin---wangshuai---date:20260803  for：【LHZP-1134】部门管理 导入部门时 部门编码需要按顺序排，否则导入失败------------
+                //update-begin---wangshuai---date:20260803  for：【LHZP-1134] Quản lý phòng ban: khi import phòng ban, mã phòng ban cần được sắp xếp theo thứ tự, nếu không import sẽ thất bại------------
 				int oldLength = oConvertUtils.isEmpty(o1.getDepartNameUrl()) ? Integer.MAX_VALUE : o1.getDepartNameUrl().split(SymbolConstant.SINGLE_SLASH).length;
                 int newLength = oConvertUtils.isEmpty(o2.getDepartNameUrl()) ? Integer.MAX_VALUE : o2.getDepartNameUrl().split(SymbolConstant.SINGLE_SLASH).length;
                 int levelCompare = Integer.compare(oldLength, newLength);
@@ -1503,55 +1503,55 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                 String oldOrgCode = oConvertUtils.isEmpty(o1.getOrgCode()) ? null : o1.getOrgCode();
                 String newOrgCode = oConvertUtils.isEmpty(o2.getOrgCode()) ? null : o2.getOrgCode();
                 return Comparator.nullsLast(String::compareTo).compare(oldOrgCode, newOrgCode);
-                //update-end---author:wangshuai ---date:20260803  for：【LHZP-1134】部门管理 导入部门时 部门编码需要按顺序排，否则导入失败------------
+                //update-end---author:wangshuai ---date:20260803  for：【LHZP-1134] Quản lý phòng ban: khi import phòng ban, mã phòng ban cần được sắp xếp theo thứ tự, nếu không import sẽ thất bại------------
             }
 		});
-		//存放部门数据的map
+		//Lưu dữ liệu phòng ban map
 		Map<String,SysDepart> departMap = new HashMap<>();
-		// orgCode编码长度
+		// orgCode Độ dài mã
 		int codeLength = YouBianCodeUtil.ZHANWEI_LENGTH;
-		//循环第二遍导入数据
+		//Lặp lại lần thứ hai để nhập dữ liệu
 		for (SysDepartExportVo departExportVo : listSysDeparts) {
 			SysDepart sysDepart = new SysDepart();
 			boolean izExport = false;
 			try {
 				izExport = this.addDepartByName(departExportVo.getDepartNameUrl(),departExportVo.getDepartName(),sysDepart,errorMessageList,tenantId,departMap,num);
 			} catch (Exception e) {
-				//没有查找到parentDept
+				//Không tìm thấy parentDept
 			}
-			//没有错误的时候才会导入数据
+			//Chỉ nhập dữ liệu khi không có lỗi
 			if(izExport){
 				if(oConvertUtils.isNotEmpty(departExportVo.getOrgCode())){
 					SysDepart depart = this.baseMapper.queryCompByOrgCode(departExportVo.getOrgCode());
 					if(null != depart){
 						if(oConvertUtils.isNotEmpty(sysDepart.getParentId())){
-							//更新上级部门为叶子节点
+							//Cập nhật phòng ban cấp trên thành nút lá
 							this.updateIzLeaf(sysDepart.getParentId(),CommonConstant.IS_LEAF);
 						}
-						//部门名称已存在
-						errorMessageList.add("第 " + num + " 行：记录部门名称“"+departExportVo.getDepartName()+"”部门编码重复，请检查！");
+						//Tên phòng ban đã tồn tại
+						errorMessageList.add(" " + num + " dòng: ghi tên phòng ban“"+departExportVo.getDepartName()+"”Mã phòng ban trùng lặp, vui lòng kiểm tra!");
 						continue;
 					}
 					String departNameUrl = departExportVo.getDepartNameUrl();
-					//包含/说明是多级
+					//Chứa/nghĩa là nhiều cấp
 					if(departNameUrl.contains(SymbolConstant.SINGLE_SLASH)){
-						//判断添加部门的规则是否和生成的一致
+						//Phán đoán quy tắc thêm phòng ban có khớp với quy tắc đã sinh ra hay không
 						if(!sysDepart.getOrgCode().equals(departExportVo.getOrgCode())){
 							if(oConvertUtils.isNotEmpty(sysDepart.getParentId())){
-								//更新上级部门为叶子节点
+								//Cập nhật phòng ban cấp trên thành nút lá
 								this.updateIzLeaf(sysDepart.getParentId(),CommonConstant.IS_LEAF);
 							}
-							//部门名称已存在
-							errorMessageList.add("第 " + num + " 行：记录部门名称“"+departExportVo.getDepartName()+"”部门编码规则不匹配，请检查！");
+							//Tên phòng ban đã tồn tại
+							errorMessageList.add(" " + num + " dòng: ghi tên phòng ban“"+departExportVo.getDepartName()+"”Quy tắc mã phòng ban không khớp, vui lòng kiểm tra!");
 							continue;
 						}
 					}
 					sysDepart.setOrgCode(departExportVo.getOrgCode());
 					if(oConvertUtils.isNotEmpty(sysDepart.getParentId())){
-					    //上级
+					    //Cấp trên
 						sysDepart.setOrgType("2");
 					}else{
-						//下级
+						//Cấp dưới
 						sysDepart.setOrgType("1");
 					}
 				}else{
@@ -1560,9 +1560,9 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 				sysDepart.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
 				sysDepart.setIzLeaf(CommonConstant.IS_LEAF);
 				sysDepart.setDepartNameEn(departExportVo.getDepartNameEn());
-				//update-begin---author:wangshuai ---date:20261029  for：【LHZP-1199】部门管理 导出导入支持机构简称------------
+				//update-begin---author:wangshuai ---date:20261029  for：【LHZP-1199】Quản lý phòng ban: xuất/nhập hỗ trợ tên viết tắt của tổ chức------------
 				sysDepart.setDepartNameAbbr(departExportVo.getDepartNameAbbr());
-				//update-end---author:wangshuai ---date:20261029  for：【LHZP-1199】部门管理 导出导入支持机构简称------------
+				//update-end---author:wangshuai ---date:20261029  for：【LHZP-1199】Quản lý phòng ban: xuất/nhập hỗ trợ tên viết tắt của tổ chức------------
 				sysDepart.setDepartOrder(departExportVo.getDepartOrder());
 				sysDepart.setOrgCategory(oConvertUtils.getString(departExportVo.getOrgCategory(),"1"));
 				sysDepart.setMobile(departExportVo.getMobile());
@@ -1578,21 +1578,21 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 	}
 
 	/**
-	 * 寻找部门路径
+	 * Tìm đường dẫn phòng ban
 	 *
-	 * @param departVo       部门vo
-	 * @param path           部门路径
-	 * @param tenantId       租户id
-	 * @param childrenDepart 子部门
-	 * @param departIdList   部门id集合
+	 * @param departVo       Phòng ban vo
+	 * @param path           Đường dẫn phòng ban
+	 * @param tenantId       Tenant id
+	 * @param childrenDepart Phòng ban con
+	 * @param departIdList   Tập hợp id phòng ban
 	 */
 	private void findSysDepartPath(SysDepartExportVo departVo, List<String> path, Integer tenantId, List<SysDepartExportVo> childrenDepart, List<String> departIdList) {
-		//step 1.查询子部门的数据
-		//获取租户id和部门父id获取的部门数据
+		//step 1.Truy vấn dữ liệu phòng ban cấp dưới
+		//Lấy dữ liệu phòng ban theo id tenant và id phòng ban cha
 		List<SysDepartExportVo> departList = departMapper.getSysDepartList(departVo.getId(), tenantId, null);
-		//部门为空判断
+		//Kiểm tra phòng ban trống
 		if (departList == null || departList.size() <= 0) {
-			//判断最后一个子部门是否已拼接
+			//Kiểm tra phòng ban con cuối cùng đã được ghép nối chưa
 			if (!departIdList.contains(departVo.getId())) {
 				departVo.setDepartNameUrl(String.join(SymbolConstant.SINGLE_SLASH, path));
 				childrenDepart.add(departVo);
@@ -1601,48 +1601,48 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 		}
 
 		for (SysDepartExportVo exportDepartVo : departList) {
-			//存放子级路径
+			//Lưu đường dẫn cấp con
 			List<String> cPath = new ArrayList<>(path);
 			cPath.add(exportDepartVo.getDepartName());
-			//step 2.拼接子部门路径
+			//step 2.Ghép đường dẫn phòng ban con
 			if (!departIdList.contains(departVo.getId())) {
 				departIdList.add(departVo.getId());
 				departVo.setDepartNameUrl(String.join(SymbolConstant.SINGLE_SLASH, path));
 				childrenDepart.add(departVo);
 			}
-			//step 3.递归查询子路径，直到找不到为止
-            // 代码逻辑说明: 【JHHB-222】导出，选中最顶级部门，只能导出选中的部门---
+			//step 3.Truy vấn đệ quy đường dẫn con cho đến khi không tìm thấy
+            // Giải thích logic mã: 【JHHB-222] Xuất, khi chọn phòng ban cấp cao nhất thì chỉ xuất phòng ban đã chọn---
 			findSysDepartPath(exportDepartVo, cPath, tenantId, childrenDepart, departIdList);
         }
 	}
-	//========================end 系统下部门与人员导入 ==================================================================
+	//========================end Nhập phòng ban và nhân sự trong hệ thống ==================================================================
 
 
-    //=========================begin 部门岗位改造 ==================================================================
+    //=========================begin Cải tạo vị trí phòng ban ==================================================================
     @Override
     public List<SysPositionSelectTreeVo> getPositionByDepartId(String parentId, String departId, String positionId) {
-        //step1 根据职级获取当前岗位的级别
+        //step1 Lấy cấp bậc của vị trí hiện tại theo cấp bậc chức vụ
         SysPosition sysPosition = sysPositionMapper.selectById(positionId);
         if(null == sysPosition){
             return null;
         }
         Integer postLevel = sysPosition.getPostLevel();
-        //先获取上级部门的信息
+        //Trước tiên lấy thông tin phòng ban cấp trên
         SysDepart sysDepart = baseMapper.getDepartById(parentId);
-        //step2 如果是总公司 即数据为空的时候，则说明没有上级领导了
+        //step2 Nếu là tổng công ty, tức là khi dữ liệu rỗng, thì nghĩa là không còn lãnh đạo cấp trên nữa
         if (null == sysDepart) {
             return null;
         }
         
-        //可能是老数据
+        //Có thể là dữ liệu cũ
         if(null == postLevel){
-            throw new JeecgBootBizTipException("当前选择职级的职务等级为空，请前往职务管理进行修改！");
+            throw new JeecgBootBizTipException("Cấp bậc chức vụ của cấp bậc đã chọn hiện đang trống, vui lòng tới quản lý chức vụ để sửa!");
         }
         return this.getParentDepartPosition(sysDepart, postLevel, departId);
     }
     
     /*
-     * 获取上级部门岗位 或者当前部门下级别高的
+     * Lấy vị trí của phòng ban cấp trên hoặc cấp bậc cao thuộc phòng ban hiện tại
      *
      * @param sysDepart
      * @param postLevel
@@ -1650,25 +1650,25 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
      * @return
      */
     private List<SysPositionSelectTreeVo> getParentDepartPosition(SysDepart sysDepart, Integer postLevel, String id) {
-        //step1 先获取上级部门下的数据
-        //已经存在的code
+        //step1 Lấy trước dữ liệu thuộc phòng ban cấp trên
+        //Đã tồn tại code
         List<String> existCodeList = new ArrayList<>();
         List<SysPositionSelectTreeVo> departPosition = getDepartPosition(sysDepart, postLevel, id, existCodeList);
-        //step2 获取上级部门信息，一直获取到子公司或者总公司为止
-        //父级id不为空并且当前部门不是子公司或者总公司，则需要寻上顶级公司
-        // 代码逻辑说明: 【JHHB-501】三级子公司的董事长岗位，存在向一级公司总经理汇报的职级关系，现在无法配置---
+        //step2 Lấy thông tin phòng ban cấp trên, cứ lấy cho tới khi tới công ty con hoặc tổng công ty
+        //Nếu id cha không rỗng và phòng ban hiện tại không phải công ty con hay tổng công ty thì cần tìm lên công ty cấp cao nhất
+        // Giải thích logic mã: 【JHHB-501] Vị trí chủ tịch của công ty con cấp ba có quan hệ cấp bậc báo cáo lên tổng giám đốc công ty cấp một, hiện không thể cấu hình---
         String parentId = sysDepart.getParentId();
         SysDepart depart = departMapper.getDepartById(parentId);
         if(null != depart){
-            //获取长度
+            //Lấy độ dài
             int codeNum = YouBianCodeUtil.ZHANWEI_LENGTH;
             List<String> codeList = getCodeHierarchy(depart.getOrgCode(), codeNum);
             if(null != codeList && codeList.size() > 1){
-                //需要将当前和上级部门的排除掉
+                //Cần loại trừ phòng ban hiện tại và phòng ban cấp trên
                 existCodeList.add(codeList.get(codeList.size() - 1));
-                //从上向下找存在子级的code
+                //Tìm từ trên xuống các mục có cấp con code
                 List<SysPositionSelectTreeVo> parentDepartPost = this.getParentDepartPost(codeList, existCodeList);
-                //当前父级部门下存在职级必当前高的需要同事渲染
+                //Khi phòng ban cấp trên hiện tại tồn tại cấp bậc cao hơn cấp hiện tại thì cần hiển thị đồng thời
                 if (CollectionUtil.isNotEmpty(departPosition)) {
                     departPosition.addAll(parentDepartPost);
                     return buildTree(departPosition);
@@ -1677,7 +1677,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                 }
             }
         }
-        // 代码逻辑说明: 【JHHB-501】三级子公司的董事长岗位，存在向一级公司总经理汇报的职级关系，现在无法配置---
+        // Giải thích logic mã: 【JHHB-501] Vị trí chủ tịch của công ty con cấp ba có quan hệ cấp bậc báo cáo lên tổng giám đốc công ty cấp một, hiện không thể cấu hình---
         if(CollectionUtil.isNotEmpty(departPosition)){
             return getSuperiorCompany(departPosition);
         }
@@ -1685,7 +1685,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 获取上级公司
+     * Lấy công ty cấp trên
      *
      * @param departPosition
      */
@@ -1707,10 +1707,10 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 获取父级部门下的一级岗位
+     * Lấy các chức vụ cấp một thuộc phòng ban cấp trên
      *
      * @param codeList
-     * @param existCodeList 已存在的部门编码
+     * @param existCodeList Mã phòng ban đã tồn tại
      */
     private List<SysPositionSelectTreeVo> getParentDepartPost(List<String> codeList, List<String> existCodeList) {
         List<SysPositionSelectTreeVo> list = new ArrayList<>();
@@ -1718,22 +1718,22 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
             if(existCodeList.contains(orgCode)){
                 continue;
             }
-            //当前部门
+            //Phòng ban hiện tại
             SysDepart depart = departMapper.queryDepartByOrgCode(orgCode);
             SysPositionSelectTreeVo sysPositionSelectTreeVo = new SysPositionSelectTreeVo(depart);
             sysPositionSelectTreeVo.setLeaf(false);
             list.add(sysPositionSelectTreeVo);
-            //查找当前部门下一级部门存在岗位的部门信息
+            //Tìm thông tin phòng ban có vị trí thuộc phòng ban cấp dưới của phòng ban hiện tại
             List<SysDepart> departByParentId = departMapper.getDepartByParentId(depart.getId());
             List<String> parentIds = new ArrayList<>();
             for (SysDepart sysDepart : departByParentId) {
                 list.add(new SysPositionSelectTreeVo(sysDepart));
-                // 代码逻辑说明: 上级岗位太慢，sql优化---
+                // Giải thích logic mã: Vị trí cấp trên quá chậm, tối ưu sql---
                 parentIds.add(sysDepart.getId());
             }
-            // 代码逻辑说明: 上级岗位太慢，sql优化---
+            // Giải thích logic mã: Vị trí cấp trên quá chậm, tối ưu sql---
             if(CollectionUtil.isNotEmpty(parentIds)){
-                //根据父级id获取部门岗位信息
+                //Lấy thông tin vị trí của phòng ban theo id cấp cha
                 List<SysDepart> departPositionList = departMapper.getDepartPositionByParentIds(parentIds);
                 if(CollectionUtil.isNotEmpty(departPositionList)){
                     List<SysPositionSelectTreeVo> sysDepartTreeModels = sysDepartToTreeModel(departPositionList);
@@ -1745,29 +1745,29 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 获取部门职务
+     * Lấy chức vụ phòng ban
      *
      * @param sysDepart
      * @param postLevel
      * @param existCodeList
      */
     private List<SysPositionSelectTreeVo> getDepartPosition(SysDepart sysDepart, Integer postLevel, String id, List<String> existCodeList) {
-        //step1 获取部门下的所有部门
-        //update-begin---wangshuai---date:20260805  for：【LHZP-1118】部门管理 在惠东科技下添加下级岗位 选择上级岗位时 出现了萌新科技------------
-        // 公司直属岗位只允许选择本公司直属的上级岗位，不查询下级部门岗位
+        //step1 Lấy tất cả phòng ban thuộc phòng ban
+        //update-begin---wangshuai---date:20260805  for：【LHZP-1118] Quản lý phòng ban: khi thêm vị trí cấp dưới dưới Công ty Công nghệ Huidong, lúc chọn vị trí cấp trên lại xuất hiện Công ty Công nghệ Mengxin------------
+        // Vị trí trực thuộc công ty chỉ được chọn vị trí cấp trên trực thuộc của chính công ty này, không truy vấn vị trí của phòng ban cấp dưới
         if (DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue().equals(sysDepart.getOrgCategory())
                 || DepartCategoryEnum.DEPART_CATEGORY_SUB_COMPANY.getValue().equals(sysDepart.getOrgCategory())) {
             List<SysDepart> companyPositionList = baseMapper.getDepartPositionByParentId(sysDepart.getId(), postLevel, id);
             return sysDepartToTreeModel(companyPositionList);
         }
-        //update-end---author:wangshuai ---date:20260805  for：【LHZP-1118】部门管理 在惠东科技下添加下级岗位 选择上级岗位时 出现了萌新科技------------
+        //update-end---author:wangshuai ---date:20260805  for：【LHZP-1118] Quản lý phòng ban: khi thêm vị trí cấp dưới dưới Công ty Công nghệ Huidong, lúc chọn vị trí cấp trên lại xuất hiện Công ty Công nghệ Mengxin------------
         String parentId = sysDepart.getParentId();
         List<SysDepart> departList = baseMapper.getDepartByParentId(parentId);
         List<SysPositionSelectTreeVo> treeModels = new ArrayList<>();
         for (int i = 0; i < departList.size(); i++) {
             SysDepart depart = departList.get(i);
             existCodeList.add(depart.getOrgCode());
-            //如果是叶子节点说明没有岗位直接跳出循环
+            //Nếu là nút lá nghĩa là không có vị trí thì thoát khỏi vòng lặp ngay
             if (oConvertUtils.isEmpty(depart.getIzLeaf()) || depart.getIzLeaf() == 1) {
                 if (DepartCategoryEnum.DEPART_CATEGORY_POST.getValue().equals(depart.getOrgCategory())) {
                     SysPositionSelectTreeVo sysDepartTreeModel = new SysPositionSelectTreeVo(depart);
@@ -1775,7 +1775,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                 }
                 continue;
             }
-            //step2 查找子部门下大于当前职别的数据
+            //step2 Tìm dữ liệu có cấp bậc cao hơn cấp bậc hiện tại thuộc các phòng ban con
             List<SysDepart> departParentPosition = baseMapper.getDepartPositionByParentId(depart.getId(), postLevel, id);
             if (CollectionUtil.isNotEmpty(departParentPosition)) {
                 List<SysPositionSelectTreeVo> sysDepartTreeModels = sysDepartToTreeModel(departParentPosition);
@@ -1788,7 +1788,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 将SysDepart中的属性转到SysDepartTreeModel中
+     * Chuyển các thuộc tính trong SysDepart sang SysDepartTreeModel
      *
      * @return
      */
@@ -1803,7 +1803,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 获取公司或者子公司的id
+     * Lấy id của công ty hoặc công ty con id
      *
      * @param parentDepartId
      * @return
@@ -1814,7 +1814,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
             if (DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue().equals(sysDepart.getOrgCategory()) || DepartCategoryEnum.DEPART_CATEGORY_SUB_COMPANY.getValue().equals(sysDepart.getOrgCategory())) {
                 return sysDepart.getId();
             }
-            //如果不是公司或者子公司的时候，需要递归查询
+            //Nếu không phải công ty hoặc công ty con thì cần truy vấn đệ quy
             if (oConvertUtils.isNotEmpty(sysDepart.getParentId())) {
                 return getCompanyDepartId(sysDepart.getParentId());
             } else {
@@ -1827,17 +1827,17 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 
     @Override
     public List<SysPositionSelectTreeVo> getRankRelation(String departId) {
-        //记录当前部门 key为部门id,value为部门名称
+        //Ghi lại phòng ban hiện tại, key là phòng ban id,value là tên phòng ban
         Map<String, String> departNameMap = new HashMap<>(5);
-        //step1 根据id查询部门信息
+        //step1 Truy vấn thông tin phòng ban theo id
         SysDepartPositionVo sysDepartPosition = baseMapper.getDepartPostByDepartId(departId);
         if (null == sysDepartPosition) {
-            throw new JeecgBootBizTipException("当前所选部门数据为空");
+            throw new JeecgBootBizTipException("Dữ liệu phòng ban đã chọn hiện tại trống");
         }
         List<SysPositionSelectTreeVo> selectTreeVos = new ArrayList<>();
-        //step2 查看是否有子级部门，存在递归查询职位
+        //step2 Xem có phòng ban con hay không, nếu có thì truy vấn đệ quy chức vụ
         if (!CommonConstant.IS_LEAF.equals(sysDepartPosition.getIzLeaf())) {
-            //获取子级职位根据部门编码
+            //Lấy chức vụ cấp dưới theo mã phòng ban
             this.getChildrenDepartPositionByOrgCode(selectTreeVos, departNameMap, sysDepartPosition,departId);
             return buildTree(selectTreeVos);
         }
@@ -1845,21 +1845,21 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
 	/**
-	 * 获取所有部门职务
+	 * Lấy tất cả chức vụ phòng ban
 	 * @param departId
 	 * @return
 	 */
     @Override
     public List<SysPositionSelectTreeVo> getALLRankRelation(String departId) {
-        //记录当前部门 key为部门id,value为部门名称
+        //Ghi lại phòng ban hiện tại, key là phòng ban id,value là tên phòng ban
         Map<String, String> departNameMap = new HashMap<>(5);
-        //step1 根据id查询部门信息
+        //step1 Truy vấn thông tin phòng ban theo id
 		List<SysDepartPositionVo> departPositionList = baseMapper.getAllDepartPost(departId);
         List<SysPositionSelectTreeVo> selectTreeVos = new ArrayList<>();
 		departPositionList.forEach(position -> {
-			//step2 查看是否有子级部门，存在递归查询职位
+			//step2 Xem có phòng ban con hay không, nếu có thì truy vấn đệ quy chức vụ
 			if (!CommonConstant.IS_LEAF.equals(position.getIzLeaf())) {
-				//获取子级职位根据部门编码
+				//Lấy chức vụ cấp dưới theo mã phòng ban
 				this.getChildrenDepartPositionByOrgCode(selectTreeVos, departNameMap, position,departId);
 			}
         });
@@ -1867,7 +1867,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 获取子级职位根据部门编码
+     * Lấy chức vụ cấp dưới theo mã phòng ban
      *
      * @param selectTreeVos
      * @param departNameMap
@@ -1875,11 +1875,11 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
      */
     private void getChildrenDepartPositionByOrgCode(List<SysPositionSelectTreeVo> selectTreeVos, Map<String, String> departNameMap, SysDepartPositionVo sysDepartPosition,String departId) {
         String orgCode = sysDepartPosition.getOrgCode();
-        //step1 根据父级id获取子级部门信息
+        //step1 Lấy thông tin phòng ban con theo id cấp cha
         List<SysDepartPositionVo> positionList = baseMapper.getDepartPostByOrgCode(orgCode + "%");
         if (CollectionUtil.isNotEmpty(positionList)) {
             for (SysDepartPositionVo position : positionList) {
-                //初始化map
+                //Khởi tạo map
                 if (departNameMap == null) {
                     departNameMap = new HashMap<>(5);
                 }
@@ -1899,7 +1899,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                     }
                 }
                 departNameMap.put(position.getParentId(), position.getPositionName());
-                //查看是否为部门岗位，不是则不需要处理
+                //Xem có phải vị trí của phòng ban hay không, nếu không thì không cần xử lý
                 SysPositionSelectTreeVo treeVo = new SysPositionSelectTreeVo(position);
 				if(oConvertUtils.isEmpty(departId)){
 					treeVo.setOrgCode(position.getOrgCode());
@@ -1911,10 +1911,10 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
 
 
     /**
-     * 构建树形结构，只返回没有父级的一级节点
+     * Xây dựng cấu trúc cây, chỉ trả về nút cấp một không có cấp trên
      */
     public static List<SysPositionSelectTreeVo> buildTree(List<SysPositionSelectTreeVo> nodes) {
-        // 1. 去重：根据ID去重，保留第一个
+        // 1. Loại bỏ trùng lặp: loại trùng theo ID, giữ lại bản đầu tiên
         Map<String, SysPositionSelectTreeVo> uniqueNodes = nodes.stream()
                 .filter(Objects::nonNull)
                 .filter(node -> node.getId() != null && !node.getId().trim().isEmpty())
@@ -1924,27 +1924,27 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
                         (existing, replacement) -> existing,
                         LinkedHashMap::new
                 ));
-        // 2. 初始化所有节点的children列表
+        // 2. Khởi tạo danh sách children của tất cả các nút
         uniqueNodes.values().forEach(node -> {
             if (node.getChildren() == null) {
                 node.setChildren(new ArrayList<>());
             }
         });
-        // 3. 构建树形结构
+        // 3. Xây dựng cấu trúc cây
         List<SysPositionSelectTreeVo> rootNodes = new ArrayList<>();
         for (SysPositionSelectTreeVo node : uniqueNodes.values()) {
             String parentId = node.getParentId();
 
             if (parentId == null || parentId.trim().isEmpty()) {
-                // 根节点
+                // Nút gốc
                 rootNodes.add(node);
             } else {
-                // 子节点，查找父节点
+                // Nút con, tìm nút cha
                 SysPositionSelectTreeVo parent = uniqueNodes.get(parentId);
                 if (parent != null) {
                     parent.getChildren().add(node);
                 } else {
-                    // 父节点不存在，当作根节点处理
+                    // Nút cha không tồn tại, xử lý như nút gốc
                     rootNodes.add(node);
                 }
             }
@@ -1952,11 +1952,11 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
         return rootNodes;
     }
 
-    //=========================end 部门岗位改造 ==================================================================
+    //=========================end Cải tạo vị trí phòng ban ==================================================================
 
     @Override
     public String getDepartPathNameByOrgCode(String orgCode, String depId) {
-        //部门id为空需要查询当前部门下的编码
+        //Khi id phòng ban trống, cần truy vấn mã thuộc phòng ban hiện tại
         if(oConvertUtils.isNotEmpty(depId)){
             SysDepart departById = baseMapper.getDepartById(depId);
             if(null != departById){
@@ -1966,22 +1966,22 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
         if(oConvertUtils.isEmpty(orgCode)){
             return "";
         }
-        //从redis 获取不为空直接返回
+        //Lấy từ redis, nếu không trống thì trả về trực tiếp
         Object departName  = redisUtil.get(CommonConstant.DEPART_NAME_REDIS_KEY_PRE + orgCode);
         if(null != departName){
             return String.valueOf(departName);
         }
-        //获取长度
+        //Lấy độ dài
         int codeNum = YouBianCodeUtil.ZHANWEI_LENGTH;
         List<String> list = this.getCodeHierarchy(orgCode, codeNum);
-        //根据部门编码查询公司和子公司的数据
+        //Theo mã phòng ban, truy vấn dữ liệu của công ty và công ty con
         LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<>();
         query.in(SysDepart::getOrgCode, list);
         query.orderByAsc(SysDepart::getOrgCode);
         List<SysDepart> sysDepartList = departMapper.selectList(query);
         if(!CollectionUtils.isEmpty(sysDepartList)){
-            //获取部门名称拼接返回给前台
-            // 代码逻辑说明: 【JHHB-631】【部门管理】存在缩写使用缩写来显示---
+            //Ghép tên phòng ban rồi trả về cho giao diện
+            // Giải thích logic mã: 【JHHB-631】Có tên viết tắt thì dùng tên viết tắt để hiển thị---
             List<String> departNameList = sysDepartList.stream().map(item-> oConvertUtils.getString(item.getDepartNameAbbr(),item.getDepartName())).toList();
             String departNames = String.join("/", departNameList);
             redisUtil.set(CommonConstant.DEPART_NAME_REDIS_KEY_PRE + orgCode,departNames);
@@ -1991,22 +1991,22 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
     
     /**
-     * 获取编码及其所有上级编码
+     * Lấy mã và tất cả các mã cấp trên của nó
      * 
-     * @param code 完整编码，如 "A01A01A01"
-     * @param fixedLength 固定位数，如 3
-     * @return 包含所有上级编码的列表，如 ['A01','A01A01','A01A01A01']
+     * @param code Mã đầy đủ, ví dụ như "A01A01A01"
+     * @param fixedLength Số ký tự cố định, ví dụ như 3
+     * @return Danh sách chứa tất cả mã cấp trên, ví dụ ['A01','A01A01','A01A01A01']
      */
     public List<String> getCodeHierarchy(String code, int fixedLength) {
         List<String> hierarchy = new ArrayList<>();
         if (code == null || code.isEmpty() || fixedLength <= 0) {
             return hierarchy;
         }
-        // 检查编码长度是否能被固定位数整除
+        // Kiểm tra độ dài mã có chia hết cho số chữ số cố định không
         if (code.length() % fixedLength != 0) {
-            throw new IllegalArgumentException("编码长度必须能被固定位数整除");
+            throw new IllegalArgumentException("Độ dài mã phải chia hết cho số chữ số cố định");
         }
-        // 按固定位数分割并生成所有上级编码
+        // Chia theo số chữ số cố định và tạo tất cả các mã cấp trên
         for (int i = fixedLength; i <= code.length(); i += fixedLength) {
             hierarchy.add(code.substring(0, i));
         }
@@ -2014,28 +2014,28 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 根据多个部门id删除主岗位和兼职岗位
+     * Theo nhiều id phòng ban, xóa vị trí chính và vị trí kiêm nhiệm
      * 
      * @param idList
      */
     private void deleteDepartPostByDepIds(List<String> idList) {
-        //更新用户主岗位位空，使用LambdaUpdateWrapper，避免为空时受全局 updateStrategy 影响导致误更新
+        //Cập nhật vị trí chính của người dùng thành rỗng, dùng LambdaUpdateWrapper để tránh khi rỗng bị ảnh hưởng bởi updateStrategy toàn cục gây cập nhật nhầm
         LambdaUpdateWrapper<SysUser> userQuery = new LambdaUpdateWrapper<>();
         userQuery.in(SysUser::getMainDepPostId, idList);
         userQuery.set(SysUser::getMainDepPostId, null);
         sysUserMapper.update(userQuery);
-        //删除兼职岗位
+        //Xóa vị trí kiêm nhiệm
         LambdaQueryWrapper<SysUserDepPost> postQuery = new LambdaQueryWrapper<>();
         postQuery.in(SysUserDepPost::getDepId, idList);
         sysUserDepPostMapper.delete(postQuery);
-        //redis清除缓存key
+        //redis Xóa cache key
         redisUtil.removeAll(CommonConstant.DEPART_NAME_REDIS_KEY_PRE);
     }
 
     /**
-     * 根据部门id获取部门下的岗位id
+     * Lấy các vị trí thuộc phòng ban theo id phòng ban id
      *
-     * @param depIds 当前选择的公司、子公司、部门id
+     * @param depIds Công ty, công ty con, phòng ban đang chọn id
      * @return
      */
     @Override
@@ -2043,10 +2043,10 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
         if (oConvertUtils.isEmpty(depIds)) {
             return "";
         }
-        //step1 先根据部门id获取编码
+        //step1 Lấy mã trước theo ID phòng ban
         List<SysUserDepVo> departIdList = departMapper.getDepartByIds(Arrays.asList(depIds.split(SymbolConstant.COMMA)));
         if (CollectionUtil.isNotEmpty(departIdList)) {
-            //step2 根据部门编码查询岗位id
+            //step2 Truy vấn chức vụ theo mã phòng ban id
             LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<>();
             query.select(SysDepart::getId);
             departIdList.forEach(item -> {
@@ -2054,7 +2054,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
             });
             query.eq(SysDepart::getOrgCategory, DepartCategoryEnum.DEPART_CATEGORY_POST.getValue());
             List<SysDepart> departList = departMapper.selectList(query);
-            //step3 返回部门id
+            //step3 Trả về phòng ban id
             if (CollectionUtil.isNotEmpty(departList)) {
                 return departList.stream().map(SysDepart::getId).collect(Collectors.joining(SymbolConstant.COMMA));
             }
@@ -2063,88 +2063,88 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 变更部门位置
+     * Thay đổi vị trí phòng ban
      * 
      * @param changeDepartVo
-     * @return orgCode 部门id
+     * @return orgCode Phòng ban id
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateChangeDepart(SysChangeDepartVo changeDepartVo) {
         String dragId = changeDepartVo.getDragId();
-        // 1. 获取被拖拽的部门
+        // 1. Lấy phòng ban bị kéo thả
         SysDepart dragDept = baseMapper.getDepartById(dragId);
         if (null == dragDept) {
-            throw new JeecgBootBizTipException("被拖拽的部门不存在");
+            throw new JeecgBootBizTipException("Phòng ban bị kéo thả không tồn tại");
         }
-        // 2. 获取目标部门
+        // 2. Lấy phòng ban đích
         String dropId = changeDepartVo.getDropId();
         SysDepart targetDept = baseMapper.getDepartById(dropId);
         if (null == targetDept) {
-            throw new JeecgBootBizTipException("目标部门不存在");
+            throw new JeecgBootBizTipException("Phòng ban đích không tồn tại");
         }
-        //3. 验证拖拽操作是否合法
+        //3. Xác minh thao tác kéo thả có hợp lệ hay không
         validateDragOperation(dragDept, targetDept, changeDepartVo.getDropPosition());
-        //4. 根据dropPosition调整部门顺序
+        //4. Điều chỉnh thứ tự phòng ban theo dropPosition
         Integer dropPosition = changeDepartVo.getDropPosition();
         switch (dropPosition) {
             case -1:
-                // 拖拽到上方
+                // Kéo thả lên phía trên
                 moveToAbove(dragDept, targetDept);
                 break;
             case 0:
-                // 拖拽到内部（作为子部门）
+                // Kéo thả vào bên trong (làm phòng ban con)
                 moveAsChild(dragDept, targetDept);
                 break;
             case 1:
-                //拖拽到下方
+                //Kéo thả xuống phía dưới
                 moveToBelow(dragDept, targetDept, changeDepartVo.getSort());
                 break;
             default:
-                throw new RuntimeException("无效的拖拽位置");
+                throw new RuntimeException("Vị trí kéo thả không hợp lệ");
         }
-        //5. 清空缓存
+        //5. Xóa bộ nhớ đệm
         redisUtil.removeAll(CommonConstant.DEPART_NAME_REDIS_KEY_PRE);
     }
 
     /**
-     * 验证拖拽操作是否合法
+     * Xác minh thao tác kéo thả có hợp lệ hay không
      *
-     * @param dragDept     被拖拽的部门
-     * @param targetDept   目标部门
-     * @param dropPosition 拖拽位置
+     * @param dragDept     Phòng ban bị kéo thả
+     * @param targetDept   Phòng ban đích
+     * @param dropPosition Vị trí kéo thả
      */
     private void validateDragOperation(SysDepart dragDept, SysDepart targetDept, Integer dropPosition) {
-        // 禁止拖拽到自身
+        // Cấm kéo thả vào chính nó
         if (dragDept.getId().equals(targetDept.getId())) {
-            throw new RuntimeException("不能拖拽到自身");
+            throw new RuntimeException("Không thể kéo thả vào chính mình");
         }
-        // 禁止拖拽到自身子部门
+        // Cấm kéo thả vào phòng ban con của chính mình
         if (isDescendant(dragDept, targetDept.getId())) {
-            throw new RuntimeException("不能拖拽到自身子部门");
+            throw new RuntimeException("Không thể kéo thả vào phòng ban con của chính mình");
         }
-        //公司岗位判断
+        //Đánh giá vị trí công ty
         String orgCategory = targetDept.getOrgCategory();
         String oldOrgCategory = dragDept.getOrgCategory();
-        //部门为公司
+        //Phòng ban là công ty
         if(0 != dropPosition && DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue().equals(orgCategory)){
-            //当前部门不能为子公司、部门和岗位
+            //Phòng ban hiện tại không được là công ty con, phòng ban hoặc vị trí
             if(!DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue().equals(oldOrgCategory)){
-                throw new JeecgBootBizTipException("当前部门类型为【"+DepartCategoryEnum.getNameByValue(oldOrgCategory)+"】,不允许移动到公司");
+                throw new JeecgBootBizTipException("Loại phòng ban hiện tại là 【"+DepartCategoryEnum.getNameByValue(oldOrgCategory)+"】,Không được phép di chuyển đến công ty");
             }
         }
-        //部门为岗位不允许移入
+        //Phòng ban là chức vụ, không được phép di chuyển vào
         if(0 == dropPosition && DepartCategoryEnum.DEPART_CATEGORY_POST.getValue().equals(orgCategory)) {
-            throw new JeecgBootBizTipException("岗位不允许存在子级");
+            throw new JeecgBootBizTipException("Chức vụ không được phép có cấp con");
         }
-        //公司不能做为子级
+        //Công ty không thể làm cấp con
         if(oConvertUtils.isNotEmpty(targetDept.getParentId()) && DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue().equals(oldOrgCategory)){
-            throw new JeecgBootBizTipException("公司不允许作为子级");
+            throw new JeecgBootBizTipException("Công ty không được phép làm cấp con");
         }
     }
 
     /**
-     * 判断目标部门是否是被拖拽部门的子部门
+     * Phán đoán phòng ban đích có phải phòng ban con của phòng ban bị kéo hay không
      */
     private boolean isDescendant(SysDepart dragDept, String targetId) {
         List<SysDepart> children = departMapper.getDepartByParentId(dragDept.getId());
@@ -2160,61 +2160,61 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 拖拽到上方：将部门移动到目标部门上方(只有最上级 即公司才会走这个逻辑)
-     * @param dragDept   被拖拽的部门
-     * @param targetDept 目标部门
+     * Kéo lên trên: di chuyển phòng ban đến phía trên phòng ban đích(Chỉ cấp cao nhất, tức là công ty, mới đi theo logic này)
+     * @param dragDept   Phòng ban bị kéo thả
+     * @param targetDept Phòng ban đích
      */
     private void moveToAbove(SysDepart dragDept, SysDepart targetDept) {
-        // 获取目标部门同级的所有部门
+        // Lấy tất cả các phòng ban cùng cấp với phòng ban đích
         List<SysDepart> siblings = departMapper.getDepartNoParent();
-        // 计算新的排序值
+        // Tính giá trị sắp xếp mới
         Integer newDepartOrder = targetDept.getDepartOrder();
-        // 更新被拖拽部门的排序值
+        // Cập nhật giá trị sắp xếp của phòng ban bị kéo thả
         dragDept.setDepartOrder(newDepartOrder);
-        // 更新被拖拽部门的排序值
+        // Cập nhật giá trị sắp xếp của phòng ban bị kéo thả
         dragDept.setDepartOrder(0);
         if(CollectionUtil.isNotEmpty(siblings)){
-            // 计算新的排序值
+            // Tính giá trị sắp xếp mới
             this.computingSort(siblings,0,dragDept.getId());
-            // 保存所有更新的部门
+            // Lưu tất cả phòng ban đã cập nhật
             this.updateBatchById(siblings);
         }
         departMapper.updateById(dragDept);
     }
 
     /**
-     * 拖拽到下方：将部门移动到目标部门下方
+     * Kéo xuống dưới: di chuyển phòng ban đến phía dưới phòng ban đích
      *
-     * @param dragDept   被拖拽的部门
-     * @param targetDept 目标部门
-     * @param sort 排序
+     * @param dragDept   Phòng ban bị kéo thả
+     * @param targetDept Phòng ban đích
+     * @param sort Sắp xếp
      */
     private void moveToBelow(SysDepart dragDept, SysDepart targetDept, Integer sort) {
         String parentId = targetDept.getParentId();
         List<SysDepart> siblings = null;
         if(oConvertUtils.isNotEmpty(parentId)){
-            // 获取目标部门同级的所有部门
+            // Lấy tất cả các phòng ban cùng cấp với phòng ban đích
             siblings = departMapper.getDepartByParentId(parentId);
         }else{
             siblings = departMapper.getDepartNoParent(); 
         }
         String oldParentId = dragDept.getParentId();
-        //判断父级部门id是否相同，不同则更新为目标部门的父部门id
+        //Kiểm tra id phòng ban cha có giống nhau không, nếu khác thì cập nhật thành phòng ban cha của phòng ban đích id
         if(oConvertUtils.isNotEmpty(dragDept.getParentId()) &&
                 oConvertUtils.isNotEmpty(parentId) &&
                 !dragDept.getParentId().equals(parentId)){
             String oldOrgCode = dragDept.getOrgCode();
-            //设置父级id和部门code
+            //Thiết lập id cấp cha và mã phòng ban code
             this.setDepartParentAndOrgCode(dragDept, parentId);
-            //修改子级的部门编码
+            //Sửa mã phòng ban của cấp con
             this.updateChildOrgCode(dragDept.getOrgCode(), oldOrgCode);
         }
-        // 更新被拖拽部门的排序值
+        // Cập nhật giá trị sắp xếp của phòng ban bị kéo thả
         dragDept.setDepartOrder(sort);
         if(CollectionUtil.isNotEmpty(siblings)){
-            // 计算新的排序值
+            // Tính giá trị sắp xếp mới
             this.computingSort(siblings,sort,dragDept.getId());
-            // 保存所有更新的部门
+            // Lưu tất cả phòng ban đã cập nhật
             this.updateBatchById(siblings);
         }
         departMapper.updateById(dragDept);
@@ -2227,32 +2227,32 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
     
     /**
-     * 拖拽到内部：将部门移动到目标部门内部（作为子部门）
+     * Kéo thả vào trong: di chuyển phòng ban vào bên trong phòng ban đích (làm phòng ban con)
      */
     private void moveAsChild(SysDepart dragDept, SysDepart targetDept) {
-        // 更新父部门ID
+        // Cập nhật phòng ban cha ID
         String parentId = targetDept.getId();
         String oldParentId = dragDept.getParentId();
-        // 获取目标部门同级的所有部门
+        // Lấy tất cả các phòng ban cùng cấp với phòng ban đích
         List<SysDepart> siblings = departMapper.getDepartByParentId(parentId);
-        //判断父级部门id是否相同，不同则更新为目标部门的父部门id
+        //Kiểm tra id phòng ban cha có giống nhau không, nếu khác thì cập nhật thành phòng ban cha của phòng ban đích id
         if(oConvertUtils.isNotEmpty(dragDept.getParentId()) &&
                 oConvertUtils.isNotEmpty(parentId) &&
                 !dragDept.getParentId().equals(parentId)){
             String oldOrgCode = dragDept.getOrgCode();
-            //设置父级id和部门code
+            //Thiết lập id cấp cha và mã phòng ban code
             this.setDepartParentAndOrgCode(dragDept, parentId);
-            //修改子级的部门编码
+            //Sửa mã phòng ban của cấp con
             this.updateChildOrgCode(dragDept.getOrgCode(), oldOrgCode);
         }
-        //内部排序为0
+        //Thứ tự sắp xếp nội bộ là 0
         Integer sort = 0;
-        // 设置新的排序值
+        // Đặt giá trị sắp xếp mới
         dragDept.setDepartOrder(sort);
         if(CollectionUtil.isNotEmpty(siblings)){
-            // 计算新的排序值
+            // Tính giá trị sắp xếp mới
             this.computingSort(siblings,sort,dragDept.getId());
-            // 保存所有更新的部门
+            // Lưu tất cả phòng ban đã cập nhật
             this.updateBatchById(siblings);
         }
         departMapper.updateById(dragDept);
@@ -2266,7 +2266,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 计算排序值
+     * Tính giá trị sắp xếp
      *
      * @param siblings
      * @param sort
@@ -2278,7 +2278,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
             if(id.equals(depart.getId())){
                 continue;
             }
-            //如果当前循环的sort大等于传入的sort值 则需要+1
+            //Nếu sort của vòng lặp hiện tại lớn hơn hoặc bằng giá trị sort truyền vào thì cần+1
             if(i >= sort){
                 depart.setDepartOrder(sort + 1);
                 sort++;
@@ -2289,23 +2289,23 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 设置被拖拽部门的父级id和部门编码
+     * Đặt id cấp cha và mã phòng ban của phòng ban bị kéo
      *
-     * @param dragDept 被拖拽的部门
-     * @param parentId 目标部门的父级id
+     * @param dragDept Phòng ban bị kéo thả
+     * @param parentId Phòng ban cha của phòng ban đích id
      */
     private void setDepartParentAndOrgCode(SysDepart dragDept, String parentId) {
-        // 更新父部门ID（与目标部门相同）
+        // Cập nhật ID phòng ban cha (giống với phòng ban đích)
         dragDept.setParentId(parentId);
         Page<SysDepart> page = new Page<>(1, 1);
-        //需要获取父级id，查看父级是否已经存在
-        //获取一级部门的最大orgCode
+        //Cần lấy id cấp cha để xem cấp cha đã tồn tại hay chưa
+        //Lấy orgCode lớn nhất của phòng ban cấp một orgCode
         List<SysDepart> records = departMapper.getMaxCodeDepart(page, parentId);
         String newOrgCode = "";
         if (CollectionUtil.isNotEmpty(records)) {
             newOrgCode = YouBianCodeUtil.getNextYouBianCode(records.get(0).getOrgCode());
         } else {
-            //查询父id
+            //Truy vấn cấp cha id
             if (oConvertUtils.isNotEmpty(parentId)) {
                 SysDepart departById = departMapper.getDepartById(parentId);
                 newOrgCode = YouBianCodeUtil.getSubYouBianCode(departById.getOrgCode(), null);
@@ -2317,13 +2317,13 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 修改子级的部门编码
+     * Sửa mã phòng ban của cấp con
      *
-     * @param newOrgCode 当前父级新的部门编码
-     * @param oldOrgCode 当前父级旧的部门编码
+     * @param newOrgCode Mã phòng ban mới của cấp cha hiện tại
+     * @param oldOrgCode Mã phòng ban cũ của cấp cha hiện tại
      */
     private void updateChildOrgCode(String newOrgCode, String oldOrgCode) {
-        //查询当前部门下的所有子级部门
+        //Truy vấn tất cả phòng ban con thuộc phòng ban hiện tại
         LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<>();
         query.likeRight(SysDepart::getOrgCode, oldOrgCode);
         query.orderByAsc(SysDepart::getDepartOrder);
@@ -2343,7 +2343,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
     }
 
     /**
-     * 获取部门负责人
+     * Lấy người phụ trách phòng ban
      *
      * @param departId
      * @param page
@@ -2354,7 +2354,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
         List<SysUser> departmentHead = departMapper.getDepartmentHead(page, departId);
         if(CollectionUtil.isNotEmpty(departmentHead)){
             departmentHead.forEach(item->{
-                //兼职岗位
+                //Vị trí kiêm nhiệm
                 List<String> depPostList = sysUserDepPostMapper.getDepPostByUserId(item.getId());
                 if(CollectionUtil.isNotEmpty(depPostList)){
                     item.setOtherDepPostId(StringUtils.join(depPostList.toArray(), SymbolConstant.COMMA));

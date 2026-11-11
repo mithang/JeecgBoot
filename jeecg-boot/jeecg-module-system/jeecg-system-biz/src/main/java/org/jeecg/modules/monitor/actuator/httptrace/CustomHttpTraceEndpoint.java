@@ -13,7 +13,7 @@ import java.util.List;
 import static org.springframework.boot.actuate.endpoint.annotation.Selector.Match.ALL_REMAINING;
 
 /**
- * @Description: ENDPOINT: 请求追踪(新),支持通过responseCode筛选
+ * @Description: ENDPOINT: Theo dõi yêu cầu(Mới),Hỗ trợ lọc qua responseCode
  * @Author: chenrui
  * @Date: 2024/5/13 17:02
  */

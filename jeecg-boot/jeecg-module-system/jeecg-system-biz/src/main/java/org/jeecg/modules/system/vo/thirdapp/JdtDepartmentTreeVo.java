@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 钉钉树结构的部门
+ * Phòng ban cấu trúc cây DingTalk
  *
  * @author sunjianlei
  */
@@ -30,7 +30,7 @@ public class JdtDepartmentTreeVo extends Department {
     }
 
     /**
-     * 是否有子项
+     * Có mục con không
      */
     public boolean hasChildren() {
         return children != null && children.size() > 0;
@@ -44,19 +44,19 @@ public class JdtDepartmentTreeVo extends Department {
     }
 
     /**
-     * 静态辅助方法，将list转为tree结构
+     * Phương thức hỗ trợ tĩnh, chuyển list thành cấu trúc tree
      */
     public static List<JdtDepartmentTreeVo> listToTree(List<Department> allDepartment) {
-        // 先找出所有的父级
+        // Trước tiên, tìm tất cả các cấp cha
         List<JdtDepartmentTreeVo> treeList = getByParentId(1, allDepartment);
         Optional<Department> departmentOptional = allDepartment.stream().filter(item -> item.getParent_id() == null).findAny();
         Department department = new Department();
-        //判断是否找到数据
+        //Kiểm tra xem có tìm thấy dữ liệu không
         if(departmentOptional.isPresent()){
             department = departmentOptional.get();
         }
         getChildrenRecursion(treeList, allDepartment);
-        // 代码逻辑说明: 【issues/6017】钉钉同步部门时没有最顶层的部门名，同步用户时，用户没有部门信息---
+        // Giải thích logic mã: 【issues/6017] Khi DingTalk đồng bộ phòng ban thì không có tên phòng ban cấp cao nhất; khi đồng bộ người dùng, người dùng không có thông tin phòng ban---
         JdtDepartmentTreeVo treeVo = new JdtDepartmentTreeVo(department);
         treeVo.setChildren(treeList);
         List<JdtDepartmentTreeVo> list = new ArrayList<>();
@@ -76,7 +76,7 @@ public class JdtDepartmentTreeVo extends Department {
 
     private static void getChildrenRecursion(List<JdtDepartmentTreeVo> treeList, List<Department> allDepartment) {
         for (JdtDepartmentTreeVo departmentTree : treeList) {
-            // 递归寻找子级
+            // Tìm đệ quy cấp con
             List<JdtDepartmentTreeVo> children = getByParentId(departmentTree.getDept_id(), allDepartment);
             if (children.size() > 0) {
                 departmentTree.setChildren(children);

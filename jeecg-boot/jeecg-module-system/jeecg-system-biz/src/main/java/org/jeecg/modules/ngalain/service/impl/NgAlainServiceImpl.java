@@ -18,7 +18,7 @@
 //import java.util.Map;
 //
 ///**
-// * @Description: NgAlainServiceImpl 实现类
+// * @Description: NgAlainServiceImpl Lớp triển khai
 // * @author: jeecg-boot
 // */
 //@Service("ngAlainService")
@@ -38,7 +38,7 @@
 //        getPermissionJsonArray(jsonArray, metaList, null);
 //        JSONArray menulist= parseNgAlain(jsonArray);
 //        JSONObject jeecgMenu = new JSONObject();
-//        jeecgMenu.put("text", "jeecg菜单");
+//        jeecgMenu.put("text", "jeecg Menu");
 //        jeecgMenu.put("group",true);
 //        jeecgMenu.put("children", menulist);
 //        JSONArray jeecgMenuList=new JSONArray();
@@ -76,7 +76,7 @@
 //    }
 //
 //    /**
-//     *  获取菜单JSON数组
+//     *  Lấy mảng JSON menu
 //     * @param jsonArray
 //     * @param metaList
 //     * @param parentJson
@@ -124,7 +124,7 @@
 //    }
 //    private JSONObject getPermissionJsonObject(SysPermission permission) {
 //        JSONObject json = new JSONObject();
-//        //类型(0：一级菜单 1：子菜单  2：按钮)
+//        //Loại(0: menu cấp một 1: menu con 2: nút)
 //        if(CommonConstant.MENU_TYPE_2.equals(permission.getMenuType())) {
 //            json.put("action", permission.getPerms());
 //            json.put("describe", permission.getName());
@@ -138,14 +138,14 @@
 //                json.put("path", permission.getUrl());
 //            }
 //
-//            //重要规则：路由name (通过URL生成路由name,路由name供前端开发，页面跳转使用)
+//            //Quy tắc quan trọng: tên route name (Tạo route qua URL name,Tên route để frontend phát triển, dùng khi chuyển trang)
 //            json.put("name", urlToRouteName(permission.getUrl()));
 //
-//            //是否隐藏路由，默认都是显示的
+//            //Có ẩn route hay không, mặc định đều hiển thị
 //            if(permission.isHidden()) {
 //                json.put("hidden",true);
 //            }
-//            //聚合路由
+//            //Route tổng hợp
 //            if(permission.isAlwaysShow()) {
 //                json.put("alwaysShow",true);
 //            }
@@ -153,7 +153,7 @@
 //            JSONObject meta = new JSONObject();
 //            meta.put("title", permission.getName());
 //            if(oConvertUtils.isEmpty(permission.getParentId())) {
-//                //一级菜单跳转地址
+//                //Địa chỉ chuyển hướng menu cấp một
 //                json.put("redirect",permission.getRedirect());
 //                meta.put("icon", oConvertUtils.getString(permission.getIcon(), ""));
 //            }else {
@@ -168,8 +168,8 @@
 //        return json;
 //    }
 //    /**
-//     * 通过URL生成路由name（去掉URL前缀斜杠，替换内容中的斜杠‘/’为-）
-//     * 举例： URL = /isystem/role
+//     * Tạo tên route qua URL (bỏ dấu gạch chéo tiền tố của URL, thay dấu gạch chéo trong nội dung ‘/’ thành-）
+//     * Ví dụ: URL = /isystem/role
 //     *     RouteName = isystem-role
 //     * @return
 //     */

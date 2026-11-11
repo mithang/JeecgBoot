@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 旧版导入
+ * @Description: Nhập phiên bản cũ
  * @author: wangshuai
  * @date: 2025/4/2 10:19
  */
@@ -36,11 +36,11 @@ public class ImportOldUserUtil {
     public static Result<?> importOldSysUser(HttpServletRequest request) throws IOException {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        // 错误信息
+        // Thông tin lỗi
         List<String> errorMessage = new ArrayList<>();
         int successLines = 0, errorLines = 0;
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            MultipartFile file = entity.getValue();// 获取上传文件对象
+            MultipartFile file = entity.getValue();// Lấy đối tượng tệp tải lên
             ImportParams params = new ImportParams();
             params.setTitleRows(2);
             params.setHeadRows(1);
@@ -50,10 +50,10 @@ public class ImportOldUserUtil {
                 for (int i = 0; i < listSysUsers.size(); i++) {
                     SysUser sysUserExcel = listSysUsers.get(i);
                     if (StringUtils.isBlank(sysUserExcel.getPassword())) {
-                        // 密码默认为 “123456”
+                        // Mật khẩu mặc định là “123456”
                         sysUserExcel.setPassword("123456");
                     }
-                    // 密码加密加盐
+                    // Mã hóa mật khẩu kèm salt
                     String salt = oConvertUtils.randomGen(8);
                     sysUserExcel.setSalt(salt);
                     String passwordEncode = PasswordUtil.encrypt(sysUserExcel.getUsername(), sysUserExcel.getPassword(), salt);
@@ -66,23 +66,23 @@ public class ImportOldUserUtil {
                         errorLines++;
                         String message = e.getMessage().toLowerCase();
                         int lineNumber = i + 1;
-                        // 通过索引名判断出错信息
+                        // Xác định thông tin lỗi qua tên chỉ mục
                         if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_USERNAME)) {
-                            errorMessage.add("第 " + lineNumber + " 行：用户名已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Tên người dùng đã tồn tại, bỏ qua nhập.");
                         } else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_WORK_NO)) {
-                            errorMessage.add("第 " + lineNumber + " 行：工号已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: mã nhân viên đã tồn tại, bỏ qua khi nhập.");
                         } else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_PHONE)) {
-                            errorMessage.add("第 " + lineNumber + " 行：手机号已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Số điện thoại đã tồn tại, bỏ qua nhập.");
                         } else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER_EMAIL)) {
-                            errorMessage.add("第 " + lineNumber + " 行：电子邮件已经存在，忽略导入。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Email đã tồn tại, bỏ qua nhập.");
                         } else if (message.contains(CommonConstant.SQL_INDEX_UNIQ_SYS_USER)) {
-                            errorMessage.add("第 " + lineNumber + " 行：违反表唯一性约束。");
+                            errorMessage.add(" " + lineNumber + " Dòng: Vi phạm ràng buộc duy nhất của bảng.");
                         } else {
-                            errorMessage.add("第 " + lineNumber + " 行：未知错误，忽略导入");
+                            errorMessage.add(" " + lineNumber + " Dòng: Lỗi không xác định, bỏ qua việc nhập");
                             log.error(e.getMessage(), e);
                         }
                     }
-                    // 批量将部门和用户信息建立关联关系
+                    // Thiết lập quan hệ liên kết giữa phòng ban và thông tin người dùng hàng loạt
                     String departIds = sysUserExcel.getDepartIds();
                     if (StringUtils.isNotBlank(departIds)) {
                         String userId = sysUserExcel.getId();
@@ -97,7 +97,7 @@ public class ImportOldUserUtil {
 
                 }
             } catch (Exception e) {
-                errorMessage.add("发生异常：" + e.getMessage());
+                errorMessage.add("Đã xảy ra ngoại lệ:" + e.getMessage());
                 log.error(e.getMessage(), e);
             } finally {
                 try {

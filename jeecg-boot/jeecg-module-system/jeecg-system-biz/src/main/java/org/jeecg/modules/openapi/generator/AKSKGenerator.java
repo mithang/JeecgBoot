@@ -3,7 +3,7 @@ package org.jeecg.modules.openapi.generator;
 import java.security.SecureRandom;
 
 /**
- * AK/SK生成器
+ * AK/SK Trình tạo
  */
 public class AKSKGenerator {
     private static final String CHAR_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

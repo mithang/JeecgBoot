@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @Author scott
  * @Date 2019/12/9 11:33
- * @Description: 机构编码生成规则
+ * @Description: Quy tắc tạo mã tổ chức
  */
 public class OrgCodeRule implements IFillRuleHandler {
 
@@ -27,14 +27,14 @@ public class OrgCodeRule implements IFillRuleHandler {
 
         LambdaQueryWrapper<SysDepart> query = new LambdaQueryWrapper<SysDepart>();
         LambdaQueryWrapper<SysDepart> query1 = new LambdaQueryWrapper<SysDepart>();
-        // 创建一个List集合,存储查询返回的所有SysDepart对象
+        // Tạo một tập hợp List,Lưu trữ tất cả đối tượng SysDepart do truy vấn trả về
         List<SysDepart> departList = new ArrayList<>();
         String[] strArray = new String[2];
-        //定义部门类型
+        //Định nghĩa loại phòng ban
         String orgType = "";
-        // 定义新编码字符串
+        // Định nghĩa chuỗi mã mới
         String newOrgCode = "";
-        // 定义旧编码字符串
+        // Định nghĩa chuỗi mã cũ
         String oldOrgCode = "";
 
         String parentId = null;
@@ -52,11 +52,11 @@ public class OrgCodeRule implements IFillRuleHandler {
             }
         }
 
-        //如果是最高级,则查询出同级的org_code, 调用工具类生成编码并返回
+        //Nếu là cấp cao nhất,thì truy vấn ra các org_code cùng cấp org_code, Gọi lớp tiện ích để tạo mã và trả về
         if (StringUtil.isNullOrEmpty(parentId)) {
-            // 线判断数据库中的表是否为空,空则直接返回初始编码
-            //获取最大值code的部门信息
-            // 代码逻辑说明: [QQYUN-4209]租户隔离下部门新建不了------------
+            // Trước tiên xác định bảng trong cơ sở dữ liệu có trống hay không,Nếu trống thì trả về trực tiếp mã ban đầu
+            //Lấy thông tin phòng ban có code giá trị lớn nhất
+            // Giải thích logic mã: [QQYUN-4209]Không thể tạo mới phòng ban khi bật cách ly Tenant------------
             Page<SysDepart> page = new Page<>(1,1);
             IPage<SysDepart> pageList = sysDepartService.getMaxCodeDepart(page,"");
             List<SysDepart> records = pageList.getRecords();
@@ -70,30 +70,30 @@ public class OrgCodeRule implements IFillRuleHandler {
                 orgType = depart.getOrgType();
                 newOrgCode = YouBianCodeUtil.getNextYouBianCode(oldOrgCode);
             }
-        } else {//反之则查询出所有同级的部门,获取结果后有两种情况,有同级和没有同级
-            //获取自己部门最大值orgCode部门信息
-            // 代码逻辑说明: [QQYUN-4209]租户隔离下部门新建不了------------
+        } else {//Ngược lại thì truy vấn tất cả các phòng ban cùng cấp,Sau khi lấy kết quả có hai trường hợp,Có cấp ngang và không có cấp ngang
+            //Lấy thông tin phòng ban có orgCode lớn nhất của phòng ban mình
+            // Giải thích logic mã: [QQYUN-4209]Không thể tạo mới phòng ban khi bật cách ly Tenant------------
             Page<SysDepart> page = new Page<>(1,1);
             IPage<SysDepart> pageList = sysDepartService.getMaxCodeDepart(page,parentId);
             List<SysDepart> records = pageList.getRecords();
-            // 查询出父级部门
+            // Truy vấn ra phòng ban cấp cha
             SysDepart depart = sysDepartService.getDepartById(parentId);
-            // 获取父级部门的Code
+            // Lấy của phòng ban cấp cha Code
             String parentCode = depart.getOrgCode();
-            // 根据父级部门类型算出当前部门的类型
+            // Theo loại phòng ban cha, tính ra loại của phòng ban hiện tại
             orgType = String.valueOf(Integer.valueOf(depart.getOrgType()) + 1);
-            // 处理同级部门为null的情况
+            // Xử lý trường hợp phòng ban cùng cấp là null
             if (null == records || records.size()==0) {
-                // 直接生成当前的部门编码并返回
+                // Tạo trực tiếp mã phòng ban hiện tại và trả về
                 newOrgCode = YouBianCodeUtil.getSubYouBianCode(parentCode, null);
-            } else { //处理有同级部门的情况
-                // 获取同级部门的编码,利用工具类
+            } else { //Xử lý trường hợp có phòng ban cùng cấp
+                // Lấy mã của phòng ban cùng cấp,Sử dụng lớp công cụ
                 String subCode = records.get(0).getOrgCode();
-                // 返回生成的当前部门编码
+                // Trả về mã phòng ban hiện tại đã tạo
                 newOrgCode = YouBianCodeUtil.getSubYouBianCode(parentCode, subCode);
             }
         }
-        // 返回最终封装了部门编码和部门类型的数组
+        // Trả về mảng cuối cùng đã đóng gói mã phòng ban và loại phòng ban
         strArray[0] = newOrgCode;
         strArray[1] = orgType;
         return strArray;

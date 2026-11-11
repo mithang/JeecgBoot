@@ -14,13 +14,13 @@
 //import org.slf4j.LoggerFactory;;
 //
 //
-//// 暂时注释掉，提高系统性能
-////@Aspect   //定义一个切面
+//// Tạm thời comment lại để nâng cao hiệu năng hệ thống
+////@Aspect   //Định nghĩa một aspect
 ////@Configuration
 //public class LogRecordAspect {
 //private static final Logger logger = LoggerFactory.getLogger(LogRecordAspect.class);
 //
-//    // 定义切点Pointcut
+//    // Định nghĩa điểm cắt Pointcut
 //    @Pointcut("execution(public * org.jeecg.modules.*.*.*Controller.*(..))")
 //    public void excudeService() {
 //    }
@@ -35,12 +35,12 @@
 //        String method = request.getMethod();
 //        String uri = request.getRequestURI();
 //        String queryString = request.getQueryString();
-//        logger.info("请求开始, 各个参数, url: {}, method: {}, uri: {}, params: {}", url, method, uri, queryString);
+//        logger.info("Bắt đầu yêu cầu, các tham số, url: {}, method: {}, uri: {}, params: {}", url, method, uri, queryString);
 //
-//        // result的值就是被拦截方法的返回值
+//        // result Giá trị chính là giá trị trả về của phương thức bị chặn
 //        Object result = pjp.proceed();
 //
-//        logger.info("请求结束，controller的返回值是 " + result);
+//        logger.info("Khi yêu cầu kết thúc, giá trị trả về của controller là " + result);
 //        return result;
 //    }
 //}

@@ -7,7 +7,7 @@ import org.jeecg.modules.system.service.ISysUserDepPostService;
 import org.springframework.stereotype.Service;
 
 /**
- * @Description: 部门岗位用户实现类
+ * @Description: Lớp triển khai người dùng chức vụ phòng ban
  * @author: wangshuai
  * @date: 2025/9/5 11:46
  */

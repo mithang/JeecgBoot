@@ -21,12 +21,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Description: gateway路由管理
+ * @Description: gateway Quản lý route
  * @Author: jeecg-boot
  * @Date: 2020-05-26
  * @Version: V1.0
  */
-@Tag(name = "gateway路由管理")
+@Tag(name = "gateway Quản lý route")
 @RestController
 @RequestMapping("/sys/gatewayRoute")
 @Slf4j
@@ -39,10 +39,10 @@ public class SysGatewayRouteController extends JeecgController<SysGatewayRoute, 
     @PostMapping(value = "/updateAll")
     public Result<?> updateAll(@RequestBody JSONObject json) {
         sysGatewayRouteService.updateAll(json);
-        return Result.ok("操作成功！");
+        return Result.ok("Thao tác thành công!");
     }
 
-	//查看路由：拥有任一路由管理按钮权限即可
+	//Xem route: Chỉ cần có quyền nút quản lý route bất kỳ là được
 	@RequiresPermissions(value = {"system:gateway:updateAll", "system:getway:delete", "system:gateway:putRecycleBin", "system:gateway:deleteRecycleBin", "system:gateway:copyRoute"}, logical = Logical.OR)
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(SysGatewayRoute sysGatewayRoute) {
@@ -66,11 +66,11 @@ public class SysGatewayRouteController extends JeecgController<SysGatewayRoute, 
 	@GetMapping(value = "/clearRedis")
 	public Result<?> clearRedis() {
 		sysGatewayRouteService.clearRedis();
-		return Result.ok("清除成功！");
+		return Result.ok("Đã xóa thành công!");
 	}
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
@@ -79,11 +79,11 @@ public class SysGatewayRouteController extends JeecgController<SysGatewayRoute, 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         sysGatewayRouteService.deleteById(id);
-        return Result.ok("删除路由成功");
+        return Result.ok("Xóa route thành công");
     }
 
 	/**
-	 * 查询被删除的列表
+	 * Truy vấn danh sách đã xóa
 	 * @return
 	 */
 	@RequiresPermissions(value = {"system:gateway:updateAll", "system:getway:delete", "system:gateway:putRecycleBin", "system:gateway:deleteRecycleBin", "system:gateway:copyRoute"}, logical = Logical.OR)
@@ -97,7 +97,7 @@ public class SysGatewayRouteController extends JeecgController<SysGatewayRoute, 
 	}
 
 	/**
-	 * 还原被逻辑删除的路由
+	 * Khôi phục route đã bị xóa logic
 	 *
 	 * @param jsonObject
 	 * @return
@@ -109,18 +109,18 @@ public class SysGatewayRouteController extends JeecgController<SysGatewayRoute, 
 			String ids = jsonObject.getString("ids");
 			if (StringUtils.isNotBlank(ids)) {
 				sysGatewayRouteService.revertLogicDeleted(Arrays.asList(ids.split(",")));
-				return Result.ok("操作成功!");
+				return Result.ok("Thao tác thành công!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Result.error("操作失败!");
+			return Result.error("Thao tác thất bại!");
 		}
-		return Result.ok("还原成功");
+		return Result.ok("Khôi phục thành công");
 	}
 	/**
-	 * 彻底删除路由
+	 * Xóa hoàn toàn route
 	 *
-	 * @param ids 被删除的路由ID，多个id用半角逗号分割
+	 * @param ids ID route bị xóa, nhiều id phân tách bằng dấu phẩy nửa chiều rộng
 	 * @return
 	 */
 	@RequiresPermissions("system:gateway:deleteRecycleBin")
@@ -130,16 +130,16 @@ public class SysGatewayRouteController extends JeecgController<SysGatewayRoute, 
 			if (StringUtils.isNotBlank(ids)) {
 				sysGatewayRouteService.deleteLogicDeleted(Arrays.asList(ids.split(",")));
 			}
-			return Result.ok("删除成功!");
+			return Result.ok("Xóa thành công!");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Result.error("删除失败!");
+			return Result.error("Xóa thất bại!");
 		}
 	}
 	/**
-	 * 复制路由
+	 * Sao chép route
 	 *
-	 * @param id 路由id
+	 * @param id Route id
 	 * @return
 	 */
 	@RequiresPermissions("system:gateway:copyRoute")

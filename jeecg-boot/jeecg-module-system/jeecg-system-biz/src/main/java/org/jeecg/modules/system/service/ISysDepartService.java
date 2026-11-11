@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 部门表 服务实现类
+ * Bảng phòng ban Lớp triển khai Service
  * <p>
  * 
  * @Author:Steve
@@ -28,60 +28,60 @@ import java.util.Map;
 public interface ISysDepartService extends IService<SysDepart>{
 
     /**
-     * 查询我的部门信息,并分节点进行显示
-     * @param departIds 部门id
+     * Truy vấn thông tin phòng ban của tôi,Và hiển thị theo từng nút
+     * @param departIds Phòng ban id
      * @return
      */
     List<SysDepartTreeModel> queryMyDeptTreeList(String departIds);
 
     /**
-     * 查询所有部门信息,并分节点进行显示
+     * Truy vấn tất cả thông tin phòng ban,Và hiển thị theo từng nút
      * @return
      */
     List<SysDepartTreeModel> queryTreeList();
 
 
     /**
-     * 查询所有部门信息,并分节点进行显示
-     * @param ids 多个部门id
+     * Truy vấn tất cả thông tin phòng ban,Và hiển thị theo từng nút
+     * @param ids Nhiều phòng ban id
      * @return
      */
     List<SysDepartTreeModel> queryTreeList(String ids);
 
     /**
-     * 查询所有部门DepartId信息,并分节点进行显示
+     * Truy vấn thông tin DepartId của tất cả phòng ban,Và hiển thị theo từng nút
      * @return
      */
     public List<DepartIdModel> queryDepartIdTreeList();
 
     /**
-     * 保存部门数据
+     * Lưu dữ liệu phòng ban
      * @param sysDepart
-     * @param username 用户名
+     * @param username Tên người dùng
      */
     void saveDepartData(SysDepart sysDepart,String username);
 
     /**
-     * 更新depart数据
+     * Cập nhật dữ liệu phòng ban
      * @param sysDepart
-     * @param username 用户名
+     * @param username Tên người dùng
      * @return
      */
     Boolean updateDepartDataById(SysDepart sysDepart,String username);
     
     /**
-     * 删除depart数据
+     * Xóa dữ liệu phòng ban
      * @param id
      * @return
      */
 	/* boolean removeDepartDataById(String id); */
     
     /**
-     * 根据关键字搜索相关的部门数据
+     * Tìm kiếm dữ liệu phòng ban liên quan theo từ khóa
      *
      * @param keyWord
      * @param myDeptSearch
-     * @param departIds    多个部门id
+     * @param departIds    Nhiều phòng ban id
      * @param orgCategory
      * @param depIds
      * @return
@@ -89,30 +89,30 @@ public interface ISysDepartService extends IService<SysDepart>{
     List<SysDepartTreeModel> searchByKeyWord(String keyWord, String myDeptSearch, String departIds, String orgCategory, String depIds);
 
 	/**
-	 * 部门管理页面根据关键字搜索组织机构，搜索结果支持继续展开下级。
+	 * Trang quản lý phòng ban tìm kiếm tổ chức theo từ khóa; kết quả tìm kiếm hỗ trợ tiếp tục mở rộng cấp dưới.
 	 *
-	 * @param keyWord 关键字
-	 * @param orgCategory 组织机构类型
-	 * @return 部门树节点
+	 * @param keyWord Từ khóa
+	 * @param orgCategory Loại cơ quan tổ chức
+	 * @return Nút cây phòng ban
 	 */
 	List<SysDepartTreeModel> searchByKeyWordForDepartManage(String keyWord, String orgCategory);
     
     /**
-     * 根据部门id删除并删除其可能存在的子级部门
+     * Xóa theo id phòng ban và xóa các phòng ban cấp dưới có thể tồn tại của nó
      * @param id
      * @return
      */
     boolean delete(String id);
     
     /**
-     * 查询SysDepart集合
+     * Truy vấn tập hợp SysDepart
      * @param userId
      * @return
      */
 	public List<SysDepart> queryUserDeparts(String userId);
 
     /**
-     * 根据用户名查询部门
+     * Truy vấn phòng ban theo tên người dùng
      *
      * @param username
      * @return
@@ -120,7 +120,7 @@ public interface ISysDepartService extends IService<SysDepart>{
     List<SysDepart> queryDepartsByUsername(String username);
     
     /**
-     * 根据用户ID查询部门
+     * Truy vấn phòng ban theo ID người dùng
      *
      * @param userId
      * @return
@@ -128,91 +128,91 @@ public interface ISysDepartService extends IService<SysDepart>{
     List<String> queryDepartsByUserId(String userId);
 
     /**
-     * 根据 用户ID 查询部门ID列表
+     * Truy vấn danh sách ID phòng ban theo ID người dùng
      *
      * @param userIds
-     * @return key = 用户ID, value = 部门ID列表
+     * @return key = Người dùng ID, value = Danh sách ID phòng ban
      */
     Map<String, List<String>> queryDepartIdsByUserIds(Collection<String> userIds);
 
 	 /**
-     * 根据部门id批量删除并删除其可能存在的子级部门
-     * @param ids 多个部门id
+     * Xóa hàng loạt theo id phòng ban và xóa các phòng ban cấp dưới có thể tồn tại của nó
+     * @param ids Nhiều phòng ban id
      * @return
      */
 	void deleteBatchWithChildren(List<String> ids);
 
     /**
-     *  根据部门Id查询,当前和下级所有部门IDS
+     *  Truy vấn theo Id phòng ban,Phòng ban hiện tại và tất cả phòng ban cấp dưới IDS
      * @param departId
      * @return
      */
     List<String> getSubDepIdsByDepId(String departId);
 
     /**
-     * 获取我的部门下级所有部门IDS
-     * @param departIds 多个部门id
+     * Lấy tất cả các phòng ban cấp dưới của phòng ban của tôi IDS
+     * @param departIds Nhiều phòng ban id
      * @return
      */
     List<String> getMySubDepIdsByDepId(String departIds);
     /**
-     * 根据关键字获取部门信息（通讯录）
-     * @param keyWord 搜索词
+     * Lấy thông tin phòng ban theo từ khóa (danh bạ)
+     * @param keyWord Từ tìm kiếm
      * @return
      */
     List<SysDepartTreeModel> queryTreeByKeyWord(String keyWord);
     /**
-     * 获取我的部门下级所有部门
-     * @param parentId 父id
-     * @param ids 多个部门id
-     * @param primaryKey 主键字段（id或者orgCode）
-     * @param orgCategory 逗号分隔的 orgCategory 值，如 "1,2"；为空时退化为默认行为（排除岗位）
+     * Lấy tất cả các phòng ban cấp dưới của phòng ban của tôi
+     * @param parentId id cha
+     * @param ids Nhiều phòng ban id
+     * @param primaryKey Trường khóa chính (id hoặc orgCode)
+     * @param orgCategory Giá trị orgCategory phân tách bằng dấu phẩy, ví dụ "1,2"; khi trống sẽ trở về hành vi mặc định (loại trừ vị trí)
      * @return
      */
     List<SysDepartTreeModel> queryTreeListByPid(String parentId,String ids, String primaryKey, String orgCategory);
 
     /**
-     * 获取某个部门的所有父级部门的ID
+     * Lấy tất cả các phòng ban cấp cha của một phòng ban ID
      *
-     * @param departId 根据departId查
+     * @param departId Truy vấn theo departId
      * @return JSONObject
      */
     JSONObject queryAllParentIdByDepartId(String departId);
 
     /**
-     * 获取某个部门的所有父级部门的ID
+     * Lấy tất cả các phòng ban cấp cha của một phòng ban ID
      *
-     * @param orgCode 根据orgCode查
+     * @param orgCode Tra cứu theo orgCode
      * @return JSONObject
      */
     JSONObject queryAllParentIdByOrgCode(String orgCode);
     /**
-     * 获取公司信息
-     * @param orgCode 部门编码
+     * Lấy thông tin công ty
+     * @param orgCode Mã phòng ban
      * @return
      */
     SysDepart queryCompByOrgCode(String orgCode);
     /**
-     * 获取下级部门
+     * Lấy phòng ban cấp dưới
      * @param pid
      * @return
      */
     List<SysDepart> queryDeptByPid(String pid);
 
     /**
-     * 获取我的部门已加入的公司
+     * Lấy các công ty mà phòng ban của tôi đã tham gia
      * @return
      */
     List<SysDepart> getMyDepartList();
 
     /**
-     * 删除部门
+     * Xóa phòng ban
      * @param id
      */
     void deleteDepart(String id);
 
     /**
-     * 通讯录通过租户id查询部门数据
+     * Danh bạ truy vấn dữ liệu phòng ban theo tenant id
      * @param parentId
      * @param tenantId
      * @param departName
@@ -221,28 +221,28 @@ public interface ISysDepartService extends IService<SysDepart>{
     List<SysDepartTreeModel> queryBookDepTreeSync(String parentId, Integer tenantId, String departName);
 
     /**
-     * 根据id查询部门信息
+     * Truy vấn thông tin phòng ban theo id
      * @param parentId
      * @return
      */
     SysDepart getDepartById(String parentId);
 
     /**
-     * 根据id查询部门信息
+     * Truy vấn thông tin phòng ban theo id
      * @param parentId
      * @return
      */
     IPage<SysDepart> getMaxCodeDepart(Page<SysDepart> page, String parentId);
 
     /**
-     * 更新叶子节点
+     * Cập nhật nút lá
      * @param id
      * @param izLeaf
      */
     void updateIzLeaf(String id, Integer izLeaf);
 
     /**
-     * 获取导出部门的数据
+     * Lấy dữ liệu phòng ban xuất ra
      * @param tenantId
      * @return
      */
@@ -251,7 +251,7 @@ public interface ISysDepartService extends IService<SysDepart>{
     void importExcel(List<ExportDepartVo> listSysDeparts, List<String> errorMessageList);
 
     /**
-     * 根据租户id导出部门
+     * Xuất phòng ban theo id Tenant
      * @param tenantId
      * @param idList
      * @return
@@ -259,14 +259,14 @@ public interface ISysDepartService extends IService<SysDepart>{
     List<SysDepartExportVo> getExportDepart(Integer tenantId, List<String> idList);
 
     /**
-     * 导出系统部门excel
+     * Xuất phòng ban hệ thống excel
      * @param listSysDeparts
      * @param errorMessageList
      */
     void importSysDepart(List<SysDepartExportVo> listSysDeparts, List<String> errorMessageList);
 
     /**
-     * 根据部门id和职级id获取岗位信息
+     * Theo id phòng ban và id cấp bậc, lấy thông tin vị trí
      *
      * @param parentId
      * @param departId
@@ -275,14 +275,14 @@ public interface ISysDepartService extends IService<SysDepart>{
     List<SysPositionSelectTreeVo> getPositionByDepartId(String parentId, String departId, String positionId);
 
     /**
-     * 获取职级关系
+     * Lấy quan hệ cấp bậc
      * @param departId
      * @return
      */
     List<SysPositionSelectTreeVo> getRankRelation(String departId);
 
     /**
-     * 异步查询部门和岗位接口
+     * Giao diện truy vấn bất đồng bộ phòng ban và chức vụ
      *
      * @param parentId
      * @param ids
@@ -293,7 +293,7 @@ public interface ISysDepartService extends IService<SysDepart>{
     List<SysDepartTreeModel> queryDepartAndPostTreeSync(String parentId, String ids, String primaryKey, String departIds,String orgName);
 
     /**
-     * 根据部门code获取当前和上级部门名称
+     * Theo code phòng ban, lấy tên phòng ban hiện tại và phòng ban cấp trên
      *
      * @param orgCode
      * @param depId
@@ -302,15 +302,15 @@ public interface ISysDepartService extends IService<SysDepart>{
     String getDepartPathNameByOrgCode(String orgCode, String depId);
 
     /**
-     * 根据部门id获取部门下的岗位id
+     * Lấy các vị trí thuộc phòng ban theo id phòng ban id
      *
-     * @param depIds 当前选择的公司、子公司、部门id
+     * @param depIds Công ty, công ty con, phòng ban đang chọn id
      * @return
      */
     String getDepPostIdByDepId(String depIds);
 
     /**
-     * 调整部门位置
+     * Điều chỉnh vị trí phòng ban
      * 
      * @param changeDepartVo
      * @return
@@ -318,7 +318,7 @@ public interface ISysDepartService extends IService<SysDepart>{
     void updateChangeDepart(SysChangeDepartVo changeDepartVo);
 
     /**
-     * 获取部门负责人
+     * Lấy người phụ trách phòng ban
      * 
      * @param departId
      * @param page
@@ -327,7 +327,7 @@ public interface ISysDepartService extends IService<SysDepart>{
     IPage<SysUser> getDepartmentHead(String departId, Page<SysUser> page);
 
     /**
-     * 获取所有职级关系
+     * Lấy tất cả quan hệ cấp bậc
      * @param departId
      * @return
      */

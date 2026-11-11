@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 消息生成工具
+ * Công cụ tạo tin nhắn
  * @author: jeecg-boot
  */
 
@@ -36,10 +36,10 @@ public class PushMsgUtil {
     @Autowired
     private Configuration freemarkerConfig;
     /**
-     * @param msgType 消息类型 1短信 2邮件 3微信
-     * @param templateCode    消息模板码
-     * @param map     消息参数
-     * @param sentTo  接收消息方
+     * @param msgType Loại tin nhắn: 1 SMS, 2 Email, 3 WeChat
+     * @param templateCode    Mã mẫu tin nhắn
+     * @param map     Tham số tin nhắn
+     * @param sentTo  Bên nhận tin nhắn
      */
     public boolean sendMessage(String msgType, String templateCode, Map<String, String> map, String sentTo) {
         List<SysMessageTemplate> sysSmsTemplates = sysMessageTemplateService.selectByCode(templateCode);
@@ -48,9 +48,9 @@ public class PushMsgUtil {
             SysMessageTemplate sysSmsTemplate = sysSmsTemplates.get(0);
             sysMessage.setEsType(msgType);
             sysMessage.setEsReceiver(sentTo);
-            //模板标题
+            //Tiêu đề mẫu
             String title = sysSmsTemplate.getTemplateName();
-            //模板内容
+            //Nội dung mẫu
             String content = sysSmsTemplate.getTemplateContent();
             StringWriter stringWriter = new StringWriter();
             Template template = null;

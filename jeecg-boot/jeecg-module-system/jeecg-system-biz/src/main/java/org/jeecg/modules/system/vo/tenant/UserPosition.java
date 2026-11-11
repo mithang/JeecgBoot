@@ -3,7 +3,7 @@ package org.jeecg.modules.system.vo.tenant;
 import lombok.Data;
 
 /**
- * 用户与职位信息
+ * Thông tin người dùng và vị trí công việc
  * @Author taoYan
  * @Date 2023/2/17 10:10
  **/
@@ -11,12 +11,12 @@ import lombok.Data;
 public class UserPosition {
 
     /**
-     * 用户ID
+     * Người dùng ID
      */
     private String userId;
 
     /**
-     * 职位名称
+     * Tên chức vụ
      */
     private String positionName;
 }

@@ -6,16 +6,16 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @Description: 用户角色vo
+ * @Description: Vai trò người dùng vo
  * @author: jeecg-boot
  */
 @Data
 public class SysUserRoleVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	/**部门id*/
+	/**Phòng ban id*/
 	private String roleId;
-	/**对应的用户id集合*/
+	/**Tập hợp id người dùng tương ứng*/
 	private List<String> userIdList;
 
 	public SysUserRoleVO() {

@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 /**
  * <P>
- * 用户部门表实现类
+ * Lớp triển khai bảng phòng ban người dùng
  * <p/>
  * @Author ZhiLin
  *@since 2019-02-22
@@ -53,7 +53,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 	
 
 	/**
-	 * 根据用户id查询部门信息
+	 * Truy vấn thông tin phòng ban theo ID người dùng
 	 */
 	@Override
 	public List<DepartIdModel> queryDepartIdsOfUser(String userId) {
@@ -69,7 +69,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 					depIdList.add(userDepart.getDepId());
 				}
 
-			// 代码逻辑说明: 判断是否开启租户saas模式，开启需要根据当前租户查询------------
+			// Giải thích logic mã: Kiểm tra có bật chế độ SaaS thuê bao hay không; nếu đã bật thì cần truy vấn theo thuê bao hiện tại------------
 			if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 				Integer tenantId = oConvertUtils.getInt(TenantContext.getTenant(), 0);
 				queryDep.eq(SysDepart::getTenantId,tenantId);
@@ -95,7 +95,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 
 
 	/**
-	 * 根据部门id查询用户信息
+	 * Truy vấn thông tin người dùng theo ID phòng ban
 	 */
 	@Override
 	public List<SysUser> queryUserByDepId(String depId) {
@@ -110,11 +110,11 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 			List<SysUser> userList = (List<SysUser>) sysUserMapper.selectBatchIds(userIdList);
 			if(CollectionUtil.isNotEmpty(userList)){
 
-				// 代码逻辑说明: JHHB-812 人员按照排序展示
+				// Giải thích logic mã: JHHB-812 Nhân viên hiển thị theo thứ tự sắp xếp
 				userList.sort(Comparator.comparing(SysUser::getSort,
 						Comparator.nullsFirst(Comparator.naturalOrder())));
 
-				// 代码逻辑说明: 接口调用查询返回结果不能返回密码相关信息
+				// Giải thích logic mã: Kết quả truy vấn khi gọi giao diện không được trả về thông tin liên quan đến mật khẩu
 				for (SysUser sysUser : userList) {
 					sysUser.setSalt("");
 					sysUser.setPassword("");
@@ -126,18 +126,18 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 	}
 
 	/**
-	 * 根据部门code，查询当前部门和下级部门的 用户信息
+	 * Truy vấn thông tin người dùng của phòng ban hiện tại và các phòng ban cấp dưới theo code phòng ban
 	 */
 	@Override
 	public List<SysUser> queryUserByDepCode(String depCode,String realname,Integer status) {
-		// 代码逻辑说明: 根据部门选择用户接口代码优化
+		// Giải thích logic mã: Tối ưu mã giao diện chọn người dùng theo phòng ban
 		if(oConvertUtils.isNotEmpty(realname)){
 			realname = realname.trim();
 		}
 		List<SysUser> userList = this.baseMapper.queryDepartUserList(depCode, realname, status);
 		Map<String, SysUser> map = new LinkedHashMap(5);
 		for (SysUser sysUser : userList) {
-			// 返回的用户数据去掉密码信息
+			// Dữ liệu người dùng trả về loại bỏ thông tin mật khẩu
 			sysUser.setSalt("");
 			sysUser.setPassword("");
 			map.put(sysUser.getId(), sysUser);
@@ -154,19 +154,19 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 	 * @param pageSize
 	 * @param pageNo
 	 * @param id
-	 * @param isMultiTranslate 是否多字段翻译
+	 * @param isMultiTranslate Có dịch nhiều trường không
 	 * @return
 	 */
 	@Override
 	public IPage<SysUser> queryDepartUserPageList(String departId, String username, String realname, int pageSize, int pageNo,String id,String isMultiTranslate) {
 		IPage<SysUser> pageList = null;
-		// 部门ID不存在 直接查询用户表即可
+		// ID phòng ban không tồn tại thì truy vấn trực tiếp bảng người dùng
 		Page<SysUser> page = new Page<SysUser>(pageNo, pageSize);
 		if(oConvertUtils.isEmpty(departId)){
 			LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<>();
-            // 代码逻辑说明: [JTC-297]已冻结用户仍可设置为代理人------------
+            // Giải thích logic mã: [JTC-297]Người dùng đã bị đóng băng vẫn có thể được đặt làm người đại diện------------
             query.eq(SysUser::getStatus,Integer.parseInt(CommonConstant.STATUS_1));
-			// 代码逻辑说明: 逗号分割多个用户翻译问题------------
+			// Giải thích logic mã: Vấn đề dịch nhiều người dùng khi phân tách bằng dấu phẩy------------
 			if(oConvertUtils.isNotEmpty(username)){
 				String COMMA = ",";
 				if(oConvertUtils.isNotEmpty(isMultiTranslate) && username.contains(COMMA)){
@@ -177,7 +177,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 				}
 			}
 
-			// 代码逻辑说明: JHHB-304 流程转办 人员选择时，加姓名搜索------------
+			// Giải thích logic mã: JHHB-304 Chuyển giao quy trình: khi chọn nhân sự, thêm tìm kiếm theo tên------------
 			if(oConvertUtils.isNotEmpty(realname)){
 				String COMMA = ",";
 				if(oConvertUtils.isNotEmpty(isMultiTranslate) && realname.contains(COMMA)){
@@ -188,9 +188,9 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 				}
 			}
 
-            // 代码逻辑说明: [VUEN-1238]邮箱回复时，发送到显示的为用户id------------
+            // Giải thích logic mã: [VUEN-1238]Khi trả lời email, gửi đến hiển thị là người dùng id------------
             if(oConvertUtils.isNotEmpty(id)){
-				// 代码逻辑说明: 【TV360X-1482】写信，选择用户后第一次回显没翻译------------
+				// Giải thích logic mã: 【TV360X-1482】Viết thư, sau khi chọn người dùng, lần hiển thị lại đầu tiên chưa được dịch------------
 				String COMMA = ",";
 				if(oConvertUtils.isNotEmpty(isMultiTranslate) && id.contains(COMMA)){
 					String[] idArr = id.split(COMMA);
@@ -199,30 +199,30 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 					query.eq(SysUser::getId, id);
 				}
             }
-            // 代码逻辑说明: [VUEN-2121]临时用户不能直接显示------------
+            // Giải thích logic mã: [VUEN-2121]Người dùng tạm thời không thể hiển thị trực tiếp------------
             query.ne(SysUser::getUsername,"_reserve_user_external");
-            // 代码逻辑说明: 【JHHB-765】需要能设置排序---
+            // Giải thích logic mã: 【JHHB-765】Cần có thể thiết lập thứ tự sắp xếp---
             query.orderByAsc(SysUser::getSort);
             query.orderByDesc(SysUser::getCreateTime);
             //------------------------------------------------------------------------------------------------
-			//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+			//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 			if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 				String tenantId = oConvertUtils.getString(TenantContext.getTenant(), "0");
-                // 代码逻辑说明: [QQYUN-3371]租户逻辑改造，改成关系表------------
+                // Giải thích logic mã: [QQYUN-3371]Cải tạo logic Tenant, đổi sang bảng quan hệ------------
 				List<String> userIdList = userTenantMapper.getUserIdsByTenantId(Integer.valueOf(tenantId));
 				if(null!=userIdList && userIdList.size()>0){
                     query.in(SysUser::getId,userIdList);
                 }
-				//update-begin---author:scott ---date:20261014  for：租户下查不到用户时不再放开过滤，防止跨租户读取用户信息-----------
+				//update-begin---author:scott ---date:20261014  for: Khi không tra được người dùng trong thuê bao thì không nới lỏng bộ lọc nữa, tránh đọc xuyên thuê bao thông tin người dùng-----------
 				else {
-					query.eq(SysUser::getId, "通过租户ID查不到用户");
+					query.eq(SysUser::getId, "Không tìm thấy người dùng theo ID tenant");
 				}
-				//update-end---author:scott ---date:20261014  for：租户下查不到用户时不再放开过滤，防止跨租户读取用户信息-----------
+				//update-end---author:scott ---date:20261014  for: Khi không tra được người dùng trong thuê bao thì không nới lỏng bộ lọc nữa, tránh đọc xuyên thuê bao thông tin người dùng-----------
 			}
 			//------------------------------------------------------------------------------------------------
 			pageList = sysUserMapper.selectPage(page, query);
 		}else{
-			// 有部门ID 需要走自定义sql
+			// Có ID phòng ban thì cần dùng SQL tùy chỉnh sql
 			SysDepart sysDepart = sysDepartService.getById(departId);
 			pageList = this.baseMapper.queryDepartUserPageList(page, sysDepart.getOrgCode(), username, realname);
 		}
@@ -231,14 +231,14 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 			List<String> userIds = userList.stream().map(SysUser::getId).collect(Collectors.toList());
 			Map<String, SysUser> map = new LinkedHashMap(5);
 			if(userIds!=null && userIds.size()>0){
-				// 查部门名称
+				// Tra cứu tên phòng ban
 				Map<String,String>  useDepNames = this.getDepNamesByUserIds(userIds);
 				userList.forEach(item->{
-					//TODO 临时借用这个字段用于页面展示
+					//TODO Tạm mượn trường này để hiển thị trên trang
 					item.setOrgCodeTxt(useDepNames.get(item.getId()));
 					item.setSalt("");
 					item.setPassword("");
-					// 去重
+					// Khử trùng lặp
 					map.put(item.getId(), item);
 				});
 			}
@@ -250,7 +250,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
     @Override
     public IPage<SysUser> getUserInformation(Integer tenantId, String departId, String keyword, Integer pageSize, Integer pageNo) {
         IPage<SysUser> pageList = null;
-        // 部门ID不存在 直接查询用户表即可
+        // ID phòng ban không tồn tại thì truy vấn trực tiếp bảng người dùng
         Page<SysUser> page = new Page<>(pageNo, pageSize);
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if(oConvertUtils.isEmpty(departId)){
@@ -258,27 +258,27 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
             query.eq(SysUser::getStatus,Integer.parseInt(CommonConstant.STATUS_1));
             query.ne(SysUser::getUsername,"_reserve_user_external");
 
-			// 支持租户隔离
+			// Hỗ trợ cách ly tenant
 			if (tenantId != null) {
 				List<String> userIds = userTenantMapper.getUserIdsByTenantId(tenantId);
 				if(oConvertUtils.listIsNotEmpty(userIds)){
 					query.in(SysUser::getId, userIds);
 				}else{
-					query.eq(SysUser::getId,"通过租户ID查不到用户");
+					query.eq(SysUser::getId,"Không tìm thấy người dùng theo ID tenant");
 				}
 			}
 			
-            //排除自己
+            //Loại trừ chính mình
             query.ne(SysUser::getId,sysUser.getId());
 			if(StringUtils.isNotEmpty(keyword)){
-				//这个语法可以将or用括号包起来，避免数据查不到
+				//Cú pháp này có thể đặt or trong dấu ngoặc đơn, tránh không tra được dữ liệu
 				query.and((wrapper) -> wrapper.like(SysUser::getUsername, keyword).or().like(SysUser::getRealname,keyword));
 			}
             pageList = sysUserMapper.selectPage(page, query);
         }else{
-            // 有部门ID 需要走自定义sql
+            // Có ID phòng ban thì cần dùng SQL tùy chỉnh sql
             SysDepart sysDepart = sysDepartService.getById(departId);
-            // 代码逻辑说明: 部门排除自己------------
+            // Giải thích logic mã: Phòng ban loại trừ chính mình------------
             pageList = this.baseMapper.getUserInformation(page, sysDepart.getOrgCode(), keyword,sysUser.getId());
         }
         return pageList;
@@ -287,7 +287,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 	@Override
 	public IPage<SysUser> getUserInformation(Integer tenantId, String departId,String roleId, String keyword, Integer pageSize, Integer pageNo, String excludeUserIdList, String includeUsernameList) {
 		IPage<SysUser> pageList = null;
-		// 部门ID不存在 直接查询用户表即可
+		// ID phòng ban không tồn tại thì truy vấn trực tiếp bảng người dùng
 		Page<SysUser> page = new Page<>(pageNo, pageSize);
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		
@@ -300,12 +300,12 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 			inUsernameList = Arrays.asList(includeUsernameList.split(SymbolConstant.COMMA));
 		}
 		if(oConvertUtils.isNotEmpty(departId)){
-			// 有部门ID 需要走自定义sql
+			// Có ID phòng ban thì cần dùng SQL tùy chỉnh sql
 			SysDepart sysDepart = sysDepartService.getById(departId);
-			// 代码逻辑说明: 【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+			// Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
 			pageList = this.baseMapper.getProcessUserList(page, sysDepart.getOrgCode(), keyword, tenantId, userIdList);
 		} else if (oConvertUtils.isNotEmpty(roleId)) {
-			// 代码逻辑说明: 【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+			// Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
 			pageList = this.sysUserMapper.selectUserListByRoleId(page, roleId, keyword, tenantId,userIdList);
 		} else{
 			LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<>();
@@ -315,33 +315,33 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 				query.in(SysUser::getUsername, inUsernameList);
 			}
 		
-			// 代码逻辑说明: 【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+			// Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
 			if(oConvertUtils.isNotEmpty(excludeUserIdList)){
 				query.notIn(SysUser::getId,Arrays.asList(excludeUserIdList.split(SymbolConstant.COMMA)));
 			}
-			// 支持租户隔离
+			// Hỗ trợ cách ly tenant
 			if (tenantId != null) {
 				List<String> userIds = userTenantMapper.getUserIdsByTenantId(tenantId);
 				if(oConvertUtils.listIsNotEmpty(userIds)){
 					query.in(SysUser::getId, userIds);
 				}else{
-					query.eq(SysUser::getId,"通过租户ID查不到用户");
+					query.eq(SysUser::getId,"Không tìm thấy người dùng theo ID tenant");
 				}
 			}
 			
 			if(StringUtils.isNotEmpty(keyword)){
-				//这个语法可以将or用括号包起来，避免数据查不到
+				//Cú pháp này có thể đặt or trong dấu ngoặc đơn, tránh không tra được dữ liệu
 				query.and((wrapper) -> wrapper.like(SysUser::getUsername, keyword).or().like(SysUser::getRealname,keyword));
 			}
 
-			// 【JHHB-811】添加排序
+			// 【JHHB-811】Thêm sắp xếp
 			query.orderByAsc(SysUser::getSort).orderByDesc(SysUser::getCreateTime);
 
 			pageList = sysUserMapper.selectPage(page, query);
 		}
-		// 批量查询用户的所属部门
-		// step.1 先拿到全部的 useids
-		// step.2 通过 useids，一次性查询用户的所属部门名字
+		// Truy vấn hàng loạt phòng ban của người dùng
+		// step.1 Trước tiên, lấy toàn bộ useids
+		// step.2 Truy vấn một lần tên phòng ban mà người dùng thuộc về thông qua useids
 		List<String> userIds = pageList.getRecords().stream().map(SysUser::getId).collect(Collectors.toList());
 		if (userIds.size() > 0) {
 			Map<String, String> useDepNames = sysUserService.getDepNamesByUserIds(userIds);
@@ -356,7 +356,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 	}
 
 	/**
-	 * 升级SpringBoot2.6.6,不允许循环依赖
+	 * Nâng cấp SpringBoot2.6.6,Không cho phép phụ thuộc vòng tròn
 	 * @param userIds
 	 * @return
 	 */
@@ -377,7 +377,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
 
 
     /**
-     * 查询部门岗位下的用户
+     * Truy vấn người dùng thuộc phòng ban/vị trí
      * @param departId
      * @param username
      * @param realname
@@ -391,16 +391,16 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
     public IPage<SysUser> queryDepartPostUserPageList(String departId, String username, String realname, Integer pageSize, Integer pageNo, String id, String isMultiTranslate) {
         Page<SysUser> page = new Page<SysUser>(pageNo, pageSize);
         if (oConvertUtils.isEmpty(departId)) {
-            // 部门ID不存在 直接查询用户表即可
+            // ID phòng ban không tồn tại thì truy vấn trực tiếp bảng người dùng
             return getDepPostListByIdUserName(username,id,isMultiTranslate,page);
         } else {
-            // 有部门ID 需要走部门岗位用户查询
+            // Có ID phòng ban thì cần đi theo truy vấn người dùng theo vị trí phòng ban
             return getDepartPostListByIdUserRealName(departId,username,realname,page);
         }
     }
 
     /**
-     * 根据部门id和用户名获取部门岗位用户分页列表
+     * Lấy danh sách phân trang người dùng theo vị trí phòng ban theo id phòng ban và tên người dùng
      *
      * @param id
      * @param username
@@ -409,7 +409,7 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
      * @return
      */
     private IPage<SysUser> getDepPostListByIdUserName(String username, String id, String isMultiTranslate, Page<SysUser> page) {
-        //需要查询部门下的用户，故将写成自定义sql，非Lambda表达式的用法
+        //Cần truy vấn người dùng thuộc phòng ban nên viết thành SQL tùy chỉnh, không dùng cách viết biểu thức Lambda
         List<String> userIdList = new ArrayList<>();
         List<String> userNameList = new ArrayList<>();
         String userId = "";
@@ -433,11 +433,11 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
             }
         }
         //------------------------------------------------------------------------------------------------
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             String tenantId = oConvertUtils.getString(TenantContext.getTenant(), "0");
             List<String> userIdsList = userTenantMapper.getUserIdsByTenantId(Integer.valueOf(tenantId));
-            //update-begin---author:scott ---date:20261014  for：传入的用户id与本租户用户取交集（原为并集，可查到其他租户用户）；租户下查不到用户时返回空-----------
+            //update-begin---author:scott ---date:20261014  for: Lấy giao của các id người dùng truyền vào với người dùng của tenant này (trước đây là hợp, có thể tra được người dùng của tenant khác); khi trong tenant không tra được người dùng thì trả về rỗng-----------
             List<String> tenantUserIds = null != userIdsList ? userIdsList : new ArrayList<>();
             if (userIdList.isEmpty()) {
                 userIdList.addAll(tenantUserIds);
@@ -445,16 +445,16 @@ public class SysUserDepartServiceImpl extends ServiceImpl<SysUserDepartMapper, S
                 userIdList.retainAll(tenantUserIds);
             }
             if (userIdList.isEmpty()) {
-                userIdList.add("通过租户ID查不到用户");
+                userIdList.add("Không tìm thấy người dùng theo ID tenant");
             }
-            //update-end---author:scott ---date:20261014  for：传入的用户id与本租户用户取交集（原为并集，可查到其他租户用户）；租户下查不到用户时返回空-----------
+            //update-end---author:scott ---date:20261014  for: Lấy giao của các id người dùng truyền vào với người dùng của tenant này (trước đây là hợp, có thể tra được người dùng của tenant khác); khi trong tenant không tra được người dùng thì trả về rỗng-----------
         }
         //------------------------------------------------------------------------------------------------
         return sysUserMapper.getDepPostListByIdUserName(page,userIdList,userId,userName,userNameList);
     }
 
     /**
-     * 根据部门id、用户名和真实姓名获取部门岗位用户分页列表
+     * Lấy danh sách phân trang người dùng theo vị trí phòng ban dựa trên id phòng ban, tên người dùng và tên thật
      *
      * @param departId
      * @param username

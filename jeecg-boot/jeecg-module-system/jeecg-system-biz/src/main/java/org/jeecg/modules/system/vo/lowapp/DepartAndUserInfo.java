@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 用户或者部门的信息
- * 用于 成员与部门 的搜索
+ * Thông tin người dùng hoặc phòng ban
+ * Dùng để tìm kiếm thành viên và phòng ban
  * @Author taoYan
  * @Date 2022/12/30 10:47
  **/

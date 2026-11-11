@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 系统日志表
+ * Bảng nhật ký hệ thống
  * </p>
  *
  * @Author zhangweijian
@@ -35,32 +35,32 @@ public class SysLog implements Serializable {
 	private String id;
 
 	/**
-	 * 创建人
+	 * Người tạo
 	 */
 	private String createBy;
 
 	/**
-	 * 创建时间
+	 * Thời gian tạo
 	 */
-	@Excel(name = "创建时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+	@Excel(name = "Thời gian tạo", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 
 	/**
-	 * 更新人
+	 * Người cập nhật
 	 */
 	private String updateBy;
 
 	/**
-	 * 更新时间
+	 * Thời gian cập nhật
 	 */
 	private Date updateTime;
 
 	/**
-	 * 耗时
+	 * Thời gian tốn
 	 */
-	@Excel(name = "耗时（毫秒）", width = 15)
+	@Excel(name = "Thời gian (mili giây)", width = 15)
 	private Long costTime;
 
 	/**
@@ -70,60 +70,60 @@ public class SysLog implements Serializable {
 	private String ip;
 
 	/**
-	 * 请求参数
+	 * Tham số yêu cầu
 	 */
 	private String requestParam;
 
 	/**
-	 * 请求类型
+	 * Loại yêu cầu
 	 */
 	private String requestType;
 
 	/**
-	 * 请求路径
+	 * Đường dẫn yêu cầu
 	 */
 	private String requestUrl;
 	/**
-	 * 请求方法
+	 * Phương thức yêu cầu
 	 */
 	private String method;
 
 	/**
-	 * 操作人用户名称
+	 * Tên người dùng của người thao tác
 	 */
 	private String username;
 	/**
-	 * 操作人用户账户
+	 * Tài khoản người dùng của người thao tác
 	 */
-	@Excel(name = "操作人", width = 15)
+	@Excel(name = "Người thao tác", width = 15)
 	private String userid;
 	/**
-	 * 操作详细日志
+	 * Nhật ký chi tiết thao tác
 	 */
-	@Excel(name = "日志内容", width = 50)
+	@Excel(name = "Nội dung nhật ký", width = 50)
 	private String logContent;
 
 	/**
-	 * 日志类型（1登录日志，2操作日志）
+	 * Loại nhật ký (1 Nhật ký đăng nhập, 2 Nhật ký thao tác)
 	 */
 	@Dict(dicCode = "log_type")
 	private Integer logType;
 
 	/**
-	 * 操作类型（1查询，2添加，3修改，4删除,5导入，6导出）
+	 * Loại thao tác (1 tìm kiếm, 2 thêm mới, 3 chỉnh sửa, 4 xóa,5 nhập, 6 xuất）
 	 */
 	@Dict(dicCode = "operate_type")
 	private Integer operateType;
 	
 	/**
-	 * 客户终端类型 pc:电脑端 app:手机端 h5:移动网页端
+	 * Loại thiết bị đầu cuối của khách hàng pc:Máy tính app:Thiết bị di động h5:Trang web di động
 	 */
-	@Excel(name = "客户端类型", width = 15, dicCode = "client_type")
+	@Excel(name = "Loại client", width = 15, dicCode = "client_type")
 	@Dict(dicCode = "client_type")
 	private String clientType;
 
 	/**
-	 * 租户ID
+	 * Tenant ID
 	 */
 	private Integer tenantId;
 

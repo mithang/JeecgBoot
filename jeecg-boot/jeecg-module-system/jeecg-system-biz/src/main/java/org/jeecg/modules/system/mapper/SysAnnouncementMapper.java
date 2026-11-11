@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
- * @Description: 系统通告表
+ * @Description: Bảng thông báo hệ thống
  * @Author: jeecg-boot
  * @Date:  2019-01-02
  * @Version: V1.0
@@ -20,26 +20,26 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public interface SysAnnouncementMapper extends BaseMapper<SysAnnouncement> {
 
     /**
-     * 通过消息类型和用户id获取系统通告
+     * Theo loại tin nhắn và id người dùng, lấy thông báo hệ thống
      * @param page
-     * @param userId 用户id
-     * @param msgCategory 消息类型
+     * @param userId Người dùng id
+     * @param msgCategory Loại tin nhắn
      * @return
      */
 	List<SysAnnouncement> querySysCementListByUserId(Page<SysAnnouncement> page, @Param("userId")String userId,@Param("msgCategory")String msgCategory,
                                                      @Param("tenantId")Integer tenantId, @Param("beginDate")Date beginDate);
 
     /**
-     * 获取用户未读消息数量
+     * Lấy số lượng tin nhắn chưa đọc của người dùng
      *
-     * @param userId 用户id
+     * @param userId Người dùng id
      * @param noticeType
      * @return
      */
     Integer getUnreadMessageCountByUserId(@Param("userId") String userId, @Param("beginDate") Date beginDate, @Param("noticeType") String noticeType);
 
     /**
-     * 分页查询全部消息列表
+     * Truy vấn phân trang toàn bộ danh sách tin nhắn
      * @param page
      * @param userId
      * @param fromUser
@@ -51,7 +51,7 @@ public interface SysAnnouncementMapper extends BaseMapper<SysAnnouncement> {
 	List<SysAnnouncement> queryAllMessageList(Page<SysAnnouncement> page, @Param("userId")String userId, @Param("fromUser")String fromUser, @Param("starFlag")String starFlag, @Param("busType")String busType, @Param("msgCategory")String msgCategory, @Param("beginDate")Date beginDate, @Param("endDate")Date endDate, @Param("noticeType") String noticeType);
    
     /**
-     * 查询用户未阅读的通知公告
+     * Truy vấn thông báo chưa đọc của người dùng
      * @param currDate
      * @param userId
      * @return

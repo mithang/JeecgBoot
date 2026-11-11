@@ -28,36 +28,36 @@ import lombok.experimental.Accessors;
 public class SysUserTenant implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键id*/
+	/**Khóa chính id*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键id")
+    @Schema(description = "Khóa chính id")
     private String id;
-	/**用户id*/
-	@Excel(name = "用户id", width = 15)
-    @Schema(description = "用户id")
+	/**Người dùng id*/
+	@Excel(name = "Người dùng id", width = 15)
+    @Schema(description = "Người dùng id")
     private String userId;
-	/**租户id*/
-	@Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+	/**Tenant id*/
+	@Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private Integer tenantId;
-	/**状态(1 正常 2 冻结 3 待审核 4 拒绝)*/
-	@Excel(name = "状态(1 正常 2 冻结 3 待审核 4 拒绝)", width = 15)
-    @Schema(description = "状态(1 正常 2 冻结 3 待审核 4 拒绝)")
+	/**Trạng thái(1 Bình thường 2 Đóng băng 3 Chờ phê duyệt 4 Từ chối)*/
+	@Excel(name = "Trạng thái(1 Bình thường 2 Đóng băng 3 Chờ phê duyệt 4 Từ chối)", width = 15)
+    @Schema(description = "Trạng thái(1 Bình thường 2 Đóng băng 3 Chờ phê duyệt 4 Từ chối)")
     private String status;
-	/**创建人登录名称*/
-    @Schema(description = "创建人登录名称")
+	/**Tên đăng nhập của người tạo*/
+    @Schema(description = "Tên đăng nhập của người tạo")
     private String createBy;
-	/**创建日期*/
+	/**Ngày tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private Date createTime;
-	/**更新人登录名称*/
-    @Schema(description = "更新人登录名称")
+	/**Tên đăng nhập của người cập nhật*/
+    @Schema(description = "Tên đăng nhập của người cập nhật")
     private String updateBy;
-	/**更新日期*/
+	/**Ngày cập nhật*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private Date updateTime;
 }

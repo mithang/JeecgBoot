@@ -58,7 +58,7 @@ import java.util.*;
 
 /**
  * <p>
- * 字典表 前端控制器
+ * Bảng danh mục Controller frontend
  * </p>
  *
  * @Author zhangweijian
@@ -85,36 +85,36 @@ public class SysDictController {
 			SysDict sysDict,
 			@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-			// 查询关键字，模糊筛选code和name
+			// Truy vấn từ khóa, lọc mờ code và name
 			@RequestParam(name = "keywords", required = false) String keywords,
 			HttpServletRequest req
 	) {
 		Result<IPage<SysDict>> result = new Result<IPage<SysDict>>();
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			sysDict.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(),0));
 		}
 		//------------------------------------------------------------------------------------------------
 		QueryWrapper<SysDict> queryWrapper = QueryGenerator.initQueryWrapper(sysDict, req.getParameterMap());
-		// 查询关键字，模糊筛选code和name
+		// Truy vấn từ khóa, lọc mờ code và name
 		if (oConvertUtils.isNotEmpty(keywords)) {
 			queryWrapper.and(i -> i.like("dict_code", keywords).or().like("dict_name", keywords));
 		}
 
 		Page<SysDict> page = new Page<>(pageNo, pageSize);
 		IPage<SysDict> pageList = sysDictService.page(page, queryWrapper);
-		log.debug("查询当前页："+pageList.getCurrent());
-		log.debug("查询当前页数量："+pageList.getSize());
-		log.debug("查询结果数量："+pageList.getRecords().size());
-		log.debug("数据总数："+pageList.getTotal());
+		log.debug("Truy vấn trang hiện tại: "+pageList.getCurrent());
+		log.debug("Truy vấn số lượng trang hiện tại:"+pageList.getSize());
+		log.debug("Số lượng kết quả truy vấn:"+pageList.getRecords().size());
+		log.debug("Tổng số dữ liệu:"+pageList.getTotal());
 		result.setSuccess(true);
 		result.setResult(pageList);
 		return result;
 	}
 
 	/**
-	 * @功能：获取树形字典数据
+	 * @Chức năng: Lấy dữ liệu danh mục dạng cây
 	 * @param sysDict
 	 * @param pageNo
 	 * @param pageSize
@@ -127,7 +127,7 @@ public class SysDictController {
 									  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,HttpServletRequest req) {
 		Result<List<SysDictTree>> result = new Result<>();
 		LambdaQueryWrapper<SysDict> query = new LambdaQueryWrapper<>();
-		// 构造查询条件
+		// Tạo điều kiện truy vấn
 		String dictName = sysDict.getDictName();
 		if(oConvertUtils.isNotEmpty(dictName)) {
 			query.like(true, SysDict::getDictName, dictName);
@@ -144,7 +144,7 @@ public class SysDictController {
 	}
 
 	/**
-	 * 获取全部字典数据
+	 * Lấy tất cả dữ liệu danh mục
 	 *
 	 * @return
 	 */
@@ -156,7 +156,7 @@ public class SysDictController {
 	}
 
 	/**
-	 * 获取字典数据
+	 * Lấy dữ liệu danh mục
 	 * @param dictCode
 	 * @return
 	 */
@@ -171,7 +171,7 @@ public class SysDictController {
 			 result.setResult(text);
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 			return result;
 		}
 		return result;
@@ -179,9 +179,9 @@ public class SysDictController {
 
 
 	/**
-	 * 获取字典数据 【接口签名验证】
-	 * @param dictCode 字典code
-	 * @param dictCode 表名,文本字段,code字段  | 举例：sys_user,realname,id
+	 * Lấy dữ liệu danh mục [Xác minh chữ ký giao diện]
+	 * @param dictCode Từ điển code
+	 * @param dictCode Tên bảng,Trường văn bản,code Trường  | Ví dụ:sys_user,realname,id
 	 * @return
 	 */
 	@RequestMapping(value = "/getDictItems/{dictCode}", method = RequestMethod.GET)
@@ -191,7 +191,7 @@ public class SysDictController {
 		try {
 			List<DictModel> ls = sysDictService.getDictItems(dictCode);
 			if (ls == null) {
-				result.error500("字典Code格式不正确！");
+				result.error500("Định dạng Code danh mục không chính xác!");
 				return result;
 			}
 			result.setSuccess(true);
@@ -199,17 +199,17 @@ public class SysDictController {
 			log.debug(result.toString());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 			return result;
 		}
 		return result;
 	}
 
 	/**
-	 * 【接口签名验证】
-	 * 【JSearchSelectTag下拉搜索组件专用接口】
-	 * 大数据量的字典表 走异步加载  即前端输入内容过滤数据
-	 * @param dictCode 字典code格式：table,text,code
+	 * 【Xác minh chữ ký giao diện】
+	 * [Interface chuyên dụng cho component tìm kiếm thả xuống JSearchSelectTag]
+	 * Bảng từ điển có lượng dữ liệu lớn sẽ tải bất đồng bộ, tức là frontend nhập nội dung để lọc dữ liệu
+	 * @param dictCode Định dạng code từ điển:table,text,code
 	 * @return
 	 */
 	@RequestMapping(value = "/loadDict/{dictCode}", method = RequestMethod.GET)
@@ -219,21 +219,21 @@ public class SysDictController {
 			@RequestParam(name = "pageNo", defaultValue = "1", required = false) Integer pageNo,
 			@RequestParam(name = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
 		
-		// 代码逻辑说明: /issues/4905 因为中括号(%5)的问题导致的 表单生成器字段配置时，选择关联字段，在进行高级配置时，无法加载数据库列表，提示 Sgin签名校验错误！ #4905 RouteToRequestUrlFilter
+		// Giải thích logic mã: /issues/4905 Vì dấu ngoặc vuông(%5)do vấn đề này gây ra: khi cấu hình trường trong trình tạo form, chọn trường liên kết, lúc thực hiện cấu hình nâng cao thì không tải được danh sách cơ sở dữ liệu và báo lỗi kiểm tra chữ ký Sgin! #4905 RouteToRequestUrlFilter
 		if(keyword!=null && keyword.indexOf("%5")>=0){
 			try {
 				keyword = URLDecoder.decode(keyword, "UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				log.error("下拉搜索关键字解码失败", e);
+				log.error("Giải mã từ khóa tìm kiếm thả xuống thất bại", e);
 			}
 		}
 		
-		log.info(" 加载字典表数据,加载关键字: "+ keyword);
+		log.info(" Đang tải dữ liệu bảng danh mục,Tải từ khóa: "+ keyword);
 		Result<List<DictModel>> result = new Result<List<DictModel>>();
 		try {
 			List<DictModel> ls = sysDictService.loadDict(dictCode, keyword, pageNo,pageSize);
 			if (ls == null) {
-				result.error500("字典Code格式不正确！");
+				result.error500("Định dạng Code danh mục không chính xác!");
 				return result;
 			}
 			result.setSuccess(true);
@@ -242,16 +242,16 @@ public class SysDictController {
 			return result;
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-			result.error500("操作失败：" + e.getMessage());
+			result.error500("Thao tác thất bại:" + e.getMessage());
 			return result;
 		}
 	}
 
 	/**
-	 * 【接口签名验证】
-	 * 【给表单设计器的表字典使用】下拉搜索模式，有值时动态拼接数据
+	 * 【Xác minh chữ ký giao diện】
+	 * [Dành cho từ điển bảng của trình thiết kế biểu mẫu] Chế độ tìm kiếm thả xuống, khi có giá trị sẽ nối dữ liệu động
 	 * @param dictCode
-	 * @param keyword 当前控件的值，可以逗号分割
+	 * @param keyword Giá trị của control hiện tại, có thể phân tách bằng dấu phẩy
 	 * @param sign
 	 * @param pageSize
 	 * @return
@@ -262,25 +262,25 @@ public class SysDictController {
 			@RequestParam(name = "keyword") String keyword,
 			@RequestParam(value = "sign", required = false) String sign,
 			@RequestParam(value = "pageSize", required = false) Integer pageSize) {
-		// 首次查询查出来用户选中的值，并且不分页
+		// Lần truy vấn đầu tiên lấy ra giá trị người dùng đã chọn, và không phân trang
 		Result<List<DictModel>> firstRes = this.loadDict(dictCode, keyword, sign,null, null);
 		if (!firstRes.isSuccess()) {
 			return firstRes;
 		}
-		// 然后再查询出第一页的数据
+		// Sau đó truy vấn dữ liệu của trang đầu tiên
 		Result<List<DictModel>> result = this.loadDict(dictCode, "", sign,1, pageSize);
 		if (!result.isSuccess()) {
 			return result;
 		}
-		// 合并两次查询的数据
+		// Gộp dữ liệu của hai lần truy vấn
 		List<DictModel> firstList = firstRes.getResult();
 		List<DictModel> list = result.getResult();
 		for (DictModel firstItem : firstList) {
-			// anyMatch 表示：判断的条件里，任意一个元素匹配成功，返回true
-			// allMatch 表示：判断条件里的元素，所有的都匹配成功，返回true
-			// noneMatch 跟 allMatch 相反，表示：判断条件里的元素，所有的都匹配失败，返回true
+			// anyMatch Nghĩa là: trong điều kiện phán đoán, bất kỳ phần tử nào khớp thành công thì trả về true
+			// allMatch Nghĩa là: các phần tử trong điều kiện phán đoán đều khớp thành công thì trả về true
+			// noneMatch Ngược lại với allMatch, nghĩa là: các phần tử trong điều kiện kiểm tra, tất cả đều khớp thất bại, trả về true
 			boolean none = list.stream().noneMatch(item -> item.getValue().equals(firstItem.getValue()));
-			// 当元素不存在时，再添加到集合里
+			// Khi phần tử không tồn tại, mới thêm vào tập hợp
 			if (none) {
 				list.add(0, firstItem);
 			}
@@ -289,12 +289,12 @@ public class SysDictController {
 	}
 
 	/**
-	 * 【接口签名验证】
-	 * 根据字典code加载字典text 返回
-	 * @param dictCode 顺序：tableName,text,code
-	 * @param keys 要查询的key
+	 * 【Xác minh chữ ký giao diện】
+	 * Tải text danh mục theo code danh mục để trả về
+	 * @param dictCode Thứ tự: tableName,text,code
+	 * @param keys cần truy vấn key
 	 * @param sign
-	 * @param delNotExist 是否移除不存在的项，默认为true，设为false如果某个key不存在数据库中，则直接返回key本身
+	 * @param delNotExist Có gỡ bỏ các mục không tồn tại hay không, mặc định là true; đặt thành false thì nếu một key nào đó không tồn tại trong cơ sở dữ liệu sẽ trả về trực tiếp chính key đó
 	 * @param request
 	 * @return
 	 */
@@ -305,7 +305,7 @@ public class SysDictController {
 			if(dictCode.indexOf(SymbolConstant.COMMA)!=-1) {
 				String[] params = dictCode.split(SymbolConstant.COMMA);
 				if(params.length!=3) {
-					result.error500("字典Code格式不正确！");
+					result.error500("Định dạng Code danh mục không chính xác!");
 					return result;
 				}
 				List<String> texts = sysDictService.queryTableDictByKeys(params[0], params[1], params[2], keys, delNotExist);
@@ -314,11 +314,11 @@ public class SysDictController {
 				result.setResult(texts);
 				log.info(result.toString());
 			}else {
-				result.error500("字典Code格式不正确！");
+				result.error500("Định dạng Code danh mục không chính xác!");
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 			return result;
 		}
 
@@ -326,14 +326,14 @@ public class SysDictController {
 	}
 
 	/**
-	 * 【接口签名验证】
-	 * 根据表名——显示字段-存储字段 pid 加载树形数据
-	 * @param hasChildField 是否叶子节点字段
-	 * @param converIsLeafVal 是否需要系统转换 是否叶子节点的值 (0标识不转换、1标准系统自动转换)
-	 * @param tableName 表名
-	 * @param text label字段
-	 * @param code value 字段
-	 * @param condition  查询条件  ？
+	 * 【Xác minh chữ ký giao diện】
+	 * Theo tên bảng —— Trường hiển thị-Trường lưu trữ pid tải dữ liệu dạng cây
+	 * @param hasChildField Có phải trường nút lá không
+	 * @param converIsLeafVal Có cần hệ thống chuyển đổi hay không, giá trị có phải nút lá hay không (0 0 là không chuyển đổi, 1 là hệ thống tự động chuyển đổi theo chuẩn)
+	 * @param tableName Tên bảng
+	 * @param text label Trường
+	 * @param code value Trường
+	 * @param condition  Điều kiện truy vấn ?
 	 *            
 	 */
 	@SuppressWarnings("unchecked")
@@ -348,19 +348,19 @@ public class SysDictController {
 												  @RequestParam(value = "sign",required = false) String sign,HttpServletRequest request) {
 		Result<List<TreeSelectModel>> result = new Result<List<TreeSelectModel>>();
 
-		// 【QQYUN-9207】防止参数为空导致报错
+		// 【QQYUN-9207] ngăn lỗi do tham số trống
 		if (oConvertUtils.isEmpty(tableName) || oConvertUtils.isEmpty(text) || oConvertUtils.isEmpty(code)) {
-			result.error500("字典Code格式不正确！");
+			result.error500("Định dạng Code danh mục không chính xác!");
 			return result;
 		}
 
-		// 1.获取查询条件参数
+		// 1.Lấy tham số điều kiện truy vấn
 		Map<String, String> query = null;
 		if(oConvertUtils.isNotEmpty(condition)) {
 			query = JSON.parseObject(condition, Map.class);
 		}
 		
-		// 2.返回查询结果
+		// 2.Trả về kết quả tìm kiếm
 		List<TreeSelectModel> ls = sysDictService.queryTreeList(query,tableName, text, code, pidField, pid,hasChildField,converIsLeafVal);
 		result.setSuccess(true);
 		result.setResult(ls);
@@ -368,7 +368,7 @@ public class SysDictController {
 	}
 
 	/**
-	 * 【APP接口】根据字典配置查询表字典数据（目前暂未找到调用的地方）
+	 * [API APP] Truy vấn dữ liệu danh mục bảng theo cấu hình danh mục (hiện chưa tìm thấy nơi gọi đến)
 	 * @param query
 	 * @param pageNo
 	 * @param pageSize
@@ -388,7 +388,7 @@ public class SysDictController {
 	}
 
 	/**
-	 * @功能：新增
+	 * @Chức năng: Thêm mới
 	 * @param sysDict
 	 * @return
 	 */
@@ -401,39 +401,39 @@ public class SysDictController {
 			sysDict.setDelFlag(CommonConstant.DEL_FLAG_0);
 			sysDictService.save(sysDict);
 			sysDictService.refreshDictVersion();
-			result.success("保存成功！");
+			result.success("Lưu thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 
 	/**
-	 * @功能：字典和字典项一起新增（支持批量）
-	 * @param sysDictBatchVo 字典批量数据
+	 * @Chức năng: Thêm mới danh mục và mục danh mục cùng lúc (hỗ trợ hàng loạt)
+	 * @param sysDictBatchVo Dữ liệu danh mục hàng loạt
 	 * @return
 	 */
     @RequiresPermissions("system:dict:add")
 	@RequestMapping(value = "/batchAddDictWithItems", method = RequestMethod.POST)
 	public Result<Map<String, Object>> batchAddDictWithItems(@RequestBody SysDictBatchVo sysDictBatchVo) {
 		Result<Map<String, Object>> result = new Result<Map<String, Object>>();
-		//update-begin---author:zzl ---date:2026-04-03  for：字典和字典项一起新增（支持批量）---
-		log.info("========== 批量新增字典开始 ==========");
-		log.info("请求参数: {}", JSON.toJSONString(sysDictBatchVo));
+		//update-begin---author:zzl ---date:2026-04-03  for: danh mục và mục danh mục được thêm mới cùng nhau (hỗ trợ hàng loạt)---
+		log.info("========== Bắt đầu thêm hàng loạt danh mục ==========");
+		log.info("Tham số yêu cầu: {}", JSON.toJSONString(sysDictBatchVo));
 		if (sysDictBatchVo == null || sysDictBatchVo.getDictList() == null || sysDictBatchVo.getDictList().isEmpty()) {
-			log.warn("字典列表为空，参数校验不通过");
-			result.error500("字典列表不能为空！");
+			log.warn("Danh sách danh mục trống, kiểm tra tham số không đạt");
+			result.error500("Danh sách danh mục không được để trống!");
 			return result;
 		}
 		int successCount = 0;
 		int failCount = 0;
 		StringBuilder message = new StringBuilder();
 		List<Map<String, String>> failList = new ArrayList<>();
-		log.info("待处理的字典数量: {}", sysDictBatchVo.getDictList().size());
+		log.info("Số lượng danh mục chờ xử lý: {}", sysDictBatchVo.getDictList().size());
 		for (int i = 0; i < sysDictBatchVo.getDictList().size(); i++) {
 			SysDictPage sysDictPage = sysDictBatchVo.getDictList().get(i);
-			log.info("开始处理第 {} 个字典, dictCode: {}, dictName: {}", i + 1, sysDictPage.getDictCode(), sysDictPage.getDictName());
+			log.info("Bắt đầu xử lý thứ {}  danh mục, dictCode: {}, dictName: {}", i + 1, sysDictPage.getDictCode(), sysDictPage.getDictName());
 			try {
 				SysDict sysDict = new SysDict();
 				sysDict.setDictName(sysDictPage.getDictName());
@@ -443,25 +443,25 @@ public class SysDictController {
 				Integer num = sysDictService.saveMain(sysDict, sysDictPage.getSysDictItemList());
 				if (num > 0) {
 					successCount++;
-					log.info("第 {} 个字典[{}]保存成功", i + 1, sysDictPage.getDictCode());
+					log.info(" {}  danh mục[{}]Lưu thành công", i + 1, sysDictPage.getDictCode());
 				} else if (num == -1) {
 					failCount++;
 					Map<String, String> failItem = new HashMap<>();
 					failItem.put("dictCode", sysDictPage.getDictCode());
 					failItem.put("dictName", sysDictPage.getDictName());
-					failItem.put("errorMsg", "字典项值为空，已忽略！");
+					failItem.put("errorMsg", "Giá trị mục danh mục trống, đã bỏ qua!");
 					failList.add(failItem);
-					message.append("第").append(i + 1).append("个字典[").append(sysDictPage.getDictCode()).append("]：字典项值为空，已忽略！\n");
-					log.warn("第 {} 个字典[{}]字典项值为空，已忽略", i + 1, sysDictPage.getDictCode());
+					message.append("").append(i + 1).append(" danh mục[").append(sysDictPage.getDictCode()).append("]: Giá trị mục danh mục trống, đã bỏ qua!\n");
+					log.warn(" {}  danh mục[{}]Giá trị mục danh mục trống, đã bỏ qua", i + 1, sysDictPage.getDictCode());
 				} else {
 					failCount++;
 					Map<String, String> failItem = new HashMap<>();
 					failItem.put("dictCode", sysDictPage.getDictCode());
 					failItem.put("dictName", sysDictPage.getDictName());
-					failItem.put("errorMsg", "字典编码已经存在！");
+					failItem.put("errorMsg", "Mã danh mục đã tồn tại!");
 					failList.add(failItem);
-					message.append("第").append(i + 1).append("个字典[").append(sysDictPage.getDictCode()).append("]：字典编码已经存在！\n");
-					log.warn("第 {} 个字典[{}]字典编码已经存在", i + 1, sysDictPage.getDictCode());
+					message.append("").append(i + 1).append(" danh mục[").append(sysDictPage.getDictCode()).append("]：Mã danh mục đã tồn tại!\n");
+					log.warn(" {}  danh mục[{}]Mã danh mục đã tồn tại", i + 1, sysDictPage.getDictCode());
 				}
 			} catch (Exception e) {
 				failCount++;
@@ -470,8 +470,8 @@ public class SysDictController {
 				failItem.put("dictName", sysDictPage.getDictName());
 				failItem.put("errorMsg", e.getMessage());
 				failList.add(failItem);
-				message.append("第").append(i + 1).append("个字典[").append(sysDictPage.getDictCode()).append("]：").append(e.getMessage()).append("\n");
-				log.error("第 {} 个字典[{}]处理异常: {}", i + 1, sysDictPage.getDictCode(), e.getMessage(), e);
+				message.append("").append(i + 1).append(" danh mục[").append(sysDictPage.getDictCode()).append("]：").append(e.getMessage()).append("\n");
+				log.error(" {}  danh mục[{}]Xử lý ngoại lệ: {}", i + 1, sysDictPage.getDictCode(), e.getMessage(), e);
 			}
 		}
 		if (successCount > 0) {
@@ -483,25 +483,25 @@ public class SysDictController {
 		returnMap.put("message", message.toString());
 		returnMap.put("failList", failList);
 		if (failCount == 0) {
-			result.success("批量保存成功！共保存 " + successCount + " 个字典！");
-			log.info("批量保存成功，共保存 {} 个字典", successCount);
+			result.success("Lưu hàng loạt thành công! Đã lưu tổng cộng " + successCount + " danh mục!");
+			log.info("Lưu hàng loạt thành công, đã lưu tổng cộng {}  danh mục", successCount);
 		} else if (successCount > 0) {
-			result.success("部分保存成功！成功 " + successCount + " 个，失败 " + failCount + " 个！");
-			log.warn("部分保存成功，成功 {} 个，失败 {} 个", successCount, failCount);
+			result.success("Lưu một phần thành công! Thành công " + successCount + " cái, thất bại " + failCount + " cái!");
+			log.warn("Lưu một phần thành công, thành công {} cái, thất bại {} cái", successCount, failCount);
 		} else {
-			result.error500("全部保存失败！");
-			log.error("全部保存失败！共 {} 个字典", sysDictBatchVo.getDictList().size());
+			result.error500("Tất cả đều lưu thất bại!");
+			log.error("Tất cả đều lưu thất bại! Tổng cộng {}  danh mục", sysDictBatchVo.getDictList().size());
 		}
 
 
 		result.setResult(returnMap);
-		log.info("========== 批量新增字典结束 ==========");
-		//update-end---author:zzl ---date:2026-04-03  for：字典和字典项一起新增（支持批量）---
+		log.info("========== Kết thúc thêm hàng loạt danh mục ==========");
+		//update-end---author:zzl ---date:2026-04-03  for: danh mục và mục danh mục được thêm mới cùng nhau (hỗ trợ hàng loạt)---
 		return result;
 	}
 
 	/**
-	 * @功能：编辑
+	 * @Chức năng: Chỉnh sửa
 	 * @param sysDict
 	 * @return
 	 */
@@ -511,20 +511,20 @@ public class SysDictController {
 		Result<SysDict> result = new Result<SysDict>();
 		SysDict sysdict = sysDictService.getById(sysDict.getId());
 		if(sysdict==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			sysDict.setUpdateTime(new Date());
 			boolean ok = sysDictService.updateById(sysDict);
 			if(ok) {
 				sysDictService.refreshDictVersion();
-				result.success("编辑成功!");
+				result.success("Chỉnh sửa thành công!");
 			}
 		}
 		return result;
 	}
 
 	/**
-	 * @功能：删除
+	 * @Chức năng: Xóa
 	 * @param id
 	 * @return
 	 */
@@ -536,15 +536,15 @@ public class SysDictController {
 		boolean ok = sysDictService.removeById(id);
 		if(ok) {
 			sysDictService.refreshDictVersion();
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}else{
-			result.error500("删除失败!");
+			result.error500("Xóa thất bại!");
 		}
 		return result;
 	}
 
 	/**
-	 * @功能：批量删除
+	 * @Chức năng: Xóa hàng loạt
 	 * @param ids
 	 * @return
 	 */
@@ -554,23 +554,23 @@ public class SysDictController {
 	public Result<SysDict> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<SysDict> result = new Result<SysDict>();
 		if(oConvertUtils.isEmpty(ids)) {
-			result.error500("参数不识别！");
+			result.error500("Không nhận dạng được tham số!");
 		}else {
 			sysDictService.removeByIds(Arrays.asList(ids.split(",")));
 			sysDictService.refreshDictVersion();
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		return result;
 	}
 
 	/**
-	 * @功能：刷新缓存
+	 * @Chức năng: Làm mới bộ nhớ đệm
 	 * @return
 	 */
 	@RequestMapping(value = "/refleshCache")
 	public Result<?> refleshCache() {
 		Result<?> result = new Result<SysDict>();
-		//清空字典缓存
+		//Xóa bộ nhớ đệm danh mục
 //		Set keys = redisTemplate.keys(CacheConstant.SYS_DICT_CACHE + "*");
 //		Set keys7 = redisTemplate.keys(CacheConstant.SYS_ENABLE_DICT_CACHE + "*");
 //		Set keys2 = redisTemplate.keys(CacheConstant.SYS_DICT_TABLE_CACHE + "*");
@@ -588,7 +588,7 @@ public class SysDictController {
 //		redisTemplate.delete(keys6);
 //		redisTemplate.delete(keys7);
 
-		// 代码逻辑说明: [issue/4358]springCache中的清除缓存的操作使用了“keys”
+		// Giải thích logic mã: [issue/4358]springCache thao tác xóa bộ nhớ đệm trong springCache đã dùng “keys”
 		redisUtil.removeAll(CacheConstant.SYS_DICT_CACHE);
 		redisUtil.removeAll(CacheConstant.SYS_ENABLE_DICT_CACHE);
 		redisUtil.removeAll(CacheConstant.SYS_DICT_TABLE_CACHE);
@@ -597,22 +597,22 @@ public class SysDictController {
 		redisUtil.removeAll(CacheConstant.SYS_DEPART_IDS_CACHE);
 		redisUtil.removeAll("jmreport:cache:dict");
 		redisUtil.removeAll("jmreport:cache:dictTable");
-		// 刷新字典版本号（兜底：直接改库后手动刷新缓存，其他用户刷新页面也能同步）
+		// Làm mới số phiên bản danh mục (dự phòng: sau khi sửa trực tiếp cơ sở dữ liệu thì làm mới cache thủ công, người dùng khác làm mới trang cũng đồng bộ được)
 		sysDictService.refreshDictVersion();
 
-		// 清除当前用户的授权缓存信息
+		// Xóa thông tin bộ nhớ đệm ủy quyền của người dùng hiện tại
 		Subject currentUser = SecurityUtils.getSubject();
 		if (currentUser.isAuthenticated()) {
 			shiroRealm.clearCache(currentUser.getPrincipals());
 		}
 
-		// 清空默认首页缓存（开源版和商业版会串）
+		// Xóa bộ nhớ đệm trang chủ mặc định (bản mã nguồn mở và bản thương mại sẽ bị lẫn)
 		redisUtil.del(DefIndexConst.CACHE_KEY + "::" + DefIndexConst.DEF_INDEX_ALL);
 		return result;
 	}
 
 	/**
-	 * 导出excel
+	 * Xuất excel
 	 *
 	 * @param request
 	 */
@@ -620,15 +620,15 @@ public class SysDictController {
 	@RequestMapping(value = "/exportXls")
 	public ModelAndView exportXls(SysDict sysDict,HttpServletRequest request) {
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			sysDict.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
 		//------------------------------------------------------------------------------------------------
 		
-		// Step.1 组装查询条件
+		// Step.1 Lắp ráp điều kiện truy vấn
 		QueryWrapper<SysDict> queryWrapper = QueryGenerator.initQueryWrapper(sysDict, request.getParameterMap());
-		//Step.2 AutoPoi 导出Excel
+		//Step.2 AutoPoi Xuất Excel
 		ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
 		String selections = request.getParameter("selections");
 		if(!oConvertUtils.isEmpty(selections)){
@@ -640,26 +640,26 @@ public class SysDictController {
 		for (SysDict dictMain : sysDictList) {
 			SysDictPage vo = new SysDictPage();
 			BeanUtils.copyProperties(dictMain, vo);
-			// 查询机票
+			// Truy vấn vé máy bay
 			List<SysDictItem> sysDictItemList = sysDictItemService.selectItemsByMainId(dictMain.getId());
 			vo.setSysDictItemList(sysDictItemList);
 			pageList.add(vo);
 		}
 
-		// 导出文件名称
-		mv.addObject(NormalExcelConstants.FILE_NAME, "数据字典");
-		// 注解对象Class
+		// Tên file xuất
+		mv.addObject(NormalExcelConstants.FILE_NAME, "Danh mục dữ liệu");
+		// Đối tượng annotation Class
 		mv.addObject(NormalExcelConstants.CLASS, SysDictPage.class);
-		// 自定义表格参数
+		// Tham số bảng tùy chỉnh
 		LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-		mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("数据字典列表", "导出人:"+user.getRealname(), "数据字典", ExcelType.XSSF));
-		// 导出数据列表
+		mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("Danh sách danh mục dữ liệu", "Người xuất:"+user.getRealname(), "Danh mục dữ liệu", ExcelType.XSSF));
+		// Xuất danh sách dữ liệu
 		mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
 		return mv;
 	}
 
 	/**
-	 * 通过excel导入数据
+	 * Nhập dữ liệu qua Excel
 	 *
 	 * @param request
 	 * @param
@@ -671,20 +671,20 @@ public class SysDictController {
  		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
 			MultipartFile file = entity.getValue();
 			ImportParams params = new ImportParams();
 			params.setTitleRows(2);
 			params.setHeadRows(2);
 			params.setNeedSave(true);
 			try {
-				//导入Excel格式校验，看匹配的字段文本概率
+				//Kiểm tra định dạng khi nhập Excel, xem xác suất khớp văn bản của trường
 				Boolean t = ExcelImportCheckUtil.check(file.getInputStream(), SysDictPage.class, params);
 				if(t!=null && !t){
-					throw new RuntimeException("导入Excel校验失败 ！");
+					throw new RuntimeException("Nhập Excel kiểm tra thất bại!");
 				}
 				List<SysDictPage> list = ExcelImportUtil.importExcel(file.getInputStream(), SysDictPage.class, params);
-				// 错误信息
+				// Thông tin lỗi
 				List<String> errorMessage = new ArrayList<>();
 				int successLines = 0, errorLines = 0;
 				for (int i=0;i< list.size();i++) {
@@ -695,24 +695,24 @@ public class SysDictController {
 						Integer integer = sysDictService.saveMain(po, list.get(i).getSysDictItemList());
 						if(integer>0){
 							successLines++;
-                        // 代码逻辑说明: [JTC-1168]如果字典项值为空，则字典项忽略导入------------
+                        // Giải thích logic mã: [JTC-1168]Nếu giá trị mục danh mục trống thì mục danh mục sẽ bị bỏ qua khi nhập------------
 						}else if(integer == -1){
                             errorLines++;
-                            errorMessage.add("字典名称：" + po.getDictName() + "，对应字典列表的字典项值不能为空，忽略导入。");
+                            errorMessage.add("Tên danh mục:" + po.getDictName() + ", giá trị mục danh mục tương ứng trong danh sách danh mục không được rỗng, bỏ qua nhập.");
                         }else{
 							errorLines++;
 							int lineNumber = i + 1;
-                            // 代码逻辑说明: [JTC-1168]字典编号不能为空------------
+                            // Giải thích logic mã: [JTC-1168]Mã số danh mục không được để trống------------
                             if(oConvertUtils.isEmpty(po.getDictCode())){
-                                errorMessage.add("第 " + lineNumber + " 行：字典编码不能为空，忽略导入。");
+                                errorMessage.add(" " + lineNumber + " Dòng: Mã danh mục không được để trống, bỏ qua nhập.");
                             }else{
-                                errorMessage.add("第 " + lineNumber + " 行：字典编码已经存在，忽略导入。");
+                                errorMessage.add(" " + lineNumber + " Dòng: Mã danh mục đã tồn tại, bỏ qua nhập.");
                             }
                         }
 					}  catch (Exception e) {
 						errorLines++;
 						int lineNumber = i + 1;
-						errorMessage.add("第 " + lineNumber + " 行：字典编码已经存在，忽略导入。");
+						errorMessage.add(" " + lineNumber + " Dòng: Mã danh mục đã tồn tại, bỏ qua nhập.");
 					}
 				}
 				if (successLines > 0) {
@@ -721,7 +721,7 @@ public class SysDictController {
 				return ImportExcelUtil.imporReturnRes(errorLines,successLines,errorMessage);
 			} catch (Exception e) {
 				log.error(e.getMessage(),e);
-				return Result.error("文件导入失败:"+e.getMessage());
+				return Result.error("Nhập file thất bại:"+e.getMessage());
 			} finally {
 				try {
 					file.getInputStream().close();
@@ -730,12 +730,12 @@ public class SysDictController {
 				}
 			}
 		}
-		return Result.error("文件导入失败！");
+		return Result.error("Nhập tệp thất bại!");
 	}
 
 
 	/**
-	 * 查询被删除的列表
+	 * Truy vấn danh sách đã xóa
 	 * @return
 	 */
 	@RequestMapping(value = "/deleteList", method = RequestMethod.GET)
@@ -749,7 +749,7 @@ public class SysDictController {
 	}
 
 	/**
-	 * 物理删除
+	 * Xóa vật lý
 	 * @param id
 	 * @return
 	 */
@@ -759,15 +759,15 @@ public class SysDictController {
 		try {
 			sysDictService.deleteOneDictPhysically(id);
 			sysDictService.refreshDictVersion();
-			return Result.ok("删除成功!");
+			return Result.ok("Xóa thành công!");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Result.error("删除失败!");
+			return Result.error("Xóa thất bại!");
 		}
 	}
 
 	/**
-	 * 逻辑删除的字段，进行取回
+	 * Khôi phục trường đã bị xóa logic
 	 * @param id
 	 * @return
 	 */
@@ -777,14 +777,14 @@ public class SysDictController {
 		try {
 			sysDictService.updateDictDelFlag(0,id);
 			sysDictService.refreshDictVersion();
-			return Result.ok("操作成功!");
+			return Result.ok("Thao tác thành công!");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Result.error("操作失败!");
+			return Result.error("Thao tác thất bại!");
 		}
 	}
 	/**
-	 * 还原被逻辑删除的字典
+	 * Khôi phục danh mục đã bị xóa logic
 	 *
 	 * @param jsonObject
 	 * @return
@@ -797,18 +797,18 @@ public class SysDictController {
 			if (StringUtils.isNotBlank(ids)) {
 				sysDictService.revertLogicDeleted(Arrays.asList(ids.split(",")));
 				sysDictService.refreshDictVersion();
-				return Result.ok("操作成功!");
+				return Result.ok("Thao tác thành công!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Result.error("操作失败!");
+			return Result.error("Thao tác thất bại!");
 		}
-		return Result.ok("还原成功");
+		return Result.ok("Khôi phục thành công");
 	}
 	/**
-	 * 彻底删除字典
+	 * Xóa hoàn toàn danh mục
 	 *
-	 * @param ids 被删除的字典ID，多个id用半角逗号分割
+	 * @param ids ID danh mục bị xóa, nhiều id phân tách bằng dấu phẩy nửa chiều rộng
 	 * @return
 	 */
 	@RequiresPermissions("system:dict:deleteRecycleBin")
@@ -818,16 +818,16 @@ public class SysDictController {
 			if (StringUtils.isNotBlank(ids)) {
 				sysDictService.removeLogicDeleted(Arrays.asList(ids.split(",")));
 			}
-			return Result.ok("删除成功!");
+			return Result.ok("Xóa thành công!");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Result.error("删除失败!");
+			return Result.error("Xóa thất bại!");
 		}
 	}
 
 	/**
-	 * VUEN-2584【issue】平台sql注入漏洞几个问题
-	 * 部分特殊函数 可以将查询结果混夹在错误信息中，导致数据库的信息暴露
+	 * VUEN-2584【issue】Một số vấn đề về lỗ hổng SQL injection của nền tảng
+	 * Một số hàm đặc biệt có thể trộn kết quả truy vấn vào thông tin lỗi, dẫn đến lộ thông tin cơ sở dữ liệu
 	 * @param e
 	 * @return
 	 */
@@ -837,13 +837,13 @@ public class SysDictController {
 		String extractvalue = "extractvalue";
 		String updatexml = "updatexml";
 		if(msg!=null && (msg.toLowerCase().indexOf(extractvalue)>=0 || msg.toLowerCase().indexOf(updatexml)>=0)){
-			return Result.error("校验失败，sql解析异常！");
+			return Result.error("Kiểm tra thất bại, lỗi phân tích sql!");
 		}
-		return Result.error("校验失败，sql解析异常！" + msg);
+		return Result.error("Kiểm tra thất bại, lỗi phân tích sql!" + msg);
 	}
 
 	/**
-	 * 根据应用id获取字典列表和详情
+	 * Lấy danh sách và chi tiết danh mục theo id ứng dụng
 	 * @param request
 	 */
 	@GetMapping("/getDictListByLowAppId")
@@ -854,7 +854,7 @@ public class SysDictController {
 	}
 
 	/**
-	 * 添加字典
+	 * Thêm danh mục
 	 * @param sysDictVo
 	 * @param request
 	 * @return
@@ -867,7 +867,7 @@ public class SysDictController {
 		sysDictVo.setTenantId(oConvertUtils.getInteger(tenantId, null));
 		sysDictService.addDictByLowAppId(sysDictVo);
 		sysDictService.refreshDictVersion();
-		return Result.ok("添加成功");
+		return Result.ok("Thêm thành công");
 	}
 
 	@PutMapping("/editDictByLowAppId")
@@ -876,23 +876,23 @@ public class SysDictController {
 		sysDictVo.setLowAppId(lowAppId);
 		sysDictService.editDictByLowAppId(sysDictVo);
 		sysDictService.refreshDictVersion();
-		return Result.ok("编辑成功");
+		return Result.ok("Chỉnh sửa thành công");
 	}
 
 	/**
-	 * 【JLinkTableCard 关联记录专用接口】
-	 * 多字段分页查询任意数据库表数据，一次请求返回所有指定字段，支持分页、关键词搜索、按 valueField 回显
+	 * [Interface chuyên dụng cho bản ghi liên kết JLinkTableCard]
+	 * Truy vấn phân trang nhiều trường đối với dữ liệu của bất kỳ bảng cơ sở dữ liệu nào, một lần yêu cầu trả về tất cả các trường được chỉ định, hỗ trợ phân trang, tìm kiếm theo từ khóa, hiển thị lại theo valueField
 	 *
-	 * @param tableName    表名，如 sys_user
-	 * @param showFields   展示字段，逗号分隔，如 realname,username,avater
-	 * @param valueField   值字段，如 id
-	 * @param keyword      关键词搜索（可选）
-	 * @param keyValues    按 valueField 精确查找的值，逗号分隔（回显用，可选）
-	 * @param pageNo       页码，默认 1
-	 * @param pageSize     每页大小，默认 10
+	 * @param tableName    Tên bảng, ví dụ sys_user
+	 * @param showFields   Các trường hiển thị, phân tách bằng dấu phẩy, ví dụ realname,username,avater
+	 * @param valueField   Trường giá trị, ví dụ id
+	 * @param keyword      Tìm kiếm theo từ khóa (tùy chọn)
+	 * @param keyValues    Giá trị tra cứu chính xác theo valueField, phân tách bằng dấu phẩy (dùng để hiển thị lại, tùy chọn)
+	 * @param pageNo       Số trang, mặc định 1
+	 * @param pageSize     Kích thước mỗi trang, mặc định 10
 	 */
 	@GetMapping("/queryTableDataForLinkRecord")
-	//update-begin---author:liusq ---date:2026-05-27  for：【优化】去掉无用参数searchFields、condition-----------
+	//update-begin---author:liusq ---date:2026-05-27  for: [Tối ưu] Bỏ tham số vô dụng searchFields,condition-----------
 	public Result<Map<String, Object>> queryTableDataForLinkRecord(
 			@RequestParam String tableName,
 			@RequestParam String showFields,
@@ -907,15 +907,15 @@ public class SysDictController {
 					keyword, keyValues, pageNo, pageSize);
 			return Result.ok(data);
 		} catch (Exception e) {
-			log.error("[queryTableDataForLinkRecord] 查询失败 tableName={} showFields={}", tableName, showFields, e);
-			return Result.error("查询失败：" + e.getMessage());
+			log.error("[queryTableDataForLinkRecord] Tìm kiếm thất bại tableName={} showFields={}", tableName, showFields, e);
+			return Result.error("Tìm kiếm thất bại:" + e.getMessage());
 		}
 	}
 
     /**
-     * 查询有效的数据字典项：表单设计器专用，用于设计器页面查询字典的维护
-     * for: 【LHZP-1163】字典换接口，过滤掉停用的
-     * @param dictCode 字典code
+     * Truy vấn các mục danh mục dữ liệu hợp lệ: chuyên dùng cho trình thiết kế form, dùng để tra cứu và bảo trì danh mục tại trang thiết kế
+     * for: 【LHZP-1163】Đổi giao diện danh mục, lọc bỏ các mục đã ngừng dùng
+     * @param dictCode Từ điển code
      * @return
      */
     @SignatureCheck
@@ -928,7 +928,7 @@ public class SysDictController {
             result.setResult(ls);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            result.error500("操作失败");
+            result.error500("Thao tác thất bại");
         }
         return result;
     }

@@ -9,75 +9,75 @@ package org.jeecg.common.airag.api;
 public interface IAiragBaseApi {
 
     /**
-     * 知识库写入文本文档（支持自定义分段策略）
+     * Ghi tài liệu văn bản vào cơ sở tri thức (hỗ trợ chiến lược phân đoạn tùy chỉnh)
      *
-     * @param knowledgeId   知识库ID
-     * @param title         文档标题
-     * @param content       文档内容
-     * @param segmentConfig 【可选】分段策略配置JSON，包含 segmentStrategy/separator/customSeparator/maxSegment/overlap/textRules
-     * @return 新增的文档ID
+     * @param knowledgeId   Kho tri thức ID
+     * @param title         Tiêu đề tài liệu
+     * @param content       Nội dung tài liệu
+     * @param segmentConfig Cấu hình JSON cho chiến lược phân đoạn, bao gồm segmentStrategy/separator/customSeparator/maxSegment/overlap/textRules
+     * @return Tài liệu mới thêm ID
      */
     String knowledgeWriteTextDocument(String knowledgeId, String title, String content, String segmentConfig);
 
     /**
-     * 知识库写入文件文档（支持自定义分段策略）
+     * Ghi tài liệu tệp vào cơ sở tri thức (hỗ trợ chiến lược phân đoạn tùy chỉnh)
      *
-     * @param knowledgeId   知识库ID
-     * @param title         文档标题
-     * @param filePath      文件URL（与知识库文档功能 metadata.filePath 字段含义一致）
-     * @param segmentConfig 【可选】分段策略配置JSON
-     * @return 新增的文档ID
+     * @param knowledgeId   Kho tri thức ID
+     * @param title         Tiêu đề tài liệu
+     * @param filePath      URL tệp (có ý nghĩa giống trường metadata.filePath của chức năng tài liệu kho tri thức metadata.filePath  có cùng ý nghĩa với trường）
+     * @param segmentConfig 【Tùy chọn】Cấu hình chiến lược phân đoạn JSON
+     * @return Tài liệu mới thêm ID
      */
     String knowledgeWriteFileDocument(String knowledgeId, String title, String filePath, String segmentConfig);
 
     /**
-     * 批量查询知识库文档向量化状态
+     * Truy vấn hàng loạt trạng thái vector hóa tài liệu kho tri thức
      *
-     * @param documentIds 文档ID列表（英文逗号拼接字符串）
-     * @return 状态码：COMPLETED / COMPLETED_WITH_FAIL / PROCESSING / PROCESSING_WITH_FAIL
+     * @param documentIds Danh sách ID tài liệu (chuỗi nối bằng dấu phẩy tiếng Anh)
+     * @return Mã trạng thái:COMPLETED / COMPLETED_WITH_FAIL / PROCESSING / PROCESSING_WITH_FAIL
      */
     String checkKnowledgeDocsVectorizeStatus(String documentIds);
 
     /**
-     * 读取会话变量
+     * Đọc biến phiên
      *
-     * @param appId    应用ID
-     * @param username 用户名
-     * @param name     变量名
-     * @return 变量值，不存在时返回null
+     * @param appId    Ứng dụng ID
+     * @param username Tên người dùng
+     * @param name     Tên biến
+     * @return Giá trị biến, trả về null khi không tồn tại null
      */
     String getChatVariable(String appId, String username, String name);
 
     /**
-     * 设置会话变量
+     * Đặt biến phiên
      *
-     * @param appId    应用ID
-     * @param username 用户名
-     * @param name     变量名
-     * @param value    变量值
+     * @param appId    Ứng dụng ID
+     * @param username Tên người dùng
+     * @param name     Tên biến
+     * @param value    Giá trị biến
      */
     void setChatVariable(String appId, String username, String name, String value);
 
     /**
-     * 根据应用ID查询记忆库ID
-     * 当应用开启了记忆功能(izOpenMemory=1)时返回memoryId，否则返回null
+     * Truy vấn kho ghi nhớ theo ID ứng dụng ID
+     * Khi ứng dụng bật tính năng ghi nhớ(izOpenMemory=1)thì trả về memoryId, nếu không thì trả về null
      *
-     * @param appId 应用ID
-     * @return 记忆库ID，未开启记忆功能时返回null
+     * @param appId Ứng dụng ID
+     * @return ID kho nhớ, trả về khi chưa bật chức năng ghi nhớ null
      */
     String getMemoryIdByAppId(String appId);
 
     /**
-     * 根据提示词ID查询提示词内容
-     * 供 LLM 节点关联模式在运行时动态加载提示词内容
+     * Truy vấn nội dung prompt theo ID prompt
+     * Để chế độ liên kết của nút LLM tải động nội dung prompt khi chạy
      *
-     * @param promptId 提示词表主键ID
-     * @return 提示词内容，提示词不存在时返回null
+     * @param promptId Khóa chính của bảng từ gợi ý ID
+     * @return Nội dung prompt, trả về khi prompt không tồn tại null
      */
     String getPromptContent(String promptId);
 
     /**
-     * 解析本地、MinIO或OSS文件内容。
+     * Phân tích nội dung tệp cục bộ, MinIO hoặc OSS.
      */
     String parseFileContent(String filePath);
 

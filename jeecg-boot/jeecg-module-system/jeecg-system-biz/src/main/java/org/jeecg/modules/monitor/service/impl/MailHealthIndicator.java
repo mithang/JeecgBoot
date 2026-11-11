@@ -5,7 +5,7 @@ import org.springframework.boot.health.contributor.HealthIndicator;
 import org.springframework.stereotype.Component;
 
 /**
- * 功能说明:自定义邮件检测
+ * Mô tả chức năng:Kiểm tra email tùy chỉnh
  *
  * @author: 李波
  * @email: 503378406@qq.com
@@ -23,7 +23,7 @@ public class MailHealthIndicator implements HealthIndicator {
         return Health.up().build();
     }
     int check(){
-        //可以实现自定义的数据库检测逻辑
+        //Có thể triển khai logic kiểm tra cơ sở dữ liệu tùy chỉnh
         return 0;
     }
 }

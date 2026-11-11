@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.oss.entity.OssFile;
 
 /**
- * @Description: oss云存储Mapper
+ * @Description: oss Lưu trữ đám mây Mapper
  * @author: jeecg-boot
  */
 public interface OssFileMapper extends BaseMapper<OssFile> {

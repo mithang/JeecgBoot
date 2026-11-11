@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * SysUserDpeart用户组织机构service
+ * SysUserDpeart Cơ quan tổ chức của người dùng service
  * </p>
  * @Author ZhiLin
  *
@@ -22,7 +22,7 @@ public interface ISysUserDepartService extends IService<SysUserDepart> {
 	
 
 	/**
-	 * 根据指定用户id查询部门信息
+	 * Truy vấn thông tin phòng ban theo id người dùng được chỉ định
 	 * @param userId
 	 * @return
 	 */
@@ -30,34 +30,34 @@ public interface ISysUserDepartService extends IService<SysUserDepart> {
 	
 
 	/**
-	 * 根据部门id查询用户信息
+	 * Truy vấn thông tin người dùng theo ID phòng ban
 	 * @param depId
 	 * @return
 	 */
 	List<SysUser> queryUserByDepId(String depId);
   	/**
-	 * 根据部门code，查询当前部门和下级部门的用户信息
-     * @param depCode 部门code
-     * @param realname 真实姓名
+	 * Truy vấn thông tin người dùng của phòng ban hiện tại và các phòng ban cấp dưới theo code phòng ban
+     * @param depCode Phòng ban code
+     * @param realname Họ tên thật
      * @return List<SysUser>
 	 */
 	List<SysUser> queryUserByDepCode(String depCode,String realname,Integer status);
 
 	/**
-	 * 用户组件数据查询
+	 * Truy vấn dữ liệu thành phần người dùng
 	 * @param departId
 	 * @param username
 	 * @param pageSize
 	 * @param pageNo
      * @param realname
      * @param id
-     * @param isMultiTranslate 是否多字段翻译
+     * @param isMultiTranslate Có dịch nhiều trường không
 	 * @return
 	 */
 	IPage<SysUser> queryDepartUserPageList(String departId, String username, String realname, int pageSize, int pageNo,String id,String isMultiTranslate);
 
     /**
-     * 获取用户信息
+     * Lấy thông tin người dùng
 	 * @param tenantId
      * @param departId
      * @param keyword
@@ -68,7 +68,7 @@ public interface ISysUserDepartService extends IService<SysUserDepart> {
     IPage<SysUser> getUserInformation(Integer tenantId, String departId, String keyword, Integer pageSize, Integer pageNo);
 
 	/**
-	 * 获取用户信息
+	 * Lấy thông tin người dùng
 	 * @param tenantId
 	 * @param departId
 	 * @param roleId
@@ -80,7 +80,7 @@ public interface ISysUserDepartService extends IService<SysUserDepart> {
 	IPage<SysUser> getUserInformation(Integer tenantId,String departId,String roleId, String keyword, Integer pageSize, Integer pageNo, String excludeUserIdList, String includeUsernameList);
 
 	/**
-	 * 通过部门id和租户id获取多个用户
+	 * Theo id phòng ban và id tenant, lấy nhiều người dùng
 	 * @param departId
 	 * @param tenantId
 	 * @return
@@ -88,7 +88,7 @@ public interface ISysUserDepartService extends IService<SysUserDepart> {
 	List<SysUser> getUsersByDepartTenantId(String departId,Integer tenantId);
 
     /**
-     * 查询部门岗位下的用户
+     * Truy vấn người dùng thuộc phòng ban/vị trí
      * 
      * @param departId
      * @param username

@@ -16,12 +16,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
-* @Description: app系统配置
+* @Description: app Cấu hình hệ thống
 * @Author: jeecg-boot
 * @Date:   2025-07-05
 * @Version: V1.0
 */
-@Tag(name="app系统配置")
+@Tag(name="app Cấu hình hệ thống")
 @RestController
 @RequestMapping("/sys/version")
 @Slf4j
@@ -30,19 +30,19 @@ public class SysAppVersionController{
     @Autowired
     private RedisUtil redisUtil;
     /**
-     * app3版本json文件路径
+     * app3 Đường dẫn tệp JSON phiên bản
      */
     private final String JSON_PATH = "classpath:org/jeecg/modules/system/config/json/app3-version.json";
 
     /**
-     * APP缓存前缀
+     * APP Tiền tố bộ nhớ đệm
      */
     private String APP3_VERSION = "app3:version";
     /**
-     * app3版本信息
+     * app3 Thông tin phiên bản
      * @return
      */
-    @Operation(summary="app版本")
+    @Operation(summary="app Phiên bản")
     @GetMapping(value = "/app3version")
     public Result<SysAppVersion> app3Version(@RequestParam(name="key", required = false)String appKey) throws Exception {
         Object appConfig = redisUtil.get(APP3_VERSION + appKey);
@@ -57,29 +57,29 @@ public class SysAppVersionController{
                 return Result.OK(sysAppVersion);
             } catch (Exception e) {
                 log.error(e.toString(),e);
-                return Result.error("app版本信息获取失败：" + e.getMessage());
+                return Result.error("app Lấy thông tin phiên bản app thất bại：" + e.getMessage());
             }
         }else{
-            // 缓存中没有，从配置的json文件中获取
+            // Trong bộ nhớ đệm không có thì lấy từ tệp json đã cấu hình
             try {
                 String jsonContent = readJson(JSON_PATH);
                 SysAppVersion sysAppVersion = JSONObject.parseObject(jsonContent, SysAppVersion.class);
                 return Result.OK(sysAppVersion);
             } catch (Exception e) {
-                log.error("从JSON文件读取app版本信息失败：{}", e);
+                log.error("Đọc thông tin phiên bản app từ tệp JSON thất bại:{}", e);
             }
         }
         return Result.OK();
     }
 
     /**
-     *   保存APP3
+     *   Lưu APP3
      *
      * @param sysAppVersion
      * @return
      */
     @RequiresRoles({"admin"})
-    @Operation(summary="app系统配置-保存")
+    @Operation(summary="app Cấu hình hệ thống-Lưu")
     @PostMapping(value = "/saveVersion")
     public Result<?> saveVersion(@RequestBody SysAppVersion sysAppVersion) {
         String id = sysAppVersion.getId();
@@ -88,14 +88,14 @@ public class SysAppVersionController{
     }
 
     /**
-     * 读取json格式文件
+     * Đọc tệp định dạng JSON
      * @param jsonSrc
      * @return
      */
     private String readJson(String jsonSrc) {
         String json = "";
         try {
-            //换个写法，解决springboot读取jar包中文件的问题
+            //Đổi cách viết khác để giải quyết vấn đề Spring Boot đọc file trong gói jar
             InputStream stream = getClass().getClassLoader().getResourceAsStream(jsonSrc.replace("classpath:", ""));
             json = IOUtils.toString(stream,"UTF-8");
         } catch (IOException e) {

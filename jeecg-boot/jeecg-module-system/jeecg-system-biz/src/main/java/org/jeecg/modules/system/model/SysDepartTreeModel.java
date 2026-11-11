@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  * <p>
- * 部门表 存储树结构数据的实体类
+ * Lớp thực thể của bảng phòng ban lưu trữ dữ liệu cấu trúc cây
  * <p>
  * 
  * @Author Steve
@@ -20,18 +20,18 @@ public class SysDepartTreeModel implements Serializable{
 	
     private static final long serialVersionUID = 1L;
     
-    /** 对应SysDepart中的id字段,前端数据树中的key*/
+    /** Tương ứng với trường id trong SysDepart,trong cây dữ liệu frontend key*/
     private String key;
 
-    /** 对应SysDepart中的id字段,前端数据树中的value*/
+    /** Tương ứng với trường id trong SysDepart,trong cây dữ liệu frontend value*/
     private String value;
 
-    /** 对应depart_name字段,前端数据树中的title*/
+    /** Tương ứng với depart_name Trường,trong cây dữ liệu frontend title*/
     private String title;
 
 
     private boolean isLeaf;
-    // 以下所有字段均与SysDepart相同
+    // Tất cả các trường dưới đây đều giống với SysDepart
     
     private String id;
 
@@ -75,22 +75,22 @@ public class SysDepartTreeModel implements Serializable{
 
     private Date updateTime;
 
-    /**部门负责人ids
-     * [JTC-119]在部门管理菜单下设置部门负责人，新增字段部门负责人ids
+    /**Người phụ trách phòng ban ids
+     * [JTC-119]Đặt người phụ trách phòng ban trong menu quản lý phòng ban, thêm trường người phụ trách phòng ban ids
      * */
     private String directorUserIds;
     
-    /**职务*/
+    /**Chức danh*/
     private String positionId;
     
-    /**上级岗位id*/
+    /**Vị trí cấp trên id*/
     private String depPostParentId;
     
     private List<SysDepartTreeModel> children = new ArrayList<>();
 
 
     /**
-     * 将SysDepart对象转换成SysDepartTreeModel对象
+     * Chuyển đối tượng SysDepart thành đối tượng SysDepartTreeModel
      * @param sysDepart
      */
 	public SysDepartTreeModel(SysDepart sysDepart) {
@@ -376,7 +376,7 @@ public class SysDepartTreeModel implements Serializable{
     }
 
     /**
-     * 重写equals方法
+     * Ghi đè phương thức equals
      */
     @Override
     public boolean equals(Object o) {
@@ -415,7 +415,7 @@ public class SysDepartTreeModel implements Serializable{
     }
     
     /**
-     * 重写hashCode方法
+     * Ghi đè phương thức hashCode
      */
     @Override
     public int hashCode() {

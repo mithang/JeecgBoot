@@ -32,13 +32,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 
  /**
- * @Description: 部门角色
+ * @Description: Vai trò phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-12
  * @Version: V1.0
  */
 @Slf4j
-@Tag(name="部门角色")
+@Tag(name="Vai trò phòng ban")
 @RestController
 @RequestMapping("/sys/sysDepartRole")
 public class SysDepartRoleController extends JeecgController<SysDepartRole, ISysDepartRoleService> {
@@ -61,7 +61,7 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
      private BaseCommonService baseCommonService;
      
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 *
 	 * @param sysDepartRole
 	 * @param pageNo
@@ -69,7 +69,7 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 	 * @param req
 	 * @return
 	 */
-	@Operation(summary="部门角色-分页列表查询")
+	@Operation(summary="Vai trò phòng ban-Truy vấn danh sách phân trang")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(SysDepartRole sysDepartRole,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -91,8 +91,8 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 //		}
 //		queryWrapper.in("depart_id",deptIds);
 
-		//我的部门，选中部门只能看当前部门下的角色
-		// 代码逻辑说明: [QQYUN-10775]验证码可以复用 #7674------------
+		//Phòng ban của tôi, khi chọn phòng ban chỉ được xem vai trò thuộc phòng ban hiện tại
+		// Giải thích logic mã: [QQYUN-10775]Mã xác thực có thể tái sử dụng #7674------------
 		if(oConvertUtils.isNotEmpty(deptId)){
 			queryWrapper.eq("depart_id",deptId);
 			IPage<SysDepartRole> pageList = sysDepartRoleService.page(page, queryWrapper);
@@ -103,71 +103,71 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 	}
 	
 	/**
-	 * 添加
+	 * Thêm
 	 *
 	 * @param sysDepartRole
 	 * @return
 	 */
     @RequiresPermissions("system:depart:role:add")
-	@Operation(summary="部门角色-添加")
+	@Operation(summary="Vai trò phòng ban-Thêm")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody SysDepartRole sysDepartRole) {
 		sysDepartRoleService.save(sysDepartRole);
-		return Result.ok("添加成功！");
+		return Result.ok("Thêm thành công!");
 	}
 	
 	/**
-	 * 编辑
+	 * Chỉnh sửa
 	 *
 	 * @param sysDepartRole
 	 * @return
 	 */
-	@Operation(summary="部门角色-编辑")
+	@Operation(summary="Vai trò phòng ban-Chỉnh sửa")
     @RequiresPermissions("system:depart:role:edit")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<?> edit(@RequestBody SysDepartRole sysDepartRole) {
 		sysDepartRoleService.updateById(sysDepartRole);
-		return Result.ok("编辑成功!");
+		return Result.ok("Chỉnh sửa thành công!");
 	}
 	
 	/**
-	 * 通过id删除
+	 * Xóa theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "部门角色-通过id删除")
-	@Operation(summary="部门角色-通过id删除")
+	@AutoLog(value = "Vai trò phòng ban-Xóa theo id")
+	@Operation(summary="Vai trò phòng ban-Xóa theo id")
     @RequiresPermissions("system:depart:role:delete")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		sysDepartRoleService.removeById(id);
-		return Result.ok("删除成功!");
+		return Result.ok("Xóa thành công!");
 	}
 	
 	/**
-	 * 批量删除
+	 * Xóa hàng loạt
 	 *
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "部门角色-批量删除")
-	@Operation(summary="部门角色-批量删除")
+	@AutoLog(value = "Vai trò phòng ban-Xóa hàng loạt")
+	@Operation(summary="Vai trò phòng ban-Xóa hàng loạt")
     @RequiresPermissions("system:depart:role:deleteBatch")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.sysDepartRoleService.deleteDepartRole(Arrays.asList(ids.split(",")));
 		//this.sysDepartRoleService.removeByIds(Arrays.asList(ids.split(",")));
-		return Result.ok("批量删除成功！");
+		return Result.ok("Xóa hàng loạt thành công!");
 	}
 	
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	@Operation(summary="部门角色-通过id查询")
+	@Operation(summary="Vai trò phòng ban-Tìm kiếm theo id")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		SysDepartRole sysDepartRole = sysDepartRoleService.getById(id);
@@ -175,14 +175,14 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 	}
 
 	 /**
-	  * 获取部门下角色
+	  * Lấy vai trò thuộc phòng ban
 	  * @param departId
 	  * @return
 	  */
 	@RequestMapping(value = "/getDeptRoleList", method = RequestMethod.GET)
 	public Result<List<SysDepartRole>> getDeptRoleList(@RequestParam(value = "departId") String departId,@RequestParam(value = "userId") String userId){
 		Result<List<SysDepartRole>> result = new Result<>();
-		//查询选中部门的角色
+		//Truy vấn vai trò của phòng ban đã chọn
 		List<SysDepartRole> deptRoleList = sysDepartRoleService.list(new LambdaQueryWrapper<SysDepartRole>().eq(SysDepartRole::getDepartId,departId));
 		result.setSuccess(true);
 		result.setResult(deptRoleList);
@@ -190,7 +190,7 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 	}
 
 	 /**
-	  * 设置
+	  * Cài đặt
 	  * @param json
 	  * @return
 	  */
@@ -201,24 +201,24 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 		 String oldRoleId = json.getString("oldRoleId");
 		 String userId = json.getString("userId");
 		 departRoleUserService.deptRoleUserAdd(userId,newRoleId,oldRoleId);
-         // 代码逻辑说明: [VUEN-234]部门角色分配添加敏感日志------------
+         // Giải thích logic mã: [VUEN-234]Phân bổ vai trò phòng ban: thêm nhật ký nhạy cảm------------
          LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-         baseCommonService.addLog("给部门用户ID："+userId+"分配角色，操作人： " +loginUser.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
-         return Result.ok("添加成功！");
+         baseCommonService.addLog("Gán vai trò cho ID người dùng phòng ban:"+userId+"Phân bổ vai trò, người thao tác： " +loginUser.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
+         return Result.ok("Thêm thành công!");
 	 }
 
 	 /**
-	  * 根据用户id获取已设置部门角色
+	  * Lấy vai trò phòng ban đã đặt theo id người dùng
 	  * @param userId
 	  * @return
 	  */
 	 @RequestMapping(value = "/getDeptRoleByUserId", method = RequestMethod.GET)
 	 public Result<List<SysDepartRoleUser>> getDeptRoleByUserId(@RequestParam(value = "userId") String userId,@RequestParam(value = "departId") String departId){
 		 Result<List<SysDepartRoleUser>> result = new Result<>();
-		 //查询部门下角色
+		 //Truy vấn vai trò thuộc phòng ban
 		 List<SysDepartRole> roleList = sysDepartRoleService.list(new QueryWrapper<SysDepartRole>().eq("depart_id",departId));
 		 List<String> roleIds = roleList.stream().map(SysDepartRole::getId).collect(Collectors.toList());
-		 //根据角色id,用户id查询已授权角色
+		 //Theo vai trò id,Truy vấn vai trò đã được ủy quyền theo id người dùng
 		 List<SysDepartRoleUser> roleUserList = null;
 		 if(roleIds!=null && roleIds.size()>0){
 			 roleUserList = departRoleUserService.list(new QueryWrapper<SysDepartRoleUser>().eq("user_id",userId).in("drole_id",roleIds));
@@ -229,14 +229,14 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 	 }
 
 	 /**
-	  * 查询数据规则数据
+	  * Truy vấn dữ liệu quy tắc dữ liệu
 	  */
 	 @GetMapping(value = "/datarule/{permissionId}/{departId}/{roleId}")
 	 public Result<?> loadDatarule(@PathVariable("permissionId") String permissionId,@PathVariable("departId") String departId,@PathVariable("roleId") String roleId) {
-		//查询已授权的部门规则
+		//Truy vấn quy tắc phòng ban đã được ủy quyền
 	 	List<SysPermissionDataRule> list = sysDepartPermissionService.getPermRuleListByDeptIdAndPermId(departId,permissionId);
 		 if(list==null || list.size()==0) {
-			 return Result.error("未找到权限配置信息");
+			 return Result.error("Không tìm thấy thông tin cấu hình quyền hạn");
 		 }else {
 			 Map<String,Object> map = new HashMap(5);
 			 map.put("datarule", list);
@@ -245,7 +245,7 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 					 .eq(SysDepartRolePermission::getRoleId,roleId);
 			 SysDepartRolePermission sysRolePermission = sysDepartRolePermissionService.getOne(query);
 			 if(sysRolePermission==null) {
-				 //return Result.error("未找到角色菜单配置信息");
+				 //return Result.error("Không tìm thấy thông tin cấu hình menu vai trò");
 			 }else {
 				 String drChecked = sysRolePermission.getDataRuleIds();
 				 if(oConvertUtils.isNotEmpty(drChecked)) {
@@ -253,12 +253,12 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 				 }
 			 }
 			 return Result.ok(map);
-			 //TODO 以后按钮权限的查询也走这个请求 无非在map中多加两个key
+			 //TODO Về sau truy vấn quyền nút bấm cũng đi qua yêu cầu này, chẳng qua chỉ cần thêm hai key vào map key
 		 }
 	 }
 
 	 /**
-	  * 保存数据规则至角色菜单关联表
+	  * Lưu quy tắc dữ liệu vào bảng liên kết menu vai trò
 	  */
 	 @RequiresPermissions("system:depart:role:edit")
 	 @PostMapping(value = "/datarule")
@@ -267,26 +267,26 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 			 String permissionId = jsonObject.getString("permissionId");
 			 String roleId = jsonObject.getString("roleId");
 			 String dataRuleIds = jsonObject.getString("dataRuleIds");
-			 log.info("保存数据规则>>"+"菜单ID:"+permissionId+"角色ID:"+ roleId+"数据权限ID:"+dataRuleIds);
+			 log.info("Lưu quy tắc dữ liệu>>"+"Menu ID:"+permissionId+"Vai trò ID:"+ roleId+"Quyền hạn dữ liệu ID:"+dataRuleIds);
 			 LambdaQueryWrapper<SysDepartRolePermission> query = new LambdaQueryWrapper<SysDepartRolePermission>()
 					 .eq(SysDepartRolePermission::getPermissionId, permissionId)
 					 .eq(SysDepartRolePermission::getRoleId,roleId);
 			 SysDepartRolePermission sysRolePermission = sysDepartRolePermissionService.getOne(query);
 			 if(sysRolePermission==null) {
-				 return Result.error("请先保存角色菜单权限!");
+				 return Result.error("Vui lòng lưu quyền hạn menu của vai trò trước!!");
 			 }else {
 				 sysRolePermission.setDataRuleIds(dataRuleIds);
 				 this.sysDepartRolePermissionService.updateById(sysRolePermission);
 			 }
 		 } catch (Exception e) {
-			 log.error("SysRoleController.saveDatarule()发生异常：" + e.getMessage(),e);
-			 return Result.error("保存失败");
+			 log.error("SysRoleController.saveDatarule()Đã xảy ra ngoại lệ:" + e.getMessage(),e);
+			 return Result.error("Lưu thất bại");
 		 }
-		 return Result.ok("保存成功!");
+		 return Result.ok("Lưu thành công!");
 	 }
 
   /**
-   * 导出excel
+   * Xuất excel
    *
    * @param request
    * @param sysDepartRole
@@ -294,11 +294,11 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
   @RequiresPermissions("system:depart:role:exportXls")
   @RequestMapping(value = "/exportXls")
   public ModelAndView exportXls(HttpServletRequest request, SysDepartRole sysDepartRole) {
-      return super.exportXls(request, sysDepartRole, SysDepartRole.class, "部门角色");
+      return super.exportXls(request, sysDepartRole, SysDepartRole.class, "Vai trò phòng ban");
   }
 
   /**
-   * 通过excel导入数据
+   * Nhập dữ liệu qua Excel
    *
    * @param request
    * @param response

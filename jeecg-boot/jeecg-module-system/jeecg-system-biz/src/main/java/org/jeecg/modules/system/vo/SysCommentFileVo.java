@@ -3,7 +3,7 @@ package org.jeecg.modules.system.vo;
 import lombok.Data;
 
 /**
- * @Description: 文档VO
+ * @Description: Tài liệu VO
  * @Author: jeecg-boot
  * @Date: 2022-07-21
  * @Version: V1.0
@@ -20,24 +20,24 @@ public class SysCommentFileVo {
      */
     private String sysFormFileId;
     /**
-     * 文件名称
+     * Tên tệp
      */
     private String name;
 
     private Double fileSize;
 
     /**
-     * 文件地址
+     * Địa chỉ tệp
      */
     private String url;
 
     /**
-     * 文档类型（folder:文件夹 excel:excel doc:word pp:ppt image:图片  archive:其他文档 video:视频）
+     * Loại tài liệu（folder:Thư mục excel:excel doc:word pp:ppt image:Hình ảnh  archive:Tài liệu khác video:Video）
      */
     private String type;
 
     /**
-     * 文件上传类型(temp/本地上传(临时文件) manage/知识库)
+     * Loại tải file lên(temp/Tải lên cục bộ(Tệp tạm thời) manage/Kho tri thức)
      */
     private String storeType;
 

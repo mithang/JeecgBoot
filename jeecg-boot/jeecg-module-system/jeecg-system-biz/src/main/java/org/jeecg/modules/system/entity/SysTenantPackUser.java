@@ -15,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 
 /**
- * @Description: 租户产品包用户关系表
+ * @Description: Bảng quan hệ người dùng gói sản phẩm Tenant
  * @Author: jeecg-boot
  * @Date:   2023-02-16
  * @Version: V1.0
@@ -24,7 +24,7 @@ import java.io.Serializable;
 @TableName("sys_tenant_pack_user")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="租户产品包用户关系表")
+@Schema(description="Bảng quan hệ người dùng gói sản phẩm Tenant")
 public class SysTenantPackUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -32,33 +32,33 @@ public class SysTenantPackUser implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "id")
     private java.lang.String id;
-    /**租户产品包ID*/
-    @Excel(name = "租户产品包ID", width = 15)
-    @Schema(description = "租户产品包ID")
+    /**Gói sản phẩm tenant ID*/
+    @Excel(name = "Gói sản phẩm tenant ID", width = 15)
+    @Schema(description = "Gói sản phẩm tenant ID")
     private java.lang.String packId;
-    /**用户ID*/
-    @Excel(name = "用户ID", width = 15)
-    @Schema(description = "用户ID")
+    /**Người dùng ID*/
+    @Excel(name = "Người dùng ID", width = 15)
+    @Schema(description = "Người dùng ID")
     private java.lang.String userId;
-    /**租户ID*/
-    @Excel(name = "租户ID", width = 15)
-    @Schema(description = "租户ID")
+    /**Tenant ID*/
+    @Excel(name = "Tenant ID", width = 15)
+    @Schema(description = "Tenant ID")
     private java.lang.Integer tenantId;
-    /**创建人*/
-    @Schema(description = "创建人")
+    /**Người tạo*/
+    @Schema(description = "Người tạo")
     private java.lang.String createBy;
-    /**创建时间*/
+    /**Thời gian tạo*/
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private java.util.Date createTime;
-    /**更新人*/
-    @Schema(description = "更新人")
+    /**Người cập nhật*/
+    @Schema(description = "Người cập nhật")
     private java.lang.String updateBy;
-    /**更新时间*/
+    /**Thời gian cập nhật*/
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "更新时间")
+    @Schema(description = "Thời gian cập nhật")
     private java.util.Date updateTime;
 
     private transient String realname;
@@ -68,7 +68,7 @@ public class SysTenantPackUser implements Serializable {
     private transient String packCode;
 
     /**
-     * 状态(申请状态0 正常状态1)
+     * Trạng thái(Trạng thái đăng ký 0 Trạng thái bình thường 1)
      */
     private Integer status;
 

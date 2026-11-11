@@ -8,7 +8,7 @@ import org.quartz.JobExecutionException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 示例不带参定时任务
+ * Nhiệm vụ định kỳ mẫu không có tham số
  * 
  * @Author Scott
  */
@@ -18,6 +18,6 @@ public class SampleJob implements Job {
 	@Override
 	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 		log.info(" Job Execution key："+jobExecutionContext.getJobDetail().getKey());
-		log.info(String.format(" Jeecg-Boot 普通定时任务 SampleJob !  时间:" + DateUtils.getTimestamp()));
+		log.info(String.format(" Jeecg-Boot Nhiệm vụ định kỳ thông thường SampleJob !  Thời gian:" + DateUtils.getTimestamp()));
 	}
 }

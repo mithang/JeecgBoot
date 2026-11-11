@@ -31,7 +31,7 @@ import java.util.*;
 
 /**
  * <p>
- * 菜单权限表 服务实现类
+ * Bảng quyền hạn menu — Lớp triển khai Service
  * </p>
  *
  * @Author scott
@@ -70,7 +70,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	}
 
 	/**
-	  * 真实删除
+	  * Xóa thực sự
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -78,65 +78,65 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	public void deletePermission(String id) throws JeecgBootException {
 		SysPermission sysPermission = this.getById(id);
 		if(sysPermission==null) {
-			throw new JeecgBootException("未找到菜单信息");
+			throw new JeecgBootException("Không tìm thấy thông tin menu");
 		}
 		String pid = sysPermission.getParentId();
 		if(oConvertUtils.isNotEmpty(pid)) {
 			Long count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, pid));
 			if(count==1) {
-				//若父节点无其他子节点，则该父节点是叶子节点
+				//Nếu nút cha không còn nút con nào khác thì nút cha đó là nút lá
 				this.sysPermissionMapper.setMenuLeaf(pid, 1);
 			}
 		}
 		sysPermissionMapper.deleteById(id);
-		// 该节点可能是子节点但也可能是其它节点的父节点,所以需要级联删除
+		// Nút này có thể là nút con nhưng cũng có thể là nút cha của các nút khác,Vì vậy cần xóa theo chuỗi
 		this.removeChildrenBy(sysPermission.getId());
-		//关联删除
+		//Xóa liên kết
 		Map map = new HashMap(5);
 		map.put("permission_id",id);
-		//删除数据规则
+		//Xóa quy tắc dữ liệu
 		this.deletePermRuleByPermId(id);
-		//删除角色授权表
+		//Xóa bảng phân quyền vai trò
 		sysRolePermissionMapper.deleteByMap(map);
-		//删除部门权限表
+		//Xóa bảng quyền hạn phòng ban
 		sysDepartPermissionMapper.deleteByMap(map);
-		//删除部门角色授权
+		//Xóa ủy quyền vai trò phòng ban
 		sysDepartRolePermissionMapper.deleteByMap(map);
 	}
 	
 	/**
-	 * 根据父id删除其关联的子节点数据
+	 * Xóa dữ liệu nút con liên quan theo id cha
 	 * 
 	 * @return
 	 */
 	public void removeChildrenBy(String parentId) {
 		LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<>();
-		// 封装查询条件parentId为主键,
+		// Đóng gói điều kiện truy vấn với parentId làm khóa chính,
 		query.eq(SysPermission::getParentId, parentId);
-		// 查出该主键下的所有子级
+		// Truy vấn tất cả các cấp con thuộc khóa chính này
 		List<SysPermission> permissionList = this.list(query);
 		if (permissionList != null && permissionList.size() > 0) {
             // id
 			String id = "";
-            // 查出的子级数量
+            // Số lượng cấp con truy vấn được
 			Long num = Long.valueOf(0);
-			// 如果查出的集合不为空, 则先删除所有
+			// Nếu tập hợp truy vấn được không trống, thì xóa toàn bộ trước
 			this.remove(query);
-			// 再遍历刚才查出的集合, 根据每个对象,查找其是否仍有子级
+			// Sau đó duyệt tập hợp vừa truy vấn được, Theo từng đối tượng,Tìm xem nó còn cấp con hay không
 			for (int i = 0, len = permissionList.size(); i < len; i++) {
 				id = permissionList.get(i).getId();
 				Map map = new HashMap(5);
 				map.put("permission_id",id);
-				//删除数据规则
+				//Xóa quy tắc dữ liệu
 				this.deletePermRuleByPermId(id);
-				//删除角色授权表
+				//Xóa bảng phân quyền vai trò
 				sysRolePermissionMapper.deleteByMap(map);
-				//删除部门权限表
+				//Xóa bảng quyền hạn phòng ban
 				sysDepartPermissionMapper.deleteByMap(map);
-				//删除部门角色授权
+				//Xóa ủy quyền vai trò phòng ban
 				sysDepartRolePermissionMapper.deleteByMap(map);
 				num = this.count(new LambdaQueryWrapper<SysPermission>().eq(SysPermission::getParentId, id));
-				// 如果有, 则递归
+				// Nếu có, thì đệ quy
 				if (num > 0) {
 					this.removeChildrenBy(id);
 				}
@@ -145,7 +145,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	}
 	
 	/**
-	  * 逻辑删除
+	  * Xóa logic
 	 */
 	@Override
 	@CacheEvict(value = CacheConstant.SYS_DATA_PERMISSIONS_CACHE,allEntries=true)
@@ -153,12 +153,12 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	public void deletePermissionLogical(String id) throws JeecgBootException {
 		SysPermission sysPermission = this.getById(id);
 		if(sysPermission==null) {
-			throw new JeecgBootException("未找到菜单信息");
+			throw new JeecgBootException("Không tìm thấy thông tin menu");
 		}
 		String pid = sysPermission.getParentId();
 		Long count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, pid));
 		if(count==1) {
-			//若父节点无其他子节点，则该父节点是叶子节点
+			//Nếu nút cha không còn nút con nào khác thì nút cha đó là nút lá
 			this.sysPermissionMapper.setMenuLeaf(pid, 1);
 		}
 		sysPermission.setDelFlag(1);
@@ -169,14 +169,14 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	@CacheEvict(value = CacheConstant.SYS_DATA_PERMISSIONS_CACHE,allEntries=true)
 	public void addPermission(SysPermission sysPermission) throws JeecgBootException {
 		//----------------------------------------------------------------------
-		//判断是否是一级菜单，是的话清空父菜单
+		//Phán đoán có phải menu cấp một hay không, nếu phải thì xóa menu cha
 		if(CommonConstant.MENU_TYPE_0.equals(sysPermission.getMenuType())) {
 			sysPermission.setParentId(null);
 		}
 		//----------------------------------------------------------------------
 		String pid = sysPermission.getParentId();
 		if(oConvertUtils.isNotEmpty(pid)) {
-			//设置父节点不为叶子节点
+			//Đặt nút cha không phải là nút lá
 			this.sysPermissionMapper.setMenuLeaf(pid, 0);
 		}
 		sysPermission.setCreateTime(new Date());
@@ -189,17 +189,17 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	@CacheEvict(value = CacheConstant.SYS_DATA_PERMISSIONS_CACHE,allEntries=true)
 	public void editPermission(SysPermission sysPermission) throws JeecgBootException {
 		SysPermission p = this.getById(sysPermission.getId());
-		//TODO 该节点判断是否还有子节点
+		//TODO Kiểm tra nút này còn nút con hay không
 		if(p==null) {
-			throw new JeecgBootException("未找到菜单信息");
+			throw new JeecgBootException("Không tìm thấy thông tin menu");
 		}else {
 			sysPermission.setUpdateTime(new Date());
 			//----------------------------------------------------------------------
-			//Step1.判断是否是一级菜单，是的话清空父菜单ID
+			//Step1.Phán đoán có phải menu cấp một hay không, nếu phải thì xóa menu cha ID
 			if(CommonConstant.MENU_TYPE_0.equals(sysPermission.getMenuType())) {
 				sysPermission.setParentId("");
 			}
-			//Step2.判断菜单下级是否有菜单，无则设置为叶子节点
+			//Step2.Phán đoán xem menu cấp dưới có menu hay không, nếu không thì đặt thành nút lá
 			Long count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, sysPermission.getId()));
 			if(count==0) {
 				sysPermission.setLeaf(true);
@@ -207,13 +207,13 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 			//----------------------------------------------------------------------
 			this.updateById(sysPermission);
 			
-			//如果当前菜单的父菜单变了，则需要修改新父菜单和老父菜单的，叶子节点状态
+			//Nếu menu cha của menu hiện tại thay đổi thì cần sửa trạng thái node lá của menu cha mới và menu cha cũ
 			String pid = sysPermission.getParentId();
             boolean flag = (oConvertUtils.isNotEmpty(pid) && !pid.equals(p.getParentId())) || oConvertUtils.isEmpty(pid)&&oConvertUtils.isNotEmpty(p.getParentId());
             if (flag) {
-				//a.设置新的父菜单不为叶子节点
+				//a.Thiết lập menu cha mới không phải là nút lá
 				this.sysPermissionMapper.setMenuLeaf(pid, 0);
-				//b.判断老的菜单下是否还有其他子菜单，没有的话则设置为叶子节点
+				//b.Kiểm tra xem dưới menu cũ còn menu con nào khác không, nếu không còn thì đặt thành nút lá
 				Long cc = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, p.getParentId()));
 				if(cc==0) {
 					if(oConvertUtils.isNotEmpty(p.getParentId())) {
@@ -223,7 +223,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 				
 			}
 
-			// 同步更改默认菜单
+			// Đồng bộ thay đổi menu mặc định
 			SysRoleIndex defIndexCfg = this.roleIndexService.queryDefaultIndex();
 			boolean isDefIndex = defIndexCfg.getUrl().equals(p.getUrl());
 			if (isDefIndex) {
@@ -236,7 +236,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 
 	@Override
 	public List<SysPermission> queryByUser(String userId) {
-		//update-begin---author:scott ---date:2026-04-16  for：【pull/9445】开启多租户模式时，获取用户权限时加入tenant_id判断-----------
+		//update-begin---author:scott ---date:2026-04-16  for：【pull/9445] Khi bật chế độ đa tenant, khi lấy quyền người dùng sẽ thêm tenant_id Kiểm tra-----------
 		List<SysPermission> permissionList;
 		if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 			int tenantId = oConvertUtils.getInt(TenantContext.getTenant(), -1);
@@ -248,14 +248,14 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 		} else {
 			permissionList = this.sysPermissionMapper.queryByUser(userId);
 		}
-		//update-end---author:scott ---date:2026-04-16  for：【pull/9445】开启多租户模式时，获取用户权限时加入tenant_id判断-----------
-		//================= begin 开启租户的时候 如果没有test角色，默认加入test角色================
+		//update-end---author:scott ---date:2026-04-16  for：【pull/9445] Khi bật chế độ đa tenant, khi lấy quyền người dùng sẽ thêm tenant_id Kiểm tra-----------
+		//================= begin Khi bật thuê bao, nếu không có vai trò test thì mặc định thêm vai trò test================
 		if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 			if (permissionList == null) {
 				permissionList = new ArrayList<>();
 			}
 			List<SysPermission> testRoleList = sysPermissionMapper.queryPermissionByTestRoleId();
-			// 代码逻辑说明: [QQYUN-5168]【vue3】为什么出现两个菜单 菜单根据id去重
+			// Giải thích logic mã: [QQYUN-5168][Vue 3] Vì sao xuất hiện hai menu? Menu được khử trùng theo id
 			for (SysPermission permission: testRoleList) {
 				boolean hasPerm = permissionList.stream().anyMatch(a->a.getId().equals(permission.getId()));
 				if(!hasPerm){
@@ -263,12 +263,12 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 				}
 			}
 		}
-		//================= end 开启租户的时候 如果没有test角色，默认加入test角色================
+		//================= end Khi bật thuê bao, nếu không có vai trò test thì mặc định thêm vai trò test================
 		return permissionList;
 	}
 
 	/**
-	 * 根据permissionId删除其关联的SysPermissionDataRule表中的数据
+	 * Xóa dữ liệu trong bảng SysPermissionDataRule liên kết với permissionId
 	 */
 	@Override
 	public void deletePermRuleByPermId(String id) {
@@ -281,7 +281,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	}
 
 	/**
-	  *   获取模糊匹配规则的数据权限URL
+	  *   Lấy quyền hạn dữ liệu theo quy tắc khớp mờ URL
 	 */
 	@Override
 	@Cacheable(value = CacheConstant.SYS_DATA_PERMISSIONS_CACHE)

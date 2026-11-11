@@ -6,14 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 用户产品包 关联的用户信息
+ * Thông tin người dùng liên kết với gói sản phẩm của người dùng
  * @Author taoYan
  * @Date 2023/2/16 21:02
  **/
 @Data
 public class TenantPackUser {
     /**
-     * 用户ID
+     * Người dùng ID
      */
     private String id;
     
@@ -26,22 +26,22 @@ public class TenantPackUser {
     private String phone;
 
     /**
-     * 多个 部门名称集合
+     * Tập hợp nhiều tên phòng ban
      */
     private Set<String> departNames;
 
     /**
-     * 多个 职位名称集合
+     * Tập hợp nhiều tên chức vụ
      */
     private Set<String> positionNames;
 
     /**
-     * 租户产品包名称
+     * Tên gói sản phẩm tenant
      */
     private String packName;
 
     /**
-     * 租户产品包ID
+     * Gói sản phẩm tenant ID
      */
     private String packId;
     

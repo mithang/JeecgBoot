@@ -41,7 +41,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Description: 系统评论回复表
+ * @Description: Bảng trả lời bình luận hệ thống
  * @Author: jeecg-boot
  * @Date: 2022-07-19
  * @Version: V1.0
@@ -68,7 +68,7 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
     private String uploadType;
 
     /**
-     * sysFormFile中的表名
+     * sysFormFile Tên bảng trong
      */
     private static final String SYS_FORM_FILE_TABLE_NAME = "sys_comment";
 
@@ -76,9 +76,9 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
     public List<SysCommentVO> queryFormCommentInfo(SysComment sysComment) {
         String tableName = sysComment.getTableName();
         String dataId = sysComment.getTableDataId();
-        //获取评论信息
+        //Lấy thông tin bình luận
         List<SysCommentVO> list = this.baseMapper.queryCommentList(tableName, dataId);
-        // 获取评论相关人员
+        // Lấy nhân viên liên quan đến bình luận
         Set<String> personSet = new HashSet<>();
         if(list!=null && list.size()>0){
             for(SysCommentVO vo: list){
@@ -91,12 +91,12 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
             }
         }
         if(personSet.size()>0){
-            //获取用户信息
+            //Lấy thông tin người dùng
             Map<String, UserAvatar> userAvatarMap = queryUserAvatar(personSet);
             for(SysCommentVO vo: list){
                 String formId = vo.getFromUserId();
                 String toId = vo.getToUserId();
-                // 设置头像、用户名
+                // Đặt ảnh đại diện, tên người dùng
                 if(oConvertUtils.isNotEmpty(formId)){
                     UserAvatar fromUser = userAvatarMap.get(formId);
                     if(fromUser!=null){
@@ -122,13 +122,13 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
         String existFileId = request.getParameter("fileId");
         if(oConvertUtils.isEmpty(existFileId)){
             String savePath = "";
-            // 获取业务路径
+            // Lấy đường dẫn nghiệp vụ
             String bizPath = request.getParameter("biz");
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             MultipartFile file = multipartRequest.getFile("file");
 
-            // 文件安全校验，防止上传漏洞文件
+            // Kiểm tra an toàn tệp, ngăn tải lên tệp có lỗ hổng
             try {
                 SsrfFileTypeFilter.checkUploadFileType(file, bizPath);
             } catch (Exception e) {
@@ -145,15 +145,15 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
             }
 
             String orgName = file.getOriginalFilename();
-            // 获取文件名
+            // Lấy tên tệp
             orgName = CommonUtils.getFileName(orgName);
-            //文件大小
+            //Kích thước tệp
             long size = file.getSize();
-            //文件类型
+            //Loại tệp
             String type = orgName.substring(orgName.lastIndexOf("."), orgName.length());
             FileTypeEnum fileType = FileTypeEnum.getByType(type);
 
-            //保存至 SysFiles
+            //Lưu vào SysFiles
             SysFilesModel sysFiles = new SysFilesModel();
             sysFiles.setFileName(orgName);
             sysFiles.setUrl(savePath);
@@ -166,11 +166,11 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
             sysFiles.setId(fileId);
             String tenantId = oConvertUtils.getString(TenantContext.getTenant());
             sysFiles.setTenantId(tenantId);
-//            //update-begin---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】知识库后端迁移---
+//            //update-begin---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】Di chuyển backend kho tri thức---
 //            easyOaBseApi.addSysFiles(sysFiles);
-//            //update-end---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】知识库后端迁移---
+//            //update-end---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】Di chuyển backend kho tri thức---
 
-            //保存至 SysFormFile
+            //Lưu vào SysFormFile
             String tableName = SYS_FORM_FILE_TABLE_NAME;
             String tableDataId = request.getParameter("commentId");
             SysFormFile sysFormFile = new SysFormFile();
@@ -181,11 +181,11 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
             sysFormFileMapper.insert(sysFormFile);
 
         }else{
-//            //update-begin---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】知识库后端迁移---
+//            //update-begin---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】Di chuyển backend kho tri thức---
 //            SysFilesModel sysFiles = easyOaBseApi.getFileById(existFileId);
-//            //update-end---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】知识库后端迁移---
+//            //update-end---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】Di chuyển backend kho tri thức---
 //            if(sysFiles!=null){
-                //保存至 SysFormFile
+                //Lưu vào SysFormFile
                 String tableName = SYS_FORM_FILE_TABLE_NAME;
                 String tableDataId = request.getParameter("commentId");
                 SysFormFile sysFormFile = new SysFormFile();
@@ -199,7 +199,7 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
     }
 
     /**
-     * app端回复评论保存文件
+     * app App trả lời bình luận, lưu file
      * @param request
      */
     @Transactional(rollbackFor = Exception.class)
@@ -209,15 +209,15 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
         String orgName = request.getParameter("fileName");
         String fileSize = request.getParameter("fileSize");
         String savePath = request.getParameter("savePath");
-        // 获取文件名
+        // Lấy tên tệp
         orgName = CommonUtils.getFileName(orgName);
-        //文件大小
+        //Kích thước tệp
         long size = Long.valueOf(fileSize);
-        //文件类型
+        //Loại tệp
         String type = orgName.substring(orgName.lastIndexOf("."), orgName.length());
         FileTypeEnum fileType = FileTypeEnum.getByType(type);
 
-        //保存至 SysFiles
+        //Lưu vào SysFiles
         SysFilesModel sysFiles = new SysFilesModel();
         sysFiles.setFileName(orgName);
         sysFiles.setUrl(savePath);
@@ -231,10 +231,10 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
         sysFiles.setId(fileId);
         String tenantId = oConvertUtils.getString(TenantContext.getTenant());
         sysFiles.setTenantId(tenantId);
-//        //update-begin---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】知识库后端迁移---
+//        //update-begin---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】Di chuyển backend kho tri thức---
 //        easyOaBseApi.addSysFiles(sysFiles);
-//        //update-end---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】知识库后端迁移---
-        //保存至 SysFormFile
+//        //update-end---author:wangshuai---date:2024-01-04---for:【QQYUN-7821】Di chuyển backend kho tri thức---
+        //Lưu vào SysFormFile
         String tableName = SYS_FORM_FILE_TABLE_NAME;
         String tableDataId = request.getParameter("commentId");
         SysFormFile sysFormFile = new SysFormFile();
@@ -255,25 +255,25 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
     @Override
     public String saveOne(SysComment sysComment) {
         this.save(sysComment);
-        //发送系统消息
+        //Gửi tin nhắn hệ thống
         String content = sysComment.getCommentContent();
         if (content.indexOf("@") >= 0) {
             Set<String> set = getCommentUsername(content);
             if (set.size() > 0) {
                 String users = String.join(",", set);
                 MessageDTO md = new MessageDTO();
-                md.setTitle("有人在表单评论中提到了你");
+                md.setTitle("Có người đã nhắc đến bạn trong bình luận của biểu mẫu");
                 md.setContent(content);
                 md.setToAll(false);
                 md.setToUser(users);
                 md.setFromUser("system");
                 md.setType(MessageTypeEnum.XT.getType());
 
-                // 代码逻辑说明: QQYUN-4744【系统通知】6、系统通知@人后，对方看不到是哪个表单@的，没有超链接
+                // Giải thích logic mã: QQYUN-4744【Thông báo hệ thống】6, thông báo hệ thống@Sau khi @ người khác, đối phương không thấy đó là biểu mẫu nào@, không có siêu liên kết
                 String tableName = sysComment.getTableName();
                 String prefix = "desform:";
                 if (tableName != null) {
-                    // 表单设计器
+                    // Trình thiết kế biểu mẫu
                     if (tableName.startsWith(prefix)) {
                         Map<String, Object> data = new HashMap<>();
                         data.put(CommonConstant.NOTICE_MSG_BUS_TYPE, "comment");
@@ -284,7 +284,7 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
                         data.put(CommonConstant.NOTICE_MSG_SUMMARY, params);
                         md.setData(data);
                     }
-                    // Online表单，判断是否携带id
+                    // Online Form, kiểm tra có mang theo hay không id
                     else if (oConvertUtils.isNotEmpty(sysComment.getTableId())) {
                         Map<String, Object> data = new HashMap<>();
                         data.put(CommonConstant.NOTICE_MSG_BUS_TYPE, "comment");
@@ -307,7 +307,7 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
     @Override
     public void deleteOne(String id) {
         this.removeById(id);
-        //还要删除关联文件
+        //Còn phải xóa tệp liên kết
         LambdaQueryWrapper<SysFormFile> query = new LambdaQueryWrapper<SysFormFile>()
                 .eq(SysFormFile::getTableDataId, id)
                 .eq(SysFormFile::getTableName, SYS_FORM_FILE_TABLE_NAME);
@@ -315,7 +315,7 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
     }
 
     /**
-     * 通过正则获取评论中的用户账号
+     * Lấy tài khoản người dùng trong bình luận bằng biểu thức chính quy
      *
      * @return
      */
@@ -335,15 +335,15 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
 
 
     /**
-     * 本地文件上传
+     * Tải file lên cục bộ
      *
-     * @param mf      文件
-     * @param bizPath 自定义路径
+     * @param mf      Tệp
+     * @param bizPath Đường dẫn tùy chỉnh
      * @return
      */
     private String uploadLocal(MultipartFile mf, String bizPath) {
         try {
-            // 文件安全校验，防止上传漏洞文件
+            // Kiểm tra an toàn tệp, ngăn tải lên tệp có lỗ hổng
             SsrfFileTypeFilter.checkUploadFileType(mf, bizPath);
         } catch (Exception e) {
             throw new JeecgBootException(e);
@@ -352,18 +352,18 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
         try {
             String ctxPath = uploadpath;
             String fileName = null;
-            //update-begin---author:liusq ---date:2026-03-30  for：【issues/9427】修复uploadLocal bizPath路径遍历漏洞(CWE-22)-----------
-            // 路径遍历校验：规范化后确保目标目录在uploadpath内
+            //update-begin---author:liusq ---date:2026-03-30  for：【issues/9427] Sửa lỗ hổng path traversal của bizPath trong uploadLocal(CWE-22)-----------
+            // Kiểm tra path traversal: sau khi chuẩn hóa, đảm bảo thư mục đích nằm trong uploadpath
             File uploadDir = new File(ctxPath).getCanonicalFile();
             File file = new File(ctxPath + File.separator + bizPath + File.separator).getCanonicalFile();
             if (!file.toPath().startsWith(uploadDir.toPath())) {
-                throw new JeecgBootException("非法业务路径，禁止访问上传目录之外的路径: " + bizPath);
+                throw new JeecgBootException("Đường dẫn nghiệp vụ không hợp lệ, cấm truy cập đường dẫn ngoài thư mục tải lên: " + bizPath);
             }
-            //update-end---author:liusq ---date:2026-03-30  for：【issues/9427】修复uploadLocal bizPath路径遍历漏洞(CWE-22)-----------
+            //update-end---author:liusq ---date:2026-03-30  for：【issues/9427] Sửa lỗ hổng path traversal của bizPath trong uploadLocal(CWE-22)-----------
             if (!file.exists()) {
-                file.mkdirs();// 创建文件根目录
+                file.mkdirs();// Tạo thư mục gốc của tệp
             }
-            String orgName = mf.getOriginalFilename();// 获取文件名
+            String orgName = mf.getOriginalFilename();// Lấy tên tệp
             orgName = CommonUtils.getFileName(orgName);
             if (orgName.indexOf(".") != -1) {
                 fileName = orgName.substring(0, orgName.lastIndexOf(".")) + "_" + System.currentTimeMillis() + orgName.substring(orgName.indexOf("."));
@@ -390,7 +390,7 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper, SysComm
     }
 
     /**
-     * 查询用户信息
+     * Truy vấn thông tin người dùng
      * @param idSet
      * @return
      */

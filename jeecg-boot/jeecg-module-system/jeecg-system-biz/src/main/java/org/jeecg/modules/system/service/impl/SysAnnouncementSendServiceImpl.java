@@ -28,7 +28,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
- * @Description: 用户通告阅读标记表
+ * @Description: Bảng đánh dấu đã đọc thông báo của người dùng
  * @Author: jeecg-boot
  * @Date:  2019-02-21
  * @Version: V1.0
@@ -54,7 +54,7 @@ public class SysAnnouncementSendServiceImpl extends ServiceImpl<SysAnnouncementS
 	}
 
     /**
-     * 获取当前用户已阅读数量
+     * Lấy số lượng đã đọc của người dùng hiện tại
      * 
      * @param id
      * @return
@@ -66,14 +66,14 @@ public class SysAnnouncementSendServiceImpl extends ServiceImpl<SysAnnouncementS
     }
 
     /**
-     * 根据多个id批量删除已阅读的数量
+     * Xóa hàng loạt số lượng đã đọc theo nhiều id
      * 
      * @param ids
      */
     @Override
     public void deleteBatchByIds(String ids) {
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        //根据用户id和阅读表的id获取所有阅读的数据
+        //Lấy tất cả dữ liệu đã đọc theo id người dùng và id của bảng đọc
         List<String> sendIds = sysAnnouncementSendMapper.getReadAnnSendByUserId(Arrays.asList(ids.split(SymbolConstant.COMMA)),sysUser.getId());
         if(CollectionUtil.isNotEmpty(sendIds)){
             this.removeByIds(sendIds);
@@ -81,7 +81,7 @@ public class SysAnnouncementSendServiceImpl extends ServiceImpl<SysAnnouncementS
     }
 
     /**
-     * 根据busId更新阅读状态
+     * Cập nhật trạng thái đã đọc theo busId
      * @param busId
      * @param busType
      */

@@ -48,13 +48,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 职务表
+ * @Description: Bảng chức vụ
  * @Author: jeecg-boot
  * @Date: 2019-09-19
  * @Version: V1.0
  */
 @Slf4j
-@Tag(name = "职务表")
+@Tag(name = "Bảng chức vụ")
 @RestController
 @RequestMapping("/sys/position")
 public class SysPositionController {
@@ -72,7 +72,7 @@ public class SysPositionController {
     private ISysUserTenantService userTenantService;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param sysPosition
      * @param pageNo
@@ -80,8 +80,8 @@ public class SysPositionController {
      * @param req
      * @return
      */
-    @AutoLog(value = "职务表-分页列表查询")
-    @Operation(summary = "职务表-分页列表查询")
+    @AutoLog(value = "Bảng chức vụ-Truy vấn danh sách phân trang")
+    @Operation(summary = "Bảng chức vụ-Truy vấn danh sách phân trang")
     @GetMapping(value = "/list")
     public Result<IPage<SysPosition>> queryPageList(SysPosition sysPosition,
                                                     @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
@@ -89,7 +89,7 @@ public class SysPositionController {
                                                     HttpServletRequest req) {
         Result<IPage<SysPosition>> result = new Result<IPage<SysPosition>>();
         //------------------------------------------------------------------------------------------------
-        //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+        //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
             sysPosition.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(),0));
         }
@@ -105,67 +105,67 @@ public class SysPositionController {
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param sysPosition
      * @return
      */
-    @AutoLog(value = "职务表-添加")
-    @Operation(summary = "职务表-添加")
+    @AutoLog(value = "Bảng chức vụ-Thêm")
+    @Operation(summary = "Bảng chức vụ-Thêm")
     @PostMapping(value = "/add")
     public Result<SysPosition> add(@RequestBody SysPosition sysPosition) {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         Integer tenantId = sysPositionService.checkPositionAuth("system:position:add", true);
         if (tenantId != null) {
-            // 敲敲云租户管理员新增的职务归属当前租户
+            // Chức vụ mà quản trị viên tenant QiaoQiaoYun thêm mới thuộc về tenant hiện tại
             sysPosition.setTenantId(tenantId);
         }
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         Result<SysPosition> result = new Result<SysPosition>();
         try {
-            //编号是空的，不需要判断多租户隔离了
+            //Mã trống thì không cần phán đoán cô lập nhiều tenant nữa
             if(oConvertUtils.isEmpty(sysPosition.getCode())){
-                //生成职位编码10位
+                //Tạo mã chức vụ 10 ký tự
                 sysPosition.setCode(RandomUtil.randomString(10));
             }
             sysPositionService.save(sysPosition);
-            result.success("添加成功！");
+            result.success("Thêm thành công!");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            result.error500("操作失败");
+            result.error500("Thao tác thất bại");
         }
         return result;
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param sysPosition
      * @return
      */
-    @AutoLog(value = "职务表-编辑")
-    @Operation(summary = "职务表-编辑")
+    @AutoLog(value = "Bảng chức vụ-Chỉnh sửa")
+    @Operation(summary = "Bảng chức vụ-Chỉnh sửa")
     @RequestMapping(value = "/edit", method ={RequestMethod.PUT, RequestMethod.POST})
     public Result<SysPosition> edit(@RequestBody SysPosition sysPosition) {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         Integer tenantId = sysPositionService.checkPositionAuth("system:position:edit", true);
         if (tenantId != null) {
             if (!sysPositionService.isPositionInTenant(sysPosition.getId(), tenantId)) {
-                return Result.error("只能编辑当前租户的职务！");
+                return Result.error("Chỉ được chỉnh sửa chức vụ của tenant hiện tại!");
             }
-            // 不允许把职务改到其它租户
+            // Không được phép chuyển chức vụ sang tenant khác
             sysPosition.setTenantId(tenantId);
         }
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         Result<SysPosition> result = new Result<SysPosition>();
         SysPosition sysPositionEntity = sysPositionService.getById(sysPosition.getId());
         if (sysPositionEntity == null) {
-            result.error500("未找到对应实体");
+            result.error500("Không tìm thấy thực thể tương ứng");
         } else {
             boolean ok = sysPositionService.updateById(sysPosition);
-            //TODO 返回false说明什么？
+            //TODO Trả về false nghĩa là gì?
             if (ok) {
-                result.success("修改成功!");
+                result.success("Chỉnh sửa thành công!");
             }
         }
 
@@ -173,70 +173,70 @@ public class SysPositionController {
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "职务表-通过id删除")
-    @Operation(summary = "职务表-通过id删除")
+    @AutoLog(value = "Bảng chức vụ-Xóa theo id")
+    @Operation(summary = "Bảng chức vụ-Xóa theo id")
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         Integer tenantId = sysPositionService.checkPositionAuth("system:position:delete", true);
         if (tenantId != null && !sysPositionService.isPositionInTenant(id, tenantId)) {
-            return Result.error("只能删除当前租户的职务！");
+            return Result.error("Chỉ được xóa chức vụ của tenant hiện tại!");
         }
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         try {
             sysPositionService.removeById(id);
-            //删除用户职位关系表
+            //Xóa bảng quan hệ chức vụ người dùng
             userPositionService.removeByPositionId(id);
         } catch (Exception e) {
-            log.error("删除失败", e.getMessage());
-            return Result.error("删除失败!");
+            log.error("Xóa thất bại", e.getMessage());
+            return Result.error("Xóa thất bại!");
         }
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
      */
-    @AutoLog(value = "职务表-批量删除")
-    @Operation(summary = "职务表-批量删除")
+    @AutoLog(value = "Bảng chức vụ-Xóa hàng loạt")
+    @Operation(summary = "Bảng chức vụ-Xóa hàng loạt")
     @DeleteMapping(value = "/deleteBatch")
     public Result<SysPosition> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
-        // 敲敲云组织管理页面不用批量删除，不放行租户管理员
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
+        // Trang quản lý tổ chức QiaoQiaoYun không dùng xóa hàng loạt, không cho quản trị viên thuê bao đi qua
         sysPositionService.checkPositionAuth("system:position:deleteBatch", false);
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         Result<SysPosition> result = new Result<SysPosition>();
         if (ids == null || "".equals(ids.trim())) {
-            result.error500("参数不识别！");
+            result.error500("Không nhận dạng được tham số!");
         } else {
             this.sysPositionService.removeByIds(Arrays.asList(ids.split(",")));
-            result.success("删除成功!");
+            result.success("Xóa thành công!");
         }
         return result;
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "职务表-通过id查询")
-    @Operation(summary = "职务表-通过id查询")
+    @AutoLog(value = "Bảng chức vụ-Tìm kiếm theo id")
+    @Operation(summary = "Bảng chức vụ-Tìm kiếm theo id")
     @GetMapping(value = "/queryById")
     public Result<SysPosition> queryById(@RequestParam(name = "id", required = true) String id) {
         Result<SysPosition> result = new Result<SysPosition>();
         SysPosition sysPosition = sysPositionService.getById(id);
         if (sysPosition == null) {
-            result.error500("未找到对应实体");
+            result.error500("Không tìm thấy thực thể tương ứng");
         } else {
             result.setResult(sysPosition);
             result.setSuccess(true);
@@ -245,18 +245,18 @@ public class SysPositionController {
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param response
      */
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(SysPosition sysPosition,HttpServletRequest request, HttpServletResponse response) {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务导出补充权限校验-----------
-        // 敲敲云组织管理页面不用导出，不放行租户管理员
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw] bổ sung kiểm tra quyền hạn khi xuất chức vụ-----------
+        // Trang quản lý tổ chức của QiaoQiaoYun không dùng xuất, không cho phép quản trị viên tenant
         sysPositionService.checkPositionAuth("system:position:exportXls", false);
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务导出补充权限校验-----------
-        // Step.1 组装查询条件
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw] bổ sung kiểm tra quyền hạn khi xuất chức vụ-----------
+        // Step.1 Lắp ráp điều kiện truy vấn
         QueryWrapper<SysPosition> queryWrapper = null;
         try {
             String paramsStr = request.getParameter("paramsStr");
@@ -264,7 +264,7 @@ public class SysPositionController {
                 String deString = URLDecoder.decode(paramsStr, "UTF-8");
                 sysPosition = JSON.parseObject(deString, SysPosition.class);
                 //------------------------------------------------------------------------------------------------
-                //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+                //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
                 if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
                     sysPosition.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(),0));
                 }
@@ -274,22 +274,22 @@ public class SysPositionController {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        // 代码逻辑说明: [03]职务导出，如果选择数据则只导出相关数据--------------------
+        // Giải thích logic mã: [03]Xuất chức vụ, nếu chọn dữ liệu thì chỉ xuất dữ liệu liên quan--------------------
         String selections = request.getParameter("selections");
         if(!oConvertUtils.isEmpty(selections)){
             queryWrapper.in("id",selections.split(","));
         }
-        //Step.2 AutoPoi 导出Excel
+        //Step.2 AutoPoi Xuất Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
         List<SysPosition> pageList = sysPositionService.list(queryWrapper);
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        //导出文件名称
-        mv.addObject(NormalExcelConstants.FILE_NAME, "职务表列表");
+        //Tên file xuất
+        mv.addObject(NormalExcelConstants.FILE_NAME, "Danh sách bảng chức vụ");
         mv.addObject(NormalExcelConstants.CLASS, SysPosition.class);
-        //支持导出xlsx格式
-        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("职务表列表数据", "导出人:"+user.getRealname(),"导出信息", ExcelType.XSSF));
+        //Hỗ trợ xuất định dạng xlsx
+        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("Dữ liệu danh sách bảng chức vụ", "Người xuất:"+user.getRealname(),"Thông tin xuất", ExcelType.XSSF));
         mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
-        //职级导出支持导出字段
+        //Xuất cấp bậc hỗ trợ trường xuất
         String exportFields = request.getParameter(NormalExcelConstants.EXPORT_FIELDS);
         if(oConvertUtils.isNotEmpty(exportFields)){
             mv.addObject(NormalExcelConstants.EXPORT_FIELDS, exportFields);
@@ -298,7 +298,7 @@ public class SysPositionController {
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -306,17 +306,17 @@ public class SysPositionController {
      */
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response)throws IOException {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
-        // 敲敲云组织管理页面不用导入，不放行租户管理员
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
+        // Trang quản lý tổ chức của QiaoQiaoYun không dùng nhập, không cho phép quản trị viên tenant
         sysPositionService.checkPositionAuth("system:position:importExcel", false);
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        // 错误信息
+        // Thông tin lỗi
         List<String> errorMessage = new ArrayList<>();
         int successLines = 0, errorLines = 0;
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
             MultipartFile file = entity.getValue();
             ImportParams params = new ImportParams();
             params.setTitleRows(2);
@@ -329,7 +329,7 @@ public class SysPositionController {
                 successLines+=(listSysPositions.size()-errorLines);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                return Result.error("文件导入失败:" + e.getMessage());
+                return Result.error("Nhập file thất bại:" + e.getMessage());
             } finally {
                 try {
                     file.getInputStream().close();
@@ -342,13 +342,13 @@ public class SysPositionController {
     }
 
     /**
-     * 通过code查询
+     * Truy vấn theo code
      *
      * @param code
      * @return
      */
-    @AutoLog(value = "职务表-通过code查询")
-    @Operation(summary = "职务表-通过code查询")
+    @AutoLog(value = "Bảng chức vụ-Truy vấn theo code")
+    @Operation(summary = "Bảng chức vụ-Truy vấn theo code")
     @GetMapping(value = "/queryByCode")
     public Result<SysPosition> queryByCode(@RequestParam(name = "code", required = true) String code) {
         Result<SysPosition> result = new Result<SysPosition>();
@@ -356,7 +356,7 @@ public class SysPositionController {
         queryWrapper.eq("code",code);
         SysPosition sysPosition = sysPositionService.getOne(queryWrapper);
         if (sysPosition == null) {
-            result.error500("未找到对应实体");
+            result.error500("Không tìm thấy thực thể tương ứng");
         } else {
             result.setResult(sysPosition);
             result.setSuccess(true);
@@ -366,13 +366,13 @@ public class SysPositionController {
 
 
     /**
-     * 通过多个ID查询
+     * Truy vấn theo nhiều ID
      *
      * @param ids
      * @return
      */
-    @AutoLog(value = "职务表-通过多个查询")
-    @Operation(summary = "职务表-通过多个id查询")
+    @AutoLog(value = "Bảng chức vụ-Tìm kiếm theo nhiều điều kiện")
+    @Operation(summary = "Bảng chức vụ-Truy vấn theo nhiều id")
     @GetMapping(value = "/queryByIds")
     public Result<List<SysPosition>> queryByIds(@RequestParam(name = "ids") String ids) {
         Result<List<SysPosition>> result = new Result<>();
@@ -380,7 +380,7 @@ public class SysPositionController {
         queryWrapper.in(true,"id",ids.split(","));
         List<SysPosition> list = sysPositionService.list(queryWrapper);
         if (list == null) {
-            result.error500("未找到对应实体");
+            result.error500("Không tìm thấy thực thể tương ứng");
         } else {
             result.setResult(list);
             result.setSuccess(true);
@@ -391,7 +391,7 @@ public class SysPositionController {
 
 
     /**
-     * 获取职位用户列表
+     * Lấy danh sách người dùng chức vụ
      *
      * @param pageNo
      * @param pageSize
@@ -402,13 +402,13 @@ public class SysPositionController {
     public Result<IPage<SysUser>> getPositionUserList(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                                       @RequestParam(name = "positionId") String positionId) {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
-        // 返回成员手机号、邮箱，按成员管理权限控制
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
+        // Trả về số điện thoại, email của thành viên, kiểm soát theo quyền quản lý thành viên
         Integer tenantId = sysPositionService.checkPositionAuth("system:position:edit", true);
         if (tenantId != null && !sysPositionService.isPositionInTenant(positionId, tenantId)) {
-            return Result.error("只能查看当前租户职务的成员！");
+            return Result.error("Chỉ được xem thành viên giữ chức vụ thuộc tenant hiện tại!");
         }
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
 
         Page<SysUser> page = new Page<>(pageNo, pageSize);
         IPage<SysUser> pageList = userPositionService.getPositionUserList(page, positionId);
@@ -423,7 +423,7 @@ public class SysPositionController {
     }
 
     /**
-     * 添加成员到用户职位关系表
+     * Thêm thành viên vào bảng quan hệ người dùng-chức vụ
      *
      * @param userIds
      * @param positionId
@@ -432,24 +432,24 @@ public class SysPositionController {
     @PostMapping("/savePositionUser")
     public Result<String> saveUserPosition(@RequestParam(name = "userIds") String userIds,
                                            @RequestParam(name = "positionId") String positionId) {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         Integer tenantId = sysPositionService.checkPositionAuth("system:position:edit", true);
         if (tenantId != null) {
             if (!sysPositionService.isPositionInTenant(positionId, tenantId)) {
-                return Result.error("只能操作当前租户的职务！");
+                return Result.error("Chỉ được thao tác chức vụ của tenant hiện tại!");
             }
             List<String> tenantUserIds = userTenantService.getUserIdsByTenantId(tenantId);
             if (tenantUserIds == null || !tenantUserIds.containsAll(Arrays.asList(userIds.split(",")))) {
-                return Result.error("只能添加当前租户下的用户！");
+                return Result.error("Chỉ được thêm người dùng thuộc tenant hiện tại!");
             }
         }
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         userPositionService.saveUserPosition(userIds, positionId);
-        return Result.ok("添加成功");
+        return Result.ok("Thêm thành công");
     }
 
     /**
-     * 职位列表移除成员
+     * Danh sách chức vụ loại bỏ thành viên
      *
      * @param userIds
      * @param positionId
@@ -458,13 +458,13 @@ public class SysPositionController {
     @DeleteMapping("/removePositionUser")
     public Result<String> removeUserPosition(@RequestParam(name = "userIds") String userIds,
                                              @RequestParam(name = "positionId") String positionId) {
-        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-begin---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         Integer tenantId = sysPositionService.checkPositionAuth("system:position:edit", true);
         if (tenantId != null && !sysPositionService.isPositionInTenant(positionId, tenantId)) {
-            return Result.error("只能操作当前租户的职务！");
+            return Result.error("Chỉ được thao tác chức vụ của tenant hiện tại!");
         }
-        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】职务增删改、成员管理补充权限校验-----------
+        //update-end---author:wangshuai ---date:2026-10-26  for：【GHSA-p4f8-h832-99pw】Bổ sung kiểm tra quyền hạn khi thêm, xóa, sửa chức vụ và quản lý thành viên-----------
         userPositionService.removePositionUser(userIds, positionId);
-        return Result.OK("移除成员成功");
+        return Result.OK("Xóa thành viên thành công");
     }
 }

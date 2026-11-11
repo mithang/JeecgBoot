@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: 填值规则
+ * @Description: Quy tắc điền giá trị
  * @Author: jeecg-boot
  * @Date: 2019-11-07
  * @Version: V1.0
@@ -28,12 +28,12 @@ public class SysFillRuleServiceImpl extends ServiceImpl<SysFillRuleMapper, SysFi
     private static final String UNIQUE_RULE_CODE_INDEX = "uk_sfr_rule_code";
 
     /**
-     * 导入填值规则，并返回重复规则编码所在的Excel行号。
+     * Import quy tắc điền giá trị và trả về số dòng Excel nơi mã quy tắc bị trùng.
      *
-     * @param file 导入文件
-     * @param params 导入参数
-     * @return 导入结果
-     * @throws Exception 导入异常
+     * @param file Tệp nhập
+     * @param params Tham số nhập
+     * @return Kết quả nhập
+     * @throws Exception Ngoại lệ khi nhập
      * @author wangshuai
      * @since 2026-08-03 LHZP-1265
      */
@@ -47,23 +47,23 @@ public class SysFillRuleServiceImpl extends ServiceImpl<SysFillRuleMapper, SysFi
         int successLines = 0;
         for (int i = 0; i < fillRules.size(); i++) {
             SysFillRule fillRule = fillRules.get(i);
-            //update-begin---author:wangshuai---date:20260807---for:规则导入时审计字段使用当前用户和当前时间---
+            //update-begin---author:wangshuai---date:20260807---for:Khi nhập quy tắc, trường kiểm toán sử dụng người dùng hiện tại và thời gian hiện tại---
             resetImportAuditFields(fillRule);
-            //update-end---author:wangshuai---date:20260807---for:规则导入时审计字段使用当前用户和当前时间---
+            //update-end---author:wangshuai---date:20260807---for:Khi nhập quy tắc, trường kiểm toán sử dụng người dùng hiện tại và thời gian hiện tại---
             int excelRowNumber = params.getTitleRows() + params.getHeadRows() + i + 1;
             if (isRuleCodeExists(fillRule.getRuleCode())) {
-                errorMessages.add("Excel第" + excelRowNumber + "行：规则编码【" + fillRule.getRuleCode() + "】重复，忽略导入。");
+                errorMessages.add("Dòng Excel " + excelRowNumber + ": Mã quy tắc 【" + fillRule.getRuleCode() + "】Trùng lặp, bỏ qua nhập.");
                 continue;
             }
             try {
                 if (save(fillRule)) {
                     successLines++;
                 } else {
-                    errorMessages.add("Excel第" + excelRowNumber + "行：数据保存失败，忽略导入。");
+                    errorMessages.add("Dòng Excel " + excelRowNumber + ": lưu dữ liệu thất bại, bỏ qua khi nhập.");
                 }
             } catch (Exception e) {
                 if (isDuplicateRuleCodeException(e)) {
-                    errorMessages.add("Excel第" + excelRowNumber + "行：规则编码【" + fillRule.getRuleCode() + "】重复，忽略导入。");
+                    errorMessages.add("Dòng Excel " + excelRowNumber + ": Mã quy tắc 【" + fillRule.getRuleCode() + "】Trùng lặp, bỏ qua nhập.");
                 } else {
                     throw e;
                 }
@@ -73,7 +73,7 @@ public class SysFillRuleServiceImpl extends ServiceImpl<SysFillRuleMapper, SysFi
     }
 
     /**
-     * 清空 Excel 中的审计字段，由 MyBatis 插入拦截器按当前用户重新填充。
+     * Xóa các trường kiểm toán trong Excel, để interceptor chèn của MyBatis điền lại theo người dùng hiện tại.
      */
     private void resetImportAuditFields(SysFillRule fillRule) {
         fillRule.setCreateBy(null);
@@ -83,10 +83,10 @@ public class SysFillRuleServiceImpl extends ServiceImpl<SysFillRuleMapper, SysFi
     }
 
     /**
-     * 判断规则编码是否已经存在。
+     * Xác định mã quy tắc đã tồn tại hay chưa.
      *
-     * @param ruleCode 规则编码
-     * @return 是否存在
+     * @param ruleCode Mã quy tắc
+     * @return Có tồn tại không
      * @author wangshuai
      * @since 2026-08-03 LHZP-1265
      */
@@ -95,10 +95,10 @@ public class SysFillRuleServiceImpl extends ServiceImpl<SysFillRuleMapper, SysFi
     }
 
     /**
-     * 判断异常链中是否包含规则编码唯一索引冲突。
+     * Phán đoán xem chuỗi ngoại lệ có chứa xung đột chỉ mục duy nhất của mã quy tắc hay không.
      *
-     * @param exception 保存数据时的异常
-     * @return 是否为规则编码重复异常
+     * @param exception Ngoại lệ khi lưu dữ liệu
+     * @return Có phải ngoại lệ trùng lặp mã quy tắc hay không
      * @author wangshuai
      * @since 2026-08-03 LHZP-1265
      */

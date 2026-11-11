@@ -265,7 +265,7 @@
             });
           }
         }else{
-          if(res.message === '用户信息不存在'){
+          if(res.message === 'Thông tin người dùng không tồn tại'){
             let params = { password: values.regPassword,phone: values.mobile,smscode: values.sms, bindThirdAccount: false, thirdUserUuid: '', thirdType: '' }
             showType.value = 'email';
             setTimeout(()=>{

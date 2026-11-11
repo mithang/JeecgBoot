@@ -68,7 +68,7 @@ public class SysUserTenantServiceImpl extends ServiceImpl<SysUserTenantMapper, S
             return records;
         }
         for (SysUser sysUser:records) {
-            //查询租户id
+            //Truy vấn tenant id
             List<Integer> list = userTenantMapper.getTenantIdsByUserId(sysUser.getId());
             if(oConvertUtils.isNotEmpty(list)){
                 sysUser.setRelTenantIds(StringUtils.join(list.toArray(), SymbolConstant.COMMA));
@@ -92,11 +92,11 @@ public class SysUserTenantServiceImpl extends ServiceImpl<SysUserTenantMapper, S
     @Override
     public List<SysUserTenantVo> getTenantListByUserId(String userId, List<String> userTenantStatus) {
         List<SysUserTenantVo> tenantListByUserId = userTenantMapper.getTenantListByUserId(userId, userTenantStatus);
-        // 代码逻辑说明: 【QQYUN-7283】1.已经是会员的租户，不是管理员时，没有购买按钮---
+        // Giải thích logic mã: 【QQYUN-7283】1.Tenant đã là thành viên, khi không phải quản trị viên thì không có nút mua---
         String noVip = "default";
         tenantListByUserId.forEach((item) ->{
             if(oConvertUtils.isNotEmpty(item.getMemberType()) && !noVip.equals(item.getMemberType())){
-                //查询是不是管理员
+                //Truy vấn xem có phải quản trị viên không
                 Long count = packUserMapper.izHaveBuyAuth(item.getId(), Integer.valueOf(item.getTenantUserId()));
                 if(count!=0){
                     item.setTenantAdmin(true);
@@ -109,14 +109,14 @@ public class SysUserTenantServiceImpl extends ServiceImpl<SysUserTenantMapper, S
     @Override
     public void updateUserTenantStatus(String id, String tenantId, String userTenantStatus) {
         if (oConvertUtils.isEmpty(tenantId)) {
-            throw new JeecgBootException("租户数据为空");
+            throw new JeecgBootException("Dữ liệu tenant trống");
         }
         LambdaQueryWrapper<SysUserTenant> query = new LambdaQueryWrapper<>();
         query.eq(SysUserTenant::getUserId, id);
         query.eq(SysUserTenant::getTenantId, Integer.valueOf(tenantId));
         SysUserTenant userTenant = userTenantMapper.selectOne(query);
         if (null == userTenant) {
-            throw new JeecgBootException("租户数据为空");
+            throw new JeecgBootException("Dữ liệu tenant trống");
         }
         SysUserTenant tenant = new SysUserTenant();
         tenant.setStatus(userTenantStatus);
@@ -131,14 +131,14 @@ public class SysUserTenantServiceImpl extends ServiceImpl<SysUserTenantMapper, S
             Map<String, String> useDepNames = this.getDepNamesByUserIds(userIds);
             tenantPageList.forEach(item -> {
                 item.setOrgCodeTxt(useDepNames.get(item.getId()));
-                //查询用户的租户ids
+                //Truy vấn các tenant của người dùng ids
                 List<Integer> list = userTenantMapper.getTenantIdsNoStatus(item.getId());
                 if (oConvertUtils.isNotEmpty(list)) {
                     item.setRelTenantIds(StringUtils.join(list.toArray(), SymbolConstant.COMMA));
                 } else {
                     item.setRelTenantIds("");
                 }
-                //查询用户职位，将租户id传到前台
+                //Truy vấn chức vụ của người dùng, truyền tenant id về frontend
                 List<String> positionList = userPositionMapper.getPositionIdByUserId(item.getId());
                 item.setPost(CommonUtils.getSplitText(positionList,SymbolConstant.COMMA));
             });
@@ -147,7 +147,7 @@ public class SysUserTenantServiceImpl extends ServiceImpl<SysUserTenantMapper, S
     }
 
     /**
-     * 根据用户id获取部门名称
+     * Lấy tên phòng ban theo ID người dùng
      *
      * @param userIds
      * @return

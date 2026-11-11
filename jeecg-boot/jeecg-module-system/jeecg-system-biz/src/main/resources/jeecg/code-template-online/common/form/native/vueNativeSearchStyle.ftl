@@ -1,4 +1,4 @@
-  <#-- 原生查询区域样式 -->
+  <#-- Kiểu vùng truy vấn gốc -->
   .jeecg-basic-table-form-container {
     padding: 0;
     .table-page-search-submitButtons {

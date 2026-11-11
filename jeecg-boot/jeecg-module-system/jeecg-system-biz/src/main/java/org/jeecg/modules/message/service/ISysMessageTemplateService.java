@@ -9,7 +9,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @Description: 消息模板
+ * @Description: Mẫu tin nhắn
  * @Author: jeecg-boot
  * @Date:  2019-04-09
  * @Version: V1.0
@@ -17,19 +17,19 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ISysMessageTemplateService extends JeecgService<SysMessageTemplate> {
 
     /**
-     * 通过模板CODE查询消息模板
-     * @param code 模板CODE
+     * Truy vấn mẫu tin nhắn qua CODE mẫu
+     * @param code Mẫu CODE
      * @return
      */
     List<SysMessageTemplate> selectByCode(String code);
 
 	/**
-	 * 导入消息模板并校验模板编码。
+	 * Nhập mẫu tin nhắn và kiểm tra mã mẫu.
 	 *
-	 * @param file 导入文件
-	 * @param params 导入参数
-	 * @return 导入结果
-	 * @throws Exception 导入异常
+	 * @param file Tệp nhập
+	 * @param params Tham số nhập
+	 * @return Kết quả nhập
+	 * @throws Exception Ngoại lệ khi nhập
 	 */
 	Result<?> importExcelCheckTemplateCode(MultipartFile file, ImportParams params) throws Exception;
 }

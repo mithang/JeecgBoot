@@ -6,12 +6,12 @@
 //import java.util.Map;
 //
 ///**
-// * @Description: NgAlainService接口
+// * @Description: NgAlainService API
 // * @author: jeecg-boot
 // */
 //public interface NgAlainService {
 //    /**
-//     * 菜单
+//     * Menu
 //     * @param id
 //     * @return JSONArray
 //     * @throws Exception
@@ -19,7 +19,7 @@
 //    public JSONArray getMenu(String id) throws Exception;
 //
 //    /**
-//     * jeecg菜单
+//     * jeecg Menu
 //     * @param id
 //     * @return JSONArray
 //     * @throws Exception
@@ -27,7 +27,7 @@
 //    public JSONArray getJeecgMenu(String id) throws Exception;
 //
 //    /**
-//     * 获取字典值
+//     * Lấy giá trị danh mục
 //     * @param table
 //     * @param key
 //     * @param value

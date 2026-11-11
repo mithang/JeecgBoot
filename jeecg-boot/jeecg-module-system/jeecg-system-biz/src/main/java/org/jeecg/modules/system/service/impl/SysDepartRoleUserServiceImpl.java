@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 部门角色人员信息
+ * @Description: Thông tin nhân viên vai trò phòng ban
  * @Author: jeecg-boot
  * @Date:   2020-02-13
  * @Version: V1.0
@@ -50,9 +50,9 @@ public class SysDepartRoleUserServiceImpl extends ServiceImpl<SysDepartRoleUserM
                 this.remove(new QueryWrapper<SysDepartRoleUser>().lambda().eq(SysDepartRoleUser::getUserId, userId).eq(SysDepartRoleUser::getDroleId, roleId));
             }
         }
-        //update-begin---author:scott ---date:20261029  for：【LHZP-1129】部门角色授权后清理相关用户Shiro权限缓存，无需重新登录即生效-----------
+        //update-begin---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò phòng ban, dọn cache quyền Shiro của người dùng liên quan, có hiệu lực ngay mà không cần đăng nhập lại-----------
         ShiroAuthCacheUtil.clearUserAuthCache(redisUtil, Collections.singletonList(userId));
-        //update-end---author:scott ---date:20261029  for：【LHZP-1129】部门角色授权后清理相关用户Shiro权限缓存，无需重新登录即生效-----------
+        //update-end---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò phòng ban, dọn cache quyền Shiro của người dùng liên quan, có hiệu lực ngay mà không cần đăng nhập lại-----------
     }
 
     @Override
@@ -67,16 +67,16 @@ public class SysDepartRoleUserServiceImpl extends ServiceImpl<SysDepartRoleUserM
                 this.remove(query);
             }
         }
-        //update-begin---author:scott ---date:20261029  for：【LHZP-1129】部门角色授权后清理相关用户Shiro权限缓存，无需重新登录即生效-----------
+        //update-begin---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò phòng ban, dọn cache quyền Shiro của người dùng liên quan, có hiệu lực ngay mà không cần đăng nhập lại-----------
         ShiroAuthCacheUtil.clearUserAuthCache(redisUtil, userIds);
-        //update-end---author:scott ---date:20261029  for：【LHZP-1129】部门角色授权后清理相关用户Shiro权限缓存，无需重新登录即生效-----------
+        //update-end---author:scott ---date:20261029  for：【LHZP-1129] Sau khi ủy quyền vai trò phòng ban, dọn cache quyền Shiro của người dùng liên quan, có hiệu lực ngay mà không cần đăng nhập lại-----------
     }
 
     /**
-     * 清理部门角色下所有用户的Shiro权限缓存
-     * @param roleId 部门角色id
+     * Dọn dẹp cache quyền Shiro của tất cả người dùng thuộc vai trò phòng ban
+     * @param roleId Vai trò phòng ban id
      * @author scott
-     * @since 2026-10-29 【LHZP-1129】部门角色授权后清理相关用户权限缓存，无需重新登录即生效
+     * @since 2026-10-29 【LHZP-1129] Sau khi phân quyền vai trò phòng ban, xóa bộ nhớ đệm quyền hạn của người dùng liên quan, có hiệu lực mà không cần đăng nhập lại
      */
     @Override
     public void clearDeptRoleUserAuthCache(String roleId) {
@@ -88,7 +88,7 @@ public class SysDepartRoleUserServiceImpl extends ServiceImpl<SysDepartRoleUserM
     }
 
     /**
-     * 从diff中找出main中没有的元素
+     * Tìm các phần tử có trong diff nhưng không có trong main
      * @param main
      * @param diff
      * @return

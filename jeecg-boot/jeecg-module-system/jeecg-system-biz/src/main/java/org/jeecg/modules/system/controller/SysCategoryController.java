@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.util.*;
 
  /**
- * @Description: 分类字典
+ * @Description: Danh mục phân loại
  * @Author: jeecg-boot
  * @Date:   2019-05-29
  * @Version: V1.0
@@ -53,12 +53,12 @@ public class SysCategoryController {
 	private ISysCategoryService sysCategoryService;
 
      /**
-      * 分类编码0
+      * Mã phân loại 0
       */
      private static final String CATEGORY_ROOT_CODE = "0";
 
 	/**
-	  * 分页列表查询
+	  * Truy vấn danh sách phân trang
 	 * @param sysCategory
 	 * @param pageNo
 	 * @param pageSize
@@ -72,31 +72,31 @@ public class SysCategoryController {
 									  HttpServletRequest req) {
 		Result<IPage<SysCategory>> result = new Result<IPage<SysCategory>>();
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			sysCategory.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(),0));
 		}
 		//------------------------------------------------------------------------------------------------
 		
-		//--author:os_chengtgen---date:20190804 -----for: 分类字典页面显示错误,issues:377--------start
-		//--author:liusq---date:20211119 -----for: 【vue3】分类字典页面查询条件配置--------start
+		//--author:os_chengtgen---date:20190804 -----for: Trang danh mục phân loại hiển thị lỗi,issues:377--------start
+		//--author:liusq---date:20211119 -----for: Cấu hình điều kiện truy vấn trang danh mục phân loại--------start
 		String name = sysCategory.getName();
 		String code = sysCategory.getCode();
-		// 代码逻辑说明: pid 不能提前设置到查询实体上，否则会被 QueryGenerator 自动拼成 pid 查询条件，
-		// 导致按名称/编码查询时只能查到根节点，查不出子级数据
+		// Giải thích logic mã: pid Không được đặt trước vào entity truy vấn, nếu không sẽ bị QueryGenerator tự động ghép thành điều kiện truy vấn pid,
+		// Dẫn đến khi tìm kiếm theo tên/Khi truy vấn theo mã chỉ tra được nút gốc, không tra được dữ liệu cấp dưới
 		String pid = sysCategory.getPid();
 		sysCategory.setPid(null);
 		QueryWrapper<SysCategory> queryWrapper = QueryGenerator.initQueryWrapper(sysCategory, req.getParameterMap());
 		//QueryWrapper<SysCategory> queryWrapper = new QueryWrapper<SysCategory>();
 		if(StringUtils.isBlank(name)&&StringUtils.isBlank(code)){
-			//无查询条件时按层级加载，默认加载根节点
+			//Khi không có điều kiện truy vấn thì tải theo cấp, mặc định tải nút gốc
 			queryWrapper.eq("pid", oConvertUtils.isEmpty(pid)?"0":pid);
 		}else if(oConvertUtils.isNotEmpty(pid)){
-			//有查询条件时不限制层级，除非调用方明确指定了 pid
+			//Khi có điều kiện truy vấn thì không giới hạn cấp, trừ khi phía gọi đã chỉ định rõ pid
 			queryWrapper.eq("pid", pid);
 		}
-		//--author:liusq---date:20211119 -----for: 分类字典页面查询条件配置--------end
-		//--author:os_chengtgen---date:20190804 -----for:【vue3】 分类字典页面显示错误,issues:377--------end
+		//--author:liusq---date:20211119 -----for: Cấu hình điều kiện truy vấn trang danh mục phân loại--------end
+		//--author:os_chengtgen---date:20190804 -----for:Trang danh mục phân loại hiển thị lỗi,issues:377--------end
 
 		Page<SysCategory> page = new Page<SysCategory>(pageNo, pageSize);
 		IPage<SysCategory> pageList = sysCategoryService.page(page, queryWrapper);
@@ -108,7 +108,7 @@ public class SysCategoryController {
 	@GetMapping(value = "/childList")
 	public Result<List<SysCategory>> queryPageList(SysCategory sysCategory,HttpServletRequest req) {
 		//------------------------------------------------------------------------------------------------
-		//是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+		//Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 		if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 			sysCategory.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
 		}
@@ -123,7 +123,7 @@ public class SysCategoryController {
 	
 	
 	/**
-	  *   添加
+	  *   Thêm
 	 * @param sysCategory
 	 * @return
 	 */
@@ -133,16 +133,16 @@ public class SysCategoryController {
 		Result<SysCategory> result = new Result<SysCategory>();
 		try {
 			sysCategoryService.addSysCategory(sysCategory);
-			result.success("添加成功！");
+			result.success("Thêm thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 	
 	/**
-	  *  编辑
+	  *  Chỉnh sửa
 	 * @param sysCategory
 	 * @return
 	 */
@@ -152,16 +152,16 @@ public class SysCategoryController {
 		Result<SysCategory> result = new Result<SysCategory>();
 		SysCategory sysCategoryEntity = sysCategoryService.getById(sysCategory.getId());
 		if(sysCategoryEntity==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			sysCategoryService.updateSysCategory(sysCategory);
-			result.success("修改成功!");
+			result.success("Chỉnh sửa thành công!");
 		}
 		return result;
 	}
 	
 	/**
-	  *   通过id删除
+	  *   Xóa theo id
 	 * @param id
 	 * @return
 	 */
@@ -171,17 +171,17 @@ public class SysCategoryController {
 		Result<SysCategory> result = new Result<SysCategory>();
 		SysCategory sysCategory = sysCategoryService.getById(id);
 		if(sysCategory==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			this.sysCategoryService.deleteSysCategory(id);
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		
 		return result;
 	}
 	
 	/**
-	  *  批量删除
+	  *  Xóa hàng loạt
 	 * @param ids
 	 * @return
 	 */
@@ -190,16 +190,16 @@ public class SysCategoryController {
 	public Result<SysCategory> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<SysCategory> result = new Result<SysCategory>();
 		if(ids==null || "".equals(ids.trim())) {
-			result.error500("参数不识别！");
+			result.error500("Không nhận dạng được tham số!");
 		}else {
 			this.sysCategoryService.deleteSysCategory(ids);
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		return result;
 	}
 	
 	/**
-	  * 通过id查询
+	  * Tìm kiếm theo id
 	 * @param id
 	 * @return
 	 */
@@ -208,7 +208,7 @@ public class SysCategoryController {
 		Result<SysCategory> result = new Result<SysCategory>();
 		SysCategory sysCategory = sysCategoryService.getById(id);
 		if(sysCategory==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			result.setResult(sysCategory);
 			result.setSuccess(true);
@@ -217,7 +217,7 @@ public class SysCategoryController {
 	}
 
   /**
-      * 导出excel
+      * Xuất excel
    *
    * @param request
    */
@@ -225,20 +225,20 @@ public class SysCategoryController {
   @RequestMapping(value = "/exportXls")
   public ModelAndView exportXls(HttpServletRequest request, SysCategory sysCategory) {
 	  //------------------------------------------------------------------------------------------------
-	  //是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】
+	  //Có bật cách ly dữ liệu đa thuê bao của module quản lý hệ thống hay không [Chế độ đa thuê bao SAAS]
 	  if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 		  sysCategory.setTenantId(oConvertUtils.getInt(TenantContext.getTenant(), 0));
 	  }
 	  //------------------------------------------------------------------------------------------------
 	  
-      // Step.1 组装查询条件查询数据
+      // Step.1 Ghép điều kiện truy vấn để truy vấn dữ liệu
       QueryWrapper<SysCategory> queryWrapper = QueryGenerator.initQueryWrapper(sysCategory, request.getParameterMap());
       List<SysCategory> pageList = sysCategoryService.list(queryWrapper);
-      // Step.2 AutoPoi 导出Excel
+      // Step.2 AutoPoi Xuất Excel
       ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-      // 过滤选中数据
+      // Lọc dữ liệu đã chọn
       String selections = request.getParameter("selections");
-      //update-begin---author:scott ---date:20260727  for：【LHZP-1208】分类字典导出包含子级并按层级排序-----------
+      //update-begin---author:scott ---date:20260727  for：【LHZP-1208】Xuất danh mục phân loại bao gồm cả cấp con và sắp xếp theo cấp bậc-----------
       if(oConvertUtils.isEmpty(selections)) {
     	  mv.addObject(NormalExcelConstants.DATA_LIST, sysCategoryService.sortByHierarchy(pageList));
       }else {
@@ -246,14 +246,14 @@ public class SysCategoryController {
     	  List<SysCategory> exportList = sysCategoryService.filterSelectionWithChildren(pageList, selectionList);
     	  mv.addObject(NormalExcelConstants.DATA_LIST, exportList);
       }
-      //update-end---author:scott ---date:20260727  for：【LHZP-1208】分类字典导出包含子级并按层级排序-----------
-      //导出文件名称
-      mv.addObject(NormalExcelConstants.FILE_NAME, "分类字典列表");
+      //update-end---author:scott ---date:20260727  for：【LHZP-1208】Xuất danh mục phân loại bao gồm cả cấp con và sắp xếp theo cấp bậc-----------
+      //Tên file xuất
+      mv.addObject(NormalExcelConstants.FILE_NAME, "Danh sách danh mục phân loại");
       mv.addObject(NormalExcelConstants.CLASS, SysCategory.class);
       LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-      //导出支持xlsx
-      mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("分类字典列表数据", "导出人:"+user.getRealname(), "导出信息", ExcelType.XSSF));
-      //分类字典导出支持导出字段
+      //Xuất hỗ trợ xlsx
+      mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("Dữ liệu danh sách danh mục phân loại", "Người xuất:"+user.getRealname(), "Thông tin xuất", ExcelType.XSSF));
+      //Xuất danh mục phân loại hỗ trợ trường xuất
       String exportFields = request.getParameter(NormalExcelConstants.EXPORT_FIELDS);
       if(oConvertUtils.isNotEmpty(exportFields)){
           mv.addObject(NormalExcelConstants.EXPORT_FIELDS, exportFields);
@@ -262,7 +262,7 @@ public class SysCategoryController {
   }
 
   /**
-      * 通过excel导入数据
+      * Nhập dữ liệu qua Excel
    *
    * @param request
    * @param response
@@ -273,11 +273,11 @@ public class SysCategoryController {
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) throws IOException{
       MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
       Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-	  // 错误信息
+	  // Thông tin lỗi
 	  List<String> errorMessage = new ArrayList<>();
 	  int successLines = 0, errorLines = 0;
 	  for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-          // 获取上传文件对象
+          // Lấy đối tượng tệp tải lên
           MultipartFile file = entity.getValue();
           ImportParams params = new ImportParams();
           params.setTitleRows(2);
@@ -285,11 +285,11 @@ public class SysCategoryController {
           params.setNeedSave(true);
           try {
               List<SysCategory> listSysCategorys = ExcelImportUtil.importExcel(file.getInputStream(), SysCategory.class, params);
-			  // 代码逻辑说明: [issues/8612]分类字典导入bug #8612 ------------
+			  // Giải thích logic mã: [issues/8612]Nhập danh mục phân loại bug #8612 ------------
 			  Set<String> parentCategoryIds = new HashSet<>();
-			 //按照编码长度排序
+			 //Sắp xếp theo độ dài mã
               Collections.sort(listSysCategorys);
-			  log.info("排序后的list====>",listSysCategorys);
+			  log.info("đã sắp xếp list====>",listSysCategorys);
               for (int i = 0; i < listSysCategorys.size(); i++) {
 				  SysCategory sysCategoryExcel = listSysCategorys.get(i);
 				  String code = sysCategoryExcel.getCode();
@@ -312,16 +312,16 @@ public class SysCategoryController {
 					  errorLines++;
 					  String message = e.getMessage().toLowerCase();
 					  int lineNumber = i + 1;
-					  // 通过索引名判断出错信息
+					  // Xác định thông tin lỗi qua tên chỉ mục
 					  if (message.contains(CommonConstant.SQL_INDEX_UNIQ_CATEGORY_CODE)) {
-						  errorMessage.add("第 " + lineNumber + " 行：分类编码已经存在，忽略导入。");
+						  errorMessage.add(" " + lineNumber + " Dòng: Mã phân loại đã tồn tại, bỏ qua nhập.");
 					  }  else {
-						  errorMessage.add("第 " + lineNumber + " 行：未知错误，忽略导入");
+						  errorMessage.add(" " + lineNumber + " Dòng: Lỗi không xác định, bỏ qua việc nhập");
 						  log.error(e.getMessage(), e);
 					  }
 				  }
               }
-			  // 代码逻辑说明: [issues/8612]分类字典导入bug #8612 ------------
+			  // Giải thích logic mã: [issues/8612]Nhập danh mục phân loại bug #8612 ------------
 			  if(oConvertUtils.isObjectNotEmpty(parentCategoryIds)){
 				  for (String parentCategoryId : parentCategoryIds) {
 					  SysCategory parentCategory = sysCategoryService.getById(parentCategoryId);
@@ -332,7 +332,7 @@ public class SysCategoryController {
 				  }
 			  }
           } catch (Exception e) {
-			  errorMessage.add("发生异常：" + e.getMessage());
+			  errorMessage.add("Đã xảy ra ngoại lệ:" + e.getMessage());
 			  log.error(e.getMessage(), e);
           } finally {
               try {
@@ -348,25 +348,25 @@ public class SysCategoryController {
   
   
   /**
-     * 加载单个数据 用于回显
+     * Tải một bản ghi dữ liệu để hiển thị lại
    */
     @RequestMapping(value = "/loadOne", method = RequestMethod.GET)
  	public Result<SysCategory> loadOne(@RequestParam(name="field") String field,@RequestParam(name="val") String val) {
  		Result<SysCategory> result = new Result<SysCategory>();
  		try {
-			// 代码逻辑说明: issues/3663 sql注入问题
+			// Giải thích logic mã: issues/3663 sql Vấn đề injection
 			boolean isClassField = ReflectHelper.isClassField(field, SysCategory.class);
 			if (!isClassField) {
-				return Result.error("字段无效，请检查!");
+				return Result.error("Trường không hợp lệ, vui lòng kiểm tra!");
 			}
  			QueryWrapper<SysCategory> query = new QueryWrapper<SysCategory>();
  			query.eq(field, val);
  			List<SysCategory> ls = this.sysCategoryService.list(query);
  			if(ls==null || ls.size()==0) {
- 				result.setMessage("查询无果");
+ 				result.setMessage("Tìm kiếm không có kết quả");
  	 			result.setSuccess(false);
  			}else if(ls.size()>1) {
- 				result.setMessage("查询数据异常,["+field+"]存在多个值:"+val);
+ 				result.setMessage("Truy vấn dữ liệu bất thường,["+field+"]tồn tại nhiều giá trị:"+val);
  	 			result.setSuccess(false);
  			}else {
  				result.setSuccess(true);
@@ -381,7 +381,7 @@ public class SysCategoryController {
  	}
    
     /**
-          * 加载节点的子数据
+          * Tải dữ liệu con của nút
      */
     @RequestMapping(value = "/loadTreeChildren", method = RequestMethod.GET)
 	public Result<List<TreeSelectModel>> loadTreeChildren(@RequestParam(name="pid") String pid) {
@@ -399,7 +399,7 @@ public class SysCategoryController {
 	}
     
     /**
-         * 加载一级节点/如果是同步 则所有数据
+         * Tải nút cấp một/Nếu đồng bộ thì tất cả dữ liệu
      */
     @RequestMapping(value = "/loadTreeRoot", method = RequestMethod.GET)
    	public Result<List<TreeSelectModel>> loadTreeRoot(@RequestParam(name="async") Boolean async,@RequestParam(name="pcode") String pcode) {
@@ -420,7 +420,7 @@ public class SysCategoryController {
    	}
   
     /**
-         * 递归求子节点 同步加载用到
+         * Đệ quy tìm nút con, dùng khi tải đồng bộ
      */
   	private void loadAllCategoryChildren(List<TreeSelectModel> ls) {
   		for (TreeSelectModel tsm : ls) {
@@ -433,7 +433,7 @@ public class SysCategoryController {
   	}
 
 	 /**
-	  * 校验编码
+	  * Kiểm tra mã
 	  * @param pid
 	  * @param code
 	  * @return
@@ -441,7 +441,7 @@ public class SysCategoryController {
 	 @GetMapping(value = "/checkCode")
 	 public Result<?> checkCode(@RequestParam(name="pid",required = false) String pid,@RequestParam(name="code",required = false) String code) {
 		if(oConvertUtils.isEmpty(code)){
-			return Result.error("错误,类型编码为空!");
+			return Result.error("Lỗi,mã loại trống!");
 		}
 		if(oConvertUtils.isEmpty(pid)){
 			return Result.ok();
@@ -450,14 +450,14 @@ public class SysCategoryController {
 		if(code.startsWith(parent.getCode())){
 			return Result.ok();
 		}else{
-			return Result.error("编码不符合规范,须以\""+parent.getCode()+"\"开头!");
+			return Result.error("Mã không đúng quy chuẩn,phải bắt đầu bằng\""+parent.getCode()+"\"Đầu!");
 		}
 
 	 }
 
 
 	 /**
-	  * 分类字典树控件 加载节点
+	  * Control cây danh mục phân loại, tải nút
 	  * @param pid
 	  * @param pcode
 	  * @param condition
@@ -466,11 +466,11 @@ public class SysCategoryController {
 	 @RequestMapping(value = "/loadTreeData", method = RequestMethod.GET)
 	 public Result<List<TreeSelectModel>> loadDict(@RequestParam(name="pid",required = false) String pid,@RequestParam(name="pcode",required = false) String pcode, @RequestParam(name="condition",required = false) String condition) {
 		 Result<List<TreeSelectModel>> result = new Result<List<TreeSelectModel>>();
-		 //pid如果传值了 就忽略pcode的作用
+		 //pid Nếu đã truyền giá trị thì bỏ qua tác dụng của pcode
 		 if(oConvertUtils.isEmpty(pid)){
 		 	if(oConvertUtils.isEmpty(pcode)){
 				result.setSuccess(false);
-				result.setMessage("加载分类字典树参数有误.[null]!");
+				result.setMessage("Tham số tải cây danh mục phân loại không đúng.[null]!");
 				return result;
 			}else{
 		 		if(ISysCategoryService.ROOT_PID_VALUE.equals(pcode)){
@@ -480,7 +480,7 @@ public class SysCategoryController {
 				}
 				if(oConvertUtils.isEmpty(pid)){
 					result.setSuccess(false);
-					result.setMessage("加载分类字典树参数有误.[code]!");
+					result.setMessage("Tham số tải cây danh mục phân loại không đúng.[code]!");
 					return result;
 				}
 			}
@@ -496,22 +496,22 @@ public class SysCategoryController {
 	 }
 
 	 /**
-	  * 分类字典控件数据回显[表单页面]
+	  * Hiển thị lại dữ liệu điều khiển danh mục phân loại[Trang biểu mẫu]
 	  *
 	  * @param ids
-	  * @param delNotExist 是否移除不存在的项，默认为true，设为false如果某个key不存在数据库中，则直接返回key本身
+	  * @param delNotExist Có gỡ bỏ các mục không tồn tại hay không, mặc định là true; đặt thành false thì nếu một key nào đó không tồn tại trong cơ sở dữ liệu sẽ trả về trực tiếp chính key đó
 	  * @return
 	  */
 	 @RequestMapping(value = "/loadDictItem", method = RequestMethod.GET)
 	 public Result<List<String>> loadDictItem(@RequestParam(name = "ids") String ids, @RequestParam(name = "delNotExist", required = false, defaultValue = "true") boolean delNotExist) {
 		 Result<List<String>> result = new Result<>();
-		 // 非空判断
+		 // Kiểm tra khác rỗng
 		 if (StringUtils.isBlank(ids)) {
 			 result.setSuccess(false);
-			 result.setMessage("ids 不能为空");
+			 result.setMessage("ids Không được trống");
 			 return result;
 		 }
-		 // 查询数据
+		 // Truy vấn dữ liệu
 		 List<String> textList = sysCategoryService.loadDictItem(ids, delNotExist);
 		 result.setSuccess(true);
 		 result.setResult(textList);
@@ -519,7 +519,7 @@ public class SysCategoryController {
 	 }
 
 	 /**
-	  * [列表页面]加载分类字典数据 用于值的替换
+	  * [Trang danh sách]Tải dữ liệu danh mục phân loại để thay thế giá trị
 	  * @param code
 	  * @return
 	  */
@@ -532,7 +532,7 @@ public class SysCategoryController {
 		 }
 		 List<SysCategory> list = this.sysCategoryService.list(query);
 		 if(list==null || list.size()==0) {
-			 result.setMessage("无数据,参数有误.[code]");
+			 result.setMessage("Không có dữ liệu,Tham số không đúng.[code]");
 			 result.setSuccess(false);
 			 return result;
 		 }
@@ -546,7 +546,7 @@ public class SysCategoryController {
 	 }
 
 	 /**
-	  * 根据父级id批量查询子节点
+	  * Truy vấn hàng loạt nút con theo id cấp cha
 	  * @param parentIds
 	  * @return
 	  */
@@ -562,7 +562,7 @@ public class SysCategoryController {
 			 return Result.OK(pageList);
 		 } catch (Exception e) {
 			 log.error(e.getMessage(), e);
-			 return Result.error("批量查询子节点失败：" + e.getMessage());
+			 return Result.error("Truy vấn hàng loạt nút con thất bại:" + e.getMessage());
 		 }
 	 }
 

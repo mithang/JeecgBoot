@@ -15,7 +15,7 @@ public class OpenApiPermissionController extends JeecgController<OpenApiPermissi
     @PostMapping("add")
     public Result add(@RequestBody OpenApiPermission openApiPermission) {
         service.add(openApiPermission);
-        return Result.ok("保存成功");
+        return Result.ok("Lưu thành công");
     }
     @RequiresPermissions("openapi:open_api_permission:getOpenApi")
     @GetMapping("/getOpenApi")

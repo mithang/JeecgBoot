@@ -63,7 +63,7 @@
             <#assign switch_extend_arr2=a>
         </#if>
     </#list>
-    @Excel(name = "${po.filedComment}", width = 15,replace = {"是_${switch_extend_arr1}","否_${switch_extend_arr2}"} )
+    @Excel(name = "${po.filedComment}", width = 15,replace = {"Có_${switch_extend_arr1}","Không_${switch_extend_arr2}"} )
     @Schema(description = "${po.filedComment}")
     private ${po.fieldType} ${po.fieldName};
 <#elseif po.classType=='pca'>

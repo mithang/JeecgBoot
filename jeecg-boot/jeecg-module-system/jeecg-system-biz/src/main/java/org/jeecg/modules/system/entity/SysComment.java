@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description: 系统评论回复表
+ * @Description: Bảng trả lời bình luận hệ thống
  * @Author: jeecg-boot
  * @Date:   2022-07-19
  * @Version: V1.0
@@ -27,7 +27,7 @@ import java.util.Date;
 @TableName("sys_comment")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="系统评论回复表")
+@Schema(description="Bảng trả lời bình luận hệ thống")
 public class SysComment implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -35,52 +35,52 @@ public class SysComment implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "id")
     private String id;
-	/**表名*/
-	@Excel(name = "表名", width = 15)
-    @Schema(description = "表名")
+	/**Tên bảng*/
+	@Excel(name = "Tên bảng", width = 15)
+    @Schema(description = "Tên bảng")
     private String tableName;
-	/**数据id*/
-	@Excel(name = "数据id", width = 15)
-    @Schema(description = "数据id")
+	/**Dữ liệu id*/
+	@Excel(name = "Dữ liệu id", width = 15)
+    @Schema(description = "Dữ liệu id")
     private String tableDataId;
-	/**来源用户id*/
-	@Excel(name = "来源用户id", width = 15)
-    @Schema(description = "来源用户id")
+	/**Người dùng nguồn id*/
+	@Excel(name = "Người dùng nguồn id", width = 15)
+    @Schema(description = "Người dùng nguồn id")
     @Dict(dictTable = "sys_user", dicCode = "id", dicText = "realname")
     private String fromUserId;
-	/**发送给用户id(允许为空)*/
-	@Excel(name = "发送给用户id(允许为空)", width = 15)
-    @Schema(description = "发送给用户id(允许为空)")
+	/**Gửi cho người dùng id(Cho phép để trống)*/
+	@Excel(name = "Gửi cho người dùng id(Cho phép để trống)", width = 15)
+    @Schema(description = "Gửi cho người dùng id(Cho phép để trống)")
     @Dict(dictTable = "sys_user", dicCode = "id", dicText = "realname")
     private String toUserId;
-	/**评论id(允许为空，不为空时，则为回复)*/
-	@Excel(name = "评论id(允许为空，不为空时，则为回复)", width = 15)
-    @Schema(description = "评论id(允许为空，不为空时，则为回复)")
+	/**Bình luận id(Cho phép trống, khi không trống thì là trả lời)*/
+	@Excel(name = "Bình luận id(Cho phép trống, khi không trống thì là trả lời)", width = 15)
+    @Schema(description = "Bình luận id(Cho phép trống, khi không trống thì là trả lời)")
     @Dict(dictTable = "sys_comment", dicCode = "id", dicText = "comment_content")
     private String commentId;
-	/**回复内容*/
-	@Excel(name = "回复内容", width = 15)
-    @Schema(description = "回复内容")
+	/**Nội dung trả lời*/
+	@Excel(name = "Nội dung trả lời", width = 15)
+    @Schema(description = "Nội dung trả lời")
     private String commentContent;
-	/**创建人*/
-    @Schema(description = "创建人")
+	/**Người tạo*/
+    @Schema(description = "Người tạo")
     private String createBy;
-	/**创建日期*/
+	/**Ngày tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private Date createTime;
-	/**更新人*/
-    @Schema(description = "更新人")
+	/**Người cập nhật*/
+    @Schema(description = "Người cập nhật")
     private String updateBy;
-	/**更新日期*/
+	/**Ngày cập nhật*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private Date updateTime;
 
     /**
-     * 不是数据库字段，用于评论跳转
+     * Không phải trường cơ sở dữ liệu, dùng để chuyển đến bình luận
      */
     @TableField(exist = false)
     private String tableId;

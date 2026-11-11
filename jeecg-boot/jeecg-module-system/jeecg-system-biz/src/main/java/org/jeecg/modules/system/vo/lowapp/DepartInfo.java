@@ -14,12 +14,12 @@ public class DepartInfo {
     private String id;
 
     /**
-     * 上级名称-下级名称
+     * Tên cấp trên-Tên cấp dưới
      */
     private List<String> orgName;
 
     /**
-     * 上级ID-下级ID
+     * Cấp trên ID-Cấp dưới ID
      */
     private List<String> orgId;
 
