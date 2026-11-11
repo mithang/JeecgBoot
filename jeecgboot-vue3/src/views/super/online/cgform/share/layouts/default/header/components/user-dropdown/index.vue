@@ -83,23 +83,23 @@ export default defineComponent({
       userStore.confirmLoginOut();
     }
 
-    // 清除缓存
+    // Xóa bộ nhớ đệm
     async function clearCache() {
       const result = await refreshCache();
       if (result.success) {
         const res = await queryAllDictItems();
         removeAuthCache(DB_DICT_DATA_KEY);
         setAuthCache(DB_DICT_DATA_KEY, res.result);
-        // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
+        // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】Quốc tế hóa
         createMessage.success(t('layout.header.refreshCacheComplete'));
-        // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
-        // update-begin--author:wangshuai---date:20241112---for：【issues/7433】vue3 数据字典优化建议
+        // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】Quốc tế hóa
+        // update-begin--author:wangshuai---date:20241112---for：【issues/7433】vue3 Đề xuất tối ưu từ điển dữ liệu
         userStore.setAllDictItems(res.result);
-        // update-end--author:wangshuai---date:20241112---for：【issues/7433】vue3 数据字典优化建议
+        // update-end--author:wangshuai---date:20241112---for：【issues/7433】vue3 Đề xuất tối ưu từ điển dữ liệu
       } else {
-        // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
+        // update-begin--author:liaozhiyang---date:20240124---for：【QQYUN-7970】Quốc tế hóa
         createMessage.error(t('layout.header.refreshCacheFailure'));
-        // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】国际化
+        // update-end--author:liaozhiyang---date:20240124---for：【QQYUN-7970】Quốc tế hóa
       }
     }
 
@@ -172,9 +172,9 @@ export default defineComponent({
   }
 
   &-dropdown-overlay {
-    // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7512】顶部账号划过首次弹出时位置会变更一下
+    // update-begin--author:liaozhiyang---date:20231226---for：【QQYUN-7512】Tài khoản ở phía trên cùng, khi di chuột qua và bật lên lần đầu, vị trí sẽ thay đổi một chút
     width: 160px;
-    // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7512】顶部账号划过首次弹出时位置会变更一下
+    // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7512】Tài khoản ở phía trên cùng, khi di chuột qua và bật lên lần đầu, vị trí sẽ thay đổi một chút
     .ant-dropdown-menu-item {
       min-width: 160px;
     }

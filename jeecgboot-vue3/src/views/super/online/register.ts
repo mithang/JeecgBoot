@@ -4,32 +4,32 @@ import {registerCgformRouter} from "./cgform/router/cgformRouter";
 import {registerCgreportRouter} from "./cgreport/router/cgreportRouter";
 import {registerGraphreportRouter} from "./graphreport/router/graphreportRouter";
 
-/** 注册 online */
+/** Đăng ký online */
 export async function register(app: App) {
 
-  // 注册Online弹窗
+  // Đăng kýOnlinePopup
   const OnlineAutoModalAsync = createAsyncComponent(() => import('./cgform/auto/default/OnlineAutoModal.vue'), {loading: true});
   app.component('OnlineAutoModal', OnlineAutoModalAsync);
-  // update-begin--author:liusq---date:20261102---for：【online表单评论】系统消息查看详情改用新版详情弹窗
-  // 注册Online详情弹窗
+  // update-begin--author:liusq---date:20261102---for：【onlineBình luận biểu mẫu】Thông báo hệ thống xem chi tiết đổi sang dùng popup chi tiết phiên bản mới
+  // Đăng kýOnlinePopup chi tiết
   const OnlineDetailModalAsync = createAsyncComponent(() => import('./cgform/auto/default/OnlineDetailModal.vue'), {loading: true});
   app.component('OnlineDetailModal', OnlineDetailModalAsync);
-  // update-end--author:liusq---date:20261102---for：【online表单评论】系统消息查看详情改用新版详情弹窗
+  // update-end--author:liusq---date:20261102---for：【onlineBình luận biểu mẫu】Thông báo hệ thống xem chi tiết đổi sang dùng popup chi tiết phiên bản mới
 
-  // 注册Online表单路由
+  // Đăng kýOnlineRoute biểu mẫu
   registerCgformRouter();
-  // 注册Online报表路由
+  // Đăng kýOnlineRoute báo cáo
   registerCgreportRouter();
-  // 注册Online图表路由
+  // Đăng kýOnlineĐịnh tuyến biểu đồ
   registerGraphreportRouter();
 
-  // 注册外部链接页面（如果有）
+  // Đăng ký trang liên kết ngoài (nếu có)
   await registerCgformShareView();
 
-  console.log('[online] 注册完成！');
+  console.log('[online] Đăng ký hoàn tất!');
 }
 
-// 注册外部链接页面，自动判断是否存在
+// Đăng ký trang liên kết ngoài, tự động phán đoán có tồn tại hay không
 async function registerCgformShareView() {
   try {
     const globModels = import.meta.glob('./cgform/share/index.ts');
@@ -46,7 +46,7 @@ async function registerCgformShareView() {
     }
     await shareModel.register();
 
-    console.debug('[online] Online表单外部链接路由注册完成！');
+    console.debug('[online] OnlineĐăng ký route liên kết ngoài của biểu mẫu hoàn tất!');
   } catch (e) {
   }
 }

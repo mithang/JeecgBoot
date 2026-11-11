@@ -11,23 +11,23 @@ export function useThirdLogin(emit) {
   const { t } = useI18n();
   const glob = useGlobSetting();
   const userStore = useUserStore();
-  //第三方类型
+  //Loại bên thứ ba
   const thirdType = ref('');
-  //第三方登录相关信息
+  //Thông tin liên quan đăng nhập bên thứ ba
   const thirdLoginInfo = ref<any>({});
-  //状态
+  //Trạng thái
   const thirdLoginState = ref(false);
-  //注册或者绑定账户
+  //Đăng ký hoặc liên kết tài khoản
   const bindingAccount = ref(false);
-  //第三方用户UUID
+  //Người dùng bên thứ baUUID
   const thirdUserUuid = ref('');
-  //提示窗
+  //Cửa sổ nhắc nhở
   const thirdConfirmShow = ref(false);
-  //绑定手机号
+  //Liên kết số điện thoại
   const thirdPhone = ref('');
-  //验证码
+  //Mã xác thực
   const thirdCaptcha = ref('');
-  //第三方登录
+  //Đăng nhập bên thứ ba
   function onThirdLogin(source) {
     let url = `${glob.uploadUrl}/sys/thirdLogin/render/${source}`;
     window.open(
@@ -41,7 +41,7 @@ export function useThirdLogin(emit) {
     let receiveMessage = function (event) {
       let token = event.data;
       if (typeof token === 'string') {
-        //如果是字符串类型 说明是token信息
+        //Nếu là kiểu chuỗi Cho thấy làtokenThông tin
         if (token === '登录失败') {
           createMessage.warning(token);
         } else if (token.includes('绑定手机号')) {
@@ -53,21 +53,21 @@ export function useThirdLogin(emit) {
           doThirdLogin(token);
         }
       } else if (typeof token === 'object') {
-        //对象类型 说明需要提示是否绑定现有账号
+        //Loại đối tượng Cho thấy cần nhắc có liên kết tài khoản hiện có hay không
         if (token['isObj'] === true) {
           thirdConfirmShow.value = true;
           thirdLoginInfo.value = { ...token };
         }
       } else {
-        createMessage.warning('不识别的信息传递');
+        createMessage.warning('Truyền tải thông tin không nhận diện được');
       }
-      //update-begin---author:wangshuai---date:2024-02-20---for:【QQYUN-8156】连续登录失败，导致失败提醒累加---
+      //update-begin---author:wangshuai---date:2024-02-20---for:【QQYUN-8156】Đăng nhập thất bại liên tục khiến nhắc nhở thất bại cộng dồn---
       window.removeEventListener('message', unref(receiveMessage),false);
-      //update-end---author:wangshuai---date:2024-02-20---for:【QQYUN-8156】连续登录失败，导致失败提醒累加---
+      //update-end---author:wangshuai---date:2024-02-20---for:【QQYUN-8156】Đăng nhập thất bại liên tục khiến nhắc nhở thất bại cộng dồn---
     };
     window.addEventListener('message', receiveMessage, false);
   }
-  // 根据token执行登录
+  // Căn cứ theotokenThực thi đăng nhập
   function doThirdLogin(token) {
     if (unref(thirdLoginState) === false) {
       thirdLoginState.value = true;
@@ -88,19 +88,19 @@ export function useThirdLogin(emit) {
 
   function requestFailed(err) {
     notification.error({
-      message: '登录失败',
-      description: ((err.response || {}).data || {}).message || err.message || '请求出现错误，请稍后再试',
+      message: 'Đăng nhập thất bại',
+      description: ((err.response || {}).data || {}).message || err.message || 'Yêu cầu xuất hiện lỗi, vui lòng thử lại sau',
       duration: 4,
     });
   }
 
-  //绑定手机号点击确定按钮
+  //Liên kết số điện thoại, nhấp nút xác nhận
   function thirdHandleOk() {
     if (!unref(thirdPhone)) {
-      cmsFailed('请输入手机号');
+      cmsFailed('Vui lòng nhập số điện thoại');
     }
     if (!unref(thirdCaptcha)) {
-      cmsFailed('请输入验证码');
+      cmsFailed('Vui lòng nhập mã xác thực');
     }
     let params = {
       mobile: unref(thirdPhone),
@@ -120,7 +120,7 @@ export function useThirdLogin(emit) {
   }
   function cmsFailed(err) {
     notification.error({
-      message: '登录失败',
+      message: 'Đăng nhập thất bại',
       description: err,
       duration: 4,
     });
@@ -128,28 +128,28 @@ export function useThirdLogin(emit) {
   }
 
   /**
-   * 登录并绑定
+   * Đăng nhập và liên kết
    */
   function loginAccountClick() {
     emit('type', { loginType: 'login' });
   }
 
   /**
-   * 创建新账号
+   * Tạo tài khoản mới
    */
   function registerAccountClick() {
     emit('type', { loginType: 'register' });
   }
 
   /**
-   * 隐藏绑定页面
+   * Ẩn trang liên kết
    */
   function hideBindThirdAccount() {
     bindingAccount.value = false;
   }
 
   /**
-   * 注册用户并且绑定第三方
+   * Đăng ký người dùng đồng thời liên kết bên thứ ba
    */
   async function createAccountBindThird(values) {
     let params = { ...values };
@@ -170,7 +170,7 @@ export function useThirdLogin(emit) {
   }
 
   /**
-   * 绑定手机号
+   * Liên kết số điện thoại
    * @param values
    */
   function bindThirdAccount(values) {
@@ -179,7 +179,7 @@ export function useThirdLogin(emit) {
     thirdHandleOk();
   }
 
-  //返回数据和方法
+  //Trả về dữ liệu và phương thức
   return {
     thirdConfirmShow,
     bindingAccount,

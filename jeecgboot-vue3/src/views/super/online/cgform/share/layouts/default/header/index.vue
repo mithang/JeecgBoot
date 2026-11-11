@@ -8,7 +8,7 @@
           :theme="getHeaderTheme"
           :style="getLogoWidth"
       />
-      <!-- 欢迎语 -->
+      <!-- Lời chào mừng -->
       <span
           :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']"
       >
@@ -98,12 +98,12 @@ export default defineComponent({
     });
 
     /**
-     * 首页多租户部门弹窗逻辑
+     * Logic popup phòng ban đa tenant ở trang chủ
      */
     const loginSelectRef = ref();
 
     function showLoginSelect() {
-      //判断是否是登陆进来
+      //Phán đoán có phải đăng nhập vào hay không
       const loginInfo = toRaw(userStore.getLoginInfo) || {};
       if (!!loginInfo.isLogin) {
         loginSelectRef.value.show(loginInfo);
@@ -131,7 +131,7 @@ export default defineComponent({
 </script>
 <style lang="less">
 @import './index.less';
-// 顶部欢迎语展示样式
+// Kiểu dáng trưng bày lời chào mừng ở phía trên
 // noinspection LessUnresolvedVariable
 @prefix-cls: ~'@{namespace}-online-share-layout-header';
 

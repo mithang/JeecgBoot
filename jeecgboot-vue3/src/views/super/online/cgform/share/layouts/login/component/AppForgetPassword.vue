@@ -65,7 +65,7 @@
             </a-form-item>
           </div>
           <div class="forget-btn pointer" @click="updatePwdClick">
-            <span>完成</span>
+            <span>Hoàn thành</span>
           </div>
           <div class="line"></div>
         </a-form>
@@ -73,7 +73,7 @@
       </div>
     </div>
   </div>
-  <!-- 图片验证码弹窗 -->
+  <!-- Popup mã xác thực hình ảnh -->
   <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
 </template>
 
@@ -94,7 +94,7 @@
   
   const { createMessage } = useMessage();
   const { t } = useI18n();
-  //手机号表单
+  //Biểu mẫu số điện thoại
   const formState = reactive<any>({
     phone: '',
     smscode: '',
@@ -107,15 +107,15 @@
   const smscodeRef = ref();
   const pwdUpdateRef = ref();
   const conPwdRef = ref();
-  //修改密码值
+  //Sửa giá trị mật khẩu
   const activeUpdateKey = ref<string>('vailPhone');
-  //选中值
+  //Giá trị đã chọn
   const activekey = ref<string>('');
 
   const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
   const getPasswordFormRule = computed(() => createRule(t('sys.login.passwordPlaceholder')));
-  //忘记密码规则
+  //Quy tắc quên mật khẩu
   const getFormRules = computed(() => {
     return {
       phone: unref(getMobileFormRule),
@@ -135,7 +135,7 @@
   const loginDisabledCode = computed(() => t('component.countdown.sendText', [unref(timeRuning)]));
 
   /**
-   * 验证二次密码
+   * Xác thực mật khẩu lần hai
    * @param password
    */
   const validateConfirmPassword = (password: string) => {
@@ -151,7 +151,7 @@
   };
 
   /**
-   * 创建规则
+   * Tạo quy tắc
    * @param message
    */
   function createRule(message: string) {
@@ -164,39 +164,39 @@
     ];
   }
 
-  //获取手机号的样式
+  //Lấy kiểu dáng của số điện thoại
   const getPhoneClass = computed(() => {
     return formState.phone != '' ? 'current-active' : '' || unref(activekey) === 'phone' ? 'current-active' : '';
   });
 
-  //获取手机号的样式
+  //Lấy kiểu dáng của số điện thoại
   const getSmsCodeClass = computed(() => {
     return formState.smscode != '' ? 'current-active' : '' || unref(activekey) === 'smscode' ? 'current-active' : '';
   });
 
-  //获取密码的样式
+  //Lấy kiểu dáng của mật khẩu
   const getPasswordClass = computed(() => {
     return unref(accountData).forgetPassword != '' ? 'current-active' : '' || unref(activekey) === 'forgetPassword' ? 'current-active' : '';
   });
-  //获取确认密码的样式
+  //Lấy kiểu dáng của mật khẩu xác nhận
   const getConfirmPasswordClass = computed(() => {
     return unref(accountData).confirmPassword != '' ? 'current-active' : '' || unref(activekey) === 'confirmPassword' ? 'current-active' : '';
   });
 
   const emit = defineEmits(['return-login', 'login-account']);
-  //是否显示获取验证码
+  //Có hiển thị lấy mã xác thực hay không
   const showInterval = ref<boolean>(true);
   //60s
   const timeRuning = ref<number>(60);
-  //定时器
+  //Bộ hẹn giờ
   const timer = ref<any>(null);
-  //验证手机号表单
+  //Xác thực biểu mẫu số điện thoại
   const phoneUpdateRef = ref();
-  //用户数据
+  //Dữ liệu người dùng
   const accountData = ref<any>([]);
 
   /**
-   * 表单组件点击事件
+   * Sự kiện nhấp của component biểu mẫu
    */
   function formStateInputClick(val) {
     activekey.value = val;
@@ -212,29 +212,29 @@
   }
 
   /**
-   * 表单组件失去焦点
+   * Component biểu mẫu mất tiêu điểm (focus)
    */
   function formStateInputBlur() {
     activekey.value = '';
   }
 
   /**
-   * 获取验证码
+   * Lấy mã xác thực
    */
   async function getLoginCode() {
     if (!formState.phone) {
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    //update-begin---author:wangshuai ---date:20230620  for：【QQYUN-5590】忘记密码不好使------------
-    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    //update-begin---author:wangshuai ---date:20230620  for：【QQYUN-5590】Quên mật khẩu không hoạt động------------
+    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】Cùng mộtIP，1phút vượt quá5lần tin nhắn SMS, thì nhắc cần mã xác thực---
     const result = await getCaptcha({ mobile: formState.phone, smsmode: SmsEnum.FORGET_PASSWORD }).catch((res) =>{
       if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
         openCaptchaModal(true, {});
       }
     });
-    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
-    //update-end---author:wangshuai ---date:20230620  for：【QQYUN-5590】忘记密码不好使------------
+    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】Cùng mộtIP，1phút vượt quá5lần tin nhắn SMS, thì nhắc cần mã xác thực---
+    //update-end---author:wangshuai ---date:20230620  for：【QQYUN-5590】Quên mật khẩu không hoạt động------------
     if (result) {
       const TIME_COUNT = 60;
       if (!unref(timer)) {
@@ -254,7 +254,7 @@
   }
 
   /**
-   * 忘记密码
+   * Quên mật khẩu
    */
   function forgetPwdClick() {
     phoneUpdateRef.value.validateFields().then(async (values) => {
@@ -284,7 +284,7 @@
   }
 
   /**
-   * 完成
+   * Hoàn thành
    */
   async function updatePwdClick() {
     pwdUpdateRef.value.validateFields().then(async (values) => {
@@ -297,13 +297,13 @@
         })
       );
       if (resultInfo.success) {
-        //修改密码
+        //Đổi mật khẩu
         emit('login-account', { account: values.username, password: values.forgetPassword });
         phoneUpdateRef.value.resetFields();
         accountData.value = {};
         activeUpdateKey.value = 'vailPhone';
       } else {
-        //错误提示
+        //Nhắc nhở lỗi
         createErrorModal({
           title: t('sys.api.errorTip'),
           content: resultInfo.message || t('sys.api.networkExceptionMsg'),
@@ -313,7 +313,7 @@
   }
 
   /**
-   * 返回登录
+   * Quay lại đăng nhập
    */
   function toLoginClick() {
     emit('return-login');

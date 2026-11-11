@@ -5,9 +5,9 @@
       :subTitle="subTitle"
   >
     <template #extra>
-      <a-button type="primary" @click="onGoToHome">返回首页</a-button>
-      <a-button @click="onReload">刷新页面</a-button>
-      <a-button @click="onClose">关闭</a-button>
+      <a-button type="primary" @click="onGoToHome">Quay lại trang chủ</a-button>
+      <a-button @click="onReload">Làm mới trang</a-button>
+      <a-button @click="onClose">Đóng</a-button>
     </template>
   </a-result>
 </template>
@@ -19,7 +19,7 @@ import {PageEnum} from "@/enums/pageEnum";
 defineProps({
   title: {
     type: String,
-    default: '啊哦，页面出错了'
+    default: 'Ối, trang đã xảy ra lỗi rồi'
   },
   subTitle: String,
 })
@@ -34,7 +34,7 @@ function onReload() {
 
 function onClose() {
   window.close()
-  setTimeout(() => alert('当前页面无法通过按钮关闭，请手动关闭'), 1000)
+  setTimeout(() => alert('Trang hiện tại không thể đóng bằng nút, vui lòng đóng thủ công'), 1000)
 }
 
 </script>

@@ -3,20 +3,20 @@
     <AppLoginHeader />
 <!--    <div  class="pointer" style="display: flex;margin-top: 40px" @click="backStepClick">-->
 <!--      <Icon icon="ant-design:arrow-left-outlined" style="color: #757575; margin-top: 2px" />-->
-<!--      <span style="margin-left: 10px">返回</span>-->
+<!--      <span style="margin-left: 10px">Quay lại</span>-->
 <!--    </div>-->
     <div class="flex-row align-items-center margin-top40">
-      <div class="register-title"> 请填写昵称和邮箱 </div>
+      <div class="register-title"> Vui lòng điền biệt danh và email </div>
     </div>
     <div class="name-email-desc align-items-center">
-      <span style="color: #9e9e9e">请填写昵称和邮箱，方便大家与您联系</span>
+      <span style="color: #9e9e9e">Vui lòng điền biệt danh và email, để mọi người tiện liên hệ với bạn</span>
     </div>
     <div class="name-email-content">
       <a-form ref="formRef" :model="formState" :rules="getFormRules">
         <div class="content-item" :class="getUserNameClass" @click="formStateInputClick('realname')">
           <a-form-item name="realname">
             <a-input ref="realNameRef" v-model:value="formState.realname" style="height: 40px" @blur="formStateInputBlur" />
-            <div class="form-title" :class="activekey === 'username' ? 'active-title' : ''"> 昵称 </div>
+            <div class="form-title" :class="activekey === 'username' ? 'active-title' : ''"> Biệt danh </div>
           </a-form-item>
         </div>
         <div class="content-item" :class="getEmailClass" @click="formStateInputClick('email')">
@@ -26,7 +26,7 @@
           </a-form-item>
         </div>
         <div class=" pointer" @click="finshClick">
-          <a-button type="primary" class="next-step" :loading="finshLoading">完成</a-button>
+          <a-button type="primary" class="next-step" :loading="finshLoading">Hoàn thành</a-button>
         </div>
       </a-form>
     </div>
@@ -47,24 +47,24 @@
   const { t } = useI18n();
   const realNameRef = ref();
   const emailRef = ref();
-  //添加邮箱和真实姓名
+  //Thêm email và họ tên thật
   const formRef = ref();
 
-  const getEmailFormRule = computed(() => [{required:true,message:'请填写邮箱',trigger: 'change'},{ type: 'email',message:'请填写正确的邮箱'}]);
-  const getUsernameFormRule = computed(() => [{required:true,message:'请填写昵称',trigger: 'change'}]);
+  const getEmailFormRule = computed(() => [{required:true,message:'Vui lòng điền email',trigger: 'change'},{ type: 'email',message:'Vui lòng điền email đúng'}]);
+  const getUsernameFormRule = computed(() => [{required:true,message:'Vui lòng điền biệt danh',trigger: 'change'}]);
   const getFormRules = computed(() => {
     return {
       realname: unref(getUsernameFormRule),
       email: unref(getEmailFormRule),
     };
   });
-  //选中值
+  //Giá trị đã chọn
   const activekey = ref<string>('');
-  //获取真实姓名的样式
+  //Lấy kiểu dáng của họ tên thật
   const getUserNameClass = computed(() => {
     return formState.realname ? 'current-active' : '' || unref(activekey) === 'realname' ? 'current-active' : '';
   });
-  //获取邮箱的样式
+  //Lấy kiểu dáng của email
   const getEmailClass = computed(() => {
     return formState.email != '' ? 'current-active' : '' || unref(activekey) === 'email' ? 'current-active' : '';
   });
@@ -74,7 +74,7 @@
   const finshLoading = ref<boolean>(false);
 
   /**
-   * 创建规则
+   * Tạo quy tắc
    * @param message
    */
   function createRule(message: string) {
@@ -88,7 +88,7 @@
   }
 
   /**
-   * 表单组件点击事件
+   * Sự kiện nhấp của component biểu mẫu
    */
   function formStateInputClick(val) {
     activekey.value = val;
@@ -100,18 +100,18 @@
   }
 
   /**
-   * 表单组件失去焦点
+   * Component biểu mẫu mất tiêu điểm (focus)
    */
   function formStateInputBlur() {
     activekey.value = '';
   }
 
   /**
-   * 绑定邮箱
+   * Liên kết email
    */
   async function finshClick() {
     formRef.value.validateFields().then(async (values) => {
-      //当前是否为第三方注册绑定手机号,如果是那么就走绑定手机号的逻辑，否则直接注册
+      //Hiện tại có phải là đăng ký bên thứ ba liên kết số điện thoại hay không,Nếu đúng là vậy thì đi theo logic liên kết số điện thoại, nếu không thì đăng ký trực tiếp
       if (!unref(registerData).bindThirdAccount) {
         try {
           finshLoading.value = true;
@@ -126,7 +126,7 @@
             })
           );
           if (resultInfo && resultInfo.data.success) {
-            //修改密码
+            //Đổi mật khẩu
             emit('login-account', { account: unref(registerData).phone, password: unref(registerData).password });
             notification.success({
               message: undefined,
@@ -163,7 +163,7 @@
   }
 
   /**
-   * 设置注册数据
+   * Thiết lập dữ liệu đăng ký
    * @param values
    */
   function setRegisterData(values) {

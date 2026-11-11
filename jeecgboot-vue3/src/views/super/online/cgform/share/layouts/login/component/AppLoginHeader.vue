@@ -1,6 +1,6 @@
 <template>
   <div class="login-header">
-    <img :src="loginLogo" alt="敲敲云" class="login-image" @click="logoImgClick"/>
+    <img :src="loginLogo" alt="Qiaoqiao Cloud" class="login-image" @click="logoImgClick"/>
     <span class="login-header-name"> </span>
   </div>
 </template>
@@ -9,7 +9,7 @@
   import loginLogo from '/@/assets/images/logo.png';
 
   /**
-   * logo图片点击之后跳转敲敲云官网
+   * logoSau khi nhấp vào hình ảnh sẽ chuyển tới trang chủ Qiaoqiao Cloud
    */
   function logoImgClick() {
     window.open("https://www.qiaoqiaoyun.com/","_target")

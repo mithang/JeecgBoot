@@ -4,52 +4,52 @@
       <AppLoginHeader :showLocalePicker="false" />
       <template v-if="organType === 'home'">
         <div class="flex-row align-items-center" style="margin-top: 20px">
-          <div class="organ-title"> 创建或者加入组织 </div>
+          <div class="organ-title"> Tạo hoặc tham gia tổ chức </div>
         </div>
         <div class="organ-desc align-items-center">
           <div class="content-box pointer" @click="joinOrganClick">
-            <div class="organ-title-desc"> 加入<span style="color: rgb(141, 198, 216)">已有</span>组织 </div>
-            <div> 如果被告知要使用，或有同事已经在用，请选择此项。 </div>
+            <div class="organ-title-desc"> Tham gia<span style="color: rgb(141, 198, 216)">Đã có</span>Tổ chức </div>
+            <div> Nếu được thông báo cần sử dụng, hoặc có đồng nghiệp đã đang dùng, vui lòng chọn mục này. </div>
           </div>
           <div class="content-box pointer" style="margin-top: 35px" @click="createOrganClick">
-            <div class="organ-title-desc"> 创建<span style="color: rgb(74, 79, 175)">新的</span>组织 </div>
-            <div> 如果想为企业或者组织创建账号，请选择此项。 </div>
+            <div class="organ-title-desc"> Tạo<span style="color: rgb(74, 79, 175)">cái mới</span>Tổ chức </div>
+            <div> Nếu muốn tạo tài khoản cho doanh nghiệp hoặc tổ chức, vui lòng chọn mục này. </div>
           </div>
         </div>
       </template>
       <template v-else-if="organType === 'join'">
         <div class="margin-top40 pointer" style="display: flex" @click="returnHome" v-if="tenantType === ''">
           <Icon icon="ant-design:arrow-left-outlined" style="color: #757575; margin-top: 2px" />
-          <span style="margin-left: 10px">返回</span>
+          <span style="margin-left: 10px">Quay lại</span>
         </div>
         <div class="align-items-center" style="margin-top: 20px">
-          <div class="organ-title"> 请填写组织门牌号 </div>
+          <div class="organ-title"> Vui lòng điền số nhà của tổ chức </div>
           <div class="organ-join-desc">
-            <span style="color: #9e9e9e">组织门牌号可以通过管理员获取</span>
+            <span style="color: #9e9e9e">Số nhà của tổ chức có thể lấy thông qua quản trị viên</span>
           </div>
           <a-form ref="joinRef" :model="formJoinState" :rules="getFormJoinRules">
             <div class="content-item" :class="getHouseNumberClass" @click="formStateInputClick('houseNumber')">
               <a-form-item name="houseNumber">
                 <a-input ref="hoseNumberRef" v-model:value="formJoinState.houseNumber" style="height: 40px" @blur="formStateInputBlur" />
-                <div class="form-title" :class="activekey === 'houseNumber' ? 'active-title' : ''"> 示例: J9A2K8R </div>
+                <div class="form-title" :class="activekey === 'houseNumber' ? 'active-title' : ''"> Ví dụ mẫu: J9A2K8R </div>
               </a-form-item>
             </div>
             <div class="tenant-number">
-              <a href="http://help.qiaoqiaoyun.com/org/new.html" target="_blank">没有组织门牌号？</a>
+              <a href="http://help.qiaoqiaoyun.com/org/new.html" target="_blank">Không có số nhà của tổ chức?</a>
             </div>
-            <div class="create-btn pointer" @click="joinTenantClick"> 加入 </div>
+            <div class="create-btn pointer" @click="joinTenantClick"> Tham gia </div>
           </a-form>
         </div>
       </template>
       <template v-else-if="organType === 'create'">
         <div class="margin-top40 pointer" style="display: flex" @click="returnHome" v-if="tenantType === ''">
           <Icon icon="ant-design:arrow-left-outlined" style="color: #757575; margin-top: 2px" />
-          <span style="margin-left: 10px">返回</span>
+          <span style="margin-left: 10px">Quay lại</span>
         </div>
         <div class="align-items-center" style="margin-top: 20px">
-          <div class="organ-title"> 创建组织 </div>
+          <div class="organ-title"> Tạo tổ chức </div>
           <div class="organ-join-desc">
-            <span style="color: #9e9e9e">您当前账号默认成为组织的管理员</span>
+            <span style="color: #9e9e9e">Tài khoản hiện tại của bạn mặc định trở thành quản trị viên của tổ chức</span>
           </div>
 
           <a-form ref="createRef" :model="formCreateState" :rules="getFormCreateRules">
@@ -61,34 +61,34 @@
                   style="height: 40px; font-size: 13px; color: rgba(0, 0, 0, 0.65)"
                   @blur="formStateInputBlur"
                 />
-                <div class="form-title" :class="activekey === 'name' ? 'active-title' : ''"> 组织名称 </div>
+                <div class="form-title" :class="activekey === 'name' ? 'active-title' : ''"> Tên tổ chức </div>
               </a-form-item>
             </div>
             <div class="content-item">
               <a-form-item name="trade">
-                <a-select placeholder="请选择" style="height: 40px" :options="tradeOption" v-model:value="formCreateState.trade" />
-                <div class="active-form-title"> 行业 </div>
+                <a-select placeholder="Vui lòng chọn" style="height: 40px" :options="tradeOption" v-model:value="formCreateState.trade" />
+                <div class="active-form-title"> Ngành nghề </div>
               </a-form-item>
             </div>
             <div class="content-item">
               <a-form-item name="companySize">
-                <a-select placeholder="请选择" style="height: 40px" :options="companySizeOption" v-model:value="formCreateState.companySize" />
-                <div class="active-form-title"> 规模 </div>
+                <a-select placeholder="Vui lòng chọn" style="height: 40px" :options="companySizeOption" v-model:value="formCreateState.companySize" />
+                <div class="active-form-title"> Quy mô </div>
               </a-form-item>
             </div>
             <div class="content-item">
               <a-form-item name="position">
-                <a-select placeholder="请选择" style="height: 40px" :options="positionOption" v-model:value="formCreateState.position" />
-                <div class="active-form-title"> 您的职级 </div>
+                <a-select placeholder="Vui lòng chọn" style="height: 40px" :options="positionOption" v-model:value="formCreateState.position" />
+                <div class="active-form-title"> Cấp bậc chức vụ của bạn </div>
               </a-form-item>
             </div>
             <div class="content-item">
               <a-form-item name="department">
-                <a-select placeholder="请选择" style="height: 40px" :options="departmentOption" v-model:value="formCreateState.department" />
-                <div class="active-form-title"> 您的部门 </div>
+                <a-select placeholder="Vui lòng chọn" style="height: 40px" :options="departmentOption" v-model:value="formCreateState.department" />
+                <div class="active-form-title"> Phòng ban của bạn </div>
               </a-form-item>
             </div>
-            <div class="create-btn pointer" @click="addOrganClick"> 创建 </div>
+            <div class="create-btn pointer" @click="addOrganClick"> Tạo </div>
           </a-form>
         </div>
       </template>
@@ -113,17 +113,17 @@
   });
 
   const { createMessage } = useMessage();
-  //创建租户表单
+  //Biểu mẫu tạo đơn vị thuê
   const createRef = ref();
-  //加入租户表单
+  //Biểu mẫu tham gia đơn vị thuê
   const joinRef = ref();
-  //租户类别：主页，加入，创建
+  //Loại tenant: trang chủ, tham gia, tạo
   const organType = ref<string>('home');
-  //租户加入
+  //Tham gia tenant
   const formJoinState = reactive<any>({
     houseNumber: '',
   });
-  //租户创建
+  //Tạo tenant
   const formCreateState = reactive<any>({
     name: '',
     trade: undefined,
@@ -131,89 +131,89 @@
     position: undefined,
     department: undefined,
   });
-  //选中值
+  //Giá trị đã chọn
   const activekey = ref<string>('');
-  //获取门牌号样式
+  //Lấy kiểu dáng số nhà
   const getHouseNumberClass = computed(() => {
     return formJoinState.houseNumber != '' ? 'current-active' : '' || unref(activekey) === 'houseNumber' ? 'current-active' : '';
   });
-  //获取租户名称样式
+  //Lấy kiểu dáng tên tenant
   const getNameClass = computed(() => {
     return formCreateState.name != '' ? 'current-active' : '' || unref(activekey) === 'name' ? 'current-active' : '';
   });
   const hoseNumberRef = ref();
   const nameRef = ref();
-  //加入租户的表单验证
+  //Kiểm chứng biểu mẫu tham gia đơn vị thuê
   const getFormJoinRules = {
-    houseNumber: [{ required: true, message: '请输入组织门牌号' }],
+    houseNumber: [{ required: true, message: 'Vui lòng nhập số nhà của tổ chức' }],
   };
   const { t } = useI18n();
-  const getNameRule = computed(() => createRule('请输入组织名称'));
-  //创建租户的表单验证
+  const getNameRule = computed(() => createRule('Vui lòng nhập tên tổ chức'));
+  //Kiểm chứng biểu mẫu tạo đơn vị thuê
   const getFormCreateRules = computed(() => {
     return {
       name: unref(getNameRule),
     };
   });
-  //所属行业
+  //Ngành trực thuộc
   const tradeOption = ref<any>([
-    { label: '信息传输、软件和信息技术服务业', value: '1' },
-    { label: '制造业', value: '2' },
-    { label: '租赁和商务服务业', value: '3' },
-    { label: '教育', value: '4' },
-    { label: '金融业', value: '5' },
-    { label: '建筑业', value: '6' },
-    { label: '科学研究和技术服务业', value: '7' },
-    { label: '批发和零售业', value: '8' },
-    { label: '住宿和餐饮业', value: '9' },
-    { label: '电子商务', value: '10' },
-    { label: '线下零售与服务业', value: '11' },
-    { label: '文化、体育和娱乐业', value: '12' },
-    { label: '房地产业', value: '13' },
-    { label: '交通运输、仓储和邮政业', value: '14' },
-    { label: '卫生和社会工作', value: '15' },
-    { label: '公共管理、社会保障和社会组织', value: '16' },
-    { label: '电力、热力、燃气及水生产和供应业', value: '17' },
-    { label: '水利、环境和公共设施管理业', value: '18' },
-    { label: '居民服务、修理和其他服务业', value: '19' },
-    { label: '政府机构', value: '20' },
-    { label: '农、林、牧、渔业', value: '21' },
-    { label: '采矿业', value: '22' },
-    { label: '国际组织', value: '23' },
-    { label: '其他', value: '24' },
+    { label: 'Ngành truyền tải thông tin, phần mềm và dịch vụ công nghệ thông tin', value: '1' },
+    { label: 'Ngành sản xuất chế tạo', value: '2' },
+    { label: 'Ngành cho thuê và dịch vụ thương mại', value: '3' },
+    { label: 'Giáo dục', value: '4' },
+    { label: 'Ngành tài chính', value: '5' },
+    { label: 'Ngành xây dựng', value: '6' },
+    { label: 'Ngành nghiên cứu khoa học và dịch vụ kỹ thuật', value: '7' },
+    { label: 'Ngành bán buôn và bán lẻ', value: '8' },
+    { label: 'Ngành lưu trú và ăn uống', value: '9' },
+    { label: 'Thương mại điện tử', value: '10' },
+    { label: 'Ngành bán lẻ ngoại tuyến và dịch vụ', value: '11' },
+    { label: 'Ngành văn hóa, thể thao và giải trí', value: '12' },
+    { label: 'Ngành bất động sản', value: '13' },
+    { label: 'Ngành vận tải, kho bãi và bưu chính', value: '14' },
+    { label: 'Ngành y tế và công tác xã hội', value: '15' },
+    { label: 'Ngành quản lý công, bảo đảm xã hội và tổ chức xã hội', value: '16' },
+    { label: 'Ngành sản xuất và cung ứng điện, nhiệt, khí đốt và nước', value: '17' },
+    { label: 'Ngành thủy lợi, môi trường và quản lý cơ sở công cộng', value: '18' },
+    { label: 'Ngành dịch vụ dân cư, sửa chữa và các dịch vụ khác', value: '19' },
+    { label: 'Cơ quan chính phủ', value: '20' },
+    { label: 'Ngành nông, lâm, chăn nuôi, ngư nghiệp', value: '21' },
+    { label: 'Ngành khai khoáng', value: '22' },
+    { label: 'Tổ chức quốc tế', value: '23' },
+    { label: 'Khác', value: '24' },
   ]);
-  //公司规模
+  //Quy mô công ty
   const companySizeOption = ref<any>([
-    { label: '20人以下', value: '1' },
-    { label: '21-99人', value: '2' },
-    { label: '100-499人', value: '3' },
-    { label: '500-999人', value: '4' },
-    { label: '1000-9999人', value: '5' },
-    { label: '10000人以上', value: '6' },
+    { label: '20người trở xuống', value: '1' },
+    { label: '21-99người', value: '2' },
+    { label: '100-499người', value: '3' },
+    { label: '500-999người', value: '4' },
+    { label: '1000-9999người', value: '5' },
+    { label: '10000người trở lên', value: '6' },
   ]);
-  //职位
+  //Chức vụ
   const positionOption = ref<any>([
-    { label: '总裁/总经理/CEO', value: '1' },
-    { label: '副总裁/副总经理/VP', value: '2' },
-    { label: '总监/主管/经理', value: '3' },
-    { label: '员工/专员/执行', value: '4' },
-    { label: '其他', value: '5' },
+    { label: 'Chủ tịch (tổng tài)/Tổng giám đốc/CEO', value: '1' },
+    { label: 'Phó chủ tịch/Phó tổng giám đốc/VP', value: '2' },
+    { label: 'Giám đốc/Người quản lý/Quản lý (giám đốc)', value: '3' },
+    { label: 'Nhân viên/chuyên viên/Thực thi', value: '4' },
+    { label: 'Khác', value: '5' },
   ]);
-  //职位
+  //Chức vụ
   const departmentOption = ref<any>([
-    { label: '总经办', value: '1' },
-    { label: '技术/IT/研发', value: '2' },
-    { label: '产品/设计', value: '3' },
-    { label: '销售/市场/运营', value: '4' },
-    { label: '人事/财务/行政', value: '5' },
-    { label: '资源/仓储/采购', value: '6' },
-    { label: '其他', value: '7' },
+    { label: 'Văn phòng tổng giám đốc', value: '1' },
+    { label: 'Kỹ thuật/IT/Nghiên cứu & phát triển', value: '2' },
+    { label: 'Sản phẩm/Thiết kế', value: '3' },
+    { label: 'Bán hàng/Thị trường/Vận hành', value: '4' },
+    { label: 'Nhân sự/Tài chính/Hành chính', value: '5' },
+    { label: 'Tài nguyên/Kho bãi/Mua sắm (thu mua)', value: '6' },
+    { label: 'Khác', value: '7' },
   ]);
   const emit = defineEmits(['success']);
   const userStore = useUserStore();
 
   /**
-   * 创建规则
+   * Tạo quy tắc
    * @param message
    */
   function createRule(message: string) {
@@ -227,21 +227,21 @@
   }
 
   /**
-   * 加入租户
+   * Tham gia đơn vị thuê
    */
   function joinOrganClick() {
     organType.value = 'join';
   }
 
   /**
-   * 创建租户
+   * Tạo đơn vị thuê
    */
   function createOrganClick() {
     organType.value = 'create';
   }
 
   /**
-   * 表单组件点击事件
+   * Sự kiện nhấp của component biểu mẫu
    */
   function formStateInputClick(val) {
     activekey.value = val;
@@ -253,14 +253,14 @@
   }
 
   /**
-   * 清除选中值
+   * Xóa giá trị đã chọn
    */
   function formStateInputBlur() {
     activekey.value = '';
   }
 
   /**
-   * 创建租户
+   * Tạo đơn vị thuê
    */
   async function addOrganClick() {
     createRef.value.validateFields().then(async (values) => {
@@ -279,7 +279,7 @@
   }
 
   /**
-   * 加入租户
+   * Tham gia đơn vị thuê
    */
   function joinTenantClick() {
     joinRef.value.validateFields().then(async (values) => {
@@ -301,7 +301,7 @@
   }
 
   /**
-   * 返回选择页面
+   * Quay lại trang lựa chọn
    */
   function returnHome() {
     organType.value = 'home';

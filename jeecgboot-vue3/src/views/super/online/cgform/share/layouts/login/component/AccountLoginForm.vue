@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup name="account-login-form">
-  //获取手机号的样式
+  //Lấy kiểu dáng của số điện thoại
   import {computed, effect, nextTick, onMounted, reactive, ref, toRaw, unref, watch} from 'vue';
   import { useUserStore } from '/@/store/modules/user';
   import { useFormRules, useFormValid } from '/@/views/sys/login/useLogin';
@@ -70,38 +70,38 @@
   const codeRef = ref();
   const passwordRef = ref();
   const { t } = useI18n();
-  //选中值
+  //Giá trị đã chọn
   const activekey = ref<string>('');
 
-  //登录加载
+  //Đang tải đăng nhập
   const loginLoading = ref<boolean>(false);
-  //登录表单
+  //Biểu mẫu đăng nhập
   const loginRef = ref();
   const randCodeData = reactive({
     randCodeImage: '',
     requestCodeSuccess: false,
     checkKey: -1,
   });
-  //手机号表单
+  //Biểu mẫu số điện thoại
   const formState = reactive<any>({
     account: '',
     password: '',
     inputCode: '',
   });
-  //登录规则
+  //Quy tắc đăng nhập
   const { getFormRules } = useFormRules(formState);
   const { validForm } = useFormValid(loginRef);
   const userStore = useUserStore();
-  //记住我
+  //Ghi nhớ tôi
   const rememberMeCheck = ref<boolean>(false);
   const getUsernameClass = computed(() => {
     return formState.account != '' ? 'current-active' : '' || unref(activekey) === 'account' ? 'current-active' : '';
   });
-  //获取密码的样式
+  //Lấy kiểu dáng của mật khẩu
   const getPwdClass = computed(() => {
     return formState.password != '' ? 'current-active' : '' || unref(activekey) === 'password' ? 'current-active' : '';
   });
-  //获取验证码的样式
+  //Lấy kiểu dáng của mã xác thực
   const getInputCodeClass = computed(() => {
     return formState.inputCode != '' ? 'current-active' : '' || unref(activekey) === 'inputCode' ? 'current-active' : '';
   });
@@ -109,21 +109,21 @@
   const emit = defineEmits(['login', 'forget-pwd', 'login-success']);
 
   /**
-   * 表单组件点击事件
+   * Sự kiện nhấp của component biểu mẫu
    */
   function formStateInputClick(val) {
     activekey.value = val;
   }
 
   /**
-   * 表单组件失去焦点
+   * Component biểu mẫu mất tiêu điểm (focus)
    */
   function formStateInputBlur() {
     activekey.value = '';
   }
 
   /**
-   * 登录点击事件
+   * Sự kiện nhấp đăng nhập
    */
   async function accountLoginClick() {
     let values = await validForm();
@@ -138,8 +138,8 @@
           username: values.account,
           captcha: values.inputCode,
           checkKey: randCodeData.checkKey,
-          mode: 'none', //不要默认的错误提示
-          goHome: false, //不跳转到首页
+          mode: 'none', //không dùng nhắc lỗi mặc định
+          goHome: false, //không chuyển đến trang chủ
         })
       );
       if (userInfo) {
@@ -158,14 +158,14 @@
   }
 
   /**
-   * 获取验证码
+   * Lấy mã xác thực
    */
   function handleChangeCheckCode() {
     formState.inputCode = '';
-    //TODO 兼容mock和接口，暂时这样处理
-    //update-begin---author:chenrui ---date:2025/1/7  for：[QQYUN-10775]验证码可以复用 #7674------------
+    //TODO Tương thíchmockvà API, tạm thời xử lý như vậy
+    //update-begin---author:chenrui ---date:2025/1/7  for：[QQYUN-10775]Mã xác thực có thể dùng lại #7674------------
     randCodeData.checkKey = new Date().getTime() + Math.random().toString(36).slice(-4); // 1629428467008;
-    //update-end---author:chenrui ---date:2025/1/7  for：[QQYUN-10775]验证码可以复用 #7674------------
+    //update-end---author:chenrui ---date:2025/1/7  for：[QQYUN-10775]Mã xác thực có thể dùng lại #7674------------
     getCodeInfo(randCodeData.checkKey).then((res) => {
       randCodeData.randCodeImage = res;
       randCodeData.requestCodeSuccess = true;
@@ -173,21 +173,21 @@
   }
 
   /**
-   * 手机号登录
+   * Đăng nhập bằng số điện thoại
    */
   function phoneLoginBtnClick() {
     emit('login', 'phoneLogin');
   }
 
   /**
-   * 忘记密码
+   * Quên mật khẩu
    */
   function forgetPwdClick() {
     emit('forget-pwd');
   }
 
   /**
-   * 设置账号数据
+   * Thiết lập dữ liệu tài khoản
    * @param values
    */
   function setAccountData(values) {

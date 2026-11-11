@@ -25,7 +25,7 @@
           </div>
           <div style="width: 100%; display: flex">
             <div class="aui-third-login">
-              <a title="微信" @click="onThirdLogin('wechat_open')">
+              <a title="WeChat" @click="onThirdLogin('wechat_open')">
                 <WechatFilled style="color: rgb(75, 176, 79)" />
               </a>
             </div>
@@ -63,7 +63,7 @@
       <template #overlay>
         <a-menu v-model:value="languageValue" @click="handleMenuEvent">
           <a-menu-item key="zh_CN">
-            <span>简体中文</span>
+            <span>Tiếng Trung giản thể</span>
           </a-menu-item>
           <a-menu-item key="en">
             <span>English</span>
@@ -72,7 +72,7 @@
       </template>
     </a-dropdown>
   </div>
-  <!-- 第三方登录相关弹框 -->
+  <!-- Popup liên quan đăng nhập bên thứ ba -->
   <AppThirdForm ref="thirdModalRef" @type="thirdLoginType" @login-success="loginSuccess" />
 </template>
 
@@ -102,32 +102,32 @@
   const { changeLocale, getLocale } = useLocale();
   const thirdModalRef = ref();
   const userStore = useUserStore();
-  //登录方式：手机号/账号
+  //Phương thức đăng nhập: số điện thoại/Tài khoản
   const loginType = ref<string>('accountLogin');
-  //注册页面
+  //Trang đăng ký
   const appRegisterRef = ref();
-  //登录页面
+  //Trang đăng nhập
   const accountLoginRef = ref();
-  //忘记密码页面
+  //Trang quên mật khẩu
   const appForgetPwdRef = ref();
   const { t } = useI18n();
 
-  //方式 判端登录、注册、忘记密码等
+  //Cách thức Xác định đăng nhập, đăng ký, quên mật khẩu, v.v.
   const type = ref<string>('login');
-  //手机号登录表单
+  //Biểu mẫu đăng nhập bằng số điện thoại
   const loginPhoneRef = ref();
   const formPhoneState = reactive<any>({
     phone: '',
     smscode: '',
   });
   const { notification, createErrorModal } = useMessage();
-  //中文还是英文
+  //tiếng Trung hay tiếng Anh
   const languageValue = ref<string>('zh_CN');
-  //当前是否为绑定账号
+  //Hiện tại có phải là liên kết tài khoản hay không
   const bindThirdAccount = ref<boolean>(false);
   const spinningLogin = ref<boolean>(false);
   /**
-   * 注册
+   * Đăng ký
    */
   function registerHandleClick() {
     type.value = 'register';
@@ -137,7 +137,7 @@
   }
 
   /**
-   * 返回登录页面
+   * Quay lại trang đăng nhập
    */
   function returnLogin() {
     type.value = 'login';
@@ -145,7 +145,7 @@
   }
 
   /**
-   * 返回登录页面并赋值
+   * Quay lại trang đăng nhập đồng thời gán giá trị
    */
   function loginAccount(values) {
     type.value = 'login';
@@ -156,7 +156,7 @@
   }
 
   /**
-   * 显示手机号登录
+   * Hiển thị đăng nhập bằng số điện thoại
    * @param type
    */
   function loginHandleType(type) {
@@ -164,17 +164,17 @@
   }
 
   /**
-   * 忘记密码
+   * Quên mật khẩu
    */
   function forgetPwdClick() {
     type.value = 'forgetPwd';
   }
 
   /**
-   * 登陆成功
+   * Đăng nhập thành công
    */
   async function loginSuccess(value) {
-    //登录成功之后需要查询租户
+    //Sau khi đăng nhập thành công, cần truy vấn tenant
     const loginInfo = toRaw(userStore.getLoginInfo);
     const { tenantList } = loginInfo;
     if (!tenantList || tenantList.length === 0) {
@@ -185,28 +185,28 @@
         description: `${t('sys.login.loginSuccessDesc')}: ${value}`,
         duration: 3,
       });
-      //update-begin---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
+      //update-begin---author:wangshuai ---date:20230424  for：【QQYUN-5195】Sau khi đăng nhập, làm mới trang trực tiếp khiến không vào được trang tạo tổ chức------------
       let redirect = router.currentRoute.value?.query?.redirect as string;
       if (redirect) {
-        // 当前页面打开
+        // Trang hiện tại mở
         window.open(decodeURIComponent(redirect), '_self')
         return;
       }
-      //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
+      //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】Sau khi đăng nhập, làm mới trang trực tiếp khiến không vào được trang tạo tổ chức------------
       await router.replace((userStore.getUserInfo && userStore.getUserInfo.homePath) || PageEnum.BASE_HOME);
       windowReload();
     }
   }
 
   /**
-   * 浏览器刷新
+   * Làm mới trình duyệt
    */
   function windowReload() {
     window.location.reload();
   }
 
   /**
-   * 第三方登录
+   * Đăng nhập bên thứ ba
    * @param type
    */
   function onThirdLogin(type) {
@@ -225,9 +225,9 @@
     toggleLocale(key);
   }
 
-  //==================================绑定第三方登录账号=============================================
+  //==================================Liên kết tài khoản đăng nhập bên thứ ba=============================================
   /**
-   * 第三方登录回调事件
+   * Sự kiện callback đăng nhập bên thứ ba
    * @param values
    */
   function thirdLoginType(values) {
@@ -244,7 +244,7 @@
   }
 
   /**
-   * 绑定手机号
+   * Liên kết số điện thoại
    */
   async function bindThirdPhone(values) {
     spinningLogin.value = true;
@@ -253,7 +253,7 @@
   }
 
   /**
-   * 绑定第三方账号
+   * Liên kết tài khoản bên thứ ba
    * @param values
    */
   async function bindAccountThird(values) {
@@ -261,7 +261,7 @@
     await thirdModalRef.value.createAccountBindThird(values);
     spinningLogin.value = false;
   }
-  //==================================绑定第三方登录账号=============================================
+  //==================================Liên kết tài khoản đăng nhập bên thứ ba=============================================
 
   onMounted(() => {
     let app = document.getElementById('app');

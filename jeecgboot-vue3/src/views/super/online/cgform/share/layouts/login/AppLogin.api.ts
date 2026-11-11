@@ -6,7 +6,7 @@ enum Api {
 }
 
 /**
- * 保存租户
+ * Lưu đơn vị thuê (tenant)
  * @param params
  */
 export const saveTenantJoinUser = (params) => {
@@ -14,7 +14,7 @@ export const saveTenantJoinUser = (params) => {
 };
 
 /**
- * 加入租户
+ * Tham gia đơn vị thuê
  * @param params
  */
 export const joinTenantByHouseNumber = (params) => {

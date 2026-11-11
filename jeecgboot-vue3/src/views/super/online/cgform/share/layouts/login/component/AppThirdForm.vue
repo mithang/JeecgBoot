@@ -1,18 +1,18 @@
 <template>
-  <!-- 绑定账号或者注册 -->
+  <!-- Liên kết tài khoản hoặc đăng ký -->
   <div class="third-account" v-show="bindingAccount">
     <div class="content">
       <div class="bind-title">
-        <span>还未绑定敲敲云账号</span>
+        <span>Chưa liên kết tài khoản Qiaoqiao Cloud</span>
       </div>
       <div class="bind-title-desc">
-        <span>请选择绑定已有帐户，或创建新帐号</span>
+        <span>Vui lòng chọn liên kết tài khoản đã có, hoặc tạo tài khoản mới</span>
       </div>
       <div class="enter-x bind-btn">
-        <a-button type="primary" @click="loginAccountClick">登录并绑定</a-button>
+        <a-button type="primary" @click="loginAccountClick">Đăng nhập và liên kết</a-button>
       </div>
       <div class="enter-x bind-btn" style="margin-top: 20px">
-        <a-button type="primary" @click="registerAccountClick">注册新账号</a-button>
+        <a-button type="primary" @click="registerAccountClick">Đăng ký tài khoản mới</a-button>
       </div>
     </div>
   </div>

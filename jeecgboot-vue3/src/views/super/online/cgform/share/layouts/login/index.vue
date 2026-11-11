@@ -1,5 +1,5 @@
 <template>
-  <div>这里是你的登录页面</div>
+  <div>Đây là trang đăng nhập của bạn</div>
 </template>
 
 <script setup lang="ts">
@@ -8,7 +8,7 @@ import {useUserStore} from "@/store/modules/user";
 
 const userStore = useUserStore();
 
-// 获取路由的 r
+// Lấy của route r
 
 if (userStore.getToken) {
 

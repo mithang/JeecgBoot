@@ -28,17 +28,17 @@ export const useShareStore = defineStore('online-cgform-share', {
   },
   actions: {
 
-    // 检查 url 参数是否携带token
+    // Kiểm tra url Tham số có mang theo hay khôngtoken
     async checkUrlToken(): Promise<boolean> {
       const token = new URLSearchParams(window.location.search).get('token');
       const flag = token != null && token.length > 0;
       if (flag) {
         userStore.setToken(token);
-        // 检查 token 是否有效
+        // Kiểm tra token Có hiệu lực hay không
         try {
           const res = await getUserInfo();
           if (!res?.userInfo) {
-            throw new Error('token无效');
+            throw new Error('tokenKhông hợp lệ');
           } else {
             userStore.setUserInfo(res.userInfo)
             if (res.sysAllDictItems) {

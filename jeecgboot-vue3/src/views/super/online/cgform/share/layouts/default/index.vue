@@ -1,7 +1,7 @@
 <template>
   <template v-if="pageLoading">
     <div style="text-align: center; padding-top: 120px;">
-      <a-spin tip="加载中…"/>
+      <a-spin tip="Đang tải…"/>
     </div>
   </template>
   <template v-else-if="pageErrorTip">

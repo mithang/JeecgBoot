@@ -38,7 +38,7 @@
             <a-form-item name="regPassword">
               <a-input ref="pwdRef" type="password" v-model:value="formData.regPassword" style="height: 40px" @blur="formDataInputBlur" autocomplete="new-password"/>
               <div class="form-title" :class="activekey === 'regPassword' ? 'active-title' : ''">
-                8-20位，需包含字母和数字
+                8-20ký tự, phải bao gồm chữ cái và chữ số
               </div>
             </a-form-item>
           </div>
@@ -59,7 +59,7 @@
   <div v-show="showType === 'email'">
     <AppNameEmail ref="emailRef" @login-account="loginAccount" @bind-third-account="bindThirdAccount"/>
   </div>
-  <!-- 图片验证码弹窗 -->
+  <!-- Popup mã xác thực hình ảnh -->
   <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
 </template>
 
@@ -78,7 +78,7 @@
 
   const { createMessage } = useMessage();
   const { t } = useI18n();
-  //手机号表单
+  //Biểu mẫu số điện thoại
   const formData = reactive<any>({
     mobile: '',
     sms: '',
@@ -90,43 +90,43 @@
   const pwdRef = ref();
   const smscodeRef = ref();
   const usernameRef = ref();
-  //加载按钮
+  //Tải nút
   const registerLoading = ref<boolean>(false);
-  //选中值
+  //Giá trị đã chọn
   const activekey = ref<string>('');
 
-  //获取手机号的样式
+  //Lấy kiểu dáng của số điện thoại
   const getPhoneClass = computed(() => {
     return formData.mobile != '' ? 'current-active' : '' || unref(activekey) === 'mobile' ? 'current-active' : '';
   });
 
-  //获取用户名的样式
+  //Lấy kiểu dáng của tên người dùng
   const getUsernameClass = computed(() => {
     return formData.username != '' ? 'current-active' : '' || unref(activekey) === 'username' ? 'current-active' : '';
   });
 
-  //获取手机号的样式
+  //Lấy kiểu dáng của số điện thoại
   const getSmsCodeClass = computed(() => {
     return formData.sms != '' ? 'current-active' : '' || unref(activekey) === 'sms' ? 'current-active' : '';
   });
 
-  //获取密码的样式
+  //Lấy kiểu dáng của mật khẩu
   const getPasswordClass = computed(() => {
     return formData.regPassword != '' ? 'current-active' : '' || unref(activekey) === 'regPassword' ? 'current-active' : '';
   });
   const emit = defineEmits(['return-login', 'login-account', 'bind-third-account']);
-  //是否显示获取验证码
+  //Có hiển thị lấy mã xác thực hay không
   const showInterval = ref<boolean>(true);
   //60s
   const timeRuning = ref<number>(60);
-  //定时器
+  //Bộ hẹn giờ
   const timer = ref<any>(null);
-  //注册表单
+  //Biểu mẫu đăng ký
   const registerRef = ref();
   const getMobileFormRule = computed(() => createPhoneRule(t('sys.login.mobilePlaceholder')));
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
-  const getPasswordFormRule = computed(() => [{ required: true, validator:checkPassword},{ pattern:/^(?=.*[0-9])(?=.*[a-zA-Z])(.{8,20})$/,message:'8-20位，需包含字母和数字'}]);
-  //登录规则
+  const getPasswordFormRule = computed(() => [{ required: true, validator:checkPassword},{ pattern:/^(?=.*[0-9])(?=.*[a-zA-Z])(.{8,20})$/,message:'8-20ký tự, phải bao gồm chữ cái và chữ số'}]);
+  //Quy tắc đăng nhập
   const getFormRules = computed(() => {
     return {
       mobile: unref(getMobileFormRule),
@@ -145,7 +145,7 @@
   const [captchaRegisterModal, { openModal: openCaptchaModal }] = useModal();
   
   /**
-   * 创建规则
+   * Tạo quy tắc
    * @param message
    */
   function createRule(message: string) {
@@ -159,7 +159,7 @@
   }  
   
   /**
-   * 创建手机号规则
+   * Tạo quy tắc số điện thoại
    * @param message
    */
   function createPhoneRule(message: string) {
@@ -177,7 +177,7 @@
   }
   
   /**
-   * 表单组件点击事件
+   * Sự kiện nhấp của component biểu mẫu
    */
   function formDataInputClick(val) {
     activekey.value = val;
@@ -193,27 +193,27 @@
   }
 
   /**
-   * 表单组件失去焦点
+   * Component biểu mẫu mất tiêu điểm (focus)
    */
   function formDataInputBlur() {
     activekey.value = '';
   }
 
   /**
-   * 获取验证码
+   * Lấy mã xác thực
    */
   async function getLoginCode() {
     if (!formData.mobile) {
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】Cùng mộtIP，1phút vượt quá5lần tin nhắn SMS, thì nhắc cần mã xác thực---
     const result = await getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.REGISTER }).catch((res) =>{
       if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
         openCaptchaModal(true, {});
       }
     });
-    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】Cùng mộtIP，1phút vượt quá5lần tin nhắn SMS, thì nhắc cần mã xác thực---
     if (result) {
       const TIME_COUNT = 60;
       if (!unref(timer)) {
@@ -233,7 +233,7 @@
   }
 
   /**
-   * 验证新密码是否为空
+   * Xác thực mật khẩu mới có rỗng hay không
    */
   function checkPassword(_rule: Rule, value: string) {
     if (value === '') {
@@ -243,14 +243,14 @@
   }
 
   /**
-   * 返回登录
+   * Quay lại đăng nhập
    */
   function toLoginClick() {
     emit('return-login');
   }
 
   /**
-   * 注册
+   * Đăng ký
    */
   async function registerClick() {
     registerRef.value.validateFields().then(async (values) => {
@@ -260,7 +260,7 @@
           if(res.result && res.result.username){
             notification.warning({
               message: t('sys.api.errorTip'),
-              description: '手机号已注册' || t('sys.api.networkExceptionMsg'),
+              description: 'Số điện thoại đã được đăng ký' || t('sys.api.networkExceptionMsg'),
               duration: 3,
             });
           }
@@ -287,7 +287,7 @@
   }
 
   /**
-   * 清除表单验证
+   * Xóa kiểm chứng biểu mẫu
    */
   function clearValidate() {
     showType.value = 'register';
@@ -296,7 +296,7 @@
   }
 
   /**
-   * 注册成功返回结果
+   * Kết quả trả về khi đăng ký thành công
    * @param values
    */
   function loginAccount(values){
@@ -304,7 +304,7 @@
   }
   
   /**
-   * 绑定第三方账号
+   * Liên kết tài khoản bên thứ ba
    */
   function bindThirdAccount(values) {
     emit('bind-third-account',values)

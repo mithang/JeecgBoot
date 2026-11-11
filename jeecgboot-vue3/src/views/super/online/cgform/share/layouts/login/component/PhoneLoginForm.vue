@@ -23,12 +23,12 @@
     </div>
     <div v-if="!props.bindThirdAccount" class="phone-login-btn pointer" @click="accountHandleLogin">{{ t('sys.login.backSignIn') }}</div>
   </a-form>
-  <!-- 图片验证码弹窗 -->
+  <!-- Popup mã xác thực hình ảnh -->
   <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
 </template>
 
 <script lang="ts" setup name="phone-login-form">
-  //获取手机号的样式
+  //Lấy kiểu dáng của số điện thoại
   import { computed, onMounted, reactive, ref, toRaw, unref } from 'vue';
   import { useUserStore } from '/@/store/modules/user';
   import { SmsEnum, useFormRules, useFormValid } from '/@/views/sys/login/useLogin';
@@ -42,46 +42,46 @@
   const { createMessage } = useMessage();
 
   const { t } = useI18n();
-  //选中值
+  //Giá trị đã chọn
   const activekey = ref<string>('');
-  //登录加载
+  //Đang tải đăng nhập
   const loginLoading = ref<boolean>(false);
-  //登录表单
+  //Biểu mẫu đăng nhập
   const loginPhoneRef = ref();
   const randCodeData = reactive({
     randCodeImage: '',
     requestCodeSuccess: false,
     checkKey: -1,
   });
-  //手机号表单
+  //Biểu mẫu số điện thoại
   const formData = reactive({
     mobile: '',
     sms: '',
   });
   const userStore = useUserStore();
   const emit = defineEmits(['login', 'login-success','bind-third-phone']);
-  //记住我
+  //Ghi nhớ tôi
   const rememberMeCheck = ref<boolean>(false);
-  //获取手机号的样式
+  //Lấy kiểu dáng của số điện thoại
   const geMobileClass = computed(() => {
     return formData.mobile != '' ? 'current-active' : '' || unref(activekey) === 'mobile' ? 'current-active' : '';
   });
-  //获取手机验证码的样式
+  //Lấy kiểu dáng của mã xác thực điện thoại
   const getSmsCodeClass = computed(() => {
     return formData.sms != '' ? 'current-active' : '' || unref(activekey) === 'sms' ? 'current-active' : '';
   });
   const { notification, createErrorModal } = useMessage();
-  //是否显示获取验证码
+  //Có hiển thị lấy mã xác thực hay không
   const showInterval = ref<boolean>(true);
   //60s
   const timeRuning = ref<number>(60);
-  //定时器
+  //Bộ hẹn giờ
   const timer = ref<any>(null);
   const smsCodeRef = ref();
   const mobileRef = ref();
   const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
-  //登录规则
+  //Quy tắc đăng nhập
   const getFormRules = computed(() => {
     return {
       mobile: unref(getAccountFormRule),
@@ -94,7 +94,7 @@
   const [captchaRegisterModal, { openModal: openCaptchaModal }] = useModal();
 
   /**
-   * 创建规则
+   * Tạo quy tắc
    * @param message
    */
   function createRule(message: string) {
@@ -108,7 +108,7 @@
   }
 
   /**
-   * 表单组件点击事件
+   * Sự kiện nhấp của component biểu mẫu
    */
   function formDataInputClick(val) {
     activekey.value = val;
@@ -120,18 +120,18 @@
   }
 
   /**
-   * 表单组件失去焦点
+   * Component biểu mẫu mất tiêu điểm (focus)
    */
   function formDataInputBlur() {
     activekey.value = '';
   }
 
   /**
-   * 登录点击事件
+   * Sự kiện nhấp đăng nhập
    */
   async function phoneLoginClick() {
     loginPhoneRef.value.validateFields().then(async (values) => {
-      //当前是否为第三方绑定手机号,如果是那么就走绑定手机号的逻辑，否则直接登录
+      //Hiện tại có phải là bên thứ ba liên kết số điện thoại hay không,Nếu đúng là vậy thì đi theo logic liên kết số điện thoại, nếu không thì đăng nhập trực tiếp
       if(!props.bindThirdAccount){
         try {
           loginLoading.value = true;
@@ -139,7 +139,7 @@
             toRaw({
               mobile: values.mobile,
               captcha: values.sms,
-              mode: 'none', //不要默认的错误提示
+              mode: 'none', //không dùng nhắc lỗi mặc định
               goHome: false,
             })
           );
@@ -162,22 +162,22 @@
   }
 
   /**
-   * 获取验证码
+   * Lấy mã xác thực
    */
   async function getLoginCode() {
     if (!formData.mobile) {
       createMessage.warn(t('sys.login.mobilePlaceholder'));
       return;
     }
-    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
-    //update-begin---author:wangshuai---date:2025-07-15---for:【issues/8567】严重：修改密码存在水平越权问题：登录应该用登录模板不应该用忘记密码的模板---
+    //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】Cùng mộtIP，1phút vượt quá5lần tin nhắn SMS, thì nhắc cần mã xác thực---
+    //update-begin---author:wangshuai---date:2025-07-15---for:【issues/8567】Nghiêm trọng: chức năng đổi mật khẩu tồn tại lỗ hổng vượt quyền ngang: đăng nhập phải dùng mẫu đăng nhập, không được dùng mẫu quên mật khẩu---
     const result = await getCaptcha({ mobile: formData.mobile, smsmode: SmsEnum.LOGIN }).catch((res) =>{
-    //update-end---author:wangshuai---date:2025-07-15---for:【issues/8567】严重：修改密码存在水平越权问题：登录应该用登录模板不应该用忘记密码的模板---
+    //update-end---author:wangshuai---date:2025-07-15---for:【issues/8567】Nghiêm trọng: chức năng đổi mật khẩu tồn tại lỗ hổng vượt quyền ngang: đăng nhập phải dùng mẫu đăng nhập, không được dùng mẫu quên mật khẩu---
       if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
         openCaptchaModal(true, {});
       }
     });
-    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+    //update-end---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】Cùng mộtIP，1phút vượt quá5lần tin nhắn SMS, thì nhắc cần mã xác thực---
     if (result) {
       const TIME_COUNT = 60;
       if (!unref(timer)) {
@@ -197,7 +197,7 @@
   }
 
   /**
-   * 手机号登录
+   * Đăng nhập bằng số điện thoại
    */
   function accountHandleLogin() {
     emit('login', 'accountLogin');

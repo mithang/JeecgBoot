@@ -21,12 +21,12 @@ export function useCgformShare() {
 
   async function initCgformShare() {
     try {
-      // 检查url中的token
+      // Kiểm traurltrong đótoken
       await shareStore.checkUrlToken()
       const route = router.currentRoute.value
-      // 检查缓存中的token
+      // Kiểm tra trong bộ nhớ đệmtoken
       if (!userStore.getToken) {
-        // 跳转到登录页
+        // Chuyển tới trang đăng nhập
         router.push({
           name: SHARE_LOGIN__ROUTER_NAME,
           query: {
@@ -35,10 +35,10 @@ export function useCgformShare() {
         });
         return
       }
-      // 获取 Online表单 的信息
+      // Lấy OnlineBiểu mẫu thông tin của
       const {id: formId} = route.params
       if (!formId) {
-        pageErrorTip.value = '参数错误'
+        pageErrorTip.value = 'Lỗi tham số'
         return
       }
       let res = await getCgformById(formId as string);
@@ -47,47 +47,47 @@ export function useCgformShare() {
         return
       }
       const record = res.result
-      // 判断是否开启了外部链接
+      // Phán đoán có bật liên kết ngoài hay không
       const extJson = parseExtConfigJson(record);
       if (!extJson?.enableExternalLink) {
-        pageErrorTip.value = '当前表单未开启外部链接'
+        pageErrorTip.value = 'Biểu mẫu hiện tại chưa bật liên kết ngoài'
         return
       }
-      // 判断是否支持当前操作
+      // Phán đoán có hỗ trợ thao tác hiện tại hay không
       let externalLinkActions = extJson.externalLinkActions.split(',');
       if (route.name === SHARE_ADD_ROUTER_NAME) {
         if (!externalLinkActions.includes('add')) {
-          pageErrorTip.value = '当前表单不支持外部新增'
+          pageErrorTip.value = 'Biểu mẫu hiện tại không hỗ trợ thêm mới từ bên ngoài'
           return
         }
       } else if (route.name === SHARE_UPDATE_ROUTER_NAME) {
         if (!externalLinkActions.includes('edit')) {
-          pageErrorTip.value = '当前表单不支持外部编辑'
+          pageErrorTip.value = 'Biểu mẫu hiện tại không hỗ trợ chỉnh sửa từ bên ngoài'
           return
         }
       } else if (route.name === SHARE_DETAIL_ROUTER_NAME) {
         if (!externalLinkActions.includes('detail')) {
-          pageErrorTip.value = '当前表单不支持外部详情'
+          pageErrorTip.value = 'Biểu mẫu hiện tại không hỗ trợ xem chi tiết từ bên ngoài'
           return
         }
       } else {
-        pageErrorTip.value = '未知的页面';
+        pageErrorTip.value = 'Trang không xác định';
         return;
       }
 
-      // 判断表单类型
+      // Phán đoán loại biểu mẫu
       if (record.tableType == 3) {
-        pageErrorTip.value = '不支持附表外部链接';
+        pageErrorTip.value = 'không hỗ trợ liên kết ngoài của bảng phụ';
         return;
       }
 
       shareStore.setCgformRecord(record);
 
-      // 查询数据
+      // Truy vấn dữ liệu
       if (route.name === SHARE_UPDATE_ROUTER_NAME || route.name === SHARE_DETAIL_ROUTER_NAME) {
         const {dataId} = route.params;
         if (!dataId) {
-          pageErrorTip.value = '参数错误'
+          pageErrorTip.value = 'Lỗi tham số'
           return
         }
         res = await getCgformRecordById(formId as string, dataId as string);
@@ -97,7 +97,7 @@ export function useCgformShare() {
         }
         const dataRecord = res.result
         if (dataRecord?.id !== dataId) {
-          pageErrorTip.value = '数据不存在或已删除'
+          pageErrorTip.value = 'Dữ liệu không tồn tại hoặc đã bị xóa'
           return
         }
         shareStore.setDataRecord(dataRecord);

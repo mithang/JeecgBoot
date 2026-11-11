@@ -1,13 +1,13 @@
 <template>
   <div ref="boxRef" :class="['view-box', {'is-mobile': isMobile}]" :style="boxStyle">
     <template v-if="!loading">
-      <!-- 详情弹框 -->
+      <!-- Popup chi tiết -->
       <OnlineDetailModal v-if="isDetail" v-bind="getModalProps" :isShare="true">
         <template #footerBtn>
-          <a-button @click="emit('goEdit')">编辑该数据</a-button>
+          <a-button @click="emit('goEdit')">Chỉnh sửa dữ liệu này</a-button>
         </template>
       </OnlineDetailModal>
-      <!-- 编辑弹框 -->
+      <!-- Popup chỉnh sửa -->
       <OnlineAutoModal v-else v-bind="getModalProps" :isShare="true"/>
     </template>
   </div>
@@ -41,11 +41,11 @@ const shareStore = useShareStore()
 
 const boxRef = ref()
 
-// box样式
+// boxKiểu dáng
 const boxStyle = computed(() => {
   let paddingTop = 20;
   let paddingLeft = 100;
-  // 兼容窄屏幕、移动端样式，不动态刷新
+  // Tương thích với màn hình hẹp, kiểu dáng di động, không làm mới động
   if (window.innerWidth < 1200) {
     paddingTop = 0;
     paddingLeft = 0;
@@ -56,15 +56,15 @@ const boxStyle = computed(() => {
 });
 
 const getModalProps = computed(() => {
-  // 业务属性
-  const titlePrefix = props.isDetail ? '详情' : (props.isUpdate ? '修改' : '新增');
+  // Thuộc tính nghiệp vụ
+  const titlePrefix = props.isDetail ? 'Chi tiết' : (props.isUpdate ? 'Chỉnh sửa' : 'Thêm mới');
   const modalProps: Recordable = {
     id: props.ID,
     title: titlePrefix + ` [${props.formName}]`,
     onRegister: registerModal,
   }
   if (!props.isDetail) {
-    // 新增、编辑参数
+    // Tham số thêm mới, chỉnh sửa
     Object.assign(modalProps, {
       cgBIBtnMap: props.cgBIBtnMap,
       buttonSwitch: props.buttonSwitch,
@@ -73,7 +73,7 @@ const getModalProps = computed(() => {
       onFormConfig: handleFormConfig,
     });
   }
-  // 自定义属性
+  // Thuộc tính tùy chỉnh
   Object.assign(modalProps, {
     cancelBtnCfg: {enabled: false},
 
@@ -90,7 +90,7 @@ const getModalProps = computed(() => {
   return modalProps;
 });
 
-// 动态计算高度
+// Tính toán chiều cao động
 const bodyHeight = computed(() => {
   let offset = 140;
   if (props.isMobile) {
@@ -106,7 +106,7 @@ const {
   onlineExtConfigJson,
 } = useOnlineTableContext();
 
-// 处理列表button
+// Xử lý danh sáchbutton
 const {
   registerModal: registerModalOrigin,
 
@@ -129,9 +129,9 @@ async function getDataRecordPromise() {
   return await getRefPromise(computed(() => shareStore.getDataRecord));
 }
 
-// 处理 BasicTable 的配置
+// Xử lý BasicTable cấu hình của
 const {} = useTableColumns(onlineTableContext, onlineExtConfigJson);
-// 处理增强
+// Xử lý phần tăng cường
 const {} = useEnhance(onlineTableContext);
 
 function onSuccess(record: Recordable) {
@@ -148,7 +148,7 @@ function onSuccess(record: Recordable) {
 }
 
 function closeFunc() {
-  alert('不允许关闭')
+  alert('không cho phép đóng')
   return false
 }
 
@@ -167,19 +167,19 @@ function closeFunc() {
 
     > .ant-modal {
       top: 0 !important;
-      // 取消动画
+      // Hủy hiệu ứng động
       animation: none !important;
 
       .jeecg-basic-title {
-        // 取消拖拽手势
+        // Hủy cử chỉ kéo thả
         cursor: default !important;
       }
 
       .ant-modal-content {
-        // 无阴影
+        // Không có bóng đổ
         box-shadow: none !important;
 
-        // 隐藏右上角 ×
+        // Ẩn góc trên bên phải ×
         > .ant-modal-close {
           display: none;
         }

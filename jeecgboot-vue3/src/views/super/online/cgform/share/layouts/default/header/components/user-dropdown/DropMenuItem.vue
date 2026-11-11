@@ -25,9 +25,9 @@
     },
     setup(props) {
       const instance = getCurrentInstance();
-      // update-begin--author:liaozhiyang---date:20240717---for：【issues/6855】组件使用key作props报警告，改为itemKey
+      // update-begin--author:liaozhiyang---date:20240717---for：【issues/6855】Component sử dụngkeylàmpropsbáo cảnh cáo, đổi thànhitemKey
       const itemKey = computed(() => props.itemKey || instance?.vnode?.props?.itemKey);
-      // update-end--author:liaozhiyang---date:20240717---for：【issues/6855】组件使用key作props报警告，改为itemKey
+      // update-end--author:liaozhiyang---date:20240717---for：【issues/6855】Component sử dụngkeylàmpropsbáo cảnh cáo, đổi thànhitemKey
       return { itemKey };
     },
   });

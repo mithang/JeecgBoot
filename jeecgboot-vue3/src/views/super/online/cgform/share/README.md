@@ -1,3 +1,3 @@
-# 目录说明
+# Giải thích thư mục
 
-本目录为 Online表单 的外部链接功能目录
+Thư mục này là thư mục chức năng liên kết ngoài của biểu mẫu Online

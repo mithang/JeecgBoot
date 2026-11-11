@@ -3,20 +3,20 @@
     <template v-if="showResult!=='none'">
       <a-result
           status="success"
-          :title="`${isUpdate ? '修改': '新增'}成功`"
-          subTitle="请选择下一步操作"
+          :title="`${isUpdate ? 'Chỉnh sửa': 'Thêm mới'}Thành công`"
+          subTitle="Vui lòng chọn thao tác tiếp theo"
       >
         <template #extra>
           <a-space>
             <a-button type="primary" @click="onAddContinue">
-              <span>继续{{ isUpdate ? '修改' : '新增' }}</span>
+              <span>Tiếp tục{{ isUpdate ? 'Chỉnh sửa' : 'Thêm mới' }}</span>
             </a-button>
-            <!-- 有详情权限：主按钮为【查看数据】，其它操作放下拉 -->
+            <!-- Có quyền xem chi tiết: nút chính là 【Xem dữ liệu】, các thao tác khác đặt ở dropdown -->
             <a-space-compact v-if="canView" block>
               <a-button @click="onOtherAction({key:'view'})">
-                <span>查看</span>
-                <span v-if="!isUpdate">新</span>
-                <span>数据</span>
+                <span>Xem</span>
+                <span v-if="!isUpdate">Mới</span>
+                <span>Dữ liệu</span>
               </a-button>
               <a-dropdown v-if="otherAction" :trigger="['click', 'hover']">
                 <a-button preIcon="ant-design:down">
@@ -28,17 +28,17 @@
                 </template>
               </a-dropdown>
             </a-space-compact>
-            <!-- 无详情权限：其它操作直接平铺为按钮 -->
+            <!-- Không có quyền xem chi tiết: các thao tác khác trực tiếp trải phẳng thành nút -->
             <a-button v-else-if="otherAction" @click="onOtherAction({key: otherAction.key})">{{ otherAction.label }}</a-button>
-            <a-button @click="onClose">关闭</a-button>
+            <a-button @click="onClose">Đóng</a-button>
           </a-space>
         </template>
       </a-result>
     </template>
-    <!-- 单表页面 -->
+    <!-- Trang bảng đơn -->
     <!--    <template v-else-if="isSingle">-->
     <!--    </template>-->
-    <!-- 主子表页面 -->
+    <!-- Trang bảng chính-con -->
     <template v-else>
       <SingleView
           :ID="ID"
@@ -85,7 +85,7 @@ const shareStore = useShareStore()
 const cgformRef = computed(() => shareStore.getCgformRecord);
 const ID = computed(() => cgformRef.value?.id);
 const formName = computed(() => cgformRef.value?.tableTxt);
-// 是否是单表
+// Có phải bảng đơn hay không
 // const isSingle = computed(() => cgformRef.value?.tableType == 1);
 
 const listRef = ref()
@@ -93,16 +93,16 @@ const buttonSwitch = computed(() => listRef.value?.buttonSwitch);
 const cgBIBtnMap = computed(() => listRef.value?.cgBIBtnMap);
 const confirmBtnCfg = computed(() => listRef.value?.getFormConfirmButtonCfg);
 
-// update-begin--author:liaozhiyang---date:20261026---for：【LHZP-29】按钮根据详情/编辑/新增权限显示
+// update-begin--author:liaozhiyang---date:20261026---for：【LHZP-29】Nút căn cứ theo chi tiết/Chỉnh sửa/Hiển thị quyền thêm mới
 /**
- * 是否有某个内置按钮的权限
- * @param keys 按钮编码，多个需同时满足
+ * Có quyền của một nút tích hợp sẵn nào đó hay không
+ * @param keys Mã nút, nhiều mã cần thỏa mãn đồng thời
  */
 function hasBtnAuth(...keys: string[]) {
   return keys.every((key) => buttonSwitch.value?.[key] === true && cgBIBtnMap.value?.[key]?.enabled !== false);
 }
 
-// 外部链接允许的操作：add、edit、detail
+// Các thao tác mà liên kết ngoài cho phép:add、edit、detail
 const externalLinkActions = computed<string[]>(() => {
   if (!cgformRef.value) {
     return [];
@@ -110,21 +110,21 @@ const externalLinkActions = computed<string[]>(() => {
   const extJson = parseExtConfigJson(cgformRef.value);
   return (extJson.externalLinkActions || '').split(',').filter((item) => !!item);
 });
-// 外部链接是否允许某个操作
+// Liên kết ngoài có cho phép một thao tác nào đó hay không
 function hasExtAction(action: string) {
   return externalLinkActions.value.includes(action);
 }
 
-// 详情：需要详情按钮权限，且外部链接允许详情
+// Chi tiết: cần quyền nút chi tiết, và liên kết ngoài cho phép xem chi tiết
 const canView = computed(() => hasBtnAuth('detail') && hasExtAction('detail'));
-// 下拉/平铺的其它操作：修改后为【添加数据】，新增后为【编辑新数据】
+// dropdown/Các thao tác dạng phẳng khác: sau khi sửa là 【Thêm dữ liệu】, sau khi thêm mới là 【Chỉnh sửa dữ liệu mới】
 const otherAction = computed(() => {
   if (props.isUpdate) {
-    return hasBtnAuth('add') && hasExtAction('add') ? { key: 'add', label: '添加数据' } : null;
+    return hasBtnAuth('add') && hasExtAction('add') ? { key: 'add', label: 'Thêm dữ liệu' } : null;
   }
-  return hasBtnAuth('edit', 'update') && hasExtAction('edit') ? { key: 'edit', label: '编辑新数据' } : null;
+  return hasBtnAuth('edit', 'update') && hasExtAction('edit') ? { key: 'edit', label: 'Chỉnh sửa dữ liệu mới' } : null;
 });
-// update-end--author:liaozhiyang---date:20261026---for：【LHZP-29】按钮根据详情/编辑/新增权限显示
+// update-end--author:liaozhiyang---date:20261026---for：【LHZP-29】Nút căn cứ theo chi tiết/Chỉnh sửa/Hiển thị quyền thêm mới
 
 const showResult = ref<'none' | 'ok'>('none');
 const lastActionDataId = ref<string>();
@@ -137,7 +137,7 @@ function onOk(dataId: string) {
   }
 }
 
-// 继续添加
+// Tiếp tục thêm
 function onAddContinue() {
   // window.location.reload();
   showResult.value = 'none';
@@ -181,7 +181,7 @@ function goDataAction(action, dataId) {
 
 function onClose() {
   window.close()
-  setTimeout(() => alert('当前页面无法通过按钮关闭，请手动关闭'), 1000)
+  setTimeout(() => alert('Trang hiện tại không thể đóng bằng nút, vui lòng đóng thủ công'), 1000)
 }
 
 </script>
