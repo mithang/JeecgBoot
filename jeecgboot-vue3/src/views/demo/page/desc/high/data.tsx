@@ -4,17 +4,17 @@ import { Badge } from 'ant-design-vue';
 
 export const refundTimeTableSchema: BasicColumn[] = [
   {
-    title: '时间',
+    title: 'Thời gian',
     width: 150,
     dataIndex: 't1',
   },
   {
-    title: '当前进度',
+    title: 'Tiến độ hiện tại',
     width: 150,
     dataIndex: 't2',
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     width: 150,
     dataIndex: 't3',
     customRender: ({ record }) => {
@@ -22,12 +22,12 @@ export const refundTimeTableSchema: BasicColumn[] = [
     },
   },
   {
-    title: '操作员ID	',
+    title: 'Người vận hànhID	',
     width: 150,
     dataIndex: 't4',
   },
   {
-    title: '耗时',
+    title: 'Thời gian tốn',
     width: 150,
     dataIndex: 't5',
   },
@@ -36,30 +36,30 @@ export const refundTimeTableSchema: BasicColumn[] = [
 export const refundTimeTableData: any[] = [
   {
     t1: '2017-10-01 14:10',
-    t2: '联系客户',
-    t3: '进行中',
-    t4: '取货员 ID1234',
+    t2: 'Liên hệ khách hàng',
+    t3: 'Đang tiến hành',
+    t4: 'Nhân viên lấy hàng ID1234',
     t5: '5mins',
   },
   {
     t1: '2017-10-01 14:10',
-    t2: '取货员出发',
-    t3: '成功',
-    t4: '取货员 ID1234',
+    t2: 'Người lấy hàng đã xuất phát',
+    t3: 'Thành công',
+    t4: 'Nhân viên lấy hàng ID1234',
     t5: '5mins',
   },
   {
     t1: '2017-10-01 14:10',
-    t2: '取货员接单',
-    t3: '成功',
-    t4: '系统',
+    t2: 'Người lấy hàng đã nhận đơn',
+    t3: 'Thành công',
+    t4: 'Hệ thống',
     t5: '5mins',
   },
   {
     t1: '2017-10-01 14:10',
-    t2: '申请审批通过',
-    t3: '成功',
-    t4: '用户',
+    t2: 'Đơn đã được phê duyệt',
+    t3: 'Thành công',
+    t4: 'Người dùng',
     t5: '1h',
   },
 ];

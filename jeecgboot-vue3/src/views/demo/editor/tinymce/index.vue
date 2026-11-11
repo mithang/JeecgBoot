@@ -1,6 +1,6 @@
 <template>
   <div :style="{ height: contentHeight, overflowY: 'scroll' }">
-    <PageWrapper title="富文本组件示例">
+    <PageWrapper title="Ví dụ component văn bản đa dạng thức">
       <Tinymce v-model="value" @change="handleChange" width="100%" />
       <div style="height: 1000px"></div>
     </PageWrapper>

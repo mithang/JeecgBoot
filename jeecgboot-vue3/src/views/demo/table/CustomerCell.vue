@@ -35,13 +35,13 @@
       slots: { customRender: 'id' },
     },
     {
-      title: '头像',
+      title: 'Ảnh đại diện',
       dataIndex: 'avatar',
       width: 100,
       slots: { customRender: 'avatar' },
     },
     {
-      title: '分类',
+      title: 'Phân loại',
       dataIndex: 'category',
       width: 80,
       align: 'center',
@@ -49,38 +49,38 @@
       slots: { customRender: 'category' },
     },
     {
-      title: '姓名',
+      title: 'Họ tên',
       dataIndex: 'name',
       width: 120,
     },
     {
-      title: '图片列表1',
+      title: 'Danh sách hình ảnh1',
       dataIndex: 'imgArr',
-      helpMessage: ['这是简单模式的图片列表', '只会显示一张在表格中', '但点击可预览多张图片'],
+      helpMessage: ['Đây là danh sách hình ảnh ở chế độ đơn giản', 'Chỉ hiển thị một hình trong bảng', 'Nhưng khi nhấn có thể xem trước nhiều hình ảnh'],
       width: 140,
       slots: { customRender: 'img' },
     },
     {
-      title: '照片列表2',
+      title: 'Danh sách ảnh2',
       dataIndex: 'imgs',
       width: 160,
       slots: { customRender: 'imgs' },
     },
     {
-      title: '地址',
+      title: 'Địa chỉ',
       dataIndex: 'address',
     },
     {
-      title: '编号',
+      title: 'Mã',
       dataIndex: 'no',
       slots: { customRender: 'no' },
     },
     {
-      title: '开始时间',
+      title: 'Thời gian bắt đầu',
       dataIndex: 'beginTime',
     },
     {
-      title: '结束时间',
+      title: 'Thời gian kết thúc',
       dataIndex: 'endTime',
     },
   ];
@@ -88,8 +88,8 @@
     components: { BasicTable, TableImg, Tag, Avatar },
     setup() {
       const [registerTable] = useTable({
-        title: '自定义列内容',
-        titleHelpMessage: '表格中所有头像、图片均为mock生成，仅用于演示图片占位',
+        title: 'Nội dung cột tùy chỉnh',
+        titleHelpMessage: 'Tất cả avatar, hình ảnh trong bảng đều được tạo bằng mock, chỉ dùng để demo placeholder hình ảnh',
         api: demoListApi,
         columns: columns,
         bordered: true,

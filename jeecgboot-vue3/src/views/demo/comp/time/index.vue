@@ -1,18 +1,18 @@
 <template>
-  <PageWrapper title="时间组件示例">
-    <CollapseContainer title="基础示例">
+  <PageWrapper title="Ví dụ về component thời gian">
+    <CollapseContainer title="Ví dụ cơ bản">
       <Time :value="time1" />
       <br />
       <Time :value="time2" />
     </CollapseContainer>
 
-    <CollapseContainer title="定时更新" class="my-4">
+    <CollapseContainer title="Cập nhật định kỳ" class="my-4">
       <Time :value="now" :step="1" />
       <br />
       <Time :value="now" :step="5" />
     </CollapseContainer>
 
-    <CollapseContainer title="定时更新">
+    <CollapseContainer title="Cập nhật định kỳ">
       <Time :value="now" mode="date" />
       <br />
       <Time :value="now" mode="datetime" />

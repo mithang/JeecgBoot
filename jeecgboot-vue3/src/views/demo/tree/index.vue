@@ -1,22 +1,22 @@
 <template>
-  <PageWrapper title="Tree基础示例">
+  <PageWrapper title="TreeVí dụ cơ bản">
     <Row :gutter="[16, 16]">
       <Col :span="8">
-        <BasicTree title="基础示例，默认展开第一层" :treeData="treeData" defaultExpandLevel="1" />
+        <BasicTree title="Ví dụ cơ bản, mặc định mở rộng tầng đầu tiên" :treeData="treeData" defaultExpandLevel="1" />
       </Col>
       <Col :span="8">
-        <BasicTree title="可勾选，默认全部展开" :treeData="treeData" :checkable="true" defaultExpandAll @check="handleCheck" />
+        <BasicTree title="Có thể chọn, mặc định mở rộng tất cả" :treeData="treeData" :checkable="true" defaultExpandAll @check="handleCheck" />
       </Col>
       <Col :span="8">
-        <BasicTree title="指定默认展开/勾选示例" :treeData="treeData" :checkable="true" :expandedKeys="['0-0']" :checkedKeys="['0-0']" />
+        <BasicTree title="Chỉ định mở rộng mặc định/Ví dụ chọn" :treeData="treeData" :checkable="true" :expandedKeys="['0-0']" :checkedKeys="['0-0']" />
       </Col>
       <Col :span="8">
-        <BasicTree title="懒加载异步树" ref="asyncTreeRef" :treeData="tree" :load-data="onLoadData" />
+        <BasicTree title="Cây bất đồng bộ lazy load" ref="asyncTreeRef" :treeData="tree" :load-data="onLoadData" />
       </Col>
       <Col :span="8">
-        <Card title="异步数据，默认展开">
+        <Card title="Dữ liệu không đồng bộ, mặc định mở rộng">
           <template #extra>
-            <a-button @click="loadTreeData" :loading="treeLoading">加载数据</a-button>
+            <a-button @click="loadTreeData" :loading="treeLoading">Tải dữ liệu</a-button>
           </template>
           <Spin :spinning="treeLoading">
             <BasicTree ref="asyncExpandTreeRef" :treeData="tree2" />
@@ -24,9 +24,9 @@
         </Card>
       </Col>
       <Col :span="8">
-        <Card title="BasicTree内置加载">
+        <Card title="BasicTreeTải tích hợp sẵn">
           <template #extra>
-            <a-button @click="loadTreeData2" :loading="treeLoading">请求数据</a-button>
+            <a-button @click="loadTreeData2" :loading="treeLoading">Yêu cầu dữ liệu</a-button>
           </template>
           <BasicTree ref="loadTreeRef" :treeData="tree2" :loading="treeLoading" />
         </Card>
@@ -59,12 +59,12 @@
 
       function loadTreeData() {
         treeLoading.value = true;
-        // 以下是模拟异步获取数据
+        // Dưới đây là dữ liệu lấy bất đồng bộ mô phỏng
         setTimeout(() => {
-          // 设置数据源
+          // Đặt nguồn dữ liệu
           tree2.value = cloneDeep(treeData);
           treeLoading.value = false;
-          // 展开全部
+          // Mở rộng tất cả
           nextTick(() => {
             console.log(unref(asyncExpandTreeRef));
             unref(asyncExpandTreeRef)?.expandAll(true);
@@ -73,9 +73,9 @@
       }
       function loadTreeData2() {
         treeLoading.value = true;
-        // 以下是模拟异步获取数据
+        // Dưới đây là dữ liệu lấy bất đồng bộ mô phỏng
         setTimeout(() => {
-          // 设置数据源
+          // Đặt nguồn dữ liệu
           tree2.value = cloneDeep(treeData);
           treeLoading.value = false;
         }, 2000);

@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="带参数标签页" content="支持带参数多tab缓存">
+  <PageWrapper title="Tab có tham số" content="Hỗ trợ cache nhiều tab có tham số">
     Current Param : {{ params }}
     <br />
     Keep Alive

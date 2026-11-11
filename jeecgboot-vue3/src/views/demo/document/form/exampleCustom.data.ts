@@ -3,177 +3,177 @@ import { defHttp } from '/@/utils/http/axios';
 
 export const schemas: FormSchema[] = [
   {
-    label: '验证码',
+    label: 'Mã xác thực',
     field: 'code',
     component: 'InputCountDown',
     componentProps: {
-      //'default': 默认, 'large': 最大, 'small': 最小
+      //'default': Mặc định, 'large': Lớn nhất, 'small': Nhỏ nhất
       size:'default',
-      //倒计时
+      //Đếm ngược
       count: 120,
     },
   },
   {
-    label: 'Api下拉选择',
+    label: 'ApiChọn trong danh sách thả xuống',
     field: 'apiSelect',
     component: 'ApiSelect',
     componentProps: {
-      //multiple: 多选；不填写为单选
+      //multiple: Chọn nhiều; không điền là chọn một
       mode: 'multiple',
-      //请求api,返回结果{ result: { records:[{'id':'1',name:'scott'},{'id':'2',name:'小张'}] }}
+      //Yêu cầuapi,Trả về kết quả{ result: { records:[{'id':'1',name:'scott'},{'id':'2',name:'Tiểu Trương'}] }}
       api: () => defHttp.get({ url: '/test/jeecgDemo/list' }),
-      //数值转成String
+      //Chuyển giá trị thànhString
       numberToString: false,
-      //标题字段
+      //Trường tiêu đề
       labelField: 'name',
-      //值字段
+      //Trường giá trị
       valueField: 'id',
-      //请求参数
+      //Tham số yêu cầu
       params: {},
-      //返回结果字段
+      //Trường kết quả trả về
       resultField: 'records',
     },
   },
   {
-    label: 'Api树选择',
+    label: 'ApiChọn cây',
     field: 'apiTreeSelect',
     component: 'ApiTreeSelect',
     componentProps: {
-      /* 请求api,返回结果
-         { result: { list: [{ title:'选项0',value:'0',key:'0',
-           children: [ {"title": "选项0-0","value": "0-0","key": "0-0"},...]
+      /* Yêu cầuapi,Trả về kết quả
+         { result: { list: [{ title:'Tùy chọn0',value:'0',key:'0',
+           children: [ {"title": "Tùy chọn0-0","value": "0-0","key": "0-0"},...]
            }, ...]
          }} */
       api: () => defHttp.get({ url: '/mock/tree/getDemoOptions' }),
-      //请求参数
+      //Tham số yêu cầu
       params: {},
-      //返回结果字段
+      //Trường kết quả trả về
       resultField: 'list',
     },
   },
   {
-    label: '校验密码强度',
+    label: 'Kiểm chứng độ mạnh mật khẩu',
     field: 'pwd',
     component: 'StrengthMeter',
     componentProps: {
-      //是否显示密码文本框
+      //Có hiển thị hộp văn bản mật khẩu không
       showInput: true,
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false,
     },
   },
   {
-    label: '省市县联动',
+    label: 'Liên động Tỉnh/Thành phố/Huyện',
     field: 'province',
     component: 'JAreaLinkage',
     componentProps: {
-      //是否显示区县，默认true,否则只显示省
+      //Có hiển thị quận huyện không, mặc địnhtrue,Nếu không chỉ hiển thị tỉnh
       showArea: true,
-      //是否是全部文本，默认false
+      //Có phải là toàn bộ văn bản không, mặc địnhfalse
       showAll: true,
     },
   },
   {
-    label: '岗位选择',
+    label: 'Chọn vị trí công tác',
     field: 'post',
     component: 'JSelectPosition',
     componentProps: {
-      //是否右侧显示选中列表
+      //Có hiển thị danh sách đã chọn ở bên phải không
       showSelected: true,
-      //最大选择数量
+      //Số lượng chọn tối đa
       maxSelectCount: 1,
-      //岗位标题
-      modalTitle: '岗位',
+      //Tiêu đề vị trí công tác
+      modalTitle: 'Vị trí công tác',
     },
   },
   {
-    label: '角色选择',
+    label: 'Chọn vai trò',
     field: 'role',
     component: 'JSelectRole',
     componentProps: {
-      //请求参数 如params:{"code":"001"}
+      //Tham số yêu cầu, ví dụparams:{"code":"001"}
       params: {},
-      //是否单选,默认false
+      //Có chọn một hay không,Mặc địnhfalse
       isRadioSelection: true,
-      //角色标题
-      modalTitle: '角色',
+      //Tiêu đề vai trò
+      modalTitle: 'Vai trò',
     },
   },
   {
-    label: '用户选择',
+    label: 'Chọn người dùng',
     field: 'user',
     component: 'JSelectUser',
     componentProps: {
-      //取值字段配置,一般为主键字段
+      //Cấu hình trường lấy giá trị,Thường là trường khóa chính
       rowKey: 'username',
-      //显示字段配置
+      //Hiển thị cấu hình trường
       labelKey: 'realname',
-      //是否显示选择按钮
+      //Có hiển thị nút chọn không
       showButton: false,
-      //用户标题
-      modalTitle: '用户',
+      //Tiêu đề người dùng
+      modalTitle: 'Người dùng',
     },
   },
   {
-    label: '图片上传',
+    label: 'Tải lên hình ảnh',
     field: 'uploadImage',
     component: 'JImageUpload',
     componentProps: {
-      //按钮显示文字
-      text:'图片上传',
-      //支持两种基本样式picture和picture-card
+      //Văn bản hiển thị của nút
+      text:'Tải lên hình ảnh',
+      //Hỗ trợ hai kiểu cơ bản picture vàpicture-card
       listType:'picture-card',
-      //用于控制文件上传的业务路径,默认temp
+      //Dùng để kiểm soát đường dẫn nghiệp vụ tải lên tệp,Mặc địnhtemp
       bizPath:'temp',
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled:false,
-      //最大上传数量
+      //Số lượng tải lên tối đa
       fileMax:1,
     },
   },
   {
-    label: '字典标签',
+    label: 'Nhãn từ điển',
     field: 'dictTags',
     component: 'JDictSelectTag',
     componentProps: {
-      //字典code配置，比如通过性别字典编码：sex，也可以使用demo,name,id 表名,名称,值的方式
+      //Cấu hình code danh mục, ví dụ qua mã danh mục giới tính: sex, cũng có thể dùngdemo,name,id Tên bảng,Tên,dạng giá trị
       dictCode:'sex',
-      //支持radio(单选按钮)、radioButton(单选按钮 btn风格)、select(下拉框)
+      //Hỗ trợradio(Nút radio)、radioButton(Nút radio kiểu btn)、select(Dropdown)
       type:'radioButton'
     },
   },
   {
-    label: '部门选择',
+    label: 'Chọn phòng ban',
     field: 'dept',
     component: 'JSelectDept',
     componentProps: {
-      //是否开启异步加载
+      //Có bật tải bất đồng bộ không
       sync: false,
-      //是否显示复选框
+      //Có hiển thị hộp kiểm không
       checkable: true,
-      //是否显示选择按钮
+      //Có hiển thị nút chọn không
       showButton: false,
-      //父子节点选中状态不再关联
+      //Trạng thái chọn của nút cha và nút con không còn liên kết với nhau
       checkStrictly: true,
-      //选择框标题
-      modalTitle: '部门选择',
+      //Tiêu đề hộp chọn
+      modalTitle: 'Chọn phòng ban',
     },
   },
   {
-    label: '省市县级联动',
+    label: 'Liên động cấp tỉnh/thành/huyện',
     field: 'provinceArea',
     component: 'JAreaSelect',
     componentProps: {
-      //级别 1 只显示省 2 省市 3 省市区
+      //Cấp 1 chỉ hiển thị tỉnh, 2 tỉnh/thành phố, 3 tỉnh/thành phố/quận huyện
       level:3
     },
   },
   {
-    label: '富文本',
+    label: 'Văn bản phong phú',
     field: 'editor',
     component: 'JEditor',
     componentProps: {
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false
     },
   },
@@ -182,12 +182,12 @@ export const schemas: FormSchema[] = [
     field: 'markdown',
     component: 'JMarkdownEditor',
     componentProps: {
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false
     },
   },
   {
-    label: '可输入下拉框',
+    label: 'Hộp dropdown có thể nhập',
     field: 'inputSelect',
     component: 'JSelectInput',
     componentProps: {
@@ -195,60 +195,60 @@ export const schemas: FormSchema[] = [
         { label: 'Default', value: 'default' },
         { label: 'IFrame', value: 'iframe' },
       ],
-      //是否为搜索模式
+      //Có phải chế độ tìm kiếm không
       showSearch: true,
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false
     },
   },
   {
-    label: '代码编辑器组件',
+    label: 'Component trình chỉnh sửa mã',
     field: 'jCode',
     component: 'JCodeEditor',
     componentProps: {
-      //高度，默认auto
+      //Chiều cao, mặc địnhauto
       height:'150px',
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled:false,
-      //是否全屏
+      //Có toàn màn hình hay không
       fullScreen:false,
-      //全屏之后的坐标
+      //Tọa độ sau khi toàn màn hình
       zIndex: 999,
-      //代码主题，目前只支持idea,可在组件自行扩展
+      //Chủ đề của mã, hiện chỉ hỗ trợidea,Có thể tự mở rộng trong component
       theme:'idea',
-      //代码提示
+      //Gợi ý mã
       keywords:['console'],
-      //语言如（javascript,vue,markdown）可在组件自行扩展
+      //Ngôn ngữ như (javascript,vue,markdown) có thể tự mở rộng trong component
       language:'javascript'
     },
   },
   {
-    label: '分类字典树',
+    label: 'Cây từ điển phân loại',
     field: 'dictTree',
     component: 'JCategorySelect',
     componentProps: {
-      //占位内容
-      placeholder:'请选择分类字典树',
-      //查询条件，如“{'name':'笔记本'}”
+      //Nội dung giữ chỗ
+      placeholder:'Vui lòng chọn cây danh mục phân loại',
+      //Điều kiện tìm kiếm, ví dụ "{'name':'Laptop'}”
       condition:"",
-      //是否多选
+      //Có chọn nhiều hay không
       multiple: false,
-      //起始选择code，见配置的分类字典的类型编码
+      //code lựa chọn ban đầu, xem mã loại của danh mục phân loại đã cấu hình
       pcode: 'A04',
-      //父级id
+      //Cấp chaid
       pid:'0',
-      //返回key
+      //Trả vềkey
       back:'id',
     },
   },
   {
-    label: '下拉多选',
+    label: 'Danh sách thả xuống chọn nhiều',
     field: 'selectMultiple',
     component: 'JSelectMultiple',
     componentProps: {
-      //字典code配置，比如通过性别字典编码：sex，也可以使用demo,name,id 表名,名称,值的方式
+      //Cấu hình code danh mục, ví dụ qua mã danh mục giới tính: sex, cũng có thể dùngdemo,name,id Tên bảng,Tên,dạng giá trị
       dictCode:'company_rank',
-      //是否只读
+      //Có chỉ đọc hay không
       readOnly:false,
     },
   },
@@ -260,11 +260,11 @@ export const schemas: FormSchema[] = [
       const {setFieldsValue} = formActionType;
       return{
         setFieldsValue:setFieldsValue,
-        //online报表编码
+        //onlineMã báo cáo
         code:"demo",
-        //是否为多选
+        //Có phải chọn nhiều không
         multi:false,
-        //字段配置
+        //Cấu hình trường
         fieldConfig: [
           { source: 'name', target: 'popup' },
         ],
@@ -272,180 +272,180 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: '开关自定义',
+    label: 'Tùy chỉnh công tắc',
     field: 'switch',
     component: 'JSwitch',
     componentProps:{
-      //取值 options
+      //Lấy giá trị options
       options:['Y','N'],
-      //文本option
-      labelOptions:['是', '否'],
-      //是否启用下拉
+      //Văn bảnoption
+      labelOptions:['Có', 'Không'],
+      //Có bật danh sách thả xuống không
       query: false,
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false,
     },
   },
   {
-    label: '定时表达式选择',
+    label: 'Chọn biểu thức hẹn giờ',
     field: 'timing',
     component: 'JEasyCron',
     componentProps:{
-      //是否隐藏参数秒和年设置，如果隐藏，那么参数秒和年将会全部忽略掉。
+      //Có ẩn cài đặt tham số giây và năm hay không, nếu ẩn thì tham số giây và năm sẽ bị bỏ qua hoàn toàn.
       hideSecond: false,
-      //是否隐藏参数年设置，如果隐藏，那么参数年将会全部忽略掉
+      //Có ẩn cài đặt năm tham số hay không, nếu ẩn thì năm tham số sẽ bị bỏ qua hoàn toàn
       hideYear: false,
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false,
-      //获取预览执行时间列表的函数，格式为：remote (cron值, time时间戳, cb回调函数)
+      //Hàm lấy danh sách thời gian thực thi xem trước, định dạng là:remote (cronGiá trị, timeDấu thời gian, cbHàm callback)
       remote:(cron,time,cb)=>{}
     },
   },
   {
-    label: '分类字典树',
+    label: 'Cây từ điển phân loại',
     field: 'treeDict',
     component: 'JTreeDict',
     componentProps:{
-      //指定当前组件需要存储的字段 可选: id(主键)和code(编码)
+      //Chỉ định trường mà component hiện tại cần lưu trữ, tùy chọn: id(Khóa chính)vàcode(Mã)
       field:'id',
-      //是否为异步
+      //Có phải bất đồng bộ không
       async: true,
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false,
-      //指定一个节点的编码,加载该节点下的所有字典数据,若不指定，默认加载所有数据
+      //Chỉ định mã của một nút,Tải tất cả dữ liệu từ điển dưới nút đó,Nếu không chỉ định, mặc định tải tất cả dữ liệu
       parentCode:'A04'
     },
   },
   {
-    label: '多行输入窗口',
+    label: 'Cửa sổ nhập nhiều dòng',
     field: 'inputPop',
     component: 'JInputPop',
     componentProps:{
-      //标题
-      title:'多行输入窗口',
-      //弹窗显示位置
+      //Tiêu đề
+      title:'Cửa sổ nhập nhiều dòng',
+      //Vị trí hiển thị popup
       position:'bottom',
     },
   },
   {
-    label: '多选',
+    label: 'Chọn nhiều',
     field: 'multipleChoice',
     component: 'JCheckbox',
     componentProps:{
-      //字典code配置，比如通过职位字典编码：company_rank，也可以使用demo,name,id 表名,名称,值的方式
+      //Cấu hình mã danh mục (dict code), ví dụ qua mã danh mục chức danh:company_rank, cũng có thể sử dụngdemo,name,id Tên bảng,Tên,dạng giá trị
       dictCode:'company_rank',
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false,
-      //没有字典code可以使用option来定义
+      //Không có mã danh mục (dict code) có thể dùng option để định nghĩa
       // options:[
       //   {label:'CE0',value:'1'}
       // ]
     },
   },
   {
-    label: '下拉树选择',
+    label: 'Chọn cây thả xuống',
     field: 'treeCusSelect',
     component: 'JTreeSelect',
     componentProps: {
-      //字典code配置，比如通过性别字典编码：sex，也可以使用sys_permission,name,id 表名,名称,值的方式
+      //Cấu hình code danh mục, ví dụ qua mã danh mục giới tính: sex, cũng có thể dùngsys_permission,name,id Tên bảng,Tên,dạng giá trị
       dict: 'sys_permission,name,id',
-      //父级id字段
+      //Trường id cấp cha
       pidField: 'parent_id',
     },
   },
   {
-    label: '根据部门选择用户组件',
+    label: 'Component chọn người dùng theo phòng ban',
     field: 'userByDept',
     component: 'JSelectUserByDept',
     componentProps: {
-      //是否显示选择按钮
+      //Có hiển thị nút chọn không
       showButton: true,
-      //选择框标题
-      modalTitle: '部门用户选择'
+      //Tiêu đề hộp chọn
+      modalTitle: 'Chọn người dùng theo phòng ban'
     },
   },
   {
-    label: '文件上传',
+    label: 'Tải lên tệp',
     field: 'uploadFile',
     component: 'JUpload',
     componentProps: {
-      //是否显示选择按钮
-      text: '文件上传',
-      //最大上传数
+      //Có hiển thị nút chọn không
+      text: 'Tải lên tệp',
+      //Số lượng tải lên tối đa
       maxCount: 2,
-      //是否显示下载按钮
+      //Có hiển thị nút tải xuống không
       download: true,
     },
   },
   {
-    label: '字典表搜索',
+    label: 'Tìm kiếm bảng từ điển',
     field: 'dictSearchSelect',
     component: 'JSearchSelect',
     componentProps: {
-      //字典code配置，通过 demo,name,id 表名,名称,值的方式
+      //Cấu hình code từ điển, thông qua demo,name,id Tên bảng,Tên,dạng giá trị
       dict: 'demo,name,id',
-      //是否异步加载
+      //Có tải bất đồng bộ không
       async: true,
-      //当async设置为true时有效，表示异步查询时，每次获取数据的数量，默认10
+      //Có hiệu lực khi async được đặt thành true, nghĩa là khi tìm kiếm bất đồng bộ, số lượng dữ liệu lấy mỗi lần, mặc định10
       pageSize:3
     },
   },
   {
-    label: '动态创建input框',
+    label: 'Tạo động ô input',
     field: 'jAddInput',
     component: 'JAddInput',
     componentProps: {
-      //自定义超过多少行才会显示删除按钮，默认为1
+      //Tùy chỉnh vượt quá bao nhiêu dòng mới hiển thị nút xóa, mặc định là1
       min:1
     },
   },
   {
-    label: '用户选择组件',
+    label: 'Component chọn người dùng',
     field: 'userCusSelect',
     component: 'UserSelect',
     componentProps: {
-      //是否多选
+      //Có chọn nhiều hay không
       multi: true,
-      //从用户表中选择一列，其值作为该控件的存储值，默认id列
+      //Chọn một cột từ bảng người dùng, giá trị của cột đó làm giá trị lưu trữ của control này, mặc định là cột id
       store: 'id',
-      //是否排除我自己(当前登录用户)
+      //Có loại trừ chính tôi không(Người dùng đang đăng nhập)
       izExcludeMy: false,
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false,
     },
   },  
   {
-    label: '选择角色组件',
+    label: 'Component chọn vai trò',
     field: 'roleSelect',
     component: 'RoleSelect',
     componentProps: {
-      //最大选择数量  
+      //Số lượng chọn tối đa  
       maxSelectCount: 4,
-      //是否单选
+      //Có chọn một hay không
       multi: true
     },
   },  
   {
-    label: '数值范围输入框',
+    label: 'Ô nhập phạm vi số',
     field: 'rangeNumber',
     component: 'JRangeNumber',
   }, 
   {
-    label: '远程Api单选框组',
+    label: 'Nhóm radio Api từ xa',
     field: 'apiRadioGroup',
     component: 'ApiRadioGroup',
     componentProps:{
-      //请求接口返回结果{ result:{ list: [ name: '选项0',id: '1' ] }}
+      //Kết quả trả về của API yêu cầu{ result:{ list: [ name: 'Tùy chọn0',id: '1' ] }}
       api:()=> defHttp.get({ url: '/mock/select/getDemoOptions' }),
-      //请求参数
+      //Tham số yêu cầu
       params:{},
-      //是否为按钮风格类型，默认false
+      //Có phải loại kiểu nút hay không, mặc địnhfalse
       isBtn: false,
-      //返回集合名称
+      //Tên tập hợp trả về
       resultField: 'list',
-      //标题字段名称
+      //Tên trường tiêu đề
       labelField: 'name',
-      //值字段名称
+      //Tên trường giá trị
       valueField: 'id',
     }
   },

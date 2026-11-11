@@ -8,22 +8,22 @@ enum Api {
 }
 
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 /**
- * 子表单信息
+ * Thông tin biểu mẫu con
  * @param params
  */
 export const orderTicketList = (params) => defHttp.get({ url: Api.orderTicketList, params });
 /**
- * 子表单信息
+ * Thông tin biểu mẫu con
  * @param params
  */
 export const orderCustomerList = (params) => defHttp.get({ url: Api.orderCustomerList, params });
 /**
- * 删除用户
+ * Xóa người dùng
  */
 export const deleteOne = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.delete, params }, { joinParamsToUrl: true }).then(() => {

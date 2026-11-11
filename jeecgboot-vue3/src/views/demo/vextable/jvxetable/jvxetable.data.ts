@@ -2,72 +2,72 @@ import { JVxeTypes, JVxeColumn } from '/@/components/jeecg/JVxeTable/types';
 
 export const columns: JVxeColumn[] = [
   {
-    title: '客户名',
+    title: 'Tên khách hàng',
     key: 'name',
     width: 180,
     type: JVxeTypes.input,
     defaultValue: '',
-    placeholder: '请输入${title}',
-    validateRules: [{ required: true, message: '${title}不能为空' }],
+    placeholder: 'Vui lòng nhập${title}',
+    validateRules: [{ required: true, message: '${title}Không được trống' }],
   },
   {
-    title: '性别',
+    title: 'Giới tính',
     key: 'sex',
     width: 180,
     type: JVxeTypes.select,
     options: [
-      // 下拉选项
-      { title: '男', value: '1' },
-      { title: '女', value: '2' },
+      // Tùy chọn danh sách thả xuống
+      { title: 'Nam', value: '1' },
+      { title: 'Nữ', value: '2' },
     ],
     defaultValue: '',
-    placeholder: '请选择${title}',
+    placeholder: 'Vui lòng chọn${title}',
   },
   {
-    title: '身份证号',
+    title: 'Số chứng minh nhân dân',
     key: 'idcard',
     width: 180,
     type: JVxeTypes.input,
     defaultValue: '',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     validateRules: [
       {
         pattern: '^\\d{6}(18|19|20)?\\d{2}(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])\\d{3}(\\d|[xX])$',
-        message: '${title}格式不正确',
+        message: '${title}Định dạng không đúng',
       },
     ],
   },
   {
-    title: '手机号',
+    title: 'Số điện thoại',
     key: 'telphone',
     width: 180,
     type: JVxeTypes.input,
     defaultValue: '',
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     validateRules: [
       {
         pattern: '^1[3456789]\\d{9}$',
-        message: '${title}格式不正确',
+        message: '${title}Định dạng không đúng',
       },
     ],
   },
 ];
 export const columns1: JVxeColumn[] = [
   {
-    title: '航班号',
+    title: 'Số hiệu chuyến bay',
     key: 'ticketCode',
     width: 180,
     type: JVxeTypes.input,
     defaultValue: '',
-    placeholder: '请输入${title}',
-    validateRules: [{ required: true, message: '${title}不能为空' }],
+    placeholder: 'Vui lòng nhập${title}',
+    validateRules: [{ required: true, message: '${title}Không được trống' }],
   },
   {
-    title: '航班时间',
+    title: 'Thời gian chuyến bay',
     key: 'tickectDate',
     width: 180,
     type: JVxeTypes.date,
-    placeholder: '请选择${title}',
+    placeholder: 'Vui lòng chọn${title}',
     defaultValue: '',
   },
 ];

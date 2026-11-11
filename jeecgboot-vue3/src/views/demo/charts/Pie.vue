@@ -21,13 +21,13 @@
       const chartRef = ref<HTMLDivElement | null>(null);
       const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
       const dataAll = [389, 259, 262, 324, 232, 176, 196, 214, 133, 370];
-      const yAxisData = ['原因1', '原因2', '原因3', '原因4', '原因5', '原因6', '原因7', '原因8', '原因9', '原因10'];
+      const yAxisData = ['Nguyên nhân1', 'Nguyên nhân2', 'Nguyên nhân3', 'Nguyên nhân4', 'Nguyên nhân5', 'Nguyên nhân6', 'Nguyên nhân7', 'Nguyên nhân8', 'Nguyên nhân9', 'Nguyên nhân10'];
       onMounted(() => {
         setOptions({
           backgroundColor: '#0f375f',
           title: [
             {
-              text: '各渠道投诉占比',
+              text: 'Tỷ lệ khiếu nại theo từng kênh',
               left: '2%',
               top: '1%',
               textStyle: {
@@ -36,7 +36,7 @@
               },
             },
             {
-              text: '投诉原因TOP10',
+              text: 'Lý do khiếu nạiTOP10',
               left: '40%',
               top: '1%',
               textStyle: {
@@ -45,7 +45,7 @@
               },
             },
             {
-              text: '各级别投诉占比',
+              text: 'Tỷ lệ khiếu nại theo từng cấp độ',
               left: '2%',
               top: '50%',
               textStyle: {
@@ -80,16 +80,16 @@
           ],
           series: [
             {
-              name: '各渠道投诉占比',
+              name: 'Tỷ lệ khiếu nại theo từng kênh',
               type: 'pie',
               radius: '30%',
               center: ['22%', '25%'],
               data: [
-                { value: 335, name: '客服电话' },
-                { value: 310, name: '奥迪官网' },
-                { value: 234, name: '媒体曝光' },
-                { value: 135, name: '质检总局' },
-                { value: 105, name: '其他' },
+                { value: 335, name: 'Điện thoại chăm sóc khách hàng' },
+                { value: 310, name: 'Trang web chính thức của Audi' },
+                { value: 234, name: 'Phơi bày trên truyền thông' },
+                { value: 135, name: 'Tổng cục Kiểm tra chất lượng' },
+                { value: 105, name: 'Khác' },
               ],
               labelLine: { show: false },
               label: {
@@ -99,16 +99,16 @@
               },
             },
             {
-              name: '各级别投诉占比',
+              name: 'Tỷ lệ khiếu nại theo từng cấp độ',
               type: 'pie',
               radius: '30%',
               center: ['22%', '75%'],
               labelLine: { show: false },
               data: [
-                { value: 335, name: 'A级' },
-                { value: 310, name: 'B级' },
-                { value: 234, name: 'C级' },
-                { value: 135, name: 'D级' },
+                { value: 335, name: 'Acấp' },
+                { value: 310, name: 'Bcấp' },
+                { value: 234, name: 'Ccấp' },
+                { value: 135, name: 'Dcấp' },
               ],
               label: {
                 show: true,
@@ -117,7 +117,7 @@
               },
             },
             {
-              name: '投诉原因TOP10',
+              name: 'Lý do khiếu nạiTOP10',
               type: 'bar',
               xAxisIndex: 0,
               yAxisIndex: 0,

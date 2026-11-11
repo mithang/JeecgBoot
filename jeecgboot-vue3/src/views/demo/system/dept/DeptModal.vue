@@ -40,7 +40,7 @@
         });
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增部门' : '编辑部门'));
+      const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới phòng ban' : 'Chỉnh sửa phòng ban'));
 
       async function handleSubmit() {
         try {

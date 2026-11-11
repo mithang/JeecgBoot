@@ -20,7 +20,7 @@
     ></JVxeTable>
 
     <a-tabs v-show="subTabs.show" :class="{ 'sub-tabs': true, 'un-expand': !subTabs.expand }">
-      <a-tab-pane tab="子表1" key="1">
+      <a-tab-pane tab="Bảng con1" key="1">
         <JVxeTable
           toolbar
           row-number
@@ -35,13 +35,13 @@
           @selectRowChange="handleTable2SelectRowChange"
         />
       </a-tab-pane>
-      <a-tab-pane tab="子表2" key="2">
-        <h1>这里是子表2</h1>
-        <h1>这里是子表2</h1>
-        <h1>这里是子表2</h1>
-        <h1>这里是子表2</h1>
-        <h1>这里是子表2</h1>
-        <h1>这里是子表2</h1>
+      <a-tab-pane tab="Bảng con2" key="2">
+        <h1>Đây là bảng con2</h1>
+        <h1>Đây là bảng con2</h1>
+        <h1>Đây là bảng con2</h1>
+        <h1>Đây là bảng con2</h1>
+        <h1>Đây là bảng con2</h1>
+        <h1>Đây là bảng con2</h1>
       </a-tab-pane>
     </a-tabs>
   </a-card>
@@ -59,43 +59,43 @@
     data() {
       return {
         toolbarConfig: {
-          // prefix 前缀；suffix 后缀
+          // prefix Tiền tố; suffix Hậu tố
           slot: ['prefix', 'suffix'],
-          // add 新增按钮；remove 删除按钮；clearSelection 清空选择按钮
+          // add Nút thêm mới; remove là nút xóa; clearSelection là nút xóa lựa chọn
           btn: ['add', 'remove', 'clearSelection'],
         },
 
         expandConfig: {
-          // 是否只能同时展开一行
+          // Có phải chỉ được mở rộng một hàng cùng lúc không
           accordion: true,
         },
 
-        // 子表 tabs
+        // Bảng con tabs
         subTabs: {
           show: false,
-          // 是否展开
+          // Có mở rộng hay không
           expand: true,
-          // 是否自动展开
+          // Có tự động mở rộng không
           autoExpand: true,
         },
 
         table1: {
-          // 是否正在加载
+          // Có đang tải không
           loading: false,
-          // 分页器参数
+          // Tham số bộ phân trang
           pagination: {
-            // 当前页码
+            // Số trang hiện tại
             current: 1,
-            // 每页的条数
+            // Số bản ghi mỗi trang
             pageSize: 200,
-            // 可切换的条数
+            // Số mục có thể chuyển đổi
             pageSizeOptions: ['10', '20', '30', '100', '200'],
-            // 数据总数（目前并不知道真实的总数，所以先填写0，在后台查出来后再赋值）
+            // Tổng số dữ liệu (hiện chưa biết tổng số thực tế, nên tạm điền 0, sau khi tra ra ở backend sẽ gán lại)
             total: 0,
             showTotal: (total, range) => {
-              // 此处为 jsx 语法
-              let text = h('span', `${range[0]}-${range[1]} 共 ${total} 条`);
-              // 判断子表是否显示，如果显示就渲染展开收起按钮
+              // Đây là cú pháp jsx
+              let text = h('span', `${range[0]}-${range[1]} Tổng cộng ${total} mục`);
+              // Kiểm tra xem bảng con có hiển thị hay không, nếu hiển thị thì render nút mở rộng/thu gọn
               if (this.subTabs.show) {
                 let expand = h('span', {}, [
                   h(
@@ -104,60 +104,60 @@
                       type: 'link',
                       onClick: this.handleToggleTabs,
                     },
-                    () => [this.subTabs.expand ? h(UpOutlined) : h(DownOutlined), h('span', {}, this.subTabs.expand ? '收起' : '展开')]
+                    () => [this.subTabs.expand ? h(UpOutlined) : h(DownOutlined), h('span', {}, this.subTabs.expand ? 'Thu gọn' : 'Mở rộng')]
                   ),
                   h(
                     Checkbox,
                     {
-                      // h 写法不支持 v-model , 所以需要手动赋值
+                      // h cách viết không được hỗ trợ v-model , Vì vậy cần gán giá trị thủ công
                       checked: this.subTabs.autoExpand,
                       'onUpdate:checked': (checked) => (this.subTabs.autoExpand = checked),
                     },
-                    () => '自动展开'
+                    () => 'Tự động mở rộng'
                   ),
                 ]);
-                // 返回多个dom用数组
+                // Trả về nhiều DOM bằng mảng
                 return [expand, text];
               } else {
-                // 直接返回单个dom
+                // Trả về trực tiếp mộtdom
                 return text;
               }
             },
           },
-          // 选择的行
+          // Hàng đã chọn
           selectedRows: [],
-          // 数据源，控制表格的数据
+          // Nguồn dữ liệu, điều khiển dữ liệu của bảng
           dataSource: [],
-          // 列配置，控制表格显示的列
+          // Cấu hình cột, kiểm soát các cột hiển thị của bảng
           columns: [
-            { key: 'num', title: '序号', width: '80px' },
+            { key: 'num', title: 'STT', width: '80px' },
             {
-              // 字段key，跟后台数据的字段名匹配
+              // key của trường, khớp với tên trường của dữ liệu backend
               key: 'ship_name',
-              // 列的标题
-              title: '船名',
-              // 列的宽度
+              // Tiêu đề cột
+              title: 'Tên tàu',
+              // Độ rộng cột
               width: '180px',
-              // 如果加上了该属性，就代表当前单元格是可编辑的，type就是表单的类型，input就是简单的输入框
+              // Nếu thêm thuộc tính này, nghĩa là ô hiện tại có thể chỉnh sửa, type chính là loại của biểu mẫu, input là ô nhập đơn giản
               type: JVxeTypes.input,
             },
-            { key: 'call', title: '呼叫', width: '990px', type: JVxeTypes.input },
-            { key: 'len', title: '长', width: '80px', type: JVxeTypes.inputNumber },
-            { key: 'ton', title: '吨', width: '120px', type: JVxeTypes.inputNumber },
-            { key: 'payer', title: '付款方', width: '120px', type: JVxeTypes.input },
-            { key: 'count', title: '数', width: '40px' },
+            { key: 'call', title: 'Gọi', width: '990px', type: JVxeTypes.input },
+            { key: 'len', title: 'Chiều dài', width: '80px', type: JVxeTypes.inputNumber },
+            { key: 'ton', title: 'tấn', width: '120px', type: JVxeTypes.inputNumber },
+            { key: 'payer', title: 'Bên thanh toán', width: '120px', type: JVxeTypes.input },
+            { key: 'count', title: 'Số', width: '40px' },
             {
               key: 'company',
-              title: '公司',
-              // 最小宽度，与宽度不同的是，这个不是固定的宽度，如果表格有多余的空间，会平均分配给设置了 minWidth 的列
-              // 如果要做占满表格的列可以这么写
+              title: 'Công ty',
+              // Chiều rộng tối thiểu, khác với chiều rộng ở chỗ đây không phải là chiều rộng cố định, nếu bảng còn không gian thừa, sẽ chia đều cho các cột đã đặt minWidth
+              // Nếu muốn làm cột chiếm đầy bảng có thể viết như vậy
               minWidth: '180px',
               type: JVxeTypes.input,
             },
-            { key: 'trend', title: '动向', width: '120px', type: JVxeTypes.input },
+            { key: 'trend', title: 'Xu hướng', width: '120px', type: JVxeTypes.input },
           ],
         },
-        // 子级表的配置信息 （配置和主表的完全一致，就不写冗余的注释了）
+        // Thông tin cấu hình của bảng cấp con (cấu hình hoàn toàn giống bảng chính nên không viết chú thích thừa nữa)
         table2: {
           currentRowId: null,
           loading: false,
@@ -165,16 +165,16 @@
           selectedRows: [],
           dataSource: [],
           columns: [
-            { key: 'dd_num', title: '调度序号', width: '120px' },
-            { key: 'tug', title: '拖轮', width: '180px', type: JVxeTypes.input },
-            { key: 'work_start_time', title: '作业开始时间', width: '180px', type: JVxeTypes.input },
-            { key: 'work_stop_time', title: '作业结束时间', width: '180px', type: JVxeTypes.input },
-            { key: 'type', title: '船舶分类', width: '120px', type: JVxeTypes.input },
-            { key: 'port_area', title: '所属港区', width: '120px', type: JVxeTypes.input },
+            { key: 'dd_num', title: 'Số thứ tự điều độ', width: '120px' },
+            { key: 'tug', title: 'Tàu kéo', width: '180px', type: JVxeTypes.input },
+            { key: 'work_start_time', title: 'Thời gian bắt đầu công việc', width: '180px', type: JVxeTypes.input },
+            { key: 'work_stop_time', title: 'Thời gian kết thúc công việc', width: '180px', type: JVxeTypes.input },
+            { key: 'type', title: 'Phân loại tàu', width: '120px', type: JVxeTypes.input },
+            { key: 'port_area', title: 'Khu vực cảng thuộc về', width: '120px', type: JVxeTypes.input },
           ],
         },
         currentSubRow: null,
-        // 查询url地址
+        // Địa chỉ url tìm kiếm
         url: {
           getData: '/mock/vxe/getData',
         },
@@ -190,14 +190,14 @@
       this.loadTable1Data();
     },
     methods: {
-      // 加载table1【主表】的数据
+      // Tải dữ liệu [Bảng chính] của table1
       loadTable1Data() {
-        // 封装查询条件
+        // Đóng gói điều kiện tìm kiếm
         let formData = {
           pageNo: this.table1.pagination.current,
           pageSize: this.table1.pagination.pageSize,
         };
-        // 调用查询数据接口
+        // Gọi API tìm kiếm dữ liệu
         this.table1.loading = true;
         defHttp
           .get({
@@ -205,23 +205,23 @@
             params: formData,
           })
           .then((result) => {
-            // 后台查询回来的 total，数据总数量
+            // total trả về từ truy vấn backend, tổng số lượng dữ liệu
             this.table1.pagination.total = result.total;
-            // 将查询的数据赋值给 dataSource
+            // Gán dữ liệu truy vấn được cho dataSource
             this.table1.dataSource = result.records;
-            // 重置选择
+            // Đặt lại lựa chọn
             this.table1.selectedRows = [];
           })
           .finally(() => {
-            // 这里是无论成功或失败都会执行的方法，在这里关闭loading
+            // Đây là phương thức sẽ được thực thi dù thành công hay thất bại, tại đây sẽ đóngloading
             this.table1.loading = false;
           });
       },
 
-      // 查询子表数据
+      // Truy vấn dữ liệu bảng con
       loadSubData(row) {
         if (row) {
-          // 这里一定要做限制，限制不能重复查询，否者会出现死循环
+          // Ở đây nhất định phải giới hạn, không được truy vấn lặp lại, nếu không sẽ xuất hiện vòng lặp vô hạn
           if (this.table2.currentRowId === row.id) {
             return true;
           }
@@ -232,7 +232,7 @@
           return false;
         }
       },
-      // 查询子表数据
+      // Truy vấn dữ liệu bảng con
       loadTable2Data() {
         let table2 = this.table2;
         let formData = {
@@ -247,18 +247,18 @@
             params: formData,
           })
           .then((result) => {
-            // 将查询的数据赋值给 dataSource
+            // Gán dữ liệu truy vấn được cho dataSource
             table2.selectedRows = [];
             table2.dataSource = result.records;
             table2.pagination.total = result.total;
           })
           .finally(() => {
-            // 这里是无论成功或失败都会执行的方法，在这里关闭loading
+            // Đây là phương thức sẽ được thực thi dù thành công hay thất bại, tại đây sẽ đóngloading
             table2.loading = false;
           });
       },
 
-      // table1【主表】当选择的行变化时触发的事件
+      // table1[Bảng chính] Sự kiện kích hoạt khi dòng được chọn thay đổi
       handleTable1SelectRowChange(event) {
         this.table1.selectedRows = event.selectedRows;
         this.subTabs.show = true;
@@ -267,28 +267,28 @@
         }
         this.loadSubData(event.selectedRows[0]);
       },
-      // table2【子表】当选择的行变化时触发的事件
+      // table2[Bảng con] Sự kiện kích hoạt khi dòng được chọn thay đổi
       handleTable2SelectRowChange(event) {
         this.table2.selectedRows = event.selectedRows;
       },
 
       handleTable1PageChange(event) {
-        // 重新赋值
+        // Gán lại giá trị
         this.table1.pagination.current = event.current;
         this.table1.pagination.pageSize = event.pageSize;
-        // 查询数据
+        // Truy vấn dữ liệu
         this.loadTable1Data();
       },
-      // 当table2【子表】分页参数变化时触发的事件
+      // Sự kiện được kích hoạt khi tham số phân trang của table2 [Bảng con] thay đổi
       handleTable2PageChange(event) {
-        // 重新赋值
+        // Gán lại giá trị
         this.table2.pagination.current = event.current;
         this.table2.pagination.pageSize = event.pageSize;
-        // 查询数据
+        // Truy vấn dữ liệu
         this.loadTable2Data();
       },
 
-      // 展开或收起子表tabs
+      // Mở rộng hoặc thu gọn bảng contabs
       handleToggleTabs() {
         this.subTabs.expand = !this.subTabs.expand;
       },

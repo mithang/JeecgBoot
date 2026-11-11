@@ -10,10 +10,10 @@
                 {{ item.title }}
               </div>
               <div :class="`${prefixCls}__card-num`">
-                活跃用户：<span>{{ item.active }}</span> 万
+                Người dùng đang hoạt động:<span>{{ item.active }}</span> vạn
               </div>
               <div :class="`${prefixCls}__card-num`">
-                新增用户：<span>{{ item.new }}</span>
+                Người dùng mới:<span>{{ item.new }}</span>
               </div>
               <Icon :class="`${prefixCls}__card-download`" v-if="item.download" :icon="item.download" />
             </Card>

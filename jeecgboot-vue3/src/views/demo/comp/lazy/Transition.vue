@@ -1,7 +1,7 @@
 <template>
-  <PageWrapper title="懒加载自定义动画示例" content="懒加载组件显示动画">
+  <PageWrapper title="Ví dụ hiệu ứng động tùy chỉnh tải lười" content="Hiệu ứng hiển thị component tải lười">
     <div class="lazy-base-demo-wrap">
-      <h1>向下滚动</h1>
+      <h1>Cuộn xuống</h1>
 
       <div class="lazy-base-demo-box">
         <LazyContainer transitionName="custom">

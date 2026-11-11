@@ -1,32 +1,32 @@
 <template>
   <div class="href-demo-page">
-    <a-card title="Href 参数接收示例" :bordered="false">
+    <a-card title="Href Ví dụ nhận tham số" :bordered="false">
       <template #extra>
-        <a-tag color="blue">Online 表单 Href 跳转</a-tag>
+        <a-tag color="blue">Online Chuyển hướng Href của biểu mẫu</a-tag>
       </template>
 
-      <a-divider orientation="left">路由参数 (route.query)</a-divider>
+      <a-divider orientation="left">Tham số route (route.query)</a-divider>
       <a-descriptions bordered :column="1" size="middle">
         <a-descriptions-item v-for="(value, key) in queryParams" :key="key" :label="key">
           <a-tag v-if="value" color="green">{{ value }}</a-tag>
-          <a-tag v-else color="default">（空值）</a-tag>
+          <a-tag v-else color="default">(Giá trị trống)</a-tag>
         </a-descriptions-item>
       </a-descriptions>
 
-      <a-empty v-if="Object.keys(queryParams).length === 0" description="未接收到任何参数" />
+      <a-empty v-if="Object.keys(queryParams).length === 0" description="Chưa nhận được tham số nào" />
 
-      <a-divider orientation="left">完整信息</a-divider>
+      <a-divider orientation="left">Thông tin đầy đủ</a-divider>
       <a-descriptions bordered :column="2" size="small">
-        <a-descriptions-item label="完整路径">{{ route.fullPath }}</a-descriptions-item>
-        <a-descriptions-item label="路由名称">{{ route.name || '（无）' }}</a-descriptions-item>
-        <a-descriptions-item label="参数来源">{{ Object.keys(props).filter(k => props[k]).length > 0 ? '内部组件 (props)' : '路由跳转 (query)' }}</a-descriptions-item>
-        <a-descriptions-item label="参数个数">{{ Object.keys(queryParams).length }}</a-descriptions-item>
+        <a-descriptions-item label="Đường dẫn đầy đủ">{{ route.fullPath }}</a-descriptions-item>
+        <a-descriptions-item label="Tên route">{{ route.name || '(Không có)' }}</a-descriptions-item>
+        <a-descriptions-item label="Nguồn tham số">{{ Object.keys(props).filter(k => props[k]).length > 0 ? 'Component nội bộ (props)' : 'Chuyển route (query)' }}</a-descriptions-item>
+        <a-descriptions-item label="Số lượng tham số">{{ Object.keys(queryParams).length }}</a-descriptions-item>
       </a-descriptions>
 
       <a-divider />
       <a-space>
-        <a-button @click="goBack">返回上一页</a-button>
-        <a-button type="primary" ghost @click="copyInfo">复制参数信息</a-button>
+        <a-button @click="goBack">Quay lại trang trước</a-button>
+        <a-button type="primary" ghost @click="copyInfo">Sao chép thông tin tham số</a-button>
       </a-space>
     </a-card>
   </div>
@@ -46,21 +46,21 @@
   const router = useRouter();
   const { createMessage } = useMessage();
 
-  // 合并 props 和 query 参数
+  // Gộp props và tham số query
   const queryParams = computed(() => {
     const params: Record<string, string> = {};
-    // 路由 query 参数
+    // Tham số query của route
     Object.entries(route.query).forEach(([k, v]) => {
       params[k] = String(v ?? '');
     });
-    // 覆盖内部组件 props（同名 key 用 props 值）
+    // Ghi đè props của component nội bộ (key trùng tên thì dùng giá trị props)
     Object.entries(props).forEach(([k, v]) => {
       if (v) params[k] = String(v);
     });
     return params;
   });
 
-  // 监听参数变化
+  // Lắng nghe thay đổi tham số
   watch(
     () => route.query,
     (newQuery) => {
@@ -82,7 +82,7 @@
       .map(([k, v]) => `${k}=${v}`)
       .join('&');
     navigator.clipboard.writeText(info).then(() => {
-      createMessage.success('参数已复制到剪贴板');
+      createMessage.success('Tham số đã được sao chép vào clipboard');
     });
   }
 </script>

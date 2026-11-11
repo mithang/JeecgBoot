@@ -1,6 +1,6 @@
 <template>
-  <PageWrapper title="图标使用示例">
-    <CollapseContainer title="Icon组件中iconfiy图标使用（不推荐使用，项目中所有图标都构建在一个js且首屏就加载，没有分割到chuck中，不是按需引入）" class="my-5">
+  <PageWrapper title="Ví dụ sử dụng biểu tượng">
+    <CollapseContainer title="IconCách dùng biểu tượng iconfiy trong component (không khuyến khích dùng, tất cả biểu tượng trong dự án đều được build trong một file js và tải ngay ở màn hình đầu tiên, không được tách vào chuck, không phải import theo nhu cầu)" class="my-5">
       <div class="flex justify-around flex-wrap">
         <Icon icon="ion:layers-outline" :size="30" />
         <Icon icon="ion:bar-chart-outline" :size="30" />
@@ -10,7 +10,7 @@
       </div>
     </CollapseContainer>
 
-    <CollapseContainer title="推荐直接使用iconify原生组件（分割到chunk中，按需引入）" class="my-5">
+    <CollapseContainer title="Khuyến nghị dùng trực tiếp component gốc iconify (tách vào chunk, import theo nhu cầu)" class="my-5">
       <div class="flex justify-around flex-wrap">
         <IconifyonLayersOutline class="text-30px" />
         <IconifyIonBarChartOutline class="text-30px" />
@@ -20,7 +20,7 @@
       </div>
     </CollapseContainer>
 
-    <CollapseContainer title="Antv Icon使用 (直接按需引入相应组件即可)">
+    <CollapseContainer title="Antv IconSử dụng (Chỉ cần import component tương ứng theo nhu cầu là được)">
       <div class="flex justify-around">
         <GithubFilled :style="{ fontSize: '30px' }" />
         <QqCircleFilled :style="{ fontSize: '30px' }" />
@@ -32,7 +32,7 @@
       </div>
     </CollapseContainer>
 
-    <CollapseContainer title="svg 雪碧图" class="my-5">
+    <CollapseContainer title="svg Ảnh sprite" class="my-5">
       <div class="flex justify-around flex-wrap">
         <SvgIcon name="test" size="32" />
         <template v-for="item in 6" :key="item">
@@ -41,13 +41,13 @@
       </div>
     </CollapseContainer>
 
-    <CollapseContainer title="图标选择器(Iconify)" class="my-5">
+    <CollapseContainer title="Bộ chọn biểu tượng(Iconify)" class="my-5">
       <div class="flex justify-around flex-wrap">
         <IconPicker />
       </div>
     </CollapseContainer>
 
-    <CollapseContainer title="图标选择器(Svg)" class="my-5">
+    <CollapseContainer title="Bộ chọn biểu tượng(Svg)" class="my-5">
       <div class="flex justify-around flex-wrap">
         <IconPicker mode="svg" />
       </div>
@@ -55,10 +55,10 @@
 
     <Alert
       show-icon
-      message="推荐使用Iconify组件"
-      description="Icon组件基本包含所有的图标,在下面网址内你可以查询到你想要的任何图标。并且打包只会打包所用到的图标。"
+      message="Khuyên dùng component Iconify"
+      description="IconComponent về cơ bản bao gồm tất cả các biểu tượng,Trong trang web dưới đây bạn có thể tra cứu bất kỳ biểu tượng nào bạn muốn. Và khi đóng gói chỉ đóng gói các biểu tượng đã dùng."
     />
-    <a-button type="link" @click="toIconify"> Iconify 图标大全 </a-button>
+    <a-button type="link" @click="toIconify"> Iconify Tổng hợp biểu tượng </a-button>
   </PageWrapper>
 </template>
 <script lang="ts">

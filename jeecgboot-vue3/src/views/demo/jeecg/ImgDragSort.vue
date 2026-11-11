@@ -7,17 +7,17 @@
         </div>
       </template>
       <template #footer>
-        <a-button @click="sureChange" type="primary" style="margin-top: 100px">确定</a-button>
+        <a-button @click="sureChange" type="primary" style="margin-top: 100px">Xác nhận</a-button>
       </template>
     </draggable>
-    <a-divider>json数据</a-divider>
+    <a-divider>jsonDữ liệu</a-divider>
     <a-row>
       <a-col :span="12">
-        <p>拖拽前：</p>
+        <p>Trước khi kéo thả:</p>
         <textarea rows="25" style="width: 780px">{{ oldDateSource }}</textarea>
       </a-col>
       <a-col :span="12">
-        <p>拖拽后：</p>
+        <p>Sau khi kéo thả:</p>
         <textarea rows="25" style="width: 780px">{{ newDateSource }}</textarea>
       </a-col>
     </a-row>
@@ -36,24 +36,24 @@
     { id: '444', sort: 4, filePath: 'https://static.jeecg.com/upload/test/u8891206113801177793fm27gp0_1588149704459.jpg' },
   ];
 
-  //数据集
+  //Tập dữ liệu
   const dataArr = ref(mockData);
-  //原始数据
+  //Dữ liệu gốc
   const oldDateSource = ref(mockData);
-  //更改后的数据
+  //Dữ liệu sau khi thay đổi
   const newDateSource = ref([]);
 
   /**
-   * 拖动结束事件
+   * Sự kiện kết thúc kéo
    * @param evt
    */
   function end(evt) {
-    console.log('拖动前的位置' + evt.oldIndex);
-    console.log('拖动后的位置' + evt.newIndex);
+    console.log('Vị trí trước khi kéo' + evt.oldIndex);
+    console.log('Vị trí sau khi kéo' + evt.newIndex);
   }
 
   /**
-   * 确认更改事件
+   * Sự kiện xác nhận thay đổi
    * @param evt
    */
   function sureChange() {

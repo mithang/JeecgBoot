@@ -1,7 +1,7 @@
 <template>
-  <BasicModal @register="register" title="Modal Title" :helpMessage="['提示1', '提示2']" :okButtonProps="{ disabled: true }">
-    <a-button type="primary" @click="closeModal" class="mr-2"> 从内部关闭弹窗 </a-button>
-    <a-button type="primary" @click="setModalProps"> 从内部修改title </a-button>
+  <BasicModal @register="register" title="Modal Title" :helpMessage="['Nhắc nhở1', 'Nhắc nhở2']" :okButtonProps="{ disabled: true }">
+    <a-button type="primary" @click="closeModal" class="mr-2"> Đóng popup từ bên trong </a-button>
+    <a-button type="primary" @click="setModalProps"> Sửa đổi từ bên trongtitle </a-button>
   </BasicModal>
 </template>
 <script lang="ts">

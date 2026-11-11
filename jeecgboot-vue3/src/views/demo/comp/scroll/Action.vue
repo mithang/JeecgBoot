@@ -1,10 +1,10 @@
 <template>
-  <PageWrapper title="滚动组件函数示例" content="基于el-scrollbar">
+  <PageWrapper title="Ví dụ hàm component cuộn" content="Dựa trênel-scrollbar">
     <div class="my-4">
-      <a-button @click="scrollTo(100)" class="mr-2"> 滚动到100px位置 </a-button>
-      <a-button @click="scrollTo(800)" class="mr-2"> 滚动到800px位置 </a-button>
-      <a-button @click="scrollTo(0)" class="mr-2"> 滚动到顶部 </a-button>
-      <a-button @click="scrollBottom()" class="mr-2"> 滚动到底部 </a-button>
+      <a-button @click="scrollTo(100)" class="mr-2"> Cuộn đến vị trí 100px </a-button>
+      <a-button @click="scrollTo(800)" class="mr-2"> Cuộn đến vị trí 800px </a-button>
+      <a-button @click="scrollTo(0)" class="mr-2"> Cuộn lên đầu </a-button>
+      <a-button @click="scrollBottom()" class="mr-2"> Cuộn xuống cuối </a-button>
     </div>
     <div class="scroll-wrap">
       <ScrollContainer class="mt-4" ref="scrollRef">

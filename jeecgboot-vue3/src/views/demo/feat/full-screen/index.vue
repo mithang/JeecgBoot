@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="全屏示例">
+  <PageWrapper title="Ví dụ toàn màn hình">
     <CollapseContainer class="w-full h-32 bg-white rounded-md" title="Window Full Screen">
       <a-button type="primary" @click="enter" class="mr-2"> Enter Window Full Screen </a-button>
       <a-button color="success" @click="toggle" class="mr-2"> Toggle Window Full Screen </a-button>

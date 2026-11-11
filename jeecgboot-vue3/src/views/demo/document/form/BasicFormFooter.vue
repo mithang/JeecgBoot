@@ -1,100 +1,100 @@
-<!-- 自定义页脚 -->
+<!-- Chân trang tùy chỉnh -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px">
     <template #formHeader>
       <div style="margin: 0 auto 20px">
-        <span>我是自定义按钮</span>
+        <span>Tôi là nút tùy chỉnh</span>
       </div>
     </template>
     <template #formFooter>
       <div style="margin: 0 auto">
-        <a-button type="primary" @click="save" class="mr-2"> 保存 </a-button>
-        <a-button type="primary" @click="saveDraft" class="mr-2"> 保存草稿 </a-button>
-        <a-button type="error" @click="reset" class="mr-2"> 重置 </a-button>
+        <a-button type="primary" @click="save" class="mr-2"> Lưu </a-button>
+        <a-button type="primary" @click="saveDraft" class="mr-2"> Lưu bản nháp </a-button>
+        <a-button type="error" @click="reset" class="mr-2"> Đặt lại </a-button>
       </div>
     </template>
   </BasicForm>
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
-      label: '员工姓名',
+      label: 'Tên nhân viên',
       field: 'name',
       component: 'Input',
     },
     {
-      label: '性别',
+      label: 'Giới tính',
       field: 'sex',
       component: 'Select',
-      //填写组件的属性
+      //Điền thuộc tính của component
       componentProps: {
         options: [
-          { label: '男', value: 1 },
-          { label: '女', value: 2 },
-          { label: '未知', value: 3 },
+          { label: 'Nam', value: 1 },
+          { label: 'Nữ', value: 2 },
+          { label: 'Không xác định', value: 3 },
         ],
       },
-      //默认值
+      //Giá trị mặc định
       defaultValue: 3,
     },
     {
-      label: '年龄',
+      label: 'Tuổi',
       field: 'age',
       component: 'Input',
     },
     {
-      label: '入职时间',
-      subLabel: '( 选填 )',
+      label: 'Thời gian vào làm',
+      subLabel: '( Không bắt buộc )',
       field: 'entryTime',
       component: 'TimePicker',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm, { validate, resetFields }] = useForm({
     schemas: formSchemas,
     labelWidth: '150px',
-    //隐藏操作按钮
+    //Ẩn nút thao tác
     showActionButtonGroup: false,
   });
 
   /**
-   * 保存
+   * Lưu
    */
   async function save() {
-    //使用useForm方法获取表单值
+    //Dùng phương thức useForm để lấy giá trị biểu mẫu
     let values = await validate();
     console.log(values);
   }
 
   /**
-   * 保存草稿
+   * Lưu bản nháp
    */
   async function saveDraft() {
-    //使用useForm方法validate获取表单值
+    //Sử dụng phương thức validate của useForm để lấy giá trị biểu mẫu
     let values = await validate();
     console.log(values);
   }
 
   /**
-   * 重置
+   * Đặt lại
    */
   async function reset() {
-    //使用useForm方法resetFields清空值
+    //Dùng phương thức useForm resetFields để xóa giá trị
     await resetFields();
   }
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

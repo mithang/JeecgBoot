@@ -1,18 +1,18 @@
 <template>
   <div>
-    <b>键盘操作快捷键：</b>
+    <b>Phím tắt thao tác bàn phím:</b>
     <div style="border: 1px solid #cccccc; padding: 8px; width: 740px">
       <pre>
-             F2 | 如果存在，激活单元格为编辑状态
-            Esc | 如果存在，取消单元格编辑状态
-              ↑ | 如果存在，则移动到上面的单元格
-              ↓ | 如果存在，则移动到下面的单元格
-              ← | 如果存在，则移动到左边的单元格
-              → | 如果存在，则移动到右边的单元格
-            Tab | 如果存在，则移动到右边单元格；如果移动到最后一列，则从下一行开始移到，以此循环
-    Shift + Tab | 如果存在，则移动到左边单元格，如果移动到第一列，则从上一行开始移到，以此循环
-          Enter | 如果存在，取消单元格编辑并移动到下面的单元格
-  Shift + Enter | 如果存在，取消单元格编辑并移动到上面的单元格</pre
+             F2 | Nếu tồn tại, kích hoạt ô thành trạng thái chỉnh sửa
+            Esc | Nếu tồn tại, hủy trạng thái chỉnh sửa ô
+              ↑ | Nếu tồn tại, di chuyển đến ô phía trên
+              ↓ | Nếu tồn tại, di chuyển đến ô phía dưới
+              ← | Nếu tồn tại, di chuyển đến ô phía bên trái
+              → | Nếu tồn tại, di chuyển đến ô phía bên phải
+            Tab | Nếu tồn tại thì di chuyển sang ô bên phải; nếu di chuyển đến cột cuối cùng thì bắt đầu di chuyển từ hàng tiếp theo, cứ thế lặp lại
+    Shift + Tab | Nếu tồn tại thì di chuyển sang ô bên trái, nếu di chuyển đến cột đầu tiên thì bắt đầu di chuyển từ hàng trước đó, cứ thế lặp lại
+          Enter | Nếu tồn tại, hủy chỉnh sửa ô và di chuyển đến ô phía dưới
+  Shift + Enter | Nếu tồn tại, hủy chỉnh sửa ô và di chuyển đến ô phía trên</pre
       >
     </div>
 
@@ -31,48 +31,48 @@
       const tableRef = ref<JVxeTableInstance>();
       const columns = ref<JVxeColumn[]>([
         {
-          title: '单行文本',
+          title: 'Văn bản một dòng',
           key: 'input',
           type: JVxeTypes.input,
           width: 220,
           defaultValue: '',
-          placeholder: '请输入${title}',
+          placeholder: 'Vui lòng nhập${title}',
         },
         {
-          title: '多行文本',
+          title: 'Văn bản nhiều dòng',
           key: 'textarea',
           type: JVxeTypes.textarea,
           width: 240,
         },
         {
-          title: '数字',
+          title: 'Số',
           key: 'number',
           type: JVxeTypes.inputNumber,
           width: 120,
           defaultValue: 32,
         },
         {
-          title: '日期时间',
+          title: 'Ngày giờ',
           key: 'datetime',
           type: JVxeTypes.datetime,
           width: 240,
           defaultValue: '2019-04-30 14:51:22',
-          placeholder: '请选择',
+          placeholder: 'Vui lòng chọn',
         },
         {
-          title: '时间',
+          title: 'Thời gian',
           key: 'time',
           type: JVxeTypes.time,
           width: 220,
           defaultValue: '14:52:22',
-          placeholder: '请选择',
+          placeholder: 'Vui lòng chọn',
         },
         {
-          title: '下拉框',
+          title: 'Dropdown',
           key: 'select',
           type: JVxeTypes.select,
           width: 220,
-          // 下拉选项
+          // Tùy chọn danh sách thả xuống
           options: [
             { title: 'String', value: 'string' },
             { title: 'Integer', value: 'int' },
@@ -81,10 +81,10 @@
           ],
           // allowInput: true,
           allowSearch: true,
-          placeholder: '请选择',
+          placeholder: 'Vui lòng chọn',
         },
         {
-          title: '复选框',
+          title: 'Checkbox',
           key: 'checkbox',
           type: JVxeTypes.checkbox,
           // width: 100,
@@ -95,29 +95,29 @@
       const dataSource = ref([]);
 
       function handleView(props) {
-        // 参数介绍：
-        // props.value          当前单元格的值
-        // props.row            当前行的数据
-        // props.rowId          当前行ID
-        // props.rowIndex       当前行下标
-        // props.column         当前列的配置
-        // props.columnIndex    当前列下标
-        // props.$table         vxe-table实例，可以调用vxe-table内置方法
-        // props.scrolling      是否正在滚动
-        // props.reloadEffect   是否开启了数据刷新特效
-        // props.triggerChange  触发change事件，用于更改slot的值
+        // Giới thiệu tham số:
+        // props.value          Giá trị của ô hiện tại
+        // props.row            Dữ liệu hàng hiện tại
+        // props.rowId          Hàng hiện tạiID
+        // props.rowIndex       Chỉ số hàng hiện tại
+        // props.column         Cấu hình cột hiện tại
+        // props.columnIndex    Chỉ số cột hiện tại
+        // props.$table         vxe-tableInstance, có thể gọivxe-tablePhương thức tích hợp sẵn
+        // props.scrolling      Có đang cuộn không
+        // props.reloadEffect   Có bật hiệu ứng làm mới dữ liệu không
+        // props.triggerChange  Kích hoạt sự kiện change, dùng để thay đổi giá trị của slot
         console.log('props: ', props);
       }
 
       function handleDelete({ row }) {
-        // 使用实例：删除当前操作的行
+        // Ví dụ sử dụng: Xóa dòng đang thao tác
         tableRef.value?.removeRows(row);
       }
 
       onMounted(async () => {
         console.log(tableRef.value);
         await nextTick();
-        // 默认添加五行数据
+        // Mặc định thêm năm dòng dữ liệu
         tableRef.value!.addRows([{ input: 'input_1' }, { input: 'input_2' }, { input: 'input_3' }, { input: 'input_4' }, { input: 'input_5' }], {
           setActive: false,
         });

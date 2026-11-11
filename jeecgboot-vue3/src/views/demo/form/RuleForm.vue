@@ -1,13 +1,13 @@
 <template>
-  <PageWrapper title="表单校验示例">
+  <PageWrapper title="Ví dụ kiểm chứng biểu mẫu">
     <div class="mb-4">
-      <a-button @click="validateForm" class="mr-2"> 手动校验表单</a-button>
-      <a-button @click="resetValidate" class="mr-2"> 清空校验信息</a-button>
-      <a-button @click="getFormValues" class="mr-2"> 获取表单值</a-button>
-      <a-button @click="setFormValues" class="mr-2"> 设置表单值</a-button>
-      <a-button @click="resetFields" class="mr-2"> 重置</a-button>
+      <a-button @click="validateForm" class="mr-2"> Kiểm chứng biểu mẫu thủ công</a-button>
+      <a-button @click="resetValidate" class="mr-2"> Xóa thông tin kiểm chứng</a-button>
+      <a-button @click="getFormValues" class="mr-2"> Lấy giá trị biểu mẫu</a-button>
+      <a-button @click="setFormValues" class="mr-2"> Đặt giá trị biểu mẫu</a-button>
+      <a-button @click="resetFields" class="mr-2"> Đặt lại</a-button>
     </div>
-    <CollapseContainer title="表单校验">
+    <CollapseContainer title="Kiểm chứng biểu mẫu">
       <BasicForm @register="register" @submit="handleSubmit" />
     </CollapseContainer>
   </PageWrapper>
@@ -24,7 +24,7 @@
     {
       field: 'field1',
       component: 'Input',
-      label: '字段1',
+      label: 'Trường1',
       colProps: {
         span: 8,
       },
@@ -33,7 +33,7 @@
     {
       field: 'field2',
       component: 'Input',
-      label: '字段2',
+      label: 'Trường2',
       colProps: {
         span: 8,
       },
@@ -50,7 +50,7 @@
     {
       field: 'field3',
       component: 'DatePicker',
-      label: '字段3',
+      label: 'Trường3',
       colProps: {
         span: 8,
       },
@@ -59,7 +59,7 @@
     {
       field: 'field33',
       component: 'DatePicker',
-      label: '字段33',
+      label: 'Trường33',
       colProps: {
         span: 8,
       },
@@ -71,7 +71,7 @@
     {
       field: 'field44',
       component: 'InputCountDown',
-      label: '验证码',
+      label: 'Mã xác thực',
       colProps: {
         span: 8,
       },
@@ -80,7 +80,7 @@
     {
       field: 'field4',
       component: 'Select',
-      label: '字段4',
+      label: 'Trường4',
       colProps: {
         span: 8,
       },
@@ -88,12 +88,12 @@
         mode: 'multiple',
         options: [
           {
-            label: '选项1',
+            label: 'Tùy chọn1',
             value: '1',
             key: '1',
           },
           {
-            label: '选项2',
+            label: 'Tùy chọn2',
             value: '2',
             key: '2',
           },
@@ -102,7 +102,7 @@
       rules: [
         {
           required: true,
-          message: '请输入规则',
+          message: 'Vui lòng nhập quy tắc',
           type: 'array',
         },
       ],
@@ -110,7 +110,7 @@
     {
       field: 'field441',
       component: 'Input',
-      label: '自定义校验',
+      label: 'Kiểm chứng tùy chỉnh',
       colProps: {
         span: 8,
       },
@@ -121,11 +121,11 @@
           validator: async (rule, value) => {
             if (!value) {
               /* eslint-disable-next-line */
-              return Promise.reject('值不能为空');
+              return Promise.reject('Giá trị không được để trống');
             }
             if (value === '1') {
               /* eslint-disable-next-line */
-              return Promise.reject('值不能为1');
+              return Promise.reject('Giá trị không được là1');
             }
             return Promise.resolve();
           },
@@ -136,18 +136,18 @@
     {
       field: 'field5',
       component: 'CheckboxGroup',
-      label: '字段5',
+      label: 'Trường5',
       colProps: {
         span: 8,
       },
       componentProps: {
         options: [
           {
-            label: '选项1',
+            label: 'Tùy chọn1',
             value: '1',
           },
           {
-            label: '选项2',
+            label: 'Tùy chọn2',
             value: '2',
           },
         ],
@@ -157,36 +157,36 @@
     {
       field: 'field7',
       component: 'RadioGroup',
-      label: '字段7',
+      label: 'Trường7',
       colProps: {
         span: 8,
       },
       componentProps: {
         options: [
           {
-            label: '选项1',
+            label: 'Tùy chọn1',
             value: '1',
           },
           {
-            label: '选项2',
+            label: 'Tùy chọn2',
             value: '2',
           },
         ],
       },
-      rules: [{ required: true, message: '覆盖默认生成的校验信息' }],
+      rules: [{ required: true, message: 'Ghi đè thông tin kiểm chứng được tạo mặc định' }],
     },
     {
       field: 'field8',
       component: 'Input',
-      label: '后端异步验证',
+      label: 'Xác thực bất đồng bộ backend',
       colProps: {
         span: 8,
       },
-      helpMessage: ['本字段演示异步验证', '本地规则：必须填写', '后端规则：不能包含admin'],
+      helpMessage: ['Trường này minh họa kiểm tra không đồng bộ', 'Quy tắc cục bộ: Bắt buộc điền', 'Quy tắc backend: Không được chứaadmin'],
       rules: [
         {
           required: true,
-          message: '请输入数据',
+          message: 'Vui lòng nhập dữ liệu',
         },
         {
           validator(_, value) {
@@ -194,7 +194,7 @@
               isAccountExist(value)
                 .then(() => resolve())
                 .catch((err) => {
-                  reject(err.message || '验证失败');
+                  reject(err.message || 'Kiểm tra thất bại');
                 });
             });
           },

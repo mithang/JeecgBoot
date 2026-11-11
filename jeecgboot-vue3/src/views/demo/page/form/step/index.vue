@@ -1,10 +1,10 @@
 <template>
-  <PageWrapper title="分步表单" contentBackground content=" 将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。" contentClass="p-4">
+  <PageWrapper title="Biểu mẫu từng bước" contentBackground content=" Chia một nhiệm vụ biểu mẫu dài dòng hoặc người dùng chưa quen thành nhiều bước, hướng dẫn người dùng hoàn thành." contentClass="p-4">
     <div class="step-form-form">
       <a-steps :current="current">
-        <a-step title="填写转账信息" />
-        <a-step title="确认转账信息" />
-        <a-step title="完成" />
+        <a-step title="Nhập thông tin chuyển khoản" />
+        <a-step title="Xác nhận thông tin chuyển khoản" />
+        <a-step title="Hoàn thành" />
       </a-steps>
     </div>
     <div class="mt-5">

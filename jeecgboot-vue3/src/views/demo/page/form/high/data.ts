@@ -2,22 +2,22 @@ import { FormSchema } from '/@/components/Form';
 
 const basicOptions: LabelValueOptions = [
   {
-    label: '付晓晓',
+    label: 'Phó Hiểu Hiểu',
     value: '1',
   },
   {
-    label: '周毛毛',
+    label: 'Châu Mao Mao',
     value: '2',
   },
 ];
 
 const storeTypeOptions: LabelValueOptions = [
   {
-    label: '私密',
+    label: 'Riêng tư',
     value: '1',
   },
   {
-    label: '公开',
+    label: 'Công khai',
     value: '2',
   },
 ];
@@ -26,13 +26,13 @@ export const schemas: FormSchema[] = [
   {
     field: 'f1',
     component: 'Input',
-    label: '仓库名',
+    label: 'Tên kho',
     required: true,
   },
   {
     field: 'f2',
     component: 'Input',
-    label: '仓库域名',
+    label: 'Tên miền kho',
     required: true,
     componentProps: {
       addonBefore: 'http://',
@@ -45,7 +45,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'f3',
     component: 'Select',
-    label: '仓库管理员',
+    label: 'Quản trị viên kho',
     componentProps: {
       options: basicOptions,
     },
@@ -57,7 +57,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'f4',
     component: 'Select',
-    label: '审批人',
+    label: 'Người duyệt',
     componentProps: {
       options: basicOptions,
     },
@@ -66,7 +66,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'f5',
     component: 'RangePicker',
-    label: '生效日期',
+    label: 'Ngày có hiệu lực',
     required: true,
     colProps: {
       offset: 2,
@@ -75,7 +75,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'f6',
     component: 'Select',
-    label: '仓库类型',
+    label: 'Loại kho',
     componentProps: {
       options: storeTypeOptions,
     },
@@ -89,13 +89,13 @@ export const taskSchemas: FormSchema[] = [
   {
     field: 't1',
     component: 'Input',
-    label: '任务名',
+    label: 'Tên nhiệm vụ',
     required: true,
   },
   {
     field: 't2',
     component: 'Input',
-    label: '任务描述',
+    label: 'Mô tả nhiệm vụ',
     required: true,
     colProps: {
       offset: 2,
@@ -104,7 +104,7 @@ export const taskSchemas: FormSchema[] = [
   {
     field: 't3',
     component: 'Select',
-    label: '执行人',
+    label: 'Người thực hiện',
     componentProps: {
       options: basicOptions,
     },
@@ -116,7 +116,7 @@ export const taskSchemas: FormSchema[] = [
   {
     field: 't4',
     component: 'Select',
-    label: '责任人',
+    label: 'Người chịu trách nhiệm',
     componentProps: {
       options: basicOptions,
     },
@@ -125,7 +125,7 @@ export const taskSchemas: FormSchema[] = [
   {
     field: 't5',
     component: 'TimePicker',
-    label: '生效日期',
+    label: 'Ngày có hiệu lực',
     required: true,
     componentProps: {
       style: { width: '100%' },
@@ -137,7 +137,7 @@ export const taskSchemas: FormSchema[] = [
   {
     field: 't6',
     component: 'Select',
-    label: '任务类型',
+    label: 'Loại nhiệm vụ',
     componentProps: {
       options: storeTypeOptions,
     },

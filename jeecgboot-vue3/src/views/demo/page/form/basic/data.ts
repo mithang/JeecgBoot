@@ -4,24 +4,24 @@ export const schemas: FormSchema[] = [
   {
     field: 'title',
     component: 'Input',
-    label: '标题',
+    label: 'Tiêu đề',
     componentProps: {
-      placeholder: '给目标起个名字',
+      placeholder: 'Đặt tên cho mục tiêu',
     },
     required: true,
   },
   {
     field: 'time',
     component: 'RangePicker',
-    label: '起止日期',
+    label: 'Ngày bắt đầu - kết thúc',
     required: true,
   },
   {
     field: 'target',
     component: 'InputTextArea',
-    label: '目标描述',
+    label: 'Mô tả mục tiêu',
     componentProps: {
-      placeholder: '请输入你的阶段性工作目标',
+      placeholder: 'Vui lòng nhập mục tiêu công việc theo giai đoạn của bạn',
       rows: 4,
     },
     required: true,
@@ -29,9 +29,9 @@ export const schemas: FormSchema[] = [
   {
     field: 'metrics',
     component: 'InputTextArea',
-    label: '衡量标准',
+    label: 'Tiêu chuẩn đánh giá',
     componentProps: {
-      placeholder: '请输入衡量标准',
+      placeholder: 'Vui lòng nhập tiêu chuẩn đo lường',
       rows: 4,
     },
     required: true,
@@ -39,52 +39,52 @@ export const schemas: FormSchema[] = [
   {
     field: 'client',
     component: 'Input',
-    label: '客户',
-    helpMessage: '目标的服务对象',
-    subLabel: '( 选填 )',
+    label: 'Khách hàng',
+    helpMessage: 'Đối tượng phục vụ mục tiêu',
+    subLabel: '( Không bắt buộc )',
     componentProps: {
-      placeholder: '请描述你服务的客户，内部客户直接 @姓名／工号',
+      placeholder: 'Vui lòng mô tả khách hàng bạn phục vụ, khách hàng nội bộ trực tiếp @Họ tên／Mã nhân viên',
     },
   },
   {
     field: 'inviteer',
     component: 'Input',
-    label: '邀评人',
-    subLabel: '( 选填 )',
+    label: 'Người mời đánh giá',
+    subLabel: '( Không bắt buộc )',
     componentProps: {
-      placeholder: '请直接 @姓名／工号，最多可邀请 5 人',
+      placeholder: 'Vui lòng trực tiếp @Họ tên／Mã nhân viên, tối đa mời được 5 người',
     },
   },
   {
     field: 'weights',
     component: 'InputNumber',
-    label: '权重',
-    subLabel: '( 选填 )',
+    label: 'Trọng số',
+    subLabel: '( Không bắt buộc )',
     componentProps: {
       formatter: (value: string) => (value ? `${value}%` : ''),
       parser: (value: string) => value.replace('%', ''),
-      placeholder: '请输入',
+      placeholder: 'Vui lòng nhập',
     },
   },
   {
     field: 'disclosure',
     component: 'RadioGroup',
-    label: '目标公开',
+    label: 'Mục tiêu công khai',
     itemProps: {
-      extra: '客户、邀评人默认被分享',
+      extra: 'Khách hàng, người được mời đánh giá được chia sẻ theo mặc định',
     },
     componentProps: {
       options: [
         {
-          label: '公开',
+          label: 'Công khai',
           value: '1',
         },
         {
-          label: '部分公开',
+          label: 'Công khai một phần',
           value: '2',
         },
         {
-          label: '不公开',
+          label: 'Không công khai',
           value: '3',
         },
       ],
@@ -98,19 +98,19 @@ export const schemas: FormSchema[] = [
       return model.disclosure === '2';
     },
     componentProps: {
-      placeholder: '公开给',
+      placeholder: 'Công khai cho',
       mode: 'multiple',
       options: [
         {
-          label: '同事1',
+          label: 'Đồng nghiệp1',
           value: '1',
         },
         {
-          label: '同事2',
+          label: 'Đồng nghiệp2',
           value: '2',
         },
         {
-          label: '同事3',
+          label: 'Đồng nghiệp3',
           value: '3',
         },
       ],

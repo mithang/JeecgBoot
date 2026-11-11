@@ -16,7 +16,7 @@
         isUpdate.value = !!data?.isUpdate;
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增角色' : '编辑角色'));
+      const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới vai trò' : 'Chỉnh sửa vai trò'));
 
       async function handleSubmit() {
         try {

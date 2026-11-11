@@ -1,11 +1,11 @@
 <template>
-  <PageWrapper :class="prefixCls" title="卡片列表">
+  <PageWrapper :class="prefixCls" title="Danh sách thẻ">
     <template #headerContent>
-      基于Vue Next, TypeScript, Ant Design Vue实现的一套完整的企业级后台管理系统。
+      Dựa trênVue Next, TypeScript, Ant Design Vuemột hệ thống quản lý backend cấp doanh nghiệp hoàn chỉnh.
       <div :class="`${prefixCls}__link`">
-        <a><Icon icon="bx:bx-paper-plane" color="#1890ff" /><span>开始</span></a>
-        <a><Icon icon="carbon:warning" color="#1890ff" /><span>简介</span></a>
-        <a><Icon icon="ion:document-text-outline" color="#1890ff" /><span>文档</span></a>
+        <a><Icon icon="bx:bx-paper-plane" color="#1890ff" /><span>Bắt đầu</span></a>
+        <a><Icon icon="carbon:warning" color="#1890ff" /><span>Giới thiệu</span></a>
+        <a><Icon icon="ion:document-text-outline" color="#1890ff" /><span>Tài liệu</span></a>
       </div>
     </template>
 
@@ -20,7 +20,7 @@
                     <Icon class="icon" v-if="item.icon" :icon="item.icon" :color="item.color" />
                     {{ item.title }}
                   </div>
-                  <div :class="`${prefixCls}__card-detail`"> 基于Vue Next, TypeScript, Ant Design Vue实现的一套完整的企业级后台管理系统 </div>
+                  <div :class="`${prefixCls}__card-detail`"> Dựa trênVue Next, TypeScript, Ant Design Vuemột hệ thống quản lý backend cấp doanh nghiệp hoàn chỉnh </div>
                 </a-card>
               </a-list-item>
             </a-col>

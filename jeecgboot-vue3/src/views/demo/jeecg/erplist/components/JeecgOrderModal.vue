@@ -9,41 +9,41 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from '../erplist.data';
   import { saveOrUpdate } from '../erplist.api';
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
   const isUpdate = ref(true);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     labelWidth: 150,
     schemas: formSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  //Gán giá trị biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      //表单赋值
+      //Gán giá trị biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
   });
-  //设置标题
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
+  //Cài đặt tiêu đề
+  const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
 
-  //表单提交事件
+  //Sự kiện submit biểu mẫu
   async function handleSubmit() {
     try {
       const values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdate(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng popup
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

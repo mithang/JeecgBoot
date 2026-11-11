@@ -13,7 +13,7 @@
     components: { BasicTable },
     setup() {
       const [registerTable] = useTable({
-        title: '多级表头示例',
+        title: 'Ví dụ tiêu đề bảng nhiều cấp',
         api: demoListApi,
         columns: getMultipleHeaderColumns(),
       });

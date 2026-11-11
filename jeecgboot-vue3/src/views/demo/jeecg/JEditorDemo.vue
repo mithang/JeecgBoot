@@ -2,10 +2,10 @@
   <div class="p-4">
     <div class="p-4 bg-white">
       <a-button-group class="j-table-operator">
-        <a-button type="primary" @click="setDis(0)">启用</a-button>
-        <a-button type="primary" @click="setDis(1)">禁用</a-button>
-        <a-button type="primary" @click="getValues()">校验表单并获取值</a-button>
-        <a-button type="primary" @click="setValues()">设置值</a-button>
+        <a-button type="primary" @click="setDis(0)">Kích hoạt</a-button>
+        <a-button type="primary" @click="setDis(1)">Vô hiệu hóa</a-button>
+        <a-button type="primary" @click="getValues()">Kiểm chứng biểu mẫu và lấy giá trị</a-button>
+        <a-button type="primary" @click="setValues()">Đặt giá trị</a-button>
       </a-button-group>
 
       <BasicForm @register="register" @submit="handleSubmit" />
@@ -15,7 +15,7 @@
 
 <script lang="ts">
   export default {
-    title: '富文本 | Markdown',
+    title: 'Văn bản phong phú | Markdown',
     name: 'MarkdownDemo',
   };
 </script>
@@ -30,14 +30,14 @@
     {
       field: 'name',
       component: 'Input',
-      label: '姓名',
+      label: 'Họ tên',
       required: true,
       defaultValue: 'zhangsan',
     },
     {
       field: 'tinymce',
       component: 'JEditor',
-      label: '富文本',
+      label: 'Văn bản phong phú',
       defaultValue: 'defaultValue',
       required: true,
     },
@@ -45,7 +45,7 @@
       field: 'markdown',
       component: 'JMarkdownEditor',
       label: 'Markdown',
-      defaultValue: '# 张三',
+      defaultValue: '# Trương Tam',
       required: true,
       componentProps: {
         height: 300,
@@ -79,19 +79,19 @@
       const values = await validate();
       console.log(values);
       createSuccessModal({
-        title: '校验通过',
+        title: 'Kiểm tra đạt',
         content: `${JSON.stringify(values)}`,
       });
     } catch (error) {
-      createMessage.warning('检验不通过');
+      createMessage.warning('Kiểm tra không đạt');
     }
   }
 
   function setValues() {
     setFieldsValue({
       name: 'LiSi',
-      markdown: '# 李四',
-      tinymce: '<p><strong><span style="font-size: 18pt;">张<span style="color: #e03e2d;">三</span>丰</span></strong></p>',
+      markdown: '# Lý Tứ',
+      tinymce: '<p><strong><span style="font-size: 18pt;">Trương<span style="color: #e03e2d;">Tam</span>Phong</span></strong></p>',
     });
   }
 </script>

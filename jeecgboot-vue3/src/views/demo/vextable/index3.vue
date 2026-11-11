@@ -1,7 +1,7 @@
 <template>
   <a-card :key="key">
     <div class="container">
-      <p class="title">vxe-table 原生加载示例</p>
+      <p class="title">vxe-table Ví dụ tải gốc</p>
       <template v-if="isRegistered">
         <vxe-table :align="allAlign" :data="tableData1">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -18,7 +18,7 @@
   import { useVxeTableRegister } from '/@/components/jeecg/JVxeTable/useVxeTableRegister';
   const allAlign = ref<string | null>(null);
   const tableData1 = ref([
-    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table Từ nhập môn đến từ bỏ' },
     { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
     { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
     { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' },
@@ -28,7 +28,7 @@
   useVxeTableRegister().then(() => {
     console.log('useVxeTableRegister');
     isRegistered.value = true;
-    // vxetable放在插槽中需要更新key才能重新渲染
+    // vxetableĐặt trong slot cần cập nhật key mới render lại được
     key.value++;
   });
 </script>

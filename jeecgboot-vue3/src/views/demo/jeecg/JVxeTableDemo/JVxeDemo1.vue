@@ -1,9 +1,9 @@
 <template>
   <a-space>
-    <a-button @click="onToggleLoading">切换加载</a-button>
-    <a-button @click="onToggleDisabled">切换禁用</a-button>
+    <a-button @click="onToggleLoading">Chuyển đổi trạng thái tải</a-button>
+    <a-button @click="onToggleDisabled">Chuyển đổi trạng thái vô hiệu hóa</a-button>
   </a-space>
-  <!--这种使用场景得用height，用maxHeight底层有问题-->
+  <!--Trường hợp sử dụng này phải dùng height, dùng maxHeight thì tầng dưới có vấn đề-->
   <JVxeTable
     ref="tableRef"
     stripe
@@ -27,17 +27,17 @@
     :custom="true"
   >
     <template #toolbarSuffix>
-      <a-button @click="handleTableCheck">表单验证</a-button>
-      <a-tooltip placement="top" title="获取值，忽略表单验证" :autoAdjustOverflow="true">
-        <a-button @click="onGetData">获取数据</a-button>
+      <a-button @click="handleTableCheck">Kiểm tra biểu mẫu</a-button>
+      <a-tooltip placement="top" title="Lấy giá trị, bỏ qua kiểm tra biểu mẫu" :autoAdjustOverflow="true">
+        <a-button @click="onGetData">Lấy dữ liệu</a-button>
       </a-tooltip>
-      <a-tooltip placement="top" title="模拟加载1000条数据" :autoAdjustOverflow="true">
-        <a-button @click="handleTableSet">设置值</a-button>
+      <a-tooltip placement="top" title="Mô phỏng tải 1000 bản ghi dữ liệu" :autoAdjustOverflow="true">
+        <a-button @click="handleTableSet">Đặt giá trị</a-button>
       </a-tooltip>
-      <a-button @click="onGetSelData">获取选中数据</a-button>
-      <a-button @click="onClearSel">清空选中</a-button>
-      <a-button @click="onDelFirst">删除第一行数据</a-button>
-      <a-button @click="onDelSel">删除选中数据</a-button>
+      <a-button @click="onGetSelData">Lấy dữ liệu đã chọn</a-button>
+      <a-button @click="onClearSel">Xóa lựa chọn</a-button>
+      <a-button @click="onDelFirst">Xóa dòng dữ liệu đầu tiên</a-button>
+      <a-button @click="onDelSel">Xóa dữ liệu đã chọn</a-button>
     </template>
 
     <template #expandContent="props">
@@ -56,10 +56,10 @@
     </template>
 
     <template #myAction="props">
-      <a @click="onLookRow(props)">查看</a>
+      <a @click="onLookRow(props)">Xem</a>
       <a-divider type="vertical" />
-      <Popconfirm title="确定删除吗？" @confirm="onDeleteRow(props)">
-        <a>删除</a>
+      <Popconfirm title="Bạn có chắc chắn muốn xóa không?" @confirm="onDeleteRow(props)">
+        <a>Xóa</a>
       </Popconfirm>
     </template>
   </JVxeTable>
@@ -87,70 +87,70 @@
       type: JVxeTypes.hidden,
     },
     {
-      title: '不可编辑',
+      title: 'Không thể chỉnh sửa',
       key: 'noEdit',
       type: JVxeTypes.normal,
       width: 180,
       defaultValue: 'noEdit-new',
     },
     {
-      title: '单行文本',
+      title: 'Văn bản một dòng',
       key: 'input',
       type: JVxeTypes.input,
       width: 180,
       defaultValue: '',
-      placeholder: '请输入${title}',
+      placeholder: 'Vui lòng nhập${title}',
       validateRules: [
         {
-          required: true, // 必填
-          message: '请输入${title}', // 显示的文本
+          required: true, // Bắt buộc
+          message: 'Vui lòng nhập${title}', // Văn bản hiển thị
         },
         {
-          pattern: /^[a-z|A-Z][a-z|A-Z\d_-]*$/, // 正则
-          message: '必须以字母开头，可包含数字、下划线、横杠',
+          pattern: /^[a-z|A-Z][a-z|A-Z\d_-]*$/, // Regex
+          message: 'Phải bắt đầu bằng chữ cái, có thể chứa số, dấu gạch dưới, dấu gạch ngang',
         },
         {
           unique: true,
-          message: '${title}不能重复',
+          message: '${title}không được trùng lặp',
         },
         {
           handler({ cellValue, row, column }, callback, target) {
-            // cellValue 当前校验的值
-            // callback(flag, message) 方法必须执行且只能执行一次
-            //          flag = 是否通过了校验，不填写或者填写 null 代表不进行任何操作
-            //          message = 提示的类型，默认使用配置的 message
-            // target 行编辑的实例对象
+            // cellValue Giá trị đang kiểm chứng
+            // callback(flag, message) Phương thức phải thực thi và chỉ được thực thi một lần
+            //          flag = Có vượt qua kiểm chứng hay không, không điền hoặc điền null nghĩa là không thực hiện bất kỳ thao tác nào
+            //          message = Loại nhắc nhở, mặc định dùng loại đã cấu hình message
+            // target Đối tượng instance chỉnh sửa hàng
             if (cellValue === 'abc') {
-              callback(false, '${title}不能是abc'); // false = 未通过校验
+              callback(false, '${title}không được làabc'); // false = Không đạt kiểm chứng
             } else {
-              callback(true); // true = 通过验证
+              callback(true); // true = Đã qua kiểm chứng
             }
           },
-          message: '${title}默认提示',
+          message: '${title}Gợi ý mặc định',
         },
       ],
     },
     {
-      title: '多行文本',
+      title: 'Văn bản nhiều dòng',
       key: 'textarea',
       type: JVxeTypes.textarea,
       width: 200,
     },
     {
-      title: '数字',
+      title: 'Số',
       key: 'number',
       type: JVxeTypes.inputNumber,
       width: 80,
       defaultValue: 32,
-      // 【统计列】sum = 求和、average = 平均值
+      // [Cột thống kê]sum = Tổng,average = Giá trị trung bình
       statistics: ['sum', 'average'],
     },
     {
-      title: '下拉框',
+      title: 'Dropdown',
       key: 'select',
       type: JVxeTypes.select,
       width: 180,
-      // 下拉选项
+      // Tùy chọn danh sách thả xuống
       options: [
         { title: 'String', value: 'string' },
         { title: 'Integer', value: 'int' },
@@ -159,31 +159,31 @@
       ],
       // allowInput: true,
       allowSearch: true,
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
     },
     {
-      title: '下拉框_字典',
+      title: 'Dropdown_Từ điển',
       key: 'select_dict',
       type: JVxeTypes.select,
       width: 180,
       options: [],
       dictCode: 'sex',
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
     },
-    // update-begin--author:liaozhiyang---date:20260507---for：【issues/7617】vxetable子表支持popup字典
+    // update-begin--author:liaozhiyang---date:20260507---for：【issues/7617]Bảng con vxetable hỗ trợ danh mục popup
     {
-      title: 'Popup字典(用户)',
+      title: 'PopupTừ điển(Người dùng)',
       key: 'popupUser',
       type: JVxeTypes.popupDict,
       width: 220,
-      // fieldConfig 格式：cgreport报表code,显示字段(label),存储字段(value)
+      // fieldConfig Định dạng: Báo cáo cgreportcode,Hiển thị trường(label),Trường lưu trữ(value)
       fieldConfig: 'report_user,realname,username',
       multi: true,
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
     },
-    // update-end--author:liaozhiyang---date:20260507---for：【issues/7617】vxetable子表支持popup字典
+    // update-end--author:liaozhiyang---date:20260507---for：【issues/7617]Bảng con vxetable hỗ trợ danh mục popup
     {
-      title: '下拉框_多选',
+      title: 'Dropdown_Chọn nhiều',
       key: 'select_multiple',
       type: JVxeTypes.selectMultiple,
       width: 205,
@@ -193,12 +193,12 @@
         { title: 'Double', value: 'double' },
         { title: 'Boolean', value: 'boolean' },
       ],
-      defaultValue: ['int', 'boolean'], // 多个默认项
-      // defaultValue: 'string,double,int', // 也可使用这种方式
-      placeholder: '多选',
+      defaultValue: ['int', 'boolean'], // Nhiều mục mặc định
+      // defaultValue: 'string,double,int', // Cũng có thể sử dụng cách này
+      placeholder: 'Chọn nhiều',
     },
     {
-      title: '下拉框_搜索',
+      title: 'Dropdown_Tìm kiếm',
       key: 'select_search',
       type: JVxeTypes.selectSearch,
       width: 180,
@@ -210,23 +210,23 @@
       ],
     },
     {
-      title: '日期时间',
+      title: 'Ngày giờ',
       key: 'datetime',
       type: JVxeTypes.datetime,
       width: 200,
       defaultValue: '2019-04-30 14:52:22',
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
     },
     {
-      title: '时间',
+      title: 'Thời gian',
       key: 'time',
       type: JVxeTypes.time,
       width: 200,
       defaultValue: '14:52:22',
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
     },
     {
-      title: '复选框',
+      title: 'Checkbox',
       key: 'checkbox',
       type: JVxeTypes.checkbox,
       width: 100,
@@ -234,37 +234,37 @@
       defaultChecked: false,
     },
     {
-      title: '预估开始日期 ~ 预估结束日期',
+      title: 'Ngày bắt đầu dự kiến ~ Ngày kết thúc dự kiến',
       key: 'planTimeRange',
       type: JVxeTypes.slot,
       width: 280,
       slotName: 'planTimeRangeSlot',
     },
     {
-      title: '自定义树控件',
+      title: 'Control cây tùy chỉnh',
       key: 'sel_tree_demo',
       type: JVxeTypes.treeSelect,
       width: 200,
-      // dict 格式：表名,文本字段,存储字段
+      // dict Định dạng: Tên bảng,Trường văn bản,Trường lưu trữ
       dict: 'sys_category,name,id',
       pidField: 'pid',
       pidValue: '0',
       hasChildField: 'has_child',
       multiple: true,
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
     },
     {
-      title: '分类字典树',
+      title: 'Cây từ điển phân loại',
       key: 'cat_tree_demo',
       type: JVxeTypes.catTreeSelect,
       width: 200,
-      // pcode: 根分类编码，'0' 表示加载所有根节点
+      // pcode: Mã phân loại gốc,'0' Biểu thị tải tất cả nút gốc
       pcode: 'B01',
       multiple: true,
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
     },
     {
-      title: '操作',
+      title: 'Thao tác',
       key: 'action',
       type: JVxeTypes.slot,
       fixed: 'right',
@@ -275,7 +275,7 @@
   ]);
   const dataSource = ref<any[]>([]);
 
-  /* 随机生成数据 */
+  /* Tạo dữ liệu ngẫu nhiên */
   function randomPage(current, pageSize, isLoading = false) {
     if (isLoading) {
       loading.value = true;
@@ -310,9 +310,9 @@
           return arr.join(',');
         })(),
         select_search: options[random(0, 3)],
-        // update-begin--author:liaozhiyang---date:20260507---for：【QQYUN-7961】vxetable子表支持popup字典
+        // update-begin--author:liaozhiyang---date:20260507---for：【QQYUN-7961]Bảng con vxetable hỗ trợ danh mục popup
         popupUser: ['jeecg', 'admin'][random(0, 1)],
-        // update-end--author:liaozhiyang---date:20260507---for：【QQYUN-7961】vxetable子表支持popup字典
+        // update-end--author:liaozhiyang---date:20260507---for：【QQYUN-7961]Bảng con vxetable hỗ trợ danh mục popup
         datetime: randomDatetime(),
         checkbox: ['Y', 'N'][random(0, 1)],
         planTimeRange: [dayjs().subtract(random(1, 30), 'day').format('YYYY-MM-DD'), dayjs().add(random(1, 30), 'day').format('YYYY-MM-DD')],
@@ -331,64 +331,64 @@
   randomPage(0, 20, true);
 
   function onLookRow(props) {
-    createMessage.success('请在控制台查看输出');
-    // 参数介绍：
-    // props.value          当前单元格的值
-    // props.row            当前行的数据
-    // props.rowId          当前行ID
-    // props.rowIndex       当前行下标
-    // props.column         当前列的配置
-    // props.columnIndex    当前列下标
-    // props.$table         vxe实例，可以调用vxe内置方法
-    // props.target         JVXE实例，可以调用JVXE内置方法
-    // props.caseId         JVXE实例唯一ID
-    // props.scrolling      是否正在滚动
-    // props.triggerChange  触发change事件，用于更改slot的值
-    console.log('查看: ', { props });
+    createMessage.success('Vui lòng xem kết quả trong console');
+    // Giới thiệu tham số:
+    // props.value          Giá trị của ô hiện tại
+    // props.row            Dữ liệu hàng hiện tại
+    // props.rowId          Hàng hiện tạiID
+    // props.rowIndex       Chỉ số hàng hiện tại
+    // props.column         Cấu hình cột hiện tại
+    // props.columnIndex    Chỉ số cột hiện tại
+    // props.$table         vxeĐối tượng instance, có thể gọi phương thức tích hợp của vxe
+    // props.target         JVXEInstance, có thể gọi phương thức tích hợp của JVXE
+    // props.caseId         JVXEID duy nhất của instanceID
+    // props.scrolling      Có đang cuộn không
+    // props.triggerChange  Kích hoạt sự kiện change, dùng để thay đổi giá trị của slot
+    console.log('Xem: ', { props });
   }
 
   // async function onDeleteRow(props) {
-  //   // 同步调用删除方法
+  //   // Gọi đồng bộ phương thức xóa
   //   const res = await tableRef.value?.removeRows(props.row);
   //   if (res && res.rows.length > 0) {
-  //     createMessage.success('删除成功');
+  //     createMessage.success('Xóa thành công');
   //   }
   // }
 
   async function onDeleteRow(props) {
-    // 异步调用删除方法
+    // Gọi không đồng bộ phương thức xóa
     const res = await tableRef.value?.removeRows(props.row, true);
-    console.log('删除成功~', res);
+    console.log('Xóa thành công~', res);
   }
 
   function handleValueChange(event) {
     console.log('handleValueChange.event: ', event);
   }
 
-  // 代码逻辑说明: 【issues/636】JVxeTable加上blur事件
+  // Giải thích logic mã: 【issues/636] JVxeTable thêm sự kiện blur
   function handleBlur(event){
     console.log("blur",event);
   }
-  /** 表单验证 */
+  /** Kiểm tra biểu mẫu */
   function handleTableCheck() {
     tableRef.value!.validateTable().then((errMap) => {
       if (errMap) {
-        console.log('表单验证未通过：', { errMap });
-        createMessage.error('验证未通过，请在控制台查看详细');
+        console.log('Kiểm chứng biểu mẫu chưa đạt:', { errMap });
+        createMessage.error('Kiểm chứng chưa đạt, vui lòng xem chi tiết trong console');
       } else {
-        createMessage.success('验证通过');
+        createMessage.success('Kiểm chứng thành công');
       }
     });
   }
 
-  /** 获取值，忽略表单验证 */
+  /** Lấy giá trị, bỏ qua kiểm tra biểu mẫu */
   function onGetData() {
     const values = tableRef.value!.getTableData();
-    console.log('获取值:', { values });
-    createMessage.success('获取值成功，请看控制台输出');
+    console.log('Lấy giá trị:', { values });
+    createMessage.success('Lấy giá trị thành công, vui lòng xem kết quả trong console');
   }
 
-  /** 模拟加载1000条数据 */
+  /** Mô phỏng tải 1000 bản ghi dữ liệu */
   function handleTableSet() {
     randomPage(1, 1000, true);
   }
@@ -405,7 +405,7 @@
   }
 
   function onGetSelData() {
-    createMessage.info('请看控制台');
+    createMessage.info('Vui lòng xem bảng điều khiển (console)');
     console.log(tableRef.value!.getSelectionData());
   }
 
@@ -429,26 +429,26 @@
       } else {
         rowId = deleteRows.id;
       }
-      console.log('删除 rowId: ', rowId);
+      console.log('Xóa rowId: ', rowId);
       setTimeout(() => resolve(true), 1500);
     });
   }
 
-  /** 异步删除示例 */
+  /** Ví dụ xóa bất đồng bộ */
   async function onJVxeRemove(event) {
-    const hideLoading = createMessage.loading('删除中…', 0);
+    const hideLoading = createMessage.loading('Đang xóa...', 0);
     try {
-      // 1. 向后台传递 event.deleteRows 以删除
+      // 1. Truyền về máy chủ event.deleteRows để xóa
       let flag = await doDelete(event.deleteRows);
       if (flag) {
-        // 注：如果启用了表格的 loading 状态，则必须先停止再删除，否则会导致无法从表格上删除数据
-        // 2. 调用 event.confirmRemove 方法确认删除成功
+        // Lưu ý: Nếu đã bật trạng thái loading của bảng, bắt buộc phải dừng trước rồi mới xóa, nếu không sẽ không thể xóa dữ liệu khỏi bảng
+        // 2. Gọi event.confirmRemove Phương thức xác nhận xóa thành công
         // await tableRef.value!.removeSelection();
         await event.confirmRemove()
-        createMessage.success('删除成功！');
+        createMessage.success('Xóa thành công!');
       } else {
-        // 3. 若删除失败，不调用 event.confirmRemove() 方法就不会删除数据
-        createMessage.warn('删除失败！');
+        // 3. Nếu xóa thất bại, không gọi event.confirmRemove() Phương thức sẽ không xóa dữ liệu
+        createMessage.warn('Xóa thất bại!');
       }
     } finally {
       hideLoading();

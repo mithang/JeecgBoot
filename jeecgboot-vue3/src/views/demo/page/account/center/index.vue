@@ -7,7 +7,7 @@
             <div :class="`${prefixCls}-top__avatar`">
               <img width="70" :src="avatar" />
               <span>Jeecg</span>
-              <div>海纳百川，有容乃大</div>
+              <div>Biển chứa trăm sông, bao dung nên lớn</div>
             </div>
           </a-col>
           <a-col :span="16">
@@ -23,7 +23,7 @@
         </a-row>
       </a-col>
       <a-col :span="7" :class="`${prefixCls}-col`">
-        <CollapseContainer title="标签" :canExpan="false">
+        <CollapseContainer title="Nhãn" :canExpan="false">
           <template v-for="tag in tags" :key="tag">
             <Tag class="mb-2">
               {{ tag }}
@@ -32,7 +32,7 @@
         </CollapseContainer>
       </a-col>
       <a-col :span="8" :class="`${prefixCls}-col`">
-        <CollapseContainer :class="`${prefixCls}-top__team`" title="团队" :canExpan="false">
+        <CollapseContainer :class="`${prefixCls}-top__team`" title="Nhóm" :canExpan="false">
           <div v-for="(team, index) in teams" :key="index" :class="`${prefixCls}-top__team-item`">
             <Icon :icon="team.icon" :color="team.color" />
             <span>{{ team.title }}</span>

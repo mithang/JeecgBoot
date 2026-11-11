@@ -5,16 +5,16 @@
         <a-dropdown>
           <template #overlay>
             <a-menu @click="handleCreate">
-              <a-menu-item :key="1">一对一示例</a-menu-item>
-              <a-menu-item :key="2">一对多示例</a-menu-item>
-              <a-menu-item :key="3">一对多(JVexTable)</a-menu-item>
+              <a-menu-item :key="1">Ví dụ một đối một</a-menu-item>
+              <a-menu-item :key="2">Ví dụ một đối nhiều</a-menu-item>
+              <a-menu-item :key="3">Một-nhiều(JVexTable)</a-menu-item>
             </a-menu>
           </template>
-          <a-button type="primary">新增 <DownOutlined /></a-button>
+          <a-button type="primary">Thêm mới <DownOutlined /></a-button>
         </a-dropdown>
       </template>
       <template #ctype="{ text }">
-        {{ text === '1' ? '国内订单' : text === '2' ? '国际订单' : text }}
+        {{ text === '1' ? 'Đơn hàng nội địa' : text === '2' ? 'Đơn hàng quốc tế' : text }}
       </template>
       <template #action="{ record }">
         <TableAction :actions="getAction(record)" :dropDownActions="getDropDownActions(record)" />
@@ -46,11 +46,11 @@
   const [registerOneToOneModal, { openModal: openOneToOneModal }] = useModal();
   const [registerVexTableModal, { openModal: openVexTableModal }] = useModal();
 
-  //定义表格行操作
+  //Định nghĩa thao tác hàng bảng
   const getAction = (record) => {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
     ];
@@ -59,9 +59,9 @@
   const getDropDownActions = (record) => {
     let arr = [
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否删除？',
+          title: 'Có xóa không?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -69,7 +69,7 @@
     return arr;
   };
 
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { tableContext } = useListPage({
     tableProps: {
       api: list,
@@ -77,19 +77,19 @@
       useSearchForm: false,
       actionColumn: {
         width: 160,
-        title: '操作',
+        title: 'Thao tác',
         dataIndex: 'action',
         slots: { customRender: 'action' },
       },
     },
   });
 
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload }, { rowSelection }] = tableContext;
-  //新增类型
-  // 代码逻辑说明: [VUEN-1661]一对多示例，编辑的时候，有时候是一对一，有时候是一对多，默认一对多------------
+  //Thêm mới loại
+  // Giải thích logic mã: [VUEN-1661]Ví dụ một-nhiều, khi chỉnh sửa, có lúc là một-một, có lúc là một-nhiều, mặc định là một-nhiều------------
   const addType = ref(3);
-  //添加事件
+  //Thêm sự kiện
   function handleCreate(e) {
     addType.value = e.key;
     let type = addType.value;
@@ -110,7 +110,7 @@
     }
   }
 
-  //编辑事件
+  //Sự kiện chỉnh sửa
   function handleEdit(record: Recordable) {
     let type = addType.value;
     if (type == 1) {

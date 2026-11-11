@@ -1,8 +1,8 @@
-<!-- 插槽 -->
+<!-- Slot -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" @submit="handleSubmit">
-      <!--  #name对应的是formSchemas对应slot(name)插槽    -->
+      <!--  #nametương ứng với formSchemasslot(name)Slot    -->
       <template #name="{ model, field }">
         <JInput v-model:value="model[field]" />
       </template>
@@ -10,45 +10,45 @@
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
-  //引入CustomDemo自定义组件
+  //Import component tùy chỉnh CustomDemo
   import JInput from "/@/components/Form/src/jeecg/components/JInput.vue";
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'name',
-      label: '姓名',
+      label: 'Họ tên',
       component: 'Input',
       slot:'name'
     },
     {
       field: 'phone',
-      label: '联系方式',
+      label: 'Thông tin liên hệ',
       component: 'Input',
     },
     {
       field: 'feedback',
-      label: '问题反馈',
+      label: 'Phản hồi vấn đề',
       component: 'InputTextArea',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showResetButton: false,
     labelWidth: '150px',
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 
   /**
-   * 提交信息
+   * Thông tin gửi
    */
   function handleSubmit(values) {
     console.log("values::",values);

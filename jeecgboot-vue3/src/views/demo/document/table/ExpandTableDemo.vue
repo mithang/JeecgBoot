@@ -1,7 +1,7 @@
 <template>
   <PageWrapper
-    title="可展开表格"
-    content="不可与scroll共用。TableAction组件可配置stopButtonPropagation来阻止操作按钮的点击事件冒泡，以便配合Table组件的expandRowByClick"
+    title="Bảng có thể mở rộng"
+    content="Không được dùng chung với scroll. Component TableAction có thể cấu hình stopButtonPropagation để ngăn sự kiện click của nút thao tác nổi bọt, nhằm phối hợp với component Table củaexpandRowByClick"
   >
     <BasicTable @register="registerTable">
       <template #expandedRowRender="{ record }">
@@ -12,16 +12,16 @@
           stopButtonPropagation
           :actions="[
             {
-              label: '删除',
+              label: 'Xóa',
               icon: 'ic:outline-delete-outline',
               onClick: handleDelete.bind(null, record),
             },
           ]"
           :dropDownActions="[
             {
-              label: '启用',
+              label: 'Kích hoạt',
               popConfirm: {
-                title: '是否启用？',
+                title: 'Có kích hoạt không?',
                 confirm: handleOpen.bind(null, record),
               },
             },
@@ -45,7 +45,7 @@
       width: 200,
     },
     {
-      title: '姓名',
+      title: 'Họ tên',
       dataIndex: 'name',
       width: 150,
       filters: [
@@ -54,25 +54,25 @@
       ],
     },
     {
-      title: '地址',
+      title: 'Địa chỉ',
       dataIndex: 'address',
       width: 300,
     },
     {
-      title: '编号',
+      title: 'Mã',
       dataIndex: 'no',
       width: 150,
       sorter: true,
       defaultHidden: true,
     },
     {
-      title: '开始时间',
+      title: 'Thời gian bắt đầu',
       width: 150,
       sorter: true,
       dataIndex: 'beginTime',
     },
     {
-      title: '结束时间',
+      title: 'Thời gian kết thúc',
       width: 150,
       sorter: true,
       dataIndex: 'endTime',
@@ -85,8 +85,8 @@
         designScope: 'basic-table-demo',
         tableProps: {
           api: demoListApi,
-          title: '可展开表格演示',
-          titleHelpMessage: ['已启用expandRowByClick', '已启用stopButtonPropagation'],
+          title: 'Demo bảng có thể mở rộng',
+          titleHelpMessage: ['Đã kích hoạtexpandRowByClick', 'Đã kích hoạtstopButtonPropagation'],
           columns: columns,
           rowKey: 'id',
           canResize: false,
@@ -99,14 +99,14 @@
           useSearchForm: false,
         },
       });
-      //注册table数据
+      //Đăng ký dữ liệu table
       const [registerTable] = tableContext;
 
       function handleDelete(record: Recordable) {
-        console.log('点击了删除', record);
+        console.log('Đã nhấp Xóa', record);
       }
       function handleOpen(record: Recordable) {
-        console.log('点击了启用', record);
+        console.log('Đã nhấp Kích hoạt', record);
       }
 
       return {

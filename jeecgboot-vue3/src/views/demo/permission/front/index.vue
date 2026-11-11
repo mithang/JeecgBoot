@@ -1,19 +1,19 @@
 <template>
   <PageWrapper
-    title="前端权限示例"
+    title="Ví dụ quyền frontend"
     contentBackground
     contentClass="p-4"
-    content="由于刷新的时候会请求用户信息接口，会根据接口重置角色信息，所以刷新后界面会恢复原样，如果不需要，可以注释 src/layout/default/index内的获取用户信息接口"
+    content="Vì khi làm mới sẽ gọi API thông tin người dùng, sẽ đặt lại thông tin vai trò theo API, nên sau khi làm mới giao diện sẽ khôi phục như ban đầu, nếu không cần có thể ghi chú src/layout/default/indexAPI lấy thông tin người dùng bên trong"
   >
     <CurrentPermissionMode />
 
     <p>
-      当前角色: <a> {{ userStore.getRoleList }} </a>
+      Vai trò hiện tại: <a> {{ userStore.getRoleList }} </a>
     </p>
-    <Alert class="mt-4" type="info" message="点击后请查看左侧菜单变化" show-icon />
+    <Alert class="mt-4" type="info" message="Sau khi nhấn, vui lòng xem sự thay đổi của menu bên trái" show-icon />
 
     <div class="mt-4">
-      权限切换(请先切换权限模式为前端角色权限模式):
+      Chuyển đổi quyền hạn(Vui lòng chuyển chế độ quyền sang chế độ quyền vai trò frontend trước):
       <a-button-group>
         <a-button @click="changeRole(RoleEnum.SUPER)" :type="isSuper ? 'primary' : 'default'">
           {{ RoleEnum.SUPER }}

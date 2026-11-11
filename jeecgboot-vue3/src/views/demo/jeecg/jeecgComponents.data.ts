@@ -7,8 +7,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'jdst',
     component: 'JDictSelectTag',
-    label: '性别下拉',
-    helpMessage: ['component模式'],
+    label: 'Danh sách thả xuống giới tính',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       dictCode: 'sex',
     },
@@ -19,14 +19,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'jdst',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'jdst1',
     component: 'JDictSelectTag',
-    label: '性别选择',
-    helpMessage: ['component模式'],
+    label: 'Chọn giới tính',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       dictCode: 'sex',
       type: 'radioButton',
@@ -38,14 +38,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'jdst1',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'jdst2',
     component: 'JDictSelectTag',
-    label: '字典表下拉',
-    helpMessage: ['component模式'],
+    label: 'Dropdown bảng từ điển',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       dictCode: 'sys_user,realname,id',
     },
@@ -56,14 +56,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'jdst2',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'jdst3',
     component: 'JDictSelectTag',
-    label: '字典表下拉(带条件)',
-    helpMessage: ['component模式'],
+    label: 'Dropdown bảng từ điển(Có điều kiện)',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       dictCode: "sys_user,realname,id,username!='admin' order by create_time",
     },
@@ -74,27 +74,27 @@ export const schemas: FormSchema[] = [
   {
     field: 'jdst3',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'jsst',
     component: 'JSearchSelect',
-    label: '字典搜索(同步)',
+    label: 'Tìm kiếm từ điển(Đồng bộ)',
     colProps: { span: 12 },
     componentProps: {
       //dict: "sys_depart,depart_name,id",
       dictOptions: [
         {
-          text: '选项一',
+          text: 'Tùy chọn 1',
           value: '1',
         },
         {
-          text: '选项二',
+          text: 'Tùy chọn 2',
           value: '2',
         },
         {
-          text: '选项三',
+          text: 'Tùy chọn 3',
           value: '3',
         },
       ],
@@ -103,13 +103,13 @@ export const schemas: FormSchema[] = [
   {
     field: 'jsst',
     component: 'JEllipsis',
-    label: '选择值',
+    label: 'Chọn giá trị',
     colProps: { span: 12 },
   },
   {
     field: 'jsst2',
     component: 'JSearchSelect',
-    label: '字典搜索(异步)',
+    label: 'Tìm kiếm từ điển(Bất đồng bộ)',
     colProps: { span: 12 },
     componentProps: {
       dict: 'sys_depart,depart_name,id',
@@ -120,13 +120,13 @@ export const schemas: FormSchema[] = [
   {
     field: 'jsst2',
     component: 'JEllipsis',
-    label: '选择值',
+    label: 'Chọn giá trị',
     colProps: { span: 12 },
   },
   {
     field: 'xldx',
     component: 'JDictSelectTag',
-    label: '字典下拉多选',
+    label: 'Dropdown từ điển chọn nhiều',
     colProps: { span: 12 },
     componentProps: {
       dictCode: 'sex',
@@ -136,13 +136,13 @@ export const schemas: FormSchema[] = [
   {
     field: 'xldx',
     component: 'JEllipsis',
-    label: '选择值',
+    label: 'Chọn giá trị',
     colProps: { span: 12 },
   },
   {
     field: 'xldx2',
     component: 'JSelectMultiple',
-    label: '字典下拉多选2',
+    label: 'Dropdown từ điển chọn nhiều2',
     colProps: { span: 12 },
     componentProps: {
       dictCode: 'sex',
@@ -151,13 +151,13 @@ export const schemas: FormSchema[] = [
   {
     field: 'xldx2',
     component: 'JEllipsis',
-    label: '选择值',
+    label: 'Chọn giá trị',
     colProps: { span: 12 },
   },
   {
     field: 'dxxlk',
     component: 'JDictSelectTag',
-    label: '字典下拉单选',
+    label: 'Dropdown từ điển chọn đơn',
     colProps: { span: 12 },
     componentProps: {
       dictCode: 'sex',
@@ -166,18 +166,18 @@ export const schemas: FormSchema[] = [
   {
     field: 'dxxlk',
     component: 'JEllipsis',
-    label: '选择值',
+    label: 'Chọn giá trị',
     colProps: { span: 12 },
   },
   {
-    label: '可输入下拉',
+    label: 'Dropdown có thể nhập',
     field: 'selectInput',
     component: 'JSelectInput',
     componentProps: {
       options: [
-        { label: '选项一', value: '1' },
-        { label: '选项二', value: '2' },
-        { label: '选项三', value: '3' },
+        { label: 'Tùy chọn 1', value: '1' },
+        { label: 'Tùy chọn 2', value: '2' },
+        { label: 'Tùy chọn 3', value: '3' },
       ],
     },
     colProps: { span: 12 },
@@ -185,14 +185,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'selectInput',
     component: 'JEllipsis',
-    label: '选择值',
+    label: 'Chọn giá trị',
     colProps: { span: 12 },
   },
   {
     field: 'depart3',
     component: 'JSelectDept',
-    label: '选择部门—自定义值',
-    helpMessage: ['component模式'],
+    label: 'Chọn phòng ban — Giá trị tùy chỉnh',
+    helpMessage: ['componentChế độ'],
     componentProps: { showButton: false, rowKey: 'orgCode', primaryKey: 'orgCode' },
     colProps: {
       span: 12,
@@ -201,14 +201,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'depart3',
     component: 'JEllipsis',
-    label: '选中部门',
+    label: 'Phòng ban đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'depart2',
     component: 'JSelectDept',
-    label: '选择部门',
-    helpMessage: ['component模式'],
+    label: 'Chọn phòng ban',
+    helpMessage: ['componentChế độ'],
     componentProps: { showButton: false },
     colProps: {
       span: 12,
@@ -217,14 +217,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'depart2',
     component: 'JEllipsis',
-    label: '选中部门',
+    label: 'Phòng ban đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'depart4',
     component: 'JSelectDepartPost',
-    label: '选择岗位',
-    helpMessage: ['component模式'],
+    label: 'Chọn vị trí công tác',
+    helpMessage: ['componentChế độ'],
     componentProps: { showButton: false },
     colProps: {
       span: 12,
@@ -233,14 +233,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'depart4',
     component: 'JEllipsis',
-    label: '选择岗位',
+    label: 'Chọn vị trí công tác',
     colProps: { span: 12 },
   },
   {
     field: 'user2',
     component: 'JSelectUser',
-    label: '用户选择组件',
-    helpMessage: ['component模式'],
+    label: 'Component chọn người dùng',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       labelKey: 'realname',
       rowKey: 'id',
@@ -253,14 +253,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'user2',
     component: 'JEllipsis',
-    label: '选中用户',
+    label: 'Người dùng đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'user3',
     component: 'JSelectUserByDept',
-    label: '部门选择用户',
-    helpMessage: ['component模式'],
+    label: 'Chọn người dùng theo phòng ban',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       labelKey: 'realname',
       rowKey: 'username',
@@ -272,14 +272,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'user3',
     component: 'JEllipsis',
-    label: '选中用户',
+    label: 'Người dùng đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'userPost1',
     component: 'JSelectUserByDeptPost',
-    label: '部门岗位选择用户',
-    helpMessage: ['component模式'],
+    label: 'Chọn người dùng theo vị trí phòng ban',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       labelKey: 'realname',
       rowKey: 'username',
@@ -291,14 +291,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'userPost1',
     component: 'JEllipsis',
-    label: '选中用户',
+    label: 'Người dùng đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'user4',
     component: 'JSelectUserByDepartment',
-    label: '部门选择用户',
-    helpMessage: ['component模式'],
+    label: 'Chọn người dùng theo phòng ban',
+    helpMessage: ['componentChế độ'],
     defaultValue: '',
     componentProps: {
       labelKey: 'realname',
@@ -311,14 +311,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'user4',
     component: 'JEllipsis',
-    label: '选中用户',
+    label: 'Người dùng đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'role2',
     component: 'JSelectRole',
-    label: '角色选择组件',
-    helpMessage: ['component模式'],
+    label: 'Component chọn vai trò',
+    helpMessage: ['componentChế độ'],
     colProps: {
       span: 12,
     },
@@ -326,33 +326,33 @@ export const schemas: FormSchema[] = [
   {
     field: 'role2',
     component: 'JEllipsis',
-    label: '选中角色',
+    label: 'Vai trò đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'position2',
     component: 'JSelectPosition',
-    label: '职务选择组件',
-    helpMessage: ['component模式'],
+    label: 'Component chọn chức danh',
+    helpMessage: ['componentChế độ'],
     colProps: { span: 12 },
     componentProps: { async: true, showSelectTable: true },
   },
   {
     field: 'position2',
     component: 'JEllipsis',
-    label: '选中职务',
+    label: 'Chức danh đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'checkbox1',
     component: 'JCheckbox',
-    label: 'JCheckbox组件1',
-    helpMessage: ['component模式'],
+    label: 'JCheckboxComponent1',
+    helpMessage: ['componentChế độ'],
     defaultValue: '1,2',
     componentProps: {
       options: [
-        { label: '男', value: '1' },
-        { label: '女', value: '2' },
+        { label: 'Nam', value: '1' },
+        { label: 'Nữ', value: '2' },
       ],
     },
     colProps: {
@@ -362,15 +362,15 @@ export const schemas: FormSchema[] = [
   {
     field: 'checkbox1',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'checkbox2',
     component: 'Input',
-    label: 'JCheckbox组件2',
+    label: 'JCheckboxComponent2',
     defaultValue: '1',
-    helpMessage: ['插槽模式'],
+    helpMessage: ['Chế độ slot'],
     slot: 'JCheckbox',
     colProps: {
       span: 12,
@@ -379,12 +379,12 @@ export const schemas: FormSchema[] = [
   {
     field: 'checkbox2',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'data1',
-    label: '日期选择',
+    label: 'Chọn ngày',
     component: 'DatePicker',
     componentProps: {
       showTime: true,
@@ -397,14 +397,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'data1',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
   },
   {
     field: 'data2',
-    label: '年份范围选择',
+    label: 'Chọn khoảng năm',
     component: 'RangePicker',
     componentProps: {
       picker: 'year',
@@ -417,7 +417,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'data2',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -425,8 +425,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'hk',
     component: 'Input',
-    label: '滑块验证码',
-    helpMessage: ['插槽模式'],
+    label: 'Mã xác thực trượt',
+    helpMessage: ['Chế độ slot'],
     slot: 'dargVerify',
     colProps: {
       span: 12,
@@ -435,7 +435,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'hk',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -443,14 +443,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'JTreeDict',
     component: 'JTreeDict',
-    label: '树字典',
-    helpMessage: ['component模式'],
+    label: 'Từ điển cây',
+    helpMessage: ['componentChế độ'],
     colProps: { span: 12 },
   },
   {
     field: 'JTreeDict',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -458,8 +458,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'ts',
     component: 'JTreeSelect',
-    label: '下拉树选择',
-    helpMessage: ['component模式'],
+    label: 'Chọn cây thả xuống',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       dict: 'sys_permission,name,id',
       pidField: 'parent_id',
@@ -473,14 +473,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'ts',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'ts1',
     component: 'JTreeSelect',
-    label: '下拉树多选',
-    helpMessage: ['component模式'],
+    label: 'Chọn nhiều trên cây thả xuống',
+    helpMessage: ['componentChế độ'],
     componentProps: {
       dict: 'sys_permission,name,id',
       pidField: 'parent_id',
@@ -495,14 +495,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'ts1',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'category',
     component: 'JCategorySelect',
-    label: '分类字典树',
-    helpMessage: ['component模式'],
+    label: 'Cây từ điển phân loại',
+    helpMessage: ['componentChế độ'],
     defaultValue: '',
     componentProps: {
       pcode: 'B01',
@@ -515,14 +515,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'category',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'JEasyCron',
     component: 'JEasyCron',
     label: 'JEasyCron',
-    helpMessage: ['component模式'],
+    helpMessage: ['componentChế độ'],
     colProps: { span: 12 },
     defaultValue: '* * * * * ? *',
     rules: [{ validator: JCronValidator }],
@@ -530,14 +530,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'JEasyCron',
     component: 'JEllipsis',
-    label: '选择值',
+    label: 'Chọn giá trị',
     colProps: { span: 12 },
   },
   {
     field: 'JInput',
     component: 'JInput',
-    label: '特殊查询组件',
-    helpMessage: ['插槽模式'],
+    label: 'Component truy vấn đặc biệt',
+    helpMessage: ['Chế độ slot'],
     slot: 'JInput',
     colProps: {
       span: 12,
@@ -546,13 +546,13 @@ export const schemas: FormSchema[] = [
   {
     field: 'jinputtype',
     component: 'Select',
-    label: '查询类型',
+    label: 'Loại tìm kiếm',
     componentProps: {
       options: [
-        { value: 'like', label: '模糊（like）' },
-        { value: 'ne', label: '不等于（ne）' },
-        { value: 'ge', label: '大于等于（ge）' },
-        { value: 'le', label: '小于等于（le)' },
+        { value: 'like', label: 'Mờ (like)' },
+        { value: 'ne', label: 'Không bằng (ne)' },
+        { value: 'ge', label: 'Lớn hơn hoặc bằng (ge)' },
+        { value: 'le', label: 'Nhỏ hơn hoặc bằng (le)' },
       ],
     },
     colProps: {
@@ -562,14 +562,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'JInput',
     component: 'JEllipsis',
-    label: '输入值',
+    label: 'Giá trị nhập',
     colProps: { span: 6 },
   },
   {
     field: 'field1',
     component: 'Select',
-    label: '省市区选择',
-    helpMessage: ['插槽模式'],
+    label: 'Chọn Tỉnh/Thành phố/Quận huyện',
+    helpMessage: ['Chế độ slot'],
     slot: 'jAreaLinkage',
     colProps: {
       span: 12,
@@ -579,7 +579,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'field1',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -587,8 +587,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'field0',
     component: 'Select',
-    label: '禁用组件(方式一)',
-    helpMessage: ['插槽模式'],
+    label: 'Vô hiệu hóa component(Cách 1)',
+    helpMessage: ['Chế độ slot'],
     slot: 'jAreaLinkage1',
     colProps: {
       span: 12,
@@ -599,7 +599,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'field0',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -607,8 +607,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'field2',
     component: 'JAreaLinkage',
-    label: '禁用组件(方式二)',
-    helpMessage: ['component模式'],
+    label: 'Vô hiệu hóa component(Cách 2)',
+    helpMessage: ['componentChế độ'],
     colProps: {
       span: 12,
     },
@@ -621,7 +621,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'field2',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -629,8 +629,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'pca1',
     component: 'JAreaSelect',
-    label: '省市区级联',
-    helpMessage: ['component模式'],
+    label: 'Liên cấp Tỉnh/Thành phố/Quận huyện',
+    helpMessage: ['componentChế độ'],
     defaultValue: '140302',
     colProps: {
       span: 12,
@@ -639,7 +639,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'pca1',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -647,8 +647,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'pop1',
     component: 'Input',
-    label: 'JPopup示例',
-    helpMessage: ['插槽模式'],
+    label: 'JPopupVí dụ',
+    helpMessage: ['Chế độ slot'],
     slot: 'JPopup',
     colProps: {
       span: 12,
@@ -657,7 +657,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'pop1',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -665,8 +665,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'pop2',
     component: 'Input',
-    label: 'JPopup带参数示例',
-    helpMessage: ['插槽模式'],
+    label: 'JPopupVí dụ có tham số',
+    helpMessage: ['Chế độ slot'],
     slot: 'JPopup2',
     colProps: {
       span: 12,
@@ -675,7 +675,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'pop2',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -683,8 +683,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'pop3',
     component: 'Input',
-    label: 'JPopup带查询条件参数示例',
-    helpMessage: ['插槽模式'],
+    label: 'JPopupVí dụ JPopup có tham số điều kiện truy vấn',
+    helpMessage: ['Chế độ slot'],
     slot: 'JPopup3',
     colProps: {
       span: 12,
@@ -693,7 +693,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'pop3',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -702,108 +702,108 @@ export const schemas: FormSchema[] = [
     field: 'JInputPop',
     component: 'JInputPop',
     label: 'JInputPop',
-    helpMessage: ['component模式'],
+    helpMessage: ['componentChế độ'],
     colProps: { span: 12 },
   },
   {
     field: 'JInputPop',
     component: 'JEllipsis',
-    label: '输入值',
+    label: 'Giá trị nhập',
     colProps: { span: 12 },
   },
   {
     field: 'JTreeDictAsync',
     component: 'JTreeDict',
-    label: '异步JTreeDict',
-    helpMessage: ['component模式'],
+    label: 'Bất đồng bộJTreeDict',
+    helpMessage: ['componentChế độ'],
     colProps: { span: 12 },
     componentProps: { async: true },
   },
   {
     field: 'JTreeDictAsync',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'JSwitch',
     component: 'JSwitch',
     label: 'JSwitch',
-    helpMessage: ['component模式'],
+    helpMessage: ['componentChế độ'],
     colProps: { span: 12 },
   },
   {
     field: 'JSwitch',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'JSwitchSelect',
     component: 'JSwitch',
     label: 'JSwitchSelect',
-    helpMessage: ['component模式'],
+    helpMessage: ['componentChế độ'],
     colProps: { span: 12 },
     componentProps: { query: true },
   },
   {
     field: 'JSwitchSelect',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   
   {
     field: 'userSelect2',
     component: 'UserSelect',
-    label: '高级用户选择',
-    helpMessage: ['component模式'],
+    label: 'Chọn người dùng nâng cao',
+    helpMessage: ['componentChế độ'],
     colProps: { span: 12 },
   },
   {
     field: 'userSelect2',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   
   {
     field: 'superQuery',
     component: 'Input',
-    label: '高级查询',
-    helpMessage: ['插槽模式'],
+    label: 'Tìm kiếm nâng cao',
+    helpMessage: ['Chế độ slot'],
     slot: 'superQuery',
     colProps: { span: 12 },
   },
   {
     field: 'superQuery',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'superQuery1',
     component: 'Input',
-    label: '高级查询',
-    helpMessage: ['插槽模式-自己保存查询条件'],
+    label: 'Tìm kiếm nâng cao',
+    helpMessage: ['Chế độ slot-Tự lưu điều kiện tìm kiếm'],
     slot: 'superQuery1',
     colProps: { span: 12 },
   },
   {
     field: 'superQuery1',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'pop2',
     component: 'JPopupDict',
-    label: 'JPopupDict示例',
+    label: 'JPopupDictVí dụ',
     colProps: {
       span: 12,
     },
     componentProps:{
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
       dictCode: 'report_user,username,id',
       multi: true,
     },
@@ -811,7 +811,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'pop2',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: {
       span: 12,
     },
@@ -819,8 +819,8 @@ export const schemas: FormSchema[] = [
   {
     field: 'sex',
     component: 'JDictSelectTag',
-    label: '性别(控制下方课程options)',
-    helpMessage: ['component模式','性别不同，下方课程展示选项不同'],
+    label: 'Giới tính(Kiểm soát khóa học bên dướioptions)',
+    helpMessage: ['componentChế độ','Giới tính khác nhau thì các tùy chọn khóa học hiển thị bên dưới cũng khác nhau'],
     componentProps: {
       dictCode: 'sex',
       type: 'radioButton',
@@ -835,25 +835,25 @@ export const schemas: FormSchema[] = [
   {
     field: 'sex',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'course',
     component: 'Select',
-    label: '课程',
+    label: 'Khóa học',
     dynamicPropskey: 'options',
     dynamicPropsVal: ({ model }) => {
       let options;
       if (model.sex == 1) {
         return [
-          { value: '0', label: 'java - 男' },
-          { value: '1', label: 'vue - 男' },
+          { value: '0', label: 'java - Nam' },
+          { value: '1', label: 'vue - Nam' },
         ];
       } else if (model.sex == 2) {
         return [
-          { value: '2', label: '瑜伽 - 女' },
-          { value: '3', label: '美甲 - 女' },
+          { value: '2', label: 'Yoga - Nữ' },
+          { value: '3', label: 'Làm móng - Nữ' },
         ];
       } else {
         return [];
@@ -869,45 +869,45 @@ export const schemas: FormSchema[] = [
   {
     field: 'course',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'field100',
     component: 'JInputSelect',
     label: 'JInputSelect',
-    helpMessage: ['component模式'],
+    helpMessage: ['componentChế độ'],
     componentProps: {
-      selectPlaceholder: '可选择系统变量',
-      inputPlaceholder: '请输入',
+      selectPlaceholder: 'Có thể chọn biến hệ thống',
+      inputPlaceholder: 'Vui lòng nhập',
       selectWidth:'200px',
       options: [
         {
-          label: '登录用户账号',
+          label: 'Tài khoản người dùng đã đăng nhập',
           value: '#{sys_user_code}',
         },
         {
-          label: '登录用户名称',
+          label: 'Tên người dùng đã đăng nhập',
           value: '#{sys_user_name}',
         },
         {
-          label: '当前日期',
+          label: 'Ngày hiện tại',
           value: '#{sys_date}',
         },
         {
-          label: '当前时间',
+          label: 'Thời gian hiện tại',
           value: '#{sys_time}',
         },
         {
-          label: '登录用户部门',
+          label: 'Phòng ban của người dùng đã đăng nhập',
           value: '#{sys_org_code}',
         },
         {
-          label: '用户拥有部门',
+          label: 'Phòng ban mà người dùng sở hữu',
           value: '#{sys_multi_org_code}',
         },
         {
-          label: '登录用户租户',
+          label: 'Tenant của người dùng đã đăng nhập',
           value: '#{tenant_id}',
         },
       ],
@@ -919,13 +919,13 @@ export const schemas: FormSchema[] = [
   {
     field: 'field100',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'JAreaLinkage',
     component: 'JAreaLinkage',
-    label: '省市区选择',
+    label: 'Chọn Tỉnh/Thành phố/Quận huyện',
     colProps: {
       span: 12,
     },
@@ -933,28 +933,28 @@ export const schemas: FormSchema[] = [
   {
     field: 'JAreaLinkage',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'tabsSelectUser',
     component: 'Input',
-    label: '用户选择',
-    helpMessage: ['插槽模式-自己保存查询条件'],
+    label: 'Chọn người dùng',
+    helpMessage: ['Chế độ slot-Tự lưu điều kiện tìm kiếm'],
     slot: 'tabsSelectUser',
     colProps: { span: 12 },
   },
   {
     field: 'tabsSelectUser',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
   {
     field: 'linkCard1',
     component: 'JLinkTableCard',
-    label: '关联记录(online模式)',
-    helpMessage: ['component模式', 'queryMode=online（默认）', '仅支持 Online 表单中已配置的表'],
+    label: 'Bản ghi liên kết(onlineChế độ)',
+    helpMessage: ['componentChế độ', 'queryMode=online(Mặc định)', 'Chỉ hỗ trợ các bảng đã cấu hình trong biểu mẫu Online'],
     colProps: { span: 12 },
     componentProps: {
       queryMode: 'online',
@@ -967,14 +967,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'linkCard1',
     component: 'JEllipsis',
-    label: '选中值(id)',
+    label: 'Giá trị đã chọn(id)',
     colProps: { span: 12 },
   },
   {
     field: 'linkCard3',
     component: 'JLinkTableCard',
-    label: '关联记录(table模式)',
-    helpMessage: ['component模式', 'queryMode=table + multi=true', '支持数据库中的所有表，多选'],
+    label: 'Bản ghi liên kết(tableChế độ)',
+    helpMessage: ['componentChế độ', 'queryMode=table + multi=true', 'Hỗ trợ tất cả các bảng trong cơ sở dữ liệu, đa chọn'],
     colProps: { span: 12 },
     componentProps: {
       queryMode: 'table',
@@ -988,14 +988,14 @@ export const schemas: FormSchema[] = [
   {
     field: 'linkCard3',
     component: 'JEllipsis',
-    label: '选中值(id逗号分隔)',
+    label: 'Giá trị đã chọn(idphân tách bằng dấu phẩy)',
     colProps: { span: 12 },
   },
   {
     field: 'orderAuth',
     component: 'Input',
-    label: '指令权限',
-    helpMessage: ['有权限右侧的"选中值"可见，否则不可见'],
+    label: 'Quyền hạn chỉ thị',
+    helpMessage: ['Nếu có quyền, phía bên phải"Giá trị đã chọn"Hiển thị, nếu không sẽ không hiển thị'],
     colProps: {
       span: 12,
     },
@@ -1004,7 +1004,7 @@ export const schemas: FormSchema[] = [
     field: 'orderAuth',
     auth: 'demo:order:auth',
     component: 'JEllipsis',
-    label: '选中值',
+    label: 'Giá trị đã chọn',
     colProps: { span: 12 },
   },
 ];

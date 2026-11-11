@@ -1,83 +1,83 @@
 <template>
-  <PageWrapper title="单号：234231029431" contentBackground>
+  <PageWrapper title="Số đơn:234231029431" contentBackground>
     <template #extra>
-      <a-button> 操作一 </a-button>
-      <a-button> 操作二 </a-button>
-      <a-button type="primary"> 主操作 </a-button>
+      <a-button> Thao tác 1 </a-button>
+      <a-button> Thao tác 2 </a-button>
+      <a-button type="primary"> Thao tác chính </a-button>
     </template>
 
     <template #footer>
       <a-tabs default-active-key="1">
-        <a-tab-pane key="1" tab="详情" />
-        <a-tab-pane key="2" tab="规则" />
+        <a-tab-pane key="1" tab="Chi tiết" />
+        <a-tab-pane key="2" tab="Quy tắc" />
       </a-tabs>
     </template>
 
     <div class="pt-4 m-4 desc-wrap">
       <a-descriptions size="small" :column="2">
-        <a-descriptions-item label="创建人"> 曲丽丽 </a-descriptions-item>
-        <a-descriptions-item label="订购产品"> XX 服务 </a-descriptions-item>
-        <a-descriptions-item label="创建时间"> 2017-01-10 </a-descriptions-item>
-        <a-descriptions-item label="关联单据">
+        <a-descriptions-item label="Người tạo"> Khúc Lệ Lệ </a-descriptions-item>
+        <a-descriptions-item label="Sản phẩm đã đặt"> XX Dịch vụ </a-descriptions-item>
+        <a-descriptions-item label="Thời gian tạo"> 2017-01-10 </a-descriptions-item>
+        <a-descriptions-item label="Chứng từ liên kết">
           <a>12421</a>
         </a-descriptions-item>
-        <a-descriptions-item label="生效日期"> 2017-07-07 ~ 2017-08-08 </a-descriptions-item>
-        <a-descriptions-item label="备注"> 请于两个工作日内确认 </a-descriptions-item>
+        <a-descriptions-item label="Ngày có hiệu lực"> 2017-07-07 ~ 2017-08-08 </a-descriptions-item>
+        <a-descriptions-item label="Ghi chú"> Vui lòng xác nhận trong vòng hai ngày làm việc </a-descriptions-item>
       </a-descriptions>
-      <a-card title="流程进度" :bordered="false">
+      <a-card title="Tiến độ quy trình" :bordered="false">
         <a-steps :current="1" progress-dot size="small">
-          <a-step title="创建项目">
+          <a-step title="Tạo dự án">
             <template #description> <div>Jeecg</div> <p>2016-12-12 12:32</p> </template>
           </a-step>
-          <a-step title="部门初审">
+          <a-step title="Sơ duyệt của phòng ban">
             <template #description>
               <p>Chad</p>
             </template>
           </a-step>
-          <a-step title="财务复核" />
-          <a-step title="完成" />
+          <a-step title="Kiểm tra lại tài chính" />
+          <a-step title="Hoàn thành" />
         </a-steps>
       </a-card>
 
-      <a-card title="用户信息" :bordered="false" class="mt-5">
+      <a-card title="Thông tin người dùng" :bordered="false" class="mt-5">
         <a-descriptions :column="3">
-          <a-descriptions-item label="用户姓名"> 付小小 </a-descriptions-item>
-          <a-descriptions-item label="会员卡号"> XX 32943898021309809423 </a-descriptions-item>
-          <a-descriptions-item label="身份证"> 3321944288191034921 </a-descriptions-item>
-          <a-descriptions-item label="联系方式"> 18100000000 </a-descriptions-item>
-          <a-descriptions-item label="联系地址" :span="2"> 曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口 </a-descriptions-item>
+          <a-descriptions-item label="Họ tên người dùng"> Phó Tiểu Tiểu </a-descriptions-item>
+          <a-descriptions-item label="Số thẻ thành viên"> XX 32943898021309809423 </a-descriptions-item>
+          <a-descriptions-item label="Chứng minh nhân dân"> 3321944288191034921 </a-descriptions-item>
+          <a-descriptions-item label="Thông tin liên hệ"> 18100000000 </a-descriptions-item>
+          <a-descriptions-item label="Địa chỉ liên hệ" :span="2"> Khúc Lệ Lệ 18100000000 Ngã tư đường Hoàng Cô Sơn và đường Công Chuyên, quận Tây Hồ, thành phố Hàng Châu, tỉnh Chiết Giang </a-descriptions-item>
         </a-descriptions>
 
-        <a-descriptions title="信息组" :column="3">
-          <a-descriptions-item label="某某数据"> 111 </a-descriptions-item>
-          <a-descriptions-item label="该数据更新时间"> 2017-08-08 </a-descriptions-item>
-          <a-descriptions-item label="某某数据"> 725 </a-descriptions-item>
-          <a-descriptions-item label="该数据更新时间"> 2017-08-08 </a-descriptions-item>
+        <a-descriptions title="Nhóm thông tin" :column="3">
+          <a-descriptions-item label="Dữ liệu nào đó"> 111 </a-descriptions-item>
+          <a-descriptions-item label="Thời gian cập nhật dữ liệu này"> 2017-08-08 </a-descriptions-item>
+          <a-descriptions-item label="Dữ liệu nào đó"> 725 </a-descriptions-item>
+          <a-descriptions-item label="Thời gian cập nhật dữ liệu này"> 2017-08-08 </a-descriptions-item>
         </a-descriptions>
 
-        <h4>信息组</h4>
-        <a-card title="多层级信息组">
-          <a-descriptions title="组名称" :column="3">
-            <a-descriptions-item label="负责人"> 林东东 </a-descriptions-item>
-            <a-descriptions-item label="角色码"> 1234567 </a-descriptions-item>
-            <a-descriptions-item label="所属部门"> XX公司 - YY部 </a-descriptions-item>
-            <a-descriptions-item label="过期时间"> 2017-08-08 </a-descriptions-item>
-            <a-descriptions-item label="描述" :span="2"> 这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长... </a-descriptions-item>
+        <h4>Nhóm thông tin</h4>
+        <a-card title="Nhóm thông tin nhiều cấp">
+          <a-descriptions title="Tên nhóm" :column="3">
+            <a-descriptions-item label="Người phụ trách"> Lâm Đông Đông </a-descriptions-item>
+            <a-descriptions-item label="Mã vai trò"> 1234567 </a-descriptions-item>
+            <a-descriptions-item label="Phòng ban trực thuộc"> XXCông ty - YYPhòng </a-descriptions-item>
+            <a-descriptions-item label="Thời gian hết hạn"> 2017-08-08 </a-descriptions-item>
+            <a-descriptions-item label="Mô tả" :span="2"> Đoạn mô tả này rất dài rất dài rất dài rất dài rất dài rất dài rất dài rất dài rất dài rất dài rất dài rất dài rất dài rất dài... </a-descriptions-item>
           </a-descriptions>
           <a-divider />
-          <a-descriptions title="组名称" :column="1">
-            <a-descriptions-item label="学名">
-              Citrullus lanatus (Thunb.) Matsum. et Nakai一年生蔓生藤本；茎、枝粗壮，具明显的棱。卷须较粗..
+          <a-descriptions title="Tên nhóm" :column="1">
+            <a-descriptions-item label="Tên khoa học">
+              Citrullus lanatus (Thunb.) Matsum. et NakaiCây dây leo sống một năm; thân, cành thô to, có gờ rõ rệt. Tua cuốn khá thô..
             </a-descriptions-item>
           </a-descriptions>
           <a-divider />
-          <a-descriptions title="组名称" :column="1">
-            <a-descriptions-item label="负责人"> 付小小 </a-descriptions-item>
-            <a-descriptions-item label="角色码"> 1234568 </a-descriptions-item>
+          <a-descriptions title="Tên nhóm" :column="1">
+            <a-descriptions-item label="Người phụ trách"> Phó Tiểu Tiểu </a-descriptions-item>
+            <a-descriptions-item label="Mã vai trò"> 1234568 </a-descriptions-item>
           </a-descriptions>
         </a-card>
       </a-card>
-      <a-card title="用户近半年来电记录" class="my-5">
+      <a-card title="Bản ghi cuộc gọi đến của người dùng trong gần nửa năm qua" class="my-5">
         <Empty />
       </a-card>
       <BasicTable @register="registerTimeTable" />
@@ -107,7 +107,7 @@
     },
     setup() {
       const [registerTimeTable] = useTable({
-        title: '退货进度',
+        title: 'Tiến độ trả hàng',
         columns: refundTimeTableSchema,
         pagination: false,
         dataSource: refundTimeTableData,

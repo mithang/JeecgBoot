@@ -1,54 +1,54 @@
-<!-- 动态表单验证 -->
+<!-- Xác thực biểu mẫu động -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" @submit="handleSubmit" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
   import { duplicateCheck } from '/@/views/system/user/user.api';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'visitor',
-      label: '来访人员',
+      label: 'Khách đến thăm',
       component: 'Input',
-      //自动触发检验，布尔类型
+      //Tự động kích hoạt kiểm chứng, kiểu boolean
       required: true,
     },
     {
       field: 'accessed',
-      label: '来访日期',
+      label: 'Ngày đến thăm',
       component: 'DatePicker',
-      //支持获取当前值判断触发 values代表当前表单的值
+      //Hỗ trợ lấy giá trị hiện tại để xác định kích hoạt, values đại diện cho giá trị của biểu mẫu hiện tại
       required: ({ values }) => {
         return !values.accessed;
       },
     },
     {
       field: 'phone',
-      label: '来访人手机号',
+      label: 'Số điện thoại của khách đến thăm',
       component: 'Input',
-      //动态自定义正则，values: 当前表单的所有值
+      //Regex tùy chỉnh động,values: Tất cả giá trị của biểu mẫu hiện tại
       dynamicRules: ({ values }) => {
-        //需要return
+        //Cầnreturn
         return [
           {
-            //默认开启表单检验
+            //Mặc định bật kiểm tra biểu mẫu
             required: true,
-            // value 当前手机号输入的值
+            // value Giá trị số điện thoại hiện đang nhập
             validator: (_, value) => {
-              //需要return 一个Promise对象
+              //Cần return một đối tượng Promise
               return new Promise((resolve, reject) => {
                 if (!value) {
-                  reject('请输入手机号！');
+                  reject('Vui lòng nhập số điện thoại!');
                 }
-                //验证手机号是否正确
+                //Kiểm tra số điện thoại có đúng không
                 let reg = /^1[3456789]\d{9}$/;
                 if (!reg.test(value)) {
-                  reject('请输入正确手机号！');
+                  reject('Vui lòng nhập đúng số điện thoại!');
                 }
                 resolve();
               });
@@ -60,19 +60,19 @@
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showResetButton: false,
     labelWidth: '150px',
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 
   /**
-   * 提交事件
+   * Sự kiện gửi
    */
   function handleSubmit(values: any) {}
 </script>

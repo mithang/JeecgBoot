@@ -1,16 +1,16 @@
 <template>
-  <PageWrapper title="Tree函数操作示例">
+  <PageWrapper title="TreeVí dụ thao tác hàm">
     <div class="flex">
       <BasicTree
         class="w-1/3"
-        title="右侧操作按钮/自定义图标"
-        helpMessage="帮助信息"
+        title="Nút thao tác bên phải/Biểu tượng tùy chỉnh"
+        helpMessage="Thông tin trợ giúp"
         :treeData="treeData"
         :actionList="actionList"
         :renderIcon="createIcon"
       />
-      <BasicTree class="w-1/3 mx-4" title="右键菜单" :treeData="treeData" :beforeRightClick="getRightMenuList" />
-      <BasicTree class="w-1/3" title="工具栏使用" toolbar checkable search :treeData="treeData" :beforeRightClick="getRightMenuList" />
+      <BasicTree class="w-1/3 mx-4" title="Menu chuột phải" :treeData="treeData" :beforeRightClick="getRightMenuList" />
+      <BasicTree class="w-1/3" title="Sử dụng thanh công cụ" toolbar checkable search :treeData="treeData" :beforeRightClick="getRightMenuList" />
     </div>
   </PageWrapper>
 </template>
@@ -31,16 +31,16 @@
       function getRightMenuList(node: any): ContextMenuItem[] {
         return [
           {
-            label: '新增',
+            label: 'Thêm mới',
             handler: () => {
-              console.log('点击了新增', node);
+              console.log('Đã nhấp Thêm mới', node);
             },
             icon: 'bi:plus',
           },
           {
-            label: '删除',
+            label: 'Xóa',
             handler: () => {
-              console.log('点击了删除', node);
+              console.log('Đã nhấp Xóa', node);
             },
             icon: 'bx:bxs-folder-open',
           },

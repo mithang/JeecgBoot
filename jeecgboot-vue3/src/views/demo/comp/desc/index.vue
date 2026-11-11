@@ -1,10 +1,10 @@
 <template>
-  <PageWrapper title="详情组件示例">
-    <Description title="基础示例" :collapseOptions="{ canExpand: true, helpMessage: 'help me' }" :column="3" :data="mockData" :schema="schema" />
+  <PageWrapper title="Ví dụ về component chi tiết">
+    <Description title="Ví dụ cơ bản" :collapseOptions="{ canExpand: true, helpMessage: 'help me' }" :column="3" :data="mockData" :schema="schema" />
 
     <Description
       class="mt-4"
-      title="垂直示例"
+      title="Ví dụ dọc"
       layout="vertical"
       :collapseOptions="{ canExpand: true, helpMessage: 'help me' }"
       :column="2"
@@ -27,34 +27,34 @@
     age: '123',
     phone: '15695909xxx',
     email: '190848757@qq.com',
-    addr: '厦门市思明区',
-    sex: '男',
+    addr: 'Quận Tư Minh, Hạ Môn',
+    sex: 'Nam',
     certy: '3504256199xxxxxxxxx',
     tag: 'orange',
   };
   const schema: DescItem[] = [
     {
       field: 'username',
-      label: '用户名',
+      label: 'Tên người dùng',
     },
     {
       field: 'nickName',
-      label: '昵称',
+      label: 'Biệt danh',
       render: (curVal, data) => {
         return `${data.username}-${curVal}`;
       },
     },
     {
       field: 'phone',
-      label: '联系电话',
+      label: 'Số điện thoại liên hệ',
     },
     {
       field: 'email',
-      label: '邮箱',
+      label: 'Email',
     },
     {
       field: 'addr',
-      label: '地址',
+      label: 'Địa chỉ',
     },
   ];
   export default defineComponent({
@@ -67,7 +67,7 @@
       });
 
       const [register1] = useDescription({
-        title: '无边框',
+        title: 'Không có viền',
         bordered: false,
         data: mockData,
         schema: schema,

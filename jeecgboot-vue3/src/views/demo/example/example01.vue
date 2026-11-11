@@ -1,32 +1,32 @@
 <template>
   <div class="root">
-    <!-- 第 1 层：宿主背景 -->
+    <!-- Lớp 1: Nền host -->
     <div class="bg-layer"></div>
-    <!-- 第 2 层：大屏 iframe -->
+    <!-- Tầng 2: Màn hình lớn iframe -->
     <iframe ref="iframeRef" class="bigscreen-iframe" :src="iframeSrc" allowtransparency="true" frameborder="0"></iframe>
-    <!-- 第 3 层：宿主交互层（PE:none 容器 + PE:auto 子元素） -->
+    <!-- Tầng 3: Lớp tương tác máy chủ (PE:none Vùng chứa + PE:auto phần tử con) -->
     <div class="host-overlay">
       <main class="host-main">
         <section class="panel">
-          <div class="panel-title">控制大屏（host:component-update → queryData）</div>
+          <div class="panel-title">Điều khiển màn hình lớn (host:component-update → queryData）</div>
           <div class="panel-body">
-            <div v-if="!components.length" class="empty">等大屏 ready 后这里会出现组件按钮...</div>
+            <div v-if="!components.length" class="empty">Đợi màn hình lớn ready xong, ở đây sẽ xuất hiện nút component...</div>
             <div v-for="c in components" :key="c.id" class="comp-row">
               <div class="comp-meta">
                 <span class="comp-type">{{ c.type }}</span>
                 <span class="comp-id" :title="c.id">#{{ c.id.slice(0, 8) }}</span>
               </div>
               <div class="comp-actions">
-                <button class="btn" @click="pushSampleData(c)">塞示例数据</button>
-                <button class="btn ghost" @click="pushRandomData(c)">塞随机数据</button>
-                <button class="btn ghost" @click="resetData(c)">重新查询</button>
+                <button class="btn" @click="pushSampleData(c)">Chèn dữ liệu mẫu</button>
+                <button class="btn ghost" @click="pushRandomData(c)">Chèn dữ liệu ngẫu nhiên</button>
+                <button class="btn ghost" @click="resetData(c)">Tìm kiếm lại</button>
               </div>
             </div>
           </div>
         </section>
 
         <section class="panel log-panel">
-          <div class="panel-title">事件日志</div>
+          <div class="panel-title">Nhật ký sự kiện</div>
           <div class="panel-body log">
             <div v-for="(log, idx) in logs" :key="idx" class="log-item" :class="log.dir">
               <span class="log-dir">{{ log.dir === 'in' ? '⬅' : '➡' }}</span>
@@ -69,10 +69,10 @@
   function samplePayloadFor(c) {
     if (/Pie/i.test(c.type)) {
       return [
-        { name: '华东', value: 320 },
-        { name: '华北', value: 240 },
-        { name: '华南', value: 180 },
-        { name: '西南', value: 90 },
+        { name: 'Hoa Đông', value: 320 },
+        { name: 'Hoa Bắc', value: 240 },
+        { name: 'Hoa Nam', value: 180 },
+        { name: 'Tây Nam', value: 90 },
       ];
     }
     if (/3d/i.test(c.type)) {
@@ -83,7 +83,7 @@
         { name: 'Q4', value: 340 },
       ];
     }
-    return ['1月', '2月', '3月', '4月', '5月', '6月'].map((m, i) => ({ name: m, value: 100 + i * 60 }));
+    return ['1tháng', '2tháng', '3tháng', '4tháng', '5tháng', '6tháng'].map((m, i) => ({ name: m, value: 100 + i * 60 }));
   }
 
   function pushSampleData(c) {
@@ -94,7 +94,7 @@
 
   function pushRandomData(c) {
     const isPie = /Pie/i.test(c.type);
-    const labels = isPie ? ['华东', '华北', '华南', '西北', '西南'] : ['1月', '2月', '3月', '4月', '5月', '6月'];
+    const labels = isPie ? ['Hoa Đông', 'Hoa Bắc', 'Hoa Nam', 'Tây Bắc', 'Tây Nam'] : ['1tháng', '2tháng', '3tháng', '4tháng', '5tháng', '6tháng'];
     const data = labels.map((name) => ({ name, value: Math.floor(50 + Math.random() * 950) }));
     sendComponentUpdate(c.id, data);
     pushLog('out', 'host:component-update', { componentId: c.id.slice(0, 8), type: c.type, data });
@@ -114,7 +114,7 @@
     overflow: hidden;
   }
 
-  /* z=0 背景 */
+  /* z=0 Nền */
   .bg-layer {
     position: absolute;
     inset: 0;
@@ -125,7 +125,7 @@
     background-repeat: no-repeat;
   }
 
-  /* z=1 大屏 iframe（透明） */
+  /* z=1 Màn hình lớn iframe (trong suốt) */
   .bigscreen-iframe {
     position: absolute;
     inset: 0;
@@ -136,12 +136,12 @@
     border: 0;
   }
 
-  /* z=2 宿主交互层 */
+  /* z=2 Lớp tương tác máy chủ */
   .host-overlay {
     position: absolute;
     inset: 0;
     z-index: 2;
-    /* 容器自身不接收事件，避免大面积盖住下面 iframe 的可点区域 */
+    /* Container tự thân không nhận sự kiện, tránh che phủ diện rộng vùng có thể nhấp của iframe bên dưới */
     pointer-events: none;
     display: grid;
     grid-template-columns: 26% 1fr 26%;
@@ -157,7 +157,7 @@
     flex-direction: column;
     gap: 14px;
     min-height: 0;
-    /* 自身仍 PE:none，让 panel 这一层 auto；这样 host-main 的 padding 间隙不会拦截 iframe 区域 */
+    /* bản thân vẫn PE:none, để tầng panel này là auto; như vậy host-main khoảng trống padding sẽ không chặn vùng iframe */
     pointer-events: none;
   }
 

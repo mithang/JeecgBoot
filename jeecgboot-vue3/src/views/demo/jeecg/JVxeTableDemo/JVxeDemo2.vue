@@ -14,7 +14,7 @@
     @pageChange="handlePageChange"
   >
     <template #toolbarSuffix>
-      <a-button @click="handleTableGet">获取数据</a-button>
+      <a-button @click="handleTableGet">Lấy dữ liệu</a-button>
     </template>
   </JVxeTable>
 </template>
@@ -34,14 +34,14 @@
   const loading = ref(false);
   const columns = ref<JVxeColumn[]>([
     {
-      title: '下拉框_字典表搜索',
+      title: 'Dropdown_Tìm kiếm bảng từ điển',
       key: 'select_dict_search',
       type: JVxeTypes.selectDictSearch,
       width: 200,
-      async: true, // 异步搜索，默认为 true
-      // 字典表配置信息：数据库表名,显示字段名,存储字段名
+      async: true, // Tìm kiếm không đồng bộ, mặc định là true
+      // Thông tin cấu hình bảng từ điển: Tên bảng cơ sở dữ liệu,Tên trường hiển thị,Tên trường lưu trữ
       dict: 'sys_user,realname,username',
-      tipsContent: '请输入查询条件',
+      tipsContent: 'Vui lòng nhập điều kiện tìm kiếm',
     },
     {
       title: 'JPopup',
@@ -59,7 +59,7 @@
       ],
     },
     {
-      title: 'JP-性别',
+      title: 'JP-Giới tính',
       key: 'popup_sex',
       type: JVxeTypes.select,
       dictCode: 'sex',
@@ -67,61 +67,61 @@
       width: 100,
     },
     {
-      title: 'JP-年龄',
+      title: 'JP-Tuổi',
       key: 'popup_age',
       type: JVxeTypes.normal,
       width: 80,
     },
     {
-      title: '用户选择',
+      title: 'Chọn người dùng',
       key: 'userSelect',
       type: JVxeTypes.userSelect,
       width: 240,
     },
     {
-      title: '部门选择',
+      title: 'Chọn phòng ban',
       key: 'departSelect',
       type: JVxeTypes.departSelect,
       width: 240,
     },
     {
-      title: '单选',
+      title: 'Chọn một',
       key: 'radio',
       type: JVxeTypes.radio,
       width: 130,
       options: [
-        { text: '男', value: '1' },
-        { text: '女', value: '2' },
+        { text: 'Nam', value: '1' },
+        { text: 'Nữ', value: '2' },
       ],
-      // 允许清除选择（再点一次取消选择）
+      // Cho phép xóa lựa chọn (bấm thêm một lần nữa để hủy chọn)
       allowClear: false,
     },
     {
-      title: '上传',
+      title: 'Tải lên',
       key: 'upload',
       type: JVxeTypes.upload,
       width: 180,
-      btnText: '点击上传',
+      btnText: 'Nhấn để tải lên',
       token: true,
       responseName: 'message',
       action: uploadUrl,
     },
     {
-      title: '图片上传',
+      title: 'Tải lên hình ảnh',
       key: 'image',
       type: JVxeTypes.image,
       width: 180,
       maxCount: 6,
     },
     {
-      title: '文件上传',
+      title: 'Tải lên tệp',
       key: 'file',
       type: JVxeTypes.file,
       width: 180,
       maxCount: 2,
     },
     {
-      title: '进度条',
+      title: 'Thanh tiến độ',
       key: 'progress',
       type: JVxeTypes.progress,
       minWidth: 320,
@@ -137,23 +137,23 @@
 
   randomPage(pagination.current, pagination.pageSize, true);
 
-  // 当分页参数变化时触发的事件
+  // Sự kiện được kích hoạt khi tham số phân trang thay đổi
   function handlePageChange(event) {
-    // 重新赋值
+    // Gán lại giá trị
     pagination.current = event.current;
     pagination.pageSize = event.pageSize;
-    // 查询数据
+    // Truy vấn dữ liệu
     randomPage(event.current, event.pageSize, true);
   }
 
-  /** 获取值，忽略表单验证 */
+  /** Lấy giá trị, bỏ qua kiểm tra biểu mẫu */
   function handleTableGet() {
     const values = tableRef.value!.getTableData();
-    console.log('获取值:', { values });
-    createMessage.success('获取值成功，请看控制台输出');
+    console.log('Lấy giá trị:', { values });
+    createMessage.success('Lấy giá trị thành công, vui lòng xem kết quả trong console');
   }
 
-  /* 随机生成分页数据 */
+  /* Tạo ngẫu nhiên dữ liệu phân trang */
   function randomPage(current, pageSize, $loading = false) {
     if ($loading) {
       loading.value = true;

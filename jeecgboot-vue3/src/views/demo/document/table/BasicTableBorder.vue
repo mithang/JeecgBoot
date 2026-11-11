@@ -1,5 +1,5 @@
 <template>
-  <!--引用表格-->
+  <!--Bảng tham chiếu-->
   <div class="p-4">
     <BasicTable @register="registerTable">
       <template #bodyCell="{ column, text }">
@@ -7,7 +7,7 @@
           <a>{{ text }}</a>
         </template>
       </template>
-      <template #footer>页脚</template>
+      <template #footer>Chân trang</template>
     </BasicTable>
   </div>
 </template>
@@ -15,56 +15,56 @@
 <script lang="ts" name="basic-table-demo" setup>
   import { ActionItem, BasicColumn, BasicTable, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
-  //定义表格列
+  //Định nghĩa cột bảng
   const columns: BasicColumn[] = [
     {
-      title: '姓名',
+      title: 'Họ tên',
       dataIndex: 'name',
       key: 'name',
       width: 300,
     },
     {
-      title: '年龄',
+      title: 'Tuổi',
       dataIndex: 'age',
       key: 'age',
       width: 300,
     },
     {
-      title: '住址',
+      title: 'Địa chỉ thường trú',
       dataIndex: 'address',
       key: 'address',
       ellipsis: true,
     },
     {
-      title: '长内容列',
+      title: 'Cột nội dung dài',
       dataIndex: 'address',
       key: 'address 2',
       ellipsis: true,
     },
     {
-      title: '长内容列',
+      title: 'Cột nội dung dài',
       dataIndex: 'address',
       key: 'address 3',
       ellipsis: true,
     },
   ];
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { tableContext } = useListPage({
     designScope: 'basic-table-demo',
     tableProps: {
-      title: '边框表格',
+      title: 'Bảng có viền',
       dataSource: [
         {
           key: '1',
-          name: '张三',
+          name: 'Trương Tam',
           age: 32,
-          address: '中国北京北京市朝阳区大屯路科学院南里1号楼3单元401',
+          address: 'Trung Quốc, Bắc Kinh, quận Triều Dương, đường Đại Đồn, Khoa Học Viện Nam Lý, tòa 1, đơn nguyên 3401',
         },
         {
           key: '2',
-          name: '刘思',
+          name: 'Lưu Tư',
           age: 32,
-          address: '中国北京北京市昌平区顺沙路尚湖世家2号楼7单元503',
+          address: 'Trung Quốc, Bắc Kinh, quận Xương Bình, đường Thuận Sa, Thượng Hồ Thế Gia, tòa 2, đơn nguyên 7503',
         },
       ],
       columns: columns,
@@ -72,15 +72,15 @@
       useSearchForm: false,
     },
   });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable] = tableContext;
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
     ];

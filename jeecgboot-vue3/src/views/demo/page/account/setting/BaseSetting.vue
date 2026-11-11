@@ -1,16 +1,16 @@
 <template>
-  <CollapseContainer title="基本设置" :canExpan="false">
+  <CollapseContainer title="Cài đặt cơ bản" :canExpan="false">
     <a-row :gutter="24">
       <a-col :span="14">
         <BasicForm @register="register" />
       </a-col>
       <a-col :span="10">
         <div class="change-avatar">
-          <div class="mb-2"> 头像 </div>
+          <div class="mb-2"> Ảnh đại diện </div>
           <CropperAvatar
             :uploadApi="uploadImg"
             :value="avatar"
-            btnText="更换头像"
+            btnText="Thay đổi ảnh đại diện"
             :btnProps="{ preIcon: 'ant-design:cloud-upload-outlined' }"
             @change="updateAvatar"
             width="150"
@@ -18,7 +18,7 @@
         </div>
       </a-col>
     </a-row>
-    <Button type="primary" @click="handleSubmit"> 更新基本信息 </Button>
+    <Button type="primary" @click="handleSubmit"> Cập nhật thông tin cơ bản </Button>
   </CollapseContainer>
 </template>
 <script lang="ts">
@@ -72,25 +72,25 @@
         const userinfo = userStore.getUserInfo;
         userinfo.avatar = data;
         userStore.setUserInfo(userinfo);
-        // 代码逻辑说明: [VUEN-2161]用户设置上传头像成功之后直接保存------------
+        // Giải thích logic mã: [VUEN-2161]Sau khi người dùng tải lên ảnh đại diện thành công thì lưu trực tiếp------------
         if(data){
           defHttp.post({ url: '/sys/user/appEdit', params:{avatar:data} });
         }
       }
       /**
-       *更新基本信息
+       *Cập nhật thông tin cơ bản
        * */
       async function handleSubmit() {
         try {
           let values = await validate();
           values.avatar = userStore.getUserInfo.avatar
           console.log('values', values);
-          //提交表单
+          //Gửi biểu mẫu
           defHttp.post({ url: '/sys/user/appEdit', params: values });
           const userinfo = userStore.getUserInfo;
           Object.assign(userinfo, values);
           userStore.setUserInfo(userinfo);
-          createMessage.success('更新成功');
+          createMessage.success('Cập nhật thành công');
         } catch (e) {
           console.log('e', e);
         }

@@ -1,9 +1,9 @@
 <template>
-  <PageWrapper title="上传组件示例">
-    <a-alert message="基础示例" />
+  <PageWrapper title="Ví dụ component tải lên">
+    <a-alert message="Ví dụ cơ bản" />
     <BasicUpload :maxSize="20" :maxNumber="10" @change="handleChange" :api="uploadApi" class="my-5" :accept="['image/*']" />
 
-    <a-alert message="嵌入表单,加入表单校验" />
+    <a-alert message="Nhúng vào biểu mẫu,Thêm kiểm chứng biểu mẫu" />
 
     <BasicForm @register="register" class="my-5" />
   </PageWrapper>
@@ -21,11 +21,11 @@
     {
       field: 'field1',
       component: 'Upload',
-      label: '字段1',
+      label: 'Trường1',
       colProps: {
         span: 8,
       },
-      rules: [{ required: true, message: '请选择上传文件' }],
+      rules: [{ required: true, message: 'Vui lòng chọn tệp tải lên' }],
       componentProps: {
         api: uploadApi,
       },
@@ -44,7 +44,7 @@
       });
       return {
         handleChange: (list: string[]) => {
-          createMessage.info(`已上传文件${JSON.stringify(list)}`);
+          createMessage.info(`Tệp đã tải lên${JSON.stringify(list)}`);
         },
         uploadApi,
         register,

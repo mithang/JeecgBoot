@@ -1,13 +1,13 @@
 <template>
   <div>
     <ol style="border: 1px solid #cccccc; width: 600px; padding: 8px">
-      <li>1. 开启 dragSort 属性之后即可实现上下拖拽排序。</li>
-      <li>2. 使用 sortKey 属性可以自定义排序保存的 key，默认为 orderNum。</li>
-      <li>3. 使用 sortBegin 属性可以自定义排序的起始值，默认为 0。</li>
-      <li>4. sortKey 定义的字段不需要定义在 columns 中也能正常获取到值。</li>
+      <li>1. Bật thuộc tính dragSort là có thể kéo thả sắp xếp lên xuống.</li>
+      <li>2. Dùng thuộc tính sortKey có thể tùy chỉnh key lưu sắp xếp, mặc định là orderNum.</li>
+      <li>3. Dùng thuộc tính sortBegin có thể tùy chỉnh giá trị bắt đầu sắp xếp, mặc định là 0.</li>
+      <li>4. sortKey Trường đã định nghĩa không cần định nghĩa trong columns vẫn có thể lấy giá trị bình thường.</li>
     </ol>
 
-    <p> 以下示例开启了拖拽排序，排序值保存字段为 sortNum，排序起始值为 3<br /> </p>
+    <p> Ví dụ dưới đây đã bật sắp xếp kéo-thả, trường lưu giá trị sắp xếp là sortNum, giá trị bắt đầu sắp xếp là 3<br /> </p>
 
     <JVxeTable
       ref="tableRef1"
@@ -23,16 +23,16 @@
       :dataSource="table1.data"
     >
       <template #toolbarSuffix>
-        <a-button @click="onGetData1">获取数据</a-button>
+        <a-button @click="onGetData1">Lấy dữ liệu</a-button>
       </template>
     </JVxeTable>
 
     <br />
-    <p>以下 fixed 表格不支持拖拽排序，仅支持点击上下排序</p>
+    <p>Các bảng fixed dưới đây không hỗ trợ kéo thả sắp xếp, chỉ hỗ trợ nhấn sắp xếp lên/xuống</p>
 
     <JVxeTable ref="tableRef2" toolbar dragSort rowSelection :maxHeight="580" :columns="table2.columns" :dataSource="table2.data">
       <template #toolbarSuffix>
-        <a-button @click="onGetData2">获取数据</a-button>
+        <a-button @click="onGetData2">Lấy dữ liệu</a-button>
       </template>
     </JVxeTable>
   </div>
@@ -54,14 +54,14 @@
         type: JVxeTypes.normal,
       },
       {
-        title: '姓名',
+        title: 'Họ tên',
         key: 'name',
         width: 240,
         type: JVxeTypes.input,
         defaultValue: 'new name',
       },
       {
-        title: '字段长度',
+        title: 'Độ dài trường',
         key: 'dbLength',
         width: 2400,
         type: JVxeTypes.inputNumber,
@@ -75,10 +75,10 @@
       },
     ] as JVxeColumn[],
     data: [
-      { id: 'uuid-0001', name: '张三', dbLength: 123 },
-      { id: 'uuid-0002', name: '李四', dbLength: 777 },
-      { id: 'uuid-0003', name: '王五', dbLength: 666 },
-      { id: 'uuid-0004', name: '赵六', dbLength: 233 },
+      { id: 'uuid-0001', name: 'Trương Tam', dbLength: 123 },
+      { id: 'uuid-0002', name: 'Lý Tứ', dbLength: 777 },
+      { id: 'uuid-0003', name: 'Vương Ngũ', dbLength: 666 },
+      { id: 'uuid-0004', name: 'Triệu Lục', dbLength: 233 },
     ],
   });
 
@@ -92,14 +92,14 @@
         type: JVxeTypes.normal,
       },
       {
-        title: '姓名',
+        title: 'Họ tên',
         key: 'name',
         width: 720,
         type: JVxeTypes.input,
         defaultValue: 'new name',
       },
       {
-        title: '字段长度',
+        title: 'Độ dài trường',
         key: 'dbLength',
         width: 720,
         type: JVxeTypes.inputNumber,
@@ -107,22 +107,22 @@
       },
     ] as JVxeColumn[],
     data: [
-      { id: 'uuid-0001', name: '张三', dbLength: 123 },
-      { id: 'uuid-0002', name: '李四', dbLength: 777 },
-      { id: 'uuid-0003', name: '王五', dbLength: 666 },
-      { id: 'uuid-0004', name: '赵六', dbLength: 233 },
+      { id: 'uuid-0001', name: 'Trương Tam', dbLength: 123 },
+      { id: 'uuid-0002', name: 'Lý Tứ', dbLength: 777 },
+      { id: 'uuid-0003', name: 'Vương Ngũ', dbLength: 666 },
+      { id: 'uuid-0004', name: 'Triệu Lục', dbLength: 233 },
     ],
   });
 
   const { createMessage } = useMessage();
 
   function onGetData1() {
-    createMessage.info('请看控制台');
+    createMessage.info('Vui lòng xem bảng điều khiển (console)');
     console.log(tableRef1.value!.getTableData());
   }
 
   function onGetData2() {
-    createMessage.info('请看控制台');
+    createMessage.info('Vui lòng xem bảng điều khiển (console)');
     console.log(tableRef2.value!.getTableData());
   }
 </script>

@@ -1,10 +1,10 @@
 <template>
-  <PageWrapper title="修改当前用户密码" content="修改成功后会自动退出当前登录！">
+  <PageWrapper title="Sửa mật khẩu người dùng hiện tại" content="Sau khi sửa thành công sẽ tự động thoát đăng nhập hiện tại!">
     <div class="py-8 bg-white flex flex-col justify-center items-center">
       <BasicForm @register="register" />
       <div class="flex justify-center">
-        <a-button @click="resetFields"> 重置 </a-button>
-        <a-button class="!ml-4" type="primary" @click="handleSubmit"> 确认 </a-button>
+        <a-button @click="resetFields"> Đặt lại </a-button>
+        <a-button class="!ml-4" type="primary" @click="handleSubmit"> Xác nhận </a-button>
       </div>
     </div>
   </PageWrapper>

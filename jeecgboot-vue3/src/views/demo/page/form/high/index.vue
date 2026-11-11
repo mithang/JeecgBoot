@@ -1,17 +1,17 @@
 <template>
-  <PageWrapper class="high-form" title="高级表单" content=" 高级表单常见于一次性输入和提交大批量数据的场景。">
-    <a-card title="仓库管理" :bordered="false">
+  <PageWrapper class="high-form" title="Biểu mẫu nâng cao" content=" Biểu mẫu nâng cao thường gặp trong các trường hợp nhập và gửi một lần lượng lớn dữ liệu.">
+    <a-card title="Quản lý kho" :bordered="false">
       <BasicForm @register="register" />
     </a-card>
-    <a-card title="任务管理" :bordered="false" class="!mt-5">
+    <a-card title="Quản lý nhiệm vụ" :bordered="false" class="!mt-5">
       <BasicForm @register="registerTask" />
     </a-card>
-    <a-card title="成员管理" :bordered="false">
+    <a-card title="Quản lý thành viên" :bordered="false">
       <PersonTable ref="tableRef" />
     </a-card>
 
     <template #rightFooter>
-      <a-button type="primary" @click="submitAll"> 提交 </a-button>
+      <a-button type="primary" @click="submitAll"> Gửi </a-button>
     </template>
   </PageWrapper>
 </template>
@@ -69,9 +69,9 @@
     padding-bottom: 48px;
   }
 
-  /** update-begin-author:taoyan date:2022-5-16 for:/issues/63 下拉框z-index问题 */
+  /** update-begin-author:taoyan date:2022-5-16 for:/issues/63 Dropdownz-indexVấn đề */
   :deep(.ant-select-dropdown) {
     z-index: 98 !important;
   }
-  /** update-end-author:taoyan date:2022-5-16 for:/issues/63 下拉框z-index问题 */
+  /** update-end-author:taoyan date:2022-5-16 for:/issues/63 Dropdownz-indexVấn đề */
 </style>

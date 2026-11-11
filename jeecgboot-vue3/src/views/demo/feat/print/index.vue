@@ -1,7 +1,7 @@
 <template>
-  <PageWrapper title="打印示例">
-    <CollapseContainer title="json打印表格">
-      <a-button type="primary" @click="jsonPrint">打印</a-button>
+  <PageWrapper title="Ví dụ in">
+    <CollapseContainer title="jsonIn bảng">
+      <a-button type="primary" @click="jsonPrint">In</a-button>
     </CollapseContainer>
 
     <a-button type="primary" class="mt-5" @click="imagePrint">Image Print</a-button>

@@ -3,25 +3,25 @@
     <a-card :bordered="false">
       <template #title>
         <span> 
-          JVXETable是专门为大数据和各种ERP风格的复杂操作研发的的高性能表格组件，底层采用vxe-table组件，可以完美弥补antd默认table性能不足问题。 
-          <a href="https://help.jeecg.com/component/JVxeTable.html">API文档</a>
+          JVXETableLà component bảng hiệu năng cao được phát triển chuyên cho dữ liệu lớn và các thao tác phức tạp theo phong cách ERP, tầng đáy dùngvxe-tablecomponent, có thể khắc phục hoàn toàn vấn đề hiệu năng chưa đủ của bảng mặc định antd. 
+          <a href="https://help.jeecg.com/component/JVxeTable.html">APITài liệu</a>
         </span>
       </template>
     
       <a-tabs defaultActiveKey="1">
-        <a-tab-pane tab="基础示例" key="1">
+        <a-tab-pane tab="Ví dụ cơ bản" key="1">
           <JVxeDemo1 />
         </a-tab-pane>
-        <a-tab-pane tab="高级示例" key="2">
+        <a-tab-pane tab="Ví dụ nâng cao" key="2">
           <JVxeDemo2 />
         </a-tab-pane>
-        <a-tab-pane tab="排序示例" key="3">
+        <a-tab-pane tab="Ví dụ sắp xếp" key="3">
           <JVxeDemo3 />
         </a-tab-pane>
-        <a-tab-pane tab="联动示例" key="4">
+        <a-tab-pane tab="Ví dụ liên động" key="4">
           <JVxeDemo4 />
         </a-tab-pane>
-        <a-tab-pane tab="键盘操作" key="5">
+        <a-tab-pane tab="Thao tác bàn phím" key="5">
           <JVxeDemo5 />
         </a-tab-pane>
       </a-tabs>

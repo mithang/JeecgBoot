@@ -1,61 +1,61 @@
-<!-- 控件属性 -->
+<!-- Thuộc tính control -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
-      label: '员工姓名',
+      label: 'Tên nhân viên',
       field: 'name',
       component: 'Input',
       componentProps: {
         disabled: true,
       },
-      defaultValue: '张三',
+      defaultValue: 'Trương Tam',
     },
     {
-      label: '性别',
+      label: 'Giới tính',
       field: 'sex',
       component: 'Select',
-      //填写组件的属性
+      //Điền thuộc tính của component
       componentProps: {
         options: [
-          { label: '男', value: 1 },
-          { label: '女', value: 2 },
-          { label: '未知', value: 3 },
+          { label: 'Nam', value: 1 },
+          { label: 'Nữ', value: 2 },
+          { label: 'Không xác định', value: 3 },
         ],
       },
-      //默认值
+      //Giá trị mặc định
       defaultValue: 3,
     },
     {
-      label: '年龄',
+      label: 'Tuổi',
       field: 'age',
       component: 'Input',
     },
     {
-      label: '入职时间',
-      subLabel: '( 选填 )',
+      label: 'Thời gian vào làm',
+      subLabel: '( Không bắt buộc )',
       field: 'entryTime',
       component: 'TimePicker',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     labelWidth: '150px',
     showResetButton: false,
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 </script>

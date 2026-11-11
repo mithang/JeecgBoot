@@ -1,16 +1,16 @@
 <template>
-  <PageWrapper title="文件下载示例">
-    <a-alert message="根据后台接口文件流下载" />
-    <a-button type="primary" class="my-4" @click="handleDownByData"> 文件流下载 </a-button>
+  <PageWrapper title="Ví dụ tải xuống tệp">
+    <a-alert message="Tải xuống theo luồng tệp của API phía máy chủ" />
+    <a-button type="primary" class="my-4" @click="handleDownByData"> Tải xuống luồng tệp </a-button>
 
-    <a-alert message="根据文件地址下载文件" />
-    <a-button type="primary" class="my-4" @click="handleDownloadByUrl"> 文件地址下载 </a-button>
+    <a-alert message="Tải xuống tệp theo địa chỉ tệp" />
+    <a-button type="primary" class="my-4" @click="handleDownloadByUrl"> Tải xuống theo địa chỉ tệp </a-button>
 
-    <a-alert message="base64流下载" />
-    <a-button type="primary" class="my-4" @click="handleDownloadByBase64"> base64流下载 </a-button>
+    <a-alert message="base64Tải xuống dạng stream" />
+    <a-button type="primary" class="my-4" @click="handleDownloadByBase64"> base64Tải xuống dạng stream </a-button>
 
-    <a-alert message="图片Url下载,如果有跨域问题，需要处理图片跨域" />
-    <a-button type="primary" class="my-4" @click="handleDownloadByOnlineUrl"> 图片Url下载 </a-button>
+    <a-alert message="Tải xuống hình ảnh qua Url,Nếu có vấn đề cross-domain, cần xử lý cross-domain hình ảnh" />
+    <a-button type="primary" class="my-4" @click="handleDownloadByOnlineUrl"> Tải xuống hình ảnh qua Url </a-button>
   </PageWrapper>
 </template>
 <script lang="ts">

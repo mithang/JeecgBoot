@@ -1,55 +1,55 @@
-<!-- 插槽 -->
+<!-- Slot -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px">
-    <!--  #phone对应的是formSchemas对应slot(phone)插槽    -->
+    <!--  #phonetương ứng với formSchemasslot(phone)Slot    -->
     <template #phone="{ model, field }">
-      <!-- 如果是组件需要进行双向绑定，model当前表单对象，field当前字段名称  -->
-      <a-input v-model:value="model[field]" placeholder="请输入手机号" />
-      <span class="font-color">请输入您的手机号，方便我们联系您</span>
+      <!-- Nếu là component cần binding hai chiều, model là đối tượng biểu mẫu hiện tại, field là tên trường hiện tại  -->
+      <a-input v-model:value="model[field]" placeholder="Vui lòng nhập số điện thoại" />
+      <span class="font-color">Vui lòng nhập số điện thoại của bạn để chúng tôi tiện liên hệ</span>
     </template>
     <template #feedback="{ model, field }">
-      <JEditor v-model:value="model[field]" placeholder="请输入问题反馈" />
-      <span class="font-color">请您图文并茂，方便我们了解问题并及时反馈</span>
+      <JEditor v-model:value="model[field]" placeholder="Vui lòng nhập phản hồi vấn đề" />
+      <span class="font-color">Mong bạn trình bày kèm hình ảnh và chữ, để chúng tôi hiểu vấn đề và phản hồi kịp thời</span>
     </template>
   </BasicForm>
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
   import JEditor from '/@/components/Form/src/jeecg/components/JEditor.vue';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'name',
-      label: '姓名',
+      label: 'Họ tên',
       component: 'Input',
     },
     {
       field: 'phone',
-      label: '联系方式',
+      label: 'Thông tin liên hệ',
       component: 'Input',
       slot: 'phone',
     },
     {
       field: 'feedback',
-      label: '问题反馈',
+      label: 'Phản hồi vấn đề',
       component: 'InputTextArea',
       slot: 'feedback',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showResetButton: false,
     labelWidth: '150px',
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 </script>

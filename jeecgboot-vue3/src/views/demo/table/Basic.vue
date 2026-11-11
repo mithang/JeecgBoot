@@ -1,8 +1,8 @@
 <template>
   <div class="p-4">
     <BasicTable
-      title="基础示例"
-      titleHelpMessage="温馨提醒"
+      title="Ví dụ cơ bản"
+      titleHelpMessage="Nhắc nhở thân thiện"
       :columns="columns"
       :dataSource="data"
       :canResize="canResize"
@@ -15,14 +15,14 @@
     >
       <template #toolbar>
         <a-button type="primary" @click="toggleCanResize">
-          {{ !canResize ? '自适应高度' : '取消自适应' }}
+          {{ !canResize ? 'Chiều cao tự thích ứng' : 'Hủy tự thích ứng' }}
         </a-button>
         <a-button type="primary" @click="toggleBorder">
-          {{ !border ? '显示边框' : '隐藏边框' }}
+          {{ !border ? 'Hiển thị viền' : 'Ẩn viền' }}
         </a-button>
-        <a-button type="primary" @click="toggleLoading"> 开启loading </a-button>
+        <a-button type="primary" @click="toggleLoading"> Bậtloading </a-button>
         <a-button type="primary" @click="toggleStriped">
-          {{ !striped ? '显示斑马纹' : '隐藏斑马纹' }}
+          {{ !striped ? 'Hiển thị vân ngựa vằn' : 'Ẩn vân ngựa vằn' }}
         </a-button>
       </template>
     </BasicTable>

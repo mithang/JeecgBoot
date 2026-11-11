@@ -1,48 +1,48 @@
-<!-- 自定义渲染 -->
+<!-- Kết xuất tùy chỉnh -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px">
-    <!--  #phone对应的是formSchemas对应slot(phone)插槽    -->
+    <!--  #phonetương ứng với formSchemasslot(phone)Slot    -->
     <template #phone="{ model, field }">
-      <!-- 如果是组件需要进行双向绑定，model当前表单对象，field当前字段名称  -->
-      <a-input v-model:value="model[field]" placeholder="请输入手机号" />
-      <span class="font-color">请输入您的手机号，方便我们联系您</span>
+      <!-- Nếu là component cần binding hai chiều, model là đối tượng biểu mẫu hiện tại, field là tên trường hiện tại  -->
+      <a-input v-model:value="model[field]" placeholder="Vui lòng nhập số điện thoại" />
+      <span class="font-color">Vui lòng nhập số điện thoại của bạn để chúng tôi tiện liên hệ</span>
     </template>
     <template #feedback="{ model, field }">
-      <JEditor v-model:value="model[field]" placeholder="请输入问题反馈" />
-      <span class="font-color">请您图文并茂，方便我们了解问题并及时反馈</span>
+      <JEditor v-model:value="model[field]" placeholder="Vui lòng nhập phản hồi vấn đề" />
+      <span class="font-color">Mong bạn trình bày kèm hình ảnh và chữ, để chúng tôi hiểu vấn đề và phản hồi kịp thời</span>
     </template>
   </BasicForm>
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
   import JEditor from '/@/components/Form/src/jeecg/components/JEditor.vue';
   import { h } from 'vue';
   import { Input } from 'ant-design-vue';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'productName',
-      label: '商品名称',
+      label: 'Tên sản phẩm',
       component: 'Input',
     },
     {
       field: 'price',
-      label: '价格',
+      label: 'Giá',
       component: 'InputNumber',
     },
     {
       field: 'buyNums',
-      label: '购买个数',
+      label: 'Số lượng mua',
       component: 'InputNumber',
-      //model 单签表单对象，field 当前字段
+      //model Đối tượng biểu mẫu đơn, field là trường hiện tại
       render: ({ model, field }) => {
-        //渲染自定义组件，以Input为例
+        //Render component tùy chỉnh, lấy Input làm ví dụ
         return h(Input, {
-          placeholder: '请输入购买个数',
+          placeholder: 'Vui lòng nhập số lượng mua',
           value: model[field],
           style: { width: '100%' },
           type: 'number',
@@ -54,36 +54,36 @@
     },
     {
       field: 'describe',
-      label: '描述',
+      label: 'Mô tả',
       component: 'Input',
       componentProps: {
         disabled: true,
       },
-      //渲染 values当前表单所有值
+      //Render values: tất cả giá trị của biểu mẫu hiện tại
       render: ({ values }) => {
         let productName = values.productName?values.productName:'';
         let price = values.price ? values.price : 0;
         let buyNums = values.buyNums ? values.buyNums : 0;
-        return '购买商品名称：' + productName + ', 总价格: ' + price * buyNums + '元';
+        return 'Tên sản phẩm đã mua:' + productName + ', Tổng giá: ' + price * buyNums + 'đồng';
       },
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showResetButton: false,
     labelWidth: '150px',
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 </script>
 
 <style scoped>
-  /** 数字输入框样式 */
+  /** Kiểu ô nhập số */
   :deep(.ant-input-number) {
     width: 100%;
   }

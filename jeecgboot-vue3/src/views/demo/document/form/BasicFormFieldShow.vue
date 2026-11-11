@@ -1,53 +1,53 @@
-<!-- 字段显示与隐藏 -->
+<!-- Hiển thị và ẩn trường -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'id',
-      label: '编号',
+      label: 'Mã',
       component: 'Input',
-      //隐藏id，css 控制，不会删除 dom（支持布尔类型 true和false。支持动态值判断，详情请见ifShow）
+      //Ẩn id, điều khiển bằng css, sẽ không xóa dom (hỗ trợ kiểu boolean true và false. Hỗ trợ phán đoán giá trị động, xem chi tiết tại ifShow)
       show: false,
     },
     {
       field: 'evaluate',
-      label: '对公司整体评价',
+      label: 'Đánh giá tổng thể về công ty',
       component: 'RadioGroup',
       componentProps: {
         options: [
-          { label: '满意', value: '0' },
-          { label: '不满意', value: '1' },
+          { label: 'Hài lòng', value: '0' },
+          { label: 'Không hài lòng', value: '1' },
         ],
       },
       defaultValue: '0',
     },
     {
       field: 'describe',
-      label: '不满意原因说明',
+      label: 'Giải thích lý do không hài lòng',
       component: 'InputTextArea',
-      //ifShow和show属性一致，使用其中一个即可，values代表当前表单的值，js 控制，会删除 dom
+      //ifShowNhất quán với thuộc tính show, dùng một trong hai là được, values đại diện cho giá trị của biểu mẫu hiện tại, js điều khiển, sẽ xóa dom
       ifShow: ({ values }) => {
         return values.evaluate == '1';
       },
     },
     {
       field: 'satisfiedLevel',
-      label: '满意度',
+      label: 'Mức độ hài lòng',
       component: 'Slider',
       componentProps: {
         tipFormatter: (value) => {
           return value + '%';
         },
       },
-      //动态禁用，values代表当前表单的值，返回 true或false
+      //Vô hiệu hóa động, values đại diện cho giá trị của biểu mẫu hiện tại, trả về true hoặcfalse
       dynamicDisabled: ({ values }) => {
         return values.evaluate == '1';
       },
@@ -55,14 +55,14 @@
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showResetButton: false,
     labelWidth: '150px',
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 </script>

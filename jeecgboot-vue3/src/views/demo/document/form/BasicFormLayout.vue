@@ -1,58 +1,58 @@
-<!-- 表单布局 -->
+<!-- Bố cục biểu mẫu -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
-      label: '会议名称',
+      label: 'Tên cuộc họp',
       field: 'name',
       component: 'Input',
     },
     {
-      label: '参会地点',
+      label: 'Địa điểm họp',
       field: 'meetingLocation',
       component: 'Input',
     },
     {
-      label: '参与人数',
+      label: 'Số người tham gia',
       field: 'numberOfPart',
       component: 'InputNumber',
     },
     {
-      label: '会议纪要',
+      label: 'Biên bản cuộc họp',
       field: 'meetingMinutes',
       component: 'JUpload',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //表单布局属性，支持（vertical,inline），默认为inline
+    //Thuộc tính bố cục biểu mẫu, hỗ trợ (vertical,inline), mặc định làinline
     layout: 'inline',
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
-    //不显示查询和重置按钮
+    //Không hiển thị nút tìm kiếm và nút đặt lại
     showActionButtonGroup: false,
-    //默认row行配置,当 layout 为 inline 生效
+    //Cấu hình hàng row mặc định,Có hiệu lực khi layout là inline
     rowProps: { gutter: [24, 24], justify: 'center', align: 'middle' },
-    //全局col列占比(每列显示多少位)，和schemas中的colProps属性一致
+    //Tỷ lệ chiếm của cột col toàn cục(Mỗi cột hiển thị bao nhiêu vị trí), giống với thuộc tính colProps trong schemas
     baseColProps: { span: 12 },
-    //row行的样式
+    //rowKiểu dáng của dòng
     baseRowStyle: { width: '100%' },
   });
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

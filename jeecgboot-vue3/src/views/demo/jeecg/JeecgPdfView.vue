@@ -1,24 +1,24 @@
 <template>
   <a-card :bordered="false">
     <a-row>
-      <!-- 左侧文件树 -->
+      <!-- Cây tệp bên trái -->
       <a-col :span="4" class="clName">
         <a-tree :treeData="treeData" :defaultExpandAll="true" @select="onSelect" style="height: 500px; overflow-y: auto"> </a-tree>
       </a-col>
-      <!--右侧缩略图-->
+      <!--Hình thu nhỏ bên phải-->
       <a-col :span="18">
         <div v-for="(file, key) in dataSource" :key="key">
           <a-col :span="24">
             <a-divider orientation="left">{{ file.fileName }}</a-divider>
           </a-col>
-          <!-- 预览区域 -->
+          <!-- Khu vực xem trước -->
           <a-col :span="24">
             <template v-if="file.filePdfPath">
               <div @click="pdfPreview(file.title)">
                 <img style="width: 80px; height: 80px" src="../../../assets/images/pdf4.jpg" />
               </div>
             </template>
-            <template v-else> (暂无材料，点击"选择文件"或"扫描上传"上传文件) </template>
+            <template v-else> (Chưa có tài liệu, nhấn"Chọn tệp"hoặc"Quét và tải lên"Tải lên tệp) </template>
           </a-col>
         </div>
       </a-col>
@@ -38,10 +38,10 @@
     {
       id: '1',
       key: '1',
-      title: '实例.pdf',
+      title: 'Instance.pdf',
       fileCode: 'shili',
-      fileName: '实例',
-      filePdfPath: '实例',
+      fileName: 'Instance',
+      filePdfPath: 'Instance',
     },
   ];
 
@@ -51,7 +51,7 @@
       const glob = useGlobSetting();
       const treeData = ref([
         {
-          title: '所有PDF电子档',
+          title: 'Tất cả tệp điện tử PDF',
           key: '0-0',
           children: mockdata,
         },
@@ -61,7 +61,7 @@
       const url = ref(`${glob.domainUrl}/sys/common/pdf/pdfPreviewIframe`);
 
       /**
-       * 打开iframe窗口
+       * Mở cửa sổ iframe
        * @param title
        */
       function pdfPreview(title) {
@@ -70,7 +70,7 @@
         iframe.contentWindow.postMessage(json, '*');
       }
 
-      // 选择PDF文件
+      // Chọn tệp PDF
       function onSelect(selectedKeys, info) {
         dataSource.value = [];
         if (selectedKeys[0] === undefined || selectedKeys[0] === '0-0') {

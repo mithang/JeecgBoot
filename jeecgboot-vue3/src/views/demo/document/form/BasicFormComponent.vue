@@ -1,29 +1,29 @@
-<!-- 操作表单值 -->
+<!-- Thao tác giá trị biểu mẫu -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px;" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
   import { schemas } from './example.data';
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm, { getFieldsValue, setFieldsValue, resetFields, validate }] = useForm({
     schemas: schemas,
     labelWidth: '150px',
-    //隐藏操作按钮
+    //Ẩn nút thao tác
     showActionButtonGroup: false,
-    //默认聚焦第一个，只支持input
+    //Mặc định focus vào phần tử đầu tiên, chỉ hỗ trợinput
     autoFocusFirstItem: true,
   });
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

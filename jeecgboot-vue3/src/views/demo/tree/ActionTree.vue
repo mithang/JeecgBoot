@@ -1,29 +1,29 @@
 <template>
-  <PageWrapper title="Tree函数操作示例" contentBackground contentClass="p-4">
+  <PageWrapper title="TreeVí dụ thao tác hàm" contentBackground contentClass="p-4">
     <div class="mb-4">
-      <a-button @click="expandAll(true)" class="mr-2"> 展开全部 </a-button>
-      <a-button @click="expandAll(false)" class="mr-2"> 折叠全部 </a-button>
-      <a-button @click="checkAll(true)" class="mr-2"> 全选 </a-button>
-      <a-button @click="checkAll(false)" class="mr-2"> 全不选 </a-button>
-      <a-button @click="handleLevel(2)" class="mr-2"> 显示到第2级 </a-button>
-      <a-button @click="handleLevel(1)" class="mr-2"> 显示到第1级 </a-button>
+      <a-button @click="expandAll(true)" class="mr-2"> Mở rộng tất cả </a-button>
+      <a-button @click="expandAll(false)" class="mr-2"> Thu gọn tất cả </a-button>
+      <a-button @click="checkAll(true)" class="mr-2"> Chọn tất cả </a-button>
+      <a-button @click="checkAll(false)" class="mr-2"> Bỏ chọn tất cả </a-button>
+      <a-button @click="handleLevel(2)" class="mr-2"> Hiển thị đến cấp 2 </a-button>
+      <a-button @click="handleLevel(1)" class="mr-2"> Hiển thị đến cấp 1 </a-button>
     </div>
     <div class="mb-4">
-      <a-button @click="handleSetCheckData" class="mr-2"> 设置勾选数据 </a-button>
-      <a-button @click="handleGetCheckData" class="mr-2"> 获取勾选数据 </a-button>
-      <a-button @click="handleSetSelectData" class="mr-2"> 设置选中数据 </a-button>
-      <a-button @click="handleGetSelectData" class="mr-2"> 获取选中数据 </a-button>
+      <a-button @click="handleSetCheckData" class="mr-2"> Đặt dữ liệu đã chọn </a-button>
+      <a-button @click="handleGetCheckData" class="mr-2"> Lấy dữ liệu đã chọn </a-button>
+      <a-button @click="handleSetSelectData" class="mr-2"> Đặt dữ liệu đã chọn </a-button>
+      <a-button @click="handleGetSelectData" class="mr-2"> Lấy dữ liệu đã chọn </a-button>
 
-      <a-button @click="handleSetExpandData" class="mr-2"> 设置展开数据 </a-button>
-      <a-button @click="handleGetExpandData" class="mr-2"> 获取展开数据 </a-button>
+      <a-button @click="handleSetExpandData" class="mr-2"> Đặt dữ liệu mở rộng </a-button>
+      <a-button @click="handleGetExpandData" class="mr-2"> Lấy dữ liệu đã mở rộng </a-button>
     </div>
     <div class="mb-4">
-      <a-button @click="appendNodeByKey(null)" class="mr-2"> 添加根节点 </a-button>
-      <a-button @click="appendNodeByKey('2-2')" class="mr-2"> 添加在parent3内添加节点 </a-button>
-      <a-button @click="deleteNodeByKey('2-2')" class="mr-2"> 删除parent3节点 </a-button>
-      <a-button @click="updateNodeByKey('1-1')" class="mr-2"> 更新parent2节点 </a-button>
+      <a-button @click="appendNodeByKey(null)" class="mr-2"> Thêm nút gốc </a-button>
+      <a-button @click="appendNodeByKey('2-2')" class="mr-2"> Thêm nút bên trong parent3 </a-button>
+      <a-button @click="deleteNodeByKey('2-2')" class="mr-2"> Xóa nút parent3 </a-button>
+      <a-button @click="updateNodeByKey('1-1')" class="mr-2"> Cập nhật nút parent2 </a-button>
     </div>
-    <BasicTree :treeData="treeData" title="函数操作" ref="treeRef" :checkable="true" />
+    <BasicTree :treeData="treeData" title="Thao tác hàm" ref="treeRef" :checkable="true" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -90,12 +90,12 @@
         getTree().insertNodeByKey({
           parentKey: parentKey,
           node: {
-            title: '新增节点',
+            title: 'Thêm mới nút',
             key: '2-2-2',
           },
-          // 往后插入
+          // Chèn về sau
           push: 'push',
-          // 往前插入
+          // Chèn lên trước
           // push:'unshift'
         });
       }

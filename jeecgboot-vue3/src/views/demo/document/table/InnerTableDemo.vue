@@ -106,10 +106,10 @@
   export default defineComponent({
     components: { BasicTable },
     setup() {
-      // 列表页面公共参数、方法
+      // Tham số, phương thức chung của trang danh sách
       const { tableContext } = useListPage({
         tableProps: {
-          title: '内嵌表格',
+          title: 'Bảng nhúng',
           dataSource: data,
           columns: columns,
           showActionColumn: false,
@@ -117,7 +117,7 @@
           useSearchForm: false,
         },
       });
-      //注册table数据
+      //Đăng ký dữ liệu table
       const [registerTable] = tableContext;
       return {
         data,

@@ -1,90 +1,90 @@
-<!-- 操作禁用表单 -->
+<!-- Thao tác vô hiệu hóa biểu mẫu -->
 <template>
   <div style="margin: 20px auto; text-align: center">
-    <!-- all 触发或清空所有验证，visitor 只触发或者清空来访人员验证 -->
-    <a-button @click="triggerFormRule('all')" class="mr-2"> 触发表单验证 </a-button>
-    <a-button @click="cancelFormRule('all')" class="mr-2"> 清空表单验证 </a-button>
-    <a-button @click="triggerFormRule('visitor')" class="mr-2"> 只验证来访人员 </a-button>
-    <a-button @click="cancelFormRule('visitor')" class="mr-2"> 只清空来访人员验证 </a-button>
+    <!-- all Kích hoạt hoặc xóa tất cả xác thực, visitor chỉ kích hoạt hoặc xóa xác thực của nhân viên đến thăm -->
+    <a-button @click="triggerFormRule('all')" class="mr-2"> Kích hoạt kiểm tra biểu mẫu </a-button>
+    <a-button @click="cancelFormRule('all')" class="mr-2"> Xóa xác thực biểu mẫu </a-button>
+    <a-button @click="triggerFormRule('visitor')" class="mr-2"> Chỉ kiểm chứng nhân viên đến thăm </a-button>
+    <a-button @click="cancelFormRule('visitor')" class="mr-2"> Chỉ xóa xác thực của khách đến thăm </a-button>
   </div>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px;" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'visitor',
-      label: '来访人员',
+      label: 'Khách đến thăm',
       component: 'Input',
       required: true,
     },
     {
       field: 'accessed',
-      label: '来访日期',
+      label: 'Ngày đến thăm',
       component: 'DatePicker',
       required: true,
     },
     {
       field: 'phone',
-      label: '来访人手机号',
+      label: 'Số điện thoại của khách đến thăm',
       component: 'Input',
       required: true,
     },
   ];
 
   /**
-   * BasicForm绑定注册;
-   * clearValidate 清除所有验证，支持取消验证其中几个字段 如 clearValidate(['visitor',...])
-   * validate 验证所有,支持验证其中几个字段，validate(['visitor',...])
-   * validateFields 只支持验证其中几个字段，如validateFields(['visitor',...])
+   * BasicFormĐăng ký liên kết;
+   * clearValidate Xóa tất cả kiểm chứng, hỗ trợ hủy kiểm chứng một vài trường như clearValidate(['visitor',...])
+   * validate Kiểm chứng tất cả,Hỗ trợ kiểm chứng một vài trường trong đó,validate(['visitor',...])
+   * validateFields Chỉ hỗ trợ kiểm chứng một vài trường trong số đó, ví dụvalidateFields(['visitor',...])
    */
   const [registerForm, { clearValidate, validateFields, validate }] = useForm({
     schemas: formSchemas,
     labelWidth: '150px',
-    //隐藏操作按钮
+    //Ẩn nút thao tác
     showActionButtonGroup: false,
-    //默认聚焦第一个，只支持input
+    //Mặc định focus vào phần tử đầu tiên, chỉ hỗ trợinput
     autoFocusFirstItem: true,
   });
 
   /**
-   * 触发表单验证
-   * @param type all 所有验证 visitor 只验证来访人员
+   * Kích hoạt kiểm tra biểu mẫu
+   * @param type all Tất cả kiểm chứng: visitor chỉ kiểm chứng người đến thăm
    */
   async function triggerFormRule(type) {
     if (type == 'all') {
-      //触发所有验证
+      //Kích hoạt tất cả xác thực
       await validate();
     } else {
-      //触发来访人员验证
-      //visitor 来访人员的对应formSchemas field字段
+      //Kích hoạt kiểm chứng nhân viên đến thăm
+      //visitor Trường field tương ứng trong formSchemas của người đến thăm
       await validateFields(['visitor']);
     }
   }
 
   /**
-   * 触发表单验证
-   * @param type all 所有验证 visitor 只验证来访人员
+   * Kích hoạt kiểm tra biểu mẫu
+   * @param type all Tất cả kiểm chứng: visitor chỉ kiểm chứng người đến thăm
    */
   async function cancelFormRule(type) {
     if (type == 'all') {
-      //取消全部验证
+      //Hủy tất cả kiểm chứng
       await clearValidate();
     } else {
-      //只取消来访人员的验证
-      //visitor 来访人员的对应formSchemas field字段
+      //Chỉ hủy kiểm chứng của khách đến thăm
+      //visitor Trường field tương ứng trong formSchemas của người đến thăm
       await clearValidate(['visitor']);
     }
   }
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

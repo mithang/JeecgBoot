@@ -3,42 +3,42 @@
     <a-form ref="formRef" :model="orderMainModel" :label-col="labelCol" :wrapper-col="wrapperCol" :rules="validatorRules">
       <a-row class="form-row" :gutter="16">
         <a-col :lg="8">
-          <a-form-item label="订单号" name="orderCode">
-            <a-input v-model:value="orderMainModel.orderCode" placeholder="请输入订单号" />
+          <a-form-item label="Số đơn hàng" name="orderCode">
+            <a-input v-model:value="orderMainModel.orderCode" placeholder="Vui lòng nhập mã đơn hàng" />
           </a-form-item>
         </a-col>
         <a-col :lg="8">
-          <a-form-item label="订单类型">
-            <a-select placeholder="请选择订单类型" v-model:value="orderMainModel.ctype">
-              <a-select-option value="1">国内订单</a-select-option>
-              <a-select-option value="2">国际订单</a-select-option>
+          <a-form-item label="Loại đơn hàng">
+            <a-select placeholder="Vui lòng chọn loại đơn hàng" v-model:value="orderMainModel.ctype">
+              <a-select-option value="1">Đơn hàng nội địa</a-select-option>
+              <a-select-option value="2">Đơn hàng quốc tế</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :lg="8">
-          <a-form-item label="订单日期">
+          <a-form-item label="Ngày đặt hàng">
             <a-date-picker showTime valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="orderMainModel.orderDate" />
           </a-form-item>
         </a-col>
       </a-row>
       <a-row class="form-row" :gutter="16">
         <a-col :lg="8">
-          <a-form-item label="订单金额">
-            <a-input v-model:value="orderMainModel.orderMoney" placeholder="请输入订单金额" />
+          <a-form-item label="Số tiền đơn hàng">
+            <a-input v-model:value="orderMainModel.orderMoney" placeholder="Vui lòng nhập số tiền đơn hàng" />
           </a-form-item>
         </a-col>
         <a-col :lg="8">
-          <a-form-item label="订单备注">
-            <a-input v-model:value="orderMainModel.content" placeholder="请输入订单备注" />
+          <a-form-item label="Ghi chú đơn hàng">
+            <a-input v-model:value="orderMainModel.content" placeholder="Vui lòng nhập ghi chú đơn hàng" />
           </a-form-item>
         </a-col>
       </a-row>
       <a-tabs defaultActiveKey="1">
-        <a-tab-pane tab="客户信息" key="1">
+        <a-tab-pane tab="Thông tin khách hàng" key="1">
           <vxe-toolbar>
             <template #buttons>
-              <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
-              <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+              <vxe-button icon="fa fa-plus" @click="insertEvent()">Thêm mới</vxe-button>
+              <vxe-button @click="$refs.xTable.removeCheckboxRow()">Xóa mục đã chọn</vxe-button>
             </template>
           </vxe-toolbar>
 
@@ -53,14 +53,14 @@
           >
             <vxe-column type="checkbox" width="60" align="center"></vxe-column>
             <vxe-column type="seq" width="60" align="center"></vxe-column>
-            <vxe-column field="name" title="客户名" sortable :edit-render="{ name: 'input', defaultValue: '' }"></vxe-column>
-            <vxe-column field="sex" title="性别" :edit-render="{ name: '$select', options: sexList }"></vxe-column>
-            <vxe-column field="idcard" title="身份证" sortable :edit-render="{ name: 'input', defaultValue: '' }"></vxe-column>
-            <vxe-column field="telphone" title="手机" sortable :edit-render="{ name: 'input', defaultValue: '' }"></vxe-column>
+            <vxe-column field="name" title="Tên khách hàng" sortable :edit-render="{ name: 'input', defaultValue: '' }"></vxe-column>
+            <vxe-column field="sex" title="Giới tính" :edit-render="{ name: '$select', options: sexList }"></vxe-column>
+            <vxe-column field="idcard" title="Chứng minh nhân dân" sortable :edit-render="{ name: 'input', defaultValue: '' }"></vxe-column>
+            <vxe-column field="telphone" title="Điện thoại" sortable :edit-render="{ name: 'input', defaultValue: '' }"></vxe-column>
           </vxe-table>
         </a-tab-pane>
 
-        <a-tab-pane tab="机票信息" key="2" forceRender> </a-tab-pane>
+        <a-tab-pane tab="Thông tin vé máy bay" key="2" forceRender> </a-tab-pane>
       </a-tabs>
     </a-form>
   </BasicModal>
@@ -89,11 +89,11 @@
       });
       const sexList = ref([
         { label: '', value: '' },
-        { label: '男', value: '1' },
-        { label: '女', value: '2' },
+        { label: 'Nam', value: '1' },
+        { label: 'Nữ', value: '2' },
       ]);
       const validatorRules = {
-        orderCode: [{ required: true, message: '订单号不能为空', trigger: 'blur' }],
+        orderCode: [{ required: true, message: 'Mã đơn hàng không được để trống', trigger: 'blur' }],
       };
       const orderMainModel = reactive({
         id: null,
@@ -115,9 +115,9 @@
         }
       });
       const tableData = ref([]);
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
+      const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
 
-      //动态添加行
+      //Thêm hàng động
       async function insertEvent(row: any) {
         const $table = xTable.value;
         const record = {
@@ -178,12 +178,12 @@
     line-height: 0px;
   }
 
-  /** 主表单行间距 */
+  /** Khoảng cách hàng của biểu mẫu chính */
   .ant-form .ant-form-item {
     margin-bottom: 10px;
   }
 
-  /** Tab页面行间距 */
+  /** TabKhoảng cách dòng trang */
   .ant-tabs-content .ant-form-item {
     margin-bottom: 0px;
   }

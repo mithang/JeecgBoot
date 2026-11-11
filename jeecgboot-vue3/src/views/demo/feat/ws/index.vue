@@ -1,38 +1,38 @@
 <template>
-  <PageWrapper title="WebSocket 示例">
+  <PageWrapper title="WebSocket Ví dụ">
     <div class="flex">
       <div class="w-1/3 bg-white p-4">
         <div class="flex items-center">
-          <span class="text-lg font-medium mr-4"> 连接状态: </span>
+          <span class="text-lg font-medium mr-4"> Trạng thái kết nối: </span>
           <Tag :color="getTagColor">{{ status }}</Tag>
         </div>
         <hr class="my-4" />
 
         <div class="flex">
           <a-input v-model:value="server" disabled>
-            <template #addonBefore> 服务地址 </template>
+            <template #addonBefore> Địa chỉ dịch vụ </template>
           </a-input>
           <a-button :type="getIsOpen ? 'danger' : 'primary'" @click="toggle">
-            {{ getIsOpen ? '关闭连接' : '开启连接' }}
+            {{ getIsOpen ? 'Đóng kết nối' : 'Mở kết nối' }}
           </a-button>
         </div>
-        <p class="text-lg font-medium mt-4">设置</p>
+        <p class="text-lg font-medium mt-4">Cài đặt</p>
         <hr class="my-4" />
 
-        <InputTextArea placeholder="需要发送到服务器的内容" :disabled="!getIsOpen" v-model:value="sendValue" allowClear />
+        <InputTextArea placeholder="Nội dung cần gửi đến máy chủ" :disabled="!getIsOpen" v-model:value="sendValue" allowClear />
 
-        <a-button type="primary" block class="mt-4" :disabled="!getIsOpen" @click="handlerSend"> 发送 </a-button>
+        <a-button type="primary" block class="mt-4" :disabled="!getIsOpen" @click="handlerSend"> Gửi </a-button>
       </div>
 
       <div class="w-2/3 bg-white ml-4 p-4">
-        <span class="text-lg font-medium mr-4"> 消息记录: </span>
+        <span class="text-lg font-medium mr-4"> Bản ghi tin nhắn: </span>
         <hr class="my-4" />
 
         <div class="max-h-80 overflow-auto">
           <ul>
             <li v-for="item in getList" class="mt-2" :key="item.time">
               <div class="flex items-center">
-                <span class="mr-2 text-primary font-medium">收到消息:</span>
+                <span class="mr-2 text-primary font-medium">Đã nhận tin nhắn:</span>
                 <span>{{ formatToDateTime(item.time) }}</span>
               </div>
               <div>

@@ -1,12 +1,12 @@
 <template>
-  <a-card title="Issue #9840：用户密码字段访问测试" size="small" style="margin-bottom: 16px">
+  <a-card title="Issue #9840: Kiểm thử truy cập trường mật khẩu người dùng" size="small" style="margin-bottom: 16px">
     <a-alert
-      message="该测试会尝试通过表字典接口查询 sys_user.password，修复生效时请求应被拒绝。"
+      message="Bài kiểm tra này sẽ thử truy vấn qua API từ điển bảng sys_user.password, khi bản sửa có hiệu lực, yêu cầu sẽ bị từ chối."
       type="warning"
       show-icon
     />
     <a-space style="margin-top: 12px">
-      <a-button danger :loading="passwordTestLoading" @click="handlePasswordQueryTest">查询用户密码字段</a-button>
+      <a-button danger :loading="passwordTestLoading" @click="handlePasswordQueryTest">Tìm kiếm trường mật khẩu người dùng</a-button>
       <a-typography-text code>GET /sys/dict/loadDict/sys_user,password,id</a-typography-text>
     </a-space>
     <a-alert
@@ -123,7 +123,7 @@
       const passwordTestAlertType = ref<'success' | 'error' | 'warning'>('warning');
       const passwordTestResult = ref('');
       const submitButtonOptions = ref({
-        text: '确定',
+        text: 'Xác nhận',
       });
       const searchParams = computed<Recordable>(() => {
         return { keyword: unref(keyword) };
@@ -147,16 +147,16 @@
           );
           passwordTestResult.value = JSON.stringify(response, null, 2);
           if (response?.success) {
-            passwordTestStatus.value = '未拦截：接口仍能返回密码字段，存在安全风险';
+            passwordTestStatus.value = 'Chưa chặn: API vẫn có thể trả về trường mật khẩu, tồn tại rủi ro bảo mật';
             passwordTestAlertType.value = 'error';
-            createMessage.error('用户密码字段未被拦截');
+            createMessage.error('Trường mật khẩu người dùng chưa bị chặn');
           } else {
-            passwordTestStatus.value = '已拦截：后端拒绝访问 sys_user.password';
+            passwordTestStatus.value = 'Đã chặn: Máy chủ từ chối truy cập sys_user.password';
             passwordTestAlertType.value = 'success';
-            createMessage.success('敏感字段拦截生效');
+            createMessage.success('Chặn trường nhạy cảm đã có hiệu lực');
           }
         } catch (error: any) {
-          passwordTestStatus.value = '请求异常：请根据返回信息确认是否为敏感字段拦截';
+          passwordTestStatus.value = 'Yêu cầu bất thường: Vui lòng căn cứ vào thông tin trả về để xác nhận có phải do chặn trường nhạy cảm hay không';
           passwordTestAlertType.value = 'warning';
           passwordTestResult.value = JSON.stringify(error?.response?.data ?? { message: error?.message ?? String(error) }, null, 2);
         } finally {
@@ -165,11 +165,11 @@
       }
 
       const superQueryConfig = {
-        name:{ title: "名称", view: "text", type: "string", order: 1 },
-        birthday:{ title: "生日", view: "date", type: "string", order: 2 },
-        age:{ title: "年龄", view: "number", type: "number", order: 4 },
-        sex:{ title: "性别", view: "list", type: "string", dictCode: "sex", order: 5 },
-        bpmStatus:{ title: "流程状态", view: "list_multi", type: "string",  dictCode: "bpm_status", order: 6 },
+        name:{ title: "Tên", view: "text", type: "string", order: 1 },
+        birthday:{ title: "Ngày sinh", view: "date", type: "string", order: 2 },
+        age:{ title: "Tuổi", view: "number", type: "number", order: 4 },
+        sex:{ title: "Giới tính", view: "list", type: "string", dictCode: "sex", order: 5 },
+        bpmStatus:{ title: "Trạng thái quy trình", view: "list_multi", type: "string",  dictCode: "bpm_status", order: 6 },
       }
       function handleSuperQuery(value, model, field){
         if(value){
@@ -181,26 +181,26 @@
       const saveSearchData = ref([
         {
           content: '[{"field":"age","rule":"eq","val":14}]',
-          title: '豆蔻年华',
+          title: 'Tuổi đậu khấu',
           type: 'and',
         },
         {
-          content: '[{"field":"name","rule":"eq","val":"张三"}]',
-          title: '项目经理',
+          content: '[{"field":"name","rule":"eq","val":"Trương Tam"}]',
+          title: 'Quản lý dự án',
           type: 'and',
         },
       ]);
       const handleSuperQuerySave = (data) => {
-        // 高级查询保存后的信息
+        // Thông tin sau khi lưu truy vấn nâng cao
         return new Promise<void>((resolve, reject) => {
-          // 模拟接口
+          // API mô phỏng
           setTimeout(() => {
             if (Math.random() > 0.5) {
-              console.log('接口成功~');
+              console.log('API thành công~');
               saveSearchData.value = data;
               resolve();
             } else {
-              console.log('接口失败~');
+              console.log('API thất bại~');
               reject();
             }
           }, 1e3);
@@ -236,10 +236,10 @@
   });
 </script>
 <style lang="less" scoped>
-  /**update-begin-author:taoyan date:20220324 for: VUEN-351【vue3】展示不全*/
+  /**update-begin-author:taoyan date:20220324 for: VUEN-351[vue3] Hiển thị không đầy đủ*/
   .jee-select-demo-form .ant-col-5 {
     flex: 0 0 159px;
     max-width: 159px;
   }
-  /**update-end-author:taoyan date:20220324 for: VUEN-351【vue3】展示不全*/
+  /**update-end-author:taoyan date:20220324 for: VUEN-351[vue3] Hiển thị không đầy đủ*/
 </style>

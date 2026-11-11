@@ -41,7 +41,7 @@
         if (data && data.length > 0) {
           let temp = data[0];
           orderCustomerFormData = { ...temp };
-          //设置表单的值
+          //Đặt giá trị của biểu mẫu
           await setFieldsValue(orderCustomerFormData);
           await setProps({ disabled: formDisabled.value });
         }

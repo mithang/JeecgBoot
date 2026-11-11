@@ -5,16 +5,16 @@
         <TableAction
           :actions="[
             {
-              label: '删除',
+              label: 'Xóa',
               icon: 'ic:outline-delete-outline',
               onClick: handleDelete.bind(null, record),
             },
           ]"
           :dropDownActions="[
             {
-              label: '启用',
+              label: 'Kích hoạt',
               popConfirm: {
-                title: '是否启用？',
+                title: 'Có kích hoạt không?',
                 confirm: handleOpen.bind(null, record),
               },
             },
@@ -38,26 +38,26 @@
       width: 280,
     },
     {
-      title: '姓名',
+      title: 'Họ tên',
       dataIndex: 'name',
       width: 260,
     },
     {
-      title: '地址',
+      title: 'Địa chỉ',
       dataIndex: 'address',
     },
     {
-      title: '编号',
+      title: 'Mã',
       dataIndex: 'no',
       width: 300,
     },
     {
-      title: '开始时间',
+      title: 'Thời gian bắt đầu',
       width: 200,
       dataIndex: 'beginTime',
     },
     {
-      title: '结束时间',
+      title: 'Thời gian kết thúc',
       dataIndex: 'endTime',
       width: 200,
     },
@@ -67,7 +67,7 @@
     setup() {
       const { tableContext } = useListPage({
         tableProps: {
-          title: '固定头和列示例',
+          title: 'Ví dụ tiêu đề và cột cố định',
           api: demoListApi,
           columns: columns,
           canResize: false,
@@ -83,10 +83,10 @@
 
       const [registerTable] = tableContext;
       function handleDelete(record: Recordable) {
-        console.log('点击了删除', record);
+        console.log('Đã nhấp Xóa', record);
       }
       function handleOpen(record: Recordable) {
-        console.log('点击了启用', record);
+        console.log('Đã nhấp Kích hoạt', record);
       }
       return {
         registerTable,

@@ -20,13 +20,13 @@
     rowKey: 'id',
     bordered: true,
     canResize: false,
-    // 树表格
+    // Bảng cây
     isTreeTable: true,
     showIndexColumn: true,
     columns: [
-      { title: '名称', dataIndex: 'name' },
-      { title: '组件', dataIndex: 'component' },
-      { title: '排序', dataIndex: 'orderNum' },
+      { title: 'Tên', dataIndex: 'name' },
+      { title: 'Component', dataIndex: 'component' },
+      { title: 'Sắp xếp', dataIndex: 'orderNum' },
     ],
   });
 

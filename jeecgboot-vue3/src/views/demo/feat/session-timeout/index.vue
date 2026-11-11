@@ -1,6 +1,6 @@
 <template>
-  <PageWrapper title="登录过期示例" content="用户登录过期示例，不再跳转登录页，直接生成页面覆盖当前页面，方便保持过期前的用户状态！">
-    <a-card title="请点击下面的按钮访问测试接口" extra="所访问的接口会返回Token过期响应">
+  <PageWrapper title="Ví dụ về đăng nhập hết hạn" content="Ví dụ hết hạn đăng nhập của người dùng, không chuyển hướng đến trang đăng nhập nữa, trực tiếp tạo trang phủ lên trang hiện tại, tiện giữ trạng thái người dùng trước khi hết hạn!">
+    <a-card title="Vui lòng nhấp vào nút bên dưới để truy cập API kiểm tra" extra="API được truy cập sẽ trả về phản hồi Token hết hạn">
       <a-card-grid style="width: 50%; text-align: center">
         <a-button type="primary" @click="test1">HttpStatus == 401</a-button>
       </a-card-grid>
@@ -25,23 +25,23 @@
     setup() {
       const userStore = useUserStore();
       async function test1() {
-        // 示例网站生产环境用的是mock数据，不能返回Http状态码，
-        // 所以在生产环境直接改变状态来达到测试效果
+        // Môi trường production của website ví dụ dùng dữ liệu mock, không thể trả về mã trạng thái Http,
+        // Vì vậy trong môi trường production trực tiếp thay đổi trạng thái để đạt hiệu quả kiểm thử
         if (import.meta.env.PROD) {
           userStore.setToken(undefined);
           userStore.setSessionTimeout(true);
         } else {
-          // 这个api会返回状态码为401的响应
+          // API này sẽ trả về phản hồi có mã trạng thái 401
           await sessionTimeoutApi();
         }
       }
 
       async function test2() {
-        // 这个api会返回code为401的json数据，Http状态码为200
+        // API này sẽ trả về dữ liệu json có code là 401, mã trạng thái Http là200
         try {
           await tokenExpiredApi();
         } catch (err) {
-          console.log('接口访问错误：', (err as Error).message || '错误');
+          console.log('Lỗi truy cập API:', (err as Error).message || 'Lỗi');
         }
       }
 

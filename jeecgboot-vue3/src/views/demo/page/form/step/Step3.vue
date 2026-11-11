@@ -1,17 +1,17 @@
 <template>
   <div class="step3">
-    <a-result status="success" title="操作成功" sub-title="预计两小时内到账">
+    <a-result status="success" title="Thao tác thành công" sub-title="Dự kiến nhận được trong hai giờ">
       <template #extra>
-        <a-button type="primary" @click="redo"> 再转一笔 </a-button>
-        <a-button> 查看账单 </a-button>
+        <a-button type="primary" @click="redo"> Chuyển thêm một khoản </a-button>
+        <a-button> Xem hóa đơn </a-button>
       </template>
     </a-result>
     <div class="desc-wrap">
       <a-descriptions :column="1" class="mt-5">
-        <a-descriptions-item label="付款账户"> ant-design@alipay.com </a-descriptions-item>
-        <a-descriptions-item label="收款账户"> test@example.com </a-descriptions-item>
-        <a-descriptions-item label="收款人姓名"> Jeecg </a-descriptions-item>
-        <a-descriptions-item label="转账金额"> 500元 </a-descriptions-item>
+        <a-descriptions-item label="Tài khoản thanh toán"> ant-design@alipay.com </a-descriptions-item>
+        <a-descriptions-item label="Tài khoản nhận tiền"> test@example.com </a-descriptions-item>
+        <a-descriptions-item label="Tên người nhận tiền"> Jeecg </a-descriptions-item>
+        <a-descriptions-item label="Số tiền chuyển khoản"> 500đồng </a-descriptions-item>
       </a-descriptions>
     </div>
   </div>

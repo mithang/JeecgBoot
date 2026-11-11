@@ -1,6 +1,6 @@
 <template>
-  <PageWrapper title="子级详情页">
-    <div> 子级详情页内容在此 </div>
+  <PageWrapper title="Trang chi tiết cấp con">
+    <div> Nội dung trang chi tiết cấp con ở đây </div>
   </PageWrapper>
 </template>
 <script lang="ts">

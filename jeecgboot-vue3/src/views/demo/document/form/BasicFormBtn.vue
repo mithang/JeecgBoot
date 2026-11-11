@@ -1,65 +1,65 @@
-<!-- 操作按钮 -->
+<!-- Nút thao tác -->
 <template>
   <div style="margin: 20px auto; text-align: center">
-    <!-- 通过setProps 可以设置 userForm 中的属性 -->
-    <!--  showActionButtonGroup 显示或者隐藏查询、重置按钮  -->
-    <a-button @click="setProps({ showActionButtonGroup: false })" class="mr-2"> 隐藏操作按钮 </a-button>
-    <a-button @click="setProps({ showActionButtonGroup: true })" class="mr-2"> 显示操作按钮 </a-button>
-    <!--  showActionButtonGroup 显示或者隐藏重置按钮  -->
-    <a-button @click="setProps({ showResetButton: false })" class="mr-2"> 隐藏重置按钮 </a-button>
-    <a-button @click="setProps({ showResetButton: true })" class="mr-2"> 显示重置按钮 </a-button>
-    <!--  showActionButtonGroup 显示或者隐藏查询按钮  -->
-    <a-button @click="setProps({ showSubmitButton: false })" class="mr-2"> 隐藏查询按钮 </a-button>
-    <a-button @click="setProps({ showSubmitButton: true })" class="mr-2"> 显示查询按钮 </a-button>
+    <!-- Có thể đặt thuộc tính trong userForm thông qua setProps -->
+    <!--  showActionButtonGroup Hiển thị hoặc ẩn nút tìm kiếm, đặt lại  -->
+    <a-button @click="setProps({ showActionButtonGroup: false })" class="mr-2"> Ẩn nút thao tác </a-button>
+    <a-button @click="setProps({ showActionButtonGroup: true })" class="mr-2"> Hiển thị nút thao tác </a-button>
+    <!--  showActionButtonGroup Hiển thị hoặc ẩn nút đặt lại  -->
+    <a-button @click="setProps({ showResetButton: false })" class="mr-2"> Ẩn nút đặt lại </a-button>
+    <a-button @click="setProps({ showResetButton: true })" class="mr-2"> Hiển thị nút đặt lại </a-button>
+    <!--  showActionButtonGroup Hiển thị hoặc ẩn nút tìm kiếm  -->
+    <a-button @click="setProps({ showSubmitButton: false })" class="mr-2"> Ẩn nút tìm kiếm </a-button>
+    <a-button @click="setProps({ showSubmitButton: true })" class="mr-2"> Hiển thị nút tìm kiếm </a-button>
   </div>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" @submit="handleSubmit" style="margin-top: 50px; margin-left: 50px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
   import { CollapseContainer } from '/@/components/Container';
 
   /**
-   * BasicForm绑定注册;
-   * setProps方法可以动态设置useForm中的属性
+   * BasicFormĐăng ký liên kết;
+   * setPropsPhương thức có thể đặt động các thuộc tính trong useForm
    */
   const [registerForm, { setProps }] = useForm({
-    //自定义查询按钮的文本和图标
-    submitButtonOptions: { text: '查询', preIcon: '' },
-    //自定义重置按钮的文本和图标
-    resetButtonOptions: { text: '重置', preIcon: '' },
-    //操作按钮的位置
+    //Văn bản và biểu tượng của nút tìm kiếm tùy chỉnh
+    submitButtonOptions: { text: 'Truy vấn', preIcon: '' },
+    //Văn bản và biểu tượng của nút đặt lại tùy chỉnh
+    resetButtonOptions: { text: 'Đặt lại', preIcon: '' },
+    //Vị trí của nút thao tác
     actionColOptions: { span: 17 },
-    //提交按钮的自定义事件
+    //Sự kiện tùy chỉnh của nút gửi
     submitFunc: customSubmitFunc,
-    //重置按钮的自定义时间
+    //Thời gian tùy chỉnh của nút đặt lại
     resetFunc: customSubmitFunc,
-    //显示操作按钮
+    //Hiển thị nút thao tác
     showActionButtonGroup: true,
   });
 
   /**
-   * 查询按钮点击事件
+   * Sự kiện nhấp nút tìm kiếm
    */
   async function customSubmitFunc() {
-    console.log('查询按钮点击事件，此处处理查询按钮的逻辑');
+    console.log('Sự kiện nhấn nút tìm kiếm, xử lý logic của nút tìm kiếm tại đây');
   }
 
   /**
-   * 重置按钮点击事件
+   * Sự kiện nhấp nút đặt lại
    */
   async function customResetFunc() {
-    console.log('重置按钮点击事件，此处处理重置按钮的逻辑');
+    console.log('Sự kiện nhấn nút đặt lại, xử lý logic của nút đặt lại tại đây');
   }
 
   /**
-   * 点击提交按钮的value值
+   * Giá trị value của nút gửi khi nhấp
    * @param values
    */
   function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
+    console.log('Dữ liệu nút gửi::::', values);
   }
 </script>
 

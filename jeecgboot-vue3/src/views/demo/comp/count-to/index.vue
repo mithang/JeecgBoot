@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="数字动画示例">
+  <PageWrapper title="Ví dụ hiệu ứng số">
     <Card>
       <CardGrid class="count-to-demo-card">
         <CountTo prefix="$" :color="'#409EFF'" :startVal="1" :endVal="200000" :duration="8000" />

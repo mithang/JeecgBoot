@@ -2,7 +2,7 @@
   <a-card :bordered="false">
     <a-row :gutter="8">
       <a-col :span="6">
-        <!-- 加上 show-line 属性后，展开收起图标自动变成 +- 样式 -->
+        <!-- Thêm vào show-line sau thuộc tính, biểu tượng mở rộng/thu gọn tự động đổi thành +- Kiểu -->
         <a-tree
           class="template-5-tree"
           :tree-data="treeData"
@@ -13,7 +13,7 @@
           @expand="handleTreeExpand"
           @select="handleTreeSelect"
         >
-          <!-- 自定义子节点图标 -->
+          <!-- Tùy chỉnh biểu tượng nút con -->
           <a-icon slot="myIcon" type="unordered-list" style="color: #0c8fcf" />
         </a-tree>
       </a-col>
@@ -37,109 +37,109 @@
   import { defHttp } from '/@/utils/http/axios';
   import { JVxeTypes } from '/@/components/jeecg/JVxeTable/types';
 
-  // 【多种布局模板】左侧为树，右侧为行编辑
+  // [Nhiều mẫu bố cục] Bên trái là cây, bên phải là chỉnh sửa dòng
   export default {
     name: 'Template5',
     data() {
       return {
-        // 是否正在加载
+        // Có đang tải không
         loading: false,
-        // 分页器参数
+        // Tham số bộ phân trang
         pagination: {
-          // 当前页码
+          // Số trang hiện tại
           current: 1,
-          // 每页的条数
+          // Số bản ghi mỗi trang
           pageSize: 50,
-          // 可切换的条数
+          // Số mục có thể chuyển đổi
           pageSizeOptions: ['50'],
-          // 数据总数（目前并不知道真实的总数，所以先填写0，在后台查出来后再赋值）
+          // Tổng số dữ liệu (hiện chưa biết tổng số thực tế, nên tạm điền 0, sau khi tra ra ở backend sẽ gán lại)
           total: 0,
         },
-        // 选择的行
+        // Hàng đã chọn
         selectedRows: [],
-        // 数据源，控制表格的数据
+        // Nguồn dữ liệu, điều khiển dữ liệu của bảng
         dataSource: [],
-        // 列配置，控制表格显示的列
+        // Cấu hình cột, kiểm soát các cột hiển thị của bảng
         columns: [
-          { key: 'num', title: '序号', width: '80px' },
+          { key: 'num', title: 'STT', width: '80px' },
           {
-            // 字段key，跟后台数据的字段名匹配
+            // key của trường, khớp với tên trường của dữ liệu backend
             key: 'ship_name',
-            // 列的标题
-            title: '船名',
-            // 列的宽度
+            // Tiêu đề cột
+            title: 'Tên tàu',
+            // Độ rộng cột
             width: '180px',
-            // 如果加上了该属性，就代表当前单元格是可编辑的，type就是表单的类型，input就是简单的输入框
+            // Nếu thêm thuộc tính này, nghĩa là ô hiện tại có thể chỉnh sửa, type chính là loại của biểu mẫu, input là ô nhập đơn giản
             type: JVxeTypes.input,
           },
-          { key: 'call', title: '呼叫', width: '80px', type: JVxeTypes.input },
-          { key: 'len', title: '长', width: '80px', type: JVxeTypes.input },
-          { key: 'ton', title: '吨', width: '120px', type: JVxeTypes.input },
-          { key: 'payer', title: '付款方', width: '120px', type: JVxeTypes.input },
-          { key: 'count', title: '数', width: '40px' },
+          { key: 'call', title: 'Gọi', width: '80px', type: JVxeTypes.input },
+          { key: 'len', title: 'Chiều dài', width: '80px', type: JVxeTypes.input },
+          { key: 'ton', title: 'tấn', width: '120px', type: JVxeTypes.input },
+          { key: 'payer', title: 'Bên thanh toán', width: '120px', type: JVxeTypes.input },
+          { key: 'count', title: 'Số', width: '40px' },
           {
             key: 'company',
-            title: '公司',
-            // 最小宽度，与宽度不同的是，这个不是固定的宽度，如果表格有多余的空间，会平均分配给设置了 minWidth 的列
-            // 如果要做占满表格的列可以这么写
+            title: 'Công ty',
+            // Chiều rộng tối thiểu, khác với chiều rộng ở chỗ đây không phải là chiều rộng cố định, nếu bảng còn không gian thừa, sẽ chia đều cho các cột đã đặt minWidth
+            // Nếu muốn làm cột chiếm đầy bảng có thể viết như vậy
             minWidth: '180px',
             type: JVxeTypes.input,
           },
-          { key: 'trend', title: '动向', width: '120px', type: JVxeTypes.input },
+          { key: 'trend', title: 'Xu hướng', width: '120px', type: JVxeTypes.input },
         ],
-        // 树的数据，这里模拟分页固定数据，实际情况应该是后台查出来的数据
+        // Dữ liệu của cây, ở đây mô phỏng dữ liệu cố định có phân trang, tình huống thực tế nên là dữ liệu được backend truy vấn ra
         treeData: [
-          // 第1级数据
+          // Dữ liệu cấp 1
           {
-            title: '1-10页',
+            title: '1-10trang',
             key: '1-10',
-            // 第2级数据
+            // Dữ liệu cấp 2
             children: [
-              { title: '第 1 页', key: 1, slots: { icon: 'myIcon' } },
-              { title: '第 2 页', key: 2, slots: { icon: 'myIcon' } },
+              { title: 'Trang 1', key: 1, slots: { icon: 'myIcon' } },
+              { title: 'Trang 2', key: 2, slots: { icon: 'myIcon' } },
               {
-                title: '第 3 页',
+                title: 'Trang 3',
                 key: 3,
                 slots: { icon: 'myIcon' },
-                // 第3级数据
+                // Dữ liệu cấp 3
                 children: [
-                  { title: '第 333 页', key: 333, slots: { icon: 'myIcon' } },
-                  { title: '第 444 页', key: 444, slots: { icon: 'myIcon' } },
-                  { title: '第 555 页', key: 555, slots: { icon: 'myIcon' } },
-                  // 第4第5级以此类推，加上 children 属性即可
+                  { title: 'Trang 333', key: 333, slots: { icon: 'myIcon' } },
+                  { title: 'Trang 444', key: 444, slots: { icon: 'myIcon' } },
+                  { title: 'Trang 555', key: 555, slots: { icon: 'myIcon' } },
+                  // Cấp 4, cấp 5 cứ thế suy ra, chỉ cần thêm thuộc tính children là được
                 ],
               },
-              { title: '第 4 页', key: 4, slots: { icon: 'myIcon' } },
-              { title: '第 5 页', key: 5, slots: { icon: 'myIcon' } },
-              { title: '第 6 页', key: 6, slots: { icon: 'myIcon' } },
-              { title: '第 7 页', key: 7, slots: { icon: 'myIcon' } },
-              { title: '第 8 页', key: 8, slots: { icon: 'myIcon' } },
-              { title: '第 9 页', key: 9, slots: { icon: 'myIcon' } },
-              { title: '第 10 页', key: 10, slots: { icon: 'myIcon' } },
+              { title: 'Trang 4', key: 4, slots: { icon: 'myIcon' } },
+              { title: 'Trang 5', key: 5, slots: { icon: 'myIcon' } },
+              { title: 'Trang 6', key: 6, slots: { icon: 'myIcon' } },
+              { title: 'Trang 7', key: 7, slots: { icon: 'myIcon' } },
+              { title: 'Trang 8', key: 8, slots: { icon: 'myIcon' } },
+              { title: 'Trang 9', key: 9, slots: { icon: 'myIcon' } },
+              { title: 'Trang 10', key: 10, slots: { icon: 'myIcon' } },
             ],
             slots: { icon: 'myIcon' },
           },
           {
-            title: '11-20页',
+            title: '11-20trang',
             key: '11-20',
             children: [
-              { title: '第 11 页', key: 11, slots: { icon: 'myIcon' } },
-              { title: '第 12 页', key: 12, slots: { icon: 'myIcon' } },
-              { title: '第 13 页', key: 13, slots: { icon: 'myIcon' } },
-              { title: '第 14 页', key: 14, slots: { icon: 'myIcon' } },
-              { title: '第 15 页', key: 15, slots: { icon: 'myIcon' } },
-              { title: '第 16 页', key: 16, slots: { icon: 'myIcon' } },
-              { title: '第 17 页', key: 17, slots: { icon: 'myIcon' } },
-              { title: '第 18 页', key: 18, slots: { icon: 'myIcon' } },
-              { title: '第 19 页', key: 19, slots: { icon: 'myIcon' } },
-              { title: '第 20 页', key: 20, slots: { icon: 'myIcon' } },
+              { title: 'Trang 11', key: 11, slots: { icon: 'myIcon' } },
+              { title: 'Trang 12', key: 12, slots: { icon: 'myIcon' } },
+              { title: 'Trang 13', key: 13, slots: { icon: 'myIcon' } },
+              { title: 'Trang 14', key: 14, slots: { icon: 'myIcon' } },
+              { title: 'Trang 15', key: 15, slots: { icon: 'myIcon' } },
+              { title: 'Trang 16', key: 16, slots: { icon: 'myIcon' } },
+              { title: 'Trang 17', key: 17, slots: { icon: 'myIcon' } },
+              { title: 'Trang 18', key: 18, slots: { icon: 'myIcon' } },
+              { title: 'Trang 19', key: 19, slots: { icon: 'myIcon' } },
+              { title: 'Trang 20', key: 20, slots: { icon: 'myIcon' } },
             ],
             slots: { icon: 'myIcon' },
           },
         ],
-        // 树展开的列，默认 1-10
+        // Cột mở rộng dạng cây, mặc định 1-10
         treeExpandedKeys: ['1-10'],
-        // 查询url地址
+        // Địa chỉ url tìm kiếm
         url: {
           getData: '/mock/vxe/getData',
         },
@@ -149,14 +149,14 @@
       this.loadData();
     },
     methods: {
-      // 加载行编辑的数据
+      // Tải dữ liệu chỉnh sửa dòng
       loadData() {
-        // 封装查询条件
+        // Đóng gói điều kiện tìm kiếm
         let formData = {
           pageNo: this.pagination.current,
           pageSize: this.pagination.pageSize,
         };
-        // 调用查询数据接口
+        // Gọi API tìm kiếm dữ liệu
         this.loading = true;
         defHttp
           .get({
@@ -164,26 +164,26 @@
             params: formData,
           })
           .then((result) => {
-            // 后台查询回来的 total，数据总数量
+            // total trả về từ truy vấn backend, tổng số lượng dữ liệu
             this.pagination.total = result.total;
-            // 将查询的数据赋值给 dataSource
+            // Gán dữ liệu truy vấn được cho dataSource
             this.dataSource = result.records;
-            // 重置选择
+            // Đặt lại lựa chọn
             this.selectedRows = [];
           })
           .finally(() => {
-            // 这里是无论成功或失败都会执行的方法，在这里关闭loading
+            // Đây là phương thức sẽ được thực thi dù thành công hay thất bại, tại đây sẽ đóngloading
             this.loading = false;
           });
       },
 
       handleTablePageChange(event) {
-        // 重新赋值
+        // Gán lại giá trị
         this.pagination.current = event.current;
         this.pagination.pageSize = event.pageSize;
-        // 查询数据
+        // Truy vấn dữ liệu
         this.loadData();
-        // 判断树展开的key
+        // Xác định cây đã mở rộngkey
         if (event.current <= 10) {
           this.treeExpandedKeys = ['1-10'];
         } else {
@@ -191,11 +191,11 @@
         }
       },
 
-      // 树被选择触发的事件
+      // Sự kiện được kích hoạt khi cây được chọn
       handleTreeSelect(selectedKeys) {
         let key = selectedKeys[0];
         if (typeof key === 'string') {
-          // 控制树展开为当前选择的列
+          // Kiểm soát cây mở rộng thành cột đang được chọn
           this.treeExpandedKeys = selectedKeys;
         } else {
           this.pagination.current = key;
@@ -203,7 +203,7 @@
         }
       },
 
-      // 树被选择触发的事件
+      // Sự kiện được kích hoạt khi cây được chọn
       handleTreeExpand(expandedKeys) {
         this.treeExpandedKeys = expandedKeys;
       },
@@ -212,7 +212,7 @@
 </script>
 
 <style lang="less">
-  /** 隐藏文件小图标 */
+  /** Ẩn biểu tượng nhỏ của tệp */
   .template-5-tree.ant-tree {
     li span.ant-tree-switcher.ant-tree-switcher-noop {
       display: none;

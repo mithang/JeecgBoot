@@ -6,8 +6,8 @@ export const searchList = (() => {
     result.push({
       id: i,
       title: 'Jeecg Admin',
-      description: ['Jeecg', '设计语言', 'Typescript'],
-      content: '基于Vue Next, TypeScript, Ant Design实现的一套完整的企业级后台管理系统。',
+      description: ['Jeecg', 'Ngôn ngữ thiết kế', 'Typescript'],
+      content: 'Dựa trênVue Next, TypeScript, Ant Designmột hệ thống quản lý backend cấp doanh nghiệp hoàn chỉnh.',
       time: '2020-11-14 11:20',
     });
   }
@@ -24,7 +24,7 @@ export const schemas: FormSchema[] = [
   {
     field: 'field1',
     component: 'InputSearch',
-    label: '项目名',
+    label: 'Tên dự án',
     colProps: {
       span: 8,
     },

@@ -1,46 +1,46 @@
-<!-- 标题与字段布局 -->
+<!-- Bố cục tiêu đề và trường -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" @submit="handleSubmit" style="margin: 20px auto"/>
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
-      label: '姓名',
+      label: 'Họ tên',
       field: 'name',
       component: 'Input',
     },
     {
-      label: '年龄',
+      label: 'Tuổi',
       field: 'password',
       component: 'InputNumber',
     },
     {
-      label: '生日',
+      label: 'Ngày sinh',
       field: 'birthday',
       component: 'DatePicker',
     },
     {
-      label: '头像',
+      label: 'Ảnh đại diện',
       field: 'avatar',
       component: 'JImageUpload',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showActionButtonGroup: false,
     actionColOptions: { span: 12 },
-    //控制标题宽度占比
+    //Kiểm soát tỷ lệ chiều rộng tiêu đề
     labelCol: {
       xs: 2,
       sm: 2,
@@ -49,7 +49,7 @@
       xl: 3,
       xxl: 2,
     },
-    //控制组件宽度占比
+    //Kiểm soát tỷ lệ chiều rộng component
     wrapperCol: {
       xs: 15,
       sm: 14,
@@ -61,16 +61,16 @@
   });
 
   /**
-   * 点击提交按钮的value值
+   * Giá trị value của nút gửi khi nhấp
    * @param values
    */
   function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
+    console.log('Dữ liệu nút gửi::::', values);
   }
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

@@ -1,29 +1,29 @@
-<!-- 动态增减表单 -->
+<!-- Thêm/bớt biểu mẫu động -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px;" @submit="handleSubmit">
-    <!--  添加input的插槽  -->
+    <!--  Thêm slot của input  -->
     <template #addForm="{ field }">
       <a-button v-if="Number(field) === 0" @click="addField" style="width: 50px">+</a-button>
       <a-button v-if="Number(field) > 0" @click="delField(field)" style="width: 50px">-</a-button>
     </template>
   </BasicForm>
   <!--  <div style="margin: 20px auto; text-align: center">
-    <a-button @click="addField">添加表单项</a-button>
+    <a-button @click="addField">Thêm mục biểu mẫu</a-button>
   </div>-->
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
   import { CollapseContainer } from '/@/components/Container';
   import { ref } from 'vue';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'name1',
-      label: '姓名1',
+      label: 'Họ tên1',
       component: 'Input',
       // ifShow:false,
       colProps: {
@@ -32,7 +32,7 @@
     },
     {
       field: 'age1',
-      label: '年龄1',
+      label: 'Tuổi1',
       component: 'InputNumber',
       // ifShow:false,
       colProps: {
@@ -52,35 +52,35 @@
   ];
 
   /**
-   * BasicForm绑定注册;
-   * appendSchemaByField:增加表单项（字段）
+   * BasicFormĐăng ký liên kết;
+   * appendSchemaByField:Thêm mục biểu mẫu (trường)
    *
-   * removeSchemaByFiled:减少表单项（字段）
+   * removeSchemaByFiled:Giảm mục biểu mẫu (trường)
    */
   const [registerForm, { appendSchemaByField, removeSchemaByFiled }] = useForm({
     schemas: formSchemas,
     showResetButton: false,
     labelWidth: '150px',
     // showSubmitButton:false
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 
-  //组件个数
+  //Số lượng component
   let n = ref<number>(2);
 
   /**
-   * 添加字段
-   * appendSchemaByField类型: ( schema: FormSchema, prefixField: string | undefined, first?: boolean | undefined ) => Promise<void>
-   * 说明: 插入到指定 filed 后面，如果没传指定 field，则插入到最后,当 first = true 时插入到第一个位置
+   * Thêm trường
+   * appendSchemaByFieldLoại: ( schema: FormSchema, prefixField: string | undefined, first?: boolean | undefined ) => Promise<void>
+   * Giải thích: Chèn vào sau filed đã chỉ định, nếu không truyền field đã chỉ định thì chèn vào cuối,Khi first = true sẽ chèn vào vị trí đầu tiên
    */
   async function addField() {
-    //添加表单字段，里面为schemas对应的属性，可自行配置
+    //Thêm trường biểu mẫu, bên trong là thuộc tính tương ứng của schemas, có thể tự cấu hình
     await appendSchemaByField(
       {
         field: `name${n.value}`,
         component: 'Input',
-        label: '字段' + n.value,
+        label: 'Trường' + n.value,
         colProps: {
           span: 8,
         },
@@ -91,7 +91,7 @@
       {
         field: `sex${n.value}`,
         component: 'InputNumber',
-        label: '字段' + n.value,
+        label: 'Trường' + n.value,
         colProps: {
           span: 8,
         },
@@ -115,28 +115,28 @@
   }
 
   /**
-   * 删除字段
-   * 类型: (field: string | string[]) => Promise<void>
-   * 说明: 根据 field 删除 Schema
-   * @param field 当前字段名称
+   * Xóa trường
+   * Loại: (field: string | string[]) => Promise<void>
+   * Giải thích: Xóa theo field Schema
+   * @param field Tên trường hiện tại
    */
   function delField(field) {
-    //移除指定字段
+    //Xóa trường được chỉ định
     removeSchemaByFiled([`name${field}`, `sex${field}`, `${field}`]);
     n.value--;
   }
 
   /**
-   * 点击提交按钮的value值
+   * Giá trị value của nút gửi khi nhấp
    * @param values
    */
   function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
+    console.log('Dữ liệu nút gửi::::', values);
   }
 </script>
 
 <style scoped>
-  /** 数字输入框样式 */
+  /** Kiểu ô nhập số */
   :deep(.ant-input-number) {
     width: 100%;
   }

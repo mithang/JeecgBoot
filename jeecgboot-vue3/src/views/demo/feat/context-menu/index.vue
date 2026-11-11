@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="右键菜单示例">
+  <PageWrapper title="Ví dụ menu chuột phải">
     <CollapseContainer title="Simple">
       <a-button type="primary" @contextmenu="handleContext"> Right Click on me </a-button>
     </CollapseContainer>

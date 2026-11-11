@@ -1,7 +1,7 @@
 <template>
   <div style="min-width: 800px">
     <a-row>
-      <!-- 左侧文件树 -->
+      <!-- Cây tệp bên trái -->
       <a-col :span="6">
         <a-tree
           showLine
@@ -14,12 +14,12 @@
         ></a-tree>
       </a-col>
 
-      <!--右侧缩略图-->
+      <!--Hình thu nhỏ bên phải-->
       <a-col :span="18">
         <a-row style="margin-top: 10px; padding-left: 2%">
           <a-col :span="24" style="margin-bottom: 10px">
-            <a-button @click="prev" preIcon="ant-design:left-outlined" type="primary">上一页</a-button>
-            <a-button @click="next" preIcon="ant-design:right-outlined" style="margin-left: 8px" type="primary">下一页</a-button>
+            <a-button @click="prev" preIcon="ant-design:left-outlined" type="primary">Trang trước</a-button>
+            <a-button @click="next" preIcon="ant-design:right-outlined" style="margin-left: 8px" type="primary">Trang tiếp theo</a-button>
             <span style="margin-left: 100px; font-weight: bolder">{{ navName }}</span>
           </a-col>
           <a-col :span="24">
@@ -33,46 +33,46 @@
 
 <script lang="ts" setup>
   import { ref, unref, onMounted } from 'vue';
-  //mock数据
+  //mockDữ liệu
   const mockdata = [
     {
-      title: '第一页',
+      title: 'Trang 1',
       key: '0-0',
       children: [
         {
-          title: '1页',
+          title: '1trang',
           key: '0-0-0',
           imgUrl: 'https://static.jeecg.com/upload/test/1_1588149743473.jpg',
         },
         {
-          title: '2页',
+          title: '2trang',
           key: '0-0-1',
           imgUrl: 'https://static.jeecg.com/upload/test/u27356337152749454924fm27gp0_1588149731821.jpg',
         },
       ],
     },
     {
-      title: '第二页',
+      title: 'Trang 2',
       key: '0-1',
       children: [
         {
-          title: '1页',
+          title: '1trang',
           key: '0-1-0',
           imgUrl: 'https://static.jeecg.com/upload/test/u24454681402491956848fm27gp0_1588149712663.jpg',
         },
         {
-          title: '2页',
+          title: '2trang',
           key: '0-1-1',
           imgUrl: 'https://static.jeecg.com/upload/test/u8891206113801177793fm27gp0_1588149704459.jpg',
         },
       ],
     },
     {
-      title: '第三页',
+      title: 'Trang 3',
       key: '0-2',
       children: [
         {
-          title: '1页',
+          title: '1trang',
           key: '0-2-0',
           imgUrl: 'https://static.jeecg.com/upload/test/1374962_1587621329085.jpg',
         },
@@ -80,25 +80,25 @@
     },
   ];
   /**
-   * 左侧树形数据
+   * Dữ liệu dạng cây bên trái
    */
   const treeData = ref(mockdata);
-  //选中的key
+  //đã chọnkey
   const selectedKeys = ref([]);
-  //展开的key
+  //đã mở rộngkey
   const expandedKeys = ref([]);
   const sort = ref(0);
-  //图片链接
+  //Liên kết hình ảnh
   const imgUrl = ref('');
-  //页码标题
+  //Tiêu đề số trang
   const navName = ref('');
-  //图片集合
+  //Bộ sưu tập hình ảnh
   const imgList = ref([]);
 
   onMounted(getImgList);
 
   /**
-   * 加载图片集合
+   * Tải tập hợp hình ảnh
    */
   function getImgList() {
     var count = 0;
@@ -116,7 +116,7 @@
     setValue(imgList.value[unref(sort)]);
   }
   /**
-   * 节点选中事件
+   * Sự kiện chọn nút
    */
   function onSelect(selectedKeys, info) {
     for (var i = 0; i < unref(imgList).length; i++) {
@@ -128,7 +128,7 @@
     }
   }
   /**
-   * 节点展开事件
+   * Sự kiện mở rộng nút
    */
   function onExpand(expandedKey) {
     expandedKeys.value = [];
@@ -137,7 +137,7 @@
     }
   }
   /**
-   * 上一页
+   * Trang trước
    */
   function prev() {
     if (unref(sort) === 0) {
@@ -148,7 +148,7 @@
     setValue(unref(imgList)[unref(sort)]);
   }
   /**
-   * 下一页
+   * Trang tiếp theo
    */
   function next() {
     if (unref(sort) === unref(imgList).length - 1) {
@@ -159,7 +159,7 @@
     setValue(unref(imgList)[unref(sort)]);
   }
 
-  // 设置受控节点值
+  // Đặt giá trị nút được kiểm soát
   function setValue(value) {
     selectedKeys.value = [];
     imgUrl.value = value.imgUrl;

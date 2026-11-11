@@ -1,6 +1,6 @@
 <template>
-  <PageWrapper title="平级面包屑示例" content="子级页面面包屑会覆盖当前层级">
-    <router-link to="/feat/breadcrumb/flatDetail"> 进入平级详情页 </router-link>
+  <PageWrapper title="Ví dụ breadcrumb cùng cấp" content="Breadcrumb của trang con sẽ ghi đè lên cấp hiện tại">
+    <router-link to="/feat/breadcrumb/flatDetail"> Vào trang chi tiết cùng cấp </router-link>
   </PageWrapper>
 </template>
 <script lang="ts">

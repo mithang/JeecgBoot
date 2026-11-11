@@ -6,62 +6,62 @@ import { Badge } from 'ant-design-vue';
 
 export const refundData = {
   a1: '1000000000',
-  a2: '已取货',
+  a2: 'Đã lấy hàng',
   a3: '1234123421',
   a4: '3214321432',
 };
 
 export const personData = {
-  b1: '付小小',
+  b1: 'Phó Tiểu Tiểu',
   b2: '18100000000',
-  b3: '菜鸟仓储',
-  b4: '浙江省杭州市西湖区万塘路18号',
-  b5: '无',
+  b3: 'Kho Cainiao',
+  b4: 'Số 18 đường Vạn Đường, quận Tây Hồ, thành phố Hàng Châu, tỉnh Chiết Giang',
+  b5: 'Không có',
 };
 export const refundSchema: DescItem[] = [
   {
     field: 'a1',
-    label: '取货单号',
+    label: 'Số đơn lấy hàng',
   },
   {
     field: 'a2',
-    label: '状态',
+    label: 'Trạng thái',
   },
   {
     field: 'a3',
-    label: '销售单号',
+    label: 'Số đơn bán hàng',
   },
   {
     field: 'a4',
-    label: '子订单',
+    label: 'Đơn hàng con',
   },
 ];
 export const personSchema: DescItem[] = [
   {
     field: 'b1',
-    label: '用户姓名',
+    label: 'Họ tên người dùng',
   },
   {
     field: 'b2',
-    label: '联系电话',
+    label: 'Số điện thoại liên hệ',
   },
   {
     field: 'b3',
-    label: '常用快递',
+    label: 'Chuyển phát nhanh thường dùng',
   },
   {
     field: 'b4',
-    label: '取货地址',
+    label: 'Địa chỉ lấy hàng',
   },
   {
     field: 'b5',
-    label: '备注',
+    label: 'Ghi chú',
   },
 ];
 
 export const refundTableSchema: BasicColumn[] = [
   {
-    title: '商品编号',
+    title: 'Mã sản phẩm',
     width: 150,
     dataIndex: 't1',
     customRender: ({ record }) => {
@@ -73,44 +73,44 @@ export const refundTableSchema: BasicColumn[] = [
     },
   },
   {
-    title: '商品名称',
+    title: 'Tên sản phẩm',
     width: 150,
     dataIndex: 't2',
   },
   {
-    title: '商品条码',
+    title: 'Mã vạch sản phẩm',
     width: 150,
     dataIndex: 't3',
   },
   {
-    title: '单价	',
+    title: 'Đơn giá	',
     width: 150,
     dataIndex: 't4',
   },
   {
-    title: '数量（件）	',
+    title: 'Số lượng (chiếc)	',
     width: 150,
     dataIndex: 't5',
   },
   {
-    title: '金额',
+    title: 'Số tiền',
     width: 150,
     dataIndex: 't6',
   },
 ];
 export const refundTimeTableSchema: BasicColumn[] = [
   {
-    title: '时间',
+    title: 'Thời gian',
     width: 150,
     dataIndex: 't1',
   },
   {
-    title: '当前进度',
+    title: 'Tiến độ hiện tại',
     width: 150,
     dataIndex: 't2',
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     width: 150,
     dataIndex: 't3',
     customRender: ({ record }) => {
@@ -118,12 +118,12 @@ export const refundTimeTableSchema: BasicColumn[] = [
     },
   },
   {
-    title: '操作员ID	',
+    title: 'Người vận hànhID	',
     width: 150,
     dataIndex: 't4',
   },
   {
-    title: '耗时',
+    title: 'Thời gian tốn',
     width: 150,
     dataIndex: 't5',
   },
@@ -132,7 +132,7 @@ export const refundTimeTableSchema: BasicColumn[] = [
 export const refundTableData: any[] = [
   {
     t1: 1234561,
-    t2: '矿泉水 550ml',
+    t2: 'Nước khoáng 550ml',
     t3: '12421432143214321',
     t4: '2.00',
     t5: 1,
@@ -140,7 +140,7 @@ export const refundTableData: any[] = [
   },
   {
     t1: 1234562,
-    t2: '矿泉水 550ml',
+    t2: 'Nước khoáng 550ml',
     t3: '12421432143214321',
     t4: '2.00',
     t5: 2,
@@ -148,7 +148,7 @@ export const refundTableData: any[] = [
   },
   {
     t1: 1234562,
-    t2: '矿泉水 550ml',
+    t2: 'Nước khoáng 550ml',
     t3: '12421432143214321',
     t4: '2.00',
     t5: 2,
@@ -156,7 +156,7 @@ export const refundTableData: any[] = [
   },
   {
     t1: 1234562,
-    t2: '矿泉水 550ml',
+    t2: 'Nước khoáng 550ml',
     t3: '12421432143214321',
     t4: '2.00',
     t5: 2,
@@ -167,30 +167,30 @@ export const refundTableData: any[] = [
 export const refundTimeTableData: any[] = [
   {
     t1: '2017-10-01 14:10',
-    t2: '联系客户',
-    t3: '进行中',
-    t4: '取货员 ID1234',
+    t2: 'Liên hệ khách hàng',
+    t3: 'Đang tiến hành',
+    t4: 'Nhân viên lấy hàng ID1234',
     t5: '5mins',
   },
   {
     t1: '2017-10-01 14:10',
-    t2: '取货员出发',
-    t3: '成功',
-    t4: '取货员 ID1234',
+    t2: 'Người lấy hàng đã xuất phát',
+    t3: 'Thành công',
+    t4: 'Nhân viên lấy hàng ID1234',
     t5: '5mins',
   },
   {
     t1: '2017-10-01 14:10',
-    t2: '取货员接单',
-    t3: '成功',
-    t4: '系统',
+    t2: 'Người lấy hàng đã nhận đơn',
+    t3: 'Thành công',
+    t4: 'Hệ thống',
     t5: '5mins',
   },
   {
     t1: '2017-10-01 14:10',
-    t2: '申请审批通过',
-    t3: '成功',
-    t4: '用户',
+    t2: 'Đơn đã được phê duyệt',
+    t3: 'Thành công',
+    t4: 'Người dùng',
     t5: '1h',
   },
 ];

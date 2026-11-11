@@ -1,22 +1,22 @@
-<!-- 操作表单schemas配置 -->
+<!-- Thao tác với cấu hình schemas của biểu mẫu -->
 <template>
   <div style="margin: 20px auto; text-align: center">
-    <a-button @click="updateFormSchemas" class="mr-2"> 更新字段属性 </a-button>
-    <a-button @click="resetFormSchemas" class="mr-2"> 重置字段属性 </a-button>
+    <a-button @click="updateFormSchemas" class="mr-2"> Cập nhật thuộc tính trường </a-button>
+    <a-button @click="resetFormSchemas" class="mr-2"> Đặt lại thuộc tính trường </a-button>
   </div>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'visitor',
-      label: '来访人员',
+      label: 'Khách đến thăm',
       component: 'Input',
       componentProps: {
         disabled: true,
@@ -24,56 +24,56 @@
     },
     {
       field: 'accessed',
-      label: '来访日期',
+      label: 'Ngày đến thăm',
       component: 'DatePicker',
       ifShow: false,
     },
     {
       field: 'phone',
-      label: '来访人手机号',
+      label: 'Số điện thoại của khách đến thăm',
       component: 'Input',
       required: true,
     },
   ];
 
   /**
-   * BasicForm绑定注册;
-   * updateSchema 更新字段属性，支持schemas里面所有的配置
+   * BasicFormĐăng ký liên kết;
+   * updateSchema Cập nhật thuộc tính trường, hỗ trợ mọi cấu hình trong schemas
    * updateSchema([{ field: 'visitor', componentProps: { disabled: false },}, ... ]);
-   * resetSchema 重置字段属性，支持schemas里面所有的配置
-   * resetSchema([{ field: 'visitor',label: '来访人员',component: 'Input',},... ]);
+   * resetSchema Đặt lại thuộc tính trường, hỗ trợ tất cả cấu hình trong schemas
+   * resetSchema([{ field: 'visitor',label: 'Khách đến thăm',component: 'Input',},... ]);
    */
   const [registerForm, { updateSchema, resetSchema }] = useForm({
     schemas: formSchemas,
-    //隐藏操作按钮
+    //Ẩn nút thao tác
     showActionButtonGroup: false,
     labelWidth: '150px',
-    //默认聚焦第一个，只支持input
+    //Mặc định focus vào phần tử đầu tiên, chỉ hỗ trợinput
     autoFocusFirstItem: true,
   });
 
   /**
-   * 清除表单配置
+   * Xóa cấu hình biểu mẫu
    */
   async function resetFormSchemas() {
     await resetSchema([
       {
-        //字段必填
+        //Trường bắt buộc
         field: 'visitor',
-        label: '来访人员',
+        label: 'Khách đến thăm',
         component: 'Input',
       },
     ]);
   }
 
   /**
-   * 更新表单配置
+   * Cập nhật cấu hình biểu mẫu
    */
   async function updateFormSchemas() {
-    //支持更新schemas里面所有的配置
+    //Hỗ trợ cập nhật mọi cấu hình trong schemas
     await updateSchema([
       {
-        //字段必填
+        //Trường bắt buộc
         field: 'visitor',
         componentProps: {
           disabled: false,
@@ -88,7 +88,7 @@
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

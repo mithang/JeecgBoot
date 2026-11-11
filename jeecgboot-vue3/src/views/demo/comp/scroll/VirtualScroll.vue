@@ -1,6 +1,6 @@
 <template>
   <PageWrapper class="virtual-scroll-demo">
-    <Divider>基础滚动示例</Divider>
+    <Divider>Ví dụ cuộn cơ bản</Divider>
     <div class="virtual-scroll-demo-wrap">
       <VScroll :itemHeight="41" :items="data" :height="300" :width="300">
         <template #default="{ item }">
@@ -11,7 +11,7 @@
       </VScroll>
     </div>
 
-    <Divider>即使不可见，也预先加载50条数据，防止空白</Divider>
+    <Divider>Ngay cả khi không nhìn thấy, cũng tải trước 50 bản ghi dữ liệu để tránh bị trống</Divider>
     <div class="virtual-scroll-demo-wrap">
       <VScroll :itemHeight="41" :items="data" :height="300" :width="300" :bench="50">
         <template #default="{ item }">
@@ -33,7 +33,7 @@
     const arr: Recordable[] = [];
     for (let index = 1; index < 20000; index++) {
       arr.push({
-        title: '列表项' + index,
+        title: 'Mục danh sách' + index,
       });
     }
     return arr;

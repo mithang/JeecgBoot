@@ -1,8 +1,8 @@
 <template>
-  <PageWrapper title="文本复制示例">
+  <PageWrapper title="Ví dụ sao chép văn bản">
     <CollapseContainer class="w-full h-32 bg-white rounded-md" title="Copy Example">
       <div class="flex justify-center">
-        <a-input placeholder="请输入" v-model:value="value" />
+        <a-input placeholder="Vui lòng nhập" v-model:value="value" />
         <a-button type="primary" @click="handleCopy"> Copy </a-button>
       </div>
     </CollapseContainer>
@@ -26,7 +26,7 @@
       function handleCopy() {
         const value = unref(valueRef);
         if (!value) {
-          createMessage.warning('请输入要拷贝的内容！');
+          createMessage.warning('Vui lòng nhập nội dung cần sao chép!');
           return;
         }
         clipboardRef.value = value;

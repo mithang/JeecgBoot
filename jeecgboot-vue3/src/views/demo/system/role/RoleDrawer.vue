@@ -8,7 +8,7 @@
           :replaceFields="{ title: 'menuName', key: 'id' }"
           checkable
           toolbar
-          title="菜单分配"
+          title="Phân bổ menu"
         />
       </template>
     </BasicForm>
@@ -40,7 +40,7 @@
       const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
         resetFields();
         setDrawerProps({ confirmLoading: false });
-        // 需要在setFieldsValue之前先填充treeData，否则Tree组件可能会报key not exist警告
+        // Cần điền treeData trước khi gọi setFieldsValue, nếu không component Tree có thể báo cảnh báo key not exist
         if (unref(treeData).length === 0) {
           treeData.value = (await getMenuList()) as any as TreeItem[];
         }
@@ -53,7 +53,7 @@
         }
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增角色' : '编辑角色'));
+      const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới vai trò' : 'Chỉnh sửa vai trò'));
 
       async function handleSubmit() {
         try {

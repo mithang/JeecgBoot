@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false">
     <a-row :gutter="8">
-      <!-- 这里是父级节点 -->
+      <!-- Đây là nút cha -->
       <a-col :span="24" style="margin-bottom: 4px">
         <JVxeTable
           toolbar
@@ -20,7 +20,7 @@
           @selectRowChange="handleTable1SelectRowChange"
         />
       </a-col>
-      <!-- 这里是子级节点 -->
+      <!-- Đây là nút con -->
       <a-col :span="12">
         <JVxeTable
           toolbar
@@ -40,7 +40,7 @@
         >
         </JVxeTable>
       </a-col>
-      <!-- 这里是孙级节点 -->
+      <!-- Đây là nút cháu -->
       <a-col :span="12">
         <JVxeTable
           toolbar
@@ -63,42 +63,42 @@
   import { defHttp } from '/@/utils/http/axios';
   import { JVxeTypes } from '/@/components/jeecg/JVxeTable/types';
 
-  // 【多种布局模板】上面父、左下子、右下孙
+  // [Nhiều mẫu bố cục] Trên là bảng cha, dưới trái là bảng con, dưới phải là bảng cháu
   export default {
     name: 'Template1',
     data() {
       return {
         table1: {
-          // 是否正在加载
+          // Có đang tải không
           loading: false,
-          // 分页器参数
+          // Tham số bộ phân trang
           pagination: {
-            // 当前页码
+            // Số trang hiện tại
             current: 1,
-            // 每页的条数
+            // Số bản ghi mỗi trang
             pageSize: 200,
-            // 可切换的条数
+            // Số mục có thể chuyển đổi
             pageSizeOptions: ['10', '20', '30', '100', '200'],
-            // 数据总数（目前并不知道真实的总数，所以先填写0，在后台查出来后再赋值）
+            // Tổng số dữ liệu (hiện chưa biết tổng số thực tế, nên tạm điền 0, sau khi tra ra ở backend sẽ gán lại)
             total: 0,
           },
-          // 最后选中的行
+          // Hàng được chọn cuối cùng
           lastRow: null,
-          // 选择的行
+          // Hàng đã chọn
           selectedRows: [],
-          // 数据源，控制表格的数据
+          // Nguồn dữ liệu, điều khiển dữ liệu của bảng
           dataSource: [],
-          // 列配置，控制表格显示的列
+          // Cấu hình cột, kiểm soát các cột hiển thị của bảng
           columns: [
-            { key: 'num', title: '序号', width: '80px' },
+            { key: 'num', title: 'STT', width: '80px' },
             {
-              // 字段key，跟后台数据的字段名匹配
+              // key của trường, khớp với tên trường của dữ liệu backend
               key: 'ship_name',
-              // 列的标题
-              title: '船名',
-              // 列的宽度
+              // Tiêu đề cột
+              title: 'Tên tàu',
+              // Độ rộng cột
               width: '180px',
-              // 如果加上了该属性，就代表当前单元格是可编辑的，type就是表单的类型，input就是简单的输入框
+              // Nếu thêm thuộc tính này, nghĩa là ô hiện tại có thể chỉnh sửa, type chính là loại của biểu mẫu, input là ô nhập đơn giản
               type: JVxeTypes.input,
               formatter({ cellValue, row, column }) {
                 let foo = '';
@@ -108,66 +108,66 @@
                 return cellValue + foo;
               },
             },
-            { key: 'call', title: '呼叫', width: '80px', type: JVxeTypes.input },
-            { key: 'len', title: '长', width: '80px', type: JVxeTypes.inputNumber },
-            { key: 'ton', title: '吨', width: '120px', type: JVxeTypes.inputNumber },
-            { key: 'payer', title: '付款方', width: '120px', type: JVxeTypes.input },
-            { key: 'count', title: '数', width: '40px' },
+            { key: 'call', title: 'Gọi', width: '80px', type: JVxeTypes.input },
+            { key: 'len', title: 'Chiều dài', width: '80px', type: JVxeTypes.inputNumber },
+            { key: 'ton', title: 'tấn', width: '120px', type: JVxeTypes.inputNumber },
+            { key: 'payer', title: 'Bên thanh toán', width: '120px', type: JVxeTypes.input },
+            { key: 'count', title: 'Số', width: '40px' },
             {
               key: 'company',
-              title: '公司',
-              // 最小宽度，与宽度不同的是，这个不是固定的宽度，如果表格有多余的空间，会平均分配给设置了 minWidth 的列
-              // 如果要做占满表格的列可以这么写
+              title: 'Công ty',
+              // Chiều rộng tối thiểu, khác với chiều rộng ở chỗ đây không phải là chiều rộng cố định, nếu bảng còn không gian thừa, sẽ chia đều cho các cột đã đặt minWidth
+              // Nếu muốn làm cột chiếm đầy bảng có thể viết như vậy
               minWidth: '180px',
               type: JVxeTypes.input,
             },
-            { key: 'trend', title: '动向', width: '120px', type: JVxeTypes.input },
+            { key: 'trend', title: 'Xu hướng', width: '120px', type: JVxeTypes.input },
           ],
         },
-        // 子级表的配置信息 （配置和主表的完全一致，就不写冗余的注释了）
+        // Thông tin cấu hình của bảng cấp con (cấu hình hoàn toàn giống bảng chính nên không viết chú thích thừa nữa)
         table2: {
           loading: false,
           pagination: { current: 1, pageSize: 200, pageSizeOptions: ['100', '200'], total: 0 },
-          // 最后选中的行
+          // Hàng được chọn cuối cùng
           lastRow: null,
           selectedRows: [],
           dataSource: [],
           columns: [
-            { key: 'dd_num', title: '调度序号', width: '120px' },
-            { key: 'tug', title: '拖轮', width: '180px', type: JVxeTypes.input },
-            { key: 'work_start_time', title: '作业开始时间', width: '180px', type: JVxeTypes.input },
-            { key: 'work_stop_time', title: '作业结束时间', width: '180px', type: JVxeTypes.input },
-            { key: 'type', title: '船舶分类', width: '120px', type: JVxeTypes.input },
-            { key: 'port_area', title: '所属港区', width: '120px', type: JVxeTypes.input },
+            { key: 'dd_num', title: 'Số thứ tự điều độ', width: '120px' },
+            { key: 'tug', title: 'Tàu kéo', width: '180px', type: JVxeTypes.input },
+            { key: 'work_start_time', title: 'Thời gian bắt đầu công việc', width: '180px', type: JVxeTypes.input },
+            { key: 'work_stop_time', title: 'Thời gian kết thúc công việc', width: '180px', type: JVxeTypes.input },
+            { key: 'type', title: 'Phân loại tàu', width: '120px', type: JVxeTypes.input },
+            { key: 'port_area', title: 'Khu vực cảng thuộc về', width: '120px', type: JVxeTypes.input },
           ],
         },
-        // 孙级表的配置信息 （配置和主表的完全一致，就不写冗余的注释了）
+        // Thông tin cấu hình của bảng cấp cháu (cấu hình hoàn toàn giống bảng chính nên không viết chú thích thừa nữa)
         table3: {
           loading: false,
           pagination: { current: 1, pageSize: 200, pageSizeOptions: ['100', '200'], total: 0 },
           selectedRows: [],
           dataSource: [],
           columns: [
-            { key: 'dd_num', title: '调度序号', width: '120px' },
-            { key: 'tug', title: '拖轮', width: '120px', type: JVxeTypes.input },
-            { key: 'power', title: '马力', width: '120px', type: JVxeTypes.input },
-            { key: 'nature', title: '性质', width: '120px', type: JVxeTypes.input },
-            { key: 'departure_time', title: '发船时间', width: '180px', type: JVxeTypes.input },
+            { key: 'dd_num', title: 'Số thứ tự điều độ', width: '120px' },
+            { key: 'tug', title: 'Tàu kéo', width: '120px', type: JVxeTypes.input },
+            { key: 'power', title: 'Mã lực', width: '120px', type: JVxeTypes.input },
+            { key: 'nature', title: 'Tính chất', width: '120px', type: JVxeTypes.input },
+            { key: 'departure_time', title: 'Thời gian tàu khởi hành', width: '180px', type: JVxeTypes.input },
           ],
         },
-        // 查询url地址
+        // Địa chỉ url tìm kiếm
         url: {
           getData: '/mock/vxe/getData',
         },
       };
     },
-    // 监听器
+    // Trình lắng nghe
     watch: {
-      // 监听table1 【主表】选择的数据发生了变化
+      // Lắng nghe dữ liệu được chọn ở table1 [Bảng chính] đã thay đổi
       ['table1.lastRow'](row) {
         this.loadTable2Data();
       },
-      // 监听table2 【子表】选择的数据发生了变化
+      // Lắng nghe dữ liệu được chọn ở table2 [Bảng con] đã thay đổi
       ['table2.lastRow']() {
         this.loadTable3Data();
       },
@@ -176,14 +176,14 @@
       this.loadTable1Data();
     },
     methods: {
-      // 加载table1【主表】的数据
+      // Tải dữ liệu [Bảng chính] của table1
       loadTable1Data() {
-        // 封装查询条件
+        // Đóng gói điều kiện tìm kiếm
         let formData = {
           pageNo: this.table1.pagination.current,
           pageSize: this.table1.pagination.pageSize,
         };
-        // 调用查询数据接口
+        // Gọi API tìm kiếm dữ liệu
         this.table1.loading = true;
         defHttp
           .get({
@@ -191,36 +191,36 @@
             params: formData,
           })
           .then((result) => {
-            // 后台查询回来的 total，数据总数量
+            // total trả về từ truy vấn backend, tổng số lượng dữ liệu
             this.table1.pagination.total = result.total;
-            // 将查询的数据赋值给 dataSource
+            // Gán dữ liệu truy vấn được cho dataSource
             this.table1.dataSource = result.records;
-            // 重置选择
+            // Đặt lại lựa chọn
             this.table1.selectedRows = [];
           })
           .finally(() => {
-            // 这里是无论成功或失败都会执行的方法，在这里关闭loading
+            // Đây là phương thức sẽ được thực thi dù thành công hay thất bại, tại đây sẽ đóngloading
             this.table1.loading = false;
           });
       },
 
-      // 当table1【主表】分页参数变化时触发的事件
+      // Sự kiện được kích hoạt khi tham số phân trang của table1 [Bảng chính] thay đổi
       handleTable1PageChange(event) {
-        // 重新赋值
+        // Gán lại giá trị
         this.table1.pagination.current = event.current;
         this.table1.pagination.pageSize = event.pageSize;
-        // 查询数据
+        // Truy vấn dữ liệu
         this.loadTable1Data();
       },
 
-      // table1【主表】当选择的行变化时触发的事件
+      // table1[Bảng chính] Sự kiện kích hoạt khi dòng được chọn thay đổi
       handleTable1SelectRowChange(event) {
         this.handleTableSelectRowChange(this.table1, event);
       },
 
-      // 加载table2【子表】的数据，根据主表的id进行查询
+      // Tải dữ liệu của table2 [Bảng con], truy vấn theo id của bảng chính
       loadTable2Data() {
-        // 如果主表没有选择，则不查询
+        // Nếu bảng chính chưa được chọn thì không truy vấn
         let selectedRows = this.table1.selectedRows;
         if (!selectedRows || selectedRows.length === 0) {
           this.table2.pagination.total = 0;
@@ -251,23 +251,23 @@
           });
       },
 
-      // table2【子表】当选择的行变化时触发的事件
+      // table2[Bảng con] Sự kiện kích hoạt khi dòng được chọn thay đổi
       handleTable2SelectRowChange(event) {
         this.handleTableSelectRowChange(this.table2, event);
       },
 
-      // 当table2【子表】分页参数变化时触发的事件
+      // Sự kiện được kích hoạt khi tham số phân trang của table2 [Bảng con] thay đổi
       handleTable2PageChange(event) {
-        // 重新赋值
+        // Gán lại giá trị
         this.table2.pagination.current = event.current;
         this.table2.pagination.pageSize = event.pageSize;
-        // 查询数据
+        // Truy vấn dữ liệu
         this.loadTable2Data();
       },
 
-      // 加载table3【孙表】的数据，根据子表的id进行查询
+      // Tải dữ liệu của table3 [Bảng cháu], truy vấn theo id của bảng con
       loadTable3Data() {
-        // 如果主表没有选择，则不查询
+        // Nếu bảng chính chưa được chọn thì không truy vấn
         let selectedRows = this.table2.selectedRows;
         if (!selectedRows || selectedRows.length === 0) {
           this.table3.pagination.total = 0;
@@ -296,24 +296,24 @@
             this.table3.loading = false;
           });
       },
-      // 当table3【孙表】分页参数变化时触发的事件
+      // Sự kiện được kích hoạt khi tham số phân trang của table3 [Bảng cháu] thay đổi
       handleTable3PageChange(event) {
-        // 重新赋值
+        // Gán lại giá trị
         this.table3.pagination.current = event.current;
         this.table3.pagination.pageSize = event.pageSize;
-        // 查询数据
+        // Truy vấn dữ liệu
         this.loadTable3Data();
       },
 
-      /** 公共方法：处理表格选中变化事件 */
+      /** Phương thức chung: xử lý sự kiện thay đổi lựa chọn của bảng */
       handleTableSelectRowChange(table, event) {
         let { row, action, selectedRows, $table } = event;
-        // 获取最后一个选中的
+        // Lấy mục cuối cùng được chọn
         let lastSelected = selectedRows[selectedRows.length - 1];
         if (action === 'selected') {
           table.lastRow = row;
         } else if (action === 'selected-all') {
-          // 取消全选
+          // Bỏ chọn tất cả
           if (selectedRows.length === 0) {
             table.lastRow = null;
           } else if (!table.lastRow) {

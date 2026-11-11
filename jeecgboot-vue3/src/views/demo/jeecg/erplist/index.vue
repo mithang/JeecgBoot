@@ -1,46 +1,46 @@
 <template>
   <div>
-    <!--主表表格-->
+    <!--Bảng chính-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Slot:tableTiêu đề-->
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> Thêm mới</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
     </BasicTable>
-    <!--子表表格tab-->
+    <!--Bảng contab-->
     <a-tabs defaultActiveKey="1" style="margin: 10px">
-      <a-tab-pane tab="客户信息" key="1">
+      <a-tab-pane tab="Thông tin khách hàng" key="1">
         <JeecgOrderCustomerList />
       </a-tab-pane>
-      <a-tab-pane tab="机票信息" key="2" forceRender>
+      <a-tab-pane tab="Thông tin vé máy bay" key="2" forceRender>
         <JeecgOrderTicketList />
       </a-tab-pane>
     </a-tabs>
   </div>
-  <!-- 表单区域 -->
+  <!-- Vùng biểu mẫu -->
   <JeecgOrderModal @register="registerModal" @success="handleSuccess"></JeecgOrderModal>
 </template>
 
 <script lang="ts" name="tab-list" setup>
-  //ts语法
+  //tsCú pháp
   import { ref, computed, unref, watch, provide } from 'vue';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
@@ -51,10 +51,10 @@
   import { columns, searchFormSchema } from './erplist.data';
   import { list, deleteOne, batchDelete } from './erplist.api';
 
-  //弹窗model
+  //Popupmodel
   const [registerModal, { openModal }] = useModal();
 
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { tableContext } = useListPage({
     tableProps: {
       api: list,
@@ -77,15 +77,15 @@
       },
     },
   });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload, updateTableDataRecord }, { rowSelection, selectedRowKeys }] = tableContext;
 
   const orderId = computed(() => (unref(selectedRowKeys).length > 0 ? unref(selectedRowKeys)[0] : ''));
-  //下发 orderId,子组件接收
+  //Gửi xuống orderId,Component con nhận
   provide('orderId', orderId);
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleCreate() {
     openModal(true, {
@@ -95,7 +95,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   async function handleEdit(record: Recordable) {
     openModal(true, {
@@ -106,7 +106,7 @@
   }
 
   /**
-   * 详情
+   * Chi tiết
    */
   async function handleDetail(record: Recordable) {
     openModal(true, {
@@ -117,14 +117,14 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteOne({ id: record.id }, reload);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDelete({ ids: selectedRowKeys.value }, () => {
@@ -134,25 +134,25 @@
   }
 
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     reload();
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa không',
           confirm: handleDelete.bind(null, record),
         },
       },

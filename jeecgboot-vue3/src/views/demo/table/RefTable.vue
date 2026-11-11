@@ -1,25 +1,25 @@
 <template>
   <div class="p-4">
     <div class="mb-4">
-      <a-button class="mr-2" @click="reloadTable"> 还原 </a-button>
-      <a-button class="mr-2" @click="changeLoading"> 开启loading </a-button>
-      <a-button class="mr-2" @click="changeColumns"> 更改Columns </a-button>
-      <a-button class="mr-2" @click="getColumn"> 获取Columns </a-button>
-      <a-button class="mr-2" @click="getTableData"> 获取表格数据 </a-button>
-      <a-button class="mr-2" @click="getTableRawData"> 获取接口原始数据 </a-button>
-      <a-button class="mr-2" @click="setPaginationInfo"> 跳转到第2页 </a-button>
+      <a-button class="mr-2" @click="reloadTable"> Khôi phục </a-button>
+      <a-button class="mr-2" @click="changeLoading"> Bậtloading </a-button>
+      <a-button class="mr-2" @click="changeColumns"> Thay đổiColumns </a-button>
+      <a-button class="mr-2" @click="getColumn"> LấyColumns </a-button>
+      <a-button class="mr-2" @click="getTableData"> Lấy dữ liệu bảng </a-button>
+      <a-button class="mr-2" @click="getTableRawData"> Lấy dữ liệu gốc của API </a-button>
+      <a-button class="mr-2" @click="setPaginationInfo"> Chuyển đến trang 2 </a-button>
     </div>
     <div class="mb-4">
-      <a-button class="mr-2" @click="getSelectRowList"> 获取选中行 </a-button>
-      <a-button class="mr-2" @click="getSelectRowKeyList"> 获取选中行Key </a-button>
-      <a-button class="mr-2" @click="setSelectedRowKeyList"> 设置选中行 </a-button>
-      <a-button class="mr-2" @click="clearSelect"> 清空选中行 </a-button>
-      <a-button class="mr-2" @click="getPagination"> 获取分页信息 </a-button>
+      <a-button class="mr-2" @click="getSelectRowList"> Lấy hàng đã chọn </a-button>
+      <a-button class="mr-2" @click="getSelectRowKeyList"> Lấy hàng đã chọnKey </a-button>
+      <a-button class="mr-2" @click="setSelectedRowKeyList"> Đặt hàng đã chọn </a-button>
+      <a-button class="mr-2" @click="clearSelect"> Xóa hàng đã chọn </a-button>
+      <a-button class="mr-2" @click="getPagination"> Lấy thông tin phân trang </a-button>
     </div>
     <BasicTable
       :canResize="false"
-      title="RefTable示例"
-      titleHelpMessage="使用Ref调用表格内方法"
+      title="RefTableVí dụ"
+      titleHelpMessage="Dùng Ref để gọi phương thức trong bảng"
       ref="tableRef"
       :api="api"
       :columns="columns"
@@ -64,21 +64,21 @@
         });
       }
       function getColumn() {
-        createMessage.info('请在控制台查看！');
+        createMessage.info('Vui lòng xem trong console!');
         console.log(getTableAction().getColumns());
       }
 
       function getTableData() {
-        createMessage.info('请在控制台查看！');
+        createMessage.info('Vui lòng xem trong console!');
         console.log(getTableAction().getDataSource());
       }
       function getTableRawData() {
-        createMessage.info('请在控制台查看！');
+        createMessage.info('Vui lòng xem trong console!');
         console.log(getTableAction().getRawDataSource());
       }
 
       function getPagination() {
-        createMessage.info('请在控制台查看！');
+        createMessage.info('Vui lòng xem trong console!');
         console.log(getTableAction().getPaginationRef());
       }
 
@@ -89,11 +89,11 @@
         getTableAction().reload();
       }
       function getSelectRowList() {
-        createMessage.info('请在控制台查看！');
+        createMessage.info('Vui lòng xem trong console!');
         console.log(getTableAction().getSelectRows());
       }
       function getSelectRowKeyList() {
-        createMessage.info('请在控制台查看！');
+        createMessage.info('Vui lòng xem trong console!');
         console.log(getTableAction().getSelectRowKeys());
       }
       function setSelectedRowKeyList() {

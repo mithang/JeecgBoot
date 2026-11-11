@@ -2,8 +2,8 @@
   <div class="p-4">
     <BasicTable @register="register">
       <template #toolbar>
-        <a-button type="primary" @click="expandAll">展开全部</a-button>
-        <a-button type="primary" @click="collapseAll">折叠全部</a-button>
+        <a-button type="primary" @click="expandAll">Mở rộng tất cả</a-button>
+        <a-button type="primary" @click="collapseAll">Thu gọn tất cả</a-button>
       </template>
     </BasicTable>
   </div>
@@ -20,7 +20,7 @@
       width: 200,
     },
     {
-      title: '姓名',
+      title: 'Họ tên',
       dataIndex: 'name',
       width: 150,
       filters: [
@@ -29,25 +29,25 @@
       ],
     },
     {
-      title: '地址',
+      title: 'Địa chỉ',
       dataIndex: 'address',
       width: 300,
     },
     {
-      title: '编号',
+      title: 'Mã',
       dataIndex: 'no',
       width: 150,
       sorter: true,
       defaultHidden: true,
     },
     {
-      title: '开始时间',
+      title: 'Thời gian bắt đầu',
       width: 150,
       sorter: true,
       dataIndex: 'beginTime',
     },
     {
-      title: '结束时间',
+      title: 'Thời gian kết thúc',
       width: 150,
       sorter: true,
       dataIndex: 'endTime',
@@ -58,12 +58,12 @@
     setup() {
       const { tableContext } = useListPage({
         tableProps: {
-          title: '树形表格',
+          title: 'Bảng cây',
           isTreeTable: true,
           rowSelection: {
             type: 'checkbox',
             getCheckboxProps(record: Recordable) {
-              // Demo: 第一行（id为0）的选择框禁用
+              // Demo: Ô chọn của dòng đầu tiên (id bằng 0) bị vô hiệu hóa
               if (record.id === '0') {
                 return { disabled: true };
               } else {
@@ -77,7 +77,7 @@
           useSearchForm: false,
         },
       });
-      //注册table数据
+      //Đăng ký dữ liệu table
       const [register, { expandAll, collapseAll }] = tableContext;
       function getTreeTableData() {
         const data: any = (() => {

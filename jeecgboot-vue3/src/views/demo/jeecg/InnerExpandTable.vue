@@ -2,13 +2,13 @@
   <a-card :bordered="false">
     <BasicTable @register="registerTable" :expandedRowKeys="expandedRowKeys" :rowSelection="rowSelection" @expand="handleExpand">
       <template #tableTitle>
-        <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
+        <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined"> Thêm mới</a-button>
       </template>
       <template #expandedRowRender>
         <BasicTable bordered size="middle" rowKey="id" :canResize="false" :columns="innerColumns" :dataSource="innerData" :pagination="false">
         </BasicTable>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -23,93 +23,93 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import JVxeTableModal from '/@/views/demo/vextable/jvxetable/JVxeTableModal.vue';
-  //接口url
+  //APIurl
   const url = {
     list: '/test/order/orderList',
     delete: '/test/order/delete',
     deleteBatch: '/test/order/deleteBatch',
     customerListByMainId: '/test/order/listOrderCustomerByMainId',
   };
-  // 展开key
+  // Mở rộngkey
   const expandedRowKeys = ref<any[]>([]);
-  // 选择key
+  // Chọnkey
   const checkedKeys = ref<any[]>([]);
-  // 子表数据
+  // Dữ liệu bảng con
   const innerData = ref<any[]>([]);
-  // 主表表头
+  // Tiêu đề bảng chính
   const columns = [
     {
-      title: '订单号',
+      title: 'Số đơn hàng',
       align: 'center',
       dataIndex: 'orderCode',
       width: 100,
     },
     {
-      title: '订单类型',
+      title: 'Loại đơn hàng',
       align: 'center',
       dataIndex: 'ctype',
       width: 100,
       customRender: ({ text }) => {
         let re = '';
         if (text === '1') {
-          re = '国内订单';
+          re = 'Đơn hàng nội địa';
         } else if (text === '2') {
-          re = '国际订单';
+          re = 'Đơn hàng quốc tế';
         }
         return re;
       },
     },
     {
-      title: '订单日期',
+      title: 'Ngày đặt hàng',
       align: 'center',
       width: 100,
       dataIndex: 'orderDate',
     },
     {
-      title: '订单金额',
+      title: 'Số tiền đơn hàng',
       align: 'center',
       dataIndex: 'orderMoney',
       width: 100,
     },
     {
-      title: '订单备注',
+      title: 'Ghi chú đơn hàng',
       align: 'center',
       dataIndex: 'content',
       width: 100,
     },
   ];
-  // 子表表头
+  // Tiêu đề bảng con
   const innerColumns = [
     {
-      title: '客户名',
+      title: 'Tên khách hàng',
       align: 'center',
       width: 100,
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: '性别',
+      title: 'Giới tính',
       align: 'center',
       dataIndex: 'sex',
       customRender: function (text) {
         //console.log(typeof  text )
         //console.log(text)
         if (text.value == '1') {
-          return '男';
+          return 'Nam';
         } else if (text.value == '2') {
-          return '女';
+          return 'Nữ';
         } else {
           return text;
         }
       },
     },
     {
-      title: '身份证号码',
+      title: 'Số chứng minh nhân dân',
       align: 'center',
       dataIndex: 'idcard',
     },
     {
-      title: '电话',
+      title: 'Điện thoại',
       dataIndex: 'telphone',
       align: 'center',
     },
@@ -127,7 +127,7 @@
     bordered: true,
     actionColumn: {
       width: 110,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       slots: { customRender: 'action' },
       fixed: undefined,
@@ -135,7 +135,7 @@
   });
 
   /**
-   * 选择列配置
+   * Cấu hình cột lựa chọn
    */
   const rowSelection = {
     type: 'checkbox',
@@ -145,13 +145,13 @@
   };
 
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;
   }
   /**
-   * 展开事件
+   * Sự kiện mở rộng
    * */
   function handleExpand(expanded, record) {
     expandedRowKeys.value = [];
@@ -166,7 +166,7 @@
     }
   }
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openModal(true, {
@@ -174,7 +174,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     openModal(true, {
@@ -183,7 +183,7 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   function handleDelete(record) {
     defHttp.delete({ url: url.delete, data: { id: record.id } }, { joinParamsToUrl: true }).then(() => {
@@ -191,18 +191,18 @@
     });
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa không',
           confirm: handleDelete.bind(null, record),
         },
       },

@@ -1,15 +1,15 @@
 <template>
-  <a-card title="弹出子表示例" :bordered="false">
+  <a-card title="Ví dụ bảng con bật lên" :bordered="false">
     <!--
-      【弹出子表大体思路】
-      1. 必须要有 clickRowShowSubForm 属性，如果该属性设为false，那么就不会弹出子表
-      2. 必须要有 subForm 插槽，用于规定弹出子表的内容
-      3. highlightCurrentRow 属性可有可无，如果有则点击一行的时候，该行会背景色会常亮
+      [Ý tưởng tổng thể về bảng con bật lên]
+      1. Bắt buộc phải có thuộc tính clickRowShowSubForm, nếu thuộc tính này được đặt là false thì sẽ không bật lên bảng con
+      2. Bắt buộc phải có slot subForm, dùng để quy định nội dung bảng con bật lên
+      3. highlightCurrentRow Thuộc tính có hay không cũng được, nếu có thì khi nhấn vào một dòng, màu nền của dòng đó sẽ luôn sáng
     -->
     <!--
-      【弹出详细信息大体思路】
-      1. 必须要有 clickRowShowMainForm 属性，如果该属性设为false，那么就不会弹出详细信息
-      2. 必须要有 mainForm 插槽，用于规定弹出的内容
+      [Ý tưởng chung về popup thông tin chi tiết]
+      1. Bắt buộc phải có thuộc tính clickRowShowMainForm, nếu thuộc tính này được đặt là false thì sẽ không bật lên thông tin chi tiết
+      2. Bắt buộc phải có slot mainForm, dùng để quy định nội dung bật lên
     -->
     <JVxeTable
       toolbar
@@ -24,7 +24,7 @@
       :dataSource="dataSource"
       @detailsConfirm="handleDetailsConfirm"
     >
-      <!-- 主表单 -->
+      <!-- Biểu mẫu chính -->
       <template #mainForm="{ row }">
         <template v-if="row">
           <a-form ref="form2" :model="row" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
@@ -35,47 +35,47 @@
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="序号" name="num">
+                <a-form-item label="STT" name="num">
                   <a-input v-model:value="row.num" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="船名" name="ship_name">
+                <a-form-item label="Tên tàu" name="ship_name">
                   <a-input v-model:value="row.ship_name" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="呼叫" name="call">
+                <a-form-item label="Gọi" name="call">
                   <a-input v-model:value="row.call" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="长" name="len">
+                <a-form-item label="Chiều dài" name="len">
                   <a-input v-model:value="row.len" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="吨" name="ton">
+                <a-form-item label="tấn" name="ton">
                   <a-input v-model:value="row.ton" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="付款方" name="payer">
+                <a-form-item label="Bên thanh toán" name="payer">
                   <a-input v-model:value="row.payer" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="数" name="count">
+                <a-form-item label="Số" name="count">
                   <a-input v-model:value="row.count" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="公司" name="company">
+                <a-form-item label="Công ty" name="company">
                   <a-input v-model:value="row.company" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item label="动向" name="trend">
+                <a-form-item label="Xu hướng" name="trend">
                   <a-input v-model:value="row.trend" />
                 </a-form-item>
               </a-col>
@@ -84,7 +84,7 @@
         </template>
       </template>
 
-      <!-- 子表单 -->
+      <!-- Biểu mẫu con -->
       <template #subForm="{ row }">
         <template v-if="loadSubData(row)">
           <JVxeTable
@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts" setup>
-  // 弹出子表示例
+  // Ví dụ bảng con bật lên
   import { reactive, ref } from 'vue';
   import { defHttp } from '/@/utils/http/axios';
   import { JVxeColumn, JVxeTypes } from '/@/components/jeecg/JVxeTable/types';
@@ -112,26 +112,26 @@
   const loading = ref(false);
   const dataSource = ref([]);
   const columns = ref<JVxeColumn[]>([
-    { key: 'num', title: '序号', width: '80px' },
-    { key: 'ship_name', title: '船名', width: '180px', type: JVxeTypes.input },
-    { key: 'call', title: '呼叫', width: '80px' },
-    { key: 'len', title: '长', width: '80px' },
-    { key: 'ton', title: '吨', width: '120px' },
-    { key: 'payer', title: '付款方', width: '120px' },
-    { key: 'count', title: '数', width: '40px' },
+    { key: 'num', title: 'STT', width: '80px' },
+    { key: 'ship_name', title: 'Tên tàu', width: '180px', type: JVxeTypes.input },
+    { key: 'call', title: 'Gọi', width: '80px' },
+    { key: 'len', title: 'Chiều dài', width: '80px' },
+    { key: 'ton', title: 'tấn', width: '120px' },
+    { key: 'payer', title: 'Bên thanh toán', width: '120px' },
+    { key: 'count', title: 'Số', width: '40px' },
     {
       key: 'company',
-      title: '公司',
+      title: 'Công ty',
       minWidth: '180px',
-      // 是否点击显示详细信息
-      // 只有当前单元格不能编辑的时候才能生效
-      // 如果不设的话，点击就只弹出子表，不会弹出主表的详细信息
+      // Có nhấn để hiển thị thông tin chi tiết không
+      // Chỉ có hiệu lực khi ô hiện tại không thể chỉnh sửa
+      // Nếu không đặt thì khi nhấp vào chỉ bật popup bảng con, không bật thông tin chi tiết của bảng chính
       showDetails: true,
     },
-    { key: 'trend', title: '动向', width: '120px' },
+    { key: 'trend', title: 'Xu hướng', width: '120px' },
   ]);
   const selectedRows = ref([]);
-  // 子表的信息
+  // Thông tin bảng con
   const subTable = reactive({
     currentRowId: null,
     loading: false,
@@ -139,33 +139,33 @@
     selectedRows: [],
     dataSource: [],
     columns: [
-      { key: 'dd_num', title: '调度序号', width: '120px' },
-      { key: 'tug', title: '拖轮', width: '180px', type: JVxeTypes.input },
-      { key: 'work_start_time', title: '作业开始时间', width: '180px', type: JVxeTypes.input },
-      { key: 'work_stop_time', title: '作业结束时间', width: '180px', type: JVxeTypes.input },
-      { key: 'type', title: '船舶分类', width: '120px', type: JVxeTypes.input },
-      { key: 'port_area', title: '所属港区', minWidth: '120px', type: JVxeTypes.input },
+      { key: 'dd_num', title: 'Số thứ tự điều độ', width: '120px' },
+      { key: 'tug', title: 'Tàu kéo', width: '180px', type: JVxeTypes.input },
+      { key: 'work_start_time', title: 'Thời gian bắt đầu công việc', width: '180px', type: JVxeTypes.input },
+      { key: 'work_stop_time', title: 'Thời gian kết thúc công việc', width: '180px', type: JVxeTypes.input },
+      { key: 'type', title: 'Phân loại tàu', width: '120px', type: JVxeTypes.input },
+      { key: 'port_area', title: 'Khu vực cảng thuộc về', minWidth: '120px', type: JVxeTypes.input },
     ] as JVxeColumn[],
   });
 
-  // form表单 col
+  // formBiểu mẫu col
   const labelCol = reactive({ span: 4 });
   const wrapperCol = reactive({ span: 20 });
   const rules = reactive({
-    num: [{ required: true, message: '必须输入序号' }],
+    num: [{ required: true, message: 'Phải nhập số thứ tự' }],
   });
 
-  // 查询url地址
+  // Địa chỉ url tìm kiếm
   enum Api {
     getData = '/mock/vxe/getData',
   }
 
   loadData();
 
-  // 加载数据
+  // Tải dữ liệu
   function loadData() {
-    // 封装查询条件
-    // 调用查询数据接口
+    // Đóng gói điều kiện tìm kiếm
+    // Gọi API tìm kiếm dữ liệu
     loading.value = true;
     defHttp
       .get({
@@ -176,21 +176,21 @@
         },
       })
       .then((result) => {
-        // 将查询的数据赋值给 dataSource
+        // Gán dữ liệu truy vấn được cho dataSource
         dataSource.value = result.records;
-        // 重置选择
+        // Đặt lại lựa chọn
         selectedRows.value = [];
       })
       .finally(() => {
-        // 这里是无论成功或失败都会执行的方法，在这里关闭loading
+        // Đây là phương thức sẽ được thực thi dù thành công hay thất bại, tại đây sẽ đóngloading
         loading.value = false;
       });
   }
 
-  // 查询子表数据
+  // Truy vấn dữ liệu bảng con
   function loadSubData(row) {
     if (row) {
-      // 这里一定要做限制，限制不能重复查询，否者会出现死循环
+      // Ở đây nhất định phải giới hạn, không được truy vấn lặp lại, nếu không sẽ xuất hiện vòng lặp vô hạn
       if (subTable.currentRowId === row.id) {
         return true;
       }
@@ -206,11 +206,11 @@
           },
         })
         .then((result) => {
-          // 将查询的数据赋值给 dataSource
+          // Gán dữ liệu truy vấn được cho dataSource
           subTable.dataSource = result.records;
         })
         .finally(() => {
-          // 这里是无论成功或失败都会执行的方法，在这里关闭loading
+          // Đây là phương thức sẽ được thực thi dù thành công hay thất bại, tại đây sẽ đóngloading
           subTable.loading = false;
         });
       return true;
@@ -219,23 +219,23 @@
     }
   }
 
-  // 详细信息里点了确认按钮
+  // Đã nhấn nút xác nhận trong thông tin chi tiết
   function handleDetailsConfirm({ row, $table, callback }) {
-    console.log('保存的数据：', row);
-    // 校验当前行
+    console.log('Dữ liệu đã lưu:', row);
+    // Kiểm chứng hàng hiện tại
     $table.validate(row).then((errMap) => {
-      // 校验通过
+      // Kiểm tra đạt
       if (!errMap) {
-        // 校验子表，如果需要的话，可以操作下面这个对象：
+        // Kiểm chứng bảng con, nếu cần, có thể thao tác đối tượng dưới đây:
         callback(true);
         loading.value = true;
         setTimeout(() => {
           loading.value = false;
-          createMessage.success('保存成功');
+          createMessage.success('Lưu thành công');
         }, 1000);
       } else {
         callback(false);
-        createMessage.warn('校验失败');
+        createMessage.warn('Kiểm tra thất bại');
       }
     });
   }

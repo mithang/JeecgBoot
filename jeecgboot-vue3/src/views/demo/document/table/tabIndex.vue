@@ -49,33 +49,33 @@
         MultipleTableDemo,
       },
     setup() {
-      //当前选中key
+      //Mục đang chọnkey
       const activeKey = ref('BasicTableDemo');
-      //组件集合
+      //Tập hợp component
       const compList = ref([
-        { key: 'BasicTableDemo', label: '基础静态表格' },
-        { key: 'BasicTableDemoAjax', label: '常规AJAX表格' },
-        { key: 'BasicTableBorder', label: '边框表格' },
-        { key: 'CustomerCellDemo', label: '自定义列内容' },
-        { key: 'EditCellTableDemo', label: '可编辑单元格' },
-        { key: 'EditRowTableDemo', label: '可编辑行' },
-        { key: 'ExpandTableDemo', label: '可展开表格' },
-        { key: 'ExportTableDemo', label: '导入导出' },
-        { key: 'FixedHeaderColumn', label: '固定头和列示例' },
-        { key: 'InnerTableDemo', label: '内嵌表格' },
-        { key: 'MergeHeaderDemo', label: '分组表头示例' },
-        { key: 'MergeTableDemo', label: '合并行列' },
-        { key: 'SelectTableDemo', label: '可选择表格' },
-          { key: 'TreeTableDemo', label: '树形表格' },
-          { key: 'AuthColumnDemo', label: '权限列设置' },
-          { key: 'MultipleTableDemo', label: '多表格实例' },
+        { key: 'BasicTableDemo', label: 'Bảng tĩnh cơ bản' },
+        { key: 'BasicTableDemoAjax', label: 'Bảng AJAX thông thường' },
+        { key: 'BasicTableBorder', label: 'Bảng có viền' },
+        { key: 'CustomerCellDemo', label: 'Nội dung cột tùy chỉnh' },
+        { key: 'EditCellTableDemo', label: 'Ô có thể chỉnh sửa' },
+        { key: 'EditRowTableDemo', label: 'Hàng có thể chỉnh sửa' },
+        { key: 'ExpandTableDemo', label: 'Bảng có thể mở rộng' },
+        { key: 'ExportTableDemo', label: 'Nhập / Xuất' },
+        { key: 'FixedHeaderColumn', label: 'Ví dụ tiêu đề và cột cố định' },
+        { key: 'InnerTableDemo', label: 'Bảng nhúng' },
+        { key: 'MergeHeaderDemo', label: 'Ví dụ tiêu đề bảng nhóm' },
+        { key: 'MergeTableDemo', label: 'Gộp hàng và cột' },
+        { key: 'SelectTableDemo', label: 'Bảng có thể chọn' },
+          { key: 'TreeTableDemo', label: 'Bảng cây' },
+          { key: 'AuthColumnDemo', label: 'Cài đặt cột quyền hạn' },
+          { key: 'MultipleTableDemo', label: 'Nhiều phiên bản bảng' },
         ]);
-      //当前选中组件
+      //Component đang chọn
       const currentComponent = computed(() => {
         return activeKey.value;
       });
 
-      //使用component动态切换tab
+      //Dùng component để chuyển đổi độngtab
       function tabChange(key) {
         activeKey.value = key;
       }

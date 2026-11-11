@@ -5,45 +5,45 @@
         <TableAction
           :actions="[
             {
-              label: '编辑',
+              label: 'Chỉnh sửa',
               onClick: handleEdit.bind(null, record),
-              auth: 'demo:btn:show', // 根据权限控制是否显示: 无权限，不显示
+              auth: 'demo:btn:show', // Điều khiển việc hiển thị theo quyền hạn: Không có quyền hạn, không hiển thị
             },
             {
-              label: '删除',
+              label: 'Xóa',
               icon: 'ic:outline-delete-outline',
               onClick: handleDelete.bind(null, record),
-              auth: 'super', // 根据权限控制是否显示: 有权限，会显示
+              auth: 'super', // Điều khiển việc hiển thị theo quyền hạn: Có quyền hạn, sẽ hiển thị
             },
           ]"
           :dropDownActions="[
             {
-              label: '启用',
+              label: 'Kích hoạt',
               popConfirm: {
-                title: '是否启用？',
+                title: 'Có kích hoạt không?',
                 confirm: handleOpen.bind(null, record),
               },
               ifShow: (_action) => {
-                return record.status !== 'enable'; // 根据业务控制是否显示: 非enable状态的不显示启用按钮
+                return record.status !== 'enable'; // Điều khiển việc hiển thị theo nghiệp vụ: Trạng thái không phải enable thì không hiển thị nút kích hoạt
               },
             },
             {
-              label: '禁用',
+              label: 'Vô hiệu hóa',
               popConfirm: {
-                title: '是否禁用？',
+                title: 'Có vô hiệu hóa không?',
                 confirm: handleOpen.bind(null, record),
               },
               ifShow: () => {
-                return record.status === 'enable'; // 根据业务控制是否显示: enable状态的显示禁用按钮
+                return record.status === 'enable'; // Điều khiển việc hiển thị theo nghiệp vụ: enableNút vô hiệu hóa hiển thị khi trạng thái là enable
               },
             },
             {
-              label: '同时控制',
+              label: 'Điều khiển đồng thời',
               popConfirm: {
-                title: '是否动态显示？',
+                title: 'Có hiển thị động không?',
                 confirm: handleOpen.bind(null, record),
               },
-              auth: 'super', // 同时根据权限和业务控制是否显示
+              auth: 'super', // Đồng thời điều khiển hiển thị theo quyền hạn và nghiệp vụ
               ifShow: () => {
                 return true;
               },
@@ -62,33 +62,33 @@
   import { useListPage } from '/@/hooks/system/useListPage';
   const columns: BasicColumn[] = [
     {
-      title: '编号',
+      title: 'Mã',
       dataIndex: 'no',
       width: 100,
     },
     {
-      title: '姓名',
+      title: 'Họ tên',
       dataIndex: 'name',
-      auth: 'demo:field:show', // 根据权限控制是否显示: 无权限，不显示
+      auth: 'demo:field:show', // Điều khiển việc hiển thị theo quyền hạn: Không có quyền hạn, không hiển thị
     },
     {
-      title: '状态',
+      title: 'Trạng thái',
       dataIndex: 'status',
     },
     {
-      title: '地址',
+      title: 'Địa chỉ',
       dataIndex: 'address',
-      auth: 'super', // 同时根据权限和业务控制是否显示
+      auth: 'super', // Đồng thời điều khiển hiển thị theo quyền hạn và nghiệp vụ
       ifShow: (_column) => {
         return true;
       },
     },
     {
-      title: '开始时间',
+      title: 'Thời gian bắt đầu',
       dataIndex: 'beginTime',
     },
     {
-      title: '结束时间',
+      title: 'Thời gian kết thúc',
       dataIndex: 'endTime',
       width: 200,
     },
@@ -98,7 +98,7 @@
     setup() {
       const { tableContext } = useListPage({
         tableProps: {
-          title: '权限列',
+          title: 'Cột quyền hạn',
           api: demoListApi,
           columns: columns,
           bordered: true,
@@ -112,17 +112,17 @@
         },
       });
 
-      //注册table数据
+      //Đăng ký dữ liệu table
       const [registerTable] = tableContext;
 
       function handleEdit(record: Recordable) {
-        console.log('点击了编辑', record);
+        console.log('Đã nhấp Chỉnh sửa', record);
       }
       function handleDelete(record: Recordable) {
-        console.log('点击了删除', record);
+        console.log('Đã nhấp Xóa', record);
       }
       function handleOpen(record: Recordable) {
-        console.log('点击了启用', record);
+        console.log('Đã nhấp Kích hoạt', record);
       }
       return {
         registerTable,

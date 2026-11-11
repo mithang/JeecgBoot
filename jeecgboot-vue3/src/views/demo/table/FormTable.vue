@@ -5,17 +5,17 @@
       <a-alert type="info" show-icon>
         <template #message>
           <template v-if="checkedKeys.length > 0">
-            <span>已选中{{ checkedKeys.length }}条记录(可跨页)</span>
-            <a-button type="link" @click="checkedKeys = []" size="small">清空</a-button>
+            <span>Đã chọn{{ checkedKeys.length }}bản ghi(Có thể qua trang)</span>
+            <a-button type="link" @click="checkedKeys = []" size="small">Xóa sạch</a-button>
           </template>
           <template v-else>
-            <span>未选中任何项目</span>
+            <span>Chưa chọn mục nào</span>
           </template>
         </template>
       </a-alert>
     </template>
     <template #toolbar>
-      <a-button type="primary" @click="getFormValues">获取表单数据</a-button>
+      <a-button type="primary" @click="getFormValues">Lấy dữ liệu biểu mẫu</a-button>
     </template>
   </BasicTable>
 </template>
@@ -32,7 +32,7 @@
     setup() {
       const checkedKeys = ref<Array<string | number>>([]);
       const [registerTable, { getForm }] = useTable({
-        title: '开启搜索区域',
+        title: 'Bật khu vực tìm kiếm',
         api: demoListApi,
         columns: getBasicColumns(),
         useSearchForm: true,

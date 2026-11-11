@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper :class="prefixCls" title="搜索列表">
+  <PageWrapper :class="prefixCls" title="Danh sách tìm kiếm">
     <template #headerContent>
       <BasicForm :class="`${prefixCls}__header-form`" :labelWidth="100" :schemas="schemas" :showActionButtonGroup="false" />
     </template>

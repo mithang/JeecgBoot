@@ -1,62 +1,62 @@
-<!-- 基本用法 -->
+<!-- Cách dùng cơ bản -->
 <template>
-  <!-- 自定表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" @submit="handleSubmit" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
-      //标题名称
-      label: '用户名(后面根据labelLength定义的长度隐藏)',
-      //字段
+      //Tên tiêu đề
+      label: 'Tên người dùng(phía sau sẽ ẩn theo độ dài được định nghĩa bởi labelLength)',
+      //Trường
       field: 'username',
-      //组件
+      //Component
       component: 'Input',
-      //标题宽度,支持数字和字符串
+      //Chiều rộng tiêu đề,Hỗ trợ số và chuỗi
       labelWidth: 150,
-      //标题长度，超过位数隐藏
+      //Độ dài tiêu đề, vượt quá số ký tự sẽ bị ẩn
       labelLength: 3,
     },
     {
-      label: '密码',
+      label: 'Mật khẩu',
       field: 'password',
-      //子标题名称（在主标题后面）
-      subLabel: '(数字和字母组成)',
+      //Tên tiêu đề phụ (nằm sau tiêu đề chính)
+      subLabel: '(Gồm chữ số và chữ cái)',
       component: 'InputPassword',
       labelWidth: '150px',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
-   * useForm 是整个框架的核心用于表单渲染，里边封装了很多公共方法;
-   * 支持（schemas: 渲染表单列，autoSubmitOnEnter：回车提交,submitButtonOptions：自定义按钮文本和图标等方法）；
-   * 平台通过此封装，简化了代码，支持自定义扩展;
+   * BasicFormĐăng ký liên kết;
+   * useForm là cốt lõi của toàn bộ framework, dùng để render biểu mẫu, bên trong đóng gói rất nhiều phương thức công khai;
+   * Hỗ trợ (schemas: Render cột biểu mẫu, autoSubmitOnEnter: nhấn Enter để gửi,submitButtonOptions: các phương thức như tùy chỉnh văn bản và icon của nút);
+   * Nền tảng thông qua việc đóng gói này đã đơn giản hóa mã, hỗ trợ mở rộng tùy chỉnh;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
-    //回车提交
+    //Nhấn Enter để gửi
     autoSubmitOnEnter: true,
-    //不显示重置按钮
+    //Không hiển thị nút đặt lại
     showResetButton: false,
-    //自定义提交按钮文本和图标
-    submitButtonOptions: { text: '提交', preIcon: '' },
-    //查询列占比 24代表一行 取值范围 0-24
+    //Tùy chỉnh văn bản và biểu tượng của nút gửi
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
+    //Tỷ lệ cột truy vấn: 24 đại diện cho một dòng, phạm vi giá trị 0-24
     actionColOptions: { span: 17 },
   });
 
   /**
-   * 点击提交按钮的value值
+   * Giá trị value của nút gửi khi nhấp
    * @param values
    */
   function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
+    console.log('Dữ liệu nút gửi::::', values);
   }
 </script>
 

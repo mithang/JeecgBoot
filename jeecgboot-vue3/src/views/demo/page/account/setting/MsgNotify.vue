@@ -1,12 +1,12 @@
 <template>
-  <CollapseContainer title="新消息通知" :canExpan="false">
+  <CollapseContainer title="Thông báo tin nhắn mới" :canExpan="false">
     <List>
       <template v-for="item in list" :key="item.key">
         <ListItem>
           <ListItemMeta>
             <template #title>
               {{ item.title }}
-              <Switch class="extra" checked-children="开" un-checked-children="关" default-checked />
+              <Switch class="extra" checked-children="Bật" un-checked-children="Tắt" default-checked />
             </template>
             <template #description>
               <div>{{ item.description }} </div>

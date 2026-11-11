@@ -1,28 +1,28 @@
-<!-- 自定义组件 -->
+<!-- Component tùy chỉnh -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'custom',
-      label: '自定义组件',
-      //引入自定义组件
+      label: 'Component tùy chỉnh',
+      //Nhập component tùy chỉnh
       component: 'JInput',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     labelWidth: '150px',
     showActionButtonGroup: false,

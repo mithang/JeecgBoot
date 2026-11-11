@@ -1,12 +1,12 @@
 <template>
-  <PageWrapper title="代码编辑器组件示例" contentFullHeight fixedHeight contentBackground>
+  <PageWrapper title="Ví dụ component trình soạn thảo mã" contentFullHeight fixedHeight contentBackground>
     <template #extra>
       <a-space size="middle">
-        <a-button @click="showData" type="primary">获取数据</a-button>
+        <a-button @click="showData" type="primary">Lấy dữ liệu</a-button>
         <RadioGroup button-style="solid" v-model:value="modeValue" @change="handleModeChange">
-          <RadioButton value="application/json"> json数据 </RadioButton>
-          <RadioButton value="htmlmixed"> html代码 </RadioButton>
-          <RadioButton value="javascript"> javascript代码 </RadioButton>
+          <RadioButton value="application/json"> jsonDữ liệu </RadioButton>
+          <RadioButton value="htmlmixed"> htmlMã </RadioButton>
+          <RadioButton value="javascript"> javascriptMã </RadioButton>
         </RadioGroup>
       </a-space>
     </template>
@@ -20,7 +20,7 @@
   import { Radio, Space, Modal } from 'ant-design-vue';
 
   const jsonData =
-    '{"name":"BeJson","url":"http://www.xxx.com","page":88,"isNonProfit":true,"address":{"street":"科技园路.","city":"江苏苏州","country":"中国"},"links":[{"name":"Google","url":"http://www.xxx.com"},{"name":"Baidu","url":"http://www.xxx.com"},{"name":"SoSo","url":"http://www.xxx.com"}]}';
+    '{"name":"BeJson","url":"http://www.xxx.com","page":88,"isNonProfit":true,"address":{"street":"Đường Công viên Khoa học.","city":"Tô Châu, Giang Tô","country":"Trung Quốc"},"links":[{"name":"Google","url":"http://www.xxx.com"},{"name":"Baidu","url":"http://www.xxx.com"},{"name":"SoSo","url":"http://www.xxx.com"}]}';
 
   const jsData = `
       (() => {
@@ -82,7 +82,7 @@
       }
 
       function showData() {
-        Modal.info({ title: '编辑器当前值', content: value.value });
+        Modal.info({ title: 'Giá trị hiện tại của trình soạn thảo', content: value.value });
       }
 
       return { value, modeValue, handleModeChange, showData };

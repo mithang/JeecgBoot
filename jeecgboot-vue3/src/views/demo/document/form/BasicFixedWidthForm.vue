@@ -1,65 +1,65 @@
-<!-- 固定label标题的宽度 -->
+<!-- Cố định chiều rộng tiêu đề label -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" @submit="handleSubmit" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
-      label: '姓名',
+      label: 'Họ tên',
       field: 'name',
       component: 'Input',
     },
     {
-      label: '年龄',
+      label: 'Tuổi',
       field: 'password',
       component: 'InputNumber',
     },
     {
-      label: '生日',
+      label: 'Ngày sinh',
       field: 'birthday',
       component: 'DatePicker',
     },
     {
-      label: '头像',
+      label: 'Ảnh đại diện',
       field: 'avatar',
       component: 'JImageUpload',
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showResetButton: false,
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
-    //使用labelWidth控制标题宽度
+    //Dùng labelWidth để điều khiển độ rộng tiêu đề
     labelWidth: '150px',
-    //使用labelCol的样式属性来控制标题宽度
+    //Sử dụng thuộc tính kiểu của labelCol để kiểm soát độ rộng tiêu đề
     labelCol: { style: { width: '150px' } },
-    //标题对齐方式（left:左对齐，right：右对齐），默认右对齐
+    //Cách căn chỉnh tiêu đề (left:Căn trái, right: căn phải), mặc định căn phải
     labelAlign: 'right',
   });
 
   /**
-   * 点击提交按钮的value值
+   * Giá trị value của nút gửi khi nhấp
    * @param values
    */
   function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
+    console.log('Dữ liệu nút gửi::::', values);
   }
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

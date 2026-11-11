@@ -1,6 +1,6 @@
 <template>
-  <PageWrapper title="表单基础示例" contentFullHeight>
-    <CollapseContainer title="基础示例">
+  <PageWrapper title="Ví dụ cơ bản về biểu mẫu" contentFullHeight>
+    <CollapseContainer title="Ví dụ cơ bản">
       <BasicForm
         autoFocusFirstItem
         :labelWidth="200"
@@ -63,7 +63,7 @@
   const valueSelectA = ref<string[]>([]);
   const valueSelectB = ref<string[]>([]);
   const options = ref<Recordable[]>([]);
-  for (let i = 1; i < 10; i++) options.value.push({ label: '选项' + i, value: `${i}` });
+  for (let i = 1; i < 10; i++) options.value.push({ label: 'Tùy chọn' + i, value: `${i}` });
 
   const optionsA = computed(() => {
     return cloneDeep(unref(options)).map((op) => {
@@ -80,13 +80,13 @@
   const provincesOptions = [
     {
       id: 'guangdong',
-      label: '广东省',
+      label: 'Quảng Đông',
       value: '1',
       key: '1',
     },
     {
       id: 'jiangsu',
-      label: '江苏省',
+      label: 'Giang Tô',
       value: '2',
       key: '2',
     },
@@ -94,34 +94,34 @@
   const citiesOptionsData = {
     guangdong: [
       {
-        label: '珠海市',
+        label: 'Châu Hải',
         value: '1',
         key: '1',
       },
       {
-        label: '深圳市',
+        label: 'Thâm Quyến',
         value: '2',
         key: '2',
       },
       {
-        label: '广州市',
+        label: 'Quảng Châu',
         value: '3',
         key: '3',
       },
     ],
     jiangsu: [
       {
-        label: '南京市',
+        label: 'Nam Kinh',
         value: '1',
         key: '1',
       },
       {
-        label: '无锡市',
+        label: 'Vô Tích',
         value: '2',
         key: '2',
       },
       {
-        label: '苏州市',
+        label: 'Tô Châu',
         value: '3',
         key: '3',
       },
@@ -132,12 +132,12 @@
     {
       field: 'divider-basic',
       component: 'Divider',
-      label: '基础字段',
+      label: 'Trường cơ bản',
     },
     {
       field: 'field1',
       component: 'Input',
-      label: '字段1',
+      label: 'Trường1',
 
       colProps: {
         span: 8,
@@ -148,7 +148,7 @@
         console.log('form:', schema);
         console.log('formModel:', formModel);
         return {
-          placeholder: '自定义placeholder',
+          placeholder: 'Tùy chỉnhplaceholder',
           onChange: (e: any) => {
             console.log(e);
           },
@@ -164,7 +164,7 @@
     {
       field: 'field2',
       component: 'Input',
-      label: '字段2',
+      label: 'Trường2',
       defaultValue: '111',
       colProps: {
         span: 8,
@@ -174,12 +174,12 @@
           console.log(e);
         },
       },
-      suffix: '天',
+      suffix: 'Ngày',
     },
     {
       field: 'field3',
       component: 'DatePicker',
-      label: '字段3',
+      label: 'Trường3',
       colProps: {
         span: 8,
       },
@@ -187,19 +187,19 @@
     {
       field: 'field4',
       component: 'Select',
-      label: '字段4',
+      label: 'Trường4',
       colProps: {
         span: 8,
       },
       componentProps: {
         options: [
           {
-            label: '选项1',
+            label: 'Tùy chọn1',
             value: '1',
             key: '1',
           },
           {
-            label: '选项2',
+            label: 'Tùy chọn2',
             value: '2',
             key: '2',
           },
@@ -209,18 +209,18 @@
     {
       field: 'field5',
       component: 'CheckboxGroup',
-      label: '字段5',
+      label: 'Trường5',
       colProps: {
         span: 8,
       },
       componentProps: {
         options: [
           {
-            label: '选项1',
+            label: 'Tùy chọn1',
             value: '1',
           },
           {
-            label: '选项2',
+            label: 'Tùy chọn2',
             value: '2',
           },
         ],
@@ -229,18 +229,18 @@
     {
       field: 'field7',
       component: 'RadioGroup',
-      label: '字段7',
+      label: 'Trường7',
       colProps: {
         span: 8,
       },
       componentProps: {
         options: [
           {
-            label: '选项1',
+            label: 'Tùy chọn1',
             value: '1',
           },
           {
-            label: '选项2',
+            label: 'Tùy chọn2',
             value: '2',
           },
         ],
@@ -249,7 +249,7 @@
     {
       field: 'field8',
       component: 'Checkbox',
-      label: '字段8',
+      label: 'Trường8',
       colProps: {
         span: 8,
       },
@@ -258,7 +258,7 @@
     {
       field: 'field9',
       component: 'Switch',
-      label: '字段9',
+      label: 'Trường9',
       colProps: {
         span: 8,
       },
@@ -266,18 +266,18 @@
     {
       field: 'field10',
       component: 'RadioButtonGroup',
-      label: '字段10',
+      label: 'Trường10',
       colProps: {
         span: 8,
       },
       componentProps: {
         options: [
           {
-            label: '选项1',
+            label: 'Tùy chọn1',
             value: '1',
           },
           {
-            label: '选项2',
+            label: 'Tùy chọn2',
             value: '2',
           },
         ],
@@ -286,7 +286,7 @@
     {
       field: 'field11',
       component: 'Cascader',
-      label: '字段11',
+      label: 'Trường11',
       colProps: {
         span: 8,
       },
@@ -330,12 +330,12 @@
     {
       field: 'divider-api-select',
       component: 'Divider',
-      label: '远程下拉演示',
+      label: 'Demo thả xuống từ xa',
     },
     {
       field: 'field30',
       component: 'ApiSelect',
-      label: '懒加载远程下拉',
+      label: 'Dropdown từ xa lazy loading',
       required: true,
       componentProps: {
         // more details see /src/components/Form/src/components/ApiSelect.vue
@@ -366,8 +366,8 @@
     {
       field: 'field311',
       component: 'JAreaLinkage',
-      label: '省市区选择',
-      helpMessage: ['JAreaLinkage组件', '省市区选择'],
+      label: 'Chọn Tỉnh/Thành phố/Quận huyện',
+      helpMessage: ['JAreaLinkageComponent', 'Chọn Tỉnh/Thành phố/Quận huyện'],
       required: true,
       slot: 'jAreaLinkage',
       colProps: {
@@ -378,8 +378,8 @@
     {
       field: 'field31',
       component: 'Input',
-      label: '下拉本地搜索',
-      helpMessage: ['ApiSelect组件', '远程数据源本地搜索', '只发起一次请求获取所有选项'],
+      label: 'Tìm kiếm cục bộ trong dropdown',
+      helpMessage: ['ApiSelectComponent', 'Tìm kiếm cục bộ nguồn dữ liệu từ xa', 'Chỉ gửi một yêu cầu để lấy tất cả tùy chọn'],
       required: true,
       slot: 'localSearch',
       colProps: {
@@ -390,8 +390,8 @@
     {
       field: 'field32',
       component: 'Input',
-      label: '下拉远程搜索',
-      helpMessage: ['ApiSelect组件', '将关键词发送到接口进行远程搜索'],
+      label: 'Tìm kiếm từ xa trong dropdown',
+      helpMessage: ['ApiSelectComponent', 'Gửi từ khóa đến API để tìm kiếm từ xa'],
       required: true,
       slot: 'remoteSearch',
       colProps: {
@@ -402,8 +402,8 @@
     {
       field: 'field33',
       component: 'ApiTreeSelect',
-      label: '远程下拉树',
-      helpMessage: ['ApiTreeSelect组件', '使用接口提供的数据生成选项'],
+      label: 'Cây dropdown từ xa',
+      helpMessage: ['ApiTreeSelectComponent', 'Dùng dữ liệu do API cung cấp để tạo tùy chọn'],
       required: true,
       componentProps: {
         api: treeOptionsListApi,
@@ -416,8 +416,8 @@
     {
       field: 'field34',
       component: 'ApiRadioGroup',
-      label: '远程Radio',
-      helpMessage: ['ApiRadioGroup组件', '使用接口提供的数据生成选项'],
+      label: 'Từ xaRadio',
+      helpMessage: ['ApiRadioGroupComponent', 'Dùng dữ liệu do API cung cấp để tạo tùy chọn'],
       required: true,
       componentProps: {
         api: optionsListApi,
@@ -438,8 +438,8 @@
     {
       field: 'field35',
       component: 'ApiRadioGroup',
-      label: '远程Radio',
-      helpMessage: ['ApiRadioGroup组件', '使用接口提供的数据生成选项'],
+      label: 'Từ xaRadio',
+      helpMessage: ['ApiRadioGroupComponent', 'Dùng dữ liệu do API cung cấp để tạo tùy chọn'],
       required: true,
       componentProps: {
         api: optionsListApi,
@@ -460,19 +460,19 @@
     {
       field: 'divider-linked',
       component: 'Divider',
-      label: '字段联动',
+      label: 'Liên động trường',
     },
     {
       field: 'province',
       component: 'Select',
-      label: '省份',
+      label: 'Tỉnh',
       colProps: {
         span: 8,
       },
       componentProps: ({ formModel, formActionType }) => {
         return {
           options: provincesOptions,
-          placeholder: '省份与城市联动',
+          placeholder: 'Liên động tỉnh và thành phố',
           onChange: (e: any) => {
             // console.log(e)
             let citiesOptions = e == 1 ? citiesOptionsData[provincesOptions[0].id] : citiesOptionsData[provincesOptions[1].id];
@@ -495,25 +495,25 @@
     {
       field: 'city',
       component: 'Select',
-      label: '城市',
+      label: 'Thành phố',
       colProps: {
         span: 8,
       },
       componentProps: {
         options: [], // defalut []
-        placeholder: '省份与城市联动',
+        placeholder: 'Liên động tỉnh và thành phố',
       },
     },
     {
       field: 'divider-selects',
       component: 'Divider',
-      label: '互斥多选',
-      helpMessage: ['两个Select共用数据源', '但不可选择对方已选中的项目'],
+      label: 'Chọn nhiều loại trừ lẫn nhau',
+      helpMessage: ['Hai Select dùng chung nguồn dữ liệu', 'Nhưng không thể chọn mục mà đối phương đã chọn'],
     },
     {
       field: 'selectA',
       component: 'Select',
-      label: '互斥SelectA',
+      label: 'Loại trừ lẫn nhauSelectA',
       slot: 'selectA',
       defaultValue: [],
       colProps: {
@@ -523,7 +523,7 @@
     {
       field: 'selectB',
       component: 'Select',
-      label: '互斥SelectB',
+      label: 'Loại trừ lẫn nhauSelectB',
       slot: 'selectB',
       defaultValue: [],
       colProps: {
@@ -533,12 +533,12 @@
     {
       field: 'divider-others',
       component: 'Divider',
-      label: '其它',
+      label: 'Khác',
     },
     {
       field: 'field20',
       component: 'InputNumber',
-      label: '字段20',
+      label: 'Trường20',
       required: true,
       colProps: {
         span: 8,
@@ -547,7 +547,7 @@
     {
       field: 'field21',
       component: 'Slider',
-      label: '字段21',
+      label: 'Trường21',
       componentProps: {
         min: 0,
         max: 100,
@@ -564,7 +564,7 @@
     {
       field: 'field22',
       component: 'Rate',
-      label: '字段22',
+      label: 'Trường22',
       defaultValue: 3,
       colProps: {
         span: 8,

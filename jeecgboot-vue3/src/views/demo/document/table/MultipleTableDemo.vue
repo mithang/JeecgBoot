@@ -1,14 +1,14 @@
 <template>
   <div>
     <a-alert
-      message="多表格实例测试 (Issue #8792 修复)"
-      description="此示例演示父子组件同时使用 BasicTable 时，列配置、列宽调整等功能正常工作，两个表格实例互不干扰"
+      message="Kiểm tra nhiều instance bảng (Issue #8792 Sửa)"
+      description="Ví dụ này minh họa component cha và con đồng thời dùng BasicTable, các chức năng như cấu hình cột, điều chỉnh độ rộng cột đều hoạt động bình thường, hai instance bảng không ảnh hưởng lẫn nhau"
       type="info"
       show-icon
       class="mb-4"
     />
 
-    <a-card title="父组件的表格" class="mb-4">
+    <a-card title="Bảng của component cha" class="mb-4">
       <BasicTable
         @register="registerParentTable"
         :columns="parentColumns"
@@ -18,12 +18,12 @@
         :canResize="false"
       >
         <template #toolbar>
-          <a-button type="primary" @click="testParentTable">测试父表格</a-button>
+          <a-button type="primary" @click="testParentTable">Kiểm tra bảng cha</a-button>
         </template>
       </BasicTable>
     </a-card>
 
-    <a-card title="子组件的表格">
+    <a-card title="Bảng của component con">
       <BasicTable
         @register="registerChildTable"
         :columns="childColumns"
@@ -33,7 +33,7 @@
         :canResize="false"
       >
         <template #toolbar>
-          <a-button type="primary" @click="testChildTable">测试子表格</a-button>
+          <a-button type="primary" @click="testChildTable">Kiểm tra bảng con</a-button>
         </template>
       </BasicTable>
     </a-card>
@@ -47,7 +47,7 @@
 
   const { createMessage } = useMessage();
 
-  // 父表格配置
+  // Cấu hình bảng cha
   const parentColumns: BasicColumn[] = [
     {
       title: 'ID',
@@ -55,26 +55,26 @@
       width: 80,
     },
     {
-      title: '父表格-姓名',
+      title: 'Bảng cha-Họ tên',
       dataIndex: 'name',
       width: 150,
     },
     {
-      title: '父表格-年龄',
+      title: 'Bảng cha-Tuổi',
       dataIndex: 'age',
       width: 100,
     },
     {
-      title: '父表格-地址',
+      title: 'Bảng cha-Địa chỉ',
       dataIndex: 'address',
       width: 200,
     },
   ];
 
   const parentData = ref([
-    { id: 1, name: '父表格-张三', age: 25, address: '北京市朝阳区' },
-    { id: 2, name: '父表格-李四', age: 30, address: '上海市浦东新区' },
-    { id: 3, name: '父表格-王五', age: 28, address: '广州市天河区' },
+    { id: 1, name: 'Bảng cha-Trương Tam', age: 25, address: 'Quận Triều Dương, Bắc Kinh' },
+    { id: 2, name: 'Bảng cha-Lý Tứ', age: 30, address: 'Quận Phố Đông, thành phố Thượng Hải' },
+    { id: 3, name: 'Bảng cha-Vương Ngũ', age: 28, address: 'Quận Thiên Hà, Quảng Châu' },
   ]);
 
   const [registerParentTable, { getColumns: getParentColumns }] = useTable({
@@ -82,7 +82,7 @@
     dataSource: parentData.value,
   });
 
-  // 子表格配置
+  // Cấu hình bảng con
   const childColumns: BasicColumn[] = [
     {
       title: 'ID',
@@ -90,31 +90,31 @@
       width: 80,
     },
     {
-      title: '子表格-产品名称',
+      title: 'Bảng con-Tên sản phẩm',
       dataIndex: 'product',
       width: 150,
     },
     {
-      title: '子表格-价格',
+      title: 'Bảng con-Giá',
       dataIndex: 'price',
       width: 100,
     },
     {
-      title: '子表格-库存',
+      title: 'Bảng con-Tồn kho',
       dataIndex: 'stock',
       width: 100,
     },
     {
-      title: '子表格-分类',
+      title: 'Bảng con-Phân loại',
       dataIndex: 'category',
       width: 150,
     },
   ];
 
   const childData = ref([
-    { id: 1, product: '子表格-商品A', price: 99, stock: 100, category: '电子产品' },
-    { id: 2, product: '子表格-商品B', price: 199, stock: 50, category: '家居用品' },
-    { id: 3, product: '子表格-商品C', price: 299, stock: 30, category: '服装鞋包' },
+    { id: 1, product: 'Bảng con-Sản phẩmA', price: 99, stock: 100, category: 'Sản phẩm điện tử' },
+    { id: 2, product: 'Bảng con-Sản phẩmB', price: 199, stock: 50, category: 'Đồ dùng gia đình' },
+    { id: 3, product: 'Bảng con-Sản phẩmC', price: 299, stock: 30, category: 'Quần áo, giày dép và túi xách' },
   ]);
 
   const [registerChildTable, { getColumns: getChildColumns }] = useTable({
@@ -124,14 +124,14 @@
 
   function testParentTable() {
     const cols = getParentColumns();
-    createMessage.success(`父表格列数: ${cols.length}，请查看控制台`);
-    console.log('父表格列配置:', cols);
+    createMessage.success(`Số cột bảng cha: ${cols.length}, vui lòng xem console`);
+    console.log('Cấu hình cột của bảng cha:', cols);
   }
 
   function testChildTable() {
     const cols = getChildColumns();
-    createMessage.success(`子表格列数: ${cols.length}，请查看控制台`);
-    console.log('子表格列配置:', cols);
+    createMessage.success(`Số cột bảng con: ${cols.length}, vui lòng xem console`);
+    console.log('Cấu hình cột bảng con:', cols);
   }
 </script>
 

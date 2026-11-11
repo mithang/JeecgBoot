@@ -2,8 +2,8 @@
   <PageWrapper contentBackground contentClass="flex" dense contentFullHeight fixedHeight>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleReloadCurrent"> 刷新当前页 </a-button>
-        <a-button type="primary" @click="handleReload"> 刷新并返回第一页 </a-button>
+        <a-button type="primary" @click="handleReloadCurrent"> Làm mới trang hiện tại </a-button>
+        <a-button type="primary" @click="handleReload"> Làm mới và quay về trang đầu tiên </a-button>
       </template>
     </BasicTable>
   </PageWrapper>
@@ -19,7 +19,7 @@
     components: { BasicTable, PageWrapper },
     setup() {
       const [registerTable, { reload }] = useTable({
-        title: '远程加载示例',
+        title: 'Ví dụ tải từ xa',
         api: demoListApi,
         columns: getBasicColumns(),
         pagination: { pageSize: 10 },

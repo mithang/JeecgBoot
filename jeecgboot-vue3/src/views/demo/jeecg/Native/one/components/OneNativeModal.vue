@@ -7,7 +7,7 @@
     @ok="handleOk"
     :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }"
     @cancel="handleCancel"
-    cancelText="关闭"
+    cancelText="Đóng"
   >
     <OneNativeForm ref="realForm" @ok="submitCallback" :formDisabled="disableSubmit"></OneNativeForm>
   </BasicModal>
@@ -26,7 +26,7 @@
   const emit = defineEmits(['register', 'ok']);
 
   function add() {
-    title.value = '新增';
+    title.value = 'Thêm mới';
     visible.value = true;
     nextTick(() => {
       realForm.value.add();
@@ -34,7 +34,7 @@
   }
 
   function edit(record) {
-    title.value = disableSubmit.value ? '详情' : '编辑';
+    title.value = disableSubmit.value ? 'Chi tiết' : 'Chỉnh sửa';
     visible.value = true;
     nextTick(() => {
       realForm.value.edit(record);
@@ -62,7 +62,7 @@
 </script>
 
 <style lang="less">
-  /**隐藏样式-modal确定按钮 */
+  /**Kiểu ẩn-modalNút xác nhận */
   .jee-hidden {
     display: none !important;
   }

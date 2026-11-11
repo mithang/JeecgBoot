@@ -1,6 +1,6 @@
 <template>
-  <PageWrapper title="Tab详情页面">
-    <div>{{ index }} - 详情页内容在此</div>
+  <PageWrapper title="TabTrang chi tiết">
+    <div>{{ index }} - Nội dung trang chi tiết ở đây</div>
   </PageWrapper>
 </template>
 
@@ -18,8 +18,8 @@
       const index = route.params?.id ?? -1;
       const { setTitle } = useTabs();
 
-      // 设置标识
-      setTitle(`No.${index} - 详情信息`);
+      // Thiết lập định danh
+      setTitle(`No.${index} - Thông tin chi tiết`);
       return {
         index,
       };

@@ -1,12 +1,12 @@
 <template>
   <div class="p-4">
-    <!--定义表格-->
+    <!--Định nghĩa bảng-->
     <BasicTable @register="registerTable">
-      <!-- 搜索区域插槽自定义查询 -->
+      <!-- Slot khu vực tìm kiếm tùy chỉnh truy vấn -->
       <template #form-email="{ model, field }">
-        <a-input placeholder="请输入邮箱" v-model:value="model[field]" addon-before="邮箱:" addon-after=".com"></a-input>
+        <a-input placeholder="Vui lòng nhập email" v-model:value="model[field]" addon-before="Email:" addon-after=".com"></a-input>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -18,10 +18,10 @@
   import { ActionItem, BasicColumn, BasicTable, FormSchema, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { defHttp } from '/@/utils/http/axios';
-  //定义表格列
+  //Định nghĩa cột bảng
   const columns: BasicColumn[] = [
     {
-      title: '姓名',
+      title: 'Họ tên',
       dataIndex: 'name',
       width: 170,
       align: 'left',
@@ -31,19 +31,19 @@
       },
     },
     {
-      title: '关键词',
+      title: 'Từ khóa',
       dataIndex: 'keyWord',
       width: 130,
       resizable: true,
     },
     {
-      title: '打卡时间',
+      title: 'Thời gian chấm công',
       dataIndex: 'punchTime',
       width: 140,
       resizable: true,
     },
     {
-      title: '工资',
+      title: 'Lương',
       dataIndex: 'salaryMoney',
       width: 140,
       resizable: true,
@@ -52,79 +52,79 @@
       },
     },
     {
-      title: '奖金',
+      title: 'Tiền thưởng',
       dataIndex: 'bonusMoney',
       width: 140,
       resizable: true,
     },
     {
-      title: '性别',
+      title: 'Giới tính',
       dataIndex: 'sex',
       sorter: {
         multiple: 3,
       },
       filters: [
-        { text: '男', value: '1' },
-        { text: '女', value: '2' },
+        { text: 'Nam', value: '1' },
+        { text: 'Nữ', value: '2' },
       ],
       customRender: ({ record }) => {
-        return record.sex ? (record.sex == '1' ? '男' : '女') : '';
+        return record.sex ? (record.sex == '1' ? 'Nam' : 'Nữ') : '';
       },
       width: 120,
       resizable: true,
     },
     {
-      title: '生日',
+      title: 'Ngày sinh',
       dataIndex: 'birthday',
       width: 120,
       resizable: true,
     },
     {
-      title: '邮箱',
+      title: 'Email',
       dataIndex: 'email',
       width: 120,
       resizable: true,
     },
   ];
-  //表单搜索字段
+  //Trường tìm kiếm biểu mẫu
   const searchFormSchema: FormSchema[] = [
     {
-      label: '姓名', //显示label
-      field: 'name', //查询字段
-      component: 'JInput', //渲染的组件
-      defaultValue: '苏榕润', //设置默认值
+      label: 'Họ tên', //Hiển thịlabel
+      field: 'name', //Trường tìm kiếm
+      component: 'JInput', //Component được kết xuất
+      defaultValue: 'Tô Dung Nhuận', //Đặt giá trị mặc định
     },
     {
-      label: '性别',
+      label: 'Giới tính',
       field: 'sex',
       component: 'JDictSelectTag',
       componentProps: {
-        //渲染的组件的props
+        //của component được renderprops
         dictCode: 'sex',
-        placeholder: '请选择性别',
+        placeholder: 'Vui lòng chọn giới tính',
       },
     },
     {
-      label: '邮箱',
+      label: 'Email',
       field: 'email',
       component: 'JInput',
       slot: 'email',
     },
     {
-      label: '生日',
+      label: 'Ngày sinh',
       field: 'birthday',
       component: 'DatePicker',
     },
   ];
-  //ajax请求api接口
+  //ajaxYêu cầu API
   const demoListApi = (params) => {
     return defHttp.get({ url: '/test/jeecgDemo/list', params });
   };
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { tableContext } = useListPage({
     designScope: 'basic-table-demo-filter',
     tableProps: {
-      title: '用户列表',
+      title: 'Danh sách người dùng',
       api: demoListApi,
       columns: columns,
       formConfig: {
@@ -133,15 +133,15 @@
       useSearchForm: true,
     },
   });
-  //BasicTable绑定注册
+  //BasicTableĐăng ký liên kết
   const [registerTable, { getForm }] = tableContext;
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
     ];
@@ -149,7 +149,7 @@
 
   function handleEdit(record) {
     let { getFieldsValue } = getForm();
-    console.log('查询form的数据', getFieldsValue());
+    console.log('Truy vấn dữ liệu của form', getFieldsValue());
     console.log(record);
   }
 </script>

@@ -1,37 +1,37 @@
 <template>
   <div>
-    <!--表格-->
+    <!--Bảng-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection" :searchInfo="searchInfo">
-      <!--插槽:table标题-->
+      <!--Slot:tableTiêu đề-->
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> Thêm mới</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
     </BasicTable>
-    <!-- 表单区域 -->
+    <!-- Vùng biểu mẫu -->
     <JeecgOrderCustomerModal @register="registerModal" @success="handleSuccess"></JeecgOrderCustomerModal>
   </div>
 </template>
 
 <script lang="ts" setup>
-  //ts语法
+  //tsCú pháp
   import type { ComputedRef } from 'vue';
   import { ref, computed, unref, watch, inject } from 'vue';
   import { BasicTable, TableAction } from '/@/components/Table';
@@ -42,17 +42,17 @@
   import { customList, deleteCustomer, deleteBatchCustomer } from './erplist.api';
   import { isEmpty } from '/@/utils/is';
   import { useMessage } from '/@/hooks/web/useMessage';
-  //接收主表id
+  //Nhận bảng chínhid
   const orderId = inject<ComputedRef<string>>(
     'orderId',
     computed(() => '')
   );
-  //提示弹窗
+  //Popup nhắc nhở
   const $message = useMessage();
-  //弹窗model
+  //Popupmodel
   const [registerModal, { openModal }] = useModal();
   const searchInfo = {};
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     tableProps: {
       api: getCustomList,
@@ -73,19 +73,19 @@
     },
   });
 
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload, setSelectedRowKeys }, { rowSelection, selectedRowKeys }] = tableContext;
 
   watch(orderId, () => {
     searchInfo['orderId'] = unref(orderId);
     reload();
-    // 主表id变化时，清空子表的选中状态
+    // Khi id bảng chính thay đổi, xóa trạng thái chọn của bảng con
     setSelectedRowKeys([]);
   });
 
   async function getCustomList(params) {
     let { orderId } = params;
-    // 主表Id为空时，不查询子表数据，直接返回空数组
+    // Khi Id bảng chính rỗng, không truy vấn dữ liệu bảng con, trả về trực tiếp mảng rỗng
     if (orderId == null || isEmpty(orderId)) {
       return [];
     }
@@ -93,12 +93,12 @@
   }
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleCreate() {
     console.log('orderId=====》', orderId);
     if (isEmpty(unref(orderId))) {
-      $message.createMessage.warning('请选择一个订单信息');
+      $message.createMessage.warning('Vui lòng chọn một thông tin đơn hàng');
       return;
     }
     openModal(true, {
@@ -108,7 +108,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   async function handleEdit(record: Recordable) {
     openModal(true, {
@@ -119,14 +119,14 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteCustomer({ id: record.id }, reload);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await deleteBatchCustomer({ ids: selectedRowKeys.value }, () => {
@@ -136,25 +136,25 @@
   }
 
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     reload();
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Có xác nhận xóa không',
           confirm: handleDelete.bind(null, record),
         },
       },

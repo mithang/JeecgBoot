@@ -23,14 +23,14 @@
         }, 0);
         return [
           {
-            _row: '合计',
-            _index: '平均值',
+            _row: 'Tổng cộng',
+            _index: 'Giá trị trung bình',
             age: Math.round(totalAge / tableData.length),
             score: Math.round(totalScore / tableData.length),
           },
           {
-            _row: '合计',
-            _index: '平均值',
+            _row: 'Tổng cộng',
+            _index: 'Giá trị trung bình',
             age: totalAge,
             score: totalScore,
           },
@@ -45,7 +45,7 @@
             width: 200,
           },
           {
-            title: '姓名',
+            title: 'Họ tên',
             dataIndex: 'name',
             width: 150,
             filters: [
@@ -54,36 +54,36 @@
             ],
           },
           {
-            title: '年龄',
+            title: 'Tuổi',
             dataIndex: 'age',
             width: 100,
           },
           {
-            title: '得分',
+            title: 'Điểm số',
             dataIndex: 'score',
             width: 100,
             resizable: true,
           },
           {
-            title: '地址',
+            title: 'Địa chỉ',
             dataIndex: 'address',
             width: 300,
           },
           {
-            title: '编号',
+            title: 'Mã',
             dataIndex: 'no',
             width: 150,
             sorter: true,
             defaultHidden: true,
           },
           {
-            title: '开始时间',
+            title: 'Thời gian bắt đầu',
             width: 150,
             sorter: true,
             dataIndex: 'beginTime',
           },
           {
-            title: '结束时间',
+            title: 'Thời gian kết thúc',
             width: 150,
             sorter: true,
             dataIndex: 'endTime',
@@ -91,11 +91,11 @@
         ];
       };
       const [registerTable] = useTable({
-        title: '表尾行合计示例',
+        title: 'Ví dụ tổng cộng hàng cuối bảng',
         api: demoListApi,
         rowSelection: { type: 'checkbox' },
         columns: getBasicColumns(),
-        // showSummary: true使用的是自定义的表尾行合计方式，如果不设置或者为false使用的antd
+        // showSummary: trueĐang dùng cách tính tổng hàng chân bảng tùy chỉnh, nếu không đặt hoặc đặt là false thì dùngantd
         showSummary: true,
         summaryFunc: handleSummary,
         scroll: { x: 1000 },

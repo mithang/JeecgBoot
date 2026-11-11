@@ -9,12 +9,12 @@
   import { demoListApi } from '/@/api/demo/table';
   import { BasicColumn } from '/@/components/Table/src/types/table';
   /** 
-    相比原先的优势：
-    1、Table 列头拖动时合计行不会错位;
-    2、合计行使用TableSummary方式渲染；
-    3、支持slot自定义合计行展示；
-    4、列添加customSummaryRender自定义渲染函数
-    5、能解决在非配置api情况下，列进行过滤时，合计行统计值未更新的问题
+    Ưu điểm so với trước đây:
+    1, khi kéo tiêu đề cột Table, hàng tổng không bị lệch vị trí;
+    2, hàng tổng cộng được render bằng phương thức TableSummary;
+    3, hỗ trợ slot tùy chỉnh hiển thị dòng tổng;
+    4, cột thêm hàm render tùy chỉnh customSummaryRender
+    5, có thể giải quyết vấn đề khi cột được lọc trong trường hợp api không được cấu hình thì giá trị thống kê của hàng tổng cộng không được cập nhật
   */
   export default defineComponent({
     components: { BasicTable },
@@ -30,14 +30,14 @@
         }, 0);
         return [
           {
-            _row: '合计',
-            _index: '平均值',
+            _row: 'Tổng cộng',
+            _index: 'Giá trị trung bình',
             age: Math.round(totalAge / tableData.length),
             score: Math.round(totalScore / tableData.length),
           },
           {
-            _row: '合计',
-            _index: '总计',
+            _row: 'Tổng cộng',
+            _index: 'Tổng cộng',
             age: totalAge,
             score: totalScore,
           },
@@ -53,7 +53,7 @@
             resizable: true,
           },
           {
-            title: '姓名',
+            title: 'Họ tên',
             dataIndex: 'name',
             width: 150,
             filters: [
@@ -62,7 +62,7 @@
             ],
           },
           {
-            title: '年龄',
+            title: 'Tuổi',
             dataIndex: 'age',
             width: 100,
             resizable: true,
@@ -72,31 +72,31 @@
             },
           },
           {
-            title: '得分',
+            title: 'Điểm số',
             dataIndex: 'score',
             width: 100,
             resizable: true,
           },
           {
-            title: '地址',
+            title: 'Địa chỉ',
             dataIndex: 'address',
             width: 300,
           },
           {
-            title: '编号',
+            title: 'Mã',
             dataIndex: 'no',
             width: 150,
             sorter: true,
             defaultHidden: true,
           },
           {
-            title: '开始时间',
+            title: 'Thời gian bắt đầu',
             width: 150,
             sorter: true,
             dataIndex: 'beginTime',
           },
           {
-            title: '结束时间',
+            title: 'Thời gian kết thúc',
             width: 150,
             sorter: true,
             dataIndex: 'endTime',
@@ -105,7 +105,7 @@
       };
 
       const [registerTable] = useTable({
-        title: '原生总结栏（表尾合计）示例',
+        title: 'Ví dụ về thanh tổng kết gốc (tổng cuối bảng)',
         api: demoListApi,
         rowSelection: { type: 'checkbox' },
         columns: getBasicColumns(),

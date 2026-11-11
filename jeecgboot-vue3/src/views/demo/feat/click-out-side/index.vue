@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="点内外部触发事件">
+  <PageWrapper title="Sự kiện kích hoạt trong/ngoài điểm nhấn">
     <ClickOutSide @clickOutside="handleClickOutside" class="flex justify-center">
       <div @click="innerClick" class="demo-box">
         {{ text }}

@@ -25,7 +25,7 @@
     {
       field: 'field1',
       component: 'JCodeEditor',
-      label: '代码编辑器',
+      label: 'Trình soạn thảo mã',
       required: true,
       slot: 'jCodeEdit',
       colProps: {

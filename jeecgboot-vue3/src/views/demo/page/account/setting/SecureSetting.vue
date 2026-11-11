@@ -1,5 +1,5 @@
 <template>
-  <CollapseContainer title="安全设置" :canExpan="false">
+  <CollapseContainer title="Cài đặt bảo mật" :canExpan="false">
     <List>
       <template v-for="item in list" :key="item.key">
         <ListItem>
@@ -45,7 +45,7 @@
         if (key == '1') {
           updatePasswordRef.value.show(userStore.getUserInfo.username);
         } else {
-          createMessage.warning('暂不支持');
+          createMessage.warning('Tạm thời chưa hỗ trợ');
         }
       }
       return {

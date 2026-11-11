@@ -10,37 +10,37 @@ export interface TabItem {
   component: string;
 }
 
-export const tags: string[] = ['很有想法的', '专注设计', '川妹子', '大长腿', '海纳百川', '前端开发', 'vue3'];
+export const tags: string[] = ['Rất nhiều ý tưởng', 'Chuyên tâm thiết kế', 'Cô gái Tứ Xuyên', 'Chân dài', 'Biển lớn chứa trăm sông', 'Phát triển frontend', 'vue3'];
 <span class="iconify" data-icon="jam:codepen-circle" data-inline="false"></span>;
 export const teams: ListItem[] = [
   {
     icon: 'ri:alipay-fill',
-    title: '科学搬砖组',
+    title: 'Nhóm cày code khoa học',
     color: '#ff4000',
   },
   {
     icon: 'emojione-monotone:letter-a',
-    title: '中二少年团',
+    title: 'Nhóm thiếu niên Chuunibyou',
     color: '#7c51b8',
   },
   {
     icon: 'ri:alipay-fill',
-    title: '高逼格设计',
+    title: 'Thiết kế đẳng cấp',
     color: '#00adf7',
   },
   {
     icon: 'jam:codepen-circle',
-    title: '程序员日常',
+    title: 'Đời thường của lập trình viên',
     color: '#00adf7',
   },
   {
     icon: 'fa:behance-square',
-    title: '科学搬砖组',
+    title: 'Nhóm cày code khoa học',
     color: '#7c51b8',
   },
   {
     icon: 'jam:codepen-circle',
-    title: '程序员日常',
+    title: 'Đời thường của lập trình viên',
     color: '#ff4000',
   },
 ];
@@ -48,32 +48,32 @@ export const teams: ListItem[] = [
 export const details: ListItem[] = [
   {
     icon: 'ic:outline-contacts',
-    title: '交互专家',
+    title: 'Chuyên gia tương tác',
   },
   {
     icon: 'grommet-icons:cluster',
-    title: '某某某事业群',
+    title: 'Nhóm sự nghiệp XXX',
   },
   {
     icon: 'bx:bx-home-circle',
-    title: '福建省厦门市',
+    title: 'Thành phố Hạ Môn, tỉnh Phúc Kiến',
   },
 ];
 
 export const achieveList: TabItem[] = [
   {
     key: '1',
-    name: '文章',
+    name: 'Bài viết',
     component: 'Article',
   },
   {
     key: '2',
-    name: '应用',
+    name: 'Ứng dụng',
     component: 'Application',
   },
   {
     key: '3',
-    name: '项目',
+    name: 'Dự án',
     component: 'Project',
   },
 ];
@@ -89,8 +89,8 @@ export const articleList = (() => {
   for (let i = 0; i < 4; i++) {
     result.push({
       title: 'Jeecg Admin',
-      description: ['Jeecg', '设计语言', 'Typescript'],
-      content: '基于Vue Next, TypeScript, Ant Design实现的一套完整的企业级后台管理系统。',
+      description: ['Jeecg', 'Ngôn ngữ thiết kế', 'Typescript'],
+      content: 'Dựa trênVue Next, TypeScript, Ant Designmột hệ thống quản lý backend cấp doanh nghiệp hoàn chỉnh.',
       time: '2020-11-14 11:20',
     });
   }
@@ -117,7 +117,7 @@ export const projectList = (() => {
   for (let i = 0; i < 8; i++) {
     result.push({
       title: 'Jeecg Admin',
-      content: '基于Vue Next, TypeScript, Ant Design实现的一套完整的企业级后台管理系统。',
+      content: 'Dựa trênVue Next, TypeScript, Ant Designmột hệ thống quản lý backend cấp doanh nghiệp hoàn chỉnh.',
     });
   }
   return result;

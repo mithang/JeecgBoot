@@ -1,7 +1,7 @@
 <template>
-  <a-card title="SQL注入拦截验证（GHSA-jgwm / GHSA-xmw4 / GHSA-g87f）" size="small" style="margin-bottom: 16px">
+  <a-card title="SQLKiểm chứng chặn inject (GHSA-jgwm / GHSA-xmw4 / GHSA-g87f）" size="small" style="margin-bottom: 16px">
     <a-alert
-      message="以下按钮会用漏洞 payload 调用字典相关接口，修复生效时应全部被拦截（success=false）。"
+      message="Các nút dưới đây sẽ dùng payload lỗ hổng để gọi API liên quan đến danh mục, khi bản sửa có hiệu lực thì tất cả đều phải bị chặn (success=false）。"
       type="warning"
       show-icon
     />
@@ -9,8 +9,8 @@
       <div v-for="(c, i) in cases" :key="i">
         <a-space>
           <a-button danger size="small" :loading="c.loading" @click="runCase(c)">{{ c.title }}</a-button>
-          <a-tag v-if="c.status === 'blocked'" color="success">已拦截</a-tag>
-          <a-tag v-else-if="c.status === 'leak'" color="error">未拦截，存在风险</a-tag>
+          <a-tag v-if="c.status === 'blocked'" color="success">Đã chặn</a-tag>
+          <a-tag v-else-if="c.status === 'leak'" color="error">Chưa chặn, tồn tại rủi ro</a-tag>
         </a-space>
         <div style="margin: 4px 0 0 4px; color: #999; font-size: 12px">{{ c.desc }}</div>
         <div v-if="c.msg" style="margin: 2px 0 0 4px; font-family: monospace; font-size: 12px; color: #d4380d">{{ c.msg }}</div>
@@ -19,12 +19,12 @@
   </a-card>
 
   <a-alert type="info" show-icon style="margin-bottom: 16px">
-    <template #message>表字典过滤条件写法（合法用法）</template>
+    <template #message>Cách viết điều kiện lọc của từ điển bảng (cách dùng hợp lệ)</template>
     <template #description>
-      <div>1. 下拉 / 搜索：dictCode 写成「表名,文本字段,编码字段,过滤条件」</div>
-      <div>2. 下拉树：dict 写成「表名 where 过滤条件,文本字段,编码字段」，过滤条件里不能有逗号（dict 按逗号拆分）</div>
-      <div>3. 过滤条件只支持「字段 比较 常量」组合（=、!=、&gt;、&lt;、like、in、between、is null、and/or、order by），不支持注释、反斜杠、子查询和函数</div>
-      <div>4. 关联记录按 id 回显、关键词搜索均为参数绑定，不需要也不允许传条件 SQL</div>
+      <div>1. Thả xuống / Tìm kiếm: dictCode viết thành "Tên bảng,Trường văn bản,Trường mã,Điều kiện lọc"</div>
+      <div>2. Cây dropdown: dict viết thành "tên bảng where điều kiện lọc,Trường văn bản,trường mã", trong điều kiện lọc không được có dấu phẩy (dict tách theo dấu phẩy)</div>
+      <div>3. Điều kiện lọc chỉ hỗ trợ tổ hợp "Trường So sánh Hằng số" (=、!=、&gt;、&lt;、like、in、between、is null、and/or, order by), không hỗ trợ chú thích, dấu gạch chéo ngược, truy vấn con và hàm</div>
+      <div>4. Bản ghi liên kết hiển thị lại theo id, tìm kiếm theo từ khóa đều là binding tham số, không cần và cũng không được phép truyền điều kiện SQL</div>
     </template>
   </a-alert>
   <BasicForm
@@ -38,10 +38,10 @@
 </template>
 <script lang="ts" setup>
   /**
-   * 表字典过滤条件 / 关联记录 示例 + SQL注入拦截验证
+   * Điều kiện lọc từ điển bảng / Ví dụ bản ghi liên kết + SQLXác minh chặn injection
    *
    * @author scott
-   * @since 2026-10-27 GHSA-jgwm/GHSA-xmw4/GHSA-g87f 字典条件校验加固后补充用法示例与回归验证
+   * @since 2026-10-27 GHSA-jgwm/GHSA-xmw4/GHSA-g87f Bổ sung ví dụ sử dụng và kiểm chứng hồi quy sau khi tăng cường kiểm chứng điều kiện danh mục
    */
   import { reactive } from 'vue';
   import { BasicForm, FormSchema } from '/@/components/Form';
@@ -54,18 +54,18 @@
     title: string;
     desc: string;
     request: () => Promise<any>;
-    // 参数化类注入(jgwm)不会报错而是查不到数据，需按返回数据量判断是否被当作纯值处理
+    // Tiêm tham số hóa(jgwm)Sẽ không báo lỗi mà là không tra được dữ liệu, cần căn cứ vào lượng dữ liệu trả về để xác định có bị coi là giá trị thuần hay không
     leakWhenData?: boolean;
     loading: boolean;
     status: '' | 'blocked' | 'leak';
     msg: string;
   }
 
-  // 注入 payload 仅用于验证拦截，经前端发出时会自动带上 X-Sign 签名
+  // Payload được inject chỉ dùng để xác thực chặn, khi phát đi từ frontend sẽ tự động mang theo X-Sign Chữ ký
   const cases = reactive<InjectCase[]>([
     {
-      title: 'jgwm：关联记录 keyValues 反斜杠闭合引号',
-      desc: "/sys/dict/queryTableDataForLinkRecord  keyValues=a\\,) or 1=1#（参数化后应查出0条）",
+      title: 'jgwm: Bản ghi liên kết keyValues dấu ngoặc kép đóng bằng dấu gạch chéo ngược',
+      desc: "/sys/dict/queryTableDataForLinkRecord  keyValues=a\\,) or 1=1#(Sau khi tham số hóa sẽ truy vấn được 0 bản ghi)",
       leakWhenData: true,
       loading: false,
       status: '',
@@ -80,8 +80,8 @@
         ),
     },
     {
-      title: 'xmw4：表字典 # 注释 + password# 字段',
-      desc: "/sys/dict/loadDict  条件=username='admin' and password# like '%'",
+      title: 'xmw4: bảng từ điển # Chú thích + password# Trường',
+      desc: "/sys/dict/loadDict  Điều kiện=username='admin' and password# like '%'",
       loading: false,
       status: '',
       msg: '',
@@ -92,7 +92,7 @@
         ),
     },
     {
-      title: 'xmw4：下拉树表名注入子查询',
+      title: 'xmw4: Tên bảng cây thả xuống chèn vào truy vấn con',
       desc: '/sys/dict/loadTreeData  tableName=sys_permission where 1=1 or (select 1 from sys_user)>0#',
       loading: false,
       status: '',
@@ -107,7 +107,7 @@
         ),
     },
     {
-      title: 'g87f：queryTableData 字面量 null 旁路',
+      title: 'g87f:queryTableData literal null được bỏ qua (bypass)',
       desc: '/sys/dict/queryTableData  table=null&text=sys_user&code=password',
       loading: false,
       status: '',
@@ -119,7 +119,7 @@
         ),
     },
     {
-      title: '敏感字段直取 sys_user.password',
+      title: 'Lấy trực tiếp trường nhạy cảm sys_user.password',
       desc: '/sys/dict/loadDict/sys_user,password,id',
       loading: false,
       status: '',
@@ -135,31 +135,31 @@
     try {
       const res = await c.request();
       if (c.leakWhenData) {
-        // 参数化类：payload 被当纯值处理时查不到数据(total=0)为安全；若 or 1=1 生效则查出数据
+        // Loại tham số hóa: payload bị xử lý như giá trị thuần thì không tra được dữ liệu(total=0)là an toàn; nếu or 1=1 Nếu có hiệu lực sẽ truy vấn được dữ liệu
         const r = res?.result || {};
         const total = r.total ?? (r.records ? r.records.length : 0);
         if (res?.success && total === 0) {
           c.status = 'blocked';
-          c.msg = '注入字符串被当作参数值，查出 0 条，注入未生效';
-          createMessage.success('已防护');
+          c.msg = 'Chuỗi injection bị coi là giá trị tham số, truy vấn ra 0 bản ghi, injection không có hiệu lực';
+          createMessage.success('Đã bảo vệ');
         } else {
           c.status = 'leak';
-          c.msg = `注入生效，查出 ${total} 条数据！`;
-          createMessage.error(c.title + ' 未拦截');
+          c.msg = `Inject có hiệu lực, truy vấn được ${total} dòng dữ liệu!`;
+          createMessage.error(c.title + ' Chưa chặn');
         }
       } else if (res?.success) {
         c.status = 'leak';
-        c.msg = '响应 success=true，注入未被拦截！';
-        createMessage.error(c.title + ' 未拦截');
+        c.msg = 'Phản hồi success=true, mã inject chưa bị chặn!';
+        createMessage.error(c.title + ' Chưa chặn');
       } else {
         c.status = 'blocked';
-        c.msg = res?.message || '后端已拒绝';
-        createMessage.success('已拦截');
+        c.msg = res?.message || 'Máy chủ đã từ chối';
+        createMessage.success('Đã chặn');
       }
     } catch (e: any) {
       c.status = 'blocked';
-      c.msg = e?.message || e?.response?.data?.message || '请求被拒绝';
-      createMessage.success('已拦截');
+      c.msg = e?.message || e?.response?.data?.message || 'Yêu cầu bị từ chối';
+      createMessage.success('Đã chặn');
     } finally {
       c.loading = false;
     }
@@ -169,7 +169,7 @@
     {
       field: 'condDictSelect',
       component: 'JDictSelectTag',
-      label: '字典表下拉(带条件)',
+      label: 'Dropdown bảng từ điển(Có điều kiện)',
       helpMessage: ["sys_user,realname,username,status = '1' and del_flag = 0"],
       componentProps: {
         dictCode: "sys_user,realname,username,status = '1' and del_flag = 0",
@@ -179,13 +179,13 @@
     {
       field: 'condDictSelect',
       component: 'JEllipsis',
-      label: '选中值',
+      label: 'Giá trị đã chọn',
       colProps: { span: 12 },
     },
     {
       field: 'condDictOrder',
       component: 'JDictSelectTag',
-      label: '字典表下拉(条件+排序)',
+      label: 'Dropdown bảng từ điển(Điều kiện+Sắp xếp)',
       helpMessage: ['sys_user,realname,username,del_flag = 0 order by create_time desc'],
       componentProps: {
         dictCode: 'sys_user,realname,username,del_flag = 0 order by create_time desc',
@@ -195,14 +195,14 @@
     {
       field: 'condDictOrder',
       component: 'JEllipsis',
-      label: '选中值',
+      label: 'Giá trị đã chọn',
       colProps: { span: 12 },
     },
     {
       field: 'condSearchSelect',
       component: 'JSearchSelect',
-      label: '字典搜索(异步带条件)',
-      helpMessage: ['输入关键字后，在过滤条件范围内分页搜索'],
+      label: 'Tìm kiếm từ điển(Bất đồng bộ có điều kiện)',
+      helpMessage: ['Sau khi nhập từ khóa, tìm kiếm phân trang trong phạm vi điều kiện lọc'],
       componentProps: {
         dict: "sys_user,realname,username,status = '1' and del_flag = 0",
         pageSize: 6,
@@ -213,14 +213,14 @@
     {
       field: 'condSearchSelect',
       component: 'JEllipsis',
-      label: '选择值',
+      label: 'Chọn giá trị',
       colProps: { span: 12 },
     },
     {
       field: 'condTreeSelect',
       component: 'JTreeSelect',
-      label: '下拉树(表名带条件)',
-      helpMessage: ['sys_permission where menu_type != 2,name,id', '只显示菜单，不显示按钮'],
+      label: 'Cây dropdown(Tên bảng có điều kiện)',
+      helpMessage: ['sys_permission where menu_type != 2,name,id', 'Chỉ hiển thị menu, không hiển thị nút'],
       componentProps: {
         dict: 'sys_permission where menu_type != 2,name,id',
         pidField: 'parent_id',
@@ -232,14 +232,14 @@
     {
       field: 'condTreeSelect',
       component: 'JEllipsis',
-      label: '选中值',
+      label: 'Giá trị đã chọn',
       colProps: { span: 12 },
     },
     {
       field: 'linkRecord',
       component: 'JLinkTableCard',
-      label: '关联记录(按id回显)',
-      helpMessage: ['调用 /sys/dict/queryTableDataForLinkRecord', '默认值为 admin 的 id，打开页面即按 keyValues 回显', '弹窗内关键词搜索走 keyword 参数'],
+      label: 'Bản ghi liên kết(Hiển thị lại theo id)',
+      helpMessage: ['Gọi /sys/dict/queryTableDataForLinkRecord', 'Giá trị mặc định là id của admin, mở trang sẽ hiển thị lại theo keyValues', 'Tìm kiếm từ khóa trong popup dùng tham số keyword'],
       defaultValue: 'e9ca23d68d884d4ebb19d07889727dae',
       componentProps: {
         queryMode: 'table',
@@ -254,7 +254,7 @@
     {
       field: 'linkRecord',
       component: 'JEllipsis',
-      label: '选中值(id逗号分隔)',
+      label: 'Giá trị đã chọn(idphân tách bằng dấu phẩy)',
       colProps: { span: 12 },
     },
   ];

@@ -1,8 +1,8 @@
 <template>
-  <PageWrapper title="基础详情页" contentBackground>
-    <Description size="middle" title="退款申请" :bordered="false" :column="3" :data="refundData" :schema="refundSchema" />
+  <PageWrapper title="Trang chi tiết cơ bản" contentBackground>
+    <Description size="middle" title="Yêu cầu hoàn tiền" :bordered="false" :column="3" :data="refundData" :schema="refundSchema" />
     <a-divider />
-    <Description size="middle" title="用户信息" :bordered="false" :column="3" :data="personData" :schema="personSchema" />
+    <Description size="middle" title="Thông tin người dùng" :bordered="false" :column="3" :data="personData" :schema="personSchema" />
     <a-divider />
 
     <BasicTable @register="registerRefundTable" />
@@ -31,7 +31,7 @@
     components: { Description, BasicTable, PageWrapper, [Divider.name]: Divider },
     setup() {
       const [registerRefundTable] = useTable({
-        title: '退货商品',
+        title: 'Sản phẩm trả lại',
         dataSource: refundTableData,
         columns: refundTableSchema,
         pagination: false,
@@ -42,7 +42,7 @@
       });
 
       const [registerTimeTable] = useTable({
-        title: '退货进度',
+        title: 'Tiến độ trả hàng',
         columns: refundTimeTableSchema,
         pagination: false,
         dataSource: refundTimeTableData,
@@ -59,7 +59,7 @@
         });
         return [
           {
-            t1: '总计',
+            t1: 'Tổng cộng',
             t5: totalT5,
             t6: totalT6,
           },

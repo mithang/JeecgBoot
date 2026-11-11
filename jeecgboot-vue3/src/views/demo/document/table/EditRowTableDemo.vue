@@ -20,7 +20,7 @@
 
   const columns: BasicColumn[] = [
     {
-      title: '输入框',
+      title: 'Hộp nhập',
       dataIndex: 'name',
       editRow: true,
       editComponentProps: {
@@ -29,34 +29,34 @@
       width: 150,
     },
     {
-      title: '默认输入状态',
+      title: 'Trạng thái nhập mặc định',
       dataIndex: 'name7',
       editRow: true,
       width: 150,
     },
     {
-      title: '输入框校验',
+      title: 'Kiểm chứng ô nhập',
       dataIndex: 'name1',
       editRow: true,
       align: 'left',
-      // 默认必填校验
+      // Kiểm chứng bắt buộc mặc định
       editRule: true,
       width: 150,
     },
     {
-      title: '输入框函数校验',
+      title: 'Kiểm chứng hàm của ô nhập',
       dataIndex: 'name2',
       editRow: true,
       align: 'right',
       editRule: async (text) => {
         if (text === '2') {
-          return '不能输入该值';
+          return 'Không thể nhập giá trị này';
         }
         return '';
       },
     },
     {
-      title: '数字输入框',
+      title: 'Ô nhập số',
       dataIndex: 'id',
       editRow: true,
       editRule: true,
@@ -64,7 +64,7 @@
       width: 150,
     },
     {
-      title: '下拉框',
+      title: 'Dropdown',
       dataIndex: 'name3',
       editRow: true,
       editComponent: 'Select',
@@ -87,7 +87,7 @@
       width: 200,
     },
     {
-      title: '远程下拉',
+      title: 'Dropdown từ xa',
       dataIndex: 'name4',
       editRow: true,
       editComponent: 'ApiSelect',
@@ -100,7 +100,7 @@
       width: 200,
     },
     {
-      title: '远程下拉树',
+      title: 'Cây dropdown từ xa',
       dataIndex: 'name8',
       editRow: true,
       editComponent: 'ApiTreeSelect',
@@ -112,7 +112,7 @@
       width: 200,
     },
     {
-      title: '日期选择',
+      title: 'Chọn ngày',
       dataIndex: 'date',
       editRow: true,
       editComponent: 'DatePicker',
@@ -123,7 +123,7 @@
       width: 150,
     },
     {
-      title: '时间选择',
+      title: 'Chọn thời gian',
       dataIndex: 'time',
       editRow: true,
       editComponent: 'TimePicker',
@@ -134,23 +134,23 @@
       width: 100,
     },
     {
-      title: '勾选框',
+      title: 'Hộp kiểm',
       dataIndex: 'name5',
       editRow: true,
 
       editComponent: 'Checkbox',
       editValueMap: (value) => {
-        return value ? '是' : '否';
+        return value ? 'Có' : 'Không';
       },
       width: 100,
     },
     {
-      title: '开关',
+      title: 'Công tắc',
       dataIndex: 'name6',
       editRow: true,
       editComponent: 'Switch',
       editValueMap: (value) => {
-        return value ? '开' : '关';
+        return value ? 'Bật' : 'Tắt';
       },
       width: 100,
     },
@@ -164,8 +164,8 @@
       const { tableContext } = useListPage({
         designScope: 'basic-table-demo',
         tableProps: {
-          title: '可编辑行示例',
-          titleHelpMessage: ['本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变'],
+          title: 'Ví dụ hàng có thể chỉnh sửa',
+          titleHelpMessage: ['Sửa trong ví dụ này[Ô nhập số]cột này, cùng dòng[Dropdown từ xa]Dữ liệu chỉnh sửa hiện tại của cột cũng sẽ thay đổi đồng bộ'],
           api: demoListApi,
           columns: columns,
           showIndexColumn: false,
@@ -180,7 +180,7 @@
           useSearchForm: false,
         },
       });
-      //注册table数据
+      //Đăng ký dữ liệu table
       const [registerTable] = tableContext;
 
       function handleEdit(record: EditRecordRow) {
@@ -194,26 +194,26 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        // 校验
-        msg.loading({ content: '正在保存...', duration: 0, key: 'saving' });
+        // Kiểm chứng
+        msg.loading({ content: 'Đang lưu......', duration: 0, key: 'saving' });
         const valid = await record.onValid?.();
         if (valid) {
           try {
             const data = cloneDeep(record.editValueRefs);
             console.log(data);
-            //TODO 此处将数据提交给服务器保存
+            //TODO Tại đây gửi dữ liệu lên máy chủ để lưu
             // ...
-            // 保存之后提交编辑状态
+            // Sau khi lưu thì gửi trạng thái chỉnh sửa
             const pass = await record.onEdit?.(false, true);
             if (pass) {
               currentEditKeyRef.value = '';
             }
-            msg.success({ content: '数据已保存', key: 'saving' });
+            msg.success({ content: 'Dữ liệu đã lưu', key: 'saving' });
           } catch (error) {
-            msg.error({ content: '保存失败', key: 'saving' });
+            msg.error({ content: 'Lưu thất bại', key: 'saving' });
           }
         } else {
-          msg.error({ content: '请填写正确的数据', key: 'saving' });
+          msg.error({ content: 'Vui lòng điền dữ liệu chính xác', key: 'saving' });
         }
       }
 
@@ -221,7 +221,7 @@
         if (!record.editable) {
           return [
             {
-              label: '编辑',
+              label: 'Chỉnh sửa',
               disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
               onClick: handleEdit.bind(null, record),
             },
@@ -229,13 +229,13 @@
         }
         return [
           {
-            label: '保存',
+            label: 'Lưu',
             onClick: handleSave.bind(null, record, column),
           },
           {
-            label: '取消',
+            label: 'Hủy',
             popConfirm: {
-              title: '是否取消编辑',
+              title: 'Có hủy chỉnh sửa không',
               confirm: handleCancel.bind(null, record, column),
             },
           },
@@ -243,7 +243,7 @@
       }
 
       function onEditChange({ column, value, record }) {
-        // 本例
+        // Ví dụ này
         if (column.dataIndex === 'id') {
           record.editValueRefs.name4.value = `${value}`;
         }

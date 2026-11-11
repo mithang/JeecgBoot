@@ -2,7 +2,7 @@
   <div>
     <BasicTable @register="registerTable">
       <template #tableTitle>
-        <a-button type="primary" @click="handleCreate"> 新增 </a-button>
+        <a-button type="primary" @click="handleCreate"> Thêm mới </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
@@ -15,7 +15,7 @@
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {
-                title: '是否确认删除',
+                title: 'Có xác nhận xóa không',
                 confirm: handleDelete.bind(null, record),
               },
             },
@@ -43,7 +43,7 @@
     setup() {
       const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload }] = useTable({
-        title: '列表数据',
+        title: 'Dữ liệu danh sách',
         api: getTestListByPage,
         columns,
         formConfig: {
@@ -56,7 +56,7 @@
         showIndexColumn: false,
         actionColumn: {
           width: 80,
-          title: '操作',
+          title: 'Thao tác',
           dataIndex: 'action',
           slots: { customRender: 'action' },
           fixed: undefined,

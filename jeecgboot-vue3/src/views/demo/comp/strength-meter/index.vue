@@ -1,11 +1,11 @@
 <template>
-  <PageWrapper title="密码强度校验组件">
+  <PageWrapper title="Component kiểm tra độ mạnh mật khẩu">
     <div class="flex justify-center">
       <div class="demo-wrap p-10">
-        <StrengthMeter placeholder="默认" />
-        <StrengthMeter placeholder="禁用" disabled />
+        <StrengthMeter placeholder="Mặc định" />
+        <StrengthMeter placeholder="Vô hiệu hóa" disabled />
         <br />
-        <StrengthMeter placeholder="隐藏input" :show-input="false" value="!@#qwe12345" />
+        <StrengthMeter placeholder="Ẩninput" :show-input="false" value="!@#qwe12345" />
       </div>
     </div>
   </PageWrapper>

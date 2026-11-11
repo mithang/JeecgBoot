@@ -1,26 +1,26 @@
 <template>
-  <PageWrapper title="modal组件使用示例">
+  <PageWrapper title="modalVí dụ sử dụng component">
     <Alert
-      message="使用 useModal 进行弹窗操作，默认可以拖动，可以通过 draggable
-    参数进行控制是否可以拖动/全屏，并演示了在Modal内动态加载内容并自动调整高度"
+      message="Dùng useModal để thực hiện thao tác popup, mặc định có thể kéo thả, có thể thông qua draggable
+    Tham số kiểm soát có thể kéo hay không/toàn màn hình, và minh họa việc tải nội dung động trong Modal và tự động điều chỉnh chiều cao"
       show-icon
     />
-    <a-button type="primary" class="my-4" @click="openModalLoading"> 打开弹窗,加载动态数据并自动调整高度(默认可以拖动/全屏) </a-button>
+    <a-button type="primary" class="my-4" @click="openModalLoading"> Mở popup,Tải dữ liệu động và tự động điều chỉnh chiều cao(Mặc định có thể kéo/Toàn màn hình) </a-button>
 
-    <Alert message="内外同时同时显示隐藏" show-icon />
-    <a-button type="primary" class="my-4" @click="openModal2"> 打开弹窗</a-button>
-    <Alert message="自适应高度" show-icon />
-    <a-button type="primary" class="my-4" @click="openModal3"> 打开弹窗</a-button>
+    <Alert message="Hiển thị/ẩn đồng thời cả trong và ngoài" show-icon />
+    <a-button type="primary" class="my-4" @click="openModal2"> Mở popup</a-button>
+    <Alert message="Chiều cao tự thích ứng" show-icon />
+    <a-button type="primary" class="my-4" @click="openModal3"> Mở popup</a-button>
 
-    <Alert message="内外数据交互" show-icon />
-    <a-button type="primary" class="my-4" @click="send"> 打开弹窗并传递数据</a-button>
+    <Alert message="Tương tác dữ liệu trong và ngoài" show-icon />
+    <a-button type="primary" class="my-4" @click="send"> Mở popup và truyền dữ liệu</a-button>
 
-    <Alert message="使用动态组件的方式在页面内使用多个弹窗" show-icon />
+    <Alert message="Sử dụng component động để dùng nhiều popup trong trang" show-icon />
     <a-space>
-      <a-button type="primary" class="my-4" @click="openTargetModal(1)"> 打开弹窗1</a-button>
-      <a-button type="primary" class="my-4" @click="openTargetModal(2)"> 打开弹窗2</a-button>
-      <a-button type="primary" class="my-4" @click="openTargetModal(3)"> 打开弹窗3</a-button>
-      <a-button type="primary" class="my-4" @click="openTargetModal(4)"> 打开弹窗4</a-button>
+      <a-button type="primary" class="my-4" @click="openTargetModal(1)"> Mở popup1</a-button>
+      <a-button type="primary" class="my-4" @click="openTargetModal(2)"> Mở popup2</a-button>
+      <a-button type="primary" class="my-4" @click="openTargetModal(3)"> Mở popup3</a-button>
+      <a-button type="primary" class="my-4" @click="openTargetModal(4)"> Mở popup4</a-button>
     </a-space>
 
     <component :is="currentModal" v-model:visible="modalVisible" :userData="userData" />

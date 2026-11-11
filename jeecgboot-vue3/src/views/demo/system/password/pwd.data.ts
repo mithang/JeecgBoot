@@ -3,27 +3,27 @@ import { FormSchema } from '/@/components/Form';
 export const formSchema: FormSchema[] = [
   {
     field: 'passwordOld',
-    label: '当前密码',
+    label: 'Mật khẩu hiện tại',
     component: 'InputPassword',
     required: true,
   },
   {
     field: 'passwordNew',
-    label: '新密码',
+    label: 'Mật khẩu mới',
     component: 'StrengthMeter',
     componentProps: {
-      placeholder: '新密码',
+      placeholder: 'Mật khẩu mới',
     },
     rules: [
       {
         required: true,
-        message: '请输入新密码',
+        message: 'Vui lòng nhập mật khẩu mới',
       },
     ],
   },
   {
     field: 'confirmPassword',
-    label: '确认密码',
+    label: 'Xác nhận mật khẩu',
     component: 'InputPassword',
 
     dynamicRules: ({ values }) => {
@@ -32,10 +32,10 @@ export const formSchema: FormSchema[] = [
           required: true,
           validator: (_, value) => {
             if (!value) {
-              return Promise.reject('不能为空');
+              return Promise.reject('Không được trống');
             }
             if (value !== values.passwordNew) {
-              return Promise.reject('两次输入的密码不一致!');
+              return Promise.reject('Mật khẩu nhập hai lần không khớp!');
             }
             return Promise.resolve();
           },

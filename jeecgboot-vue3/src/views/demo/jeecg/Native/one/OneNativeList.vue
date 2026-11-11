@@ -1,32 +1,32 @@
 <template>
   <a-card :bordered="false">
-    <!-- 操作按钮区域 -->
+    <!-- Khu vực nút thao tác -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" preIcon="ant-design:plus">新增</a-button>
-      <!--      <a-button type="primary" preIcon="ant-design:download" @click="handleExportExcel('单表原生列表')">导出</a-button>-->
-      <!--      <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="handleImportExcel">导入</j-upload-button>-->
+      <a-button @click="handleAdd" type="primary" preIcon="ant-design:plus">Thêm mới</a-button>
+      <!--      <a-button type="primary" preIcon="ant-design:download" @click="handleExportExcel('Danh sách gốc đơn bảng')">Xuất</a-button>-->
+      <!--      <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="handleImportExcel">Import</j-upload-button>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <template #overlay>
           <a-menu>
             <a-menu-item key="1" @click="batchDel">
               <Icon icon="ant-design:delete-outlined"></Icon>
-              删除
+              Xóa
             </a-menu-item>
           </a-menu>
         </template>
         <a-button
-          >批量操作
+          >Thao tác hàng loạt
           <Icon icon="mdi:chevron-down"></Icon>
         </a-button>
       </a-dropdown>
     </div>
 
-    <!-- table区域-begin -->
+    <!-- tableKhu vực-begin -->
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
-        >项
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
+        <i class="anticon anticon-info-circle ant-alert-icon"></i> Đã chọn <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
+        >Mục
+        <a style="margin-left: 24px" @click="onClearSelected">Xóa sạch</a>
       </div>
 
       <a-table
@@ -45,26 +45,26 @@
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex==='tupian'">
-            <span v-if="!text" style="font-size: 12px; font-style: italic">无图片</span>
+            <span v-if="!text" style="font-size: 12px; font-style: italic">Không có hình ảnh</span>
             <img v-else :src="getImgView(text)" :preview="record.id" alt="" class="anty-img-wrap" />
           </template>
           <template v-else-if="column.dataIndex==='wenjian'">
-            <span v-if="!text" style="font-size: 12px; font-style: italic">无文件</span>
-            <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download" size="small" @click="downloadFile(text)"> 下载 </a-button>
+            <span v-if="!text" style="font-size: 12px; font-style: italic">Không có tệp</span>
+            <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download" size="small" @click="downloadFile(text)"> Tải xuống </a-button>
           </template>
           <template v-else-if="column.dataIndex==='action'">
-            <a @click="handleEdit(record)">编辑</a>
+            <a @click="handleEdit(record)">Chỉnh sửa</a>
             <a-divider type="vertical" />
             <a-dropdown>
-              <a class="ant-dropdown-link">更多 <Icon icon="mdi-light:chevron-down"></Icon></a>
+              <a class="ant-dropdown-link">Thêm <Icon icon="mdi-light:chevron-down"></Icon></a>
               <template #overlay>
                 <a-menu class="antd-more">
                   <a-menu-item>
-                    <a @click="handleDetail(record)">详情</a>
+                    <a @click="handleDetail(record)">Chi tiết</a>
                   </a-menu-item>
                   <a-menu-item>
-                    <Popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)" placement="left">
-                      <a>删除</a>
+                    <Popconfirm title="Bạn có chắc chắn muốn xóa không?" @confirm="() => handleDelete(record.id)" placement="left">
+                      <a>Xóa</a>
                     </Popconfirm>
                   </a-menu-item>
                 </a-menu>
@@ -109,39 +109,39 @@
   const dictOptions = ref<any>([]);
   const oneProtogenesisModal = ref();
   const tokenHeader = { 'X-Access-Token': getToken() };
-  //表头
+  //Tiêu đề bảng
   const columns = ref<any>([
     {
-      title: '文本',
+      title: 'Văn bản',
       align: 'center',
       dataIndex: 'name',
     },
     {
-      title: '字典下拉',
+      title: 'Danh sách thả xuống từ điển',
       align: 'center',
       dataIndex: 'xiala',
       customRender: ({ text }) => (text ? filterMultiDictText(dictOptions.value['xiala'], text) : ''),
     },
     {
-      title: '字典单选',
+      title: 'Chọn một từ điển',
       align: 'center',
       dataIndex: 'danxuan',
       customRender: ({ text }) => (text ? filterMultiDictText(dictOptions.value['danxuan'], text) : ''),
     },
     {
-      title: '字典多选',
+      title: 'Chọn nhiều từ điển',
       align: 'center',
       dataIndex: 'duoxuan',
       customRender: ({ text }) => (text ? filterMultiDictText(dictOptions.value['duoxuan'], text) : ''),
     },
     {
-      title: '开关',
+      title: 'Công tắc',
       align: 'center',
       dataIndex: 'kaiguan',
       customRender: ({ text }) => (text ? filterMultiDictText(dictOptions.value['kaiguan'], text) : ''),
     },
     {
-      title: '日期',
+      title: 'Ngày',
       align: 'center',
       dataIndex: 'riqi',
       customRender: function ({ text }) {
@@ -149,27 +149,27 @@
       },
     },
     {
-      title: '年月日时分秒',
+      title: 'Năm tháng ngày giờ phút giây',
       align: 'center',
       dataIndex: 'nyrsfm',
     },
     {
-      title: '时间',
+      title: 'Thời gian',
       align: 'center',
       dataIndex: 'shijian',
     },
     {
-      title: '文件',
+      title: 'Tệp',
       align: 'center',
       dataIndex: 'wenjian',
     },
     {
-      title: '图片',
+      title: 'Hình ảnh',
       align: 'center',
       dataIndex: 'tupian',
     },
     {
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       align: 'center',
       fixed: 'right',
@@ -191,7 +191,7 @@
     pageSize: 10,
     pageSizeOptions: ['10', '20', '30'],
     showTotal: (total, range) => {
-      return range[0] + '-' + range[1] + ' 共' + total + '条';
+      return range[0] + '-' + range[1] + ' Tổng cộng' + total + 'mục';
     },
     showQuickJumper: true,
     showSizeChanger: true,
@@ -205,7 +205,7 @@
   const { createMessage } = useMessage();
 
   /**
-   * 复选框选中事件
+   * Sự kiện chọn checkbox
    * @param rowKeys
    * @param rows
    */
@@ -215,7 +215,7 @@
   }
 
   /**
-   * 表格改变事件
+   * Sự kiện thay đổi bảng
    */
   function handleTableChange({ pagination, filters, sorter }) {
     ipagination.value = pagination;
@@ -224,7 +224,7 @@
   }
 
   /**
-   * 新增
+   * Thêm mới
    */
   function handleAdd() {
     oneProtogenesisModal.value.disableSubmit = false;
@@ -232,7 +232,7 @@
   }
 
   /**
-   * 清除选中行
+   * Xóa hàng đã chọn
    */
   function onClearSelected() {
     selectedRowKeys.value = [];
@@ -240,14 +240,14 @@
   }
 
   /**
-   * 批量删除
+   * Xóa hàng loạt
    */
   function batchDel() {
     Modal.confirm({
-      title: '确认删除',
-      content: '是否删除选中数据',
-      okText: '确认',
-      cancelText: '取消',
+      title: 'Xác nhận xóa',
+      content: 'Có xóa dữ liệu đã chọn không',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: () => {
         defHttp.delete({ url: Api.delete, data: { ids: selectedRowKeys.value } }, { joinParamsToUrl: true }).then(() => {
           handleSuccess();
@@ -257,7 +257,7 @@
   }
 
   /**
-   * 导出excel
+   * Xuấtexcel
    */
   function handleExportExcel(title) {
     let paramsForm = getQueryParams();
@@ -268,7 +268,7 @@
   }
 
   /**
-   * 导入excel
+   * Importexcel
    */
   function handleImportExcel(file) {
     handleImportXls(file, Api.importExcel, '').then(() => {
@@ -277,7 +277,7 @@
   }
 
   /**
-   * 获取查询参数
+   * Lấy tham số truy vấn
    */
   function getQueryParams() {
     let params = Object.assign(queryParam.value, iSorter.value, iFilters.value);
@@ -288,7 +288,7 @@
   }
 
   /**
-   * 字段权限控制
+   * Kiểm soát quyền trường
    */
   function getQueryField() {
     let str = 'id,';
@@ -299,7 +299,7 @@
   }
 
   /**
-   * 初始化数据
+   * Dữ liệu khởi tạo
    */
   function loadData(arg?) {
     if (arg === 1) {
@@ -326,7 +326,7 @@
       });
   }
 
-  //查询
+  //Truy vấn
   function searchQuery() {
     loadData(1);
     selectedRowKeys.value = [];
@@ -334,14 +334,14 @@
   }
 
   /**
-   * 查询区域展开关闭
+   * Mở rộng/thu gọn vùng tìm kiếm
    */
   function handleToggleSearch() {
     toggleSearchStatus.value = !toggleSearchStatus.value;
   }
 
   /**
-   * 重置按钮
+   * Nút đặt lại
    */
   function searchReset() {
     queryParam.value = {};
@@ -349,7 +349,7 @@
   }
 
   /**
-   * 获取预览图片
+   * Lấy hình ảnh xem trước
    */
   function getImgView(text) {
     if (text && text.indexOf(',') > 0) {
@@ -359,7 +359,7 @@
   }
 
   /**
-   * 编辑
+   * Chỉnh sửa
    * @param record
    */
   function handleEdit(record) {
@@ -368,7 +368,7 @@
   }
 
   /**
-   * 详情
+   * Chi tiết
    * @param record
    */
   function handleDetail(record) {
@@ -377,7 +377,7 @@
   }
 
   /**
-   * 删除
+   * Xóa
    * @param id
    */
   function handleDelete(id) {
@@ -387,7 +387,7 @@
   }
 
   /**
-   * 初始化字典选项
+   * Khởi tạo tùy chọn từ điển
    */
   async function initDictConfig() {
     dictOptions.value['flzds'] = await loadCategoryData({ code: 'B01' });
@@ -397,7 +397,7 @@
   }
 
   /**
-   * 保存表单后回调事件
+   * Sự kiện callback sau khi lưu biểu mẫu
    */
   function handleSuccess() {
     selectedRowKeys.value = [];
@@ -406,12 +406,12 @@
   }
   onMounted(() => {
     dictOptions.value['kaiguan'] = [
-      { text: '是', value: '1' },
-      { text: '否', value: '2' },
+      { text: 'Có', value: '1' },
+      { text: 'Không', value: '2' },
     ];
-    //初始加载页面
+    //Tải trang ban đầu
     loadData();
-    //初始化字典选项
+    //Khởi tạo tùy chọn từ điển
     initDictConfig();
   });
 </script>

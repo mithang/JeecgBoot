@@ -1,6 +1,6 @@
 <template>
   <div class="p-5">
-    多层级缓存-页面1-2
+    Cache nhiều cấp-Trang1-2
     <br />
     <Input />
   </div>

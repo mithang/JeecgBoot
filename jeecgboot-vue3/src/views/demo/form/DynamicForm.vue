@@ -1,16 +1,16 @@
 <template>
-  <PageWrapper title="动态表单示例">
+  <PageWrapper title="Ví dụ biểu mẫu động">
     <div class="mb-4">
-      <a-button @click="changeLabel3" class="mr-2"> 更改字段3label </a-button>
-      <a-button @click="changeLabel34" class="mr-2"> 同时更改字段3,4label </a-button>
-      <a-button @click="appendField" class="mr-2"> 往字段3后面插入字段10 </a-button>
-      <a-button @click="deleteField" class="mr-2"> 删除字段11 </a-button>
+      <a-button @click="changeLabel3" class="mr-2"> Thay đổi trường3label </a-button>
+      <a-button @click="changeLabel34" class="mr-2"> Đồng thời thay đổi trường3,4label </a-button>
+      <a-button @click="appendField" class="mr-2"> Chèn trường vào sau trường 310 </a-button>
+      <a-button @click="deleteField" class="mr-2"> Xóa trường11 </a-button>
     </div>
-    <CollapseContainer title="动态表单示例,动态根据表单内其他值改变">
+    <CollapseContainer title="Ví dụ biểu mẫu động,Thay đổi động theo các giá trị khác trong biểu mẫu">
       <BasicForm @register="register" />
     </CollapseContainer>
 
-    <CollapseContainer class="mt-5" title="componentProps动态改变">
+    <CollapseContainer class="mt-5" title="componentPropsThay đổi động">
       <BasicForm @register="register1" />
     </CollapseContainer>
   </PageWrapper>
@@ -26,7 +26,7 @@
     {
       field: 'field5',
       component: 'Switch',
-      label: '是否显示字段1(css控制)',
+      label: 'Có hiển thị trường không1(cssĐiều khiển)',
       defaultValue: true,
       colProps: {
         span: 12,
@@ -36,7 +36,7 @@
     {
       field: 'field1',
       component: 'Input',
-      label: '字段1',
+      label: 'Trường1',
       colProps: {
         span: 12,
       },
@@ -47,7 +47,7 @@
     {
       field: 'field6',
       component: 'Switch',
-      label: '是否显示字段2(dom控制)',
+      label: 'Có hiển thị trường không2(domĐiều khiển)',
       defaultValue: true,
       colProps: {
         span: 12,
@@ -57,7 +57,7 @@
     {
       field: 'field2',
       component: 'Input',
-      label: '字段2',
+      label: 'Trường2',
       colProps: {
         span: 12,
       },
@@ -68,7 +68,7 @@
     {
       field: 'field7',
       component: 'Switch',
-      label: '是否禁用字段3',
+      label: 'Có vô hiệu hóa trường không3',
       colProps: {
         span: 12,
       },
@@ -77,7 +77,7 @@
     {
       field: 'field3',
       component: 'DatePicker',
-      label: '字段3',
+      label: 'Trường3',
       colProps: {
         span: 12,
       },
@@ -88,7 +88,7 @@
     {
       field: 'field8',
       component: 'Switch',
-      label: '字段4是否必填',
+      label: 'Trường 4 có bắt buộc không',
       colProps: {
         span: 12,
       },
@@ -97,22 +97,22 @@
     {
       field: 'field4',
       component: 'Select',
-      label: '字段4',
+      label: 'Trường4',
       colProps: {
         span: 12,
       },
       dynamicRules: ({ values }) => {
-        return values.field8 ? [{ required: true, message: '字段必填' }] : [];
+        return values.field8 ? [{ required: true, message: 'Trường bắt buộc' }] : [];
       },
       componentProps: {
         options: [
           {
-            label: '选项1',
+            label: 'Tùy chọn1',
             value: '1',
             key: '1',
           },
           {
-            label: '选项2',
+            label: 'Tùy chọn2',
             value: '2',
             key: '2',
           },
@@ -122,7 +122,7 @@
     {
       field: 'field11',
       component: 'DatePicker',
-      label: '字段11',
+      label: 'Trường11',
       colProps: {
         span: 8,
       },
@@ -140,7 +140,7 @@
       labelWidth: 200,
       componentProps: ({ formModel }) => {
         return {
-          placeholder: '同步f2的值为f1',
+          placeholder: 'Đồng bộ giá trị của f2 thành f1f1',
           onChange: (e: ChangeEvent) => {
             formModel.f2 = e.target.value;
           },
@@ -168,10 +168,10 @@
       // @ts-ignore
       componentProps: ({ formActionType }) => {
         return {
-          placeholder: '值改变时执行查询,查看控制台',
+          placeholder: 'Khi giá trị thay đổi sẽ thực hiện truy vấn,Xem bảng điều khiển (console)',
           onChange: async () => {
             const { validate } = formActionType;
-            // tableAction只适用于在表格内开启表单的例子
+            // tableActionChỉ áp dụng cho ví dụ mở biểu mẫu trong bảng
             // const { reload } = tableAction;
             const res = await validate();
             console.log(res);
@@ -187,7 +187,7 @@
       const [register, { setProps, updateSchema, appendSchemaByField, removeSchemaByFiled }] = useForm({
         labelWidth: 120,
         schemas,
-        //禁用表单所有组件
+        //Vô hiệu hóa tất cả component của biểu mẫu
         disabled: true,
         labelCol: {
           xs: { span: 24 },
@@ -211,18 +211,18 @@
       function changeLabel3() {
         updateSchema({
           field: 'field3',
-          label: '字段3 New',
+          label: 'Trường3 New',
         });
       }
       function changeLabel34() {
         updateSchema([
           {
             field: 'field3',
-            label: '字段3 New++',
+            label: 'Trường3 New++',
           },
           {
             field: 'field4',
-            label: '字段4 New++',
+            label: 'Trường4 New++',
           },
         ]);
       }
@@ -231,7 +231,7 @@
         appendSchemaByField(
           {
             field: 'field10',
-            label: '字段10',
+            label: 'Trường10',
             component: 'Input',
             colProps: {
               span: 8,

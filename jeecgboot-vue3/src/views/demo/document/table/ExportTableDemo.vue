@@ -1,12 +1,12 @@
 <template>
   <div class="p-4">
-    <!--引用表格-->
+    <!--Bảng tham chiếu-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
+        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất</a-button>
+        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">Import</j-upload-button>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -18,10 +18,10 @@
   import { ActionItem, BasicColumn, BasicTable, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { defHttp } from '/@/utils/http/axios';
-  //定义表格列
+  //Định nghĩa cột bảng
   const columns: BasicColumn[] = [
     {
-      title: '姓名',
+      title: 'Họ tên',
       dataIndex: 'name',
       width: 170,
       align: 'left',
@@ -31,19 +31,19 @@
       },
     },
     {
-      title: '关键词',
+      title: 'Từ khóa',
       dataIndex: 'keyWord',
       width: 130,
       resizable: true,
     },
     {
-      title: '打卡时间',
+      title: 'Thời gian chấm công',
       dataIndex: 'punchTime',
       width: 140,
       resizable: true,
     },
     {
-      title: '工资',
+      title: 'Lương',
       dataIndex: 'salaryMoney',
       width: 140,
       resizable: true,
@@ -52,72 +52,72 @@
       },
     },
     {
-      title: '奖金',
+      title: 'Tiền thưởng',
       dataIndex: 'bonusMoney',
       width: 140,
       resizable: true,
     },
     {
-      title: '性别',
+      title: 'Giới tính',
       dataIndex: 'sex',
       sorter: {
         multiple: 3,
       },
       filters: [
-        { text: '男', value: '1' },
-        { text: '女', value: '2' },
+        { text: 'Nam', value: '1' },
+        { text: 'Nữ', value: '2' },
       ],
       customRender: ({ record }) => {
-        return record.sex ? (record.sex == '1' ? '男' : '女') : '';
+        return record.sex ? (record.sex == '1' ? 'Nam' : 'Nữ') : '';
       },
       width: 120,
       resizable: true,
     },
     {
-      title: '生日',
+      title: 'Ngày sinh',
       dataIndex: 'birthday',
       width: 120,
       resizable: true,
     },
     {
-      title: '邮箱',
+      title: 'Email',
       dataIndex: 'email',
       width: 120,
       resizable: true,
     },
   ];
 
-  //ajax请求api接口
+  //ajaxYêu cầu API
   const demoListApi = (params) => {
     return defHttp.get({ url: '/test/jeecgDemo/list', params });
   };
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { tableContext, onExportXls, onImportXls } = useListPage({
     designScope: 'basic-table-demo-filter',
     tableProps: {
-      title: '表单搜索',
+      title: 'Tìm kiếm biểu mẫu',
       api: demoListApi,
       columns: columns,
       showActionColumn: false,
       useSearchForm: false,
     },
     exportConfig: {
-      name: '示例列表',
+      name: 'Danh sách ví dụ',
       url: '/test/jeecgDemo/exportXls',
     },
     importConfig: {
       url: '/test/jeecgDemo/importExcel',
     },
   });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload }, { rowSelection, selectedRows, selectedRowKeys }] = tableContext;
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
     ];

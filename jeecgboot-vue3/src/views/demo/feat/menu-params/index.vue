@@ -1,15 +1,15 @@
 <template>
-  <PageWrapper title="带参数菜单（路由）" content="支持多级参数">
-    当前参数：{{ params }}
+  <PageWrapper title="Menu có tham số (route)" content="Hỗ trợ tham số nhiều cấp">
+    Tham số hiện tại:{{ params }}
     <br />
-    输入参数切换路由：
-    <Input v-model:value="value" placeholder="建议为url标准字符，输入后点击切换" />
-    <a-button type="primary" @click="handleClickGo">切换路由</a-button>
+    Nhập tham số để chuyển route:
+    <Input v-model:value="value" placeholder="Nên dùng ký tự chuẩn của url, sau khi nhập bấm để chuyển đổi" />
+    <a-button type="primary" @click="handleClickGo">Chuyển đổi route</a-button>
     <br />
-    切换路由后
+    Sau khi chuyển route
     <ul>
-      <li>可刷新页面测试路由参数情况是否正常。</li>
-      <li>可于左侧菜单中展开子菜单，点击测试参数是否携带正常。</li>
+      <li>Có thể làm mới trang để kiểm tra tình trạng tham số route có bình thường không.</li>
+      <li>Có thể mở rộng menu con trong menu bên trái, nhấp để kiểm tra tham số có được mang theo bình thường không.</li>
     </ul>
   </PageWrapper>
 </template>

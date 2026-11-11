@@ -4,40 +4,40 @@
       <div style="overflow-x: hidden">
         <a-row class="form-row" :gutter="16">
           <a-col :lg="8">
-            <a-form-item label="订单号" name="orderCode">
-              <a-input v-model:value="orderMainModel.orderCode" placeholder="请输入订单号" />
+            <a-form-item label="Số đơn hàng" name="orderCode">
+              <a-input v-model:value="orderMainModel.orderCode" placeholder="Vui lòng nhập mã đơn hàng" />
             </a-form-item>
           </a-col>
           <a-col :lg="8">
-            <a-form-item label="订单类型" name="ctype">
-              <a-select placeholder="请选择订单类型" v-model:value="orderMainModel.ctype">
-                <a-select-option value="1">国内订单</a-select-option>
-                <a-select-option value="2">国际订单</a-select-option>
+            <a-form-item label="Loại đơn hàng" name="ctype">
+              <a-select placeholder="Vui lòng chọn loại đơn hàng" v-model:value="orderMainModel.ctype">
+                <a-select-option value="1">Đơn hàng nội địa</a-select-option>
+                <a-select-option value="2">Đơn hàng quốc tế</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
           <a-col :lg="8">
-            <a-form-item label="订单日期" name="orderDate">
+            <a-form-item label="Ngày đặt hàng" name="orderDate">
               <a-date-picker showTime valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="orderMainModel.orderDate" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row class="form-row" :gutter="16">
           <a-col :lg="8">
-            <a-form-item label="订单金额" name="orderMoney">
-              <a-input v-model:value="orderMainModel.orderMoney" placeholder="请输入订单金额" />
+            <a-form-item label="Số tiền đơn hàng" name="orderMoney">
+              <a-input v-model:value="orderMainModel.orderMoney" placeholder="Vui lòng nhập số tiền đơn hàng" />
             </a-form-item>
           </a-col>
           <a-col :lg="8">
-            <a-form-item label="订单备注" name="content">
-              <a-input v-model:value="orderMainModel.content" placeholder="请输入订单备注" />
+            <a-form-item label="Ghi chú đơn hàng" name="content">
+              <a-input v-model:value="orderMainModel.content" placeholder="Vui lòng nhập ghi chú đơn hàng" />
             </a-form-item>
           </a-col>
         </a-row>
       </div>
-      <!-- 子表单区域 -->
+      <!-- Khu vực biểu mẫu con -->
       <a-tabs v-model:activeKey="activeKey" @change="handleChangeTabs">
-        <a-tab-pane tab="客户信息" key="tableRef1">
+        <a-tab-pane tab="Thông tin khách hàng" key="tableRef1">
           <JVxeTable
             ref="tableRef1"
             stripe
@@ -54,7 +54,7 @@
           ></JVxeTable>
         </a-tab-pane>
 
-        <a-tab-pane tab="机票信息" key="tableRef2" forceRender>
+        <a-tab-pane tab="Thông tin vé máy bay" key="tableRef2" forceRender>
           <JVxeTable
             ref="tableRef2"
             stripe
@@ -100,13 +100,13 @@
         xs: { span: 24 },
         sm: { span: 16 },
       });
-      // 客户信息
+      // Thông tin khách hàng
       const table1 = reactive({
         loading: false,
         dataSource: [],
         columns,
       });
-      // 机票信息
+      // Thông tin vé máy bay
       const table2 = reactive({
         loading: false,
         dataSource: [],
@@ -134,20 +134,20 @@
         isUpdate.value = !!data?.isUpdate;
         if (unref(isUpdate)) {
           Object.assign(orderMainModel, data.record);
-          //加载子表数据
+          //Tải dữ liệu bảng con
           let params = { id: orderMainModel.id };
           requestSubTableData(orderCustomerList, params, table1);
           requestSubTableData(orderTicketList, params, table2);
         }
       });
 
-      const validatorRules = { orderCode: [{ required: true, message: '订单号不能为空', trigger: 'blur' }] };
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
+      const validatorRules = { orderCode: [{ required: true, message: 'Mã đơn hàng không được để trống', trigger: 'blur' }] };
+      const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
 
       function classifyIntoFormData(allValues) {
         let orderMain = Object.assign(orderMainModel, allValues.formValue);
         return {
-          ...orderMain, // 展开
+          ...orderMain, // Mở rộng
           jeecgOrderCustomerList: allValues.tablesValue[0].tableData,
           jeecgOrderTicketList: allValues.tablesValue[1].tableData,
         };
@@ -166,14 +166,14 @@
       }
       async function requestAddOrEdit(values) {
         setModalProps({ confirmLoading: true });
-        //提交表单
+        //Gửi biểu mẫu
         await saveOrUpdate(values, unref(isUpdate));
-        //关闭弹窗
+        //Đóng popup
         closeModal();
-        //刷新列表
+        //Làm mới danh sách
         emit('success');
       }
-      // 代码逻辑说明: 【QQYUN-5866】放大行数自适应
+      // Giải thích logic mã: 【QQYUN-5866] phóng to số dòng tự thích ứng
       const handleFullScreen = (val) => {
         tableH.value=val ? document.documentElement.clientHeight - 387 :  300;
       };

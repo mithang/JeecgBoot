@@ -5,41 +5,41 @@ const { isDisabledAuth, hasPermission, initBpmFormData} = usePermission();
 
 export const columns: BasicColumn[] = [
   {
-    title: '订单号',
+    title: 'Số đơn hàng',
     dataIndex: 'orderCode',
     width: 260,
   },
   {
-    title: '订单类型',
+    title: 'Loại đơn hàng',
     dataIndex: 'ctype',
     slots: { customRender: 'ctype' },
   },
   {
-    title: '订单日期',
+    title: 'Ngày đặt hàng',
     dataIndex: 'orderDate',
     width: 300,
   },
   {
-    title: '订单金额',
+    title: 'Số tiền đơn hàng',
     width: 200,
     dataIndex: 'orderMoney',
   },
   {
-    title: '订单备注',
+    title: 'Ghi chú đơn hàng',
     width: 200,
     dataIndex: 'content',
   },
   {
-    title: '流程状态',
+    title: 'Trạng thái quy trình',
     width: 200,
     dataIndex: 'bpmStatus',
     customRender: ({ text }) => {
       if (!text || text == '1') {
-        return '待提交';
+        return 'Chờ gửi';
       } else if (text == '2') {
-        return '处理中';
+        return 'Đang xử lý';
       } else if (text == '2') {
-        return '已完成';
+        return 'Đã hoàn thành';
       } else {
         return text;
       }
@@ -48,12 +48,12 @@ export const columns: BasicColumn[] = [
 ];
 
 export function getBpmFormSchema(formData) {
-  //注入流程节点表单权限
+  //Chèn quyền biểu mẫu của nút quy trình
   initBpmFormData(formData);
   
   const formSchema2: FormSchema[] = [
     {
-      label: '订单号',
+      label: 'Số đơn hàng',
       field: 'orderCode',
       component: 'Input',
       show: ({ values }) => {
@@ -61,18 +61,18 @@ export function getBpmFormSchema(formData) {
       },
     },
     {
-      label: '订单类型',
+      label: 'Loại đơn hàng',
       field: 'ctype',
       component: 'Select',
       componentProps: {
         options: [
-          { label: '国内订单', value: '1', key: '1' },
-          { label: '国际订单', value: '2', key: '2' },
+          { label: 'Đơn hàng nội địa', value: '1', key: '1' },
+          { label: 'Đơn hàng quốc tế', value: '2', key: '2' },
         ],
       },
     },
     {
-      label: '订单日期',
+      label: 'Ngày đặt hàng',
       field: 'orderDate',
       component: 'DatePicker',
       componentProps: {
@@ -83,12 +83,12 @@ export function getBpmFormSchema(formData) {
       },
     },
     {
-      label: '订单金额',
+      label: 'Số tiền đơn hàng',
       field: 'orderMoney',
       component: 'Input',
     },
     {
-      label: '订单备注',
+      label: 'Ghi chú đơn hàng',
       field: 'content',
       component: 'Input',
     },
@@ -97,12 +97,12 @@ export function getBpmFormSchema(formData) {
 }
 
 export function getOrderCustomerFormSchema(formData) {
-  //注入流程节点表单权限
+  //Chèn quyền biểu mẫu của nút quy trình
   initBpmFormData(formData);
   
   const formSchema2: FormSchema[] = [
     {
-      label: '客户名',
+      label: 'Tên khách hàng',
       field: 'name',
       component: 'Input',
       dynamicDisabled: ({ values }) => {
@@ -110,23 +110,23 @@ export function getOrderCustomerFormSchema(formData) {
       },
     },
     {
-      label: '性别',
+      label: 'Giới tính',
       field: 'sex',
       component: 'Select',
       componentProps: {
         options: [
-          { label: '男', value: '1', key: '1' },
-          { label: '女', value: '2', key: '2' },
+          { label: 'Nam', value: '1', key: '1' },
+          { label: 'Nữ', value: '2', key: '2' },
         ],
       },
     },
     {
-      label: '身份证号',
+      label: 'Số chứng minh nhân dân',
       field: 'idcard',
       component: 'Input',
     },
     {
-      label: '手机号',
+      label: 'Số điện thoại',
       field: 'telphone',
       component: 'Input',
     },
@@ -136,19 +136,19 @@ export function getOrderCustomerFormSchema(formData) {
 
 export const jeecgOrderTicketColumns: JVxeColumn[] = [
   {
-    title: '航班号',
+    title: 'Số hiệu chuyến bay',
     key: 'ticketCode',
     width: 180,
     type: JVxeTypes.input,
-    placeholder: '请输入${title}',
+    placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },
   {
-    title: '航班时间',
+    title: 'Thời gian chuyến bay',
     key: 'tickectDate',
     width: 180,
     type: JVxeTypes.date,
-    placeholder: '请选择${title}',
+    placeholder: 'Vui lòng chọn${title}',
     defaultValue: '',
   },
 ];

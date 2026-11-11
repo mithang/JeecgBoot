@@ -1,56 +1,56 @@
-<!-- 表单验证 -->
+<!-- Kiểm tra biểu mẫu -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" @submit="handleSubmit" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'visitor',
-      label: '来访人员',
+      label: 'Khách đến thăm',
       component: 'Input',
-      //自动触发检验，布尔类型
+      //Tự động kích hoạt kiểm chứng, kiểu boolean
       required: true,
-      //检验的时候不加上标题
+      //Khi kiểm chứng không cộng thêm tiêu đề
       rulesMessageJoinLabel: false,
     },
     {
       field: 'accessed',
-      label: '来访日期',
+      label: 'Ngày đến thăm',
       component: 'DatePicker',
-      //支持获取当前值判断触发 values代表当前表单的值
+      //Hỗ trợ lấy giá trị hiện tại để xác định kích hoạt, values đại diện cho giá trị của biểu mẫu hiện tại
       required: ({ values }) => {
         return !values.accessed;
       },
     },
     {
       field: 'phone',
-      label: '来访人手机号',
+      label: 'Số điện thoại của khách đến thăm',
       component: 'Input',
-      //支持正则表达式pattern 和 自定义提示信息 message
-      rules: [{ required: false, message: '请输入正确的手机号', pattern: /^1[3456789]\d{9}$/ }],
+      //Hỗ trợ pattern biểu thức chính quy và thông báo gợi ý tùy chỉnh message
+      rules: [{ required: false, message: 'Vui lòng nhập đúng số điện thoại', pattern: /^1[3456789]\d{9}$/ }],
     },
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showResetButton: false,
     labelWidth: '150px',
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 
   /**
-   * 提交事件
+   * Sự kiện gửi
    */
   function handleSubmit(values: any) {}
 </script>

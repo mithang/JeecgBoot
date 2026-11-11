@@ -4,27 +4,27 @@ import dayjs from 'dayjs';
 
 export const schemas: FormSchema[] = [
   {
-    label: '文本框',
+    label: 'Hộp văn bản',
     field: 'name',
     component: 'Input',
     componentProps: {
-      prefix: '中文',
+      prefix: 'Tiếng Trung',
       showCount: true,
     },
-    defaultValue: '张三',
+    defaultValue: 'Trương Tam',
   },
   {
-    label: '密码',
+    label: 'Mật khẩu',
     field: 'password',
     component: 'InputPassword',
     componentProps: {
-      //是否显示切换按钮或者控制密码显隐
+      //Có hiển thị nút chuyển đổi hay điều khiển hiện/ẩn mật khẩu hay không
       visibilityToggle: true,
-      prefix: '密码',
+      prefix: 'Mật khẩu',
     },
   },
   {
-    label: '搜索框',
+    label: 'Hộp tìm kiếm',
     field: 'searchBox',
     component: 'InputSearch',
     componentProps: {
@@ -34,92 +34,92 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: '文本域',
+    label: 'Vùng văn bản',
     field: 'textArea',
     component: 'InputTextArea',
     componentProps: {
-      //可以点击清除图标删除内容
+      //Có thể nhấp vào biểu tượng xóa để xóa nội dung
       allowClear: true,
-      //是否展示字数
+      //Có hiển thị số ký tự không
       showCount: true,
-      //自适应内容高度，可设置为 true | false 或对象：{ minRows: 2, maxRows: 6 }
+      //Chiều cao tự thích ứng theo nội dung, có thể đặt thành true | false hoặc đối tượng:{ minRows: 2, maxRows: 6 }
       autoSize: {
-        //最小显示行数
+        //Số dòng hiển thị tối thiểu
         minRows: 2,
-        //最大显示行数
+        //Số dòng hiển thị tối đa
         maxRows: 3,
       },
     },
   },
   {
-    label: '数值输入框',
+    label: 'Ô nhập số',
     field: 'number',
     component: 'InputNumber',
     componentProps: {
-      //带标签的 input，设置后置标签
-      addonAfter: '保留两位小数',
-      //最大值
+      //input có nhãn, đặt nhãn phía sau
+      addonAfter: 'Giữ lại hai chữ số thập phân',
+      //Giá trị lớn nhất
       max: 100,
-      //数值经度
+      //Kinh độ số
       precision: 2,
-      //步数
+      //Số bước
       step: 0.1,
     },
   },
 
   {
-    label: '下拉框',
+    label: 'Dropdown',
     field: 'jinputtype',
     component: 'Select',
     componentProps: {
       options: [
-        { value: 'like', label: '模糊（like）' },
-        { value: 'ne', label: '不等于（ne）' },
-        { value: 'ge', label: '大于等于（ge）' },
-        { value: 'le', label: '小于等于（le)' },
+        { value: 'like', label: 'Mờ (like)' },
+        { value: 'ne', label: 'Không bằng (ne)' },
+        { value: 'ge', label: 'Lớn hơn hoặc bằng (ge)' },
+        { value: 'le', label: 'Nhỏ hơn hoặc bằng (le)' },
       ],
-      //下拉多选
+      //Danh sách thả xuống chọn nhiều
       mode: 'multiple',
-      //配置是否可搜索
+      //Cấu hình có thể tìm kiếm hay không
       showSearch: true,
     },
   },
   {
     field: 'TreeSelect',
-    label: '下拉树',
+    label: 'Cây dropdown',
     component: 'TreeSelect',
     componentProps: {
-      //是否显示下拉框，默认false
+      //Có hiển thị hộp thả xuống không, mặc địnhfalse
       treeCheckable: true,
-      //标题
-      title: '下拉树',
-      //下拉树
+      //Tiêu đề
+      title: 'Cây dropdown',
+      //Cây dropdown
       treeData: [
         {
-          label: '洗衣机',
+          label: 'Máy giặt',
           value: '0',
           children: [
             {
-              label: '滚筒洗衣机',
+              label: 'Máy giặt lồng ngang',
               value: '0-1',
             },
           ],
         },
         {
-          label: '电视机',
+          label: 'Tivi',
           value: '1',
           children: [
             {
-              label: '平板电视',
+              label: 'TV màn hình phẳng',
               value: '1-1',
               disabled: true,
             },
             {
-              label: 'CRT电视机',
+              label: 'CRTTivi',
               value: '1-2',
             },
             {
-              label: '投影电视',
+              label: 'TV máy chiếu',
               value: '1-3',
             },
           ],
@@ -128,55 +128,55 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: 'RadioButtonGroup组件',
+    label: 'RadioButtonGroupComponent',
     field: 'status',
     component: 'RadioButtonGroup',
     componentProps: {
       options: [
-        { label: '有效', value: 1 },
-        { label: '无效', value: 0 },
+        { label: 'Hiệu lực', value: 1 },
+        { label: 'Không hợp lệ', value: 0 },
       ],
     },
   },
   {
-    label: '单选框',
+    label: 'Hộp chọn đơn',
     field: 'radioSex',
     component: 'RadioGroup',
     componentProps: {
-      //options里面由一个一个的radio组成,支持disabled禁用
+      //optionsBên trong gồm từng radio một,Hỗ trợ vô hiệu hóa disabled
       options: [
-        { label: '男', value: 1, disabled: false },
-        { label: '女', value: 0 },
+        { label: 'Nam', value: 1, disabled: false },
+        { label: 'Nữ', value: 0 },
       ],
     },
   },
   {
-    label: '多选框',
+    label: 'Hộp chọn nhiều',
     field: 'checkbox',
     component: 'Checkbox',
     componentProps: {
-      //是否禁用,默认false
+      //Có vô hiệu hóa hay không,Mặc địnhfalse
       disabled: false,
     },
   },
   {
-    label: '多选框组',
+    label: 'Nhóm checkbox',
     field: 'checkSex',
     component: 'CheckboxGroup',
     componentProps: {
-      //RadioGroup 下所有 input[type="radio"] 的 name 属性
-      name: '爱好',
-      //options支持disabled禁用
+      //RadioGroup bên dưới tất cả input[type="radio"] Thuộc tính name của
+      name: 'Sở thích',
+      //optionsHỗ trợ vô hiệu hóa disabled
       options: [
-        { label: '运动', value: 0, disabled: true },
-        { label: '听音乐', value: 1 },
-        { label: '看书', value: 2 },
+        { label: 'Thể thao', value: 0, disabled: true },
+        { label: 'Nghe nhạc', value: 1 },
+        { label: 'Đọc sách', value: 2 },
       ],
     },
     defaultValue: [2],
   },
   {
-    label: '自动完成组件',
+    label: 'Component tự động hoàn thành',
     field: 'AutoComplete',
     component: 'AutoComplete',
     componentProps: {
@@ -184,37 +184,37 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: '级联选择',
+    label: 'Chọn liên cấp',
     field: 'cascade',
     component: 'Cascader',
     componentProps: {
-      //最多显示多少个tag
+      //Hiển thị tối đa bao nhiêu tagtag
       maxTagCount: 2,
-      //浮层预设位置
+      //Vị trí đặt trước của lớp nổi
       placement: 'bottomRight',
-      //在选择框中显示搜索框,默认false
+      //Hiển thị hộp tìm kiếm trong hộp chọn,Mặc địnhfalse
       showSearch: true,
       options: [
         {
-          label: '北京',
+          label: 'Bắc Kinh',
           value: 'BeiJin',
           children: [
             {
-              label: '海淀区',
+              label: 'Quận Hải Điến',
               value: 'HaiDian',
             },
           ],
         },
         {
-          label: '江苏省',
+          label: 'Giang Tô',
           value: 'JiangSu',
           children: [
             {
-              label: '南京',
+              label: 'Nam Kinh',
               value: 'Nanjing',
               children: [
                 {
-                  label: '中华门',
+                  label: 'Cổng Trung Hoa',
                   value: 'ZhongHuaMen',
                 },
               ],
@@ -225,21 +225,21 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: '日期选择',
+    label: 'Chọn ngày',
     field: 'dateSelect',
     component: 'DatePicker',
     componentProps: {
-      //日期格式化，页面上显示的值
+      //Định dạng ngày, giá trị hiển thị trên trang
       format: 'YYYY-MM-DD',
-      //返回值格式化（绑定值的格式）
+      //Định dạng giá trị trả về (định dạng của giá trị liên kết)
       valueFormat: 'YYYY-MM-DD',
-      //是否显示今天按钮
+      //Có hiển thị nút hôm nay không
       showToday: true,
-      //不可选择日期
+      //Ngày không thể chọn
       disabledDate: (currentDate) => {
         let date = dayjs(currentDate).format('YYYY-MM-DD');
         let nowDate = dayjs(new Date()).format('YYYY-MM-DD');
-        //当天不可选择
+        //Ngày hôm đó không thể chọn
         if (date == nowDate) {
           return true;
         }
@@ -248,15 +248,15 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: '月份选择',
+    label: 'Chọn tháng',
     field: 'monthSelect',
     component: 'MonthPicker',
     componentProps: {
-      //不可选择日期
+      //Ngày không thể chọn
       disabledDate: (currentDate) => {
         let date = dayjs(currentDate).format('YYYY-MM');
         let nowDate = dayjs(new Date()).format('YYYY-MM');
-        //当天不可选择
+        //Ngày hôm đó không thể chọn
         if (date == nowDate) {
           return true;
         }
@@ -265,7 +265,7 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: '周选择',
+    label: 'Chọn tuần',
     field: 'weekSelect',
     component: 'WeekPicker',
     componentProps: {
@@ -273,81 +273,81 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: '时间选择',
+    label: 'Chọn thời gian',
     field: 'timeSelect',
     component: 'TimePicker',
     componentProps: {
       size: 'default',
-      //日期时间或者时间模式下是否显示此刻，不支持日期时间范围和时间范围
+      //Ở chế độ ngày giờ hoặc chế độ thời gian có hiển thị thời điểm hiện tại hay không, không hỗ trợ phạm vi ngày giờ và phạm vi thời gian
       showNow: true,
     },
   },
   {
-    label: '日期时间范围',
+    label: 'Phạm vi ngày giờ',
     field: 'dateTimeRangeSelect',
     component: 'RangePicker',
     componentProps: {
-      //是否显示时间
+      //Có hiển thị thời gian không
       showTime: true,
-      //日期格式化
+      //Định dạng ngày
       format: 'YYYY/MM/DD HH:mm:ss',
-      //范围文本描述用集合
-      placeholder: ['请选择开始日期时间', '请选择结束日期时间'],
+      //Mô tả văn bản khoảng dùng tập hợp
+      placeholder: ['Vui lòng chọn ngày giờ bắt đầu', 'Vui lòng chọn ngày giờ kết thúc'],
     },
   },
   {
-    label: '日期范围',
+    label: 'Phạm vi ngày',
     field: 'dateRangeSelect',
     component: 'RangeDate',
     componentProps: {
-      //日期格式化
+      //Định dạng ngày
       format: 'YYYY/MM/DD',
-      //范围文本描述用集合
-      placeholder: ['请选择开始日期', '请选择结束日期'],
+      //Mô tả văn bản khoảng dùng tập hợp
+      placeholder: ['Vui lòng chọn ngày bắt đầu', 'Vui lòng chọn ngày kết thúc'],
     },
   },
   {
-    label: '时间范围',
+    label: 'Phạm vi thời gian',
     field: 'timeRangeSelect',
     component: 'RangeTime',
     componentProps: {
-      //日期格式化
+      //Định dạng ngày
       format: 'HH/mm/ss',
-      //范围文本描述用集合
-      placeholder: ['请选择开始时间', '请选择结束时间'],
+      //Mô tả văn bản khoảng dùng tập hợp
+      placeholder: ['Vui lòng chọn thời gian bắt đầu', 'Vui lòng chọn thời gian kết thúc'],
     },
   },
   {
-    label: '开关',
+    label: 'Công tắc',
     field: 'switch',
     component: 'Switch',
     componentProps: {
-      //开关大小，可选值：default small
+      //Kích thước công tắc, giá trị tùy chọn:default small
       size: 'default',
-      //非选中时的内容
-      unCheckedChildren: '开启',
-      //非选中时的值
+      //Nội dung khi không được chọn
+      unCheckedChildren: 'Bật',
+      //Giá trị khi không được chọn
       unCheckedValue: '0',
-      //选中时的内容
-      checkedChildren: '关闭',
-      //选中时的值
+      //Nội dung khi được chọn
+      checkedChildren: 'Đóng',
+      //Giá trị khi được chọn
       checkedValue: '1',
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: false,
     },
   },
   {
-    label: '滑动输入条',
+    label: 'Thanh nhập trượt',
     field: 'slider',
     component: 'Slider',
     componentProps: {
-      //最小值
+      //Giá trị nhỏ nhất
       min: -20,
-      //最大值
+      //Giá trị lớn nhất
       max: 100,
-      //是否为双滑块模式
+      //Có phải chế độ hai thanh trượt không
       range: true,
-      //刻度标记
+      //Đánh dấu vạch chia
       marks: {
         '-20': '-20°C',
         0: '0°C',
@@ -363,30 +363,30 @@ export const schemas: FormSchema[] = [
     },
   },
   {
-    label: '评分',
+    label: 'Đánh giá',
     field: 'rate',
     component: 'Rate',
     componentProps: {
-      //是否允许半选
+      //Có cho phép chọn một nửa không
       allowHalf: true,
-      //star 总数
+      //star Tổng số
       count: 5,
-      //tooltip提示，有几颗星写几个
-      tooltips: ['非常差', '较差', '正常', '很好', '非很好'],
+      //tooltipGợi ý: Có bao nhiêu sao thì viết bấy nhiêu
+      tooltips: ['Rất kém', 'Kém', 'Bình thường', 'Rất tốt', 'Chưa tốt lắm'],
     },
   },
   {
-    label: '分割线',
+    label: 'Đường phân cách',
     field: 'divisionLine',
     component: 'Divider',
     componentProps: {
-      //是否虚线
+      //Có đường nét đứt hay không
       dashed: false,
-      //分割线标题的位置（left | right | center）
+      //Vị trí tiêu đề đường phân cách (left | right | center）
       orientation: 'center',
-      //文字是否显示为普通正文样式
+      //Chữ có hiển thị theo kiểu văn bản thường hay không
       plain: true,
-      //水平还是垂直类型（horizontal | vertical）
+      //Loại ngang hay dọc (horizontal | vertical）
       type: 'horizontal',
     },
   },

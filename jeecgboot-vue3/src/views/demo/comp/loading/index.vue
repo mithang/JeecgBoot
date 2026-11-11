@@ -1,18 +1,18 @@
 <template>
-  <PageWrapper v-loading="loadingRef" loading-tip="加载中..." title="Loading组件示例">
+  <PageWrapper v-loading="loadingRef" loading-tip="Đang tải..." title="LoadingVí dụ component">
     <div ref="wrapEl">
-      <a-alert message="组件方式" />
-      <a-button class="my-4 mr-4" type="primary" @click="openCompFullLoading"> 全屏 Loading </a-button>
-      <a-button class="my-4" type="primary" @click="openCompAbsolute"> 容器内 Loading </a-button>
+      <a-alert message="Cách dùng component" />
+      <a-button class="my-4 mr-4" type="primary" @click="openCompFullLoading"> Toàn màn hình Loading </a-button>
+      <a-button class="my-4" type="primary" @click="openCompAbsolute"> Trong container Loading </a-button>
       <Loading :loading="loading" :absolute="absolute" :theme="theme" :background="background" :tip="tip" />
 
-      <a-alert message="函数方式" />
+      <a-alert message="Dạng hàm" />
 
-      <a-button class="my-4 mr-4" type="primary" @click="openFnFullLoading"> 全屏 Loading </a-button>
-      <a-button class="my-4" type="primary" @click="openFnWrapLoading"> 容器内 Loading </a-button>
+      <a-button class="my-4 mr-4" type="primary" @click="openFnFullLoading"> Toàn màn hình Loading </a-button>
+      <a-button class="my-4" type="primary" @click="openFnWrapLoading"> Trong container Loading </a-button>
 
-      <a-alert message="指令方式" />
-      <a-button class="my-4 mr-4" type="primary" @click="openDirectiveLoading"> 打开指令Loading </a-button>
+      <a-alert message="Dạng lệnh" />
+      <a-button class="my-4 mr-4" type="primary" @click="openDirectiveLoading"> Mở lệnhLoading </a-button>
     </div>
   </PageWrapper>
 </template>
@@ -33,16 +33,16 @@
         loading: false,
         theme: 'dark',
         background: 'rgba(111,111,111,.7)',
-        tip: '加载中...',
+        tip: 'Đang tải...',
       });
       const [openFullLoading, closeFullLoading] = useLoading({
-        tip: '加载中...',
+        tip: 'Đang tải...',
       });
 
       const [openWrapLoading, closeWrapLoading] = useLoading({
         target: wrapEl,
         props: {
-          tip: '加载中...',
+          tip: 'Đang tải...',
           absolute: true,
         },
       });

@@ -1,8 +1,8 @@
 <template>
   <div>
     <textarea ref="textarea">
-白日依山尽，黄河入海流。
-欲穷千里目，更上一层楼。
+Mặt trời lặn sau núi, sông Hoàng Hà đổ ra biển.
+Muốn nhìn xa ngàn dặm, phải lên thêm một tầng lầu.
         </textarea
     >
   </div>
@@ -10,17 +10,17 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref, reactive } from 'vue';
-  // 引入全局实例
+  // Nhập instance toàn cục
   import _CodeMirror from 'codemirror';
 
-  // 核心样式
+  // Kiểu dáng cốt lõi
   import 'codemirror/lib/codemirror.css';
-  // 引入主题后还需要在 options 中指定主题才会生效
+  // Sau khi import theme vẫn cần chỉ định theme trong options thì mới có hiệu lực
   import 'codemirror/theme/cobalt.css';
 
-  // 需要引入具体的语法高亮库才会有对应的语法高亮效果
-  // codemirror 官方其实支持通过 /addon/mode/loadmode.js 和 /mode/meta.js 来实现动态加载对应语法高亮库
-  // 但 vue 貌似没有无法在实例初始化后再动态加载对应 JS ，所以此处才把对应的 JS 提前引入
+  // Cần import thư viện tô sáng cú pháp cụ thể mới có hiệu ứng tô sáng cú pháp tương ứng
+  // codemirror Thực ra chính thức hỗ trợ thông qua /addon/mode/loadmode.js và /mode/meta.js để tải động thư viện tô sáng cú pháp tương ứng
+  // Nhưng vue dường như không thể tải động JS tương ứng sau khi instance được khởi tạo, nên tại đây mới import trước JS tương ứng
   import 'codemirror/mode/javascript/javascript.js';
   import 'codemirror/mode/css/css.js';
   import 'codemirror/mode/xml/xml.js';
@@ -32,7 +32,7 @@
   import 'codemirror/mode/sql/sql.js';
   import 'codemirror/mode/swift/swift.js';
   import 'codemirror/mode/vue/vue.js';
-  // 尝试获取全局实例
+  // Thử lấy instance toàn cục
 
   export default defineComponent({
     components: {},
@@ -41,11 +41,11 @@
 
       const textarea = ref(null);
       const options = reactive({
-        // 缩进格式
+        // Định dạng thụt lề
         tabSize: 2,
-        // 主题，对应主题库 JS 需要提前引入
+        // Chủ đề, JS của thư viện chủ đề tương ứng cần được import trước
         theme: 'cobalt',
-        // 显示行号
+        // Hiển thị số dòng
         lineNumbers: true,
         line: true,
       });

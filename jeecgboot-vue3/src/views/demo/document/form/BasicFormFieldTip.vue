@@ -1,37 +1,37 @@
-<!-- 字段标题提示及前缀 -->
+<!-- Gợi ý tiêu đề trường và tiền tố -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'month',
-      label: '当前月份',
+      label: 'Tháng hiện tại',
       component: 'Input',
-      suffix: '月',
+      suffix: 'tháng',
     },
     {
       field: 'lateNumber',
-      label: '迟到次数',
+      label: 'Số lần đi muộn',
       component: 'InputNumber',
-      //帮助信息：可以直接返回String(helpMessage:"迟到次数")，也可以获取表单值，动态填写
+      //Thông tin trợ giúp: Có thể trả về trực tiếpString(helpMessage:"Số lần đi muộn"), cũng có thể lấy giá trị biểu mẫu để điền động
       helpMessage: ({ values }) => {
-        return '当前迟到次数' + values.lateNumber + ', 扣款' + values.lateNumber * 50 + '元';
+        return 'Số lần đi muộn hiện tại' + values.lateNumber + ', Khấu trừ' + values.lateNumber * 50 + 'đồng';
       },
       defaultValue: 0,
     },
     {
       field: 'lateReason',
-      label: '迟到原因',
+      label: 'Lý do đi muộn',
       component: 'Input',
-      helpMessage: '什么原因耽误上班迟到',
-      //自定义提示属性，需要结合helpMessage一起使用
+      helpMessage: 'Lý do gì khiến đi làm muộn',
+      //Thuộc tính nhắc nhở tùy chỉnh, cần dùng kết hợp với helpMessage
       helpComponentProps: {
         maxWidth: '200px',
         color: '#66CCFF',
@@ -40,14 +40,14 @@
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
     showResetButton: false,
     labelWidth: '150px',
-    submitButtonOptions: { text: '提交', preIcon: '' },
+    submitButtonOptions: { text: 'Gửi', preIcon: '' },
     actionColOptions: { span: 17 },
   });
 </script>

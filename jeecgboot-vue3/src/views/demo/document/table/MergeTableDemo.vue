@@ -1,8 +1,8 @@
 <template>
   <div class="p-4">
-    <!--引用表格-->
+    <!--Bảng tham chiếu-->
     <BasicTable @register="registerTable">
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -13,10 +13,10 @@
 <script lang="ts" name="basic-table-demo" setup>
   import { ActionItem, BasicColumn, BasicTable, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
-  //定义表格列
+  //Định nghĩa cột bảng
   const columns: BasicColumn[] = [
     {
-      title: '名称',
+      title: 'Tên',
       dataIndex: 'name',
       customCell: (record, index, column) => ({
         colSpan: index < 4 ? 1 : 5,
@@ -26,7 +26,7 @@
       },
     },
     {
-      title: '年龄',
+      title: 'Tuổi',
       dataIndex: 'age',
       customCell: (record, index, column) => {
         if (index == 4) {
@@ -35,7 +35,7 @@
       },
     },
     {
-      title: '家庭住址',
+      title: 'Địa chỉ gia đình',
       dataIndex: 'address',
       customCell: (record, index, column) => {
         if (index == 4) {
@@ -44,7 +44,7 @@
       },
     },
     {
-      title: '联系电话',
+      title: 'Số điện thoại liên hệ',
       colSpan: 2,
       dataIndex: 'tel',
       customCell: (record, index, column) => {
@@ -70,51 +70,51 @@
       },
     },
   ];
-  // 列表页面公共参数、方法
+  // Tham số, phương thức chung của trang danh sách
   const { tableContext } = useListPage({
     designScope: 'basic-table-demo',
     tableProps: {
-      title: '合并行列',
+      title: 'Gộp hàng và cột',
       dataSource: [
         {
           key: '1',
-          name: '尹嘉乐',
+          name: 'Doãn Gia Lạc',
           age: 32,
           tel: '0319-5972018',
           phone: 17600080009,
-          address: '北京市昌平区',
+          address: 'Quận Xương Bình, Bắc Kinh',
         },
         {
           key: '2',
-          name: '龙佳钰',
+          name: 'Long Giai Ngọc',
           tel: '0319-5972018',
           phone: 17600060007,
           age: 42,
-          address: '北京市海淀区',
+          address: 'Quận Hải Điến, Bắc Kinh',
         },
         {
           key: '3',
-          name: '贺泽惠',
+          name: 'Hạ Trạch Huệ',
           age: 32,
           tel: '0319-5972018',
           phone: 17600040005,
-          address: '北京市门头沟区',
+          address: 'Quận Môn Đầu Câu, thành phố Bắc Kinh',
         },
         {
           key: '4',
-          name: '沈勇',
+          name: 'Thẩm Dũng',
           age: 18,
           tel: '0319-5972018',
           phone: 17600010003,
-          address: '北京市朝阳区',
+          address: 'Quận Triều Dương, Bắc Kinh',
         },
         {
           key: '5',
-          name: '白佳毅',
+          name: 'Bạch Giai Nghị',
           age: 18,
           tel: '0319-5972018',
           phone: 17600010002,
-          address: '北京市丰台区',
+          address: 'Quận Phong Đài, Bắc Kinh',
         },
       ],
       columns: columns,
@@ -122,15 +122,15 @@
       useSearchForm: false,
     },
   });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable] = tableContext;
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
     ];

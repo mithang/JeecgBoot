@@ -1,33 +1,33 @@
-<!-- 查询区域 -->
+<!-- Khu vực tìm kiếm -->
 <template>
-  <!-- 自定义表单 -->
+  <!-- Biểu mẫu tùy chỉnh -->
   <BasicForm @register="registerForm" @submit="handleSubmit" style="margin-top: 20px" />
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
       field: 'name',
-      label: '姓名',
+      label: 'Họ tên',
       component: 'Input',
     },
     {
       field: 'hobby',
-      label: '爱好',
+      label: 'Sở thích',
       component: 'Input',
     },
     {
       field: 'birthday',
-      label: '生日',
+      label: 'Ngày sinh',
       component: 'DatePicker',
     },
     {
       field: 'joinTime',
-      label: '入职时间',
+      label: 'Thời gian vào làm',
       component: 'RangePicker',
       componentProps: {
         valueType: 'Date',
@@ -35,21 +35,21 @@
     },
     {
       field: 'workYears',
-      label: '工作年份',
+      label: 'Số năm làm việc',
       component: 'JRangeNumber',
     },
     {
       field: 'sex',
-      label: '性别',
+      label: 'Giới tính',
       component: 'Select',
       componentProps: {
         options: [
           {
-            label: '男',
+            label: 'Nam',
             value: '1',
           },
           {
-            label: '女',
+            label: 'Nữ',
             value: '2',
           },
         ],
@@ -57,16 +57,16 @@
     },
     {
       field: 'marital',
-      label: '婚姻状况',
+      label: 'Tình trạng hôn nhân',
       component: 'RadioGroup',
       componentProps: {
         options: [
           {
-            label: '未婚',
+            label: 'Chưa kết hôn',
             value: '1',
           },
           {
-            label: '已婚',
+            label: 'Đã kết hôn',
             value: '2',
           },
         ],
@@ -75,37 +75,37 @@
   ];
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm] = useForm({
-    //将表单内时间区域的值映射成 2个字段, 'YYYY-MM-DD'日期格式化
+    //Ánh xạ giá trị vùng thời gian trong biểu mẫu thành 2 trường, 'YYYY-MM-DD'Định dạng ngày
     fieldMapToTime: [['joinTime', ['joinTime_begin', 'joinTime_end'], 'YYYY-MM-DD']],
-    //注册表单列
+    //Đăng ký cột biểu mẫu
     schemas: formSchemas,
-    //是否显示展开收起按钮，默认false
+    //Có hiển thị nút mở rộng/thu gọn hay không, mặc địnhfalse
     showAdvancedButton: true,
-    //超过指定行数折叠，默认3行
+    //Vượt quá số dòng chỉ định thì thu gọn, mặc định 3 dòng
     autoAdvancedCol: 3,
-    //折叠时默认显示行数，默认1行
+    //Số dòng hiển thị mặc định khi thu gọn, mặc định 1 dòng
     alwaysShowLines: 2,
 
-    //将表单内数值类型区域的值映射成 2个字段
+    //Ánh xạ giá trị của vùng kiểu số trong biểu mẫu thành 2 trường
     fieldMapToNumber: [['workYears', ['workYears_begin', 'workYears_end']]],
-    //每列占比，默认一行为24
+    //Tỷ lệ mỗi cột chiếm, mặc định một hàng là24
     baseColProps: { span: 12 },
   });
 
   /**
-   * 点击提交按钮的value值
+   * Giá trị value của nút gửi khi nhấp
    * @param values
    */
   function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
+    console.log('Dữ liệu nút gửi::::', values);
   }
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

@@ -1,7 +1,7 @@
 <template>
-  <PageWrapper title="动画组件示例">
+  <PageWrapper title="Ví dụ component hiệu ứng">
     <div class="flex">
-      <Select :options="options" v-model:value="value" placeholder="选择动画" :style="{ width: '150px' }" />
+      <Select :options="options" v-model:value="value" placeholder="Chọn hiệu ứng" :style="{ width: '150px' }" />
       <a-button type="primary" class="ml-4" @click="start"> start </a-button>
     </div>
     <component :is="`${value}Transition`">

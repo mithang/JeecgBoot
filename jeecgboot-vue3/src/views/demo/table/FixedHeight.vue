@@ -3,12 +3,12 @@
     <BasicTable @register="registerTable">
       <template #customTitle>
         <span>
-          姓名
-          <BasicHelp class="ml-2" text="姓名" />
+          Họ tên
+          <BasicHelp class="ml-2" text="Họ tên" />
         </span>
       </template>
       <template #customAddress>
-        地址
+        Địa chỉ
         <FormOutlined class="ml-2" />
       </template>
     </BasicTable>
@@ -26,7 +26,7 @@
     components: { BasicTable, FormOutlined, BasicHelp },
     setup() {
       const [registerTable] = useTable({
-        title: '定高/头部自定义',
+        title: 'Chiều cao cố định/Tùy chỉnh tiêu đề',
         api: demoListApi,
         columns: getCustomHeaderColumns(),
         canResize: false,

@@ -8,13 +8,13 @@
   import { BasicColumn, BasicTable, useTable } from '/@/components/Table';
 
   import { demoListApi } from '/@/api/demo/table';
-  //计算合并表头
+  //Tính toán tiêu đề hợp nhất
 
   export default defineComponent({
     components: { BasicTable },
     setup() {
       const [registerTable] = useTable({
-        title: '分组表头示例',
+        title: 'Ví dụ tiêu đề bảng nhóm',
         api: demoListApi,
         columns: getMergeHeaderColumns(),
         bordered: true,
@@ -29,34 +29,34 @@
             width: 300,
           },
           {
-            title: '姓名',
+            title: 'Họ tên',
             dataIndex: 'name',
             width: 300,
           },
           {
-            title: '地址',
+            title: 'Địa chỉ',
             width: 120,
             children: [
               {
-                title: '地址',
+                title: 'Địa chỉ',
                 dataIndex: 'address',
                 key: 'address',
                 width: 200,
               },
               {
-                title: '编号',
+                title: 'Mã',
                 dataIndex: 'no',
                 key: 'no',
               },
             ],
           },
           {
-            title: '开始时间',
+            title: 'Thời gian bắt đầu',
             dataIndex: 'beginTime',
             width: 200,
           },
           {
-            title: '结束时间',
+            title: 'Thời gian kết thúc',
             dataIndex: 'endTime',
             width: 200,
           },

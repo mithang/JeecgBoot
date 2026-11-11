@@ -3,45 +3,45 @@
     <a-form ref="formRef" :model="orderMainModel" :label-col="labelCol" :wrapper-col="wrapperCol" :rules="validatorRules">
       <a-row class="form-row" :gutter="16">
         <a-col :lg="8">
-          <a-form-item label="订单号" name="orderCode">
-            <a-input v-model:value="orderMainModel.orderCode" placeholder="请输入订单号" />
+          <a-form-item label="Số đơn hàng" name="orderCode">
+            <a-input v-model:value="orderMainModel.orderCode" placeholder="Vui lòng nhập mã đơn hàng" />
           </a-form-item>
         </a-col>
         <a-col :lg="8">
-          <a-form-item label="订单类型">
-            <a-select placeholder="请选择订单类型" v-model:value="orderMainModel.ctype">
-              <a-select-option value="1">国内订单</a-select-option>
-              <a-select-option value="2">国际订单</a-select-option>
+          <a-form-item label="Loại đơn hàng">
+            <a-select placeholder="Vui lòng chọn loại đơn hàng" v-model:value="orderMainModel.ctype">
+              <a-select-option value="1">Đơn hàng nội địa</a-select-option>
+              <a-select-option value="2">Đơn hàng quốc tế</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :lg="8">
-          <a-form-item label="订单日期">
+          <a-form-item label="Ngày đặt hàng">
             <a-date-picker showTime valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="orderMainModel.orderDate" />
           </a-form-item>
         </a-col>
       </a-row>
       <a-row class="form-row" :gutter="16">
         <a-col :lg="8">
-          <a-form-item label="订单金额">
-            <a-input v-model:value="orderMainModel.orderMoney" placeholder="请输入订单金额" />
+          <a-form-item label="Số tiền đơn hàng">
+            <a-input v-model:value="orderMainModel.orderMoney" placeholder="Vui lòng nhập số tiền đơn hàng" />
           </a-form-item>
         </a-col>
         <a-col :lg="8">
-          <a-form-item label="订单备注">
-            <a-input v-model:value="orderMainModel.content" placeholder="请输入订单备注" />
+          <a-form-item label="Ghi chú đơn hàng">
+            <a-input v-model:value="orderMainModel.content" placeholder="Vui lòng nhập ghi chú đơn hàng" />
           </a-form-item>
         </a-col>
       </a-row>
       <a-tabs defaultActiveKey="1">
-        <a-tab-pane tab="客户信息" key="1">
+        <a-tab-pane tab="Thông tin khách hàng" key="1">
           <div>
             <a-row type="flex" style="margin-bottom: 10px" :gutter="16">
-              <a-col :span="5">客户名</a-col>
-              <a-col :span="5">性别</a-col>
-              <a-col :span="6">身份证号码</a-col>
-              <a-col :span="6">手机号</a-col>
-              <a-col :span="2">操作</a-col>
+              <a-col :span="5">Tên khách hàng</a-col>
+              <a-col :span="5">Giới tính</a-col>
+              <a-col :span="6">Số chứng minh nhân dân</a-col>
+              <a-col :span="6">Số điện thoại</a-col>
+              <a-col :span="2">Thao tác</a-col>
             </a-row>
             <a-row type="flex" style="margin-bottom: 10px" :gutter="16" v-for="(item, index) in orderMainModel.jeecgOrderCustomerList" :key="index">
               <a-col :span="6" style="display: none">
@@ -51,29 +51,29 @@
               </a-col>
               <a-col :span="5">
                 <a-form-item>
-                  <a-input placeholder="客户名" v-model:value="item.name" />
+                  <a-input placeholder="Tên khách hàng" v-model:value="item.name" />
                 </a-form-item>
               </a-col>
               <a-col :span="5">
                 <a-form-item>
-                  <a-select placeholder="性别" v-model:value="item.sex">
-                    <a-select-option value="1">男</a-select-option>
-                    <a-select-option value="2">女</a-select-option>
+                  <a-select placeholder="Giới tính" v-model:value="item.sex">
+                    <a-select-option value="1">Nam</a-select-option>
+                    <a-select-option value="2">Nữ</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item
                   :name="['jeecgOrderCustomerList', index, 'idcard']"
-                  :rules="[{ required: true, message: '请输入身份证号', trigger: 'blur' }]"
+                  :rules="[{ required: true, message: 'Vui lòng nhập số CMND/CCCD', trigger: 'blur' }]"
                   :key="index"
                 >
-                  <a-input placeholder="身份证号" v-model:value="item.idcard" />
+                  <a-input placeholder="Số chứng minh nhân dân" v-model:value="item.idcard" />
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item :name="['jeecgOrderCustomerList', index, 'telphone']">
-                  <a-input placeholder="手机号" v-model:value="item.telphone" />
+                  <a-input placeholder="Số điện thoại" v-model:value="item.telphone" />
                 </a-form-item>
               </a-col>
               <a-col :span="2">
@@ -84,16 +84,16 @@
             </a-row>
             <a-button type="dashed" style="width: 98%; margin-top: 10px" @click="addRowCustom">
               <Icon icon="ph:plus-bold" />
-              添加客户信息
+              Thêm thông tin khách hàng
             </a-button>
           </div>
         </a-tab-pane>
 
-        <a-tab-pane tab="机票信息" key="2" forceRender>
+        <a-tab-pane tab="Thông tin vé máy bay" key="2" forceRender>
           <a-row type="flex" style="margin-bottom: 10px" :gutter="16">
-            <a-col :span="6">航班号</a-col>
-            <a-col :span="6">航班时间</a-col>
-            <a-col :span="6">操作</a-col>
+            <a-col :span="6">Số hiệu chuyến bay</a-col>
+            <a-col :span="6">Thời gian chuyến bay</a-col>
+            <a-col :span="6">Thao tác</a-col>
           </a-row>
           <a-row type="flex" style="margin-bottom: 10px" :gutter="16" v-for="(item, index) in orderMainModel.jeecgOrderTicketList" :key="index">
             <a-col :span="6" style="display: none">
@@ -104,14 +104,14 @@
             <a-col :span="6">
               <a-form-item
                 :name="['jeecgOrderTicketList', index, 'ticketCode']"
-                :rules="{ required: true, message: '请输入航班号', trigger: 'blur' }"
+                :rules="{ required: true, message: 'Vui lòng nhập số hiệu chuyến bay', trigger: 'blur' }"
               >
-                <a-input placeholder="航班号" v-model:value="item.ticketCode" />
+                <a-input placeholder="Số hiệu chuyến bay" v-model:value="item.ticketCode" />
               </a-form-item>
             </a-col>
             <a-col :span="6">
               <a-form-item>
-                <a-date-picker placeholder="航班时间" valueFormat="YYYY-MM-DD" v-model:value="item.tickectDate" />
+                <a-date-picker placeholder="Thời gian chuyến bay" valueFormat="YYYY-MM-DD" v-model:value="item.tickectDate" />
               </a-form-item>
             </a-col>
             <a-col :span="6">
@@ -122,7 +122,7 @@
           </a-row>
           <a-button type="dashed" style="width: 98%; margin-top: 10px" @click="addRowTicket">
             <Icon icon="ph:plus-bold" />
-            添加机票信息
+            Thêm thông tin vé máy bay
           </a-button>
         </a-tab-pane>
       </a-tabs>
@@ -153,7 +153,7 @@
         sm: { span: 16 },
       });
       const validatorRules = {
-        orderCode: [{ required: true, message: '订单号不能为空', trigger: 'blur' }],
+        orderCode: [{ required: true, message: 'Mã đơn hàng không được để trống', trigger: 'blur' }],
       };
       const orderMainModel = reactive({
         id: null,
@@ -178,14 +178,14 @@
           orderMainModel.jeecgOrderTicketList = ticketList;
         }
       });
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
+      const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới' : 'Chỉnh sửa'));
 
-      //动态添加行
+      //Thêm hàng động
       function addRowCustom() {
         orderMainModel.jeecgOrderCustomerList.push({});
       }
 
-      //删除行
+      //Xóa hàng
       function delRowCustom(index) {
         orderMainModel['jeecgOrderCustomerList'].splice(index, 1);
         orderMainModel.jeecgOrderCustomerList.splice(index, 1);
@@ -204,7 +204,7 @@
         orderMainModel.jeecgOrderTicketList.push({});
       }
 
-      //删除机票
+      //Xóa vé máy bay
       function delRowTicket(index) {
         orderMainModel['jeecgOrderTicketList'].splice(index, 1);
         orderMainModel.jeecgOrderTicketList.splice(index, 1);
@@ -256,12 +256,12 @@
     line-height: 0px;
   }
 
-  /** 主表单行间距 */
+  /** Khoảng cách hàng của biểu mẫu chính */
   .ant-form .ant-form-item {
     margin-bottom: 10px;
   }
 
-  /** Tab页面行间距 */
+  /** TabKhoảng cách dòng trang */
   .ant-tabs-content .ant-form-item {
     margin-bottom: 0px;
   }

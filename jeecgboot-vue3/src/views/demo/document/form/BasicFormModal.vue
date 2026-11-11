@@ -1,85 +1,85 @@
-<!-- 弹出层表单 -->
+<!-- Biểu mẫu lớp popup -->
 <template>
   <div style="margin: 20px auto">
-    <a-button type="primary" @click="openPopup" class="mr-2"> 打开弹窗 </a-button>
+    <a-button type="primary" @click="openPopup" class="mr-2"> Mở popup </a-button>
   </div>
-  <!-- 自定义弹窗组件 -->
-  <BasicModal @register="registerModal" title="弹出层表单">
-    <!-- 自定义表单 -->
+  <!-- Component popup tùy chỉnh -->
+  <BasicModal @register="registerModal" title="Biểu mẫu lớp popup">
+    <!-- Biểu mẫu tùy chỉnh -->
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
 
 <script lang="ts" setup>
-  //引入依赖
+  //Nhập dependency
   import { useForm, BasicForm, FormSchema } from '/@/components/Form';
   import { BasicModal } from '/@/components/Modal';
   import { useModal } from '/@/components/Modal';
 
-  //自定义表单字段
+  //Trường biểu mẫu tùy chỉnh
   const formSchemas: FormSchema[] = [
     {
-      label: '员工姓名',
+      label: 'Tên nhân viên',
       field: 'name',
       component: 'Input',
     },
     {
-      label: '性别',
+      label: 'Giới tính',
       field: 'sex',
       component: 'Select',
-      //填写组件的属性
+      //Điền thuộc tính của component
       componentProps: {
         options: [
-          { label: '男', value: 1 },
-          { label: '女', value: 2 },
-          { label: '未知', value: 3 },
+          { label: 'Nam', value: 1 },
+          { label: 'Nữ', value: 2 },
+          { label: 'Không xác định', value: 3 },
         ],
       },
-      //默认值
+      //Giá trị mặc định
       defaultValue: 3,
     },
     {
-      label: '年龄',
+      label: 'Tuổi',
       field: 'age',
       component: 'Input',
     },
     {
-      label: '入职时间',
-      subLabel: '(选填)',
+      label: 'Thời gian vào làm',
+      subLabel: '(Không bắt buộc)',
       field: 'entryTime',
       component: 'TimePicker',
-      // 弹窗场景：把下拉面板挂到 body 避免被 modal 边界裁剪/遮挡
+      // Tình huống popup: gắn panel dropdown vào body để tránh bị biên của modal cắt mất/Che khuất
       componentProps: {
         getPopupContainer: () => document.body,
       },
     },
   ];
 
-  //BasicModal绑定注册;
+  //BasicModalĐăng ký liên kết;
   const [registerModal, { openModal }] = useModal();
 
   /**
-   * BasicForm绑定注册;
+   * BasicFormĐăng ký liên kết;
    */
   const [registerForm, { validate, resetFields }] = useForm({
     schemas: formSchemas,
-    // 弹窗宽度有限，给 label 一个固定宽度，避免「入职时间（选填）」被截断
+    // Chiều rộng popup có hạn, đặt cho label một chiều rộng cố định, tránh "Thời gian vào làm (tùy chọn)" bị cắt ngắn
     labelWidth: 120,
-    //隐藏操作按钮
+    //Ẩn nút thao tác
     showActionButtonGroup: false,
   });
 
   /**
-   * 打开弹窗
+   * Mở popup
    */
   async function openPopup() {
-    //详见 BasicModal模块
+    //Xem chi tiết trong module BasicModal
     openModal(true, {});
   }
 </script>
 
 <style scoped>
-  /** 时间和数字输入框样式 */
+  /** Kiểu ô nhập thời gian và số */
   :deep(.ant-input-number) {
     width: 100%;
   }

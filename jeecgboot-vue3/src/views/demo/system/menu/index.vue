@@ -2,7 +2,7 @@
   <div>
     <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
       <template #tableTitle>
-        <a-button type="primary" @click="handleCreate"> 新增菜单 </a-button>
+        <a-button type="primary" @click="handleCreate"> Thêm mới menu </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
@@ -15,7 +15,7 @@
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {
-                title: '是否确认删除',
+                title: 'Có xác nhận xóa không',
                 confirm: handleDelete.bind(null, record),
               },
             },
@@ -43,7 +43,7 @@
     setup() {
       const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload, expandAll }] = useTable({
-        title: '菜单列表',
+        title: 'Danh sách menu',
         api: getMenuList,
         columns,
         formConfig: {
@@ -60,7 +60,7 @@
         canResize: false,
         actionColumn: {
           width: 80,
-          title: '操作',
+          title: 'Thao tác',
           dataIndex: 'action',
           slots: { customRender: 'action' },
           fixed: undefined,
@@ -89,7 +89,7 @@
       }
 
       function onFetchSuccess() {
-        // 演示默认展开所有表项
+        // Minh họa mở rộng tất cả các mục bảng theo mặc định
         nextTick(expandAll);
       }
 

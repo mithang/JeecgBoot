@@ -2,11 +2,11 @@
   <div class="jeecg-flow-demo">
     <BasicForm @register="registerForm"></BasicForm>
     <a-tabs v-model:activeKey="activeKey" @change="handleChangeTabs">
-      <a-tab-pane tab="客户信息" key="jeecgOrderCustomerForm" :forceRender="true">
+      <a-tab-pane tab="Thông tin khách hàng" key="jeecgOrderCustomerForm" :forceRender="true">
         <JeecgOrderCustomerForm ref="jeecgOrderCustomerFormRef" :formData="formData"></JeecgOrderCustomerForm>
       </a-tab-pane>
 
-      <a-tab-pane tab="机票信息" key="jeecgOrderTicket" :forceRender="true">
+      <a-tab-pane tab="Thông tin vé máy bay" key="jeecgOrderTicket" :forceRender="true">
         <JVxeTable v-if="ok" ref="jeecgOrderTicketRef" stripe rowSelection keepSource :maxHeight="300" :loading="table2.loading" :columns="table2.columns" :dataSource="table2.dataSource"> </JVxeTable>
       </a-tab-pane>
     </a-tabs>
@@ -58,7 +58,7 @@
         const data = await defHttp.get({ url: queryByIdUrl, params });
         console.log('data', data);
         formData = { ...data };
-        //设置表单的值
+        //Đặt giá trị của biểu mẫu
         await setFieldsValue(formData);
         await setProps({ disabled: formDisabled.value });
 
@@ -70,7 +70,7 @@
       async function submitForm() {
         let data = getFieldsValue();
         let params = Object.assign({}, formData, data);
-        console.log('表单数据', params);
+        console.log('Dữ liệu biểu mẫu', params);
         await saveOrUpdate(params, true);
       }
 
@@ -78,7 +78,7 @@
 
       const activeKey = ref('jeecgOrderCustomerForm');
       function handleChangeTabs() {}
-      // 机票信息
+      // Thông tin vé máy bay
       const table2 = reactive({
         loading: false,
         dataSource: [],
@@ -95,10 +95,10 @@
         }
       }
 
-      //新增权限处理方法
+      //Phương thức xử lý quyền hạn mới thêm
       function filterSubTableColnmns(columns, pre) {
         let authList = props.formData.permissionList;
-        //注意：如果子表配置显示反向 这里不处理其逻辑  即隐藏无法在流程表单中实现，请使用全局表单权限实现
+        //Lưu ý: Nếu bảng con cấu hình hiển thị ngược thì không xử lý logic của nó tại đây, tức là việc ẩn không thể thực hiện trong biểu mẫu quy trình, vui lòng dùng quyền biểu mẫu toàn cục để thực hiện
         let temp = columns.filter((item) => {
           let oneAuth = authList.find((auth) => {
             return auth.action === pre + item.key;
@@ -107,17 +107,17 @@
             return true;
           }
 
-          //代码严谨处理，防止一个授权标识，配置多次
+          //Xử lý mã chặt chẽ, tránh một mã định danh ủy quyền được cấu hình nhiều lần
           if (oneAuth instanceof Array) {
             oneAuth = oneAuth[0];
           }
 
-          //禁用逻辑
+          //Logic vô hiệu hóa
           if (oneAuth.type == '2' && !oneAuth.isAuth) {
             item['disabled'] = true;
             return true;
           }
-          //隐藏逻辑逻辑
+          //Logic ẩn
           if (oneAuth.type == '1' && !oneAuth.isAuth) {
             return false;
           }

@@ -7,7 +7,7 @@
       "properties": {
         "id": "710000",
         "cp": [121.509062, 24.044332],
-        "name": "台湾",
+        "name": "Đài Loan",
         "childNum": 6
       },
       "geometry": {
@@ -40,7 +40,7 @@
       "properties": {
         "id": "130000",
         "cp": [114.502461, 38.045474],
-        "name": "河北",
+        "name": "Hà Bắc",
         "childNum": 3
       },
       "geometry": {
@@ -61,7 +61,7 @@
       "properties": {
         "id": "140000",
         "cp": [111.849248, 36.857014],
-        "name": "山西",
+        "name": "Sơn Tây",
         "childNum": 1
       },
       "geometry": {
@@ -78,7 +78,7 @@
       "properties": {
         "id": "150000",
         "cp": [111.670801, 41.818311],
-        "name": "内蒙古",
+        "name": "Nội Mông",
         "childNum": 2
       },
       "geometry": {
@@ -97,7 +97,7 @@
       "properties": {
         "id": "210000",
         "cp": [123.429096, 41.796767],
-        "name": "辽宁",
+        "name": "Liêu Ninh",
         "childNum": 16
       },
       "geometry": {
@@ -145,7 +145,7 @@
     {
       "type": "Feature",
       "id": "220000",
-      "properties": { "id": "220000", "cp": [125.3245, 43.886841], "name": "吉林", "childNum": 1 },
+      "properties": { "id": "220000", "cp": [125.3245, 43.886841], "name": "Cát Lâm", "childNum": 1 },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -160,7 +160,7 @@
       "properties": {
         "id": "230000",
         "cp": [128.642464, 46.756967],
-        "name": "黑龙江",
+        "name": "Hắc Long Giang",
         "childNum": 2
       },
       "geometry": {
@@ -179,7 +179,7 @@
       "properties": {
         "id": "320000",
         "cp": [119.767413, 33.041544],
-        "name": "江苏",
+        "name": "Giang Tô",
         "childNum": 1
       },
       "geometry": {
@@ -196,7 +196,7 @@
       "properties": {
         "id": "330000",
         "cp": [120.153576, 29.287459],
-        "name": "浙江",
+        "name": "Chiết Giang",
         "childNum": 45
       },
       "geometry": {
@@ -302,7 +302,7 @@
     {
       "type": "Feature",
       "id": "340000",
-      "properties": { "id": "340000", "cp": [117.283042, 31.26119], "name": "安徽", "childNum": 3 },
+      "properties": { "id": "340000", "cp": [117.283042, 31.26119], "name": "An Huy", "childNum": 3 },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -321,7 +321,7 @@
       "properties": {
         "id": "350000",
         "cp": [118.306239, 26.075302],
-        "name": "福建",
+        "name": "Phúc Kiến",
         "childNum": 18
       },
       "geometry": {
@@ -376,7 +376,7 @@
       "properties": {
         "id": "360000",
         "cp": [115.592151, 27.676493],
-        "name": "江西",
+        "name": "Giang Tây",
         "childNum": 1
       },
       "geometry": {
@@ -393,7 +393,7 @@
       "properties": {
         "id": "370000",
         "cp": [118.000923, 36.275807],
-        "name": "山东",
+        "name": "Sơn Đông",
         "childNum": 13
       },
       "geometry": {
@@ -438,7 +438,7 @@
       "properties": {
         "id": "410000",
         "cp": [113.665412, 33.757975],
-        "name": "河南",
+        "name": "Hà Nam",
         "childNum": 1
       },
       "geometry": {
@@ -455,7 +455,7 @@
       "properties": {
         "id": "420000",
         "cp": [113.298572, 30.684355],
-        "name": "湖北",
+        "name": "Hồ Bắc",
         "childNum": 3
       },
       "geometry": {
@@ -473,7 +473,7 @@
     {
       "type": "Feature",
       "id": "430000",
-      "properties": { "id": "430000", "cp": [111.782279, 28.09409], "name": "湖南", "childNum": 3 },
+      "properties": { "id": "430000", "cp": [111.782279, 28.09409], "name": "Hồ Nam", "childNum": 3 },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -492,7 +492,7 @@
       "properties": {
         "id": "440000",
         "cp": [113.280637, 23.125178],
-        "name": "广东",
+        "name": "Quảng Đông",
         "childNum": 24
       },
       "geometry": {
@@ -556,7 +556,7 @@
     {
       "type": "Feature",
       "id": "450000",
-      "properties": { "id": "450000", "cp": [108.320004, 22.82402], "name": "广西", "childNum": 2 },
+      "properties": { "id": "450000", "cp": [108.320004, 22.82402], "name": "Quảng Tây", "childNum": 2 },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -571,7 +571,7 @@
     {
       "type": "Feature",
       "id": "460000",
-      "properties": { "id": "460000", "cp": [109.83119, 19.031971], "name": "海南", "childNum": 1 },
+      "properties": { "id": "460000", "cp": [109.83119, 19.031971], "name": "Hải Nam", "childNum": 1 },
       "geometry": {
         "type": "Polygon",
         "coordinates": ["@@¦Ŝil¢XƦƞòïè§ŞCêɕrŧůÇąĻõ·ĉ³œ̅kÇm@ċȧŧĥĽʉ­ƅſȓÒË¦ŝE}ºƑ[ÍĜȋ gÎfǐÏĤ¨êƺ\\Ɔ¸ĠĎvʄȀÐ¾jNðĀÒRZǆzÐŘÎ°H¨Ƣb²_Ġ "],
@@ -584,7 +584,7 @@
       "properties": {
         "id": "510000",
         "cp": [104.065735, 30.659462],
-        "name": "四川",
+        "name": "Tứ Xuyên",
         "childNum": 2
       },
       "geometry": {
@@ -604,7 +604,7 @@
       "properties": {
         "id": "520000",
         "cp": [106.713478, 26.578343],
-        "name": "贵州",
+        "name": "Quý Châu",
         "childNum": 3
       },
       "geometry": {
@@ -625,7 +625,7 @@
       "properties": {
         "id": "530000",
         "cp": [101.512251, 24.740609],
-        "name": "云南",
+        "name": "Vân Nam",
         "childNum": 1
       },
       "geometry": {
@@ -639,7 +639,7 @@
     {
       "type": "Feature",
       "id": "540000",
-      "properties": { "id": "540000", "cp": [89.132212, 30.860361], "name": "西藏", "childNum": 1 },
+      "properties": { "id": "540000", "cp": [89.132212, 30.860361], "name": "Tây Tạng", "childNum": 1 },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -654,7 +654,7 @@
       "properties": {
         "id": "610000",
         "cp": [108.948024, 34.263161],
-        "name": "陕西",
+        "name": "Thiểm Tây",
         "childNum": 1
       },
       "geometry": {
@@ -671,7 +671,7 @@
       "properties": {
         "id": "620000",
         "cp": [103.823557, 36.058039],
-        "name": "甘肃",
+        "name": "Cam Túc",
         "childNum": 2
       },
       "geometry": {
@@ -688,7 +688,7 @@
     {
       "type": "Feature",
       "id": "630000",
-      "properties": { "id": "630000", "cp": [96.778916, 35.623178], "name": "青海", "childNum": 2 },
+      "properties": { "id": "630000", "cp": [96.778916, 35.623178], "name": "Thanh Hải", "childNum": 2 },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -703,7 +703,7 @@
     {
       "type": "Feature",
       "id": "640000",
-      "properties": { "id": "640000", "cp": [106.278179, 37.26637], "name": "宁夏", "childNum": 2 },
+      "properties": { "id": "640000", "cp": [106.278179, 37.26637], "name": "Ninh Hạ", "childNum": 2 },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -718,7 +718,7 @@
     {
       "type": "Feature",
       "id": "650000",
-      "properties": { "id": "650000", "cp": [85.617733, 40.792818], "name": "新疆", "childNum": 1 },
+      "properties": { "id": "650000", "cp": [85.617733, 40.792818], "name": "Tân Cương", "childNum": 1 },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -733,7 +733,7 @@
       "properties": {
         "id": "110000",
         "cp": [116.405285, 39.904989],
-        "name": "北京",
+        "name": "Bắc Kinh",
         "childNum": 1
       },
       "geometry": {
@@ -750,7 +750,7 @@
       "properties": {
         "id": "120000",
         "cp": [117.190182, 39.125596],
-        "name": "天津",
+        "name": "Thiên Tân",
         "childNum": 1
       },
       "geometry": {
@@ -767,7 +767,7 @@
       "properties": {
         "id": "310000",
         "cp": [121.472644, 31.231706],
-        "name": "上海",
+        "name": "Thượng Hải",
         "childNum": 6
       },
       "geometry": {
@@ -789,7 +789,7 @@
       "properties": {
         "id": "500000",
         "cp": [107.304962, 29.533155],
-        "name": "重庆",
+        "name": "Trùng Khánh",
         "childNum": 2
       },
       "geometry": {
@@ -809,7 +809,7 @@
       "properties": {
         "id": "810000",
         "cp": [114.173355, 22.320048],
-        "name": "香港",
+        "name": "Hồng Kông",
         "childNum": 5
       },
       "geometry": {
@@ -827,7 +827,7 @@
     {
       "type": "Feature",
       "id": "820000",
-      "properties": { "id": "820000", "cp": [113.54909, 22.198951], "name": "澳门", "childNum": 1 },
+      "properties": { "id": "820000", "cp": [113.54909, 22.198951], "name": "Ma Cao", "childNum": 1 },
       "geometry": {
         "type": "Polygon",
         "coordinates": ["@@kÊd°å§s"],

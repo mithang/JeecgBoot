@@ -2,84 +2,84 @@
   <PageWrapper>
     <a-card :bordered="false" class="j-print-demo">
       <div style="text-align: right">
-        <a-button type="primary" ghost @click="onPrint">打印</a-button>
+        <a-button type="primary" ghost @click="onPrint">In</a-button>
       </div>
       <section ref="print" id="printContent">
         <div style="text-align: center">
-          <p style="font-size: 24px; font-weight: 800">打印测试表单</p>
+          <p style="font-size: 24px; font-weight: 800">In biểu mẫu kiểm tra</p>
         </div>
-        <!--签字-->
+        <!--Ký tên-->
         <a-col :md="24" :sm="24">
           <div class="sign" style="text-align: center; height: inherit">
             <a-col :span="24">
-              <span>打印人员:</span>
+              <span>Người in:</span>
               <a-input style="width: 30%" v-model:value="model.printer" />
-              <span style="margin-left: 12.5%">打印日期:</span>
+              <span style="margin-left: 12.5%">Ngày in:</span>
               <a-input style="width: 30%" v-model:value="model.printTime" />
             </a-col>
             <a-col :span="24"> </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印内容:</span>
+              <span>Nội dung in:</span>
               <a-input style="width: 80%" v-model:value="model.printContent" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的1:</span>
+              <span>Mục đích in1:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的2:</span>
+              <span>Mục đích in2:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的3:</span>
+              <span>Mục đích in3:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的4:</span>
+              <span>Mục đích in4:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的5:</span>
+              <span>Mục đích in5:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的6:</span>
+              <span>Mục đích in6:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的7:</span>
+              <span>Mục đích in7:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的8:</span>
+              <span>Mục đích in8:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的9:</span>
+              <span>Mục đích in9:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的10:</span>
+              <span>Mục đích in10:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的11:</span>
+              <span>Mục đích in11:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的12:</span>
+              <span>Mục đích in12:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的13:</span>
+              <span>Mục đích in13:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col :span="24" style="margin-top: 20px">
-              <span>打印目的14:</span>
+              <span>Mục đích in14:</span>
               <a-input style="width: 80%" v-model:value="model.printReason" />
             </a-col>
             <a-col style="margin-top: 20px" :span="24">
-              <span>打印图片:</span>
+              <span>Hình ảnh in:</span>
               <br />
               <a-upload
                 action="/jsonplaceholder.typicode.com/posts/"
@@ -120,10 +120,10 @@
     },
     setup() {
       const model = reactive({
-        printer: '张三',
+        printer: 'Trương Tam',
         printTime: '2021-12-31 23:59:59',
-        printContent: '打印内容：这是一个打印测试！',
-        printReason: '做一个打印测试',
+        printContent: 'Nội dung in: Đây là một bài kiểm tra in!',
+        printReason: 'Làm một kiểm tra in ấn',
         fileList: [
           {
             uid: '-1',

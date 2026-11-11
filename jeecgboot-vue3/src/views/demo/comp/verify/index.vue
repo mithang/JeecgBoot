@@ -1,26 +1,26 @@
 <template>
-  <PageWrapper title="拖动校验示例">
+  <PageWrapper title="Ví dụ kiểm chứng kéo">
     <div class="flex justify-center p-4 items-center bg-gray-700">
       <BasicDragVerify ref="el1" @success="handleSuccess" />
-      <a-button type="primary" class="ml-2" @click="handleBtnClick(el1)"> 还原 </a-button>
+      <a-button type="primary" class="ml-2" @click="handleBtnClick(el1)"> Khôi phục </a-button>
     </div>
 
     <div class="flex justify-center p-4 items-center bg-gray-700">
       <BasicDragVerify ref="el2" @success="handleSuccess" circle />
-      <a-button type="primary" class="ml-2" @click="handleBtnClick(el2)"> 还原 </a-button>
+      <a-button type="primary" class="ml-2" @click="handleBtnClick(el2)"> Khôi phục </a-button>
     </div>
 
     <div class="flex justify-center p-4 items-center bg-gray-700">
       <BasicDragVerify
         ref="el3"
         @success="handleSuccess"
-        text="拖动以进行校验"
-        successText="校验成功"
+        text="Kéo để kiểm chứng"
+        successText="Kiểm chứng thành công"
         :barStyle="{
           backgroundColor: '#018ffb',
         }"
       />
-      <a-button type="primary" class="ml-2" @click="handleBtnClick(el3)"> 还原 </a-button>
+      <a-button type="primary" class="ml-2" @click="handleBtnClick(el3)"> Khôi phục </a-button>
     </div>
 
     <div class="flex justify-center p-4 items-center bg-gray-700">
@@ -30,7 +30,7 @@
           <RightOutlined v-else />
         </template>
       </BasicDragVerify>
-      <a-button type="primary" class="ml-2" @click="handleBtnClick(el4)"> 还原 </a-button>
+      <a-button type="primary" class="ml-2" @click="handleBtnClick(el4)"> Khôi phục </a-button>
     </div>
 
     <div class="flex justify-center p-4 items-center bg-gray-700">
@@ -38,15 +38,15 @@
         <template #text="isPassing">
           <div v-if="isPassing">
             <BugOutlined />
-            成功
+            Thành công
           </div>
           <div v-else>
-            拖动
+            Kéo
             <RightOutlined />
           </div>
         </template>
       </BasicDragVerify>
-      <a-button type="primary" class="ml-2" @click="handleBtnClick(el5)"> 还原 </a-button>
+      <a-button type="primary" class="ml-2" @click="handleBtnClick(el5)"> Khôi phục </a-button>
     </div>
   </PageWrapper>
 </template>
@@ -69,7 +69,7 @@
 
       function handleSuccess(data: PassingData) {
         const { time } = data;
-        createMessage.success(`校验成功,耗时${time}秒`);
+        createMessage.success(`Kiểm chứng thành công,Thời gian tốn${time}giây`);
       }
 
       function handleBtnClick(elRef: Nullable<DragVerifyActionType>) {

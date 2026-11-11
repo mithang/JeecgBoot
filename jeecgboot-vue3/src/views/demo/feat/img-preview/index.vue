@@ -1,10 +1,10 @@
 <template>
-  <PageWrapper title="图片预览示例">
-    <h1>有预览图</h1>
+  <PageWrapper title="Ví dụ xem trước hình ảnh">
+    <h1>Có ảnh xem trước</h1>
     <ImagePreview :imageList="imgList" />
     <a-divider />
-    <h1>无预览图</h1>
-    <a-button @click="openImg" type="primary">点击预览</a-button>
+    <h1>Không có ảnh xem trước</h1>
+    <a-button @click="openImg" type="primary">Nhấn để xem trước</a-button>
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -25,9 +25,9 @@
     setup() {
       function openImg() {
         const onImgLoad = ({ index, url, dom }) => {
-          console.log(`第${index + 1}张图片已加载，URL为：${url}`, dom);
+          console.log(`Ảnh thứ ${index + 1} đã tải xong, URL: ${url}`, dom);
         };
-        // 可以使用createImgPreview返回的 PreviewActions 来控制预览逻辑，实现类似幻灯片、自动旋转之类的骚操作
+        // Có thể dùng PreviewActions trả về bởi createImgPreview để điều khiển logic xem trước, thực hiện các thao tác hay ho tương tự như trình chiếu, tự động xoay
         let imageList = imgList.map<string>((i) => i.src);
         createImgPreview({ imageList: imageList, defaultWidth: 700, rememberState: true, onImgLoad });
       }

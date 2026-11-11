@@ -1,17 +1,17 @@
 <template>
-  <PageWrapper title="抽屉组件使用示例">
-    <Alert message="使用 useDrawer 进行抽屉操作" show-icon />
-    <a-button type="primary" class="my-4" @click="openDrawerLoading"> 打开Drawer </a-button>
+  <PageWrapper title="Ví dụ sử dụng component drawer">
+    <Alert message="Sử dụng useDrawer để thao tác ngăn kéo" show-icon />
+    <a-button type="primary" class="my-4" @click="openDrawerLoading"> MởDrawer </a-button>
 
-    <Alert message="内外同时控制显示隐藏" show-icon />
-    <a-button type="primary" class="my-4" @click="openDrawer2(true)"> 打开Drawer </a-button>
-    <Alert message="自适应高度/显示footer" show-icon />
-    <a-button type="primary" class="my-4" @click="openDrawer3(true)"> 打开Drawer </a-button>
+    <Alert message="Điều khiển hiển thị/ẩn đồng thời cả trong và ngoài" show-icon />
+    <a-button type="primary" class="my-4" @click="openDrawer2(true)"> MởDrawer </a-button>
+    <Alert message="Chiều cao tự thích ứng/Hiển thịfooter" show-icon />
+    <a-button type="primary" class="my-4" @click="openDrawer3(true)"> MởDrawer </a-button>
 
-    <Alert message="内外数据交互" show-icon />
-    <a-button type="primary" class="my-4" @click="send"> 打开Drawer并传递数据 </a-button>
-    <Alert message="详情页模式" show-icon />
-    <a-button type="primary" class="my-4" @click="openDrawer5(true)"> 打开详情Drawer </a-button>
+    <Alert message="Tương tác dữ liệu trong và ngoài" show-icon />
+    <a-button type="primary" class="my-4" @click="send"> Mở Drawer và truyền dữ liệu </a-button>
+    <Alert message="Chế độ trang chi tiết" show-icon />
+    <a-button type="primary" class="my-4" @click="openDrawer5(true)"> Mở chi tiếtDrawer </a-button>
     <Drawer1 @register="register1" />
     <Drawer2 @register="register2" />
     <Drawer3 @register="register3" />

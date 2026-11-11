@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper title="基础表单" contentBackground content=" 表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。" contentClass="p-4">
+  <PageWrapper title="Biểu mẫu cơ bản" contentBackground content=" Trang biểu mẫu dùng để thu thập hoặc xác thực thông tin từ người dùng, biểu mẫu cơ bản thường gặp trong các tình huống biểu mẫu có ít mục dữ liệu." contentClass="p-4">
     <BasicForm @register="register" />
   </PageWrapper>
 </template>
@@ -28,7 +28,7 @@
           span: 12,
         },
         submitButtonOptions: {
-          text: '提交',
+          text: 'Gửi',
         },
         submitFunc: customSubmitFunc,
       });
@@ -47,7 +47,7 @@
                 loading: false,
               },
             });
-            createMessage.success('提交成功！');
+            createMessage.success('Gửi thành công!');
           }, 2000);
         } catch (error) {}
       }

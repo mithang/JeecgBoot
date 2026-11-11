@@ -4,7 +4,7 @@ export const step1Schemas: FormSchema[] = [
   {
     field: 'account',
     component: 'Select',
-    label: '付款账户',
+    label: 'Tài khoản thanh toán',
     required: true,
     defaultValue: '1',
     componentProps: {
@@ -19,7 +19,7 @@ export const step1Schemas: FormSchema[] = [
   {
     field: 'fac',
     component: 'InputGroup',
-    label: '收款账户',
+    label: 'Tài khoản nhận tiền',
     required: true,
     defaultValue: 'test@example.com',
     slot: 'fac',
@@ -34,14 +34,14 @@ export const step1Schemas: FormSchema[] = [
   {
     field: 'payeeName',
     component: 'Input',
-    label: '收款人姓名',
+    label: 'Tên người nhận tiền',
     defaultValue: 'Jeecg',
     required: true,
   },
   {
     field: 'money',
     component: 'Input',
-    label: '转账金额',
+    label: 'Số tiền chuyển khoản',
     defaultValue: '500',
     required: true,
     renderComponentContent: () => {
@@ -56,7 +56,7 @@ export const step2Schemas: FormSchema[] = [
   {
     field: 'pwd',
     component: 'InputPassword',
-    label: '支付密码',
+    label: 'Mật khẩu thanh toán',
     required: true,
     defaultValue: '123456',
   },

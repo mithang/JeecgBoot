@@ -6,13 +6,13 @@ import { Icon } from '/@/components/Icon';
 
 export const columns: BasicColumn[] = [
   {
-    title: '菜单名称',
+    title: 'Tên menu',
     dataIndex: 'menuName',
     width: 200,
     align: 'left',
   },
   {
-    title: '图标',
+    title: 'Biểu tượng',
     dataIndex: 'icon',
     width: 50,
     customRender: ({ record }) => {
@@ -20,33 +20,33 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '权限标识',
+    title: 'Định danh quyền hạn',
     dataIndex: 'permission',
     width: 180,
   },
   {
-    title: '组件',
+    title: 'Component',
     dataIndex: 'component',
   },
   {
-    title: '排序',
+    title: 'Sắp xếp',
     dataIndex: 'orderNo',
     width: 50,
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status',
     width: 80,
     customRender: ({ record }) => {
       const status = record.status;
       const enable = ~~status === 0;
       const color = enable ? 'green' : 'red';
-      const text = enable ? '启用' : '停用';
+      const text = enable ? 'Kích hoạt' : 'Vô hiệu hóa';
       return h(Tag, { color: color }, () => text);
     },
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     dataIndex: 'createTime',
     width: 180,
   },
@@ -59,18 +59,18 @@ const isButton = (type: string) => type === '2';
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'menuName',
-    label: '菜单名称',
+    label: 'Tên menu',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
     field: 'status',
-    label: '状态',
+    label: 'Trạng thái',
     component: 'Select',
     componentProps: {
       options: [
-        { label: '启用', value: '0' },
-        { label: '停用', value: '1' },
+        { label: 'Kích hoạt', value: '0' },
+        { label: 'Vô hiệu hóa', value: '1' },
       ],
     },
     colProps: { span: 8 },
@@ -80,28 +80,28 @@ export const searchFormSchema: FormSchema[] = [
 export const formSchema: FormSchema[] = [
   {
     field: 'type',
-    label: '菜单类型',
+    label: 'Loại menu',
     component: 'RadioButtonGroup',
     defaultValue: '0',
     componentProps: {
       options: [
-        { label: '目录', value: '0' },
-        { label: '菜单', value: '1' },
-        { label: '按钮', value: '2' },
+        { label: 'Danh mục', value: '0' },
+        { label: 'Menu', value: '1' },
+        { label: 'Nút', value: '2' },
       ],
     },
     colProps: { lg: 24, md: 24 },
   },
   {
     field: 'menuName',
-    label: '菜单名称',
+    label: 'Tên menu',
     component: 'Input',
     required: true,
   },
 
   {
     field: 'parentMenu',
-    label: '上级菜单',
+    label: 'Menu cấp trên',
     component: 'TreeSelect',
     componentProps: {
       replaceFields: {
@@ -115,13 +115,13 @@ export const formSchema: FormSchema[] = [
 
   {
     field: 'orderNo',
-    label: '排序',
+    label: 'Sắp xếp',
     component: 'InputNumber',
     required: true,
   },
   {
     field: 'icon',
-    label: '图标',
+    label: 'Biểu tượng',
     component: 'IconPicker',
     required: true,
     ifShow: ({ values }) => !isButton(values.type),
@@ -129,44 +129,44 @@ export const formSchema: FormSchema[] = [
 
   {
     field: 'routePath',
-    label: '路由地址',
+    label: 'Địa chỉ route',
     component: 'Input',
     required: true,
     ifShow: ({ values }) => !isButton(values.type),
   },
   {
     field: 'component',
-    label: '组件路径',
+    label: 'Đường dẫn component',
     component: 'Input',
     ifShow: ({ values }) => isMenu(values.type),
   },
   {
     field: 'permission',
-    label: '权限标识',
+    label: 'Định danh quyền hạn',
     component: 'Input',
     ifShow: ({ values }) => !isDir(values.type),
   },
   {
     field: 'status',
-    label: '状态',
+    label: 'Trạng thái',
     component: 'RadioButtonGroup',
     defaultValue: '0',
     componentProps: {
       options: [
-        { label: '启用', value: '0' },
-        { label: '禁用', value: '1' },
+        { label: 'Kích hoạt', value: '0' },
+        { label: 'Vô hiệu hóa', value: '1' },
       ],
     },
   },
   {
     field: 'isExt',
-    label: '是否外链',
+    label: 'Có liên kết ngoài hay không',
     component: 'RadioButtonGroup',
     defaultValue: '0',
     componentProps: {
       options: [
-        { label: '否', value: '0' },
-        { label: '是', value: '1' },
+        { label: 'Không', value: '0' },
+        { label: 'Có', value: '1' },
       ],
     },
     ifShow: ({ values }) => !isButton(values.type),
@@ -174,13 +174,13 @@ export const formSchema: FormSchema[] = [
 
   {
     field: 'keepalive',
-    label: '是否缓存',
+    label: 'Có cache hay không',
     component: 'RadioButtonGroup',
     defaultValue: '0',
     componentProps: {
       options: [
-        { label: '否', value: '0' },
-        { label: '是', value: '1' },
+        { label: 'Không', value: '0' },
+        { label: 'Có', value: '1' },
       ],
     },
     ifShow: ({ values }) => isMenu(values.type),
@@ -188,13 +188,13 @@ export const formSchema: FormSchema[] = [
 
   {
     field: 'show',
-    label: '是否显示',
+    label: 'Có hiển thị không',
     component: 'RadioButtonGroup',
     defaultValue: '0',
     componentProps: {
       options: [
-        { label: '是', value: '0' },
-        { label: '否', value: '1' },
+        { label: 'Có', value: '0' },
+        { label: 'Không', value: '1' },
       ],
     },
     ifShow: ({ values }) => !isButton(values.type),

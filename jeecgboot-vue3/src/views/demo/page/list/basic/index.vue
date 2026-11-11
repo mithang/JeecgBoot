@@ -1,18 +1,18 @@
 <template>
-  <PageWrapper :class="prefixCls" title="标准列表">
+  <PageWrapper :class="prefixCls" title="Danh sách tiêu chuẩn">
     <div :class="`${prefixCls}__top`">
       <a-row :gutter="12">
         <a-col :span="8" :class="`${prefixCls}__top-col`">
-          <div>我的待办</div>
-          <p>8个任务</p>
+          <div>Việc cần làm của tôi</div>
+          <p>8nhiệm vụ</p>
         </a-col>
         <a-col :span="8" :class="`${prefixCls}__top-col`">
-          <div>本周任务平均处理时间</div>
-          <p>32分钟</p>
+          <div>Thời gian xử lý trung bình của nhiệm vụ trong tuần này</div>
+          <p>32Phút</p>
         </a-col>
         <a-col :span="8" :class="`${prefixCls}__top-col`">
-          <div>本周完成任务数</div>
-          <p>24个任务</p>
+          <div>Số nhiệm vụ hoàn thành trong tuần này</div>
+          <p>24nhiệm vụ</p>
         </a-col>
       </a-row>
     </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="info">
                   <div><span>Owner</span>{{ item.author }}</div>
-                  <div><span>开始时间</span>{{ item.datetime }}</div>
+                  <div><span>Thời gian bắt đầu</span>{{ item.datetime }}</div>
                 </div>
                 <div class="progress">
                   <Progress :percent="item.percent" status="active" />
