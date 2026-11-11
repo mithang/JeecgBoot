@@ -1,31 +1,31 @@
 export function checkFileType(file: File, accepts: string[]) {
-  // 代码逻辑说明: 【issues/7954】BasicUpload组件上传文件，限制上传格式校验出错
+  // Giải thích logic mã: 【issues/7954]Component BasicUpload tải tệp lên, giới hạn định dạng tải lên bị lỗi kiểm chứng
   const mimePatterns: string[] = [];
   const suffixList: string[] = [];
-  // 分类处理 accepts
+  // Xử lý theo loại accepts
   for (const item of accepts) {
     if (item.includes('/')) {
       mimePatterns.push(item);
     } else {
-      // 支持.png 或 png（带点后缀或者不带点后缀）
+      // Hỗ trợ.png hoặc png (có hậu tố dấu chấm hoặc không có hậu tố dấu chấm)
       const suffix = item.startsWith('.') ? item.slice(1) : item;
       suffixList.push(suffix);
     }
   }
-  // 后缀匹配逻辑
+  // Logic khớp hậu tố
   let suffixMatch = false;
   if (suffixList.length > 0) {
     const suffixRegex = new RegExp(`\\.(${suffixList.join('|')})$`, 'i');
     suffixMatch = suffixRegex.test(file.name);
   }
-  // MIME类型匹配逻辑
+  // MIMELogic khớp loại
   let mimeMatch = false;
   if (mimePatterns.length > 0 && file.type) {
     mimeMatch = mimePatterns.some((pattern) => {
-      // 先转义特殊字符，再处理通配符
+      // Thoát ký tự đặc biệt trước, rồi xử lý ký tự đại diện
       const regexPattern = pattern
-        .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // 先转义特殊字符
-        .replace(/\*/g, '.*'); // 再替换通配符
+        .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // Thoát ký tự đặc biệt trước
+        .replace(/\*/g, '.*'); // Thay thế ký tự đại diện lần nữa
       const regex = new RegExp(`^${regexPattern}$`, 'i');
       return regex.test(file.type);
     });

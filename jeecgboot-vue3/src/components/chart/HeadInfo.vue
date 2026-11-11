@@ -32,7 +32,7 @@
         type: String,
         default: false,
       },
-      // 代码逻辑说明: 【QQYUN-8762】首页默认及echars颜色调整
+      // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
       iconColor: {
         type: String,
         default: '#2b99ff',

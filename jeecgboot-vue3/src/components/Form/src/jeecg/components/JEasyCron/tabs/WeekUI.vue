@@ -2,26 +2,26 @@
   <div :class="`${prefixCls}-config-list`">
     <a-radio-group v-model:value="type">
       <div class="item">
-        <a-radio :value="TypeEnum.unset" v-bind="beforeRadioAttrs">不设置</a-radio>
-        <span class="tip-info">日和周只能设置其中之一</span>
+        <a-radio :value="TypeEnum.unset" v-bind="beforeRadioAttrs">Không đặt</a-radio>
+        <span class="tip-info">Ngày và tuần chỉ được đặt một trong hai</span>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">区间</a-radio>
-        <span> 从 </span>
+        <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">Khoảng</a-radio>
+        <span> Từ </span>
         <a-select v-model:value="valueRange.start" :options="weekOptions" v-bind="typeRangeSelectAttrs" />
-        <span> 至 </span>
+        <span> Đến </span>
         <a-select v-model:value="valueRange.end" :options="weekOptions" v-bind="typeRangeSelectAttrs" />
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">循环</a-radio>
-        <span> 从 </span>
+        <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">Lặp lại</a-radio>
+        <span> Từ </span>
         <a-select v-model:value="valueLoop.start" :options="weekOptions" v-bind="typeLoopSelectAttrs" />
-        <span> 开始，间隔 </span>
+        <span> Bắt đầu, khoảng cách </span>
         <InputNumber v-model:value="valueLoop.interval" v-bind="typeLoopAttrs" />
-        <span> 天 </span>
+        <span> Ngày </span>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.specify" v-bind="beforeRadioAttrs">指定</a-radio>
+        <a-radio :value="TypeEnum.specify" v-bind="beforeRadioAttrs">Chỉ định</a-radio>
         <div class="list list-cn">
           <a-checkbox-group v-model:value="valueList">
             <template v-for="opt in weekOptions" :key="i">
@@ -50,13 +50,13 @@
   };
 
   const WEEK_MAP_CN = {
-    '1': '周日',
-    '2': '周一',
-    '3': '周二',
-    '4': '周三',
-    '5': '周四',
-    '6': '周五',
-    '7': '周六',
+    '1': 'Chủ nhật',
+    '2': 'Thứ Hai',
+    '3': 'Thứ Ba',
+    '4': 'Thứ Tư',
+    '5': 'Thứ Năm',
+    '6': 'Thứ Sáu',
+    '7': 'Thứ Bảy',
   };
 
   export default defineComponent({
@@ -78,7 +78,7 @@
         defaultValue: '?',
         minValue: 1,
         maxValue: 7,
-        // 0,7表示周日 1表示周一
+        // 0,7biểu thị Chủ nhật, 1 biểu thị Thứ hai
         valueRange: { start: 1, end: 7 },
         valueLoop: { start: 2, interval: 1 },
         disabled: disabledChoice,

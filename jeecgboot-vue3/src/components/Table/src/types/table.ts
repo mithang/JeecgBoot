@@ -38,7 +38,7 @@ export interface TableRowSelection<T = any> extends ITableRowSelection {
    * @type Function
    */
   onSelectInvert?: (selectedRows: string[] | number[]) => any;
-  //【issues/8163】关联记录新增丢失
+  //【issues/8163] bản ghi liên kết thêm mới bị mất
   selectedRows?: any[];
 }
 
@@ -80,7 +80,7 @@ export interface FetchParams {
 export interface GetColumnsParams {
   ignoreIndex?: boolean;
   ignoreAction?: boolean;
-  // 代码逻辑说明: 【issues/8502】解决权限列在列表中不显示，列配置中还显示
+  // Giải thích logic mã: 【issues/8502] Giải quyết vấn đề cột quyền không hiển thị trong danh sách nhưng vẫn hiển thị trong cấu hình cột
   ignoreAuth?: boolean;
   ignoreIfShow?: boolean | ((column: BasicColumn) => boolean);
   sort?: boolean;
@@ -124,114 +124,114 @@ export interface TableActionType {
 }
 
 export interface FetchSetting {
-  // 请求接口当前页数
+  // Số trang hiện tại của API yêu cầu
   pageField: string;
-  // 每页显示多少条
+  // Mỗi trang hiển thị bao nhiêu dòng
   sizeField: string;
-  // 请求结果列表字段  支持 a.b.c
+  // Trường danh sách kết quả yêu cầu, hỗ trợ a.b.c
   listField: string;
-  // 请求结果总数字段  支持 a.b.c
+  // Trường tổng số kết quả yêu cầu, hỗ trợ a.b.c
   totalField: string;
 }
 
 export interface TableSetting {
-  // 是否显示刷新按钮
+  // Có hiển thị nút làm mới không
   redo?: boolean;
-  // 是否显示尺寸调整按钮
+  // Có hiển thị nút điều chỉnh kích thước không
   size?: boolean;
-  // 是否显示字段调整按钮
+  // Có hiển thị nút điều chỉnh trường không
   setting?: boolean;
-  // 缓存“字段调整”配置的key，用于页面上有多个表格需要区分的情况
+  // Cache key cấu hình "Điều chỉnh trường", dùng cho trường hợp trên trang có nhiều bảng cần phân biệt
   cacheKey?: string;
-  // 是否显示全屏按钮
+  // Có hiển thị nút toàn màn hình không
   fullScreen?: boolean;
 }
 
 export interface BasicTableProps<T = any> {
-  // 点击行选中
+  // Nhấp hàng để chọn
   clickToRowSelect?: boolean;
   isTreeTable?: boolean;
-  // 自定义排序方法
+  // Phương thức sắp xếp tùy chỉnh
   sortFn?: (sortInfo: SorterResult) => any;
-  // 排序方法
+  // Phương thức sắp xếp
   filterFn?: (data: Partial<Recordable<string[]>>) => any;
-  // 取消表格的默认padding
+  // Hủy padding mặc định của bảngpadding
   inset?: boolean;
-  // 显示表格设置
+  // Hiển thị cài đặt bảng
   showTableSetting?: boolean;
-  // 表格上方操作按钮设置
+  // Cài đặt nút thao tác phía trên bảng
   tableSetting?: TableSetting;
-  // 斑马纹
+  // Vằn ngựa vằn
   striped?: boolean;
-  // 是否自动生成key
+  // Có tự động tạo khôngkey
   autoCreateKey?: boolean;
-  // 计算合计行的方法
+  // Phương thức tính hàng tổng cộng
   summaryFunc?: (...arg: any) => Recordable[];
-  // 自定义合计表格内容
+  // Tùy chỉnh nội dung bảng tổng cộng
   summaryData?: Recordable[];
-  // 是否显示合计行
+  // Có hiển thị hàng tổng cộng không
   showSummary?: boolean;
-  // 是否可拖拽列
+  // Có thể kéo thả cột không
   canColDrag?: boolean;
-  // 接口请求对象
+  // Đối tượng yêu cầu API
   api?: (...arg: any) => Promise<any>;
-  // 请求之前处理参数
+  // Xử lý tham số trước khi yêu cầu
   beforeFetch?: Fn;
-  // 自定义处理接口返回参数
+  // Xử lý tùy chỉnh tham số trả về của API
   afterFetch?: Fn;
-  // 查询条件请求之前处理
+  // Xử lý trước khi gửi yêu cầu điều kiện truy vấn
   handleSearchInfoFn?: Fn;
-  // 请求接口配置
+  // Cấu hình API yêu cầu
   fetchSetting?: Partial<FetchSetting>;
-  // 立即请求接口
+  // Yêu cầu API ngay lập tức
   immediate?: boolean;
-  // 在开起搜索表单的时候，如果没有数据是否显示表格
+  // Khi mở biểu mẫu tìm kiếm, nếu không có dữ liệu thì có hiển thị bảng hay không
   emptyDataIsShowTable?: boolean;
-  // 额外的请求参数
+  // Tham số yêu cầu bổ sung
   searchInfo?: Recordable;
-  // 默认的排序参数
+  // Tham số sắp xếp mặc định
   defSort?: Recordable | Recordable[];
-  // 使用搜索表单
+  // Sử dụng biểu mẫu tìm kiếm
   useSearchForm?: boolean;
-  // 表单配置
+  // Cấu hình biểu mẫu
   formConfig?: Partial<FormProps>;
-  // 列配置
+  // Cấu hình cột
   columns: BasicColumn[];
-  // 统一设置列最大宽度
+  // Thống nhất đặt chiều rộng tối đa của cột
   maxColumnWidth?: number;
-  // 是否显示序号列
+  // Có hiển thị cột số thứ tự không
   showIndexColumn?: boolean;
-  // 序号列配置
+  // Cấu hình cột số thứ tự
   indexColumnProps?: BasicColumn;
-  // 是否显示操作列
+  // Có hiển thị cột thao tác không
   showActionColumn?: boolean;
-  // 操作列配置
+  // Cấu hình cột thao tác
   actionColumn?: Partial<BasicColumn>;
-  // 文本超过宽度是否显示。。。
+  // Văn bản vượt quá chiều rộng có hiển thị... hay không
   ellipsis?: boolean;
-  // 是否可以自适应高度
+  // Có thể tự thích ứng chiều cao không
   canResize?: boolean;
-  // 自适应高度偏移， 计算结果-偏移量
+  // Độ lệch chiều cao tự thích ứng, kết quả tính toán-Độ lệch
   resizeHeightOffset?: number;
-  // 在分页改变的时候清空选项
+  // Xóa tùy chọn khi phân trang thay đổi
   clearSelectOnPageChange?: boolean;
   //
   rowKey?: string | ((record: Recordable) => string);
-  // 数据
+  // Dữ liệu
   dataSource?: Recordable[];
-  // 标题右侧提示
+  // Gợi ý ở phía bên phải tiêu đề
   titleHelpMessage?: string | string[];
-  // 表格最小高度
+  // Chiều cao tối thiểu bảng
   minHeight?: number;
-  // 表格滚动最大高度
+  // Chiều cao tối đa khi cuộn bảng
   maxHeight?: number;
-  // 是否显示边框
+  // Có hiển thị viền không
   bordered?: boolean;
-  // 展开列宽度
+  // Chiều rộng cột mở rộng
   expandColumnWidth: number;
-  // 分页配置
+  // Cấu hình phân trang
   pagination?: PaginationProps | boolean;
-  // loading加载
+  // loadingTải
   loading?: boolean;
 
   /**
@@ -328,7 +328,7 @@ export interface BasicTableProps<T = any> {
    * you need to add style .ant-table td { white-space: nowrap; }.
    * @type object
    */
-  // 代码逻辑说明: 【issues/1188】BasicTable加上scrollToFirstRowOnChange类型定义
+  // Giải thích logic mã: 【issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
   scroll?: { x?: number | true | 'max-content'; y?: number; scrollToFirstRowOnChange?: boolean };
 
   /**
@@ -434,12 +434,12 @@ export interface BasicColumn extends ColumnProps<Recordable> {
 
   //
   flag?: 'INDEX' | 'DEFAULT' | 'CHECKBOX' | 'RADIO' | 'ACTION';
-  // 代码逻辑说明: 【issues/6908】多语言无刷新切换时，BasicColumn和FormSchema里面的值不能正常切换
+  // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
   title: string | Fn;
   customTitle?: VueNode;
 
   slots?: Recordable;
-  // slots的备份，兼容老的写法，转成新写法避免控制台警告
+  // slotsBản sao lưu, tương thích với cách viết cũ, chuyển sang cách viết mới để tránh cảnh báo console
   slotsBak?: Recordable;
 
   // Whether to hide the column by default, it can be displayed in the column configuration
@@ -455,18 +455,18 @@ export interface BasicColumn extends ColumnProps<Recordable> {
   editRow?: boolean;
   editable?: boolean;
   editComponent?: ComponentType;
-  // 代码逻辑说明: 【issues/8680】editComponentProps可接受一个函数传入record
+  // Giải thích logic mã: 【issues/8680]editComponentProps có thể nhận một hàm truyền vàorecord
   editComponentProps?: Recordable | ((record: Recordable) => Recordable);
   editRule?: boolean | ((text: string, record: Recordable) => Promise<string>);
   editValueMap?: (value: any) => string;
   onEditRow?: () => void;
-  // 权限编码控制是否显示
+  // Mã quyền điều khiển việc hiển thị
   auth?: RoleEnum | RoleEnum[] | string | string[];
-  // 业务控制是否显示
+  // Nghiệp vụ kiểm soát có hiển thị hay không
   ifShow?: boolean | ((column: BasicColumn) => boolean);
-  //compType-用于记录类型
+  //compType-Dùng để ghi lại loại
   compType?: string;
-  // 代码逻辑说明: 【pull/1201】添加antd的TableSummary功能兼容老的summary（表尾合计）
+  // Giải thích logic mã: 【pull/1201]Thêm chức năng TableSummary của antd để tương thích với summary cũ (tổng cộng cuối bảng)
   customSummaryRender?: (opt: {
     value: any;
     text: any;
@@ -475,7 +475,7 @@ export interface BasicColumn extends ColumnProps<Recordable> {
     renderIndex?: number;
     column: BasicColumn;
   }) => any | VNodeChild | JSX.Element;
-  // 额外的属性
+  // Thuộc tính bổ sung
   extraProps?: Recordable;
 }
 

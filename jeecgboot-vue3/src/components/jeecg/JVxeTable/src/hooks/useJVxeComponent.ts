@@ -11,20 +11,20 @@ import { getAreaTextByCode } from "@/components/Form/src/utils/Area";
 
 export function useJVxeCompProps() {
   return {
-    // 组件类型
+    // Loại component
     type: propTypes.string,
-    // 渲染类型
+    // Loại render
     renderType: propTypes.string.def('default'),
-    // 渲染参数
+    // Tham số render
     params: propTypes.object,
-    // 渲染自定义选项
+    // Render tùy chọn tùy chỉnh
     renderOptions: propTypes.object,
   };
 }
 
 export function useJVxeComponent(props: JVxeComponent.Props) {
   const value = computed(() => {
-    // 代码逻辑说明: 【QQYUN-9125】oracle数据库日期类型字段会默认带上时分秒
+    // Giải thích logic mã: 【QQYUN-9125]Trường kiểu ngày của cơ sở dữ liệu oracle sẽ mặc định kèm theo giờ phút giây
     const val = props.params.row[props.params.column.property];
     if (props.type === 'date' && typeof val === 'string') {
       return val.split(' ').shift();
@@ -36,15 +36,15 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
   const row = computed(() => props.params.row);
   const rows = computed(() => props.params.data);
   const column = computed(() => props.params.column);
-  // 用户配置的原始 column
+  // Column gốc do người dùng cấu hình column
   const originColumn = computed(() => column.value.params);
   const rowIndex = computed(() => props.params._rowIndex);
   const columnIndex = computed(() => props.params._columnIndex);
-  // 表格数据长度
+  // Độ dài dữ liệu bảng
   const fullDataLength = computed(() => props.params.$table.internalData.tableFullData.length);
-  // 是否正在滚动中
+  // Có đang cuộn không
   const scrolling = computed(() => !!props.renderOptions.scrolling);
-  // 当有formatter时，优先使用formatter
+  // Khi có formatter, ưu tiên sử dụngformatter
   const innerLabel = computed(() => {
     if(typeof column.value?.formatter === 'function'){
       return column.value.formatter({
@@ -61,40 +61,40 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
 
     let cellProps = {};
 
-    // 输入占位符
+    // Placeholder nhập liệu
     cellProps['placeholder'] = replaceProps(col, col.placeholder);
 
-    // 解析props
+    // Phân tích cú phápprops
     if (isObject(col.props)) {
       Object.keys(col.props).forEach((key) => {
         cellProps[key] = replaceProps(col, col.props[key]);
       });
     }
 
-    // 判断是否是禁用的列
+    // Kiểm tra có phải cột bị vô hiệu hóa không
     cellProps['disabled'] = isBoolean(col['disabled']) ? col['disabled'] : cellProps['disabled'];
-    // 判断是否禁用行
+    // Xác định có vô hiệu hóa hàng không
     if (renderOptions.isDisabledRow(row.value, rowIndex.value)) {
       cellProps['disabled'] = true;
     }
-    // 代码逻辑说明: 【TV360X-291】没勾选同步数据库禁用排序功能
+    // Giải thích logic mã: 【TV360X-291] Không tick đồng bộ cơ sở dữ liệu thì vô hiệu hóa chức năng sắp xếp
     if (col.props && col.props.isDisabledCell) {
       if (col.props.isDisabledCell({ row: row.value, rowIndex: rowIndex.value, column: col, columnIndex: columnIndex.value })) {
         cellProps['disabled'] = true;
       }
     }
-    // 判断是否禁用所有组件
+    // Kiểm tra xem có vô hiệu hóa tất cả component không
     if (renderOptions.disabled === true) {
       cellProps['disabled'] = true;
-      // 代码逻辑说明: 【TV360X-1068】行编辑整体禁用时上传按钮不显示
+      // Giải thích logic mã: 【TV360X-1068] Khi chỉnh sửa dòng bị vô hiệu hóa toàn bộ, nút tải lên không hiển thị
       cellProps['disabledTable'] = true;
     }
-    // 代码逻辑说明: VUEN-1111 一对多子表 部门选择 不应该级联
+    // Giải thích logic mã: VUEN-1111 Bảng con một-nhiều: chọn phòng ban không nên liên kết cấp
     if (col.checkStrictly === true) {
       cellProps['checkStrictly'] = true;
     }
 
-    // 代码逻辑说明: 用户组件 控制单选多选新的参数配置
+    // Giải thích logic mã: Component người dùng: cấu hình tham số mới điều khiển đơn chọn/đa chọn
     if (col.isRadioSelection === true) {
       cellProps['isRadioSelection'] = true;
     } else if (col.isRadioSelection === false) {
@@ -106,12 +106,12 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
 
   const listeners = computed(() => {
     let listeners = Object.assign({}, props.renderOptions.listeners || {});
-    // 默认change事件
+    // Sự kiện change mặc định
     if (!listeners.change) {
       listeners.change = async (event) => {
         vModel(event.value, row, column);
         await nextTick();
-        // 处理 change 事件相关逻辑（例如校验）
+        // Xử lý logic liên quan đến sự kiện change (ví dụ như kiểm chứng)
         props.params.$table.updateStatus(props.params);
       };
     }
@@ -134,29 +134,29 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
   };
   const ctx = { props, context };
 
-  // 获取组件增强
+  // Lấy tăng cường component
   let enhanced = getEnhanced(props.type);
 
   watch(
     value,
     (newValue) => {
-      // -update-begin--author:liaozhiyang---date:20241210---for：【issues/7497】隐藏某一列后，字典没翻译，恢复后正常
-      // TODO 先这样修复解决问题，根因后期再看看
+      // -update-begin--author:liaozhiyang---date:20241210---for：【issues/7497] Sau khi ẩn một cột, từ điển không được dịch, khôi phục lại thì bình thường
+      // TODO Tạm sửa như vậy để giải quyết vấn đề, nguyên nhân gốc sẽ xem sau
       // enhanced = getEnhanced(props.type);
-      // -update-end--author:liaozhiyang---date:20241210---for：【issues/7497】隐藏某一列后，字典没翻译，恢复后
-      // 解决online中对同一条数据点击编辑多次他表字段变成空格的问题
+      // -update-end--author:liaozhiyang---date:20241210---for：【issues/7497] Sau khi ẩn một cột, từ điển không được dịch, sau khi khôi phục
+      // Khắc phục vấn đề trong online khi nhấp chỉnh sửa nhiều lần cùng một bản ghi thì trường của bảng khác biến thành khoảng trắng
       if (props.type === 'input' && originColumn.value.flag === 'link-table-field' && (newValue === undefined || newValue === null)) {
         return;
       }
-      // 验证值格式
+      // Xác minh định dạng giá trị
       let getValue = enhanced.getValue(newValue, ctx);
       if (newValue !== getValue) {
-        // 值格式不正确，重新赋值
+        // Định dạng giá trị không đúng, gán lại giá trị
         newValue = getValue;
         vModel(newValue, row, column);
       }
       innerValue.value = enhanced.setValue(newValue, ctx);
-      // 代码逻辑说明: 【QQYUN-9205】一对多(jVxetable组件date)支持年，年月，年度度，年周
+      // Giải thích logic mã: 【QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
       if (props.type === 'date' && props.renderType === JVxeRenderType.spaner && enhanced.translate.enabled === true) {
         if (isFunction(enhanced.translate.handler)) {
           innerValue.value = enhanced.translate.handler(newValue, ctx);
@@ -164,17 +164,17 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
         return;
       }
 
-      // 代码逻辑说明: 【issues/7203】自动生成一对多表单代码中，省市区回显问题---
+      // Giải thích logic mã: 【issues/7203] Vấn đề hiển thị lại Tỉnh/Thành/Quận huyện trong mã biểu mẫu một-nhiều được tạo tự động---
       if (props.type === 'pca' && props.renderType === JVxeRenderType.spaner) {
         innerValue.value = getAreaTextByCode(newValue);
         return;
       }
 
-      // 判断是否启用翻译
+      // Kiểm tra có bật dịch không
       if (props.renderType === JVxeRenderType.spaner && enhanced.translate.enabled === true) {
         if (isFunction(enhanced.translate.handler)) {
           let res = enhanced.translate.handler(newValue, ctx);
-          // 异步翻译，可解决字典查询慢的问题
+          // Dịch bất đồng bộ, có thể giải quyết vấn đề truy vấn từ điển chậm
           if (isPromise(res)) {
             res.then((v) => (innerValue.value = v));
           } else {
@@ -186,8 +186,8 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     { immediate: true }
   );
 
-  // update-begin--author:liaozhiyang---date:20250526---for：【QQYUN-15511】一对多子表的options通过js修改后，刷新后编辑回显的不是label
-  // 监听 options 变化（解决 动态更新options时需重新翻译）
+  // update-begin--author:liaozhiyang---date:20250526---for：【QQYUN-15511]Sau khi options của bảng con một-nhiều được sửa bằng js, làm mới rồi chỉnh sửa thì giá trị hiển thị lại không phải làlabel
+  // Lắng nghe thay đổi của options (giải quyết việc khi cập nhật động options cần dịch lại)
   watch(
     () => originColumn.value?.options,
     () => {
@@ -206,17 +206,17 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     },
     { deep: true }
   );
-  // update-end--author:liaozhiyang---date:20250526---for：【QQYUN-15511】一对多子表的options通过js修改后，刷新后编辑回显的不是label
+  // update-end--author:liaozhiyang---date:20250526---for：【QQYUN-15511]Sau khi options của bảng con một-nhiều được sửa bằng js, làm mới rồi chỉnh sửa thì giá trị hiển thị lại không phải làlabel
 
-  /** 通用处理 change 事件 */
+  /** Xử lý chung sự kiện change */
   function handleChangeCommon($value, force = false) {
     const newValue = enhanced.getValue($value, ctx);
     const oldValue = value.value;
-    // 代码逻辑说明: 【issues-5025】JVueTable的事件 @valueChange重复触发问题
+    // Giải thích logic mã: 【issues-5025] Sự kiện của JVueTable @valueChangeVấn đề kích hoạt lặp lại
     const execute = force ? true : newValue !== oldValue;
     if (execute) {
       trigger('change', { value: newValue });
-      // 触发valueChange事件
+      // Kích hoạt sự kiện valueChange
       parentTrigger('valueChange', {
         type: props.type,
         value: newValue,
@@ -228,13 +228,13 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     }
   }
 
-  /** 通用处理 blur 事件 */
+  /** Xử lý chung sự kiện blur */
   function handleBlurCommon($value) {
-    // 代码逻辑说明: 【issues/636】JVxeTable加上blur事件
+    // Giải thích logic mã: 【issues/636] JVxeTable thêm sự kiện blur
     const newValue = enhanced.getValue($value, ctx);
     const oldValue = value.value;
     //trigger('blur', { value });
-    // 触发blur事件
+    // Kích hoạt sự kiện blur
     parentTrigger('blur', {
       type: props.type,
       value: newValue,
@@ -246,10 +246,10 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
   }
 
   /**
-   * 如果事件存在的话，就触发
-   * @param name 事件名
-   * @param event 事件参数
-   * @param args 其他附带参数
+   * Nếu sự kiện tồn tại thì kích hoạt
+   * @param name Tên sự kiện
+   * @param event Tham số sự kiện
+   * @param args Các tham số đính kèm khác
    */
   function trigger(name, event?, args: any[] = []) {
     let listener = listeners.value[name];
@@ -269,7 +269,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
   function packageEvent(name, event: any = {}) {
     event.row = row.value;
     event.column = column.value;
-    // online增强参数兼容
+    // onlineTương thích tham số tăng cường
     event.column['key'] = column.value['property'];
     // event.cellTarget = this
     if (!event.type) {
@@ -278,7 +278,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     if (!event.cellType) {
       event.cellType = props.type;
     }
-    // 是否校验表单，默认为true
+    // Có kiểm chứng biểu mẫu không, mặc định làtrue
     if (isBoolean(event.validate)) {
       event.validate = true;
     }
@@ -286,7 +286,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
   }
 
   /**
-   * 防样式冲突类名生成器
+   * Trình tạo tên class chống xung đột kiểu
    * @param scope
    */
   function useCellDesign(scope: string) {
@@ -302,7 +302,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
 }
 
 /**
- * 获取组件默认增强
+ * Lấy tăng cường mặc định của component
  */
 export function useDefaultEnhanced(): JVxeComponent.EnhancedPartial {
   return {
@@ -325,7 +325,7 @@ export function useDefaultEnhanced(): JVxeComponent.EnhancedPartial {
     translate: {
       enabled: false,
       handler(value, ctx) {
-        // 默认翻译方法
+        // Phương thức dịch mặc định
         if (ctx) {
           return filterDictText(unref(ctx.context.column).params.options, value);
         } else {

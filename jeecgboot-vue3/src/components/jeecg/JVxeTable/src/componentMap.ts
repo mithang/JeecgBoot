@@ -21,12 +21,12 @@ import JVxeTextareaCell from './components/cells/JVxeTextareaCell.vue';
 import JVxeTreeSelectCell from './components/cells/JVxeTreeSelectCell.vue';
 import JVxeCategorySelectCell from './components/cells/JVxeCategorySelectCell.vue';
 
-// 代码逻辑说明: 【issues/860】生成的一对多代码，热更新之后点击新增卡死[暂时先解决]
+// Giải thích logic mã: 【issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
 const JVxeComponents = 'JVxeComponents__';
-/** span 组件结尾 */
+/** span Cuối component */
 export const spanEnds: string = ':span';
 
-/** 定义不能用于注册的关键字 */
+/** Định nghĩa từ khóa không thể dùng để đăng ký */
 export const excludeKeywords: Array<JVxeTypes> = [
   JVxeTypes.hidden,
   JVxeTypes.rowNumber,
@@ -36,35 +36,35 @@ export const excludeKeywords: Array<JVxeTypes> = [
 ];
 
 /**
- * 注册组件
+ * Đăng ký component
  *
- * @param type 组件 type
- * @param component Vue组件
- * @param spanComponent 显示组件，可空，默认为 JVxeNormalCell 组件
+ * @param type Component type
+ * @param component VueComponent
+ * @param spanComponent Component hiển thị, có thể để trống, mặc định là component JVxeNormalCell
  */
 export function addComponent(type: JVxeTypes, component: JVxeVueComponent, spanComponent?: JVxeVueComponent) {
   if (excludeKeywords.includes(type)) {
-    throw new Error(`【addComponent】不能使用"${type}"作为组件的name，因为这是关键字。`);
+    throw new Error(`[addComponent] Không thể sử dụng"${type}"làm name của component, vì đây là từ khóa.`);
   }
   if (componentMap.has(type)) {
-    throw new Error(`【addComponent】组件"${type}"已存在`);
+    throw new Error(`[addComponent] Component"${type}"Đã tồn tại`);
   }
   componentMap.set(type, component);
   if (spanComponent) {
     componentMap.set(type + spanEnds, spanComponent);
   }
-  // 代码逻辑说明: 【issues/860】生成的一对多代码，热更新之后点击新增卡死[暂时先解决]
+  // Giải thích logic mã: 【issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
   import.meta.env.DEV && (window[JVxeComponents] = componentMap);
 }
 
 export function deleteComponent(type: JVxeTypes) {
   componentMap.delete(type);
   componentMap.delete(type + spanEnds);
-  // 代码逻辑说明: 【issues/860】生成的一对多代码，热更新之后点击新增卡死[暂时先解决]
+  // Giải thích logic mã: 【issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
   import.meta.env.DEV && (window[JVxeComponents] = componentMap);
 }
 
-/** 定义内置自定义组件 */
+/** Định nghĩa component tùy chỉnh tích hợp sẵn */
 export function definedComponent() {
   addComponent(JVxeTypes.slot, JVxeSlotCell);
   addComponent(JVxeTypes.normal, JVxeNormalCell);
@@ -75,8 +75,8 @@ export function definedComponent() {
   addComponent(JVxeTypes.radio, JVxeRadioCell);
   addComponent(JVxeTypes.checkbox, JVxeCheckboxCell);
   addComponent(JVxeTypes.select, JVxeSelectCell);
-  addComponent(JVxeTypes.selectSearch, JVxeSelectCell); // 下拉搜索
-  addComponent(JVxeTypes.selectMultiple, JVxeSelectCell); // 下拉多选
+  addComponent(JVxeTypes.selectSearch, JVxeSelectCell); // Tìm kiếm trong dropdown
+  addComponent(JVxeTypes.selectMultiple, JVxeSelectCell); // Danh sách thả xuống chọn nhiều
   addComponent(JVxeTypes.date, JVxeDateCell);
   addComponent(JVxeTypes.datetime, JVxeDateCell);
   addComponent(JVxeTypes.time, JVxeTimeCell);
@@ -88,10 +88,10 @@ export function definedComponent() {
 
   // addComponent(JVxeTypes.departSelect, JVxeDepartSelectCell)
   // addComponent(JVxeTypes.userSelect, JVxeUserSelectCell)
-  // update-begin--author:liaozhiyang---date:20260413---for:【issues/7633】online子表支持分类字典树，自定义树
+  // update-begin--author:liaozhiyang---date:20260413---for:【issues/7633] Bảng con online hỗ trợ cây danh mục phân loại, cây tùy chỉnh
   addComponent(JVxeTypes.treeSelect, JVxeTreeSelectCell);
   addComponent(JVxeTypes.catTreeSelect, JVxeCategorySelectCell);
-  // update-end--author:liaozhiyang---date:20260413---for:【issues/7633】online子表支持分类字典树，自定义树
+  // update-end--author:liaozhiyang---date:20260413---for:【issues/7633] Bảng con online hỗ trợ cây danh mục phân loại, cây tùy chỉnh
 }
 
 export { componentMap, clearComponent } from './componentMapStore';

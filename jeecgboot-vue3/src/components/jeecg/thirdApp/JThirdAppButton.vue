@@ -1,9 +1,9 @@
 <template>
   <template v-if="syncToApp || syncToLocal">
-    <JThirdAppDropdown v-if="enabledTypes.wechatEnterprise" type="wechatEnterprise" name="企微" v-bind="bindAttrs" v-on="bindEvents" />
-    <JThirdAppDropdown v-if="enabledTypes.dingtalk" type="dingtalk" name="钉钉" v-bind="bindAttrs" v-on="bindEvents" />
+    <JThirdAppDropdown v-if="enabledTypes.wechatEnterprise" type="wechatEnterprise" name="WeCom" v-bind="bindAttrs" v-on="bindEvents" />
+    <JThirdAppDropdown v-if="enabledTypes.dingtalk" type="dingtalk" name="DingTalk" v-bind="bindAttrs" v-on="bindEvents" />
   </template>
-  <template v-else>未设置任何同步方向</template>
+  <template v-else>Chưa đặt bất kỳ hướng đồng bộ nào</template>
 </template>
 
 <script lang="ts" setup>
@@ -17,30 +17,30 @@
 
   const { createMessage, createWarningModal } = useMessage();
   const props = defineProps({
-    // 同步类型，可以是 user、depart
+    // Loại đồng bộ, có thể là user,depart
     bizType: {
       type: String,
       required: true,
     },
-    // 是否允许同步到第三方APP
+    // Có cho phép đồng bộ sang bên thứ ba khôngAPP
     syncToApp: Boolean,
-    // 是否允许第三方APP同步到本地
+    // Có cho phép APP bên thứ ba đồng bộ về local hay không
     syncToLocal: Boolean,
-    // 选择的行
+    // Hàng đã chọn
     selectedRowKeys: Array,
   });
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['sync-ok', 'sync-error', 'sync-finally']);
 
   const enabledTypes = ref({});
-  // 绑定属性
+  // Thuộc tính liên kết
   const bindAttrs = computed(() => {
     return {
       syncToApp: props.syncToApp,
       syncToLocal: props.syncToLocal,
     };
   });
-  // 绑定方法
+  // Phương thức liên kết
   const bindEvents = computed(() => {
     return {
       'to-app': onToApp,
@@ -48,46 +48,46 @@
     };
   });
 
-  // 同步到第三方App
+  // Đồng bộ sang bên thứ baApp
   function onToApp(e) {
     doSync(e.type, '/toApp');
   }
 
-  // 同步到本地
+  // Đồng bộ về máy local
   function onToLocal(e) {
     doSync(e.type, '/toLocal');
   }
 
-  // 获取启用的第三方App
+  // Lấy ứng dụng bên thứ ba đã bậtApp
   async function loadEnabledTypes() {
     enabledTypes.value = await getEnabledTypes();
   }
 
-  // 开始同步第三方App
+  // Bắt đầu đồng bộ ứng dụng bên thứ baApp
   function doSync(type, direction) {
     let urls = backEndUrl[type];
     if (!(urls && urls[props.bizType])) {
-      console.warn('配置出错');
+      console.warn('Lỗi cấu hình');
       return;
     }
     let url = urls[props.bizType] + direction;
     let selectedRowKeys = props.selectedRowKeys;
-    let content = '确定要开始同步全部数据吗？可能花费较长时间！';
+    let content = 'Bạn có chắc chắn muốn bắt đầu đồng bộ tất cả dữ liệu không? Có thể mất khá nhiều thời gian!';
 
     if (Array.isArray(selectedRowKeys) && selectedRowKeys.length > 0) {
-      content = `确定要开始同步这 ${selectedRowKeys.length} 项吗？`;
+      content = `Bạn có chắc chắn muốn bắt đầu đồng bộ ${selectedRowKeys.length} mục không?`;
     } else {
       selectedRowKeys = [];
     }
     return new Promise((resolve, reject) => {
       const model = Modal.confirm({
         icon: createVNode(ExclamationCircleOutlined),
-        title: '同步',
+        title: 'Đồng bộ',
         content,
         onOk: () => {
           model.update({
             keyboard: false,
-            okText: '同步中…',
+            okText: 'Đang đồng bộ...',
             cancelButtonProps: { disabled: true },
           });
           let params = { ids: selectedRowKeys.join(',') };
@@ -101,12 +101,12 @@
                   title: res.message,
                   content: () => {
                     let nodes;
-                    let successInfo = [`成功信息如下：`, renderTextarea(h, res.result.successInfo.map((v, i) => `${i + 1}. ${v}`).join('\n'))];
+                    let successInfo = [`Thông tin thành công như sau:`, renderTextarea(h, res.result.successInfo.map((v, i) => `${i + 1}. ${v}`).join('\n'))];
                     if (res.success) {
-                      nodes = [...successInfo, h('br'), `无失败信息！`];
+                      nodes = [...successInfo, h('br'), `Không có thông tin thất bại!`];
                     } else {
                       nodes = [
-                        `失败信息如下：`,
+                        `Thông tin thất bại như sau:`,
                         renderTextarea(h, res.result.failInfo.map((v, i) => `${i + 1}. ${v}`).join('\n')),
                         h('br'),
                         ...successInfo,
@@ -169,7 +169,7 @@
     );
   }
 
-  // 获取启用的第三方App
+  // Lấy ứng dụng bên thứ ba đã bậtApp
   loadEnabledTypes();
 </script>
 

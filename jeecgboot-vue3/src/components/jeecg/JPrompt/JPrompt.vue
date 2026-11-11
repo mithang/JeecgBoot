@@ -37,11 +37,11 @@
       const inputRef = ref();
       const { getAntdLocale } = useLocale();
       const visible = ref(false);
-      // 当前是否正在加载中
+      // Hiện có đang tải không
       const loading = ref(false);
       const options = ref<JPromptProps>({});
-      const placeholder = computed(() => options.value.placeholder ?? '请输入内容');
-      // 注册表单
+      const placeholder = computed(() => options.value.placeholder ?? 'Vui lòng nhập nội dung');
+      // Đăng ký biểu mẫu
       const [registerForm, { clearValidate, setFieldsValue, validate, updateSchema }] = useForm({
         compact: true,
         wrapperCol: { span: 24 },
@@ -56,7 +56,7 @@
         showActionButtonGroup: false,
       });
 
-      // 弹窗最终props
+      // Popup cuối cùngprops
       const getProps = computed(() => {
         let opt = options.value;
         let modalProps: Partial<ModalProps> = {
@@ -88,7 +88,7 @@
         });
       });
 
-      /** 弹窗开启 */
+      /** Mở popup */
       async function openModal(opt: any) {
         document.body.focus();
 
@@ -108,7 +108,7 @@
         inputRef.value?.focus();
       }
 
-      /** 弹窗关闭 */
+      /** Đóng popup */
       function close() {
         visible.value = false;
       }
@@ -117,16 +117,16 @@
         validate()
       }
 
-      /** 提交表单 */
+      /** Gửi biểu mẫu */
       async function onSubmit() {
         try {
           const { onOk } = options.value;
-          // 表单验证
+          // Kiểm tra biểu mẫu
           let values = await validate();
           setLoading(true);
           if (typeof onOk === 'function') {
             let flag = await onOk(values.input);
-            // 只有返回 false 才阻止关闭弹窗
+            // Chỉ khi trả về false mới ngăn đóng popup
             if (!(flag === false)) {
               close();
             }
@@ -138,7 +138,7 @@
         }
       }
 
-      /** 设置加载状态*/
+      /** Đặt trạng thái tải*/
       function setLoading(flag) {
         loading.value = flag;
       }

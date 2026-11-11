@@ -1,8 +1,8 @@
-<!--部门选择框-->
+<!--Hộp chọn phòng ban-->
 <template>
   <div>
     <BasicModal v-bind="$attrs" @register="register" :title="modalTitle" width="600px" :minHeight="300" :maxHeight="maxHeight" @ok="handleOk" destroyOnClose @visible-change="visibleChange">
-      <a-input-search v-if="izOnlySelectDepartPost" placeholder="按岗位名称搜索…" style="margin-bottom: 10px" @search="onSearch" @change="handelSearchChange"/>
+      <a-input-search v-if="izOnlySelectDepartPost" placeholder="Tìm kiếm theo tên vị trí…" style="margin-bottom: 10px" @search="onSearch" @change="handelSearchChange"/>
       <BasicTree
         ref="treeRef"
         :treeData="treeData"
@@ -21,20 +21,20 @@
           <TreeIcon :orgCategory="orgCategory" :title="getTitle(orgCategory, title, orgCode)"></TreeIcon>
         </template>
       </BasicTree>
-      <!--树操作部分-->
+      <!--Phần thao tác cây-->
       <template #insertFooter>
         <a-dropdown placement="top">
           <template #overlay>
             <a-menu>
-              <a-menu-item v-if="multiple" key="1" @click="checkALL(true)">全部勾选</a-menu-item>
-              <a-menu-item v-if="multiple" key="2" @click="checkALL(false)">取消全选</a-menu-item>
-              <a-menu-item key="3" @click="expandAll(true)">展开全部</a-menu-item>
-              <a-menu-item key="4" @click="expandAll(false)">折叠全部</a-menu-item>
-              <a-menu-item v-if="multiple" key="5" @click="toggleCheckStrictly(false)">层级关联</a-menu-item>
-              <a-menu-item v-if="multiple" key="6" @click="toggleCheckStrictly(true)">层级独立</a-menu-item>
+              <a-menu-item v-if="multiple" key="1" @click="checkALL(true)">Chọn tất cả</a-menu-item>
+              <a-menu-item v-if="multiple" key="2" @click="checkALL(false)">Bỏ chọn tất cả</a-menu-item>
+              <a-menu-item key="3" @click="expandAll(true)">Mở rộng tất cả</a-menu-item>
+              <a-menu-item key="4" @click="expandAll(false)">Thu gọn tất cả</a-menu-item>
+              <a-menu-item v-if="multiple" key="5" @click="toggleCheckStrictly(false)">Liên kết theo cấp bậc</a-menu-item>
+              <a-menu-item v-if="multiple" key="6" @click="toggleCheckStrictly(true)">Độc lập theo cấp bậc</a-menu-item>
             </a-menu>
           </template>
-          <a-button style="float: left"> 树操作 <Icon icon="ant-design:up-outlined" /> </a-button>
+          <a-button style="float: left"> Thao tác cây <Icon icon="ant-design:up-outlined" /> </a-button>
         </a-dropdown>
       </template>
     </BasicModal>
@@ -62,23 +62,23 @@
     },
     props: {
       ...treeProps,
-      //选择框标题
+      //Tiêu đề hộp chọn
       modalTitle: {
         type: String,
-        default: '部门选择',
+        default: 'Chọn phòng ban',
       },
-      // 代码逻辑说明: 【QQYUN-7678】部门组件内容过多没有滚动条（给一个默认最大高）
+      // Giải thích logic mã: 【QQYUN-7678]Nội dung component phòng ban quá nhiều nhưng không có thanh cuộn (đặt một chiều cao tối đa mặc định)
       maxHeight: {
         type: Number,
         default: 500,
       },
       value: propTypes.oneOfType([propTypes.string, propTypes.array]),
-      //查询参数
+      //Tham số truy vấn
       params: {
         type: Object,
         default: () => ({}),
       },
-      //是否显示部门路径（用户部门选择主岗位和兼职岗位需要显示全路径）
+      //Có hiển thị đường dẫn phòng ban hay không (khi người dùng chọn vị trí chính và vị trí kiêm nhiệm của phòng ban cần hiển thị đầy đủ đường dẫn)
       izShowDepPath: {
         type: Boolean,
         default: false,
@@ -86,20 +86,20 @@
     },
     emits: ['register', 'getSelectResult', 'close'],
     setup(props, { emit }) {
-      //注册弹框
+      //Đăng ký popup
       const [register, { closeModal }] = useModalInner();
       const attrs = useAttrs();
       const treeRef = ref<Nullable<TreeActionType>>(null);
-      //加载树key
+      //Tải câykey
       const reloadKey = ref<number>(Math.random());
       
-      // 代码逻辑说明: 部门选择警告类型不匹配
+      // Giải thích logic mã: Loại cảnh báo khi chọn phòng ban không khớp
       let propValue = props.value === ''?[]:props.value;
-      // 确保传递给BasicTree的value是数组格式
+      // Đảm bảo value truyền cho BasicTree có định dạng mảng
       if (propValue && typeof propValue === 'string') {
         propValue = propValue.split(',');
       }
-      // 代码逻辑说明: [issues/538]JSelectDept组件受 dynamicDisabled 影响
+      // Giải thích logic mã: [issues/538]JSelectDeptComponent bị ảnh hưởng bởi dynamicDisabled
       let temp = Object.assign({}, unref(props), unref(attrs), {value: propValue},{disabled: false});
       const getBindValue = omit(temp, 'multiple');
       
@@ -108,32 +108,32 @@
         useTreeBiz(treeRef, queryUrl, getBindValue, props, emit);
       const searchInfo = ref(props.params || {});
       const tree = ref([]);
-      //替换treeNode中key字段为treeData中对应的字段
+      //Thay trường key trong treeNode bằng trường tương ứng trong treeData
       const fieldNames = {
         key: props.rowKey,
       };
       // {children:'children', title:'title', key:'key' }
       /**
-       * 确定选择
+       * Xác nhận lựa chọn
        */
       function handleOk() {
         getSelectTreeData((options, values) => {
-          //回传选项和已选择的值
+          //Trả về tùy chọn và giá trị đã chọn
           emit('getSelectResult', options, values);
-          //关闭弹窗
+          //Đóng popup
           closeModal();
         });
       }
 
-      /** 获取查询数据方法 */
+      /** Phương thức lấy dữ liệu tìm kiếm */
       function getQueryUrl() {
         let queryFn = props.izOnlySelectDepartPost ? queryDepartAndPostTreeSync :props.sync ? queryDepartTreeSync : queryTreeList;
-        // 代码逻辑说明: issues/I5F3P4 online配置部门选择后编辑，查看数据应该显示部门名称，不是部门代码
+        // Giải thích logic mã: issues/I5F3P4 onlineSau khi cấu hình chọn phòng ban rồi chỉnh sửa, khi xem dữ liệu phải hiển thị tên phòng ban, không phải mã phòng ban
         return (params) => queryFn(Object.assign({}, params, props.params, { primaryKey: props.rowKey }));
       }
 
       /**
-       * 搜索值改变事件
+       * Sự kiện thay đổi giá trị tìm kiếm
        * @param value
        */
       function handelSearchChange(value) {
@@ -143,7 +143,7 @@
       }
 
       /**
-       * 设置层级关联和层级独立
+       * Đặt liên kết theo cấp bậc và độc lập theo cấp bậc
        * 
        * @param value
        */
@@ -151,11 +151,11 @@
         checkStrictly.value = value;
       }
 
-      //标题缓存
+      //Cache tiêu đề
       const titleCache = reactive<Record<string, string>>({});
       
       /**
-       * 获取标题
+       * Lấy tiêu đề
        * @param orgCategory
        * @param title
        * @param orgCode

@@ -3,7 +3,7 @@
     <BasicForm @register="registerForm">
       <template #captchaSlot="{ model, field }">
         <div style="width: 100%; display: flex">
-          <a-input style="width: 200px" v-model:value="model[field]" placeholder="请输入图片验证码" />
+          <a-input style="width: 200px" v-model:value="model[field]" placeholder="Vui lòng nhập mã xác thực hình ảnh" />
           <div class="margin-left10">
             <img
               class="pointer"
@@ -34,17 +34,17 @@
     components: { BasicModal, BasicForm },
     emits: ['ok','register'],
     setup(props, { emit }) {
-      const title = ref<string>('验证码');
+      const title = ref<string>('Mã xác thực');
       const schemas: FormSchema[] = [
         {
           field: 'captcha',
           component: 'Input',
-          label: '图片验证码',
+          label: 'Mã xác thực hình ảnh',
           rules: [{ required: true }],
           slot: 'captchaSlot',
         },
       ];
-      //表单配置
+      //Cấu hình biểu mẫu
       const [registerForm, { resetFields, validate }] = useForm({
         schemas: schemas,
         showActionButtonGroup: false,
@@ -54,16 +54,16 @@
         wrapperCol: { span: 24 },
       });
 
-      //表单赋值
+      //Gán giá trị biểu mẫu
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         setModalProps({ confirmLoading: true });
-        //重置表单
+        //Đặt lại biểu mẫu
         await resetFields();
         await getCaptchaCode();
         setModalProps({ confirmLoading: false });
       });
 
-      //存放二维码的数据
+      //Dữ liệu mã QR được lưu trữ
       const randCodeData = reactive({
         randCodeImage: '',
         requestCodeSuccess: false,
@@ -72,11 +72,11 @@
       const { createMessage } = useMessage();
       
       /**
-       * 获取验证码
+       * Lấy mã xác thực
        */
       async function getCaptchaCode() {
         await resetFields();
-        // 代码逻辑说明: [QQYUN-10775]验证码可以复用 #7674------------
+        // Giải thích logic mã: [QQYUN-10775]Mã xác thực có thể tái sử dụng #7674------------
         randCodeData.checkKey = new Date().getTime() + Math.random().toString(36).slice(-4); // 1629428467008;
         getCodeInfo(randCodeData.checkKey).then((res) => {
           randCodeData.randCodeImage = res;
@@ -85,7 +85,7 @@
       }
 
       /**
-       * 第三方配置点击事件
+       * Sự kiện nhấp cấu hình bên thứ ba
        */
       async function handleSubmit() {
         let values = await validate();
@@ -104,7 +104,7 @@
       }
 
       /**
-       * 关闭弹窗
+       * Đóng popup
        */
       function handleCancel() {
         closeModal();

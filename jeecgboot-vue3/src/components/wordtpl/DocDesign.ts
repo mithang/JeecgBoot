@@ -7,9 +7,9 @@ let instance: any = null;
 
 const formState = reactive({
   family: '微软雅黑',
-  size: '小四',
-  name: 'word在线编辑',
-  title: '正文',
+  size: 'Tiểu 4',
+  name: 'wordChỉnh sửa trực tuyến',
+  title: 'Nội dung chính',
   highlightColor: '#ffffff00',
   showCataLogDom: true,
   separatorColor: '#000000',
@@ -19,37 +19,37 @@ const formState = reactive({
 
 const isApple = typeof navigator !== 'undefined' && /Mac OS X/.test(navigator.userAgent);
 
-//搜索结果的Dom元素
+//Phần tử DOM của kết quả tìm kiếm
 const searchCollapseDom = ref<any>();
 const searchInputDom = ref<any>();
 const searchResultDom = ref<any>();
-//替换文本的Dom元素
+//Phần tử DOM của văn bản thay thế
 const replaceInputDom = ref<any>();
 
 /**
- * 创建编辑器
+ * Tạo trình soạn thảo
  */
 export async function createEditor(content: any) {
   let querySelector = document.querySelector('.jeecg__editor');
-  // 初始化编辑器
+  // Khởi tạo trình soạn thảo
   const editorData = {
     header: content.header ? JSON.parse(content.header) : [],
     main: content.main ? JSON.parse(content.main) : [],
     footer: content.footer ? JSON.parse(content.footer) : [],
   };
-  formState.name = content.name || 'word在线编辑';
-  instance = new Editor(querySelector, editorData, {  scrollContainerSelector: ".editor-container", pageNumber: { format: "第{pageNo}页/共{pageCount}页"} });
+  formState.name = content.name || 'wordChỉnh sửa trực tuyến';
+  instance = new Editor(querySelector, editorData, {  scrollContainerSelector: ".editor-container", pageNumber: { format: "Thứ{pageNo}trang/Tổng cộng{pageCount}trang"} });
   settingPaper(content);
   const contextMenuList = await instance.register.getContextMenuList();
-  // 修改内部右键菜单示例
-  //另存为图片是base64位的，所以禁用掉
+  // Sửa ví dụ menu chuột phải nội bộ
+  //Lưu thành hình ảnh là dạng base64 nên đã vô hiệu hóa
   contextMenuList.forEach((menu) => {
-    // 通过菜单key找到菜单项后进行属性修改
+    // Tìm mục menu theo key menu rồi sửa thuộc tính
     if (menu.key === 'imageChange') {
       menu.when = () => false;
     }
   });
-  // 全屏
+  // Toàn màn hình
   const fullscreenDom:any = document.querySelector('.fullscreen')
   fullscreenDom.onclick = toggleFullscreen
   window.addEventListener('keydown', (evt) => {
@@ -68,96 +68,96 @@ export async function createEditor(content: any) {
       document.exitFullscreen();
     }
   }
-  //添加监听
+  //Thêm listener
   addListener();
-  //添加可见页发生改变监听
+  //Thêm trình lắng nghe khi trang hiển thị thay đổi
   addPageNoListListener();
-  //添加监听当前页数发生改变监听
+  //Thêm listener theo dõi sự thay đổi của số trang hiện tại
   addPageSizeListener();
-  //添加当前页发生改变监听
+  //Thêm trình lắng nghe khi trang hiện tại thay đổi
   addIntersectionPageNoListener();
-  //当前页面缩放比例发生改变监听
+  //Lắng nghe sự thay đổi tỷ lệ thu phóng của trang hiện tại
   addPageScaleListener();
-  //页面模式发生改变监听
+  //Lắng nghe thay đổi chế độ trang
   addPageModeListener();
-  //监听字数
+  //Lắng nghe số từ
   addWordCountListener();
 }
 
 /**
- * 添加监听
+ * Thêm listener
  */
 function addListener() {
-  //字体
+  //Phông chữ
   const fontDom: any = document.querySelector('.jeecg-menu-item-font');
   const fontSelectDom = fontDom.querySelector('.select');
   const fontOptionDom = fontDom.querySelector('.options');
-  //字体大小
+  //Cỡ chữ
   const jeecgSizeDom: any = document.querySelector('.jeecg-menu-item-size');
   const sizeOptionDom = jeecgSizeDom.querySelector('.options');
-  //下划线
+  //Gạch chân
   const underlineDom: any = document.querySelector('.jeecg-menu-item-underline');
-  //加粗
+  //In đậm
   const boldDom: any = document.querySelector('.jeecg-menu-item-bold');
-  //倾斜
+  //Nghiêng
   const italicDom: any = document.querySelector('.jeecg-menu-item-italic');
-  //删除线
+  //Gạch ngang
   const strikeoutDom: any = document.querySelector('.jeecg-menu-item-strikeout');
-  //上标
+  //Chỉ số trên
   const subscriptDom: any = document.querySelector('.jeecg-menu-item-subscript');
-  //下标
+  //Chỉ số dưới
   const superscriptDom: any = document.querySelector('.jeecg-menu-item-superscript');
-  //颜色
+  //Màu sắc
   const colorControlDom:any = document.querySelector('#color');
   const colorDom:any = document.querySelector('.jeecg-menu-item-color');
   const colorSpanDom:any = colorDom.querySelector('span');
-  //左对齐
+  //Căn trái
   const leftDom:any = document.querySelector('.jeecg-menu-item-left');
-  //居中对齐
+  //Căn giữa
   const centerDom:any = document.querySelector('.jeecg-menu-item-center');
-  //右对齐
+  //Căn phải
   const rightDom:any = document.querySelector('.jeecg-menu-item-right');
-  //两端对齐
+  //Căn đều hai bên
   const alignmentDom:any = document.querySelector('.jeecg-menu-item-alignment');
-  //行间距
+  //Khoảng cách dòng
   const rowMarginDom:any = document.querySelector('.jeecg-menu-item-row-margin');
   const rowOptionDom = rowMarginDom.querySelector('.options')
-  //高亮颜色
+  //Màu nổi bật
   const highlightDom:any = document.querySelector('.jeecg-menu-item-highlight');
   const highlightSpanDom = highlightDom.querySelector('span');
   const highlightControlDom:any = document.querySelector('#highlight');
-  //标题
+  //Tiêu đề
   const titleDom:any = document.querySelector('.jeecg-menu-item-title')
   const titleOptionDom = titleDom.querySelector('.options');
-  //列表
+  //Danh sách
   const listDom:any = document.querySelector('.jeecg-menu-item-list');
   const listOptionDom = listDom.querySelector('.options');
-  //分割线
+  //Đường phân cách
   const separatorDom:any = document.querySelector('.jeecg-menu-item-separator');
   const separatorOptionDom = separatorDom.querySelector('.options');
-  //搜索查询
+  //Tìm kiếm
   searchCollapseDom.value = document.querySelector('.jeecg-menu-item-search-collapse');
   searchResultDom.value = searchCollapseDom.value.querySelector('.search-result');
   replaceInputDom.value = document.querySelector('.jeecg-menu-item-search-collapse-replace input')
   searchInputDom.value = document.querySelector('.jeecg-menu-item-search-collapse-search input')
-  // 内部事件监听
+  // Lắng nghe sự kiện nội bộ
   instance.listener.rangeStyleChange = function (payload) {
     let undoDom: any = document.querySelector('.jeecg-menu-item-undo');
-    // 撤销
+    // Hoàn tác
     if (undoDom && undoDom.classList) {
       payload.undo ? undoDom.classList.remove('no-allow') : undoDom.classList.add('no-allow');
     }
-    // 重做
+    // Làm lại
     let redoDom: any = document.querySelector('.jeecg-menu-item-redo');
     if (redoDom && redoDom.classList) {
       payload.redo ? redoDom.classList.remove('no-allow') : redoDom.classList.add('no-allow');
     }
     let painterDom = document.querySelector('.jeecg-menu-item-painter');
-    // 格式刷
+    // Cọ định dạng
     if (painterDom && painterDom.classList) {
       payload.painter ? painterDom.classList.add('active') : painterDom.classList.remove('active');
     }
-    //字体
+    //Phông chữ
     fontOptionDom.querySelectorAll('li').forEach((li) => li.classList.remove('active'));
     const curFontDom = fontOptionDom.querySelector(`[data-family='${payload.font}']`);
     if (curFontDom) {
@@ -166,7 +166,7 @@ function addListener() {
       curFontDom.classList.add('active');
     }
 
-    //字体大小
+    //Cỡ chữ
     sizeOptionDom.querySelectorAll('li').forEach((li) => li.classList.remove('active'));
     const curSizeDom = sizeOptionDom.querySelector(`[data-size='${payload.size}']`);
     if (curSizeDom) {
@@ -175,30 +175,30 @@ function addListener() {
     } else {
       formState.size = `${payload.size}`;
     }
-    //加粗
+    //In đậm
     if (boldDom && boldDom.classList) {
       payload.bold ? boldDom.classList.add('active') : boldDom.classList.remove('active');
     }
-    //倾斜
+    //Nghiêng
     if (italicDom && italicDom.classList) {
       payload.italic ? italicDom.classList.add('active') : italicDom.classList.remove('active');
     }
 
-    //下划线
+    //Gạch chân
     if (underlineDom && underlineDom.classList) {
       payload.underline ? underlineDom.classList.add('active') : underlineDom.classList.remove('active');
     }
-    //删除线
+    //Gạch ngang
     if (strikeoutDom && strikeoutDom.classList) {
       payload.strikeout ? strikeoutDom.classList.add('active') : strikeoutDom.classList.remove('active');
     }
-    //上标
+    //Chỉ số trên
     payload.type === 'superscript' ? superscriptDom.classList.add('active') : superscriptDom.classList.remove('active');
 
-    //下标
+    //Chỉ số dưới
     payload.type === 'subscript' ? subscriptDom.classList.add('active') : subscriptDom.classList.remove('active');
 
-    //字体颜色
+    //Màu chữ
     if (colorDom && colorDom.classList) {
       if (payload.color) {
         colorDom.classList.add('active');
@@ -211,7 +211,7 @@ function addListener() {
       }
     }
     
-    //对齐方式
+    //Cách căn chỉnh
     leftDom.classList.remove('active')
     centerDom.classList.remove('active')
     rightDom.classList.remove('active')
@@ -225,14 +225,14 @@ function addListener() {
     } else {
       leftDom.classList.add('active')
     }
-    //行间距
+    //Khoảng cách dòng
     rowOptionDom.querySelectorAll('li').forEach(li => li.classList.remove('active'))
     const curRowMarginDom = rowOptionDom.querySelector(
       `[data-rowmargin='${payload.rowMargin}']`
     )
     curRowMarginDom.classList.add('active')
     
-    //高亮颜色
+    //Màu nổi bật
     if (payload.highlight) {
       highlightDom.classList.add('active')
       formState.highlightColor = payload.highlight
@@ -245,18 +245,18 @@ function addListener() {
       highlightSpanDom.style.backgroundColor = '#ffffff00'
     }
     
-    // 标题
+    // Tiêu đề
     titleOptionDom.querySelectorAll('li') .forEach(li => li.classList.remove('active'));
     if (payload.level) {
       const curTitleDom = titleOptionDom.querySelector(`[data-level='${payload.level}']` );
       formState.title = curTitleDom.innerText;
       curTitleDom.classList.add('active');
     } else {
-      formState.title = '正文';
+      formState.title = 'Nội dung chính';
       titleOptionDom.querySelector('li:first-child').classList.add('active');
     }
     
-    //列表
+    //Danh sách
     listOptionDom.querySelectorAll('li') .forEach(li => li.classList.remove('active'));
     if (payload.listType) {
       listDom.classList.add('active')
@@ -269,7 +269,7 @@ function addListener() {
     } else {
       listDom.classList.remove('active');
     }
-    //分割线
+    //Đường phân cách
     separatorOptionDom.querySelectorAll('li') .forEach(li => li.classList.remove('active'))
     if (payload.type === 'separator') {
       const separator = payload.dashArray.join(',') || '0,0'
@@ -293,7 +293,7 @@ function addListener() {
 }
 
 /**
- * 可见页发生改变
+ * Trang hiển thị đã thay đổi
  */
 function addPageNoListListener() {
   instance.listener.visiblePageNoListChange = function (payload) {
@@ -304,7 +304,7 @@ function addPageNoListListener() {
 }
 
 /**
- * 当前页数发生改变
+ * Số trang hiện tại thay đổi
  */
 function addPageSizeListener(){
   instance.listener.pageSizeChange = function (payload) {
@@ -314,7 +314,7 @@ function addPageSizeListener(){
 }
 
 /**
- * 添加当前页发生改变
+ * Thêm: Trang hiện tại thay đổi
  */
 function addIntersectionPageNoListener(){
   instance.listener.intersectionPageNoChange = function (payload) {
@@ -324,7 +324,7 @@ function addIntersectionPageNoListener(){
 }
 
 /**
- * 当前页面缩放比例发生改变
+ * Tỷ lệ thu phóng của trang hiện tại thay đổi
  */
 function addPageScaleListener(){
   instance.listener.pageScaleChange = function (payload) {
@@ -334,7 +334,7 @@ function addPageScaleListener(){
 }
 
 /**
- * 页面模式发生改变
+ * Chế độ trang đã thay đổi
  */
 function addPageModeListener(){
   const pageModeDom:any = document.querySelector('.page-mode')
@@ -349,10 +349,10 @@ function addPageModeListener(){
 }
 
 /**
- * 字数
+ * Số ký tự
  */
 const handleContentChange = async function () {
-  // 字数
+  // Số ký tự
   const wordCount = await instance.command.getWordCount();
   let querySelector:any = document.querySelector('.word-count');
   querySelector.innerText = `${ wordCount || 0 }`;
@@ -362,19 +362,19 @@ const handleContentChange = async function () {
 }
 
 /**
- * 监听字数
+ * Lắng nghe số từ
  */
 async function addWordCountListener(){
   instance.listener.contentChange = debounce(handleContentChange,200);
 }
 
 /**
- * 设置纸张
+ * Thiết lập giấy
  * @param content
  */
 function settingPaper(content) {
   if(content.width && content.height){
-    //设置纸张大小并回显
+    //Đặt khổ giấy và hiển thị lại
     instance.command.executePaperSize(content.width,content.height);
     const paperSizeDom:any = document.querySelector('.paper-size');
     const paperSizeDomOptionsDom = paperSizeDom.querySelector('.options')
@@ -386,7 +386,7 @@ function settingPaper(content) {
         element.classList.add('active')
       }
     }
-    //设置纸张方向并回显
+    //Đặt hướng giấy và hiển thị lại
     if(content.paperDirection){
       let pageDirection = content.paperDirection;
       instance.command.executePaperDirection(pageDirection);
@@ -401,13 +401,13 @@ function settingPaper(content) {
         }
       }
     }
-    //设置水印
+    //Thiết lập watermark
     let watermark = content.watermark;
     if(watermark){
       let watermarkObj = JSON.parse(watermark);
       instance.command.executeAddWatermark(watermarkObj)
     }
-    //设置边距
+    //Thiết lập lề
     let margins = content.margins;
     if(margins && margins != "[]"){
       margins = JSON.parse(margins);
@@ -422,7 +422,7 @@ function settingPaper(content) {
 }
 
 /**
- * 更新日志
+ * Nhật ký cập nhật
  */
 async function updateCatalog() {
   const catalog = await instance.command.getCatalog()
@@ -437,13 +437,13 @@ async function updateCatalog() {
         const catalogItem = catalogItems[c]
         const catalogItemDom = document.createElement('div')
         catalogItemDom.classList.add('catalog-item')
-        // 渲染
+        // Render
         const catalogItemContentDom = document.createElement('div')
         catalogItemContentDom.classList.add('jeecg-catalog-item-content')
         const catalogItemContentSpanDom = document.createElement('span')
         catalogItemContentSpanDom.innerText = catalogItem.name
         catalogItemContentDom.append(catalogItemContentSpanDom)
-        // 定位
+        // Định vị
         catalogItemContentDom.onclick = () => {
           instance.command.executeLocationCatalog(catalogItem.id)
         }
@@ -451,7 +451,7 @@ async function updateCatalog() {
         if (catalogItem.subCatalog && catalogItem.subCatalog.length) {
           appendCatalog(catalogItemDom, catalogItem.subCatalog)
         }
-        // 追加
+        // Thêm vào
         parent.append(catalogItemDom)
       }
     }
@@ -459,12 +459,12 @@ async function updateCatalog() {
   }
 }
 
-const SURROGATE_PAIR_REG = /[\uD800-\uDBFF][\uDC00-\uDFFF]/ // unicode代理对（surrogate pair）
+const SURROGATE_PAIR_REG = /[\uD800-\uDBFF][\uDC00-\uDFFF]/ // unicodeCặp đại diện (surrogate pair)
 const EMOJI_REG =
   /[#*0-9]\uFE0F?\u20E3|[\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23ED-\u23EF\u23F1\u23F2\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB\u25FC\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u265F\u2660\u2663\u2665\u2666\u2668\u267B\u267E\u267F\u2692\u2694-\u2697\u2699\u269B\u269C\u26A0\u26A7\u26AA\u26B0\u26B1\u26BD\u26BE\u26C4\u26C8\u26CF\u26D1\u26E9\u26F0-\u26F5\u26F7\u26F8\u26FA\u2702\u2708\u2709\u270F\u2712\u2714\u2716\u271D\u2721\u2733\u2734\u2744\u2747\u2757\u2763\u27A1\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B55\u3030\u303D\u3297\u3299]\uFE0F?|[\u261D\u270C\u270D](?:\uFE0F|\uD83C[\uDFFB-\uDFFF])?|[\u270A\u270B](?:\uD83C[\uDFFB-\uDFFF])?|[\u23E9-\u23EC\u23F0\u23F3\u25FD\u2693\u26A1\u26AB\u26C5\u26CE\u26D4\u26EA\u26FD\u2705\u2728\u274C\u274E\u2753-\u2755\u2795-\u2797\u27B0\u27BF\u2B50]|\u26D3\uFE0F?(?:\u200D\uD83D\uDCA5)?|\u26F9(?:\uFE0F|\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|\u2764\uFE0F?(?:\u200D(?:\uD83D\uDD25|\uD83E\uDE79))?|\uD83C(?:[\uDC04\uDD70\uDD71\uDD7E\uDD7F\uDE02\uDE37\uDF21\uDF24-\uDF2C\uDF36\uDF7D\uDF96\uDF97\uDF99-\uDF9B\uDF9E\uDF9F\uDFCD\uDFCE\uDFD4-\uDFDF\uDFF5\uDFF7]\uFE0F?|[\uDF85\uDFC2\uDFC7](?:\uD83C[\uDFFB-\uDFFF])?|[\uDFC4\uDFCA](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDFCB\uDFCC](?:\uFE0F|\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDCCF\uDD8E\uDD91-\uDD9A\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF43\uDF45-\uDF4A\uDF4C-\uDF7C\uDF7E-\uDF84\uDF86-\uDF93\uDFA0-\uDFC1\uDFC5\uDFC6\uDFC8\uDFC9\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF8-\uDFFF]|\uDDE6\uD83C[\uDDE8-\uDDEC\uDDEE\uDDF1\uDDF2\uDDF4\uDDF6-\uDDFA\uDDFC\uDDFD\uDDFF]|\uDDE7\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEF\uDDF1-\uDDF4\uDDF6-\uDDF9\uDDFB\uDDFC\uDDFE\uDDFF]|\uDDE8\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDEE\uDDF0-\uDDF5\uDDF7\uDDFA-\uDDFF]|\uDDE9\uD83C[\uDDEA\uDDEC\uDDEF\uDDF0\uDDF2\uDDF4\uDDFF]|\uDDEA\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDED\uDDF7-\uDDFA]|\uDDEB\uD83C[\uDDEE-\uDDF0\uDDF2\uDDF4\uDDF7]|\uDDEC\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEE\uDDF1-\uDDF3\uDDF5-\uDDFA\uDDFC\uDDFE]|\uDDED\uD83C[\uDDF0\uDDF2\uDDF3\uDDF7\uDDF9\uDDFA]|\uDDEE\uD83C[\uDDE8-\uDDEA\uDDF1-\uDDF4\uDDF6-\uDDF9]|\uDDEF\uD83C[\uDDEA\uDDF2\uDDF4\uDDF5]|\uDDF0\uD83C[\uDDEA\uDDEC-\uDDEE\uDDF2\uDDF3\uDDF5\uDDF7\uDDFC\uDDFE\uDDFF]|\uDDF1\uD83C[\uDDE6-\uDDE8\uDDEE\uDDF0\uDDF7-\uDDFB\uDDFE]|\uDDF2\uD83C[\uDDE6\uDDE8-\uDDED\uDDF0-\uDDFF]|\uDDF3\uD83C[\uDDE6\uDDE8\uDDEA-\uDDEC\uDDEE\uDDF1\uDDF4\uDDF5\uDDF7\uDDFA\uDDFF]|\uDDF4\uD83C\uDDF2|\uDDF5\uD83C[\uDDE6\uDDEA-\uDDED\uDDF0-\uDDF3\uDDF7-\uDDF9\uDDFC\uDDFE]|\uDDF6\uD83C\uDDE6|\uDDF7\uD83C[\uDDEA\uDDF4\uDDF8\uDDFA\uDDFC]|\uDDF8\uD83C[\uDDE6-\uDDEA\uDDEC-\uDDF4\uDDF7-\uDDF9\uDDFB\uDDFD-\uDDFF]|\uDDF9\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDED\uDDEF-\uDDF4\uDDF7\uDDF9\uDDFB\uDDFC\uDDFF]|\uDDFA\uD83C[\uDDE6\uDDEC\uDDF2\uDDF3\uDDF8\uDDFE\uDDFF]|\uDDFB\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDEE\uDDF3\uDDFA]|\uDDFC\uD83C[\uDDEB\uDDF8]|\uDDFD\uD83C\uDDF0|\uDDFE\uD83C[\uDDEA\uDDF9]|\uDDFF\uD83C[\uDDE6\uDDF2\uDDFC]|\uDF44(?:\u200D\uD83D\uDFEB)?|\uDF4B(?:\u200D\uD83D\uDFE9)?|\uDFC3(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?|\uDFF3\uFE0F?(?:\u200D(?:\u26A7\uFE0F?|\uD83C\uDF08))?|\uDFF4(?:\u200D\u2620\uFE0F?|\uDB40\uDC67\uDB40\uDC62\uDB40(?:\uDC65\uDB40\uDC6E\uDB40\uDC67|\uDC73\uDB40\uDC63\uDB40\uDC74|\uDC77\uDB40\uDC6C\uDB40\uDC73)\uDB40\uDC7F)?)|\uD83D(?:[\uDC3F\uDCFD\uDD49\uDD4A\uDD6F\uDD70\uDD73\uDD76-\uDD79\uDD87\uDD8A-\uDD8D\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA\uDECB\uDECD-\uDECF\uDEE0-\uDEE5\uDEE9\uDEF0\uDEF3]\uFE0F?|[\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC6B-\uDC6D\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDC8F\uDC91\uDCAA\uDD7A\uDD95\uDD96\uDE4C\uDE4F\uDEC0\uDECC](?:\uD83C[\uDFFB-\uDFFF])?|[\uDC6E\uDC70\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4\uDEB5](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDD74\uDD90](?:\uFE0F|\uD83C[\uDFFB-\uDFFF])?|[\uDC00-\uDC07\uDC09-\uDC14\uDC16-\uDC25\uDC27-\uDC3A\uDC3C-\uDC3E\uDC40\uDC44\uDC45\uDC51-\uDC65\uDC6A\uDC79-\uDC7B\uDC7D-\uDC80\uDC84\uDC88-\uDC8E\uDC90\uDC92-\uDCA9\uDCAB-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDDA4\uDDFB-\uDE2D\uDE2F-\uDE34\uDE37-\uDE41\uDE43\uDE44\uDE48-\uDE4A\uDE80-\uDEA2\uDEA4-\uDEB3\uDEB7-\uDEBF\uDEC1-\uDEC5\uDED0-\uDED2\uDED5-\uDED7\uDEDC-\uDEDF\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB\uDFF0]|\uDC08(?:\u200D\u2B1B)?|\uDC15(?:\u200D\uD83E\uDDBA)?|\uDC26(?:\u200D(?:\u2B1B|\uD83D\uDD25))?|\uDC3B(?:\u200D\u2744\uFE0F?)?|\uDC41\uFE0F?(?:\u200D\uD83D\uDDE8\uFE0F?)?|\uDC68(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D(?:[\uDC68\uDC69]\u200D\uD83D(?:\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?)|[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?)|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFC-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB\uDFFD-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB-\uDFFD\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB-\uDFFE])))?))?|\uDC69(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?[\uDC68\uDC69]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D(?:[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?|\uDC69\u200D\uD83D(?:\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?))|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFC-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB\uDFFD-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB-\uDFFD\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB-\uDFFE])))?))?|\uDC6F(?:\u200D[\u2640\u2642]\uFE0F?)?|\uDD75(?:\uFE0F|\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|\uDE2E(?:\u200D\uD83D\uDCA8)?|\uDE35(?:\u200D\uD83D\uDCAB)?|\uDE36(?:\u200D\uD83C\uDF2B\uFE0F?)?|\uDE42(?:\u200D[\u2194\u2195]\uFE0F?)?|\uDEB6(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?)|\uD83E(?:[\uDD0C\uDD0F\uDD18-\uDD1F\uDD30-\uDD34\uDD36\uDD77\uDDB5\uDDB6\uDDBB\uDDD2\uDDD3\uDDD5\uDEC3-\uDEC5\uDEF0\uDEF2-\uDEF8](?:\uD83C[\uDFFB-\uDFFF])?|[\uDD26\uDD35\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD\uDDCF\uDDD4\uDDD6-\uDDDD](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDDDE\uDDDF](?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDD0D\uDD0E\uDD10-\uDD17\uDD20-\uDD25\uDD27-\uDD2F\uDD3A\uDD3F-\uDD45\uDD47-\uDD76\uDD78-\uDDB4\uDDB7\uDDBA\uDDBC-\uDDCC\uDDD0\uDDE0-\uDDFF\uDE70-\uDE7C\uDE80-\uDE88\uDE90-\uDEBD\uDEBF-\uDEC2\uDECE-\uDEDB\uDEE0-\uDEE8]|\uDD3C(?:\u200D[\u2640\u2642]\uFE0F?|\uD83C[\uDFFB-\uDFFF])?|\uDDCE(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?|\uDDD1(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1|\uDDD1\u200D\uD83E\uDDD2(?:\u200D\uD83E\uDDD2)?|\uDDD2(?:\u200D\uD83E\uDDD2)?))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFC-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB\uDFFD-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB-\uDFFD\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB-\uDFFE]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?))?|\uDEF1(?:\uD83C(?:\uDFFB(?:\u200D\uD83E\uDEF2\uD83C[\uDFFC-\uDFFF])?|\uDFFC(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB\uDFFD-\uDFFF])?|\uDFFD(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])?|\uDFFE(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB-\uDFFD\uDFFF])?|\uDFFF(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB-\uDFFE])?))?)/g
 
 /**
- * 分割文本
+ * Tách văn bản
  * @param text
  */
 function splitText(text){
@@ -492,25 +492,25 @@ function splitText(text){
 }
 
 /**
- * 方法
+ * Phương thức
  */
 export function method() {
   /**
-   * 清除格式
+   * Xóa định dạng
    */
   function clearFormat() {
     instance.command.executeFormat();
   }
 
   /**
-   * 撤销
+   * Hoàn tác
    */
   function undo() {
     instance.command.executeUndo();
   }
 
   /**
-   * 重做
+   * Làm lại
    */
   function redo() {
     instance.command.executeRedo();
@@ -520,7 +520,7 @@ export function method() {
   let painterTimeout = 0;
 
   /**
-   * 格式刷（单击）
+   * Cọ định dạng (nhấp đơn)
    */
   function painterClick() {
     if (isFirstClick) {
@@ -537,7 +537,7 @@ export function method() {
   }
 
   /**
-   * 格式刷双击
+   * Nhấp đúp cọ định dạng
    */
   function painterDblClick() {
     isFirstClick = true;
@@ -548,7 +548,7 @@ export function method() {
   }
 
   /**
-   * 字体
+   * Phông chữ
    * @param family
    * @param name
    */
@@ -558,7 +558,7 @@ export function method() {
   }
 
   /**
-   * 字体大小
+   * Cỡ chữ
    * @param size
    * @param name
    */
@@ -568,39 +568,39 @@ export function method() {
   }
 
   /**
-   * 字体+
+   * Phông chữ+
    */
   function sizeAdd() {
     instance.command.executeSizeAdd();
   }
 
   /**
-   * 字体-
+   * Phông chữ-
    */
   function sizeMinus() {
     instance.command.executeSizeMinus();
   }
 
   /**
-   * 加粗
+   * In đậm
    */
   function blob() {
     instance.command.executeBold();
   }
 
   /**
-   * 倾斜
+   * Nghiêng
    */
   function itailc() {
     instance.command.executeItalic();
   }
 
   /**
-   * 下划线
+   * Gạch chân
    * @param value
    */
   function underline(value) {
-    //下划线
+    //Gạch chân
     const underlineDom: any = document.querySelector('.jeecg-menu-item-underline');
     const underlineOptionDom = underlineDom.querySelector('.options');
     if(underlineOptionDom && underlineOptionDom.classList){
@@ -618,28 +618,28 @@ export function method() {
   }
 
   /**
-   * 删除线
+   * Gạch ngang
    */
   function strikeout() {
     instance.command.executeStrikeout();
   }
 
   /**
-   * 上标
+   * Chỉ số trên
    */
   function superscript() {
     instance.command.executeSuperscript();
   }
 
   /**
-   * 下标
+   * Chỉ số dưới
    */
   function subscript() {
     instance.command.executeSubscript();
   }
 
   /**
-   * 颜色
+   * Màu sắc
    * @param e
    */
   function color(e) {
@@ -647,7 +647,7 @@ export function method() {
   }
 
   /**
-   * 单元格背景色
+   * Màu nền ô
    * @param e
    */
   function cellColor(e) {
@@ -655,7 +655,7 @@ export function method() {
   }
 
   /**
-   * 连页分页
+   * Phân trang liên tục
    * @param value
    */
   function pageMode(value) {
@@ -663,27 +663,27 @@ export function method() {
   }
 
   /**
-   * 放大
+   * Phóng to
    */
   function scaleAdd() {
     instance.command.executePageScaleAdd();
   }
 
   /**
-   * 缩小
+   * Thu nhỏ
    */
   function scaleMiuns() {
     instance.command.executePageScaleMinus();
   }
 
   /**
-   * 纸张大小
+   * Khổ giấy
    * @param value
    */
   function paperSize(value) {
     const [width, height] = value.split('*').map(Number);
     instance.command.executePaperSize(width, height);
-    // 纸张状态回显
+    // Hiển thị lại trạng thái giấy
     const paperSizeDom:any = document.querySelector('.paper-size');
     const paperSizeDomOptionsDom = paperSizeDom.querySelector('.options');
     paperSizeDomOptionsDom.querySelectorAll('li').forEach(child => child.classList.remove('active'));
@@ -692,11 +692,11 @@ export function method() {
   }
 
   /**
-   * 纸张方向
+   * Hướng giấy
    */
   function paperDirection(value) {
     instance.command.executePaperDirection(value);
-    // 纸张方向状态回显
+    // Hiển thị lại trạng thái hướng giấy
     const paperDirectionDom:any = document.querySelector('.paper-direction');
     const paperDirectionDomOptionsDom =  paperDirectionDom.querySelector('.options');
     paperDirectionDomOptionsDom.querySelectorAll('li').forEach(child => child.classList.remove('active'));
@@ -705,14 +705,14 @@ export function method() {
   }
 
   /**
-   * 打印
+   * In
    */
   function printTemplate() {
     instance.command.executePrint();
   }
 
   /**
-   * 获取边距
+   * Lấy lề
    */
   function getPaperMargin() {
     const [topMargin, rightMargin, bottomMargin, leftMargin] = instance.command.getPaperMargin();
@@ -725,7 +725,7 @@ export function method() {
   }
 
   /**
-   * 设置边距
+   * Thiết lập lề
    * @param values
    */
   function setPaperMargin(values) {
@@ -738,7 +738,7 @@ export function method() {
   }
 
   /**
-   * 设置图片
+   * Thiết lập hình ảnh
    * @param url
    */
   function setWordImage(url) {
@@ -766,12 +766,12 @@ export function method() {
   }
 
   /**
-   * 文件上传赋值内容
+   * Nội dung gán khi tải tệp lên
    */
   async function setWordContent(content) {
     if(content){
       let main = JSON.parse(content.main);
-      //设置可访问的image
+      //Đặt image có thể truy cậpimage
       main = await setViewImage(main,'import');
       instance.command.executeSetValue({
         "header":  JSON.parse(content.header) || [],
@@ -783,7 +783,7 @@ export function method() {
   }
 
   /**
-   * 设置可访问的image
+   * Đặt image có thể truy cậpimage
    * @param main
    * @param type
    */
@@ -828,35 +828,35 @@ export function method() {
   }
 
   /**
-   * 左对齐
+   * Căn trái
    */
   function leftAlign() {
     instance.command.executeRowFlex("left");
   } 
   
   /**
-   * 居中对齐
+   * Căn giữa
    */
   function centerAlign() {
     instance.command.executeRowFlex("center");
   }
 
   /**
-   * 右对齐
+   * Căn phải
    */
   function rightAlign() {
     instance.command.executeRowFlex("right");
   }  
   
   /**
-   * 两端对齐
+   * Căn đều hai bên
    */
   function alignmentAlign() {
     instance.command.executeRowFlex("alignment");
   }
 
   /**
-   * 行间距
+   * Khoảng cách dòng
    * @param value
    */
   function rowMargin(value) {
@@ -864,14 +864,14 @@ export function method() {
   }
 
   /**
-   * 分页符
+   * Dấu ngắt trang
    */
   function pageBreak() {
     instance.command.executePageBreak();
   }
 
   /**
-   * 设置高亮颜色
+   * Đặt màu làm nổi bật
    * @param value
    */
   function setHighlightColor(value) {
@@ -882,7 +882,7 @@ export function method() {
   }
 
   /**
-   * 标题
+   * Tiêu đề
    * @param value
    */
   function title(value) {
@@ -890,7 +890,7 @@ export function method() {
   }
 
   /**
-   * 列表
+   * Danh sách
    * @param listType
    * @param listStyle
    */
@@ -899,7 +899,7 @@ export function method() {
   }
 
   /**
-   * 表格
+   * Bảng
    * @param rowIndex
    * @param colIndex
    * @param recoveryTable
@@ -910,7 +910,7 @@ export function method() {
   }
 
   /**
-   * 分割线
+   * Đường phân cách
    * @param value
    */
   function separator() {
@@ -926,7 +926,7 @@ export function method() {
   }
 
   /**
-   * 超链接
+   * Siêu liên kết
    * @param value
    */
   function setHyperlink(value) {
@@ -942,7 +942,7 @@ export function method() {
   }
 
   /**
-   * 获取超链接
+   * Lấy siêu liên kết
    */
   function getHyperlink() {
     let rangeText = instance.command.getRangeText();
@@ -953,7 +953,7 @@ export function method() {
   }
 
   /**
-   * 设置水印
+   * Thiết lập watermark
    * @param watermark
    */
   function setWatermark(watermark) {
@@ -975,14 +975,14 @@ export function method() {
   }
 
   /**
-   * 删除水印
+   * Xóa watermark
    */
   function deleteWatermarkClick() {
     instance.command.executeDeleteWatermark();
   }
 
   /**
-   * 查询文本输入事件
+   * Sự kiện nhập văn bản tìm kiếm
    * @param evt
    */
   function searchInput(evt) {
@@ -992,7 +992,7 @@ export function method() {
   }  
   
   /**
-   * 查询文本键盘事件
+   * Sự kiện bàn phím văn bản tìm kiếm
    * @param evt
    */
   function searchKeyDown(evt) {
@@ -1004,7 +1004,7 @@ export function method() {
   }
   
   /**
-   * 上一个
+   * Mục trước
    */
   function arrowLeft() {
     instance.command.executeSearchNavigatePre();
@@ -1012,7 +1012,7 @@ export function method() {
   }
 
   /**
-   * 下一个
+   * Mục tiếp theo
    */
   function arrowRight() {
     instance.command.executeSearchNavigateNext();
@@ -1020,7 +1020,7 @@ export function method() {
   }
 
   /**
-   * 替换
+   * Thay thế
    */
   function replaceText() {
     console.log("searchResultDom.value:::",searchResultDom.value)
@@ -1033,7 +1033,7 @@ export function method() {
   }
 
   /**
-   * 关闭搜索
+   * Đóng tìm kiếm
    */
   function closeSearch() {
     searchCollapseDom.value.style.display = 'none';
@@ -1044,7 +1044,7 @@ export function method() {
   }
 
   /**
-   * 设置搜索结果
+   * Đặt kết quả tìm kiếm
    */
   function setSearchResult() {
     const result = instance.command.getSearchNavigateInfo();
@@ -1057,7 +1057,7 @@ export function method() {
   }
   
   /**
-   * 保存
+   * Lưu
    */
   function save() {
     let tplSettings = instance.command.getValue();

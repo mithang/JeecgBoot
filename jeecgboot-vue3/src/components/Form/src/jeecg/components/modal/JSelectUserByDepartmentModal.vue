@@ -11,20 +11,20 @@
   >
     <div class="j-select-user-by-dept">
       <div class="modal-content">
-        <!-- 左侧搜索和组织列表 -->
+        <!-- Tìm kiếm và danh sách tổ chức bên trái -->
         <div class="left-content">
-          <!-- 搜索框 -->
+          <!-- Hộp tìm kiếm -->
           <div class="search-box">
-            <a-input v-model:value.trim="searchText" placeholder="搜索" @change="handleSearch" @pressEnter="handleSearch" allowClear />
+            <a-input v-model:value.trim="searchText" placeholder="Tìm kiếm" @change="handleSearch" @pressEnter="handleSearch" allowClear />
           </div>
-          <!-- 组织架构 -->
+          <!-- Cơ cấu tổ chức -->
           <div class="tree-box">
             <template v-if="searchText.length">
               <template v-if="searchResult.depart.length || searchResult.user.length">
                 <div class="search-result">
                   <template v-if="searchResult.user.length">
                     <div class="search-user">
-                      <p class="search-user-title">人员</p>
+                      <p class="search-user-title">Nhân sự</p>
                       <template v-for="item in searchResult.user" :key="item.id">
                         <div class="search-user-item" @click="handleSearchUserCheck(item)">
                           <a-checkbox v-model:checked="item.checked" />
@@ -43,7 +43,7 @@
                   </template>
                   <template v-if="searchResult.depart.length">
                     <div class="search-depart">
-                      <p class="search-depart-title">部门</p>
+                      <p class="search-depart-title">Phòng ban</p>
                       <template v-for="item in searchResult.depart" :key="item.id">
                         <div class="search-depart-item" @click="handleSearchDepartClick(item)">
                           <a-checkbox v-model:checked="item.checked" @click.stop @change="($event) => handleSearchDepartCheck($event, item)" />
@@ -57,7 +57,7 @@
               </template>
               <template v-else>
                 <div class="no-data">
-                  <a-empty description="暂无数据" />
+                  <a-empty description="Không có dữ liệu" />
                 </div>
               </template>
             </template>
@@ -75,10 +75,10 @@
                 </a-breadcrumb>
               </div>
               <div v-if="currentDepartUsers.length || currentDeptTotal > 0">
-                <!-- 当前部门用户树 -->
+                <!-- Cây người dùng phòng ban hiện tại -->
                 <div class="depart-users-tree">
                   <div v-if="!currentDepartTree.length" class="allChecked">
-                    <a-checkbox v-model:checked="currentDepartAllUsers" @change="handleAllUsers">全选</a-checkbox>
+                    <a-checkbox v-model:checked="currentDepartAllUsers" @change="handleAllUsers">Chọn tất cả</a-checkbox>
                   </div>
                   <template v-for="item in currentDepartUsers" :key="item.id">
                     <div class="depart-users-tree-item" @click="handleDepartUsersTreeCheck(item)">
@@ -92,7 +92,7 @@
                     </div>
                   </template>
                 </div>
-                <!-- 分页 -->
+                <!-- Phân trang -->
                 <div v-if="!currentDepartTree.length && currentDeptTotal > currentDeptPageSize" class="dept-user-pagination">
                   <a-pagination
                     v-model:current="currentDeptPageNo"
@@ -105,7 +105,7 @@
                   />
                 </div>
               </div>
-              <!-- 部门树 -->
+              <!-- Cây phòng ban -->
               <div v-if="currentDepartTree.length" class="depart-tree">
                 <template v-for="item in currentDepartTree" :key="item.id">
                   <div class="depart-tree-item" @click="handleDepartTreeClick(item)">
@@ -116,14 +116,14 @@
                 </template>
               </div>
               <div v-if="currentDepartTree.length === 0 && currentDepartUsers.length === 0" class="no-data">
-                <a-empty description="暂无数据" />
+                <a-empty description="Không có dữ liệu" />
               </div>
             </template>
           </div>
         </div>
-        <!-- 右侧已选人员展示 -->
+        <!-- Hiển thị nhân viên đã chọn bên phải -->
         <div class="right-content">
-          <div class="selected-header"> 已选人员：{{ selectedUsers.length }}人 </div>
+          <div class="selected-header"> Nhân sự đã chọn:{{ selectedUsers.length }}người </div>
           <div class="selected-users">
             <div class="content">
               <div v-for="user in selectedUsers" :key="user.id" class="user-avatar" @click="handleDelUser(user)">
@@ -155,40 +155,40 @@
   defineOptions({ name: 'JSelectUserByDepartmentModal' });
   const props = defineProps({
     // ...selectProps,
-    //回传value字段名
+    //Trả về tên trường value
     rowKey: {
       type: String,
       default: 'id',
     },
-    //回传文本字段名
+    //Tên trường văn bản trả về
     labelKey: {
       type: String,
       default: 'name',
     },
     modalTitle: {
       type: String,
-      default: '部门用户选择',
+      default: 'Chọn người dùng theo phòng ban',
     },
     selectedUser: {
       type: Array,
       default: () => [],
     },
-    //查询参数
+    //Tham số truy vấn
     params: {
       type: Object,
       default: () => {},
     },
-    // 是否启用公司简称
+    // Có bật tên viết tắt của công ty không
     useCompanyShortName: {
       type: Boolean,
       default: true,
     },
-    //最大选择数量
+    //Số lượng chọn tối đa
     maxSelectCount: {
       type: Number,
       default: 0,
     },
-    // 是否单选
+    // Có chọn một hay không
     isRadioSelection: {
       type: Boolean,
       default: false,
@@ -197,40 +197,40 @@
   const emit = defineEmits(['close', 'register', 'change']);
   import { useMessage } from '/@/hooks/web/useMessage';
   const { createMessage } = useMessage();
-  // 搜索文本
+  // Văn bản tìm kiếm
   const searchText = ref('');
   const breadcrumb = ref<any[]>([]);
-  // 部门树(整颗树)
+  // Cây phòng ban(Toàn bộ cây)
   const departTree = ref([]);
-  // 当前部门树
+  // Cây phòng ban hiện tại
   const currentDepartTree = ref<any[]>([]);
-  // 选中的部门节点
+  // Nút phòng ban đã chọn
   const checkedDepartIds = ref<string[]>([]);
-  // 当前部门用户
+  // Người dùng phòng ban hiện tại
   const currentDepartUsers = ref([]);
-  // 当前叶子部门分页状态
+  // Trạng thái phân trang của phòng ban lá hiện tại
   const currentDeptId = ref('');
   const currentDeptPageNo = ref(1);
   const currentDeptPageSize = ref(50);
   const currentDeptTotal = ref(0);
-  // 已选用户
+  // Người dùng đã chọn
   const selectedUsers = ref<any[]>([]);
-  // 全选
+  // Chọn tất cả
   const currentDepartAllUsers = ref(false);
-  // 搜索结构
+  // Cấu trúc tìm kiếm
   const searchResult: any = reactive({
     depart: [],
     user: [],
   });
-  // 面包屑框
+  // Khung breadcrumb
   const breadcrumbBoxRef = ref();
-  // 映射部门和人员的关系
+  // Ánh xạ quan hệ giữa phòng ban và nhân sự
   const cacheDepartUser = {};
-  //注册弹框
+  //Đăng ký popup
   const [register, { closeModal }] = useModalInner(async (data) => {
-    // 初始化
+    // Khởi tạo
     if (props.selectedUser.length) {
-      // 编辑时，传进来已选中的数据
+      // Khi chỉnh sửa, truyền vào dữ liệu đã chọn
       selectedUsers.value = props.selectedUser;
     }
     getQueryTreeList();
@@ -244,21 +244,21 @@
   };
   const handleOk = () => {
     if (selectedUsers.value.length == 0) {
-      createMessage.warning('请选择人员');
+      createMessage.warning('Vui lòng chọn nhân sự');
       return;
     }
     if (props.isRadioSelection && selectedUsers.value.length > 1) {
-      createMessage.warning('只允许选择一个用户');
+      createMessage.warning('Chỉ được chọn một người dùng');
       return;
     }
     if (props.maxSelectCount && selectedUsers.value.length > props.maxSelectCount) {
-      createMessage.warning(`最多只能选择${props.maxSelectCount}个用户`);
+      createMessage.warning(`Tối đa chỉ được chọn${props.maxSelectCount}người dùng`);
       return;
     }
     emit('change', selectedUsers.value);
     closeModal();
   };
-  // 搜索人员/部门
+  // Tìm kiếm nhân viên/Phòng ban
   const handleSearch = () => {
     if (searchText.value) {
       defHttp
@@ -276,7 +276,7 @@
           result.records?.forEach((item) => {
             const findItem = selectedUsers.value.find((user) => user.id == item.id);
             if (findItem) {
-              // 能在右侧找到说明选中了，左侧同样需要选中。
+              // Tìm thấy ở phía bên phải nghĩa là đã chọn, phía bên trái cũng cần chọn.
               item.checked = true;
             } else {
               item.checked = false;
@@ -290,9 +290,9 @@
       searchResult.depart = [];
     }
   };
-  // 面包屑
+  // Breadcrumb
   const handleBreadcrumbClick = (item?) => {
-    // 先清空
+    // Xóa trước
     currentDepartUsers.value = [];
     currentDeptId.value = '';
     currentDeptPageNo.value = 1;
@@ -308,29 +308,29 @@
       const data = getDepartTreeNodeById(item.id, departTree.value);
       currentDepartTree.value = data.children;
     } else {
-      // 根节点
+      // Nút gốc
       currentDepartTree.value = departTree.value;
       breadcrumb.value = [];
     }
   };
-  // 同步当前部门下所有子部门的勾选状态
+  // Đồng bộ trạng thái tick của tất cả phòng ban con thuộc phòng ban hiện tại
   const setDepartChildrenChecked = (depart, checked: boolean) => {
     depart.children?.forEach((child) => {
       child.checked = checked;
       setDepartChildrenChecked(child, checked);
     });
   };
-  // 点击部门树复选框触发
+  // Kích hoạt khi nhấn vào checkbox của cây phòng ban
   const handleDepartTreeCheck = (e, item) => {
     const { target } = e;
     setDepartChildrenChecked(item, target.checked);
     if (target.checked) {
-      // 选中
+      // Đã chọn
       getUsersByDeptId(item['id']).then((users) => {
         addUsers(users);
       });
       checkedDepartIds.value.push((item as any).id);
-      // 检查父节点下所有子节点是否选中
+      // Kiểm tra tất cả các nút con dưới nút cha có được chọn hay không
       const parentItem = getDepartTreeParentById(item.id);
       if (parentItem?.children) {
         const isChildAllChecked = parentItem.children.every((item) => item.checked);
@@ -341,12 +341,12 @@
         }
       }
     } else {
-      // 取消选中
+      // Bỏ chọn
       const findIndex = checkedDepartIds.value.findIndex((o: any) => o.id === item.id);
       if (findIndex != -1) {
         checkedDepartIds.value.splice(findIndex, 1);
       }
-      // 如果父节点是选中，则需要取消
+      // Nếu nút cha đang được chọn thì cần bỏ chọn
       const parentItem = getDepartTreeParentById(item.id);
       if (parentItem) {
         parentItem.checked = false;
@@ -361,13 +361,13 @@
       });
     }
   };
-  // 点击部门树节点触发
+  // Nhấp vào nút cây phòng ban sẽ kích hoạt
   const handleDepartTreeClick = (item) => {
     breadcrumb.value = [...breadcrumb.value, item];
     if (item.children) {
-      // 有子节点，则显示部门
+      // Nếu có nút con thì hiển thị phòng ban
       if (item.checked) {
-        // 父节点勾选，则子节点全部勾选
+        // Nút cha được chọn thì tất cả nút con đều được chọn
         item.children.forEach((item) => {
           item.checked = true;
         });
@@ -383,17 +383,17 @@
         .then((res: any) => {
           const result = res ?? [];
           if (item.checked) {
-            // 父节点勾选，则默认勾选
+            // Nếu nút cha được chọn thì mặc định chọn theo
             result.forEach((item) => {
               item.checked = true;
             });
           }
-          // 右侧勾选了，则默认勾选（用户存在多部门，在别的部门被选中了）
+          // Nếu phía bên phải đã tích chọn thì mặc định tích chọn (người dùng thuộc nhiều phòng ban, đã được chọn ở phòng ban khác)
           if (selectedUsers.value.length) {
             result.forEach((item) => {
               const findItem = selectedUsers.value.find((user) => user.id === item.id);
               if (findItem) {
-                // 说明在selectedUsers中被找到
+                // Nghĩa là đã được tìm thấy trong selectedUsers
                 item.checked = true;
               }
             });
@@ -401,7 +401,7 @@
           currentDepartUsers.value = result.sort((a, b) => a.sort - b.sort );
         });
     } else {
-      // 没有子节点，则显示用户
+      // Nếu không có nút con thì hiển thị người dùng
       currentDepartTree.value = [];
       currentDeptId.value = item['id'];
       currentDeptPageNo.value = 1;
@@ -409,7 +409,7 @@
       loadDeptUsers(item['id'], 1);
     }
   };
-  // 加载叶子部门用户（带分页）
+  // Tải người dùng của phòng ban lá (có phân trang)
   const loadDeptUsers = (departId: string, pageNo: number) => {
     return getTableList({
       departId,
@@ -434,11 +434,11 @@
       }
     });
   };
-  // 叶子部门用户翻页
+  // Chuyển trang người dùng phòng ban lá
   const handleDeptUserPageChange = (page: number) => {
     loadDeptUsers(currentDeptId.value, page);
   };
-  // 点击部门用户树复选框触发
+  // Kích hoạt khi nhấn vào checkbox của cây người dùng theo phòng ban
   const handleDepartUsersTreeCheck = (item) => {
     item.checked = !item.checked;
     if (item.checked) {
@@ -447,11 +447,11 @@
       selectedUsers.value = selectedUsers.value.filter((user) => user.id !== item.id);
     }
     if (item.checked == false) {
-      // 有一个是false，则全选false
+      // Có một giá trị false thì chọn tất cảfalse
       currentDepartAllUsers.value = false;
     }
   };
-  // 全选
+  // Chọn tất cả
   const handleAllUsers = ({ target }) => {
     const { checked } = target;
     if (checked) {
@@ -470,7 +470,7 @@
       });
     }
   };
-  // 删除人员
+  // Xóa nhân viên
   const handleDelUser = (item) => {
     const findIndex = selectedUsers.value.findIndex((user) => user.id === item.id);
     if (findIndex != -1) {
@@ -482,7 +482,7 @@
       currentDepartAllUsers.value = false;
     }
   };
-  // 点击搜索用户复选框
+  // Nhấp vào checkbox tìm kiếm người dùng
   const handleSearchUserCheck = (item) => {
     item.checked = !item.checked;
     if (item.checked) {
@@ -491,26 +491,26 @@
       selectedUsers.value = selectedUsers.value.filter((user) => user.id !== item.id);
     }
   };
-  // 点击搜索部门复选框
+  // Nhấp vào checkbox tìm kiếm phòng ban
   const handleSearchDepartCheck = (e, item) => {
     handleDepartTreeCheck(e, item);
   };
-  // 点击搜索部门
+  // Nhấp để tìm kiếm phòng ban
   const handleSearchDepartClick = (item) => {
     searchResult.depart = [];
     searchResult.user = [];
     breadcrumb.value = getPathToNodeById(item.id);
     handleDepartTreeClick(item);
   };
-  // 添加人员到右侧
+  // Thêm người vào phía bên phải
   const addUsers = (users) => {
     let newUsers: any = [];
     if (isArray(users)) {
-      // selectedUsers里面没有才添加（防止重复）
+      // selectedUsersChưa có bên trong mới thêm (tránh trùng lặp)
       newUsers = users.filter((user: any) => !selectedUsers.value.find((item) => item.id === user.id));
     } else {
       if (!selectedUsers.value.find((user) => user.id === users.id)) {
-        // selectedUsers里面没有才添加（防止重复）
+        // selectedUsersChưa có bên trong mới thêm (tránh trùng lặp)
         newUsers = [users];
       }
     }
@@ -529,7 +529,7 @@
       olEle.scrollLeft = 30000;
     }
   };
-  // 解析参数
+  // Phân tích tham số
   const parseParams = (params) => {
     if (props?.params) {
       return {
@@ -548,7 +548,7 @@
       }
     });
   };
-  // 根据部门id获取用户
+  // Lấy người dùng theo id phòng ban
   const getTableList = (params) => {
     params = parseParams(params);
     return getTableListOrigin({ ...params });
@@ -569,7 +569,7 @@
       }
     });
   };
-  // 根据id获取根节点到当前节点路径
+  // Lấy đường dẫn từ nút gốc đến nút hiện tại theo id
   const getPathToNodeById = (id: string, tree = departTree.value, path = []): any[] => {
     for (const node of tree) {
       if ((node as any).id === id) {
@@ -584,7 +584,7 @@
     }
     return [];
   };
-  // 根据id获取部门树父节点数据
+  // Lấy dữ liệu nút cha của cây phòng ban theo id
   const getDepartTreeParentById = (id: string, tree = departTree.value, parent = null): any => {
     for (const node of tree) {
       if ((node as any).id === id) {
@@ -599,7 +599,7 @@
     }
     return null;
   };
-  // 通过名称搜索部门支持模糊
+  // Tìm kiếm phòng ban theo tên, hỗ trợ tìm mờ
   const getDepartByName = (name: string, tree = departTree.value): any[] => {
     const result: any[] = [];
     const search = (nodes: any[]) => {
@@ -615,7 +615,7 @@
     search(tree);
     return result;
   };
-  // 根据id获取部门树当前节点数据
+  // Lấy dữ liệu nút hiện tại của cây phòng ban theo id
   const getDepartTreeNodeById = (id: string, tree = departTree.value): any => {
     for (const node of tree) {
       if ((node as any).id === id) {
@@ -630,7 +630,7 @@
     }
     return null;
   };
-  // 获取部门名称（如果启用公司简称且公司简称不为空，则返回公司简称）
+  // Lấy tên phòng ban (nếu đã bật tên viết tắt của công ty và tên viết tắt của công ty không rỗng thì trả về tên viết tắt của công ty)
   function getDepartName(departName, departNameAbbr) {
     if (props.useCompanyShortName && departNameAbbr) {
       return departNameAbbr;
@@ -686,10 +686,10 @@
       ol {
         flex-wrap: nowrap;
         overflow-x: auto;
-        /* 预留滚动条空间，避免 hover 变粗时布局跳动 */
+        /* Dự trữ không gian cho thanh cuộn, tránh bố cục bị nhảy khi hover làm dày lên */
         padding-bottom: 6px;
-        /* 美化滚动条：默认细，悬停变粗方便拖动 */
-        // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-869】部门组件面包屑有滚动条时悬停加粗便于拖动
+        /* Làm đẹp thanh cuộn: mặc định mỏng, khi di chuột qua thì dày lên để dễ kéo */
+        // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-869] Khi breadcrumb của component phòng ban có thanh cuộn, di chuột vào sẽ in đậm để tiện kéo
         &::-webkit-scrollbar {
           width: 4px;
           height: 4px;
@@ -718,7 +718,7 @@
             background: #f0f0f0;
           }
         }
-        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-869】部门组件面包屑有滚动条时悬停加粗便于拖动
+        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-869] Khi breadcrumb của component phòng ban có thanh cuộn, di chuột vào sẽ in đậm để tiện kéo
       }
       li {
         flex: none;

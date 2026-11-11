@@ -4,42 +4,42 @@
     :width="popModalFixedWidth"
     :dialogStyle="{ top: '70px' }"
     :bodyStyle="modalBodyStyle"
-    title="选择记录"
+    title="Chọn bản ghi"
     wrapClassName="jeecg-all-table-pop-list-modal"
   >
     <template #footer>
-      <a-button key="back" @click="handleCancel">关闭</a-button>
-      <a-button :disabled="submitDisabled" key="submit" type="primary" @click="handleSubmit" :loading="submitLoading">确定</a-button>
+      <a-button key="back" @click="handleCancel">Đóng</a-button>
+      <a-button :disabled="submitDisabled" key="submit" type="primary" @click="handleSubmit" :loading="submitLoading">Xác nhận</a-button>
     </template>
 
     <a-form-item-rest>
       <a-form-item class="atm-form-item">
         <div class="atm-layout">
-          <!-- 搜索栏 + 已选提示 -->
+          <!-- Thanh tìm kiếm + Gợi ý đã chọn -->
           <div class="atm-toolbar">
             <a-input-search
               v-model:value="searchText"
-              placeholder="请输入关键词，按回车搜索"
+              placeholder="Vui lòng nhập từ khóa, nhấn Enter để tìm kiếm"
               style="width: 240px"
               @search="doSearch"
               @pressEnter="doSearch"
             />
             <span v-if="selectedKeys.length > 0" class="atm-selected-tip">
-              已选中 {{ selectedKeys.length }} 条记录
-              <a class="atm-clear-link" @click="clearSelection">清空</a>
+              Đã chọn {{ selectedKeys.length }} bản ghi
+              <a class="atm-clear-link" @click="clearSelection">Xóa sạch</a>
             </span>
           </div>
 
           <div class="atm-content">
-            <!-- 加载中 -->
+            <!-- Đang tải -->
             <div v-if="loading" class="atm-spin-wrap">
               <a-spin />
             </div>
 
-            <!-- 无数据 -->
-            <a-empty v-else-if="dataList.length === 0" class="atm-empty" description="暂无数据" />
+            <!-- Không có dữ liệu -->
+            <a-empty v-else-if="dataList.length === 0" class="atm-empty" description="Không có dữ liệu" />
 
-            <!-- 卡片网格 -->
+            <!-- Lưới thẻ -->
             <div v-else class="atm-card-grid">
               <div
                 v-for="record in dataList"
@@ -48,13 +48,13 @@
                 :class="{ 'atm-card--selected': isSelected(record) }"
                 @click="handleToggle(record)"
               >
-                <!-- 多选模式才显示右上角选中图标 -->
+                <!-- Chỉ ở chế độ đa chọn mới hiển thị biểu tượng đã chọn ở góc trên bên phải -->
                 <span v-if="multi" class="atm-card-check">
                   <CheckSquareFilled v-if="isSelected(record)" class="atm-check-icon--on" />
                   <BorderOutlined v-else class="atm-check-icon--off" />
                 </span>
 
-                <!-- 内容区 -->
+                <!-- Khu vực nội dung -->
                 <div class="atm-card-inner" :class="{ 'atm-has-image': hasImage(record) }">
                   <div class="atm-card-title">{{ getMainContent(record) }}</div>
                   <div class="atm-card-fields">
@@ -65,7 +65,7 @@
                   </div>
                 </div>
 
-                <!-- 图片区 -->
+                <!-- Khu vực hình ảnh -->
                 <div v-if="hasImage(record)" class="atm-card-image">
                   <img :src="getImageSrc(record)" alt="" @error="handleImageError" />
                 </div>
@@ -73,13 +73,13 @@
             </div>
           </div>
 
-          <!-- 分页 -->
+          <!-- Phân trang -->
           <div class="atm-pagination">
             <a-pagination
               v-model:current="currentPage"
               :total="total"
               :pageSize="pageSize"
-              :show-total="(t) => `共 ${t} 条`"
+              :show-total="(t) => `Tổng cộng ${t} mục`"
               show-size-changer
               @change="handlePageChange"
               @showSizeChange="handleSizeChange"
@@ -100,7 +100,7 @@
   import { CheckSquareFilled, BorderOutlined } from '@ant-design/icons-vue';
   import placeholderImage from '/@/assets/images/placeholderImage.png';
 
-  /** 调用后端 /sys/dict/queryTableDataForLinkRecord 接口 */
+  /** Gọi backend /sys/dict/queryTableDataForLinkRecord API */
   function queryTableData(params: Record<string, any>) {
     return defHttp.get({ url: '/sys/dict/queryTableDataForLinkRecord', params });
   }
@@ -120,7 +120,7 @@
       const { popModalFixedWidth, resetBodyStyle, popBodyStyle } = useFixedHeightModal();
       const modalBodyStyle = computed(() => ({ ...popBodyStyle.value, overflow: 'hidden', padding: '16px 20px' }));
 
-      // ---------- 数据状态 ----------
+      // ---------- Trạng thái dữ liệu ----------
       const loading = ref(false);
       const dataList = ref<any[]>([]);
       const total = ref(0);
@@ -128,7 +128,7 @@
       const pageSize = ref(10);
       const searchText = ref('');
 
-      // ---------- 选中状态（跨页持久化） ----------
+      // ---------- Trạng thái đã chọn (lưu bền vững qua các trang) ----------
       const selectedKeys = ref<string[]>([]);
       const selectedRecordsMap = ref<Record<string, any>>({});
 
@@ -162,7 +162,7 @@
         selectedRecordsMap.value = {};
       }
 
-      // ---------- 字段计算 ----------
+      // ---------- Tính toán trường ----------
       const mainTextField = computed(() => {
         return (props.textField || '').split(',').filter(Boolean)[0] || props.valueField;
       });
@@ -190,7 +190,7 @@
         (e.target as HTMLImageElement).src = placeholderImage;
       }
 
-      // ---------- 数据加载 ----------
+      // ---------- Tải dữ liệu ----------
       async function loadData() {
         if (!props.tableName || !props.valueField || !props.textField) return;
 
@@ -211,7 +211,7 @@
           dataList.value = res?.records || [];
           total.value = res?.total || 0;
         } catch (e) {
-          console.error('[AllTableListModal] 加载数据失败', e);
+          console.error('[AllTableListModal] Tải dữ liệu thất bại', e);
           dataList.value = [];
           total.value = 0;
         } finally {
@@ -235,15 +235,15 @@
         loadData();
       }
 
-      // ---------- 弹窗生命周期 ----------
+      // ---------- Vòng đời popup ----------
       const [registerModal, { closeModal }] = useModalInner((data) => {
-        // 重置搜索和分页
+        // Đặt lại tìm kiếm và phân trang
         searchText.value = '';
         currentPage.value = 1;
         dataList.value = [];
         total.value = 0;
 
-        // 恢复传入的已选记录
+        // Khôi phục bản ghi đã chọn được truyền vào
         selectedKeys.value = (data.selectedRowKeys || []).map(String);
         selectedRecordsMap.value = {};
         for (const row of data.selectedRows || []) {
@@ -252,14 +252,14 @@
           }
         }
 
-        // 延迟加载（等弹窗完全挂载后再请求）
+        // Tải chậm (đợi popup được mount hoàn toàn rồi mới yêu cầu)
         setTimeout(() => {
           loadData();
           resetBodyStyle();
         }, 100);
       });
 
-      // ---------- 提交 ----------
+      // ---------- Gửi ----------
       const submitLoading = ref(false);
       const submitDisabled = computed(() => selectedKeys.value.length === 0);
 
@@ -386,7 +386,7 @@
     gap: 12px;
   }
 
-  /* 卡片 */
+  /* Thẻ */
   .atm-card {
     position: relative;
     display: inline-flex;
@@ -417,7 +417,7 @@
     }
   }
 
-  /* 选中图标（右上角，位于卡片内部） */
+  /* Icon đã chọn (góc trên bên phải, nằm trong thẻ) */
   .atm-card-check {
     position: absolute;
     top: 10px;
@@ -435,7 +435,7 @@
     color: #d9d9d9;
   }
 
-  /* 内容区 */
+  /* Khu vực nội dung */
   .atm-card-inner {
     flex: 1;
     min-width: 0;
@@ -487,7 +487,7 @@
     text-overflow: ellipsis;
   }
 
-  /* 图片区 */
+  /* Khu vực hình ảnh */
   .atm-card-image {
     width: 88px;
     flex-shrink: 0;
@@ -507,7 +507,7 @@
     }
   }
 
-  /* 分页 */
+  /* Phân trang */
   .atm-pagination {
     display: flex;
     justify-content: flex-end;

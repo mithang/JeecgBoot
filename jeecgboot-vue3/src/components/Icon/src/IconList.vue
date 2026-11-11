@@ -64,15 +64,15 @@
       value: propTypes.string.def(''),
     },
     setup(props, { emit }) {
-      //选中的值
+      //Giá trị đã chọn
       const currentSelect = ref('');
-      //页数
+      //Số trang
       const current = ref<number>(1);
-      //每页条数
+      //Số bản ghi mỗi trang
       const pageSize = ref<number>(140);
-      //下拉分页显示
+      //Hiển thị phân trang dropdown
       const pageSizeOptions = ref<any>(['10', '20', '50', '100', '140']);
-      //下拉搜索值
+      //Giá trị tìm kiếm thả xuống
       const searchIconValue = ref<string>('');
       const { clipboardRef, isSuccessRef } = useCopyToClipboard(props.value);
 
@@ -82,13 +82,13 @@
       const { t } = useI18n();
       const { createMessage } = useMessage();
       /**
-       * 搜索
+       * Tìm kiếm
        * @param e
        */
       function handleSearchChange(e: ChangeEvent) {
         const value = e.target.value;
         console.log("value::::",value)
-        // 代码逻辑说明: 【issues/4947】菜单编辑页面菜单图标选择模板，每页显示数量切换无效------------
+        // Giải thích logic mã: 【issues/4947]Trang chỉnh sửa menu, mẫu chọn biểu tượng menu, chuyển đổi số lượng hiển thị mỗi trang không có hiệu lực------------
         setCurrentPage(1);
         current.value = 1;
         if (!value) {
@@ -99,7 +99,7 @@
       }
 
       /**
-       * 图标点击重置页数
+       * Nhấp biểu tượng để đặt lại số trang
        */
       function currentSelectClick() {
         setCurrentPage(1);
@@ -111,7 +111,7 @@
       }
 
       function handlePageChange(page: number, size: number) {
-        // 代码逻辑说明: 【issues/4947】菜单编辑页面菜单图标选择模板，每页显示数量切换无效------------
+        // Giải thích logic mã: 【issues/4947]Trang chỉnh sửa menu, mẫu chọn biểu tượng menu, chuyển đổi số lượng hiển thị mỗi trang không có hiệu lực------------
         current.value = page;
         pageSize.value = size;
         setPageSize(size);
@@ -119,7 +119,7 @@
       }
 
       /**
-       * 图标点击事件
+       * Sự kiện nhấp biểu tượng
        * @param icon
        */
       function handleClick(icon: string) {
@@ -142,7 +142,7 @@
       }
 
       /**
-       * 获取图标
+       * Lấy biểu tượng
        */
       function getIcon() {
         return currentSelect.value;

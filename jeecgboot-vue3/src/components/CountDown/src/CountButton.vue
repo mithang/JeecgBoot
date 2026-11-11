@@ -2,7 +2,7 @@
   <Button v-bind="$attrs" :disabled="isStart" @click="handleStart" :loading="loading">
     {{ getButtonText }}
   </Button>
-  <!-- 图片验证码弹窗 -->
+  <!-- Popup mã xác thực hình ảnh -->
   <CaptchaModal @register="captchaRegisterModal" @ok="handleStart" />
 </template>
 <script lang="ts">
@@ -52,7 +52,7 @@
         if (beforeStartFunc && isFunction(beforeStartFunc)) {
           loading.value = true;
           try {
-            // 代码逻辑说明: 【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+            // Giải thích logic mã: 【QQYUN-9005]Cùng một IP, trong 1 phút gửi SMS quá 5 lần thì nhắc cần mã xác thực---
             const canStart = await beforeStartFunc().catch((res) =>{
               if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
                 openCaptchaModal(true, {});

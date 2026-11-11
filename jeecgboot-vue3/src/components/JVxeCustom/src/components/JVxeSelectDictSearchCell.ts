@@ -9,12 +9,12 @@ import { useJVxeComponent, useJVxeCompProps } from '/@/components/jeecg/JVxeTabl
 import { useMessage } from '/@/hooks/web/useMessage';
 import { Select, SelectOption, Spin } from 'ant-design-vue'
 
-/** value - label map，防止重复查询（刷新清空缓存） */
+/** value - label map, tránh truy vấn lặp lại (làm mới sẽ xóa cache) */
 const LabelMap = new Map<string, any>();
-// 请求id
+// Yêu cầuid
 let requestId = 0;
 
-/** 显示组件，自带翻译 */
+/** Component hiển thị, tự kèm dịch */
 export const DictSearchSpanCell = defineComponent({
   name: 'JVxeSelectSearchSpanCell',
   props: useJVxeCompProps(),
@@ -26,7 +26,7 @@ export const DictSearchSpanCell = defineComponent({
   },
 });
 
-// 输入选择组件
+// Component chọn nhập
 export const DictSearchInputCell = defineComponent({
   name: 'JVxeSelectSearchInputCell',
   props: useJVxeCompProps(),
@@ -35,20 +35,20 @@ export const DictSearchInputCell = defineComponent({
     const { dict, loading, isAsync, options, innerOptions, originColumn, cellProps, innerSelectValue, handleChangeCommon } =
       useSelectDictSearch(props);
     const hasRequest = ref(false);
-    // 提示信息
+    // Thông tin nhắc nhở
     const tipsContent = computed(() => {
-      return originColumn.value.tipsContent || '请输入搜索内容';
+      return originColumn.value.tipsContent || 'Vui lòng nhập nội dung tìm kiếm';
     });
-    // 筛选函数
+    // Hàm lọc
     const filterOption = computed(() => {
       if (isAsync.value) {
-        //【jeecgboot-vue3/issues/I5QRT8】JVxeTypes.selectDictSearch sync问题
+        //【jeecgboot-vue3/issues/I5QRT8】JVxeTypes.selectDictSearch syncVấn đề
         return ()=>true;
       }
       return (input, option) => option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     });
 
-    /** 加载数据 */
+    /** Tải dữ liệu */
     const loadData = debounce((value) => {
       const currentRequestId = ++requestId;
       loading.value = true;
@@ -58,7 +58,7 @@ export const DictSearchInputCell = defineComponent({
         hasRequest.value = false;
         return;
       }
-      // 字典code格式：table,text,code
+      // Định dạng code từ điển:table,text,code
       hasRequest.value = true;
       loadDictByKeyword(dict.value, value)
         .then((res) => {
@@ -72,7 +72,7 @@ export const DictSearchInputCell = defineComponent({
               LabelMap.set(item.value, [item]);
             });
           } else {
-            createMessage.warning(message || '查询失败');
+            createMessage.warning(message || 'Tìm kiếm thất bại');
           }
         })
         .finally(() => {
@@ -87,7 +87,7 @@ export const DictSearchInputCell = defineComponent({
 
     function handleSearch(value) {
       if (isAsync.value) {
-        // 在输入时也应该开启加载，因为loadData加了消抖，所以会有800ms的用户主观上认为的卡顿时间
+        // Khi nhập cũng nên bật trạng thái tải, vì loadData đã thêm debounce, nên sẽ có thời gian 800ms mà người dùng chủ quan cho là bị kẹt
         loading.value = true;
         if (innerOptions.value.length > 0) {
           innerOptions.value = [];
@@ -137,7 +137,7 @@ export const DictSearchInputCell = defineComponent({
             if (loading.value) {
               return h(Spin, { size: 'small' });
             } else if (hasRequest.value) {
-              return h('div', '没有查询到任何数据');
+              return h('div', 'Không truy vấn được dữ liệu nào');
             } else {
               return h('div', [tipsContent.value]);
             }
@@ -146,7 +146,7 @@ export const DictSearchInputCell = defineComponent({
       );
     };
   },
-  // 【组件增强】注释详见：JVxeComponent.Enhanced
+  // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
   enhanced: {
     aopEvents: {
       editActived({ $event }) {
@@ -166,15 +166,15 @@ function useSelectDictSearch(props) {
   const setup = useJVxeComponent(props);
   const { innerValue, originColumn } = setup;
 
-  // 加载状态
+  // Trạng thái tải
   const loading = ref(false);
-  // 内部选择值
+  // Giá trị chọn nội bộ
   const innerSelectValue = ref(null);
-  // 内部 options
+  // Nội bộ options
   const innerOptions = ref<any[]>([]);
 
   const dict = computed(() => originColumn.value.dict);
-  // 是否是异步模式
+  // Có phải chế độ bất đồng bộ không
   const isAsync = computed(() => {
     let isAsync = originColumn.value.async;
     return isAsync != null && isAsync !== '' ? !!isAsync : true;
@@ -187,7 +187,7 @@ function useSelectDictSearch(props) {
     }
   });
 
-  /** 公共属性监听 */
+  /** Lắng nghe thuộc tính dùng chung */
   watch(
     innerValue,
     (value: string) => {
@@ -201,7 +201,7 @@ function useSelectDictSearch(props) {
   );
   watch(dict, () => loadDataByDict());
 
-  // 根据 value 查询数据，用于回显
+  // Truy vấn dữ liệu theo value, dùng để hiển thị lại
   async function loadDataByValue(value) {
     if (isAsync.value) {
       if (innerSelectValue.value !== value) {
@@ -219,12 +219,12 @@ function useSelectDictSearch(props) {
     innerSelectValue.value = (value || '').toString();
   }
 
-  // 初始化字典
+  // Khởi tạo danh mục
   async function loadDataByDict() {
     if (!isAsync.value) {
-      // 如果字典项集合有数据
+      // Nếu tập hợp mục từ điển có dữ liệu
       if (!originColumn.value.options || originColumn.value.options.length === 0) {
-        // 根据字典Code, 初始化字典数组
+        // Theo từ điểnCode, Khởi tạo mảng từ điển
         let dictStr = '';
         if (dict.value) {
           let arr = dict.value.split(',');
@@ -235,7 +235,7 @@ function useSelectDictSearch(props) {
             dictStr = dict.value;
           }
           if (dict.value.indexOf(',') === -1) {
-            //优先从缓存中读取字典配置
+            //Ưu tiên đọc cấu hình từ điển từ cache
             let cache = getDictItemsByCode(dict.value);
             if (cache) {
               innerOptions.value = cache;
@@ -262,7 +262,7 @@ function useSelectDictSearch(props) {
   };
 }
 
-/** 获取字典项 */
+/** Lấy mục danh mục */
 function loadDictItem(dict: string, key: string) {
   return defHttp.get({
     url: `/sys/dict/loadDictItem/${dict}`,
@@ -272,7 +272,7 @@ function loadDictItem(dict: string, key: string) {
   });
 }
 
-/** 根据关键字获取字典项（搜索） */
+/** Lấy mục từ điển theo từ khóa (tìm kiếm) */
 function loadDictByKeyword(dict: string, keyword: string) {
   return defHttp.get(
     {

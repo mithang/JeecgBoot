@@ -7,33 +7,33 @@ import { defHttp } from "@/utils/http/axios";
 import { queryAllParentId } from "/@/api/common/api";
 
 export function useTreeBiz(treeRef, getList, props, realProps, emit) {
-  //接收下拉框选项
+  //Nhận tùy chọn hộp thả xuống
   const selectOptions = inject('selectOptions', ref<Array<object>>([]));
-  //接收已选择的值
+  //Nhận giá trị đã chọn
   const selectValues = <object>inject('selectValues', reactive({}));
-  // 是否正在加载回显
+  // Có đang tải hiển thị lại không
   const loadingEcho = inject<Ref<boolean>>('loadingEcho', ref(false));
-  //数据集
+  //Tập dữ liệu
   const treeData = ref<Array<object>>([]);
-  //已选择的值
+  //Giá trị đã chọn
   const checkedKeys = ref<Array<string | number>>([]);
-  //选则的行记录
+  //Bản ghi hàng đã chọn
   const selectRows = ref<Array<object>>([]);
-  //是否是打开弹框模式
+  //Có phải chế độ mở hộp thoại không
   const openModal = ref(false);
-  //是否层级关联
+  //Có liên kết theo cấp bậc không
   const checkStrictly = ref<boolean>(realProps.multiple ? props.checkStrictly : true);
-  // 是否开启父子关联，如果不可以多选，就始终取消父子关联
+  // Có bật liên kết cha-con hay không, nếu không cho phép chọn nhiều thì luôn hủy liên kết cha-con
   const getCheckStrictly = computed(() => checkStrictly.value);
-  // 是否是首次加载回显，只有首次加载，才会显示 loading
+  // Có phải lần đầu tải và hiển thị lại không, chỉ lần đầu tải mới hiển thị loading
   let isFirstLoadEcho = true;
   let prevSelectValues = [];
-  // 需要展开的父节点ID列表
+  // Danh sách ID nút cha cần mở rộng
   const expandedKeys = ref<Array<string | number>>([]);
-  // 是否启用自动展开功能（可以通过props控制）
+  // Có kích hoạt chức năng tự động mở rộng hay không (có thể điều khiển qua props)
   const enableAutoExpand = props.enableAutoExpand !== false;
   /**
-   * 监听selectValues变化
+   * Lắng nghe sự thay đổi của selectValues
    */
   watch(
     selectValues,
@@ -41,9 +41,9 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
       if(!values){
         return;
       }
-      // 代码逻辑说明: 【issues/8232】代码设置JSelectDept组件值没翻译
+      // Giải thích logic mã: 【issues/8232] Đặt giá trị component JSelectDept bằng mã không được dịch
       if (values.length > 0) {
-        // 防止多次请求
+        // Ngăn chặn nhiều yêu cầu
         if (isEqual(values, prevSelectValues)) return;
         prevSelectValues = values;
         loadingEcho.value = isFirstLoadEcho;
@@ -57,7 +57,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   );
 
   /**
-   * 获取树实例
+   * Lấy đối tượng cây
    */
   function getTree() {
     const tree = unref(treeRef);
@@ -69,7 +69,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 获取需要展开的父节点ID
+   * Lấy nút cha cần mở rộngID
    */
   async function getParentIdsToExpand(selectedIds) {
     if (!selectedIds || selectedIds.length === 0) return [];
@@ -82,46 +82,46 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
       
       if (result) {
         const allParentIds = [];
-        // 处理 Map 或 Object 结构
+        // Xử lý cấu trúc Map hoặc Object
         const valuesToProcess = result instanceof Map 
           ? Array.from(result.values()) 
           : Object.values(result);
         
-        // 遍历所有选中节点的父节点
+        // Duyệt qua nút cha của tất cả các nút đã chọn
         valuesToProcess.forEach((nodeData: any) => {
           if (nodeData && nodeData.parentIds && Array.isArray(nodeData.parentIds)) {
-            // 添加父节点ID（不包含选中节点本身）
+            // Thêm ID nút cha (không bao gồm nút được chọn)
             const parentIds = nodeData.parentIds.filter(id => !selectedIds.includes(id));
             allParentIds.push(...parentIds);
           }
         });
         
-        return [...new Set(allParentIds)]; // 去重
+        return [...new Set(allParentIds)]; // Khử trùng lặp
       }
       return [];
     } catch (error) {
-      console.warn('获取父节点ID失败:', error);
+      console.warn('Lấy ID nút cha thất bại:', error);
       return [];
     }
   }
 
   /**
-   * 设置树展开级别
+   * Đặt mức mở rộng cây
    */
   function expandTree() {
     nextTick(() => {
       if (props.defaultExpandLevel && props.defaultExpandLevel > 0) {
         getTree().filterByLevel(props.defaultExpandLevel);
       }
-      //设置列表默认选中
+      //Đặt mục chọn mặc định của danh sách
       checkedKeys.value = selectValues['value'];
       
-      // 如果有需要展开的父节点，则展开它们
+      // Nếu có nút cha cần mở rộng, thì mở rộng chúng
       if (expandedKeys.value.length > 0) {
         getTree().setExpandedKeys(expandedKeys.value);
       }
     }).then(() => {
-      // 再次确保展开，因为树可能还没有完全渲染
+      // Đảm bảo mở rộng lại lần nữa, vì cây có thể chưa được render hoàn toàn
       if (expandedKeys.value.length > 0) {
         setTimeout(() => {
           getTree().setExpandedKeys(expandedKeys.value);
@@ -131,7 +131,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 树节点选择
+   * Chọn nút cây
    */
   function onSelect(keys, info) {
     if (props.checkable == false) {
@@ -146,17 +146,17 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 树节点选择
+   * Chọn nút cây
    */
   function onCheck(keys, info) {
     if(!info){
       return;
     }
     if (props.checkable == true) {
-      // 如果不能多选，就只保留最后一个选中的
+      // Nếu không thể chọn nhiều, thì chỉ giữ lại mục được chọn cuối cùng
       if (!realProps.multiple) {
         if (info.checked) {
-          // 代码逻辑说明: 单选模式下，设定rowKey，无法选中数据-
+          // Giải thích logic mã: Ở chế độ chọn đơn, khi thiết lập rowKey sẽ không thể chọn dữ liệu-
           checkedKeys.value = [info.node.eventKey];
           let rowKey = props.rowKey;
           let temp = info.checkedNodes.find((n) => n[rowKey] === info.node.eventKey);
@@ -167,7 +167,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
         }
         return;
       }
-      // 代码逻辑说明: 【JHHB-250】选择部门加一个层级关联/独立的配置，现在是点击就全勾选了---
+      // Giải thích logic mã: 【JHHB-250] Chọn phòng ban thêm một liên kết cấp bậc/Cấu hình độc lập, hiện tại bấm là tick tất cả---
       checkedKeys.value = checkStrictly.value ? keys.checked : keys;
       const { checkedNodes } = info;
       let rows = <any[]>[];
@@ -179,11 +179,11 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 勾选全部
+   * Chọn tất cả
    */
   async function checkALL(checkAll) {
     getTree().checkAll(checkAll);
-    // 代码逻辑说明: 【issues/394】所属部门树操作全部勾选不生效/【issues/4646】部门全部勾选后，点击确认按钮，部门信息丢失------------
+    // Giải thích logic mã: 【issues/394] Thao tác cây phòng ban trực thuộc: tick tất cả không có hiệu lực/【issues/4646] Sau khi tích chọn tất cả phòng ban, nhấn nút xác nhận thì thông tin phòng ban bị mất------------
     await nextTick();
     checkedKeys.value = getTree().getCheckedKeys();
     if(checkAll){
@@ -194,7 +194,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 获取数列表
+   * Lấy danh sách cây
    * @param res
    */
   function getTreeRow() {
@@ -208,21 +208,21 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 展开全部
+   * Mở rộng tất cả
    */
   function expandAll(expandAll) {
     getTree().expandAll(expandAll);
   }
 
   /**
-   * 加载树数据
+   * Tải dữ liệu cây
    */
   async function onLoadData(treeNode, ids) {
     let params = {};
     let startPid = '';
     if (treeNode) {
       startPid = treeNode.eventKey;
-      // 代码逻辑说明: rowkey不设置成id，sync开启异步的时候，点击上级下级不显示------------
+      // Giải thích logic mã: rowkeyKhông đặt thành id, khi sync bật bất đồng bộ, nhấn cấp trên/cấp dưới không hiển thị------------
       params['pid'] = treeNode.value;
     }
     if (ids) {
@@ -235,20 +235,20 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
     }
     let record = await getList(params);
     let optionData = record;
-    //只展示公司信息（公司+子公司）
+    //Chỉ hiển thị thông tin công ty (công ty+công ty con)
     if(props.onlyShowCompany){
       record = getCompanyData(record)
     }
-    //是否只选择部门岗位
+    //Có chỉ chọn vị trí phòng ban không
     if (props.izOnlySelectDepartPost) {
       setCompanyDepartCheckable(record);
     }
-    //是否缩写departNameAbbr
+    //Có viết tắt hay khôngdepartNameAbbr
     if (props.izShowDepartNameAbbr) {
       record = getDepartAbbrData(record);
     }
     if (!props.serverTreeData) {
-      //前端处理数据为tree结构
+      //Frontend xử lý dữ liệu thành cấu trúc tree
       record = listToTree(record, props, startPid);
       if (record.length == 0 && treeNode) {
         checkHasChild(startPid, treeData.value);
@@ -256,7 +256,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
     }
 
     if (openModal.value == true) {
-      //弹框模式下加载全部数据
+      //Tải toàn bộ dữ liệu trong chế độ hộp thoại
       if (!treeNode) {
         treeData.value = record;
       } else {
@@ -278,7 +278,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
     } else {
       const options = <any[]>[];
       optionData.forEach((item) => {
-        // 代码逻辑说明: issues/I5F3P4 online配置部门选择后编辑，查看数据应该显示部门名称，不是部门代码
+        // Giải thích logic mã: issues/I5F3P4 onlineSau khi cấu hình chọn phòng ban rồi chỉnh sửa, khi xem dữ liệu phải hiển thị tên phòng ban, không phải mã phòng ban
         options.push({ label: item[props.labelKey], value: item[props.rowKey] });
       });
       selectOptions.value = options;
@@ -286,7 +286,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 获取到公司/子公司数据
+   * Lấy được công ty/Dữ liệu công ty con
    * @param record
    */
   function getCompanyData(record){
@@ -294,7 +294,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
     return companyData
   }
   /**
-   * 获取到公司/子公司数据
+   * Lấy được công ty/Dữ liệu công ty con
    * @param record
    */
   function getDepartAbbrData(record){
@@ -305,9 +305,9 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
     return departAbbrData
   }
   /**
-   * 异步加载时检测是否含有下级节点
-   * @param pid 父节点
-   * @param treeArray  tree数据
+   * Khi tải bất đồng bộ, kiểm tra có chứa nút cấp dưới hay không
+   * @param pid Nút cha
+   * @param treeArray  treeDữ liệu
    */
   function checkHasChild(pid, treeArray) {
     if (treeArray && treeArray.length > 0) {
@@ -325,7 +325,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 获取已选择数据
+   * Lấy dữ liệu đã chọn
    */
   function getSelectTreeData(success) {
     const options = <any[]>[];
@@ -341,15 +341,15 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 弹出框显示隐藏触发事件
+   * Sự kiện kích hoạt khi popup hiển thị/ẩn
    */
   async function visibleChange(visible) {
     if (visible) {
-      //弹出框打开时加载全部数据
+      //Tải tất cả dữ liệu khi hộp thoại bật lên
       openModal.value = true;
       await onLoadData(null, null);
       
-      // 在数据加载完成后，如果有选中的值且启用了自动展开功能，则展开父节点
+      // Sau khi tải dữ liệu xong, nếu có giá trị đã chọn và đã bật tính năng tự động mở rộng thì mở rộng nút cha
       if (enableAutoExpand && selectValues.value && selectValues.value.length > 0) {
         try {
           const selectedIds = selectValues.value;
@@ -358,21 +358,21 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
           if (parentIds.length > 0) {
             expandedKeys.value = parentIds;
             
-            // 延迟展开，确保树已经渲染完成
+            // Mở rộng chậm lại để đảm bảo cây đã render xong
             nextTick(() => {
               try {
                 const tree = getTree();
                 if (tree) {
                   tree.setExpandedKeys(parentIds);
 
-                  // 再次确保展开
+                  // Đảm bảo mở rộng lần nữa
                   setTimeout(() => {
                     try {
                       const tree = getTree();
                       if (tree) {
                         tree.setExpandedKeys(parentIds);
-                        console.log('父节点已展开:', parentIds);
-                        // 第三次确保展开，使用更长的延迟
+                        console.log('Nút cha đã được mở rộng:', parentIds);
+                        // Lần thứ ba đảm bảo mở rộng, dùng độ trễ dài hơn
                         setTimeout(() => {
                           try {
                             const tree = getTree();
@@ -380,23 +380,23 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
                               tree.setExpandedKeys(parentIds);
                             }
                           } catch (error) {
-                            console.warn('展开父节点失败:', error);
+                            console.warn('Mở rộng nút cha thất bại:', error);
                           }
                         }, 500);
                       }
                     } catch (error) {
-                      console.warn('展开父节点失败:', error);
+                      console.warn('Mở rộng nút cha thất bại:', error);
                     }
                   }, 200);
                 }
               } catch (error) {
-                console.warn('展开父节点失败:', error);
+                console.warn('Mở rộng nút cha thất bại:', error);
               }
             });
             
           }
         } catch (error) {
-          console.warn('获取父节点ID失败:', error);
+          console.warn('Lấy ID nút cha thất bại:', error);
         }
       }
     } else {
@@ -406,7 +406,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 设置公司部门复选框显示
+   * Đặt hiển thị checkbox phòng ban công ty
    * @param record
    */
   function setCompanyDepartCheckable(record) {
@@ -427,7 +427,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
   }
 
   /**
-   * 岗位搜索
+   * Tìm kiếm vị trí công tác
    *
    * @param value
    */

@@ -1,4 +1,4 @@
-<!--用户选择框-->
+<!--Hộp chọn người dùng-->
 <template>
   <div>
     <BasicModal
@@ -42,7 +42,7 @@
             :useSearchForm="true"
             :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }"
           >
-            <!--操作栏-->
+            <!--Thanh thao tác-->
             <template #action="{ record }">
               <a href="javascript:void(0)" @click="handleDeleteSelected(record)"><Icon icon="ant-design:delete-outlined"></Icon></a>
             </template>
@@ -64,7 +64,7 @@
   export default defineComponent({
     name: 'UserSelectModal',
     components: {
-      //此处需要异步加载BasicTable
+      //Tại đây cần tải bất đồng bộBasicTable
       BasicModal,
       BasicTable: createAsyncComponent(() => import('/@/components/Table/src/BasicTable.vue'), {
         loading: true,
@@ -72,62 +72,62 @@
     },
     props: {
       ...selectProps,
-      //选择框标题
+      //Tiêu đề hộp chọn
       modalTitle: {
         type: String,
-        default: '选择用户',
+        default: 'Chọn người dùng',
       },
-      //排除用户id的集合
+      //Tập hợp id người dùng bị loại trừ
       excludeUserIdList: {
         type: Array,
         default: [],
       },
 
-      // wrap类名
+      // wrapTên class
       modalWrapClassName: {
         type: String,
         default: 'j-user-select-modal',
       },
-      // 查询table数据使用的自定义接口
+      // API tùy chỉnh dùng để truy vấn dữ liệu table
       customListApi: {type: Function},
-      // 自定义接口的查询条件是否使用 JInput
+      // Điều kiện truy vấn của API tùy chỉnh có sử dụng hay không JInput
       customApiJInput: {type: Boolean, default: true},
-      // 自定义表单配置条件
+      // Điều kiện cấu hình biểu mẫu tùy chỉnh
       customFormConfig: {type: Object},
-      // 自定义表格列
+      // Cột bảng tùy chỉnh
       customTableColumns: {type: Array},
     },
     emits: ['register', 'getSelectResult', 'close'],
     setup(props, { emit, refs }) {
-      // 代码逻辑说明: VUEN-1086 【移动端】用户选择 查询按钮 效果不好 列表展示没有滚动条
+      // Giải thích logic mã: VUEN-1086 [Mobile] Chọn người dùng, nút tìm kiếm hiệu quả không tốt, danh sách hiển thị không có thanh cuộn
       const tableScroll = ref<any>({ x: false });
       const tableRef = ref();
       const maxHeight = ref(600);
 
       const hasCustomApi = computed(() => typeof props.customListApi === 'function');
 
-      //注册弹框
+      //Đăng ký popup
       const [register, { closeModal }] = useModalInner(() => {
         if (window.innerWidth < 900) {
           tableScroll.value = { x: 900 };
         } else {
           tableScroll.value = { x: false };
         }
-        // 代码逻辑说明: VUEN-1112 一对多 用户选择 未显示选择条数，及清空
+        // Giải thích logic mã: VUEN-1112 Một-nhiều: chọn người dùng chưa hiển thị số lượng đã chọn, và xóa
         setTimeout(() => {
-          // update-begin--author:liaozhiyang---date:20260120--for：【issues/9275】用户组件第二次点击取消时勾选值还是回显了
+          // update-begin--author:liaozhiyang---date:20260120--for：【issues/9275] Component người dùng khi nhấn hủy lần thứ hai thì giá trị đã tích chọn vẫn hiển thị lại
           let selectedData = selectValues['value'];
           if (isArray(selectedData)) {
             selectedData = cloneDeep(selectedData);
           }
-          // update-end--author:liaozhiyang---date:20260120--for：【issues/9275】用户组件第二次点击取消时勾选值还是回显了
+          // update-end--author:liaozhiyang---date:20260120--for：【issues/9275] Component người dùng khi nhấn hủy lần thứ hai thì giá trị đã tích chọn vẫn hiển thị lại
           if (tableRef.value) {
             tableRef.value.setSelectedRowKeys(selectedData || []);
           }
         }, 800);
       });
       const attrs = useAttrs();
-      //表格配置
+      //Cấu hình bảng
       const config = {
         canResize: false,
         bordered: true,
@@ -139,8 +139,8 @@
         getBindValue,
         emit
       );
-      // 【修复】params 是 props 一次性快照场景改为 watch 跟随 props.params 同步，
-      // 避免父组件切换部门后 searchInfo 仍指向首次捕获的旧引用
+      // [Sửa lỗi]params là cảnh snapshot một lần của props được đổi sang watch để theo dõi props.params đồng bộ,
+      // Tránh việc sau khi component cha chuyển phòng ban, searchInfo vẫn trỏ tới tham chiếu cũ được bắt lần đầu
       const searchInfo = ref<Recordable>(props.params ?? {});
       watch(
         () => props.params,
@@ -149,14 +149,14 @@
         },
         { deep: true, immediate: true }
       );
-      // 代码逻辑说明: 【issues/657】右侧选中列表删除无效
+      // Giải thích logic mã: 【issues/657] xóa trong danh sách đã chọn bên phải không có hiệu lực
       watch(checkedKeys, (newVal) => {
-        // 代码逻辑说明: null指针异常导致控制台报错页面不显示------------
+        // Giải thích logic mã: nullLỗi con trỏ null khiến console báo lỗi, trang không hiển thị------------
         if(tableRef.value){
           tableRef.value.setSelectedRowKeys(newVal);
         }
       });
-      //查询form
+      //Truy vấnform
       const formConfig = {
         baseColProps: {
           xs: 24,
@@ -166,7 +166,7 @@
           xl: 6,
           xxl: 6,
         },
-        // 代码逻辑说明: VUEN-1086 【移动端】用户选择 查询按钮 效果不好 列表展示没有滚动条---查询表单按钮的栅格布局和表单的保持一致
+        // Giải thích logic mã: VUEN-1086 [Mobile] Chọn người dùng, nút tìm kiếm hiệu quả không tốt, danh sách hiển thị không có thanh cuộn---Bố cục lưới của nút biểu mẫu truy vấn giữ nhất quán với biểu mẫu
         actionColOptions: {
           xs: 24,
           sm: 8,
@@ -177,12 +177,12 @@
         },
         schemas: [
           {
-            label: '账号',
+            label: 'Tài khoản',
             field: 'username',
             component: (hasCustomApi.value && !props.customApiJInput) ? 'Input' : 'JInput',
           },
           {
-            label: '姓名',
+            label: 'Họ tên',
             field: 'realname',
             component: (hasCustomApi.value && !props.customApiJInput) ? 'Input' : 'JInput',
           },
@@ -191,26 +191,26 @@
 
         ...props.customFormConfig,
       };
-      //定义表格列
+      //Định nghĩa cột bảng
       const columns = props.customTableColumns?.length ? props.customTableColumns : [
         {
-          title: '用户账号',
+          title: 'Tài khoản người dùng',
           dataIndex: 'username',
           width: 120,
           align: 'left',
         },
         {
-          title: '用户姓名',
+          title: 'Họ tên người dùng',
           dataIndex: 'realname',
           width: 120,
         },
         {
-          title: '性别',
+          title: 'Giới tính',
           dataIndex: 'sex_dictText',
           width: 50,
         },
         {
-          title: '手机号码',
+          title: 'Số điện thoại',
           dataIndex: 'phone',
           width: 120,
           customRender:( { record, text })=>{
@@ -221,7 +221,7 @@
           }
         },
         {
-          title: '邮箱',
+          title: 'Email',
           dataIndex: 'email',
           customRender:( { record, text })=>{
             if(record.izHideContact && record.izHideContact === '1'){
@@ -232,12 +232,12 @@
           // width: 40,
         },
         {
-          title: '状态',
+          title: 'Trạng thái',
           dataIndex: 'status_dictText',
           width: 80,
         },
       ];
-      //已选择的table信息
+      //Thông tin table đã chọn
       const selectedTable = {
         pagination: false,
         showIndexColumn: false,
@@ -248,12 +248,12 @@
         rowKey: 'id',
         columns: [
           {
-            title: '用户姓名',
+            title: 'Họ tên người dùng',
             dataIndex: 'realname',
             width: 40,
           },
           {
-            title: '操作',
+            title: 'Thao tác',
             dataIndex: 'action',
             align: 'center',
             width: 40,
@@ -262,19 +262,19 @@
         ],
       };
       /**
-       * 确定选择
+       * Xác nhận lựa chọn
        */
       function handleOk() {
         getSelectResult((options, values) => {
-          //回传选项和已选择的值
+          //Trả về tùy chọn và giá trị đã chọn
           emit('getSelectResult', options, values);
-          //关闭弹窗
+          //Đóng popup
           closeModal();
         });
       }
       
       /**
-       * 用户返回结果逻辑查询
+       * Truy vấn logic kết quả trả về của người dùng
        */
       function afterFetch(record) {
         let excludeList = props.excludeUserIdList;
@@ -282,7 +282,7 @@
           return record;
         }
         let arr:any[] = [];
-        //如果存在过滤用户id集合，并且后台返回的数据不为空
+        //Nếu tồn tại tập hợp id người dùng cần lọc, và dữ liệu backend trả về không rỗng
         if(excludeList.length>0 && record && record.length>0){
           for(let item of record){
             if(excludeList.indexOf(item.id)<0){
@@ -293,17 +293,17 @@
         }
         return record;
       }
-      // 代码逻辑说明: 【QQYUN-9366】用户选择组件取消和关闭会把选择数据带入
+      // Giải thích logic mã: 【QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
       const handleCancel = () => {
         emit('close');
       };
 
-      // 代码逻辑说明: 【TV360X-305】小屏幕展示10条
+      // Giải thích logic mã: 【TV360X-305] màn hình nhỏ hiển thị 10 dòng
       const clientHeight = document.documentElement.clientHeight * 200;
       maxHeight.value = clientHeight > 600 ? 600 : clientHeight;
 
       /**
-       * 请求之前根据创建时间排序
+       * Sắp xếp theo thời gian tạo trước khi gửi yêu cầu
        *
        * @param params
        */

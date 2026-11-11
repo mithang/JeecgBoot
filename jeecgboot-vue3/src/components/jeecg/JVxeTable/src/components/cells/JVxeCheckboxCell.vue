@@ -15,26 +15,26 @@
     props: useJVxeCompProps(),
     setup(props: JVxeComponent.Props) {
       const { innerValue, cellProps, originColumn, scrolling, handleChangeCommon } = useJVxeComponent(props);
-      // 是否启用边框
+      // Có bật viền không
       const bordered = computed(() => !!props.renderOptions.bordered);
-      // box 类名
+      // box Tên class
       const boxClass = computed(() => {
         return {
           'j-vxe-checkbox': true,
           'no-animation': scrolling.value,
         };
       });
-      // box 行内样式
+      // box Kiểu dáng nội tuyến
       const boxStyle = computed(() => {
         const style = {};
-        // 如果有边框且未设置align属性，就强制居中
+        // Nếu có viền và chưa thiết lập thuộc tính align thì sẽ ép căn giữa
         if (bordered.value && !originColumn.value.align) {
           style['text-align'] = 'center';
         }
         return style;
       });
 
-      // onChange 事件
+      // onChange Sự kiện
       function handleChange(event) {
         handleChangeCommon(event.target.checked);
       }
@@ -48,7 +48,7 @@
       };
     },
 
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: {
       switches: {
         visible: true,
@@ -56,7 +56,7 @@
       getValue(value, ctx) {
         let { context } = ctx!;
         let { originColumn } = context;
-        // 处理 customValue
+        // Xử lý customValue
         if (isArray(originColumn.value.customValue)) {
           let customValue = getCustomValue(originColumn.value);
           if (isBoolean(value)) {
@@ -71,7 +71,7 @@
       setValue(value, ctx) {
         let { context } = ctx!;
         let { originColumn } = context;
-        // 判断是否设定了customValue（自定义值）
+        // Kiểm tra xem có đặt customValue (giá trị tùy chỉnh) hay không
         if (isArray(originColumn.value.customValue)) {
           let customValue = getCustomValue(originColumn.value);
           return neverNull(value).toString() === customValue[0].toString();
@@ -106,7 +106,7 @@
 </script>
 
 <style lang="less">
-  // 关闭动画，防止滚动时动态赋值出现问题
+  // Tắt animation, tránh lỗi khi gán giá trị động lúc cuộn
   .j-vxe-checkbox.no-animation {
     .ant-checkbox-inner,
     .ant-checkbox-inner::after {

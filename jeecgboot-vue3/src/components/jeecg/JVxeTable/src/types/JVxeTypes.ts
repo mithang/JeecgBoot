@@ -1,14 +1,14 @@
-/** 组件类型 */
+/** Loại component */
 export enum JVxeTypes {
-  // 行号列
+  // Cột số hàng
   rowNumber = 'row-number',
-  // 选择列
+  // Chọn cột
   rowCheckbox = 'row-checkbox',
-  // 单选列
+  // Cột chọn đơn
   rowRadio = 'row-radio',
-  // 展开列
+  // Cột mở rộng
   rowExpand = 'row-expand',
-  // 上下排序
+  // Sắp xếp lên/xuống
   rowDragSort = 'row-drag-sort',
 
   input = 'input',
@@ -20,50 +20,50 @@ export enum JVxeTypes {
   time = 'time',
   checkbox = 'checkbox',
   upload = 'upload',
-  // 下拉搜索
+  // Tìm kiếm trong dropdown
   selectSearch = 'select-search',
-  // 下拉多选
+  // Danh sách thả xuống chọn nhiều
   selectMultiple = 'select-multiple',
-  // 进度条
+  // Thanh tiến độ
   progress = 'progress',
-  //部门选择
+  //Chọn phòng ban
   departSelect = 'depart-select',
-  //用户选择
+  //Chọn người dùng
   userSelect = 'user-select',
 
-  // 拖轮Tags（暂无用）
-  tags = 'tags', // TODO 待实现
+  // Tags kéo thả (tạm thời chưa dùng)
+  tags = 'tags', // TODO Chưa triển khai
 
   slot = 'slot',
   normal = 'normal',
   hidden = 'hidden',
 
-  // 以下为自定义组件
+  // Dưới đây là các component tùy chỉnh
   popup = 'popup',
-  // update-begin--author:liaozhiyang---date:20260507---for：【QQYUN-7961】vxetable子表支持popup字典
+  // update-begin--author:liaozhiyang---date:20260507---for：【QQYUN-7961]Bảng con vxetable hỗ trợ danh mục popup
   popupDict = 'popupDict',
-  // update-end--author:liaozhiyang---date:20260507---for：【QQYUN-7961】vxetable子表支持popup字典
+  // update-end--author:liaozhiyang---date:20260507---for：【QQYUN-7961]Bảng con vxetable hỗ trợ danh mục popup
   selectDictSearch = 'selectDictSearch',
   radio = 'radio',
   image = 'image',
   file = 'file',
-  // 省市区
+  // Tỉnh/Thành/Quận huyện
   pca = 'pca',
-  // 关联记录
+  // Bản ghi liên kết
   linkTable = 'link-table',
-  // update-begin--author:liaozhiyang---date:20260413---for:【issues/7633】online子表支持分类字典树，自定义树
-  // 自定义树控件
+  // update-begin--author:liaozhiyang---date:20260413---for:【issues/7633] Bảng con online hỗ trợ cây danh mục phân loại, cây tùy chỉnh
+  // Control cây tùy chỉnh
   treeSelect = 'sel-tree',
-  // 分类字典树
+  // Cây từ điển phân loại
   catTreeSelect = 'cat-tree',
-  // update-end--author:liaozhiyang---date:20260413---for:【issues/7633】online子表支持分类字典树，自定义树
+  // update-end--author:liaozhiyang---date:20260413---for:【issues/7633] Bảng con online hỗ trợ cây danh mục phân loại, cây tùy chỉnh
 }
 
-// 为了防止和 vxe 内置的类型冲突，所以加上一个前缀
-// 前缀是自动加的，代码中直接用就行（JVxeTypes.input）
+// Để tránh xung đột với kiểu có sẵn của vxe nên thêm một tiền tố
+// Tiền tố được tự động thêm, dùng trực tiếp trong mã là được (JVxeTypes.input）
 export const JVxeTypePrefix = 'j-';
 
-/** VxeTable 渲染类型 */
+/** VxeTable Loại render */
 export enum JVxeRenderType {
   editer = 'editer',
   spaner = 'spaner',

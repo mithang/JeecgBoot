@@ -7,7 +7,7 @@ import { isNumber, isObject } from '/@/utils/is';
 const { t } = useI18n();
 
 /**
- * @description: 生成placeholder
+ * @description: Tạoplaceholder
  */
 export function createPlaceholderMessage(component: ComponentType) {
   if (component.includes('Input') || component.includes('Complete')) {
@@ -23,14 +23,14 @@ export function createPlaceholderMessage(component: ComponentType) {
     component.includes('Radio') ||
     component.includes('Switch')
   ) {
-    // return `请选择${label}`;
+    // return `Vui lòng chọn${label}`;
     return t('common.chooseText');
   }
-  //update-begin---author:liaozhiyang ---date:20260518  for：[issues/9638]BasicForm里使用JUpload且必填时验证总是提示未上传，补Upload类必填提示前缀-----------
+  //update-begin---author:liaozhiyang ---date:20260518  for：[issues/9638]BasicFormTrong đó dùng JUpload và khi bắt buộc thì kiểm chứng luôn nhắc chưa tải lên, bổ sung tiền tố nhắc bắt buộc của loại Upload-----------
   if (component.includes('Upload')) {
     return t('common.uploadText');
   }
-  //update-end---author:liaozhiyang ---date:20260518  for：[issues/9638]BasicForm里使用JUpload且必填时验证总是提示未上传，补Upload类必填提示前缀-----------
+  //update-end---author:liaozhiyang ---date:20260518  for：[issues/9638]BasicFormTrong đó dùng JUpload và khi bắt buộc thì kiểm chứng luôn nhắc chưa tải lên, bổ sung tiền tố nhắc bắt buộc của loại Upload-----------
   return '';
 }
 
@@ -41,7 +41,7 @@ function genType() {
 }
 
 export function setComponentRuleType(rule: ValidationRule, component: ComponentType, valueFormat: string) {
-  //https://github.com/vbenjs/vue-vben-admin/pull/3082 github修复原文
+  //https://github.com/vbenjs/vue-vben-admin/pull/3082 githubVăn bản gốc đã sửa
   if (Reflect.has(rule, 'type')) {
     return;
   }
@@ -73,11 +73,11 @@ export function handleInputNumberValue(component?: ComponentType, val?: any) {
 /** 
 *liaozhiyang
 *2023-12-26
-*某些组件的传值需要把字符串类型转成数值类型
+*Một số component truyền giá trị cần chuyển kiểu chuỗi thành kiểu số
 */ 
 export function handleInputStringValue(component?: ComponentType, val?: any) {
   if (!component) return val;
-  // 代码逻辑说明: 【TV360X-13】InputNumber设置精确3位小数传入''变成了0.00
+  // Giải thích logic mã: 【TV360X-13] InputNumber thiết lập chính xác 3 chữ số thập phân khi truyền vào''đã trở thành0.00
   if (['InputNumber'].includes(component) && typeof val === 'string' && val != '') {
     return Number(val);
   }
@@ -85,6 +85,6 @@ export function handleInputStringValue(component?: ComponentType, val?: any) {
 }
 
 /**
- * 时间字段
+ * Trường thời gian
  */
 export const dateItemType = genType();

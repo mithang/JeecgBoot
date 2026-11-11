@@ -6,14 +6,14 @@
           <SelectedUserItem v-if="index < maxSelectCount" :info="item" @unSelect="unSelect" query />
         </template>
       </template>
-      <span v-else style="height: 30px; line-height: 30px; display: inline-block; margin-left: 7px; color: #bfbfbf">请选择</span>
+      <span v-else style="height: 30px; line-height: 30px; display: inline-block; margin-left: 7px; color: #bfbfbf">Vui lòng chọn</span>
       <div v-if="ellipsisInfo.status" class="user-selected-item">
         <div class="user-select-ellipsis">
           <span style="color: red">+{{ ellipsisInfo.count }}...</span>
         </div>
       </div>
     </div>
-    <RoleSelectModal :appId="currentAppId" :multi="multi" :getContainer="getContainer" title="选择组织角色" @register="registerRoleModal" @selected="onSelected" />
+    <RoleSelectModal :appId="currentAppId" :multi="multi" :getContainer="getContainer" title="Chọn vai trò tổ chức" @register="registerRoleModal" @selected="onSelected" />
   </div>
 </template>
 
@@ -39,7 +39,7 @@
         type: Boolean,
         default: false,
       },
-      // 代码逻辑说明: 【issues/8078】角色选择组件点击文字部分会一直选中
+      // Giải thích logic mã: 【issues/8078] Component chọn vai trò: bấm vào phần chữ sẽ luôn bị chọn
       maxSelectCount: {
         type: Number,
         default: 2,
@@ -121,11 +121,11 @@
         emit('update:value', str);
         emit('change', str);
         formItemContext.onFieldChange();
-        console.log('选中数据', str);
+        console.log('Dữ liệu đã chọn', str);
       }
 
       function onSelected(_v, values) {
-        console.log('角色选择完毕：', values);
+        console.log('Đã chọn vai trò xong:', values);
         loading.value = false;
         if (values && values.length > 0) {
           selectedList.value = values;
@@ -136,7 +136,7 @@
         closeRoleModal();
       }
 
-      // 目前仅用于数据重新加载的一个状态
+      // Hiện tại chỉ dùng cho một trạng thái tải lại dữ liệu
       const currentAppId = ref('');
       const userStore = useUserStore();
       watchEffect(() => {
@@ -165,7 +165,7 @@
       );
 
       /**
-       * 获取角色列表
+       * Lấy danh sách vai trò
        * @param ids
        */
       async function getRoleList(ids) {
@@ -174,7 +174,7 @@
           [props.store]: ids,
           pageSize: 200
         };
-        // 特殊条件处理（因为后台实体是roleCode，所以折中一下，不能直接改，会出问题）
+        // Xử lý điều kiện đặc biệt (vì thực thể phía backend là roleCode, nên xử lý thỏa hiệp, không thể sửa trực tiếp, sẽ phát sinh vấn đề)
         if (props.store === 'code') {
           params.roleCode = ids;
         }
@@ -194,7 +194,7 @@
                 selectType: 'sys_role',
               });
             }
-            // 根据 ids 的顺序对 arr 进行排序
+            // Sắp xếp arr theo thứ tự của ids
             if (props.store === 'code') {
               arr.sort((a, b) => ids.indexOf(a.code) - ids.indexOf(b.code));
             } else {

@@ -1,8 +1,8 @@
-/* JVxeTable 行编辑 权限 */
+/* JVxeTable Quyền chỉnh sửa hàng */
 import { usePermissionStoreWithOut } from '/@/store/modules/permission';
 
 /**
- * JVxe 专用，获取权限
+ * JVxe Dành riêng cho JVxe, lấy quyền hạn
  * @param prefix
  */
 export function getJVxeAuths(prefix) {
@@ -13,20 +13,20 @@ export function getJVxeAuths(prefix) {
   if (!prefix || prefix.length == 0) {
     return authsMap;
   }
-  // 将所有vxe用到的权限取出来
+  // Lấy ra tất cả quyền mà vxe sử dụng
   for (let auth of allAuthList) {
     if (auth.status == '1' && (auth.action || '').startsWith(prefix)) {
       authsMap.set(auth.action, { ...auth, isAuth: false });
     }
   }
-  // 设置是否已授权
+  // Đặt đã được ủy quyền hay chưa
   for (let auth of authList) {
     let getAuth = authsMap.get(auth.action);
     if (getAuth != null) {
       getAuth.isAuth = true;
     }
   }
-  // 代码逻辑说明: VUEN-1162 子表按钮没控制
+  // Giải thích logic mã: VUEN-1162 Nút bảng con chưa được kiểm soát
   let onlineButtonAuths = permissionStore.getOnlineSubTableAuth(prefix);
   if (onlineButtonAuths && onlineButtonAuths.length > 0) {
     for (let auth of onlineButtonAuths) {
@@ -37,7 +37,7 @@ export function getJVxeAuths(prefix) {
 }
 
 /**
- * 获取前缀
+ * Lấy tiền tố
  * @param prefix
  */
 export function getPrefix(prefix: string) {

@@ -11,7 +11,7 @@ import { JVxeComponent } from '../types/JVxeComponent';
 import { useValidateRules } from './useValidateRules';
 import { JVxeTableMethods } from '../types';
 
-// handle 方法参数
+// handle Tham số phương thức
 export interface HandleArgs {
   props: JVxeTableProps;
   slots: any;
@@ -25,36 +25,36 @@ export interface HandleArgs {
 
 export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: JVxeTableMethods, slots) {
   data.vxeColumns = computed(() => {
-    // linkageConfig变化时也需要执行
+    // linkageConfigKhi thay đổi cũng cần thực thi
     const linkageConfig = toRaw(props.linkageConfig);
     if (linkageConfig) {
       // console.log(linkageConfig);
     }
     let columns: JVxeColumn[] = [];
     if (isArray(props.columns)) {
-      // handle 方法参数
+      // handle Tham số phương thức
       const args: HandleArgs = { props, slots, data, methods, columns };
       let seqColumn, selectionColumn, expandColumn, dragSortColumn;
 
       const handleColumn = (column: JVxeColumn, container: JVxeColumn[]) => {
-        // 排除未授权的列 1 = 显示/隐藏； 2 = 禁用
+        // Loại trừ cột chưa được cấp quyền 1 = Hiển thị/Ẩn; 2 = Vô hiệu hóa
         let auth = methods.getColAuth(column.key);
         if (auth?.type == '1' && !auth.isAuth) {
           return;
         } else if (auth?.type == '2' && !auth.isAuth) {
           column.disabled = true;
         }
-        // type 不填，默认为 normal
+        // type Không nhập, mặc định là normal
         if (column.type == null || isEmpty(column.type)) {
           column.type = JVxeTypes.normal;
         }
         let col: JVxeColumn = cloneDeep(column);
-        // 处理隐藏列
+        // Xử lý cột ẩn
         if (col.type === JVxeTypes.hidden) {
           return handleInnerColumn(args, col, handleHiddenColumn);
         }
-        // 处理子级列
-        // 判断是否是分组列，如果当前是父级，则无需处理 render
+        // Xử lý cột con
+        // Kiểm tra xem có phải là cột nhóm hay không, nếu hiện tại là cấp cha thì không cần xử lý render
         if (Array.isArray(col.children) && col.children.length > 0) {
           const children: JVxeColumn[] = [];
           col.children.forEach((child: JVxeColumn) => handleColumn(child, children));
@@ -62,7 +62,7 @@ export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: 
           container.push(col);
           return;
         }
-        // 组件未注册，自动设置为 normal
+        // Component chưa được đăng ký, tự động đặt thành normal
         if (!isRegistered(col.type)) {
           col.type = JVxeTypes.normal;
         }
@@ -76,12 +76,12 @@ export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: 
           listeners: {
             trigger: (name, event) => methods.trigger(name, event),
             valueChange: (event) => methods.trigger('valueChange', event),
-            /** 重新排序行 */
+            /** Sắp xếp lại hàng */
             rowResort: (event) => {
               methods.doSort(event.oldIndex, event.newIndex);
               methods.trigger('dragged', event);
             },
-            /** 在当前行下面插入一行 */
+            /** Chèn một hàng bên dưới hàng hiện tại */
             rowInsertDown: (rowIndex) => methods.insertRows({}, rowIndex + 1),
           },
         };
@@ -110,7 +110,7 @@ export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: 
       handleInnerColumn(args, selectionColumn, handleSelectionColumn);
       handleInnerColumn(args, expandColumn, handleExpandColumn);
       handleInnerColumn(args, dragSortColumn, handleDragSortColumn, true);
-      // update-begin--author:liaozhiyang---date:2024-05-30---for【TV360X-371】不可编辑组件必填缺少*号
+      // update-begin--author:liaozhiyang---date:2024-05-30---for【TV360X-371] component không thể chỉnh sửa thiếu dấu * bắt buộc*dấu
       customComponentAddStar(columns);
     }
     return columns;
@@ -120,7 +120,7 @@ export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: 
 /**
  * 2024-05-30
  * liaozhiyang
- * 不可编辑组件必填通过title人为加*号
+ * Component không thể chỉnh sửa: trường bắt buộc thêm dấu * thủ công qua title*dấu
  */
 function customComponentAddStar(columns) {
   columns.forEach((column) => {
@@ -141,16 +141,16 @@ function customComponentAddStar(columns) {
         ].includes(type)
       ) {
         if (validateRules.find((item) => item.required)) {
-          // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-703】用户、部门、图片、文件、开关的必填标识显示非红色
+          // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-703]Dấu bắt buộc của người dùng, phòng ban, hình ảnh, tệp, công tắc hiển thị không phải màu đỏ
           column.headerClassName = 'jvxe-col--required';
-          // update-end--author:liaozhiyang---date:20260807---for:【LHZP-703】用户、部门、图片、文件、开关的必填标识显示非红色
+          // update-end--author:liaozhiyang---date:20260807---for:【LHZP-703]Dấu bắt buộc của người dùng, phòng ban, hình ảnh, tệp, công tắc hiển thị không phải màu đỏ
         }
       }
     }
   });
 }
 
-/** 处理内置列 */
+/** Xử lý cột tích hợp */
 function handleInnerColumn(args: HandleArgs, col: JVxeColumn, handler: (args: HandleArgs) => void, assign?: boolean) {
   let renderOptions = col?.editRender || col?.cellRender;
   return handler({
@@ -161,7 +161,7 @@ function handleInnerColumn(args: HandleArgs, col: JVxeColumn, handler: (args: Ha
 }
 
 /**
- * 处理隐藏列
+ * Xử lý cột ẩn
  */
 function handleHiddenColumn({ col, columns }: HandleArgs) {
   col!.params = cloneDeep(col);
@@ -172,10 +172,10 @@ function handleHiddenColumn({ col, columns }: HandleArgs) {
 }
 
 /**
- * 处理行号列
+ * Xử lý cột số thứ tự hàng
  */
 function handleSeqColumn({ props, col, columns }: HandleArgs) {
-  // 判断是否开启了行号列
+  // Kiểm tra xem có bật cột số hàng không
   if (props.rowNumber) {
     let column = {
       type: 'seq',
@@ -185,7 +185,7 @@ function handleSeqColumn({ props, col, columns }: HandleArgs) {
       fixed: props.rowNumberFixed,
       align: 'center',
     };
-    // 代码逻辑说明: 【QQYUN-8405】vxetable支持序号是否固定（移动端需要）
+    // Giải thích logic mã: 【QQYUN-8405]vxetable hỗ trợ cố định số thứ tự hay không (cần cho mobile)
     if (props.rowNumberFixed === 'none') {
       delete column.fixed;
     }
@@ -198,13 +198,13 @@ function handleSeqColumn({ props, col, columns }: HandleArgs) {
 }
 
 /**
- * 处理可选择列
+ * Xử lý cột có thể chọn
  */
 function handleSelectionColumn({ props, data, col, columns }: HandleArgs) {
-  // 判断是否开启了可选择行
-  // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1002】详情页面行编辑不显示checkbox
+  // Kiểm tra xem có bật hàng có thể chọn không
+  // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1002] trang chi tiết không hiển thị chỉnh sửa hàngcheckbox
   if (props.rowSelection && props.disabled == false) {
-    // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-1002】详情页面行编辑不显示checkbox
+    // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-1002] trang chi tiết không hiển thị chỉnh sửa hàngcheckbox
     let width = 45;
     if (data.statistics.has && !props.rowExpand && !props.dragSort) {
       width = 60;
@@ -215,7 +215,7 @@ function handleSelectionColumn({ props, data, col, columns }: HandleArgs) {
       fixed: 'left',
       align: 'center',
     };
-    // 代码逻辑说明: 【issues/1162】JVxeTable列过长（出现横向滚动条）时无法拖拽排序
+    // Giải thích logic mã: 【issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
     if (props.rowSelectionFixed === 'none') {
       delete column.fixed;
     }
@@ -228,10 +228,10 @@ function handleSelectionColumn({ props, data, col, columns }: HandleArgs) {
 }
 
 /**
- * 处理可展开行
+ * Xử lý hàng có thể mở rộng
  */
 function handleExpandColumn({ props, data, col, columns }: HandleArgs) {
-  // 是否可展开行
+  // Có thể mở rộng hàng không
   if (props.rowExpand) {
     let width = 40;
     if (data.statistics.has && !props.dragSort) {
@@ -253,9 +253,9 @@ function handleExpandColumn({ props, data, col, columns }: HandleArgs) {
   }
 }
 
-/** 处理可排序列 */
+/** Xử lý cột có thể sắp xếp */
 function handleDragSortColumn({ props, data, col, columns, renderOptions }: HandleArgs) {
-  // 是否可拖动排序
+  // Có thể kéo thả để sắp xếp không
   if (props.dragSort) {
     let width = 40;
     if (data.statistics.has) {
@@ -266,14 +266,14 @@ function handleDragSortColumn({ props, data, col, columns, renderOptions }: Hand
       width: width,
       fixed: 'left',
       align: 'center',
-      // 代码逻辑说明: 【QQYUN-8785】online表单列位置的id未做限制，拖动其他列到id列上面，同步数据库时报错
+      // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
       params: {
         insertRow: props.insertRow,
         notAllowDrag: props.notAllowDrag,
         ...col?.params,
       },
     };
-    // 代码逻辑说明: 【issues/1162】JVxeTable列过长（出现横向滚动条）时无法拖拽排序
+    // Giải thích logic mã: 【issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
     if (props.dragSortFixed === 'none') {
       delete column.fixed;
     }
@@ -294,7 +294,7 @@ function handleDragSortColumn({ props, data, col, columns, renderOptions }: Hand
   }
 }
 
-/** 处理自定义组件列 */
+/** Xử lý cột component tùy chỉnh */
 function handlerCol(args: HandleArgs) {
   const { props, col, columns, enhanced } = args;
   if (!col) return;
@@ -302,7 +302,7 @@ function handlerCol(args: HandleArgs) {
   col.field = col.key;
   delete col.type;
   let renderName = 'cellRender';
-  // 渲染选项
+  // Tùy chọn render
   let $renderOptions: any = { name: JVxeTypePrefix + type };
   if (enhanced?.switches.editRender) {
     if (!(enhanced.switches.visible || props.alwaysEdit)) {
@@ -311,7 +311,7 @@ function handlerCol(args: HandleArgs) {
     // $renderOptions.type = (enhanced.switches.visible || props.alwaysEdit) ? 'visible' : 'default'
   }
   col[renderName] = $renderOptions;
-  // 代码逻辑说明: 【QQYUN-5806】js增强改变下拉搜索options（添加customOptions为true不读字典，走自己的options）
+  // Giải thích logic mã: 【QQYUN-5806]Mã tăng cường js thay đổi options tìm kiếm của dropdown (thêm customOptions là true thì không đọc danh mục, đi theo options của chính nó)
   !col.params.customOptions && handleDict(args);
   handleRules(args);
   handleStatistics(args);
@@ -326,7 +326,7 @@ function handlerCol(args: HandleArgs) {
     Object.assign(col.cellRender, args.renderOptions);
   }
 
-  // slot 类型列：通过 titlePrefix 在表头显示编辑图标（不能用 editRender，否则非编辑状态下 cellRender 会被绕过）
+  // slot Cột loại slot: hiển thị biểu tượng chỉnh sửa ở tiêu đề bảng thông qua titlePrefix (không được dùng editRender, nếu không cellRender sẽ bị bỏ qua khi ở trạng thái không chỉnh sửa)
   if (col.params.type === JVxeTypes.slot && col.cellRender && !col.editRender) {
     col.titlePrefix = { icon: 'vxe-table-icon-edit' };
   }
@@ -335,16 +335,16 @@ function handlerCol(args: HandleArgs) {
 }
 
 /**
- * 处理字典
+ * Xử lý từ điển
  */
 async function handleDict({ col, methods }: HandleArgs) {
   if (col && col.params.dictCode) {
-    /** 加载数据字典并合并到 options */
+    /** Tải từ điển dữ liệu và gộp vào options */
     try {
-      // 查询字典
+      // Tìm kiếm danh mục
       if (!isPromise(col.params.optionsPromise)) {
         col.params.optionsPromise = new Promise(async (resolve) => {
-          // 代码逻辑说明: VUEN-1180 【代码生成】子表不支持带条件？
+          // Giải thích logic mã: VUEN-1180 [Sinh mã] Bảng con không hỗ trợ kèm điều kiện?
           let dictCodeString = col.params.dictCode;
           if (dictCodeString) {
             dictCodeString = encodeURI(dictCodeString);
@@ -352,7 +352,7 @@ async function handleDict({ col, methods }: HandleArgs) {
           const dictOptions: any = await initDictOptions(dictCodeString);
           let options = col.params.options ?? [];
           dictOptions.forEach((dict) => {
-            // 过滤重复数据
+            // Lọc dữ liệu trùng lặp
             if (options.findIndex((o) => o.value === dict.value) === -1) {
               options.push(dict);
             }
@@ -364,7 +364,7 @@ async function handleDict({ col, methods }: HandleArgs) {
       await nextTick();
       await methods.getXTable().updateData();
     } catch (e) {
-      console.group(`[JVxeTable] 查询字典 "${col.params.dictCode}" 时发生异常！`);
+      console.group(`[JVxeTable] Tìm kiếm danh mục "${col.params.dictCode}"  đã xảy ra ngoại lệ!`);
       console.warn(e);
       console.groupEnd();
     }
@@ -372,7 +372,7 @@ async function handleDict({ col, methods }: HandleArgs) {
 }
 
 /**
- * 处理校验
+ * Xử lý kiểm chứng
  */
 function handleRules(args: HandleArgs) {
   if (isArray(args.col?.validateRules)) {
@@ -381,10 +381,10 @@ function handleRules(args: HandleArgs) {
 }
 
 /**
- * 处理统计列
+ * Xử lý cột thống kê
  */
 function handleStatistics({ col, data }: HandleArgs) {
-  // sum = 求和、average = 平均值
+  // sum = Tổng,average = Giá trị trung bình
   if (col && isArray(col.statistics)) {
     data.statistics.has = true;
     col.statistics.forEach((item) => {
@@ -399,10 +399,10 @@ function handleStatistics({ col, data }: HandleArgs) {
 }
 
 /**
- * 处理插槽
+ * Xử lý slot
  */
 function handleSlots({ slots, col, renderOptions }: HandleArgs) {
-  // slot 组件特殊处理
+  // slot Xử lý đặc biệt cho component
   if (col && col.params.type === JVxeTypes.slot) {
     if (!isEmpty(col.slotName) && slots.hasOwnProperty(col.slotName)) {
       renderOptions.slot = slots[col.slotName];
@@ -410,11 +410,11 @@ function handleSlots({ slots, col, renderOptions }: HandleArgs) {
   }
 }
 
-/** 处理联动列 */
+/** Xử lý cột liên động */
 function handleLinkage({ data, col, renderOptions, methods }: HandleArgs) {
-  // 处理联动列，联动列只能作用于 select 组件
+  // Xử lý cột liên động, cột liên động chỉ tác dụng lên component select
   if (col && col.params.type === JVxeTypes.select && data.innerLinkageConfig != null) {
-    // 判断当前列是否是联动列
+    // Kiểm tra xem cột hiện tại có phải là cột liên động không
     if (data.innerLinkageConfig.has(col.key)) {
       renderOptions.linkage = {
         config: data.innerLinkageConfig.get(col.key),

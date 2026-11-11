@@ -1,4 +1,4 @@
-<!-- 省市县选择组件，在筛选中的用法 -->
+<!-- Component chọn Tỉnh/Thành/Quận huyện, cách dùng trong bộ lọc -->
 <template>
   <a-space :class="[prefixCls]" direction="vertical">
   </a-space>

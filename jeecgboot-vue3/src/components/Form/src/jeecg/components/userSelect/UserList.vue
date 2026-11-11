@@ -47,7 +47,7 @@
         type: Array,
         default: () => [],
       },
-      // 是否显示部门文本
+      // Có hiển thị văn bản phòng ban không
       depart: {
         type: Boolean,
         default: false,
@@ -86,7 +86,7 @@
 
       const departStyle = computed(() => {
         if (props.depart === true) {
-          // 如果显示部门信息
+          // Nếu hiển thị thông tin phòng ban
           return {
             flex: 1,
           };
@@ -99,7 +99,7 @@
 
       const nameStyle = computed(() => {
         if (props.depart === true) {
-          // 如果显示部门信息
+          // Nếu hiển thị thông tin phòng ban
           return {
             width: '200px',
           };
@@ -137,7 +137,7 @@
         e.preventDefault();
         e.stopPropagation();
       }
-//代码逻辑说明: 【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+//Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
 /*      function records2DataList() {
         let arr:any[] = [];
         let excludeList = props.excludeUserIdList;

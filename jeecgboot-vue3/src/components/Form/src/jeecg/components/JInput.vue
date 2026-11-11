@@ -23,20 +23,20 @@
     emits: ['change', 'update:value'],
     setup(props, { emit }) {
       const attrs = useAttrs();
-      //表单值
+      //Giá trị biểu mẫu
       const showText = ref('');
-      //绑定属性
+      //Thuộc tính liên kết
       const getBindValue = computed(() => {
         return omit(Object.assign({}, unref(props), unref(attrs)), ['value']);
       });
-      //监听类型变化
+      //Lắng nghe thay đổi loại
       watch(
         () => props.type,
         (val) => {
           val && backValue({ target: { value: unref(showText) } });
         }
       );
-      //监听value变化
+      //Lắng nghe thay đổi của value
       watch(
         () => props.value,
         () => {
@@ -46,7 +46,7 @@
       );
 
       /**
-       * 初始化数值
+       * Khởi tạo giá trị số
        */
       function initVal() {
         if (!props.value) {
@@ -55,7 +55,7 @@
           let text = props.value;
           switch (props.type) {
             case JInputTypeEnum.JINPUT_QUERY_LIKE:
-              //修复路由传参的值传送到jinput框被前后各截取了一位 #1336
+              //Sửa lỗi giá trị tham số route truyền vào ô jinput bị cắt mất một ký tự ở đầu và cuối #1336
               if (text.indexOf('*') != -1) {
                 text = text.substring(1, text.length - 1);
               }
@@ -76,7 +76,7 @@
       }
 
       /**
-       * 返回值
+       * Giá trị trả về
        */
       function backValue(e) {
         let text = e?.target?.value ?? '';
@@ -85,7 +85,7 @@
         }
         switch (props.type) {
           case JInputTypeEnum.JINPUT_QUERY_LIKE:
-            // 如果输入以 ! 开头，表示走 NE（不等于）查询，不再拼 * 走 LIKE
+            // Nếu nhập bắt đầu bằng ! Bắt đầu bằng, nghĩa là dùng truy vấn NE (không bằng), không ghép nữa * đi qua LIKE
             if (!text.startsWith('!')) {
               text = '*' + text + '*';
             }

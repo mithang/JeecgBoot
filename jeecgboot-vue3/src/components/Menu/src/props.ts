@@ -12,9 +12,9 @@ export const basicProps = {
     default: () => [],
   },
   collapsedShowTitle: propTypes.bool,
-  // 最好是4 倍数
+  // Tốt nhất là bội số của 4
   inlineIndent: propTypes.number.def(20),
-  // 菜单组件的mode属性
+  // Thuộc tính mode của component menu
   mode: {
     type: String as PropType<MenuMode>,
     default: MenuModeEnum.INLINE,

@@ -54,12 +54,12 @@
       formActionType: {
         type: Object as PropType<FormActionType>,
       },
-      // 代码逻辑说明: 【TV360X-857】解决禁用状态下触发校验
+      // Giải thích logic mã: 【TV360X-857] Giải quyết việc kích hoạt kiểm chứng ở trạng thái vô hiệu hóa
       clearValidate: {
         type: Function,
         default: null,
       },
-      // 代码逻辑说明: 【TV360X-1511】blur不生效
+      // Giải thích logic mã: 【TV360X-1511] blur không có hiệu lực
       formName: {
         type: String,
         default: '',
@@ -101,7 +101,7 @@
           componentProps = componentProps({ schema, tableAction, formModel, formActionType }) ?? {};
         }
         if (schema.component === 'Divider') {
-          // 代码逻辑说明: 【QQYUN-6603】分割线标题位置显示不正确---
+          // Giải thích logic mã: 【QQYUN-6603] Vị trí tiêu đề đường phân cách hiển thị không đúng---
           componentProps = Object.assign({ type: 'horizontal',orientation:'left', plain: true, }, componentProps);
         }
         return componentProps as Recordable;
@@ -109,7 +109,7 @@
 
       const getDisable = computed(() => {
         const { disabled: globDisabled } = props.formProps;
-        // 代码逻辑说明: 【TV360X-594】表单全局禁用则dynamicDisabled不生效
+        // Giải thích logic mã: 【TV360X-594]Biểu mẫu vô hiệu hóa toàn cục thì dynamicDisabled không có hiệu lực
         if (!!globDisabled) {
           return globDisabled;
         }
@@ -125,7 +125,7 @@
         return disabled;
       });
 
-      // 代码逻辑说明: 【QQYUN-8377】formSchema props支持动态修改
+      // Giải thích logic mã: 【QQYUN-8377]formSchema props hỗ trợ sửa động
       const getDynamicPropsValue = computed(() => {
         const { dynamicPropsVal, dynamicPropskey } = props.schema;
         if (dynamicPropskey == null) {
@@ -163,8 +163,8 @@
         isShow = isShow && itemIsAdvanced;
         return { isShow, isIfShow };
       }
-      // 代码逻辑说明: 【TV360X-434】validator校验执行两次
-      //update-begin---author:liaozhiyang ---date:20260518  for：[issues/9638]新增prevValueArr，值发生变化时强制重新执行validator，避免上传/输入后必填红色提示不消失-----------
+      // Giải thích logic mã: 【TV360X-434] validator kiểm chứng thực thi hai lần
+      //update-begin---author:liaozhiyang ---date:20260518  for：[issues/9638]Thêm mới prevValueArr, khi giá trị thay đổi thì bắt buộc thực thi lại validator, tránh việc tải lên/Sau khi nhập, nhắc nhở đỏ bắt buộc vẫn không biến mất-----------
       let vSwitchArr: any = [],
         prevValidatorArr: any = [],
         prevValueArr: any = [];
@@ -179,7 +179,7 @@
           prevValueArr.push(undefined);
           if (isFunction(fn)) {
             item.validator = (rule, value, callback) => {
-              // 100ms内不允许多次调用，除非值变了
+              // 100msTrong 100ms không cho phép gọi nhiều lần, trừ khi giá trị thay đổi
               const valueChanged = !Object.is(prevValueArr[index], value);
               if (vSwitchArr[index] || valueChanged) {
                 vSwitchArr[index] = false;
@@ -197,29 +197,29 @@
           }
         });
       };
-      //update-end---author:liaozhiyang ---date:20260518  for：[issues/9638]新增prevValueArr，值发生变化时强制重新执行validator，避免上传/输入后必填红色提示不消失-----------
+      //update-end---author:liaozhiyang ---date:20260518  for：[issues/9638]Thêm mới prevValueArr, khi giá trị thay đổi thì bắt buộc thực thi lại validator, tránh việc tải lên/Sau khi nhập, nhắc nhở đỏ bắt buộc vẫn không biến mất-----------
       function handleRules(): ValidationRule[] {
         const { rules: defRules = [], component, rulesMessageJoinLabel, label, dynamicRules, required, auth, field } = props.schema;
-        // 代码逻辑说明: 【TV360X-857】解决禁用状态下触发校验
+        // Giải thích logic mã: 【TV360X-857] Giải quyết việc kích hoạt kiểm chứng ở trạng thái vô hiệu hóa
         const { disabled: globDisabled } = props.formProps;
         const { disabled: itemDisabled = false } = unref(getComponentsProps);
         if (!!globDisabled || !!itemDisabled) {
           props.clearValidate(field);
           return [];
         }
-        // 代码逻辑说明: 【TV360X-842】必填项v-auth、show隐藏的情况下表单无法提交
+        // Giải thích logic mã: 【TV360X-842] Trường bắt buộcv-auth, trong trường hợp show bị ẩn thì biểu mẫu không thể gửi
         const { hasPermission } = usePermission();
         const { isShow } = getShow();
         if ((auth && !hasPermission(auth)) || !isShow) {
           return [];
         }
         if (isFunction(dynamicRules)) {
-          // 代码逻辑说明: 【issues/1244】标识了必填，但是必填标识没显示
+          // Giải thích logic mã: 【issues/1244] Đã đánh dấu bắt buộc, nhưng dấu bắt buộc không hiển thị
           const ruleArr = dynamicRules(unref(getValues)) as ValidationRule[];
           if (required) {
             ruleArr.unshift({ required: true });
           }
-          // 代码逻辑说明: 【TV360X-434】validator校验执行两次
+          // Giải thích logic mã: 【TV360X-434] validator kiểm chứng thực thi hai lần
           hijackValidator(ruleArr);
           return ruleArr;
         }
@@ -233,13 +233,13 @@
         function validator(rule: any, value: any) {
           const msg = rule.message || defaultMsg;
           if (value === undefined || isNull(value)) {
-            // 空值
+            // Giá trị rỗng
             return Promise.reject(msg);
           } else if (Array.isArray(value) && value.length === 0) {
-            // 数组类型
+            // Loại mảng
             return Promise.reject(msg);
           } else if (typeof value === 'string' && value.trim() === '') {
-            // 空字符串
+            // Chuỗi rỗng
             return Promise.reject(msg);
           } else if (
             typeof value === 'object' &&
@@ -250,7 +250,7 @@
             value.checked.length === 0 &&
             value.halfChecked.length === 0
           ) {
-            // 非关联选择的tree组件
+            // Component tree chọn không liên kết
             return Promise.reject(msg);
           }
           return Promise.resolve();
@@ -271,7 +271,7 @@
             rule.required = false;
           }
           if (component) {
-            //https://github.com/vbenjs/vue-vben-admin/pull/3082 github修复原文
+            //https://github.com/vbenjs/vue-vben-admin/pull/3082 githubVăn bản gốc đã sửa
             /*if (!Reflect.has(rule, 'type')) {
               rule.type = component === 'InputNumber' ? 'number' : 'string';
             }*/
@@ -291,7 +291,7 @@
         if (characterInx !== -1 && !rules[characterInx].validator) {
           rules[characterInx].message = rules[characterInx].message || t('component.form.maxTip', [rules[characterInx].max] as Recordable);
         }
-        // 代码逻辑说明: 【QQYUN-7495】pattern由字符串改成正则传递给antd（因使用InputNumber时发现正则无效）
+        // Giải thích logic mã: 【QQYUN-7495]pattern đổi từ chuỗi thành regex truyền cho antd (vì khi dùng InputNumber phát hiện regex không có hiệu lực)
         rules.forEach((item) => {
           if (typeof item.pattern === 'string') {
             try {
@@ -306,7 +306,7 @@
             }
           }
         });
-        // 代码逻辑说明: 【TV360X-434】validator校验执行两次
+        // Giải thích logic mã: 【TV360X-434] validator kiểm chứng thực thi hai lần
         hijackValidator(rules);
         return rules;
       }
@@ -315,7 +315,7 @@
         const { renderComponentContent, component, field, changeEvent = 'change', valueField, componentProps, dynamicRules, rules:defRules = [] } = props.schema;
 
         const isCheck = component && ['Switch', 'Checkbox'].includes(component);
-        // 代码逻辑说明: 【QQYUN-6679】input去空格
+        // Giải thích logic mã: 【QQYUN-6679] input loại bỏ khoảng trắng
         let isTrim = false;
         if (component === 'Input' && componentProps && componentProps.trim) {
           isTrim = true;
@@ -325,19 +325,19 @@
           const dyRules = isFunction(dynamicRules) ? dynamicRules(unref(getValues)) : [];
           return [...dyRules, ...defRules];
         };
-        // 代码逻辑说明: 【issues/752】表单校验dynamicRules 无法 使用失去焦点后校验 trigger: 'blur'
+        // Giải thích logic mã: 【issues/752]Kiểm chứng biểu mẫu dynamicRules không thể dùng kiểm chứng sau khi mất focus trigger: 'blur'
         const on = {
           [eventKey]: (...args: Nullable<Recordable>[]) => {
             const [e] = args;
             if (propsData[eventKey]) {
               propsData[eventKey](...args);
-              // 代码逻辑说明: 【issues/8791】js增强popup弹框的onlChange()没生效
+              // Giải thích logic mã: 【issues/8791] popup của js tăng cườngonlChange()không có hiệu lực
               if (eventKey == 'onPopUpChange') {
                 return;
               }
             }
             const target = e ? e.target : null;
-            // 代码逻辑说明: 【QQYUN-6679】input去空格
+            // Giải thích logic mã: 【QQYUN-6679] input loại bỏ khoảng trắng
             let value;
             if (target) {
               if (isCheck) {
@@ -349,10 +349,10 @@
               value = e;
             }
             props.setFormModel(field, value);
-            // 代码逻辑说明: 【TV360X-1511】blur不生效
+            // Giải thích logic mã: 【TV360X-1511] blur không có hiệu lực
             const findItem = getRules().find((item) => item?.trigger === 'blur');
             if (!findItem) {
-              // 代码逻辑说明: 【TV360X-341】有值之后必填校验不消失
+              // Giải thích logic mã: 【TV360X-341] Sau khi có giá trị, kiểm chứng bắt buộc không biến mất
               props.validateFields([field]).catch((_) => {});
             }
           },
@@ -373,7 +373,7 @@
           ...unref(getComponentsProps),
           disabled: unref(getDisable),
         };
-        // 代码逻辑说明: 【QQYUN-8377】formSchema props支持动态修改
+        // Giải thích logic mã: 【QQYUN-8377]formSchema props hỗ trợ sửa động
         const dynamicPropskey = props.schema.dynamicPropskey;
         if (dynamicPropskey) {
           propsData[dynamicPropskey] = unref(getDynamicPropsValue);
@@ -382,10 +382,10 @@
         // const isCreatePlaceholder = !propsData.disabled && autoSetPlaceHolder;
         const isCreatePlaceholder = !!autoSetPlaceHolder;
 
-        // RangePicker place是一个数组
+        // RangePicker placelà một mảng
         if (isCreatePlaceholder && component !== 'RangePicker' && component) {
-          //自动设置placeholder
-          // 代码逻辑说明: 【issues/6908】多语言无刷新切换时，BasicColumn和FormSchema里面的值不能正常切换
+          //Tự động thiết lậpplaceholder
+          // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
           let label = isFunction(props.schema.label) ? props.schema.label() : props.schema.label;
           if (localeStore.getLocale === 'en' && !(/^\s/.test(label))) {
             label = ' ' + label;
@@ -417,16 +417,16 @@
       }
 
       /**
-       *渲染Label
+       *RenderLabel
        * @updateBy:zyf
        */
       function renderLabelHelpMessage() {
-        //label宽度支持自定义
+        //labelĐộ rộng hỗ trợ tùy chỉnh
         const { label: itemLabel, helpMessage, helpComponentProps, subLabel, labelLength } = props.schema;
-        // 代码逻辑说明: 【issues/6908】多语言无刷新切换时，BasicColumn和FormSchema里面的值不能正常切换
+        // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
         const label = isFunction(itemLabel) ? itemLabel() : itemLabel;
         let showLabel: string = label + '';
-        // 代码逻辑说明: 【TV360X-98】label展示的文字必须和labelLength配置一致
+        // Giải thích logic mã: 【TV360X-98]Chữ hiển thị của label phải nhất quán với cấu hình labelLength
         if (labelLength) {
           showLabel = showLabel.substr(0, labelLength);
         }
@@ -457,7 +457,7 @@
         const { labelCol, wrapperCol } = unref(itemLabelWidthProp);
         const { colon } = props.formProps;
 
-        // 代码逻辑说明: itemProps 属性支持函数形式
+        // Giải thích logic mã: itemProps Thuộc tính hỗ trợ dạng hàm
         let getItemProps = itemProps;
         if (typeof getItemProps === 'function') {
           getItemProps = getItemProps(unref(getValues));
@@ -484,16 +484,16 @@
               {...(getItemProps as Recordable)}
               label={renderLabelHelpMessage()}
               rules={handleRules()}
-              // 代码逻辑说明: 【issues/1244】标识了必填，但是必填标识没显示
+              // Giải thích logic mã: 【issues/1244] Đã đánh dấu bắt buộc, nhưng dấu bắt buộc không hiển thị
               validateFirst = { true }
               labelCol={labelCol}
               wrapperCol={wrapperCol}
             >
               <div style="display:flex">
-                {/* author: sunjianlei for: 【VUEN-744】此处加上 width: 100%; 因为要防止组件宽度超出 FormItem */}
-                {/* update-begin--author:liaozhiyang---date:20240510---for：【TV360X-719】表单校验不通过项滚动到可视区内 */}
+                {/* author: sunjianlei for: 【VUEN-744] thêm vào đây width: 100%; Vì cần ngăn chiều rộng component vượt quá FormItem */}
+                {/* update-begin--author:liaozhiyang---date:20240510---for：【TV360X-719] Mục kiểm chứng biểu mẫu không đạt cuộn vào trong vùng hiển thị */}
                 <Middleware formName={props.formName} fieldName={field} source={props.source}>{getContent()}</Middleware>
-                {/* update-end--author:liaozhiyang---date:20240510---for：【TV360X-719】表单校验不通过项滚动到可视区内 */}
+                {/* update-end--author:liaozhiyang---date:20240510---for：【TV360X-719] Mục kiểm chứng biểu mẫu không đạt cuộn vào trong vùng hiển thị */}
                 {showSuffix && <span class="suffix">{getSuffix}</span>}
               </div>
             </Form.Item>
@@ -508,7 +508,7 @@
         }
 
         const { baseColProps = {} } = props.formProps;
-        // 代码逻辑说明: 【issues-641】调整表格搜索表单的span配置无效
+        // Giải thích logic mã: 【issues-641] Điều chỉnh cấu hình span của biểu mẫu tìm kiếm bảng không có hiệu lực
         const { getIsMobile } = useAppInject();
         let realColProps;
         realColProps = { ...baseColProps, ...colProps };

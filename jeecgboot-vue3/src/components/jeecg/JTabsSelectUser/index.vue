@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
   /**
-   * 选择用户组件 - 多标签切换选择用户
+   * Component chọn người dùng - Chọn người dùng bằng cách chuyển đổi nhiều tab
    */
   import { provide, reactive, ref, watch } from 'vue';
   import SelectUserModal from './SelectUserModal.vue';
@@ -21,11 +21,11 @@
   import { getTableList as getTableListOrigin } from '/@/api/common/api';
 
   defineOptions({ name: 'JTabsSelectUser' });
-  //定义props
+  //Định nghĩaprops
   const props = defineProps({
     placeholder:{
       type: String,
-      default: '选择人员',
+      default: 'Chọn nhân sự',
     },
     value: propTypes.oneOfType([propTypes.string, propTypes.array]),
     rowKey: {
@@ -37,24 +37,24 @@
       default: 'realname',
     },
   });
-  //定义emit
+  //Định nghĩaemit
   const emit = defineEmits(['options-change', 'change', 'update:value']);
   const attrs: any = useAttrs();
   const [registerModal, { openModal }] = useModal();
-  //下拉框选项值
+  //Giá trị tùy chọn của hộp dropdown
   const selectOptions: any = ref<SelectValue>([]);
-  //下拉框选中值
+  //Giá trị đã chọn của hộp dropdown
   let selectValues: any = reactive<object>({
     value: [],
     change: false,
   });
-  // 是否正在加载回显数据
+  // Có đang tải dữ liệu hiển thị lại không
   const loadingEcho = ref<boolean>(false);
-  //下发 selectOptions,xxxBiz组件接收
+  //Gửi xuống selectOptions,xxxBizComponent nhận
   provide('selectOptions', selectOptions);
-  //下发 selectValues,xxxBiz组件接收
+  //Gửi xuống selectValues,xxxBizComponent nhận
   provide('selectValues', selectValues);
-  //下发 loadingEcho,xxxBiz组件接收
+  //Gửi xuống loadingEcho,xxxBizComponent nhận
   provide('loadingEcho', loadingEcho);
 
   function openSelect() {
@@ -65,9 +65,9 @@
   }
 
   function getModalData() {
-    //找rows
+    //Tìmrows
     let arr = selectOptions.value;
-    //找username
+    //Tìmusername
     let arr2 = selectValues.value;
     let dataArray = arr.filter((item) => arr2.indexOf(item[props.rowKey]) >= 0);
     return dataArray;
@@ -82,9 +82,9 @@
       };
     });
     selectValues.value = data.map((item) => item[props.rowKey]);
-    // 更新value
+    // Cập nhậtvalue
     emit('update:value', selectValues.value);
-    // 触发change事件（不转是因为basicForm提交时会自动将字符串转化为数组）
+    // Kích hoạt sự kiện change (không chuyển đổi vì khi basicForm submit sẽ tự động chuyển chuỗi thành mảng)
     emit('change', selectValues.value,selectOptions.value);
   }
 
@@ -92,7 +92,7 @@
     selectOptions.value = selectOptions.value.filter((item) => data.includes(item[props.rowKey]));
     setValue(selectOptions.value);
   };
-  // 设置下拉框的值
+  // Đặt giá trị của hộp dropdown
   const setValue = (data) => {
     selectOptions.value = data.map((item) => {
       return {
@@ -102,12 +102,12 @@
       };
     });
     selectValues.value = data.map((item) => item[props.rowKey]);
-    // 更新value
+    // Cập nhậtvalue
     emit('update:value', selectValues.value);
-    // 触发change事件（不转是因为basicForm提交时会自动将字符串转化为数组）
+    // Kích hoạt sự kiện change (không chuyển đổi vì khi basicForm submit sẽ tự động chuyển chuỗi thành mảng)
     emit('change', selectValues.value,selectOptions.value);
   };
-  // 翻译
+  // Dịch
   const transform = () => {
     let value = props.value;
     let len;
@@ -120,7 +120,7 @@
       }
       value = value.trim();
       if (value) {
-        // 如果value的值在selectedUser中存在，则不请求翻译
+        // Nếu giá trị của value tồn tại trong selectedUser thì không yêu cầu dịch
         let isNotRequestTransform = false;
         isNotRequestTransform = value.split(',').every((value) => !!selectOptions.value.find((item) => item[props.rowKey] === value));
         if (isNotRequestTransform) {
@@ -148,7 +148,7 @@
       selectValues.value = [];
     }
   };
-  // 监听value变化
+  // Lắng nghe thay đổi của value
   watch(
     () => props.value,
     () => {
@@ -159,13 +159,13 @@
 </script>
 
 <style lang="less" scoped>
-  // update-begin--author:liaozhiyang---date:20240605---for：【TV360X-1050】Safari浏览器指定下一步处理人页面控件没对齐
+  // update-begin--author:liaozhiyang---date:20240605---for：【TV360X-1050]Trang chỉ định người xử lý tiếp theo trên trình duyệt Safari, control chưa căn chỉnh
   .ant-select {
     vertical-align: middle;
   }
-  // update-end--author:liaozhiyang---date:20240605---for：【TV360X-1050】Safari浏览器指定下一步处理人页面控件没对齐
+  // update-end--author:liaozhiyang---date:20240605---for：【TV360X-1050]Trang chỉ định người xử lý tiếp theo trên trình duyệt Safari, control chưa căn chỉnh
 
-  // 自定义按钮样式
+  // Kiểu nút tùy chỉnh
   .custom-btn {
     height: 28px !important;
     padding: 0 12px !important;

@@ -82,7 +82,7 @@
           <a-button size="small" @click="reset">
             {{ t('common.resetText') }}
           </a-button>
-          <a-button size="small" type="primary" @click="saveSetting"> 保存 </a-button>
+          <a-button size="small" type="primary" @click="saveSetting"> Lưu </a-button>
         </div>
       </template>
       <SettingOutlined />
@@ -143,12 +143,12 @@
     setup(props, { emit, attrs }) {
       const { t } = useI18n();
       const table = useTableContext();
-      // 代码逻辑说明: 【issues/8301】树形表格序号列禁用
+      // Giải thích logic mã: 【issues/8301] vô hiệu hóa cột số thứ tự của bảng cây
       const isTreeTable = computed(() => table.getBindValues.value.isTreeTable);
       const popoverVisible = ref(false);
       // nextTick(() => popoverVisible.value = false);
       const defaultRowSelection = omit(table.getRowSelection(), 'selectedRowKeys');
-      // 代码逻辑说明: 【issues/8529】setColumns后列配置没联动更新
+      // Giải thích logic mã: 【issues/8529]Sau setColumns cấu hình cột không cập nhật liên động
       const getColumnsRef = table.getColumnsRef();
       let inited = false;
 
@@ -189,7 +189,7 @@
       let sortable: Sortable;
       const sortableOrder = ref<string[]>();
       const localeStore = useLocaleStoreWithOut();
-      // 列表字段配置缓存
+      // Cache cấu hình trường danh sách
       const { saveSetting, resetSetting, getCache } = useColumnsCache(
         {
           state,
@@ -217,20 +217,20 @@
         checkIndex.value = !!values.showIndexColumn;
         checkSelect.value = !!values.rowSelection;
       });
-      // 代码逻辑说明: 【issues/6908】多语言无刷新切换时，BasicColumn和FormSchema里面的值不能正常切换
+      // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
       watch([localeStore], () => {
         const columns = getColumns();
         plainOptions.value = columns;
         plainSortOptions.value = columns;
         cachePlainOptions.value = columns;
       });
-      // 代码逻辑说明: 【issues/8529】setColumns将原本隐藏的列展示后，列配置里却没有勾选该列
+      // Giải thích logic mã: 【issues/8529]Sau khi setColumns hiển thị cột vốn bị ẩn, trong cấu hình cột lại không tích chọn cột đó
       watch([getColumnsRef], () => {
         init();
       });
       function getColumns() {
         const ret: Options[] = [];
-        // 代码逻辑说明: 【issues/7996】表格列组件取消所有或者只勾选中间，显示非预期
+        // Giải thích logic mã: 【issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
         let t = table.getColumns({ ignoreIndex: true, ignoreAction: true, ignoreAuth: true, ignoreIfShow: true });
         if (!t.length) {
           t = table.getCacheColumns();
@@ -257,7 +257,7 @@
             return item.dataIndex || item.title;
           })
           .filter(Boolean) as string[];
-        // 代码逻辑说明: 【issues/7996】表格列组件取消所有或者只勾选中间，显示非预期
+        // Giải thích logic mã: 【issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
         const { sortedList = [] } = getCache() || {};
         await nextTick();
         if (!plainOptions.value.length) {
@@ -282,7 +282,7 @@
               item.fixed = findItem.fixed;
             }
           });
-          // 代码逻辑说明: 【issues/7996】表格列组件取消所有或者只勾选中间，显示非预期
+          // Giải thích logic mã: 【issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
           if (sortedList?.length) {
             plainOptions.value.sort((prev, next) => {
               return sortedList.indexOf(prev.value) - sortedList.indexOf(next.value);
@@ -291,7 +291,7 @@
         }
         state.isInit = true;
         state.checkedList = checkList;
-        // 代码逻辑说明: 【TV360X-105】列展示设置问题[列展示如果存在未勾选的列，保存并刷新后，列展示复选框样式会错乱]
+        // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Nếu trong hiển thị cột tồn tại cột chưa được tích chọn, sau khi lưu và làm mới, kiểu dáng checkbox hiển thị cột sẽ bị lỗi]
         state.checkAll = columns.length === checkList.length;
       }
 
@@ -327,12 +327,12 @@
 
       // reset columns
       function reset() {
-        // 代码逻辑说明: 【TV360X-105】列展示设置问题[需要重置两次才回到初始状态]
+        // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Cần đặt lại hai lần mới trở về trạng thái ban đầu]
         setColumns(table.getCacheColumns());
         setTimeout(() => {
           const columns = getColumns();
           // state.checkedList = [...state.defaultCheckList];
-          // 代码逻辑说明: 【issues/825】tabel的列设置隐藏列保存后切换路由问题[重置没勾选]
+          // Giải thích logic mã: 【issues/825] Vấn đề chuyển route sau khi lưu khi thiết lập ẩn cột trong cài đặt cột của tabel[Đặt lại mục chưa chọn]
           state.checkedList = table
             .getColumns({ ignoreAction: true, ignoreAuth: true, ignoreIfShow: true })
             .map((item) => {
@@ -353,7 +353,7 @@
       // Open the pop-up window for drag and drop initialization
       function handleVisibleChange() {
         if (inited) return;
-        // 代码逻辑说明: 【TV360X-254】列设置闪现及苹果浏览器弹窗过长
+        // Giải thích logic mã: 【TV360X-254] Cài đặt cột nhấp nháy và popup trình duyệt Apple quá dài
         setTimeout(() => {
           const columnListEl = unref(columnListRef);
           if (!columnListEl) return;
@@ -382,17 +382,17 @@
               }
 
               plainSortOptions.value = columns;
-              // 代码逻辑说明: 【TV360X-108】刷新后勾选之前未勾选的字段拖拽之后该字段对应的表格列消失了
+              // Giải thích logic mã: 【TV360X-108]Sau khi làm mới, tích chọn trường trước đó chưa được tích rồi kéo thả thì cột bảng tương ứng với trường đó biến mất
               const cols = columns.map((item) => item.value);
               const arr = cols.filter((cItem) => state.checkedList.find((lItem) => lItem === cItem));
               setColumns(arr);
-              // 最开始的代码
+              // Mã ban đầu
               // setColumns(columns);
-              // 代码逻辑说明: 【TV360X-105】列展示设置问题[重置之后保存的顺序还是上次的]
+              // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Sau khi đặt lại, thứ tự đã lưu vẫn là thứ tự lần trước]
               restAfterOptions.value = null;
             },
           });
-          // 记录原始 order 序列
+          // Ghi lại chuỗi order gốc
           if (!sortableOrder.value) {
             sortableOrder.value = sortable.toArray();
           }
@@ -489,7 +489,7 @@
       justify-content: space-between;
     }
 
-    /* 卡片底部样式 */
+    /* Kiểu đáy thẻ */
     &__popover-footer {
       position: relative;
       top: 7px;
@@ -557,7 +557,7 @@
         // flex-wrap: wrap;
       }
 
-      // 代码逻辑说明: 【TV360X-254】列设置闪现及苹果浏览器弹窗过长
+      // Giải thích logic mã: 【TV360X-254] Cài đặt cột nhấp nháy và popup trình duyệt Apple quá dài
       &.ant-popover,
       .ant-popover-content,
       .ant-popover-inner,

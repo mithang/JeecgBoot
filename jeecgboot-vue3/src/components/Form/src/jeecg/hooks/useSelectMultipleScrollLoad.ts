@@ -2,9 +2,9 @@ import { computed, ref, Ref, unref } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { defHttp } from '/@/utils/http/axios';
 
-/** 触发「加载更多」的滚动剩余距离阈值（px） */
+/** Ngưỡng khoảng cách cuộn còn lại để kích hoạt "Tải thêm" (px) */
 const SCROLL_LOAD_THRESHOLD = 10;
-/** 搜索输入防抖时间（ms） */
+/** Thời gian debounce của ô nhập tìm kiếm (ms) */
 const SEARCH_DEBOUNCE_MS = 300;
 
 export interface ScrollLoadDictProps {
@@ -14,14 +14,14 @@ export interface ScrollLoadDictProps {
 }
 
 export function useScrollLoadDict(props: ScrollLoadDictProps, dictOptions: Ref<any[]>, arrayValue: Ref<any[]>) {
-  // --- 状态 ---
+  // --- Trạng thái ---
   const loading = ref(false);
   const pageNo = ref(1);
   const isHasData = ref(true);
   const scrollLoading = ref(false);
   const searchKeyword = ref('');
 
-  // --- 计算：是否表字典、是否启用滚动加载 ---
+  // --- Tính toán: có phải từ điển bảng không, có bật tải cuộn hay không ---
   const isDictTable = computed(() => {
     if (!props.dictCode) return false;
     return props.dictCode.split(',').length >= 2;
@@ -29,10 +29,10 @@ export function useScrollLoadDict(props: ScrollLoadDictProps, dictOptions: Ref<a
   const useLoadDict = computed(() => props.scrollLoad && isDictTable.value);
 
   /**
-   * 拉取一页字典数据（loadDict 接口）。
-   * @param pageNoToLoad 页码（从 1 开始）
-   * @param isAppend true=追加到当前列表，false=替换
-   * @param keyword 搜索关键字，不传则用内部的 searchKeyword
+   * Lấy một trang dữ liệu danh mục (API loadDict).
+   * @param pageNoToLoad Số trang (bắt đầu từ 1)
+   * @param isAppend true=Thêm vào danh sách hiện tại,false=Thay thế
+   * @param keyword Từ khóa tìm kiếm, nếu không truyền thì dùng từ khóa nội bộ searchKeyword
    */
   function fetchLoadDictPage(pageNoToLoad: number, isAppend: boolean, keyword?: string) {
     const kw = keyword !== undefined ? keyword : searchKeyword.value;
@@ -50,14 +50,14 @@ export function useScrollLoadDict(props: ScrollLoadDictProps, dictOptions: Ref<a
         }));
         if (items.length > 0) {
           if (isAppend) {
-            // 追加时按 value 去重，避免与回显补的项重复
+            // Khi thêm vào, loại trùng theo value, tránh trùng với mục được bổ sung khi hiển thị lại
             const existValues = new Set(dictOptions.value.map((o) => String(o.value)));
             const newItems = items.filter((it: any) => !existValues.has(String(it.value)));
             if (newItems.length > 0) {
               dictOptions.value = dictOptions.value.concat(newItems);
             }
           } else {
-            // 有选中的值且optinos中存在时，需要把选中的值在options中存在且不在新数据中的项保留（防止多次请求）
+            // Khi có giá trị đã chọn và tồn tại trong optinos, cần giữ lại các mục mà giá trị đã chọn tồn tại trong options và không nằm trong dữ liệu mới (để tránh nhiều lần request)
             if (unref(arrayValue).length && unref(dictOptions).length) {
               unref(arrayValue).forEach((val: any) => {
                 const existOption = unref(dictOptions).find((o: any) => String(o.value) === String(val));
@@ -113,7 +113,7 @@ export function useScrollLoadDict(props: ScrollLoadDictProps, dictOptions: Ref<a
     });
   }
 
-  /** 搜索：带防抖，用 keyword 拉取第一页并替换列表 */
+  /** Tìm kiếm: có debounce, dùng keyword để lấy trang đầu tiên và thay thế danh sách */
   const handleSearch = useDebounceFn((keyword: string) => {
     if (!useLoadDict.value) return;
     searchKeyword.value = keyword || '';
@@ -139,7 +139,7 @@ export function useScrollLoadDict(props: ScrollLoadDictProps, dictOptions: Ref<a
     });
   }
 
-  /** 初始加载字典：拉取第一页 */
+  /** Tải từ điển ban đầu: Lấy trang đầu tiên */
   function loadDictOptions() {
     if (!useLoadDict.value) return;
     pageNo.value = 1;
@@ -151,7 +151,7 @@ export function useScrollLoadDict(props: ScrollLoadDictProps, dictOptions: Ref<a
     });
   }
 
-  /** 下拉内滚动触底时加载下一页，按 value 去重后追加 */
+  /** Khi cuộn chạm đáy trong dropdown sẽ tải trang tiếp theo, loại bỏ trùng theo value rồi thêm vào */
   function handlePopupScroll(e: Event) {
     if (!useLoadDict.value) return;
     const target = e.target as HTMLElement;

@@ -28,7 +28,7 @@ export function useTableExpand(propsRef: ComputedRef<BasicTableProps>, tableData
     };
   });
 
-  // 监听并同步props中的expandedRowKeys
+  // Lắng nghe và đồng bộexpandedRowKeys
   watch(() => propsRef.value?.expandedRowKeys, (keys) => {
     if (Array.isArray(keys)) {
       expandedRowKeys.value = keys;

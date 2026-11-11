@@ -9,12 +9,12 @@
       </Tooltip>
     </template>
 
-    <!-- 是否开启评论区域 -->
+    <!-- Có bật khu vực bình luận không -->
     <template v-if="enableComment">
-      <Tooltip title="收起" placement="bottom" v-if="commentSpan>0">
+      <Tooltip title="Thu gọn" placement="bottom" v-if="commentSpan>0">
         <RightSquareOutlined @click="handleCloseComment" style="font-size: 16px"/>
       </Tooltip>
-      <Tooltip title="展开" placement="bottom" v-else>
+      <Tooltip title="Mở rộng" placement="bottom" v-else>
         <LeftSquareOutlined @click="handleOpenComment" style="font-size: 16px"/>
       </Tooltip>
     </template>
@@ -68,7 +68,7 @@
       }
 
       /**
-       * 开启评论区域
+       * Bật khu vực bình luận
        * @param e
        */
       function handleOpenComment(e: Event){
@@ -81,7 +81,7 @@
       }
 
       /**
-       * 关闭评论区域
+       * Đóng khu vực bình luận
        * @param e
        */
       function handleCloseComment(e: Event){
@@ -91,7 +91,7 @@
       }
 
       /**
-       * 有评论的时候不需要设置全屏
+       * Khi có bình luận thì không cần đặt toàn màn hình
        */
       const fullScreenStatus = computed(()=>{
         if(props.enableComment===true){
@@ -120,7 +120,7 @@
     display: flex;
     height: 95%;
     align-items: center;
-    // 代码逻辑说明: 【issues/7260】原生a-modal关闭按钮位置偏移
+    // Giải thích logic mã: 【issues/7260]Gốca-modalVị trí nút đóng bị lệch
     margin-top: -2px;
     > span {
       margin-left: 48px;

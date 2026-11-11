@@ -64,10 +64,10 @@
         table.setProps({
           size: key,
         });
-        // update-begin--author:liaozhiyang---date:20260827---for:【LHZP-511】online表格密度由默认切换到宽松后出现了滚动条
+        // update-begin--author:liaozhiyang---date:20260827---for:【LHZP-511]Mật độ bảng online chuyển từ mặc định sang rộng rãi thì xuất hiện thanh cuộn
         table.redoHeight();
-        // update-end--author:liaozhiyang---date:20260827---for:【LHZP-511】online表格密度由默认切换到宽松后出现了滚动条
-        // 代码逻辑说明: 【TV360X-100】缓存表格密度
+        // update-end--author:liaozhiyang---date:20260827---for:【LHZP-511]Mật độ bảng online chuyển từ mặc định sang rộng rãi thì xuất hiện thanh cuộn
+        // Giải thích logic mã: 【TV360X-100] lưu cache mật độ bảng
         $ls.set(cacheKey.value, key);
       }
       const cacheKey = computed(() => {

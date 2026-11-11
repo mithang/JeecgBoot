@@ -1,9 +1,9 @@
 import { ref } from 'vue';
-//每行个数
+//Số lượng mỗi dòng
 export const grid = ref(12);
-// slider属性
+// sliderThuộc tính
 export const useSlider = (min = 6, max = 12) => {
-  // 每行显示个数滑动条
+  // Thanh trượt số lượng hiển thị mỗi dòng
   const getMarks = () => {
     const l = {};
     for (let i = min; i < max + 1; i++) {

@@ -4,24 +4,24 @@
     :getContainer="getContainer"
     :canFullscreen="false"
     destroyOnClose
-    title="会签人员选择"
+    title="Chọn nhân viên đồng ký"
     :width="600"
     wrapClassName="j-filtered-user-select-modal"
   >
-    <!-- 节点说明 -->
+    <!-- Mô tả nút -->
     <a-select 
-      value="系统角色会签，请筛选参与人员" 
+      value="Ký duyệt chung theo vai trò hệ thống, vui lòng lọc người tham gia" 
       disabled 
       style="width: 100%" 
       class="node-label-select"
     >
-      <a-select-option value="系统角色会签，请筛选参与人员">
-        系统角色会签，请筛选参与人员
+      <a-select-option value="Ký duyệt chung theo vai trò hệ thống, vui lòng lọc người tham gia">
+        Ký duyệt chung theo vai trò hệ thống, vui lòng lọc người tham gia
       </a-select-option>
     </a-select>
 
     <div class="modal-content">
-      <!-- 搜索框 -->
+      <!-- Hộp tìm kiếm -->
       <div :class="['search-wrapper', { 'search-expanded': searchInputStatus }]">
         <span v-show="!searchInputStatus" class="search-icon" @click="showSearchInput">
           <SearchOutlined />
@@ -29,20 +29,20 @@
         <div v-show="searchInputStatus" class="search-input">
           <a-input 
             v-model:value="searchText" 
-            placeholder="请输入用户名按回车搜索"
+            placeholder="Vui lòng nhập tên người dùng, nhấn Enter để tìm kiếm"
             @pressEnter="onSearchUser"
           >
             <template #prefix>
               <SearchOutlined />
             </template>
             <template #suffix>
-              <CloseOutlined title="退出搜索" @click="clearSearch" />
+              <CloseOutlined title="Thoát tìm kiếm" @click="clearSearch" />
             </template>
           </a-input>
         </div>
       </div>
 
-      <!-- 用户列表 -->
+      <!-- Danh sách người dùng -->
       <div class="user-list-wrapper">
         <user-list 
           :multi="multi" 
@@ -53,7 +53,7 @@
         />
       </div>
 
-      <!-- 已选用户标签 -->
+      <!-- Nhãn người dùng đã chọn -->
       <div v-if="selectedUserList.length > 0" class="selected-users">
         <SelectedUserItem 
           v-for="item in selectedUserList" 
@@ -81,7 +81,7 @@
           :disabled="!hasSelectedUser" 
           @click="handleOk"
         >
-          确认提交
+          Xác nhận gửi
         </a-button>
       </div>
     </template>
@@ -97,7 +97,7 @@
   import UserList from './UserList.vue';
   import SelectedUserItem from './SelectedUserItem.vue';
 
-  // 用户数据接口
+  // API dữ liệu người dùng
   interface UserInfo {
     id: string;
     username: string;
@@ -105,13 +105,13 @@
     [key: string]: any;
   }
 
-  // 弹窗打开参数接口
+  // Interface tham số mở popup
   interface ModalData {
     usernames?: string[];
     list?: UserInfo[];
   }
 
-  // 常量定义
+  // Định nghĩa hằng số
   const PAGE_SIZE = 10;
   const API_URL = '/sys/user/selectUserList';
 
@@ -126,17 +126,17 @@
       APagination: Pagination,
     },
     props: {
-      // 是否多选
+      // Có chọn nhiều hay không
       multi: {
         type: Boolean,
         default: true,
       },
-      // 容器函数
+      // Hàm container
       getContainer: {
         type: Function as PropType<() => HTMLElement>,
         default: undefined,
       },
-      // 传入的用户账号列表（用于过滤）
+      // Danh sách tài khoản người dùng được truyền vào (dùng để lọc)
       usernames: {
         type: Array as PropType<string[]>,
         default: () => [],
@@ -144,7 +144,7 @@
     },
     emits: ['selected', 'register'],
     setup(props, { emit }) {
-      // ==================== 状态定义 ====================
+      // ==================== Định nghĩa trạng thái ====================
       const selectedUserList = ref<UserInfo[]>([]);
       const actualUsernames = ref<string[]>([]);
       const searchInputStatus = ref(false);
@@ -153,7 +153,7 @@
       const totalRecord = ref(0);
       const userDataList = ref<UserInfo[]>([]);
 
-      // ==================== 计算属性 ====================
+      // ==================== Thuộc tính tính toán ====================
       const selectedIdList = computed(() => 
         selectedUserList.value.map((item) => item.id)
       );
@@ -162,7 +162,7 @@
         selectedUserList.value.length > 0
       );
 
-      // ==================== 弹窗事件 ====================
+      // ==================== Sự kiện popup ====================
       const [register] = useModalInner((data: ModalData) => {
         initUsernames(data);
         initSelectedUsers(data);
@@ -171,7 +171,7 @@
       });
 
       /**
-       * 初始化用户名列表
+       * Khởi tạo danh sách tên người dùng
        */
       function initUsernames(data: ModalData) {
         if (data?.usernames?.length) {
@@ -184,14 +184,14 @@
       }
 
       /**
-       * 初始化已选用户
+       * Khởi tạo người dùng đã chọn
        */
       function initSelectedUsers(data: ModalData) {
         selectedUserList.value = data?.list?.length ? [...data.list] : [];
       }
 
       /**
-       * 重置搜索状态
+       * Đặt lại trạng thái tìm kiếm
        */
       function resetSearchState() {
         searchText.value = '';
@@ -199,9 +199,9 @@
         pageNo.value = 1;
       }
 
-      // ==================== 用户操作 ====================
+      // ==================== Thao tác người dùng ====================
       /**
-       * 确认选择
+       * Xác nhận lựa chọn
        */
       function handleOk() {
         if (!hasSelectedUser.value) return;
@@ -209,7 +209,7 @@
       }
 
       /**
-       * 选中用户
+       * Người dùng đã chọn
        */
       function onSelectUser(info: UserInfo) {
         if (!props.multi) {
@@ -223,7 +223,7 @@
       }
 
       /**
-       * 取消选中用户
+       * Hủy chọn người dùng
        */
       function unSelectUser(id: string) {
         const index = selectedUserList.value.findIndex((item) => item.id === id);
@@ -232,9 +232,9 @@
         }
       }
 
-      // ==================== 搜索功能 ====================
+      // ==================== Chức năng tìm kiếm ====================
       /**
-       * 显示搜索框
+       * Hiển thị ô tìm kiếm
        */
       function showSearchInput(e?: Event) {
         e?.preventDefault();
@@ -243,7 +243,7 @@
       }
 
       /**
-       * 执行搜索
+       * Thực hiện tìm kiếm
        */
       function onSearchUser() {
         pageNo.value = 1;
@@ -251,7 +251,7 @@
       }
 
       /**
-       * 清除搜索
+       * Xóa tìm kiếm
        */
       function clearSearch(e?: Event) {
         e?.preventDefault();
@@ -262,17 +262,17 @@
         loadUserList();
       }
 
-      // ==================== 分页功能 ====================
+      // ==================== Chức năng phân trang ====================
       /**
-       * 翻页处理
+       * Xử lý chuyển trang
        */
       function onPageChange() {
         loadUserList();
       }
 
-      // ==================== 数据加载 ====================
+      // ==================== Tải dữ liệu ====================
       /**
-       * 加载用户列表
+       * Tải danh sách người dùng
        */
       async function loadUserList() {
         if (!actualUsernames.value?.length) {
@@ -304,20 +304,20 @@
             resetUserData();
           }
         } catch (error) {
-          console.error('加载用户列表失败:', error);
+          console.error('Tải danh sách người dùng thất bại:', error);
           resetUserData();
         }
       }
 
       /**
-       * 重置用户数据
+       * Đặt lại dữ liệu người dùng
        */
       function resetUserData() {
         userDataList.value = [];
         totalRecord.value = 0;
       }
 
-      // ==================== 返回值 ====================
+      // ==================== Giá trị trả về ====================
       return {
         PAGE_SIZE,
         register,
@@ -343,7 +343,7 @@
 
 <style lang="less" scoped>
   .j-filtered-user-select-modal {
-    // 节点说明标签
+    // Nhãn giải thích nút
     .node-label-select {
       margin-bottom: 10px;
       
@@ -360,13 +360,13 @@
       }
     }
 
-    // 弹窗内容区
+    // Vùng nội dung popup
     .modal-content {
       position: relative;
       min-height: 350px;
     }
 
-    // 搜索框容器
+    // Vùng chứa ô tìm kiếm
     .search-wrapper {
       position: absolute;
       top: 14px;
@@ -402,12 +402,12 @@
       }
     }
 
-    // 用户列表
+    // Danh sách người dùng
     .user-list-wrapper {
       padding-top: 50px;
     }
 
-    // 已选用户标签
+    // Nhãn người dùng đã chọn
     .selected-users {
       display: flex;
       flex-wrap: wrap;
@@ -417,7 +417,7 @@
       overflow-x: hidden;
     }
 
-    // 底部容器
+    // Container dưới cùng
     .modal-footer {
       display: flex;
       justify-content: space-between;
@@ -440,7 +440,7 @@
       }
     }
 
-    // 滚动容器优化
+    // Tối ưu hóa vùng chứa cuộn
     :deep(.scroll-container) {
       padding-bottom: 0 !important;
     }

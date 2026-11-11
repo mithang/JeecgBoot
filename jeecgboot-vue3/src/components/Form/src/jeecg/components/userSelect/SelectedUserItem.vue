@@ -70,7 +70,7 @@
         type: Object,
         default: () => {},
       },
-      // 是否作为查询条件
+      // Có dùng làm điều kiện tìm kiếm không
       query:{
         type: Boolean,
         default: false,

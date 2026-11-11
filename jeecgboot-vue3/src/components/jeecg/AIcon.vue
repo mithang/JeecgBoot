@@ -14,9 +14,9 @@
     props: {
       icon: String,
       type: String,
-      // 图标大小，默认 16
+      // Kích thước biểu tượng, mặc định 16
       size: propTypes.any,
-      // 样式
+      // Kiểu
       theme: propTypes.any,
     },
     setup(props) {

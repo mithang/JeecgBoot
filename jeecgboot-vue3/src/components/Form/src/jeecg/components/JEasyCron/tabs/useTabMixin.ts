@@ -1,4 +1,4 @@
-// 主要用于日和星期的互斥使用
+// Chủ yếu dùng cho việc loại trừ lẫn nhau giữa ngày và tuần
 import { computed, inject, reactive, ref, unref, watch } from 'vue';
 import { propTypes } from '/@/utils/propTypes';
 
@@ -12,7 +12,7 @@ export enum TypeEnum {
   specify = 'SPECIFY',
 }
 
-// use 公共 props
+// use Dùng chung props
 export function useTabProps(options) {
   const defaultValue = options?.defaultValue ?? '?';
   return {
@@ -22,20 +22,20 @@ export function useTabProps(options) {
   };
 }
 
-// use 公共 emits
+// use Dùng chung emits
 export function useTabEmits() {
   return ['change', 'update:value'];
 }
 
-// use 公共 setup
+// use Dùng chung setup
 export function useTabSetup(props, context, options) {
   const { emit } = context;
   const prefixCls = inject('prefixCls');
   const defaultValue = ref(options?.defaultValue ?? '?');
-  // 类型
+  // Loại
   const type = ref(options.defaultType ?? TypeEnum.every);
   const valueList = ref<any[]>([]);
-  // 对于不同的类型，所定义的值也有所不同
+  // Đối với các loại khác nhau, giá trị được định nghĩa cũng khác nhau
   const valueRange = reactive(options.valueRange);
   const valueLoop = reactive(options.valueLoop);
   const valueWeek = reactive(options.valueWeek);
@@ -43,7 +43,7 @@ export function useTabSetup(props, context, options) {
   const maxValue = ref(options.maxValue);
   const minValue = ref(options.minValue);
 
-  // 根据不同的类型计算出的value
+  // Giá trị được tính theo các loại khác nhauvalue
   const computeValue = computed(() => {
     let valueArray: any[] = [];
     switch (type.value) {
@@ -77,7 +77,7 @@ export function useTabSetup(props, context, options) {
     }
     return valueArray.length > 0 ? valueArray.join('') : defaultValue.value;
   });
-  // 指定值范围区间，介于最小值和最大值之间
+  // Chỉ định khoảng giá trị, nằm giữa giá trị nhỏ nhất và giá trị lớn nhất
   const specifyRange = computed(() => {
     let range: number[] = [];
     if (maxValue.value != null) {

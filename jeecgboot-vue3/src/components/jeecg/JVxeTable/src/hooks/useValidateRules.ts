@@ -13,15 +13,15 @@ export function useValidateRules(args: HandleArgs) {
         message: replaceProps(col, rule.message),
       };
       if (rule.unique || rule.pattern === 'only') {
-        // 唯一校验器
+        // Bộ kiểm chứng duy nhất
         rule.validator = uniqueValidator(args);
       } else if (rule.pattern) {
-        // 非空
+        // Không rỗng
         if (rule.pattern === fooPatterns[0].value) {
           rule.required = true;
           delete rule.pattern;
         } else {
-          // 兼容Online表单的特殊规则
+          // Tương thích quy tắc đặc biệt của biểu mẫu Online
           let reg: any = rule.pattern;
           for (let foo of fooPatterns) {
             if (foo.value === rule.pattern) {
@@ -29,14 +29,14 @@ export function useValidateRules(args: HandleArgs) {
               break;
             }
           }
-          // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-172】行编辑pattern校验空值时不应触发，仅有值时校验（非空由required规则负责）
+          // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
           const regExp = reg instanceof RegExp ? reg : new RegExp(reg);
           delete rule.pattern;
           rule.validator = emptySkipPatternValidator(regExp);
-          // update-end--author:liaozhiyang---date:20260714---for：【LHZP-172】行编辑pattern校验空值时不应触发，仅有值时校验（非空由required规则负责）
+          // update-end--author:liaozhiyang---date:20260714---for：【LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
         }
       } else if (typeof rule.handler === 'function') {
-        // 自定义函数校验
+        // Kiểm chứng hàm tùy chỉnh
         rule.validator = handlerConvertToValidator;
       }
       rules.push(Object.assign({}, rule, replace));
@@ -45,11 +45,11 @@ export function useValidateRules(args: HandleArgs) {
   data.innerEditRules[col.key] = rules;
 }
 
-/** 唯一校验器 */
+/** Bộ kiểm chứng duy nhất */
 function uniqueValidator({ methods }: HandleArgs) {
   return function (event) {
     const { cellValue, column, rule } = event;
-    // 代码逻辑说明: 【TV360X-299】JVxetable组件中唯一校验过滤掉空字符串
+    // Giải thích logic mã: 【TV360X-299]Component JVxetable kiểm chứng duy nhất sẽ lọc bỏ chuỗi rỗng
     if (cellValue == '') return Promise.resolve();
     let tableData = methods.getTableData();
     let findCount = 0;
@@ -64,7 +64,7 @@ function uniqueValidator({ methods }: HandleArgs) {
   };
 }
 
-/** 旧版handler转为新版Validator */
+/** Chuyển handler phiên bản cũ thành phiên bản mớiValidator */
 function handlerConvertToValidator(event) {
   const { column, rule } = event;
   return new Promise((resolve, reject) => {
@@ -84,8 +84,8 @@ function handlerConvertToValidator(event) {
   });
 }
 
-// update-begin--author:liaozhiyang---date:20260714---for：【LHZP-172】行编辑pattern校验空值时不应触发，仅有值时校验（非空由required规则负责）
-/** pattern 校验器：空值不校验（非空交给 required 规则），仅当有值时做正则校验 */
+// update-begin--author:liaozhiyang---date:20260714---for：【LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
+/** pattern Trình kiểm chứng: giá trị rỗng không kiểm chứng (giá trị không rỗng giao cho quy tắc required), chỉ khi có giá trị mới kiểm chứng bằng regex */
 function emptySkipPatternValidator(regExp: RegExp) {
   return function (event) {
     const { cellValue, rule } = event;
@@ -95,29 +95,29 @@ function emptySkipPatternValidator(regExp: RegExp) {
     return regExp.test(String(cellValue)) ? Promise.resolve() : Promise.reject(new Error(rule.message));
   };
 }
-// update-end--author:liaozhiyang---date:20260714---for：【LHZP-172】行编辑pattern校验空值时不应触发，仅有值时校验（非空由required规则负责）
+// update-end--author:liaozhiyang---date:20260714---for：【LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
 
-// 兼容 online 的规则
+// Tương thích với quy tắc của online
 const fooPatterns = [
-  { title: '非空', value: '*', pattern: /^.+$/ },
-  { title: '6到16位数字', value: 'n6-16', pattern: /^\d{6,16}$/ },
-  { title: '6到16位任意字符', value: '*6-16', pattern: /^.{6,16}$/ },
-  { title: '6到18位字母', value: 's6-18', pattern: /^[a-z|A-Z]{6,18}$/ },
-  // 代码逻辑说明: VUEN-1160 对多子表，网址校验不正确
+  { title: 'Không rỗng', value: '*', pattern: /^.+$/ },
+  { title: '6đến 16 chữ số', value: 'n6-16', pattern: /^\d{6,16}$/ },
+  { title: '6đến 16 ký tự bất kỳ', value: '*6-16', pattern: /^.{6,16}$/ },
+  { title: '6đến 18 chữ cái', value: 's6-18', pattern: /^[a-z|A-Z]{6,18}$/ },
+  // Giải thích logic mã: VUEN-1160 Đối với nhiều bảng con, kiểm chứng URL không đúng
   {
-    title: '网址',
+    title: 'URL',
     value: 'url',
     pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:\/~+#]*[\w\-@?^=%&\/~+#])?$/,
   },
-  // 代码逻辑说明: 【TV360X-466】邮箱跟一对第一校验规则一致
-  { title: '电子邮件', value: 'e', pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/ },
-  { title: '手机号码', value: 'm', pattern: /^1[3456789]\d{9}$/ },
-  { title: '邮政编码', value: 'p', pattern: /^\d{6}$/ },
-  { title: '字母', value: 's', pattern: /^[A-Z|a-z]+$/ },
-  { title: '数字', value: 'n', pattern: /^-?\d+(\.?\d+|\d?)$/ },
-  { title: '整数', value: 'z', pattern: /^-?\d+$/ },
+  // Giải thích logic mã: 【TV360X-466] Quy tắc kiểm chứng email thống nhất với quy tắc kiểm chứng một-một đầu tiên
+  { title: 'Email', value: 'e', pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/ },
+  { title: 'Số điện thoại', value: 'm', pattern: /^1[3456789]\d{9}$/ },
+  { title: 'Mã bưu chính', value: 'p', pattern: /^\d{6}$/ },
+  { title: 'Chữ cái', value: 's', pattern: /^[A-Z|a-z]+$/ },
+  { title: 'Số', value: 'n', pattern: /^-?\d+(\.?\d+|\d?)$/ },
+  { title: 'Số nguyên', value: 'z', pattern: /^-?\d+$/ },
   {
-    title: '金额',
+    title: 'Số tiền',
     value: 'money',
     pattern: /^(([1-9][0-9]*)|([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,5}))$/,
   },

@@ -24,7 +24,7 @@
                 <span class="ml-1">{{ item.text }}</span>
               </div>
             </a-popconfirm>
-            <!--  设置动态插槽   -->
+            <!--  Đặt slot động   -->
             <template v-else-if="item.slot">
               <slot :name="item.slot" :label="item.text"></slot>
             </template>
@@ -105,7 +105,7 @@
   @prefix-cls: ~'@{namespace}-basic-dropdown';
 
   .@{prefix-cls} {
-    // 代码逻辑说明: 【VUEN-180】更多下拉菜单，只有点到字上才有效，点到空白处什么都不会发生，体验不好
+    // Giải thích logic mã: 【VUEN-180Menu dropdown "Thêm", chỉ bấm trúng chữ mới có hiệu lực, bấm vào chỗ trống thì không xảy ra gì, trải nghiệm không tốt
     &-menu .ant-dropdown-menu-item.is-pop-confirm {
       padding: 0;
 

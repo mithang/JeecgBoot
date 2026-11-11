@@ -47,33 +47,33 @@
     components: { LoadingOutlined, UploadOutlined },
     inheritAttrs: false,
     props: {
-      //绑定值
+      //Giá trị liên kết
       value: propTypes.oneOfType([propTypes.string, propTypes.array]),
-      //按钮文本
+      //Văn bản nút
       listType: {
         type: String,
         required: false,
         default: 'picture-card',
       },
-      //按钮文本
+      //Văn bản nút
       text: {
         type: String,
         required: false,
-        default: '上传',
+        default: 'Tải lên',
       },
-      //这个属性用于控制文件上传的业务路径
+      //Thuộc tính này dùng để điều khiển đường dẫn nghiệp vụ tải lên tệp
       bizPath: {
         type: String,
         required: false,
         default: 'temp',
       },
-      //是否禁用
+      //Có vô hiệu hóa hay không
       disabled: {
         type: Boolean,
         required: false,
         default: false,
       },
-      //上传数量
+      //Số lượng tải lên
       fileMax: {
         type: Number,
         required: false,
@@ -94,7 +94,7 @@
       const emitData = ref<any[]>([]);
       const attrs = useAttrs();
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
-      //获取文件名
+      //Lấy tên tệp
       const getFileName = (path) => {
         if (path.lastIndexOf('\\') >= 0) {
           let reg = new RegExp('\\\\', 'g');
@@ -104,23 +104,23 @@
       };
       //token
       const headers = getHeaders();
-      //上传状态
+      //Trạng thái tải lên
       const loading = ref<boolean>(false);
-      //是否是初始化加载
+      //Có phải tải khởi tạo không
       const initTag = ref<boolean>(true);
-      //文件列表
+      //Danh sách tệp
       let uploadFileList = ref<any[]>([]);
-      //预览图
+      //Ảnh xem trước
       const previewImage = ref<string | undefined>('');
-      //预览框状态
+      //Trạng thái khung xem trước
       const previewVisible = ref<boolean>(false);
 
-      //计算是否开启多图上传
+      //Tính xem có bật tải lên nhiều hình ảnh không
       const multiple = computed(() => {
         return props['fileMax'] > 1 || props['fileMax'] === 0;
       });
 
-      //计算是否可以继续上传
+      //Tính xem có thể tiếp tục tải lên không
       const uploadVisible = computed(() => {
         if (props['fileMax'] === 0) {
           return true;
@@ -129,12 +129,12 @@
       });
 
       /**
-       * 监听value变化
+       * Lắng nghe thay đổi của value
        */
       watch(
         () => props.value,
         (val, prevCount) => {
-         // 代码逻辑说明: 【issues/556】JImageUpload组件value赋初始值没显示图片------------
+         // Giải thích logic mã: 【issues/556]Component JImageUpload gán giá trị ban đầu cho value nhưng không hiển thị hình ảnh------------
             if (val && val instanceof Array) {
             val = val.join(',');
           }
@@ -146,7 +146,7 @@
       );
 
       /**
-       * 初始化文件列表
+       * Khởi tạo danh sách tệp
        */
       function initFileList(paths) {
         if (!paths || paths.length == 0) {
@@ -172,25 +172,25 @@
       }
 
       /**
-       * 上传前校验
+       * Kiểm chứng trước khi tải lên
        */
       function beforeUpload(file) {
         let fileType = file.type;
         if (fileType.indexOf('image') < 0) {
-          createMessage.info('请上传图片');
+          createMessage.info('Vui lòng tải lên hình ảnh');
           return false;
         }
       }
       /**
-       * 文件上传结果回调
+       * Callback kết quả tải tệp lên
        */
       function handleChange({ file, fileList, event }) {
         initTag.value = false;
         // uploadFileList.value = fileList;
         if (file.status === 'error') {
-          createMessage.error(`${file.name} 上传失败.`);
+          createMessage.error(`${file.name} Tải lên thất bại.`);
         }
-        // 代码逻辑说明: 【TV360X-1640】上传图片大小超出限制显示优化
+        // Giải thích logic mã: 【TV360X-1640] Tối ưu hiển thị khi kích thước hình ảnh tải lên vượt giới hạn
         if (file.status === 'done' && file.response.success === false) {
           const failIndex = uploadFileList.value.findIndex((item) => item.uid === file.uid);
           if (failIndex != -1) {
@@ -216,7 +216,7 @@
           if (noUploadingFileCount == fileList.length) {
             state.value = fileUrls.join(',');
             emit('update:value', fileUrls.join(','));
-            // 代码逻辑说明: [issues/248]原生表单内使用图片组件,关闭弹窗图片组件值不会被清空------------
+            // Giải thích logic mã: [issues/248]Sử dụng component hình ảnh trong biểu mẫu gốc,Đóng popup thì giá trị của component hình ảnh không bị xóa------------
             nextTick(() => {
               initTag.value = true;
             });
@@ -225,15 +225,15 @@
       }
 
       /**
-       * 删除图片
+       * Xóa hình ảnh
        */
       function handleDelete(file) {
-        //如有需要新增 删除逻辑
+        //Nếu cần thêm mới, logic xóa
         console.log(file);
       }
 
       /**
-       * 预览图片
+       * Xem trước hình ảnh
        */
       function handlePreview(file) {
         previewImage.value = file.url || file.thumbUrl;

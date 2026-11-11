@@ -1,4 +1,4 @@
-<!--职务选择框-->
+<!--Hộp chọn chức danh-->
 <template>
   <div>
     <BasicModal
@@ -32,7 +32,7 @@
             :useSearchForm="true"
             :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }"
           >
-            <!--操作栏-->
+            <!--Thanh thao tác-->
             <template #action="{ record }">
               <a href="javascript:void(0)" @click="handleDeleteSelected(record)"><Icon icon="ant-design:delete-outlined"></Icon></a>
             </template>
@@ -54,7 +54,7 @@
   export default defineComponent({
     name: 'PositionSelectModal',
     components: {
-      //此处需要异步加载BasicTable
+      //Tại đây cần tải bất đồng bộBasicTable
       BasicModal,
       BasicTable: createAsyncComponent(() => import('/@/components/Table/src/BasicTable.vue'), {
         loading: true,
@@ -62,23 +62,23 @@
     },
     props: {
       ...selectProps,
-      //选择框标题
+      //Tiêu đề hộp chọn
       modalTitle: {
         type: String,
-        default: '职务选择',
+        default: 'Chọn chức danh',
       },
     },
     emits: ['register', 'getSelectResult'],
     setup(props, { emit, refs }) {
-      //注册弹框
+      //Đăng ký popup
       const [register, { closeModal }] = useModalInner();
       const attrs = useAttrs();
-      //表格配置
+      //Cấu hình bảng
       const config = {
         canResize: false,
         bordered: true,
         size: 'small',
-        //改成读取rowKey,自定义传递参数
+        //Đổi thành đọcrowKey,Tùy chỉnh tham số truyền vào
         rowKey: props.rowKey,
       };
       const getBindValue = Object.assign({}, unref(props), unref(attrs), config);
@@ -87,7 +87,7 @@
         getBindValue
       );
       const searchInfo = ref(props.params);
-      //查询form
+      //Truy vấnform
       const formConfig = {
         labelCol: {
           span: 4,
@@ -100,7 +100,7 @@
           xl: 10,
           xxl: 10,
         },
-        // 代码逻辑说明: [issues/5514]组件页面显示错位
+        // Giải thích logic mã: [issues/5514]Trang component hiển thị lệch vị trí
         actionColOptions: {
             xs: 24,
             sm: 8,
@@ -111,26 +111,26 @@
         },
         schemas: [
           {
-            label: '职务名称',
+            label: 'Tên chức danh',
             field: 'name',
             component: 'JInput',
             colProps: { span: 10 },
           },
         ],
       };
-      //定义表格列
+      //Định nghĩa cột bảng
       const columns = [
         {
-          title: '职务名称',
+          title: 'Tên chức danh',
           dataIndex: 'name',
           // width: 180,
         },
         {
-          title: '职务级别',
+          title: 'Cấp bậc chức danh',
           dataIndex: 'postLevel',
         },
       ];
-      //已选择的table信息
+      //Thông tin table đã chọn
       const selectedTable = {
         pagination: false,
         showIndexColumn: false,
@@ -141,12 +141,12 @@
         rowKey: 'id',
         columns: [
           {
-            title: '职务名称',
+            title: 'Tên chức danh',
             dataIndex: 'name',
             width: 40,
           },
           {
-            title: '操作',
+            title: 'Thao tác',
             dataIndex: 'action',
             align: 'center',
             width: 40,
@@ -155,13 +155,13 @@
         ],
       };
       /**
-       * 确定选择
+       * Xác nhận lựa chọn
        */
       function handleOk() {
         getSelectResult((options, values) => {
-          //回传选项和已选择的值
+          //Trả về tùy chọn và giá trị đã chọn
           emit('getSelectResult', options, values);
-          //关闭弹窗
+          //Đóng popup
           closeModal();
         });
       }

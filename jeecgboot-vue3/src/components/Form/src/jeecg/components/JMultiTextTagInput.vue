@@ -18,7 +18,7 @@
     />
     <div v-if="showDropdown" class="mtti-dropdown">
       <div class="mtti-dropdown-item" @mousedown.prevent="handleDropdownClick">
-        使用"{{ inputValue }}"
+        Sử dụng"{{ inputValue }}"
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@ export default defineComponent({
     },
     placeholder: {
       type: String,
-      default: '输入后按回车添加，逗号分隔多个关键词',
+      default: 'Sau khi nhập nhấn Enter để thêm, dùng dấu phẩy để tách nhiều từ khóa',
     },
     disabled: {
       type: Boolean,
@@ -50,7 +50,7 @@ export default defineComponent({
     const isFocused = ref(false);
     const isComposing = ref(false);
 
-    // 将逗号分隔的字符串转为数组
+    // Chuyển chuỗi phân tách bằng dấu phẩy thành mảng
     const tags = computed(() => {
       if (!props.value || props.value.trim() === '') {
         return [];
@@ -62,14 +62,14 @@ export default defineComponent({
       return isFocused.value && inputValue.value && inputValue.value.trim() !== '';
     });
 
-    // 发出变更事件
+    // Phát sự kiện thay đổi
     function emitChange(newTags: string[]) {
       const val = newTags.filter(s => s.trim() !== '').join(',');
       emit('update:value', val);
       emit('change', val);
     }
 
-    // 添加一个或多个标签
+    // Thêm một hoặc nhiều nhãn
     function addTags(values: string[]) {
       const existing = [...tags.value];
       for (const v of values) {
@@ -81,26 +81,26 @@ export default defineComponent({
       emitChange(existing);
     }
 
-    // 添加单个标签
+    // Thêm một thẻ
     function addTag(value: string) {
       addTags([value]);
     }
 
-    // 移除标签
+    // Xóa nhãn
     function removeTag(index: number) {
       const newTags = [...tags.value];
       newTags.splice(index, 1);
       emitChange(newTags);
     }
 
-    // 处理回车
+    // Xử lý phím Enter
     function handleEnter() {
       if (isComposing.value) {
         return;
       }
       const text = inputValue.value.trim();
       if (text) {
-        // 检查是否包含逗号，自动分割
+        // Kiểm tra có chứa dấu phẩy hay không, tự động tách
         if (text.includes(',')) {
           const parts = text.split(',').map(s => s.trim()).filter(s => s !== '');
           addTags(parts);
@@ -111,12 +111,12 @@ export default defineComponent({
       }
     }
 
-    // 处理按键：逗号自动分割（中文逗号和英文逗号）
+    // Xử lý phím bấm: dấu phẩy tự động tách (dấu phẩy tiếng Trung và dấu phẩy tiếng Anh)
     function handleKeydown(e: KeyboardEvent) {
       if (isComposing.value) {
         return;
       }
-      // 如果输入了逗号（英文逗号或中文逗号），自动分割
+      // Nếu nhập dấu phẩy (dấu phẩy tiếng Anh hoặc dấu phẩy tiếng Trung), tự động tách
       if (e.key === ',' || e.key === '，') {
         e.preventDefault();
         const text = inputValue.value.trim();
@@ -125,13 +125,13 @@ export default defineComponent({
           inputValue.value = '';
         }
       }
-      // 退格键：如果输入框为空，删除最后一个标签
+      // Phím Backspace: nếu ô nhập trống, xóa thẻ cuối cùng
       if (e.key === 'Backspace' && inputValue.value === '' && tags.value.length > 0) {
         removeTag(tags.value.length - 1);
       }
     }
 
-    // 下拉选项点击
+    // Nhấp tùy chọn dropdown
     function handleDropdownClick() {
       const text = inputValue.value.trim();
       if (text) {
@@ -148,10 +148,10 @@ export default defineComponent({
     }
 
     function onBlur() {
-      // 延迟关闭，让 mousedown 有机会触发
+      // Đóng chậm, để mousedown có cơ hội kích hoạt
       setTimeout(() => {
         isFocused.value = false;
-        // 失焦时自动添加当前输入内容
+        // Khi mất focus sẽ tự động thêm nội dung đang nhập
         const text = inputValue.value.trim();
         if (text) {
           if (text.includes(',')) {

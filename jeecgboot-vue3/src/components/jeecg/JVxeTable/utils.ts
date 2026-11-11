@@ -3,44 +3,44 @@ import { unref, isRef } from 'vue';
 import { isFunction } from '/@/utils/is';
 
 type dispatchEventOptions = {
-  // JVxeTable 的 props
+  // JVxeTable của props
   props;
-  // 触发的 event 事件对象
+  // Đối tượng sự kiện event được kích hoạt
   $event;
-  // 行、列
+  // Hàng, cột
   row?;
   column?;
-  // JVxeTable的vue3实例
+  // JVxeTableInstance vue3 của JVxeTable
   instance?: ComponentInternalInstance | any;
-  // 要寻找的className
+  // cần tìmclassName
   className: string;
-  // 重写找到dom后的处理方法
+  // Viết lại phương thức xử lý sau khi tìm thấy dom
   handler?: Fn;
-  // 是否直接执行click方法而不是模拟click事件
+  // Có thực thi trực tiếp phương thức click thay vì mô phỏng sự kiện click hay không
   isClick?: boolean;
 };
 
-/** 模拟触发事件 */
+/** Mô phỏng kích hoạt sự kiện */
 export function dispatchEvent(options: dispatchEventOptions) {
   const { props, $event, row, column, instance, className, handler, isClick } = options;
   if ((!$event || !$event.path) && !instance) {
     return;
   }
-  // alwaysEdit 下不模拟触发事件，否者会导致触发两次
+  // alwaysEdit không mô phỏng kích hoạt sự kiện, nếu không sẽ kích hoạt hai lần
   if (props && props.alwaysEdit) {
     return;
   }
   let getCell = () => {
     let paths: HTMLElement[] = [...($event?.path ?? [])];
-    // 通过 instance 获取 cell dom对象
+    // Lấy đối tượng cell DOM thông qua instance
     if (row && column) {
       let selector = `table.vxe-table--body tbody tr[rowid='${row.id}'] td[colid='${column.id}']`;
       let cellDom = instance!.vnode?.el?.querySelector(selector);
-      // -update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6390】解决online新增字段警告（兼容下）
+      // -update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6390]Khắc phục cảnh báo khi thêm trường mới trong online (tương thích)
       if (!cellDom) {
         cellDom = instance!.$el?.querySelector(selector);
       }
-      // -update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6390】解决online新增字段警告（兼容下）
+      // -update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6390]Khắc phục cảnh báo khi thêm trường mới trong online (tương thích)
       if (cellDom) {
         paths.unshift(cellDom);
       }
@@ -87,7 +87,7 @@ export function dispatchEvent(options: dispatchEventOptions) {
         if (isFunction(handler)) {
           handler(element);
         } else {
-          // 模拟触发点击事件
+          // Mô phỏng kích hoạt sự kiện nhấp
           if (isClick) {
             element.click();
           } else {
@@ -97,11 +97,11 @@ export function dispatchEvent(options: dispatchEventOptions) {
       }
     }, 10);
   } else {
-    console.warn('【JVxeTable】dispatchEvent 获取 cell 失败');
+    console.warn('[JVxeTable]dispatchEvent lấy cell thất bại');
   }
 }
 
-/** 绑定 VxeTable 数据 */
+/** Liên kết dữ liệu VxeTable */
 export function vModel(value, row, column: Ref<any> | string) {
   // @ts-ignore
   let property = isRef(column) ? column.value.property : column;
@@ -111,12 +111,12 @@ export function vModel(value, row, column: Ref<any> | string) {
 /**
  * liaozhiyang
  * 2024-06-20
- * 判断当前行编辑是否使用了虚拟滚动（并不是开启了就是，还得满足数据数量大于gt值）
+ * Xác định việc chỉnh sửa hàng hiện tại có dùng cuộn ảo hay không (không phải cứ bật là dùng, còn phải thỏa mãn số lượng dữ liệu lớn hơn giá trị gt)
  */
 export function isEnabledVirtualYScroll(props, xTable): boolean {
   let isRealEnabledVirtual = false;
   const isEnabledVScroll = props?.scrollY?.enabled;
-  // 100是底层的默认值
+  // 100Là giá trị mặc định của tầng dưới
   const gtYNum = props?.scrollY?.gt || 100;
   if (isEnabledVScroll) {
     const tableFullData = xTable.internalData.tableFullData;

@@ -21,9 +21,9 @@
 
   const uploadRef = ref();
   const uploadBinds = reactive({ props: {} as any });
-  const modalTitle = computed(() => (uploadBinds.props?.fileType === UploadTypeEnum.image ? '图片上传' : '文件上传'));
+  const modalTitle = computed(() => (uploadBinds.props?.fileType === UploadTypeEnum.image ? 'Tải lên hình ảnh' : 'Tải lên tệp'));
 
-  // 注册弹窗
+  // Đăng ký popup
   const [registerModal, { closeModal }] = useModalInner(async (data) => {
     uploadBinds.props = unref(data) || {};
     if ([UploadTypeEnum.image, 'img', 'picture'].includes(uploadBinds.props?.fileType)) {

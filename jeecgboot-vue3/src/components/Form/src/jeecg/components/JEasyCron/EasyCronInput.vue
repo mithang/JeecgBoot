@@ -4,7 +4,7 @@
       <template #addonAfter>
         <a class="open-btn" :disabled="disabled ? 'disabled' : null" @click="showConfigModal">
           <Icon icon="ant-design:setting-outlined" />
-          <span>选择</span>
+          <span>Chọn</span>
         </a>
       </template>
     </a-input>
@@ -32,7 +32,7 @@
   const emit = defineEmits([...cronEmits]);
   const props = defineProps({
     ...cronProps,
-    placeholder: propTypes.string.def('请输入cron表达式'),
+    placeholder: propTypes.string.def('Vui lòng nhập biểu thức cron'),
     exeStartTime: propTypes.oneOfType([propTypes.number, propTypes.string, propTypes.object]).def(0),
   });
   const [registerModal, { openModal }] = useModal();

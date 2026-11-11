@@ -2,40 +2,40 @@
   <div :class="`${prefixCls}-config-list`">
     <a-radio-group v-model:value="type">
       <div class="item">
-        <a-radio :value="TypeEnum.unset" v-bind="beforeRadioAttrs">不设置</a-radio>
-        <span class="tip-info">日和周只能设置其中之一</span>
+        <a-radio :value="TypeEnum.unset" v-bind="beforeRadioAttrs">Không đặt</a-radio>
+        <span class="tip-info">Ngày và tuần chỉ được đặt một trong hai</span>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.every" v-bind="beforeRadioAttrs">每日</a-radio>
+        <a-radio :value="TypeEnum.every" v-bind="beforeRadioAttrs">Mỗi ngày</a-radio>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">区间</a-radio>
-        <span> 从 </span>
+        <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">Khoảng</a-radio>
+        <span> Từ </span>
         <InputNumber v-model:value="valueRange.start" v-bind="typeRangeAttrs" />
-        <span> 日 至 </span>
+        <span> Ngày đến </span>
         <InputNumber v-model:value="valueRange.end" v-bind="typeRangeAttrs" />
-        <span> 日 </span>
+        <span> ngày </span>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">循环</a-radio>
-        <span> 从 </span>
+        <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">Lặp lại</a-radio>
+        <span> Từ </span>
         <InputNumber v-model:value="valueLoop.start" v-bind="typeLoopAttrs" />
-        <span> 日开始，间隔 </span>
+        <span> ngày bắt đầu, khoảng cách </span>
         <InputNumber v-model:value="valueLoop.interval" v-bind="typeLoopAttrs" />
-        <span> 日 </span>
+        <span> ngày </span>
       </div>
-<!--       工作日暂不支持，会报错，先隐藏了 -->
+<!--       Ngày làm việc tạm thời chưa hỗ trợ, sẽ báo lỗi, đã ẩn trước -->
 <!--      <div class="item">-->
-<!--        <a-radio :value="TypeEnum.work" v-bind="beforeRadioAttrs">工作日</a-radio>-->
-<!--        <span> 本月 </span>-->
+<!--        <a-radio :value="TypeEnum.work" v-bind="beforeRadioAttrs">Ngày làm việc</a-radio>-->
+<!--        <span> Tháng này </span>-->
 <!--        <InputNumber v-model:value="valueWork" v-bind="typeWorkAttrs" />-->
-<!--        <span> 日，最近的工作日 </span>-->
+<!--        <span> Ngày, ngày làm việc gần nhất </span>-->
 <!--      </div>-->
       <div class="item">
-        <a-radio :value="TypeEnum.last" v-bind="beforeRadioAttrs">最后一日</a-radio>
+        <a-radio :value="TypeEnum.last" v-bind="beforeRadioAttrs">Ngày cuối cùng</a-radio>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.specify" v-bind="beforeRadioAttrs">指定</a-radio>
+        <a-radio :value="TypeEnum.specify" v-bind="beforeRadioAttrs">Chỉ định</a-radio>
         <div class="list">
           <a-checkbox-group v-model:value="valueList">
             <template v-for="i in specifyRange" :key="i">

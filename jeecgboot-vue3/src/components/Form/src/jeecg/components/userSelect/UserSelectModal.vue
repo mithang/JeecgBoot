@@ -4,28 +4,28 @@
     :getContainer="getContainer"
     :canFullscreen="false"
     destroyOnClose
-    title="选择用户"
+    title="Chọn người dùng"
     :width="800"
     wrapClassName="j-user-select-modal2"
   >
-    <!-- 部门下拉框 -->
+    <!-- Hộp dropdown phòng ban -->
     <a-select v-model:value="selectedDepart" style="width: 100%" class="depart-select" @change="onDepartChange">
       <a-select-option v-for="item in departOptions" :value="item.value">{{ item.label }}</a-select-option>
     </a-select>
 
     <div style="position: relative; min-height: 350px">
-      <!-- 用户搜索框 -->
+      <!-- Ô tìm kiếm người dùng -->
       <div :class="searchInputStatus ? 'my-search all-width' : 'my-search'">
         <span :class="searchInputStatus ? 'hidden' : ''" style="margin-left: 10px"
           ><SearchOutlined style="color: #c0c0c0" @click="showSearchInput"
         /></span>
         <div style="width: 100%" :class="searchInputStatus ? '' : 'hidden'">
-          <a-input v-model:value="searchText" @pressEnter="onSearchUser" style="width: 100%" placeholder="请输入用户名按回车搜索">
+          <a-input v-model:value="searchText" @pressEnter="onSearchUser" style="width: 100%" placeholder="Vui lòng nhập tên người dùng, nhấn Enter để tìm kiếm">
             <template #prefix>
               <SearchOutlined style="color: #c0c0c0" />
             </template>
             <template #suffix>
-              <CloseOutlined title="退出搜索" @click="clearSearch" />
+              <CloseOutlined title="Thoát tìm kiếm" @click="clearSearch" />
             </template>
           </a-input>
         </div>
@@ -34,13 +34,13 @@
       <!-- tabs -->
       <div class="my-tabs">
         <a-tabs v-model:activeKey="myActiveKey" :centered="true" @change="onChangeTab">
-          <!-- 所有用户 -->
-          <a-tab-pane key="1" tab="全部" forceRender>
+          <!-- Tất cả người dùng -->
+          <a-tab-pane key="1" tab="Tất cả" forceRender>
             <user-list :multi="multi" :excludeUserIdList="excludeUserIdList" :dataList="userDataList" :selectedIdList="selectedIdList" depart @selected="onSelectUser" @unSelect="unSelectUser" />
           </a-tab-pane>
 
-          <!-- 部门用户 -->
-          <a-tab-pane key="2" tab="按部门" forceRender>
+          <!-- Người dùng phòng ban -->
+          <a-tab-pane key="2" tab="Theo phòng ban" forceRender>
             <depart-user-list
               :multi="multi"
               :searchText="searchText"
@@ -52,14 +52,14 @@
             />
           </a-tab-pane>
 
-          <!-- 角色用户 -->
-          <a-tab-pane key="3" tab="按角色" forceRender>
+          <!-- Người dùng vai trò -->
+          <a-tab-pane key="3" tab="Theo vai trò" forceRender>
             <role-user-list :multi="multi" :excludeUserIdList="excludeUserIdList" :searchText="searchText" :selectedIdList="selectedIdList" @selected="onSelectUser" @unSelect="unSelectUser" />
           </a-tab-pane>
         </a-tabs>
       </div>
 
-      <!-- 选中用户 -->
+      <!-- Người dùng đã chọn -->
       <div class="selected-users" style="width: 100%; overflow-x: hidden">
         <SelectedUserItem v-for="item in selectedUserList" :info="item" @unSelect="unSelectUser" />
       </div>
@@ -77,7 +77,7 @@
             @change="onPageChange"
           />
         </div>
-        <a-button type="primary" @click="handleOk">确 定</a-button>
+        <a-button type="primary" @click="handleOk">Xác nhận</a-button>
       </div>
     </template>
   </BasicModal>
@@ -119,12 +119,12 @@
         type: Function,
         default: null,
       },
-      //是否排除我自己
+      //Có loại trừ chính tôi không
       izExcludeMy: {
         type: Boolean,
         default: false,
       },
-      //是否在高级查询中作为条件 可以选择当前用户表达式
+      //Có làm điều kiện trong tìm kiếm nâng cao hay không, có thể chọn biểu thức người dùng hiện tại
       inSuperQuery:{
         type: Boolean,
         default: false,
@@ -143,10 +143,10 @@
           return arr.map((k) => k.id);
         }
       });
-      // QQYUN-4152【应用】已经存在的用户，添加的时候还可以重复选择
+      // QQYUN-4152[Ứng dụng] Người dùng đã tồn tại, khi thêm vẫn có thể chọn trùng lặp
       const excludeUserIdList = ref<any[]>([]);
 
-      // 弹窗事件
+      // Sự kiện popup
       const [register] = useModalInner((data) => {
         let list = data.list;
         if (list && list.length > 0) {
@@ -159,40 +159,40 @@
         }else{
           excludeUserIdList.value = [];
         }
-        //如果排除我自己，直接excludeUserIdList.push排除即可
+        //Nếu loại trừ chính mình, trực tiếpexcludeUserIdList.pushChỉ cần loại trừ
         if (props.izExcludeMy) {
           excludeUserIdList.value.push(userStore.getUserInfo.id);
         }
         resetFilterState();
-        //加载用户列表
+        //Tải danh sách người dùng
         loadUserList();
       });
 
-      // 确定事件
+      // Sự kiện xác nhận
       function handleOk() {
         let arr = toRaw(selectedUserList.value);
         emit('selected', arr);
       }
 
-      /*--------------部门下拉框，用于筛选用户---------------*/
+      /*--------------Hộp thả xuống phòng ban, dùng để lọc người dùng---------------*/
       const selectedDepart = ref('');
       const departOptions = ref<any[]>([]);
       function initDepartOptions(options) {
-        departOptions.value = [{ value: '', label: '全部用户' }, ...options];
+        departOptions.value = [{ value: '', label: 'Tất cả người dùng' }, ...options];
         selectedDepart.value = '';
       }
       function onDepartChange() {
         pageNo.value = 1;
         loadUserList();
       }
-      /*--------------部门下拉框，用于筛选用户---------------*/
+      /*--------------Hộp thả xuống phòng ban, dùng để lọc người dùng---------------*/
 
-      /*--------------第一页 搜索框---------------*/
+      /*--------------Trang đầu tiên - Ô tìm kiếm---------------*/
       const searchInputStatus = ref(false);
       const searchText = ref('');
 
       /**
-       * 清空数据
+       * Xóa dữ liệu
        */
       function resetFilterState() {
         selectedDepart.value = '';
@@ -206,13 +206,13 @@
         searchInputStatus.value = true;
       }
 
-      // 回车事件，触发查询
+      // Sự kiện Enter, kích hoạt tìm kiếm
       function onSearchUser() {
         pageNo.value = 1;
         loadUserList();
       }
 
-      // 清除按名称筛选
+      // Xóa lọc theo tên
       function clearSearch(e) {
         e && prevent(e);
         pageNo.value = 1;
@@ -220,9 +220,9 @@
         searchInputStatus.value = false;
         loadUserList();
       }
-      /*--------------第一页 搜索框---------------*/
+      /*--------------Trang đầu tiên - Ô tìm kiếm---------------*/
 
-      /*--------------加载数据---------------*/
+      /*--------------Tải dữ liệu---------------*/
       const pageNo = ref(1);
       const totalRecord = ref(0);
       const userDataList = ref<any[]>([]);
@@ -243,7 +243,7 @@
           params['departId'] = selectedDepart.value;
         }
 
-        // 代码逻辑说明: 【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+        // Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
         if(unref(excludeUserIdList) && unref(excludeUserIdList).length>0){
           params['excludeUserIdList'] = excludeUserIdList.value.join(",");
         }
@@ -260,15 +260,15 @@
         console.log('loadUserList', data);
       }
       
-      // 往用户列表中添加一个 当前用户选项
+      // Thêm một tùy chọn Người dùng hiện tại vào danh sách người dùng
       function initCurrentUserData(records) {
         if(pageNo.value==1 && props.inSuperQuery === true){
           records.unshift({...mySelfData})
         }
       }
-      /*--------------加载数据---------------*/
+      /*--------------Tải dữ liệu---------------*/
 
-      /*--------------选中/取消选中---------------*/
+      /*--------------Đã chọn/Bỏ chọn---------------*/
       function onSelectUser(info) {
         if (props.multi === true) {
           let arr = selectedUserList.value;
@@ -295,7 +295,7 @@
           selectedUserList.value = arr;
         }
       }
-      /*--------------选中/取消选中---------------*/
+      /*--------------Đã chọn/Bỏ chọn---------------*/
 
       function onChangeTab(tab) {
         myActiveKey.value = tab;
@@ -306,7 +306,7 @@
         e.stopPropagation();
       }
 
-      //加载第一页数据
+      //Tải dữ liệu trang đầu tiên
       loadUserList();
 
       return {

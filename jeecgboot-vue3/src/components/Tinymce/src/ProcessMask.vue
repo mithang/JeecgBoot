@@ -26,25 +26,25 @@
   });
   const { prefixCls } = useDesign('tinymce-process-mask');
 
-  //显示遮罩
+  //Hiển thị lớp phủ
   const showMask = ref(false);
-  //进度值占比
+  //Tỷ lệ giá trị tiến độ
   const progressValue = ref<any>(0);
-  //当前数量
+  //Số lượng hiện tại
   const currentNum = ref(0);
-  // 计算进度条宽度的计算属性
+  // Thuộc tính computed tính chiều rộng của thanh tiến trình
   const progressBarWidth = computed(() => {
     return progressValue.value > 0 ? `${progressValue.value}px` : '0px';
   });
-  // 计算进度条百分比
+  // Tính phần trăm thanh tiến trình
   const percentage = computed(() => {
     return `${progressValue.value}%`;
   });
-  // 进度色
+  // Màu tiến độ
   const frontColor = computed(() => {
     return props.processColor;
   });
-  // 后置背景色
+  // Màu nền phía sau
   const rearColor = computed(() => {
     return props.backColor;
   });
@@ -73,12 +73,12 @@
 .@{prefix-cls} {
 
   & {
-    position: absolute; /* 或者使用固定定位等其他方式 */
+    position: absolute; /* Hoặc dùng định vị cố định và các cách khác */
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* 半透明遮罩 */
+    background-color: rgba(0, 0, 0, 0.5); /* Lớp phủ bán trong suốt */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,15 +87,15 @@
   }
 
   .progress-bar-rear {
-    width: 100px; /* 进度条宽度 */
-    height: 10px; /* 进度条高度 */
-    background-color: v-bind(rearColor); /* 进度条颜色 */
+    width: 100px; /* Chiều rộng thanh tiến độ */
+    height: 10px; /* Chiều cao thanh tiến độ */
+    background-color: v-bind(rearColor); /* Màu thanh tiến độ */
     border-radius: 4px;
   }
 
   .progress-bar-front {
-    height: 10px; /* 进度条高度 */
-    background-color: v-bind(frontColor); /* 进度条颜色 */
+    height: 10px; /* Chiều cao thanh tiến độ */
+    background-color: v-bind(frontColor); /* Màu thanh tiến độ */
     border-radius: 4px;
   }
 

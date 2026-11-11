@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="loading" content="加载中请稍后"></Loading>
+  <Loading :loading="loading" content="Đang tải, vui lòng đợi"></Loading>
   <div class="content" style="height: 100vh; display: flex; flex-direction: column; overflow: hidden; background-color: #f0f2f5">
     <div style="width: 100%; flex: none" class="header-box">
       <a-layout>
@@ -17,12 +17,12 @@
           <div class="center">
             <div class="menu" editor-component="menu">
               <div class="menu-item">
-                <!--  保存  -->
-                <div class="jeecg-menu-item-save" title="保存模板" @click="saveTemplate">
+                <!--  Lưu  -->
+                <div class="jeecg-menu-item-save" title="Lưu mẫu" @click="saveTemplate">
                   <i />
                 </div>
-                <!--  上传  -->
-                <div class="jeecg-menu-item-upload" title="上传" @click="uploadWordFile">
+                <!--  Tải lên  -->
+                <div class="jeecg-menu-item-upload" title="Tải lên" @click="uploadWordFile">
                   <i />
                   <input
                     ref="uploadWordFileRef"
@@ -34,59 +34,59 @@
                 <div style="display: none">
                   <input id="uploadDocxBtn" type="file" accept=".docx" />
                 </div>
-                <div class="jeecg-menu-item-download" title="导出模板" @click="downloadTemplate">
+                <div class="jeecg-menu-item-download" title="Xuất mẫu" @click="downloadTemplate">
                   <i />
                 </div>
-                <!--  预览  -->
-                <!-- <div class="menu-item-preview" title="预览">
+                <!--  Xem trước  -->
+                <!-- <div class="menu-item-preview" title="Xem trước">
                    <i />
                  </div>-->
-                <div class="jeecg-menu-item-undo no-allow" @click="undo" :title="isApple ? '撤销(⌘+Z)' : '撤销(Ctrl+Z)'">
+                <div class="jeecg-menu-item-undo no-allow" @click="undo" :title="isApple ? 'Hoàn tác(⌘+Z)' : 'Hoàn tác(Ctrl+Z)'">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-redo no-allow" @click="redo" :title="isApple ? '(重做⌘)' : '(CtrlY)'">
+                <div class="jeecg-menu-item-redo no-allow" @click="redo" :title="isApple ? '(Làm lại⌘)' : '(CtrlY)'">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-painter" title="格式刷(双击可连续使用)" @click="painterClick" @dblclick="painterDblClick">
+                <div class="jeecg-menu-item-painter" title="Cọ định dạng(Nhấp đúp có thể sử dụng liên tục)" @click="painterClick" @dblclick="painterDblClick">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-format" title="清除格式" @click="clearFormat">
+                <div class="jeecg-menu-item-format" title="Xóa định dạng" @click="clearFormat">
                   <i />
                 </div>
               </div>
               <a-divider type="vertical" style="border-inline-start: 1px solid #cfd2d8; height: 20px" />
               <div class="menu-item">
                 <div class="jeecg-menu-item-font" @click="fontFamilyClick('.jeecg-menu-item-font', '.options')">
-                  <span class="select" title="字体">{{ formState.family }}</span>
+                  <span class="select" title="Phông chữ">{{ formState.family }}</span>
                   <div class="options">
                     <ul>
                       <li v-for="item in fontStyleOption" :data-family="item.value" :style="{ 'font-family': item.value}" @click="font(item.value, item.label)">{{ item.label }}</li>
                     </ul>
                   </div>
                 </div>
-                <div title="字号" class="jeecg-menu-item-size" @click="fontFamilyClick('.jeecg-menu-item-size', '.options')">
-                  <span class="select" title="字体">{{ formState.size }}</span>
+                <div title="Cỡ chữ" class="jeecg-menu-item-size" @click="fontFamilyClick('.jeecg-menu-item-size', '.options')">
+                  <span class="select" title="Phông chữ">{{ formState.size }}</span>
                   <div class="options">
                     <ul>
                       <li v-for="item in fontSizeOption" :data-size="item.value" @click="fontSize(item.value, item.label)">{{ item.label }}</li>
                     </ul>
                   </div>
                 </div>
-                <div class="jeecg-menu-item-size-add" :title="`增大字号(${isApple ? '⌘' : 'Ctrl'}+[)`" @click="sizeAdd">
+                <div class="jeecg-menu-item-size-add" :title="`Tăng cỡ chữ(${isApple ? '⌘' : 'Ctrl'}+[)`" @click="sizeAdd">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-size-minus" :title="`减小字号(${isApple ? '⌘' : 'Ctrl'}+])`" @click="sizeMinus">
+                <div class="jeecg-menu-item-size-minus" :title="`Giảm cỡ chữ(${isApple ? '⌘' : 'Ctrl'}+])`" @click="sizeMinus">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-bold" :title="`加粗(${isApple ? '⌘' : 'Ctrl'}+B)`" @click="blob">
+                <div class="jeecg-menu-item-bold" :title="`In đậm(${isApple ? '⌘' : 'Ctrl'}+B)`" @click="blob">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-italic" :title="`斜体(${isApple ? '⌘' : 'Ctrl'}+I)`" @click="itailc">
+                <div class="jeecg-menu-item-italic" :title="`Nghiêng(${isApple ? '⌘' : 'Ctrl'}+I)`" @click="itailc">
                   <i />
                 </div>
                 <div
                   class="jeecg-menu-item-underline"
-                  :title="`下划线(${isApple ? '⌘' : 'Ctrl'}+U)`"
+                  :title="`Gạch chân(${isApple ? '⌘' : 'Ctrl'}+U)`"
                   @click="fontFamilyClick('.jeecg-menu-item-underline', '.options')"
                 >
                   <i @click.stop="underline('')" />
@@ -99,26 +99,26 @@
                     </ul>
                   </div>
                 </div>
-                <div class="jeecg-menu-item-strikeout" title="删除线(Ctrl+Shift+X)" @click="strikeout">
+                <div class="jeecg-menu-item-strikeout" title="Gạch ngang(Ctrl+Shift+X)" @click="strikeout">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-superscript" :title="`上标(${isApple ? '⌘' : 'Ctrl'}+Shift+,)`" @click="superscript">
+                <div class="jeecg-menu-item-superscript" :title="`Chỉ số trên(${isApple ? '⌘' : 'Ctrl'}+Shift+,)`" @click="superscript">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-subscript" :title="`下标(${isApple ? '⌘' : 'Ctrl'}+Shift+.)`" @click="subscript">
+                <div class="jeecg-menu-item-subscript" :title="`Chỉ số dưới(${isApple ? '⌘' : 'Ctrl'}+Shift+.)`" @click="subscript">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-color" title="字体颜色" @click="colorClick">
+                <div class="jeecg-menu-item-color" title="Màu chữ" @click="colorClick">
                   <i />
                   <span />
                   <input id="color" ref="colorRef" type="color" @input="color">
                 </div>
-                <div class="jeecg-menu-item-highlight" title="高亮" @click="highLightColorClick">
+                <div class="jeecg-menu-item-highlight" title="Tô sáng" @click="highLightColorClick">
                   <i />
                   <span />
                   <input id="highlight" type="color">
                 </div>
-                <div class="jeecg-menu-item-cellcolor" title="单元格颜色" @click="cellColorClick">
+                <div class="jeecg-menu-item-cellcolor" title="Màu ô" @click="cellColorClick">
                   <i />
                   <!-- <span></span> -->
                   <input ref="cellColorRef" id="cellcolor" type="color" @input="cellColor">
@@ -128,27 +128,27 @@
               <div class="menu-item">
                 <div class="jeecg-menu-item-title" @click="fontFamilyClick('.jeecg-menu-item-title', '.options')">
                   <i class="page-mode-i"/>
-                  <span class="select" title="切换标题">{{formState.title}}</span>
+                  <span class="select" title="Chuyển đổi tiêu đề">{{formState.title}}</span>
                   <div class="options">
                     <ul>
                       <li v-for="(item,index) in titleOptions" style="font-size: 16px" :title="`Ctrl+${isApple ? 'Option' : 'Alt'}+${index}`" :data-level="item.value" :style="{fontSize: item.fontSize}" @click="title(item.value)">{{item.label}}</li>
                     </ul>
                   </div>
                 </div>
-                <div class="jeecg-menu-item-left" title="左对齐" @click="leftAlign" :title="`左对齐(${isApple ? '⌘' : 'Ctrl'}+L)`">
+                <div class="jeecg-menu-item-left" title="Căn trái" @click="leftAlign" :title="`Căn trái(${isApple ? '⌘' : 'Ctrl'}+L)`">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-center" title="居中" @click="centerAlign" :title="`居中对齐(${isApple ? '⌘' : 'Ctrl'}+E)`">
+                <div class="jeecg-menu-item-center" title="Căn giữa" @click="centerAlign" :title="`Căn giữa(${isApple ? '⌘' : 'Ctrl'}+E)`">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-right" title="右对齐" @click="rightAlign" :title="`右对齐(${isApple ? '⌘' : 'Ctrl'}+R)`">
+                <div class="jeecg-menu-item-right" title="Căn phải" @click="rightAlign" :title="`Căn phải(${isApple ? '⌘' : 'Ctrl'}+R)`">
                   <i />
                 </div>
-                <div class="jeecg-menu-item-alignment" title="两端对齐" @click="alignmentAlign" :title="`两端对齐(${isApple ? '⌘' : 'Ctrl'}+J)`">
+                <div class="jeecg-menu-item-alignment" title="Căn đều hai bên" @click="alignmentAlign" :title="`Căn đều hai bên(${isApple ? '⌘' : 'Ctrl'}+J)`">
                   <i />
                 </div>
                 <div class="jeecg-menu-item-row-margin" @click="fontFamilyClick('.jeecg-menu-item-row-margin', '.options')">
-                  <i title="行间距" class="page-mode-i" />
+                  <i title="Khoảng cách dòng" class="page-mode-i" />
                   <div class="options">
                     <ul>
                       <li v-for="item in marginOptions" :data-rowmargin="item.value" @click="rowMargin(item.value)">{{item.label}}</li>
@@ -157,31 +157,31 @@
                 </div>
                 <div class="jeecg-menu-item-list" @click="fontFamilyClick('.jeecg-menu-item-list', '.options')">
                   <i class="page-mode-i" />
-                  <div class="options" :title="`列表(${isApple ? '⌘' : 'Ctrl'}+Shift+U)`">
+                  <div class="options" :title="`Danh sách(${isApple ? '⌘' : 'Ctrl'}+Shift+U)`">
                     <ul>
                       <li  @click="list(null,null)">
-                        <span>取消列表</span>
+                        <span>Hủy danh sách</span>
                       </li>
                       <li data-list-type="ol" data-list-style="decimal" @click="list('ol','decimal')">
-                        <span>有序列表：</span>
+                        <span>Danh sách có thứ tự:</span>
                         <ol>
                           <li>________</li>
                         </ol>
                       </li>
                       <li data-list-type="ul" data-list-style="disc" @click="list('ul','disc')">
-                        <span>实心圆点列表：</span>
+                        <span>Danh sách dấu chấm tròn đặc:</span>
                         <ul style="list-style-type: disc !important;">
                           <li>________</li>
                         </ul>
                       </li>
                       <li data-list-type="ul" data-list-style="circle" @click="list('ul','circle')">
-                        <span>空心圆点列表：</span>
+                        <span>Danh sách dấu chấm tròn rỗng:</span>
                         <ul style="list-style-type: circle !important;">
                           <li>________</li>
                         </ul>
                       </li>
                       <li data-list-type="ul" data-list-style="square" @click="list('ul','square')">
-                        <span>空心方块列表：</span>
+                        <span>Danh sách khối vuông rỗng:</span>
                         <ul style="list-style-type: square !important;">
                           <li>________</li>
                         </ul>
@@ -193,21 +193,21 @@
               <a-divider type="vertical" style="border-inline-start: 1px solid #cfd2d8; height: 20px" />
               <div class="menu-item">
                 <!-- <div class="jeecg-menu-item-chart">
-                   <i title="图表" />
+                   <i title="Biểu đồ" />
                  </div>-->
                 <div class="jeecg-menu-item-table" @click="tableClick">
-                  <i title="表格" class="page-mode-i"/>
+                  <i title="Bảng" class="page-mode-i"/>
                 </div>
                 <div class="jeecg-menu-item-table-collapse page-mode-i" style="display: none">
                   <div class="table-close" @click="recoveryTable">×</div>
                   <div class="table-title page-mode-i" >
-                    <span class="table-select page-mode-i">插入</span>
-                    <span class="page-mode-i">表格</span>
+                    <span class="table-select page-mode-i">Chèn</span>
+                    <span class="page-mode-i">Bảng</span>
                   </div>
                   <div class="table-panel page-mode-i" @mousemove="tableMousemove" @click="tableCellClick"/>
                 </div>
                 <div class="jeecg-menu-item-image" @click="uploadImage">
-                  <i title="图片" />
+                  <i title="Hình ảnh" />
                   <input
                     ref="uploadImageRef"
                     id="image"
@@ -217,16 +217,16 @@
                   >
                 </div>
                 <!--<div class="jeecg-menu-item-barcode">
-                  <i title="条形码" />
+                  <i title="Mã vạch" />
                 </div>
                 <div class="jeecg-menu-item-qrcode">
-                  <i title="二维码" />
+                  <i title="Mã QR" />
                 </div>-->
                 <div class="jeecg-menu-item-hyperlink" @click="hyperlinkClick">
-                  <i title="超链接" />
+                  <i title="Siêu liên kết" />
                 </div>
                 <div class="jeecg-menu-item-separator" @click.stop="separatorClick">
-                  <i title="分割线" class="page-mode-i"/>
+                  <i title="Đường phân cách" class="page-mode-i"/>
                   <div class="options page-mode-i">
                     <ul>
                       <li class="page-mode-i" v-for="item in separatorOption" :data-separator="item.value" @click.stop="separatorActiveClick(item.value)">
@@ -234,31 +234,31 @@
                       </li>
                     </ul>
                     <div class="more page-mode-i">
-                      <div class="page-mode-i">颜色:<a-input @click.stop="" type="color" class="page-mode-i color" v-model:value="formState.separatorColor"/></div>
-                      <div class="page-mode-i">粗细(px):<a-input-number @click.stop="" type="tel" class="page-mode-i lineWidth"  v-model:value="formState.separatorLineWidth"/></div>
+                      <div class="page-mode-i">Màu sắc:<a-input @click.stop="" type="color" class="page-mode-i color" v-model:value="formState.separatorColor"/></div>
+                      <div class="page-mode-i">Độ đậm(px):<a-input-number @click.stop="" type="tel" class="page-mode-i lineWidth"  v-model:value="formState.separatorLineWidth"/></div>
                       <div class="page-mode-i" style="margin-top: 10px;">
-                        <a-button size="small" type="primary" @click.prevent.stop="separatorOk">确定</a-button>
-                        <a-button @click.prevent.stop="separatorCancel" size="small" style="margin-left: 6px">取消</a-button>
+                        <a-button size="small" type="primary" @click.prevent.stop="separatorOk">Xác nhận</a-button>
+                        <a-button @click.prevent.stop="separatorCancel" size="small" style="margin-left: 6px">Hủy</a-button>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="jeecg-menu-item-watermark" @click="fontFamilyClick('.jeecg-menu-item-watermark', '.options')">
-                  <i title="水印(添加、删除)" class="page-mode-i"/>
+                  <i title="Watermark(Thêm, xóa)" class="page-mode-i"/>
                   <div class="options">
                     <ul>
-                      <li data-menu="add" @click="addWatermarkClick">添加水印</li>
-                      <li data-menu="delete" @click="deleteWatermarkClick">删除水印</li>
+                      <li data-menu="add" @click="addWatermarkClick">Thêm watermark</li>
+                      <li data-menu="delete" @click="deleteWatermarkClick">Xóa watermark</li>
                     </ul>
                   </div>
                 </div>
-                <div class="jeecg-menu-item-page-break" title="分页符" @click="pageBreak">
+                <div class="jeecg-menu-item-page-break" title="Dấu ngắt trang" @click="pageBreak">
                   <i />
                 </div>
               </div>
               <a-divider type="vertical" style="border-inline-start: 1px solid #cfd2d8; height: 20px" />
               <div class="menu-item">
-                <div :title="`搜索与替换(${isApple ? '⌘' : 'Ctrl'}+F)`" class="jeecg-menu-item-search" data-menu="search" title="查找替换" @click="searchClick">
+                <div :title="`Tìm kiếm và thay thế(${isApple ? '⌘' : 'Ctrl'}+F)`" class="jeecg-menu-item-search" data-menu="search" title="Tìm và thay thế" @click="searchClick">
                   <i class="page-mode-i"/>
                 </div>
                 <div class="jeecg-menu-item-search-collapse" data-menu="search" style="display: none">
@@ -275,17 +275,17 @@
                   </div>
                   <div class="jeecg-menu-item-search-collapse-replace">
                     <input type="text">
-                    <button @click="replaceText">替换</button>
+                    <button @click="replaceText">Thay thế</button>
                   </div>
                 </div>
-                <div :title="`打印(${isApple ? '⌘' : 'Ctrl'}+P)`" class="jeecg-menu-item-print" data-menu="print" title="打印" @click="printTemplate">
+                <div :title="`In(${isApple ? '⌘' : 'Ctrl'}+P)`" class="jeecg-menu-item-print" data-menu="print" title="In" @click="printTemplate">
                   <i />
                 </div>
               </div>
             </div>
             <div class="catalog" editor-component="catalog">
               <div class="jeecg-catalog-header">
-                <span>目录</span>
+                <span>Danh mục</span>
                 <div class="jeecg-catalog-header-close" @click="closeDirectory">
                   <i />
                 </div>
@@ -300,52 +300,52 @@
         <a-layout-footer>
           <div class="footer" editor-component="footer">
             <div>
-              <div class="catalog-mode" title="目录" @click="openDirectory">
+              <div class="catalog-mode" title="Danh mục" @click="openDirectory">
                 <i />
               </div>
               <div class="page-mode" @click="fontFamilyClick('.page-mode', '.options')">
-                <i title="页面模式(分页、连页)" class="page-mode-i"/>
+                <i title="Chế độ trang(phân trang, trang liên tục)" class="page-mode-i"/>
                 <div class="options">
                   <ul>
                     <li v-for="item in pageModeOptions" :data-page-mode="item.value" :class="item.value === 'paging'?'active':''" @click="pageMode(item.value)">{{item.label}}</li>
                   </ul>
                 </div>
               </div>
-              <span>可见页码：<span class="page-no-list">1</span></span>
-              <span>页面：<span class="page-no">1</span>/<span class="page-size" >1</span></span>
-              <span>字数：<span class="word-count">0</span></span>
+              <span>Số trang hiển thị:<span class="page-no-list">1</span></span>
+              <span>Trang:<span class="page-no">1</span>/<span class="page-size" >1</span></span>
+              <span>Số từ:<span class="word-count">0</span></span>
             </div>
             <div>
-              <div class="page-scale-minus" title="缩小(Ctrl+-)" @click="scaleMiuns">
+              <div class="page-scale-minus" title="Thu nhỏ(Ctrl+-)" @click="scaleMiuns">
                 <i />
               </div>
               <span
                 class="page-scale-percentage"
-                title="显示比例(点击可复原Ctrl+0)"
+                title="Hiển thị tỷ lệ(Nhấp để khôi phụcCtrl+0)"
               >100%</span>
-              <div class="page-scale-add" title="放大(Ctrl+=)" @click="scaleAdd">
+              <div class="page-scale-add" title="Phóng to(Ctrl+=)" @click="scaleAdd">
                 <i />
               </div>
               <div class="paper-size" @click="fontFamilyClick('.paper-size', '.options')">
-                <i title="纸张类型" class="page-mode-i"/>
-                <div class="options" title="纸张大小">
+                <i title="Loại giấy" class="page-mode-i"/>
+                <div class="options" title="Khổ giấy">
                   <ul>
                     <li v-for="item in paperSizeOption" :data-paper-size="item.value" :class="item.label === 'A4'?'active':''" @click="paperSize(item.value)">{{item.label}}</li>
                   </ul>
                 </div>
               </div>
               <div class="paper-direction" @click="fontFamilyClick('.paper-direction', '.options')">
-                <i title="纸张方向" class="page-mode-i"/>
+                <i title="Hướng giấy" class="page-mode-i"/>
                 <div class="options">
                   <ul>
                     <li v-for="item in paperDirectionOptions" :data-paper-direction="item.value" :class="item.value == 'vertical'?'active':''" @click="paperDirection(item.value)">{{item.label}}</li>
                   </ul>
                 </div>
               </div>
-              <div class="paper-margin" title="页边距" @click="paperMarginClick">
+              <div class="paper-margin" title="Lề trang" @click="paperMarginClick">
                 <i />
               </div>
-              <div class="fullscreen" title="全屏显示">
+              <div class="fullscreen" title="Hiển thị toàn màn hình">
                 <i />
               </div>
             </div>
@@ -353,13 +353,13 @@
         </a-layout-footer>
       </a-layout>
     </div>
-    <!--  页边距  -->
+    <!--  Lề trang  -->
     <PagerMarginDrawer @register="registerPagerMarginDrawer" @ok="setPaperMargin"></PagerMarginDrawer>
-    <!--  高亮颜色  -->
+    <!--  Màu nổi bật  -->
     <HighlightColorModal @register="registerHighlightColorModal" @ok="setHighlightColor"></HighlightColorModal>
-    <!--  超链接  -->
+    <!--  Siêu liên kết  -->
     <HyperlinkDrawer @register="registerHyperlinkDrawer" @ok="setHyperlink"></HyperlinkDrawer>
-    <!--  水印  -->
+    <!--  Watermark  -->
     <WatermarkDrawer @register="registerWatermarkDrawer" @ok="setWatermark"></WatermarkDrawer>
   </div>
 </template>
@@ -378,17 +378,17 @@
   import { useModal } from "@/components/Modal";
   
   const props = defineProps({
-    //内容（包含图片、页眉、页脚）
+    //Nội dung (bao gồm hình ảnh, đầu trang, chân trang)
     content: { type: Object, default: {} },
-    //图片上传路径
+    //Đường dẫn tải lên hình ảnh
     uploadImageUrl: { type: String, default: '/sys/common/upload' },
-    //文件上传路径
+    //Đường dẫn tải lên tệp
     uploadFileUrl: { type: String, default: '/wordtpl/template/parse/file' },
   });
 
   let emit = defineEmits(['download', 'save']);
   
-  //字体样式
+  //Kiểu chữ
   const fontStyleOption = [
     { label: '微软雅黑', value: 'Microsoft YaHei' },
     { label: '宋体', value: '宋体' },
@@ -409,12 +409,12 @@
     { label: 'Fantasy', value: 'Fantasy' },
   ];
 
-  //字体
+  //Phông chữ
   const fontSizeOption = [
-    { label: '初号', value: '56' },{ label: '小初', value: '48' },{ label: '一号', value: '34' },{ label: '小一', value: '32' },
-    { label: '二号', value: '29' },{ label: '小二', value: '24' }, { label: '三号', value: '21' }, { label: '小三', value: '20' },
-    { label: '四号', value: '18' }, { label: '小四', value: '16' }, { label: '五号', value: '14' },  { label: '小五', value: '12' },
-    { label: '六号', value: '10' },{ label: '小六', value: '8' },  { label: '七号', value: '7' },  { label: '八号', value: '6' },
+    { label: 'Sơ hiệu', value: '56' },{ label: 'Tiểu sơ', value: '48' },{ label: 'Số 1', value: '34' },{ label: 'Tiểu 1', value: '32' },
+    { label: 'Số 2', value: '29' },{ label: 'Tiểu 2', value: '24' }, { label: 'Số 3', value: '21' }, { label: 'Tiểu 3', value: '20' },
+    { label: 'Số 4', value: '18' }, { label: 'Tiểu 4', value: '16' }, { label: 'Số 5', value: '14' },  { label: 'Tiểu 5', value: '12' },
+    { label: 'Số 6', value: '10' },{ label: 'Tiểu 6', value: '8' },  { label: 'Số 7', value: '7' },  { label: 'Số 8', value: '6' },
     { label: '5', value: '5' }, { label: '9', value: '9' },{ label: '13', value: '13' },{ label: '15', value: '15' },
     { label: '17', value: '17' }, { label: '19', value: '19' },{ label: '23', value: '23' },{ label: '25', value: '25' },
     { label: '26', value: '26' }, { label: '27', value: '27' },{ label: '30', value: '30' },{ label: '31', value: '31' },
@@ -429,7 +429,7 @@
     { label: '70', value: '70' },{ label: '71', value: '71' },{ label: '72', value: '72' }
   ];
 
-  //下划线
+  //Gạch chân
   const underlineOptions = [
     { label: 'solid', value: 'solid' },
     { label: 'double', value: 'double' },
@@ -438,18 +438,18 @@
     { label: 'wavy', value: 'wavy' },
   ];
   
-  //标题
+  //Tiêu đề
   const titleOptions = [
-    { label: '正文', value: null, fontSize: '16px' },
-    { label: '标题1', value: 'first', fontSize: '26px' },
-    { label: '标题2', value: 'second', fontSize: '24px' },
-    { label: '标题3', value: 'third', fontSize: '22px' },
-    { label: '标题4', value: 'fourth', fontSize: '20px' },
-    { label: '标题5', value: 'fifth', fontSize: '18px' },
-    { label: '标题6', value: 'sixth', fontSize: '16px' },
+    { label: 'Nội dung chính', value: null, fontSize: '16px' },
+    { label: 'Tiêu đề1', value: 'first', fontSize: '26px' },
+    { label: 'Tiêu đề2', value: 'second', fontSize: '24px' },
+    { label: 'Tiêu đề3', value: 'third', fontSize: '22px' },
+    { label: 'Tiêu đề4', value: 'fourth', fontSize: '20px' },
+    { label: 'Tiêu đề5', value: 'fifth', fontSize: '18px' },
+    { label: 'Tiêu đề6', value: 'sixth', fontSize: '16px' },
   ];
   
-  //行间距
+  //Khoảng cách dòng
   const marginOptions = [
     { label: '1', value: '1' },
     { label: '1.25', value: '1.25' },
@@ -460,7 +460,7 @@
     { label: '3', value: '3' },
   ]
   
-  //分割线
+  //Đường phân cách
   const separatorOption = [
     { label: '0,0', value: '0,0' },
     { label: '1,1', value: '1,1' },
@@ -470,33 +470,33 @@
     { label: '6,2,2,2,2,2', value: '6,2,2,2,2,2' },
   ]
   
-  //纸张大小
+  //Khổ giấy
   const paperSizeOption = [
     { label: 'A4', value: '794*1123' },
     { label: 'A2', value: '1593*2251' },
     { label: 'A3', value: '1125*1593' },
     { label: 'A5', value: '565*796' },
-    { label: '5号信封', value: '412*488' },
-    { label: '6号信封', value: '450*866' },
-    { label: '7号信封', value: '609*862' },
-    { label: '9号信封', value: '862*1221' },
-    { label: '法律用纸', value: '813*1266' },
-    { label: '信纸', value: '813*1054' },
+    { label: '5phong bì số', value: '412*488' },
+    { label: '6phong bì số', value: '450*866' },
+    { label: '7phong bì số', value: '609*862' },
+    { label: '9phong bì số', value: '862*1221' },
+    { label: 'Giấy khổ Legal', value: '813*1266' },
+    { label: 'Giấy thư', value: '813*1054' },
   ]
   
-  //页面模式
+  //Chế độ trang
   const pageModeOptions = [
-    { label: '分页', value: 'paging' },
-    { label: '连页', value: 'continuity' },
+    { label: 'Phân trang', value: 'paging' },
+    { label: 'Trang liên tục', value: 'continuity' },
   ]  
   
-  //纸张方向
+  //Hướng giấy
   const paperDirectionOptions = [
-    { label: '纵向', value: 'vertical' },
-    { label: '横向', value: 'horizontal' },
+    { label: 'Dọc', value: 'vertical' },
+    { label: 'Ngang', value: 'horizontal' },
   ]
 
-  //加载状态
+  //Trạng thái tải
   const loading = ref<boolean>(false);
   let { formState, save, clearFormat, undo, redo, isApple, painterClick, painterDblClick, font, 
     fontSize, sizeAdd, sizeMinus, blob, itailc, underline, strikeout, superscript, subscript,
@@ -504,112 +504,112 @@
     setPaperMargin, updateCatalog, setWordImage, setWordContent, leftAlign, centerAlign, rightAlign, alignmentAlign,
     rowMargin, pageBreak, cellColor, setHighlightColor, title, list, tabCell, separator, setHyperlink, getHyperlink,
     setWatermark, deleteWatermarkClick, arrowLeft, arrowRight, searchInput, searchKeyDown, replaceText, closeSearch } = method();
-  //颜色的ref
+  //của màuref
   const colorRef = ref();
   initEditor();
-  //字体option
+  //Phông chữoption
   const fontOptionDom = ref<any>();
-  //字体大小option
+  //Cỡ chữoption
   const sizeOptionDom = ref<any>();
-  //下划线option
+  //Gạch chânoption
   const underlineOptionDom = ref<any>();
-  //页面模式option
+  //Chế độ trangoption
   const pageModeOptionDom = ref<any>();
-  //纸张大小option
+  //Khổ giấyoption
   const paperSizeOptionDom = ref<any>();
-  //纸张方向option
+  //Hướng giấyoption
   const paperDirectionOptionDom = ref<any>();
-  //行间距option
+  //Khoảng cách dòngoption
   const rowMarginOptionDom = ref<any>();
-  //标题Option
+  //Tiêu đềOption
   const titleOptionDom = ref<any>();
-  //列表Option
+  //Danh sáchOption
   const listOptionDom = ref<any>();
-  //table折叠层
+  //tableLớp gấp
   const tableCollapseDom = ref<any>();
-  //分割线
+  //Đường phân cách
   const separatorOptionDom = ref<any>();
-  //水印
+  //Watermark
   const watermarkOptionDom = ref<any>();
-  //查找替换
+  //Tìm và thay thế
   const searchCollapseDom = ref<any>();
-  //边距的Drawer
+  //của lềDrawer
   const [registerPagerMarginDrawer, { openDrawer: openMarginDrawer }] = useDrawer();
-  //超链接的Drawer
+  //của siêu liên kếtDrawer
   const [registerHyperlinkDrawer, { openDrawer: openHyperlinkDrawer }] = useDrawer();
-  //水印的Drawer
+  //của watermarkDrawer
   const [registerWatermarkDrawer, { openDrawer: openHyperWatermarkDrawer }] = useDrawer();
-  //上传图片的ref
+  //của hình ảnh đã tải lênref
   const uploadImageRef = ref();
-  //上传文件的ref
+  //của tệp đã tải lênref
   const uploadWordFileRef = ref();
-  //单元格背景色ref
+  //Màu nền ôref
   const cellColorRef = ref();
-  //单元格列的数组
+  //Mảng cột ô
   const tableCellList = ref<any>([]);
-  //当前第几行
+  //Hàng thứ mấy hiện tại
   const rowIndex = ref<number>(0);
-  //当前第几列
+  //Cột thứ mấy hiện tại
   const colIndex = ref<number>(0);
-  //弹窗model
+  //Popupmodel
   const [registerHighlightColorModal, { openModal: openHighlightColorModal }] = useModal();
   
   function initEditor() {
     setTimeout(async () => {
       const fontDom: any = document.querySelector('.jeecg-menu-item-font');
       fontOptionDom.value = fontDom.querySelector('.options');
-      //字体大小
+      //Cỡ chữ
       const jeecgSizeDom: any = document.querySelector('.jeecg-menu-item-size');
       sizeOptionDom.value = jeecgSizeDom.querySelector('.options');
-      //下划线
+      //Gạch chân
       const underlineDom: any = document.querySelector('.jeecg-menu-item-underline');
       underlineOptionDom.value = underlineDom.querySelector('.options');   
-      //分页
+      //Phân trang
       const pageModeDom: any = document.querySelector('.page-mode');
       pageModeOptionDom.value = pageModeDom.querySelector('.options');
-      //分页
+      //Phân trang
       const pageSizeDom: any = document.querySelector('.paper-size');
       paperSizeOptionDom.value = pageSizeDom.querySelector('.options');
-      //纸张方向
+      //Hướng giấy
       const paperDirectionDom: any = document.querySelector('.paper-direction');
       paperDirectionOptionDom.value = paperDirectionDom.querySelector('.options'); 
-      //行间距
+      //Khoảng cách dòng
       const rowMarginDom: any = document.querySelector('.jeecg-menu-item-row-margin');
       rowMarginOptionDom.value = rowMarginDom.querySelector('.options');
-      //标题
+      //Tiêu đề
       const titleDom: any = document.querySelector('.jeecg-menu-item-title');
       titleOptionDom.value = titleDom.querySelector('.options');
-      //列表
+      //Danh sách
       const listDom: any = document.querySelector('.jeecg-menu-item-list');
       listOptionDom.value = listDom.querySelector('.options'); 
-      //表格
+      //Bảng
       tableCollapseDom.value = document.querySelector('.jeecg-menu-item-table-collapse');
-      //分割线
+      //Đường phân cách
       let separatorDom:any = document.querySelector('.jeecg-menu-item-separator');
       separatorOptionDom.value = separatorDom.querySelector('.options');
-      //水印
+      //Watermark
       let watermarkDom:any = document.querySelector('.jeecg-menu-item-watermark');
       watermarkOptionDom.value = watermarkDom.querySelector('.options');
-      //查找替换
+      //Tìm và thay thế
       searchCollapseDom.value = document.querySelector('.jeecg-menu-item-search-collapse');
       
       setTableStyle()
-      // update-begin--author:liaozhiyang---date:20270724---for:【LHZP-1452】修复word目录需要修改下正文才显示
+      // update-begin--author:liaozhiyang---date:20270724---for:【LHZP-1452] Sửa lỗi mục lục Word cần sửa nội dung chính mới hiển thị
       await createEditor(props.content);
-      // 初始化完成后主动渲染一次目录，避免需要点击目录按钮才显示
+      // Sau khi khởi tạo xong chủ động render mục lục một lần, tránh việc phải nhấn nút mục lục mới hiển thị
       if (formState.showCataLogDom) {
         updateCatalog();
       }
-      // update-end--author:liaozhiyang---date:20270724---for:【LHZP-1452】修复word目录需要修改下正文才显示
-      // 组件挂载后添加事件监听器
+      // update-end--author:liaozhiyang---date:20270724---for:【LHZP-1452] Sửa lỗi mục lục Word cần sửa nội dung chính mới hiển thị
+      // Thêm trình lắng nghe sự kiện sau khi component được mount
       document.addEventListener('click', handleClickOutside);
-      //监听Ctrl或Cmd键和S键事件
+      //Lắng nghe sự kiện phím Ctrl hoặc Cmd và phím S
       document.addEventListener('keydown', handleKeyDown);
     }, 300);
   }
 
   /**
-   * 下拉框点击事件
+   * Sự kiện nhấp hộp thả xuống
    */
   function fontFamilyClick(parentClass, childrenClass) {
     const font: any = document.querySelector(parentClass);
@@ -642,7 +642,7 @@
   }
 
   /**
-   * 动态设置展开面板的位置
+   * Đặt vị trí của bảng mở rộng một cách động
    * @param parentNode
    * @param dropdownNode
    */
@@ -658,7 +658,7 @@
   }
 
   /**
-   * 监听关闭事件
+   * Lắng nghe sự kiện đóng
    * @param event
    */
   const handleClickOutside = (event) => {
@@ -668,21 +668,21 @@
   };
 
   /**
-   * 颜色点击事件
+   * Sự kiện nhấp vào màu
    */
   function colorClick() {
     colorRef.value.click();
   }
 
   /**
-   * 导出模板
+   * Xuất mẫu
    */
   function downloadTemplate() {
     emit('download', props.content);
   }
 
   /**
-   * 保存
+   * Lưu
    */
   function saveTemplate() {
     let saveData = save();
@@ -691,7 +691,7 @@
   }
 
   /**
-   * 隐藏下拉框的显示
+   * Ẩn hiển thị hộp thả xuống
    * 
    * @param value
    */
@@ -735,7 +735,7 @@
   }
 
   /**
-   * 边距点击事件
+   * Sự kiện nhấp vào lề
    */
   function paperMarginClick() {
     let values = getPaperMargin();
@@ -745,7 +745,7 @@
   }
 
   /**
-   * 打开目录
+   * Mở mục lục
    */
   function openDirectory() {
     const catalogDom:any = document.querySelector('.catalog');
@@ -755,7 +755,7 @@
   }
   
   /**
-   * 关闭目录
+   * Đóng mục lục
    */
   function closeDirectory() {
     const catalogDom:any = document.querySelector('.catalog');
@@ -764,12 +764,12 @@
   }
   
   /**
-   * 图片上传
+   * Tải lên hình ảnh
    */
   function uploadImage(){
     uploadImageRef.value.click();
   }
-  //图片上传成功事件
+  //Sự kiện tải hình ảnh lên thành công
   const uploadImageSuccess = (fileInfo) => {
     if(fileInfo.success){
       let fileUrl = getFileAccessHttpUrl(fileInfo.message);
@@ -778,7 +778,7 @@
   }
   
   /**
-   * 文件上传改变事件
+   * Sự kiện thay đổi tải tệp lên
    * @param e
    */
   function uploadImageChange(e) {
@@ -786,7 +786,7 @@
     defHttp.uploadFile({ url: props.uploadImageUrl },  { file: file, filename: file.name, data: { biz: 'word' } }, { success: uploadImageSuccess });
   }
 
-  //文件上传成功事件
+  //Sự kiện tải tệp lên thành công
   const uploadFileSuccess = (fileInfo) => {
     if(fileInfo.success){
       setWordContent(fileInfo.result);
@@ -794,14 +794,14 @@
   }
   
   /**
-   * 上传文件
+   * Tải lên tệp
    */
   function uploadWordFile() {
     uploadWordFileRef.value.click();
   }
 
   /**
-   * 上传文件change
+   * Tải lên tệpchange
    * @param e
    */
   function uploadDocxChange(e) {
@@ -810,14 +810,14 @@
   }
 
   /**
-   * 单元格背景色点击事件
+   * Sự kiện nhấn vào màu nền của ô
    */
   function cellColorClick() {
     cellColorRef.value.click();
   }
 
   /**
-   * 高亮颜色点击事件爱你
+   * Sự kiện nhấp vào màu tô sáng
    */
   function highLightColorClick() {
     openHighlightColorModal(true,{
@@ -826,11 +826,11 @@
   }
 
   /**
-   * 设置table9*9样式
+   * Cài đặttable9*9Kiểu
    */
   function setTableStyle() {
     const tablePanel:any = document.querySelector('.table-panel');
-    // 绘制行列
+    // Vẽ hàng và cột
     tableCellList.value = []
     for (let i = 0; i < 10; i++) {
       const tr = document.createElement('tr');
@@ -847,7 +847,7 @@
     }
   }
   /**
-   * 表格点击事件
+   * Sự kiện nhấp vào bảng
    */
   function tableClick() {
     hiddenVisible('table');
@@ -857,7 +857,7 @@
   }
 
   /**
-   * 移除所有格选择
+   * Xóa tất cả lựa chọn ô
    */
   function removeAllTableCellSelect() {
     tableCellList.value.forEach(tr => {
@@ -866,7 +866,7 @@
   }
 
   /**
-   * 设置标题内容
+   * Đặt nội dung tiêu đề
    * @param payload
    */
   function setTableTitle(payload) {
@@ -875,20 +875,20 @@
   }
 
   /**
-   * 恢复初始状态
+   * Khôi phục trạng thái ban đầu
    */
   function recoveryTable() {
-    // 还原选择样式、标题、选择行列
+    // Khôi phục kiểu chọn, tiêu đề, dòng/cột đã chọn
     removeAllTableCellSelect()
-    setTableTitle('插入')
+    setTableTitle('Chèn')
     colIndex.value = 0
     rowIndex.value = 0
-    // 隐藏panel
+    // Ẩnpanel
     tableCollapseDom.value.style.display = 'none';
   }
 
   /**
-   * 表格鼠标移动事件
+   * Sự kiện di chuyển chuột trên bảng
    * @param evt
    */
   function tableMousemove(evt) {
@@ -896,11 +896,11 @@
     const rowMarginTop = 10;
     const celMarginRight = 6;
     const { offsetX, offsetY } = evt;
-    // 移除所有选择
+    // Xóa tất cả lựa chọn
     removeAllTableCellSelect()
     colIndex.value = Math.ceil(offsetX / (celSize + celMarginRight)) || 1;
     rowIndex.value = Math.ceil(offsetY / (celSize + rowMarginTop)) || 1;
-    // 改变选择样式
+    // Thay đổi kiểu chọn
     tableCellList.value.forEach((tr, trIndex) => {
       tr.forEach((td, tdIndex) => {
         if (tdIndex < colIndex.value && trIndex < rowIndex.value) {
@@ -908,19 +908,19 @@
         }
       })
     })
-    // 改变表格标题
+    // Thay đổi tiêu đề bảng
     setTableTitle(`${rowIndex.value}×${colIndex.value}`);
   }
 
   /**
-   * table单元格单击事件
+   * tableSự kiện nhấp đơn ô bảng
    */
   function tableCellClick() {
     tabCell(rowIndex.value,colIndex.value,recoveryTable);
   }
 
   /**
-   * 超链接点击事件
+   * Sự kiện nhấp siêu liên kết
    */
   function hyperlinkClick() {
     let hyperlink = getHyperlink();
@@ -930,14 +930,14 @@
   }
 
   /**
-   * 添加水印
+   * Thêm watermark
    */
   function addWatermarkClick(){
     openHyperWatermarkDrawer(true,{});
   }
 
   /**
-   * 查找点击事件
+   * Tìm sự kiện nhấp chuột
    */
   function searchClick() {
     searchCollapseDom.value.style.display = 'block';
@@ -958,25 +958,25 @@
 
 
   /**
-   * 检查是否按下了Ctrl或Cmd键和S键
+   * Kiểm tra có nhấn phím Ctrl hoặc Cmd và phím S hay không
    * @param event
    */
   function handleKeyDown(event) {
-    // 检查是否按下了Ctrl或Cmd键和S键
+    // Kiểm tra có nhấn phím Ctrl hoặc Cmd và phím S hay không
     if ((event.ctrlKey || event.metaKey) && event.key === 's') {
       event.preventDefault();
-      //保存
+      //Lưu
       saveTemplate();
     }
   }
 
-  //是否显示输入框
+  //Có hiển thị ô nhập không
   const showInput = ref<boolean>(false);
-  //标题输入框
+  //Ô nhập tiêu đề
   const nameRef = ref();
   
   /**
-   * 显示或隐藏输入框
+   * Hiển thị hoặc ẩn ô nhập
    */
   function showInputClick() {
     showInput.value = true;
@@ -987,7 +987,7 @@
   }
 
   /**
-   * 保存模板名称事件
+   * Sự kiện lưu tên mẫu
    */
   function saveTemplateNameClick() {
     showInput.value = false;
@@ -999,7 +999,7 @@
   }
 
   /**
-   * 分隔符点击事件
+   * Sự kiện nhấp dấu phân cách
    */
   function separatorClick() {
     hiddenVisible('separator');
@@ -1010,18 +1010,18 @@
   }
 
   /**
-   * 分割线确定事件
+   * Sự kiện xác nhận đường phân cách
    */
   function separatorOk() {
     const separators: any = document.querySelector(".jeecg-menu-item-separator");
     const separatorOption = separators.querySelector(".options");
     separatorOption.classList.remove('visible');
-    console.log("我进来了1111")
+    console.log("Đã vào đây1111")
     separator();
   }
   
   /**
-   * 分割线取消事件
+   * Sự kiện hủy đường phân cách
    */
   function separatorCancel() {
     separatorOptionDom.value.classList.remove('visible');
@@ -1032,7 +1032,7 @@
   }
 
   /**
-   * 分割线下拉选中事件
+   * Sự kiện chọn thả xuống của đường phân cách
    * @param value
    */
   function separatorActiveClick(value) {
@@ -1046,9 +1046,9 @@
   
   
   onUnmounted(() => {
-    // 组件卸载前移除事件监听器，防止内存泄漏
+    // Trước khi component bị gỡ, loại bỏ event listener để tránh rò rỉ bộ nhớ
     document.removeEventListener('click', handleClickOutside);
-    // 移出键盘事件
+    // Loại bỏ sự kiện bàn phím
     document.removeEventListener('keydown', handleKeyDown);
   });
 </script>

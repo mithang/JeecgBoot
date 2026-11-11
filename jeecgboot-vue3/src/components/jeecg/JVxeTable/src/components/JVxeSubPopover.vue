@@ -2,7 +2,7 @@
   <a-popover :open="visible" :placement="placement" overlayClassName="j-vxe-popover-overlay" :overlayStyle="overlayStyle">
     <template #title>
       <div class="j-vxe-popover-title">
-        <div>子表</div>
+        <div>Bảng con</div>
         <div class="j-vxe-popover-title-close" @click="close">
           <a-icon type="close" />
         </div>
@@ -59,8 +59,8 @@
 
       function open(event, level = 0) {
         if (level > 3) {
-          createMessage.error('打开子表失败');
-          console.warn('【JVxeSubPopover】打开子表失败');
+          createMessage.error('Mở bảng con thất bại');
+          console.warn('[JVxeSubPopover] Mở bảng con thất bại');
           return;
         }
 
@@ -76,21 +76,21 @@
         let className = target.className || '';
         className = isString(className) ? className : className.toString();
 
-        // 获取 td 父级
+        // Lấy phần tử cha của td
         let td = getParentNodeByTagName(target, 'td');
-        // 点击的是拖拽排序列，不做处理
+        // Nhấp vào cột sắp xếp kéo-thả thì không xử lý
         if (td && td.querySelector('.j-vxe-drag-box')) {
           return;
         }
-        // 点击的是expand，不做处理
+        // Nhấp vào expand thì không xử lý
         if (className.includes('vxe-table--expand-btn')) {
           return;
         }
-        // 点击的是checkbox，不做处理
+        // Bấm vào là checkbox, không xử lý
         if (className.includes('vxe-checkbox--icon') || className.includes('vxe-cell--checkbox')) {
           return;
         }
-        // 点击的是radio，不做处理
+        // Nhấp vào radio thì không xử lý
         if (className.includes('vxe-radio--icon') || className.includes('vxe-cell--radio')) {
           return;
         }
@@ -125,7 +125,7 @@
           });
         } else {
           let num = ++level;
-          console.warn('【JVxeSubPopover】table or tr 获取失败，正在进行第 ' + num + '次重试', {
+          console.warn('[JVxeSubPopover]Lấy table hoặc tr thất bại, đang thực hiện lần thử lại thứ ' + num + 'lần thử lại', {
             event,
             table: parentElem,
             tr,

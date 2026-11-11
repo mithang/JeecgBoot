@@ -7,9 +7,9 @@
     import { propTypes } from '/@/utils/propTypes';
     import { Form } from 'ant-design-vue';
 
-    const placeholder = ['开始时间', '结束时间']
+    const placeholder = ['Thời gian bắt đầu', 'Thời gian kết thúc']
     /**
-     * 用于时间-time组件的范围查询
+     * Dùng cho thời gian-timeTìm kiếm theo phạm vi của component time
      */
     export default defineComponent({
         name: "JRangeTime",

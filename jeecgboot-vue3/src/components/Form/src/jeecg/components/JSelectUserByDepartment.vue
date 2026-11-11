@@ -1,4 +1,4 @@
-<!--用户选择组件-->
+<!--Component chọn người dùng-->
 <template>
   <div>
     <JSelectBiz @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs" @change="handleSelectChange"></JSelectBiz>
@@ -34,7 +34,7 @@
     value: propTypes.oneOfType([propTypes.string, propTypes.array]),
     modalTitle: {
       type: String,
-      default: '部门用户选择',
+      default: 'Chọn người dùng theo phòng ban',
     },
     rowKey: {
       type: String,
@@ -44,7 +44,7 @@
       type: String,
       default: 'realname',
     },
-    //查询参数
+    //Tham số truy vấn
     params: {
       type: Object,
       default: () => {},
@@ -56,29 +56,29 @@
   });
   const emit = defineEmits(['options-change', 'change', 'update:value']);
   const { createMessage } = useMessage();
-  //注册model
+  //Đăng kýmodel
   const [regModal, { openModal }] = useModal();
-  // 是否显示弹窗
+  // Có hiển thị popup không
   const modalShow = ref(false);
-  //下拉框选项值
+  //Giá trị tùy chọn của hộp dropdown
   const selectOptions: any = ref<SelectValue>([]);
-  //下拉框选中值
+  //Giá trị đã chọn của hộp dropdown
   let selectValues: any = reactive<object>({
     value: [],
     change: false,
   });
-  // 是否正在加载回显数据
+  // Có đang tải dữ liệu hiển thị lại không
   const loadingEcho = ref<boolean>(false);
-  //下发 selectOptions,xxxBiz组件接收
+  //Gửi xuống selectOptions,xxxBizComponent nhận
   provide('selectOptions', selectOptions);
-  //下发 selectValues,xxxBiz组件接收
+  //Gửi xuống selectValues,xxxBizComponent nhận
   provide('selectValues', selectValues);
-  //下发 loadingEcho,xxxBiz组件接收
+  //Gửi xuống loadingEcho,xxxBizComponent nhận
   provide('loadingEcho', loadingEcho);
 
   const attrs: any = useAttrs();
 
-  // 打开弹窗
+  // Mở popup
   function handleOpen() {
     modalShow.value = true;
     setTimeout(() => {
@@ -91,7 +91,7 @@
     selectOptions.value = selectOptions.value.filter((item) => data.includes(item[props.rowKey]));
     setValue(selectOptions.value);
   };
-  // 设置下拉框的值
+  // Đặt giá trị của hộp dropdown
   const setValue = (data) => {
     selectOptions.value = data.map((item) => {
       return {
@@ -101,14 +101,14 @@
       };
     });
     selectValues.value = data.map((item) => item[props.rowKey]);
-    // 更新value
+    // Cập nhậtvalue
     emit('update:value', selectValues.value);
-    // 触发change事件（不转是因为basicForm提交时会自动将字符串转化为数组）
+    // Kích hoạt sự kiện change (không chuyển đổi vì khi basicForm submit sẽ tự động chuyển chuỗi thành mảng)
     emit('change', selectValues.value);
-    // 触发options-change事件
+    // Kích hoạtoptions-changeSự kiện
     emit('options-change', selectOptions.value);
   };
-  // 翻译
+  // Dịch
   const transform = () => {
     let value = props.value;
     let len;
@@ -121,7 +121,7 @@
       }
       value = value.trim();
       if (value) {
-        // 如果value的值在selectedUser中存在，则不请求翻译
+        // Nếu giá trị của value tồn tại trong selectedUser thì không yêu cầu dịch
         let isNotRequestTransform = false;
         isNotRequestTransform = value.split(',').every((value) => !!selectOptions.value.find((item) => item[props.rowKey] === value));
         if (isNotRequestTransform) {
@@ -148,7 +148,7 @@
       selectValues.value = [];
     }
   };
-  // 监听value变化
+  // Lắng nghe thay đổi của value
   watch(
     () => props.value,
     () => {

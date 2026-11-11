@@ -80,7 +80,7 @@
       const wrapElRef = ref<HTMLDivElement | null>(null);
       const imgElRef = ref<HTMLImageElement | null>(null);
 
-      // 初始化
+      // Khởi tạo
       function init() {
         initMouseWheel();
         const { index, imageList } = props;
@@ -92,7 +92,7 @@
         handleIChangeImage(imageList[index]);
       }
 
-      // 重置
+      // Đặt lại
       function initState() {
         imgState.imgScale = 1;
         imgState.imgRotate = 0;
@@ -100,16 +100,16 @@
         imgState.imgLeft = 0;
       }
 
-      // 初始化鼠标滚轮事件
+      // Khởi tạo sự kiện lăn chuột
       function initMouseWheel() {
         const wrapEl = unref(wrapElRef);
         if (!wrapEl) {
           return;
         }
         (wrapEl as any).onmousewheel = scrollFunc;
-        // 火狐浏览器没有onmousewheel事件，用DOMMouseScroll代替
+        // Trình duyệt Firefox không có sự kiện onmousewheel, dùng DOMMouseScroll thay thế
         document.body.addEventListener('DOMMouseScroll', scrollFunc);
-        // 禁止火狐浏览器下拖拽图片的默认事件
+        // Chặn sự kiện mặc định khi kéo thả hình ảnh trên trình duyệt Firefox
         document.ondragstart = function () {
           return false;
         };
@@ -124,44 +124,44 @@
         }
       });
 
-      // 监听鼠标滚轮
+      // Lắng nghe bánh xe chuột
       function scrollFunc(e: any) {
         e = e || window.event;
         e.delta = e.wheelDelta || -e.detail;
 
         e.preventDefault();
         if (e.delta > 0) {
-          // 滑轮向上滚动
+          // Cuộn lên bằng bánh xe chuột
           scaleFunc(getScaleStep.value);
         }
         if (e.delta < 0) {
-          // 滑轮向下滚动
+          // Cuộn xuống bằng bánh xe chuột
           scaleFunc(-getScaleStep.value);
         }
       }
-      // 缩放函数
+      // Hàm thu phóng
       function scaleFunc(num: number) {
         if (imgState.imgScale <= 0.2 && num < 0) return;
         imgState.imgScale += num;
-        // 代码逻辑说明: 【QQYUN-13162】图片预览点击缩小一下就没了
+        // Giải thích logic mã: 【QQYUN-13162] Xem trước hình ảnh, nhấp thu nhỏ một cái là biến mất
         if (imgState.imgScale < 0.2) {
           imgState.imgScale = 0.2;
         }
       }
 
-      // 旋转图片
+      // Xoay hình ảnh
       function rotateFunc(deg: number) {
         imgState.imgRotate += deg;
       }
 
-      // 鼠标事件
+      // Sự kiện chuột
       function handleMouseUp() {
         const imgEl = unref(imgElRef);
         if (!imgEl) return;
         imgEl.onmousemove = null;
       }
 
-      // 更换图片
+      // Thay đổi hình ảnh
       function handleIChangeImage(url: string) {
         imgState.status = StatueEnum.LOADING;
         const img = new Image();
@@ -170,14 +170,14 @@
           if (imgState.currentUrl !== url) {
             const ele: any[] = e.composedPath();
             if (props.rememberState) {
-              // 保存当前图片的缩放信息
+              // Lưu thông tin thu phóng của hình ảnh hiện tại
               stateMap.set(imgState.currentUrl, {
                 scale: imgState.imgScale,
                 top: imgState.imgTop,
                 left: imgState.imgLeft,
                 rotate: imgState.imgRotate,
               });
-              // 如果之前已存储缩放信息，就应用
+              // Nếu trước đó đã lưu thông tin thu phóng, thì áp dụng
               const stateInfo = stateMap.get(url);
               if (stateInfo) {
                 imgState.imgScale = stateInfo.scale;
@@ -218,7 +218,7 @@
         };
       }
 
-      // 关闭
+      // Đóng
       function handleClose(e: MouseEvent) {
         e && e.stopPropagation();
         close();
@@ -226,13 +226,13 @@
 
       function close() {
         imgState.show = false;
-        // 移除火狐浏览器下的鼠标滚动事件
+        // Gỡ bỏ sự kiện cuộn chuột trên trình duyệt Firefox
         document.body.removeEventListener('DOMMouseScroll', scrollFunc);
-        // 恢复火狐及Safari浏览器下的图片拖拽
+        // Khôi phục kéo thả hình ảnh trên trình duyệt Firefox và Safari
         document.ondragstart = null;
       }
 
-      // 图片复原
+      // Khôi phục hình ảnh
       function resume() {
         initState();
       }
@@ -250,7 +250,7 @@
         },
       });
 
-      // 上一页下一页
+      // Trang trước trang sau
       function handleChange(direction: 'left' | 'right') {
         const { currentIndex } = imgState;
         const { imageList } = props;
@@ -290,7 +290,7 @@
         imgState.moveY = e.clientY;
       }
 
-      // 获取图片样式
+      // Lấy kiểu hình ảnh
       const getImageStyle = computed(() => {
         const { imgScale, imgRotate, imgTop, imgLeft } = imgState;
         return {

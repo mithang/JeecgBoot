@@ -63,7 +63,7 @@
     padding-left: 7px;
     cursor: pointer;
     transition: all 0.2s ease;
-    //左侧菜单模式和左侧菜单混合模式加渐变背景色
+    //Chế độ menu bên trái và chế độ hỗn hợp menu bên trái thêm màu nền chuyển sắc
     &.jeecg-layout-mix-sider-logo,&.jeecg-layout-menu-logo{
       background:@sider-logo-bg-color;
     }

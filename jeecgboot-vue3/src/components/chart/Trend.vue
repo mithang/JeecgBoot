@@ -12,13 +12,13 @@
   export default defineComponent({
     name: 'Trend',
     props: {
-      // 同title
+      // Cùngtitle
       term: {
         type: String,
         default: '',
         required: true,
       },
-      // 百分比
+      // Phần trăm
       percentage: {
         type: Number,
         default: null,

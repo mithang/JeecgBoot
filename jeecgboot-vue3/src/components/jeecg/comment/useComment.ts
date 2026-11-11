@@ -29,23 +29,23 @@ enum Api {
   getFileViewDomain = '/sys/comment/getFileViewDomain',
 }
 
-// 文件预览地址的domain 在后台配置的
+// domain của địa chỉ xem trước tệp được cấu hình ở backend
 let onlinePreviewDomain = '';
 
 /**
- * 获取文件预览的domain
+ * Lấydomain
  */
 const getViewFileDomain = () => defHttp.get({ url: Api.getFileViewDomain });
 
 /**
- * 列表接口
+ * API danh sách
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 
 export function getGloablEmojiIndex(){
   if(window['myEmojiIndex']){
-    console.log("----走window['myEmojiIndex']缓存，不new新对象！")
+    console.log("----đi quawindow['myEmojiIndex']Cache, không tạo đối tượng mới!")
     return window['myEmojiIndex'];
   }
   
@@ -59,7 +59,7 @@ export function getGloablEmojiIndex(){
 }
 
 /**
- * 查询单条记录
+ * Truy vấn một bản ghi
  * @param params
  */
 export const queryById = (id) => {
@@ -68,20 +68,20 @@ export const queryById = (id) => {
 };
 
 /**
- * 文件列表接口
+ * API danh sách tệp
  * @param params
  */
 export const fileList = (params) => defHttp.get({ url: Api.fileList, params });
 
 /**
- * 删除单个
+ * Xóa từng cái
  */
 export const deleteOne = (params) => {
   return defHttp.delete({ url: Api.deleteOne, params }, { joinParamsToUrl: true });
 };
 
 /**
- * 保存
+ * Lưu
  * @param params
  */
 export const saveOne = (params) => {
@@ -90,14 +90,14 @@ export const saveOne = (params) => {
 };
 
 /**
- * 数据日志列表接口
+ * API danh sách nhật ký dữ liệu
  * @param params
  */
 export const getLogList = (params) => defHttp.get({ url: Api.logList, params }, {isTransformResponse: false});
 
 
 /**
- * 文件上传接口
+ * API tải lên tệp
  */
 export const uploadFileUrl = `${baseUploadUrl}/sys/comment/addFile`;
 
@@ -109,7 +109,7 @@ export function useCommentWithFile(props) {
   const { createMessage } = useMessage();
   const buttonLoading = ref(false);
 
-  //确定按钮触发
+  //Kích hoạt nút xác nhận
   async function saveCommentAndFiles(obj, fileList) {
     buttonLoading.value = true;
     setTimeout(() => {
@@ -120,7 +120,7 @@ export function useCommentWithFile(props) {
   }
 
   /**
-   * 保存评论
+   * Lưu bình luận
    */
   async function saveComment(obj) {
     const {fromUserId, toUserId, commentId, commentContent} = obj;
@@ -145,7 +145,7 @@ export function useCommentWithFile(props) {
       uploadData.commentId = res.result;
     } else {
       createMessage.warning(res.message);
-      return Promise.reject('保存评论失败');
+      return Promise.reject('Lưu bình luận thất bại');
     }
   }
 
@@ -176,7 +176,7 @@ export function useCommentWithFile(props) {
   }
 
   /**
-   * QQYUN-4310【文件】从文件库选择文件功能未做
+   * QQYUN-4310[Tệp] Chức năng chọn tệp từ thư viện tệp chưa làm
    * @param file
    */
   async function saveSysFormFile(file){
@@ -221,7 +221,7 @@ export function uploadMu(fileList) {
 }
 
 /**
- * 显示文件列表
+ * Hiển thị danh sách tệp
  */
 export function useFileList() {
   const imageSrcMap = reactive({});
@@ -235,7 +235,7 @@ export function useFileList() {
     image
   };
    function getBackground(item) {
-    console.log('获取文件背景图', item);
+    console.log('Lấy ảnh nền tệp', item);
     if (isImage(item)) {
       return 'none'
     } else {
@@ -259,12 +259,12 @@ export function useFileList() {
 
   function getBase64(file, id){
     return new Promise((resolve, reject) => {
-      //声明js的文件流
+      //Khai báo luồng tệp js
       let reader = new FileReader();
       if(file){
-        //通过文件流将文件转换成Base64字符串
+        //Chuyển tệp thành chuỗi Base64 qua luồng tệp
         reader.readAsDataURL(file);
-        //转换成功后
+        //Sau khi chuyển đổi thành công
         reader.onload = function () {
           let base = reader.result;
           console.log('base', base)
@@ -334,7 +334,7 @@ export function useFileList() {
           return imageSrcMap[id];
         }
       }else if(file.url){
-        //数据库中地址
+        //Địa chỉ trong cơ sở dữ liệu
         let url = getFileAccessHttpUrl(file.url);
         return url;
       }
@@ -343,7 +343,7 @@ export function useFileList() {
   }
 
   /**
-   * 显示图片
+   * Hiển thị hình ảnh
    * @param item
    */
   function getImageAsBackground(item){
@@ -362,7 +362,7 @@ export function useFileList() {
   }
 
   /**
-   * 预览列表 cell 图片
+   * Xem trước hình ảnh cell trong danh sách
    * @param text
    */
   async function viewImage(file) {
@@ -374,12 +374,12 @@ export function useFileList() {
       }
     }else{
       if(file.url){
-        //数据库中地址
+        //Địa chỉ trong cơ sở dữ liệu
         let url = getFileAccessHttpUrl(file.url);
         await initViewDomain();
-        //本地测试需要将文件地址的localhost/127.0.0.1替换成IP, 或是直接修改全局domain
+        //Kiểm tra local cần thay địa chỉ tệplocalhost/127.0.0.1Thay thànhIP, Hoặc sửa trực tiếp toàn cụcdomain
         //url = url.replace('localhost', '192.168.1.100')
-        // 代码逻辑说明: 【TV360X-952】升级到kkfileview4.1.0---
+        // Giải thích logic mã: 【TV360X-952]Nâng cấp lênkkfileview4.1.0---
         let previewUrl = encodeURIComponent(encryptByBase64(url));
         window.open(onlinePreviewDomain+'?url='+previewUrl);
       }
@@ -387,7 +387,7 @@ export function useFileList() {
   }
 
   /**
-   * 初始化domain
+   * Khởi tạodomain
    */
   async function initViewDomain(){
     if(!onlinePreviewDomain){
@@ -414,7 +414,7 @@ export function useFileList() {
 }
 
 /**
- * 用于emoji渲染
+ * Dùng để render emoji
  */
 export function useEmojiHtml(globalEmojiIndex){
   const COLONS_REGEX = new RegExp('([^:]+)?(:[a-zA-Z0-9-_+]+:(:skin-tone-[2-6]:)?)','g');
@@ -453,7 +453,7 @@ export function useEmojiHtml(globalEmojiIndex){
 }
 
 /**
- * 获取modal窗体高度
+ * Lấy chiều cao của cửa sổ modal
  */
 export function getModalHeight(){
   return window.innerHeight;

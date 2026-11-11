@@ -1,6 +1,6 @@
-<!--水印页面-->
+<!--Trang watermark-->
 <template>
-  <BasicDrawer @register="registerBaseDrawer" title="设置水印" width="600" showFooter @ok="handleOk">
+  <BasicDrawer @register="registerBaseDrawer" title="Thiết lập watermark" width="600" showFooter @ok="handleOk">
     <BasicForm @register="registerForm" />
   </BasicDrawer>
 </template>
@@ -13,33 +13,33 @@
 
   const schemas: FormSchema[] = [
     {
-      label: '内容',
+      label: 'Nội dung',
       field: 'data',
       component: 'Input',
-      rules: [{ required: true, message: '请填写内容' }],
+      rules: [{ required: true, message: 'Vui lòng điền nội dung' }],
     },
     {
-      label: '颜色',
+      label: 'Màu sắc',
       field: 'color',
       component: 'Input',
       componentProps: {
         type: 'color',
       },
-      rules: [{ required: true, message: '请选择颜色' }],
+      rules: [{ required: true, message: 'Vui lòng chọn màu' }],
       defaultValue: '#AEB5C0',
     },
     {
-      label: '字体大小',
+      label: 'Cỡ chữ',
       field: 'size',
       component: 'InputNumber',
       componentProps: {
         min: 10,
       },
       defaultValue: 50,
-      rules: [{ required: true, message: '请填写字体大小' }],
+      rules: [{ required: true, message: 'Vui lòng nhập cỡ chữ' }],
     },
     {
-      label: '透明度',
+      label: 'Độ trong suốt',
       field: 'opacity',
       component: 'Slider',
       componentProps: {
@@ -48,28 +48,28 @@
         step: 0.1,
       },
       defaultValue: 0.3,
-      rules: [{ required: true, message: '请填写透明度' }],
+      rules: [{ required: true, message: 'Vui lòng nhập độ trong suốt' }],
     },
     {
-      label: '重复',
+      label: 'Lặp lại',
       field: 'repeat',
       component: 'Select',
       componentProps: {
         options: [
-          { label: '不重复', value: '0' },
-          { label: '重复', value: '1' },
+          { label: 'Không lặp lại', value: '0' },
+          { label: 'Lặp lại', value: '1' },
         ],
       },
       defaultValue: '0',
     },
     {
-      label: '水平间隔',
+      label: 'Khoảng cách ngang',
       field: 'horizontalGap',
       component: 'InputNumber',
       defaultValue: 10,
     },
     {
-      label: '垂直间隔',
+      label: 'Khoảng cách dọc',
       field: 'verticalGap',
       component: 'InputNumber',
       defaultValue: 10,
@@ -83,7 +83,7 @@
     labelCol: { span: 24 },
   });
 
-  //注册Drawer
+  //Đăng kýDrawer
   const [registerBaseDrawer, { closeDrawer }] = useDrawerInner((data) => {
     resetFields();
     setFieldsValue({
@@ -92,7 +92,7 @@
   });
 
   /**
-   * 确定事件
+   * Sự kiện xác nhận
    */
   async function handleOk() {
     let values = await validate();

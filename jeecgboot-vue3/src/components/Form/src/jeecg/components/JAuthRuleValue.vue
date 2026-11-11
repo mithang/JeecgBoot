@@ -1,7 +1,7 @@
 <template>
   <div class="JAuthRuleValue">
     <a-input-group compact>
-      <!-- 系统变量选择器：使用 Dropdown 而非 Select，避免被外层 FormItem 二次收集 -->
+      <!-- Bộ chọn biến hệ thống: dùng Dropdown thay vì Select, tránh bị FormItem bên ngoài thu thập lần hai -->
       <a-dropdown class="sys-var-dropdown" :trigger="['click']" :getPopupContainer="getPopupContainer" v-model:open="dropdownVisible">
         <a-button type="default" size="middle" :class="isSysVarMode ? 'sys-var-button-active' : 'sys-var-button-inactive'">
           <span class="sys-var-label">{{ selectedSysVarLabel || selectPlaceholder }}</span>
@@ -14,7 +14,7 @@
         </template>
       </a-dropdown>
 
-      <!-- 默认文本输入（未配置专业组件 或 当前为系统变量模式） -->
+      <!-- Ô nhập văn bản mặc định (chưa cấu hình component chuyên dụng hoặc đang ở chế độ biến hệ thống) -->
       <a-input
         v-if="!innerComponent || isSysVarMode"
         allow-clear
@@ -24,27 +24,27 @@
         @change="handleInputChange"
       />
 
-      <!-- 字典选择 -->
+      <!-- Chọn từ điển -->
       <JDictSelectTag v-else-if="innerComponent === 'JDictSelectTag'" v-bind="innerProps" :value="inputVal" @change="handleCustomChange" />
 
-      <!-- 关联记录 -->
+      <!-- Bản ghi liên kết -->
       <div v-else-if="innerComponent === 'JLinkTableCard'" class="link-table-rule-value">
         <JLinkTableCard v-bind="innerProps" :value="inputVal" @change="handleCustomChange" />
       </div>
 
-      <!-- Popup 字典 -->
+      <!-- Popup Từ điển -->
       <JPopupDict v-else-if="innerComponent === 'JPopupDict'" v-bind="innerProps" :value="inputVal" @change="handleCustomChange" />
 
-      <!-- 用户选择 -->
+      <!-- Chọn người dùng -->
       <JSelectUser v-else-if="innerComponent === 'JSelectUser'" v-bind="innerProps" :value="inputVal" @change="handleCustomChange" />
 
-      <!-- 部门选择 -->
+      <!-- Chọn phòng ban -->
       <JSelectDept v-else-if="innerComponent === 'JSelectDept'" v-bind="innerProps" :value="inputVal" @change="handleCustomChange" />
 
-      <!-- 省市区 -->
+      <!-- Tỉnh/Thành/Quận huyện -->
       <JAreaLinkage v-else-if="innerComponent === 'JAreaLinkage'" v-bind="innerProps" :value="inputVal" @change="handleCustomChange" />
 
-      <!-- 日期 -->
+      <!-- Ngày -->
       <DatePicker
         v-else-if="innerComponent === 'DatePicker'"
         v-bind="innerProps"
@@ -53,7 +53,7 @@
         @change="handleDatePickerChange"
       />
 
-      <!-- 时间 -->
+      <!-- Thời gian -->
       <TimePicker v-else-if="innerComponent === 'TimePicker'" v-bind="innerProps" :value="inputVal" @change="handleCustomChange" />
     </a-input-group>
   </div>
@@ -79,12 +79,12 @@
 
   const props = defineProps({
     value: propTypes.oneOfType([propTypes.string, propTypes.number, propTypes.array]),
-    // 内部实际组件配置 { component: 'JSelectUser', componentProps: {...} }
+    // Cấu hình component thực tế bên trong { component: 'JSelectUser', componentProps: {...} }
     customComponent: propTypes.object.def(null),
-    // 系统变量选项
+    // Tùy chọn biến hệ thống
     options: propTypes.array.def([]),
-    selectPlaceholder: propTypes.string.def('选择系统变量'),
-    inputPlaceholder: propTypes.string.def('请输入'),
+    selectPlaceholder: propTypes.string.def('Chọn biến hệ thống'),
+    inputPlaceholder: propTypes.string.def('Vui lòng nhập'),
     getPopupContainer: {
       type: Function,
       default: () => document.body,
@@ -98,7 +98,7 @@
 
   const innerComponent = computed(() => props.customComponent?.component);
   const innerProps = computed(() => props.customComponent?.componentProps || {});
-  // 兼容此前按年/月/周/季度显示格式保存的规则值，传给 DatePicker 前转换成稳定的 YYYY-MM-DD
+  // Tương thích với giá trị quy tắc đã lưu trước đây theo năm/tháng/Tuần/Giá trị quy tắc được lưu theo định dạng hiển thị theo quý, chuyển đổi thành định dạng ổn định trước khi truyền cho DatePicker YYYY-MM-DD
   const datePickerValue = computed(() => {
     const value = inputVal.value;
     const picker = innerProps.value?.picker;
@@ -117,7 +117,7 @@
   });
 
   const isSysVar = (val) => val != null && props.options.some((item) => item.value === val);
-  // 当前值为系统变量时，右侧统一回退为普通输入框，避免专业组件解析 #{...} 字符串
+  // Khi giá trị hiện tại là biến hệ thống, phía bên phải thống nhất quay về ô nhập thông thường, tránh component chuyên dụng phân tích cú pháp #{...} Chuỗi
   const isSysVarMode = computed(() => isSysVar(inputVal.value));
 
   const selectedSysVarLabel = computed(() => {
@@ -157,7 +157,7 @@
       display: flex;
       width: 100%;
     }
-    // a-dropdown 不生成包裹节点，class 会直接合并到内部按钮，需使用同级类选择器
+    // a-dropdown Không sinh nút bao bọc, class sẽ được hợp nhất trực tiếp vào nút bên trong, cần dùng bộ chọn class cùng cấp
     .sys-var-dropdown.ant-btn {
       flex: 0 0 auto;
       border-top-right-radius: 0;

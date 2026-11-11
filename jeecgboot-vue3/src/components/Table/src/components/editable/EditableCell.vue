@@ -50,7 +50,7 @@
   import { treeToList } from '/@/utils/helper/treeHelper';
   import { Spin } from 'ant-design-vue';
 
-  // 这些字段是表格内部使用的，不应该传递给 beforeEditSubmit
+  // Các trường này dùng nội bộ trong bảng, không nên truyền cho beforeEditSubmit
   const INTERNAL_RECORD_FIELDS = [
     'editable',
     'submitCbs',
@@ -110,7 +110,7 @@
 
       const getComponentProps = computed(() => {
         let compProps;
-        // 代码逻辑说明: 【issues/8680】editComponentProps可接受一个函数传入record
+        // Giải thích logic mã: 【issues/8680]editComponentProps có thể nhận một hàm truyền vàorecord
         if (isFunction(props.column?.editComponentProps)) {
           compProps = props.column?.editComponentProps(props.record);
         } else {
@@ -128,7 +128,7 @@
         const val = unref(currentValueRef);
 
         const value = isCheckValue ? (isNumber(val) && isBoolean(val) ? val : !!val) : val;
-        // 代码逻辑说明: 【issues/7136】单元格上的tooltip提示，如果表格有滚动条，会不跟着单元格滚动---
+        // Giải thích logic mã: 【issues/7136]Gợi ý tooltip trên ô, nếu bảng có thanh cuộn thì sẽ không cuộn theo ô---
         let tooltipPosition:any = unref(table?.wrapRef.value)?.parentElement?.querySelector('.ant-table-body');
         if(tooltipPosition){
           tooltipPosition.style.position = 'relative';
@@ -160,7 +160,7 @@
 
         const options: LabelValueOptions = editComponentProps?.options ?? (unref(optionsRef) || []);
         const option = options.find((item) => `${item.value}` === `${value}`);
-        // 代码逻辑说明: 【QQYUN-13251】表格可编辑单元格apiSelect多选不翻译 ---
+        // Giải thích logic mã: 【QQYUN-13251]Ô có thể chỉnh sửa của bảng apiSelect chọn nhiều không dịch ---
         if (['tags', 'multiple'].includes(editComponentProps?.mode)) {
           const result = options
             .filter((item) => {
@@ -297,7 +297,7 @@
             spinning.value = true;
             let result: any = true;
             try {
-              // 过滤掉内部字段，只保留业务数据字段，确保 id 等关键字段不丢失
+              // Lọc bỏ các trường nội bộ, chỉ giữ lại các trường dữ liệu nghiệp vụ, đảm bảo các trường quan trọng như id không bị mất
               const cleanRecord = omit(record, INTERNAL_RECORD_FIELDS);
               result = await beforeEditSubmit({
                 record: cleanRecord,
@@ -379,7 +379,7 @@
       function initCbs(cbs: 'submitCbs' | 'validCbs' | 'cancelCbs', handle: Fn) {
         if (props.record) {
           /* eslint-disable  */
-          // 代码逻辑说明: 【issues/1165】解决canResize为true时第一行校验不过
+          // Giải thích logic mã: 【issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
           const { dataIndex, key } = props.column;
           const field: any = dataIndex || key;
           if (isArray(props.record[cbs])) {
@@ -406,7 +406,7 @@
         }
         /* eslint-disable  */
         props.record.onCancelEdit = () => {
-          // 代码逻辑说明: 【issues/1165】解决canResize为true时第一行校验不过
+          // Giải thích logic mã: 【issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
           isArray(props.record?.cancelCbs) &&
             props.record?.cancelCbs.forEach((item) => {
               const [fn] = Object.values(item);
@@ -418,7 +418,7 @@
           if (isArray(props.record?.submitCbs)) {
             if (!props.record?.onValid?.()) return;
             const submitFns = props.record?.submitCbs || [];
-            // 代码逻辑说明: 【issues/1165】解决canResize为true时第一行校验不过
+            // Giải thích logic mã: 【issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
             submitFns.forEach((item) => {
               const [fn] = Object.values(item);
               fn(false, false);

@@ -18,16 +18,16 @@
 
 <script lang="ts">
   import type { RawEditorOptions } from 'tinymce';
-  // update-begin--author:copilot---date:20260711---for:【依赖升级排查】修复 Rolldown 严格 CJS 互操作导致 tinymce 全局未挂载
+  // update-begin--author:copilot---date:20260711---for:Sửa lỗi Rolldown với tương tác CJS nghiêm ngặt khiến tinymce toàn cục chưa được mount
   import tinymce from '/@/utils/tinymceGlobalShim';
-  // update-end--author:copilot---date:20260711---for:【依赖升级排查】修复 Rolldown 严格 CJS 互操作导致 tinymce 全局未挂载
+  // update-end--author:copilot---date:20260711---for:Sửa lỗi Rolldown với tương tác CJS nghiêm ngặt khiến tinymce toàn cục chưa được mount
   import Editor from '@tinymce/tinymce-vue'
   import 'tinymce/themes/silver';
   import 'tinymce/icons/default/icons';
   import 'tinymce/models/dom';
 
-  // tinymce插件可按自己的需要进行导入
-  // 更多插件参考：https://www.tiny.cloud/docs/plugins/
+  // tinymcePlugin có thể import theo nhu cầu của mình
+  // Tham khảo thêm plugin:https://www.tiny.cloud/docs/plugins/
   import 'tinymce/plugins/fullscreen';
   import 'tinymce/plugins/link';
   import 'tinymce/plugins/lists';
@@ -91,7 +91,7 @@
       type: Boolean,
       default: false,
     },
-    //是否聚焦
+    //Có lấy focus hay không
     autoFocus:{
       type: Boolean,
       default: true,
@@ -105,7 +105,7 @@
     props: tinymceProps as any,
     emits: ['change', 'update:modelValue', 'inited', 'init-error'],
     setup(props, { emit, attrs }) {
-      console.log("---Tinymce---初始化---")
+      console.log("---Tinymce---Khởi tạo---")
 
       const editorRef = ref<Nullable<any>>(null);
       const fullscreen = ref(false);
@@ -142,7 +142,7 @@
       const initOptions = computed(() => {
         const { height, options, toolbar, plugins, menubar } = props;
         let publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
-        // 代码逻辑说明: 【QQYUN-8571】发布路径不以/结尾资源会加载失败
+        // Giải thích logic mã: 【QQYUN-8571] đường dẫn phát hành không kết thúc bằng/tài nguyên sẽ tải thất bại nếu không kết thúc bằng /
         if (!publicPath.endsWith('/')) {
           publicPath += '/';
         }
@@ -152,22 +152,22 @@
           toolbar,
           menubar: false,
           plugins,
-          // 添加以下粘贴相关配置
-          paste_data_images: true, // 允许粘贴图片
-          paste_as_text: false, // 不以纯文本粘贴
-          paste_retain_style_properties: 'all', // 保留所有样式属性
-          paste_webkit_styles: 'all', // 保留webkit样式
-          paste_merge_formats: true, // 合并格式
-          paste_block_drop: true, // 允许拖放粘贴
+          // Thêm cấu hình dán sau đây
+          paste_data_images: true, // Cho phép dán hình ảnh
+          paste_as_text: false, // Không dán dưới dạng văn bản thuần
+          paste_retain_style_properties: 'all', // Giữ lại tất cả thuộc tính kiểu
+          paste_webkit_styles: 'all', // Giữ lại kiểu webkit
+          paste_merge_formats: true, // Gộp định dạng
+          paste_block_drop: true, // Cho phép kéo thả để dán
           paste_preprocess: (plugin, args) => {
-            // 可以在这里对粘贴的内容进行预处理
-            //console.log('粘贴的内容:', args.content);
+            // Có thể xử lý trước nội dung đã dán tại đây
+            //console.log('Nội dung đã dán:', args.content);
           },
           paste_postprocess: (plugin, args) => {
-            // 可以在这里对粘贴的内容进行后处理
-            //console.log('处理后的内容:', args.node);
+            // Có thể xử lý sau nội dung đã dán tại đây
+            //console.log('Nội dung đã xử lý:', args.node);
           },
-          // 放宽内容过滤规则
+          // Nới lỏng quy tắc lọc nội dung
           valid_elements: '*[*]',
           extended_valid_elements: '*[*]',
           valid_children: '+body[style]',
@@ -181,7 +181,7 @@
           link_title: false,
           object_resizing: true,
           toolbar_mode: 'sliding',
-          // 代码逻辑说明: 【TV360X-416】单表代码生成，表单打开时，会先聚焦富文本组件，并滚动到富文本组件所在的位置---
+          // Giải thích logic mã: 【TV360X-416]Sinh mã bảng đơn, khi biểu mẫu mở ra sẽ focus trước vào component rich text và cuộn đến vị trí của component rich text---
           auto_focus: props.autoFocus,
           // toolbar_groups: true,
           skin: skinName.value,
@@ -203,12 +203,12 @@
                   resolve(img);
                 }
               } else {
-                  reject('上传失败！');
+                  reject('Tải lên thất bại!');
               }
             };
             uploadFile(params, uploadSuccess);
         }),
-          // update-begin--author:liaozhiyang---date:20260617---for:【JHHB-1433】新闻内容需要支持插入视频，现在的插件没有插入视频操作
+          // update-begin--author:liaozhiyang---date:20260617---for:【JHHB-1433]Nội dung tin tức cần hỗ trợ chèn video, plugin hiện tại không có thao tác chèn video
           media_live_embeds: true,
           media_alt_source: false,
           media_poster: false,
@@ -239,23 +239,23 @@
             };
             input.click();
           },
-          // update-end--author:liaozhiyang---date:20260617---for:【JHHB-1433】新闻内容需要支持插入视频，现在的插件没有插入视频操作
+          // update-end--author:liaozhiyang---date:20260617---for:【JHHB-1433]Nội dung tin tức cần hỗ trợ chèn video, plugin hiện tại không có thao tác chèn video
           content_css: publicPath + 'resource/tinymce/skins/ui/' + skinName.value + '/content.min.css',
           ...options,
           setup: (editor: any) => {
             editorRef.value = editor;
             editor.on('init', (e) => {
               initSetup(e);
-              // update-begin--author:liaozhiyang---date:20260306---for:【issues/9448】滚动时tinymce如果下拉打开则隐藏
-              // 弹窗内滚动时关闭tinymce下拉菜单，避免下拉菜单挂载在body导致位置不跟随
+              // update-begin--author:liaozhiyang---date:20260306---for:【issues/9448]Khi cuộn, nếu dropdown của tinymce đang mở thì ẩn đi
+              // Khi cuộn trong popup thì đóng menu dropdown của tinymce, tránh menu dropdown gắn vào body khiến vị trí không bám theo
               bindScrollCloseMenu(editor);
-              // update-end--author:liaozhiyang---date:20260306---for:【issues/9448】滚动时tinymce如果下拉打开则隐藏
+              // update-end--author:liaozhiyang---date:20260306---for:【issues/9448]Khi cuộn, nếu dropdown của tinymce đang mở thì ẩn đi
             });
-            //update-begin-author:liusq---date:2025-11-19--for: JHHB-1070 从word复制的表格不能对齐
-            // 表格对齐功能
+            //update-begin-author:liusq---date:2025-11-19--for: JHHB-1070 Bảng sao chép từ Word không căn chỉnh được
+            // Chức năng căn chỉnh bảng
             initTableAlignment(editor);
-            //update-end-author:liusq---date:2025-11-19--for: JHHB-1070 从word复制的表格不能对齐
-            // 在编辑器内部处理粘贴事件，确保能正确替换选中内容
+            //update-end-author:liusq---date:2025-11-19--for: JHHB-1070 Bảng sao chép từ Word không căn chỉnh được
+            // Xử lý sự kiện dán bên trong trình chỉnh sửa, đảm bảo thay thế đúng nội dung đã chọn
             editor.on('paste', async (e: any) => {
               try {
                 e.preventDefault();
@@ -263,7 +263,7 @@
                 const clipboardData = e.clipboardData as DataTransfer | undefined;
                 if (!clipboardData) return false;
 
-                // 先处理剪贴板中的图片（截图/粘贴图片）
+                // Xử lý trước hình ảnh trong clipboard (ảnh chụp màn hình/Dán hình ảnh)
                 const items = clipboardData.items as DataTransferItemList | undefined;
                 if (items && items.length > 0) {
                   const imageFiles: File[] = [];
@@ -274,7 +274,7 @@
                       if (file) imageFiles.push(file);
                     }
                   }
-                  // 若存在图片，逐一上传后替换
+                  // Nếu có hình ảnh, tải lên từng cái rồi thay thế
                   if (imageFiles.length > 0) {
                     for (const file of imageFiles) {
                       await new Promise<void>((resolve) => {
@@ -313,7 +313,7 @@
                   }
                 }
 
-                // 处理 HTML/纯文本
+                // Xử lý HTML/Văn bản thuần túy
                 const pasteContent = clipboardData.getData('text/html') || clipboardData.getData('text');
                 if (!pasteContent) return false;
                 
@@ -334,7 +334,7 @@
         const { options } = props;
         const getdDisabled = options && Reflect.get(options, 'readonly');
         const editor = unref(editorRef);
-        // 代码逻辑说明: 设置disabled，图片上传没有被禁用
+        // Giải thích logic mã: Đã đặt disabled nhưng tải lên hình ảnh không bị vô hiệu hóa
         if (editor && editor?.setMode) {
           editor.setMode(getdDisabled || attrs.disabled === true ? 'readonly' : 'design');
         }
@@ -468,7 +468,7 @@
       }
 
       /**
-       * 上传进度计算
+       * Tính tiến độ tải lên
        * @param file
        * @param fileList
        */
@@ -484,7 +484,7 @@
       function getUploadingImgName(name: string) {
         return `[uploading:${name}]`;
       }
-      // 代码逻辑说明: 【TV360X-35】富文本，图片上传遮挡其他按钮
+      // Giải thích logic mã: 【TV360X-35] Rich text, tải lên hình ảnh che các nút khác
       let executeCount = 0;
       watch(
         () => props.showImageUpload,
@@ -516,7 +516,7 @@
           executeCount++;
         }, 100);
       };
-      // 代码逻辑说明: 【QQYUN-8639】暗黑主题适配
+      // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
       function changeColor() {
         setTimeout(() => {
           const iframe = editorRootRef.value?.querySelector('iframe');
@@ -537,14 +537,14 @@
         }
       );
 
-      // 滚动时关闭tinymce下拉菜单
+      // Đóng menu dropdown tinymce khi cuộn
       function bindScrollCloseMenu(editor) {
         const root = unref(editorRootRef);
         if (!root) return;
         const scrollParent = getScrollParent(root);
         if (!scrollParent) return;
         const onScroll = () => {
-          // 触发body上的mousedown，tinymce会自动关闭打开的下拉菜单
+          // Kích hoạt mousedown trên body, tinymce sẽ tự động đóng menu dropdown đang mở
           document.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
         };
         scrollParent.addEventListener('scroll', onScroll, { passive: true });
@@ -566,52 +566,52 @@
       }
 
       /**
-       * 处理图片链接地址
+       * Xử lý địa chỉ liên kết hình ảnh
        *
        * @param pasteContent
        */
       async function preprocess(pasteContent) {
-        // 正则提取所有img标签（包含src和其他属性，避免丢失样式/alt等）
+        // Dùng regex trích xuất tất cả thẻ img (bao gồm src và các thuộc tính khác, tránh mất kiểu/altv.v.)
         const imgTagRegex = /<img([^>]+)src="([^">]+)"([^>]*)/g;
 
-        // 收集所有需要替换的图片信息（索引、原始src、完整标签）
+        // Thu thập thông tin của tất cả hình ảnh cần thay thế (chỉ mục, src gốc, thẻ đầy đủ)
         const imgReplaceList:any = [];
         let match;
         while ((match = imgTagRegex.exec(pasteContent)) !== null) {
           imgReplaceList.push({
-            // 完整的img标签（如<img class="xxx" src="xxx" alt="xxx">）
+            // Thẻ img đầy đủ (ví dụ<img class="xxx" src="xxx" alt="xxx">）
             fullTag: match[0],
-            // 原始图片URL
+            // Hình ảnh gốcURL
             src: match[2],
-            // src前的属性（如class="xxx" ）
+            // srcthuộc tính trước (nhưclass="xxx" ）
             prefix: match[1],
-            // src后的属性（如 alt="xxx"）
+            // srcthuộc tính sau (như alt="xxx"）
             suffix: match[3]
           });
         }
    
-        // 替换所有图片URL为服务器地址
+        // Thay thế tất cả URL hình ảnh bằng địa chỉ máy chủ
         let processedContent = pasteContent;
-        // 获取当前域名（协议+域名+端口）
+        // Lấy tên miền hiện tại (giao thức+Tên miền+cổng)
         const currentOrigin = window.location.hostname;
-        console.log("当前域名："+ currentOrigin)
-        // 处理图片
+        console.log("Tên miền hiện tại:"+ currentOrigin)
+        // Xử lý hình ảnh
         for (const imgInfo of imgReplaceList) {
           try {
             if(imgInfo.src.startsWith('http')){
-              // 判断是否为当前域名下的图片
+              // Kiểm tra có phải hình ảnh thuộc tên miền hiện tại hay không
               let isOwnServer = false;
               try {
                 const imgHost = new URL(imgInfo.src, window.location.href).hostname;
                 isOwnServer = imgHost === currentOrigin;
-                console.log("图片中的域名：" + imgHost)
+                console.log("Tên miền trong hình ảnh:" + imgHost)
               } catch (e) {
-                // 如果URL解析失败，使用简单的hostname检查作为后备
+                // Nếu phân tích URL thất bại, dùng kiểm tra hostname đơn giản làm phương án dự phòng
                 isOwnServer = imgInfo.src.includes(window.location.hostname);
-                console.log("图片中的域名：" + window.location.hostname)
+                console.log("Tên miền trong hình ảnh:" + window.location.hostname)
               }
               if(!isOwnServer){
-                // 非当前域名的网络图片，需要上传
+                // Hình ảnh mạng không thuộc tên miền hiện tại cần được tải lên
                 const filename = getFilenameFromUrl(imgInfo.src) || 'pasted-image.jpg';
                 let newUrl = await uploadImage(imgInfo.src, filename);
                 if(newUrl){
@@ -619,7 +619,7 @@
                   processedContent = processedContent.replace(imgInfo.fullTag, newImgTag);
                 }
               }
-              // 如果是当前域名下的图片，不做任何处理，保持原样
+              // Nếu là hình ảnh thuộc tên miền hiện tại, không xử lý gì, giữ nguyên
             }
           } catch (error) {}
         }
@@ -628,7 +628,7 @@
       
       
       /**
-       * 根据路径获取文件名
+       * Lấy tên tệp theo đường dẫn
        * 
        * @param url
        */
@@ -637,7 +637,7 @@
       }
 
       /**
-       * 上传文件并返回文件路径
+       * Tải lên tệp và trả về đường dẫn tệp
        * 
        * @param fileUrl
        * @param filename
@@ -654,24 +654,24 @@
           return "";
         }
       }
-      //update-begin-author:liusq---date:2025-11-19--for: JHHB-1070 从word复制的表格不能对齐
+      //update-begin-author:liusq---date:2025-11-19--for: JHHB-1070 Bảng sao chép từ Word không căn chỉnh được
       /**
-       * 处理表格居中
+       * Xử lý căn giữa bảng
        * @param editor
        */
       function initTableAlignment(editor) {
-        // 表格左对齐 - 带表格图标的左对齐
+        // Căn trái bảng - Căn trái có biểu tượng bảng
         editor.ui.registry.addIcon('table-align-left', '<svg width="24" height="24"><rect x="2" y="8" width="16" height="8" fill="currentColor"/><path d="M2 4h20v2H2zm0 14h12v2H2z" fill="currentColor"/></svg>');
 
-        // 表格居中对齐 - 带表格图标的居中对齐
+        // Căn giữa bảng - Căn giữa với biểu tượng bảng
         editor.ui.registry.addIcon('table-align-center', '<svg width="24" height="24"><rect x="4" y="8" width="16" height="8" fill="currentColor"/><path d="M2 4h20v2H2zm4 14h12v2H6z" fill="currentColor"/></svg>');
 
-        // 表格右对齐 - 带表格图标的右对齐
+        // Căn phải bảng - Căn phải có biểu tượng bảng
         editor.ui.registry.addIcon('table-align-right', '<svg width="24" height="24"><rect x="6" y="8" width="16" height="8" fill="currentColor"/><path d="M2 4h20v2H2zm8 14h12v2H10z" fill="currentColor"/></svg>');
 
-        // 添加表格专用对齐按钮
+        // Thêm nút căn chỉnh chuyên dụng cho bảng
         editor.ui.registry.addButton('tablealignleft', {
-          tooltip: '表格左对齐',
+          tooltip: 'Căn trái bảng',
           icon: 'table-align-left',
           onAction: () => {
             const table = getSelectedTable(editor);
@@ -679,7 +679,7 @@
           }
         });
         editor.ui.registry.addButton('tablealigncenter', {
-          tooltip: '表格居中',
+          tooltip: 'Căn giữa bảng',
           icon: 'table-align-center',
           onAction: () => {
             const table = getSelectedTable(editor);
@@ -688,7 +688,7 @@
         });
 
         editor.ui.registry.addButton('tablealignright', {
-          tooltip: '表格右对齐',
+          tooltip: 'Căn phải bảng',
           icon: 'table-align-right',
           onAction: () => {
             const table = getSelectedTable(editor);
@@ -697,60 +697,60 @@
         });
       }
 
-      // 获取当前选中的表格
+      // Lấy bảng hiện đang được chọn
       function getSelectedTable(editor) {
         const selectedNode = editor.selection.getNode();
         return selectedNode.closest('table');
       }
 
-      // 使用包装器的表格对齐函数
+      // Hàm căn chỉnh bảng dùng wrapper
       function alignTable(editor, table, command) {
-        // 检查表格是否已经被包装
+        // Kiểm tra xem bảng đã được đóng gói chưa
         let wrapper = table.parentNode;
         const isWrapped = wrapper && wrapper.classList && wrapper.classList.contains('table-wrapper');
 
         switch (command) {
           case 'JustifyLeft':
           case 'JustifyRight':
-            // 对于左右对齐，移除包装器（如果有）
+            // Đối với căn trái phải, loại bỏ wrapper (nếu có)
             if (isWrapped) {
-              editor.dom.remove(wrapper, true); // 移除包装器但保留表格
+              editor.dom.remove(wrapper, true); // Xóa wrapper nhưng giữ lại bảng
             }
-            // 直接设置表格的浮动
+            // Đặt trực tiếp float của bảng
             editor.dom.setStyle(table, 'float', command === 'JustifyLeft' ? 'left' : 'right');
             editor.dom.setStyle(table, 'margin', '0');
             break;
 
           case 'JustifyCenter':
-            // 对于居中对齐，使用包装器
+            // Đối với căn giữa, dùng wrapper
             if (!isWrapped) {
-              // 创建包装器
+              // Tạo wrapper
               wrapper = editor.dom.create('div', {
                 'class': 'table-wrapper',
                 style: 'text-align: center; margin: 0 auto;'
               });
 
-              // 包装表格
+              // Bọc bảng
               table.parentNode.insertBefore(wrapper, table);
               wrapper.appendChild(table);
             }
 
-            // 设置包装器样式
+            // Đặt kiểu wrapper
             editor.dom.setStyles(wrapper, {
               'text-align': 'center',
               'margin': '0 auto',
               'display': 'block'
             });
-            // 移除表格的浮动和边距
+            // Xóa float và margin của bảng
             editor.dom.setStyles(table, {
               'float': '',
               'margin': '0',
-              'display': 'inline-table' // 保持表格显示特性
+              'display': 'inline-table' // Giữ đặc tính hiển thị của bảng
             });
             break;
 
           case 'JustifyFull':
-            // 移除包装器（如果有）
+            // Xóa wrapper (nếu có)
             if (isWrapped) {
               editor.dom.remove(wrapper, true);
             }
@@ -759,11 +759,11 @@
             break;
         }
 
-        // 触发变更事件
+        // Kích hoạt sự kiện thay đổi
         editor.fire('change');
         editor.undoManager.add();
       }
-      //update-end-author:liusq---date:2025-11-19--for: JHHB-1070 从word复制的表格不能对齐 
+      //update-end-author:liusq---date:2025-11-19--for: JHHB-1070 Bảng sao chép từ Word không căn chỉnh được 
 
       return {
         prefixCls,
@@ -789,14 +789,14 @@
 </script>
 
 <style lang="less" scoped>
-/* 表格包装器样式 */
+/* Kiểu wrapper bảng */
 .table-wrapper {
   text-align: center;
   margin: 0 auto;
   display: block;
 }
 
-/* 确保在编辑器中正确显示 */
+/* Đảm bảo hiển thị đúng trong trình chỉnh sửa */
 .tox-edit-area__iframe {
   .table-wrapper {
     text-align: center !important;
@@ -826,7 +826,7 @@
     .tox:not(.tox-tinymce-inline) .tox-editor-header {
       padding:0;
     }
-    // 代码逻辑说明: 【TV360X-329】富文本禁用状态下工具栏划过边框丢失
+    // Giải thích logic mã: 【TV360X-329] Ở trạng thái vô hiệu hóa của rich text, thanh công cụ khi di chuột qua bị mất viền
     .tox .tox-tbtn--disabled,
     .tox .tox-tbtn--disabled:hover,
     .tox .tox-tbtn:disabled,

@@ -7,7 +7,7 @@
     style="width: 100%"
     :get-popup-container="(node) => node?.parentNode"
     :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-    :placeholder="cellAttrs.placeholder || '请选择'"
+    :placeholder="cellAttrs.placeholder || 'Vui lòng chọn'"
     :disabled="cellAttrs.disabled"
     :multiple="isMultiple"
     :load-data="asyncLoadTreeData"
@@ -19,9 +19,9 @@
 
 <script lang="ts">
   /**
-   * 列配置须包含：dict（"表名,文本字段,存储字段"）、pidField（父级字段名）、
-   * pidValue（根节点值，可选）、hasChildField（是否有子节点字段，可选）。
-   * 支持多选：列配置加 multiple: true，存储值为逗号分隔字符串。
+   * Cấu hình cột phải bao gồm: dict ("Tên bảng,Trường văn bản,Trường lưu trữ"), pidField (tên trường cấp cha),
+   * pidValue(Giá trị nút gốc, tùy chọn), hasChildField (có trường nút con hay không, tùy chọn).
+   * Hỗ trợ chọn nhiều: Cấu hình cột thêm multiple: true, giá trị lưu trữ là chuỗi phân tách bằng dấu phẩy.
    */
   import { ref, computed, watch, defineComponent } from 'vue';
   import { defHttp } from '/@/utils/http/axios';
@@ -31,7 +31,7 @@
   const API_LOAD_TREE = '/sys/dict/loadTreeData';
   const API_LOAD_ITEM = '/sys/dict/loadDictItem/';
 
-  // 模块级标签缓存，key 为 "tableName:id"，在选中和回显时写入，translate.handler 优先读缓存
+  // Cache nhãn cấp module, key là "tableName:id", ghi khi chọn và khi hiển thị lại,translate.handler Ưu tiên đọc cache
   const _labelCache = new Map<string, string>();
 
   function _cacheLabels(tableName: string, ids: string[], labels: string[]) {
@@ -44,22 +44,22 @@
     setup(props: JVxeComponent.Props) {
       const { innerValue, cellProps, originColumn, handleChangeCommon } = useJVxeComponent(props);
 
-      // cellProps 内部以 {} 声明，无具体属性类型；统一转换后供模板直接使用，避免模板内 `as` 断言
+      // cellProps nội bộ dùng {} khai báo, không có kiểu thuộc tính cụ thể; sau khi chuyển đổi thống nhất thì cung cấp cho template dùng trực tiếp, tránh trong template `as` Khẳng định
       const cellAttrs = computed(() => cellProps.value as Record<string, any>);
 
-      // 树形节点列表
+      // Danh sách nút cây
       const treeData = ref<any[]>([]);
-      // 当前选中的带 label 的值（labelInValue 格式，多选为数组）
+      // Giá trị kèm label đang được chọn (định dạng labelInValue, chọn nhiều thì là mảng)
       const treeValue = ref<any>(null);
-      // 用于重置组件（dict 变更时重新挂载）
+      // Dùng để đặt lại component (gắn lại khi dict thay đổi)
       const show = ref(true);
 
-      // 是否多选（由列配置 multiple 控制）
+      // Có cho phép chọn nhiều hay không (do cấu hình cột multiple kiểm soát)
       const isMultiple = computed(() => !!originColumn.value?.multiple);
 
       /**
-       * 从列配置中解析树相关参数
-       * dict 格式为 "tableName,textField,codeField"
+       * Phân tích tham số liên quan đến cây từ cấu hình cột
+       * dict có định dạng "tableName,textField,codeField"
        */
       const treeConfig = computed(() => {
         const col = originColumn.value;
@@ -75,14 +75,14 @@
         };
       });
 
-      // 外部值变化时回显 label
+      // Khi giá trị bên ngoài thay đổi sẽ hiển thị lại label
       watch(
         () => innerValue.value,
         (val) => loadItemByCode(val),
         { immediate: true }
       );
 
-      // dict 配置变化时重新加载根节点
+      // dict Tải lại nút gốc khi cấu hình thay đổi
       watch(
         () => treeConfig.value.tableName,
         async (tableName) => {
@@ -96,7 +96,7 @@
         { immediate: true }
       );
 
-      /** 加载根节点列表 */
+      /** Tải danh sách nút gốc */
       async function loadRoot() {
         const { tableName, text, code, pidField, pidValue, hasChildField, condition } = treeConfig.value;
         if (!tableName) return;
@@ -113,7 +113,7 @@
         }
       }
 
-      /** 根据存储值（逗号分隔 ID）查询对应的 label，用于回显 */
+      /** Truy vấn label tương ứng theo giá trị lưu trữ (ID phân tách bằng dấu phẩy), dùng để hiển thị lại */
       async function loadItemByCode(val) {
         if (!val) {
           treeValue.value = isMultiple.value ? [] : { label: null, value: null };
@@ -125,7 +125,7 @@
           return;
         }
         const ids = val.split(',');
-        // 若缓存已全部命中，直接用缓存构建 treeValue，跳过 API 请求
+        // Nếu cache đã trúng toàn bộ, dùng trực tiếp cache để xây dựng treeValue, bỏ qua yêu cầu API
         const cachedLabels = ids.map((id) => _labelCache.get(`${tableName}:${id}`));
         if (cachedLabels.every((l) => l !== undefined)) {
           treeValue.value = isMultiple.value
@@ -135,7 +135,7 @@
         }
         const res = await defHttp.get({ url: `${API_LOAD_ITEM}${tableName},${text},${code}`, params: { key: val } }, { isTransformResponse: false });
         if (isMultiple.value) {
-          // 多选：拆分 ID，逐一映射为 {key, value, label}
+          // Đa chọn: Tách ID, ánh xạ từng cái thành {key, value, label}
           treeValue.value = ids.map((id, index) => ({
             key: id,
             value: id,
@@ -149,7 +149,7 @@
         }
       }
 
-      /** 异步懒加载子节点 */
+      /** Tải lười không đồng bộ nút con */
       async function asyncLoadTreeData(treeNode) {
         if (treeNode.dataRef.children) return Promise.resolve();
         const { tableName, text, code, pidField, hasChildField, condition } = treeConfig.value;
@@ -170,7 +170,7 @@
         return Promise.resolve();
       }
 
-      /** 递归将子节点插入到对应父节点下 */
+      /** Đệ quy chèn nút con vào dưới nút cha tương ứng */
       function addChildren(pid, children, arr) {
         if (!arr?.length) return;
         for (const item of arr) {
@@ -183,15 +183,15 @@
         }
       }
 
-      /** 选中或清空事件 */
+      /** Sự kiện chọn hoặc xóa */
       function onChange(value) {
         const { tableName } = treeConfig.value;
         if (!value || (Array.isArray(value) && value.length === 0)) {
-          // 清空
+          // Xóa sạch
           treeValue.value = isMultiple.value ? [] : null;
           handleChangeCommon('');
         } else if (Array.isArray(value)) {
-          // 多选：数组 → 逗号分隔字符串；同时缓存 id->label 供非编辑模式直接使用
+          // Chọn nhiều: mảng → Chuỗi phân tách bằng dấu phẩy; đồng thời cache id->label Để chế độ không chỉnh sửa sử dụng trực tiếp
           treeValue.value = value;
           if (tableName)
             _cacheLabels(
@@ -201,7 +201,7 @@
             );
           handleChangeCommon(value.map((item) => item.value).join(','));
         } else {
-          // 单选
+          // Chọn một
           treeValue.value = value;
           if (tableName && value.value != null) _cacheLabels(tableName, [value.value], [value.label]);
           handleChangeCommon(value.value);
@@ -210,7 +210,7 @@
 
       return { cellAttrs, treeData, treeValue, show, isMultiple, asyncLoadTreeData, onChange };
     },
-    // 【组件增强】非编辑模式：优先读缓存，避免重复 API 请求
+    // [Tăng cường component] Chế độ không chỉnh sửa: ưu tiên đọc cache, tránh yêu cầu API lặp lại
     enhanced: {
       switches: { editRender: true, visible: false },
       translate: {

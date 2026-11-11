@@ -10,20 +10,20 @@ export function useJPrompt() {
     let instance = null;
     const box = document.createElement('div');
     const vm = createVNode(JPrompt, {
-      // 注册
+      // Đăng ký
       async onRegister(ins) {
         instance = ins;
         await nextTick();
         ins.openModal(options);
       },
-      // 销毁
+      // Hủy
       afterClose() {
         render(null, box);
         document.body.removeChild(box);
       },
     });
     vm.appContext = getAppContext()!;
-    // 挂载到 body
+    // Gắn vào body
     render(vm, box);
     document.body.appendChild(box);
 

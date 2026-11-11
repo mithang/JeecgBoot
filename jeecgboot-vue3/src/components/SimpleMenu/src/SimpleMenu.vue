@@ -96,7 +96,7 @@
         },
         { flush: 'post' }
       );
-      // 代码逻辑说明: 【QQYUN-8922】左侧导航栏文字颜色调整区分彩色和暗黑
+      // Giải thích logic mã: 【QQYUN-8922]Điều chỉnh màu chữ thanh điều hướng bên trái để phân biệt chế độ màu và chế độ tối
       watch(
         () => appStore.getProjectConfig.menuSetting,
         (menuSetting) => {
@@ -130,14 +130,14 @@
 
       async function handleSelect(key: string) {
         if (isUrl(key)) {
-          // 代码逻辑说明: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
+          // Giải thích logic mã: 【VUEN-656]Cấu hình URL ngoài không mở được, nguyên nhân là có#số, cần thay thế
           let url = key.replace(URL_HASH_TAB, '#');
           window.open(url)
           //openWindow(url);
-          // 代码逻辑说明: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
+          // Giải thích logic mã: 【VUEN-656]Cấu hình URL ngoài không mở được, nguyên nhân là có#số, cần thay thế
           return;
         }
-        // 代码逻辑说明: 【QQYUN-6366】内部路由也可以支持采用新浏览器tab打开
+        // Giải thích logic mã: 【QQYUN-6366] Route nội bộ cũng có thể hỗ trợ mở bằng tab trình duyệt mới
         const findItem = getMatchingMenu(props.items, key);
         if (findItem?.internalOrExternal == true) {
           window.open(location.origin + key);
@@ -160,7 +160,7 @@
       /**
        * 2024-02-27
        * liaozhiyang
-       * 获取菜单中匹配的path所在的项
+       * Lấy mục chứa path khớp trong menu
        */
       const getMatchingMenu = (menus, path) => {
         for (let i = 0, len = menus.length; i < len; i++) {

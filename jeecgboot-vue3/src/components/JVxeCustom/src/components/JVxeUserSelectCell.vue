@@ -46,16 +46,16 @@
           ...cellProps.value,
           value: selectedValue.value,
           showButton: false,
-          // 不允许搜索
+          // Không cho phép tìm kiếm
           showSearch: false,
-          // 设置最大的显示个数
-          // 代码逻辑说明: 【issues/7661】vxetable用户组件maxTagCount通过业务传递
+          // Đặt số lượng hiển thị tối đa
+          // Giải thích logic mã: 【issues/7661]maxTagCount của component người dùng vxetable được truyền qua nghiệp vụ
           maxTagCount: originColumn.value.maxTagCount ?? 1,
-          // 显示提示重写，去掉省略号
+          // Viết lại hiển thị nhắc nhở, bỏ dấu ba chấm
           maxTagPlaceholder: ({ length }) => '+' + length,
-          // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1002】详情页面行编辑用户组件和部门组件显示方式优化
+          // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
           isDetailsMode: cellProps.value.disabledTable,
-          // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-1002】详情页面行编辑用户组件和部门组件显示方式优化
+          // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
         };
       });
 
@@ -98,7 +98,7 @@
   @prefix-cls: ~'@{namespace}-vxe-cell-user-select';
 
   .@{prefix-cls} {
-    // 限制tag最大长度为100px，防止选中文字过多的选项时换行
+    // Giới hạn độ dài tối đa của tag là 100px, tránh xuống dòng khi chọn option có quá nhiều chữ
     .ant-select .ant-select-selection-overflow-item {
       max-width: 80px;
     }

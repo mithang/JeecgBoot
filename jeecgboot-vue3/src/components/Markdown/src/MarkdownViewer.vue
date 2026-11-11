@@ -22,7 +22,7 @@
   });
   const getHtmlData = computed(() => sanitizeRichText(converter.makeHtml(props.value || '')));
 
-  // 代码逻辑说明: 【issues/918】MarkdownViewer加上暗黑主题
+  // Giải thích logic mã: 【issues/918] MarkdownViewer thêm chủ đề tối
   const isDarkTheme = ref(false);
   const { getDarkMode } = useRootSetting();
   watch(

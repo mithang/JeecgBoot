@@ -56,7 +56,7 @@ function handleIndexColumn(propsRef: ComputedRef<BasicTableProps>, getPagination
       columns.splice(indIndex, 1);
     }
   });
-  // 代码逻辑说明: 【TV360X-105】列展示设置问题[列展示复选框不应该判断序号列复选框的状态]
+  // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Checkbox hiển thị cột không nên xét trạng thái checkbox của cột số thứ tự]
   if (columns.length === 0 && showIndexColumn) {
     const indIndex = columns.findIndex((column) => column.flag === INDEX_COLUMN_FLAG);
     if (indIndex === -1) {
@@ -69,7 +69,7 @@ function handleIndexColumn(propsRef: ComputedRef<BasicTableProps>, getPagination
 
   columns.unshift({
     flag: INDEX_COLUMN_FLAG,
-    // 代码逻辑说明: 【TV360X-1634】密度是宽松模式时，序号列表头换行了
+    // Giải thích logic mã: 【TV360X-1634] Khi mật độ là chế độ rộng rãi, tiêu đề cột số thứ tự bị xuống dòng
     width: propsRef.value.size === 'large' ? 65 : 50,
     title: t('component.table.index'),
     align: 'center',
@@ -114,7 +114,7 @@ export function useColumns(
 
   const getColumnsRef = computed(() => {
     const columns = cloneDeep(unref(columnsRef));
-    // 代码逻辑说明: 【issues/6908】多语言无刷新切换时，BasicColumn和FormSchema里面的值不能正常切换
+    // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
     if (isArray(columns)) {
       columns.forEach((item) => {
         item.title = isFunction(item.title) ? item.title() : item.title;
@@ -122,7 +122,7 @@ export function useColumns(
     }
     handleIndexColumn(propsRef, getPaginationRef, columns);
     handleActionColumn(propsRef, columns);
-    // 代码逻辑说明: 【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题
+    // Giải thích logic mã: 【QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật
     handleCustomSelectColumn(columns);
 
     if (!columns) {
@@ -159,9 +159,9 @@ export function useColumns(
     const columns = cloneDeep(viewColumns);
     const formatEditColumn = (columns) => {
       return columns.map((column) => {
-        // 代码逻辑说明: 【issues-179】antd3 一些警告以及报错(针对表格)
+        // Giải thích logic mã: 【issues-179] antd3 một số cảnh báo và lỗi(Đối với bảng)
         if(column.slots?.customRender) {
-          // slots的备份，兼容老的写法，转成新写法避免控制台警告
+          // slotsBản sao lưu, tương thích với cách viết cũ, chuyển sang cách viết mới để tránh cảnh báo console
           column.slotsBak = column.slots;
           delete column.slots;
         }
@@ -173,7 +173,7 @@ export function useColumns(
           column.customTitle = column.title as string;
           Reflect.deleteProperty(column, 'title');
         }
-        // 代码逻辑说明: 【online报表】分组标题显示错误，都显示成了联系信息 LOWCOD-2343
+        // Giải thích logic mã: [Báo cáo online] Tiêu đề nhóm hiển thị sai, đều hiển thị thành thông tin liên hệ LOWCOD-2343
         if (column.children) {
           column.title = metaTitle;
         }
@@ -189,16 +189,16 @@ export function useColumns(
         if ((edit || editRow) && !isDefaultAction) {
           column.customRender = renderEditCell(column);
         }
-        // 代码逻辑说明: 【pull/7333】修复分组表头可编辑表格失效问题
+        // Giải thích logic mã: 【pull/7333] Sửa lỗi bảng có thể chỉnh sửa với tiêu đề nhóm bị vô hiệu
         if (column.children?.length) {
           formatEditColumn(column.children.filter((item) => hasPermission(column.auth) && isIfShow(column)));
         }
         return reactive(column);
       });
     };
-    // 代码逻辑说明: 【pull/7333】修复分组表头可编辑表格失效问题
+    // Giải thích logic mã: 【pull/7333] Sửa lỗi bảng có thể chỉnh sửa với tiêu đề nhóm bị vô hiệu
     const result = formatEditColumn(columns.filter((item) => hasPermission(item.auth) && isIfShow(item)));
-    // 代码逻辑说明: 【QQYUN-6387】展开写法（去掉报错）
+    // Giải thích logic mã: 【QQYUN-6387] cách viết mở rộng (loại bỏ lỗi)
     if (propsRef.value.expandedRowKeys && !propsRef.value.isTreeTable) {
       let index = 0;
       const findIndex = result.findIndex((item) => item.key === CUS_SEL_COLUMN_KEY);
@@ -282,9 +282,9 @@ export function useColumns(
     if (ignoreAction) {
       columns = columns.filter((item) => item.flag !== ACTION_COLUMN_FLAG);
     }
-    // 过滤自定义选择列
+    // Lọc cột chọn tùy chỉnh
     columns = columns.filter((item) => item.key !== CUS_SEL_COLUMN_KEY);
-    // 代码逻辑说明: 【issues/8502】解决权限列在列表中不显示，列配置中还显示
+    // Giải thích logic mã: 【issues/8502] Giải quyết vấn đề cột quyền không hiển thị trong danh sách nhưng vẫn hiển thị trong cấu hình cột
     if (ignoreAuth) {
       columns = columns.filter((item) => {
         if (item.auth) {

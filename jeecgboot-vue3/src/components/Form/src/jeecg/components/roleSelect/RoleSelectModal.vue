@@ -9,28 +9,28 @@
     @ok="handleOk"
     wrapClassName="j-user-select-modal2"
   >
-    <!--update-begin---author:wangshuai---date:20260807---for:【LHZP-141】【表单设计器】筛选 角色选择的弹框效果不太好-->
+    <!--update-begin---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt-->
     <div class="role-modal-body">
-      <!-- 搜索框 -->
+      <!-- Hộp tìm kiếm -->
       <div class="role-search-bar">
-        <a-input v-model:value="searchText" class="role-search" allowClear placeholder="搜索角色名称">
+        <a-input v-model:value="searchText" class="role-search" allowClear placeholder="Tìm kiếm tên vai trò">
           <template #prefix>
             <SearchOutlined class="search-icon" />
           </template>
         </a-input>
-        <span class="selected-count">已选 {{ selectedList.length }}</span>
+        <span class="selected-count">Đã chọn {{ selectedList.length }}</span>
       </div>
 
       <div class="list-caption">
-        <span>角色列表</span>
-        <span>共 {{ showDataList.length }} 项</span>
+        <span>Danh sách vai trò</span>
+        <span>Tổng cộng {{ showDataList.length }} Mục</span>
       </div>
 
-      <!-- 角色列表 -->
+      <!-- Danh sách vai trò -->
       <div class="modal-select-list-container">
         <template v-if="showDataList.length > 0">
           <label class="item" :class="{ checked: item.checked }" v-for="item in showDataList" :key="item.id" @click="(e) => onSelect(e, item)">
-            <span class="role-mark">{{ item.name?.slice(0, 1) || '角' }}</span>
+            <span class="role-mark">{{ item.name?.slice(0, 1) || 'V' }}</span>
             <span class="role-info">
               <span class="role-name">{{ item.name }}</span>
               <span v-if="item.code" class="role-code">{{ item.code }}</span>
@@ -38,18 +38,18 @@
             <a-checkbox v-model:checked="item.checked" class="role-checkbox" />
           </label>
         </template>
-        <a-empty v-else description="暂无角色" :image-style="{ height: '60px' }" style="margin-top: 70px" />
+        <a-empty v-else description="Không có vai trò" :image-style="{ height: '60px' }" style="margin-top: 70px" />
       </div>
 
-      <!-- 已选角色 -->
+      <!-- Vai trò đã chọn -->
       <div v-if="selectedList.length > 0" class="selected-users-wrapper">
-        <div class="selected-title">已选角色</div>
+        <div class="selected-title">Vai trò đã chọn</div>
         <div class="selected-users">
           <SelectedUserItem v-for="item in selectedList" :key="item.id" :info="item" @unSelect="unSelect" />
         </div>
       </div>
     </div>
-    <!--update-end---author:wangshuai---date:20260807---for:【LHZP-141】【表单设计器】筛选 角色选择的弹框效果不太好-->
+    <!--update-end---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt-->
   </BasicModal>
 </template>
 
@@ -110,15 +110,15 @@
       }, {immediate: true});
       
       
-      // 弹窗事件
+      // Sự kiện popup
       const [register] = useModalInner((data) => {
         let list = dataList.value;
         if(!list || list.length ==0 ){
         }else{
           let selectedIdList = data.list || [];
-          //update-begin---author:wangshuai---date:20260807---for:【LHZP-141】【表单设计器】筛选 角色选择的弹框效果不太好
+          //update-begin---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
           selectedKeys.value = [...selectedIdList];
-          //update-end---author:wangshuai---date:20260807---for:【LHZP-141】【表单设计器】筛选 角色选择的弹框效果不太好
+          //update-end---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
           for(let item of list){
             if(selectedIdList.indexOf(item.id)>=0){
               item.checked = true;
@@ -129,7 +129,7 @@
         }
       });
 
-      // 确定事件
+      // Sự kiện xác nhận
       function handleOk() {
         let arr = toRaw(selectedIdList.value);
         emit('selected', arr, toRaw(selectedList.value));
@@ -155,7 +155,7 @@
           return []
         }
         list = list.filter(item=>item.checked)
-        // 根据 selectedKeys 的顺序排序
+        // Sắp xếp theo thứ tự của selectedKeys
         let arr: any[] = [];
         for (let key of selectedKeys.value) {
           let item = list.find(item => item.id == key);
@@ -171,7 +171,7 @@
         if(!list || list.length ==0 ){
           return;
         }
-        // 代码逻辑说明: 【issues/8078】角色选择组件点击文字部分会一直选中
+        // Giải thích logic mã: 【issues/8078] Component chọn vai trò: bấm vào phần chữ sẽ luôn bị chọn
         let findItem = list.find((item) => item.id == id);
         findItem.checked = false;
         selectedKeys.value = selectedKeys.value.filter((key) => key != id);
@@ -209,21 +209,21 @@
 
       function onSelect(e, item) {
         prevent(e);
-        // 单选模式下，先清除所有选中状态
+        // Ở chế độ đơn chọn, xóa tất cả trạng thái đã chọn trước
         if (!props.multi) {
           dataList.value.forEach(dataItem => {
             if (dataItem.id != item.id) {
               dataItem.checked = false;
             }
           });
-          // 清空已选择的keys
+          // Xóa các mục đã chọnkeys
           selectedKeys.value = [];
         }
 
-        // 切换当前项的选中状态
+        // Chuyển đổi trạng thái chọn của mục hiện tại
         item.checked = !item.checked;
 
-        // 更新selectedKeys数组
+        // Cập nhật mảng selectedKeys
         if (item.checked) {
           selectedKeys.value.push(item.id);
         } else {
@@ -251,7 +251,7 @@
   };
 </script>
 <style scoped lang="less">
-  //update-begin---author:wangshuai---date:20260807---for:【LHZP-141】【表单设计器】筛选 角色选择的弹框效果不太好
+  //update-begin---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
   .role-modal-body {
     position: relative;
   }
@@ -448,7 +448,7 @@
       gap: 4px;
       padding-top: 0;
 
-      // 弹窗内压缩已选标签行高（默认 30px 偏高）
+      // Trong popup nén chiều cao hàng của nhãn đã chọn (mặc định 30px hơi cao)
       :deep(.user-selected-item) {
         height: 26px;
         line-height: 26px;
@@ -456,7 +456,7 @@
       }
     }
   }
-  //update-end---author:wangshuai---date:20260807---for:【LHZP-141】【表单设计器】筛选 角色选择的弹框效果不太好
+  //update-end---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
 </style>
 
 <style lang="less">
@@ -464,7 +464,7 @@
     .scroll-container {
       padding-bottom: 0 !important;
 
-      // 去掉内容底部多余的 18px 外边距，弹窗底部不再空一大块
+      // Bỏ margin ngoài thừa 18px ở cuối nội dung, phần dưới popup không còn trống một khoảng lớn nữa
       .scrollbar__wrap {
         margin-bottom: 0 !important;
       }

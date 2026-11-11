@@ -28,7 +28,7 @@
         </template>
       </BasicTree>
     </template>
-    <a-empty v-else description="无岗位信息" />
+    <a-empty v-else description="Không có thông tin vị trí công tác" />
   </a-spin>
 </template>
 
@@ -44,12 +44,12 @@
   const loading = ref<boolean>(false);
   const activeTooltipKey = ref<any>(null);
   let tooltipTimer: ReturnType<typeof setTimeout> | null = null;
-  //选中的key
+  //đã chọnkey
   const expandedKeys = ref<any[]>([]);
-  //所有的部门id
+  //Tất cả phòng banid
   const departIds = ref<any[]>([]);
   /**
-   * 折叠全部
+   * Thu gọn tất cả
    *
    * @param expandAll
    */
@@ -75,7 +75,7 @@
   }
 
   /**
-   * 岗位名称显示不全时展示完整内容
+   * Khi tên vị trí hiển thị không đầy đủ thì hiển thị nội dung đầy đủ
    */
   function handleTitleMouseEnter(event: MouseEvent, value: any) {
     const titleElement = event.currentTarget as HTMLElement;
@@ -103,16 +103,16 @@
 
   onBeforeUnmount(clearTooltipTimer);
   /**
-   * 获取存在子级的部门id
+   * Lấy phòng ban có cấp conid
    * @param departments
    */
   function getParentDepartmentIds(departments) {
     const ids: any = [];
     departments.forEach((dept) => {
-      // 检查是否有 children 数组且不为空
+      // Kiểm tra có mảng children và không rỗng hay không
       if (dept.children && Array.isArray(dept.children) && dept.children.length > 0) {
         ids.push(dept.id);
-        // 递归检查子部门是否也有子级
+        // Đệ quy kiểm tra phòng ban con có cấp con nữa hay không
         ids.push(...getParentDepartmentIds(dept.children));
       }
     });
@@ -121,7 +121,7 @@
 </script>
 
 <style lang="less" scoped>
-  // update-begin--author:liaozhiyang---date:20260811---for：【LHZP-1694】选中用户组件切换到岗位时滚动条拖动不了
+  // update-begin--author:liaozhiyang---date:20260811---for：【LHZP-1694]Khi component chọn người dùng chuyển sang vị trí công tác thì thanh cuộn không kéo được
   .post-rank-tree {
     width: 100%;
     min-width: 0;
@@ -181,5 +181,5 @@
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22);
     backdrop-filter: blur(6px);
   }
-  // update-end--author:liaozhiyang---date:20260811---for：【LHZP-1694】选中用户组件切换到岗位时滚动条拖动不了
+  // update-end--author:liaozhiyang---date:20260811---for：【LHZP-1694]Khi component chọn người dùng chuyển sang vị trí công tác thì thanh cuộn không kéo được
 </style>

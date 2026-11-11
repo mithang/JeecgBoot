@@ -11,7 +11,7 @@ interface ActionType {
   getPaginationInfo: ComputedRef<boolean | PaginationProps>;
   setPagination: (info: Partial<PaginationProps>) => void;
   setLoading: (loading: boolean) => void;
-  // 代码逻辑说明: 由于 getFieldsValue 返回的不是逗号分割的数据，所以改用 validate
+  // Giải thích logic mã: Vì getFieldsValue trả về không phải dữ liệu phân tách bằng dấu phẩy, nên đổi sang dùng validate
   validate: () => Recordable;
   clearSelectedRowKeys: () => void;
   tableData: Ref<Recordable[]>;
@@ -132,7 +132,7 @@ export function useDataSource(
     if (row) {
       for (const field in row) {
         if (Reflect.has(record, field)) row[field] = record[field];
-        // 代码逻辑说明: 【TV360X-437】树表 部分组件编辑完后，列表未刷新---
+        // Giải thích logic mã: 【TV360X-437] Bảng cây: sau khi một số component chỉnh sửa xong, danh sách chưa làm mới---
         if (Reflect.has(record, field + '_dictText')) {
           row[field + '_dictText'] = record[field + '_dictText'];
         }
@@ -236,7 +236,7 @@ export function useDataSource(
 
       const { sortInfo = {}, filterInfo } = searchState;
 
-      // 扩展默认排序多字段数组写法
+      // Mở rộng cách viết mảng đa trường sắp xếp mặc định
       let defSortInfo: Recordable<any> | undefined = {};
       if (defSort && Array.isArray(defSort) && defSort.length > 0) {
         defSortInfo['defSortString'] = JSON.stringify(defSort);
@@ -246,7 +246,7 @@ export function useDataSource(
 
       let params: Recordable = {
         ...pageParams,
-        // 由于 getFieldsValue 返回的不是逗号分割的数据，所以改用 validate
+        // Vì getFieldsValue trả về không phải dữ liệu phân tách bằng dấu phẩy, nên đổi sang dùng validate
         ...(useSearchForm ? await validate() : {}),
         ...searchInfo,
         ...defSortInfo,
@@ -259,7 +259,7 @@ export function useDataSource(
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
-      // 代码逻辑说明: 【QQYUN-8316】table查询条件,请求剔除空字符串字段
+      // Giải thích logic mã: 【QQYUN-8316] điều kiện truy vấn của table,Khi gửi yêu cầu, loại bỏ các trường chuỗi rỗng
       for (let item of Object.entries(params)) {
         const [key, val] = item;
         if (val === '') {
@@ -274,7 +274,7 @@ export function useDataSource(
       let resultItems: Recordable[] = isArrayResult ? res : get(res, listField);
       const resultTotal: number = isArrayResult ? 0 : get(res, totalField);
 
-      // 假如数据变少，导致总页数变少并小于当前选中页码，通过getPaginationRef获取到的页码是不正确的，需获取正确的页码再次执行
+      // Giả sử dữ liệu ít đi, khiến tổng số trang giảm và nhỏ hơn số trang đang chọn, số trang lấy được qua getPaginationRef là không chính xác, cần lấy số trang chính xác rồi thực thi lại
       if (resultTotal) {
         const currentTotalPage = Math.ceil(Number(resultTotal) / pageSize);
         if (current > currentTotalPage) {

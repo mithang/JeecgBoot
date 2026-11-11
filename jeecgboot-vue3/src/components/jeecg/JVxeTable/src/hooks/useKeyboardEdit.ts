@@ -1,27 +1,27 @@
 /*
- * JVxeTable 键盘操作
+ * JVxeTable Thao tác bàn phím
  */
 import type { VxeTablePropTypes } from 'vxe-table';
 import type { JVxeTableProps } from '../types';
 import { computed } from 'vue';
 
 /**
- * JVxeTable 键盘操作
+ * JVxeTable Thao tác bàn phím
  *
  * @param props
  */
 export function useKeyboardEdit(props: JVxeTableProps) {
-  // 是否开启了键盘操作
+  // Có bật thao tác bàn phím không
   const enabledKeyboard = computed(() => props.keyboardEdit ?? false);
-  // 重写 keyboardConfig
+  // Viết lại keyboardConfig
   const keyboardConfig: VxeTablePropTypes.KeyboardConfig = {
     editMethod({ row, column, $table }) {
-      // 重写默认的覆盖式，改为追加式
+      // Viết lại chế độ ghi đè mặc định thành chế độ thêm vào
       $table.setActiveCell(row, column);
       return true;
     },
   };
-  // 键盘操作配置
+  // Cấu hình thao tác bàn phím
   const keyboardEditConfig = computed(() => {
     return {
       mouseConfig: {

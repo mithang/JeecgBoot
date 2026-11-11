@@ -1,6 +1,6 @@
 <template>
   <div ref="containerRef" v-bind="boxBindProps">
-    <!-- 全屏按钮 -->
+    <!-- Nút toàn màn hình -->
     <a-icon v-if="fullScreen" class="full-screen-icon" :type="fullScreenIcon" @click="onToggleFullScreen" />
     <textarea ref="textarea" v-bind="getBindValue"></textarea>
   </div>
@@ -10,13 +10,13 @@
   import { defineComponent, onMounted, reactive, ref, watch, unref, computed, nextTick } from 'vue';
   import { propTypes } from '/@/utils/propTypes';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
-  // 引入全局实例
+  // Nhập instance toàn cục
   import _CodeMirror, { EditorFromTextArea } from 'codemirror';
-  // 核心样式
+  // Kiểu dáng cốt lõi
   import 'codemirror/lib/codemirror.css';
-  // 引入主题后还需要在 options 中指定主题才会生效
+  // Sau khi import theme vẫn cần chỉ định theme trong options thì mới có hiệu lực
   import 'codemirror/theme/idea.css';
-  // 需要引入具体的语法高亮库才会有对应的语法高亮效果
+  // Cần import thư viện tô sáng cú pháp cụ thể mới có hiệu ứng tô sáng cú pháp tương ứng
   import 'codemirror/mode/javascript/javascript.js';
   import 'codemirror/mode/css/css.js';
   import 'codemirror/mode/xml/xml.js';
@@ -28,49 +28,49 @@
   import 'codemirror/mode/sql/sql.js';
   import 'codemirror/mode/swift/swift.js';
   import 'codemirror/mode/vue/vue.js';
-  // 折叠资源引入:开始
+  // Nhập tài nguyên gấp gọn:Bắt đầu
   import 'codemirror/addon/fold/foldgutter.css';
   import 'codemirror/addon/fold/foldcode.js';
   import 'codemirror/addon/fold/brace-fold.js';
   import 'codemirror/addon/fold/comment-fold.js';
   import 'codemirror/addon/fold/indent-fold.js';
   import 'codemirror/addon/fold/foldgutter.js';
-  // 折叠资源引入:结束
-  //光标行背景高亮，配置里面也需要styleActiveLine设置为true
+  // Nhập tài nguyên gấp gọn:Kết thúc
+  //Tô sáng nền dòng con trỏ, trong cấu hình cũng cần đặt styleActiveLine thànhtrue
   import 'codemirror/addon/selection/active-line.js';
-  // 支持代码自动补全
+  // Hỗ trợ tự động hoàn thành mã
   import 'codemirror/addon/hint/show-hint.css';
   import 'codemirror/addon/hint/show-hint.js';
   import 'codemirror/addon/hint/anyword-hint.js';
-  // 匹配括号
+  // Khớp dấu ngoặc
   import 'codemirror/addon/edit/matchbrackets';
-  // 占位符
+  // Placeholder
   import 'codemirror/addon/display/placeholder.js';
   
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { isJsonObjectString } from '/@/utils/is.ts';
-  // 代码提示
+  // Gợi ý mã
   import { useCodeHinting } from '../hooks/useCodeHinting';
 
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
   import { ThemeEnum } from '/@/enums/appEnum';
   export default defineComponent({
     name: 'JCodeEditor',
-    // 不将 attrs 的属性绑定到 html 标签上
+    // Không binding thuộc tính của attrs lên thẻ html
     inheritAttrs: false,
     components: {},
     props: {
       value: propTypes.string.def(''),
       height: propTypes.string.def('auto'),
       disabled: propTypes.bool.def(false),
-      // 是否显示全屏按钮
+      // Có hiển thị nút toàn màn hình không
       fullScreen: propTypes.bool.def(false),
-      // 全屏以后的z-index
+      // sau khi toàn màn hìnhz-index
       zIndex: propTypes.any.def(1500),
       theme: propTypes.string.def('idea'),
       language: propTypes.string.def(''),
-      // 代码提示
+      // Gợi ý mã
       keywords: propTypes.array.def([]),
     },
     emits: ['change', 'update:value', 'ready'],
@@ -80,34 +80,34 @@
       const { prefixCls } = useDesign('code-editer');
       const CodeMirror = window.CodeMirror || _CodeMirror;
       const emitData = ref<object>();
-      //表单值
+      //Giá trị biểu mẫu
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
       const textarea = ref<HTMLTextAreaElement>();
       let coder: Nullable<EditorFromTextArea> = null;
       const attrs = useAttrs();
       const height = ref(props.height);
       const options = reactive({
-        // 缩进格式
+        // Định dạng thụt lề
         tabSize: 2,
-        // 主题，对应主题库 JS 需要提前引入
-        // 代码逻辑说明: 【QQYUN-8639】暗黑主题适配
+        // Chủ đề, JS của thư viện chủ đề tương ứng cần được import trước
+        // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
         theme: getDarkMode.value == ThemeEnum.DARK ? 'monokai' : props.theme,
-        smartIndent: true, // 是否智能缩进
-        // 显示行号
+        smartIndent: true, // Có thụt lề thông minh không
+        // Hiển thị số dòng
         lineNumbers: true,
         line: true,
-        // 启用代码折叠相关功能:开始
+        // Bật tính năng liên quan đến gấp mã:Bắt đầu
         foldGutter: true,
         lineWrapping: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
-        // 启用代码折叠相关功能:结束
-        // 光标行高亮
+        // Bật tính năng liên quan đến gấp mã:Kết thúc
+        // Làm nổi bật dòng con trỏ
         styleActiveLine: true,
-        // 代码逻辑说明: 【issues/869】JCodeEditor组件初始化时没有设置mode
+        // Giải thích logic mã: 【issues/869] Component JCodeEditor khi khởi tạo chưa thiết lậpmode
         mode: props.language,
-        // 代码逻辑说明: 【TV360X-898】代码生成之后的预览改成只读
+        // Giải thích logic mã: 【TV360X-898] Bản xem trước sau khi sinh mã đổi thành chỉ đọc
         readOnly: props.disabled,
-        // 匹配括号
+        // Khớp dấu ngoặc
         matchBrackets: true,
         extraKeys: {
           // Tab: function autoFormat(editor) {
@@ -119,12 +119,12 @@
           'Ctrl-/': (cm) => comment(cm),
         },
       });
-      // 内部存储值，初始为 props.value
+      // Giá trị lưu trữ nội bộ, ban đầu là props.value
       let innerValue = props.value ?? '';
-      // 全屏状态
+      // Trạng thái toàn màn hình
       const isFullScreen = ref(false);
       const fullScreenIcon = computed(() => (isFullScreen.value ? 'fullscreen-exit' : 'fullscreen'));
-      // 外部盒子参数
+      // Tham số hộp bên ngoài
       const boxBindProps = computed(() => {
         let _props = {
           class: [
@@ -142,11 +142,11 @@
         }
         return _props;
       });
-      // 代码逻辑说明: 【QQYUN-5955】online js增强，加入代码提示
+      // Giải thích logic mã: 【QQYUN-5955] Tăng cường JS online, thêm gợi ý mã
       const { codeHintingMount, codeHintingRegistry } = useCodeHinting(CodeMirror, props.keywords, props.language);
       codeHintingRegistry();
       /**
-       * 监听组件值
+       * Lắng nghe giá trị component
        */
       watch(
         () => props.value,
@@ -158,44 +158,44 @@
       );
       onMounted(() => {
         initialize();
-        // 代码逻辑说明: 【QQYUN-8473】代码编辑器首次加载会有遮挡
+        // Giải thích logic mã: 【QQYUN-8473] Trình chỉnh sửa mã lần đầu tải sẽ bị che khuất
         setTimeout(() => {
           refresh();
-          // 初始化 + refresh 全部完成后通知父组件
+          // Khởi tạo + refresh Sau khi hoàn tất tất cả thì thông báo cho component cha
           emit('ready');
         }, 150);
       });
 
       /**
-       * 组件赋值
+       * Gán giá trị component
        * @param value
-       * @param trigger 是否触发 change 事件
+       * @param trigger Có kích hoạt sự kiện change hay không
        */
       function setValue(value: string, trigger = true) {
         if (value && isJsonObjectString(value)) {
-          // update-begin--author:liaozhiyang---date:20260617---for:【issues/9699】JS增强写错了之后页面报错
-          // isJsonObjectString 仅判断首尾字符，无法保证合法 JSON；解析失败时保留原值，避免非 JSON 内容（如 JS 增强代码）打开时报错卡死
+          // update-begin--author:liaozhiyang---date:20260617---for:【issues/9699] JS tăng cường viết sai thì trang báo lỗi
+          // isJsonObjectString Chỉ phán đoán ký tự đầu và cuối, không thể đảm bảo JSON hợp lệ; khi phân tích thất bại thì giữ nguyên giá trị gốc, tránh nội dung không phải JSON (như mã tăng cường JS) bị lỗi kẹt khi mở
           try {
             value = JSON.stringify(JSON.parse(value), null, 2);
           } catch (e) {
-            // 非合法 JSON，按原文本展示
+            // JSON không hợp lệ thì hiển thị theo văn bản gốc
           }
         }
-        // update-end--author:liaozhiyang---date:20260617---for:【issues/9699】JS增强写错了之后页面报错
+        // update-end--author:liaozhiyang---date:20260617---for:【issues/9699] JS tăng cường viết sai thì trang báo lỗi
         coder?.setValue(value ?? '');
         innerValue = value;
         trigger && emitChange(innerValue);
-        // 代码逻辑说明: 【QQYUN-9231】代码编辑器有遮挡
+        // Giải thích logic mã: 【QQYUN-9231] trình soạn thảo mã bị che khuất
         setTimeout(() => {
           refresh();
-          // 再次刷下防止小概率下遮挡问题
+          // Làm mới lại lần nữa để tránh vấn đề che khuất với xác suất nhỏ
           setTimeout(() => {
             refresh();
           }, 600);
         }, 400);
       }
 
-      //编辑器值修改事件
+      //Sự kiện thay đổi giá trị trình chỉnh sửa
       function onChange(obj) {
         let value = obj.getValue();
         innerValue = value || '';
@@ -209,28 +209,28 @@
         emit('update:value', value);
       }
 
-      //组件初始化
+      //Khởi tạo component
       function initialize() {
         coder = CodeMirror.fromTextArea(textarea.value!, options);
-        //绑定值修改事件
+        //Sự kiện thay đổi giá trị liên kết
         coder.on('change', onChange);
-        // 初始化成功时赋值一次
+        // Gán giá trị một lần khi khởi tạo thành công
         setValue(innerValue, false);
-        // 代码逻辑说明: 【QQYUN-5955】online js增强，加入代码提示
+        // Giải thích logic mã: 【QQYUN-5955] Tăng cường JS online, thêm gợi ý mã
         codeHintingMount(coder);
       }
 
-      // 切换全屏状态
+      // Chuyển đổi trạng thái toàn màn hình
       function onToggleFullScreen() {
         isFullScreen.value = !isFullScreen.value;
-        // update-begin--author:liaozhiyang---date:20260713---for:【LHZP-236】onlinejs增强查看历史里面的数据，放大查看，内容无法滚动
+        // update-begin--author:liaozhiyang---date:20260713---for:【LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
         nextTick(() => {
           setTimeout(() => refresh(), 100);
         });
-        // update-end--author:liaozhiyang---date:20260713---for:【LHZP-236】onlinejs增强查看历史里面的数据，放大查看，内容无法滚动
+        // update-end--author:liaozhiyang---date:20260713---for:【LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
       }
 
-      // 代码逻辑说明: codeEditor禁用功能
+      // Giải thích logic mã: codeEditorVô hiệu hóa chức năng
       watch(
         () => props.disabled,
         (val) => {
@@ -240,7 +240,7 @@
         }
       );
       
-      // 支持动态设置语言
+      // Hỗ trợ đặt ngôn ngữ động
       watch(()=>props.language, (val)=>{
         if(val && coder){
           coder.setOption('mode', val);
@@ -249,7 +249,7 @@
 
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
 
-      // 代码逻辑说明: VUEN-2480【严重bug】online vue3测试的问题 8、online js增强样式问题
+      // Giải thích logic mã: VUEN-2480[Bug nghiêm trọng]Vấn đề kiểm thử online vue3 8, vấn đề kiểu dáng tăng cường JS online
       function refresh(){
         if(coder){
           coder.refresh();
@@ -259,7 +259,7 @@
       /**
        * 2024-04-01
        * liaozhiyang
-       * 代码批量注释
+       * Chú thích hàng loạt mã
        */
       function comment(cm) {
         var selection = cm.getSelection();
@@ -267,10 +267,10 @@
         var end = cm.getCursor('end');
         var isCommented = selection.startsWith('//');
         if (isCommented) {
-          // 如果已经被注释，取消注释
+          // Nếu đã được chú thích thì bỏ chú thích
           cm.replaceRange(selection.replace(/\n\/\/\s/g, '\n').replace(/^\/\/\s/, ''), start, end);
         } else {
-          // 添加注释
+          // Thêm chú thích
           cm.replaceRange('// ' + selection.replace(/\n(?=.)/g, '\n// '), start, end);
         }
       }
@@ -302,7 +302,7 @@
       }
     }
 
-    /* 全屏样式 */
+    /* Kiểu toàn màn hình */
 
     &.full-screen-parent {
       position: relative;
@@ -349,9 +349,9 @@
 
         .full-screen-child,
         .CodeMirror {
-          // update-begin--author:liaozhiyang---date:20260713---for:【LHZP-236】onlinejs增强查看历史里面的数据，放大查看，内容无法滚动
+          // update-begin--author:liaozhiyang---date:20260713---for:【LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
           height: 100% !important;
-          // update-end--author:liaozhiyang---date:20260713---for:【LHZP-236】onlinejs增强查看历史里面的数据，放大查看，内容无法滚动
+          // update-end--author:liaozhiyang---date:20260713---for:【LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
           max-height: 100%;
           min-height: 100%;
         }
@@ -362,7 +362,7 @@
       }
     }
     
-    /** VUEN-2344【vue3】这个样式有问题，是不是加个边框 */
+    /** VUEN-2344[vue3] Kiểu này có vấn đề, có nên thêm một đường viền không */
     .CodeMirror{
       border: 1px solid #ddd;
     }
@@ -377,7 +377,7 @@
     max-width: 600px;
     max-height: 300px;
   }
-  // 代码逻辑说明: 【QQYUN-8639】暗黑主题适配
+  // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
   html[data-theme='dark'] {
     .@{prefix-cls} {
       .CodeMirror {

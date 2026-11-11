@@ -2,30 +2,30 @@
   <div :class="`${prefixCls}`">
     <div class="content">
       <a-tabs :size="`small`" v-model:activeKey="activeKey">
-        <a-tab-pane tab="秒" key="second" v-if="!hideSecond">
+        <a-tab-pane tab="giây" key="second" v-if="!hideSecond">
           <SecondUI v-model:value="second" :disabled="disabled" />
         </a-tab-pane>
-        <a-tab-pane tab="分" key="minute">
+        <a-tab-pane tab="phút" key="minute">
           <MinuteUI v-model:value="minute" :disabled="disabled" />
         </a-tab-pane>
-        <a-tab-pane tab="时" key="hour">
+        <a-tab-pane tab="giờ" key="hour">
           <HourUI v-model:value="hour" :disabled="disabled" />
         </a-tab-pane>
-        <a-tab-pane tab="日" key="day">
+        <a-tab-pane tab="ngày" key="day">
           <DayUI v-model:value="day" :week="week" :disabled="disabled" />
         </a-tab-pane>
-        <a-tab-pane tab="月" key="month">
+        <a-tab-pane tab="tháng" key="month">
           <MonthUI v-model:value="month" :disabled="disabled" />
         </a-tab-pane>
-        <a-tab-pane tab="周" key="week">
+        <a-tab-pane tab="Tuần" key="week">
           <WeekUI v-model:value="week" :day="day" :disabled="disabled" />
         </a-tab-pane>
-        <a-tab-pane tab="年" key="year" v-if="!hideYear && !hideSecond">
+        <a-tab-pane tab="năm" key="year" v-if="!hideYear && !hideSecond">
           <YearUI v-model:value="year" :disabled="disabled" />
         </a-tab-pane>
       </a-tabs>
       <a-divider />
-      <!-- 执行时间预览 -->
+      <!-- Xem trước thời gian thực thi -->
       <div style="overflow: hidden">
         <a-row :gutter="8">
           <a-col :span="18" style="margin-top: 22px">
@@ -33,63 +33,63 @@
               <a-col :span="8" style="margin-bottom: 12px">
                 <a-input v-model:value="inputValues.second" @blur="onInputBlur">
                   <template #addonBefore>
-                    <span class="allow-click" @click="activeKey = 'second'">秒</span>
+                    <span class="allow-click" @click="activeKey = 'second'">giây</span>
                   </template>
                 </a-input>
               </a-col>
               <a-col :span="8" style="margin-bottom: 12px">
                 <a-input v-model:value="inputValues.minute" @blur="onInputBlur">
                   <template #addonBefore>
-                    <span class="allow-click" @click="activeKey = 'minute'">分</span>
+                    <span class="allow-click" @click="activeKey = 'minute'">phút</span>
                   </template>
                 </a-input>
               </a-col>
               <a-col :span="8" style="margin-bottom: 12px">
                 <a-input v-model:value="inputValues.hour" @blur="onInputBlur">
                   <template #addonBefore>
-                    <span class="allow-click" @click="activeKey = 'hour'">时</span>
+                    <span class="allow-click" @click="activeKey = 'hour'">giờ</span>
                   </template>
                 </a-input>
               </a-col>
               <a-col :span="8" style="margin-bottom: 12px">
                 <a-input v-model:value="inputValues.day" @blur="onInputBlur">
                   <template #addonBefore>
-                    <span class="allow-click" @click="activeKey = 'day'">日</span>
+                    <span class="allow-click" @click="activeKey = 'day'">ngày</span>
                   </template>
                 </a-input>
               </a-col>
               <a-col :span="8" style="margin-bottom: 12px">
                 <a-input v-model:value="inputValues.month" @blur="onInputBlur">
                   <template #addonBefore>
-                    <span class="allow-click" @click="activeKey = 'month'">月</span>
+                    <span class="allow-click" @click="activeKey = 'month'">tháng</span>
                   </template>
                 </a-input>
               </a-col>
               <a-col :span="8" style="margin-bottom: 12px">
                 <a-input v-model:value="inputValues.week" @blur="onInputBlur">
                   <template #addonBefore>
-                    <span class="allow-click" @click="activeKey = 'week'">周</span>
+                    <span class="allow-click" @click="activeKey = 'week'">Tuần</span>
                   </template>
                 </a-input>
               </a-col>
               <a-col :span="8">
                 <a-input v-model:value="inputValues.year" @blur="onInputBlur">
                   <template #addonBefore>
-                    <span class="allow-click" @click="activeKey = 'year'">年</span>
+                    <span class="allow-click" @click="activeKey = 'year'">năm</span>
                   </template>
                 </a-input>
               </a-col>
               <a-col :span="16">
                 <a-input v-model:value="inputValues.cron" @blur="onInputCronBlur">
                   <template #addonBefore>
-                    <a-tooltip title="Cron表达式">式</a-tooltip>
+                    <a-tooltip title="CronBiểu thức">Biểu thức</a-tooltip>
                   </template>
                 </a-input>
               </a-col>
             </a-row>
           </a-col>
           <a-col :span="6">
-            <div>近十次执行时间（不含年）</div>
+            <div>Thời gian thực thi mười lần gần nhất (không bao gồm năm)</div>
             <a-textarea type="textarea" :value="preTimeList" :rows="5" />
           </a-col>
         </a-row>
@@ -134,9 +134,9 @@
     year: '',
     cron: '',
   });
-  const preTimeList = ref('执行预览，会忽略年份参数。');
+  const preTimeList = ref('Khi thực thi xem trước, tham số năm sẽ bị bỏ qua.');
 
-  // cron表达式
+  // cronBiểu thức
   const cronValueInner = computed(() => {
     let result: string[] = [];
     if (!props.hideSecond) {
@@ -150,13 +150,13 @@
     if (!props.hideYear && !props.hideSecond) result.push(year.value ? year.value : '*');
     return result.join(' ');
   });
-  // 不含年
+  // Không bao gồm năm
   const cronValueNoYear = computed(() => {
     const v = cronValueInner.value;
     if (props.hideYear || props.hideSecond) return v;
     const vs = v.split(' ');
     if (vs.length >= 6) {
-      // 转成 Quartz 的规则
+      // Chuyển thành quy tắc của Quartz
       vs[5] = convertWeekToQuartz(vs[5]);
     }
     return vs.slice(0, vs.length - 1).join(' ');
@@ -242,8 +242,8 @@
     assignInput();
   }
 
-  // Quartz 的规则：
-  // 1 = 周日，2 = 周一，3 = 周二，4 = 周三，5 = 周四，6 = 周五，7 = 周六
+  // Quartz quy tắc:
+  // 1 = Chủ Nhật,2 = Thứ Hai,3 = Thứ Ba,4 = Thứ Tư,5 = Thứ Năm,6 = Thứ Sáu,7 = Thứ Bảy
   function convertWeekToQuartz(week: string) {
     let convert = (v: string) => {
       if (v === '0') {
@@ -254,9 +254,9 @@
       }
       return (Number.parseInt(v) - 1).toString();
     };
-    // 匹配示例 1-7 or 1/7
+    // Ví dụ khớp 1-7 or 1/7
     let patten1 = /^([0-7])([-/])([0-7])$/;
-    // 匹配示例 1,4,7
+    // Ví dụ khớp 1,4,7
     let patten2 = /^([0-7])(,[0-7])+$/;
     if (/^[0-7]$/.test(week)) {
       return convert(week);
@@ -278,7 +278,7 @@
   }
 
   function calTriggerListInner() {
-    // 设置了回调函数
+    // Đã đặt hàm callback
     if (props.remote) {
       props.remote(cronValueInner.value, +new Date(), (v) => {
         preTimeList.value = v;
@@ -294,7 +294,7 @@
     for (let i = 1; i <= 10; i++) {
       result.push(dateFormat(new Date(iter.next() as any), format));
     }
-    preTimeList.value = result.length > 0 ? result.join('\n') : '无执行时间';
+    preTimeList.value = result.length > 0 ? result.join('\n') : 'Không có thời gian thực thi';
   }
 
   function onInputBlur() {

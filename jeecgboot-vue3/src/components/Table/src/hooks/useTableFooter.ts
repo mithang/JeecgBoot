@@ -19,7 +19,7 @@ export function useTableFooter(
     return (unref(getDataSourceRef) || []).length === 0;
   });
 
-  // 是否有展开行
+  // Có hàng mở rộng không
   const hasExpandedRow = computed(() => Object.keys(slots).includes('expandedRowRender'))
 
   const getFooterProps = computed((): Recordable | undefined => {
@@ -44,7 +44,7 @@ export function useTableFooter(
       const tableEl = unref(tableElRef);
       if (!tableEl) return;
       let bodyDom;
-      // 代码逻辑说明: 【issues/7422】BasicTable列表canResize属性为true时合计行不能横向滚动
+      // Giải thích logic mã: 【issues/7422]Khi thuộc tính canResize của danh sách BasicTable là true thì hàng tổng cộng không thể cuộn ngang
       if (canResize) {
         setTimeout(() => {
           bodyDom = tableEl.$el.querySelector('.ant-table-body');

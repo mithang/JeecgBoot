@@ -14,11 +14,11 @@
       <template #removeIcon="{ file }">
         <a-popconfirm
           v-if="removeConfirm"
-          :title="`删除这${isImageMode ? '张图片' : '个文件'}？`"
+          :title="`Xóa${isImageMode ? 'ảnh' : 'tệp'}？`"
           placement="topRight"
           overlayClassName="j-upload-remove-popconfirm"
-          okText="删除"
-          cancelText="取消"
+          okText="Xóa"
+          cancelText="Hủy"
           @confirm="confirmRemove(file)"
         >
           <span class="j-upload-remove-trigger" :data-file-uid="file.uid" @click.stop>
@@ -61,29 +61,29 @@
   const emit = defineEmits(['change', 'update:value']);
   const props = defineProps({
     value: propTypes.oneOfType([propTypes.string, propTypes.array]),
-    text: propTypes.string.def('上传'),
+    text: propTypes.string.def('Tải lên'),
     fileType: propTypes.string.def(UploadTypeEnum.all),
-    /*这个属性用于控制文件上传的业务路径*/
+    /*Thuộc tính này dùng để điều khiển đường dẫn nghiệp vụ tải lên tệp*/
     bizPath: propTypes.string.def('temp'),
     /**
-     * 是否返回url，
-     * true：仅返回url
-     * false：返回fileName filePath fileSize
+     * Có trả về url không,
+     * true: chỉ trả vềurl
+     * false: trả vềfileName filePath fileSize
      */
     returnUrl: propTypes.bool.def(true),
-    // 最大上传数量
+    // Số lượng tải lên tối đa
     maxCount: propTypes.number.def(0),
     buttonVisible: propTypes.bool.def(true),
     multiple: propTypes.bool.def(true),
-    // 是否显示左右移动按钮
+    // Có hiển thị nút di chuyển trái/phải không
     mover: propTypes.bool.def(true),
-    // 是否显示下载按钮
+    // Có hiển thị nút tải xuống không
     download: propTypes.bool.def(true),
-    // 删除时是否显示确认框
+    // Khi xóa có hiển thị hộp xác nhận không
     removeConfirm: propTypes.bool.def(false),
     beforeUpload: propTypes.func,
     disabled: propTypes.bool.def(false),
-    // 替换前一个文件，用于超出最大数量依然允许上传
+    // Thay thế tệp trước đó, dùng để khi vượt quá số lượng tối đa vẫn cho phép tải lên
     replaceLastOne: propTypes.bool.def(false),
   });
 
@@ -93,11 +93,11 @@
   // refs
   const containerRef = ref<HTMLElement>();
   const confirmedRemoveUid = ref<string | number>();
-  // 是否达到了最大上传数量
+  // Đã đạt số lượng tải lên tối đa chưa
   const isMaxCount = computed(() => props.maxCount > 0 && fileList.value.length >= props.maxCount);
-  // 当前是否是上传图片模式
+  // Hiện tại có phải là chế độ tải lên hình ảnh không
   const isImageMode = computed(() => props.fileType === UploadTypeEnum.image);
-  // 上传按钮是否禁用
+  // Nút tải lên có bị vô hiệu hóa không
   const buttonDisabled = computed(()=>{
     if(props.disabled === true){
       return true;
@@ -111,20 +111,20 @@
     }
     return false
   });
-  // 合并 props 和 attrs
+  // Gộp props và attrs
   const bindProps = computed(() => {
-    // 代码逻辑说明: [issue/455]上传组件传入accept限制上传文件类型无效
+    // Giải thích logic mã: [issue/455]Component tải lên truyền vào accept để giới hạn loại tệp tải lên không có hiệu lực
     const bind: any = Object.assign({}, props, unref(attrs));
 
     bind.name = 'file';
     bind.listType = isImageMode.value ? 'picture-card' : 'text';
     bind.class = [bind.class, { 'upload-disabled': props.disabled }];
     bind.data = { biz: props.bizPath, ...bind.data };
-    // 代码逻辑说明: 自定义beforeUpload return false，并不能中断上传过程
+    // Giải thích logic mã: Tùy chỉnh beforeUpload trả về false cũng không thể ngắt quá trình tải lên
     if (!bind.beforeUpload) {
       bind.beforeUpload = onBeforeUpload;
     }
-    // 如果当前是图片上传模式，就只能上传图片
+    // Nếu hiện tại là chế độ tải lên hình ảnh, thì chỉ có thể tải lên hình ảnh
     if (isImageMode.value && !bind.accept) {
       bind.accept = 'image/*';
     }
@@ -145,7 +145,7 @@
           parseArrayValue(val);
         }
       } else {
-        // 代码逻辑说明: [issues/5327]Upload组件returnUrl为false时上传的字段值返回了一个'[object Object]' ------------
+        // Giải thích logic mã: [issues/5327]UploadKhi returnUrl của component là false, giá trị trường tải lên đã trả về một'[object Object]' ------------
         if (props.returnUrl) {
           parsePathsValue(val);
         } else {
@@ -177,8 +177,8 @@
     }
   }
 
-  // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73】上传图片操作按钮优化（解决报错导致箭头和下载icon不显示）
-  // 添加可左右移动的按钮
+  // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73]Tối ưu nút thao tác tải ảnh lên (khắc phục lỗi khiến mũi tên và icon tải xuống không hiển thị)
+  // Thêm nút có thể di chuyển trái/phải
   function onAddActionsButton(event: MouseEvent) {
     const uploadItem = event.currentTarget as HTMLElement | null;
     if (!uploadItem?.classList.contains(antUploadItemCls)) {
@@ -188,14 +188,14 @@
     if (!actions || actions.length === 0) {
       return;
     }
-    // 添加操作按钮
+    // Thêm nút thao tác
     const div = document.createElement('div');
     div.className = 'upload-actions-container';
     createApp(UploadItemActions, {
       element: uploadItem,
-      // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73】批量上传图片后左右移动提示-1
+      // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
       container: containerRef.value,
-      // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73】批量上传图片后左右移动提示-1
+      // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
       fileList: fileList,
       mover: props.mover,
       download: props.download,
@@ -205,16 +205,16 @@
     uploadItem.setAttribute('data-has-actions', 'true');
     uploadItem.removeEventListener('mouseover', onAddActionsButton);
   }
-  // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73】上传图片操作按钮优化（解决报错导致箭头和下载icon不显示）
+  // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73]Tối ưu nút thao tác tải ảnh lên (khắc phục lỗi khiến mũi tên và icon tải xuống không hiển thị)
 
-  // 解析数据库存储的逗号分割
+  // Phân tích chuỗi phân tách bằng dấu phẩy được lưu trong cơ sở dữ liệu
   function parsePathsValue(paths) {
     if (!paths || paths.length == 0) {
       fileList.value = [];
       return;
     }
     let list: any[] = [];
-    // 代码逻辑说明: 【issues/7990】图片参数中包含逗号会错误的识别成多张图
+    // Giải thích logic mã: 【issues/7990]Tham số hình ảnh chứa dấu phẩy sẽ bị nhận nhầm thành nhiều ảnh
     const result = split(paths);
     for (const item of result) {
       let url = getFileAccessHttpUrl(item);
@@ -229,7 +229,7 @@
     fileList.value = list;
   }
 
-  // 解析数组值
+  // Phân tích giá trị mảng
   function parseArrayValue(array) {
     if (!array || array.length == 0) {
       fileList.value = [];
@@ -249,24 +249,24 @@
     fileList.value = list;
   }
 
-  // 文件上传之前的操作
+  // Thao tác trước khi tải tệp lên
   function onBeforeUpload(file) {
     uploadGoOn.value = true;
     if (isImageMode.value) {
       if (file.type.indexOf('image') < 0) {
-        createMessage.warning('请上传图片');
+        createMessage.warning('Vui lòng tải lên hình ảnh');
         uploadGoOn.value = false;
         return false;
       }
     }
-    // 扩展 beforeUpload 验证
+    // Mở rộng kiểm chứng beforeUpload
     if (typeof props.beforeUpload === 'function') {
       return props.beforeUpload(file);
     }
     return true;
   }
 
-  // 删除处理事件
+  // Sự kiện xử lý xóa
   function onRemove(file) {
     if (!props.removeConfirm) {
       return true;
@@ -289,13 +289,13 @@
     return Array.from(triggers).find((trigger) => trigger.dataset.fileUid === String(file.uid));
   }
 
-  // upload组件change事件
+  // uploadSự kiện change của component
   function onFileChange(info) {
     if (!info.file.status && uploadGoOn.value === false) {
       info.fileList.pop();
     }
     let fileListTemp = info.fileList;
-    // 限制最大上传数
+    // Giới hạn số lượng tải lên tối đa
     if (props.maxCount > 0) {
       let count = fileListTemp.length;
       if (count >= props.maxCount) {
@@ -321,22 +321,22 @@
         successFileList = fileListTemp.filter(item=>{
           return item.uid!=info.file.uid;
         });
-        // update-begin--author:liaozhiyang---date:20260825---for：【LHZP-329】上传失败，显示接口的message
+        // update-begin--author:liaozhiyang---date:20260825---for：【LHZP-329] tải lên thất bại, hiển thị thông báo của APImessage
         createMessage.error(`${info.file.response.message}`);
-        // update-end--author:liaozhiyang---date:20260825---for：【LHZP-329】上传失败，显示接口的message
+        // update-end--author:liaozhiyang---date:20260825---for：【LHZP-329] tải lên thất bại, hiển thị thông báo của APImessage
       }
       fileListTemp = successFileList;
     } else if (info.file.status === 'error') {
-      createMessage.error(`${info.file.name} 上传失败.`);
+      createMessage.error(`${info.file.name} Tải lên thất bại.`);
     }
-    // beforeUpload 返回false，则没有status
+    // beforeUpload Trả về false thì không cóstatus
     info.file.status && (fileList.value = fileListTemp);
     if (info.file.status === 'done' || info.file.status === 'removed') {
-      //returnUrl为true时仅返回文件路径
+      //returnUrlKhi là true chỉ trả về đường dẫn tệp
       if (props.returnUrl) {
         handlePathChange();
       } else {
-        //returnUrl为false时返回文件名称、文件路径及文件大小
+        //returnUrlKhi là false sẽ trả về tên tệp, đường dẫn tệp và kích thước tệp
         let newFileList: any[] = [];
         for (const item of fileListTemp) {
           if (item.status === 'done') {
@@ -350,7 +350,7 @@
             return;
           }
         }
-        // 代码逻辑说明: [issues/5327]Upload组件returnUrl为false时上传的字段值返回了一个'[object Object]' ------------
+        // Giải thích logic mã: [issues/5327]UploadKhi returnUrl của component là false, giá trị trường tải lên đã trả về một'[object Object]' ------------
         emitValue(JSON.stringify(newFileList));
       }
     }
@@ -380,7 +380,7 @@
     return fileList.value.map((file) => file.response?.message).join(',');
   }
 
-  // 预览文件、图片
+  // Xem trước tệp, hình ảnh
   function onFilePreview(file) {
     if (isImageMode.value) {
       createImgPreview({ imageList: [file.url], maskClosable: true });
@@ -453,16 +453,16 @@
           }
         }
 
-        /* update-begin-author:taoyan date:2022-5-24 for:VUEN-1093详情界面 图片下载按钮显示不全*/
+        /* update-begin-author:taoyan date:2022-5-24 for:VUEN-1093Trên giao diện chi tiết, nút tải xuống hình ảnh hiển thị không đầy đủ*/
         .upload-download-handler {
           right: 6px !important;
         }
-        /* update-end-author:taoyan date:2022-5-24 for:VUEN-1093详情界面 图片下载按钮显示不全*/
+        /* update-end-author:taoyan date:2022-5-24 for:VUEN-1093Trên giao diện chi tiết, nút tải xuống hình ảnh hiển thị không đầy đủ*/
       }
       .ant-upload-text-icon {
         color: @primary-color;
       }
-      // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73】上传图片操作按钮优化
+      // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73] tối ưu nút thao tác tải lên hình ảnh
       .ant-upload-list-item {
         &:not(.has-upload-mover-actions) {
           .ant-upload-list-item-actions {
@@ -537,7 +537,7 @@
           }
         }
       }
-      // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73】上传图片操作按钮优化
+      // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73] tối ưu nút thao tác tải lên hình ảnh
     }
   }
 

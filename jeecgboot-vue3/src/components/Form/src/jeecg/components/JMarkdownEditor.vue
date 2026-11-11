@@ -9,7 +9,7 @@
   import { Form } from 'ant-design-vue';
   export default defineComponent({
     name: 'JMarkdownEditor',
-    // 不将 attrs 的属性绑定到 html 标签上
+    // Không binding thuộc tính của attrs lên thẻ html
     inheritAttrs: false,
     components: { MarkDown },
     props: {
@@ -18,19 +18,19 @@
     },
     emits: ['change', 'update:value'],
     setup(props, { emit, attrs }) {
-      // markdown 组件实例
+      // markdown Thể hiện component
       let mdRef: any = null;
-      // vditor 组件实例
+      // vditor Thể hiện component
       let vditorRef: any = null;
-      // 合并 props 和 attrs
+      // Gộp props và attrs
       const bindProps = computed(() => Object.assign({}, props, attrs));
       const formItemContext = Form.useInjectFormItemContext();
-      // 相当于 onMounted
+      // Tương đương với onMounted
       function onGetVditor(instance) {
         mdRef = instance;
         vditorRef = mdRef.getVditor();
 
-        // 监听禁用，切换编辑器禁用状态
+        // Lắng nghe trạng thái vô hiệu hóa, chuyển đổi trạng thái vô hiệu hóa của trình chỉnh sửa
         watch(
           () => props.disabled,
           (disabled) => (disabled ? vditorRef.disabled() : vditorRef.enable()),
@@ -38,11 +38,11 @@
         );
       }
 
-      // value change 事件
+      // value change Sự kiện
       function onChange(value) {
         emit('change', value);
         emit('update:value', value);
-        // 代码逻辑说明: 【QQYUN-9110】组件有值校验没消失
+        // Giải thích logic mã: 【QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
         nextTick(() => {
           formItemContext?.onFieldChange();
         });

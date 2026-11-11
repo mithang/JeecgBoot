@@ -1,92 +1,92 @@
-//下拉选择框组件公共props
+//Props chung của component hộp chọn thả xuốngprops
 import { propTypes } from '/@/utils/propTypes';
 
 export const selectProps = {
-  //是否多选
+  //Có chọn nhiều hay không
   isRadioSelection: {
     type: Boolean,
-    // 代码逻辑说明: 部门用户组件默认应该单选，否则其他地方有问题------------
+    // Giải thích logic mã: Component người dùng phòng ban mặc định nên là chọn đơn, nếu không các nơi khác sẽ có vấn đề------------
     default: false,
   },
-  //回传value字段名
+  //Trả về tên trường value
   rowKey: {
     type: String,
     default: 'id',
   },
-  //回传文本字段名
+  //Tên trường văn bản trả về
   labelKey: {
     type: String,
     default: 'name',
   },
-  //查询参数
+  //Tham số truy vấn
   params: {
     type: Object,
     default: () => {},
   },
-  //是否显示选择按钮
+  //Có hiển thị nút chọn không
   showButton: propTypes.bool.def(true),
-  //是否显示右侧选中列表
+  //Có hiển thị danh sách đã chọn ở bên phải không
   showSelected: propTypes.bool.def(false),
-  //最大选择数量
+  //Số lượng chọn tối đa
   maxSelectCount: {
     type: Number,
     default: 0,
   },
 };
 
-//树形选择组件公共props
+//Props chung của component chọn dạng câyprops
 export const treeProps = {
-  //回传value字段名
+  //Trả về tên trường value
   rowKey: {
     type: String,
     default: 'key',
   },
-  //回传文本字段名
+  //Tên trường văn bản trả về
   labelKey: {
     type: String,
     default: 'title',
   },
-  //初始展开的层级
+  //Cấp độ mở rộng ban đầu
   defaultExpandLevel: {
     type: [Number],
     default: 1,
   },
-  //根pid值
+  //Giá trị pid gốc
   startPid: {
     type: [Number, String],
     default: '',
   },
-  //主键字段
+  //Trường khóa chính
   primaryKey: {
     type: [String],
     default: 'id',
   },
-  //父ID字段
+  //Trường ID cha
   parentKey: {
     type: [String],
     default: 'parentId',
   },
-  //title字段
+  //titleTrường
   titleKey: {
     type: [String],
     default: 'title',
   },
-  //是否开启服务端转换tree数据结构
+  //Có bật chuyển đổi cấu trúc dữ liệu tree ở phía server hay không
   serverTreeData: propTypes.bool.def(true),
-  //是否开启异步加载数据
+  //Có bật tải dữ liệu bất đồng bộ không
   sync: propTypes.bool.def(true),
-  //是否显示选择按钮
+  //Có hiển thị nút chọn không
   showButton: propTypes.bool.def(true),
-  //是否只显示公司
+  //Có chỉ hiển thị công ty không
   onlyShowCompany: propTypes.bool.def(false),
-  //是否显示复选框
+  //Có hiển thị hộp kiểm không
   checkable: propTypes.bool.def(true),
-  //checkable 状态下节点选择完全受控（父子节点选中状态不再关联）
+  //checkable Trong trạng thái checkable, việc chọn nút được kiểm soát hoàn toàn (trạng thái chọn của nút cha và nút con không còn liên kết với nhau)
   checkStrictly: propTypes.bool.def(false),
-  // 是否允许多选，默认 true
+  // Có cho phép chọn nhiều không, mặc định true
   multiple: propTypes.bool.def(true),
-  // 是否只选择岗位
+  // Có chỉ chọn vị trí công tác không
   izOnlySelectDepartPost: propTypes.bool.def(false),
-  // 是否显示部门简称
+  // Có hiển thị tên viết tắt phòng ban không
   izShowDepartNameAbbr: propTypes.bool.def(false),
 };

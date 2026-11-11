@@ -26,28 +26,28 @@
     inheritAttrs: false,
     props: {
       value: propTypes.oneOfType([propTypes.object, propTypes.array, propTypes.string]),
-      // 显示层级：province 只显示省，city 显示省市，region 显示省市县（优先于 showArea）
+      // Cấp hiển thị: province chỉ hiển thị tỉnh, city hiển thị tỉnh/thành phố, region hiển thị tỉnh/thành phố/quận huyện (ưu tiên hơn showArea)
       displayLevel: propTypes.oneOf(['province', 'city', 'region', 'all']),
-      //是否显示区县
+      //Có hiển thị quận huyện không
       showArea: propTypes.bool.def(true),
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-707】修复省市区禁用状态下还可以点击x删除
+      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
       disabled: propTypes.bool.def(false),
-      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-707】修复省市区禁用状态下还可以点击x删除
-      // 存储数据 （all时：传递到外面的是数组；province, city, region传递外面的是字符串）
+      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
+      // Lưu trữ dữ liệu (khi all: dữ liệu truyền ra ngoài là mảng;province, city, regiongiá trị truyền ra ngoài là chuỗi)
       saveCode: propTypes.oneOf(['province', 'city', 'region', 'all']).def('all'),
     },
     emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit }) {
-      // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
+      // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
       const showLastLevelOnly = computed(() => {
         return props.displayLevel === 'province' || props.displayLevel === 'city' || props.displayLevel === 'region';
       });
-      // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
+      // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
       const attrs = useAttrs();
       // const [state] = useRuleFormItem(props, 'value', 'change', emitData);
       const cascaderValue = ref<(string | number)[]>([]);
       const getOptions = computed(() => {
-        // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
+        // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
         if (props.displayLevel) {
           if (props.displayLevel === 'all') {
             return regionData;
@@ -65,13 +65,13 @@
             return provinceAndCityData;
           }
         }
-        // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
+        // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
       });
       /**
-       * 监听value变化
+       * Lắng nghe thay đổi của value
        */
       watchEffect(() => {
-        // 代码逻辑说明: 【TV360X-1223】省市区换新组件
+        // Giải thích logic mã: 【TV360X-1223] tỉnh/thành/quận huyện đổi component mới
         if (props.value) {
           initValue();
         } else {
@@ -80,7 +80,7 @@
       });
 
       /**
-       * 老数据可能是区县码（如 120101），displayLevel 为 province 时需显示对应省，
+       * Dữ liệu cũ có thể là mã quận huyện (ví dụ 120101), khi displayLevel là province cần hiển thị tỉnh tương ứng,
        */
       function buildDisplayPathFromCode(code, displayLevel) {
         if (!code && code !== 0) return [];
@@ -97,26 +97,26 @@
         return fullPath;
       }
       /**
-       * 将字符串值转化为数组
+       * Chuyển giá trị chuỗi thành mảng
        */
       function initValue() {
         let value = props.value ? props.value : [];
-        // 代码逻辑说明: 【TV360X-501】省市区换新组件
+        // Giải thích logic mã: 【TV360X-501] tỉnh/thành/quận huyện đổi component mới
         if (value && typeof value === 'string' && value != 'null' && value != 'undefined') {
           const arr = value.split(',');
           if (props.displayLevel) {
-            // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
+            // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
             const code = arr[0];
             cascaderValue.value = buildDisplayPathFromCode(code, props.displayLevel);
-            // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
+            // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
           } else {
             cascaderValue.value = transform(arr);
           }
         } else if (isArray(value)) {
           if (value.length) {
             if (props.displayLevel) {
-              // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
-              // 老数据 saveCode 为 all 时存的是完整路径数组 [省,市,区]，直接按 displayLevel 截断
+              // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+              // Dữ liệu cũ khi saveCode là all thì lưu mảng đường dẫn đầy đủ [Tỉnh,Thành phố,Quận], cắt trực tiếp theo displayLevel
               if (value.length >= 2) {
                 const len = props.displayLevel === 'province' ? 1 : props.displayLevel === 'city' ? 2 : Math.min(3, value.length);
                 cascaderValue.value = value.slice(0, len);
@@ -124,7 +124,7 @@
                 const code = value[0];
                 cascaderValue.value = buildDisplayPathFromCode(code, props.displayLevel);
               }
-              // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694】online支持配置独立的省、市、县
+              // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
             } else {
               cascaderValue.value = transform(value);
             }
@@ -152,15 +152,15 @@
       /**
        * liaozhiyang
        * 2024-06-17
-       * 【TV360X-1224】省市区组件默认传到外面的值是字符串逗号分隔
+       * 【TV360X-1224] Giá trị mặc định component Tỉnh/Thành/Quận huyện truyền ra ngoài là chuỗi phân tách bằng dấu phẩy
        * */
       const send = (data) => {
         let result = data;
         if (result) {
           if (props.saveCode === 'all') {
-            // 传递的是数组
+            // Truyền vào là mảng
           } else {
-            // 传递的是字符串
+            // Giá trị truyền vào là chuỗi
             result = data.join(',');
           }
         }
@@ -169,11 +169,11 @@
       };
 
       function handleChange(arr) {
-        // 代码逻辑说明: 【TV360X-501】省市区换新组件
+        // Giải thích logic mã: 【TV360X-501] tỉnh/thành/quận huyện đổi component mới
         if (arr?.length) {
           let result: any = [];
           if (props.saveCode === 'region') {
-            // 可能只有两位（选择香港时，只有省区）
+            // Có thể chỉ có hai cấp (khi chọn Hồng Kông, chỉ có Tỉnh/Quận)
             result = [arr[arr.length - 1]];
           } else if (props.saveCode === 'city') {
             result = [arr[1]];
@@ -187,7 +187,7 @@
           send(arr);
         }
         // emitData.value = args;
-        // 上面改的v-model:value导致选中数据没有显示
+        // Việc thay đổi ở trênv-model:valueKhiến dữ liệu đã chọn không hiển thị
         // state.value = result;
       }
       

@@ -6,17 +6,17 @@ export const basicProps = {
     type: String as PropType<string>,
     default: '',
   },
-  // 文件最大多少MB
+  // Tệp tối đa bao nhiêuMB
   maxSize: {
     type: Number as PropType<number>,
     default: 2,
   },
-  // 最大数量的文件，Infinity不限制
+  // Số lượng tệp tối đa, Infinity là không giới hạn
   maxNumber: {
     type: Number as PropType<number>,
     default: Infinity,
   },
-  // 根据后缀，或者其他
+  // Theo hậu tố, hoặc cách khác
   accept: {
     type: Array as PropType<string[]>,
     default: () => [],

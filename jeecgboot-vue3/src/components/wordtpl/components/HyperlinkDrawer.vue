@@ -1,6 +1,6 @@
-<!--超链接-->
+<!--Siêu liên kết-->
 <template>
-  <BasicDrawer @register="registerBaseDrawer" title="超链接" width="600" showFooter @ok="handleOk">
+  <BasicDrawer @register="registerBaseDrawer" title="Siêu liên kết" width="600" showFooter @ok="handleOk">
     <BasicForm @register="registerForm" />
   </BasicDrawer>
 </template>
@@ -13,19 +13,19 @@
 
   const schemas: FormSchema[] = [
     {
-      label: '链接名称',
+      label: 'Tên liên kết',
       field: 'name',
       component: 'Input',
-      rules: [{ required: true, message: '请填写链接名称' }],
+      rules: [{ required: true, message: 'Vui lòng nhập tên liên kết' }],
     },
     {
-      label: '链接地址',
+      label: 'Địa chỉ liên kết',
       field: 'url',
       component: 'Input',
       componentProps: {
         min: 0,
       },
-      rules: [{ required: true, message: '请填写链接地址' }],
+      rules: [{ required: true, message: 'Vui lòng nhập địa chỉ liên kết' }],
     },
   ];
 
@@ -36,7 +36,7 @@
     labelCol: { span: 24 },
   });
 
-  //注册Drawer
+  //Đăng kýDrawer
   const [registerBaseDrawer, { closeDrawer }] = useDrawerInner((data) => {
     resetFields();
     setFieldsValue({
@@ -46,7 +46,7 @@
   });
 
   /**
-   * 确定事件
+   * Sự kiện xác nhận
    */
   async function handleOk() {
     let values = await validate();

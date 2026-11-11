@@ -7,19 +7,19 @@
   import { propTypes } from '/@/utils/propTypes';
 
   /**
-   * 左侧省略：空间不足时显示 "...右侧文字"，保证末尾内容完整可见。
-   * 按指定容器（默认 .ant-select-selector）的实际宽度测量，避免被文案自身撑开导致测不准。
+   * Rút gọn bên trái: Hiển thị khi không đủ không gian "...Văn bản bên phải", đảm bảo nội dung ở cuối hiển thị đầy đủ.
+   * Theo container chỉ định (mặc định .ant-select-selector) đo theo chiều rộng thực tế, tránh bị chính nội dung văn bản làm giãn ra dẫn đến đo không chính xác.
    */
   defineOptions({ name: 'JLeftEllipsis' });
 
   const props = defineProps({
-    /** 完整文案 */
+    /** Văn bản đầy đủ */
     text: propTypes.string.def(''),
-    /** 用于测量可用宽度的容器选择器 */
+    /** Bộ chọn container dùng để đo chiều rộng khả dụng */
     containerSelector: propTypes.string.def('.ant-select-selector'),
-    /** 额外预留宽度（关闭按钮、padding 等），单位 px */
+    /** Chiều rộng dự trữ thêm (nút đóng, padding, v.v.), đơn vị px */
     reserveWidth: propTypes.number.def(40),
-    /** 附加到根节点的 class */
+    /** Gắn vào nút gốc class */
     contentClass: propTypes.string.def(''),
   });
 

@@ -1,18 +1,18 @@
-<!--popup组件-->
+<!--popupComponent-->
 <template>
   <div class="JPopup components-input-demo-presuffix" v-if="avalid">
-    <!--输入框-->
-    <a-input @click="handleOpen" @update:value="handleValueChange" :value="isQueryingShowText ? '加载中...' : (innerShowText || showText)" :placeholder="placeholder" readOnly v-bind="attrs">
+    <!--Hộp nhập-->
+    <a-input @click="handleOpen" @update:value="handleValueChange" :value="isQueryingShowText ? 'Đang tải...' : (innerShowText || showText)" :placeholder="placeholder" readOnly v-bind="attrs">
       <template #prefix>
         <Icon v-if="!isQueryingShowText" icon="ant-design:cluster-outlined"></Icon>
         <Icon v-else icon="ant-design:loading-outlined" spin></Icon>
       </template>
       <!-- <template #suffix>
-                <Icon icon="ant-design:close-circle-outlined" @click="handleEmpty" title="清空" v-if="showText"></Icon>
+                <Icon icon="ant-design:close-circle-outlined" @click="handleEmpty" title="Xóa sạch" v-if="showText"></Icon>
             </template>-->
     </a-input>
     <a-form-item>
-      <!--popup弹窗-->
+      <!--popupPopup-->
       <JPopupOnlReportModal
         @register="regModal"
         :code="code"
@@ -38,7 +38,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { defHttp } from '/@/utils/http/axios';
 
-  // 定义请求 url 信息
+  // Định nghĩa thông tin url của yêu cầu
   const configUrl = reactive({
     getColumns: '/online/cgreport/api/getRpColumns/',
     getData: '/online/cgreport/api/getData/',
@@ -55,7 +55,7 @@
       value: propTypes.oneOfType([propTypes.string, propTypes.number]).def(''),
       sorter: propTypes.string.def(''),
       width: propTypes.number.def(1200),
-      placeholder: propTypes.string.def('请选择'),
+      placeholder: propTypes.string.def('Vui lòng chọn'),
       multi: propTypes.bool.def(false),
       param: propTypes.object.def({}),
       spliter: propTypes.string.def(','),
@@ -69,40 +69,40 @@
         default: () => [],
       },
       showAdvancedButton: propTypes.bool.def(true),
-      // 是否是在 筛选（search） 中使用
+      // Có đang dùng trong bộ lọc (search) hay không
       inSearch: propTypes.bool.def(false),
     },
     emits: ['update:value', 'register', 'popUpChange', 'focus'],
     setup(props, { emit, refs }) {
       const { createMessage } = useMessage();
       const attrs = useAttrs();
-      //pop是否展示
+      //popCó hiển thị hay không
       const avalid = ref(true);
       const showText = ref('');
       const innerShowText = ref('')
       const loading = ref(false);
       const isQueryingShowText = ref(false);
       const cgRpConfigId = ref('');
-      // 编辑回显：弹窗待匹配的已选行
+      // Hiển thị lại khi chỉnh sửa: Các dòng đã chọn chờ khớp trong popup
       const echoRows = ref<any[]>([]);
-      //注册model
+      //Đăng kýmodel
       const [regModal, { openModal }] = useModal();
-      //表单值
+      //Giá trị biểu mẫu
       let {code, fieldConfig } = props;
-      //唯一分组groupId
+      //Nhóm duy nhấtgroupId
       const uniqGroupId = computed(() => (props.groupId ? `${props.groupId}_${code}_${fieldConfig[0]['source']}_${fieldConfig[0]['target']}` : ''));
       /**
-       * 判断popup配置项是否正确
+       * Kiểm tra mục cấu hình popup có đúng hay không
        */
       onMounted(() => {
         if (props.fieldConfig.length == 0) {
-          createMessage.error('popup参数未正确配置!');
+          createMessage.error('popupTham số popup chưa được cấu hình đúng!!');
           avalid.value = false;
         }
       });
-      // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-2558】popup存储的值如果是数值不回显
+      // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-2558] Giá trị popup lưu trữ nếu là số thì không hiển thị lại
       /**
-       * value 转成显示文本（单选回填时会保留数字类型）
+       * value Chuyển thành văn bản hiển thị (khi điền lại chọn đơn sẽ giữ kiểu số)
        */
       function getValueText(val) {
         if (val === undefined || val === null || val === '') {
@@ -110,9 +110,9 @@
         }
         return String(val).split(props.spliter).join(',');
       }
-      // update-end--author:liaozhiyang---date:20261029---for：【LHZP-2558】popup存储的值如果是数值不回显
+      // update-end--author:liaozhiyang---date:20261029---for：【LHZP-2558] Giá trị popup lưu trữ nếu là số thì không hiển thị lại
       /**
-       * 监听value数值
+       * Lắng nghe giá trị value
        */
       watch(
         () => props.value,
@@ -121,11 +121,11 @@
           if (!text) {
             innerShowText.value = '';
           }
-          // 反查期间先不显示 id，等接口返回后再决定显示文本或回退显示 value
+          // Trong thời gian tra ngược tạm thời không hiển thị id, đợi API trả về rồi mới quyết định hiển thị văn bản hay hiển thị lại value
           if (!isQueryingShowText.value) {
             showText.value = text;
           }
-          // 筛选场景下组件重建后 innerShowText 会丢失，需要根据 value 反查 online 报表文本回显
+          // Trong tình huống lọc, sau khi component được xây dựng lại thì innerShowText sẽ bị mất, cần dựa vào value để tra ngược lại văn bản hiển thị của báo cáo online
           if (props.inSearch && text && !innerShowText.value) {
             queryShowTextByValue(String(val));
           }
@@ -134,7 +134,7 @@
       );
 
       /**
-       * 根据 value 反查显示文本
+       * Tra ngược văn bản hiển thị theo value
        */
       function queryShowTextByValue(val) {
         if (!props.code || props.fieldConfig.length === 0) {
@@ -145,7 +145,7 @@
         if (!sourceField || !labelField) {
           return;
         }
-        // 反查期间显示 loading，并先清空 showText 避免闪现 id
+        // Trong thời gian tra ngược hiển thị loading, đồng thời xóa showText trước để tránh hiện thoáng qua id
         isQueryingShowText.value = true;
         showText.value = '';
         const doQuery = () => {
@@ -159,7 +159,7 @@
       }
 
       /**
-       * 加载列信息获取 cgRpConfigId
+       * Tải thông tin cột để lấy cgRpConfigId cgRpConfigId
        */
       function loadColumnsInfo({ callBack }) {
         loading.value = true;
@@ -173,11 +173,11 @@
             }
           })
           .catch((err) => {
-            console.error('【JPopup】加载报表列信息失败', err);
+            console.error('[JPopup] Tải thông tin cột báo cáo thất bại', err);
           })
           .finally(() => {
             loading.value = false;
-            // 列信息加载失败时恢复显示 value，并关闭 loading
+            // Khi tải thông tin cột thất bại sẽ khôi phục hiển thị value, và đóng loading
             if (!cgRpConfigId.value) {
               isQueryingShowText.value = false;
               showText.value = getValueText(props.value);
@@ -186,7 +186,7 @@
       }
 
       /**
-       * 根据 value 加载显示文本
+       * Tải văn bản hiển thị theo value
        */
       function loadDataForShowText(val, sourceField, labelField) {
         loading.value = true;
@@ -204,11 +204,11 @@
             }
           })
           .catch((err) => {
-            console.error('【JPopup】根据 value 反查显示文本失败', err);
+            console.error('[JPopup] Tra ngược văn bản hiển thị theo value thất bại', err);
           })
           .finally(() => {
             loading.value = false;
-            // 反查结束关闭 loading；若未查到文本则回退显示 value
+            // Kết thúc tra ngược thì tắt loading; nếu không tra được văn bản thì quay lại hiển thị value
             isQueryingShowText.value = false;
             if (!innerShowText.value) {
               showText.value = getValueText(props.value);
@@ -217,22 +217,22 @@
       }
 
       /**
-       * 打开pop弹出框
+       * Mở hộp thoại pop
        */
       function handleOpen() {
         emit('focus');
-        // 代码逻辑说明: 【TV360X-317】禁用后JPopup和JPopupdic还可以点击出弹窗
+        // Giải thích logic mã: 【TV360X-317]Sau khi vô hiệu hóa, JPopup và JPopupdic vẫn có thể nhấn để mở popup
         if (attrs.value.disabled) {
           return;
         }
-        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3】popup编辑时弹窗勾选回显
+        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
         echoRows.value = buildEchoRows();
-        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3】popup编辑时弹窗勾选回显
+        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
         openModal(true);
       }
 
       /**
-       * 根据表单中各回填字段的值，按位置还原出已选行 [{源字段: 值}]，用于弹窗勾选回显
+       * Căn cứ vào giá trị của các trường điền lại trong biểu mẫu, khôi phục các hàng đã chọn theo vị trí [{Trường nguồn: Giá trị}], dùng để hiển thị lại lựa chọn đã tick trong popup
        */
       function buildEchoRows() {
         let formValues: Recordable = {};
@@ -241,7 +241,7 @@
         } catch (e) {
           formValues = {};
         }
-        // 取不到表单值时（如高级查询），至少用自身的值
+        // Khi không lấy được giá trị biểu mẫu (ví dụ như truy vấn nâng cao), ít nhất hãy dùng giá trị của chính nó
         const codeField = attrs.value.codeField;
         if (codeField && formValues[codeField] === undefined) {
           formValues = { ...formValues, [codeField]: props.value };
@@ -250,15 +250,15 @@
         props.fieldConfig.forEach((item: any) => {
           const target = item.target.split(',')[0];
           const val = formValues[target];
-          // 表单中没有该字段（如无权限隐藏）则不参与匹配
+          // Nếu trong biểu mẫu không có trường này (ví dụ như bị ẩn do không có quyền) thì không tham gia đối sánh
           if (val === undefined) {
             return;
           }
           const text = val === null ? '' : String(val);
-          // 单选时整体作为一个值，多选时按分隔符拆开
+          // Khi chọn đơn, toàn bộ là một giá trị; khi chọn nhiều, tách theo ký tự phân tách
           columns.push({ source: item.source, values: props.multi ? text.split(props.spliter) : [text] });
         });
-        // 所有字段都为空说明没有已选数据
+        // Tất cả các trường đều trống nghĩa là không có dữ liệu đã chọn
         if (!columns.some((col) => col.values.some((v) => v !== ''))) {
           return [];
         }
@@ -267,26 +267,26 @@
         for (let i = 0; i < count; i++) {
           const row = {};
           columns.forEach((col) => {
-            // 值为空的字段不参与匹配（如回填字段被清空，只剩存储字段）
+            // Trường có giá trị rỗng không tham gia đối sánh (ví dụ trường điền lại bị xóa sạch, chỉ còn trường lưu trữ)
             if (col.values[i] !== undefined && col.values[i] !== '') {
               row[col.source] = col.values[i];
             }
           });
-          // 整行都为空的不参与匹配
+          // Hàng hoàn toàn trống không tham gia đối sánh
           Object.keys(row).length && rows.push(row);
         }
         return rows;
       }
 
       /**
-       * TODO 清空
+       * TODO Xóa sạch
        */
       function handleEmpty() {
         showText.value = '';
       }
 
       /**
-       * 输入框值改变事件（只读模式下用于处理 allowClear）
+       * Sự kiện thay đổi giá trị ô nhập (dùng để xử lý allowClear trong chế độ chỉ đọc)
        */
       function handleValueChange(value) {
         emit('update:value', value);
@@ -306,23 +306,23 @@
       }
 
       /**
-       * 传值回调
+       * Callback truyền giá trị
        */
       function callBack(rows) {
         let { fieldConfig } = props;
-        //匹配popup设置的回调值
+        //Khớp với giá trị callback mà popup đã đặt
         let values = {};
         let labels = []
         for (let item of fieldConfig) {
           let val = rows.map((row) => row[item.source]);
-          // 代码逻辑说明: 【QQYUN-7535】数组只有一个且是number类型，join会改变值的类型为string
+          // Giải thích logic mã: 【QQYUN-7535]Mảng chỉ có một phần tử và là kiểu number, join sẽ thay đổi kiểu của giá trị thànhstring
           val = val.length == 1 ? val[0] : val.join(',');
           item.target.split(',').forEach((target) => {
             values[target] = val;
           });
 
           if (props.inSearch) {
-            // 处理显示值
+            // Xử lý giá trị hiển thị
             if (item.label) {
               let txt = rows.map((row) => row[item.label]);
               txt = txt.length == 1 ? txt[0] : txt.join(',');
@@ -334,11 +334,11 @@
 
         }
         innerShowText.value = labels.join(',');
-        //传入表单示例方式赋值
+        //Gán giá trị theo cách truyền vào ví dụ biểu mẫu
         props.formElRef && props.formElRef.setFieldsValue(values);
-        //传入赋值方法方式赋值
+        //Gán giá trị theo cách truyền vào phương thức gán giá trị
         props.setFieldsValue && props.setFieldsValue(values);
-        // 代码逻辑说明: 【issues/5213】JPopup抛出change事件
+        // Giải thích logic mã: 【issues/5213] JPopup ném sự kiện change
         emit('popUpChange', values);
       }
 
@@ -361,7 +361,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
+  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JPopup {
     > .ant-form-item {
       display: none;

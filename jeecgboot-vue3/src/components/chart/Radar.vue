@@ -31,13 +31,13 @@
       const option = reactive({
         title: {
           text: '',
-          // text: '基础雷达图',
+          // text: 'Biểu đồ radar cơ bản',
         },
         legend: {
-          data: ['文综'],
+          data: ['Tổng hợp khoa học xã hội'],
         },
         radar: {
-          indicator: [{ name: '历史' }, { name: '地理' }, { name: '生物' }, { name: '化学' }, { name: '物理' }, { name: '政治' }],
+          indicator: [{ name: 'Lịch sử' }, { name: 'Địa lý' }, { name: 'Sinh học' }, { name: 'Hóa học' }, { name: 'Vật lý' }, { name: 'Chính trị' }],
         },
         series: [
           {
@@ -45,7 +45,7 @@
             data: [
               {
                 value: [82, 70, 60, 55, 90, 66],
-                name: '文综',
+                name: 'Tổng hợp khoa học xã hội',
               },
             ],
           },
@@ -60,9 +60,9 @@
         if (props.option) {
           Object.assign(option, cloneDeep(props.option));
         }
-        //图例类型
+        //Loại chú giải
         let typeArr = Array.from(new Set(props.chartData.map((item) => item.type)));
-        //雷达数据
+        //Dữ liệu radar
         let indicator = Array.from(
           new Set(
             props.chartData.map((item) => {
@@ -77,7 +77,7 @@
           let obj = { name: type };
           let chartArr = props.chartData.filter((item) => type === item.type);
           obj['value'] = chartArr.map((item) => item.value);
-          //data数据
+          //dataDữ liệu
           data.push(obj);
         });
         option.legend.data = typeArr;

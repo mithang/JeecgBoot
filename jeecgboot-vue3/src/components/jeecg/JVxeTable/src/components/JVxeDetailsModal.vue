@@ -1,5 +1,5 @@
 <template>
-  <BasicModal @register="registerModel" title="详细信息" :width="1200" :keyboard="true" @ok="handleOk" @cancel="close">
+  <BasicModal @register="registerModel" title="Thông tin chi tiết" :width="1200" :keyboard="true" @ok="handleOk" @cancel="close">
     <transition name="fade">
       <div v-if="getVisible">
         <slot name="mainForm" :row="row" :column="column" />

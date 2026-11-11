@@ -7,7 +7,7 @@ import { getEnhanced } from './enhancedUtils';
 import { isFunction } from '/@/utils/is';
 
 /**
- * 判断某个组件是否已注册
+ * Kiểm tra xem một component đã được đăng ký chưa
  * @param type
  */
 export function isRegistered(type: JVxeTypes | string) {
@@ -18,11 +18,11 @@ export function isRegistered(type: JVxeTypes | string) {
 }
 
 /**
- * 注册vxe自定义组件
+ * Đăng ký component tùy chỉnh vxe
  *
  * @param type
- * @param component 编辑状态显示的组件
- * @param spanComponent 非编辑状态显示的组件，可以为空
+ * @param component Component hiển thị ở trạng thái chỉnh sửa
+ * @param spanComponent Component hiển thị ở trạng thái không chỉnh sửa, có thể để trống
  */
 export function registerComponent(type: JVxeTypes, component: Component, spanComponent?: Component) {
   addComponent(type, component, spanComponent);
@@ -30,7 +30,7 @@ export function registerComponent(type: JVxeTypes, component: Component, spanCom
 }
 
 /**
- * 异步注册vxe自定义组件
+ * Đăng ký bất đồng bộ component tùy chỉnh vxe
  *
  * @param type
  * @param promise
@@ -51,7 +51,7 @@ export async function registerAsyncComponent(type: JVxeTypes, promise: Promise<a
 /**
  * 2024-03-08
  * liaozhiyang
- * 异步注册vxe自定义组件
+ * Đăng ký bất đồng bộ component tùy chỉnh vxe
  * 【QQYUN-8241】
  * @param type
  * @param promise
@@ -62,11 +62,11 @@ export function registerASyncComponentReal(type: JVxeTypes, component) {
 }
 
 /**
- * 安装所有vxe组件
+ * Cài đặt tất cả component vxe
  */
 export function registerAllComponent() {
   definedComponent();
-  // 遍历所有组件批量注册
+  // Duyệt tất cả component để đăng ký hàng loạt
   const components = [...componentMap.keys()];
   components.forEach((type) => {
     if (!type.endsWith(spanEnds)) {
@@ -76,9 +76,9 @@ export function registerAllComponent() {
 }
 
 /**
- * 注册单个vxe组件
+ * Đăng ký một component vxe
  *
- * @param type 组件 type
+ * @param type Component type
  */
 export function registerOneComponent(type: JVxeTypes) {
   const component = componentMap.get(type);
@@ -90,53 +90,53 @@ export function registerOneComponent(type: JVxeTypes) {
       createCellRender(type, component);
     }
   } else {
-    throw new Error(`【registerOneComponent】"${type}"不存在于componentMap中`);
+    throw new Error(`【registerOneComponent】"${type}"không tồn tại trong componentMap`);
   }
 }
 
-/** 注册可编辑组件 */
+/** Đăng ký component có thể chỉnh sửa */
 function createEditRender(type: JVxeTypes, component: Component, spanComponent?: Component) {
-  // 获取当前组件的增强
+  // Lấy phần tăng cường của component hiện tại
   const enhanced = getEnhanced(type);
   if (!spanComponent) {
     if (componentMap.has(type + spanEnds)) {
       spanComponent = componentMap.get(type + spanEnds);
     } else {
-      // 默认的 span 组件为 normal
+      // Component span mặc định là normal
       spanComponent = componentMap.get(JVxeTypes.normal);
     }
   }
-  // 添加渲染
+  // Thêm render
   VXETable.renderer.add(JVxeTypePrefix + type, {
-    // 可编辑模板
+    // Mẫu có thể chỉnh sửa
     renderEdit: createRender(type, component, JVxeRenderType.editer),
-    // 显示模板
+    // Hiển thị mẫu
     renderCell: createRender(type, spanComponent, JVxeRenderType.spaner),
-    // 增强注册
+    // Đăng ký tăng cường
     ...enhanced.installOptions,
   });
 }
 
-/** 注册普通组件 */
+/** Đăng ký component thông thường */
 function createCellRender(type: JVxeTypes, component: Component = <Component>componentMap.get(JVxeTypes.normal)) {
-  // 获取当前组件的增强
+  // Lấy phần tăng cường của component hiện tại
   const enhanced = getEnhanced(type);
   VXETable.renderer.add(JVxeTypePrefix + type, {
-    // 默认显示模板
+    // Mẫu hiển thị mặc định
     renderDefault: createRender(type, component, JVxeRenderType.default),
-    // 增强注册
+    // Đăng ký tăng cường
     ...enhanced.installOptions,
   });
 }
 
 function createRender(type, component, renderType) {
   return function (renderOptions, params) {
-    // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
-    // 为每个 cell 生成唯一 key，防止相邻列（值相同但 options 不同）被错误复用
+    // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+    // Tạo key duy nhất cho mỗi cell, tránh các cột kề nhau (giá trị giống nhau nhưng options khác nhau) bị tái sử dụng sai
     const rowId = params.row?.id ?? params.rowIndex ?? '';
     const colId = params.column?.property ?? params.column?.id ?? '';
     const cellKey = `cell-${rowId}-${colId}`;
-    // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+    // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
     return [
       h(component, {
         key: cellKey,

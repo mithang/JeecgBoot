@@ -1,4 +1,4 @@
-<!--下拉树-->
+<!--Cây dropdown-->
 <template>
   <a-tree-select
     allowClear
@@ -33,7 +33,7 @@
       value: propTypes.oneOfType([propTypes.string, propTypes.array]),
       placeholder: {
         type: String,
-        default: '请选择',
+        default: 'Vui lòng chọn',
         required: false,
       },
       disabled: {
@@ -46,7 +46,7 @@
         default: '',
         required: false,
       },
-      // 是否支持多选
+      // Có hỗ trợ chọn nhiều không
       multiple: {
         type: [Boolean, String],
         default: false,
@@ -85,7 +85,7 @@
         () => {
           loadItemByCode();
         },
-        // 代码逻辑说明: 【TV360X-480】封装表单和原生表单，默认值生成有问题的字段：分类字典树附默认值不生效---
+        // Giải thích logic mã: 【TV360X-480]Biểu mẫu đóng gói và biểu mẫu gốc, trường có vấn đề khi sinh giá trị mặc định: cây danh mục phân loại kèm giá trị mặc định không có hiệu lực---
         { deep: true, immediate: true }
       );
       watch(
@@ -143,7 +143,7 @@
       }
 
       function onLoadTriggleChange(text) {
-        //只有单选才会触发
+        //Chỉ khi chọn một mới kích hoạt
         if (!props.multiple && props.loadTriggleChange) {
           backValue(props.value, text);
         }
@@ -221,7 +221,7 @@
           backValue(value.value, value.label);
           treeValue.value = value;
         }
-        // 代码逻辑说明: 【QQYUN-9110】组件有值校验没消失
+        // Giải thích logic mã: 【QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
         nextTick(() => {
           formItemContext?.onFieldChange();
         });
@@ -242,11 +242,11 @@
               if (typeof test == 'object' && test) {
                 resolve();
               } else {
-                createMessage.error('组件JTreeSelect-condition传值有误，需要一个json字符串!');
+                createMessage.error('ComponentJTreeSelect-conditionTruyền giá trị sai, cần một chuỗi json!');
                 reject();
               }
             } catch (e) {
-              createMessage.error('组件JTreeSelect-condition传值有误，需要一个json字符串!');
+              createMessage.error('ComponentJTreeSelect-conditionTruyền giá trị sai, cần một chuỗi json!');
               reject();
             }
           }

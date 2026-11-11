@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
   /*
-   * 异步树加载组件 通过传入表名 显示字段 存储字段 加载一个树控件
+   * Component tải cây không đồng bộ: thông qua việc truyền vào tên bảng, trường hiển thị, trường lưu trữ để tải một control cây
    * <j-tree-select dict="aa_tree_test,aad,id" pid-field="pid" ></j-tree-select>
    * */
   import { ref, watch, unref, nextTick, computed } from 'vue';
@@ -40,11 +40,11 @@
 
   const props = defineProps({
     value: propTypes.string.def(''),
-    placeholder: propTypes.string.def('请选择'),
+    placeholder: propTypes.string.def('Vui lòng chọn'),
     dict: propTypes.string.def('id'),
     parentCode: propTypes.string.def(''),
     pidField: propTypes.string.def('pid'),
-    // 代码逻辑说明: JTreeSelect组件pidValue还原成空，否则会影响自定义组件树示例------------
+    // Giải thích logic mã: JTreeSelectKhôi phục pidValue của component thành rỗng, nếu không sẽ ảnh hưởng đến ví dụ cây component tùy chỉnh------------
     pidValue: propTypes.string.def(''),
     hasChildField: propTypes.string.def(''),
     converIsLeafVal: propTypes.integer.def(1),
@@ -52,13 +52,13 @@
     multiple: propTypes.bool.def(false),
     loadTriggleChange: propTypes.bool.def(false),
     reload: propTypes.number.def(1),
-    // 代码逻辑说明: issues/4173 Online JTreeSelect控件changeOptions方法未生效
+    // Giải thích logic mã: issues/4173 Online JTreeSelectPhương thức changeOptions của control chưa có hiệu lực
     url: propTypes.string.def(''),
     params: propTypes.object.def({}),
-    //默认没有选择框
+    //Mặc định không có hộp chọn
     treeCheckAble: propTypes.bool.def(false),
     hiddenNodeKey: propTypes.string.def(''),
-    //多选时渲染tag文本
+    //Khi chọn nhiều, render văn bản tag
     tagRender: propTypes.func,
   });
   const attrs = useAttrs();
@@ -66,16 +66,16 @@
   const emit = defineEmits(['change', 'update:value']);
   const slots = defineSlots();
   const { createMessage } = useMessage();
-  //树形下拉数据
+  //Dữ liệu thả xuống dạng cây
   const treeData = ref<any[]>([]);
-  //选择数据
+  //Chọn dữ liệu
   const treeValue = ref<any>();
   const tableName = ref<any>('');
   const text = ref<any>('');
   const code = ref<any>('');
   const show = ref<boolean>(true);
   /**
-   * 监听value数据并初始化
+   * Lắng nghe dữ liệu value và khởi tạo
    */
   watch(
     () => props.value,
@@ -83,9 +83,9 @@
     { deep: true, immediate: true }
   );
   /**
-   * 监听dict变化
+   * Lắng nghe thay đổi dict
    */
-  // 代码逻辑说明: 【issues/1283】JtreeSelect组件初始调用了两次接口
+  // Giải thích logic mã: 【issues/1283]Component JtreeSelect ban đầu đã gọi API hai lần
   watch(
     () => props.dict,
     () => {
@@ -93,7 +93,7 @@
       loadRoot();
     }
   );
-  // 代码逻辑说明: 【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+  // Giải thích logic mã: 【TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
   watch(
     () => props.hiddenNodeKey,
     () => {
@@ -104,12 +104,12 @@
     }
   );
 
-  // 代码逻辑说明: VUEN-1056 15、严重——online树表单，添加的时候，父亲节点是空的
+  // Giải thích logic mã: VUEN-1056 15, Nghiêm trọng — Biểu mẫu cây online, khi thêm mới, nút cha bị trống
   watch(
     () => props.reload,
     async () => {
       treeData.value = [];
-      // 代码逻辑说明: 【TV360X-88】online树表重复新增时父节点数据加载不全且已开的子节点不重新加载
+      // Giải thích logic mã: 【TV360X-88]Khi bảng cây online thêm mới lặp lại, dữ liệu nút cha tải không đầy đủ và nút con đã mở không tải lại
       show.value = false;
       nextTick(() => {
         show.value = true;
@@ -122,7 +122,7 @@
   );
 
   /**
-   * 根据code获取下拉数据并回显
+   * Lấy dữ liệu dropdown theo code và hiển thị lại
    */
   async function loadItemByCode() {
     if (!props.value || props.value == '0') {
@@ -132,11 +132,11 @@
         treeValue.value = undefined;
       }
     } else {
-      // 代码逻辑说明: issues/4173 Online JTreeSelect控件changeOptions方法未生效
+      // Giải thích logic mã: issues/4173 Online JTreeSelectPhương thức changeOptions của control chưa có hiệu lực
       if(props.url){
         getItemFromTreeData();
       }else{
-        // 代码逻辑说明: 【issues/8093】选择节点后会先变成编码再显示label文字
+        // Giải thích logic mã: 【issues/8093] Sau khi chọn node sẽ chuyển thành mã trước rồi mới hiển thị văn bản label
         if (props.value) {
           if (isArray(treeValue.value)) {
             let isNotRequestTransform = false;
@@ -147,7 +147,7 @@
             }
           } else if (isObject(treeValue.value) && unref(treeValue).label != null) {
             if (props.value == unref(treeValue).value) {
-              // 不需要再去请求翻译
+              // Không cần gửi yêu cầu dịch nữa
               return;
             }
           }
@@ -172,14 +172,14 @@
   }
 
   function onLoadTriggleChange(text) {
-    //只有单选才会触发
+    //Chỉ khi chọn một mới kích hoạt
     if (!props.multiple && props.loadTriggleChange) {
       emit('change', props.value, text);
     }
   }
 
   /**
-   * 初始化数据
+   * Dữ liệu khởi tạo
    */
   function initDictInfo() {
     let arr = props.dict?.split(',');
@@ -189,7 +189,7 @@
   }
 
   /**
-   * 加载下拉树形数据
+   * Tải dữ liệu cây thả xuống
    */
   async function loadRoot() {
     let params = {
@@ -209,16 +209,16 @@
         i.value = i.key;
         i.isLeaf = !!i.leaf;
       }
-      // 代码逻辑说明: 【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+      // Giải thích logic mã: 【TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
       handleHiddenNode(res.result);
       treeData.value = [...res.result];
     } else {
-      console.log('数根节点查询结果异常', res);
+      console.log('Kết quả truy vấn nút gốc của cây bất thường', res);
     }
   }
 
   /**
-   * 翻译
+   * Dịch
    * @param text
    */
   function translateTitle(text) {
@@ -228,7 +228,7 @@
     return text;
   }
   /**
-   * 异步加载数据
+   * Tải dữ liệu bất đồng bộ
    */
   async function asyncLoadTreeData(treeNode) {
     if (treeNode.dataRef.children) {
@@ -255,9 +255,9 @@
         i.value = i.key;
         i.isLeaf = !!i.leaf;
       }
-      // 代码逻辑说明: 【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+      // Giải thích logic mã: 【TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
       handleHiddenNode(res.result);
-      //添加子节点
+      //Thêm nút con
       addChildren(pid, res.result, treeData.value);
       treeData.value = [...treeData.value];
     }
@@ -265,7 +265,7 @@
   }
 
   /**
-   * 加载子节点
+   * Tải nút con
    */
   function addChildren(pid, children, treeArray) {
     if (treeArray && treeArray.length > 0) {
@@ -285,7 +285,7 @@
   }
 
   /**
-   * 选中树节点事件
+   * Sự kiện chọn nút cây
    */
   function onChange(value) {
     if (!value) {
@@ -295,9 +295,9 @@
     } else {
       emitValue(value.value);
     }
-    // 代码逻辑说明: 【issues/8093】删除后会先变成编码再显示label文字
+    // Giải thích logic mã: 【issues/8093]Sau khi xóa sẽ chuyển thành mã trước rồi mới hiển thị chữ label
     if (isArray(value)) {
-      // 编辑删除时有选中的值是异步（第二级以上的）会不显示label
+      // Khi chỉnh sửa hoặc xóa, giá trị đã chọn là bất đồng bộ (từ cấp hai trở lên) sẽ không hiển thịlabel
       value.forEach((item) => {
         if (item.label === undefined && item.value != null) {
           const findItem = treeValue.value.find((o) => o.value === item.value);
@@ -318,7 +318,7 @@
   }
 
   /**
-   * 校验条件配置是否有误
+   * Kiểm tra xem cấu hình điều kiện kiểm chứng có sai không
    */
   function validateProp() {
     let mycondition = props.condition;
@@ -331,18 +331,18 @@
           if (typeof test == 'object' && test) {
             resolve();
           } else {
-            createMessage.error('组件JTreeSelect-condition传值有误，需要一个json字符串!');
+            createMessage.error('ComponentJTreeSelect-conditionTruyền giá trị sai, cần một chuỗi json!');
             reject();
           }
         } catch (e) {
-          createMessage.error('组件JTreeSelect-condition传值有误，需要一个json字符串!');
+          createMessage.error('ComponentJTreeSelect-conditionTruyền giá trị sai, cần một chuỗi json!');
           reject();
         }
       }
     });
   }
 
-  // 代码逻辑说明: issues/4173 Online JTreeSelect控件changeOptions方法未生效
+  // Giải thích logic mã: issues/4173 Online JTreeSelectPhương thức changeOptions của control chưa có hiệu lực
   watch(()=> [props.url, props.params], async (val)=>{
     if(val){
       await loadRootByUrl();
@@ -350,7 +350,7 @@
   });
 
   /**
-   * 根据自定义的请求地址加载数据
+   * Tải dữ liệu theo địa chỉ yêu cầu tùy chỉnh
    */
   async function loadRootByUrl(){
     let url = props.url;
@@ -362,16 +362,16 @@
         i.key = i.value ?? i.id;
         i.isLeaf = !!i.leaf;
       }
-      // 代码逻辑说明: 【TV360X-87】树表编辑时不可选自己及子孙节点当父节点
+      // Giải thích logic mã: 【TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
       handleHiddenNode(res.result);
       treeData.value = [...res.result];
     } else {
-      console.log('数根节点查询结果异常', res);
+      console.log('Kết quả truy vấn nút gốc của cây bất thường', res);
     }
   }
 
   /**
-   * 根据已有的树数据 翻译选项
+   * Dịch tùy chọn theo dữ liệu cây có sẵn
    */
   function getItemFromTreeData(){
     let data = treeData.value;
@@ -384,7 +384,7 @@
   }
 
   /**
-   * 递归找子节点
+   * Đệ quy tìm nút con
    * @param data
    * @param arr
    */
@@ -408,7 +408,7 @@
   /**
    * 2024-05-23
    * liaozhiyang
-   * 过滤掉指定节点(包含其子孙节点)
+   * Lọc bỏ nút đã chỉ định(Bao gồm cả nút con cháu của nó)
    */
   function handleHiddenNode(data) {
     if (props.hiddenNodeKey && data?.length) {
@@ -426,7 +426,7 @@
   /**
    * 2024-07-30
    * liaozhiyang
-   * 【issues/6953】JTreeSelect 组件能支持antdv 对应的a-tree-select 组件的插槽
+   * 【issues/6953]Component JTreeSelect có thể hỗ trợ tương ứng của antdva-tree-select Slot của component
    */
   const slotNamesGroup = computed(() => {
     const native: string[] = [];

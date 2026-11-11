@@ -15,7 +15,7 @@ export function useFileCell(props, fileType: UploadTypeEnum, options?) {
   const { innerFile, handleChangeCommon, originColumn } = setup;
   const [registerModel, { openModal }] = useModal();
 
-  // 截取文件名
+  // Cắt tên tệp
   const shortFileName = computed(() => {
     const length = 5;
     const file = innerFile.value;
@@ -46,7 +46,7 @@ export function useFileCell(props, fileType: UploadTypeEnum, options?) {
 
   const maxCount = computed(() => {
     let maxCount = originColumn.value.maxCount;
-    // online 扩展JSON
+    // online Mở rộngJSON
     if (originColumn.value && originColumn.value.fieldExtendJson) {
       const json = JSON.parse(originColumn.value.fieldExtendJson);
       maxCount = json.uploadnum ? json.uploadnum : 0;
@@ -54,7 +54,7 @@ export function useFileCell(props, fileType: UploadTypeEnum, options?) {
     return Number(maxCount ?? 0);
   });
 
-  // 点击更多按钮
+  // Nhấp vào nút xem thêm
   function handleMoreOperation() {
     openModal(true, {
       removeConfirm: true,
@@ -64,27 +64,27 @@ export function useFileCell(props, fileType: UploadTypeEnum, options?) {
       maxCount: maxCount.value,
       multiple: originColumn.value.props?.multiple ?? maxCount.value !== 1,
       fileType: fileType,
-      // update-begin--author:liaozhiyang---date:20250526---for：【issues/9657】jvxetable组件的图片上传编辑时再次上传报错
+      // update-begin--author:liaozhiyang---date:20250526---for：【issues/9657]Lỗi khi tải lên lại trong lúc chỉnh sửa tải lên hình ảnh của component jvxetable
       action: originColumn.value.action ?? setup.uploadAction,
-      // update-end--author:liaozhiyang---date:20250526---for：【issues/9657】jvxetable组件的图片上传编辑时再次上传报错
-      // update-begin--author:liaozhiyang---date:20250526---for：【issues/9652】vxetable上传、上传文件、上传图片加上自定义路径
+      // update-end--author:liaozhiyang---date:20250526---for：【issues/9657]Lỗi khi tải lên lại trong lúc chỉnh sửa tải lên hình ảnh của component jvxetable
+      // update-begin--author:liaozhiyang---date:20250526---for：【issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
       bizPath: originColumn.value.bizPath ?? 'temp',
-      // update-end--author:liaozhiyang---date:20250526---for：【issues/9652】vxetable上传、上传文件、上传图片加上自定义路径
+      // update-end--author:liaozhiyang---date:20250526---for：【issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
     });
   }
 
-  // 更多上传回调
+  // Callback tải lên bổ sung
   function onModalChange(path) {
     if (path) {
       if (innerFile.value === null) {
-        // 从弹窗首次上传时同步补齐文件名和完成状态
+        // Khi tải lên lần đầu từ popup, đồng bộ bổ sung tên tệp và trạng thái hoàn thành
         innerFile.value = fileSetValue(path);
       } else {
         innerFile.value.path = path;
       }
       handleChangeCommon(innerFile.value);
     } else {
-      // 代码逻辑说明: [issues/530]JVxeTable 的JVxeTypes.image类型，无法全部删除上传图片
+      // Giải thích logic mã: [issues/530]JVxeTable củaJVxeTypes.imageloại, không thể xóa toàn bộ hình ảnh đã tải lên
       handleChangeCommon(null);
     }
   }

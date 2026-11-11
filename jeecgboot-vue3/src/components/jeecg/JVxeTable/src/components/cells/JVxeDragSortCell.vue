@@ -8,11 +8,11 @@
       ></span>
       <template #overlay >
         <a-menu>
-          <a-menu-item key="0" :disabled="disabledMoveUp" @click="handleRowMoveUp">向上移</a-menu-item>
-          <a-menu-item key="1" :disabled="disabledMoveDown" @click="handleRowMoveDown">向下移</a-menu-item>
+          <a-menu-item key="0" :disabled="disabledMoveUp" @click="handleRowMoveUp">Di chuyển lên</a-menu-item>
+          <a-menu-item key="1" :disabled="disabledMoveDown" @click="handleRowMoveDown">Di chuyển xuống</a-menu-item>
           <template v-if="allowInsertRow">
             <a-menu-divider />
-            <a-menu-item key="3" @click="handleRowInsertDown">插入一行</a-menu-item>
+            <a-menu-item key="3" @click="handleRowInsertDown">Chèn một dòng</a-menu-item>
           </template>
         </a-menu>
       </template>
@@ -32,7 +32,7 @@
     props: useJVxeCompProps(),
     setup(props: JVxeComponent.Props) {
       const { rowIndex, originColumn, fullDataLength, trigger } = useJVxeComponent(props);
-      // 代码逻辑说明: 【QQYUN-8785】online表单列位置的id未做限制，拖动其他列到id列上面，同步数据库时报错
+      // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
       const isAllowDrag = computed(() => {
         const notAllowDrag = originColumn.value.notAllowDrag;
         if (notAllowDrag.length) {
@@ -49,10 +49,10 @@
       const disabledMoveUp = computed(() => rowIndex.value === 0);
       const disabledMoveDown = computed(() => rowIndex.value === fullDataLength.value - 1);
 
-      // 是否允许插入行
+      // Có cho phép chèn hàng không
       const allowInsertRow = computed(() => originColumn.value.insertRow);
 
-      /** 向上移 */
+      /** Di chuyển lên */
       function handleRowMoveUp() {
         if (!disabledMoveUp.value) {
           trigger('rowResort', {
@@ -62,7 +62,7 @@
         }
       }
 
-      /** 向下移 */
+      /** Di chuyển xuống */
       function handleRowMoveDown() {
         if (!disabledMoveDown.value) {
           trigger('rowResort', {
@@ -72,7 +72,7 @@
         }
       }
 
-      /** 插入一行 */
+      /** Chèn một dòng */
       function handleRowInsertDown() {
         trigger('rowInsertDown', rowIndex.value);
       }
@@ -87,9 +87,9 @@
         allowInsertRow,
       };
     },
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: {
-      // 【功能开关】
+      // [Công tắc chức năng]
       switches: {
         editRender: false,
       },

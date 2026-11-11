@@ -1,5 +1,5 @@
 <template>
-  <!--异步字典下拉搜素-->
+  <!--Tìm kiếm thả xuống từ điển không đồng bộ-->
   <a-select
     v-if="async"
     v-bind="attrs"
@@ -24,7 +24,7 @@
     </template>
     <a-select-option v-for="d in options" :key="d?.value" :value="d?.value">{{ d?.text }}</a-select-option>
   </a-select>
-  <!--字典下拉搜素-->
+  <!--Tìm kiếm dropdown từ điển-->
   <a-select
     v-else
     v-model:value="selectedValue"
@@ -78,17 +78,17 @@
         type: Function,
         default: (node) => node?.parentNode,
       },
-      //默认开启Y轴溢出位置调整，因此在可视空间不足时下拉框位置会自动上移，导致Select的输入框被遮挡。需要注意的是，默认情况是是可视空间，而不是所拥有的空间
-      // 代码逻辑说明: [issue/286]下拉搜索框遮挡问题
+      //Mặc định bật điều chỉnh vị trí tràn trục Y, vì vậy khi không gian hiển thị không đủ, vị trí của hộp thả xuống sẽ tự động dịch lên trên, khiến ô nhập của Select bị che khuất. Cần lưu ý, mặc định là không gian hiển thị, chứ không phải không gian sở hữu
+      // Giải thích logic mã: [issue/286]Vấn đề hộp tìm kiếm thả xuống bị che khuất
       adjustY:propTypes.bool.def(true),
-      //是否在有值后立即触发change
+      //Có kích hoạt ngay sau khi có giá trị khôngchange
       immediateChange: propTypes.bool.def(false),
-      //支持传入查询参数，如排序信息
+      //Hỗ trợ truyền tham số truy vấn, ví dụ thông tin sắp xếp
       params:{
         type: Object,
         default: ()=>{}
       },
-      //是否为多选
+      //Có phải chọn nhiều không
       multiple:{
         type: Boolean,
         default: false
@@ -102,20 +102,20 @@
     setup(props, { emit, refs }) {
       const options = ref<any[]>([]);
       const loading = ref(false);
-      // 代码逻辑说明: 【issues/897】JSearchSelect组件添加class/style样式不生效
+      // Giải thích logic mã: 【issues/897] Component JSearchSelect thêmclass/styleKiểu không có hiệu lực
       const attrs = useAttrs({'excludeDefaultKeys': false});
       const selectedValue = ref([]);
       const selectedAsyncValue = ref([]);
       const lastLoad = ref(0);
-      // 是否根据value加载text
+      // Có tải theo value khôngtext
       const loadSelectText = ref(true);
-      // 异步(字典表) - 滚动加载时会用到
+      // Bất đồng bộ(Bảng từ điển) - Sẽ dùng khi tải bằng cuộn
       let isHasData = true;
       let scrollLoading = false;
       let pageNo = 1;
       let searchKeyword = '';
 
-      // 是否是字典表
+      // Có phải bảng từ điển không
       const isDictTable = computed(() => {
         if (props.dict) {
           return props.dict.split(',').length >= 2
@@ -124,7 +124,7 @@
       })
 
       /**
-       * 监听字典code
+       * Lắng nghe danh mụccode
        */
       watch(() => props.dict, () => {
         if (!props.dict) {
@@ -138,7 +138,7 @@
       }, {immediate: true});
 
       /**
-       * 监听value
+       * Lắng nghevalue
        */
       watch(
         () => props.value,
@@ -153,7 +153,7 @@
         { immediate: true }
       );
       /**
-       * 监听dictOptions
+       * Lắng nghedictOptions
        */
       watch(
         () => props.dictOptions,
@@ -165,13 +165,13 @@
         { immediate: true }
       );
       /**
-       * 异步查询数据
+       * Truy vấn dữ liệu bất đồng bộ
        */
       const loadData = debounce(async function loadData(value) {
         if (!isDictTable.value) {
           return;
         }
-        // 代码逻辑说明: 【TV360X-1898】JsearchSelect组件传入字典表格式则支持滚动加载
+        // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
         pageNo = 1;
         isHasData = true;
         searchKeyword = value;
@@ -181,9 +181,9 @@
         options.value = [];
         loading.value = true;
         let keywordInfo = getKeywordParam(value);
-        // 代码逻辑说明: [QQYUN-8800]JSearchSelect的search事件在中文输入还没拼字成功时会触发，导致后端SQL注入 #6049------------
+        // Giải thích logic mã: [QQYUN-8800]JSearchSelectSự kiện search sẽ được kích hoạt khi nhập tiếng Trung chưa ghép chữ xong, dẫn đến SQL injection ở backend #6049------------
         keywordInfo = keywordInfo.replaceAll("'", '');
-        // 字典code格式：table,text,code
+        // Định dạng code từ điển:table,text,code
         defHttp
           .get({
             url: `/sys/dict/loadDict/${props.dict}`,
@@ -196,19 +196,19 @@
                 return;
               }
               options.value = res;
-              // 代码逻辑说明: 【TV360X-1898】JsearchSelect组件传入字典表格式则支持滚动加载
+              // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
               pageNo++;
             } else {
-              // 代码逻辑说明: 【TV360X-1898】JsearchSelect组件传入字典表格式则支持滚动加载
+              // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
               pageNo == 1 && (isHasData = false);
             }
           });
       }, 300);
       /**
-       * 初始化value
+       * Khởi tạovalue
        */
       function initSelectValue() {
-        // 代码逻辑说明: 下拉搜索组件每次选中值会触发value的监听事件，触发此方法，但是实际不需要
+        // Giải thích logic mã: Component tìm kiếm dropdown mỗi lần chọn giá trị sẽ kích hoạt sự kiện lắng nghe value, kích hoạt phương thức này, nhưng thực tế không cần
         if (loadSelectText.value === false) {
           loadSelectText.value = true;
           return;
@@ -218,11 +218,11 @@
           if (!selectedAsyncValue || !selectedAsyncValue.key || selectedAsyncValue.key !== value) {
             defHttp.get({ url: `/sys/dict/loadDictItem/${dict}`, params: { key: value } }).then((res) => {
               if (res && res.length > 0) {
-                //判断组件是否为多选
+                //Kiểm tra component có phải chọn nhiều không
                 if(props.multiple){
                   if(value){
                     let arr: any = [];
-                    //多选返回的是以逗号拼接的方式
+                    //Đa chọn trả về theo cách nối bằng dấu phẩy
                     let values = value.toString().split(',');
                     for (let i = 0; i < res.length; i++) {
                       let obj = {
@@ -242,7 +242,7 @@
                   if (props.value == value) {
                     selectedAsyncValue.value = { ...obj };
                   }
-                  // 代码逻辑说明: 值改变触发change事件--用于online关联记录配置页面
+                  // Giải thích logic mã: Giá trị thay đổi sẽ kích hoạt sự kiện change--Dùng cho trang cấu hình bản ghi liên kết online
                   if(props.immediateChange == true){
                     emit('change', props.value);
                   }
@@ -251,30 +251,30 @@
             });
           }
         } else {
-          // 代码逻辑说明: 【issues/8101】前端dict组件导致内存溢出问题：搜索组件支持多选---
+          // Giải thích logic mã: 【issues/8101]Component dict ở frontend gây tràn bộ nhớ: component tìm kiếm hỗ trợ chọn nhiều---
           if(!props.multiple){
             selectedValue.value = value.toString();
             if(props.immediateChange == true){
               emit('change', value.toString());
             }
           }else{
-            //多选的情况下需要转成数组
+            //Trong trường hợp đa chọn cần chuyển thành mảng
             selectedValue.value = value.toString().split(',');
           }
         }
       }
 
       /**
-       * 初始化字典下拉数据
+       * Khởi tạo dữ liệu thả xuống của từ điển
        */
       async function initDictTableData() {
         let { dict, async, dictOptions, pageSize } = props;
         if (!async) {
-          //如果字典项集合有数据
+          //Nếu tập hợp mục từ điển có dữ liệu
           if (dictOptions && dictOptions.length > 0) {
             options.value = dictOptions;
           } else {
-            //根据字典Code, 初始化字典数组
+            //Theo từ điểnCode, Khởi tạo mảng từ điển
             let dictStr = '';
             if (dict) {
               let arr = dict.split(',');
@@ -284,21 +284,21 @@
               } else {
                 dictStr = dict;
               }
-              //根据字典Code, 初始化字典数组
+              //Theo từ điểnCode, Khởi tạo mảng từ điển
               const dictData = await initDictOptions(dictStr);
               options.value = dictData;
             }
           }
         } else {
           if (!dict) {
-            console.error('搜索组件未配置字典项');
+            console.error('Component tìm kiếm chưa cấu hình mục từ điển');
           } else {
-            // 代码逻辑说明: 【TV360X-1898】JsearchSelect组件传入字典表格式则支持滚动加载
+            // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
             pageNo = 1;
             isHasData = true;
             searchKeyword = '';
 
-            //异步一开始也加载一点数据
+            //Bất đồng bộ ban đầu cũng tải một ít dữ liệu
             loading.value = true;
             let keywordInfo = getKeywordParam('');
             defHttp
@@ -310,10 +310,10 @@
                 loading.value = false;
                 if (res && res.length > 0) {
                   options.value = res;
-                  // 代码逻辑说明: 【TV360X-1898】JsearchSelect组件传入字典表格式则支持滚动加载
+                  // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
                   pageNo++;
                 } else {
-                  // 代码逻辑说明: 【TV360X-1898】JsearchSelect组件传入字典表格式则支持滚动加载
+                  // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
                   pageNo == 1 && (isHasData = false);
                 }
               });
@@ -322,27 +322,27 @@
       }
 
       /**
-       * 查询数据字典
+       * Truy vấn từ điển dữ liệu
        */
       async function initDictCodeData() {
         options.value = await initDictOptions(props.dict);
       }
 
       /**
-       * 同步改变事件
+       * Sự kiện thay đổi đồng bộ
        * */
       function handleChange(value) {
-        //多选也会触发change事件，需要判断如果时多选不需要赋值
+        //Chọn nhiều cũng sẽ kích hoạt sự kiện change, cần kiểm tra nếu là chọn nhiều thì không cần gán giá trị
         if(!props.multiple){
           selectedValue.value = value;
           callback();
         }
       }
       /**
-       * 异步改变事件
+       * Sự kiện thay đổi bất đồng bộ
        * */
       function handleAsyncChange(selectedObj) {
-          // 单选情况下使用change事件
+          // Trong trường hợp đơn chọn dùng sự kiện change
           if(!props.multiple){
             if (selectedObj) {
               selectedAsyncValue.value = selectedObj;
@@ -354,13 +354,13 @@
               loadData('');
             }
             callback();
-            // 点x清空时需要把loadSelectText设置true
+            // Khi nhấn x để xóa cần đặt loadSelectTexttrue
             selectedObj ?? (loadSelectText.value = true);
           }
       }
 
       /**
-       * 异步值选中事件
+       * Sự kiện chọn giá trị bất đồng bộ
        * @param selectedObj
        */
       function handleSelect(selectedObj){
@@ -368,9 +368,9 @@
         if(props.async){
           key = selectedObj.key;
         }
-        //多选情况下使用select事件
+        //Trong trường hợp đa chọn dùng sự kiện select
         if(props.multiple && key){
-          //异步的时候才需要在selectedValue数组中添加值操作，同步的情况下直接走更新值操作
+          //Chỉ khi không đồng bộ mới cần thao tác thêm giá trị trong mảng selectedValue, trong trường hợp đồng bộ thì đi thẳng thao tác cập nhật giá trị
           if(props.async){
             selectedValue.value.push(key);
           }
@@ -380,7 +380,7 @@
       }
       
       /**
-       * 异步值取消选中事件
+       * Sự kiện bỏ chọn giá trị không đồng bộ
        * @param selectedObj
        */
       function handleDeSelect(selectedObj){
@@ -388,9 +388,9 @@
         if(props.async){
           key = selectedObj.key;
         }
-        //多选情况下使用select事件
+        //Trong trường hợp đa chọn dùng sự kiện select
         if(props.multiple){
-          //异步的时候才需要在selectedValue数组中删除值操作，同步的情况下直接走更新值操作
+          //Chỉ khi không đồng bộ mới cần thao tác xóa giá trị trong mảng selectedValue, trong trường hợp đồng bộ thì đi thẳng thao tác cập nhật giá trị
           if(props.async){
             let findIndex = selectedValue.value.findIndex(item => item === key);
             if(findIndex != -1){
@@ -403,40 +403,40 @@
       }
       
       /**
-       *回调方法
+       *Phương thức callback
        * */
       function callback() {
         loadSelectText.value = false;
-        //单选直接走更新值操作
+        //Chọn đơn thực hiện trực tiếp thao tác cập nhật giá trị
         if(!props.multiple){
           emit('change', unref(selectedValue));
           emit('update:value', unref(selectedValue));
         } else {
-          //多选需要把数组转成字符串
+          //Đa chọn cần chuyển mảng thành chuỗi
           emit('change', unref(selectedValue).join(","));
           emit('update:value', unref(selectedValue).join(","));
         }
       }
       /**
-       * 过滤选中option
+       * Lọc lựa chọnoption
        */
       function filterOption(input, option) {
-        // 代码逻辑说明: issues/218 所有功能表单的下拉搜索框搜索无效
+        // Giải thích logic mã: issues/218 Ô tìm kiếm dropdown của biểu mẫu mọi chức năng tìm kiếm không có hiệu lực
         let value = '', label = '';
         try {
           value = option.value;
           label = option.children()[0].children;
         }catch (e) {
-          console.log('获取下拉项失败', e)
+          console.log('Lấy mục dropdown thất bại', e)
         }
         let str = input.toLowerCase();
         return value.toLowerCase().indexOf(str) >= 0 || label.toLowerCase().indexOf(str) >= 0;
       }
 
       function getParentContainer(node) {
-        // 代码逻辑说明: getPopupContainer一直有值 导致popContainer的逻辑永远走不进去，把它挪到前面判断
+        // Giải thích logic mã: getPopupContainerLuôn có giá trị khiến logic của popContainer mãi không được thực thi, hãy chuyển nó lên phía trước để kiểm tra
         if (props.popContainer) {
-          // 代码逻辑说明: 【QQYUN-9339】有多个modal弹窗内都有下拉字典多选和下拉搜索组件时，打开另一个modal时组件的options不展示
+          // Giải thích logic mã: 【QQYUN-9339]Khi có nhiều popup modal đều chứa component chọn nhiều trong danh mục thả xuống và component tìm kiếm thả xuống, khi mở một modal khác thì options của component không hiển thị
           return setPopContainer(node, props.popContainer);
         } else {
           if (typeof props.getPopupContainer === 'function') {
@@ -447,13 +447,13 @@
         }
       }
 
-      //获取关键词参数 支持设置排序信息
+      //Lấy tham số từ khóa, hỗ trợ đặt thông tin sắp xếp
       function getKeywordParam(text){
-        // 如果设定了排序信息，需要写入排序信息，在关键词后加 [orderby:create_time,desc]
+        // Nếu đã đặt thông tin sắp xếp thì cần ghi thông tin sắp xếp, thêm sau từ khóa [orderby:create_time,desc]
         if(props.params && props.params.column && props.params.order){
           let temp = text||''
           
-          // 代码逻辑说明: /issues/4905 表单生成器字段配置时，选择关联字段，在进行高级配置时，无法加载数据库列表，提示 Sgin签名校验错误！ #4905
+          // Giải thích logic mã: /issues/4905 Khi cấu hình trường của trình tạo biểu mẫu, chọn trường liên kết, khi thực hiện cấu hình nâng cao, không thể tải danh sách cơ sở dữ liệu, báo lỗi kiểm chứng chữ ký Sgin! #4905
           temp = temp+'[orderby:'+props.params.column+','+props.params.order+']'
           return encodeURI(temp);
           
@@ -461,15 +461,15 @@
           return text;
         }
       }
-      // 代码逻辑说明: 【TV360X-26】下拉搜索控件选中选项后再次点击下拉应该显示初始的下拉选项，而不是只展示选中结果
+      // Giải thích logic mã: 【TV360X-26]Sau khi chọn mục trong control tìm kiếm dropdown rồi bấm lại dropdown thì nên hiển thị các mục dropdown ban đầu, thay vì chỉ hiển thị kết quả đã chọn
       const handleAsyncFocus = () => {
-        // 代码逻辑说明: 【issues/6681】异步查询不生效
+        // Giải thích logic mã: 【issues/6681] truy vấn không đồng bộ không có hiệu lực
         if ((isObject(selectedAsyncValue.value) || selectedAsyncValue.value?.length) && isDictTable.value && props.async) {
-          // 代码逻辑说明: 【TV360X-2062】下拉搜索选择第二页数据后，第一次点击时(得到焦点)滚动条没复原到初始位置且数据会加载第二页数据(应该只加载第一页数据)
+          // Giải thích logic mã: 【TV360X-2062]Sau khi chọn dữ liệu trang thứ hai trong tìm kiếm dropdown, lần nhấn đầu tiên(nhận focus)Thanh cuộn chưa khôi phục về vị trí ban đầu và dữ liệu sẽ tải dữ liệu trang thứ hai(Chỉ nên tải dữ liệu của trang đầu tiên)
           options.value = [];
           initDictTableData();
         }
-        // 代码逻辑说明: 【TV360X-2348】得到焦点时options选项显示第一页内容（解决新增时显示非第一页内容）
+        // Giải thích logic mã: 【TV360X-2348]Khi nhận focus, mục options hiển thị nội dung trang đầu tiên (giải quyết việc khi thêm mới hiển thị nội dung không phải trang đầu tiên)
         if (Array.isArray(selectedAsyncValue.value) && selectedAsyncValue.value.length === 0 && isDictTable.value && props.async) {
           if (pageNo > 2) {
             options.value = [];
@@ -482,10 +482,10 @@
       /**
        * 2024-07-30
        * liaozhiyang
-       * 【TV360X-1898】JsearchSelect组件传入字典表格式则支持滚动加载
+       * 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
        * */
       const handlePopupScroll = async (e) => {
-        // 字典表才才支持滚动加载
+        // Chỉ bảng từ điển mới hỗ trợ tải khi cuộn
         if (isDictTable.value) {
           const { target } = e;
           const { scrollTop, scrollHeight, clientHeight } = target;
@@ -498,7 +498,7 @@
               .then((res) => {
                 loading.value = false;
                 if (res?.length > 0) {
-                  // 防止开源只更新了前端代码没更新后端代码（第一页和第二页面的第一条数据相同则是后端代码没更新，没分页）
+                  // Ngăn trường hợp mã nguồn mở chỉ cập nhật code frontend mà chưa cập nhật code backend (nếu dữ liệu đầu tiên của trang 1 và trang 2 giống nhau thì tức là code backend chưa được cập nhật, không có phân trang)
                   if (JSON.stringify(res[0]) === JSON.stringify(options.value[0])) {
                     isHasData =  false;
                     return;

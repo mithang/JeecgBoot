@@ -6,7 +6,7 @@ import { useTableContext } from './useTableContext';
 import { useMessage } from '/@/hooks/web/useMessage';
 
 /**
- * 列表配置缓存
+ * Cache cấu hình danh sách
  */
 export function useColumnsCache(opt, setColumns, handleColumnFixed) {
   let isInit = false;
@@ -14,9 +14,9 @@ export function useColumnsCache(opt, setColumns, handleColumnFixed) {
   const $ls = createLocalStorage();
   const { createMessage: $message } = useMessage();
   const route = useRoute();
-  // 列表配置缓存key
+  // Cache cấu hình danh sáchkey
   const cacheKey = computed(() => {
-    // 代码逻辑说明: 【QQYUN-8367】online报表配置列展示保存，影响到其他页面的table字段的显示隐藏（开发环境热更新会有此问题，生产环境无问题）
+    // Giải thích logic mã: 【QQYUN-8367]Việc lưu hiển thị cột cấu hình báo cáo online ảnh hưởng đến việc hiển thị/ẩn trường table của các trang khác (môi trường dev khi hot update sẽ có vấn đề này, môi trường production không có vấn đề)
     const path = route.path;
     let key = path.replace(/[\/\\]/g, '_');
     let cacheKey = table.getBindValues.value.tableSetting?.cacheKey;
@@ -42,27 +42,27 @@ export function useColumnsCache(opt, setColumns, handleColumnFixed) {
     if (columnCache && columnCache.checkedList) {
       const { checkedList, sortedList, sortableOrder, checkIndex } = columnCache;
       await nextTick();
-      // checkbox的排序缓存
+      // checkboxbộ nhớ đệm sắp xếp của
       opt.sortableOrder.value = sortableOrder;
-      // checkbox的选中缓存
+      // checkboxbộ nhớ đệm đã chọn của
       opt.state.checkedList = checkedList;
-      // tableColumn的排序缓存
+      // tableColumnbộ nhớ đệm sắp xếp của
       opt.plainSortOptions.value.sort((prev, next) => {
         return sortedList.indexOf(prev.value) - sortedList.indexOf(next.value);
       });
-      // 重新排序tableColumn
+      // Sắp xếp lạitableColumn
       checkedList.sort((prev, next) => sortedList.indexOf(prev) - sortedList.indexOf(next));
-      // 是否显示行号列
+      // Có hiển thị cột số hàng không
       if (checkIndex) {
         table.setProps({ showIndexColumn: true });
       }
       setColumns(checkedList);
-      // 设置固定列
+      // Đặt cột cố định
       setColumnFixed(columnCache);
     }
   }
 
-  /** 设置被固定的列 */
+  /** Đặt các cột đã cố định */
   async function setColumnFixed(columnCache) {
     const { fixedColumns } = columnCache;
     const columns = opt.plainOptions.value;
@@ -75,10 +75,10 @@ export function useColumnsCache(opt, setColumns, handleColumnFixed) {
     }
   }
 
-  // 判断列固定状态
+  // Xác định trạng thái cố định của cột
   const fixedReg = /^(true|left|right)$/;
 
-  /** 获取被固定的列 */
+  /** Lấy các cột đã cố định */
   function getFixedColumns() {
     let fixedColumns: any[] = [];
     const columns = opt.plainOptions.value;
@@ -93,10 +93,10 @@ export function useColumnsCache(opt, setColumns, handleColumnFixed) {
     return fixedColumns;
   }
 
-  /** 保存列配置 */
+  /** Lưu cấu hình cột */
   function saveSetting() {
     const { checkedList } = opt.state;
-    // 代码逻辑说明: 【TV360X-105】列展示设置问题[重置之后保存的顺序还是上次的]
+    // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Sau khi đặt lại, thứ tự đã lưu vẫn là thứ tự lần trước]
     let sortedList = [];
     if (opt.restAfterOptions.value) {
       sortedList = opt.restAfterOptions.value.map((item) => item.value);
@@ -104,28 +104,28 @@ export function useColumnsCache(opt, setColumns, handleColumnFixed) {
       sortedList = unref(opt.plainSortOptions).map((item) => item.value);
     }
     $ls.set(cacheKey.value, {
-      // 保存的列
+      // Các cột đã lưu
       checkedList,
-      // 排序后的列
+      // Cột sau khi sắp xếp
       sortedList,
-      // 是否显示行号列
+      // Có hiển thị cột số hàng không
       checkIndex: unref(opt.checkIndex),
-      // checkbox原始排序
+      // checkboxThứ tự gốc
       sortableOrder: unref(opt.sortableOrder),
-      // 固定列
+      // Cột cố định
       fixedColumns: getFixedColumns(),
     });
-    $message.success('保存成功');
-    // 保存之后直接关闭
+    $message.success('Lưu thành công');
+    // Sau khi lưu sẽ đóng trực tiếp
     opt.popoverVisible.value = false;
   }
 
-  /** 重置（删除）列配置 */
+  /** Đặt lại (xóa) cấu hình cột */
   async function resetSetting() {
-    // 重置固定列
+    // Đặt lại cột cố định
     await resetFixedColumn();
     $ls.remove(cacheKey.value);
-    $message.success('重置成功');
+    $message.success('Đặt lại thành công');
   }
 
   async function resetFixedColumn() {

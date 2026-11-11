@@ -57,7 +57,7 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, 
     }
     const reg = createSearchReg(unref(keyword));
     const filterMenu = filter(menuList, (item) => {
-      // 【issues/33】包含子菜单时，不添加到搜索队列
+      // 【issues/33] Khi chứa submenu, không thêm vào hàng đợi tìm kiếm
       if (Array.isArray(item.children)) {
         return false;
       }
@@ -153,9 +153,9 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, 
     handleClose();
     await nextTick();
 
-    // 代码逻辑说明: 【QQYUN-8369】搜索区分大小写，外部链接新页打开
+    // Giải thích logic mã: 【QQYUN-8369] Tìm kiếm phân biệt hoa thường, liên kết ngoài mở ở trang mới
     if (to.internalOrExternal) {
-      // 代码逻辑说明: 【QQYUN-8773】配置外部网址在顶部菜单模式和搜索打不开
+      // Giải thích logic mã: 【QQYUN-8773]Cấu hình URL bên ngoài không mở được ở chế độ menu trên cùng và trong tìm kiếm
       const path = to.path.replace(URL_HASH_TAB, '#');
       window.open(path, '_blank');
     } else {

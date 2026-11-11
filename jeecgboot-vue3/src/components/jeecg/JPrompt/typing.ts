@@ -2,14 +2,14 @@ import { ModalOptionsPartial } from '/@/hooks/web/useMessage';
 import { RenderCallbackParams, Rule } from '/@/components/Form';
 
 export interface JPromptProps extends ModalOptionsPartial {
-  // 输入框是否必填
+  // Ô nhập có bắt buộc hay không
   required?: boolean;
-  // 校验
+  // Kiểm chứng
   rules?: Rule[];
-  // 动态校验
+  // Kiểm chứng động
   dynamicRules?: (renderCallbackParams: RenderCallbackParams) => Rule[];
-  // 占位字符
+  // Ký tự giữ chỗ
   placeholder?: string;
-  // 输入框默认值
+  // Giá trị mặc định của ô nhập
   defaultValue?: string;
 }

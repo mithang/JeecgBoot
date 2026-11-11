@@ -8,7 +8,7 @@
   >
     <template #title>
       <span :class="title ? 'title' : 'emptyTitle'">{{ title }}</span>
-      <span style="float: right" title="关闭">
+      <span style="float: right" title="Đóng">
         <Icon icon="ant-design:close-outlined" @click="visible = false" />
       </span>
     </template>
@@ -35,12 +35,12 @@
     // v-model:value
     value: propTypes.string.def(''),
     title: propTypes.string.def(''),
-    // 弹出框显示位置
+    // Vị trí hiển thị hộp bật lên
     position: propTypes.string.def('right'),
     width: propTypes.number.def(300),
     height: propTypes.number.def(150),
     disabled: propTypes.bool.def(false),
-    // 弹出框挂载的元素ID
+    // Phần tử mà hộp thoại gắn vàoID
     popContainer: propTypes.oneOfType([propTypes.string, propTypes.func]).def(''),
   });
   const attrs = useAttrs();
@@ -48,9 +48,9 @@
 
   const visible = ref<boolean>(false);
   const innerValue = ref<string>('');
-  // textarea ref对象
+  // textarea refĐối tượng
   const textareaRef = ref();
-  // textarea 样式
+  // textarea Kiểu
   const textareaStyle = computed(() => ({
     height: `${props.height}px`,
     width: `${props.width}px`,
@@ -77,7 +77,7 @@
     textareaRef.value?.focus();
   }
 
-  // 获取弹出框挂载的元素
+  // Lấy phần tử mà popup gắn vào
   function getPopupContainer(node) {
     if (!props.popContainer) {
       return node?.parentNode;
@@ -104,7 +104,7 @@
 
   .@{prefix-cls} {
     &-popover {
-      // 代码逻辑说明: 【TV360X-144】jVxetable中的多行文本组件当title没有时去掉多余的线
+      // Giải thích logic mã: 【TV360X-144]Khi title không có trong component văn bản nhiều dòng của jVxetable thì bỏ đường kẻ thừa
       .ant-popover-title:has(.emptyTitle) {
         border-bottom: none;
       }

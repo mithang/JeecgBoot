@@ -7,7 +7,7 @@
       <a-date-picker
         :showTime="false"
         valueFormat="YYYY-MM-DD"
-        :placeholder="'请选择' + item.label"
+        :placeholder="'Vui lòng chọn' + item.label"
         v-model:value="queryParam[item.field]"
         style="width: 100%"
       ></a-date-picker>
@@ -16,7 +16,7 @@
       <a-date-picker
         :showTime="false"
         valueFormat="YYYY-MM-DD"
-        placeholder="开始日期"
+        placeholder="Ngày bắt đầu"
         v-model:value="queryParam[item.field + '_begin']"
         style="width: calc(50% - 15px)"
       ></a-date-picker>
@@ -24,7 +24,7 @@
       <a-date-picker
         :showTime="false"
         valueFormat="YYYY-MM-DD"
-        placeholder="结束日期"
+        placeholder="Ngày kết thúc"
         v-model:value="queryParam[item.field + '_end']"
         style="width: calc(50% - 15px)"
       ></a-date-picker>
@@ -37,7 +37,7 @@
     </template>
     <template v-if="single_mode === item.mode">
       <a-date-picker
-        :placeholder="'请选择' + item.label"
+        :placeholder="'Vui lòng chọn' + item.label"
         :show-time="true"
         valueFormat="YYYY-MM-DD HH:mm:ss"
         v-model:value="queryParam[item.field]"
@@ -46,7 +46,7 @@
     </template>
     <template v-else>
       <a-date-picker
-        placeholder="选择开始时间"
+        placeholder="Chọn thời gian bắt đầu"
         :show-time="true"
         valueFormat="YYYY-MM-DD HH:mm:ss"
         v-model:value="queryParam[item.field + '_begin']"
@@ -54,7 +54,7 @@
       ></a-date-picker>
       <span class="group-query-strig" style="width: auto; padding: 0 4px">~</span>
       <a-date-picker
-        placeholder="选择结束时间"
+        placeholder="Chọn thời gian kết thúc"
         :show-time="true"
         valueFormat="YYYY-MM-DD HH:mm:ss"
         v-model:value="queryParam[item.field + '_end']"
@@ -68,11 +68,11 @@
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
     <template v-if="single_mode === item.mode">
-      <a-date-picker :placeholder="'请选择' + item.label" mode="time" valueFormat="HH:mm:ss" v-model:value="queryParam[item.field]" style="width: 100%"></a-date-picker>
+      <a-date-picker :placeholder="'Vui lòng chọn' + item.label" mode="time" valueFormat="HH:mm:ss" v-model:value="queryParam[item.field]" style="width: 100%"></a-date-picker>
     </template>
     <template v-else>
       <a-date-picker
-        placeholder="请选择开始时间"
+        placeholder="Vui lòng chọn thời gian bắt đầu"
         mode="time"
         valueFormat="HH:mm:ss"
         v-model:value="queryParam[item.field + '_begin']"
@@ -80,7 +80,7 @@
       ></a-date-picker>
       <span class="group-query-strig">~</span>
       <a-date-picker
-        placeholder="请选择结束时间"
+        placeholder="Vui lòng chọn thời gian kết thúc"
         mode="time"
         valueFormat="HH:mm:ss"
         v-model:value="queryParam[item.field + '_end']"
@@ -97,9 +97,9 @@
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JDictSelectTag v-if="item.config === '1'" :placeholder="'请选择' + item.label" v-model="queryParam[item.field]" :dictCode="getDictCode(item)">
+    <JDictSelectTag v-if="item.config === '1'" :placeholder="'Vui lòng chọn' + item.label" v-model="queryParam[item.field]" :dictCode="getDictCode(item)">
     </JDictSelectTag>
-    <a-select v-else :placeholder="'请选择' + item.label" v-model:value="queryParam[item.field]">
+    <a-select v-else :placeholder="'Vui lòng chọn' + item.label" v-model:value="queryParam[item.field]">
       <template v-for="(obj, index) in dictOptions[getDictOptionKey(item)]" :key="index">
         <a-select-option :value="obj.value"> {{ obj.text }}</a-select-option>
       </template>
@@ -111,7 +111,7 @@
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
     <JTreeSelect
-      :placeholder="'请选择' + item.label"
+      :placeholder="'Vui lòng chọn' + item.label"
       v-model:value="queryParam[item.field]"
       :dict="item.dict"
       :pidField="item.pidField"
@@ -127,7 +127,7 @@
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JCategorySelect :pcode="item.pcode" v-model:value="queryParam[item.field]" :placeholder="'请选择' + item.label" />
+    <JCategorySelect :pcode="item.pcode" v-model:value="queryParam[item.field]" :placeholder="'Vui lòng chọn' + item.label" />
   </a-form-item>
 
   <a-form-item v-else-if="item.view === CompTypeEnum.SelSearch" :labelCol="labelCol" :class="'jeecg-online-search'">
@@ -136,7 +136,7 @@
     </template>
     <JOnlineSearchSelect
       v-model:value="queryParam[item.field]"
-      :placeholder="'请选择' + item.label"
+      :placeholder="'Vui lòng chọn' + item.label"
       :fieldId="item.fieldId"
       :reportId="item.reportId"
     />
@@ -146,14 +146,14 @@
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JSelectUserByDept v-model:value="queryParam[item.field]" :placeholder="'请选择' + item.label"></JSelectUserByDept>
+    <JSelectUserByDept v-model:value="queryParam[item.field]" :placeholder="'Vui lòng chọn' + item.label"></JSelectUserByDept>
   </a-form-item>
 
   <a-form-item v-else-if="item.view == CompTypeEnum.SelDepart" :labelCol="labelCol" :class="'jeecg-online-search'">
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JSelectDept v-model:value="queryParam[item.field]" :placeholder="'请选择' + item.label" />
+    <JSelectDept v-model:value="queryParam[item.field]" :placeholder="'Vui lòng chọn' + item.label" />
   </a-form-item>
 
   <a-form-item v-else-if="item.view === CompTypeEnum.Popup" :labelCol="labelCol" :class="'jeecg-online-search'">
@@ -161,7 +161,7 @@
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
     <JPopup
-      :placeholder="'请选择' + item.label"
+      :placeholder="'Vui lòng chọn' + item.label"
       v-model:value="queryParam[item.field]"
       :formElRef="formElRef"
       :code="item.dictTable"
@@ -174,9 +174,9 @@
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JAreaLinkage :placeholder="'请选择' + item.label" v-model:value="queryParam[item.field]" />
+    <JAreaLinkage :placeholder="'Vui lòng chọn' + item.label" v-model:value="queryParam[item.field]" />
   </a-form-item>
-  <!--TODO 缺少的组件-->
+  <!--TODO Component còn thiếu-->
   <a-form-item
     v-else-if="item.view === CompTypeEnum.Checkbox || item.view === CompTypeEnum.ListMulti"
     :labelCol="labelCol"
@@ -185,13 +185,13 @@
   >
     <!-- <j-select-multiple
                 v-if="item.config==='1'"
-                :placeholder=" '请选择'+item.label "
+                :placeholder=" 'Vui lòng chọn'+item.label "
                 v-model="queryParam[item.field]"
                 :dictCode="getDictCode(item)">
         </j-select-multiple>
         <j-select-multiple
                 v-else
-                :placeholder=" '请选择'+item.label "
+                :placeholder=" 'Vui lòng chọn'+item.label "
                 :options="dictOptions[item.dbField]"
                 v-model="queryParam[item.field]">
         </j-select-multiple>-->
@@ -202,15 +202,15 @@
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
     <template v-if="single_mode === item.mode && 'string'== item.view">
-      <j-input :placeholder="'请输入' + item.label" v-model:value="queryParam[item.field]"></j-input>
+      <j-input :placeholder="'Vui lòng nhập' + item.label" v-model:value="queryParam[item.field]"></j-input>
     </template>
     <template v-else-if="single_mode === item.mode">
-      <a-input :placeholder="'请输入' + item.label" v-model:value="queryParam[item.field]"></a-input>
+      <a-input :placeholder="'Vui lòng nhập' + item.label" v-model:value="queryParam[item.field]"></a-input>
     </template>
     <template v-else>
-      <a-input :placeholder="'请输入开始' + item.label" v-model:value="queryParam[item.field + '_begin']" style="width: calc(50% - 15px)"></a-input>
+      <a-input :placeholder="'Vui lòng nhập giá trị bắt đầu' + item.label" v-model:value="queryParam[item.field + '_begin']" style="width: calc(50% - 15px)"></a-input>
       <span class="group-query-strig">~</span>
-      <a-input :placeholder="'请输入结束' + item.label" v-model:value="queryParam[item.field + '_end']" style="width: calc(50% - 15px)"></a-input>
+      <a-input :placeholder="'Vui lòng nhập giá trị kết thúc' + item.label" v-model:value="queryParam[item.field + '_end']" style="width: calc(50% - 15px)"></a-input>
     </template>
   </a-form-item>
 </template>
@@ -287,7 +287,7 @@
         }
       }
 
-      // 定义查询条件 文本label的最大宽度 比起单纯的控制字体个数更好
+      // Định nghĩa điều kiện tìm kiếm: chiều rộng tối đa của label văn bản tốt hơn so với việc chỉ kiểm soát số lượng ký tự
       const labelTextMaxWidth = '120px';
       const labelCol = {
         style: {
@@ -315,7 +315,7 @@
     display: inline-block;
   }
 
-  /* 查询条件左对齐样式设置 */
+  /* Cài đặt kiểu căn trái cho điều kiện truy vấn */
   .jeecg-online-search :deep(.ant-form-item-label) {
     flex: 0 0 auto !important;
     width: auto;
@@ -324,7 +324,7 @@
     max-width: 100%;
   }
 
-  /* label显示宽度 超出显示... */
+  /* labelChiều rộng hiển thị, vượt quá sẽ hiển thị... */
   .jeecg-online-search :deep(.label-text) {
     max-width: v-bind(labelTextMaxWidth);
     overflow: hidden;
@@ -333,9 +333,9 @@
     overflow-wrap: break-word;
   }
 
-  /* update-begin--author:liaozhiyang---date:20260804---for：【LHZP-983】查询日期/日期时间组件宽度撑满 */
+  /* update-begin--author:liaozhiyang---date:20260804---for：【LHZP-983] truy vấn ngày/Chiều rộng của component ngày giờ lấp đầy */
   .jeecg-online-search :deep(.ant-picker) {
     width: 100%;
   }
-  /* update-end--author:liaozhiyang---date:20260804---for：【LHZP-983】查询日期/日期时间组件宽度撑满 */
+  /* update-end--author:liaozhiyang---date:20260804---for：【LHZP-983] truy vấn ngày/Chiều rộng của component ngày giờ lấp đầy */
 </style>

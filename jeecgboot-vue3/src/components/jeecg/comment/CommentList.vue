@@ -13,11 +13,11 @@
                 <span>{{ item.fromUserId_dictText }}</span>
 
                 <template v-if="item.toUserId">
-                  <span>回复</span>
+                  <span>Trả lời</span>
                   <span>{{ item.toUserId_dictText }}</span>
                   <Tooltip class="comment-last-content" @openChange="(v)=>visibleChange(v, item)">
                     <template #title>
-                      <a-spin v-if="item.commentIdLoading" size="small" tip="加载中..." class="jeecg-comment-tooltip-spin" />
+                      <a-spin v-if="item.commentIdLoading" size="small" tip="Đang tải..." class="jeecg-comment-tooltip-spin" />
                       <div v-else v-html="getHtml(lineFeed(item.commentId_dictText))"></div>
                     </template>
                     <message-outlined />
@@ -35,10 +35,10 @@
             </template>
 
             <template #actions>
-              <span @click="showReply(item)">回复</span>
+              <span @click="showReply(item)">Trả lời</span>
 
-              <Popconfirm title="确定删除吗？" @confirm="deleteComment(item)">
-                <span>删除</span>
+              <Popconfirm title="Bạn có chắc chắn muốn xóa không?" @confirm="deleteComment(item)">
+                <span>Xóa</span>
               </Popconfirm>
             </template>
 
@@ -47,7 +47,7 @@
               </div>
 
               <div v-if="item.fileList && item.fileList.length > 0">
-                <!-- 历史文件 -->
+                <!-- Tệp lịch sử -->
                 <history-file-list :dataList="item.fileList" isComment></history-file-list>
               </div>
             </template>
@@ -74,7 +74,7 @@
 
 <script>
   /**
-   * 评论列表
+   * Danh sách bình luận
    */
   import { defineComponent, ref, onMounted, watch, watchEffect ,inject, nextTick } from 'vue';
   import { propTypes } from '/@/utils/propTypes';
@@ -110,7 +110,7 @@
       tableName: propTypes.string.def(''),
       dataId: propTypes.string.def(''),
       datetime:  propTypes.number.def(1),
-      // 其他需要减去的高度
+      // Chiều cao khác cần trừ đi
       otherHeight: propTypes.number.def(0),
     },
     setup(props) {
@@ -120,7 +120,7 @@
       const dayjs = inject('$dayjs')
       const listRef = ref(null);
       /**
-       * 获取当前用户名称
+       * Lấy tên người dùng hiện tại
        */
       function getMyname() {
         if (userStore.getUserInfo.realname) {
@@ -133,7 +133,7 @@
         return getFileAccessHttpUrl(userStore.getUserInfo.avatar);
       }
       
-      // 获取头像
+      // Lấy ảnh đại diện
       function getAvatar(item) {
         if (item.fromUserAvatar) {
           return getFileAccessHttpUrl(item.fromUserAvatar)
@@ -141,17 +141,17 @@
         return '';
       }
 
-      // 头像没有获取 用户名前两位
+      // Chưa lấy được avatar thì lấy hai ký tự đầu của tên người dùng
       function getAvatarText(item){
         if (item.fromUserId_dictText) {
           return item.fromUserId_dictText.substr(0, 2);
         }
-        return '未知';
+        return 'Không xác định';
       }
 
       function getAuthor(item) {
         if (item.toUser) {
-          return item.fromUserId_dictText + ' 回复 ' + item.fromUserId_dictText;
+          return item.fromUserId_dictText + ' Trả lời ' + item.fromUserId_dictText;
         } else {
           return item.fromUserId_dictText;
         }
@@ -173,7 +173,7 @@
       });
 
       /**
-       * 加载数据
+       * Tải dữ liệu
        * @returns {Promise<void>}
        */
       async function loadData() {
@@ -190,7 +190,7 @@
           let array = data.records;
           console.log(123, array);
           dataList.value = array;
-          // Number.MAX_SAFE_INTEGER 火狐不兼容改成 10e4
+          // Number.MAX_SAFE_INTEGER Firefox không tương thích nên đổi thành 10e4
           nextTick(() => {
             listRef.value && listRef.value.$el && (listRef.value.$el.scrollTop = 10e5);
           });
@@ -198,7 +198,7 @@
       }
 
       const { saveCommentAndFiles } = useCommentWithFile(props);
-      // 回复
+      // Trả lời
       async function replyComment(item, content, fileList) {
         console.log(content, item);
         let obj = {
@@ -211,7 +211,7 @@
         await loadData();
       }
       
-      //评论
+      //Bình luận
       async function sendComment(content, fileList) {
         let obj = {
           fromUserId: userStore.getUserInfo.id,
@@ -225,7 +225,7 @@
         },100)
       }
 
-      //删除
+      //Xóa
       async function deleteComment(item) {
         const params = { id: item.id };
         await deleteOne(params);
@@ -233,7 +233,7 @@
       }
 
       /**
-       * 打开回复时触发
+       * Kích hoạt khi mở trả lời
        * @type {Ref<UnwrapRef<boolean>>}
        */
       const focusStatus = ref(false);
@@ -247,7 +247,7 @@
         focusStatus.value = true;
       }
 
-      // 表单改变 -重新加载评论列表
+      // Biểu mẫu thay đổi -Tải lại danh sách bình luận
       watchEffect(() => {
         if(props.datetime){
           if (props.tableName && props.dataId) {
@@ -266,7 +266,7 @@
 
 
       /**
-       * 根据id查询评论信息
+       * Truy vấn thông tin bình luận theo id
        */
       async function visibleChange(v, item){
         if(v==true){
@@ -277,13 +277,13 @@
               item.commentId_dictText = data.result.commentContent
             }else{
               console.error(data.message)
-              item.commentId_dictText='该评论已被删除';
+              item.commentId_dictText='Bình luận này đã bị xóa';
             }
             item.commentIdLoading = false;
           }
         }
       }
-      // 代码逻辑说明: 【TV360X-932】评论加上换行
+      // Giải thích logic mã: 【TV360X-932] bình luận thêm xuống dòng
       const lineFeed = (content) => {
         if (!content) return '';
         return content.replace(/\n/g, '<br>');
@@ -350,7 +350,7 @@
   .tx{
     margin-top: 4px;
   }
-  // 代码逻辑说明: 【QQYUN-8639】暗黑主题适配
+  // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
   .comment-area {
     position: absolute;
     bottom: 0;

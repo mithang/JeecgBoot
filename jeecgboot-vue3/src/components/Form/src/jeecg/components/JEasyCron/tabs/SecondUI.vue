@@ -2,26 +2,26 @@
   <div :class="`${prefixCls}-config-list`">
     <a-radio-group v-model:value="type">
       <div class="item">
-        <a-radio :value="TypeEnum.every" v-bind="beforeRadioAttrs">每秒</a-radio>
+        <a-radio :value="TypeEnum.every" v-bind="beforeRadioAttrs">Mỗi giây</a-radio>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">区间</a-radio>
-        <span> 从 </span>
+        <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">Khoảng</a-radio>
+        <span> Từ </span>
         <InputNumber v-model:value="valueRange.start" v-bind="typeRangeAttrs" />
-        <span> 秒 至 </span>
+        <span> Giây đến </span>
         <InputNumber v-model:value="valueRange.end" v-bind="typeRangeAttrs" />
-        <span> 秒 </span>
+        <span> giây </span>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">循环</a-radio>
-        <span> 从 </span>
+        <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">Lặp lại</a-radio>
+        <span> Từ </span>
         <InputNumber v-model:value="valueLoop.start" v-bind="typeLoopAttrs" />
-        <span> 秒开始，间隔 </span>
+        <span> giây bắt đầu, cách nhau </span>
         <InputNumber v-model:value="valueLoop.interval" v-bind="typeLoopAttrs" />
-        <span> 秒 </span>
+        <span> giây </span>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.specify" v-bind="beforeRadioAttrs">指定</a-radio>
+        <a-radio :value="TypeEnum.specify" v-bind="beforeRadioAttrs">Chỉ định</a-radio>
         <div class="list">
           <a-checkbox-group v-model:value="valueList">
             <template v-for="i in specifyRange" :key="i">

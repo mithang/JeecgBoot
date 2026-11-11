@@ -44,7 +44,7 @@
         type: Object as PropType<Recordable>,
       },
       rowKey: propTypes.string.def('key'),
-      // 是否有展开列
+      // Có cột mở rộng không
       hasExpandedRow: propTypes.bool,
     },
     setup(props) {
@@ -60,7 +60,7 @@
         if (!isFunction(summaryFunc)) {
           return [];
         }
-        // 代码逻辑说明: 【QQYUN-8172】可编辑单元格编辑完以后不更新合计值
+        // Giải thích logic mã: 【QQYUN-8172] Sau khi chỉnh sửa ô có thể chỉnh sửa xong không cập nhật giá trị tổng
         let dataSource = cloneDeep(unref(table.getDataSource()));
         dataSource = summaryFunc(dataSource);
         dataSource.forEach((item, i) => {
@@ -71,18 +71,18 @@
 
       const getColumns = computed(() => {
         const dataSource = unref(getDataSource);
-        // 代码逻辑说明: 【issues/8502】权限列不显示后，表尾行合计栏还显示导致对不齐
+        // Giải thích logic mã: 【issues/8502]Sau khi cột quyền không hiển thị, thanh tổng cộng ở hàng cuối bảng vẫn hiển thị gây lệch
         const allColumns = unref(getColumnsRef);
         let columns: BasicColumn[] = cloneDeep(table.getColumns({ ignoreAuth: true, ignoreIfShow: true }));
-        // 代码逻辑说明: 【issues/638】表格合计，列自定义隐藏或展示时，合计栏会错位
+        // Giải thích logic mã: 【issues/638]Tổng cộng bảng, khi cột tùy chỉnh ẩn hoặc hiển thị, thanh tổng cộng sẽ bị lệch
         columns = columns.filter((item) => !item.defaultHidden);
         const index = columns.findIndex((item) => item.flag === INDEX_COLUMN_FLAG);
         const hasRowSummary = dataSource.some((item) => Reflect.has(item, SUMMARY_ROW_KEY));
         const hasIndexSummary = dataSource.some((item) => Reflect.has(item, SUMMARY_INDEX_KEY));
 
-        // 是否有序号列
+        // Có cột số thứ tự không
         let hasIndexCol = false;
-        // 是否有选择列
+        // Có cột chọn không
         let hasSelection = table.getRowSelection() && hasRowSummary
 
         if (index !== -1) {
@@ -96,7 +96,7 @@
         }
 
         if (hasSelection) {
-          // 代码逻辑说明: 【issues/776】显示100条/页，复选框只能显示3个的问题(fixed也有可能设置true)
+          // Giải thích logic mã: 【issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái(fixedCũng có thể đặttrue)
           const isFixed = columns.some((col) => col.fixed === 'left' || col.fixed === true);
           columns.unshift({
             width: 50,
@@ -121,7 +121,7 @@
         }
         return columns;
       });
-      // 代码逻辑说明: 【issues/7773】合计没有跟着左右滚动条滚动
+      // Giải thích logic mã: 【issues/7773] Dòng tổng không cuộn theo thanh cuộn trái/phải
       let mainTableBody, footerTable;
       const handleSroll = () => {
         const scrollLeft = mainTableBody.scrollLeft;
@@ -142,7 +142,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【issues/776】显示100条/页，复选框只能显示3个的问题(隐藏合计的滚动条)
+  // Giải thích logic mã: 【issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái(Ẩn thanh cuộn của tổng cộng)
   .ant-table-wrapper {
     :deep(.ant-table-body) {
       overflow-x: hidden !important;

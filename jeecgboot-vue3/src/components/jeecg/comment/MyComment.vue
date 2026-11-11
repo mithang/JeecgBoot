@@ -1,25 +1,25 @@
 <template>
   <div :class="{'comment-active': commentActive}" class="comment-main" @click="handleClickBlank">
-    <textarea ref="commentRef" v-model="myComment" @keyup.enter="sendComment" @input="handleCommentChange" @blur="handleBlur" class="comment-content" :rows="3" placeholder="请输入你的评论，可以@成员"></textarea>
+    <textarea ref="commentRef" v-model="myComment" @keyup.enter="sendComment" @input="handleCommentChange" @blur="handleBlur" class="comment-content" :rows="3" placeholder="Vui lòng nhập bình luận của bạn, có thể@Thành viên"></textarea>
     <div ref="commentContentRef" class="comment-content comment-html-shower" :class="{'no-content':noConent, 'top-div': showHtml, 'bottom-div': showHtml == false }" v-html="commentHtml" @click="handleClickHtmlShower"></div>
     <div class="comment-buttons" v-if="commentActive">
       <div style="cursor: pointer">
-        <Tooltip title="选择@用户">
+        <Tooltip title="Chọn@Người dùng">
           <user-add-outlined @click="openSelectUser" />
         </Tooltip>
 
-        <Tooltip title="上传附件">
+        <Tooltip title="Tải lên tệp đính kèm">
           <PaperClipOutlined @click="uploadVisible = !uploadVisible" />
         </Tooltip>
 
-        <span title="表情" style="display: inline-block">
+        <span title="Biểu cảm" style="display: inline-block">
           <SmileOutlined ref="emojiButton" @click="handleShowEmoji" />
           <div style="position: relative" v-show=""> </div>
         </span>
       </div>
       <div v-if="commentActive">
-        <a-button v-if="inner" @click="noComment" style="margin-right: 10px">取消</a-button>
-        <a-button type="primary" @click="sendComment" :loading="buttonLoading" :disabled="disabledButton">发 送</a-button>
+        <a-button v-if="inner" @click="noComment" style="margin-right: 10px">Hủy</a-button>
+        <a-button type="primary" @click="sendComment" :loading="buttonLoading" :disabled="disabledButton">Gửi</a-button>
       </div>
     </div>
     <upload-chunk ref="uploadRef" :visible="uploadVisible" @select="selectFirstFile"></upload-chunk>
@@ -57,16 +57,16 @@
 
   const optionsName = {
     categories: {
-      recent: '最常用的',
-      smileys: '表情选择',
-      people: '人物&身体',
-      nature: '动物&自然',
-      foods: '食物&饮料',
-      activity: '活动',
-      places: '旅行&地点',
-      objects: '物品',
-      symbols: '符号',
-      flags: '旗帜',
+      recent: 'Thường dùng nhất',
+      smileys: 'Chọn biểu cảm',
+      people: 'Nhân vật&Cơ thể',
+      nature: 'Động vật&Tự nhiên',
+      foods: 'Thức ăn&Đồ uống',
+      activity: 'Hoạt động',
+      places: 'Du lịch&Địa điểm',
+      objects: 'Vật phẩm',
+      symbols: 'Ký hiệu',
+      flags: 'Cờ',
     },
   };
   export default {
@@ -91,12 +91,12 @@
       const uploadVisible = ref(false);
       const uploadRef = ref();
       const commentContentRef = ref<null | HTMLDivElement>(null);
-      //注册model
+      //Đăng kýmodel
       const [registerModal, { openModal, closeModal }] = useModal();
       const buttonLoading = ref(false);
       const myComment = ref<string>('');
       function sendComment(e) {
-        // 代码逻辑说明: 【TV360X-932】评论加上换行
+        // Giải thích logic mã: 【TV360X-932] bình luận thêm xuống dòng
         const keyCode = e.keyCode || e.which;
         if (keyCode == 13 && e.shiftKey) {
           return;
@@ -158,7 +158,7 @@
           if (realname && username) {
             let str = `${realname}[${username}]`;
             let temp = myComment.value;
-            // 代码逻辑说明: 【TV360X-929】选择@用户，应该插入到光标位置
+            // Giải thích logic mã: 【TV360X-929] chọn@người dùng, nên chèn vào vị trí con trỏ
             if (!temp) {
               myComment.value = '@' + str + ' ';
             } else {
@@ -180,7 +180,7 @@
               }
             }
 
-            // 代码逻辑说明: 【QQYUN-8002】选完人，鼠标应该放到后面并在前面加上空格---
+            // Giải thích logic mã: 【QQYUN-8002] Sau khi chọn xong người, con trỏ chuột nên đặt ở phía sau và thêm dấu cách ở phía trước---
             showHtml.value = false;
             commentRef.value.focus();
             commentActive.value = true;
@@ -188,7 +188,7 @@
         }
         closeModal();        
       }
-      // 代码逻辑说明: 【TV360X-927】@只有在输入时弹出用户弹窗，删除时不应该弹出
+      // Giải thích logic mã: 【TV360X-927】@Chỉ khi nhập mới hiện popup người dùng, khi xóa thì không nên hiện
       function handleCommentChange(e) {
         if (e.data === '@') {
           e.target.blur();
@@ -219,7 +219,7 @@
         if (str.indexOf('::') > 0) {
           str = str.substring(0, str.indexOf(':') + 1);
         }
-        // 代码逻辑说明: 【TV360X-931】评论表情插入光标位置
+        // Giải thích logic mã: 【TV360X-931] chèn biểu cảm bình luận vào vị trí con trỏ
         const index = commentRef.value?.selectionStart ?? temp.length;
         // myComment.value = temp + str;
         const startStr = temp.substring(0, index);
@@ -258,7 +258,7 @@
       const commentHtml = computed(() => {
         let temp = myComment.value;
         if (!temp) {
-          return '请输入你的评论，可以@成员';
+          return 'Vui lòng nhập bình luận của bạn, có thể@Thành viên';
         }
         return getHtml(temp);
       });
@@ -274,7 +274,7 @@
       }
       function handleBlur() {
         showHtml.value = true;
-        // 代码逻辑说明: 解决多行获取焦点和失去焦点时滚动位置不一致
+        // Giải thích logic mã: Khắc phục vị trí cuộn không nhất quán khi nhiều dòng nhận và mất focus
         nextTick(() => {
           const commentContentElement = commentContentRef.value;
           const commentElement = commentRef.value;
@@ -342,7 +342,7 @@
 </script>
 
 <style lang="less">
-  // 代码逻辑说明: 【QQYUN-8639】暗黑主题适配
+  // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
   .comment-main {
     border: 1px solid #eee;
     margin: 0;
@@ -370,7 +370,7 @@
     width: 100%;
     border: solid 0px;
     outline: none;
-    // 代码逻辑说明: 【TV360X-933】评论框拖动之后底部评论列表被覆盖了部分
+    // Giải thích logic mã: 【TV360X-933]Sau khi kéo khung bình luận, danh sách bình luận phía dưới bị che mất một phần
     resize: none;
     .emoji-item {
       display: inline-block !important;
@@ -390,7 +390,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    // 代码逻辑说明: 解决多行获取焦点和失去焦点时滚动位置不一致
+    // Giải thích logic mã: Khắc phục vị trí cuộn không nhất quán khi nhiều dòng nhận và mất focus
     height: 78px;
     overflow-y: auto;
     &.bottom-div {
@@ -426,11 +426,11 @@
     color: #a1a1a1
   }
   
-  /**聊天表情本地化*/
+  /**Bản địa hóa biểu tượng cảm xúc trò chuyện*/
   .emoji-type-image.emoji-set-apple {
     background-image: url("./image/emoji.png");
   }
-  // 代码逻辑说明: 【QQYUN-8639】暗黑主题适配
+  // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
   html[data-theme='dark'] {
     .emoji-type-image.emoji-set-apple {
       background-image: url("./image/emoji_native.png");

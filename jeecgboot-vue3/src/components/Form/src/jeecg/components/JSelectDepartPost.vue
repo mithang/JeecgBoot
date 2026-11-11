@@ -1,9 +1,9 @@
-<!--部门选择组件-->
+<!--Component chọn phòng ban-->
 <template>
   <div class="JSelectDepartPost">
     <JSelectBiz @change="handleSelectChange" @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs" :isCustomRenderTag="isCustomRenderTag" :rowKey="getBindValue?.rowKey"/>
     <a-form-item>
-      <DeptSelectModal @register="regModal" @getSelectResult="setValue" modalTitle="部门岗位选择" v-bind="getBindValue" :multiple="multiple" @close="handleClose" :izShowDepPath="izShowDepPath"/>
+      <DeptSelectModal @register="regModal" @getSelectResult="setValue" modalTitle="Chọn phòng ban và vị trí công tác" v-bind="getBindValue" :multiple="multiple" @close="handleClose" :izShowDepPath="izShowDepPath"/>
     </a-form-item>
   </div>
 </template>
@@ -26,42 +26,42 @@
     inheritAttrs: false,
     props: {
       value: propTypes.oneOfType([propTypes.string, propTypes.array]),
-      // 是否允许多选，默认 true
+      // Có cho phép chọn nhiều không, mặc định true
       multiple: propTypes.bool.def(true),
-      //是否只选择岗位
+      //Có chỉ chọn vị trí công tác không
       izOnlySelectDepartPost: propTypes.bool.def(true),
-      // 自定义渲染tag
+      // Kết xuất tùy chỉnhtag
       isCustomRenderTag: propTypes.bool.def(true),
-      //是否显示部门路径（用户部门选择主岗位和兼职岗位需要显示全路径）
+      //Có hiển thị đường dẫn phòng ban hay không (khi người dùng chọn vị trí chính và vị trí kiêm nhiệm của phòng ban cần hiển thị đầy đủ đường dẫn)
       izShowDepPath: propTypes.bool.def(false),
     },
     emits: ['options-change', 'change', 'select', 'update:value'],
     setup(props, { emit, refs }) {
       const emitData = ref<any[]>();
-      //注册model
+      //Đăng kýmodel
       const [regModal, { openModal }] = useModal();
-      //下拉框选项值
+      //Giá trị tùy chọn của hộp dropdown
       const selectOptions = ref<SelectValue>([]);
-      //下拉框选中值
+      //Giá trị đã chọn của hộp dropdown
       let selectValues = reactive<Recordable>({
         value: [],
       });
       let tempSave: any = [];
 
-      // 是否正在加载回显数据
+      // Có đang tải dữ liệu hiển thị lại không
       const loadingEcho = ref<boolean>(false);
-      //下发 selectOptions,xxxBiz组件接收
+      //Gửi xuống selectOptions,xxxBizComponent nhận
       provide('selectOptions', selectOptions);
-      //下发 selectValues,xxxBiz组件接收
+      //Gửi xuống selectValues,xxxBizComponent nhận
       provide('selectValues', selectValues);
-      //下发 loadingEcho,xxxBiz组件接收
+      //Gửi xuống loadingEcho,xxxBizComponent nhận
       provide('loadingEcho', loadingEcho);
 
       const tag = ref(false);
       const attrs = useAttrs();
 
       /**
-       * 监听组件值
+       * Lắng nghe giá trị component
        */
       watchEffect(() => {
         tempSave = [];
@@ -82,7 +82,7 @@
       });
 
       /**
-       * 打卡弹出框
+       * Hộp popup chấm công
        */
       function handleOpen() {
         tag.value = true;
@@ -92,7 +92,7 @@
       }
 
       /**
-       * 将字符串值转化为数组
+       * Chuyển giá trị chuỗi thành mảng
        */
       function initValue() {
         let value = props.value ? props.value : [];
@@ -106,7 +106,7 @@
       }
 
       /**
-       * 设置下拉框的值
+       * Đặt giá trị của hộp dropdown
        */
       function setValue(options, values) {
         selectOptions.value = options;

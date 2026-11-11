@@ -1,4 +1,4 @@
-<!--wps文件预览页面-->
+<!--wpsTrang xem trước tệp-->
 <template></template>
 
 <script lang="ts" setup name="online-preview">
@@ -13,7 +13,7 @@
   initWpsPath();
 
   /**
-   * 初始化wps路径
+   * Khởi tạo đường dẫn wps
    */
   async function initWpsPath() {
     let query = router.currentRoute.value.query;
@@ -28,22 +28,22 @@
           mode: 'normal',
           mount: document.querySelector('#app'),
         });
-        // 设置 token
+        // Cài đặt token
         instance.setToken({
           token: getToken(),
         });
       } else {
-        const msg = '请求预览地址失败' + (result.message ? `：${result.message}` : '，请重试！');
+        const msg = 'Yêu cầu địa chỉ xem trước thất bại' + (result.message ? `：${result.message}` : ', vui lòng thử lại!');
         createWarningModal({
-          title: '提示',
+          title: 'Nhắc nhở',
           content: msg,
           onOk: () => window.close(),
         });
       }
     } else {
       createWarningModal({
-        title: '提示',
-        content: '获取预览地址失败，请重试！',
+        title: 'Nhắc nhở',
+        content: 'Lấy địa chỉ xem trước thất bại, vui lòng thử lại!',
         onOk: () => window.close(),
       });
     }

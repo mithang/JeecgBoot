@@ -26,7 +26,7 @@
 
       function handleRadioClick(item) {
         if (originColumn.value.allowClear === true) {
-          // 取消选择
+          // Hủy lựa chọn
           if (item.value === innerValue.value) {
             handleChangeCommon(null);
           }
@@ -42,7 +42,7 @@
         handleChangeCommon,
       };
     },
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: {
       switches: { visible: true },
     } as JVxeComponent.EnhancedPartial,
@@ -50,7 +50,7 @@
 </script>
 
 <style lang="less">
-  // 关闭动画，防止滚动时动态赋值出现问题
+  // Tắt animation, tránh lỗi khi gán giá trị động lúc cuộn
   .j-vxe-radio.no-animation {
     .ant-radio-inner,
     .ant-radio-inner::after {

@@ -2,9 +2,9 @@
   <a-select :value="innerValue" v-bind="selectProps">
     <template v-if="loading" #notFoundContent>
       <LoadingOutlined />
-      <span>&nbsp;加载中…</span>
+      <span>&nbsp;Đang tải...</span>
     </template>
-    <!-- 分组模式：options 中含有 group 字段时，按分组渲染 -->
+    <!-- Chế độ nhóm: khi options chứa trường group thì render theo nhóm -->
     <template v-if="hasGroup">
       <template v-for="(groupOptions, groupName) of groupedSelectOptions" :key="groupName">
         <a-select-opt-group :label="groupName">
@@ -20,7 +20,7 @@
         </a-select-opt-group>
       </template>
     </template>
-    <!-- 非分组模式：原有扁平渲染 -->
+    <!-- Chế độ không nhóm: render phẳng như ban đầu -->
     <template v-else>
       <template v-for="option of selectOptions" :key="option.value">
         <a-select-option :value="option.value" :title="option.text || option.label || option.title" :disabled="option.disabled">
@@ -47,9 +47,9 @@
     setup(props: JVxeComponent.Props) {
       const { innerValue, cellProps, row, originColumn, scrolling, handleChangeCommon, handleBlurCommon } = useJVxeComponent(props);
       const loading = ref(false);
-      // 异步加载的options（用于多级联动）
+      // options tải bất đồng bộ (dùng cho liên động nhiều cấp)
       const asyncOptions = ref<any[] | null>(null);
-      // 下拉框 props
+      // Dropdown props
       const selectProps = computed(() => {
         let selProps = {
           ...cellProps.value,
@@ -61,7 +61,7 @@
           onBlur: handleBlur,
           onChange: handleChange,
         };
-        // 判断select是否允许输入
+        // Kiểm tra select có cho phép nhập hay không
         let { allowSearch, allowInput } = originColumn.value;
         if (allowInput === true || allowSearch === true) {
           selProps['showSearch'] = true;
@@ -69,7 +69,7 @@
         }
         return selProps;
       });
-      // 下拉选项
+      // Tùy chọn danh sách thả xuống
       const selectOptions = computed(() => {
         if (asyncOptions.value) {
           return asyncOptions.value;
@@ -78,7 +78,7 @@
         if (linkage) {
           let { getLinkageOptionsSibling, config } = linkage;
           let res = getLinkageOptionsSibling(row.value, originColumn.value, config, true);
-          // 当返回Promise时，说明是多级联动
+          // Khi trả về Promise, nghĩa là liên động nhiều cấp
           if (res instanceof Promise) {
             loading.value = true;
             res
@@ -98,13 +98,13 @@
         return originColumn.value.options;
       });
 
-      // 是否包含分组字段
+      // Có chứa trường nhóm không
       const hasGroup = computed(() => {
         const opts = selectOptions.value;
         return opts && opts.length > 0 && opts.some((o) => o.group);
       });
 
-      // 按 group 字段分组后的选项
+      // Các tùy chọn sau khi nhóm theo trường group
       const groupedSelectOptions = computed(() => {
         const opts = selectOptions.value || [];
         const groups: Record<string, any[]> = {};
@@ -118,25 +118,25 @@
 
       // --------- created ---------
 
-      // 多选、搜索type
+      // Chọn nhiều, tìm kiếmtype
       let multipleTypes = [JVxeTypes.selectMultiple, 'list_multi'];
       let searchTypes = [JVxeTypes.selectSearch, 'sel_search'];
       if (multipleTypes.includes(props.type)) {
-        // 处理多选
+        // Xử lý chọn nhiều
         let props = originColumn.value.props || {};
         props['mode'] = 'multiple';
         props['maxTagCount'] = 1;
-        // 代码逻辑说明: issues/271 Online表单主子表单下拉多选无法搜索
+        // Giải thích logic mã: issues/271 OnlineDropdown đa chọn của biểu mẫu chính-con trong biểu mẫu Online không tìm kiếm được
         originColumn.value.allowSearch = true;
         originColumn.value.props = props;
       } else if (searchTypes.includes(props.type)) {
-        // 处理搜索
+        // Xử lý tìm kiếm
         originColumn.value.allowSearch = true;
       }
 
-      /** 处理 change 事件 */
+      /** Xử lý sự kiện change */
       function handleChange(value) {
-        // 处理下级联动
+        // Xử lý liên động cấp dưới
         let linkage = props.renderOptions.linkage;
         if (linkage) {
           linkage.handleLinkageSelectChange(row.value, originColumn.value, linkage.config, value);
@@ -144,11 +144,11 @@
         handleChangeCommon(value);
       }
 
-      /** 处理blur失去焦点事件 */
+      /** Xử lý sự kiện blur mất focus */
       function handleBlur(value) {
         let { allowInput, options } = originColumn.value;
         if (allowInput === true) {
-          // 删除无用的因搜索（用户输入）而创建的项
+          // Xóa các mục vô dụng được tạo do tìm kiếm (người dùng nhập)
           if (typeof value === 'string') {
             let indexes: number[] = [];
             options.forEach((option, index) => {
@@ -158,7 +158,7 @@
                 indexes.push(index);
               }
             });
-            // 翻转删除数组中的项
+            // Đảo thứ tự rồi xóa mục trong mảng
             for (let index of indexes.reverse()) {
               options.splice(index, 1);
             }
@@ -167,25 +167,25 @@
         handleBlurCommon(value);
       }
 
-      /** 用于搜索下拉框中的内容 */
+      /** Dùng để tìm kiếm nội dung trong hộp thả xuống */
       function handleSelectFilterOption(input, option) {
       
         let { allowSearch, allowInput } = originColumn.value;
         if (allowSearch === true || allowInput === true) {
-          // 代码逻辑说明: 【QQYUN-5806】js增强改变下拉搜索options (防止option.title为null报错)
+          // Giải thích logic mã: 【QQYUN-5806] JS tăng cường thay đổi tìm kiếm trong danh sách thả xuốngoptions (Ngăn chặnoption.titleBáo lỗi khi là null)
           if (option.title == null) return false;
-          // 代码逻辑说明: 【issues/5305】JVxeTypes.select 无法按照预期进行搜索
+          // Giải thích logic mã: 【issues/5305】JVxeTypes.select Không thể tìm kiếm như mong đợi
           return option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
         }
         return true;
       }
 
-      /** select 搜索时的事件，用于动态添加options */
+      /** select Sự kiện khi tìm kiếm, dùng để thêm độngoptions */
       function handleSearchSelect(value) {
         let { allowSearch, allowInput, options } = originColumn.value;
 
         if (allowSearch !== true && allowInput === true) {
-          // 是否找到了对应的项，找不到则添加这一项
+          // Đã tìm thấy mục tương ứng chưa, nếu không tìm thấy thì thêm mục này
           let flag = false;
           for (let option of options) {
             if (option.value.toLocaleString() === value.toLocaleString()) {
@@ -193,9 +193,9 @@
               break;
             }
           }
-          // !!value ：不添加空值
+          // !!value : không thêm giá trị rỗng
           if (!flag && !!value) {
-            // searchAdd 是否是通过搜索添加的
+            // searchAdd Có phải được thêm qua tìm kiếm không
             options.push({ title: value, value: value, searchAdd: true });
           }
         }
@@ -212,7 +212,7 @@
         handleBlur,
       };
     },
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: {
       aopEvents: {
         editActived({ $event, row, column }) {
@@ -235,7 +235,7 @@
           let { row, originColumn } = context;
           let options;
           let linkage = props?.renderOptions.linkage;
-          // 判断是否是多级联动，如果是就通过接口异步翻译
+          // Kiểm tra xem có phải là liên động nhiều cấp hay không, nếu đúng thì dịch bất đồng bộ qua API
           if (linkage) {
             let { getLinkageOptionsSibling, config } = linkage;
             let linkageOptions = getLinkageOptionsSibling(row.value, originColumn.value, config, true);
@@ -258,7 +258,7 @@
       setValue(value, ctx) {
         let { context } = ctx!;
         let { originColumn } = context;
-        // 判断是否是多选
+        // Xác định có phải chọn nhiều không
         if ((originColumn.value.props || {})['mode'] === 'multiple') {
           originColumn.value.props['maxTagCount'] = 1;
         }

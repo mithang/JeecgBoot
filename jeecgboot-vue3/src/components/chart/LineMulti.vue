@@ -70,19 +70,19 @@
         if (props.option) {
           Object.assign(option, cloneDeep(props.option));
         }
-        //图例类型
+        //Loại chú giải
         let typeArr = Array.from(new Set(props.chartData.map((item) => item.type)));
-        //轴数据
+        //Dữ liệu trục
         let xAxisData = Array.from(new Set(props.chartData.map((item) => item.name)));
         let seriesData = [];
         typeArr.forEach((type) => {
           let obj: any = { name: type, type: props.type };
-          // 代码逻辑说明: 【QQYUN-8762】首页默认及echars颜色调整
+          // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
           const findItem: any = props.chartData.find((item: any) => item.type == type);
           if (findItem && findItem.color) {
             obj.color = findItem.color;
           }
-          // 代码逻辑说明: [issues/613] LineMulti 在数据不对齐时，横坐标计算错误
+          // Giải thích logic mã: [issues/613] LineMulti Khi dữ liệu không thẳng hàng, tính toán trục hoành bị sai
           let data = [];
           xAxisData.forEach((x) => {
             let dataArr = props.chartData.filter((item) => type === item.type && item.name == x);
@@ -92,7 +92,7 @@
               data.push(null);
             }
           });
-          //data数据
+          //dataDữ liệu
           obj['data'] = data;
           seriesData.push(obj);
         });

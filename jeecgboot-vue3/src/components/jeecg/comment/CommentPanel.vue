@@ -1,23 +1,23 @@
 <template>
   <div class="comment-tabs-warp" v-if="showStatus">
     <a-tabs v-if="show" @change="handleChange" :animated="false">
-      <a-tab-pane v-if="showComment" tab="评论" key="comment" class="comment-list-tab">
+      <a-tab-pane v-if="showComment" tab="Bình luận" key="comment" class="comment-list-tab">
         <comment-list :tableId="tableId" :tableName="tableName" :dataId="dataId" :datetime="datetime1" :otherHeight="otherHeight"></comment-list>
       </a-tab-pane>
-      <a-tab-pane v-if="showFiles" tab="文件" key="file">
+      <a-tab-pane v-if="showFiles" tab="Tệp" key="file">
         <comment-files :tableId="tableId" :tableName="tableName" :dataId="dataId" :datetime="datetime2"></comment-files>
       </a-tab-pane>
-      <a-tab-pane v-if="showDataLog" tab="日志" key="log">
+      <a-tab-pane v-if="showDataLog" tab="Nhật ký" key="log">
         <data-log-list :tableName="tableName" :dataId="dataId" :datetime="datetime3"></data-log-list>
       </a-tab-pane>
     </a-tabs>
   </div>
-  <a-empty v-else description="新增页面不支持评论" />
+  <a-empty v-else description="Trang thêm mới không hỗ trợ bình luận" />
 </template>
 
 <script>
   /**
-   * 评论区域
+   * Khu vực bình luận
    */
   import { propTypes } from '/@/utils/propTypes';
   import { computed, ref, nextTick } from 'vue';
@@ -36,13 +36,13 @@
       tableId: propTypes.string.def(''),
       tableName: propTypes.string.def(''),
       dataId: propTypes.string.def(''),
-      // 显示评论
+      // Hiển thị bình luận
       showComment: propTypes.bool.def(true),
-      // 显示文件
+      // Hiển thị tệp
       showFiles: propTypes.bool.def(true),
-      // 显示日志
+      // Hiển thị nhật ký
       showDataLog: propTypes.bool.def(true),
-      // 其他需要减去的高度
+      // Chiều cao khác cần trừ đi
       otherHeight: propTypes.number.def(0),
     },
     setup(props) {
@@ -68,13 +68,13 @@
         }
       }
 
-      // VUEN-1978【bug】online关联记录和他表字段存在问题  20 修改完数据，再次打开不切换tab的时候，修改日志没有变化
+      // VUEN-1978Bản ghi liên kết online và trường bảng khác có vấn đề 20 Sau khi sửa xong dữ liệu, mở lại mà không chuyển tab thì nhật ký sửa đổi không thay đổi
       function reload() {
         let temp = new Date().getTime();
         datetime1.value = temp;
         datetime2.value = temp;
         datetime3.value = temp;
-        // 再次打开重置组件内的状态
+        // Mở lại sẽ đặt lại trạng thái bên trong component
         show.value = false;
         nextTick(() => {
           show.value = true;
@@ -102,7 +102,7 @@
       overflow: visible;
     }
   }
-  //antd3升级后，表单右侧讨论样式调整
+  //antd3Sau khi nâng cấp, điều chỉnh kiểu thảo luận ở phía phải biểu mẫu
   :deep(.ant-tabs-top  .ant-tabs-nav, .ant-tabs-bottom  .ant-tabs-nav, .ant-tabs-top  div  .ant-tabs-nav, .ant-tabs-bottom  div  .ant-tabs-nav) {
     margin: 0 16px 0;
   }

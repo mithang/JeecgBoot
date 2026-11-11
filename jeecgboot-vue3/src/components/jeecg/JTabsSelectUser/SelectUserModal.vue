@@ -1,6 +1,6 @@
 <template>
   <BasicModal
-    title="选择用户"
+    title="Chọn người dùng"
     @register="registerModal"
     width="100%"
     wrapClassName="tabs-select-user-modal"
@@ -11,24 +11,24 @@
     defaultFullscreen
   >
     <a-row>
-      <!-- 左侧多tabs切换 -->
+      <!-- Chuyển đổi nhiều tabs bên trái -->
       <a-col :xs="24" :sm="6">
         <a-card class="left-select-card" :bordered="true" :bodyStyle="{ overflow: 'hidden', padding: 0 }">
           <a-tabs class="left-select-tabs" v-model:activeKey="activeTab" size="small" centered :tabBarStyle="{ margin: 10 }" @change="onTabChange">
-            <!-- 部门标签页 -->
-            <a-tab-pane key="depart" tab="部门">
+            <!-- Tab phòng ban -->
+            <a-tab-pane key="depart" tab="Phòng ban">
               <div class="left-tab-content">
                 <a-alert type="info" :showIcon="true" class="alert-info">
                   <template #message>
                     <div class="alert-message-content">
-                      <span class="alert-label">当前选择：</span>
+                      <span class="alert-label">Lựa chọn hiện tại:</span>
                       <span v-if="departInfo.currentSelectRow.title" class="selected-title">{{ departInfo.currentSelectRow.title }}</span>
-                      <a v-if="departInfo.currentSelectRow.title" class="clear-link" @click="onClearSelectedDepart">取消选择</a>
+                      <a v-if="departInfo.currentSelectRow.title" class="clear-link" @click="onClearSelectedDepart">Hủy lựa chọn</a>
                     </div>
                   </template>
                 </a-alert>
-                <a-input-search placeholder="按部门名称搜索…" :allowClear="true" style="margin-bottom: 10px" @search="onSearchDepart" v-model:value="departSearchText" />
-                <!--组织机构-->
+                <a-input-search placeholder="Tìm kiếm theo tên phòng ban…" :allowClear="true" style="margin-bottom: 10px" @search="onSearchDepart" v-model:value="departSearchText" />
+                <!--Tổ chức-->
                 <div class="tree-container" v-if="departInfo.treeData && departInfo.treeData.length > 0">
                   <a-directory-tree
                     selectable
@@ -47,56 +47,56 @@
                     </template>
                   </a-directory-tree>
                 </div>
-                <a-empty v-else description="无部门信息" />
+                <a-empty v-else description="Không có thông tin phòng ban" />
               </div>
             </a-tab-pane>
 
-            <!-- 岗位标签页 -->
-            <a-tab-pane key="position" tab="岗位">
+            <!-- Tab vị trí công tác -->
+            <a-tab-pane key="position" tab="Vị trí công tác">
               <div class="left-tab-content">
                 <a-alert type="info" :showIcon="true" class="alert-info">
                   <template #message>
                     <div class="alert-message-content">
-                      <span class="alert-label">当前选择：</span>
+                      <span class="alert-label">Lựa chọn hiện tại:</span>
                       <span v-if="positionInfo.currentSelectRow.title" class="selected-title">{{ positionInfo.currentSelectRow.title }}</span>
-                      <a v-if="positionInfo.currentSelectRow.title" class="clear-link" @click="onClearSelectedPosition">取消选择</a>
+                      <a v-if="positionInfo.currentSelectRow.title" class="clear-link" @click="onClearSelectedPosition">Hủy lựa chọn</a>
                     </div>
                   </template>
                 </a-alert>
                 <a-input-search
-                  placeholder="按岗位名称搜索…"
+                  placeholder="Tìm kiếm theo tên vị trí…"
                   style="margin-bottom: 10px"
                   allowClear
                   @search="onSearchPosition"
                   v-model:value="positionSearchText"
                 />
-                <!--岗位列表-->
+                <!--Danh sách vị trí công tác-->
                 <div class="position-list">
                   <PostRankRelation :treeData="positionInfo.treeData" @select="onSelectPosition" />
                 </div>
               </div>
             </a-tab-pane>
 
-            <!-- 用户组标签页 -->
-            <a-tab-pane key="userGroup" tab="用户组">
+            <!-- Tab nhóm người dùng -->
+            <a-tab-pane key="userGroup" tab="Nhóm người dùng">
               <div class="left-tab-content">
                 <a-alert type="info" :showIcon="true" class="alert-info">
                   <template #message>
                     <div class="alert-message-content">
-                      <span class="alert-label">当前选择：</span>
+                      <span class="alert-label">Lựa chọn hiện tại:</span>
                       <span v-if="userGroupInfo.currentSelectRow.title" class="selected-title">{{ userGroupInfo.currentSelectRow.title }}</span>
-                      <a v-if="userGroupInfo.currentSelectRow.title" class="clear-link" @click="onClearSelectedUserGroup">取消选择</a>
+                      <a v-if="userGroupInfo.currentSelectRow.title" class="clear-link" @click="onClearSelectedUserGroup">Hủy lựa chọn</a>
                     </div>
                   </template>
                 </a-alert>
                 <a-input-search
-                  placeholder="按用户组名称搜索…"
+                  placeholder="Tìm kiếm theo tên nhóm người dùng…"
                   style="margin-bottom: 10px"
                   allowClear
                   @search="onSearchUserGroup"
                   v-model:value="userGroupSearchText"
                 />
-                <!--用户组列表-->
+                <!--Danh sách nhóm người dùng-->
                 <div class="user-group-list" v-if="userGroupInfo.data && userGroupInfo.data.length > 0">
                   <div
                     v-for="item in userGroupInfo.data"
@@ -108,27 +108,27 @@
                     <span class="user-group-title">{{ item.title }}</span>
                   </div>
                 </div>
-                <a-empty v-else description="无用户组信息" />
+                <a-empty v-else description="Không có thông tin nhóm người dùng" />
               </div>
             </a-tab-pane>
           </a-tabs>
         </a-card>
       </a-col>
 
-      <!-- 中间列表-展示用户信息 -->
+      <!-- Danh sách ở giữa-Hiển thị thông tin người dùng -->
       <a-col :xs="24" :sm="showSelected ? 12 : 18">
-        <a-card title="选择人员" :bordered="true" :bodyStyle="{ paddingTop: '1px' }">
+        <a-card title="Chọn nhân sự" :bordered="true" :bodyStyle="{ paddingTop: '1px' }">
           <BasicTable @register="registerTable" :rowSelection="rowSelection" />
         </a-card>
       </a-col>
 
-      <!-- 右侧显示已经选中用户，支持调整顺序 -->
+      <!-- Bên phải hiển thị người dùng đã chọn, hỗ trợ điều chỉnh thứ tự -->
       <a-col :xs="24" :sm="6" v-if="showSelected">
-        <a-card title="已选用户" :bordered="true">
+        <a-card title="Người dùng đã chọn" :bordered="true">
           <BasicTable @register="registerSelectedUserTable">
-            <!--操作栏-->
+            <!--Thanh thao tác-->
             <template #action="{ record }">
-              <a-button type="primary" size="small" @click="handleDelete(record)" preIcon="ant-design:delete">删除</a-button>
+              <a-button type="primary" size="small" @click="handleDelete(record)" preIcon="ant-design:delete">Xóa</a-button>
             </template>
           </BasicTable>
         </a-card>
@@ -165,7 +165,7 @@
       type: Boolean,
       default: true,
     },
-    //回传value字段名
+    //Trả về tên trường value
     rowKey: {
       type: String,
       default: 'username',
@@ -176,20 +176,20 @@
     showSelectedValue(data);
   });
 
-  // 当前激活的标签页
+  // Tab hiện đang kích hoạt
   const activeTab = ref('depart');
-  // 加载状态
+  // Trạng thái tải
   const loading = ref(false);
-  // 搜索文本
+  // Văn bản tìm kiếm
   const departSearchText = ref('');
   const positionSearchText = ref('');
   const userGroupSearchText = ref('');
 
-  // 原始数据缓存
+  // Cache dữ liệu gốc
   const originalDepartData = ref<any[]>([]);
   const originalPositionData = ref<any[]>([]);
   const originalUserGroupData = ref<any[]>([]);
-  /*-----------------部门---begin----------------*/
+  /*-----------------Phòng ban---begin----------------*/
   const departInfo = reactive({
     treeData: [] as any[],
     selectedKeys: [] as any[],
@@ -208,17 +208,17 @@
     departInfo.currentSelectRow = { title: '' };
     reload();
   }
-  // 部门树展开的keys
+  // của cây phòng ban đã mở rộngkeys
   const expandedDepartKeys = ref<any[]>([]);
 
-  // 部门树展开事件
+  // Sự kiện mở rộng cây phòng ban
   function onDepartExpand(expandedKeys) {
     expandedDepartKeys.value = expandedKeys;
-    // 延迟触发滚动区域重新计算
+    // Kích hoạt tính toán lại vùng cuộn sau một khoảng trễ
     setTimeout(() => {
       const treeContainer = document.querySelector('.tree-container') as HTMLElement | null;
       if (treeContainer) {
-        // 强制触发重排
+        // Buộc kích hoạt sắp xếp lại
         treeContainer.style.overflow = 'hidden';
         setTimeout(() => {
           treeContainer.style.overflow = 'auto';
@@ -229,17 +229,17 @@
   async function loadRootDepart() {
     const result = await getDepartTreeData();
     if (Array.isArray(result)) {
-      //update-begin-author:liusq---date:2025-12-05--for: JHHB-1175 【流程审批】指定下一步操作人，人员需要按用户的排序进行排序 部门加滚动条 显示部门简称
+      //update-begin-author:liusq---date:2025-12-05--for: JHHB-1175 Chỉ định người thao tác tiếp theo, nhân viên cần sắp xếp theo thứ tự của người dùng, phòng ban thêm thanh cuộn, hiển thị tên viết tắt của phòng ban
       result.forEach((item) => {
         item.title = item.departNameAbbr || item.title;
       });
-      //update-end-author:liusq---date:2025-12-05--for: JHHB-1175 【流程审批】指定下一步操作人，人员需要按用户的排序进行排序 部门加滚动条 显示部门简称
+      //update-end-author:liusq---date:2025-12-05--for: JHHB-1175 Chỉ định người thao tác tiếp theo, nhân viên cần sắp xếp theo thứ tự của người dùng, phòng ban thêm thanh cuộn, hiển thị tên viết tắt của phòng ban
       departInfo.treeData = result;
       originalDepartData.value = result;
     }
   }
 
-  // 部门搜索
+  // Tìm kiếm phòng ban
   async function onSearchDepart(value) {
     departSearchText.value = value;
     if (!value) {
@@ -264,19 +264,19 @@
       if (result.length == 0) {
         treeNode.dataRef.isLeaf = true;
       } else {
-        //update-begin-author:liusq---date:2025-12-05--for: JHHB-1175 【流程审批】指定下一步操作人，人员需要按用户的排序进行排序 部门加滚动条 显示部门简称
+        //update-begin-author:liusq---date:2025-12-05--for: JHHB-1175 Chỉ định người thao tác tiếp theo, nhân viên cần sắp xếp theo thứ tự của người dùng, phòng ban thêm thanh cuộn, hiển thị tên viết tắt của phòng ban
         result.forEach((item) => {
           item.title = item.departNameAbbr || item.title;
         });
-        //update-end-author:liusq---date:2025-12-05--for: JHHB-1175 【流程审批】指定下一步操作人，人员需要按用户的排序进行排序 部门加滚动条 显示部门简称
+        //update-end-author:liusq---date:2025-12-05--for: JHHB-1175 Chỉ định người thao tác tiếp theo, nhân viên cần sắp xếp theo thứ tự của người dùng, phòng ban thêm thanh cuộn, hiển thị tên viết tắt của phòng ban
         treeNode.dataRef.children = result;
       }
       // departInfo.treeData = [...departInfo.treeData]
-      // 数据加载完成后，延迟触发滚动区域重新计算
+      // Sau khi tải dữ liệu xong, trì hoãn kích hoạt tính toán lại vùng cuộn
       // setTimeout(() => {
       //   const treeContainer = document.querySelector('.tree-container');
       //   if (treeContainer) {
-      //     // 强制触发重排，保持当前滚动位置
+      //     // Buộc kích hoạt reflow, giữ nguyên vị trí cuộn hiện tại
       //     const scrollTop = treeContainer.scrollTop;
       //     treeContainer.style.overflow = 'hidden';
       //     setTimeout(() => {
@@ -286,19 +286,19 @@
       //   }
       // }, 50);
     } catch (e) {
-      console.error('部门树子节点加载失败', e);
+      console.error('Tải nút con của cây phòng ban thất bại', e);
     }
     return Promise.resolve();
   }
-  /*-----------------部门---end----------------*/
+  /*-----------------Phòng ban---end----------------*/
 
-  /*-----------------岗位---begin----------------*/
+  /*-----------------Vị trí công tác---begin----------------*/
   const positionInfo = reactive({
     treeData: [] as any[],
     selectedKeys: [] as any[],
     currentSelectRow: { title: '' } as any,
   });
-  // 递归搜索函数，支持搜索所有层级的节点
+  // Hàm tìm kiếm đệ quy, hỗ trợ tìm kiếm nút ở mọi cấp
   const findNodeInTree = (treeData: any[], targetId: any): any => {
     for (const node of treeData) {
       if (node.id == targetId) {
@@ -315,7 +315,7 @@
   };
 
   function onSelectPosition(data) {
-    // 避免循环引用错误，只使用安全的数据
+    // Tránh lỗi tham chiếu vòng lặp, chỉ dùng dữ liệu an toàn
     positionInfo.selectedKeys[0] = data[0];
     let obj = findNodeInTree(positionInfo.treeData, data[0]);
     positionInfo.currentSelectRow = obj ? { ...obj } : { title: '' };
@@ -336,10 +336,10 @@
         originalPositionData.value = result;
       }
     } catch (error) {
-      console.error('获取岗位列表失败', error);
+      console.error('Lấy danh sách vị trí công tác thất bại', error);
     }
   }
-  // 岗位搜索
+  // Tìm kiếm vị trí công tác
   function onSearchPosition(value) {
     positionSearchText.value = value;
     if (!value) {
@@ -349,7 +349,7 @@
 
     const searchText = value.toLowerCase();
 
-    // 递归过滤树：如果节点自身匹配或任一子孙匹配，则保留该节点（并只保留匹配的子节点）
+    // Lọc cây đệ quy: nếu bản thân nút khớp hoặc bất kỳ nút con cháu nào khớp thì giữ lại nút đó (và chỉ giữ lại các nút con khớp)
     function filterTree(nodes: any[]): any[] {
       if (!Array.isArray(nodes)) return [];
       const result: any[] = [];
@@ -362,12 +362,12 @@
           if (filteredChildren.length > 0) matched = true;
         }
         if (matched) {
-          // 浅拷贝节点，避免修改原始数据
+          // Sao chép nông nút để tránh sửa dữ liệu gốc
           const newNode: any = { ...node };
           if (filteredChildren.length > 0) {
             newNode.children = filteredChildren;
           } else {
-            // 确保在没有匹配子节点时不携带 children 或将其清空
+            // Đảm bảo khi không có nút con khớp thì không mang theo children hoặc xóa sạch nó
             delete newNode.children;
           }
           result.push(newNode as any);
@@ -378,9 +378,9 @@
 
     positionInfo.treeData = filterTree(originalPositionData.value || []);
   }
-  /*-----------------岗位---end----------------*/
+  /*-----------------Vị trí công tác---end----------------*/
 
-  /*-----------------用户组---begin----------------*/
+  /*-----------------Nhóm người dùng---begin----------------*/
   const userGroupInfo = reactive({
     data: [] as any[],
     selectedKeys: [] as string[],
@@ -414,10 +414,10 @@
         originalUserGroupData.value = userGroupData;
       }
     } catch (error) {
-      console.error('获取用户组列表失败', error);
+      console.error('Lấy danh sách nhóm người dùng thất bại', error);
     }
   }
-  // 用户组搜索
+  // Tìm kiếm nhóm người dùng
   function onSearchUserGroup(value) {
     userGroupSearchText.value = value;
     if (!value) {
@@ -429,9 +429,9 @@
     const filteredData = originalUserGroupData.value.filter((item) => item.title.toLowerCase().includes(searchText));
     userGroupInfo.data = filteredData;
   }
-  /*-----------------用户组---end----------------*/
+  /*-----------------Nhóm người dùng---end----------------*/
 
-  /*-----------------用户列表---begin----------------*/
+  /*-----------------Danh sách người dùng---begin----------------*/
   async function queryUserList(params) {
     params['column'] = 'sort';
     params['order'] = 'ASC';
@@ -439,11 +439,11 @@
     if(departInfo.selectedKeys.length == 0 && positionInfo.selectedKeys.length == 0 && userGroupInfo.selectedKeys.length == 0 && params.realname){
       params['realname'] = `*${params.realname.trim()}*`;
     }
-    // 根据当前激活的标签页进行查询
+    // Truy vấn theo tab đang được kích hoạt
     if (activeTab.value === 'depart') {
       let arr = departInfo.selectedKeys;
       if (arr.length > 0) {
-        //根据部门查询
+        //Truy vấn theo phòng ban
         params['id'] = arr[0];
         let result = await getDepartUserList(params);
         if (params.username) {
@@ -458,7 +458,7 @@
     } else if (activeTab.value === 'position') {
       let arr = positionInfo.selectedKeys;
       if (arr.length > 0) {
-        //根据岗位查询
+        //Truy vấn theo vị trí công tác
         params['orgCode'] = positionInfo.currentSelectRow?.orgCode;
         return defHttp.get({ url: '/sys/user/queryDepartPostByOrgCode', params });
       } else {
@@ -467,7 +467,7 @@
     } else if (activeTab.value === 'userGroup') {
       let arr = userGroupInfo.selectedKeys;
       if (arr.length > 0) {
-        //根据用户组查询
+        //Tìm kiếm theo nhóm người dùng
         params['groupId'] = arr[0];
         return defHttp.get({ url: '/sys/user/groupUserList', params });
       } else {
@@ -492,10 +492,10 @@
         labelWidth: '90px',
         schemas: searchFormSchema,
         autoAdvancedCol: 4,
-        //update-begin-author:liusq---date:2024-06-11--for: 指定会签人员的弹框 查询遮挡了
+        //update-begin-author:liusq---date:2024-06-11--for: Popup chỉ định người ký duyệt bị ô tìm kiếm che khuất
         baseColProps: { xs: 24, sm: 24, md: 24, lg: 12, xl: 8, xxl: 8 },
         actionColOptions: { xs: 24, sm: 24, md: 24, lg: 12, xl: 8, xxl: 8 },
-        //update-end-author:liusq---date:2024-06-11--for:指定会签人员的弹框 查询遮挡了
+        //update-end-author:liusq---date:2024-06-11--for:Popup chỉ định người ký duyệt bị ô tìm kiếm che khuất
       },
     },
   });
@@ -512,9 +512,9 @@
     }
   );
 
-  /*-----------------用户列表--end-----------------*/
+  /*-----------------Danh sách người dùng--end-----------------*/
   const selectedUserList = ref<any[]>([]);
-  //update-begin-author:liusq---date:2024-06-11--for: TV360X-1047 指定下一步操作人/抄送给，选人组件无法多选。
+  //update-begin-author:liusq---date:2024-06-11--for: TV360X-1047 Chỉ định người thực hiện bước tiếp theo/Sao chép cho, component chọn người không thể đa chọn.
   watch(
     selectedRows,
     () => {
@@ -530,7 +530,7 @@
     },
     { deep: true }
   );
-  //update-end-author:liusq---date:2024-06-11--for: TV360X-1047 指定下一步操作人/抄送给，选人组件无法多选。
+  //update-end-author:liusq---date:2024-06-11--for: TV360X-1047 Chỉ định người thực hiện bước tiếp theo/Sao chép cho, component chọn người không thể đa chọn.
 
   const { tableContext: selectedTableContext } = useListPage({
     designScope: 'bpm-select-user',
@@ -562,7 +562,7 @@
   }
 
   /**
-   * 弹框打开 回显下拉框选中的数据
+   * Khi popup mở, hiển thị lại dữ liệu đã chọn trong dropdown
    * @param data
    */
   function showSelectedValue(data) {
@@ -587,7 +587,7 @@
   }
 
   /**
-   * tab切换，取消选择
+   * tabChuyển tab, hủy lựa chọn
    * @param key
    */
   function onTabChange() {
@@ -595,7 +595,7 @@
     onClearSelectedPosition();
     onClearSelectedUserGroup();
   }
-  // 初始化加载所有数据
+  // Khởi tạo và tải tất cả dữ liệu
   loadRootDepart();
   loadPositionList();
   loadUserGroupList();
@@ -698,15 +698,15 @@
   .alert-info {
     margin-bottom: 5px;
   }
-  /**部门树组件滚动条样式*/
+  /**Kiểu thanh cuộn của component cây phòng ban*/
   .tree-container {
     flex: 1;
     min-height: 0;
-    overflow-y: auto;                /* 垂直滚动 */
-    overflow-x: hidden;              /* 隐藏水平滚动 */
-    position: relative;              /* 相对定位 */
+    overflow-y: auto;                /* Cuộn dọc */
+    overflow-x: hidden;              /* Ẩn cuộn ngang */
+    position: relative;              /* Định vị tương đối */
   }
-  /* 深度选择器优化树组件内部样式 */
+  /* Bộ chọn sâu tối ưu kiểu nội bộ của component cây */
   .tree-container :deep(.ant-tree) {
     width: 100%;
     padding: 8px 4px;
@@ -733,39 +733,39 @@
     background: #a8a8a8;
   }
   .selected-title {
-    display: inline-block; /* 设置为块级元素才能应用宽度限制 */
+    display: inline-block; /* Phải đặt thành phần tử block mới áp dụng được giới hạn chiều rộng */
     flex: 1;
     min-width: 0;
-    max-width: 180px; /* 最大宽度限制 */
-    overflow: hidden; /* 超出部分隐藏 */
-    text-overflow: ellipsis; /* 显示省略号 */
-    white-space: nowrap; /* 禁止换行 */
-    vertical-align: middle; /* 垂直居中 */
+    max-width: 180px; /* Giới hạn chiều rộng tối đa */
+    overflow: hidden; /* Ẩn phần vượt quá */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm */
+    white-space: nowrap; /* Không cho xuống dòng */
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
   }
-  /* Alert消息内容水平对齐 */
+  /* AlertCăn ngang nội dung tin nhắn */
   .alert-message-content {
-    display: flex; /* 弹性布局 */
-    align-items: center; /* 垂直居中 */
-    gap: 8px; /* 元素间距 */
-    flex-wrap: nowrap; /* 允许换行 */
+    display: flex; /* Bố cục flex */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 8px; /* Khoảng cách phần tử */
+    flex-wrap: nowrap; /* Cho phép xuống dòng */
   }
 
   .alert-label {
-    color: #000000d9; /* 标签颜色 */
-    font-weight: 500; /* 字体加粗 */
-    white-space: nowrap; /* 禁止换行 */
+    color: #000000d9; /* Màu nhãn */
+    font-weight: 500; /* Chữ đậm */
+    white-space: nowrap; /* Không cho xuống dòng */
   }
 
   .clear-link {
     flex-shrink: 0;
-    color: #1890ff; /* 链接颜色 */
-    text-decoration: none; /* 去除下划线 */
-    white-space: nowrap; /* 禁止换行 */
-    cursor: pointer; /* 手型光标 */
+    color: #1890ff; /* Màu liên kết */
+    text-decoration: none; /* Bỏ gạch chân */
+    white-space: nowrap; /* Không cho xuống dòng */
+    cursor: pointer; /* Con trỏ hình bàn tay */
   }
 
   .clear-link:hover {
-    color: #40a9ff; /* 悬停颜色 */
-    text-decoration: underline; /* 悬停下划线 */
+    color: #40a9ff; /* Màu khi di chuột qua */
+    text-decoration: underline; /* Gạch chân khi di chuột */
   }
 </style>

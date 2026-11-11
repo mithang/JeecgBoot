@@ -1,4 +1,4 @@
-<!--角色选择框-->
+<!--Hộp chọn vai trò-->
 <template>
   <div>
     <BasicModal v-bind="$attrs" @register="register" :title="modalTitle" width="800px" @ok="handleOk" destroyOnClose @visible-change="visibleChange">
@@ -27,7 +27,7 @@
   export default defineComponent({
     name: 'UserSelectModal',
     components: {
-      //此处需要异步加载BasicTable
+      //Tại đây cần tải bất đồng bộBasicTable
       BasicModal,
       BasicTable: createAsyncComponent(() => import('/@/components/Table/src/BasicTable.vue'), {
         loading: true,
@@ -35,18 +35,18 @@
     },
     props: {
       ...selectProps,
-      //选择框标题
+      //Tiêu đề hộp chọn
       modalTitle: {
         type: String,
-        default: '角色选择',
+        default: 'Chọn vai trò',
       },
     },
     emits: ['register', 'getSelectResult'],
     setup(props, { emit, refs }) {
-      //注册弹框
+      //Đăng ký popup
       const [register, { closeModal }] = useModalInner();
       const attrs = useAttrs();
-      //表格配置
+      //Cấu hình bảng
       const config = {
         canResize: false,
         bordered: true,
@@ -56,7 +56,7 @@
       const getBindValue = Object.assign({}, unref(props), unref(attrs), config);
       const [{ rowSelection, indexColumnProps, visibleChange, getSelectResult }] = useSelectBiz(getRoleList, getBindValue);
       const searchInfo = ref(props.params);
-      //查询form
+      //Truy vấnform
       const formConfig = {
         //labelWidth: 220,
         baseColProps: {
@@ -67,7 +67,7 @@
           xl: 14,
           xxl: 14,
         },
-        // 代码逻辑说明: [issues/5514]组件页面显示错位
+        // Giải thích logic mã: [issues/5514]Trang component hiển thị lệch vị trí
         actionColOptions: {
             xs: 24,
             sm: 8,
@@ -78,36 +78,36 @@
         },
         schemas: [
           {
-            label: '角色名称',
+            label: 'Tên vai trò',
             field: 'roleName',
             component: 'Input',
           },
         ],
         autoSubmitOnEnter: true,
       };
-      //定义表格列
+      //Định nghĩa cột bảng
       const columns = [
         {
-          title: '角色名称',
+          title: 'Tên vai trò',
           dataIndex: 'roleName',
           width: 240,
           align: 'left',
         },
         {
-          title: '角色编码',
+          title: 'Mã vai trò',
           dataIndex: 'roleCode',
           // width: 40,
         },
       ];
 
       /**
-       * 确定选择
+       * Xác nhận lựa chọn
        */
       function handleOk() {
         getSelectResult((options, values) => {
-          //回传选项和已选择的值
+          //Trả về tùy chọn và giá trị đã chọn
           emit('getSelectResult', options, values);
-          //关闭弹窗
+          //Đóng popup
           closeModal();
         });
       }

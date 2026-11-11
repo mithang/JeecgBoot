@@ -77,21 +77,21 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
 
     if (isLastAction) {
       advanceState.hideAdvanceBtn = unref(getSchema).length <= autoAdvancedCol;
-      // 代码逻辑说明: 注释掉该逻辑，使小于等于2行时，也显示展开收起按钮
+      // Giải thích logic mã: Comment lại logic này để khi nhỏ hơn hoặc bằng 2 dòng vẫn hiển thị nút mở rộng/thu gọn
       /* if (itemColSum <= BASIC_COL_LEN * 2) {
-        // 小于等于2行时，不显示折叠和展开按钮
+        // Khi nhỏ hơn hoặc bằng 2 dòng, không hiển thị nút thu gọn và mở rộng
         advanceState.hideAdvanceBtn = true;
         advanceState.isAdvanced = true;
       } else */
       /*if (itemColSum > BASIC_COL_LEN * 2 && itemColSum <= BASIC_COL_LEN * (unref(getProps).autoAdvancedLine || 3)) {
         advanceState.hideAdvanceBtn = false;
 
-        // 默认超过 3 行折叠
+        // Mặc định gấp lại khi vượt quá 3 dòng
       } else*/
       if (!advanceState.isLoad) {
         advanceState.isLoad = true;
         advanceState.isAdvanced = !advanceState.isAdvanced;
-        // 代码逻辑说明: 如果总列数大于 autoAdvancedCol，就默认折叠
+        // Giải thích logic mã: Nếu tổng số cột lớn hơn autoAdvancedCol thì mặc định thu gọn
         if (unref(getSchema).length > autoAdvancedCol) {
           advanceState.hideAdvanceBtn = false;
           advanceState.isAdvanced = false;
@@ -102,7 +102,7 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
     if (itemColSum > BASIC_COL_LEN * (unref(getProps).alwaysShowLines || 1)) {
       return { isAdvanced: advanceState.isAdvanced, itemColSum };
     } else if (!advanceState.isAdvanced && index + 1 > autoAdvancedCol) {
-      // 如果当前是收起状态，并且当前列下标 > autoAdvancedCol，就隐藏
+      // Nếu hiện tại là trạng thái thu gọn, và chỉ số cột hiện tại > autoAdvancedCol, sẽ ẩn
       return { isAdvanced: false, itemColSum };
     } else {
       // The first line is always displayed

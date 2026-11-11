@@ -42,13 +42,13 @@ export function useTableHeader(propsRef: ComputedRef<BasicTableProps>, slots: Sl
                       headerTop: () => getSlot(slots, 'headerTop'),
                     }
                   : {}),
-                //添加tableTop插槽
+                //Thêm slot tableTop
                 ...(slots.tableTop
                   ? {
                       tableTop: () => getSlot(slots, 'tableTop'),
                     }
                   : {}),
-                // 添加alertAfter插槽
+                // Thêm slot alertAfter
                 ...(slots.alertAfter ? { alertAfter: () => getSlot(slots, 'alertAfter') } : {}),
               }
             ),

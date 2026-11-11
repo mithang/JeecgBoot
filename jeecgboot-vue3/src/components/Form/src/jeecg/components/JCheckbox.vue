@@ -26,15 +26,15 @@
     emits: ['change', 'update:value'],
     setup(props, { emit }) {
       const attrs = useAttrs();
-      //checkbox选项
+      //checkboxTùy chọn
       const checkOptions = ref<any[]>([]);
-      //checkbox数值
+      //checkboxGiá trị số
       const checkboxArray = ref<any[]>([]);
       /**
-       * 监听value
+       * Lắng nghevalue
        */
       watchEffect(() => {
-        // 代码逻辑说明: issues/I5E7YX AUTO在线表单进入功能测试之后一直卡在功能测试界面
+        // Giải thích logic mã: issues/I5E7YX AUTOBiểu mẫu online sau khi vào kiểm thử chức năng thì luôn bị kẹt ở giao diện kiểm thử chức năng
         let temp = props.value;
         if(!temp && temp!==0){
           checkboxArray.value = []
@@ -42,39 +42,39 @@
           temp = temp + '';
           checkboxArray.value = temp.split(',')
         }
-        // 代码逻辑说明: 调用表单的 resetFields不会清空当前信息，界面显示上一次的数据
+        // Giải thích logic mã: Gọi resetFields của biểu mẫu không xóa thông tin hiện tại, giao diện hiển thị dữ liệu lần trước
         if (props.value === '' || props.value === undefined) {
           checkboxArray.value = [];
         }
       });
       /**
-       * 监听字典code
+       * Lắng nghe danh mụccode
        */
       watchEffect(() => {
         props && initOptions();
       });
 
       /**
-       * 初始化选项
+       * Khởi tạo tùy chọn
        */
       async function initOptions() {
-        //根据options, 初始化选项
+        //Theooptions, Khởi tạo tùy chọn
         if (props.options && props.options.length > 0) {
           checkOptions.value = props.options;
           return;
         }
-        //根据字典Code, 初始化选项
+        //Theo từ điểnCode, Khởi tạo tùy chọn
         if (props.dictCode) {
           loadDictOptions()
         }
       }
 
-      // 根据字典code查询字典项
+      // Truy vấn mục từ điển theo code từ điển
       function loadDictOptions() {
-        // 代码逻辑说明: 字典数据请求前将参数编码处理，但是不能直接编码，因为可能之前已经编码过了
+        // Giải thích logic mã: Trước khi yêu cầu dữ liệu từ điển, mã hóa tham số, nhưng không thể mã hóa trực tiếp vì có thể trước đây đã mã hóa rồi
         let temp = props.dictCode || '';
         if (temp.indexOf(',') > 0 && temp.indexOf(' ') > 0) {
-          // 编码后 是不包含空格的
+          // Sau khi mã hóa không chứa khoảng trắng
           temp = encodeURI(temp);
         }
         getDictItems(temp).then((res) => {
@@ -89,7 +89,7 @@
       }
 
       /**
-       * change事件
+       * changeSự kiện
        * @param $event
        */
       function handleChange($event) {
@@ -110,7 +110,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
+  // Giải thích logic mã: 【QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
   .colorText {
     display: inline-block;
     height: 20px;

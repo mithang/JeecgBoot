@@ -13,7 +13,7 @@
         />
       </a-col>
       <a-col v-if="showButton" class="right">
-        <a-button type="primary" @click="openModal">选择</a-button>
+        <a-button type="primary" @click="openModal">Chọn</a-button>
       </a-col>
     </a-row>
   </div>
@@ -29,7 +29,7 @@
     inheritAttrs: false,
     props: {
       showButton: propTypes.bool.def(true),
-      // 是否支持多选，默认 true
+      // Có hỗ trợ chọn nhiều không, mặc định true
       multiple: {
         type: Boolean,
         default: 'multiple',
@@ -37,21 +37,21 @@
     },
     emits: ['btnOk'],
     setup(props, { emit, refs }) {
-      //接收下拉框选项
+      //Nhận tùy chọn hộp thả xuống
       const options = inject('selectOptions') || ref([]);
-      //接收选择的值
+      //Nhận giá trị đã chọn
       const selectValues = inject('selectValues') || ref({});
       const attrs = useAttrs();
 
       /**
-       * 打开弹出框
+       * Mở hộp popup
        */
       function openModal() {
         emit('btnOk');
       }
 
       /**
-       * 下拉框值改变事件
+       * Sự kiện thay đổi giá trị hộp thả xuống
        */
       function handleChange(value) {
         selectValues.value = value;

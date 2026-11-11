@@ -54,22 +54,22 @@ export const basicProps = {
       return FETCH_SETTING;
     },
   },
-  // 立即请求接口
+  // Yêu cầu API ngay lập tức
   immediate: propTypes.bool.def(true),
   emptyDataIsShowTable: propTypes.bool.def(true),
-  // 额外的请求参数
+  // Tham số yêu cầu bổ sung
   searchInfo: {
     type: Object as PropType<Recordable>,
     default: null,
   },
-  // 默认的排序参数
+  // Tham số sắp xếp mặc định
   defSort: {
     type: Object as PropType<Recordable>,
     default: null,
   },
-  // 使用搜索表单
+  // Sử dụng biểu mẫu tìm kiếm
   useSearchForm: propTypes.bool,
-  // 表单配置
+  // Cấu hình biểu mẫu
   formConfig: {
     type: Object as PropType<Partial<FormProps>>,
     default: null,
@@ -108,9 +108,9 @@ export const basicProps = {
   },
   minHeight: propTypes.number,
   maxHeight: propTypes.number,
-  // 代码逻辑说明: 【TV360X-116】内嵌风格字段较多时表格错位
+  // Giải thích logic mã: 【TV360X-116] Khi có nhiều trường kiểu nhúng, bảng bị lệch
   expandColumnWidth: propTypes.number.def(48),
-  // 统一设置列最大宽度
+  // Thống nhất đặt chiều rộng tối đa của cột
   maxColumnWidth: propTypes.number,
   dataSource: {
     type: Array as PropType<Recordable[]>,
@@ -130,7 +130,7 @@ export const basicProps = {
     type: Function as PropType<(record: TableCustomRecord<any>, index: number) => string>,
   },
   scroll: {
-    // 代码逻辑说明: 【issues/1188】BasicTable加上scrollToFirstRowOnChange类型定义
+    // Giải thích logic mã: 【issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
     type: Object as PropType<{ x?: number | true; y?: number; scrollToFirstRowOnChange?: boolean }>,
     default: null,
   },

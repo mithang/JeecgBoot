@@ -1,7 +1,7 @@
 import type { ButtonProps } from 'ant-design-vue/lib/button/buttonTypes';
 import type { CSSProperties, VNodeChild, ComputedRef } from 'vue';
 /**
- * @description: 弹窗对外暴露的方法
+ * @description: Phương thức popup công khai ra bên ngoài
  */
 export interface ModalMethods {
   setModalProps: (props: Partial<ModalProps>) => void;
@@ -34,20 +34,20 @@ export type UseModalInnerReturnType = [RegisterFn, ReturnInnerMethods];
 export interface ModalProps {
   minHeight?: number;
   height?: number;
-  // 启用wrapper后 底部可以适当增加高度
+  // Sau khi bật wrapper, phía dưới có thể tăng chiều cao một cách phù hợp
   wrapperFooterOffset?: number;
   draggable?: boolean;
   scrollTop?: boolean;
 
-  // 是否可以进行全屏
+  // Có thể toàn màn hình không
   canFullscreen?: boolean;
   defaultFullscreen?: boolean;
   visible?: boolean;
   open?: boolean;
-  // 温馨提醒信息
+  // Thông tin nhắc nhở thân thiện
   helpMessage: string | string[];
 
-  // 是否使用modalWrapper
+  // Có dùng khôngmodalWrapper
   useWrapper: boolean;
 
   loading: boolean;

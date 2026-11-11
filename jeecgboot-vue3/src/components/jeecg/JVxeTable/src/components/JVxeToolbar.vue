@@ -1,7 +1,7 @@
 <template>
   <div :class="boxClass">
     <vxe-toolbar ref="xToolbarRef" :custom="custom">
-      <!-- 工具按钮 -->
+      <!-- Nút công cụ -->
       <template #buttons>
         <div :class="`${prefixCls}-button div`" :size="btnSize">
           <slot v-if="showPrefix" name="toolbarPrefix" :size="btnSize" />
@@ -10,21 +10,21 @@
           </a-button>
           <slot name="toolbarAfterAdd" :size="btnSize" :selectedRowIds="selectedRowIds" />
           <a-button v-if="showSave" preIcon="ant-design:save-outlined" :disabled="disabled" @click="trigger('save')">
-            <span>保存</span>
+            <span>Lưu</span>
           </a-button>
           <template v-if="deleting || selectedRowIds.length > 0">
-            <Popconfirm v-if="removeBtnCfg.enabled && showRemove" :title="`确定要删除这 ${selectedRowIds.length} 项吗?`" :disabled="deleting" @confirm="onRemove">
+            <Popconfirm v-if="removeBtnCfg.enabled && showRemove" :title="`Bạn có chắc chắn muốn xóa ${selectedRowIds.length} mục không?`" :disabled="deleting" @confirm="onRemove">
               <a-button :preIcon="removeBtnCfg.buttonIcon" :disabled="disabled" :loading="deleting">
                 <span>{{ removeBtnCfg.buttonName }}</span>
               </a-button>
             </Popconfirm>
             <template v-if="showClearSelection">
-              <a-button preIcon="ant-design:delete-outlined" @click="trigger('clearSelection')">清空选择</a-button>
+              <a-button preIcon="ant-design:delete-outlined" @click="trigger('clearSelection')">Xóa lựa chọn</a-button>
             </template>
           </template>
           <slot v-if="showSuffix" name="toolbarSuffix" :size="btnSize" :selectedRowIds="selectedRowIds" />
           <a v-if="showCollapse" style="margin-left: 4px" @click="toggleCollapse">
-            <span>{{ collapsed ? '展开' : '收起' }}</span>
+            <span>{{ collapsed ? 'Mở rộng' : 'Thu gọn' }}</span>
             <Icon :icon="collapsed ? 'ant-design:down-outlined' : 'ant-design:up-outlined'" />
           </a>
         </div>
@@ -52,12 +52,12 @@
     addBtnCfg: propTypes.object.def(() => ({
       enabled: true,
       buttonIcon: 'ant-design:plus-outlined',
-      buttonName: '新增',
+      buttonName: 'Thêm mới',
     })),
     removeBtnCfg: propTypes.object.def(() => ({
       enabled: true,
       buttonIcon: 'ant-design:minus-outlined',
-      buttonName: '删除',
+      buttonName: 'Xóa',
     })),
   });
   const emit = defineEmits(['save', 'add', 'remove', 'clearSelection', 'register']);
@@ -69,17 +69,17 @@
       [`${prefixCls}-collapsed`]: collapsed.value,
     },
   ]);
-  // 是否收起
+  // Có thu gọn hay không
   const collapsed = ref(true);
-  // 配置的按钮
+  // Nút đã cấu hình
   const btns = computed(() => {
     let { btn, btns } = props.toolbarConfig || {};
     btns = btn || btns || ['add', 'remove', 'clearSelection'];
-    // 排除掉没有授权的按钮
+    // Loại bỏ nút chưa được cấp quyền
     return btns.filter((btn) => {
-      // 系统默认的批量删除编码配置为 batch_delete 此处需要兼容一下
+      // Mã cấu hình xóa hàng loạt mặc định của hệ thống là batch_delete Tại đây cần tương thích thêm
       if (btn === 'remove') {
-        // 代码逻辑说明: VUEN-1162 子表按钮没控制
+        // Giải thích logic mã: VUEN-1162 Nút bảng con chưa được kiểm soát
         return hasBtnAuth(btn) && hasBtnAuth('batch_delete');
       }
       return hasBtnAuth(btn);
@@ -88,47 +88,47 @@
   const showAdd = computed(() => btns.value.includes('add'));
   const showSave = computed(() => btns.value.includes('save'));
   const showRemove = computed(() => btns.value.includes('remove'));
-  // 配置的插槽
+  // Slot đã cấu hình
   const slots = computed(() => props.toolbarConfig?.slot || ['prefix', 'suffix']);
   const showPrefix = computed(() => slots.value.includes('prefix'));
   const showSuffix = computed(() => slots.value.includes('suffix'));
-  // 是否显示清除选择按钮
+  // Có hiển thị nút xóa lựa chọn không
   const showClearSelection = computed(() => {
     if (btns.value.includes('clearSelection')) {
-      // 有禁用行时才显示清空选择按钮
-      // 因为禁用行会阻止选择行，导致无法取消全选
+      // Chỉ hiển thị nút xóa lựa chọn khi có dòng bị vô hiệu hóa
+      // Vì dòng bị vô hiệu hóa sẽ chặn việc chọn dòng, dẫn đến không thể hủy chọn tất cả
       // return Object.keys(props.disabledRows).length > 0
     }
     return false;
   });
-  // 是否显示展开收起按钮
+  // Có hiển thị nút mở rộng/thu gọn không
   const showCollapse = computed(() => btns.value.includes('collapse'));
-  // 按钮 size
+  // Nút size
   const btnSize = computed(() => (props.size === 'tiny' ? 'small' : null));
 
   onMounted(() => {
-    // 注册 vxe-toolbar
+    // Đăng ký vxe-toolbar
     emit('register', {
       xToolbarRef,
     });
   });
 
-  // 判断按钮是否已授权
+  // Kiểm tra nút đã được cấp quyền chưa
   function hasBtnAuth(key: string) {
     return props.hasBtnAuth ? props.hasBtnAuth(key) : true;
   }
 
-  /** 触发事件 */
+  /** Kích hoạt sự kiện */
   function trigger(name) {
     emit(name);
   }
 
-  // 切换展开收起
+  // Chuyển đổi mở rộng/thu gọn
   function toggleCollapse() {
     collapsed.value = !collapsed.value;
   }
 
-  // 【TV360X-1975】在Online设计中，当字段多时，由于会同步删除其他表格导致删除时间变长，所以增加删除loading，防止以为点击删除按钮无效
+  // 【TV360X-1975]Trong thiết kế Online, khi có nhiều trường, do sẽ đồng bộ xóa các bảng khác nên thời gian xóa trở nên dài hơn, vì vậy tăng thêm loading khi xóa, để tránh tưởng rằng nút xóa bấm không có tác dụng
   const deleting = ref(false);
 
   let deleteTimer: any = null

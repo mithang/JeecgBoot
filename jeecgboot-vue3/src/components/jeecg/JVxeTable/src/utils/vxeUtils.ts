@@ -1,9 +1,9 @@
 /**
  *
- * 根据 tagName 获取父级节点
+ * Lấy nút cha theo tagName
  *
- * @param dom 一级dom节点
- * @param tagName 标签名，不区分大小写
+ * @param dom Nút dom cấp một
+ * @param tagName Tên thẻ, không phân biệt chữ hoa/thường
  */
 export function getParentNodeByTagName(dom: HTMLElement, tagName: string = 'body'): HTMLElement | null {
   if (tagName === 'body') {

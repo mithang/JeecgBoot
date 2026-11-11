@@ -1,4 +1,4 @@
-<!--字典下拉多选-->
+<!--Dropdown từ điển chọn nhiều-->
 <template>
   <a-select
     :value="arrayValue"
@@ -42,7 +42,7 @@
       value: propTypes.oneOfType([propTypes.string, propTypes.array]),
       placeholder: {
         type: String,
-        default: '请选择',
+        default: 'Vui lòng chọn',
         required: false,
       },
       readOnly: {
@@ -82,12 +82,12 @@
         type: Boolean,
         default: false,
       },
-      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307】online下拉加载表字典需滚动加载
-      // 分页时每页条数，仅当 scrollLoad 为 true 且 dictCode 为字典表格式时生效
+      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
+      // Số bản ghi mỗi trang khi phân trang, chỉ có hiệu lực khi scrollLoad là true và dictCode có định dạng bảng từ điển
       pageSize: { type: Number, default: 10 },
-      // 是否滚动加载，为 true 且 dictCode 为字典表格式(table,text,code)时走 /sys/dict/loadDict/，否则走 initDictOptions
+      // Có tải cuộn hay không, khi là true và dictCode có định dạng bảng từ điển(table,text,code)thì đi qua /sys/dict/loadDict/, nếu không sẽ dùng initDictOptions
       scrollLoad: { type: Boolean, default: false },
-      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307】online下拉加载表字典需滚动加载
+      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
     },
     emits: ['options-change', 'change', 'input', 'update:value'],
     setup(props, { emit }) {
@@ -99,11 +99,11 @@
       const dictOptions = ref<any[]>([]);
       const attrs = useAttrs();
       const [state, , , formItemContext] = useRuleFormItem(props, 'value', 'change', emitData);
-      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307】online下拉加载表字典需滚动加载
+      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
       const scrollLoadApi = useScrollLoadDict(props, dictOptions, arrayValue);
       const { useLoadDict, loading, loadDictOptions: loadDictOptionsScroll, ensureValueInOptions, handleSearch, handleDropdownVisibleChange, handlePopupScroll, isDictTable } = scrollLoadApi;
-      // update-end--author:liaozhiyang---date:20260204---for:【issues/9307】online下拉加载表字典需滚动加载
-      // 处理下拉选项
+      // update-end--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
+      // Xử lý tùy chọn dropdown
       const getOptions = computed(() => {
         if (!Array.isArray(dictOptions.value)) {
           return [];
@@ -154,13 +154,13 @@
         }
       );
 
-      //适用于 动态改变下拉选项的操作
+      //Áp dụng cho thao tác thay đổi động các tùy chọn dropdown
       watch(()=>props.options, ()=>{
         if (props.dictCode) {
-          // update-begin--author:liaozhiyang---date:20260325---for:【QQYUN-15021】online js增强修改下拉不生效
-          // online js增强改变options
+          // update-begin--author:liaozhiyang---date:20260325---for:【QQYUN-15021] Tăng cường JS online sửa dropdown không có hiệu lực
+          // online jsThay đổi tăng cườngoptions
           dictOptions.value = props.options;
-          // update-end--author:liaozhiyang---date:20260325---for:【QQYUN-15021】online js增强修改下拉不生效
+          // update-end--author:liaozhiyang---date:20260325---for:【QQYUN-15021] Tăng cường JS online sửa dropdown không có hiệu lực
         } else {
           dictOptions.value = props.options;
         }
@@ -174,7 +174,7 @@
           emit('input', selectedValue.join(props.spliter));
           emit('update:value', selectedValue.join(props.spliter));
         }
-        // 代码逻辑说明: 【QQYUN-9110】组件有值校验没消失
+        // Giải thích logic mã: 【QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
         nextTick(() => {
           formItemContext?.onFieldChange();
         });
@@ -184,13 +184,13 @@
         if (!props.popContainer) {
           return node?.parentNode;
         } else {
-          // 代码逻辑说明: 【QQYUN-9339】有多个modal弹窗内都有下拉字典多选和下拉搜索组件时，打开另一个modal时组件的options不展示
+          // Giải thích logic mã: 【QQYUN-9339]Khi có nhiều popup modal đều chứa component chọn nhiều trong danh mục thả xuống và component tìm kiếm thả xuống, khi mở một modal khác thì options của component không hiển thị
           return setPopContainer(node, props.popContainer);
         }
       }
 
       async function loadDictOptions() {
-        // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307】online下拉加载表字典需滚动加载
+        // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
         if (useLoadDict.value) {
           loadDictOptionsScroll();
         } else {
@@ -203,10 +203,10 @@
             dictOptions.value = [];
           }
         }
-        // update-end--author:liaozhiyang---date:20260204---for:【issues/9307】online下拉加载表字典需滚动加载
+        // update-end--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
       }
 
-      // 代码逻辑说明: VUEN-1145 下拉多选，搜索时，查不到数据
+      // Giải thích logic mã: VUEN-1145 Dropdown đa chọn, khi tìm kiếm không tra được dữ liệu
       function filterOption(input, option) {
         return option.children()[0].children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
       }

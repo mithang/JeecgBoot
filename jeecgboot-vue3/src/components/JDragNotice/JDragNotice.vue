@@ -11,7 +11,7 @@
         @selected="reloadPage"
       />
     </keep-alive>
-    <!-- 系统公告弹窗 -->
+    <!-- Popup thông báo hệ thống -->
     <DynamicNotice ref="showDynamNotice" v-bind="bindParams" />
   </div>
 </template>

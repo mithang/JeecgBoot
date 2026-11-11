@@ -39,7 +39,7 @@
 </script>
 
 <style scoped lang="less">
-  // 代码逻辑说明: 【TV360X-1090】表单label超长省略显示
+  // Giải thích logic mã: 【TV360X-1090] Label của biểu mẫu quá dài thì hiển thị rút gọn
   .jeecg-and-modal-form {
     :deep(.ant-form-item-label) {
       overflow: hidden;
@@ -55,7 +55,7 @@
       }
     }
   }
-  // update-end--author:liaozhiyang---date:20240719---for：【TV360X-1090】表单label超长省略显示
+  // update-end--author:liaozhiyang---date:20240719---for：【TV360X-1090] Label của biểu mẫu quá dài thì hiển thị rút gọn
   .jeecg-form-container-disabled {
     cursor: not-allowed;
   }
@@ -67,8 +67,8 @@
     -ms-pointer-events: none;
     pointer-events: none;
   }
-  // update-begin--author:liaozhiyang---date:20240605---for：【TV360X-857】online代码生成详情样式调整
-  // begin antdv 禁用样式
+  // update-begin--author:liaozhiyang---date:20240605---for：【TV360X-857] Điều chỉnh style chi tiết sinh mã online
+  // begin antdv Kiểu dáng vô hiệu hóa
   // .jeecg-form-container-disabled :deep(.ant-input-number),
   // .jeecg-form-container-disabled :deep(.ant-input),
   // .jeecg-form-container-disabled :deep(.ant-input-password),
@@ -194,8 +194,8 @@
       }
     }
   }
-  // end antdv 禁用样式
-  // 代码逻辑说明: 【TV360X-857】online代码生成详情样式调整
+  // end antdv Kiểu dáng vô hiệu hóa
+  // Giải thích logic mã: 【TV360X-857] Điều chỉnh style chi tiết sinh mã online
   .jeecg-form-container-disabled :deep(.ant-upload-select) {
     cursor: grabbing;
   }

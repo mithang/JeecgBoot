@@ -1,4 +1,4 @@
-<!--用户选择组件-->
+<!--Component chọn người dùng-->
 <template>
   <div class="JselectUser">
     <JSelectBiz @change="handleSelectChange" @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs"></JSelectBiz>
@@ -46,7 +46,7 @@
         type: Object,
         default: () => {},
       },
-      //排除用户id的集合
+      //Tập hợp id người dùng bị loại trừ
       excludeUserIdList:{
         type: Array,
         default: () => [],
@@ -55,45 +55,45 @@
     emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit }) {
       const emitData = ref<any[]>();
-      //注册model
+      //Đăng kýmodel
       const [regModal, { openModal }] = useModal();
-      //表单值
+      //Giá trị biểu mẫu
       // const [state] = useRuleFormItem(props, 'value', 'change', emitData);
-      //下拉框选项值
+      //Giá trị tùy chọn của hộp dropdown
       const selectOptions = ref<SelectValue>([]);
-      //下拉框选中值
+      //Giá trị đã chọn của hộp dropdown
       let selectValues = reactive<Recordable>({
         value: [],
         change: false,
       });
       let tempSave: any = [];
-      // 是否正在加载回显数据
+      // Có đang tải dữ liệu hiển thị lại không
       const loadingEcho = ref<boolean>(false);
-      //下发 selectOptions,xxxBiz组件接收
+      //Gửi xuống selectOptions,xxxBizComponent nhận
       provide('selectOptions', selectOptions);
-      //下发 selectValues,xxxBiz组件接收
+      //Gửi xuống selectValues,xxxBizComponent nhận
       provide('selectValues', selectValues);
-      //下发 loadingEcho,xxxBiz组件接收
+      //Gửi xuống loadingEcho,xxxBizComponent nhận
       provide('loadingEcho', loadingEcho);
 
       const tag = ref(false);
       const attrs = useAttrs();
 
       /**
-       * 监听组件值
+       * Lắng nghe giá trị component
        */
       watchEffect(() => {
-        // 代码逻辑说明: [TV360X-840]用户授权，没有选择，点取消，也会回显一个选过的用户
+        // Giải thích logic mã: [TV360X-840]Phân quyền người dùng, không chọn gì, nhấn Hủy cũng sẽ hiển thị lại một người dùng đã chọn trước đó
         tempSave = [];
         props.value && initValue();
-        // 查询条件重置的时候 界面显示未清空
+        // Khi đặt lại điều kiện truy vấn, giao diện hiển thị chưa được xóa
         if (!props.value) {
           selectValues.value = [];
         }
       });
 
       /**
-       * 监听selectValues变化
+       * Lắng nghe sự thay đổi của selectValues
        */
       // watch(selectValues, () => {
       //   if (selectValues) {
@@ -101,18 +101,18 @@
       //   }
       // });
 
-      // 代码逻辑说明: 【QQYUN-5685】5、离职人员可以选自己------------
+      // Giải thích logic mã: 【QQYUN-5685] 5. Nhân viên đã nghỉ việc có thể chọn chính mình------------
       const excludeUserIdList = ref<any>([]);
       
       /**
-       * 需要监听一下excludeUserIdList，否则modal获取不到
+       * Cần lắng nghe excludeUserIdList, nếu không modal sẽ không lấy được
        */ 
       watch(()=>props.excludeUserIdList,(data)=>{
         excludeUserIdList.value = data;
       },{ immediate: true })
       
       /**
-       * 打卡弹出框
+       * Hộp popup chấm công
        */
       function handleOpen() {
         tag.value = true;
@@ -122,7 +122,7 @@
       }
 
       /**
-       * 将字符串值转化为数组
+       * Chuyển giá trị chuỗi thành mảng
        */
       function initValue() {
         let value = props.value ? props.value : [];
@@ -131,14 +131,14 @@
           selectValues.value = value.split(',');
           tempSave = value.split(',');
         } else {
-          // 【VUEN-857】兼容数组（行编辑的用法问题）
+          // 【VUEN-857] Tương thích mảng (vấn đề cách dùng chỉnh sửa dòng)
           selectValues.value = value;
           tempSave = cloneDeep(value);
         }
       }
 
       /**
-       * 设置下拉框的值
+       * Đặt giá trị của hộp dropdown
        */
       function setValue(options, values) {
         selectOptions.value = options;
@@ -147,11 +147,11 @@
         selectValues.value = values;
         send(values);
       }
-      // 【修复】原写法是 setup 期一次性 Object.assign 快照，
-      // 父组件 updateSchema 改 props 后 v-bind="getBindValue" 不会重新求值
-      // 改为 computed 后，props/attrs 任一变化都会重新合并后透传给 UserSelectModal
+      // [Sửa lỗi] Cách viết cũ là snapshot một lần trong giai đoạn setup Object.assign ảnh chụp nhanh,
+      // Component cha sau khi updateSchema thay đổi props v-bind="getBindValue" Sẽ không tính lại
+      // Sau khi đổi thành computed,props/attrs Bất kỳ thay đổi nào cũng sẽ hợp nhất lại rồi truyền tiếp cho UserSelectModal
       const getBindValue = computed(() => Object.assign({}, unref(props), unref(attrs)));
-      // 代码逻辑说明: 【QQYUN-9366】用户选择组件取消和关闭会把选择数据带入
+      // Giải thích logic mã: 【QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
       const handleClose = () => {
         if (tempSave.length) {
           selectValues.value = cloneDeep(tempSave);
@@ -187,7 +187,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
+  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JselectUser {
     > .ant-form-item {
       display: none;

@@ -95,7 +95,7 @@
               }
             });
 
-            //存储路径和标题的关系
+            //Quan hệ giữa đường dẫn lưu trữ và tiêu đề
             storePathTitle(props.name);
             rootMenuEmitter.emit('on-update-active-name:submenu', uidList);
           } else {
@@ -105,7 +105,7 @@
         { immediate: true }
       );
 
-      // 代码逻辑说明: VUEN-1144 online 配置成菜单后，打开菜单，显示名称未展示为菜单名称
+      // Giải thích logic mã: VUEN-1144 online Sau khi cấu hình thành menu, mở menu, tên hiển thị không hiển thị thành tên menu
       function storePathTitle(path) {
         console.log('storePathTitle', path);
         let title = '';

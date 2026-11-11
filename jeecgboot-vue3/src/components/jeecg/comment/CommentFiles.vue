@@ -4,25 +4,25 @@
       <template #message>
         <span class="j-icon">
           <a-upload multiple v-model:file-list="selectFileList" :showUploadList="false" :before-upload="beforeUpload">
-            <span class="inner-button"><upload-outlined />上传</span>
+            <span class="inner-button"><upload-outlined />Tải lên</span>
           </a-upload>
         </span>
       </template>
     </a-alert>
 
-    <!-- 正在上传的文件 -->
+    <!-- Tệp đang tải lên -->
     <div class="selected-file-warp" v-if="selectFileList && selectFileList.length > 0">
       <div class="selected-file-list">
         <div class="item" v-for="item in selectFileList">
           <div class="complex">
             <div class="content" >
-              <!-- 图片 -->
+              <!-- Hình ảnh -->
               <div v-if="isImage(item)" class="content-top" style="height: 100%">
                 <div class="content-image" :style="getImageAsBackground(item)">
                   <!--  <img style="height: 100%;" :src="getImageSrc(item)">-->
                 </div>
               </div>
-              <!-- 文件 -->
+              <!-- Tệp -->
               <template v-else>
                 <div class="content-top">
                   <div class="content-icon" :style="{ background: 'url(' + getBackground(item) + ')  no-repeat' }"></div>
@@ -36,7 +36,7 @@
               <div class="next" @click="viewImage(item)"><div class="text">{{ item.name }} </div></div>
               <div class="buttons">
                 <div class="opt-icon">
-                  <Tooltip title="删除">
+                  <Tooltip title="Xóa">
                     <delete-outlined @click="handleRemove(item)" />
                   </Tooltip>
                 </div>
@@ -48,12 +48,12 @@
       </div>
 
       <div style="margin-bottom: 24px; margin-top: 18px; text-align: right">
-        <a-button @click="quxiao">取消</a-button>
-        <a-button type="primary" style="margin-left: 10px" @click="queding" :loading="buttonLoading">确定</a-button>
+        <a-button @click="quxiao">Hủy</a-button>
+        <a-button type="primary" style="margin-left: 10px" @click="queding" :loading="buttonLoading">Xác nhận</a-button>
       </div>
     </div>
 
-    <!-- 历史文件 -->
+    <!-- Tệp lịch sử -->
     <history-file-list :dataList="dataList"></history-file-list>
   </div>
 </template>
@@ -117,7 +117,7 @@
       }
 
       watchEffect(() => {
-        // 每次切换tab都会刷新文件列表--- VUEN-1884 评论里上传的图片未在文件中显示
+        // Mỗi lần chuyển tab đều làm mới danh sách tệp--- VUEN-1884 Hình ảnh tải lên trong bình luận không hiển thị trong tệp
         if(props.datetime){
           if (props.tableName && props.dataId) {
             loadFileList();
@@ -134,7 +134,7 @@
       async function queding() {
         let obj = {
           fromUserId: userInfo.id,
-          commentContent: '上传了附件'
+          commentContent: 'Đã tải lên tệp đính kèm'
         }
         await saveCommentAndFiles(obj, selectFileList.value)
         selectFileList.value = [];
@@ -146,15 +146,15 @@
       }
       
       function onSelectFileOk(temp) {
-        // 代码逻辑说明: 【TV360X-935】从知识库选择文件判断下是否没选
+        // Giải thích logic mã: 【TV360X-935] Chọn tệp từ kho tri thức, kiểm tra xem có chưa chọn không
         if (temp.length === 0) return;
         let arr = selectFileList.value;
-        // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-938】知识库文件选择支持多选
+        // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-938] Chọn tệp trong kho tri thức hỗ trợ đa chọn
         temp.forEach((item) => {
           item.exist = true;
         });
         selectFileList.value = [...arr, ...temp];
-        // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-938】知识库文件选择支持多选
+        // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-938] Chọn tệp trong kho tri thức hỗ trợ đa chọn
       }
 
       return {

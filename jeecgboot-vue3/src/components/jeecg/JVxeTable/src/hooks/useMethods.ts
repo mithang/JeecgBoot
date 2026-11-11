@@ -18,7 +18,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
 
   function getXTable() {
     if (!xTableTemp) {
-      // !. 为 typescript 的非空断言
+      // !. là khẳng định không null của typescript
       xTableTemp = refs.gridRef.value!.getRefMaps().refTable.value;
     }
     return xTableTemp;
@@ -54,23 +54,23 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     rowResort,
   };
 
-  // 多级联动
+  // Liên động nhiều cấp
   const linkageMethods = useLinkage(props, data, hookMethods);
-  // WebSocket 无痕刷新
+  // WebSocket Làm mới không dấu vết
   const socketMethods = useWebSocket(props, data, hookMethods);
 
-  // 可显式供外部调用的方法
+  // Phương thức có thể gọi trực tiếp từ bên ngoài
   const publicMethods = {
     ...hookMethods,
     ...linkageMethods,
     ...socketMethods,
   };
 
-  /** 监听vxe滚动条位置 */
+  /** Lắng nghe vị trí thanh cuộn vxe */
   function handleVxeScroll(event) {
     let { scroll } = data;
 
-    // 记录滚动条的位置
+    // Ghi lại vị trí thanh cuộn
     scroll.top = event.scrollTop;
     scroll.left = event.scrollLeft;
 
@@ -79,26 +79,26 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     closeScrolling();
   }
 
-  // 当手动勾选单选时触发的事件
+  // Sự kiện được kích hoạt khi chọn thủ công chọn đơn
   function handleVxeRadioChange(event) {
     let row = event.$table.getRadioRecord();
     data.selectedRows.value = row ? [row] : [];
     handleSelectChange('radio', data.selectedRows.value, event);
   }
 
-  // 当手动勾选全选时触发的事件
+  // Sự kiện được kích hoạt khi chọn thủ công chọn tất cả
   function handleVxeCheckboxAll(event) {
     data.selectedRows.value = event.$table.getCheckboxRecords();
     handleSelectChange('checkbox-all', data.selectedRows.value, event);
   }
 
-  // 当手动勾选并且值发生改变时触发的事件
+  // Sự kiện kích hoạt khi tick thủ công và giá trị thay đổi
   function handleVxeCheckboxChange(event) {
     data.selectedRows.value = event.$table.getCheckboxRecords();
     handleSelectChange('checkbox', data.selectedRows.value, event);
   }
 
-  // 行选择change事件
+  // Sự kiện change khi chọn hàng
   function handleSelectChange(type, selectedRows, $event) {
     let action;
     if (type === 'radio') {
@@ -120,17 +120,17 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     });
   }
 
-  // 点击单元格时触发的事件
+  // Sự kiện kích hoạt khi nhấn vào ô
   function handleCellClick(event) {
     let { row, column, $event, $table } = event;
 
-    // 点击了可编辑的
+    // Đã nhấn vào ô có thể chỉnh sửa
     if (column.editRender) {
       refs.subPopoverRef.value?.close();
       return;
     }
 
-    // 显示详细信息
+    // Hiển thị thông tin chi tiết
     if (column.params?.showDetails) {
       refs.detailsModalRef.value?.open(event);
     } else if (refs.subPopoverRef.value) {
@@ -138,20 +138,20 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     } else if (props.clickSelectRow) {
       let className = $event.target.className || '';
       className = isString(className) ? className : className.toString();
-      // 点击的是expand，不做处理
+      // Nhấp vào expand thì không xử lý
       if (className.includes('vxe-table--expand-btn')) {
         return;
       }
-      // 点击的是checkbox，不做处理
+      // Bấm vào là checkbox, không xử lý
       if (className.includes('vxe-checkbox--icon') || className.includes('vxe-cell--checkbox')) {
         return;
       }
-      // 点击的是radio，不做处理
+      // Nhấp vào radio thì không xử lý
       if (className.includes('vxe-radio--icon') || className.includes('vxe-cell--radio')) {
         return;
       }
 
-      // 代码逻辑说明: 【issues/9038】JVxeTable表格点击行选择BUG---
+      // Giải thích logic mã: 【issues/9038] JVxeTable bảng bấm dòng để chọnBUG---
       if(!data.disabledRowIds.includes(row.id)){
         if (props.rowSelectionType === 'radio') {
           $table.setRadioRow(row);
@@ -165,19 +165,19 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     }
   }
 
-  // 单元格被激活编辑时会触发该事件
+  // Sự kiện này sẽ kích hoạt khi ô được kích hoạt chỉnh sửa
   function handleEditActived({ column }) {
-    // 执行增强
+    // Thực thi tăng cường
     getEnhanced(column.params.type).aopEvents.editActived!.apply(instanceRef.value, arguments as any);
   }
 
-  // 单元格编辑状态下被关闭时会触发该事件
+  // Sự kiện này sẽ kích hoạt khi ô đang ở trạng thái chỉnh sửa bị đóng
   function handleEditClosed({ column }) {
-    // 执行增强
+    // Thực thi tăng cường
     getEnhanced(column.params.type).aopEvents.editClosed!.apply(instanceRef.value, arguments as any);
   }
 
-  // 返回值决定行是否可选中
+  // Giá trị trả về quyết định hàng có thể chọn được không
   function handleCheckMethod({ row }) {
     if (props.disabled) {
       return false;
@@ -185,7 +185,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return !data.disabledRowIds.includes(row.id);
   }
 
-  // 返回值决定单元格是否可以编辑
+  // Giá trị trả về quyết định ô có thể chỉnh sửa hay không
   function handleActiveMethod({ row, column }) {
     let flag = (() => {
       if (props.disabled) {
@@ -197,22 +197,22 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
       if (column.params?.disabled) {
         return false;
       }
-      // 执行增强
+      // Thực thi tăng cường
       return getEnhanced(column.params.type).aopEvents.activeMethod!.apply(instanceRef.value, arguments as any) ?? true;
     })();
     if (!flag) {
-      // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-1404】vxetable警告
+      // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-1404] cảnh báo vxetable
       getXTable().clearEdit();
-      // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-1404】vxetable警告
+      // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-1404] cảnh báo vxetable
     }
     return flag;
   }
 
   /**
-   * 判断是否是禁用行
-   * @param row 行数据
-   * @param rowIndex 行号
-   * @param force 是否强制判断
+   * Kiểm tra có phải dòng bị vô hiệu hóa không
+   * @param row Dữ liệu hàng
+   * @param rowIndex Số dòng
+   * @param force Có bắt buộc kiểm tra không
    */
   function isDisabledRow(row, rowIndex: number | boolean = -1, force = true) {
     if(typeof rowIndex === 'boolean'){
@@ -228,18 +228,18 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     let disabled: boolean = false;
     let keys: string[] = Object.keys(props.disabledRows);
     for (const key of keys) {
-      // 判断是否有该属性
+      // Kiểm tra có thuộc tính đó không
       if (row.hasOwnProperty(key)) {
         let value = row[key];
         let temp: any = props.disabledRows![key];
-        // 禁用规则可以是一个函数
+        // Quy tắc vô hiệu hóa có thể là một hàm
         if (typeof temp === 'function') {
           disabled = temp(value, row, rowIndex);
         } else if (isArray(temp)) {
-          // 禁用规则可以是一个数组
+          // Quy tắc vô hiệu hóa có thể là một mảng
           disabled = temp.includes(value);
         } else {
-          // 禁用规则可以是一个具体值
+          // Quy tắc vô hiệu hóa có thể là một giá trị cụ thể
           disabled = temp === value;
         }
         if (disabled) {
@@ -250,13 +250,13 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return disabled;
   }
 
-  // 重新计算禁用行
+  // Tính lại các hàng bị vô hiệu hóa
   function recalcDisableRows() {
     let xTable = getXTable();
     data.disabledRowIds = [];
     const { tableFullData } = xTable.internalData;
     tableFullData.forEach((row, rowIndex) => {
-      // 判断是否是禁用行
+      // Kiểm tra có phải dòng bị vô hiệu hóa không
       if (isDisabledRow(row, rowIndex)) {
         data.disabledRowIds.push(row.id);
       }
@@ -264,23 +264,23 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     xTable.updateData();
   }
 
-  // 监听 disabledRows，更改时重新计算禁用行
+  // Lắng nghe disabledRows, khi thay đổi thì tính toán lại các dòng bị vô hiệu hóa
   watch(
     () => props.disabledRows,
     () => recalcDisableRows()
   );
 
-  // 返回值决定是否允许展开、收起行
+  // Giá trị trả về quyết định có cho phép mở rộng/thu gọn dòng hay không
   function handleExpandToggleMethod({ expanded }) {
     return !(expanded && props.disabled);
   }
 
-  // 设置 data.scrolling 防抖模式
+  // Cài đặt data.scrolling Chế độ debounce
   const closeScrolling = simpleDebounce(function () {
     data.scrolling.value = false;
   }, 100);
 
-  /** 表尾数据处理方法，用于显示统计信息 */
+  /** Phương thức xử lý dữ liệu chân bảng, dùng để hiển thị thông tin thống kê */
   function handleFooterMethod({ columns, data: $data }) {
     const { statistics } = data;
     let footers: any[] = [];
@@ -289,7 +289,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
         footers.push(
           getFooterStatisticsMap({
             columns: columns,
-            title: '合计',
+            title: 'Tổng cộng',
             checks: statistics.sum,
             method: (column) => XEUtils.sum($data, column.property),
           })
@@ -299,7 +299,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
         footers.push(
           getFooterStatisticsMap({
             columns: columns,
-            title: '平均',
+            title: 'Trung bình',
             checks: statistics.average,
             method: (column) => XEUtils.mean($data, column.property),
           })
@@ -309,7 +309,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return footers;
   }
 
-  /** 获取底部统计Map */
+  /** Lấy thống kê ở cuốiMap */
   function getFooterStatisticsMap({ columns, title, checks, method }) {
     return columns.map((column, columnIndex) => {
       if (columnIndex === 0) {
@@ -322,24 +322,24 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     });
   }
 
-  // 创建新行，自动添加默认值
+  // Tạo dòng mới, tự động thêm giá trị mặc định
   function createRow(record: Recordable = {}) {
     let xTable = getXTable();
-    // 添加默认值
+    // Thêm giá trị mặc định
     xTable.internalData.tableFullColumn.forEach((column) => {
       let col = column.params;
-      // 不能被注册的列不获取增强
+      // Cột không thể đăng ký thì không lấy tăng cường
       if (col && !excludeKeywords.includes(col.type)) {
         if (col.key && (record[col.key] == null || record[col.key] === '')) {
-          // 设置默认值
+          // Đặt giá trị mặc định
           let createValue = getEnhanced(col.type).createValue;
           let defaultValue = col.defaultValue ?? '';
           let ctx = { context: { row: record, column, $table: xTable } };
           record[col.key] = createValue(defaultValue, ctx);
         }
-        // 处理联动列
+        // Xử lý cột liên động
         if (col.type === JVxeTypes.select && data.innerLinkageConfig.size > 0) {
-          // 判断当前列是否是联动列
+          // Kiểm tra xem cột hiện tại có phải là cột liên động không
           if (data.innerLinkageConfig.has(col.key)) {
             let configItem = data.innerLinkageConfig.get(col.key);
             linkageMethods.getLinkageOptionsAsync(configItem, '');
@@ -360,12 +360,12 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     } else {
       records = [rows];
     }
-    // 遍历添加默认值
+    // Duyệt và thêm giá trị mặc định
     records.forEach((record) => createRow(record));
     let setActive = options?.setActive ?? props.addSetActive ?? true;
     let result = await pushRows(records, { index: index, setActive });
-    // 遍历插入的行
-    // online js增强时以传过来值为准，不再赋默认值
+    // Duyệt các hàng đã chèn
+    // online jsKhi tăng cường, lấy giá trị truyền qua làm chuẩn, không gán giá trị mặc định nữa
     if (!(options?.isOnlineJS ?? false)) {
       if (triggerName != null) {
         for (let i = 0; i < result.rows.length; i++) {
@@ -384,32 +384,32 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return result;
   }
 
-  // 新增、插入一行时的可选参数
+  // Tham số tùy chọn khi thêm mới, chèn một dòng
   interface IAddRowsOptions {
-    // 是否是 onlineJS增强 触发的
+    // Có phải do tăng cường onlineJS kích hoạt hay không
     isOnlineJS?: boolean;
-    // 是否激活编辑状态
+    // Có kích hoạt trạng thái chỉnh sửa không
     setActive?: boolean;
-    //是否需要触发change事件
+    //Có cần kích hoạt sự kiện change hay không
     emitChange?:boolean
-    // 是否是modal弹窗添加的数据
+    // Có phải dữ liệu được thêm từ popup modal hay không
     isModalData?:boolean
   }
 
   /**
-   * 添加一行或多行
+   * Thêm một hoặc nhiều hàng
    *
    * @param rows
-   * @param options 参数
+   * @param options Tham số
    * @return
    */
   async function addRows(rows: Recordable | Recordable[] = {}, options?: IAddRowsOptions) {
-    // 代码逻辑说明: VUEN-1892【online子表弹框】有主从关联js时，子表弹框修改了数据，主表字段未修改
+    // Giải thích logic mã: VUEN-1892[Popup bảng con online]Khi có JS liên kết chính-phụ, popup bảng con đã sửa dữ liệu nhưng trường bảng chính chưa được sửa
     let result = await addOrInsert(rows, -1, 'added', options);
     if(options && options!.emitChange==true){
       trigger('valueChange', {column: 'all', row: result.row})
     }
-    // 代码逻辑说明: 【TV360X-279】行编辑添加新字段滚动对应位置
+    // Giải thích logic mã: 【TV360X-279] Chỉnh sửa dòng thêm trường mới cuộn đến vị trí tương ứng
     let xTable = getXTable();
     setTimeout(() => {
       xTable.scrollToRow(result.row);
@@ -418,62 +418,62 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   }
 
   /**
-   * 添加一行或多行临时数据，不会填充默认值，传什么就添加进去什么
+   * Thêm một hoặc nhiều dòng dữ liệu tạm thời, sẽ không điền giá trị mặc định, truyền gì thì thêm vào đó
    * @param rows
-   * @param options 选项
-   * @param options.setActive 是否激活最后一行的编辑模式
+   * @param options Tùy chọn
+   * @param options.setActive Có kích hoạt chế độ chỉnh sửa của dòng cuối cùng hay không
    */
   async function pushRows(rows: Recordable | Recordable[] = {}, options = { setActive: false, index: -1 }) {
     let xTable = getXTable();
     let { setActive, index } = options;
     index = index === -1 ? index : xTable.internalData.tableFullData[index];
     index = index == null ? -1 : index;
-    // 插入行
+    // Chèn hàng
     let result = await xTable.insertAt(rows, index);
     if (setActive) {
-      // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-1404】vxetable警告
-      // 激活最后一行的编辑模式
+      // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-1404] cảnh báo vxetable
+      // Kích hoạt chế độ chỉnh sửa của hàng cuối cùng
       xTable.setEditRow(result.rows[result.rows.length - 1], true);
-      // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-1404】vxetable警告
+      // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-1404] cảnh báo vxetable
     }
     await recalcSortNumber();
     return result;
   }
 
   /**
-   * 插入一行或多行临时数据
+   * Chèn một hoặc nhiều hàng dữ liệu tạm thời
    *
    * @param rows
-   * @param index 添加下标，数字，必填
-   * @param options 参数
+   * @param index Thêm chỉ số dưới, số, bắt buộc
+   * @param options Tham số
    * @return
    */
   function insertRows(rows: Recordable | Recordable[] = {}, index: number, options?: IAddRowsOptions) {
     if (index < 0) {
-      console.warn(`【JVxeTable】insertRows：index必须传递数字，且大于-1`);
+      console.warn(`[JVxeTable]insertRows: index bắt buộc phải truyền số, và lớn hơn-1`);
       return;
     }
     return addOrInsert(rows, index, 'inserted', options);
   }
 
-  /** 获取表格表单里的值 */
+  /** Lấy giá trị trong biểu mẫu của bảng */
   function getValues(callback, rowIds) {
     let tableData = getTableData({ rowIds: rowIds });
-    // 代码逻辑说明: 【issues/7631】JVxeTable组件的getValues回调函数参数修正
+    // Giải thích logic mã: 【issues/7631]Sửa tham số hàm callback getValues của component JVxeTable
     callback(tableData, tableData);
   }
 
   type getTableDataOptions = {
     rowIds?: string[];
-    // 是否保留新行的id
+    // Có giữ lại id của hàng mới khôngid
     keepNewId?: boolean;
   }
 
-  /** 获取表格数据 */
+  /** Lấy dữ liệu bảng */
   function getTableData(options: getTableDataOptions = {}) {
     let { rowIds } = options;
     let tableData;
-    // 仅查询指定id的行
+    // Chỉ truy vấn dòng có id chỉ định
     if (isArray(rowIds) && rowIds.length > 0) {
       tableData = [];
       rowIds.forEach((rowId) => {
@@ -483,7 +483,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
         }
       });
     } else {
-      // 查询所有行
+      // Truy vấn tất cả các hàng
       tableData = getXTable().getTableData().fullData;
     }
     return filterNewRows(tableData, {
@@ -492,20 +492,20 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     });
   }
 
-  /** 仅获取新增的数据 */
+  /** Chỉ lấy dữ liệu mới thêm */
   function getNewData() {
     let newData = getNewDataWithId();
     newData.forEach((row) => delete row.id);
     return newData;
   }
 
-  /** 仅获取新增的数据,带有id */
+  /** Chỉ lấy dữ liệu mới thêm,kèm theoid */
   function getNewDataWithId() {
     let xTable = getXTable();
     return cloneDeep(xTable.getInsertRecords());
   }
 
-  /** 根据ID获取行，新增的行也能查出来 */
+  /** Lấy dòng theo ID, dòng mới thêm cũng có thể tra ra */
   function getIfRowById(id) {
     let xTable = getXTable();
     let row = xTable.getRowById(id),
@@ -513,7 +513,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     if (!row) {
       row = getNewRowById(id);
       if (!row) {
-        console.warn(`JVxeTable.getIfRowById：没有找到id为"${id}"的行`);
+        console.warn(`JVxeTable.getIfRowById: không tìm thấy hàng có id là"${id}"hàng`);
         return { row: null };
       }
       isNew = true;
@@ -521,7 +521,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return { row, isNew };
   }
 
-  /** 通过临时ID获取新增的行 */
+  /** Lấy hàng mới thêm qua ID tạm thời */
   function getNewRowById(id) {
     let records = getXTable().getInsertRecords();
     for (let record of records) {
@@ -538,21 +538,21 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   } | boolean
 
   /**
-   * 过滤添加的行
-   * @param rows 要筛选的行数据
-   * @param optOrRm 如果传 boolean 则是 removeNewLine 参数（true = 删除新增，false=只删除id），如果传对象则是配置参数
+   * Lọc các hàng đã thêm
+   * @param rows Dữ liệu hàng cần lọc
+   * @param optOrRm Nếu truyền boolean thì đó là tham số removeNewLine (true = Xóa mục mới thêm,false=chỉ xóa id), nếu truyền đối tượng thì là tham số cấu hình
    * @param handler function
    */
   function filterNewRows(rows, optOrRm:filterNewRowsOptions = true, handler?: Fn) {
     let insertRecords = getXTable().getInsertRecords();
     let records: Recordable[] = [];
     optOrRm = typeof optOrRm === 'boolean' ? { removeNewLine: optOrRm } : optOrRm;
-    // true = 删除新增，false=只删除id
+    // true = Xóa mục mới thêm,false=Chỉ xóaid
     let removeNewLine = optOrRm?.removeNewLine ?? true;
     for (let row of rows) {
-      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
       let item = { ...row };
-      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
       if (insertRecords.includes(row)) {
         handler ? handler({ item, row, insertRecords }) : null;
         if (removeNewLine) {
@@ -568,22 +568,22 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   }
 
   /**
-   * 重置滚动条Top位置
-   * @param top 新top位置，留空则滚动到上次记录的位置，用于解决切换tab选项卡时导致白屏以及自动将滚动条滚动到顶部的问题
+   * Đặt lại vị trí Top của thanh cuộn
+   * @param top Vị trí top mới, để trống thì cuộn đến vị trí đã ghi lại lần trước, dùng để giải quyết vấn đề màn hình trắng khi chuyển tab và tự động cuộn thanh cuộn lên đầu
    */
   function resetScrollTop(top?) {
     let xTable = getXTable();
     xTable.scrollTo(null, top == null || top === '' ? data.scroll.top : top);
   }
 
-  /** 校验table，失败返回errMap，成功返回null */
+  /** Kiểm chứng table, thất bại trả về errMap, thành công trả vềnull */
   async function validateTable(rows?) {
     let xTable = getXTable();
     const errMap = await xTable.validate(rows ?? true).catch((errMap) => errMap);
     return errMap ? errMap : null;
   }
 
-  /** 完整校验 */
+  /** Kiểm chứng đầy đủ */
   async function fullValidateTable(rows?) {
     let xTable = getXTable();
     const errMap = await xTable.fullValidate(rows ?? true).catch((errMap) => errMap);
@@ -593,14 +593,14 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   type setValuesParam = { rowKey: string; values: Recordable };
 
   /**
-   * 设置某行某列的值
+   * Đặt giá trị của một hàng, một cột
    *
    * @param values
-   * @return 返回受影响的单元格数量
+   * @return Trả về số lượng ô bị ảnh hưởng
    */
   function setValues(values: setValuesParam[]): number {
     if (!isArray(values)) {
-      console.warn(`[JVxeTable] setValues 必须传递数组`);
+      console.warn(`[JVxeTable] setValues Phải truyền mảng`);
       return 0;
     }
     let xTable = getXTable();
@@ -618,7 +618,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
           let newValue = record[colKey];
           if (newValue !== oldValue) {
             row[colKey] = newValue;
-            // 触发 valueChange 事件
+            // Kích hoạt sự kiện valueChange
             trigger('valueChange', {
               type: column.params.type,
               value: newValue,
@@ -631,7 +631,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
             count++;
           }
         } else {
-          console.warn(`[JVxeTable] setValues 没有找到key为"${colKey}"的列`);
+          console.warn(`[JVxeTable] setValues Không tìm thấy cột có key là"${colKey}"cột`);
         }
       });
     });
@@ -641,7 +641,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return count;
   }
 
-  /** 清空选择行 */
+  /** Xóa hàng đã chọn */
   async function clearSelection() {
     const xTable = getXTable();
     let event = { $table: xTable, target: instanceRef.value };
@@ -655,8 +655,8 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   }
 
   /**
-   * 获取选中数据
-   * @param isFull 如果 isFull=true 则获取全表已选中的数据
+   * Lấy dữ liệu đã chọn
+   * @param isFull Nếu isFull=true thì lấy dữ liệu đã chọn của toàn bộ bảng
    */
   function getSelectionData(isFull?: boolean) {
     const xTable = getXTable();
@@ -671,14 +671,14 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     }
   }
 
-  /** 仅获取被删除的数据（新增又被删除的数据不会被获取到） */
+  /** Chỉ lấy dữ liệu đã bị xóa (dữ liệu mới thêm rồi lại bị xóa sẽ không được lấy) */
   function getDeleteData() {
     return filterNewRows(getXTable().getRemoveRecords(), false);
   }
 
-  /** 删除一行或多行数据 */
+  /** Xóa một hoặc nhiều dòng dữ liệu */
   async function removeRows(rows, asyncRemove = false) {
-    // 代码逻辑说明: vxe-table removeRows方法加上异步删除
+    // Giải thích logic mã: vxe-table removeRowsPhương thức thêm xóa bất đồng bộ
     const xTable = getXTable();
     const removeEvent: any = { deleteRows: rows, $table: xTable };
     if (asyncRemove) {
@@ -686,11 +686,11 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
       const deleteOldRows = filterNewRows(selectedRows);
       if (deleteOldRows.length) {
         return new Promise((resolve) => {
-          // 确认删除，只有调用这个方法才会真删除
+          // Xác nhận xóa, chỉ khi gọi phương thức này mới thực sự xóa
           removeEvent.confirmRemove = async () => {
             const insertRecords = xTable.getInsertRecords();
             selectedRows.forEach((item) => {
-              // 删除新添加的数据id
+              // Xóa dữ liệu mới thêmid
               if (insertRecords.includes(item)) {
                 delete item.id;
               }
@@ -702,7 +702,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
           trigger('removed', removeEvent);
         });
       } else {
-        // 全新的行立马删除，不等待。
+        // Dòng hoàn toàn mới xóa ngay lập tức, không chờ đợi.
         const res = await xTable.remove(rows);
         removeEvent.confirmRemove = () => {};
         trigger('removed', removeEvent);
@@ -717,7 +717,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     }
   }
 
-  /** 根据id删除一行或多行 */
+  /** Xóa một hoặc nhiều hàng theo id */
   function removeRowsById(rowId) {
     let rowIds;
     if (isArray(rowId)) {
@@ -734,7 +734,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
         if (row) {
           return row;
         } else {
-          console.warn(`【JVxeTable】removeRowsById：${id}不存在`);
+          console.warn(`【JVxeTable】removeRowsById：${id}Không tồn tại`);
           return null;
         }
       })
@@ -742,7 +742,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return removeRows(rows);
   }
 
-  // 删除选中的数据
+  // Xóa dữ liệu đã chọn
   async function removeSelection() {
     let xTable = getXTable();
     let res;
@@ -756,7 +756,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return res;
   }
 
-  /** 重新计算排序字段的数值 */
+  /** Tính lại giá trị của trường sắp xếp */
   async function recalcSortNumber(force = false) {
     if (props.dragSort || force) {
       let xTable = getXTable();
@@ -772,40 +772,40 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   }
 
   /**
-   * 排序表格
+   * Sắp xếp bảng
    * @param oldIndex
    * @param newIndex
-   * @param force 强制排序
+   * @param force Sắp xếp bắt buộc
    */
   async function doSort(oldIndex: number, newIndex: number, force = false) {
     if (props.dragSort || force) {
       let xTable = getXTable();
       let sort = (array) => {
-        // 存储old数据，并删除该项
+        // Lưu dữ liệu old và xóa mục đó
         let row = array.splice(oldIndex, 1)[0];
-        // 向newIndex处添加old数据
+        // Thêm dữ liệu old vào vị trí newIndex
         array.splice(newIndex, 0, row);
       };
       sort(xTable.internalData.tableFullData);
       if (xTable.keepSource) {
         sort(xTable.internalData.tableSourceData);
       }
-      // -update-begin--author:liaozhiyang---date:20240620---for：【TV360X-585】拖动字段虚拟滚动不好使
+      // -update-begin--author:liaozhiyang---date:20240620---for：【TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
       if (isEnabledVirtualYScroll(props, xTable)) {
         await xTable.loadData(xTable.internalData.tableFullData);
       }
-      // -update-end--author:liaozhiyang---date:20240620---for：【TV360X-585】拖动字段虚拟滚动不好使
+      // -update-end--author:liaozhiyang---date:20240620---for：【TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
       return await recalcSortNumber(force);
     }
   }
 
-  /** 行重新排序 */
+  /** Sắp xếp lại hàng */
   function rowResort(oldIndex: number, newIndex: number) {
     return doSort(oldIndex, newIndex, true);
   }
 
-  // ---------------- begin 权限控制 ----------------
-  // 加载权限
+  // ---------------- begin Kiểm soát quyền hạn ----------------
+  // Tải quyền hạn
   function loadAuthsMap() {
     if (!props.authPre || props.authPre.length == 0) {
       data.authsMap.value = null;
@@ -815,7 +815,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   }
 
   /**
-   * 根据 权限code 获取权限
+   * Lấy quyền theo mã quyền
    * @param authCode
    */
   function getAuth(authCode) {
@@ -826,36 +826,36 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     return null;
   }
 
-  // 获取列权限
+  // Lấy quyền cột
   function getColAuth(key: string) {
     return getAuth(key);
   }
 
-  // 判断按钮权限
+  // Kiểm tra quyền nút
   function hasBtnAuth(key: string) {
     return getAuth('btn:' + key)?.isAuth ?? true;
   }
 
-  // ---------------- end 权限控制 ----------------
+  // ---------------- end Kiểm soát quyền hạn ----------------
 
-  /* --- 辅助方法 ---*/
+  /* --- Phương thức hỗ trợ ---*/
 
   function created() {
     loadAuthsMap();
   }
 
-  // 触发事件
+  // Kích hoạt sự kiện
   function trigger(name, event: any = {}) {
     event.$target = instanceRef.value;
     event.$table = getXTable();
-    //online增强参数兼容
+    //onlineTương thích tham số tăng cường
     event.target = instanceRef.value;
     emit(name, event);
   }
 
   /**
-   * 获取选中的行-和 getSelectionData 区别在于对于新增的行也会返回ID
-   * 用于onlinePopForm
+   * Lấy hàng đã chọn-Khác với getSelectionData ở chỗ cũng trả về các hàng mới thêmID
+   * Dùng choonlinePopForm
    * @param isFull
    */
   function getSelectedData(isFull?: boolean) {
@@ -872,16 +872,16 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     }
     let records: Recordable[] = [];
     for (let row of rows) {
-      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
       records.push({ ...row });
-      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
     }
     return records;
   }
   /**
    *  2024-03-21
    *  liaozhiyang
-   *  VXETable列设置保存缓存字段名
+   *  VXETableTên trường cache lưu cấu hình cột
    * */
   function handleCustom({ type, $grid }) {
     const { saveSetting, resetSetting } = useColumnsCache({ cacheColumnsKey: props.cacheColumnsKey });

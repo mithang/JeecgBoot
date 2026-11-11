@@ -1,4 +1,4 @@
-<!--部门选择组件-->
+<!--Component chọn phòng ban-->
 <template>
   <div class="JSelectDept">
     <JSelectBiz  @change="handleSelectChange" @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs" :isCustomRenderTag="isCustomRenderTag" :rowKey="getBindValue?.rowKey"/>
@@ -27,48 +27,48 @@
     inheritAttrs: false,
     props: {
       value: propTypes.oneOfType([propTypes.string, propTypes.array]),
-      // 是否允许多选，默认 true
+      // Có cho phép chọn nhiều không, mặc định true
       multiple: propTypes.bool.def(true),
-      // 自定义渲染tag
+      // Kết xuất tùy chỉnhtag
       isCustomRenderTag: propTypes.bool.def(true),
     },
     emits: ['options-change', 'change', 'select', 'update:value'],
     setup(props, { emit, refs }) {
       const emitData = ref<any[]>();
-      //注册model
+      //Đăng kýmodel
       const [regModal, { openModal }] = useModal();
-      //表单值
+      //Giá trị biểu mẫu
       // const [state] = useRuleFormItem(props, 'value', 'change', emitData);
-      //下拉框选项值
+      //Giá trị tùy chọn của hộp dropdown
       const selectOptions = ref<SelectValue>([]);
-      //下拉框选中值
+      //Giá trị đã chọn của hộp dropdown
       let selectValues = reactive<Recordable>({
         value: [],
       });
       let tempSave: any = [];
 
-      // 是否正在加载回显数据
+      // Có đang tải dữ liệu hiển thị lại không
       const loadingEcho = ref<boolean>(false);
-      //下发 selectOptions,xxxBiz组件接收
+      //Gửi xuống selectOptions,xxxBizComponent nhận
       provide('selectOptions', selectOptions);
-      //下发 selectValues,xxxBiz组件接收
+      //Gửi xuống selectValues,xxxBizComponent nhận
       provide('selectValues', selectValues);
-      //下发 loadingEcho,xxxBiz组件接收
+      //Gửi xuống loadingEcho,xxxBizComponent nhận
       provide('loadingEcho', loadingEcho);
 
       const tag = ref(false);
       const attrs = useAttrs();
 
       /**
-       * 监听组件值
+       * Lắng nghe giá trị component
        */
       watchEffect(() => {
-        // 代码逻辑说明: [TV360X-840]用户授权，没有选择，点取消，也会回显一个选过的用户
+        // Giải thích logic mã: [TV360X-840]Phân quyền người dùng, không chọn gì, nhấn Hủy cũng sẽ hiển thị lại một người dùng đã chọn trước đó
         tempSave = [];
         props.value && initValue();
       });
 
-      // 代码逻辑说明: 为了解决弹窗form初始化赋值问题 ---
+      // Giải thích logic mã: Để giải quyết vấn đề gán giá trị khởi tạo của form trong popup ---
       watch(
         () => props.value,
         () => {
@@ -76,7 +76,7 @@
         }
       );
       /**
-       * 监听selectValues变化
+       * Lắng nghe sự thay đổi của selectValues
        */
       // watch(selectValues, () => {
       //   if (selectValues) {
@@ -84,7 +84,7 @@
       //   }
       // });
       /**
-       * 监听selectOptions变化
+       * Lắng nghe sự thay đổi của selectOptions
        */
       watch(selectOptions, () => {
         if (selectOptions) {
@@ -93,7 +93,7 @@
       });
 
       /**
-       * 打卡弹出框
+       * Hộp popup chấm công
        */
       function handleOpen() {
         tag.value = true;
@@ -103,7 +103,7 @@
       }
 
       /**
-       * 将字符串值转化为数组
+       * Chuyển giá trị chuỗi thành mảng
        */
       function initValue() {
         let value = props.value ? props.value : [];
@@ -112,14 +112,14 @@
           selectValues.value = value.split(',');
           tempSave = value.split(',');
         } else {
-          // 【VUEN-857】兼容数组（行编辑的用法问题）
+          // 【VUEN-857] Tương thích mảng (vấn đề cách dùng chỉnh sửa dòng)
           selectValues.value = value;
           tempSave = cloneDeep(value);
         }
       }
 
       /**
-       * 设置下拉框的值
+       * Đặt giá trị của hộp dropdown
        */
       function setValue(options, values) {
         selectOptions.value = options;
@@ -130,7 +130,7 @@
       }
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
 
-       // 代码逻辑说明: 【TV360X-414】部门设置了默认值，查询重置变成空了(同步JSelectUser组件改法)
+       // Giải thích logic mã: 【TV360X-414] Phòng ban đã đặt giá trị mặc định, đặt lại truy vấn thì thành trống(Đồng bộ cách sửa của component JSelectUser)
       const handleClose = () => {
         if (tempSave.length) {
           selectValues.value = cloneDeep(tempSave);
@@ -146,7 +146,7 @@
         let result = typeof props.value == 'string' ? values.join(',') : values;
         emit('update:value', result);
         emit('change', result);
-        // 代码逻辑说明: 【TV360X-1648】用户编辑界面“所属部门”与“负责部门”联动出错（同步之前丢的代码）
+        // Giải thích logic mã: 【TV360X-1648]Giao diện chỉnh sửa người dùng, liên động giữa "Phòng ban trực thuộc" và "Phòng ban phụ trách" bị lỗi (mã bị mất trước khi đồng bộ)
         if (!values || values.length == 0) {
           emit('select', null, null);
         }
@@ -170,7 +170,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
+  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JSelectDept {
     > .ant-form-item {
       display: none;

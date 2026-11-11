@@ -46,7 +46,7 @@
 
       useWindowSizeFn(setModalHeight.bind(null, false));
 
-      // 代码逻辑说明: 【TV360X-145】将弹窗还原全屏后，关闭再打开窗口变小了
+      // Giải thích logic mã: 【TV360X-145]Sau khi khôi phục popup về toàn màn hình, đóng rồi mở lại cửa sổ bị thu nhỏ
       let observer,
         recordCount: any = {};
       watch(
@@ -95,7 +95,7 @@
       });
 
       const spinStyle = computed((): CSSProperties => {
-        // 代码逻辑说明: 【QQYUN-7147】Model的高度设置不生效
+        // Giải thích logic mã: 【QQYUN-7147] Cài đặt chiều cao của Model không có hiệu lực
         if (props.fullScreen) {
           return {
             height: `${unref(realHeightRef)}px`,
@@ -116,7 +116,7 @@
           } else {
             return {
               minHeight: `${props.minHeight === null ? defaultMiniHeight : props.minHeight}px`,
-              // 代码逻辑说明: 【QQYUN-7641】basicModal组件添加MaxHeight属性
+              // Giải thích logic mã: 【QQYUN-7641]Component basicModal thêm thuộc tính MaxHeight
               maxHeight: `${props.maxHeight ? Math.min(props.maxHeight, unref(availableHeightRef) || props.maxHeight) : unref(realHeightRef)}px`,
             };
           }
@@ -157,16 +157,16 @@
       }
 
       async function setModalHeight(option?) {
-        console.log("---------性能监控--------setModalHeight----------")
+        console.log("---------Giám sát hiệu năng--------setModalHeight----------")
         const options = option || {};
         const source = options.source;
         const callBack = options.callBack;
-        // 解决在弹窗关闭的时候监听还存在,导致再次打开弹窗没有高度
-        // 加上这个,就必须在使用的时候传递父级的visible
+        // Khắc phục việc listener vẫn tồn tại khi popup đóng,Khiến lần mở popup tiếp theo không có chiều cao
+        // Thêm cái này,thì bắt buộc phải truyền của cấp cha khi sử dụngvisible
         if (!props.visible) return;
         const wrapperRefDom = unref(wrapperRef);
         if (!wrapperRefDom) return;
-        // 代码逻辑说明: 【QQYUN-8573】BasicModal组件在非全屏的情况下最大高度获取异常，不论内容高度是否超出屏幕高度，都等于内容高度
+        // Giải thích logic mã: 【QQYUN-8573]Component BasicModal khi không ở chế độ toàn màn hình thì việc lấy chiều cao tối đa bị bất thường, bất kể chiều cao nội dung có vượt quá chiều cao màn hình hay không, đều bằng chiều cao nội dung
         const bodyDom = wrapperRefDom.$el.parentElement?.parentElement?.parentElement;
         if (!bodyDom) return;
         // bodyDom.style.padding = '0';
@@ -175,17 +175,17 @@
         try {
           const modalDom = bodyDom.closest('.ant-modal');
           if (!modalDom) return;
-          //update-begin---author:scott ---date:20260814  for:修复弹窗内容高度自适应及底部操作按钮遮挡问题-----------
+          //update-begin---author:scott ---date:20260814  for:Sửa vấn đề chiều cao nội dung popup tự thích ứng và nút thao tác ở dưới cùng bị che khuất-----------
           const spinEl = unref(spinRef);
           if (!spinEl) return;
 
-          // 使用 CSS 布局位置计算可用高度，避免打开动画导致位置读取不稳定
+          // Dùng vị trí bố cục CSS để tính chiều cao khả dụng, tránh việc animation mở gây đọc vị trí không ổn định
           const modalTop = Number.parseFloat(getComputedStyle(modalDom).top) || 0;
           const modalExtHeight = (modalDom as HTMLElement).offsetHeight - spinEl.clientHeight;
           let maxHeight = window.innerHeight - modalTop + (props.footerOffset! || 0) - modalExtHeight;
-          //update-end---author:scott ---date:20260814  for:修复弹窗内容高度自适应及底部操作按钮遮挡问题-----------
+          //update-end---author:scott ---date:20260814  for:Sửa vấn đề chiều cao nội dung popup tự thích ứng và nút thao tác ở dưới cùng bị che khuất-----------
 
-          // 距离顶部过进会出现滚动条
+          // Khi quá gần phía trên sẽ xuất hiện thanh cuộn
           if (modalTop < 40) {
             maxHeight -= 26;
           }
@@ -201,7 +201,7 @@
           } else {
             realHeightRef.value = props.height ? props.height : realHeight > maxHeight ? maxHeight : realHeight;
           }
-          // 代码逻辑说明: 【QQYUN-9035】basicModal不设置maxHeight或height会一直执行setModalHeight，需即使销毁MutationObserver
+          // Giải thích logic mã: 【QQYUN-9035]basicModal không đặt maxHeight hoặc height sẽ luôn thực thi setModalHeight, cần hủy kịp thờiMutationObserver
           if (source == 'muob') {
             callBack(realHeightRef.value);
           }

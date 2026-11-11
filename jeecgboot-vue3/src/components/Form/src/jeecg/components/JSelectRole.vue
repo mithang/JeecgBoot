@@ -1,4 +1,4 @@
-<!--角色选择组件-->
+<!--Component chọn vai trò-->
 <template>
   <div class="JSelectRole">
     <JSelectBiz @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs"></JSelectBiz>
@@ -42,42 +42,42 @@
     emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit, refs }) {
       const emitData = ref<any[]>();
-      //注册model
+      //Đăng kýmodel
       const [regModal, { openModal }] = useModal();
-      //表单值
+      //Giá trị biểu mẫu
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
-      //下拉框选项值
+      //Giá trị tùy chọn của hộp dropdown
       const selectOptions = ref<SelectValue>([]);
-      //下拉框选中值
+      //Giá trị đã chọn của hộp dropdown
       let selectValues = reactive<Recordable>({
         value: [],
         change: false,
       });
-      // 是否正在加载回显数据
+      // Có đang tải dữ liệu hiển thị lại không
       const loadingEcho = ref<boolean>(false);
-      //下发 selectOptions,xxxBiz组件接收
+      //Gửi xuống selectOptions,xxxBizComponent nhận
       provide('selectOptions', selectOptions);
-      //下发 selectValues,xxxBiz组件接收
+      //Gửi xuống selectValues,xxxBizComponent nhận
       provide('selectValues', selectValues);
-      //下发 loadingEcho,xxxBiz组件接收
+      //Gửi xuống loadingEcho,xxxBizComponent nhận
       provide('loadingEcho', loadingEcho);
 
       const tag = ref(false);
       const attrs = useAttrs();
 
       /**
-       * 监听组件值
+       * Lắng nghe giá trị component
        */
       watchEffect(() => {
         props.value && initValue();
-        // 查询条件重置的时候，清空界面显示
+        // Khi đặt lại điều kiện truy vấn, xóa hiển thị giao diện
         if (!props.value) {
           selectValues.value = [];
         }
       });
 
       /**
-       * 监听selectValues变化
+       * Lắng nghe sự thay đổi của selectValues
        */
       watch(selectValues, () => {
         if (selectValues) {
@@ -86,7 +86,7 @@
       });
 
       /**
-       * 打卡弹出框
+       * Hộp popup chấm công
        */
       function handleOpen() {
         tag.value = true;
@@ -96,7 +96,7 @@
       }
 
       /**
-       * 将字符串值转化为数组
+       * Chuyển giá trị chuỗi thành mảng
        */
       function initValue() {
         let value = props.value ? props.value : [];
@@ -109,14 +109,14 @@
       }
 
       /**
-       * 设置下拉框的值
+       * Đặt giá trị của hộp dropdown
        */
       function setValue(options, values) {
         selectOptions.value = options;
         //emitData.value = values.join(",");
         state.value = values;
         selectValues.value = values;
-        // 代码逻辑说明: 【issues/7948】修复JselectRole组件不支持双向绑定
+        // Giải thích logic mã: 【issues/7948]Sửa lỗi component JselectRole không hỗ trợ binding hai chiều
         emit('update:value', values);
       }
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
@@ -136,7 +136,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
+  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JSelectRole {
     > .ant-form-item {
       display: none;

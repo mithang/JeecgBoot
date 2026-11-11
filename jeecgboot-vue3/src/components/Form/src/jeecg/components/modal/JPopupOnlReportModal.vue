@@ -1,5 +1,5 @@
 <template>
-  <!--popup选择框-->
+  <!--popupHộp chọn-->
   <div>
     <BasicModal
       v-bind="$attrs"
@@ -8,7 +8,7 @@
       :width="1200"
       @ok="handleSubmit"
       @cancel="handleCancel"
-      cancelText="关闭"
+      cancelText="Đóng"
       wrapClassName="j-popup-modal"
       @visible-change="visibleChange"
     >
@@ -31,10 +31,10 @@
             <a-col :md="8" :sm="8" v-if="showAdvancedButton">
               <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
                 <a-col :lg="6">
-                  <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">查询</a-button>
-                  <a-button preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">重置</a-button>
+                  <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">Truy vấn</a-button>
+                  <a-button preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">Đặt lại</a-button>
                   <a @click="handleToggleSearch" style="margin-left: 8px">
-                    {{ toggleSearchStatus ? '收起' : '展开' }}
+                    {{ toggleSearchStatus ? 'Thu gọn' : 'Mở rộng' }}
                     <Icon :icon="toggleSearchStatus ? 'ant-design:up-outlined' : 'ant-design:down-outlined'" />
                   </a>
                 </a-col>
@@ -61,8 +61,8 @@
         <template #tableTitle></template>
          <template #bodyCell="{text, column}">
           <template v-if="column.fieldType === 'Image'">
-            <span v-if="!text" style="font-size: 12px; font-style: italic">无图片</span>
-            <img v-else :src="getImgView(text)" alt="图片不存在" class="cellIamge" @click="viewOnlineCellImage($event, text)" />
+            <span v-if="!text" style="font-size: 12px; font-style: italic">Không có hình ảnh</span>
+            <img v-else :src="getImgView(text)" alt="Hình ảnh không tồn tại" class="cellIamge" @click="viewOnlineCellImage($event, text)" />
           </template>
         </template>
       </BasicTable>
@@ -83,7 +83,7 @@
   export default defineComponent({
     name: 'JPopupOnlReportModal',
     components: {
-      //此处需要异步加载BasicTable
+      //Tại đây cần tải bất đồng bộBasicTable
       BasicModal,
       SearchFormItem: createAsyncComponent(() => import('/@/components/jeecg/OnLine/SearchFormItem.vue'), { loading: false }),
       BasicTable: createAsyncComponent(() => import('/@/components/Table/src/BasicTable.vue'), {
@@ -102,14 +102,14 @@
         xs: { span: 24 },
         sm: { span: 18 },
       });
-      //注册弹框
+      //Đăng ký popup
       const [register, { closeModal }] = useModalInner();
       const formRef = ref();
       const tableRef = ref();
       const toggleSearchStatus = ref(false);
       const attrs = useAttrs();
       const tableScroll = ref({ x: true });
-      // 代码逻辑说明: 【issues/675】子表字段Popup弹框数据不更新
+      // Giải thích logic mã: 【issues/675] Dữ liệu popup của trường bảng con không cập nhật
       const getBindValue = computed(() => {
         return Object.assign({}, unref(props), unref(attrs));
       });
@@ -144,7 +144,7 @@
 
       const showSearchFlag = computed(() => unref(queryInfo) && unref(queryInfo).length > 0);
       /**
-       *监听code
+       *Lắng nghecode
        */
       watch(
         () => props.code,
@@ -153,12 +153,12 @@
         }
       );
       /**
-       *监听popup动态参数 支持系统变量语法
+       *Lắng nghe tham số động của popup, hỗ trợ cú pháp biến hệ thống
        */
       watch(
         () => props.param,
         () => {
-          // 代码逻辑说明: 【issues/901】JPopup组件配置param参数后异常
+          // Giải thích logic mã: 【issues/901] Component JPopup sau khi cấu hình tham số param thì bất thường
           if (visible.value) {
             dynamicParamHandler();
             loadData();
@@ -166,14 +166,14 @@
         }
       );
       /**
-       *监听sorter排序字段
+       *Lắng nghe trường sắp xếp sorter
        */
       watchEffect(() => {
         if (props.sorter) {
           let arr = props.sorter.split('=');
           if (arr.length === 2 && ['asc', 'desc'].includes(arr[1].toLowerCase())) {
             iSorter.value = { column: arr[0], order: arr[1].toLowerCase() };
-            // 排序字段受控
+            // Trường sắp xếp được kiểm soát
             unref(columns).forEach((col) => {
               if (col.dataIndex === unref(iSorter).column) {
                 col['sortOrder'] = unref(iSorter).order === 'asc' ? 'ascend' : 'descend';
@@ -182,12 +182,12 @@
               }
             });
           } else {
-            console.warn('【JPopup】sorter参数不合法');
+            console.warn('[JPopup] Tham số sorter không hợp lệ');
           }
         }
       });
 
-      // 代码逻辑说明: VUEN-1156 popup 多数据有分页时，选中其他页，关闭popup 再点开，分页仍然选中上一次点击的分页，但数据是第一页的数据 未刷新
+      // Giải thích logic mã: VUEN-1156 popup Khi có nhiều dữ liệu và có phân trang, chọn trang khác, đóng popup rồi mở lại, phân trang vẫn chọn trang đã click lần trước, nhưng dữ liệu lại là dữ liệu của trang đầu tiên, chưa được làm mới
       watch(
         () => pagination.current,
         (current) => {
@@ -203,43 +203,43 @@
         toggleSearchStatus.value = !unref(toggleSearchStatus);
       }
       /**
-       * 取消/关闭
+       * Hủy/Đóng
        */
       function handleCancel() {
         closeModal();
         checkedKeys.value = [];
         selectRows.value = [];
-        // 代码逻辑说明: 【issues/742】选择后删除默认仍然存在
+        // Giải thích logic mã: 【issues/742] Sau khi chọn rồi xóa, giá trị mặc định vẫn tồn tại
         tableRef.value.clearSelectedRowKeys();
       }
 
       /**
-       *确认提交
+       *Xác nhận gửi
        */
       function handleSubmit() {
         filterUnuseSelect();
         if (!props.multi && unref(selectRows) && unref(selectRows).length > 1) {
-          createMessage.warning('只能选择一条记录');
+          createMessage.warning('Chỉ được chọn một bản ghi');
           return false;
         }
         if (!unref(selectRows) || unref(selectRows).length == 0) {
-          createMessage.warning('至少选择一条记录');
+          createMessage.warning('Vui lòng chọn ít nhất một bản ghi');
           return false;
         }
-        // 代码逻辑说明: VUEN-1155 popup 选择数据时，会选择多条重复数据
+        // Giải thích logic mã: VUEN-1155 popup Khi chọn dữ liệu, sẽ chọn nhiều bản ghi trùng lặp
         let rows = getOkSelectRows!();
         emit('ok', rows);
         handleCancel();
       }
 
       /**
-       * 查询
+       * Truy vấn
        */
       function searchQuery() {
         loadData(1);
       }
       /**
-       * 重置
+       * Đặt lại
        */
       function searchReset() {
         queryParam.value = {};
@@ -249,8 +249,8 @@
       /**
        * 2024-07-24
        * liaozhiyang
-       * 【TV360X-1756】报表添加图片类型
-       * 图片
+       * 【TV360X-1756] báo cáo thêm loại hình ảnh
+       * Hình ảnh
        * @param text
        */
       function getImgView(text) {
@@ -262,8 +262,8 @@
       /**
        * 2024-07-24
        * liaozhiyang
-       * 【TV360X-1756】报表添加图片类型
-       * 预览列表 cell 图片
+       * 【TV360X-1756] báo cáo thêm loại hình ảnh
+       * Xem trước hình ảnh cell trong danh sách
        * @param text
        */
       function viewOnlineCellImage(e, text) {
@@ -279,7 +279,7 @@
           createImgPreview({ imageList: imgList });
         }
       }
-      // 代码逻辑说明: 【issues/3656】popupdict回显
+      // Giải thích logic mã: 【issues/3656] Hiển thị lại popupdict
       watchEffect(() => {
         if (props.selected && props.rowkey && unref(visible)) {
           const selected = Array.isArray(props.selected) ? props.selected : [props.selected];
@@ -288,11 +288,11 @@
         }
       });
 
-      // update-begin--author:liaozhiyang---date:20261029---for：popup编辑时弹窗勾选回显
-      // 待匹配项：{ match: 源字段值, placeholder: 占位行, matched: 是否已匹配 }
+      // update-begin--author:liaozhiyang---date:20261029---for: khi chỉnh sửa popup, popup hiển thị lại trạng thái đã chọn
+      // Mục đang chờ khớp:{ match: Giá trị trường nguồn, placeholder: Hàng giữ chỗ, matched: Đã khớp chưa }
       let echoPending: any[] = [];
       /**
-       * 弹窗打开时，先把待匹配项作为占位行放入已选（保证原数据不在当前页时直接确定也不丢值）
+       * Khi popup mở ra, trước tiên đưa mục cần khớp vào danh sách đã chọn dưới dạng hàng giữ chỗ (đảm bảo dữ liệu gốc không ở trang hiện tại mà xác nhận trực tiếp cũng không bị mất giá trị)
        */
       function initEcho() {
         echoPending = [];
@@ -311,14 +311,14 @@
         syncTableSelection();
       }
       /**
-       * 在当前页数据中匹配待匹配项：所有源字段都相等才算命中，命中多条取第一条，匹配过的项后续页不再匹配
+       * Khớp mục cần khớp trong dữ liệu trang hiện tại: tất cả các trường nguồn đều bằng nhau mới tính là trúng, trúng nhiều mục thì lấy mục đầu tiên, các mục đã khớp sẽ không khớp lại ở các trang sau
        */
       function matchEchoRows(records) {
         const pending = echoPending.filter((item) => !item.matched);
         if (!pending.length || !records?.length) {
           return;
         }
-        // 已被其他回显项占用的行，同一行只能对应一个回显项
+        // Hàng đã bị mục hiển thị lại khác chiếm, cùng một hàng chỉ tương ứng với một mục hiển thị lại
         const claimedKeys = new Set(echoPending.filter((item) => item.matched && item.rowKey).map((item) => item.rowKey));
         let changed = false;
         pending.forEach((item) => {
@@ -335,12 +335,12 @@
           item.matched = true;
           item.rowKey = rowKey;
           claimedKeys.add(rowKey);
-          // 占位行已被取消（如单选时改选了其他行），不再回显
+          // Hàng giữ chỗ đã bị hủy (ví dụ khi chọn đơn mà đổi sang hàng khác), không hiển thị lại nữa
           if (index === -1) {
             return;
           }
           if (checkedKeys.value.includes(rowKey)) {
-            // 该行已被手动勾选，移除占位行即可
+            // Dòng này đã được tick thủ công, chỉ cần loại bỏ dòng giữ chỗ
             checkedKeys.value.splice(index, 1);
             selectRows.value = selectRows.value.filter((r) => combineRowKey(r) !== placeholderKey);
           } else {
@@ -352,7 +352,7 @@
         changed && syncTableSelection();
       }
       /**
-       * 同步 BasicTable 内部的勾选状态
+       * Đồng bộ trạng thái tích chọn bên trong BasicTable
        */
       function syncTableSelection() {
         nextTick(() => {
@@ -366,7 +366,7 @@
         }
       );
       watch(dataSource, (records) => matchEchoRows(records));
-      // update-end--author:liaozhiyang---date:20261029---for：popup编辑时弹窗勾选回显
+      // update-end--author:liaozhiyang---date:20261029---for: khi chỉnh sửa popup, popup hiển thị lại trạng thái đã chọn
       return {
         attrs,
         register,

@@ -1,4 +1,4 @@
-<!-- 字典下拉单选 / 远程加载下拉 -->
+<!-- Dropdown từ điển chọn đơn / Tải thả xuống từ xa -->
 <template>
   <a-select
     :value="innerValue"
@@ -71,12 +71,12 @@
       showSearch?: boolean;
       filterOption?: (input: string, option: any) => boolean;
       onSearch?: (keyword: string) => void;
-      /** 远程加载模式：启用滚动加载+远程搜索，通过 onLoad 回调获取分页数据 */
+      /** Chế độ tải từ xa: Bật tải khi cuộn+Tìm kiếm từ xa, lấy dữ liệu phân trang thông qua callback onLoad */
       remoteLoad?: boolean;
       onLoad?: (params: { keyword: string; pageNo: number; pageSize: number }) => Promise<DictOption[]>;
     }>(),
     {
-      placeholder: '请选择',
+      placeholder: 'Vui lòng chọn',
       readOnly: false,
       options: () => [],
       triggerChange: true,
@@ -96,19 +96,19 @@
     (e: 'options-change'): void;
   }>();
 
-  // --- 选项数据 ---
+  // --- Dữ liệu tùy chọn ---
   const innerValue = ref<SelectSingleValue>();
   const dictOptions = ref<DictOption[]>([]);
   const loading = ref(false);
   const searchKeyword = ref('');
 
-  // --- 分页滚动状态 ---
+  // --- Trạng thái cuộn phân trang ---
   const scrollState = {
     pageNo: 1,
     hasMore: true,
     loading: false,
   };
-  /** 缓存上次滚动的目标元素，关闭下拉时复位其滚动条 */
+  /** Lưu cache phần tử đích đã cuộn lần trước, khi đóng dropdown sẽ đặt lại thanh cuộn của nó */
   let lastScrollTarget: HTMLElement | null = null;
 
   const isDictTable = computed(() => {
@@ -136,7 +136,7 @@
     });
   });
 
-  // --- 字典加载 ---
+  // --- Tải từ điển ---
   function fetchDictPage(pageNo: number, append: boolean) {
     return defHttp
       .get({
@@ -152,7 +152,7 @@
       });
   }
 
-  // --- 远程加载 ---
+  // --- Tải từ xa ---
   async function fetchRemotePage(pageNo: number, append: boolean) {
     if (!props.onLoad) return;
     try {
@@ -270,14 +270,14 @@
 
   function handleDropdownVisibleChange(open: boolean) {
     if (!open) {
-      // 关闭时：复位缓存的滚动元素，下次打开从顶部开始
+      // Khi đóng: đặt lại phần tử cuộn đã cache, lần mở sau bắt đầu từ đầu trang
       if (lastScrollTarget) {
         lastScrollTarget.scrollTop = 0;
         lastScrollTarget = null;
       }
       return;
     }
-    // 打开时：清空缓存
+    // Khi mở: Xóa cache
     lastScrollTarget = null;
     if (useLoadDict.value) {
       scrollState.pageNo = 1;
@@ -313,7 +313,7 @@
     }
   }
 
-  // --- 弹层挂载 & 搜索过滤 ---
+  // --- Gắn lớp popup & Lọc tìm kiếm ---
   function getPopupContainer(node: HTMLElement) {
     return props.popContainer ? setPopContainer(node, props.popContainer) : node?.parentNode;
   }
@@ -328,7 +328,7 @@
     return props.filterOption?.(input, option) ?? filterOption(input, option);
   });
 
-  // --- 选择变更 ---
+  // --- Thay đổi lựa chọn ---
   function handleChange(value: SelectSingleValue) {
     const val = value ?? undefined;
     if (props.triggerChange) {
@@ -339,7 +339,7 @@
     emit('update:value', val);
   }
 
-  // --- 初始化与监听 ---
+  // --- Khởi tạo và lắng nghe ---
   function syncOptionsFromProps() {
     if (props.dictCode || props.remoteLoad) {
       loadDictOptions();

@@ -66,7 +66,7 @@
         fileList: [],
       });
 
-      //   是否正在上传
+      //   Có đang tải lên không
       const isUploadingRef = ref(false);
       const fileListRef = ref<FileItem[]>([]);
       const { accept, helpText, maxNumber, maxSize } = toRefs(props);
@@ -103,18 +103,18 @@
           : t('component.upload.startUpload');
       });
 
-      // 上传前校验
+      // Kiểm chứng trước khi tải lên
       function beforeUpload(file: File) {
         const { size, name } = file;
         const { maxSize } = props;
         const accept = unref(getAccept);
-        // 设置最大值，则判断
+        // Đặt giá trị tối đa, sau đó kiểm tra
         if (maxSize && file.size / 1024 / 1024 >= maxSize) {
           createMessage.error(t('component.upload.maxSizeMultiple', [maxSize]));
           return false;
         }
 
-        // 设置类型,则判断
+        // Thiết lập loại,thì kiểm tra
         if (accept.length > 0 && !checkFileType(file, accept)) {
           createMessage.error!(t('component.upload.acceptUpload', [accept.join(',')]));
           return false;
@@ -127,9 +127,9 @@
           percent: 0,
           type: name.split('.').pop(),
         };
-        // 生成图片缩略图
+        // Tạo hình thu nhỏ của hình ảnh
         if (checkImgType(file)) {
-          // beforeUpload，如果异步会调用自带上传方法
+          // beforeUpload, nếu là bất đồng bộ sẽ gọi phương thức tải lên tích hợp
           // file.thumbUrl = await getBase64(file);
           getBase64WithFile(file).then(({ result: thumbUrl }) => {
             fileListRef.value = [
@@ -146,14 +146,14 @@
         return false;
       }
 
-      // 删除
+      // Xóa
       function handleRemove(record: FileItem) {
         const index = fileListRef.value.findIndex((item) => item.uuid === record.uuid);
         index !== -1 && fileListRef.value.splice(index, 1);
         emit('delete', record);
       }
 
-      // 预览
+      // Xem trước
       // function handlePreview(record: FileItem) {
       //   const { thumbUrl = '' } = record;
       //   createImgPreview({
@@ -182,7 +182,7 @@
               item.percent = complete;
             }
           );
-          // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1385】修复上传示例报错
+          // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1385]Sửa lỗi ví dụ tải lên
           const data = res?.data ?? res;
           const isSuccess = data && (data.success === true || data.code === 0);
           const url = data?.url || data?.result || data?.message;
@@ -191,7 +191,7 @@
           }
           item.status = UploadResultStatus.SUCCESS;
           item.responseData = { ...data, url };
-          // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1385】修复上传示例报错
+          // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1385]Sửa lỗi ví dụ tải lên
           return {
             success: true,
             error: null,
@@ -206,7 +206,7 @@
         }
       }
 
-      // 点击开始上传
+      // Nhấp để bắt đầu tải lên
       async function handleStartUpload() {
         const { maxNumber } = props;
         if ((fileListRef.value.length + (props.previewFileList?.length ?? 0)) > maxNumber) {
@@ -214,7 +214,7 @@
         }
         try {
           isUploadingRef.value = true;
-          // 只上传不是成功状态的
+          // Chỉ tải lên những tệp không ở trạng thái thành công
           const uploadFileList = fileListRef.value.filter((item) => item.status !== UploadResultStatus.SUCCESS) || [];
           const data = await Promise.all(
             uploadFileList.map((item) => {
@@ -222,7 +222,7 @@
             })
           );
           isUploadingRef.value = false;
-          // 生产环境:抛出错误
+          // Môi trường production:Ném lỗi
           const errorList = data.filter((item: any) => !item.success);
           if (errorList.length > 0) throw errorList;
         } catch (e) {
@@ -231,7 +231,7 @@
         }
       }
 
-      //   点击保存
+      //   Nhấn để lưu
       function handleOk() {
         const { maxNumber } = props;
 
@@ -249,7 +249,7 @@
             fileList.push(responseData.url);
           }
         }
-        // 存在一个上传成功的即可保存
+        // Chỉ cần có một tệp tải lên thành công là có thể lưu
         if (fileList.length <= 0) {
           return createMessage.warning(t('component.upload.saveError'));
         }
@@ -258,7 +258,7 @@
         emit('change', fileList);
       }
 
-      // 点击关闭：则所有操作不保存，包括上传的
+      // Bấm đóng: thì mọi thao tác không được lưu, bao gồm cả phần đã tải lên
       async function handleCloseFunc() {
         if (!isUploadingRef.value) {
           fileListRef.value = [];

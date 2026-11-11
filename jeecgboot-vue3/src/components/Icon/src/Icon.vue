@@ -9,10 +9,10 @@
   import { isString } from '/@/utils/is';
   import { propTypes } from '/@/utils/propTypes';
   const SVG_END_WITH_FLAG = '|svg';
-  // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-143】online新增字段图标会闪烁
-  // 缓存Iconify实例，避免每次动态import造成图标插入延迟（闪烁）
+  // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
+  // Cache instance Iconify, tránh mỗi lần import động gây chậm khi chèn biểu tượng (nhấp nháy)
   let iconifyInstance: any = null;
-  // update-end--author:liaozhiyang---date:20260713---for：【LHZP-143】online新增字段图标会闪烁
+  // update-end--author:liaozhiyang---date:20260713---for：【LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
   export default defineComponent({
     name: 'Icon',
     components: { SvgIcon },
@@ -45,29 +45,29 @@
         await nextTick();
         const icon = unref(getIconRef);
         if (!icon) return;
-        // update-begin--author:liaozhiyang---date:20260304---for:【QQYUN-14802】新增unplugin-icons插件，及icon支持online和local两种模式
+        // update-begin--author:liaozhiyang---date:20260304---for:【QQYUN-14802] thêm mớiunplugin-iconsPlugin, và icon hỗ trợ hai chế độ online và local
         try {
           let svg: SVGElement | null = null;
-          // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-143】online新增字段图标会闪烁
+          // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
           if (iconifyInstance) {
             svg = iconifyInstance.renderSVG(icon, {});
           } else if (import.meta.env.VITE_GLOB_ICONIFY_USE_TYPE === 'local') {
-            // 使用本地 purge-icons 图标（离线，图标已打包进产物）
+            // Sử dụng cục bộ purge-icons Icon (offline, icon đã được đóng gói vào sản phẩm)
             const iconifyModule = await import('@purge-icons/generated');
             iconifyInstance = iconifyModule.default;
             svg = iconifyInstance.renderSVG(icon, {});
           } else {
-            // 使用 @iconify/iconify 在线按需加载
+            // Sử dụng @iconify/iconify Tải theo nhu cầu trực tuyến
             const iconifyModule = await import('@iconify/iconify');
             iconifyInstance = iconifyModule.default;
             svg = iconifyInstance.renderSVG(icon, {});
           }
-          // update-end--author:liaozhiyang---date:20260713---for：【LHZP-143】online新增字段图标会闪烁
+          // update-end--author:liaozhiyang---date:20260713---for：【LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
           if (svg) {
             el.textContent = '';
             el.appendChild(svg);
           } else {
-            // 如果图标不存在，显示占位符
+            // Nếu biểu tượng không tồn tại, hiển thị placeholder
             const span = document.createElement('span');
             span.className = 'iconify';
             span.dataset.icon = icon;
@@ -77,7 +77,7 @@
         } catch (err) {
           console.error('Failed to render icon:', icon, err);
         }
-        // update-end--author:liaozhiyang---date:20260304---for:【QQYUN-14802】新增unplugin-icons插件，及icon支持online和local两种模式
+        // update-end--author:liaozhiyang---date:20260304---for:【QQYUN-14802] thêm mớiunplugin-iconsPlugin, và icon hỗ trợ hai chế độ online và local
       };
 
       const getWrapStyle = computed((): CSSProperties => {

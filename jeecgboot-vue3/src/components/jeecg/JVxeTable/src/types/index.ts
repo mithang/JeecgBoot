@@ -19,47 +19,47 @@ type statisticsTypes = 'sum' | 'average';
 export type JVxeColumn = IJVxeColumn & Recordable;
 
 /**
- * JVxe 列配置项
+ * JVxe Mục cấu hình cột
  */
 export interface IJVxeColumn extends VxeColumnProps {
   type?: any;
-  // 行唯一标识
+  // Định danh duy nhất của hàng
   key: string;
-  // 表单预期值的提示信息，可以使用${...}变量替换文本
+  // Thông tin nhắc nhở về giá trị kỳ vọng của biểu mẫu, có thể dùng${...}Văn bản thay thế biến
   placeholder?: string;
-  // 默认值
+  // Giá trị mặc định
   defaultValue?: any;
-  // 是否禁用当前列，默认false
+  // Có vô hiệu hóa cột hiện tại không, mặc địnhfalse
   disabled?: boolean;
-  // 校验规则 TODO 类型待定义
+  // Quy tắc kiểm chứng TODO, kiểu dữ liệu chờ định nghĩa
   validateRules?: any;
-  // 联动下一级的字段key
+  // Trường liên động cấp tiếp theokey
   linkageKey?: string;
-  // 自定义传入组件的其他属性
+  // Các thuộc tính khác của component được truyền vào tùy chỉnh
   props?: Recordable;
-  allowClear?: boolean; // 允许清除
-  // 【inputNumber】是否是统计列，只有 inputNumber 才能设置统计列。统计列：sum 求和；average 平均值
+  allowClear?: boolean; // Cho phép xóa
+  // Có phải là cột thống kê không, chỉ inputNumber mới có thể đặt cột thống kê. Cột thống kê: sum là tính tổng; average là giá trị trung bình
   statistics?: boolean | [statisticsTypes, statisticsTypes?];
   // 【select】
-  dictCode?: string; // 字典 code
-  options?: { title?: string; label?: string; text?: string; value: any; disabled?: boolean }[]; // 下拉选项列表
-  allowInput?: boolean; // 允许输入
-  allowSearch?: boolean; // 允许搜索
+  dictCode?: string; // Từ điển code
+  options?: { title?: string; label?: string; text?: string; value: any; disabled?: boolean }[]; // Danh sách tùy chọn dropdown
+  allowInput?: boolean; // Cho phép nhập
+  allowSearch?: boolean; // Cho phép tìm kiếm
   // 【slot】
-  slotName?: string; // 插槽名
+  slotName?: string; // Tên slot
   // 【checkbox】
-  customValue?: [any, any]; // 自定义值
-  defaultChecked?: boolean; // 默认选中
+  customValue?: [any, any]; // Giá trị tùy chỉnh
+  defaultChecked?: boolean; // Được chọn mặc định
   // 【upload】 upload
-  btnText?: string; // 上传按钮文字
-  token?: boolean; // 是否传递 token
-  responseName?: string; // 返回取值名称
-  action?: string; // 上传地址
-  allowRemove?: boolean; // 是否允许删除
-  allowDownload?: boolean; // 是否允许下载
-  // 【下拉字典搜索】
-  dict?: string; // 字典表配置信息：数据库表名,显示字段名,存储字段名
-  async?: boolean; // 是否同步模式
+  btnText?: string; // Văn bản nút tải lên
+  token?: boolean; // Có truyền hay không token
+  responseName?: string; // Tên giá trị trả về
+  action?: string; // Địa chỉ tải lên
+  allowRemove?: boolean; // Có cho phép xóa không
+  allowDownload?: boolean; // Có cho phép tải xuống không
+  // [Tìm kiếm thả xuống theo từ điển]
+  dict?: string; // Thông tin cấu hình bảng từ điển: Tên bảng cơ sở dữ liệu,Tên trường hiển thị,Tên trường lưu trữ
+  async?: boolean; // Có phải chế độ đồng bộ không
   tipsContent?: string;
   // 【popup】
   popupCode?: string;
@@ -76,44 +76,44 @@ export interface JVxeRefs {
 
 export interface JVxeDataProps {
   prefixCls: string;
-  // vxe 实例ID
+  // vxe InstanceID
   caseId: string;
-  // vxe 最终 columns
+  // vxe Cuối cùng columns
   vxeColumns?: ComputedRef;
-  // vxe 最终 dataSource
+  // vxe Cuối cùng dataSource
   vxeDataSource: Ref<Recordable[]>;
-  // 记录滚动条位置
+  // Ghi lại vị trí thanh cuộn
   scroll: { top: number; left: number };
-  // 当前是否正在滚动
+  // Hiện có đang cuộn không
   scrolling: Ref<boolean>;
-  // vxe 默认配置
+  // vxe Cấu hình mặc định
   defaultVxeProps: object;
-  // 绑定左侧选择框
+  // Liên kết hộp chọn bên trái
   selectedRows: Ref<any[]>;
-  // 绑定左侧选择框已选择的id
+  // Gắn các ID đã chọn của hộp chọn bên tráiid
   selectedRowIds: Ref<string[]>;
   disabledRowIds: string[];
-  // 统计列配置
+  // Cấu hình cột thống kê
   statistics: {
     has: boolean;
     sum: string[];
     average: string[];
   };
-  // 所有和当前表格相关的授权信息
+  // Tất cả thông tin ủy quyền liên quan đến bảng hiện tại
   authsMap: Ref<Nullable<ReturnType<typeof getJVxeAuths>>>;
-  // 内置 EditRules
+  // Tích hợp sẵn EditRules
   innerEditRules: Recordable<VxeTablePropTypes.EditRules[]>;
-  // 联动下拉选项（用于隔离不同的下拉选项）
-  // 内部联动配置，map
+  // Tùy chọn dropdown liên động (dùng để tách riêng các tùy chọn dropdown khác nhau)
+  // Cấu hình liên động nội bộ,map
   innerLinkageConfig: Map<string, any>;
-  // 开启了数据刷新效果的行
+  // Hàng đã bật hiệu ứng làm mới dữ liệu
   reloadEffectRowKeysMap: Recordable;
 }
 
 export interface JVxeLinkageConfig {
-  // 联动第一级的 key
+  // của cấp đầu tiên được liên động key
   key: string;
-  // 获取数据的方法
+  // Phương thức lấy dữ liệu
   requestData: (parent: string) => Promise<any>;
 }
 

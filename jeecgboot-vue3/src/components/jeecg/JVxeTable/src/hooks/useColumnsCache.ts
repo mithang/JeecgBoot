@@ -46,7 +46,7 @@ export function useColumnsCache({ cacheColumnsKey, refs }: any) {
     const hideColumnKey = getHideColumnKey(fullColumn, visibleColumn);
     if (hideColumnKey.length) {
       $ls.set(cacheKey.value, hideColumnKey);
-      $message.success('保存成功');
+      $message.success('Lưu thành công');
     }
   }
   const resetSetting = ($grid) => {
@@ -63,7 +63,7 @@ export function useColumnsCache({ cacheColumnsKey, refs }: any) {
       }
     }
     $ls.remove(cacheKey.value);
-    $message.success('重置成功');
+    $message.success('Đặt lại thành công');
   };
   const getHideColumn = (fullColumn, columnCache) => {
     const result: any = [];

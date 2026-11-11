@@ -1,14 +1,14 @@
 <template>
   <div v-show="download" class="upload-download-handler">
-    <a class="download" title="下载" @click="onDownload">
+    <a class="download" title="Tải xuống" @click="onDownload">
       <Icon icon="ant-design:download" />
     </a>
   </div>
   <div v-show="canMove" class="upload-mover-handler">
-    <a title="向前移动" @click="onMoveForward">
+    <a title="Di chuyển lên trước" @click="onMoveForward">
       <Icon icon="ant-design:arrow-left" />
     </a>
-    <a title="向后移动" @click="onMoveBack">
+    <a title="Di chuyển về sau" @click="onMoveBack">
       <Icon icon="ant-design:arrow-right" />
     </a>
   </div>
@@ -23,25 +23,25 @@
 
   const props = defineProps({
     element: { type: HTMLElement, required: true },
-    // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73】批量上传图片后左右移动提示-1
+    // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
     container: { type: HTMLElement, required: true },
-    // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73】批量上传图片后左右移动提示-1
+    // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
     fileList: { type: Object, required: true },
     mover: { type: Boolean, required: true },
     download: { type: Boolean, required: true },
     emitValue: { type: Function, required: true },
   });
   const list = computed(() => unref(props.fileList));
-  // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73】上传图片操作按钮优化
+  // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73] tối ưu nút thao tác tải lên hình ảnh
   const canMove = computed(() => props.mover && list.value.length > 1);
   watchEffect(() => props.element.classList.toggle('has-upload-mover-actions', canMove.value));
-  // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73】上传图片操作按钮优化
+  // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73] tối ưu nút thao tác tải lên hình ảnh
 
-  // 向前移动图片
+  // Di chuyển hình ảnh về phía trước
   function onMoveForward() {
     let index = getIndex();
     if (index === -1) {
-      createMessage.warn('移动失败：' + index);
+      createMessage.warn('Di chuyển thất bại:' + index);
       return;
     }
     if (index === 0) {
@@ -51,11 +51,11 @@
     doSwap(index, index - 1);
   }
 
-  // 向后移动图片
+  // Di chuyển hình ảnh về phía sau
   function onMoveBack() {
     let index = getIndex();
     if (index === -1) {
-      createMessage.warn('移动失败：' + index);
+      createMessage.warn('Di chuyển thất bại:' + index);
       return;
     }
     if (index == unref(list).length - 1) {
@@ -76,7 +76,7 @@
     }
   }
 
-  // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73】批量上传图片后左右移动提示-1
+  // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
   function getIndex() {
     const uploadItems = Array.from(props.container.getElementsByClassName('ant-upload-list-item'));
     const index = uploadItems.indexOf(props.element);
@@ -85,7 +85,7 @@
     }
     return getIndexByUrl();
   }
-  // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73】批量上传图片后左右移动提示-1
+  // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
 
   function getIndexByUrl() {
     const url = props.element?.getElementsByTagName('img')[0]?.src;

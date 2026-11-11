@@ -4,13 +4,13 @@
       <div class="item" v-for="item in dataList">
         <div class="complex">
           <div class="content">
-            <!-- 图片 -->
+            <!-- Hình ảnh -->
             <div v-if="isImage(item)" class="content-top" style="height: 100%">
               <div class="content-image" :style="getImageAsBackground(item)">
                 <!--<img style="height: 100%;" :src="getImageSrc(item)"/>-->
               </div>
             </div>
-            <!-- 文件 -->
+            <!-- Tệp -->
             <template v-else>
               <div class="content-top">
                 <div class="content-icon" :style="{ background: 'url(' + getBackground(item) + ')  no-repeat' }"></div>
@@ -31,7 +31,7 @@
             </div>
             <div class="buttons">
               <div class="opt-icon">
-                <Tooltip title="下载">
+                <Tooltip title="Tải xuống">
                   <download-outlined @click="downLoad(item)" />
                 </Tooltip>
               </div>

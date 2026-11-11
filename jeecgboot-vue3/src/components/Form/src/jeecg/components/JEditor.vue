@@ -11,25 +11,25 @@
 
   export default defineComponent({
     name: 'JEditor',
-    // 不将 attrs 的属性绑定到 html 标签上
+    // Không binding thuộc tính của attrs lên thẻ html
     inheritAttrs: false,
     components: { Tinymce },
     props: {
       value: propTypes.string.def(''),
       disabled: propTypes.bool.def(false),
-      //是否聚焦
+      //Có lấy focus hay không
       autoFocus: propTypes.bool.def(true),
     },
     emits: ['change', 'update:value'],
     setup(props, { emit, attrs }) {
-      // 合并 props 和 attrs
+      // Gộp props và attrs
       const bindProps = computed(() => Object.assign({}, props, attrs));
       const formItemContext = Form.useInjectFormItemContext();
-      // value change 事件
+      // value change Sự kiện
       function onChange(value) {
         emit('change', value);
         emit('update:value', value);
-        // 代码逻辑说明: 【QQYUN-9110】组件有值校验没消失
+        // Giải thích logic mã: 【QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
         nextTick(() => {
           formItemContext?.onFieldChange();
         });

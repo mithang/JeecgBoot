@@ -3,15 +3,15 @@ import type { ValidatorRule } from 'ant-design-vue/lib/form/interface';
 
 const cronRule: ValidatorRule = {
   validator({}, value) {
-    // 没填写就不校验
+    // Không điền thì không kiểm chứng
     if (!value) {
       return Promise.resolve();
     }
     const values: string[] = value.split(' ').filter((item) => !!item);
     if (values.length > 7) {
-      return Promise.reject('Cron表达式最多7项！');
+      return Promise.reject('CronBiểu thức Cron tối đa 7 mục!');
     }
-    // 检查第7项
+    // Kiểm tra mục thứ 7
     let val: string = value;
     if (values.length === 7) {
       const year = values[6];
@@ -24,23 +24,23 @@ const cronRule: ValidatorRule = {
         } else {
           yearValues = [year];
         }
-        // 判断是否都是数字
+        // Kiểm tra có phải đều là số không
         const checkYear = yearValues.some((item) => isNaN(Number(item)));
         if (checkYear) {
-          return Promise.reject('Cron表达式参数[年]错误：' + year);
+          return Promise.reject('CronTham số biểu thức Cron[năm]Lỗi:' + year);
         }
       }
-      // 取其中的前六项
+      // Lấy sáu mục đầu trong đó
       val = values.slice(0, 6).join(' ');
     }
-    // 6位 没有年
-    // 5位没有秒、年
+    // 6vị, không có năm
+    // 5vị không có giây, năm
     try {
       const iter = CronParser.parseExpression(val);
       iter.next();
       return Promise.resolve();
     } catch (e) {
-      return Promise.reject('Cron表达式错误：' + e);
+      return Promise.reject('CronLỗi biểu thức:' + e);
     }
   },
 };

@@ -9,76 +9,76 @@ export namespace JVxeComponent {
     context?: any;
   }
 
-  /** 组件增强类型 */
+  /** Loại tăng cường component */
   export interface Enhanced {
-    // 注册参数（详见：https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/renderer/edit）
+    // Tham số đăng ký (xem chi tiết:https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/renderer/edit）
     installOptions: {
-      // 自动聚焦的 class 类名
+      // Tên class tự động focus
       autofocus?: string;
     } & Recordable;
-    // 事件拦截器（用于兼容）
+    // Bộ chặn sự kiện (dùng để tương thích)
     interceptor: {
-      // 已实现：event.clearActived
-      // 说明：比如点击了某个组件的弹出层面板之后，此时被激活单元格不应该被自动关闭，通过返回 false 可以阻止默认的行为。
+      // Đã triển khai:event.clearActived
+      // Giải thích: ví dụ sau khi click vào bảng nổi (panel) của một component nào đó, lúc này ô đang được kích hoạt không nên tự động đóng lại, trả về false có thể ngăn hành vi mặc định.
       'event.clearActived'?: (params, event, target, ctx?: EnhancedCtx) => boolean;
-      // 自定义：event.clearActived.className
-      // 说明：比原生的多了一个参数：className，用于判断点击的元素的样式名（递归到顶层）
+      // Tùy chỉnh:event.clearActived.className
+      // Giải thích: nhiều hơn một tham số so với gốc: className, dùng để phán đoán tên style của phần tử được click (đệ quy đến cấp cao nhất)
       'event.clearActived.className'?: (params, event, target, ctx?: EnhancedCtx) => boolean;
     };
-    // 【功能开关】
+    // [Công tắc chức năng]
     switches: {
-      // 是否使用 editRender 模式（仅当前组件，并非全局）
-      // 如果设为true，则表头上方会出现一个可编辑的图标
+      // Có sử dụng chế độ editRender hay không (chỉ component hiện tại, không phải toàn cục)
+      // Nếu đặt thành true thì phía trên tiêu đề bảng sẽ xuất hiện một biểu tượng có thể chỉnh sửa
       editRender?: boolean;
-      // false = 组件触发后可视）；true = 组件一直可视
+      // false = Component hiển thị sau khi được kích hoạt);true = Component luôn hiển thị
       visible?: boolean;
     };
-    // 【切面增强】切面事件处理，一般在某些方法执行后同步执行
+    // [Tăng cường Aspect] Xử lý sự kiện Aspect, thường thực thi đồng bộ sau khi một số phương thức thực thi
     aopEvents: {
-      // 单元格被激活编辑时会触发该事件
+      // Sự kiện này sẽ kích hoạt khi ô được kích hoạt chỉnh sửa
       editActived?: (this: ComponentInternalInstance, ...args) => any;
-      // 单元格编辑状态下被关闭时会触发该事件
+      // Sự kiện này sẽ kích hoạt khi ô đang ở trạng thái chỉnh sửa bị đóng
       editClosed?: (this: ComponentInternalInstance, ...args) => any;
-      // 返回值决定单元格是否可以编辑
+      // Giá trị trả về quyết định ô có thể chỉnh sửa hay không
       activeMethod?: (this: ComponentInternalInstance, ...args) => boolean;
     };
-    // 【翻译增强】可以实现例如select组件保存的value，但是span模式下需要显示成text
+    // Có thể thực hiện ví dụ như value mà component select lưu, nhưng ở chế độ span cần hiển thị thànhtext
     translate: {
-      // 是否启用翻译
+      // Có bật dịch không
       enabled?: boolean;
       /**
-       * 【翻译处理方法】如果handler留空，则使用默认的翻译方法
+       * [Phương pháp xử lý dịch] Nếu handler để trống thì dùng phương pháp dịch mặc định
        *
-       * @param value 需要翻译的值
-       * @returns{*} 返回翻译后的数据
+       * @param value Giá trị cần dịch
+       * @returns{*} Trả về dữ liệu đã dịch
        */
       handler?: (value, ctx?: EnhancedCtx) => any;
     };
     /**
-     * 【获取值增强】组件抛出的值
+     * [Tăng cường lấy giá trị] Giá trị mà component đưa ra
      *
-     * @param value 保存到数据库里的值
-     * @returns{*} 返回处理后的值
+     * @param value Giá trị lưu vào cơ sở dữ liệu
+     * @returns{*} Trả về giá trị đã xử lý
      */
     getValue: (value, ctx?: EnhancedCtx) => any;
     /**
-     * 【设置值增强】设置给组件的值
+     * [Tăng cường giá trị cài đặt] Giá trị đặt cho component
      *
-     * @param value 组件触发的值
-     * @returns{*} 返回处理后的值
+     * @param value Giá trị do component kích hoạt
+     * @returns{*} Trả về giá trị đã xử lý
      */
     setValue: (value, ctx?: EnhancedCtx) => any;
     /**
-     * 【新增行增强】在用户点击新增时触发的事件，返回新行的默认值
+     * [Tăng cường thêm dòng] Sự kiện được kích hoạt khi người dùng nhấn thêm mới, trả về giá trị mặc định của dòng mới
      *
-     * @param defaultValue 默认值
-     * @param row 行数据
-     * @param column 列配置，.params 是用户配置的参数
-     * @param $table vxe 实例
-     * @param renderOptions 渲染选项
-     * @param params 可以在这里获取 $table
+     * @param defaultValue Giá trị mặc định
+     * @param row Dữ liệu hàng
+     * @param column Cấu hình cột,.params Là tham số do người dùng cấu hình
+     * @param $table vxe Instance
+     * @param renderOptions Tùy chọn render
+     * @param params Có thể lấy $table tại đây $table
      *
-     * @returns 返回新值
+     * @returns Trả về giá trị mới
      */
     createValue: (defaultValue: any, ctx?: EnhancedCtx) => any;
   }

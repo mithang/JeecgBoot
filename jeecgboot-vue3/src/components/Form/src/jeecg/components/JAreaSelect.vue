@@ -1,19 +1,19 @@
 <template>
   <a-form-item-rest>
     <div class="area-select">
-      <!--省份-->
+      <!--Tỉnh-->
       <a-select v-model:value="province" @change="proChange" allowClear :disabled="disabled">
         <template v-for="item in provinceOptions" :key="`${item.value}`">
           <a-select-option :value="item.value">{{ item.label }}</a-select-option>
         </template>
       </a-select>
-      <!--城市-->
+      <!--Thành phố-->
       <a-select v-if="level >= 2" v-model:value="city" @change="cityChange" :disabled="disabled">
         <template v-for="item in cityOptions" :key="`${item.value}`">
           <a-select-option :value="item.value">{{ item.label }}</a-select-option>
         </template>
       </a-select>
-      <!--地区-->
+      <!--Khu vực-->
       <a-select v-if="level >= 3" v-model:value="area" @change="areaChange" :disabled="disabled">
         <template v-for="item in areaOptions" :key="`${item.value}`">
           <a-select-option :value="item.value">{{ item.label }}</a-select-option>
@@ -50,31 +50,31 @@
     emits: ['change', 'update:value','update:area','update:city','update:province'],
     setup(props, { emit, refs }) {
       const emitData = ref<any[]>([]);
-      //下拉框的选择值
+      //Giá trị đã chọn của hộp thả xuống
       const pca = reactive({
         province: '',
         city: '',
         area: '',
       });
-      //表单值
+      //Giá trị biểu mẫu
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
-      //城市下拉框的选项
+      //Tùy chọn hộp thả xuống thành phố
       const cityOptions = computed(() => {
         return pca.province ? getDataByCode(pca.province) : [];
       });
-      //地区下拉框的选项
+      //Tùy chọn hộp thả xuống khu vực
       const areaOptions = computed(() => {
         return pca.city ? getDataByCode(pca.city) : [];
       });
       /**
-       * 监听props值
+       * Lắng nghe giá trị props
        */
       watchEffect(() => {
         props && initValue();
       });
 
       /**
-       * 监听组件值变化
+       * Lắng nghe thay đổi giá trị component
        */
       watch(pca, (newVal) => {
         if (!props.value) {
@@ -84,17 +84,17 @@
         }
       });
       /**
-       * 数据初始化
+       * Khởi tạo dữ liệu
        */
       function initValue() {
         if (props.value) {
-          //传参是数组的情况下的处理
+          //Xử lý trong trường hợp tham số truyền vào là mảng
           if (Array.isArray(props.value)) {
             pca.province = props.value[0];
             pca.city = props.value[1] ? props.value[1] : '';
             pca.area = props.value[2] ? props.value[2] : '';
           } else {
-            //传参是数值
+            //Tham số truyền vào là số
             let valueArr = getRealCode(props.value, props.level);
             if (valueArr) {
               pca.province = valueArr[0];
@@ -103,7 +103,7 @@
             }
           }
         } else {
-          //绑定三个数据的情况
+          //Trường hợp liên kết ba dữ liệu
           pca.province = props.province ? props.province : '';
           pca.city = props.city ? props.city : '';
           pca.area = props.area ? props.area : '';
@@ -111,7 +111,7 @@
       }
 
       /**
-       * 省份change事件
+       * Sự kiện change của tỉnh
        */
       function proChange(val) {
         pca.city = val && getDataByCode(val)[0]?.value;
@@ -121,7 +121,7 @@
       }
 
       /**
-       * 城市change事件
+       * Sự kiện change của thành phố
        */
       function cityChange(val) {
         pca.area = val && getDataByCode(val)[0]?.value;
@@ -130,7 +130,7 @@
       }
 
       /**
-       * 区域change事件
+       * Sự kiện change của khu vực
        */
       function areaChange(val) {
         state.value = val;
@@ -153,13 +153,13 @@
   .area-select {
     width: 100%;
 
-    /* update-begin-author:taoyan date:2023-2-18 for: QQYUN-4292【online表单】高级查询 2.省市县样式问题 */
+    /* update-begin-author:taoyan date:2023-2-18 for: QQYUN-4292[Biểu mẫu online] Truy vấn nâng cao 2.Vấn đề kiểu tỉnh/thành phố/quận huyện */
    /* display: flex;*/
 
     .ant-select {
       width: calc(33.3% - 7px)
     }
-    /* update-end-author:taoyan date:2023-2-18 for:  QQYUN-4292【online表单】高级查询 2.省市县样式问题 */
+    /* update-end-author:taoyan date:2023-2-18 for:  QQYUN-4292[Biểu mẫu online] Truy vấn nâng cao 2.Vấn đề kiểu tỉnh/thành phố/quận huyện */
 
     .ant-select:not(:first-child) {
       margin-left: 10px;

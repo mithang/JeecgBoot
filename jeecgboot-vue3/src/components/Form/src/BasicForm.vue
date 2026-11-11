@@ -73,7 +73,7 @@
       const modalFn = useModalContext();
 
       const advanceState = reactive<AdvanceState>({
-        // 默认是收起状态
+        // Mặc định là trạng thái thu gọn
         isAdvanced: false,
         hideAdvanceBtn: true,
         isLoad: false,
@@ -91,11 +91,11 @@
       // Get the basic configuration of the form
       const getProps = computed((): FormProps => {
         let mergeProps = { ...props, ...unref(propsRef) } as FormProps;
-        // 代码逻辑说明: 如果用户设置了labelWidth，则使labelCol失效，解决labelWidth设置无效的问题
+        // Giải thích logic mã: Nếu người dùng đã đặt labelWidth thì làm cho labelCol vô hiệu, giải quyết vấn đề labelWidth đặt không có hiệu lực
         if (mergeProps.labelWidth) {
           mergeProps.labelCol = undefined;
         }
-        // 代码逻辑说明: 【QQYUN-6566】BasicForm支持一行显示(inline)
+        // Giải thích logic mã: 【QQYUN-6566] BasicForm hỗ trợ hiển thị một dòng(inline)
         if (mergeProps.layout === 'inline') {
           if (mergeProps.labelCol === componentSetting.form.labelCol) {
             mergeProps.labelCol = undefined;
@@ -128,7 +128,7 @@
 
       const getBindValue = computed(() => {
         const bindValue = { ...attrs, ...props, ...unref(getProps) } as Recordable;
-        // 代码逻辑说明: 【issues/8484】分类字典中的新增弹窗的label点击会触发查询区域的input
+        // Giải thích logic mã: 【issues/8484]Nhấp vào label của popup thêm mới trong từ điển phân loại sẽ kích hoạt vùng tìm kiếminput
         if (bindValue.name === undefined && bindValue.source === 'table-query') {
           bindValue.name = 'top-query-form';
         }
@@ -141,9 +141,9 @@
           const { defaultValue, component, componentProps } = schema;
           // handle date type
           if (defaultValue && dateItemType.includes(component)) {
-            // 代码逻辑说明: 【issues/435】代码生成的日期控件赋默认值报错------------
+            // Giải thích logic mã: 【issues/435] Control ngày sinh mã gán giá trị mặc định bị lỗi------------
             let valueFormat:string = "";
-            // 代码逻辑说明: 【issues/8683】DatePicker组件的componentProps使用函数形式时初始值获取不对
+            // Giải thích logic mã: 【issues/8683]Khi componentProps của component DatePicker dùng dạng hàm thì giá trị khởi tạo lấy không đúng
             if(isObject(componentProps)) {
               valueFormat = componentProps?.valueFormat;
             } else if (isFunction(componentProps)) {
@@ -153,15 +153,15 @@
               } catch (error) {
               }
             }
-            // update-end--author:liaozhiyang---date:20250818---for【issues/8683】DatePicker组件的componentProps使用函数形式时初始值获取不对
+            // update-end--author:liaozhiyang---date:20250818---for【issues/8683]Khi componentProps của component DatePicker dùng dạng hàm thì giá trị khởi tạo lấy không đúng
             if(!valueFormat){
-              console.warn("未配置valueFormat,可能导致格式化错误！");
+              console.warn("Chưa cấu hìnhvalueFormat,Có thể gây lỗi định dạng!");
             }
             if (!Array.isArray(defaultValue)) {
-              // 代码逻辑说明: [issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
+              // Giải thích logic mã: [issues/215]Ô tìm kiếm ở trang danh sách (ô chọn ngày) đặt thời gian khởi tạo, vừa vào trang thì backend báo lỗi chuyển đổi kiểu ngày------------
               if(valueFormat){
                 // schema.defaultValue = dateUtil(defaultValue).format(valueFormat);
-                // 代码逻辑说明: 【TV360X-346 】时间组件填写默认值有问题
+                // Giải thích logic mã: 【TV360X-346 ] Component thời gian điền giá trị mặc định có vấn đề
                 schema.defaultValue = dateUtil(defaultValue, valueFormat).format(valueFormat);
               }else{
                 schema.defaultValue = dateUtil(defaultValue);
@@ -169,15 +169,15 @@
             } else {
               const def: dayjs.Dayjs[] = [];
               defaultValue.forEach((item) => {
-                // 代码逻辑说明: [issues/215]列表页查询框（日期选择框）设置初始时间，一进入页面时，后台报日期转换类型错误的------------
+                // Giải thích logic mã: [issues/215]Ô tìm kiếm ở trang danh sách (ô chọn ngày) đặt thời gian khởi tạo, vừa vào trang thì backend báo lỗi chuyển đổi kiểu ngày------------
                 if(valueFormat){
-                  // 代码逻辑说明: 【TV360X-346 】时间组件填写默认值有问题
+                  // Giải thích logic mã: 【TV360X-346 ] Component thời gian điền giá trị mặc định có vấn đề
                   def.push(dateUtil(item, valueFormat).format(valueFormat));
                 }else{
                   def.push(dateUtil(item));
                 }
               });
-              // 代码逻辑说明: 【issues/1114】rangepicker等时间控件报错（vue3.4以上版本有问题）
+              // Giải thích logic mã: 【issues/1114]rangepicker và các control thời gian khác báo lỗi (vue3.4Phiên bản trở lên có vấn đề)
               def.forEach((item, index) => {
                 defaultValue[index] = item;
               });
@@ -284,7 +284,7 @@
         propsRef.value = deepMerge(unref(propsRef) || {}, formProps);
       }
 
-      // 代码逻辑说明: QQYUN-3121 【优化】表单视图问题#scott测试 8、此功能未实现
+      // Giải thích logic mã: QQYUN-3121 [Tối ưu] Vấn đề về chế độ xem biểu mẫu#scottKiểm thử 8, tính năng này chưa được triển khai
       const onFormSubmitWhenChange = useDebounceFn(handleSubmit, 300);
       function setFormModel(key: string, value: any) {
         formModel[key] = value;
@@ -309,7 +309,7 @@
       }
 
       /**
-       * 获取 componentProps，处理可能是函数的情况
+       * Lấy componentProps, xử lý trường hợp có thể là hàm
        * @param schema
        */
       function getSchemaComponentProps(schema: FormSchema) {
@@ -383,12 +383,12 @@
       //&:not(.ant-form-item-with-help) {
       //  margin-bottom: 24px;
       //}
-      // 代码逻辑说明: 【TV360X-1420】校验时闪动
+      // Giải thích logic mã: 【TV360X-1420] nhấp nháy khi kiểm chứng
       &-has-error {
         margin-bottom: 24px;
       }
 
-      // 表单组件中间件样式
+      // Kiểu middleware của component biểu mẫu
       .j-form-item-middleware {
         flex: 1;
         width: 100%
@@ -403,7 +403,7 @@
           margin-top: 4px;
         }
 
-        // 【QQYUN-12876】当紧凑型 suffix 时，表单组件中间件的宽度不占满
+        // 【QQYUN-12876]Khi suffix dạng thu gọn, chiều rộng của middleware component biểu mẫu không chiếm đầy
         &.suffix-compact .j-form-item-middleware {
           flex: unset;
           width: auto;
@@ -418,7 +418,7 @@
         }
       }
     }
-    /*【美化表单】form的字体改小一号*/
+    /*[Làm đẹp biểu mẫu] Cỡ chữ của form giảm một cỡ*/
 /*    .ant-form-item-label > label{
       font-size: 13px;
     }
@@ -434,7 +434,7 @@
     .ant-input {
       font-size: 13px;
     }*/
-    /*【美化表单】form的字体改小一号*/
+    /*[Làm đẹp biểu mẫu] Cỡ chữ của form giảm một cỡ*/
     
     .ant-form-explain {
       font-size: 14px;
@@ -445,7 +445,7 @@
         margin-bottom: 8px !important;
       }
     }
-    // 代码逻辑说明: 【QQYUN-6566】BasicForm支持一行显示(inline)
+    // Giải thích logic mã: 【QQYUN-6566] BasicForm hỗ trợ hiển thị một dòng(inline)
     &.ant-form-inline {
       & > .ant-row {
         .ant-col { width:auto !important; }

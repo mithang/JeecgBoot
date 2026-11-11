@@ -31,7 +31,7 @@
         { immediate: true }
       );
 
-      // 特效结束
+      // Kết thúc hiệu ứng
       function handleEffectEnd() {
         isEffect.value = false;
         reloadEffect.removeEffect(row.value.id);

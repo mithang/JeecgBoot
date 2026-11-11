@@ -3,7 +3,7 @@
     <div class="table-link-card">
       <div style="width: 100%; height: 100%">
         <div class="card-button" v-if="showButton">
-          <a-button @click="handleAddRecord"><PlusOutlined />记 录</a-button>
+          <a-button @click="handleAddRecord"><PlusOutlined />Bản ghi</a-button>
         </div>
 
         <a-row>
@@ -53,24 +53,24 @@
     name: 'JLinkTableCard',
     inheritAttrs: false,
     props: {
-      // value字段
+      // valueTrường
       valueField: propTypes.string.def(''),
-      // 文本字段
+      // Trường văn bản
       textField: propTypes.string.def(''),
-      // 关联表名
+      // Tên bảng liên kết
       tableName: propTypes.string.def(''),
-      // 是否多选
+      // Có chọn nhiều hay không
       multi: propTypes.bool.def(false),
       value: propTypes.oneOfType([propTypes.string, propTypes.number]),
-      // ["表单字段,表字典字段","表单字段,表字典字段"]
+      // ["Trường biểu mẫu,Trường từ điển bảng","Trường biểu mẫu,Trường từ điển bảng"]
       linkFields: propTypes.array.def([]),
-      //是否是禁用页面
+      //Có phải trang bị vô hiệu hóa không
       disabled: propTypes.bool.def(false),
-      // 是否是detail页面
+      // Có phải là trang detail không
       detail: propTypes.bool.def(false),
-      // 图片字段
+      // Trường hình ảnh
       imageField: propTypes.string.def(''),
-      // 查询模式：'online'（仅限 Online 表单配置的表）| 'table'（数据库中的所有表）
+      // Chế độ tìm kiếm:'online'(Chỉ giới hạn các bảng được cấu hình trong biểu mẫu Online)| 'table'(Tất cả các bảng trong cơ sở dữ liệu)
       queryMode: propTypes.string.def('online'),
     },
     components: {
@@ -84,7 +84,7 @@
       const popTableName = computed(() => {
         return props.tableName;
       });
-      //注册model
+      //Đăng kýmodel
       const [registerListModal, { openModal: openListModal }] = useModal();
       const selectValue = ref([]);
       const selectRecords = ref([]);
@@ -96,7 +96,7 @@
           return false;
         }
         if (props.multi === false) {
-          //单选且有值
+          //Chọn đơn và có giá trị
           if (selectRecords.value.length > 0) {
             return false;
           }
@@ -151,14 +151,14 @@
       function handleAddRecord(e) {
         prevent(e);
         openListModal(true, {
-          // 代码逻辑说明: 【TV360X-43】修复关联记录可以添加重复数据
+          // Giải thích logic mã: 【TV360X-43] Sửa lỗi bản ghi liên kết có thể thêm dữ liệu trùng lặp
           selectedRowKeys: selectRecords.value.map((item) => item.id),
           selectedRows: [...selectRecords.value],
         });
       }
 
       function addCard(data) {
-        // 代码逻辑说明: 【TV360X-43】修复关联记录可以添加重复数据
+        // Giải thích logic mã: 【TV360X-43] Sửa lỗi bản ghi liên kết có thể thêm dữ liệu trùng lặp
         let arr = [];
         for (let item of data) {
           let temp = { ...item };
@@ -220,7 +220,7 @@
               let arr = await loadOne(val);
               selectRecords.value = arr;
             }
-            //保证表单其他值回显成功
+            //Đảm bảo các giá trị khác của biểu mẫu hiển thị lại thành công
             if (props.linkFields && props.linkFields.length > 0) {
               emitValue();
             }
@@ -232,12 +232,12 @@
       );
 
       onMounted(() => {
-        // 代码逻辑说明: 【TV360X-281】分辨率小时关联记录文字被图片挤没了
+        // Giải thích logic mã: 【TV360X-281] Khi độ phân giải nhỏ, chữ bản ghi liên kết bị hình ảnh chèn mất
         if (tableLinkCardRef.value.offsetWidth < 250) {
           fixedSpan.value = 24;
         }
       });
-      // 代码逻辑说明: 【TV360X-389】下拉和卡片关联记录图裂开给个默认图片
+      // Giải thích logic mã: 【TV360X-389] Dropdown và hình ảnh bản ghi liên kết của thẻ bị vỡ, cho một ảnh mặc định
       const handleImageError = (event) => {
         event.target.src = placeholderImage;
       };

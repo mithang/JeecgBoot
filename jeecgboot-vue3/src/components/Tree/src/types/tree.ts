@@ -113,23 +113,23 @@ export const treeProps = buildProps({
   rightMenuList: {
     type: Array as PropType<ContextMenuItem[]>,
   },
-  // 自定义数据过滤判断方法(注: 不是整个过滤方法，而是内置过滤的判断方法，用于增强原本仅能通过title进行过滤的方式)
+  // Phương thức phán đoán lọc dữ liệu tùy chỉnh(Lưu ý: Không phải toàn bộ phương thức lọc, mà là phương thức phán đoán lọc nội bộ, dùng để tăng cường cách thức ban đầu chỉ có thể lọc qua title)
   filterFn: {
     type: Function as PropType<
       (searchValue: any, node: TreeItem, fieldNames: FieldNames) => boolean
     >,
     default: undefined,
   },
-  // 高亮搜索值，仅高亮具体匹配值（通过title）值为true时使用默认色值，值为#xxx时使用此值替代且高亮开启
+  // Tô sáng giá trị tìm kiếm, chỉ tô sáng giá trị khớp cụ thể (thông qua title); khi giá trị là true thì dùng màu mặc định, khi giá trị là#xxxthì dùng giá trị này thay thế và bật tô sáng
   highlight: {
     type: [Boolean, String] as PropType<Boolean | String>,
     default: false,
   },
-  // 搜索完成时自动展开结果
+  // Tự động mở rộng kết quả khi tìm kiếm hoàn tất
   expandOnSearch: Boolean,
-  // 搜索完成自动选中所有结果,当且仅当 checkable===true 时生效
+  // Sau khi tìm kiếm xong, tự động chọn tất cả kết quả,khi và chỉ khi checkable===true khi có hiệu lực
   checkOnSearch: Boolean,
-  // 搜索完成自动select所有结果
+  // Sau khi tìm kiếm xong tự động select tất cả kết quả
   selectedOnSearch: Boolean,
   loading: {
     type: Boolean,

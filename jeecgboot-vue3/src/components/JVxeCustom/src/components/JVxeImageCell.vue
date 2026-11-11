@@ -3,16 +3,16 @@
     <template v-if="hasFile" v-for="(file, fileKey) of [innerFile || {}]" :key="fileKey">
       <div class="j-vxe-image-list">
         <template v-if="!file || !(file['url'] || file['path'] || file['message'])">
-          <a-tooltip :title="'请稍后: ' + JSON.stringify(file) + (file['url'] || file['path'] || file['message'])">
+          <a-tooltip :title="'Vui lòng chờ: ' + JSON.stringify(file) + (file['url'] || file['path'] || file['message'])">
             <LoadingOutlined />
           </a-tooltip>
         </template>
         <template v-else-if="file['path']">
           <template v-for="src of imgList">
-            <img class="j-vxe-image" :src="src" alt="图片错误" @[clickEvent]="handleMoreOperation" @click="handlePreview" />
+            <img class="j-vxe-image" :src="src" alt="Lỗi hình ảnh" @[clickEvent]="handleMoreOperation" @click="handlePreview" />
           </template>
         </template>
-        <a-tooltip v-else :title="file.message || '上传失败'" @[clickEvent]="handleClickShowImageError">
+        <a-tooltip v-else :title="file.message || 'Tải lên thất bại'" @[clickEvent]="handleClickShowImageError">
           <Icon icon="ant-design:exclamation-circle" style="color: red" />
         </a-tooltip>
       </div>
@@ -29,7 +29,7 @@
         v-bind="cellProps"
         @change="handleChangeUpload"
       >
-        <a-button v-if="!hasFile" class="j-vxe-upload-trigger" size="small" preIcon="ant-design:upload">{{ originColumn.btnText || '图片' }}</a-button>
+        <a-button v-if="!hasFile" class="j-vxe-upload-trigger" size="small" preIcon="ant-design:upload">{{ originColumn.btnText || 'Hình ảnh' }}</a-button>
         <div v-if="hasFile && imgList.length < maxCount" class="j-vxe-plus" @click="">
           <Icon icon="ant-design:plus" />
         </div>
@@ -56,9 +56,9 @@
       
       const { createErrorModal } = useMessage();
       const setup = useFileCell(props, UploadTypeEnum.image, { multiple: true });
-      // 代码逻辑说明: 【TV360X-470】jVxetable上传图片组件限制类型
+      // Giải thích logic mã: 【TV360X-470]jVxetable giới hạn loại của component tải lên hình ảnh
       const acceptFileType = 'image/*';
-      // 代码逻辑说明: 【issues/953】online子表vxe-table展现形式详情图片上传可点击
+      // Giải thích logic mã: 【issues/953] bảng con onlinevxe-tableHình ảnh tải lên trong chi tiết dạng hiển thị có thể nhấp được
       const clickEvent = computed(() => {
         return unref(setup.cellProps).disabled ? null : 'click';
       });
@@ -76,18 +76,18 @@
         return [];
       });
 
-      // 弹出上传出错详细信息
+      // Hiển thị chi tiết lỗi tải lên
       function handleClickShowImageError() {
         let file = innerFile.value || null;
         if (file && file['message']) {
           createErrorModal({
-            title: '上传出错',
-            content: '错误信息：' + file['message'],
+            title: 'Tải lên bị lỗi',
+            content: 'Thông tin lỗi:' + file['message'],
             maskClosable: true,
           });
         }
       }
-      // 代码逻辑说明: 【TV360X-121】jvxetable文件组件禁用状态(详情)下可下载
+      // Giải thích logic mã: 【TV360X-121] Trạng thái vô hiệu hóa của component tệp jvxetable(Chi tiết)có thể tải xuống
       const handlePreview = () => {
         if (unref(setup.cellProps).disabled) {
           createImgPreview({ imageList: imgList.value });
@@ -103,7 +103,7 @@
         acceptFileType,
       };
     },
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: enhanced,
   });
 </script>

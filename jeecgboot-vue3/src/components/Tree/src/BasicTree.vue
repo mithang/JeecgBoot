@@ -99,12 +99,12 @@
       /**
        * 2024-04-26
        * liaozhiyang
-       * 【issues/1151】层级独立时勾选了父级，然后点击层级关联子级视觉上勾选了，但是保存子级没存上(把函数独立出来复用)
+       * 【issues/1151]Khi cấp bậc độc lập mà đã tick nút cha, sau đó bấm liên kết cấp bậc thì nút con về mặt hiển thị đã được tick, nhưng khi lưu thì nút con không được lưu(Tách hàm ra riêng để tái sử dụng)
        * */
       const handleCheck = (v: CheckKeys, e?) => {
         let currentValue = toRaw(state.checkedKeys) as KeyType[];
         if (isArray(currentValue) && searchState.startSearch && e) {
-          // 代码逻辑说明: [issue/429]树搜索点击事件失效---
+          // Giải thích logic mã: [issue/429]Sự kiện nhấp tìm kiếm cây không hoạt động---
           const value = e.node.eventKey;
           currentValue = difference(currentValue, getChildrenKeys(value));
           if (e.checked) {
@@ -323,7 +323,7 @@
           emit('change', v);
         },
       );
-      // 代码逻辑说明: 【issues/1151】层级独立时勾选了父级，然后点击层级关联子级视觉上勾选了，但是保存子级没存上
+      // Giải thích logic mã: 【issues/1151]Khi cấp bậc độc lập mà đã tick nút cha, sau đó bấm liên kết cấp bậc thì nút con về mặt hiển thị đã được tick, nhưng khi lưu thì nút con không được lưu
       watch(
         () => props.checkStrictly,
         () => {
@@ -455,7 +455,7 @@
                 {extendSlots(slots)}
               </TreeHeader>
             )}
-            <Spin spinning={unref(props.loading)} tip="加载中...">
+            <Spin spinning={unref(props.loading)} tip="Đang tải...">
               <ScrollContainer style={scrollStyle} v-show={!unref(getNotFound)}>
                 <Tree ref={treeRef} {...unref(getBindValues)} showIcon={false} treeData={treeData.value} />
               </ScrollContainer>
@@ -472,7 +472,7 @@
   });
 </script>
 <style lang="less" scoped>
-// 代码逻辑说明: 【JHHB-192】主职务选择，多选框改成单选
+// Giải thích logic mã: 【JHHB-192] Lựa chọn chức danh chính, đổi hộp kiểm đa chọn thành chọn đơn
 .custom-radio {
   :deep(.ant-tree) {
     .ant-tree-checkbox {

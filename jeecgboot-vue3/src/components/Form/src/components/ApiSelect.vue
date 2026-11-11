@@ -37,7 +37,7 @@
   import { isNumber } from '/@/utils/is';
 
   type OptionsItem = { label: string; value: string; disabled?: boolean };
-  //文档 https://help.jeecg.com/ui/apiSelect#pageconfig%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE
+  //Tài liệu https://help.jeecg.com/ui/apiSelect#pageconfig%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE
   export default defineComponent({
     name: 'ApiSelect',
     components: {
@@ -57,7 +57,7 @@
         type: Object as PropType<Recordable>,
         default: () => ({}),
       },
-      //分页配置
+      //Cấu hình phân trang
       pageConfig: {
         type: Object as PropType<Recordable>,
         default: () => ({ isPage: false }),
@@ -79,25 +79,25 @@
       const searchValue = ref('');
       let searchTimer: ReturnType<typeof setTimeout> | null = null;
       const { t } = useI18n();
-      // 代码逻辑说明: 【QQYUN-11831】ApiSelect 分页下拉方案 #7883
+      // Giải thích logic mã: 【QQYUN-11831] Phương án dropdown phân trang ApiSelect #7883
       const hasMore = ref(true);
       const pagination = ref({
         pageNo: 1,
         pageSize: 10,
         total: 0,
       });
-      // update-begin--author:liaozhiyang---date:20260617---for:【issue/9689】开启分页 + 搜索,过滤不到未加载数据
+      // update-begin--author:liaozhiyang---date:20260617---for:【issue/9689] bật phân trang + Tìm kiếm,Không lọc được dữ liệu chưa tải
       const defPageConfig = { isPage: false, pageField: 'pageNo', pageSizeField: 'pageSize', totalField: 'total', listField: 'records', searchField: '' };
       const mergedPageConfig = computed(() => ({ ...defPageConfig, ...props.pageConfig }));
       const isRemoteSearch = computed(() => {
         const { isPage, searchField } = mergedPageConfig.value;
         return !!(isPage && searchField);
       });
-      // update-end--author:liaozhiyang---date:20260617---for:【issue/9689】开启分页 + 搜索,过滤不到未加载数据
-      // update-end--author:liusq---date:20250407---for：【QQYUN-11831】ApiSelect 分页下拉方案 #7883
+      // update-end--author:liaozhiyang---date:20260617---for:【issue/9689] bật phân trang + Tìm kiếm,Không lọc được dữ liệu chưa tải
+      // update-end--author:liusq---date:20250407---for：【QQYUN-11831] Phương án dropdown phân trang ApiSelect #7883
       // Embedded in the form, just use the hook binding to perform form verification
       const [state, setState] = useRuleFormItem(props, 'value', 'change', emitData);
-      // 代码逻辑说明: 【QQYUN-6308】解决警告
+      // Giải thích logic mã: 【QQYUN-6308] giải quyết cảnh báo
       let vModalValue: any;
       const attrs_ = computed(() => {
         let obj: any = unref(attrs) || {};
@@ -105,9 +105,9 @@
           vModalValue = obj['onUpdate:value'];
           delete obj['onUpdate:value'];
         }
-        // 代码逻辑说明: 【issues/5467】ApiSelect修复覆盖了用户传递的方法
+        // Giải thích logic mã: 【issues/5467] ApiSelect sửa lỗi ghi đè phương thức do người dùng truyền vào
         if (obj['filterOption'] === undefined) {
-          // 代码逻辑说明: 【issues/5305】无法按照预期进行搜索
+          // Giải thích logic mã: 【issues/5305] không thể tìm kiếm như mong đợi
           obj['filterOption'] = (inputValue, option) => {
             if (typeof option['label'] === 'string') {
               return option['label'].toLowerCase().indexOf(inputValue.toLowerCase()) != -1;
@@ -118,16 +118,16 @@
         }
         return obj;
       });
-      // 代码逻辑说明: 【QQYUN-6308】解决警告
+      // Giải thích logic mã: 【QQYUN-6308] giải quyết cảnh báo
       const getOptions = computed(() => {
         const { labelField, valueField, numberToString } = props;
         return unref(options).reduce((prev, next: Recordable) => {
           if (next) {
             const value = next[valueField];
             prev.push({
-              // update-begin--author:liaozhiyang---date:20260226---for:【issues/9326】ApiSelect组件，返回数据中包含 options 这个名称导致组件渲染失败
+              // update-begin--author:liaozhiyang---date:20260226---for:【issues/9326]Component ApiSelect, dữ liệu trả về chứa tên options khiến component render thất bại
               ...omit(next, [labelField, valueField, 'options']),
-              // update-end--author:liaozhiyang---date:20260226---for:【issues/9326】ApiSelect组件，返回数据中包含 options 这个名称导致组件渲染失败
+              // update-end--author:liaozhiyang---date:20260226---for:【issues/9326]Component ApiSelect, dữ liệu trả về chứa tên options khiến component render thất bại
               label: next[labelField],
               value: numberToString ? `${value}` : value,
             });
@@ -135,7 +135,7 @@
           return prev;
         }, [] as OptionsItem[]);
       });
-      // 代码逻辑说明: 【issues/8527】apiSelect分页加载重复请求
+      // Giải thích logic mã: 【issues/8527] apiSelect tải phân trang bị yêu cầu trùng lặp
       watch(
         () => props.immediate,
         () => {
@@ -158,19 +158,19 @@
         },
         { deep: true }
       );
-      //监听数值修改，查询数据
+      //Lắng nghe thay đổi giá trị, truy vấn dữ liệu
       watchEffect(() => {
         props.value && handleFetch();
       });
       /**
-       * 筛选流程
+       * Quy trình lọc
        * @param input
        * @param option
        */
       const filterOption = (input: string, option: any) => {
         return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0 || option.label.indexOf(input) >= 0;
       };
-      // update-begin--author:liaozhiyang---date:20260617---for:【issue/9689】开启分页 + 搜索,过滤不到未加载数据
+      // update-begin--author:liaozhiyang---date:20260617---for:【issue/9689] bật phân trang + Tìm kiếm,Không lọc được dữ liệu chưa tải
       const getFilterOption = computed(() => {
         return isRemoteSearch.value ? false : filterOption;
       });
@@ -185,11 +185,11 @@
           fetch();
         }, props.searchDebounce);
       }
-      // update-end--author:liaozhiyang---date:20260617---for:【issue/9689】开启分页 + 搜索,过滤不到未加载数据
+      // update-end--author:liaozhiyang---date:20260617---for:【issue/9689] bật phân trang + Tìm kiếm,Không lọc được dữ liệu chưa tải
       async function fetch() {
         const api = props.api;
         if (!api || !isFunction(api)) return;
-        // 代码逻辑说明: 【QQYUN-11831】ApiSelect 分页下拉方案 #7883
+        // Giải thích logic mã: 【QQYUN-11831] Phương án dropdown phân trang ApiSelect #7883
         if (!props.pageConfig.isPage || pagination.value.pageNo == 1) {
           options.value = [];
         }
@@ -199,15 +199,15 @@
           let params = isPage
             ? { ...props.params, [pageField]: pagination.value.pageNo, [pageSizeField]: pagination.value.pageSize }
             : { ...props.params };
-          // update-begin--author:liaozhiyang---date:20260617---for:【issue/9689】开启分页 + 搜索,过滤不到未加载数据
-          // 携带远程搜索关键字到后端
+          // update-begin--author:liaozhiyang---date:20260617---for:【issue/9689] bật phân trang + Tìm kiếm,Không lọc được dữ liệu chưa tải
+          // Mang từ khóa tìm kiếm từ xa đến backend
           if (isPage && searchField && searchValue.value) {
             params[searchField] = searchValue.value;
           }
-          // update-end--author:liaozhiyang---date:20260617---for:【issue/9689】开启分页 + 搜索,过滤不到未加载数据
+          // update-end--author:liaozhiyang---date:20260617---for:【issue/9689] bật phân trang + Tìm kiếm,Không lọc được dữ liệu chưa tải
           const res = await api(params);
           if (isPage) {
-            // 代码逻辑说明: 【QQYUN-11831】ApiSelect 分页下拉方案 #7883
+            // Giải thích logic mã: 【QQYUN-11831] Phương án dropdown phân trang ApiSelect #7883
             options.value = [...options.value, ...res[listField]];
             pagination.value.total = res[totalField] || 0;
             hasMore.value = res[totalField] ? options.value.length < res[totalField] : res[listField] < pagination.value.pageSize;
@@ -233,7 +233,7 @@
 
       function initValue() {
         let value = props.value;
-        // 代码逻辑说明: 【issues/8037】初始化值单选的值被错误地写入数组值
+        // Giải thích logic mã: 【issues/8037] Giá trị đơn chọn của giá trị khởi tạo bị ghi nhầm vào giá trị mảng
         if (['multiple', 'tags'].includes(unref(attrs).mode)) {
           if (value && typeof value === 'string' && value != 'null' && value != 'undefined') {
             state.value = value.split(',');
@@ -260,7 +260,7 @@
         vModalValue && vModalValue(_);
         emitData.value = args;
       }
-      // 滚动加载更多
+      // Cuộn để tải thêm
       function handlePopupScroll(e) {
         const { scrollTop, scrollHeight, clientHeight } = e.target;
         const isNearBottom = scrollHeight - scrollTop <= clientHeight + 20;

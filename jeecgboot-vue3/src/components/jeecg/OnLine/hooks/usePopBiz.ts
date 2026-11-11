@@ -13,7 +13,7 @@ import {replaceUserInfoByExpression} from "@/utils/common/compUtils";
 import { isString } from '/@/utils/is';
 
 export function usePopBiz(ob, tableRef?) {
-  // 代码逻辑说明: 【issues/675】子表字段Popup弹框数据不更新
+  // Giải thích logic mã: 【issues/675] Dữ liệu popup của trường bảng con không cập nhật
   let props: any;
   if (isRef(ob)) {
     props = ob.value;
@@ -25,51 +25,51 @@ export function usePopBiz(ob, tableRef?) {
     props = ob;
   }
   const { createMessage } = useMessage();
-  //弹窗可视状态
+  //Trạng thái hiển thị popup
   const visible = ref(false);
-  //表格加载
+  //Tải bảng
   const loading = ref(false);
   //cgRpConfigId
   const cgRpConfigId = ref('');
-  //标题
-  const title = ref('列表');
-  // 排序字段，默认无排序
+  //Tiêu đề
+  const title = ref('Danh sách');
+  // Trường sắp xếp, mặc định không sắp xếp
   const iSorter = ref<any>('');
-  // 查询对象
+  // Đối tượng tìm kiếm
   const queryInfo = ref([]);
-  // 查询参数
+  // Tham số truy vấn
   const queryParam = ref<any>({});
-  // 动态参数
+  // Tham số động
   const dynamicParam = ref<any>({});
-  //字典配置项
+  //Mục cấu hình danh mục
   const dictOptions = ref({});
-  //数据集
+  //Tập dữ liệu
   const dataSource = ref<Array<object>>([]);
-  //定义表格信息
+  //Định nghĩa thông tin bảng
   const columns = ref<Array<object>>([]);
-  // 当前路由
+  // Route hiện tại
   const route = useRoute();
-  //定义请求url信息
+  //Định nghĩa thông tin URL yêu cầu
   const configUrl = reactive({
-    //列表页加载column和data
+    //Trang danh sách tải column vàdata
     getColumnsAndData: '/online/cgreport/api/getColumnsAndData/',
     getColumns: '/online/cgreport/api/getRpColumns/',
     getData: '/online/cgreport/api/getData/',
     getQueryInfo: '/online/cgreport/api/getQueryInfo/',
     export: '/online/cgreport/api/exportManySheetXls/',
   });
-  //已选择的值
+  //Giá trị đã chọn
   const checkedKeys = ref<Array<string | number>>([]);
-  //选择的行记录
+  //Bản ghi hàng đã chọn
   const selectRows = ref<Array<any>>([]);
-  // 点击单元格选中行 popup需要 但是报表预览不需要
+  // Nhấp vào ô để chọn dòng, popup cần nhưng xem trước báo cáo thì không cần
   let clickThenCheckFlag = true;
   if (props.clickToRowSelect === false) {
     clickThenCheckFlag = false;
   }
 
   /**
-   * 选择列配置
+   * Cấu hình cột lựa chọn
    */
   const rowSelection = {
     fixed: true,
@@ -80,55 +80,55 @@ export function usePopBiz(ob, tableRef?) {
   };
 
   /**
-   * 序号列配置
+   * Cấu hình cột số thứ tự
    */
   const indexColumnProps = {
     dataIndex: 'index',
     width: '15px',
   };
   /**
-   * 分页配置
+   * Cấu hình phân trang
    */
   const pagination = reactive({
     current: 1,
     pageSize: 10,
     pageSizeOptions: ['10', '20', '30'],
     // showTotal: (total, range) => {
-    //     return range[0] + '-' + range[1] + ' 共' + total + '条'
+    //     return range[0] + '-' + range[1] + ' Tổng cộng' + total + 'mục'
     // },
     showQuickJumper: true,
     showSizeChanger: true,
     total: 0,
-    // 合计逻辑 [待优化 3.0]
+    // Logic tính tổng [Cần tối ưu 3.0]
     showTotal: (total) => onShowTotal(total),
     realPageSize: 10,
     realTotal: 0,
-    // 是否有合计列，默认为""，在第一次获取到数据之后会设计为ture或者false
+    // Có cột tổng cộng không, mặc định là"", sau lần đầu tiên lấy được dữ liệu sẽ được thiết kế thành ture hoặcfalse
     isTotal: <string | boolean>'',
     onShowSizeChange: (current, pageSize) => onSizeChange(current, pageSize),
   });
 
   /**
-   * 表格选择事件
+   * Sự kiện chọn bảng
    * @param selectedRowKeys
    * @param selectRow
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
-    // 修复单选编辑选中的值在第二页，在第一页保存时保存不上
+    // Sửa lỗi giá trị đã chọn khi chỉnh sửa chọn đơn ở trang thứ hai, khi lưu ở trang thứ nhất thì lưu không được
     const prevRows = [...selectRows.value];
-    // 代码逻辑说明: 【QQYUN-7514】popup单选显示radio
+    // Giải thích logic mã: 【QQYUN-7514] hiển thị radio khi popup chọn đơnradio
     if (!props.multi) {
       selectRows.value = [];
       checkedKeys.value = [];
       // selectedRowKeys = [selectedRowKeys[selectedRowKeys.length - 1]];
     }
-    // 代码逻辑说明: 【QQYUN-4263】跨页选择导出问题
+    // Giải thích logic mã: 【QQYUN-4263] vấn đề xuất khi chọn qua nhiều trang
     if (!selectedRowKeys || selectedRowKeys.length == 0) {
       selectRows.value = [];
       checkedKeys.value = [];
     } else {
       if (selectRows.value.length > selectedRowKeys.length) {
-        // 取消
+        // Hủy
         selectRows.value.forEach((item, index) => {
           const rowKey = combineRowKey(item);
           if (!selectedRowKeys.find((key) => key === rowKey)) {
@@ -136,15 +136,15 @@ export function usePopBiz(ob, tableRef?) {
           }
         });
       } else {
-        // 新增
+        // Thêm mới
         const append: any = [];
         const beforeRowKeys = selectRows.value.map((item) => combineRowKey(item));
         selectedRowKeys.forEach((key) => {
           if (!beforeRowKeys.find((item) => item === key)) {
-            // 那就是新增选中的行
-            // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3】popup编辑时弹窗勾选回显
+            // Đó chính là dòng mới được chọn thêm
+            // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
             const row = getRowByKey(key) || prevRows.find((item) => combineRowKey(item) === key);
-            // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3】popup编辑时弹窗勾选回显
+            // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
             row && append.push(row);
           }
         });
@@ -154,7 +154,7 @@ export function usePopBiz(ob, tableRef?) {
     }
   }
   /**
-   * 过滤没用选项
+   * Lọc các tùy chọn không dùng
    * @param selectedRowKeys
    */
   function filterUnuseSelect() {
@@ -165,7 +165,7 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 根据key获取row信息
+   * Lấy thông tin row theo key
    * @param key
    */
   function getRowByKey(key) {
@@ -174,12 +174,12 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 加载rowKey
+   * TảirowKey
    */
   function combineRowKey(record) {
     let res = record?.id || '';
     if (props?.rowkey) {
-      // 代码逻辑说明: 【issues/3656】popupdict回显
+      // Giải thích logic mã: 【issues/3656] Hiển thị lại popupdict
       res = record[props.rowkey];
     } else {
       Object.keys(record).forEach((key) => {
@@ -191,12 +191,12 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 加载列信息
+   * Tải thông tin cột
    */
   function loadColumnsInfo() {
     const {code} = handleCodeParams(true)
     let url = `${configUrl.getColumns}${code}`;
-    //缓存key
+    //Cachekey
     let groupIdKey = props.groupId ? `${props.groupId}${url}` : '';
     httpGroupRequest(() => defHttp.get({ url }, { isTransformResponse: false, successMessageMode: 'none' }), groupIdKey).then((res) => {
       if (res.success) {
@@ -211,12 +211,12 @@ export function usePopBiz(ob, tableRef?) {
               return filterMultiDictText(unref(dictOptions)[dictCode], text + '');
             };
           }
-          // 排序字段受控
+          // Trường sắp xếp được kiểm soát
           if (unref(iSorter) && currColumns[a].dataIndex === unref(iSorter).column) {
             currColumns[a].sortOrder = unref(iSorter).order === 'asc' ? 'ascend' : 'descend';
           }
         }
-        // 代码逻辑说明: 【issues/946】popup列宽和在线报表列宽读取配置
+        // Giải thích logic mã: 【issues/946] Độ rộng cột popup và độ rộng cột báo cáo online đọc cấu hình
         currColumns.forEach((item) => {
           if (item.fieldWidth != null) {
             if (isString(item.fieldWidth) && item.fieldWidth.trim().length == 0) return;
@@ -226,13 +226,13 @@ export function usePopBiz(ob, tableRef?) {
         });
         if (currColumns[0].key !== 'rowIndex') {
           currColumns.unshift({
-            title: '序号',
+            title: 'STT',
             dataIndex: 'rowIndex',
             key: 'rowIndex',
             width: 60,
             align: 'center',
             customRender: function ({ text }) {
-              // 代码逻辑说明: 【QQYUN-7584】popup有合计时序号列会出现NaN
+              // Giải thích logic mã: 【QQYUN-7584] Khi popup có tổng, cột số thứ tự sẽ xuất hiệnNaN
               if (text == undefined) {
                 return '';
               } else {
@@ -248,10 +248,10 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 加载列和数据[列表专用]
+   * Tải cột và dữ liệu[Dành riêng cho danh sách]
    */
   function loadColumnsAndData() {
-    // 第一次加载 置空isTotal 在这里调用确保 该方法只是进入页面后 加载一次 其余查询不走该方法
+    // Lần tải đầu tiên đặt trống isTotal, gọi tại đây để đảm bảo phương thức này chỉ tải một lần sau khi vào trang, các lần truy vấn còn lại không đi qua phương thức này
     pagination.isTotal = '';
     let url = `${configUrl.getColumnsAndData}${props.id}`;
 
@@ -259,15 +259,15 @@ export function usePopBiz(ob, tableRef?) {
     if (query) {
       url = url + query
     }
-    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1296】地址栏有参数时首次请求即带上，避免再触发两次请求
-    // 首次请求前先合并地址栏参数，保证与后续查询条件一致
+    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1296]Khi thanh địa chỉ có tham số thì yêu cầu đầu tiên mang theo luôn, tránh kích hoạt thêm hai yêu cầu nữa
+    // Trước lần yêu cầu đầu tiên, hợp nhất trước các tham số trên thanh địa chỉ để đảm bảo nhất quán với điều kiện tìm kiếm sau đó
     if (props.routeQuery && Object.keys(props.routeQuery).length > 0) {
       queryParam.value = Object.assign({}, queryParam.value, props.routeQuery);
     }
     let params = getQueryParams();
     params['onlRepUrlParamStr'] = getUrlParamString();
-    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1296】地址栏有参数时首次请求即带上，避免再触发两次请求
-    //缓存key
+    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1296]Khi thanh địa chỉ có tham số thì yêu cầu đầu tiên mang theo luôn, tránh kích hoạt thêm hai yêu cầu nữa
+    //Cachekey
     let groupIdKey = props.groupId ? `${props.groupId}${url}${JSON.stringify(params)}` : '';
     httpGroupRequest(() => defHttp.get({ url, params }, { isTransformResponse: false, successMessageMode: 'none' }), groupIdKey).then((res) => {
       if (res.success) {
@@ -275,11 +275,11 @@ export function usePopBiz(ob, tableRef?) {
         cgRpConfigId.value = props.id;
         let { columns: metaColumnList, cgreportHeadName, fieldHrefSlots, isGroupTitle } = res.result;
         title.value = cgreportHeadName;
-        // href 跳转
+        // href Chuyển hướng
         const fieldHrefSlotKeysMap = {};
         fieldHrefSlots.forEach((item) => (fieldHrefSlotKeysMap[item.slotName] = item));
         let currColumns: any = handleColumnHrefAndDict(metaColumnList, fieldHrefSlotKeysMap);
-        // 代码逻辑说明: 【issues/946】popup列宽和在线报表列宽读取配置
+        // Giải thích logic mã: 【issues/946] Độ rộng cột popup và độ rộng cột báo cáo online đọc cấu hình
         currColumns.forEach((item) => {
           if (isString(item.fieldWidth) && item.fieldWidth.trim().length == 0) return;
           if (item.fieldWidth != null) {
@@ -288,10 +288,10 @@ export function usePopBiz(ob, tableRef?) {
           }
         });
 
-        // popup需要序号， 普通列表不需要
+        // popupCần số thứ tự, danh sách thường thì không cần
         if (clickThenCheckFlag === true) {
           currColumns.unshift({
-            title: '序号',
+            title: 'STT',
             dataIndex: 'rowIndex',
             key: 'rowIndex',
             width: 60,
@@ -302,20 +302,20 @@ export function usePopBiz(ob, tableRef?) {
           });
         }
 
-        // 合并表头
+        // Gộp tiêu đề bảng
         if (isGroupTitle === true) {
           currColumns = handleGroupTitle(currColumns);
         }
         columns.value = [...currColumns];
         initQueryInfo(res.result.data);
       } else {
-        // 代码逻辑说明: VUEN-583【vue3】JeecgBootException: sql黑名单校验不通过,请联系管理员!,前台无提示
+        // Giải thích logic mã: VUEN-583【vue3】JeecgBootException: sqlKiểm chứng danh sách đen chưa đạt,Vui lòng liên hệ quản trị viên!,Giao diện không hiển thị nhắc nhở
         createMessage.warning(res.message);
       }
     });
   }
 
-  // 处理动态参数和系统变量
+  // Xử lý tham số động và biến hệ thống
   function handleCodeParams(onlyCode: boolean = false) {
     if (!props.code) {
       return {code: '', query: ''}
@@ -330,12 +330,12 @@ export function usePopBiz(ob, tableRef?) {
     }
     const queryOrigin = props.code.substring(firstIndex, props.code.length);
     let query: string
-    // 替换系统变量
+    // Thay thế biến hệ thống
     query = replaceUserInfoByExpression(queryOrigin)
-    // 获取表单值
+    // Lấy giá trị biểu mẫu
     if (typeof props.getFormValues === 'function') {
       const values = props.getFormValues()
-      // 替换动态参数，如果有 ${xxx} 则替换为实际值
+      // Thay thế tham số động, nếu có ${xxx} Sẽ thay bằng giá trị thực tế
       query = query.replace(/\${([^}]+)}/g, (_$0, $1) => {
         if (values[$1] == null) {
           return ''
@@ -349,17 +349,17 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 处理求和的列 合计逻辑 [待优化 3.0]
+   * Xử lý logic tổng cộng của cột tính tổng [Cần tối ưu 3.0]
    */
   function handleSumColumn(metaColumnList: OnlineColumn[], dataTotal: number): void {
-    // 获取需要合计列的dataIndex
+    // Lấy dataIndex của cột cần tổng hợpdataIndex
     let sumColumnList = getNeedSumColumns(metaColumnList);
-    // 判断是否为第一次获取数据，如果是的话，则需要重新设置pageSize
+    // Xác định có phải lần đầu tiên lấy dữ liệu hay không, nếu đúng thì cần đặt lạipageSize
     if (pagination.isTotal == '') {
       if (sumColumnList.length > 0) {
         pagination.isTotal = true;
-        // 有合计字段时，每次最多查询原pageSize-1条记录，另外需要第一次时将查询的10条中删除最后一条
-        // 删除最后一条数据 如果第一次得到的数据长度等于pageSize的话，则删除最后一条
+        // Khi có trường tổng, mỗi lần truy vấn tối đa số bản ghi gốcpageSize-1bản ghi, ngoài ra lần đầu tiên cần xóa bản ghi cuối cùng trong 10 bản ghi đã truy vấn
+        // Xóa bản ghi dữ liệu cuối cùng: nếu độ dài dữ liệu lấy được lần đầu bằng pageSize thì xóa bản ghi cuối cùng
         if (dataSource.value.length == pagination.pageSize) {
           let remove_data = dataSource.value.pop();
         }
@@ -368,20 +368,20 @@ export function usePopBiz(ob, tableRef?) {
         pagination.isTotal = false;
       }
     }
-    // 需要添加合计字段
+    // Cần thêm trường tổng cộng
     if (pagination.isTotal) {
       let totalRow = {};
       sumColumnList.forEach((dataIndex) => {
         let count = 0;
         dataSource.value.forEach((row) => {
-          // 统计去除null及空数据
+          // Thống kê loại bỏ null và dữ liệu rỗng
           if (row[dataIndex] != null && row[dataIndex] != '') {
             count += parseFloat(row[dataIndex]);
           }
         });
-        totalRow[dataIndex] = isNaN(count) ? '包含非数字内容' : count.toFixed(2);
+        totalRow[dataIndex] = isNaN(count) ? 'Chứa nội dung không phải số' : count.toFixed(2);
 
-        // 长整形时合计不显示.00后缀
+        // Khi là số nguyên dài, tổng cộng không hiển thị.00Hậu tố
         let v = metaColumnList.find((v) => v.dataIndex == dataIndex);
         if (v && v.fieldType == 'Long') {
           totalRow[dataIndex] = parseInt(totalRow[dataIndex]);
@@ -394,7 +394,7 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 获取需要求和的列 dataIndex
+   * Lấy dataIndex của cột cần tính tổng dataIndex
    * @param columns
    */
   function getNeedSumColumns(columns: OnlineColumn[]): string[] {
@@ -403,7 +403,7 @@ export function usePopBiz(ob, tableRef?) {
       if (column.isTotal === '1') {
         arr.push(column.dataIndex!);
       }
-        // 【VUEN-1569】【online报表】合计无效
+        // 【VUEN-1569] [Báo cáo online] Tổng không có hiệu lực
       if (column.children && column.children.length > 0) {
         let subArray = getNeedSumColumns(column.children);
         if (subArray.length > 0) {
@@ -415,12 +415,12 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 处理列的href和字典翻译
+   * Xử lý href và bản dịch từ điển của cột
    */
   function handleColumnHrefAndDict(columns: OnlineColumn[], fieldHrefSlotKeysMap: {}): OnlineColumn[] {
     for (let column of columns) {
       let { customRender, hrefSlotName, fieldType } = column;
-      // online 报表中类型配置为日期（yyyy-MM-dd ），但是实际展示为日期时间格式(yyyy-MM-dd HH:mm:ss) issues/3042
+      // online Trong báo cáo, loại được cấu hình là ngày (yyyy-MM-dd ), nhưng thực tế hiển thị theo định dạng ngày giờ(yyyy-MM-dd HH:mm:ss) issues/3042
       if (fieldType == 'Date') {
         column.customRender = ({ text }) => {
           if (!text) {
@@ -433,20 +433,20 @@ export function usePopBiz(ob, tableRef?) {
         };
       } else {
         if (!hrefSlotName && column.scopedSlots && column.scopedSlots.customRender) {
-          //【Online报表】字典和href互斥 这里通过fieldHrefSlotKeysMap 先找到是href的列
+          //Danh mục và href loại trừ lẫn nhau, tại đây thông qua fieldHrefSlotKeysMap tìm trước cột là href
           if (fieldHrefSlotKeysMap.hasOwnProperty(column.scopedSlots.customRender)) {
             hrefSlotName = column.scopedSlots.customRender;
           }
         }
-        // 如果 customRender 有值则代表使用了字典
-        // 如果 hrefSlotName 有值则代表使用了href跳转
-        // 两者可以兼容。兼容的具体思路为：先获取到字典替换的值，再添加href链接跳转
+        // Nếu customRender có giá trị thì nghĩa là đã dùng danh mục
+        // Nếu hrefSlotName có giá trị thì có nghĩa là đã sử dụng chuyển hướng href
+        // Hai bên có thể tương thích. Ý tưởng tương thích cụ thể là: trước tiên lấy giá trị thay thế của danh mục, sau đó thêm liên kết href để chuyển hướng
         if (customRender || hrefSlotName) {
           let dictCode = customRender as string;
           let replaceFlag = '_replace_text_';
           column.customRender = ({ text, record }) => {
             let value = text;
-            // 如果 dictCode 有值，就进行字典转换
+            // Nếu dictCode có giá trị thì thực hiện chuyển đổi danh mục
             if (dictCode) {
               if (dictCode.startsWith(replaceFlag)) {
                 let textFieldName = dictCode.replace(replaceFlag, '');
@@ -455,13 +455,13 @@ export function usePopBiz(ob, tableRef?) {
                 value = filterMultiDictText(unref(dictOptions)[dictCode], text + '');
               }
             }
-            // 扩展参数设置列的内容长度
+            // Tham số mở rộng đặt độ dài nội dung của cột
             if (column.showLength) {
               if (value && value.length > column.showLength) {
                 value = value.substr(0, column.showLength) + '...';
               }
             }
-            // 如果 hrefSlotName 有值，就生成一个 a 标签，包裹住字典替换后（或原生）的值
+            // Nếu hrefSlotName có giá trị, sẽ tạo một thẻ a, bao lấy giá trị sau khi đã thay thế bằng danh mục (hoặc giá trị gốc)
             if (hrefSlotName) {
               let field = fieldHrefSlotKeysMap[hrefSlotName];
               if (field) {
@@ -483,24 +483,24 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 处理合并表头
+   * Xử lý tiêu đề bảng gộp
    * @param columns
    */
   function handleGroupTitle(columns: OnlineColumn[]): OnlineColumn[] {
     let newColumns: OnlineColumn[] = [];
     for (let column of columns) {
-      //排序字段受控  ---- 此逻辑为新增逻辑 待
+      //Trường sắp xếp được kiểm soát  ---- Logic này là logic mới được thêm vào, đang chờ
       if (unref(iSorter) && column.dataIndex === unref(iSorter).column) {
         column.sortOrder = unref(iSorter).order === 'asc' ? 'ascend' : 'descend';
       }
-      //判断字段是否需要合并表头
+      //Kiểm tra trường có cần hợp nhất tiêu đề bảng hay không
       if (column.groupTitle) {
         let clIndex = newColumns.findIndex((im) => im.title === column.groupTitle);
         if (clIndex !== -1) {
-          //表头已存在直接push children
+          //Tiêu đề bảng đã tồn tại thì trực tiếppush children
           newColumns[clIndex].children!.push(column);
         } else {
-          //表头不存在组装表头信息
+          //Nếu không có tiêu đề bảng thì ghép thông tin tiêu đề bảng
           let clGroup: OnlineColumn = {},
             child: OnlineColumn[] = [];
           child.push(column);
@@ -516,10 +516,10 @@ export function usePopBiz(ob, tableRef?) {
     return newColumns;
   }
 
-  // 获取路由器对象 href跳转用到
+  // Lấy đối tượng router, dùng cho chuyển hướng href
   let router = useRouter();
   /**
-   * href 点击事件
+   * href Sự kiện nhấn
    * @param field
    * @param record
    */
@@ -530,16 +530,16 @@ export function usePopBiz(ob, tableRef?) {
     let jsPattern = /{{([^}]+)}}/g; // {{ xxx }}
     if (typeof href === 'string') {
       href = href.trim().replace(/\${([^}]+)?}/g, (s1, s2) => record[s2]);
-      // 执行 {{...}} JS增强语句
+      // Thực thi {{...}} JSCâu lệnh tăng cường
       if (jsPattern.test(href)) {
         href = href.replace(jsPattern, function (text, s0) {
           try {
-            // 支持 {{ ACCESS_TOKEN }} 占位符
+            // Hỗ trợ {{ ACCESS_TOKEN }} Placeholder
             if (s0.trim() === 'ACCESS_TOKEN') {
               return getToken()
             }
 
-            // 代码逻辑说明: 【QQYUN-6390】eval替换成new Function，解决build警告
+            // Giải thích logic mã: 【QQYUN-6390]Thay eval bằng new Function, khắc phục cảnh báo build
             return _eval(s0);
           } catch (e) {
             console.error(e);
@@ -550,7 +550,7 @@ export function usePopBiz(ob, tableRef?) {
       if (urlPattern.test(href)) {
         window.open(href, '_blank');
       } else if (compPattern.test(href)) {
-        // 处理弹框
+        // Xử lý popup
         openHrefCompModal(href);
       } else {
         router.push(href);
@@ -559,21 +559,21 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 导出
+   * Xuất
    */
   function handleExport() {
     const { handleExportXls } = useMethods();
     let url = `${configUrl.export}${cgRpConfigId.value}`;
-    let params = getQueryParams(); //查询条件
-    // 【VUEN-1568】如果选中了某些行，就只导出选中的行
+    let params = getQueryParams(); //Điều kiện tìm kiếm
+    // 【VUEN-1568] Nếu đã chọn một số dòng, thì chỉ xuất các dòng đã chọn
     let keys = unref(checkedKeys);
     if (keys.length > 0) {
       keys = keys
         .map((i) => selectRows.value.find((item) => combineRowKey(item) === i)?.id)
         .filter((i) => i != null && i !== '');
-      // 判断是否有ID字段
+      // Kiểm tra có trường ID không
       if (keys.length === 0) {
-        createMessage.warning('由于数据中缺少ID字段，故无法使用选中导出功能');
+        createMessage.warning('Do dữ liệu thiếu trường ID, nên không thể sử dụng chức năng xuất các mục đã chọn');
         return;
       }
       params['force_id'] = keys.join(',');
@@ -582,8 +582,8 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 合计逻辑 [待优化 3.0]
-   * 分页 大小改变事件
+   * Logic tính tổng [Cần tối ưu 3.0]
+   * Sự kiện thay đổi kích thước phân trang
    * @param _current
    * @param size
    */
@@ -599,20 +599,20 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   *  合计逻辑 [待优化 3.0]
-   * 显示总条数
+   *  Logic tính tổng [Cần tối ưu 3.0]
+   * Hiển thị tổng số bản ghi
    * @param total
    */
   function onShowTotal(total) {
-    // 重新根据是否有合计计算每页显示的数据
+    // Tính lại dữ liệu hiển thị mỗi trang dựa trên có tổng hay không
     let start = (pagination.current - 1) * pagination.realPageSize + 1;
     let end = start + (pagination.isTotal ? dataSource.value.length - 1 : dataSource.value.length) - 1;
     let realTotal = pagination.isTotal ? pagination.realTotal : total;
-    return start + '-' + end + ' 共' + realTotal + '条';
+    return start + '-' + end + ' Tổng cộng' + realTotal + 'mục';
   }
 
   /**
-   * 弹出框显示隐藏触发事件
+   * Sự kiện kích hoạt khi popup hiển thị/ẩn
    */
   async function visibleChange($event) {
     visible.value = $event;
@@ -620,27 +620,27 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 初始化查询条件
-   * @param data 数据结果集
+   * Khởi tạo điều kiện tìm kiếm
+   * @param data Tập kết quả dữ liệu
    */
   function initQueryInfo(data) {
     let url = `${configUrl.getQueryInfo}${unref(cgRpConfigId)}`;
-    //缓存key
+    //Cachekey
     let groupIdKey = props.groupId ? `${props.groupId}${url}` : '';
     httpGroupRequest(() => defHttp.get({ url }, { isTransformResponse: false, successMessageMode: 'none' }), groupIdKey).then((res) => {
-      // console.log("获取查询条件", res);
+      // console.log("Lấy điều kiện truy vấn", res);
       if (res.success) {
         dynamicParamHandler(res.result);
         queryInfo.value = res.result;
         console.log('queryInfo==>', queryInfo.value);
-        // update-begin--author:liaozhiyang---date:20260804---for：【JPopupOnlReport】已有列表数据时不再二次 loadData，避免地址栏带参重复请求
-        // 查询条件加载后再请求数据；若 loadColumnsAndData 已带回数据，直接回填，不再重复请求
+        // update-begin--author:liaozhiyang---date:20260804---for: Khi đã có dữ liệu danh sách thì không loadData lần hai nữa, tránh request lặp lại do mang tham số trên thanh địa chỉ
+        // Sau khi điều kiện truy vấn được tải xong mới request dữ liệu; nếu loadColumnsAndData đã mang về dữ liệu, điền trực tiếp vào, không request lặp lại nữa
         if (data) {
           setDataSource(data);
         } else {
           loadData(1);
         }
-        // update-end--author:liaozhiyang---date:20260804---for：【JPopupOnlReport】已有列表数据时不再二次 loadData，避免地址栏带参重复请求
+        // update-end--author:liaozhiyang---date:20260804---for: Khi đã có dữ liệu danh sách thì không loadData lần hai nữa, tránh request lặp lại do mang tham số trên thanh địa chỉ
       } else {
         createMessage.warning(res.message);
       }
@@ -648,38 +648,38 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 加载表格数据
+   * Tải dữ liệu bảng
    * @param arg
    */
   function loadData(arg?) {
     if (arg == 1) {
       pagination.current = 1;
     }
-    let params = getQueryParams(); //查询条件
+    let params = getQueryParams(); //Điều kiện tìm kiếm
     params['onlRepUrlParamStr'] = getUrlParamString();
     console.log('params', params);
     loading.value = true;
-    // 代码逻辑说明: 【TV360X-578】online报表SQL翻译，第二页不翻页数据
+    // Giải thích logic mã: 【TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
     let url = `${configUrl.getColumnsAndData}${unref(cgRpConfigId)}`;
     const {query} = handleCodeParams()
     if (query) {
       url = url + query
     }
-    //缓存key
+    //Cachekey
     let groupIdKey = props.groupId ? `${props.groupId}${url}${JSON.stringify(params)}` : '';
     httpGroupRequest(() => defHttp.get({ url, params }, { isTransformResponse: false, successMessageMode: 'none' }), groupIdKey).then((res) => {
-      // 代码逻辑说明: 【TV360X-578】online报表SQL翻译，第二页不翻页数据
+      // Giải thích logic mã: 【TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
       res.result.dictOptions && initDictOptionData(res.result.dictOptions);
       loading.value = false;
-      // 代码逻辑说明: 【TV360X-578】online报表SQL翻译，第二页不翻页数据
+      // Giải thích logic mã: 【TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
       let data = res.result.data;
-      console.log('表格信息:', data);
+      console.log('Thông tin bảng:', data);
       setDataSource(data);
     });
   }
 
   /**
-   * 获取地址栏的参数
+   * Lấy tham số trên thanh địa chỉ
    */
   function getUrlParamString() {
    let query = route.query;
@@ -693,7 +693,7 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 设置dataSource
+   * Cài đặtdataSource
    */
   function setDataSource(data) {
     if (data) {
@@ -705,7 +705,7 @@ export function usePopBiz(ob, tableRef?) {
         }
       }
       dataSource.value = data.records;
-      // 代码逻辑说明: issues/426 修复356时候引入的回归错误 JPopupOnlReportModal.vue 中未修改
+      // Giải thích logic mã: issues/426 Lỗi hồi quy được đưa vào khi sửa 356 JPopupOnlReportModal.vue chưa được sửa trong
       tableRef?.value && tableRef?.value?.setPagination?.({
         total: Number(data.total)
       })
@@ -713,35 +713,35 @@ export function usePopBiz(ob, tableRef?) {
       pagination.total = 0;
       dataSource.value = [];
     }
-    // 合计逻辑 [待优化 3.0]
+    // Logic tính tổng [Cần tối ưu 3.0]
     handleSumColumn(columns.value, pagination.total);
   }
 
   /**
-   * 获取查询参数
+   * Lấy tham số truy vấn
    */
   function getQueryParams() {
     let paramTarget = {};
     if (unref(dynamicParam)) {
-      //处理自定义参数
+      //Xử lý tham số tùy chỉnh
       Object.keys(unref(dynamicParam)).map((key) => {
         paramTarget['self_' + key] = unref(dynamicParam)[key];
       });
     }
     let param = Object.assign(paramTarget, unref(queryParam), unref(iSorter));
     param.pageNo = pagination.current;
-    // 合计逻辑 [待优化 3.0]
-    //  实际查询时不使用table组件的pageSize，而使用自定义的realPageSize,realPageSize会在第一次获取到数据后变化
+    // Logic tính tổng [Cần tối ưu 3.0]
+    //  Khi tìm kiếm thực tế không dùng pageSize của component table mà dùng giá trị tùy chỉnhrealPageSize,realPageSizeSẽ thay đổi sau lần đầu tiên lấy được dữ liệu
     param.pageSize = pagination.realPageSize;
     return filterObj(param);
   }
 
   /**
-   * 处理动态参数
+   * Xử lý tham số động
    */
   function dynamicParamHandler(arr?) {
     if (arr && arr.length > 0) {
-      //第一次加载查询条件前 初始化queryParam为空对象
+      //Trước khi tải điều kiện truy vấn lần đầu, khởi tạo queryParam thành đối tượng rỗng
       let queryTemp = {};
       for (let item of arr) {
         if (item.mode === 'single') {
@@ -750,7 +750,7 @@ export function usePopBiz(ob, tableRef?) {
       }
       queryParam.value = { ...queryTemp };
     }
-    // 合并路由参数
+    // Gộp tham số route
     if (props.routeQuery) {
       queryParam.value = Object.assign(queryParam.value, props.routeQuery);
     }
@@ -759,12 +759,12 @@ export function usePopBiz(ob, tableRef?) {
     if (props.param) {
       Object.keys(props.param).map((key) => {
         let str = props.param[key];
-        //【issues/8426】解决JPopup组件传参不能接收
+        //【issues/8426] Giải quyết component JPopup truyền tham số không nhận được
         if (key in queryParam.value) {
           if (str && str.startsWith("'") && str.endsWith("'")) {
             str = str.substring(1, str.length - 1);
           }
-          //如果查询条件包含参数 设置值
+          //Nếu điều kiện truy vấn chứa tham số thì đặt giá trị
           unref(queryParam)[key] = str;
         }
         dynamicTemp[key] = props.param[key];
@@ -774,20 +774,20 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 分页
+   * Phân trang
    * @param page
    * @param filters
    * @param sorter
    */
   function handleChangeInTable(page, filters, sorter) {
     console.log(page, filters, sorter);
-    //分页、排序、筛选变化时触发
+    //Kích hoạt khi phân trang, sắp xếp, lọc thay đổi
     if (Object.keys(sorter).length > 0) {
       iSorter.value = {
         column: sorter.field,
         order: 'ascend' === sorter.order ? 'asc' : 'desc',
       };
-      // 排序字段受控
+      // Trường sắp xếp được kiểm soát
       unref(columns).forEach((col) => {
         if (col['dataIndex'] === sorter.field) {
           col['sortOrder'] = sorter.order;
@@ -800,12 +800,12 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 行点击事件
+   * Sự kiện nhấp hàng
    * @param record
    */
   function clickThenCheck(record) {
     if (clickThenCheckFlag === true) {
-      // 代码逻辑说明: 【QQYUN-7514】popup单选显示radio
+      // Giải thích logic mã: 【QQYUN-7514] hiển thị radio khi popup chọn đơnradio
       if (!props.multi) {
         selectRows.value = [];
         checkedKeys.value = [];
@@ -820,22 +820,22 @@ export function usePopBiz(ob, tableRef?) {
         //selectRows.value = arr1;
       } else {
         if (unref(checkedKeys).indexOf(rowKey) < 0) {
-          //不存在就选中
+          //Không tồn tại thì chọn
           checkedKeys.value.push(rowKey);
           //selectRows.value.push(record);
         } else {
-          //已选中就取消
+          //Đã chọn thì hủy
           let rowKey_index = unref(checkedKeys).indexOf(rowKey);
           checkedKeys.value.splice(rowKey_index, 1);
           //selectRows.value.splice(rowKey_index, 1);
         }
       }
-      // 代码逻辑说明: 【issues/5357】点击行选中
+      // Giải thích logic mã: 【issues/5357] nhấp vào hàng để chọn
       tableRef.value.setSelectedRowKeys([...checkedKeys.value]);
     }
   }
 
-  //防止字典中有垃圾数据
+  //Ngăn chặn dữ liệu rác trong từ điển
   function initDictOptionData(arr) {
     let obj = {};
     Object.keys(arr).map((k) => {
@@ -847,7 +847,7 @@ export function usePopBiz(ob, tableRef?) {
   }
 
   /**
-   * 过滤对象中为空的属性
+   * Lọc thuộc tính trống trong đối tượng
    * @param obj
    * @returns {*}
    */
@@ -864,7 +864,7 @@ export function usePopBiz(ob, tableRef?) {
     return obj;
   }
 
-  // 样式
+  // Kiểu
   const dialogStyle = {
     top: 0,
     left: 0,
@@ -873,11 +873,11 @@ export function usePopBiz(ob, tableRef?) {
     padding: 0,
   };
 
-  // 弹窗属性配置
+  // Cấu hình thuộc tính popup
   const hrefComponent = ref({
     model: {
       title: '',
-      okText: '关闭',
+      okText: 'Đóng',
       width: '100%',
       open: false,
       destroyOnClose: true,
@@ -889,7 +889,7 @@ export function usePopBiz(ob, tableRef?) {
         overflow: 'auto',
         overflowX: 'hidden',
       },
-      // 隐藏掉取消按钮
+      // Ẩn nút Hủy
       cancelButtonProps: { style: { display: 'none' } },
     },
     on: {
@@ -900,9 +900,9 @@ export function usePopBiz(ob, tableRef?) {
     params: {},
   });
 
-  // 超链点击事件--> 打开一个modal窗口
+  // Sự kiện nhấp vào siêu liên kết--> Mở một cửa sổ modal
   function openHrefCompModal(href) {
-    // 解析 href 参数
+    // Phân tích tham số href
     let index = href.indexOf('?');
     let path = href;
     if (index !== -1) {
@@ -919,12 +919,12 @@ export function usePopBiz(ob, tableRef?) {
       hrefComponent.value.params = {};
     }
     hrefComponent.value.model.open = true;
-    hrefComponent.value.model.title = '操作';
+    hrefComponent.value.model.title = 'Thao tác';
     hrefComponent.value.is = markRaw(defineAsyncComponent(() => importViewsFile(path)));
   }
 
   /**
-   * emit事件 获取选中的行数据
+   * emitSự kiện: lấy dữ liệu hàng đã chọn
    */
   function getOkSelectRows(): any[] {
     let arr = unref(selectRows);

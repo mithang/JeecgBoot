@@ -14,7 +14,7 @@
     value: propTypes.oneOfType([propTypes.string, propTypes.number, propTypes.array]),
     length: propTypes.number.def(25),
   });
-  //显示的文本
+  //Văn bản hiển thị
   const showText = computed(() =>
     props.value ? (props.value.length > props.length ? props.value.slice(0, props.length) + '...' : props.value) : props.value
   );

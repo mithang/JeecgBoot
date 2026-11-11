@@ -2,35 +2,35 @@ import { defHttp } from '/@/utils/http/axios';
 import { cloneObject } from '/@/utils/index';
 
 export const backEndUrl = {
-  // 获取启用的第三方App
+  // Lấy ứng dụng bên thứ ba đã bậtApp
   getEnabledType: '/sys/thirdApp/getEnabledType',
-  // 企业微信
+  // WeCom
   wechatEnterprise: {
     user: '/sys/thirdApp/sync/wechatEnterprise/user',
     depart: '/sys/thirdApp/sync/wechatEnterprise/depart',
   },
-  // 钉钉
+  // DingTalk
   dingtalk: {
     user: '/sys/thirdApp/sync/dingtalk/user',
     depart: '/sys/thirdApp/sync/dingtalk/depart',
   },
 };
-// 启用了哪些第三方App（在此缓存）
+// Đã kích hoạt những App bên thứ ba nào (cache tại đây)
 let enabledTypes = null;
 
-// 获取启用的第三方App
+// Lấy ứng dụng bên thứ ba đã bậtApp
 export const getEnabledTypes = async () => {
-  // 获取缓存
+  // Lấy cache
   if (enabledTypes != null) {
     return cloneObject(enabledTypes);
   } else {
     let { success, result } = await defHttp.get({ url: backEndUrl.getEnabledType }, { isTransformResponse: false });
     if (success) {
-      // 在此缓存
+      // Lưu cache tại đây
       enabledTypes = cloneObject(result);
       return result;
     } else {
-      console.warn('getEnabledType查询失败：');
+      console.warn('getEnabledTypeTìm kiếm thất bại:');
     }
   }
   return {};

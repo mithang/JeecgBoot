@@ -1,13 +1,13 @@
-<!--popup组件-->
+<!--popupComponent-->
 <template>
   <div class="JPopupDict components-input-demo-presuffix">
-    <!--输入框-->
+    <!--Hộp nhập-->
     <a-input v-if="useInput" v-model:value="showLabel" v-bind="attrs" :disabled="disabled" @click="handleOpen" readonly :loading="loading" />
     <a-select v-else v-model:value="showText" v-bind="attrs" :disabled="disabled" :mode="multi ? 'multiple' : ''" @click="handleOpen" readOnly :loading="loading" :open="false">
       <a-select-option v-for="item in options" :value="item.value">{{ item.text }}</a-select-option>
     </a-select>
     <a-form-item>
-      <!--popup弹窗-->
+      <!--popupPopup-->
       <JPopupOnlReportModal
         @register="regModal"
         :code="code"
@@ -32,7 +32,7 @@
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { defHttp } from '/@/utils/http/axios';
   import { useMessage } from '/@/hooks/web/useMessage';
-  //定义请求url信息
+  //Định nghĩa thông tin URL yêu cầu
   const configUrl = reactive({
     getColumns: '/online/cgreport/api/getRpColumns/',
     getData: '/online/cgreport/api/getData/',
@@ -46,10 +46,10 @@
     inheritAttrs: false,
     props: {
       /**
-       * 示例：demo,name,id
-       * demo: online报表编码
-       * name: online报表的字段，用户显示的label
-       * id: online报表的字段，用于存储key
+       * Ví dụ:demo,name,id
+       * demo: onlineMã báo cáo
+       * name: onlineTrường của báo cáo, nội dung hiển thị cho người dùng làlabel
+       * id: onlineTrường của báo cáo, dùng để lưu trữkey
        */
       dictCode: propTypes.string.def(''),
       value: propTypes.string.def(''),
@@ -77,18 +77,18 @@
       const labelFiled = props.dictCode.split(',')[1];
       const valueFiled = props.dictCode.split(',')[2];
       if (!code || !valueFiled || !labelFiled) {
-        createMessage.error('popupDict参数未正确配置!');
+        createMessage.error('popupDictTham số popup chưa được cấu hình đúng!!');
       }
-      //注册model
+      //Đăng kýmodel
       const [regModal, { openModal }] = useModal();
 
       /**
-       * 打开pop弹出框
+       * Mở hộp thoại pop
        */
       function handleOpen() {
-        // 代码逻辑说明: 【TV360X-317】禁用后JPopup和JPopupdic还可以点击出弹窗
-        //update-begin---wangshuai---date:20260104  for：[issue/1560]动态列后面无法接其它列，如动态列最后加汇总就有问题------------
-        //update-end---author:wangshuai ---date:20260104  for：[issue/1560]动态列后面无法接其它列，如动态列最后加汇总就有问题------------
+        // Giải thích logic mã: 【TV360X-317]Sau khi vô hiệu hóa, JPopup và JPopupdic vẫn có thể nhấn để mở popup
+        //update-begin---wangshuai---date:20260104  for：[issue/1560]Phía sau cột động không thể nối cột khác, ví dụ cột động cuối cùng thêm tổng hợp sẽ có vấn đề------------
+        //update-end---author:wangshuai ---date:20260104  for：[issue/1560]Phía sau cột động không thể nối cột khác, ví dụ cột động cuối cùng thêm tổng hợp sẽ có vấn đề------------
         if (props.disabled) {
           return;
         }
@@ -96,10 +96,10 @@
         openModal(true);
       }
 
-      // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3】popup字典编辑时弹窗勾选回显
+      // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
       const echoRows = ref<any[]>([]);
       /**
-       * 当前值转成字符串数组（存储字段可能是数字类型，统一按字符串比较）
+       * Chuyển giá trị hiện tại thành mảng chuỗi (trường lưu trữ có thể là kiểu số, thống nhất so sánh theo chuỗi)
        */
       function getValues(): string[] {
         const value = props.value;
@@ -110,22 +110,22 @@
         return values.filter((v) => v !== '');
       }
       /**
-       * 根据当前值生成弹窗回显的待匹配行 [{存储字段: 值}]，弹窗中多条匹配时勾选第一条
+       * Tạo dòng chờ khớp hiển thị lại trong popup theo giá trị hiện tại [{Trường lưu trữ: Giá trị}], khi có nhiều kết quả khớp trong popup thì chọn dòng đầu tiên
        */
       function buildEchoRows() {
         return getValues().map((v) => ({ [valueFiled]: v }));
       }
       /**
-       * 按存储值反查显示文本（存储字段不唯一时取第一条，与列表后端翻译一致）
+       * Tra ngược văn bản hiển thị theo giá trị đã lưu (khi trường lưu trữ không duy nhất thì lấy bản ghi đầu tiên, đồng nhất với bản dịch phía backend của danh sách)
        */
       function translate(callBack) {
         cgRpConfigId.value ? loadData({ callBack }) : loadColumnsInfo({ callBack });
       }
-      // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3】popup字典编辑时弹窗勾选回显
+      // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
       /**
        * liaozhiyang
        * 20260522
-       * 【QQYUN-15493】新增a-input模式下
+       * 【QQYUN-15493] thêm mớia-inputtrong chế độ
        * */
       function syncShowLabel() {
         if (!props.useInput) return;
@@ -144,21 +144,21 @@
         }
       }
       /**
-       * 监听value数值
+       * Lắng nghe giá trị value
        */
       /**
-       * 根据 props.value 同步显示值（单向同步，不触发 update:value）
+       * Theo props.value Đồng bộ giá trị hiển thị (đồng bộ một chiều, không kích hoạt update:value）
        */
       function syncFromProps() {
         syncingFromProps = true;
-        // update-begin--author:liusq---date:20260720---for：【LHZP-1003】单表pop字典，设置后，编辑打开，回显数据陷入循环查询的死循环
-        // 代码逻辑说明: 必须使用实时的props.value而非闭包捕获的val，否则在异步回调时
-        // defaultValue与记录值不同时，多个callBack会交替覆盖formModel，导致无限刷新
-        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3】存储字段为数字时，显示值与options的value类型不一致导致不翻译
+        // update-begin--author:liusq---date:20260720---for：【LHZP-1003]Từ điển pop của bảng đơn, sau khi cài đặt, mở chỉnh sửa thì dữ liệu hiển thị lại rơi vào vòng lặp truy vấn vô hạn
+        // Giải thích logic mã: Phải sử dụng props.value thời gian thựcprops.valuechứ không phải val mà closure bắt được, nếu không khi callback bất đồng bộ
+        // defaultValueKhi khác với giá trị bản ghi, nhiều callBack sẽ ghi đè luân phiên lên formModel, gây làm mới vô hạn
+        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3]Khi trường lưu trữ là số, giá trị hiển thị và kiểu value của options không nhất quán nên không dịch
         const values = getValues();
         showText.value = props.multi ? values : values[0] ?? '';
-        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3】存储字段为数字时，显示值与options的value类型不一致导致不翻译
-        // update-end--author:liusq---date:20260720---for：【LHZP-1003】单表pop字典，设置后，编辑打开，回显数据陷入循环查询的死循环
+        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3]Khi trường lưu trữ là số, giá trị hiển thị và kiểu value của options không nhất quán nên không dịch
+        // update-end--author:liusq---date:20260720---for：【LHZP-1003]Từ điển pop của bảng đơn, sau khi cài đặt, mở chỉnh sửa thì dữ liệu hiển thị lại rơi vào vòng lặp truy vấn vô hạn
         syncShowLabel();
         nextTick(() => {
           syncingFromProps = false;
@@ -167,7 +167,7 @@
       watch(
         () => props.value,
         () => {
-          // 先回显已保存值，接口返回后再用加载到的 options 替换为显示文本，避免编辑弹窗短暂空白
+          // Hiển thị trước giá trị đã lưu, sau khi API trả về thì dùng options đã tải được để thay thế thành văn bản hiển thị, tránh popup chỉnh sửa bị trống trong thời gian ngắn
           syncFromProps();
           if (props.value || props.defaultValue) {
             translate(syncFromProps);
@@ -178,7 +178,7 @@
       watch(
         () => showText.value,
         (val) => {
-          // props 回显属于单向同步，不能再作为用户操作反向清空或覆盖表单值
+          // props Hiển thị lại thuộc về đồng bộ một chiều, không thể dùng làm thao tác của người dùng để xóa ngược hoặc ghi đè giá trị biểu mẫu
           if (syncingFromProps) return;
           let result;
           if (props.multi) {
@@ -193,7 +193,7 @@
         }
       );
       /**
-       * 加载列信息
+       * Tải thông tin cột
        */
       function loadColumnsInfo({ callBack }) {
         loading.value = true;
@@ -222,15 +222,15 @@
           .then((res) => {
             let data = res.result;
             if (data.records?.length) {
-              // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3】popup字典编辑时弹窗勾选回显
-              // 存储字段不唯一时反查会返回多条，同一个值只取第一条的显示文本；value统一转字符串，与显示值类型一致
+              // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
+              // Khi trường lưu trữ không duy nhất, tra ngược sẽ trả về nhiều bản ghi, cùng một giá trị chỉ lấy văn bản hiển thị của bản ghi đầu tiên; value thống nhất chuyển thành chuỗi, nhất quán với kiểu của giá trị hiển thị
               const map = new Map();
               data.records.forEach((item) => {
                 const key = String(item[valueFiled]);
                 !map.has(key) && map.set(key, { value: key, text: item[labelFiled] });
               });
               options.value = [...map.values()];
-              // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3】popup字典编辑时弹窗勾选回显
+              // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
             }
           })
           .finally(() => {
@@ -239,7 +239,7 @@
           });
       }
       /**
-       * 传值回调
+       * Callback truyền giá trị
        */
       function callBack(rows) {
         const dataOptions: any = [];
@@ -253,24 +253,24 @@
         if (props.multi) {
           showText.value = dataValue;
           result = dataValue.join(props.spliter);
-          //update-begin author:liaozhiyang date:20260522 for：【QQYUN-15493】新增a-input模式下
+          //update-begin author:liaozhiyang date:20260522 for：【QQYUN-15493] thêm mớia-inputtrong chế độ
           if (props.useInput) {
             showLabel.value = dataOptions.map((o: any) => o.text).join(props.spliter);
           }
-          //update-end author:liaozhiyang date:20260522 for：【QQYUN-15493】新增a-input模式下
+          //update-end author:liaozhiyang date:20260522 for：【QQYUN-15493] thêm mớia-inputtrong chế độ
         } else {
           showText.value = dataValue[0];
           result = dataValue[0];
-          //update-begin author:liaozhiyang date:20260522 for：【QQYUN-15493】新增a-input模式下
+          //update-begin author:liaozhiyang date:20260522 for：【QQYUN-15493] thêm mớia-inputtrong chế độ
           if (props.useInput) {
             showLabel.value = dataOptions[0]?.text || '';
           }
-          //update-end author:liaozhiyang date:20260522 for：【QQYUN-15493】新增a-input模式下
+          //update-end author:liaozhiyang date:20260522 for：【QQYUN-15493] thêm mớia-inputtrong chế độ
         }
-        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3】popup字典编辑时弹窗勾选回显
-        // 选择后需按存储值重新翻译
+        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
+        // Sau khi chọn cần dịch lại theo giá trị đã lưu
         const needTranslate = result != null && result !== '' && String(props.value ?? '') === String(result);
-        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3】popup字典编辑时弹窗勾选回显
+        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
         nextTick(() => {
           emit('change', result);
           emit('update:value', result);
@@ -296,7 +296,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【QQYUN-9260】必填模式下会影响到弹窗内antd组件的样式
+  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JPopupDict {
     > .ant-form-item {
       display: none;

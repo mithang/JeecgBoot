@@ -9,7 +9,7 @@
   import { dispatchEvent } from '/@/components/jeecg/JVxeTable/utils';
   import { defHttp } from '/@/utils/http/axios';
 
-  // 解析 dictCode（"code,labelField,valueField"）
+  // Phân tích dictCode ("code,labelField,valueField"）
   function parseDictCode(dictCode: string | undefined) {
     const arr = (dictCode || '').split(',');
     return { code: arr[0] || '', labelField: arr[1] || '', valueField: arr[2] || '' };
@@ -24,7 +24,7 @@
     sessionStorage.setItem(key, value);
   }
 
-  // 拿 cgRpConfigId（会话缓存 + 内存缓存）
+  // Lấy cgRpConfigId (cache phiên + cache bộ nhớ)
   async function getCgRpConfigId(code: string) {
     if (!code) return '';
     const sessionKey = `${CG_RP_CONFIG_ID_SESSION_PREFIX}${code}`;
@@ -49,7 +49,7 @@
     setup(props: JVxeComponent.Props) {
       const { innerValue, originColumn, cellProps, handleChangeCommon } = useJVxeComponent(props);
 
-      // 仅支持 fieldConfig：cgreport报表code,显示字段(label),存储字段(value)
+      // Chỉ hỗ trợ fieldConfig: báo cáo cgreportcode,Hiển thị trường(label),Trường lưu trữ(value)
       const computedFieldConfig = computed(() => {
         const col = originColumn.value;
         return (col as any).fieldConfig || '';
@@ -76,7 +76,7 @@
 
       return { popupProps, onChange, onOptionsChange };
     },
-    // 【组件增强】非编辑模式下把 value(username) 翻译成 label(realname)
+    // [Tăng cường component] Ở chế độ không chỉnh sửa, chuyển value(username) dịch thành label(realname)
     enhanced: {
       switches: { editRender: true, visible: false },
       aopEvents: {
@@ -98,7 +98,7 @@
           const { code, labelField, valueField } = parseDictCode(fieldConfig);
           if (!code || !labelField || !valueField) return value;
           if (resultOptions?.length) {
-            // 刚点击完弹窗，直接返回结果options
+            // Vừa nhấp xong popup thì trả về kết quả ngayoptions
             const result = resultOptions.map((item: any) => item.text);
             resultOptions = [];
             return result.join(',');

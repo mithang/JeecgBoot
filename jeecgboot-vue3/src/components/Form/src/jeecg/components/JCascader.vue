@@ -1,6 +1,6 @@
 <!--
-  级联选择器：只读输入框 + 挂载到 body 的下拉多列菜单
-  选中叶子节点时同步 value 并关闭下拉；非叶子节点仅展开下一列
+  Bộ chọn xếp tầng: Ô nhập chỉ đọc + Menu dropdown nhiều cột được mount vào body
+  Khi chọn nút lá thì đồng bộ value và đóng dropdown; nút không phải lá chỉ mở rộng cột tiếp theo
 -->
 <template>
   <div class="cascader" ref="rootRef">
@@ -21,7 +21,7 @@
         <DownOutlined class="cascader-arrow" :class="{ 'is-open': visible }" />
       </template>
     </AInput>
-    <!-- 下拉挂载到 body，用 fixed + 计算出的 left/top 定位 -->
+    <!-- Dropdown gắn vào body, dùng fixed + đã tính left/top Định vị -->
     <Teleport to="body">
       <Transition name="cascader-dropdown">
         <div v-show="visible" ref="dropdownRef" class="cascader-dropdown cascader-dropdown-placement"
@@ -48,14 +48,14 @@ import { Input as AInput } from 'ant-design-vue';
 import { DownOutlined, RightOutlined, CloseCircleFilled } from '@ant-design/icons-vue';
 import { useAttrs } from '/@/hooks/core/useAttrs';
 
-/** 级联选项：value/label + 可选 children */
+/** Tùy chọn liên cấp:value/label + Tùy chọn children */
 export interface CascaderOption {
   value: string | number;
   label: string;
   children?: CascaderOption[];
 }
 
-/** 选中路径：每级的 value 数组 */
+/** Đường dẫn đã chọn: mảng value mỗi cấp */
 type PathValue = (string | number)[];
 
 const DISPLAY_SEPARATOR = ' / ';
@@ -68,11 +68,11 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<{
-    /** 当前选中路径（每级 value 数组） */
+    /** Đường dẫn đang chọn (mảng value mỗi cấp) */
     value?: PathValue;
-    /** 级联树数据 */
+    /** Dữ liệu cây liên cấp */
     options?: CascaderOption[];
-    /** 是否只在 input 中显示最后一级 */
+    /** Có chỉ hiển thị cấp cuối cùng trong input hay không */
     showLastLevelOnly?: boolean;
   }>(),
   {
@@ -88,35 +88,35 @@ const emit = defineEmits<{
 }>();
 
 const attrs = useAttrs();
-const inputPlaceholder = computed(() => String(unref(attrs as Record<string, unknown>).placeholder ?? '请选择'));
+const inputPlaceholder = computed(() => String(unref(attrs as Record<string, unknown>).placeholder ?? 'Vui lòng chọn'));
 const inputDisabled = computed(() => Boolean(unref(attrs as Record<string, unknown>).disabled));
-// update-begin--author:liaozhiyang---date:20260804---for：【LHZP-707】修复省市区禁用状态下还可以点击x删除
-/** 排除 allowClear/disabled，清空按钮由 suffix 自定义实现 */
+// update-begin--author:liaozhiyang---date:20260804---for：【LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
+/** Loại trừ allowClear/disabled, nút xóa do suffix tự định nghĩa */
 const inputAttrs = computed(() => {
   const { allowClear: _allowClear, disabled: _disabled, ...rest } = unref(attrs as Record<string, unknown>);
   return rest;
 });
-// update-end--author:liaozhiyang---date:20260804---for：【LHZP-707】修复省市区禁用状态下还可以点击x删除
+// update-end--author:liaozhiyang---date:20260804---for：【LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
 const rootRef = ref<HTMLElement>();
 const dropdownRef = ref<HTMLElement>();
-/** 下拉是否展开 */
+/** Dropdown có mở rộng hay không */
 const visible = ref(false);
-/** 展开时正在编辑的路径（未确认前）；用于多列菜单的当前高亮与子列数据 */
+/** Đường dẫn đang chỉnh sửa khi mở rộng (trước khi xác nhận); dùng cho trạng thái tô sáng hiện tại và dữ liệu cột con của menu nhiều cột */
 const editingPath = ref<PathValue>([]);
-/** 下拉挂到 body 时的 fixed 定位：left、top（px 字符串） */
+/** Định vị fixed khi dropdown gắn vào body: left, top (chuỗi px) */
 const dropdownPlaceStyle = ref<{ left: string; top: string }>({ left: '0', top: '0' });
 
-/** 规范化 value 为路径数组 */
+/** Chuẩn hóa value thành mảng đường dẫn */
 function normalizePath(val: PathValue | undefined): PathValue {
   return Array.isArray(val) ? val : [];
 }
 
-/** 是否有子节点（非叶子） */
+/** Có nút con không (không phải nút lá) */
 function hasChildren(opt: CascaderOption): boolean {
   return !!(opt.children?.length);
 }
 
-/** 根据 value 路径在 options 树中逐级查找，返回对应的 label 数组 */
+/** Dựa theo đường dẫn value để tìm từng cấp trong cây options, trả về mảng label tương ứng */
 function getPathLabels(opts: CascaderOption[], pathValues: PathValue): string[] {
   const labels: string[] = [];
   let current = opts;
@@ -129,7 +129,7 @@ function getPathLabels(opts: CascaderOption[], pathValues: PathValue): string[] 
   return labels;
 }
 
-/** 输入框展示文案：showLastLevelOnly 时只显示最后一级 label，否则用分隔符拼接整条路径 */
+/** Văn bản hiển thị trong ô nhập: khi showLastLevelOnly chỉ hiển thị label của cấp cuối cùng, nếu không thì dùng dấu phân cách để nối toàn bộ đường dẫn */
 const displayText = computed(() => {
   const path = normalizePath(props.value);
   if (!path.length) return '';
@@ -137,11 +137,11 @@ const displayText = computed(() => {
   return props.showLastLevelOnly ? (labels.at(-1) ?? '') : labels.join(DISPLAY_SEPARATOR);
 });
 
-/** 用于菜单高亮与列数据：展开时用 editingPath，收起时用 props.value */
+/** Dùng cho tô sáng menu và dữ liệu cột: khi mở rộng dùng editingPath, khi thu lại dùng props.value */
 const pathForMenus = computed<PathValue>(() =>
   visible.value ? editingPath.value : normalizePath(props.value));
 
-/** 根据当前 path 展开的列：第 0 列为根，第 k 列为 path[k-1] 的 children；列数 = path.length + 1，点击第几级只展示到下一级 */
+/** Các cột được mở rộng theo path hiện tại: cột 0 là gốc, cột k là path[k-1] children; số cột = path.length + 1, nhấp vào cấp nào chỉ hiển thị đến cấp tiếp theo */
 const columns = computed(() => {
   const path = pathForMenus.value;
   const opts = props.options ?? [];
@@ -159,20 +159,20 @@ const columns = computed(() => {
   return cols;
 });
 
-/** 当前列中该项是否为“当前路径”在该列的节点（高亮并展示子列） */
+/** Mục này trong cột hiện tại có phải là nút của "đường dẫn hiện tại" tại cột đó hay không (tô sáng và hiển thị cột con) */
 function isActive(opt: CascaderOption, colIndex: number): boolean {
   const path = pathForMenus.value;
   return path[colIndex] === opt.value;
 }
 
-/** 当前列中该项是否为已选中的叶子节点（选中样式） */
+/** Mục này trong cột hiện tại có phải là nút lá đã chọn hay không (kiểu đã chọn) */
 function isSelected(opt: CascaderOption, colIndex: number): boolean {
   const path = pathForMenus.value;
   if (colIndex < path.length - 1) return path[colIndex] === opt.value;
   return path[colIndex] === opt.value && !hasChildren(opt);
 }
 
-/** 点击某一列选项：截断到该列并追加当前项；若为叶子则 emit 并关闭，否则更新 editingPath 展开下一列 */
+/** Click vào một tùy chọn của cột: cắt ngắn đến cột đó và thêm mục hiện tại; nếu là lá thì emit và đóng lại, nếu không thì cập nhật editingPath để mở rộng cột tiếp theo */
 function onSelectOption(opt: CascaderOption, colIndex: number) {
   const path = visible.value ? [...editingPath.value] : normalizePath(props.value).slice();
   path.length = colIndex;
@@ -191,7 +191,7 @@ function toggle() {
   visible.value = !visible.value;
 }
 
-/** 清除选中：与 UI 库 readonly 下不显示清除按钮的补偿，在 suffix 中手动实现 */
+/** Xóa lựa chọn: bù cho việc UI library không hiển thị nút xóa khi ở chế độ readonly, tự triển khai thủ công trong suffix */
 function handleClear() {
   if (inputDisabled.value) return;
   emit('change', []);
@@ -199,7 +199,7 @@ function handleClear() {
   visible.value = false;
 }
 
-/** 点击不在输入框、不在下拉内时关闭下拉（capture 阶段监听） */
+/** Đóng dropdown khi nhấp vào vị trí không nằm trong ô nhập và không nằm trong dropdown (lắng nghe ở giai đoạn capture) */
 function handleClickOutside(e: MouseEvent) {
   const target = e.target as Node;
   if (!target || !document.body.contains(target)) return;
@@ -208,26 +208,26 @@ function handleClickOutside(e: MouseEvent) {
   visible.value = false;
 }
 
-/** 根据触发器 rootRef 的视口位置，设置下拉的 fixed left/top（下拉在 body 下） */
+/** Dựa vào vị trí viewport của rootRef của trigger, đặt giá trị dropdown fixed left/top(Danh sách thả xuống nằm dưới body) */
 function updatePopupPosition() {
   if (!rootRef.value) return;
   const rect = rootRef.value.getBoundingClientRect();
-  // update-begin--author:liaozhiyang---date:20260714---for【LHZP-100】省市区在页面边缘时，最后一级没法选
+  // update-begin--author:liaozhiyang---date:20260714---for【LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
   const margin = 8;
   const viewportWidth = document.documentElement.clientWidth;
   const viewportHeight = document.documentElement.clientHeight;
-  // 浮层宽高（未渲染出来时退化为仅按触发器定位）
+  // Chiều rộng và chiều cao của lớp nổi (khi chưa render ra sẽ thoái hóa thành chỉ định vị theo trigger)
   const dropdownWidth = dropdownRef.value?.offsetWidth ?? 0;
   const dropdownHeight = dropdownRef.value?.offsetHeight ?? 0;
 
-  // 水平：默认与触发器左对齐；右侧放不下则向左偏移使其完整显示
+  // Theo chiều ngang: mặc định căn trái với trigger; nếu phía phải không đủ chỗ thì dịch sang trái để hiển thị đầy đủ
   let left = rect.left;
   if (dropdownWidth && left + dropdownWidth > viewportWidth - margin) {
     left = viewportWidth - dropdownWidth - margin;
   }
   if (left < margin) left = margin;
 
-  // 垂直：默认在下方；下方放不下且上方空间足够则翻到上方
+  // Theo chiều dọc: mặc định ở phía dưới; nếu phía dưới không đủ chỗ và phía trên đủ không gian thì lật lên trên
   let top = rect.bottom + DROPDOWN_GAP;
   if (dropdownHeight && top + dropdownHeight > viewportHeight - margin) {
     const aboveTop = rect.top - DROPDOWN_GAP - dropdownHeight;
@@ -235,18 +235,18 @@ function updatePopupPosition() {
   }
 
   dropdownPlaceStyle.value = { left: `${left}px`, top: `${top}px` };
-  // update-end--author:liaozhiyang---date:20260714---for：【LHZP-100】省市区在页面边缘时，最后一级没法选
+  // update-end--author:liaozhiyang---date:20260714---for：【LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
 }
 
-// update-begin--author:liaozhiyang---date:20260714---for：【LHZP-100】省市区在页面边缘时，最后一级没法选
+// update-begin--author:liaozhiyang---date:20260714---for：【LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
 watch(columns, () => {
   if (visible.value) {
     nextTick(updatePopupPosition);
   }
 });
-// update-end--author:liaozhiyang---date:20260714---for：【LHZP-100】省市区在页面边缘时，最后一级没法选
+// update-end--author:liaozhiyang---date:20260714---for：【LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
 
-/** 展开时：用当前 value 初始化 editingPath、计算定位、注册点击外部关闭；收起时移除监听 */
+/** Khi mở rộng: dùng value hiện tại để khởi tạo editingPath, tính toán vị trí, đăng ký đóng khi click bên ngoài; khi thu gọn thì gỡ bỏ lắng nghe */
 watch(visible, (v) => {
   if (v) {
     editingPath.value = normalizePath(props.value).slice();
@@ -264,7 +264,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<!-- 下拉挂 body 时用 .cascader-dropdown-placement 覆盖为 position: fixed -->
+<!-- Dùng khi danh sách thả xuống gắn vào body .cascader-dropdown-placement ghi đè thành position: fixed -->
 <style scoped lang="less">
 @import (reference) '/@/design/config.less';
 

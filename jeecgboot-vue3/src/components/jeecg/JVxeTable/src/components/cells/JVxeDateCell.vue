@@ -34,7 +34,7 @@
         return format ? format : isDatetime.value ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
       });
       const openPicker = ref(true);
-      // 代码逻辑说明: 【QQYUN-9205】一对多(jVxetable组件date)支持年，年月，年度度，年周
+      // Giải thích logic mã: 【QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
       const picker = computed(() => {
         const picker = originColumn.value.picker;
         return picker ? picker : null;
@@ -52,12 +52,12 @@
       );
 
       function handleChange(_mom, dateStr) {
-        // 代码逻辑说明: 【QQYUN-9205】一对多(jVxetable组件date)支持年，年月，年度度，年周
+        // Giải thích logic mã: 【QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
         if (picker.value) {
-          //update-begin-author:liusq---date:2026-08-06--for: LHZP-1052 生成的jvxe子表 保存的时候 年 年月 周 季度 有一个没有填写值，就会报错
+          //update-begin-author:liusq---date:2026-08-06--for: LHZP-1052 Bảng con jvxe được sinh ra, khi lưu nếu Năm, Năm-tháng, Tuần, Quý có một mục chưa nhập giá trị thì sẽ báo lỗi
           const dateValue = _mom && dayjs(_mom).isValid() ? dayjs(_mom).format(dateFormat.value) : null;
           handleChangeCommon(dateValue);
-          //update-end-author:liusq---date:2026-08-06--for: LHZP-1052 生成的jvxe子表 保存的时候 年 年月 周 季度 有一个没有填写值，就会报错        
+          //update-end-author:liusq---date:2026-08-06--for: LHZP-1052 Bảng con jvxe được sinh ra, khi lưu nếu Năm, Năm-tháng, Tuần, Quý có một mục chưa nhập giá trị thì sẽ báo lỗi        
         } else {
           handleChangeCommon(dateStr);
         }
@@ -73,11 +73,11 @@
         picker,
       };
     },
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: {
       aopEvents: {
       },
-      // 代码逻辑说明: 【QQYUN-9205】一对多(jVxetable组件date)支持年，年月，年度度，年周
+      // Giải thích logic mã: 【QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
       translate: {
         enabled: true,
         handler(value, ctx) {

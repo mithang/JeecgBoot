@@ -25,7 +25,7 @@
     },
     emits: ['change', 'get', 'update:value'],
     setup(props, { attrs, emit }) {
-      console.log("---Markdown---初始化---")
+      console.log("---Markdown---Khởi tạo---")
       const wrapRef = ref<ElRef>(null);
       const vditorRef = ref(null) as Ref<Nullable<Vditor>>;
       const initedRef = ref(false);
@@ -78,7 +78,7 @@
         }
         return lang;
       });
-      // 代码逻辑说明: VUEN-1090 markdown 无法上传
+      // Giải thích logic mã: VUEN-1090 markdown Không thể tải lên
       const uploadUrl = `${window._CONFIG['domianURL']}/sys/common/upload`;
       const token = getToken();
       const tenantId = getTenantId() ? getTenantId() : '0';
@@ -110,7 +110,7 @@
         const wrapEl = unref(wrapRef) as HTMLElement;
         if (!wrapEl) return;
 
-        // vditor组件本地化的路径配置【QQYUN-12053】
+        // vditorCấu hình đường dẫn bản địa hóa của component [QQYUN-12053】
         let localCdn = '/resource/vditor@3.9.4';
         if ($electron.isElectron()) {
           localCdn = '.' + localCdn;
@@ -120,7 +120,7 @@
         const insEditor = new Vditor(wrapEl, {
           theme: getDarkMode.value === 'dark' ? 'dark' : 'classic',
           lang: unref(getCurrentLang),
-          // 代码逻辑说明: 【TV360X-146】Markdown组件去掉录音选项
+          // Giải thích logic mã: 【TV360X-146] Component Markdown bỏ tùy chọn ghi âm
           toolbar: [
             'emoji',
             'headings',
@@ -165,7 +165,7 @@
           preview: {
             actions: [],
           },
-          // 代码逻辑说明: VUEN-1090 markdown 无法上传
+          // Giải thích logic mã: VUEN-1090 markdown Không thể tải lên
           upload: {
             accept: 'image/*',
             //url: uploadUrl,
@@ -180,7 +180,7 @@
             format(files, response) {
               return formatResult(files, response);
             },
-            // 遍历文件上传并展示
+            // Duyệt tệp tải lên và hiển thị
             async handler(files) {
               const uploadSuccess = (res) => {
                 // {"success":true,"message":"markdown/aa_1653391146501.png","code":0,"result":null,"timestamp":1653391146501}'
@@ -248,7 +248,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // 代码逻辑说明: 【TV360X-318】解决markdown控件禁用状态放大按钮还可以点击
+  // Giải thích logic mã: 【TV360X-318]Khắc phục nút phóng to của control markdown vẫn có thể nhấp khi ở trạng thái bị vô hiệu hóa
   :deep(.vditor-menu--disabled) {
     pointer-events: none;
   }

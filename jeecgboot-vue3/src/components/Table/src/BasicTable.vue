@@ -16,15 +16,15 @@
       </template>
     </BasicForm>
 
-    <!-- antd v3 升级兼容，阻止数据的收集，防止控制台报错 -->
+    <!-- antd v3 Tương thích nâng cấp, ngăn thu thập dữ liệu, tránh báo lỗi ở console -->
     <!-- https://antdv.com/docs/vue/migration-v3-cn -->
     <a-form-item-rest>
-      <!-- 【TV360X-377】关联记录必填影响到了table的输入框和页码样式 -->
+      <!-- 【TV360X-377]Bắt buộc nhập của bản ghi liên kết ảnh hưởng đến kiểu của ô nhập và số trang của table -->
       <a-form-item>
         <Table ref="tableElRef" v-bind="getBindValues" :rowClassName="getRowClassName" v-show="getEmptyDataIsShowTable" @resizeColumn="handleResizeColumn" @change="handleTableChange">
-          <!-- antd的原生插槽直接传递 -->
+          <!-- antdSlot gốc của antd được truyền trực tiếp -->
           <template #[item]="data" v-for="item in slotNamesGroup.native" :key="item">
-            <!-- 代码逻辑说明: 【issues/1146】BasicTable使用headerCell全选框出不来 -->
+            <!-- Giải thích logic mã: 【issues/1146]BasicTable dùng headerCell thì ô chọn tất cả không hiển thị -->
             <template v-if="item === 'headerCell'">
               <CustomSelectHeader v-if="isCustomSelection(data.column)" v-bind="selectHeaderProps" />
               <slot v-else :name="item" v-bind="data || {}"></slot>
@@ -32,11 +32,11 @@
             <slot v-else :name="item" v-bind="data || {}"></slot>
           </template>
           <template #headerCell="{ column }">
-            <!-- 代码逻辑说明: 【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题 -->
+            <!-- Giải thích logic mã: 【QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật -->
             <CustomSelectHeader v-if="isCustomSelection(column)" v-bind="selectHeaderProps"/>
             <HeaderCell v-else :column="column" />
           </template>
-          <!-- 增加对antdv3.x兼容 -->
+          <!-- Thêm hỗ trợ choantdv3.xTương thích -->
           <template #bodyCell="data">
             <template v-if="data.column?.slotsBak?.customRender">
               <slot :name="data.column.slotsBak.customRender" v-bind="data || {}"></slot>
@@ -144,10 +144,10 @@
       // const { getRowSelection, getRowSelectionRef, getSelectRows, clearSelectedRowKeys, getSelectRowKeys, deleteSelectRowByKey, setSelectedRowKeys } =
       //   useRowSelection(getProps, tableData, emit);
 
-      // 子级列名
+      // Tên cột con
       const childrenColumnName = computed(() => getProps.value.childrenColumnName || 'children');
 
-      // 自定义选择列
+      // Cột chọn tùy chỉnh
       const {
         getRowSelection,
         getSelectRows,
@@ -200,7 +200,7 @@
       function handleTableChange(...args) {
         onTableChange.call(undefined, ...args);
         emit('change', ...args);
-        // 解决通过useTable注册onChange时不起作用的问题
+        // Khắc phục vấn đề onChange đăng ký qua useTable không có tác dụng
         const { onChange } = unref(getProps);
         onChange && isFunction(onChange) && onChange.call(undefined, ...args);
       }
@@ -208,7 +208,7 @@
       const { getViewColumns, getColumns, getRefColumns, setCacheColumnsByField, setColumns, getColumnsRef, getCacheColumns } = useColumns(
         getProps,
         getPaginationInfo,
-        // 代码逻辑说明: 【QQYUN-5571】自封装选择列，解决数据行选择卡顿问题
+        // Giải thích logic mã: 【QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật
         handleCustomSelectColumn,
       );
 
@@ -235,9 +235,9 @@
       };
 
       const { getHeaderProps } = useTableHeader(getProps, slots, handlers);
-      // 代码逻辑说明: 【pull/1201】添加antd的TableSummary功能兼容老的summary（表尾合计）
+      // Giải thích logic mã: 【pull/1201]Thêm chức năng TableSummary của antd để tương thích với summary cũ (tổng cộng cuối bảng)
       const getSummaryProps = computed(() => {
-        // 代码逻辑说明: 【issues/7956】修复showSummary: false时且有内嵌子表时合计栏错位
+        // Giải thích logic mã: 【issues/7956]SửashowSummary: falsethì khi có bảng con nhúng, thanh tổng bị lệch
         const result = pick(unref(getProps), ['summaryFunc', 'summaryData', 'hasExpandedRow', 'rowKey']);
         result['hasExpandedRow'] = Object.keys(slots).includes('expandedRowRender');
         return result;
@@ -257,13 +257,13 @@
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
         let propsData: Recordable = {
-          // date-begin--author:liaozhiyang---date:20250716---for：【issues/8564】basicTale的TableLayout换成auto不生效
+          // date-begin--author:liaozhiyang---date:20250716---for：【issues/8564]Đổi TableLayout của basicTale thành auto không có hiệu lực
           tableLayout: 'fixed',
-          // date-begin--author:liaozhiyang---date:20250716---for：【issues/8564】basicTale的TableLayout换成auto不生效
+          // date-begin--author:liaozhiyang---date:20250716---for：【issues/8564]Đổi TableLayout của basicTale thành auto không có hiệu lực
           // ...(dataSource.length === 0 ? { getPopupContainer: () => document.body } : {}),
           ...attrs,
           customRow,
-          //树列表展开使用AntDesignVue默认的加减图标 author:scott date:20210914
+          //Danh sách cây mở rộng dùng biểu tượng cộng/trừ mặc định của AntDesignVue author:scott date:20210914
           //expandIcon: slots.expandIcon ? null : expandIcon(),
           ...unref(getProps),
           ...unref(getHeaderProps),
@@ -276,26 +276,26 @@
           dataSource,
           footer: unref(getFooterProps),
           ...unref(getExpandOption),
-          // 【QQYUN-5837】动态计算 expandIconColumnIndex
+          // 【QQYUN-5837] tính toán động expandIconColumnIndex
           expandIconColumnIndex: getExpandIconColumnIndex.value,
         };
 
-        //额外的展开行存在插槽时会将滚动移除掉,注释掉
+        //Khi dòng mở rộng thêm có slot sẽ loại bỏ cuộn,đã chú thích
         /*if (slots.expandedRowRender) {
           propsData = omit(propsData, 'scroll');
         }*/
 
-        // 自定义选择列，需要去掉原生的
+        // Cột chọn tùy chỉnh, cần loại bỏ cột gốc
         delete propsData.rowSelection
 
-        // 代码逻辑说明: 【QQYUN-6387】展开写法（去掉报错）
+        // Giải thích logic mã: 【QQYUN-6387] cách viết mở rộng (loại bỏ lỗi)
         !propsData.isTreeTable && delete propsData.expandIconColumnIndex;
         propsData.expandedRowKeys === null && delete propsData.expandedRowKeys;
         propsData = omit(propsData, ['class', 'onChange']);
         return propsData;
       });
 
-      // 统一设置表格列宽度
+      // Thống nhất đặt chiều rộng cột của bảng
       const getMaxColumnWidth = computed(() => {
         const values = unref(getBindValues);
         return values.maxColumnWidth > 0 ? values.maxColumnWidth + 'px' : null;
@@ -310,7 +310,7 @@
             [`${prefixCls}-form-container`]: values.useSearchForm,
             [`${prefixCls}--inset`]: values.inset,
             [`${prefixCls}-col-max-width`]: getMaxColumnWidth.value != null,
-            // 是否显示表尾合计
+            // Có hiển thị tổng cộng ở chân bảng không
             [`${prefixCls}--show-summary`]: values.showSummary,
           },
         ];
@@ -350,7 +350,7 @@
         getRowSelection,
         getPaginationRef: getPagination,
         getColumns,
-        // 代码逻辑说明: 【issues/8529】setColumns后列配置没联动更新
+        // Giải thích logic mã: 【issues/8529]Sau setColumns cấu hình cột không cập nhật liên động
         getColumnsRef: () => getColumnsRef,
         getCacheColumns,
         emit,
@@ -363,16 +363,16 @@
         getSize: () => {
           return unref(getBindValues).size as SizeType;
         },
-        // 代码逻辑说明: 【QQYUN-13558】erp风格主表在5条数据时也有滚动条
+        // Giải thích logic mã: 【QQYUN-13558] Bảng chính kiểu ERP vẫn có thanh cuộn khi có 5 dòng dữ liệu
         getBindValuesRef: () => getBindValues,
       };
       createTableContext({ ...tableAction, wrapRef, getBindValues });
 
-      // 获取分组之后的slot名称
+      // Lấy tên slot sau khi nhóm
       const slotNamesGroup = computed<{
-        // AntTable原生插槽
+        // AntTableSlot gốc
         native: string[];
-        // 列自定义插槽
+        // Slot tùy chỉnh của cột
         custom: string[];
       }>(() => {
         const native: string[] = [];
@@ -380,7 +380,7 @@
         const columns = unref<Recordable[]>(getViewColumns) as BasicColumn[];
         const allCustomRender = columns.map<string>((column) => column.slotsBak?.customRender);
         for (const name of Object.keys(slots)) {
-          // 过滤特殊的插槽
+          // Lọc các slot đặc biệt
           if (['bodyCell'].includes(name)) {
             continue;
           }
@@ -392,11 +392,11 @@
         }
         return { native, custom };
       });
-      // 代码逻辑说明: 【issues/945】BasicTable组件设置默认展开不生效
+      // Giải thích logic mã: 【issues/945] Component BasicTable thiết lập mở rộng mặc định không có hiệu lực
       nextTick(() => {
         getProps.value.defaultExpandAllRows && expandAll();
       })
-      // 代码逻辑说明: 【issues/7588】选择后自动刷新表格
+      // Giải thích logic mã: 【issues/7588] tự động làm mới bảng sau khi chọn
       expose({ ...tableAction, handleSearchInfoChange });
 
       emit('register', tableAction, formActions);
@@ -415,7 +415,7 @@
         tableAction,
         redoHeight,
         handleResizeColumn: (w, col) => {
-          // 代码逻辑说明: 【issues/7101】列配置resizable: true时，表尾合计的列宽没有同步改变
+          // Giải thích logic mã: 【issues/7101] Cấu hình cộtresizable: truethì độ rộng cột của dòng tổng cuối bảng không thay đổi đồng bộ
           const columns = getColumns();
           const findItem = columns.find((item) => {
             if (item['dataIndex'] != null) {
@@ -460,7 +460,7 @@
     }
 
     .@{prefix-cls} {
-      //表格选择工具栏样式
+      //Kiểu thanh công cụ chọn bảng
       .alert {
         // background-color: #323232;
         // border-color: #424242;
@@ -476,7 +476,7 @@
         background-color: @app-content-background;
       }
     }
-    // 代码逻辑说明: 【TV360X-1232】查询区域隐藏后点击刷新不走请求了(采用css隐藏)
+    // Giải thích logic mã: 【TV360X-1232] Sau khi vùng truy vấn bị ẩn, bấm làm mới không gửi yêu cầu nữa(Ẩn bằng CSS)
     > .table-search-area-hidden {
       display: none;
     }
@@ -495,7 +495,7 @@
       margin-right: 0;
     }
 
-    // 代码逻辑说明: [issues/526]RangePicker 设置预设范围按钮样式问题---
+    // Giải thích logic mã: [issues/526]RangePicker Vấn đề về kiểu nút của phạm vi đặt trước---
     .ant-picker-preset {
       .ant-tag {
         margin-right: 8px !important;
@@ -528,7 +528,7 @@
         justify-content: space-between;
         align-items: center;
       }
-      //定义行颜色
+      //Định nghĩa màu hàng
       .trcolor {
         background-color: rgba(255, 192, 203, 0.31);
         color: red;
@@ -563,7 +563,7 @@
         padding: 12px 8px;
       }
     }
-    //表格选择工具栏样式
+    //Kiểu thanh công cụ chọn bảng
     .alert {
       height: 38px;
       // background-color: #e6f7ff;
@@ -575,22 +575,22 @@
       }
     }
 
-    // ------ 统一设置表格列最大宽度 ------
+    // ------ Thống nhất đặt chiều rộng tối đa của cột bảng ------
     &-col-max-width {
       .ant-table-thead tr th,
       .ant-table-tbody tr td {
         max-width: v-bind(getMaxColumnWidth);
       }
     }
-    // ------ 统一设置表格列最大宽度 ------
+    // ------ Thống nhất đặt chiều rộng tối đa của cột bảng ------
 
-    // 代码逻辑说明: 【issues/622】修复表尾合计错位的问题
+    // Giải thích logic mã: 【issues/622] Sửa vấn đề lệch tổng cuối bảng
     &--show-summary {
       .ant-table > .ant-table-footer {
         padding: 12px 0 0;
       }
       .ant-table > .ant-table-footer {
-        // 代码逻辑说明: 【issues/7413】合计行有点对不齐
+        // Giải thích logic mã: 【issues/7413] dòng tổng cộng hơi lệch
         padding-left: 0 !important;
         padding-right: 0 !important;
       }
@@ -598,7 +598,7 @@
         border: 0;
       }
     }
-    // 代码逻辑说明: 【TV360X-377】关联记录必填影响到了table的输入框和页码样式
+    // Giải thích logic mã: 【TV360X-377]Bắt buộc nhập của bản ghi liên kết ảnh hưởng đến kiểu của ô nhập và số trang của table
     > .ant-form-item {
       margin-bottom: 0;
     }

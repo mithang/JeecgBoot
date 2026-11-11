@@ -3,32 +3,32 @@ import { useMessage } from '/@/hooks/web/useMessage';
 import { isEmpty } from '@/utils/is';
 
 export function useSelectBiz(getList, props, emit?) {
-  //接收下拉框选项
+  //Nhận tùy chọn hộp thả xuống
   const selectOptions = inject('selectOptions', ref<Array<object>>([]));
-  //接收已选择的值
+  //Nhận giá trị đã chọn
   const selectValues = <object>inject('selectValues', reactive({ value: [], change: false }));
-  // 是否正在加载回显
+  // Có đang tải hiển thị lại không
   const loadingEcho = inject<Ref<boolean>>('loadingEcho', ref(false));
-  //数据集
+  //Tập dữ liệu
   const dataSource = ref<Array<object>>([]);
-  //已选择的值
+  //Giá trị đã chọn
   const checkedKeys = ref<Array<string | number>>([]);
-  //选则的行记录
+  //Bản ghi hàng đã chọn
   const selectRows = ref<Array<object>>([]);
-  //提示弹窗
+  //Popup nhắc nhở
   const $message = useMessage();
-  // 是否是首次加载回显，只有首次加载，才会显示 loading
+  // Có phải lần đầu tải và hiển thị lại không, chỉ lần đầu tải mới hiển thị loading
   let isFirstLoadEcho = true;
 
   /**
-   * 监听selectValues变化
+   * Lắng nghe sự thay đổi của selectValues
    */
   watch(
     selectValues,
     () => {
       //if (selectValues['change'] == false && !isEmpty(selectValues['value'])) {
       if (selectValues['change'] == false && !isEmpty(selectValues['value'])) {
-        // 代码逻辑说明: 【issues/7405】部门选择用户同时全部选择两页用户，回显到父页面。第二页用户显示的不是真是姓名
+        // Giải thích logic mã: 【issues/7405]Chọn người dùng theo phòng ban đồng thời chọn tất cả người dùng của hai trang, hiển thị lại lên trang cha. Người dùng ở trang thứ hai hiển thị không phải tên thật
         let params = { isMultiTranslate: 'true', pageSize: selectValues.value?.length };
         params[props.rowKey] = selectValues['value'].join(',');
         loadingEcho.value = isFirstLoadEcho;
@@ -39,8 +39,8 @@ export function useSelectBiz(getList, props, emit?) {
             loadingEcho.value = isFirstLoadEcho;
           });
       }
-      //设置列表默认选中
-      // 代码逻辑说明: 【QQYUN-12155】弹窗中勾选，再点取消，值被选中了
+      //Đặt mục chọn mặc định của danh sách
+      // Giải thích logic mã: 【QQYUN-12155] Tick trong popup, rồi bấm Hủy, giá trị vẫn bị chọn
       checkedKeys['value'] = [...selectValues['value']];
     },
     { immediate: true }
@@ -48,7 +48,7 @@ export function useSelectBiz(getList, props, emit?) {
 
   async function onSelectChange(selectedRowKeys: (string | number)[], selectRow) {
     checkedKeys.value = selectedRowKeys;
-    //判断全选的问题checkedKeys和selectRows必须一致
+    //Vấn đề chọn tất cả: checkedKeys và selectRows phải nhất quán
     if (props.showSelected && unref(checkedKeys).length !== unref(selectRow).length) {
       let { records } = await getList({
         code: unref(checkedKeys).join(','),
@@ -61,19 +61,19 @@ export function useSelectBiz(getList, props, emit?) {
   }
 
   /**
-   * 选择列配置（响应式：当 isRadioSelection prop 变化时，type 自动切换 radio/checkbox）
+   * Cấu hình cột chọn (phản ứng: khi prop isRadioSelection thay đổi, type tự động chuyển radio/checkbox）
    */
   const rowSelection = computed(() => ({
     type: props.isRadioSelection ? 'radio' : 'checkbox',
     columnWidth: 20,
     selectedRowKeys: checkedKeys,
     onChange: onSelectChange,
-    //table4.4.0新增属性选中之后是否清空上一页下一页的数据，默认false
+    //table4.4.0Thuộc tính mới: sau khi chọn có xóa dữ liệu trang trước/trang sau hay không, mặc địnhfalse
     preserveSelectedRowKeys:true,
   }));
 
   /**
-   * 序号列配置
+   * Cấu hình cột số thứ tự
    */
   const indexColumnProps = {
     dataIndex: 'index',
@@ -81,9 +81,9 @@ export function useSelectBiz(getList, props, emit?) {
   };
 
   /**
-   * 加载列表数据集
+   * Tải tập dữ liệu danh sách
    * @param params
-   * @param flag 是否是默认回显模式加载
+   * @param flag Có phải tải ở chế độ hiển thị lại mặc định không
    */
   async function getDataSource(params, flag) {
     let { records } = await getList(params);
@@ -101,28 +101,28 @@ export function useSelectBiz(getList, props, emit?) {
       code: selectValues['value'].join(','),
       pageSize: selectValues['value'].length,
     });
-    // 代码逻辑说明: 【QQYUN-12155】弹窗中勾选，再点取消，值被选中了
+    // Giải thích logic mã: 【QQYUN-12155] Tick trong popup, rồi bấm Hủy, giá trị vẫn bị chọn
     checkedKeys['value'] = [...selectValues['value']];
     selectRows['value'] = records;
   }
 
   /**
-   * 弹出框显示隐藏触发事件
+   * Sự kiện kích hoạt khi popup hiển thị/ẩn
    */
   async function visibleChange(visible) {
     if (visible) {
-      // 代码逻辑说明: 【QQYUN-12179】弹窗勾选了值，点击取消再次打开弹窗遗留了上次的勾选的值
+      // Giải thích logic mã: 【QQYUN-12179]Popup đã chọn giá trị, nhấn hủy rồi mở lại popup thì vẫn còn giá trị đã chọn lần trước
       checkedKeys['value'] = [...selectValues['value']];
-      //设置列表默认选中
+      //Đặt mục chọn mặc định của danh sách
       props.showSelected && initSelectRows();
     } else {
-      // 代码逻辑说明: 【QQYUN-9366】用户选择组件取消和关闭会把选择数据带入
+      // Giải thích logic mã: 【QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
       emit?.('close');
     }
   }
 
   /**
-   * 确定选择
+   * Xác nhận lựa chọn
    */
   function getSelectResult(success) {
     let options = <any[]>[];
@@ -135,18 +135,18 @@ export function useSelectBiz(getList, props, emit?) {
     });
     selectOptions.value = options;
     if (props.maxSelectCount && values.length > props.maxSelectCount) {
-      $message.createMessage.warning(`最多只能选择${props.maxSelectCount}条数据`);
+      $message.createMessage.warning(`Tối đa chỉ được chọn${props.maxSelectCount}bản ghi dữ liệu`);
       return false;
     }
     success && success(options, values);
   }
-  //删除已选择的信息
+  //Xóa thông tin đã chọn
   function handleDeleteSelected(record) {
-    // 代码逻辑说明: 【issues/424】开启右侧列表后，在右侧列表中删除用户时，逻辑有问题------------
+    // Giải thích logic mã: 【issues/424]Sau khi bật danh sách bên phải, khi xóa người dùng trong danh sách bên phải thì logic có vấn đề------------
     checkedKeys.value = checkedKeys.value.filter((item) => item != record[props.rowKey]);
     selectRows.value = selectRows.value.filter((item) => item[props.rowKey] !== record[props.rowKey]);
   }
-  //清空选择项
+  //Xóa mục đã chọn
   function reset() {
     checkedKeys.value = [];
     selectRows.value = [];

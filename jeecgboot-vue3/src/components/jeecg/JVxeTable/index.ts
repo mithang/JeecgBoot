@@ -1,6 +1,6 @@
 import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
-// update-begin--author:liaozhiyang---date:20260318---for:【QQYUN-14948】需要兼容vxetable引入到了页面也不报错
-// 兼容页面直接引入：通过异步组件包装，确保 vxe-table 注册后再渲染，避免页面卡死
+// update-begin--author:liaozhiyang---date:20260318---for:【QQYUN-14948]Cần tương thích để vxetable dù được import vào trang cũng không báo lỗi
+// Tương thích khi trang import trực tiếp: bọc bằng component bất đồng bộ để đảm bảo vxe-table Render sau khi đăng ký để tránh trang bị kẹt
 export const JVxeTable = createAsyncComponent(
   async () => {
     const app = window['JAppRootInstance'];
@@ -15,7 +15,7 @@ export const JVxeTable = createAsyncComponent(
   },
   { loading: true }
 );
-// update-end--author:liaozhiyang---date:20260318---for:【QQYUN-14948】需要兼容vxetable引入到了页面也不报错
+// update-end--author:liaozhiyang---date:20260318---for:【QQYUN-14948]Cần tương thích để vxetable dù được import vào trang cũng không báo lỗi
 export { registerJVxeTable } from './src/install';
 export { deleteComponent } from './src/componentMap';
 export { registerComponent, registerAsyncComponent, registerASyncComponentReal } from './src/utils/registerUtils';

@@ -24,8 +24,8 @@
   </a-radio-group>
 
   <template v-else-if="compType === CompTypeEnum.Select">
-    <!-- 显示加载效果 -->
-    <a-input v-if="loadingEcho" readOnly placeholder="加载中…">
+    <!-- Hiển thị hiệu ứng tải -->
+    <a-input v-if="loadingEcho" readOnly placeholder="Đang tải...">
       <template #prefix>
         <LoadingOutlined />
       </template>
@@ -40,7 +40,7 @@
       :style="style"
       @change="handleChange"
     >
-      <a-select-option v-if="showChooseOption" :value="null">请选择…</a-select-option>
+      <a-select-option v-if="showChooseOption" :value="null">Vui lòng chọn...</a-select-option>
       <template v-for="item in dictOptions" :key="`${item.value}`">
         <a-select-option :value="item.value">
           <span
@@ -80,16 +80,16 @@
         type: Function,
         default: (node) => node?.parentNode,
       },
-      // 是否显示【请选择】选项
+      // Có hiển thị tùy chọn [Vui lòng chọn] không
       showChooseOption: propTypes.bool.def(true),
-      // 下拉项-online使用
+      // Mục dropdown-onlineSử dụng
       options: {
         type: Array,
         default: () => [],
         required: false,
       },
       style: propTypes.any,
-      // 搜索时是否只搜索label
+      // Khi tìm kiếm có chỉ tìm kiếmlabel
       onlySearchByLabel: propTypes.bool.def(false),
     },
     emits: ['options-change', 'change','update:value'],
@@ -99,7 +99,7 @@
       const formItemContext = Form.useInjectFormItemContext();
       const state = ref<any>(props.value);
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
-      // update-begin-author:liaozhiyang date:2026-05-12 for:【issues/9420】系统用户职务多选回显时显示1,2,3
+      // update-begin-author:liaozhiyang date:2026-05-12 for:【issues/9420] Khi hiển thị lại đa chọn chức danh của người dùng hệ thống sẽ hiển thị1,2,3
       watch(
         () => props.value,
         (val) => {
@@ -114,18 +114,18 @@
         },
         { immediate: true }
       );
-      // update-end-author:liaozhiyang date:2026-05-12 for:【issues/9420】系统用户职务多选回显时显示1,2,3
-      // 是否正在加载回显数据
+      // update-end-author:liaozhiyang date:2026-05-12 for:【issues/9420] Khi hiển thị lại đa chọn chức danh của người dùng hệ thống sẽ hiển thị1,2,3
+      // Có đang tải dữ liệu hiển thị lại không
       const loadingEcho = ref<boolean>(false);
-      // 是否是首次加载回显，只有首次加载，才会显示 loading
+      // Có phải lần đầu tải và hiển thị lại không, chỉ lần đầu tải mới hiển thị loading
       let isFirstLoadEcho = true;
 
-      //组件类型
+      //Loại component
       const compType = computed(() => {
         return !props.type || props.type === 'list' ? 'select' : props.type;
       });
       /**
-       * 监听字典code
+       * Lắng nghe danh mụccode
        */
       watchEffect(() => {
         if (props.dictCode) {
@@ -135,14 +135,14 @@
             loadingEcho.value = isFirstLoadEcho;
           });
         }
-        //update-begin-author:taoyan date: 如果没有提供dictCode 可以走options的配置--
+        //update-begin-author:taoyan date: Nếu không cung cấp dictCode thì có thể dùng cấu hình của options--
         if (!props.dictCode) {
           dictOptions.value = props.options;
         }
-        //update-end-author:taoyan date: 如果没有提供dictCode 可以走options的配置--
+        //update-end-author:taoyan date: Nếu không cung cấp dictCode thì có thể dùng cấu hình của options--
       });
 
-      // 此处添加空值的change事件,即当组件调用地代码设置value为''也能触发change事件
+      // Thêm sự kiện change cho giá trị rỗng tại đây,tức là khi mã gọi component đặt value thành''cũng có thể kích hoạt sự kiện change
       watch(
         () => props.value,
         () => {
@@ -155,7 +155,7 @@
 
       async function initDictData() {
         let { dictCode, stringToNumber } = props;
-        //根据字典Code, 初始化字典数组
+        //Theo từ điểnCode, Khởi tạo mảng từ điển
         const dictData = await initDictOptions(dictCode);
         dictOptions.value = dictData.reduce((prev, next) => {
           if (next) {
@@ -174,12 +174,12 @@
       function handleChange(e) {
         const { mode } = unref<Recordable>(getBindValue);
         let changeValue:any;
-        // 兼容多选模式
+        // Tương thích chế độ chọn nhiều
         
-        //采用一个值，不然的话state值变换触发多个change
+        //Dùng một giá trị, nếu không khi giá trị state thay đổi sẽ kích hoạt nhiềuchange
         if (mode === 'multiple') {
           changeValue = e?.target?.value ?? e;
-          // 过滤掉空值
+          // Lọc bỏ giá trị rỗng
           if (changeValue == null || changeValue === '') {
             changeValue = [];
           }
@@ -191,38 +191,38 @@
         }
         state.value = changeValue;
 
-        // 代码逻辑说明: 【issues/4507】JDictSelectTag组件使用时，浏览器给出警告提示：Expected Function, got Array------------
+        // Giải thích logic mã: 【issues/4507]Khi dùng component JDictSelectTag, trình duyệt đưa ra cảnh báo:Expected Function, got Array------------
         emit('update:value', changeValue);
-        // 不再依赖 useRuleFormItem 的 setter 自动 emit('change')，这里显式触发，保证 BasicForm 的 onChange wrapper 能写回 formModel 并校验
+        // Không còn phụ thuộc vào setter của useRuleFormItem để tự động emit('change'), tại đây kích hoạt một cách tường minh, đảm bảo wrapper onChange của BasicForm có thể ghi lại vào formModel và kiểm chứng
         emit('change', changeValue);
         nextTick(() => formItemContext.onFieldChange());
       }
 
-      /** 单选radio的值变化事件 */
+      /** Sự kiện thay đổi giá trị của radio chọn đơn */
       function handleChangeRadio(e) {
         const radioValue = e?.target?.value ?? e;
         state.value = radioValue;
-        // 代码逻辑说明: 【issues/506】JDictSelectTag 组件 type="radio" 没有返回值------------
+        // Giải thích logic mã: 【issues/506] Component JDictSelectTag type="radio" Không có giá trị trả về------------
         emit('update:value', radioValue);
         emit('change', radioValue);
         nextTick(() => formItemContext.onFieldChange());
       }
 
-      /** 用于搜索下拉框中的内容 */
+      /** Dùng để tìm kiếm nội dung trong hộp thả xuống */
       function handleFilterOption(input, option) {
-        // 代码逻辑说明: 【QQYUN-6514】 配置的时候，Y轴不能输入多个字段了，控制台报错
+        // Giải thích logic mã: 【QQYUN-6514]Khi cấu hình, trục Y không thể nhập nhiều trường, console báo lỗi
         if (typeof option.children === 'function') {
-          // 在 label 中搜索
+          // Tìm kiếm trong label
           let labelIf = option.children()[0]?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
           if (labelIf) {
             return true;
           }
         }
         if (props.onlySearchByLabel) {
-          // 如果开启了只在 label 中搜索，就不继续往下搜索value了
+          // Nếu đã bật chỉ tìm kiếm trong label thì không tiếp tục tìm kiếm value ở phía dưới nữa
           return false;
         }
-        // 在 value 中搜索
+        // Tìm kiếm trong value
         return (option.value || '').toString().toLowerCase().indexOf(input.toLowerCase()) >= 0;
       }
 
@@ -242,7 +242,7 @@
   });
 </script>
 <style scoped lang="less">
-  // 代码逻辑说明: 【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
+  // Giải thích logic mã: 【QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
   .colorText {
     display: inline-block;
     height: 20px;
@@ -253,5 +253,5 @@
     color: #fff;
     font-size: 12px;
   }
-  // 代码逻辑说明: 【QQYUN-7799】字典组件（原生组件除外）加上颜色配置
+  // Giải thích logic mã: 【QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
 </style>

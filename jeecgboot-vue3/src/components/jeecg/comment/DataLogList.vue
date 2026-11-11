@@ -59,7 +59,7 @@
       const dataList = ref([]);
       const lastIndex = ref(0);
       /**
-       * 加载数据
+       * Tải dữ liệu
        * @returns {Promise<void>}
        */
       async function loadData() {
@@ -100,7 +100,7 @@
       }
       
       function handleClickPerson() {
-        console.log('此功能未开放')
+        console.log('Chức năng này chưa được mở')
       }
       
       return {

@@ -8,30 +8,30 @@
     wrapClassName="jeecg-online-pop-list-modal"
   >
     <template #footer>
-      <a-button key="back" @click="handleCancel">关闭</a-button>
-      <a-button :disabled="submitDisabled" key="submit" type="primary" @click="handleSubmit" :loading="submitLoading">确定</a-button>
+      <a-button key="back" @click="handleCancel">Đóng</a-button>
+      <a-button :disabled="submitDisabled" key="submit" type="primary" @click="handleSubmit" :loading="submitLoading">Xác nhận</a-button>
     </template>
 
-    <!-- 工具栏：搜索 + 已选提示 -->
+    <!-- Thanh công cụ: Tìm kiếm + Gợi ý đã chọn -->
     <div class="ltm-toolbar">
       <a-input-search
         v-model:value="searchText"
         @search="onSearch"
         @pressEnter="onSearch"
-        placeholder="请输入关键词，按回车搜索"
+        placeholder="Vui lòng nhập từ khóa, nhấn Enter để tìm kiếm"
         style="width: 240px"
       />
       <span v-if="cardSelectedKeys.length > 0" class="atm-selected-tip">
-        已选中 {{ cardSelectedKeys.length }} 条记录
-        <a class="atm-clear-link" @click="clearCardSelection">清空</a>
+        Đã chọn {{ cardSelectedKeys.length }} bản ghi
+        <a class="atm-clear-link" @click="clearCardSelection">Xóa sạch</a>
       </span>
     </div>
 
-    <!-- 卡片视图 -->
+    <!-- Chế độ xem thẻ -->
     <div v-if="cardLoading" class="atm-spin-wrap">
       <a-spin />
     </div>
-    <a-empty v-else-if="cardDataList.length === 0" style="margin: 40px 0" description="暂无数据" />
+    <a-empty v-else-if="cardDataList.length === 0" style="margin: 40px 0" description="Không có dữ liệu" />
     <div v-else class="atm-card-grid">
       <div
         v-for="record in cardDataList"
@@ -40,13 +40,13 @@
         :class="{ 'atm-card--selected': isCardSelected(record) }"
         @click="handleCardToggle(record)"
       >
-        <!-- 多选模式右上角图标 -->
+        <!-- Biểu tượng góc trên bên phải ở chế độ chọn nhiều -->
         <span v-if="multi" class="atm-card-check">
           <CheckSquareFilled v-if="isCardSelected(record)" class="atm-check-icon--on" />
           <BorderOutlined v-else class="atm-check-icon--off" />
         </span>
 
-        <!-- 内容区 -->
+        <!-- Khu vực nội dung -->
         <div class="atm-card-inner" :class="{ 'atm-has-image': hasCardImage(record) }">
           <div class="atm-card-title">{{ getCardMainContent(record) }}</div>
           <div class="atm-card-fields">
@@ -57,20 +57,20 @@
           </div>
         </div>
 
-        <!-- 图片区 -->
+        <!-- Khu vực hình ảnh -->
         <div v-if="hasCardImage(record)" class="atm-card-image">
           <img :src="getCardImageSrc(record)" alt="" @error="handleCardImageError" />
         </div>
       </div>
     </div>
 
-    <!-- 卡片分页 -->
+    <!-- Phân trang thẻ -->
     <div class="atm-pagination">
       <a-pagination
         v-model:current="cardCurrentPage"
         :total="cardTotal"
         :pageSize="cardPageSize"
-        :show-total="(t) => `共 ${t} 条`"
+        :show-total="(t) => `Tổng cộng ${t} mục`"
         show-size-changer
         @change="handleCardPageChange"
         @showSizeChange="handleCardSizeChange"
@@ -93,7 +93,7 @@ import placeholderImage from '/@/assets/images/placeholderImage.png';
 export default defineComponent({
   name: 'LinkTableListModal',
   props: {
-    /**可以是表名 可以是ID*/
+    /**Có thể là tên bảng, có thể làID*/
     id: {
       type: String,
       default: '',
@@ -115,18 +115,18 @@ export default defineComponent({
   emits: ['success', 'register'],
   setup(props, { emit }) {
     const { createMessage: $message } = useMessage();
-    // 弹窗高度控制
+    // Kiểm soát chiều cao popup
     const { popModalFixedWidth, resetBodyStyle, popBodyStyle } = useFixedHeightModal();
     const searchText = ref('');
 
-    // ==================== 卡片模式状态 ====================
+    // ==================== Trạng thái chế độ thẻ ====================
     const cardLoading = ref(false);
     const cardDataList = ref<any[]>([]);
     const cardTotal = ref(0);
     const cardCurrentPage = ref(1);
     const cardPageSize = ref(10);
 
-    // 卡片模式选中状态
+    // Trạng thái đã chọn ở chế độ thẻ
     const cardSelectedKeys = ref<string[]>([]);
     const cardSelectedRecordsMap = ref<Record<string, any>>({});
 
@@ -160,15 +160,15 @@ export default defineComponent({
       cardSelectedRecordsMap.value = {};
     }
 
-    // ==================== 卡片字段计算（基于 columns） ====================
-    // 主显示字段（第一个非图片/文件列）
+    // ==================== Tính toán trường thẻ (dựa trên columns) ====================
+    // Trường hiển thị chính (cột đầu tiên không phải hình ảnh/Cột tệp)
     const cardMainField = computed(() => {
       const cols = columns.value || [];
       const first = cols.find((c) => !isImageOrFileColumn(c) && c.dataIndex !== 'action');
       return first?.dataIndex || '';
     });
 
-    // 其他文本字段（排除主字段、图片、文件列，最多3个）
+    // Các trường văn bản khác (loại trừ trường chính, cột hình ảnh, cột tệp, tối đa 3 trường)
     const cardOtherDisplayFields = computed(() => {
       const cols = columns.value || [];
       const mainKey = cardMainField.value;
@@ -178,7 +178,7 @@ export default defineComponent({
         .map((c) => ({ key: c.dataIndex, title: c.title || c.dataIndex }));
     });
 
-    // 图片字段（第一个 imgSlot 列）
+    // Trường hình ảnh (cột imgSlot đầu tiên)
     const cardImageField = computed(() => {
       const cols = columns.value || [];
       const imgCol = cols.find((c) => getColumnSlot(c) === 'imgSlot');
@@ -215,7 +215,7 @@ export default defineComponent({
       (e.target as HTMLImageElement).src = placeholderImage;
     }
 
-    // ==================== 卡片数据加载 ====================
+    // ==================== Tải dữ liệu thẻ ====================
     async function loadCardData() {
       if (!props.id) return;
       cardLoading.value = true;
@@ -229,7 +229,7 @@ export default defineComponent({
         cardDataList.value = res?.records || [];
         cardTotal.value = res?.total || 0;
       } catch (e) {
-        console.error('[LinkTableListModal] 卡片数据加载失败', e);
+        console.error('[LinkTableListModal] Tải dữ liệu thẻ thất bại', e);
         cardDataList.value = [];
         cardTotal.value = 0;
       } finally {
@@ -248,11 +248,11 @@ export default defineComponent({
       loadCardData();
     }
 
-    // ==================== 弹窗 ====================
+    // ==================== Popup ====================
     const [registerModal, { closeModal }] = useModalInner((data) => {
       searchText.value = '';
 
-      // 同步卡片选中状态
+      // Đồng bộ trạng thái đã chọn của thẻ
       cardSelectedKeys.value = (data.selectedRowKeys || []).map(String);
       cardSelectedRecordsMap.value = {};
       for (const row of data.selectedRows || []) {
@@ -287,7 +287,7 @@ export default defineComponent({
       }, 200);
     }
 
-    // ==================== 数据请求 ====================
+    // ==================== Yêu cầu dữ liệu ====================
     function queryTableData(params) {
       const url = '/online/cgform/api/getData/' + props.id;
       return defHttp.get({ url, params });
@@ -381,7 +381,7 @@ export default defineComponent({
       popModalFixedWidth,
       popBodyStyle,
 
-      // 卡片模式
+      // Chế độ thẻ
       cardLoading,
       cardDataList,
       cardTotal,
@@ -405,7 +405,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
-/* ===== 工具栏 ===== */
+/* ===== Thanh công cụ ===== */
 .ltm-toolbar {
   display: flex;
   align-items: center;
@@ -413,7 +413,7 @@ export default defineComponent({
   margin-bottom: 12px;
 }
 
-/* ===== 卡片通用样式 ===== */
+/* ===== Kiểu chung của thẻ ===== */
 .atm-selected-tip {
   font-size: 13px;
   color: #1890ff;

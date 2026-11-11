@@ -1,10 +1,10 @@
-<!--通过部门选择用户-->
+<!--Chọn người dùng theo phòng ban-->
 <template>
   <BasicModal v-bind="$attrs" @register="register" :title="modalTitle" width="1200px" @ok="handleOk" destroyOnClose @visible-change="visibleChange">
     <a-row :gutter="10">
       <a-col :md="7" :sm="24" style="height: 613px;overflow: auto ">
         <a-card :style="{ minHeight: '613px', overflow: 'auto' }">
-          <!--组织机构-->
+          <!--Tổ chức-->
           <BasicTree
             ref="treeRef"
             :style="{ minWidth: '250px' }"
@@ -24,7 +24,7 @@
       </a-col>
       <a-col :md="17" :sm="24">
         <a-card :style="{ minHeight: '613px', overflow: 'auto' }">
-          <!--用户列表-->
+          <!--Danh sách người dùng-->
           <BasicTable ref="tableRef" v-bind="getBindValue" :searchInfo="searchInfo" :api="getTableList" :rowSelection="rowSelection" :defSort="{ column: '', order: '' }"></BasicTable>
         </a-card>
       </a-col>
@@ -46,7 +46,7 @@
     name: 'UserSelectByDepModal',
     components: {
       TreeIcon,
-      //此处需要异步加载BasicTable
+      //Tại đây cần tải bất đồng bộBasicTable
       BasicModal,
       BasicTree,
       BasicTable: createAsyncComponent(() => import('/@/components/Table/src/BasicTable.vue'), {
@@ -55,17 +55,17 @@
     },
     props: {
       ...selectProps,
-      //选择框标题
+      //Tiêu đề hộp chọn
       modalTitle: {
         type: String,
-        default: '部门用户选择',
+        default: 'Chọn người dùng theo phòng ban',
       },
     },
     emits: ['register', 'getSelectResult'],
     setup(props, { emit, refs }) {
       const tableRef = ref();
       const treeRef = ref();
-      //注册弹框
+      //Đăng ký popup
       const [register, { closeModal }] = useModalInner(async (data) => {
         await queryDepartTree();
       });
@@ -75,27 +75,27 @@
       const expandedKeys = ref([]);
       const searchInfo = {};
       /**
-       *表格配置
+       *Cấu hình bảng
        */
       const tableProps = {
         columns: [
           {
-            title: '用户账号',
+            title: 'Tài khoản người dùng',
             dataIndex: 'username',
             width: 180,
           },
           {
-            title: '用户姓名',
+            title: 'Họ tên người dùng',
             dataIndex: 'realname',
             width: 180,
           },
           {
-            title: '性别',
+            title: 'Giới tính',
             dataIndex: 'sex_dictText',
             width: 80,
           },
           {
-            title: '手机号码',
+            title: 'Số điện thoại',
             dataIndex: 'phone',
             customRender:( { record, text })=>{
               if(record.izHideContact && record.izHideContact === '1'){
@@ -123,7 +123,7 @@
             xl: 6,
             xxl: 8,
           },
-          // 代码逻辑说明: [issues/5514]组件页面显示错位
+          // Giải thích logic mã: [issues/5514]Trang component hiển thị lệch vị trí
           actionColOptions: {
               xs: 24,
               sm: 12,
@@ -134,12 +134,12 @@
           },
           schemas: [
             {
-              label: '账号',
+              label: 'Tài khoản',
               field: 'username',
               component: 'Input',
             },
             {
-              label: '姓名',
+              label: 'Họ tên',
               field: 'realname',
               component: 'Input',
             },
@@ -161,7 +161,7 @@
       }
 
       /**
-       * 解析参数
+       * Phân tích tham số
        * @param params
        */
       function parseParams(params) {
@@ -175,19 +175,19 @@
       }
 
       /**
-       * 加载树形数据
+       * Tải dữ liệu dạng cây
        */
       function queryDepartTree() {
         queryDepartTreeSync().then((res) => {
           if (res) {
             departTree.value = res;
-            // 默认展开父节点
+            // Mở rộng nút cha theo mặc định
             //expandedKeys.value = unref(departTree).map(item => item.id)
           }
         });
       }
       /**
-       * 加载子级部门
+       * Tải phòng ban cấp con
        */
       async function loadChildrenTreeData(treeNode) {
         try {
@@ -205,7 +205,7 @@
         return Promise.resolve();
       }
       /**
-       * 点击树节点,筛选出对应的用户
+       * Nhấp nút cây,Lọc ra người dùng tương ứng
        */
       function onDepSelect(keys) {
         if (keys[0] != null) {
@@ -217,25 +217,25 @@
         }
       }
       /**
-       * 自定义重置方法
+       * Phương thức đặt lại tùy chỉnh
        * */
       async function customResetFunc() {
-        console.log('自定义查询');
-        //树节点清空
+        console.log('Tìm kiếm tùy chỉnh');
+        //Xóa nút cây
         selectedDepIds.value = [];
-        //查询条件清空
+        //Xóa điều kiện truy vấn
         searchInfo['departId'] = '';
-        //选择项清空
+        //Xóa mục đã chọn
         reset();
       }
       /**
-       * 确定选择
+       * Xác nhận lựa chọn
        */
       function handleOk() {
         getSelectResult((options, values) => {
-          //回传选项和已选择的值
+          //Trả về tùy chọn và giá trị đã chọn
           emit('getSelectResult', options, values);
-          //关闭弹窗
+          //Đóng popup
           closeModal();
         });
       }

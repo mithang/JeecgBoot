@@ -6,55 +6,55 @@ export enum Api {
   userList = '/sys/user/list',
   departUserList = '/sys/user/queryUserByDepId',
 
-  //获取所有岗位职级信息
+  //Lấy thông tin cấp bậc của tất cả vị trí công tác
   queryALLRankRelation = '/sys/sysDepart/getALLRankRelation',
-  //根据关键字搜索部门
+  //Tìm kiếm phòng ban theo từ khóa
   searchBy = '/sys/sysDepart/searchBy'
 }
 
 /**
- * 获取部门树列表
+ * Lấy danh sách cây phòng ban
  */
 export const getDepartTreeData = (params?) => defHttp.get({ url: Api.departList, params });
 
 /**
- * 获取用户列表
+ * Lấy danh sách người dùng
  */
 export const getUserList = (params?) => defHttp.get({ url: Api.userList, params: { ...params, status: '1' } });
 
 /**
- * 获取指定部门用户列表
+ * Lấy danh sách người dùng của phòng ban chỉ định
  */
 export const getDepartUserList = (params?) => defHttp.get({ url: Api.departUserList, params });
 /**
- * 获取职级信息
+ * Lấy thông tin cấp bậc
  */
 export const queryALLRankRelation = (params?) => defHttp.get({ url: Api.queryALLRankRelation, params,timeout: 2 * 60 * 1000 });
 
 /**
- * 根据关键字搜索部门
+ * Tìm kiếm phòng ban theo từ khóa
  */
 export const searchByKeywords = (params) => defHttp.get({ url: Api.searchBy, params });
 /**
- * 用户列表
+ * Danh sách người dùng
  */
 export const columns: BasicColumn[] = [
   // {
-  //   title: '用户账号',
+  //   title: 'Tài khoản người dùng',
   //   align: 'center',
   //   dataIndex: 'username',
   //   ellipsis: true,
   //   width: 130,
   // },
   {
-    title: '用户姓名',
+    title: 'Họ tên người dùng',
     align: 'center',
     width: 150,
     dataIndex: 'realname',
     ellipsis: true,
   },
   {
-    title: '部门',
+    title: 'Phòng ban',
     align: 'center',
     width: 150,
     dataIndex: 'orgCodeTxt',
@@ -62,11 +62,11 @@ export const columns: BasicColumn[] = [
 ];
 
 /**
- * 选中用户列表
+ * Danh sách người dùng đã chọn
  */
 export const selectedUserColumns: BasicColumn[] = [
   {
-    title: '用户姓名',
+    title: 'Họ tên người dùng',
     align: 'center',
     width: 150,
     dataIndex: 'realname',
@@ -75,11 +75,11 @@ export const selectedUserColumns: BasicColumn[] = [
 ];
 
 /**
- * 查询条件
+ * Điều kiện tìm kiếm
  */
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '用户姓名',
+    label: 'Họ tên người dùng',
     field: 'realname',
     component: 'Input',
     componentProps: {
@@ -89,7 +89,7 @@ export const searchFormSchema: FormSchema[] = [
     },
   },
   // {
-  //   label: '用户账号',
+  //   label: 'Tài khoản người dùng',
   //   field: 'username',
   //   component: 'JInput',
   //   componentProps: {

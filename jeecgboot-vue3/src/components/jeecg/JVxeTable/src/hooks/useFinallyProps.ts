@@ -7,11 +7,11 @@ import { JVxeDataProps, JVxeTableMethods, JVxeTableProps } from '../types';
 
 export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, methods: JVxeTableMethods) {
   const attrs = useAttrs();
-  // vxe 键盘操作配置
+  // vxe Cấu hình thao tác bàn phím
   const { keyboardEditConfig } = useKeyboardEdit(props);
-  // vxe 最终 editRules
+  // vxe Cuối cùng editRules
   const vxeEditRules = computed(() => merge({}, props.editRules, data.innerEditRules));
-  // vxe 最终 events
+  // vxe Cuối cùng events
   const vxeEvents = computed(() => {
     let listeners = { ...unref(attrs) };
     let events = {
@@ -22,10 +22,10 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
       onRadioChange: methods.handleVxeRadioChange,
       onCheckboxAll: methods.handleVxeCheckboxAll,
       onCheckboxChange: methods.handleVxeCheckboxChange,
-      // 代码逻辑说明: 【QQYUN-8566】JVXETable无法记住列设置
+      // Giải thích logic mã: 【QQYUN-8566] JVXETable không thể nhớ cài đặt cột
       onCustom: methods.handleCustom,
     };
-    // 用户传递的事件，进行合并操作
+    // Sự kiện do người dùng truyền vào sẽ được hợp nhất
     Object.keys(listeners).forEach((key) => {
       let listen = listeners[key];
       if (events.hasOwnProperty(key)) {
@@ -40,9 +40,9 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
     return events;
   });
 
-  // vxe 最终 props
+  // vxe Cuối cùng props
   const vxePropsMerge = computed(() => {
-    // 代码逻辑说明: 【QQYUN-8785】online表单列位置的id未做限制，拖动其他列到id列上面，同步数据库时报错
+    // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
     let rowClass = {};
     if (props.dragSort) {
       rowClass = {
@@ -52,7 +52,7 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
             const {key, value} = item;
             return row[key] == value;
           });
-          // 业务传进的来的rowClassName
+          // rowClassName do nghiệp vụ truyền vàorowClassName
           const popsRowClassName = props.rowClassName ?? '';
           let outClass = '';
           if(typeof popsRowClassName==='string'){
@@ -80,16 +80,16 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
         editRules: unref(vxeEditRules),
         height: props.height === 'auto' ? null : props.height,
         maxHeight: props.maxHeight,
-        // 代码逻辑说明: 【QQYUN-5133】JVxeTable 行编辑升级
+        // Giải thích logic mã: 【QQYUN-5133] Nâng cấp chỉnh sửa dòng của JVxeTable
         scrollY: props.scrollY,
         scrollX: props.scrollX,
         border: props.bordered,
         footerMethod: methods.handleFooterMethod,
-        // 展开行配置
+        // Cấu hình hàng mở rộng
         expandConfig: {
           toggleMethod: methods.handleExpandToggleMethod,
         },
-        // 可编辑配置
+        // Cấu hình có thể chỉnh sửa
         editConfig: {
           //activeMethod: methods.handleActiveMethod,
           beforeEditMethod: methods.handleActiveMethod,
@@ -120,7 +120,7 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
   const vxeProps = computed(() => {
     return {
       ...unref(vxePropsMerge),
-      // 【issue/8695】单独抽出 columns，防止性能问题
+      // 【issue/8695]Tách riêng columns để tránh vấn đề hiệu năng
       columns: unref(vxeColumnsRef),
     }
   });

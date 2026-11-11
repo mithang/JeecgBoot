@@ -17,19 +17,19 @@ export function useData(props: JVxeTableProps): JVxeDataProps {
       // rowId: props.rowKey,
       rowConfig: {
         keyField: props.rowKey,
-        // 高亮hover的行
+        // Tô sáng dòng được hover
         isHover: true,
       },
 
-      // --- 【issues/209】自带的tooltip会错位，所以替换成原生的title ---
-      // 溢出隐藏并显示tooltip
+      // --- 【issues/209]tooltip đi kèm sẽ bị lệch vị trí, nên thay bằng title gốctitle ---
+      // Ẩn khi tràn và hiển thị tooltiptooltip
       showOverflow: "title",
-      // 表头溢出隐藏并显示tooltip
+      // Tiêu đề bảng tràn sẽ ẩn và hiển thịtooltip
       showHeaderOverflow: "title",
-      // --- 【issues/209】自带的tooltip会错位，所以替换成原生的title ---
+      // --- 【issues/209]tooltip đi kèm sẽ bị lệch vị trí, nên thay bằng title gốctitle ---
 
       showFooterOverflow: true,
-      // 可编辑配置
+      // Cấu hình có thể chỉnh sửa
       editConfig: {
         trigger: 'click',
         mode: 'cell',
@@ -41,45 +41,45 @@ export function useData(props: JVxeTableProps): JVxeDataProps {
         iconOpen: 'vxe-icon-arrow-down',
         ...props.expandConfig,
       },
-      // 虚拟滚动配置，y轴大于xx条数据时启用虚拟滚动
+      // Cấu hình cuộn ảo, khi trục y có hơn xx bản ghi dữ liệu sẽ bật cuộn ảo
       scrollY: {
         gt: 30,
       },
       scrollX: {
         gt: 20,
-        // 暂时关闭左右虚拟滚动
+        // Tạm thời tắt cuộn ảo trái/phải
         enabled: false,
       },
       radioConfig: {
-        // 保留勾选状态
+        // Giữ trạng thái đã chọn
         reserve: true,
         highlight: true,
       },
       checkboxConfig: {
-        // 保留勾选状态
+        // Giữ trạng thái đã chọn
         reserve: true,
         highlight: true,
       },
-      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
-      // 禁止点击表格外部时清空校验状态，避免每次点击空白区域触发 reactData.validErrorMaps={} 导致不必要的重渲染
+      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+      // Cấm xóa trạng thái kiểm chứng khi nhấn bên ngoài bảng, tránh việc mỗi lần nhấn vùng trống đều kích hoạt reactData.validErrorMaps={} Gây ra việc render lại không cần thiết
       validConfig: {
         autoClear: false,
       },
-      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
       keyboardConfig: {
-        // 删除键功能
+        // Chức năng phím Delete
         isDel: false,
-        // Esc键关闭编辑功能
+        // Escđóng chức năng chỉnh sửa
         isEsc: true,
-        // Tab 键功能
+        // Tab Chức năng phím
         isTab: true,
-        // 任意键进入编辑（功能键除外）
+        // Nhấn phím bất kỳ để vào chế độ chỉnh sửa (trừ phím chức năng)
         isEdit: true,
-        // 方向键功能
+        // Chức năng phím mũi tên
         isArrow: true,
-        // 回车键功能
+        // Chức năng phím Enter
         isEnter: true,
-        // 如果功能被支持，用于 column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能
+        // Nếu tính năng được hỗ trợ, dùng cho column.type=checkbox|radio, bật chức năng dùng phím cách để chuyển trạng thái checkbox hoặc radio
         isChecked: true,
       },
     }),

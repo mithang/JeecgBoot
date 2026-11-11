@@ -72,7 +72,7 @@ export default defineComponent({
         const tableName = col.tableName;
         const textField = col.textField || '';
         const valueField = col.valueField || 'id';
-        // 关联记录相关的他表字段
+        // Trường của bảng khác liên quan đến bản ghi liên kết
         const linkFields: string[] = col.linkFields || [];
         if (!tableName) return value;
         const vals = (value + '').split(',');
@@ -112,7 +112,7 @@ export default defineComponent({
           const record = records.find((r) => String(r[valueField]) === String(v));
           return record ? record[textKey] : v;
         });
-        // 将他表字段的值同步写入行数据，使对应列能正确显示
+        // Đồng bộ ghi giá trị trường của bảng khác vào dữ liệu hàng, để cột tương ứng hiển thị đúng
         if (linkFields.length > 0 && row) {
           linkFields.forEach((lf) => {
             const [formField, tableField] = lf.split(',');

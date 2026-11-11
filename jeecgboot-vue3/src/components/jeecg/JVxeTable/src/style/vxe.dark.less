@@ -1,5 +1,5 @@
 @import 'vxe.const';
-// update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8493】修正暗黑模式online表单Erp和编辑页面显示不正确
+// update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8493]Sửa lỗi hiển thị không đúng của biểu mẫu online Erp và trang chỉnh sửa trong chế độ tối
 html[data-theme='dark'] { 
   --vxe-table-body-background-color: #151515;
   --vxe-table-footer-background-color: #151515;
@@ -8,7 +8,7 @@ html[data-theme='dark'] {
   --vxe-table-row-hover-background-color:#1e1e1e;
   --vxe-input-border-color: #606266;
 }
-// update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8493】修正暗黑模式online表单Erp和编辑页面显示不正确
+// update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8493]Sửa lỗi hiển thị không đúng của biểu mẫu online Erp và trang chỉnh sửa trong chế độ tối
 [data-theme='dark'] .@{prefix-cls} {
   @fontColor: #c9d1d9;
   @bgColor: #151515;
@@ -22,9 +22,9 @@ html[data-theme='dark'] {
   }
 
   .vxe-toolbar {
-    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8493】修正暗黑模式online表单Erp和编辑页面显示不正确
+    // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8493]Sửa lỗi hiển thị không đúng của biểu mẫu online Erp và trang chỉnh sửa trong chế độ tối
     background-color: #1f1f1f;
-    // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8493】修正暗黑模式online表单Erp和编辑页面显示不正确
+    // update-end--author:liaozhiyang---date:20240313---for：【QQYUN-8493]Sửa lỗi hiển thị không đúng của biểu mẫu online Erp và trang chỉnh sửa trong chế độ tối
   }
 
   .vxe-table--render-default .vxe-table--body-wrapper,
@@ -32,37 +32,37 @@ html[data-theme='dark'] {
     background-color: @bgColor;
   }
 
-  // 外边框
+  // Viền ngoài
   .vxe-table--render-default .vxe-table--border-line {
     border-color: @borderColor;
   }
 
-  // header 下边框
+  // header Viền dưới
   .vxe-table .vxe-table--header-wrapper .vxe-table--header-border-line {
     border-bottom-color: @borderColor;
   }
 
-  // footer 上边框
+  // footer Viền trên
   .vxe-table--render-default .vxe-table--footer-wrapper {
     border-top-color: @borderColor;
   }
 
-  // 展开行 边框
+  // Viền hàng mở rộng
   .vxe-table--render-default .vxe-body--expanded-column {
     border-bottom-color: @borderColor;
   }
 
-  // 行斑马纹
+  // Vân sọc ngựa vằn theo dòng
   .vxe-table--render-default .vxe-body--row.row--stripe {
     background-color: #1e1e1e;
   }
 
-  // 行hover
+  // Hànghover
   .vxe-table--render-default .vxe-body--row.row--hover {
     background-color: #262626;
   }
 
-  // 选中行
+  // Hàng đã chọn
   .vxe-table--render-default .vxe-body--row.row--checked {
     background-color: #44403a;
 
@@ -86,7 +86,7 @@ html[data-theme='dark'] {
     background-image: linear-gradient(#1d1d1d, #1d1d1d);
   }
 
-  // 列宽拖动
+  // Kéo độ rộng cột
   .vxe-header--column .vxe-resizable.is--line:before {
     background-color: #505050;
   }

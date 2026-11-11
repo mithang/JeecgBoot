@@ -93,16 +93,16 @@ export interface FormProps {
   autoSubmitOnEnter?: boolean;
   // Check whether the information is added to the label
   rulesMessageJoinLabel?: boolean;
-  // 是否显示展开收起按钮
+  // Có hiển thị nút mở rộng/thu gọn không
   showAdvancedButton?: boolean;
   // Whether to focus on the first input box, only works when the first form item is input
   autoFocusFirstItem?: boolean;
-  // 【jeecg】如果 showAdvancedButton 为 true，超过指定列数默认折叠，默认为3
+  // Nếu showAdvancedButton là true, khi vượt quá số cột quy định sẽ mặc định thu gọn, mặc định là3
   autoAdvancedCol?: number;
-  // 如果 showAdvancedButton 为 true，超过指定行数行默认折叠
-  // 代码逻辑说明: 【issues/7261】表格上方查询项autoAdvancedLine配置没有效果（删除autoAdvancedLine）
+  // Nếu showAdvancedButton là true, vượt quá số hàng chỉ định thì mặc định thu gọn
+  // Giải thích logic mã: 【issues/7261]Cấu hình autoAdvancedLine của mục truy vấn phía trên bảng không có hiệu lực (xóa autoAdvancedLine)
   // autoAdvancedLine?: number;
-  // 折叠时始终保持显示的行数
+  // Số dòng luôn hiển thị khi thu gọn
   alwaysShowLines?: number;
   // Whether to show the operation button
   showActionButtonGroup?: boolean;
@@ -134,7 +134,7 @@ export interface FormSchema {
   // Variable name bound to v-model Default value
   valueField?: string;
   // Label name
-  // 代码逻辑说明: 【issues/6908】多语言无刷新切换时，BasicColumn和FormSchema里面的值不能正常切换
+  // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
   label: string | VNode | Fn;
   // Auxiliary text
   subLabel?: string;
@@ -156,7 +156,7 @@ export interface FormSchema {
   required?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);
 
   suffix?: string | number | VueNode | ((values: RenderCallbackParams) => string | number | VueNode);
-  // 【QQYUN-12876】是否是紧凑型 suffix（当组件宽度未占满时，可紧挨着组件右侧）
+  // 【QQYUN-12876]Có phải suffix dạng gọn hay không (khi chiều rộng component chưa chiếm hết, có thể áp sát phía phải của component)
   suffixCompact?: boolean;
 
   // Validation rules
@@ -170,7 +170,7 @@ export interface FormSchema {
   // col configuration outside formModelItem
   colProps?: Partial<ColEx>;
 
-  // 默认值
+  // Giá trị mặc định
   defaultValue?: any;
   isAdvanced?: boolean;
 
@@ -198,18 +198,18 @@ export interface FormSchema {
   dynamicDisabled?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);
 
   dynamicRules?: (renderCallbackParams: RenderCallbackParams) => Rule[];
-  // 设置组件props的key
+  // Đặt key của props componentkey
   dynamicPropskey?: string;
   dynamicPropsVal?: ((renderCallbackParams: RenderCallbackParams) => any);
 
-  // 这个属性自定义的 用于自定义的业务 比如在表单打开的时候修改表单的禁用状态，但是又不能重写componentProps，因为他的内容太多了，所以使用dynamicDisabled和buss实现
+  // Thuộc tính tùy chỉnh này dùng cho nghiệp vụ tùy chỉnh, ví dụ khi biểu mẫu mở ra thì sửa trạng thái vô hiệu hóa của biểu mẫu, nhưng không thể viết lại componentProps vì nội dung của nó quá nhiều, nên dùng dynamicDisabled và buss để thực hiện
   buss?: any;
   
-  //label字数控制（label宽度）
+  //labelKiểm soát số ký tự (chiều rộng label)
   labelLength?: number;
-  // update-begin--author:liaozhiyang---date:20240529---for【TV360X-460】basicForm支持v-auth指令(权限控制显隐)
+  // update-begin--author:liaozhiyang---date:20240529---for【TV360X-460] basicForm hỗ trợv-authChỉ thị(Kiểm soát quyền hiện/ẩn)
   auth?: string;
-  // update-end--author:liaozhiyang---date:20240529---for【TV360X-460】basicForm支持v-auth指令(权限控制显隐)
+  // update-end--author:liaozhiyang---date:20240529---for【TV360X-460] basicForm hỗ trợv-authChỉ thị(Kiểm soát quyền hiện/ẩn)
 }
 export interface HelpComponentProps {
   maxWidth: string;

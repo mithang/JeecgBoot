@@ -67,15 +67,15 @@
         if (props.option) {
           Object.assign(option, cloneDeep(props.option));
         }
-        //图例类型
+        //Loại chú giải
         let typeArr = Array.from(new Set(props.chartData.map((item) => item.type)));
-        //轴数据
+        //Dữ liệu trục
         let xAxisData = Array.from(new Set(props.chartData.map((item) => item.name)));
         let seriesData = [];
         typeArr.forEach((type,index) => {
           let obj = { name: type };
           let chartArr = props.chartData.filter((item) => type === item.type);
-          //data数据
+          //dataDữ liệu
           obj['data'] = chartArr.map((item) => item.value);
           obj['type'] = chartArr[0].seriesType;
           if(props?.customColor && props?.customColor[index]){

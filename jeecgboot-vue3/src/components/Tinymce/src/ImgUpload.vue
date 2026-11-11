@@ -40,7 +40,7 @@
     },
     emits: ['uploading', 'done', 'error', 'loading'],
     setup(props, { emit }) {
-      // 代码逻辑说明: 富文本上传图片不支持
+      // Giải thích logic mã: Không hỗ trợ tải lên hình ảnh trong rich text
       function getheader() {
         return getHeaders();
       }
@@ -53,7 +53,7 @@
       }
       const { domainUrl } = useGlobSetting();
       const uploadUrl = domainUrl + '/sys/common/upload';
-      //文件列表
+      //Danh sách tệp
       let uploadFileList = ref<any[]>([]);
       const { t } = useI18n();
       const { prefixCls } = useDesign('tinymce-img-upload');
@@ -67,7 +67,7 @@
 
       let uploadLength = 0;
       function handleChange({ file, fileList }) {
-        // 过滤掉已经存在的文件
+        // Lọc bỏ các tệp đã tồn tại
         fileList = fileList.filter((file) => {
           const existFile = uploadFileList.value.find(({ uid }) => uid === file.uid);
           return existFile ? false : true;
@@ -76,7 +76,7 @@
         if (file.status != 'uploading') {
           emit('loading', uploadLength, true);
         }
-        // 处理上传好的文件
+        // Xử lý tệp đã tải lên
         if (file.status != 'uploading') {
           fileList.forEach((file) => {
             if (file.status === 'done' && file.response.success) {
@@ -88,7 +88,7 @@
           });
         }
       }
-      //上传之前
+      //Trước khi tải lên
       function beforeUpload() {
         uploadLength = 0;
         emit('loading', null, true);
@@ -120,12 +120,12 @@
       position: fixed;
       z-index: 10000;
     }
-    // 代码逻辑说明: 【QQYUN-8647】online tinymce组件上传图片按遮挡了控件栏的全屏按钮
+    // Giải thích logic mã: 【QQYUN-8647]Nút tải ảnh lên của component tinymce online che khuất nút toàn màn hình trên thanh công cụ
     .ant-btn {
       padding: 2px 4px;
       font-size: 12px;
       height: 24px;
-      // 代码逻辑说明: 【TV360X-235】富文本禁用状态下图片上传按钮文字看不清
+      // Giải thích logic mã: 【TV360X-235]Ở trạng thái vô hiệu hóa của rich text, chữ trên nút tải lên hình ảnh nhìn không rõ
       &.is-disabled {
         color: rgba(255, 255, 255, 0.5);
       }

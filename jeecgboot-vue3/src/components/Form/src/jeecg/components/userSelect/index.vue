@@ -4,7 +4,7 @@
       <template v-if="selectedUserList.length > 0">
         <SelectedUserItem v-for="item in showUserList" :info="item" @unSelect="unSelectUser" query />
       </template>
-      <span v-else style="height: 30px;line-height: 30px;display: inline-block;margin-left: 7px;color: #bfbfbf;">请选择用户</span>
+      <span v-else style="height: 30px;line-height: 30px;display: inline-block;margin-left: 7px;color: #bfbfbf;">Vui lòng chọn người dùng</span>
       <div v-if="ellipsisInfo.status" class="user-selected-item">
         <div class="user-select-ellipsis">
           <span style="color: red">+{{ellipsisInfo.count}}...</span>
@@ -57,12 +57,12 @@
         type: Function,
         default: null,
       },
-      // 是否作为查询条件
+      // Có dùng làm điều kiện tìm kiếm không
       query:{
         type: Boolean,
         default: false,
       },
-      //最多显示几个人员-query为true有效
+      //Hiển thị tối đa bao nhiêu người-queryCó hiệu lực khi query là true
       maxCount:{
         type: Number,
         default: 2
@@ -71,12 +71,12 @@
         type: Boolean,
         default: false,
       },
-      //是否排除我自己
+      //Có loại trừ chính tôi không
       izExcludeMy:{
         type: Boolean,
         default: false,
       },
-      //是否在高级查询中作为条件 可以选择当前用户
+      //Có dùng làm điều kiện trong tìm kiếm nâng cao không, có thể chọn người dùng hiện tại
       inSuperQuery:{
         type: Boolean,
         default: false,
@@ -105,7 +105,7 @@
         }
       });
 
-      // 注册弹窗
+      // Đăng ký popup
       const [registerModal, { openModal, closeModal }] = useModal();
       function onShowModal() {
         if(props.disabled===true){
@@ -137,7 +137,7 @@
         emit('update:value', str);
         emit('change', str);
         formItemContext.onFieldChange();
-        console.log('选中数据', str);
+        console.log('Dữ liệu đã chọn', str);
       }
 
       watch(
@@ -161,7 +161,7 @@
         let idList = [];
         selectedUserList.value = [];
         if(ids){
-          // 代码逻辑说明: 修复用户选择器逗号分割回显不生效的问题
+          // Giải thích logic mã: Sửa lỗi bộ chọn người dùng phân tách bằng dấu phẩy hiển thị lại không có hiệu lực
           let tempArray = ids.split(',').map(s => s.trim()).filter(s => s != '');
           if (tempArray.includes(mySelfExpress)) {
             hasUserExpress = true;

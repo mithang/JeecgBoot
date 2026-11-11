@@ -1,4 +1,4 @@
-<!--用户选择组件-->
+<!--Component chọn người dùng-->
 <template>
   <div>
     <JSelectBiz @change="handleChange" @handleOpen="handleOpen" :loading="loadingEcho" v-bind="attrs"></JSelectBiz>
@@ -36,42 +36,42 @@
     emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit, refs }) {
       const emitData = ref<any[]>();
-      //注册model
+      //Đăng kýmodel
       const [regModal, { openModal }] = useModal();
-      //表单值
+      //Giá trị biểu mẫu
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
-      //下拉框选项值
+      //Giá trị tùy chọn của hộp dropdown
       const selectOptions = ref<SelectValue>([]);
-      //下拉框选中值
+      //Giá trị đã chọn của hộp dropdown
       let selectValues = reactive<object>({
         value: [],
         change: false,
       });
-      // 是否正在加载回显数据
+      // Có đang tải dữ liệu hiển thị lại không
       const loadingEcho = ref<boolean>(false);
-      //下发 selectOptions,xxxBiz组件接收
+      //Gửi xuống selectOptions,xxxBizComponent nhận
       provide('selectOptions', selectOptions);
-      //下发 selectValues,xxxBiz组件接收
+      //Gửi xuống selectValues,xxxBizComponent nhận
       provide('selectValues', selectValues);
-      //下发 loadingEcho,xxxBiz组件接收
+      //Gửi xuống loadingEcho,xxxBizComponent nhận
       provide('loadingEcho', loadingEcho);
 
       const tag = ref(false);
       const attrs = useAttrs();
 
       /**
-       * 监听组件值
+       * Lắng nghe giá trị component
        */
       watchEffect(() => {
         initValue();
       });
 
       /**
-       * 监听selectValues变化
+       * Lắng nghe sự thay đổi của selectValues
        */
       watch(selectValues, () => {
         if (selectValues) {
-          // 代码逻辑说明: 【QQYUN-12869】通过部门选择用户组件，必填状态下选择用户后，点击重置后，会出校验信息
+          // Giải thích logic mã: 【QQYUN-12869]Qua component chọn người dùng theo phòng ban, ở trạng thái bắt buộc sau khi chọn người dùng rồi bấm đặt lại thì sẽ xuất hiện thông tin kiểm chứng
           if (props.value === undefined && selectValues.value?.length == 0) {
             return;
           }
@@ -80,7 +80,7 @@
       });
 
       /**
-       * 打卡弹出框
+       * Hộp popup chấm công
        */
       function handleOpen() {
         tag.value = true;
@@ -90,7 +90,7 @@
       }
 
       /**
-       * 将字符串值转化为数组
+       * Chuyển giá trị chuỗi thành mảng
        */
       function initValue() {
         let value = props.value ? props.value : [];
@@ -103,7 +103,7 @@
       }
 
       /**
-       * 设置下拉框的值
+       * Đặt giá trị của hộp dropdown
        */
       function setValue(options, values) {
         selectOptions.value = options;

@@ -23,31 +23,31 @@ export function useModalDragMove(context: UseModalDragMoveContext) {
 
     dialogHeaderEl.onmousedown = (e: any) => {
       if (!e) return;
-      // 鼠标按下，计算当前元素距离可视区的距离
+      // Nhấn chuột, tính khoảng cách từ phần tử hiện tại đến vùng hiển thị
       const disX = e.clientX;
       const disY = e.clientY;
-      const screenWidth = document.body.clientWidth; // body当前宽度
-      const screenHeight = document.documentElement.clientHeight; // 可见区域高度(应为body高度，可某些环境下无法获取)
+      const screenWidth = document.body.clientWidth; // bodyChiều rộng hiện tại
+      const screenHeight = document.documentElement.clientHeight; // Chiều cao vùng hiển thị(Đáng lẽ là chiều cao body, nhưng một số môi trường không lấy được)
 
-      const dragDomWidth = dragDom.offsetWidth; // 对话框宽度
-      const dragDomheight = dragDom.offsetHeight; // 对话框高度
+      const dragDomWidth = dragDom.offsetWidth; // Chiều rộng hộp thoại
+      const dragDomheight = dragDom.offsetHeight; // Chiều cao hộp thoại
 
       const minDragDomLeft = dragDom.offsetLeft;
 
       const maxDragDomLeft = screenWidth - dragDom.offsetLeft - dragDomWidth;
       const minDragDomTop = dragDom.offsetTop;
       let maxDragDomTop = screenHeight - dragDom.offsetTop - dragDomheight;
-      // 代码逻辑说明: [issue/430]弹出页面出现自动吸顶，无法移动和显示头部---
+      // Giải thích logic mã: [issue/430]Trang popup xuất hiện tự động dính trên cùng, không thể di chuyển và hiển thị phần đầu---
       if(maxDragDomTop<0){
         maxDragDomTop = screenHeight - dragDom.offsetTop
       }
-      // 获取到的值带px 正则匹配替换
+      // Giá trị lấy được có kèm px, dùng regex để khớp và thay thế
       const domLeft = getStyle(dragDom, 'left');
       const domTop = getStyle(dragDom, 'top');
       let styL = +domLeft;
       let styT = +domTop;
 
-      // 注意在ie中 第一次获取到的值为组件自带50% 移动之后赋值为px
+      // Lưu ý trong IE, giá trị lấy được lần đầu là giá trị mặc định của component50% Sau khi di chuyển sẽ gán thành pxpx
       if (domLeft.includes('%')) {
         styL = +document.body.clientWidth * (+domLeft.replace(/%/g, '') / 100);
         styT = +document.body.clientHeight * (+domTop.replace(/%/g, '') / 100);
@@ -57,11 +57,11 @@ export function useModalDragMove(context: UseModalDragMoveContext) {
       }
 
       document.onmousemove = function (e) {
-        // 通过事件委托，计算移动的距离
+        // Tính khoảng cách di chuyển thông qua ủy quyền sự kiện
         let left = e.clientX - disX;
         let top = e.clientY - disY;
 
-        // 边界处理
+        // Xử lý biên
         if (-left > minDragDomLeft) {
           left = -minDragDomLeft;
         } else if (left > maxDragDomLeft) {
@@ -74,7 +74,7 @@ export function useModalDragMove(context: UseModalDragMoveContext) {
           top = maxDragDomTop;
         }
 
-        // 移动当前元素
+        // Di chuyển phần tử hiện tại
         dragDom.style.cssText += `;left:${left + styL}px;top:${top + styT}px;`;
       };
 
@@ -92,7 +92,7 @@ export function useModalDragMove(context: UseModalDragMoveContext) {
       const display = getStyle(wrap, 'display');
       const draggable = wrap.getAttribute('data-drag');
       if (display !== 'none') {
-        // 拖拽位置
+        // Vị trí kéo thả
         if (draggable === null || unref(context.destroyOnClose)) {
           drag(wrap);
         }

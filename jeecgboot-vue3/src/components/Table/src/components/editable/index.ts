@@ -15,7 +15,7 @@ export function renderEditCell(column: BasicColumn) {
   return ({ text: value, record, index }: Params) => {
     toRaw(record).onValid = async () => {
       if (isArray(record?.validCbs)) {
-        // 代码逻辑说明: 【issues/1165】解决canResize为true时第一行校验不过
+        // Giải thích logic mã: 【issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
         const validFns = (record?.validCbs || []).map((item) => {
           const [fn] = Object.values(item);
           // @ts-ignore

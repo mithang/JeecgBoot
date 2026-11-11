@@ -62,7 +62,7 @@
       Modal,
     },
     props: {
-      //是否全屏
+      //Có toàn màn hình hay không
       fullscreen: {
         type: Boolean,
         default: false,
@@ -110,15 +110,15 @@
         return omit(attr, ['visible']);
       });
 
-      //整合warpClassName
+      //Tích hợpwarpClassName
       const getWrapClassName = computed(() => {
         let clsName = toRef(getMergeProps.value, 'wrapClassName').value || '';
-        // 代码逻辑说明: 【issues/7260】原生a-modal关闭按钮位置偏移
+        // Giải thích logic mã: 【issues/7260]Gốca-modalVị trí nút đóng bị lệch
         clsName = `${clsName} jeecg-modal-code-generate`;
         return unref(fullScreenRef) ? `jeecg-full-screen-modal-code-generate ${clsName} ` : unref(clsName);
       });
 
-      //获取props
+      //Lấyprops
       const getProps = computed((): Recordable => {
         const opt = {
           ...unref(getMergeProps),
@@ -133,22 +133,22 @@
         };
       });
 
-      //注册model,instance.uid 避免多个model冲突
+      //Đăng kýmodel,instance.uid Tránh xung đột giữa nhiều model
       const instance = getCurrentInstance();
       if (instance) {
         emit('register', modalMethods, instance.uid);
       }
 
       /**
-       * 是否含有标题
+       * Có chứa tiêu đề không
        */
       function isNoTitle() {
-        //标题为空并且不含有标题插槽
+        //Tiêu đề trống và không chứa slot tiêu đề
         return !unref(getMergeProps).title && !slots.title;
       }
 
       /**
-       * 放大缩小事件
+       * Sự kiện phóng to/thu nhỏ
        * @param e
        */
       function handleFullScreen(e: Event) {
@@ -157,10 +157,10 @@
         fullScreenRef.value = !unref(fullScreenRef);
       }
 
-      // 取消事件
+      // Sự kiện hủy
       async function handleCancel(e: Event) {
         e?.stopPropagation();
-        // 过滤自定义关闭按钮的空白区域
+        // Lọc vùng trống của nút đóng tùy chỉnh
         if (props.closeFunc && isFunction(props.closeFunc)) {
           const isClose: boolean = await props.closeFunc();
           visibleRef.value = !isClose;
@@ -171,7 +171,7 @@
       }
 
       /**
-       * 确定事件
+       * Sự kiện xác nhận
        * @param e
        */
       function handleOk(e: Event) {
@@ -184,7 +184,7 @@
         handleFullScreen(e);
       }
       /**
-       * 设置modal参数
+       * Đặt tham số modal
        */
       function setModalProps(props: Partial<ModalProps>): void {
         // Keep the last setModalProps
@@ -204,7 +204,7 @@
       }
 
       /**
-       * 监听放大缩小
+       * Lắng nghe phóng to/thu nhỏ
        */
       watchEffect(() => {
         fullScreenRef.value = props.fullscreen;
@@ -214,14 +214,14 @@
       });
 
       /**
-       * 监听model的显示隐藏
+       * Lắng nghe việc hiển thị/ẩn của model
        */
       watchEffect(() => {
         visibleRef.value = !!props.visible;
       });
 
       /**
-       * 监听model的显示隐藏
+       * Lắng nghe việc hiển thị/ẩn của model
        */
       watchEffect(() => {
         visibleRef.value = !!props.open;
@@ -260,7 +260,7 @@
 </script>
 
 <style lang="less" scoped>
-  /*begin 放大关闭按钮样式*/
+  /*begin Kiểu nút đóng khi phóng to*/
   .jeecg-basic-modal-close {
     display: flex;
     height: 95%;
@@ -301,11 +301,11 @@
       }
     }
   }
-  /*end 放大关闭按钮样式*/
+  /*end Kiểu nút đóng khi phóng to*/
 </style>
 
 <style lang="less">
-  /*begin 全屏弹窗modal样式*/
+  /*begin Kiểu modal popup toàn màn hình*/
   .jeecg-full-screen-modal-code-generate {
     .ant-modal {
       max-width: 100%;
@@ -325,8 +325,8 @@
       overflow-y: auto;
     }
   }
-  /*end 全屏弹窗modal样式*/
-  // 代码逻辑说明: 【issues/7260】原生a-modal关闭按钮位置偏移
+  /*end Kiểu modal popup toàn màn hình*/
+  // Giải thích logic mã: 【issues/7260]Gốca-modalVị trí nút đóng bị lệch
   .jeecg-modal-code-generate {
     .ant-modal {
       .ant-modal-close {

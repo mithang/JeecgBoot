@@ -44,7 +44,7 @@
         type: [String, Array],
         default: '',
       },
-      noresize: Boolean, // 如果 container 尺寸不会发生变化，最好设置它可以优化性能
+      noresize: Boolean, // Nếu kích thước container không thay đổi, tốt nhất nên đặt thuộc tính này để tối ưu hiệu năng
       tag: {
         type: String,
         default: 'div',

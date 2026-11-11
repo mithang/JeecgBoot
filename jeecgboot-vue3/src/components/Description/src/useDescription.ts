@@ -10,14 +10,14 @@ export function useDescription(props?: Partial<DescriptionProps>): UseDescReturn
   const loaded = ref(false);
 
   function register(instance: DescInstance) {
-    // update-begin--author:liaozhiyang---date:20251223---for:【pull/9125】在抽屉中配置destroy-on-close，再次打开未正确渲染
+    // update-begin--author:liaozhiyang---date:20251223---for:【pull/9125] cấu hình trong ngăn kéo (drawer)destroy-on-close, mở lại chưa hiển thị đúng
     isProdMode() &&
       onUnmounted(() => {
         desc.value = null;
         loaded.value = false;
       });
     if (unref(loaded) && isProdMode() && instance === unref(desc)) return;
-    // update-end--author:liaozhiyang---date:20251223---for:【pull/9125】在抽屉中配置destroy-on-close，再次打开未正确渲染
+    // update-end--author:liaozhiyang---date:20251223---for:【pull/9125] cấu hình trong ngăn kéo (drawer)destroy-on-close, mở lại chưa hiển thị đúng
     desc.value = instance;
     props && instance.setDescProps(props);
     loaded.value = true;

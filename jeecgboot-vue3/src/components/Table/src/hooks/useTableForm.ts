@@ -18,7 +18,7 @@ export function useTableForm(
       ...formConfig,
       submitButtonOptions: { loading: unref(getLoading), ...submitButtonOptions },
       compact: true,
-      // 代码逻辑说明: [issues/568]设置 autoSubmitOnEnter: false 不生效 ---
+      // Giải thích logic mã: [issues/568]Cài đặt autoSubmitOnEnter: false Không có hiệu lực ---
       autoSubmitOnEnter: autoSubmitOnEnter,
     };
   });

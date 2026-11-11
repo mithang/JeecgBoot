@@ -9,14 +9,14 @@ export interface ActionItem extends ButtonProps {
   popConfirm?: PopConfirm;
   disabled?: boolean;
   divider?: boolean;
-  // 权限编码控制是否显示
+  // Mã quyền điều khiển việc hiển thị
   auth?: RoleEnum | RoleEnum[] | string | string[];
-  // 业务控制是否显示
+  // Nghiệp vụ kiểm soát có hiển thị hay không
   ifShow?: boolean | ((action: ActionItem) => boolean);
   tooltip?: string | TooltipProps;
-  // 自定义类名
+  // Tên class tùy chỉnh
   class?: string | Record<string, boolean> | any[];
-  // 自定义图标颜色
+  // Màu biểu tượng tùy chỉnh
   iconColor?: string;
 }
 

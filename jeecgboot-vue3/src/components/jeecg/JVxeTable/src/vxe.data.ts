@@ -2,12 +2,12 @@ import { propTypes } from '/@/utils/propTypes';
 
 export const vxeProps = () => ({
   rowKey: propTypes.string.def('id'),
-  // 列信息
+  // Thông tin cột
   columns: {
     type: Array,
     required: true,
   },
-  // 数据源
+  // Nguồn dữ liệu
   dataSource: {
     type: Array,
     required: true,
@@ -17,104 +17,104 @@ export const vxeProps = () => ({
     required: false,
     default: '',
   },
-  // 是否显示工具栏
+  // Có hiển thị thanh công cụ không
   toolbar: propTypes.bool.def(false),
-  // 工具栏配置
+  // Cấu hình thanh công cụ
   toolbarConfig: propTypes.object.def(() => ({
-    // prefix 前缀；suffix 后缀；
+    // prefix Tiền tố; suffix Hậu tố;
     slots: ['prefix', 'suffix'],
-    // add 新增按钮；remove 删除按钮；clearSelection 清空选择按钮；collapse 展开收起
+    // add add là nút thêm mới; remove là nút xóa; clearSelection là nút xóa lựa chọn; collapse là mở rộng/thu gọn
     btns: ['add', 'remove', 'clearSelection'],
   })),
-  // 是否显示行号
+  // Có hiển thị số dòng không
   rowNumber: propTypes.bool.def(false),
-  // 固定行号位置或者不固定 【QQYUN-8405】
+  // Cố định vị trí số dòng hoặc không cố định [QQYUN-8405】
   rowNumberFixed: propTypes.oneOf(['left', 'none']).def('left'),
-  // 代码逻辑说明: 【issues/1162】JVxeTable列过长（出现横向滚动条）时无法拖拽排序
+  // Giải thích logic mã: 【issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
   dragSortFixed: propTypes.oneOf(['left', 'none']).def('left'),
   rowSelectionFixed: propTypes.oneOf(['left', 'none']).def('left'),
-  // 是否可选择行
+  // Có thể chọn hàng không
   rowSelection: propTypes.bool.def(false),
-  // 选择行类型
+  // Loại hàng đã chọn
   rowSelectionType: propTypes.oneOf(['checkbox', 'radio']).def('checkbox'),
-  // 是否可展开行
+  // Có thể mở rộng hàng không
   rowExpand: propTypes.bool.def(false),
-  // 展开行配置
+  // Cấu hình hàng mở rộng
   expandConfig: propTypes.object.def(() => ({})),
-  // 是否可插入行
+  // Có thể chèn hàng không
   insertRow: propTypes.bool.def(true),
-  // 页面是否在加载中
+  // Trang có đang tải không
   loading: propTypes.bool.def(false),
-  // 表格高度
+  // Chiều cao bảng
   height: propTypes.oneOfType([propTypes.number, propTypes.string]).def('auto'),
-  // 最大高度
+  // Chiều cao tối đa
   maxHeight: {
     type: Number,
     default: () => null,
   },
-  // 要禁用的行
+  // Hàng cần vô hiệu hóa
   disabledRows: propTypes.object.def(() => ({})),
-  // 是否禁用全部组件
+  // Có vô hiệu hóa tất cả component không
   disabled: propTypes.bool.def(false),
-  // 是否可拖拽排序（有固定列的情况下无法拖拽排序，仅可上下排序）
+  // Có thể kéo thả để sắp xếp hay không (khi có cột cố định thì không thể kéo thả sắp xếp, chỉ có thể sắp xếp lên/xuống)
   dragSort: propTypes.bool.def(false),
-  // 排序字段保存的Key
+  // Key lưu trường sắp xếpKey
   sortKey: propTypes.string.def('orderNum'),
-  // 排序序号开始值，默认为 0
+  // Giá trị bắt đầu của số thứ tự sắp xếp, mặc định là 0
   sortBegin: propTypes.number.def(0),
-  // 大小，可选值有：medium（中）、small（小）、mini（微）
+  // Kích thước, các giá trị tùy chọn: medium (trung bình), small (nhỏ), mini (rất nhỏ)
   size: propTypes.oneOf(['medium', 'small', 'mini']).def('medium'),
-  // 是否显示边框线
+  // Có hiển thị đường viền không
   bordered: propTypes.bool.def(false),
-  // 自定义列配置 默认继承 setup.toolbar.custom
+  // Cấu hình cột tùy chỉnh, mặc định kế thừa setup.toolbar.custom
   custom: propTypes.bool.def(false),
-  // 分页器参数，设置了即可显示分页器
+  // Tham số phân trang, đặt là hiển thị phân trang
   pagination: propTypes.object.def(() => ({})),
-  // 点击行时是否显示子表单
+  // Khi nhấn vào hàng có hiển thị biểu mẫu con không
   clickRowShowSubForm: propTypes.bool.def(false),
-  // 点击行时是否显示主表单
+  // Khi nhấn vào hàng có hiển thị biểu mẫu chính không
   clickRowShowMainForm: propTypes.bool.def(false),
-  // 是否点击选中行，优先级最低
+  // Có nhấp để chọn dòng hay không, mức ưu tiên thấp nhất
   clickSelectRow: propTypes.bool.def(false),
-  // 是否开启 reload 数据效果
+  // Có bật hiệu ứng reload dữ liệu hay không
   reloadEffect: propTypes.bool.def(false),
-  // 校验规则
+  // Quy tắc kiểm chứng
   editRules: propTypes.object.def(() => ({})),
-  // 是否异步删除行，如果你要实现异步删除，那么需要把这个选项开启，
-  // 在remove事件里调用confirmRemove方法才会真正删除（除非删除的全是新增的行）
+  // Có xóa hàng không đồng bộ hay không, nếu bạn muốn triển khai xóa không đồng bộ thì cần bật tùy chọn này,
+  // Chỉ khi gọi phương thức confirmRemove trong sự kiện remove mới thực sự xóa (trừ khi tất cả các hàng bị xóa đều là hàng mới thêm)
   asyncRemove: propTypes.bool.def(false),
-  // 是否一直显示组件，如果为false则只有点击的时候才出现组件
-  // 注：该参数不能动态修改；如果行、列字段多的情况下，会根据机器性能造成不同程度的卡顿。
-  // TODO 新版vxe-table取消了 visible 参数，导致无法实现该功能
+  // Có luôn hiển thị component hay không, nếu là false thì chỉ khi nhấn vào mới xuất hiện component
+  // Lưu ý: Tham số này không thể sửa động; nếu số trường hàng, cột nhiều thì tùy theo hiệu năng máy sẽ gây giật lag ở các mức độ khác nhau.
+  // TODO Phiên bản mớivxe-tableĐã hủy tham số visible, dẫn đến không thể thực hiện chức năng này
   alwaysEdit: propTypes.bool.def(false),
-  // 联动配置，数组，详情配置见文档
+  // Cấu hình liên động, dạng mảng, xem tài liệu để biết cấu hình chi tiết
   linkageConfig: propTypes.array.def(() => []),
-  // 是否开启使用 webSocket 无痕刷新
+  // Có bật dùng webSocket để làm mới không dấu vết không
   socketReload: propTypes.bool.def(false),
-  // 相同的socketKey更改时会互相刷新
+  // Khi socketKey giống nhau thay đổi sẽ làm mới lẫn nhau
   socketKey: propTypes.string.def('vxe-default'),
-  // 新增行时切换行的激活状态
+  // Khi thêm dòng mới, chuyển đổi trạng thái kích hoạt của dòng
   addSetActive: propTypes.bool.def(true),
-  // 是否开启键盘编辑
+  // Có bật chỉnh sửa bằng bàn phím không
   keyboardEdit: propTypes.bool.def(false),
-  // 横向虚拟滚动配置（不支持展开行）
-  // 【QQYUN-7676】x滚动条滚动时字典变成了id
+  // Cấu hình cuộn ảo ngang (không hỗ trợ dòng mở rộng)
+  // 【QQYUN-7676] Khi thanh cuộn x cuộn, từ điển biến thànhid
   scrollX: propTypes.object.def(() => ({ enabled: false })),
-  // 纵向虚拟滚动配置（不支持展开行）
+  // Cấu hình cuộn ảo dọc (không hỗ trợ dòng mở rộng)
   scrollY: propTypes.object.def(() => ({ enabled: true })),
-  //【QQYUN-8566】缓存列设置的key（路由页面内唯一）
+  //【QQYUN-8566] Key của cài đặt cột cache (duy nhất trong trang route)
   cacheColumnsKey: propTypes.string.def(''),
-  // 代码逻辑说明: 【QQYUN-8785】online表单列位置的id未做限制，拖动其他列到id列上面，同步数据库时报错
+  // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
   rowClassName: {
     type: [String, Function],
     default: null,
   },
-  // 不允许拖拽的行 [{'key':field,'value':value}]
+  // Hàng không cho phép kéo thả [{'key':field,'value':value}]
   notAllowDrag: propTypes.array.def(() => []),
 
-  // 新增按钮配置
+  // Cấu hình nút thêm mới
   addBtnCfg: propTypes.object,
-  // 删除按钮配置
+  // Cấu hình nút xóa
   removeBtnCfg: propTypes.object,
 });
 

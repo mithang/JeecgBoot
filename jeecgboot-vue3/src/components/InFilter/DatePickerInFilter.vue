@@ -1,19 +1,19 @@
-<!-- 在筛选中使用的日期选择器（可选择今天、本周等范围） -->
+<!-- Bộ chọn ngày dùng trong bộ lọc (có thể chọn phạm vi như hôm nay, tuần này...) -->
 <template>
   <a-space :id="formItemId" :class="[prefixCls]" direction="vertical">
     <a-space-compact block>
-      <!-- 日期范围下拉 -->
+      <!-- Danh sách thả xuống phạm vi ngày -->
       <a-select v-if="isRange" v-model:value="innerValue">
         <a-select-option v-for="opt of RANGE_OPTIONS" :key="opt.key" :value="opt.key">
           {{ opt.label }}
         </a-select-option>
         <a-select-option key="custom" value="custom">
-          自定义日期
+          Ngày tùy chỉnh
         </a-select-option>
       </a-select>
-      <!-- 自定义日期选择器 -->
+      <!-- Tùy chỉnh bộ chọn ngày -->
       <DatePicker v-else v-model:value="innerValue" v-model:open="datePickerIsOpen" v-bind="attrs"/>
-      <!-- 右侧下拉菜单 -->
+      <!-- Menu dropdown bên phải -->
       <a-dropdown v-if="allowSelectRange" :trigger="['click']">
         <a-button preIcon="ant-design:menu-unfold"/>
         <template #overlay>
@@ -22,7 +22,7 @@
               {{ opt.label }}
             </a-menu-item>
             <a-menu-item key="custom">
-              自定义日期
+              Ngày tùy chỉnh
             </a-menu-item>
           </a-menu>
         </template>
@@ -53,18 +53,18 @@ dayjs.extend(isoWeek);
 dayjs.extend(quarterOfYear);
 const formItemContext = Form.useInjectFormItemContext();
 
-// 日期范围选项
+// Tùy chọn phạm vi ngày
 const RANGE_OPTIONS = [
-  {key: 'TODAY', label: '今天'},
-  {key: 'YESTERDAY', label: '昨天'},
-  {key: 'TOMORROW', label: '明天'},
-  {key: 'THIS_WEEK', label: '本周'},
-  {key: 'LAST_WEEK', label: '上周'},
-  {key: 'NEXT_WEEK', label: '下周'},
-  {key: 'LAST_7_DAYS', label: '过去七天'},
-  {key: 'THIS_MONTH', label: '本月'},
-  {key: 'LAST_MONTH', label: '上月'},
-  {key: 'NEXT_MONTH', label: '下月'},
+  {key: 'TODAY', label: 'Hôm nay'},
+  {key: 'YESTERDAY', label: 'Hôm qua'},
+  {key: 'TOMORROW', label: 'Ngày mai'},
+  {key: 'THIS_WEEK', label: 'Tuần này'},
+  {key: 'LAST_WEEK', label: 'Tuần trước'},
+  {key: 'NEXT_WEEK', label: 'Tuần sau'},
+  {key: 'LAST_7_DAYS', label: '7 ngày qua'},
+  {key: 'THIS_MONTH', label: 'Tháng này'},
+  {key: 'LAST_MONTH', label: 'Tháng trước'},
+  {key: 'NEXT_MONTH', label: 'Tháng sau'},
 ];
 const RANGE_OPTION_KEYS = RANGE_OPTIONS.map(item => item.key)
 
@@ -74,7 +74,7 @@ const props = defineProps({
     type: [String],
     default: ''
   },
-  // 是否允许选择预设范围
+  // Có cho phép chọn phạm vi đặt trước không
   allowSelectRange: {
     type: Boolean,
     default: true,
@@ -83,37 +83,37 @@ const props = defineProps({
 const emit = defineEmits(['change', 'update:value'])
 const attrs = useAttrs()
 
-// 组件id
+// Componentid
 const formItemId  = computed(() => formItemContext.id.value)
 
 const innerValue = ref(props.value)
-// 是否打开日期选择器
+// Có mở bộ chọn ngày không
 const datePickerIsOpen = ref(false)
 
-// 判断是否为范围选项
+// Kiểm tra có phải tùy chọn khoảng không
 const isRange = computed(() => RANGE_OPTION_KEYS.includes(innerValue.value));
 
-// 同步value
+// Đồng bộvalue
 watch(() => props.value, (val) => {
   innerValue.value = val
 })
 
-// emit 更改
+// emit Thay đổi
 watch(innerValue, (val) => {
   if (val === 'custom') {
     val = ''
     openDatePicker()
   }
-  // update-begin--author:wangshuai---date:20260819---for：【LHZP-322】【表单设计器】online周、季度没转化成功
+  // update-begin--author:wangshuai---date:20260819---for：【LHZP-322][Trình thiết kế biểu mẫu] online tuần, quý chưa chuyển đổi thành công
   const normalizedValue = normalizePickerValue(val)
   emit('change', normalizedValue)
   emit('update:value', normalizedValue)
-  // update-end--author:wangshuai---date:20260819---for：【LHZP-322】【表单设计器】online周、季度没转化成功
-  // 代码逻辑说明: 【QQYUN-9227】日期校验没清空
+  // update-end--author:wangshuai---date:20260819---for：【LHZP-322][Trình thiết kế biểu mẫu] online tuần, quý chưa chuyển đổi thành công
+  // Giải thích logic mã: 【QQYUN-9227] kiểm tra ngày chưa được xóa
   formItemContext?.onFieldChange();
 })
 
-/** 季度取季度第一天，周取 ISO 周的周一。 */
+/** Quý lấy ngày đầu tiên của quý, tuần lấy thứ Hai của tuần ISO. */
 function normalizePickerValue(value) {
   if (!value || RANGE_OPTION_KEYS.includes(value)) {
     return value
@@ -129,13 +129,13 @@ function normalizePickerValue(value) {
 }
 
 watch(() => props.allowSelectRange, (allow) => {
-  // 如果不允许选择范围，且当前值为范围选项，则清空值
+  // Nếu không cho phép chọn phạm vi, và giá trị hiện tại là tùy chọn phạm vi, thì xóa giá trị
   if (!allow && isRange.value) {
     innerValue.value = ''
   }
 }, {immediate: true});
 
-// 点击右侧下拉菜单
+// Nhấn menu thả xuống bên phải
 function onMenuClick(event: Recordable) {
   if (event.key === 'custom') {
     if (isRange.value) {
@@ -147,7 +147,7 @@ function onMenuClick(event: Recordable) {
   }
 }
 
-// 打开日期选择器下拉
+// Mở danh sách thả xuống của bộ chọn ngày
 async function openDatePicker() {
   await nextTick()
   datePickerIsOpen.value = true

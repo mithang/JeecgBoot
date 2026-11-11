@@ -57,7 +57,7 @@
         selectedKeys: [],
         collapsedOpenKeys: [],
       });
-      // 代码逻辑说明: 【QQYUN-8691】顶部菜单模式online不显示菜单名显示默认的auto在线表单
+      // Giải thích logic mã: 【QQYUN-8691]Ở chế độ menu trên cùng, online không hiển thị tên menu mà hiển thị biểu mẫu trực tuyến auto mặc định
       createBasicRootMenuContext({ menuState: menuState });
       const { prefixCls } = useDesign('basic-menu');
       const { items, mode, accordion } = toRefs(props);
@@ -115,20 +115,20 @@
           }
         );
 
-      // 代码逻辑说明: VUEN-1144 online 配置成菜单后，打开菜单，显示名称未展示为菜单名称
+      // Giải thích logic mã: VUEN-1144 online Sau khi cấu hình thành menu, mở menu, tên hiển thị không hiển thị thành tên menu
       async function handleMenuClick({ item, key }: { item: any; key: string; keyPath: string[] }) {
         const { beforeClickFn } = props;
-        // 代码逻辑说明: 【QQYUN-8773】配置外部网址在顶部菜单模式和搜索打不开
+        // Giải thích logic mã: 【QQYUN-8773]Cấu hình URL bên ngoài không mở được ở chế độ menu trên cùng và trong tìm kiếm
         if (isUrl(key)) {
           key = key.replace(URL_HASH_TAB, '#');
           window.open(key);
           return;
         }
-        // 代码逻辑说明: 【issues/7706】顶部栏导航内部路由也可以支持采用新浏览器tab打开
+        // Giải thích logic mã: 【issues/7706]Điều hướng trên thanh trên cùng, route nội bộ cũng có thể hỗ trợ mở bằng tab trình duyệt mới
         const menus = await getMenus();
         const findItem = getMatchingPath(menus, key);
         if (findItem?.internalOrExternal == true && !findItem?.children?.length) {
-          // 一级菜单当设置了外部打开，只有没有子菜单时才生效
+          // Menu cấp một khi đặt mở bên ngoài, chỉ có hiệu lực khi không có menu con
           window.open(location.origin + key);
           return;
         }
@@ -136,7 +136,7 @@
           const flag = await beforeClickFn(key);
           if (!flag) return;
         }
-        // 代码逻辑说明: 【QQYUN-8773】顶部混合导航(顶部左侧组合菜单)一级菜单没有配置redirect默认跳子菜单的第一个
+        // Giải thích logic mã: 【QQYUN-8773] điều hướng kết hợp phía trên(Menu kết hợp bên trái phía trên)Menu cấp một nếu không cấu hình redirect thì mặc định nhảy tới menu con đầu tiên
         if (props.type === MenuTypeEnum.MIX) {
           const menuItem = getMatchingPath(menus, key);
           if (handleMixMenuClick(menuItem, key)) {
@@ -174,7 +174,7 @@
       /**
        * liaozhiyang
        * 2024-05-18
-       * 获取指定菜单下的第一个菜单(忽略隐藏路由)
+       * Lấy menu đầu tiên dưới menu được chỉ định(Bỏ qua route ẩn)
        */
       function getSubMenu(menus) {
         for (let i = 0, len = menus.length; i < len; i++) {
@@ -186,12 +186,12 @@
             if (result) {
               return result;
             }
-            // update-begin--author:liaozhiyang---date:20250401---for：【issues/9405】修复顶部混合导航模式下点击一级菜单时,如果最后一级是隐藏路由显示不对
-            // 子菜单全部是隐藏路由时，返回上一级作为导航目标
+            // update-begin--author:liaozhiyang---date:20250401---for：【issues/9405] Sửa lỗi khi bấm menu cấp một ở chế độ điều hướng hỗn hợp phía trên,Nếu cấp cuối cùng là route ẩn thì hiển thị không đúng
+            // Khi tất cả menu con đều là route ẩn, trả về cấp trên làm mục tiêu điều hướng
             if (item.path && !item.hideMenu) {
               return item;
             }
-            // update-end--author:liaozhiyang---date:20250401---for：【issues/9405】修复顶部混合导航模式下点击一级菜单时,如果最后一级是隐藏路由显示不对
+            // update-end--author:liaozhiyang---date:20250401---for：【issues/9405] Sửa lỗi khi bấm menu cấp một ở chế độ điều hướng hỗn hợp phía trên,Nếu cấp cuối cùng là route ẩn thì hiển thị không đúng
           }
         }
         return null;
@@ -200,7 +200,7 @@
       /**
        * liaozhiyang
        * 2024-05-18
-       * 获取匹配path的菜单
+       * Lấy menu khớp với path
        */
       function getMatchingPath(menus, path) {
         for (let i = 0, len = menus.length; i < len; i++) {
@@ -219,7 +219,7 @@
       /**
        * 2025-01-14
        * liaozhiyang
-       * 获取菜单中匹配的path所在的项
+       * Lấy mục chứa path khớp trong menu
        */
       const getMatchingMenu = (menus, path) => {
         for (let i = 0, len = menus.length; i < len; i++) {
@@ -238,17 +238,17 @@
       /*
       * 2025-11-12
       * liaozhiyang
-      * 顶部混合导航(顶部左侧组合菜单)一级菜单点击事件处理。
-      * 1.没有重定向打开子菜单的第一个
-      * 2.有重定向判断router中是否存在该路由且路由是否有对应的组件，存在则打开，不存在则打开子菜单的第一个
+      * Điều hướng kết hợp ở phía trên(Menu kết hợp bên trái phía trên)Xử lý sự kiện nhấn vào menu cấp một.
+      * 1.Không có chuyển hướng thì mở mục đầu tiên của menu con
+      * 2.Có phán đoán chuyển hướng xem router có tồn tại route đó hay không và route có component tương ứng hay không, nếu tồn tại thì mở ra, nếu không tồn tại thì mở mục con đầu tiên của submenu
       */
       function handleMixMenuClick(menuItem, key) {
         const hasChildren = menuItem && menuItem.children?.length;
-        // 不存在子菜单，直接返回
+        // Nếu không có menu con, trả về trực tiếp
         if (!hasChildren) {
           return false;
         }
-        // 存在redirect，则判断router中是否存在该路由且路由是否有对应的组件
+        // Nếu tồn tại redirect thì xác định trong router có tồn tại route đó hay không và route có component tương ứng hay không
         if (menuItem.redirect) {
           const allRoutes = getRoutes();
           const findRedirectRoute = allRoutes.find((item) => item.path === menuItem.redirect);
@@ -256,7 +256,7 @@
             return false;
           }
         }
-        // 判断子菜单第一个path是否存在
+        // Kiểm tra path đầu tiên của submenu có tồn tại hay không
         const subMenuItem = getSubMenu(menuItem.children);
         if (!subMenuItem?.path) {
           return false;
@@ -265,14 +265,14 @@
         let nextKey = path;
         if (isUrl(path)) {
           // window.open(path);
-          // 外部打开emit出去的key不能是url，否则左侧菜单出不来
+          // Key emit ra khi mở từ bên ngoài không được là url, nếu không menu bên trái sẽ không hiển thị
           nextKey = key;
         }
         // =====================================================================
-        // TODO: 临时代码 - 需要删除！！！
-        // 这是针对敲敲云首页菜单的特殊处理，后续需要重构或删除
+        // TODO: Mã tạm thời - Cần xóa!!!
+        // Đây là xử lý đặc biệt cho menu trang chủ của Qiaoqiao Cloud, về sau cần tái cấu trúc hoặc xóa
         // =====================================================================
-        // 是外部打开且是白名单内的菜单，则直接打开
+        // Nếu mở bên ngoài và là menu trong danh sách trắng thì mở trực tiếp
         if (subMenuItem?.internalOrExternal == true && MIX_EXTERNAL_WHITELIST.includes(path)) {
           window.open(location.origin + path);
           return true;

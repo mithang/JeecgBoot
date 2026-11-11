@@ -1,41 +1,41 @@
-# 报表组件文档
+# Tài liệu component báo cáo
 
-## 柱状图
+## Biểu đồ cột
 
-##### 引用方式
+##### Cách tham chiếu
 
 ```js
 import Bar from '/@/components/chart/Bar.vue';
 ```
 
-##### 参数列表
+##### Danh sách tham số
 
-| 参数名    | 类型   | 必填 | 说明       |
+| Tên tham số    | Loại   | Bắt buộc | Giải thích       |
 | --------- | ------ | ---- | ---------- |
-| chartData | array  | ✔️   | 报表数据源 |
-| width     | number |      | 报表宽度   |
-| height    | number |      | 报表高度   |
+| chartData | array  | ✔️   | Nguồn dữ liệu báo cáo |
+| width     | number |      | Chiều rộng báo cáo   |
+| height    | number |      | Chiều cao báo cáo   |
 
-##### chartData 示例
+##### chartData Ví dụ
 
 ```json
 [
   {
-    "name": "1月",
+    "name": "1tháng",
     "value": 320
   },
   {
-    "name": "2月",
+    "name": "2tháng",
     "value": 457
   },
   {
-    "name": "3月",
+    "name": "3tháng",
     "value": 182
   }
 ]
 ```
 
-##### 代码示例
+##### Ví dụ mã
 
 ```html
 <template>
@@ -46,15 +46,15 @@ import Bar from '/@/components/chart/Bar.vue';
   import Bar from '/@/components/chart/Bar.vue';
   const chartData = [
     {
-      name: '1月',
+      name: '1tháng',
       value: 320,
     },
     {
-      name: '2月',
+      name: '2tháng',
       value: 457,
     },
     {
-      name: '3月',
+      name: '3tháng',
       value: 182,
     },
   ];
@@ -63,220 +63,220 @@ import Bar from '/@/components/chart/Bar.vue';
 <style></style>
 ```
 
-## 多列柱状图
+## Biểu đồ cột nhiều cột
 
-##### 引用方式
+##### Cách tham chiếu
 
 ```js
 import BarMulti from '/@/components/chart/BarMulti.vue';
 ```
 
-##### 参数列表
+##### Danh sách tham số
 
-| 参数名    | 类型   | 必填 | 说明       |
+| Tên tham số    | Loại   | Bắt buộc | Giải thích       |
 | --------- | ------ | ---- | ---------- |
-| chartData | array  | ✔️   | 报表数据源 |
-| width     | number |      | 报表宽度   |
-| height    | number |      | 报表高度   |
+| chartData | array  | ✔️   | Nguồn dữ liệu báo cáo |
+| width     | number |      | Chiều rộng báo cáo   |
+| height    | number |      | Chiều cao báo cáo   |
 
-##### chartData 示例
+##### chartData Ví dụ
 
 ```json
 [
   {
-    "name": "1月",
+    "name": "1tháng",
     "value": 320,
     "type": "2021"
   },
   {
-    "name": "2月",
+    "name": "2tháng",
     "value": 457,
     "type": "2021"
   },
   {
-    "name": "3月",
+    "name": "3tháng",
     "value": 182,
     "type": "2021"
   },
   {
-    "name": "1月",
+    "name": "1tháng",
     "value": 240,
     "type": "2022"
   },
   {
-    "name": "2月",
+    "name": "2tháng",
     "value": 357,
     "type": "2022"
   },
   {
-    "name": "3月",
+    "name": "3tháng",
     "value": 456,
     "type": "2022"
   }
 ]
 ```
 
-## 迷你柱状图
+## Biểu đồ cột mini
 
-同柱形图，修改配置即可
+Giống biểu đồ cột, chỉ cần sửa cấu hình là được
 
-## 面积图
+## Biểu đồ diện tích
 
-##### 引用方式
+##### Cách tham chiếu
 
 ```js
 import Line from '/@/components/chart/Line.vue';
 ```
 
-##### 参数列表
+##### Danh sách tham số
 
-| 参数名    | 类型   | 必填 | 说明       |
+| Tên tham số    | Loại   | Bắt buộc | Giải thích       |
 | --------- | ------ | ---- | ---------- |
-| chartData | array  | ✔️   | 报表数据源 |
-| width     | number |      | 报表宽度   |
-| height    | number |      | 报表高度   |
-| option    | object |      | 配置项     |
+| chartData | array  | ✔️   | Nguồn dữ liệu báo cáo |
+| width     | number |      | Chiều rộng báo cáo   |
+| height    | number |      | Chiều cao báo cáo   |
+| option    | object |      | Mục cấu hình     |
 
-##### chartData 示例
+##### chartData Ví dụ
 
 ```json
 [
   {
-    "name": "1月",
+    "name": "1tháng",
     "value": 320
   },
   {
-    "name": "2月",
+    "name": "2tháng",
     "value": 457
   },
   {
-    "name": "3月",
+    "name": "3tháng",
     "value": 182
   }
 ]
 ```
 
-## 多行折线图
+## Biểu đồ đường nhiều dòng
 
-##### 引用方式
+##### Cách tham chiếu
 
 ```js
 import LineMulti from '/@/components/chart/LineMulti.vue';
 ```
 
-##### 参数列表
+##### Danh sách tham số
 
-| 参数名    | 类型   | 必填 | 说明       |
+| Tên tham số    | Loại   | Bắt buộc | Giải thích       |
 | --------- | ------ | ---- | ---------- |
-| chartData | array  | ✔️   | 报表数据源 |
-| width     | number |      | 报表宽度   |
-| height    | number |      | 报表高度   |
-| option    | object |      | 配置项     |
+| chartData | array  | ✔️   | Nguồn dữ liệu báo cáo |
+| width     | number |      | Chiều rộng báo cáo   |
+| height    | number |      | Chiều cao báo cáo   |
+| option    | object |      | Mục cấu hình     |
 
-##### chartData 示例
+##### chartData Ví dụ
 
-同柱形图
+Cùng biểu đồ cột
 
-## 饼状图
+## Biểu đồ hình tròn
 
-##### 引用方式
+##### Cách tham chiếu
 
 ```js
 import Pie from '/@/components/chart/Pie';
 ```
 
-##### 参数列表
+##### Danh sách tham số
 
-| 参数名    | 类型   | 必填 | 说明       |
+| Tên tham số    | Loại   | Bắt buộc | Giải thích       |
 | --------- | ------ | ---- | ---------- |
-| chartData | array  | ✔️   | 报表数据源 |
-| width     | number |      | 报表宽度   |
-| height    | number |      | 报表高度   |
-| option    | object |      | 配置项     |
+| chartData | array  | ✔️   | Nguồn dữ liệu báo cáo |
+| width     | number |      | Chiều rộng báo cáo   |
+| height    | number |      | Chiều cao báo cáo   |
+| option    | object |      | Mục cấu hình     |
 
-##### chartData 示例
+##### chartData Ví dụ
 
 ```json
 [
-  { "name": "一月", "value": 40 },
-  { "name": "二月", "value": 21 },
-  { "name": "三月", "value": 17 },
-  { "name": "四月", "value": 13 },
-  { "name": "五月", "value": 9 }
+  { "name": "Tháng 1", "value": 40 },
+  { "name": "Tháng 2", "value": 21 },
+  { "name": "Tháng 3", "value": 17 },
+  { "name": "Tháng 4", "value": 13 },
+  { "name": "Tháng 5", "value": 9 }
 ]
 ```
 
-## 雷达图
+## Biểu đồ radar
 
-##### 引用方式
+##### Cách tham chiếu
 
 ```js
 import Radar from '/@/components/chart/Radar';
 ```
 
-##### 参数列表
+##### Danh sách tham số
 
-| 参数名    | 类型   | 必填 | 说明       |
+| Tên tham số    | Loại   | Bắt buộc | Giải thích       |
 | --------- | ------ | ---- | ---------- |
-| chartData | array  | ✔️   | 报表数据源 |
-| width     | number |      | 报表宽度   |
-| height    | number |      | 报表高度   |
-| option    | object |      | 配置项     |
+| chartData | array  | ✔️   | Nguồn dữ liệu báo cáo |
+| width     | number |      | Chiều rộng báo cáo   |
+| height    | number |      | Chiều cao báo cáo   |
+| option    | object |      | Mục cấu hình     |
 
-##### chartData 示例
+##### chartData Ví dụ
 
 ```json
 [
-  { "item": "一月", "score": 40 },
-  { "item": "二月", "score": 20 },
-  { "item": "三月", "score": 67 },
-  { "item": "四月", "score": 43 },
-  { "item": "五月", "score": 90 }
+  { "item": "Tháng 1", "score": 40 },
+  { "item": "Tháng 2", "score": 20 },
+  { "item": "Tháng 3", "score": 67 },
+  { "item": "Tháng 4", "score": 43 },
+  { "item": "Tháng 5", "score": 90 }
 ]
 ```
 
-## 仪表盘
+## Bảng điều khiển
 
-##### 引用方式
+##### Cách tham chiếu
 
 ```js
 import Gauge from '/@/components/chart/Gauge';
 ```
 
-##### 参数列表
+##### Danh sách tham số
 
-| 参数名    | 类型   | 必填 | 说明       |
+| Tên tham số    | Loại   | Bắt buộc | Giải thích       |
 | --------- | ------ | ---- | ---------- |
-| chartData | array  | ✔️   | 报表数据源 |
-| width     | number |      | 报表宽度   |
-| height    | number |      | 报表高度   |
-| option    | object |      | 配置项     |
+| chartData | array  | ✔️   | Nguồn dữ liệu báo cáo |
+| width     | number |      | Chiều rộng báo cáo   |
+| height    | number |      | Chiều cao báo cáo   |
+| option    | object |      | Mục cấu hình     |
 
-## 排名列表
+## Danh sách xếp hạng
 
-##### 引用方式
+##### Cách tham chiếu
 
 ```js
 import RankList from '@/components/chart/RankList';
 ```
 
-##### 参数列表
+##### Danh sách tham số
 
-| 参数名 | 类型   | 必填 | 说明                     |
+| Tên tham số | Loại   | Bắt buộc | Giải thích                     |
 | ------ | ------ | ---- | ------------------------ |
-| title  | string |      | 报表标题                 |
-| list   | array  |      | 排名列表数据             |
-| height | number |      | 报表高度，默认自适应高度 |
+| title  | string |      | Tiêu đề báo cáo                 |
+| list   | array  |      | Dữ liệu danh sách xếp hạng             |
+| height | number |      | Chiều cao báo cáo, mặc định chiều cao tự thích ứng |
 
-##### list 示例
+##### list Ví dụ
 
 ```json
 [
-  { "name": "北京朝阳 1 号店", "total": 1981 },
-  { "name": "北京朝阳 2 号店", "total": 1359 },
-  { "name": "北京朝阳 3 号店", "total": 1354 },
-  { "name": "北京朝阳 4 号店", "total": 263 },
-  { "name": "北京朝阳 5 号店", "total": 446 },
-  { "name": "北京朝阳 6 号店", "total": 796 }
+  { "name": "Cửa hàng số 1 Triều Dương, Bắc Kinh", "total": 1981 },
+  { "name": "Cửa hàng số 2 Triều Dương, Bắc Kinh", "total": 1359 },
+  { "name": "Cửa hàng số 3 Triều Dương, Bắc Kinh", "total": 1354 },
+  { "name": "Cửa hàng số 4 Triều Dương, Bắc Kinh", "total": 263 },
+  { "name": "Cửa hàng số 5 Triều Dương, Bắc Kinh", "total": 446 },
+  { "name": "Cửa hàng số 6 Triều Dương, Bắc Kinh", "total": 796 }
 ]
 ```

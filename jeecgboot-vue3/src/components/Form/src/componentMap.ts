@@ -1,5 +1,5 @@
 /**
- * 目前实现了异步加载的组件清单（antd 组件已改为 createAsyncComponent 异步加载）
+ * Danh sách các component đã triển khai tải không đồng bộ hiện tại (các component antd đã đổi sang tải không đồng bộ createAsyncComponent)
  */
 import type { Component } from 'vue';
 import type { ComponentType } from './types/index';
@@ -48,7 +48,7 @@ componentMap.set('InputCountDown', createAsyncComponent(() => import('/@/compone
 componentMap.set('Upload', createAsyncComponent(() => import('/@/components/Upload/src/BasicUpload.vue')));
 componentMap.set('Divider', createAsyncComponent(() => import('ant-design-vue/es/divider')));
 
-//注册自定义组件
+//Đăng ký component tùy chỉnh
 
 componentMap.set('JAreaLinkage', createAsyncComponent(() => import('./jeecg/components/JAreaLinkage.vue')));
 componentMap.set('JSelectPosition', createAsyncComponent(() => import('./jeecg/components/JSelectPosition.vue')));
@@ -58,10 +58,10 @@ componentMap.set('JImageUpload', createAsyncComponent(() => import('./jeecg/comp
 componentMap.set('JDictSelectTag', createAsyncComponent(() => import('./jeecg/components/JDictSelectTag.vue')));
 componentMap.set('JSelectDept', createAsyncComponent(() => import('./jeecg/components/JSelectDept.vue')));
 componentMap.set('JAreaSelect', createAsyncComponent(() => import('./jeecg/components/JAreaSelect.vue')));
-// update-begin--author:liaozhiyang---date:20260227---for:【QQYUN-14751】tinymce富文本、JEasyCron、JLinkTableCard异步加载
+// update-begin--author:liaozhiyang---date:20260227---for:【QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
 componentMap.set('JLinkTableCard', createAsyncComponent(() => import('./jeecg/components/JLinkTableCard/JLinkTableCard.vue'), { loading: true }));
 componentMap.set('JEditor', createAsyncComponent(() => import('./jeecg/components/JEditor.vue')));
-// update-end--author:liaozhiyang---date:20260227---for:【QQYUN-14751】tinymce富文本、JEasyCron、JLinkTableCard异步加载
+// update-end--author:liaozhiyang---date:20260227---for:【QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
 componentMap.set('JMarkdownEditor', createAsyncComponent(() => import('./jeecg/components/JMarkdownEditor.vue')));
 componentMap.set('JSelectInput', createAsyncComponent(() => import('./jeecg/components/JSelectInput.vue')));
 componentMap.set('JCodeEditor', createAsyncComponent(() => import('./jeecg/components/JCodeEditor.vue')));
@@ -69,7 +69,7 @@ componentMap.set('JCategorySelect', createAsyncComponent(() => import('./jeecg/c
 componentMap.set('JSelectMultiple', createAsyncComponent(() => import('./jeecg/components/JSelectMultiple.vue')));
 componentMap.set('JSelectSingle', createAsyncComponent(() => import('./jeecg/components/JSelectSingle.vue')));
 componentMap.set('JPopup', createAsyncComponent(() => import('./jeecg/components/JPopup.vue')));
-// 代码逻辑说明: 【QQYUN-7961】popupDict字典
+// Giải thích logic mã: 【QQYUN-7961] Từ điển popupDict
 componentMap.set('JPopupDict', createAsyncComponent(() => import('./jeecg/components/JPopupDict.vue')));
 componentMap.set('JSwitch', createAsyncComponent(() => import('./jeecg/components/JSwitch.vue')));
 componentMap.set('JTreeDict', createAsyncComponent(() => import('./jeecg/components/JTreeDict.vue')));

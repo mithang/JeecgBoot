@@ -83,12 +83,12 @@ export function useForm(props?: Props): UseFormReturnType {
 
     // TODO promisify
     getFieldsValue: <T>() => {
-      // 代码逻辑说明: VUEN-1341【流程】编码方式 流程节点编辑表单时，填写数据报错 包括用户组件、部门组件、省市区
+      // Giải thích logic mã: VUEN-1341[Quy trình]Phương thức mã hóa: khi chỉnh sửa biểu mẫu tại nút quy trình, nhập dữ liệu bị lỗi, bao gồm component người dùng, component phòng ban, Tỉnh/Thành/Quận huyện
       let values = unref(formRef)?.getFieldsValue() as T;
       if(values){
         Object.keys(values).map(key=>{
           if (values[key] instanceof Array) {
-            // 代码逻辑说明: 【issues/4330】判断如果是对象数组，则不拼接
+            // Giải thích logic mã: 【issues/4330] Kiểm tra nếu là mảng đối tượng thì không nối
             let isObject = typeof (values[key][0] || '') === 'object';
             if (!isObject) {
               values[key] = values[key].join(',');
@@ -115,8 +115,8 @@ export function useForm(props?: Props): UseFormReturnType {
     },
 
     /**
-     * 表单验证并返回表单值
-     * @update:添加表单值转换逻辑
+     * Kiểm tra biểu mẫu và trả về giá trị biểu mẫu
+     * @update:Thêm logic chuyển đổi giá trị biểu mẫu
      * @updateBy:zyf
      * @updateDate:2021-09-02
      */
@@ -132,9 +132,9 @@ export function useForm(props?: Props): UseFormReturnType {
             }
           }
         }
-        //--@updateBy-begin----author:liusq---date:20210916------for:处理区域事件字典信息------
+        //--@updateBy-begin----author:liusq---date:20210916------for:Xử lý thông tin từ điển của sự kiện khu vực------
         return handleRangeValue(getProps, values);
-        //--@updateBy-end----author:liusq---date:20210916------for:处理区域事件字典信息------
+        //--@updateBy-end----author:liusq---date:20210916------for:Xử lý thông tin từ điển của sự kiện khu vực------
       });
       return values;
     },

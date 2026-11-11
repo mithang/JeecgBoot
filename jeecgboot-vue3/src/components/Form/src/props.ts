@@ -14,7 +14,7 @@ export const basicProps = {
     type: Object as PropType<Recordable>,
     default: {},
   },
-  // 标签宽度  固定宽度
+  // Chiều rộng của nhãn, chiều rộng cố định
   labelWidth: {
     type: [Number, String] as PropType<number | string>,
     default: 0,
@@ -28,7 +28,7 @@ export const basicProps = {
     default: () => [],
   },
   compact: propTypes.bool,
-  // 表单配置规则
+  // Quy tắc cấu hình biểu mẫu
   schemas: {
     type: [Array] as PropType<FormSchema[]>,
     default: () => [],
@@ -44,55 +44,55 @@ export const basicProps = {
     type: Object as PropType<Partial<ColEx>>,
   },
   autoSetPlaceHolder: propTypes.bool.def(true),
-  // 在INPUT组件上单击回车时，是否自动提交
+  // Khi nhấn Enter trên component INPUT, có tự động gửi hay không
   autoSubmitOnEnter: propTypes.bool.def(false),
   submitOnReset: propTypes.bool,
   size: propTypes.oneOf(['default', 'small', 'large']).def('default'),
-  // 禁用表单
+  // Vô hiệu hóa biểu mẫu
   disabled: propTypes.bool,
   emptySpan: {
     type: [Number, Object] as PropType<number>,
     default: 0,
   },
-  // 是否显示收起展开按钮
+  // Có hiển thị nút thu gọn/mở rộng không
   showAdvancedButton: propTypes.bool,
-  // 转化时间
+  // Thời gian chuyển đổi
   transformDateFunc: {
     type: Function as PropType<Fn>,
     default: (date: any) => {
-      // 判断是否是dayjs实例
+      // Kiểm tra có phải instance của dayjs hay không
       return dayjs.isDayjs(date) ? date?.format('YYYY-MM-DD HH:mm:ss') : date;
     },
   },
   rulesMessageJoinLabel: propTypes.bool.def(true),
-  // 【jeecg】超过3列自动折叠
+  // [jeecg] Vượt quá 3 cột tự động gấp lại
   autoAdvancedCol: propTypes.number.def(3),
-  // 超过3行自动折叠
+  // Quá 3 dòng sẽ tự động thu gọn
   // autoAdvancedLine: propTypes.number.def(3),
-  // 不受折叠影响的行数
+  // Số dòng không bị ảnh hưởng bởi việc gấp lại
   alwaysShowLines: propTypes.number.def(1),
 
-  // 是否显示操作按钮
+  // Có hiển thị nút thao tác không
   showActionButtonGroup: propTypes.bool.def(true),
-  // 操作列Col配置
+  // Cấu hình Col của cột thao tác
   actionColOptions: Object as PropType<Partial<ColEx>>,
-  // 显示重置按钮
+  // Hiển thị nút đặt lại
   showResetButton: propTypes.bool.def(true),
-  // 是否聚焦第一个输入框，只在第一个表单项为input的时候作用
+  // Có focus vào ô nhập đầu tiên hay không, chỉ có tác dụng khi mục biểu mẫu đầu tiên là input
   autoFocusFirstItem: propTypes.bool,
-  // 重置按钮配置
+  // Cấu hình nút đặt lại
   resetButtonOptions: Object as PropType<Partial<ButtonProps>>,
 
-  // 显示确认按钮
+  // Hiển thị nút xác nhận
   showSubmitButton: propTypes.bool.def(true),
-  // 确认按钮配置
+  // Cấu hình nút xác nhận
   submitButtonOptions: Object as PropType<Partial<ButtonProps>>,
 
-  // 自定义重置函数
+  // Hàm đặt lại tùy chỉnh
   resetFunc: Function as PropType<() => Promise<void>>,
   submitFunc: Function as PropType<() => Promise<void>>,
 
-  // 以下为默认props
+  // Sau đây là mặc địnhprops
   hideRequiredMark: propTypes.bool,
 
   labelCol: {
@@ -116,6 +116,6 @@ export const basicProps = {
 
   rowProps: Object as PropType<RowProps>,
   
-  // 当表单是查询条件的时候 当表单改变后自动查询，不需要点击查询按钮
+  // Khi biểu mẫu là điều kiện tìm kiếm, khi biểu mẫu thay đổi sẽ tự động tìm kiếm, không cần nhấp nút tìm kiếm
   autoSearch: propTypes.bool.def(false),
 };

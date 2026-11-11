@@ -138,7 +138,7 @@
   .item-style() {
     li {
       display: inline-block;
-      // 代码逻辑说明: 【TV360X-1576】右键样式选中缺少了一块---
+      // Giải thích logic mã: 【TV360X-1576] Kiểu chọn khi nhấp chuột phải bị thiếu một phần---
       width: 100% !important;
       height: @default-height;
       margin: 0 !important;

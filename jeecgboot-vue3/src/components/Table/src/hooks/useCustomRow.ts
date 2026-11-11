@@ -42,10 +42,10 @@ export function useCustomRow(
 
           const isCheckbox = rowSelection.type === 'checkbox';
           if (isCheckbox) {
-            // 找到tr
+            // Tìm thấytr
             const tr: HTMLElement = (e as MouseEvent).composedPath?.().find((dom: HTMLElement) => dom.tagName === 'TR') as HTMLElement;
             if (!tr) return;
-            // 找到Checkbox，检查是否为disabled
+            // Tìm Checkbox, kiểm tra có phải làdisabled
             const checkBox = tr.querySelector('input[type=checkbox]');
             if (!checkBox || checkBox.hasAttribute('disabled')) return;
             if (!keys.includes(key)) {
@@ -60,7 +60,7 @@ export function useCustomRow(
 
           const isRadio = rowSelection.type === 'radio';
           if (isRadio) {
-            // 代码逻辑说明: 【QQYUN-6794】table列表增加radio禁用功能
+            // Giải thích logic mã: 【QQYUN-6794] Danh sách table thêm chức năng vô hiệu hóa radio
             const rowSelection = propsRef.value.rowSelection;
             if (rowSelection.getCheckboxProps) {
               const result = rowSelection.getCheckboxProps(record);
@@ -75,7 +75,7 @@ export function useCustomRow(
               setSelectedRowKeys([key]);
               return;
             } else {
-              // 点击已经选中的，直接return不在做操作
+              // Nhấn vào mục đã chọn thì return trực tiếp, không thực hiện thao tác nữa
               return;
             }
             clearSelectedRowKeys();

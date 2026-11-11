@@ -2,12 +2,12 @@
 @import 'vxe.dark';
 
 .@{prefix-cls} {
-  // 编辑按钮样式
+  // Kiểu nút chỉnh sửa
   .vxe-cell--edit-icon {
     border-color: #606266;
   }
 
-  // 图片、附件上传按钮在行内保持紧凑，避免抢占表格内容的视觉层级
+  // Nút tải lên hình ảnh, tệp đính kèm giữ gọn trong dòng, tránh lấn át tầng hiển thị trực quan của nội dung bảng
   .j-vxe-upload-trigger.ant-btn {
     height: 28px;
     padding: 0 10px;
@@ -18,7 +18,7 @@
     border-color: @primary-color;
   }
 
-  // toolbar 样式
+  // toolbar Kiểu
   &-toolbar {
     &-collapsed {
       [data-collapse] {
@@ -31,7 +31,7 @@
     }
   }
 
-  // 分页器
+  // Bộ phân trang
   .j-vxe-pagination {
     margin-top: 8px;
     text-align: right;
@@ -47,19 +47,19 @@
     }
   }
 
-  // 更改 header 底色
+  // Đổi màu nền header
   .vxe-table.border--default .vxe-table--header-wrapper,
   .vxe-table.border--full .vxe-table--header-wrapper,
   .vxe-table.border--outer .vxe-table--header-wrapper {
     //background-color: #FFFFFF;
   }
 
-  // 更改 tooltip 校验失败的颜色
+  // Đổi màu của tooltip khi kiểm chứng thất bại
   .vxe-table--tooltip-wrapper.vxe-table--valid-error {
     background-color: #f5222d !important;
   }
 
-  // 更改 输入框 校验失败的颜色
+  // Đổi màu khi ô nhập kiểm chứng thất bại
   .col--valid-error > .vxe-cell > .ant-input,
   .col--valid-error > .vxe-cell > .ant-select .ant-input,
   .col--valid-error > .vxe-cell > .ant-select .ant-select-selection,
@@ -74,12 +74,12 @@
   .col--valid-error > .vxe-tree-cell > .ant-calendar-picker .ant-calendar-picker-input {
     border-color: #f5222d !important;
   }
-  // update-begin--author:liaozhiyang---date:20260415---for:【QQYUN-15134】修复jvxetable使用fixed固定后无法拖拽
-  // 被拖起的源行：禁用/半透明效果，跨主体和固定列 wrapper 同步生效
+  // update-begin--author:liaozhiyang---date:20260415---for:【QQYUN-15134]Sửa lỗi jvxetable dùng fixed cố định thì không kéo thả được
+  // Dòng nguồn bị kéo lên: Vô hiệu hóa/Hiệu ứng bán trong suốt, đồng bộ có hiệu lực trên wrapper của phần thân chính và cột cố định
   .vxe-body--row.j-vxe-drag-source {
     opacity: 0.4;
   }
-  // 拖拽方向指示线（用 box-shadow 实现，不影响行高/布局）
+  // Đường chỉ hướng kéo thả (dùng box-shadow Triển khai, không ảnh hưởng chiều cao dòng/bố cục)
   .vxe-body--row.j-vxe-drag-hover-top {
     box-shadow: inset 0 2px 0 0 #1890ff;
   }
@@ -87,13 +87,13 @@
     box-shadow: inset 0 -3px 0 0 #1890ff;
   }
 
-  // update-end--author:liaozhiyang---date:20260415---for:【QQYUN-15134】修复jvxetable使用fixed固定后无法拖拽
+  // update-end--author:liaozhiyang---date:20260415---for:【QQYUN-15134]Sửa lỗi jvxetable dùng fixed cố định thì không kéo thả được
   .vxe-body--row.sortable-ghost,
   .vxe-body--row.sortable-chosen {
     background-color: transparent;
   }
 
-  // ----------- 【VUEN-1691】默认隐藏滚动条，鼠标放上去才显示 -------------------------------------------
+  // ----------- 【VUEN-1691] Mặc định ẩn thanh cuộn, di chuột lên mới hiển thị -------------------------------------------
   .vxe-table {
     //.vxe-table--footer-wrapper.body--wrapper,
     .vxe-table--body-wrapper.body--wrapper {
@@ -107,19 +107,19 @@
       }
     }
   }
-  // ----------- 【VUEN-1691】默认隐藏滚动条，鼠标放上去才显示 -------------------------------------------
+  // ----------- 【VUEN-1691] Mặc định ẩn thanh cuộn, di chuột lên mới hiển thị -------------------------------------------
 
-  // 调整展开/收起图标样式
+  // Điều chỉnh mở rộng/Kiểu biểu tượng thu gọn
   .vxe-table--render-default .vxe-table--expanded .vxe-table--expand-btn {
     width: 17px;
     height: 17px;
   }
-  /*【美化表单】行编辑table的title字体改小一号*/
+  /*[Làm đẹp biểu mẫu] Đổi cỡ chữ title của table chỉnh sửa theo dòng nhỏ đi một cỡ*/
   .vxe-header--column.col--ellipsis>.vxe-cell .vxe-cell--title{
     font-size: 13px;
   }
-  // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-703】用户、部门、图片、文件、开关的必填标识显示非红色
-  // 不可编辑组件（cellRender）必填标识，样式与 vxe-table 原生 .vxe-cell--required-icon 保持一致
+  // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-703]Dấu bắt buộc của người dùng, phòng ban, hình ảnh, tệp, công tắc hiển thị không phải màu đỏ
+  // Dấu bắt buộc của component không thể chỉnh sửa (cellRender), kiểu dáng giống với vxe-table Gốc .vxe-cell--required-icon Giữ nhất quán
   .vxe-header--column.jvxe-col--required > .vxe-cell .vxe-cell--title::before {
     content: '*';
     display: inline-block;
@@ -129,6 +129,6 @@
     font-family: Verdana, Arial, Tahoma;
     vertical-align: middle;
   }
-  // update-end--author:liaozhiyang---date:20260807---for:【LHZP-703】用户、部门、图片、文件、开关的必填标识显示非红色
+  // update-end--author:liaozhiyang---date:20260807---for:【LHZP-703]Dấu bắt buộc của người dùng, phòng ban, hình ảnh, tệp, công tắc hiển thị không phải màu đỏ
 
 }

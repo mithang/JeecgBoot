@@ -16,9 +16,9 @@ export function useRowSelection(propsRef: ComputedRef<BasicTableProps>, tableDat
     }
 
     return {
-      // AntDV3.0 之后使用远程加载数据进行分页时，
-      // 默认会清空上一页选择的行数据（导致无法跨页选择），
-      // 将此属性设置为 true 即可解决。
+      // AntDV3.0 Sau đó khi dùng dữ liệu tải từ xa để phân trang,
+      // Mặc định sẽ xóa dữ liệu hàng đã chọn ở trang trước (dẫn đến không thể chọn xuyên trang),
+      // Đặt thuộc tính này thành true là giải quyết được.
       preserveSelectedRowKeys: true,
       selectedRowKeys: unref(selectedRowKeysRef),
       onChange: (selectedRowKeys: string[]) => {
@@ -44,7 +44,7 @@ export function useRowSelection(propsRef: ComputedRef<BasicTableProps>, tableDat
           const { onChange } = rowSelection;
           if (onChange && isFunction(onChange)) onChange(getSelectRowKeys(), getSelectRows());
         }
-        //table行选择时卡顿明显 #503
+        //tableKhi chọn hàng bị giật rõ rệt #503
         if (unref(tableData).length > 0) {
           emit('selection-change', {
             keys: getSelectRowKeys(),

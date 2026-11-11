@@ -11,7 +11,7 @@
 
         <div style="position: relative; min-height: 350px">
             <div style="width: 100%">
-                <a-input v-model:value="searchText" allowClear style="width: 100%" placeholder="搜索">
+                <a-input v-model:value="searchText" allowClear style="width: 100%" placeholder="Tìm kiếm">
                     <template #prefix>
                         <SearchOutlined style="color: #c0c0c0" />
                     </template>
@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <!-- 选中用户 -->
+            <!-- Người dùng đã chọn -->
             <div class="selected-users" style="width: 100%; overflow-x: hidden">
                 <SelectedUserItem v-for="item in selectedList" :info="item" @unSelect="unSelect" />
             </div>
@@ -98,7 +98,7 @@
       }, {immediate: true});
       
       
-      // 弹窗事件
+      // Sự kiện popup
       const [register] = useModalInner(() => {
         let list = dataList.value;
         if(!list || list.length ==0 ){
@@ -108,7 +108,7 @@
         }
       });
 
-      // 确定事件
+      // Sự kiện xác nhận
       function handleOk() {
         let arr = toRaw(selectedIdList.value);
         emit('selected', arr);

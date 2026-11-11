@@ -68,7 +68,7 @@ export function useTableScroll(
     if (!tableEl) return;
 
     if (!bodyEl) {
-      // 代码逻辑说明: issues/355 前端-jeecgboot-vue3 3.4.4版本,BasicTable高度自适应功能失效,设置BasicTable组件maxHeight失效; 原因已找到,请看详情
+      // Giải thích logic mã: issues/355 Frontend-jeecgboot-vue3 3.4.4Phiên bản,BasicTableChức năng chiều cao tự thích ứng không hoạt động,Đặt maxHeight cho component BasicTable không có hiệu lực; Đã tìm thấy nguyên nhân,Vui lòng xem chi tiết
       bodyEl = tableEl.querySelector('.ant-table-tbody');
       if (!bodyEl) return;
     }
@@ -106,7 +106,7 @@ export function useTableScroll(
     const paddingHeight = 32;
     // Pager height
     let paginationHeight = 2;
-    // 【issues/9217】当配置了pagination: true时,BasicTable组件自适应高度异常
+    // 【issues/9217] khi đã cấu hìnhpagination: truegiờ,BasicTableChiều cao tự thích ứng của component bất thường
     if (pagination !== false) {
       paginationEl = tableEl.querySelector('.ant-pagination') as HTMLElement;
       if (paginationEl) {
@@ -121,7 +121,7 @@ export function useTableScroll(
     }
 
     let footerHeight = 0;
-    // 代码逻辑说明: 【issues/1137】BasicTable自适应高度计算没有减去尾部高度
+    // Giải thích logic mã: 【issues/1137]BasicTable tính chiều cao tự thích ứng chưa trừ đi chiều cao phần đuôi
     footerEl = tableEl.querySelector('.ant-table-footer');
     if (footerEl) {
       const offsetHeight = footerEl.offsetHeight;
@@ -134,12 +134,12 @@ export function useTableScroll(
     }
 
     let height = bottomIncludeBody - (resizeHeightOffset || 0) - paddingHeight - paginationHeight - footerHeight - headerHeight;
-    // update-begin--author:liaozhiyang---date:20240603---for【TV360X-861】列表查询区域不可往上滚动
-    // 10+6(外层边距padding:10 + 内层padding-bottom:6)
+    // update-begin--author:liaozhiyang---date:20240603---for【TV360X-861]Vùng truy vấn danh sách không cuộn lên được
+    // 10+6(Lề ngoàipadding:10 + Lớp trongpadding-bottom:6)
     height -= 16;
-    // 代码逻辑说明: 【issues/8880】BasicTable组件在modal中适应高度
+    // Giải thích logic mã: 【issues/8880]Component BasicTable tự điều chỉnh chiều cao trong modal
     try {
-      // 当BasicTable在BasicModal容器中时,扣减容器底部高度
+      // Khi BasicTable nằm trong container BasicModal,Trừ chiều cao đáy container
       const modalFooter = tableEl.closest('.ant-modal-root')?.querySelector('.ant-modal-footer');
       if (modalFooter) {
         const { bottomIncludeBody: modalFooterHeight } = getViewportOffset(modalFooter);
@@ -151,7 +151,7 @@ export function useTableScroll(
     setHeight(height);
 
     bodyEl!.style.height = `${height}px`;
-    // update-begin--author:liaozhiyang---date:20240609---for【issues/8374】分页始终显示在底部
+    // update-begin--author:liaozhiyang---date:20240609---for【issues/8374] phân trang luôn hiển thị ở phía dưới
     nextTick(() => {
       if (maxHeight === undefined) {
         if (unref(getPaginationInfo) && unref(getDataSourceRef).length) {
@@ -164,7 +164,7 @@ export function useTableScroll(
           const trHeight = lastrEl.offsetHeight;
           const dataHeight = trHeight * pageSize;
           if (tableBody && lastrEl) {
-            // table是否隐藏（隐藏的table不能吸底）
+            // tableCó ẩn hay không (table bị ẩn không thể dính đáy)
             const isTableBodyHide = tableBody.offsetHeight == 0 && tableBody.offsetWidth == 0;
             if (isTableBodyHide) {
               return;
@@ -178,7 +178,7 @@ export function useTableScroll(
         }
       }
     });
-    // update-end--author:liaozhiyang---date:20240609---for【issues/8374】分页始终显示在底部
+    // update-end--author:liaozhiyang---date:20240609---for【issues/8374] phân trang luôn hiển thị ở phía dưới
   }
   useWindowSizeFn(calcTableHeight, 280);
   onMountedOrActivated(() => {
@@ -193,13 +193,13 @@ export function useTableScroll(
     // if (unref(rowSelectionRef)) {
     //   width += 60;
     // }
-    // 代码逻辑说明: 【issues/5411】BasicTable 配置maxColumnWidth 未生效
+    // Giải thích logic mã: 【issues/5411]Cấu hình maxColumnWidth của BasicTable không có hiệu lực
     const { maxColumnWidth } = unref(propsRef);
     // TODO props ?? 0;
     const NORMAL_WIDTH = maxColumnWidth ?? 150;
-    // date-begin--author:liaozhiyang---date:20250716---for：【QQYUN-13122】有数十个字段时只展示2个字段，其余字段为ifShow:false会有滚动条
+    // date-begin--author:liaozhiyang---date:20250716---for：【QQYUN-13122] Khi có hàng chục trường chỉ hiển thị 2 trường, các trường còn lại làifShow:falseSẽ có thanh cuộn
     const columns = unref(columnsRef).filter((item) => !(item.defaultHidden == true || item.ifShow == false))
-    // date-end--author:liaozhiyang---date:20250716---for：【QQYUN-13122】有数十个字段时只展示2个字段，其余字段为ifShow:false会有滚动条
+    // date-end--author:liaozhiyang---date:20250716---for：【QQYUN-13122] Khi có hàng chục trường chỉ hiển thị 2 trường, các trường còn lại làifShow:falseSẽ có thanh cuộn
     columns.forEach((item) => {
       width += Number.parseInt(item.width as string) || 0;
     });
@@ -209,7 +209,7 @@ export function useTableScroll(
     if (len !== 0) {
       width += len * NORMAL_WIDTH;
     }
-    // 代码逻辑说明: 【TV360X-116】内嵌风格字段较多时表格错位
+    // Giải thích logic mã: 【TV360X-116] Khi có nhiều trường kiểu nhúng, bảng bị lệch
     if (slots.expandedRowRender) {
       width += propsRef.value.expandColumnWidth;
     }
@@ -225,7 +225,7 @@ export function useTableScroll(
     return {
       x: unref(getScrollX),
       y: canResize ? tableHeight : null,
-      // 代码逻辑说明: 【issues/1188】BasicTable加上scrollToFirstRowOnChange类型定义
+      // Giải thích logic mã: 【issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
       scrollToFirstRowOnChange: table.scrollToFirstRowOnChange,
       ...scroll,
     };

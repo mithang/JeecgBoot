@@ -1,7 +1,7 @@
 <template>
   <div v-for="(param, index) in dynamicInput.params" :key="index" style="display: flex">
-    <a-input placeholder="请输入参数key" v-model:value="param.label" style="width: 30%; margin-bottom: 5px" @input="emitChange" />
-    <a-input placeholder="请输入参数value" v-model:value="param.value" style="width: 30%; margin: 0 0 5px 5px" @input="emitChange" />
+    <a-input placeholder="Vui lòng nhập tham sốkey" v-model:value="param.label" style="width: 30%; margin-bottom: 5px" @input="emitChange" />
+    <a-input placeholder="Vui lòng nhập tham sốvalue" v-model:value="param.value" style="width: 30%; margin: 0 0 5px 5px" @input="emitChange" />
     <MinusCircleOutlined
       v-if="dynamicInput.params.length > min"
       class="dynamic-delete-button"
@@ -12,7 +12,7 @@
   <div>
     <a-button type="dashed" style="width: 60%" @click="add">
       <PlusOutlined />
-      新增
+      Thêm mới
     </a-button>
   </div>
 </template>
@@ -31,14 +31,14 @@
     name: 'JAddInput',
     props: {
       value: propTypes.string.def(''),
-      //自定义删除按钮多少才会显示
+      //Nút xóa tùy chỉnh hiển thị khi có bao nhiêu mục
       min: propTypes.integer.def(1),
     },
     emits: ['change', 'update:value'],
     setup(props, { emit }) {
-      //input动态数据
+      //inputDữ liệu động
       const dynamicInput: UnwrapRef<{ params: Params[] }> = reactive({ params: [] });
-      //删除Input
+      //XóaInput
       const remove = (item: Params) => {
         let index = dynamicInput.params.indexOf(item);
         if (index !== -1) {
@@ -46,7 +46,7 @@
         }
         emitChange();
       };
-      //新增Input
+      //Thêm mớiInput
       const add = () => {
         dynamicInput.params.push({
           label: '',
@@ -55,13 +55,13 @@
         emitChange();
       };
 
-      //监听传入数据value
+      //Lắng nghe dữ liệu truyền vàovalue
       watchEffect(() => {
         initVal();
       });
 
       /**
-       * 初始化数值
+       * Khởi tạo giá trị số
        */
       function initVal() {
         console.log('props.value', props.value);
@@ -74,7 +74,7 @@
         }
       }
       /**
-       * 数值改变
+       * Giá trị thay đổi
        */
       function emitChange() {
         let obj = {};

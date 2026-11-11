@@ -4,11 +4,11 @@ import { JVxeTypes } from '../types';
 import { JVxeComponent } from '../types/JVxeComponent';
 import { componentMap } from '../componentMap';
 
-// 已注册的组件增强
+// Phần tăng cường component đã đăng ký
 const enhancedMap = new Map<JVxeTypes, JVxeComponent.Enhanced>();
 
 /**
- * 获取某个组件的增强
+ * Lấy phần tăng cường của một component
  * @param type JVxeTypes
  */
 export function getEnhanced(type: JVxeTypes | string): JVxeComponent.Enhanced {
@@ -21,7 +21,7 @@ export function getEnhanced(type: JVxeTypes | string): JVxeComponent.Enhanced {
         Object.keys(defaultEnhanced).forEach((key) => {
           let def = defaultEnhanced[key];
           if (enhanced.hasOwnProperty(key)) {
-            // 方法如果存在就不覆盖
+            // Nếu phương thức đã tồn tại thì không ghi đè
             if (!isFunction(def) && !isString(def)) {
               enhanced[key] = Object.assign({}, def, enhanced[key]);
             }
@@ -33,14 +33,14 @@ export function getEnhanced(type: JVxeTypes | string): JVxeComponent.Enhanced {
         return <JVxeComponent.Enhanced>enhanced;
       }
     } else {
-      throw new Error(`[JVxeTable] ${$type} 组件尚未注册，获取增强失败`);
+      throw new Error(`[JVxeTable] ${$type} Component chưa được đăng ký, lấy tăng cường thất bại`);
     }
     enhancedMap.set($type, <JVxeComponent.Enhanced>defaultEnhanced);
   }
   return <JVxeComponent.Enhanced>enhancedMap.get($type);
 }
 
-/** 辅助方法：替换${...}变量 */
+/** Phương thức hỗ trợ: thay thế${...}Biến */
 export function replaceProps(col, value) {
   if (value && typeof value === 'string') {
     let text = value;

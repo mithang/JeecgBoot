@@ -76,7 +76,7 @@ export function useFormEvents({
       const schema = unref(getSchema).find((item) => item.field === key);
       let value = values[key];
 
-      //antd3升级后，online表单时间控件选中值报js错 TypeError: Reflect.has called on non-object
+      //antd3Sau khi nâng cấp, giá trị được chọn của control thời gian trong biểu mẫu online báo lỗi js TypeError: Reflect.has called on non-object
       if(!(values instanceof Object)){
         return;
       }
@@ -84,7 +84,7 @@ export function useFormEvents({
       const hasKey = Reflect.has(values, key);
 
       value = handleInputNumberValue(schema?.component, value);
-      // 代码逻辑说明: 【QQYUN-7535】popup回填字段inputNumber组件验证错误
+      // Giải thích logic mã: 【QQYUN-7535]Lỗi xác thực của component inputNumber trong trường điền lại của popup
       value = handleInputStringValue(schema?.component, value);
       // 0| '' is allow
       if (hasKey && fields.includes(key)) {
@@ -114,7 +114,7 @@ export function useFormEvents({
   }
 
   /**
-   *  根据字段名获取schema
+   *  Lấy schema theo tên trườngschema
    * @param field
    */
   function getSchemaByField(field: string): Nullable<FormSchema> {
@@ -220,14 +220,14 @@ export function useFormEvents({
     updateData.forEach((item) => {
       unref(getSchema).forEach((val) => {
         if (val.field === item.field) {
-          // update-begin-author:liaozhiyang date:2026-05-12 for:【issue/9612】updateSchema中的函数执行两次
+          // update-begin-author:liaozhiyang date:2026-05-12 for:【issue/9612] Hàm trong updateSchema thực thi hai lần
           const { componentProps: itemCp, ...restItem } = item as any;
           const newSchema = deepMerge(val, restItem);
           if (Reflect.has(item, 'componentProps')) {
-            //【issues/7940】componentProps写成函数形式时，updateSchema写成对象时，参数没合并
+            //【issues/7940]Khi componentProps viết dưới dạng hàm, updateSchema viết dưới dạng đối tượng, tham số không được gộp
             newSchema.componentProps = mergeComponentProps(val.componentProps, itemCp);
           }
-          // update-end-author:liaozhiyang date:2026-05-12 for:【issue/9612】updateSchema中的函数执行两次
+          // update-end-author:liaozhiyang date:2026-05-12 for:【issue/9612] Hàm trong updateSchema thực thi hai lần
           schema.push(newSchema as FormSchema);
         } else {
           schema.push(val);
@@ -282,7 +282,7 @@ export function useFormEvents({
     if (!formEl) return;
     try {
       const values = await validate();
-      //代码逻辑说明: 对查询表单提交的数组处理成字符串------
+      //Giải thích logic mã: Xử lý mảng gửi của biểu mẫu truy vấn thành chuỗi------
       for (let key in values) {
         if (values[key] instanceof Array) {
           let valueType = getValueType(getProps, key);
@@ -294,7 +294,7 @@ export function useFormEvents({
       const res = handleFormValues(values);
       emit('submit', res);
     } catch (error) {
-      // 代码逻辑说明: 列表查询表单会触发校验错误导致重置失败，原因不明
+      // Giải thích logic mã: Biểu mẫu tìm kiếm danh sách sẽ kích hoạt lỗi kiểm chứng dẫn đến đặt lại thất bại, nguyên nhân chưa rõ
       emit('submit', {});
       console.error('query form validate error, please ignore!', error)
       //throw new Error(error);

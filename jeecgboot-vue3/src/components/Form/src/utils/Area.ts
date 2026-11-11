@@ -1,7 +1,7 @@
 import {pcaa as REGION_DATA} from "@/utils/areaData/pcaUtils";
 
 /**
- * Area 属性all的类型
+ * Area Kiểu của thuộc tính all
  */
 interface PlainPca {
   id: string;
@@ -11,13 +11,13 @@ interface PlainPca {
 }
 
 /**
- * 省市区工具类 -解决列表省市区组件的翻译问题
+ * Lớp tiện ích tỉnh/thành/quận huyện -Giải quyết vấn đề dịch của component Tỉnh/Thành/Quận huyện trong danh sách
  */
 class Area {
   all: PlainPca[];
 
   /**
-   * 构造器
+   * Hàm khởi tạo
    * @param pcaa
    */
   constructor(pcaa?) {
@@ -57,7 +57,7 @@ class Area {
     }
   }
   
-// 代码逻辑说明: [issue/382]省市区组件JAreaLinkage数据不回显---
+// Giải thích logic mã: [issue/382]Dữ liệu component Tỉnh/Thành/Quận huyện JAreaLinkage không hiển thị lại---
   getText(code,index=3) {
     if (!code || code.length == 0) {
       return '';
@@ -97,10 +97,10 @@ class Area {
 }
 const jeecgAreaData = new Area();
 
-// 根据code找文本
+// Tìm văn bản theo code
 const getAreaTextByCode = function (code) {
   let index = 3;
-  // 代码逻辑说明: 判断code是否是多code逗号分割的字符串，是的话，获取最后一位的code ---
+  // Giải thích logic mã: Kiểm tra xem code có phải là chuỗi nhiều code phân tách bằng dấu phẩy không, nếu đúng thì lấy code cuối cùngcode ---
   if (code && code.includes(',')) {
     index = code.split(",").length;
     code = code.substr(code.lastIndexOf(',') + 1);
@@ -111,9 +111,9 @@ const getAreaTextByCode = function (code) {
 /**
  * 20260204
  * liaozhiyang
- * 【QQYUN-14694】online支持配置独立的省、市、县 （根据 code 找文本（支持仅省、仅省市、省市区））
- * @param includeParent 是否返回父级路径。默认 false 只返回最后一级（如「长治市」），true 返回完整路径（如「山西省/长治市」）
- * @param level 层级：1=省，2=市，3=县。传入时作为 index 使用，不传则从 code 推断
+ * 【QQYUN-14694]online hỗ trợ cấu hình tỉnh, thành phố, huyện độc lập (tìm văn bản theo code (hỗ trợ chỉ tỉnh, chỉ tỉnh/thành phố, tỉnh/thành phố/quận huyện))
+ * @param includeParent Có trả về đường dẫn của cấp cha hay không. Mặc định false chỉ trả về cấp cuối cùng (ví dụ「Trường Trị」), true trả về đường dẫn đầy đủ (ví dụ「Sơn Tây/Thành phố Trường Trị")
+ * @param level Cấp bậc:1=Tỉnh,2=Thành phố,3=Huyện. Khi truyền vào thì dùng làm index, nếu không truyền thì suy ra từ code
  */
 const getAreaTextByCodeAnyLevel = function (code: string | number | undefined, includeParent = false, level?: 1 | 2 | 3): string {
   if (!code) return '';

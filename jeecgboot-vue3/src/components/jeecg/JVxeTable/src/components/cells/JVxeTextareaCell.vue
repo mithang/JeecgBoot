@@ -31,14 +31,14 @@
 
       return { innerValue, cellProps, handleChangeCommon, handleBlurCommon, getPopupContainer };
     },
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: {
       installOptions: {
         autofocus: '.ant-input',
       },
       aopEvents: {
         editActived({ $event, row, column }) {
-          // 是否默认打开右侧弹窗
+          // Có mở popup bên phải theo mặc định không
           if (column.params.defaultOpen ?? false) {
             dispatchEvent({
               $event,

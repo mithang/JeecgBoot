@@ -12,11 +12,11 @@ import { onMountedOrActivated } from '/@/hooks/core/onMountedOrActivated';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { ModalFunc } from 'ant-design-vue/lib/modal/Modal';
 
-// 自定义选择列的key
+// Cột chọn tùy chỉnhkey
 export const CUS_SEL_COLUMN_KEY = 'j-custom-selected-column';
 
 /**
- * 自定义选择列
+ * Cột chọn tùy chỉnh
  */
 export function useCustomSelection(
   propsRef: ComputedRef<BasicTableProps>,
@@ -27,27 +27,27 @@ export function useCustomSelection(
   childrenColumnName: ComputedRef<string>
 ) {
   const { createConfirm } = useMessage();
-  // 表格body元素
+  // Phần tử body của bảng
   const bodyEl = ref<HTMLDivElement>();
-  // body元素高度
+  // bodyChiều cao phần tử
   const bodyHeight = ref<number>(0);
-  // 表格tr高度
+  // Chiều cao tr của bảng
   const rowHeight = ref<number>(0);
-  // body 滚动高度
+  // body Chiều cao cuộn
   const scrollTop = ref(0);
-  // 选择的key
+  // đã chọnkey
   const selectedKeys = ref<string[]>([]);
-  // 选择的行
+  // Hàng đã chọn
   const selectedRows = ref<Recordable[]>([]);
-  // 变更的行
+  // Các hàng đã thay đổi
   let changeRows: Recordable[] = [];
   let allSelected: boolean = false;
 
   let timer;
 
-  // 扁平化数据，children数据也会放到一起
+  // Làm phẳng dữ liệu, dữ liệu children cũng sẽ được đặt cùng nhau
   const flattedData = computed(() => {
-    // 代码逻辑说明: 【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
+    // Giải thích logic mã: 【QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
     const data = flattenData(tableData.value, childrenColumnName.value);
     const rowSelection = propsRef.value.rowSelection;
     if (rowSelection?.type === 'checkbox' && rowSelection.getCheckboxProps) {
@@ -80,7 +80,7 @@ export function useCustomSelection(
     };
   });
 
-  // 是否是单选
+  // Có phải chọn đơn không
   const isRadio = computed(() => {
     return getRowSelectionRef.value?.type === 'radio';
   });
@@ -89,12 +89,12 @@ export function useCustomSelection(
     return unref(propsRef).autoCreateKey && !unref(propsRef).rowKey;
   });
 
-  // 列key字段
+  // Trường key của cột
   const getRowKey = computed(() => {
     const { rowKey } = unref(propsRef);
     return unref(getAutoCreateKey) ? ROW_KEY : rowKey;
   });
-  // 获取行的key字段数据
+  // Lấy dữ liệu trường key của hàng
   const getRecordKey = (record) => {
     if (!getRowKey.value) {
       return record[ROW_KEY];
@@ -105,39 +105,39 @@ export function useCustomSelection(
     }
   };
 
-  // 分页配置
+  // Cấu hình phân trang
   const getPagination = computed<PaginationProps>(() => {
     return typeof getPaginationRef.value === 'boolean' ? {} : getPaginationRef.value;
   });
-  // 当前页条目数量
+  // Số lượng mục của trang hiện tại
   const currentPageSize = computed(() => {
     const { pageSize = 10, total = flattedData.value.length } = getPagination.value;
     return pageSize > total ? total : pageSize;
   });
 
-  // 选择列表头props
+  // Tiêu đề danh sách lựa chọnprops
   const selectHeaderProps = computed(() => {
     return {
       onSelectAll,
       isRadio: isRadio.value,
       selectedLength: flattedData.value.filter((data) => selectedKeys.value.includes(getRecordKey(data))).length,
-      // 【TV360X-53】为空时会报错，加强判断
+      // 【TV360X-53] Khi trống sẽ báo lỗi, tăng cường kiểm tra
       pageSize: flattedData.value?.length ?? 0,
-      // 【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
+      // 【QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
       disabled: flattedData.value.length == 0,
       hideSelectAll: unref(propsRef)?.rowSelection?.hideSelectAll,
     };
   });
 
-  // 监听传入的selectedRowKeys
-  // 代码逻辑说明: 【QQYUN-8390】部门人员组件点击重置未清空（selectedRowKeys.value=[]，watch没监听到加deep）
+  // Lắng nghe dữ liệu được truyền vàoselectedRowKeys
+  // Giải thích logic mã: 【QQYUN-8390] Component nhân sự phòng ban bấm đặt lại chưa xóa (selectedRowKeys.value=[], watch không lắng nghe được thì thêm deep)
   watch(
     () => unref(propsRef)?.rowSelection?.selectedRowKeys,
     (val: string[]) => {
-      // 解决selectedRowKeys在页面调用处使用ref失效
+      // Khắc phục selectedRowKeys bị mất hiệu lực khi dùng ref tại nơi gọi trong trang
       const value = unref(val);
       if (Array.isArray(value) && !sameArray(value, selectedKeys.value)) {
-        // 延迟是为了等watch selectedRows
+        // Trì hoãn là để đợiwatch selectedRows
         setTimeout(() => {
           setSelectedRowKeys(value);
         }, 0);
@@ -148,7 +148,7 @@ export function useCustomSelection(
       deep: true
     }
   );
-  // 编辑时selectedRows可能会回填
+  // Khi chỉnh sửa, selectedRows có thể được điền lại
   watch(
     () => unref(propsRef)?.rowSelection?.selectedRows,
     (val: string[]) => {
@@ -165,7 +165,7 @@ export function useCustomSelection(
   /**
   * 2024-03-06
   * liaozhiyang
-  * 判断是否同一个数组 (引用地址，长度，元素位置信息相同才是同一个数组。数组元素只有字符串)
+  * Kiểm tra có phải cùng một mảng không (Chỉ khi địa chỉ tham chiếu, độ dài và thông tin vị trí phần tử giống nhau mới là cùng một mảng. Các phần tử của mảng chỉ là chuỗi)
   */
   function sameArray(a, b) {
     if (a === b) {
@@ -175,7 +175,7 @@ export function useCustomSelection(
         return false;
       }
     } else {
-      // 代码逻辑说明: 【QQYUN-9123】popupdict打开弹窗打开程序运行
+      // Giải thích logic mã: 【QQYUN-9123]popupdict mở popup, mở chương trình chạy
       if (isEqual(a, b)) {
         return true;
       }
@@ -183,23 +183,23 @@ export function useCustomSelection(
     }
   }
 
-  // 当任意一个变化时，触发同步检测
+  // Khi bất kỳ giá trị nào thay đổi, kích hoạt kiểm tra đồng bộ
   watch([selectedKeys, selectedRows], () => {
     nextTick(() => {
       syncSelectedRows();
     });
   });
 
-  // 监听滚动条事件
+  // Lắng nghe sự kiện thanh cuộn
   const onScrollTopChange = throttle((e) => (scrollTop.value = e?.target?.scrollTop), 150);
 
   let bodyResizeObserver: Nullable<ResizeObserver> = null;
-  // 获取首行行高
+  // Lấy chiều cao hàng đầu tiên
   watchEffect(() => {
-    // 这种写法是为了监听到 size 的变化
+    // Cách viết này là để lắng nghe sự thay đổi của size
     propsRef.value.size && void 0;
     if (bodyEl.value) {
-      // 监听div高度变化
+      // Lắng nghe thay đổi chiều cao của div
       bodyResizeObserver = new ResizeObserver((entries) => {
         for (let entry of entries) {
           if (entry.target === bodyEl.value && entry.contentRect) {
@@ -227,25 +227,25 @@ export function useCustomSelection(
     }
   });
 
-  // 更新首行行高
+  // Cập nhật chiều cao hàng đầu tiên
   function updateRowHeight() {
     const el = bodyEl.value?.querySelector('tbody.ant-table-tbody tr.ant-table-row') as HTMLDivElement;
     if (el) {
-      // 代码逻辑说明: 【issues/7442】basicTable从默认切换到宽松紧凑时多选框显示异常
+      // Giải thích logic mã: 【issues/7442]basicTable khi chuyển từ mặc định sang rộng rãi/thu gọn thì ô chọn nhiều hiển thị bất thường
       nextTick(() => rowHeight.value = el.offsetHeight);
     }
   }
 
-  // 选择全部
+  // Chọn tất cả
   function onSelectAll(checked: boolean, flag = 'currentPage') {
-    // 代码逻辑说明: 【issues/5577】BasicTable组件全选和取消全选时不触发onSelectAll事件
+    // Giải thích logic mã: 【issues/5577]Khi component BasicTable chọn tất cả và hủy chọn tất cả thì không kích hoạt sự kiện onSelectAll
     if (unref(propsRef)?.rowSelection?.onSelectAll) {
       allSelected = checked;
       changeRows = getInvertRows(selectedRows.value, checked, flag);
     }
-    // 取消全选
+    // Bỏ chọn tất cả
     if (!checked) {
-      // 代码逻辑说明: 【issues/6958】取消没触发onSelectAll事件，跨页选中后 changeRows 为空
+      // Giải thích logic mã: 【issues/6958]Hủy không kích hoạt sự kiện onSelectAll, sau khi chọn trên nhiều trang thì changeRows rỗng
       if (flag === 'allPage') {
         selectedKeys.value = [];
         selectedRows.value = [];
@@ -258,16 +258,16 @@ export function useCustomSelection(
       return;
     }
     let modal: Nullable<ReturnType<ModalFunc>> = null;
-    // 全选
+    // Chọn tất cả
     const checkAll = () => {
       if (modal != null) {
         modal.update({
-          content: '正在分批全选，请稍后……',
+          content: 'Đang chọn tất cả theo từng đợt, vui lòng chờ…',
           cancelButtonProps: { disabled: true },
         });
       }
       let showCount = 0;
-      // 最小选中数量
+      // Số lượng chọn tối thiểu
       let minSelect = 100;
       const hidden: Recordable[] = [];
       flattedData.value.forEach((item, index, array) => {
@@ -289,11 +289,11 @@ export function useCustomSelection(
       }
     };
 
-    // 当数据量大于120条时，全选会导致页面卡顿，需进行慢速全选
+    // Khi lượng dữ liệu lớn hơn 120 dòng, chọn tất cả sẽ khiến trang bị lag, cần thực hiện chọn tất cả chậm
     if (flattedData.value.length > 120) {
       modal = createConfirm({
-        title: '全选',
-        content: '当前数据量较大，全选可能会导致页面卡顿，确定要执行此操作吗？',
+        title: 'Chọn tất cả',
+        content: 'Lượng dữ liệu hiện tại khá lớn, chọn tất cả có thể khiến trang bị lag, bạn có chắc chắn muốn thực hiện thao tác này không?',
         iconType: 'warning',
         onOk: () => checkAll(),
       });
@@ -302,11 +302,11 @@ export function useCustomSelection(
     }
   }
 
-  // 分批全选
+  // Chọn tất cả theo lô
   function batchesSelectAll(hidden: Recordable[], checked: boolean, minSelect: number) {
     return new Promise<void>((resolve) => {
       (function call() {
-        // 每隔半秒钟，选择100条数据
+        // Cứ mỗi nửa giây, chọn 100 bản ghi dữ liệu
         setTimeout(() => {
           const list = hidden.splice(0, minSelect);
           if (list.length > 0) {
@@ -317,7 +317,7 @@ export function useCustomSelection(
           } else {
             setTimeout(() => {
               emitChange('all');
-              // 代码逻辑说明: 【QQYUN-5687】批量选择，提示成功后，又来一个提示
+              // Giải thích logic mã: 【QQYUN-5687] Chọn hàng loạt, sau khi nhắc thành công lại xuất hiện thêm một nhắc nhở
               setTimeout(() =>resolve(), 0);
             }, 500);
           }
@@ -326,12 +326,12 @@ export function useCustomSelection(
     });
   }
 
-  // 选中单个
+  // Chọn một mục
   function onSelect(record, checked) {
     onSelectChild(record, checked);
     updateSelected(record, checked);
     onSelectParent(record, checked);
-    // 代码逻辑说明: 【issues/8690】BasicTable的rowSelection新增onSelect方法
+    // Giải thích logic mã: 【issues/8690]rowSelection của BasicTable thêm mới phương thức onSelect
     propsRef.value.rowSelection?.onSelect?.(toRaw(record), checked, toRaw(selectedRows.value));
     emitChange();
   }
@@ -355,14 +355,14 @@ export function useCustomSelection(
         selectedRows.value.splice(index, 1);
       }
     }
-    // 代码逻辑说明: 【issues/7200】basicTable选中后没有选中样式
+    // Giải thích logic mã: 【issues/7200]basicTable sau khi chọn không có kiểu đã chọn
     clearTimeout(timer);
     timer = setTimeout(() => {
       selectedKeys.value = [...selectedKeys.value];
     }, 0);
   }
 
-  // 调用用户自定义的onChange事件
+  // Gọi sự kiện onChange do người dùng tự định nghĩa
   function emitChange(mode = 'single') {
     const { rowSelection } = unref(propsRef);
     if (rowSelection) {
@@ -377,7 +377,7 @@ export function useCustomSelection(
       keys: getSelectRowKeys(),
       rows: getSelectRows(),
     });
-    // 代码逻辑说明: 【issues/5577】BasicTable组件全选和取消全选时不触发onSelectAll事件
+    // Giải thích logic mã: 【issues/5577]Khi component BasicTable chọn tất cả và hủy chọn tất cả thì không kích hoạt sự kiện onSelectAll
     if (mode == 'all') {
       const rowSelection = unref(propsRef)?.rowSelection;
       if (rowSelection?.onSelectAll) {
@@ -386,7 +386,7 @@ export function useCustomSelection(
     }
   }
   /**
-   * 层级关联时，选中下级数据
+   * Khi liên kết theo cấp bậc, chọn dữ liệu cấp dưới
    * @param record
    * @param checked
    */
@@ -405,8 +405,8 @@ export function useCustomSelection(
   /**
    * 2024-09-24
    * liaozhiyang
-   * 层级关联时，选中上级数据
-   * 【issues/7217】BasicTable树形表格设置checkStrictly无效
+   * Khi liên kết theo cấp bậc, chọn dữ liệu cấp trên
+   * 【issues/7217]Đặt checkStrictly cho bảng cây của BasicTable không có hiệu lực
    * */
   function onSelectParent(record, checked) {
     if (unref(propsRef)?.isTreeTable && unref(propsRef)?.rowSelection?.checkStrictly === false && !isRadio.value) {
@@ -426,13 +426,13 @@ export function useCustomSelection(
             updateSelected(parentRecord, checked);
           }
           if (tableData.value.find((item) => getRecordKey(item) === getRecordKey(parentRecord))) {
-            // 循环终止
+            // Kết thúc vòng lặp
             condition = false;
           } else {
             currentRecord = parentRecord;
           }
         } else {
-          // 循环终止
+          // Kết thúc vòng lặp
           condition = false;
         }
       }
@@ -455,35 +455,35 @@ export function useCustomSelection(
       return parent;
     }
   }
-  // 用于判断是否是自定义选择列
+  // Dùng để kiểm tra có phải cột chọn tùy chỉnh hay không
   function isCustomSelection(column: BasicColumn) {
     return column.key === CUS_SEL_COLUMN_KEY;
   }
 
   /**
-   * 判断当前行是否可视，虚拟滚动用
-   * @param index 行下标
-   * @param threshold 前后阈值，默认可视区域前后显示3条
+   * Kiểm tra dòng hiện tại có hiển thị không, dùng cho cuộn ảo
+   * @param index Chỉ số hàng
+   * @param threshold Ngưỡng trước sau, mặc định hiển thị 3 dòng trước và sau vùng hiển thị
    */
   function recordIsShow(index: number, threshold = 3) {
-    // 只有数据量大于50条时，才会进行虚拟滚动
+    // Chỉ khi lượng dữ liệu lớn hơn 50 bản ghi mới thực hiện cuộn ảo
     const isVirtual = flattedData.value.length > 50;
     if (isVirtual) {
-      // 根据 scrollTop、bodyHeight、rowHeight 计算出当前行是否可视（阈值前后3条）
-      // flag1 = 判断当前行是否在可视区域上方3条
+      // Dựa vào scrollTop, bodyHeight, rowHeight để tính xem hàng hiện tại có hiển thị hay không (ngưỡng 3 hàng trước và sau)
+      // flag1 = Kiểm tra dòng hiện tại có nằm trên vùng hiển thị 3 dòng hay không
       const flag1 = scrollTop.value - rowHeight.value * threshold < index * rowHeight.value;
-      // flag2 = 判断当前行是否在可视区域下方3条
+      // flag2 = Kiểm tra dòng hiện tại có nằm dưới vùng hiển thị 3 dòng hay không
       const flag2 = index * rowHeight.value < scrollTop.value + bodyHeight.value + rowHeight.value * threshold;
-      // 全部条件满足时，才显示当前行
+      // Chỉ hiển thị dòng hiện tại khi tất cả điều kiện đều thỏa mãn
       return flag1 && flag2;
     }
     return true;
   }
 
-  // 自定义渲染Body
+  // Kết xuất tùy chỉnhBody
   function bodyCustomRender(params) {
     const { index } = params;
-    // 代码逻辑说明: 【issues/776】显示100条/页，复选框只能显示3个的问题
+    // Giải thích logic mã: 【issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái
     if (propsRef.value.canResize && !recordIsShow(index)) {
       return '';
     }
@@ -495,11 +495,11 @@ export function useCustomSelection(
   }
 
   /**
-   * 渲染checkbox组件
+   * Render component checkbox
    */
   function renderCheckboxComponent({ record }) {
     const recordKey = getRecordKey(record);
-    // 获取用户自定义checkboxProps
+    // Lấy tùy chỉnh của người dùngcheckboxProps
     const checkboxProps = ((getCheckboxProps) => {
       if (typeof getCheckboxProps === 'function') {
         try {
@@ -516,18 +516,18 @@ export function useCustomSelection(
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
-        // 代码逻辑说明: 【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
+        // Giải thích logic mã: 【QQYUN-8694] BasicTable đang được dùngclickToRowSelect=truedưới,selection-change Sự kiện sẽ kích hoạt nhiều lần
         onClick={(e) => e.stopPropagation()}
       />
     );
   }
 
   /**
-   * 渲染radio组件
+   * Render component radio
    */
   function renderRadioComponent({ record }) {
     const recordKey = getRecordKey(record);
-    // 获取用户自定义radioProps
+    // Lấy tùy chỉnh của người dùngradioProps
     const checkboxProps = (() => {
       const rowSelection = propsRef.value.rowSelection;
       if (rowSelection?.getCheckboxProps) {
@@ -541,23 +541,23 @@ export function useCustomSelection(
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
-        // 代码逻辑说明: 【QQYUN-8694】BasicTable在使用clickToRowSelect=true下，selection-change 事件在触发多次
+        // Giải thích logic mã: 【QQYUN-8694] BasicTable đang được dùngclickToRowSelect=truedưới,selection-change Sự kiện sẽ kích hoạt nhiều lần
         onClick={(e) => e.stopPropagation()}
       />
     );
   }
 
-  // 创建选择列
+  // Tạo cột chọn
   function handleCustomSelectColumn(columns: BasicColumn[]) {
-    // 代码逻辑说明: 【issues/757】JPopup表格的选择列固定配置不生效
+    // Giải thích logic mã: 【issues/757]Cấu hình cố định cột chọn của bảng JPopup không có hiệu lực
     const rowSelection = propsRef.value.rowSelection;
     if (!rowSelection) {
       return;
     }
     const isFixedLeft = rowSelection.fixed || columns.some((item) => item.fixed === 'left');
-    // 代码逻辑说明: 【issues/757】JPopup表格的选择列固定配置不生效
+    // Giải thích logic mã: 【issues/757]Cấu hình cố định cột chọn của bảng JPopup không có hiệu lực
     columns.unshift({
-      title: '选择列',
+      title: 'Chọn cột',
       flag: 'CHECKBOX',
       key: CUS_SEL_COLUMN_KEY,
       width: 50,
@@ -569,22 +569,22 @@ export function useCustomSelection(
     });
   }
 
-  // 清空所有选择
+  // Xóa tất cả lựa chọn
   function clearSelectedRowKeys() {
     onSelectAll(false, 'allPage');
   }
 
-  // 通过 selectedKeys 同步 selectedRows
+  // Đồng bộ qua selectedKeys selectedRows
   function syncSelectedRows() {
     if (selectedKeys.value.length !== selectedRows.value.length) {
-      // 延迟是为了等watch selectedRows
+      // Trì hoãn là để đợiwatch selectedRows
       setTimeout(() => {
         setSelectedRowKeys(selectedKeys.value);
       }, 0);
     }
   }
 
-  // 设置选择的key
+  // Đặt key đã chọnkey
   function setSelectedRowKeys(rowKeys: string[]) {
     const isSomeRowKeys = selectedKeys.value === rowKeys;
     selectedKeys.value = rowKeys;
@@ -600,7 +600,7 @@ export function useCustomSelection(
       const found = allSelectedRows.find((item) => getRecordKey(item) === key);
       found && trueSelectedRows.push(found);
     });
-    // 代码逻辑说明: 【issues/828】解决卡死问题
+    // Giải thích logic mã: 【issues/828] khắc phục sự cố treo
     if (!(isSomeRowKeys && equal(selectedRows.value, trueSelectedRows))) {
       selectedRows.value = trueSelectedRows;
       emitChange();
@@ -608,8 +608,8 @@ export function useCustomSelection(
   }
   /**
    *2023-11-03
-   *廖志阳
-   *检测selectedRows.value和trueSelectedRows是否相等，防止死循环
+   *Liêu Chí Dương
+   *Kiểm traselectedRows.valuevà trueSelectedRows có bằng nhau không, để tránh vòng lặp vô hạn
    */
   function equal(oldVal, newVal) {
     let oldKeys = [],
@@ -629,8 +629,8 @@ export function useCustomSelection(
   }
   /**
    *2024-08-08
-   *廖志阳
-   *根据全选或者反选(或者使用clearSelectedRowKeys()方法)返回源数据中这次需要变更的数据
+   *Liêu Chí Dương
+   *Theo chọn tất cả hoặc bỏ chọn ngược lại(hoặc sử dụngclearSelectedRowKeys()Phương thức)Trả về dữ liệu cần thay đổi lần này trong dữ liệu nguồn
    */
   function getInvertRows(selectedRows: any, checked: boolean, flag): any {
     if (flag == 'currentPage') {
@@ -673,14 +673,14 @@ export function useCustomSelection(
     }
   }
 
-  // 【QQYUN-5837】动态计算 expandIconColumnIndex
+  // 【QQYUN-5837] tính toán động expandIconColumnIndex
   const getExpandIconColumnIndex = computed(() => {
     const { expandIconColumnIndex } = unref(propsRef);
-    // 未设置选择列，则保持不变
+    // Nếu chưa đặt cột chọn thì giữ nguyên
     if (getRowSelectionRef.value == null) {
       return expandIconColumnIndex;
     }
-    // 设置了选择列，并且未传入 index 参数，则返回 1
+    // Đã đặt cột chọn, và chưa truyền tham số index thì trả về 1
     if (expandIconColumnIndex == null) {
       return 1;
     }

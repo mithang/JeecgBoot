@@ -1,7 +1,7 @@
 <template>
-  <a-button type="primary" v-if="hasExportAuth() && config.export" preIcon="ant-design:export-outlined" @click="onExportXls()"> 导出</a-button>
+  <a-button type="primary" v-if="hasExportAuth() && config.export" preIcon="ant-design:export-outlined" @click="onExportXls()"> Xuất</a-button>
   <a-upload name="file" :showUploadList="false" v-if="hasImportAuth() && config.import" :customRequest="(file) => onImportXls(file)">
-    <a-button type="primary" preIcon="ant-design:import-outlined">导入</a-button>
+    <a-button type="primary" preIcon="ant-design:import-outlined">Import</a-button>
   </a-upload>
 </template>
 
@@ -11,27 +11,27 @@
   import { useMethods } from '/@/hooks/system/useMethods';
   import { useMessage } from '/@/hooks/web/useMessage';
 
-  // 定义 excel 方法所需参数
+  // Định nghĩa tham số cần thiết cho phương thức excel
   interface ExcelConfig {
-    // 导出配置
+    // Cấu hình xuất
     exportConfig: {
       url: string;
-      // 导出文件名
+      // Tên tệp xuất
       name?: string | (() => string);
-      //按钮权限
+      //Quyền hạn nút
       auth?: string | string[];
     };
-    // 导入配置
+    // Cấu hình import
     importConfig: {
       url: string;
-      // 导出成功后的回调
+      // Callback sau khi xuất thành công
       success?: (fileInfo?: any) => void;
-      //按钮权限
+      //Quyền hạn nút
       auth?: string | string[];
     };
   }
   /**
-   * 定义组件参数
+   * Định nghĩa tham số component
    */
   const props = defineProps({
     config: {
@@ -39,42 +39,42 @@
       default: null,
     },
   });
-  //按钮权限问题
+  //Vấn đề quyền nút
   const { hasPermission } = usePermission();
-  //导入导出方法
+  //Phương thức nhập/xuất
   const { handleExportXls, handleImportXls } = useMethods();
 
   const $message = useMessage();
-  // 导出 excel
+  // Xuất excel
   function onExportXls() {
     let { url, name } = props.config?.export ?? {};
     if (url) {
       let title = typeof name === 'function' ? name() : name;
       return handleExportXls(title as string, url);
     } else {
-      $message.createMessage.warn('没有传递 export.url 参数');
+      $message.createMessage.warn('Chưa truyền export.url Tham số');
       return Promise.reject();
     }
   }
 
-  // 导入 excel
+  // Import excel
   function onImportXls(file) {
     let { url, success } = props.config?.import ?? {};
     if (url) {
       return handleImportXls(file, url, success);
     } else {
-      $message.createMessage.warn('没有传递 import.url 参数');
+      $message.createMessage.warn('Chưa truyền import.url Tham số');
       return Promise.reject();
     }
   }
 
-  // 导入按钮权限
+  // Quyền nút nhập
   function hasImportAuth() {
     let auth = props.config?.import?.auth;
     return auth && auth.length > 0 ? hasPermission(auth) : true;
   }
 
-  // 导出按钮权限
+  // Quyền nút xuất
   function hasExportAuth() {
     let auth = props.config?.export?.auth;
     return auth && auth.length > 0 ? hasPermission(auth) : true;

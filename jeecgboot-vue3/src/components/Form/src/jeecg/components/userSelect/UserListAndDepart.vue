@@ -134,7 +134,7 @@
       const containerStyle = computed(() => {
         return {
           'overflow-y': 'auto',
-          // 代码逻辑说明: JHHB-911 【用户选择】用户选择组件 有滚动条时 不好用 没有显示简称
+          // Giải thích logic mã: JHHB-911 [Chọn người dùng] Component chọn người dùng khi có thanh cuộn thì dùng không tốt, không hiển thị tên viết tắt
           'max-height': (maxHeight.value>=300?maxHeight.value:300) + 'px',
         };
       });
@@ -152,7 +152,7 @@
         if (selectedDepartId.value) {
           params['departId'] = selectedDepartId.value;
         }
-        // 代码逻辑说明: 【QQYUN-8239】用户角色，添加用户 返回2页数据，实际只显示一页---
+        // Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
         if(props.excludeUserIdList && props.excludeUserIdList.length>0){
           params['excludeUserIdList'] = props.excludeUserIdList.join(",");
         }
@@ -178,7 +178,7 @@
       function unSelectUser(id) {
         emit('unSelect', id);
       }
-      // 递归将 departNameAbbr 赋给 title，并递归处理 children
+      // Đệ quy gán departNameAbbr cho title, đồng thời xử lý đệ quy children
       function fillTitles(nodes: any[] = []) {
         for (const node of nodes) {
           if (!node) continue;

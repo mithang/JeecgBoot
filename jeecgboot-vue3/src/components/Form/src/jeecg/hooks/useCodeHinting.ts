@@ -15,7 +15,7 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
   };
 
   const codeHintingRegistry = () => {
-    // 自定义关键词(.的上一级)
+    // Từ khóa tùy chỉnh(.cấp trên)
     const customKeywords: string[] = [];
 
     currentKeywords.forEach((item) => {
@@ -24,19 +24,19 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
       }
     });
     const funcsHint = (cm, callback) => {
-      // 获取光标位置
+      // Lấy vị trí con trỏ
       const cur = cm.getCursor();
-      // 获取当前单词的信息
+      // Lấy thông tin của từ hiện tại
       const token = cm.getTokenAt(cur);
       const start = token.start;
       const end = cur.ch;
       const str = token.string;
       let recordKeyword = null;
-      console.log('光标位置：', cur, '单词信息：', token, `start:${start},end:${end},str:${str}`);
+      console.log('Vị trí con trỏ:', cur, 'Thông tin từ:', token, `start:${start},end:${end},str:${str}`);
 
       if (str.length) {
         if (str === '.') {
-          // 查找.前面是否有定义的关键词
+          // Tìm.Phía trước có từ khóa đã định nghĩa không
           const curLineCode = cm.getLine(cur.line);
           for (let i = 0, len = customKeywords.length; i < len; i++) {
             const k = curLineCode.slice(-(customKeywords[i].length + 1), -1);
@@ -46,7 +46,7 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
             }
           }
         } else {
-          // 查找单词前面是否有.this(.关键词)
+          // Tìm xem phía trước từ có.this(.Từ khóa)
           const curLineCode = cm.getLine(cur.line);
           for (let i = 0, len = customKeywords.length; i < len; i++) {
             const k = curLineCode.slice(start - (customKeywords[i].length + 1), start);
@@ -59,10 +59,10 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
         const findIdx = (a, b) => a.toLowerCase().indexOf(b.toLowerCase());
         let list = currentKeywords.filter((item) => {
           if (recordKeyword) {
-            // 查特定对象下的属性or方法
+            // Tra thuộc tính hoặc phương thức của đối tượng cụ thể
             return item.superiors === recordKeyword;
           } else {
-            // 查全局属性或者方法
+            // Tra cứu thuộc tính hoặc phương thức toàn cục
             return item.superiors == undefined;
           }
         });
@@ -88,14 +88,14 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
         }
 
         if (list.length === 1) {
-          // 只有一个时可能是自己输入，输到最后需要去掉提示。
+          // Khi chỉ còn một cái thì có thể là tự nhập, nhập đến cuối cần bỏ gợi ý.
           const item = list[0];
           if (item.text === str || item.text.substring(1) === str) {
             list = [];
           }
         }
         if (list.length) {
-          // 当str不是点时去掉点
+          // Khi str không phải là dấu chấm thì bỏ dấu chấm
           if (str != '.') {
             list = list.map((item) => {
               if (item.text.indexOf('.') === 0) {
@@ -109,7 +109,7 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
             from: CodeMirror.Pos(cur.line, start),
             to: CodeMirror.Pos(cur.line, end),
           });
-          // 代码逻辑说明: 【QQYUN-8865】js增强加上鼠标移入提示
+          // Giải thích logic mã: 【QQYUN-8865] js tăng cường thêm nhắc nhở khi di chuột vào
           const item = currentKeywords[0];
           if (item?.desc) {
             setTimeout(() => {
@@ -132,7 +132,7 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
     };
     funcsHint.async = true;
     funcsHint.supportsSelection = true;
-    // 自动补全
+    // Tự động hoàn thành
     keywords.length && CodeMirror.registerHelper('hint', language, funcsHint);
   };
   return {

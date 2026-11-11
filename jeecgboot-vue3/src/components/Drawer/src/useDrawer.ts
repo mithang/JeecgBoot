@@ -63,7 +63,7 @@ export function useDrawer(): UseDrawerReturnType {
     }),
 
     openDrawer: <T = any>(visible = true, data?: T, openOnSet = true): void => {
-      // 代码逻辑说明: 【QQYUN-6366】升级到antd4.x
+      // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
       getInstance()?.setDrawerProps({
         open: visible,
       });
@@ -80,7 +80,7 @@ export function useDrawer(): UseDrawerReturnType {
       }
     },
     closeDrawer: () => {
-      // 代码逻辑说明: 【QQYUN-6366】升级到antd4.x
+      // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
       getInstance()?.setDrawerProps({ open: false });
     },
   };

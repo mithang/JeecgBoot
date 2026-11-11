@@ -19,10 +19,10 @@
           <a-col :md="6" :sm="8">
             <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-col :lg="6">
-                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">查询</a-button>
-                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">重置</a-button>
+                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">Truy vấn</a-button>
+                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">Đặt lại</a-button>
                 <a @click="handleToggleSearch" style="margin-left: 8px">
-                  {{ toggleSearchStatus ? '收起' : '展开' }}
+                  {{ toggleSearchStatus ? 'Thu gọn' : 'Mở rộng' }}
                   <Icon :icon="toggleSearchStatus ? 'ant-design:up-outlined' : 'ant-design:down-outlined'" />
                 </a>
               </a-col>
@@ -46,17 +46,17 @@
       @change="handleChangeInTable"
     >
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
+        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất</a-button>
       </template>
       <template #bodyCell="{ text, column }">
         <template v-if="column.fieldType === 'Image'">
-          <span v-if="!text" style="font-size: 12px; font-style: italic">无图片</span>
-          <img v-else :src="getImgView(text)" alt="图片不存在" class="cellIamge" @click="viewOnlineCellImage($event, text)" />
+          <span v-if="!text" style="font-size: 12px; font-style: italic">Không có hình ảnh</span>
+          <img v-else :src="getImgView(text)" alt="Hình ảnh không tồn tại" class="cellIamge" @click="viewOnlineCellImage($event, text)" />
         </template>
       </template>
     </BasicTable>
 
-    <!-- 跳转Href的动态组件方式 -->
+    <!-- Cách dùng component động để chuyển Href -->
     <a-modal v-bind="hrefComponent.model" v-on="hrefComponent.on">
       <component :is="hrefComponent.is" v-bind="hrefComponent.params" />
     </a-modal>
@@ -137,7 +137,7 @@
 
       const showSearchFlag = computed(() => unref(queryInfo) && unref(queryInfo).length > 0);
       /**
-       *监听code
+       *Lắng nghecode
        */
       watch(
         () => props.code,
@@ -147,7 +147,7 @@
         { immediate: true }
       );
       /**
-       *监听popup动态参数 支持系统变量语法
+       *Lắng nghe tham số động của popup, hỗ trợ cú pháp biến hệ thống
        */
       watch(
         () => props.param,
@@ -159,14 +159,14 @@
         }
       );
       /**
-       *监听sorter排序字段
+       *Lắng nghe trường sắp xếp sorter
        */
       watchEffect(() => {
         if (props.sorter) {
           let arr = props.sorter.split('=');
           if (arr.length === 2 && ['asc', 'desc'].includes(arr[1].toLowerCase())) {
             iSorter.value = { column: arr[0], order: arr[1].toLowerCase() };
-            // 排序字段受控
+            // Trường sắp xếp được kiểm soát
             unref(columns).forEach((col) => {
               if (col.dataIndex === unref(iSorter).column) {
                 col['sortOrder'] = unref(iSorter).order === 'asc' ? 'ascend' : 'descend';
@@ -175,7 +175,7 @@
               }
             });
           } else {
-            console.warn('【JPopup】sorter参数不合法');
+            console.warn('[JPopup] Tham số sorter không hợp lệ');
           }
         }
       });
@@ -185,21 +185,21 @@
       }
 
       /**
-       * 导出excel
+       * Xuấtexcel
        */
       function onExportXls() {
         handleExport!();
       }
 
       /**
-       * 查询
+       * Truy vấn
        */
       function searchQuery() {
         loadData(1);
       }
 
       /**
-       * 重置
+       * Đặt lại
        */
       function searchReset() {
         queryParam.value = {};
@@ -209,8 +209,8 @@
       /**
        * 2024-07-24
        * liaozhiyang
-       * 【TV360X-1756】报表添加图片类型
-       * 图片
+       * 【TV360X-1756] báo cáo thêm loại hình ảnh
+       * Hình ảnh
        * @param text
        */
       function getImgView(text) {
@@ -222,8 +222,8 @@
       /**
        * 2024-07-24
        * liaozhiyang
-       * 【TV360X-1756】报表添加图片类型
-       * 预览列表 cell 图片
+       * 【TV360X-1756] báo cáo thêm loại hình ảnh
+       * Xem trước hình ảnh cell trong danh sách
        * @param text
        */
       function viewOnlineCellImage(e, text) {

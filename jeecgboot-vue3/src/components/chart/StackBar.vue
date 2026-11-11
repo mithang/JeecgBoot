@@ -68,7 +68,7 @@
         props.chartData && initCharts();
       });
       /**
-       * 监听拖拽大小变化
+       * Lắng nghe thay đổi kích thước kéo thả
        */
       watch(
         () => props.size,
@@ -84,15 +84,15 @@
         if (props.option) {
           Object.assign(option, cloneDeep(props.option));
         }
-        //图例类型
+        //Loại chú giải
         let typeArr = Array.from(new Set(props.chartData.map((item) => item.type)));
-        //轴数据
+        //Dữ liệu trục
         let yAxisData = Array.from(new Set(props.chartData.map((item) => item.name)));
         let seriesData = [];
         typeArr.forEach((type) => {
           let obj = { name: type, type: props.type, stack: 'total' };
           let chartArr = props.chartData.filter((item) => type === item.type);
-          //data数据
+          //dataDữ liệu
           obj['data'] = chartArr.map((item) => item.value);
           seriesData.push(obj);
         });

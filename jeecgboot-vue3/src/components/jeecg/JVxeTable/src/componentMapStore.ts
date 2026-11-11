@@ -1,7 +1,7 @@
 import type { JVxeVueComponent } from './types';
 import { JVxeTypes } from './types/JVxeTypes';
 
-/** 仅存 componentMap 与 clearComponent，供 qiankun unmount 等场景使用，不引用任何 Cell 组件 */
+/** Chỉ lưu componentMap và clearComponent, dùng cho các tình huống qiankun unmount, không tham chiếu bất kỳ component Cell nào */
 let componentMap = new Map<JVxeTypes | string, JVxeVueComponent>();
 const JVxeComponents = 'JVxeComponents__';
 if (import.meta.env.DEV && componentMap.size === 0 && window[JVxeComponents] && window[JVxeComponents].size > 0) {
@@ -11,10 +11,10 @@ if (import.meta.env.DEV && componentMap.size === 0 && window[JVxeComponents] && 
 export { componentMap };
 
 /**
- * 清空注册的组件（乾坤子应用 unmount 时调用，仅引用本文件避免加载所有 Cell）
+ * Xóa các component đã đăng ký (gọi khi ứng dụng con Qiankun unmount, chỉ tham chiếu file này để tránh tải tất cả Cell)
  */
 export function clearComponent() {
   componentMap.clear();
-  // 代码逻辑说明: 【issues/860】生成的一对多代码，热更新之后点击新增卡死[暂时先解决]
+  // Giải thích logic mã: 【issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
   import.meta.env.DEV && (window[JVxeComponents] = componentMap);
 }

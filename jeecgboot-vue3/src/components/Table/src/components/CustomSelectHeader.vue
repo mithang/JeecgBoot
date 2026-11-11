@@ -1,7 +1,7 @@
-<!-- 自定义选择列，表头实现部分 -->
+<!-- Cột chọn tùy chỉnh, phần triển khai tiêu đề bảng -->
 <template>
   <template v-if="isRadio">
-    <!-- radio不存在全选，所以放个空标签 -->
+    <!-- radioKhông có chọn tất cả nên đặt một thẻ trống -->
     <span></span>
   </template>
   <template v-else>
@@ -23,7 +23,7 @@
       type: Number,
       required: true,
     },
-    // 当前页条目数
+    // Số mục trang hiện tại
     pageSize: {
       type: Number,
       required: true,
@@ -32,7 +32,7 @@
       type: Boolean,
       default: false,
     },
-    // 代码逻辑说明: 【QQYUN-6774】解决checkbox禁用后全选仍能勾选问题
+    // Giải thích logic mã: 【QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
     disabled: {
       type: Boolean,
       required: true,
@@ -40,7 +40,7 @@
   });
   const emit = defineEmits(['select-all']);
 
-  // 是否全选
+  // Có chọn tất cả hay không
   const checked = computed(() => {
     if (props.isRadio) {
       return false;
@@ -48,7 +48,7 @@
     return props.selectedLength > 0 && props.selectedLength >= props.pageSize;
   });
 
-  // 是否半选
+  // Có chọn một nửa hay không
   const isHalf = computed(() => {
     if (props.isRadio) {
       return false;

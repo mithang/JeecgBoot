@@ -13,9 +13,9 @@
     dayjs.extend(isoWeek);
     dayjs.extend(quarterOfYear);
 
-    const placeholder = ['开始日期', '结束日期']
+    const placeholder = ['Ngày bắt đầu', 'Ngày kết thúc']
     /**
-     * 用于范围查询
+     * Dùng cho truy vấn theo phạm vi
      */
     export default defineComponent({
         name: "JRangeDate",
@@ -54,10 +54,10 @@
             function handleChange(arr){
                 let str = ''
                 if(arr && arr.length>0){
-                  // 代码逻辑说明: [issues/6368] rangeDate去掉判断允许起始项或结束项为空兼容allowEmpty
-                  // update-begin--author:wangshuai---date:20260819---for：【LHZP-322】【表单设计器】支持周、季度
+                  // Giải thích logic mã: [issues/6368] rangeDateBỏ kiểm tra cho phép mục bắt đầu hoặc mục kết thúc trống để tương thíchallowEmpty
+                  // update-begin--author:wangshuai---date:20260819---for：【LHZP-322][Trình thiết kế biểu mẫu] Hỗ trợ tuần, quý
                   str = arr.map(normalizePickerValue).join(',')
-                  // update-end--author:wangshuai---date:20260819---for：【LHZP-322】【表单设计器】支持周、季度
+                  // update-end--author:wangshuai---date:20260819---for：【LHZP-322][Trình thiết kế biểu mẫu] Hỗ trợ tuần, quý
                 }
                 emit('change', str);
                 emit('update:value', str);
@@ -65,7 +65,7 @@
             }
 
           /**
-           * 返回季度 周 格式化之后的代码
+           * Mã sau khi định dạng trả về của quý, tuần
            * @param value
            * @returns {*|string}
            */

@@ -1,14 +1,14 @@
 <template>
   <a-input-group>
-    <a-input-number v-bind="attrs" :value="beginValue" style="width: calc(50% - 15px)" placeholder="最小值" @change="handleChangeBegin" />
+    <a-input-number v-bind="attrs" :value="beginValue" style="width: calc(50% - 15px)" placeholder="Giá trị nhỏ nhất" @change="handleChangeBegin" />
     <a-input style="width: 30px; border-left: 0; pointer-events: none; background-color: #fff" placeholder="~" disabled />
-    <a-input-number v-bind="attrs" :value="endValue" style="width: calc(50% - 15px); border-left: 0" placeholder="最大值" @change="handleChangeEnd" />
+    <a-input-number v-bind="attrs" :value="endValue" style="width: calc(50% - 15px); border-left: 0" placeholder="Giá trị lớn nhất" @change="handleChangeEnd" />
   </a-input-group>
 </template>
 
 <script>
   /**
-   * 查询条件用-数值范围查询
+   * Dùng cho điều kiện truy vấn-Truy vấn khoảng số
    */
   import { ref, watch } from 'vue';
   import { Form } from 'ant-design-vue';
@@ -39,7 +39,7 @@
 
       function emitArray() {
         let arr = [];
-        // 代码逻辑说明: 【TV360X-1749】数量0输入不了，输入清空了
+        // Giải thích logic mã: 【TV360X-1749] Số lượng 0 không nhập được, nhập vào thì bị xóa
         let begin = beginValue.value ?? '';
         let end = endValue.value ?? '';
         arr.push(begin);
@@ -78,7 +78,7 @@
 </script>
 
 <style lang="less" scoped>
-  // 代码逻辑说明: 【TV360X-214】范围查询控件没有根据配置格式化
+  // Giải thích logic mã: 【TV360X-214] Control truy vấn theo khoảng không định dạng theo cấu hình
   .ant-input-group {
     display: flex;
     .ant-input-number {

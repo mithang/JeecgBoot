@@ -57,7 +57,7 @@
         props.chartData && initCharts();
       });
       /**
-       * 监听拖拽大小变化
+       * Lắng nghe thay đổi kích thước kéo thả
        */
       watch(
         () => props.size,

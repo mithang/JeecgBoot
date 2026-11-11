@@ -23,13 +23,13 @@
   const props = defineProps({
     // v-model:value
     value: propTypes.oneOfType([propTypes.string, propTypes.number]),
-    // 取值 options
+    // Lấy giá trị options
     options: propTypes.array.def(() => ['Y', 'N']),
-    // 文本 options
-    labelOptions: propTypes.array.def(() => ['是', '否']),
-    // 是否使用下拉
+    // Văn bản options
+    labelOptions: propTypes.array.def(() => ['Có', 'Không']),
+    // Có sử dụng danh sách thả xuống không
     query: propTypes.bool.def(false),
-    // 是否禁用
+    // Có vô hiệu hóa hay không
     disabled: propTypes.bool.def(false),
   });
   const attrs = useAttrs();
@@ -41,7 +41,7 @@
     () => props.value,
     (val) => {
       if (!props.query) {
-        // 代码逻辑说明: 【QQYUN-7473】options使用[0,1]，导致开关无法切换
+        // Giải thích logic mã: 【QQYUN-7473] sử dụng options[0,1], khiến công tắc không thể chuyển đổi
         if (!val && !props.options.includes(val)) {
           checked.value = false;
           emitValue(props.options[1]);

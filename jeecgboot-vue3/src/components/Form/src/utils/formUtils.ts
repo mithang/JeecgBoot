@@ -2,21 +2,21 @@ import { unref } from 'vue';
 import { dateUtil } from '/@/utils/dateUtil';
 
 /**
- * 表单区间时间数值字段转换
+ * Chuyển đổi trường giá trị số thời gian theo khoảng của biểu mẫu
  * @param props
  * @param values
  */
 export function handleRangeValue(props, values) {
-  //判断是否配置并处理fieldMapToTime
+  //Kiểm tra đã cấu hình và xử lý chưafieldMapToTime
   const fieldMapToTime = unref(props)?.fieldMapToTime;
   fieldMapToTime && (values = handleRangeTimeValue(props, values));
-  //判断是否配置并处理fieldMapToNumber
+  //Kiểm tra đã cấu hình và xử lý chưafieldMapToNumber
   const fieldMapToNumber = unref(props)?.fieldMapToNumber;
   fieldMapToNumber && (values = handleRangeNumberValue(props, values));
   return values;
 }
 /**
- * 处理时间转换成2个字段
+ * Xử lý chuyển thời gian thành 2 trường
  * @param props
  * @param values
  */
@@ -30,13 +30,13 @@ export function handleRangeTimeValue(props, values) {
       continue;
     }
 
-    // 【issues/I53G9Y】 日期区间组件有可能是字符串
+    // 【issues/I53G9Y] Component khoảng ngày có thể là chuỗi
     let timeValue = values[field];
     if (!Array.isArray(timeValue)) {
       timeValue = timeValue.split(',');
     }
     const [startTime, endTime]: string[] = timeValue;
-    // 代码逻辑说明: 【issues/7216】当RangePicker组件值允许开始/结束为空时,表单的fieldMapToTime处理异常---
+    // Giải thích logic mã: 【issues/7216]Khi giá trị của component RangePicker cho phép bắt đầu/Khi kết thúc để trống,Xử lý bất thường của fieldMapToTime trong biểu mẫu---
     startTime && (values[startTimeKey] = dateUtil(startTime).format(format));
     endTime && (values[endTimeKey] = dateUtil(endTime).format(format));
     Reflect.deleteProperty(values, field);
@@ -44,7 +44,7 @@ export function handleRangeTimeValue(props, values) {
   return values;
 }
 /**
- * 处理数字转换成2个字段
+ * Xử lý chuyển số thành 2 trường
  * @param props
  * @param values
  * @updateby liusq
@@ -59,7 +59,7 @@ export function handleRangeNumberValue(props, values) {
     if (!field || !startNumberKey || !endNumberKey || !values[field]) {
       continue;
     }
-    // 代码逻辑说明: 用于数值的范围查询 数组格式的中间转换不知道哪里出了问题，这里会变成字符串，需要再强制转成数组
+    // Giải thích logic mã: Dùng cho truy vấn theo khoảng giá trị, không biết khâu chuyển đổi trung gian của định dạng mảng đã xảy ra vấn đề ở đâu, tại đây sẽ biến thành chuỗi, cần ép chuyển lại thành mảng
     let temp = values[field];
     if (typeof temp === 'string') {
       temp = temp.split(',');

@@ -1,6 +1,6 @@
-<!--边距页面-->
+<!--Trang lề-->
 <template>
-  <BasicDrawer @register="registerBaseDrawer" title="设置边距" width="600" showFooter @ok="handleOk">
+  <BasicDrawer @register="registerBaseDrawer" title="Thiết lập lề" width="600" showFooter @ok="handleOk">
     <BasicForm @register="registerForm" />
   </BasicDrawer>
 </template>
@@ -13,40 +13,40 @@
   
   const schemas: FormSchema[] = [
     {
-      label:'上边距',
+      label:'Lề trên',
       field: 'marginTop',
       component: 'InputNumber',
       componentProps: {
         min: 0,
       },
-      rules: [{ required: true, message: '请填写上边距' }],
+      rules: [{ required: true, message: 'Vui lòng nhập lề trên' }],
     },
     {
-      label:'下边距',
+      label:'Lề dưới',
       field: 'marginBottom',
       component: 'InputNumber',
       componentProps: {
         min: 0,
       },
-      rules: [{ required: true, message: '请填写下边距' }],
+      rules: [{ required: true, message: 'Vui lòng nhập lề dưới' }],
     },
     {
-      label:'左边距',
+      label:'Lề trái',
       field: 'marginLeft',
       component: 'InputNumber',
       componentProps: {
         min: 0,
       },
-      rules: [{ required: true, message: '请填写左边距' }],
+      rules: [{ required: true, message: 'Vui lòng nhập lề trái' }],
     },
     {
-      label:'右边距',
+      label:'Lề phải',
       field: 'marginRight',
       component: 'InputNumber',
       componentProps: {
         min: 0,
       },
-      rules: [{ required: true, message: '请填写右边距' }],
+      rules: [{ required: true, message: 'Vui lòng nhập lề phải' }],
     },
   ];
 
@@ -57,7 +57,7 @@
     labelCol: { span: 24 },
   });
 
-  //注册Drawer
+  //Đăng kýDrawer
   const [registerBaseDrawer, { closeDrawer }] = useDrawerInner((data) => {
     resetFields();
     setFieldsValue({
@@ -66,7 +66,7 @@
   });
 
   /**
-   * 确定事件
+   * Sự kiện xác nhận
    */
   async function handleOk() {
     let values = await validate();

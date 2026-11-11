@@ -21,7 +21,7 @@ export default defineComponent({
       type: Array as PropType<Recordable[]>,
     },
     rowKey: propTypes.string.def('key'),
-    // 是否有展开列
+    // Có cột mở rộng không
     hasExpandedRow: propTypes.bool,
     data: {
       type: Object as PropType<Recordable>,
@@ -60,9 +60,9 @@ export default defineComponent({
       const hasRowSummary = dataSource.some((item) => Reflect.has(item, SUMMARY_ROW_KEY));
       const hasIndexSummary = dataSource.some((item) => Reflect.has(item, SUMMARY_INDEX_KEY));
 
-      // 是否有序号列
+      // Có cột số thứ tự không
       let hasIndexCol = false;
-      // 是否有选择列
+      // Có cột chọn không
       const hasSelection = table.getRowSelection() && hasRowSummary;
 
       if (index !== -1) {

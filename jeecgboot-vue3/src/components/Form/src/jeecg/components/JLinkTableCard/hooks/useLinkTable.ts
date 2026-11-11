@@ -13,14 +13,14 @@ function queryTableColumns(tableName, params) {
   const url = '/online/cgform/api/getColumns/' + tableName;
   return defHttp.get({ url, params });
 }
-//表格列信息
+//Thông tin cột bảng
 const tableColumns = ref<any[]>([]);
-// 选项
+// Tùy chọn
 const selectOptions = ref<any[]>([]);
-//字典项
+//Mục từ điển
 const dictOptions = ref<any>({});
 /**
- * table 模式：调用 /sys/dict/queryTableDataForLinkRecord 接口（一次请求获取多字段数据）
+ * table Chế độ: Gọi /sys/dict/queryTableDataForLinkRecord API (lấy dữ liệu nhiều trường trong một lần yêu cầu)
  */
 function queryAllTableData(params: {
   tableName: string;
@@ -37,7 +37,7 @@ function queryAllTableData(params: {
 }
 
 /**
- * table 模式：获取需要查询的所有展示字段（textFields + imageField，去重）
+ * table Chế độ: lấy tất cả các trường hiển thị cần truy vấn (textFields + imageField, loại bỏ trùng lặp)
  */
 function getAllTableShowFields(props): string {
   const textFields = (props.textField || '').split(',').filter(Boolean);
@@ -48,21 +48,21 @@ function getAllTableShowFields(props): string {
 }
 
 export function useLinkTable(props) {
-  //TODO 目前只支持查询第一页的数据，可以输入关键字搜索
+  //TODO Hiện tại chỉ hỗ trợ truy vấn dữ liệu của trang đầu tiên, có thể nhập từ khóa để tìm kiếm
   const pageNo = ref('1');
-  // 查询列
+  // Cột tìm kiếm
   const baseParam = ref<any>({});
-  // 搜素条件
+  // Điều kiện tìm kiếm
   const searchParam = ref<any>({});
-  // 第一个文本列
+  // Cột văn bản đầu tiên
   const mainContentField = ref('');
-  //权限数据
+  //Dữ liệu quyền hạn
   const auths = reactive({
     add: true,
     update: true,
   });
 
-  //显示列
+  //Cột hiển thị
   const textFieldArray = computed(() => {
     if (props.textField) {
       return props.textField.split(',');
@@ -70,7 +70,7 @@ export function useLinkTable(props) {
     return [];
   });
   const otherColumns = ref<any[]>([]);
-  // 展示的列 配置的很多列，但是只展示三行
+  // Các cột hiển thị: đã cấu hình nhiều cột, nhưng chỉ hiển thị ba dòng
   const realShowColumns = computed(() => {
     const columns = otherColumns.value;
     if (props.multi == true) {
@@ -84,12 +84,12 @@ export function useLinkTable(props) {
     const table = props.tableName;
     if (table) {
       if (props.queryMode === 'table') {
-        // table 模式：跳过 Online 接口，根据 textField/imageField 配置初始化展示列
+        // table Chế độ: bỏ qua API Online, theo textField/imageField Cấu hình cột hiển thị khởi tạo
         const textFields = (props.textField || '').split(',').filter(Boolean);
         mainContentField.value = textFields[0] || '';
-        // otherColumns：textField 中第一个之后的字段，用于卡片副内容展示
+        // otherColumns: các trường sau trường đầu tiên trong textField, dùng để hiển thị nội dung phụ của thẻ
         otherColumns.value = textFields.slice(1).map((f) => ({ title: f, dataIndex: f }));
-        // tableColumns 记录所有字段（transData 中使用，allTable 模式下实为 no-op）
+        // tableColumns Ghi lại tất cả các trường (dùng trong transData, ở chế độ allTable thực chất là no-op）
         tableColumns.value = textFields.map((f) => ({ title: f, dataIndex: f }));
         dictOptions.value = {};
         return;
@@ -150,8 +150,8 @@ export function useLinkTable(props) {
       otherColumns.value = arr;
     }
     dictOptions.value = data.dictOptions;
-    // 权限数据
-    console.log('隐藏的按钮', data.hideColumns);
+    // Dữ liệu quyền hạn
+    console.log('Nút đã ẩn', data.hideColumns);
     if (data.hideColumns) {
       const hideCols = data.hideColumns;
       if (hideCols.indexOf('add') >= 0) {
@@ -186,14 +186,14 @@ export function useLinkTable(props) {
         dataList.push(result);
       }
     }
-    //添加一个空对象 为add操作占位
-    // 代码逻辑说明: 【TV360X-1095】高级查询关联记录去掉编辑按钮及去掉记录按钮
+    //Thêm một đối tượng trống làm chỗ cho thao tác add
+    // Giải thích logic mã: 【TV360X-1095] Truy vấn nâng cao, bản ghi liên kết bỏ nút chỉnh sửa và bỏ nút bản ghi
     props.editBtnShow && dataList.push({});
     selectOptions.value = dataList;
   }
 
   /**
-   * 数据简单翻译-字典
+   * Dịch dữ liệu đơn giản-Từ điển
    * @param data
    */
   function transData(data) {
@@ -203,14 +203,14 @@ export function useLinkTable(props) {
       const { dataIndex, customRender } = c;
       if (data[dataIndex] || data[dataIndex] === 0) {
         if (customRender && customRender == dataIndex) {
-          //这样的就是 字典数据了 可以直接翻译
+          //Như vậy là dữ liệu từ điển, có thể dịch trực tiếp
           if (dictInfo[customRender]) {
             data[dataIndex] = filterMultiDictText(dictInfo[customRender], data[dataIndex]);
             continue;
           }
         }
       }
-      // 兼容后台翻译字段
+      // Tương thích trường dịch của backend
       const dictText = data[dataIndex + '_dictText'];
       if (dictText) {
         data[dataIndex] = dictText;
@@ -218,13 +218,13 @@ export function useLinkTable(props) {
     }
   }
 
-  //获取加载数据的查询条件
+  //Lấy điều kiện truy vấn để tải dữ liệu
   function getLoadDataParams() {
     const params = Object.assign({ pageSize: 100, pageNo: pageNo.value }, baseParam.value, searchParam.value);
     return params;
   }
 
-  //设置查询条件
+  //Đặt điều kiện truy vấn
   function addQueryParams(text) {
     if (!text) {
       searchParam.value = {};
@@ -252,7 +252,7 @@ export function useLinkTable(props) {
       return [];
     }
 
-    // table 模式：调用新接口，按 keyValues 反查所有字段，一次返回完整记录
+    // table Chế độ: gọi API mới, tra ngược tất cả các trường theo keyValues, trả về bản ghi đầy đủ trong một lần
     if (props.queryMode === 'table') {
       const showFields = getAllTableShowFields(props);
       if (!showFields) return [];
@@ -267,14 +267,14 @@ export function useLinkTable(props) {
         });
         const records: any[] = data?.records || [];
         if (records.length > 0) return records;
-        // 接口无数据时用原始 value 兜底展示
+        // Khi API không có dữ liệu thì dùng value gốc để hiển thị dự phòng
         const firstTextField = (props.textField || '').split(',').filter(Boolean)[0] || props.valueField;
         return value
           .split(',')
           .filter(Boolean)
           .map((v: string) => ({ id: v, [props.valueField]: v, [firstTextField]: v }));
       } catch (e) {
-        console.error('[useLinkTable] table loadOne 失败', e);
+        console.error('[useLinkTable] table loadOne Thất bại', e);
         return [];
       }
     }
@@ -303,7 +303,7 @@ export function useLinkTable(props) {
   }
 
   /**
-   * true:数据一致；false:数据不一致
+   * true:Dữ liệu nhất quán;false:Dữ liệu không nhất quán
    * @param arr
    * @param value
    */
@@ -340,7 +340,7 @@ export function useLinkTable(props) {
     if (linkFieldArray && linkFieldArray.length > 0) {
       for (const str of linkFieldArray) {
         const arr = str.split(',');
-        //["表单字段,表字典字段"]
+        //["Trường biểu mẫu,Trường từ điển bảng"]
         const field = arr[0];
         const dictField = arr[1];
         if (!formData[field]) {
@@ -353,13 +353,13 @@ export function useLinkTable(props) {
     }
   }
 
-  // 获取图片地址
+  // Lấy địa chỉ hình ảnh
   function getImageSrc(item) {
     if (props.imageField) {
       let url = item[props.imageField];
-      // 代码逻辑说明: 【TV360X-38】关联记录空间，被关联数据优多个图片时，封面图片不展示
+      // Giải thích logic mã: 【TV360X-38]Không gian bản ghi liên kết, khi dữ liệu được liên kết có nhiều hình ảnh thì ảnh bìa không hiển thị
       if (typeof url === 'string') {
-        // 有多张图时默认取第一张
+        // Khi có nhiều hình ảnh, mặc định lấy hình đầu tiên
         url = url.split(',')[0];
       }
       return getFileAccessHttpUrl(url);
@@ -396,7 +396,7 @@ export function useLinkTable(props) {
 }
 
 /**
- * 使用固定高度的modal
+ * Sử dụng modal có chiều cao cố địnhmodal
  */
 export function useFixedHeightModal() {
   const minWidth = 800;
@@ -407,7 +407,7 @@ export function useFixedHeightModal() {
   }
   popModalFixedWidth.value = tempWidth;
 
-  // 弹窗高度控制
+  // Kiểm soát chiều cao popup
   const popBodyStyle = ref({});
   function resetBodyStyle() {
     const height = window.innerHeight - 210;

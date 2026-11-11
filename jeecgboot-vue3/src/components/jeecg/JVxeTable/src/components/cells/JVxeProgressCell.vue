@@ -22,7 +22,7 @@
       });
       return { innerValue, cellProps, clazz };
     },
-    // 【组件增强】注释详见：：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết tại::JVxeComponent.Enhanced
     enhanced: {
       switches: {
         editRender: false,
@@ -43,7 +43,7 @@
 </script>
 
 <style scoped lang="less">
-  // 关闭进度条的动画，防止滚动时动态赋值出现问题
+  // Tắt hiệu ứng động của thanh tiến trình, tránh xảy ra vấn đề khi gán giá trị động lúc cuộn
   .j-vxe-progress.no-animation {
     :deep(.ant-progress-bg) {
       transition: none !important;

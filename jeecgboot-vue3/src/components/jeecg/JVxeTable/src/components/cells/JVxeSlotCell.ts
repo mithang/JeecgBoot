@@ -32,7 +32,7 @@ export default defineComponent({
       }
     };
   },
-  // 【组件增强】注释详见：JVxeComponent.Enhanced
+  // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
   enhanced: {
     switches: {
       editRender: false,

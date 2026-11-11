@@ -1,31 +1,31 @@
 import {pcaa as REGION_DATA} from "@/utils/areaData/pcaUtils";
 import { cloneDeep } from 'lodash-es';
 
-// code转汉字大对象
+// codechuyển thành đối tượng lớn chữ Hán
 const CodeToText = {};
-// 汉字转code大对象
+// Đối tượng lớn chuyển ký tự Hán sang code
 const TextToCode = {};
-const provinceObject = REGION_DATA['86']; // 省份对象
+const provinceObject = REGION_DATA['86']; // Đối tượng tỉnh
 const regionData = [];
 let provinceAndCityData = [];
 
-CodeToText[''] = '全部';
+CodeToText[''] = 'Tất cả';
 
-// 计算省
+// Tính tỉnh
 for (const prop in provinceObject) {
   regionData.push({
-    value: prop, // 省份code值
-    label: provinceObject[prop], // 省份汉字
+    value: prop, // Giá trị code tỉnh
+    label: provinceObject[prop], // Tên tỉnh (chữ Hán)
   });
   CodeToText[prop] = provinceObject[prop];
   TextToCode[provinceObject[prop]] = {
     code: prop,
   };
-  TextToCode[provinceObject[prop]]['全部'] = {
+  TextToCode[provinceObject[prop]]['Tất cả'] = {
     code: '',
   };
 }
-// 计算市
+// Tính thành phố
 for (let i = 0, len = regionData.length; i < len; i++) {
   const provinceCode = regionData[i].value;
   const provinceText = regionData[i].label;
@@ -39,7 +39,7 @@ for (let i = 0, len = regionData.length; i < len; i++) {
     TextToCode[provinceText][REGION_DATA[provinceCode][prop]] = {
       code: prop,
     };
-    TextToCode[provinceText][REGION_DATA[provinceCode][prop]]['全部'] = {
+    TextToCode[provinceText][REGION_DATA[provinceCode][prop]]['Tất cả'] = {
       code: '',
     };
   }
@@ -49,7 +49,7 @@ for (let i = 0, len = regionData.length; i < len; i++) {
 }
 provinceAndCityData = cloneDeep(regionData);
 
-// 计算区
+// Tính quận/huyện
 for (let i = 0, len = regionData.length; i < len; i++) {
   const province = regionData[i].children;
   const provinceText = regionData[i].label;
@@ -75,25 +75,25 @@ for (let i = 0, len = regionData.length; i < len; i++) {
   }
 }
 
-// 添加“全部”选项
+// Thêm tùy chọn "Tất cả"
 const provinceAndCityDataPlus = cloneDeep(provinceAndCityData);
 provinceAndCityDataPlus.unshift({
   value: '',
-  label: '全部',
+  label: 'Tất cả',
 });
 for (let i = 0, len = provinceAndCityDataPlus.length; i < len; i++) {
   const province = provinceAndCityDataPlus[i].children;
   if (province && province.length) {
     province.unshift({
       value: '',
-      label: '全部',
+      label: 'Tất cả',
     });
     for (let j = 0, len = province.length; j < len; j++) {
       const city = province[j].children;
       if (city && city.length) {
         city.unshift({
           value: '',
-          label: '全部',
+          label: 'Tất cả',
         });
       }
     }
@@ -103,14 +103,14 @@ for (let i = 0, len = provinceAndCityDataPlus.length; i < len; i++) {
 const regionDataPlus = cloneDeep(regionData);
 regionDataPlus.unshift({
   value: '',
-  label: '全部',
+  label: 'Tất cả',
 });
 for (let i = 0, len = regionDataPlus.length; i < len; i++) {
   const province = regionDataPlus[i].children;
   if (province && province.length) {
     province.unshift({
       value: '',
-      label: '全部',
+      label: 'Tất cả',
     });
 
     for (let j = 0, len = province.length; j < len; j++) {
@@ -118,23 +118,23 @@ for (let i = 0, len = regionDataPlus.length; i < len; i++) {
       if (city && city.length) {
         city.unshift({
           value: '',
-          label: '全部',
+          label: 'Tất cả',
         });
       }
     }
   }
 }
-//--begin--@updateBy:liusq----date:20210922---for:省市区三级联动需求方法-----
-//省份数据
+//--begin--@updateBy:liusq----date:20210922---for:Phương thức đáp ứng nhu cầu liên động ba cấp tỉnh/thành phố/quận huyện-----
+//Dữ liệu tỉnh
 const provinceOptions = [];
 for (const prop in provinceObject) {
   provinceOptions.push({
-    value: prop, // 省份code值
-    label: provinceObject[prop], // 省份汉字
+    value: prop, // Giá trị code tỉnh
+    label: provinceObject[prop], // Tên tỉnh (chữ Hán)
   });
 }
 /**
- * 根据code获取下拉option的数据
+ * Lấy dữ liệu option của dropdown theo code
  * @param code
  * @returns []
  */
@@ -142,15 +142,15 @@ function getDataByCode(code) {
   let data = [];
   for (const prop in REGION_DATA[code]) {
     data.push({
-      value: prop, // 省份code值
-      label: REGION_DATA[code][prop], // 省份汉字
+      value: prop, // Giá trị code tỉnh
+      label: REGION_DATA[code][prop], // Tên tỉnh (chữ Hán)
     });
   }
   return data;
 }
 
 /**
- * 获取全部省市区的层级
+ * Lấy cấp bậc của tất cả tỉnh/thành/quận huyện
  * @type {Array}
  */
 const pca = [];
@@ -169,7 +169,7 @@ Object.keys(provinceObject).map((province) => {
 });
 
 /**
- * 根据code反推value
+ * Suy ngược value theo codevalue
  * @param code
  * @param level
  * @returns {Array}
@@ -189,5 +189,5 @@ function getPcode(id, arr, index) {
     }
   }
 }
-//--end--@updateBy:liusq----date:20210922---for:省市区三级联动需求方法-----
+//--end--@updateBy:liusq----date:20210922---for:Phương thức đáp ứng nhu cầu liên động ba cấp tỉnh/thành phố/quận huyện-----
 export { provinceAndCityData, regionData, provinceAndCityDataPlus, regionDataPlus, getDataByCode, provinceOptions, getRealCode };

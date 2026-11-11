@@ -8,26 +8,26 @@ import { getToken } from '/@/utils/auth';
 
 // vxe socket
 const vs = {
-  // 页面唯一 id，用于标识同一用户，不同页面的websocket
+  // id duy nhất của trang, dùng để xác định cùng một người dùng, các trang khác nhauwebsocket
   pageId: buildUUID(),
-  // webSocket 对象
+  // webSocket Đối tượng
   ws: null,
-  // 一些常量
+  // Một số hằng số
   constants: {
-    // 消息类型
+    // Loại tin nhắn
     TYPE: 'type',
-    // 消息数据
+    // Dữ liệu tin nhắn
     DATA: 'data',
-    // 消息类型：心跳检测
+    // Loại thông báo: Kiểm tra heartbeat
     TYPE_HB: 'heart_beat',
-    // 消息类型：更新vxe table数据
+    // Loại tin nhắn: cập nhật dữ liệu vxe table
     TYPE_UVT: 'update_vxe_table',
   },
-  // 心跳检测
+  // Kiểm tra heartbeat
   heartCheck: {
-    // 间隔时间，间隔多久发送一次心跳消息
+    // Thời gian khoảng cách, bao lâu gửi một tin nhắn heartbeat
     interval: 10000,
-    // 心跳消息超时时间，心跳消息多久没有回复后重连
+    // Thời gian timeout của tin nhắn heartbeat, sau bao lâu tin nhắn heartbeat không có phản hồi thì kết nối lại
     timeout: 6000,
     timeoutTimer: -1,
     clear() {
@@ -36,27 +36,27 @@ const vs = {
     },
     start() {
       vs.sendMessage(vs.constants.TYPE_HB, '');
-      // 如果超过一定时间还没重置，说明后端主动断开了
+      // Nếu sau một khoảng thời gian nhất định vẫn chưa đặt lại, nghĩa là backend đã chủ động ngắt kết nối
       this.timeoutTimer = window.setTimeout(() => {
         vs.reconnect();
       }, this.timeout);
       return this;
     },
-    // 心跳消息返回
+    // Tin nhắn heartbeat trả về
     back() {
       this.clear();
       window.setTimeout(() => this.start(), this.interval);
     },
   },
 
-  /** 初始化 WebSocket */
+  /** Khởi tạo WebSocket */
   initialWebSocket() {
     if (this.ws === null) {
       const userId = useUserStore().getUserInfo?.id;
       const domainURL = useGlobSetting().uploadUrl!;
       const domain = domainURL.replace('https://', 'wss://').replace('http://', 'ws://');
       const url = `${domain}/vxeSocket/${userId}/${this.pageId}`;
-      // 代码逻辑说明: v2.4.6 的 websocket 服务端，存在性能和安全问题。 #3278
+      // Giải thích logic mã: v2.4.6 phía máy chủ websocket, tồn tại vấn đề về hiệu năng và bảo mật. #3278
       let token = (getToken() || '') as string;
       this.ws = new WebSocket(url, [token]);
       this.ws.onopen = this.on.open.bind(this);
@@ -66,7 +66,7 @@ const vs = {
     }
   },
 
-  // 发送消息
+  // Gửi tin nhắn
   sendMessage(type, message) {
     try {
       let ws = this.ws;
@@ -79,13 +79,13 @@ const vs = {
         );
       }
     } catch (err: any) {
-      console.warn('【JVxeWebSocket】发送消息失败：(' + err.code + ')');
+      console.warn('[JVxeWebSocket] Gửi tin nhắn thất bại:(' + err.code + ')');
     }
   },
 
-  /** 绑定全局VXE表格 */
+  /** Liên kết bảng VXE toàn cục */
   tableMap: new Map(),
-  /** 添加绑定 */
+  /** Thêm liên kết */
   addBind(map, key, value: VmArgs) {
     let binds = map.get(key);
     if (isArray(binds)) {
@@ -94,7 +94,7 @@ const vs = {
       map.set(key, [value]);
     }
   },
-  /** 移除绑定 */
+  /** Xóa liên kết */
   removeBind(map, key, value: VmArgs) {
     let binds = map.get(key);
     if (isArray(binds)) {
@@ -112,7 +112,7 @@ const vs = {
       map.delete(key);
     }
   },
-  // 呼叫绑定的表单
+  // Gọi biểu mẫu đã liên kết
   callBind(map, key, callback) {
     let binds = map.get(key);
     if (isArray(binds)) {
@@ -121,7 +121,7 @@ const vs = {
   },
 
   lockReconnect: false,
-  /** 尝试重连 */
+  /** Thử kết nối lại */
   reconnect() {
     if (this.lockReconnect) return;
     this.lockReconnect = true;
@@ -130,7 +130,7 @@ const vs = {
         this.ws.close();
       }
       this.ws = null;
-      console.info('【JVxeWebSocket】尝试重连...');
+      console.info('[JVxeWebSocket] Đang thử kết nối lại...');
       this.initialWebSocket();
       this.lockReconnect = false;
     }, 5000);
@@ -138,50 +138,50 @@ const vs = {
 
   on: {
     open() {
-      console.info('【JVxeWebSocket】连接成功');
+      console.info('[JVxeWebSocket] Kết nối thành công');
       this.heartCheck.start();
     },
     error(e) {
-      console.warn('【JVxeWebSocket】连接发生错误:', e);
+      console.warn('[JVxeWebSocket] Kết nối xảy ra lỗi:', e);
       this.reconnect();
     },
     message(e) {
-      // 解析消息
+      // Phân tích tin nhắn
       let json;
       try {
         json = JSON.parse(e.data);
       } catch (e: any) {
-        console.warn('【JVxeWebSocket】收到无法解析的消息:', e.data);
+        console.warn('[JVxeWebSocket] Nhận được thông báo không thể phân tích cú pháp:', e.data);
         return;
       }
       let type = json[this.constants.TYPE];
       let data = json[this.constants.DATA];
       switch (type) {
-        // 心跳检测
+        // Kiểm tra heartbeat
         case this.constants.TYPE_HB:
           this.heartCheck.back();
           break;
-        // 更新form数据
+        // Cập nhật dữ liệu form
         case this.constants.TYPE_UVT:
           this.callBind(this.tableMap, data.socketKey, (args) => this.onVM.onUpdateTable(args, ...data.args));
           break;
         default:
-          console.warn('【JVxeWebSocket】收到不识别的消息类型:' + type);
+          console.warn('[JVxeWebSocket] Nhận được loại tin nhắn không nhận dạng được:' + type);
           break;
       }
     },
     close(e) {
-      console.info('【JVxeWebSocket】连接被关闭:', e);
+      console.info('[JVxeWebSocket] Kết nối đã bị đóng:', e);
       this.reconnect();
     },
   },
 
   onVM: {
-    /** 收到更新表格的消息 */
+    /** Nhận được thông báo cập nhật bảng */
     onUpdateTable({ props, data, methods }: VmArgs, row, caseId) {
       if (data.caseId !== caseId) {
         const tableRow = methods.getIfRowById(row.id).row;
-        // 局部保更新数据
+        // Lưu cục bộ và cập nhật dữ liệu
         if (tableRow) {
           if (props.reloadEffect) {
             data.reloadEffectRowKeysMap[row.id] = true;
@@ -217,7 +217,7 @@ export function useWebSocket(props: JVxeTableProps, data: JVxeDataProps, methods
     { immediate: true }
   );
 
-  /** 发送socket消息更新行 */
+  /** Gửi tin nhắn socket để cập nhật dòng */
   function socketSendUpdateRow(row) {
     vs.sendMessage(vs.constants.TYPE_UVT, {
       socketKey: props.socketKey,

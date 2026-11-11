@@ -18,7 +18,7 @@
       const { innerValue, row, originColumn, cellProps, handleChangeCommon } = useJVxeComponent(props);
       const groupId = ref<string>('j-vxe-popup');
       const popupProps = computed(() => {
-        // 代码逻辑说明: 【issues/5371】一对多子表popup增加多选
+        // Giải thích logic mã: 【issues/5371] Bảng con một-nhiều popup thêm đa chọn
         return {
           ...cellProps.value,
           value: innerValue.value,
@@ -28,16 +28,16 @@
           // orgFields: originColumn.value.orgFields,
           // destFields: originColumn.value.destFields,
           groupId: groupId.value,
-          // update-begin--author:liaozhiyang---date:20260203---for:【issues/9212】JVxeTypes.popup中属性param传参后，弹框数据为空
+          // update-begin--author:liaozhiyang---date:20260203---for:【issues/9212】JVxeTypes.popupSau khi truyền tham số cho thuộc tính param trong, dữ liệu popup trống
           param: originColumn.value.params ?? originColumn.value.param,
-          // update-end--author:liaozhiyang---date:20260203---for:【issues/9212】JVxeTypes.popup中属性param传参后，弹框数据为空
+          // update-end--author:liaozhiyang---date:20260203---for:【issues/9212】JVxeTypes.popupSau khi truyền tham số cho thuộc tính param trong, dữ liệu popup trống
           sorter: originColumn.value.sorter,
           setFieldsValue: (values) => {
             if (!isEmpty(values)) {
               let popupValue = '';
               Object.keys(values).forEach((key) => {
                 let currentValue = values[key];
-                // 当前列直接赋值，其他列通过vModel赋值
+                // Cột hiện tại gán trực tiếp, các cột khác gán thông qua vModel
                 if (key === originColumn.value.key) {
                   popupValue = currentValue;
                 } else {
@@ -49,7 +49,7 @@
           },
         };
       });
-      // 代码逻辑说明: 【issues/675】子表字段Popup弹框数据不更新
+      // Giải thích logic mã: 【issues/675] Dữ liệu popup của trường bảng con không cập nhật
       const handleFocus = () => {
         groupId.value = '';
       };
@@ -58,7 +58,7 @@
         popupProps,
       };
     },
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: {
       aopEvents: {
         editActived({ $event }) {

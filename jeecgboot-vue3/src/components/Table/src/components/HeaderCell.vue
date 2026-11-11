@@ -30,7 +30,7 @@
 
       const getIsEdit = computed(() => !!props.column?.edit);
       const getTitle = computed(() => {
-        // 代码逻辑说明: 【QQYUN-6366】升级到antd4.x
+        // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
         const result = props.column?.customTitle || props.column?.title;
         if (typeof result === 'string') {
           return result;

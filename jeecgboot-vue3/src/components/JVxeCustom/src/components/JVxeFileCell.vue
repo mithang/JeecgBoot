@@ -2,10 +2,10 @@
   <div>
     <template v-if="hasFile">
       <div v-for="(file, fileKey) of [innerFile || {}]" :key="fileKey" class="j-vxe-file-item">
-        <a-tooltip v-if="file.status === 'uploading'" :title="`上传中(${Math.floor(file.percent)}%)`">
+        <a-tooltip v-if="file.status === 'uploading'" :title="`Đang tải lên(${Math.floor(file.percent)}%)`">
           <span class="j-vxe-file-content">
             <LoadingOutlined />
-            <span class="j-vxe-file-name">上传中…</span>
+            <span class="j-vxe-file-name">Đang tải lên…</span>
           </span>
         </a-tooltip>
 
@@ -15,7 +15,7 @@
             class="j-vxe-file-content j-vxe-file-content--action"
             title=""
             :disabled="cellProps.disabled"
-            :aria-label="`管理附件，共 ${uploadCount} 个`"
+            :aria-label="`Quản lý tệp đính kèm, tổng cộng ${uploadCount} `"
             @click="handleMoreOperation"
           >
             <Icon icon="ant-design:paper-clip" />
@@ -24,7 +24,7 @@
           </button>
         </a-tooltip>
 
-        <a-tooltip v-else :title="file.message || '上传失败'">
+        <a-tooltip v-else :title="file.message || 'Tải lên thất bại'">
           <span class="j-vxe-file-content">
             <Icon icon="ant-design:exclamation-circle" style="color: red" />
             <span class="j-vxe-file-name">{{ shortFileName }}</span>
@@ -32,21 +32,21 @@
         </a-tooltip>
 
         <Dropdown v-if="file.status !== 'uploading'" :trigger="['click']" placement="bottomRight">
-          <a-tooltip title="操作">
-            <button type="button" class="j-vxe-file-action" aria-label="文件操作">
+          <a-tooltip title="Thao tác">
+            <button type="button" class="j-vxe-file-action" aria-label="Thao tác tệp">
               <Icon icon="ant-design:ellipsis-outlined" />
             </button>
           </a-tooltip>
           <template #overlay>
             <a-menu>
               <a-menu-item :disabled="cellProps.disabled" @click="handleMoreOperation">
-                <span><Icon icon="ant-design:bars" />&nbsp;管理</span>
+                <span><Icon icon="ant-design:bars" />&nbsp;Quản lý</span>
               </a-menu-item>
               <a-menu-item v-if="originColumn.allowDownload !== false" @click="handleClickDownloadFile">
-                <span><Icon icon="ant-design:download" />&nbsp;下载</span>
+                <span><Icon icon="ant-design:download" />&nbsp;Tải xuống</span>
               </a-menu-item>
               <a-menu-item :disabled="cellProps.disabled" v-if="originColumn.allowRemove !== false" @click="handleClickDeleteFile">
-                <span><Icon icon="ant-design:delete" />&nbsp;删除</span>
+                <span><Icon icon="ant-design:delete" />&nbsp;Xóa</span>
               </a-menu-item>
             </a-menu>
           </template>
@@ -63,7 +63,7 @@
       :disabled="cellProps.disabled"
       @click="handleMoreOperation"
     >
-      {{ originColumn.btnText || '附件' }}
+      {{ originColumn.btnText || 'Tệp đính kèm' }}
     </a-button>
     <JUploadModal :value="modalValue" @register="registerModel" @change="onModalChange" />
   </div>
@@ -83,7 +83,7 @@
     setup(props: JVxeComponent.Props) {
       return useFileCell(props, UploadTypeEnum.file);
     },
-    // 【组件增强】注释详见：JVxeComponent.Enhanced
+    // [Tăng cường component] Xem chú thích chi tiết:JVxeComponent.Enhanced
     enhanced: enhanced,
   });
 </script>

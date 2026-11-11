@@ -4,25 +4,25 @@
       <template #message>
         <span class="j-icon">
           <a-upload multiple v-model:file-list="selectFileList" :showUploadList="false" :before-upload="beforeUpload">
-            <span class="inner-button"><upload-outlined />上传</span>
+            <span class="inner-button"><upload-outlined />Tải lên</span>
           </a-upload>
         </span>
       </template>
     </a-alert>
 
-    <!-- 正在上传的文件 -->
+    <!-- Tệp đang tải lên -->
     <div class="selected-file-warp" v-if="selectFileList && selectFileList.length > 0">
       <div class="selected-file-list">
         <div class="item" v-for="item in selectFileList">
           <div class="complex">
             <div class="content">
-              <!-- 图片 -->
+              <!-- Hình ảnh -->
               <div v-if="isImage(item) && !item.exist" class="content-top" style="height: 100%">
                 <div class="content-image" :style="{'height':'100%', 'backgroundImage': 'url('+getImageSrc(item)+')'}">
                   <!--  <img style="height: 100%;" :src="getImageSrc(item)">-->
                 </div>
               </div>
-              <!-- 文件 -->
+              <!-- Tệp -->
               <template v-else>
                 <div class="content-top">
                   <div class="content-icon" :style="{ background: 'url(' + (isImage(item) ? getImageTypeIcon() : getBackground(item)) + ')  no-repeat' }"></div>
@@ -38,7 +38,7 @@
               </div>
               <div class="buttons">
                 <div class="opt-icon">
-                  <Tooltip title="删除">
+                  <Tooltip title="Xóa">
                     <delete-outlined @click="handleRemove(item)" />
                   </Tooltip>
                 </div>
@@ -107,7 +107,7 @@
 
       function onSelectFileOk(temp) {
         let arr = selectFileList.value;
-        // 代码逻辑说明: 【JHHB-524】我的日程留言功能，从文件库中无法选附件
+        // Giải thích logic mã: 【JHHB-524]Chức năng nhắn tin trong lịch trình của tôi, không thể chọn tệp đính kèm từ thư viện tệp
         temp.forEach((item) => {
           arr.push({
             ...item,

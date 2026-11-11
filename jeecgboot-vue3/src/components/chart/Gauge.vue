@@ -25,7 +25,7 @@
         type: String as PropType<string>,
         default: 'calc(100vh - 78px)',
       },
-      // 代码逻辑说明: 【QQYUN-8762】首页默认及echars颜色调整
+      // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
       seriesColor: {
         type: String,
         default: '#1890ff',
@@ -80,7 +80,7 @@
             data: [
               {
                 value: 70,
-                name: '本地磁盘',
+                name: 'Đĩa local',
               },
             ],
           },
@@ -98,7 +98,7 @@
         }
         option.series[0].data[0].name = props.chartData.name;
         option.series[0].data[0].value = props.chartData.value;
-        // 代码逻辑说明: 【QQYUN-8762】首页默认及echars颜色调整
+        // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
         option.series[0].color = props.seriesColor;
         setOptions(option);
       }

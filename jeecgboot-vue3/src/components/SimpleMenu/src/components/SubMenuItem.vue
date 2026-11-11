@@ -75,7 +75,7 @@
       },
       disabled: propTypes.bool,
       collapsedShowTitle: propTypes.bool,
-      // 代码逻辑说明: 【QQYUN-8927】侧边栏导航二级菜单彩色模式文字颜色调整
+      // Giải thích logic mã: 【QQYUN-8927]Điều chỉnh màu chữ ở chế độ màu của menu cấp hai trong điều hướng sidebar
       isThemeBright: {
         type: Boolean,
         default: false,
@@ -133,7 +133,7 @@
       const getTheme = computed(() => rootProps.theme);
 
       const getOverlayStyle = computed((): CSSProperties => {
-        // 代码逻辑说明: 【QQYUN-8774】侧边混合导航菜单宽度调整
+        // Giải thích logic mã: 【QQYUN-8774]Điều chỉnh độ rộng menu điều hướng hỗn hợp bên hông
         return {
           minWidth: '150px',
         };

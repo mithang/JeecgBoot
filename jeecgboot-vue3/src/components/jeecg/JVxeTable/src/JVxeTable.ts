@@ -27,23 +27,23 @@ export default defineComponent({
     useColumns(props, data, methods, slots);
     useDataSource(props, data, methods, refs);
     useDragSort(props, methods);
-    // 代码逻辑说明: 【QQYUN-8566】JVXETable无法记住列设置
+    // Giải thích logic mã: 【QQYUN-8566] JVXETable không thể nhớ cài đặt cột
     const { initSetting } = useColumnsCache({ cacheColumnsKey: props.cacheColumnsKey });
     initSetting(props);
-    // 最终传入到 template 里的 props
+    // Cuối cùng được truyền vào template props
     const finallyProps = useFinallyProps(props, data, methods);
-    // 渲染子组件
+    // Kết xuất component con
     const renderComponents = useRenderComponents(props, data, methods, slots);
-    // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
-    // 在 setup 阶段缓存组件引用，避免每次 render 调用 resolveComponent 查找
+    // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+    // Lưu trữ tham chiếu component trong giai đoạn setup, tránh mỗi lần render gọi resolveComponent để tìm kiếm
     const aSpinComp = Spin;
     const vxeGridComp = resolveComponent('vxe-grid');
-    // 将 vxeProps 和 data 合并为一个 computed，避免 render 每次 spread 生成新对象
+    // Gộp vxeProps và data thành một computed, tránh việc render mỗi lần spread tạo ra đối tượng mới
     const vxeGridProps = computed(() => ({
       ...finallyProps.vxeProps.value,
       data: data.vxeDataSource.value,
     }));
-    // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751】jVxetable优化
+    // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
     return {
       instanceRef,
       ...refs,

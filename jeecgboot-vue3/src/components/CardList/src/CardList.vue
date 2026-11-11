@@ -11,12 +11,12 @@
             ><slot name="header"></slot>
             <Tooltip>
               <template #title>
-                <div class="w-50">每行显示数量</div><Slider id="slider" v-bind="sliderProp" v-model:value="grid" @change="sliderChange"
+                <div class="w-50">Số lượng hiển thị mỗi hàng</div><Slider id="slider" v-bind="sliderProp" v-model:value="grid" @change="sliderChange"
               /></template>
               <Button><TableOutlined /></Button>
             </Tooltip>
             <Tooltip @click="fetch">
-              <template #title>刷新</template>
+              <template #title>Làm mới</template>
               <Button><RedoOutlined /></Button>
             </Tooltip>
           </div>
@@ -37,10 +37,10 @@
                   :trigger="['hover']"
                   :dropMenuList="[
                     {
-                      text: '删除',
+                      text: 'Xóa',
                       event: '1',
                       popConfirm: {
-                        title: '是否确认删除',
+                        title: 'Có xác nhận xóa không',
                         confirm: handleDelete.bind(null, item.id),
                       },
                     },
@@ -80,36 +80,36 @@
   const ListItem = List.Item;
   const CardMeta = Card.Meta;
   const TypographyText = Typography.Text;
-  // 获取slider属性
+  // Lấy thuộc tính slider
   const sliderProp = computed(() => useSlider(4));
-  // 组件接收参数
+  // Tham số component nhận
   const props = defineProps({
-    // 请求API的参数
+    // Tham số yêu cầu API
     params: propTypes.object.def({}),
     //api
     api: propTypes.func,
   });
-  //暴露内部方法
+  //Cung cấp phương thức nội bộ
   const emit = defineEmits(['getMethod', 'delete']);
-  //数据
+  //Dữ liệu
   const data = ref([]);
-  // 切换每行个数
-  // cover图片自适应高度
-  //修改pageSize并重新请求数据
+  // Chuyển đổi số lượng mỗi hàng
+  // coverHình ảnh tự thích ứng chiều cao
+  //Sửa pageSize và yêu cầu lại dữ liệu
 
   const height = computed(() => {
     return `h-${120 - grid.value * 6}`;
   });
-  //表单
+  //Biểu mẫu
   const [registerForm, { validate }] = useForm({
-    schemas: [{ field: 'type', component: 'Input', label: '类型' }],
+    schemas: [{ field: 'type', component: 'Input', label: 'Loại' }],
     labelWidth: 80,
     baseColProps: { span: 6 },
     actionColOptions: { span: 24 },
     autoSubmitOnEnter: true,
     submitFunc: handleSubmit,
   });
-  //表单提交
+  //Gửi biểu mẫu
   async function handleSubmit() {
     const data = await validate();
     await fetch(data);
@@ -119,7 +119,7 @@
     fetch();
   }
 
-  // 自动请求并暴露内部方法
+  // Tự động gửi yêu cầu và công khai phương thức nội bộ
   onMounted(() => {
     fetch();
     emit('getMethod', fetch);
@@ -133,7 +133,7 @@
       total.value = res.total;
     }
   }
-  //分页相关
+  //Liên quan đến phân trang
   const page = ref(1);
   const pageSize = ref(36);
   const total = ref(0);
@@ -143,7 +143,7 @@
     pageSize,
     current: page,
     total,
-    showTotal: (total) => `总 ${total} 条`,
+    showTotal: (total) => `Tổng ${total} mục`,
     onChange: pageChange,
     onShowSizeChange: pageSizeChange,
   });

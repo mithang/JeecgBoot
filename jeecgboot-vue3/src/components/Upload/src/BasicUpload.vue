@@ -45,10 +45,10 @@
 
     setup(props, { emit, attrs }) {
       const { t } = useI18n();
-      // 上传modal
+      // Tải lênmodal
       const [registerUploadModal, { openModal: openUploadModal }] = useModal();
 
-      //   预览modal
+      //   Xem trướcmodal
       const [registerPreviewModal, { openModal: openPreviewModal }] = useModal();
 
       const fileList = ref<string[]>([]);
@@ -72,14 +72,14 @@
         { immediate: true }
       );
 
-      // 上传modal保存操作
+      // Thao tác lưu của modal tải lên
       function handleChange(urls: string[]) {
         fileList.value = [...unref(fileList), ...(urls || [])];
         emit('update:value', fileList.value);
         emit('change', fileList.value);
       }
 
-      // 预览modal保存操作
+      // Thao tác lưu của modal xem trước
       function handlePreviewChange(urls: string[]) {
         fileList.value = [...(urls || [])];
         emit('update:value', fileList.value);

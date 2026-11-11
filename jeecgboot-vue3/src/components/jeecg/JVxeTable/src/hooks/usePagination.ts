@@ -9,7 +9,7 @@ export function usePagination(props: JVxeTableProps, methods: JVxeTableMethods) 
     pageSize: 10,
     pageSizeOptions: ['10', '20', '30'],
     showTotal: (total, range) => {
-      return range[0] + '-' + range[1] + ' 共 ' + total + ' 条';
+      return range[0] + '-' + range[1] + ' Tổng cộng ' + total + ' mục';
     },
     showQuickJumper: true,
     showSizeChanger: true,
@@ -38,13 +38,13 @@ export function usePagination(props: JVxeTableProps, methods: JVxeTableMethods) 
 
   function handleShowSizeChange(current, pageSize) {
     innerPagination.pageSize = pageSize;
-    // -update-begin--author:liaozhiyang---date:20251209---for:【issues/9169】切换页码时，pageChange事件加载了两次
-    // 因为 handleShowSizeChange先触发，紧接着会触发 handleChange，所以可以注释掉。
+    // -update-begin--author:liaozhiyang---date:20251209---for:【issues/9169]Khi chuyển trang, sự kiện pageChange đã tải hai lần
+    // Vì handleShowSizeChange kích hoạt trước, ngay sau đó sẽ kích hoạt handleChange, nên có thể ghi chú lại.
     // methods.trigger('pageChange', { current, pageSize });
-    // -update-end--author:liaozhiyang---date:20251209---for:【issues/9169】切换页码时，pageChange事件加载了两次
+    // -update-end--author:liaozhiyang---date:20251209---for:【issues/9169]Khi chuyển trang, sự kiện pageChange đã tải hai lần
   }
 
-  /** 渲染分页器 */
+  /** Kết xuất phân trang */
   function renderPagination() {
     if (props.pagination && !isEmpty(props.pagination)) {
       return h(
@@ -55,7 +55,7 @@ export function usePagination(props: JVxeTableProps, methods: JVxeTableMethods) 
         [
           h(Pagination, {
             ...bindProps.value,
-            // 代码逻辑说明: 【issues/8137】vxetable表格禁用后分页隐藏了
+            // Giải thích logic mã: 【issues/8137] Bảng vxetable sau khi vô hiệu hóa thì phân trang bị ẩn
             disabled: false,
             onChange: handleChange,
             onShowSizeChange: handleShowSizeChange,

@@ -2,23 +2,23 @@
   <div :class="`${prefixCls}-config-list`">
     <a-radio-group v-model:value="type">
       <div class="item">
-        <a-radio :value="TypeEnum.every" v-bind="beforeRadioAttrs">每年</a-radio>
+        <a-radio :value="TypeEnum.every" v-bind="beforeRadioAttrs">Mỗi năm</a-radio>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">区间</a-radio>
-        <span> 从 </span>
+        <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">Khoảng</a-radio>
+        <span> Từ </span>
         <InputNumber class="w80" v-model:value="valueRange.start" v-bind="typeRangeAttrs" />
-        <span> 年 至 </span>
+        <span> Năm đến </span>
         <InputNumber class="w80" v-model:value="valueRange.end" v-bind="typeRangeAttrs" />
-        <span> 年 </span>
+        <span> năm </span>
       </div>
       <div class="item">
-        <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">循环</a-radio>
-        <span> 从 </span>
+        <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">Lặp lại</a-radio>
+        <span> Từ </span>
         <InputNumber class="w80" v-model:value="valueLoop.start" v-bind="typeLoopAttrs" />
-        <span> 年开始，间隔 </span>
+        <span> năm bắt đầu, khoảng cách </span>
         <InputNumber class="w80" v-model:value="valueLoop.interval" v-bind="typeLoopAttrs" />
-        <span> 年 </span>
+        <span> năm </span>
       </div>
     </a-radio-group>
   </div>

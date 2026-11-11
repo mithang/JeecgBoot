@@ -12,7 +12,7 @@ export function useItemLabelWidth(schemaItemRef: Ref<FormSchema>, propsRef: Ref<
 
     const { labelWidth: globalLabelWidth, labelCol: globalLabelCol, wrapperCol: globWrapperCol,layout } = unref(propsRef);
 
-    // 代码逻辑说明: 禁用全局 labelWidth，不自动设置 textAlign --------
+    // Giải thích logic mã: Vô hiệu hóa labelWidth toàn cục, không tự động thiết lập textAlign --------
     if (disabledLabelWidth) {
       return { labelCol, wrapperCol };
     }
@@ -30,7 +30,7 @@ export function useItemLabelWidth(schemaItemRef: Ref<FormSchema>, propsRef: Ref<
 
     if (width) {
       width = isNumber(width) ? `${width}px` : width;
-      // 代码逻辑说明: 【issues/6865】配置单个的labelWidth不生效
+      // Giải thích logic mã: 【issues/6865] Cấu hình labelWidth riêng lẻ không có hiệu lực
       col = {};
     }
 

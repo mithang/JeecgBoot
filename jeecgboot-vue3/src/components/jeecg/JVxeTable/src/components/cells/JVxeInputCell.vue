@@ -15,12 +15,12 @@
     setup(props: JVxeComponent.Props) {
       const { innerValue, cellProps, handleChangeCommon, handleBlurCommon } = useJVxeComponent(props);
 
-      // 是否是数字类型输入框
+      // Có phải là ô nhập kiểu số không
       const isNumberType = props.type === JVxeTypes.inputNumber;
 
       /**
-       * 计算数字类型的限制属性
-       * 包含最大值、最小值和精度配置，供输入组件和格式化逻辑使用
+       * Tính thuộc tính giới hạn của kiểu số
+       * Bao gồm cấu hình giá trị lớn nhất, giá trị nhỏ nhất và độ chính xác, dùng cho component nhập liệu và logic định dạng
        */
       const numberProps = computed<{
         max?: number,
@@ -29,28 +29,28 @@
       }>(() => {
         const {max, min, precision} = cellProps.value as Recordable;
         const nProps: Recordable = {};
-        // 最大值
+        // Giá trị lớn nhất
         if (typeof max === 'number') {
           nProps.max = max;
         }
-        // 最小值
+        // Giá trị nhỏ nhất
         if (typeof min === 'number') {
           nProps.min = min;
         }
-        // 数值精度，保留小数位数
+        // Độ chính xác số, giữ lại số chữ số thập phân
         if (typeof precision === 'number') {
           nProps.precision = precision;
         }
         return nProps;
       });
 
-      /** 处理change事件 */
+      /** Xử lý sự kiện change */
       function handleChange(event) {
         let { target } = event;
         let { value, selectionStart } = target;
         let change = true;
         if (isNumberType) {
-          // 判断输入的值是否匹配数字正则表达式，不匹配就还原
+          // Kiểm tra xem giá trị nhập vào có khớp biểu thức chính quy số hay không, không khớp thì khôi phục lại
           if (!NumberRegExp.test(value) && value !== '' && value !== '-') {
             change = false;
             value = innerValue.value;
@@ -60,7 +60,7 @@
               target.selectionEnd = selectionStart - 1;
             }
           } else {
-            // 例如：41.1 -> 41.10, 100.1 -> 100.10 不执行handleChangeCommon 函数。
+            // Ví dụ:41.1 -> 41.10, 100.1 -> 100.10 Không thực thi hàm handleChangeCommon.
             if (value.indexOf('.') != -1) {
               const result = value.split('.').pop();
               if (result && result.length >= 2 && result.substr(-1) === '0') {
@@ -70,16 +70,16 @@
             }
           }
         }
-        // 触发事件，存储输入的值
+        // Kích hoạt sự kiện, lưu giá trị đã nhập
         if (change) {
           handleChangeCommon(value);
         }
       }
 
-      /** 处理blur失去焦点事件 */
+      /** Xử lý sự kiện blur mất focus */
       function handleBlur(event) {
         let { target } = event;
-        // 判断输入的值是否匹配数字正则表达式，不匹配就置空
+        // Kiểm tra xem giá trị nhập vào có khớp biểu thức chính quy số hay không, không khớp thì đặt thành rỗng
         if (isNumberType) {
           if (!NumberRegExp.test(target.value)) {
             target.value = '';
@@ -94,17 +94,17 @@
       }
 
       /**
-       * 依据最小值和最大值限制数值
-       * @param value 需要裁剪的数值
+       * Giới hạn giá trị theo giá trị nhỏ nhất và lớn nhất
+       * @param value Giá trị cần cắt
        */
       function clampNumber(value: number): number {
         let result = value;
         const { max, min } = numberProps.value;
-        // 应用最小值限制
+        // Áp dụng giới hạn giá trị tối thiểu
         if (typeof min === 'number') {
           result = Math.max(min, result);
         }
-        // 应用最大值限制
+        // Áp dụng giới hạn giá trị tối đa
         if (typeof max === 'number') {
           result = Math.min(max, result);
         }
@@ -112,8 +112,8 @@
       }
 
       /**
-       * 按配置精度格式化数值
-       * @param value 待格式化的数值
+       * Định dạng giá trị số theo độ chính xác đã cấu hình
+       * @param value Giá trị cần định dạng
        */
       function applyPrecision(value: number): number {
         const { precision } = numberProps.value;
@@ -138,7 +138,7 @@
       getValue(value, ctx) {
         if (ctx?.props?.type === JVxeTypes.inputNumber && isString(value)) {
           if (NumberRegExp.test(value)) {
-            // 【issues/I5IHN7】修复无法输入小数点的bug
+            // 【issues/I5IHN7] sửa lỗi không thể nhập dấu thập phânbug
             if (/\.0*$/.test(value)) {
               return value;
             }

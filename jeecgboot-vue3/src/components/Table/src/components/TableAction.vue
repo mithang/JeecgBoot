@@ -28,12 +28,12 @@
       :getPopupContainer="dropdownGetPopupContainer"
     >
       <slot name="more"></slot>
-      <!--  设置插槽   -->
+      <!--  Thiết lập slot   -->
       <template v-slot:[item.slot] v-for="(item, index) in getDropdownSlotList" :key="`${index}-${item.label}`">
         <slot :name="item.slot"></slot>
       </template>
 
-      <a-button type="link" size="small" v-if="!$slots.more"> 更多 <Icon icon="mdi-light:chevron-down"></Icon> </a-button>
+      <a-button type="link" size="small" v-if="!$slots.more"> Thêm <Icon icon="mdi-light:chevron-down"></Icon> </a-button>
     </Dropdown>
   </div>
 </template>
@@ -98,7 +98,7 @@
       const getActions = computed(() => {
         return (toRaw(props.actions) || [])
           .filter((action) => {
-            // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-528】列表配置了权限，在列表行上划过，都会执行hasPermission
+            // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
             const auth: any = action.auth;
             let authResult;
             if (action.auth && typeof tempActionsAuth[auth] === 'boolean') {
@@ -108,11 +108,11 @@
               action.auth && (tempActionsAuth[auth] = authResult);
             }
             return authResult && isIfShow(action);
-            // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-528】列表配置了权限，在列表行上划过，都会执行hasPermission
+            // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
           })
           .map((action) => {
             const { popConfirm } = action;
-            // 代码逻辑说明: 【issues/951】table删除记录时按钮显示错位
+            // Giải thích logic mã: 【issues/951] Khi table xóa bản ghi, nút hiển thị bị lệch vị trí
             if (popConfirm) {
               const overlayClassName = popConfirm.overlayClassName;
               popConfirm.overlayClassName = `${overlayClassName ? overlayClassName : ''} ${prefixCls}-popconfirm`;
@@ -123,7 +123,7 @@
               size: 'small',
               ...action,
               ...(popConfirm || {}),
-              // 代码逻辑说明: 【issues/936】表格操作栏删除当接口失败时，气泡确认框不会消失
+              // Giải thích logic mã: 【issues/936]Khi xóa ở thanh thao tác của bảng mà API thất bại, hộp xác nhận bong bóng sẽ không biến mất
               onConfirm: handelConfirm(popConfirm?.confirm),
               onCancel: popConfirm?.cancel,
               enable: !!popConfirm,
@@ -132,9 +132,9 @@
       });
 
       const getDropdownList = computed((): any[] => {
-        //过滤掉隐藏的dropdown,避免出现多余的分割线
+        //Lọc bỏ các mục đã ẩndropdown,Tránh xuất hiện đường phân cách thừa
         const list = (toRaw(props.dropDownActions) || []).filter((action) => {
-          // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-528】列表配置了权限，在列表行上划过，都会执行hasPermission
+          // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
           const auth: any = action.auth;
           let authResult;
           if (action.auth && typeof tempDropdownListAuth[auth] === 'boolean') {
@@ -144,22 +144,22 @@
             action.auth && (tempDropdownListAuth[auth] = authResult);
           }
           return authResult && isIfShow(action);
-          // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-528】列表配置了权限，在列表行上划过，都会执行hasPermission
+          // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
         });
         return list.map((action, index) => {
           const { label, popConfirm } = action;
-          // 代码逻辑说明: 【issues/951】table删除记录时按钮显示错位
+          // Giải thích logic mã: 【issues/951] Khi table xóa bản ghi, nút hiển thị bị lệch vị trí
           if (popConfirm) {
             const overlayClassName = popConfirm.overlayClassName;
             popConfirm.overlayClassName = `${overlayClassName ? overlayClassName : ''} ${prefixCls}-popconfirm`;
-            // 代码逻辑说明: 【issues/7028】表格全屏后操作列中的下拉菜单和气泡确认框不显示
+            // Giải thích logic mã: 【issues/7028]Sau khi bảng toàn màn hình, menu thả xuống và hộp xác nhận bong bóng trong cột thao tác không hiển thị
             if (!popConfirm.getPopupContainer) {
               popConfirm.getPopupContainer = () => {
                 return (table as any)?.wrapRef?.value ?? document.body;
               };
             }
           }
-          // 代码逻辑说明: 【issues/936】表格操作栏删除当接口失败时，气泡确认框不会消失
+          // Giải thích logic mã: 【issues/936]Khi xóa ở thanh thao tác của bảng mà API thất bại, hộp xác nhận bong bóng sẽ không biến mất
           if (popConfirm) {
             popConfirm.confirm = handelConfirm(popConfirm?.confirm);
           }
@@ -176,7 +176,7 @@
       /*
       2023-01-08
       liaozhiyang
-      给传进来的函数包一层promise
+      Bọc hàm được truyền vào thêm một lớppromise
       */
       const handelConfirm = (fn) => {
         if (typeof fn !== 'function') return fn;
@@ -223,7 +223,7 @@
         });
         isInButton && e.stopPropagation();
       }
-      // 代码逻辑说明: 【issues/7028】表格全屏后操作列中的下拉菜单和气泡确认框不显示
+      // Giải thích logic mã: 【issues/7028]Sau khi bảng toàn màn hình, menu thả xuống và hộp xác nhận bong bóng trong cột thao tác không hiển thị
       const dropdownGetPopupContainer = () => {
         return (table as any)?.wrapRef?.value ?? document.body;
       };
@@ -237,9 +237,9 @@
   .@{prefix-cls} {
     display: flex;
     align-items: center;
-    /* update-begin-author:taoyan date:2022-11-18 for: 表格默认行高比官方示例多出2px*/
+    /* update-begin-author:taoyan date:2022-11-18 for: Chiều cao dòng mặc định của bảng cao hơn ví dụ chính thức2px*/
     height: 22px;
-    /* update-end-author:taoyan date:2022-11-18 for: 表格默认行高比官方示例多出2px*/
+    /* update-end-author:taoyan date:2022-11-18 for: Chiều cao dòng mặc định của bảng cao hơn ví dụ chính thức2px*/
 
     .action-divider {
       display: table;
@@ -288,13 +288,13 @@
     &-popconfirm {
       .ant-popconfirm-buttons {
         min-width: 120px;
-        // 代码逻辑说明: 【issues/1019】popConfirm确认框待端后端返回过程中（处理中）样式错乱
+        // Giải thích logic mã: 【issues/1019]Hộp xác nhận popConfirm bị lỗi kiểu dáng trong quá trình chờ backend trả về (đang xử lý)
         display: flex;
         align-items: center;
         justify-content: center;
       }
     }
-    // 代码逻辑说明: 【QQYUN-8762】调整table操作栏ant-dropdown样式
+    // Giải thích logic mã: 【QQYUN-8762] điều chỉnh thanh thao tác của tableant-dropdownKiểu
     &-dropdown {
       .ant-dropdown-menu .ant-dropdown-menu-item-divider {
         margin: 2px 0;

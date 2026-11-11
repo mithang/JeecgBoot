@@ -2,24 +2,24 @@
 // import { ThemeEnum } from '/@/enums/appEnum';
 // import { MenuModeEnum } from '/@/enums/menuEnum';
 export interface MenuState {
-  // 默认选中的列表
+  // Danh sách được chọn mặc định
   defaultSelectedKeys: string[];
 
-  // 模式
+  // Chế độ
   // mode: MenuModeEnum;
 
-  // // 主题
+  // // Theme
   // theme: ComputedRef<ThemeEnum> | ThemeEnum;
 
-  // 缩进
+  // Thụt lề
   inlineIndent?: number;
 
-  // 展开数组
+  // Mảng mở rộng
   openKeys: string[];
 
-  // 当前选中的菜单项 key 数组
+  // Mảng key của các mục menu đang được chọn
   selectedKeys: string[];
 
-  // 收缩状态下展开的数组
+  // Mảng mở rộng ở trạng thái thu gọn
   collapsedOpenKeys: string[];
 }

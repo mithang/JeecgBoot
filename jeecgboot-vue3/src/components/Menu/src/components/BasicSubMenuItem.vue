@@ -47,7 +47,7 @@
           &&checkChildrenHidden(menuTreeItem)
         );
       }
-      // 代码逻辑说明: 【QQYUN-8691】顶部菜单模式online不显示菜单名显示默认的auto在线表单
+      // Giải thích logic mã: 【QQYUN-8691]Ở chế độ menu trên cùng, online không hiển thị tên menu mà hiển thị biểu mẫu trực tuyến auto mặc định
       const getMatchingRouterName = (menus, path) => {
         for (let i = 0, len = menus.length; i < len; i++) {
           const item = menus[i];
@@ -84,7 +84,7 @@
   });
 </script>
 <style lang="less">
-  // 代码逻辑说明: 【QQYUN-8762】顶部模式下拉菜单颜色统一
+  // Giải thích logic mã: 【QQYUN-8762] Thống nhất màu menu dropdown ở chế độ trên cùng
   @prefix-cls: ~'@{namespace}-basic-subMenu';
   html[data-theme='light'] {
     .@{prefix-cls}.ant-menu-dark {
@@ -99,7 +99,7 @@
         background-color: var(--header-active-menu-bg-color);
       }
     }
-    //【QQYUN-8922】顶部导航三个点菜单样式调整
+    //【QQYUN-8922] Điều chỉnh kiểu menu ba chấm của thanh điều hướng trên cùng
     .ant-menu-submenu-placement-bottomLeft.ant-menu-dark.ant-menu-submenu-popup {
       background-color: var(--header-bg-color);
       &.ant-menu-dark.ant-menu-submenu > .ant-menu {
@@ -108,7 +108,7 @@
       }
     }
   }
-  // 代码逻辑说明: 【QQYUN-9128】暗黑主题顶部模式下拉菜单颜色统一
+  // Giải thích logic mã: 【QQYUN-9128] Chế độ phía trên của chủ đề tối: màu menu dropdown thống nhất
   html[data-theme='dark'] {
     @bgcolor:#212121;
     .@{prefix-cls}.ant-menu-dark {
@@ -119,7 +119,7 @@
         }
       }
     }
-    //【QQYUN-8922】顶部导航三个点菜单样式调整
+    //【QQYUN-8922] Điều chỉnh kiểu menu ba chấm của thanh điều hướng trên cùng
     .ant-menu-submenu-placement-bottomLeft.ant-menu-dark.ant-menu-submenu-popup {
       background-color: @bgcolor;
       &.ant-menu-dark.ant-menu-submenu > .ant-menu {

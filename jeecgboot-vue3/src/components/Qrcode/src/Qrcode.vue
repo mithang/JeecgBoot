@@ -17,22 +17,22 @@
         type: [String, Array] as PropType<string | any[]>,
         default: null,
       },
-      // 参数
+      // Tham số
       options: {
         type: Object as PropType<QRCodeRenderersOptions>,
         default: null,
       },
-      // 宽度
+      // Chiều rộng
       width: {
         type: Number as PropType<number>,
         default: 200,
       },
-      // 中间logo图标
+      // Biểu tượng logo ở giữa
       logo: {
         type: [String, Object] as PropType<Partial<LogoType> | string>,
         default: '',
       },
-      // img 不支持内嵌logo
+      // img Không hỗ trợ nhúng tronglogo
       tag: {
         type: String as PropType<'canvas' | 'img'>,
         default: 'canvas',
@@ -48,7 +48,7 @@
           const renderValue = String(value);
           const wrapEl = unref(wrapRef);
 
-          // 无值不生成
+          // Không có giá trị thì không tạo
           if (renderValue == null || renderValue === '') {
             return;
           }
@@ -100,7 +100,7 @@
 
       onMounted(createQrcode);
 
-      // 监听参数变化重新生成二维码
+      // Lắng nghe thay đổi tham số để tạo lại mã QR
       watch(
         props,
         () => {

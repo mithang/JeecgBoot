@@ -104,16 +104,16 @@
           ...props,
           ...(unref(propsRef) as any),
         };
-        // 代码逻辑说明: 【QQYUN-8643】弹窗移动端弹窗统一全屏
+        // Giải thích logic mã: 【QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
         if (getIsMobile.value) {
           result.canFullscreen = false;
           result.defaultFullscreen = true;
         }
         return result;
       });
-        //是否未设置标题
+        //Có chưa đặt tiêu đề không
         const isNoTitle = computed(() => {
-            //标题为空并且不含有标题插槽
+            //Tiêu đề trống và không chứa slot tiêu đề
             return !unref(getMergeProps).title && !slots.title;
         });
 
@@ -139,7 +139,7 @@
       });
 
       const getBindValue = computed((): Recordable => {
-        // 代码逻辑说明: 【QQYUN-6366】升级到antd4.x
+        // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
         const attr = {
           ...attrs,
           ...unref(getMergeProps),
@@ -159,7 +159,7 @@
 
       watchEffect(() => {
         fullScreenRef.value = !!props.defaultFullscreen;
-        // 代码逻辑说明: 【QQYUN-8643】弹窗移动端弹窗统一全屏
+        // Giải thích logic mã: 【QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
         if (getIsMobile.value) {
           fullScreenRef.value = true
         }
@@ -192,10 +192,10 @@
         }
       );
 
-      // 取消事件
+      // Sự kiện hủy
       async function handleCancel(e: Event) {
         e?.stopPropagation();
-        // 过滤自定义关闭按钮的空白区域
+        // Lọc vùng trống của nút đóng tùy chỉnh
         if ((e.target as HTMLElement)?.classList?.contains(prefixCls + '-close--custom')) return;
         if (props.closeFunc && isFunction(props.closeFunc)) {
           const isClose: boolean = await props.closeFunc();
@@ -208,7 +208,7 @@
       }
 
       /**
-       * @description: 设置modal参数
+       * @description: Đặt tham số modal
        */
       function setModalProps(props: Partial<ModalProps>): void {
         // Keep the last setModalProps
@@ -221,7 +221,7 @@
         }
         if (Reflect.has(props, 'defaultFullscreen')) {
           fullScreenRef.value = !!props.defaultFullscreen;
-           // 代码逻辑说明: 【QQYUN-8643】弹窗移动端弹窗统一全屏
+           // Giải thích logic mã: 【QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
           if (getIsMobile.value) {
             fullScreenRef.value = true
           }
@@ -246,7 +246,7 @@
         handleFullScreen(e);
       }
 
-      // 代码逻辑说明: modal支持评论 slot
+      // Giải thích logic mã: modalHỗ trợ bình luận slot
       const commentSpan = ref(0);
       watch(()=>props.enableComment, (flag)=>{
         handleComment(flag)
@@ -257,22 +257,22 @@
         }else{
           commentSpan.value = 0
         }
-        // 代码逻辑说明: 【TV360X-485】开启评论之后弹窗按钮居右隔一个评论的距离
+        // Giải thích logic mã: 【TV360X-485] Sau khi bật bình luận, nút popup căn phải cách một khoảng bình luận
         emit('comment-open', commentSpan.value === 0, commentSpan.value);
       }
 
-      // 代码逻辑说明: 【QQYUN-5866】放大行数自适应
+      // Giải thích logic mã: 【QQYUN-5866] phóng to số dòng tự thích ứng
       watch(fullScreenRef,(val)=>{
         emit('fullScreen',val);
       });
 
-      // update-begin--author:liaozhiyang---date:20260805---for:【LHZP-865】basicModal无标题时不预留 header 高度，有标题时重新计算内容区高度
+      // update-begin--author:liaozhiyang---date:20260805---for:【LHZP-865]Khi basicModal không có tiêu đề thì không chừa chiều cao header, khi có tiêu đề thì tính lại chiều cao vùng nội dung
       watch(isNoTitle, () => {
         nextTick(() => {
           modalMethods.redoModalHeight();
         });
       });
-      // update-end--author:liaozhiyang---date:20260805---for:【LHZP-865】basicModal无标题时不预留 header 高度，有标题时重新计算内容区高度
+      // update-end--author:liaozhiyang---date:20260805---for:【LHZP-865]Khi basicModal không có tiêu đề thì không chừa chiều cao header, khi có tiêu đề thì tính lại chiều cao vùng nội dung
       return {
         handleCancel,
         getBindValue,
@@ -296,7 +296,7 @@
   });
 </script>
 <style lang="less">
-  /*update-begin-author:taoyan date:2022-7-27 for:modal评论区域样式*/
+  /*update-begin-author:taoyan date:2022-7-27 for:modalKiểu vùng bình luận*/
   .jeecg-comment-outer {
     border-left: 1px solid #f0f0f0;
     .ant-tabs-nav-wrap{
@@ -305,13 +305,13 @@
   }
   .jeecg-modal-content{
     >.scroll-container{
-      // 代码逻辑说明: 【QQYUN-7297】表单讨论弹窗放大按钮时只显示一部分---
+      // Giải thích logic mã: 【QQYUN-7297] Khi bấm nút phóng to của popup thảo luận biểu mẫu chỉ hiển thị một phần---
       padding: 6px;
     }
   }
-  /*update-end-author:taoyan date:2022-7-27 for:modal评论区域样式*/
+  /*update-end-author:taoyan date:2022-7-27 for:modalKiểu vùng bình luận*/
 
-  // wrapper设为100%，兼容之前写过的弹窗自定义样式
+  // wrapperĐặt thành100%, tương thích với kiểu tùy chỉnh của popup đã viết trước đây
   .jeecg-modal-wrapper,
   .jeecg-modal-content {
     height: 100%;

@@ -3,7 +3,7 @@
     <BasicModal
       v-bind="$attrs"
       @register="register"
-      title="导入 Excel"
+      title="Import Excel"
       :width="620"
       :minHeight="0"
       :bodyStyle="{ padding: '20px 24px 16px' }"
@@ -13,15 +13,15 @@
       destroyOnClose
     >
       <div class="j-import-modal">
-        <!--是否校验-->
+        <!--Có kiểm chứng hay không-->
         <div v-if="online" class="validate-setting">
           <div class="validate-setting__content">
-            <div class="validate-setting__title">导入数据校验</div>
-            <div class="validate-setting__description">开启后将校验文件内容，并反馈不符合规则的数据</div>
+            <div class="validate-setting__title">Kiểm chứng dữ liệu nhập</div>
+            <div class="validate-setting__description">Sau khi bật sẽ kiểm chứng nội dung tệp, và phản hồi dữ liệu không phù hợp với quy tắc</div>
           </div>
-          <a-switch :checked="validateStatus == 1" @change="handleChangeValidateStatus" checked-children="是" un-checked-children="否" />
+          <a-switch :checked="validateStatus == 1" @change="handleChangeValidateStatus" checked-children="Có" un-checked-children="Không" />
         </div>
-        <!--上传-->
+        <!--Tải lên-->
         <a-upload-dragger
           class="import-uploader"
           name="file"
@@ -36,22 +36,22 @@
             <div class="upload-icon">
               <InboxOutlined />
             </div>
-            <div class="upload-title">点击或拖拽 Excel 文件到此处</div>
-            <div class="upload-description">支持 .xls、.xlsx 格式，可一次选择多个文件</div>
+            <div class="upload-title">Bấm hoặc kéo tệp Excel vào đây</div>
+            <div class="upload-description">Hỗ trợ .xls、.xlsx định dạng, có thể chọn nhiều tệp cùng lúc</div>
           </template>
           <div v-else class="selected-files">
             <div class="selected-files__header">
               <div>
-                <div class="selected-files__title"><CheckCircleFilled /> 已选择 {{ fileList.length }} 个文件</div>
-                <div class="selected-files__description">点击此区域可继续添加文件</div>
+                <div class="selected-files__title"><CheckCircleFilled /> Đã chọn {{ fileList.length }} tệp</div>
+                <div class="selected-files__description">Nhấn vào khu vực này để tiếp tục thêm tệp</div>
               </div>
-              <span class="selected-files__add">继续添加</span>
+              <span class="selected-files__add">Tiếp tục thêm</span>
             </div>
             <div class="selected-files__list">
               <div v-for="(file, index) in fileList" :key="file.uid || `${file.name}-${index}`" class="selected-file" @click.stop>
                 <span class="selected-file__icon"><FileExcelOutlined /></span>
                 <span class="selected-file__name" :title="file.name">{{ file.name }}</span>
-                <a-button type="text" class="selected-file__remove" title="移除文件" @click.stop="handleRemove(file)">
+                <a-button type="text" class="selected-file__remove" title="Xóa tệp" @click.stop="handleRemove(file)">
                   <DeleteOutlined />
                 </a-button>
               </div>
@@ -59,11 +59,11 @@
           </div>
         </a-upload-dragger>
       </div>
-      <!--页脚-->
+      <!--Chân trang-->
       <template #footer>
-        <a-button @click="handleClose">关闭</a-button>
+        <a-button @click="handleClose">Đóng</a-button>
         <a-button type="primary" @click="handleImport" :disabled="uploadDisabled" :loading="uploading">{{
-          uploading ? '上传中...' : '开始上传'
+          uploading ? 'Đang tải lên...' : 'Bắt đầu tải lên'
         }}</a-button>
       </template>
     </BasicModal>
@@ -100,7 +100,7 @@
         default: '',
         required: false,
       },
-      //是否online导入
+      //Có phải nhập online không
       online: {
         type: Boolean,
         default: false,
@@ -110,41 +110,41 @@
     emits: ['ok', 'register'],
     setup(props, { emit, refs }) {
       const { createMessage, createWarningModal } = useMessage();
-      //注册弹框
+      //Đăng ký popup
       const [register, { closeModal }] = useModalInner((data) => {
         reset(data);
       });
       const glob = useGlobSetting();
       const attrs = useAttrs();
       const uploading = ref(false);
-      //文件集合
+      //Tập hợp tệp
       const fileList = ref([]);
-      //上传url
+      //Tải lênurl
       const uploadAction = ref('');
       const foreignKeys = ref('');
-      //校验状态
+      //Trạng thái kiểm chứng
       const validateStatus = ref(1);
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
-      //监听url
+      //Lắng ngheurl
       watchEffect(() => {
         props.url && (uploadAction.value = `${glob.uploadUrl}${props.url}`);
       });
-      //按钮disabled状态
+      //Trạng thái disabled của nút
       const uploadDisabled = computed(() => !(unref(fileList).length > 0));
 
-      //关闭方法
+      //Phương thức đóng
       function handleClose() {
-        // 代码逻辑说明: 【QQYUN-7477】关闭弹窗清空内容（之前上传失败关闭后不会清除）
+        // Giải thích logic mã: 【QQYUN-7477]Đóng popup sẽ xóa nội dung (trước đây sau khi tải lên thất bại rồi đóng sẽ không xóa)
         closeModal();
         reset();
       }
 
-      //校验状态切换
+      //Chuyển đổi trạng thái kiểm chứng
       function handleChangeValidateStatus(checked) {
         validateStatus.value = !!checked ? 1 : 0;
       }
 
-      //移除上传文件
+      //Xóa tệp đã tải lên
       function handleRemove(file) {
         const index = unref(fileList).indexOf(file);
         const newFileList = unref(fileList).slice();
@@ -152,13 +152,13 @@
         fileList.value = newFileList;
       }
 
-      //上传前处理
+      //Xử lý trước khi tải lên
       function beforeUpload(file) {
         fileList.value = [...unref(fileList), file];
         return false;
       }
 
-      //文件上传
+      //Tải lên tệp
       function handleImport() {
         let { biz, online } = props;
         const formData = new FormData();
@@ -168,7 +168,7 @@
         if (unref(foreignKeys) && unref(foreignKeys).length > 0) {
           formData.append('foreignKeys', unref(foreignKeys));
         }
-        // 代码逻辑说明: 【issues/6124】当用户没有【Online表单开发】页面的权限时用户无权导入从表数据
+        // Giải thích logic mã: 【issues/6124]Khi người dùng không có quyền của trang [Phát triển biểu mẫu Online] thì người dùng không có quyền nhập dữ liệu bảng con
         if (isObject(foreignKeys.value)) {
           formData.append('foreignKeys', JSON.stringify(foreignKeys.value));
         }
@@ -180,7 +180,7 @@
         });
         uploading.value = true;
 
-        //TODO 请求怎样处理的问题
+        //TODO Vấn đề yêu cầu xử lý như thế nào
         let headers = {
           'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime(),
         };
@@ -203,34 +203,34 @@
         });
       }
 
-      //错误信息提示
+      //Nhắc nhở thông tin lỗi
       function errorTip(tipMessage, fileUrl) {
-        //update-begin---author:scott ---date:20260813  for：优化Excel导入弹窗并修复错误提示HTML注入风险-----------
+        //update-begin---author:scott ---date:20260813  for:Tối ưu popup import Excel và sửa rủi ro tiêm HTML trong thông báo lỗi-----------
         const resolvedUrl = new URL(`${glob.uploadUrl}${fileUrl}`, window.location.origin);
         const href = ['http:', 'https:'].includes(resolvedUrl.protocol) ? resolvedUrl.href : '#';
         const resultMessage = String(tipMessage ?? '')
           .replace(/,/g, '，')
           .replace(/:/g, '：');
         createWarningModal({
-          title: '导入完成，部分数据未导入',
+          title: 'Nhập hoàn tất, một phần dữ liệu chưa được nhập',
           centered: true,
           width: 480,
-          okText: '知道了',
+          okText: 'Đã biết',
           content: h('div', { class: 'j-import-result-content' }, [
             h('div', { class: 'j-import-result-summary' }, [
-              h('div', { class: 'j-import-result-summary__label' }, '导入结果'),
+              h('div', { class: 'j-import-result-summary__label' }, 'Kết quả nhập'),
               h('div', { class: 'j-import-result-summary__message' }, resultMessage),
             ]),
             h('a', { class: 'j-import-result-download', href, target: '_blank', rel: 'noopener noreferrer' }, [
-              h('span', { class: 'j-import-result-download__main' }, [h(FileExcelOutlined), h('span', '下载错误数据明细')]),
+              h('span', { class: 'j-import-result-download__main' }, [h(FileExcelOutlined), h('span', 'Tải xuống chi tiết dữ liệu lỗi')]),
               h('span', { class: 'j-import-result-download__meta' }, 'Excel'),
             ]),
           ]),
         });
-        //update-end---author:scott ---date:20260813  for：优化Excel导入弹窗并修复错误提示HTML注入风险-----------
+        //update-end---author:scott ---date:20260813  for:Tối ưu popup import Excel và sửa rủi ro tiêm HTML trong thông báo lỗi-----------
       }
 
-      //重置
+      //Đặt lại
       function reset(arg?) {
         fileList.value = [];
         uploading.value = false;

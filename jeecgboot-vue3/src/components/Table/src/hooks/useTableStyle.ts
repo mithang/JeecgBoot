@@ -8,7 +8,7 @@ export function useTableStyle(propsRef: ComputedRef<BasicTableProps>, prefixCls:
   /**
    * 2024-09-19
    * liaozhiyang
-   * 【issues/7200】basicTable选中后没有选中样式
+   * 【issues/7200]basicTable sau khi chọn không có kiểu đã chọn
    * */
   const isChecked = (propsRef, record) => {
     const getAutoCreateKey = () => {
@@ -18,7 +18,7 @@ export function useTableStyle(propsRef: ComputedRef<BasicTableProps>, prefixCls:
       const { rowKey } = unref(propsRef);
       return getAutoCreateKey() ? ROW_KEY : rowKey;
     };
-    // 获取行的key字段数据
+    // Lấy dữ liệu trường key của hàng
     const getRecordKey = (record) => {
       const key = getRowKey();
       if (!key) {
@@ -45,7 +45,7 @@ export function useTableStyle(propsRef: ComputedRef<BasicTableProps>, prefixCls:
     if (rowClassName && isFunction(rowClassName)) {
       classNames.push(rowClassName(record, index));
     }
-    // 代码逻辑说明: 【issues/7200】basicTable选中后没有选中样式
+    // Giải thích logic mã: 【issues/7200]basicTable sau khi chọn không có kiểu đã chọn
     if (isChecked(propsRef, record)) {
       classNames.push('ant-table-row-selected');
     }
