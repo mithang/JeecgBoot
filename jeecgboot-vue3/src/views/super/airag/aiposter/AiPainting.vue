@@ -1,22 +1,22 @@
 <template>
   <div class="content-wrapper">
-    <!-- 中间参数配置 -->
+    <!-- Cấu hình tham số ở giữa -->
     <div class="config-panel">
       <div class="config-tabs">
         <a-tabs v-model:activeKey="configTab" :tabBarStyle="{ margin: 0 }">
-          <a-tab-pane key="draw" tab="绘图" />
-          <a-tab-pane key="face" tab="换脸" />
-          <a-tab-pane key="mix" tab="混图" />
+          <a-tab-pane key="draw" tab="Vẽ" />
+          <a-tab-pane key="face" tab="Thay khuôn mặt" />
+          <a-tab-pane key="mix" tab="Trộn hình" />
         </a-tabs>
       </div>
 
-      <!-- 示例按钮区域 -->
+      <!-- Khu vực nút ví dụ -->
       <div class="example-buttons" v-if="configTab === 'mix'">
-        <a-tooltip title="工作证制作">
-          <a-button class="example-btn" size="small" @click="applyExample('work_card')">示例一</a-button>
+        <a-tooltip title="Làm thẻ công tác">
+          <a-button class="example-btn" size="small" @click="applyExample('work_card')">Ví dụ một</a-button>
         </a-tooltip>
-        <a-tooltip title="换衣">
-          <a-button class="example-btn" size="small" @click="applyExample('change_clothes')">示例二</a-button>
+        <a-tooltip title="Thay trang phục">
+          <a-button class="example-btn" size="small" @click="applyExample('change_clothes')">Ví dụ hai</a-button>
         </a-tooltip>
       </div>
 
@@ -24,38 +24,38 @@
         <BasicForm @register="registerForm" />
 
         <div class="instructions" v-if="configTab === 'face'">
-          <div class="title">说明:</div>
-          <p>1 图片都必须包含脸，否则出不来图</p>
-          <p>2 "明星图"可以先用mj绘画制作出来</p>
-          <p>3 "明星图"其实动漫图也行</p>
-          <p>4 "你的头像"建议用一寸个人照</p>
+          <div class="title">Giải thích:</div>
+          <p>1 Mọi hình ảnh đều phải chứa khuôn mặt, nếu không sẽ không ra được ảnh</p>
+          <p>2 "Hình ngôi sao"Có thể dùng mj vẽ tạo ra trước</p>
+          <p>3 "Hình ngôi sao"Thực ra hình anime cũng được</p>
+          <p>4 "Ảnh đại diện của bạn"Khuyên dùng ảnh cá nhân một inch</p>
         </div>
 
         <div class="instructions" v-if="configTab === 'mix'">
-          <div class="title">说明:</div>
-          <p>1 合成至少2张图片</p>
-          <p>2 最多可传3张图</p>
+          <div class="title">Giải thích:</div>
+          <p>1 Tổng hợp ít nhất 2 hình ảnh</p>
+          <p>2 Tối đa có thể truyền 3 hình</p>
         </div>
       </div>
       <div class="action-container">
         <a-button type="primary" size="large" block @click="handleGenerate" :loading="loading">
           <Icon icon="ant-design:thunderbolt-outlined" />
-          立即生成
+          Tạo ngay
         </a-button>
       </div>
     </div>
 
-    <!-- 右侧图片生成结果 -->
+    <!-- Kết quả tạo hình ảnh bên phải -->
     <div class="preview-panel">
-      <div class="panel-title">生成结果</div>
+      <div class="panel-title">Kết quả tạo</div>
       <div class="preview-content">
         <div v-if="!generatedImage && !loading" class="empty-state">
           <Icon icon="ant-design:picture-outlined" size="64" color="#ccc" />
-          <p>在左侧配置参数并点击生成</p>
+          <p>Cấu hình tham số ở bên trái và nhấp tạo</p>
         </div>
 
         <div v-if="loading && !generatedImage" class="loading-state">
-          <a-spin size="large" tip="正在绘制图片，请稍候..." />
+          <a-spin size="large" tip="Đang vẽ hình ảnh, vui lòng chờ..." />
         </div>
 
         <div v-if="generatedImage" class="result-image-wrapper group">
@@ -63,11 +63,11 @@
           <div class="image-actions">
             <a-button class="preview-button" @click="handlePreview">
               <Icon icon="ant-design:eye-outlined" />
-              预览
+              Xem trước
             </a-button>
             <a-button type="primary" @click="handleDownload">
               <Icon icon="ant-design:download-outlined" />
-              下载
+              Tải xuống
             </a-button>
           </div>
         </div>
@@ -90,17 +90,17 @@
 
   const { createMessage } = useMessage();
   const loading = ref(false);
-  //update-begin---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】AI绘画改为异步轮询，支持切换菜单后继续查询
+  //update-begin---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】Vẽ AI đổi thành thăm dò bất đồng bộ, hỗ trợ tiếp tục truy vấn sau khi chuyển menu
   const PAINTING_TASK_ID_KEY = 'ai_painting_task_id';
   let pollTimer: ReturnType<typeof setTimeout> | null = null;
-  //update-end---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】AI绘画改为异步轮询，支持切换菜单后继续查询
+  //update-end---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】Vẽ AI đổi thành thăm dò bất đồng bộ, hỗ trợ tiếp tục truy vấn sau khi chuyển menu
   const generatedImage = ref('');
   const previewVisible = ref(false);
   const configTab = ref('draw');
   const FACE_SWAP_PROMPT =
-    '将图2的人脸替换到图1的人脸区域，保留图2的面部特征和五官细节，保持图1的身体姿态、发型、服装、构图和背景不变，面部融合自然，光影与肤色协调，高分辨率，写实风格';
+    'Thay khuôn mặt của hình 2 vào vùng khuôn mặt của hình 1, giữ lại đặc trưng khuôn mặt và chi tiết ngũ quan của hình 2, giữ nguyên tư thế cơ thể, kiểu tóc, trang phục, bố cục và nền của hình 1, khuôn mặt hòa trộn tự nhiên, ánh sáng và tông da hài hòa, độ phân giải cao, phong cách tả thực';
   const MIX_CHANGE_CLOTHES_PROMPT =
-    '以图2作为唯一的主体底图和最终画面，只将图1人物所穿的服装转移到图2人物身上。必须完整保留图2人物的身份、人脸、五官、发型、体型、身体姿态以及图2的构图、环境和背景，不得使用或复制图1的人脸、头部、身体姿态、人物身份和背景。图1仅作为服装参考，准确还原其服装款式、颜色、纹理和材质，使服装自然贴合图2人物，保持图2原有光影和画面风格。最终结果必须是图2中的人穿上图1的衣服，而不是生成图1中的人物。高分辨率，写实风格';
+    'Dùng hình 2 làm hình nền chủ thể duy nhất và hình ảnh cuối cùng, chỉ chuyển trang phục mà nhân vật trong hình 1 đang mặc sang nhân vật trong hình 2. Phải giữ nguyên hoàn toàn danh tính, khuôn mặt, ngũ quan, kiểu tóc, thể hình, tư thế cơ thể của nhân vật hình 2 cùng bố cục, môi trường và nền của hình 2, không được dùng hoặc sao chép khuôn mặt, đầu, tư thế cơ thể, danh tính nhân vật và nền của hình 1. Hình 1 chỉ làm tham khảo trang phục, tái hiện chính xác kiểu dáng, màu sắc, họa tiết và chất liệu trang phục của nó, để trang phục ôm tự nhiên vào nhân vật hình 2, giữ nguyên ánh sáng và phong cách hình ảnh vốn có của hình 2. Kết quả cuối cùng phải là người trong hình 2 mặc quần áo của hình 1, chứ không phải tạo ra nhân vật trong hình 1. Độ phân giải cao, phong cách tả thực';
 
   const { domainUrl } = useGlobSetting();
   const [registerForm, { validate, resetSchema, setFieldsValue }] = useForm({
@@ -127,8 +127,8 @@
     }
   });
 
-  //update-begin---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】AI绘画改为异步轮询，支持切换菜单后继续查询
-  /** 轮询查询任务结果 */
+  //update-begin---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】Vẽ AI đổi thành thăm dò bất đồng bộ, hỗ trợ tiếp tục truy vấn sau khi chuyển menu
+  /** Thăm dò truy vấn kết quả nhiệm vụ */
   function startPolling(taskId: string) {
     const poll = () => {
       defHttp
@@ -144,12 +144,12 @@
               generatedImage.value = imageUrl;
               loading.value = false;
               localStorage.removeItem(PAINTING_TASK_ID_KEY);
-              createMessage.success('图片生成成功！');
+              createMessage.success('Tạo hình ảnh thành công!');
             }
           } else {
             loading.value = false;
             localStorage.removeItem(PAINTING_TASK_ID_KEY);
-            createMessage.warning(res.message || '图片生成失败！');
+            createMessage.warning(res.message || 'Tạo hình ảnh thất bại!');
           }
         })
         .catch(() => {
@@ -174,7 +174,7 @@
       pollTimer = null;
     }
   });
-  //update-end---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】AI绘画改为异步轮询，支持切换菜单后继续查询
+  //update-end---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】Vẽ AI đổi thành thăm dò bất đồng bộ, hỗ trợ tiếp tục truy vấn sau khi chuyển menu
 
   async function handleGenerate() {
     try {
@@ -194,7 +194,7 @@
           FACE_SWAP_PROMPT;
       }
 
-      //update-begin---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】改为异步提交，获取taskId后开始轮询
+      //update-begin---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】Đổi thành gửi bất đồng bộ, lấy được taskId rồi bắt đầu thăm dò
       const res = await defHttp.post(
         { url: '/airag/chat/genAiPosterAsync', params: values },
         { isTransformResponse: false },
@@ -205,9 +205,9 @@
         startPolling(taskId);
       } else {
         loading.value = false;
-        createMessage.warning('提交任务失败！');
+        createMessage.warning('Gửi nhiệm vụ thất bại!');
       }
-      //update-end---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】改为异步提交，获取taskId后开始轮询
+      //update-end---author:wangshuai---date:2026-04-15---for:【QQYUN-14944】Đổi thành gửi bất đồng bộ, lấy được taskId rồi bắt đầu thăm dò
     } catch (error) {
       console.error('Validation failed:', error);
       loading.value = false;
@@ -224,7 +224,7 @@
         imageUrl:
           'https://jeecgdev.oss-cn-beijing.aliyuncs.com/upload/test/afdad9ea-077f-44a4-9d85-c26cde7aceed_1770703400282.png,https://jeecgdev.oss-cn-beijing.aliyuncs.com/upload/test/4e4d1886-fb3b-4c01-abf6-25e546a1253e_1770703403479.png',
         content:
-          '以[图1]名片设计稿的构图与磨砂玻璃质感为模板，为[图2]人物生成竖版工作卡。圆角半透明卡面，柔和高光与浅投影；人物胸像置于中上区域；左下排版姓名/职位/公司/电话，极简无衬线字体，留白均衡。右上角放置[图1]人物的可爱3D卡通形象，打破边界半浮出卡片并投下轻影，形成层次与视觉焦点。整体明亮自然光、真实材质细节，不添加多余图案与元素。人物需要清晰，不要模糊。',
+          'Lấy[Hình 1]Dùng bố cục và chất cảm kính mờ của bản thiết kế danh thiếp làm mẫu, cho[Hình 2]Tạo thẻ công tác dọc cho nhân vật. Mặt thẻ bo góc bán trong suốt, điểm sáng mềm và bóng đổ nông; ảnh bán thân nhân vật đặt ở vùng giữa trên; góc dưới trái trình bày họ tên/Chức vụ/Công ty/điện thoại, phông không chân tối giản, khoảng trắng cân bằng. Góc trên phải đặt[Hình 1]hình tượng hoạt hình 3D dễ thương của nhân vật, phá vỡ ranh giới nửa nổi ra khỏi thẻ và đổ bóng nhẹ, tạo thành lớp và điểm nhấn thị giác. Ánh sáng tự nhiên sáng tổng thể, chi tiết chất liệu chân thực, không thêm họa tiết và yếu tố thừa. Nhân vật cần rõ nét, không được mờ.',
       });
     } else if (type === 'change_clothes') {
       setFieldsValue({
@@ -236,7 +236,7 @@
   }
 
   /**
-   * 图片导出
+   * Xuất hình ảnh
    */
   function handleDownload() {
     if (!generatedImage.value) {

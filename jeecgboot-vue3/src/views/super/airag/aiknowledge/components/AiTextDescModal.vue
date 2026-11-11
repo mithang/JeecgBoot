@@ -1,6 +1,6 @@
-<!--手动录入text-->
+<!--Nhập thủ công text-->
 <template>
-  <BasicModal title="段落详情" destroyOnClose @register="registerModal" :canFullscreen="false" width="600px" :footer="null">
+  <BasicModal title="Chi tiết đoạn văn" destroyOnClose @register="registerModal" :canFullscreen="false" width="600px" :footer="null">
     <div class="p-2">
       <div class="header">
         <a-tag color="#a9c8ff">
@@ -35,19 +35,19 @@
     setup(props, { emit }) {
       let hitTextDescData = ref<any>({})
       
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
         hitTextDescData.value.source = 'score' + ' ' + data.score.toFixed(2);
-        //替换图片宽度
+        //Thay thế độ rộng hình ảnh
         data.content = replaceImageWith(data.content);
-        //替换图片domainUrl
+        //Thay thế domainUrl của hình ảnh
         data.content = replaceDomainUrl(data.content);
         hitTextDescData.value.content = data.content;
         setModalProps({ header: '300px' })
       });
       const { domainUrl } = useGlobSetting();
       const replaceImageWith = markdownContent => {
-        // 支持图片设置width的写法 ![](/static/jimuImages/screenshot_1617252560523.png =100)
+        // Hỗ trợ cách viết đặt width cho hình ảnh ![](/static/jimuImages/screenshot_1617252560523.png =100)
         const regex = /!\[([^\]]*)\]\(([^)]+)=([0-9]+)\)/g;
         return markdownContent.replace(regex, (match, alt, src, width) => {
           let reg = /#\s*{\s*domainURL\s*}/g;
@@ -56,7 +56,7 @@
         });
       };
       
-      //替换domainURL
+      //Thay thế domainURL
       const replaceDomainUrl = markdownContent => {
             const regex = /!\[([^\]]*)\]\(.*?#\s*{\s*domainURL\s*}.*?\)/g;
             return markdownContent.replace(regex, (match) => {

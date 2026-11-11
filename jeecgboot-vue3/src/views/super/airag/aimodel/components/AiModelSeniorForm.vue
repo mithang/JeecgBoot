@@ -1,8 +1,8 @@
 <template>
   <div class="model-params-popover">
     <div class="params" v-if="type === 'model'">
-      <span style="font-size:14px">参数</span>
-      <a-select value="加载预设" style="width: 96px" size="small" @change="onLoadPreset">
+      <span style="font-size:14px">Tham số</span>
+      <a-select value="Tải đặt sẵn" style="width: 96px" size="small" @change="onLoadPreset">
         <a-select-option v-for="(preset, idx) of presets" :value="idx" :key="idx">
           <a-space>
             <Icon :icon="preset.icon" />
@@ -11,10 +11,10 @@
         </a-select-option>
       </a-select>
     </div>
-    <!-- 模型温度 -->
+    <!-- Nhiệt độ mô hình -->
     <div class="setting-item" v-if="type === 'model'">
       <div class="label">
-        <span>模型温度</span>
+        <span>Nhiệt độ mô hình</span>
         <a-tooltip :title="tips.temperature">
           <Icon icon="ant-design:question-circle" />
         </a-tooltip>
@@ -25,10 +25,10 @@
         <a-input-number v-bind="temperatureProps" v-model:value="model.temperature" :disabled="model['temperature'] === null"/>
       </a-space>
     </div>
-    <!-- 词汇属性 -->
+    <!-- Thuộc tính từ vựng -->
     <div class="setting-item" v-if="type === 'model'">
       <div class="label">
-        <span>词汇属性</span>
+        <span>Thuộc tính từ vựng</span>
         <a-tooltip :title="tips.topP">
           <Icon icon="ant-design:question-circle" />
         </a-tooltip>
@@ -39,10 +39,10 @@
         <a-input-number v-bind="topPProps" v-model:value="model.topP" :disabled="model['topP'] === null"/>
       </a-space>
     </div>
-    <!-- 话题属性 -->
+    <!-- Thuộc tính chủ đề -->
     <div class="setting-item" v-if="type === 'model'">
       <div class="label">
-        <span>话题属性</span>
+        <span>Thuộc tính chủ đề</span>
         <a-tooltip :title="tips.presencePenalty">
           <Icon icon="ant-design:question-circle" />
         </a-tooltip>
@@ -53,10 +53,10 @@
         <a-input-number v-bind="presencePenaltyProps" v-model:value="model.presencePenalty" :disabled="model['presencePenalty'] === null"/>
       </a-space>
     </div>
-    <!-- 重复属性 -->
+    <!-- Thuộc tính lặp lại -->
     <div class="setting-item" v-if="type === 'model'">
       <div class="label">
-        <span>重复属性</span>
+        <span>Thuộc tính lặp lại</span>
         <a-tooltip :title="tips.frequencyPenalty">
           <Icon icon="ant-design:question-circle" />
         </a-tooltip>
@@ -67,10 +67,10 @@
         <a-input-number v-bind="frequencyPenaltyProps" v-model:value="model.frequencyPenalty" :disabled="model['frequencyPenalty'] === null"/>
       </a-space>
     </div>
-    <!-- 最大回复 -->
+    <!-- Trả lời tối đa -->
     <div class="setting-item" v-if="type === 'model'">
       <div class="label">
-        <span>最大回复</span>
+        <span>Trả lời tối đa</span>
         <a-tooltip :title="tips.maxTokens">
           <Icon icon="ant-design:question-circle" />
         </a-tooltip>
@@ -81,10 +81,10 @@
         <a-input-number v-bind="maxTokensProps" v-model:value="model.maxTokens" :disabled="model['maxTokens'] === null"/>
       </a-space>
     </div>
-    <!-- timeout 超时 -->
+    <!-- timeout quá thời gian chờ -->
     <div class="setting-item" v-if="type === 'model'">
       <div class="label">
-        <span>超时时间</span>
+        <span>Thời gian quá thời gian chờ</span>
         <a-tooltip :title="tips.timeout">
           <Icon icon="ant-design:question-circle" />
         </a-tooltip>
@@ -109,10 +109,10 @@
         <a-input-number v-bind="topNumberProps" v-model:value="model.topNumber" :disabled="model['topNumber'] === null"/>
       </a-space>
     </div>
-    <!-- Score 阈值 -->
+    <!-- Ngưỡng Score -->
     <div class="setting-item" v-if="type === 'knowledge'">
       <div class="label">
-        <span>Score 阈值</span>
+        <span>Ngưỡng Score</span>
         <a-tooltip :title="tips.similarity">
           <Icon icon="ant-design:question-circle" />
         </a-tooltip>
@@ -145,10 +145,10 @@
     },
     emits: ['success', 'register', 'updateModel'],
     setup(props, { emit }) {
-      // 预设参数
+      // Tham số đặt sẵn
       const presets = [
         {
-          name: '创意',
+          name: 'Sáng tạo',
           icon: 'fxemoji:star',
           params: {
             temperature: 0.8,
@@ -160,7 +160,7 @@
           },
         },
         {
-          name: '平衡',
+          name: 'Cân bằng',
           icon: 'noto:balance-scale',
           params: {
             temperature: 0.5,
@@ -172,7 +172,7 @@
           },
         },
         {
-          name: '精确',
+          name: 'Chính xác',
           icon: 'twemoji:direct-hit',
           params: {
             temperature: 0.2,
@@ -185,66 +185,66 @@
         },
       ];
 
-      // 参数介绍
+      // Giới thiệu tham số
       const tips = {
-        temperature: '值越大，回复内容越赋有多样性创造性、随机性；设为0根据事实回答，希望得到精准答案应该降低该参数；日常聊天建议0.5-0.8。',
-        topP: '值越小，Ai生成的内容越单调也越容易理解；值越大，Ai回复的词汇围越大，越多样化。',
-        presencePenalty: '值越大，越能够让Ai更好地控制新话题的引入，建议微调或不变。',
-        frequencyPenalty: '值越大，越能够让Ai更好地避免重复之前说过的话，建议微调或不变。',
+        temperature: 'Giá trị càng lớn, nội dung trả lời càng đa dạng, sáng tạo và ngẫu nhiên; đặt là 0 thì trả lời dựa trên sự thật, muốn có đáp án chính xác nên giảm tham số này; trò chuyện hằng ngày gợi ý 0.5-0.8.',
+        topP: 'Giá trị càng nhỏ, nội dung Ai tạo ra càng đơn điệu và cũng dễ hiểu hơn; giá trị càng lớn, phạm vi từ vựng trong trả lời của Ai càng lớn, càng đa dạng.',
+        presencePenalty: 'Giá trị càng lớn, càng giúp Ai kiểm soát việc đưa vào chủ đề mới tốt hơn, gợi ý tinh chỉnh nhẹ hoặc giữ nguyên.',
+        frequencyPenalty: 'Giá trị càng lớn, càng giúp Ai tránh lặp lại những gì đã nói trước đó tốt hơn, gợi ý tinh chỉnh nhẹ hoặc giữ nguyên.',
         maxTokens:
-          '设置Ai最大回复内容大小，会影响返回结果的长度。普通聊天建议500-800；短文生成建议800-2000；代码生成建议2000-3600；长文生成建议4000左右（或选择长回复模型)',
-        topNumber: '用于筛选与用户问题相似度最高的文本片段。系统同时会根据选用模型上下文窗口大小动态调整分段数量。',
-        similarity: '用于设置文本片段筛选的相似度阅值。',
-        timeout: '等待AI响应的最长时间，单位为秒。'
+          'Đặt kích thước nội dung trả lời tối đa của Ai, sẽ ảnh hưởng đến độ dài kết quả trả về. Trò chuyện thông thường gợi ý 500-800; tạo văn ngắn gợi ý 800-2000; tạo mã gợi ý 2000-3600; tạo văn dài gợi ý khoảng 4000 (hoặc chọn mô hình trả lời dài)',
+        topNumber: 'Dùng để lọc ra các đoạn văn bản có độ tương đồng cao nhất với câu hỏi của người dùng. Hệ thống đồng thời sẽ điều chỉnh động số lượng phân đoạn theo kích thước cửa sổ ngữ cảnh của mô hình đã chọn.',
+        similarity: 'Dùng để đặt ngưỡng độ tương đồng cho việc lọc đoạn văn bản.',
+        timeout: 'Thời gian chờ phản hồi AI tối đa, đơn vị là giây.'
       };
 
-      // 参数：温度
+      // Tham số: nhiệt độ
       const temperatureProps = ref<any>({
         min: 0.1,
         max: 1,
         step: 0.1,
       });
 
-      // 参数：词汇属性
+      // Tham số: thuộc tính từ vựng
       const topPProps = ref<any>({
         min: 0.1,
         max: 1,
         step: 0.1,
       });
-      // 参数：话题属性
+      // Tham số: thuộc tính chủ đề
       const presencePenaltyProps = ref<any>({
         min: -2,
         max: 2,
         step: 0.1,
       });
-      // 参数：重复属性
+      // Tham số: thuộc tính lặp lại
       const frequencyPenaltyProps = ref<any>({
         min: -2,
         max: 2,
         step: 0.1,
       });
-      // 参数：最大回复
+      // Tham số: trả lời tối đa
       const maxTokensProps = ref<any>({
         min: 1,
         max: 16000,
         step: 1,
       });    
       
-      // 参数：topk
+      // Tham số: topk
       const topNumberProps = ref<any>({
         min: 1,
         max: 10,
         step: 1,
       });     
       
-      // 参数：Score 阈值
+      // Tham số: Ngưỡng Score
       const similarityProps = ref<any>({
         min: 0.1,
         max: 1,
         step: 0.1,
       });
       
-      //参数：超时时间
+      //Tham số: thời gian quá thời gian chờ
       const timeoutProps = ref<any>({
         min: 1,
         step: 1,
@@ -252,34 +252,34 @@
       })
       
       
-      //参数对象
+      //Đối tượng tham số
       const model = ref<any>(props.modelParams || {})
       
-      //模型温度是否勾选
+      //Nhiệt độ mô hình có được chọn hay không
       const temperatureEnable = computed({
         get:()=> model.value.temperature != null,
         set:(value) => model.value.temperature = !value? null: 0.7
       });    
       
-      //词汇属性是否勾选
+      //Thuộc tính từ vựng có được chọn hay không
       const topPEnable = computed({
         get:()=> model.value.topP != null,
         set:(value) => model.value.topP = !value? null: 0
       });
       
-      //词汇属性是否勾选
+      //Thuộc tính từ vựng có được chọn hay không
       const presencePenaltyEnable = computed({
         get:()=> model.value.presencePenalty != null,
         set:(value) => model.value.presencePenalty = !value? null: 0
       });  
       
-      //重复属性是否勾选
+      //Thuộc tính lặp lại có được chọn hay không
       const frequencyPenaltyEnable = computed({
         get:()=> model.value.frequencyPenalty != null,
         set:(value) => model.value.frequencyPenalty = !value? null: 0
       });   
       
-      //最大回复
+      //Trả lời tối đa
       const maxTokensEnable = computed({
         get:()=> model.value.maxTokens != null,
         set:(value) => model.value.maxTokens = !value? null: 520
@@ -291,19 +291,19 @@
         set:(value) => model.value.topNumber = !value? null: 4
       });   
       
-      //Score 阈值
+      //Ngưỡng Score
       const similarityEnable = computed({
         get:()=> model.value.similarity != null,
         set:(value) => model.value.similarity = !value? null: 0.74
       });    
       
-      //timeout超时时间
+      //timeoutThời gian quá thời gian chờ
       const timeoutEnable = computed({
         get:()=> model.value.timeout != null,
         set:(value) => model.value.timeout = !value? null: 60
       });
       
-      // 加载预设
+      // Tải đặt sẵn
       function onLoadPreset(idx: number) {
         const preset = presets[idx];
         if (!preset) {
@@ -313,7 +313,7 @@
       }
 
       /**
-       * 更新参数
+       * Cập nhật tham số
        *
        * @param model
        */
@@ -322,7 +322,7 @@
       }
 
       /**
-       * 设置modal值
+       * Đặt giá trị modal
        * @param values
        */
       function setModalParams(values){

@@ -1,7 +1,7 @@
-<!--知识库添加页面-->
+<!--Trang thêm kho tri thức-->
 <template>
   <div class="knowledge">
-    <!--查询区域-->
+    <!--Khu vực truy vấn-->
     <div class="jeecg-basic-table-form-container">
       <a-form
         ref="formRef"
@@ -13,15 +13,15 @@
       >
         <a-row :gutter="24">
           <a-col :xl="7" :lg="7" :md="8" :sm="24">
-            <a-form-item name="name" label="知识库名称">
-              <JInput v-model:value="queryParam.name" placeholder="请输入知识库名称" />
+            <a-form-item name="name" label="Tên kho tri thức">
+              <JInput v-model:value="queryParam.name" placeholder="Vui lòng nhập tên kho tri thức" />
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-col :lg="6">
-                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">查询</a-button>
-                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">重置</a-button>
+                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">Truy vấn</a-button>
+                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">Đặt lại</a-button>
               </a-col>
             </span>
           </a-col>
@@ -34,7 +34,7 @@
         <a-card class="add-knowledge-card" @click="handleAddKnowled">
           <div class="flex">
             <Icon icon="ant-design:plus-outlined" class="add-knowledge-card-icon" size="20"></Icon>
-            <span class="add-knowledge-card-title">创建知识库</span>
+            <span class="add-knowledge-card-title">Tạo kho tri thức</span>
           </div>
         </a-card>
       </a-col>
@@ -45,12 +45,12 @@
               <img class="header-img" src="./icon/knowledge.png" />
               <div class="header-text">
                 <span class="header-text-top header-name ellipsis" :title="item.name"> {{ item.name }} </span>
-                <span class="header-text-top"> 创建者：{{ item.createBy_dictText || item.createBy }} </span>
+                <span class="header-text-top"> Người tạo:{{ item.createBy_dictText || item.createBy }} </span>
               </div>
             </div>
           </div>
           <div class="mt-10 text-desc">
-            <span>{{ item.descr || '暂无描述' }}</span>
+            <span>{{ item.descr || 'Tạm thời chưa có mô tả' }}</span>
           </div>
           <div class="knowledge-footer flex" style="justify-content: space-between">
             <div style="width: calc(100% - 60px)" class="ellipsis">
@@ -58,8 +58,8 @@
               <span :title="item.embedId_dictText">{{ item.embedId_dictText }}</span>
             </div>
             <div>
-              <a-tag v-if="item.type == 'memory'" color="orange" class="tag-style">记忆库</a-tag>
-              <a-tag v-else color="blue" class="tag-style">知识库</a-tag>
+              <a-tag v-if="item.type == 'memory'" color="orange" class="tag-style">Kho bộ nhớ</a-tag>
+              <a-tag v-else color="blue" class="tag-style">Kho tri thức</a-tag>
             </div>
           </div>
           <div class="knowledge-btn">
@@ -71,19 +71,19 @@
                 <a-menu>
                   <a-menu-item key="vectorization" @click.prevent.stop="handleVectorization(item.id)">
                     <Icon icon="ant-design:retweet-outlined" size="16"></Icon>
-                    向量化
+                    Vector hóa
                   </a-menu-item>
                   <a-menu-item key="text" @click.prevent.stop="handleEditClick(item)">
                     <Icon class="pointer" icon="ant-design:edit-outlined" size="16"></Icon>
-                    编辑
+                    Chỉnh sửa
                   </a-menu-item>
                   <a-menu-item key="file" @click.prevent.stop="handleDelete(item)">
                     <Icon class="pointer" icon="ant-design:delete-outlined" size="16"></Icon>
-                    删除
+                    Xóa
                   </a-menu-item>
                   <a-menu-item key="clear" @click.prevent.stop="onDeleteAllDoc(item)">
                     <Icon icon="ant-design:delete-outlined" size="16"></Icon>
-                    清空文档
+                    Làm trống tài liệu
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -103,11 +103,11 @@
       @change="handlePageChange"
       class="list-footer"
       size="small"
-      :show-total="() => `共${total}条` "
+      :show-total="() => `Tổng cộng${total}Mục` "
     />
-    <!--添加知识库弹窗-->
+    <!--Popup thêm kho tri thức-->
     <KnowledgeBaseModal @register="registerModal" @success="reload"></KnowledgeBaseModal>
-    <!-- 知识库文档弹窗 -->
+    <!-- Popup tài liệu kho tri thức -->
     <AiragKnowledgeDocListModal @register="docListRegister"></AiragKnowledgeDocListModal>
   </div>
 </template>
@@ -138,51 +138,51 @@
       Pagination,
     },
     setup() {
-      //模型列表
+      //Danh sách mô hình
       const knowledgeList = ref([]);
 
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { openModal }] = useModal();
       const [docListRegister, { openModal: openDocModal }] = useModal();
 
-      //当前页数
+      //Số trang hiện tại
       const pageNo = ref<number>(1);
-      //每页条数
+      //Số mục mỗi trang
       const pageSize = ref<number>(30);
-      //总条数
+      //Tổng số mục
       const total = ref<number>(0);
-      //可选择的页数
+      //Số trang có thể chọn
       const pageSizeOptions = ref<any>(['10', '20', '30']);
-      //查询参数
+      //Tham số truy vấn
       const queryParam = reactive<any>({});
-      //查询区域label宽度
+      //Độ rộng label của khu vực truy vấn
       const labelCol = reactive({
         xs: 24,
         sm: 4,
         xl: 6,
         xxl: 6,
       });
-      //查询区域组件宽度
+      //Độ rộng component khu vực truy vấn
       const wrapperCol = reactive({
         xs: 24,
         sm: 20,
       });
-      //查询区域表单的ref
+      //ref của biểu mẫu khu vực truy vấn
       const formRef = ref();
       const { createMessage } = useMessage();
 
-      //页面初始化执行列表查询
+      //Khi khởi tạo trang thực thi truy vấn danh sách
       reload();
 
       /**
-       * 新增
+       * Thêm mới
        */
       async function handleAddKnowled() {
         openModal(true, {});
       }
 
       /**
-       * 编辑
+       * Chỉnh sửa
        *
        * @param item
        */
@@ -195,7 +195,7 @@
       }
 
       /**
-       * 重新加载数据
+       * Tải lại dữ liệu
        */
       function reload() {
         let params = {
@@ -218,7 +218,7 @@
       }
 
       /**
-       * 分页改变事件
+       * Sự kiện thay đổi phân trang
        * @param page
        * @param current
        */
@@ -229,7 +229,7 @@
       }
 
       /**
-       * 删除模型
+       * Xóa mô hình
        * @param item
        */
       async function handleDelete(item) {
@@ -240,7 +240,7 @@
       }
 
       /**
-       * 清空文档
+       * Làm trống tài liệu
        * @param item
        */
       async function onDeleteAllDoc(item) {
@@ -249,7 +249,7 @@
       }
 
       /**
-       * 查询
+       * Truy vấn
        */
       function searchQuery() {
         pageNo.value = 1;
@@ -257,42 +257,42 @@
       }
 
       /**
-       * 重置
+       * Đặt lại
        */
       function searchReset() {
         formRef.value.resetFields();
         queryParam.createBy = '';
         pageNo.value = 1;
-        //刷新数据
+        //Làm mới dữ liệu
         reload();
       }
 
       /**
-       * 参数配置点击事件
+       * Sự kiện nhấp cấu hình tham số
        *
        * @param id
        * @param type
        */
-      //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+      //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
       function handleDocClick(item) {
         openDocModal(true, { id: item.id, type: item.type, knowledgeMetadata: item.metadata });
-      //update-end---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+      //update-end---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
       }
 
       /**
-       * 知识库向量化
+       * Vector hóa kho tri thức
        * @param id
        */
       async function handleVectorization(id) {
         rebuild({ knowIds: id }).then((res) =>{
           if(res.success){
-            createMessage.success("操作成功，开始异步重建知识库，请稍后查看！");
+            createMessage.success("Thao tác thành công, bắt đầu xây dựng lại kho tri thức bất đồng bộ, vui lòng xem sau!");
             reload();
           }else{
-            createMessage.warning("向量化失败！");
+            createMessage.warning("Vector hóa thất bại!");
           }
         }).catch(err=>{
-          createMessage.warning("向量化失败！");
+          createMessage.warning("Vector hóa thất bại!");
         });
       }
 

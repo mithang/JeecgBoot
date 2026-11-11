@@ -3,16 +3,16 @@ import { FormSchema } from '@/components/Form';
 export const formSchema: FormSchema[] = [
   {
     field: 'drawModelId',
-    label: '模型',
+    label: 'Mô hình',
     component: 'JDictSelectTag',
     required: true,
     helpMessage: [
-      '1、需要选择在模型中已有的图像模型',
-      '2、智普语言模型不支持尺寸设置',
-      "3、openAi旧版模型如(dall-e-2)需要选择尺寸，新版模型直接输入'竖版: 9:16即可'",
-      '4、当前只有千问万象模型(wanx2.1-imageedit,wan2.5-i2i-preview)支持图生图',
-      '5、wan2.5-i2i-preview支持多张图片',
-      '6、当前文生图openAi效果最佳',
+      '1. Cần chọn mô hình hình ảnh đã có trong mô hình',
+      '2. Mô hình ngôn ngữ Zhipu không hỗ trợ cài đặt kích thước',
+      "3. Mô hình phiên bản cũ của openAi như (dall-e-2) cần chọn kích thước, mô hình phiên bản mới nhập trực tiếp 'Bản dọc: 9:16 là được'",
+      '4. Hiện tại chỉ có mô hình Qwen Wanxiang (wanx2.1-imageedit, wan2.5-i2i-preview) hỗ trợ tạo ảnh từ ảnh',
+      '5. wan2.5-i2i-preview hỗ trợ nhiều hình ảnh',
+      '6. Hiện tại tạo ảnh từ văn bản bằng openAi hiệu quả tốt nhất',
     ],
     componentProps: {
       dictCode: "airag_model where model_type = 'IMAGE' and activate_flag = 1,name,id",
@@ -20,17 +20,17 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'content',
-    label: '提示词',
+    label: 'Prompt',
     component: 'InputTextArea',
     required: true,
     componentProps: {
       rows: 10,
-      placeholder: '请输入提示词，例如：一只可爱的猫咪，赛博朋克风格',
+      placeholder: 'Vui lòng nhập prompt, ví dụ: một chú mèo dễ thương, phong cách cyberpunk',
     },
   },
   {
     field: 'imageUrl',
-    label: '参考图',
+    label: 'Hình tham khảo',
     component: 'JImageUpload',
     componentProps: {
       fileMax: 2,
@@ -38,7 +38,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'imageSize',
-    label: '图片尺寸',
+    label: 'Kích thước hình ảnh',
     component: 'Select',
     defaultValue: '720*1280',
     componentProps: {
@@ -54,17 +54,17 @@ export const formSchema: FormSchema[] = [
 ];
 
 /**
- * 混图表单
+ * Biểu mẫu biểu đồ hỗn hợp
  */
 export const mixFormSchema: FormSchema[] = [
   {
     field: 'drawModelId',
-    label: '模型',
+    label: 'Mô hình',
     component: 'JDictSelectTag',
     required: true,
     helpMessage: [
-      '1、需要选择在模型中已有的图像模型',
-      '2、当前支持通义万象模型wan2.5-i2i-preview',
+      '1. Cần chọn mô hình hình ảnh đã có trong mô hình',
+      '2. Hiện tại hỗ trợ mô hình Tongyi Wanxiang wan2.5-i2i-preview',
     ],
     componentProps: {
       dictCode: "airag_model where model_type = 'IMAGE' and activate_flag = 1,name,id",
@@ -72,7 +72,7 @@ export const mixFormSchema: FormSchema[] = [
   },
   {
     field: 'imageSize',
-    label: '尺寸',
+    label: 'Kích thước',
     component: 'Select',
     defaultValue: '720*1280',
     componentProps: {
@@ -87,23 +87,23 @@ export const mixFormSchema: FormSchema[] = [
   },
   {
     field: 'imageUrl',
-    label: '上传图像',
+    label: 'Tải lên hình tượng',
     component: 'JImageUpload',
     required: true,
     componentProps: {
       fileMax: 3,
-      text: '上传图像',
+      text: 'Tải lên hình tượng',
     },
     rules: [
       {
         required: true,
         validator: async (_, value) => {
           if (!value) {
-            return Promise.reject('请上传图像');
+            return Promise.reject('Vui lòng tải lên hình tượng');
           }
           const images = value.split(',');
           if (images.length < 2) {
-            return Promise.reject('合成至少2张图片');
+            return Promise.reject('Tổng hợp ít nhất 2 hình ảnh');
           }
           return Promise.resolve();
         },
@@ -112,33 +112,33 @@ export const mixFormSchema: FormSchema[] = [
   },
   {
     field: 'content',
-    label: '提示词',
+    label: 'Prompt',
     component: 'InputTextArea',
     defaultValue:
-      '以图2作为唯一的主体底图和最终画面，只将图1人物所穿的服装转移到图2人物身上。必须完整保留图2人物的身份、人脸、五官、发型、体型、身体姿态以及图2的构图、环境和背景，不得使用或复制图1的人脸、头部、身体姿态、人物身份和背景。图1仅作为服装参考，准确还原其服装款式、颜色、纹理和材质，使服装自然贴合图2人物，保持图2原有光影和画面风格。最终结果必须是图2中的人穿上图1的衣服，而不是生成图1中的人物。高分辨率，写实风格',
+      'Dùng hình 2 làm hình nền chủ thể duy nhất và hình ảnh cuối cùng, chỉ chuyển trang phục mà nhân vật trong hình 1 đang mặc sang nhân vật trong hình 2. Phải giữ nguyên hoàn toàn danh tính, khuôn mặt, ngũ quan, kiểu tóc, thể hình, tư thế cơ thể của nhân vật hình 2 cùng bố cục, môi trường và nền của hình 2, không được dùng hoặc sao chép khuôn mặt, đầu, tư thế cơ thể, danh tính nhân vật và nền của hình 1. Hình 1 chỉ làm tham khảo trang phục, tái hiện chính xác kiểu dáng, màu sắc, họa tiết và chất liệu trang phục của nó, để trang phục ôm tự nhiên vào nhân vật hình 2, giữ nguyên ánh sáng và phong cách hình ảnh vốn có của hình 2. Kết quả cuối cùng phải là người trong hình 2 mặc quần áo của hình 1, chứ không phải tạo ra nhân vật trong hình 1. Độ phân giải cao, phong cách tả thực',
     componentProps: {
       rows: 4,
-      placeholder: '如将图一的话花瓶放到图二中',
+      placeholder: 'Ví dụ đặt lọ hoa trong hình một vào trong hình hai',
     },
   },
 ];
 
 /**
- * 绘画的表单
+ * Biểu mẫu của việc vẽ
  */
 export const drawFormSchema: FormSchema[] = [
   {
     field: 'drawModelId',
-    label: '模型',
+    label: 'Mô hình',
     component: 'JDictSelectTag',
     required: true,
     helpMessage: [
-      '1、需要选择在模型中已有的图像模型',
-      '2、智普语言模型不支持尺寸设置',
-      "3、openAi旧版模型如(dall-e-2)需要选择尺寸，新版模型直接输入'竖版: 9:16即可'",
-      '4、当前只有千问万象模型(wanx2.1-imageedit,wan2.5-i2i-preview)支持图生图',
-      '5、wan2.5-i2i-preview支持多张图片',
-      '6、当前文生图openAi效果最佳',
+      '1. Cần chọn mô hình hình ảnh đã có trong mô hình',
+      '2. Mô hình ngôn ngữ Zhipu không hỗ trợ cài đặt kích thước',
+      "3. Mô hình phiên bản cũ của openAi như (dall-e-2) cần chọn kích thước, mô hình phiên bản mới nhập trực tiếp 'Bản dọc: 9:16 là được'",
+      '4. Hiện tại chỉ có mô hình Qwen Wanxiang (wanx2.1-imageedit, wan2.5-i2i-preview) hỗ trợ tạo ảnh từ ảnh',
+      '5. wan2.5-i2i-preview hỗ trợ nhiều hình ảnh',
+      '6. Hiện tại tạo ảnh từ văn bản bằng openAi hiệu quả tốt nhất',
     ],
     componentProps: {
       dictCode: "airag_model where model_type = 'IMAGE' and activate_flag = 1,name,id",
@@ -146,17 +146,17 @@ export const drawFormSchema: FormSchema[] = [
   },
   {
     field: 'content',
-    label: '提示词',
+    label: 'Prompt',
     component: 'InputTextArea',
     required: true,
     componentProps: {
       rows: 5,
-      placeholder: '请输入提示词，例如：一只可爱的猫咪',
+      placeholder: 'Vui lòng nhập prompt, ví dụ: một chú mèo dễ thương',
     },
   },
   {
     field: 'imageSize',
-    label: '图片尺寸',
+    label: 'Kích thước hình ảnh',
     component: 'Select',
     defaultValue: '720*1280',
     componentProps: {
@@ -171,105 +171,105 @@ export const drawFormSchema: FormSchema[] = [
   },
   {
     field: 'style',
-    label: '风格',
+    label: 'Phong cách',
     component: 'Select',
     defaultValue: 'modernOrganic',
     componentProps: {
       options: [
-        { label: '赛博朋克', value: 'cyberpunk' },
-        { label: '星际', value: 'star' },
-        { label: '动漫', value: 'anime' },
-        { label: '日本漫画', value: 'japaneseComicsManga' },
-        { label: '水墨画风格', value: 'inkWashPaintingStyle' },
-        { label: '原创', value: 'original' },
-        { label: '风景画', value: 'landscape' },
-        { label: '插画', value: 'illustration' },
-        { label: '漫画', value: 'manga' },
-        { label: '现代自然', value: 'modernOrganic' },
-        { label: '创世纪', value: 'genesis' },
-        { label: '海报风格', value: 'posterstyle' },
-        { label: '超现实主义', value: 'surrealism' },
-        { label: '素描', value: 'sketch' },
-        { label: '写实', value: 'realism' },
-        { label: '水彩画', value: 'watercolorPainting' },
-        { label: '立体主义', value: 'cubism' },
-        { label: '黑白', value: 'blackAndWhite' },
-        { label: '胶片摄影风格', value: 'fmPhotography' },
-        { label: '电影化', value: 'cinematic' },
-        { label: '清晰的面部特征', value: 'clearFacialFeatures' },
+        { label: 'Cyberpunk', value: 'cyberpunk' },
+        { label: 'Liên sao', value: 'star' },
+        { label: 'Anime', value: 'anime' },
+        { label: 'Manga Nhật Bản', value: 'japaneseComicsManga' },
+        { label: 'Phong cách tranh thủy mặc', value: 'inkWashPaintingStyle' },
+        { label: 'Nguyên tác', value: 'original' },
+        { label: 'Tranh phong cảnh', value: 'landscape' },
+        { label: 'Minh họa', value: 'illustration' },
+        { label: 'Truyện tranh', value: 'manga' },
+        { label: 'Hiện đại tự nhiên', value: 'modernOrganic' },
+        { label: 'Sáng thế', value: 'genesis' },
+        { label: 'Phong cách poster', value: 'posterstyle' },
+        { label: 'Chủ nghĩa siêu thực', value: 'surrealism' },
+        { label: 'Phác họa', value: 'sketch' },
+        { label: 'Hiện thực', value: 'realism' },
+        { label: 'Tranh màu nước', value: 'watercolorPainting' },
+        { label: 'Chủ nghĩa lập thể', value: 'cubism' },
+        { label: 'Đen trắng', value: 'blackAndWhite' },
+        { label: 'Phong cách chụp ảnh phim', value: 'fmPhotography' },
+        { label: 'Điện ảnh hóa', value: 'cinematic' },
+        { label: 'Đặc điểm khuôn mặt rõ nét', value: 'clearFacialFeatures' },
       ],
     },
   },
   {
     field: 'visualAngle',
-    label: '视角',
+    label: 'Góc nhìn',
     component: 'Select',
     defaultValue: 'frontView',
     componentProps: {
       options: [
-        { label: '宽视角', value: 'wideView' },
-        { label: '鸟瞰视角', value: 'birdView' },
-        { label: '顶视角', value: 'topView' },
-        { label: '仰视角', value: 'upview' },
-        { label: '正面视角', value: 'frontView' },
-        { label: '头部特写', value: 'headshot' },
-        { label: '超广角视角', value: 'ultrawideshot' },
-        { label: '中景', value: 'mediumShot' },
-        { label: '远景', value: 'longShot' },
-        { label: '景深', value: 'depthOfField' },
+        { label: 'Góc nhìn rộng', value: 'wideView' },
+        { label: 'Góc nhìn từ trên cao', value: 'birdView' },
+        { label: 'Góc nhìn trên đỉnh', value: 'topView' },
+        { label: 'Góc nhìn từ dưới lên', value: 'upview' },
+        { label: 'Góc nhìn chính diện', value: 'frontView' },
+        { label: 'Đặc tả phần đầu', value: 'headshot' },
+        { label: 'Góc nhìn siêu rộng', value: 'ultrawideshot' },
+        { label: 'Cảnh trung', value: 'mediumShot' },
+        { label: 'Cảnh xa', value: 'longShot' },
+        { label: 'Độ sâu trường ảnh', value: 'depthOfField' },
       ],
     },
   },
   {
     field: 'characterShot',
-    label: '人物镜头',
+    label: 'Ống kính nhân vật',
     component: 'Select',
     defaultValue: 'fullLengthShot',
     componentProps: {
       options: [
-        { label: '脸部特写', value: 'faceShot' },
-        { label: '大特写', value: 'bigCloseUp' },
-        { label: '特写', value: 'closeUp' },
-        { label: '腰部以上', value: 'waistShot' },
-        { label: '膝盖以上', value: 'kneeShot' },
-        { label: '全身照', value: 'fullLengthShot' },
-        { label: '极远景', value: 'extraLongShot' },
+        { label: 'Đặc tả khuôn mặt', value: 'faceShot' },
+        { label: 'Đặc tả lớn', value: 'bigCloseUp' },
+        { label: 'Đặc tả', value: 'closeUp' },
+        { label: 'Từ eo trở lên', value: 'waistShot' },
+        { label: 'Từ đầu gối trở lên', value: 'kneeShot' },
+        { label: 'Ảnh toàn thân', value: 'fullLengthShot' },
+        { label: 'Cảnh cực xa', value: 'extraLongShot' },
       ],
     },
   },
   {
     field: 'lighting',
-    label: '灯光',
+    label: 'Ánh sáng đèn',
     component: 'Select',
     defaultValue: 'naturalLight',
     componentProps: {
       options: [
-        { label: '冷光', value: 'coldLight' },
-        { label: '暖光', value: 'warmLight' },
-        { label: '硬光', value: 'hardLighting' },
-        { label: '戏剧性光线', value: 'dramaticLight' },
-        { label: '反射光', value: 'reflectionLight' },
-        { label: '薄雾', value: 'mistyFoggy' },
-        { label: '自然光', value: 'naturalLight' },
-        { label: '阳光', value: 'sunLight' },
-        { label: '情绪化', value: 'moody' },
+        { label: 'Ánh sáng lạnh', value: 'coldLight' },
+        { label: 'Ánh sáng ấm', value: 'warmLight' },
+        { label: 'Ánh sáng cứng', value: 'hardLighting' },
+        { label: 'Ánh sáng kịch tính', value: 'dramaticLight' },
+        { label: 'Ánh sáng phản xạ', value: 'reflectionLight' },
+        { label: 'Sương mỏng', value: 'mistyFoggy' },
+        { label: 'Ánh sáng tự nhiên', value: 'naturalLight' },
+        { label: 'Ánh nắng', value: 'sunLight' },
+        { label: 'Cảm xúc hóa', value: 'moody' },
       ],
     },
   },
 ];
 
 /**
- * 换脸表单
+ * Biểu mẫu thay khuôn mặt
  */
 export const faceSwapFormSchema: FormSchema[] = [
   {
     field: 'drawModelId',
-    label: '模型',
+    label: 'Mô hình',
     component: 'JDictSelectTag',
     required: true,
     helpMessage: [
-      '1、需要选择在模型中已有的图像模型',
-      '2、当前只支持通义万象模型(wan2.5-i2i-preview)'
+      '1. Cần chọn mô hình hình ảnh đã có trong mô hình',
+      '2. Hiện tại chỉ hỗ trợ mô hình Tongyi Wanxiang(wan2.5-i2i-preview)'
     ],
     componentProps: {
       dictCode: "airag_model where model_type = 'IMAGE' and activate_flag = 1,name,id",
@@ -277,39 +277,39 @@ export const faceSwapFormSchema: FormSchema[] = [
   },
   {
     field: 'sourceImage',
-    label: '你的头像',
+    label: 'Ảnh đại diện của bạn',
     component: 'JImageUpload',
     required: true,
     componentProps: {
       fileMax: 1,
-      text: '上传头像',
+      text: 'Tải lên ảnh đại diện',
     },
   },
   {
     field: 'targetImage',
-    label: '明星图',
+    label: 'Hình ngôi sao',
     component: 'JImageUpload',
     required: true,
     componentProps: {
       fileMax: 1,
-      text: '上传明星图',
+      text: 'Tải lên hình ngôi sao',
     },
   },
   {
     field: 'content',
-    label: '提示词',
+    label: 'Prompt',
     component: 'InputTextArea',
     required: true,
     defaultValue:
-      '将图2的人脸替换到图1的人脸区域，保留图2的面部特征和五官细节，保持图1的身体姿态、发型、服装、构图和背景不变，面部融合自然，光影与肤色协调，高分辨率，写实风格',
+      'Thay khuôn mặt của hình 2 vào vùng khuôn mặt của hình 1, giữ lại đặc trưng khuôn mặt và chi tiết ngũ quan của hình 2, giữ nguyên tư thế cơ thể, kiểu tóc, trang phục, bố cục và nền của hình 1, khuôn mặt hòa trộn tự nhiên, ánh sáng và tông da hài hòa, độ phân giải cao, phong cách tả thực',
     componentProps: {
       rows: 4,
-      placeholder: '请输入换脸提示词',
+      placeholder: 'Vui lòng nhập prompt thay khuôn mặt',
     },
   },
   {
     field: 'imageSize',
-    label: '图片尺寸',
+    label: 'Kích thước hình ảnh',
     component: 'Select',
     defaultValue: '720*1280',
     componentProps: {

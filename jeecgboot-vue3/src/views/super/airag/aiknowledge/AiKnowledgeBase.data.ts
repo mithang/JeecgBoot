@@ -2,7 +2,7 @@ import { FormSchema } from '@/components/Form';
 import { BasicColumn } from '@/components/Table';
 
 /**
- * 表单
+ * Biểu mẫu
  */
 export const formSchema: FormSchema[] = [
   {
@@ -12,30 +12,30 @@ export const formSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '知识库名称',
+    label: 'Tên kho tri thức',
     field: 'name',
     required: true,
     componentProps: {
-      placeholder: '请输入知识库名称',
-      //是否展示字数
+      placeholder: 'Vui lòng nhập tên kho tri thức',
+      // Có hiển thị số ký tự hay không
       showCount: true,
       maxlength: 64,
     },
     component: 'Input',
   },
   {
-    label: '知识库描述',
+    label: 'Mô tả kho tri thức',
     field: 'descr',
     component: 'InputTextArea',
     componentProps: {
-      placeholder: '描述知识库的内容，详尽的描述将帮助AI能深入理解该知识库的内容，能更准确的检索到内容，提高该知识库的命中率。',
-      //是否展示字数
+      placeholder: 'Mô tả nội dung của kho tri thức, mô tả chi tiết sẽ giúp AI hiểu sâu nội dung của kho tri thức này, có thể truy xuất nội dung chính xác hơn, nâng cao tỷ lệ trúng của kho tri thức này.',
+      // Có hiển thị số ký tự hay không
       showCount: true,
       maxlength: 256,
     },
   },
   {
-    label: '向量模型',
+    label: 'Mô hình vector',
     field: 'embedId',
     required: true,
     component: 'JDictSelectTag',
@@ -44,60 +44,60 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '状态',
+    label: 'Trạng thái',
     field: 'status',
     required: true,
     component: 'JDictSelectTag',
     componentProps: {
       options: [
-        { label: '启用', value: 'enable' },
-        { label: '禁用', value: 'disable' },
+        { label: 'Kích hoạt', value: 'enable' },
+        { label: 'Vô hiệu hóa', value: 'disable' },
       ],
       type: 'radioButton',
     },
     defaultValue: 'enable',
   },
   {
-    label: '类型',
+    label: 'Loại',
     field: 'type',
     required: true,
     component: 'JDictSelectTag',
     componentProps: {
       options: [
-        { label: '知识库', value: 'knowledge' },
-        { label: '记忆库', value: 'memory' },
+        { label: 'Kho tri thức', value: 'knowledge' },
+        { label: 'Kho bộ nhớ', value: 'memory' },
       ],
       type: 'radioButton',
     },
     defaultValue: 'knowledge',
   },
   {
-    label: '分段策略',
+    label: 'Chiến lược phân đoạn',
     field: 'enableSegment',
     component: 'Switch',
     defaultValue: false,
     ifShow: ({ values }) => values.type !== 'memory',
     componentProps: {
-      checkedChildren: '开启',
-      unCheckedChildren: '关闭',
+      checkedChildren: 'Bật',
+      unCheckedChildren: 'Đóng',
     },
-    helpMessage: '开启后，知识库里面的文档默认使用该分段策略；文档也可单独配置自己的分段策略',
+    helpMessage: 'Sau khi bật, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn này; tài liệu cũng có thể cấu hình riêng chiến lược phân đoạn của mình',
   },
   {
-    label: '分段模式',
+    label: 'Chế độ phân đoạn',
     field: 'segmentStrategy',
     component: 'RadioGroup',
     defaultValue: 'auto',
     ifShow: ({ values }) => values.type !== 'memory' && values.enableSegment === true,
     componentProps: {
       options: [
-        { label: '自动分段与清洗', value: 'auto' },
-        { label: '自定义', value: 'custom' },
+        { label: 'Tự động phân đoạn và làm sạch', value: 'auto' },
+        { label: 'Tùy chỉnh', value: 'custom' },
       ],
     },
   },
   {
-    label: '分段标识符',
+    label: 'Định danh phân đoạn',
     field: 'separator',
     component: 'Select',
     defaultValue: '\\n',
@@ -106,27 +106,27 @@ export const formSchema: FormSchema[] = [
     componentProps: {
       getPopupContainer: () => document.body,
       options: [
-        { label: '换行', value: '\\n' },
-        { label: '2个换行', value: '\\n\\n' },
-        { label: '中文句号', value: '。' },
-        { label: '中文叹号', value: '！' },
-        { label: '中文问号', value: '？' },
-        { label: '英文句号', value: '.' },
-        { label: '英文叹号', value: '!' },
-        { label: '英文问号', value: '?' },
-        { label: '自定义', value: 'custom' },
+        { label: 'Xuống dòng', value: '\\n' },
+        { label: '2 lần xuống dòng', value: '\\n\\n' },
+        { label: 'Dấu chấm tiếng Trung', value: '。' },
+        { label: 'Dấu chấm than tiếng Trung', value: '！' },
+        { label: 'Dấu chấm hỏi tiếng Trung', value: '？' },
+        { label: 'Dấu chấm tiếng Anh', value: '.' },
+        { label: 'Dấu chấm than tiếng Anh', value: '!' },
+        { label: 'Dấu chấm hỏi tiếng Anh', value: '?' },
+        { label: 'Tùy chỉnh', value: 'custom' },
       ],
     },
   },
   {
-    label: '自定义分隔符',
+    label: 'Dấu phân cách tùy chỉnh',
     field: 'customSeparator',
     component: 'Input',
     required: true,
     ifShow: ({ values }) => values.type !== 'memory' && values.enableSegment === true && values.separator === 'custom' && values.segmentStrategy !== 'auto',
   },
   {
-    label: '分段最大长度',
+    label: 'Độ dài tối đa của đoạn',
     field: 'maxSegment',
     component: 'InputNumber',
     defaultValue: 800,
@@ -138,7 +138,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '分段重叠度%',
+    label: 'Mức chồng lấp phân đoạn%',
     field: 'overlap',
     component: 'InputNumber',
     defaultValue: 10,
@@ -150,21 +150,21 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '文本预处理规则',
+    label: 'Quy tắc tiền xử lý văn bản',
     field: 'textRules',
     component: 'CheckboxGroup',
     defaultValue: [],
     ifShow: ({ values }) => values.type !== 'memory' && values.enableSegment === true && values.segmentStrategy === 'custom',
     componentProps: {
       options: [
-        { label: '替换掉连续的空格、换行符和制表符', value: 'cleanSpaces' },
-        { label: '删除所有 URL 和电子邮箱地址', value: 'removeUrlsEmails' },
+        { label: 'Thay thế các dấu cách liên tiếp, ký tự xuống dòng và ký tự tab', value: 'cleanSpaces' },
+        { label: 'Xóa tất cả URL và địa chỉ email', value: 'removeUrlsEmails' },
       ],
     },
   },
 ];
 
-//文档文本表单
+//Biểu mẫu văn bản tài liệu
 export const docTextSchema: FormSchema[] = [
   {
     label: 'id',
@@ -173,31 +173,31 @@ export const docTextSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '知识库id',
+    label: 'id kho tri thức',
     field: 'knowledgeId',
     show: false,
     component: 'Input',
   },
   {
-    label: '标题',
+    label: 'Tiêu đề',
     field: 'title',
     required: true,
     component: 'Input',
   },
   {
-    label: '类型',
+    label: 'Loại',
     field: 'type',
     required: true,
     component: 'Input',
     show: false
   },
   {
-    label: '内容',
+    label: 'Nội dung',
     field: 'content',
-    rules: [{ required: true, message: '请输入内容' }],
+    rules: [{ required: true, message: 'Vui lòng nhập nội dung' }],
     component: 'JMarkdownEditor',
     componentProps: {
-      placeholder: "请输入内容",
+      placeholder: "Vui lòng nhập nội dung",
       preview:{ mode: 'view', action: [] }
     },
     ifShow:({ values})=>{
@@ -208,16 +208,16 @@ export const docTextSchema: FormSchema[] = [
     }
   },
   {
-    label: '文件',
+    label: 'Tệp',
     field: 'filePath',
-    rules: [{ required: true, message: '请上传文件' }],
+    rules: [{ required: true, message: 'Vui lòng tải lên tệp' }],
     component: 'JUpload',
-    helpMessage:'支持txt、markdown、pdf、docx、xlsx、pptx',
+    helpMessage:'Hỗ trợ txt, markdown, pdf, docx, xlsx, pptx',
     componentProps:{
       fileType: 'file',
       maxCount: 1,
       multiple: false,
-      text: '上传文档'
+      text: 'Tải lên tài liệu'
     },
     ifShow:({ values })=>{
       if(values.type === 'file'){
@@ -227,15 +227,15 @@ export const docTextSchema: FormSchema[] = [
     }
   },
   {
-    label: '网页地址',
+    label: 'Địa chỉ trang web',
     field: 'website',
     rules: [
-      { required: true, message: '请输入网页URL' },
-      { pattern: /^https?:\/\//, message: '请输入正确的网页地址，以http://或https://开头' },
+      { required: true, message: 'Vui lòng nhập URL trang web' },
+      { pattern: /^https?:\/\//, message: 'Vui lòng nhập địa chỉ trang web chính xác, bắt đầu bằng http:// hoặc https://' },
     ],
     component: 'Input',
     componentProps: {
-      placeholder: '请输入网页URL，例如：https://help.jeecg.com/',
+      placeholder: 'Vui lòng nhập URL trang web, ví dụ: https://help.jeecg.com/',
     },
     ifShow:({ values })=>{
       if(values.type === 'web'){
@@ -247,23 +247,23 @@ export const docTextSchema: FormSchema[] = [
 ];
 
 /**
- * 分段策略表单
+ * Biểu mẫu chiến lược phân đoạn
  */
 export const docSegmentSchema: FormSchema[] = [
   {
-    label: '分段策略',
+    label: 'Chiến lược phân đoạn',
     field: 'segmentStrategy',
     component: 'RadioGroup',
     defaultValue: 'auto',
     componentProps: {
       options: [
-        { label: '自动分段与清洗', value: 'auto' },
-        { label: '自定义', value: 'custom' },
+        { label: 'Tự động phân đoạn và làm sạch', value: 'auto' },
+        { label: 'Tùy chỉnh', value: 'custom' },
       ],
     },
   },
   {
-    label: '分段标识符',
+    label: 'Định danh phân đoạn',
     field: 'separator',
     component: 'Select',
     defaultValue: '\\n',
@@ -272,15 +272,15 @@ export const docSegmentSchema: FormSchema[] = [
     componentProps: {
       getPopupContainer: () => document.body,
       options: [
-        { label: '换行', value: '\\n' },
-        { label: '2个换行', value: '\\n\\n' },
-        { label: '中文句号', value: '。' },
-        { label: '中文叹号', value: '！' },
-        { label: '中文问号', value: '？' },
-        { label: '英文句号', value: '.' },
-        { label: '英文叹号', value: '!' },
-        { label: '英文问号', value: '?' },
-        { label: '自定义', value: 'custom' },
+        { label: 'Xuống dòng', value: '\\n' },
+        { label: '2 lần xuống dòng', value: '\\n\\n' },
+        { label: 'Dấu chấm tiếng Trung', value: '。' },
+        { label: 'Dấu chấm than tiếng Trung', value: '！' },
+        { label: 'Dấu chấm hỏi tiếng Trung', value: '？' },
+        { label: 'Dấu chấm tiếng Anh', value: '.' },
+        { label: 'Dấu chấm than tiếng Anh', value: '!' },
+        { label: 'Dấu chấm hỏi tiếng Anh', value: '?' },
+        { label: 'Tùy chỉnh', value: 'custom' },
       ],
     },
   },
@@ -292,7 +292,7 @@ export const docSegmentSchema: FormSchema[] = [
     ifShow: ({ values }) => values.separator === 'custom' && values.segmentStrategy !== 'auto',
   },
   {
-    label: '分段最大长度',
+    label: 'Độ dài tối đa của đoạn',
     field: 'maxSegment',
     component: 'InputNumber',
     defaultValue: 800,
@@ -303,7 +303,7 @@ export const docSegmentSchema: FormSchema[] = [
     },
   },
   {
-    label: '分段重叠度%',
+    label: 'Mức chồng lấp phân đoạn%',
     field: 'overlap',
     component: 'InputNumber',
     defaultValue: 10,
@@ -314,15 +314,15 @@ export const docSegmentSchema: FormSchema[] = [
     required: true,
   },
   {
-    label: '文本预处理规则',
+    label: 'Quy tắc tiền xử lý văn bản',
     field: 'textRules',
     component: 'CheckboxGroup',
     defaultValue: [],
     ifShow: ({ values }) => values.segmentStrategy === 'custom',
     componentProps: {
       options: [
-        { label: '替换掉连续的空格、换行符和制表符', value: 'cleanSpaces' },
-        { label: '删除所有 URL 和电子邮箱地址', value: 'removeUrlsEmails' },
+        { label: 'Thay thế các dấu cách liên tiếp, ký tự xuống dòng và ký tự tab', value: 'cleanSpaces' },
+        { label: 'Xóa tất cả URL và địa chỉ email', value: 'removeUrlsEmails' },
       ],
     },
   },

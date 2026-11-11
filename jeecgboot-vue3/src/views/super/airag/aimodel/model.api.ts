@@ -12,7 +12,7 @@ enum Api {
 }
 
 /**
- * 查询AI模型
+ * Truy vấn mô hình AI
  * @param params
  */
 export const list = (params) => {
@@ -20,7 +20,7 @@ export const list = (params) => {
 };
 
 /**
- * 根据id查询AI模型
+ * Truy vấn mô hình AI theo id
  * @param params
  */
 export const queryById = (params) => {
@@ -28,7 +28,7 @@ export const queryById = (params) => {
 };
 
 /**
- * 新增AI模型
+ * Thêm mới mô hình AI
  *
  * @param params
  */
@@ -37,7 +37,7 @@ export const saveModel = (params) => {
 };
 
 /**
- * 编辑AI模型
+ * Chỉnh sửa mô hình AI
  *
  * @param params
  */
@@ -46,18 +46,18 @@ export const editModel = (params) => {
 };
 
 /**
- * 复制AI模型
+ * Sao chép mô hình AI
  *
  * @param id
  * @author scott
- * @since 2026-08-06 LHZP-1552 AI模型配置增加复制功能
+ * @since 2026-08-06 LHZP-1552 Cấu hình mô hình AI thêm chức năng sao chép
  */
 export const copyModel = (id) => {
   return defHttp.post({ url: `${Api.copy}/${id}` });
 };
 
 /**
- * 测试链接
+ * Kiểm tra liên kết
  *
  * @param params
  */
@@ -66,14 +66,14 @@ export const testConn = (params) => {
 };
 
 /**
- * 删除数据权限
+ * Quyền xóa dữ liệu
  */
 export const deleteModel = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除名称为' + params.name + '的模型吗？',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa tên là' + params.name + 'mô hình?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.delete, params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();

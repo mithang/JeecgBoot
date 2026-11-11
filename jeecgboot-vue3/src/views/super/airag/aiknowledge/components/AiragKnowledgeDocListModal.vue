@@ -1,4 +1,4 @@
-<!--知识库文档列表-->
+<!--Danh sách tài liệu kho tri thức-->
 <template>
   <div class="p-2">
     <BasicModal
@@ -21,19 +21,19 @@
                 <a-input
                     class="search-input"
                     v-model:value="searchText"
-                    placeholder="请输入文档名称，回车搜索"
+                    placeholder="Vui lòng nhập tên tài liệu, nhấn Enter để tìm kiếm"
                     @pressEnter="searchTextEnter"
                 />
                 <template v-if="selectedRows.length > 0">
                   <div>
-                    <span>已进入多选模式，当前选中</span>
+                    <span>Đã vào chế độ chọn nhiều, hiện đang chọn</span>
                     <a style="margin: 0 4px;"> {{ selectedRows.length }} </a>
-                    <span>条文档</span>
+                    <span>tài liệu</span>
                   </div>
                   <div>
-                    <a @click="onClearSelected">清空选择</a>
+                    <a @click="onClearSelected">Làm trống lựa chọn</a>
                     <a-divider type="vertical"/>
-                    <a @click="onDeleteBatch">批量删除</a>
+                    <a @click="onDeleteBatch">Xóa hàng loạt</a>
                   </div>
                 </template>
               </a-space>
@@ -42,21 +42,21 @@
               <a-col :xxl="4" :xl="6" :lg="6" :md="6" :sm="12" :xs="24" v-if="!type || type==='knowledge'">
                 <a-card class="add-knowledge-card" :bodyStyle="cardBodyStyle">
                   <span style="line-height: 18px;font-weight: 500;color:#676f83;font-size: 12px">
-                    创建文档
-                    <a-tooltip title="知识库文档">
+                    Tạo tài liệu
+                    <a-tooltip title="Tài liệu kho tri thức">
                       <a style="color: unset" href="https://help.jeecg.com/aigc/guide/knowledge#4-%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3" target="_blank">
                         <Icon style="position:relative;top:1px" icon="ant-design:question-circle-outlined" size="14"></Icon>
                       </a>
                     </a-tooltip>
                   </span>
                   <div class="add-knowledge-doc" @click="handleCreateText">
-                    <Icon icon="ant-design:form-outlined" size="13"></Icon><span>手动录入</span>
+                    <Icon icon="ant-design:form-outlined" size="13"></Icon><span>Nhập thủ công</span>
                   </div>
                   <div class="add-knowledge-doc" @click="handleCreateUpload">
-                    <Icon icon="ant-design:cloud-upload-outlined" size="13"></Icon><span>文件上传</span>
+                    <Icon icon="ant-design:cloud-upload-outlined" size="13"></Icon><span>Tải lên tệp</span>
                   </div>
                   <div class="add-knowledge-doc" @click="handleCreateWeb">
-                    <Icon icon="ant-design:global-outlined" size="13"></Icon><span>网页录入</span>
+                    <Icon icon="ant-design:global-outlined" size="13"></Icon><span>Nhập trang web</span>
                   </div>
                   <div class="add-knowledge-doc">
                     <a-upload
@@ -72,7 +72,7 @@
                     >
                         <div style="display: flex;width: 100%">
                           <Icon style="margin-left: 0;color:#676f83" icon="ant-design:project-outlined" size="13"></Icon>
-                          <span style="color:#676f83;font-size: 12px">文档库上传</span>
+                          <span style="color:#676f83;font-size: 12px">Tải lên kho tài liệu</span>
                         </div>
                     </a-upload>
                   </div>
@@ -84,7 +84,7 @@
                       <a-menu>
                         <a-menu-item key="delete" @click="onDeleteAll">
                           <Icon icon="ant-design:delete-outlined" size="16"></Icon>
-                          清空文档
+                          Làm trống tài liệu
                         </a-menu-item>
                       </a-menu>
                     </template>
@@ -117,23 +117,23 @@
                   </div>
                   <div class="flex" style="justify-content: space-between">
                     <div class="card-text">
-                      状态：
+                      Trạng thái:
                       <div v-if="item.status==='complete'" class="card-text-status">
                         <Icon icon="ant-design:check-circle-outlined" size="16" color="#56D1A7"></Icon>
-                        <span class="ml-2">已完成</span>
+                        <span class="ml-2">Đã hoàn thành</span>
                       </div>
                       <div v-else-if="item.status==='building'" class="card-text-status">
                         <a-spin v-if="item.loading" :spinning="item.loading" :indicator="indicator"></a-spin>
-                        <span class="ml-2">构建中</span>
+                        <span class="ml-2">Đang xây dựng</span>
                       </div>
                       <div v-else-if="item.status==='draft'" class="card-text-status">
                         <img src="../icon/draft.png" style="width: 16px;height: 16px" />
-                        <span class="ml-2">草稿</span>
+                        <span class="ml-2">Bản nháp</span>
                       </div>
                       <a-tooltip v-else-if="item.status==='failed'" :title="getDocFailedReason(item)">
                         <div class="card-text-status">
                           <Icon icon="ant-design:close-circle-outlined" size="16" color="#FF4D4F"></Icon>
-                          <span class="ml-2">失败</span>
+                          <span class="ml-2">Thất bại</span>
                         </div>
                       </a-tooltip>
                     </div>
@@ -145,15 +145,15 @@
                         <a-menu>
                           <a-menu-item key="vectorization" @click="handleVectorization(item.id)">
                             <Icon icon="ant-design:retweet-outlined" size="16"></Icon>
-                            向量化
+                            Vector hóa
                           </a-menu-item>
                           <a-menu-item key="edit" @click="handleEdit(item)">
                             <Icon icon="ant-design:edit-outlined" size="16"></Icon>
-                            编辑
+                            Chỉnh sửa
                           </a-menu-item>
                           <a-menu-item key="delete" @click="handleDelete(item.id)">
                             <Icon icon="ant-design:delete-outlined" size="16"></Icon>
-                            删除
+                            Xóa
                           </a-menu-item>
                         </a-menu>
                       </template>
@@ -173,15 +173,15 @@
               @change="handlePageChange"
               class="list-footer"
               size="small"
-              :show-total="() => `共${total}条` "
+              :show-total="() => `Tổng cộng${total}Mục` "
             />
           </div>
 
           <div v-if="selectedKey === 'hitTest'" style="padding: 16px">
             <a-spin :spinning="spinning">
               <div class="hit-test">
-                <h4>命中测试</h4>
-                <span>针对用户提问调试段落匹配情况，保障回答效果。</span>
+                <h4>Kiểm tra trúng</h4>
+                <span>Gỡ lỗi tình huống khớp đoạn theo câu hỏi của người dùng, đảm bảo hiệu quả trả lời.</span>
               </div>
               <div class="content">
                 <div class="content-title">
@@ -196,7 +196,7 @@
                           <div style="display: flex;">
                             <Icon icon="ant-design:appstore-outlined" size="14"></Icon>
                             <span style="margin-left: 4px">Chunk-{{item.chunk}}</span>
-                            <span style="margin-left: 10px">{{ item.content.length }} 字符</span>
+                            <span style="margin-left: 10px">{{ item.content.length }} Ký tự</span>
                           </div>
                           <a-tag class="card-title-tag" color="#a9c8ff">
                             <span>{{ getTagTxt(item.score) }}</span>
@@ -215,7 +215,7 @@
                     <a-empty :image-style="{ margin: '0 auto', height: '160px', verticalAlign: 'middle', borderStyle: 'none' }">
                       <template #description>
                         <div style="margin-top: 26px; font-size: 20px; color: #000; text-align: center !important">
-                          没有命中的分段
+                          Không có đoạn nào trúng
                         </div>
                       </template>
                     </a-empty>
@@ -223,20 +223,20 @@
                 </div>
               </div>
               <div class="param">
-                <span style="font-weight: bold; font-size: 16px">参数配置</span>
+                <span style="font-weight: bold; font-size: 16px">Cấu hình tham số</span>
                 <ul>
                   <li>
-                    <span>条数：</span>
+                    <span>Số mục:</span>
                     <a-input-number :min="1" v-model:value="topNumber"></a-input-number>
                   </li>
                   <li>
-                    <span>Score阈值：</span>
+                    <span>Ngưỡng Score:</span>
                     <a-input-number :min="0" :step="0.01" :max="1" v-model:value="similarity"></a-input-number>
                   </li>
                 </ul>
               </div>
               <div class="hit-test-footer">
-                <a-input v-model:value="hitText" size="large" placeholder="请输入" style="width: 100%" @pressEnter="hitTestClick">
+                <a-input v-model:value="hitText" size="large" placeholder="Vui lòng nhập" style="width: 100%" @pressEnter="hitTestClick">
                   <template #suffix>
                     <Icon icon="ant-design:send-outlined" style="transform: rotate(-33deg); cursor: pointer" size="22" @click="hitTestClick"></Icon>
                   </template>
@@ -246,12 +246,12 @@
           </div>
         </a-layout-content>
       </a-layout>
-      <Loading tip="上传中，请稍后" :loading="uploadLoading"></Loading>
+      <Loading tip="Đang tải lên, vui lòng chờ" :loading="uploadLoading"></Loading>
     </BasicModal>
 
-    <!--  手工录入文本  -->
+    <!--  Nhập văn bản thủ công  -->
     <AiragKnowledgeDocTextModal @register="docTextRegister" @success="handleSuccess"></AiragKnowledgeDocTextModal>
-    <!--  文本明细  -->
+    <!--  Chi tiết văn bản  -->
     <AiTextDescModal @register="docTextDescRegister"></AiTextDescModal>
   </div>
 </template>
@@ -292,81 +292,81 @@
     },
     emits: ['success', 'register'],
     setup(props, { emit }) {
-      //标题
-      const title = ref<string>('知识库详情');
+      //Tiêu đề
+      const title = ref<string>('Chi tiết kho tri thức');
 
-      //保存或修改
+      //Lưu hoặc sửa đổi
       const knowledgeId = ref<string>('');
 
-      //菜单初始化选中的值
+      //Giá trị chọn khi khởi tạo menu
       const selectedKeys = ref(['document']);
-      //菜单点击选中的key，用于显示和隐藏table
+      //key được chọn khi nhấp menu, dùng để hiển thị và ẩn table
       const selectedKey = ref<string>('document');
-      //定向搜索的文本
+      //Văn bản tìm kiếm có định hướng
       const hitText = ref<string>('');
-      //定向显示的文本
+      //Văn bản hiển thị có định hướng
       const hitShowSearchText = ref<string>('');
-      //加载效果
+      //Hiệu ứng tải
       const spinning = ref<boolean>(false);
-      //最小分数 0-1
+      //Điểm tối thiểu 0-1
       const similarity = ref<number>(0.65);
-      //条数
+      //Số mục
       const topNumber = ref<number>(5);
-      //定向返回结果集
+      //Trả về tập kết quả có định hướng
       const hitTextList = ref<any>([]);
-      //用户头像
+      //Ảnh đại diện người dùng
       const avatar = ref<any>('');
       const userStore = useUserStore();
-      //文档列表
+      //Danh sách tài liệu
       const knowledgeDocDataList = ref<any>([]);
-      //当前页数
+      //Số trang hiện tại
       const pageNo = ref<number>(1);
-      //每页条数
+      //Số mục mỗi trang
       const pageSize = ref<number>(10);
-      //总条数
+      //Tổng số mục
       const total = ref<number>(0);
-      //可选择的页数
+      //Số trang có thể chọn
       const pageSizeOptions = ref<any>(['10', '20', '30']);
-      //查询参数
+      //Tham số truy vấn
       const searchText = ref<string>('');
-      //是否没有命中
+      //Có không trúng hay không
       const notHit = ref<boolean>(false);
-      //定时任务刷新列表
+      //Nhiệm vụ định kỳ làm mới danh sách
       const timer = ref<any>(null);
       //token
       const headers = getHeaders();
       const globSetting = useGlobSetting();
-      //上传路径
+      //Đường dẫn tải lên
       const uploadUrl = ref<string>(globSetting.domainUrl+"/airag/knowledge/doc/import/zip");
-      //上传加载
+      //Đang tải lên
       const uploadLoading = ref<boolean>(false);
 
-      //菜单项
+      //Mục menu
       const menuItems = ref<any>([
         {
           key: 'document',
           icon: '',
-          label: '文档',
-          title: '文档',
+          label: 'Tài liệu',
+          title: 'Tài liệu',
         },
         {
           key: 'hitTest',
           icon: '',
-          label: '命中测试',
-          title: '命中测试',
+          label: 'Kiểm tra trúng',
+          title: 'Kiểm tra trúng',
         },
       ]);
 
-      // 当前选中的行
+      // Dòng hiện đang chọn
       const selectedRows = computed(() => knowledgeDocDataList.value.filter(item => item.__checked))
 
-      //注册modal
+      //Đăng ký modal
       const [docTextRegister, { openModal: docTextOpenModal }] = useModal();
       const [docTextDescRegister, { openModal: docTextDescOpenModal }] = useModal();
       const type = ref<string>('');
-      // 知识库的分段策略 metadata
+      // metadata chiến lược phân đoạn của kho tri thức
       const knowledgeMetadata = ref<string>('');
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
         knowledgeId.value = data.id;
         selectedKeys.value = ['document'];
@@ -394,7 +394,7 @@
       };
 
       /**
-       * 加载指示符
+       * Chỉ thị tải
        */
       const indicator =  h(LoadingOutlined, {
         style: {
@@ -407,37 +407,37 @@
       const { createMessage, createConfirmSync } = useMessage();
 
       /**
-       * 手工录入文本
+       * Nhập văn bản thủ công
        */
       function handleCreateText() {
-        //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+        //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
         docTextOpenModal(true, { knowledgeId: knowledgeId.value, type: "text", knowledgeMetadata: knowledgeMetadata.value, knowledgeType: type.value });
-        //update-end---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+        //update-end---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
       }
 
       /**
-       * 文件上传
+       * Tải lên tệp
        */
       function handleCreateUpload() {
-        //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+        //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
         docTextOpenModal(true, { knowledgeId: knowledgeId.value, type: "file", knowledgeMetadata: knowledgeMetadata.value, knowledgeType: type.value });
-        //update-end---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+        //update-end---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
       }
 
       /**
-       * web网络地址
+       * Địa chỉ mạng web
        */
       function handleCreateWeb() {
-        //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+        //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
         docTextOpenModal(true, { knowledgeId: knowledgeId.value, type: "web", knowledgeMetadata: knowledgeMetadata.value, knowledgeType: type.value });
-        //update-end---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+        //update-end---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
       }
 
       /**
-       * 编辑
+       * Chỉnh sửa
        */
       function handleEdit(record) {
-        // 判断如果有选中的行，则说明是批量操作模式
+        // Phán đoán nếu có dòng được chọn, thì đó là chế độ thao tác hàng loạt
         if (selectedRows.value.length > 0) {
           record.__checked = !record.__checked;
           return
@@ -455,15 +455,15 @@
       }
 
       /**
-       * 删除
+       * Xóa
        * @param id
        */
       function handleDelete(id) {
         Modal.confirm({
-          title: '提示',
-          content: '确认要删除该文档吗?',
-          okText: '确认',
-          cancelText: '取消',
+          title: 'Gợi ý',
+          content: 'Xác nhận muốn xóa tài liệu này?',
+          okText: 'Xác nhận',
+          cancelText: 'Hủy',
           onOk: () => {
             if(knowledgeDocDataList.value.length == 1 && pageNo.value > 1) {
               pageNo.value = pageNo.value - 1;
@@ -476,19 +476,19 @@
       function getDocFailedReason(doc) {
         let metadata = doc?.metadata;
         if (!metadata) {
-          return '构建失败，原因未知';
+          return 'Xây dựng thất bại, nguyên nhân không rõ';
         }
         try {
           metadata = JSON.parse(metadata);
-          return metadata?.failedReason || '构建失败，原因未知';
+          return metadata?.failedReason || 'Xây dựng thất bại, nguyên nhân không rõ';
         } catch (e) {
           console.log('getDocFailedReason', e);
-          return '构建失败，原因未知';
+          return 'Xây dựng thất bại, nguyên nhân không rõ';
         }
       }
 
       /**
-       * 向量化
+       * Vector hóa
        *
        * @param id
        */
@@ -497,7 +497,7 @@
       }
 
       /**
-       * 文档新增和编辑成功回调
+       * Callback thành công khi thêm mới và chỉnh sửa tài liệu
        */
       function handleSuccess() {
         clearInterval(timer.value);
@@ -507,7 +507,7 @@
       }
 
       /**
-       * 触发定时任务
+       * Kích hoạt nhiệm vụ định kỳ
        */
       function triggeringTimer() {
         timer.value = setInterval(() => {
@@ -516,7 +516,7 @@
       }
 
       /**
-       * 菜单点击事件
+       * Sự kiện nhấp menu
        * @param value
        */
       function handleMenuClick(value) {
@@ -540,7 +540,7 @@
       }
 
       /**
-       * 命中测试
+       * Kiểm tra trúng
        */
       function hitTestClick() {
         if (hitText.value) {
@@ -570,7 +570,7 @@
       }
 
       /**
-       * 获取文本
+       * Lấy văn bản
        * @param value
        */
       function getTagTxt(value) {
@@ -578,7 +578,7 @@
       }
 
       /**
-       * 命中测试卡点击事件
+       * Sự kiện nhấp thẻ kiểm tra trúng
        * @param values
        */
       function hitTextDescClick(values) {
@@ -586,7 +586,7 @@
       }
 
       /**
-       * 加载表格
+       * Tải bảng
        */
       async function reload() {
         let params = {
@@ -599,7 +599,7 @@
         };
         await knowledgeDocList(params).then((res) => {
           if (res.success) {
-            //update-begin---author:wangshuai---date:2025-03-21---for:【QQYUN-11636】向量化功能改成异步---
+            //update-begin---author:wangshuai---date:2025-03-21---for:【QQYUN-11636】Chức năng vector hóa đổi thành bất đồng bộ---
             if(res.result.records){
               let clearTimer = true;
               for (const item of res.result.records) {
@@ -614,7 +614,7 @@
                 clearInterval(timer.value);
               }
             }
-            //update-end---author:wangshuai---date:2025-03-21---for:【QQYUN-11636】向量化功能改成异步---
+            //update-end---author:wangshuai---date:2025-03-21---for:【QQYUN-11636】Chức năng vector hóa đổi thành bất đồng bộ---
             knowledgeDocDataList.value = res.result.records.map((item)=>{
               item.__checked = false;
               return item;
@@ -628,7 +628,7 @@
       }
 
       /**
-       * 分页改变事件
+       * Sự kiện thay đổi phân trang
        * @param page
        * @param current
        */
@@ -639,7 +639,7 @@
       }
 
       /**
-       * 获取文件后缀
+       * Lấy hậu tố tệp
        */
       function getFileSuffix(metadata) {
         if(metadata){
@@ -651,12 +651,12 @@
       }
 
       /**
-       * 上传前事件
+       * Sự kiện trước khi tải lên
        */
       function beforeUpload(file) {
         let fileType = file.type;
         if (fileType !== 'application/zip' && fileType !== 'application/x-zip-compressed') {
-            createMessage.warning('请上传zip文件');
+            createMessage.warning('Vui lòng tải lên tệp zip');
             return false;
         }
         uploadLoading.value = true;
@@ -664,13 +664,13 @@
       }
 
       /**
-       * 文件上传回调事件
+       * Sự kiện callback tải lên tệp
        * @param info
        */
       function handleUploadChange(info) {
         let { file } = info;
         if (file.status === 'error' || (file.response && file.response.code == 500)) {
-          createMessage.error(file.response?.message ||`${file.name} 上传失败,请查看服务端日志`);
+          createMessage.error(file.response?.message ||`${file.name} Tải lên thất bại, vui lòng xem nhật ký phía máy chủ`);
           uploadLoading.value = false;
           return;
         }
@@ -693,15 +693,15 @@
         });
       }
 
-      // 清空文档
+      // Làm trống tài liệu
       async function onDeleteAll() {
         pageNo.value = 1;
         doDeleteAllDoc(knowledgeId.value, reload);
       }
 
-      // 批量删除
+      // Xóa hàng loạt
       async function onDeleteBatch() {
-        const flag = await createConfirmSync({ title: '批量删除', content: `确定要删除这 ${selectedRows.value.length} 条数据吗？` });
+        const flag = await createConfirmSync({ title: 'Xóa hàng loạt', content: `Xác nhận muốn xóa cái này ${selectedRows.value.length} dữ liệu?` });
         if (!flag) {
           return;
         }
@@ -714,7 +714,7 @@
       }
 
       /**
-       * 回车搜索
+       * Nhấn Enter để tìm kiếm
        */
       function searchTextEnter(){
         pageNo.value = 1;

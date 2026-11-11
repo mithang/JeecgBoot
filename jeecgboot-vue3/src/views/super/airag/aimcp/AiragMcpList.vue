@@ -1,6 +1,6 @@
 <template>
   <div class="mcp">
-    <!-- 查询区域 -->
+    <!-- Khu vực truy vấn -->
     <div class="jeecg-basic-table-form-container">
       <a-form
         ref="formRef"
@@ -12,14 +12,14 @@
       >
         <a-row :gutter="24">
           <a-col :lg="6">
-            <a-form-item name="name" label="名称">
+            <a-form-item name="name" label="Tên">
               <JInput v-model:value="queryParam.name" />
             </a-form-item>
           </a-col>
           <a-col :lg="6">
-            <a-form-item name="category" label="类型">
-              <a-select v-model:value="queryParam.category" placeholder="全部" allowClear>
-                <a-select-option value="plugin">插件</a-select-option>
+            <a-form-item name="category" label="Loại">
+              <a-select v-model:value="queryParam.category" placeholder="Tất cả" allowClear>
+                <a-select-option value="plugin">Plugin</a-select-option>
                 <a-select-option value="mcp">MCP</a-select-option>
               </a-select>
             </a-form-item>
@@ -27,21 +27,21 @@
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-col :lg="6">
-                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">查询</a-button>
-                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">重置</a-button>
+                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">Truy vấn</a-button>
+                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">Đặt lại</a-button>
               </a-col>
             </span>
           </a-col>
         </a-row>
       </a-form>
     </div>
-    <!-- 卡片区域 -->
+    <!-- Khu vực thẻ -->
     <a-row :span="24" class="mcp-row">
       <a-col :xxl="4" :xl="6" :lg="6" :md="6" :sm="12" :xs="24">
         <a-card class="add-mcp-card" @click="handleAdd" >
           <div class="flex">
             <Icon icon="ant-design:plus-outlined" class="add-mcp-card-icon" size="20" />
-            <span class="add-mcp-card-title">新增MCP</span>
+            <span class="add-mcp-card-title">Thêm mới MCP</span>
           </div>
         </a-card>
       </a-col>
@@ -70,31 +70,31 @@
               </div>
               <template #overlay>
                 <a-menu>
-                  <!-- MCP类型：显示同步按钮 -->
+                  <!-- Loại MCP: hiển thị nút đồng bộ -->
                   <a-menu-item
                     v-if="item.category === 'mcp'"
                     key="sync"
                     @click.prevent.stop="handleSync(item)"
                     v-auth="'llm:airag_mcp:sync'"
                   >
-                    <Icon icon="ant-design:cloud-sync-outlined" size="16" /> 同步
+                    <Icon icon="ant-design:cloud-sync-outlined" size="16" /> Đồng bộ
                   </a-menu-item>
-                  <!-- 插件类型：显示工具管理按钮 -->
+                  <!-- Loại plugin: hiển thị nút quản lý công cụ -->
                   <a-menu-item
                     v-if="item.category === 'plugin'"
                     key="toolManage"
                     @click.prevent.stop="handleToolManage(item)"
                     v-auth="'llm:airag_mcp:edit'"
                   >
-                    <Icon icon="ant-design:tool-outlined" size="16" /> 工具管理
+                    <Icon icon="ant-design:tool-outlined" size="16" /> Quản lý công cụ
                   </a-menu-item>
-                  <!-- 编辑：始终显示，不受禁用启用影响 -->
+                  <!-- Chỉnh sửa: luôn hiển thị, không bị ảnh hưởng bởi vô hiệu hóa/kích hoạt -->
                   <a-menu-item
                     key="edit"
                     @click.prevent.stop="handleEditClick(item)"
                     v-auth="'llm:airag_mcp:edit'"
                   >
-                    <Icon icon="ant-design:edit-outlined" size="16" /> 编辑
+                    <Icon icon="ant-design:edit-outlined" size="16" /> Chỉnh sửa
                   </a-menu-item>
                   <a-menu-item
                     v-if="item.synced"
@@ -103,7 +103,7 @@
                     v-auth="'llm:airag_mcp:edit'"
                   >
                     <Icon :icon="item.status === 'enable' ? 'ant-design:stop-outlined' : 'ant-design:check-circle-outlined'" size="16" />
-                    {{ item.status === 'enable' ? '禁用' : '启用' }}
+                    {{ item.status === 'enable' ? 'Vô hiệu hóa' : 'Kích hoạt' }}
                   </a-menu-item>
                   <a-menu-item
                     v-if="item.status === 'disable' || !item.synced"
@@ -111,24 +111,24 @@
                     @click.prevent.stop="handleDeleteClick(item)"
                     v-auth="'llm:airag_mcp:delete'"
                   >
-                    <Icon icon="ant-design:delete-outlined" size="16" /> 删除
+                    <Icon icon="ant-design:delete-outlined" size="16" /> Xóa
                   </a-menu-item>
                 </a-menu>
               </template>
             </a-dropdown>
           </div>
           <div class="card-footer" v-if="true">
-            <div class="pill type-pill" :title="'类型: '+(item.category === 'plugin' ? '插件' : 'MCP')">
+            <div class="pill type-pill" :title="'Loại: '+(item.category === 'plugin' ? 'Plugin' : 'MCP')">
               <Icon :icon="getCategoryIcon(item.category)" class="pill-icon" />
-              <span class="pill-text">{{ item.category === 'plugin' ? '插件' : 'MCP' }}</span>
+              <span class="pill-text">{{ item.category === 'plugin' ? 'Plugin' : 'MCP' }}</span>
             </div>
-            <div class="pill status-pill" :class="item.synced ? (item.status==='enable'?'status-enable-pill':'status-disable-pill'):'status-unsynced-pill'" :title="item.synced ? (item.status==='enable'?'已启用':'未启用'):'未同步'">
+            <div class="pill status-pill" :class="item.synced ? (item.status==='enable'?'status-enable-pill':'status-disable-pill'):'status-unsynced-pill'" :title="item.synced ? (item.status==='enable'?'Đã kích hoạt':'Chưa kích hoạt'):'Chưa đồng bộ'">
               <Icon :icon="getStatusIcon(item)" class="pill-icon" />
-              <span class="pill-text">{{ item.synced ? (item.status==='enable'?'启用':'禁用') : '未同步' }}</span>
+              <span class="pill-text">{{ item.synced ? (item.status==='enable'?'Kích hoạt':'Vô hiệu hóa') : 'Chưa đồng bộ' }}</span>
             </div>
-            <div class="pill tool-pill" :title="getToolCount(item)+' 个工具'">
+            <div class="pill tool-pill" :title="getToolCount(item)+' công cụ'">
               <Icon icon="ant-design:tool-outlined" class="pill-icon" />
-              <span class="pill-text">{{ getToolCount(item) }} 个工具</span>
+              <span class="pill-text">{{ getToolCount(item) }} công cụ</span>
             </div>
           </div>
         </a-card>
@@ -145,10 +145,10 @@
       @change="handlePageChange"
       class="list-footer"
       size="small"
-      :show-total="() => `共${total}条` "
+      :show-total="() => `Tổng cộng${total}Mục` "
     />
   </div>
-  <!-- 弹窗区域 -->
+  <!-- Khu vực popup -->
   <AiragMcpAddModal @register="registerModal" @success="reload" />
   <AiragMcpDetailModal @register="registerDetailModal" @edit="handleDetailEdit" @success="reload" />
 </template>
@@ -164,20 +164,20 @@ import { getFileAccessHttpUrl } from '@/utils/common/compUtils';
 import JInput from '@/components/Form/src/jeecg/components/JInput.vue';
 import defaultLogo from './imgs/mcpLogo.png'
 
-// 列表数据
+// Dữ liệu danh sách
 const mcpList = ref<any[]>([]);
-// 分页
+// Phân trang
 const pageNo = ref<number>(1);
 const pageSize = ref<number>(30);
 const total = ref<number>(0);
 const pageSizeOptions = ref<any>(['10', '20', '30']);
 
-// 查询参数
+// Tham số truy vấn
 const queryParam = reactive<any>({});
 const formRef = ref();
 const { createMessage } = useMessage();
 
-// 查询区域label宽度
+// Độ rộng label của khu vực truy vấn
 const labelCol = reactive({
   xs: 24,
   sm: 4,
@@ -189,12 +189,12 @@ const wrapperCol = reactive({
   sm: 20,
 });
 
-// 弹窗（新增/编辑）
+// Popup (thêm mới/Chỉnh sửa)
 const [registerModal, { openModal }] = useModal();
-// 详情弹窗
+// Popup chi tiết
 const [registerDetailModal, { openModal: openDetailModal }] = useModal();
 
-// 初始化
+// Khởi tạo
 reload();
 
 function reload() {
@@ -227,17 +227,17 @@ function handleAdd() {
 }
 
 function handleEditClick(item) {
-  // 参考模型列表，仅传 id；如需后端查询可在弹窗内部扩展
+  // Danh sách mô hình tham khảo, chỉ truyền id; nếu cần backend truy vấn có thể mở rộng bên trong popup
   openModal(true, { id: item.id, ...item });
 }
 
 function handleDetailClick(item){
-  // 仅传 id，详情弹窗内部调用 queryById 获取最新数据
+  // Chỉ truyền id, bên trong popup chi tiết gọi queryById để lấy dữ liệu mới nhất
   openDetailModal(true, { id: item.id });
 }
 
 function handleDetailEdit(record){
-  // 从详情弹窗内部触发编辑
+  // Kích hoạt chỉnh sửa từ bên trong popup chi tiết
   openModal(true, { id: record.id, ...record });
 }
 
@@ -252,12 +252,12 @@ async function handleSync(item) {
   try {
     const res = await syncMcp(item.id);
     if (res.success) {
-      createMessage.success(res.message || '同步成功');
+      createMessage.success(res.message || 'Đồng bộ thành công');
     } else {
-      createMessage.error(res.message || '同步失败');
+      createMessage.error(res.message || 'Đồng bộ thất bại');
     }
   } catch (error: any) {
-    createMessage.error(error?.message || '同步失败');
+    createMessage.error(error?.message || 'Đồng bộ thất bại');
   } finally {
     reload();
   }
@@ -279,14 +279,14 @@ function searchReset() {
   searchQuery();
 }
 
-// 图标处理
+// Xử lý biểu tượng
 function getIcon(icon?: string) {
   return icon ? getFileAccessHttpUrl(icon) : defaultLogo;
 }
 
-// 工具数量：插件按 tools 列表统计，MCP 优先读取 metadata
+// Số lượng công cụ: plugin thống kê theo danh sách tools, MCP ưu tiên đọc metadata
 function getToolCount(item: any): number {
-  //update-begin---wangshuai---date:20260805  for：[LHZP-1590]mcp 插件的时候 列表工具不显示数量------------
+  //update-begin---wangshuai---date:20260805  for：[LHZP-1590]Khi dùng mcp plugin, công cụ danh sách không hiển thị số lượng------------
   let metaObj: any = item?.metadata;
   if (typeof metaObj === 'string') {
     try {
@@ -304,19 +304,19 @@ function getToolCount(item: any): number {
     }
   }
   if (item?.category === 'plugin' && Array.isArray(tools)) {
-    //update-begin---author:scott ---date:20260806  for：【LHZP-1496】插件卡片只统计启用工具-----------
+    //update-begin---author:scott ---date:20260806  for：【LHZP-1496】Thẻ plugin chỉ thống kê công cụ đã kích hoạt-----------
     return tools.filter((tool: any) => tool?.enabled !== false).length;
-    //update-end---author:scott ---date:20260806  for：【LHZP-1496】插件卡片只统计启用工具-----------
+    //update-end---author:scott ---date:20260806  for：【LHZP-1496】Thẻ plugin chỉ thống kê công cụ đã kích hoạt-----------
   }
   const count = metaObj?.tool_count;
   if (count != null) {
     return typeof count === 'number' ? count : parseInt(count, 10) || 0;
   }
   return Array.isArray(tools) ? tools.length : 0;
-  //update-end---author:wangshuai ---date:20260805  for：[LHZP-1590]mcp 插件的时候 列表工具不显示数量------------
+  //update-end---author:wangshuai ---date:20260805  for：[LHZP-1590]Khi dùng mcp plugin, công cụ danh sách không hiển thị số lượng------------
 }
 
-// 类型图标映射
+// Ánh xạ biểu tượng loại
 function getTypeIcon(type?: string) {
   switch (type) {
     case 'sse':
@@ -328,7 +328,7 @@ function getTypeIcon(type?: string) {
   }
 }
 
-// category图标映射
+// Ánh xạ biểu tượng category
 function getCategoryIcon(category?: string) {
   if (category === 'plugin') {
     return 'ant-design:api-outlined';
@@ -336,18 +336,18 @@ function getCategoryIcon(category?: string) {
   return 'ant-design:tool-twotone';
 }
 
-// 工具管理 - 打开详情页面
+// Quản lý công cụ - Mở trang chi tiết
 function handleToolManage(item: any) {
   openDetailModal(true, { id: item.id });
 }
 
-// 状态/同步图标
+// Trạng thái/Đồng bộ biểu tượng
 function getStatusIcon(item: any) {
   if (!item.synced) return 'ant-design:cloud-sync-outlined';
   return item.status === 'enable' ? 'ant-design:check-circle-outlined' : 'ant-design:stop-outlined';
 }
 
-// <script setup> 下自动暴露到模板, 无需 export
+// <script setup> tự động lộ ra template ở phía dưới, không cần export
 </script>
 
 <style lang="less" scoped>

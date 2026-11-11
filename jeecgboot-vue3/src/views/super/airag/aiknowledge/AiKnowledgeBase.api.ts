@@ -2,14 +2,14 @@ import { defHttp } from '/@/utils/http/axios';
 import { Modal } from 'ant-design-vue';
 
 enum Api {
-  //知识库管理
+  //Quản lý kho tri thức
   list = '/airag/knowledge/list',
   save = '/airag/knowledge/add',
   delete = '/airag/knowledge/delete',
   queryById = '/airag/knowledge/queryById',
   edit = '/airag/knowledge/edit',
   rebuild = '/airag/knowledge/rebuild',
-  //知识库文档
+  //Tài liệu kho tri thức
   knowledgeDocList = '/airag/knowledge/doc/list',
   knowledgeEditDoc = '/airag/knowledge/doc/edit',
   knowledgeDeleteBatchDoc = '/airag/knowledge/doc/deleteBatch',
@@ -19,7 +19,7 @@ enum Api {
 }
 
 /**
- * 查询知识库
+ * Truy vấn kho tri thức
  * @param params
  */
 export const list = (params) => {
@@ -27,7 +27,7 @@ export const list = (params) => {
 };
 
 /**
- * 根据id查询知识库
+ * Truy vấn kho tri thức theo id
  * @param params
  */
 export const queryById = (params) => {
@@ -35,7 +35,7 @@ export const queryById = (params) => {
 };
 
 /**
- * 新增知识库
+ * Thêm mới kho tri thức
  * @param params
  */
 export const saveKnowledge = (params) => {
@@ -43,7 +43,7 @@ export const saveKnowledge = (params) => {
 };
 
 /**
- * 编辑知识库
+ * Chỉnh sửa kho tri thức
  *
  * @param params
  */
@@ -52,14 +52,14 @@ export const editKnowledge = (params) => {
 };
 
 /**
- * 删除知识库
+ * Xóa kho tri thức
  */
 export const deleteModel = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除名称为'+params.name+'的知识库吗？',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Có xóa tên là'+params.name+'kho tri thức?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.delete, params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -69,7 +69,7 @@ export const deleteModel = (params, handleSuccess) => {
 };
 
 /**
- * 查询知识库详情
+ * Truy vấn chi tiết kho tri thức
  * @param params
  */
 export const knowledgeDocList = (params) => {
@@ -77,7 +77,7 @@ export const knowledgeDocList = (params) => {
 };
 
 /**
- * 知识库向量化
+ * Vector hóa kho tri thức
  *
  * @param params
  */
@@ -86,7 +86,7 @@ export const rebuild = (params) => {
 };
 
 /**
- * 新增知识库
+ * Thêm mới kho tri thức
  * @param params
  */
 export const knowledgeSaveDoc = (params) => {
@@ -94,7 +94,7 @@ export const knowledgeSaveDoc = (params) => {
 };
 
 /**
- * 文档向量化
+ * Vector hóa tài liệu
  * @param params
  */
 export const knowledgeRebuildDoc = (params, handleSuccess) => {
@@ -104,7 +104,7 @@ export const knowledgeRebuildDoc = (params, handleSuccess) => {
 };
 
 /**
- * 批量删除文档
+ * Xóa hàng loạt tài liệu
  *
  * @param params
  * @param handleSuccess
@@ -116,7 +116,7 @@ export const knowledgeDeleteBatchDoc = (params, handleSuccess) => {
 };
 
 /**
- * 批量删除文档
+ * Xóa hàng loạt tài liệu
  *
  * @param params
  * @param handleSuccess
@@ -128,7 +128,7 @@ export const knowledgeDeleteAllDoc = (knowId: string, handleSuccess) => {
 };
 
 /**
- * 命中测试
+ * Kiểm tra trúng
  * @param params
  */
 export const knowledgeEmbeddingHitTest = (params) => {

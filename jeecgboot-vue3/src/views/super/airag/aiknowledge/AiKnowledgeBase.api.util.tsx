@@ -3,16 +3,16 @@ import {useMessage} from "@/hooks/web/useMessage";
 
 const {createConfirmSync} = useMessage();
 
-// 清空文档
+// Làm trống tài liệu
 export async function doDeleteAllDoc(knowledgeId: string, reload: () => void) {
   const flag = await createConfirmSync({
-    title: '清空文档',
+    title: 'Làm trống tài liệu',
     content: () => (
       <p>
-        <span>确定要清空所有文档吗？</span>
+        <span>Xác nhận làm trống tất cả tài liệu?</span>
         <br/>
         <span style="color: #ee0000;">
-          此操作会删除所有已录入的文档，并且不能恢复，请谨慎操作
+          Thao tác này sẽ xóa tất cả tài liệu đã nhập, và không thể khôi phục, vui lòng thao tác thận trọng
         </span>
       </p>
     ),

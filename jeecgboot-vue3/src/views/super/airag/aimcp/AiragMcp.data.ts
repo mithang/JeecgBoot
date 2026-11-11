@@ -3,76 +3,76 @@ import {FormSchema} from '/@/components/Table';
 import { rules} from '/@/utils/helper/validator';
 import { render } from '/@/utils/common/renderUtils';
 import { getWeekMonthQuarterYear } from '/@/utils';
-//列表数据
+//Dữ liệu danh sách
 export const columns: BasicColumn[] = [
   {
-    title: '图标',
+    title: 'Biểu tượng',
     align: "center",
     dataIndex: 'icon'
   },
   {
-    title: '名称',
+    title: 'Tên',
     align: "center",
     dataIndex: 'name'
   },
   {
-    title: '描述',
+    title: 'Mô tả',
     align: "center",
     dataIndex: 'descr'
   },
   {
-    title: 'mcp类型（sse：sse类型；stdio：标准类型）',
+    title: 'Loại mcp (sse: loại sse; stdio: loại tiêu chuẩn)',
     align: "center",
     dataIndex: 'type'
   },
   {
-    title: '服务端点（SSE类型为URL，stdio类型为命令）',
+    title: 'Điểm cuối máy chủ (loại SSE là URL, loại stdio là lệnh)',
     align: "center",
     dataIndex: 'endpoint'
   },
   {
-    title: '请求头（sse类型）、环境变量（stdio类型）',
+    title: 'Header yêu cầu (loại sse), biến môi trường (loại stdio)',
     align: "center",
     dataIndex: 'headers'
   },
   {
-    title: '工具列表',
+    title: 'Danh sách công cụ',
     align: "center",
     dataIndex: 'tools'
   },
   {
-    title: '状态（enable=启用、disable=禁用）',
+    title: 'Trạng thái (enable=kích hoạt, disable=Vô hiệu hóa)',
     align: "center",
     dataIndex: 'status'
   },
   {
-    title: '是否同步',
+    title: 'Có đồng bộ hay không',
     align: "center",
     dataIndex: 'synced'
   },
   {
-    title: '元数据',
+    title: 'Siêu dữ liệu',
     align: "center",
     dataIndex: 'metadata'
   },
   {
-    title: '租户id',
+    title: 'id tenant',
     align: "center",
     dataIndex: 'tenantId'
   },
 ];
 
-// 高级查询数据
+// Dữ liệu truy vấn nâng cao
 export const superQuerySchema = {
-  icon: {title: '应用图标',order: 0,view: 'text', type: 'string',},
-  name: {title: '名称',order: 1,view: 'text', type: 'string',},
-  descr: {title: '描述',order: 2,view: 'text', type: 'string',},
-  type: {title: 'mcp类型（sse：sse类型；stdio：标准类型）',order: 3,view: 'text', type: 'string',},
-  endpoint: {title: '服务端点（SSE类型为URL，stdio类型为命令）',order: 4,view: 'textarea', type: 'string',},
-  headers: {title: '请求头（sse类型）、环境变量（stdio类型）',order: 5,view: 'textarea', type: 'string',},
-  tools: {title: '工具列表',order: 6,view: 'textarea', type: 'string',},
-  status: {title: '状态（enable=启用、disable=禁用）',order: 7,view: 'text', type: 'string',},
-  synced: {title: '是否同步',order: 8,view: 'number', type: 'number',},
-  metadata: {title: '元数据',order: 9,view: 'textarea', type: 'string',},
-  tenantId: {title: '租户id',order: 10,view: 'text', type: 'string',},
+  icon: {title: 'Biểu tượng ứng dụng',order: 0,view: 'text', type: 'string',},
+  name: {title: 'Tên',order: 1,view: 'text', type: 'string',},
+  descr: {title: 'Mô tả',order: 2,view: 'text', type: 'string',},
+  type: {title: 'Loại mcp (sse: loại sse; stdio: loại tiêu chuẩn)',order: 3,view: 'text', type: 'string',},
+  endpoint: {title: 'Điểm cuối máy chủ (loại SSE là URL, loại stdio là lệnh)',order: 4,view: 'textarea', type: 'string',},
+  headers: {title: 'Header yêu cầu (loại sse), biến môi trường (loại stdio)',order: 5,view: 'textarea', type: 'string',},
+  tools: {title: 'Danh sách công cụ',order: 6,view: 'textarea', type: 'string',},
+  status: {title: 'Trạng thái (enable=kích hoạt, disable=Vô hiệu hóa)',order: 7,view: 'text', type: 'string',},
+  synced: {title: 'Có đồng bộ hay không',order: 8,view: 'number', type: 'number',},
+  metadata: {title: 'Siêu dữ liệu',order: 9,view: 'textarea', type: 'string',},
+  tenantId: {title: 'id tenant',order: 10,view: 'text', type: 'string',},
 };

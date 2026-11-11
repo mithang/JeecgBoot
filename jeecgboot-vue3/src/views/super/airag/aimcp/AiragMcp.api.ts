@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-// import { useMessage } from "/@/hooks/web/useMessage"; // 需要确认弹窗再启用
+// import { useMessage } from "/@/hooks/web/useMessage"; // Cần popup xác nhận rồi mới kích hoạt
 
 enum Api {
   list = '/airag/airagMcp/list',
@@ -15,24 +15,24 @@ enum Api {
 }
 
 /**
- * 导出api
+ * api xuất
  * @param params
  */
 export const getExportUrl = Api.exportXls;
 
 /**
- * 导入api
+ * api nhập
  */
 export const getImportUrl = Api.importExcel;
 
 /**
- * 列表接口
+ * Giao diện danh sách
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 
 /**
- * 删除单个
+ * Xóa đơn lẻ
  * @param params
  * @param handleSuccess
  */
@@ -44,7 +44,7 @@ export const deleteOne = (params,handleSuccess) => {
 
 
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
  * @param isUpdate
  */
@@ -53,7 +53,7 @@ export const saveOrUpdate = (params) => {
 }
 
 /**
- * 保存并同步
+ * Lưu và đồng bộ
  * @param params
  * @param isUpdate
  */
@@ -62,32 +62,32 @@ export const saveAndSync = (params) => {
 }
 
 /**
- * 同步接口
+ * Giao diện đồng bộ
  * @param id
  */
 export const syncMcp = (id) => defHttp.post({ url: Api.sync+"/"+id }, { isTransformResponse: false });
 
 /**
- * 修改状态
+ * Sửa đổi trạng thái
  * @param id
  */
 export const toggleStatus = (id,status) => defHttp.post({ url: Api.toggleStatus+"/"+id + "/"+ status });
 
 /**
- * 详情查询
+ * Truy vấn chi tiết
  * @param id
  */
 export const queryById = (id) => defHttp.get({ url: Api.queryById ,params: { id:id }}, { isTransformResponse: false });
 
 /**
- * 根据多个id查询
+ * Truy vấn theo nhiều id
  * @param params
  */
 export const queryByIds = (params) => defHttp.get({ url: Api.list, params }, { isTransformResponse: false });
 
 /**
- * 保存插件工具（仅更新tools字段）
- * @param id 插件ID
- * @param tools 工具列表JSON字符串
+ * Lưu công cụ plugin (chỉ cập nhật trường tools)
+ * @param id ID plugin
+ * @param tools chuỗi JSON danh sách công cụ
  */
 export const saveTools = (id, tools) => defHttp.post({ url: Api.saveTools, data: { id, tools } }, { isTransformResponse: false });

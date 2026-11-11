@@ -17,7 +17,7 @@ import volcengine from './icon/volcengine.png';
 import { ref } from 'vue';
 
 /**
- * 表单
+ * Biểu mẫu
  */
 export const formSchema: FormSchema[] = [
   {
@@ -27,27 +27,27 @@ export const formSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '模型名称',
+    label: 'Tên mô hình',
     field: 'name',
     required: true,
     component: 'Input',
   },
   {
-    label: '模型类型',
+    label: 'Loại mô hình',
     field: 'modelType',
     slot: 'modelType',
     required: true,
     component: 'Select',
   },
   {
-    label: '基础模型',
+    label: 'Mô hình cơ sở',
     field: 'modelName',
     required: true,
     slot: 'modelName',
     component: 'Select',
   },
   {
-    label: 'API域名',
+    label: 'Tên miền API',
     field: 'baseUrl',
     required: true,
     component: 'Input'
@@ -94,30 +94,30 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: 'HTTP1.1协议',
+    label: 'Giao thức HTTP1.1',
     field: 'httpVersionOne',
     component: 'Switch',
     defaultValue: 1,
-    helpMessage: '是否使用HTTP1.1协议，在长时间无响应的情况下，可以尝试关闭此开关',
+    helpMessage: 'Có dùng giao thức HTTP1.1 hay không, trong trường hợp lâu không phản hồi, có thể thử tắt công tắc này',
     componentProps: {
       checkedValue: 1,
       unCheckedValue: 0,
     },
     ifShow: ({ values }) => {
-      //update-begin---author:wangshuai---date:20261013---for：【issues/9888】AI 应用调用本地Ollama deepseek1.5模型时总是提示错误，AI助手没问题---
+      //update-begin---author:wangshuai---date:20261013---for：【issues/9888】Ứng dụng AI khi gọi mô hình deepseek1.5 Ollama cục bộ luôn báo lỗi, trợ lý AI thì không sao---
       return values.provider === 'VLLM' || values.provider === 'LMSTDIO' || values.provider === 'XINFERENCE' || values.provider === 'OLLAMA';
-      //update-end---author:wangshuai---date:20261013---for：【issues/9888】AI 应用调用本地Ollama deepseek1.5模型时总是提示错误，AI助手没问题---
+      //update-end---author:wangshuai---date:20261013---for：【issues/9888】Ứng dụng AI khi gọi mô hình deepseek1.5 Ollama cục bộ luôn báo lỗi, trợ lý AI thì không sao---
     },
   },
   {
-    label: '额外参数',
+    label: 'Tham số bổ sung',
     field: 'extraParams',
     slot: 'extraParams',
     component: 'Input',
     ifShow: ({ values }) => values.modelType === 'LLM',
   },
   {
-    label: '供应者',
+    label: 'Nhà cung cấp',
     field: 'provider',
     component: 'Input',
     show: false,
@@ -125,7 +125,7 @@ export const formSchema: FormSchema[] = [
 ];
 
 /**
- * 图片路径映射
+ * Ánh xạ đường dẫn hình ảnh
  *
  * @param name
  */

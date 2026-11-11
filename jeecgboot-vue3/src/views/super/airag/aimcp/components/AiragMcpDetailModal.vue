@@ -8,12 +8,12 @@
   >
     <template #title>
       <div class="detail-modal-title">
-        <span>详情</span>
+        <span>Chi tiết</span>
         <a-button 
           class="detail-edit-btn" 
           type="text" 
           @click="emitEdit"
-          :title="'编辑'"
+          :title="'Chỉnh sửa'"
         >
           <Icon icon="ant-design:edit-outlined" :size="18" />
         </a-button>
@@ -25,22 +25,22 @@
         <div class="detail-titles">
           <div class="detail-name" :title="record?.name">{{ record?.name || '-' }}</div>
           <div class="detail-type-status">
-            <a-tag color="blue">{{ record?.category === 'plugin' ? '插件' : (record?.type || '未知类型') }}</a-tag>
+            <a-tag color="blue">{{ record?.category === 'plugin' ? 'Plugin' : (record?.type || 'Loại không rõ') }}</a-tag>
             <a-tag v-if="record?.synced" :color="record?.status === 'enable' ? 'green' : 'red'">
-              {{ record?.status === 'enable' ? '已启用' : '未启用' }}
+              {{ record?.status === 'enable' ? 'Đã kích hoạt' : 'Chưa kích hoạt' }}
             </a-tag>
-            <a-tag v-else color="orange">未同步</a-tag>
+            <a-tag v-else color="orange">Chưa đồng bộ</a-tag>
           </div>
         </div>
       </div>
-      <div class="detail-descr" :title="record?.descr">{{ record?.descr || '暂无描述' }}</div>
+      <div class="detail-descr" :title="record?.descr">{{ record?.descr || 'Tạm thời chưa có mô tả' }}</div>
       <div class="tools-wrapper">
         <div class="tools-header">
-          <div class="tools-title">工具列表</div>
-          <a-button v-if="record?.category === 'plugin'" type="primary" size="small" @click="handleAddTool">添加工具</a-button>
+          <div class="tools-title">Danh sách công cụ</div>
+          <a-button v-if="record?.category === 'plugin'" type="primary" size="small" @click="handleAddTool">Thêm công cụ</a-button>
         </div>
         <div class="tools-grid" v-if="(pluginTools && pluginTools.length) || (tools && tools.length)">
-          <!-- 插件类型工具 -->
+          <!-- Công cụ loại plugin -->
           <template v-if="record?.category === 'plugin'">
             <div
               v-for="tool in pluginTools"
@@ -61,7 +61,7 @@
                     type="text" 
                     size="small" 
                     @click.stop="handleEditTool(tool)"
-                    :title="'编辑工具'"
+                    :title="'Chỉnh sửa công cụ'"
                   >
                     <Icon icon="ant-design:edit-outlined" :size="16" />
                   </a-button>
@@ -70,20 +70,20 @@
                     danger
                     size="small" 
                     @click.stop="handleDeleteTool(tool)"
-                    :title="'删除工具'"
+                    :title="'Xóa công cụ'"
                   >
                     <Icon icon="ant-design:delete-outlined" :size="16" />
                   </a-button>
                 </div>
               </div>
-              <div class="tool-descr" :title="tool.description">{{ tool.description || '无描述' }}</div>
+              <div class="tool-descr" :title="tool.description">{{ tool.description || 'Không có mô tả' }}</div>
               <div v-if="tool.method || tool.path" class="tool-meta">
                 <a-tag v-if="tool.method" size="small" :color="getMethodColor(tool.method)">{{ tool.method }}</a-tag>
                 <span v-if="tool.path" class="tool-path">{{ tool.path }}</span>
               </div>
             </div>
           </template>
-          <!-- MCP类型工具 -->
+          <!-- Công cụ loại MCP -->
           <template v-else>
             <div
               v-for="tool in tools"
@@ -93,18 +93,18 @@
               <div class="tool-header-item" @click.stop>
                 <div class="tool-name" :title="tool.name">{{ tool.name }}</div>
               </div>
-              <div class="tool-descr" :title="tool.descr">{{ tool.descr || '无描述' }}</div>
+              <div class="tool-descr" :title="tool.descr">{{ tool.descr || 'Không có mô tả' }}</div>
             </div>
           </template>
         </div>
-        <a-empty v-else description="暂无工具" />
+        <a-empty v-else description="Tạm thời chưa có công cụ" />
       </div>
     </div>
     <template #footer>
-      <a-button @click="closeModal()">关闭</a-button>
+      <a-button @click="closeModal()">Đóng</a-button>
     </template>
   </BasicModal>
-  <!-- 工具编辑弹窗 -->
+  <!-- Popup chỉnh sửa công cụ -->
   <PluginToolEditModal @register="registerToolEditModal" @success="handleToolEditSuccess" />
 </template>
 <script lang="ts" setup>
@@ -156,7 +156,7 @@ const tools = ref<McpToolItem[]>([]);
 const pluginTools = ref<PluginToolItem[]>([]);
 const loading = ref<boolean>(false);
 
-// 工具编辑弹窗
+// Popup chỉnh sửa công cụ
 const [registerToolEditModal, { openModal: openToolEditModal }] = useModal();
 
 const displayIcon = computed(() => {
@@ -168,7 +168,7 @@ const displayIcon = computed(() => {
 const [registerModal, { closeModal }] = useModalInner(async (data: McpRecord) => {
   if(!data?.id){
     record.value = { ...data };
-    // 根据category初始化工具列表
+    // Khởi tạo danh sách công cụ theo category
     if (data.category === 'plugin') {
       try {
         const toolsData = typeof data.tools === 'string' ? JSON.parse(data.tools) : data.tools;
@@ -186,8 +186,8 @@ const [registerModal, { closeModal }] = useModalInner(async (data: McpRecord) =>
   loading.value = true;
   try {
     const res = await queryById(data.id);
-    // 后端返回结构直接使用 res.result 或 res depending on transform; 假设统一为 res.result
-    const detail = res.result || res; // 兼容不同返回包装
+    // Cấu trúc trả về của backend dùng trực tiếp res.result hoặc res depending on transform; Giả sử thống nhất là res.result
+    const detail = res.result || res; // Tương thích với các gói trả về khác nhau
     record.value = {
       id: detail.id,
       name: detail.name,
@@ -202,9 +202,9 @@ const [registerModal, { closeModal }] = useModalInner(async (data: McpRecord) =>
       metadata: detail.metadata,
     };
     
-    // 根据category解析工具
+    // Phân tích công cụ theo category
     if (detail.category === 'plugin') {
-      // 插件类型：解析tools字段为插件工具列表
+      // Loại plugin: phân tích trường tools thành danh sách công cụ plugin
       let parsedPluginTools: PluginToolItem[] = [];
       const rawTools = detail.tools;
       if (rawTools) {
@@ -218,14 +218,14 @@ const [registerModal, { closeModal }] = useModalInner(async (data: McpRecord) =>
           parsedPluginTools = [];
         }
       }
-      // 确保每个工具都有enabled字段，默认为true
+      // Đảm bảo mỗi công cụ đều có trường enabled, mặc định là true
       pluginTools.value = parsedPluginTools.map((t: any) => ({
         ...t,
         enabled: t.enabled !== undefined ? t.enabled : true
       }));
       tools.value = [];
     } else {
-      // MCP类型：解析tools字段为MCP工具列表
+      // MCPLoại MCP: phân tích trường tools thành danh sách công cụ MCP
       let parsedTools: McpToolItem[] = [];
       const rawTools = detail.tools;
       if (rawTools) {
@@ -261,7 +261,7 @@ function handleAddTool() {
   openToolEditModal(true, {
     pluginId: record.value?.id,
     plugin: record.value,
-    tool: null, // 新增
+    tool: null, // Thêm mới
   });
 }
 
@@ -285,7 +285,7 @@ function getMethodColor(method: string): string {
 }
 
 async function handleToolEnabledChange(tool: PluginToolItem) {
-  // 更新工具启用状态
+  // Cập nhật trạng thái kích hoạt công cụ
   if (!record.value?.id) return;
   
   try {
@@ -307,28 +307,28 @@ async function handleToolEnabledChange(tool: PluginToolItem) {
       emit('success');
     }
   } catch (e) {
-    console.error('更新工具启用状态失败:', e);
-    // 恢复状态
+    console.error('Cập nhật trạng thái kích hoạt công cụ thất bại:', e);
+    // Khôi phục trạng thái
     tool.enabled = !tool.enabled;
   }
 }
 
 function handleDeleteTool(tool: PluginToolItem) {
-  // 删除工具前进行二次确认
+  // Xác nhận lần hai trước khi xóa công cụ
   Modal.confirm({
-    title: '确认删除',
-    content: `确定要删除工具"${tool.name}"吗？此操作不可恢复。`,
-    okText: '确定',
+    title: 'Xác nhận xóa',
+    content: `Xác nhận muốn xóa công cụ"${tool.name}"không? Thao tác này không thể khôi phục.`,
+    okText: 'Xác định',
     okType: 'danger',
-    cancelText: '取消',
+    cancelText: 'Hủy',
     onOk: async () => {
       if (!record.value?.id) {
-        createMessage.error('插件ID不存在');
+        createMessage.error('ID plugin không tồn tại');
         return;
       }
       
       try {
-        // 获取最新的工具列表
+        // Lấy danh sách công cụ mới nhất
         const res = await queryById(record.value.id);
         const detail = res.result || res;
         let tools: any[] = [];
@@ -340,37 +340,37 @@ function handleDeleteTool(tool: PluginToolItem) {
           }
         }
         
-        // 从工具列表中移除该工具
+        // Loại bỏ công cụ này khỏi danh sách công cụ
         const filteredTools = tools.filter((t: any) => t.name !== tool.name);
         
         if (filteredTools.length === tools.length) {
-          createMessage.warning('未找到要删除的工具');
+          createMessage.warning('Không tìm thấy công cụ cần xóa');
           return;
         }
         
-        // 保存更新后的工具列表
+        // Lưu danh sách công cụ sau khi cập nhật
         const { saveTools } = await import('../AiragMcp.api');
         const saveRes = await saveTools(record.value.id, JSON.stringify(filteredTools));
         
         if (saveRes.success) {
-          createMessage.success('删除成功');
-          // 更新前端显示
+          createMessage.success('Xóa thành công');
+          // Cập nhật hiển thị frontend
           pluginTools.value = pluginTools.value.filter((t: any) => t.name !== tool.name);
-          // 触发成功事件，通知父组件刷新
+          // Kích hoạt sự kiện thành công, thông báo component cha làm mới
           emit('success');
         } else {
-          createMessage.error(saveRes.message || '删除失败');
+          createMessage.error(saveRes.message || 'Xóa thất bại');
         }
       } catch (e) {
-        console.error('删除工具失败:', e);
-        createMessage.error('删除工具失败');
+        console.error('Xóa công cụ thất bại:', e);
+        createMessage.error('Xóa công cụ thất bại');
       }
     },
   });
 }
 
 function emitEdit() {
-  // 触发编辑事件，传递record给父组件
+  // Kích hoạt sự kiện chỉnh sửa, truyền record cho component cha
   if (record.value) {
     emit('edit', record.value);
     closeModal();
@@ -378,13 +378,13 @@ function emitEdit() {
 }
 
 function handleToolEditSuccess() {
-  // 重新加载详情数据
+  // Tải lại dữ liệu chi tiết
   if (record.value?.id) {
     loading.value = true;
     queryById(record.value.id).then((res: any) => {
       const detail = res.result || res;
       
-      // 更新record信息
+      // Cập nhật thông tin record
       record.value = {
         id: detail.id,
         name: detail.name,
@@ -399,9 +399,9 @@ function handleToolEditSuccess() {
         metadata: detail.metadata,
       };
       
-      // 根据category解析工具
+      // Phân tích công cụ theo category
       if (detail.category === 'plugin') {
-        // 插件类型：解析tools字段为插件工具列表
+        // Loại plugin: phân tích trường tools thành danh sách công cụ plugin
         let parsedPluginTools: PluginToolItem[] = [];
         const rawTools = detail.tools;
         if (rawTools) {
@@ -421,7 +421,7 @@ function handleToolEditSuccess() {
         }));
         tools.value = [];
       } else {
-        // MCP类型：解析tools字段为MCP工具列表
+        // MCPLoại MCP: phân tích trường tools thành danh sách công cụ MCP
         let parsedTools: McpToolItem[] = [];
         const rawTools = detail.tools;
         if (rawTools) {
@@ -440,7 +440,7 @@ function handleToolEditSuccess() {
         pluginTools.value = [];
       }
       loading.value = false;
-      // 触发success事件，通知列表页刷新
+      // Kích hoạt sự kiện success, thông báo trang danh sách làm mới
       emit('success');
     }).catch(() => {
       loading.value = false;

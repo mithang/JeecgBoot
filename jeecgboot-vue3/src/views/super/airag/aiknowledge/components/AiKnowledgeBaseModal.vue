@@ -4,7 +4,7 @@
       <template #title>
          <span style="display: flex">
           {{title}}
-          <a-tooltip title="AI知识库文档">
+          <a-tooltip title="Tài liệu kho tri thức AI">
             <a style="color: unset" href="https://help.jeecg.com/aigc/guide/knowledge" target="_blank">
               <Icon style="position:relative;left:2px;top:1px" icon="ant-design:question-circle-outlined"></Icon>
             </a>
@@ -35,12 +35,12 @@
     },
     emits: ['success', 'register'],
     setup(props, { emit }) {
-      const title = ref<string>('创建知识库');
+      const title = ref<string>('Tạo kho tri thức');
 
-      //保存或修改
+      //Lưu hoặc sửa đổi
       const isUpdate = ref<boolean>(false);
 
-      //表单配置
+      //Cấu hình biểu mẫu
       const [registerForm, { resetFields, setFieldsValue, validate, clearValidate, updateSchema }] = useForm({
         schemas: formSchema,
         showActionButtonGroup: false,
@@ -49,18 +49,18 @@
         labelCol: { span: 24 },
       });
 
-      //注册modal
+      //Đăng ký modal
       const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
-        //重置表单
+        //Đặt lại biểu mẫu
         await resetFields();
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
-        title.value = isUpdate.value ? '编辑知识库' : '创建知识库';
+        title.value = isUpdate.value ? 'Chỉnh sửa kho tri thức' : 'Tạo kho tri thức';
         if (unref(isUpdate)) {
           let values = await queryById({ id: data.id });
-          //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+          //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
           let record = { ...values.result };
-          // 解析 metadata 中的分段策略
+          // Phân tích chiến lược phân đoạn trong metadata
           if (record.metadata) {
             try {
               const meta = JSON.parse(record.metadata);
@@ -76,22 +76,22 @@
               }
             } catch (_e) {}
           }
-          //表单赋值
+          //Gán giá trị biểu mẫu
           await setFieldsValue(record);
-          //update-end---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+          //update-end---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
         }
         setModalProps({ minHeight: 500, bodyStyle: { padding: '10px' } });
       });
 
       /**
-       * 保存
+       * Lưu
        */
       async function handleOk() {
         try {
           setModalProps({ confirmLoading: true });
           let values = await validate();
-          //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
-          // 将分段策略字段打包到 metadata
+          //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
+          // Đóng gói trường chiến lược phân đoạn vào metadata
           const { enableSegment, segmentStrategy, separator, customSeparator, maxSegment, overlap, textRules, ...rest } = values;
           let params: any = { ...rest };
           if (enableSegment) {
@@ -115,11 +115,11 @@
             await saveKnowledge(params);
           } else {
             await editKnowledge(params);
-        //update-end---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+        //update-end---wangshuai---date:20260414  for：【QQYUN-14932】Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định dùng chiến lược phân đoạn của kho tri thức------------
           }
-          //关闭弹窗
+          //Đóng popup
           closeModal();
-          //刷新列表
+          //Làm mới danh sách
           emit('success');
         } finally {
           setModalProps({ confirmLoading: false });
@@ -127,7 +127,7 @@
       }
 
       /**
-       * 取消
+       * Hủy
        */
       function handleCancel() {
         closeModal();

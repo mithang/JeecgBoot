@@ -4,20 +4,20 @@
     @register="registerModal"
     :canFullscreen="false"
     width="640px"
-    :title="isEdit ? '编辑MCP' : '新增MCP'"
+    :title="isEdit ? 'Chỉnh sửa MCP' : 'Thêm mới MCP'"
     wrapClassName="airag-mcp-modal"
   >
     <div class="modal">
       <div class="mcp-content">
         <BasicForm @register="registerForm">
-          <!-- category类型选择：单选 -->
+          <!-- Chọn loại category: chọn một -->
           <template #category="{ model, field }">
             <a-radio-group v-model:value="model[field]" @change="onCategoryChange" :disabled="isEdit">
               <a-radio value="mcp">MCP</a-radio>
-              <a-radio value="plugin">插件</a-radio>
+              <a-radio value="plugin">Plugin</a-radio>
             </a-radio-group>
           </template>
-          <!-- MCP类型选择 -->
+          <!-- Chọn loại MCP -->
           <template #type="{ model, field }">
             <a-select v-model:value="model[field]" @change="onTypeChange" :disabled="isEdit">
               <a-select-option value="sse">SSE</a-select-option>
@@ -25,7 +25,7 @@
               <a-select-option value="http">HTTP</a-select-option>
             </a-select>
           </template>
-          <!-- endpoint 根据类型切换 placeholder -->
+          <!-- endpoint chuyển đổi placeholder theo loại -->
           <template #endpoint="{ model, field }">
             <a-input
               v-model:value="model[field]"
@@ -33,13 +33,13 @@
               autocomplete="new-password"
             />
           </template>
-          <!-- headers 根据类型切换标签名称与 placeholder -->
+          <!-- headers chuyển đổi tên nhãn và placeholder theo loại -->
           <template #headers>
-            <!-- 解决浏览抛warning 70+ -->
+            <!-- Giải quyết việc duyệt ném warning 70+ -->
             <a-form-item-rest>
               <div class="headers-table-wrapper">
                 <a-button type="primary" size="small" @click="addHeaderRow" style="margin-bottom: 8px;">
-                  添加
+                  Thêm
                 </a-button>
                 <div class="headers-table-container">
                   <a-table
@@ -51,13 +51,13 @@
                   >
                     <template #bodyCell="{ column, record, index }">
                       <template v-if="column.key === 'key'">
-                        <a-input v-model:value="record.key" placeholder="请输入键" size="small" />
+                        <a-input v-model:value="record.key" placeholder="Vui lòng nhập khóa" size="small" />
                       </template>
                       <template v-if="column.key === 'value'">
-                        <a-input v-model:value="record.value" placeholder="请输入值" size="small" />
+                        <a-input v-model:value="record.value" placeholder="Vui lòng nhập giá trị" size="small" />
                       </template>
                       <template v-if="column.key === 'action'">
-                        <a-button type="link" danger size="small" @click="deleteHeaderRow(index)">删除</a-button>
+                        <a-button type="link" danger size="small" @click="deleteHeaderRow(index)">Xóa</a-button>
                       </template>
                     </template>
                   </a-table>
@@ -65,28 +65,28 @@
               </div>
             </a-form-item-rest>
           </template>
-          <!-- 授权方式配置（仅插件类型） -->
+          <!-- Cấu hình cách ủy quyền (chỉ loại plugin) -->
           <template #authType="{ model, field }">
             <a-select v-model:value="model[field]" @change="onAuthTypeChange">
-              <a-select-option value="none">不需要授权</a-select-option>
+              <a-select-option value="none">Không cần ủy quyền</a-select-option>
               <a-select-option value="token">Token / API Key</a-select-option>
             </a-select>
           </template>
-          <!-- Token参数名（仅插件类型且选择Token授权时） -->
+          <!-- Tên tham số Token (chỉ loại plugin và khi chọn ủy quyền Token) -->
           <template #tokenParamName="{ model, field }">
-            <a-input v-model:value="model[field]" placeholder="请输入Token参数名" />
+            <a-input v-model:value="model[field]" placeholder="Vui lòng nhập tên tham số Token" />
           </template>
-          <!-- Token参数值（仅插件类型且选择Token授权时） -->
+          <!-- Giá trị tham số Token (chỉ loại plugin và khi chọn ủy quyền Token) -->
           <template #tokenParamValue="{ model, field }">
-            <a-input  autocomplete="new-password" v-model:value="model[field]" type="password" placeholder="请输入Token值" />
+            <a-input  autocomplete="new-password" v-model:value="model[field]" type="password" placeholder="Vui lòng nhập giá trị Token" />
           </template>
         </BasicForm>
       </div>
     </div>
     <template #footer>
-      <a-button @click="close">关闭</a-button>
-      <a-button type="primary" @click="handleSubmit" :loading="submitLoading">保存</a-button>
-      <a-button v-if="categoryValue === 'mcp'" type="primary" @click="handleSubmitAndSync" :loading="submitLoading">保存并同步</a-button>
+      <a-button @click="close">Đóng</a-button>
+      <a-button type="primary" @click="handleSubmit" :loading="submitLoading">Lưu</a-button>
+      <a-button v-if="categoryValue === 'mcp'" type="primary" @click="handleSubmitAndSync" :loading="submitLoading">Lưu và đồng bộ</a-button>
     </template>
   </BasicModal>
 </template>
@@ -105,59 +105,59 @@ const isEdit = ref(false);
 const submitLoading = ref(false);
 const recordId = ref<string | undefined>(undefined);
 
-// category类型（plugin/mcp）
+// Loại category (plugin/mcp)
 const categoryValue = ref('mcp');
-// MCP类型（sse/stdio）
+// Loại MCP (sse/stdio)
 const typeValue = ref('sse');
-// 授权方式
-const authType = ref('none'); // none: 不需要授权, token: Token / API Key
-// Token配置
+// Cách ủy quyền
+const authType = ref('none'); // none: không cần ủy quyền, token: Token / API Key
+// Cấu hình Token
 const tokenParamName = ref('X-Access-Token');
 const tokenParamValue = ref('');
 
 const endpointPlaceholder = computed(() => {
   if (categoryValue.value === 'plugin') {
-    return '请输入BaseURL，例如：https://api.example.com（可选，不填使用当前系统地址）';
+    return 'Vui lòng nhập BaseURL, ví dụ: https://api.example.com (tùy chọn, không điền thì dùng địa chỉ hệ thống hiện tại)';
   }
-  return typeValue.value === 'sse' || typeValue.value === 'http' ? '请输入服务端点URL，例如：https://example.com/stream' : '请输入启动命令，例如：./start-mcp-service';
+  return typeValue.value === 'sse' || typeValue.value === 'http' ? 'Vui lòng nhập URL điểm cuối máy chủ, ví dụ: https://example.com/stream' : 'Vui lòng nhập lệnh khởi động, ví dụ: ./start-mcp-service';
 });
 
-// 表格数据
+// Dữ liệu bảng
 const headersData = ref<Array<{ key: string; value: string }>>([]);
 
-// 表格列配置
+// Cấu hình cột bảng
 const headersColumns = [
-  { title: '键', dataIndex: 'key', key: 'key', width: '40%' },
-  { title: '值', dataIndex: 'value', key: 'value', width: '45%' },
-  { title: '操作', key: 'action', width: '15%' },
+  { title: 'Khóa', dataIndex: 'key', key: 'key', width: '40%' },
+  { title: 'Giá trị', dataIndex: 'value', key: 'value', width: '45%' },
+  { title: 'Thao tác', key: 'action', width: '15%' },
 ];
 
-// 添加行
+// Thêm dòng
 function addHeaderRow() {
   headersData.value.push({ key: '', value: '' });
 }
 
-// 删除行
+// Xóa dòng
 function deleteHeaderRow(index: number) {
-  // 如果只剩一行
+  // Nếu chỉ còn một dòng
   if (headersData.value.length <= 1) {
     const lastRow = headersData.value[0];
-    // 判断最后一行是否为空
+    // Phán đoán dòng cuối cùng có trống hay không
     if (!lastRow.key && !lastRow.value) {
-      // 如果键和值都是空的，不处理
+      // Nếu khóa và giá trị đều trống, không xử lý
       return;
     } else {
-      // 如果不是空的，清空这一行的键和值
+      // Nếu không trống, làm trống khóa và giá trị của dòng này
       lastRow.key = '';
       lastRow.value = '';
-      createMessage.success('已清空数据');
+      createMessage.success('Đã làm trống dữ liệu');
       return;
     }
   }
   headersData.value.splice(index, 1);
 }
 
-// 将表格数据转换为JSON字符串格式
+// Chuyển đổi dữ liệu bảng thành định dạng chuỗi JSON
 function headersDataToString(): string {
   const filtered = headersData.value.filter(item => item.key && item.value);
   if (filtered.length === 0) {
@@ -170,10 +170,10 @@ function headersDataToString(): string {
   return JSON.stringify(obj);
 }
 
-// 将JSON字符串格式转换为表格数据
+// Chuyển đổi định dạng chuỗi JSON thành dữ liệu bảng
 function stringToHeadersData(str: string | undefined) {
   if (!str) {
-    // 默认添加一行空数据
+    // Mặc định thêm một dòng dữ liệu trống
     headersData.value = [{ key: '', value: '' }];
     return;
   }
@@ -181,7 +181,7 @@ function stringToHeadersData(str: string | undefined) {
     const obj = JSON.parse(str);
     const entries = Object.entries(obj);
     if (entries.length === 0) {
-      // 如果解析后没有数据，默认添加一行空数据
+      // Nếu sau khi phân tích không có dữ liệu, mặc định thêm một dòng dữ liệu trống
       headersData.value = [{ key: '', value: '' }];
     } else {
       headersData.value = entries.map(([key, value]) => ({
@@ -190,8 +190,8 @@ function stringToHeadersData(str: string | undefined) {
       }));
     }
   } catch (e) {
-    // JSON解析失败，默认添加一行空数据
-    console.error('解析headers JSON失败:', e);
+    // Phân tích JSON thất bại, mặc định thêm một dòng dữ liệu trống
+    console.error('Phân tích flowData.metadata thất bại', e);
     headersData.value = [{ key: '', value: '' }];
   }
 }
@@ -207,34 +207,34 @@ function onAuthTypeChange(val: string) {
 function onCategoryChange(val) {
   categoryValue.value = val.target.value;
   if (categoryValue.value === 'plugin') {
-    // 插件类型：显示BaseURL、请求头、授权方式，隐藏MCP类型选择
+    // Loại plugin: hiển thị BaseURL, header yêu cầu, cách ủy quyền, ẩn lựa chọn loại MCP
     updateSchema([
-      { field: 'category', label: '类型' },
+      { field: 'category', label: 'Loại' },
       { field: 'endpoint', label: 'BaseURL', required: false },
       { field: 'type', show: false },
-      { field: 'headers', label: '请求头', show: true },
-      { field: 'authType', label: '授权方式', required: true, show: true },
-      { field: 'tokenParamName', label: 'Token参数名', required: authType.value === 'token', show: authType.value === 'token' },
-      { field: 'tokenParamValue', label: 'Token参数值', required: false , show: authType.value === 'token' },
+      { field: 'headers', label: 'Header yêu cầu', show: true },
+      { field: 'authType', label: 'Cách ủy quyền', required: true, show: true },
+      { field: 'tokenParamName', label: 'Tên tham số Token', required: authType.value === 'token', show: authType.value === 'token' },
+      { field: 'tokenParamValue', label: 'Giá trị tham số Token', required: false , show: authType.value === 'token' },
     ]);
-    // 设置插件类型的默认值
+    // Đặt giá trị mặc định của loại plugin
     setFieldsValue({
       type: 'api',
       authType: authType.value || 'none',
       tokenParamName: tokenParamName.value || 'X-Access-Token',
     });
   } else {
-    // MCP类型：显示原有字段
+    // Loại MCP: hiển thị trường vốn có
     updateSchema([
-      { field: 'category', label: '类型' },
-      { field: 'endpoint', label: typeValue.value === 'stdio' ? '命令' : 'URL', required: true },
-      { field: 'type', label: 'MCP类型', show: true },
-      { field: 'headers', label: '请求头', show:() =>typeValue.value !=='stdio'},
+      { field: 'category', label: 'Loại' },
+      { field: 'endpoint', label: typeValue.value === 'stdio' ? 'Lệnh' : 'URL', required: true },
+      { field: 'type', label: 'Loại MCP', show: true },
+      { field: 'headers', label: 'Header yêu cầu', show:() =>typeValue.value !=='stdio'},
       { field: 'authType', show: false },
       { field: 'tokenParamName', show: false },
       { field: 'tokenParamValue', show: false },
     ]);
-    // 设置MCP类型的默认值
+    // Đặt giá trị mặc định của loại MCP
     setFieldsValue({
       type: typeValue.value || 'sse',
       authType: undefined,
@@ -245,22 +245,22 @@ function onCategoryChange(val) {
 }
 
 
-// 表单配置
+// Cấu hình biểu mẫu
 const [registerForm, { resetFields, validate, setFieldsValue, updateSchema }] = useForm({
   showActionButtonGroup: false,
   layout: 'vertical',
   baseColProps: { span: 24 },
   schemas: [
-    { field: 'name', component: 'Input', label: '名称', required: true, componentProps: { placeholder: '请输入名称' } },
-    { field: 'icon', label: '图标', component: 'JImageUpload' },
-    { field: 'category', component: 'RadioGroup', label: '类型', required: true, slot: 'category', defaultValue: 'mcp' },
-    { field: 'type', component: 'Select', label: 'MCP类型', required: true, slot: 'type', defaultValue: 'sse' },
+    { field: 'name', component: 'Input', label: 'Tên', required: true, componentProps: { placeholder: 'Vui lòng nhập tên' } },
+    { field: 'icon', label: 'Biểu tượng', component: 'JImageUpload' },
+    { field: 'category', component: 'RadioGroup', label: 'Loại', required: true, slot: 'category', defaultValue: 'mcp' },
+    { field: 'type', component: 'Select', label: 'Loại MCP', required: true, slot: 'type', defaultValue: 'sse' },
     { field: 'endpoint', component: 'Input', label: 'URL', required: true, slot: 'endpoint' },
-    { field: 'headers', component: 'InputTextArea', label: '请求头', slot: 'headers', show: false },
-    { field: 'authType', component: 'Select', label: '授权方式', required: true, slot: 'authType', defaultValue: 'none', show: false },
-    { field: 'tokenParamName', component: 'Input', label: 'Token参数名', required: false, slot: 'tokenParamName', defaultValue: 'X-Access-Token', show: false },
-    { field: 'tokenParamValue', component: 'Input', label: 'Token参数值', required: false, slot: 'tokenParamValue', show: false },
-    { field: 'descr', component: 'InputTextArea', label: '描述', componentProps: { rows: 3, placeholder: '请输入描述' } },
+    { field: 'headers', component: 'InputTextArea', label: 'Header yêu cầu', slot: 'headers', show: false },
+    { field: 'authType', component: 'Select', label: 'Cách ủy quyền', required: true, slot: 'authType', defaultValue: 'none', show: false },
+    { field: 'tokenParamName', component: 'Input', label: 'Tên tham số Token', required: false, slot: 'tokenParamName', defaultValue: 'X-Access-Token', show: false },
+    { field: 'tokenParamValue', component: 'Input', label: 'Giá trị tham số Token', required: false, slot: 'tokenParamValue', show: false },
+    { field: 'descr', component: 'InputTextArea', label: 'Mô tả', componentProps: { rows: 3, placeholder: 'Vui lòng nhập mô tả' } },
   ]
 });
 
@@ -269,25 +269,25 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
   submitLoading.value = false;
   recordId.value = data?.id;
   if (data && Object.keys(data).length > 0) {
-    // 区分新增/编辑
+    // Phân biệt thêm mới/Chỉnh sửa
     if (data.id) {
       isEdit.value = true;
     } else {
       isEdit.value = false;
     }
-    // 获取category，默认为mcp
+    // Lấy category, mặc định là mcp
     const category = data.category || 'mcp';
     categoryValue.value = category;
     const t = data.type || 'sse';
     typeValue.value = t;
     
-    // 解析授权配置（从headers或metadata中解析）
+    // Phân tích cấu hình ủy quyền (phân tích từ headers hoặc metadata)
     let parsedAuthType = 'none';
     let parsedTokenParamName = 'X-Access-Token';
     let parsedTokenParamValue = '';
     
     if (category === 'plugin') {
-      // 尝试从metadata中解析授权配置
+      // Thử phân tích cấu hình ủy quyền từ metadata
       if (data.metadata) {
         try {
           const metadata = typeof data.metadata === 'string' ? JSON.parse(data.metadata) : data.metadata;
@@ -295,23 +295,23 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
           parsedTokenParamName = metadata.tokenParamName || 'X-Access-Token';
           parsedTokenParamValue = metadata.tokenParamValue || '';
         } catch (e) {
-          // 解析失败，使用默认值
+          // Phân tích thất bại, dùng giá trị mặc định
         }
       }
       
-      // 从headers中提取token（如果存在）
+      // Trích xuất token từ headers (nếu tồn tại)
       let headersObj: any = {};
       if (data.headers) {
         try {
           headersObj = typeof data.headers === 'string' ? JSON.parse(data.headers) : data.headers;
-          // 如果metadata中有token配置，尝试从headers中提取对应的值
+          // Nếu trong metadata có cấu hình token, thử trích xuất giá trị tương ứng từ headers
           if (parsedAuthType === 'token' && parsedTokenParamName && headersObj[parsedTokenParamName]) {
             parsedTokenParamValue = headersObj[parsedTokenParamName];
-            // 从headers中移除token，避免在表格中显示
+            // Loại bỏ token khỏi headers, tránh hiển thị trong bảng
             delete headersObj[parsedTokenParamName];
           }
         } catch (e) {
-          // 解析失败
+          // Phân tích thất bại
         }
       }
       
@@ -320,18 +320,18 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
       tokenParamValue.value = parsedTokenParamValue;
       
       updateSchema([
-        { field: 'category', label: '类型', componentProps: { disabled: true } },
+        { field: 'category', label: 'Loại', componentProps: { disabled: true } },
         { field: 'endpoint', label: 'BaseURL', required: false },
         { field: 'type', show: false },
-        { field: 'headers', label: '请求头', show: true },
-        { field: 'authType', label: '授权方式', required: true, show: true },
-        { field: 'tokenParamName', label: 'Token参数名', required: parsedAuthType === 'token', show: parsedAuthType === 'token' },
-        { field: 'tokenParamValue', label: 'Token参数值', required: false, show: parsedAuthType === 'token' },
+        { field: 'headers', label: 'Header yêu cầu', show: true },
+        { field: 'authType', label: 'Cách ủy quyền', required: true, show: true },
+        { field: 'tokenParamName', label: 'Tên tham số Token', required: parsedAuthType === 'token', show: parsedAuthType === 'token' },
+        { field: 'tokenParamValue', label: 'Giá trị tham số Token', required: false, show: parsedAuthType === 'token' },
       ]);
-      // 将处理后的headers（已移除token）转换为表格数据
+      // Chuyển đổi headers đã xử lý (đã loại bỏ token) thành dữ liệu bảng
       stringToHeadersData(Object.keys(headersObj).length > 0 ? JSON.stringify(headersObj) : '');
       
-      // 需要在下一个tick设置值，确保updateSchema完成
+      // Cần đặt giá trị ở tick tiếp theo, đảm bảo updateSchema hoàn thành
       nextTick(() => {
         setFieldsValue({
           icon: data.icon,
@@ -347,18 +347,18 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
       });
     } else {
       updateSchema([
-        { field: 'category', label: '类型', componentProps: { disabled: true } },
-        { field: 'endpoint', label: t === 'stdio' ? '命令' : 'URL', required: true },
-        { field: 'type', label: 'MCP类型', show: true },
-        { field: 'headers', label: '请求头', show:() => t !== 'stdio' },
+        { field: 'category', label: 'Loại', componentProps: { disabled: true } },
+        { field: 'endpoint', label: t === 'stdio' ? 'Lệnh' : 'URL', required: true },
+        { field: 'type', label: 'Loại MCP', show: true },
+        { field: 'headers', label: 'Header yêu cầu', show:() => t !== 'stdio' },
         { field: 'authType', show: false },
         { field: 'tokenParamName', show: false },
         { field: 'tokenParamValue', show: false },
       ]);
-      // 将 headers 字符串转换为表格数据
+      // Chuyển đổi chuỗi headers thành dữ liệu bảng
       stringToHeadersData(data.headers);
       
-      // 需要在下一个tick设置值，确保updateSchema完成
+      // Cần đặt giá trị ở tick tiếp theo, đảm bảo updateSchema hoàn thành
       nextTick(() => {
         setFieldsValue({
           icon: data.icon,
@@ -377,30 +377,30 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
     authType.value = 'none';
     tokenParamName.value = 'X-Access-Token';
     tokenParamValue.value = '';
-    // 默认添加一行空数据
+    // Mặc định thêm một dòng dữ liệu trống
     headersData.value = [{ key: '', value: '' }];
     updateSchema([
-      { field: 'category', label: '类型' },
+      { field: 'category', label: 'Loại' },
       { field: 'endpoint', label: 'URL' },
-      { field: 'headers', label: '请求头', show: true },
+      { field: 'headers', label: 'Header yêu cầu', show: true },
       { field: 'authType', show: false },
       { field: 'tokenParamName', show: false },
       { field: 'tokenParamValue', show: false },
     ]);
-    // 设置默认选中值
+    // Đặt giá trị chọn mặc định
     setFieldsValue({ category: 'mcp', type: 'sse', authType: 'none', tokenParamName: 'X-Access-Token', tokenParamValue: '' });
   }
 });
 
 /**
- * 类型改变事件
+ * Sự kiện thay đổi loại
  * @param val
  */
 function onTypeChange(val: string){
   typeValue.value = val;
   updateSchema([
-    { field: 'endpoint', label: val === 'stdio' ? '命令' : 'URL' },
-    { field: 'headers', label: '请求头', show:() => val !== 'stdio' },
+    { field: 'endpoint', label: val === 'stdio' ? 'Lệnh' : 'URL' },
+    { field: 'headers', label: 'Header yêu cầu', show:() => val !== 'stdio' },
   ]);
 }
 
@@ -413,16 +413,16 @@ async function handleSubmit(){
     }
     
     if (values.category === 'plugin') {
-      // 插件类型：验证授权配置
+      // Loại plugin: kiểm chứng cấu hình ủy quyền
       if (values.authType === 'token') {
         if (!values.tokenParamName) {
-          createMessage.error('Token授权方式需要填写Token参数名和参数值');
+          createMessage.error('Cách ủy quyền Token cần điền tên tham số Token và giá trị tham số');
           return;
         }
       }
       
-      // 插件类型：处理headers和授权配置
-      // 合并headers和token配置
+      // Loại plugin: xử lý headers và cấu hình ủy quyền
+      // Hợp nhất headers và cấu hình token
       let headersObj = {};
       const headersStr = headersDataToString();
       if (headersStr) {
@@ -433,20 +433,20 @@ async function handleSubmit(){
         }
       }
       
-      // 如果选择了Token授权，添加token到headers
+      // Nếu đã chọn ủy quyền Token, thêm token vào headers
       if (values.authType === 'token' && values.tokenParamName && values.tokenParamValue) {
         headersObj[values.tokenParamName] = values.tokenParamValue;
       }
       
       values.headers = Object.keys(headersObj).length > 0 ? JSON.stringify(headersObj) : '';
       
-      // 将授权配置保存到metadata
+      // Lưu cấu hình ủy quyền vào metadata
       const metadata: any = {};
       if (values.metadata) {
         try {
           Object.assign(metadata, typeof values.metadata === 'string' ? JSON.parse(values.metadata) : values.metadata);
         } catch (e) {
-          // 解析失败，使用空对象
+          // Phân tích thất bại, dùng đối tượng trống
         }
       }
       metadata.authType = values.authType || 'none';
@@ -458,9 +458,9 @@ async function handleSubmit(){
       
       values.type = 'api';
     } else {
-      // MCP类型：将表格数据转换为字符串
+      // Loại MCP: chuyển đổi dữ liệu bảng thành chuỗi
       values.headers = headersDataToString();
-      // 清除授权相关字段
+      // Làm trống các trường liên quan đến ủy quyền
       delete values.authType;
       delete values.tokenParamName;
       delete values.tokenParamValue;
@@ -468,11 +468,11 @@ async function handleSubmit(){
     
     const res = await saveOrUpdate(values);
     if(res.success){
-      createMessage.success(res.message || '保存成功');
+      createMessage.success(res.message || 'Lưu thành công');
       emit('success');
       closeModal();
     }else{
-      createMessage.error(res.message || '保存失败');
+      createMessage.error(res.message || 'Lưu thất bại');
     }
   }finally{
     submitLoading.value = false;
@@ -486,15 +486,15 @@ async function handleSubmitAndSync(){
     if(recordId.value){
       values.id = recordId.value;
     }
-    // 将表格数据转换为字符串
+    // Chuyển đổi dữ liệu bảng thành chuỗi
     values.headers = headersDataToString();
     const res = await saveAndSync(values);
     if(res.success){
-      createMessage.success(res.message || '保存并同步成功');
+      createMessage.success(res.message || 'Lưu và đồng bộ thành công');
       emit('success');
       closeModal();
     }else{
-      createMessage.error(res.message || '保存并同步失败');
+      createMessage.error(res.message || 'Lưu và đồng bộ thất bại');
     }
   }finally{
     submitLoading.value = false;

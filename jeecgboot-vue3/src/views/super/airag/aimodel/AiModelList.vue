@@ -1,24 +1,24 @@
 <template>
   <div class="model">
-    <!--查询区域-->
+    <!--Khu vực truy vấn-->
     <div class="jeecg-basic-table-form-container">
       <a-form ref="formRef" @keyup.enter.native="searchQuery" :model="queryParam" :label-col="labelCol" :wrapper-col="wrapperCol" style="background-color: #f7f8fc !important;">
         <a-row :gutter="24">
           <a-col :lg="6">
-            <a-form-item name="name" label="模板名称">
+            <a-form-item name="name" label="Tên mẫu">
               <JInput v-model:value="queryParam.name" />
             </a-form-item>
           </a-col>
           <a-col :lg="6">
-            <a-form-item name="modelType" label="模板类型">
+            <a-form-item name="modelType" label="Loại mẫu">
               <JDictSelectTag v-model:value="queryParam.modelType" dict-code="model_type" />
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-col :lg="6">
-                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">查询</a-button>
-                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">重置</a-button>
+                <a-button type="primary" preIcon="ant-design:search-outlined" @click="searchQuery">Truy vấn</a-button>
+                <a-button type="primary" preIcon="ant-design:reload-outlined" @click="searchReset" style="margin-left: 8px">Đặt lại</a-button>
               </a-col>
             </span>
           </a-col>
@@ -30,7 +30,7 @@
         <a-card class="add-knowledge-card" @click="handleAdd">
           <div class="flex">
             <Icon icon="ant-design:plus-outlined" class="add-knowledge-card-icon" size="20"></Icon>
-            <span class="add-knowledge-card-title">添加模型</span>
+            <span class="add-knowledge-card-title">Thêm mô hình</span>
           </div>
         </a-card>
       </a-col>
@@ -45,18 +45,18 @@
           <div class="mt-6">
             <ul>
               <li class="flex mr-14" style="align-items: center;">
-                <span class="label" style="flex-shrink: 0;">模型类型</span>
+                <span class="label" style="flex-shrink: 0;">Loại mô hình</span>
                 <span class="described" style="flex: 1; min-width: 0;">{{ item.modelType_dictText }}</span>
-                <a-tooltip v-if="!item.activateFlag" title="未激活模型暂无法被系统其他功能调用，激活后可正常使用。">
-                  <span class="no-activate">未激活</span>
+                <a-tooltip v-if="!item.activateFlag" title="Mô hình chưa kích hoạt tạm thời không thể được các chức năng khác của hệ thống gọi, sau khi kích hoạt có thể dùng bình thường.">
+                  <span class="no-activate">Chưa kích hoạt</span>
                 </a-tooltip>
               </li>
               <li class="flex mr-14 mt-6" style="align-items: center;">
-                <span class="label" style="flex-shrink: 0;">基础模型</span>
+                <span class="label" style="flex-shrink: 0;">Mô hình cơ sở</span>
                 <span class="described" style="flex: 1; min-width: 0;">{{ item.modelName }}</span>
               </li>
               <li class="flex mr-14 mt-6" style="align-items: center;">
-                <span class="label" style="flex-shrink: 0;">创建者</span>
+                <span class="label" style="flex-shrink: 0;">Người tạo</span>
                 <span class="described" style="flex: 1; min-width: 0;">{{ item.createBy_dictText || item.createBy }}</span>
               </li>
             </ul>
@@ -73,16 +73,16 @@
                 <a-menu>
                   <!--<a-menu-item key="param" @click="handleParamClick(item.id)">
                     <Icon icon="ant-design:setting-outlined" size="16"></Icon>
-                    <span class="ml-4">模型参数配置</span>
+                    <span class="ml-4">Cấu hình tham số mô hình</span>
                   </a-menu-item>-->
                   <a-menu-item key="copy" @click.prevent.stop="handleCopyClick(item)">
-                    <Icon icon="ant-design:copy-outlined" size="16"></Icon> 复制
+                    <Icon icon="ant-design:copy-outlined" size="16"></Icon> Sao chép
                   </a-menu-item>
                   <a-menu-item v-if="item.activateFlag" key="deactivate" @click.prevent.stop="handleDeactivateClick(item)">
-                    <Icon icon="ant-design:stop-outlined" size="16"></Icon> 取消激活
+                    <Icon icon="ant-design:stop-outlined" size="16"></Icon> Hủy kích hoạt
                   </a-menu-item>
                   <a-menu-item key="delete" @click.prevent.stop="handleDeleteClick(item)">
-                    <Icon icon="ant-design:delete-outlined" size="16"></Icon> 删除
+                    <Icon icon="ant-design:delete-outlined" size="16"></Icon> Xóa
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -102,11 +102,11 @@
       @change="handlePageChange"
       class="list-footer"
       size="small"
-      :show-total="() => `共${total}条` "
+      :show-total="() => `Tổng cộng${total}Mục` "
     />
   </div>
 
-  <!--添加模型弹窗-->
+  <!--Popup thêm mô hình-->
   <AiModelModal @register="registerModal" @success="reload"></AiModelModal>
 </template>
 
@@ -131,48 +131,48 @@
       Pagination,
     },
     setup() {
-      //模型列表
+      //Danh sách mô hình
       const modalList = ref([]);
 
       const [registerModal, { openModal }] = useModal();
 
-      //当前页数
+      //Số trang hiện tại
       const pageNo = ref<number>(1);
-      //每页条数
+      //Số mục mỗi trang
       const pageSize = ref<number>(30);
-      //总条数
+      //Tổng số mục
       const total = ref<number>(0);
-      //可选择的页数
+      //Số trang có thể chọn
       const pageSizeOptions = ref<any>(['10', '20', '30']);
-      //查询参数
+      //Tham số truy vấn
       const queryParam = reactive<any>({});
-      //查询区域label宽度
+      //Độ rộng label của khu vực truy vấn
       const labelCol = reactive({
         xs: 24,
         sm: 4,
         xl: 6,
         xxl: 6,
       });
-      //查询区域组件宽度
+      //Độ rộng component khu vực truy vấn
       const wrapperCol = reactive({
         xs: 24,
         sm: 20,
       });
-      //查询区域表单的ref
+      //ref của biểu mẫu khu vực truy vấn
       const formRef = ref();
 
-      //页面初始化执行列表查询
+      //Khi khởi tạo trang thực thi truy vấn danh sách
       reload();
 
       /**
-       * 新增
+       * Thêm mới
        */
       async function handleAdd() {
         openModal(true, {});
       }
 
       /**
-       * 编辑
+       * Chỉnh sửa
        *
        * @param item
        */
@@ -183,7 +183,7 @@
       }
 
       /**
-       * 重新加载数据
+       * Tải lại dữ liệu
        */
       function reload() {
         let params = {
@@ -205,7 +205,7 @@
       }
 
       /**
-       * 分页改变事件
+       * Sự kiện thay đổi phân trang
        * @param page
        * @param current
        */
@@ -216,7 +216,7 @@
       }
 
       /**
-       * 获取图片
+       * Lấy hình ảnh
        * @param name
        */
       const getImage = (name) => {
@@ -224,7 +224,7 @@
       };
 
       /**
-       * 删除模型
+       * Xóa mô hình
        * @param item
        */
       async function handleDeleteClick(item) {
@@ -235,10 +235,10 @@
       }
 
       /**
-       * 复制模型
+       * Sao chép mô hình
        * @param item
        * @author scott
-       * @since 2026-08-06 LHZP-1552 AI模型配置增加复制功能
+       * @since 2026-08-06 LHZP-1552 Cấu hình mô hình AI thêm chức năng sao chép
        */
       async function handleCopyClick(item) {
         await copyModel(item.id);
@@ -247,7 +247,7 @@
       }
 
       /**
-       * 取消激活模型
+       * Hủy kích hoạt mô hình
        * @param item
        */
       async function handleDeactivateClick(item) {
@@ -256,7 +256,7 @@
       }
 
       /**
-       * 查询
+       * Truy vấn
        */
       function searchQuery() {
         pageNo.value = 1;
@@ -264,17 +264,17 @@
       }
 
       /**
-       * 重置
+       * Đặt lại
        */
       function searchReset() {
         formRef.value.resetFields();
         queryParam.createBy = '';
-        //刷新数据
+        //Làm mới dữ liệu
         reload();
       }
 
       /**
-       * 参数配置点击事件
+       * Sự kiện nhấp cấu hình tham số
        *
        * @param id
        */

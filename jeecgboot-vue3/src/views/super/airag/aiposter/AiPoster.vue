@@ -2,15 +2,15 @@
   <div class="ai-poster-page">
     <div class="page-header">
       <a-tabs v-model:activeKey="activeKey">
-        <a-tab-pane key="poster" tab="AI 海报" />
-        <a-tab-pane key="painting" tab="AI 绘画" />
+        <a-tab-pane key="poster" tab="AI Poster" />
+        <a-tab-pane key="painting" tab="AI Vẽ tranh" />
       </a-tabs>
     </div>
 
     <div class="content-wrapper" v-show="activeKey === 'poster'">
-      <!-- 左侧模板选择 -->
+      <!-- Chọn mẫu bên trái -->
       <div class="template-panel">
-        <div class="panel-title">模板选择</div>
+        <div class="panel-title">Chọn mẫu</div>
         <div class="template-list">
           <div
             v-for="item in templates"
@@ -26,31 +26,31 @@
           </div>
         </div>
       </div>
-      <!-- 中间参数配置 -->
+      <!-- Cấu hình tham số ở giữa -->
       <div class="config-panel">
-        <div class="panel-title">参数配置</div>
+        <div class="panel-title">Cấu hình tham số</div>
         <div class="form-container">
           <BasicForm @register="registerForm" />
         </div>
         <div class="action-container">
           <a-button type="primary" size="large" block @click="handleGenerate" :loading="loading">
             <Icon icon="ant-design:thunderbolt-outlined" />
-            立即生成
+            Tạo ngay
           </a-button>
         </div>
       </div>
 
-      <!-- 右侧图片生成结果 -->
+      <!-- Kết quả tạo hình ảnh bên phải -->
       <div class="preview-panel">
-        <div class="panel-title">生成结果</div>
+        <div class="panel-title">Kết quả tạo</div>
         <div class="preview-content">
           <div v-if="!generatedImage && !loading" class="empty-state">
             <Icon icon="ant-design:picture-outlined" size="64" color="#ccc" />
-            <p>在左侧配置参数并点击生成</p>
+            <p>Cấu hình tham số ở bên trái và nhấp tạo</p>
           </div>
 
           <div v-if="loading && !generatedImage" class="loading-state">
-            <a-spin size="large" tip="正在绘制海报，请稍候..." />
+            <a-spin size="large" tip="Đang vẽ poster, vui lòng chờ..." />
           </div>
 
           <div v-if="generatedImage" class="result-image-wrapper group">
@@ -58,11 +58,11 @@
             <div class="image-actions">
               <a-button class="preview-button" @click="handlePreview">
                 <Icon icon="ant-design:eye-outlined" />
-                预览
+                Xem trước
               </a-button>
               <a-button type="primary" @click="handleDownload">
                 <Icon icon="ant-design:download-outlined" />
-                下载
+                Tải xuống
               </a-button>
             </div>
           </div>
@@ -103,41 +103,41 @@
   const templates = [
     {
       id: 1,
-      name: '淡雅政务风',
+      name: 'Phong chính quyền thanh nhã',
       prompt:
-        '淡雅政务风横版海报，主色调浅蓝 + 米白 + 淡灰，扁平化矢量风格，叠加细腻宣纸纹理；画面核心元素：简约政务办公楼轮廓（线条简洁）、金色钢笔、展开的公文册、淡蓝色祥云纹样、橄榄枝装饰；背景是米白渐变 + 浅蓝竖条肌理，点缀细金色边框；文字设计：居中用黑体写‘政务为民・高效规范’，下方配‘用心服务・务实笃行’浅蓝小字；整体氛围淡雅庄重、专业简洁，层次分明，光影柔和，高清细节，竖版 9:16 构图',
+        'Poster ngang phong chính quyền thanh nhã, tông màu chính xanh nhạt + Trắng gạo + xám nhạt, phong cách vector phẳng, chồng thêm họa tiết giấy Tuyên mịn; Yếu tố cốt lõi của hình ảnh: đường nét tòa nhà văn phòng chính quyền giản lược (đường nét đơn giản), bút máy vàng, cuốn công văn mở ra, họa tiết mây lành xanh nhạt, trang trí cành ô liu; Nền là chuyển màu trắng ngà + họa tiết sọc dọc xanh nhạt, điểm xuyết viền vàng mảnh; Thiết kế chữ: ở giữa viết ‘Chính quyền vì dân・Hiệu quả chuẩn mực’ bằng phông Hei, phía dưới thêm chữ nhỏ xanh nhạt ‘Phục vụ tận tâm・Thiết thực vững vàng’; Không khí tổng thể thanh nhã trang trọng, chuyên nghiệp đơn giản, phân lớp rõ ràng, ánh sáng mềm, chi tiết độ nét cao, bố cục dọc 9:16',
       size: '720*1280',
       url: 'https://upload.jeecg.com/jeecg/AI/simple.png',
     },
     {
       id: 2,
-      name: '节日海报',
+      name: 'Poster ngày lễ',
       prompt:
-        '国潮中国风春节竖版海报，主色调红金 + 暖橙渐变，国潮插画风格，矢量扁平 + 柔和渐变质感，叠加细腻宣纸纹理；画面层次：前景是红色剪纸风梅花、金色福字贴纸、饱满水饺、红色灯笼串，中景是红墙金瓦的传统民居屋檐、飘带式祥云，远景是淡金色烟花绽放 + 暖红色光晕背景；点缀金色铜钱纹、折纸兔子、如意纹样；画面中央偏上用金色书法字体写‘新春大吉’，下方配\'万事如意\'四字楷书；整体氛围喜庆祥和、团圆温馨，层次分明主次清晰，光影柔和不刺眼，高清细节，竖版 9:16 构图',
+        'Poster dọc Tết phong cách Trung Quốc quốc triều, tông màu chính đỏ vàng + chuyển màu cam ấm, phong cách minh họa quốc triều, vector phẳng + chất cảm chuyển màu mềm, chồng thêm họa tiết giấy Tuyên mịn; Lớp hình ảnh: tiền cảnh là hoa mai phong cách cắt giấy màu đỏ, nhãn dán chữ Phúc vàng, bánh chẻo căng tròn, dãy đèn lồng đỏ, trung cảnh là mái hiên nhà dân truyền thống tường đỏ ngói vàng, mây lành dạng dải bay, viễn cảnh là pháo hoa vàng nhạt nở rộ + nền quầng sáng đỏ ấm; điểm xuyết họa tiết đồng tiền vàng, thỏ gấp giấy, họa tiết như ý; giữa hình ảnh hơi lệch lên trên viết ‘Chúc mừng năm mới’ bằng phông thư pháp vàng, phía dưới thêm\'Vạn sự như ý\'chữ khải bốn chữ; Không khí tổng thể vui mừng điềm lành, đoàn viên ấm áp, phân lớp rõ ràng, chính phụ phân minh, ánh sáng mềm không chói mắt, chi tiết độ nét cao, bố cục dọc 9:16',
       url: 'https://upload.jeecg.com/jeecg/AI/image89444392111.png',
       size: '720*1280',
     },
     {
       id: 3,
-      name: '科技宣传',
+      name: 'Tuyên truyền công nghệ',
       prompt:
-        '未来科技感宣传海报，主色调蓝紫渐变 + 银白金属色，冷光霓虹光效，赛博朋克线条质感；画面核心元素：全息投影的地球数据模型、流动的蓝色数据流、发光的电路板纹理、悬浮的芯片与机械齿轮、未来感建筑轮廓；点缀粒子光效、透明全息界面、霓虹光带；文字设计：居中用未来感无衬线字体写‘科技赋能・智启新程’，下方配‘创新驱动・引领未来’小字，字体带轻微发光描边；整体氛围简洁高级、充满未来感，层次分明，光影锐利，高清细节，横版 16:9 构图',
+        'Poster tuyên truyền cảm giác công nghệ tương lai, tông màu chính chuyển màu xanh tím + màu kim loại trắng bạc, hiệu ứng ánh sáng neon lạnh, chất cảm đường nét cyberpunk; Yếu tố cốt lõi của hình ảnh: mô hình dữ liệu Trái Đất chiếu toàn tức, dòng dữ liệu xanh lam chảy động, họa tiết bảng mạch phát sáng, chip và bánh răng cơ khí lơ lửng, đường nét kiến trúc đậm chất tương lai; điểm xuyết hiệu ứng ánh sáng hạt, giao diện toàn tức trong suốt, dải ánh sáng neon; Thiết kế chữ: ở giữa viết ‘Công nghệ tiếp sức・Trí tuệ mở lối’ bằng phông không chân đậm chất tương lai, phía dưới thêm chữ nhỏ ‘Đổi mới dẫn dắt・Hướng tới tương lai’, chữ có viền phát sáng nhẹ; Không khí tổng thể đơn giản cao cấp, tràn đầy cảm giác tương lai, phân lớp rõ ràng, ánh sáng sắc nét, chi tiết độ nét cao, bố cục ngang 16:9',
       size: '720*1280',
       url: 'https://upload.jeecg.com/jeecg/AI/technology.png',
     },
     {
       id: 4,
-      name: '优雅复古',
+      name: 'Thanh nhã cổ điển',
       prompt:
-        '民国风优雅复古竖版海报，主色调米黄 + 豆沙红 + 墨黑，低饱和度胶片质感，叠加老报纸纹理与轻微颗粒感；画面核心元素：穿月白旗袍的女性侧影（盘发配珍珠发簪）、油纸伞、复古留声机、雕花木质窗棂、缠绕珍珠的藤蔓花纹；背景是模糊的老上海石库门建筑轮廓，点缀淡粉色玉兰花、复古字体排版的诗句（‘岁月静好，温婉如初’）；文字设计：上方用民国手写体写‘雅致时光’，下方配衬线字体‘复刻民国风雅’，字体带轻微做旧效果；整体氛围温婉知性、静谧典雅，光影柔和（侧光勾勒人物轮廓），层次分明，高清细节，竖版 9:16 构图',
+        'Poster dọc phong cách Dân Quốc thanh nhã cổ điển, tông màu chính vàng be + Đỏ đậu sa + đen mực, chất cảm phim độ bão hòa thấp, chồng thêm họa tiết báo cũ và hạt nhiễu nhẹ; Yếu tố cốt lõi của hình ảnh: bóng nghiêng của người phụ nữ mặc sườn xám trắng ngà (tóc búi cài trâm ngọc trai), ô giấy dầu, máy hát cổ điển, khung cửa sổ gỗ chạm khắc, họa tiết dây leo quấn ngọc trai; Nền là đường nét kiến trúc Shikumen Thượng Hải xưa mờ ảo, điểm xuyết hoa mộc lan hồng nhạt, câu thơ trình bày bằng phông chữ cổ điển (‘Năm tháng bình yên, dịu dàng như xưa’); Thiết kế chữ: phía trên viết ‘Thời gian tao nhã’ bằng chữ viết tay thời Dân Quốc, phía dưới dùng phông có chân ‘Tái hiện phong nhã Dân Quốc’, chữ có hiệu ứng cũ nhẹ; Không khí tổng thể dịu dàng tri thức, tĩnh lặng tao nhã, ánh sáng mềm (ánh sáng bên phác họa đường nét nhân vật), phân lớp rõ ràng, chi tiết độ nét cao, bố cục dọc 9:16',
       size: '720*1280',
       url: 'https://upload.jeecg.com/jeecg/AI/retro.png',
     },
     {
       id: 5,
-      name: '赛博朋克',
+      name: 'Cyberpunk',
       prompt:
-        '国潮赛博朋克横版海报，主色调中国红 + 深空黑 + 鎏金霓虹，传统纹样与科技元素碰撞，叠加红金渐变光效 + 竹简纹理；画面核心元素：龙形霓虹光带（龙身缠绕电路板）、红墙金瓦的赛博风古建筑（屋檐挂霓虹灯笼）、穿汉服改良款的赛博人物（配发光发簪 / 机械袖）、全息投影的汉字霓虹灯牌（‘江湖’‘未来’）；点缀祥云数据流、金属质感的传统回纹、悬浮的鎏金元宝状机械装置；文字设计：上方用金色书法字体写‘赛博江湖’，下方配‘TECH & TRADITION’英文，字体带红金霓虹发光效果；整体氛围大气炫酷、传统与未来交融，光影强烈且富有冲击力，层次分明，高清细节，横版 16:9 构图',
+        'Poster ngang cyberpunk quốc triều, tông màu chính đỏ Trung Quốc + Đen không gian sâu + Neon mạ vàng, họa tiết truyền thống và yếu tố công nghệ va chạm, chồng thêm hiệu ứng ánh sáng chuyển màu đỏ vàng + họa tiết thẻ tre; Yếu tố cốt lõi của hình ảnh: dải ánh sáng neon hình rồng (thân rồng quấn quanh bảng mạch), kiến trúc cổ phong cyber tường đỏ ngói vàng (mái hiên treo đèn lồng neon), nhân vật cyber mặc Hán phục cải tiến (kèm trâm tóc phát sáng / tay áo cơ khí), bảng đèn neon chữ Hán chiếu toàn tức (‘Giang hồ’ ‘Tương lai’); điểm xuyết dòng dữ liệu mây lành, họa tiết hồi văn truyền thống chất cảm kim loại, thiết bị cơ khí hình thỏi vàng mạ vàng lơ lửng; Thiết kế chữ: phía trên viết ‘Giang hồ cyber’ bằng phông thư pháp vàng, phía dưới thêm ‘TECH & TRADITION’, chữ có hiệu ứng phát sáng neon đỏ vàng; Không khí tổng thể hoành tráng sành điệu, truyền thống và tương lai hòa quyện, ánh sáng mạnh và giàu sức tác động, phân lớp rõ ràng, chi tiết độ nét cao, bố cục ngang 16:9',
       size: '720*1280',
       url: 'https://upload.jeecg.com/jeecg/AI/cyberpunk.png',
     },
@@ -151,7 +151,7 @@
   });
 
   /**
-   * 选中模板事件
+   * Sự kiện chọn mẫu
    * @param template
    */
   function handleSelectTemplate(template: any) {
@@ -161,11 +161,11 @@
       imageUrl: template.url,
       imageSize: template.size,
     });
-    createMessage.success(`已应用模板：${template.name}`);
+    createMessage.success(`Đã áp dụng mẫu:${template.name}`);
   }
 
-  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
-  /** 轮询查询任务结果 */
+  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
+  /** Thăm dò truy vấn kết quả nhiệm vụ */
   function startPolling(taskId: string) {
     const poll = () => {
       defHttp
@@ -173,23 +173,23 @@
         .then((res) => {
           if (res.success) {
             if (res.result === 'pending' || res.result === null) {
-              // 继续轮询
+              // Tiếp tục thăm dò
               pollTimer = setTimeout(poll, 3000);
             } else {
-              // 成功
+              // Thành công
               let imageUrl = res.result as string;
               const reg = /#\s*{\s*domainURL\s*}/g;
               imageUrl = imageUrl.replace(reg, domainUrl + '/sys/common/static');
               generatedImage.value = imageUrl;
               loading.value = false;
               localStorage.removeItem(TASK_ID_KEY);
-              createMessage.success('海报生成成功！');
+              createMessage.success('Tạo poster thành công!');
             }
           } else {
-            // 失败
+            // Thất bại
             loading.value = false;
             localStorage.removeItem(TASK_ID_KEY);
-            createMessage.warning(res.message || '海报生成失败！');
+            createMessage.warning(res.message || 'Tạo poster thất bại!');
           }
         })
         .catch(() => {
@@ -198,14 +198,14 @@
     };
     poll();
   }
-  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
   
   async function handleGenerate() {
     try {
       const values = await validate();
       loading.value = true;
       generatedImage.value = '';
-      //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+      //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
       values.type = 'poster';
       const res = await defHttp.post(
         { url: '/airag/chat/genAiPosterAsync', params: values },
@@ -217,18 +217,18 @@
         startPolling(taskId);
       } else {
         loading.value = false;
-        createMessage.warning('提交任务失败！');
+        createMessage.warning('Gửi nhiệm vụ thất bại!');
       }
-      //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+      //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
     } catch (error) {
       loading.value = false;
       console.error('Validation failed:', error);
     }
   }
 
-  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+  //update-begin---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
   onMounted(() => {
-    // 切换回菜单时，若有未完成的任务则恢复轮询
+    // Khi chuyển về menu, nếu có nhiệm vụ chưa hoàn thành thì khôi phục thăm dò
     const savedTaskId = localStorage.getItem(TASK_ID_KEY);
     if (savedTaskId) {
       loading.value = true;
@@ -243,14 +243,14 @@
       pollTimer = null;
     }
   });
-  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI 改成异步的，支持切换菜单------------
+  //update-end---wangshuai---date:20260415  for：[QQYUN-14944]AI đổi thành bất đồng bộ, hỗ trợ chuyển menu------------
 
   function handlePreview() {
     previewVisible.value = true;
   }
 
   /**
-   * 图片导出
+   * Xuất hình ảnh
    */
   function handleDownload() {
     if (!generatedImage.value) {

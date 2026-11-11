@@ -4,24 +4,24 @@
     @register="registerModal"
     :canFullscreen="false"
     width="1400px"
-    :title="isEdit ? '编辑工具' : '新增工具'"
+    :title="isEdit ? 'Chỉnh sửa công cụ' : 'Thêm mới công cụ'"
     wrapClassName="plugin-tool-edit-modal"
   >
     <div class="modal">
       <div class="tool-edit-content">
-        <!-- 基本信息 -->
+        <!-- Thông tin cơ bản -->
         <div class="section">
-          <h3 class="section-title">基本信息</h3>
+          <h3 class="section-title">Thông tin cơ bản</h3>
           <a-form :model="toolForm" layout="vertical">
             <a-row :gutter="24">
               <a-col :span="12">
-                <a-form-item label="工具名称" required>
-                  <a-input v-model:value="toolForm.name" placeholder="请输入工具名称" />
+                <a-form-item label="Tên công cụ" required>
+                  <a-input v-model:value="toolForm.name" placeholder="Vui lòng nhập tên công cụ" />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="请求方式" required>
-                  <a-select v-model:value="toolForm.method" placeholder="请选择请求方式">
+                <a-form-item label="Phương thức yêu cầu" required>
+                  <a-select v-model:value="toolForm.method" placeholder="Vui lòng chọn phương thức yêu cầu">
                     <a-select-option value="GET">GET</a-select-option>
                     <a-select-option value="POST">POST</a-select-option>
                     <a-select-option value="PUT">PUT</a-select-option>
@@ -33,26 +33,26 @@
             </a-row>
             <a-row :gutter="24">
               <a-col :span="24">
-                <a-form-item label="访问路径" required>
-                  <a-input v-model:value="toolForm.path" placeholder="请输入访问路径，如：/api/user/{userId}" @blur="normalizePath" />
+                <a-form-item label="Đường dẫn truy cập" required>
+                  <a-input v-model:value="toolForm.path" placeholder="Vui lòng nhập đường dẫn truy cập, ví dụ:/api/user/{userId}" @blur="normalizePath" />
                 </a-form-item>
               </a-col>
             </a-row>
             <a-row :gutter="24">
               <a-col :span="24">
-                <a-form-item label="描述" required>
-                  <a-textarea v-model:value="toolForm.description" :rows="3" placeholder="请输入工具描述" />
+                <a-form-item label="Mô tả" required>
+                  <a-textarea v-model:value="toolForm.description" :rows="3" placeholder="Vui lòng nhập mô tả công cụ" />
                 </a-form-item>
               </a-col>
             </a-row>
           </a-form>
         </div>
 
-        <!-- 请求参数 -->
+        <!-- Tham số yêu cầu -->
         <div class="section">
           <div class="section-header">
-            <h3 class="section-title">请求参数</h3>
-            <a-button type="primary" size="small" @click="handleAddRequestParam">添加参数</a-button>
+            <h3 class="section-title">Tham số yêu cầu</h3>
+            <a-button type="primary" size="small" @click="handleAddRequestParam">Thêm tham số</a-button>
           </div>
           <a-table
             :dataSource="requestParams"
@@ -66,12 +66,12 @@
               <template v-if="column.key === 'name'">
                 <a-input
                   v-model:value="record.name"
-                  placeholder="参数名称（字母数字下划线）"
+                  placeholder="Tên tham số (chữ cái, chữ số, gạch dưới)"
                   @blur="validateParamName(record)"
                 />
               </template>
               <template v-else-if="column.key === 'description'">
-                <a-input v-model:value="record.description" placeholder="参数描述" />
+                <a-input v-model:value="record.description" placeholder="Mô tả tham số" />
               </template>
               <template v-else-if="column.key === 'type'">
                 <a-select v-model:value="record.type" style="width: 100%">
@@ -94,20 +94,20 @@
                 <a-checkbox v-model:checked="record.required" />
               </template>
               <template v-else-if="column.key === 'defaultValue'">
-                <a-input v-model:value="record.defaultValue" placeholder="默认值" />
+                <a-input v-model:value="record.defaultValue" placeholder="Giá trị mặc định" />
               </template>
               <template v-else-if="column.key === 'action'">
-                <a-button type="link" danger size="small" @click="handleDeleteRequestParam(index)">删除</a-button>
+                <a-button type="link" danger size="small" @click="handleDeleteRequestParam(index)">Xóa</a-button>
               </template>
             </template>
           </a-table>
         </div>
 
-        <!-- 输出参数 -->
+        <!-- Tham số đầu ra -->
         <div class="section">
           <div class="section-header">
-            <h3 class="section-title">输出参数</h3>
-            <a-button type="primary" size="small" @click="handleAddResponseParam">添加参数</a-button>
+            <h3 class="section-title">Tham số đầu ra</h3>
+            <a-button type="primary" size="small" @click="handleAddResponseParam">Thêm tham số</a-button>
           </div>
           <a-table
             :dataSource="responseParams"
@@ -121,12 +121,12 @@
               <template v-if="column.key === 'name'">
                 <a-input
                   v-model:value="record.name"
-                  placeholder="参数名称（支持点号和数组语法，如data.name、data[].name）"
+                  placeholder="Tên tham số (hỗ trợ cú pháp dấu chấm và mảng, ví dụ data.name, data[].name)"
                   @blur="validateResponseParamName(record)"
                 />
               </template>
               <template v-else-if="column.key === 'description'">
-                <a-input v-model:value="record.description" placeholder="参数描述" />
+                <a-input v-model:value="record.description" placeholder="Mô tả tham số" />
               </template>
               <template v-else-if="column.key === 'type'">
                 <a-select v-model:value="record.type" style="width: 100%" @change="onResponseTypeChange(record)">
@@ -139,7 +139,7 @@
                 </a-select>
               </template>
               <template v-else-if="column.key === 'action'">
-                <a-button type="link" danger size="small" @click="handleDeleteResponseParam(index)">删除</a-button>
+                <a-button type="link" danger size="small" @click="handleDeleteResponseParam(index)">Xóa</a-button>
               </template>
             </template>
           </a-table>
@@ -147,8 +147,8 @@
       </div>
     </div>
     <template #footer>
-      <a-button @click="close">关闭</a-button>
-      <a-button type="primary" @click="handleSave" :loading="submitLoading">保存</a-button>
+      <a-button @click="close">Đóng</a-button>
+      <a-button type="primary" @click="handleSave" :loading="submitLoading">Lưu</a-button>
     </template>
   </BasicModal>
 </template>
@@ -165,9 +165,9 @@ const { createMessage } = useMessage();
 const submitLoading = ref(false);
 const pluginId = ref<string | undefined>(undefined);
 const isEdit = ref(false);
-const toolIndex = ref<number>(-1); // 编辑时工具在数组中的索引
+const toolIndex = ref<number>(-1); // Chỉ số của công cụ trong mảng khi chỉnh sửa
 
-// 工具表单
+// Biểu mẫu công cụ
 const toolForm = reactive({
   name: '',
   description: '',
@@ -175,28 +175,28 @@ const toolForm = reactive({
   method: 'GET',
 });
 
-// 请求参数列表
+// Danh sách tham số yêu cầu
 const requestParams = ref<any[]>([]);
-// 输出参数列表
+// Danh sách tham số đầu ra
 const responseParams = ref<any[]>([]);
 
-// 请求参数表格列
+// Cột bảng tham số yêu cầu
 const requestParamsColumns = [
-  { title: '参数名称', key: 'name', width: 150 },
-  { title: '参数描述', key: 'description', width: 200 },
-  { title: '参数类型', key: 'type', width: 120 },
-  { title: '传入方式', key: 'location', width: 150 },
-  { title: '是否必须', key: 'required', width: 100 },
-  { title: '默认值', key: 'defaultValue', width: 150 },
-  { title: '操作', key: 'action', width: 100 },
+  { title: 'Tên tham số', key: 'name', width: 150 },
+  { title: 'Mô tả tham số', key: 'description', width: 200 },
+  { title: 'Loại tham số', key: 'type', width: 120 },
+  { title: 'Cách truyền vào', key: 'location', width: 150 },
+  { title: 'Có bắt buộc hay không', key: 'required', width: 100 },
+  { title: 'Giá trị mặc định', key: 'defaultValue', width: 150 },
+  { title: 'Thao tác', key: 'action', width: 100 },
 ];
 
-// 输出参数表格列
+// Cột bảng tham số đầu ra
 const responseParamsColumns = [
-  { title: '参数名称', key: 'name', width: 200 },
-  { title: '参数描述', key: 'description', width: 200 },
-  { title: '参数类型', key: 'type', width: 150 },
-  { title: '操作', key: 'action', width: 100 },
+  { title: 'Tên tham số', key: 'name', width: 200 },
+  { title: 'Mô tả tham số', key: 'description', width: 200 },
+  { title: 'Loại tham số', key: 'type', width: 150 },
+  { title: 'Thao tác', key: 'action', width: 100 },
 ];
 
 let tempIdCounter = 0;
@@ -205,7 +205,7 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
   pluginId.value = data?.pluginId;
   isEdit.value = !!data?.tool;
   
-  // 重置表单
+  // Đặt lại biểu mẫu
   toolForm.name = '';
   toolForm.description = '';
   toolForm.path = '';
@@ -215,7 +215,7 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
   toolIndex.value = -1;
   
   if (data?.tool) {
-    // 编辑模式：填充数据
+    // Chế độ chỉnh sửa: điền dữ liệu
     toolForm.name = data.tool.name || '';
     toolForm.description = data.tool.description || '';
     toolForm.path = data.tool.path || '';
@@ -232,7 +232,7 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
       tempId: `resp_${tempIdCounter++}`,
     }));
     
-    // 查找工具在列表中的索引
+    // Tìm chỉ số của công cụ trong danh sách
     if (pluginId.value) {
       const res = await queryById(pluginId.value);
       const detail = res.result || res;
@@ -249,50 +249,50 @@ const [registerModal, { closeModal }] = useModalInner(async (data) => {
 });
 
 function validateParamName(record: any) {
-  // 验证参数名称：只允许字母数字下划线
+  // Kiểm chứng tên tham số: chỉ cho phép chữ cái, chữ số, gạch dưới
   if (record.name && !/^[a-zA-Z0-9_]+$/.test(record.name)) {
-    createMessage.warning('参数名称只能包含字母、数字和下划线');
+    createMessage.warning('Tên tham số chỉ có thể chứa chữ cái, chữ số và gạch dưới');
     record.name = record.name.replace(/[^a-zA-Z0-9_]/g, '');
   }
 }
 
 function validateResponseParamName(record: any) {
-  // 验证输出参数名称：支持字母、数字、下划线、点、中括号
-  // 只有Object和Array类型可以使用点号和中括号
+  // Kiểm chứng tên tham số đầu ra: hỗ trợ chữ cái, chữ số, gạch dưới, dấu chấm, dấu ngoặc vuông
+  // Chỉ loại Object và Array mới có thể dùng dấu chấm và dấu ngoặc vuông
   if (!record.name) return;
   
   const type = record.type;
   const name = record.name;
   
   if (type === 'Object' || type === 'Array') {
-    // Object和Array类型：支持字母、数字、下划线、点、中括号
-    // 例如：data.name, data[String], data[].name
+    // Loại Object và Array: hỗ trợ chữ cái, chữ số, gạch dưới, dấu chấm, dấu ngoặc vuông
+    // Ví dụ: data.name, data[String], data[].name
     if (!/^[a-zA-Z0-9_.\[\]]+$/.test(name)) {
-      createMessage.warning('参数名称只能包含字母、数字、下划线、点和中括号');
+      createMessage.warning('Tên tham số chỉ có thể chứa chữ cái, chữ số, gạch dưới, dấu chấm và dấu ngoặc vuông');
       record.name = name.replace(/[^a-zA-Z0-9_.\[\]]/g, '');
     }
   } else {
-    // 其他类型：只允许字母数字下划线
+    // Loại khác: chỉ cho phép chữ cái, chữ số, gạch dưới
     if (!/^[a-zA-Z0-9_]+$/.test(name)) {
-      createMessage.warning('非Object/Array类型参数名称只能包含字母、数字和下划线');
+      createMessage.warning('Không phải Object/Tên tham số loại Array chỉ có thể chứa chữ cái, chữ số và gạch dưới');
       record.name = name.replace(/[^a-zA-Z0-9_]/g, '');
     }
   }
 }
 
 function onResponseTypeChange(record: any) {
-  // 当类型改变时，如果类型不是Object或Array，清除点号和中括号
+  // Khi loại thay đổi, nếu loại không phải Object hoặc Array, xóa dấu chấm và dấu ngoặc vuông
   if (record.type !== 'Object' && record.type !== 'Array') {
     if (record.name && /[.\[\]]/.test(record.name)) {
-      createMessage.warning('非Object/Array类型不支持使用点号和中括号');
+      createMessage.warning('Không phải Object/Loại Array không hỗ trợ dùng dấu chấm và dấu ngoặc vuông');
       record.name = record.name.replace(/[.\[\]]/g, '');
     }
   }
 }
 
 function onLocationChange(record: any) {
-  // Body和Form-Data可以同时存在，不再警告
-  // 同时存在时，后端默认使用Body
+  // Body và Form-Data có thể tồn tại đồng thời, không cảnh báo nữa
+  // Khi tồn tại đồng thời, backend mặc định dùng Body
 }
 
 function handleAddRequestParam() {
@@ -328,52 +328,52 @@ async function handleSave() {
   try {
     submitLoading.value = true;
     
-    // 验证基本字段
+    // Kiểm chứng trường cơ bản
     if (!toolForm.name || !toolForm.description || !toolForm.path || !toolForm.method) {
-      createMessage.warning('请填写完整的工具基本信息');
+      createMessage.warning('Vui lòng điền đầy đủ thông tin cơ bản của công cụ');
       return;
     }
 
-    // 校验 name 正则 ^[a-zA-Z0-9_-]+$
+    // Kiểm chứng biểu thức chính quy name ^[a-zA-Z0-9_-]+$
     if (!/^[a-zA-Z0-9_-]+$/.test(toolForm.name)) {
-      createMessage.warning('工具名称只能包含字母、数字、下划线和中划线');
+      createMessage.warning('Tên công cụ chỉ có thể chứa chữ cái, chữ số, gạch dưới và gạch nối');
       return;
     }
 
-    // Body和Form-Data可以同时存在，后端会默认使用Body
+    // Body và Form-Data có thể tồn tại đồng thời, backend mặc định dùng Body
     
     if (!pluginId.value) {
-      createMessage.error('插件ID不存在');
+      createMessage.error('ID plugin không tồn tại');
       return;
     }
     
-    // 加载插件数据
+    // Tải dữ liệu plugin
     const res = await queryById(pluginId.value);
     const detail = res.result || res;
     
-    // 解析现有工具列表
+    // Phân tích danh sách công cụ hiện có
     let tools: any[] = [];
     if (detail.tools) {
       try {
         const parsedTools = typeof detail.tools === 'string' ? JSON.parse(detail.tools) : detail.tools;
-        // 确保是数组
+        // Đảm bảo là mảng
         if (Array.isArray(parsedTools)) {
-          tools = [...parsedTools]; // 复制数组，避免引用问题
+          tools = [...parsedTools]; // Sao chép mảng, tránh vấn đề tham chiếu
         } else {
           tools = [];
         }
       } catch (e) {
-        console.error('解析工具列表失败:', e);
+        console.error('Phân tích danh sách công cụ thất bại:', e);
         tools = [];
       }
     }
     
-    // 确保tools是数组
+    // Đảm bảo tools là mảng
     if (!Array.isArray(tools)) {
       tools = [];
     }
     
-    // 构建当前工具数据（移除tempId）
+    // Xây dựng dữ liệu công cụ hiện tại (loại bỏ tempId)
     const parameters = requestParams.value.map(p => {
       const { tempId: _tempId, ...param } = p;
       return param;
@@ -388,37 +388,37 @@ async function handleSave() {
       description: toolForm.description,
       path: toolForm.path,
       method: toolForm.method,
-      enabled: true, // 默认启用
+      enabled: true, // Mặc định kích hoạt
       parameters,
       responses,
     };
     
-    // 根据编辑状态处理工具
+    // Xử lý công cụ theo trạng thái chỉnh sửa
     if (isEdit.value && toolIndex.value >= 0 && toolIndex.value < tools.length) {
-      // 编辑模式：更新现有工具
+      // Chế độ chỉnh sửa: cập nhật công cụ hiện có
       tools[toolIndex.value] = toolData;
     } else {
-      // 新增模式：添加新工具
-      // 检查工具名称是否已存在
+      // Chế độ thêm mới: thêm công cụ mới
+      // Kiểm tra tên công cụ đã tồn tại hay chưa
       const nameExists = tools.some((t: any) => t.name === toolForm.name);
       if (nameExists) {
-        createMessage.error('工具名称已存在，请使用不同的名称');
+        createMessage.error('Tên công cụ đã tồn tại, vui lòng dùng tên khác');
         return;
       }
       tools.push(toolData);
     }
     
-    // 构建工具列表JSON字符串
+    // Xây dựng chuỗi JSON danh sách công cụ
     const toolsJson = JSON.stringify(tools);
     
-    // 调用保存工具接口
+    // Gọi giao diện lưu công cụ
     const saveRes = await saveTools(pluginId.value, toolsJson);
     if (saveRes.success) {
-      createMessage.success('保存成功');
+      createMessage.success('Lưu thành công');
       emit('success');
       closeModal();
     } else {
-      createMessage.error(saveRes.message || '保存失败');
+      createMessage.error(saveRes.message || 'Lưu thất bại');
     }
   } finally {
     submitLoading.value = false;
@@ -429,7 +429,7 @@ function close() {
   closeModal();
 }
 
-// 规范化路径：确保以/开头
+// Chuẩn hóa đường dẫn: đảm bảo bắt đầu bằng/Mở đầu
 function normalizePath() {
   if (toolForm.path && !toolForm.path.startsWith('/')) {
     toolForm.path = '/' + toolForm.path;
