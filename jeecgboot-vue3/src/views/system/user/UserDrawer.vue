@@ -20,7 +20,7 @@
   import { useDrawerAdaptiveWidth } from '/@/hooks/jeecg/useAdaptiveWidth';
   import { getTenantId } from "/@/utils/auth";
 
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
   const attrs = useAttrs();
   const isUpdate = ref(true);
@@ -29,7 +29,7 @@
   let isFormDepartUser = false;
   let isRoleDisabled = false;
   let disabledDepartValue = '';
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { setProps, resetFields, setFieldsValue, validate, updateSchema }] = useForm({
     labelWidth: 90,
     schemas: formSchema,
@@ -37,7 +37,7 @@
   });
   // TODO [VUEN-527] https://www.teambition.com/task/6239beb894b358003fe93626
   const showFooter = ref(true);
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     await resetFields();
     showFooter.value = data?.showFooter ?? true;
@@ -45,15 +45,15 @@
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
       rowId.value = data.record.id;
-      //租户信息定义成数组
+      //Định nghĩa thông tin đơn vị thuê thành mảng
    /*   if (data.record.relTenantIds && !Array.isArray(data.record.relTenantIds)) {
         data.record.relTenantIds = data.record.relTenantIds.split(',');
       } else {
-        //【issues/I56C5I】用户管理中连续点两次编辑租户配置就丢失了
+        //【issues/I56C5I】Trong Quản lý người dùng, nhấn hai lần liên tiếp vào chỉnh sửa thì cấu hình đơn vị thuê bị mất
         //data.record.relTenantIds = [];
       }*/
 
-      //查角色/赋值/try catch 处理，不然编辑有问题
+      //Kiểm tra vai trò/gán giá trị/xử lý try catch, nếu không việc chỉnh sửa sẽ có vấn đề
       try {
         const userRoles = await getUserRoles({ userid: data.record.id });
         if (userRoles && userRoles.length > 0) {
@@ -61,7 +61,7 @@
         }
       } catch (error) {}
 
-      //查所属部门/赋值
+      //Kiểm tra phòng ban trực thuộc/gán giá trị
       const userDepart = await getUserDepartList({ userId: data.record.id });
       if (userDepart && userDepart.length > 0) {
         data.record.selecteddeparts = userDepart;
@@ -71,19 +71,19 @@
           return { label: item.title, value: item.key };
         });
       }
-      //负责部门/赋值
+      //Phòng ban phụ trách/gán giá trị
       data.record.departIds && !Array.isArray(data.record.departIds) && (data.record.departIds = data.record.departIds.split(','));
-      // 代码逻辑说明: [issues/772]避免空值显示异常------------
+      // Giải thích logic mã: [issues/772]Tránh hiển thị bất thường do giá trị trống------------
       data.record.departIds =  (!data.record.departIds || data.record.departIds == '') ? [] : data.record.departIds;
     }
-    //处理角色用户列表情况(和角色列表有关系)
+    //Xử lý tình huống danh sách người dùng của vai trò(Có quan hệ với danh sách vai trò)
     data.selectedroles && (await setFieldsValue({ selectedroles: data.selectedroles }));
-    // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1737】部门用户编辑接口，增加参数updateFromPage:"deptUsers"
+    // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1737】API chỉnh sửa người dùng phòng ban, bổ sung tham sốupdateFromPage:"deptUsers"
     isFormDepartUser = data?.departDisabled === true || data?.roleDisabled === true;
     isRoleDisabled = data?.roleDisabled === true;
     disabledDepartValue = data?.departDisabled ? data.record?.selecteddeparts || '' : '';
-    // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1737】部门用户编辑接口，增加参数updateFromPage:"deptUsers"
-    //编辑时隐藏密码/角色列表隐藏角色信息/我的部门时隐藏所属部门
+    // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1737】API chỉnh sửa người dùng phòng ban, bổ sung tham sốupdateFromPage:"deptUsers"
+    //Khi chỉnh sửa thì ẩn mật khẩu / danh sách vai trò ẩn thông tin vai trò / ở Phòng ban của tôi thì ẩn phòng ban trực thuộc
     updateSchema([
       {
         field: 'password',
@@ -100,24 +100,24 @@
       },
       {
         field: 'selecteddeparts',
-        //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1141]【系统管理】我的部门编辑用户所属部门和角色没显示出来------------
+        //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1141]【Quản lý hệ thống】Phòng ban và vai trò của người dùng không hiển thị khi chỉnh sửa tại mục Phòng ban của tôi------------
         show: true,
         componentProps: { disabled: !!data?.departDisabled },
-        //update-end---author:wangshuai ---date:20260811  for：[LHZP-1141]【系统管理】我的部门编辑用户所属部门和角色没显示出来------------
+        //update-end---author:wangshuai ---date:20260811  for：[LHZP-1141]【Quản lý hệ thống】Phòng ban và vai trò của người dùng không hiển thị khi chỉnh sửa tại mục Phòng ban của tôi------------
       },
       {
         field: 'selectedroles',
-        //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1141]【系统管理】我的部门编辑用户所属部门和角色没显示出来------------
+        //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1141]【Quản lý hệ thống】Phòng ban và vai trò của người dùng không hiển thị khi chỉnh sửa tại mục Phòng ban của tôi------------
         show: !data.isRole,
-        //判断是否为多租户模式
+        //Kiểm tra có phải chế độ đa đơn vị thuê hay không
         componentProps:{
           api: data.tenantSaas?getAllRolesList:getAllRolesListNoByTenant,
           disabled: !!data?.roleDisabled,
           immediate: !!data?.roleDisabled,
-        //update-end---author:wangshuai ---date:20260811  for：[LHZP-1141]【系统管理】我的部门编辑用户所属部门和角色没显示出来------------
+        //update-end---author:wangshuai ---date:20260811  for：[LHZP-1141]【Quản lý hệ thống】Phòng ban và vai trò của người dùng không hiển thị khi chỉnh sửa tại mục Phòng ban của tôi------------
         }
       },
-      // 代码逻辑说明: 【issues/4935】租户用户编辑界面中租户下拉框未过滤，显示当前系统所有的租户------------
+      // Giải thích logic mã: 【issues/4935】Trong giao diện chỉnh sửa người dùng của đơn vị thuê, hộp thả xuống đơn vị thuê chưa được lọc, hiển thị tất cả đơn vị thuê hiện có trong hệ thống------------
       {
         field: 'relTenantIds',
         componentProps:{
@@ -125,22 +125,22 @@
         },
       },
     ]);
-    // 代码逻辑说明: 【issues/4935】租户用户编辑界面中租户下拉框未过滤，显示当前系统所有的租户------------
+    // Giải thích logic mã: 【issues/4935】Trong giao diện chỉnh sửa người dùng của đơn vị thuê, hộp thả xuống đơn vị thuê chưa được lọc, hiển thị tất cả đơn vị thuê hiện có trong hệ thống------------
     if(!unref(isUpdate) && data.tenantSaas){
       await setFieldsValue({ relTenantIds: getTenantId().toString() })
     }
-    // 无论新增还是编辑，都可以设置表单值
+    // Dù thêm mới hay chỉnh sửa đều có thể đặt giá trị cho biểu mẫu
     if (typeof data.record === 'object') {
       setFieldsValue({
         ...data.record,
       });
     }
-    // 隐藏底部时禁用整个表单
-    // 代码逻辑说明: VUEN-1117【issue】0523周开源问题
+    // Khi ẩn phần chân thì vô hiệu hóa toàn bộ biểu mẫu
+    // Giải thích logic mã: VUEN-1117【issue】Các vấn đề mã nguồn mở tuần 0523
     setProps({ disabled: !showFooter.value });
     if(unref(isUpdate)){
       updateSchema([
-        //修改主岗位和兼职岗位的参数
+        //Sửa tham số của vị trí chính và vị trí kiêm nhiệm
         {
           field: 'mainDepPostId',
           componentProps: { params: { departIds: data.record.selecteddeparts, parentId: data.record.selecteddeparts } },
@@ -151,7 +151,7 @@
         }
       ]);
     }
-    //部门管理，新增用户，在岗位下添加人员的时候默认当前岗位为主岗位
+    //Quản lý phòng ban, thêm mới người dùng: khi thêm nhân viên dưới một vị trí thì mặc định vị trí hiện tại là vị trí chính
     updateSchema([
       {
         field: 'mainDepPostId',
@@ -159,18 +159,18 @@
       }
     ])
   });
-  //获取标题
+  //Lấy tiêu đề
   const getTitle = computed(() => {
-    // 代码逻辑说明: 【QQYUN-8389】系统用户详情抽屉title更改
+    // Giải thích logic mã: 【QQYUN-8389】Thay đổi tiêu đề (title) của ngăn kéo chi tiết người dùng hệ thống
     if (!unref(isUpdate)) {
-      return '新增用户';
+      return 'Thêm mới người dùng';
     } else {
-      return unref(showFooter) ? '编辑用户' : '用户详情';
+      return unref(showFooter) ? 'Chỉnh sửa người dùng' : 'Chi tiết người dùng';
     }
   });
   const { adaptiveWidth } = useDrawerAdaptiveWidth();
 
-  //提交事件
+  //Sự kiện gửi
   async function handleSubmit() {
     try {
       let values = await validate();
@@ -184,17 +184,17 @@
       setDrawerProps({ confirmLoading: true });
       values.userIdentity === 1 && (values.departIds = '');
       let isUpdateVal = unref(isUpdate);
-      // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1737】部门用户编辑接口，增加参数updateFromPage:"deptUsers"
+      // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1737】API chỉnh sửa người dùng phòng ban, bổ sung tham sốupdateFromPage:"deptUsers"
       let params = values;
       if (isRoleDisabled) {
         params = { ...params, updateFromPage: 'deptUsers' };
       }
-      // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1737】部门用户编辑接口，增加参数updateFromPage:"deptUsers"
-      //提交表单
+      // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1737】API chỉnh sửa người dùng phòng ban, bổ sung tham sốupdateFromPage:"deptUsers"
+      //Gửi biểu mẫu
       await saveOrUpdateUser(params, isUpdateVal);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeDrawer();
-      //刷新列表
+      //Làm mới danh sách
       emit('success',{isUpdateVal ,values});
     } finally {
       setDrawerProps({ confirmLoading: false });

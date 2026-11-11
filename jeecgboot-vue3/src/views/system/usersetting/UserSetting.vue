@@ -57,9 +57,9 @@ export default defineComponent({
     const { getDarkMode} = useRootSetting();
     const isDark = computed(() => getDarkMode.value === ThemeEnum.DARK);
     const activeKey = ref<string>('1');
-    //是否为vip
+    //Có phải làvip
     const showVip = ref<boolean>(false);
-    //vip编码
+    //vipMã
     const vipCode = ref<string>('');
     const router = useRouter();
     const componentList = computed(()=>{
@@ -70,7 +70,7 @@ export default defineComponent({
     })
 
     /**
-     * 组件标题点击事件,解决第二次不加载数据
+     * Sự kiện nhấp vào tiêu đề component,Giải quyết việc lần thứ hai không tải dữ liệu
      * @param key
      */
     function componentClick(key) {
@@ -78,13 +78,13 @@ export default defineComponent({
     }
 
     function goToMyTeantPage(){
-      //update-begin---author:wangshuai ---date:20230721  for：【QQYUN-5726】邀请加入租户加个按钮直接跳转过去------------
-      //如果请求参数包含我的租户，直接跳转过去
+      //update-begin---author:wangshuai ---date:20230721  for：【QQYUN-5726】Thêm một nút vào lời mời tham gia đơn vị thuê để chuyển thẳng tới đó------------
+      //Nếu tham số yêu cầu chứa đơn vị thuê của tôi thì chuyển thẳng tới đó
       let query = router.currentRoute.value.query;
       if(query && query.page === 'tenantSetting'){
         activeKey.value = "2";
       }
-      //update-end---author:wangshuai ---date:20230721  for：【QQYUN-5726】邀请加入租户加个按钮直接跳转过去------------
+      //update-end---author:wangshuai ---date:20230721  for：【QQYUN-5726】Thêm một nút vào lời mời tham gia đơn vị thuê để chuyển thẳng tới đó------------
     }
     
     onMounted(()=>{
@@ -113,18 +113,18 @@ export default defineComponent({
     padding-left: 0;
   }
 
-  //tabs弹窗左边样式
+  //tabsKiểu phía bên trái của hộp thoại
   :deep(.ant-tabs-nav){
     height: 260px;
   }
-  //tabs弹窗右边边样式
+  //tabsKiểu cạnh bên phải của hộp thoại
   :deep(.ant-tabs-content-holder){
     position: relative;
     left: 12px;
     height: auto !important;
   }
 }
-//tab点击样式
+//tabKiểu khi nhấp
 :deep(.ant-tabs-tab-active){
   border-radius: 0 20px 20px 0;
   background-color: #1294f7!important;
@@ -145,7 +145,7 @@ export default defineComponent({
 }
 
 .vip-height{
-  //tabs弹窗左边样式
+  //tabsKiểu phía bên trái của hộp thoại
   :deep(.ant-tabs-nav){
     height: 310px !important;
   }
@@ -167,11 +167,11 @@ export default defineComponent({
   .ant-tabs-tab-active {
     background-color: @item-active-bg;
   }
-  //tabs弹窗左边样式
+  //tabsKiểu phía bên trái của hộp thoại
  .ant-tabs-nav{
     background-color: @component-background;
   }
-  //tabs弹窗右边边样式
+  //tabsKiểu cạnh bên phải của hộp thoại
   .ant-tabs-content-holder{
     background: @component-background;
   }

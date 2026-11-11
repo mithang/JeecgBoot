@@ -2,7 +2,7 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd">租户默认套餐
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd">Gói mặc định của đơn vị thuê
         </a-button>
         <a-button
           v-if="selectedRowKeys.length > 0"
@@ -10,17 +10,17 @@
           type="primary"
           @click="handlePackBatch"
           style="margin-right: 5px"
-        >批量删除
+        >Xóa hàng loạt
         </a-button>
         <span style="color: #666; font-size: 14px; margin-left: 12px; margin-top: 4px; display: inline-block;">
-          租户默认套餐是指新建租户时自动拥有的基础套餐，所有租户都将继承这些套餐权限
+          Gói mặc định của đơn vị thuê là gói cơ bản tự động có khi tạo mới đơn vị thuê, tất cả đơn vị thuê đều sẽ kế thừa các quyền của những gói này
         </span>
       </template>
       <template #action="{ record }">
         <TableAction :actions="getActions(record)" />
       </template>
     </BasicTable>
-    <!--  套餐包  -->
+    <!--  Gói dịch vụ  -->
     <TenantPackMenuModal @register="registerPackMenuModal" @success="handleSuccess"/>
     <PackPermissionDrawer @register="registerPackPermDrawer" @success="handleSuccess"/>
   </div>
@@ -44,7 +44,7 @@
   const [registerPackMenuModal, { openModal: packModal }] = useModal();
   const userStore = useUserStore();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     designScope: 'tenant-template',
     tableProps: {
@@ -62,23 +62,23 @@
   const [registerPackPermDrawer, { openDrawer: openPackPermDrawer }] = useDrawer();
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '授权',
+        label: 'Cấp quyền',
         onClick: handleRolePrem.bind(null, record),
       },
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除租户套餐包',
+          title: 'Xác nhận xóa gói dịch vụ của đơn vị thuê?',
           confirm: handleDelete.bind(null, record.id),
         },
       },
@@ -86,7 +86,7 @@
   }
 
   /**
-   * 编辑套餐包
+   * Chỉnh sửa gói dịch vụ
    */ 
   function handleAdd() {
     packModal(true, {
@@ -98,13 +98,13 @@
   
   
   /**
-   * 删除默认套餐包
+   * Xóa gói dịch vụ mặc định
    */ 
   async function handleDelete(id) {
     await deleteTenantPack({ ids: id }, handleSuccess);
   }
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function handleEdit(record) {
     packModal(true, {     
@@ -116,11 +116,11 @@
   }
 
   /**
-   * 新增套餐包
+   * Thêm mới gói dịch vụ
    */
   async function handlePack() {
     if (unref(selectedRowKeys).length > 1) {
-      createMessage.warn('请选择一个');
+      createMessage.warn('Vui lòng chọn một mục');
       return;
     }
     packModal(true, {
@@ -129,21 +129,21 @@
   }
 
   /**
-   * 删除成功之后回调事件
+   * Sự kiện callback sau khi xóa thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
 
   /**
-   * 批量删除套餐包
+   * Xóa hàng loạt gói dịch vụ
    */
   async function handlePackBatch() {
     Modal.confirm({
-      title: '删除租户套餐包',
-      content: '是否删除租户套餐包',
-      okText: '确认',
-      cancelText: '取消',
+      title: 'Xóa gói dịch vụ của đơn vị thuê',
+      content: 'Xóa gói dịch vụ của đơn vị thuê?',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: async () => {
         await deleteTenantPack({ ids: selectedRowKeys.value.join(',')}, handleSuccess);
       }
@@ -151,7 +151,7 @@
   }
 
   /**
-   * 授权
+   * Cấp quyền
    * 
    * @param record
    */

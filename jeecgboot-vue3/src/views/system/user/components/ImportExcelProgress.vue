@@ -16,17 +16,17 @@
       <a-button type="primary" preIcon="ant-design:import-outlined" v-if="percent === 0 || percent === 100">{{ btnText }}</a-button>
       <a-button @click.prevent.stop="progressOpen = true" type="primary" v-else>
         <LoadingOutlined />
-        导入中
+        Đang nhập
       </a-button>
     </a-upload>
-    <a-modal v-model:open="progressOpen" title="文件上传" :body-style="{ padding: '20px' }" :destroyOnClose="true" :footer="null">
+    <a-modal v-model:open="progressOpen" title="Tải tệp lên" :body-style="{ padding: '20px' }" :destroyOnClose="true" :footer="null">
       <div>
         <div style="display: flex">
-          <div class="label">当前上传文件：</div>
+          <div class="label">Tệp đang tải lên:</div>
           <div class="file-name">{{ fileName }}</div>
         </div>
         <div style="margin-top: 10px; display: flex">
-          <div class="label">当前文件上传进度:</div>
+          <div class="label">Tiến độ tải lên của tệp hiện tại:</div>
           <a-progress :percent="percent" style="width: 300px; margin-left: 10px" :format="(percent) => `${percent}%`"></a-progress>
         </div>
       </div>
@@ -47,17 +47,17 @@
     name: 'ImportExcelProgress',
     components: { LoadingOutlined },
     props: {
-      //上传路径
+      //Đường dẫn tải lên
       uploadUrl: {
         type: String,
         required: true,
       },
-      //按钮文字
+      //Chữ trên nút
       btnText: {
         type: String,
-        default: '导入',
+        default: 'Nhập (import)',
       },
-      //上传类型
+      //Loại tải lên
       type: {
         type: String,
         default: 'user',
@@ -66,25 +66,25 @@
     emit: ['success', 'register'],
     setup(props, { emit }) {
       const fileName = ref<string>('');
-      //上传数据
+      //Tải lên dữ liệu
       const uploadData = ref({});
-      //上传请求头
+      //Header của yêu cầu tải lên
       const headers = ref({});
       const { createMessage, createWarningModal } = useMessage();
-      //文件上传定时任务
+      //Tác vụ hẹn giờ tải tệp lên
       const fileUploadInterval = ref<any>();
       const glob = useGlobSetting();
       const progressOpen = ref(false);
-      //上传进度
+      //Tiến độ tải lên
       const percent = ref<number>(0);
       const uploadRef = ref();
-      //随机数
+      //Số ngẫu nhiên
       const uuid = ref();
       const baseApiUrl = glob.domainUrl;
       const uploadAction = computed(() => {
         return baseApiUrl + props.uploadUrl;
       });
-      //文件发生改变回调
+      //Callback khi tệp thay đổi
       function onFileChange(info) {
         if (info.file.name) {
           fileName.value = info.file.name;
@@ -102,36 +102,36 @@
                 centered: false,
                 content: `<div>
                         <span>${msg}</span><br/> 
-                        <span>具体详情请<a href = ${href} download = ${fileName}> 点击下载 </a> </span> 
+                        <span>Chi tiết cụ thể vui lòng<a href = ${href} download = ${fileName}> Nhấn tải xuống </a> </span> 
                       </div>`,
               });
               percent.value = 100;
               emit('success');
             } else {
-              createMessage.success('文件导入成功!');
+              createMessage.success('Nhập tệp thành công!');
               percent.value = 100;
               emit('success');
             }
           } else {
-            createMessage.error(info.file.response.message || `${info.file.name} 导入失败.`);
+            createMessage.error(info.file.response.message || `${info.file.name} Nhập thất bại.`);
           }
           clear();
         } else if (info.file.status === 'error' || (info.file.response && info.file.response.code === 500)) {
           clear();
-          createMessage.error(info.file.response?.message || `导入失败，可能原因文件超出上传大小，请查看控制台或服务端日志`);
+          createMessage.error(info.file.response?.message || `Nhập thất bại, nguyên nhân có thể là tệp vượt quá dung lượng tải lên, vui lòng xem console hoặc nhật ký phía máy chủ`);
         }
       }
 
       /**
-       * 清除定时器
+       * Xóa bộ hẹn giờ
        */
       function clear() {
-        //查看状态 讲以导入的改成导入失败
+        //Trạng thái xem: đổi mục đã nhập thành nhập thất bại
         clearInterval(fileUploadInterval.value);
       }
 
       /**
-       * 上传之前的回调
+       * Callback trước khi tải lên
        */
       function beforeUpload() {
         percent.value = 1;

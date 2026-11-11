@@ -1,4 +1,4 @@
-<!--邀请用户加入租户弹窗-->
+<!--Hộp thoại mời người dùng tham gia đơn vị thuê-->
 <template>
   <BasicModal @register="registerModal" :width="500" :title="title" @ok="handleSubmit">
     <BasicForm @register="registerForm" />
@@ -16,56 +16,56 @@ export default defineComponent({
     BasicForm,
   },
   setup(props, { emit }) {
-    const title = ref<string>('邀请成员');
+    const title = ref<string>('Mời thành viên');
     const [registerForm, { resetFields, validate }] = useForm({
       schemas: [
         {
-          label: '邀请方式',
+          label: 'Cách mời',
           field: 'invitedMode',
           component: 'RadioButtonGroup',
           defaultValue: 1,
           componentProps: {
             options: [
-              { label: '手机号', value: 1 },
-              { label: '用户账号', value: 2 },
+              { label: 'Số điện thoại', value: 1 },
+              { label: 'Tài khoản người dùng', value: 2 },
             ],
           },
         },
         {
-          label: '手机号',
+          label: 'Số điện thoại',
           field: 'phone',
           component: 'Input',
           ifShow: ({ values }) => values.invitedMode === 1,
           dynamicRules: ({ values }) => {
             return values.invitedMode === 1
               ? [
-                  { required: true, message: '请填写手机号' },
-                  { pattern: /^1[3456789]\d{9}$/, message: '手机号码格式有误' },
+                  { required: true, message: 'Vui lòng điền số điện thoại' },
+                  { pattern: /^1[3456789]\d{9}$/, message: 'Định dạng số điện thoại không đúng' },
                 ]
-              : [{ pattern: /^1[3456789]\d{9}$/, message: '手机号码格式有误' }];
+              : [{ pattern: /^1[3456789]\d{9}$/, message: 'Định dạng số điện thoại không đúng' }];
           },
         },
         {
           field: 'user',
           component: 'Input',
-          label: '用户账号',
+          label: 'Tài khoản người dùng',
           ifShow: ({ values }) => values.invitedMode === 2,
           dynamicRules: ({ values }) => {
-            return values.invitedMode === 2 ? [{ required: true, message: '请输入用户账号' }] : [];
+            return values.invitedMode === 2 ? [{ required: true, message: 'Vui lòng nhập tài khoản người dùng' }] : [];
           },
         },
       ],
       showActionButtonGroup: false,
     });
-    //表单赋值
+    //Gán giá trị cho biểu mẫu
     const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-      //重置表单
+      //Đặt lại biểu mẫu
       await resetFields();
       setModalProps({ minHeight: 100 });
     });
 
     /**
-     * 提交，返回给租户list页面
+     * Gửi, trả về trang list của đơn vị thuê
      */
     async function handleSubmit() {
       let values = await validate();

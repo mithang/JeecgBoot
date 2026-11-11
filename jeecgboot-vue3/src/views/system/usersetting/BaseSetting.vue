@@ -13,7 +13,7 @@
         <div class="account-right border-bottom">
           <div v-if="!isEdit">
             <span class="font-size-17 account-name">{{ userInfo.realname }}</span>
-            <a-tooltip content="编辑姓名">
+            <a-tooltip content="Chỉnh sửa họ tên">
               <Icon class="pointer font-size-17 gray-bd account-icon" icon="ant-design:edit-outlined"
                     @click="editHandleClick" />
             </a-tooltip>
@@ -22,51 +22,51 @@
             <a-input ref="accountNameEdit" :maxlength="100" v-model:value="userInfo.realname" @blur="editRealName" />
           </div>
           <div class="use-day">
-            使用：<span>{{userInfo.createTimeText}}</span>
+            Sử dụng:<span>{{userInfo.createTimeText}}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="account-data border-bottom">
-      <!-- 详细资料 -->
+      <!-- Thông tin chi tiết -->
       <div class="account-detail">
-        <div class="font-size-15 font-bold font-color-gray" style="margin-bottom: 16px">详细资料</div>
+        <div class="font-size-15 font-bold font-color-gray" style="margin-bottom: 16px">Thông tin chi tiết</div>
         <div class="margin-bottom-10 font-size-13">
-          <span class="gray-75 item-label">生日</span>
+          <span class="gray-75 item-label">Ngày sinh</span>
           <span class="gray-3">{{ userInfo.birthday }}</span>
         </div>
         <div class="margin-bottom-10 font-size-13">
-          <span class="gray-75 item-label">性别</span>
+          <span class="gray-75 item-label">Giới tính</span>
           <span class="gray-3">{{ userInfo.sexText }}</span>
         </div>
         <div class="margin-bottom-10 nowarp font-size-13">
-          <span class="gray-75 item-label">职位</span>
-          <span class="gray-3">{{ userInfo.postText ? userInfo.postText : "未填写" }}</span>
+          <span class="gray-75 item-label">Chức vụ</span>
+          <span class="gray-3">{{ userInfo.postText ? userInfo.postText : "Chưa điền" }}</span>
         </div>
         <div class="font-size-13">
           <span class="item-label"></span>
-          <span class="item-label pointer" style="color:#1e88e5" @click="openEditModal">编辑</span>
+          <span class="item-label pointer" style="color:#1e88e5" @click="openEditModal">Chỉnh sửa</span>
         </div>
       </div>
-      <!-- 联系信息 -->
+      <!-- Thông tin liên hệ -->
       <div class="account-info">
-        <div class="font-size-15 font-bold font-color-gray" style="margin-bottom: 16px">联系信息</div>
+        <div class="font-size-15 font-bold font-color-gray" style="margin-bottom: 16px">Thông tin liên hệ</div>
         <div class="margin-bottom-10 font-size-13">
-          <span class="gray-75 item-label">邮箱</span>
-          <span class="gray-3">{{ userInfo.email ? userInfo.email : "未填写" }}</span>
+          <span class="gray-75 item-label">Email</span>
+          <span class="gray-3">{{ userInfo.email ? userInfo.email : "Chưa điền" }}</span>
         </div>
         <div class="margin-bottom-10 font-size-13">
-          <span class="gray-75 item-label">手机</span>
-          <span class="gray-3">{{ userInfo.phone ? userInfo.phone : "未填写" }}</span>
+          <span class="gray-75 item-label">Điện thoại</span>
+          <span class="gray-3">{{ userInfo.phone ? userInfo.phone : "Chưa điền" }}</span>
         </div>
       </div>
     </div>
     <div class="account-data">
-      <!-- 个性签名 -->
+      <!-- Chữ ký cá nhân -->
       <div class="account-detail">
-        <div class="font-size-15 font-bold font-color-gray" style="margin-bottom: 16px">个性签名</div>
+        <div class="font-size-15 font-bold font-color-gray" style="margin-bottom: 16px">Chữ ký cá nhân</div>
         <div class="font-size-13 flex">
-          <span class="gray-75 item-label">签名</span>
+          <span class="gray-75 item-label">Chữ ký</span>
           <a-upload
             accept="jpg,jpeg,png"  
             :max-count="1"
@@ -82,7 +82,7 @@
           >
             <div v-if="uploadVisible">
               <UploadOutlined></UploadOutlined>
-              <div class="ant-upload-text">上传</div>
+              <div class="ant-upload-text">Tải lên</div>
             </div>
           </a-upload>
           <a-modal :width="500" :open="previewVisible" :footer="null" @cancel="handleCancel">
@@ -90,14 +90,14 @@
           </a-modal>
         </div>
         <div style="font-size: 12px;color:#93a6aa" class="margin-bottom-10">
-          <p>建议上传尺寸为200*80，大小不超过1M且格式为png或jpeg的图片</p>
-          <p>生成签名方法一：手写扫描进行上传。</p>
-          <p>生成签名方法二：使用在线转换，生成后进行上传。
+          <p>Kích thước tải lên đề xuất là200*80, hình ảnh có dung lượng không vượt quá 1M và định dạng png hoặc jpeg</p>
+          <p>Cách tạo chữ ký thứ nhất: viết tay, quét rồi tải lên.</p>
+          <p>Cách tạo chữ ký thứ hai: dùng chuyển đổi trực tuyến, sau khi tạo xong thì tải lên.
             <a href="http://www.diyiziti.com/qianming" target="_blank">http://www.diyiziti.com/qianming</a>
           </p>
         </div>
         <div class="margin-bottom-10 font-size-13 flex" style="margin-top: 10px">
-          <span class="gray-75 item-label">开启状态</span>
+          <span class="gray-75 item-label">Trạng thái bật</span>
           <a-switch v-model:checked="userInfo.signEnable" :checkedValue="1" :unCheckedValue="0" @change="handleEnableSignChange"></a-switch>
         </div>
       </div>
@@ -126,19 +126,19 @@ import { getToken } from "@/utils/auth";
 import { uploadUrl } from "@/api/common/api";
 import { UploadOutlined } from "@ant-design/icons-vue";
 
-//TODO 当字典租户隔离时，数据会查不到，默认一个
-const sexOption = getDictItemsByCode("sex") || [{text:'男',value:'1'},{text:'女',value:'2'}];
+//TODO Khi từ điển cách ly theo đơn vị thuê, dữ liệu sẽ không truy vấn được, mặc định một mục
+const sexOption = getDictItemsByCode("sex") || [{text:'Nam',value:'1'},{text:'Nữ',value:'2'}];
 const { createMessage } = useMessage();
 const userStore = useUserStore();
   const { prefixCls } = useDesign('j-base-setting-container');
-//是否编辑
+//Có chỉnh sửa không
 const isEdit = ref<boolean>(false);
-//用户信息
+//Thông tin người dùng
 const userInfo = ref<any>({});
-//编辑时input触发事件
+//Khi chỉnh sửa, input kích hoạt sự kiện
 const accountNameEdit = ref();
 const [registerModal, { openModal }] = useModal();
-//头像动态计算
+//Tính toán động ảnh đại diện
 const avatar = computed(() => {
   return getFileAccessHttpUrl(userInfo.value.avatar) || headerImg;
 });
@@ -149,22 +149,22 @@ const uploadHeader = computed(() => {
   return headers;
 });
 const { createMessage: $message } = useMessage();
-//上传列表
+//Danh sách tải lên
 const uploadFileList = ref<any>([]);
-//计算是否可以继续上传
+//Tính toán có thể tiếp tục tải lên hay không
 const uploadVisible = computed(() => {
   if(!uploadFileList){
     return true;
   }
   return uploadFileList.value.length < 1;
 });
-//图片预览
+//Xem trước hình ảnh
 const previewVisible = ref<boolean>(false);
-//图片预览路径
+//Đường dẫn xem trước hình ảnh
 const previewImage = ref<string>('');
 
 /**
- * 更新用户头像
+ * Cập nhật ảnh đại diện người dùng
  */
 function updateAvatar(src: string, data: string) {
   const userinfo = userStore.getUserInfo;
@@ -176,8 +176,8 @@ function updateAvatar(src: string, data: string) {
 }
 
 /**
- * 更新用户信息
- * @params 参数
+ * Cập nhật thông tin người dùng
+ * @params Tham số
  */
 function updateUserInfo(params) {
   userEdit(params).then((res) => {
@@ -188,7 +188,7 @@ function updateUserInfo(params) {
 }
 
 /**
- * 编辑按钮点击事件
+ * Sự kiện nhấp vào nút chỉnh sửa
  */
 function editHandleClick() {
   isEdit.value = true;
@@ -198,36 +198,36 @@ function editHandleClick() {
 }
 
 /**
- * 修改真实姓名
+ * Sửa họ tên thật
  */
 function editRealName() {
   if (userInfo.value.realname) {
     updateUserInfo({ realname: userInfo.value.realname, id: userInfo.value.id });
     userStore.setUserInfo(userInfo.value);
   } else {
-    createMessage.warn("请输入姓名");
+    createMessage.warn("Vui lòng nhập họ tên");
   }
   isEdit.value = false;
 }
 
 /**
- * 获取生日信息
+ * Lấy thông tin ngày sinh
  */
 function getBirthDay(val) {
   if (val) {
     return dayjs(val).format("YYYY-MM-DD");
   } else {
-    return "未填写";
+    return "Chưa điền";
   }
 }
 
 /**
- * 获取性别
+ * Lấy giới tính
  * @param val
  */
 function getSex(val) {
   let findOption = sexOption.find(item => parseInt(item.value) === val);
-  let sex = "未填写";
+  let sex = "Chưa điền";
   if (findOption) {
     sex = findOption.text;
   }
@@ -235,7 +235,7 @@ function getSex(val) {
 }
 
 /**
- * 打开编辑弹窗
+ * Mở hộp thoại chỉnh sửa
  */
 function openEditModal() {
   let value = cloneDeep(userInfo.value);
@@ -245,7 +245,7 @@ function openEditModal() {
 }
 
 /**
- * 获取用户信息
+ * Lấy thông tin người dùng
  */
 function getUserDetail() {
   uploadFileList.value = [];
@@ -278,45 +278,45 @@ function getUserDetail() {
 }
 
 /**
- * 获取使用时间
+ * Lấy thời gian sử dụng
  * @param date
  */
 function getDiffDay(date) {
-  // 计算两个日期之间的天数差值
+  // Tính chênh lệch số ngày giữa hai ngày
   let totalDays, diffDate
   let createDate = Date.parse(date);
   let nowDate = new Date().getTime();
-  // 将两个日期都转换为毫秒格式，然后做差
-  diffDate = Math.abs(nowDate - createDate) // 取相差毫秒数的绝对值
-  totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
-  return totalDays+" 天";
+  // Chuyển cả hai ngày thành định dạng mili giây, sau đó trừ nhau
+  diffDate = Math.abs(nowDate - createDate) // Lấy giá trị tuyệt đối của số mili giây chênh lệch
+  totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // Làm tròn xuống
+  return totalDays+" ngày";
 }
 
 /**
- * 上传图片之前进行验证
+ * Trước khi tải hình ảnh lên, tiến hành kiểm chứng
  * 
  * @param file
  */
 function beforeUpload({ file }) {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg";
   if (!isJpgOrPng) {
-    $message.error("上传文件格式只能是jpg/png");
+    $message.error("Định dạng tệp tải lên chỉ có thể làjpg/png");
     return false;
   }
   const isLimit = file.size / 1024 / 1024 < 1;
   if (!isLimit) {
-    $message.error("上传图片大小不能超过 1MB!");
+    $message.error("Dung lượng hình ảnh tải lên không được vượt quá 1MB!");
     return false;
   }
   return true;
 }
 
 /**
- * 上传成功事件
+ * Sự kiện tải lên thành công
  */
 function handleChange({ file, fileList }) {
   if (file.status === 'error') {
-    createMessage.error(`${file.name} 上传失败.`);
+    createMessage.error(`${file.name} Tải lên thất bại.`);
   }
   if (file.status === 'done' && file.response.success === false) {
     const failIndex = uploadFileList.value.findIndex((item) => item.uid === file.uid);
@@ -329,7 +329,7 @@ function handleChange({ file, fileList }) {
   if (file.status != 'uploading') {
     fileList.forEach((file) => {
       if (file.status === 'done') {
-        //上传成功事件
+        //Sự kiện tải lên thành công
         uploadSuccess(file.response.message);
       }
     });
@@ -340,18 +340,18 @@ function handleChange({ file, fileList }) {
 }
 
 /**
- * 移除
+ * Loại bỏ
  */
 function handleDelete() {
-  updateUser({ sign: "", id: userInfo.value.id },"删除个性签名成功")
+  updateUser({ sign: "", id: userInfo.value.id },"Xóa chữ ký cá nhân thành công")
 }
 
 /**
- * 上传成功事件
+ * Sự kiện tải lên thành công
  * @param url
  */
 function uploadSuccess(url) {
-   updateUser({ sign: url, id: userInfo.value.id },"上传个性签名成功")
+   updateUser({ sign: url, id: userInfo.value.id },"Tải lên chữ ký cá nhân thành công")
 }
 
 function updateUser(params,message) {
@@ -363,7 +363,7 @@ function updateUser(params,message) {
 }
 
 /**
- * 图片预览
+ * Xem trước hình ảnh
  * @param file
  */
 function handlePreview(file) {
@@ -372,7 +372,7 @@ function handlePreview(file) {
 }
 
 /**
- * 获取文件名
+ * Lấy tên tệp
  * @param path
  */
 function getFileName(path) {
@@ -384,17 +384,17 @@ function getFileName(path) {
 }
 
 /**
- * 图片预览关闭
+ * Đóng xem trước hình ảnh
  */
 function handleCancel() {
   previewVisible.value = false;
 }
 
 /**
- * 个性签名开启状态更新
+ * Cập nhật trạng thái bật của chữ ký cá nhân
  */
 function handleEnableSignChange() {
-  updateUser({ signEnable: userInfo.value.signEnable, id: userInfo.value.id },"修改成功")
+  updateUser({ signEnable: userInfo.value.signEnable, id: userInfo.value.id },"Sửa thành công")
 }
 
 onMounted(async () => {
@@ -403,7 +403,7 @@ onMounted(async () => {
 </script>
 
 <style lang="less">
-    // 代码逻辑说明: [issues/563]暗色主题部分失效
+    // Giải thích logic mã: [issues/563]Một phần chủ đề tối không hoạt động
   @prefix-cls: ~'@{namespace}-j-base-setting-container';
 
   .@{prefix-cls}{
@@ -452,9 +452,9 @@ onMounted(async () => {
       width: 200px;
       text-overflow: ellipsis;
       line-height: 32px !important;
-      /*begin 兼容暗夜模式*/
+      /*begin Tương thích chế độ tối*/
       color: @text-color;
-      /*end 兼容暗夜模式*/
+      /*end Tương thích chế độ tối*/
       font-weight: 500;
     }
 
@@ -520,9 +520,9 @@ onMounted(async () => {
     }
 
     .use-day {
-      /*begin 兼容暗夜模式*/
+      /*begin Tương thích chế độ tối*/
       color: @text-color;
-      /*end 兼容暗夜模式*/
+      /*end Tương thích chế độ tối*/
       margin-top: 10px;
       font-size: 13px;
       span {

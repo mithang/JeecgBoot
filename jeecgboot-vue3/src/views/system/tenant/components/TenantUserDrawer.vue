@@ -23,10 +23,10 @@
       const status = ref<string>('');
       const isUpdate = ref(false);
       const title = computed(() => {
-        return isUpdate.value ? '编辑人员' : '添加人员';
+        return isUpdate.value ? 'Chỉnh sửa nhân viên' : 'Thêm nhân viên';
       });
 
-      //表单
+      //Biểu mẫu
       const [registerForm, { setFieldsValue, resetFields, validate, setProps, clearValidate }] = useForm({
         schemas: tenantUserSchema,
         showActionButtonGroup: false,
@@ -55,7 +55,7 @@
           status.value = data.status;
           await setFieldsValue(formData);
         }
-        // 隐藏底部时禁用整个表单
+        // Khi ẩn phần chân thì vô hiệu hóa toàn bộ biểu mẫu
         setProps({ disabled: !data?.showFooter });
         if(!data?.showFooter){
           await clearValidate();
@@ -64,7 +64,7 @@
 
       const confirmLoading = ref<boolean>(false);
 
-      //提交事件
+      //Sự kiện gửi
       async function handleSubmit() {
         const data: any = await validate();
         if (!data.username) {
@@ -79,7 +79,7 @@
       }
 
       /**
-       * 取消
+       * Hủy
        */
       function handleClose() {
         closeDrawer();

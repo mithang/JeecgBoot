@@ -1,15 +1,15 @@
 <template>
-  <!--引用表格-->
+  <!--Tham chiếu bảng-->
   <BasicTable @register="registerTable" :rowSelection="rowSelection">
-    <!--插槽:table标题-->
+    <!--Khe cắm:table tiêu đề-->
     <template #tableTitle>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="createUser" :disabled="!orgCode">新建用户</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="createUser" :disabled="!orgCode">Tạo mới người dùng</a-button>
       <a-button type="primary" preIcon="ant-design:plus-outlined" @click="selectAddUser" :disabled="!orgCode || props.data?.orgCategory === '3'"
-        >添加已有用户</a-button
+        >Thêm người dùng hiện có</a-button
       >
-      <a-button v-if="selectedRowKeys.length > 0" preIcon="ant-design:user-delete-outlined" @click="onRemoveDepartUserBatch">批量移出</a-button>
+      <a-button v-if="selectedRowKeys.length > 0" preIcon="ant-design:user-delete-outlined" @click="onRemoveDepartUserBatch">Loại bỏ hàng loạt</a-button>
     </template>
-    <!-- 插槽：行内操作按钮 -->
+    <!-- Slot: nút thao tác trong hàng -->
     <template #action="{ record }">
       <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
     </template>
@@ -38,27 +38,27 @@
     data: { require: true, type: Object },
   });
   const userSelectModalRef: any = ref(null);
-  // 当前选中的部门code，可能会为空，代表未选择部门
+  // Mã (code) phòng ban đang chọn, có thể trống, nghĩa là chưa chọn phòng ban
   const orgCode = computed(() => props.data?.orgCode);
-  // 当前部门id
+  // Phòng ban hiện tạiid
   const departId = computed(() => props.data?.id);
-  // 当前选中的类型：部门 / 岗位
-  const departTypeText = computed(() => (props.data?.orgCategory === '3' ? '岗位' : '部门'));
+  // Loại đang chọn: Phòng ban / Vị trí
+  const departTypeText = computed(() => (props.data?.orgCategory === '3' ? 'Vị trí công tác' : 'Phòng ban'));
   const departUserColumns: BasicColumn[] = [
     {
       ...userColumns[0],
-      // izCurrentDepartPost：是否为当前部门/岗位下的用户（列表中还包含下级部门、岗位的用户），是的话显示「本级」
+      // izCurrentDepartPost：Có phải người dùng thuộc phòng ban/vị trí hiện tại hay không (trong danh sách còn bao gồm người dùng của phòng ban, vị trí cấp dưới), nếu phải thì hiển thị 'Cấp này'
       customRender: ({ record, text }) => {
         if (record.izCurrentDepartPost !== true) {
           return h('span', [text]);
         }
-        return h('span', [text, h(Tag, { color: 'blue', style: { marginLeft: '6px' } }, () => '本级')]);
+        return h('span', [text, h(Tag, { color: 'blue', style: { marginLeft: '6px' } }, () => 'Cấp này')]);
       },
     },
     ...userColumns.slice(1),
   ];
 
-  // 自适应列配置
+  // Cấu hình cột thích ứng
   const adaptiveColProps: Partial<ColEx> = {
     xs: 24, // <576px
     sm: 24, // ≥576px
@@ -67,7 +67,7 @@
     xl: 12, // ≥1200px
     xxl: 8, // ≥1600px
   };
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { tableContext, createMessage, createConfirm } = useListPage({
     tableProps: {
       api: queryDepartPostByOrgCode,
@@ -86,14 +86,14 @@
           xl: 7,
           xxl: 5,
         },
-        // 操作按钮配置
+        // Cấu hình nút thao tác
         actionColOptions: {
           ...adaptiveColProps,
           style: { textAlign: 'left' },
         },
       },
       tableSetting: { cacheKey: 'depart_user_userInfo' },
-      // 请求之前对参数做处理
+      // Xử lý tham số trước khi gửi yêu cầu
       beforeFetch(params) {
         return Object.assign(params, { orgCode: orgCode.value });
       },
@@ -101,28 +101,28 @@
     },
   });
 
-  // 注册 ListTable
+  // Đăng ký ListTable
   const [registerTable, { reload, setProps, setLoading, updateTableDataRecord }, { rowSelection, selectedRowKeys }] = tableContext;
 
   watch(
     () => props.data,
     () => reload()
   );
-  //注册drawer
+  //Đăng kýdrawer
   const [registerDrawer, { openDrawer, setDrawerProps }] = useDrawer();
   const [registerUserAuthDrawer, userAuthDrawer] = useDrawer();
-  // 注册用户选择 modal
+  // Chọn người dùng đăng ký modal
   const [registerSelUserModal, selUserModal] = useModal();
 
-  // 清空选择的行
+  // Bỏ chọn tất cả các hàng
   function clearSelection() {
     selectedRowKeys.value = [];
   }
 
-  // 创建用户
+  // Tạo người dùng
   async function createUser() {
     if (!departId.value) {
-      createMessage.warning('请先选择一个部门');
+      createMessage.warning('Vui lòng chọn một phòng ban trước');
     } else {
       let mainDepPostId = '';
       let selecteddeparts = departId.value;
@@ -132,12 +132,12 @@
       }
       openDrawer(true, {
         isUpdate: false,
-        //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1124]【系统管理】部门管理-用户列表 在这里编辑用户时 部门和角色没展示出来------------
+        //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1124]【Quản lý hệ thống】Quản lý phòng ban - Danh sách người dùng: khi chỉnh sửa người dùng tại đây, phòng ban và vai trò không hiển thị------------
         departDisabled: true,
-        //update-end---author:wangshuai ---date:20260811  for：[LHZP-1124]【系统管理】部门管理-用户列表 在这里编辑用户时 部门和角色没展示出来------------
-        // 初始化负责部门
+        //update-end---author:wangshuai ---date:20260811  for：[LHZP-1124]【Quản lý hệ thống】Quản lý phòng ban - Danh sách người dùng: khi chỉnh sửa người dùng tại đây, phòng ban và vai trò không hiển thị------------
+        // Khởi tạo phòng ban phụ trách
         nextDepartOptions: { value: props.data?.key, label: props.data?.title },
-        //初始化岗位
+        //Khởi tạo vị trí
         record: {
           mainDepPostId: mainDepPostId,
           activitiSync: 1,
@@ -148,7 +148,7 @@
     }
   }
 
-  // 查看用户详情
+  // Xem chi tiết người dùng
   function showUserDetail(record) {
     record.activitiSync = record.activitiSync? Number(record.activitiSync) : 1;
     openDrawer(true, {
@@ -158,21 +158,21 @@
     });
   }
 
-  // 编辑用户信息
+  // Chỉnh sửa thông tin người dùng
   function editUserInfo(record) {
     record.activitiSync = record.activitiSync? Number(record.activitiSync) : 1;
-    //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1124]【系统管理】部门管理-用户列表 在这里编辑用户时 部门和角色没展示出来------------
+    //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1124]【Quản lý hệ thống】Quản lý phòng ban - Danh sách người dùng: khi chỉnh sửa người dùng tại đây, phòng ban và vai trò không hiển thị------------
     openDrawer(true, { isUpdate: true, record, departDisabled: true, roleDisabled: true, departPostDisabled: true });
-    //update-end---author:wangshuai ---date:20260811  for：[LHZP-1124]【系统管理】部门管理-用户列表 在这里编辑用户时 部门和角色没展示出来------------
+    //update-end---author:wangshuai ---date:20260811  for：[LHZP-1124]【Quản lý hệ thống】Quản lý phòng ban - Danh sách người dùng: khi chỉnh sửa người dùng tại đây, phòng ban và vai trò không hiển thị------------
   }
 
-  // 选择添加已有用户
+  // Chọn thêm người dùng hiện có
   function selectAddUser() {
     userSelectModalRef.value.rowSelection.selectedRowKeys = [];
     selUserModal.openModal();
   }
 
-  // 选择用户成功
+  // Chọn người dùng thành công
   async function onSelectUserOk(options, userIdList) {
     if (userIdList.length > 0) {
       try {
@@ -186,7 +186,7 @@
   }
 
   /**
-   * 移出部门/岗位，只删除关联关系，不删除用户
+   * Loại bỏ khỏi phòng ban/vị trí, chỉ xóa quan hệ liên kết, không xóa người dùng
    */
   async function onRemoveDepartUser(userIds: string[]) {
     try {
@@ -195,49 +195,49 @@
       clearSelection();
       reload();
     } catch (e) {
-      // 失败信息已由 defHttp 统一提示
+      // Thông tin thất bại đã được defHttp nhắc thống nhất
     } finally {
       setLoading(false);
     }
   }
 
-  // 批量移出
+  // Loại bỏ hàng loạt
   function onRemoveDepartUserBatch() {
     createConfirm({
       iconType: 'warning',
-      title: '批量移出',
-      content: `确定将选中的 ${selectedRowKeys.value.length} 个用户移出当前${departTypeText.value}吗？`,
+      title: 'Loại bỏ hàng loạt',
+      content: `Bạn có chắc muốn loại bỏ ${selectedRowKeys.value.length} người dùng đã chọn khỏi ${departTypeText.value} hiện tại không?`,
       onOk: () => onRemoveDepartUser(selectedRowKeys.value),
     });
   }
 
   /**
-   * 用户抽屉表单成功回调
+   * Callback thành công của biểu mẫu trong ngăn kéo người dùng
    */
   function onUserDrawerSuccess({ isUpdate, values }) {
     isUpdate ? updateTableDataRecord(values.id, values) : reload();
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
-    return [{ label: '编辑', onClick: editUserInfo.bind(null, record) }];
+    return [{ label: 'Chỉnh sửa', onClick: editUserInfo.bind(null, record) }];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record): ActionItem[] {
     return [
-      { label: '详情', onClick: showUserDetail.bind(null, record) },
+      { label: 'Chi tiết', onClick: showUserDetail.bind(null, record) },
       {
-        label: '移出',
+        label: 'Loại bỏ',
         color: 'error',
-        // 只有当前部门/岗位下的用户可以移出，下级部门、岗位的用户需要到对应的部门、岗位下操作
+        // Chỉ người dùng thuộc phòng ban/vị trí hiện tại mới có thể loại bỏ, người dùng của phòng ban, vị trí cấp dưới cần thao tác tại phòng ban, vị trí tương ứng
         ifShow: record.izCurrentDepartPost === true,
         popConfirm: {
-          title: `确认将该用户移出当前${departTypeText.value}吗？`,
+          title: `Xác nhận loại bỏ người dùng này khỏi ${departTypeText.value} hiện tại?`,
           confirm: onRemoveDepartUser.bind(null, [record.id]),
         },
       },

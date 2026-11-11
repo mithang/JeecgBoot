@@ -1,20 +1,20 @@
 <template>
   <BasicTable @register="registerTable">
     <template #tableTitle>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
-      <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-      <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> Thêm mới</a-button>
+      <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất (export)</a-button>
+      <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">Nhập (import)</j-upload-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <template #overlay>
           <a-menu>
             <a-menu-item key="1" @click="batchHandleDelete">
               <Icon icon="ant-design:delete-outlined"></Icon>
-              删除
+              Xóa
             </a-menu-item>
           </a-menu>
         </template>
         <a-button
-          >批量操作
+          >Thao tác hàng loạt
           <Icon icon="mdi:chevron-down"></Icon>
         </a-button>
       </a-dropdown>
@@ -23,15 +23,15 @@
       <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
     </template>
   </BasicTable>
-  <!--角色用户表格-->
+  <!--Bảng người dùng của vai trò-->
   <RoleUserTable @register="roleUserDrawer" />
-  <!--角色编辑抽屉-->
+  <!--Ngăn kéo chỉnh sửa vai trò-->
   <RoleDrawer @register="registerDrawer" @success="reload" :showFooter="showFooter" />
-  <!--角色详情-->
+  <!--Chi tiết vai trò-->
   <RoleDesc @register="registerDesc"></RoleDesc>
-  <!--角色菜单授权抽屉-->
+  <!--Ngăn kéo cấp quyền menu của vai trò-->
   <RolePermissionDrawer @register="rolePermissionDrawer" />
-  <!--角色首页配置-->
+  <!--Cấu hình trang chủ của vai trò-->
   <RoleIndexModal @register="registerIndexModal" />
 </template>
 <script lang="ts" name="system-role" setup>
@@ -54,15 +54,15 @@
   const [rolePermissionDrawer, { openDrawer: openRolePermissionDrawer }] = useDrawer();
   const [registerDesc, { openDrawer: openRoleDesc }] = useDrawer();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext, onImportXls, onExportXls } = useListPage({
     designScope: 'role-template',
     tableProps: {
-      title: '系统角色列表',
+      title: 'Danh sách vai trò hệ thống',
       api: list,
       columns: columns,
       formConfig: {
-        // 代码逻辑说明: 【QQYUN-5873】查询区域lablel默认居左
+        // Giải thích logic mã: 【QQYUN-5873】Nhãn (label) của khu vực truy vấn mặc định căn trái
         labelWidth:65,
         rowProps: { gutter: 24 },
         schemas: searchFormSchema,
@@ -71,14 +71,14 @@
         width: 120,
       },
       rowSelection: null,
-      //自定义默认排序
+      //Tùy chỉnh sắp xếp mặc định
       defSort: {
         column: 'id',
         order: 'desc',
       },
     },
     exportConfig: {
-      name: '角色列表',
+      name: 'Danh sách vai trò',
       url: getExportUrl,
     },
     importConfig: {
@@ -88,7 +88,7 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增
+   * Thêm mới
    */
   function handleCreate() {
     showFooter.value = true;
@@ -97,7 +97,7 @@
     });
   }
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     showFooter.value = true;
@@ -107,7 +107,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   function handleDetail(record) {
     showFooter.value = false;
@@ -117,69 +117,69 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteRole({ id: record.id }, reload);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteRole({ ids: selectedRowKeys.value }, reload);
   }
   /**
-   * 角色授权弹窗
+   * Hộp thoại cấp quyền vai trò
    */
   function handlePerssion(record) {
     openRolePermissionDrawer(true, { roleId: record.id });
   }
   /**
-   * 首页配置弹窗
+   * Hộp thoại cấu hình trang chủ
    */
   function handleIndexConfig(roleCode) {
     openIndexModal(true, { roleCode });
   }
   /**
-   * 角色用户
+   * Người dùng của vai trò
    */
   function handleUser(record) {
     //onSelectChange(selectedRowKeys)
     openRoleUserDrawer(true, record);
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '用户',
+        label: 'Người dùng',
         onClick: handleUser.bind(null, record),
       },
       {
-        label: '授权',
+        label: 'Cấp quyền',
         onClick: handlePerssion.bind(null, record),
       },
     ];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },

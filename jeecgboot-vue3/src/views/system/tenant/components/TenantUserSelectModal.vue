@@ -1,4 +1,4 @@
-<!--套餐中使用的用户选择框-->
+<!--Ô chọn người dùng dùng trong gói dịch vụ-->
 <template>
   <div>
     <BasicModal
@@ -27,24 +27,24 @@
   export default defineComponent({
     name: 'TenantUserSelectModal',
     components: {
-      //此处需要异步加载BasicTable
+      //Tại đây cần tải không đồng bộBasicTable
       BasicModal,
       BasicTable: createAsyncComponent(() => import('/@/components/Table/src/BasicTable.vue'), {
         loading: true,
       }),
     },
     props: {
-      //选择框标题
+      //Tiêu đề ô chọn
       modalTitle: {
         type: String,
-        default: '选择用户',
+        default: 'Chọn người dùng',
       },
-      //查询参数
+      //Tham số truy vấn
       tenantId: {
         type: Number,
         default: 0,
       },
-      //排除用户id的集合
+      //Tập hợp các ID người dùng bị loại trừ
       excludeUserIdList: {
         type: Array,
         default: [],
@@ -54,7 +54,7 @@
     setup(props, { emit, refs }) {
       const tableScroll = ref<any>({ x: false });
       const tableRef = ref();
-      //注册弹框
+      //Hộp thoại đăng ký
       const [register, { closeModal }] = useModalInner(() => {
         if (window.innerWidth < 900) {
           tableScroll.value = { x: 900 };
@@ -68,42 +68,42 @@
         }, 800);
       });
 
-      //定义表格列
+      //Định nghĩa cột bảng
       const columns = [
         {
-          title: '账号',
+          title: 'Tài khoản',
           dataIndex: 'username',
           width: 40,
           align: 'left',
         },
         {
-          title: '姓名',
+          title: 'Họ tên',
           dataIndex: 'realname',
           width: 40,
         },
         {
-          title: '性别',
+          title: 'Giới tính',
           dataIndex: 'sex_dictText',
           width: 20,
         },
         {
-          title: '手机号码',
+          title: 'Số điện thoại',
           dataIndex: 'phone',
           width: 30,
         },
         {
-          title: '邮箱',
+          title: 'Email',
           dataIndex: 'email',
           width: 40,
         },
         {
-          title: '状态',
+          title: 'Trạng thái',
           dataIndex: 'status_dictText',
           width: 20,
         },
       ];
 
-      // 列表页面公共参数、方法
+      // Tham số và phương thức dùng chung của trang danh sách
       const { prefixCls, tableContext } = useListPage({
         designScope: 'tenant-template',
         tableProps: {
@@ -132,10 +132,10 @@
       const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
       /**
-       * 确定选择
+       * Xác định lựa chọn
        */
       function handleOk() {
-        //返回选中事件
+        //Sự kiện trả về mục đã chọn
         emit('on-select', rowSelection.selectedRows, rowSelection.selectedRowKeys);
       }
 

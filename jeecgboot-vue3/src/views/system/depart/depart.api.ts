@@ -26,44 +26,44 @@ export enum Api {
   getUpdateDepartInfo = '/sys/user/getUpdateDepartInfo',
   doUpdateDepartInfo = '/sys/user/doUpdateDepartInfo',
   changeDepartChargePerson = '/sys/user/changeDepartChargePerson',
-  //根据部门id获取岗位信息
+  //Dựa vào ID phòng ban để lấy thông tin vị trí
   getPositionByDepartId = '/sys/sysDepart/getPositionByDepartId',
-  //根据部门id获取岗位上下级关系
+  //Dựa vào ID phòng ban để lấy quan hệ cấp trên/cấp dưới của vị trí
   getRankRelation = '/sys/sysDepart/getRankRelation',
-  //异步获取部门和岗位
+  //Lấy phòng ban và vị trí không đồng bộ
   queryDepartAndPostTreeSync = '/sys/sysDepart/queryDepartAndPostTreeSync',
-  //获取部门和岗位下的成员
+  //Lấy thành viên thuộc phòng ban và vị trí
   queryDepartPostByOrgCode = '/sys/user/queryDepartPostByOrgCode',
-  //更新拖拽部门后的位置
+  //Cập nhật vị trí sau khi kéo thả phòng ban
   updateChangeDepart = '/sys/sysDepart/updateChangeDepart',
-  //获取负责部门
+  //Lấy phòng ban phụ trách
   getDepartmentHead = '/sys/sysDepart/getDepartmentHead',
-  //将用户移出部门/岗位
+  //Loại bỏ người dùng khỏi phòng ban/vị trí
   removeDepartUser = '/sys/user/removeDepartUser',
 }
 
 /**
- * 获取部门树列表
+ * Lấy danh sách cây phòng ban
  */
 export const queryDepartTreeSync = (params?) => defHttp.get({ url: Api.queryDepartTreeSync, params });
 
 /**
- * 部门管理页面专用搜索，搜索结果支持继续展开下级
+ * Tìm kiếm chuyên dụng của trang Quản lý phòng ban, kết quả tìm kiếm hỗ trợ tiếp tục mở rộng cấp dưới
  */
 export const searchByDepartManage = (params) => defHttp.get({ url: Api.searchByDepartManage, params });
 
 /**
- * 获取部门节点及其所有上级
+ * Lấy nút phòng ban và mọi cấp trên của nó
  */
 export const queryAllParentId = (params) => defHttp.get({ url: Api.queryAllParentId, params });
 
 /**
- * 获取部门和岗位树列表
+ * Lấy danh sách cây phòng ban và vị trí
  */
 export const queryDepartAndPostTreeSync = (params?) => defHttp.get({ url: Api.queryDepartAndPostTreeSync, params });
 
 /**
- * 保存或者更新部门角色
+ * Lưu hoặc cập nhật vai trò phòng ban
  */
 export const saveOrUpdateDepart = (params, isUpdate) => {
   if (isUpdate) {
@@ -74,7 +74,7 @@ export const saveOrUpdateDepart = (params, isUpdate) => {
 };
 
 /**
- * 批量删除部门角色
+ * Xóa hàng loạt vai trò phòng ban
  */
 export const deleteBatchDepart = (params, confirm = false) => {
   return new Promise((resolve, reject) => {
@@ -84,8 +84,8 @@ export const deleteBatchDepart = (params, confirm = false) => {
     if (confirm) {
       createConfirm({
         iconType: 'warning',
-        title: '删除',
-        content: '确定要删除吗？',
+        title: 'Xóa',
+        content: 'Bạn có chắc chắn muốn xóa không?',
         onOk: () => doDelete(),
         onCancel: () => reject(),
       });
@@ -96,97 +96,97 @@ export const deleteBatchDepart = (params, confirm = false) => {
 };
 
 /**
- * 获取权限树列表
+ * Lấy danh sách cây quyền
  */
 export const queryRoleTreeList = (params?) => defHttp.get({ url: Api.roleQueryTreeList, params });
 /**
- * 查询部门权限
+ * Truy vấn quyền phòng ban
  */
 export const queryDepartPermission = (params?) => defHttp.get({ url: Api.queryDepartPermission, params });
 /**
- * 保存部门权限
+ * Lưu quyền phòng ban
  */
 export const saveDepartPermission = (params) => defHttp.post({ url: Api.saveDepartPermission, params });
 
 /**
- *  查询部门数据权限列表
+ *  Truy vấn danh sách quyền dữ liệu của phòng ban
  */
 export const queryDepartDataRule = (functionId, departId, params?) => {
   let url = `${Api.dataRule}/${unref(functionId)}/${unref(departId)}`;
   return defHttp.get({ url, params });
 };
 /**
- * 保存部门数据权限
+ * Lưu quyền dữ liệu của phòng ban
  */
 export const saveDepartDataRule = (params) => defHttp.post({ url: Api.dataRule, params });
 /**
- * 获取登录用户部门信息
+ * Lấy thông tin phòng ban của người dùng đăng nhập
  */
 export const getUserDeparts = (params?) => defHttp.get({ url: Api.getCurrentUserDeparts, params });
 /**
- * 切换选择部门
+ * Chuyển đổi lựa chọn phòng ban
  */
 export const selectDepart = (params?) => defHttp.put({ url: Api.selectDepart, params });
 
 /**
- * 编辑部门前获取部门相关信息
+ * Trước khi chỉnh sửa phòng ban, lấy thông tin liên quan của phòng ban
  * @param id
  */
 export const getUpdateDepartInfo = (id) => defHttp.get({ url: Api.getUpdateDepartInfo, params: {id} });
 
 /**
- * 编辑部门
+ * Chỉnh sửa phòng ban
  * @param params
  */
 export const doUpdateDepartInfo = (params) => defHttp.put({ url: Api.doUpdateDepartInfo, params });
 
 /**
- * 删除部门
+ * Xóa phòng ban
  * @param id
  */
 export const deleteDepart = (id) => defHttp.delete({ url: Api.delete, params:{ id } }, { joinParamsToUrl: true });
 
 /**
- * 设置负责人 取消负责人
+ * Đặt người phụ trách / Hủy người phụ trách
  * @param params
  */
 export const changeDepartChargePerson = (params) => defHttp.put({ url: Api.changeDepartChargePerson, params });
 
 /**
- * 根据部门id获取岗位信息
+ * Dựa vào ID phòng ban để lấy thông tin vị trí
  */
 export const getPositionByDepartId = (params) => defHttp.get({ url: Api.getPositionByDepartId, params }, { isTransformResponse: false });
 
 /**
- * 根据部门id获取岗位上下级关系
+ * Dựa vào ID phòng ban để lấy quan hệ cấp trên/cấp dưới của vị trí
  * @param params
  */
 export const getRankRelation = (params) => defHttp.get({ url: Api.getRankRelation, params,timeout: 2 * 60 * 1000 }, { isTransformResponse: false });
 
 /**
- * 根据部门或岗位编码获取通讯录成员
+ * Dựa vào mã phòng ban hoặc vị trí để lấy thành viên danh bạ
  * 
  * @param params
  */
 export const queryDepartPostByOrgCode = (params) => defHttp.get({ url: Api.queryDepartPostByOrgCode, params });
 
 /**
- * 更新拖拽部门后的位置
+ * Cập nhật vị trí sau khi kéo thả phòng ban
  * 
  * @param params
  */
 export const updateChangeDepart = (params) => defHttp.put({ url: Api.updateChangeDepart, params },{ isTransformResponse: false });
 
 /**
- * 获取负责部门
+ * Lấy phòng ban phụ trách
  * 
  * @param params
  */
 export const getDepartmentHead = (params) => defHttp.get({ url: Api.getDepartmentHead, params });
 
 /**
- * 将用户移出部门/岗位（只删除关联关系，不删除用户）
+ * Loại bỏ người dùng khỏi phòng ban/vị trí (chỉ xóa quan hệ liên kết, không xóa người dùng)
  *
- * @param params depId：部门或岗位id，userIds：用户id，多个用逗号分隔
+ * @param params depId：ID phòng ban hoặc vị trí, userIds: ID người dùng, nhiều giá trị phân tách bằng dấu phẩy
  */
 export const removeDepartUser = (params) => defHttp.delete({ url: Api.removeDepartUser, params }, { joinParamsToUrl: true });

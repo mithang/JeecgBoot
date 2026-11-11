@@ -1,8 +1,8 @@
 <template>
-  <BasicDrawer title="数据规则/按钮权限配置" :width="365" @close="onClose" @register="registerDrawer">
+  <BasicDrawer title="Cấu hình quy tắc dữ liệu/quyền nút" :width="365" @close="onClose" @register="registerDrawer">
     <a-spin :spinning="loading">
       <a-tabs defaultActiveKey="1">
-        <a-tab-pane tab="数据规则" key="1">
+        <a-tab-pane tab="Quy tắc dữ liệu" key="1">
           <a-checkbox-group v-model:value="dataRuleChecked" v-if="dataRuleList.length > 0">
             <a-row>
               <a-col :span="24" v-for="(item, index) in dataRuleList" :key="'dr' + index">
@@ -11,13 +11,13 @@
               <a-col :span="24">
                 <div style="width: 100%; margin-top: 15px">
                   <a-button type="primary" :loading="loading" :size="'small'" preIcon="ant-design:save-filled" @click="saveDataRuleForRole">
-                    <span>点击保存</span>
+                    <span>Nhấn Lưu</span>
                   </a-button>
                 </div>
               </a-col>
             </a-row>
           </a-checkbox-group>
-          <a-empty v-else description="无配置信息" />
+          <a-empty v-else description="Không có thông tin cấu hình" />
         </a-tab-pane>
       </a-tabs>
     </a-spin>
@@ -37,7 +37,7 @@
   const dataRuleList = ref<Array<any>>([]);
   const dataRuleChecked = ref<Array<any>>([]);
 
-  // 注册抽屉组件
+  // Đăng ký thành phần ngăn kéo
   const [registerDrawer, { closeDrawer }] = useDrawerInner((data) => {
     departId.value = unref(data.departId);
     functionId.value = unref(data.functionId);

@@ -1,24 +1,24 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="离职人员信息" :showOkBtn="false" width="1000px" destroyOnClose>
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Thông tin nhân viên nghỉ việc" :showOkBtn="false" width="1000px" destroyOnClose>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleRevert">
                 <Icon icon="ant-design:redo-outlined"></Icon>
-                批量取消
+                Hủy hàng loạt
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -38,13 +38,13 @@
   import { defHttp } from '/@/utils/http/axios';
 
   const { createConfirm } = useMessage();
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
   const checkedKeys = ref<Array<string | number>>([]);
   const [registerModal] = useModalInner(() => {
     checkedKeys.value = [];
   });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const { prefixCls, tableContext } = useListPage({
     tableProps: {
       api: getQuitList,
@@ -57,11 +57,11 @@
       },
     },
   });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
 
   /**
-   * 取消离职事件
+   * Sự kiện hủy nghỉ việc
    * @param record
    */
   async function handleCancelQuit(record) {
@@ -69,14 +69,14 @@
     emit('success');
   }
   /**
-   * 批量取消离职事件
+   * Sự kiện hủy nghỉ việc hàng loạt
    */
   function batchHandleRevert() {
     Modal.confirm({
-      title: '取消离职',
-      content: '取消离职交接人也会清空',
-      okText: '确认',
-      cancelText: '取消',
+      title: 'Hủy nghỉ việc',
+      content: 'Khi hủy nghỉ việc, người bàn giao cũng bị xóa',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: () => {
         let rowValue = selectedRows.value;
         let rowData: any = [];
@@ -88,14 +88,14 @@
     });
   }
 
-  //获取操作栏事件
+  //Lấy sự kiện của thanh thao tác
   function getTableAction(record) {
     return [
       {
-        label: '取消离职',
+        label: 'Hủy nghỉ việc',
         icon: 'ant-design:redo-outlined',
         popConfirm: {
-          title: '是否取消离职,取消离职交接人也会清空',
+          title: 'Có hủy nghỉ việc không,Khi hủy nghỉ việc, người bàn giao cũng bị xóa',
           confirm: handleCancelQuit.bind(null, record),
         },
       },

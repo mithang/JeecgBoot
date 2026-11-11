@@ -1,8 +1,8 @@
 <template>
   <div class="tenant-padding" :class="[`${prefixCls}`]">
     <div class="my-tenant">
-      <span style="flex: 1">我的组织</span>
-      <span class="invited" @click="invitedClick">我的受邀信息<span class="approved-count" v-if="invitedCount>0">{{invitedCount}}</span></span>
+      <span style="flex: 1">Tổ chức của tôi</span>
+      <span class="invited" @click="invitedClick">Thông tin lời mời của tôi<span class="approved-count" v-if="invitedCount>0">{{invitedCount}}</span></span>
     </div>
     <div class="tenant-list" v-if="dataSource.length>0">
       <div v-for="item in dataSource" class="tenant-list-item" @click="drownClick(item)">
@@ -12,7 +12,7 @@
             <div class="vip-message">
               <div class="item-house" @click.stop="copyClick(item.houseNumber)">
                 <span>
-                  组织门牌号：{{ item.houseNumber }}
+                  Số nhà của tổ chức:{{ item.houseNumber }}
                   <Icon icon="ant-design:copy-outlined" style="font-size: 13px; margin-left: 2px" />
                 </span>
               </div>
@@ -20,12 +20,12 @@
           </div>
           <div class="item-right">
             <span v-if="item.userTenantStatus === '3'">
-              <span class="pointer examine">待审核</span>
-              <span class="pointer cancel-apply" @click.stop="cancelApplyClick(item.tenantUserId)">取消申请</span>
+              <span class="pointer examine">Chờ duyệt</span>
+              <span class="pointer cancel-apply" @click.stop="cancelApplyClick(item.tenantUserId)">Hủy đơn đăng ký</span>
             </span>
             <span v-else-if="item.userTenantStatus === '5'">
-              <span class="pointer examine" @click="joinOrRefuseClick(item.tenantUserId,'1')">加入</span>
-              <span class="pointer cancel-apply" @click.stop="joinOrRefuseClick(item.tenantUserId,'4')">拒绝</span>
+              <span class="pointer examine" @click="joinOrRefuseClick(item.tenantUserId,'1')">Tham gia</span>
+              <span class="pointer cancel-apply" @click.stop="joinOrRefuseClick(item.tenantUserId,'4')">Từ chối</span>
             </span>
             <div v-else style="width: 75px"></div>
             <span style="margin-left: 24px">
@@ -36,24 +36,24 @@
         </div>
         <div class="item-content" v-show="item.show">
           <div class="content-box">
-            <div class="content-name"> 组织名片 </div>
+            <div class="content-name"> Danh thiếp tổ chức </div>
             <div class="content-desc">
               <div class="flex-flow">
-                <div class="content-des-text">姓名</div>
+                <div class="content-des-text">Họ tên</div>
                 <div style="font-size: 13px;color: #000000">
                   {{ userDetail.realname }}
                 </div>
               </div>
               <div class="flex-flow">
-                <div class="content-des-text">部门</div>
+                <div class="content-des-text">Phòng ban</div>
                 <div style="font-size: 13px">
-                  {{ userDetail.orgCodeTxt ? userDetail.orgCodeTxt : '未填写' }}
+                  {{ userDetail.orgCodeTxt ? userDetail.orgCodeTxt : 'Chưa điền' }}
                 </div>
               </div>
               <div class="flex-flow">
-                <div class="content-des-text">职业</div>
+                <div class="content-des-text">Nghề nghiệp</div>
                 <div style="font-size: 13px">
-                  {{ userDetail.postText ? userDetail.postText : '未填写' }}
+                  {{ userDetail.postText ? userDetail.postText : 'Chưa điền' }}
                 </div>
               </div>
             </div>
@@ -65,11 +65,11 @@
               class="font-color333 flex-center margin-right40 font-size13 pointer"
             >
               <Icon icon="ant-design:edit-outlined" class="footer-icon" />
-              <span>查看租户名片</span>
+              <span>Xem danh thiếp đơn vị thuê</span>
             </span>
             <span v-else class="font-color9e flex-center margin-right40 font-size13">
               <Icon icon="ant-design:edit-outlined" class="footer-icon" />
-              <span>查看租户名片</span>
+              <span>Xem danh thiếp đơn vị thuê</span>
             </span>
             <span
               v-if="item.userTenantStatus !== '3'"
@@ -77,50 +77,50 @@
               class="font-color333 flex-center margin-right40 font-size13 pointer"
             >
               <Icon icon="ant-design:export-outlined" class="footer-icon" />
-              <span>退出租户</span>
+              <span>Rời khỏi đơn vị thuê</span>
             </span>
             <span v-else class="font-color9e flex-center margin-right40 font-size13">
               <Icon icon="ant-design:export-outlined" class="footer-icon" />
-              <span>退出租户</span>
+              <span>Rời khỏi đơn vị thuê</span>
             </span>
           </div>
         </div>
       </div>
     </div>
-    <a-empty v-else description="暂无数据" style="position: relative;top: 50px;"/>
+    <a-empty v-else description="Không có dữ liệu" style="position: relative;top: 50px;"/>
   </div>
   <a-modal v-model:open="tenantVisible" width="400px" wrapClassName="edit-tenant-setting">
     <template #title>
-      <div style="font-size: 17px; font-weight: 700">查看名片</div>
-      <div style="color: #9e9e9e; margin-top: 10px; font-size: 13px"> 名片是您在该组织下的个人信息，只在本组织中展示。 </div>
+      <div style="font-size: 17px; font-weight: 700">Xem danh thiếp</div>
+      <div style="color: #9e9e9e; margin-top: 10px; font-size: 13px"> Danh thiếp là thông tin cá nhân của bạn trong tổ chức này, chỉ hiển thị trong tổ chức này. </div>
     </template>
     <div style="margin-top: 24px; font-size: 13px; padding: 0 24px">
-      <div class="font-color75">姓名</div>
+      <div class="font-color75">Họ tên</div>
       <div class="margin-top6 margin-bottom-16">{{ userDetail.realname }}</div>
-      <div>部门</div>
-      <div class="margin-top6 margin-bottom-16">{{ userDetail.orgCodeTxt ? userDetail.orgCodeTxt : '未填写' }}</div>
-      <div>职位</div>
-      <div class="margin-top6 margin-bottom-16">{{ userDetail.postText ? userDetail.postText : '未填写' }}</div>
-      <div>工作地点</div>
-      <div class="margin-top6 margin-bottom-16">{{ userData.workPlace ? userData.workPlace : '未填写' }}</div>
-      <div>工号</div>
-      <div class="margin-top6 margin-bottom-16">{{ userDetail.workNo ? userDetail.workNo : '未填写' }}</div>
+      <div>Phòng ban</div>
+      <div class="margin-top6 margin-bottom-16">{{ userDetail.orgCodeTxt ? userDetail.orgCodeTxt : 'Chưa điền' }}</div>
+      <div>Chức vụ</div>
+      <div class="margin-top6 margin-bottom-16">{{ userDetail.postText ? userDetail.postText : 'Chưa điền' }}</div>
+      <div>Địa điểm làm việc</div>
+      <div class="margin-top6 margin-bottom-16">{{ userData.workPlace ? userData.workPlace : 'Chưa điền' }}</div>
+      <div>Mã nhân viên</div>
+      <div class="margin-top6 margin-bottom-16">{{ userDetail.workNo ? userDetail.workNo : 'Chưa điền' }}</div>
     </div>
   </a-modal>
 
-  <!-- 退出租户 -->
+  <!-- Rời khỏi đơn vị thuê -->
   <a-modal v-model:open="cancelVisible" width="800" destroy-on-close>
     <template #title>
       <div class="cancellation">
         <Icon icon="ant-design:warning-outlined" style="font-size: 20px;color: red"/>
-        退出租户 {{myTenantInfo.name}}
+        Rời khỏi đơn vị thuê {{myTenantInfo.name}}
       </div>
     </template>
     <a-form :model="formCancelState" ref="cancelTenantRef">
       <a-form-item name="tenantName">
         <a-row :span="24" style="padding: 20px 20px 0;font-size: 13px">
           <a-col :span="24">
-            请输入租户名称
+            Vui lòng nhập tên đơn vị thuê
           </a-col>
           <a-col :span="24" style="margin-top: 10px">
             <a-input v-model:value="formCancelState.tenantName" @change="tenantNameChange"/>
@@ -130,7 +130,7 @@
       <a-form-item name="loginPassword">
         <a-row :span="24" style="padding: 0 20px;font-size: 13px">
           <a-col :span="24">
-            请输入您的登录密码
+            Vui lòng nhập mật khẩu đăng nhập của bạn
           </a-col>
           <a-col :span="24" style="margin-top: 10px">
             <a-input-password v-model:value="formCancelState.loginPassword" />
@@ -139,13 +139,13 @@
       </a-form-item>
     </a-form>
     <template #footer>
-      <a-button type="primary" @click="handleOutClick" :disabled="outBtnDisabled">确定</a-button>
-      <a-button @click="handleCancelOutClick">取消</a-button>
+      <a-button type="primary" @click="handleOutClick" :disabled="outBtnDisabled">Xác nhận</a-button>
+      <a-button @click="handleCancelOutClick">Hủy</a-button>
     </template>
   </a-modal>
 
   <a-modal
-    title="变更拥有者"
+    title="Thay đổi chủ sở hữu"
     v-model:open="owenVisible"
     width="800"
     destroy-on-close
@@ -154,7 +154,7 @@
       <div style="padding: 20px">
         <a-row :span="24">
           <div class="change-owen">
-            只有变更拥有着之后,才能退出
+            Chỉ sau khi thay đổi chủ sở hữu,mới có thể thoát
           </div>
         </a-row>
         <a-row :span="24" style="margin-top: 10px">
@@ -163,14 +163,14 @@
       </div>
   </a-modal>
   
-  <!-- begin 我的受邀信息 -->
-  <a-modal title="我的受邀信息" v-model:open="invitedVisible" :footer="null">
+  <!-- begin Thông tin lời mời của tôi -->
+  <a-modal title="Thông tin lời mời của tôi" v-model:open="invitedVisible" :footer="null">
       <a-row :span="24" class="invited-row">
         <a-col :span="16">
-          组织
+          Tổ chức
         </a-col>
         <a-col :span="8">
-          操作
+          Thao tác
         </a-col>
       </a-row>
     <a-row :span="24" class="invited-row-list" v-for="item in invitedList">
@@ -178,13 +178,13 @@
         {{item.name}}
       </a-col>
       <a-col :span="8">
-        <span class="common" @click="joinOrRefuseClick(item.tenantUserId,'1')">加入</span>
-        <span class="common refuse" @click="joinOrRefuseClick(item.tenantUserId,'4')">拒绝</span>
+        <span class="common" @click="joinOrRefuseClick(item.tenantUserId,'1')">Tham gia</span>
+        <span class="common refuse" @click="joinOrRefuseClick(item.tenantUserId,'4')">Từ chối</span>
       </a-col>
     </a-row>
     <div style="height: 20px"></div>
   </a-modal>
-  <!-- end 我的受邀信息 -->
+  <!-- end Thông tin lời mời của tôi -->
 </template>
 
 <script lang="ts" name="tenant-setting" setup>
@@ -203,19 +203,19 @@ import {router} from "/@/router";
 import { useDesign } from '/@/hooks/web/useDesign';
 
 const { prefixCls } = useDesign('j-user-tenant-setting-container');
-//数据源
+//Nguồn dữ liệu
 const dataSource = ref<any>([]);
 const userStore = useUserStore();
 
-//数据源
+//Nguồn dữ liệu
 const { createMessage } = useMessage();
-//部门字典
+//Từ điển phòng ban
 const departOptions = ref<any>([]);
-//租户编辑是或否隐藏
+//Chỉnh sửa đơn vị thuê có ẩn hay không
 const tenantVisible = ref<boolean>(false);
-//用户数据
+//Dữ liệu người dùng
 const userData = ref<any>([]);
-//用户
+//Người dùng
 const userDetail = ref({
   realname: userStore.getUserInfo.realname,
   workNo: userStore.getUserInfo.workNo,
@@ -223,22 +223,22 @@ const userDetail = ref({
   postText: userStore.getUserInfo.postText,
 });
 /**
- * 初始化租户数据
+ * Khởi tạo dữ liệu đơn vị thuê
  */
   async function initDataSource() {
-  //获取用户数据
-    // 代码逻辑说明: [QQYUN-5608]用户导入后，邀请后,被导入人同意即可,新增被邀信息-----------
+  //Lấy dữ liệu người dùng
+    // Giải thích logic mã: [QQYUN-5608]Sau khi nhập người dùng, sau khi mời,Chỉ cần người được nhập đồng ý,Thêm mới thông tin được mời-----------
     getTenantListByUserId({ userTenantStatus: '1,3,5' }).then((res) => {
       if (res.success) {
         if(res.result && res.result.length>0){
           let result = res.result;
-          //存放正常和审核中的数组
+          //Lưu trữ các mảng bình thường và đang duyệt
           let normal:any = [];
-          //存放受邀的信息
+          //Lưu trữ thông tin được mời
           let invited:any = [];
           for (let i = 0; i < result.length; i++) {
             let status = result[i].userTenantStatus;
-            //状态为邀请的放入invited数组中
+            //Các mục có trạng thái là mời được đưa vào mảng invited
             if(status === '5'){
               invited.push(result[i]);
             }
@@ -262,39 +262,39 @@ const userDetail = ref({
   }
 
   /**
-   * 复制门户
+   * Sao chép cổng thông tin
    * @param value
    */
   function copyClick(value) {
-    // 创建input元素
+    // Tạo phần tử input
     const el = document.createElement('input');
-    // 给input元素赋值需要复制的文本
+    // Gán cho phần tử input văn bản cần sao chép
     el.setAttribute('value', value);
-    // 将input元素插入页面
+    // Chèn phần tử input vào trang
     document.body.appendChild(el);
-    // 选中input元素的文本
+    // Chọn văn bản của phần tử input
     el.select();
-    // 复制内容到剪贴板
+    // Sao chép nội dung vào bảng tạm (clipboard)
     document.execCommand('copy');
-    // 删除input元素
+    // Xóa phần tử input
     document.body.removeChild(el);
-    createMessage.success('复制成功');
+    createMessage.success('Sao chép thành công');
   };
 
   /**
-   * 取消申请
+   * Hủy đơn đăng ký
    * @param id
    */
   function cancelApplyClick(id) {
     Modal.confirm({
-      title: '取消申请',
-      content: '是否取消申请',
-      okText: '确认',
-      cancelText: '取消',
+      title: 'Hủy đơn đăng ký',
+      content: 'Có hủy đơn đăng ký không',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: () => {
         cancelApplyTenant({ tenantId: id }).then((res) => {
           if (res.success) {
-            createMessage.success('取消申请成功');
+            createMessage.success('Hủy đơn đăng ký thành công');
             initDataSource();
           }else{
             createMessage.warning(res.message);
@@ -307,7 +307,7 @@ const userDetail = ref({
   };
 
   /**
-   * 展开关闭事件
+   * Sự kiện mở rộng/đóng
    */
   function drownClick(value) {
     if (!value.show) {
@@ -318,7 +318,7 @@ const userDetail = ref({
   };
 
   /**
-   * 获取部门文本
+   * Lấy văn bản phòng ban
    * @param value
    */
   function getDepartText(value) {
@@ -328,19 +328,19 @@ const userDetail = ref({
     if (arr && arr.length > 0) {
       return arr[0].label;
     }
-    return '未填写';
+    return 'Chưa điền';
   };
 
   /**
-   * 底部文本点击事件
+   * Sự kiện nhấp vào văn bản ở cuối
    */
   function footerClick(type, item) {
     userData.value = item;
-    //编辑组织名片
+    //Chỉnh sửa danh thiếp tổ chức
     if (type === 'editTenant') {
       tenantVisible.value = true;
     }else if(type === 'exitTenant'){
-      //退出租户
+      //Rời khỏi đơn vị thuê
       formCancelState.value = {loginPassword:'', tenantName:''};
       outBtnDisabled.value = true;
       cancelVisible.value = true;
@@ -348,21 +348,21 @@ const userDetail = ref({
     }
   }
 
-  //退出租户弹窗
+  //Hộp thoại rời khỏi đơn vị thuê
   const cancelVisible = ref<boolean>(false);
-  //退出租户数据
+  //Dữ liệu rời khỏi đơn vị thuê
   const formCancelState = ref<any>({});
-  //租户数据
+  //Dữ liệu đơn vị thuê
   const myTenantInfo = ref<any>({});
-  //注销租户弹窗确定按钮是否可以点击
+  //Nút xác nhận trong hộp thoại hủy đơn vị thuê có thể nhấn hay không
   const outBtnDisabled = ref<boolean>(true);
-  //拥有者
+  //Chủ sở hữu
   const tenantOwen = ref<string>('');
-  //拥有者弹窗
+  //Hộp thoại chủ sở hữu
   const owenVisible = ref<boolean>(false);
 
   /**
-   * 租户名称值改变事件
+   * Sự kiện thay đổi giá trị tên đơn vị thuê
    */
   function tenantNameChange() {
     let name = unref(myTenantInfo).name;
@@ -375,11 +375,11 @@ const userDetail = ref({
   }
 
   /**
-   * 退出确定点击事件
+   * Sự kiện nhấp xác nhận thoát
    */
   async function handleOutClick() {
     if(!unref(formCancelState).loginPassword){
-        createMessage.warning("请输入登录密码");
+        createMessage.warning("Vui lòng nhập mật khẩu đăng nhập");
         return;
     }
     console.log("myTenantInfo::::",myTenantInfo);
@@ -388,23 +388,23 @@ const userDetail = ref({
         createMessage.success(res.message);
         cancelVisible.value = false;
         initDataSource();
-        // 代码逻辑说明: 【QQYUN-6822】7、登录拥有多个租户身份的用户，退出租户，只剩下一个租户后显示为空---
+        // Giải thích logic mã: 【QQYUN-6822】7、Người dùng đăng nhập với nhiều tư cách đơn vị thuê, sau khi rời các đơn vị thuê và chỉ còn một đơn vị thuê thì hiển thị trống---
         userExitChangeLoginTenantId(unref(myTenantInfo).tenantUserId);
       } else {
         if (res.message === 'assignedOwen') {
-          //需要指定变更者
+          //Cần chỉ định người thay đổi
           owenVisible.value = true;
           cancelVisible.value = false;
-        // 代码逻辑说明: 【QQYUN-5270】名下租户全部退出后，再次登录，提示租户全部冻结。拥有者提示前往注销------------
+        // Giải thích logic mã: 【QQYUN-5270】Sau khi rời khỏi tất cả đơn vị thuê đứng tên, đăng nhập lại sẽ nhắc mọi đơn vị thuê đều bị đóng băng. Chủ sở hữu được nhắc đi tới hủy tài khoản------------
         }else if(res.message === 'cancelTenant'){
           cancelVisible.value = false;
           let fullPath = router.currentRoute.value.fullPath;
           Modal.confirm({
-            title: '您是该组织的拥有者',
-            content: '该组织下没有其他成员，需要您前往注销',
-            okText: '前往注销',
+            title: 'Bạn là chủ sở hữu của tổ chức này',
+            content: 'Tổ chức này không còn thành viên khác, bạn cần đi tới hủy tài khoản',
+            okText: 'Đi tới hủy tài khoản',
             okType: 'danger',
-            cancelText: '取消',
+            cancelText: 'Hủy',
             onOk: () => {
               if(fullPath === '/system/usersetting'){
                 return;
@@ -422,7 +422,7 @@ const userDetail = ref({
   }
 
   /**
-   * 退出租户取消事件
+   * Sự kiện hủy khi rời khỏi đơn vị thuê
    */
   function handleCancelOutClick() {
     cancelVisible.value = false;
@@ -430,18 +430,18 @@ const userDetail = ref({
   }
 
   /**
-   * 变更拥有着
+   * Thay đổi chủ sở hữu
    */
   function changeOwen() {
     if(!unref(tenantOwen)){
-      createMessage.warning("请选择变更拥有者");
+      createMessage.warning("Vui lòng chọn người thay đổi chủ sở hữu");
       return;
     }
     changeOwenUserTenant({ userId:unref(tenantOwen), tenantId:unref(myTenantInfo).tenantUserId }).then((res) =>{
       if(res.success){
         createMessage.success(res.message);
         initDataSource();
-        // 代码逻辑说明: 【QQYUN-6822】7、登录拥有多个租户身份的用户，退出租户，只剩下一个租户后显示为空---
+        // Giải thích logic mã: 【QQYUN-6822】7、Người dùng đăng nhập với nhiều tư cách đơn vị thuê, sau khi rời các đơn vị thuê và chỉ còn một đơn vị thuê thì hiển thị trống---
         userExitChangeLoginTenantId(unref(myTenantInfo).tenantUserId);
       } else {
         createMessage.warning(res.message);
@@ -449,22 +449,22 @@ const userDetail = ref({
     })
   }
   
-  //邀请数量
+  //Số lượng lời mời
   const invitedCount = ref<number>(0);
-  //受邀信息
+  //Thông tin được mời
   const invitedList = ref<any>([]);
-  //受邀信息弹窗
+  //Hộp thoại thông tin được mời
   const invitedVisible = ref<boolean>(false);
 
   /**
-   * 受邀信息点击事件
+   * Sự kiện nhấp vào thông tin được mời
    */
   function invitedClick() {
     invitedVisible.value = true;
   }
 
   /**
-   * 加入组织点击事件
+   * Sự kiện nhấp vào tham gia tổ chức
    */
   async function joinOrRefuseClick(tenantId,status) {
     await agreeOrRefuseJoinTenant( { tenantId:Number.parseInt(tenantId), status:status });
@@ -485,9 +485,9 @@ const userDetail = ref({
   display: flex;
   font-size: 17px;
   font-weight: 700!important;
-  /*begin 兼容暗夜模式*/
+  /*begin Tương thích chế độ tối*/
   color: @text-color;
-  /*end 兼容暗夜模式*/
+  /*end Tương thích chế độ tối*/
   margin-bottom: 20px;
   .invited{
     font-size: 14px;
@@ -502,9 +502,9 @@ const userDetail = ref({
   overflow-x: hidden;
 }
 .tenant-list-item{
-  /*begin 兼容暗夜模式*/
+  /*begin Tương thích chế độ tối*/
   border: 1px solid @border-color-base;
-  /*end 兼容暗夜模式*/
+  /*end Tương thích chế độ tối*/
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -520,9 +520,9 @@ const userDetail = ref({
     padding: 14px 0;
     cursor: pointer;
     font-size:17px;
-    /*begin 兼容暗夜模式*/
+    /*begin Tương thích chế độ tối*/
     color: @text-color;
-    /*end 兼容暗夜模式*/
+    /*end Tương thích chế độ tối*/
     font-weight: 700!important;
   }
 }
@@ -548,18 +548,18 @@ const userDetail = ref({
   transition: ease-in 2s;
 
   .content-box {
-    /*begin 兼容暗夜模式*/
+    /*begin Tương thích chế độ tối*/
     border-top: 1px solid @border-color-base;
-    /*end 兼容暗夜模式*/
+    /*end Tương thích chế độ tối*/
     box-sizing: border-box;
     display: flex;
     padding: 24px 0;
   }
 
   .content-name {
-    /*begin 兼容暗夜模式*/
+    /*begin Tương thích chế độ tối*/
     color: @text-color;
-    /*end 兼容暗夜模式*/
+    /*end Tương thích chế độ tối*/
     text-align: center;
     width: 100px;
     font-size: 13px;
@@ -571,9 +571,9 @@ const userDetail = ref({
   }
 
   .content-des-text {
-    /*begin 兼容暗夜模式*/
+    /*begin Tương thích chế độ tối*/
     color: @text-color;
-    /*end 兼容暗夜模式*/
+    /*end Tương thích chế độ tối*/
     text-align: left;
     width: 76px;
     font-size: 13px;
@@ -593,9 +593,9 @@ const userDetail = ref({
 }
 
 .footer-box {
-  /*begin 兼容暗夜模式*/
+  /*begin Tương thích chế độ tối*/
   border-top: 1px solid @border-color-base;
-  /*end 兼容暗夜模式*/
+  /*end Tương thích chế độ tối*/
   box-sizing: border-box;
   display: flex;
   padding: 24px 0;
@@ -606,7 +606,7 @@ const userDetail = ref({
   margin-right: 40px;
 }
 
-/*begin 兼容暗夜模式*/
+/*begin Tương thích chế độ tối*/
 .font-color333 {
   color: @text-color;
   font-weight: normal;
@@ -619,7 +619,7 @@ const userDetail = ref({
 .font-color75 {
   color: @text-color;
 }
-/*end 兼容暗夜模式*/
+/*end Tương thích chế độ tối*/
 
 .font-size13 {
   font-size: 13px;
@@ -685,7 +685,7 @@ const userDetail = ref({
   font-size: 14px;
   font-weight: 700;
 }
-// 代码逻辑说明: 被邀弹窗样式------------
+// Giải thích logic mã: Kiểu của hộp thoại được mời------------
 .approved-count{
   background: #ffd2d2;
   border-radius: 19px;
@@ -720,9 +720,9 @@ const userDetail = ref({
 </style>
 
 <style lang="less">
-  // 代码逻辑说明: [issues/563]暗色主题部分失效
+  // Giải thích logic mã: [issues/563]Một phần chủ đề tối không hoạt động
 @prefix-cls: ~'@{namespace}-j-user-tenant-setting-container';
-/*begin 兼容暗夜模式*/
+/*begin Tương thích chế độ tối*/
 .@{prefix-cls} {
 
   .my-tenant{
@@ -755,7 +755,7 @@ const userDetail = ref({
     border-top: 1px solid @border-color-base;
   }
 
-  /*begin 兼容暗夜模式*/
+  /*begin Tương thích chế độ tối*/
   .font-color333 {
     color: @text-color;
   }
@@ -768,5 +768,5 @@ const userDetail = ref({
     color: @text-color;
   }
 }
-/*end 兼容暗夜模式*/
+/*end Tương thích chế độ tối*/
 </style>

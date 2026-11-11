@@ -2,11 +2,11 @@
 <BasicModal v-bind="$attrs" @register="registerModal" width="500px"  :title="title" :showCancelBtn="false" :showOkBtn="false">
   <a-form class="antd-modal-form" ref="formRef" :model="formState" :rules="validatorRules">
     <a-form-item name="email">
-      <a-input size="large" v-model:value="formState.email" placeholder="请输入邮箱" />
+      <a-input size="large" v-model:value="formState.email" placeholder="Vui lòng nhập email" />
     </a-form-item>
     <a-form-item>
       <a-button size="large" type="primary" block @click="updateEmail">
-        确认
+        Xác nhận
       </a-button>
     </a-form-item>
   </a-form>
@@ -36,7 +36,7 @@ const formState = reactive<Record<string, any>>({
 const formRef = ref();
 
 const validatorRules: Record<string, Rule[]> = {
-  email: [{...rules.duplicateCheckRule("sys_user",'email',formState,{ label:'邮箱' })[0]},{ required: true, type: 'email', message: '邮箱格式不正确' }],
+  email: [{...rules.duplicateCheckRule("sys_user",'email',formState,{ label:'Email' })[0]},{ required: true, type: 'email', message: 'Định dạng email không đúng' }],
 };
 const useForm = Form.useForm;
 const title = ref<string>('');
@@ -45,20 +45,20 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
   formRef.value.resetFields();
   formRef.value.clearValidate();
   setModalProps({ confirmLoading: false });
-  title.value = '修改邮箱';
-  //赋值
+  title.value = 'Đổi email';
+  //Gán giá trị
   data.record.smscode = '';
   Object.assign(formState, data.record);
 });
 
 /**
- * 更新邮箱
+ * Cập nhật email
  */
 async function updateEmail() {
   await formRef.value.validateFields();
   userEdit(formState).then((res) =>{
     if(res.success){
-      createMessage.success("修改邮箱成功")
+      createMessage.success("Đổi email thành công")
       emit("success")
       closeModal();
     }else{

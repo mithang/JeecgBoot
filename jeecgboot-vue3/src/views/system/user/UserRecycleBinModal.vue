@@ -1,28 +1,28 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="用户回收站" :showOkBtn="false" width="1000px" destroyOnClose @fullScreen="handleFullScreen">
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Thùng rác người dùng" :showOkBtn="false" width="1000px" destroyOnClose @fullScreen="handleFullScreen">
     <BasicTable @register="registerTable" :rowSelection="rowSelection" :scroll="scroll">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
         <a-dropdown v-if="checkedKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                批量删除
+                Xóa hàng loạt
               </a-menu-item>
               <a-menu-item key="1" @click="batchHandleRevert">
                 <Icon icon="ant-design:redo-outlined"></Icon>
-                批量还原
+                Khôi phục hàng loạt
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="getTableAction(record)" />
@@ -40,14 +40,14 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   const { createConfirm } = useMessage();
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
   const checkedKeys = ref<Array<string | number>>([]);
   const [registerModal] = useModalInner(() => {
     checkedKeys.value = [];
   });
   const scroll = ref({ y: 0 });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload }] = useTable({
     api: getRecycleBinList,
     columns: recycleColumns,
@@ -63,13 +63,13 @@
     canResize: false,
     actionColumn: {
       width: 150,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       // slots: { customRender: 'action' },
       fixed: undefined,
     },
   });
-  // 代码逻辑说明: 【TV360X-1657】系统用户回收站弹窗分页展示在可视区内
+  // Giải thích logic mã: 【TV360X-1657】Phân trang trong hộp thoại thùng rác người dùng hệ thống hiển thị trong vùng nhìn thấy được
   const handleFullScreen = (maximize) => {
     setTableHeight(maximize);
   };
@@ -96,7 +96,7 @@
     { deep: true }
   );
   /**
-   * 选择列配置
+   * Cấu hình cột chọn
    */
   const rowSelection = {
     type: 'checkbox',
@@ -105,58 +105,58 @@
     onChange: onSelectChange,
   };
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;
   }
   /**
-   * 还原事件
+   * Sự kiện khôi phục
    */
   async function handleRevert(record) {
     await putRecycleBin({ userIds: record.id }, reload);
     emit('success');
   }
   /**
-   * 批量还原事件
+   * Sự kiện khôi phục hàng loạt
    */
   function batchHandleRevert() {
     handleRevert({ id: toRaw(unref(checkedKeys)).join(',') });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteRecycleBin({ userIds: record.id }, reload);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   function batchHandleDelete() {
     createConfirm({
       iconType: 'warning',
-      title: '删除',
-      content: '确定要永久删除吗？删除后将不可恢复！',
+      title: 'Xóa',
+      content: 'Bạn có chắc muốn xóa vĩnh viễn không? Sau khi xóa sẽ không thể khôi phục!',
       onOk: () => handleDelete({ id: toRaw(unref(checkedKeys)).join(',') }),
       onCancel() {},
     });
   }
-  //获取操作栏事件
+  //Lấy sự kiện của thanh thao tác
   function getTableAction(record) {
     return [
       {
-        label: '取回',
+        label: 'Thu hồi',
         icon: 'ant-design:redo-outlined',
         popConfirm: {
-          title: '是否确认还原',
+          title: 'Xác nhận khôi phục?',
           confirm: handleRevert.bind(null, record),
         },
       },
       {
-        label: '彻底删除',
+        label: 'Xóa vĩnh viễn',
         icon: 'ant-design:scissor-outlined',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },

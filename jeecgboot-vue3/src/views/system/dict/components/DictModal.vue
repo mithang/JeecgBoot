@@ -9,41 +9,41 @@
   import { BasicForm, useForm } from '/src/components/Form';
   import { formSchema } from '../dict.data';
   import { saveOrUpdateDict } from '../dict.api';
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
   const rowId = ref('');
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     schemas: formSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false, minHeight: 80 });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
       rowId.value = data.record.id;
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
   });
-  //设置标题
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增字典' : '编辑字典'));
-  //表单提交事件
+  //Đặt tiêu đề
+  const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới từ điển' : 'Chỉnh sửa từ điển'));
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       let values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateDict(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
     } finally {
       setModalProps({ confirmLoading: false });

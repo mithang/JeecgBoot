@@ -1,44 +1,44 @@
 <template>
-  <!--引用表格-->
+  <!--Tham chiếu bảng-->
   <BasicTable @register="registerTable" :rowSelection="rowSelection">
-    <!--插槽:table标题-->
+    <!--Khe cắm:table tiêu đề-->
     <template #tableTitle>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
-      <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-      <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
-      <a-button type="primary" @click="handlerRefreshCache" preIcon="ant-design:sync-outlined"> 刷新缓存</a-button>
-      <a-button type="primary" @click="openRecycleModal(true)" preIcon="ant-design:hdd-outlined"> 回收站</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> Thêm mới</a-button>
+      <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> Xuất (export)</a-button>
+      <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">Nhập (import)</j-upload-button>
+      <a-button type="primary" @click="handlerRefreshCache" preIcon="ant-design:sync-outlined"> Làm mới bộ nhớ đệm</a-button>
+      <a-button type="primary" @click="openRecycleModal(true)" preIcon="ant-design:hdd-outlined"> Thùng rác</a-button>
 
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <template #overlay>
           <a-menu>
             <a-menu-item key="1" @click="batchHandleDelete">
               <Icon icon="ant-design:delete-outlined"></Icon>
-              删除
+              Xóa
             </a-menu-item>
           </a-menu>
         </template>
         <a-button
-          >批量操作
+          >Thao tác hàng loạt
           <Icon icon="ant-design:down-outlined"></Icon>
         </a-button>
       </a-dropdown>
     </template>
-    <!--操作栏-->
+    <!--Thanh thao tác-->
     <template #action="{ record }">
       <TableAction :actions="getTableAction(record)" />
     </template>
   </BasicTable>
-  <!--字典弹窗-->
+  <!--Hộp thoại từ điển-->
   <DictModal @register="registerModal" @success="handleSuccess" />
-  <!--字典配置抽屉-->
+  <!--Ngăn kéo cấu hình từ điển-->
   <DictItemList @register="registerDrawer" />
-  <!--回收站弹窗-->
+  <!--Hộp thoại thùng rác-->
   <DictRecycleBinModal @register="registerModal1" @success="reload" />
 </template>
 
 <script lang="ts" name="system-dict" setup>
-  //ts语法
+  //tsCú pháp
   import { ref, computed, unref } from 'vue';
   import { BasicTable, TableAction } from '/src/components/Table';
   import { useDrawer } from '/src/components/Drawer';
@@ -54,20 +54,20 @@
   import { useUserStore } from '/@/store/modules/user';
 
   const { createMessage } = useMessage();
-  //字典model
+  //Từ điểnmodel
   const [registerModal, { openModal }] = useModal();
-  //字典配置drawer
+  //Cấu hình từ điểndrawer
   const [registerDrawer, { openDrawer }] = useDrawer();
   import { useListPage } from '/@/hooks/system/useListPage';
 
-  //回收站model
+  //Thùng rácmodel
   const [registerModal1, { openModal: openRecycleModal }] = useModal();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     designScope: 'dict-template',
     tableProps: {
-      title: '数据字典',
+      title: 'Từ điển dữ liệu',
       api: list,
       columns: columns,
       formConfig: {
@@ -77,9 +77,9 @@
         width: 240,
       },
     },
-    // 代码逻辑说明: [issues/I5AMDD]导入/导出功能，操作后提示没有传递 export.url/import.url 参数------------
+    // Giải thích logic mã: [issues/I5AMDD]Chức năng nhập/xuất, sau khi thao tác nhắc rằng chưa truyền tham số export.url/import.url------------
     exportConfig: {
-      name: '数据字典列表',
+      name: 'Danh sách từ điển dữ liệu',
       url: getExportUrl,
     },
     importConfig: {
@@ -87,11 +87,11 @@
     },
   });
 
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload, updateTableDataRecord }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleCreate() {
     openModal(true, {
@@ -99,7 +99,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   async function handleEdit(record: Recordable) {
     openModal(true, {
@@ -108,7 +108,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   async function handleDetail(record) {
     openModal(true, {
@@ -117,7 +117,7 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteDict({ id: record.id }, () => {
@@ -126,11 +126,11 @@
     });
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteDict({ ids: selectedRowKeys.value }, () => {
-      // 代码逻辑说明: 【TV360X-1665】数据字典批量删除后选中也清空
+      // Giải thích logic mã: 【TV360X-1665】Sau khi xóa hàng loạt từ điển dữ liệu, danh sách đã chọn cũng bị xóa
       reload();
       selectedRowKeys.value = [];
       selectedRows.value = [];
@@ -138,7 +138,7 @@
     });
   }
   /**
-   * 成功回调
+   * Callback thành công
    */
   async function handleSuccess({ isUpdate, values }) {
     if (isUpdate) {
@@ -146,27 +146,27 @@
     } else {
       reload();
     }
-    // 代码逻辑说明: 新增/编辑字典后同步刷新字典缓存，避免页面引用不到或显示旧值
+    // Giải thích logic mã: Sau khi thêm mới/chỉnh sửa từ điển thì đồng bộ làm mới bộ nhớ đệm từ điển, tránh việc trang không tham chiếu được hoặc hiển thị giá trị cũ
     await handlerRefreshCache(false);
   }
   /**
-   * 刷新缓存
+   * Làm mới bộ nhớ đệm
    */
   async function handlerRefreshCache(showTip = true) {
     const result = await refreshCache();
     if (result.success) {
       const res = await queryAllDictItems();
       removeAuthCache(DB_DICT_DATA_KEY);
-      // 代码逻辑说明: 【QQYUN-6417】生产环境字典慢的问题
+      // Giải thích logic mã: 【QQYUN-6417】Sự cố từ điển chậm trong môi trường production
       const userStore = useUserStore();
       userStore.setAllDictItems(res.result);
-      showTip && createMessage.success('刷新缓存完成！');
+      showTip && createMessage.success('Làm mới bộ nhớ đệm hoàn thành!');
     } else {
-      showTip && createMessage.error('刷新缓存失败！');
+      showTip && createMessage.error('Làm mới bộ nhớ đệm thất bại!');
     }
   }
   /**
-   * 字典配置
+   * Cấu hình từ điển
    */
   function handleItem(record) {
     openDrawer(true, {
@@ -174,22 +174,22 @@
     });
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '字典配置',
+        label: 'Cấu hình từ điển',
         onClick: handleItem.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '确定删除吗?',
+          title: 'Bạn có chắc muốn xóa không?',
           confirm: handleDelete.bind(null, record),
         },
       },

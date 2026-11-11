@@ -11,14 +11,14 @@ enum Api {
   searchBy = '/sys/sysDepart/searchBy',
 }
 
-// 部门用户API
+// Người dùng phòng banAPI
 enum DepartUserApi {
   list = '/sys/user/departUserList',
   link = '/sys/user/editSysDepartWithUser',
   unlink = '/sys/user/deleteUserInDepartBatch',
 }
 
-// 部门角色API
+// Vai trò phòng banAPI
 enum DepartRoleApi {
   list = '/sys/sysDepartRole/list',
   deleteBatch = '/sys/sysDepartRole/deleteBatch',
@@ -34,41 +34,41 @@ enum DepartRoleApi {
 }
 
 /**
- * 获取部门树列表
+ * Lấy danh sách cây phòng ban
  */
 export const queryMyDepartTreeList = (params?) => defHttp.get({ url: Api.treeList, params }, { isTransformResponse: false });
 
 /**
- * 查询数据，以树结构形式加载所有部门的名称
+ * Truy vấn dữ liệu, tải tên của tất cả phòng ban dưới dạng cấu trúc cây
  */
 export const queryIdTree = (params?) => defHttp.get({ url: Api.queryIdTree, params });
 
 /**
- * 根据部门ID查询完整部门信息
+ * Dựa vào ID phòng ban để truy vấn thông tin phòng ban đầy đủ
  */
 export const queryDepartByIds = (params) => defHttp.get({ url: Api.queryByIds, params });
 
 /**
- * 根据关键字搜索部门
+ * Tìm kiếm phòng ban theo từ khóa
  */
 export const searchByKeywords = (params) => defHttp.get({ url: Api.searchBy, params });
 
 /**
- * 查询部门下的用户信息
+ * Truy vấn thông tin người dùng thuộc phòng ban
  */
 export const departUserList = (params) => defHttp.get({ url: DepartUserApi.list, params });
 
 /**
- * 批量添加部门和用户的关联关系
+ * Thêm hàng loạt quan hệ liên kết giữa phòng ban và người dùng
  *
- * @param departId 部门ID
- * @param userIdList 用户ID列表
+ * @param departId Phòng banID
+ * @param userIdList Danh sách ID người dùng
  */
 export const linkDepartUserBatch = (departId: string, userIdList: string[]) =>
   defHttp.post({ url: DepartUserApi.link, params: { depId: departId, userIdList } });
 
 /**
- * 批量取消部门和用户的关联关系
+ * Hủy hàng loạt quan hệ liên kết giữa phòng ban và người dùng
  */
 export const unlinkDepartUserBatch = (params, confirm = false) => {
   return new Promise((resolve, reject) => {
@@ -78,8 +78,8 @@ export const unlinkDepartUserBatch = (params, confirm = false) => {
     if (confirm) {
       createConfirm({
         iconType: 'warning',
-        title: '取消关联',
-        content: '确定要取消关联吗？',
+        title: 'Hủy bỏ liên kết',
+        content: 'Bạn có chắc muốn hủy liên kết không?',
         onOk: () => doDelete(),
         onCancel: () => reject(),
       });
@@ -90,12 +90,12 @@ export const unlinkDepartUserBatch = (params, confirm = false) => {
 };
 
 /**
- * 查询部门角色信息
+ * Truy vấn thông tin vai trò phòng ban
  */
 export const departRoleList = (params) => defHttp.get({ url: DepartRoleApi.list, params });
 
 /**
- * 保存或者更新部门角色
+ * Lưu hoặc cập nhật vai trò phòng ban
  */
 export const saveOrUpdateDepartRole = (params, isUpdate) => {
   if (isUpdate) {
@@ -106,7 +106,7 @@ export const saveOrUpdateDepartRole = (params, isUpdate) => {
 };
 
 /**
- * 批量删除部门角色
+ * Xóa hàng loạt vai trò phòng ban
  */
 export const deleteBatchDepartRole = (params, confirm = false) => {
   return new Promise((resolve, reject) => {
@@ -116,8 +116,8 @@ export const deleteBatchDepartRole = (params, confirm = false) => {
     if (confirm) {
       createConfirm({
         iconType: 'warning',
-        title: '删除',
-        content: '确定要删除吗？',
+        title: 'Xóa',
+        content: 'Bạn có chắc chắn muốn xóa không?',
         onOk: () => doDelete(),
         onCancel: () => reject(),
       });
@@ -128,38 +128,38 @@ export const deleteBatchDepartRole = (params, confirm = false) => {
 };
 
 /**
- * 用户角色授权功能，查询菜单权限树
+ * Chức năng cấp quyền vai trò người dùng, truy vấn cây quyền menu
  */
 export const queryTreeListForDeptRole = (params) => defHttp.get({ url: DepartRoleApi.queryTreeListForDeptRole, params });
 /**
- * 查询角色授权
+ * Truy vấn cấp quyền vai trò
  */
 export const queryDeptRolePermission = (params) => defHttp.get({ url: DepartRoleApi.queryDeptRolePermission, params });
 /**
- * 保存角色授权
+ * Lưu cấp quyền vai trò
  */
 export const saveDeptRolePermission = (params) => defHttp.post({ url: DepartRoleApi.saveDeptRolePermission, params });
 
 /**
- *  查询部门角色数据权限列表
+ *  Truy vấn danh sách quyền dữ liệu của vai trò phòng ban
  */
 export const queryDepartRoleDataRule = (functionId, departId, roleId, params?) => {
   let url = `${DepartRoleApi.dataRule}/${unref(functionId)}/${unref(departId)}/${unref(roleId)}`;
   return defHttp.get({ url, params });
 };
 /**
- * 保存部门角色数据权限
+ * Lưu quyền dữ liệu của vai trò phòng ban
  */
 export const saveDepartRoleDataRule = (params) => defHttp.post({ url: DepartRoleApi.dataRule, params });
 /**
- * 查询部门角色用户授权
+ * Truy vấn cấp quyền người dùng của vai trò phòng ban
  */
 export const queryDepartRoleUserList = (params) => defHttp.get({ url: DepartRoleApi.getDeptRoleList, params });
 /**
- * 根据 userId 查询部门角色用户授权
+ * Truy vấn cấp quyền người dùng của vai trò phòng ban theo userId
  */
 export const queryDepartRoleByUserId = (params) => defHttp.get({ url: DepartRoleApi.getDeptRoleByUserId, params });
 /**
- * 保存部门角色用户授权
+ * Lưu cấp quyền người dùng của vai trò phòng ban
  */
 export const saveDepartRoleUser = (params) => defHttp.post({ url: DepartRoleApi.saveDeptRoleUser, params });

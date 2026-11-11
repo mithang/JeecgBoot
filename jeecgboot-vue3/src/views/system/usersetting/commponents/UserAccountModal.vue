@@ -26,7 +26,7 @@ const emit = defineEmits(['register','success']);
 const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
   await resetFields();
   setModalProps({ confirmLoading: false });
-  title.value = '编辑个人资料';
+  title.value = 'Chỉnh sửa hồ sơ cá nhân';
   if(data.record.post){
     data.record.post = data.record.post.split(",")
   }
@@ -34,21 +34,21 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
     data.record.relTenantIds = data.record.relTenantIds.split(",")
   }
   userDetail.value = data.record;
-  // 代码逻辑说明: [QQYUN-3976]个人信息 编辑时，刚注册没有设置生日 生日显示有问题------------
-  if(data.record.birthday === '未填写'){
+  // Giải thích logic mã: [QQYUN-3976]Thông tin cá nhân: khi chỉnh sửa, vừa đăng ký chưa đặt ngày sinh thì hiển thị ngày sinh có vấn đề------------
+  if(data.record.birthday === 'Chưa điền'){
     data.record.birthday = undefined;
   }
   await setFieldsValue({ ...data.record });
 });
 
 /**
- * 数据修改和新增
+ * Sửa và thêm mới dữ liệu
  */
 async function handleSubmit() {
   try {
     let values = await validate();
     setModalProps({ confirmLoading: true });
-    //提交表单
+    //Gửi biểu mẫu
     await userEdit(values).then((res) =>{
       if(res.success){
         createMessage.success(res.message)
@@ -56,11 +56,11 @@ async function handleSubmit() {
         createMessage.warn(res.message)
       }
     });
-    //更新缓存
+    //Cập nhật bộ nhớ đệm
     Object.assign(userDetail.value,values)
     userStore.setUserInfo(unref(userDetail));
     emit('success')
-    //关闭弹窗
+    //Đóng cửa sổ bật lên
     closeModal();
   } finally {
     setModalProps({ confirmLoading: false });

@@ -8,13 +8,13 @@
     <a-col :xl="18" :lg="16" :md="14" :sm="24" style="flex: 1">
       <a-card :bordered="false" style="height: 100%">
         <a-tabs defaultActiveKey="user-info">
-          <a-tab-pane tab="基本信息" key="base-info" forceRender>
+          <a-tab-pane tab="Thông tin cơ bản" key="base-info" forceRender>
             <DepartBaseInfoTab :data="departData" />
           </a-tab-pane>
-          <a-tab-pane tab="用户信息" key="user-info">
+          <a-tab-pane tab="Thông tin người dùng" key="user-info">
             <DepartUserInfoTab :key="reRender" :data="departData" />
           </a-tab-pane>
-          <a-tab-pane tab="部门角色" key="role-info">
+          <a-tab-pane tab="Vai trò phòng ban" key="role-info">
             <DepartRoleInfoTab :key="reRender" :data="departData" />
           </a-tab-pane>
         </a-tabs>
@@ -35,16 +35,16 @@
   const { prefixCls } = useDesign('depart-user');
   provide('prefixCls', prefixCls);
 
-  // 当前选中的部门信息
+  // Thông tin phòng ban đang chọn
   let departData = ref({});
 
   const reRender = ref(-1);
 
-  // 左侧树选择后触发
+  // Kích hoạt sau khi chọn cây bên trái
   function onTreeSelect(data) {
-    // 代码逻辑说明: 【issues/7658】我的部门无部门列表数据时，点击查询或者重置能查出数据
+    // Giải thích logic mã: 【issues/7658】Khi Phòng ban của tôi không có dữ liệu danh sách phòng ban, nhấn tìm kiếm hoặc đặt lại vẫn truy vấn ra dữ liệu
     if (reRender.value == -1) {
-      // 重新渲染组件
+      // Kết xuất lại component
       reRender.value = Math.random();
     }
     departData.value = data;

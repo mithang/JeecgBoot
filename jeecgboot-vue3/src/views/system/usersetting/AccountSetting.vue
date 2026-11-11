@@ -1,31 +1,31 @@
 <template>
   <div :class="[`${prefixCls}`]">
-    <div class="my-account">账户</div>
+    <div class="my-account">Tài khoản ngân hàng</div>
     <div class="account-row-item clearfix">
-      <div class="account-label gray-75">手机</div>
+      <div class="account-label gray-75">Điện thoại</div>
       <span class="gray" v-if="userDetail.phoneText">{{ userDetail.phoneText}}</span>
-      <span class="pointer blue-e5 phone-margin" @click="updatePhone" v-if="userDetail.phone">修改</span>
-      <span class="pointer blue-e5 phone-margin" @click="bindPhone" v-else>绑定</span>
-      <!--      <span class="pointer blue-e5" @click="unbindPhone" v-if="userDetail.phone">解绑?</span>-->
-      <!--      <span class="pointer blue-e5" @click="unbindPhone" v-else>绑定?</span>-->
+      <span class="pointer blue-e5 phone-margin" @click="updatePhone" v-if="userDetail.phone">Sửa</span>
+      <span class="pointer blue-e5 phone-margin" @click="bindPhone" v-else>Liên kết</span>
+      <!--      <span class="pointer blue-e5" @click="unbindPhone" v-if="userDetail.phone">Gỡ liên kết?</span>-->
+      <!--      <span class="pointer blue-e5" @click="unbindPhone" v-else>Liên kết?</span>-->
     </div>
     <div class="account-row-item clearfix">
-      <div class="account-label gray-75">邮箱</div>
-      <span class="gray">{{ userDetail.email ? userDetail.email : '未填写' }}</span>
-      <span class="pointer blue-e5 phone-margin" @click="updateEmail">修改</span>
-      <!--      <span class="pointer blue-e5" @click="unbindEmail" v-if="userDetail.email">解绑?</span>-->
-      <!--      <span class="pointer blue-e5" @click="unbindEmail" v-else>绑定?</span>-->
-      <!--      <span class="pointer blue-e5" style="margin-left:5px" @click="checkEmail" v-if="userDetail.email">验证?</span>-->
+      <div class="account-label gray-75">Email</div>
+      <span class="gray">{{ userDetail.email ? userDetail.email : 'Chưa điền' }}</span>
+      <span class="pointer blue-e5 phone-margin" @click="updateEmail">Sửa</span>
+      <!--      <span class="pointer blue-e5" @click="unbindEmail" v-if="userDetail.email">Gỡ liên kết?</span>-->
+      <!--      <span class="pointer blue-e5" @click="unbindEmail" v-else>Liên kết?</span>-->
+      <!--      <span class="pointer blue-e5" style="margin-left:5px" @click="checkEmail" v-if="userDetail.email">Xác thực?</span>-->
     </div>
     <div class="account-row-item">
-      <div class="account-label gray-75">密码</div>
+      <div class="account-label gray-75">Mật khẩu</div>
       <Icon icon="ant-design:lock-outlined" style="color: #9e9e9e" />
-      <span class="pointer blue-e5" style="margin-left: 10px" @click="updatePassWord">修改</span>
+      <span class="pointer blue-e5" style="margin-left: 10px" @click="updatePassWord">Sửa</span>
     </div>
 
     <!--    <div class="account-row-item clearfix">-->
-    <!--      <div class="account-label gray-75">账户注销?</div>-->
-    <!--      <span style="color: red" class="pointer" @click="cancellation">注销?</span>-->
+    <!--      <div class="account-label gray-75">Hủy tài khoản (account)?</div>-->
+    <!--      <span style="color: red" class="pointer" @click="cancellation">Hủy tài khoản?</span>-->
     <!--    </div>-->
   </div>
 
@@ -61,14 +61,14 @@
 
   const wechatData = reactive<any>({
     bindWechat: false,
-    name: '昵称',
+    name: 'Biệt danh',
   });
 
   /**
-   * 初始化用户数据
+   * Khởi tạo dữ liệu người dùng
    */
   function initUserDetail() {
-    //获取用户数据
+    //Lấy dữ liệu người dùng
     getUserData().then((res) => {
       if (res.success) {
         userDetail.value = res.result;
@@ -80,7 +80,7 @@
   }
 
   /**
-   * 修改手机号
+   * Đổi số điện thoại
    */
   function updatePhone() {
     openModal(true, {
@@ -89,7 +89,7 @@
   }
   
   /**
-   * 绑定手机号
+   * Liên kết số điện thoại
    */ 
   function bindPhone() {
     openModal(true, {
@@ -98,7 +98,7 @@
   }
 
   /**
-   * 修改邮箱
+   * Đổi email
    */
   function updateEmail() {
     openEmailModal(true, {
@@ -107,16 +107,16 @@
   }
 
   /**
-   * 密码修改
+   * Đổi mật khẩu
    */
   function updatePassWord() {
-    //存在手机号手机号修改密码
+    //Có số điện thoại, dùng số điện thoại để đổi mật khẩu
     if(userDetail.value.phone){
       openPassModal(true, {
         record: { username: userDetail.value.username },
       });
     } else {
-      //没有手机号走直接修改密码弹窗
+      //Không có số điện thoại thì đi tới hộp thoại đổi mật khẩu trực tiếp
       openPassNotBindPhoneModal(true, {
         record: { username: userDetail.value.username },
       });
@@ -124,35 +124,35 @@
   }
 
   /**
-   * 手机号解绑
+   * Gỡ liên kết số điện thoại
    */
   function unbindPhone() {
-    console.log('手机号解绑');
+    console.log('Gỡ liên kết số điện thoại');
   }
 
   /**
-   * 邮箱解绑
+   * Gỡ liên kết email
    */
   function unbindEmail() {
-    console.log('邮箱解绑');
+    console.log('Gỡ liên kết email');
   }
 
   /**
-   * 邮箱验证
+   * Xác thực email
    */
   function checkEmail() {
-    console.log('邮箱验证');
+    console.log('Xác thực email');
   }
 
   /**
-   * 微信绑定解绑事件
+   * Sự kiện liên kết/gỡ liên kết WeChat
    */
   function wechatBind() {
-    console.log('微信绑定解绑事件');
+    console.log('Sự kiện liên kết/gỡ liên kết WeChat');
   }
 
   /**
-   * 注销事件
+   * Sự kiện hủy tài khoản
    */
   function cancellation() {}
 
@@ -161,16 +161,16 @@
   });
 </script>
 <style lang="less">
-    // 代码逻辑说明: [issues/563]暗色主题部分失效
+    // Giải thích logic mã: [issues/563]Một phần chủ đề tối không hoạt động
   @prefix-cls: ~'@{namespace}-j-user-account-setting-container';
 
   .@{prefix-cls}{
      padding: 30px 40px 0 20px;
     .account-row-item {
       align-items: center;
-      /*begin 兼容暗夜模式*/
+      /*begin Tương thích chế độ tối*/
       border-bottom: 1px solid @border-color-base;
-      /*end 兼容暗夜模式*/
+      /*end Tương thích chế độ tối*/
       box-sizing: border-box;
       display: flex;
       height: 71px;
@@ -183,9 +183,9 @@
     }
 
     .gray-75 {
-      /*begin 兼容暗夜模式*/
+      /*begin Tương thích chế độ tối*/
       color: @text-color !important;
-      /*end 兼容暗夜模式*/
+      /*end Tương thích chế độ tối*/
     }
 
     .pointer {
@@ -212,9 +212,9 @@
     .my-account{
       font-size: 17px;
       font-weight: 700!important;
-      /*begin 兼容暗夜模式*/
+      /*begin Tương thích chế độ tối*/
       color: @text-color;
-      /*end 兼容暗夜模式*/
+      /*end Tương thích chế độ tối*/
       margin-bottom: 20px;
     }
   }

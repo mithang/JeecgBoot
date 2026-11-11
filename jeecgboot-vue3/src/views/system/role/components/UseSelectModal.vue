@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="用户选择列表" width="1000px" @ok="handleSubmit" destroyOnClose @openChange="handleOpenChange">
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Danh sách chọn người dùng" width="1000px" @ok="handleSubmit" destroyOnClose @openChange="handleOpenChange">
     <BasicTable @register="registerTable" :rowSelection="rowSelection" />
   </BasicModal>
 </template>
@@ -9,11 +9,11 @@
   import { BasicTable, useTable, TableAction } from '/src/components/Table';
   import { userColumns, searchUserFormSchema } from '../role.data';
   import { list } from '../../user/user.api';
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['select', 'register']);
   const checkedKeys = ref<Array<string | number>>([]);
   const [registerModal, { setModalProps, closeModal }] = useModalInner();
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload }] = useTable({
     api: list,
     rowKey: 'id',
@@ -32,7 +32,7 @@
     canResize: false,
   });
   /**
-   * 选择列配置
+   * Cấu hình cột chọn
    */
   const rowSelection = {
     type: 'checkbox',
@@ -41,26 +41,26 @@
     onChange: onSelectChange,
   };
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;
   }
 
   const handleOpenChange = (visible) => {
-    // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1679】系统角色-角色用户再次打开弹窗重置之前选中的状态
+    // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1679】Vai trò hệ thống - Người dùng của vai trò: khi mở lại hộp thoại thì đặt lại trạng thái đã chọn trước đó
     if (visible) {
       checkedKeys.value = [];
     }
-    // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1679】系统角色-角色用户再次打开弹窗重置之前选中的状态
+    // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1679】Vai trò hệ thống - Người dùng của vai trò: khi mở lại hộp thoại thì đặt lại trạng thái đã chọn trước đó
   };
 
-  //提交事件
+  //Sự kiện gửi
   function handleSubmit() {
     setModalProps({ confirmLoading: true });
-    //关闭弹窗
+    //Đóng cửa sổ bật lên
     closeModal();
-    //刷新列表
+    //Làm mới danh sách
     emit('select', toRaw(unref(checkedKeys)));
     setModalProps({ confirmLoading: false });
   }

@@ -9,27 +9,27 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from '../tenant.data';
   import { saveOrUpdateTenant, getTenantById } from '../tenant.api';
-  // Emits声明
+  // EmitsKhai báo
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
     // labelWidth: 150,
     schemas: formSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      // 编辑模式下禁用id字段
+      // Ở chế độ chỉnh sửa, vô hiệu hóa trường id
       updateSchema({ field: 'id', dynamicDisabled: true });
-      //获取详情
+      //Lấy chi tiết
       data.record = await getTenantById({ id: data.record.id });
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
@@ -37,18 +37,18 @@
       updateSchema({ field: 'id', dynamicDisabled: false });
     }
   });
-  //设置标题
-  const title = computed(() => (!unref(isUpdate) ? '新增租户' : '编辑租户'));
-  //表单提交事件
+  //Đặt tiêu đề
+  const title = computed(() => (!unref(isUpdate) ? 'Thêm mới đơn vị thuê' : 'Chỉnh sửa đơn vị thuê'));
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit(v) {
     try {
       let values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateTenant(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

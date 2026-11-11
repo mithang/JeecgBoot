@@ -23,22 +23,22 @@ enum Api {
   queryAllDictItems = '/sys/dict/queryAllDictItems',
 }
 /**
- * 导出api
+ * Xuất (export)api
  * @param params
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入api
+ * Nhập (import)api
  * @param params
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 字典列表接口
+ * API danh sách từ điển
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 /**
- * 删除字典
+ * Xóa từ điển
  */
 export const deleteDict = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteDict, params }, { joinParamsToUrl: true }).then(() => {
@@ -46,15 +46,15 @@ export const deleteDict = (params, handleSuccess) => {
   });
 };
 /**
- * 批量删除字典
+ * Xóa hàng loạt từ điển
  * @param params
  */
 export const batchDeleteDict = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -63,7 +63,7 @@ export const batchDeleteDict = (params, handleSuccess) => {
   });
 };
 /**
- * 保存或者更新字典
+ * Lưu hoặc cập nhật từ điển
  * @param params
  */
 export const saveOrUpdateDict = (params, isUpdate) => {
@@ -71,18 +71,18 @@ export const saveOrUpdateDict = (params, isUpdate) => {
   return defHttp.post({ url: url, params });
 };
 /**
- * 唯一校验
+ * Kiểm tra tính duy nhất
  * @param params
  */
 export const duplicateCheck = (params) => defHttp.get({ url: Api.duplicateCheck, params }, { isTransformResponse: false });
 /**
- * 字典回收站列表
+ * Danh sách thùng rác từ điển
  * @param params
  */
 export const getRecycleBinList = (params) => defHttp.get({ url: Api.recycleBinList, params });
 
 /**
- * 回收站批量还原
+ * Khôi phục hàng loạt từ thùng rác
  * @param params
  */
 export const batchPutRecycleBin = (params, handleSuccess) => {
@@ -91,7 +91,7 @@ export const batchPutRecycleBin = (params, handleSuccess) => {
   });
 };
 /**
- * 回收站还原
+ * Khôi phục từ thùng rác
  * @param params
  */
 export const putRecycleBin = (id, handleSuccess) => {
@@ -100,7 +100,7 @@ export const putRecycleBin = (id, handleSuccess) => {
   });
 };
 /**
- * 回收站批量删除
+ * Xóa hàng loạt trong thùng rác
  * @param params
  */
 export const batchDeleteRecycleBin = (params, handleSuccess) => {
@@ -109,7 +109,7 @@ export const batchDeleteRecycleBin = (params, handleSuccess) => {
   });
 };
 /**
- * 回收站删除
+ * Xóa trong thùng rác
  * @param params
  */
 export const deleteRecycleBin = (id, handleSuccess) => {
@@ -118,12 +118,12 @@ export const deleteRecycleBin = (id, handleSuccess) => {
   });
 };
 /**
- * 字典配置列表
+ * Danh sách cấu hình từ điển
  * @param params
  */
 export const itemList = (params) => defHttp.get({ url: Api.itemList, params });
 /**
- * 字典配置删除
+ * Xóa cấu hình từ điển
  * @param params
  */
 export const deleteItem = (params, handleSuccess) => {
@@ -132,7 +132,7 @@ export const deleteItem = (params, handleSuccess) => {
   });
 };
 /**
- * 保存或者更新字典配置
+ * Lưu hoặc cập nhật cấu hình từ điển
  * @param params
  */
 export const saveOrUpdateDictItem = (params, isUpdate) => {
@@ -140,17 +140,17 @@ export const saveOrUpdateDictItem = (params, isUpdate) => {
   return defHttp.post({ url: url, params });
 };
 /**
- * 校验字典数据值
+ * Kiểm tra giá trị dữ liệu từ điển
  * @param params
  */
 export const dictItemCheck = (params) => defHttp.get({ url: Api.dictItemCheck, params }, { isTransformResponse: false });
 /**
- * 刷新字典
+ * Làm mới từ điển
  * @param params
  */
 export const refreshCache = () => defHttp.get({ url: Api.refreshCache }, { isTransformResponse: false });
 /**
- * 获取所有字典项
+ * Lấy mọi mục từ điển
  * @param params
  */
 export const queryAllDictItems = () => defHttp.get({ url: Api.queryAllDictItems }, { isTransformResponse: false });

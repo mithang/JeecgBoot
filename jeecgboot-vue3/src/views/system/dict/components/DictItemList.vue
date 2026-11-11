@@ -1,8 +1,8 @@
 <template>
-  <BasicDrawer v-bind="$attrs" @register="registerDrawer" title="字典列表" width="800px">
+  <BasicDrawer v-bind="$attrs" @register="registerDrawer" title="Danh sách từ điển" width="800px">
     <BasicTable @register="registerTable" :rowClassName="getRowClassName">
       <template #tableTitle>
-        <a-button type="primary" @click="handleCreate"> 新增</a-button>
+        <a-button type="primary" @click="handleCreate"> Thêm mới</a-button>
       </template>
       <template v-slot:bodyCell="{column, record, index}">
         <template v-if="column.dataIndex ==='action'">
@@ -32,14 +32,14 @@
   const { prefixCls } = useDesign('row-invalid');
   const { createMessage } = useMessage();
   const dictId = ref('');
-  //字典配置model
+  //Cấu hình từ điểnmodel
   const [registerModal, { openModal }] = useModal();
   const [registerDrawer] = useDrawerInner(async (data) => {
     dictId.value = data.id;
     setProps({ searchInfo: { dictId: unref(dictId) } });
     reload();
   });
-  // 自适应列配置
+  // Cấu hình cột thích ứng
   const adaptiveColProps: Partial<ColEx> = {
     xs: 24, // <576px
     sm: 24, // ≥576px
@@ -49,7 +49,7 @@
     xxl: 8, // ≥1600px
   };
   const [registerTable, { reload, setProps }] = useTable({
-    //需要配置rowKey，否则会有警告
+    //Cần cấu hình rowKey, nếu không sẽ có cảnh báo
     rowKey:'dictId',
     api: itemList,
     columns: dictItemColumns,
@@ -80,7 +80,7 @@
     immediate: false,
     actionColumn: {
       width: 100,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       //slots: { customRender: 'action' },
       fixed: undefined,
@@ -88,7 +88,7 @@
   });
 
   /**
-   * 新增
+   * Thêm mới
    */
   function handleCreate() {
     openModal(true, {
@@ -97,7 +97,7 @@
   }
 
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function handleEdit(record) {
     openModal(true, {
@@ -107,7 +107,7 @@
   }
 
   /**
-   * 删除
+   * Xóa
    */
   async function handleDelete(record) {
     await deleteItem({ id: record.id }, () => {
@@ -117,7 +117,7 @@
   }
 
   /**
-   * 字典项新增/编辑成功：刷新列表 + 同步刷新字典缓存
+   * Thêm mới/chỉnh sửa mục từ điển thành công: làm mới danh sách + đồng bộ làm mới bộ nhớ đệm từ điển
    */
   async function handleItemSuccess() {
     await reload();
@@ -125,7 +125,7 @@
   }
 
   /**
-   * 刷新字典缓存（后端缓存 + 前端 store + 本地缓存）
+   * Làm mới bộ nhớ đệm từ điển (bộ nhớ đệm backend + store frontend + bộ nhớ đệm cục bộ)
    */
   async function doRefreshDictCache() {
     try {
@@ -133,31 +133,31 @@
       if (result && result.success) {
         const res = await queryAllDictItems();
         removeAuthCache(DB_DICT_DATA_KEY);
-        // 代码逻辑说明: 【QQYUN-6417】生产环境字典慢的问题
+        // Giải thích logic mã: 【QQYUN-6417】Sự cố từ điển chậm trong môi trường production
         const userStore = useUserStore();
         userStore.setAllDictItems(res.result);
-        //createMessage.success('刷新字典缓存成功！');
+        //createMessage.success('Làm mới bộ nhớ đệm từ điển thành công!');
       } else {
-       // createMessage.error('刷新字典缓存失败！');
+       // createMessage.error('Làm mới bộ nhớ đệm từ điển thất bại!');
       }
     } catch (e) {
-      //createMessage.error('刷新字典缓存异常！');
+      //createMessage.error('Làm mới bộ nhớ đệm từ điển bất thường!');
     }
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },

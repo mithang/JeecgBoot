@@ -1,8 +1,8 @@
 <template>
-  <BasicDrawer v-bind="$attrs" @register="registerDrawer" title="数据权限规则" :width="adaptiveWidth" :rootClassName="prefixCls">
+  <BasicDrawer v-bind="$attrs" @register="registerDrawer" title="Quy tắc quyền dữ liệu" :width="adaptiveWidth" :rootClassName="prefixCls">
     <BasicTable @register="registerTable">
       <template #tableTitle>
-        <a-button type="primary" @click="handleCreate"> 新增</a-button>
+        <a-button type="primary" @click="handleCreate"> Thêm mới</a-button>
       </template>
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
@@ -25,7 +25,7 @@
   const permissionId = ref('');
   const { adaptiveWidth } = useDrawerAdaptiveWidth();
   const { prefixCls } = useDesign('sys-menu-dataRulelist');
-  //权限规则model
+  //Quy tắc quyền hạnmodel
   const [registerModal, { openModal }] = useModal();
   const [registerDrawer] = useDrawerInner(async (data) => {
     permissionId.value = data.id;
@@ -33,7 +33,7 @@
     await getForm().resetFields();
     reload();
   });
-  // 自适应列配置
+  // Cấu hình cột thích ứng
   const adaptiveColProps: Partial<ColEx> = {
     xs: 24, // <576px
     sm: 24, // ≥576px
@@ -71,7 +71,7 @@
     immediate: false,
     actionColumn: {
       width: 100,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       slots: { customRender: 'action' },
       fixed: undefined,
@@ -79,7 +79,7 @@
   });
 
   /**
-   * 新增
+   * Thêm mới
    */
   function handleCreate() {
     openModal(true, {
@@ -88,7 +88,7 @@
   }
 
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function handleEdit(record) {
     openModal(true, {
@@ -98,25 +98,25 @@
   }
 
   /**
-   * 删除
+   * Xóa
    */
   async function handleDelete(record) {
     await deleteRule({ id: record.id }, reload);
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -124,7 +124,7 @@
   }
 </script>
 <style lang="less">
-  // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1660】菜单管理-数据权限的查询和按钮没间隙
+  // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1660】Quản lý menu - Ô truy vấn và nút của quyền dữ liệu không có khoảng cách
   @prefix-cls: ~'@{namespace}-sys-menu-dataRulelist';
   .@{prefix-cls} {
     .jeecg-basic-table {
@@ -141,5 +141,5 @@
       }
     }
   }
-  // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1660】菜单管理-数据权限的查询和按钮没间隙
+  // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1660】Quản lý menu - Ô truy vấn và nút của quyền dữ liệu không có khoảng cách
 </style>

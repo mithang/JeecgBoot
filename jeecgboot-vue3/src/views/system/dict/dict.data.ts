@@ -6,17 +6,17 @@ import { h } from "vue";
 
 export const columns: BasicColumn[] = [
   {
-    title: '字典名称',
+    title: 'Tên từ điển',
     dataIndex: 'dictName',
     width: 240,
   },
   {
-    title: '字典编码',
+    title: 'Mã từ điển',
     dataIndex: 'dictCode',
     width: 240,
   },
   {
-    title: '描述',
+    title: 'Mô tả',
     dataIndex: 'description',
     // width: 120
   },
@@ -24,17 +24,17 @@ export const columns: BasicColumn[] = [
 
 export const recycleBincolumns: BasicColumn[] = [
   {
-    title: '字典名称',
+    title: 'Tên từ điển',
     dataIndex: 'dictName',
     width: 120,
   },
   {
-    title: '字典编码',
+    title: 'Mã từ điển',
     dataIndex: 'dictCode',
     width: 120,
   },
   {
-    title: '描述',
+    title: 'Mô tả',
     dataIndex: 'description',
     width: 120,
   },
@@ -42,13 +42,13 @@ export const recycleBincolumns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '字典名称',
+    label: 'Tên từ điển',
     field: 'dictName',
     component: 'JInput',
     colProps: { span: 6 },
   },
   {
-    label: '字典编码',
+    label: 'Mã từ điển',
     field: 'dictCode',
     component: 'JInput',
     colProps: { span: 6 },
@@ -63,13 +63,13 @@ export const formSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '字典名称',
+    label: 'Tên từ điển',
     field: 'dictName',
     required: true,
     component: 'Input',
   },
   {
-    label: '字典编码',
+    label: 'Mã từ điển',
     field: 'dictCode',
     component: 'Input',
     dynamicDisabled: ({ values }) => {
@@ -78,7 +78,7 @@ export const formSchema: FormSchema[] = [
     dynamicRules: ({ model, schema }) => rules.duplicateCheckRule('sys_dict', 'dict_code', model, schema, true),
   },
   {
-    label: '描述',
+    label: 'Mô tả',
     field: 'description',
     component: 'Input',
   },
@@ -86,17 +86,17 @@ export const formSchema: FormSchema[] = [
 
 export const dictItemColumns: BasicColumn[] = [
   {
-    title: '名称',
+    title: 'Tên',
     dataIndex: 'itemText',
     width: 80,
   },
   {
-    title: '数据值',
+    title: 'Giá trị dữ liệu',
     dataIndex: 'itemValue',
     width: 80,
   },
   {
-    title: '字典颜色',
+    title: 'Màu từ điển',
     dataIndex: 'itemColor',
     width: 80,
     align:'center',
@@ -110,12 +110,12 @@ export const dictItemColumns: BasicColumn[] = [
 
 export const dictItemSearchFormSchema: FormSchema[] = [
   {
-    label: '名称',
+    label: 'Tên',
     field: 'itemText',
     component: 'JInput',
   },
   {
-    label: '状态',
+    label: 'Trạng thái',
     field: 'status',
     component: 'JDictSelectTag',
     componentProps: {
@@ -133,13 +133,13 @@ export const itemFormSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '名称',
+    label: 'Tên',
     field: 'itemText',
     required: true,
     component: 'Input',
   },
   {
-    label: '数据值',
+    label: 'Giá trị dữ liệu',
     field: 'itemValue',
     component: 'Input',
     dynamicRules: ({ values, model }) => {
@@ -148,10 +148,10 @@ export const itemFormSchema: FormSchema[] = [
           required: true,
           validator: (_, value) => {
             if (!value) {
-              return Promise.reject('请输入数据值');
+              return Promise.reject('Vui lòng nhập giá trị dữ liệu');
             }
             if (new RegExp("[`~!@#$^&*()=|{}'.<>《》/?！￥（）—【】‘；：”“。，、？]").test(value)) {
-              return Promise.reject('数据值不能包含特殊字符！');
+              return Promise.reject('Giá trị dữ liệu không được chứa ký tự đặc biệt!');
             }
             return new Promise<void>((resolve, reject) => {
               let params = {
@@ -161,10 +161,10 @@ export const itemFormSchema: FormSchema[] = [
               };
               dictItemCheck(params)
                 .then((res) => {
-                  res.success ? resolve() : reject(res.message || '校验失败');
+                  res.success ? resolve() : reject(res.message || 'Kiểm tra không hợp lệ');
                 })
                 .catch((err) => {
-                  reject(err.message || '验证失败');
+                  reject(err.message || 'Xác thực thất bại');
                 });
             });
           },
@@ -173,25 +173,25 @@ export const itemFormSchema: FormSchema[] = [
     },
   },
   {
-    label: '颜色值',
+    label: 'Giá trị màu',
     field: 'itemColor',
     component: 'Input',
     slot:'itemColor'
   },
   {
-    label: '描述',
+    label: 'Mô tả',
     field: 'description',
     component: 'Input',
   },
   {
     field: 'sortOrder',
-    label: '排序',
+    label: 'Sắp xếp',
     component: 'InputNumber',
     defaultValue: 1,
   },
   {
     field: 'status',
-    label: '是否启用',
+    label: 'Có kích hoạt không',
     defaultValue: 1,
     component: 'JDictSelectTag',
     componentProps: {

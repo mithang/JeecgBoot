@@ -11,36 +11,36 @@ import {
 import { h, ref } from 'vue';
 
 const { createMessage: $message } = useMessage();
-//部门名称
+//Tên phòng ban
 const departNamePath = ref<Record<string, string>>({});
 
-// 部门基础表单
+// Biểu mẫu cơ bản của phòng ban
 export function useBasicFormSchema(treeData) {
   const basicFormSchema: FormSchema[] = [
     {
       field: 'departName',
-      label: '机构名称',
+      label: 'Tên cơ quan',
       component: 'Input',
       componentProps: {
-        placeholder: '请输入机构/部门名称',
+        placeholder: 'Vui lòng nhập tên cơ quan/phòng ban',
       },
-      rules: [{ required: true, message: '机构名称不能为空' }],
+      rules: [{ required: true, message: 'Tên cơ quan không được để trống' }],
     },
     {
       field: 'departNameAbbr',
-      label: '机构简称',
+      label: 'Tên viết tắt cơ quan',
       component: 'Input',
       componentProps: {
-        placeholder: '请输入机构/部门简称',
+        placeholder: 'Vui lòng nhập tên viết tắt của cơ quan/phòng ban',
       }
     },
     {
       field: 'parentId',
-      label: '上级部门',
+      label: 'Phòng ban cấp trên',
       component: 'TreeSelect',
       componentProps: {
         treeData: [],
-        placeholder: '无',
+        placeholder: 'Không có',
         treeCheckAble: true,
         multiple: true,
         dropdownStyle: { maxHeight: '200px', overflow: 'auto' },
@@ -60,21 +60,21 @@ export function useBasicFormSchema(treeData) {
     },
     {
       field: 'orgCode',
-      label: '机构编码',
+      label: 'Mã cơ quan',
       component: 'Input',
       componentProps: {
-        placeholder: '请输入机构编码',
+        placeholder: 'Vui lòng nhập mã cơ quan',
       },
     },
     {
       field: 'orgCategory',
-      label: '机构类型',
+      label: 'Loại cơ quan',
       component: 'RadioButtonGroup',
       componentProps: { options: [] },
     },
     {
       field: 'positionId',
-      label: '职务级别',
+      label: 'Cấp bậc chức danh',
       component: 'JDictSelectTag',
       componentProps: ({ formModel, formActionType }) => {
         return {
@@ -93,7 +93,7 @@ export function useBasicFormSchema(treeData) {
     },
     {
       field: 'depPostParentId',
-      label: '上级岗位',
+      label: 'Vị trí cấp trên',
       component: 'TreeSelect',
       ifShow:({ values })=>{
         return values.orgCategory === '3'
@@ -102,16 +102,16 @@ export function useBasicFormSchema(treeData) {
     },
     {
       field: 'departOrder',
-      label: '排序',
+      label: 'Sắp xếp',
       component: 'InputNumber',
       componentProps: {},
     },
     {
       field: 'mobile',
-      label: '电话',
+      label: 'Điện thoại',
       component: 'Input',
       componentProps: {
-        placeholder: '请输入电话',
+        placeholder: 'Vui lòng nhập điện thoại',
       },
       ifShow:({ values })=>{
         return values.orgCategory !== '3'
@@ -119,10 +119,10 @@ export function useBasicFormSchema(treeData) {
     },
     {
       field: 'fax',
-      label: '传真',
+      label: 'Fax',
       component: 'Input',
       componentProps: {
-        placeholder: '请输入传真',
+        placeholder: 'Vui lòng nhập fax',
       },
       ifShow:({ values })=>{
         return values.orgCategory !== '3'
@@ -130,10 +130,10 @@ export function useBasicFormSchema(treeData) {
     },
     {
       field: 'address',
-      label: '地址',
+      label: 'Địa chỉ',
       component: 'Input',
       componentProps: {
-        placeholder: '请输入地址',
+        placeholder: 'Vui lòng nhập địa chỉ',
       },
       ifShow:({ values })=>{
         return values.orgCategory !== '3'
@@ -141,10 +141,10 @@ export function useBasicFormSchema(treeData) {
     },
     {
       field: 'memo',
-      label: '备注',
+      label: 'Ghi chú',
       component: 'InputTextArea',
       componentProps: {
-        placeholder: '请输入备注',
+        placeholder: 'Vui lòng nhập ghi chú',
       },
       ifShow:({ values })=>{
         return values.orgCategory !== '3'
@@ -160,38 +160,38 @@ export function useBasicFormSchema(treeData) {
   return { basicFormSchema };
 }
 
-// 机构类型选项
+// Tùy chọn loại cơ quan
 export const orgCategoryOptions = {
-  // 一级部门
-  root: [{ value: '1', label: '公司' }],
-  // 子级部门
+  // Phòng ban cấp một
+  root: [{ value: '1', label: 'Công ty' }],
+  // Phòng ban cấp con
   child: [
-    { value: '4', label: '子公司' },
-    { value: '2', label: '部门' },
-    { value: '3', label: '岗位' },
+    { value: '4', label: 'Công ty con' },
+    { value: '2', label: 'Phòng ban' },
+    { value: '3', label: 'Vị trí công tác' },
   ],
-  //部门岗位
+  //Vị trí phòng ban
   childDepartPost: [
-    { value: '2', label: '部门' },
-    { value: '3', label: '岗位' },
+    { value: '2', label: 'Phòng ban' },
+    { value: '3', label: 'Vị trí công tác' },
   ],
-  //岗位
+  //Vị trí công tác
   childPost: [
-    { value: '3', label: '岗位' },
+    { value: '3', label: 'Vị trí công tác' },
   ]
 };
 
 /**
- * 用户列表
+ * Danh sách người dùng
  */
 export const userColumns: BasicColumn[] = [
   {
-    title: '姓名',
+    title: 'Họ tên',
     dataIndex: 'realname',
     width: 150,
   },
   {
-    title: '手机',
+    title: 'Điện thoại',
     width: 150,
     dataIndex: 'phone',
     customRender:( { record, text })=>{
@@ -202,7 +202,7 @@ export const userColumns: BasicColumn[] = [
     }
   },
   {
-    title: '主岗位',
+    title: 'Vị trí chính',
     dataIndex: 'mainDepPostId',
     customRender: ({ record, text })=>{
       if(!text){
@@ -213,7 +213,7 @@ export const userColumns: BasicColumn[] = [
     width: 200,
   },
   {
-    title: '兼职岗位',
+    title: 'Vị trí kiêm nhiệm',
     dataIndex: 'otherDepPostId',
     customRender: ({ record, text })=>{
       if(!text){
@@ -226,7 +226,7 @@ export const userColumns: BasicColumn[] = [
 ];
 
 /**
- * 职位改变事件
+ * Sự kiện thay đổi chức vụ
  * @param value
  * @param model
  * @param treeData

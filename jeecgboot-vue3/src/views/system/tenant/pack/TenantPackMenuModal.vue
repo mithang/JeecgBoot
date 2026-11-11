@@ -11,22 +11,22 @@
   import { addPackPermission, editPackPermission } from '../tenant.api';
 
   const isUpdate = ref<boolean>(false);
-  // Emits声明
+  // EmitsKhai báo
   const emit = defineEmits(['register', 'success']);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate, setProps }] = useForm({
     schemas: packMenuFormSchema,
     showActionButtonGroup: false,
   });
-  //租户
+  //Đơn vị thuê (tenant)
   const tenantId = ref<number>();
-  //套餐包类型
+  //Loại gói dịch vụ
   const packType = ref<number>();
-  //权限
+  //Quyền hạn
   const permissionIds = ref<string>();
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     isUpdate.value = !!data?.isUpdate;
     if(data.tenantId){
@@ -34,19 +34,19 @@
     }
     packType.value = data.packType;
     if (unref(isUpdate)) {
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       console.log(data.record)
       await setFieldsValue({ ...data.record });
       permissionIds.value = data.record.permissionIds;
     }
-    // 代码逻辑说明: 【QQYUN-5685】2 套餐包增加一个查看：添加底部有没有按钮及表单禁用------------
+    // Giải thích logic mã: 【QQYUN-5685】2 Gói dịch vụ bổ sung một mục xem: thêm kiểm tra phía dưới có nút hay không và vô hiệu hóa biểu mẫu------------
     setModalProps({ confirmLoading: false, showCancelBtn:!!data?.showFooter, showOkBtn:!!data?.showFooter });
-    // 隐藏底部时禁用整个表单
+    // Khi ẩn phần chân thì vô hiệu hóa toàn bộ biểu mẫu
     setProps({ disabled: !data?.showFooter })
   });
-  //设置标题
-  const title = computed(() => (unref(isUpdate) ? '编辑 租户套餐' : '新增 租户套餐'));
-  //表单提交事件
+  //Đặt tiêu đề
+  const title = computed(() => (unref(isUpdate) ? 'Chỉnh sửa gói đơn vị thuê' : 'Thêm mới gói đơn vị thuê'));
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit(v) {
     const values = await validate();
     

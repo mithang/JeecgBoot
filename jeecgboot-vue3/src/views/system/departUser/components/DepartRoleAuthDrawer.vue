@@ -3,13 +3,13 @@
     :width="650"
     :loading="loading"
     showFooter
-    okText="保存并关闭"
+    okText="Lưu và đóng"
     @ok="onSubmit(true)"
     @close="onClose"
     @register="registerDrawer"
   >
     <template #title>
-      部门角色权限配置
+      Cấu hình quyền vai trò phòng ban
       <a-dropdown>
         <Icon icon="ant-design:more-outlined" class="more-icon" />
         <template #overlay>
@@ -30,7 +30,7 @@
       <a-spin :spinning="loading">
         <template v-if="treeData.length > 0">
           <BasicTree
-            title="所拥有的部门权限"
+            title="Các quyền phòng ban đang sở hữu"
             checkable
             :treeData="treeData"
             :checkedKeys="checkedKeys"
@@ -48,12 +48,12 @@
             </template>
           </BasicTree>
         </template>
-        <a-empty v-else description="无可配置部门权限" />
+        <a-empty v-else description="Không có quyền phòng ban nào có thể cấu hình" />
       </a-spin>
     </div>
 
     <template #centerFooter>
-      <a-button type="primary" :loading="loading" ghost @click="onSubmit(false)">仅保存</a-button>
+      <a-button type="primary" :loading="loading" ghost @click="onSubmit(false)">Chỉ lưu</a-button>
     </template>
   </BasicDrawer>
   <DepartRoleDataRuleDrawer @register="registerDataRuleDrawer" />
@@ -82,17 +82,17 @@
   const expandedKeys = ref<Array<any>>([]);
   const selectedKeys = ref<Array<any>>([]);
   const allTreeKeys = ref<Array<any>>([]);
-  //父子节点选中状态是否关联 true不关联，false关联
+  //Trạng thái chọn của nút cha và nút con có liên kết hay không: true = không liên kết, false = có liên kết
   const checkStrictly = ref(false);
   const { t } = useI18n();
 
-  // 注册抽屉组件
+  // Đăng ký thành phần ngăn kéo
   const [registerDrawer, { closeDrawer }] = useDrawerInner((data) => {
     roleId.value = data.record.id;
     departId.value = data.record.departId;
     loadData({
       success: (ids) => {
-        // 代码逻辑说明: 【TV360X-1619】同步系统角色改法加上缓存，默认层级关联修正原生层级关联bug
+        // Giải thích logic mã: 【TV360X-1619】Đồng bộ phương pháp thay đổi vai trò hệ thống kèm bộ nhớ đệm, liên kết phân cấp mặc định sửa lại thành liên kết phân cấp gốcbug
         const localData = localStorage.getItem(DEPART_ROLE_AUTH_CONFIG_KEY);
         if (localData) {
           const obj = JSON.parse(localData);
@@ -104,21 +104,21 @@
       },
     });
   });
-  // 注册数据规则授权弹窗抽屉
+  // Đăng ký ngăn kéo hộp thoại cấp quyền quy tắc dữ liệu
   const [registerDataRuleDrawer, dataRuleDrawer] = useDrawer();
 
   async function loadData(options: any = {}) {
     try {
       loading.value = true;
-      // 用户角色授权功能，查询菜单权限树
+      // Chức năng cấp quyền vai trò người dùng, truy vấn cây quyền menu
       const { ids, treeList } = await queryTreeListForDeptRole({ departId: departId.value });
       if (ids.length > 0) {
         allTreeKeys.value = ids;
-        // 代码逻辑说明: 【TV360X-1619】同步系统角色改法加上缓存，默认层级关联修正原生层级关联bug
+        // Giải thích logic mã: 【TV360X-1619】Đồng bộ phương pháp thay đổi vai trò hệ thống kèm bộ nhớ đệm, liên kết phân cấp mặc định sửa lại thành liên kết phân cấp gốcbug
         options.success?.(ids);
-        // 代码逻辑说明: 【issues/1169】我的部门功能中的【部门权限】中未翻译 t('') 多语言---
+        // Giải thích logic mã: 【issues/1169】Trong chức năng Phòng ban của tôi, phần 【Quyền phòng ban】 chưa được dịch t('') Đa ngôn ngữ---
         treeData.value = translateTitle(treeList);
-        // 查询角色授权
+        // Truy vấn cấp quyền vai trò
         checkedKeys.value = await queryDeptRolePermission({ roleId: roleId.value });
         lastCheckedKeys.value = [checkedKeys.value];
       } else {
@@ -129,7 +129,7 @@
     }
   }
 
-  // 重置页面
+  // Đặt lại trang
   function reset() {
     treeData.value = [];
     expandedKeys.value = [];
@@ -139,18 +139,18 @@
   }
 
   /**
-   * 点击选中
+   * Nhấn để chọn
    * 2024-07-04
    * liaozhiyang
    */
   function onCheck(o, e) {
-    // checkStrictly: true=>层级独立，false=>层级关联.
+    // checkStrictly: true=>Phân cấp độc lập，false=>Liên kết theo cấp bậc.
     if (checkStrictly.value) {
       checkedKeys.value = o.checked ? o.checked : o;
     } else {
       const keys = getNodeAllKey(e.node, 'children', 'key');
       if (e.checked) {
-        // 反复操作下可能会有重复的keys，得用new Set去重下
+        // Khi thao tác lặp lại có thể xuất hiện các key trùng lặp, cần dùng new Set để loại bỏ trùng lặp
         checkedKeys.value = [...new Set([...checkedKeys.value, ...keys])];
       } else {
         const result = removeMatchingItems(checkedKeys.value, keys);
@@ -161,21 +161,21 @@
   /**
    * 2024-07-04
    * liaozhiyang
-   * 删除相匹配数组的项
+   * Xóa các phần tử khớp trong mảng
    */
   function removeMatchingItems(arr1, arr2) {
-    // 使用哈希表记录 arr2 中的元素
+    // Dùng bảng băm để ghi lại các phần tử trong arr2
     const hashTable = {};
     for (const item of arr2) {
       hashTable[item] = true;
     }
-    // 使用 filter 方法遍历第一个数组，过滤出不在哈希表中存在的项
+    // Dùng phương thức filter để duyệt mảng thứ nhất, lọc ra các phần tử không tồn tại trong bảng băm
     return arr1.filter((item) => !hashTable[item]);
   }
   /**
    * 2024-07-04
    * liaozhiyang
-   * 获取当前节点及以下所有子孙级的key
+   * Lấy nút hiện tại và tất cả các nút cấp con cháu bên dướikey
    */
   function getNodeAllKey(node: any, children: any, key: string) {
     const result: any = [];
@@ -192,12 +192,12 @@
     return result;
   }
 
-  // tree展开事件
+  // treeSự kiện mở rộng
   function onExpand($expandedKeys) {
     expandedKeys.value = $expandedKeys;
   }
 
-  // tree选中事件
+  // treeSự kiện được chọn
   function onSelect($selectedKeys, { selectedNodes }) {
     if (selectedNodes[0]?.ruleFlag) {
       let functionId = $selectedKeys[0];
@@ -236,7 +236,7 @@
   }
 
   /**
-   * 树菜单选择
+   * Chọn menu dạng cây
    * @param key
    */
   function treeMenuClick({ key }) {
@@ -270,7 +270,7 @@
   };
 </script>
 <style lang="less" scoped>
-  /** 固定操作按钮 */
+  /** Nút thao tác cố định */
   .jeecg-basic-tree {
     position: absolute;
     width: 618px;

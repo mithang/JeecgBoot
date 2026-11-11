@@ -44,6 +44,6 @@
       { immediate: true }
     );
   });
-  // 动态查询 parentId 组件的 treeData
+  // Truy vấn động component theo parentId treeData
   queryIdTree().then((data) => (treeData.value = data));
 </script>

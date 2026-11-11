@@ -1,5 +1,5 @@
 <template>
-  <BasicDrawer v-bind="$attrs" @register="registerDrawer" title="角色详情" width="500px" destroyOnClose>
+  <BasicDrawer v-bind="$attrs" @register="registerDrawer" title="Chi tiết vai trò" width="500px" destroyOnClose>
     <Description :column="1" :data="roleData" :schema="formDescSchema" />
   </BasicDrawer>
 </template>

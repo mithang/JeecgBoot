@@ -5,17 +5,17 @@ import { rules } from "/@/utils/helper/validator";
 
 export const columns: BasicColumn[] = [
   {
-    title: '租户名称',
+    title: 'Tên đơn vị thuê',
     dataIndex: 'name',
     width: 200,
     align: 'left',
   },
   {
-    title: '租户编号(ID)',
+    title: 'Mã đơn vị thuê(ID)',
     dataIndex: 'id',
     width: 180,
   },{
-    title: '组织LOGO',
+    title: 'Tổ chứcLOGO',
     dataIndex: 'companyLogo',
     width: 100,
     customRender: ({ text }) => {
@@ -27,48 +27,48 @@ export const columns: BasicColumn[] = [
   },
   {
     dataIndex: 'trade_dictText',
-    title: '所属行业',
+    title: 'Ngành nghề',
     width: 150
   },
   {
     dataIndex: 'companySize_dictText',
-    title: '公司规模',
+    title: 'Quy mô công ty',
     width: 100
   },
   {
     dataIndex: 'houseNumber',
-    title: '门牌号',
+    title: 'Số nhà',
     width: 100,
   },
   // {
   //   dataIndex: 'position_dictText',
-  //   title: '职级',
+  //   title: 'Cấp bậc',
   //   width: 150
   // },
   // {
   //   dataIndex: 'department_dictText',
-  //   title: '部门',
+  //   title: 'Phòng ban',
   //   width: 150
   // },
   {
     dataIndex: 'createBy_dictText',
-    title: '创建者(拥有)',
+    title: 'Người tạo(Sở hữu)',
     width: 150
   },
 /*  {
-    title: '开始时间',
+    title: 'Thời gian bắt đầu',
     dataIndex: 'beginDate',
     sorter: true,
     width: 180,
   },
   {
-    title: '结束时间',
+    title: 'Thời gian kết thúc',
     dataIndex: 'endDate',
     sorter: true,
     width: 180,
   },*/
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status_dictText',
     width: 100,
   },
@@ -77,18 +77,18 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'name',
-    label: '租户名称',
+    label: 'Tên đơn vị thuê',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
     field: 'status',
-    label: '状态',
+    label: 'Trạng thái',
     component: 'Select',
     componentProps: {
       options: [
-        { label: '正常', value: 1 },
-        { label: '冻结', value: 0 },
+        { label: 'Bình thường', value: 1 },
+        { label: 'Đóng băng', value: 0 },
       ],
     },
     colProps: { span: 8 },
@@ -96,7 +96,7 @@ export const searchFormSchema: FormSchema[] = [
   // {
   //   field: 'fieldTime',
   //   component: 'RangePicker',
-  //   label: '时间字段',
+  //   label: 'Trường thời gian',
   //   componentProps: {
   //     valueType: 'Date',
   //   },
@@ -109,13 +109,13 @@ export const searchFormSchema: FormSchema[] = [
 export const formSchema: FormSchema[] = [
   {
     field: 'name',
-    label: '租户名称',
+    label: 'Tên đơn vị thuê',
     component: 'Input',
     required: true,
   },
   {
     field: 'id',
-    label: '租户编号(ID)',
+    label: 'Mã đơn vị thuê(ID)',
     component: 'InputNumber',
     required: true,
     ifShow: ({ values }) => {
@@ -124,7 +124,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'companyLogo',
-    label: '组织LOGO',
+    label: 'Tổ chứcLOGO',
     component: 'JImageUpload',
     componentProps:{
       text:'logo'
@@ -132,39 +132,39 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'trade',
-    label: '所属行业',
+    label: 'Ngành nghề',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode:'trade',
     }
   }, {
     field: 'companySize',
-    label: '公司规模',
+    label: 'Quy mô công ty',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode:'company_size',
     }
   }, {
     field: 'companyAddress',
-    label: '公司地址',
+    label: 'Địa chỉ công ty',
     component: 'JAreaSelect',
     componentProps: {
-      placeholder: '请输入公司地址',
+      placeholder: 'Vui lòng nhập địa chỉ công ty',
       rows: 4,
     }
   },
   {
     field: 'workPlace',
-    label: '工作地点',
+    label: 'Địa điểm làm việc',
     component: 'InputTextArea',
     componentProps: {
-      placeholder: '请输入工作地点',
+      placeholder: 'Vui lòng nhập địa điểm làm việc',
       rows: 4,
     }
   },
 /*  {
     field: 'beginDate',
-    label: '开始时间',
+    label: 'Thời gian bắt đầu',
     component: 'DatePicker',
     componentProps: {
       showTime: true,
@@ -174,7 +174,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'endDate',
-    label: '结束时间',
+    label: 'Thời gian kết thúc',
     component: 'DatePicker',
     componentProps: {
       showTime: true,
@@ -184,7 +184,7 @@ export const formSchema: FormSchema[] = [
   },*/
   {
     field: 'houseNumber',
-    label: '门牌号',
+    label: 'Số nhà',
     component: 'Input',
     dynamicDisabled: true,
     ifShow: ({ values }) => {
@@ -193,7 +193,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'position',
-    label: '职级',
+    label: 'Cấp bậc',
     component: 'JDictSelectTag',
     componentProps:{
       dictCode: 'company_rank'
@@ -201,7 +201,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'department',
-    label: '部门',
+    label: 'Phòng ban',
     component: 'JDictSelectTag',
     componentProps:{
       dictCode:'company_department'
@@ -209,191 +209,191 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'status',
-    label: '状态',
+    label: 'Trạng thái',
     component: 'RadioButtonGroup',
     defaultValue: 1,
     componentProps: {
       options: [
-        { label: '正常', value: 1 },
-        { label: '冻结', value: 0 },
+        { label: 'Bình thường', value: 1 },
+        { label: 'Đóng băng', value: 0 },
       ],
     },
   },
 ];
 
-//定义用户表格列
+//Định nghĩa cột bảng người dùng
 export const userColumns: BasicColumn[] =[
   {
-    title: '用户账号',
+    title: 'Tài khoản người dùng',
     dataIndex: 'username',
     width: 100,
     align: 'left',
   },
   {
-    title: '用户姓名',
+    title: 'Họ tên người dùng',
     dataIndex: 'realname',
     width: 100,
   },
   {
-    title: '性别',
+    title: 'Giới tính',
     dataIndex: 'sex_dictText',
     width: 100,
   },
   {
-    title: '手机号码',
+    title: 'Số điện thoại',
     dataIndex: 'phone',
     width: 100,
   },
 ];
 
-//邀请用户搜索表单
+//Biểu mẫu tìm kiếm mời người dùng
 export const userSearchFormSchema: FormSchema[] = [
   {
     field: 'username',
-    label: '账号',
+    label: 'Tài khoản',
     component: 'Input',
   },
   {
     field: 'realname',
-    label: '姓名',
+    label: 'Họ tên',
     component: 'Input',
   },
 ];
 
-//套餐包列表
+//Danh sách gói dịch vụ
 export const packColumns: BasicColumn[] = [
   {
-    title: '套餐包名称',
+    title: 'Tên gói dịch vụ',
     dataIndex: 'packName',
     width: 100,
     customRender: ( { record, text }) => {
       if(record.packCode && record.packCode.indexOf('default') != -1) {
-        return text + '(默认产品包)';
+        return text + '(Gói sản phẩm mặc định)';
       } else {
         return text;
       }
     }
   },
   {
-    title: '是否自动分配用户',
+    title: 'Có tự động phân bổ người dùng không',
     dataIndex: 'izSysn',
     width: 120,
     customRender: ( { text }) => {
       if(text === '1') {
-        return '是';
+        return 'Có';
       } else {
-        return '否';
+        return 'Không';
       }
     }
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status',
     width: 100,
     customRender: ({ text }) => {
       if (text === '1') {
-        return '开启';
+        return 'Bật';
       } else {
-        return '关闭';
+        return 'Đóng';
       }
     },
   },
   {
-    title: '备注说明',
+    title: 'Mô tả ghi chú',
     dataIndex: 'remarks',
     width: 150,
   },
 ];
 
-//套餐包列表
+//Danh sách gói dịch vụ
 export const tenantPackColumns: BasicColumn[] = [
   {
-    title: '套餐包名称',
+    title: 'Tên gói dịch vụ',
     dataIndex: 'packName',
     width: 100,
     customRender: ( { record, text }) => {
       if(record.packCode && record.packCode.indexOf('default') != -1) {
-        return text + '(默认产品包)';
+        return text + '(Gói sản phẩm mặc định)';
       } else {
         return text;
       }
     }
   },
   {
-    title: '是否自动分配用户',
+    title: 'Có tự động phân bổ người dùng không',
     dataIndex: 'izSysn',
     width: 100,
     customRender: ( { text }) => {
       if(text === '1') {
-        return '是';
+        return 'Có';
       } else {
-        return '否';
+        return 'Không';
       }
     }
   },
   {
-    title: '备注说明',
+    title: 'Mô tả ghi chú',
     dataIndex: 'remarks',
     width: 150,
   },
 ];
 
-//套餐包列表
+//Danh sách gói dịch vụ
 export const defalutPackColumns: BasicColumn[] = [
   {
-    title: '默认套餐名称',
+    title: 'Tên gói dịch vụ mặc định',
     dataIndex: 'packName',
     width: 100,
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status',
     width: 100,
     customRender: ({ text }) => {
       if (text === '1') {
-        return '开启';
+        return 'Bật';
       } else {
-        return '关闭';
+        return 'Đóng';
       }
     },
   },
   {
-    title: '备注说明',
+    title: 'Mô tả ghi chú',
     dataIndex: 'remarks',
     width: 150,
   },
 ];
 
-//套餐包搜索表单
+//Biểu mẫu tìm kiếm gói dịch vụ
 export const packFormSchema: FormSchema[] = [
   {
     field: 'packName',
-    label: '套餐包名',
+    label: 'Tên gói dịch vụ',
     component: 'JInput',
     colProps: { xxl: 8 },
   },
 ];
 
-//套餐包搜索表单
+//Biểu mẫu tìm kiếm gói dịch vụ
 export const defaultPackFormSchema: FormSchema[] = [
   {
     field: 'packName',
-    label: '默认套餐名',
+    label: 'Tên gói mặc định',
     component: 'JInput',
     colProps: { xxl: 8 },
   },
 ];
 
-//套餐包表单
+//Biểu mẫu gói dịch vụ
 export const packMenuFormSchema: FormSchema[] = [
   {
     field: 'packName',
-    label: '套餐包名称',
+    label: 'Tên gói dịch vụ',
     component: 'Input',
   },
 /*  {
     field: 'permissionIds',
-    label: '授权菜单',
+    label: 'Menu cấp quyền',
     component: 'JTreeSelect',
     componentProps: {
       dict: 'sys_permission,name,id',
@@ -408,69 +408,69 @@ export const packMenuFormSchema: FormSchema[] = [
   },*/
   {
     field: 'remarks',
-    label: '备注说明',
+    label: 'Mô tả ghi chú',
     component: 'InputTextArea',
   },
   {
     field: 'izSysn',
-    label: '自动分配用户',
+    label: 'Tự động phân bổ người dùng',
     component: 'Switch',
     componentProps: {
       checkedValue: "1",
-      checkedChildren: '是',
+      checkedChildren: 'Có',
       unCheckedValue: "0",
-      unCheckedChildren: '否',
+      unCheckedChildren: 'Không',
     },
     defaultValue: "1",
-    helpMessage: "默认会自动分配给用户，个性高级套餐，需要租户管理员手工分配人员(拥有更灵活性权限控制)"
+    helpMessage: "Mặc định sẽ tự động phân bổ cho người dùng; gói nâng cao cá nhân hóa cần quản trị viên đơn vị thuê phân bổ nhân viên thủ công(Sở hữu kiểm soát quyền linh hoạt hơn)"
   },  
   {
     field: 'status',
-    label: '开启状态',
+    label: 'Trạng thái bật',
     component: 'Switch',
     componentProps: {
       checkedValue: '1',
-      checkedChildren: '开启',
+      checkedChildren: 'Bật',
       unCheckedValue: '0',
-      unCheckedChildren: '关闭',
+      unCheckedChildren: 'Đóng',
     },
     defaultValue: '1',
   },
   {
     field: 'id',
-    label: '开启状态',
+    label: 'Trạng thái bật',
     component: 'Input',
     show: false
   },
   {
     field: 'packCode',
-    label: '产品包编码',
+    label: 'Mã gói sản phẩm',
     component: 'Input',
     show: false
   },  
   {
     field: 'packType',
-    label: '产品包类型',
+    label: 'Loại gói sản phẩm',
     component: 'Input',
     show: false
   },
 ];
 
-//回收站列表
+//Danh sách thùng rác
 export const recycleColumns : BasicColumn[] = [
   {
-    title: '租户名称',
+    title: 'Tên đơn vị thuê',
     dataIndex: 'name',
     width: 100,
     align: 'left',
   },
   {
-    title: '租户编号(ID)',
+    title: 'Mã đơn vị thuê(ID)',
     dataIndex: 'id',
     width: 100,
   },
   {
-    title: '组织LOGO',
+    title: 'Tổ chứcLOGO',
     dataIndex: 'companyLogo',
     width: 100,
     customRender: ({ text }) => {
@@ -482,41 +482,41 @@ export const recycleColumns : BasicColumn[] = [
   },
   {
     dataIndex: 'houseNumber',
-    title: '门牌号',
+    title: 'Số nhà',
     width: 100,
   }
 ]
 
-//租户回收站搜索表单
+//Biểu mẫu tìm kiếm thùng rác đơn vị thuê
 export const searchRecycleFormSchema : FormSchema[] = [
   {
     field: 'name',
-    label: '租户名称',
+    label: 'Tên đơn vị thuê',
     component: 'Input',
   },
   {
     field: 'houseNumber',
-    label: '门牌号',
+    label: 'Số nhà',
     component: 'Input',
   },
 ]
 
-//套餐包用户列表
+//Danh sách người dùng của gói dịch vụ
 export const tenantPackUserColumns: BasicColumn[] = [
   {
-    title: '用户',
+    title: 'Người dùng',
     dataIndex: 'realname',
     width: 200,
   },
   {
-    title: '部门',
+    title: 'Phòng ban',
     dataIndex: 'departNames',
     width: 200,
     ellipsis: true,
     slots: { customRender: 'departNames' }
   },
   {
-    title: '职位',
+    title: 'Chức vụ',
     dataIndex: 'positionNames',
     ellipsis: true,
     width: 200,
@@ -525,14 +525,14 @@ export const tenantPackUserColumns: BasicColumn[] = [
 ]
 
 /**
- * 用户租户新增编辑表单
+ * Biểu mẫu thêm mới/chỉnh sửa đơn vị thuê của người dùng
  */
 export const tenantUserSchema: FormSchema[] = [
   { field: 'id', label: 'id', component: 'Input', show: false },
   { field: 'username', label: 'username', component: 'Input', show: false },
   {
     field: 'realname',
-    label: '姓名',
+    label: 'Họ tên',
     component: 'Input',
     dynamicDisabled: ({ values }) => {
       return !!values.id;
@@ -540,7 +540,7 @@ export const tenantUserSchema: FormSchema[] = [
   },
   {
     field: 'phone',
-    label: '手机',
+    label: 'Điện thoại',
     component: 'Input',
     dynamicRules: ({ model, schema }) => {
       if (model.id) {
@@ -554,7 +554,7 @@ export const tenantUserSchema: FormSchema[] = [
   },
   {
     field: 'email',
-    label: '邮箱',
+    label: 'Email',
     component: 'Input',
     dynamicRules: ({ model, schema }) => {
       if (model.id) {
@@ -566,35 +566,35 @@ export const tenantUserSchema: FormSchema[] = [
       return !!values.id;
     },
   },
-  { field: 'selecteddeparts', label: '部门', component: 'JSelectDept', componentProps: { checkStrictly: true } },
+  { field: 'selecteddeparts', label: 'Phòng ban', component: 'JSelectDept', componentProps: { checkStrictly: true } },
  /* {
     field: 'post',
-    label: '职位',
+    label: 'Chức vụ',
     component: 'JSelectPosition',
   },
   {
     field: 'workNo',
-    label: '工号',
+    label: 'Mã nhân viên',
     component: 'Input',
     dynamicRules: ({ model, schema }) => {
-      return [{ required: false, message: '请输入工号' }, { ...rules.duplicateCheckRule('sys_user', 'work_no', model, schema, false)[0] }];
+      return [{ required: false, message: 'Vui lòng nhập mã nhân viên' }, { ...rules.duplicateCheckRule('sys_user', 'work_no', model, schema, false)[0] }];
     },
   },*/
-  { field: 'relTenantIds', label: '租户', component: 'Input',show:false },
-  { field: 'selectedroles', label: '角色', component: 'Input',show:false },
+  { field: 'relTenantIds', label: 'Đơn vị thuê (tenant)', component: 'Input',show:false },
+  { field: 'selectedroles', label: 'Vai trò', component: 'Input',show:false },
 ];
 
-// 分配用户套餐
+// Phân bổ gói cho người dùng
 export const packUserAllotSchemas: FormSchema[] = [
   { 
     field: 'userId', 
-    label: '用户id', 
+    label: 'Người dùngid', 
     component: 'Input',
     show: false
   },
   {
     field: 'realname',
-    label: '用户姓名',
+    label: 'Họ tên người dùng',
     component: 'Input',
     componentProps:{
       readonly : true
@@ -602,7 +602,7 @@ export const packUserAllotSchemas: FormSchema[] = [
   },
   {
     field: 'packId',
-    label: '套餐',
+    label: 'Gói dịch vụ',
     component: 'Select',
     slot: 'packId'
   }

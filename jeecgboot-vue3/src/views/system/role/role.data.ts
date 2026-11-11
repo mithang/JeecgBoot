@@ -3,35 +3,35 @@ import { isRoleExist } from './role.api';
 import { useDrawer, useDrawerInner } from '@/components/Drawer';
 export const columns = [
   {
-    title: '角色名称',
+    title: 'Tên vai trò',
     dataIndex: 'roleName',
     width: 100,
   },
   {
-    title: '角色编码',
+    title: 'Mã vai trò',
     dataIndex: 'roleCode',
     width: 100,
   },
   {
-    title: '创建时间',
+    title: 'Thời gian tạo',
     dataIndex: 'createTime',
     width: 100,
   },
 ];
 /**
- * 角色用户Columns
+ * Người dùng của vai tròColumns
  */
 export const userColumns = [
   {
-    title: '用户账号',
+    title: 'Tài khoản người dùng',
     dataIndex: 'username',
   },
   {
-    title: '用户姓名',
+    title: 'Họ tên người dùng',
     dataIndex: 'realname',
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status_dictText',
     width: 80,
   },
@@ -39,50 +39,50 @@ export const userColumns = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'roleName',
-    label: '角色名称',
+    label: 'Tên vai trò',
     component: 'Input',
     colProps: { span: 6 },
   },
   {
     field: 'roleCode',
-    label: '角色编码',
+    label: 'Mã vai trò',
     component: 'Input',
     colProps: { span: 6 },
   },
 ];
 
 /**
- * 租户角色查询
+ * Truy vấn vai trò đơn vị thuê
  */
 export const searchTenantRoleFormSchema: FormSchema[] = [
     {
         field: 'roleName',
-        label: '角色名称',
+        label: 'Tên vai trò',
         component: 'JInput',
         colProps: { span: 6 },
     },
     {
         field: 'roleCode',
-        label: '角色编码',
+        label: 'Mã vai trò',
         component: 'JInput',
         colProps: { span: 6 },
     },
 ];
 
 /**
- * 角色用户搜索form
+ * Tìm kiếm người dùng của vai tròform
  */
 export const searchUserFormSchema: FormSchema[] = [
   {
     field: 'username',
-    label: '用户账号',
+    label: 'Tài khoản người dùng',
     component: 'JInput',
     colProps: { span: 8 },
     labelWidth: 74,
   },
   {
     field: 'realname',
-    label: '用户名称',
+    label: 'Tên người dùng',
     component: 'JInput',
     colProps: { span: 8 },
     labelWidth: 74,
@@ -90,19 +90,19 @@ export const searchUserFormSchema: FormSchema[] = [
 ];
 
 /**
- * 角色用户搜索
+ * Tìm kiếm người dùng của vai trò
  */
 export const roleUserSearchFormSchema: FormSchema[] = [
     {
         field: 'username',
-        label: '用户账号',
+        label: 'Tài khoản người dùng',
         component: 'Input',
         colProps: { span: 8 },
         labelWidth: 74,
     },
     {
         field: 'realname',
-        label: '用户名称',
+        label: 'Tên người dùng',
         component: 'Input',
         colProps: { span: 8 },
         labelWidth: 74,
@@ -118,13 +118,13 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'roleName',
-    label: '角色名称',
+    label: 'Tên vai trò',
     required: true,
     component: 'Input',
   },
   {
     field: 'roleCode',
-    label: '角色编码',
+    label: 'Mã vai trò',
     required: true,
     component: 'Input',
     dynamicDisabled: ({ values }) => {
@@ -137,16 +137,16 @@ export const formSchema: FormSchema[] = [
           required: true,
           validator: (_, value) => {
             if (!value) {
-              return Promise.reject('请输入角色编码');
+              return Promise.reject('Vui lòng nhập mã vai trò');
             }
             if (values) {
               return new Promise((resolve, reject) => {
                 isRoleExist({ id: model.id, roleCode: value })
                   .then((res) => {
-                    res.success ? resolve() : reject(res.message || '校验失败');
+                    res.success ? resolve() : reject(res.message || 'Kiểm tra không hợp lệ');
                   })
                   .catch((err) => {
-                    reject(err.message || '验证失败');
+                    reject(err.message || 'Xác thực thất bại');
                   });
               });
             }
@@ -157,7 +157,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '备注',
+    label: 'Ghi chú',
     field: 'description',
     component: 'InputTextArea',
   },
@@ -166,14 +166,14 @@ export const formSchema: FormSchema[] = [
 export const formDescSchema = [
   {
     field: 'roleName',
-    label: '角色名称',
+    label: 'Tên vai trò',
   },
   {
     field: 'roleCode',
-    label: '角色编码',
+    label: 'Mã vai trò',
   },
   {
-    label: '备注',
+    label: 'Ghi chú',
     field: 'description',
   },
 ];
@@ -186,42 +186,42 @@ export const roleIndexFormSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '角色编码',
+    label: 'Mã vai trò',
     field: 'roleCode',
     component: 'Input',
     dynamicDisabled: true,
   },
   {
-    label: '首页路由',
+    label: 'Định tuyến trang chủ',
     field: 'url',
     component: 'Input',
     required: true,
-    helpMessage: '首页路由的访问地址',
+    helpMessage: 'Địa chỉ truy cập của định tuyến trang chủ',
   },
   {
-    label: '组件地址',
+    label: 'Địa chỉ component',
     field: 'component',
     component: 'Input',
-    helpMessage: '首页路由的组件地址',
+    helpMessage: 'Địa chỉ component của định tuyến trang chủ',
     componentProps: {
-      placeholder: '请输入前端组件',
+      placeholder: 'Vui lòng nhập component frontend',
     },
     required: true,
   },
   {
     field: 'route',
-    label: '是否路由菜单',
-    helpMessage: '非路由菜单设置成首页，需开启',
+    label: 'Có phải menu định tuyến không',
+    helpMessage: 'Menu phi định tuyến được đặt làm trang chủ thì cần bật',
     component: 'Switch',
     defaultValue: true
   },
   {
-    label: '优先级',
+    label: 'Mức ưu tiên',
     field: 'priority',
     component: 'InputNumber',
   },
   {
-    label: '是否开启',
+    label: 'Có bật không',
     field: 'status',
     component: 'JSwitch',
     componentProps: {

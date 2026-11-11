@@ -1,59 +1,59 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Tham chiếu bảng-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
-        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls" > 导出</a-button>
-<!--        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls" v-auth="'system:user:import'">导入</j-upload-button>-->
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> Thêm mới</a-button>
+        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls" > Xuất (export)</a-button>
+<!--        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls" v-auth="'system:user:import'">Nhập (import)</j-upload-button>-->
         <import-excel-progress :upload-url="getImportUrl" @success="reload"></import-excel-progress>
-        <a-button type="primary" @click="openModal(true, {})" preIcon="ant-design:hdd-outlined"> 回收站</a-button>
+        <a-button type="primary" @click="openModal(true, {})" preIcon="ant-design:hdd-outlined"> Thùng rác</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
               <a-menu-item key="2" @click="batchFrozen(2)">
                 <Icon icon="ant-design:lock-outlined"></Icon>
-                冻结
+                Đóng băng
               </a-menu-item>
               <a-menu-item key="3" @click="batchFrozen(1)">
                 <Icon icon="ant-design:unlock-outlined"></Icon>
-                解冻
+                Bỏ đóng băng
               </a-menu-item>
               <a-menu-item v-if="hasPermission('system:user:resetPassword')" key="4" @click="batchResetPassword()">
                 <Icon icon="ant-design:reload-outlined"></Icon>
-                重置密码
+                Đặt lại mật khẩu
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-          >批量操作
+          >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
-    <!--用户抽屉-->
+    <!--Ngăn kéo người dùng-->
     <UserDrawer @register="registerDrawer" @success="handleSuccess" />
-    <!--修改密码-->
+    <!--Đổi mật khẩu-->
     <PasswordModal @register="registerPasswordModal" @success="reload" />
-    <!--回收站-->
+    <!--Thùng rác-->
     <UserRecycleBinModal @register="registerModal" @success="reload" />
-    <!-- 离职人员列弹窗 -->
+    <!-- Hộp thoại danh sách nhân viên nghỉ việc -->
     <UserQuitModal @register="registerQuitModal" @success="reload" />
   </div>
 </template>
 
 <script lang="ts" name="system-user" setup>
-  //ts语法
+  //tsCú pháp
   import { ref, computed, unref } from 'vue';
   import { BasicTable, TableAction, ActionItem } from '/@/components/Table';
   import UserDrawer from './UserDrawer.vue';
@@ -74,24 +74,24 @@
   const { createMessage, createConfirm } = useMessage();
   const { isDisabledAuth, hasPermission } = usePermission();
   
-  //注册drawer
+  //Đăng kýdrawer
   const [registerDrawer, { openDrawer }] = useDrawer();
-  //回收站model
+  //Thùng rácmodel
   const [registerModal, { openModal }] = useModal();
-  //密码model
+  //Mật khẩumodel
   const [registerPasswordModal, { openModal: openPasswordModal }] = useModal();
-  //代理人model
+  //Người đại diệnmodel
   const [registerAgentModal, { openModal: openAgentModal }] = useModal();
-  //离职代理人model
+  //Người được ủy quyền khi nghỉ việcmodel
   const [registerQuitAgentModal, { openModal: openQuitAgentModal }] = useModal();
-  //离职用户列表model
+  //Danh sách người dùng nghỉ việcmodel
   const [registerQuitModal, { openModal: openQuitModal }] = useModal();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     designScope: 'user-list',
     tableProps: {
-      title: '用户列表',
+      title: 'Danh sách người dùng',
       api: listNoCareTenant,
       columns: columns,
       canResize: true,
@@ -104,7 +104,7 @@
         width: 120,
       },
       afterFetch: async (result) => {
-        // 批量预加载部门/岗位路径名称，避免每个单元格逐条请求接口
+        // Tải trước hàng loạt tên đường dẫn phòng ban/vị trí, tránh việc mỗi ô lại yêu cầu API từng cái một
         await batchPreloadDepartPathNames(result);
         return result;
       },
@@ -117,7 +117,7 @@
       },
     },
     exportConfig: {
-      name: '用户列表',
+      name: 'Danh sách người dùng',
       url: getExportUrl,
     },
     importConfig: {
@@ -125,11 +125,11 @@
     },
   });
 
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload, updateTableDataRecord, clearSelectedRowKeys }, { rowSelection, selectedRows, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleCreate() {
     openDrawer(true, {
@@ -139,7 +139,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   async function handleEdit(record: Recordable) {
     openDrawer(true, {
@@ -150,7 +150,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   async function handleDetail(record: Recordable) {
     openDrawer(true, {
@@ -161,22 +161,22 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     if ('admin' == record.username) {
-      createMessage.warning('管理员账号不允许此操作！');
+      createMessage.warning('Tài khoản quản trị viên không được phép thực hiện thao tác này!');
       return;
     }
     await deleteUser({ id: record.id }, reload);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     let hasAdmin = unref(selectedRows).filter((item) => item.username == 'admin');
     if (unref(hasAdmin).length > 0) {
-      createMessage.warning('管理员账号不允许此操作！');
+      createMessage.warning('Tài khoản quản trị viên không được phép thực hiện thao tác này!');
       return;
     }
     await batchDeleteUser({ ids: selectedRowKeys.value }, () => {
@@ -185,60 +185,60 @@
     });
   }
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     reload();
   }
 
   /**
-   * 打开修改密码弹窗
+   * Mở hộp thoại đổi mật khẩu
    */
   function handleChangePassword(username) {
     openPasswordModal(true, { username });
   }
   /**
-   * 冻结解冻
+   * Đóng băng/Bỏ đóng băng
    */
   async function handleFrozen(record, status) {
     if ('admin' == record.username) {
-      createMessage.warning('管理员账号不允许此操作！');
+      createMessage.warning('Tài khoản quản trị viên không được phép thực hiện thao tác này!');
       return;
     }
     await frozenBatch({ ids: record.id, status: status }, reload);
   }
   /**
-   * 批量冻结解冻
+   * Đóng băng/Bỏ đóng băng hàng loạt
    */
   function batchFrozen(status) {
     let hasAdmin = selectedRows.value.filter((item) => item.username == 'admin');
     if (unref(hasAdmin).length > 0) {
-      createMessage.warning('管理员账号不允许此操作！');
+      createMessage.warning('Tài khoản quản trị viên không được phép thực hiện thao tác này!');
       return;
     }
     createConfirm({
       iconType: 'warning',
-      title: '确认操作',
-      content: '是否' + (status == 1 ? '解冻' : '冻结') + '选中账号?',
+      title: 'Xác nhận thao tác',
+      content: 'Có phải' + (status == 1 ? 'Bỏ đóng băng' : 'Đóng băng') + 'Tài khoản đã chọn?',
       onOk: async () => {
         await frozenBatch({ ids: unref(selectedRowKeys).join(','), status: status }, reload);
       },
     });
   }
   /**
-   * 批量重置密码
+   * Đặt lại mật khẩu hàng loạt
    */
   function batchResetPassword() {
     let hasAdmin = selectedRows.value.filter((item) => item.username == 'admin');
     if (unref(hasAdmin).length > 0) {
-      createMessage.warning('所选用户中包含管理员，管理员账号不允许重置密码！！');
+      createMessage.warning('Trong số người dùng đã chọn có quản trị viên, tài khoản quản trị viên không được phép đặt lại mật khẩu!!');
       return;
     }
     if (selectedRows.value.length > 0) {
       createConfirm({
         iconType: 'warning',
-        title: '确认操作',
-        content: '是否重置选中的账号密码?',
+        title: 'Xác nhận thao tác',
+        content: 'Có đặt lại mật khẩu của tài khoản đã chọn không?',
         onOk: async () => {
           const usernames = selectedRows.value.map((item) => item.username).join(',');
           await resetPassword({ usernames: usernames }, ()=>{reload();clearSelectedRowKeys();});
@@ -249,61 +249,61 @@
 
 
   /**
-   *同步钉钉和微信回调
+   *Đồng bộ callback của DingTalk và WeChat
    */
   function onSyncFinally({ isToLocal }) {
-    // 同步到本地时刷新下数据
+    // Khi đồng bộ về máy cục bộ thì làm mới dữ liệu
     if (isToLocal) {
       reload();
     }
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
         // ifShow: () => hasPermission('system:user:edit'),
       },
     ];
   }
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record): ActionItem[] {
     return [
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '密码',
+        label: 'Mật khẩu',
         //auth: 'user:changepwd',
         onClick: handleChangePassword.bind(null, record.username),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },
       {
-        label: '冻结',
+        label: 'Đóng băng',
         ifShow: record.status == 1,
         popConfirm: {
-          title: '确定冻结吗?',
+          title: 'Bạn có chắc muốn đóng băng không?',
           confirm: handleFrozen.bind(null, record, 2),
         },
       },
       {
-        label: '解冻',
+        label: 'Bỏ đóng băng',
         ifShow: record.status == 2,
         popConfirm: {
-          title: '确定解冻吗?',
+          title: 'Bạn có chắc muốn bỏ đóng băng không?',
           confirm: handleFrozen.bind(null, record, 1),
         },
       },

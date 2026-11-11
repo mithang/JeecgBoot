@@ -14,8 +14,8 @@
     </BasicForm>
     <div class="j-box-bottom-button offset-20" style="margin-top: 30px">
       <div class="j-box-bottom-button-float" :class="[`${prefixCls}`]">
-        <a-button preIcon="ant-design:sync-outlined" @click="onReset">重置</a-button>
-        <a-button type="primary" preIcon="ant-design:save-filled" @click="onSubmit">保存</a-button>
+        <a-button preIcon="ant-design:sync-outlined" @click="onReset">Đặt lại</a-button>
+        <a-button type="primary" preIcon="ant-design:save-filled" @click="onSubmit">Lưu</a-button>
       </div>
     </div>
   </a-spin>
@@ -38,17 +38,17 @@
     rootTreeData: { type: Array, default: () => [] },
   });
   const loading = ref<boolean>(false);
-  // 当前是否是更新模式
+  // Hiện có đang ở chế độ cập nhật không
   const isUpdate = ref<boolean>(true);
-  // 当前的弹窗数据
+  // Dữ liệu của hộp thoại hiện tại
   const model = ref<object>({});
   const treeData = ref<any>([]);
-  //上级岗位
+  //Vị trí cấp trên
   const depPostValue = ref<any>([]);
-  //上级岗位名称映射
+  //Ánh xạ tên vị trí cấp trên
   const orgNameMap = ref<Record<string, string>>({});
 
-  //注册表单
+  //Biểu mẫu đăng ký
   const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
     schemas: useBasicFormSchema(treeData).basicFormSchema,
     showActionButtonGroup: false,
@@ -63,12 +63,12 @@
   });
 
   onMounted(() => {
-    // 禁用字段
+    // Vô hiệu hóa trường
     updateSchema([
       { field: 'parentId', componentProps: { disabled: true } },
       { field: 'orgCode', componentProps: { disabled: true } },
     ]);
-    // data 变化，重填表单
+    // data Thay đổi, điền lại biểu mẫu
     watch(
       () => props.data,
       async () => {
@@ -88,7 +88,7 @@
       },
       { deep: true, immediate: true }
     );
-    // 更新 父部门 选项
+    // Cập nhật tùy chọn phòng ban cha
     watch(
       () => props.rootTreeData,
       async () => {
@@ -101,7 +101,7 @@
       },
       { deep: true, immediate: true }
     );
-    // 监听并更改 orgCategory options
+    // Theo dõi và thay đổi orgCategory options
     watch(
       categoryOptions,
       async () => {
@@ -116,13 +116,13 @@
     );
   });
 
-  // 重置表单
+  // Đặt lại biểu mẫu
   async function onReset() {
     await resetFields();
     await setFieldsValue({ ...model.value });
   }
 
-  // 提交事件
+  // Sự kiện gửi
   async function onSubmit() {
     try {
       loading.value = true;
@@ -133,9 +133,9 @@
       } else {
         values.depPostParentId = '';
       }
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateDepart(values, isUpdate.value);
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
       Object.assign(model.value, values);
     } finally {
@@ -144,7 +144,7 @@
   }
 
   /**
-   * 树选中事件
+   * Sự kiện chọn trên cây
    *
    * @param info
    * @param keys
@@ -162,12 +162,12 @@
 <style lang="less">
 
   @prefix-cls: ~'@{namespace}-j-depart-form-content';
-  /*begin 兼容暗夜模式*/
+  /*begin Tương thích chế độ tối*/
   .@{prefix-cls} {
     background: @component-background;
     border-top: 1px solid @border-color-base;
   }
-  /*end 兼容暗夜模式*/
+  /*end Tương thích chế độ tối*/
 </style>
 <style lang="less" scoped>
   :deep(.ant-select-selector .ant-select-selection-item){

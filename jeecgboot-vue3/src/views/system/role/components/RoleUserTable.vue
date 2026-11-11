@@ -1,21 +1,21 @@
 <template>
-  <BasicDrawer @register="registerBaseDrawer" title="角色用户" width="800" destroyOnClose>
+  <BasicDrawer @register="registerBaseDrawer" title="Người dùng của vai trò" width="800" destroyOnClose>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button type="primary" @click="handleCreate" v-if="!disableUserEdit"> 新增用户</a-button>
-        <a-button type="primary" @click="handleSelect"> 已有用户</a-button>
+        <a-button type="primary" @click="handleCreate" v-if="!disableUserEdit"> Thêm mới người dùng</a-button>
+        <a-button type="primary" @click="handleSelect"> Người dùng hiện có</a-button>
 
         <a-dropdown v-if="checkedKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="bx:bx-unlink"></Icon>
-                取消关联
+                Hủy bỏ liên kết
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
@@ -24,9 +24,9 @@
         <TableAction :actions="getTableAction(record)" />
       </template>
     </BasicTable>
-    <!--用户操作抽屉-->
+    <!--Ngăn kéo thao tác người dùng-->
     <UserDrawer @register="registerDrawer" @success="handleSuccess" />
-    <!--用户选择弹窗-->
+    <!--Hộp thoại chọn người dùng-->
     <UseSelectModal @register="registerModal" @select="selectOk" />
   </BasicDrawer>
 </template>
@@ -53,16 +53,16 @@
     setProps({ searchInfo: { roleId: data.id } });
     reload();
   });
-  //注册drawer
+  //Đăng kýdrawer
   const [registerDrawer, { openDrawer }] = useDrawer();
-  //注册drawer
+  //Đăng kýdrawer
   const [registerModal, { openModal }] = useModal();
   const [registerTable, { reload, updateTableDataRecord, setProps }] = useTable({
-    title: '用户列表',
+    title: 'Danh sách người dùng',
     api: userList,
     columns: userColumns,
     formConfig: {
-      // 代码逻辑说明: 【QQYUN-5685】3、租户角色下,查询居左显示
+      // Giải thích logic mã: 【QQYUN-5685】3、Trong vai trò của đơn vị thuê,Tìm kiếm hiển thị ở bên trái
       labelWidth: 60,
       schemas: roleUserSearchFormSchema,
       autoSubmitOnEnter: true,
@@ -73,13 +73,13 @@
     clickToRowSelect: false,
     bordered: true,
     showIndexColumn: false,
-    // 【issues/1064】列设置的 cacheKey
+    // 【issues/1064】Thuộc về cài đặt cột cacheKey
     tableSetting: { fullScreen: true, cacheKey: 'role_user_table' },
     canResize: false,
     rowKey: 'id',
     actionColumn: {
       width: 180,
-      title: '操作',
+      title: 'Thao tác',
       dataIndex: 'action',
       slots: { customRender: 'action' },
       fixed: undefined,
@@ -87,7 +87,7 @@
   });
 
   /**
-   * 选择列配置
+   * Cấu hình cột chọn
    */
   const rowSelection = {
     type: 'checkbox',
@@ -97,14 +97,14 @@
   };
 
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[], selectionRows) {
     checkedKeys.value = selectedRowKeys;
   }
 
   /**
-   * 新增
+   * Thêm mới
    */
   function handleCreate() {
     openDrawer(true, {
@@ -114,7 +114,7 @@
     });
   }
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   async function handleEdit(record: Recordable) {
     try {
@@ -133,55 +133,55 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteUserRole({ userId: record.id, roleId: roleId.value }, reload);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteUserRole({ userIds: checkedKeys.value.join(','), roleId: roleId.value }, () => {
-      // 代码逻辑说明: 【TV360X-1655】批量取消关联之后清空选中记录
+      // Giải thích logic mã: 【TV360X-1655】Sau khi hủy liên kết hàng loạt thì xóa các bản ghi đã chọn
       reload();
       checkedKeys.value = [];
     });
   }
 
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess({ isUpdate, values }) {
     isUpdate ? updateTableDataRecord(values.id, values) : reload();
   }
   /**
-   * 选择已有用户
+   * Chọn người dùng hiện có
    */
   function handleSelect() {
     openModal(true);
   }
   /**
-   * 添加已有用户
+   * Thêm người dùng hiện có
    */
   async function selectOk(val) {
     await addUserRole({ roleId: roleId.value, userIdList: val }, reload);
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
         ifShow: () => !props.disableUserEdit,
       },
       {
-        label: '取消关联',
+        label: 'Hủy bỏ liên kết',
         popConfirm: {
-          title: '是否确认取消关联',
+          title: 'Xác nhận hủy liên kết?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -190,9 +190,9 @@
 </script>
 
 <style scoped>
-  /*update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5685】3、租户角色下,查询居左显示*/
+  /*update-begin---author:wangshuai ---date:20230703  for：【QQYUN-5685】3、Trong vai trò của đơn vị thuê,Tìm kiếm hiển thị ở bên trái*/
   :deep(.ant-form-item-control-input-content){
     text-align: left;
   }
-  /*update-end---author:wangshuai ---date:20230703  for：【QQYUN-5685】3、租户角色下,查询居左显示*/
+  /*update-end---author:wangshuai ---date:20230703  for：【QQYUN-5685】3、Trong vai trò của đơn vị thuê,Tìm kiếm hiển thị ở bên trái*/
 </style>

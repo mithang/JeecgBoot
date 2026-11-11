@@ -2,21 +2,21 @@
   <div class="p-4">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增菜单</a-button>
-        <a-button type="primary" preIcon="ic:round-expand" @click="expandAll">展开全部</a-button>
-        <a-button type="primary" preIcon="ic:round-compress" @click="collapseAll">折叠全部</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> Thêm mới menu</a-button>
+        <a-button type="primary" preIcon="ic:round-expand" @click="expandAll">Mở rộng tất cả</a-button>
+        <a-button type="primary" preIcon="ic:round-compress" @click="collapseAll">Thu gọn tất cả</a-button>
 
         <a-dropdown v-if="checkedKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined" />
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined" />
           </a-button>
         </a-dropdown>
@@ -48,33 +48,33 @@
   const { t } = useI18n();
   let collapseBeforeFetch = () => {};
 
-  // 自定义菜单名称列渲染
+  // Kết xuất cột tên menu tùy chỉnh
   columns[0].customRender = function ({ text, record }) {
-    // date-begin--author:liaozhiyang---date:20250716---for：【issues/8317】默认首页菜单名称适配国际化报错
+    // date-begin--author:liaozhiyang---date:20250716---for：【issues/8317】Tên menu của trang chủ mặc định gây lỗi khi thích ứng quốc tế hóa
     let displayText = text;
-    // 先处理国际化，避免在添加默认首页标记后影响国际化检查
+    // Xử lý quốc tế hóa trước, tránh ảnh hưởng đến kiểm tra quốc tế hóa sau khi thêm dấu trang chủ mặc định
     if (displayText && displayText.includes("t('") && t) {
       try {
         displayText = new Function('t', `return ${displayText}`)(t);
       } catch (error) {
-        console.warn('国际化处理失败:', error);
-        // 如果国际化处理失败，使用原始文本
+        console.warn('Xử lý quốc tế hóa thất bại:', error);
+        // Nếu xử lý quốc tế hóa thất bại, dùng văn bản gốc
         displayText = text;
       }
     }
-    // 在国际化处理完成后，再添加默认首页标记
+    // Sau khi hoàn thành xử lý quốc tế hóa, mới thêm dấu trang chủ mặc định
     const isDefIndex = checkDefIndex(record);
     if (isDefIndex) {
       displayText += `（${t('routes.basic.defaultHomePage')}）`;
     }
     return displayText;
-    // date-end--author:liaozhiyang---date:20250716---for：【issues/8317】默认首页菜单名称适配国际化报错
+    // date-end--author:liaozhiyang---date:20250716---for：【issues/8317】Tên menu của trang chủ mặc định gây lỗi khi thích ứng quốc tế hóa
   };
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     tableProps: {
-      title: '菜单列表',
+      title: 'Danh sách menu',
       api: list,
       columns: columns,
       size: 'small',
@@ -91,7 +91,7 @@
         return params;
       },
       formConfig: {
-        // 代码逻辑说明: 【QQYUN-5873】查询区域lablel默认居左
+        // Giải thích logic mã: 【QQYUN-5873】Nhãn (label) của khu vực truy vấn mặc định căn trái
         labelWidth: 74,
         rowProps: { gutter: 24 },
         schemas: searchFormSchema,
@@ -104,12 +104,12 @@
       },
     },
   });
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload, expandAll, collapseAll, getDataSource, setProps }] = tableContext;
   collapseBeforeFetch = collapseAll;
 
   /**
-   * 只展开根节点，避免一次性渲染全部菜单和按钮权限节点导致页面卡顿
+   * Chỉ mở rộng nút gốc, tránh kết xuất toàn bộ nút menu và nút quyền cùng một lúc khiến trang bị giật lag
    */
   function expandFirstLevel() {
     const rootKeys = getDataSource().map((item) => item.id).filter(Boolean);
@@ -117,7 +117,7 @@
   }
 
   /**
-   * 选择列配置
+   * Cấu hình cột chọn
    */
   const rowSelection = {
     type: 'checkbox',
@@ -127,14 +127,14 @@
   };
 
   /**
-   * 选择事件
+   * Sự kiện chọn
    */
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;
   }
 
   /**
-   * 新增
+   * Thêm mới
    */
   function handleCreate() {
     showFooter.value = true;
@@ -144,7 +144,7 @@
   }
 
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function handleEdit(record) {
     showFooter.value = true;
@@ -154,7 +154,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   function handleDetail(record) {
     showFooter.value = false;
@@ -164,7 +164,7 @@
     });
   }
   /**
-   * 添加下级
+   * Thêm cấp dưới
    */
   function handleAddSub(record) {
     openDrawer(true, {
@@ -173,31 +173,31 @@
     });
   }
   /**
-   * 数据权限弹窗
+   * Hộp thoại quyền dữ liệu
    */
   function handleDataRule(record) {
     openDataRule(true, { id: record.id });
   }
 
   /**
-   * 删除
+   * Xóa
    */
   async function handleDelete(record) {
     await deleteMenu({ id: record.id }, reload);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteMenu({ ids: checkedKeys.value }, () => {
-      // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1662】菜单管理、定时任务批量删除清空选中
+      // -update-begin--author:liaozhiyang---date:20240702---for：【TV360X-1662】Quản lý menu, tác vụ hẹn giờ: khi xóa hàng loạt thì xóa danh sách đã chọn
       reload();
       checkedKeys.value = [];
-      // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1662】菜单管理、定时任务批量删除清空选中
+      // -update-end--author:liaozhiyang---date:20240702---for：【TV360X-1662】Quản lý menu, tác vụ hẹn giờ: khi xóa hàng loạt thì xóa danh sách đã chọn
     });
   }
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     reload();
@@ -205,28 +205,28 @@
   }
 
   function onFetchSuccess() {
-    // 演示默认展开所有表项
+    // Trình diễn mặc định mở rộng mọi mục bảng
     nextTick(expandAll);
   }
 
-  // --------------- begin 默认首页配置 ------------
+  // --------------- begin Cấu hình trang chủ mặc định ------------
 
   const defIndexStore = useDefIndexStore()
 
-  // 设置默认主页
+  // Đặt trang chủ mặc định
   async function handleSetDefIndex(record: Recordable) {
     defIndexStore.update(record.url, record.component, record.route)
   }
 
   /**
-   * 检查是否为默认主页
+   * Kiểm tra có phải trang chủ mặc định hay không
    * @param record
    */
   function checkDefIndex(record: Recordable) {
     return defIndexStore.check(record.url)
   }
 
-  // 重新加载默认首页配置
+  // Tải lại cấu hình trang chủ mặc định
   function reloadDefIndex() {
     try {
       defIndexStore.query();
@@ -237,47 +237,47 @@
 
   reloadDefIndex()
 
-  // --------------- end 默认首页配置 ------------
+  // --------------- end Cấu hình trang chủ mặc định ------------
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
     ];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record) {
     return [
       // {
-      //   label: '详情',
+      //   label: 'Chi tiết',
       //   onClick: handleDetail.bind(null, record),
       // },
       {
-        label: '添加下级',
+        label: 'Thêm cấp dưới',
         onClick: handleAddSub.bind(null, record),
       },
       {
-        label: '数据规则',
+        label: 'Quy tắc dữ liệu',
         onClick: handleDataRule.bind(null, record),
       },
       {
-        label: '设为默认首页',
+        label: 'Đặt làm trang chủ mặc định',
         onClick: handleSetDefIndex.bind(null, record),
         ifShow: () => !record.internalOrExternal && record.component && !checkDefIndex(record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         color: 'error',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },

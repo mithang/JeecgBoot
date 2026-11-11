@@ -16,27 +16,27 @@
 
   const emit = defineEmits(['success', 'register']);
   const props = defineProps({
-    // 当前部门ID
+    // Phòng ban hiện tạiID
     departId: { require: true, type: String },
   });
   const prefixCls = inject('prefixCls');
-  // 当前是否是更新模式
+  // Hiện có đang ở chế độ cập nhật không
   const isUpdate = ref<boolean>(true);
-  // 当前的弹窗数据
+  // Dữ liệu của hộp thoại hiện tại
   const model = ref<object>({});
-  const title = computed(() => (isUpdate.value ? '编辑' : '新增'));
+  const title = computed(() => (isUpdate.value ? 'Chỉnh sửa' : 'Thêm mới'));
 
-  //注册表单
+  //Biểu mẫu đăng ký
   const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
     schemas: departRoleModalFormSchema,
     showActionButtonGroup: false,
   });
 
-  // 注册弹窗
+  // Hộp thoại đăng ký
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     await resetFields();
     isUpdate.value = unref(data?.isUpdate);
-    // 无论新增还是编辑，都可以设置表单值
+    // Dù thêm mới hay chỉnh sửa đều có thể đặt giá trị cho biểu mẫu
     let record = unref(data?.record);
     if (typeof record === 'object') {
       model.value = record;
@@ -44,17 +44,17 @@
     }
   });
 
-  //提交事件
+  //Sự kiện gửi
   async function handleOk() {
     try {
       setModalProps({ confirmLoading: true });
       let values = await validate();
       values.departId = unref(props.departId);
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateDepartRole(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success', { isUpdate: unref(isUpdate), values });
     } finally {
       setModalProps({ confirmLoading: false });

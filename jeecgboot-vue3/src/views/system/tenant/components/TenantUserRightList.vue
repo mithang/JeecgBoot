@@ -11,10 +11,10 @@
       </template>
     </template>
     <template #tableTitle>
-      <a-button preIcon="ant-design:usergroup-add-outlined" type="primary" @click="addUser" :disabled="tenantPackData.izSysn == '1'">邀请成员</a-button>
-      <a-button preIcon="ant-design:rollback-outlined" @click="cancel">关闭</a-button>
+      <a-button preIcon="ant-design:usergroup-add-outlined" type="primary" @click="addUser" :disabled="tenantPackData.izSysn == '1'">Mời thành viên</a-button>
+      <a-button preIcon="ant-design:rollback-outlined" @click="cancel">Đóng</a-button>
     </template>
-    <!--操作栏-->
+    <!--Thanh thao tác-->
     <template #action="{ record }">
       <TableAction :actions="getTableAction(record)" />
     </template>
@@ -28,7 +28,7 @@
   import { BasicTable, TableAction } from '@/components/Table';
   import TenantUserSelectModal from '@/views/system/tenant/components/TenantUserSelectModal.vue';
   import { addTenantPackUser, deleteTenantPackUser } from '@/views/system/tenant/tenant.api';
-  //注册table数据
+  //Đăng ký dữ liệu table
   import { useListPage } from '@/hooks/system/useListPage';
   import { queryTenantPackUserList } from '@/views/system/tenant/tenant.api';
   import { tenantPackUserColumns } from '@/views/system/tenant/tenant.data';
@@ -41,12 +41,12 @@
     emits: ['cancel'],
     setup(props, { emit }) {
       const [registerUserModal, { openModal: openUserModal, closeModal: closeUserModal }] = useModal();
-      //获取租户id
+      //Lấy đơn vị thuêid
       const getTenantId = computed(() => {
         return tenantPackData.tenantId;
       });
 
-      //套餐包信息
+      //Thông tin gói dịch vụ
       const tenantPackData = reactive<any>({});
       const { tableContext } = useListPage({
         tableProps: {
@@ -71,7 +71,7 @@
       const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
       /**
-       * 初始化数据
+       * Khởi tạo dữ liệu
        * @param value
        */
       function initData(value) {
@@ -81,15 +81,15 @@
       }
 
       /**
-       * 表格操作列
+       * Cột thao tác của bảng
        * @param record
        */
       function getTableAction(record) {
         return [
           {
-            label: '移除',
+            label: 'Loại bỏ',
             popConfirm: {
-              title: '是否确认移除',
+              title: 'Xác nhận loại bỏ?',
               confirm: handleDelete.bind(null, record),
             },
             ifShow:() => tenantPackData.izSysn != '1'
@@ -98,7 +98,7 @@
       }
 
       /**
-       * 删除
+       * Xóa
        */
       async function handleDelete(record) {
         let params = {
@@ -113,7 +113,7 @@
       }
 
       /**
-       * 添加用户弹窗
+       * Hộp thoại thêm người dùng
        */
       function addUser() {
         openUserModal(true, {
@@ -122,7 +122,7 @@
       }
 
       /**
-       * 邀请人回调事件
+       * Sự kiện callback của người mời
        * @param arr
        */
       async function onSelected(arr) {
@@ -147,7 +147,7 @@
       }
 
       /**
-       * 获取部门/职务名称
+       * Lấy tên phòng ban/chức danh
        * @param value
        */
       function getName(value) {
@@ -155,7 +155,7 @@
       }
 
       /**
-       * 关闭
+       * Đóng
        */
       function cancel() {
         emit('cancel');

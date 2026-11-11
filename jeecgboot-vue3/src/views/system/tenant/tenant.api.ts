@@ -16,31 +16,31 @@ enum Api {
   packList = '/sys/tenant/packList',
   addPackPermission = '/sys/tenant/addPackPermission',
   editPackPermission = '/sys/tenant/editPackPermission',
-  // 套餐包菜单数据规则
+  // Quy tắc dữ liệu của menu gói dịch vụ
   packDataRule = '/sys/tenant/packDatarule',
   deleteTenantPack = '/sys/tenant/deleteTenantPack',
   recycleBinPageList = '/sys/tenant/recycleBinPageList',
   deleteLogicDeleted = '/sys/tenant/deleteLogicDeleted',
   revertTenantLogic = '/sys/tenant/revertTenantLogic',
   syncDefaultPack = '/sys/tenant/syncDefaultPack',
-  //用户产品包关系api
+  //Quan hệ gói sản phẩm của người dùngapi
   queryTenantPackUserList = '/sys/tenant/queryTenantPackUserList',
   deleteTenantPackUser = '/sys/tenant/deleteTenantPackUser',
   addTenantPackUser = '/sys/tenant/addTenantPackUser',
-  //获取用户租户列表
+  //Lấy danh sách đơn vị thuê của người dùng
   getTenantPageListByUserId = '/sys/tenant/getTenantPageListByUserId',
   
-  //新增、编辑用户租户
+  //Thêm mới, chỉnh sửa đơn vị thuê của người dùng
   saveUser = '/sys/user/addTenantUser',
   editUser = '/sys/user/editTenantUser',
-  //根据租户id和用户获取用户的产品包列表和当前用户下的产品包id
+  //Dựa vào ID đơn vị thuê và người dùng để lấy danh sách gói sản phẩm của người dùng và gói sản phẩm thuộc người dùng hiện tạiid
   listPackByTenantUserId = '/sys/tenant/listPackByTenantUserId',
-  // 获取菜单权限
+  // Lấy quyền menu
   queryPremTreeList = '/sys/role/queryTreeList',
 }
 
 /**
- * 查询租户列表
+ * Truy vấn danh sách đơn vị thuê
  * @param params
  */
 export const getTenantList = (params) => {
@@ -48,7 +48,7 @@ export const getTenantList = (params) => {
 };
 
 /**
- * 保存或者更新租户
+ * Lưu hoặc cập nhật đơn vị thuê
  * @param params
  */
 export const saveOrUpdateTenant = (params, isUpdate) => {
@@ -57,7 +57,7 @@ export const saveOrUpdateTenant = (params, isUpdate) => {
 };
 
 /**
- * 查询租户详情
+ * Truy vấn chi tiết đơn vị thuê
  * @param params
  */
 export const getTenantById = (params) => {
@@ -65,7 +65,7 @@ export const getTenantById = (params) => {
 };
 
 /**
- * 删除租户
+ * Xóa đơn vị thuê
  * @param params
  */
 export const deleteTenant = (params, handleSuccess) => {
@@ -75,15 +75,15 @@ export const deleteTenant = (params, handleSuccess) => {
 };
 
 /**
- * 批量删除租户
+ * Xóa hàng loạt đơn vị thuê
  * @param params
  */
 export const batchDeleteTenant = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -93,18 +93,18 @@ export const batchDeleteTenant = (params, handleSuccess) => {
 };
 
 /**
- * 获取登录用户部门信息
+ * Lấy thông tin phòng ban của người dùng đăng nhập
  */
 export const getUserTenants = (params?) => defHttp.get({ url: Api.getCurrentUserTenants, params });
 
 /**
- * 邀请用户加入租户
+ * Mời người dùng tham gia đơn vị thuê
  * @param params
  */
 export const invitationUserJoin = (params) => defHttp.put({ url: Api.invitationUserJoin, params }, { joinParamsToUrl: true });
 
 /**
- * 通过租户id获取数据
+ * Lấy dữ liệu thông qua ID đơn vị thuê
  * @param params
  */
 export const getTenantUserList = (params) => {
@@ -112,15 +112,15 @@ export const getTenantUserList = (params) => {
 };
 
 /**
- * 用户离开租户
+ * Người dùng rời khỏi đơn vị thuê
  * @param params
  */
 export const leaveTenant = (params, handleSuccess) => {
   Modal.confirm({
-    title: '请离',
-    content: '是否将此用户请离当前租户',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xin nghỉ việc',
+    content: 'Có mời người dùng này rời khỏi đơn vị thuê hiện tại không',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.put({ url: Api.leaveTenant, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -130,7 +130,7 @@ export const leaveTenant = (params, handleSuccess) => {
 };
 
 /**
- * 获取产品包列表
+ * Lấy danh sách gói sản phẩm
  * @param params
  */
 export const packList = (params) => {
@@ -138,7 +138,7 @@ export const packList = (params) => {
 };
 
 /**
- * 添加菜单
+ * Thêm menu
  * @param params
  */
 export const addPackPermission = (params) => {
@@ -146,7 +146,7 @@ export const addPackPermission = (params) => {
 };
 
 /**
- * 添加菜单
+ * Thêm menu
  * @param params
  */
 export const editPackPermission = (params) => {
@@ -154,20 +154,20 @@ export const editPackPermission = (params) => {
 };
 
 /**
- * 查询套餐包菜单的数据规则
- * @param params functionId 菜单id，packId 套餐包id
+ * Truy vấn quy tắc dữ liệu của menu gói dịch vụ
+ * @param params functionId ID menu, packId: gói dịch vụid
  */
 export const queryPackDataRule = (params) =>
   defHttp.get({ url: `${Api.packDataRule}/${params.functionId}/${params.packId}` }, { isTransformResponse: false });
 
 /**
- * 保存套餐包菜单的数据规则
- * @param params permissionId 菜单id，packId 套餐包id，dataRuleIds 数据规则id
+ * Lưu quy tắc dữ liệu của menu gói dịch vụ
+ * @param params permissionId ID menu, packId: ID gói dịch vụ, dataRuleIds: quy tắc dữ liệuid
  */
 export const savePackDataRule = (params) => defHttp.post({ url: Api.packDataRule, params });
 
 /**
- * 删除菜单
+ * Xóa menu
  * @param params
  */
 export const deleteTenantPack = (params, handleSuccess) => {
@@ -177,7 +177,7 @@ export const deleteTenantPack = (params, handleSuccess) => {
 };
 
 /**
- * 初始化套餐包
+ * Khởi tạo gói dịch vụ
  * @param params
  * @param handleSuccess
  */
@@ -188,7 +188,7 @@ export const syncDefaultTenantPack = (params, handleSuccess) => {
 };
 
 /**
- * 获取租户回收站的列表
+ * Lấy danh sách thùng rác của đơn vị thuê
  * @param params
  */
 export const recycleBinPageList = (params) => {
@@ -196,7 +196,7 @@ export const recycleBinPageList = (params) => {
 };
 
 /**
- * 租户彻底删除
+ * Xóa vĩnh viễn đơn vị thuê
  * @param params
  */
 export const deleteLogicDeleted = (params,handleSuccess) => {
@@ -208,7 +208,7 @@ export const deleteLogicDeleted = (params,handleSuccess) => {
 };
 
 /**
- * 租户还原
+ * Khôi phục đơn vị thuê
  * @param params
  */
 export const revertTenantLogic = (params,handleSuccess) => {
@@ -218,7 +218,7 @@ export const revertTenantLogic = (params,handleSuccess) => {
 };
 
 /**
- * 获取租户产品包下面的用户
+ * Lấy người dùng thuộc gói sản phẩm của đơn vị thuê
  * @param params
  */
 export const queryTenantPackUserList = (params) => {
@@ -226,7 +226,7 @@ export const queryTenantPackUserList = (params) => {
 };
 
 /**
- * 移除用户和产品包的关系数据
+ * Loại bỏ dữ liệu quan hệ giữa người dùng và gói sản phẩm
  * @param params
  */
 export const deleteTenantPackUser = (params)=>{
@@ -234,7 +234,7 @@ export const deleteTenantPackUser = (params)=>{
 }
 
 /**
- * 添加用户和产品包的关系数据
+ * Thêm dữ liệu quan hệ giữa người dùng và gói sản phẩm
  * @param params
  */
 export const addTenantPackUser = (params)=>{
@@ -242,7 +242,7 @@ export const addTenantPackUser = (params)=>{
 }
 
 /**
- * 查询用户租户列表
+ * Truy vấn danh sách đơn vị thuê của người dùng
  * @param params
  */
 export const getTenantPageListByUserId = (params) => {
@@ -251,7 +251,7 @@ export const getTenantPageListByUserId = (params) => {
 
 
 /**
- * 获取当前登录租户名称
+ * Lấy tên đơn vị thuê đang đăng nhập
  */
 export async function getLoginTenantName() {
   let tenantId = getTenantId();
@@ -261,11 +261,11 @@ export async function getLoginTenantName() {
       return result.name;
     }
   }
-  return "空";
+  return "Trống";
 }
 
 /**
- * 保存或者更新用户
+ * Lưu hoặc cập nhật người dùng
  * @param params
  */
 export const saveOrUpdateTenantUser = (params, isUpdate) => {
@@ -273,7 +273,7 @@ export const saveOrUpdateTenantUser = (params, isUpdate) => {
   return defHttp.post({ url: url, params },{ joinParamsToUrl: true });
 };
 /**
- * 根据租户id和用户获取用户的产品包列表和当前用户下的产品包id
+ * Dựa vào ID đơn vị thuê và người dùng để lấy danh sách gói sản phẩm của người dùng và gói sản phẩm thuộc người dùng hiện tạiid
  * 
  * @param params
  */
@@ -282,7 +282,7 @@ export const listPackByTenantUserId = (params) => {
 }
 
 /**
- * 获取菜单树
+ * Lấy cây menu
  */
 export const queryPremTreeList = () =>{
   return defHttp.get({ url: Api.queryPremTreeList });

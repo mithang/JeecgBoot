@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="修改密码" @ok="handleSubmit">
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Đổi mật khẩu" @ok="handleSubmit">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -9,31 +9,31 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formPasswordSchema } from './user.data';
   import { changePassword } from './user.api';
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     schemas: formPasswordSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
-    //表单赋值
+    //Gán giá trị cho biểu mẫu
     await setFieldsValue({ ...data });
   });
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       const values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await changePassword(values);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

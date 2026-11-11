@@ -1,14 +1,14 @@
-<!-- 当前租户下套餐 -->
+<!-- Gói dịch vụ thuộc đơn vị thuê hiện tại -->
 <template>
   <div style="display: flex; width: 100%">
     <div :style="leftStyle">
       <BasicTable @register="registerTable">
         <template #tableTitle>
           <div style="margin-left: 10px; margin-top: 5px"
-            >当前登录租户: <span class="tenant-name">{{ loginTenantName }}</span>
+            >Đơn vị thuê đang đăng nhập: <span class="tenant-name">{{ loginTenantName }}</span>
           </div>
         </template>
-        <!--操作栏-->
+        <!--Thanh thao tác-->
         <template #action="{ record }">
           <TableAction :actions="getTableAction(record)" />
         </template>
@@ -46,15 +46,15 @@
 
       const tenantId = ref<number>();
       const rightListRef = ref<any>();
-      //是否显示右侧用户列表
+      //Có hiển thị danh sách người dùng bên phải hay không
       const showRight = ref<any>();
-      //左侧样式
+      //Kiểu phía bên trái
       const leftStyle = ref<any>({
         width: '100%',
         transition: 'width 0.3s',
       });
 
-      // 列表页面公共参数、方法
+      // Tham số và phương thức dùng chung của trang danh sách
       const { prefixCls, tableContext } = useListPage({
         designScope: 'tenant-template',
         tableProps: {
@@ -81,12 +81,12 @@
         },
       });
       const [registerTable, { reload }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
-      //当前登录的租户名称
+      //Tên đơn vị thuê đang đăng nhập
       const loginTenantName = ref<string>('');
       const { createMessage } = useMessage();
 
       /**
-       * 获取租户名称
+       * Lấy tên đơn vị thuê
        */
       getTenantName();
 
@@ -100,31 +100,31 @@
       }
 
       /**
-       * 表格操作
+       * Thao tác bảng
        * @param record
        */
       function getTableAction(record) {
         return [
           {
-            label: '用户',
+            label: 'Người dùng',
             onClick: seeTenantPackUser.bind(null, record),
           },
           {
-            label: '套餐详情',
+            label: 'Chi tiết gói dịch vụ',
             onClick: handleDetail.bind(null, record),
           },
         ];
       }
 
       /**
-       * 成功
+       * Thành công
        */
       function success() {
         (selectedRowKeys.value = []) && reload();
       }
 
       /**
-       * 套餐包下面的用户
+       * Người dùng thuộc gói dịch vụ
        * @param record
        */
       function seeTenantPackUser(record) {
@@ -139,7 +139,7 @@
       }
 
       /**
-       * 详情
+       * Chi tiết
        * @param record
        */
       function handleDetail(record) {
@@ -153,7 +153,7 @@
       }
 
       /**
-       * 关闭回调
+       * Callback khi đóng
        */
       function handleCancel() {
         showRight.value = false;

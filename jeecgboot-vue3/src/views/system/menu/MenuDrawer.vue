@@ -11,7 +11,7 @@
   import { list, saveOrUpdateMenu } from './menu.api';
   import { useDrawerAdaptiveWidth } from '/@/hooks/jeecg/useAdaptiveWidth';
   import { useI18n } from "/@/hooks/web/useI18n";
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
   const { adaptiveWidth } = useDrawerAdaptiveWidth();
   const attrs = useAttrs();
@@ -37,17 +37,17 @@
     isUpdate.value = !!data?.isUpdate;
     menuType.value = data?.record?.menuType;
 
-    //获取下拉树信息
+    //Lấy thông tin cây thả xuống
     const treeData = await list();
     updateSchema([
       {
         field: 'parentId',
-        // 代码逻辑说明: 【QQYUN-8379】菜单管理页菜单国际化
+        // Giải thích logic mã: 【QQYUN-8379】Quốc tế hóa menu ở trang Quản lý menu
         componentProps: { treeData: translateMenu(treeData, 'name') },
       },
       {
         field: 'name',
-        label: isButton(unref(menuType)) ? '按钮/权限' : '菜单名称',
+        label: isButton(unref(menuType)) ? 'Nút/Quyền hạn' : 'Tên menu',
       },
       {
         field: 'url',
@@ -58,31 +58,31 @@
       },
     ]);
 
-    // 无论新增还是编辑，都可以设置表单值
+    // Dù thêm mới hay chỉnh sửa đều có thể đặt giá trị cho biểu mẫu
     if (typeof data.record === 'object') {
       let values = { ...data.record };
       setFieldsValue(values);
       onUrlChange(values.url);
     }
-    //按钮类型情况下，编辑时候清除一下地址的校验
+    //Trong trường hợp loại nút, khi chỉnh sửa thì xóa bỏ kiểm tra của địa chỉ
     if (menuType.value == 2) {
       clearValidate();
     }
-    //禁用表单
+    //Vô hiệu hóa biểu mẫu
     setProps({ disabled: !attrs.showFooter });
   });
-  //获取弹窗标题
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增菜单' : '编辑菜单'));
-  //提交事件
+  //Lấy tiêu đề hộp thoại
+  const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới menu' : 'Chỉnh sửa menu'));
+  //Sự kiện gửi
   async function handleSubmit() {
     try {
       const values = await validate();
-      // iframe兼容
+      // iframeTương thích
       if (ComponentTypes.IFrame === values.component) {
         values.component = values.frameSrc;
       }
       setDrawerProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateMenu(values, unref(isUpdate));
       closeDrawer();
       emit('success');
@@ -91,7 +91,7 @@
     }
   }
 
-  /** url 变化时，动态设置组件名称placeholder */
+  /** url Khi thay đổi, đặt động tên componentplaceholder */
   function onUrlChange(url) {
     let placeholder = '';
     let httpUrl = url;
@@ -100,14 +100,14 @@
         url = url.substring(1);
       }
       url = url.replaceAll('/', '-');
-      // 特殊标记
+      // Đánh dấu đặc biệt
       url = url.replaceAll(':', '@');
       placeholder = `${url}`;
     } else {
-      placeholder = '请输入组件名称';
+      placeholder = 'Vui lòng nhập tên component';
     }
     updateSchema([{ field: 'componentName', componentProps: { placeholder } }]);
-    // 代码逻辑说明: [QQYUN-4058]菜单添加智能化处理------------
+    // Giải thích logic mã: [QQYUN-4058]Xử lý thông minh khi thêm menu------------
     if (httpUrl != null && httpUrl != '') {
       if (httpUrl.startsWith('http://') || httpUrl.startsWith('https://')) {
         setFieldsValue({ component: httpUrl });
@@ -118,7 +118,7 @@
   /**
   * 2024-03-06
   * liaozhiyang
-  * 翻译菜单名称
+  * Dịch tên menu
   */
   function translateMenu(data, key) {
     if (data?.length) {

@@ -10,7 +10,7 @@
   import { BasicTree, TreeItem } from '/src/components/Tree';
   import { formSchema } from '../role.data';
   import { saveOrUpdateRole } from '../role.api';
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
   const attrs = useAttrs();
   const isUpdate = ref(true);
@@ -28,21 +28,21 @@
         ...data.record,
       });
     }
-    //禁用表单
+    //Vô hiệu hóa biểu mẫu
     setProps({ disabled: !attrs.showFooter });
   });
   /**
-   * 标题
+   * Tiêu đề
    */
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增角色' : '编辑角色'));
+  const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới vai trò' : 'Chỉnh sửa vai trò'));
   /**
-   * 提交
+   * Gửi
    */
   async function handleSubmit() {
     try {
       const values = await validate();
       setDrawerProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateRole(values, isUpdate.value);
       closeDrawer();
       emit('success');

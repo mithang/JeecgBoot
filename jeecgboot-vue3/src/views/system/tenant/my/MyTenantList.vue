@@ -8,7 +8,7 @@
           @click="handleInvitation"
           style="margin-right: 5px"
           :disabled="selectedRowKeys.length === 0"
-          >邀请用户加入</a-button
+          >Mời người dùng tham gia</a-button
         >
 <!--        <a-button
           preIcon="ant-design:plus-outlined"
@@ -16,7 +16,7 @@
           @click="handlePack"
           style="margin-right: 5px"
           :disabled="selectedRowKeys.length === 0"
-          >套餐</a-button
+          >Gói dịch vụ</a-button
         >-->
       </template>
       <template #action="{ record }">
@@ -25,7 +25,7 @@
     </BasicTable>
     <TenantInviteUserModal @register="registerSelUserModal" @inviteOk="handleInviteUserOk" />
     <TenantUserModal @register="registerTenUserModal" />
-    <!--  产品包  -->
+    <!--  Gói sản phẩm  -->
     <TenantPackList @register="registerPackModal" />
   </div>
 </template>
@@ -52,11 +52,11 @@
   const [registerPackModal, { openModal: packModal }] = useModal();
   const userStore = useUserStore();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     designScope: 'tenant-template',
     tableProps: {
-      title: '租户列表',
+      title: 'Danh sách đơn vị thuê',
       api: getTenantPageListByUserId,
       columns: columns,
       formConfig: {
@@ -76,14 +76,14 @@
   });
   const [registerTable, { reload }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
 
-  // 默认选中当前租户
+  // Mặc định chọn đơn vị thuê hiện tại
   function onFetchSuccess(data) {
     let items = data.items;
     console.log('items:', items);
-    // 当前登录租户ID
+    // Đơn vị thuê đang đăng nhậpID
     let loginTenantId = getTenantId();
     console.log('loginTenantId:', loginTenantId);
-    // 如果当前登录租户ID在列表中，则默认选中
+    // Nếu ID đơn vị thuê đang đăng nhập có trong danh sách thì chọn mặc định
     if (items && items.length > 0 && loginTenantId) {
       for (let i = 0; i < items.length; i++) {
         if (items[i].id == loginTenantId) {
@@ -97,27 +97,27 @@
   }
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '用户',
+        label: 'Người dùng',
         onClick: handleSeeUser.bind(null, record.id),
       },
     ];
   }
 
   /**
-   * 邀请用户加入租户
+   * Mời người dùng tham gia đơn vị thuê
    */
   function handleInvitation() {
     userOpenModal(true, {});
   }
 
   /**
-   * 用户选择回调事件
+   * Sự kiện callback chọn người dùng
    * @param options
    * @param phone
    * @param userSelectId
@@ -132,7 +132,7 @@
   }
 
   /**
-   * 查看用户
+   * Xem người dùng
    * @param id
    */
   async function handleSeeUser(id) {
@@ -142,29 +142,29 @@
   }
 
   /**
-   * 新增产品包
+   * Thêm mới gói sản phẩm
    */
   async function handlePack() {
     if (unref(selectedRowKeys).length > 1) {
-      createMessage.warn('请选择一个');
+      createMessage.warn('Vui lòng chọn một mục');
       return;
     }
     packModal(true, {
       tenantId: unref(selectedRowKeys.value.join(',')),
-      //我的租户不显示新增和编辑产品包
+      //Đơn vị thuê của tôi không hiển thị thêm mới và chỉnh sửa gói sản phẩm
       showPackAddAndEdit: false
     });
   }
 
   /**
-   * 删除成功之后回调事件
+   * Sự kiện callback sau khi xóa thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
 
   onMounted(()=>{
-    //提示信息
-    tenantSaasMessage('我的租户')
+    //Thông tin thông báo
+    tenantSaasMessage('Đơn vị thuê của tôi')
   })
 </script>

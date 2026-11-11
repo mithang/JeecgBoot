@@ -1,9 +1,9 @@
 <template>
-  <!--引用表格-->
+  <!--Tham chiếu bảng-->
   <BasicTable @register="registerTable" :rowSelection="rowSelection">
-    <!--插槽:table标题-->
+    <!--Khe cắm:table tiêu đề-->
     <template #tableTitle>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="addDepartRole" :disabled="!departId">添加部门角色</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="addDepartRole" :disabled="!departId">Thêm vai trò phòng ban</a-button>
       <template v-if="selectedRowKeys.length > 0">
         <a-divider type="vertical" />
         <a-dropdown>
@@ -11,23 +11,23 @@
             <a-menu>
               <a-menu-item key="1" @click="onDeleteDepartRoleBatch">
                 <icon icon="ant-design:delete-outlined" />
-                <span>删除</span>
+                <span>Xóa</span>
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            <span>批量操作 </span>
+            <span>Thao tác hàng loạt </span>
             <icon icon="akar-icons:chevron-down" />
           </a-button>
         </a-dropdown>
       </template>
     </template>
-    <!-- 插槽：行内操作按钮 -->
+    <!-- Slot: nút thao tác trong hàng -->
     <template #action="{ record }">
       <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
     </template>
   </BasicTable>
-  <!-- 添加部门弹窗 -->
+  <!-- Hộp thoại thêm phòng ban -->
   <DepartRoleModal :departId="departId" @register="registerFormModal" @success="onFormModalSuccess" />
   <DepartRoleAuthDrawer @register="registerAuthDrawer" />
 </template>
@@ -51,10 +51,10 @@
     data: { require: true, type: Object },
   });
   defineEmits(['register']);
-  // 当前选中的部门ID，可能会为空，代表未选择部门
+  // ID phòng ban đang chọn, có thể để trống, nghĩa là chưa chọn phòng ban
   const departId = computed(() => props.data?.id);
 
-  // 自适应列配置
+  // Cấu hình cột thích ứng
   const adaptiveColProps: Partial<ColEx> = {
     xs: 24, // <576px
     sm: 24, // ≥576px
@@ -63,7 +63,7 @@
     xl: 12, // ≥1200px
     xxl: 8, // ≥1600px
   };
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { tableContext, createMessage } = useListPage({
     tableProps: {
       api: departRoleList,
@@ -83,7 +83,7 @@
           xxl: 6,
         },
         wrapperCol: {},
-        // 操作按钮配置
+        // Cấu hình nút thao tác
         actionColOptions: {
           ...adaptiveColProps,
           style: { textAlign: 'left' },
@@ -91,26 +91,26 @@
         showResetButton: !!departId.value,
         showSubmitButton: !!departId.value,
       },
-      // 【issues/1064】列设置的 cacheKey
+      // 【issues/1064】Thuộc về cài đặt cột cacheKey
       tableSetting: { cacheKey: 'depart_user_departInfo' },
-      // 请求之前对参数做处理
+      // Xử lý tham số trước khi gửi yêu cầu
       beforeFetch(params) {
         params.deptId = departId.value;
       },
-      // 代码逻辑说明: 【TV360X-53】未选择部门的情况下，部门角色全查出来了
+      // Giải thích logic mã: 【TV360X-53】Trong trường hợp chưa chọn phòng ban, vai trò phòng ban bị truy vấn ra toàn bộ
       immediate: !!departId.value,
     },
   });
 
-  // 注册 ListTable
+  // Đăng ký ListTable
   const [registerTable, { reload, setProps, setLoading, updateTableDataRecord }, { rowSelection, selectedRowKeys }] = tableContext;
 
-  // 注册Form弹窗
+  // Hộp thoại Form đăng ký
   const [registerFormModal, formModal] = useModal();
-  // 注册授权弹窗抽屉
+  // Ngăn kéo hộp thoại cấp quyền đăng ký
   const [registerAuthDrawer, authDrawer] = useDrawer();
 
-  // 监听 data 更改，重新加载数据
+  // Theo dõi thay đổi của data, tải lại dữ liệu
   watch(
     () => props.data,
     () => reload()
@@ -119,12 +119,12 @@
     // reload();
   });
 
-  // 清空选择的行
+  // Bỏ chọn tất cả các hàng
   function clearSelection() {
     selectedRowKeys.value = [];
   }
 
-  // 添加部门角色
+  // Thêm vai trò phòng ban
   function addDepartRole() {
     formModal.openModal(true, {
       isUpdate: false,
@@ -132,7 +132,7 @@
     });
   }
 
-  // 编辑部门角色
+  // Chỉnh sửa vai trò phòng ban
   function editDepartRole(record) {
     formModal.openModal(true, {
       isUpdate: true,
@@ -140,15 +140,15 @@
     });
   }
 
-  // 授权部门角色
+  // Cấp quyền vai trò phòng ban
   function permissionDepartRole(record) {
     authDrawer.openDrawer(true, { record });
   }
 
-  // 批量删除部门角色
+  // Xóa hàng loạt vai trò phòng ban
   async function deleteDepartRole(idList, confirm) {
     if (!departId.value) {
-      createMessage.warning('请先选择一个部门');
+      createMessage.warning('Vui lòng chọn một phòng ban trước');
     } else {
       setLoading(true);
       let ids = unref(idList).join(',');
@@ -162,38 +162,38 @@
     return Promise.reject();
   }
 
-  // 批量删除部门角色事件
+  // Sự kiện xóa hàng loạt vai trò phòng ban
   async function onDeleteDepartRoleBatch() {
     try {
       await deleteDepartRole(selectedRowKeys, true);
-      // 批量删除成功后清空选择
+      // Sau khi xóa hàng loạt thành công thì xóa danh sách đã chọn
       clearSelection();
     } catch (e) {}
   }
 
-  // 表单弹窗成功后的回调
+  // Callback sau khi hộp thoại biểu mẫu thành công
   function onFormModalSuccess({ isUpdate, values }) {
     isUpdate ? updateTableDataRecord(values.id, values) : reload();
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
-    return [{ label: '编辑', onClick: editDepartRole.bind(null, record) }];
+    return [{ label: 'Chỉnh sửa', onClick: editDepartRole.bind(null, record) }];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record): ActionItem[] {
     return [
-      { label: '授权', onClick: permissionDepartRole.bind(null, record) },
+      { label: 'Cấp quyền', onClick: permissionDepartRole.bind(null, record) },
       {
-        label: '删除',
+        label: 'Xóa',
         color: 'error',
         popConfirm: {
-          title: '确认要删除吗？',
+          title: 'Bạn có chắc chắn muốn xóa không?',
           confirm: deleteDepartRole.bind(null, [record.id], false),
         },
       },

@@ -2,21 +2,21 @@
   <BasicModal v-bind="$attrs" @register="registerModal" :title="title" @ok="handleSubmit" width="800px" :showCancelBtn="false" :showOkBtn="false">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px" v-if="showPackAddAndEdit">新增 </a-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px" v-if="showPackAddAndEdit">Thêm mới </a-button>
         <a-button
           v-if="selectedRowKeys.length > 0"
           preIcon="ant-design:delete-outlined"
           type="primary"
           @click="handlePackBatch"
           style="margin-right: 5px"
-          >批量删除
+          >Xóa hàng loạt
         </a-button>
         <a-button
           preIcon="ant-design:sync-outlined"
           type="primary"
           @click="handleSyncDefaultPack"
           style="margin-right: 5px"
-          >初始化默认套餐
+          >Khởi tạo gói mặc định
         </a-button>
       </template>
       <template #action="{ record }">
@@ -47,7 +47,7 @@
   const [registerPackPermDrawer, { openDrawer: openPackPermDrawer }] = useDrawer();
   
   const tenantId = ref<number>(0);
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     designScope: 'tenant-template',
     tableProps: {
@@ -74,20 +74,20 @@
     },
   });
   const [registerTable, { reload }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
-  // Emits声明
+  // EmitsKhai báo
   const emit = defineEmits(['register', 'success']);
-  //是否显示新增和编辑套餐包
+  //Có hiển thị thêm mới và chỉnh sửa gói dịch vụ không
   const showPackAddAndEdit = ref<boolean>(false);
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     tenantId.value = data.tenantId;
     showPackAddAndEdit.value = data.showPackAddAndEdit;
     success();
   });
-  //设置标题
-  const title = '租户个性化套餐包';
+  //Đặt tiêu đề
+  const title = 'Gói dịch vụ cá nhân hóa của đơn vị thuê';
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit(v) {
     closeModal();
   }
@@ -95,11 +95,11 @@
   function getActions(record) {
     return [
       {
-        label: '用户',
+        label: 'Người dùng',
         onClick: seeTenantPackUser.bind(null, record),
       },
       {
-        label: '授权',
+        label: 'Cấp quyền',
         onClick: handleRolePrem.bind(null, record),
         ifShow: ()=>{ return showPackAddAndEdit.value }
       },
@@ -107,14 +107,14 @@
   }
 
   /**
-   * 成功
+   * Thành công
    */
   function success() {
     (selectedRowKeys.value = []) && reload();
   }
 
   /**
-   * 编辑
+   * Chỉnh sửa
    * @param record
    */
   async function handleEdit(record) {
@@ -127,50 +127,50 @@
     });
   }
 
-  //默认系统套餐包不允许删除,包含(超级管理员、组织账户管理员、组织应用管理员)
+  //Gói dịch vụ mặc định của hệ thống không được phép xóa,Bao gồm(Siêu quản trị viên, quản trị viên tài khoản tổ chức, quản trị viên ứng dụng tổ chức)
   const packCode = reactive<any>(['superAdmin','accountAdmin','appAdmin']);
   const { createMessage } = useMessage();
   
   /**
-   * 删除套餐包
-   * @param 删除
+   * Xóa gói dịch vụ
+   * @param Xóa
    */
   async function handleDelete(record) {
-    // 代码逻辑说明: 系统默认套餐包不允许删除------------
+    // Giải thích logic mã: Gói dịch vụ mặc định của hệ thống không được phép xóa------------
     if(packCode.indexOf(record.packCode) != -1){
-        createMessage.warning("默认系统套餐包不允许删除");
+        createMessage.warning("Gói dịch vụ mặc định của hệ thống không được phép xóa");
        return;
     }
     if(record.packCode && record.packCode.indexOf("default") != -1){
-      createMessage.warning("默认套餐包不允许删除");
+      createMessage.warning("Gói dịch vụ mặc định không được phép xóa");
       return;
     }
     await deleteTenantPack({ ids: record.id }, success);
   }
 
   /**
-   * 批量删除套餐包
+   * Xóa hàng loạt gói dịch vụ
    */
   async function handlePackBatch() {
     let value = selectedRows.value;
     if(value && value.length>0){
       for (let i = 0; i < value.length; i++) {
         if(packCode.indexOf(value[i].packCode) != -1){
-          createMessage.warning("默认系统套餐包不允许删除");
+          createMessage.warning("Gói dịch vụ mặc định của hệ thống không được phép xóa");
           return;
         }
-        // 代码逻辑说明: 默认套餐不允许删除---
+        // Giải thích logic mã: Gói mặc định không được phép xóa---
         if(value[i].packCode && value[i].packCode.indexOf("default") != -1){
-          createMessage.warning("默认套餐包不允许删除");
+          createMessage.warning("Gói dịch vụ mặc định không được phép xóa");
           return;
         }
       }
     }
     Modal.confirm({
-      title: '删除租户套餐包',
-      content: '是否删除租户套餐包',
-      okText: '确认',
-      cancelText: '取消',
+      title: 'Xóa gói dịch vụ của đơn vị thuê',
+      content: 'Xóa gói dịch vụ của đơn vị thuê?',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: async () => {
         await deleteTenantPack({ ids: selectedRowKeys.value.join(',')}, success);
       }
@@ -179,10 +179,10 @@
 
   async function handleSyncDefaultPack() {
     Modal.confirm({
-      title: '初始化默认套餐包',
-      content: '是否初始化默认套餐包',
-      okText: '确认',
-      cancelText: '取消',
+      title: 'Khởi tạo gói dịch vụ mặc định',
+      content: 'Có khởi tạo gói dịch vụ mặc định hay không',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: async () => {
         await syncDefaultTenantPack({tenantId: unref(tenantId)}, success);
       },
@@ -191,7 +191,7 @@
 
   /**
    *
-   * 新增表单
+   * Thêm mới biểu mẫu
    */
   function handleAdd() {
     openModal(true, {
@@ -203,7 +203,7 @@
   }
 
   /**
-   * 套餐包下面的用户
+   * Người dùng thuộc gói dịch vụ
    * @param record
    */
   function seeTenantPackUser(record) {
@@ -213,24 +213,24 @@
   }
 
   /**
-   * 更多
+   * Thêm
    * @param record
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
         ifShow: ()=>{ return showPackAddAndEdit.value }
       },
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除租户套餐包',
+          title: 'Xác nhận xóa gói dịch vụ của đơn vị thuê?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -238,7 +238,7 @@
   }
 
   /**
-   * 详情
+   * Chi tiết
    * @param record
    */
   function handleDetail(record) {
@@ -253,7 +253,7 @@
 
 
   /**
-   * 授权
+   * Cấp quyền
    *
    * @param record
    */

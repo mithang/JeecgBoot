@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="首页配置" @ok="handleSubmit" width="40%">
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Cấu hình trang chủ" @ok="handleSubmit" width="40%">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -10,41 +10,41 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { roleIndexFormSchema } from '../role.data';
   import { saveOrUpdateRoleIndex, queryIndexByCode } from '../role.api';
-  // Emits声明
+  // EmitsKhai báo
   const emit = defineEmits(['register', 'success']);
   const isUpdate = ref(true);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     labelWidth: 150,
     schemas: roleIndexFormSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     setFieldsValue({ roleCode: data.roleCode });
     let res = await queryIndexByCode({ roleCode: data.roleCode });
     isUpdate.value = !!res.result?.id;
     if (unref(isUpdate)) {
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...res.result,
       });
     }
   });
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit(v) {
     try {
       let values = await validate();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateRoleIndex(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success', { isUpdate: isUpdate.value, values });
     } finally {
       setModalProps({ confirmLoading: false });

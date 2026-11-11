@@ -1,6 +1,6 @@
-<!-- 部门负责人页面 -->
+<!-- Trang người đứng đầu phòng ban -->
 <template>
-  <!--引用表格-->
+  <!--Tham chiếu bảng-->
   <BasicTable @register="registerTable"></BasicTable>
 </template>
 
@@ -13,10 +13,10 @@
   const props = defineProps({
     data: { require: true, type: Object },
   });
-  // 当前部门id
+  // Phòng ban hiện tạiid
   const departId = computed(() => props.data?.id);
  
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { tableContext } = useListPage({
     tableProps: {
       api: getDepartmentHead,
@@ -24,7 +24,7 @@
       canResize: false,
       rowKey: 'id',
       tableSetting: { cacheKey: 'depart_head_list' },
-      // 请求之前对参数做处理
+      // Xử lý tham số trước khi gửi yêu cầu
       beforeFetch(params) {
         return Object.assign(params, { departId: departId.value });
       },
@@ -32,7 +32,7 @@
       immediate: !!departId.value,
     },
   });
-  // 注册 ListTable
+  // Đăng ký ListTable
   const [registerTable, { reload }] = tableContext;
 
   watch(

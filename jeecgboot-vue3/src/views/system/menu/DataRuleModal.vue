@@ -9,43 +9,43 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { dataRuleFormSchema } from './menu.data';
   import { saveOrUpdateRule } from './menu.api';
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
   const props = defineProps({ permissionId: String });
   const isUpdate = ref(true);
-  //表单配置
+  //Cấu hình biểu mẫu
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     schemas: dataRuleFormSchema,
     showActionButtonGroup: false,
   });
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-    //重置表单
+    //Đặt lại biểu mẫu
     await resetFields();
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       await setFieldsValue({
         ...data.record,
       });
     }
   });
 
-  //设置标题
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增规则' : '编辑规则'));
+  //Đặt tiêu đề
+  const getTitle = computed(() => (!unref(isUpdate) ? 'Thêm mới quy tắc' : 'Chỉnh sửa quy tắc'));
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       const values = await validate();
       values.permissionId = props.permissionId;
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateRule(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });

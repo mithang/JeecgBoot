@@ -1,18 +1,18 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="修改密码" @ok="handleSubmit" destroyOnClose :width="400">
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Đổi mật khẩu" @ok="handleSubmit" destroyOnClose :width="400">
     <a-form class="antd-modal-form" ref="formRef" :model="formState" :rules="validatorRules">
       <a-form-item name="oldPassword">
-        <div class="black font-size-13">旧密码</div>
+        <div class="black font-size-13">Mật khẩu cũ</div>
         <div class="pass-padding">
-          <a-input-password placeholder="请输入旧密码" v-model:value="formState.oldPassword" />
+          <a-input-password placeholder="Vui lòng nhập mật khẩu cũ" v-model:value="formState.oldPassword" />
         </div>
       </a-form-item>
       <a-form-item name="password">
-        <span class="black font-size-13">新密码</span>
+        <span class="black font-size-13">Mật khẩu mới</span>
         <div class="pass-padding">
-          <a-input-password v-model:value="formState.password" placeholder="新密码" autocomplete="new-password" />
+          <a-input-password v-model:value="formState.password" placeholder="Mật khẩu mới" autocomplete="new-password" />
         </div>
-        <span class="gray-9e font-size-13">8-20位，需包含字母和数字</span>
+        <span class="gray-9e font-size-13">8-20ký tự, cần chứa cả chữ cái và số</span>
       </a-form-item>
     </a-form>
   </BasicModal>
@@ -26,16 +26,16 @@
   import { useUserStore } from '/@/store/modules/user';
 
   const { createMessage } = useMessage();
-  //用户名
+  //Tên người dùng
   const username = ref<string>('');
   const formRef = ref();
   const formState = reactive({
     oldPassword: '',
     password: '',
   });
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     setModalProps({ confirmLoading: false });
     username.value = data.record.username;
@@ -43,31 +43,31 @@
   });
   const userStore = useUserStore();
   const validatorRules: Record<string, Rule[]> = {
-    oldPassword: [{ required: true, message: '请输入旧密码' }],
+    oldPassword: [{ required: true, message: 'Vui lòng nhập mật khẩu cũ' }],
     password: [
       { required: true, validator: checkPassword },
-      { pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(.{8,20})$/, message: '8-20位，需包含字母和数字' },
+      { pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(.{8,20})$/, message: '8-20ký tự, cần chứa cả chữ cái và số' },
     ],
   };
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       let values = await formRef.value.validateFields();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       values.username = unref(username);
       await updatePasswordNotBindPhone(values).then((res) => {
         if (res.success) {
           createMessage.info({
-            content: '密码修改成功，请重新登录！3s后自动退出登录',
+            content: 'Đổi mật khẩu thành công, vui lòng đăng nhập lại! Sau 3s sẽ tự động đăng xuất',
             duration: 3,
           });
-          //3s后返回登录页面
+          //3ssau đó quay lại trang đăng nhập
           setTimeout(() => {
             userStore.logout(true);
           }, 3000);
-          //关闭弹窗
+          //Đóng cửa sổ bật lên
           closeModal();
         } else {
           createMessage.warn(res.message);
@@ -79,11 +79,11 @@
   }
 
   /**
-   * 验证新密码是否为空
+   * Kiểm tra mật khẩu mới có trống hay không
    */
   function checkPassword(_rule: Rule, value: string) {
     if (value === '') {
-      return Promise.reject('请输入新密码');
+      return Promise.reject('Vui lòng nhập mật khẩu mới');
     }
     return Promise.resolve();
   }

@@ -2,18 +2,18 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">新增</a-button>
+        <a-button preIcon="ant-design:plus-outlined" type="primary" @click="handleAdd" style="margin-right: 5px">Thêm mới</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                删除
+                Xóa
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
         </a-dropdown>
@@ -23,7 +23,7 @@
           @click="handleInvitation"
           style="margin-right: 5px"
           :disabled="selectedRowKeys.length === 0"
-          >邀请用户加入</a-button
+          >Mời người dùng tham gia</a-button
         >
         <a-button
           preIcon="ant-design:sliders-outlined"
@@ -31,9 +31,9 @@
           @click="handlePack"
           style="margin-right: 5px"
           :disabled="selectedRowKeys.length === 0"
-          >套餐管理</a-button
+          >Quản lý gói dịch vụ</a-button
         >
-        <a-button type="primary" @click="recycleBinClick" preIcon="ant-design:hdd-outlined">回收站</a-button>
+        <a-button type="primary" @click="recycleBinClick" preIcon="ant-design:hdd-outlined">Thùng rác</a-button>
       </template>
       <template #action="{ record }">
         <TableAction :actions="getActions(record)" />
@@ -42,9 +42,9 @@
     <TenantModal @register="registerModal" @success="reload" />
     <TenantInviteUserModal @register="registerSelUserModal" @inviteOk="handleInviteUserOk"/>
     <TenantUserModal @register="registerTenUserModal" />
-    <!--  产品包  -->
+    <!--  Gói sản phẩm  -->
     <TenantPackList @register="registerPackModal" />
-    <!--  租户回收站  -->
+    <!--  Thùng rác đơn vị thuê  -->
     <TenantRecycleBinModal @register="registerRecycleBinModal" @success="reload" />
   </div>
 </template>
@@ -69,11 +69,11 @@
   const [registerPackModal, { openModal: packModal }] = useModal();
   const [registerRecycleBinModal, { openModal: recycleBinModal }] = useModal();
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext } = useListPage({
     designScope: 'tenant-template',
     tableProps: {
-      title: '租户列表',
+      title: 'Danh sách đơn vị thuê',
       api: getTenantList,
       columns: columns,
       formConfig: {
@@ -89,32 +89,32 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
 
   /**
-   * 操作列定义
+   * Định nghĩa cột thao tác
    * @param record
    */
   function getActions(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           placement: 'left',
           confirm: handleDelete.bind(null, record),
         },
       },
       {
-        label: '用户',
+        label: 'Người dùng',
         onClick: handleSeeUser.bind(null, record.id),
       },
     ];
   }
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleAdd() {
     openModal(true, {
@@ -123,7 +123,7 @@
   }
 
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   function handleEdit(record) {
     openModal(true, {
@@ -133,34 +133,34 @@
   }
 
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteTenant({ id: record.id }, handleSuccess);
   }
 
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteTenant({ ids: selectedRowKeys.value }, handleSuccess);
   }
 
   /**
-   * 邀请用户加入租户
+   * Mời người dùng tham gia đơn vị thuê
    */
   function handleInvitation() {
     userOpenModal(true, {});
   }
 
   /**
-   * 用户选择回调事件
+   * Sự kiện callback chọn người dùng
    * @param options
    * @param phone
    * @param userSelectId
    */
   async function handleInviteUserOk(phone, username) {
-    // 代码逻辑说明: 【QQYUN-4605】后台的邀请谁加入租户，没办法选不是租户下的用户------------
+    // Giải thích logic mã: 【QQYUN-4605】Phần mời người tham gia đơn vị thuê ở hậu trường không có cách nào chọn người dùng không thuộc đơn vị thuê------------
     if (phone) {
       await invitationUserJoin({ ids: selectedRowKeys.value.join(','), phone: phone });
     }
@@ -170,7 +170,7 @@
   }
 
   /**
-   * 查看用户
+   * Xem người dùng
    * @param id
    */
   function handleSeeUser(id) {
@@ -180,29 +180,29 @@
   }
 
   /**
-   * 新增产品包
+   * Thêm mới gói sản phẩm
    */
   function handlePack() {
     if (unref(selectedRowKeys).length > 1) {
-      createMessage.warn('请选择一个');
+      createMessage.warn('Vui lòng chọn một mục');
       return;
     }
     packModal(true, {
       tenantId: unref(selectedRowKeys.value.join(',')),
-      //我的租户显示新增和编辑产品包
+      //Đơn vị thuê của tôi hiển thị thêm mới và chỉnh sửa gói sản phẩm
       showPackAddAndEdit: true
     });
   }
 
   /**
-   * 回收站
+   * Thùng rác
    */
   function recycleBinClick() {
     recycleBinModal(true, {});
   }
 
   /**
-   * 删除成功之后回调事件
+   * Sự kiện callback sau khi xóa thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();

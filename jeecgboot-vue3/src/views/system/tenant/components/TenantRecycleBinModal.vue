@@ -1,29 +1,29 @@
-<!--回收站-->
+<!--Thùng rác-->
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="用户回收站" :showOkBtn="false" width="1000px" destroyOnClose>
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Thùng rác người dùng" :showOkBtn="false" width="1000px" destroyOnClose>
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="batchHandleDelete">
                 <Icon icon="ant-design:delete-outlined"></Icon>
-                批量删除
+                Xóa hàng loạt
               </a-menu-item>
               <a-menu-item key="2" @click="batchHandleRevert">
                 <Icon icon="ant-design:redo-outlined"></Icon>
-                批量还原
+                Khôi phục hàng loạt
               </a-menu-item>
             </a-menu>
           </template>
           <a-button
-            >批量操作
+            >Thao tác hàng loạt
             <Icon icon="ant-design:down-outlined"></Icon>
           </a-button>
         </a-dropdown>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -43,7 +43,7 @@
 
   const { createMessage: $message } = useMessage();
   const [registerModal] = useModalInner(() => {});
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     tableProps: {
       api: recycleBinPageList,
@@ -59,25 +59,25 @@
     },
   });
   const emit = defineEmits(['success', 'register']);
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload, updateTableDataRecord }, { rowSelection, selectedRows, selectedRowKeys }] = tableContext;
 
-  //获取操作栏事件
+  //Lấy sự kiện của thanh thao tác
   function getTableAction(record) {
     return [
       {
-        label: '还原',
+        label: 'Khôi phục',
         icon: 'ant-design:redo-outlined',
         popConfirm: {
-          title: '是否确认还原',
+          title: 'Xác nhận khôi phục?',
           confirm: handleRevert.bind(null, record),
         },
       },
       {
-        label: '彻底删除',
+        label: 'Xóa vĩnh viễn',
         icon: 'ant-design:scissor-outlined',
         popConfirm: {
-          title: '是否确认彻底删除',
+          title: 'Xác nhận xóa vĩnh viễn?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -85,7 +85,7 @@
   }
 
   /**
-   * 还原
+   * Khôi phục
    * @param record
    */
   function handleRevert(record) {
@@ -94,14 +94,14 @@
   }
 
   /**
-   * 成功刷新表格
+   * Làm mới bảng thành công
    */
   function handleSuccess() {
     (selectedRowKeys.value = []) && reload();
   }
 
   /**
-   * 彻底删除
+   * Xóa vĩnh viễn
    * @param record
    */
   async function handleDelete(record) {
@@ -109,14 +109,14 @@
   }
 
   /**
-   * 批量彻底删除
+   * Xóa vĩnh viễn hàng loạt
    */
   function batchHandleDelete() {
     Modal.confirm({
-      title: '彻底删除',
-      content: '是否确认彻底删除',
-      okText: '确认',
-      cancelText: '取消',
+      title: 'Xóa vĩnh viễn',
+      content: 'Xác nhận xóa vĩnh viễn?',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: () => {
         deleteLogicDeleted({ ids: toRaw(unref(selectedRowKeys)).join(',') }, handleSuccess);
       },
@@ -124,14 +124,14 @@
   }
 
   /**
-   * 批量还原
+   * Khôi phục hàng loạt
    */
   function batchHandleRevert() {
     Modal.confirm({
-      title: '还原',
-      content: '是否确认还原',
-      okText: '确认',
-      cancelText: '取消',
+      title: 'Khôi phục',
+      content: 'Xác nhận khôi phục?',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: () => {
         revertTenantLogic({ ids: toRaw(unref(selectedRowKeys)).join(',') }, handleSuccess);
         emit('success');

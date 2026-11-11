@@ -1,22 +1,22 @@
 <template>
   <BasicDrawer v-bind="$attrs" @register="registerDrawer" width="650px" destroyOnClose showFooter>
     <template #title>
-      权限配置
+      Cấu hình quyền hạn
       <a-dropdown>
         <a-button class="more-icon">
-          更多操作
+          Thao tác khác
           <Icon icon="ant-design:down-outlined" size="14px" style="position: relative; top: 1px; right: 5px"></Icon>
         </a-button>
         <template #overlay>
           <a-menu @click="treeMenuClick">
-            <a-menu-item key="checkAll">选择全部</a-menu-item>
-            <a-menu-item key="cancelCheck">取消选择</a-menu-item>
+            <a-menu-item key="checkAll">Chọn tất cả</a-menu-item>
+            <a-menu-item key="cancelCheck">Hủy lựa chọn</a-menu-item>
             <div class="line"></div>
-            <a-menu-item key="openAll">展开全部</a-menu-item>
-            <a-menu-item key="closeAll">折叠全部</a-menu-item>
+            <a-menu-item key="openAll">Mở rộng tất cả</a-menu-item>
+            <a-menu-item key="closeAll">Thu gọn tất cả</a-menu-item>
             <div class="line"></div>
-            <a-menu-item key="relation">层级关联</a-menu-item>
-            <a-menu-item key="standAlone">层级独立</a-menu-item>
+            <a-menu-item key="relation">Liên kết theo cấp bậc</a-menu-item>
+            <a-menu-item key="standAlone">Phân cấp độc lập</a-menu-item>
           </a-menu>
         </template>
       </a-dropdown>
@@ -30,7 +30,7 @@
       :selectedKeys="selectedKeys"
       :clickRowToExpand="false"
       :checkStrictly="true"
-      title="所拥有的的权限"
+      title="Các quyền đang sở hữu"
       @check="onCheck"
       @select="onTreeNodeSelect"
     >
@@ -39,12 +39,12 @@
         <Icon v-if="ruleFlag" icon="ant-design:align-left-outlined" style="margin-left: 5px; color: red"></Icon>
       </template>
     </BasicTree>
-    <!--右下角按钮-->
+    <!--Nút ở góc dưới bên phải-->
     <template #footer>
-      <!-- <PopConfirmButton title="确定放弃编辑？" @confirm="closeDrawer" okText="确定" cancelText="取消"></PopConfirmButton> -->
-      <a-button @click="closeDrawer">取消</a-button>
-      <a-button @click="handleSubmit(false)" type="primary" :loading="loading" ghost style="margin-right: 0.8rem">仅保存</a-button>
-      <a-button @click="handleSubmit(true)" type="primary" :loading="loading">保存并关闭</a-button>
+      <!-- <PopConfirmButton title="Bạn có chắc muốn hủy bỏ chỉnh sửa không?" @confirm="closeDrawer" okText="Xác nhận" cancelText="Hủy"></PopConfirmButton> -->
+      <a-button @click="closeDrawer">Hủy</a-button>
+      <a-button @click="handleSubmit(false)" type="primary" :loading="loading" ghost style="margin-right: 0.8rem">Chỉ lưu</a-button>
+      <a-button @click="handleSubmit(true)" type="primary" :loading="loading">Lưu và đóng</a-button>
     </template>
     <PackDataRuleDrawer @register="registerDataRuleDrawer" />
   </BasicDrawer>
@@ -58,30 +58,30 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { PACK_AUTH_CONFIG_KEY } from '/@/enums/cacheEnum';
   const emit = defineEmits(['register','success']);
-  //树的信息
+  //Thông tin của cây
   const treeData = ref<TreeItem[]>([]);
-  //树的全部节点信息
+  //Thông tin tất cả các nút của cây
   const allTreeKeys = ref([]);
-  //树的选择节点信息
+  //Thông tin nút được chọn trên cây
   const checkedKeys = ref<any>([]);
-  //树的选中的节点信息
+  //Thông tin nút được chọn của cây
   const selectedKeys = ref([]);
   const packId = ref('');
-  //树的实例
+  //Instance của cây
   const treeRef = ref(null);
   const loading = ref(false);
 
-  //展开折叠的key
+  //Mở rộng phần đã thu gọnkey
   const expandedKeys = ref<any>([]);
-  //父子节点选中状态是否关联 true不关联，false关联
+  //Trạng thái chọn của nút cha và nút con có liên kết hay không: true = không liên kết, false = có liên kết
   const checkStrictly = ref<boolean>(false);
-  // 数据规则抽屉
+  // Ngăn kéo quy tắc dữ liệu
   const [registerDataRuleDrawer, { openDrawer: openDataRuleDrawer }] = useDrawer();
   const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     await reset();
     setDrawerProps({ confirmLoading: false, loading: true });
     packId.value = data.packId;
-    //初始化数据
+    //Khởi tạo dữ liệu
     const roleResult = await queryPremTreeList();
     treeData.value = translateTitle(roleResult.treeList);
     allTreeKeys.value = roleResult.ids;
@@ -94,7 +94,7 @@
       expandedKeys.value = roleResult.ids;
     }
 
-    //初始化角色菜单数据
+    //Khởi tạo dữ liệu menu của vai trò
     if(data.permissionIds){
       checkedKeys.value = data.permissionIds.split(",");
     }
@@ -102,7 +102,7 @@
     setDrawerProps({ loading: false });
   });
   /**
-   * 翻译菜单名称
+   * Dịch tên menu
    */
   function translateTitle(data) {
     if (data?.length) {
@@ -121,16 +121,16 @@
     return data;
   }
   /**
-   * 点击选中
+   * Nhấn để chọn
    */
   function onCheck(o, e) {
-    // checkStrictly: true=>层级独立，false=>层级关联.
+    // checkStrictly: true=>Phân cấp độc lập，false=>Liên kết theo cấp bậc.
     if (checkStrictly.value) {
       checkedKeys.value = o.checked ? o.checked : o;
     } else {
       const keys = getNodeAllKey(e.node, 'children', 'key');
       if (e.checked) {
-        // 反复操作下可能会有重复的keys，得用new Set去重下
+        // Khi thao tác lặp lại có thể xuất hiện các key trùng lặp, cần dùng new Set để loại bỏ trùng lặp
         checkedKeys.value = [...new Set([...checkedKeys.value, ...keys])];
       } else {
         const result = removeMatchingItems(checkedKeys.value, keys);
@@ -139,19 +139,19 @@
     }
   }
   /**
-   * 删除相匹配数组的项
+   * Xóa các phần tử khớp trong mảng
    */
   function removeMatchingItems(arr1, arr2) {
-    // 使用哈希表记录 arr2 中的元素
+    // Dùng bảng băm để ghi lại các phần tử trong arr2
     const hashTable = {};
     for (const item of arr2) {
       hashTable[item] = true;
     }
-    // 使用 filter 方法遍历第一个数组，过滤出不在哈希表中存在的项
+    // Dùng phương thức filter để duyệt mảng thứ nhất, lọc ra các phần tử không tồn tại trong bảng băm
     return arr1.filter((item) => !hashTable[item]);
   }
   /**
-   * 获取当前节点及以下所有子孙级的key
+   * Lấy nút hiện tại và tất cả các nút cấp con cháu bên dướikey
    */
   function getNodeAllKey(node: any, children: any, key: string) {
     const result: any = [];
@@ -169,7 +169,7 @@
   }
   
   /**
-   * 选中节点，打开数据权限抽屉
+   * Chọn nút, mở ngăn kéo quyền dữ liệu
    */
   function onTreeNodeSelect(key) {
     if (key && key.length > 0) {
@@ -179,7 +179,7 @@
   }
 
   /**
-   * 数据重置
+   * Đặt lại dữ liệu
    */
   function reset() {
     treeData.value = [];
@@ -189,7 +189,7 @@
     packId.value = '';
   }
   /**
-   * 获取tree实例
+   * Lấy instance của tree
    */
   function getTree() {
     const tree = unref(treeRef);
@@ -199,7 +199,7 @@
     return tree;
   }
   /**
-   * 提交
+   * Gửi
    */
   async function handleSubmit(exit) {
     let params = {
@@ -209,15 +209,15 @@
     if (loading.value === false) {
       await doSave(params);
     } else {
-      console.log('请等待上次执行完毕!');
+      console.log('Vui lòng chờ lần thực thi trước hoàn tất!');
     }
     if (exit) {
-      // 如果关闭
+      // Nếu đóng
       closeDrawer();
     }
   }
 
-  // VUE角色授权重复保存 #352
+  // VUELưu lặp lại việc cấp quyền vai trò #352
   async function doSave(params) {
     loading.value = true;
     try {
@@ -232,7 +232,7 @@
   }
 
   /**
-   * 树菜单选择
+   * Chọn menu dạng cây
    * @param key
    */
   function treeMenuClick({ key }) {
@@ -255,7 +255,7 @@
     }
   }
   /**
-   * 角色授权弹窗操作缓存
+   * Bộ nhớ đệm thao tác của hộp thoại cấp quyền vai trò
    */
   const saveLocalOperation = (key, value) => {
     const localData = localStorage.getItem(PACK_AUTH_CONFIG_KEY);
@@ -266,7 +266,7 @@
 </script>
 
 <style lang="less" scoped>
-  /** 固定操作按钮 */
+  /** Nút thao tác cố định */
   .jeecg-basic-tree {
     position: absolute;
     width: 618px;

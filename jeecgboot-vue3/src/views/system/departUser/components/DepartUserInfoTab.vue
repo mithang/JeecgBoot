@@ -1,28 +1,28 @@
 <template>
-  <!--引用表格-->
+  <!--Tham chiếu bảng-->
   <BasicTable @register="registerTable" :rowSelection="rowSelection">
-    <!--插槽:table标题-->
+    <!--Khe cắm:table tiêu đề-->
     <template #tableTitle>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="selectAddUser" :disabled="!departId">添加已有用户</a-button>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="createUser" :disabled="!departId">新建用户</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="selectAddUser" :disabled="!departId">Thêm người dùng hiện có</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="createUser" :disabled="!departId">Tạo mới người dùng</a-button>
       <template v-if="selectedRowKeys.length > 0">
         <a-dropdown>
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="onUnlinkDepartUserBatch">
                 <icon icon="bx:bx-unlink" />
-                <span>取消关联</span>
+                <span>Hủy bỏ liên kết</span>
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            <span>批量操作 </span>
+            <span>Thao tác hàng loạt </span>
             <icon icon="akar-icons:chevron-down" />
           </a-button>
         </a-dropdown>
       </template>
     </template>
-    <!-- 插槽：行内操作按钮 -->
+    <!-- Slot: nút thao tác trong hàng -->
     <template #action="{ record }">
       <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
     </template>
@@ -51,10 +51,10 @@
     data: { require: true, type: Object },
   });
   const userSelectModalRef: any = ref(null);
-  // 当前选中的部门ID，可能会为空，代表未选择部门
+  // ID phòng ban đang chọn, có thể để trống, nghĩa là chưa chọn phòng ban
   const departId = computed(() => props.data?.id);
 
-  // 自适应列配置
+  // Cấu hình cột thích ứng
   const adaptiveColProps: Partial<ColEx> = {
     xs: 24, // <576px
     sm: 24, // ≥576px
@@ -63,7 +63,7 @@
     xl: 12, // ≥1200px
     xxl: 8, // ≥1600px
   };
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { tableContext, createMessage } = useListPage({
     tableProps: {
       api: departUserList,
@@ -82,7 +82,7 @@
           xxl: 5,
         },
         wrapperCol: {},
-        // 操作按钮配置
+        // Cấu hình nút thao tác
         actionColOptions: {
           ...adaptiveColProps,
           style: { textAlign: 'left' },
@@ -90,49 +90,49 @@
         showResetButton: !!departId.value,
         showSubmitButton: !!departId.value,
       },
-      // 【issues/1064】列设置的 cacheKey
+      // 【issues/1064】Thuộc về cài đặt cột cacheKey
       tableSetting: { cacheKey: 'depart_user_userInfo' },
-      // 请求之前对参数做处理
+      // Xử lý tham số trước khi gửi yêu cầu
       beforeFetch(params) {
         params.depId = departId.value;
       },
-      // 代码逻辑说明: 【TV360X-1861】没部门时不加载用户信息
+      // Giải thích logic mã: 【TV360X-1861】Khi không có phòng ban thì không tải thông tin người dùng
       immediate: !!departId.value,
     },
   });
 
-  // 注册 ListTable
+  // Đăng ký ListTable
   const [registerTable, { reload, setProps, setLoading, updateTableDataRecord }, { rowSelection, selectedRowKeys }] = tableContext;
 
   watch(
     () => props.data,
     () => reload()
   );
-  //注册drawer
+  //Đăng kýdrawer
   const [registerDrawer, { openDrawer, setDrawerProps }] = useDrawer();
   const [registerUserAuthDrawer, userAuthDrawer] = useDrawer();
-  // 注册用户选择 modal
+  // Chọn người dùng đăng ký modal
   const [registerSelUserModal, selUserModal] = useModal();
 
-  // 清空选择的行
+  // Bỏ chọn tất cả các hàng
   function clearSelection() {
     selectedRowKeys.value = [];
   }
 
-  // 查看部门角色
+  // Xem vai trò phòng ban
   function showDepartRole(record) {
     userAuthDrawer.openDrawer(true, { userId: record.id, departId });
   }
 
-  // 创建用户
+  // Tạo người dùng
   function createUser() {
     if (!departId.value) {
-      createMessage.warning('请先选择一个部门');
+      createMessage.warning('Vui lòng chọn một phòng ban trước');
     } else {
       openDrawer(true, {
         isUpdate: false,
         departDisabled: true,
-        // 初始化负责部门
+        // Khởi tạo phòng ban phụ trách
         nextDepartOptions: { value: props.data?.key, label: props.data?.title },
         record: {
           activitiSync: 1,
@@ -143,7 +143,7 @@
     }
   }
 
-  // 查看用户详情
+  // Xem chi tiết người dùng
   function showUserDetail(record) {
     openDrawer(true, {
       record,
@@ -153,24 +153,24 @@
     });
   }
 
-  // 编辑用户信息
+  // Chỉnh sửa thông tin người dùng
   function editUserInfo(record) {
-    //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1141]【系统管理】我的部门编辑用户所属部门和角色没显示出来------------
+    //update-begin---author:wangshuai ---date:20260811  for：[LHZP-1141]【Quản lý hệ thống】Phòng ban và vai trò của người dùng không hiển thị khi chỉnh sửa tại mục Phòng ban của tôi------------
     openDrawer(true, { isUpdate: true, record, departDisabled: true, roleDisabled: true, departPostDisabled: true });
-    //update-end---author:wangshuai ---date:20260811  for：[LHZP-1141]【系统管理】我的部门编辑用户所属部门和角色没显示出来------------
+    //update-end---author:wangshuai ---date:20260811  for：[LHZP-1141]【Quản lý hệ thống】Phòng ban và vai trò của người dùng không hiển thị khi chỉnh sửa tại mục Phòng ban của tôi------------
   }
 
-  // 选择添加已有用户
+  // Chọn thêm người dùng hiện có
   function selectAddUser() {
-    // 代码逻辑说明: 【TV360X-1613】再次打开还是上次的选中用户，没置空
+    // Giải thích logic mã: 【TV360X-1613】Mở lại vẫn là người dùng đã chọn lần trước, chưa được đặt trống
     userSelectModalRef.value.rowSelection.selectedRowKeys = [];
     selUserModal.openModal();
   }
 
-  // 批量取消关联部门和用户之间的关系
+  // Hủy liên kết hàng loạt quan hệ giữa phòng ban và người dùng
   async function unlinkDepartUser(idList, confirm) {
     if (!departId.value) {
-      createMessage.warning('请先选择一个部门');
+      createMessage.warning('Vui lòng chọn một phòng ban trước');
     } else {
       setLoading(true);
       let userIds = unref(idList).join(',');
@@ -184,16 +184,16 @@
     return Promise.reject();
   }
 
-  // 批量取消关联事件
+  // Sự kiện hủy liên kết hàng loạt
   async function onUnlinkDepartUserBatch() {
     try {
       await unlinkDepartUser(selectedRowKeys, true);
-      // 批量删除成功后清空选择
+      // Sau khi xóa hàng loạt thành công thì xóa danh sách đã chọn
       clearSelection();
     } catch (e) {}
   }
 
-  // 选择用户成功
+  // Chọn người dùng thành công
   async function onSelectUserOk(options, userIdList) {
     if (userIdList.length > 0) {
       try {
@@ -207,31 +207,31 @@
   }
 
   /**
-   * 用户抽屉表单成功回调
+   * Callback thành công của biểu mẫu trong ngăn kéo người dùng
    */
   function onUserDrawerSuccess({ isUpdate, values }) {
     isUpdate ? updateTableDataRecord(values.id, values) : reload();
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
-    return [{ label: '编辑', onClick: editUserInfo.bind(null, record) }];
+    return [{ label: 'Chỉnh sửa', onClick: editUserInfo.bind(null, record) }];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record): ActionItem[] {
     return [
-      { label: '部门角色', onClick: showDepartRole.bind(null, record) },
-      { label: '用户详情', onClick: showUserDetail.bind(null, record) },
+      { label: 'Vai trò phòng ban', onClick: showDepartRole.bind(null, record) },
+      { label: 'Chi tiết người dùng', onClick: showUserDetail.bind(null, record) },
       {
-        label: '取消关联',
+        label: 'Hủy bỏ liên kết',
         color: 'error',
         popConfirm: {
-          title: '确认取消关联吗？',
+          title: 'Xác nhận hủy liên kết?',
           confirm: unlinkDepartUser.bind(null, [record.id], false),
         },
       },

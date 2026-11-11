@@ -20,11 +20,11 @@ export interface ListItem {
   color?: string;
 }
 
-// tab的list
+// tabcủalist
 export const settingList = [
   {
     key: '1',
-    name: '个人信息',
+    name: 'Thông tin cá nhân',
     component: 'BaseSetting',
     icon:'ant-design:user-outlined',
     img1: geren1,
@@ -32,7 +32,7 @@ export const settingList = [
   },
   {
     key: '2',
-    name: '我的组织',
+    name: 'Tổ chức của tôi',
     component: 'TenantSetting',
     isSlot:false,
     icon:'ant-design:team-outlined',
@@ -41,7 +41,7 @@ export const settingList = [
   },
    {
     key: '3',
-    name: '账号安全',
+    name: 'An toàn tài khoản',
     component: 'AccountSetting',
     icon:'ant-design:lock-outlined',
     img1: anquan1,
@@ -49,7 +49,7 @@ export const settingList = [
   },
   {
     key: '4',
-    name: '第三方APP',
+    name: 'Bên thứ baAPP',
     component: 'WeChatDingSetting',
     icon: 'ant-design:contacts-outlined',
     img1: app1,
@@ -59,20 +59,20 @@ export const settingList = [
 
 
 /**
- * 用户表单
+ * Biểu mẫu người dùng
  */
 export const formSchema: FormSchema[] = [
   {
     field: 'realname',
     component: 'Input',
-    label: '姓名',
+    label: 'Họ tên',
     colProps: { span: 24 },
     required:true
   },
   {
     field: 'birthday',
     component: 'DatePicker',
-    label: '生日',
+    label: 'Ngày sinh',
     colProps: { span: 24 },
     componentProps:{
       showTime:false,
@@ -83,16 +83,16 @@ export const formSchema: FormSchema[] = [
   {
     field: 'sex',
     component: 'RadioGroup',
-    label: '性别',
+    label: 'Giới tính',
     colProps: { span: 24 },
     componentProps:{
       options: [
         {
-          label: '男',
+          label: 'Nam',
           value: 1,
         },
         {
-          label: '女',
+          label: 'Nữ',
           value: 2,
         },
       ],
@@ -101,7 +101,7 @@ export const formSchema: FormSchema[] = [
   {
     field: 'relTenantIds',
     component: 'JDictSelectTag',
-    label: '租户',
+    label: 'Đơn vị thuê (tenant)',
     colProps: { span: 24 },
     componentProps:{
       mode:'multiple',
@@ -112,7 +112,7 @@ export const formSchema: FormSchema[] = [
   {
     field: 'post',
     component: 'JDictSelectTag',
-    label: '职位',
+    label: 'Chức vụ',
     colProps: { span: 24 },
     componentProps:{
       mode:'multiple',
@@ -128,36 +128,36 @@ export const formSchema: FormSchema[] = [
   },
 ]
 
-//密码弹窗
+//Hộp thoại mật khẩu
 export const formPasswordSchema: FormSchema[] = [
   {
-    label: '用户账号',
+    label: 'Tài khoản người dùng',
     field: 'username',
     component: 'Input',
     componentProps: { readOnly: true },
   },
   {
-    label: '旧密码',
+    label: 'Mật khẩu cũ',
     field: 'oldpassword',
     component: 'InputPassword',
     required: true,
   },
   {
-    label: '新密码',
+    label: 'Mật khẩu mới',
     field: 'password',
     component: 'StrengthMeter',
     componentProps: {
-      placeholder: '请输入新密码',
+      placeholder: 'Vui lòng nhập mật khẩu mới',
     },
     rules: [
       {
         required: true,
-        message: '请输入新密码',
+        message: 'Vui lòng nhập mật khẩu mới',
       },
     ],
   },
   {
-    label: '确认新密码',
+    label: 'Xác nhận mật khẩu mới',
     field: 'confirmpassword',
     component: 'InputPassword',
     dynamicRules: ({ values }) => rules.confirmPassword(values, true),

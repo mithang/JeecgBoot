@@ -1,5 +1,5 @@
 <template>
-  <BasicDrawer title="部门角色分配" :width="365" @close="onClose" @register="registerDrawer">
+  <BasicDrawer title="Phân bổ vai trò phòng ban" :width="365" @close="onClose" @register="registerDrawer">
     <a-spin :spinning="loading">
       <template v-if="desformList.length > 0">
         <a-checkbox-group v-model:value="designNameValue">
@@ -11,11 +11,11 @@
         </a-checkbox-group>
         <div style="width: 100%; margin-top: 15px">
           <a-button type="primary" :loading="loading" :size="'small'" preIcon="ant-design:save-filled" @click="onSubmit">
-            <span>点击保存</span>
+            <span>Nhấn Lưu</span>
           </a-button>
         </div>
       </template>
-      <a-empty v-else description="无配置信息" />
+      <a-empty v-else description="Không có thông tin cấu hình" />
     </a-spin>
   </BasicDrawer>
 </template>
@@ -34,7 +34,7 @@
   const desformList = ref<Array<any>>([]);
   const designNameValue = ref<Array<any>>([]);
 
-  // 注册抽屉组件
+  // Đăng ký thành phần ngăn kéo
   const [registerDrawer, { closeDrawer }] = useDrawerInner((data) => {
     userId.value = unref(data.userId);
     departId.value = unref(data.departId);
@@ -48,7 +48,7 @@
         departId: departId.value,
         userId: userId.value,
       };
-      // 查询 DepartRole
+      // Tìm kiếm DepartRole
       const [$desformList, $departRoleList] = await Promise.all([queryDepartRoleUserList(params), queryDepartRoleByUserId(params)]);
       desformList.value = $desformList;
       designNameValue.value = $departRoleList.map((item) => item.droleId);

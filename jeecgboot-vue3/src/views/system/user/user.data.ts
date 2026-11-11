@@ -8,25 +8,25 @@ import { h } from 'vue';
 import { Tag } from 'ant-design-vue';
 export const columns: BasicColumn[] = [
   {
-    title: '用户账号',
+    title: 'Tài khoản người dùng',
     dataIndex: 'username',
     width: 120,
     resizable: true,
   },
   {
-    title: '用户姓名',
+    title: 'Họ tên người dùng',
     dataIndex: 'realname',
     width: 100,
     resizable: true,
   },
 /*  {
-    title: '头像',
+    title: 'Ảnh đại diện',
     dataIndex: 'avatar',
     width: 120,
     customRender: render.renderAvatar,
   },*/
   {
-    title: '性别',
+    title: 'Giới tính',
     dataIndex: 'sex',
     width: 80,
     resizable: true,
@@ -36,12 +36,12 @@ export const columns: BasicColumn[] = [
     },
   },
 /*  {
-    title: '生日',
+    title: 'Ngày sinh',
     dataIndex: 'birthday',
     width: 100,
   },*/
   {
-    title: '手机号',
+    title: 'Số điện thoại',
     dataIndex: 'phone',
     width: 100,
     resizable: true,
@@ -53,7 +53,7 @@ export const columns: BasicColumn[] = [
     }
   },
   {
-    title: '部门',
+    title: 'Phòng ban',
     width: 150,
     resizable: true,
     dataIndex: 'belongDepIds',
@@ -65,7 +65,7 @@ export const columns: BasicColumn[] = [
     }
   },
   {
-    title: '负责部门',
+    title: 'Phòng ban phụ trách',
     width: 150,
     resizable: true,
     dataIndex: 'departIds',
@@ -77,7 +77,7 @@ export const columns: BasicColumn[] = [
     }
   },
   {
-    title: '主岗位',
+    title: 'Vị trí chính',
     width: 150,
     resizable: true,
     dataIndex: 'mainDepPostId',
@@ -89,7 +89,7 @@ export const columns: BasicColumn[] = [
     }
   },
   {
-    title: '兼职岗位',
+    title: 'Vị trí kiêm nhiệm',
     width: 150,
     resizable: true,
     dataIndex: 'otherDepPostId',
@@ -101,7 +101,7 @@ export const columns: BasicColumn[] = [
     }
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status_dictText',
     width: 80,
     resizable: true,
@@ -110,23 +110,23 @@ export const columns: BasicColumn[] = [
 
 export const recycleColumns: BasicColumn[] = [
   {
-    title: '用户账号',
+    title: 'Tài khoản người dùng',
     dataIndex: 'username',
     width: 100,
   },
   {
-    title: '用户姓名',
+    title: 'Họ tên người dùng',
     dataIndex: 'realname',
     width: 100,
   },
   {
-    title: '头像',
+    title: 'Ảnh đại diện',
     dataIndex: 'avatar',
     width: 80,
     customRender: render.renderAvatar,
   },
   {
-    title: '性别',
+    title: 'Giới tính',
     dataIndex: 'sex',
     width: 80,
     sorter: true,
@@ -138,51 +138,51 @@ export const recycleColumns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '账号',
+    label: 'Tài khoản',
     field: 'username',
     component: 'JInput',
     //colProps: { span: 6 },
   },
   {
-    label: '名字',
+    label: 'Tên',
     field: 'realname',
     component: 'JInput',
    //colProps: { span: 6 },
   },
   {
-    label: '性别',
+    label: 'Giới tính',
     field: 'sex',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'sex',
-      placeholder: '请选择性别',
+      placeholder: 'Vui lòng chọn giới tính',
       stringToNumber: true,
     },
     //colProps: { span: 6 },
   },
   {
-    label: '手机号码',
+    label: 'Số điện thoại',
     field: 'phone',
     component: 'JInput',
     //colProps: { span: 6 },
   },
   {
-    label: '用户状态',
+    label: 'Trạng thái người dùng',
     field: 'status',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'user_status',
-      placeholder: '请选择状态',
+      placeholder: 'Vui lòng chọn trạng thái',
       stringToNumber: true,
     },
    //colProps: { span: 6 },
   },
   {
-    label: '所属部门',
+    label: 'Phòng ban trực thuộc',
     field: 'departId',
     component: 'JSelectDept',
     componentProps: {
-      placeholder: '请选择所属部门',
+      placeholder: 'Vui lòng chọn phòng ban trực thuộc',
       showButton: false,
       checkStrictly: true
     },
@@ -197,7 +197,7 @@ export const formSchema: FormSchema[] = [
     show: false,
   },
   {
-    label: '用户账号',
+    label: 'Tài khoản người dùng',
     field: 'username',
     component: 'Input',
     required: true,
@@ -207,7 +207,7 @@ export const formSchema: FormSchema[] = [
     dynamicRules: ({ model, schema }) => rules.duplicateCheckRule('sys_user', 'username', model, schema, true),
   },
   {
-    label: '登录密码',
+    label: 'Mật khẩu đăng nhập',
     field: 'password',
     component: 'StrengthMeter',
     componentProps:{
@@ -216,36 +216,36 @@ export const formSchema: FormSchema[] = [
     rules: [
       {
         required: true,
-        message: '请输入登录密码',
+        message: 'Vui lòng nhập mật khẩu đăng nhập',
       },
-      //update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】根据三级等保开关动态切换校验规则-----------
+      //update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】Chuyển đổi linh hoạt quy tắc kiểm tra theo trạng thái bật/tắt của bảo mật cấp ba-----------
       {
         validator: createPasswordValidator(),
       },
-      //update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】根据三级等保开关动态切换校验规则-----------
+      //update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】Chuyển đổi linh hoạt quy tắc kiểm tra theo trạng thái bật/tắt của bảo mật cấp ba-----------
     ],
   },
   {
-    label: '确认密码',
+    label: 'Xác nhận mật khẩu',
     field: 'confirmPassword',
     component: 'InputPassword',
     dynamicRules: ({ values }) => rules.confirmPassword(values, true),
   },
   {
-    label: '用户姓名',
+    label: 'Họ tên người dùng',
     field: 'realname',
     required: true,
     component: 'Input',
   },
   {
-    label: '工号',
+    label: 'Mã nhân viên',
     field: 'workNo',
     required: false,
     component: 'Input',
     dynamicRules: ({ model, schema }) => rules.duplicateCheckRule('sys_user', 'work_no', model, schema, false),
   },
 /*  {
-    label: '职务',
+    label: 'Chức danh',
     field: 'post',
     required: false,
     component: 'JSelectPosition',
@@ -254,18 +254,18 @@ export const formSchema: FormSchema[] = [
     },
   },*/
   {
-    label: '职务',
+    label: 'Chức danh',
     field: 'positionType',
     required: false,
     component: 'JDictSelectTag',
-    helpMessage: '此职务为字典项，非职务等级，无法用于流程审批',
+    helpMessage: 'Chức danh này là mục từ điển, không phải cấp bậc chức danh, không thể dùng cho phê duyệt quy trình',
     componentProps: {
       dictCode: "user_position",
       mode: 'multiple',
     },
   },
   {
-    label: '角色',
+    label: 'Vai trò',
     field: 'selectedroles',
     component: 'ApiSelect',
     componentProps: {
@@ -277,7 +277,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '所属部门',
+    label: 'Phòng ban trực thuộc',
     field: 'selecteddeparts',
     component: 'JSelectDept',
     componentProps: ({ formActionType, formModel }) => {
@@ -289,23 +289,23 @@ export const formSchema: FormSchema[] = [
         onSelect: (options, values) => {
           const { updateSchema } = formActionType;
           const departIds = values ? values.value.join(',') : '';
-          //所属部门修改后更新负责部门下拉框数据
+          //Sau khi sửa phòng ban trực thuộc, cập nhật dữ liệu hộp thả xuống phòng ban phụ trách
           updateSchema([
-            //修改主岗位和兼职岗位的参数
+            //Sửa tham số của vị trí chính và vị trí kiêm nhiệm
             {
               field: 'mainDepPostId',
-              //update-begin---wangshuai---date:20260803  for：[LHZP-742]系统用户岗位 选择完部门之后 主岗位和兼职岗位没有实时刷新，需要重新保存之后才好用------------
+              //update-begin---wangshuai---date:20260803  for：[LHZP-742]Vị trí của người dùng hệ thống: sau khi chọn xong phòng ban, vị trí chính và vị trí kiêm nhiệm không được làm mới theo thời gian thực, phải lưu lại mới có tác dụng------------
               componentProps: { key: departIds, params: { departIds } },
-              //update-end---author:wangshuai ---date:20260803  for：[LHZP-742]系统用户岗位 选择完部门之后 主岗位和兼职岗位没有实时刷新，需要重新保存之后才好用------------
+              //update-end---author:wangshuai ---date:20260803  for：[LHZP-742]Vị trí của người dùng hệ thống: sau khi chọn xong phòng ban, vị trí chính và vị trí kiêm nhiệm không được làm mới theo thời gian thực, phải lưu lại mới có tác dụng------------
             },
             {
               field: 'otherDepPostId',
-              //update-begin---wangshuai---date:20260803  for：[LHZP-742]系统用户岗位 选择完部门之后 主岗位和兼职岗位没有实时刷新，需要重新保存之后才好用------------
+              //update-begin---wangshuai---date:20260803  for：[LHZP-742]Vị trí của người dùng hệ thống: sau khi chọn xong phòng ban, vị trí chính và vị trí kiêm nhiệm không được làm mới theo thời gian thực, phải lưu lại mới có tác dụng------------
               componentProps: { key: departIds, params: { departIds } },
-              //update-end---wangshuai---date:20260803  for：[LHZP-742]系统用户岗位 选择完部门之后 主岗位和兼职岗位没有实时刷新，需要重新保存之后才好用------------
+              //update-end---wangshuai---date:20260803  for：[LHZP-742]Vị trí của người dùng hệ thống: sau khi chọn xong phòng ban, vị trí chính và vị trí kiêm nhiệm không được làm mới theo thời gian thực, phải lưu lại mới có tác dụng------------
             }
           ]);
-          //更新负责部门的option
+          //Cập nhật của phòng ban phụ tráchoption
           updateDepartOption(options, updateSchema);
           if(!values){
             formModel.departIds = [];
@@ -313,18 +313,18 @@ export const formSchema: FormSchema[] = [
             formModel.otherDepPostId = "";
             return;
           }
-          //所属部门修改后更新负责部门数据
+          //Sau khi sửa phòng ban trực thuộc, cập nhật dữ liệu phòng ban phụ trách
           formModel.departIds && (formModel.departIds = formModel.departIds.filter((item) => values.value.indexOf(item) > -1));
         },
         onChange: async (values) => {
-          // 当所属部门发生改变时，需要取消主岗位和兼职岗位的选中值
+          // Khi phòng ban trực thuộc thay đổi, cần hủy giá trị đã chọn của vị trí chính và vị trí kiêm nhiệm
           await removeDepPostByDepId(formModel, values, formActionType);
         }
       };
     },
   },
   {
-    label: '主岗位',
+    label: 'Vị trí chính',
     field: 'mainDepPostId',
     component: 'JSelectDepartPost',
     componentProps: {
@@ -340,7 +340,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '兼职岗位',
+    label: 'Vị trí kiêm nhiệm',
     field: 'otherDepPostId',
     component: 'JSelectDepartPost',
     componentProps: {
@@ -355,7 +355,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '租户',
+    label: 'Đơn vị thuê (tenant)',
     field: 'relTenantIds',
     component: 'JSearchSelect',
     componentProps: {
@@ -365,15 +365,15 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '身份',
+    label: 'Danh tính',
     field: 'userIdentity',
     component: 'RadioGroup',
     defaultValue: 1,
     componentProps: ({ formModel }) => {
       return {
         options: [
-          { label: '普通用户', value: 1, key: '1' },
-          { label: '上级', value: 2, key: '2' },
+          { label: 'Người dùng thường', value: 1, key: '1' },
+          { label: 'Cấp trên', value: 2, key: '2' },
         ],
         onChange: () => {
           formModel.userIdentity == 1 && (formModel.departIds = []);
@@ -382,13 +382,13 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '负责部门',
+    label: 'Phòng ban phụ trách',
     field: 'departIds',
     component: 'Select',
     componentProps: {
       mode: 'multiple',
       tagRender: ({ label, value, closable, onClose }) => {
-        // 计算显示文本：前面省略号 + 后面字符
+        // Tính toán văn bản hiển thị: dấu ba chấm phía trước + ký tự phía sau
         let displayLabel = label;
         if(displayLabel && label.length >= 20) {
           displayLabel = "..." + displayLabel.substring(label.length - 20);
@@ -419,7 +419,7 @@ export const formSchema: FormSchema[] = [
     ifShow: ({ values }) => values.userIdentity == 2,
   },
   {
-    label: '排序',
+    label: 'Sắp xếp',
     field: 'sort',
     component: 'InputNumber',
     defaultValue: 1000,
@@ -431,7 +431,7 @@ export const formSchema: FormSchema[] = [
     }
   },
   {
-    label: '头像',
+    label: 'Ảnh đại diện',
     field: 'avatar',
     component: 'JImageUpload',
     componentProps: {
@@ -439,22 +439,22 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '生日',
+    label: 'Ngày sinh',
     field: 'birthday',
     component: 'DatePicker',
   },
   {
-    label: '性别',
+    label: 'Giới tính',
     field: 'sex',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'sex',
-      placeholder: '请选择性别',
+      placeholder: 'Vui lòng chọn giới tính',
       stringToNumber: true,
     },
   },
   {
-    label: '邮箱',
+    label: 'Email',
     field: 'email',
     component: 'Input',
     required: false,
@@ -466,25 +466,25 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '手机号码',
+    label: 'Số điện thoại',
     field: 'phone',
     component: 'Input',
     required: true,
     dynamicRules: ({ model, schema }) => {
       return [
         { ...rules.duplicateCheckRule('sys_user', 'phone', model, schema, true)[0], trigger: 'blur' },
-        { pattern: /^1[3456789]\d{9}$/, message: '手机号码格式有误', trigger: 'blur' },
+        { pattern: /^1[3456789]\d{9}$/, message: 'Định dạng số điện thoại không đúng', trigger: 'blur' },
       ];
     },
   },
   {
-    label: '座机',
+    label: 'Điện thoại cố định',
     field: 'telephone',
     component: 'Input',
-    rules: [{ pattern: /^0\d{2,3}-[1-9]\d{6,7}$/, message: '请输入正确的座机号码' }],
+    rules: [{ pattern: /^0\d{2,3}-[1-9]\d{6,7}$/, message: 'Vui lòng nhập số điện thoại cố định đúng' }],
   },
   {
-    label: '工作流引擎',
+    label: 'Động cơ quy trình làm việc (workflow)',
     field: 'activitiSync',
     defaultValue: 1,
     component: 'JDictSelectTag',
@@ -495,7 +495,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '隐藏联系方式',
+    label: 'Ẩn phương thức liên hệ',
     field: 'izHideContact',
     defaultValue: '0',
     component: 'JDictSelectTag',
@@ -508,32 +508,32 @@ export const formSchema: FormSchema[] = [
 
 export const formPasswordSchema: FormSchema[] = [
   {
-    label: '用户账号',
+    label: 'Tài khoản người dùng',
     field: 'username',
     component: 'Input',
     componentProps: { readOnly: true },
   },
   {
-    label: '登录密码',
+    label: 'Mật khẩu đăng nhập',
     field: 'password',
     component: 'StrengthMeter',
     componentProps: {
-      placeholder: '请输入登录密码',
+      placeholder: 'Vui lòng nhập mật khẩu đăng nhập',
     },
     rules: [
       {
         required: true,
-        message: '请输入登录密码',
+        message: 'Vui lòng nhập mật khẩu đăng nhập',
       },
-      //update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】根据三级等保开关动态切换校验规则-----------
+      //update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】Chuyển đổi linh hoạt quy tắc kiểm tra theo trạng thái bật/tắt của bảo mật cấp ba-----------
       {
         validator: createPasswordValidator(),
       },
-      //update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】根据三级等保开关动态切换校验规则-----------
+      //update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】Chuyển đổi linh hoạt quy tắc kiểm tra theo trạng thái bật/tắt của bảo mật cấp ba-----------
     ],
   },
   {
-    label: '确认密码',
+    label: 'Xác nhận mật khẩu',
     field: 'confirmPassword',
     component: 'InputPassword',
     dynamicRules: ({ values }) => rules.confirmPassword(values, true),
@@ -541,71 +541,71 @@ export const formPasswordSchema: FormSchema[] = [
 ];
 
 
-//租户用户列表
+//Danh sách người dùng đơn vị thuê
 export const userTenantColumns: BasicColumn[] = [
   {
-    title: '用户账号',
+    title: 'Tài khoản người dùng',
     dataIndex: 'username',
     width: 120,
   },
   {
-    title: '用户姓名',
+    title: 'Họ tên người dùng',
     dataIndex: 'realname',
     width: 100,
   },
   {
-    title: '头像',
+    title: 'Ảnh đại diện',
     dataIndex: 'avatar',
     width: 120,
     customRender: render.renderAvatar,
   },
   {
-    title: '手机号',
+    title: 'Số điện thoại',
     dataIndex: 'phone',
     width: 100,
   },
   {
-    title: '部门',
+    title: 'Phòng ban',
     width: 150,
     dataIndex: 'orgCodeTxt',
   },
   {
-    title: '状态',
+    title: 'Trạng thái',
     dataIndex: 'status',
     width: 80,
     customRender: ({ text }) => {
       if (text === '1') {
-        return '正常';
+        return 'Bình thường';
       } else if (text === '3') {
-        return '审批中';
+        return 'Đang phê duyệt';
       } else {
-        return '已拒绝';
+        return 'Đã từ chối';
       }
     },
   },
 ];
 
-//用户租户搜索表单
+//Biểu mẫu tìm kiếm đơn vị thuê của người dùng
 export const userTenantFormSchema: FormSchema[] = [
   {
-    label: '账号',
+    label: 'Tài khoản',
     field: 'username',
     component: 'Input',
     colProps: { span: 6 },
   },
   {
-    label: '名字',
+    label: 'Tên',
     field: 'realname',
     component: 'Input',
     colProps: { span: 6 },
   },
   {
-    label: '性别',
+    label: 'Giới tính',
     field: 'sex',
     component: 'JDictSelectTag',
     componentProps: {
       dictCode: 'sex',
-      placeholder: '请选择性别',
+      placeholder: 'Vui lòng chọn giới tính',
       stringToNumber: true,
     },
     colProps: { span: 6 },
@@ -614,12 +614,12 @@ export const userTenantFormSchema: FormSchema[] = [
 
 
 /**
- * 删除非当前部门下的数据
- * 当所属部门发生改变时，取消主岗位和兼职岗位的选中值
+ * Xóa dữ liệu không thuộc phòng ban hiện tại
+ * Khi phòng ban trực thuộc thay đổi, hủy giá trị đã chọn của vị trí chính và vị trí kiêm nhiệm
  * 
- * @param formModel 表单模型
- * @param values 选中的部门值
- * @param formActionType 表单操作方法
+ * @param formModel Mô hình biểu mẫu
+ * @param values Giá trị phòng ban đã chọn
+ * @param formActionType Phương thức thao tác biểu mẫu
  */
 async function removeDepPostByDepId(formModel, values, formActionType) {
   const { setFieldsValue } = formActionType;
@@ -632,24 +632,24 @@ async function removeDepPostByDepId(formModel, values, formActionType) {
     }
     if (departIds) {
       try {
-        // 查询当前选中部门下的岗位ID
+        // Truy vấn các vị trí thuộc phòng ban đang chọnID
         const { result } = await getDepPostIdByDepId({ depIds: departIds });
         const validPostIds = result.split(",") || [];
         
-        // 检查主岗位是否在当前部门下
+        // Kiểm tra vị trí chính có thuộc phòng ban hiện tại hay không
         if (formModel.mainDepPostId) {
           const mainPostId = Array.isArray(formModel.mainDepPostId) 
             ? formModel.mainDepPostId[0] 
             : formModel.mainDepPostId;
           
           if (mainPostId && !validPostIds.includes(mainPostId)) {
-            // 主岗位不在当前部门下，清空主岗位
+            // Vị trí chính không thuộc phòng ban hiện tại, xóa trống vị trí chính
             setFieldsValue({ mainDepPostId: null });
             formModel.mainDepPostId = null;
           }
         }
 
-        // 检查兼职岗位是否在当前部门下
+        // Kiểm tra vị trí kiêm nhiệm có thuộc phòng ban hiện tại hay không
         if(typeof formModel.otherDepPostId === "string"){
           formModel.otherDepPostId = formModel.otherDepPostId.split(",");
         }
@@ -657,13 +657,13 @@ async function removeDepPostByDepId(formModel, values, formActionType) {
           const validOtherPosts = formModel.otherDepPostId.filter(postId => 
             validPostIds.includes(postId)
           );
-          // 有兼职岗位不在当前部门下，更新兼职岗位
+          // Có vị trí kiêm nhiệm không thuộc phòng ban hiện tại, cập nhật vị trí kiêm nhiệm
           setFieldsValue({ otherDepPostId: validOtherPosts });
           formModel.otherDepPostId = validOtherPosts;
         }
       } catch (error) {
-        console.error('查询部门岗位失败:', error);
-        // 查询失败时，清空所有岗位选择
+        console.error('Truy vấn vị trí phòng ban thất bại:', error);
+        // Khi truy vấn thất bại, xóa mọi lựa chọn vị trí
         setFieldsValue({
           mainDepPostId: null,
           otherDepPostId: []
@@ -672,7 +672,7 @@ async function removeDepPostByDepId(formModel, values, formActionType) {
         formModel.otherDepPostId = [];
       }
     } else {
-      // 没有选中部门时，清空所有岗位选择
+      // Khi không chọn phòng ban, xóa mọi lựa chọn vị trí
       setFieldsValue({
         mainDepPostId: null,
         otherDepPostId: []
@@ -684,14 +684,14 @@ async function removeDepPostByDepId(formModel, values, formActionType) {
 }
 
 /**
- * 更新负责部门的options
+ * Cập nhật của phòng ban phụ tráchoptions
  *
  * @param options
  * @param updateSchema
  */
 async function updateDepartOption(options, updateSchema) {
   if (options && options.length > 0) {
-    // 并行处理所有异步操作
+    // Xử lý song song mọi thao tác không đồng bộ
     const updatedOptions = await Promise.all(
       options.map(async (item) => {
         const departPathName = await getDepartPathNameByOrgCode('', item.label, item.value);

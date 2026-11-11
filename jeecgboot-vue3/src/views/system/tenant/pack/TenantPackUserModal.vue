@@ -12,9 +12,9 @@
         </template>
       </template>
       <template #tableTitle>
-        <a-button preIcon="ant-design:usergroup-add-outlined" type="primary" @click="addUser">邀请成员</a-button>
+        <a-button preIcon="ant-design:usergroup-add-outlined" type="primary" @click="addUser">Mời thành viên</a-button>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" />
       </template>
@@ -38,23 +38,23 @@
     name: 'TenantPackUserModal',
     components: { BasicModal, BasicTable, TableAction, TenantUserSelectModal },
     setup() {
-      //获取租户id
+      //Lấy đơn vị thuêid
       const getTenantId = computed(()=>{
         return tenantPackData.tenantId;
       })
       
-      //套餐包信息
+      //Thông tin gói dịch vụ
       const tenantPackData = reactive<any>({});
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         setModalProps({ confirmLoading: false, showCancelBtn: true, showOkBtn: false });
         Object.assign(tenantPackData, data.record);
         await reload();
       });
       const { createMessage } = useMessage();
-      //设置标题
-      const title = ref<string>('用户');
-      //注册table数据
+      //Đặt tiêu đề
+      const title = ref<string>('Người dùng');
+      //Đăng ký dữ liệu table
       const { tableContext } = useListPage({
         tableProps: {
           api: queryTenantPackUserList,
@@ -78,7 +78,7 @@
       const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
       /**
-       * 获取部门/职务名称
+       * Lấy tên phòng ban/chức danh
        * @param value
        */
       function getName(value) {
@@ -86,15 +86,15 @@
       }
 
       /**
-       * 表格操作列
+       * Cột thao tác của bảng
        * @param record
        */
       function getTableAction(record) {
         return [
           {
-            label: '移除',
+            label: 'Loại bỏ',
             popConfirm: {
-              title: '是否确认移除',
+              title: 'Xác nhận loại bỏ?',
               confirm: handleDelete.bind(null, record),
             }
           },
@@ -102,7 +102,7 @@
       }
 
       /**
-       * 删除
+       * Xóa
        */
       async function handleDelete(record) {
         let params = {
@@ -117,7 +117,7 @@
       }
 
       /**
-       * 添加用户弹窗
+       * Hộp thoại thêm người dùng
        */
       function addUser() {
         openUserModal(true, {
@@ -126,7 +126,7 @@
       }
 
       /**
-       * 邀请人回调事件
+       * Sự kiện callback của người mời
        * @param arr
        */
       async function onSelected(arr) {

@@ -13,14 +13,14 @@
     <a-col :xl="12" :lg="24" :md="24" style="margin-bottom: 10px">
       <div style="height: 100%" :class="[`${prefixCls}`]">
         <a-tabs v-show="departData != null" defaultActiveKey="base-info">
-          <a-tab-pane tab="基本信息" key="base-info" forceRender style="position: relative">
+          <a-tab-pane tab="Thông tin cơ bản" key="base-info" forceRender style="position: relative">
             <div style="padding: 20px">
               <DepartFormTab v-if="showDepart" :data="departData" :rootTreeData="rootTreeData" @success="onSuccess" :isTenantDepart="true" />
             </div>
           </a-tab-pane>
         </a-tabs>
         <div v-show="departData == null" style="padding-top: 40px">
-          <a-empty description="尚未选择部门" />
+          <a-empty description="Chưa chọn phòng ban" />
         </div>
       </div>
     </a-col>
@@ -38,18 +38,18 @@
   const { prefixCls } = useDesign('tenant-depart-manage');
   provide('prefixCls', prefixCls);
 
-  // 给子组件定义一个ref变量
+  // Định nghĩa một biến ref cho component con
   const leftTree = ref();
-  //是否显示部门
+  //Có hiển thị phòng ban không
   const showDepart = ref(false);
 
-  // 当前选中的部门信息
+  // Thông tin phòng ban đang chọn
   const departData = ref({});
   const rootTreeData = ref<any[]>([]);
   const loginTenantName = ref<string>('');
 
   /**
-   * 获取租户名称
+   * Lấy tên đơn vị thuê
    */
   getTenantName();
 
@@ -62,12 +62,12 @@
     }
   }
 
-  // 左侧树选择后触发
+  // Kích hoạt sau khi chọn cây bên trái
   function onTreeSelect(data) {
     departData.value = data;
   }
 
-  // 左侧树rootTreeData触发
+  // Kích hoạt rootTreeData của cây bên trái
   function onRootTreeData(data) {
     rootTreeData.value = data;
   }
@@ -77,8 +77,8 @@
   }
 
   onMounted(() => {
-    //提示信息
-    tenantSaasMessage('租户部门');
+    //Thông tin thông báo
+    tenantSaasMessage('Phòng ban đơn vị thuê');
   });
 </script>
 

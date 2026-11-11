@@ -27,26 +27,26 @@ enum Api {
   queryIndexByCode = '/sys/sysRoleIndex/queryByCode',
 }
 /**
- * 导出api
+ * Xuất (export)api
  */
 export const getExportUrl = Api.exportXls;
 /**
- * 导入api
+ * Nhập (import)api
  */
 export const getImportUrl = Api.importExcel;
 /**
- * 系统角色列表
+ * Danh sách vai trò hệ thống
  * @param params
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 /**
- * 租户角色列表
+ * Danh sách vai trò đơn vị thuê
  * @param params
  */
 export const listByTenant = (params) => defHttp.get({ url: Api.listByTenant, params });
 
 /**
- * 删除角色
+ * Xóa vai trò
  */
 export const deleteRole = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteRole, params }, { joinParamsToUrl: true }).then(() => {
@@ -54,15 +54,15 @@ export const deleteRole = (params, handleSuccess) => {
   });
 };
 /**
- * 批量删除角色
+ * Xóa hàng loạt vai trò
  * @param params
  */
 export const batchDeleteRole = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.deleteBatch, data: params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -71,7 +71,7 @@ export const batchDeleteRole = (params, handleSuccess) => {
   });
 };
 /**
- * 保存或者更新角色
+ * Lưu hoặc cập nhật vai trò
  * @param params
  */
 export const saveOrUpdateRole = (params, isUpdate) => {
@@ -79,10 +79,10 @@ export const saveOrUpdateRole = (params, isUpdate) => {
   return defHttp.post({ url: url, params });
 };
 /**
- * 编码校验
+ * Kiểm tra mã
  * @param params
  */
-// 代码逻辑说明: 【QQYUN-7415】表单调用接口进行校验的添加防抖
+// Giải thích logic mã: 【QQYUN-7415】Bổ sung chống rung (debounce) cho việc biểu mẫu gọi API để kiểm tra
 let timer;
 export const isRoleExist = (params) => {
   return new Promise((resolve, rejected) => {
@@ -100,47 +100,47 @@ export const isRoleExist = (params) => {
   });
 };
 /**
- * 根据角色查询树信息
+ * Truy vấn thông tin cây theo vai trò
  */
 export const queryTreeListForRole = () => defHttp.get({ url: Api.queryTreeListForRole });
 /**
- * 查询角色权限
+ * Truy vấn quyền vai trò
  */
 export const queryRolePermission = (params) => defHttp.get({ url: Api.queryRolePermission, params });
 /**
- * 保存角色权限
+ * Lưu quyền vai trò
  */
 export const saveRolePermission = (params) => defHttp.post({ url: Api.saveRolePermission, params });
 /**
- * 查询角色数据规则
+ * Truy vấn quy tắc dữ liệu của vai trò
  */
 export const queryDataRule = (params) =>
   defHttp.get({ url: `${Api.queryDataRule}/${params.functionId}/${params.roleId}` }, { isTransformResponse: false });
 /**
- * 保存角色数据规则
+ * Lưu quy tắc dữ liệu của vai trò
  */
 export const saveDataRule = (params) => defHttp.post({ url: Api.queryDataRule, params });
 /**
- * 获取表单数据
+ * Lấy dữ liệu biểu mẫu
  * @return List<Map>
  */
 export const getParentDesignList = () => defHttp.get({ url: Api.getParentDesignList });
 /**
- * 获取角色表单数据
+ * Lấy dữ liệu biểu mẫu vai trò
  * @return List<Map>
  */
 export const getRoleDegisnList = (params) => defHttp.get({ url: Api.getRoleDegisnList, params });
 /**
- * 提交角色工单信息
+ * Gửi thông tin phiếu công việc của vai trò
  */
 export const saveRoleDesign = (params) => defHttp.post({ url: Api.saveRoleDesign, params });
 /**
- * 角色列表接口
+ * API danh sách vai trò
  * @param params
  */
 export const userList = (params) => defHttp.get({ url: Api.userList, params });
 /**
- * 删除角色用户
+ * Xóa người dùng của vai trò
  */
 export const deleteUserRole = (params, handleSuccess) => {
   return defHttp.delete({ url: Api.deleteUserRole, params }, { joinParamsToUrl: true }).then(() => {
@@ -148,15 +148,15 @@ export const deleteUserRole = (params, handleSuccess) => {
   });
 };
 /**
- * 批量删除角色用户
+ * Xóa hàng loạt người dùng của vai trò
  * @param params
  */
 export const batchDeleteUserRole = (params, handleSuccess) => {
   Modal.confirm({
-    title: '确认删除',
-    content: '是否删除选中数据',
-    okText: '确认',
-    cancelText: '取消',
+    title: 'Xác nhận xóa',
+    content: 'Xóa dữ liệu đã chọn?',
+    okText: 'Xác nhận',
+    cancelText: 'Hủy',
     onOk: () => {
       return defHttp.delete({ url: Api.batchDeleteUserRole, params }, { joinParamsToUrl: true }).then(() => {
         handleSuccess();
@@ -165,7 +165,7 @@ export const batchDeleteUserRole = (params, handleSuccess) => {
   });
 };
 /**
- * 添加已有用户
+ * Thêm người dùng hiện có
  */
 export const addUserRole = (params, handleSuccess) => {
   return defHttp.post({ url: Api.addUserRole, params }).then(() => {
@@ -173,16 +173,16 @@ export const addUserRole = (params, handleSuccess) => {
   });
 };
 /**
- * 保存或者更新
+ * Lưu hoặc cập nhật
  * @param params
- * @param isUpdate 是否是更新数据
+ * @param isUpdate Có phải dữ liệu cập nhật không
  */
 export const saveOrUpdateRoleIndex = (params, isUpdate) => {
   let url = isUpdate ? Api.editRoleIndex : Api.saveRoleIndex;
   return defHttp.post({ url: url, params });
 };
 /**
- * 根据code查询首页配置
+ * Truy vấn cấu hình trang chủ theo code
  * @param params
  */
 export const queryIndexByCode = (params) => defHttp.get({ url: Api.queryIndexByCode, params }, { isTransformResponse: false });

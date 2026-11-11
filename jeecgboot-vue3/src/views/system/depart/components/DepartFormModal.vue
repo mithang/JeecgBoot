@@ -31,28 +31,28 @@
     rootTreeData: { type: Array, default: () => [] },
   });
   const prefixCls = inject('prefixCls');
-  // 当前是否是更新模式
+  // Hiện có đang ở chế độ cập nhật không
   const isUpdate = ref<boolean>(false);
-  // 当前的弹窗数据
+  // Dữ liệu của hộp thoại hiện tại
   const model = ref<object>({});
-  const title = computed(() => (isUpdate.value ? '编辑' : '新增'));
+  const title = computed(() => (isUpdate.value ? 'Chỉnh sửa' : 'Thêm mới'));
   const treeData = ref<any>([]);
-  //上级岗位
+  //Vị trí cấp trên
   const depPostValue = ref<any>([]);
-  //上级岗位名称映射
+  //Ánh xạ tên vị trí cấp trên
   const orgNameMap = ref<Record<string, string>>({});
 
-  //注册表单
+  //Biểu mẫu đăng ký
   const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
     schemas: useBasicFormSchema(treeData).basicFormSchema,
     showActionButtonGroup: false,
   });
 
-  // 注册弹窗
+  // Hộp thoại đăng ký
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     await resetFields();
     isUpdate.value = unref(data?.isUpdate);
-    // 当前是否为添加子级
+    // Hiện có phải đang thêm cấp con hay không
     let isChild = unref(data?.isChild);
     let categoryOptions = isChild ? orgCategoryOptions.child : orgCategoryOptions.root;
     
@@ -66,13 +66,13 @@
       orgNameMap.value[data.record.depPostParentId] = await getDepartPathNameByOrgCode('', '', data.record.depPostParentId);
       depPostValue.value = [data.record.depPostParentId];
     }
-    // 隐藏不需要展示的字段
+    // Ẩn các trường không cần hiển thị
     updateSchema([
       {
         field: 'parentId',
         show: isChild,
         componentProps: {
-          // 如果是添加子部门，就禁用该字段
+          // Nếu là thêm phòng ban con thì vô hiệu hóa trường này
           disabled: isChild,
           treeData: props.rootTreeData,
         },
@@ -94,7 +94,7 @@
     let orgCategory = data.record?.orgCategory;
     let company = orgCategory === '1' || orgCategory === '4';
     delete data.record?.orgCategory;
-    // 赋默认值
+    // Gán giá trị mặc định
     record = Object.assign(
       {
         departOrder: 0,
@@ -106,7 +106,7 @@
     await setFieldsValue({ ...record });
   });
 
-  // 提交事件
+  // Sự kiện gửi
   async function handleOk() {
     try {
       setModalProps({ confirmLoading: true });
@@ -116,11 +116,11 @@
       }else{
         values.depPostParentId = "";
       }
-      //提交表单
+      //Gửi biểu mẫu
       await saveOrUpdateDepart(values, isUpdate.value);
-      //关闭弹窗
+      //Đóng cửa sổ bật lên
       closeModal();
-      //刷新列表
+      //Làm mới danh sách
       emit('success');
     } finally {
       setModalProps({ confirmLoading: false });
@@ -128,14 +128,14 @@
   }
 
   /**
-   * 树选中事件
+   * Sự kiện chọn trên cây
    *
    * @param info
    * @param keys
    */
   async function treeSelect(keys,info) {
     if (info.checkable) {
-      //解决闪动问题
+      //Giải quyết vấn đề nhấp nháy
       orgNameMap.value[info.id] = "";
       depPostValue.value = [info.value];
       orgNameMap.value[info.id] = await getDepartPathNameByOrgCode(info.orgCode,info.label,info.id);

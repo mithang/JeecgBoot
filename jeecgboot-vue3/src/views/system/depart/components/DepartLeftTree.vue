@@ -1,48 +1,48 @@
 <template>
   <a-card :bordered="false" style="height: 100%">
     <div class="j-table-operator" style="width: 100%;display: flex;align-items: center">
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="onAddDepart">新增</a-button>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="onAddChildDepart()">添加下级</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="onAddDepart">Thêm mới</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="onAddChildDepart()">Thêm cấp dưới</a-button>
       <a-upload name="file" :showUploadList="false" :customRequest="onImportXls" v-if="!isTenantDepart">
-        <a-button type="primary" preIcon="ant-design:import-outlined">导入</a-button>
+        <a-button type="primary" preIcon="ant-design:import-outlined">Nhập (import)</a-button>
       </a-upload>
-      <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls" v-if="!isTenantDepart">导出</a-button>
+      <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls" v-if="!isTenantDepart">Xuất (export)</a-button>
       <template v-if="checkedKeys.length > 0">
         <a-dropdown>
           <template #overlay>
             <a-menu>
               <a-menu-item key="1" @click="onDeleteBatch">
                 <icon icon="ant-design:delete-outlined" />
-                <span>删除</span>
+                <span>Xóa</span>
               </a-menu-item>
             </a-menu>
           </template>
           <a-button>
-            <span>批量操作 </span>
+            <span>Thao tác hàng loạt </span>
             <icon icon="akar-icons:chevron-down" />
           </a-button>
         </a-dropdown>
       </template>
       <Icon icon="ant-design:question-circle-outlined" style="margin-left: 10px;cursor: pointer" @click="tipShow = true"></Icon>
       <div v-if="loginTenantName" style="margin-left: 10px;"
-      >当前登录租户: <span class="tenant-name">{{ loginTenantName }}</span>
+      >Đơn vị thuê đang đăng nhập: <span class="tenant-name">{{ loginTenantName }}</span>
       </div>
     </div>
     <a-alert type="info" show-icon class="alert" style="margin-bottom: 8px">
       <template #message>
         <template v-if="checkedKeys.length > 0">
-          <span>已选中 {{ checkedKeys.length }} 条记录</span>
+          <span>Đã chọn {{ checkedKeys.length }} bản ghi</span>
           <a-divider type="vertical" />
-          <a @click="checkedKeys = []">清空</a>
+          <a @click="checkedKeys = []">Xóa sạch</a>
         </template>
         <template v-else>
-          <span>未选中任何数据</span>
+          <span>Chưa chọn bất kỳ dữ liệu nào</span>
         </template>
       </template>
     </a-alert>
     <a-spin :spinning="loading">
-      <a-input-search v-model:value="searchKeyword" placeholder="按部门名称搜索…" style="margin-bottom: 10px" @search="onSearch" />
-      <!--组织机构树-->
+      <a-input-search v-model:value="searchKeyword" placeholder="Tìm kiếm theo tên phòng ban…" style="margin-bottom: 10px" @search="onSearch" />
+      <!--Cây tổ chức-->
       <template v-if="treeData.length > 0">
         <a-tree
           checkable
@@ -64,9 +64,9 @@
             <a-dropdown :trigger="['contextmenu']">
               <Popconfirm
                 :open="visibleTreeKey === treeKey"
-                title="确定要删除吗？"
-                ok-text="确定"
-                cancel-text="取消"
+                title="Bạn có chắc chắn muốn xóa không?"
+                ok-text="Xác nhận"
+                cancel-text="Hủy"
                 placement="rightTop"
                 @confirm="onDelete(dataRef)"
                 @openChange="onVisibleChange"
@@ -76,9 +76,9 @@
 
               <template #overlay>
                 <a-menu @click="">
-                  <a-menu-item key="1" @click="onAddChildDepart(dataRef)" v-if="data.orgCategory !== '3'">添加下级</a-menu-item>
+                  <a-menu-item key="1" @click="onAddChildDepart(dataRef)" v-if="data.orgCategory !== '3'">Thêm cấp dưới</a-menu-item>
                   <a-menu-item key="2" @click="visibleTreeKey = treeKey">
-                    <span style="color: red">删除</span>
+                    <span style="color: red">Xóa</span>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -86,22 +86,22 @@
           </template>
         </a-tree>
       </template>
-      <a-empty v-else description="暂无数据" />
+      <a-empty v-else description="Không có dữ liệu" />
     </a-spin>
     <DepartFormModal :rootTreeData="treeData" @register="registerModal" @success="loadRootTreeData" />
   </a-card>
-  <a-modal v-model:open="tipShow" :footer="null" title="部门规则说明" :width="800">
+  <a-modal v-model:open="tipShow" :footer="null" title="Giải thích quy tắc phòng ban" :width="800">
       <ul class="departmentalRulesTip">
-        <li>当前部门机构设置支持集团组织架构，第一级默认为公司，下级可创建子公司、部门和岗位。</li>
+        <li>Cài đặt cơ quan phòng ban hiện tại hỗ trợ sơ đồ tổ chức tập đoàn, cấp thứ nhất mặc định là công ty, cấp dưới có thể tạo công ty con, phòng ban và vị trí.</li>
         <li><br/></li>
-        <li>1、岗位下不能添加下级。</li>
-        <li>2、部门下不能直接添加子公司。</li>
-        <li>3、子公司下可继续添加子公司。</li>
-        <li>4、岗位需配置职务级别，岗位的级别高低和上下级关系均以职务级别及上级岗位设置为准。</li>
-        <li>5、董事长岗位仅可选择上级公司（子公司或总公司）各部门的所有岗位为上级岗位。</li>
-        <li>6、非董事长岗位仅可选择当前父级部门及本部门内级别更高的岗位为上级岗位。</li>
+        <li>1, dưới vị trí không thể thêm cấp dưới.</li>
+        <li>2, dưới phòng ban không thể trực tiếp thêm công ty con.</li>
+        <li>3, dưới công ty con có thể tiếp tục thêm công ty con.</li>
+        <li>4, vị trí cần cấu hình cấp bậc chức danh, mức cao thấp và quan hệ cấp trên/cấp dưới của vị trí đều căn cứ theo cấp bậc chức danh và cài đặt vị trí cấp trên.</li>
+        <li>5, vị trí Chủ tịch chỉ có thể chọn mọi vị trí của các phòng ban thuộc công ty cấp trên (công ty con hoặc tổng công ty) làm vị trí cấp trên.</li>
+        <li>6, vị trí không phải Chủ tịch chỉ có thể chọn vị trí có cấp bậc cao hơn trong phòng ban cha hiện tại và trong chính phòng ban này làm vị trí cấp trên.</li>
         <li><br/></li>
-        <li><b>特别说明：</b>董事长相关逻辑为固定写死，职务等级“董事长”的表述请勿修改。</li>
+        <li><b>Giải thích đặc biệt:</b>Logic liên quan đến Chủ tịch được viết cứng cố định, cách diễn đạt cấp bậc chức danh 'Chủ tịch' vui lòng không sửa đổi.</li>
       </ul>
     <div style="height: 10px"></div>
   </a-modal>
@@ -123,40 +123,40 @@
   const { createMessage } = useMessage();
   const { handleImportXls, handleExportXls } = useMethods();
   const props = defineProps({
-    //是否为租户部门
+    //Có phải phòng ban của đơn vị thuê không
     isTenantDepart: { default: false, type: Boolean },
-    //当前登录租户
+    //Đơn vị thuê đang đăng nhập
     loginTenantName: { default: "", type: String },
   })
 
   const loading = ref<boolean>(false);
-  // 部门树列表数据
+  // Dữ liệu danh sách cây phòng ban
   const treeData = ref<any[]>([]);
-  // 当前选中的项
+  // Mục đang được chọn
   const checkedKeys = ref<any[]>([]);
-  // 当前展开的项
+  // Mục đang mở rộng
   const expandedKeys = ref<any[]>([]);
-  // 当前选中的项
+  // Mục đang được chọn
   const selectedKeys = ref<any[]>([]);
-  // 树父子是否关联
+  // Cây cha-con có liên kết hay không
   const checkStrictly = ref<boolean>(true);
-  // 当前选中的部门
+  // Phòng ban đang chọn
   const currentDepart = ref<any>(null);
-  // 控制确认删除提示框是否显示
+  // Kiểm soát hộp thoại nhắc xác nhận xóa có hiển thị hay không
   const visibleTreeKey = ref<any>(null);
-  // 搜索关键字
+  // Từ khóa tìm kiếm
   const searchKeyword = ref('');
-  // 是否正在展示搜索结果，搜索结果仅展示命中节点及其上级
+  // Có đang hiển thị kết quả tìm kiếm hay không, kết quả tìm kiếm chỉ hiển thị các nút trúng và cấp trên của chúng
   const isSearchResult = ref<boolean>(false);
-  // 提示弹窗是否显示
+  // Hộp thoại nhắc có hiển thị hay không
   const tipShow = ref<boolean>(false);
-  // 职务级别名称，页面加载时一次性获取，避免按岗位查询
+  // Tên cấp bậc chức danh, lấy một lần khi tải trang, tránh truy vấn theo từng vị trí
   const positionNameMap = ref<Record<string, string>>({});
 
-  // 注册 modal
+  // Đăng ký modal
   const [registerModal, { openModal }] = useModal();
 
-  // 加载顶级部门信息
+  // Tải thông tin phòng ban cấp cao nhất
   async function loadRootTreeData() {
     try {
       loading.value = true;
@@ -171,7 +171,7 @@
         if (selectedKeys.value.length === 0) {
           let item = treeData.value[0];
           if (item) {
-            // 默认选中第一个
+            // Mặc định chọn mục đầu tiên
             setSelectedKey(item.id, item);
           }
         } else {
@@ -188,9 +188,9 @@
   loadRootTreeData();
 
   /**
-   * 一次性加载职务级别字典，树节点渲染只做内存查找
+   * Tải một lần từ điển cấp bậc chức danh, việc kết xuất nút cây chỉ tra cứu trong bộ nhớ
    * @author scott
-   * @since 2026-08-06 【无】岗位节点展示职务级别
+   * @since 2026-08-06 【Không】Nút vị trí hiển thị cấp bậc chức danh
    */
   async function loadPositionNames() {
     try {
@@ -199,14 +199,14 @@
         positionNameMap.value = Object.fromEntries(options.map((item) => [item.value, item.text]));
       }
     } catch (e) {
-      console.error('加载职务级别字典失败', e);
+      console.error('Tải từ điển cấp bậc chức danh thất bại', e);
     }
   }
 
   /**
-   * 岗位节点追加展示职务级别，其他节点保持原名称
+   * Nút vị trí hiển thị thêm cấp bậc chức danh, các nút khác giữ nguyên tên
    * @author scott
-   * @since 2026-08-06 【无】岗位节点展示职务级别
+   * @since 2026-08-06 【Không】Nút vị trí hiển thị cấp bậc chức danh
    */
   function getTreeTitle(data, title: string) {
     if (data.orgCategory !== '3' || !data.positionId) {
@@ -216,7 +216,7 @@
     return positionName ? `${title}（${positionName}）` : title;
   }
 
-  // 加载子级部门信息
+  // Tải thông tin phòng ban cấp con
   async function loadChildrenTreeData(treeNode) {
     try {
       const result = await queryDepartAndPostTreeSync({
@@ -227,7 +227,7 @@
       } else {
         treeNode.dataRef.children = result;
         if (expandedKeys.value.length > 0) {
-          // 判断获取的子级是否有当前展开的项
+          // Kiểm tra trong các mục con lấy được có mục đang mở rộng hay không
           let subKeys: any[] = [];
           for (let key of expandedKeys.value) {
             if (result.findIndex((item) => item.id === key) !== -1) {
@@ -247,14 +247,14 @@
     return Promise.resolve();
   }
 
-  // 自动展开父节点，只展开一级
+  // Tự động mở rộng nút cha, chỉ mở rộng một cấp
   function autoExpandParentNode() {
     let item = treeData.value[0];
     if (item) {
       if (!item.isLeaf) {
         expandedKeys.value = [item.key];
       }
-      // 默认选中第一个
+      // Mặc định chọn mục đầu tiên
       setSelectedKey(item.id, item);
     } else {
       emit('select', null);
@@ -262,7 +262,7 @@
   }
 
   /**
-   * 设置当前选中的行
+   * Đặt hàng đang được chọn
    */
   function setSelectedKey(key: string, data?: object) {
     selectedKeys.value = [key];
@@ -272,35 +272,35 @@
     }
   }
 
-  // 添加一级部门
+  // Thêm phòng ban cấp một
   function onAddDepart() {
     openModal(true, { isUpdate: false, isChild: false });
   }
 
-  // 添加子级部门
+  // Thêm phòng ban cấp con
   function onAddChildDepart(data = currentDepart.value) {
     if (data == null) {
-      createMessage.warning('请先选择一个部门');
+      createMessage.warning('Vui lòng chọn một phòng ban trước');
       return;
     }
     if(data.orgCategory === '3'){
-      createMessage.warning('岗位下无法添加子级！');
+      createMessage.warning('Không thể thêm cấp dưới vào vị trí!');
       return;
     }
     const record = { parentId: data.id, orgCategory: data.orgCategory };
     openModal(true, { isUpdate: false, isChild: true, record });
   }
 
-  // 搜索事件
+  // Sự kiện tìm kiếm
   async function onSearch(value: string) {
     if (value) {
       try {
         loading.value = true;
         isSearchResult.value = true;
         treeData.value = [];
-        // update-begin--author:wangshuai---date:20260813---for:【LHZP-1075】【系统管理】部门 搜索后 如果是公司或部门 不能展开下级
+        // update-begin--author:wangshuai---date:20260813---for:【LHZP-1075】【Quản lý hệ thống】Phòng ban: sau khi tìm kiếm, nếu là công ty hoặc phòng ban thì không mở rộng được cấp dưới
         let result = await searchByDepartManage({ keyWord: value, orgCategory: "1,2,3,4" });
-        // update-end--author:wangshuai---date:20260813---for:【LHZP-1075】【系统管理】部门 搜索后 如果是公司或部门 不能展开下级
+        // update-end--author:wangshuai---date:20260813---for:【LHZP-1075】【Quản lý hệ thống】Phòng ban: sau khi tìm kiếm, nếu là công ty hoặc phòng ban thì không mở rộng được cấp dưới
         if (Array.isArray(result)) {
           treeData.value = await buildSearchTreeWithParents(result);
         }
@@ -316,7 +316,7 @@
     searchKeyword.value = value;
   }
 
-  // 使用现有祖先查询接口补齐命中节点的上级，并在前端组装树
+  // Dùng API truy vấn tổ tiên hiện có để bổ sung cấp trên của các nút trúng, đồng thời lắp ráp cây ở frontend
   async function buildSearchTreeWithParents(searchResult: any[]) {
     const departIds = searchResult.map((item) => item.id).filter(Boolean);
     if (departIds.length === 0) {
@@ -344,7 +344,7 @@
     return result;
   }
 
-  // 将部门实体转换为树节点
+  // Chuyển thực thể phòng ban thành nút cây
   function createSearchTreeNode(depart: any) {
     return {
       ...depart,
@@ -356,7 +356,7 @@
     };
   }
 
-  // 搜索结果沿用部门排序
+  // Kết quả tìm kiếm kế thừa sắp xếp của phòng ban
   function sortSearchTree(nodes: any[]) {
     nodes.sort((first, second) => (first.departOrder ?? 0) - (second.departOrder ?? 0));
     nodes.forEach((node) => {
@@ -365,7 +365,7 @@
     });
   }
 
-  // 展开搜索结果中的完整祖先路径，不触发下级懒加载
+  // Mở rộng đường dẫn tổ tiên đầy đủ trong kết quả tìm kiếm, không kích hoạt tải lười cấp dưới
   function expandSearchResult() {
     const keys: string[] = [];
     const stack = [...treeData.value];
@@ -385,7 +385,7 @@
     }
   }
 
-  // 树复选框选择事件
+  // Sự kiện chọn hộp kiểm của cây
   function onCheck(e) {
     if (Array.isArray(e)) {
       checkedKeys.value = e;
@@ -394,21 +394,21 @@
     }
   }
 
-  // 树选择事件
+  // Sự kiện lựa chọn trên cây
   function onSelect(selKeys, event) {
     console.log('select: ', selKeys, event);
     if (selKeys.length > 0 && selectedKeys.value[0] !== selKeys[0]) {
       setSelectedKey(selKeys[0], event.selectedNodes[0]);
     } else {
-      // 这样可以防止用户取消选择
+      // Làm vậy có thể ngăn người dùng hủy lựa chọn
       setSelectedKey(selectedKeys.value[0]);
     }
   }
 
   /**
-   * 根据 ids 删除部门
+   * Xóa phòng ban theo ids
    * @param idListRef array
-   * @param confirm 是否显示确认提示框
+   * @param confirm Có hiển thị hộp thoại nhắc xác nhận không
    */
   async function doDeleteDepart(idListRef, confirm = true) {
     const idList = unref(idListRef);
@@ -423,7 +423,7 @@
     }
   }
 
-  // 删除单个部门
+  // Xóa một phòng ban
   async function onDelete(data) {
     if (data) {
       onVisibleChange(false);
@@ -431,7 +431,7 @@
     }
   }
 
-  // 批量删除部门
+  // Xóa hàng loạt phòng ban
   async function onDeleteBatch() {
     try {
       await doDeleteDepart(checkedKeys);
@@ -453,16 +453,16 @@
   }
 
   function onExportXls() {
-    // 代码逻辑说明: 【TV360X-1671】部门管理不支持选中的记录导出---
+    // Giải thích logic mã: 【TV360X-1671】Quản lý phòng ban không hỗ trợ xuất các bản ghi đã chọn---
     let params = {}
     if(checkedKeys.value && checkedKeys.value.length > 0) {
       params['selections'] = checkedKeys.value.join(',')
     }
-    handleExportXls('部门信息', Api.exportXlsUrl,params);
+    handleExportXls('Thông tin phòng ban', Api.exportXlsUrl,params);
   }
 
   /**
-   * 拖拽开始时，只关闭被拖拽的当前节点
+   * Khi bắt đầu kéo thả, chỉ đóng nút hiện tại đang bị kéo thả
    * 
    * @param info
    */
@@ -471,14 +471,14 @@
     if (!dragKey){
       return;
     }
-    // 只关闭被拖拽的当前节点，不关闭其子节点
+    // Chỉ đóng nút hiện tại đang bị kéo thả, không đóng các nút con của nó
     if (expandedKeys.value.includes(dragKey)) {
       expandedKeys.value = expandedKeys.value.filter(key => key !== dragKey);
     }
   }
   
   /**
-   * 拖拽结束
+   * Kết thúc kéo thả
    * @param info
    */
   function onDrop (info){
@@ -488,24 +488,24 @@
     const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
     const dropTitle = info.node.title;
     const dragTitle = info.dragNode.title;
-    //禁止拖拽到子节点
+    //Cấm kéo thả vào nút con
     if (isDescendant(info.dragNode, info.node.key)) {
-      createMessage.warning('不能拖拽到自身后代');
+      createMessage.warning('Không thể kéo thả vào hậu duệ của chính nó');
       return;
     }
     if(dropKey === dragKey){
-      createMessage.warning('不能自身拖拽到自身');
+      createMessage.warning('Không thể tự kéo thả vào chính nó');
       return;
     }
-    let pos = "中";
+    let pos = " vào trong";
     if(dropPosition === -1){
-      pos = "上方";
+      pos = " ở phía trên";
     }else if (dropPosition === 1){
-      pos = "下方";
+      pos = " ở phía dưới";
     }
-    let text = "将【" + dragTitle + "】移动到【" + dropTitle + "】" + pos + "？";
+    let text = "Di chuyển【" + dragTitle + "】 tới【" + dropTitle + "】" + pos + "？";
     Modal.confirm({
-      title: '确认移动',
+      title: 'Xác nhận di chuyển',
       content: h('div', {}, [
         h('p', { style: { marginBottom: '12px', fontSize: '14px' } }, text),
         h('p', { 
@@ -514,15 +514,15 @@
             fontSize: '13px',
             margin: '0'
           } 
-        }, '移动后：机构编码会改变，历史业务数据保留原机构编码，此操作不可撤销！')
+        }, 'Sau khi di chuyển: mã cơ quan sẽ thay đổi, dữ liệu nghiệp vụ lịch sử giữ nguyên mã cơ quan cũ, thao tác này không thể hoàn tác!')
       ]),
-      okText: '确认',
-      cancelText: '取消',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
       onOk: () => {
         updateChangeDepart({ dragId: dragKey, dropId: dropKey, dropPosition: dropPosition, sort: info.dropPosition }).then(async res=>{
           if(res.success){
-            createMessage.success('部门顺序调整成功');
-            //重新加载树
+            createMessage.success('Điều chỉnh thứ tự phòng ban thành công');
+            //Tải lại cây
             treeData.value = [];
             selectedKeys.value = [];
             await loadRootTreeData();
@@ -538,7 +538,7 @@
   }
 
   /**
-   * 判断目标节点是否在拖拽节点的子树中（避免循环引用）
+   * Kiểm tra nút đích có nằm trong cây con của nút đang kéo thả hay không (tránh tham chiếu vòng tròn)
    * 
    * @param dragNode
    * @param targetKey

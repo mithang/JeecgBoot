@@ -1,45 +1,45 @@
 <template>
   <div>
-    <!--引用表格-->
+    <!--Tham chiếu bảng-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
-      <!--插槽:table标题-->
+      <!--Khe cắm:table tiêu đề-->
       <template #tableTitle>
-        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate">新增</a-button>
+        <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate">Thêm mới</a-button>
         <a-button
             preIcon="ant-design:user-add-outlined"
             type="primary"
             @click="handleInvitation"
             style="margin-right: 5px">
-            邀请用户加入
+            Mời người dùng tham gia
         </a-button>
         <JThirdAppButton biz-type="user" :selected-row-keys="selectedRowKeys" syncToApp syncToLocal @sync-finally="onSyncFinally" />
-        <a-button type="primary" @click="openQuitModal(true, {})" preIcon="ant-design:user-delete-outlined">离职人员</a-button>
-        <div style="margin-left: 10px;margin-top: 5px"> 当前登录租户: <span class="tenant-name">{{loginTenantName}}</span> </div>
-        <a-tooltip title="租户用户更多操作说明">
+        <a-button type="primary" @click="openQuitModal(true, {})" preIcon="ant-design:user-delete-outlined">Nhân viên nghỉ việc</a-button>
+        <div style="margin-left: 10px;margin-top: 5px"> Đơn vị thuê đang đăng nhập: <span class="tenant-name">{{loginTenantName}}</span> </div>
+        <a-tooltip title="Giải thích thao tác khác của người dùng đơn vị thuê">
           <a-icon type="question-circle" style="margin-left: 8px; cursor: pointer " @click="tipShow = true"/>
         </a-tooltip>
       </template>
-      <!--操作栏-->
+      <!--Thanh thao tác-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
       </template>
     </BasicTable>
-    <!--用户抽屉-->
+    <!--Ngăn kéo người dùng-->
     <TenantUserDrawer @register="registerDrawer" @success="handleSuccess" />
-    <!-- 离职人员列弹窗 -->
+    <!-- Hộp thoại danh sách nhân viên nghỉ việc -->
     <UserQuitModal @register="registerQuitModal" @success="reload" />
-    <!--  变更拥有者弹窗  -->
+    <!--  Hộp thoại thay đổi chủ sở hữu  -->
     <UserSelectModal @register="registerUserModal" :excludeUserIdList="excludeUserIdList" :maxSelectCount="1" @getSelectResult="selectResult" />
-    <!--  套餐分配弹窗  -->
+    <!--  Hộp thoại phân bổ gói dịch vụ  -->
     <TenantPackAllotModal @register="registerPackAllotModal"></TenantPackAllotModal>
-    <!--  邀请人弹窗  -->
+    <!--  Hộp thoại người mời  -->
     <TenantInviteUserModal @register="registerSelUserModal" @inviteOk="handleInviteUserOk" />
-    <a-modal v-model:open="tipShow" :footer="null" title="租户用户更多操作说明" :width="800">
+    <a-modal v-model:open="tipShow" :footer="null" title="Giải thích thao tác khác của người dùng đơn vị thuê" :width="800">
       <ul class="user-tenant-tip">
-        <li>移除：将用户从当前租户中移除</li>
-        <li>删除：仅可删除当天创建的用户，删除后可在系统用户回收站恢复</li>
-        <li>离职：非租户创建者可进行离职操作，离职员工可在离职人员列表查看</li>
-        <li>交接：租户创建者可进行租户交接，交接后员工信息可在离职人员列表查看</li>
+        <li>Loại bỏ: loại bỏ người dùng khỏi đơn vị thuê hiện tại</li>
+        <li>Xóa: chỉ có thể xóa người dùng được tạo trong ngày, sau khi xóa có thể khôi phục trong thùng rác người dùng hệ thống</li>
+        <li>Nghỉ việc: người không phải người tạo đơn vị thuê có thể thực hiện thao tác nghỉ việc, nhân viên nghỉ việc có thể xem trong danh sách nhân viên nghỉ việc</li>
+        <li>Bàn giao: người tạo đơn vị thuê có thể bàn giao đơn vị thuê, sau khi bàn giao có thể xem thông tin nhân viên trong danh sách nhân viên nghỉ việc</li>
       </ul>
       <div style="height: 10px"></div>
     </a-modal>
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" name="tenant-system-user" setup>
-  //ts语法
+  //tsCú pháp
   import { onMounted, ref, unref } from 'vue';
   import { BasicTable, TableAction, ActionItem } from '/@/components/Table';
   import UserDrawer from '../user/UserDrawer.vue';
@@ -74,24 +74,24 @@
 
   const { createMessage, createConfirm } = useMessage();
 
-  //注册drawer
+  //Đăng kýdrawer
   const [registerDrawer, { openDrawer }] = useDrawer();
-  //离职代理人model
+  //Người được ủy quyền khi nghỉ việcmodel
   const [registerQuitAgentModal, { openModal: openQuitAgentModal }] = useModal();
-  //离职用户列表model
+  //Danh sách người dùng nghỉ việcmodel
   const [registerQuitModal, { openModal: openQuitModal }] = useModal();
-  //分配套餐弹窗
+  //Hộp thoại phân bổ gói dịch vụ
   const [registerPackAllotModal, { openModal: openPackAllotModal }] = useModal();
   const userStore = useUserStore();
   const createBy = userStore.getUserInfo.username;
-  //弹窗提示显示
+  //Hiển thị nhắc hộp thoại
   const tipShow = ref<boolean>(false);
 
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     designScope: 'user-list',
     tableProps: {
-      title: '租户用户列表',
+      title: 'Danh sách người dùng đơn vị thuê',
       api: getUserTenantPageList,
       columns: userTenantColumns,
       size: 'small',
@@ -108,11 +108,11 @@
     },
   });
 
-  //注册table数据
+  //Đăng ký dữ liệu table
   const [registerTable, { reload, updateTableDataRecord }, { rowSelection, selectedRows, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增事件
+   * Sự kiện thêm mới
    */
   function handleCreate() {
     openDrawer(true, {
@@ -122,7 +122,7 @@
     });
   }
   /**
-   * 编辑事件
+   * Sự kiện chỉnh sửa
    */
   async function handleEdit(record: Recordable) {
     openDrawer(true, {
@@ -133,7 +133,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   async function handleDetail(record: Recordable) {
     openDrawer(true, {
@@ -145,73 +145,73 @@
   }
 
   /**
-   * 成功回调
+   * Callback thành công
    */
   function handleSuccess() {
     reload();
   }
 
   /**
-   *同步钉钉和微信回调
+   *Đồng bộ callback của DingTalk và WeChat
    */
   function onSyncFinally({ isToLocal }) {
-    // 同步到本地时刷新下数据
+    // Khi đồng bộ về máy cục bộ thì làm mới dữ liệu
     if (isToLocal) {
       reload();
     }
   }
 
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record): ActionItem[] {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
         // ifShow: () => hasPermission('system:user:edit'),
       },
     ];
   }
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record): ActionItem[] {
     return [
       {
-        label: '查看详情',
+        label: 'Xem chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '移除用户',
+        label: 'Loại bỏ người dùng',
         onClick: handleLeave.bind(null, record.id),
       },
       {
-        label: '删除用户',
+        label: 'Xóa người dùng',
         popConfirm: {
-          title: '是否确认删除该用户',
+          title: 'Xác nhận xóa người dùng này?',
           confirm: handleDeleteUser.bind(null, record),
         },
         ifShow: () => record.username!== userStore.getUserInfo?.username && sameDay(record.createTime),
       },
       {
-        label: '变更拥有者',
+        label: 'Thay đổi chủ sở hữu',
         onClick: handleHandover.bind(null, record),
         ifShow: () =>{
           return record.username === record.createBy;
         }
       },
       {
-        label: '同意',
+        label: 'Đồng ý',
         onClick: updateStatus.bind(null, record.id, '1'),
         ifShow: () => {
           return (record.status === '3' || record.status === '4') && record.createBy === createBy;
         },
       },
       {
-        label: '拒绝',
+        label: 'Từ chối',
         popConfirm: {
-          title: '是否确认拒绝',
+          title: 'Xác nhận từ chối?',
           confirm: updateStatus.bind(null, record.id, '4'),
         },
         ifShow: () => {
@@ -219,14 +219,14 @@
         },
       },
       {
-        label: '用户套餐',
+        label: 'Gói của người dùng',
         onClick: handleAllotPack.bind(null, record),
       }
     ];
   }
 
   /**
-   * 更新用户租户状态
+   * Cập nhật trạng thái đơn vị thuê của người dùng
    * @param id
    * @param status
    */
@@ -244,30 +244,30 @@
       });
   }
 
-  //============================================ 租户离职交接  ============================================
-  //租户id
+  //============================================ Bàn giao khi nghỉ việc của đơn vị thuê  ============================================
+  //Đơn vị thuê (tenant)id
   const tenantId = ref<string>('');
-  //排除自己的编号集合
+  //Tập hợp mã số loại trừ chính mình
   const excludeUserIdList = ref<any>([]);
-  //离职代理人model
+  //Người được ủy quyền khi nghỉ việcmodel
   const [registerUserModal, { openModal: openUserModal }] = useModal();
-  //邀请用户加入弹窗
+  //Hộp thoại mời người dùng tham gia
   const [registerSelUserModal, { openModal: userOpenModal }] = useModal();
   const handOverUserName = ref<string>('');
   
   /**
-   * 人员交接
+   * Bàn giao nhân sự
    */
   function handleHandover(record) {
     tenantId.value = getTenantId();
     excludeUserIdList.value = [record.id];
-    //记录一下当前需要交接的用户名
+    //Ghi lại tên người dùng cần bàn giao hiện tại
     handOverUserName.value = record.createBy;
     openUserModal(true)
   }
 
   /**
-   * 用户选择回调
+   * Callback chọn người dùng
    * @param options
    * @param values
    */
@@ -277,7 +277,7 @@
       let userId = values[0];
       changeOwenUserTenant({ userId:userId, tenantId:unref(tenantId) }).then((res) =>{
         if(res.success){
-          createMessage.success("交接成功");
+          createMessage.success("Bàn giao thành công");
           let username = userStore.getUserInfo?.username;
           if(username == handOverUserName.value){
             userStore.logout(true);
@@ -290,10 +290,10 @@
       })
     }
   }
-  //============================================  租户离职交接  ============================================
+  //============================================  Bàn giao khi nghỉ việc của đơn vị thuê  ============================================
 
 
-  // 代码逻辑说明: 【QQYUN-5723】4、显示当前登录租户------------
+  // Giải thích logic mã: 【QQYUN-5723】4、Hiển thị đơn vị thuê đang đăng nhập------------
   const loginTenantName = ref<string>('');
 
   getTenantName();
@@ -301,11 +301,11 @@
   async function getTenantName(){
     loginTenantName.value = await getLoginTenantName();
   }
-  //update-end---author:wangshuai ---date:20230710  for：【QQYUN-5723】4、显示当前登录租户------------
+  //update-end---author:wangshuai ---date:20230710  for：【QQYUN-5723】4、Hiển thị đơn vị thuê đang đăng nhập------------
   
 
   /**
-   * 分配套餐
+   * Phân bổ gói dịch vụ
    * 
    * @param record
    */
@@ -316,21 +316,21 @@
   }
 
   /**
-   * 删除用户
+   * Xóa người dùng
    */
   function handleDeleteUser(record) {
     deleteUser({ id: record.id }, reload);
   }
 
   /**
-   * 邀请用户加入租户
+   * Mời người dùng tham gia đơn vị thuê
    */
   function handleInvitation() {
     userOpenModal(true, {});
   }
   
   /**
-   * 用户选择回调事件
+   * Sự kiện callback chọn người dùng
    * @param username
    * @param phone
    * @param userSelectId
@@ -348,7 +348,7 @@
   }
 
   /**
-   * 请离
+   * Xin nghỉ việc
    * @param id
    */
   async function handleLeave(id) {
@@ -357,7 +357,7 @@
   
   
   onMounted(()=>{
-    tenantSaasMessage('租户用户')
+    tenantSaasMessage('Người dùng đơn vị thuê')
   })
 </script>
 

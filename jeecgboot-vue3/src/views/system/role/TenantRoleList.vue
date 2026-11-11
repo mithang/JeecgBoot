@@ -1,32 +1,32 @@
 <template>
   <BasicTable @register="registerTable">
     <template #tableTitle>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> 新增</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleCreate"> Thêm mới</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <template #overlay>
           <a-menu>
             <a-menu-item key="1" @click="batchHandleDelete">
               <Icon icon="ant-design:delete-outlined"></Icon>
-              删除
+              Xóa
             </a-menu-item>
           </a-menu>
         </template>
         <a-button
-          >批量操作
+          >Thao tác hàng loạt
           <Icon icon="mdi:chevron-down"></Icon>
         </a-button>
       </a-dropdown>
-      <div style="margin-left: 10px;margin-top: 5px">当前登录租户: <span class="tenant-name">{{loginTenantName}}</span> </div>
+      <div style="margin-left: 10px;margin-top: 5px">Đơn vị thuê đang đăng nhập: <span class="tenant-name">{{loginTenantName}}</span> </div>
     </template>
     <template #action="{ record }">
       <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
     </template>
   </BasicTable>
-  <!--角色用户表格-->
+  <!--Bảng người dùng của vai trò-->
   <RoleUserTable @register="roleUserDrawer" :disableUserEdit="true"/>
-  <!--角色编辑抽屉-->
+  <!--Ngăn kéo chỉnh sửa vai trò-->
   <RoleDrawer @register="registerDrawer" @success="reload" :showFooter="showFooter" />
-  <!--角色详情-->
+  <!--Chi tiết vai trò-->
   <RoleDesc @register="registerDesc"></RoleDesc>
 </template>
 <script lang="ts" name="tenant-role-list" setup>
@@ -49,11 +49,11 @@
   const [registerModal, { openModal }] = useModal();
   const [registerDesc, { openDrawer: openRoleDesc }] = useDrawer();
   
-  // 列表页面公共参数、方法
+  // Tham số và phương thức dùng chung của trang danh sách
   const { prefixCls, tableContext, onImportXls, onExportXls } = useListPage({
     designScope: 'role-template',
     tableProps: {
-      title: '租户角色列表',
+      title: 'Danh sách vai trò đơn vị thuê',
       api: listByTenant,
       columns: columns,
       formConfig: {
@@ -63,14 +63,14 @@
         width: 120,
       },
       rowSelection: null,
-      //自定义默认排序
+      //Tùy chỉnh sắp xếp mặc định
       defSort: {
         column: 'id',
         order: 'desc',
       },
     },
     exportConfig: {
-      name: '角色列表',
+      name: 'Danh sách vai trò',
       url: getExportUrl,
     },
     importConfig: {
@@ -80,7 +80,7 @@
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
   /**
-   * 新增
+   * Thêm mới
    */
   function handleCreate() {
     showFooter.value = true;
@@ -89,7 +89,7 @@
     });
   }
   /**
-   * 编辑
+   * Chỉnh sửa
    */
   function handleEdit(record: Recordable) {
     showFooter.value = true;
@@ -99,7 +99,7 @@
     });
   }
   /**
-   * 详情
+   * Chi tiết
    */
   function handleDetail(record) {
     showFooter.value = false;
@@ -109,53 +109,53 @@
     });
   }
   /**
-   * 删除事件
+   * Sự kiện xóa
    */
   async function handleDelete(record) {
     await deleteRole({ id: record.id }, reload);
   }
   /**
-   * 批量删除事件
+   * Sự kiện xóa hàng loạt
    */
   async function batchHandleDelete() {
     await batchDeleteRole({ ids: selectedRowKeys.value }, reload);
   }
   /**
-   * 角色用户
+   * Người dùng của vai trò
    */
   function handleUser(record) {
     //onSelectChange(selectedRowKeys)
     openRoleUserDrawer(true, record);
   }
   /**
-   * 操作栏
+   * Thanh thao tác
    */
   function getTableAction(record) {
     return [
       {
-        label: '用户',
+        label: 'Người dùng',
         onClick: handleUser.bind(null, record),
       },
     ];
   }
 
   /**
-   * 下拉操作栏
+   * Thanh thao tác thả xuống
    */
   function getDropDownAction(record) {
     return [
       {
-        label: '编辑',
+        label: 'Chỉnh sửa',
         onClick: handleEdit.bind(null, record),
       },
       {
-        label: '详情',
+        label: 'Chi tiết',
         onClick: handleDetail.bind(null, record),
       },
       {
-        label: '删除',
+        label: 'Xóa',
         popConfirm: {
-          title: '是否确认删除',
+          title: 'Xác nhận xóa?',
           confirm: handleDelete.bind(null, record),
         },
       },
@@ -171,7 +171,7 @@
   }
 
   onMounted(()=>{
-    tenantSaasMessage('租户角色')
+    tenantSaasMessage('Vai trò đơn vị thuê')
   })
 </script>
 

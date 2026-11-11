@@ -1,26 +1,26 @@
-<!--我的租户详情-->
+<!--Chi tiết đơn vị thuê của tôi-->
 <template>
   <div class="message-set-container">
     <div class="message-set-box">
       <div class="message-set-header">
-        <span class="font17">组织信息</span>
+        <span class="font17">Thông tin tổ chức</span>
       </div>
       <a-form :model="formState">
         <div class="message-set-content">
           <div class="common-info">
             <div class="common-info-row">
-              <div class="common-info-row-label">组织LOGO</div>
+              <div class="common-info-row-label">Tổ chứcLOGO</div>
               <div class="common-info-row-content">
                 <JImageUpload v-model:value="formState.companyLogo" @change="handleCompanyLogoChange"></JImageUpload>
               </div>
             </div>
             <div class="common-info-row m-top24">
-              <div class="common-info-row-label">组织名称</div>
+              <div class="common-info-row-label">Tên tổ chức</div>
               <span class="m-right16">{{ formState.name }}</span>
-              <span class="edit-name" @click="goUpdate('name')">修改</span>
+              <span class="edit-name" @click="goUpdate('name')">Sửa</span>
             </div>
             <div class="common-info-row m-top24">
-              <div class="common-info-row-label">组织门牌号</div>
+              <div class="common-info-row-label">Số nhà của tổ chức</div>
               <div class="common-info-row-content">
                 <span class="pointer">
                   <span>{{ formState.houseNumber }}</span>
@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="common-info-row m-top24">
-              <div class="common-info-row-label">组织编号(ID)</div>
+              <div class="common-info-row-label">Mã tổ chức(ID)</div>
               <div class="common-info-row-content">
                 <span class="pointer">
                   <span>{{ formState.id }}</span>
@@ -37,19 +37,19 @@
             </div>
             <div class="split-line"></div>
             <div class="common-info-row">
-              <div class="common-info-row-label">所在地</div>
+              <div class="common-info-row-label">Địa điểm</div>
               <span class="m-right16">{{ formState.companyAddress_dictText }}</span>
-              <span class="edit-name" @click="goUpdate('companyAddress')">修改</span>
+              <span class="edit-name" @click="goUpdate('companyAddress')">Sửa</span>
             </div>
             <div class="common-info-row m-top24">
-              <div class="common-info-row-label">所在行业</div>
+              <div class="common-info-row-label">Ngành nghề</div>
               <span class="m-right16">{{ formState.trade_dictText }}</span>
-              <span class="edit-name" @click="goUpdate('trade')">修改</span>
+              <span class="edit-name" @click="goUpdate('trade')">Sửa</span>
             </div>
             <div class="common-info-row m-top24">
-              <div class="common-info-row-label">工作地点</div>
+              <div class="common-info-row-label">Địa điểm làm việc</div>
               <span class="m-right16">{{ formState.workPlace }}</span>
-              <span class="edit-name" @click="goUpdate('workPlace')">修改</span>
+              <span class="edit-name" @click="goUpdate('workPlace')">Sửa</span>
             </div>
             <div class="cancel-split-line"></div>
           </div>
@@ -57,13 +57,13 @@
       </a-form>
     </div>
   </div>
-  <!-- 组织名称修改弹窗 -->
-  <a-modal v-model:open="modalVisible.name" title="修改组织名称" width="500" destroy-on-close @ok="doUpdate('name')">
+  <!-- Hộp thoại sửa tên tổ chức -->
+  <a-modal v-model:open="modalVisible.name" title="Sửa tên tổ chức" width="500" destroy-on-close @ok="doUpdate('name')">
     <a-form ref="manageNameRef" :model="updateInfo" :rules="getManageNameRules">
       <a-form-item name="name" class="form-item-padding">
         <div class="form-group">
               <span class="form-label">
-                组织名称
+                Tên tổ chức
                 <span class="txt-middle red">*</span>
               </span>
           <a-input v-model:value="updateInfo.name" />
@@ -72,8 +72,8 @@
     </a-form>
   </a-modal>
   
-  <!-- 组织所在地弹窗 -->
-  <a-modal v-model:open="modalVisible.companyAddress" title="所在地" width="500" destroy-on-close @ok="doUpdate('companyAddress')">
+  <!-- Hộp thoại địa điểm của tổ chức -->
+  <a-modal v-model:open="modalVisible.companyAddress" title="Địa điểm" width="500" destroy-on-close @ok="doUpdate('companyAddress')">
     <a-form :model="updateInfo">
       <a-form-item name="companyAddress" class="form-item-padding">
         <div style="margin-top: 20px">
@@ -83,8 +83,8 @@
     </a-form>
   </a-modal>
 
-  <!-- 组织所在行业弹窗 -->
-  <a-modal v-model:open="modalVisible.trade" title="设置所在行业" width="500" destroy-on-close @ok="doUpdate('trade')">
+  <!-- Hộp thoại ngành nghề của tổ chức -->
+  <a-modal v-model:open="modalVisible.trade" title="Đặt ngành nghề" width="500" destroy-on-close @ok="doUpdate('trade')">
     <a-form :model="updateInfo">
       <a-form-item name="trade" class="form-item-padding">
         <div style="margin-top: 20px">
@@ -94,12 +94,12 @@
     </a-form>
   </a-modal>
 
-  <!-- 工作地点弹窗 -->
-  <a-modal v-model:open="modalVisible.workPlace" title="设置工作地点" width="500" destroy-on-close @ok="doUpdate('workPlace')">
+  <!-- Hộp thoại địa điểm làm việc -->
+  <a-modal v-model:open="modalVisible.workPlace" title="Đặt địa điểm làm việc" width="500" destroy-on-close @ok="doUpdate('workPlace')">
     <a-form ref="workPlaceRef" :model="updateInfo">
       <a-form-item name="name" class="form-item-padding">
         <div style="margin-top: 20px">
-          <a-textarea placeholder="请填写工作地点" v-model:value="updateInfo.workPlace" />
+          <a-textarea placeholder="Vui lòng điền địa điểm làm việc" v-model:value="updateInfo.workPlace" />
         </div>
       </a-form-item>
     </a-form>
@@ -132,21 +132,21 @@
     companyLogo: '',
   });
   let tradeOptions: any[] = [];
-  //组织名称ref
+  //Tên tổ chứcref
   const manageNameRef= ref();
-  // modal显示
+  // modalHiển thị
   const modalVisible = reactive<any>({
     name: false,
     trade: false,
     companyAddress: false
   });
 
-  // 组织名称检验规则
+  // Quy tắc kiểm tra tên tổ chức
   const getManageNameRules =  {
-    name: [{ required: true, message: '组织名称不能为空', trigger: 'blur' }],
+    name: [{ required: true, message: 'Tên tổ chức không được để trống', trigger: 'blur' }],
   };
 
-  //修改对象
+  //Đối tượng sửa đổi
   const updateInfo = reactive<any>({
     name: '',
     trade:'',
@@ -155,7 +155,7 @@
   });
   
   /**
-   * 初始化租户信息
+   * Khởi tạo thông tin đơn vị thuê
    */
   async function initTenant() {
     let result = await getTenantById({ id: getTenantId() });
@@ -175,7 +175,7 @@
   }
 
   /**
-   * 获取省市区文本
+   * Lấy văn bản tỉnh/thành/quận
    * @param code
    */
   function getPcaText(code) {
@@ -200,7 +200,7 @@
   }
 
   /**
-   * 获取行业文本
+   * Lấy văn bản ngành nghề
    *
    * @param trade
    */
@@ -217,7 +217,7 @@
   }
 
   /**
-   * 公司logo上传成功事件
+   * Sự kiện tải lên logo công ty thành công
    * 
    * @param val
    */
@@ -228,7 +228,7 @@
   }
 
   /**
-   * 更新打开弹窗
+   * Cập nhật mở hộp thoại
    * 
    * @param key
    */
@@ -238,7 +238,7 @@
   }
 
   /**
-   * 编辑租户信息
+   * Chỉnh sửa thông tin đơn vị thuê
    * @param params
    */
   async function updateTenantInfo(params){
@@ -246,14 +246,14 @@
   }
 
   /**
-   * 更新数据
+   * Cập nhật dữ liệu
    * @param key
    */
   async function doUpdate(key) {
     if(key=='name'){
       await manageNameRef.value.validateFields();
     }
-    //所在地为空报错
+    //Báo lỗi khi địa điểm trống
     if(key == 'companyAddress'){
       if(updateInfo[key] instanceof Array){
         updateInfo[key] = '';
@@ -269,8 +269,8 @@
   }
 
   onMounted(() => {
-    //提示信息
-    tenantSaasMessage('我的租户');
+    //Thông tin thông báo
+    tenantSaasMessage('Đơn vị thuê của tôi');
     initTenant();
   });
 </script>

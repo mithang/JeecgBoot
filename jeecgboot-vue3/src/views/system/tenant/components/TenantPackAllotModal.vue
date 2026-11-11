@@ -1,6 +1,6 @@
-<!--  用户套餐分配页面 -->
+<!--  Trang phân bổ gói cho người dùng -->
 <template>
-  <BasicModal @register="registerModal" :width="500" title="分配套餐" @ok="handleSubmit">
+  <BasicModal @register="registerModal" :width="500" title="Phân bổ gói dịch vụ" @ok="handleSubmit">
     <BasicForm @register="registerForm">
       <template #packId="{ model, field }">
         <a-checkbox-group v-model:value="model[field]" :options="packOption"></a-checkbox-group>
@@ -24,17 +24,17 @@
       BasicForm,
     },
     setup() {
-      //产品包的option
+      //của gói sản phẩmoption
       const packOption = ref<any>([]);
-      //表单配置
+      //Cấu hình biểu mẫu
       const [registerForm, { resetFields, setFieldsValue, setProps }] = useForm({
         schemas: packUserAllotSchemas,
         showActionButtonGroup: false,
       });
-      //表单赋值
+      //Gán giá trị cho biểu mẫu
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         setModalProps({ confirmLoading: false, showCancelBtn: false, showOkBtn: false });
-        //重置表单
+        //Đặt lại biểu mẫu
         await resetFields();
         let tenantId = getTenantId();
         let result = await listPackByTenantUserId({ tenantId: tenantId, userId: data.record.id });
@@ -42,7 +42,7 @@
           if (result.packList) {
             for (const item of result.packList) {
               if (item.packCode) {
-                item.label = item.packName + "(默认产品包)";
+                item.label = item.packName + "(Gói sản phẩm mặc định)";
               } else {
                 item.label = item.packName;
               }

@@ -1,17 +1,17 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="注销" @ok="handleSubmit" destroyOnClose :width="400">
+  <BasicModal v-bind="$attrs" @register="registerModal" title="Hủy tài khoản" @ok="handleSubmit" destroyOnClose :width="400">
     <a-form class="antd-modal-form" ref="formRef" :model="formState" :rules="validatorRules">
       <div class="cancellation-tip">
-        <p style="color: red;margin-bottom: 10px !important;">注销后账号会保留10天，如需恢复请QQ管理员 </p>
+        <p style="color: red;margin-bottom: 10px !important;">Sau khi hủy, tài khoản sẽ được giữ lại 10 ngày, nếu cần khôi phục vui lòng liên hệ quản trị viên qua QQ </p>
       </div>
       <a-form-item label="" name="phone" class="cancellation-tip">
-        <div class="black font-size-13" style="margin-bottom: 6px">验证方式</div>
+        <div class="black font-size-13" style="margin-bottom: 6px">Cách xác thực</div>
         <div class="pass-padding">
-          <a-input placeholder="请输入手机号" v-model:value="formState.phone" />
+          <a-input placeholder="Vui lòng nhập số điện thoại" v-model:value="formState.phone" />
         </div>
       </a-form-item>
       <a-form-item label="" name="smscode" class="cancellation-tip">
-        <CountdownInput v-model:value="formState.smscode" placeholder="请输入6位验证码" :sendCodeApi="sendCodeApi" />
+        <CountdownInput v-model:value="formState.smscode" placeholder="Vui lòng nhập mã xác thực 6 số" :sendCodeApi="sendCodeApi" />
       </a-form-item>
     </a-form>
   </BasicModal>
@@ -27,16 +27,16 @@
   import { defHttp } from '@/utils/http/axios';
 
   const { createMessage, createErrorModal } = useMessage();
-  //用户名
+  //Tên người dùng
   const username = ref<string>('');
   const formRef = ref();
   const formState = reactive({
     smscode: '',
     phone: '',
   });
-  // 声明Emits
+  // Khai báoEmits
   const emit = defineEmits(['success', 'register']);
-  //表单赋值
+  //Gán giá trị cho biểu mẫu
   const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     setModalProps({ confirmLoading: false });
     username.value = data.record.username;
@@ -44,28 +44,28 @@
   });
   const userStore = useUserStore();
   const validatorRules: Record<string, Rule[]> = {
-    phone: [{ required: true, message: '请输入手机号' }],
-    smscode: [{ required: true, message: '请输入6位验证码' }],
+    phone: [{ required: true, message: 'Vui lòng nhập số điện thoại' }],
+    smscode: [{ required: true, message: 'Vui lòng nhập mã xác thực 6 số' }],
   };
 
-  //表单提交事件
+  //Sự kiện gửi biểu mẫu
   async function handleSubmit() {
     try {
       let values = await formRef.value.validateFields();
       setModalProps({ confirmLoading: true });
-      //提交表单
+      //Gửi biểu mẫu
       values.username = unref(username);
       await userLogOff(values).then((res) => {
         if (res.success) {
           createMessage.info({
-            content: '注销成功！',
+            content: 'Hủy tài khoản thành công!',
             duration: 1,
           });
-          //返回登录页面
+          //Quay lại trang đăng nhập
           setTimeout(() => {
             userStore.logout(true);
           }, 1000);
-          //关闭弹窗
+          //Đóng cửa sổ bật lên
           closeModal();
         } else {
           createMessage.warn(res.message);
@@ -77,12 +77,12 @@
   }
 
   /**
-   * 倒计时执行前的函数
+   * Hàm chạy trước khi đếm ngược
    */
   function sendCodeApi() {
     return new Promise((resolve, reject) => {
       if(!formState.phone){
-        createErrorModal({ title: '错误提示', content: '请输入手机号！' });
+        createErrorModal({ title: 'Thông báo lỗi', content: 'Vui lòng nhập số điện thoại!' });
         reject();
         return;
       }
@@ -93,12 +93,12 @@
           if (res.success) {
             resolve(true);
           } else {
-            createErrorModal({ title: '错误提示', content: res.message || '未知问题' });
+            createErrorModal({ title: 'Thông báo lỗi', content: res.message || 'Sự cố không xác định' });
             reject();
           }
         })
         .catch((res) => {
-          createErrorModal({ title: '错误提示', content: res.message || '未知问题' });
+          createErrorModal({ title: 'Thông báo lỗi', content: res.message || 'Sự cố không xác định' });
           reject();
         });
     });

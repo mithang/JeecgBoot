@@ -2,7 +2,7 @@
   <BasicModal v-bind="$attrs" @register="registerModal" :title="title" @ok="handleSubmit" width="800px">
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <template #tableTitle>
-        <a-button v-if="selectedRowKeys.length>0" preIcon="ant-design:delete-outlined" type="primary" @click="handleLeaveBatch" style="margin-right: 5px">批量请离</a-button>
+        <a-button v-if="selectedRowKeys.length>0" preIcon="ant-design:delete-outlined" type="primary" @click="handleLeaveBatch" style="margin-right: 5px">Cho nghỉ việc hàng loạt</a-button>
       </template>
       <template #action="{ record }">
         <TableAction :actions="getActions(record)" />
@@ -20,7 +20,7 @@ import { useListPage } from "/@/hooks/system/useListPage";
 import { BasicTable, TableAction } from '/@/components/Table';
 
 const tenantId = ref<number>(0);
-// 列表页面公共参数、方法
+// Tham số và phương thức dùng chung của trang danh sách
 const { prefixCls, tableContext } = useListPage({
   designScope: 'tenant-template',
   tableProps: {
@@ -30,7 +30,7 @@ const { prefixCls, tableContext } = useListPage({
     canResize: false,
     formConfig: {
       schemas: userSearchFormSchema,
-      // 代码逻辑说明: 【QQYUN-5698】样式问题------------
+      // Giải thích logic mã: 【QQYUN-5698】Vấn đề về kiểu (style)------------
       labelWidth: 40,
       actionColOptions: {
         xs: 24,
@@ -48,16 +48,16 @@ const { prefixCls, tableContext } = useListPage({
 });
 const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
-// Emits声明
+// EmitsKhai báo
 const emit = defineEmits(['register', 'success']);
-//表单赋值
+//Gán giá trị cho biểu mẫu
 const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
   tenantId.value = data.id;
   success();
 });
-//设置标题
-const title = '成员';
-//表单提交事件
+//Đặt tiêu đề
+const title = 'Thành viên';
+//Sự kiện gửi biểu mẫu
 async function handleSubmit(v) {
   closeModal();
 }
@@ -65,21 +65,21 @@ async function handleSubmit(v) {
 function getActions(record) {
   return [
     {
-      label: '移除',
+      label: 'Loại bỏ',
       onClick: handleLeave.bind(null, record.id),
     },
   ]
 }
 
 /**
- * 成功
+ * Thành công
  */
 function success() {
   (selectedRowKeys.value = []) && reload();
 }
 
 /**
- * 请离
+ * Xin nghỉ việc
  * @param id
  */
 async function handleLeave(id) {
@@ -87,7 +87,7 @@ async function handleLeave(id) {
 }
 
 /**
- * 批量请离
+ * Cho nghỉ việc hàng loạt
  */
 async function  handleLeaveBatch(){
   await leaveTenant({userIds:selectedRowKeys.value.join(","),tenantId:unref(tenantId)},success)
@@ -95,9 +95,9 @@ async function  handleLeaveBatch(){
 </script>
 
 <style scoped>
-  /*update-begin---author:wangshuai ---date:20220705  for：查询组件input有后缀，隐藏掉------------*/
+  /*update-begin---author:wangshuai ---date:20220705  for：Component truy vấn: input có hậu tố, ẩn đi------------*/
   :deep(.ant-input-suffix){
     display: none;
   }
-  /*update-begin---author:wangshuai ---date:20220705  for：查询组件input有后缀，隐藏掉------------*/
+  /*update-begin---author:wangshuai ---date:20220705  for：Component truy vấn: input có hậu tố, ẩn đi------------*/
 </style>
