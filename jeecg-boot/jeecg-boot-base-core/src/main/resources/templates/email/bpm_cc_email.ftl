@@ -6,25 +6,25 @@
 <body>
 <div  class="box-content">
     <div  class="info-top">
-        <img src="https://www.jeecg.com/images/logo.png" style="float: left; margin: 0 10px 0 0; width: 32px;height:32px" /><div style="color:#fff"><strong>【重要】流程抄送的通知</strong></div>
+        <img src="https://www.jeecg.com/images/logo.png" style="float: left; margin: 0 10px 0 0; width: 32px;height:32px" /><div style="color:#fff"><strong>【Quan trọng】Thông báo sao gửi quy trình</strong></div>
     </div>
     <div class="info-wrap">
         <div class="tips" style="padding:15px;">
             <p style="margin: 10px 0;">
-               您好，您有一个新的流程抄送任务亟待查看，任务内容如下：：
+               Xin chào, bạn có một nhiệm vụ sao gửi quy trình mới cần xem ngay, nội dung nhiệm vụ như sau：：
             </p>
             <table style="width: 400px; border-spacing: 0px; border-collapse: collapse; border: none; margin-top: 20px;"><tbody>
                 <tr style="height: 45px;">
                     <td style="width: 150px; height: 40px; background: #F6F6F6;border: 1px solid #DBDBDB; font-size: 14px; font-weight: normal; text-align: left; padding-left: 14px;">
-                        流程名称
+                        Tên quy trình
                     </td>
                     <td style="width: 250px;height: 40px; border: 1px solid #DBDBDB; font-size: 14px; font-weight: normal; text-align: left; padding-left: 14px;">
-                        ${bpm_name}<a style="color: #006eff;" href="${url}" target="_blank" rel="noopener">[立刻查看]</a>
+                        ${bpm_name}<a style="color: #006eff;" href="${url}" target="_blank" rel="noopener">[Xem ngay]</a>
                     </td>
                 </tr>
                 <tr style="height: 45px;">
                     <td style="width: 150px;height: 40px; background: #F6F6F6;border: 1px solid #DBDBDB; font-size: 14px; font-weight: normal; text-align: left; padding-left: 14px;">
-                        抄送任务
+                        Nhiệm vụ sao gửi
                     </td>
                     <td style="width: 250px;height: 40px; border: 1px solid #DBDBDB; font-size: 14px; font-weight: normal; text-align: left; padding-left: 14px;">
                         ${bpm_task}
@@ -32,7 +32,7 @@
                 </tr>
                 <tr style="height: 45px;">
                     <td style="width: 150px; height: 40px; background: #F6F6F6;border: 1px solid #DBDBDB; font-size: 14px; font-weight: normal; text-align: left; padding-left: 14px;">
-                        抄送时间
+                        Thời gian sao gửi
                     </td>
                     <td style="width: 250px;height: 40px; border: 1px solid #DBDBDB; font-size: 14px; font-weight: normal; text-align: left; padding-left: 14px;">
                         ${datetime}
@@ -40,7 +40,7 @@
                 </tr>
                 <tr style="height: 45px;">
                     <td style="width: 150px; height: 40px; background: #F6F6F6;border: 1px solid #DBDBDB; font-size: 14px; font-weight: normal; text-align: left; padding-left: 14px;">
-                        抄送内容
+                        Nội dung sao gửi
                     </td>
                     <td style="width: 250px;height: 40px; border: 1px solid #DBDBDB; font-size: 14px; font-weight: normal; text-align: left; padding-left: 14px;">
                         ${remark}
@@ -52,17 +52,17 @@
         <div class="footer">北京国炬平台</div>
     </div>
     <div style="margin-top: 60px;margin-bottom: 10px;">
-        <span style="font-size: 13px; font-weight: bold; color: #666;">温馨提醒</span>
+        <span style="font-size: 13px; font-weight: bold; color: #666;">Nhắc nhở thân thiện</span>
         <div style="line-height: 24px; margin-top: 10px;">
-            <div style="font-size: 13px; color: #666;">使用过程中如有任何问题，请联系系统管理员。</div>
+            <div style="font-size: 13px; color: #666;">Trong quá trình sử dụng, nếu có bất kỳ vấn đề gì, vui lòng liên hệ quản trị viên hệ thống.</div>
         </div>
     </div>
     <div style="width: 600px; margin: 0 auto;  margin-top: 50px; font-size: 12px; -webkit-font-smoothing: subpixel-antialiased; text-size-adjust: 100%;">
         <p style="text-align: center; line-height: 20.4px; text-size-adjust: 100%; font-family: 'Microsoft YaHei'!important; padding: 0px !important; margin: 0px !important; color: #7e8890 !important;">
-            <span class="appleLinks">Copyright © 2023-2024 北京国炬信息技术有限公司. 保留所有权利。</span>
+            <span class="appleLinks">Copyright © 2023-2024 北京国炬信息技术有限公司. Bảo lưu mọi quyền.</span>
         </p>
         <p style="text-align: center;line-height: 20.4px; text-size-adjust: 100%; font-family: 'Microsoft YaHei'!important; padding: 0px !important; margin: 0px; color: #7e8890 !important; margin-top: 10px;">
-            <span class="appleLinks">邮件由系统自动发送，请勿直接回复本邮件！</span>
+            <span class="appleLinks">Email này do hệ thống tự động gửi, vui lòng không trả lời trực tiếp email này!</span>
         </p>
     </div>
 </div>

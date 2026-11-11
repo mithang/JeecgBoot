@@ -1,7 +1,7 @@
 package org.jeecg.config.firewall.SqlInjection;
 
 /**
- * 字典表查询 :: 白名单配置
+ * Truy vấn bảng từ điển :: Cấu hình danh sách trắng
  *
  * @Author taoYan
  * @Date 2022/3/17 11:21
@@ -9,7 +9,7 @@ package org.jeecg.config.firewall.SqlInjection;
 public interface IDictTableWhiteListHandler {
 
     /**
-     * 校验【表名】【字段】是否合法允许查询，允许则返回 true
+     * Kiểm tra 【tên bảng】【trường】 có hợp lệ và được phép truy vấn hay không, nếu được phép thì trả về true
      *
      * @param sql
      * @return
@@ -17,9 +17,9 @@ public interface IDictTableWhiteListHandler {
     boolean isPassBySql(String sql);
 
     /**
-     * 校验字典是否通过
+     * Kiểm tra từ điển có đạt hay không
      *
-     * @param dictCodeString 字典表配置
+     * @param dictCodeString Cấu hình bảng từ điển
      * @return
      */
     boolean isPassByDict(String dictCodeString);
@@ -27,7 +27,7 @@ public interface IDictTableWhiteListHandler {
     boolean isPassByDict(String tableName, String... fields);
 
     /**
-     * 清空缓存，使更改生效
+     * Xóa cache để thay đổi có hiệu lực
      *
      * @return
      */

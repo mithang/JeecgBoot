@@ -14,7 +14,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * @Description: spring上下文工具类
+ * @Description: spring Lớp công cụ ngữ cảnh
  * @author: jeecg-boot
  */
 @Lazy(false)
@@ -22,7 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class SpringContextUtils implements ApplicationContextAware {
 
 	/**
-	 * 上下文对象实例
+	 * Thể hiện đối tượng ngữ cảnh
 	 */
 	private static ApplicationContext applicationContext;
 
@@ -32,7 +32,7 @@ public class SpringContextUtils implements ApplicationContextAware {
 	}
 
 	/**
-	 * 获取applicationContext
+	 * Lấy applicationContext
 	 *
 	 * @return
 	 */
@@ -41,45 +41,45 @@ public class SpringContextUtils implements ApplicationContextAware {
 	}
 
 	/**
-	  * 获取HttpServletRequest
+	  * Lấy HttpServletRequest
 	 */
 	public static HttpServletRequest getHttpServletRequest() {
 		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 	}
 	/**
-	 * 获取HttpServletResponse
+	 * Lấy HttpServletResponse
 	 */
 	public static HttpServletResponse getHttpServletResponse() {
 		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
 	}
 
 	/**
-	*  获取项目根路径 basePath
+	*  Lấy đường dẫn gốc của dự án basePath
 	*/
 	public static String getDomain(){
 		HttpServletRequest request = getHttpServletRequest();
 		StringBuffer url = request.getRequestURL();
-		//1.微服务情况下，获取gateway的basePath
+		//1.Trong trường hợp microservice, lấy của gateway basePath
 		String basePath = request.getHeader(ServiceNameConstants.X_GATEWAY_BASE_PATH);
 		if(oConvertUtils.isNotEmpty(basePath)){
-        //update-begin---author:wangshuai ---date:20260616  for：【issues/9695】校验X_GATEWAY_BASE_PATH防止SSRF header注入-----------
+        //update-begin---author:wangshuai ---date:20260616  for：【issues/9695】Kiểm chứng X_GATEWAY_BASE_PATH Ngăn chặn SSRF header injection-----------
 			String validated = CommonUtils.validateGatewayBasePathForDomain(basePath);
 			if(validated != null){
 				return validated;
 			}
-        //update-end---author:wangshuai ---date:20260616  for：【issues/9695】校验X_GATEWAY_BASE_PATH防止SSRF header注入-----------
+        //update-end---author:wangshuai ---date:20260616  for：【issues/9695】Kiểm chứng X_GATEWAY_BASE_PATH Ngăn chặn SSRF header injection-----------
 		}
 		String domain = url.delete(url.length() - request.getRequestURI().length(), url.length()).toString();
-		//2.【兼容】SSL认证之后，request.getScheme()获取不到https的问题
+		//2.【Tương thích】 Sau khi xác thực SSL,request.getScheme()vấn đề không lấy được https
 		// https://blog.csdn.net/weixin_34376986/article/details/89767950
 		String scheme = request.getHeader(CommonConstant.X_FORWARDED_SCHEME);
-		//update-begin---author:scott ---date:20261013  for：【jimureport/issues/4786】HTTPS反代下只传X-Forwarded-Proto时页面资源仍为http://，Mixed Content白屏-----------
+		//update-begin---author:scott ---date:20261013  for：【jimureport/issues/4786】Khi reverse proxy HTTPS chỉ truyền X-Forwarded-Proto thì tài nguyên trang vẫn là http://, màn hình trắng do Mixed Content-----------
 		if(oConvertUtils.isEmpty(scheme)){
-			// 多级代理时形如 "https, http"，取第一个（最靠近浏览器的那一跳）
+			// Khi proxy nhiều cấp có dạng "https, http", lấy cái đầu tiên (bước nhảy gần trình duyệt nhất)
 			String proto = request.getHeader(CommonConstant.X_FORWARDED_PROTO);
 			scheme = oConvertUtils.isNotEmpty(proto) ? proto.split(",")[0].trim() : null;
 		}
-		//update-end---author:scott ---date:20261013  for：【jimureport/issues/4786】HTTPS反代下只传X-Forwarded-Proto时页面资源仍为http://，Mixed Content白屏-----------
+		//update-end---author:scott ---date:20261013  for：【jimureport/issues/4786】Khi reverse proxy HTTPS chỉ truyền X-Forwarded-Proto thì tài nguyên trang vẫn là http://, màn hình trắng do Mixed Content-----------
 		if(scheme!=null && !request.getScheme().equals(scheme)){
 			domain = domain.replace(request.getScheme(),scheme);
 		}
@@ -92,7 +92,7 @@ public class SpringContextUtils implements ApplicationContextAware {
 	}
 	
 	/**
-	 * 通过name获取 Bean.
+	 * Lấy thông qua name Bean.
 	 *
 	 * @param name
 	 * @return
@@ -102,7 +102,7 @@ public class SpringContextUtils implements ApplicationContextAware {
 	}
 
 	/**
-	 * 通过class获取Bean.
+	 * Lấy thông qua class Bean.
 	 *
 	 * @param clazz
 	 * @param       <T>
@@ -113,7 +113,7 @@ public class SpringContextUtils implements ApplicationContextAware {
 	}
 
 	/**
-	 * 通过name,以及Clazz返回指定的Bean
+	 * Thông qua name,và trả về đối tượng được chỉ định theo Clazz Bean
 	 *
 	 * @param name
 	 * @param clazz

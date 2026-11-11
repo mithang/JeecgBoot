@@ -18,13 +18,13 @@ import jakarta.servlet.http.HttpServletRequest;
 /**
  * @Author scott
  * @Date 2019/9/23 14:12
- * @Description: 编程校验token有效性
+ * @Description: Kiểm chứng tính hợp lệ của token bằng mã
  */
 @Slf4j
 public class TokenUtils {
 
     /**
-     * 获取 request 里传递的 token
+     * Lấy dữ liệu được truyền trong request token
      *
      * @param request
      * @return
@@ -42,7 +42,7 @@ public class TokenUtils {
     }
     
     /**
-     * 获取 request 里传递的 token
+     * Lấy dữ liệu được truyền trong request token
      * @return
      */
     public static String getTokenByRequest() {
@@ -57,7 +57,7 @@ public class TokenUtils {
     }
 
     /**
-     * 获取 request 里传递的 tenantId (租户ID)
+     * Lấy dữ liệu được truyền trong request tenantId (Tenant ID)
      *
      * @param request
      * @return
@@ -71,23 +71,23 @@ public class TokenUtils {
         if (oConvertUtils.isNotEmpty(tenantId) && "undefined".equals(tenantId)) {
             return null;
         }
-        //update-begin---author:scott ---date:20261015  for：【安全 GHSA-2h34-xh29-7w95】URL参数tenantId未经登录校验，多租户模式下须属于当前登录用户，否则忽略参数改用请求头（请求头已由ShiroRealm校验），防止传参冒充其他租户-----------
+        //update-begin---author:scott ---date:20261015  for: 【Bảo mật GHSA-2h34-xh29-7w95】Tham số URL tenantId chưa được kiểm chứng khi đăng nhập, ở chế độ đa tenant phải thuộc về người dùng hiện đang đăng nhập, nếu không sẽ bỏ qua tham số và dùng request header (request header đã được ShiroRealm kiểm chứng), để ngăn truyền tham số giả mạo tenant khác-----------
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL && oConvertUtils.isNotEmpty(tenantId)) {
             String headerTenantId = oConvertUtils.getString(request.getHeader(CommonConstant.TENANT_ID));
             if (!tenantId.equals(headerTenantId) && !"0".equals(tenantId) && !isLoginUserTenant(tenantId)) {
-                log.warn("请求参数租户ID不属于当前登录用户，已忽略参数，使用请求头租户ID。参数租户：{}，请求头租户：{}，请求：{}", tenantId, headerTenantId, request.getRequestURI());
+                log.warn("Tenant ID trong tham số yêu cầu không thuộc về người dùng hiện đang đăng nhập, đã bỏ qua tham số và sử dụng tenant ID trong request header. Tenant tham số:{}, tenant trong request header:{}, yêu cầu:{}", tenantId, headerTenantId, request.getRequestURI());
                 return oConvertUtils.isNotEmpty(headerTenantId) && !"undefined".equals(headerTenantId) ? headerTenantId : null;
             }
         }
-        //update-end---author:scott ---date:20261015  for：【安全 GHSA-2h34-xh29-7w95】URL参数tenantId未经登录校验，多租户模式下须属于当前登录用户，否则忽略参数改用请求头（请求头已由ShiroRealm校验），防止传参冒充其他租户-----------
+        //update-end---author:scott ---date:20261015  for: 【Bảo mật GHSA-2h34-xh29-7w95】Tham số URL tenantId chưa được kiểm chứng khi đăng nhập, ở chế độ đa tenant phải thuộc về người dùng hiện đang đăng nhập, nếu không sẽ bỏ qua tham số và dùng request header (request header đã được ShiroRealm kiểm chứng), để ngăn truyền tham số giả mạo tenant khác-----------
         return tenantId;
     }
 
-    //update-begin---author:scott ---date:20261015  for：【安全 GHSA-2h34-xh29-7w95】校验租户是否属于当前登录用户-----------
+    //update-begin---author:scott ---date:20261015  for: 【Bảo mật GHSA-2h34-xh29-7w95】Kiểm chứng tenant có thuộc về người dùng hiện đang đăng nhập hay không-----------
     /**
-     * 租户是否属于当前登录用户（未登录时返回true，保持原逻辑，由各接口自身鉴权）
+     * Tenant có thuộc về người dùng hiện đang đăng nhập hay không (khi chưa đăng nhập trả về true, giữ nguyên logic cũ, do từng API tự xác thực)
      *
-     * @param tenantId 租户ID
+     * @param tenantId Tenant ID
      * @return
      */
     private static boolean isLoginUserTenant(String tenantId) {
@@ -103,10 +103,10 @@ public class TokenUtils {
         String relTenantIds = loginUser.getRelTenantIds();
         return oConvertUtils.isNotEmpty(relTenantIds) && oConvertUtils.isIn(tenantId, relTenantIds.split(","));
     }
-    //update-end---author:scott ---date:20261015  for：【安全 GHSA-2h34-xh29-7w95】校验租户是否属于当前登录用户-----------
+    //update-end---author:scott ---date:20261015  for: 【Bảo mật GHSA-2h34-xh29-7w95】Kiểm chứng tenant có thuộc về người dùng hiện đang đăng nhập hay không-----------
 
     /**
-     * 获取 request 里传递的 lowAppId (低代码应用ID)
+     * Lấy dữ liệu được truyền trong request lowAppId (Ứng dụng low-code ID)
      *
      * @param request
      * @return
@@ -120,7 +120,7 @@ public class TokenUtils {
     }
 
     /**
-     * 验证Token
+     * Xác minh Token
      */
     public static boolean verifyToken(HttpServletRequest request, CommonAPI commonApi, RedisUtil redisUtil) {
         log.debug(" -- url --" + request.getRequestURL());
@@ -129,32 +129,32 @@ public class TokenUtils {
     }
 
     /**
-     * 验证Token
+     * Xác minh Token
      */
     public static boolean verifyToken(String token, CommonAPI commonApi, RedisUtil redisUtil) {
         if (StringUtils.isBlank(token)) {
-            throw new JeecgBoot401Exception("token不能为空!");
+            throw new JeecgBoot401Exception("token Không được trống!");
         }
 
-        // 解密获得username，用于和数据库进行对比
+        // Giải mã để lấy username, dùng để đối chiếu với cơ sở dữ liệu
         String username = JwtUtil.getUsername(token);
         if (username == null) {
-            throw new JeecgBoot401Exception("token非法无效!");
+            throw new JeecgBoot401Exception("token Không hợp lệ!");
         }
 
-        // 查询用户信息
+        // Truy vấn thông tin người dùng
         LoginUser user = TokenUtils.getLoginUser(username, commonApi, redisUtil);
         //LoginUser user = commonApi.getUserByName(username);
         if (user == null) {
-            throw new JeecgBoot401Exception("用户不存在!");
+            throw new JeecgBoot401Exception("Người dùng không tồn tại!");
         }
-        // 判断用户状态
+        // Kiểm tra trạng thái người dùng
         if (user.getStatus() != 1) {
-            throw new JeecgBoot401Exception("账号已被锁定,请联系管理员!");
+            throw new JeecgBoot401Exception("Tài khoản đã bị khóa,Vui lòng liên hệ quản trị viên!");
         }
-        // 校验token是否超时失效 & 或者账号密码是否错误
+        // Kiểm chứng token có hết hạn hay không & Hoặc tài khoản/mật khẩu có sai hay không
         if (!jwtTokenRefresh(token, username, user.getPassword(), redisUtil)) {
-            // 用户登录Token过期提示信息
+            // Thông tin nhắc nhở token đăng nhập của người dùng đã hết hạn
             String userLoginTokenErrorMsg = oConvertUtils.getString(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN_ERROR_MSG + token));
             throw new JeecgBoot401Exception(oConvertUtils.isEmpty(userLoginTokenErrorMsg)? CommonConstant.TOKEN_IS_INVALID_MSG: userLoginTokenErrorMsg);
         }
@@ -162,7 +162,7 @@ public class TokenUtils {
     }
 
     /**
-     * 刷新token（保证用户在线操作不掉线）
+     * Làm mới token (đảm bảo người dùng không bị mất kết nối khi đang thao tác trực tuyến)
      * @param token
      * @param userName
      * @param passWord
@@ -172,12 +172,12 @@ public class TokenUtils {
     private static boolean jwtTokenRefresh(String token, String userName, String passWord, RedisUtil redisUtil) {
         String cacheToken = oConvertUtils.getString(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
         if (oConvertUtils.isNotEmpty(cacheToken)) {
-            // 校验token有效性
+            // Kiểm chứng tính hợp lệ của token
             if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-                // 从token中解析客户端类型，保持续期时使用相同的客户端类型
+                // Phân tích loại client từ token, giữ nguyên loại client đó khi gia hạn
                 String clientType = JwtUtil.getClientType(token);
                 String newAuthorization = JwtUtil.sign(userName, passWord, clientType);
-                // 根据客户端类型设置对应的缓存有效时间
+                // Đặt thời gian hiệu lực cache tương ứng theo loại client
                 long expireTime = CommonConstant.CLIENT_TYPE_APP.equalsIgnoreCase(clientType) 
                     ? JwtUtil.APP_EXPIRE_TIME * 2 / 1000 
                     : JwtUtil.EXPIRE_TIME * 2 / 1000;
@@ -190,7 +190,7 @@ public class TokenUtils {
     }
 
     /**
-     * 获取登录用户
+     * Lấy người dùng đăng nhập
      *
      * @param commonApi
      * @param username
@@ -199,17 +199,17 @@ public class TokenUtils {
     public static LoginUser getLoginUser(String username, CommonAPI commonApi, RedisUtil redisUtil) {
         LoginUser loginUser = null;
         String loginUserKey = CacheConstant.SYS_USERS_CACHE + "::" + username;
-        //【重要】此处通过redis原生获取缓存用户，是为了解决微服务下system服务挂了，其他服务互调不通问题---
+        //【Quan trọng】 Tại đây lấy người dùng đã lưu trong cache trực tiếp qua Redis nhằm giải quyết vấn đề khi dịch vụ system bị sập trong môi trường microservice, các dịch vụ khác không thể gọi lẫn nhau---
         if (redisUtil.hasKey(loginUserKey)) {
             try {
                 loginUser = (LoginUser) redisUtil.get(loginUserKey);
-                //解密用户
+                //Giải mã người dùng
                 SensitiveInfoUtil.handlerObject(loginUser, false);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         } else {
-            // 查询用户信息
+            // Truy vấn thông tin người dùng
             loginUser = commonApi.getUserByName(username);
         }
         return loginUser;

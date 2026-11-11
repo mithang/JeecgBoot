@@ -1,13 +1,13 @@
 package org.jeecg.common.constant.enums;
 
 /**
- * 日志按模块分类
+ * Nhật ký phân loại theo mô-đun
  * @author: jeecg-boot
  */
 public enum ModuleType {
 
     /**
-     * 普通
+     * Thông thường
      */
     COMMON,
 

@@ -41,7 +41,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Spring Boot 2.0 解决跨域问题
+ * Spring Boot 2.0 Giải quyết vấn đề cross-domain
  *
  * @Author qinfeng
  *
@@ -63,14 +63,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     /**
      * meterRegistryPostProcessor
-     * for [QQYUN-12558]【监控】系统监控的头两个tab不好使，接口404
+     * for [QQYUN-12558]【Giám sát】Hai tab đầu của giám sát hệ thống không hoạt động, API 404
      */
     @Autowired(required = false)
     @Qualifier("meterRegistryPostProcessor")
     private BeanPostProcessor meterRegistryPostProcessor;
 
     /**
-     * 静态资源的配置 - 使得可以从磁盘中读取 Html、图片、视频、音频等
+     * Cấu hình tài nguyên tĩnh - Cho phép đọc Html, hình ảnh, video, âm thanh, v.v. từ đĩa
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -81,13 +81,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                     .addResourceLocations("file:" + jeecgBaseConfig.getPath().getWebapp() + "//");
         }
         resourceHandlerRegistration.addResourceLocations(staticLocations.split(","));
-        // 设置缓存控制标头 Cache-Control有效期为30天
+        // Đặt header kiểm soát cache Cache-Control Thời hạn hiệu lực là 30 ngày
         resourceHandlerRegistration.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));
     }
 
     /**
-     * 方案一： 默认访问根路径跳转 doc.html页面 （swagger文档页面）
-     * 方案二： 访问根路径改成跳转 index.html页面 （简化部署方案： 可以把前端打包直接放到项目的 webapp，上面的配置）
+     * Phương án 1: Truy cập đường dẫn gốc mặc định sẽ chuyển hướng doc.html trang (trang tài liệu swagger)
+     * Phương án 2: Đổi truy cập đường dẫn gốc thành chuyển hướng index.html trang (phương án triển khai đơn giản: có thể đóng gói frontend đặt trực tiếp vào webapp của dự án, cấu hình ở trên)
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -99,42 +99,42 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration corsConfiguration = new CorsConfiguration();
-        //是否允许请求带有验证信息
+        //Có cho phép yêu cầu mang thông tin xác thực hay không
         corsConfiguration.setAllowCredentials(true);
-        // 允许访问的客户端域名
+        // Tên miền client được phép truy cập
         corsConfiguration.addAllowedOriginPattern("*");
-        // 允许服务端访问的客户端请求头
+        // Request header của client mà phía server cho phép truy cập
         corsConfiguration.addAllowedHeader("*");
-        // 允许访问的方法名,GET POST等
+        // Tên phương thức được phép truy cập,GET POST v.v.
         corsConfiguration.addAllowedMethod("*");
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
 
-	//update-begin---author:scott ---date:2026-07-07  for：【Spring Boot 4 升级】移除 configureMessageConverters 重写，该方法替换默认转换器导致 /v3/api-docs 返回 Base64，且 Spring Framework 7 已标记弃用+移除，改为依赖 @Primary ObjectMapper 自动装配-----------
+	//update-begin---author:scott ---date:2026-07-07  for: 【Nâng cấp Spring Boot 4】 Loại bỏ việc ghi đè configureMessageConverters, phương thức này thay thế bộ chuyển đổi mặc định nên gây ra /v3/api-docs trả về Base64, và Spring Framework 7 đã đánh dấu deprecated+Loại bỏ, đổi thành dựa vào @Primary ObjectMapper Tự động lắp ráp (autowiring)-----------
 //    @Override
 //    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 //        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper());
 //        converters.add(jackson2HttpMessageConverter);
 //    }
-	//update-end---author:scott ---date:2026-07-07  for：【Spring Boot 4 升级】移除 configureMessageConverters 重写-----------
+	//update-end---author:scott ---date:2026-07-07  for: 【Nâng cấp Spring Boot 4】 Loại bỏ việc ghi đè configureMessageConverters-----------
 
     /**
-     * 自定义ObjectMapper
+     * Tùy chỉnh ObjectMapper
      */
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        //处理bigDecimal
+        //Xử lý bigDecimal
         objectMapper.enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
         objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-        //处理失败
+        //Xử lý thất bại
         objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
-        //默认的处理日期时间格式
+        //Định dạng ngày giờ xử lý mặc định
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         JavaTimeModule javaTimeModule = new JavaTimeModule();
 		javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DATE_TIME_FORMATTER));
@@ -147,9 +147,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return objectMapper;
     }
 
-	//update-begin---author:scott ---date:20260813  for：Spring Boot 4默认Jackson 3统一Java时间格式------------
+	//update-begin---author:scott ---date:20260813  for：Spring Boot 4 mặc định dùng Jackson 3 để thống nhất định dạng thời gian Java------------
 	/**
-	 * 为 Spring Boot 4 默认的 Jackson 3 JsonMapper 注册 Java 时间序列化格式。
+	 * Đăng ký định dạng tuần tự hóa thời gian Java cho JsonMapper của Jackson 3 mặc định trong Spring Boot 4.
 	 */
 	@Bean
 	public tools.jackson.databind.JacksonModule jackson3JavaTimeModule() {
@@ -159,10 +159,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		javaTimeModule.addSerializer(LocalTime.class, new tools.jackson.databind.ext.javatime.ser.LocalTimeSerializer(TIME_FORMATTER));
 		return javaTimeModule;
 	}
-	//update-end---author:scott ---date:20260813  for：Spring Boot 4默认Jackson 3统一Java时间格式------------
+	//update-end---author:scott ---date:20260813  for：Spring Boot 4 mặc định dùng Jackson 3 để thống nhất định dạng thời gian Java------------
 
 //    /**
-//     * SpringBootAdmin的Httptrace不见了
+//     * SpringBootAdmin của Httptrace đã biến mất
 //     * https://blog.csdn.net/u013810234/article/details/110097201
 //     */
 //    @Bean
@@ -171,11 +171,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 //    }
 
 
-    //update-begin---author:liusq ---date:20260525  for：【QQYUN-15536】修复上传SVG文件通过静态资源路径触发存储型XSS-----------
+    //update-begin---author:liusq ---date:20260525  for：【QQYUN-15536】Sửa lỗi tải lên tệp SVG kích hoạt stored XSS qua đường dẫn tài nguyên tĩnh XSS-----------
     /**
-     * 注册 SVG 安全响应头过滤器
-     * <p>对所有 .svg 请求的响应自动追加 Content-Security-Policy:sandbox 和 X-Content-Type-Options:nosniff，
-     * 阻止浏览器以顶层文档方式渲染已上传 SVG 时执行内嵌脚本（存储型 XSS）。</p>
+     * Đăng ký bộ lọc header phản hồi an toàn SVG
+     * <p>Đối với tất cả .svg Phản hồi của yêu cầu được tự động thêm Content-Security-Policy:sandbox và X-Content-Type-Options:nosniff，
+     * Ngăn trình duyệt thực thi script nhúng khi render SVG đã tải lên dưới dạng tài liệu cấp cao nhất (XSS lưu trữ).</p>
      *
      * @see SvgSecurityFilter
      */
@@ -187,25 +187,25 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registration.setName("svgSecurityFilter");
         return registration;
     }
-    //update-end---author:liusq ---date:20260525  for：【QQYUN-15536】修复上传SVG文件通过静态资源路径触发存储型XSS-----------
+    //update-end---author:liusq ---date:20260525  for：【QQYUN-15536】Sửa lỗi tải lên tệp SVG kích hoạt stored XSS qua đường dẫn tài nguyên tĩnh XSS-----------
 
     /**
-     * 在Bean初始化完成后立即配置PrometheusMeterRegistry，避免在Meter注册后才配置MeterFilter
-     * for [QQYUN-12558]【监控】系统监控的头两个tab不好使，接口404
+     * Ngay sau khi Bean khởi tạo xong, cấu hình PrometheusMeterRegistry, tránh cấu hình sau khi Meter đã đăng ký MeterFilter
+     * for [QQYUN-12558]【Giám sát】Hai tab đầu của giám sát hệ thống không hoạt động, API 404
      * @author chenrui
      * @date 2025/5/26 16:46
      */
     @PostConstruct
     public void initPrometheusMeterRegistry() {
-        // 确保在应用启动早期就配置MeterFilter，避免警告
+        // Đảm bảo cấu hình MeterFilter ngay từ giai đoạn đầu khi ứng dụng khởi động, tránh cảnh báo
         if (null != meterRegistryPostProcessor && null != prometheusMeterRegistry) {
             meterRegistryPostProcessor.postProcessAfterInitialization(prometheusMeterRegistry, "prometheusMeterRegistry");
-            log.info("PrometheusMeterRegistry 配置完成");
+            log.info("PrometheusMeterRegistry Cấu hình hoàn tất");
         }
     }
 
 //    /**
-//     * 注册拦截器【拦截器拦截参数，自动切换数据源——后期实现多租户切换数据源功能】
+//     * Đăng ký interceptor 【Interceptor chặn tham số, tự động chuyển đổi nguồn dữ liệu — sau này triển khai chức năng chuyển đổi nguồn dữ liệu đa tenant】
 //     * @param registry
 //     */
 //    @Override

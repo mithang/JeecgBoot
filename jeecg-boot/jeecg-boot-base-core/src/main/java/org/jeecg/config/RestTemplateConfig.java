@@ -7,7 +7,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 /**
-* 优雅的http请求方式RestTemplate
+* Cách gọi HTTP tao nhã RestTemplate
 * @author: jeecg-boot
 * @Return:
 */
@@ -22,9 +22,9 @@ public class RestTemplateConfig {
     @Bean
     public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        //ms毫秒
+        //ms Mili giây
         factory.setReadTimeout(5000);
-        //ms毫秒
+        //ms Mili giây
         factory.setConnectTimeout(15000);
         return factory;
     }

@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 /**
- * 任务调度器配置
- * 提供 ThreadPoolTaskScheduler Bean 用于 AI RAG 流程调度等功能
- * 仅当容器中不存在 ThreadPoolTaskScheduler 时才创建
+ * Cấu hình bộ lập lịch tác vụ
+ * Cung cấp Bean ThreadPoolTaskScheduler dùng cho lập lịch quy trình AI RAG và các chức năng khác
+ * Chỉ tạo khi trong container không tồn tại ThreadPoolTaskScheduler
  *
  * @author jeecg
  */
@@ -20,7 +20,7 @@ public class TaskSchedulerConfig {
     @Bean
     @ConditionalOnMissingBean(ThreadPoolTaskScheduler.class)
     public ThreadPoolTaskScheduler taskScheduler() {
-        log.info("初始化定时任务调度器 ThreadPoolTaskScheduler");
+        log.info("Khởi tạo bộ lập lịch tác vụ định kỳ ThreadPoolTaskScheduler");
 
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(10);

@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 /**
- * 通过 RESTful 风格的接口操纵 desform 里的数据
+ * Thao tác dữ liệu trong desform thông qua API theo phong cách RESTful
  *
  * @author sunjianlei
  */
@@ -23,7 +23,7 @@ public class RestDesformUtil {
     }
 
     /**
-     * 查询数据
+     * Truy vấn dữ liệu
      *
      * @param desformCode
      * @param dataId
@@ -38,7 +38,7 @@ public class RestDesformUtil {
     }
 
     /**
-     * 新增数据
+     * Thêm mới dữ liệu
      *
      * @param desformCode
      * @param formData
@@ -50,7 +50,7 @@ public class RestDesformUtil {
     }
 
     /**
-     * 修改数据
+     * Sửa dữ liệu
      *
      * @param desformCode
      * @param formData
@@ -69,7 +69,7 @@ public class RestDesformUtil {
     }
 
     /**
-     * 删除数据
+     * Xóa dữ liệu
      *
      * @param desformCode
      * @param dataId
@@ -87,7 +87,7 @@ public class RestDesformUtil {
         if (result.getBody() != null) {
             return result.getBody().toJavaObject(Result.class);
         }
-        return Result.error("操作失败");
+        return Result.error("Thao tác thất bại");
     }
 
     private static StringBuilder getBaseUrl() {

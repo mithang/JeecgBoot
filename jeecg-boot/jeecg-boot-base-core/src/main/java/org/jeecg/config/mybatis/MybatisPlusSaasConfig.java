@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 单数据源配置（jeecg.datasource.open = false时生效）
+ * Cấu hình nguồn dữ liệu đơn (jeecg.datasource.open = false thì có hiệu lực)
  * @Author zhoujf
  *
  */
@@ -36,33 +36,33 @@ import java.util.List;
 public class MybatisPlusSaasConfig {
     
     /**
-     * 是否开启系统模块的租户隔离
-     *  控制范围：用户、角色、部门、我的部门、字典、分类字典、多数据源、职务、通知公告
+     * Có bật cách ly tenant của module hệ thống hay không
+     *  Phạm vi kiểm soát: người dùng, vai trò, phòng ban, phòng ban của tôi, từ điển, từ điển phân loại, đa nguồn dữ liệu, chức danh, thông báo
      *  
-     *  实现功能
-     *  1.用户表通过硬编码实现租户ID隔离
-     *  2.角色、部门、我的部门、字典、分类字典、多数据源、职务、通知公告除了硬编码还加入的 TENANT_TABLE 配置中，实现租户隔离更安全
-     *  3.菜单表、租户表不做租户隔离
-     *  4.通过拦截器MybatisInterceptor实现，增删改查数据 自动注入租户ID
+     *  Chức năng thực hiện
+     *  1.Bảng người dùng thực hiện cách ly tenant ID bằng hard-code
+     *  2.Vai trò, phòng ban, phòng ban của tôi, từ điển, từ điển phân loại, đa nguồn dữ liệu, chức danh, thông báo ngoài hard-code còn được thêm vào TENANT_TABLE trong cấu hình, giúp cách ly tenant an toàn hơn
+     *  3.Bảng menu, bảng tenant không thực hiện cách ly tenant
+     *  4.Thực hiện qua interceptor MybatisInterceptor, khi thêm/sửa/xóa/truy vấn dữ liệu sẽ tự động inject tenant ID
      */
     public static final Boolean OPEN_SYSTEM_TENANT_CONTROL = false;
     
     /**
-     * 哪些表需要做多租户 表需要添加一个字段 tenant_id
+     * Những bảng nào cần đa tenant thì bảng cần thêm một trường tenant_id
      */
     public static final List<String> TENANT_TABLE = new ArrayList<String>();
 
     static {
-        //1.需要租户隔离的表请在此配置
+        //1.Các bảng cần cách ly tenant vui lòng cấu hình tại đây
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
-            //a.系统管理表
+            //a.Bảng quản lý hệ thống
             //TENANT_TABLE.add("sys_role");
             //TENANT_TABLE.add("sys_user_role");
             TENANT_TABLE.add("sys_depart");
             TENANT_TABLE.add("sys_category");
             TENANT_TABLE.add("sys_data_source");
             TENANT_TABLE.add("sys_position");
-            //b-2.仪表盘
+            //b-2.Bảng điều khiển
             TENANT_TABLE.add("onl_drag_page");
             TENANT_TABLE.add("onl_drag_dataset_head");
             TENANT_TABLE.add("jimu_report_data_source");
@@ -76,26 +76,26 @@ public class MybatisPlusSaasConfig {
             TENANT_TABLE.add("airag_model");
         }
 
-        //2.示例测试
+        //2.Ví dụ kiểm tra
         //TENANT_TABLE.add("demo");
-        //3.online租户隔离测试
+        //3.online Kiểm tra cách ly tenant
         //TENANT_TABLE.add("ceapp_issue");
     }
 
 
     @Bean
-    // 顺序需低于 OnlineCgformDataSourceMybatisInterceptor（其为 LOWEST_PRECEDENCE），使分页插件处于数据源切换拦截器的内层，
-    // 保证 Online 物理表查询时数据源已 push、分页插件 beforeQuery 探测连接能路由到正确的数据源
-    // author:zhangdaiscott date:2026-07-09 for：修复Online配置多数据源导出excel数据为空
+    // Thứ tự cần thấp hơn OnlineCgformDataSourceMybatisInterceptor (nó là LOWEST_PRECEDENCE), để plugin phân trang nằm ở lớp trong của interceptor chuyển đổi nguồn dữ liệu,
+    // Đảm bảo khi truy vấn bảng vật lý Online, nguồn dữ liệu đã được push, plugin phân trang beforeQuery thăm dò kết nối có thể định tuyến đến đúng nguồn dữ liệu
+    // author:zhangdaiscott date:2026-07-09 for: Sửa lỗi khi cấu hình Online đa nguồn dữ liệu, xuất excel dữ liệu trống
     @Order(Ordered.LOWEST_PRECEDENCE - 1)
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        // 先 add TenantLineInnerInterceptor 再 add PaginationInnerInterceptor
+        // Thêm TenantLineInnerInterceptor trước rồi mới add PaginationInnerInterceptor
         interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
             @Override
             public Expression getTenantId() {
                 String tenantId = TenantContext.getTenant();
-                //如果通过线程获取租户ID为空，则通过当前请求的request获取租户（shiro排除拦截器的请求会获取不到租户ID）
+                //Nếu lấy tenant ID qua thread bị trống thì lấy tenant qua request của yêu cầu hiện tại (yêu cầu bị shiro loại khỏi interceptor sẽ không lấy được tenant ID)
                 if(oConvertUtils.isEmpty(tenantId)){
                     try {
                         tenantId = TokenUtils.getTenantIdByRequest(SpringContextUtils.getHttpServletRequest());
@@ -114,7 +114,7 @@ public class MybatisPlusSaasConfig {
                 return TenantConstant.TENANT_ID_TABLE;
             }
 
-            // 返回 true 表示不走租户逻辑
+            // Trả về true nghĩa là không đi theo logic tenant
             @Override
             public boolean ignoreTable(String tableName) {
                 for(String temp: TENANT_TABLE){
@@ -125,31 +125,31 @@ public class MybatisPlusSaasConfig {
                 return true;
             }
         }));
-        // 注入动态表名适配拦截器解决多表名问题
+        // Inject interceptor thích ứng tên bảng động để giải quyết vấn đề nhiều tên bảng
         interceptor.addInnerInterceptor(dynamicTableNameInnerInterceptor());
-        //update-begin---author:scott ---date:2026-07-09  for：【LHZP-9、LHZP-8】使用按连接实时探测方言的分页拦截器，兼容主库/从库不同数据库类型（多数据源）；SQL Server 走 2005 方言并做 ORDER BY 去重（保留 issues/8666 修复）---
+        //update-begin---author:scott ---date:2026-07-09  for：【LHZP-9、LHZP-8】Dùng interceptor phân trang dò dialect theo thời gian thực theo kết nối, tương thích với cơ sở dữ liệu chính/Cơ sở dữ liệu phụ có loại cơ sở dữ liệu khác nhau (đa nguồn dữ liệu); SQL Server dùng dialect 2005 và khử trùng lặp ORDER BY (giữ lại issues/8666 bản sửa)---
         interceptor.addInnerInterceptor(new MultiDataSourcePaginationInnerInterceptor());
-        //update-end---author:scott ---date:2026-07-09  for：【LHZP-9、LHZP-8】使用按连接实时探测方言的分页拦截器，兼容主库/从库不同数据库类型（多数据源）；SQL Server 走 2005 方言并做 ORDER BY 去重（保留 issues/8666 修复）---
-        // 增加@Version乐观锁支持 
+        //update-end---author:scott ---date:2026-07-09  for：【LHZP-9、LHZP-8】Dùng interceptor phân trang dò dialect theo thời gian thực theo kết nối, tương thích với cơ sở dữ liệu chính/Cơ sở dữ liệu phụ có loại cơ sở dữ liệu khác nhau (đa nguồn dữ liệu); SQL Server dùng dialect 2005 và khử trùng lặp ORDER BY (giữ lại issues/8666 bản sửa)---
+        // Thêm@Version Hỗ trợ khóa lạc quan 
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         return interceptor;
     }
 
     /**
-     * 动态表名切换拦截器,用于适配vue2和vue3同一个表有多个的情况,如sys_role_index在vue3情况下表名为sys_role_index_v3
+     * Interceptor chuyển đổi tên bảng động,Dùng để thích ứng trường hợp cùng một bảng có nhiều tên trong vue2 và vue3,Như sys_role_index Trong trường hợp vue3, tên bảng là sys_role_index_v3
      * @return
      */
     private DynamicTableNameInnerInterceptor dynamicTableNameInnerInterceptor() {
         DynamicTableNameInnerInterceptor dynamicTableNameInnerInterceptor = new DynamicTableNameInnerInterceptor();
         dynamicTableNameInnerInterceptor.setTableNameHandler((sql, tableName) -> {
-            //获取需要动态解析的表名
+            //Lấy tên bảng cần phân tích động
             String dynamicTableName = ThreadLocalDataHelper.get(CommonConstant.DYNAMIC_TABLE_NAME);
-            //当dynamicTableName不为空时才走动态表名处理逻辑,否则返回原始表名
+            //Chỉ khi dynamicTableName không trống mới đi theo logic xử lý tên bảng động,Nếu không thì trả về tên bảng gốc
             if (ObjectUtil.isNotEmpty(dynamicTableName) && dynamicTableName.equals(tableName)) {
-                // 获取前端传递的版本号标识
+                // Lấy định danh phiên bản mà frontend truyền sang
                 Object version = ThreadLocalDataHelper.get(CommonConstant.VERSION);
                 if (ObjectUtil.isNotEmpty(version)) {
-                    //拼接表名规则(原始表名+下划线+前端传递的版本号)
+                    //Quy tắc nối tên bảng(Tên bảng gốc+Gạch chân+Phiên bản mà frontend truyền sang)
                     return tableName + "_" + version;
                 }
             }
@@ -159,7 +159,7 @@ public class MybatisPlusSaasConfig {
     }
 
 //    /**
-//     * 下个版本会删除，现在为了避免缓存出现问题不得不配置
+//     * Phiên bản sau sẽ xóa, hiện tại để tránh cache gặp vấn đề nên buộc phải cấu hình
 //     * @return
 //     */
 //    @Bean
@@ -167,7 +167,7 @@ public class MybatisPlusSaasConfig {
 //        return configuration -> configuration.setUseDeprecatedExecutor(false);
 //    }
 //    /**
-//     * mybatis-plus SQL执行效率插件【生产环境可以关闭】
+//     * mybatis-plus SQL Plugin hiệu quả thực thi 【môi trường production có thể tắt】
 //     */
 //    @Bean
 //    public PerformanceInterceptor performanceInterceptor() {

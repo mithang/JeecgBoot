@@ -7,39 +7,39 @@
 //import java.util.Set;
 //
 ///**
-// * select 查询 sql 的信息
+// * select Thông tin SQL truy vấn
 // */
 //@Data
 //public class SelectSqlInfo {
 //
 //    /**
-//     * 查询的表名，如果是子查询，则此处为null
+//     * Tên bảng được truy vấn; nếu là truy vấn con thì chỗ này là null
 //     */
 //    private String fromTableName;
 //    /**
-//     * 表别名
+//     * Bí danh bảng
 //     */
 //    private String fromTableAliasName;
 //    /**
-//     * 通过子查询获取的表信息，例如：select name from (select * from user) u
-//     * 如果不是子查询，则为null
+//     * Thông tin bảng lấy được qua truy vấn con, ví dụ:select name from (select * from user) u
+//     * Nếu không phải truy vấn con thì là null
 //     */
 //    private SelectSqlInfo fromSubSelect;
 //    /**
-//     * 查询的字段集合，如果是 * 则为null，如果设了别名则为别名
+//     * Tập hợp các trường được truy vấn; nếu là  * thì là null, nếu đặt bí danh thì là bí danh
 //     */
 //    private Set<String> selectFields;
 //    /**
-//     * 真实的查询字段集合，如果是 * 则为null，如果设了别名则为原始字段名
+//     * Tập hợp các trường truy vấn thực; nếu là  * thì là null, nếu đặt bí danh thì là tên trường gốc
 //     */
 //    private Set<String> realSelectFields;
 //    /**
-//     * 是否是查询所有字段
+//     * Có phải đang truy vấn tất cả các trường không
 //     */
 //    private boolean selectAll;
 //
 //    /**
-//     * 解析之后的 SQL （关键字都是大写）
+//     * SQL sau khi phân giải (từ khóa đều viết hoa)
 //     */
 //    private final String parsedSql;
 //
@@ -63,19 +63,19 @@
 //    }
 //
 //    /**
-//     * 获取所有字段，包括子查询里的。
+//     * Lấy tất cả các trường, bao gồm cả trường trong truy vấn con.
 //     *
 //     * @return
 //     */
 //    public Set<String> getAllRealSelectFields() {
 //        Set<String> fields = new HashSet<>();
-//        // 递归获取所有字段，起个直观的方法名为：
+//        // Lấy đệ quy tất cả các trường, đặt tên phương thức trực quan là:
 //        this.recursiveGetAllFields(this, fields);
 //        return fields;
 //    }
 //
 //    /**
-//     * 递归获取所有字段
+//     * Lấy đệ quy tất cả các trường
 //     */
 //    private void recursiveGetAllFields(SelectSqlInfo sqlInfo, Set<String> fields) {
 //        if (!sqlInfo.isSelectAll() && sqlInfo.getRealSelectFields() != null) {

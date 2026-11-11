@@ -11,9 +11,9 @@ import java.util.List;
 
 /**
  * @ClassName: JeecgDataAutorUtils
- * @Description: 数据权限查询规则容器工具类
+ * @Description: Lớp công cụ container quy tắc truy vấn quyền dữ liệu
  * @Author: 张代浩
- * @Date: 2012-12-15 下午11:27:39
+ * @Date: 2012-12-15 Buổi chiều 11:27:39
  * 
  */
 public class JeecgDataAutorUtils {
@@ -25,28 +25,28 @@ public class JeecgDataAutorUtils {
 	public static final String SYS_USER_INFO = "SYS_USER_INFO";
 
 	/**
-	 * 往链接请求里面，传入数据查询条件
+	 * Truyền điều kiện truy vấn dữ liệu vào trong yêu cầu liên kết
 	 * 
 	 * @param request
 	 * @param dataRules
 	 */
 	public static synchronized void installDataSearchConditon(HttpServletRequest request, List<SysPermissionDataRuleModel> dataRules) {
 		@SuppressWarnings("unchecked")
-        // 1.先从request获取MENU_DATA_AUTHOR_RULES，如果存则获取到LIST
+        // 1.Trước tiên lấy từ request MENU_DATA_AUTHOR_RULES, nếu đã lưu thì lấy được LIST
 		List<SysPermissionDataRuleModel> list = (List<SysPermissionDataRuleModel>)loadDataSearchConditon();
 		if (list==null) {
-			// 2.如果不存在，则new一个list
+			// 2.Nếu không tồn tại thì new một list
 			list = new ArrayList<SysPermissionDataRuleModel>();
 		}
 		for (SysPermissionDataRuleModel tsDataRule : dataRules) {
 			list.add(tsDataRule);
 		}
-        // 3.往list里面增量存指
+        // 3.Lưu tăng dần vào trong list
 		request.setAttribute(MENU_DATA_AUTHOR_RULES, list);
 	}
 
 	/**
-	 * 获取请求对应的数据权限规则
+	 * Lấy quy tắc quyền dữ liệu tương ứng với yêu cầu
 	 * 
 	 * @return
 	 */
@@ -57,7 +57,7 @@ public class JeecgDataAutorUtils {
 	}
 
 	/**
-	 * 获取请求对应的数据权限SQL
+	 * Lấy quyền dữ liệu tương ứng với yêu cầu SQL
 	 * 
 	 * @return
 	 */
@@ -66,7 +66,7 @@ public class JeecgDataAutorUtils {
 	}
 
 	/**
-	 * 往链接请求里面，传入数据查询条件
+	 * Truyền điều kiện truy vấn dữ liệu vào trong yêu cầu liên kết
 	 * 
 	 * @param request
 	 * @param sql
@@ -79,7 +79,7 @@ public class JeecgDataAutorUtils {
 	}
 
 	/**
-	 * 将用户信息存到request
+	 * Lưu thông tin người dùng vào request
 	 * @param request
 	 * @param userinfo
 	 */
@@ -88,7 +88,7 @@ public class JeecgDataAutorUtils {
 	}
 
 	/**
-	 * 将用户信息存到request
+	 * Lưu thông tin người dùng vào request
 	 * @param userinfo
 	 */
 	public static synchronized void installUserInfo(SysUserCacheInfo userinfo) {
@@ -96,7 +96,7 @@ public class JeecgDataAutorUtils {
 	}
 
 	/**
-	 * 从request获取用户信息
+	 * Lấy thông tin người dùng từ request
 	 * @return
 	 */
 	public static synchronized SysUserCacheInfo loadUserInfo() {

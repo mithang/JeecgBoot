@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 数据库类型判断
- * 【有些数据库引擎是一样的，以达到复用目的】
+ * Xác định loại cơ sở dữ liệu
+ * 【Một số engine cơ sở dữ liệu giống nhau, nhằm mục đích tái sử dụng】
  * @author: jeecg-boot
  */
 public class DbTypeUtils {
@@ -16,46 +16,46 @@ public class DbTypeUtils {
     public static Map<String, String> dialectMap = new HashMap<String, String>();
     static{
         dialectMap.put("mysql", "org.hibernate.dialect.MySQL5InnoDBDialect");
-        // mariadb数据库 1  --
+        // mariadb Cơ sở dữ liệu 1  --
         dialectMap.put("mariadb", "org.hibernate.dialect.MariaDBDialect");
-        //oracle数据库 1
+        //oracle Cơ sở dữ liệu 1
         dialectMap.put("oracle", "org.hibernate.dialect.OracleDialect");
-        // TODO 没找到不确定
+        // TODO Không tìm thấy, chưa xác định
         dialectMap.put("oracle12c", "org.hibernate.dialect.OracleDialect");
-        // db2数据库 1xx
+        // db2 Cơ sở dữ liệu 1xx
         dialectMap.put("db2", "org.hibernate.dialect.DB2390Dialect");
-        // H2数据库
+        // H2 Cơ sở dữ liệu
         dialectMap.put("h2", "org.hibernate.dialect.HSQLDialect");
-        // HSQL数据库  1
+        // HSQL Cơ sở dữ liệu  1
         dialectMap.put("hsql", "org.hibernate.dialect.HSQLDialect");
-        //SQLite数据库 应用平台mobile
+        //SQLite Cơ sở dữ liệu Nền tảng ứng dụng mobile
         dialectMap.put("sqlite", "org.jeecg.modules.online.config.dialect.SQLiteDialect");
-        //PostgreSQL数据库1  --
+        //PostgreSQL Cơ sở dữ liệu 1  --
         dialectMap.put("postgresql", "org.hibernate.dialect.PostgreSQLDialect");
         dialectMap.put("sqlserver2005", "org.hibernate.dialect.SQLServer2005Dialect");
-        //sqlserver数据库1
+        //sqlserver Cơ sở dữ liệu 1
         dialectMap.put("sqlserver", "org.hibernate.dialect.SQLServerDialect");
-        //达梦数据库 [国产] 1--
+        //Cơ sở dữ liệu Dameng [Sản xuất trong nước] 1--
         dialectMap.put("dm", "org.hibernate.dialect.DmDialect");
-        //虚谷数据库
+        //Cơ sở dữ liệu Xugu
         dialectMap.put("xugu", "org.hibernate.dialect.HSQLDialect");
-        //人大金仓 [国产] 1
+        //Kingbase [Sản xuất trong nước] 1
         dialectMap.put("kingbasees", "org.hibernate.dialect.PostgreSQLDialect");
-        // Phoenix HBase数据库
+        // Phoenix HBase Cơ sở dữ liệu
         dialectMap.put("phoenix", "org.hibernate.dialect.HSQLDialect");
-        // Gauss 数据库
+        // Gauss Cơ sở dữ liệu
         dialectMap.put("zenith", "org.hibernate.dialect.PostgreSQLDialect");
-        //阿里云PolarDB
+        //Alibaba Cloud PolarDB
         dialectMap.put("clickhouse", "org.hibernate.dialect.MySQLDialect");
-        // 南大通用数据库 TODO 没找到不确定
+        // Cơ sở dữ liệu GBase TODO chưa tìm thấy, chưa chắc chắn
         dialectMap.put("gbase", "org.hibernate.dialect.PostgreSQLDialect");
-        //神通数据库 [国产] TODO 没找到不确定
+        //Cơ sở dữ liệu ShenTong [Sản xuất trong nước] TODO Không tìm thấy, chưa xác định
         dialectMap.put("oscar", "org.hibernate.dialect.PostgreSQLDialect");
-        //Sybase ASE 数据库
+        //Sybase ASE Cơ sở dữ liệu
         dialectMap.put("sybase", "org.hibernate.dialect.SybaseDialect");
         dialectMap.put("oceanbase", "org.hibernate.dialect.PostgreSQLDialect");
         dialectMap.put("Firebird", "org.hibernate.dialect.FirebirdDialect");
-        //瀚高数据库
+        //Cơ sở dữ liệu HighGo
         dialectMap.put("highgo", "org.hibernate.dialect.HSQLDialect");
         dialectMap.put("other", "org.hibernate.dialect.PostgreSQLDialect");
     }
@@ -69,7 +69,7 @@ public class DbTypeUtils {
     }
 
     /**
-     * 是否是达梦
+     * Có phải là Dameng hay không
      */
     public static boolean dbTypeIsDm(DbType dbType) {
         return dbTypeIf(dbType, DbType.DM);
@@ -86,7 +86,7 @@ public class DbTypeUtils {
 
 
     /**
-     *  根据枚举类 获取数据库类型的字符串
+     *  Lấy chuỗi loại cơ sở dữ liệu dựa trên lớp enum
      * @param dbType
      * @return
      */
@@ -108,7 +108,7 @@ public class DbTypeUtils {
     }
 
     /**
-     *  根据枚举类 获取数据库方言字符串
+     *  Lấy chuỗi dialect của cơ sở dữ liệu dựa trên lớp enum
      * @param dbType
      * @return
      */
@@ -117,7 +117,7 @@ public class DbTypeUtils {
     }
 
     /**
-     * 判断数据库类型
+     * Xác định loại cơ sở dữ liệu
      */
     public static boolean dbTypeIf(DbType dbType, DbType... correctTypes) {
         for (DbType type : correctTypes) {

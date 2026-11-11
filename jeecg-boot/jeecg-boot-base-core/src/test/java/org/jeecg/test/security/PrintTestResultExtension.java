@@ -6,14 +6,14 @@ import org.junit.jupiter.api.extension.TestWatcher;
 import java.util.Optional;
 
 /**
- * 通用测试结果打印扩展：每个用例执行结束后自动打印一行结果，
- * 解决"测试通过时控制台静默、看起来像没跑"的困惑。
+ * Phần mở rộng in kết quả kiểm thử chung: sau khi mỗi ca kiểm thử thực thi xong, tự động in một dòng kết quả,
+ * Giải quyết"Khi kiểm thử đạt, console im lặng, trông như chưa chạy"gây bối rối.
  *
- * 用法：在测试类上加 @ExtendWith(PrintTestResultExtension.class)。
- * 输出形如： [PASS] 发生重定向时，初始 URL 与重定向目标都各被 checkSsrfHttpUrl 校验一次
+ * Cách dùng: thêm vào lớp kiểm thử @ExtendWith(PrintTestResultExtension.class)。
+ * Đầu ra có dạng: [PASS] Khi xảy ra chuyển hướng, URL ban đầu và mục tiêu chuyển hướng đều được checkSsrfHttpUrl kiểm chứng một lần
  *
- * 注：状态标记用 ASCII，避免 Windows GBK 控制台乱码；用例名（@DisplayName 中文）
- * 在 IDE 的 UTF-8 控制台可正常显示。
+ * Lưu ý: dấu trạng thái dùng ASCII, tránh console Windows GBK bị lỗi ký tự; tên ca kiểm thử (@DisplayName tiếng Trung)
+ * Trong IDE UTF-8 console có thể hiển thị bình thường.
  *
  * @author wangshuai
  * @date 2026-06-17

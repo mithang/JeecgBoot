@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * @Description: 阿里云 oss 上传工具类(高依赖版)
+ * @Description: Lớp công cụ tải lên Alibaba Cloud OSS(Phiên bản phụ thuộc cao)
  * @Date: 2019/5/10
  * @author: jeecg-boot
  */
@@ -83,21 +83,21 @@ public class OssBootUtil {
     }
 
     /**
-     * oss 工具客户端
+     * oss Client công cụ
      */
     private static OSSClient ossClient = null;
 
     /**
-     * 上传文件至阿里云 OSS
-     * 文件上传成功,返回文件完整访问路径
-     * 文件上传失败,返回 null
+     * Tải tệp lên Alibaba Cloud OSS
+     * Tải lên tệp thành công,Trả về đường dẫn truy cập đầy đủ của tệp
+     * Tải tệp lên thất bại,Trả về null
      *
-     * @param file    待上传文件
-     * @param fileDir 文件保存目录
-     * @return oss 中的相对文件路径
+     * @param file    Tệp chờ tải lên
+     * @param fileDir Thư mục lưu tệp
+     * @return oss Đường dẫn tệp tương đối trong
      */
     public static String upload(MultipartFile file, String fileDir,String customBucket) throws Exception {
-        // 文件安全校验，防止上传漏洞文件
+        // Kiểm tra an toàn tệp, ngăn tải lên tệp có lỗ hổng
         SsrfFileTypeFilter.checkUploadFileType(file);
 
         String filePath = null;
@@ -108,11 +108,11 @@ public class OssBootUtil {
             newBucket = customBucket;
         }
         try {
-            //判断桶是否存在,不存在则创建桶
+            //Phán đoán bucket có tồn tại không,Nếu không tồn tại thì tạo bucket
             if(!ossClient.doesBucketExist(newBucket)){
                 ossClient.createBucket(newBucket);
             }
-            // 获取文件名
+            // Lấy tên tệp
             String orgName = file.getOriginalFilename();
             if("" == orgName){
               orgName=file.getName();
@@ -124,7 +124,7 @@ public class OssBootUtil {
             if (!fileDir.endsWith(SymbolConstant.SINGLE_SLASH)) {
                 fileDir = fileDir.concat(SymbolConstant.SINGLE_SLASH);
             }
-            // 代码逻辑说明: 过滤上传文件夹名特殊字符，防止攻击
+            // Giải thích logic mã: Lọc ký tự đặc biệt trong tên thư mục tải lên để ngăn chặn tấn công
             fileDir=StrAttackFilter.filter(fileDir);
             fileUrl = fileUrl.append(fileDir + fileName);
 
@@ -134,10 +134,10 @@ public class OssBootUtil {
                 filePath = "https://" + newBucket + "." + endPoint + SymbolConstant.SINGLE_SLASH + fileUrl;
             }
             PutObjectResult result = ossClient.putObject(newBucket, fileUrl.toString(), file.getInputStream());
-            // 设置权限(公开读)
+            // Thiết lập quyền(Đọc công khai)
 //            ossClient.setBucketAcl(newBucket, CannedAccessControlList.PublicRead);
             if (result != null) {
-                log.info("------OSS文件上传成功------" + fileUrl);
+                log.info("------OSS Tải lên tệp thành công------" + fileUrl);
             }
         } catch (IOException e) {
             log.error(e.getMessage(),e);
@@ -150,8 +150,8 @@ public class OssBootUtil {
     }
 
     /**
-     * 获取原始URL
-    * @param url: 原始URL
+     * Lấy bản gốc URL
+    * @param url: Gốc URL
     * @Return: java.lang.String
     */
     public static String getOriginalUrl(String url) {
@@ -163,7 +163,7 @@ public class OssBootUtil {
     }
 
     /**
-     * 文件上传
+     * Tải lên tệp
      * @param file
      * @param fileDir
      * @return
@@ -173,13 +173,13 @@ public class OssBootUtil {
     }
 
     /**
-     * 上传文件至阿里云 OSS
-     * 文件上传成功,返回文件完整访问路径
-     * 文件上传失败,返回 null
+     * Tải tệp lên Alibaba Cloud OSS
+     * Tải lên tệp thành công,Trả về đường dẫn truy cập đầy đủ của tệp
+     * Tải tệp lên thất bại,Trả về null
      *
-     * @param file    待上传文件
-     * @param fileDir 文件保存目录
-     * @return oss 中的相对文件路径
+     * @param file    Tệp chờ tải lên
+     * @param fileDir Thư mục lưu tệp
+     * @return oss Đường dẫn tệp tương đối trong
      */
     public static String upload(FileItemStream file, String fileDir) {
         String filePath = null;
@@ -199,10 +199,10 @@ public class OssBootUtil {
                 filePath = "https://" + bucketName + "." + endPoint + SymbolConstant.SINGLE_SLASH + fileUrl;
             }
             PutObjectResult result = ossClient.putObject(bucketName, fileUrl.toString(), file.openStream());
-            // 设置权限(公开读)
+            // Thiết lập quyền(Đọc công khai)
             ossClient.setBucketAcl(bucketName, CannedAccessControlList.PublicRead);
             if (result != null) {
-                log.info("------OSS文件上传成功------" + fileUrl);
+                log.info("------OSS Tải lên tệp thành công------" + fileUrl);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -212,7 +212,7 @@ public class OssBootUtil {
     }
 
     /**
-     * 删除文件
+     * Xóa tệp
      * @param url
      */
     public static void deleteUrl(String url) {
@@ -220,7 +220,7 @@ public class OssBootUtil {
     }
 
     /**
-     * 删除文件
+     * Xóa tệp
      * @param url
      */
     public static void deleteUrl(String url,String bucket) {
@@ -234,14 +234,14 @@ public class OssBootUtil {
         } else {
             bucketUrl = "https://" + newBucket + "." + endPoint + SymbolConstant.SINGLE_SLASH;
         }
-        //TODO 暂时不允许删除云存储的文件
+        //TODO Tạm thời không cho phép xóa tệp lưu trữ trên cloud
         //initOss(endPoint, accessKeyId, accessKeySecret);
         url = url.replace(bucketUrl,"");
         ossClient.deleteObject(newBucket, url);
     }
 
     /**
-     * 删除文件
+     * Xóa tệp
      * @param fileName
      */
     public static void delete(String fileName) {
@@ -249,12 +249,12 @@ public class OssBootUtil {
     }
 
     /**
-     * 获取指定桶（私有桶）中的文件流
-     * 通过OSS SDK直接读取文件内容，支持指定自定义桶名（如 "eoafile"），为空则使用默认桶
+     * Lấy luồng tệp trong bucket đã chỉ định (bucket riêng tư)
+     * Đọc trực tiếp nội dung tệp qua OSS SDK, hỗ trợ chỉ định tên bucket tùy chỉnh (ví dụ  "eoafile"), nếu để trống thì dùng bucket mặc định
      *
-     * @param objectName 文件对象路径（如 "eoafile/2026/04/test.pdf"，会自动替换前缀）
-     * @param bucket     自定义桶名称，为空则使用默认桶
-     * @return 文件输入流，失败返回null
+     * @param objectName Đường dẫn đối tượng tệp (ví dụ "eoafile/2026/04/test.pdf", sẽ tự động thay thế tiền tố)
+     * @param bucket     Tên bucket tùy chỉnh, nếu để trống thì dùng bucket mặc định
+     * @return Luồng đầu vào của tệp, trả về khi thất bại null
      */
     public static InputStream getOssFile(String objectName,String bucket){
         InputStream inputStream = null;
@@ -264,18 +264,18 @@ public class OssBootUtil {
                 newBucket = bucket;
             }
             initOss(endPoint, accessKeyId, accessKeySecret);
-            // 代码逻辑说明: 替换objectName前缀，防止key不一致导致获取不到文件----
+            // Giải thích logic mã: Thay thế tiền tố objectName, ngăn key không nhất quán dẫn đến không lấy được tệp----
             objectName = OssBootUtil.replacePrefix(objectName,bucket);
             OSSObject ossObject = ossClient.getObject(newBucket,objectName);
             inputStream = new BufferedInputStream(ossObject.getObjectContent());
         }catch (Exception e){
-            log.info("文件获取失败" + e.getMessage());
+            log.info("Lấy tệp thất bại" + e.getMessage());
         }
         return inputStream;
     }
 
     ///**
-    // * 获取文件流
+    // * Lấy luồng tệp
     // * @param objectName
     // * @return
     // */
@@ -284,34 +284,34 @@ public class OssBootUtil {
     //}
 
     /**
-     * 获取私有桶文件的预签名访问URL（带过期时间）
-     * 通过OSS预签名机制生成临时访问链接，无需公开桶即可让外部下载/预览文件
+     * Lấy URL truy cập đã ký trước của tệp trong bucket riêng (kèm thời gian hết hạn)
+     * Tạo liên kết truy cập tạm thời bằng cơ chế chữ ký trước của OSS, không cần công khai bucket mà bên ngoài vẫn có thể tải xuống/Xem trước tệp
      *
-     * @param bucketName 桶名称（如 "eoafile"）
-     * @param objectName 文件对象路径（会自动替换前缀）
-     * @param expires    链接过期时间点（Date类型，如1天后过期）
-     * @return 预签名URL字符串，文件不存在或失败返回null
+     * @param bucketName Tên bucket (ví dụ  "eoafile"）
+     * @param objectName Đường dẫn đối tượng tệp (sẽ tự động thay thế tiền tố)
+     * @param expires    Thời điểm liên kết hết hạn (kiểu Date, ví dụ hết hạn sau 1 ngày)
+     * @return Chuỗi URL chữ ký trước; nếu tệp không tồn tại hoặc thất bại thì trả về null
      */
     public static String getObjectUrl(String bucketName, String objectName, Date expires) {
         initOss(endPoint, accessKeyId, accessKeySecret);
         try{
-            // 代码逻辑说明: 替换objectName前缀，防止key不一致导致获取不到文件----
+            // Giải thích logic mã: Thay thế tiền tố objectName, ngăn key không nhất quán dẫn đến không lấy được tệp----
             objectName = OssBootUtil.replacePrefix(objectName,bucketName);
             if(ossClient.doesObjectExist(bucketName,objectName)){
                 URL url = ossClient.generatePresignedUrl(bucketName,objectName,expires);
-                //log.info("原始url : {}", url.toString());
+                //log.info("Gốc url : {}", url.toString());
                 //log.info("decode url : {}", URLDecoder.decode(url.toString(), "UTF-8"));
-                //【issues/4023】问题 oss外链经过转编码后，部分无效，大概在三分一；无需转编码直接返回即可 #4023
+                //【issues/4023】 Vấn đề: liên kết ngoài OSS sau khi chuyển mã hoá thì một phần không hợp lệ, khoảng một phần ba; không cần chuyển mã hoá, trả về trực tiếp là được #4023
                 return url.toString();
             }
         }catch (Exception e){
-            log.info("文件路径获取失败" + e.getMessage()); 
+            log.info("Lấy đường dẫn tệp thất bại" + e.getMessage()); 
         }
         return null;
     }
 
     /**
-     * 初始化 oss 客户端
+     * Khởi tạo client OSS
      *
      * @return
      */
@@ -326,12 +326,12 @@ public class OssBootUtil {
 
 
     /**
-     * 通过输入流上传文件到阿里云OSS默认桶
-     * 上传后设置桶为公开读权限，返回文件完整访问URL
+     * Tải tệp lên bucket mặc định của Alibaba Cloud OSS qua luồng đầu vào
+     * Sau khi tải lên, đặt bucket thành quyền đọc công khai và trả về quyền truy cập đầy đủ của tệp URL
      *
-     * @param stream       文件输入流
-     * @param relativePath 文件在桶中的相对路径（如 "upload/2026/04/test.pdf"）
-     * @return 文件完整访问URL（优先使用staticDomain，否则拼接 bucketName.endPoint）
+     * @param stream       Luồng đầu vào của tệp
+     * @param relativePath Đường dẫn tương đối của tệp trong bucket (ví dụ "upload/2026/04/test.pdf"）
+     * @return URL truy cập đầy đủ của tệp (ưu tiên dùng staticDomain, nếu không thì nối  bucketName.endPoint）
      */
     public static String upload(InputStream stream, String relativePath) {
         String filePath = null;
@@ -343,24 +343,24 @@ public class OssBootUtil {
             filePath = "https://" + bucketName + "." + endPoint + SymbolConstant.SINGLE_SLASH + fileUrl;
         }
         PutObjectResult result = ossClient.putObject(bucketName, fileUrl.toString(),stream);
-        // 设置权限(公开读)
+        // Thiết lập quyền(Đọc công khai)
         ossClient.setBucketAcl(bucketName, CannedAccessControlList.PublicRead);
         if (result != null) {
-            log.info("------OSS文件上传成功------" + fileUrl);
+            log.info("------OSS Tải lên tệp thành công------" + fileUrl);
         }
         return filePath;
     }
 
     /**
-     * 替换前缀，防止key不一致导致获取不到文件
-     * @param objectName 文件上传路径 key
-     * @param customBucket 自定义桶
+     * Thay thế tiền tố để tránh key không nhất quán khiến không lấy được tệp
+     * @param objectName Đường dẫn tải lên tệp key
+     * @param customBucket Bucket tùy chỉnh
      * @date 2022-01-20
      * @author lsq
      * @return
      */
     private static String replacePrefix(String objectName,String customBucket){
-        log.info("------replacePrefix---替换前---objectName:{}",objectName);
+        log.info("------replacePrefix---Trước khi thay thế---objectName:{}",objectName);
         if(oConvertUtils.isNotEmpty(staticDomain)){
             objectName= objectName.replace(staticDomain+SymbolConstant.SINGLE_SLASH,"");
         }else{
@@ -371,7 +371,7 @@ public class OssBootUtil {
             String path ="https://" + newBucket + "." + endPoint + SymbolConstant.SINGLE_SLASH;
             objectName = objectName.replace(path,"");
         }
-        log.info("------replacePrefix---替换后---objectName:{}",objectName);
+        log.info("------replacePrefix---Sau khi thay thế---objectName:{}",objectName);
         return objectName;
     }
 }

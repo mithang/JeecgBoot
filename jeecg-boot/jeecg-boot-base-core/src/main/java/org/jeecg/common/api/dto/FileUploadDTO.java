@@ -6,8 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.Serializable;
 
 /**
- * 文件上传
- * cloud api 用到的接口传输对象
+ * Tải lên tệp
+ * cloud api Đối tượng truyền tải của API được sử dụng
  * @author: jeecg-boot
  */
 @Data
@@ -28,7 +28,7 @@ public class FileUploadDTO implements Serializable {
     }
 
     /**
-     * 简单上传 构造器1
+     * Tải lên đơn giản Constructor 1
      * @param file
      * @param bizPath
      * @param uploadType
@@ -40,7 +40,7 @@ public class FileUploadDTO implements Serializable {
     }
 
     /**
-     * 申明桶 文件上传 构造器2
+     * Khai báo bucket Constructor tải tệp lên 2
      * @param file
      * @param bizPath
      * @param uploadType

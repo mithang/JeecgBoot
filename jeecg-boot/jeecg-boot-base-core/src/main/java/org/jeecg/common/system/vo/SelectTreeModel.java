@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 下拉树 model
+ * Cây dropdown model
  *
  * @author jeecg-boot
  */
@@ -17,15 +17,15 @@ public class SelectTreeModel implements Serializable {
     private String title;
     private String value;
     /**
-     * 父Id
+     * Cha Id
      */
     private String parentId;
     /**
-     * 是否是叶节点
+     * Có phải là nút lá không
      */
     private boolean isLeaf;
     /**
-     * 子节点
+     * Nút con
      */
     private List<SelectTreeModel> children;
 

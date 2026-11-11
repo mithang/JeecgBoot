@@ -31,49 +31,49 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * @Description: Controller基类
+ * @Description: Controller Lớp cơ sở
  * @Author: dangzhenghui@163.com
  * @Date: 2019-4-21 8:13
  * @Version: 1.0
  */
 @Slf4j
 public class JeecgController<T, S extends IService<T>> {
-    /**issues/2933 JeecgController注入service时改用protected修饰，能避免重复引用service*/
+    /**issues/2933 JeecgController Khi inject service, đổi sang dùng modifier protected để tránh tham chiếu lặp lại service*/
     @Autowired
     protected S service;
     @Resource
     private JeecgBaseConfig jeecgBaseConfig;
     
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      */
     protected ModelAndView exportXls(HttpServletRequest request, T object, Class<T> clazz, String title) {
-        // Step.1 组装查询条件
+        // Step.1 Lắp ráp điều kiện truy vấn
         QueryWrapper<T> queryWrapper = QueryGenerator.initQueryWrapper(object, request.getParameterMap());
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
-        // 过滤选中数据
+        // Lọc dữ liệu đã chọn
         String selections = request.getParameter("selections");
         if (oConvertUtils.isNotEmpty(selections)) {
             List<String> selectionList = Arrays.asList(selections.split(","));
             queryWrapper.in("id",selectionList);
         }
-        // Step.2 获取导出数据
+        // Step.2 Lấy dữ liệu xuất
         List<T> exportList = service.list(queryWrapper);
 
-        // Step.3 AutoPoi 导出Excel
+        // Step.3 AutoPoi Xuất Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-        //此处设置的filename无效 ,前端会重更新设置一下
+        //filename được đặt ở đây không có hiệu lực ,Frontend sẽ cập nhật lại thiết lập
         mv.addObject(NormalExcelConstants.FILE_NAME, title);
         mv.addObject(NormalExcelConstants.CLASS, clazz);
-        // 代码逻辑说明: 【QQYUN-13930】统一改成导出xlsx格式---
-        ExportParams exportParams=new ExportParams(title + "报表", "导出人:" + sysUser.getRealname(), title, ExcelType.XSSF);
+        // Giải thích logic mã: 【QQYUN-13930】Thống nhất đổi sang định dạng xuất xlsx---
+        ExportParams exportParams=new ExportParams(title + "Báo cáo", "Người xuất:" + sysUser.getRealname(), title, ExcelType.XSSF);
         exportParams.setImageBasePath(jeecgBaseConfig.getPath().getUpload());
         mv.addObject(NormalExcelConstants.PARAMS,exportParams);
         mv.addObject(NormalExcelConstants.DATA_LIST, exportList);
-        // 代码逻辑说明: 【issues/9052】BasicTable列表页导出excel可以指定列---
+        // Giải thích logic mã: 【issues/9052】Trang danh sách BasicTable xuất excel có thể chỉ định cột---
         String exportFields = request.getParameter(NormalExcelConstants.EXPORT_FIELDS);
         if(oConvertUtils.isNotEmpty(exportFields)){
             mv.addObject(NormalExcelConstants.EXPORT_FIELDS, exportFields);
@@ -81,81 +81,81 @@ public class JeecgController<T, S extends IService<T>> {
         return mv;
     }
     /**
-     * 根据每页sheet数量导出多sheet
+     * Xuất nhiều sheet theo số lượng sheet mỗi trang sheet
      *
      * @param request
-     * @param object 实体类
-     * @param clazz 实体类class
-     * @param title 标题
-     * @param exportFields 导出字段自定义
-     * @param pageNum 每个sheet的数据条数
+     * @param object Lớp entity
+     * @param clazz Lớp entity class
+     * @param title Tiêu đề
+     * @param exportFields Tùy chỉnh trường xuất
+     * @param pageNum Số dòng dữ liệu của mỗi sheet
      * @param request
      */
     protected ModelAndView exportXlsSheet(HttpServletRequest request, T object, Class<T> clazz, String title,String exportFields,Integer pageNum) {
-        // Step.1 组装查询条件
+        // Step.1 Lắp ráp điều kiện truy vấn
         QueryWrapper<T> queryWrapper = QueryGenerator.initQueryWrapper(object, request.getParameterMap());
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        // Step.2 计算分页sheet数据
+        // Step.2 Tính dữ liệu sheet phân trang
         double total = service.count();
         int count = (int)Math.ceil(total/pageNum);
-        // Step.3  过滤选中数据
+        // Step.3  Lọc dữ liệu đã chọn
         String selections = request.getParameter("selections");
         if (oConvertUtils.isNotEmpty(selections)) {
             List<String> selectionList = Arrays.asList(selections.split(","));
             queryWrapper.in("id",selectionList);
         }
-        // Step.4 多sheet处理
+        // Step.4 Xử lý nhiều sheet
         List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
         for (int i = 1; i <=count ; i++) {
             Page<T> page = new Page<T>(i, pageNum);
             IPage<T> pageList = service.page(page, queryWrapper);
             List<T> exportList = pageList.getRecords();
             Map<String, Object> map = new HashMap<>(5);
-            ExportParams exportParams=new ExportParams(title + "报表", "导出人:" + sysUser.getRealname(), title+i,jeecgBaseConfig.getPath().getUpload());
+            ExportParams exportParams=new ExportParams(title + "Báo cáo", "Người xuất:" + sysUser.getRealname(), title+i,jeecgBaseConfig.getPath().getUpload());
             exportParams.setType(ExcelType.XSSF);
             //map.put("title",exportParams);
-            //表格Title
+            //Bảng Title
             map.put(NormalExcelConstants.PARAMS,exportParams);
-            //表格对应实体
+            //Thực thể tương ứng với bảng
             map.put(NormalExcelConstants.CLASS,clazz);
-            //数据集合
+            //Tập hợp dữ liệu
             map.put(NormalExcelConstants.DATA_LIST, exportList);
             listMap.add(map);
         }
-        // Step.4 AutoPoi 导出Excel
+        // Step.4 AutoPoi Xuất Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-        //此处设置的filename无效 ,前端会重更新设置一下
+        //filename được đặt ở đây không có hiệu lực ,Frontend sẽ cập nhật lại thiết lập
         mv.addObject(NormalExcelConstants.FILE_NAME, title);
         mv.addObject(NormalExcelConstants.MAP_LIST, listMap);
         return mv;
     }
 
     /**
-     * 大数据导出
+     * Xuất dữ liệu lớn
      * @param request
      * @param object
      * @param clazz
      * @param title
-     * @param pageSize 每次查询的数据量
+     * @param pageSize Lượng dữ liệu mỗi lần tìm kiếm
      * @return
      * @author chenrui
      * @date 2025/8/11 16:11
      */
     protected ModelAndView exportXlsForBigData(HttpServletRequest request, T object, Class<T> clazz, String title,Integer pageSize) {
-        // 组装查询条件
+        // Lắp ráp điều kiện truy vấn
         QueryWrapper<T> queryWrapper = QueryGenerator.initQueryWrapper(object, request.getParameterMap());
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        // 计算分页数
+        // Tính số trang
         double total = service.count();
         int count = (int) Math.ceil(total / pageSize);
-        // 过滤选中数据
+        // Lọc dữ liệu đã chọn
         String selections = request.getParameter("selections");
         if (oConvertUtils.isNotEmpty(selections)) {
             List<String> selectionList = Arrays.asList(selections.split(","));
             queryWrapper.in("id", selectionList);
         }
 
-        // 定义IExcelExportServer
+        // Định nghĩa IExcelExportServer
         IExcelExportServer excelExportServer = (queryParams, pageNum) -> {
             if (pageNum > count) {
                 return null;
@@ -165,12 +165,12 @@ public class JeecgController<T, S extends IService<T>> {
             return new ArrayList<>(pageList.getRecords());
         };
 
-        // AutoPoi 导出Excel
+        // AutoPoi Xuất Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-        //此处设置的filename无效 ,前端会重更新设置一下
+        //filename được đặt ở đây không có hiệu lực ,Frontend sẽ cập nhật lại thiết lập
         mv.addObject(NormalExcelConstants.FILE_NAME, title);
         mv.addObject(NormalExcelConstants.CLASS, clazz);
-        ExportParams exportParams = new ExportParams(title + "报表", "导出人:" + sysUser.getRealname(), title, jeecgBaseConfig.getPath().getUpload());
+        ExportParams exportParams = new ExportParams(title + "Báo cáo", "Người xuất:" + sysUser.getRealname(), title, jeecgBaseConfig.getPath().getUpload());
         mv.addObject(NormalExcelConstants.PARAMS, exportParams);
         mv.addObject(NormalExcelConstants.EXPORT_SERVER, excelExportServer);
         mv.addObject(NormalExcelConstants.QUERY_PARAMS, queryWrapper);
@@ -179,7 +179,7 @@ public class JeecgController<T, S extends IService<T>> {
 
 
     /**
-     * 根据权限导出excel，传入导出字段参数
+     * Xuất excel theo quyền hạn, truyền tham số trường xuất
      *
      * @param request
      */
@@ -190,7 +190,7 @@ public class JeecgController<T, S extends IService<T>> {
     }
 
     /**
-     * 获取对象ID
+     * Lấy đối tượng ID
      *
      * @return
      */
@@ -204,7 +204,7 @@ public class JeecgController<T, S extends IService<T>> {
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -214,7 +214,7 @@ public class JeecgController<T, S extends IService<T>> {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
             MultipartFile file = entity.getValue();
             ImportParams params = new ImportParams();
             params.setTitleRows(2);
@@ -222,24 +222,24 @@ public class JeecgController<T, S extends IService<T>> {
             params.setNeedSave(true);
             try {
                 List<T> list = ExcelImportUtil.importExcel(file.getInputStream(), clazz, params);
-                // update-begin--author:wangshuai---date:20260901---for：【LHZP-985】代码生成 单表和树导出popup字典没有翻译：导入添加翻译
+                // update-begin--author:wangshuai---date:20260901---for：【LHZP-985】Tạo mã: từ điển popup khi xuất bảng đơn và cây chưa được dịch: nhập và thêm bản dịch
 				beforeImport(list);
-                // update-end--author:wangshuai---date:20260804---for：【LHZP-985】代码生成 单表和树导出popup字典没有翻译：导入添加翻译
-                // 代码逻辑说明: 批量插入数据
+                // update-end--author:wangshuai---date:20260804---for：【LHZP-985】Tạo mã: từ điển popup khi xuất bảng đơn và cây chưa được dịch: nhập và thêm bản dịch
+                // Giải thích logic mã: Chèn hàng loạt dữ liệu
                 long start = System.currentTimeMillis();
                 service.saveBatch(list);
-                //400条 saveBatch消耗时间1592毫秒  循环插入消耗时间1947毫秒
-                //1200条  saveBatch消耗时间3687毫秒 循环插入消耗时间5212毫秒
-                log.info("消耗时间" + (System.currentTimeMillis() - start) + "毫秒");
-                return Result.ok("文件导入成功！数据行数：" + list.size());
+                //400 bản ghi, saveBatch tốn 1592 mili giây, chèn vòng lặp tốn 1947 mili giây
+                //1200 bản ghi, saveBatch tốn 3687 mili giây, chèn vòng lặp tốn 5212 mili giây
+                log.info("Thời gian tiêu tốn" + (System.currentTimeMillis() - start) + "Mili giây");
+                return Result.ok("Nhập tệp thành công! Số dòng dữ liệu:" + list.size());
             } catch (Exception e) {
-                // 代码逻辑说明: 导入数据重复增加提示
+                // Giải thích logic mã: Nhắc nhở khi dữ liệu nhập bị trùng và tăng thêm
                 String msg = e.getMessage();
                 log.error(msg, e);
                 if(msg!=null && msg.indexOf("Duplicate entry")>=0){
-                    return Result.error("文件导入失败:有重复数据！");
+                    return Result.error("Nhập file thất bại:Có dữ liệu trùng lặp!");
                 }else{
-                    return Result.error("文件导入失败:" + e.getMessage());
+                    return Result.error("Nhập file thất bại:" + e.getMessage());
                 }
             } finally {
                 try {
@@ -249,15 +249,15 @@ public class JeecgController<T, S extends IService<T>> {
                 }
             }
         }
-        return Result.error("文件导入失败！");
+        return Result.error("Nhập tệp thất bại!");
     }
 
 	/**
-	 * 数据持久化前处理导入数据。
+	 * Xử lý dữ liệu nhập trước khi persist dữ liệu.
 	 *
-	 * @param list 导入数据
+	 * @param list Nhập dữ liệu
 	 */
 	protected void beforeImport(List<T> list) {
-		// 供生成的控制器扩展导入前处理逻辑
+		// Dành cho controller được sinh ra để mở rộng logic xử lý trước khi nhập
 	}
 }

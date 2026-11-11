@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import jakarta.annotation.Resource;
 
 /**
- * 签名 拦截器配置
+ * Cấu hình interceptor chữ ký
  * @author: jeecg-boot
  */
 @Configuration
@@ -30,7 +30,7 @@ public class SignAuthConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //------------------------------------------------------------
-        //查询需要进行签名拦截的接口 signUrls
+        //Tìm kiếm API cần chặn chữ ký signUrls
         String signUrls = jeecgBaseConfig.getSignUrls();
         String[] signUrlsArray = null;
         if (StringUtils.isNotBlank(signUrls)) {
@@ -42,7 +42,7 @@ public class SignAuthConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(signAuthInterceptor()).addPathPatterns(signUrlsArray);
     }
 
-    // 代码逻辑说明: issues/I53J5E post请求X_SIGN签名拦截校验后报错, request body 为空
+    // Giải thích logic mã: issues/I53J5E post Yêu cầu X_SIGN Sau khi interceptor chữ ký kiểm tra xong thì báo lỗi, request body Trống
     @Bean
     public RequestBodyReserveFilter requestBodyReserveFilter(){
         return new RequestBodyReserveFilter();
@@ -54,7 +54,7 @@ public class SignAuthConfiguration implements WebMvcConfigurer {
         registration.setFilter(requestBodyReserveFilter());
         registration.setName("requestBodyReserveFilter");
         //------------------------------------------------------------
-        //查询需要进行签名拦截的接口 signUrls
+        //Tìm kiếm API cần chặn chữ ký signUrls
         String signUrls = jeecgBaseConfig.getSignUrls();
         String[] signUrlsArray = null;
         if (StringUtils.isNotBlank(signUrls)) {
@@ -63,9 +63,9 @@ public class SignAuthConfiguration implements WebMvcConfigurer {
             signUrlsArray = PathMatcherUtil.SIGN_URL_LIST;
         }
         //------------------------------------------------------------
-        // 建议此处只添加post请求地址而不是所有的都需要走过滤器
+        // Khuyến nghị ở đây chỉ thêm địa chỉ yêu cầu post thay vì tất cả đều phải đi qua filter
         registration.addUrlPatterns(signUrlsArray);
-        // 增加注解签名请求
+        // Thêm yêu cầu chữ ký bằng annotation
         registration.addUrlPatterns(TenantConstant.SIGNATURE_CHECK_POST_URL);
         return registration;
     }

@@ -3,22 +3,22 @@ package org.jeecg.common.aspect;
 /**
  * @Author scott
  * @Date 2020/1/14 13:36
- * @Description: 请求URL与菜单路由URL转换规则（方便于采用菜单路由URL来配置数据权限规则）
+ * @Description: Quy tắc chuyển đổi URL yêu cầu và URL route menu (thuận tiện dùng URL route menu để cấu hình quy tắc quyền dữ liệu)
  */
 public enum UrlMatchEnum {
-    /**求URL与菜单路由URL转换规则 /online/cgform/api/getData/ */
+    /**Quy tắc chuyển đổi URL và URL route của menu /online/cgform/api/getData/ */
     CGFORM_DATA("/online/cgform/api/getData/", "/online/cgformList/"),
-    /**求URL与菜单路由URL转换规则 /online/cgform/api/exportXls/ */
+    /**Quy tắc chuyển đổi URL và URL route của menu /online/cgform/api/exportXls/ */
     CGFORM_EXCEL_DATA("/online/cgform/api/exportXls/", "/online/cgformList/"),
-    /**求URL与菜单路由URL转换规则 /online/cgform/api/getTreeData/ */
+    /**Quy tắc chuyển đổi URL và URL route của menu /online/cgform/api/getTreeData/ */
     CGFORM_TREE_DATA("/online/cgform/api/getTreeData/", "/online/cgformList/"),
-    /**求URL与菜单路由URL转换规则 /online/cgreport/api/getColumnsAndData/ */
+    /**Quy tắc chuyển đổi URL và URL route của menu /online/cgreport/api/getColumnsAndData/ */
     CGREPORT_DATA("/online/cgreport/api/getColumnsAndData/", "/online/cgreport/"),
-    /** 求URL与菜单路由URL转换规则/online/cgreport/api/getData/ 【vue3报表数据请求地址】 */
+    /** Quy tắc chuyển đổi URL và URL route của menu/online/cgreport/api/getData/ 【Địa chỉ yêu cầu dữ liệu báo cáo Vue3】 */
     CGREPORT_ONLY_DATA("/online/cgreport/api/getData/", "/online/cgreport/"),
-    /**求URL与菜单路由URL转换规则 /online/cgreport/api/exportXls/ */
+    /**Quy tắc chuyển đổi URL và URL route của menu /online/cgreport/api/exportXls/ */
     CGREPORT_EXCEL_DATA("/online/cgreport/api/exportXls/", "/online/cgreport/"),
-    /**求URL与菜单路由URL转换规则 /online/cgreport/api/exportManySheetXls/ */
+    /**Quy tắc chuyển đổi URL và URL route của menu /online/cgreport/api/exportManySheetXls/ */
     CGREPORT_EXCEL_DATA2("/online/cgreport/api/exportManySheetXls/", "/online/cgreport/");
 
     UrlMatchEnum(String url, String matchUrl) {
@@ -27,28 +27,28 @@ public enum UrlMatchEnum {
     }
 
     /**
-     * Request 请求 URL前缀
+     * Request Tiền tố URL yêu cầu
      */
     private String url;
     /**
-     * 菜单路由 URL前缀 (对应菜单路径)
+     * Tiền tố URL route menu (Đường dẫn menu tương ứng)
      */
     private String matchUrl;
 
     /**
-     * 根据req url 获取到菜单配置路径（前端页面路由URL）
+     * Lấy đường dẫn cấu hình menu theo req URL (URL route trang frontend)
      *
      * @param url
      * @return
      */
     public static String getMatchResultByUrl(String url) {
-        //获取到枚举
+        //Lấy được enum
         UrlMatchEnum[] values = UrlMatchEnum.values();
-        //加强for循环进行遍历操作
+        //Dùng vòng lặp for tăng cường để duyệt
         for (UrlMatchEnum lr : values) {
-            //如果遍历获取的type和参数type一致
+            //Nếu type lấy được khi duyệt trùng với type tham số
             if (url.indexOf(lr.url) != -1) {
-                //返回type对象的desc
+                //Trả về desc của đối tượng type desc
                 return url.replace(lr.url, lr.matchUrl);
             }
         }
@@ -60,8 +60,8 @@ public enum UrlMatchEnum {
     }
     //    public static void main(String[] args) {
 //        /**
-//         * 比如request真实请求URL: /online/cgform/api/getData/81fcf7d8922d45069b0d5ba983612d3a
-//         * 转换匹配路由URL后（对应配置的菜单路径）:/online/cgformList/81fcf7d8922d45069b0d5ba983612d3a
+//         * Ví dụ request yêu cầu thực tế URL: /online/cgform/api/getData/81fcf7d8922d45069b0d5ba983612d3a
+//         * Sau khi chuyển đổi khớp URL route (đường dẫn menu đã cấu hình tương ứng):/online/cgformList/81fcf7d8922d45069b0d5ba983612d3a
 //         */
 //        System.out.println(UrlMatchEnum.getMatchResultByUrl("/online/cgform/api/getData/81fcf7d8922d45069b0d5ba983612d3a"));
 //    }

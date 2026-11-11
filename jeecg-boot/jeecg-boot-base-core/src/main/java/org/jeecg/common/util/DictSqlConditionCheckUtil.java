@@ -30,15 +30,15 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
- * 前端字典条件 SQL 结构校验工具。
+ * Công cụ kiểm chứng cấu trúc SQL của điều kiện từ điển phía frontend.
  *
  * @author scott
- * @since 2026-08-25 issues/9840 字典过滤条件 SQL 注入防护
+ * @since 2026-08-25 issues/9840 Phòng chống SQL injection cho điều kiện lọc từ điển
  */
 public final class DictSqlConditionCheckUtil {
 
 	/**
-	 * 条件字段名：字母/数字/下划线组成的标识符，可带反引号或双引号，可带表别名前缀
+	 * Tên trường điều kiện: chữ cái/Số//số/gạch dưới tạo thành định danh, có thể mang dấu backtick hoặc dấu ngoặc kép, có thể mang tiền tố bí danh bảng
 	 */
 	private static final Pattern COLUMN_NAME_PATTERN = Pattern.compile(
 			"[`\"]?[\\p{L}_][\\p{L}\\p{N}_]*[`\"]?(\\.[`\"]?[\\p{L}_][\\p{L}\\p{N}_]*[`\"]?)*");
@@ -47,11 +47,11 @@ public final class DictSqlConditionCheckUtil {
 	}
 
 	/**
-	 * 校验字典条件语法并返回条件中使用的字段。
+	 * Kiểm chứng cú pháp điều kiện từ điển và trả về các trường được dùng trong điều kiện.
 	 *
-	 * @param value 字典过滤条件
-	 * @return 条件字段集合
-	 * @throws IllegalArgumentException 条件包含不支持或不安全的 SQL 结构
+	 * @param value Điều kiện lọc từ điển
+	 * @return Tập hợp trường điều kiện
+	 * @throws IllegalArgumentException Điều kiện chứa cấu trúc SQL không được hỗ trợ hoặc không an toàn
 	 */
 	public static Set<String> checkAndGetFields(String value) {
 		if (value == null || value.trim().isEmpty()) {
@@ -60,13 +60,13 @@ public final class DictSqlConditionCheckUtil {
 		String trimmed = value.trim();
 		Set<String> conditionFields = new LinkedHashSet<>();
 		try {
-			//update-begin---author:scott ---date:20261027  for：【GHSA-jgwm-2xxm-mmm4/GHSA-xmw4-rx44-4jcp】禁止反斜杠，JSqlParser不把\当转义符而MySQL会，两者对字符串边界理解不一致可绕过校验-----------
+			//update-begin---author:scott ---date:20261027  for：【GHSA-jgwm-2xxm-mmm4/GHSA-xmw4-rx44-4jcp】Cấm dấu gạch chéo ngược, JSqlParser không coi\là ký tự escape nhưng MySQL thì có, hai bên hiểu ranh giới chuỗi không nhất quán nên có thể bypass kiểm chứng-----------
 			if (trimmed.indexOf('\\') >= 0) {
-				throw new IllegalArgumentException("字典过滤条件不允许包含反斜杠");
+				throw new IllegalArgumentException("Điều kiện lọc từ điển không được chứa dấu gạch chéo ngược");
 			}
-			//update-end---author:scott ---date:20261027  for：【GHSA-jgwm-2xxm-mmm4/GHSA-xmw4-rx44-4jcp】禁止反斜杠，JSqlParser不把\当转义符而MySQL会，两者对字符串边界理解不一致可绕过校验-----------
+			//update-end---author:scott ---date:20261027  for：【GHSA-jgwm-2xxm-mmm4/GHSA-xmw4-rx44-4jcp】Cấm dấu gạch chéo ngược, JSqlParser không coi\là ký tự escape nhưng MySQL thì có, hai bên hiểu ranh giới chuỗi không nhất quán nên có thể bypass kiểm chứng-----------
 			if (containsSqlComment(trimmed)) {
-				throw new IllegalArgumentException("字典过滤条件不允许包含SQL注释");
+				throw new IllegalArgumentException("Điều kiện lọc từ điển không được chứa chú thích SQL");
 			}
 			int orderByIndex = findTopLevelOrderBy(trimmed);
 			String conditionSql = orderByIndex < 0 ? trimmed : trimmed.substring(0, orderByIndex).trim();
@@ -74,11 +74,11 @@ public final class DictSqlConditionCheckUtil {
 					: trimmed.substring(orderByIndex).replaceFirst("(?i)^order\\s+by\\s+", "").trim();
 			if ((!conditionSql.isEmpty() && !validateCondition(conditionSql, conditionFields))
 					|| (orderBySql != null && !validateOrderBy(orderBySql, conditionFields))) {
-				throw new IllegalArgumentException("不支持的字典过滤条件");
+				throw new IllegalArgumentException("Điều kiện lọc từ điển không được hỗ trợ");
 			}
 			return conditionFields;
 		} catch (Exception e) {
-			throw new IllegalArgumentException("不支持的字典过滤条件", e);
+			throw new IllegalArgumentException("Điều kiện lọc từ điển không được hỗ trợ", e);
 		}
 	}
 
@@ -110,7 +110,7 @@ public final class DictSqlConditionCheckUtil {
 	}
 
 	/**
-	 * 定位字符串和括号之外的 ORDER BY，避免误判条件值中的普通文本。
+	 * Định vị ORDER BY nằm ngoài chuỗi và dấu ngoặc, tránh nhận nhầm văn bản thông thường trong giá trị điều kiện.
 	 */
 	private static int findTopLevelOrderBy(String value) {
 		char quote = 0;
@@ -162,7 +162,7 @@ public final class DictSqlConditionCheckUtil {
 	}
 
 	/**
-	 * 仅识别字符串和引用标识符之外的 SQL 注释，避免误伤普通文本中的注释符号。
+	 * Chỉ nhận dạng chú thích SQL nằm ngoài chuỗi và định danh được trích dẫn, tránh nhận nhầm ký hiệu chú thích trong văn bản thông thường.
 	 */
 	private static boolean containsSqlComment(String value) {
 		char quote = 0;
@@ -184,11 +184,11 @@ public final class DictSqlConditionCheckUtil {
 				quote = current;
 				continue;
 			}
-			//update-begin---author:scott ---date:20261027  for：【GHSA-xmw4-rx44-4jcp】MySQL的#也是行注释-----------
+			//update-begin---author:scott ---date:20261027  for：【GHSA-xmw4-rx44-4jcp】Dấu # của MySQL#cũng là chú thích dòng-----------
 			if (current == '#') {
 				return true;
 			}
-			//update-end---author:scott ---date:20261027  for：【GHSA-xmw4-rx44-4jcp】MySQL的#也是行注释-----------
+			//update-end---author:scott ---date:20261027  for：【GHSA-xmw4-rx44-4jcp】Dấu # của MySQL#cũng là chú thích dòng-----------
 			if (i + 1 < value.length()
 					&& ((current == '-' && value.charAt(i + 1) == '-')
 					|| (current == '/' && value.charAt(i + 1) == '*'))) {
@@ -234,11 +234,11 @@ public final class DictSqlConditionCheckUtil {
 	private static boolean validateComparisonExpression(BinaryExpression comparison, Set<String> conditionFields) {
 		Expression leftExpression = comparison.getLeftExpression();
 		Expression rightExpression = comparison.getRightExpression();
-		//update-begin---author:scott ---date:20260831  for：【issues/9840】兼容1=1字典占位条件-----------
+		//update-begin---author:scott ---date:20260831  for：【issues/9840】Tương thích 1=1 Điều kiện giữ chỗ của từ điển-----------
 		if (comparison instanceof EqualsTo && isLiteral(leftExpression) && isLiteral(rightExpression)) {
 			return true;
 		}
-		//update-end---author:scott ---date:20260831  for：【issues/9840】兼容1=1字典占位条件-----------
+		//update-end---author:scott ---date:20260831  for：【issues/9840】Tương thích 1=1 Điều kiện giữ chỗ của từ điển-----------
 		return addConditionField(leftExpression, conditionFields) && isLiteral(rightExpression);
 	}
 
@@ -255,11 +255,11 @@ public final class DictSqlConditionCheckUtil {
 		if (!(expression instanceof Column column)) {
 			return false;
 		}
-		//update-begin---author:scott ---date:20261027  for：【GHSA-xmw4-rx44-4jcp】字段名只允许普通标识符，防止password#之类绕过敏感字段检查-----------
+		//update-begin---author:scott ---date:20261027  for：【GHSA-xmw4-rx44-4jcp】Tên trường chỉ cho phép định danh thông thường, ngăn password#các trường hợp tương tự bypass kiểm tra trường nhạy cảm-----------
 		if (!COLUMN_NAME_PATTERN.matcher(column.getFullyQualifiedName()).matches()) {
 			return false;
 		}
-		//update-end---author:scott ---date:20261027  for：【GHSA-xmw4-rx44-4jcp】字段名只允许普通标识符，防止password#之类绕过敏感字段检查-----------
+		//update-end---author:scott ---date:20261027  for：【GHSA-xmw4-rx44-4jcp】Tên trường chỉ cho phép định danh thông thường, ngăn password#các trường hợp tương tự bypass kiểm tra trường nhạy cảm-----------
 		conditionFields.add(column.getFullyQualifiedName());
 		return true;
 	}

@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * 【issue/9677】SQL注入换行符绕过修复 — 单元测试
+ * 【issue/9677】Sửa lỗi bỏ qua SQL injection bằng ký tự xuống dòng — Kiểm thử đơn vị
  *
- * 漏洞：攻击者用换行符(\n)替代空格，绕过关键词黑名单和正则检测
- * 例如 "1\nand\nsleep(2)" 绕过 "and " 和 "sleep\\s*\\(" 的检测
+ * Lỗ hổng: Kẻ tấn công dùng ký tự xuống dòng(\n)thay cho khoảng trắng, bỏ qua danh sách đen từ khóa và kiểm tra regex
+ * Ví dụ "1\nand\nsleep(2)" Bypass "and " và "sleep\\s*\\(" của việc kiểm tra
  *
- * 修复：在所有检测入口对输入做 \\s+ → 空格 的归一化，正则加 (?s) DOTALL 模式
+ * Sửa: Tại tất cả các điểm vào kiểm tra, chuẩn hóa đầu vào bằng cách chuyển \\s+ → khoảng trắng, thêm vào regex (?s) DOTALL Chế độ
  *
  * @author wangshuai
  * @date 2026-06-16
@@ -24,63 +24,63 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(PrintTestResultExtension.class)
 public class Issue9677_SqlInjectionNewlineBypassTest {
 
-    // ========== 漏洞一：SQL注入换行绕过 ==========
+    // ========== Lỗ hổng 1: Bỏ qua SQL injection bằng ký tự xuống dòng ==========
 
     @Nested
-    @DisplayName("filterContent — 换行绕过检测")
+    @DisplayName("filterContent — Phát hiện bypass bằng ký tự xuống dòng")
     class FilterContentNewlineBypass {
 
         @Test
-        @DisplayName("正常空格形式 'and sleep(2)' 被拦截（回归）")
+        @DisplayName("Dạng khoảng trắng bình thường 'and sleep(2)' Bị chặn (hồi quy)")
         void normalSpaceBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.filterContent("1 and sleep(2)", null));
         }
 
         @Test
-        @DisplayName("换行符形式 '1\\nand\\nsleep(2)' 应被拦截")
+        @DisplayName("Dạng ký tự xuống dòng '1\\nand\\nsleep(2)' nên bị chặn")
         void newlineAndSleepBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.filterContent("1\nand\nsleep(2)", null));
         }
 
         @Test
-        @DisplayName("制表符形式 '1\\tand\\tsleep(2)' 应被拦截")
+        @DisplayName("Dạng ký tự tab '1\\tand\\tsleep(2)' nên bị chặn")
         void tabAndSleepBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.filterContent("1\tand\tsleep(2)", null));
         }
 
         @Test
-        @DisplayName("回车换行混合 '1\\r\\nand\\r\\nsleep(2)' 应被拦截")
+        @DisplayName("Hỗn hợp CR LF '1\\r\\nand\\r\\nsleep(2)' nên bị chặn")
         void crlfAndSleepBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.filterContent("1\r\nand\r\nsleep(2)", null));
         }
 
         @Test
-        @DisplayName("换行符形式 '1\\nselect\\n1' 应被拦截")
+        @DisplayName("Dạng ký tự xuống dòng '1\\nselect\\n1' nên bị chặn")
         void newlineSelectBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.filterContent("1\nselect\n1", null));
         }
 
         @Test
-        @DisplayName("换行符形式 '1\\nor\\n1=1' 应被拦截")
+        @DisplayName("Dạng ký tự xuống dòng '1\\nor\\n1=1' nên bị chặn")
         void newlineOrBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.filterContent("1\nor\n1=1", null));
         }
 
         @Test
-        @DisplayName("换行符+正则函数 'benchmark\\n(1000,md5(1))' 应被拦截")
+        @DisplayName("Ký tự xuống dòng+Hàm regex 'benchmark\\n(1000,md5(1))' nên bị chặn")
         void newlineBenchmarkBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.filterContent("1\nand\nbenchmark\n(1000,md5(1))", null));
         }
 
         @Test
-        @DisplayName("换行符+show tables应被拦截")
+        @DisplayName("Ký tự xuống dòng+show tables nên bị chặn")
         void newlineShowTablesBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.filterContent("1\nand\nshow\ntables", null));
@@ -88,46 +88,46 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
     }
 
     @Nested
-    @DisplayName("specialFilterContentForDictSql — 换行绕过检测")
+    @DisplayName("specialFilterContentForDictSql — Phát hiện bypass bằng ký tự xuống dòng")
     class DictSqlNewlineBypass {
 
         @Test
-        @DisplayName("正常空格形式 'and sleep(5)' 被拦截（回归）")
+        @DisplayName("Dạng khoảng trắng bình thường 'and sleep(5)' Bị chặn (hồi quy)")
         void normalSpaceBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1 and sleep(5)"));
         }
 
         @Test
-        @DisplayName("换行符形式 '1\\nand\\nsleep(5)' 应被拦截")
+        @DisplayName("Dạng ký tự xuống dòng '1\\nand\\nsleep(5)' nên bị chặn")
         void newlineSleepBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1\nand\nsleep(5)"));
         }
 
         @Test
-        @DisplayName("换行符+select 绕过应被拦截")
+        @DisplayName("Ký tự xuống dòng+select Bypass nên bị chặn")
         void newlineSelectBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1\nunion\nselect\npassword\nfrom\nsys_user"));
         }
 
         @Test
-        @DisplayName("换行符+database()应被拦截")
+        @DisplayName("Ký tự xuống dòng+database()nên bị chặn")
         void newlineDatabaseFuncBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1\nand\ndatabase()='jeecg'"));
         }
 
         @Test
-        @DisplayName("制表符+extractvalue应被拦截")
+        @DisplayName("Ký tự tab+extractvalue nên bị chặn")
         void tabExtractvalueBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1\tand\textractvalue(1,concat(0x7e))"));
         }
 
         @Test
-        @DisplayName("多种空白混合应被拦截")
+        @DisplayName("Nhiều loại khoảng trắng hỗn hợp nên bị chặn")
         void mixedWhitespaceBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1\n\tand \nsleep(5)"));
@@ -135,39 +135,39 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
     }
 
     @Nested
-    @DisplayName("specialFilterContentForOnlineReport — 换行绕过检测")
+    @DisplayName("specialFilterContentForOnlineReport — Phát hiện bypass bằng ký tự xuống dòng")
     class OnlineReportNewlineBypass {
 
         @Test
-        @DisplayName("换行符+insert绕过应被拦截")
+        @DisplayName("Ký tự xuống dòng+insert Bypass nên bị chặn")
         void newlineInsertBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForOnlineReport("1\ninsert\ninto\nsys_user"));
         }
 
         @Test
-        @DisplayName("换行符+delete绕过应被拦截")
+        @DisplayName("Ký tự xuống dòng+delete Bypass nên bị chặn")
         void newlineDeleteBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForOnlineReport("1\ndelete\nfrom\nsys_user"));
         }
 
         @Test
-        @DisplayName("换行符+drop绕过应被拦截")
+        @DisplayName("Ký tự xuống dòng+drop Bypass nên bị chặn")
         void newlineDropBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForOnlineReport("1;\ndrop\ntable\nsys_user"));
         }
     }
 
-    // ========== 合法输入不被误拦截 ==========
+    // ========== Đầu vào hợp lệ không bị chặn nhầm ==========
 
     @Nested
-    @DisplayName("合法输入回归 — 确保不误拦截")
+    @DisplayName("Hồi quy đầu vào hợp lệ — Đảm bảo không chặn nhầm")
     class LegitimateInputs {
 
         @Test
-        @DisplayName("简单条件通过")
+        @DisplayName("Điều kiện đơn giản được thông qua")
         void simpleConditionPasses() {
             assertDoesNotThrow(() -> SqlInjectionUtil.filterContent("status=1", null));
             assertDoesNotThrow(() -> SqlInjectionUtil.specialFilterContentForDictSql("status=1"));
@@ -175,14 +175,14 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
         }
 
         @Test
-        @DisplayName("含引号的字符串值通过")
+        @DisplayName("Giá trị chuỗi chứa dấu ngoặc kép được thông qua")
         void quotedValuePasses() {
             assertDoesNotThrow(() -> SqlInjectionUtil.specialFilterContentForDictSql("dept_id='10001'"));
             assertDoesNotThrow(() -> SqlInjectionUtil.specialFilterContentForDictSql("create_time > '2026-01-01'"));
         }
 
         @Test
-        @DisplayName("空/null值通过")
+        @DisplayName("Trống/null Giá trị được thông qua")
         void blankPasses() {
             assertDoesNotThrow(() -> SqlInjectionUtil.filterContent((String) "", null));
             assertDoesNotThrow(() -> SqlInjectionUtil.filterContent((String) null, null));
@@ -193,27 +193,27 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
         }
 
         @Test
-        @DisplayName("字典条件中含like的合法查询通过")
+        @DisplayName("Truy vấn hợp lệ chứa like trong điều kiện từ điển được thông qua")
         void likePasses() {
             assertDoesNotThrow(() -> SqlInjectionUtil.specialFilterContentForDictSql("name like '%张%'"));
         }
 
         @Test
-        @DisplayName("含数字比较的条件通过")
+        @DisplayName("Điều kiện chứa so sánh số được thông qua")
         void numericComparisonPasses() {
             assertDoesNotThrow(() -> SqlInjectionUtil.specialFilterContentForDictSql("age >= 18"));
             assertDoesNotThrow(() -> SqlInjectionUtil.specialFilterContentForDictSql("level != 0"));
         }
     }
 
-    // ========== 既有攻击回归 ==========
+    // ========== Hồi quy tấn công đã có ==========
 
     @Nested
-    @DisplayName("既有攻击向量回归 — 确保已有修复不被破坏")
+    @DisplayName("Hồi quy vector tấn công đã có — Đảm bảo bản sửa hiện có không bị phá vỡ")
     class ExistingAttackRegression {
 
         @Test
-        @DisplayName("【#9523】时间盲注 sleep/benchmark/pg_sleep/waitfor delay 仍拦截")
+        @DisplayName("【#9523】Blind injection theo thời gian sleep/benchmark/pg_sleep/waitfor delay Vẫn chặn")
         void timeBlindStillBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1 and sleep(5)"));
@@ -224,7 +224,7 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
         }
 
         @Test
-        @DisplayName("【#9524】(extractvalue/(updatexml 报错注入仍拦截")
+        @DisplayName("【#9524】(extractvalue/(updatexml Injection báo lỗi vẫn bị chặn")
         void errorBasedStillBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql(
@@ -235,7 +235,7 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
         }
 
         @Test
-        @DisplayName("【#9571】database()/version()/ascii() 信息泄露函数仍拦截")
+        @DisplayName("【#9571】database()/version()/ascii() Hàm rò rỉ thông tin vẫn bị chặn")
         void booleanBlindStillBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1 and database()='jeecg-boot'"));
@@ -246,7 +246,7 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
         }
 
         @Test
-        @DisplayName("【#9572】select(/insert(/delete( 紧贴形式仍拦截")
+        @DisplayName("【#9572】select(/insert(/delete( Dạng dính sát vẫn bị chặn")
         void keywordParenStillBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql(
@@ -256,7 +256,7 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
         }
 
         @Test
-        @DisplayName("SQL注释 -- 和 /**/ 仍拦截")
+        @DisplayName("SQL Chú thích -- và /**/ Vẫn chặn")
         void sqlCommentStillBlocked() {
             assertThrows(RuntimeException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id=1-- "));
@@ -265,7 +265,7 @@ public class Issue9677_SqlInjectionNewlineBypassTest {
         }
 
         @Test
-        @DisplayName("information_schema 仍拦截")
+        @DisplayName("information_schema Vẫn chặn")
         void infoSchemaStillBlocked() {
             assertThrows(JeecgSqlInjectionException.class,
                     () -> SqlInjectionUtil.specialFilterContentForDictSql("id in (select 1 from information_schema.tables)"));

@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: 字典类
+ * @Description: Lớp từ điển
  * @author: jeecg-boot
  */
 @Data
@@ -35,27 +35,27 @@ public class DictModel implements Serializable{
 	}
 
 	/**
-	 * 字典value
+	 * Từ điển value
 	 */
 	private String value;
 	/**
-	 * 字典文本
+	 * Văn bản danh mục
 	 */
 	private String text;
 	/**
-	 * 字典颜色
+	 * Màu từ điển
 	 */
 	private String color;
 
 	/**
-	 * 特殊用途： JgEditableTable
+	 * Mục đích đặc biệt: JgEditableTable
 	 * @return
 	 */
 	public String getTitle() {
 		return this.text;
 	}
 	/**
-	 * 特殊用途： vue3 Select组件
+	 * Mục đích đặc biệt: component Select của vue3
 	 */
 	public String getLabel() {
 		return this.text;
@@ -63,8 +63,8 @@ public class DictModel implements Serializable{
 
 
 	/**
-	 * 用于表单设计器 关联记录表数据存储
-	 * QQYUN-5595【表单设计器】他表字段 导入没有翻译
+	 * Dùng cho trình thiết kế biểu mẫu để lưu trữ dữ liệu bảng bản ghi liên kết
+	 * QQYUN-5595【Trình thiết kế biểu mẫu】Trường của bảng khác khi nhập chưa được dịch
 	 */
 	private JSONObject jsonObject;
 

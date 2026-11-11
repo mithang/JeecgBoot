@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * 消息模板dto
+ * Mẫu tin nhắn dto
  * @author: jeecg-boot
  */
 @Data
@@ -15,17 +15,17 @@ public class TemplateDTO implements Serializable {
     private static final long serialVersionUID = 5848247133907528650L;
 
     /**
-     * 模板编码
+     * Mã mẫu
      */
     protected String templateCode;
 
     /**
-     * 模板参数
+     * Tham số mẫu
      */
     protected Map<String, String> templateParam;
 
     /**
-     * 构造器 通过设置模板参数和模板编码 作为参数获取消息内容
+     * Constructor lấy nội dung tin nhắn làm tham số bằng cách đặt tham số mẫu và mã mẫu
      */
     public TemplateDTO(String templateCode, Map<String, String> templateParam){
         this.templateCode = templateCode;

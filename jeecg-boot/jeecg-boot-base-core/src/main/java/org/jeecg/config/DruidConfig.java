@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import com.alibaba.druid.util.Utils;
 
 /**
- * @Description: DruidConfig配置类
+ * @Description: DruidConfig Lớp cấu hình
  * @author: jeecg-boot
  */
 @Configuration
@@ -24,22 +24,22 @@ import com.alibaba.druid.util.Utils;
 public class DruidConfig {
 
     /**
-     * 带有广告的common.js全路径，druid-1.1.14
+     * có chứa quảng cáo common.js đường dẫn đầy đủ,druid-1.1.14
      */
     private static final String FILE_PATH = "support/http/resources/js/common.js";
     /**
-     * 原始脚本，触发构建广告的语句
+     * Script gốc, câu lệnh kích hoạt việc xây dựng quảng cáo
      */
     private static final String ORIGIN_JS = "this.buildFooter();";
     /**
-     * 替换后的脚本
+     * Script sau khi thay thế
      */
     private static final String NEW_JS = "//this.buildFooter();";
 
     /**
-     * 去除Druid监控页面的广告
+     * Loại bỏ quảng cáo trên trang giám sát Druid
      *
-     * @param properties DruidStatProperties属性集合
+     * @param properties DruidStatProperties Tập hợp thuộc tính
      * @return {@link FilterRegistrationBean}
      */
     @Bean
@@ -47,14 +47,14 @@ public class DruidConfig {
     @ConditionalOnProperty(name = "spring.datasource.druid.stat-view-servlet.enabled", havingValue = "true")
     public FilterRegistrationBean<RemoveAdFilter> removeDruidAdFilter(
             DruidStatProperties properties) throws IOException {
-        // 获取web监控页面的参数
+        // Lấy tham số của trang giám sát web
         DruidStatProperties.StatViewServlet config = properties.getStatViewServlet();
-        // 提取common.js的配置路径
+        // Trích xuất common.js đường dẫn cấu hình
         String pattern = config.getUrlPattern() != null ? config.getUrlPattern() : "/druid/*";
         String commonJsPattern = pattern.replaceAll("\\*", "js/common.js");
-        // 获取common.js
+        // Lấy common.js
         String text = Utils.readFromResource(FILE_PATH);
-        // 屏蔽 this.buildFooter(); 不构建广告
+        // Chặn this.buildFooter(); không xây dựng quảng cáo
         final String newJs = text.replace(ORIGIN_JS, NEW_JS);
         FilterRegistrationBean<RemoveAdFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new RemoveAdFilter(newJs));
@@ -63,7 +63,7 @@ public class DruidConfig {
     }
 
     /**
-     * 删除druid的广告过滤器
+     * Xóa bộ lọc quảng cáo của Druid
      *
      * @author BBF
      */
@@ -79,7 +79,7 @@ public class DruidConfig {
         public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
                 throws IOException, ServletException {
             chain.doFilter(request, response);
-            // 重置缓冲区，响应头不会被重置
+            // Đặt lại bộ đệm, header phản hồi sẽ không bị đặt lại
             response.resetBuffer();
             response.getWriter().write(newJs);
         }

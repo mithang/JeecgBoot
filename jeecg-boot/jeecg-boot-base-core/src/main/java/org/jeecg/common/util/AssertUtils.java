@@ -4,7 +4,7 @@ package org.jeecg.common.util;
 import org.jeecg.common.exception.JeecgBootAssertException;
 
 /**
- * 断言检查工具
+ * Công cụ kiểm tra assertion
  * for for [QQYUN-10990]AIRAG
  * @author chenrui
  * @date 2017-06-22 10:05:56
@@ -12,7 +12,7 @@ import org.jeecg.common.exception.JeecgBootAssertException;
 public class AssertUtils {
 
     /**
-     * 确保对象为空,如果不为空抛出异常
+     * Đảm bảo đối tượng rỗng,Nếu không rỗng sẽ ném ngoại lệ
      *
      * @param msg
      * @param obj
@@ -28,7 +28,7 @@ public class AssertUtils {
 
 
     /**
-     * 确保对象不为空,如果为空抛出异常
+     * Đảm bảo đối tượng không rỗng,Nếu rỗng sẽ ném ngoại lệ
      *
      * @param msg
      * @param obj
@@ -44,7 +44,7 @@ public class AssertUtils {
 
 
     /**
-     * 验证对象是否相同
+     * Kiểm chứng đối tượng có giống nhau không
      *
      * @param message
      * @param expected
@@ -61,7 +61,7 @@ public class AssertUtils {
     }
 
     /**
-     * 验证不相同
+     * Kiểm chứng không giống nhau
      *
      * @param message
      * @param expected
@@ -78,7 +78,7 @@ public class AssertUtils {
     }
 
     /**
-     * 验证是否相等
+     * Kiểm chứng có bằng nhau không
      *
      * @param message
      * @param expected
@@ -95,7 +95,7 @@ public class AssertUtils {
     }
 
     /**
-     * 验证不相等
+     * Kiểm chứng không bằng nhau
      *
      * @param message
      * @param unexpected
@@ -111,7 +111,7 @@ public class AssertUtils {
     }
 
     /**
-     * 验证是否为真
+     * Kiểm chứng có phải là true không
      *
      * @param message
      * @param condition
@@ -123,7 +123,7 @@ public class AssertUtils {
     }
 
     /**
-     * 验证 condition是否为false
+     * Kiểm chứng condition có phải là false
      *
      * @param message
      * @param condition
@@ -134,7 +134,7 @@ public class AssertUtils {
 
 
     /**
-     * 验证是否存在
+     * Kiểm chứng có tồn tại không
      *
      * @param message
      * @param obj
@@ -153,7 +153,7 @@ public class AssertUtils {
     }
 
     /**
-     * 验证是否不存在
+     * Kiểm chứng có không tồn tại không
      *
      * @param message
      * @param obj
@@ -174,7 +174,7 @@ public class AssertUtils {
 
 
     /**
-     * 确保src大于des
+     * Đảm bảo src lớn hơn des
      *
      * @param message
      * @param src
@@ -190,7 +190,7 @@ public class AssertUtils {
     }
 
     /**
-     * 确保src大于等于des
+     * Đảm bảo src lớn hơn hoặc bằng des
      *
      * @param message
      * @param src
@@ -207,7 +207,7 @@ public class AssertUtils {
 
 
     /**
-     * 确保src小于des
+     * Đảm bảo src nhỏ hơn des
      *
      * @param message
      * @param src
@@ -222,7 +222,7 @@ public class AssertUtils {
     }
 
     /**
-     * 确保src小于等于des
+     * Đảm bảo src nhỏ hơn hoặc bằng des
      *
      * @param message
      * @param src

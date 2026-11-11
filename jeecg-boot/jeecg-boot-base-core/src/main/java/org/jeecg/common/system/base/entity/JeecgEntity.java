@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: Entity基类
+ * @Description: Entity Lớp cơ sở
  * @Author: dangzhenghui@163.com
  * @Date: 2019-4-28
  * @Version: 1.1
@@ -34,33 +34,33 @@ public class JeecgEntity implements Serializable {
     private java.lang.String id;
 
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
-    @Excel(name = "创建人", width = 15)
+    @Schema(description = "Người tạo")
+    @Excel(name = "Người tạo", width = 15)
     private java.lang.String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
-    @Schema(description = "创建时间")
-    @Excel(name = "创建时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "Thời gian tạo")
+    @Excel(name = "Thời gian tạo", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
-    @Excel(name = "更新人", width = 15)
+    @Schema(description = "Người cập nhật")
+    @Excel(name = "Người cập nhật", width = 15)
     private java.lang.String updateBy;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
-    @Schema(description = "更新时间")
-    @Excel(name = "更新时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "Thời gian cập nhật")
+    @Excel(name = "Thời gian cập nhật", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date updateTime;

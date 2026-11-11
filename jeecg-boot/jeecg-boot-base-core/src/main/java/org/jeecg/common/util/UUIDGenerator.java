@@ -12,7 +12,7 @@ public class UUIDGenerator {
 
 	
 	/**
-	 * 产生一个32位的UUID
+	 * Tạo một chuỗi có 32 ký tự UUID
 	 * 
 	 * @return
 	 */

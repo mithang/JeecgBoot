@@ -36,14 +36,14 @@ import org.jeecg.common.util.oConvertUtils;
 /**
  * @Author Scott
  * @Date 2018-07-12 14:23
- * @Desc JWT工具类
+ * @Desc JWT Lớp công cụ
  **/
 @Slf4j
 public class JwtUtil {
 
-	/**PC端，Token有效期为7天（Token在reids中缓存时间为两倍）*/
+	/**PC, Token có hiệu lực 7 ngày (thời gian Token được cache trong Redis gấp đôi)*/
 	public static final long EXPIRE_TIME = (7 * 12) * 60 * 60 * 1000L;
-	/**APP端，Token有效期为30天（Token在reids中缓存时间为两倍）*/
+	/**APP, Token có hiệu lực 30 ngày (thời gian Token được cache trong Redis gấp đôi)*/
 	public static final long APP_EXPIRE_TIME = (30 * 12) * 60 * 60 * 1000L;
 	static final String WELL_NUMBER = SymbolConstant.WELL_NUMBER + SymbolConstant.LEFT_CURLY_BRACKET;
 
@@ -58,11 +58,11 @@ public class JwtUtil {
 			Result jsonResult = new Result(code, errorMsg);
 			jsonResult.setSuccess(false);
 			
-			// 设置响应头和内容类型
+			// Đặt response header và loại nội dung
 			response.setStatus(code);
 			response.setHeader("Content-type", "text/html;charset=UTF-8");
 			response.setContentType("application/json;charset=UTF-8");
-			// 使用 ObjectMapper 序列化为 JSON 字符串
+			// Sử dụng ObjectMapper để tuần tự hóa thành chuỗi JSON
 			ObjectMapper objectMapper = new ObjectMapper();
 			String json = objectMapper.writeValueAsString(jsonResult);
 			response.getWriter().write(json);
@@ -73,30 +73,30 @@ public class JwtUtil {
 	}
 
 	/**
-	 * 校验token是否正确
+	 * Kiểm chứng token có đúng không
 	 *
-	 * @param token  密钥
-	 * @param secret 用户的密码
-	 * @return 是否正确
+	 * @param token  Khóa
+	 * @param secret Mật khẩu của người dùng
+	 * @return Có đúng không
 	 */
 	public static boolean verify(String token, String username, String secret) {
 		try {
-			// 根据密码生成JWT效验器
+			// Tạo bộ kiểm chứng JWT theo mật khẩu
 			Algorithm algorithm = Algorithm.HMAC256(secret);
 			JWTVerifier verifier = JWT.require(algorithm).withClaim("username", username).build();
-			// 效验TOKEN
+			// Kiểm chứng TOKEN
 			DecodedJWT jwt = verifier.verify(token);
 			return true;
 		} catch (Exception e) {
-			log.warn("Token验证失败：" + e.getMessage(),e);
+			log.warn("Token Xác thực thất bại:" + e.getMessage(),e);
 			return false;
 		}
 	}
 
 	/**
-	 * 获得token中的信息无需secret解密也能获得
+	 * Lấy thông tin trong token không cần giải mã bằng secret cũng có được
 	 *
-	 * @return token中包含的用户名
+	 * @return token tên người dùng chứa trong đó
 	 */
 	public static String getUsername(String token) {
 		try {
@@ -109,58 +109,58 @@ public class JwtUtil {
 	}
 
 	/**
-	 * 生成签名,5min后过期
+	 * Tạo chữ ký,5min hết hạn sau
 	 *
-	 * @param username 用户名
-	 * @param secret   用户的密码
-	 * @return 加密的token
-	 * @deprecated 请使用sign(String username, String secret, String clientType)方法代替
+	 * @param username Tên người dùng
+	 * @param secret   Mật khẩu của người dùng
+	 * @return Đã mã hóa token
+	 * @deprecated Vui lòng sử dụng sign(String username, String secret, String clientType)phương thức thay thế
 	 */
 	@Deprecated
 	public static String sign(String username, String secret) {
 		Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
 		Algorithm algorithm = Algorithm.HMAC256(secret);
-		// 附带username信息
+		// Kèm theo thông tin username
 		return JWT.create().withClaim("username", username).withExpiresAt(date).sign(algorithm);
 
 	}
 
 
 	/**
-	 * 生成签名,5min后过期
+	 * Tạo chữ ký,5min hết hạn sau
 	 *
-	 * @param username 用户名
-	 * @param secret   用户的密码
-	 * @param expireTime 过期时间
-	 * @return 加密的token
-	 * @deprecated 请使用sign(String username, String secret, String clientType)方法代替
+	 * @param username Tên người dùng
+	 * @param secret   Mật khẩu của người dùng
+	 * @param expireTime Thời gian hết hạn
+	 * @return Đã mã hóa token
+	 * @deprecated Vui lòng sử dụng sign(String username, String secret, String clientType)phương thức thay thế
 	 */
 	@Deprecated
 	public static String sign(String username, String secret, Long expireTime) {
 		Date date = new Date(System.currentTimeMillis() + expireTime);
 		Algorithm algorithm = Algorithm.HMAC256(secret);
-		// 附带username信息
+		// Kèm theo thông tin username
 		return JWT.create().withClaim("username", username).withExpiresAt(date).sign(algorithm);
 
 	}
 
 	/**
-	 * 生成签名，根据客户端类型自动选择过期时间
-	 * for [JHHB-1030]【鉴权】移动端用户token到期后续期时间变成pc端时长
+	 * Tạo chữ ký, tự động chọn thời gian hết hạn theo loại client
+	 * for [JHHB-1030]【Xác thực】 Thời gian gia hạn sau khi token của người dùng mobile hết hạn trở thành thời lượng của PC
 	 *
-	 * @param username 用户名
-	 * @param secret   用户的密码
-	 * @param clientType 客户端类型（PC或APP）
-	 * @return 加密的token
+	 * @param username Tên người dùng
+	 * @param secret   Mật khẩu của người dùng
+	 * @param clientType Loại client (PC hoặc APP)
+	 * @return Đã mã hóa token
 	 */
 	public static String sign(String username, String secret, String clientType) {
-		// 根据客户端类型选择对应的过期时间
+		// Chọn thời gian hết hạn tương ứng theo loại client
 		long expireTime = CommonConstant.CLIENT_TYPE_APP.equalsIgnoreCase(clientType) 
 			? APP_EXPIRE_TIME 
 			: EXPIRE_TIME;
 		Date date = new Date(System.currentTimeMillis() + expireTime);
 		Algorithm algorithm = Algorithm.HMAC256(secret);
-		// 附带username和clientType信息
+		// Kèm theo thông tin username và clientType
 		return JWT.create()
 			.withClaim("username", username)
 			.withClaim("clientType", clientType)
@@ -169,26 +169,26 @@ public class JwtUtil {
 	}
 
 	/**
-	 * 从token中获取客户端类型
-	 * for [JHHB-1030]【鉴权】移动端用户token到期后续期时间变成pc端时长
+	 * Lấy loại client từ token
+	 * for [JHHB-1030]【Xác thực】 Thời gian gia hạn sau khi token của người dùng mobile hết hạn trở thành thời lượng của PC
 	 *
 	 * @param token JWT token
-	 * @return 客户端类型，如果不存在则返回PC（兼容旧token）
+	 * @return Loại client, nếu không tồn tại thì trả về PC (tương thích token cũ)
 	 */
 	public static String getClientType(String token) {
 		try {
 			DecodedJWT jwt = JWT.decode(token);
 			String clientType = jwt.getClaim("clientType").asString();
-			// 如果clientType为空，返回默认值PC（兼容旧token）
+			// Nếu clientType rỗng, trả về giá trị mặc định PC (tương thích token cũ)
 			return oConvertUtils.isNotEmpty(clientType) ? clientType : CommonConstant.CLIENT_TYPE_PC;
 		} catch (JWTDecodeException e) {
-			log.warn("解析token中的clientType失败，使用默认值PC：" + e.getMessage());
+			log.warn("Phân tích clientType trong token thất bại, sử dụng giá trị mặc định PC:" + e.getMessage());
 			return CommonConstant.CLIENT_TYPE_PC;
 		}
 	}
 
 	/**
-	 * 根据request中的token获取用户账号
+	 * Lấy tài khoản người dùng theo token trong request
 	 * 
 	 * @param request
 	 * @return
@@ -198,19 +198,19 @@ public class JwtUtil {
 		String accessToken = request.getHeader("X-Access-Token");
 		String username = getUsername(accessToken);
 		if (oConvertUtils.isEmpty(username)) {
-			throw new JeecgBootException("未获取到用户");
+			throw new JeecgBootException("Chưa lấy được người dùng");
 		}
 		return username;
 	}
 	
 	/**
-	  *  从session中获取变量
+	  *  Lấy biến từ session
 	 * @param key
 	 * @return
 	 */
 	public static String getSessionData(String key) {
 		//${myVar}%
-		//得到${} 后面的值
+		//Lấy được${} Giá trị phía sau
 		String moshi = "";
 		String wellNumber = WELL_NUMBER;
 
@@ -225,32 +225,32 @@ public class JwtUtil {
 			HttpSession session = SpringContextUtils.getHttpServletRequest().getSession();
 			returnValue = (String) session.getAttribute(key);
 		}
-		//结果加上${} 后面的值
+		//Kết quả cộng thêm${} Giá trị phía sau
 		if(returnValue!=null){returnValue = returnValue + moshi;}
 		return returnValue;
 	}
 	
 	/**
-	  * 从当前用户中获取变量
+	  * Lấy biến từ người dùng hiện tại
 	 * @param key
 	 * @param user
 	 * @return
 	 */
 	public static String getUserSystemData(String key, SysUserCacheInfo user) {
-		//1.优先获取 SysUserCacheInfo
+		//1.Ưu tiên lấy SysUserCacheInfo
 		if(user==null) {
 			try {
 				user = JeecgDataAutorUtils.loadUserInfo();
 			} catch (Exception e) {
-				log.warn("获取用户信息异常：" + e.getMessage());
+				log.warn("Lấy thông tin người dùng bất thường：" + e.getMessage());
 			}
 		}
-		//2.通过shiro获取登录用户信息
+		//2.Lấy thông tin người dùng đăng nhập qua shiro
 		LoginUser sysUser = null;
 		try {
 			sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		} catch (Exception e) {
-			log.warn("SecurityUtils.getSubject() 获取用户信息异常：" + e.getMessage());
+			log.warn("SecurityUtils.getSubject() Lấy thông tin người dùng bất thường：" + e.getMessage());
 		}
 
 		//#{sys_user_code}%
@@ -260,13 +260,13 @@ public class JwtUtil {
 			 moshi = key.substring(key.indexOf("}")+1);
 		}
 		String returnValue = null;
-		//针对特殊标示处理#{sysOrgCode}，判断替换
+		//Xử lý đối với ký hiệu đặc biệt#{sysOrgCode}, xác định và thay thế
 		if (key.contains(wellNumber)) {
 			key = key.substring(2,key.indexOf("}"));
 		} else {
 			key = key;
 		}
-		// 是否存在字符串标志
+		// Có tồn tại cờ chuỗi không
 		boolean multiStr;
 		if(oConvertUtils.isNotEmpty(key) && key.trim().matches("^\\[\\w+]$")){
 			key = key.substring(1,key.length()-1);
@@ -274,25 +274,25 @@ public class JwtUtil {
 		} else {
             multiStr = false;
         }
-		//替换为当前系统时间(年月日)
+		//Thay thế bằng thời gian hệ thống hiện tại(Năm tháng ngày)
 		if (key.equals(DataBaseConstant.SYS_DATE)|| key.toLowerCase().equals(DataBaseConstant.SYS_DATE_TABLE)) {
 			returnValue = DateUtils.formatDate();
 		}
-		//替换为当前系统时间（年月日时分秒）
+		//Thay thế bằng thời gian hệ thống hiện tại (năm-tháng-ngày giờ-phút-giây)
 		else if (key.equals(DataBaseConstant.SYS_TIME)|| key.toLowerCase().equals(DataBaseConstant.SYS_TIME_TABLE)) {
 			returnValue = DateUtils.now();
 		}
-		//流程状态默认值（默认未发起）
+		//Giá trị mặc định của trạng thái quy trình (mặc định chưa khởi tạo)
 		else if (key.equals(DataBaseConstant.BPM_STATUS)|| key.toLowerCase().equals(DataBaseConstant.BPM_STATUS_TABLE)) {
 			returnValue = "1";
 		}
 
-		//后台任务获取用户信息异常，导致程序中断
+		//Tác vụ nền lấy thông tin người dùng bị lỗi, khiến chương trình bị gián đoạn
 		if(sysUser==null && user==null){
 			return null;
 		}
 		
-		//替换为系统登录用户帐号
+		//Thay thế bằng tài khoản người dùng đăng nhập hệ thống
 		if (key.equals(DataBaseConstant.SYS_USER_CODE)|| key.toLowerCase().equals(DataBaseConstant.SYS_USER_CODE_TABLE)) {
 			if(user==null) {
 				returnValue = sysUser.getUsername();
@@ -301,7 +301,7 @@ public class JwtUtil {
 			}
 		}
 
-		// 替换为系统登录用户ID
+		// Thay thế bằng người dùng đăng nhập hệ thống ID
 		else if (key.equals(DataBaseConstant.SYS_USER_ID) || key.equalsIgnoreCase(DataBaseConstant.SYS_USER_ID_TABLE)) {
 			if(user==null) {
 				returnValue = sysUser.getId();
@@ -310,7 +310,7 @@ public class JwtUtil {
 			}
 		}
 
-		//替换为系统登录用户真实名字
+		//Thay thế bằng tên thật của người dùng đăng nhập hệ thống
 		else if (key.equals(DataBaseConstant.SYS_USER_NAME)|| key.toLowerCase().equals(DataBaseConstant.SYS_USER_NAME_TABLE)) {
 			if(user==null) {
 				returnValue = sysUser.getRealname();
@@ -319,7 +319,7 @@ public class JwtUtil {
 			}
 		}
 		
-		//替换为系统用户登录所使用的机构编码
+		//Thay thế bằng mã cơ quan mà người dùng hệ thống dùng để đăng nhập
 		else if (key.equals(DataBaseConstant.SYS_ORG_CODE)|| key.toLowerCase().equals(DataBaseConstant.SYS_ORG_CODE_TABLE)) {
 			if(user==null) {
 				returnValue = sysUser.getOrgCode();
@@ -328,7 +328,7 @@ public class JwtUtil {
 			}
 		}
 
-		// 替换为系统用户登录所使用的机构ID
+		// Thay thế bằng cơ quan mà người dùng hệ thống dùng để đăng nhập ID
 		else if (key.equals(DataBaseConstant.SYS_ORG_ID) || key.equalsIgnoreCase(DataBaseConstant.SYS_ORG_ID_TABLE)) {
 			if (user == null) {
 				returnValue = sysUser.getOrgId();
@@ -337,20 +337,20 @@ public class JwtUtil {
 			}
 		}
 
-		//替换为系统用户所拥有的所有机构编码
+		//Thay thế bằng tất cả mã cơ quan mà người dùng hệ thống sở hữu
 		else if (key.equals(DataBaseConstant.SYS_MULTI_ORG_CODE)|| key.toLowerCase().equals(DataBaseConstant.SYS_MULTI_ORG_CODE_TABLE)) {
 			if(user==null){
-				//TODO 暂时使用用户登录部门，存在逻辑缺陷，不是用户所拥有的部门
+				//TODO Tạm thời dùng phòng ban đăng nhập của người dùng, tồn tại khiếm khuyết logic, không phải là phòng ban mà người dùng sở hữu
 				returnValue = sysUser.getOrgCode();
-				// 代码逻辑说明: [QQYUN-10785]数据权限，查看自己拥有部门的权限中存在问题 #7288------------
+				// Giải thích logic mã: [QQYUN-10785]Quyền dữ liệu, có vấn đề khi xem quyền của phòng ban mình sở hữu #7288------------
 				returnValue = multiStr ? "'" + returnValue + "'" : returnValue;
 			}else{
 				if(user.isOneDepart()) {
 					returnValue = user.getSysMultiOrgCode().get(0);
-					// 代码逻辑说明: [QQYUN-10785]数据权限，查看自己拥有部门的权限中存在问题 #7288------------
+					// Giải thích logic mã: [QQYUN-10785]Quyền dữ liệu, có vấn đề khi xem quyền của phòng ban mình sở hữu #7288------------
 					returnValue = multiStr ? "'" + returnValue + "'" : returnValue;
 				}else {
-					// 代码逻辑说明: [QQYUN-10785]数据权限，查看自己拥有部门的权限中存在问题 #7288------------
+					// Giải thích logic mã: [QQYUN-10785]Quyền dữ liệu, có vấn đề khi xem quyền của phòng ban mình sở hữu #7288------------
 					returnValue = user.getSysMultiOrgCode().stream()
 							.filter(Objects::nonNull)
 							.map(orgCode -> {
@@ -365,7 +365,7 @@ public class JwtUtil {
 			}
 		}
 
-		// 替换为当前登录用户的角色code（多个逗号分割）
+		// Thay thế bằng role code của người dùng hiện đang đăng nhập (nhiều code phân cách bằng dấu phẩy)
 		else if (key.equals(DataBaseConstant.SYS_ROLE_CODE) || key.equalsIgnoreCase(DataBaseConstant.SYS_ROLE_CODE_TABLE)) {
 			if (user == null) {
 				returnValue = sysUser.getRoleCode();
@@ -374,12 +374,12 @@ public class JwtUtil {
 			}
 		}
 
-		// 代码逻辑说明: 多租户ID作为系统变量
+		// Giải thích logic mã: ID đa tenant làm biến hệ thống
 		else if (key.equals(TenantConstant.TENANT_ID) || key.toLowerCase().equals(TenantConstant.TENANT_ID_TABLE)){
 			try {
 				returnValue = SpringContextUtils.getHttpServletRequest().getHeader(CommonConstant.TENANT_ID);
 			} catch (Exception e) {
-				log.warn("获取系统租户异常：" + e.getMessage());
+				log.warn("Lỗi khi lấy tenant hệ thống:" + e.getMessage());
 			}
 		}
 		if(returnValue!=null){returnValue = returnValue + moshi;}

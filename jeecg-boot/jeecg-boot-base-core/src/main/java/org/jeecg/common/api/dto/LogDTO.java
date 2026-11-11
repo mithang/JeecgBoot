@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 日志对象
- * cloud api 用到的接口传输对象
+ * Đối tượng nhật ký
+ * cloud api Đối tượng truyền tải của API được sử dụng
  * @author: jeecg-boot
  */
 @Data
@@ -15,16 +15,16 @@ public class LogDTO implements Serializable {
 
     private static final long serialVersionUID = 8482720462943906924L;
 
-    /**内容*/
+    /**Nội dung*/
     private String logContent;
 
-    /**日志类型(0:操作日志;1:登录日志;2:定时任务)  */
+    /**Loại nhật ký(0:Nhật ký thao tác;1:Nhật ký đăng nhập;2:Tác vụ định kỳ)  */
     private Integer logType;
 
-    /**操作类型(1:添加;2:修改;3:删除;) */
+    /**Loại thao tác(1:Thêm;2:Sửa;3:Xóa;) */
     private Integer operateType;
 
-    /**登录用户 */
+    /**Người dùng đã đăng nhập */
     private LoginUser loginUser;
 
     private String id;
@@ -33,31 +33,31 @@ public class LogDTO implements Serializable {
     private Long costTime;
     private String ip;
 
-    /**请求参数 */
+    /**Tham số yêu cầu */
     private String requestParam;
 
-    /**请求类型*/
+    /**Loại yêu cầu*/
     private String requestType;
 
-    /**请求路径*/
+    /**Đường dẫn yêu cầu*/
     private String requestUrl;
 
-    /**请求方法 */
+    /**Phương thức yêu cầu */
     private String method;
 
-    /**操作人用户名称*/
+    /**Tên người dùng của người thao tác*/
     private String username;
 
-    /**操作人用户账户*/
+    /**Tài khoản người dùng của người thao tác*/
     private String userid;
 
     /**
-     * 租户ID
+     * Tenant ID
      */
     private Integer tenantId;
 
     /**
-     * 客户终端类型 pc:电脑端 app:手机端 h5:移动网页端
+     * Loại thiết bị đầu cuối của khách hàng pc:Máy tính app:Thiết bị di động h5:Trang web di động
      */
     private String clientType;
     

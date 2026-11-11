@@ -11,7 +11,7 @@ import java.util.concurrent.*;
  * @date 2025-09-04
  * @author scott
  * 
- * @Description: 支持shiro的API，获取当前登录人方法的线程池
+ * @Description: Thread pool hỗ trợ API của Shiro, lấy phương thức của người dùng hiện đang đăng nhập
  */
 public class ShiroThreadPoolExecutor extends ThreadPoolExecutor {
 

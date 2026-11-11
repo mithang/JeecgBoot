@@ -3,52 +3,52 @@ package org.jeecg.common.constant;
 /**
  * @Description: TenantConstant
  * @author: scott
- * @date: 2022年08月29日 15:29
+ * @date: 2022 năm 08 tháng 29 ngày 15:29
  */
 public interface TenantConstant {
-    /*------【低代码应用参数】----------------------------------------------*/
+    /*------【Tham số ứng dụng low-code】----------------------------------------------*/
     /**
-     * header的lowAppId标识
+     * header Định danh lowAppId của
      */
     String X_LOW_APP_ID = "X-Low-App-ID";
     /**
-     * 应用ID——实体字段
+     * ID ứng dụng — Trường thực thể
      */
     String FIELD_LOW_APP_ID = "lowAppId";
     /**
-     * 应用ID——表字段
+     * ID ứng dụng — Trường bảng
      */
     String DB_FIELD_LOW_APP_ID = "low_app_id";
-    /*------【低代码应用参数】---------------------------------------------*/
+    /*------【Tham số ứng dụng low-code】---------------------------------------------*/
 
-    /*--------【租户参数】-----------------------------------------------*/
+    /*--------【Tham số tenant】-----------------------------------------------*/
     /**
-     * 租户ID（实体字段名 和 url参数名）
+     * ID tenant (tên trường thực thể và tên tham số URL)
      */
     String TENANT_ID = "tenantId";
     /**
-     * 租户ID 数据库字段名
+     * Tên trường cơ sở dữ liệu của ID tenant
      */
     String TENANT_ID_TABLE = "tenant_id";
-    /*-------【租户参数】-----------------------------------------------*/
+    /*-------【Tham số tenant】-----------------------------------------------*/
 
     /**
-     * 超级管理员
+     * Siêu quản trị viên
      */
     String SUPER_ADMIN = "superAdmin";
 
     /**
-     * 组织账户管理员
+     * Quản trị viên tài khoản của tổ chức
      */
     String ACCOUNT_ADMIN = "accountAdmin";
 
     /**
-     * 组织应用管理员
+     * Quản trị viên ứng dụng của tổ chức
      */
     String APP_ADMIN = "appAdmin";
 
     /**
-     * 增加SignatureCheck注解POST请求的URL
+     * Của yêu cầu POST có thêm annotation SignatureCheck URL
      */
     String[] SIGNATURE_CHECK_POST_URL = { "/sys/tenant/joinTenantByHouseNumber", "/sys/tenant/invitationUser" };
 }

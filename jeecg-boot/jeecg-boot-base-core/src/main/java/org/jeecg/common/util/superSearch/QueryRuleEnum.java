@@ -3,34 +3,34 @@
 //import org.jeecg.common.util.oConvertUtils;
 //
 ///**
-// * Query 规则 常量
+// * Query Quy tắc Hằng số
 // * @Author Scott
-// * @Date 2019年02月14日
+// * @Date 2019 năm 14 tháng 02
 // */
 //public enum QueryRuleEnum {
 //
-//    /**查询规则 大于*/
-//    GT(">","大于"),
-//    /**查询规则 大于等于*/
-//    GE(">=","大于等于"),
-//    /**查询规则 小于*/
-//    LT("<","小于"),
-//    /**查询规则 小于等于*/
-//    LE("<=","小于等于"),
-//    /**查询规则 等于*/
-//    EQ("=","等于"),
-//    /**查询规则 不等于*/
-//    NE("!=","不等于"),
-//    /**查询规则 包含*/
-//    IN("IN","包含"),
-//    /**查询规则 全模糊*/
-//    LIKE("LIKE","全模糊"),
-//    /**查询规则 左模糊*/
-//    LEFT_LIKE("LEFT_LIKE","左模糊"),
-//    /**查询规则 右模糊*/
-//    RIGHT_LIKE("RIGHT_LIKE","右模糊"),
-//    /**查询规则 自定义SQL片段*/
-//    SQL_RULES("EXTEND_SQL","自定义SQL片段");
+//    /**Quy tắc truy vấn Lớn hơn*/
+//    GT(">","Lớn hơn"),
+//    /**Quy tắc truy vấn Lớn hơn hoặc bằng*/
+//    GE(">=","Lớn hơn hoặc bằng"),
+//    /**Quy tắc truy vấn Nhỏ hơn*/
+//    LT("<","Nhỏ hơn"),
+//    /**Quy tắc truy vấn Nhỏ hơn hoặc bằng*/
+//    LE("<=","Nhỏ hơn hoặc bằng"),
+//    /**Quy tắc truy vấn Bằng*/
+//    EQ("=","Bằng"),
+//    /**Quy tắc truy vấn Không bằng*/
+//    NE("!=","Không bằng"),
+//    /**Quy tắc truy vấn Chứa*/
+//    IN("IN","Chứa"),
+//    /**Quy tắc truy vấn Mờ toàn phần*/
+//    LIKE("LIKE","Mờ toàn phần"),
+//    /**Quy tắc truy vấn Mờ trái*/
+//    LEFT_LIKE("LEFT_LIKE","Mờ trái"),
+//    /**Quy tắc truy vấn Mờ phải*/
+//    RIGHT_LIKE("RIGHT_LIKE","Mờ phải"),
+//    /**Quy tắc truy vấn Đoạn SQL tùy chỉnh*/
+//    SQL_RULES("EXTEND_SQL","Đoạn SQL tùy chỉnh");
 //
 //    private String value;
 //

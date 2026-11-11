@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * 枚举字典数据 资源加载工具类
+ * Lớp công cụ tải tài nguyên dữ liệu từ điển enum
  *
  * @Author taoYan
  * @Date 2022/7/8 10:40
@@ -25,10 +25,10 @@ import java.util.*;
 public class ResourceUtil {
 
     /**
-     * 多个包扫描根路径
+     * Nhiều đường dẫn gốc quét package
      *
-     * 之所以让用户手工配置扫描路径，是为了避免不必要的类加载开销，提升启动性能。
-     * 请务必将所有枚举类所在包路径添加到此配置中。
+     * Sở dĩ để người dùng tự cấu hình đường dẫn quét là để tránh chi phí tải lớp không cần thiết và nâng cao hiệu năng khởi động.
+     * Vui lòng đảm bảo thêm đường dẫn package chứa tất cả các lớp enum vào cấu hình này.
      */
     private final static String[] BASE_SCAN_PACKAGES = {
             "org.jeecg.common.constant.enums",
@@ -37,43 +37,43 @@ public class ResourceUtil {
     };
     
     /**
-     * 枚举字典数据
+     * Dữ liệu từ điển enum
      */
     private final static Map<String, List<DictModel>> enumDictData = new HashMap<>(5);
     /**
-     * 所有枚举java类
+     * Tất cả các lớp enum java
      */
 
     private final static String CLASS_ENUM_PATTERN="/**/*Enum.class";
 
     /**
-     * 初始化状态标识
+     * Cờ trạng thái khởi tạo
      */
     private static volatile boolean initialized = false;
 
     /**
-     * 枚举类中获取字典数据的方法名
+     * Tên phương thức lấy dữ liệu từ điển trong lớp enum
      */
     private final static String METHOD_NAME = "getDictList";
 
     /**
-     * 获取枚举字典数据
-     * 获取枚举类对应的字典数据 SysDictServiceImpl#queryAllDictItems()
+     * Lấy dữ liệu từ điển enum
+     * Lấy dữ liệu từ điển tương ứng với lớp enum SysDictServiceImpl#queryAllDictItems()
      *
-     * @return 枚举字典数据
+     * @return Dữ liệu từ điển enum
      */
     public static Map<String, List<DictModel>> getEnumDictData() {
         if (!initialized) {
             synchronized (ResourceUtil.class) {
                 if (!initialized) {
                     long startTime = System.currentTimeMillis();
-                    log.debug("【枚举字典加载】开始初始化枚举字典数据...");
+                    log.debug("【Tải từ điển enum】Bắt đầu khởi tạo dữ liệu từ điển enum...");
 
                     initEnumDictData();
                     initialized = true;
 
                     long endTime = System.currentTimeMillis();
-                    log.debug("【枚举字典加载】枚举字典数据初始化完成，共加载 {} 个字典，总耗时: {}ms", enumDictData.size(), endTime - startTime);
+                    log.debug("【Tải từ điển enum】Khởi tạo dữ liệu từ điển enum hoàn tất, đã tải tổng cộng {} từ điển, tổng thời gian tiêu tốn: {}ms", enumDictData.size(), endTime - startTime);
                 }
             }
         }
@@ -81,7 +81,7 @@ public class ResourceUtil {
     }
 
     /**
-     * 使用多包路径扫描方式初始化枚举字典数据
+     * Khởi tạo dữ liệu từ điển enum bằng cách quét nhiều đường dẫn package
      */
     private static void initEnumDictData() {
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
@@ -89,21 +89,21 @@ public class ResourceUtil {
         long scanStartTime = System.currentTimeMillis();
         List<Resource> allResources = new ArrayList<>();
 
-        // 扫描多个包路径
+        // Quét nhiều đường dẫn package
         for (String basePackage : BASE_SCAN_PACKAGES) {
             String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + ClassUtils.convertClassNameToResourcePath(basePackage) + CLASS_ENUM_PATTERN;
 
             try {
                 Resource[] resources = resourcePatternResolver.getResources(pattern);
                 allResources.addAll(Arrays.asList(resources));
-                log.debug("【枚举字典加载】扫描包 {} 找到 {} 个枚举类文件", basePackage, resources.length);
+                log.debug("【Tải từ điển enum】 Quét gói {} Tìm thấy {} tệp lớp enum", basePackage, resources.length);
             } catch (Exception e) {
-                log.warn("【枚举字典加载】扫描包 {} 时出现异常: {}", basePackage, e.getMessage());
+                log.warn("【Tải từ điển enum】 Quét gói {} thì xảy ra ngoại lệ: {}", basePackage, e.getMessage());
             }
         }
 
         long scanEndTime = System.currentTimeMillis();
-        log.debug("【枚举字典加载】文件扫描完成，总共找到 {} 个枚举类文件，扫描耗时: {}ms", allResources.size(), scanEndTime - scanStartTime);
+        log.debug("【Tải từ điển enum】Quét tệp hoàn tất, tổng cộng tìm thấy {} tệp lớp enum, thời gian quét tiêu tốn: {}ms", allResources.size(), scanEndTime - scanStartTime);
 
         MetadataReaderFactory readerFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
@@ -115,22 +115,22 @@ public class ResourceUtil {
                 MetadataReader reader = readerFactory.getMetadataReader(resource);
                 String classname = reader.getClassMetadata().getClassName();
 
-                // 提前检查是否有@EnumDict注解，避免不必要的Class.forName
+                // Kiểm tra trước xem có@EnumDict annotation, tránh những việc không cần thiết Class.forName
                 if (hasEnumDictAnnotation(reader)) {
                     processEnumClass(classname);
                     processedCount++;
                 }
             } catch (Exception e) {
-                log.debug("处理资源异常: {} - {}", resource.getFilename(), e.getMessage());
+                log.debug("Xử lý ngoại lệ tài nguyên: {} - {}", resource.getFilename(), e.getMessage());
             }
         }
 
         long processEndTime = System.currentTimeMillis();
-        log.debug("【枚举字典加载】处理完成，实际处理 {} 个带注解的枚举类，处理耗时: {}ms", processedCount, processEndTime - processStartTime);
+        log.debug("【Tải từ điển enum】Xử lý hoàn tất, thực tế đã xử lý {} lớp enum có annotation, thời gian xử lý tiêu tốn: {}ms", processedCount, processEndTime - processStartTime);
     }
 
     /**
-     * 检查类是否有EnumDict注解（通过元数据，避免类加载）
+     * Kiểm tra lớp có annotation EnumDict không (thông qua metadata, tránh tải lớp)
      */
     private static boolean hasEnumDictAnnotation(MetadataReader reader) {
         try {
@@ -141,13 +141,13 @@ public class ResourceUtil {
     }
 
     /**
-     * 处理单个枚举类
+     * Xử lý một lớp enum
      */
     private static void processEnumClass(String classname) {
         try {
-            //update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName使用上下文类加载器，增强部署兼容性-----------
+            //update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
             Class<?> clazz = Class.forName(classname, true, Thread.currentThread().getContextClassLoader());
-            //update-end---author:scott ---date:20260416  for：【PR#9538】Class.forName使用上下文类加载器，增强部署兼容性-----------
+            //update-end---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
             EnumDict enumDict = clazz.getAnnotation(EnumDict.class);
 
             if (enumDict != null) {
@@ -156,26 +156,26 @@ public class ResourceUtil {
                     Method method = clazz.getDeclaredMethod(METHOD_NAME);
                     List<DictModel> list = (List<DictModel>) method.invoke(null);
                     enumDictData.put(key, list);
-                    log.debug("成功加载枚举字典: {} -> {}", key, classname);
+                    log.debug("Tải từ điển enum thành công: {} -> {}", key, classname);
                 }
             }
         } catch (Exception e) {
-            log.debug("处理枚举类异常: {} - {}", classname, e.getMessage());
+            log.debug("Xử lý ngoại lệ lớp enum: {} - {}", classname, e.getMessage());
         }
     }
 
     /**
-     * 用于后端字典翻译 SysDictServiceImpl#queryManyDictByKeys(java.util.List, java.util.List)
+     * Dùng để dịch từ điển ở backend SysDictServiceImpl#queryManyDictByKeys(java.util.List, java.util.List)
      *
-     * @param dictCodeList 字典编码列表
-     * @param keys         键值列表
-     * @return 字典数据映射
+     * @param dictCodeList Danh sách mã từ điển
+     * @param keys         Danh sách cặp khóa-giá trị
+     * @return Ánh xạ dữ liệu từ điển
      */
     public static Map<String, List<DictModel>> queryManyDictByKeys(List<String> dictCodeList, List<String> keys) {
         Map<String, List<DictModel>> enumDict = getEnumDictData();
         Map<String, List<DictModel>> map = new HashMap<>();
 
-        // 使用更高效的查找方式
+        // Sử dụng cách tra cứu hiệu quả hơn
         Set<String> dictCodeSet = new HashSet<>(dictCodeList);
         Set<String> keySet = new HashSet<>(keys);
 
@@ -185,7 +185,7 @@ public class ResourceUtil {
                 for (DictModel dm : dictItemList) {
                     String value = dm.getValue();
                     if (keySet.contains(value)) {
-                        // 修复bug：获取或创建该dictCode对应的list，而不是每次都创建新的list
+                        // Sửa bug: lấy hoặc tạo list tương ứng với dictCode đó, thay vì mỗi lần đều tạo mới list
                         List<DictModel> list = map.computeIfAbsent(code, k -> new ArrayList<>());
                         list.add(new DictModel(value, dm.getText()));
                         //break;

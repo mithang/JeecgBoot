@@ -20,8 +20,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
- * 基于AOP的签名验证切面
- * 复用SignAuthInterceptor的成熟签名验证逻辑
+ * Aspect xác thực chữ ký dựa trên AOP
+ * Tái sử dụng logic xác thực chữ ký đã hoàn thiện của SignAuthInterceptor
  * 
  * @author GitHub Copilot
  * @since 2025-12-15
@@ -32,36 +32,36 @@ import java.util.Arrays;
 public class SignatureCheckAspect {
     
     /**
-     * 复用SignAuthInterceptor的签名验证逻辑
+     * Tái sử dụng logic xác thực chữ ký của SignAuthInterceptor
      */
     private final SignAuthInterceptor signAuthInterceptor = new SignAuthInterceptor();
 
     /**
-     * 验签切点：拦截所有标记了@SignatureCheck注解的方法
+     * Điểm cắt kiểm tra chữ ký: Chặn tất cả các phương thức được đánh dấu@SignatureCheck bằng annotation
      */
     @Pointcut("@annotation(org.jeecg.config.sign.annotation.SignatureCheck)")
     private void signatureCheckPointCut() {
     }
 
     /**
-     * 开始验签
+     * Bắt đầu kiểm tra chữ ký
      */
     @Before("signatureCheckPointCut()")
     public void doSignatureValidation(JoinPoint point) throws Exception {
-        // 获取方法上的注解
+        // Lấy annotation trên phương thức
         MethodSignature signature = (MethodSignature) point.getSignature();
         Method method = signature.getMethod();
         SignatureCheck signatureCheck = method.getAnnotation(SignatureCheck.class);
         
-        log.info("AOP签名验证: {}.{}", method.getDeclaringClass().getSimpleName(), method.getName());
+        log.info("AOP Xác thực chữ ký: {}.{}", method.getDeclaringClass().getSimpleName(), method.getName());
         
-        // 如果注解被禁用，直接返回
+        // Nếu annotation bị vô hiệu hóa, trả về trực tiếp
         if (!signatureCheck.enabled()) {
-            log.info("签名验证已禁用，跳过");
+            log.info("Xác thực chữ ký đã bị vô hiệu hóa, bỏ qua");
             return;
         }
 
-        // update-begin---author:sjlei---date:20260115 for: 查找带有@RequestBody注解的参数，解决签名校验时读取请求体为空的问题
+        // update-begin---author:sjlei---date:20260115 for: Tìm tham số mang@RequestBody annotation, giải quyết vấn đề đọc request body bị trống khi kiểm chứng chữ ký
         Object bodyParam = null;
         Object[] args = point.getArgs();
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -70,42 +70,42 @@ public class SignatureCheckAspect {
             Annotation[] annotations = parameterAnnotations[i];
             boolean hasRequestBodyAnnotation = Arrays.stream(annotations).anyMatch(annotation -> annotation.annotationType().equals(RequestBody.class));
             if (hasRequestBodyAnnotation) {
-                // 捕获携带@RequestBody注解的参数，供签名校验使用
+                // Bắt tham số mang@RequestBody annotation, dùng cho kiểm tra chữ ký
                 bodyParam = arg;
             }
         }
-        // update-end-----author:sjlei---date:20260115 for: 查找带有@RequestBody注解的参数，解决签名校验时读取请求体为空的问题
+        // update-end-----author:sjlei---date:20260115 for: Tìm tham số mang@RequestBody annotation, giải quyết vấn đề đọc request body bị trống khi kiểm chứng chữ ký
 
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
-            log.error("无法获取请求上下文");
-            throw new IllegalArgumentException("无法获取请求上下文");
+            log.error("Không thể lấy ngữ cảnh yêu cầu");
+            throw new IllegalArgumentException("Không thể lấy ngữ cảnh yêu cầu");
         }
         
         HttpServletRequest request = attributes.getRequest();
         log.info("X-SIGN: {}, X-TIMESTAMP: {}", request.getHeader("X-SIGN"), request.getHeader("X-TIMESTAMP"));
         
         try {
-            // 直接调用SignAuthInterceptor的验证逻辑
+            // Gọi trực tiếp logic xác thực của SignAuthInterceptor
             signAuthInterceptor.validateSignature(request, bodyParam);
-            log.info("AOP签名验证通过");
+            log.info("AOP Xác minh chữ ký thành công");
             
         } catch (IllegalArgumentException e) {
-            // 使用注解中配置的错误消息，或者保留原始错误消息
+            // Sử dụng thông báo lỗi được cấu hình trong annotation, hoặc giữ lại thông báo lỗi gốc
             String errorMessage = signatureCheck.errorMessage();
-            log.error("AOP签名验证失败: {}", e.getMessage());
+            log.error("AOP Xác minh chữ ký thất bại: {}", e.getMessage());
             
-            if ("Sign签名校验失败！".equals(errorMessage)) {
-                // 如果是默认错误消息，使用原始的详细错误信息
+            if ("Sign Xác thực chữ ký thất bại!".equals(errorMessage)) {
+                // Nếu là thông báo lỗi mặc định, sử dụng thông tin lỗi chi tiết gốc
                 throw e;
             } else {
-                // 如果是自定义错误消息，使用自定义消息
+                // Nếu là thông báo lỗi tùy chỉnh, sử dụng thông báo tùy chỉnh
                 throw new IllegalArgumentException(errorMessage, e);
             }
         } catch (Exception e) {
-            // 包装其他异常
+            // Bọc các ngoại lệ khác
             String errorMessage = signatureCheck.errorMessage();
-            log.error("AOP签名验证异常: {}", e.getMessage());
+            log.error("AOP Lỗi xác minh chữ ký: {}", e.getMessage());
             throw new IllegalArgumentException(errorMessage, e);
         }
     }

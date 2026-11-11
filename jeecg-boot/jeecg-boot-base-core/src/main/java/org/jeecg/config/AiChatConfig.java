@@ -10,88 +10,88 @@ import org.springframework.stereotype.Component;
 public class AiChatConfig {
 
     /**
-     * 默认聊天模型名称（用于判断是否支持Tool Calling等）
+     * Tên mô hình trò chuyện mặc định (dùng để phán đoán có hỗ trợ Tool Calling hay không, v.v.)
      */
     private String model;
 
     /**
-     * skills配置文件路径
+     * skills Đường dẫn tệp cấu hình
      */
     private String skillsDir;
     /**
-     * shell命令行配置文件路径
+     * shell Đường dẫn tệp cấu hình dòng lệnh
      */
     private String skillsShellDir;
     
     /**
-     * AI绘图(文生图)
+     * AI Vẽ hình(Tạo hình từ văn bản)
      */
     private ModelConfig aiModelDraw = new ModelConfig();
 
     /**
-     * AI图生(图绘画)
+     * AI Tạo hình từ hình ảnh(Vẽ hình từ hình ảnh)
      */
     private ModelConfig aiModelPicDraw = new ModelConfig();
 
     /**
-     * AI语音
+     * AI Giọng nói
      */
     private VoiceModelConfig aiModelVoice = new VoiceModelConfig();
 
     /**
-     * AI视频
+     * AI Video
      */
     private VideoModelConfig aiModelVideo = new VideoModelConfig();
 
     /**
-     * AI默认向量模型
+     * AI Mô hình vector mặc định
      */
     private ModelConfig aiModelEmbed = new ModelConfig();
 
 	/**
-	 * AI 聊天助手访问限流配置
+	 * AI Cấu hình giới hạn truy cập của trợ lý trò chuyện
 	 */
 	private RateLimitConfig rateLimit = new RateLimitConfig();
 
 	/**
-	 * AI 聊天助手访问限流参数
+	 * AI Tham số giới hạn tốc độ truy cập của trợ lý trò chuyện
 	 *
 	 * @author scott
-	 * @since 2026-09-01 issues/9871 AI聊天助手访问限流配置优化
+	 * @since 2026-09-01 issues/9871 AI Tối ưu cấu hình giới hạn tốc độ truy cập của trợ lý trò chuyện
 	 */
 	@Data
 	public static class RateLimitConfig {
-		/** 每会话每分钟最多发送消息次数，为空或小于等于 0 时不限制 */
+		/** Số tin nhắn tối đa gửi mỗi phút cho mỗi phiên; nếu để trống hoặc nhỏ hơn hoặc bằng 0 thì không giới hạn */
 		private Integer sendPerSessionPerMinute;
 
-		/** 每 IP 每分钟最多发送消息次数，为空或小于等于 0 时不限制 */
+		/** Số tin nhắn tối đa gửi mỗi phút cho mỗi IP; nếu để trống hoặc nhỏ hơn hoặc bằng 0 thì không giới hạn */
 		private Integer sendPerIpPerMinute;
 
-		/** 每会话每小时最多上传文件次数，为空或小于等于 0 时不限制 */
+		/** Số lần tải tệp lên tối đa mỗi giờ cho mỗi phiên; nếu để trống hoặc nhỏ hơn hoặc bằng 0 thì không giới hạn */
 		private Integer uploadPerSessionPerHour;
 	}
 
     @Data
     public static class ModelConfig {
         /**
-         * 使用的模型
+         * Mô hình đang dùng
          */
         private String model;
         /**
-         * api秘钥
+         * api Khóa bí mật
          */
         private String apiKey;
         /**
-         * api域名
+         * api Tên miền
          */
         private String apiHost;
         /**
-         * 超时时间
+         * Thời gian timeout
          */
         private int timeout = 60;
 
         /**
-         * 供应商
+         * Nhà cung cấp
          */
         private String provider = "QWEN"; //AiModelFactory.AIMODEL_TYPE_QWEN
     }
@@ -99,11 +99,11 @@ public class AiChatConfig {
     @Data
     public static class VideoModelConfig extends ModelConfig {
         /**
-         * ffmpeg 可执行文件路径，为空时自动查找
+         * ffmpeg Đường dẫn tệp thực thi, tự động tìm khi trống
          */
         private String ffmpegPath;
         /**
-         * edge-tts 可执行文件路径，为空时自动查找
+         * edge-tts Đường dẫn tệp thực thi, tự động tìm khi trống
          */
         private String edgeTtsPath;
     }
@@ -111,15 +111,15 @@ public class AiChatConfig {
     @Data
     public static class VoiceModelConfig extends ModelConfig {
         /**
-         * 默认声色
+         * Giọng nói mặc định
          */
         private String voice = "alloy";
         /**
-         * 默认倍速，范围0.25~4.0
+         * Tốc độ phát mặc định, phạm vi 0.25~4.0
          */
         private double speed = 1.0;
         /**
-         * 默认音量增益(dB)
+         * Độ tăng âm lượng mặc định(dB)
          */
         private double volume = 0.0;
     }

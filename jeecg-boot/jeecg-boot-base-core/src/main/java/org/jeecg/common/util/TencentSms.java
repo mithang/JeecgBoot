@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 腾讯发送短信
+ * @Description: Tencent gửi tin nhắn SMS
  * @author: wangshuai
  * @date: 2025/11/4 19:27
  */
@@ -30,7 +30,7 @@ public class TencentSms {
     private final static Logger logger = LoggerFactory.getLogger(TencentSms.class);
 
     /**
-     * 发送腾讯短信
+     * Gửi tin nhắn SMS Tencent
      *
      * @param phone
      * @param templateParamJson
@@ -39,58 +39,58 @@ public class TencentSms {
      * @return
      */
     public static boolean sendTencentSms(String phone, JSONObject templateParamJson, JeecgTencent tencent, DySmsEnum dySmsEnum) {
-        //获取客户端链接
+        //Lấy liên kết client
         SmsClient client = getSmsClient(tencent);
-        //构建腾讯云短信发送请求
+        //Xây dựng yêu cầu gửi SMS Tencent Cloud
         SendSmsRequest req = buildSendSmsRequest(phone, templateParamJson, dySmsEnum, tencent);
         try {
-            //发送短信
+            //Gửi SMS
             SendSmsResponse resp = client.SendSms(req);
-            // 处理响应
+            // Xử lý phản hồi
             SendStatus[] statusSet = resp.getSendStatusSet();
             if (statusSet != null && statusSet.length > 0) {
                 SendStatus status = statusSet[0];
                 if ("Ok".equals(status.getCode())) {
-                    logger.info("短信发送成功，手机号：{}", phone);
+                    logger.info("Gửi tin nhắn SMS thành công, số điện thoại:{}", phone);
                     return true;
                 } else {
-                    logger.error("短信发送失败，手机号：{}，错误码：{}，错误信息：{}",
+                    logger.error("Gửi tin nhắn SMS thất bại, số điện thoại:{}, mã lỗi:{}, thông tin lỗi:{}",
                             phone, status.getCode(), status.getMessage());
                 }
             }
         } catch (TencentCloudSDKException e) {
-            logger.error("短信发送失败{}", e.getMessage());
+            logger.error("Gửi tin nhắn SMS thất bại{}", e.getMessage());
         }
         return false;
     }
 
     /**
-     * 获取sms客户端
+     * Lấy client SMS
      *
-     * @param tencent 腾讯云配置
-     * @return SmsClient对象
+     * @param tencent Cấu hình Tencent Cloud
+     * @return SmsClient Đối tượng
      */
     private static SmsClient getSmsClient(JeecgTencent tencent) {
         Credential cred = new Credential(tencent.getSecretId(), tencent.getSecretKey());
-        // 实例化一个http选项，可选的，没有特殊需求可以跳过
+        // Khởi tạo một tùy chọn HTTP, tùy chọn, có thể bỏ qua nếu không có nhu cầu đặc biệt
         HttpProfile httpProfile = new HttpProfile();
-        //指定接入地域域名*/
+        //Chỉ định tên miền khu vực truy cập*/
         httpProfile.setEndpoint(tencent.getEndpoint());
-        //实例化一个客户端配置对象
+        //Khởi tạo một đối tượng cấu hình client
         ClientProfile clientProfile = new ClientProfile();
         clientProfile.setHttpProfile(httpProfile);
-        //实例化要请求产品的client对象，第二个参数是地域信息
+        //Khởi tạo đối tượng client của sản phẩm cần yêu cầu, tham số thứ hai là thông tin khu vực
         return new SmsClient(cred, tencent.getRegion(), clientProfile);
     }
 
     /**
-     * 构建腾讯云短信发送请求
+     * Xây dựng yêu cầu gửi SMS Tencent Cloud
      *
-     * @param phone             手机号码
-     * @param templateParamJson 模板参数JSON对象
-     * @param dySmsEnum         短信枚举配置
-     * @param tencent           腾讯云配置
-     * @return 构建好的SendSmsRequest对象
+     * @param phone             Số điện thoại
+     * @param templateParamJson Đối tượng JSON tham số mẫu
+     * @param dySmsEnum         Cấu hình enum tin nhắn SMS
+     * @param tencent           Cấu hình Tencent Cloud
+     * @return Đối tượng SendSmsRequest đã được xây dựng
      */
     private static SendSmsRequest buildSendSmsRequest(
             String phone,
@@ -100,39 +100,39 @@ public class TencentSms {
 
         SendSmsRequest req = new SendSmsRequest();
 
-        // 1. 设置短信应用ID
+        // 1. Thiết lập ứng dụng SMS ID
         String sdkAppId = tencent.getSdkAppId();
         req.setSmsSdkAppId(sdkAppId);
-        // 2. 设置短信签名
+        // 2. Thiết lập chữ ký SMS
         String signName = getSmsSignName(dySmsEnum);
         req.setSignName(signName);
-        // 3. 设置模板ID
+        // 3. Thiết lập mẫu ID
         String templateId = getSmsTemplateId(dySmsEnum);
         req.setTemplateId(templateId);
-        // 4. 设置模板参数
+        // 4. Thiết lập tham số mẫu
         String[] templateParams = extractTemplateParams(templateParamJson);
         req.setTemplateParamSet(templateParams);
-        // 5. 设置手机号码
+        // 5. Thiết lập số điện thoại
         String[] phoneNumberSet = { phone };
         req.setPhoneNumberSet(phoneNumberSet);
 
-        logger.debug("构建短信请求完成 - 应用ID: {}, 签名: {}, 模板ID: {}, 手机号: {}",
+        logger.debug("Đã hoàn thành việc xây dựng yêu cầu SMS - Ứng dụng ID: {}, Chữ ký: {}, Mẫu ID: {}, Số điện thoại: {}",
                 sdkAppId, signName, templateId, phone);
 
         return req;
     }
 
     /**
-     * 获取短信签名名称
+     * Lấy tên chữ ký SMS
      *
-     * @param dySmsEnum 腾讯云对象
+     * @param dySmsEnum Đối tượng Tencent Cloud
      */
     private static String getSmsSignName(DySmsEnum dySmsEnum) {
         JeecgSmsTemplateConfig baseConfig = SpringContextUtils.getBean(JeecgSmsTemplateConfig.class);
         String signName = dySmsEnum.getSignName();
 
         if (StringUtils.isNotEmpty(baseConfig.getSignature())) {
-            logger.debug("yml中读取签名名称: {}", baseConfig.getSignature());
+            logger.debug("yml Đọc tên chữ ký trong: {}", baseConfig.getSignature());
             signName = baseConfig.getSignature();
         }
 
@@ -140,9 +140,9 @@ public class TencentSms {
     }
 
     /**
-     * 获取短信模板ID
+     * Lấy mẫu SMS ID
      *
-     * @param dySmsEnum 腾讯云对象
+     * @param dySmsEnum Đối tượng Tencent Cloud
      */
     private static String getSmsTemplateId(DySmsEnum dySmsEnum) {
         JeecgSmsTemplateConfig baseConfig = SpringContextUtils.getBean(JeecgSmsTemplateConfig.class);
@@ -153,16 +153,16 @@ public class TencentSms {
             if (smsTemplate.containsKey(templateCode) &&
                     StringUtils.isNotEmpty(smsTemplate.get(templateCode))) {
                 templateCode = smsTemplate.get(templateCode);
-                logger.debug("yml中读取短信模板ID: {}", templateCode);
+                logger.debug("yml trong đó đọc mẫu SMS ID: {}", templateCode);
             }
         }
         return templateCode;
     }
 
     /**
-     * 从JSONObject中提取模板参数（按原始顺序）
+     * Trích xuất tham số mẫu từ JSONObject (theo thứ tự gốc)
      *
-     * @param templateParamJson 模板参数
+     * @param templateParamJson Tham số mẫu
      */
     private static String[] extractTemplateParams(JSONObject templateParamJson) {
         if (templateParamJson == null || templateParamJson.isEmpty()) {
@@ -174,11 +174,11 @@ public class TencentSms {
             if (value != null) {
                 params.add(value.toString());
             } else {
-                // 处理null值
+                // Xử lý giá trị null
                 params.add("");
             }
         }
-        logger.debug("提取模板参数: {}", params);
+        logger.debug("Trích xuất tham số mẫu: {}", params);
         return params.toArray(new String[0]);
     }
 }

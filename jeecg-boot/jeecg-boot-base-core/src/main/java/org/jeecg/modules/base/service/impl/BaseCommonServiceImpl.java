@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * @Description: common实现类
+ * @Description: common Lớp triển khai
  * @author: jeecg-boot
  */
 @Service
@@ -34,7 +34,7 @@ public class BaseCommonServiceImpl implements BaseCommonService {
         if(oConvertUtils.isEmpty(logDTO.getId())){
             logDTO.setId(String.valueOf(IdWorker.getId()));
         }
-        //保存日志（异常捕获处理，防止数据太大存储失败，导致业务失败）JT-238
+        //Lưu nhật ký (xử lý bắt ngoại lệ, ngăn dữ liệu quá lớn khiến lưu trữ thất bại, dẫn đến nghiệp vụ thất bại)JT-238
         try {   
             logDTO.setCreateTime(new Date());
             baseCommonMapper.saveLog(logDTO);
@@ -48,18 +48,18 @@ public class BaseCommonServiceImpl implements BaseCommonService {
     public void addLog(String logContent, Integer logType, Integer operatetype, LoginUser user) {
         LogDTO sysLog = new LogDTO();
         sysLog.setId(String.valueOf(IdWorker.getId()));
-        //注解上的描述,操作日志内容
+        //Mô tả trên annotation,Nội dung nhật ký thao tác
         sysLog.setLogContent(logContent);
         sysLog.setLogType(logType);
         sysLog.setOperateType(operatetype);
         try {
-            //获取request
+            //Lấy request
             HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
-            //设置IP地址
+            //Thiết lập địa chỉ IP
             sysLog.setIp(IpUtils.getIpAddr(request));
 
             try {
-                //设置客户端
+                //Thiết lập client
                 if(BrowserUtils.isDesktop(request)){
                     sysLog.setClientType(ClientTerminalTypeEnum.PC.getKey());
                 }else{
@@ -71,7 +71,7 @@ public class BaseCommonServiceImpl implements BaseCommonService {
         } catch (Exception e) {
             sysLog.setIp("127.0.0.1");
         }
-        //获取登录用户信息
+        //Lấy thông tin người dùng đăng nhập
         if(user==null){
             try {
                 user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -84,7 +84,7 @@ public class BaseCommonServiceImpl implements BaseCommonService {
             sysLog.setUsername(user.getRealname());
         }
         sysLog.setCreateTime(new Date());
-        //保存日志（异常捕获处理，防止数据太大存储失败，导致业务失败）JT-238
+        //Lưu nhật ký (xử lý bắt ngoại lệ, ngăn dữ liệu quá lớn khiến lưu trữ thất bại, dẫn đến nghiệp vụ thất bại)JT-238
         try {
             baseCommonMapper.saveLog(sysLog);
         } catch (Exception e) {

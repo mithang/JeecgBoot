@@ -1,65 +1,65 @@
 package org.jeecg.common.constant;
 
 /**
- * @Description: Websocket常量类
+ * @Description: Websocket Lớp hằng số
  * @author: taoyan
- * @date: 2020年03月23日
+ * @date: 2020 năm 03 tháng 23 ngày
  */
 public class WebsocketConst {
 
 
     /**
-     * 消息json key:cmd
+     * Tin nhắn json key:cmd
      */
     public static final String MSG_CMD = "cmd";
 
     /**
-     * 消息json key:msgId
+     * Tin nhắn json key:msgId
      */
     public static final String MSG_ID = "msgId";
 
     /**
-     * 消息json key:msgTxt
+     * Tin nhắn json key:msgTxt
      */
     public static final String MSG_TXT = "msgTxt";
 
     /**
-     * 消息json key:userId
+     * Tin nhắn json key:userId
      */
     public static final String MSG_USER_ID = "userId";
 
     /**
-     * 消息json key:chat
+     * Tin nhắn json key:chat
      */
     public static final String MSG_CHAT = "chat";
 
     /**
-     * 消息类型 heartcheck
+     * Loại tin nhắn heartcheck
      */
     public static final String CMD_CHECK = "heartcheck";
 
     /**
-     * 消息类型 user 用户消息
+     * Loại tin nhắn user: Tin nhắn người dùng
      */
     public static final String CMD_USER = "user";
 
     /**
-     * 消息类型 topic 系统通知
+     * Loại tin nhắn topic: Thông báo hệ thống
      */
     public static final String CMD_TOPIC = "topic";
 
     /**
-     * 消息类型 email
+     * Loại tin nhắn email
      */
     public static final String CMD_EMAIL = "email";
 
     /**
-     * 消息类型 meetingsign 会议签到
+     * Loại tin nhắn meetingsign: Điểm danh cuộc họp
      */
     public static final String CMD_SIGN = "sign";
 
     /**
-     * 消息类型 新闻发布/取消
+     * Loại tin nhắn: Phát hành tin tức/Hủy
      */
     public static final String NEWS_PUBLISH = "publish";
 

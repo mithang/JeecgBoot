@@ -9,66 +9,66 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
 /**
- * @Description: 密码工具类
+ * @Description: Lớp công cụ mật khẩu
  * @author: jeecg-boot
  */
 public class PasswordUtil {
 
 	/**
-	 * JAVA6支持以下任意一种算法 PBEWITHMD5ANDDES PBEWITHMD5ANDTRIPLEDES
+	 * JAVA6 Hỗ trợ bất kỳ thuật toán nào sau đây PBEWITHMD5ANDDES PBEWITHMD5ANDTRIPLEDES
 	 * PBEWITHSHAANDDESEDE PBEWITHSHA1ANDRC2_40 PBKDF2WITHHMACSHA1
 	 * */
 
     /**
-     * 定义使用的算法为:PBEWITHMD5andDES算法
-     * 加密算法
+     * Thuật toán được định nghĩa sử dụng là:PBEWITHMD5andDES Thuật toán
+     * Thuật toán mã hóa
      */
 	public static final String ALGORITHM = "PBEWithMD5AndDES";
 
     /**
-     * 定义使用的算法为:PBEWITHMD5andDES算法
-     * 密钥
+     * Thuật toán được định nghĩa sử dụng là:PBEWITHMD5andDES Thuật toán
+     * Khóa
      */
 	public static final String SALT = "63293188";
 
 	/**
-	 * 定义迭代次数为1000次
+	 * Định nghĩa số lần lặp là 1000 lần
 	 */
 	private static final int ITERATIONCOUNT = 1000;
 
 	/**
-	 * 获取加密算法中使用的盐值,解密中使用的盐值必须与加密中使用的相同才能完成操作. 盐长度必须为8字节
+	 * Lấy giá trị salt được sử dụng trong thuật toán mã hóa,Giá trị salt dùng khi giải mã phải giống với giá trị salt dùng khi mã hóa thì mới hoàn tất được thao tác. Độ dài salt phải là 8 byte
 	 * 
-	 * @return byte[] 盐值
+	 * @return byte[] Giá trị salt
 	 * */
 	public static byte[] getSalt() throws Exception {
-		// 实例化安全随机数
+		// Khởi tạo số ngẫu nhiên an toàn
 		SecureRandom random = new SecureRandom();
-		// 产出盐
+		// Tạo salt
 		return random.generateSeed(8);
 	}
 
 	public static byte[] getStaticSalt() {
-		// 产出盐
+		// Tạo salt
 		return SALT.getBytes();
 	}
 
 	/**
-	 * 根据PBE密码生成一把密钥
+	 * Tạo một khóa dựa trên mật khẩu PBE
 	 * 
 	 * @param password
-	 *            生成密钥时所使用的密码
-	 * @return Key PBE算法密钥
+	 *            Mật khẩu được sử dụng khi tạo khóa
+	 * @return Key PBE Khóa thuật toán
 	 * */
 	private static Key getPbeKey(String password) {
-		// 实例化使用的算法
+		// Khởi tạo thuật toán được sử dụng
 		SecretKeyFactory keyFactory;
 		SecretKey secretKey = null;
 		try {
 			keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
-			// 设置PBE密钥参数
+			// Thiết lập tham số khóa PBE
 			PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray());
-			// 生成密钥
+			// Tạo khóa
 			secretKey = keyFactory.generateSecret(keySpec);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -79,15 +79,15 @@ public class PasswordUtil {
 	}
 
 	/**
-	 * 加密明文字符串
+	 * Mã hóa chuỗi văn bản gốc
 	 * 
 	 * @param plaintext
-	 *            待加密的明文字符串
+	 *            Chuỗi văn bản gốc cần mã hóa
 	 * @param password
-	 *            生成密钥时所使用的密码
+	 *            Mật khẩu được sử dụng khi tạo khóa
 	 * @param salt
-	 *            盐值
-	 * @return 加密后的密文字符串
+	 *            Giá trị salt
+	 * @return Chuỗi mật mã sau khi mã hóa
 	 * @throws Exception
 	 */
 	public static String encrypt(String plaintext, String password, String salt) {
@@ -99,7 +99,7 @@ public class PasswordUtil {
 			Cipher cipher = Cipher.getInstance(ALGORITHM);
 
 			cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec);
-			// 代码逻辑说明: 中文作为用户名时，加密的密码windows和linux会得到不同的结果 gitee/issues/IZUD7
+			// Giải thích logic mã: Khi tên người dùng là tiếng Trung, mật khẩu đã mã hóa trên Windows và Linux sẽ cho kết quả khác nhau gitee/issues/IZUD7
 			encipheredData = cipher.doFinal(plaintext.getBytes("utf-8"));
 		} catch (Exception e) {
 		}
@@ -107,15 +107,15 @@ public class PasswordUtil {
 	}
 
 	/**
-	 * 解密密文字符串
+	 * Giải mã chuỗi mật mã
 	 * 
 	 * @param ciphertext
-	 *            待解密的密文字符串
+	 *            Chuỗi mật mã cần giải mã
 	 * @param password
-	 *            生成密钥时所使用的密码(如需解密,该参数需要与加密时使用的一致)
+	 *            Mật khẩu được sử dụng khi tạo khóa(Nếu cần giải mã,Tham số này cần nhất quán với tham số đã dùng khi mã hóa)
 	 * @param salt
-	 *            盐值(如需解密,该参数需要与加密时使用的一致)
-	 * @return 解密后的明文字符串
+	 *            Giá trị salt(Nếu cần giải mã,Tham số này cần nhất quán với tham số đã dùng khi mã hóa)
+	 * @return Chuỗi văn bản gốc sau khi giải mã
 	 * @throws Exception
 	 */
 	public static String decrypt(String ciphertext, String password, String salt) {
@@ -138,10 +138,10 @@ public class PasswordUtil {
 	}
 
 	/**
-	 * 将字节数组转换为十六进制字符串
+	 * Chuyển đổi mảng byte thành chuỗi thập lục phân
 	 * 
 	 * @param src
-	 *            字节数组
+	 *            Mảng byte
 	 * @return
 	 */
 	public static String bytesToHexString(byte[] src) {
@@ -161,10 +161,10 @@ public class PasswordUtil {
 	}
 
 	/**
-	 * 将十六进制字符串转换为字节数组
+	 * Chuyển đổi chuỗi thập lục phân thành mảng byte
 	 * 
 	 * @param hexString
-	 *            十六进制字符串
+	 *            Chuỗi thập lục phân
 	 * @return
 	 */
 	public static byte[] hexStringToBytes(String hexString) {

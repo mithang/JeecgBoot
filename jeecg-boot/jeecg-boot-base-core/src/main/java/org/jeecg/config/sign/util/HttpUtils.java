@@ -20,7 +20,7 @@ import org.springframework.http.HttpMethod;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * http 工具类 获取请求中的参数
+ * http Lớp tiện ích lấy tham số trong yêu cầu
  *
  * @author jeecg
  * @date 20210621
@@ -29,7 +29,7 @@ import com.alibaba.fastjson.JSONObject;
 public class HttpUtils {
 
     /**
-     * 将URL的参数和body参数合并
+     * Gộp tham số URL và tham số body
      *
      * @author jeecg
      * @date 20210621
@@ -38,7 +38,7 @@ public class HttpUtils {
     public static SortedMap<String, String> getAllParams(HttpServletRequest request, Object bodyParam) throws IOException {
 
         SortedMap<String, String> result = new TreeMap<>();
-        // 获取URL上最后带逗号的参数变量 sys/dict/getDictItems/sys_user,realname,username
+        // Lấy biến tham số cuối cùng mang dấu phẩy trên URL sys/dict/getDictItems/sys_user,realname,username
         String pathVariable = request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/") + 1);
         if (pathVariable.contains(SymbolConstant.COMMA)) {
             log.debug(" pathVariable: {}",pathVariable);
@@ -48,7 +48,7 @@ public class HttpUtils {
             if(deString.contains("%")){
                 try {
                     deString = URLDecoder.decode(deString, "UTF-8");
-                    log.debug("存在%情况下，执行两次解码 — pathVariable decode: {}",deString);
+                    log.debug("có%trong trường hợp này, thực hiện giải mã hai lần — pathVariable decode: {}",deString);
                 } catch (Exception e) {
                     //e.printStackTrace();
                 }
@@ -56,27 +56,27 @@ public class HttpUtils {
             log.debug(" pathVariable decode: {}",deString);
             result.put(SignUtil.X_PATH_VARIABLE, deString);
         }
-        // 获取URL上的参数
+        // Lấy tham số trên URL
         Map<String, String> urlParams = getUrlParams(request);
         for (Map.Entry entry : urlParams.entrySet()) {
-            //不能直接转成String,否则会有类型转换错误
+            //Không thể chuyển trực tiếp thành String,Nếu không sẽ xảy ra lỗi chuyển đổi kiểu
             result.put((String)entry.getKey(), String.valueOf(entry.getValue()));
         }
         Map<String, String> allRequestParam = new HashMap<>(16);
-        // get请求不需要拿body参数
+        // get Yêu cầu GET không cần lấy tham số body
         if (!HttpMethod.GET.name().equals(request.getMethod())) {
             if (bodyParam != null) {
-                // update-begin---author:sjlei---date:20260115 for: 解决签名校验时读取请求体为空的问题
+                // update-begin---author:sjlei---date:20260115 for: Giải quyết vấn đề đọc request body bị trống khi kiểm chứng chữ ký
                 allRequestParam = JSONObject.parseObject(JSONObject.toJSONString(bodyParam), Map.class);
-                // update-end-----author:sjlei---date:20260115 for: 解决签名校验时读取请求体为空的问题
+                // update-end-----author:sjlei---date:20260115 for: Giải quyết vấn đề đọc request body bị trống khi kiểm chứng chữ ký
             } else {
                 allRequestParam = getAllRequestParam(request);
             }
         }
-        // 将URL的参数和body参数进行合并
+        // Gộp tham số URL và tham số body
         if (allRequestParam != null) {
             for (Map.Entry entry : allRequestParam.entrySet()) {
-                //不能直接转成String,否则会有类型转换错误
+                //Không thể chuyển trực tiếp thành String,Nếu không sẽ xảy ra lỗi chuyển đổi kiểu
                 result.put((String)entry.getKey(), String.valueOf(entry.getValue()));
             }
         }
@@ -84,7 +84,7 @@ public class HttpUtils {
     }
 
     /**
-     * 将URL的参数和body参数合并
+     * Gộp tham số URL và tham số body
      *
      * @author jeecg
      * @date 20210621
@@ -94,7 +94,7 @@ public class HttpUtils {
         throws IOException {
 
         SortedMap<String, String> result = new TreeMap<>();
-        // 获取URL上最后带逗号的参数变量 sys/dict/getDictItems/sys_user,realname,username
+        // Lấy biến tham số cuối cùng mang dấu phẩy trên URL sys/dict/getDictItems/sys_user,realname,username
         String pathVariable = url.substring(url.lastIndexOf("/") + 1);
         if (pathVariable.contains(SymbolConstant.COMMA)) {
             log.debug(" pathVariable: {}",pathVariable);
@@ -103,22 +103,22 @@ public class HttpUtils {
             //https://www.52dianzi.com/category/article/37/565371.html
             if(deString.contains("%")){
                 deString = URLDecoder.decode(deString, "UTF-8");
-                log.debug("存在%情况下，执行两次解码 — pathVariable decode: {}",deString);
+                log.debug("có%trong trường hợp này, thực hiện giải mã hai lần — pathVariable decode: {}",deString);
             }
             log.debug(" pathVariable decode: {}",deString);
             result.put(SignUtil.X_PATH_VARIABLE, deString);
         }
-        // 获取URL上的参数
+        // Lấy tham số trên URL
         Map<String, String> urlParams = getUrlParams(queryString);
         for (Map.Entry entry : urlParams.entrySet()) {
             result.put((String)entry.getKey(), (String)entry.getValue());
         }
         Map<String, String> allRequestParam = new HashMap<>(16);
-        // get请求不需要拿body参数
+        // get Yêu cầu GET không cần lấy tham số body
         if (!HttpMethod.GET.name().equals(method)) {
             allRequestParam = getAllRequestParam(body);
         }
-        // 将URL的参数和body参数进行合并
+        // Gộp tham số URL và tham số body
         if (allRequestParam != null) {
             for (Map.Entry entry : allRequestParam.entrySet()) {
                 result.put((String)entry.getKey(), (String)entry.getValue());
@@ -128,7 +128,7 @@ public class HttpUtils {
     }
 
     /**
-     * 获取 Body 参数
+     * Lấy tham số Body
      *
      * @date 15:04 20210621
      * @param request
@@ -138,16 +138,16 @@ public class HttpUtils {
         BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String str = "";
         StringBuilder wholeStr = new StringBuilder();
-        // 一行一行的读取body体里面的内容；
+        // Đọc từng dòng nội dung trong body;
         while ((str = reader.readLine()) != null) {
             wholeStr.append(str);
         }
-        // 转化成json对象
+        // Chuyển thành đối tượng JSON
         return JSONObject.parseObject(wholeStr.toString(), Map.class);
     }
 
     /**
-     * 获取 Body 参数
+     * Lấy tham số Body
      *
      * @date 15:04 20210621
      * @param body
@@ -157,12 +157,12 @@ public class HttpUtils {
             return null;
         }
         String wholeStr = new String(body);
-        // 转化成json对象
+        // Chuyển thành đối tượng JSON
         return JSONObject.parseObject(wholeStr.toString(), Map.class);
     }
 
     /**
-     * 将URL请求参数转换成Map
+     * Chuyển tham số yêu cầu URL thành Map
      *
      * @param request
      */
@@ -180,7 +180,7 @@ public class HttpUtils {
         String[] params = param.split("&");
         for (String s : params) {
             int index = s.indexOf("=");
-            // 代码逻辑说明: [issues/5879]数据查询传ds=“”造成的异常------------
+            // Giải thích logic mã: [issues/5879]Truy vấn dữ liệu truyền ds=Ngoại lệ do “” gây ra------------
             if (index != -1) {
                 result.put(s.substring(0, index), s.substring(index + 1));
             }
@@ -189,7 +189,7 @@ public class HttpUtils {
     }
 
     /**
-     * 将URL请求参数转换成Map
+     * Chuyển tham số yêu cầu URL thành Map
      * 
      * @param queryString
      */
@@ -207,7 +207,7 @@ public class HttpUtils {
         String[] params = param.split("&");
         for (String s : params) {
             int index = s.indexOf("=");
-            // 代码逻辑说明: [issues/5879]数据查询传ds=“”造成的异常------------
+            // Giải thích logic mã: [issues/5879]Truy vấn dữ liệu truyền ds=Ngoại lệ do “” gây ra------------
             if (index != -1) {
                 result.put(s.substring(0, index), s.substring(index + 1));
             }

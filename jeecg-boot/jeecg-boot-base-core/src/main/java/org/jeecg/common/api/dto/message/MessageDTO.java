@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * 普通消息
+ * Tin nhắn thường
  * @author: jeecg-boot
  */
 @Data
@@ -15,86 +15,86 @@ public class MessageDTO implements Serializable {
     private static final long serialVersionUID = -5690444483968058442L;
     
     /**
-     * 发送人(用户登录账户)
+     * Người gửi(Tài khoản đăng nhập của người dùng)
      */
     protected String fromUser;
 
     /**
-     * 发送给(用户登录账户)
+     * Gửi tới(Tài khoản đăng nhập của người dùng)
      */
     protected String toUser;
 
     /**
-     * 发送给所有人
+     * Gửi cho tất cả mọi người
      */
     protected Boolean toAll;
 
     /**
-     * 消息主题
+     * Chủ đề tin nhắn
      */
     protected String title;
 
     /**
-     * 消息内容
+     * Nội dung tin nhắn
      */
     protected String content;
 
     /**
-     * 消息类型 1:消息  2:系统消息
+     * Loại tin nhắn 1:Tin nhắn  2:Tin nhắn hệ thống
      */
     protected String category;
     
     /**
-     * 消息类型：org.jeecg.common.constant.enums.MessageTypeEnum
-     *  XT("system",  "系统消息")
-     *  YJ("email",  "邮件消息")
-     *  DD("dingtalk", "钉钉消息")
-     *  QYWX("wechat_enterprise", "企业微信")
+     * Loại tin nhắn：org.jeecg.common.constant.enums.MessageTypeEnum
+     *  XT("system",  "Tin nhắn hệ thống")
+     *  YJ("email",  "Tin nhắn email")
+     *  DD("dingtalk", "Tin nhắn DingTalk")
+     *  QYWX("wechat_enterprise", "WeCom")
      */
     protected String type;
     
 
-    //---【推送模板相关参数】-------------------------------------------------------------
+    //---【Tham số liên quan đến mẫu đẩy】-------------------------------------------------------------
     /**
-     * 是否发送Markdown格式的消息
+     * Có gửi tin nhắn định dạng Markdown hay không
      */
     protected boolean isMarkdown;
     /**
-     * 模板消息对应的模板编码
+     * Mã mẫu tương ứng với tin nhắn mẫu
      */
     protected String templateCode;
     /**
-     * 解析模板内容 对应的数据
+     * Dữ liệu tương ứng khi phân tích nội dung mẫu
      */
     protected Map<String, Object> data;
-    //---【推送模板相关参数】-------------------------------------------------------------
+    //---【Tham số liên quan đến mẫu đẩy】-------------------------------------------------------------
 
-    //---【邮件相关参数】-------------------------------------------------------------
+    //---【Tham số liên quan đến email】-------------------------------------------------------------
     /**
-     * 邮件抄送人
+     * Người nhận CC email
      */
     private String copyToUser;
 
     /**
-     * 邮件推送地址
+     * Địa chỉ đẩy email
      */
     protected Set<String> toEmailList;
 
     /**
-     * 邮件抄送地址
+     * Địa chỉ CC email
      */
     protected Set<String> ccEmailList;
 
     /**
-     * 是否为定时任务推送email
+     * Có phải đẩy theo tác vụ định giờ hay không email
      */
     private Boolean isTimeJob = false;
     
-    //---【邮件相关参数】-------------------------------------------------------------
+    //---【Tham số liên quan đến email】-------------------------------------------------------------
 
     /**
-     * 枚举：org.jeecg.common.constant.enums.NoticeTypeEnum
-     * 通知类型(system:系统消息、file:知识库、flow:流程、plan:日程计划、meeting:会议)
+     * Enum:org.jeecg.common.constant.enums.NoticeTypeEnum
+     * Loại thông báo(system:Tin nhắn hệ thống、file:Cơ sở tri thức、flow:Quy trình、plan:Lịch trình、meeting:Cuộc họp)
      */
     private String noticeType;
     
@@ -102,19 +102,19 @@ public class MessageDTO implements Serializable {
     }
 
     /**
-     * 构造器1 系统消息
+     * Constructor 1 Tin nhắn hệ thống
      */
     public MessageDTO(String fromUser,String toUser,String title, String content){
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.title = title;
         this.content = content;
-        //默认 都是2系统消息
+        //Mặc định đều là tin nhắn hệ thống loại 2
         this.category = CommonConstant.MSG_CATEGORY_2;
     }
 
     /**
-     * 构造器2 支持设置category 1:消息  2:系统消息
+     * Constructor 2 Hỗ trợ đặt category 1:Tin nhắn  2:Tin nhắn hệ thống
      */
     public MessageDTO(String fromUser,String toUser,String title, String content, String category){
         this.fromUser = fromUser;

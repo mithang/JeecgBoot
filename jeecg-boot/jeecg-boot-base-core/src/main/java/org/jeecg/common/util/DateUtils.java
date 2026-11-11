@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * 类描述：时间操作定义类
+ * Mô tả lớp: lớp định nghĩa thao tác thời gian
  *
  * @Author: 张代浩
  * @Date:2012-12-8 12:15:03
@@ -43,7 +43,7 @@ public class DateUtils extends PropertyEditorSupport {
     public static ThreadLocal<SimpleDateFormat> date_sdf_wz = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy年MM月dd日");
+            return new SimpleDateFormat("yyyy nămMM thángdd ngày");
         }
     };
     public static ThreadLocal<SimpleDateFormat> time_sdf = new ThreadLocal<SimpleDateFormat>() {
@@ -72,7 +72,7 @@ public class DateUtils extends PropertyEditorSupport {
     };
 
     /**
-     * 以毫秒表示的时间
+     * Thời gian biểu thị bằng mili giây
      */
     private static final long DAY_IN_MILLIS = 24 * 3600 * 1000;
     private static final long HOUR_IN_MILLIS = 3600 * 1000;
@@ -80,7 +80,7 @@ public class DateUtils extends PropertyEditorSupport {
     private static final long SECOND_IN_MILLIS = 1000;
 
     /**
-     * 指定模式的时间格式
+     * Định dạng thời gian của mẫu đã chỉ định
      * @param pattern
      * @return
      */
@@ -89,19 +89,19 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 当前日历，这里用中国时间表示
+     * Lịch hiện tại, ở đây dùng giờ Trung Quốc để biểu thị
      *
-     * @return 以当地时区表示的系统当前日历
+     * @return Lịch hiện tại của hệ thống biểu thị theo múi giờ địa phương
      */
     public static Calendar getCalendar() {
         return Calendar.getInstance();
     }
 
     /**
-     * 指定毫秒数表示的日历
+     * Lịch được biểu thị bằng số mili giây đã chỉ định
      *
-     * @param millis 毫秒数
-     * @return 指定毫秒数表示的日历
+     * @param millis Số mili giây
+     * @return Lịch được biểu thị bằng số mili giây đã chỉ định
      */
     public static Calendar getCalendar(long millis) {
         Calendar cal = Calendar.getInstance();
@@ -112,13 +112,13 @@ public class DateUtils extends PropertyEditorSupport {
 
     // ////////////////////////////////////////////////////////////////////////////
     // getDate
-    // 各种方式获取的Date
+    // Lấy bằng nhiều cách khác nhau Date
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * 当前日期
+     * Ngày hiện tại
      *
-     * @return 系统当前时间
+     * @return Thời gian hiện tại của hệ thống
      */
     public static Date getDate() {
         return new Date();
@@ -126,9 +126,9 @@ public class DateUtils extends PropertyEditorSupport {
     
     
     /**
-     * 当前日期
+     * Ngày hiện tại
      *
-     * @return 系统当前日期（不带时分秒）
+     * @return Ngày hiện tại của hệ thống (không có giờ/phút/giây)
      */
     public static LocalDate getLocalDate() {
         LocalDate today = LocalDate.now();
@@ -136,17 +136,17 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 指定毫秒数表示的日期
+     * Ngày được biểu thị bằng số mili giây đã chỉ định
      *
-     * @param millis 毫秒数
-     * @return 指定毫秒数表示的日期
+     * @param millis Số mili giây
+     * @return Ngày được biểu thị bằng số mili giây đã chỉ định
      */
     public static Date getDate(long millis) {
         return new Date(millis);
     }
 
     /**
-     * 时间戳转换为字符串
+     * Chuyển đổi timestamp thành chuỗi
      *
      * @param time
      * @return
@@ -160,7 +160,7 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 字符串转换时间戳
+     * Chuyển đổi chuỗi thành timestamp
      *
      * @param str
      * @return
@@ -171,7 +171,7 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 字符串转换成日期
+     * Chuyển đổi chuỗi thành ngày
      *
      * @param str
      * @param sdf
@@ -192,10 +192,10 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 日期转换为字符串
+     * Chuyển đổi ngày thành chuỗi
      *
-     * @param dateSdf 日期格式
-     * @return 字符串
+     * @param dateSdf Định dạng ngày
+     * @return Chuỗi
      */
     public static String date2Str(SimpleDateFormat dateSdf) {
         synchronized (dateSdf) {
@@ -208,7 +208,7 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 格式化时间
+     * Định dạng thời gian
      *
      * @param date
      * @param format
@@ -227,11 +227,11 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 日期转换为字符串
+     * Chuyển đổi ngày thành chuỗi
      *
-     * @param date     日期
-     * @param dateSdf 日期格式
-     * @return 字符串
+     * @param date     Ngày
+     * @param dateSdf Định dạng ngày
+     * @return Chuỗi
      */
     public static String date2Str(Date date, SimpleDateFormat dateSdf) {
         synchronized (dateSdf) {
@@ -243,10 +243,10 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 日期转换为字符串
+     * Chuyển đổi ngày thành chuỗi
      *
-     * @param format 日期格式
-     * @return 字符串
+     * @param format Định dạng ngày
+     * @return Chuỗi
      */
     public static String getDate(String format) {
         Date date = new Date();
@@ -258,58 +258,58 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 指定毫秒数的时间戳
+     * Timestamp của số mili giây đã chỉ định
      *
-     * @param millis 毫秒数
-     * @return 指定毫秒数的时间戳
+     * @param millis Số mili giây
+     * @return Timestamp của số mili giây đã chỉ định
      */
     public static Timestamp getTimestamp(long millis) {
         return new Timestamp(millis);
     }
 
     /**
-     * 以字符形式表示的时间戳
+     * Timestamp được biểu thị dưới dạng ký tự
      *
-     * @param time 毫秒数
-     * @return 以字符形式表示的时间戳
+     * @param time Số mili giây
+     * @return Timestamp được biểu thị dưới dạng ký tự
      */
     public static Timestamp getTimestamp(String time) {
         return new Timestamp(Long.parseLong(time));
     }
 
     /**
-     * 系统当前的时间戳
+     * Timestamp hiện tại của hệ thống
      *
-     * @return 系统当前的时间戳
+     * @return Timestamp hiện tại của hệ thống
      */
     public static Timestamp getTimestamp() {
         return new Timestamp(System.currentTimeMillis());
     }
 
     /**
-     * 当前时间，格式 yyyy-MM-dd HH:mm:ss
+     * Thời gian hiện tại, định dạng yyyy-MM-dd HH:mm:ss
      *
-     * @return 当前时间的标准形式字符串
+     * @return Chuỗi dạng chuẩn của thời gian hiện tại
      */
     public static String now() {
         return datetimeFormat.get().format(getCalendar().getTime());
     }
 
     /**
-     * 指定日期的时间戳
+     * Timestamp của ngày đã chỉ định
      *
-     * @param date 指定日期
-     * @return 指定日期的时间戳
+     * @param date Ngày đã chỉ định
+     * @return Timestamp của ngày đã chỉ định
      */
     public static Timestamp getTimestamp(Date date) {
         return new Timestamp(date.getTime());
     }
 
     /**
-     * 指定日历的时间戳
+     * Timestamp của lịch đã chỉ định
      *
-     * @param cal 指定日历
-     * @return 指定日历的时间戳
+     * @param cal Lịch đã chỉ định
+     * @return Timestamp của lịch đã chỉ định
      */
     public static Timestamp getCalendarTimestamp(Calendar cal) {
         // ---------------------return new Timestamp(cal.getTimeInMillis());
@@ -326,23 +326,23 @@ public class DateUtils extends PropertyEditorSupport {
 
     // ////////////////////////////////////////////////////////////////////////////
     // getMillis
-    // 各种方式获取的Millis
+    // Lấy bằng nhiều cách khác nhau Millis
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * 系统时间的毫秒数
+     * Số mili giây của thời gian hệ thống
      *
-     * @return 系统时间的毫秒数
+     * @return Số mili giây của thời gian hệ thống
      */
     public static long getMillis() {
         return System.currentTimeMillis();
     }
 
     /**
-     * 指定日历的毫秒数
+     * Số mili giây của lịch đã chỉ định
      *
-     * @param cal 指定日历
-     * @return 指定日历的毫秒数
+     * @param cal Lịch đã chỉ định
+     * @return Số mili giây của lịch đã chỉ định
      */
     public static long getMillis(Calendar cal) {
         // --------------------return cal.getTimeInMillis();
@@ -350,20 +350,20 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 指定日期的毫秒数
+     * Số mili giây của ngày đã chỉ định
      *
-     * @param date 指定日期
-     * @return 指定日期的毫秒数
+     * @param date Ngày đã chỉ định
+     * @return Số mili giây của ngày đã chỉ định
      */
     public static long getMillis(Date date) {
         return date.getTime();
     }
 
     /**
-     * 指定时间戳的毫秒数
+     * Số mili giây của timestamp đã chỉ định
      *
-     * @param ts 指定时间戳
-     * @return 指定时间戳的毫秒数
+     * @param ts Timestamp đã chỉ định
+     * @return Số mili giây của timestamp đã chỉ định
      */
     public static long getMillis(Timestamp ts) {
         return ts.getTime();
@@ -371,29 +371,29 @@ public class DateUtils extends PropertyEditorSupport {
 
     // ////////////////////////////////////////////////////////////////////////////
     // formatDate
-    // 将日期按照一定的格式转化为字符串
+    // Chuyển đổi ngày thành chuỗi theo một định dạng nhất định
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * 默认方式表示的系统当前日期，具体格式：年-月-日
+     * Ngày hiện tại của hệ thống theo cách mặc định, định dạng cụ thể: năm-tháng-ngày
      *
-     * @return 默认日期按“年-月-日“格式显示
+     * @return Ngày mặc định theo định dạng “năm-tháng-ngày“ hiển thị theo định dạng
      */
     public static String formatDate() {
         return date_sdf.get().format(getCalendar().getTime());
     }
 
     /**
-     * 默认方式表示的系统当前日期，具体格式：yyyy-MM-dd HH:mm:ss
+     * Ngày hiện tại của hệ thống biểu thị theo cách mặc định, định dạng cụ thể:yyyy-MM-dd HH:mm:ss
      *
-     * @return 默认日期按“yyyy-MM-dd HH:mm:ss“格式显示
+     * @return Ngày mặc định hiển thị theo định dạng “yyyy-MM-dd HH:mm:ss” định dạng hiển thị
      */
     public static String formatDateTime() {
         return datetimeFormat.get().format(getCalendar().getTime());
     }
 
     /**
-     * 获取时间字符串
+     * Lấy chuỗi thời gian
      */
     public static String getDataString(SimpleDateFormat formatstr) {
         synchronized (formatstr) {
@@ -402,62 +402,62 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 指定日期的默认显示，具体格式：年-月-日
+     * Hiển thị mặc định của ngày đã chỉ định, định dạng cụ thể: năm-tháng-ngày
      *
-     * @param cal 指定的日期
-     * @return 指定日期按“年-月-日“格式显示
+     * @param cal Ngày đã chỉ định
+     * @return Ngày đã chỉ định theo định dạng “năm-tháng-ngày“ hiển thị theo định dạng
      */
     public static String formatDate(Calendar cal) {
         return date_sdf.get().format(cal.getTime());
     }
 
     /**
-     * 指定日期的默认显示，具体格式：年-月-日
+     * Hiển thị mặc định của ngày đã chỉ định, định dạng cụ thể: năm-tháng-ngày
      *
-     * @param date 指定的日期
-     * @return 指定日期按“年-月-日“格式显示
+     * @param date Ngày đã chỉ định
+     * @return Ngày đã chỉ định theo định dạng “năm-tháng-ngày“ hiển thị theo định dạng
      */
     public static String formatDate(Date date) {
         return date_sdf.get().format(date);
     }
 
     /**
-     * 指定毫秒数表示日期的默认显示，具体格式：年-月-日
+     * Hiển thị mặc định của ngày được biểu thị bằng số mili giây đã chỉ định, định dạng cụ thể: năm-tháng-ngày
      *
-     * @param millis 指定的毫秒数
-     * @return 指定毫秒数表示日期按“年-月-日“格式显示
+     * @param millis Số mili giây đã chỉ định
+     * @return Ngày được biểu thị bằng số mili giây đã chỉ định theo định dạng “năm-tháng-ngày“ hiển thị theo định dạng
      */
     public static String formatDate(long millis) {
         return date_sdf.get().format(new Date(millis));
     }
 
     /**
-     * 默认日期按指定格式显示
+     * Ngày mặc định hiển thị theo định dạng đã chỉ định
      *
-     * @param pattern 指定的格式
-     * @return 默认日期按指定格式显示
+     * @param pattern Định dạng đã chỉ định
+     * @return Ngày mặc định hiển thị theo định dạng đã chỉ định
      */
     public static String formatDate(String pattern) {
         return getSdFormat(pattern).format(getCalendar().getTime());
     }
 
     /**
-     * 指定日期按指定格式显示
+     * Ngày đã chỉ định hiển thị theo định dạng đã chỉ định
      *
-     * @param cal     指定的日期
-     * @param pattern 指定的格式
-     * @return 指定日期按指定格式显示
+     * @param cal     Ngày đã chỉ định
+     * @param pattern Định dạng đã chỉ định
+     * @return Ngày đã chỉ định hiển thị theo định dạng đã chỉ định
      */
     public static String formatDate(Calendar cal, String pattern) {
         return getSdFormat(pattern).format(cal.getTime());
     }
 
     /**
-     * 指定日期按指定格式显示
+     * Ngày đã chỉ định hiển thị theo định dạng đã chỉ định
      *
-     * @param date    指定的日期
-     * @param pattern 指定的格式
-     * @return 指定日期按指定格式显示
+     * @param date    Ngày đã chỉ định
+     * @param pattern Định dạng đã chỉ định
+     * @return Ngày đã chỉ định hiển thị theo định dạng đã chỉ định
      */
     public static String formatDate(Date date, String pattern) {
         return getSdFormat(pattern).format(date);
@@ -465,43 +465,43 @@ public class DateUtils extends PropertyEditorSupport {
 
     // ////////////////////////////////////////////////////////////////////////////
     // formatTime
-    // 将日期按照一定的格式转化为字符串
+    // Chuyển đổi ngày thành chuỗi theo một định dạng nhất định
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * 默认方式表示的系统当前日期，具体格式：年-月-日 时：分
+     * Ngày hiện tại của hệ thống theo cách mặc định, định dạng cụ thể: năm-tháng-ngày giờ:phút
      *
-     * @return 默认日期按“年-月-日 时：分“格式显示
+     * @return Ngày mặc định theo định dạng “năm-tháng-ngày giờ:phút“ hiển thị theo định dạng
      */
     public static String formatTime() {
         return time_sdf.get().format(getCalendar().getTime());
     }
 
     /**
-     * 指定毫秒数表示日期的默认显示，具体格式：年-月-日 时：分
+     * Hiển thị mặc định của ngày được biểu thị bằng số mili giây đã chỉ định, định dạng cụ thể: năm-tháng-ngày giờ:phút
      *
-     * @param millis 指定的毫秒数
-     * @return 指定毫秒数表示日期按“年-月-日 时：分“格式显示
+     * @param millis Số mili giây đã chỉ định
+     * @return Ngày được biểu thị bằng số mili giây đã chỉ định theo định dạng “năm-tháng-ngày giờ:phút“ hiển thị theo định dạng
      */
     public static String formatTime(long millis) {
         return time_sdf.get().format(new Date(millis));
     }
 
     /**
-     * 指定日期的默认显示，具体格式：年-月-日 时：分
+     * Hiển thị mặc định của ngày đã chỉ định, định dạng cụ thể: năm-tháng-ngày giờ:phút
      *
-     * @param cal 指定的日期
-     * @return 指定日期按“年-月-日 时：分“格式显示
+     * @param cal Ngày đã chỉ định
+     * @return Ngày đã chỉ định theo định dạng “năm-tháng-ngày giờ:phút“ hiển thị theo định dạng
      */
     public static String formatTime(Calendar cal) {
         return time_sdf.get().format(cal.getTime());
     }
 
     /**
-     * 指定日期的默认显示，具体格式：年-月-日 时：分
+     * Hiển thị mặc định của ngày đã chỉ định, định dạng cụ thể: năm-tháng-ngày giờ:phút
      *
-     * @param date 指定的日期
-     * @return 指定日期按“年-月-日 时：分“格式显示
+     * @param date Ngày đã chỉ định
+     * @return Ngày đã chỉ định theo định dạng “năm-tháng-ngày giờ:phút“ hiển thị theo định dạng
      */
     public static String formatTime(Date date) {
         return time_sdf.get().format(date);
@@ -509,43 +509,43 @@ public class DateUtils extends PropertyEditorSupport {
 
     // ////////////////////////////////////////////////////////////////////////////
     // formatShortTime
-    // 将日期按照一定的格式转化为字符串
+    // Chuyển đổi ngày thành chuỗi theo một định dạng nhất định
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * 默认方式表示的系统当前日期，具体格式：时：分
+     * Ngày hiện tại của hệ thống biểu thị theo cách mặc định, định dạng cụ thể: giờ:phút
      *
-     * @return 默认日期按“时：分“格式显示
+     * @return Ngày mặc định hiển thị theo định dạng “giờ:phút”
      */
     public static String formatShortTime() {
         return short_time_sdf.get().format(getCalendar().getTime());
     }
 
     /**
-     * 指定毫秒数表示日期的默认显示，具体格式：时：分
+     * Hiển thị mặc định của ngày biểu thị bằng số mili giây đã chỉ định, định dạng cụ thể: giờ:phút
      *
-     * @param millis 指定的毫秒数
-     * @return 指定毫秒数表示日期按“时：分“格式显示
+     * @param millis Số mili giây đã chỉ định
+     * @return Ngày biểu thị bằng số mili giây đã chỉ định hiển thị theo định dạng “giờ:phút”
      */
     public static String formatShortTime(long millis) {
         return short_time_sdf.get().format(new Date(millis));
     }
 
     /**
-     * 指定日期的默认显示，具体格式：时：分
+     * Hiển thị mặc định của ngày đã chỉ định, định dạng cụ thể: giờ:phút
      *
-     * @param cal 指定的日期
-     * @return 指定日期按“时：分“格式显示
+     * @param cal Ngày đã chỉ định
+     * @return Ngày đã chỉ định hiển thị theo định dạng “giờ:phút”
      */
     public static String formatShortTime(Calendar cal) {
         return short_time_sdf.get().format(cal.getTime());
     }
 
     /**
-     * 指定日期的默认显示，具体格式：时：分
+     * Hiển thị mặc định của ngày đã chỉ định, định dạng cụ thể: giờ:phút
      *
-     * @param date 指定的日期
-     * @return 指定日期按“时：分“格式显示
+     * @param date Ngày đã chỉ định
+     * @return Ngày đã chỉ định hiển thị theo định dạng “giờ:phút”
      */
     public static String formatShortTime(Date date) {
         return short_time_sdf.get().format(date);
@@ -555,15 +555,15 @@ public class DateUtils extends PropertyEditorSupport {
     // parseDate
     // parseCalendar
     // parseTimestamp
-    // 将字符串按照一定的格式转化为日期或时间
+    // Chuyển đổi chuỗi thành ngày hoặc thời gian theo một định dạng nhất định
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * 根据指定的格式将字符串转换成Date 如输入：2003-11-19 11:20:20将按照这个转成时间
+     * Chuyển đổi chuỗi thành Date theo định dạng đã chỉ định, ví dụ nhập:2003-11-19 11:20:20 sẽ được chuyển thành thời gian theo định dạng này
      *
-     * @param src     将要转换的原始字符窜
-     * @param pattern 转换的匹配格式
-     * @return 如果转换成功则返回转换后的日期
+     * @param src     Chuỗi ký tự gốc cần chuyển đổi
+     * @param pattern Định dạng khớp khi chuyển đổi
+     * @return Nếu chuyển đổi thành công thì trả về ngày sau khi chuyển đổi
      * @throws ParseException
      */
     public static Date parseDate(String src, String pattern) throws ParseException {
@@ -572,11 +572,11 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 根据指定的格式将字符串转换成Date 如输入：2003-11-19 11:20:20将按照这个转成时间
+     * Chuyển đổi chuỗi thành Date theo định dạng đã chỉ định, ví dụ nhập:2003-11-19 11:20:20 sẽ được chuyển thành thời gian theo định dạng này
      *
-     * @param src     将要转换的原始字符窜
-     * @param pattern 转换的匹配格式
-     * @return 如果转换成功则返回转换后的日期
+     * @param src     Chuỗi ký tự gốc cần chuyển đổi
+     * @param pattern Định dạng khớp khi chuyển đổi
+     * @return Nếu chuyển đổi thành công thì trả về ngày sau khi chuyển đổi
      * @throws ParseException
      */
     public static Calendar parseCalendar(String src, String pattern) throws ParseException {
@@ -595,11 +595,11 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 根据指定的格式将字符串转换成Date 如输入：2003-11-19 11:20:20将按照这个转成时间
+     * Chuyển đổi chuỗi thành Date theo định dạng đã chỉ định, ví dụ nhập:2003-11-19 11:20:20 sẽ được chuyển thành thời gian theo định dạng này
      *
-     * @param src     将要转换的原始字符窜
-     * @param pattern 转换的匹配格式
-     * @return 如果转换成功则返回转换后的时间戳
+     * @param src     Chuỗi ký tự gốc cần chuyển đổi
+     * @param pattern Định dạng khớp khi chuyển đổi
+     * @return Nếu chuyển đổi thành công sẽ trả về timestamp sau khi chuyển đổi
      * @throws ParseException
      */
     public static Timestamp parseTimestamp(String src, String pattern) throws ParseException {
@@ -609,16 +609,16 @@ public class DateUtils extends PropertyEditorSupport {
 
     // ////////////////////////////////////////////////////////////////////////////
     // dateDiff
-    // 计算两个日期之间的差值
+    // Tính hiệu số giữa hai ngày
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * 计算两个时间之间的差值，根据标志的不同而不同
+     * Tính hiệu số giữa hai thời gian, khác nhau tùy theo cờ
      *
-     * @param flag   计算标志，表示按照年/月/日/时/分/秒等计算
-     * @param calSrc 减数
-     * @param calDes 被减数
-     * @return 两个日期之间的差值
+     * @param flag   Cờ tính toán, biểu thị tính theo năm/tháng/ngày/giờ/phút/giây, v.v.
+     * @param calSrc Số trừ
+     * @param calDes Số bị trừ
+     * @return Hiệu số giữa hai ngày
      */
     public static int dateDiff(char flag, Calendar calSrc, Calendar calDes) {
 
@@ -657,8 +657,8 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * String类型 转换为Date, 如果参数长度为10 转换格式”yyyy-MM-dd“ 如果参数长度为19 转换格式”yyyy-MM-dd
-     * HH:mm:ss“ * @param text String类型的时间值
+     * String Kiểu chuyển đổi thành Date, Nếu độ dài tham số là 10, định dạng chuyển đổi là ”yyyy-MM-dd“ Nếu độ dài tham số là 19, định dạng chuyển đổi là ”yyyy-MM-dd
+     * HH:mm:ss“ * @param text String Giá trị thời gian kiểu
      */
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
@@ -690,7 +690,7 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 将字符串转成时间
+     * Chuyển đổi chuỗi thành thời gian
      * @param str
      * @return
      */
@@ -703,7 +703,7 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 判断两个时间是否是同一天
+     * Kiểm tra hai thời gian có phải cùng một ngày không
      *
      * @param date1
      * @param date2
@@ -723,45 +723,45 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 计算与当前日期的时间差
+     * Tính chênh lệch thời gian so với ngày hiện tại
      *
      * @param targetDate
      * @return
      */
     public static long calculateTimeDifference(Date targetDate) {
-        // 获取当前时间
+        // Lấy thời gian hiện tại
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // 将java.util.Date转换为java.time.LocalDateTime
+        // Sẽ java.util.Date Chuyển đổi thành java.time.LocalDateTime
         LocalDateTime convertedTargetDate = targetDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-        // 计算时间差
+        // Tính chênh lệch thời gian
         Duration duration = Duration.between(currentTime, convertedTargetDate);
 
-        // 获取时间差的毫秒数
+        // Lấy số mili giây của chênh lệch thời gian
         long timeDifferenceInMillis = duration.toMillis();
 
         return timeDifferenceInMillis;
     }
 
     /**
-     * 计算与当前日期的日期天数差
+     * Tính chênh lệch số ngày so với ngày hiện tại
      *
      * @param targetDate
      * @return
      */
     public static long calculateDaysDifference(Date targetDate) {
-        // 获取当前日期
+        // Lấy ngày hiện tại
         LocalDate currentDate = LocalDate.now();
-        // 将java.util.Date转换为java.time.LocalDate
+        // Sẽ java.util.Date Chuyển đổi thành java.time.LocalDate
         LocalDate convertedTargetDate = targetDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        // 计算日期差
+        // Tính chênh lệch ngày
         long daysDifference = ChronoUnit.DAYS.between(currentDate, convertedTargetDate);
         return daysDifference;
     }
 
     /**
-     * 判断两个时间是否是同一周
+     * Kiểm tra hai thời gian có phải cùng một tuần không
      *
      * @param date1
      * @param date2
@@ -780,7 +780,7 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 判断两个时间是否是同一月
+     * Kiểm tra hai thời gian có phải cùng một tháng không
      *
      * @param date1
      * @param date2
@@ -799,7 +799,7 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 判断两个时间是否是同一年
+     * Kiểm tra hai thời gian có phải cùng một năm không
      *
      * @param date1
      * @param date2
@@ -817,7 +817,7 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
-     * 获取两个日期之间的所有日期列表，包含开始和结束日期
+     * Lấy danh sách tất cả các ngày giữa hai ngày, bao gồm ngày bắt đầu và ngày kết thúc
      *
      * @param begin
      * @param end
@@ -829,7 +829,7 @@ public class DateUtils extends PropertyEditorSupport {
             return dateList;
         }
 
-        // 清除时间部分，只比较日期
+        // Xóa phần thời gian, chỉ so sánh ngày
         Calendar beginCal = Calendar.getInstance();
         beginCal.setTime(begin);
         beginCal.set(Calendar.HOUR_OF_DAY, 0);

@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Description: ServiceImpl基类
+ * @Description: ServiceImpl Lớp cơ sở
  * @Author: dangzhenghui@163.com
  * @Date: 2019-4-21 8:13
  * @Version: 1.0

@@ -1,24 +1,24 @@
 package org.jeecg.common.constant;
 
 /**
- * 规则值生成 编码常量类
+ * Lớp hằng số mã hóa cho việc sinh giá trị theo quy tắc
  * @author: taoyan
- * @date: 2020年04月02日
+ * @date: 2020 năm 04 tháng 02 ngày
  */
 public class FillRuleConstant {
 
     /**
-     * 公文发文编码
+     * Mã phát hành công văn
      */
     public static final String DOC_SEND = "doc_send_code";
 
     /**
-     * 部门编码
+     * Mã phòng ban
      */
     public static final String DEPART = "org_num_role";
 
     /**
-     * 分类字典编码
+     * Mã từ điển phân loại
      */
     public static final String CATEGORY = "category_code_rule";
 

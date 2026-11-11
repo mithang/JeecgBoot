@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class BrowserUtils {
 
     /**
-     * 判断是否是IE
+     * Kiểm tra có phải là không IE
      * @param request
      * @return
      */
@@ -26,7 +26,7 @@ public class BrowserUtils {
 	}
 
 	/**
-	 * 获取IE版本
+	 * Lấy phiên bản IE
 	 * 
 	 * @param request
 	 * @return
@@ -50,7 +50,7 @@ public class BrowserUtils {
 	}
 
 	/**
-	 * 获取浏览器类型
+	 * Lấy loại trình duyệt
 	 * 
 	 * @param request
 	 * @return
@@ -113,7 +113,7 @@ public class BrowserUtils {
 	private final static String OPERA = "Opera";
 	private final static String CHROME = "Chrome";
 	private final static String SAFARI = "Safari";
-	private final static String OTHER = "其它";
+	private final static String OTHER = "Khác";
 	private final static String CAMINO = "Camino";
 
 	public static String checkBrowse(HttpServletRequest request) {
@@ -196,12 +196,12 @@ public class BrowserUtils {
 		return browserLangCode;
 	}
 
-    /** 判断请求是否来自电脑端 */
+    /** Kiểm tra yêu cầu có đến từ máy tính không */
     public static boolean isDesktop(HttpServletRequest request) {
         return !isMobile(request);
     }
 
-    /** 判断请求是否来自移动端 */
+    /** Kiểm tra yêu cầu có đến từ thiết bị di động không */
     public static boolean isMobile(HttpServletRequest request) {
         String ua = request.getHeader("User-Agent").toLowerCase();
         String type = "(phone|pad|pod|iphone|ipod|ios|ipad|android|mobile|blackberry|iemobile|mqqbrowser|juc|fennec|wosbrowser|browserng|webos|symbian|windows phone)";

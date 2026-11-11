@@ -38,45 +38,45 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Description: 通用工具
+ * @Description: Công cụ dùng chung
  * @author: jeecg-boot
  */
 @Slf4j
 public class CommonUtils {
 
     /**
-     * 中文正则
+     * Biểu thức chính quy tiếng Trung
      */
     private static Pattern ZHONGWEN_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
 
     /**
-     * 文件名 正则字符串
-     * 文件名支持的字符串：字母数字中文.-_()（） 除此之外的字符将被删除
+     * Tên tệp — chuỗi regex
+     * Các ký tự được hỗ trợ trong tên tệp: chữ cái, chữ số, tiếng Trung.-_()（） Các ký tự khác sẽ bị xóa
      */
     private static String FILE_NAME_REGEX = "[^A-Za-z\\.\\(\\)\\-（）\\_0-9\\u4e00-\\u9fa5]";
 
     public static String uploadOnlineImage(byte[] data,String basePath,String bizPath,String uploadType){
         String dbPath = null;
         String fileName = "image" + Math.round(Math.random() * 100000000000L);
-        //update-begin---author:wangshuai---date:2026-01-08---for:【QQYUN-14535】ai生成图片的后缀不一致的，导致不展示---
+        //update-begin---author:wangshuai---date:2026-01-08---for:【QQYUN-14535】Hậu tố của hình ảnh do AI tạo không nhất quán, dẫn đến không hiển thị---
         fileName += "." + PoiPublicUtil.getFileExtendName(data).toLowerCase();
-        //update-end---author:wangshuai---date:2026-01-08---for:【QQYUN-14535】ai生成图片的后缀不一致的，导致不展示---
+        //update-end---author:wangshuai---date:2026-01-08---for:【QQYUN-14535】Hậu tố của hình ảnh do AI tạo không nhất quán, dẫn đến không hiển thị---
         try {
             if(CommonConstant.UPLOAD_TYPE_LOCAL.equals(uploadType)){
-                //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9435】uploadOnlineImage路径遍历漏洞修复---
-                // 1. 使用已有的路径遍历检查
+                //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9435】Sửa lỗ hổng path traversal của uploadOnlineImage---
+                // 1. Sử dụng kiểm tra duyệt đường dẫn có sẵn
                 SsrfFileTypeFilter.checkPathTraversal(bizPath);
-                // 2. 标准化路径并校验是否在basePath范围内
+                // 2. Chuẩn hóa đường dẫn và kiểm chứng có nằm trong phạm vi basePath không
                 Path root = Paths.get(basePath).toAbsolutePath().normalize();
                 Path targetDir = root.resolve(bizPath).toAbsolutePath().normalize();
                 if (!targetDir.startsWith(root)) {
-                    log.error("检测到路径遍历攻击！非法 bizPath: {}", bizPath);
+                    log.error("Phát hiện tấn công duyệt đường dẫn! Không hợp lệ bizPath: {}", bizPath);
                     throw new SecurityException("Illegal access to path outside of base directory.");
                 }
                 File file = targetDir.toFile();
-                //update-end---author:wangshuai---date:2026-03-30---for:【issues/9435】uploadOnlineImage路径遍历漏洞修复---
+                //update-end---author:wangshuai---date:2026-03-30---for:【issues/9435】Sửa lỗ hổng path traversal của uploadOnlineImage---
                 if (!file.exists()) {
-                    file.mkdirs();// 创建文件根目录
+                    file.mkdirs();// Tạo thư mục gốc của tệp
                 }
                 String savePath = file.getPath() + File.separator + fileName;
                 File savefile = new File(savePath);
@@ -98,12 +98,12 @@ public class CommonUtils {
     }
 
     /**
-     * 判断文件名是否带盘符，重新处理
+     * Kiểm tra tên tệp có chứa ký tự ổ đĩa không, xử lý lại
      * @param fileName
      * @return
      */
     public static String getFileName(String fileName){
-        //判断是否带有盘符信息
+        //Kiểm tra có chứa thông tin ổ đĩa không
         // Check for Unix-style path
         int unixSep = fileName.lastIndexOf('/');
         // Check for Windows-style path
@@ -114,19 +114,19 @@ public class CommonUtils {
             // Any sort of path separator found...
             fileName = fileName.substring(pos + 1);
         }
-        //替换上传文件名字的特殊字符
+        //Thay thế ký tự đặc biệt trong tên tệp tải lên
         fileName = fileName.replace("=","").replace(",","").replace("&","")
                 .replace("#", "").replace("“", "").replace("”", "");
-        //替换上传文件名字中的空格
+        //Thay thế khoảng trắng trong tên tệp tải lên
         fileName=fileName.replaceAll("\\s","");
-        //update-beign-author:taoyan date:20220302 for: /issues/3381 online 在线表单 使用文件组件时，上传文件名中含%，下载异常
+        //update-beign-author:taoyan date:20220302 for: /issues/3381 online Biểu mẫu trực tuyến: khi sử dụng component tệp, tên tệp tải lên chứa%, tải xuống bất thường
         fileName = fileName.replaceAll(FILE_NAME_REGEX, "");
-        //update-end-author:taoyan date:20220302 for: /issues/3381 online 在线表单 使用文件组件时，上传文件名中含%，下载异常
+        //update-end-author:taoyan date:20220302 for: /issues/3381 online Biểu mẫu trực tuyến: khi sử dụng component tệp, tên tệp tải lên chứa%, tải xuống bất thường
         return fileName;
     }
 
     /**
-     * java 判断字符串里是否包含中文字符
+     * java Kiểm tra chuỗi có chứa ký tự tiếng Trung không
      * @param str
      * @return
      */
@@ -143,7 +143,7 @@ public class CommonUtils {
     }
 
     /**
-     * 统一全局上传
+     * Tải lên toàn cục thống nhất
      * @Return: java.lang.String
      */
     public static String upload(MultipartFile file, String bizPath, String uploadType) {
@@ -161,32 +161,32 @@ public class CommonUtils {
         return url;
     }
     /**
-     * 本地文件上传
-     * @param mf 文件
-     * @param bizPath  自定义路径
+     * Tải file lên cục bộ
+     * @param mf Tệp
+     * @param bizPath  Đường dẫn tùy chỉnh
      * @return
      */
     public static String uploadLocal(MultipartFile mf,String bizPath,String uploadpath){
         try {
-            // 文件安全校验，防止上传漏洞文件
+            // Kiểm tra an toàn tệp, ngăn tải lên tệp có lỗ hổng
             SsrfFileTypeFilter.checkUploadFileType(mf, bizPath);
             
             String fileName = null;
-            //update-begin---author:liusq ---date:2026-03-30  for：【issues/9428】修复uploadLocal bizPath路径遍历漏洞(CWE-22)-----------
-            // 路径遍历校验：规范化后确保目标目录在uploadpath内
+            //update-begin---author:liusq ---date:2026-03-30  for：【issues/9428] Sửa lỗ hổng path traversal của bizPath trong uploadLocal(CWE-22)-----------
+            // Kiểm tra path traversal: sau khi chuẩn hóa, đảm bảo thư mục đích nằm trong uploadpath
             File uploadDir = new File(uploadpath).getCanonicalFile();
             File file = new File(uploadpath + File.separator + bizPath + File.separator).getCanonicalFile();
             if (!file.toPath().startsWith(uploadDir.toPath())) {
-                throw new JeecgBootException("非法业务路径，禁止访问上传目录之外的路径: " + bizPath);
+                throw new JeecgBootException("Đường dẫn nghiệp vụ không hợp lệ, cấm truy cập đường dẫn ngoài thư mục tải lên: " + bizPath);
             }
-            //update-end---author:liusq ---date:2026-03-30  for：【issues/9428】修复uploadLocal bizPath路径遍历漏洞(CWE-22)-----------
+            //update-end---author:liusq ---date:2026-03-30  for：【issues/9428] Sửa lỗ hổng path traversal của bizPath trong uploadLocal(CWE-22)-----------
             if (!file.exists()) {
-                // 创建文件根目录
+                // Tạo thư mục gốc của tệp
                 file.mkdirs();
             }
-            // 获取文件名
+            // Lấy tên tệp
             String orgName = mf.getOriginalFilename();
-            // 无中文情况下进行转码
+            // Chuyển mã khi không có tiếng Trung
             if (orgName != null && !CommonUtils.ifContainChinese(orgName)) {
                 orgName = new String(orgName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
             }
@@ -218,14 +218,14 @@ public class CommonUtils {
     }
 
     /**
-     * 统一全局上传（支持自定义桶）
-     * 根据 uploadType 自动选择 MinIO 或 阿里云OSS 进行文件上传
+     * Tải lên toàn cục thống nhất (hỗ trợ bucket tùy chỉnh)
+     * Tự động chọn MinIO hoặc Alibaba Cloud OSS để tải tệp lên theo uploadType
      *
-     * @param file         待上传的文件
-     * @param bizPath      业务路径，作为文件存储的目录前缀（如 "upload/images"）
-     * @param uploadType   上传方式：{@link CommonConstant#UPLOAD_TYPE_MINIO} 使用MinIO，其他使用阿里云OSS
-     * @param customBucket 自定义桶名称，为空则使用各存储服务的默认桶
-     * @return 文件访问URL，上传失败返回空字符串
+     * @param file         Tệp chờ tải lên
+     * @param bizPath      Đường dẫn nghiệp vụ, tiền tố thư mục lưu trữ tệp (ví dụ như "upload/images"）
+     * @param uploadType   Phương thức tải lên:{@link CommonConstant#UPLOAD_TYPE_MINIO} Sử dụng MinIO, các trường hợp khác dùng Alibaba Cloud OSS
+     * @param customBucket Tên bucket tùy chỉnh, để trống sẽ dùng bucket mặc định của từng dịch vụ lưu trữ
+     * @return URL truy cập tệp, tải lên thất bại trả về chuỗi rỗng
      */
     public static String upload(MultipartFile file, String bizPath, String uploadType, String customBucket) {
         String url = "";
@@ -241,12 +241,12 @@ public class CommonUtils {
         return url;
     }
 
-    /** 当前系统数据库类型 */
+    /** Loại cơ sở dữ liệu của hệ thống hiện tại */
     private static String DB_TYPE = "";
     private static DbType dbTypeEnum = null;
 
     /**
-     * 全局获取平台数据库类型（作废了）
+     * Lấy toàn cục loại cơ sở dữ liệu của nền tảng (đã bỏ)
      * @return
      */
     @Deprecated
@@ -265,7 +265,7 @@ public class CommonUtils {
     }
 
     /**
-     * 全局获取平台数据库类型（对应mybaisPlus枚举）
+     * Lấy toàn cục loại cơ sở dữ liệu của nền tảng (tương ứng enum mybatisPlus)
      * @return
      */
     public static DbType getDatabaseTypeEnum() {
@@ -275,7 +275,7 @@ public class CommonUtils {
         try {
             DataSource dataSource = SpringContextUtils.getApplicationContext().getBean(DataSource.class);
             dbTypeEnum = JdbcUtils.getDbType(dataSource.getConnection().getMetaData().getURL());
-            //【采用SQL_SERVER2005引擎】QQYUN-13298 解决升级mybatisPlus后SqlServer分页使用OFFSET，无排序字段报错问题
+            //【Sử dụng SQL_SERVER2005 Engine】QQYUN-13298 Khắc phục lỗi phân trang SqlServer dùng OFFSET sau khi nâng cấp mybatisPlus khi không có trường sắp xếp
             if (dbTypeEnum == DbType.SQL_SERVER) {
                 dbTypeEnum = DbType.SQL_SERVER2005;
             }
@@ -287,7 +287,7 @@ public class CommonUtils {
     }
 
     /**
-     * 根据数据源key获取DataSourceProperty
+     * Lấy theo key nguồn dữ liệu DataSourceProperty
      * @param sourceKey
      * @return
      */
@@ -299,7 +299,7 @@ public class CommonUtils {
     }
 
     /**
-     * 根据sourceKey 获取数据源连接
+     * Lấy kết nối nguồn dữ liệu theo sourceKey
      * @param sourceKey
      * @return
      * @throws SQLException
@@ -323,7 +323,7 @@ public class CommonUtils {
     }
 
     /**
-     * 获取数据库类型
+     * Lấy loại cơ sở dữ liệu
      * @param dataSource
      * @return
      * @throws SQLException
@@ -346,8 +346,8 @@ public class CommonUtils {
                 }else if(dbType.indexOf(DataBaseConstant.DB_TYPE_MARIADB)>=0) {
                     DB_TYPE = DataBaseConstant.DB_TYPE_MARIADB;
                 }else {
-                    log.error("数据库类型:[" + dbType + "]不识别!");
-                    //throw new JeecgBootException("数据库类型:["+dbType+"]不识别!");
+                    log.error("Loại cơ sở dữ liệu:[" + dbType + "]Không nhận dạng được!");
+                    //throw new JeecgBootException("Loại cơ sở dữ liệu:["+dbType+"]Không nhận dạng được!");
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
@@ -359,65 +359,65 @@ public class CommonUtils {
 
     }
     /**
-     * 获取服务器地址
+     * Lấy địa chỉ máy chủ
      *
      * @param request
      * @return
      */
     public static String getBaseUrl(HttpServletRequest request) {
-        //1.【兼容】兼容微服务下的 base path-------
+        //1.【Tương thích】 Tương thích với các microservice base path-------
         String xGatewayBasePath = request.getHeader(ServiceNameConstants.X_GATEWAY_BASE_PATH);
         if(oConvertUtils.isNotEmpty(xGatewayBasePath)){
-            //update-begin---author:wangshuai ---date:20260616  for：【issues/9695】校验X_GATEWAY_BASE_PATH防止SSRF header注入-----------
+            //update-begin---author:wangshuai ---date:20260616  for：【issues/9695】Kiểm chứng X_GATEWAY_BASE_PATH Ngăn chặn SSRF header injection-----------
             String validated = validateGatewayBasePath(xGatewayBasePath);
             if(validated != null){
                 log.info("x_gateway_base_path = {}", validated);
                 return validated;
             }
-            log.warn("X_GATEWAY_BASE_PATH header 校验失败，已忽略: {}", xGatewayBasePath);
-            //update-end---author:wangshuai ---date:20260616  for：【issues/9695】校验X_GATEWAY_BASE_PATH防止SSRF header注入-----------
+            log.warn("X_GATEWAY_BASE_PATH header Kiểm chứng thất bại, đã bỏ qua: {}", xGatewayBasePath);
+            //update-end---author:wangshuai ---date:20260616  for：【issues/9695】Kiểm chứng X_GATEWAY_BASE_PATH Ngăn chặn SSRF header injection-----------
         }
-        //2.【兼容】SSL认证之后，request.getScheme()获取不到https的问题
+        //2.【Tương thích】 Sau khi xác thực SSL,request.getScheme()vấn đề không lấy được https
         // https://blog.csdn.net/weixin_34376986/article/details/89767950
         String scheme = request.getHeader(CommonConstant.X_FORWARDED_SCHEME);
-        //update-begin---author:scott ---date:20261013  for：【jimureport/issues/4786】HTTPS反代下只传X-Forwarded-Proto时页面资源仍为http://，Mixed Content白屏-----------
+        //update-begin---author:scott ---date:20261013  for：【jimureport/issues/4786】Khi reverse proxy HTTPS chỉ truyền X-Forwarded-Proto thì tài nguyên trang vẫn là http://, màn hình trắng do Mixed Content-----------
         if(oConvertUtils.isEmpty(scheme)){
-            // 多级代理时形如 "https, http"，取第一个（最靠近浏览器的那一跳）
+            // Khi proxy nhiều cấp có dạng "https, http", lấy cái đầu tiên (bước nhảy gần trình duyệt nhất)
             String proto = request.getHeader(CommonConstant.X_FORWARDED_PROTO);
             if(oConvertUtils.isNotEmpty(proto)){
                 scheme = proto.split(",")[0].trim();
             }
         }
-        //update-end---author:scott ---date:20261013  for：【jimureport/issues/4786】HTTPS反代下只传X-Forwarded-Proto时页面资源仍为http://，Mixed Content白屏-----------
+        //update-end---author:scott ---date:20261013  for：【jimureport/issues/4786】Khi reverse proxy HTTPS chỉ truyền X-Forwarded-Proto thì tài nguyên trang vẫn là http://, màn hình trắng do Mixed Content-----------
         if(oConvertUtils.isEmpty(scheme)){
             scheme = request.getScheme();
         }
 
-        //3.常规操作
+        //3.Thao tác thông thường
         String serverName = request.getServerName();
         int serverPort = request.getServerPort();
         String contextPath = request.getContextPath();
 
-        //返回 host domain
+        //Trả về host domain
         String baseDomainPath = null;
-        //update-begin---author:wangshuai---date:2024-03-15---for:【QQYUN-8561】企业微信登陆请求接口设置上下文不一致，导致接口404---
+        //update-begin---author:wangshuai---date:2024-03-15---for:【QQYUN-8561】Cài đặt ngữ cảnh của API yêu cầu đăng nhập WeCom không nhất quán, khiến API 404---
         int httpPort = 80;
         int httpsPort = 443;
         if(httpPort == serverPort || httpsPort == serverPort){
-        //update-end---author:wangshuai---date:2024-03-15---for:【QQYUN-8561】企业微信登陆请求接口设置上下文不一致，导致接口404---~
+        //update-end---author:wangshuai---date:2024-03-15---for:【QQYUN-8561】Cài đặt ngữ cảnh của API yêu cầu đăng nhập WeCom không nhất quán, khiến API 404---~
             baseDomainPath = scheme + "://" + serverName  + contextPath ;
         }else{
             baseDomainPath = scheme + "://" + serverName + ":" + serverPort + contextPath ;
         }
-        log.debug("-----获取当前服务 BaseUrl----- : " + baseDomainPath);
+        log.debug("-----Lấy dịch vụ hiện tại BaseUrl----- : " + baseDomainPath);
         return baseDomainPath;
     }
 
-    //update-begin---author:wangshuai ---date:20260616  for：【issues/9695】校验X_GATEWAY_BASE_PATH防止SSRF header注入-----------
+    //update-begin---author:wangshuai ---date:20260616  for：【issues/9695】Kiểm chứng X_GATEWAY_BASE_PATH Ngăn chặn SSRF header injection-----------
     /**
-     * 校验 X_GATEWAY_BASE_PATH 请求头：仅允许 http/https 协议，不允许 userInfo，
-     * 从解析后的 URI 组件重新拼接，防止注入特殊字符绕过。
-     * @return 校验通过返回安全的 baseUrl，否则返回 null
+     * Kiểm chứng X_GATEWAY_BASE_PATH Request header: chỉ cho phép http/https giao thức, không cho phép userInfo,
+     * Ghép lại từ các thành phần URI đã phân tích, ngăn chặn vượt qua bằng cách chèn ký tự đặc biệt.
+     * @return Kiểm chứng đạt sẽ trả về baseUrl an toàn, ngược lại trả về null
      */
     public static String validateGatewayBasePathForDomain(String headerValue) {
         return validateGatewayBasePath(headerValue);
@@ -440,7 +440,7 @@ public class CommonUtils {
             if (oConvertUtils.isEmpty(host)) {
                 return null;
             }
-            //update-begin---author:jeecg---for：【GHSA-3c5r-mgw9-jq74】网关基址头只接受纯路径，拒绝查询串/片段/路径穿越，防止篡改转发目标---
+            //update-begin---author:jeecg---for：【GHSA-3c5r-mgw9-jq74】Header địa chỉ cơ sở của gateway chỉ chấp nhận đường dẫn thuần, từ chối chuỗi truy vấn/Fragment/duyệt đường dẫn, ngăn chặn giả mạo đích chuyển tiếp---
             if (uri.getRawQuery() != null || uri.getRawFragment() != null) {
                 return null;
             }
@@ -451,49 +451,49 @@ public class CommonUtils {
             }
             String path = uri.getPath();
             if (path != null && !path.isEmpty()) {
-                // 仅允许常规路径字符，拒绝解码后出现的 ? # 及路径穿越 ..
+                // Chỉ cho phép ký tự đường dẫn thông thường, từ chối các ký tự xuất hiện sau khi giải mã ? # và duyệt đường dẫn ..
                 if (!path.matches("[A-Za-z0-9/_.\\-]*") || path.contains("..")) {
                     return null;
                 }
                 sb.append(path);
             }
             return sb.toString();
-            //update-end---author:jeecg---for：【GHSA-3c5r-mgw9-jq74】网关基址头只接受纯路径---
+            //update-end---author:jeecg---for：【GHSA-3c5r-mgw9-jq74】Header địa chỉ cơ sở của gateway chỉ chấp nhận đường dẫn thuần---
         } catch (Exception e) {
             return null;
         }
     }
     
     /**
-     * 校验 URL 的 host 是否为内网地址（回环 / 局域网 / 链路本地），
-     * 用于 OpenAPI 转发等服务端发起请求的场景，防止 SSRF 到公网。
-     * 校验失败抛出 JeecgBootException。
+     * Kiểm chứng host của URL có phải là địa chỉ mạng nội bộ không (loopback / Mạng LAN / link-local),
+     * Dùng cho các kịch bản yêu cầu do phía máy chủ khởi tạo như chuyển tiếp OpenAPI, ngăn chặn SSRF ra mạng công cộng.
+     * Kiểm chứng thất bại sẽ ném JeecgBootException.
      */
     public static void checkInternalUrl(String url) {
         try {
             java.net.URI uri = new java.net.URI(url);
             String host = uri.getHost();
             if (oConvertUtils.isEmpty(host)) {
-                throw new JeecgBootException("URL host 为空: " + url);
+                throw new JeecgBootException("URL host Trống: " + url);
             }
             java.net.InetAddress addr = java.net.InetAddress.getByName(host);
             if (addr.isLoopbackAddress() || addr.isSiteLocalAddress() || addr.isLinkLocalAddress()) {
                 return;
             }
-            throw new JeecgBootException("OpenAPI baseUrl 仅允许内网地址，当前解析到外部地址: " + host + " -> " + addr.getHostAddress());
+            throw new JeecgBootException("OpenAPI baseUrl Chỉ cho phép địa chỉ mạng nội bộ, hiện đã phân tích ra địa chỉ bên ngoài: " + host + " -> " + addr.getHostAddress());
         } catch (JeecgBootException e) {
             throw e;
         } catch (Exception e) {
-            throw new JeecgBootException("OpenAPI baseUrl 校验失败: " + e.getMessage());
+            throw new JeecgBootException("OpenAPI baseUrl Kiểm tra thất bại: " + e.getMessage());
         }
     }
-    //update-end---author:wangshuai ---date:20260616  for：【issues/9695】校验X_GATEWAY_BASE_PATH防止SSRF header注入-----------
+    //update-end---author:wangshuai ---date:20260616  for：【issues/9695】Kiểm chứng X_GATEWAY_BASE_PATH Ngăn chặn SSRF header injection-----------
 
     /**
-     * 递归合并 fastJSON 对象
+     * Gộp đệ quy đối tượng fastJSON
      *
-     * @param target  目标对象
-     * @param sources 来源对象，允许多个，优先级从左到右，最右侧的优先级最高
+     * @param target  Đối tượng đích
+     * @param sources Đối tượng nguồn, cho phép nhiều đối tượng, mức độ ưu tiên từ trái sang phải, phía bên phải nhất có mức ưu tiên cao nhất
      */
     public static JSONObject mergeJSON(JSONObject target, JSONObject... sources) {
         for (JSONObject source : sources) {
@@ -503,35 +503,35 @@ public class CommonUtils {
     }
 
     /**
-     * 递归合并 fastJSON 对象
+     * Gộp đệ quy đối tượng fastJSON
      *
-     * @param target 目标对象
-     * @param source 来源对象
+     * @param target Đối tượng đích
+     * @param source Đối tượng nguồn
      */
     public static JSONObject mergeJSON(JSONObject target, JSONObject source) {
         for (String key : source.keySet()) {
             Object sourceItem = source.get(key);
-            // 是否是 JSONObject
+            // Có phải là JSONObject
             if (sourceItem instanceof Map) {
-                // target中存在此key
+                // target trong đó tồn tại key
                 if (target.containsKey(key)) {
-                    // 两个都是 JSONObject，继续合并
+                    // Cả hai đều là JSONObject, tiếp tục hợp nhất
                     if (target.get(key) instanceof Map) {
                         CommonUtils.mergeJSON(target.getJSONObject(key), source.getJSONObject(key));
                         continue;
                     }
                 }
             }
-            // target不存在此key，或不是 JSONObject，则覆盖
+            // target Không tồn tại key này, hoặc không phải JSONObject, thì ghi đè
             target.put(key, sourceItem);
         }
         return target;
     }
 
     /**
-     * 将list集合以分割符的方式进行分割
-     * @param list      String类型的集合文本
-     * @param separator 分隔符
+     * Chia tập hợp list theo ký tự phân tách
+     * @param list      String Văn bản tập hợp kiểu
+     * @param separator Ký tự phân tách
      * @return
      */
     public static String getSplitText(List<String> list, String separator) {
@@ -542,7 +542,7 @@ public class CommonUtils {
     }
  
     /**
-     * 通过table的条件SQL
+     * Điều kiện qua table SQL
      *
      * @param tableSql sys_user where name = '1212'
      * @return name = '1212'
@@ -562,7 +562,7 @@ public class CommonUtils {
     }
 
     /**
-     * 通过table获取表名
+     * Lấy tên bảng qua table
      *
      * @param tableSql sys_user where name = '1212'
      * @return sys_user
@@ -581,7 +581,7 @@ public class CommonUtils {
     }
 
     /**
-     * 判断两个数组是否存在交集
+     * Kiểm tra hai mảng có giao nhau không
      * @param set1
      * @param arr2
      * @return
@@ -602,7 +602,7 @@ public class CommonUtils {
     }
 
     /**
-     * 输出info日志，会捕获异常，防止因为日志问题导致程序异常
+     * Ghi log info, sẽ bắt ngoại lệ để tránh chương trình gặp lỗi do vấn đề log
      *
      * @param msg
      * @param objects
@@ -617,21 +617,21 @@ public class CommonUtils {
 
 
     /**
-     * 从完整 URL 中提取本系统存储服务（OSS staticDomain/endpoint、MinIO）里的相对路径，非已配置存储的地址返回 null。
-     * 按主机名 + 端口精确比对（不区分大小写），带用户信息（user@host）或路径含 .. 的地址一律不认，
-     * 防止 http://存储地址@内网IP/、在查询串里拼存储地址等前缀匹配绕过；可用于"只允许引用本系统存储文件"的场景（如匿名附件）
+     * Trích xuất đường dẫn tương đối trong dịch vụ lưu trữ của hệ thống này từ URL đầy đủ (OSS staticDomain/endpoint, MinIO), địa chỉ lưu trữ chưa được cấu hình trả về null.
+     * Theo tên máy chủ + So khớp chính xác cổng (không phân biệt chữ hoa/thường), mang thông tin người dùng (user@host) hoặc đường dẫn chứa .. các địa chỉ đều không được chấp nhận,
+     * Ngăn chặn http://Địa chỉ lưu trữ@Mạng nội bộ IP/, ghép địa chỉ lưu trữ trong chuỗi truy vấn để vượt qua bằng khớp tiền tố; có thể dùng cho"Chỉ cho phép tham chiếu tệp lưu trữ của hệ thống này"trong các kịch bản (như tệp đính kèm ẩn danh)
      *
-     * @param url 完整地址
-     * @return 存储内相对路径（不带开头 /，MinIO 已去掉 bucket），非本系统存储返回 null
+     * @param url Địa chỉ đầy đủ
+     * @return Đường dẫn tương đối trong kho lưu trữ (không có dấu / ở đầu /, MinIO đã loại bỏ bucket), không phải lưu trữ của hệ thống này sẽ trả về null
      * @author scott
-     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】由 AiragChatServiceImpl 下沉，供其他模块复用
+     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】Được hạ xuống từ AiragChatServiceImpl để các module khác tái sử dụng
      */
     public static String extractStorageRelativePath(String url) {
         if (oConvertUtils.isEmpty(url)) {
             return null;
         }
         java.net.URI target = parseUri(url);
-        // 带用户信息（user@host）的地址一律不认，防止 http://存储地址@内网IP/ 这类写法
+        // Mang thông tin người dùng (user@host) các địa chỉ đều không được chấp nhận, để ngăn chặn http://Địa chỉ lưu trữ@Mạng nội bộ IP/ cách viết kiểu này
         if (target == null || target.getHost() == null || target.getRawUserInfo() != null) {
             return null;
         }
@@ -639,12 +639,12 @@ public class CommonUtils {
         if (targetPath.contains("..")) {
             return null;
         }
-        // 匹配 OSS staticDomain（如 https://jeecgdev.oss-cn-beijing.aliyuncs.com）
+        // Khớp OSS staticDomain (như https://jeecgdev.oss-cn-beijing.aliyuncs.com）
         java.net.URI ossDomain = parseUri(OssBootUtil.getStaticDomain());
         if (isSameServer(ossDomain, target)) {
             return stripBasePath(ossDomain, targetPath);
         }
-        // 匹配 OSS endpoint（如 oss-cn-beijing.aliyuncs.com，访问地址为 bucket.endpoint）
+        // Khớp OSS endpoint (như oss-cn-beijing.aliyuncs.com, địa chỉ truy cập là bucket.endpoint）
         String ossEndpoint = OssBootUtil.getEndPoint();
         if (oConvertUtils.isNotEmpty(ossEndpoint)) {
             String endpointHost = ossEndpoint.replaceFirst("(?i)^https?://", "").replaceAll("/.*$", "").toLowerCase();
@@ -653,14 +653,14 @@ public class CommonUtils {
                 return targetPath.startsWith("/") ? targetPath.substring(1) : targetPath;
             }
         }
-        // 匹配 MinIO URL（如 http://192.168.1.100:9000/）
+        // Khớp URL MinIO (như http://192.168.1.100:9000/）
         java.net.URI minioUrl = parseUri(MinioUtil.getMinioUrl());
         if (isSameServer(minioUrl, target)) {
             String path = stripBasePath(minioUrl, targetPath);
             if (path == null) {
                 return null;
             }
-            // 跳过 bucket 名称
+            // Bỏ qua tên bucket
             int slashIdx = path.indexOf('/');
             return slashIdx >= 0 ? path.substring(slashIdx + 1) : null;
         }
@@ -668,10 +668,10 @@ public class CommonUtils {
     }
 
     /**
-     * 解析地址，格式错误返回 null
+     * Phân tích địa chỉ, định dạng sai sẽ trả về null
      *
      * @author scott
-     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】存储地址按主机名比对
+     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】So sánh địa chỉ lưu trữ theo tên máy chủ
      */
     private static java.net.URI parseUri(String url) {
         if (oConvertUtils.isEmpty(url)) {
@@ -685,10 +685,10 @@ public class CommonUtils {
     }
 
     /**
-     * 两个地址是否指向同一服务：主机名相同（不区分大小写）且端口相同（未写端口按协议默认端口）
+     * Hai địa chỉ có trỏ tới cùng một dịch vụ không: tên máy chủ giống nhau (không phân biệt chữ hoa/thường) và cổng giống nhau (chưa ghi cổng thì theo cổng mặc định của giao thức)
      *
      * @author scott
-     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】存储地址按主机名比对
+     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】So sánh địa chỉ lưu trữ theo tên máy chủ
      */
     private static boolean isSameServer(java.net.URI base, java.net.URI target) {
         if (base == null || base.getHost() == null) {
@@ -698,10 +698,10 @@ public class CommonUtils {
     }
 
     /**
-     * 地址的实际端口，未写端口时按协议取默认值
+     * Cổng thực tế của địa chỉ, khi chưa ghi cổng sẽ lấy giá trị mặc định theo giao thức
      *
      * @author scott
-     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】存储地址按主机名比对
+     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】So sánh địa chỉ lưu trữ theo tên máy chủ
      */
     private static int effectivePort(java.net.URI uri) {
         if (uri.getPort() != -1) {
@@ -711,10 +711,10 @@ public class CommonUtils {
     }
 
     /**
-     * 去掉存储地址自身的路径前缀，返回不带开头 / 的相对路径；不在该前缀下返回 null
+     * Loại bỏ tiền tố đường dẫn của chính địa chỉ lưu trữ, trả về đường dẫn không có dấu / ở đầu / ; không nằm dưới tiền tố đó sẽ trả về null
      *
      * @author scott
-     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】存储地址按主机名比对
+     * @since 2026-10-27 【GHSA-hw5p-65q6-qcxr】So sánh địa chỉ lưu trữ theo tên máy chủ
      */
     private static String stripBasePath(java.net.URI base, String targetPath) {
         String basePath = oConvertUtils.getString(base.getPath(), "");

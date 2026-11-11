@@ -5,7 +5,7 @@ import javax.print.DocFlavor;
 /**
  *
  * @author: scott
- * @date: 2022年04月18日 20:35
+ * @date: 2022 năm 04 tháng 18 ngày 20:35
  */
 public class Path {
     private String upload;

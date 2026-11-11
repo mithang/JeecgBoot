@@ -30,7 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Set;
 
 /**
- * @Description: 用户登录鉴权和获取用户授权
+ * @Description: Xác thực đăng nhập người dùng và lấy quyền ủy quyền của người dùng
  * @Author: Scott
  * @Date: 2019-4-23 8:13
  * @Version: 1.1
@@ -48,7 +48,7 @@ public class ShiroRealm extends AuthorizingRealm {
     private RedisUtil redisUtil;
 
     /**
-     * 必须重写此方法，不然Shiro会报错
+     * Phải ghi đè phương thức này, nếu không Shiro sẽ báo lỗi
      */
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -56,15 +56,15 @@ public class ShiroRealm extends AuthorizingRealm {
     }
 
     /**
-     * 权限信息认证(包括角色以及权限)是用户访问controller的时候才进行验证(redis存储的此处权限信息)
-     * 触发检测用户权限时才会调用此方法，例如checkRole,checkPermission
+     * Xác thực thông tin quyền hạn(bao gồm vai trò và quyền hạn)chỉ khi người dùng truy cập controller mới tiến hành xác thực(redis thông tin quyền hạn được lưu trữ tại đây)
+     * Chỉ khi kích hoạt kiểm tra quyền hạn của người dùng mới gọi phương thức này, ví dụ checkRole,checkPermission
      *
-     * @param principals 身份信息
-     * @return AuthorizationInfo 权限信息
+     * @param principals Thông tin danh tính
+     * @return AuthorizationInfo Thông tin quyền hạn
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        log.debug("===============Shiro权限认证开始============ [ roles、permissions]==========");
+        log.debug("===============Shiro Bắt đầu xác thực quyền hạn============ [ roles、permissions]==========");
         String username = null;
         String userId = null;
         if (principals != null) {
@@ -74,92 +74,92 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-        // 设置用户拥有的角色集合，比如“admin,test”
+        // Đặt tập hợp vai trò mà người dùng sở hữu, ví dụ “admin,test”
         Set<String> roleSet = commonApi.queryUserRolesById(userId);
         //System.out.println(roleSet.toString());
         info.setRoles(roleSet);
 
-        // 设置用户拥有的权限集合，比如“sys:role:add,sys:user:add”
+        // Đặt tập hợp quyền hạn mà người dùng sở hữu, ví dụ “sys:role:add,sys:user:add”
         Set<String> permissionSet = commonApi.queryUserAuths(userId);
         info.addStringPermissions(permissionSet);
         //System.out.println(permissionSet);
-        log.debug("===============Shiro权限认证成功==============");
+        log.debug("===============Shiro Xác thực quyền hạn thành công==============");
         return info;
     }
 
     /**
-     * 用户信息认证是在用户进行登录的时候进行验证(不存redis)
-     * 也就是说验证用户输入的账号和密码是否正确，错误抛出异常
+     * Xác thực thông tin người dùng được tiến hành khi người dùng đăng nhập(không lưu redis)
+     * Tức là kiểm tra tài khoản và mật khẩu người dùng nhập có đúng hay không, nếu sai sẽ ném ngoại lệ
      *
-     * @param auth 用户登录的账号密码信息
-     * @return 返回封装了用户信息的 AuthenticationInfo 实例
+     * @param auth Thông tin tài khoản và mật khẩu đăng nhập của người dùng
+     * @return Trả về thể hiện AuthenticationInfo đã đóng gói thông tin người dùng
      * @throws AuthenticationException
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
-        log.debug("===============Shiro身份认证开始============doGetAuthenticationInfo==========");
+        log.debug("===============Shiro Bắt đầu xác thực danh tính============doGetAuthenticationInfo==========");
         String token = (String) auth.getCredentials();
         if (token == null) {
             HttpServletRequest req = SpringContextUtils.getHttpServletRequest();
-            log.info("————————身份认证失败——————————IP地址:  "+ oConvertUtils.getIpAddrByRequest(req) +"，URL:"+req.getRequestURI());
-            throw new AuthenticationException("token为空!");
+            log.info("————————Xác thực danh tính thất bại——————————Địa chỉ IP:  "+ oConvertUtils.getIpAddrByRequest(req) +"，URL:"+req.getRequestURI());
+            throw new AuthenticationException("token Trống!");
         }
-        // 校验token有效性
+        // Kiểm chứng tính hợp lệ của token
         LoginUser loginUser = null;
         try {
             loginUser = this.checkUserTokenIsEffect(token);
         } catch (AuthenticationException e) {
-            log.error("—————校验 check token 失败——————————"+ e.getMessage(), e);
-            // 重新抛出异常，让JwtFilter统一处理，避免返回两次错误响应
+            log.error("—————Kiểm tra check token thất bại——————————"+ e.getMessage(), e);
+            // Ném lại ngoại lệ, để JwtFilter xử lý thống nhất, tránh trả về hai lần phản hồi lỗi
             throw e;
         }
         return new SimpleAuthenticationInfo(loginUser, token, getName());
     }
 
     /**
-     * 校验token的有效性
+     * Kiểm tra tính hợp lệ của token
      *
      * @param token
      */
     public LoginUser checkUserTokenIsEffect(String token) throws AuthenticationException {
-        // 解密获得username，用于和数据库进行对比
+        // Giải mã để lấy username, dùng để đối chiếu với cơ sở dữ liệu
         String username = JwtUtil.getUsername(token);
         if (username == null) {
-            throw new AuthenticationException("Token非法无效!");
+            throw new AuthenticationException("Token Không hợp lệ!");
         }
 
-        // 查询用户信息
-        log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
+        // Truy vấn thông tin người dùng
+        log.debug("———Kiểm tra token có hợp lệ hay không————checkUserTokenIsEffect——————— "+ token);
         LoginUser loginUser = TokenUtils.getLoginUser(username, commonApi, redisUtil);
         //LoginUser loginUser = commonApi.getUserByName(username);
         if (loginUser == null) {
-            throw new AuthenticationException("用户不存在!");
+            throw new AuthenticationException("Người dùng không tồn tại!");
         }
-        // 判断用户状态
+        // Kiểm tra trạng thái người dùng
         if (loginUser.getStatus() != 1) {
-            throw new AuthenticationException("账号已被锁定,请联系管理员!");
+            throw new AuthenticationException("Tài khoản đã bị khóa,Vui lòng liên hệ quản trị viên!");
         }
-        // 校验token是否超时失效 & 或者账号密码是否错误
+        // Kiểm chứng token có hết hạn hay không & Hoặc tài khoản/mật khẩu có sai hay không
         if (!jwtTokenRefresh(token, username, loginUser.getPassword())) {
-            // 用户登录Token过期提示信息
+            // Thông tin nhắc nhở token đăng nhập của người dùng đã hết hạn
             String userLoginTokenErrorMsg = oConvertUtils.getString(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN_ERROR_MSG + token));
             throw new AuthenticationException(oConvertUtils.isEmpty(userLoginTokenErrorMsg)? CommonConstant.TOKEN_IS_INVALID_MSG: userLoginTokenErrorMsg);
         }
-        // 代码逻辑说明: 校验用户的tenant_id和前端传过来的是否一致
+        // Giải thích logic mã: Kiểm tra tenant_id của người dùng có khớp với dữ liệu frontend truyền sang hay không
         String userTenantIds = loginUser.getRelTenantIds();
         if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL && oConvertUtils.isNotEmpty(userTenantIds)){
             String contextTenantId = TenantContext.getTenant();
-            log.debug("登录租户：" + contextTenantId);
-            log.debug("用户拥有那些租户：" + userTenantIds);
-             //登录用户无租户，前端header中租户ID值为 0
+            log.debug("Tenant đăng nhập:" + contextTenantId);
+            log.debug("Những tenant mà người dùng sở hữu:" + userTenantIds);
+             //Người dùng đăng nhập không có tenant, giá trị ID tenant trong header của frontend là 0
             String str ="0";
             if(oConvertUtils.isNotEmpty(contextTenantId) && !str.equals(contextTenantId)){
-                // 代码逻辑说明: /issues/I4O14W 用户租户信息变更判断漏洞
+                // Giải thích logic mã: /issues/I4O14W Lỗ hổng phán đoán thay đổi thông tin tenant của người dùng
                 String[] arr = userTenantIds.split(",");
                 if(!oConvertUtils.isIn(contextTenantId, arr)){
                     boolean isAuthorization = false;
                     //========================================================================
-                    // 查询用户信息（如果租户不匹配从数据库中重新查询一次用户信息）
+                    // Truy vấn thông tin người dùng (nếu tenant không khớp thì truy vấn lại thông tin người dùng từ cơ sở dữ liệu một lần nữa)
                     String loginUserKey = CacheConstant.SYS_USERS_CACHE + "::" + username;
                     redisUtil.del(loginUserKey);
                     LoginUser loginUserFromDb = commonApi.getUserByName(username);
@@ -173,9 +173,9 @@ public class ShiroRealm extends AuthorizingRealm {
 
                     //*********************************************
                     if(!isAuthorization){
-                        log.info("租户异常——登录租户：" + contextTenantId);
-                        log.info("租户异常——用户拥有租户组：" + userTenantIds);
-                        throw new AuthenticationException("登录租户授权变更，请重新登陆!");
+                        log.info("Tenant bất thường——Tenant đăng nhập:" + contextTenantId);
+                        log.info("Tenant bất thường——Nhóm tenant mà người dùng sở hữu:" + userTenantIds);
+                        throw new AuthenticationException("Quyền ủy quyền tenant đăng nhập đã thay đổi, vui lòng đăng nhập lại!");
                     }
                     //*********************************************
                 }
@@ -185,13 +185,13 @@ public class ShiroRealm extends AuthorizingRealm {
     }
 
     /**
-     * JWTToken刷新生命周期 （实现： 用户在线操作不掉线功能）
-     * 1、登录成功后将用户的JWT生成的Token作为k、v存储到cache缓存里面(这时候k、v值一样)，缓存有效期设置为Jwt有效时间的2倍
-     * 2、当该用户再次请求时，通过JWTFilter层层校验之后会进入到doGetAuthenticationInfo进行身份验证
-     * 3、当该用户这次请求jwt生成的token值已经超时，但该token对应cache中的k还是存在，则表示该用户一直在操作只是JWT的token失效了，程序会给token对应的k映射的v值重新生成JWTToken并覆盖v值，该缓存生命周期重新计算
-     * 4、当该用户这次请求jwt在生成的token值已经超时，并在cache中不存在对应的k，则表示该用户账户空闲超时，返回用户信息已失效，请重新登录。
-     * 注意： 前端请求Header中设置Authorization保持不变，校验有效性以缓存中的token为准。
-     *       用户过期时间 = Jwt有效时间 * 2。
+     * JWTToken Làm mới vòng đời (thực hiện: chức năng người dùng thao tác trực tuyến không bị ngắt kết nối)
+     * 1, sau khi đăng nhập thành công, lưu Token JWT đã tạo của người dùng làm k, v vào trong cache(lúc này giá trị k, v giống nhau), thời gian hiệu lực của cache được đặt bằng 2 lần thời gian hiệu lực của Jwt
+     * 2, khi người dùng đó yêu cầu lần nữa, sau khi qua từng lớp kiểm tra của JWTFilter sẽ vào doGetAuthenticationInfo để xác thực danh tính
+     * 3, khi token do jwt tạo ra trong lần yêu cầu này của người dùng đã hết hạn, nhưng k tương ứng với token đó trong cache vẫn còn tồn tại, thì nghĩa là người dùng vẫn đang thao tác chỉ là token JWT đã hết hiệu lực, chương trình sẽ tạo lại JWTToken cho giá trị v được ánh xạ bởi k tương ứng với token và ghi đè giá trị v, vòng đời của cache được tính lại
+     * 4, khi token do jwt tạo ra trong lần yêu cầu này của người dùng đã hết hạn, và trong cache không tồn tại k tương ứng, thì nghĩa là tài khoản người dùng đã hết hạn do không hoạt động, trả về thông tin người dùng đã hết hiệu lực, vui lòng đăng nhập lại.
+     * Lưu ý: Header yêu cầu của frontend đặt Authorization giữ nguyên không đổi, việc kiểm tra tính hợp lệ dựa trên token trong cache.
+     *       Thời gian hết hạn của người dùng = Jwt thời gian hiệu lực * 2。
      *
      * @param userName
      * @param passWord
@@ -200,40 +200,40 @@ public class ShiroRealm extends AuthorizingRealm {
     public boolean jwtTokenRefresh(String token, String userName, String passWord) {
         String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
         if (oConvertUtils.isNotEmpty(cacheToken)) {
-            // 校验token有效性
+            // Kiểm chứng tính hợp lệ của token
             if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-                // 从token中解析客户端类型，保持续期时使用相同的客户端类型
+                // Phân tích loại client từ token, giữ nguyên loại client đó khi gia hạn
                 String clientType = JwtUtil.getClientType(token);
                 String newAuthorization = JwtUtil.sign(userName, passWord, clientType);
-                // 根据客户端类型设置对应的缓存有效时间
+                // Đặt thời gian hiệu lực cache tương ứng theo loại client
                 long expireTime = CommonConstant.CLIENT_TYPE_APP.equalsIgnoreCase(clientType) 
                     ? JwtUtil.APP_EXPIRE_TIME * 2 / 1000 
                     : JwtUtil.EXPIRE_TIME * 2 / 1000;
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
                 redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, expireTime);
-                log.debug("——————————用户在线操作，更新token保证不掉线—————————jwtTokenRefresh——————— "+ token);
+                log.debug("——————————Người dùng thao tác trực tuyến, cập nhật token để đảm bảo không bị ngắt kết nối—————————jwtTokenRefresh——————— "+ token);
             }
 //			else {
-//				// 设置超时时间
+//				// Đặt thời gian chờ
 //				redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, cacheToken);
 //				redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
 //			}
             return true;
         }
 
-        //redis中不存在此TOEKN，说明token非法返回false
+        //redis trong đó không tồn tại TOEKN này, nghĩa là token không hợp lệ, trả về false
         return false;
     }
 
     /**
-     * 清除当前用户的权限认证缓存
+     * Xóa cache xác thực quyền hạn của người dùng hiện tại
      *
-     * @param principals 权限信息
+     * @param principals Thông tin quyền hạn
      */
     @Override
     public void clearCache(PrincipalCollection principals) {
         super.clearCache(principals);
-        // 代码逻辑说明: 【TV360X-1320】分配权限必须退出重新登录才生效，造成很多用户困扰---
+        // Giải thích logic mã: 【TV360X-1320】Việc phân quyền phải thoát ra và đăng nhập lại mới có hiệu lực, gây nhiều phiền phức cho người dùng---
         super.clearCachedAuthorizationInfo(principals);
     }
 }

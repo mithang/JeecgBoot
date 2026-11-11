@@ -1,7 +1,7 @@
 package org.jeecg.common.constant;
 
 /**
-* @Description: 密码常量类
+* @Description: Lớp hằng số mật khẩu
 *
 * @author: wangshuai
 * @date: 2025/8/27 20:10
@@ -9,7 +9,7 @@ package org.jeecg.common.constant;
 public interface PasswordConstant {
 
     /**
-     * 导入用户默认密码 (重置密码)
+     * Mật khẩu mặc định khi nhập người dùng (Đặt lại mật khẩu)
      */
     String DEFAULT_PASSWORD = "123456";
 }

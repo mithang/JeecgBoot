@@ -3,11 +3,11 @@ package org.jeecg.common.system.annotation;
 import java.lang.annotation.*;
 
 /**
- * 将枚举类转化成字典数据
+ * Chuyển lớp enum thành dữ liệu từ điển
  * 
- * <<使用说明>>
- * 1. 枚举类需以 `Enum` 结尾，并且在类上添加 `@EnumDict` 注解。
- * 2. 需要手动将枚举类所在包路径** 添加到 `org.jeecg.common.system.util.ResourceUtil.BASE_SCAN_PACKAGES` 配置数组中。
+ * <<Hướng dẫn sử dụng>>
+ * 1. Lớp enum cần kết thúc bằng `Enum` , và thêm trên lớp `@EnumDict` annotation.
+ * 2. Cần thủ công thêm đường dẫn package chứa lớp enum** Thêm vào `org.jeecg.common.system.util.ResourceUtil.BASE_SCAN_PACKAGES` vào trong mảng cấu hình.
  * 
  * @Author taoYan
  * @Date 2022/7/8 10:34
@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 public @interface EnumDict {
 
     /**
-     * 作为字典数据的唯一编码
+     * Làm mã duy nhất của dữ liệu từ điển
      */
     String value() default "";
 }

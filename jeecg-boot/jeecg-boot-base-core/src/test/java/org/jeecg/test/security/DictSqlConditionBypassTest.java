@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * 字典过滤条件 SQL 注入绕过 — 单元测试
+ * Bỏ qua SQL injection trong điều kiện lọc từ điển — Kiểm thử đơn vị
  *
- * GHSA-jgwm-2xxm-mmm4：反斜杠导致 JSqlParser 与 MySQL 对字符串边界理解不一致
- * GHSA-xmw4-rx44-4jcp：MySQL 的 # 注释、password# 字段名绕过敏感字段检查
- * GHSA-g87f-mgx5-wj9c：字面量 null 表名被当成空表名放行
+ * GHSA-jgwm-2xxm-mmm4：Dấu gạch chéo ngược khiến JSqlParser và MySQL hiểu không nhất quán về ranh giới chuỗi
+ * GHSA-xmw4-rx44-4jcp：Của MySQL # chú thích,password# Tên trường bỏ qua kiểm tra trường nhạy cảm
+ * GHSA-g87f-mgx5-wj9c：Tên bảng dạng literal null bị coi là tên bảng rỗng và được cho qua
  *
  * @author scott
- * @since 2026-10-27 GHSA-jgwm/GHSA-xmw4/GHSA-g87f 字典条件注入加固
+ * @since 2026-10-27 GHSA-jgwm/GHSA-xmw4/GHSA-g87f Củng cố chống injection điều kiện từ điển
  */
 @ExtendWith(PrintTestResultExtension.class)
 public class DictSqlConditionBypassTest {
@@ -28,7 +28,7 @@ public class DictSqlConditionBypassTest {
     }
 
     @Test
-    @DisplayName("jgwm：反斜杠闭合引号的 IN 列表被拦截")
+    @DisplayName("jgwm：Danh sách IN có dấu ngoặc kép bị đóng bởi dấu gạch chéo ngược bị chặn")
     void backslashInListBlocked() {
         assertThrows(JeecgSqlInjectionException.class, () -> check("id IN ('a\\',') or 1=1#')"));
         assertThrows(JeecgSqlInjectionException.class,
@@ -36,20 +36,20 @@ public class DictSqlConditionBypassTest {
     }
 
     @Test
-    @DisplayName("jgwm：不带 # 的反斜杠变体同样被拦截")
+    @DisplayName("jgwm：Không có # biến thể dấu gạch chéo ngược cũng bị chặn tương tự")
     void backslashWithoutCommentBlocked() {
         assertThrows(JeecgSqlInjectionException.class, () -> check("username = 'a\\'' or username = ''"));
     }
 
     @Test
-    @DisplayName("xmw4：password# 字段名与 # 注释被拦截")
+    @DisplayName("xmw4：password# Tên trường và # chú thích bị chặn")
     void hashCommentBlocked() {
         assertThrows(JeecgSqlInjectionException.class, () -> check("username='admin' and password# like '\nlike \"c%\"#'"));
         assertThrows(JeecgSqlInjectionException.class, () -> check("username='admin' # comment"));
     }
 
     @Test
-    @DisplayName("回归：引号内的 # 与正常条件放行")
+    @DisplayName("Hồi quy: Trong dấu ngoặc kép # và điều kiện bình thường được cho qua")
     void normalConditionAllowed() {
         assertDoesNotThrow(() -> check("username = 'a#b'"));
         assertDoesNotThrow(() -> check("1=1"));
@@ -58,13 +58,13 @@ public class DictSqlConditionBypassTest {
     }
 
     @Test
-    @DisplayName("回归：直接使用敏感字段仍被拦截")
+    @DisplayName("Hồi quy: Sử dụng trực tiếp trường nhạy cảm vẫn bị chặn")
     void sensitiveFieldBlocked() {
         assertThrows(JeecgSqlInjectionException.class, () -> check("username='admin' and password like 'c%'"));
     }
 
     @Test
-    @DisplayName("g87f：字面量 null 表名不再放行")
+    @DisplayName("g87f：Tên bảng dạng literal null không còn được cho qua")
     void literalNullTableBlocked() {
         assertThrows(JeecgSqlInjectionException.class, () -> SensitiveTableCheckUtil.checkForbiddenFields("null", "password"));
         assertThrows(JeecgSqlInjectionException.class, () -> SensitiveTableCheckUtil.checkForbiddenFields(" NULL ", "password"));

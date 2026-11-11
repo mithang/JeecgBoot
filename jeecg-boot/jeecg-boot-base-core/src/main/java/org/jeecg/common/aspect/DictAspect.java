@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 字典aop类
+ * @Description: Lớp AOP danh mục
  * @Author: dangzhenghui
  * @Date: 2019-3-17 21:50
  * @Version: 1.0
@@ -50,7 +50,7 @@ public class DictAspect {
     private static final String JAVA_UTIL_DATE = "java.util.Date";
 
     /**
-     * 定义切点Pointcut
+     * Định nghĩa điểm cắt Pointcut
      */
     @Pointcut("(@within(org.springframework.web.bind.annotation.RestController) || " +
             "@within(org.springframework.stereotype.Controller) || @annotation(org.jeecg.common.aspect.annotation.AutoDict)) " +
@@ -63,34 +63,34 @@ public class DictAspect {
     	long time1=System.currentTimeMillis();	
         Object result = pjp.proceed();
         long time2=System.currentTimeMillis();
-        log.debug("获取JSON数据 耗时："+(time2-time1)+"ms");
+        log.debug("Lấy dữ liệu JSON Tốn thời gian："+(time2-time1)+"ms");
         long start=System.currentTimeMillis();
         result=this.parseDictText(result);
         long end=System.currentTimeMillis();
-        log.debug("注入字典到JSON数据  耗时"+(end-start)+"ms");
+        log.debug("Inject danh mục vào dữ liệu JSON Tốn thời gian"+(end-start)+"ms");
         return result;
     }
 
     /**
-     * 本方法针对返回对象为Result 的IPage的分页列表数据进行动态字典注入
-     * 字典注入实现 通过对实体类添加注解@dict 来标识需要的字典内容,字典分为单字典code即可 ，table字典 code table text配合使用与原来jeecg的用法相同
-     * 示例为SysUser   字段为sex 添加了注解@Dict(dicCode = "sex") 会在字典服务立马查出来对应的text 然后在请求list的时候将这个字典text，已字段名称加_dictText形式返回到前端
-     * 例输入当前返回值的就会多出一个sex_dictText字段
+     * Phương thức này thực hiện inject danh mục động cho dữ liệu danh sách phân trang IPage có đối tượng trả về là Result
+     * Triển khai inject danh mục bằng cách thêm annotation cho lớp thực thể@dict để đánh dấu nội dung danh mục cần thiết,Danh mục chia thành danh mục đơn chỉ cần code, danh mục bảng dùng code table text phối hợp, giống cách dùng gốc của Jeecg
+     * Ví dụ SysUser, trường sex đã thêm annotation@Dict(dicCode = "sex") sẽ tra ngay text tương ứng trong dịch vụ danh mục, rồi khi yêu cầu list sẽ đưa text danh mục này, cộng thêm tên trường_dictText dưới dạng trả về frontend
+     * Ví dụ nhập giá trị trả về hiện tại sẽ thừa ra một sex_dictText Trường
      * {
      *      sex:1,
-     *      sex_dictText:"男"
+     *      sex_dictText:"Nam"
      * }
-     * 前端直接取值sext_dictText在table里面无需再进行前端的字典转换了
+     * Frontend lấy giá trị trực tiếp sext_dictText Trong table không cần thực hiện chuyển đổi danh mục ở frontend nữa
      *  customRender:function (text) {
      *               if(text==1){
-     *                 return "男";
+     *                 return "Nam";
      *               }else if(text==2){
-     *                 return "女";
+     *                 return "Nữ";
      *               }else{
      *                 return text;
      *               }
      *             }
-     *             目前vue是这么进行字典渲染到table上的多了就很麻烦了 这个直接在服务端渲染完成前端可以直接用
+     *             Hiện tại Vue render danh mục lên table như vậy, nhiều sẽ rất rắc rối; cách này render trực tiếp xong ở phía server, frontend có thể dùng ngay
      * @param result
      */
     private Object parseDictText(Object result) {
@@ -99,36 +99,36 @@ public class DictAspect {
             if (((Result) result).getResult() instanceof IPage) {
                 List<JSONObject> items = new ArrayList<>();
 
-                //step.1 筛选出加了 Dict 注解的字段列表
+                //step.1 Lọc ra danh sách trường đã thêm annotation Dict
                 List<Field> dictFieldList = new ArrayList<>();
-                // 字典数据列表， key = 字典code，value=数据列表
+                // Danh sách dữ liệu danh mục, key = mã danh mục,value=Danh sách dữ liệu
                 Map<String, List<String>> dataListMap = new HashMap<>(5);
-                //取出结果集
+                //Lấy tập kết quả
                 List<Object> records=((IPage) ((Result) result).getResult()).getRecords();
-                // 代码逻辑说明: 【VUEN-1230】 判断是否含有字典注解,没有注解返回-----
+                // Giải thích logic mã: 【VUEN-1230】Kiểm tra có chứa annotation danh mục hay không,Không có annotation thì trả về-----
                 Boolean hasDict= checkHasDict(records);
                 if(!hasDict){
                     return result;
                 }
 
-                log.debug(" __ 进入字典翻译切面 DictAspect —— " );
+                log.debug(" __ Vào aspect dịch danh mục DictAspect —— " );
                 for (Object record : records) {
-                    //update-begin---author:scott ---date:2026-04-15  for：【issues/9543】改用反射直接读取字段构建 JSONObject，避免 ObjectMapper 对循环引用实体进行全量序列化导致 OOM；合并字典字段收集逻辑为同一次循环，避免对 getAllFields 遍历两遍；保留 【issues/#3629】@JsonFormat 的 Date 格式化兼容；保留 【issues/3303】字段顺序（LinkedHashMap）-----------
+                    //update-begin---author:scott ---date:2026-04-15  for：【issues/9543】Đổi sang dùng reflection đọc trực tiếp trường để xây dựng JSONObject, tránh ObjectMapper tuần tự hóa toàn bộ entity tham chiếu vòng gây OOM; gộp logic thu thập trường từ điển thành cùng một vòng lặp, tránh duyệt getAllFields hai lần; giữ lại 【issues/#3629】@JsonFormat tương thích định dạng Date; giữ lại 【issues/3303】Thứ tự trường (LinkedHashMap)-----------
                     JSONObject item = new JSONObject(true);
                     for (Field field : oConvertUtils.getAllFields(record)) {
                         if (Modifier.isStatic(field.getModifiers())) {
                             continue;
                         }
-                        //update-begin---author:scott ---date:2026-04-16  for：【issues/9543】优先通过 getter 方法读取字段值（兼容实体重写 getter 的场景），getter 不存在时 fallback 到直接读字段-----------
-                        //update-begin---author:scott ---date:20260911  for：【安全修复 GHSA-7wcq-939v-pcrg】字典翻译切面用反射重建响应体会绕过序列化注解，此处尊重 @JsonProperty(WRITE_ONLY) 语义，跳过敏感字段（如 SysDataSource.dbPassword）防止泄露-----------
+                        //update-begin---author:scott ---date:2026-04-16  for：【issues/9543】Ưu tiên đọc giá trị trường qua phương thức getter (tương thích trường hợp entity ghi đè getter), khi getter không tồn tại thì fallback sang đọc trực tiếp trường-----------
+                        //update-begin---author:scott ---date:20260911  for：【Khắc phục bảo mật GHSA-7wcq-939v-pcrg】Aspect dịch từ điển dùng reflection để tái tạo response body sẽ bypass annotation tuần tự hóa, tại đây tôn trọng @JsonProperty(WRITE_ONLY) ngữ nghĩa, bỏ qua trường nhạy cảm (như SysDataSource.dbPassword) để ngăn rò rỉ-----------
                         JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
                         if (jsonProperty != null && JsonProperty.Access.WRITE_ONLY == jsonProperty.access()) {
                         	continue;
                         }
-                        //update-end---author:scott ---date:20260911  for：【安全修复 GHSA-7wcq-939v-pcrg】字典翻译切面用反射重建响应体会绕过序列化注解，此处尊重 @JsonProperty(WRITE_ONLY) 语义，跳过敏感字段（如 SysDataSource.dbPassword）防止泄露-----------
+                        //update-end---author:scott ---date:20260911  for：【Khắc phục bảo mật GHSA-7wcq-939v-pcrg】Aspect dịch từ điển dùng reflection để tái tạo response body sẽ bypass annotation tuần tự hóa, tại đây tôn trọng @JsonProperty(WRITE_ONLY) ngữ nghĩa, bỏ qua trường nhạy cảm (như SysDataSource.dbPassword) để ngăn rò rỉ-----------
                         Object fieldValue = getFieldValue(record, field);
-                        //update-end---author:scott ---date:2026-04-16  for：【issues/9543】优先通过 getter 方法读取字段值（兼容实体重写 getter 的场景），getter 不存在时 fallback 到直接读字段-----------
-                        // 解决@JsonFormat注解解析不了的问题详见SysAnnouncement类的@JsonFormat
+                        //update-end---author:scott ---date:2026-04-16  for：【issues/9543】Ưu tiên đọc giá trị trường qua phương thức getter (tương thích trường hợp entity ghi đè getter), khi getter không tồn tại thì fallback sang đọc trực tiếp trường-----------
+                        // Giải quyết@JsonFormat Vấn đề annotation không phân tích được, xem chi tiết trong lớp SysAnnouncement@JsonFormat
                         if (fieldValue instanceof Date) {
                             JsonFormat jsonFormat = field.getAnnotation(JsonFormat.class);
                             if (jsonFormat != null && oConvertUtils.isNotEmpty(jsonFormat.pattern())) {
@@ -137,7 +137,7 @@ public class DictAspect {
                         }
                         item.put(field.getName(), fieldValue);
 
-                        // 遍历所有字段，把字典Code取出来，放到 map 里
+                        // Duyệt tất cả các trường, lấy Dict Code ra, đặt vào map
                         String value = item.getString(field.getName());
                         if (oConvertUtils.isEmpty(value)) {
                             continue;
@@ -149,41 +149,41 @@ public class DictAspect {
                             String code = field.getAnnotation(Dict.class).dicCode();
                             String text = field.getAnnotation(Dict.class).dicText();
                             String table = field.getAnnotation(Dict.class).dictTable();
-                            // 代码逻辑说明: [issues/#5643]解决分布式下表字典跨库无法查询问题------------
+                            // Giải thích logic mã: [issues/#5643]Giải quyết vấn đề danh mục bảng liên cơ sở dữ liệu không truy vấn được trong môi trường phân tán------------
                             String dataSource = field.getAnnotation(Dict.class).ds();
                             List<String> dataList;
                             String dictCode = code;
                             if (!StringUtils.isEmpty(table)) {
-                                // 代码逻辑说明: [issues/#5643]解决分布式下表字典跨库无法查询问题------------
+                                // Giải thích logic mã: [issues/#5643]Giải quyết vấn đề danh mục bảng liên cơ sở dữ liệu không truy vấn được trong môi trường phân tán------------
                                 dictCode = String.format("%s,%s,%s,%s", table, text, code, dataSource);
                             }
                             dataList = dataListMap.computeIfAbsent(dictCode, k -> new ArrayList<>());
                             this.listAddAllDeduplicate(dataList, Arrays.asList(value.split(",")));
                         }
-                        //date类型默认转换string格式化日期
+                        //date Kiểu date mặc định chuyển sang string để định dạng ngày
                         //if (JAVA_UTIL_DATE.equals(field.getType().getName())&&field.getAnnotation(JsonFormat.class)==null&&item.get(field.getName())!=null){
                             //SimpleDateFormat aDate=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             // item.put(field.getName(), aDate.format(new Date((Long) item.get(field.getName()))));
                         //}
                     }
-                    //update-end---author:scott ---date:2026-04-15  for：【issues/9543】改用反射直接读取字段构建 JSONObject，避免 ObjectMapper 对循环引用实体进行全量序列化导致 OOM；合并字典字段收集逻辑为同一次循环，避免对 getAllFields 遍历两遍；保留 【issues/#3629】@JsonFormat 的 Date 格式化兼容；保留 【issues/3303】字段顺序（LinkedHashMap）-----------
+                    //update-end---author:scott ---date:2026-04-15  for：【issues/9543】Đổi sang dùng reflection đọc trực tiếp trường để xây dựng JSONObject, tránh ObjectMapper tuần tự hóa toàn bộ entity tham chiếu vòng gây OOM; gộp logic thu thập trường từ điển thành cùng một vòng lặp, tránh duyệt getAllFields hai lần; giữ lại 【issues/#3629】@JsonFormat tương thích định dạng Date; giữ lại 【issues/3303】Thứ tự trường (LinkedHashMap)-----------
                     items.add(item);
                 }
 
-                //step.2 调用翻译方法，一次性翻译
+                //step.2 Gọi phương thức dịch, dịch một lần
                 Map<String, List<DictModel>> translText = this.translateAllDict(dataListMap);
 
-                //step.3 将翻译结果填充到返回结果里
+                //step.3 Điền kết quả dịch vào kết quả trả về
                 for (JSONObject record : items) {
                     for (Field field : dictFieldList) {
                         String code = field.getAnnotation(Dict.class).dicCode();
                         String text = field.getAnnotation(Dict.class).dicText();
                         String table = field.getAnnotation(Dict.class).dictTable();
-                        // 自定义的字典表数据源
+                        // Nguồn dữ liệu bảng danh mục tùy chỉnh
                         String dataSource = field.getAnnotation(Dict.class).ds();
                         String fieldDictCode = code;
                         if (!StringUtils.isEmpty(table)) {
-                            // 代码逻辑说明: [issues/#5643]解决分布式下表字典跨库无法查询问题------------
+                            // Giải thích logic mã: [issues/#5643]Giải quyết vấn đề danh mục bảng liên cơ sở dữ liệu không truy vấn được trong môi trường phân tán------------
                             fieldDictCode = String.format("%s,%s,%s,%s", table, text, code, dataSource);
                         }
 
@@ -195,10 +195,10 @@ public class DictAspect {
                             }
 
                             String textValue = this.translDictText(dictModels, value);
-                            log.debug(" 字典Val : " + textValue);
-                            log.debug(" __翻译字典字段__ " + field.getName() + CommonConstant.DICT_TEXT_SUFFIX + "： " + textValue);
+                            log.debug(" Từ điển Val : " + textValue);
+                            log.debug(" __Dịch trường danh mục__ " + field.getName() + CommonConstant.DICT_TEXT_SUFFIX + "： " + textValue);
 
-                            // TODO-sun 测试输出，待删
+                            // TODO-sun Đầu ra kiểm thử, chờ xóa
                             log.debug(" ---- dictCode: " + fieldDictCode);
                             log.debug(" ---- value: " + value);
                             log.debug(" ----- text: " + textValue);
@@ -217,38 +217,38 @@ public class DictAspect {
     }
 
     /**
-     * list 去重添加
+     * list Thêm sau khi loại trùng
      */
     private void listAddAllDeduplicate(List<String> dataList, List<String> addList) {
-        // 筛选出dataList中没有的数据
+        // Lọc ra dữ liệu không có trong dataList
         List<String> filterList = addList.stream().filter(i -> !dataList.contains(i)).collect(Collectors.toList());
         dataList.addAll(filterList);
     }
 
     /**
-     * 一次性把所有的字典都翻译了
-     * 1.  所有的普通数据字典的所有数据只执行一次SQL
-     * 2.  表字典相同的所有数据只执行一次SQL
+     * Dịch tất cả các danh mục trong một lần
+     * 1.  Tất cả dữ liệu của mọi danh mục dữ liệu thường chỉ thực thi một lần SQL
+     * 2.  Tất cả dữ liệu giống nhau của danh mục bảng chỉ thực thi một lần SQL
      * @param dataListMap
      * @return
      */
     private Map<String, List<DictModel>> translateAllDict(Map<String, List<String>> dataListMap) {
-        // 翻译后的字典文本，key=dictCode
+        // Văn bản danh mục sau khi dịch,key=dictCode
         Map<String, List<DictModel>> translText = new HashMap<>(5);
-        // 需要翻译的数据（有些可以从redis缓存中获取，就不走数据库查询）
+        // Dữ liệu cần dịch (một số có thể lấy từ cache Redis, không cần truy vấn cơ sở dữ liệu)
         List<String> needTranslData = new ArrayList<>();
-        //step.1 先通过redis中获取缓存字典数据
+        //step.1 Bước 1: lấy dữ liệu danh mục cache từ Redis trước
         for (String dictCode : dataListMap.keySet()) {
             List<String> dataList = dataListMap.get(dictCode);
             if (dataList.size() == 0) {
                 continue;
             }
-            // 表字典需要翻译的数据
+            // Dữ liệu danh mục bảng cần dịch
             List<String> needTranslDataTable = new ArrayList<>();
             for (String s : dataList) {
                 String data = s.trim();
                 if (data.length() == 0) {
-                    continue; //跳过循环
+                    continue; //Bỏ qua vòng lặp
                 }
                 if (dictCode.contains(",")) {
                     String keyString = String.format("sys:cache:dictTable::SimpleKey [%s,%s]", dictCode, data);
@@ -261,7 +261,7 @@ public class DictAspect {
                             log.warn(e.getMessage());
                         }
                     } else if (!needTranslDataTable.contains(data)) {
-                        // 去重添加
+                        // Thêm sau khi loại trùng
                         needTranslDataTable.add(data);
                     }
                 } else {
@@ -275,18 +275,18 @@ public class DictAspect {
                             log.warn(e.getMessage());
                         }
                     } else if (!needTranslData.contains(data)) {
-                        // 去重添加
+                        // Thêm sau khi loại trùng
                         needTranslData.add(data);
                     }
                 }
 
             }
-            //step.2 调用数据库翻译表字典
+            //step.2 Bước 2: gọi cơ sở dữ liệu để dịch danh mục bảng
             if (needTranslDataTable.size() > 0) {
                 String[] arr = dictCode.split(",");
                 String table = arr[0], text = arr[1], code = arr[2];
                 String values = String.join(",", needTranslDataTable);
-                // 自定义的数据源
+                // Nguồn dữ liệu tùy chỉnh
                 String dataSource = null;
                 if (arr.length > 3) {
                     dataSource = arr[3];
@@ -294,7 +294,7 @@ public class DictAspect {
                 log.debug("translateDictFromTableByKeys.dictCode:" + dictCode);
                 log.debug("translateDictFromTableByKeys.values:" + values);
                 
-                // 代码逻辑说明: 微服务下为空报错没有参数需要传递空字符串---
+                // Giải thích logic mã: Ở microservice, trống sẽ báo lỗi vì không có tham số, cần truyền chuỗi trống---
                 if(null == dataSource){
                     dataSource = "";
                 }
@@ -304,11 +304,11 @@ public class DictAspect {
                 List<DictModel> list = translText.computeIfAbsent(dictCode, k -> new ArrayList<>());
                 list.addAll(texts);
 
-                // 做 redis 缓存
+                // Thực hiện cache redis
                 for (DictModel dict : texts) {
                     String redisKey = String.format("sys:cache:dictTable::SimpleKey [%s,%s]", dictCode, dict.getValue());
                     try {
-                        // 保留5分钟
+                        // Giữ lại 5 phút
                         redisTemplate.opsForValue().set(redisKey, dict.getText(), 300, TimeUnit.SECONDS);
                     } catch (Exception e) {
                         log.warn(e.getMessage(), e);
@@ -317,10 +317,10 @@ public class DictAspect {
             }
         }
 
-        //step.3 调用数据库进行翻译普通字典
+        //step.3 Bước 3: gọi cơ sở dữ liệu để dịch danh mục thường
         if (needTranslData.size() > 0) {
             List<String> dictCodeList = Arrays.asList(dataListMap.keySet().toArray(new String[]{}));
-            // 将不包含逗号的字典code筛选出来，因为带逗号的是表字典，而不是普通的数据字典
+            // Lọc ra dict code không chứa dấu phẩy, vì code có dấu phẩy là danh mục bảng chứ không phải danh mục dữ liệu thường
             List<String> filterDictCodes = dictCodeList.stream().filter(key -> !key.contains(",")).collect(Collectors.toList());
             String dictCodes = String.join(",", filterDictCodes);
             String values = String.join(",", needTranslData);
@@ -333,7 +333,7 @@ public class DictAspect {
                 List<DictModel> newList = manyDict.get(dictCode);
                 list.addAll(newList);
 
-                // 做 redis 缓存
+                // Thực hiện cache redis
                 for (DictModel dict : newList) {
                     String redisKey = String.format("sys:cache:dict::%s:%s", dictCode, dict.getValue());
                     try {
@@ -348,7 +348,7 @@ public class DictAspect {
     }
 
     /**
-     * 字典值替换文本
+     * Văn bản thay thế giá trị danh mục
      *
      * @param dictModels
      * @param values
@@ -357,7 +357,7 @@ public class DictAspect {
     private String translDictText(List<DictModel> dictModels, String values) {
         List<String> result = new ArrayList<>();
 
-        // 允许多个逗号分隔，允许传数组对象
+        // Cho phép tách bằng nhiều dấu phẩy, cho phép truyền đối tượng mảng
         String[] splitVal = values.split(",");
         for (String val : splitVal) {
             String dictText = val;
@@ -373,7 +373,7 @@ public class DictAspect {
     }
 
     /**
-     *  翻译字典文本
+     *  Dịch văn bản danh mục
      * @param code
      * @param text
      * @param table
@@ -389,11 +389,11 @@ public class DictAspect {
         String[] keys = key.split(",");
         for (String k : keys) {
             String tmpValue = null;
-            log.debug(" 字典 key : "+ k);
+            log.debug(" Từ điển key : "+ k);
             if (k.trim().length() == 0) {
-                continue; //跳过循环
+                continue; //Bỏ qua vòng lặp
             }
-            // 代码逻辑说明: !56 优化微服务应用下存在表字段需要字典翻译时加载缓慢问题-----
+            // Giải thích logic mã: !56 Tối ưu vấn đề tải chậm khi ứng dụng microservice có trường bảng cần dịch danh mục-----
             if (!StringUtils.isEmpty(table)){
                 log.debug("--DictAspect------dicTable="+ table+" ,dicText= "+text+" ,dicCode="+code);
                 String keyString = String.format("sys:cache:dictTable::SimpleKey [%s,%s,%s,%s]",table,text,code,k.trim());
@@ -430,10 +430,10 @@ public class DictAspect {
         return textValue.toString();
     }
 
-    //update-begin---author:scott ---date:2026-04-16  for：【issues/9543】优先通过 getter 方法读取字段值（兼容实体重写 getter 的场景），getter 不存在时 fallback 到直接读字段-----------
+    //update-begin---author:scott ---date:2026-04-16  for：【issues/9543】Ưu tiên đọc giá trị trường qua phương thức getter (tương thích trường hợp entity ghi đè getter), khi getter không tồn tại thì fallback sang đọc trực tiếp trường-----------
     /**
-     * 优先通过 PropertyDescriptor 获取 getter 方法读取字段值，兼容实体重写 getter 的场景；
-     * getter 不存在或调用异常时 fallback 到直接反射读字段。
+     * Ưu tiên lấy phương thức getter qua PropertyDescriptor để đọc giá trị trường, tương thích với trường hợp thực thể ghi đè getter;
+     * getter Khi không tồn tại hoặc gọi bị lỗi thì fallback sang đọc trường trực tiếp bằng reflection.
      */
     private Object getFieldValue(Object record, Field field) {
         try {
@@ -448,14 +448,14 @@ public class DictAspect {
             field.setAccessible(true);
             return field.get(record);
         } catch (IllegalAccessException e) {
-            log.error("反射读取字段失败: " + field.getName(), e);
+            log.error("Đọc trường bằng reflection thất bại: " + field.getName(), e);
             return null;
         }
     }
-    //update-end---author:scott ---date:2026-04-16  for：【issues/9543】优先通过 getter 方法读取字段值（兼容实体重写 getter 的场景），getter 不存在时 fallback 到直接读字段-----------
+    //update-end---author:scott ---date:2026-04-16  for：【issues/9543】Ưu tiên đọc giá trị trường qua phương thức getter (tương thích trường hợp entity ghi đè getter), khi getter không tồn tại thì fallback sang đọc trực tiếp trường-----------
 
     /**
-     * 检测返回结果集中是否包含Dict注解
+     * Kiểm tra tập kết quả trả về có chứa annotation Dict hay không
      * @param records
      * @return
      */

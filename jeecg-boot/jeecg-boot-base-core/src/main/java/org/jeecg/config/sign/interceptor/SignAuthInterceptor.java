@@ -21,27 +21,27 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 签名拦截器
+ * Interceptor chữ ký
  * @author qinfeng
  */
 @Slf4j
 public class SignAuthInterceptor implements HandlerInterceptor {
     /**
-     * 5分钟有效期
+     * 5 phút hiệu lực
      */
     private final static long MAX_EXPIRE = 5 * 60;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.debug("签名拦截器 Interceptor request URI = " + request.getRequestURI());
+        log.debug("Interceptor chữ ký Interceptor request URI = " + request.getRequestURI());
         
         try {
-            // 调用验证逻辑
+            // Gọi logic xác thực
             validateSignature(request);
             return true;
         } catch (IllegalArgumentException e) {
-            // 验证失败，返回错误响应
-            log.error("Sign 签名校验失败！{}", e.getMessage());
+            // Xác thực thất bại, trả về phản hồi lỗi
+            log.error("Sign Xác thực chữ ký thất bại!{}", e.getMessage());
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             PrintWriter out = response.getWriter();
@@ -52,84 +52,84 @@ public class SignAuthInterceptor implements HandlerInterceptor {
     }
 
     /**
-     * 签名验证核心逻辑
-     * 提取出来供AOP切面复用
-     * @param request HTTP请求
-     * @throws IllegalArgumentException 验证失败时抛出异常
+     * Logic cốt lõi xác minh chữ ký
+     * Tách ra để AOP aspect tái sử dụng
+     * @param request HTTP Yêu cầu
+     * @throws IllegalArgumentException Ném ngoại lệ khi xác minh thất bại
      */
     public void validateSignature(HttpServletRequest request) throws IllegalArgumentException {
         validateSignature(request, null);
     }
 
     /**
-     * 签名验证核心逻辑
-     * 提取出来供AOP切面复用
-     * @param request HTTP请求
-     * @throws IllegalArgumentException 验证失败时抛出异常
+     * Logic cốt lõi xác minh chữ ký
+     * Tách ra để AOP aspect tái sử dụng
+     * @param request HTTP Yêu cầu
+     * @throws IllegalArgumentException Ném ngoại lệ khi xác minh thất bại
      */
     public void validateSignature(HttpServletRequest request, Object bodyParam) throws IllegalArgumentException {
         try {
-            log.debug("开始签名验证: {} {}", request.getMethod(), request.getRequestURI());
+            log.debug("Bắt đầu xác thực chữ ký: {} {}", request.getMethod(), request.getRequestURI());
             
             HttpServletRequest requestWrapper = new BodyReaderHttpServletRequestWrapper(request);
-            //获取全部参数(包括URL和body上的)
+            //Lấy tất cả tham số(bao gồm cả trên URL và body)
             SortedMap<String, String> allParams = HttpUtils.getAllParams(requestWrapper, bodyParam);
-            log.debug("提取参数: {}", allParams);
+            log.debug("Trích xuất tham số: {}", allParams);
             
-            //对参数进行签名验证
+            //Thực hiện xác thực chữ ký đối với tham số
             String headerSign = request.getHeader(CommonConstant.X_SIGN);
             String xTimestamp = request.getHeader(CommonConstant.X_TIMESTAMP);
             
             if(oConvertUtils.isEmpty(xTimestamp)){
-                log.error("Sign签名校验失败，时间戳为空！");
-                throw new IllegalArgumentException("Sign签名校验失败，请求参数不完整！");
+                log.error("Sign Kiểm tra chữ ký thất bại, timestamp rỗng!");
+                throw new IllegalArgumentException("Sign Kiểm tra chữ ký thất bại, tham số yêu cầu không đầy đủ!");
             }
 
-            //客户端时间
+            //Thời gian của client
             Long clientTimestamp = Long.parseLong(xTimestamp);
 
             int length = 14;
             int length1000 = 1000;
-            //1.校验签名时间（兼容X_TIMESTAMP的新老格式）
+            //1.Kiểm tra thời gian chữ ký (tương thích X_TIMESTAMP định dạng mới và cũ)
             if (xTimestamp.length() == length) {
-                //a. X_TIMESTAMP格式是 yyyyMMddHHmmss (例子：20220308152143)
+                //a. X_TIMESTAMP Định dạng là yyyyMMddHHmmss (Ví dụ:20220308152143)
                 long currentTimestamp = DateUtils.getCurrentTimestamp();
                 long timeDiff = currentTimestamp - clientTimestamp;
-                log.debug("时间戳验证(yyyyMMddHHmmss): 时间差{}秒", timeDiff);
+                log.debug("Xác minh timestamp(yyyyMMddHHmmss): Chênh lệch thời gian{}giây", timeDiff);
                 
                 if (timeDiff > MAX_EXPIRE) {
-                    log.error("时间戳已过期: {}秒 > {}秒", timeDiff, MAX_EXPIRE);
-                    throw new IllegalArgumentException("签名验证失败，请求时效性验证失败！");
+                    log.error("Timestamp đã hết hạn: {}giây > {}giây", timeDiff, MAX_EXPIRE);
+                    throw new IllegalArgumentException("Xác minh chữ ký thất bại, xác minh tính thời hiệu của yêu cầu thất bại!");
                 }
             } else {
-                //b. X_TIMESTAMP格式是 时间戳 (例子：1646552406000)
+                //b. X_TIMESTAMP Định dạng là timestamp (Ví dụ:1646552406000)
                 long currentTime = System.currentTimeMillis();
                 long timeDiff = currentTime - clientTimestamp;
                 long maxExpireMs = MAX_EXPIRE * length1000;
-                log.debug("时间戳验证(Unix): 时间差{}ms", timeDiff);
+                log.debug("Xác minh timestamp(Unix): Chênh lệch thời gian{}ms", timeDiff);
                 
                 if (timeDiff > maxExpireMs) {
-                    log.error("时间戳已过期: {}ms > {}ms", timeDiff, maxExpireMs);
-                    throw new IllegalArgumentException("签名验证失败，请求时效性验证失败！");
+                    log.error("Timestamp đã hết hạn: {}ms > {}ms", timeDiff, maxExpireMs);
+                    throw new IllegalArgumentException("Xác minh chữ ký thất bại, xác minh tính thời hiệu của yêu cầu thất bại!");
                 }
             }
 
-            //2.校验签名
+            //2.Kiểm tra chữ ký
             boolean isSigned = SignUtil.verifySign(allParams,headerSign);
 
             if (isSigned) {
-                log.debug("签名验证通过");
+                log.debug("Xác minh chữ ký thành công");
             } else {
-                log.error("签名验证失败, 参数: {}", allParams);
-                throw new IllegalArgumentException("Sign签名校验失败！");
+                log.error("Xác minh chữ ký thất bại, Tham số: {}", allParams);
+                throw new IllegalArgumentException("Sign Xác thực chữ ký thất bại!");
             }
         } catch (IllegalArgumentException e) {
-            // 重新抛出签名验证异常
+            // Ném lại ngoại lệ xác thực chữ ký
             throw e;
         } catch (Exception e) {
-            // 包装其他异常（如IOException）
-            log.error("签名验证异常: {}", e.getMessage());
-            throw new IllegalArgumentException("Sign签名校验失败：" + e.getMessage());
+            // Bọc các ngoại lệ khác (như IOException)
+            log.error("Lỗi xác minh chữ ký: {}", e.getMessage());
+            throw new IllegalArgumentException("Sign Kiểm tra chữ ký thất bại：" + e.getMessage());
         }
     }
 

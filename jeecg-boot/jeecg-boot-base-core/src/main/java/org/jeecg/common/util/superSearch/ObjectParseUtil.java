@@ -3,19 +3,19 @@
 //import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 //
 ///**
-// *   判断类型，追加查询规则
+// *   Phán đoán loại, thêm quy tắc truy vấn
 // *
 // * @Author Scott
-// * @Date 2019年02月14日
+// * @Date 2019 năm 14 tháng 02
 // */
 //public class ObjectParseUtil {
 //
 //	/**
 //	 *
 //	 * @param queryWrapper QueryWrapper
-//	 * @param name         字段名字
-//	 * @param rule         查询规则
-//	 * @param value        查询条件值
+//	 * @param name         Tên trường
+//	 * @param rule         Quy tắc truy vấn
+//	 * @param value        Giá trị điều kiện truy vấn
 //	 */
 //	public static void addCriteria(QueryWrapper<?> queryWrapper, String name, QueryRuleEnum rule, Object value) {
 //		if (value == null || rule == null) {

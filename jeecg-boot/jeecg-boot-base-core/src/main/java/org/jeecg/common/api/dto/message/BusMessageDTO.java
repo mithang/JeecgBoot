@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 带业务参数的消息
+ * Tin nhắn mang tham số nghiệp vụ
 * 
 * @author: taoyan
 * @date: 2022/8/17
@@ -15,12 +15,12 @@ public class BusMessageDTO extends MessageDTO implements Serializable {
 
     private static final long serialVersionUID = 9104793287983367669L;
     /**
-     * 业务类型
+     * Loại nghiệp vụ
      */
     private String busType;
 
     /**
-     * 业务id
+     * Nghiệp vụ id
      */
     private String busId;
 
@@ -29,7 +29,7 @@ public class BusMessageDTO extends MessageDTO implements Serializable {
     }
 
     /**
-     * 构造 带业务参数的消息
+     * Tạo tin nhắn mang tham số nghiệp vụ
      * @param fromUser
      * @param toUser
      * @param title

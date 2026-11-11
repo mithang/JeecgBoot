@@ -1,53 +1,53 @@
 package org.jeecg.common.desensitization.enums;
 
 /**
- * 敏感字段信息类型
+ * Loại thông tin trường nhạy cảm
  */
 public enum SensitiveEnum {
 
 
     /**
-     * 加密
+     * Mã hóa
      */
     ENCODE,
 
     /**
-     * 中文名
+     * Tên tiếng Trung
      */
     CHINESE_NAME,
 
     /**
-     * 身份证号
+     * Số chứng minh nhân dân
      */
     ID_CARD,
 
     /**
-     * 座机号
+     * Số điện thoại bàn
      */
     FIXED_PHONE,
 
     /**
-     * 手机号
+     * Số điện thoại
      */
     MOBILE_PHONE,
 
     /**
-     * 地址
+     * Địa chỉ
      */
     ADDRESS,
 
     /**
-     * 电子邮件
+     * Email
      */
     EMAIL,
 
     /**
-     * 银行卡
+     * Thẻ ngân hàng
      */
     BANK_CARD,
 
     /**
-     * 公司开户银行联号
+     * Số liên ngân hàng của tài khoản công ty
      */
     CNAPS_CODE;
 

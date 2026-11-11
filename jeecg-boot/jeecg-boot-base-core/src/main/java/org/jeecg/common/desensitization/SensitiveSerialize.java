@@ -35,7 +35,7 @@ public class SensitiveSerialize extends JsonSerializer<String> implements Contex
                 try {
                     jsonGenerator.writeString(AesEncryptUtil.encrypt(data));
                 } catch (Exception exception) {
-                    log.error("数据加密错误", exception.getMessage());
+                    log.error("Lỗi mã hóa dữ liệu", exception.getMessage());
                     jsonGenerator.writeString(data);
                 }
                 break;

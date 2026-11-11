@@ -36,9 +36,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @PropertySource("classpath:config/default-spring-doc.properties")
 public class Swagger3Config implements WebMvcConfigurer {
 
-    // 路径匹配结果缓存，避免重复计算
+    // Cache kết quả khớp đường dẫn, tránh tính toán lặp lại
     private static final Map<String, Boolean> EXCLUDED_PATHS_CACHE = new ConcurrentHashMap<>();
-    // 定义不需要注入安全要求的路径集合
+    // Định nghĩa tập hợp các đường dẫn không cần chèn yêu cầu bảo mật
     private static final Set<String> excludedPaths = new HashSet<>(Arrays.asList(
             "/sys/randomImage/**",
             "/sys/login",
@@ -50,11 +50,11 @@ public class Swagger3Config implements WebMvcConfigurer {
             "/sys/thirdLogin/**",
             "/sys/user/register"
     ));
-    // 预处理通配符模式，提高匹配效率
+    // Tiền xử lý mẫu ký tự đại diện, nâng cao hiệu quả khớp
     private static final Set<String> wildcardPatterns = new HashSet<>();
     private static final Set<String> exactPatterns = new HashSet<>();
     static {
-        // 初始化时分离精确匹配和通配符匹配
+        // Khi khởi tạo, tách khớp chính xác và khớp ký tự đại diện
         for (String pattern : excludedPaths) {
             if (pattern.endsWith("/**")) {
                 wildcardPatterns.add(pattern.substring(0, pattern.length() - 3));
@@ -66,7 +66,7 @@ public class Swagger3Config implements WebMvcConfigurer {
     
     /**
      *
-     * 显示swagger-ui.html文档展示页，还必须注入swagger资源：
+     * Hiển thị swagger-ui.html Trang hiển thị tài liệu còn phải inject tài nguyên swagger：
      *
      * @param registry
      */
@@ -89,7 +89,7 @@ public class Swagger3Config implements WebMvcConfigurer {
             if (!isExcludedPath(path)) {
                 operation.addSecurityItem(new SecurityRequirement().addList(CommonConstant.X_ACCESS_TOKEN));
             }else{
-                log.info("忽略加入 X_ACCESS_TOKEN 的 PATH:" + path);
+                log.info("Bỏ qua việc thêm X_ACCESS_TOKEN của PATH:" + path);
             }
             return operation;
         };
@@ -98,17 +98,17 @@ public class Swagger3Config implements WebMvcConfigurer {
     private String getFullPath(HandlerMethod handlerMethod) {
         StringBuilder fullPath = new StringBuilder();
 
-        // 获取类级别的路径
+        // Lấy đường dẫn cấp class
         RequestMapping classMapping = handlerMethod.getBeanType().getAnnotation(RequestMapping.class);
         if (classMapping != null && classMapping.value().length > 0) {
             fullPath.append(classMapping.value()[0]);
         }
 
-        // 获取方法级别的路径
+        // Lấy đường dẫn cấp phương thức
         RequestMapping methodMapping = handlerMethod.getMethodAnnotation(RequestMapping.class);
         if (methodMapping != null && methodMapping.value().length > 0) {
             String methodPath = methodMapping.value()[0];
-            // 确保路径正确拼接，处理斜杠
+            // Đảm bảo đường dẫn được nối đúng, xử lý dấu gạch chéo
             if (!fullPath.toString().endsWith("/") && !methodPath.startsWith("/")) {
                 fullPath.append("/");
             }
@@ -120,13 +120,13 @@ public class Swagger3Config implements WebMvcConfigurer {
 
 
     private boolean isExcludedPath(String path) {
-        // 使用缓存避免重复计算
+        // Sử dụng cache để tránh tính toán lặp lại
         return EXCLUDED_PATHS_CACHE.computeIfAbsent(path, p -> {
-            // 精确匹配
+            // Khớp chính xác
             if (exactPatterns.contains(p)) {
                 return true;
             }
-            // 通配符匹配
+            // Khớp ký tự đại diện
             return wildcardPatterns.stream().anyMatch(p::startsWith);
         });
     }
@@ -135,10 +135,10 @@ public class Swagger3Config implements WebMvcConfigurer {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("JeecgBoot 后台服务API接口文档")
+                        .title("JeecgBoot Tài liệu API giao diện dịch vụ backend")
                         .version("3.9.6")
                         .contact(new Contact().name("北京国炬信息技术有限公司").url("www.jeccg.com").email("jeecgos@163.com"))
-                        .description("后台API接口")
+                        .description("API giao diện backend")
                         .termsOfService("NO terms of service")
                         .license(new License().name("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0.html")))
                 .addSecurityItem(new SecurityRequirement().addList(CommonConstant.X_ACCESS_TOKEN))
@@ -146,7 +146,7 @@ public class Swagger3Config implements WebMvcConfigurer {
                         new SecurityScheme()
                                 .name(CommonConstant.X_ACCESS_TOKEN)
                                 .type(SecurityScheme.Type.APIKEY)
-                                .in(SecurityScheme.In.HEADER) // 关键：指定为 header
+                                .in(SecurityScheme.In.HEADER) // Quan trọng: chỉ định là header
                 ));
     }
 }

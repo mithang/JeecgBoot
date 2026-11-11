@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.net.URLDecoder;
 
 /**
- * minio文件上传工具类
+ * minio Lớp công cụ tải tệp lên
  * @author: jeecg-boot
  */
 @Slf4j
@@ -49,16 +49,16 @@ public class MinioUtil {
     private static MinioClient minioClient = null;
 
     /**
-     * 上传文件
+     * Tải lên tệp
      * @param file
      * @return
      */
     public static String upload(MultipartFile file, String bizPath, String customBucket) throws Exception {
         String fileUrl = "";
-        // 业务路径过滤，防止攻击
+        // Lọc đường dẫn nghiệp vụ, ngăn chặn tấn công
         bizPath = StrAttackFilter.filter(bizPath);
 
-        // 文件安全校验，防止上传漏洞文件
+        // Kiểm tra an toàn tệp, ngăn tải lên tệp có lỗ hổng
         SsrfFileTypeFilter.checkUploadFileType(file, bizPath);
 
         String newBucket = bucketName;
@@ -67,16 +67,16 @@ public class MinioUtil {
         }
         try {
             initMinio(minioUrl, minioName,minioPass);
-            // 检查存储桶是否已经存在
+            // Kiểm tra bucket lưu trữ đã tồn tại chưa
             if(minioClient.bucketExists(BucketExistsArgs.builder().bucket(newBucket).build())) {
                 log.info("Bucket already exists.");
             } else {
-                // 创建一个名为ota的存储桶
+                // Tạo một bucket lưu trữ có tên ota
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(newBucket).build());
                 log.info("create a new bucket.");
             }
             InputStream stream = file.getInputStream();
-            // 获取文件名
+            // Lấy tên tệp
             String orgName = file.getOriginalFilename();
             if("".equals(orgName)){
                 orgName=file.getName();
@@ -88,7 +88,7 @@ public class MinioUtil {
                                    :orgName.substring(0, orgName.lastIndexOf(".")) + "_" + System.currentTimeMillis() + orgName.substring(orgName.lastIndexOf("."))
                                  );
 
-            // 使用putObject上传一个本地文件到存储桶中。
+            // Dùng putObject để tải một tệp cục bộ lên bucket lưu trữ.
             if(objectName.startsWith(SymbolConstant.SINGLE_SLASH)){
                 objectName = objectName.substring(1);
             }
@@ -106,7 +106,7 @@ public class MinioUtil {
     }
 
     /**
-     * 文件上传
+     * Tải lên tệp
      * @param file
      * @param bizPath
      * @return
@@ -116,7 +116,7 @@ public class MinioUtil {
     }
 
     /**
-     * 获取文件流
+     * Lấy luồng tệp
      * @param bucketName
      * @param objectName
      * @return
@@ -129,13 +129,13 @@ public class MinioUtil {
                     .bucket(bucketName).build();
             inputStream = minioClient.getObject(objectArgs);
         } catch (Exception e) {
-            log.info("文件获取失败" + e.getMessage());
+            log.info("Lấy tệp thất bại" + e.getMessage());
         }
         return inputStream;
     }
 
     /**
-     * 删除文件
+     * Xóa tệp
      * @param bucketName
      * @param objectName
      * @throws Exception
@@ -147,36 +147,36 @@ public class MinioUtil {
                     .bucket(bucketName).build();
             minioClient.removeObject(objectArgs);
         }catch (Exception e){
-            log.info("文件删除失败" + e.getMessage());
+            log.info("Xóa tệp thất bại" + e.getMessage());
         }
     }
 
     /**
-     * 获取私有桶文件的预签名访问URL（带过期时间）
-     * 通过MinIO预签名机制生成临时GET链接，无需公开桶即可让外部访问文件
+     * Lấy URL truy cập đã ký trước của tệp trong bucket riêng (kèm thời gian hết hạn)
+     * Tạo liên kết GET tạm thời qua cơ chế presigned của MinIO, không cần công khai bucket vẫn cho phép bên ngoài truy cập tệp
      *
-     * @param bucketName 桶名称
-     * @param objectName 文件对象路径（如 "eoafile/2026/04/test.pdf"）
-     * @param expires    链接有效期，单位：秒（注意不是天）
-     * @return 预签名URL，失败返回null
+     * @param bucketName Tên bucket
+     * @param objectName Đường dẫn đối tượng tệp (ví dụ "eoafile/2026/04/test.pdf"）
+     * @param expires    Thời hạn hiệu lực của liên kết, đơn vị: giây (lưu ý không phải ngày)
+     * @return URL presigned, thất bại sẽ trả về null
      */
     public static String getObjectUrl(String bucketName, String objectName, Integer expires) {
         initMinio(minioUrl, minioName,minioPass);
         try{
-            // 代码逻辑说明: 获取文件外链报错提示method不能为空，导致文件下载和预览失败----
+            // Giải thích logic mã: Lấy thông báo lỗi liên kết ngoài của tệp: method không được để trống, khiến tải xuống và xem trước tệp thất bại----
             GetPresignedObjectUrlArgs objectArgs = GetPresignedObjectUrlArgs.builder().object(objectName)
                     .bucket(bucketName)
                     .expiry(expires).method(Method.GET).build();
             String url = minioClient.getPresignedObjectUrl(objectArgs);
             return URLDecoder.decode(url,"UTF-8");
         }catch (Exception e){
-            log.info("文件路径获取失败" + e.getMessage());
+            log.info("Lấy đường dẫn tệp thất bại" + e.getMessage());
         }
         return null;
     }
 
     /**
-     * 初始化客户端
+     * Khởi tạo máy khách
      * @param minioUrl
      * @param minioName
      * @param minioPass
@@ -197,20 +197,20 @@ public class MinioUtil {
     }
 
     /**
-     * 通过输入流上传文件到MinIO默认桶
-     * 若桶不存在会自动创建，上传成功后关闭输入流
+     * Tải tệp lên bucket mặc định của MinIO qua luồng đầu vào
+     * Nếu bucket không tồn tại sẽ tự động tạo, sau khi tải lên thành công sẽ đóng luồng đầu vào
      *
-     * @param stream       文件输入流
-     * @param relativePath 文件在桶中的相对路径（如 "upload/2026/04/test.pdf"）
-     * @return 文件完整访问URL（格式：minioUrl + bucketName + "/" + relativePath）
-     * @throws Exception 桶操作或上传过程中的异常
+     * @param stream       Luồng đầu vào của tệp
+     * @param relativePath Đường dẫn tương đối của tệp trong bucket (ví dụ "upload/2026/04/test.pdf"）
+     * @return URL truy cập đầy đủ của tệp (định dạng:minioUrl + bucketName + "/" + relativePath）
+     * @throws Exception Ngoại lệ trong quá trình thao tác bucket hoặc tải lên
      */
     public static String upload(InputStream stream,String relativePath) throws Exception {
         initMinio(minioUrl, minioName,minioPass);
         if(minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
             log.info("Bucket already exists.");
         } else {
-            // 创建一个名为ota的存储桶
+            // Tạo một bucket lưu trữ có tên ota
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
             log.info("create a new bucket.");
         }

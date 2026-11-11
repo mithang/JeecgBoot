@@ -16,7 +16,7 @@ import jakarta.servlet.Filter;
 import java.util.Map;
 
 /**
- * 自定义ShiroFilterFactoryBean解决资源中文路径问题
+ * Tùy chỉnh CustomShiroFilterFactoryBean để giải quyết vấn đề đường dẫn tài nguyên chứa tiếng Trung
  * @author: jeecg-boot
  */
 @Slf4j
@@ -50,7 +50,7 @@ public class CustomShiroFilterFactoryBean extends ShiroFilterFactoryBean {
         Map<String, Filter> filterMap = manager.getFilters();
         Filter invalidRequestFilter = filterMap.get(DefaultFilter.invalidRequest.name());
         if (invalidRequestFilter instanceof InvalidRequestFilter) {
-            //此处是关键,设置false跳过URL携带中文400，servletPath中文校验bug
+            //Đây là điểm then chốt,Đặt false để bỏ qua lỗi 400 khi URL chứa tiếng Trung, kiểm tra tiếng Trung của servletPath bug
             ((InvalidRequestFilter) invalidRequestFilter).setBlockNonAscii(false);
         }
         //Now create a concrete ShiroFilter instance and apply the acquired SecurityManager and built

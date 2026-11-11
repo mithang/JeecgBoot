@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Properties;
 
 /**
- * mybatis拦截器，自动注入创建人、创建时间、修改人、修改时间
+ * mybatis Interceptor, tự động inject người tạo, thời gian tạo, người sửa, thời gian sửa
  * @Author scott
  * @Date  2019-01-19
  *
@@ -54,14 +54,14 @@ public class MybatisInterceptor implements Interceptor {
 						field.setAccessible(false);
 						if (localCreateBy == null || "".equals(localCreateBy)) {
 							if (sysUser != null) {
-								// 登录人账号
+								// Tài khoản của người đăng nhập
 								field.setAccessible(true);
 								field.set(parameter, sysUser.getUsername());
 								field.setAccessible(false);
 							}
 						}
 					}
-					// 注入创建时间
+					// Inject thời gian tạo
 					if ("createTime".equals(field.getName())) {
 						field.setAccessible(true);
 						Object localCreateDate = field.get(parameter);
@@ -72,13 +72,13 @@ public class MybatisInterceptor implements Interceptor {
 							field.setAccessible(false);
 						}
 					}
-					//注入部门编码
+					//Inject mã phòng ban
 					if ("sysOrgCode".equals(field.getName())) {
 						field.setAccessible(true);
 						Object localSysOrgCode = field.get(parameter);
 						field.setAccessible(false);
 						if (localSysOrgCode == null || "".equals(localSysOrgCode)) {
-							// 获取登录用户信息
+							// Lấy thông tin người dùng đăng nhập
 							if (sysUser != null) {
 								field.setAccessible(true);
 								field.set(parameter, sysUser.getOrgCode());
@@ -88,7 +88,7 @@ public class MybatisInterceptor implements Interceptor {
 					}
 
 					//------------------------------------------------------------------------------------------------
-					//注入租户ID（是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】）
+					//Inject tenant ID (có bật cách ly dữ liệu đa tenant của module quản lý hệ thống hay không 【Chế độ đa tenant SAAS】)
 					if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
 						if (TenantConstant.TENANT_ID.equals(field.getName())) {
 							field.setAccessible(true);
@@ -98,7 +98,7 @@ public class MybatisInterceptor implements Interceptor {
 								field.setAccessible(true);
 
 								String tenantId = TenantContext.getTenant();
-								//如果通过线程获取租户ID为空，则通过当前请求的request获取租户（shiro排除拦截器的请求会获取不到租户ID）
+								//Nếu lấy tenant ID qua thread bị trống thì lấy tenant qua request của yêu cầu hiện tại (yêu cầu bị shiro loại khỏi interceptor sẽ không lấy được tenant ID)
 								if(oConvertUtils.isEmpty(tenantId) && MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 									try {
 										tenantId = TokenUtils.getTenantIdByRequest(SpringContextUtils.getHttpServletRequest());
@@ -108,10 +108,10 @@ public class MybatisInterceptor implements Interceptor {
 								}
 
 								if (field.getType().equals(String.class)) {
-									// 字段类型为String
+									// Loại trường là String
 									field.set(parameter, tenantId);
 								} else {
-									// 字段类型不是String
+									// Loại trường không phải là String
 									field.set(parameter, oConvertUtils.getInt(tenantId, 0));
 								}
 								field.setAccessible(false);
@@ -129,7 +129,7 @@ public class MybatisInterceptor implements Interceptor {
 			Field[] fields = null;
 			if (parameter instanceof ParamMap) {
 				ParamMap<?> p = (ParamMap<?>) parameter;
-				// 代码逻辑说明: 批量更新报错issues/IZA3Q--
+				// Giải thích logic mã: Cập nhật hàng loạt báo lỗi issues/IZA3Q--
                 String et = "et";
 				if (p.containsKey(et)) {
 					parameter = p.get(et);
@@ -137,7 +137,7 @@ public class MybatisInterceptor implements Interceptor {
 					parameter = p.get("param1");
 				}
 
-				// 代码逻辑说明: 更新指定字段时报错 issues/#516-
+				// Giải thích logic mã: Khi cập nhật trường chỉ định thì báo lỗi issues/#516-
 				if (parameter == null) {
 					return invocation.proceed();
 				}
@@ -151,9 +151,9 @@ public class MybatisInterceptor implements Interceptor {
 				log.debug("------field.name------" + field.getName());
 				try {
 					if ("updateBy".equals(field.getName())) {
-						//获取登录用户信息
+						//Lấy thông tin người dùng đăng nhập
 						if (sysUser != null) {
-							// 登录账号
+							// Tài khoản đăng nhập
 							field.setAccessible(true);
 							field.set(parameter, sysUser.getUsername());
 							field.setAccessible(false);
@@ -183,7 +183,7 @@ public class MybatisInterceptor implements Interceptor {
 	}
 
     /**
-     * 获取登录用户
+     * Lấy người dùng đăng nhập
      * @return
      */
 	private LoginUser getLoginUser() {

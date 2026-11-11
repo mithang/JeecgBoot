@@ -3,7 +3,7 @@ package org.jeecg.config.vo;
 /**
  * @Description: TODO
  * @author: scott
- * @date: 2022年01月21日 14:23
+ * @date: 2022 năm 01 tháng 21 ngày 14:23
  */
 public class Shiro {
     private String excludeUrls = "";

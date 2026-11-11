@@ -26,9 +26,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * 数据权限切面处理类
- *  当被请求的方法有注解PermissionData时,会在往当前request中写入数据权限信息
- * @Date 2019年4月10日
+ * Lớp xử lý aspect quyền dữ liệu
+ *  Khi phương thức được yêu cầu có annotation PermissionData,sẽ ghi thông tin quyền dữ liệu vào request hiện tại
+ * @Date 2019 năm 4 tháng 10 ngày
  * @Version: 1.0
  * @author: jeecg-boot
  */
@@ -57,23 +57,23 @@ public class PermissionDataAspect {
         String requestMethod = request.getMethod();
         String requestPath = request.getRequestURI().substring(request.getContextPath().length());
         requestPath = filterUrl(requestPath);
-        //先判断是否online报表请求
+        //Kiểm tra trước có phải yêu cầu báo cáo online hay không
         if(requestPath.indexOf(UrlMatchEnum.CGREPORT_DATA.getMatchUrl())>=0 || requestPath.indexOf(UrlMatchEnum.CGREPORT_ONLY_DATA.getMatchUrl())>=0){
-            // 获取地址栏参数
+            // Lấy tham số thanh địa chỉ
             String urlParamString = request.getParameter(CommonConstant.ONL_REP_URL_PARAM_STR);
             if(oConvertUtils.isNotEmpty(urlParamString)){
                 requestPath+="?"+urlParamString;
             }
         }
-        log.debug("拦截请求 >> {} ; 请求类型 >> {} . ", requestPath, requestMethod);
+        log.debug("Chặn yêu cầu >> {} ; Loại yêu cầu >> {} . ", requestPath, requestMethod);
         String username = JwtUtil.getUserNameByToken(request);
-        //查询数据权限信息
-        //TODO 微服务情况下也得支持缓存机制
+        //Tìm kiếm thông tin quyền dữ liệu
+        //TODO Trong trường hợp microservice cũng phải hỗ trợ cơ chế cache
         List<SysPermissionDataRuleModel> dataRules = commonApi.queryPermissionDataRule(component, requestPath, username);
         if(dataRules!=null && dataRules.size()>0) {
-            //临时存储
+            //Lưu trữ tạm thời
             JeecgDataAutorUtils.installDataSearchConditon(request, dataRules);
-            //TODO 微服务情况下也得支持缓存机制
+            //TODO Trong trường hợp microservice cũng phải hỗ trợ cơ chế cache
             SysUserCacheInfo userinfo = commonApi.getCacheUser(username);
             JeecgDataAutorUtils.installUserInfo(request, userinfo);
         }
@@ -96,7 +96,7 @@ public class PermissionDataAspect {
     }
 
     /**
-     * 获取请求地址
+     * Lấy địa chỉ yêu cầu
      * @param request
      * @return
      */
@@ -107,7 +107,7 @@ public class PermissionDataAspect {
         if(oConvertUtils.isNotEmpty(queryString)){
             requestPath += "?" + queryString;
         }
-        // 去掉其他参数(保留一个参数) 例如：loginController.do?login
+        // Loại bỏ các tham số khác(Giữ lại một tham số) Ví dụ:loginController.do?login
         if (requestPath.indexOf(SymbolConstant.AND) > -1) {
             requestPath = requestPath.substring(0, requestPath.indexOf("&"));
         }
@@ -118,7 +118,7 @@ public class PermissionDataAspect {
                 requestPath = requestPath.substring(0,requestPath.indexOf("?"));
             }
         }
-        // 去掉项目路径
+        // Loại bỏ đường dẫn dự án
         requestPath = requestPath.substring(request.getContextPath().length() + 1);
         return filterUrl(requestPath);
     }

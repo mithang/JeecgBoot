@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 消息类型
+ * Loại tin nhắn
  *
  * @author: jeecg-boot
  */
@@ -15,29 +15,29 @@ import java.util.List;
 public enum MessageTypeEnum {
 
     /**
-     * 系统消息
+     * Tin nhắn hệ thống
      */
-    XT("system", "系统消息"),
+    XT("system", "Tin nhắn hệ thống"),
     /**
-     * 邮件消息
+     * Tin nhắn email
      */
-    YJ("email", "邮件消息"),
+    YJ("email", "Tin nhắn email"),
     /**
-     * 钉钉消息
+     * Tin nhắn DingTalk
      */
-    DD("dingtalk", "钉钉消息"),
+    DD("dingtalk", "Tin nhắn DingTalk"),
     /**
-     * 企业微信
+     * WeCom
      */
-    QYWX("wechat_enterprise", "企业微信"),
+    QYWX("wechat_enterprise", "WeCom"),
     /**
-     * 飞书
+     * Feishu
      */
-    FS("feishu", "飞书消息"),
+    FS("feishu", "Tin nhắn Feishu"),
     /**
-     * 短信消息
+     * Tin nhắn SMS
      */
-    DX("sms", "短信消息");
+    DX("sms", "Tin nhắn SMS");
 
     MessageTypeEnum(String type, String note) {
         this.type = type;
@@ -45,12 +45,12 @@ public enum MessageTypeEnum {
     }
 
     /**
-     * 消息类型
+     * Loại tin nhắn
      */
     String type;
 
     /**
-     * 类型说明
+     * Mô tả loại
      */
     String note;
 
@@ -72,7 +72,7 @@ public enum MessageTypeEnum {
 
 
     /**
-     * 获取字典数据
+     * Lấy dữ liệu danh mục
      *
      * @return
      */
@@ -89,7 +89,7 @@ public enum MessageTypeEnum {
     }
 
     /**
-     * 根据type获取枚举
+     * Lấy enum theo type
      *
      * @param type
      * @return

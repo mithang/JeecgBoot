@@ -35,11 +35,11 @@ import java.util.Date;
 
 
 /**
- * 系统日志，切面处理类
+ * Nhật ký hệ thống, lớp xử lý aspect
  *
  * @Author scott
  * @email jeecgos@163.com
- * @Date 2018年1月14日
+ * @Date 2018 năm 1 tháng 14 ngày
  */
 @Aspect
 @Component
@@ -56,12 +56,12 @@ public class AutoLogAspect {
     @Around("logPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         long beginTime = System.currentTimeMillis();
-        //执行方法
+        //Thực thi phương thức
         Object result = point.proceed();
-        //执行时长(毫秒)
+        //Thời gian thực thi(Mili giây)
         long time = System.currentTimeMillis() - beginTime;
 
-        //保存日志
+        //Lưu nhật ký
         saveSysLog(point, time, result);
 
         return result;
@@ -79,62 +79,62 @@ public class AutoLogAspect {
             if(syslog.module()== ModuleType.ONLINE){
                 content = getOnlineLogContent(obj, content);
             }
-            //注解上的描述,操作日志内容
+            //Mô tả trên annotation,Nội dung nhật ký thao tác
             dto.setLogType(syslog.logType());
             dto.setLogContent(content);
         }
 
-        //请求的方法名
+        //Tên phương thức được yêu cầu
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = signature.getName();
         dto.setMethod(className + "." + methodName + "()");
 
 
-        //设置操作类型
+        //Thiết lập loại thao tác
         if (CommonConstant.LOG_TYPE_2 == dto.getLogType()) {
             dto.setOperateType(getOperateType(methodName, syslog.operateType()));
         }
 
-        //获取request
+        //Lấy request
         HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
-        //请求的参数
+        //Tham số của yêu cầu
         dto.setRequestParam(getReqestParams(request,joinPoint));
-        //设置IP地址
+        //Thiết lập địa chỉ IP
         dto.setIp(IpUtils.getIpAddr(request));
-        //设置客户端
+        //Thiết lập client
         if (BrowserUtils.isDesktop(request)) {
             dto.setClientType(ClientTerminalTypeEnum.PC.getKey());
         } else {
             dto.setClientType(ClientTerminalTypeEnum.APP.getKey());
         }
-        //获取登录用户信息
+        //Lấy thông tin người dùng đăng nhập
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if(sysUser!=null){
             dto.setUserid(sysUser.getUsername());
             dto.setUsername(sysUser.getRealname());
 
         }
-        //耗时
+        //Thời gian tốn
         dto.setCostTime(time);
         dto.setCreateTime(new Date());
-        //保存系统日志
+        //Lưu nhật ký hệ thống
         baseCommonService.addLog(dto);
     }
 
 
     /**
-     * 获取操作类型
+     * Lấy loại thao tác
      */
     private int getOperateType(String methodName,int operateType) {
         if (operateType > 0) {
             return operateType;
         }
-        // 代码逻辑说明: 阿里云代码扫描规范(不允许任何魔法值出现在代码中)------------
+        // Giải thích logic mã: Quy chuẩn quét mã Alibaba Cloud(Không cho phép bất kỳ magic value nào xuất hiện trong mã)------------
         return OperateTypeEnum.getTypeByMethodName(methodName);
     }
 
     /**
-     * @Description: 获取请求参数
+     * @Description: Lấy tham số yêu cầu
      * @author: scott
      * @date: 2020/4/16 0:10
      * @param request:  request
@@ -151,14 +151,14 @@ public class AutoLogAspect {
             Object[] arguments  = new Object[paramsArray.length];
             for (int i = 0; i < paramsArray.length; i++) {
                 if (paramsArray[i] instanceof BindingResult || paramsArray[i] instanceof ServletRequest || paramsArray[i] instanceof ServletResponse || paramsArray[i] instanceof MultipartFile || paramsArray[i] instanceof MultipartFile[]) {
-                    //ServletRequest不能序列化，从入参里排除，否则报异常：java.lang.IllegalStateException: It is illegal to call this method if the current request is not in asynchronous mode (i.e. isAsyncStarted() returns false)
-                    //ServletResponse不能序列化 从入参里排除，否则报异常：java.lang.IllegalStateException: getOutputStream() has already been called for this response
-                    //MultipartFile和MultipartFile[]不能序列化，从入参里排除
+                    //ServletRequest Không thể serialize, loại khỏi tham số đầu vào, nếu không sẽ báo ngoại lệ：java.lang.IllegalStateException: It is illegal to call this method if the current request is not in asynchronous mode (i.e. isAsyncStarted() returns false)
+                    //ServletResponse Không thể serialize, loại khỏi tham số đầu vào, nếu không sẽ báo ngoại lệ：java.lang.IllegalStateException: getOutputStream() has already been called for this response
+                    //MultipartFile và MultipartFile[]Không thể serialize, loại khỏi tham số đầu vào
                     continue;
                 }
                 arguments[i] = paramsArray[i];
             }
-            // 代码逻辑说明: 日志数据太长的直接过滤掉
+            // Giải thích logic mã: Dữ liệu nhật ký quá dài thì lọc trực tiếp
             PropertyFilter profilter = new PropertyFilter() {
                 @Override
                 public boolean apply(Object o, String name, Object value) {
@@ -176,9 +176,9 @@ public class AutoLogAspect {
         } else {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             Method method = signature.getMethod();
-            // 请求的方法参数值
+            // Giá trị tham số của phương thức được yêu cầu
             Object[] args = joinPoint.getArgs();
-            // 请求的方法参数名称
+            // Tên tham số của phương thức được yêu cầu
             StandardReflectionParameterNameDiscoverer u= new StandardReflectionParameterNameDiscoverer();
             String[] paramNames = u.getParameterNames(method);
             if (args != null && paramNames != null) {
@@ -191,7 +191,7 @@ public class AutoLogAspect {
     }
 
     /**
-     * online日志内容拼接
+     * online Nối nội dung nhật ký
      * @param obj
      * @param content
      * @return
@@ -202,12 +202,12 @@ public class AutoLogAspect {
             String msg = res.getMessage();
             String tableName = res.getOnlTable();
             if(oConvertUtils.isNotEmpty(tableName)){
-                content+=",表名:"+tableName;
+                content+=",Tên bảng:"+tableName;
             }
             if(res.isSuccess()){
-                content+= ","+(oConvertUtils.isEmpty(msg)?"操作成功":msg);
+                content+= ","+(oConvertUtils.isEmpty(msg)?"Thao tác thành công":msg);
             }else{
-                content+= ","+(oConvertUtils.isEmpty(msg)?"操作失败":msg);
+                content+= ","+(oConvertUtils.isEmpty(msg)?"Thao tác thất bại":msg);
             }
         }
         return content;
@@ -226,41 +226,41 @@ public class AutoLogAspect {
             if(syslog.module()== ModuleType.ONLINE){
                 content = getOnlineLogContent(obj, content);
             }
-            //注解上的描述,操作日志内容
+            //Mô tả trên annotation,Nội dung nhật ký thao tác
             sysLog.setLogContent(content);
             sysLog.setLogType(syslog.logType());
         }
 
-        //请求的方法名
+        //Tên phương thức được yêu cầu
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = signature.getName();
         sysLog.setMethod(className + "." + methodName + "()");
 
 
-        //设置操作类型
+        //Thiết lập loại thao tác
         if (sysLog.getLogType() == CommonConstant.LOG_TYPE_2) {
             sysLog.setOperateType(getOperateType(methodName, syslog.operateType()));
         }
 
-        //获取request
+        //Lấy request
         HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
-        //请求的参数
+        //Tham số của yêu cầu
         sysLog.setRequestParam(getReqestParams(request,joinPoint));
 
-        //设置IP地址
+        //Thiết lập địa chỉ IP
         sysLog.setIp(IPUtils.getIpAddr(request));
 
-        //获取登录用户信息
+        //Lấy thông tin người dùng đăng nhập
         LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
         if(sysUser!=null){
             sysLog.setUserid(sysUser.getUsername());
             sysLog.setUsername(sysUser.getRealname());
 
         }
-        //耗时
+        //Thời gian tốn
         sysLog.setCostTime(time);
         sysLog.setCreateTime(new Date());
-        //保存系统日志
+        //Lưu nhật ký hệ thống
         sysLogService.save(sysLog);
     }*/
 }

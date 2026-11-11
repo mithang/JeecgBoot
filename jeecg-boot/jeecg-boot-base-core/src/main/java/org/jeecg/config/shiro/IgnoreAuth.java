@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 免Token认证注解
+ * Annotation miễn xác thực Token
  * 
- * 认证系统结合spring MVC的@RequestMapping获取请求路径进行免登录配置
+ * Hệ thống xác thực kết hợp với@RequestMapping Lấy đường dẫn yêu cầu để cấu hình miễn đăng nhập
  * @author eightmonth
  * @date 2024/2/28 9:58
  */

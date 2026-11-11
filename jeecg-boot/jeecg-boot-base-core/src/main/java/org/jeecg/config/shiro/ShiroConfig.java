@@ -39,31 +39,31 @@ import java.util.*;
 /**
  * @author: Scott
  * @date: 2018/2/7
- * @description: shiro 配置类
+ * @description: shiro Lớp cấu hình
  */
 
 @Slf4j
 @Configuration
 public class ShiroConfig {
-	//update-begin---author:scott ---date:2026-08-24  for：【issues/9840】静态资源按目录放行，避免业务接口通过伪造文件后缀绕过JWT-----------
+	//update-begin---author:scott ---date:2026-08-24  for：【issues/9840】Tài nguyên tĩnh được cho qua theo thư mục, tránh API nghiệp vụ bỏ qua bằng cách giả mạo hậu tố tệp JWT-----------
 	private static final String[] ANONYMOUS_STATIC_RESOURCE_PATHS = {
-		// 基础入口
+		// Lối vào cơ bản
 		"/", "/index.html", "/doc.html", "/favicon.ico", "/logo.png", "/pca.json", "/demo1.html",
-		// Vue3前端构建资源
+		// Vue3 Tài nguyên build của frontend
 		"/manifest.webmanifest", "/sw.js", "/workbox-*.js", "/assets/**", "/resource/**",
 		"/static/**", "/css/**", "/js/**", "/img/**", "/fonts/**",
-		// 系统内置静态页面
+		// Trang tĩnh tích hợp sẵn của hệ thống
 		"/generic/**", "/view/userlist.html",
-		// 开源Demo大屏模板
+		// Mẫu màn hình lớn Demo mã nguồn mở
 		"/bigscreen/template1/**", "/bigscreen/template2/**",
-		// 积木报表
+		// Báo cáo Jimu
 		"/jmreport/desreport_/**",
-		// 积木BI仪表盘、大屏
+		// Dashboard, màn hình lớn Jimu BI
 		"/drag/favicon.ico", "/drag/lib/**", "/drag/list/**",
 		// Chat2BI
         "/chat2bi/**", "/jimu/chat2bi/css/**", "/jimu/chat2bi/js/**","/jimu/chat2bi/libs/**", "/jimu/chat2bi/logo.png"
 	};
-	//update-end---author:scott ---date:2026-08-24  for：【issues/9840】静态资源按目录放行，避免业务接口通过伪造文件后缀绕过JWT-----------
+	//update-end---author:scott ---date:2026-08-24  for：【issues/9840】Tài nguyên tĩnh được cho qua theo thư mục, tránh API nghiệp vụ bỏ qua bằng cách giả mạo hậu tố tệp JWT-----------
 
     @Resource
     private LettuceConnectionFactory lettuceConnectionFactory;
@@ -71,26 +71,26 @@ public class ShiroConfig {
     private Environment env;
     @Resource
     private JeecgBaseConfig jeecgBaseConfig;
-    //update-begin---author:scott ---date:2026-07-07  for：【Spring Boot 4.0 升级】RedisProperties 改名为 DataRedisProperties，包路径变更-----------
+    //update-begin---author:scott ---date:2026-07-07  for：【Spring Boot 4.0 Nâng cấp】RedisProperties đổi tên thành DataRedisProperties, đường dẫn package thay đổi-----------
     @Autowired(required = false)
     private DataRedisProperties redisProperties;
-    //update-end---author:scott ---date:2026-07-07  for：【Spring Boot 4.0 升级】RedisProperties 改名为 DataRedisProperties，包路径变更-----------
+    //update-end---author:scott ---date:2026-07-07  for：【Spring Boot 4.0 Nâng cấp】RedisProperties đổi tên thành DataRedisProperties, đường dẫn package thay đổi-----------
     
     /**
-     * Filter Chain定义说明
+     * Filter Chain Giải thích định nghĩa
      *
-     * 1、一个URL可以配置多个Filter，使用逗号分隔
-     * 2、当设置多个过滤器时，全部验证通过，才视为通过
-     * 3、部分过滤器可指定参数，如perms，roles
+     * 1, một URL có thể cấu hình nhiều Filter, dùng dấu phẩy để phân tách
+     * 2, khi đặt nhiều bộ lọc, tất cả đều phải xác thực thành công mới được coi là đạt
+     * 3, một số bộ lọc có thể chỉ định tham số, ví dụ perms,roles
      */
     @Bean("shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         CustomShiroFilterFactoryBean shiroFilterFactoryBean = new CustomShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        // 拦截器
+        // Interceptor
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
-        //支持yml方式，配置拦截排除
+        //Hỗ trợ cách cấu hình bằng yml, cấu hình loại trừ khi chặn
         if(jeecgBaseConfig!=null && jeecgBaseConfig.getShiro()!=null){
             String shiroExcludeUrls = jeecgBaseConfig.getShiro().getExcludeUrls();
             if(oConvertUtils.isNotEmpty(shiroExcludeUrls)){
@@ -101,36 +101,36 @@ public class ShiroConfig {
             }
         }
 
-        // 配置不会被拦截的链接 顺序判断
-        filterChainDefinitionMap.put("/sys/cas/client/validateLogin", "anon"); //cas验证登录
-        filterChainDefinitionMap.put("/sys/randomImage/**", "anon"); //登录验证码接口排除
-        filterChainDefinitionMap.put("/sys/checkCaptcha", "anon"); //登录验证码接口排除
-        filterChainDefinitionMap.put("/sys/smsCheckCaptcha", "anon"); //短信次数发送太多验证码排除
-        filterChainDefinitionMap.put("/sys/login", "anon"); //登录接口排除
-        filterChainDefinitionMap.put("/sys/mLogin", "anon"); //登录接口排除
-        filterChainDefinitionMap.put("/sys/logout", "anon"); //登出接口排除
-        filterChainDefinitionMap.put("/sys/thirdLogin/**", "anon"); //第三方登录
-        filterChainDefinitionMap.put("/sys/getEncryptedString", "anon"); //获取加密串
-        filterChainDefinitionMap.put("/sys/sms", "anon");//短信验证码
-        filterChainDefinitionMap.put("/sys/phoneLogin", "anon");//手机登录
-        filterChainDefinitionMap.put("/sys/user/checkOnlyUser", "anon");//校验用户是否存在
-        filterChainDefinitionMap.put("/sys/user/register", "anon");//用户注册
-        filterChainDefinitionMap.put("/sys/user/phoneVerification", "anon");//用户忘记密码验证手机号
-        filterChainDefinitionMap.put("/sys/user/passwordChange", "anon");//用户更改密码
-        filterChainDefinitionMap.put("/auth/2step-code", "anon");//登录验证码
-        filterChainDefinitionMap.put("/sys/common/static/**", "anon");//图片预览 &下载文件不限制token
-        filterChainDefinitionMap.put("/sys/common/pdf/**", "anon");//pdf预览
+        // Cấu hình các liên kết sẽ không bị chặn, phán đoán theo thứ tự
+        filterChainDefinitionMap.put("/sys/cas/client/validateLogin", "anon"); //cas Xác thực đăng nhập
+        filterChainDefinitionMap.put("/sys/randomImage/**", "anon"); //Loại trừ API mã xác thực đăng nhập
+        filterChainDefinitionMap.put("/sys/checkCaptcha", "anon"); //Loại trừ API mã xác thực đăng nhập
+        filterChainDefinitionMap.put("/sys/smsCheckCaptcha", "anon"); //Loại trừ khi gửi SMS quá nhiều lần mã xác thực
+        filterChainDefinitionMap.put("/sys/login", "anon"); //Loại trừ API đăng nhập
+        filterChainDefinitionMap.put("/sys/mLogin", "anon"); //Loại trừ API đăng nhập
+        filterChainDefinitionMap.put("/sys/logout", "anon"); //Loại trừ API đăng xuất
+        filterChainDefinitionMap.put("/sys/thirdLogin/**", "anon"); //Đăng nhập bên thứ ba
+        filterChainDefinitionMap.put("/sys/getEncryptedString", "anon"); //Lấy chuỗi mã hóa
+        filterChainDefinitionMap.put("/sys/sms", "anon");//Mã xác thực SMS
+        filterChainDefinitionMap.put("/sys/phoneLogin", "anon");//Đăng nhập bằng điện thoại
+        filterChainDefinitionMap.put("/sys/user/checkOnlyUser", "anon");//Kiểm tra người dùng có tồn tại không
+        filterChainDefinitionMap.put("/sys/user/register", "anon");//Đăng ký người dùng
+        filterChainDefinitionMap.put("/sys/user/phoneVerification", "anon");//Người dùng quên mật khẩu xác thực số điện thoại
+        filterChainDefinitionMap.put("/sys/user/passwordChange", "anon");//Người dùng đổi mật khẩu
+        filterChainDefinitionMap.put("/auth/2step-code", "anon");//Mã xác thực đăng nhập
+        filterChainDefinitionMap.put("/sys/common/static/**", "anon");//Xem trước hình ảnh &Tải tệp xuống không giới hạn token
+        filterChainDefinitionMap.put("/sys/common/pdf/**", "anon");//pdf Xem trước
 
-        //filterChainDefinitionMap.put("/sys/common/view/**", "anon");//图片预览不限制token
-        //filterChainDefinitionMap.put("/sys/common/download/**", "anon");//文件下载不限制token
-        filterChainDefinitionMap.put("/sys/getLoginQrcode/**", "anon"); //登录二维码
-        filterChainDefinitionMap.put("/sys/getQrcodeToken/**", "anon"); //监听扫码
-        filterChainDefinitionMap.put("/sys/checkAuth", "anon"); //授权接口排除
-        filterChainDefinitionMap.put("/openapi/call/**", "anon"); // 开放平台接口排除
+        //filterChainDefinitionMap.put("/sys/common/view/**", "anon");//Xem trước hình ảnh không giới hạn token
+        //filterChainDefinitionMap.put("/sys/common/download/**", "anon");//Tải tệp xuống không giới hạn token
+        filterChainDefinitionMap.put("/sys/getLoginQrcode/**", "anon"); //Mã QR đăng nhập
+        filterChainDefinitionMap.put("/sys/getQrcodeToken/**", "anon"); //Lắng nghe quét mã
+        filterChainDefinitionMap.put("/sys/checkAuth", "anon"); //Loại trừ API ủy quyền
+        filterChainDefinitionMap.put("/openapi/call/**", "anon"); // Loại trừ API nền tảng mở
 
-        //update-begin---author:scott ---date:2026-08-24  for：【issues/9840】禁止按URL后缀全局放行静态资源-----------
+        //update-begin---author:scott ---date:2026-08-24  for：【issues/9840】Cấm cho qua toàn cục tài nguyên tĩnh theo hậu tố URL-----------
 		addAnonymousStaticResourcePaths(filterChainDefinitionMap);
-        //update-end---author:scott ---date:2026-08-24  for：【issues/9840】禁止按URL后缀全局放行静态资源-----------
+        //update-end---author:scott ---date:2026-08-24  for：【issues/9840】Cấm cho qua toàn cục tài nguyên tĩnh theo hậu tố URL-----------
 
         filterChainDefinitionMap.put("/druid/**", "anon");
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
@@ -140,13 +140,13 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/sys/annountCement/show/**", "anon");
 
-        //Chat2BI分享页（页面自带独立登录）
+        //Chat2BI Trang chia sẻ (trang tự có đăng nhập độc lập)
         filterChainDefinitionMap.put("/jimu/chat2bi/chat", "anon");
 
-        //积木报表排除
+        //Loại trừ báo cáo Jimu
         filterChainDefinitionMap.put("/jmreport/**", "anon");
         
-        //积木BI大屏和仪表盘排除
+        //Loại trừ màn hình lớn và Dashboard Jimu BI
         filterChainDefinitionMap.put("/drag/view", "anon");
         filterChainDefinitionMap.put("/drag/page/queryById", "anon");
         filterChainDefinitionMap.put("/drag/page/addVisitsNumber", "anon");
@@ -162,67 +162,67 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/jimubi/view", "anon");
         filterChainDefinitionMap.put("/jimubi/share/view/**", "anon");
 
-        //大屏模板例子
+        //Ví dụ mẫu màn hình lớn
         filterChainDefinitionMap.put("/test/bigScreen/**", "anon");
-        //filterChainDefinitionMap.put("/test/jeecgDemo/rabbitMqClientTest/**", "anon"); //MQ测试
-        //filterChainDefinitionMap.put("/test/jeecgDemo/html", "anon"); //模板页面
-        //filterChainDefinitionMap.put("/test/jeecgDemo/redis/**", "anon"); //redis测试
+        //filterChainDefinitionMap.put("/test/jeecgDemo/rabbitMqClientTest/**", "anon"); //MQ Kiểm tra
+        //filterChainDefinitionMap.put("/test/jeecgDemo/html", "anon"); //Trang mẫu
+        //filterChainDefinitionMap.put("/test/jeecgDemo/redis/**", "anon"); //redis Kiểm tra
 
-        //websocket排除
-        filterChainDefinitionMap.put("/websocket/**", "anon");//系统通知和公告
-        filterChainDefinitionMap.put("/newsWebsocket/**", "anon");//CMS模块
-        filterChainDefinitionMap.put("/vxeSocket/**", "anon");//JVxeTable无痕刷新示例
-        //App vue3版本查询版本接口
+        //websocket Loại trừ
+        filterChainDefinitionMap.put("/websocket/**", "anon");//Thông báo hệ thống và thông cáo
+        filterChainDefinitionMap.put("/newsWebsocket/**", "anon");//CMS Module
+        filterChainDefinitionMap.put("/vxeSocket/**", "anon");//JVxeTable Ví dụ làm mới không dấu vết
+        //App vue3 API tra cứu phiên bản
         filterChainDefinitionMap.put("/sys/version/app3version", "anon");
-        //仪表盘（按钮通信）
+        //Dashboard (giao tiếp bằng nút)
         filterChainDefinitionMap.put("/dragChannelSocket/**","anon");
-        //App vue3版本查询版本接口
+        //App vue3 API tra cứu phiên bản
         filterChainDefinitionMap.put("/sys/version/app3version", "anon");
 
-        //update-begin---author:scott ---date:20261023  for：【GHSA-2899-g99h-hq64】actuator不再整体免登录（请求追踪会泄露他人token）：health保留匿名供微服务监控中心探活，其余端点要求登录且为admin角色------------
+        //update-begin---author:scott ---date:20261023  for：【GHSA-2899-g99h-hq64】actuator không còn miễn đăng nhập toàn bộ nữa (theo dõi yêu cầu sẽ làm rò rỉ token của người khác): health giữ ẩn danh để trung tâm giám sát microservice thăm dò trạng thái, các endpoint còn lại yêu cầu đăng nhập và có vai trò admin------------
         filterChainDefinitionMap.put("/actuator/health", "anon");
         filterChainDefinitionMap.put("/actuator/health/**", "anon");
         filterChainDefinitionMap.put("/actuator/**", "jwt,roles[admin]");
-        //update-end---author:scott ---date:20261023  for：【GHSA-2899-g99h-hq64】actuator不再整体免登录：health保留匿名，其余端点要求登录且为admin角色------------
-        //测试模块排除
+        //update-end---author:scott ---date:20261023  for：【GHSA-2899-g99h-hq64】actuator không còn miễn đăng nhập toàn bộ nữa: health giữ ẩn danh, các endpoint còn lại yêu cầu đăng nhập và có vai trò admin------------
+        //Loại trừ module kiểm tra
         filterChainDefinitionMap.put("/test/seata/**", "anon");
 
-        //错误路径排除
+        //Loại trừ đường dẫn lỗi
         filterChainDefinitionMap.put("/error", "anon");
-        // 企业微信证书排除
+        // Loại trừ chứng chỉ WeCom doanh nghiệp
         filterChainDefinitionMap.put("/WW_verify*", "anon");
 
         filterChainDefinitionMap.put("/openapi/call/**", "anon");
 
-        // 添加自己的过滤器并且取名为jwt
+        // Thêm bộ lọc của riêng mình và đặt tên là jwt
         Map<String, Filter> filterMap = new HashMap<String, Filter>(1);
-        //如果cloudServer为空 则说明是单体 需要加载跨域配置【微服务跨域切换】
+        //Nếu cloudServer trống thì là đơn khối, cần tải cấu hình cross-domain 【Chuyển đổi cross-domain microservice】
         Object cloudServer = env.getProperty(CommonConstant.CLOUD_SERVER_KEY);
         filterMap.put("jwt", new JwtFilter(cloudServer==null));
         shiroFilterFactoryBean.setFilters(filterMap);
-        // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
+        // <!-- Định nghĩa chuỗi bộ lọc, thực thi theo thứ tự từ trên xuống dưới, thường đặt/**ở dưới cùng
         filterChainDefinitionMap.put("/**", "jwt");
 
-        // 未授权界面返回JSON
+        // Giao diện chưa được ủy quyền trả về JSON
         shiroFilterFactoryBean.setUnauthorizedUrl("/sys/common/403");
         shiroFilterFactoryBean.setLoginUrl("/sys/common/403");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
 
-	//update-begin---author:scott ---date:2026-08-24  for：【issues/9840】集中维护允许匿名访问的静态资源路径-----------
+	//update-begin---author:scott ---date:2026-08-24  for：【issues/9840】Bảo trì tập trung đường dẫn tài nguyên tĩnh cho phép truy cập ẩn danh-----------
 	static void addAnonymousStaticResourcePaths(Map<String, String> filterChainDefinitionMap) {
 		for (String path : ANONYMOUS_STATIC_RESOURCE_PATHS) {
 			filterChainDefinitionMap.put(path, "anon");
 		}
 	}
-	//update-end---author:scott ---date:2026-08-24  for：【issues/9840】集中维护允许匿名访问的静态资源路径-----------
+	//update-end---author:scott ---date:2026-08-24  for：【issues/9840】Bảo trì tập trung đường dẫn tài nguyên tĩnh cho phép truy cập ẩn danh-----------
 
     /**
-     * spring过滤装饰器 <br/>
-     * 因为shiro的filter不支持异步请求,导致所有的异步请求都会报错. <br/>
-     * 所以需要用spring的FilterRegistrationBean再代理一下shiro的filter.为他扩展异步支持. <br/>
-     * 后续所有异步的接口都需要再这里增加registration.addUrlPatterns("/xxx/xxx");
+     * spring Decorator của bộ lọc <br/>
+     * Vì filter của shiro không hỗ trợ yêu cầu bất đồng bộ,khiến mọi yêu cầu bất đồng bộ đều báo lỗi. <br/>
+     * Vì vậy cần dùng FilterRegistrationBean của spring để proxy lại filter.mở rộng hỗ trợ bất đồng bộ cho nó. <br/>
+     * Sau này mọi API bất đồng bộ đều cần thêm ở đây registration.addUrlPatterns("/xxx/xxx");
      * @return
      * @author chenrui
      * @date 2024/12/3 19:49
@@ -232,7 +232,7 @@ public class ShiroConfig {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new DelegatingFilterProxy("shiroFilterFactoryBean"));
         registration.setEnabled(true);
-        // 代码逻辑说明: [issues/7491]运行耗时长，效率慢 
+        // Giải thích logic mã: [issues/7491]Thời gian chạy lâu, hiệu quả chậm 
         registration.addUrlPatterns("/test/ai/chat/send");
         registration.addUrlPatterns("/airag/flow/run");
         registration.addUrlPatterns("/airag/flow/debug");
@@ -241,18 +241,18 @@ public class ShiroConfig {
         registration.addUrlPatterns("/airag/app/debug");
         registration.addUrlPatterns("/airag/app/prompt/generate");
         registration.addUrlPatterns("/airag/chat/receive/**");
-        // 添加SSE接口的异步支持
+        // Thêm hỗ trợ bất đồng bộ cho API SSE
         registration.addUrlPatterns("/airag/extData/evaluator/debug");
         registration.addUrlPatterns("/drag/onlDragDatasetHead/generateChartSse");
         registration.addUrlPatterns("/drag/onlDragDatasetHead/updateChartOptSse");
         registration.addUrlPatterns("/drag/onlDragDatasetHead/generateSqlSse");
-        //大屏AI生成/修改/讨论 SSE 接口的异步支持
+        //AI tạo màn hình lớn/Sửa/hỗ trợ bất đồng bộ cho API SSE thảo luận
         registration.addUrlPatterns("/drag/page/aiGenerateScreenSse");
         registration.addUrlPatterns("/drag/page/aiModifyScreenSse");
         registration.addUrlPatterns("/drag/page/aiDiscussScreenSse");
         registration.addUrlPatterns("/jmreport/ai/assistant/*");
         registration.addUrlPatterns("/jimu/chat2bi/table-meta/syncTables");
-        //支持异步
+        //Hỗ trợ bất đồng bộ
         registration.setAsyncSupported(true);
         registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ASYNC);
         return registration;
@@ -264,7 +264,7 @@ public class ShiroConfig {
         securityManager.setRealm(myRealm);
 
         /*
-         * 关闭shiro自带的session，详情见文档
+         * Tắt session tích hợp sẵn của shiro, xem chi tiết trong tài liệu
          * http://shiro.apache.org/session-management.html#SessionManagement-
          * StatelessApplications%28Sessionless%29
          */
@@ -273,13 +273,13 @@ public class ShiroConfig {
         defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         securityManager.setSubjectDAO(subjectDAO);
-        //自定义缓存实现,使用redis
+        //Triển khai cache tùy chỉnh,Sử dụng redis
         securityManager.setCacheManager(redisCacheManager());
         return securityManager;
     }
 
     /**
-     * 下面的代码是添加注解支持
+     * Đoạn mã dưới đây là để thêm hỗ trợ annotation
      * @return
      */
     @Bean
@@ -288,8 +288,8 @@ public class ShiroConfig {
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
         /**
-         * 解决重复代理问题 github#994
-         * 添加前缀判断 不匹配 任何Advisor
+         * Giải quyết vấn đề proxy lặp lại github#994
+         * Thêm phán đoán tiền tố, không khớp với bất kỳ Advisor
          */
         defaultAdvisorAutoProxyCreator.setUsePrefix(true);
         defaultAdvisorAutoProxyCreator.setAdvisorBeanNamePrefix("_no_advisor");
@@ -309,36 +309,36 @@ public class ShiroConfig {
     }
 
     /**
-     * cacheManager 缓存 redis实现
-     * 使用的是shiro-redis开源插件
+     * cacheManager Cache triển khai bằng redis
+     * Đang dùng shiro-redis Plugin mã nguồn mở
      *
      * @return
      */
     public RedisCacheManager redisCacheManager() {
-        log.info("===============(1)创建缓存管理器RedisCacheManager");
+        log.info("===============(1)Tạo trình quản lý cache RedisCacheManager");
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
-        //redis中针对不同用户缓存(此处的id需要对应user实体中的id字段,用于唯一标识)
+        //redis cache cho từng người dùng khác nhau trong(id tại đây cần tương ứng với trường id trong thực thể user,dùng để định danh duy nhất)
         redisCacheManager.setPrincipalIdFieldName("id");
-        //用户权限信息缓存时间
+        //Thời gian cache thông tin quyền hạn của người dùng
         redisCacheManager.setExpire(200000);
         return redisCacheManager;
     }
 
     /**
-     * RedisConfig在项目starter项目中
+     * RedisConfig Trong dự án starter của dự án
      * jeecg-boot-starter-github\jeecg-boot-common\src\main\java\org\jeecg\common\modules\redis\config\RedisConfig.java
      * 
-     * 配置shiro redisManager
-     * 使用的是shiro-redis开源插件
+     * Cấu hình shiro redisManager
+     * Đang dùng shiro-redis Plugin mã nguồn mở
      *
      * @return
      */
     @Bean
     public IRedisManager redisManager() {
-        log.info("===============(2)创建RedisManager,连接Redis..");
+        log.info("===============(2)Tạo RedisManager,Kết nối Redis..");
         IRedisManager manager;
-        // sentinel cluster redis（【issues/5569】shiro集成 redis 不支持 sentinel 方式部署的redis集群 #5569）
+        // sentinel cluster redis（【issues/5569】shiro tích hợp redis không hỗ trợ cụm redis triển khai theo cách sentinel #5569）
         if (Objects.nonNull(redisProperties)
                 && Objects.nonNull(redisProperties.getSentinel())
                 && !CollectionUtils.isEmpty(redisProperties.getSentinel().getNodes())) {
@@ -351,7 +351,7 @@ public class ShiroConfig {
             return sentinelManager;
         }
         
-        // redis 单机支持，在集群为空，或者集群无机器时候使用 add by jzyadmin@163.com
+        // redis Hỗ trợ máy đơn, dùng khi cụm trống hoặc cụm không có máy add by jzyadmin@163.com
         if (lettuceConnectionFactory.getClusterConfiguration() == null || lettuceConnectionFactory.getClusterConfiguration().getClusterNodes().isEmpty()) {
             RedisManager redisManager = new RedisManager();
             redisManager.setHost(lettuceConnectionFactory.getHostName() + ":" + lettuceConnectionFactory.getPort());
@@ -363,11 +363,11 @@ public class ShiroConfig {
             }
             manager = redisManager;
         }else{
-            // redis集群支持，优先使用集群配置
+            // redis Hỗ trợ cụm, ưu tiên dùng cấu hình cụm
             RedisClusterManager redisManager = new RedisClusterManager();
             Set<HostAndPort> portSet = new HashSet<>();
             lettuceConnectionFactory.getClusterConfiguration().getClusterNodes().forEach(node -> portSet.add(new HostAndPort(node.getHost() , node.getPort())));
-            //update-begin--Author:scott Date:20210531 for：修改集群模式下未设置redis密码的bug issues/I3QNIC
+            //update-begin--Author:scott Date:20210531 for: Sửa lỗi chưa đặt mật khẩu redis ở chế độ cụm bug issues/I3QNIC
             if (oConvertUtils.isNotEmpty(lettuceConnectionFactory.getPassword())) {
                 JedisCluster jedisCluster = new JedisCluster(portSet, 2000, 2000, 5,
                     lettuceConnectionFactory.getPassword(), new GenericObjectPoolConfig());
@@ -383,8 +383,8 @@ public class ShiroConfig {
     }
 
     /**
-     * 解决 ShiroRequestMappingConfig 获取 requestMappingHandlerMapping Bean 冲突
-     * spring-boot-autoconfigure:3.4.5 和 spring-boot-actuator-autoconfigure:3.4.5
+     * Giải quyết xung đột khi ShiroRequestMappingConfig lấy Bean requestMappingHandlerMapping
+     * spring-boot-autoconfigure:3.4.5 và spring-boot-actuator-autoconfigure:3.4.5
      */
     @Primary
     @Bean

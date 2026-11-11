@@ -3,42 +3,42 @@ package org.jeecg.common.constant.enums;
 import org.jeecg.common.util.oConvertUtils;
 
 /**
- * UniPush 消息推送枚举
+ * UniPush Enum đẩy tin nhắn
  * @author: jeecg-boot
  */
 public enum UniPushTypeEnum {
     /**
-     * 聊天
+     * Trò chuyện
      */
-    CHAT("chat", "聊天消息", "收到%s发来的聊天消息"),
+    CHAT("chat", "Tin nhắn trò chuyện", "Nhận được%s tin nhắn trò chuyện đã gửi đến"),
     /**
-     * 流程跳转到我的任务
+     * Quy trình chuyển đến nhiệm vụ của tôi
      */
-    BPM("bpm_task", "待办任务", "收到%s待办任务"),
+    BPM("bpm_task", "Nhiệm vụ chờ xử lý", "Nhận được%s Nhiệm vụ chờ xử lý"),
 
     /**
-     * 流程抄送任务
+     * Nhiệm vụ sao gửi quy trình
      */
-    BPM_VIEW("bpm_cc", "知会任务", "收到%s知会任务"),
+    BPM_VIEW("bpm_cc", "Nhiệm vụ thông báo", "Nhận được%s Nhiệm vụ thông báo"),
     /**
-     * 系统消息
+     * Tin nhắn hệ thống
      */
-    SYS_MSG("system", "系统消息", "收到一条系统通告"),
+    SYS_MSG("system", "Tin nhắn hệ thống", "Đã nhận được một thông cáo hệ thống"),
     /**
-     * 协同工作
+     * Làm việc cộng tác
      */
-    COLLABORATION_MSG("collaboration", "系统消息", "收到一条协同工作消息");
+    COLLABORATION_MSG("collaboration", "Tin nhắn hệ thống", "Đã nhận được một tin nhắn công việc phối hợp");
 
     /**
-     * 业务类型(chat:聊天 bpm_task:流程 bpm_cc:流程抄送)
+     * Loại nghiệp vụ(chat:Trò chuyện bpm_task:Quy trình bpm_cc:Sao gửi quy trình)
      */
     private String type;
     /**
-     * 消息标题
+     * Tiêu đề tin nhắn
      */
     private String title;
     /**
-     * 消息内容
+     * Nội dung tin nhắn
      */
     private String content;
 

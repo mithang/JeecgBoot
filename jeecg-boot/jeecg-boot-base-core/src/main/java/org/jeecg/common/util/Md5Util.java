@@ -3,7 +3,7 @@ package org.jeecg.common.util;
 import java.security.MessageDigest;
 
 /**
- * @Description: 加密工具
+ * @Description: Công cụ mã hóa
  * @author: jeecg-boot
  */
 public class Md5Util {

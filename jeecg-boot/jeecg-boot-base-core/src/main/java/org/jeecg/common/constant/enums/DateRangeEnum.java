@@ -1,27 +1,27 @@
 package org.jeecg.common.constant.enums;
 
 /**
- * 日期预设范围枚举
+ * Enum phạm vi đặt trước của ngày
  */
 public enum DateRangeEnum {
-    // 今天
+    // Hôm nay
     TODAY,
-    // 昨天
+    // Hôm qua
     YESTERDAY,
-    // 明天
+    // Ngày mai
     TOMORROW,
-    // 本周
+    // Tuần này
     THIS_WEEK,
-    // 上周
+    // Tuần trước
     LAST_WEEK,
-    // 下周
+    // Tuần sau
     NEXT_WEEK,
-    // 过去七天
+    // 7 ngày qua
     LAST_7_DAYS,
-    // 本月
+    // Tháng này
     THIS_MONTH,
-    // 上月
+    // Tháng trước
     LAST_MONTH,
-    // 下月
+    // Tháng sau
     NEXT_MONTH,
 }

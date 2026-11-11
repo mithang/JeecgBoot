@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 
 /**
- * 文件下载
- * cloud api 用到的接口传输对象
+ * Tải xuống tệp
+ * cloud api Đối tượng truyền tải của API được sử dụng
  * @author: jeecg-boot
  */
 @Data

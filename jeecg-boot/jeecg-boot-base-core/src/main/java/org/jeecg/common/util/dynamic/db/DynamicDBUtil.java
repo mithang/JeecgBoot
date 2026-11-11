@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Spring JDBC 实时数据库访问
+ * Spring JDBC Truy cập cơ sở dữ liệu thời gian thực
  *
  * @author chenguobin
  * @version 1.0
@@ -29,7 +29,7 @@ import java.util.Map;
 public class DynamicDBUtil {
 
     /**
-     * 获取数据源【最底层方法，不要随便调用】
+     * Lấy nguồn dữ liệu 【phương thức ở tầng thấp nhất, không tùy tiện gọi】
      *
      * @param dbSource
      * @return
@@ -39,11 +39,11 @@ public class DynamicDBUtil {
 
         String driverClassName = dbSource.getDbDriver();
         String url = dbSource.getDbUrl();
-        // url配置成 “123” 会触发Druid死循环，一直去重复尝试连接
+        // url Cấu hình thành “123” sẽ kích hoạt vòng lặp vô hạn của Druid, liên tục thử kết nối lặp lại
         if (oConvertUtils.isEmpty(url) || !url.toLowerCase().startsWith("jdbc:")) {
-            throw new JeecgBootException("数据源URL配置格式不正确！");
+            throw new JeecgBootException("Định dạng cấu hình URL nguồn dữ liệu không đúng!");
         }
-        // 纵深防御: 连接建立时二次校验 URL 和驱动安全性
+        // Phòng thủ theo chiều sâu: Khi thiết lập kết nối, kiểm chứng lần hai tính bảo mật của URL và driver
         JdbcSecurityUtil.validate(url);
         JdbcSecurityUtil.validateDriver(driverClassName);
 
@@ -56,9 +56,9 @@ public class DynamicDBUtil {
         dataSource.setTestOnBorrow(false);
         dataSource.setTestOnReturn(false);
         dataSource.setBreakAfterAcquireFailure(true);
-        // TCP建连超时 3s，防止目标库不可达时连接线程挂住
+        // TCP Timeout thiết lập kết nối 3 giây, tránh trường hợp luồng kết nối bị kẹt khi cơ sở dữ liệu đích không thể truy cập
         dataSource.setConnectTimeout(3000);
-        // 登录超时 5s（原为60s，过长会导致线程被占住；不影响SQL执行阶段）
+        // Timeout đăng nhập 5 giây (trước đây là 60 giây, quá dài sẽ khiến luồng bị chiếm giữ; không ảnh hưởng đến giai đoạn thực thi SQL)
         dataSource.setLoginTimeout(5);
         dataSource.setConnectionErrorRetryAttempts(0);
         dataSource.setUsername(dbUser);
@@ -67,44 +67,44 @@ public class DynamicDBUtil {
 
         log.info("******************************************");
         log.info("*                                        *");
-        log.info("*====【"+dbSource.getCode()+"】=====Druid连接池已启用 ====*");
+        log.info("*====【"+dbSource.getCode()+"】=====Druid Pool kết nối đã được kích hoạt ====*");
         log.info("*                                        *");
         log.info("******************************************");
         return dataSource;
     }
 
     /**
-     * 通过 dbKey ,获取数据源
+     * Thông qua dbKey ,Lấy nguồn dữ liệu
      *
      * @param dbKey
      * @return
      */
     public static DruidDataSource getDbSourceByDbKey(final String dbKey) {
-        //获取多数据源配置
+        //Lấy cấu hình đa nguồn dữ liệu
         DynamicDataSourceModel dbSource = DataSourceCachePool.getCacheDynamicDataSourceModel(dbKey);
-        //先判断缓存中是否存在数据库链接
+        //Trước tiên kiểm tra xem trong cache có tồn tại liên kết cơ sở dữ liệu hay không
         DruidDataSource cacheDbSource = DataSourceCachePool.getCacheBasicDataSource(dbKey);
         if (cacheDbSource != null && !cacheDbSource.isClosed()) {
-            log.debug("--------getDbSourceBydbKey------------------从缓存中获取DB连接-------------------");
+            log.debug("--------getDbSourceBydbKey------------------Lấy kết nối DB từ cache-------------------");
             return cacheDbSource;
         } else {
             DruidDataSource dataSource = getJdbcDataSource(dbSource);
             if(dataSource!=null && dataSource.isEnable()){
 
-                // 【TV360X-2060】设置超时时间 6秒
+                // 【TV360X-2060】 Thiết lập thời gian timeout 6 giây
                 dataSource.setMaxWait(6000);
 
                 DataSourceCachePool.putCacheBasicDataSource(dbKey, dataSource);
             }else{
-                throw new JeecgBootException("动态数据源连接失败，dbKey："+dbKey);
+                throw new JeecgBootException("Kết nối nguồn dữ liệu động thất bại, dbKey:"+dbKey);
             }
-            log.info("--------getDbSourceBydbKey------------------创建DB数据库连接-------------------");
+            log.info("--------getDbSourceBydbKey------------------Tạo kết nối cơ sở dữ liệu DB-------------------");
             return dataSource;
         }
     }
 
     /**
-     * 关闭数据库连接池
+     * Đóng pool kết nối cơ sở dữ liệu
      *
      * @param dbKey
      * @return
@@ -130,7 +130,7 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 根据数据源获取NamedParameterJdbcTemplate
+     * Dựa trên nguồn dữ liệu để lấy NamedParameterJdbcTemplate
      * @param dbKey
      * @return
      */
@@ -157,17 +157,17 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 支持miniDao语法操作的Update
+     * Hỗ trợ thao tác theo cú pháp miniDao Update
      *
-     * @param dbKey 数据源标识
-     * @param sql   执行sql语句，sql支持minidao语法逻辑
-     * @param data  sql语法中需要判断的数据及sql拼接注入中需要的数据
+     * @param dbKey Định danh nguồn dữ liệu
+     * @param sql   Thực thi câu lệnh SQL, SQL hỗ trợ logic cú pháp minidao
+     * @param data  sql Dữ liệu cần phán đoán trong cú pháp và dữ liệu cần thiết khi nối SQL
      * @return
      */
     public static int updateByHash(final String dbKey, String sql, HashMap<String, Object> data) {
         int effectCount;
         JdbcTemplate jdbcTemplate = getJdbcTemplate(dbKey);
-        //根据模板获取sql
+        //Lấy theo mẫu sql
         sql = FreemarkerParseFactory.parseTemplateContent(sql, data);
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
         effectCount = namedParameterJdbcTemplate.update(sql, data);
@@ -188,11 +188,11 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 支持miniDao语法操作的查询 返回HashMap
+     * Truy vấn hỗ trợ thao tác theo cú pháp miniDao, trả về HashMap
      *
-     * @param dbKey 数据源标识
-     * @param sql   执行sql语句，sql支持minidao语法逻辑
-     * @param data  sql语法中需要判断的数据及sql拼接注入中需要的数据
+     * @param dbKey Định danh nguồn dữ liệu
+     * @param sql   Thực thi câu lệnh SQL, SQL hỗ trợ logic cú pháp minidao
+     * @param data  sql Dữ liệu cần phán đoán trong cú pháp và dữ liệu cần thiết khi nối SQL
      * @return
      */
     public static Object findOneByHash(final String dbKey, String sql, HashMap<String, Object> data) {
@@ -208,11 +208,11 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 直接sql查询 根据clazz返回单个实例
+     * Truy vấn SQL trực tiếp, trả về một thể hiện duy nhất theo clazz
      *
-     * @param dbKey 数据源标识
-     * @param sql   执行sql语句
-     * @param clazz 返回实例的Class
+     * @param dbKey Định danh nguồn dữ liệu
+     * @param sql   Thực thi câu lệnh SQL
+     * @param clazz Trả về thể hiện của Class
      * @param param
      * @return
      */
@@ -223,12 +223,12 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 支持miniDao语法操作的查询 返回单个实例
+     * Truy vấn hỗ trợ thao tác theo cú pháp miniDao, trả về một thể hiện duy nhất
      *
-     * @param dbKey 数据源标识
-     * @param sql   执行sql语句，sql支持minidao语法逻辑
-     * @param clazz 返回实例的Class
-     * @param data  sql语法中需要判断的数据及sql拼接注入中需要的数据
+     * @param dbKey Định danh nguồn dữ liệu
+     * @param sql   Thực thi câu lệnh SQL, SQL hỗ trợ logic cú pháp minidao
+     * @param clazz Trả về thể hiện của Class
+     * @param data  sql Dữ liệu cần phán đoán trong cú pháp và dữ liệu cần thiết khi nối SQL
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -250,7 +250,7 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 查询数量
+     * Truy vấn số lượng
      * @param dbKey
      * @param sql
      * @param param
@@ -262,7 +262,7 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 查询列表数据
+     * Truy vấn dữ liệu danh sách
      * @param dbKey
      * @param sql
      * @param param
@@ -275,17 +275,17 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 支持miniDao语法操作的查询
+     * Truy vấn hỗ trợ thao tác theo cú pháp miniDao
      *
-     * @param dbKey 数据源标识
-     * @param sql   执行sql语句，sql支持minidao语法逻辑
-     * @param data  sql语法中需要判断的数据及sql拼接注入中需要的数据
+     * @param dbKey Định danh nguồn dữ liệu
+     * @param sql   Thực thi câu lệnh SQL, SQL hỗ trợ logic cú pháp minidao
+     * @param data  sql Dữ liệu cần phán đoán trong cú pháp và dữ liệu cần thiết khi nối SQL
      * @return
      */
     public static List<Map<String, Object>> findListByHash(final String dbKey, String sql, HashMap<String, Object> data) {
         List<Map<String, Object>> list;
         JdbcTemplate jdbcTemplate = getJdbcTemplate(dbKey);
-        //根据模板获取sql
+        //Lấy theo mẫu sql
         sql = FreemarkerParseFactory.parseTemplateContent(sql, data);
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
         list = namedParameterJdbcTemplate.queryForList(sql, data);
@@ -293,11 +293,11 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 此方法只能返回单列，不能返回实体类
-     * @param dbKey 数据源的key
+     * Phương thức này chỉ có thể trả về một cột duy nhất, không thể trả về lớp thực thể
+     * @param dbKey của nguồn dữ liệu key
      * @param sql sal
-     * @param clazz 类
-     * @param param 参数
+     * @param clazz Lớp
+     * @param param Tham số
      * @param <T>
      * @return
      */
@@ -314,18 +314,18 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 支持miniDao语法操作的查询 返回单列数据list
+     * Truy vấn hỗ trợ thao tác theo cú pháp miniDao, trả về dữ liệu một cột list
      *
-     * @param dbKey 数据源标识
-     * @param sql   执行sql语句，sql支持minidao语法逻辑
-     * @param clazz 类型Long、String等
-     * @param data  sql语法中需要判断的数据及sql拼接注入中需要的数据
+     * @param dbKey Định danh nguồn dữ liệu
+     * @param sql   Thực thi câu lệnh SQL, SQL hỗ trợ logic cú pháp minidao
+     * @param clazz Kiểu Long, String, v.v.
+     * @param data  sql Dữ liệu cần phán đoán trong cú pháp và dữ liệu cần thiết khi nối SQL
      * @return
      */
     public static <T> List<T> findListByHash(final String dbKey, String sql, Class<T> clazz, HashMap<String, Object> data) {
         List<T> list;
         JdbcTemplate jdbcTemplate = getJdbcTemplate(dbKey);
-        //根据模板获取sql
+        //Lấy theo mẫu sql
         sql = FreemarkerParseFactory.parseTemplateContent(sql, data);
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
         list = namedParameterJdbcTemplate.queryForList(sql, data, clazz);
@@ -333,12 +333,12 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 直接sql查询 返回实体类列表
+     * Truy vấn SQL trực tiếp, trả về danh sách lớp thực thể
      *
-     * @param dbKey 数据源标识
-     * @param sql   执行sql语句，sql支持 minidao 语法逻辑
-     * @param clazz 返回实体类列表的class
-     * @param param sql拼接注入中需要的数据
+     * @param dbKey Định danh nguồn dữ liệu
+     * @param sql   Thực thi câu lệnh SQL, SQL hỗ trợ logic cú pháp minidao
+     * @param clazz Trả về danh sách lớp thực thể của class
+     * @param param sql Dữ liệu cần thiết trong quá trình nối chuỗi để tiêm (SQL)
      * @return
      */
     public static <T> List<T> findListEntities(final String dbKey, String sql, Class<T> clazz, Object... param) {
@@ -347,12 +347,12 @@ public class DynamicDBUtil {
     }
 
     /**
-     * 支持miniDao语法操作的查询 返回实体类列表
+     * Truy vấn hỗ trợ thao tác theo cú pháp miniDao, trả về danh sách lớp thực thể
      *
-     * @param dbKey 数据源标识
-     * @param sql   执行sql语句，sql支持minidao语法逻辑
-     * @param clazz 返回实体类列表的class
-     * @param data  sql语法中需要判断的数据及sql拼接注入中需要的数据
+     * @param dbKey Định danh nguồn dữ liệu
+     * @param sql   Thực thi câu lệnh SQL, SQL hỗ trợ logic cú pháp minidao
+     * @param clazz Trả về danh sách lớp thực thể của class
+     * @param data  sql Dữ liệu cần phán đoán trong cú pháp và dữ liệu cần thiết khi nối SQL
      * @return
      */
     public static <T> List<T> findListEntitiesByHash(final String dbKey, String sql, Class<T> clazz, HashMap<String, Object> data) {

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * 加载项目配置
+ * Tải cấu hình dự án
  * @author: jeecg-boot
  */
 @Component("jeecgBaseConfig")
@@ -19,88 +19,88 @@ import org.springframework.stereotype.Component;
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class JeecgBaseConfig {
     /**
-     * 签名密钥串(字典等敏感接口)
-     * @TODO 降低使用成本加的默认值,实际以 yml配置 为准
+     * Chuỗi khóa ký(Các API nhạy cảm như từ điển)
+     * @TODO Giá trị mặc định được thêm để giảm chi phí sử dụng,Thực tế lấy cấu hình yml làm chuẩn
      */
     private String signatureSecret = "dd05f1c54d63749eda95f9fa6d49v442a";
     /**
-     * 自定义后台资源前缀，解决表单设计器无法通过前端nginx转发访问
+     * Tiền tố tài nguyên backend tùy chỉnh, giải quyết việc trình thiết kế biểu mẫu không thể truy cập qua chuyển tiếp nginx của frontend
      */
     private String customResourcePrefixPath;
     /**
-     * 需要加强校验的接口清单
+     * Danh sách API cần tăng cường kiểm chứng
      */
     private String signUrls;
     /**
-     * 上传模式  
-     * 本地：local\Minio：minio\阿里云：alioss
+     * Chế độ tải lên  
+     * Cục bộ:local\Minio：minio\Alibaba Cloud:alioss
      */
     private String uploadType;
     
     /**
-     * 平台安全模式配置
+     * Cấu hình chế độ an toàn nền tảng
      */
     private Firewall firewall;
     
     /**
-     * shiro拦截排除
+     * shiro Loại trừ khỏi chặn
      */
     private Shiro shiro;
     /**
-     * 上传文件配置
+     * Cấu hình tải lên tệp
      */
     private Path path;
 
     /**
-     * 前端页面访问地址
+     * Địa chỉ truy cập trang frontend
      * pc: http://localhost:3100
      * app: http://localhost:8051
      */
     private DomainUrl domainUrl;
 
     /**
-     * 文件预览
+     * Xem trước tệp
      */
     private String fileViewDomain;
      /**
-     * ES配置
+     * ES Cấu hình
      */
     private Elasticsearch elasticsearch;
 
     /**
-     * 微信支付
+     * Thanh toán WeChat
      * @return
      */
     private WeiXinPay weiXinPay;
 
     /**
-     * 百度开放API配置
+     * Cấu hình API mở Baidu
      */
     private BaiduApi baiduApi;
 
     /**
-     * minio配置
+     * minio Cấu hình
      */
     @Getter
     @Setter
     private JeecgMinio minio;
 
     /**
-     * oss配置
+     * oss Cấu hình
      */
     @Getter
     @Setter
     private JeecgOSS oss;
 
     /**
-     * 短信发送方式 aliyun阿里云短信 tencent腾讯云短信
+     * Phương thức gửi SMS: aliyun SMS Alibaba Cloud, tencent SMS Tencent Cloud
      */
     @Getter
     @Setter
     private String smsSendType = "aliyun";
     
     /**
-     * 腾讯配置
+     * Cấu hình Tencent
      */
     @Getter
     @Setter

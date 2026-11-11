@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 /**
- * 云存储 配置
+ * Cấu hình lưu trữ đám mây
  * @author: jeecg-boot
  */
 @Lazy(false)

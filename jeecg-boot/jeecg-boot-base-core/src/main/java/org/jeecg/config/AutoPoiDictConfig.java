@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 描述：AutoPoi Excel注解支持字典参数设置
- *  举例： @Excel(name = "性别", width = 15, dicCode = "sex")
- * 1、导出的时候会根据字典配置，把值1,2翻译成：男、女;
- * 2、导入的时候，会把男、女翻译成1,2存进数据库;
+ * Mô tả: Annotation AutoPoi Excel hỗ trợ đặt tham số từ điển
+ *  Ví dụ: @Excel(name = "Giới tính", width = 15, dicCode = "sex")
+ * 1、Khi xuất sẽ căn cứ cấu hình danh mục để chuyển giá trị 1,2 Dịch thành：Nam, Nữ;
+ * 2、Khi nhập sẽ dịch Nam, Nữ thành 1,2 Lưu vào cơ sở dữ liệu;
  * 
  * @Author:scott 
  * @since：2019-04-09 
@@ -36,7 +36,7 @@ public class AutoPoiDictConfig implements AutoPoiDictServiceI {
 	private CommonAPI commonApi;
 
 	/**
-	 * 通过字典查询easypoi，所需字典文本
+	 * Tra cứu easypoi qua từ điển, văn bản từ điển cần thiết
 	 * 
 	 * @Author:scott 
 	 * @since：2019-04-09
@@ -46,7 +46,7 @@ public class AutoPoiDictConfig implements AutoPoiDictServiceI {
 	public String[] queryDict(String dicTable, String dicCode, String dicText) {
 		List<String> dictReplaces = new ArrayList<String>();
 		List<DictModel> dictList = null;
-		// step.1 如果没有字典表则使用系统字典表
+		// step.1 Nếu không có bảng từ điển thì dùng bảng từ điển hệ thống
 		if (oConvertUtils.isEmpty(dicTable)) {
 			dictList = commonApi.queryDictItemsByCode(dicCode);
 		} else {
@@ -60,9 +60,9 @@ public class AutoPoiDictConfig implements AutoPoiDictServiceI {
 
 
 		for (DictModel t : dictList) {
-			// 代码逻辑说明: [issues/4917]excel 导出异常---
+			// Giải thích logic mã: [issues/4917]excel Ngoại lệ khi xuất---
 			if(t!=null && t.getText()!=null && t.getValue()!=null){
-				// 代码逻辑说明: [issues/I4MBB3]@Excel dicText字段的值有下划线时，导入功能不能正确解析---
+				// Giải thích logic mã: [issues/I4MBB3]@Excel dicText Khi giá trị của trường có dấu gạch dưới, chức năng nhập không thể phân giải đúng---
 				if(t.getValue().contains(EXCEL_SPLIT_TAG)){
 					String val = t.getValue().replace(EXCEL_SPLIT_TAG,TEMP_EXCEL_SPLIT_TAG);
 					dictReplaces.add(t.getText() + EXCEL_SPLIT_TAG + val);

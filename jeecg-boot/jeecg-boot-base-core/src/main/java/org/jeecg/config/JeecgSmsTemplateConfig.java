@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
-* @Description: 短信模板
+* @Description: Mẫu SMS
 *
 * @author: wangshuai
-* @date: 2024/11/5 下午3:44
+* @date: 2024/11/5 Buổi chiều 3:44
 */
 @Data
 @Component("jeecgSmsTemplateConfig")
@@ -18,13 +18,13 @@ import java.util.Map;
 public class JeecgSmsTemplateConfig {
 
     /**
-     * 短信签名
+     * Chữ ký SMS
      */
     private String signature;
 
 
     /**
-     * 短信模板code
+     * Mẫu SMS code
      *
      * @return
      */

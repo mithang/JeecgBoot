@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * 调用AI流程入参
- * for [QQYUN-13634]在baseapi里面封装方法，方便其他模块调用
+ * Tham số đầu vào khi gọi quy trình AI
+ * for [QQYUN-13634]Đóng gói phương thức trong baseapi để các module khác gọi tiện lợi
  * @author chenrui
  * @date 2025/9/2 14:11
  */
@@ -24,18 +24,18 @@ public class AiragFlowDTO implements Serializable {
     private static final long serialVersionUID = 7431775881170684867L;
 
     /**
-     * 流程id
+     * Quy trình id
      */
     private String flowId;
 
 
     /**
-     * 输入参数
+     * Tham số đầu vào
      */
     private Map<String, Object> inputParams;
 
     /**
-     * 是否流式返回
+     * Có trả về dạng streaming hay không
      */
     private boolean isStream;
 

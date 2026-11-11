@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * 日期范围工具类
+ * Lớp công cụ phạm vi ngày
  *
  * @author scott
  * @date 20230801
@@ -15,7 +15,7 @@ import java.util.Date;
 public class DateRangeUtils {
 
     /**
-     * 根据日期范围枚举获取日期范围
+     * Lấy phạm vi ngày theo enum phạm vi ngày
      *
      * @param rangeEnum
      * @return Date[]
@@ -73,63 +73,63 @@ public class DateRangeUtils {
     }
 
     /**
-     * 获得下月第一天 周日 00:00:00
+     * Lấy ngày đầu tiên của tháng sau, Chủ nhật 00:00:00
      */
     public static Date getNextMonthStartDay() {
         return DateUtil.beginOfMonth(DateUtil.nextMonth());
     }
 
     /**
-     * 获得下月最后一天 23:59:59
+     * Lấy ngày cuối cùng của tháng sau 23:59:59
      */
     public static Date getNextMonthEndDay() {
         return DateUtil.endOfMonth(DateUtil.nextMonth());
     }
 
     /**
-     * 获得本月第一天 周日 00:00:00
+     * Lấy ngày đầu tiên của tháng này, Chủ nhật 00:00:00
      */
     public static Date getThisMonthStartDay() {
         return DateUtil.beginOfMonth(DateUtil.date());
     }
 
     /**
-     * 获得本月最后一天 23:59:59
+     * Lấy ngày cuối cùng của tháng này 23:59:59
      */
     public static Date getThisMonthEndDay() {
         return DateUtil.endOfMonth(DateUtil.date());
     }
 
     /**
-     * 获得上月第一天 周日 00:00:00
+     * Lấy ngày đầu tiên của tháng trước, Chủ nhật 00:00:00
      */
     public static Date getLastMonthStartDay() {
         return DateUtil.beginOfMonth(DateUtil.lastMonth());
     }
 
     /**
-     * 获得上月最后一天 23:59:59
+     * Lấy ngày cuối cùng của tháng trước 23:59:59
      */
     public static Date getLastMonthEndDay() {
         return DateUtil.endOfMonth(DateUtil.lastMonth());
     }
 
     /**
-     * 获得上周第一天 周一 00:00:00
+     * Lấy ngày đầu tiên của tuần trước, Thứ hai 00:00:00
      */
     public static Date getLastWeekStartDay() {
         return DateUtil.beginOfWeek(DateUtil.lastWeek());
     }
 
     /**
-     * 获得上周最后一天 周日 23:59:59
+     * Lấy ngày cuối cùng của tuần trước, Chủ nhật 23:59:59
      */
     public static Date getLastWeekEndDay() {
         return DateUtil.endOfWeek(DateUtil.lastWeek());
     }
 
     /**
-     * 获得本周第一天 周一 00:00:00
+     * Lấy ngày đầu tiên của tuần này, Thứ hai 00:00:00
      */
     public static Date getThisWeekStartDay() {
         Date today = new Date();
@@ -137,7 +137,7 @@ public class DateRangeUtils {
     }
 
     /**
-     * 获得本周最后一天 周日 23:59:59
+     * Lấy ngày cuối cùng của tuần này, Chủ nhật 23:59:59
      */
     public static Date getThisWeekEndDay() {
         Date today = new Date();
@@ -145,21 +145,21 @@ public class DateRangeUtils {
     }
 
     /**
-     * 获得下周第一天 周一 00:00:00
+     * Lấy ngày đầu tiên của tuần sau, Thứ hai 00:00:00
      */
     public static Date getNextWeekStartDay() {
         return DateUtil.beginOfWeek(DateUtil.nextWeek());
     }
 
     /**
-     * 获得下周最后一天 周日 23:59:59
+     * Lấy ngày cuối cùng của tuần sau, Chủ nhật 23:59:59
      */
     public static Date getNextWeekEndDay() {
         return DateUtil.endOfWeek(DateUtil.nextWeek());
     }
 
     /**
-     * 过去七天开始时间（不含今天）
+     * Thời gian bắt đầu của bảy ngày qua (không bao gồm hôm nay)
      *
      * @return
      */
@@ -171,7 +171,7 @@ public class DateRangeUtils {
     }
 
     /**
-     * 过去七天结束时间（不含今天）
+     * Thời gian kết thúc của bảy ngày qua (không bao gồm hôm nay)
      *
      * @return
      */
@@ -183,7 +183,7 @@ public class DateRangeUtils {
     }
 
     /**
-     * 昨天开始时间
+     * Thời gian bắt đầu hôm qua
      *
      * @return
      */
@@ -195,7 +195,7 @@ public class DateRangeUtils {
     }
 
     /**
-     * 昨天结束时间
+     * Thời gian kết thúc hôm qua
      *
      * @return
      */
@@ -204,7 +204,7 @@ public class DateRangeUtils {
     }
 
     /**
-     * 明天开始时间
+     * Thời gian bắt đầu ngày mai
      *
      * @return
      */
@@ -213,7 +213,7 @@ public class DateRangeUtils {
     }
 
     /**
-     * 明天结束时间
+     * Thời gian kết thúc ngày mai
      *
      * @return
      */
@@ -222,7 +222,7 @@ public class DateRangeUtils {
     }
 
     /**
-     * 今天开始时间
+     * Thời gian bắt đầu hôm nay
      *
      * @return
      */
@@ -231,7 +231,7 @@ public class DateRangeUtils {
     }
 
     /**
-     * 今天结束时间
+     * Thời gian kết thúc hôm nay
      *
      * @return
      */

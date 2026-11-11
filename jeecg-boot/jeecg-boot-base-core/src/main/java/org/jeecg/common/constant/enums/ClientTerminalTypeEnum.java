@@ -1,13 +1,13 @@
 package org.jeecg.common.constant.enums;
 
 /**
- * 客户终端类型
+ * Loại thiết bị đầu cuối của khách hàng
  */
 public enum ClientTerminalTypeEnum {
 
-    PC("pc", "电脑终端"),
-    H5("h5", "移动网页端"),
-    APP("app", "手机app端");
+    PC("pc", "Thiết bị đầu cuối máy tính"),
+    H5("h5", "Trang web di động"),
+    APP("app", "Ứng dụng di động");
 
     private String key;
     private String text;

@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 在spring boot初始化时，根据@RestController注解获取当前spring容器中的bean
+ * Khi spring boot khởi tạo, dựa theo@RestController annotation để lấy bean trong container spring hiện tại bean
  * @author eightmonth
  * @date 2024/4/18 11:35
  */
@@ -36,7 +36,7 @@ public class IgnoreAuthPostProcessor implements InitializingBean {
         
         List<String> ignoreAuthUrls = new ArrayList<>();
         
-        // 优化：直接从HandlerMethod过滤，避免重复扫描
+        // Tối ưu: Lọc trực tiếp từ HandlerMethod, tránh quét trùng lặp
         requestMappingHandlerMapping.getHandlerMethods().values().stream()
             .filter(handlerMethod -> handlerMethod.getMethod().isAnnotationPresent(IgnoreAuth.class))
             .forEach(handlerMethod -> {
@@ -45,18 +45,18 @@ public class IgnoreAuthPostProcessor implements InitializingBean {
                 ignoreAuthUrls.addAll(processIgnoreAuthMethod(clazz, method));
             });
 
-        log.info("Init Token ignoreAuthUrls Config [ 集合 ]  ：{}", ignoreAuthUrls);
+        log.info("Init Token ignoreAuthUrls Config [ tập hợp ]  ：{}", ignoreAuthUrls);
         if (!CollectionUtils.isEmpty(ignoreAuthUrls)) {
             InMemoryIgnoreAuth.set(ignoreAuthUrls);
         }
 
-        // 计算方法的耗时
+        // Tính thời gian thực thi của phương thức
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
-        log.info("Init Token ignoreAuthUrls Config [ 耗时 ] ：" + elapsedTime + "ms");
+        log.info("Init Token ignoreAuthUrls Config [ Thời gian tốn ] ：" + elapsedTime + "ms");
     }
 
-    // 优化：新方法处理单个@IgnoreAuth方法，减少重复注解检查
+    // Tối ưu: Phương thức mới xử lý một@IgnoreAuth phương thức, giảm kiểm tra annotation trùng lặp
     private List<String> processIgnoreAuthMethod(Class<?> clazz, Method method) {
         RequestMapping base = clazz.getAnnotation(RequestMapping.class);
         String[] baseUrl = Objects.nonNull(base) ? base.value() : new String[]{};
@@ -84,7 +84,7 @@ public class IgnoreAuthPostProcessor implements InitializingBean {
         if (bases.length > 0) {
             for (String base : bases) {
                 for (String uri : uris) {
-                    // 如果uri包含路径占位符, 则需要将其替换为*
+                    // Nếu uri chứa placeholder đường dẫn, thì cần thay thế nó bằng*
                     if (uri.matches(".*\\{.*}.*")) {
                         uri = uri.replaceAll("\\{.*?}", "*");
                     }

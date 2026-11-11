@@ -5,13 +5,13 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * 文件上传字符串过滤特殊字符
+ * Lọc ký tự đặc biệt trong chuỗi tải lên tệp
  * @author: jeecg-boot
  */
 public class StrAttackFilter {
 
     public static String filter(String str) throws PatternSyntaxException {
-        // 清除掉所有特殊字符
+        // Xóa bỏ tất cả ký tự đặc biệt
         String regEx = "[`_《》~!@#$%^&*()+=|{}':;',\\[\\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Pattern p = Pattern.compile(regEx);
         Matcher m = p.matcher(str);

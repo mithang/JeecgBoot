@@ -13,8 +13,8 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 @Configuration
 public class WebSocketConfig {
     /**
-     * 	注入ServerEndpointExporter，
-     * 	这个bean会自动注册使用了@ServerEndpoint注解声明的Websocket endpoint
+     * 	Inject ServerEndpointExporter,
+     * 	Bean này sẽ tự động đăng ký các endpoint đã sử dụng@ServerEndpoint được khai báo bằng annotation Websocket endpoint
      */
     @Bean
     public ServerEndpointExporter serverEndpointExporter() {
@@ -30,7 +30,7 @@ public class WebSocketConfig {
     public FilterRegistrationBean getFilterRegistrationBean(){
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setFilter(websocketFilter());
-        //TODO 临时注释掉，测试下线上socket总断的问题
+        //TODO Tạm thời comment lại, kiểm tra vấn đề socket trên môi trường production hay bị ngắt
         bean.addUrlPatterns("/taskCountSocket/*", "/websocket/*","/eoaSocket/*","/eoaNewChatSocket/*", "/newsWebsocket/*", "/dragChannelSocket/*", "/vxeSocket/*");
         return bean;
     }

@@ -13,34 +13,34 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * 【issues/9726】OpenAPI originUrl 存储型 SSRF 漏洞修复 (CWE-918) — 单元测试
+ * 【issues/9726】Sửa lỗi SSRF dạng lưu trữ của OpenAPI originUrl (CWE-918) — Kiểm thử đơn vị
  *
- * ── 漏洞是怎么引起的 ──────────────────────────────────────────────────────────
- * OpenApiController#call(/openapi/call/{path}) 是一个"服务端转发"接口：它读取数据库里
- * 配置的 originUrl，由【服务器】自己发起 restTemplate.exchange(...) 去请求该地址。
- * originUrl 由管理员通过 POST /openapi/add、PUT /openapi/edit 写入并持久化（存储型）。
+ * ── Lỗ hổng được gây ra như thế nào ──────────────────────────────────────────────────────────
+ * OpenApiController#call(/openapi/call/{path}) là một"Chuyển tiếp phía server"API: nó đọc trong cơ sở dữ liệu
+ * originUrl đã cấu hình, do 【máy chủ】tự khởi xướng restTemplate.exchange(...) để yêu cầu địa chỉ đó.
+ * originUrl do quản trị viên thông qua POST /openapi/add、PUT /openapi/edit ghi và lưu trữ bền vững (dạng lưu trữ).
  *
- * 自 issues/9590 起，originUrl 允许填写完整的 http(s)://host URL（用于微服务跨模块调用，
- * 如部署在 erp 7003 的接口）。修复前 validOriginUrl 的【完整URL分支】只校验了协议——
- * 禁止 file/ftp/gopher/jar/netdoc，却【完全不限制 host】。于是管理员可存入：
- *     originUrl = http://169.254.169.254/latest/meta-data/   (云元数据)
- *     originUrl = http://127.0.0.1:6379/                     (本机 redis 等内网服务)
- *     originUrl = http://attacker.com/                       (任意公网，把服务器当代理)
- * 再以合法 OpenAPI 凭证触发 /openapi/call/{path}，服务器即主动访问该地址 —— 存储型 SSRF。
- * 根因：完整URL分支"校验协议、放过主机"，被校验的内容覆盖不到真正危险的 host。
+ * Từ issues/9590 trở đi, originUrl cho phép điền đầy đủ http(s)://host URL(dùng để gọi liên mô-đun trong kiến trúc microservice,
+ * chẳng hạn như API được triển khai trên erp 7003). Trước khi sửa, nhánh của validOriginUrl chỉ kiểm tra giao thức——
+ * Cấm file/ftp/gopher/jar/netdoc, nhưng. Vì vậy quản trị viên có thể lưu trữ:
+ *     originUrl = http://169.254.169.254/latest/meta-data/   (Metadata đám mây)
+ *     originUrl = http://127.0.0.1:6379/                     (Dịch vụ nội mạng như redis trên máy cục bộ)
+ *     originUrl = http://attacker.com/                       (Bất kỳ mạng công cộng nào, dùng máy chủ làm proxy)
+ * Sau đó kích hoạt bằng thông tin xác thực OpenAPI hợp lệ /openapi/call/{path}, máy chủ sẽ chủ động truy cập địa chỉ đó —— SSRF dạng lưu trữ.
+ * Nguyên nhân gốc rễ: nhánh URL đầy đủ"chỉ kiểm tra giao thức, bỏ qua máy chủ", nội dung được kiểm tra không bao phủ được host thực sự nguy hiểm.
  *
- * ── 修复 ──────────────────────────────────────────────────────────────────────
- * 在 validOriginUrl 完整URL分支补两套互补的 host 校验（两者交集才放行）：
- *   1) SsrfFileTypeFilter.checkSsrfHttpUrl(url)：拦回环(127.x/::1)与链路本地
- *      (169.254.x，含云元数据 169.254.169.254)；放行 RFC1918 与公网。
- *   2) CommonUtils.checkInternalUrl(url)：拦公网地址；放行回环/局域网/链路本地。
- * 取交集后【仅 RFC1918 内网地址可通过】——既保留微服务跨模块内网调用，又同时堵死
- * 回环、链路本地/元数据、公网三类 SSRF 目标。单独任一方法都不足以覆盖（见各自反例）。
+ * ── Sửa ──────────────────────────────────────────────────────────────────────
+ * Trong nhánh URL đầy đủ của validOriginUrl, bổ sung hai bộ kiểm tra host bổ trợ lẫn nhau (chỉ cho qua khi giao nhau):
+ *   1) SsrfFileTypeFilter.checkSsrfHttpUrl(url): Chặn loopback(127.x/::1)với liên kết cục bộ
+ *      (169.254.x，chứa siêu dữ liệu đám mây 169.254.169.254); cho qua RFC1918 và mạng công cộng.
+ *   2) CommonUtils.checkInternalUrl(url): chặn địa chỉ mạng công cộng; cho qua loopback/Mạng LAN/địa chỉ link-local.
+ * Sau khi lấy giao nhau, —— vừa giữ lại việc gọi nội mạng liên mô-đun của microservice, vừa đồng thời chặn đứng
+ * Loopback, link-local/siêu dữ liệu, và mạng công cộng — ba loại mục tiêu SSRF. Bất kỳ phương pháp riêng lẻ nào cũng không đủ để bao phủ (xem phản ví dụ của từng phương pháp).
  *
- * ── 测试策略 ──────────────────────────────────────────────────────────────────
- * 校验逻辑都在 public static 方法里，纯单测、无需 Spring / 无需联网（全部用字面量 IP，
- * 不触发 DNS）。下面用 validateFullOriginUrl 复刻 controller 完整URL分支的两步校验，
- * 对四类目标分别断言放行/拦截。
+ * ── Chiến lược kiểm thử ──────────────────────────────────────────────────────────────────
+ * Logic kiểm tra đều nằm trong các phương thức public static, kiểm thử đơn vị thuần túy, không cần Spring / không cần kết nối mạng (đều dùng IP dạng literal,
+ * không kích hoạt DNS). Dưới đây dùng validateFullOriginUrl để tái hiện hai bước kiểm tra của nhánh URL đầy đủ trong controller,
+ * Đối với bốn loại mục tiêu, khẳng định cho qua riêng biệt/Chặn.
  *
  * @author liusq
  * @date 2026-06-29
@@ -49,94 +49,94 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class Issue9726_OpenApiOriginUrlSsrfTest {
 
     /**
-     * 复刻 OpenApiController#validOriginUrl 完整URL分支在修复后执行的两步 host 校验。
-     * 任一步抛 JeecgBootException 即视为该 URL 被拦截。
+     * Tái hiện OpenApiController#validOriginUrl Hai bước kiểm tra host mà nhánh URL đầy đủ thực hiện sau khi sửa.
+     * Bất kỳ bước nào ném JeecgBootException cũng được coi là URL đó bị chặn.
      */
     private void validateFullOriginUrl(String originUrl) {
-        SsrfFileTypeFilter.checkSsrfHttpUrl(originUrl); // 拦回环 + 链路本地(含元数据)
-        CommonUtils.checkInternalUrl(originUrl);        // 拦公网
+        SsrfFileTypeFilter.checkSsrfHttpUrl(originUrl); // Chặn loopback + Link-local(bao gồm siêu dữ liệu)
+        CommonUtils.checkInternalUrl(originUrl);        // Chặn mạng công cộng
     }
 
     // ==================================================================
-    // 一、漏洞复现：四类危险目标在修复后都被拦截
+    // I. Tái hiện lỗ hổng: cả bốn loại mục tiêu nguy hiểm đều bị chặn sau khi sửa
     // ==================================================================
 
     @Nested
-    @DisplayName("漏洞复现 —— 修复后存入完整URL的各类 SSRF 目标均被拦死")
+    @DisplayName("Tái hiện lỗ hổng —— sau khi sửa, các loại mục tiêu SSRF được lưu dưới dạng URL đầy đủ đều bị chặn hoàn toàn")
     class MaliciousTargetsBlocked {
 
         @Test
-        @DisplayName("【元数据】云元数据端点 169.254.169.254 被拦截（checkSsrfHttpUrl 兜底）")
+        @DisplayName("Điểm cuối siêu dữ liệu đám mây 169.254.169.254 Bị chặn (checkSsrfHttpUrl chặn cuối)")
         void cloudMetadataBlocked() {
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> validateFullOriginUrl("http://169.254.169.254/latest/meta-data/"));
             System.out.println("[cloudMetadataBlocked] 169.254.169.254 -> " + ex.getMessage());
-            assertTrue(ex.getMessage().contains("链路本地") || ex.getMessage().contains("本机"),
-                    "云元数据属链路本地地址，应被 checkSsrfHttpUrl 拦截");
+            assertTrue(ex.getMessage().contains("Link-local") || ex.getMessage().contains("Máy local"),
+                    "Siêu dữ liệu đám mây thuộc địa chỉ link-local, cần bị checkSsrfHttpUrl chặn");
         }
 
         @Test
-        @DisplayName("【回环】本机服务 127.0.0.1:6379 被拦截（checkSsrfHttpUrl 兜底）")
+        @DisplayName("Dịch vụ trên máy cục bộ 127.0.0.1:6379 Bị chặn (checkSsrfHttpUrl chặn cuối)")
         void loopbackBlocked() {
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> validateFullOriginUrl("http://127.0.0.1:6379/"));
             System.out.println("[loopbackBlocked] 127.0.0.1:6379 -> " + ex.getMessage());
-            assertTrue(ex.getMessage().contains("本机") || ex.getMessage().contains("链路本地"),
-                    "回环地址应被 checkSsrfHttpUrl 拦截");
+            assertTrue(ex.getMessage().contains("Máy local") || ex.getMessage().contains("Link-local"),
+                    "Địa chỉ loopback cần bị checkSsrfHttpUrl chặn");
         }
 
         @Test
-        @DisplayName("【公网】任意公网地址 8.8.8.8 被拦截（checkInternalUrl 兜底）")
+        @DisplayName("Bất kỳ địa chỉ mạng công cộng nào 8.8.8.8 bị chặn (checkInternalUrl làm lớp dự phòng)")
         void publicAddressBlocked() {
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> validateFullOriginUrl("http://8.8.8.8/x"));
             System.out.println("[publicAddressBlocked] 8.8.8.8 -> " + ex.getMessage());
-            assertTrue(ex.getMessage().contains("内网"),
-                    "公网地址应被 checkInternalUrl 拦截，仅允许内网");
+            assertTrue(ex.getMessage().contains("Mạng nội bộ"),
+                    "Địa chỉ mạng công cộng cần bị checkInternalUrl chặn, chỉ cho phép nội mạng");
         }
     }
 
     // ==================================================================
-    // 二、合法功能不被误伤：微服务跨模块内网(RFC1918)调用放行
+    // II. Chức năng hợp lệ không bị ảnh hưởng: nội mạng liên mô-đun của microservice(RFC1918)cho qua việc gọi
     // ==================================================================
 
     @Nested
-    @DisplayName("合法功能 —— 微服务跨模块内网(RFC1918)地址正常放行")
+    @DisplayName("Chức năng hợp lệ —— nội mạng liên mô-đun của microservice(RFC1918)địa chỉ được cho qua bình thường")
     class LegitInternalTargetsPass {
 
         @Test
-        @DisplayName("RFC1918 内网地址（10/172.16/192.168）放行，不抛异常")
+        @DisplayName("RFC1918 Địa chỉ nội mạng (10/172.16/192.168) được cho qua, không ném ngoại lệ")
         void rfc1918AddressesPass() {
             assertDoesNotThrow(() -> validateFullOriginUrl("http://10.0.0.8:7003/erp/order/list"));
             assertDoesNotThrow(() -> validateFullOriginUrl("http://172.16.5.20:8080/api"));
             assertDoesNotThrow(() -> validateFullOriginUrl("http://192.168.1.30:9999/house/list"));
-            System.out.println("[rfc1918AddressesPass] RFC1918 内网地址全部放行，微服务跨模块调用不受影响");
+            System.out.println("[rfc1918AddressesPass] RFC1918 Tất cả địa chỉ nội mạng đều được cho qua, việc gọi liên mô-đun của microservice không bị ảnh hưởng");
         }
     }
 
     // ==================================================================
-    // 三、为什么必须两套校验【组合】—— 单独任一方法都有漏网之鱼
+    // III. Vì sao bắt buộc phải hai bộ kiểm tra —— bất kỳ phương pháp riêng lẻ nào cũng có lỗ hổng
     // ==================================================================
 
     @Nested
-    @DisplayName("互补性证明 —— 单独任一校验都不足以覆盖全部 SSRF 目标")
+    @DisplayName("Chứng minh tính bổ trợ lẫn nhau —— bất kỳ kiểm tra riêng lẻ nào cũng không đủ để bao phủ tất cả các mục tiêu SSRF")
     class WhyBothChecksNeeded {
 
         @Test
-        @DisplayName("仅 checkInternalUrl 不够：它把链路本地视为内网，会放过云元数据 169.254.169.254")
+        @DisplayName("Chỉ checkInternalUrl là không đủ: nó coi link-local là nội mạng, sẽ bỏ qua siêu dữ liệu đám mây 169.254.169.254")
         void internalCheckAloneLeaksMetadata() {
-            // checkInternalUrl 单独使用时，链路本地地址被当作"内网"放行 —— 这正是必须叠加
-            // checkSsrfHttpUrl 的原因
+            // checkInternalUrl Khi sử dụng riêng lẻ, địa chỉ link-local bị coi là"Mạng nội bộ"cho qua —— đây chính là lý do bắt buộc phải chồng thêm
+            // checkSsrfHttpUrl lý do
             assertDoesNotThrow(() -> CommonUtils.checkInternalUrl("http://169.254.169.254/latest/meta-data/"));
-            System.out.println("[internalCheckAloneLeaksMetadata] 仅 checkInternalUrl 会放过云元数据 → 需 checkSsrfHttpUrl 兜底");
+            System.out.println("[internalCheckAloneLeaksMetadata] Chỉ checkInternalUrl sẽ bỏ qua siêu dữ liệu đám mây → cần checkSsrfHttpUrl làm lớp dự phòng");
         }
 
         @Test
-        @DisplayName("仅 checkSsrfHttpUrl 不够：它放行公网，会把服务器当作访问任意公网的代理")
+        @DisplayName("Chỉ checkSsrfHttpUrl là không đủ: nó cho qua mạng công cộng, sẽ biến máy chủ thành proxy để truy cập bất kỳ mạng công cộng nào")
         void ssrfCheckAloneLeaksPublic() {
-            // checkSsrfHttpUrl 单独使用时，公网地址被放行 —— 这正是必须叠加 checkInternalUrl 的原因
+            // checkSsrfHttpUrl Khi sử dụng riêng lẻ, địa chỉ mạng công cộng bị cho qua —— đây chính là lý do bắt buộc phải chồng thêm checkInternalUrl
             assertDoesNotThrow(() -> SsrfFileTypeFilter.checkSsrfHttpUrl("http://8.8.8.8/x"));
-            System.out.println("[ssrfCheckAloneLeaksPublic] 仅 checkSsrfHttpUrl 会放过公网地址 → 需 checkInternalUrl 兜底");
+            System.out.println("[ssrfCheckAloneLeaksPublic] Chỉ checkSsrfHttpUrl sẽ bỏ qua địa chỉ mạng công cộng → cần checkInternalUrl làm lớp dự phòng");
         }
     }
 }

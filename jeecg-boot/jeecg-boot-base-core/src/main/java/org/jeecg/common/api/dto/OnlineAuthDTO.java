@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * online 拦截器权限判断
- * cloud api 用到的接口传输对象
+ * online Đánh giá quyền hạn của interceptor
+ * cloud api Đối tượng truyền tải của API được sử dụng
  * @author: jeecg-boot
  */
 @Data
@@ -16,22 +16,22 @@ public class OnlineAuthDTO implements Serializable {
 
 
     /**
-     * 用户名
+     * Tên người dùng
      */
     private String username;
 
     /**
-     * 可能的请求地址
+     * Địa chỉ yêu cầu có thể
      */
     private List<String> possibleUrl;
 
     /**
-     * online开发的菜单地址
+     * online Địa chỉ menu đã phát triển
      */
     private String onlineFormUrl;
 
     /**
-     * online工单的地址
+     * online Địa chỉ của ticket
      */
     private String onlineWorkOrderUrl;
 

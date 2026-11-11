@@ -10,11 +10,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * 【QQYUN-15536】修复上传SVG文件通过静态资源路径触发存储型XSS
- * 对 .svg 后缀的响应自动追加以下安全响应头，阻止浏览器在顶层文档渲染 SVG 时执行内嵌脚本
- * Content-Security-Policy: sandbox —— 沙箱化页面，禁止脚本、表单提交、同源操作等
- * X-Content-Type-Options: nosniff —— 禁止 MIME 类型嗅探，防止绕过 Content-Type 限制
- * 对通过 {@code <img src="xxx.svg">} 方式内嵌的 SVG 无任何影响（子资源加载不受此类头部限制）
+ * 【QQYUN-15536】Sửa lỗi tải lên tệp SVG kích hoạt stored XSS qua đường dẫn tài nguyên tĩnh XSS
+ * Đối với .svg Phản hồi có hậu tố được tự động thêm các header phản hồi an toàn sau đây, ngăn trình duyệt thực thi script nhúng khi render SVG dưới dạng tài liệu cấp cao nhất
+ * Content-Security-Policy: sandbox — Sandbox hóa trang, cấm script, gửi biểu mẫu, thao tác cùng nguồn, v.v.
+ * X-Content-Type-Options: nosniff — Cấm dò tìm loại MIME, ngăn chặn việc bypass Content-Type giới hạn
+ * Đối với việc thông qua {@code <img src="xxx.svg">} SVG nhúng theo cách này không bị ảnh hưởng gì (việc tải tài nguyên con không bị giới hạn bởi các header này)
  * @author liusq
  * @date 2026/05/25
  * @see <a href="https://github.com/jeecgboot/JeecgBoot/issues/9646">issues/9646</a>
@@ -27,15 +27,15 @@ public class SvgSecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        //update-begin---author:liusq ---date:2026-05-26  for：【QQYUN-15536】补充URL编码绕过防御：getServletPath()由Servlet容器解码，可防止%2E等编码绕过-----------
-        // 使用 getServletPath() 而非 getRequestURI()：前者由 Servlet 容器自动 URL 解码，
-        // 后者返回原始未解码路径，攻击者可用 %2e%73%76%67 绕过 endsWith(".svg") 检测
+        //update-begin---author:liusq ---date:2026-05-26  for：【QQYUN-15536】Bổ sung phòng thủ bỏ qua mã hóa URL：getServletPath()Được Servlet container giải mã, có thể ngăn%2E và các cách bỏ qua bằng mã hóa khác-----------
+        // Sử dụng getServletPath() mà không phải là getRequestURI(): Cái trước do Servlet container tự động giải mã URL,
+        // Cái sau trả về đường dẫn gốc chưa giải mã, kẻ tấn công có thể dùng %2e%73%76%67 Bypass endsWith(".svg") Kiểm tra
         String uri = request.getServletPath();
-        //update-end---author:liusq ---date:2026-05-26  for：【QQYUN-15536】补充URL编码绕过防御：getServletPath()由Servlet容器解码，可防止%2E等编码绕过-----------
+        //update-end---author:liusq ---date:2026-05-26  for：【QQYUN-15536】Bổ sung phòng thủ bỏ qua mã hóa URL：getServletPath()Được Servlet container giải mã, có thể ngăn%2E và các cách bỏ qua bằng mã hóa khác-----------
         if (uri != null && uri.toLowerCase().endsWith(SVG_SUFFIX)) {
-            // 沙箱化限制：即使浏览器以顶层文档方式访问 SVG，内嵌脚本也无法执行
+            // Giới hạn sandbox: Ngay cả khi trình duyệt truy cập SVG dưới dạng tài liệu cấp cao nhất, script nhúng cũng không thể thực thi
             response.setHeader("Content-Security-Policy", "sandbox");
-            // 禁止 MIME 类型嗅探，强制浏览器遵守声明的 Content-Type，防止绕过
+            // Cấm dò tìm loại MIME, buộc trình duyệt tuân thủ Content-Type, ngăn chặn việc bypass
             response.setHeader("X-Content-Type-Options", "nosniff");
         }
         filterChain.doFilter(request, response);

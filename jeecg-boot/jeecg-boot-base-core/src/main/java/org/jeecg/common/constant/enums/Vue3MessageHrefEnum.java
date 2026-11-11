@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 消息跳转【vue3】
+ * Chuyển hướng tin nhắn 【vue3】
  * @Author taoYan
  * @Date 2022/8/19 20:41
  **/
@@ -15,27 +15,27 @@ import java.util.List;
 public enum Vue3MessageHrefEnum {
 
     /**
-     * 流程催办
+     * Đôn đốc quy trình
      */
     BPM("bpm", "/task/myHandleTaskInfo"),
     
     /**
-     * 系统消息通知
+     * Thông báo tin nhắn hệ thống
      */
     BPM_SYSTEM_MSG("bpm_msg_node", ""),
     
     /**
-     * 流程抄送任务
+     * Nhiệm vụ sao gửi quy trình
      */
     BPM_VIEW("bpm_cc", "/task/myHandleTaskInfo"),
 
     /**
-     * 节点通知
+     * Thông báo nút
      */
     BPM_TASK("bpm_task", "/task/myHandleTaskInfo"),
 
     /**
-     * 邮件消息
+     * Tin nhắn email
      */
     EMAIL("email", "/eoa/email");
     
@@ -57,7 +57,7 @@ public enum Vue3MessageHrefEnum {
     }
 
     /**
-     * 获取字典数据
+     * Lấy dữ liệu danh mục
      * @return
      */
     public static List<DictModel> getDictList(){

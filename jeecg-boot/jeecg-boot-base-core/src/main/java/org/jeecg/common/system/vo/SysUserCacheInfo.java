@@ -5,7 +5,7 @@ import java.util.List;
 import org.jeecg.common.util.DateUtils;
 
 /**
- * @Description: 用户缓存信息
+ * @Description: Thông tin cache người dùng
  * @author: jeecg-boot
  */
 public class SysUserCacheInfo {
@@ -19,7 +19,7 @@ public class SysUserCacheInfo {
 	private String sysOrgCode;
 
 	/**
-	 * 当前用户部门ID
+	 * Phòng ban của người dùng hiện tại ID
 	 */
 	private String sysOrgId;
 
@@ -28,7 +28,7 @@ public class SysUserCacheInfo {
 	private boolean oneDepart;
 
 	/**
-	 * 当前用户角色code（多个逗号分割）
+	 * Mã vai trò của người dùng hiện tại (nhiều mã phân tách bằng dấu phẩy)
 	 */
 	private String sysRoleCode;
 

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * 跨域配置加载条件
+ * Điều kiện tải cấu hình cross-domain
  * @author: jeecg-boot
  */
 public class CorsFilterCondition implements Condition {
@@ -14,7 +14,7 @@ public class CorsFilterCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Object object = context.getEnvironment().getProperty(CommonConstant.CLOUD_SERVER_KEY);
-        //如果没有服务注册发现的配置 说明是单体应用 则加载跨域配置 返回true
+        //Nếu không có cấu hình đăng ký và phát hiện dịch vụ thì chứng tỏ là ứng dụng đơn thể, lúc đó tải cấu hình cross-domain và trả về true
         if(object==null){
             return true;
         }

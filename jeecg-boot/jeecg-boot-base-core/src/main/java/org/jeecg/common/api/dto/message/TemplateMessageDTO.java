@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * 模板消息
+ * Tin nhắn mẫu
  * @author: jeecg-boot
  */
 @Data
@@ -15,17 +15,17 @@ public class TemplateMessageDTO extends TemplateDTO implements Serializable {
 
 
     /**
-     * 发送人(用户登录账户)
+     * Người gửi(Tài khoản đăng nhập của người dùng)
      */
     protected String fromUser;
 
     /**
-     * 发送给(用户登录账户)
+     * Gửi tới(Tài khoản đăng nhập của người dùng)
      */
     protected String toUser;
 
     /**
-     * 消息主题
+     * Chủ đề tin nhắn
      */
     protected String title;
 
@@ -35,7 +35,7 @@ public class TemplateMessageDTO extends TemplateDTO implements Serializable {
     }
 
     /**
-     * 构造器1 发模板消息用
+     * Constructor 1 dùng để gửi tin nhắn mẫu
      */
     public TemplateMessageDTO(String fromUser, String toUser,String title, Map<String, String> templateParam, String templateCode){
         super(templateCode, templateParam);

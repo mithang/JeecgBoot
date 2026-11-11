@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
 /**
- * AES 工具 (兼容历史 NoPadding + 新 PKCS5Padding)
+ * AES Công cụ (Tương thích với lịch sử NoPadding + Mới PKCS5Padding)
  */
 @Slf4j
 public class AesEncryptUtil {
@@ -17,7 +17,7 @@ public class AesEncryptUtil {
     private static final String KEY = EncryptedString.key;
     private static final String IV  = EncryptedString.iv;
 
-    /* -------- 新版：CBC + PKCS5Padding (与前端 CryptoJS Pkcs7 兼容) -------- */
+    /* -------- Phiên bản mới:CBC + PKCS5Padding (Tương thích với CryptoJS Pkcs7 của frontend) -------- */
     private static String decryptPkcs5(String cipherBase64) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         SecretKeySpec ks = new SecretKeySpec(KEY.getBytes(StandardCharsets.UTF_8), "AES");
@@ -27,7 +27,7 @@ public class AesEncryptUtil {
         return new String(plain, StandardCharsets.UTF_8);
     }
 
-    /* -------- 旧版：CBC + NoPadding (手工补 0) -------- */
+    /* -------- Phiên bản cũ:CBC + NoPadding (Bổ sung thủ công 0) -------- */
     private static String decryptLegacyNoPadding(String cipherBase64) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
         SecretKeySpec ks = new SecretKeySpec(KEY.getBytes(StandardCharsets.UTF_8), "AES");
@@ -35,48 +35,48 @@ public class AesEncryptUtil {
         cipher.init(Cipher.DECRYPT_MODE, ks, ivSpec);
         byte[] data = cipher.doFinal(Base64.decode(cipherBase64));
         return new String(data, StandardCharsets.UTF_8)
-                .replace("\u0000",""); // 旧填充 0
+                .replace("\u0000",""); // Phần đệm cũ 0
     }
 
-    /* -------- 兼容入口：登录使用 -------- */
+    /* -------- Điểm vào tương thích: dùng cho đăng nhập -------- */
     public static String resolvePassword(String input){
         if(oConvertUtils.isEmpty(input)){
             return input;
         }
-        // 1. 先尝试新版
+        // 1. 1. Thử phiên bản mới trước
         try{
             String p = decryptPkcs5(input);
             return clean(p);
         }catch(Exception ignore){
-            //log.debug("【AES解密】Password not AES PKCS5 cipher, try legacy.");
+            //log.debug("【Giải mã AES】Password not AES PKCS5 cipher, try legacy.");
         }
 
-        // 2. 回退旧版
+        // 2. 2. Quay lại phiên bản cũ
         try{
             String legacy = decryptLegacyNoPadding(input);
             return clean(legacy);
         }catch(Exception e){
-            log.debug("【AES解密】Password not AES cipher, raw used.");
+            log.debug("【Giải mã AES】Password not AES cipher, raw used.");
         }
 
-        // 3. 视为明文
+        // 3. 3. Xem như văn bản gốc
         return input;
     }
 
-    /* -------- 可选：统一清理尾部不可见控制字符 -------- */
+    /* -------- Tùy chọn: dọn dẹp thống nhất các ký tự điều khiển vô hình ở cuối -------- */
     private static String clean(String s){
         if(s==null) return null;
-        // 去除结尾控制符/空白（不影响中间合法空格）
+        // Loại bỏ ký tự điều khiển ở cuối/khoảng trắng (không ảnh hưởng đến khoảng trắng hợp lệ ở giữa)
         return s.replaceAll("[\\p{Cntrl}]+","").trim();
     }
 
-    /* -------- 若仍需要旧接口，可保留 (不建议再用于新前端) -------- */
+    /* -------- Nếu vẫn cần API cũ, có thể giữ lại (Không khuyến nghị dùng cho frontend mới nữa) -------- */
     @Deprecated
     public static String desEncrypt(String data) throws Exception {
         return decryptLegacyNoPadding(data);
     }
 
-    /* 加密（若前端不再使用，可忽略；保留旧实现避免影响历史） */
+    /* Mã hóa (nếu frontend không còn sử dụng, có thể bỏ qua; giữ lại triển khai cũ để tránh ảnh hưởng đến lịch sử) */
     @Deprecated
     public static String encrypt(String data) throws Exception {
         try{
@@ -100,8 +100,8 @@ public class AesEncryptUtil {
     }
 
 //    public static void main(String[] args) throws Exception {
-//        // 前端 CBC/Pkcs7 密文测试
-//        String frontCipher = encrypt("sa"); // 仅验证管道是否可用（旧方式）
+//        // Frontend CBC/Pkcs7 Kiểm tra mật mã
+//        String frontCipher = encrypt("sa"); // Chỉ kiểm chứng xem pipeline có khả dụng hay không (cách cũ)
 //        System.out.println(resolvePassword(frontCipher));
 //    }
 }

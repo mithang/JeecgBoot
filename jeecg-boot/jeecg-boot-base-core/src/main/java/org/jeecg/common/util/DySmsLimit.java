@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 防止刷短信接口（只针对绑定手机号模板：SMS_175430166）
+ * Ngăn chặn lạm dụng giao diện SMS (chỉ áp dụng cho mẫu liên kết số điện thoại:SMS_175430166）
  * 
- * 1、同一IP，1分钟内发短信不允许超过5次（每一分钟重置每个IP请求次数）
- * 2、同一IP，1分钟内发短信超过20次，进入黑名单，不让使用短信接口
+ * 1, cùng một IP, trong 1 phút không được gửi SMS quá 5 lần (mỗi phút đặt lại số lần yêu cầu của từng IP)
+ * 2, cùng một IP, trong 1 phút gửi SMS quá 20 lần sẽ vào danh sách đen, không được dùng giao diện SMS
  * 
- * 3、短信接口加签和时间戳
- *  涉及接口：
+ * 3, ký giao diện SMS và timestamp
+ *  Các giao diện liên quan:
  *  /sys/sms
  *  /desform/api/sendVerifyCode
  *  /sys/sendChangePwdSms
@@ -19,30 +19,30 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class DySmsLimit {
 
-    // 1分钟内最大发短信数量（单一IP）
+    // 1 Số lượng SMS tối đa trong một phút (một IP duy nhất)
     private static final int MAX_MESSAGE_PER_MINUTE = 5;
-    // 1分钟
+    // 1 Phút
     private static final int MILLIS_PER_MINUTE = 60000;
-    // 一分钟内报警线最大短信数量，超了进黑名单（单一IP）
+    // Số lượng SMS tối đa tại ngưỡng cảnh báo trong một phút, vượt quá sẽ vào danh sách đen (một IP duy nhất)
     private static final int MAX_TOTAL_MESSAGE_PER_MINUTE = 20;
 
     private static ConcurrentHashMap<String, Long> ipLastRequestTime = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, Integer> ipRequestCount = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, Boolean> ipBlacklist = new ConcurrentHashMap<>();
 
-    // 同一手机号限流：60秒内最多1条，1小时内最多10条（基于Redis，集群共享）
+    // Giới hạn tốc độ theo cùng một số điện thoại: tối đa 1 tin trong 60 giây, tối đa 10 tin trong 1 giờ (dựa trên Redis, dùng chung trong cụm)
     private static final String PHONE_LIMIT_KEY_PRE = "sys:sms:limit:phone:";
     private static final int PHONE_MINUTE_SECONDS = 60;
     private static final int PHONE_HOUR_SECONDS = 3600;
     private static final int MAX_MESSAGE_PER_HOUR_PER_PHONE = 10;
 
     /**
-     * 按接收短信的手机号限流（不依赖客户端IP）：同一手机号60秒内最多1条，1小时内最多10条
+     * Giới hạn tốc độ theo số điện thoại nhận SMS (không phụ thuộc IP máy khách): cùng một số điện thoại tối đa 1 tin trong 60 giây, tối đa 10 tin trong 1 giờ
      *
-     * @param phone 接收短信的手机号
-     * @return 允许发送返回true
+     * @param phone Số điện thoại nhận SMS
+     * @return Cho phép gửi sẽ trả về true
      * @author scott
-     * @since 2026-10-13 【安全 GHSA-5qr3-c98m-9767】增加按手机号限流
+     * @since 2026-10-13 【Bảo mật GHSA-5qr3-c98m-9767】Thêm giới hạn theo số điện thoại
      */
     public static boolean canSendSmsToPhone(String phone) {
         if (oConvertUtils.isEmpty(phone)) {
@@ -55,7 +55,7 @@ public class DySmsLimit {
             redisUtil.expire(minuteKey, PHONE_MINUTE_SECONDS);
         }
         if (minuteCount > 1) {
-            log.warn("手机号：{}，{}秒内已发送过短信，请稍后再试", phone, PHONE_MINUTE_SECONDS);
+            log.warn("Số điện thoại:{}，{}giây đã gửi SMS, vui lòng thử lại sau", phone, PHONE_MINUTE_SECONDS);
             return false;
         }
         String hourKey = PHONE_LIMIT_KEY_PRE + "hour:" + phone;
@@ -64,14 +64,14 @@ public class DySmsLimit {
             redisUtil.expire(hourKey, PHONE_HOUR_SECONDS);
         }
         if (hourCount > MAX_MESSAGE_PER_HOUR_PER_PHONE) {
-            log.warn("手机号：{}，1小时内短信发送超过{}条", phone, MAX_MESSAGE_PER_HOUR_PER_PHONE);
+            log.warn("Số điện thoại:{}, trong 1 giờ số SMS đã gửi vượt quá{}mục", phone, MAX_MESSAGE_PER_HOUR_PER_PHONE);
             return false;
         }
         return true;
     }
 
     /**
-     * @param ip 请求发短信的IP地址
+     * @param ip Địa chỉ IP yêu cầu gửi SMS
      * @return
      */
     public static boolean canSendSms(String ip) {
@@ -81,37 +81,37 @@ public class DySmsLimit {
         log.info("IP：{}, Msg requestCount：{} ", ip, requestCount);
 
         if (ipBlacklist.getOrDefault(ip, false)) {
-            // 如果IP在黑名单中，则禁止发送短信
-            log.error("IP：{}, 进入黑名单，禁止发送请求短信！", ip);
+            // Nếu IP nằm trong danh sách đen thì cấm gửi SMS
+            log.error("IP：{}, Đã vào danh sách đen, cấm gửi yêu cầu SMS!", ip);
             return false;
         }
 
         if (currentTime - lastRequestTime >= MILLIS_PER_MINUTE) {
-            // 如果距离上次请求已经超过一分钟，则重置计数
+            // Nếu đã hơn một phút kể từ lần yêu cầu trước thì đặt lại bộ đếm
             ipRequestCount.put(ip, 1);
             ipLastRequestTime.put(ip, currentTime);
             return true;
         } else {
-            // 如果距离上次请求不到一分钟
+            // Nếu chưa đầy một phút kể từ lần yêu cầu trước
             ipRequestCount.put(ip, requestCount + 1);
             if (requestCount < MAX_MESSAGE_PER_MINUTE) {
-                // 如果请求次数小于5次，允许发送短信
+                // Nếu số lần yêu cầu nhỏ hơn 5 lần thì cho phép gửi SMS
                 return true;
             } else if (requestCount >= MAX_TOTAL_MESSAGE_PER_MINUTE) {
-                // 如果请求次数超过报警线短信数量，将IP加入黑名单
+                // Nếu số lần yêu cầu vượt quá số lượng SMS tại ngưỡng cảnh báo thì đưa IP vào danh sách đen
                 ipBlacklist.put(ip, true);
                 return false;
             } else {
-                log.error("IP：{}, 1分钟内请求短信超过5次，请稍后重试！", ip);
+                log.error("IP：{}, 1 Trong một phút yêu cầu SMS quá 5 lần, vui lòng thử lại sau!", ip);
                 return false;
             }
         }
     }
 
     /**
-     * 图片二维码验证成功之后清空数量
+     * Sau khi xác minh mã QR hình ảnh thành công sẽ xóa số lượng
      * 
-     * @param ip IP地址
+     * @param ip IP Địa chỉ
      */
     public static void clearSendSmsCount(String ip) {
         long currentTime = System.currentTimeMillis();

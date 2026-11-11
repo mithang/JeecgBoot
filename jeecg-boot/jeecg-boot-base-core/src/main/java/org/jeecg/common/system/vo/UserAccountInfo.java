@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 在线用户信息
+ * Thông tin người dùng trực tuyến
  * </p>
  *
  * @Author scott
@@ -23,38 +23,38 @@ import java.util.Date;
 public class UserAccountInfo {
 
     /**
-     * 登录人id
+     * Người đăng nhập id
      */
     private String id;
 
     /**
-     * 登录人账号
+     * Tài khoản của người đăng nhập
      */
     private String username;
 
     /**
-     * 登录人名字
+     * Tên người đăng nhập
      */
     private String realname;
 
     /**
-     * 电子邮件
+     * Email
      */
     private String email;
 
     /**
-     * 头像
+     * Ảnh đại diện
      */
     @SensitiveField
     private String avatar;
 
     /**
-     * 同步工作流引擎1同步0不同步
+     * Đồng bộ engine workflow: 1 đồng bộ, 0 không đồng bộ
      */
     private Integer activitiSync;
 
     /**
-     * 电话
+     * Điện thoại
      */
     @SensitiveField
     private String phone;

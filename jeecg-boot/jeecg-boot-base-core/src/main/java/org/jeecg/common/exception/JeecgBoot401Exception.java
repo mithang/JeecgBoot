@@ -1,7 +1,7 @@
 package org.jeecg.common.exception;
 
 /**
- * @Description: jeecg-boot自定义401异常
+ * @Description: jeecg-boot Ngoại lệ 401 tùy chỉnh
  * @author: jeecg-boot
  */
 public class JeecgBoot401Exception extends RuntimeException {

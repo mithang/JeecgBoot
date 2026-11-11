@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 在线用户信息
+ * Thông tin người dùng trực tuyến
  * </p>
  *
  * @Author scott
@@ -23,129 +23,129 @@ import java.util.Date;
 public class LoginUser {
 
 	/**
-	 * 登录人id
+	 * Người đăng nhập id
 	 */
 	@SensitiveField
 	private String id;
 
 	/**
-	 * 登录人账号
+	 * Tài khoản của người đăng nhập
 	 */
 	@SensitiveField
 	private String username;
 
 	/**
-	 * 登录人名字
+	 * Tên người đăng nhập
 	 */
 	@SensitiveField
 	private String realname;
 
 	/**
-	 * 登录人密码
+	 * Mật khẩu của người đăng nhập
 	 */
 	@SensitiveField
 	private String password;
 
      /**
-      * 当前登录部门code
+      * Phòng ban đang đăng nhập code
       */
 	@SensitiveField
     private String orgCode;
 	/**
-	 * 当前登录部门id
+	 * Phòng ban đang đăng nhập id
 	 */
 	@SensitiveField
 	private String orgId;
 	/**
-	 * 当前登录角色code（多个逗号分割）
+	 * Role code hiện đang đăng nhập (nhiều code phân cách bằng dấu phẩy)
 	 */
 	@SensitiveField
 	private String roleCode;
 
 	/**
-	 * 头像
+	 * Ảnh đại diện
 	 */
 	@SensitiveField
 	private String avatar;
 
 	/**
-	 * 工号
+	 * Mã nhân viên
 	 */
 	@SensitiveField
 	private String workNo;
 
 	/**
-	 * 生日
+	 * Ngày sinh
 	 */
 	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
 
 	/**
-	 * 性别（1：男 2：女）
+	 * Giới tính (1: Nam, 2: Nữ)
 	 */
 	private Integer sex;
 
 	/**
-	 * 电子邮件
+	 * Email
 	 */
 	@SensitiveField
 	private String email;
 
 	/**
-	 * 电话
+	 * Điện thoại
 	 */
 	@SensitiveField
 	private String phone;
 
 	/**
-	 * 状态(1：正常 2：冻结 ）
+	 * Trạng thái(1: bình thường, 2: đóng băng)
 	 */
 	private Integer status;
 	
 	private Integer delFlag;
 	/**
-     * 同步工作流引擎1同步0不同步
+     * Đồng bộ engine workflow: 1 đồng bộ, 0 không đồng bộ
      */
     private Integer activitiSync;
 
 	/**
-	 * 创建时间
+	 * Thời gian tạo
 	 */
 	private Date createTime;
 
 	/**
-	 *  身份（1 普通员工 2 上级）
+	 *  Thân phận (1: nhân viên thường, 2: cấp trên)
 	 */
 	private Integer userIdentity;
 
 	/**
-	 * 管理部门ids
+	 * Phòng ban quản lý ids
 	 */
 	@SensitiveField
 	private String departIds;
 
 	/**
-	 * 职务，关联职务表
+	 * Chức vụ, liên kết bảng chức vụ
 	 */
 	@SensitiveField
 	private String post;
 
 	/**
-	 * 座机号
+	 * Số điện thoại bàn
 	 */
 	@SensitiveField
 	private String telephone;
 
-	/** 多租户ids临时用，不持久化数据库(数据库字段不存在) */
+	/** Ids nhiều tenant dùng tạm thời, không lưu lâu dài vào cơ sở dữ liệu(Trường cơ sở dữ liệu không tồn tại) */
 	@SensitiveField
 	private String relTenantIds;
 
-	/**设备id uniapp推送用*/
+	/**id thiết bị, dùng để đẩy thông báo uniapp*/
 	private String clientId;
 
 	/**
-	 * 主岗位
+	 * Vị trí chính
 	 */
 	private String mainDepPostId;
 }

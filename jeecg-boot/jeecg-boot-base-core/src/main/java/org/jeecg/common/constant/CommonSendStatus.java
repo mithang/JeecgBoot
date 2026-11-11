@@ -1,48 +1,48 @@
 package org.jeecg.common.constant;
 
 /**
- * 	系统通告 - 发布状态
+ * 	Thông cáo hệ thống - Trạng thái phát hành
  * @Author LeeShaoQing
  *
  */
 public interface CommonSendStatus {
 
     /**
-     * 未发布
+     * Chưa phát hành
      */
     public static final String UNPUBLISHED_STATUS_0 = "0";
 
     /**
-     * 已发布
+     * Đã phát hành
      */
 	public static final String PUBLISHED_STATUS_1 = "1";
 
     /**
-     * 撤销
+     * Hoàn tác
      */
 	public static final String REVOKE_STATUS_2 = "2";
 
     /**
-     * app端推送会话标识后缀
+     * app Hậu tố định danh phiên đẩy của phía APP
      */
 	public static final String  APP_SESSION_SUFFIX = "_app";
 
 
-	/**-----【流程相关通知模板code】------------------------------------------------------------*/
-	/**流程催办——系统通知消息模板*/
+	/**-----【Mã mẫu thông báo liên quan đến quy trình】------------------------------------------------------------*/
+	/**Mẫu tin nhắn thông báo hệ thống cho đôn đốc quy trình*/
 	public static final String TZMB_BPM_CUIBAN = "bpm_cuiban";
-	/**流程抄送——系统通知消息模板*/
+	/**Mẫu tin nhắn thông báo hệ thống cho sao gửi quy trình*/
 	public static final String TZMB_BPM_CC = "bpm_cc";
-	/**流程催办——邮件通知消息模板*/
+	/**Mẫu tin nhắn thông báo email cho đôn đốc quy trình*/
 	public static final String TZMB_BPM_CUIBAN_EMAIL = "bpm_cuiban_email";
-	/**标准模板—系统消息通知*/
+	/**Mẫu chuẩn — Thông báo tin nhắn hệ thống*/
 	public static final String TZMB_SYS_TS_NOTE = "sys_ts_note";
-	/**流程超时提醒——系统通知消息模板*/
+	/**Mẫu tin nhắn thông báo hệ thống nhắc nhở quy trình quá hạn*/
 	public static final String TZMB_BPM_CHAOSHI_TIP = "bpm_chaoshi_tip";
-	/**-----【流程相关通知模板code】-----------------------------------------------------------*/
+	/**-----【Mã mẫu thông báo liên quan đến quy trình】-----------------------------------------------------------*/
 
 	/**
-	 * 系统通知拓展参数（比如：用于流程抄送和催办通知，这里额外传递流程跳转页面所需要的路由参数）
+	 * Tham số mở rộng của thông báo hệ thống (ví dụ: dùng cho thông báo sao gửi và đôn đốc quy trình, tại đây truyền thêm tham số route cần thiết cho trang chuyển hướng của quy trình)
 	 */
 	public static final String MSG_ABSTRACT_JSON = "msg_abstract";
 }

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
- * 设置静态参数初始化
+ * Khởi tạo tham số tĩnh
  * @author: jeecg-boot
  */
 @Lazy(false)
@@ -24,13 +24,13 @@ public class StaticConfig {
     private String emailFrom;
 
     /**
-     * 是否开启定时发送
+     * Có bật gửi định kỳ hay không
      */
     @Value(value = "${spring.mail.timeJobSend:false}")
     private Boolean timeJobSend;
 
 //    /**
-//     * 签名密钥串
+//     * Chuỗi khóa ký
 //     */
 //    @Value(value = "${jeecg.signatureSecret}")
 //    private String signatureSecret;

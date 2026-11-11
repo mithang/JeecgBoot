@@ -9,9 +9,9 @@ public class MyClassLoader extends ClassLoader {
 	public static Class getClassByScn(String className) {
 		Class myclass = null;
 		try {
-			//update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName使用上下文类加载器，增强部署兼容性-----------
+			//update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
 			myclass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
-			//update-end---author:scott ---date:20260416  for：【PR#9538】Class.forName使用上下文类加载器，增强部署兼容性-----------
+			//update-end---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException(className+" not found!");
@@ -20,47 +20,47 @@ public class MyClassLoader extends ClassLoader {
 	}
 
     /**
-     * 获得类的全名，包括包名
+     * Lấy tên đầy đủ của lớp, bao gồm tên gói
      * @param object
      * @return
      */
 	public static String getPackPath(Object object) {
-		// 检查用户传入的参数是否为空
+		// Kiểm tra xem tham số người dùng truyền vào có rỗng không
 		if (object == null) {
-			throw new java.lang.IllegalArgumentException("参数不能为空！");
+			throw new java.lang.IllegalArgumentException("Tham số không được rỗng!");
 		}
-		// 获得类的全名，包括包名
+		// Lấy tên đầy đủ của lớp, bao gồm tên gói
 		String clsName = object.getClass().getName();
 		return clsName;
 	}
 
 	public static String getAppPath(Class cls) {
-		// 检查用户传入的参数是否为空
+		// Kiểm tra xem tham số người dùng truyền vào có rỗng không
 		if (cls == null) {
-			throw new java.lang.IllegalArgumentException("参数不能为空！");
+			throw new java.lang.IllegalArgumentException("Tham số không được rỗng!");
 		}
 		ClassLoader loader = cls.getClassLoader();
-		// 获得类的全名，包括包名
+		// Lấy tên đầy đủ của lớp, bao gồm tên gói
 		String clsName = cls.getName() + ".class";
-		// 获得传入参数所在的包
+		// Lấy gói chứa tham số truyền vào
 		Package pack = cls.getPackage();
 		String path = "";
-		// 如果不是匿名包，将包名转化为路径
+		// Nếu không phải gói ẩn danh, chuyển tên gói thành đường dẫn
 		if (pack != null) {
 			String packName = pack.getName();
 			String javaSpot="java.";
 			String javaxSpot="javax.";
-			// 此处简单判定是否是Java基础类库，防止用户传入JDK内置的类库
+			// Tại đây chỉ đơn giản xác định có phải là thư viện cơ sở Java không, để ngăn người dùng truyền vào thư viện tích hợp sẵn của JDK
 			if (packName.startsWith(javaSpot) || packName.startsWith(javaxSpot)) {
-				throw new java.lang.IllegalArgumentException("不要传送系统类！");
+				throw new java.lang.IllegalArgumentException("Đừng truyền lớp hệ thống!");
 			}
-			// 在类的名称中，去掉包名的部分，获得类的文件名
+			// Trong tên lớp, loại bỏ phần tên gói để lấy tên tệp của lớp
 			clsName = clsName.substring(packName.length() + 1);
-			// 判定包名是否是简单包名，如果是，则直接将包名转换为路径，
+			// Xác định xem tên gói có phải là tên gói đơn giản hay không, nếu đúng thì trực tiếp chuyển đổi tên gói thành đường dẫn,
 			if (packName.indexOf(SymbolConstant.SPOT) < 0) {
 				path = packName + "/";
 			} else {
-                // 否则按照包名的组成部分，将包名转换为路径
+                // Ngược lại, chuyển đổi tên gói thành đường dẫn theo từng thành phần của tên gói
 				int start = 0, end = 0;
 				end = packName.indexOf(".");
 				StringBuilder pathBuilder = new StringBuilder();
@@ -75,27 +75,27 @@ public class MyClassLoader extends ClassLoader {
 				path = path + packName.substring(start) + "/";
 			}
 		}
-		// 调用ClassLoader的getResource方法，传入包含路径信息的类文件名
+		// Gọi phương thức getResource của ClassLoader, truyền vào tên tệp lớp chứa thông tin đường dẫn
 		java.net.URL url = loader.getResource(path + clsName);
-		// 从URL对象中获取路径信息
+		// Lấy thông tin đường dẫn từ đối tượng URL
 		String realPath = url.getPath();
-		// 去掉路径信息中的协议名"file:"
+		// Loại bỏ tên giao thức trong thông tin đường dẫn"file:"
 		int pos = realPath.indexOf("file:");
 		if (pos > -1) {
 			realPath = realPath.substring(pos + 5);
 		}
-		// 去掉路径信息最后包含类文件信息的部分，得到类所在的路径
+		// Loại bỏ phần cuối của thông tin đường dẫn chứa thông tin tệp lớp để lấy đường dẫn nơi lớp tọa lạc
 		pos = realPath.indexOf(path + clsName);
 		realPath = realPath.substring(0, pos - 1);
-		// 如果类文件被打包到JAR等文件中时，去掉对应的JAR等打包文件名
+		// Nếu tệp lớp được đóng gói vào tệp JAR hoặc tương tự, loại bỏ tên tệp đóng gói JAR tương ứng
 		if (realPath.endsWith(SymbolConstant.EXCLAMATORY_MARK)) {
 			realPath = realPath.substring(0, realPath.lastIndexOf("/"));
 		}
 		/*------------------------------------------------------------  
-		 ClassLoader的getResource方法使用了utf-8对路径信息进行了编码，当路径  
-		  中存在中文和空格时，他会对这些字符进行转换，这样，得到的往往不是我们想要  
-		  的真实路径，在此，调用了URLDecoder的decode方法进行解码，以便得到原始的  
-		  中文及空格路径  
+		 ClassLoader phương thức getResource đã sử dụng utf-8 đã mã hóa thông tin đường dẫn, khi đường dẫn  
+		  chứa ký tự tiếng Trung và khoảng trắng, nó sẽ chuyển đổi các ký tự này, do đó kết quả thu được thường không phải là thứ chúng ta muốn  
+		  đường dẫn thực tế, tại đây đã gọi phương thức decode của URLDecoder để giải mã nhằm thu được  
+		  Đường dẫn chứa tiếng Trung và khoảng trắng  
 		-------------------------------------------------------------*/
 		try {
 			realPath = java.net.URLDecoder.decode(realPath, "utf-8");
@@ -103,5 +103,5 @@ public class MyClassLoader extends ClassLoader {
 			throw new RuntimeException(e);
 		}
 		return realPath;
-	}// getAppPath定义结束
+	}// getAppPath Kết thúc định nghĩa
 }

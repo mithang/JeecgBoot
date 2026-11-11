@@ -22,17 +22,17 @@ import java.io.PrintWriter;
 import java.util.Set;
 
 /**
- * 低代码模式（dev:开发模式，prod:发布模式——关闭所有在线开发配置能力）
+ * Chế độ low-code (dev:Chế độ phát triển,prod:Chế độ phát hành — tắt toàn bộ khả năng phát triển trực tuyến)
  * <p>
- * prod开启后会关闭以下功能，只保留功能测试（拥有admin角色账号，可以使用配置能力）
- * 1.online表单的所有配置功能，代码生成和导入表功能
- * 2.online报表的所有配置功能，和sql解析
- * 3.online图表的所有配置功能，和sql解析
- * 4.仪表盘的在线配置功能，和sql解析
- * 5.大屏的在线配置功能，和sql解析
+ * prod Sau khi bật sẽ tắt các chức năng sau, chỉ giữ lại kiểm tra chức năng (tài khoản có vai trò admin có thể sử dụng khả năng cấu hình)
+ * 1.online Tất cả chức năng cấu hình của biểu mẫu, chức năng sinh mã và nhập bảng
+ * 2.online Tất cả chức năng cấu hình của báo cáo, và phân tích SQL
+ * 3.online Tất cả chức năng cấu hình của biểu đồ, và phân tích SQL
+ * 4.Chức năng cấu hình trực tuyến của Dashboard, và phân tích SQL
+ * 5.Chức năng cấu hình trực tuyến của màn hình lớn, và phân tích SQL
  * 
- * 积木的逻辑单独处理
- * 1.积木报表的在线配置功能，和sql解析
+ * Logic của Jimu được xử lý riêng
+ * 1.Chức năng cấu hình trực tuyến của báo cáo Jimu, và phân tích SQL
  *
  * @author qinfeng
  * @date 20230904
@@ -41,7 +41,7 @@ import java.util.Set;
 @Component
 public class LowCodeModeInterceptor implements HandlerInterceptor {
     /**
-     * 低代码开发模式
+     * Chế độ phát triển low-code
      */
     public static final String LOW_CODE_MODE_DEV = "dev";
     public static final String LOW_CODE_MODE_PROD = "prod";
@@ -50,14 +50,14 @@ public class LowCodeModeInterceptor implements HandlerInterceptor {
     private JeecgBaseConfig jeecgBaseConfig;
     
     /**
-     * 在请求处理之前进行调用
+     * Được gọi trước khi xử lý yêu cầu
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         CommonAPI commonAPI = null;
-        log.debug("低代码模式，拦截请求路径：" + request.getRequestURI());
+        log.debug("Chế độ low-code, chặn đường dẫn yêu cầu：" + request.getRequestURI());
         
-        //1、验证是否开启低代码开发模式控制
+        //1, kiểm tra xem có bật kiểm soát chế độ phát triển low-code hay không
         if (jeecgBaseConfig == null) {
             jeecgBaseConfig = SpringContextUtils.getBean(JeecgBaseConfig.class);
         }
@@ -67,7 +67,7 @@ public class LowCodeModeInterceptor implements HandlerInterceptor {
 
         if (jeecgBaseConfig.getFirewall()!=null && LowCodeModeInterceptor.LOW_CODE_MODE_PROD.equals(jeecgBaseConfig.getFirewall().getLowCodeMode())) {
             String requestURI = request.getRequestURI().substring(request.getContextPath().length());
-            log.info("低代码模式，拦截请求路径：" + requestURI);
+            log.info("Chế độ low-code, chặn đường dẫn yêu cầu：" + requestURI);
             LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
             Set<String> hasRoles = null;
             if (loginUser == null) {
@@ -75,16 +75,16 @@ public class LowCodeModeInterceptor implements HandlerInterceptor {
             }
 
             if (loginUser != null) {
-                //当前登录人拥有的角色
+                //Các vai trò mà người đang đăng nhập sở hữu
                 hasRoles = commonAPI.queryUserRolesById(loginUser.getId());
             }
             
             log.info("get loginUser info: {}", loginUser);
-            log.info("get loginRoles info: {}", hasRoles != null ? hasRoles.toArray() : "空");
+            log.info("get loginRoles info: {}", hasRoles != null ? hasRoles.toArray() : "Trống");
             
-            //拥有的角色 和 允许开发角色存在交集
+            //Các vai trò sở hữu và các vai trò được phép phát triển có giao nhau
             boolean hasIntersection = CommonUtils.hasIntersection(hasRoles, CommonConstant.allowDevRoles);
-            //如果是超级管理员 或者 允许开发的角色，则不做限制
+            //Nếu là quản trị viên cấp cao hoặc vai trò được phép phát triển thì không giới hạn
             if (loginUser!=null && ("admin".equals(loginUser.getUsername()) || hasIntersection)) {
                 return true;
             }
@@ -97,18 +97,18 @@ public class LowCodeModeInterceptor implements HandlerInterceptor {
 
 
     /**
-     * 返回结果
+     * Trả về kết quả
      *
      * @param response
      */
     private void returnErrorMessage(HttpServletResponse response) {
-        //校验失败返回前端
+        //Kiểm tra thất bại thì trả về frontend
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            Result<?> result = Result.error("低代码开发模式为发布模式，不允许使用在线配置！！");
+            Result<?> result = Result.error("Chế độ phát triển low-code đang ở chế độ phát hành, không được phép sử dụng cấu hình trực tuyến!!");
             out.print(JSON.toJSON(result));
         } catch (IOException e) {
             e.printStackTrace();

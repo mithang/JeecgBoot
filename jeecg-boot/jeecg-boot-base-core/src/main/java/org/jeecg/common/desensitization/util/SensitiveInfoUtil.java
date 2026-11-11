@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 敏感信息处理工具类
+ * Lớp tiện ích xử lý thông tin nhạy cảm
  * @author taoYan
  * @date 2022/4/20 18:01
  **/
@@ -20,10 +20,10 @@ import java.util.List;
 public class SensitiveInfoUtil {
 
     /**
-     * 处理嵌套对象
-     * @param obj 方法返回值
-     * @param entity 实体class
-     * @param isEncode 是否加密（true: 加密操作 / false:解密操作）
+     * Xử lý đối tượng lồng nhau
+     * @param obj Giá trị trả về của phương thức
+     * @param entity Entity class
+     * @param isEncode Có mã hóa hay không (true: Thao tác mã hóa / false:Thao tác giải mã)
      * @throws IllegalAccessException
      */
     public static void handleNestedObject(Object obj, Class entity, boolean isEncode) throws IllegalAccessException {
@@ -33,13 +33,13 @@ public class SensitiveInfoUtil {
                 continue;
             }
             if(field.getType().equals(entity)){
-                // 对象里面是实体
+                // Bên trong đối tượng là thực thể
                 field.setAccessible(true);
                 Object nestedObject = field.get(obj);
                 handlerObject(nestedObject, isEncode);
                 break;
             }else{
-                // 对象里面是List<实体>
+                // Bên trong đối tượng là List<Entity>
                 if(field.getGenericType() instanceof ParameterizedType){
                     ParameterizedType pt = (ParameterizedType)field.getGenericType();
                     if(pt.getRawType().equals(List.class)){
@@ -56,9 +56,9 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * 处理Object
-     * @param obj 方法返回值
-     * @param isEncode 是否加密（true: 加密操作 / false:解密操作）
+     * Xử lý Object
+     * @param obj Giá trị trả về của phương thức
+     * @param isEncode Có mã hóa hay không (true: Thao tác mã hóa / false:Thao tác giải mã)
      * @return
      * @throws IllegalAccessException
      */
@@ -69,14 +69,14 @@ public class SensitiveInfoUtil {
         long startTime=System.currentTimeMillis();
         log.debug(" obj --> "+ obj.toString());
         
-        // 判断是不是一个对象
+        // Xác định có phải là một đối tượng hay không
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
             boolean isSensitiveField = field.isAnnotationPresent(SensitiveField.class);
             if(isSensitiveField){
-                // 必须有SensitiveField注解 才作处理
+                // Bắt buộc phải có annotation SensitiveField mới xử lý
                 if(field.getType().isAssignableFrom(String.class)){
-                    //必须是字符串类型 才作处理
+                    //Bắt buộc phải là kiểu chuỗi mới xử lý
                     field.setAccessible(true);
                     String realValue = (String) field.get(obj);
                     if(realValue==null || "".equals(realValue)){
@@ -84,11 +84,11 @@ public class SensitiveInfoUtil {
                     }
                     SensitiveField sf = field.getAnnotation(SensitiveField.class);
                     if(isEncode==true){
-                        //加密
+                        //Mã hóa
                         String value = SensitiveInfoUtil.getEncodeData(realValue,  sf.type());
                         field.set(obj, value);
                     }else{
-                        //解密只处理 encode类型的
+                        //Giải mã chỉ xử lý loại encode
                         if(sf.type().equals(SensitiveEnum.ENCODE)){
                             String value = SensitiveInfoUtil.getDecodeData(realValue);
                             field.set(obj, value);
@@ -98,15 +98,15 @@ public class SensitiveInfoUtil {
             }
         }
         //long endTime=System.currentTimeMillis();
-        //log.info((isEncode ? "加密操作，" : "解密操作，") + "当前程序耗时：" + (endTime - startTime) + "ms");
+        //log.info((isEncode ? "Thao tác mã hóa," : "Thao tác giải mã,") + "Thời gian chạy chương trình hiện tại:" + (endTime - startTime) + "ms");
         return obj;
     }
 
     /**
-     * 处理 List<实体>
+     * Xử lý List<Entity>
      * @param obj
      * @param entity
-     * @param isEncode（true: 加密操作 / false:解密操作）
+     * @param isEncode（true: Thao tác mã hóa / false:Thao tác giải mã)
      */
     public static void handleList(Object obj, Class entity, boolean isEncode){
         List list = (List)obj;
@@ -127,7 +127,7 @@ public class SensitiveInfoUtil {
 
 
     /**
-     * 处理数据 获取解密后的数据
+     * Xử lý dữ liệu: Lấy dữ liệu sau khi giải mã
      * @param data
      * @return
      */
@@ -136,9 +136,9 @@ public class SensitiveInfoUtil {
         try {
             result = AesEncryptUtil.desEncrypt(data);
         } catch (Exception exception) {
-            log.debug("数据解密错误，原数据:"+data);
+            log.debug("Lỗi giải mã dữ liệu, dữ liệu gốc:"+data);
         }
-        //解决debug模式下，加解密失效导致中文被解密变成空的问题
+        //Khắc phục vấn đề ở chế độ debug: mã hóa/giải mã không hiệu lực khiến tiếng Trung bị giải mã thành rỗng
         if(oConvertUtils.isEmpty(result) && oConvertUtils.isNotEmpty(data)){
             result = data;
         }
@@ -146,10 +146,10 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * 处理数据 获取加密后的数据 或是格式化后的数据
-     * @param data 字符串
-     * @param sensitiveEnum 类型
-     * @return 处理后的字符串
+     * Xử lý dữ liệu: Lấy dữ liệu sau khi mã hóa hoặc dữ liệu sau khi định dạng
+     * @param data Chuỗi
+     * @param sensitiveEnum Loại
+     * @return Chuỗi sau khi xử lý
      */
     public static String getEncodeData(String data, SensitiveEnum sensitiveEnum){
         String result;
@@ -158,7 +158,7 @@ public class SensitiveInfoUtil {
                 try {
                     result = AesEncryptUtil.encrypt(data);
                 } catch (Exception exception) {
-                    log.error("数据加密错误", exception.getMessage());
+                    log.error("Lỗi mã hóa dữ liệu", exception.getMessage());
                     result = data;
                 }
                 break;
@@ -194,9 +194,9 @@ public class SensitiveInfoUtil {
 
 
     /**
-     * [中文姓名] 只显示第一个汉字，其他隐藏为2个星号
-     * @param fullName 全名
-     * @return <例子：李**>
+     * [Họ tên tiếng Trung] Chỉ hiển thị ký tự Hán đầu tiên, các ký tự còn lại ẩn thành 2 dấu sao
+     * @param fullName Họ tên đầy đủ
+     * @return <Ví dụ: Lý**>
      */
     public static String chineseName(String fullName) {
         if (oConvertUtils.isEmpty(fullName)) {
@@ -206,10 +206,10 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * [中文姓名] 只显示第一个汉字，其他隐藏为2个星号
-     * @param familyName 姓
-     * @param firstName 名
-     * @return <例子：李**>
+     * [Họ tên tiếng Trung] Chỉ hiển thị ký tự Hán đầu tiên, các ký tự còn lại ẩn thành 2 dấu sao
+     * @param familyName Họ
+     * @param firstName Tên
+     * @return <Ví dụ: Lý**>
      */
     public static String chineseName(String familyName, String firstName) {
         if (oConvertUtils.isEmpty(familyName) || oConvertUtils.isEmpty(firstName)) {
@@ -219,9 +219,9 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * [身份证号] 显示最后四位，其他隐藏。共计18位或者15位。
-     * @param id 身份证号
-     * @return <例子：*************5762>
+     * [Số chứng minh nhân dân] Hiển thị bốn số cuối, các số khác ẩn đi. Tổng cộng 18 hoặc 15 số.
+     * @param id Số chứng minh nhân dân
+     * @return <Ví dụ:*************5762>
      */
     public static String idCardNum(String id) {
         if (oConvertUtils.isEmpty(id)) {
@@ -232,9 +232,9 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * [固定电话] 后四位，其他隐藏
-     * @param num 固定电话
-     * @return <例子：****1234>
+     * [Điện thoại cố định] Bốn số cuối, các số khác ẩn đi
+     * @param num Điện thoại cố định
+     * @return <Ví dụ:****1234>
      */
     public static String fixedPhone(String num) {
         if (oConvertUtils.isEmpty(num)) {
@@ -244,9 +244,9 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * [手机号码] 前三位，后四位，其他隐藏
-     * @param num 手机号码
-     * @return <例子:138******1234>
+     * [Số điện thoại] Ba số đầu, bốn số cuối, các số khác ẩn đi
+     * @param num Số điện thoại
+     * @return <Ví dụ:138******1234>
      */
     public static String mobilePhone(String num) {
         if (oConvertUtils.isEmpty(num)) {
@@ -260,10 +260,10 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * [地址] 只显示到地区，不显示详细地址；我们要对个人信息增强保护
-     * @param address 地址
-     * @param sensitiveSize 敏感信息长度
-     * @return <例子：北京市海淀区****>
+     * [Địa chỉ] Chỉ hiển thị đến khu vực, không hiển thị địa chỉ chi tiết; chúng ta cần tăng cường bảo vệ thông tin cá nhân
+     * @param address Địa chỉ
+     * @param sensitiveSize Độ dài thông tin nhạy cảm
+     * @return <Ví dụ:北京市海淀区****>
      */
     public static String address(String address, int sensitiveSize) {
         if (oConvertUtils.isEmpty(address)) {
@@ -277,9 +277,9 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * [电子邮箱] 邮箱前缀仅显示第一个字母，前缀其他隐藏，用星号代替，@及后面的地址显示
-     * @param email 电子邮箱
-     * @return <例子:g**@163.com>
+     * [Email] Tiền tố email chỉ hiển thị chữ cái đầu tiên, các ký tự khác của tiền tố ẩn đi và thay bằng dấu sao,@và địa chỉ phía sau dấu @ vẫn hiển thị
+     * @param email Email
+     * @return <Ví dụ:g**@163.com>
      */
     public static String email(String email) {
         if (oConvertUtils.isEmpty(email)) {
@@ -296,9 +296,9 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * [银行卡号] 前六位，后四位，其他用星号隐藏每位1个星号
-     * @param cardNum 银行卡号
-     * @return <例子:6222600**********1234>
+     * [Số thẻ ngân hàng] Sáu số đầu, bốn số cuối, các số khác ẩn bằng dấu sao, mỗi số một dấu sao
+     * @param cardNum Số thẻ ngân hàng
+     * @return <Ví dụ:6222600**********1234>
      */
     public static String bankCard(String cardNum) {
         if (oConvertUtils.isEmpty(cardNum)) {
@@ -308,9 +308,9 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * [公司开户银行联号] 公司开户银行联行号,显示前两位，其他用星号隐藏，每位1个星号
-     * @param code 公司开户银行联号
-     * @return <例子:12********>
+     * [Số liên ngân hàng của tài khoản công ty] Số liên ngân hàng của ngân hàng mở tài khoản công ty,Hiển thị hai số đầu, các số khác ẩn bằng dấu sao, mỗi số một dấu sao
+     * @param code Số liên ngân hàng của tài khoản công ty
+     * @return <Ví dụ:12********>
      */
     public static String cnapsCode(String code) {
         if (oConvertUtils.isEmpty(code)) {
@@ -321,10 +321,10 @@ public class SensitiveInfoUtil {
 
 
     /**
-     * 将右边的格式化成*
-     * @param str 字符串
-     * @param reservedLength 保留长度
-     * @return 格式化后的字符串
+     * Định dạng phía bên phải thành*
+     * @param str Chuỗi
+     * @param reservedLength Độ dài giữ lại
+     * @return Chuỗi sau khi định dạng
      */
     public static String formatRight(String str, int reservedLength){
         String name = str.substring(0, reservedLength);
@@ -333,10 +333,10 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * 将左边的格式化成*
-     * @param str 字符串
-     * @param reservedLength 保留长度
-     * @return 格式化后的字符串
+     * Định dạng phía bên trái thành*
+     * @param str Chuỗi
+     * @param reservedLength Độ dài giữ lại
+     * @return Chuỗi sau khi định dạng
      */
     public static String formatLeft(String str, int reservedLength){
         int len = str.length();
@@ -346,11 +346,11 @@ public class SensitiveInfoUtil {
     }
 
     /**
-     * 将中间的格式化成*
-     * @param str 字符串
-     * @param beginLen 开始保留长度
-     * @param endLen 结尾保留长度
-     * @return 格式化后的字符串
+     * Định dạng phần ở giữa thành*
+     * @param str Chuỗi
+     * @param beginLen Độ dài giữ lại ở đầu
+     * @param endLen Độ dài giữ lại ở cuối
+     * @return Chuỗi sau khi định dạng
      */
     public static String formatBetween(String str, int beginLen, int endLen){
         int len = str.length();

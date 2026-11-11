@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 /**
- * 关于 ElasticSearch 的一些方法（创建索引、添加数据、查询等）
+ * Một số phương thức về ElasticSearch (tạo chỉ mục, thêm dữ liệu, tìm kiếm, v.v.)
  *
  * @author sunjianlei
  */
@@ -25,13 +25,13 @@ import java.util.*;
 @Component
 @ConditionalOnProperty(prefix = "jeecg.elasticsearch", name = "cluster-nodes")
 public class JeecgElasticsearchTemplate {
-    /** es服务地址 */
+    /** es Địa chỉ dịch vụ */
     private String baseUrl;
     private final String FORMAT_JSON = "format=json";
-    /** Elasticsearch 的版本号 */
+    /** Elasticsearch Số phiên bản của */
     private String version = null;
 
-    /**ElasticSearch 最大可返回条目数*/
+    /**ElasticSearch Số mục tối đa có thể trả về*/
     public static final int ES_MAX_SIZE = 10000;
 
     /**es7*/
@@ -44,22 +44,22 @@ public class JeecgElasticsearchTemplate {
         log.debug("JeecgElasticsearchTemplate BaseURL：" + baseUrl);
         if (StringUtils.isNotEmpty(baseUrl)) {
             this.baseUrl = baseUrl;
-            // 验证配置的ES地址是否有效
+            // Kiểm tra xem địa chỉ ES đã cấu hình có hợp lệ không
             if (checkEnabled) {
                 try {
                     this.getElasticsearchVersion();
-                    log.info("ElasticSearch 服务连接成功");
+                    log.info("ElasticSearch Kết nối dịch vụ thành công");
                     log.info("ElasticSearch version: " + this.version);
                 } catch (Exception e) {
                     this.version = "";
-                    log.warn("ElasticSearch 服务连接失败，原因：配置未通过。可能是BaseURL未配置或配置有误，也可能是Elasticsearch服务未启动。接下来将会拒绝执行任何方法！");
+                    log.warn("ElasticSearch Kết nối dịch vụ thất bại, nguyên nhân: cấu hình chưa đạt. Có thể BaseURL chưa được cấu hình hoặc cấu hình sai, cũng có thể dịch vụ Elasticsearch chưa khởi động. Tiếp theo sẽ từ chối thực thi mọi phương thức!");
                 }
             }
         }
     }
 
     /**
-     * 获取 Elasticsearch 的版本号信息，失败返回null
+     * Lấy thông tin số phiên bản của Elasticsearch, thất bại trả về null
      */
     private void getElasticsearchVersion() {
         if (this.version == null) {
@@ -87,7 +87,7 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * cat 查询ElasticSearch系统数据，返回json
+     * cat Truy vấn dữ liệu hệ thống ElasticSearch, trả về json
      */
     private <T> ResponseEntity<T> cat(String urlAfter, Class<T> responseType) {
         String url = this.getBaseUrl().append("/_cat").append(urlAfter).append("?").append(FORMAT_JSON).toString();
@@ -95,9 +95,9 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 查询所有索引
+     * Tìm kiếm tất cả các chỉ mục
      * <p>
-     * 查询地址：GET http://{baseUrl}/_cat/indices
+     * Địa chỉ truy vấn:GET http://{baseUrl}/_cat/indices
      */
     public JSONArray getIndices() {
         return getIndices(null);
@@ -105,9 +105,9 @@ public class JeecgElasticsearchTemplate {
 
 
     /**
-     * 查询单个索引
+     * Tìm kiếm một chỉ mục
      * <p>
-     * 查询地址：GET http://{baseUrl}/_cat/indices/{indexName}
+     * Địa chỉ truy vấn:GET http://{baseUrl}/_cat/indices/{indexName}
      */
     public JSONArray getIndices(String indexName) {
         StringBuilder urlAfter = new StringBuilder("/indices");
@@ -118,7 +118,7 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 索引是否存在
+     * Chỉ mục có tồn tại không
      */
     public boolean indexExists(String indexName) {
         try {
@@ -134,13 +134,13 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 根据ID获取索引数据，未查询到返回null
+     * Lấy dữ liệu chỉ mục theo ID, không tìm thấy thì trả về null
      * <p>
-     * 查询地址：GET http://{baseUrl}/{indexName}/{typeName}/{dataId}
+     * Địa chỉ truy vấn:GET http://{baseUrl}/{indexName}/{typeName}/{dataId}
      *
-     * @param indexName 索引名称
-     * @param typeName  type，一个任意字符串，用于分类
-     * @param dataId    数据id
+     * @param indexName Tên chỉ mục
+     * @param typeName  type, một chuỗi tùy ý, dùng để phân loại
+     * @param dataId    Dữ liệu id
      * @return
      */
     public JSONObject getDataById(String indexName, String typeName, String dataId) {
@@ -156,14 +156,14 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 创建索引
+     * Tạo chỉ mục
      * <p>
-     * 查询地址：PUT http://{baseUrl}/{indexName}
+     * Địa chỉ truy vấn:PUT http://{baseUrl}/{indexName}
      */
     public boolean createIndex(String indexName) {
         String url = this.getBaseUrl(indexName).toString();
 
-        /* 返回结果 （仅供参考）
+        /* Kết quả trả về (chỉ để tham khảo)
         "createIndex": {
             "shards_acknowledged": true,
             "acknowledged": true,
@@ -174,7 +174,7 @@ public class JeecgElasticsearchTemplate {
             return RestUtil.put(url).getBoolean("acknowledged");
         } catch (org.springframework.web.client.HttpClientErrorException ex) {
             if (HttpStatus.BAD_REQUEST == ex.getStatusCode()) {
-                log.warn("索引创建失败：" + indexName + " 已存在，无需再创建");
+                log.warn("Tạo chỉ mục thất bại:" + indexName + " đã tồn tại, không cần tạo lại");
             } else {
                 ex.printStackTrace();
             }
@@ -183,9 +183,9 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 删除索引
+     * Xóa chỉ mục
      * <p>
-     * 查询地址：DELETE http://{baseUrl}/{indexName}
+     * Địa chỉ truy vấn:DELETE http://{baseUrl}/{indexName}
      */
     public boolean removeIndex(String indexName) {
         String url = this.getBaseUrl(indexName).toString();
@@ -193,7 +193,7 @@ public class JeecgElasticsearchTemplate {
             return RestUtil.delete(url).getBoolean("acknowledged");
         } catch (org.springframework.web.client.HttpClientErrorException ex) {
             if (HttpStatus.NOT_FOUND == ex.getStatusCode()) {
-                log.warn("索引删除失败：" + indexName + " 不存在，无需删除");
+                log.warn("Xóa chỉ mục thất bại:" + indexName + " không tồn tại, không cần xóa");
             } else {
                 ex.printStackTrace();
             }
@@ -202,34 +202,34 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 获取索引字段映射（可获取字段类型）
+     * Lấy ánh xạ trường của chỉ mục (có thể lấy loại trường)
      * <p>
      *
-     * @param indexName 索引名称
-     * @param typeName  分类名称
+     * @param indexName Tên chỉ mục
+     * @param typeName  Tên phân loại
      * @return
      */
     public JSONObject getIndexMapping(String indexName, String typeName) {
         String url = this.getBaseUrl(indexName, typeName).append("/_mapping?").append(FORMAT_JSON).toString();
-        // 针对 es 7.x 版本做兼容
+        // Đối với es 7.x tương thích với phiên bản
         this.getElasticsearchVersion();
         if (oConvertUtils.isNotEmpty(this.version) && this.version.startsWith(IE_SEVEN)) {
             url += "&include_type_name=true";
         }
         log.info("getIndexMapping-url:" + url);
         /*
-         * 参考返回JSON结构：
+         * Tham khảo cấu trúc JSON trả về:
          *
          *{
-         *    // 索引名称
+         *    // Tên chỉ mục
          *    "[indexName]": {
          *        "mappings": {
-         *            // 分类名称
+         *            // Tên phân loại
          *            "[typeName]": {
          *                "properties": {
-         *                    // 字段名
+         *                    // Tên trường
          *                    "input_number": {
-         *                        // 字段类型
+         *                        // Loại trường
          *                        "type": "long"
          *                    },
          *                    "input_string": {
@@ -259,7 +259,7 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 获取索引字段映射，返回Java实体类
+     * Lấy ánh xạ trường của chỉ mục, trả về lớp thực thể Java
      *
      * @param indexName
      * @param typeName
@@ -271,12 +271,12 @@ public class JeecgElasticsearchTemplate {
         if (mapping == null) {
             return map;
         }
-        // 获取字段属性
+        // Lấy thuộc tính trường
         JSONObject properties = mapping.getJSONObject(indexName)
                 .getJSONObject("mappings")
                 .getJSONObject(typeName)
                 .getJSONObject("properties");
-        // 封装成 java类型
+        // Đóng gói thành kiểu java
         for (String key : properties.keySet()) {
             T entity = properties.getJSONObject(key).toJavaObject(clazz);
             map.put(key, entity);
@@ -285,33 +285,33 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 保存数据，详见：saveOrUpdate
+     * Lưu dữ liệu, xem chi tiết:saveOrUpdate
      */
     public boolean save(String indexName, String typeName, String dataId, JSONObject data) {
         return this.saveOrUpdate(indexName, typeName, dataId, data);
     }
 
     /**
-     * 更新数据，详见：saveOrUpdate
+     * Cập nhật dữ liệu, xem chi tiết:saveOrUpdate
      */
     public boolean update(String indexName, String typeName, String dataId, JSONObject data) {
         return this.saveOrUpdate(indexName, typeName, dataId, data);
     }
 
     /**
-     * 保存或修改索引数据
+     * Lưu hoặc sửa dữ liệu chỉ mục
      * <p>
-     * 查询地址：PUT http://{baseUrl}/{indexName}/{typeName}/{dataId}
+     * Địa chỉ truy vấn:PUT http://{baseUrl}/{indexName}/{typeName}/{dataId}
      *
-     * @param indexName 索引名称
-     * @param typeName  type，一个任意字符串，用于分类
-     * @param dataId    数据id
-     * @param data      要存储的数据
+     * @param indexName Tên chỉ mục
+     * @param typeName  type, một chuỗi tùy ý, dùng để phân loại
+     * @param dataId    Dữ liệu id
+     * @param data      Dữ liệu cần lưu trữ
      * @return
      */
     public boolean saveOrUpdate(String indexName, String typeName, String dataId, JSONObject data) {
         String url = this.getBaseUrl(indexName, typeName).append("/").append(dataId).append("?refresh=wait_for").toString();
-        /* 返回结果（仅供参考）
+        /* Kết quả trả về (chỉ để tham khảo)
        "createIndexA2": {
             "result": "created",
             "_shards": {
@@ -329,19 +329,19 @@ public class JeecgElasticsearchTemplate {
          */
 
         try {
-            // 去掉 data 中为空的值
+            // Loại bỏ các giá trị rỗng trong data
             Set<String> keys = data.keySet();
             List<String> emptyKeys = new ArrayList<>(keys.size());
             for (String key : keys) {
                 String value = data.getString(key);
-                //1、剔除空值
+                //1, loại bỏ giá trị rỗng
                 if (oConvertUtils.isEmpty(value) || "[]".equals(value)) {
                     emptyKeys.add(key);
                 }
-                //2、剔除上传控件值(会导致ES同步失败，报异常failed to parse field [ge_pic] of type [text] )
+                //2, loại bỏ giá trị của control tải lên(sẽ khiến đồng bộ ES thất bại và báo lỗi failed to parse field [ge_pic] of type [text] )
                 if (oConvertUtils.isNotEmpty(value) && value.indexOf("[{")!=-1) {
                     emptyKeys.add(key);
-                    log.info("-------剔除上传控件字段------------key: "+ key);
+                    log.info("-------Loại bỏ trường control tải lên------------key: "+ key);
                 }
             }
             for (String key : emptyKeys) {
@@ -355,17 +355,17 @@ public class JeecgElasticsearchTemplate {
             return "created".equals(result) || "updated".equals(result);
         } catch (Exception e) {
             log.error(e.getMessage() + "\n-- url: " + url + "\n-- data: " + data.toJSONString());
-            //TODO 打印接口返回异常json
+            //TODO In lỗi trả về của API json
             return false;
         }
     }
 
     /**
-     * 批量保存数据
+     * Lưu hàng loạt dữ liệu
      *
-     * @param indexName 索引名称
-     * @param typeName  type，一个任意字符串，用于分类
-     * @param dataList  要存储的数据数组，每行数据必须包含id
+     * @param indexName Tên chỉ mục
+     * @param typeName  type, một chuỗi tùy ý, dùng để phân loại
+     * @param dataList  Mảng dữ liệu cần lưu trữ, mỗi dòng dữ liệu phải chứa id
      * @return
      */
     public boolean saveBatch(String indexName, String typeName, JSONArray dataList) {
@@ -374,7 +374,7 @@ public class JeecgElasticsearchTemplate {
         for (int i = 0; i < dataList.size(); i++) {
             JSONObject data = dataList.getJSONObject(i);
             String id = data.getString("id");
-            // 该行的操作
+            // Thao tác của dòng đó
             // {"create": {"_id":"${id}", "_index": "${indexName}", "_type": "${typeName}"}}
             JSONObject action = new JSONObject();
             JSONObject actionInfo = new JSONObject();
@@ -383,7 +383,7 @@ public class JeecgElasticsearchTemplate {
             actionInfo.put("_type", typeName);
             action.put("create", actionInfo);
             bodySb.append(action.toJSONString()).append("\n");
-            // 该行的数据
+            // Dữ liệu của dòng đó
             data.remove("id");
             bodySb.append(data.toJSONString()).append("\n");
         }
@@ -394,13 +394,13 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * 删除索引数据
+     * Xóa dữ liệu chỉ mục
      * <p>
-     * 请求地址：DELETE http://{baseUrl}/{indexName}/{typeName}/{dataId}
+     * Địa chỉ yêu cầu:DELETE http://{baseUrl}/{indexName}/{typeName}/{dataId}
      */
     public boolean delete(String indexName, String typeName, String dataId) {
         String url = this.getBaseUrl(indexName, typeName).append("/").append(dataId).toString();
-        /* 返回结果（仅供参考）
+        /* Kết quả trả về (chỉ để tham khảo)
         {
             "_index": "es_demo",
             "_type": "docs",
@@ -428,12 +428,12 @@ public class JeecgElasticsearchTemplate {
     }
 
 
-    /* = = = 以下关于查询和查询条件的方法 = = =*/
+    /* = = = Các phương thức sau đây về tìm kiếm và điều kiện tìm kiếm = = =*/
 
     /**
-     * 查询数据
+     * Truy vấn dữ liệu
      * <p>
-     * 请求地址：POST http://{baseUrl}/{indexName}/{typeName}/_search
+     * Địa chỉ yêu cầu:POST http://{baseUrl}/{indexName}/{typeName}/_search
      */
     public JSONObject search(String indexName, String typeName, JSONObject queryObject) {
         String url = this.getBaseUrl(indexName, typeName).append("/_search").toString();
@@ -445,10 +445,10 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * @param source （源滤波器）指定返回的字段，传null返回所有字段
+     * @param source (Bộ lọc nguồn) chỉ định các trường trả về, truyền null sẽ trả về tất cả các trường
      * @param query
-     * @param from    从第几条数据开始
-     * @param size    返回条目数
+     * @param from    Bắt đầu từ bản ghi dữ liệu thứ mấy
+     * @param size    Số mục trả về
      * @return { "query": query }
      */
     public JSONObject buildQuery(List<String> source, JSONObject query, int from, int size) {
@@ -482,8 +482,8 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * @param field 要查询的字段
-     * @param args  查询参数，参考： *哈哈* OR *哒* NOT *呵* OR *啊*
+     * @param field Trường cần tìm kiếm
+     * @param args  Tham số tìm kiếm, tham khảo: *哈哈* OR *哒* NOT *呵* OR *啊*
      * @return
      */
     public JSONObject buildQueryString(String field, String... args) {
@@ -512,11 +512,11 @@ public class JeecgElasticsearchTemplate {
     }
 
     /**
-     * @param field      查询字段
-     * @param min        最小值
-     * @param max        最大值
-     * @param containMin 范围内是否包含最小值
-     * @param containMax 范围内是否包含最大值
+     * @param field      Trường tìm kiếm
+     * @param min        Giá trị nhỏ nhất
+     * @param max        Giá trị lớn nhất
+     * @param containMin Trong phạm vi có bao gồm giá trị nhỏ nhất không
+     * @param containMax Trong phạm vi có bao gồm giá trị lớn nhất không
      * @return { "range" : { field : { 『 "gt『e』?containMin" : min 』?min!=null , 『 "lt『e』?containMax" : max 』}} }
      */
     public JSONObject buildRangeQuery(String field, Object min, Object max, boolean containMin, boolean containMax) {

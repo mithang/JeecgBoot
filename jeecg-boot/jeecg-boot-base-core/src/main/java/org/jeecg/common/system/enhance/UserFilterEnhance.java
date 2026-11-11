@@ -3,15 +3,15 @@ package org.jeecg.common.system.enhance;
 import java.util.List;
 
 /**
- * 用户增强
+ * Tăng cường người dùng
  */
 public interface UserFilterEnhance {
     
     /**
-     * 获取用户id
-     * @param loginUserId 当前登录的用户id
+     * Lấy người dùng id
+     * @param loginUserId Người dùng hiện đang đăng nhập id
      * 
-     * @return List<String> 返回多个用户id
+     * @return List<String> Trả về nhiều người dùng id
      */
     default List<String> getUserIds(String loginUserId) {
         return null;

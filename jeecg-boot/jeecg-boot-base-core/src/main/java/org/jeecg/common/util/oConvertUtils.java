@@ -61,7 +61,7 @@ public class oConvertUtils {
 
 	
 	/**
-	 * 返回decode解密字符串
+	 * Trả về chuỗi đã giải mã decode
 	 * 
 	 * @param inStr
 	 * @return
@@ -74,7 +74,7 @@ public class oConvertUtils {
 		try {
 			inStr = URLDecoder.decode(inStr, "UTF-8");
 		} catch (Exception e) {
-			// 解决：URLDecoder: Illegal hex characters in escape (%) pattern - For input string: "自动"
+			// Giải quyết:URLDecoder: Illegal hex characters in escape (%) pattern - For input string: "Tự động"
 			//e.printStackTrace();
 		}
 		return inStr;
@@ -245,7 +245,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 转义成Unicode编码
+	 * Escape thành mã Unicode
 	 * @param s
 	 * @return
 	 */
@@ -269,7 +269,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 返回常规字符串（只保留字符串中的数字、字母、中文）
+	 * Trả về chuỗi thông thường (chỉ giữ lại chữ số, chữ cái và tiếng Trung trong chuỗi)
 	 *
 	 * @param input
 	 * @return
@@ -306,7 +306,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 获取本机IP
+	 * Lấy máy cục bộ IP
 	 */
 	public static String getIp() {
 		String ip = null;
@@ -321,21 +321,21 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断一个类是否为基本数据类型。
+	 * Phán đoán một lớp có phải kiểu dữ liệu cơ bản không.
 	 * 
 	 * @param clazz
-	 *            要判断的类。
-	 * @return true 表示为基本数据类型。
+	 *            Lớp cần phán đoán.
+	 * @return true biểu thị là kiểu dữ liệu cơ bản.
 	 */
 	private static boolean isBaseDataType(Class clazz) throws Exception {
 		return (clazz.equals(String.class) || clazz.equals(Integer.class) || clazz.equals(Byte.class) || clazz.equals(Long.class) || clazz.equals(Double.class) || clazz.equals(Float.class) || clazz.equals(Character.class) || clazz.equals(Short.class) || clazz.equals(BigDecimal.class) || clazz.equals(BigInteger.class) || clazz.equals(Boolean.class) || clazz.equals(Date.class) || clazz.isPrimitive());
 	}
 
 	/**
-	 * 解码base64
+	 * Giải mã base64
 	 *
-	 * @param base64Str base64字符串
-	 * @return 被加密后的字符串
+	 * @param base64Str base64 Chuỗi
+	 * @return Chuỗi sau khi được mã hoá
 	 */
 	public static String decodeBase64Str(String base64Str) {
 		byte[] byteContent = Base64.decodeBase64(base64Str);
@@ -367,31 +367,31 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * @return 本机IP
+	 * @return Máy local IP
 	 * @throws SocketException
 	 */
 	public static String getRealIp() throws SocketException {
-        // 本地IP，如果没有配置外网IP则返回它
+        // IP cục bộ, nếu chưa cấu hình IP mạng ngoài thì trả về IP này
 		String localip = null;
-        // 外网IP
+        // Mạng ngoài IP
 		String netip = null;
 
 		Enumeration<NetworkInterface> netInterfaces = NetworkInterface.getNetworkInterfaces();
 		InetAddress ip = null;
-        // 是否找到外网IP
+        // Có tìm thấy mạng ngoài không IP
 		boolean finded = false;
 		while (netInterfaces.hasMoreElements() && !finded) {
 			NetworkInterface ni = netInterfaces.nextElement();
 			Enumeration<InetAddress> address = ni.getInetAddresses();
 			while (address.hasMoreElements()) {
 				ip = address.nextElement();
-                // 外网IP
+                // Mạng ngoài IP
 				if (!ip.isSiteLocalAddress() && !ip.isLoopbackAddress() && ip.getHostAddress().indexOf(":") == -1) {
 					netip = ip.getHostAddress();
 					finded = true;
 					break;
 				} else if (ip.isSiteLocalAddress() && !ip.isLoopbackAddress() && ip.getHostAddress().indexOf(":") == -1) {
-                    // 内网IP
+                    // Mạng nội bộ IP
 				    localip = ip.getHostAddress();
 				}
 			}
@@ -405,7 +405,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * java去除字符串中的空格、回车、换行符、制表符
+	 * java Loại bỏ khoảng trắng, ký tự carriage return, ký tự xuống dòng và ký tự tab trong chuỗi
 	 * 
 	 * @param str
 	 * @return
@@ -423,7 +423,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断元素是否在数组内
+	 * Kiểm tra xem phần tử có nằm trong mảng không
 	 * 
 	 * @param child
 	 * @param all
@@ -443,7 +443,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断元素是否在数组内
+	 * Kiểm tra xem phần tử có nằm trong mảng không
 	 *
 	 * @param childArray
 	 * @param all
@@ -462,7 +462,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断元素是否在数组内
+	 * Kiểm tra xem phần tử có nằm trong mảng không
 	 *
 	 * @param childArray
 	 * @param all
@@ -483,7 +483,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断字符串是否为JSON格式
+	 * Phán đoán chuỗi có phải định dạng JSON không
 	 * @param str
 	 * @return
 	 */
@@ -500,14 +500,14 @@ public class oConvertUtils {
 	}
 	
 	/**
-	 * 获取Map对象
+	 * Lấy đối tượng Map
 	 */
 	public static Map<Object, Object> getHashMap() {
 		return new HashMap<>(5);
 	}
 
 	/**
-	 * SET转换MAP
+	 * SET Chuyển đổi MAP
 	 * 
 	 * @param str
 	 * @return
@@ -526,7 +526,7 @@ public class oConvertUtils {
 		boolean isInnerIp = false;
 		long ipNum = getIpNum(ipAddress);
 		/**
-		 * 私有IP：A类 10.0.0.0-10.255.255.255 B类 172.16.0.0-172.31.255.255 C类 192.168.0.0-192.168.255.255 当然，还有127这个网段是环回地址
+		 * IP riêng: Loại A 10.0.0.0-10.255.255.255 B Lớp 172.16.0.0-172.31.255.255 C Lớp 192.168.0.0-192.168.255.255 Tất nhiên, còn dải mạng 127 là địa chỉ loopback
 		 **/
 		long aBegin = getIpNum("10.0.0.0");
 		long aEnd = getIpNum("10.255.255.255");
@@ -555,38 +555,38 @@ public class oConvertUtils {
 	}
 	
 	/**
-	 * 将下划线大写方式命名的字符串转换为驼峰式。
-	 * 如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。</br>
-	 * 例如：hello_world->helloWorld
+	 * Chuyển đổi chuỗi được đặt tên theo kiểu gạch dưới viết hoa thành kiểu camelCase.
+	 * Nếu chuỗi được đặt tên theo kiểu gạch dưới viết hoa trước khi chuyển đổi rỗng, trả về chuỗi rỗng.</br>
+	 * Ví dụ:hello_world->helloWorld
 	 * 
 	 * @param name
-	 *            转换前的下划线大写方式命名的字符串
-	 * @return 转换后的驼峰式命名的字符串
+	 *            Chuỗi được đặt tên theo kiểu gạch dưới viết hoa trước khi chuyển đổi
+	 * @return Chuỗi được đặt tên theo kiểu camelCase sau khi chuyển đổi
 	 */
 	public static String camelName(String name) {
 		StringBuilder result = new StringBuilder();
-		// 快速检查
+		// Kiểm tra nhanh
 		if (name == null || name.isEmpty()) {
-			// 没必要转换
+			// Không cần chuyển đổi
 			return "";
 		} else if (!name.contains(SymbolConstant.UNDERLINE)) {
-			// 不含下划线，仅将首字母小写
-			// 代码逻辑说明: TASK #2500 【代码生成器】代码生成器开发一通用模板生成功能
+			// Không chứa dấu gạch dưới, chỉ viết thường chữ cái đầu
+			// Giải thích logic mã: TASK #2500 【Trình tạo mã】 Chức năng tạo mẫu chung trong phát triển trình tạo mã
 			return name.substring(0, 1).toLowerCase() + name.substring(1).toLowerCase();
 		}
-		// 用下划线将原始字符串分割
+		// Tách chuỗi gốc bằng dấu gạch dưới
 		String[] camels = name.split("_");
 		for (String camel : camels) {
-			// 跳过原始字符串中开头、结尾的下换线或双重下划线
+			// Bỏ qua dấu gạch dưới ở đầu, cuối chuỗi gốc hoặc dấu gạch dưới kép
 			if (camel.isEmpty()) {
 				continue;
 			}
-			// 处理真正的驼峰片段
+			// Xử lý đoạn camelCase thực sự
 			if (result.length() == 0) {
-				// 第一个驼峰片段，全部字母都小写
+				// Đoạn camelCase đầu tiên, tất cả chữ cái đều viết thường
 				result.append(camel.toLowerCase());
 			} else {
-				// 其他的驼峰片段，首字母大写
+				// Các đoạn camelCase khác, viết hoa chữ cái đầu
 				result.append(camel.substring(0, 1).toUpperCase());
 				result.append(camel.substring(1).toLowerCase());
 			}
@@ -595,13 +595,13 @@ public class oConvertUtils {
 	}
 	
 	/**
-	 * 将下划线大写方式命名的字符串转换为驼峰式。
-	 * 如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。</br>
-	 * 例如：hello_world,test_id->helloWorld,testId
+	 * Chuyển đổi chuỗi được đặt tên theo kiểu gạch dưới viết hoa thành kiểu camelCase.
+	 * Nếu chuỗi được đặt tên theo kiểu gạch dưới viết hoa trước khi chuyển đổi rỗng, trả về chuỗi rỗng.</br>
+	 * Ví dụ:hello_world,test_id->helloWorld,testId
 	 * 
 	 * @param name
-	 *            转换前的下划线大写方式命名的字符串
-	 * @return 转换后的驼峰式命名的字符串
+	 *            Chuỗi được đặt tên theo kiểu gạch dưới viết hoa trước khi chuyển đổi
+	 * @return Chuỗi được đặt tên theo kiểu camelCase sau khi chuyển đổi
 	 */
 	public static String camelNames(String names) {
 		if(names==null||"".equals(names)){
@@ -618,32 +618,32 @@ public class oConvertUtils {
 	}
 	
 	/**
-	 * 将下划线大写方式命名的字符串转换为驼峰式。(首字母写)
-	 * 如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。</br>
-	 * 例如：hello_world->HelloWorld
+	 * Chuyển đổi chuỗi được đặt tên theo kiểu gạch dưới viết hoa thành kiểu camelCase.(chữ cái đầu viết thường)
+	 * Nếu chuỗi được đặt tên theo kiểu gạch dưới viết hoa trước khi chuyển đổi rỗng, trả về chuỗi rỗng.</br>
+	 * Ví dụ:hello_world->HelloWorld
 	 * 
 	 * @param name
-	 *            转换前的下划线大写方式命名的字符串
-	 * @return 转换后的驼峰式命名的字符串
+	 *            Chuỗi được đặt tên theo kiểu gạch dưới viết hoa trước khi chuyển đổi
+	 * @return Chuỗi được đặt tên theo kiểu camelCase sau khi chuyển đổi
 	 */
 	public static String camelNameCapFirst(String name) {
 		StringBuilder result = new StringBuilder();
-		// 快速检查
+		// Kiểm tra nhanh
 		if (name == null || name.isEmpty()) {
-			// 没必要转换
+			// Không cần chuyển đổi
 			return "";
 		} else if (!name.contains(SymbolConstant.UNDERLINE)) {
-			// 不含下划线，仅将首字母小写
+			// Không chứa dấu gạch dưới, chỉ viết thường chữ cái đầu
 			return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
 		}
-		// 用下划线将原始字符串分割
+		// Tách chuỗi gốc bằng dấu gạch dưới
 		String[] camels = name.split("_");
 		for (String camel : camels) {
-			// 跳过原始字符串中开头、结尾的下换线或双重下划线
+			// Bỏ qua dấu gạch dưới ở đầu, cuối chuỗi gốc hoặc dấu gạch dưới kép
 			if (camel.isEmpty()) {
 				continue;
 			}
-			// 其他的驼峰片段，首字母大写
+			// Các đoạn camelCase khác, viết hoa chữ cái đầu
 			result.append(camel.substring(0, 1).toUpperCase());
 			result.append(camel.substring(1).toLowerCase());
 		}
@@ -651,7 +651,7 @@ public class oConvertUtils {
 	}
 	
 	/**
-	 * 将驼峰命名转化成下划线
+	 * Chuyển đổi tên camelCase thành dấu gạch dưới
 	 * @param para
 	 * @return
 	 */
@@ -661,9 +661,9 @@ public class oConvertUtils {
         	return para.toLowerCase(); 
         }
         StringBuilder sb=new StringBuilder(para);
-        //定位
+        //Định vị
         int temp=0;
-        //从第三个字符开始 避免命名不规范 
+        //Bắt đầu từ ký tự thứ ba để tránh đặt tên không đúng quy chuẩn 
         for(int i=2;i<para.length();i++){
             if(Character.isUpperCase(para.charAt(i))){
                 sb.insert(i+temp, "_");
@@ -674,8 +674,8 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 随机数
-	 * @param place 定义随机数的位数
+	 * Số ngẫu nhiên
+	 * @param place Định nghĩa số chữ số của số ngẫu nhiên
 	 */
 	public static String randomGen(int place) {
 		String base = "qwertyuioplkjhgfdsazxcvbnmQAZWSXEDCRFVTGBYHNUJMIKLOP0123456789";
@@ -688,7 +688,7 @@ public class oConvertUtils {
 	}
 	
 	/**
-	 * 获取类的所有属性，包括父类
+	 * Lấy tất cả thuộc tính của lớp, bao gồm cả lớp cha
 	 * 
 	 * @param object
 	 * @return
@@ -706,7 +706,7 @@ public class oConvertUtils {
 	}
 	
 	/**
-	  * 将map的key全部转成小写
+	  * Chuyển toàn bộ key của map thành chữ thường
 	 * @param list
 	 * @return
 	 */
@@ -725,7 +725,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 将entityList转换成modelList
+	 * Chuyển entityList thành modelList
 	 * @param fromList
 	 * @param tClass
 	 * @param <F>
@@ -745,7 +745,7 @@ public class oConvertUtils {
 	}
 
 	public static<F,T> T entityToModel(F entity, Class<T> modelClass) {
-		log.debug("entityToModel : Entity属性的值赋值到Model");
+		log.debug("entityToModel : Entity Gán giá trị thuộc tính vào Model");
 		Object model = null;
 		if (entity == null || modelClass ==null) {
 			return null;
@@ -754,16 +754,16 @@ public class oConvertUtils {
 		try {
 			model = modelClass.newInstance();
 		} catch (InstantiationException e) {
-			log.error("entityToModel : 实例化异常", e);
+			log.error("entityToModel : Ngoại lệ khởi tạo (instantiation)", e);
 		} catch (IllegalAccessException e) {
-			log.error("entityToModel : 安全权限异常", e);
+			log.error("entityToModel : Ngoại lệ quyền bảo mật", e);
 		}
 		BeanUtils.copyProperties(entity, model);
 		return (T)model;
 	}
 
 	/**
-	 * 判断 list 是否为空
+	 * Phán đoán list có rỗng không
 	 *
 	 * @param list
 	 * @return true or false
@@ -775,7 +775,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断旧值与新值 是否相等
+	 * Phán đoán giá trị cũ và giá trị mới có bằng nhau không
 	 *
 	 * @param oldVal
 	 * @param newVal
@@ -810,12 +810,12 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 方法描述 判断一个对象是否是一个数组
+	 * Mô tả phương thức: phán đoán một đối tượng có phải là mảng không
 	 *
 	 * @param obj
 	 * @return
 	 * @author yaomy
-	 * @date 2018年2月5日 下午5:03:00
+	 * @date 2018 năm 2 tháng 5 ngày buổi chiều 5:03:00
 	 */
 	public static boolean isArray(Object obj) {
 		if (obj == null) {
@@ -825,7 +825,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 获取集合的大小
+	 * Lấy kích thước của tập hợp
 	 * 
 	 * @param collection
 	 * @return
@@ -835,7 +835,7 @@ public class oConvertUtils {
 	}
 	
 	/**
-	 * 判断两个数组是否相等（数组元素不分顺序）
+	 * Kiểm tra hai mảng có bằng nhau hay không (phần tử mảng không phân biệt thứ tự)
 	 *
 	 * @param oldVal
 	 * @param newVal
@@ -856,8 +856,8 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 比较带逗号的字符串
-	 * QQYUN-5212【简流】按日期触发 多选 人员组件 选择顺序不一致时 不触发，应该是统一问题 包括多选部门组件
+	 * So sánh chuỗi có chứa dấu phẩy
+	 * QQYUN-5212【Quy trình đơn giản】 Khi kích hoạt theo ngày, component chọn nhiều nhân sự có thứ tự chọn không nhất quán thì không kích hoạt; có lẽ là vấn đề thống nhất, bao gồm cả component chọn nhiều phòng ban
 	 * @param oldVal
 	 * @param newVal
 	 * @return
@@ -888,7 +888,7 @@ public class oConvertUtils {
 	}
 	
 	/**
-	 * 判断两个数组是否相等（数组元素不分顺序）
+	 * Kiểm tra hai mảng có bằng nhau hay không (phần tử mảng không phân biệt thứ tự)
 	 *
 	 * @param oldVal
 	 * @param newVal
@@ -917,7 +917,7 @@ public class oConvertUtils {
 //	}
 	
 	/**
-	 * 判断 list 是否不为空
+	 * Phán đoán list có không rỗng không
 	 *
 	 * @param list
 	 * @return true or false
@@ -929,14 +929,14 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 读取静态文本内容
+	 * Đọc nội dung văn bản tĩnh
 	 * @param url
 	 * @return
 	 */
 	public static String readStatic(String url) {
 		String json = "";
 		try {
-			//换个写法，解决springboot读取jar包中文件的问题
+			//Đổi cách viết khác để giải quyết vấn đề Spring Boot đọc file trong gói jar
 			InputStream stream = oConvertUtils.class.getClassLoader().getResourceAsStream(url.replace("classpath:", ""));
 			json = IOUtils.toString(stream,"UTF-8");
 		} catch (IOException e) {
@@ -946,7 +946,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 将List 转成 JSONArray
+	 * Chuyển List thành  JSONArray
 	 * @return
 	 */
 	public static JSONArray list2JSONArray(List<String> list){
@@ -961,8 +961,8 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断两个list中的元素是否完全一致
-	 * QQYUN-5326【简流】获取组织人员 单/多 筛选条件 没有部门筛选
+	 * Phán đoán các phần tử trong hai list có hoàn toàn giống nhau không
+	 * QQYUN-5326【Luồng đơn giản】Lấy nhân sự tổ chức, đơn/Nhiều điều kiện lọc, không có lọc theo phòng ban
 	 * @return
 	 */
 	public static boolean isEqList(List<String> list1, List<String> list2){
@@ -986,12 +986,12 @@ public class oConvertUtils {
 
 
 	/**
-	 * 判断 sourceList中的元素是否在targetList中出现
+	 * Phán đoán phần tử trong sourceList có xuất hiện trong targetList không
 	 * 
-	 * QQYUN-5326【简流】获取组织人员 单/多 筛选条件 没有部门筛选
-	 * @param sourceList 源列表，要检查的元素列表
-	 * @param targetList 目标列表，用于匹配的列表
-	 * @return 如果sourceList中有任何元素在targetList中存在则返回true，否则返回false
+	 * QQYUN-5326【Luồng đơn giản】Lấy nhân sự tổ chức, đơn/Nhiều điều kiện lọc, không có lọc theo phòng ban
+	 * @param sourceList Danh sách nguồn, danh sách phần tử cần kiểm tra
+	 * @param targetList Danh sách đích, danh sách dùng để khớp
+	 * @return Nếu có bất kỳ phần tử nào của sourceList tồn tại trong targetList thì trả về true, nếu không thì trả về false
 	 */
 	public static boolean isInList(List<String> sourceList, List<String> targetList){
 		for(String sourceItem: sourceList){
@@ -1010,17 +1010,17 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断 sourceList中的所有元素是否都在targetList中存在
-	 * @param sourceList 源列表，要检查的元素列表
-	 * @param targetList 目标列表，用于匹配的列表
-	 * @return 如果sourceList中的所有元素都在targetList中存在则返回true，否则返回false
+	 * Phán đoán tất cả phần tử trong sourceList có đều tồn tại trong targetList không
+	 * @param sourceList Danh sách nguồn, danh sách phần tử cần kiểm tra
+	 * @param targetList Danh sách đích, danh sách dùng để khớp
+	 * @return Nếu tất cả phần tử trong sourceList đều tồn tại trong targetList thì trả về true, nếu không thì trả về false
 	 */
 	public static boolean isAllInList(List<String> sourceList, List<String> targetList){
 		if(sourceList == null || sourceList.isEmpty()){
-			return true; // 空列表视为所有元素都存在
+			return true; // Danh sách rỗng được xem là tất cả phần tử đều tồn tại
 		}
 		if(targetList == null || targetList.isEmpty()){
-			return false; // 目标列表为空，源列表非空时返回false
+			return false; // Khi danh sách đích rỗng và danh sách nguồn không rỗng thì trả về false
 		}
 
 		for(String sourceItem: sourceList){
@@ -1032,14 +1032,14 @@ public class oConvertUtils {
 				}
 			}
 			if(!found){
-				return false; // 有任何一个元素不在目标列表中，返回false
+				return false; // Nếu có bất kỳ phần tử nào không nằm trong danh sách đích thì trả về false
 			}
 		}
-		return true; // 所有元素都找到了
+		return true; // Tất cả phần tử đều đã tìm thấy
 	}
 	
 	/**
-	 * 计算文件大小转成MB
+	 * Tính kích thước tệp rồi chuyển thành MB
 	 * @param uploadCount
 	 * @return
 	 */
@@ -1047,7 +1047,7 @@ public class oConvertUtils {
 		double count = 0.0;
 		if(uploadCount>0) {
 			BigDecimal bigDecimal = new BigDecimal(uploadCount);
-			//换算成MB
+			//Quy đổi thành MB
 			BigDecimal divide = bigDecimal.divide(new BigDecimal(1048576));
 			count = divide.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			return count;
@@ -1056,7 +1056,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * map转str
+	 * map Chuyển str
 	 *
 	 * @param map
 	 * @return
@@ -1083,8 +1083,8 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断对象是否为空 <br/>
-	 * 支持各种类型的对象
+	 * Phán đoán đối tượng có rỗng không <br/>
+	 * Hỗ trợ các đối tượng thuộc nhiều loại khác nhau
 	 * for for [QQYUN-10990]AIRAG
 	 * @param obj
 	 * @return
@@ -1111,10 +1111,10 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * iterator 是否为空
+	 * iterator Có trống hay không
 	 * for for [QQYUN-10990]AIRAG
-	 * @param iterator Iterator对象
-	 * @return 是否为空
+	 * @param iterator Iterator Đối tượng
+	 * @return Có trống hay không
 	 */
 	public static boolean isEmptyIterator(Iterator<?> iterator) {
 		return null == iterator || false == iterator.hasNext();
@@ -1122,7 +1122,7 @@ public class oConvertUtils {
 
 
 	/**
-	 * 判断对象是否不为空
+	 * Phán đoán đối tượng có không rỗng không
 	 * for for [QQYUN-10990]AIRAG
 	 * @param object
 	 * @return
@@ -1134,7 +1134,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 如果src大于des返回true
+	 * Nếu src lớn hơn des thì trả về true
 	 * for [QQYUN-10990]AIRAG
 	 * @param src
 	 * @param des
@@ -1144,7 +1144,7 @@ public class oConvertUtils {
 	 */
 	public static boolean isGt(Number src, Number des) {
 		if (null == src || null == des) {
-			throw new IllegalArgumentException("参数不能为空");
+			throw new IllegalArgumentException("Tham số không được để trống");
 		}
 		if (src.doubleValue() > des.doubleValue()) {
 			return true;
@@ -1153,7 +1153,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 如果src大于等于des返回true
+	 * Nếu src lớn hơn hoặc bằng des thì trả về true
 	 * for [QQYUN-10990]AIRAG
 	 * @param src
 	 * @param des
@@ -1163,7 +1163,7 @@ public class oConvertUtils {
 	 */
 	public static boolean isGe(Number src, Number des) {
 		if (null == src || null == des) {
-			throw new IllegalArgumentException("参数不能为空");
+			throw new IllegalArgumentException("Tham số không được để trống");
 		}
 		if (src.doubleValue() < des.doubleValue()) {
 			return false;
@@ -1173,7 +1173,7 @@ public class oConvertUtils {
 
 
 	/**
-	 * 判断是否存在
+	 * Phán đoán có tồn tại không
 	 * for [QQYUN-10990]AIRAG
 	 * @param obj
 	 * @param objs
@@ -1195,7 +1195,7 @@ public class oConvertUtils {
 	}
 
 	/**
-	 * 判断租户ID是否有效
+	 * Phán đoán ID tenant có hợp lệ không
 	 * @param tenantId
 	 * @return
 	 */
@@ -1204,31 +1204,31 @@ public class oConvertUtils {
 	}
 
     /**
-     * 复制源对象的非空属性到目标对象（同名属性）
+     * Sao chép các thuộc tính không rỗng của đối tượng nguồn sang đối tượng đích (thuộc tính cùng tên)
      * 
-     * @param source 源对象（页面）
-     * @param target 目标对象（数据库实体）
+     * @param source Đối tượng nguồn (trang)
+     * @param target Đối tượng đích (thực thể cơ sở dữ liệu)
      */
     public static void copyNonNullFields(Object source, Object target) {
         if (source == null || target == null) {
             return;
         }
-        // 获取源对象的非空属性名数组
+        // Lấy mảng tên thuộc tính không rỗng của đối tượng nguồn
         String[] nullPropertyNames = getNullPropertyNames(source);
-        // 复制：忽略源对象的空属性，仅覆盖目标对象的对应非空属性
+        // Sao chép: bỏ qua các thuộc tính rỗng của đối tượng nguồn, chỉ ghi đè các thuộc tính không rỗng tương ứng của đối tượng đích
         BeanUtils.copyProperties(source, target, nullPropertyNames);
     }
 
     /**
-     * 获取源对象中值为 null 的属性名数组
+     * Lấy mảng tên thuộc tính có giá trị null trong đối tượng nguồn
      * 
      * @param source 
      */
     private static String[] getNullPropertyNames(Object source) {
         BeanWrapper beanWrapper = new BeanWrapperImpl(source);
-        //获取类的属性
+        //Lấy thuộc tính của lớp
         PropertyDescriptor[] propertyDescriptors = beanWrapper.getPropertyDescriptors();
-        // 过滤出值为 null 的属性名
+        // Lọc ra tên các thuộc tính có giá trị null
         return Stream.of(propertyDescriptors)
                 .map(PropertyDescriptor::getName)
                 .filter(name -> beanWrapper.getPropertyValue(name) == null)
@@ -1236,7 +1236,7 @@ public class oConvertUtils {
     }
 
     /**
-     * String转换long类型
+     * String Chuyển đổi sang kiểu long
      *
      * @param v
      * @param def

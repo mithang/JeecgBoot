@@ -20,39 +20,39 @@ package org.jeecg.common.constant;
 
 /**
  * @author scott
- * @date 2019年05月18日
- * 服务名称
+ * @date 2019 năm 05 tháng 18 ngày
+ * Tên dịch vụ
  */
 public interface ServiceNameConstants {
 
 	/**
-	 * 微服务名：系统管理模块
+	 * Tên microservice: Mô-đun quản lý hệ thống
 	 */
 	String SERVICE_SYSTEM = "jeecg-system";
 	/**
-	 * 微服务名： demo模块
+	 * Tên microservice: Mô-đun demo
 	 */
 	String SERVICE_DEMO = "jeecg-demo";
 	/**
-	 * 微服务名：joa模块
+	 * Tên microservice: Mô-đun joa
 	 */
 	String SERVICE_JOA = "jeecg-joa";
 	
 //	/**
-//	 * 微服务名：online在线模块
+//	 * Tên microservice: Mô-đun online trực tuyến
 //	 */
 //	String SERVICE_ONLINE = "jeecg-online";
 //	/**
-//	 * 微服务名：OA模块
+//	 * Tên microservice: Mô-đun OA
 //	 */
 //	String SERVICE_EOA = "jeecg-eoa";
 //	/**
-//	 * 微服务名：表单设计模块
+//	 * Tên microservice: Mô-đun thiết kế biểu mẫu
 //	 */
 //	String SERVICE_FORM = "jeecg-desform";
 
 	/**
-	 * gateway通过header传递根路径 basePath
+	 * gateway Truyền đường dẫn gốc qua header basePath
 	 */
 	String X_GATEWAY_BASE_PATH = "X_GATEWAY_BASE_PATH";
 

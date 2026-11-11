@@ -2,7 +2,7 @@ package org.jeecg.config.vo;
 
 /**
  * @author: scott
- * @date: 2023年05月10日 16:06
+ * @date: 2023 năm 05 tháng 10 ngày 16:06
  */
 public class Elasticsearch {
     private String clusterNodes;

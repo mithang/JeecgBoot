@@ -16,19 +16,19 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @Description: 省市区
+ * @Description: Tỉnh/Thành/Quận huyện
  * @author: jeecg-boot
  */
 @Component("pca")
 public class ProvinceCityArea {
-    // 使用 CopyOnWriteArrayList + volatile 解决懒加载场景下并发 add / 遍历导致的 ConcurrentModificationException
-    // 列表在 initAreaList 完成后即不再修改,迭代器为快照式,读路径无锁
+    // Sử dụng CopyOnWriteArrayList + volatile Giải quyết vấn đề đồng thời trong tình huống lazy loading add / do việc duyệt gây ra ConcurrentModificationException
+    // Danh sách sau khi initAreaList hoàn thành sẽ không còn bị sửa đổi nữa,Iterator là dạng snapshot,Đường đọc không cần khóa
     private volatile List<Area> areaList;
 
     public String getText(String code){
         if(StringUtils.isNotBlank(code)){
             this.initAreaList();
-            // 修复逻辑 bug:原 || 写错,areaList==null 时会先 false 再走 size() 抛 NPE,改为 &&
+            // Sửa logic bug:Ban đầu || viết sai,areaList==null khi đó sẽ trả về false trước rồi mới gọi size() ném ra NPE,đổi thành &&
             if(this.areaList!=null && this.areaList.size()>0){
                 List<String> ls = new ArrayList<String>();
                 getAreaByCode(code,ls);
@@ -43,7 +43,7 @@ public class ProvinceCityArea {
             this.initAreaList();
             if(areaList!=null && areaList.size()>0){
                 for(int i=areaList.size()-1;i>=0;i--){
-                    // 代码逻辑说明: VUEN-1088 online 导入 省市区导入后 导入数据错乱 北京市/市辖区/西城区-->山西省/晋城市/城区
+                    // Giải thích logic mã: VUEN-1088 online Import Tỉnh/Thành/Quận huyện Import 后 Nhập dữ liệu 错乱 北京市/市辖区/西城区-->山西省/晋城市/城区
                     String areaText = areaList.get(i).getText();
                     String cityText = areaList.get(i).getAheadText();
                     if(text.indexOf(areaText)>=0 && (cityText!=null && text.indexOf(cityText)>=0)){
@@ -56,9 +56,9 @@ public class ProvinceCityArea {
     }
 
     /**
-     * 获取省市区code，精准匹配
-     * @param texts 文本数组，省，市，区
-     * @return 返回 省市区的code
+     * Lấy code tỉnh/thành/quận huyện, khớp chính xác
+     * @param texts Mảng văn bản: tỉnh, thành phố, quận huyện
+     * @return Trả về code của tỉnh/thành/quận huyện code
      */
     public String[] getCode(String[] texts) {
         if (texts == null || texts.length == 0) {
@@ -89,7 +89,7 @@ public class ProvinceCityArea {
     }
 
     /**
-     * 根据text获取area
+     * Lấy theo text area
      * @param text
      * @return
      */
@@ -103,8 +103,8 @@ public class ProvinceCityArea {
     }
 
     /**
-     * 通过pid获取 area 对象
-     * @param pCode 父级编码
+     * Lấy đối tượng area qua pid
+     * @param pCode Mã cấp cha
      * @param text
      * @return
      */
@@ -131,34 +131,34 @@ public class ProvinceCityArea {
     }
 
     private void initAreaList(){
-        // 双重检查 + volatile:保证列表仅被一个线程初始化,避免懒加载场景下并发 add / 遍历导致的 ConcurrentModificationException
+        // Kiểm tra hai lần + volatile:Đảm bảo danh sách chỉ được khởi tạo bởi một luồng duy nhất,Tránh tình huống đồng thời trong lazy loading add / do việc duyệt gây ra ConcurrentModificationException
         if(this.areaList==null || this.areaList.isEmpty()){
             synchronized (this) {
                 if(this.areaList==null || this.areaList.isEmpty()){
-                    // CopyOnWriteArrayList 的迭代器为快照式,即使与其他读线程并发也不会抛 CME
+                    // CopyOnWriteArrayList  có iterator dạng snapshot,dù đồng thời với các luồng đọc khác cũng không ném ra CME
                     this.areaList = new CopyOnWriteArrayList<Area>();
                     try {
                         String jsonData = oConvertUtils.readStatic("classpath:static/pca.json");
                         JSONObject baseJson = JSONObject.parseObject(jsonData);
-                        //第一层 省
+                        //Tầng thứ nhất: Tỉnh
                         JSONObject provinceJson = baseJson.getJSONObject("86");
                         for(String provinceKey: provinceJson.keySet()){
                             //System.out.println("===="+provinceKey);
                             Area province = new Area(provinceKey,provinceJson.getString(provinceKey),"86");
                             this.areaList.add(province);
-                            //第二层 市
+                            //Tầng thứ hai: Thành phố
                             JSONObject cityJson = baseJson.getJSONObject(provinceKey);
                             for(String cityKey:cityJson.keySet()){
                                 //System.out.println("-----"+cityKey);
                                 Area city = new Area(cityKey,cityJson.getString(cityKey),provinceKey);
                                 this.areaList.add(city);
-                                //第三层 区
+                                //Tầng thứ ba: Quận huyện
                                 JSONObject areaJson =  baseJson.getJSONObject(cityKey);
                                 if(areaJson!=null){
                                     for(String areaKey:areaJson.keySet()){
                                         //System.out.println("········"+areaKey);
                                         Area area = new Area(areaKey,areaJson.getString(areaKey),cityKey);
-                                        // 代码逻辑说明: VUEN-1088 online 导入 省市区导入后 导入数据错乱 北京市/市辖区/西城区-->山西省/晋城市/城区
+                                        // Giải thích logic mã: VUEN-1088 online Import Tỉnh/Thành/Quận huyện Import 后 Nhập dữ liệu 错乱 北京市/市辖区/西城区-->山西省/晋城市/城区
                                         area.setAheadText(cityJson.getString(cityKey));
                                         this.areaList.add(area);
                                     }
@@ -197,7 +197,7 @@ public class ProvinceCityArea {
         String id;
         String text;
         String pid;
-        // 用于存储上级文本数据，区的上级文本 是市的数据
+        // Dùng để lưu dữ liệu văn bản cấp trên; văn bản cấp trên của quận huyện là dữ liệu của thành phố
         String aheadText;
 
         public Area(String id,String text,String pid){

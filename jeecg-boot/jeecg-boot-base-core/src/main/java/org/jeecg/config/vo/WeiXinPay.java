@@ -5,27 +5,27 @@ import lombok.Data;
 @Data
 public class WeiXinPay {
     /**
-     * 微信公众号id
+     * Tài khoản công khai WeChat id
      */
     private String appId;
     /**
-     * 商户号id
+     * Mã thương nhân id
      */
     private String mchId;
     /**
-     * 商户号秘钥
+     * Khóa bí mật mã thương nhân
      */
     private String apiKey;
     /**
-     * 回调地址
+     * Địa chỉ callback
      */
     private String notifyUrl;
     /**
-     * 是否开启会员认证
+     * Có bật xác thực thành viên hay không
      */
     private Boolean openVipLimit;
     /**
-     * 证书路径
+     * Đường dẫn chứng chỉ
      */
     private String certPath;
 }

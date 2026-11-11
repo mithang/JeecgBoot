@@ -22,26 +22,26 @@ import java.util.Map;
 
 /**
  * Created on 17/6/7.
- * 短信API产品的DEMO程序,工程中包含了一个SmsDemo类，直接通过
- * 执行main函数即可体验短信产品API功能(只需要将AK替换成开通了云通信-短信产品功能的AK即可)
- * 工程依赖了2个jar包(存放在工程的libs目录下)
+ * Chương trình DEMO của sản phẩm SMS API,Dự án chứa một lớp SmsDemo, trực tiếp thông qua
+ * Thực thi hàm main là có thể trải nghiệm chức năng SMS API(Chỉ cần thay AK thành AK đã kích hoạt dịch vụ nhắn tin đám mây-AK có chức năng sản phẩm SMS là được)
+ * Dự án phụ thuộc vào 2 gói jar(Được lưu trong thư mục libs của dự án)
  * 1:aliyun-java-sdk-core.jar
  * 2:aliyun-java-sdk-dysmsapi.jar
  *
- * 备注:Demo工程编码采用UTF-8
- * 国际短信发送请勿参照此DEMO
+ * Ghi chú:Demo Mã hóa của dự án sử dụng UTF-8
+ * Vui lòng không tham khảo DEMO này khi gửi SMS quốc tế DEMO
  * @author: jeecg-boot
  */
 public class DySmsHelper {
 	
 	private final static Logger logger=LoggerFactory.getLogger(DySmsHelper.class);
 
-    /**产品名称:云通信短信API产品,开发者无需替换*/
+    /**Tên sản phẩm:Sản phẩm SMS API của dịch vụ nhắn tin đám mây,Nhà phát triển không cần thay thế*/
     static final String PRODUCT = "Dysmsapi";
-    /**产品域名,开发者无需替换*/
+    /**Tên miền sản phẩm,Nhà phát triển không cần thay thế*/
     static final String DOMAIN = "dysmsapi.aliyuncs.com";
 
-    /**TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)*/
+    /**TODO Tại đây cần thay bằng AK của chính nhà phát triển AK(Tìm trong bảng điều khiển truy cập Alibaba Cloud)*/
     static  String accessKeyId;
     static  String accessKeySecret;
 
@@ -68,64 +68,64 @@ public class DySmsHelper {
         if(oConvertUtils.isNotEmpty(smsSendType) && CommonConstant.SMS_SEND_TYPE_TENCENT.equals(smsSendType)){
             return TencentSms.sendTencentSms(phone, templateParamJson, config.getTencent(), dySmsEnum);
         }
-        //可自助调整超时时间
+        //Có thể tự điều chỉnh thời gian timeout
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
-        // 代码逻辑说明: 配置类数据获取
+        // Giải thích logic mã: Lấy dữ liệu dạng cấu hình
         StaticConfig staticConfig = SpringContextUtils.getBean(StaticConfig.class);
-        //logger.info("阿里大鱼短信秘钥 accessKeyId：" + staticConfig.getAccessKeyId());
-        //logger.info("阿里大鱼短信秘钥 accessKeySecret："+ staticConfig.getAccessKeySecret());
+        //logger.info("Khóa bí mật SMS Alibaba Dayu accessKeyId:" + staticConfig.getAccessKeyId());
+        //logger.info("Khóa bí mật SMS Alibaba Dayu accessKeySecret:"+ staticConfig.getAccessKeySecret());
         setAccessKeyId(staticConfig.getAccessKeyId());
         setAccessKeySecret(staticConfig.getAccessKeySecret());
         
-        //初始化acsClient,暂不支持region化
+        //Khởi tạo acsClient,Tạm thời chưa hỗ trợ region
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
         DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
         IAcsClient acsClient = new DefaultAcsClient(profile);
         
-        //验证json参数
+        //Kiểm chứng tham số json
         validateParam(templateParamJson,dySmsEnum);
 
-        // 代码逻辑说明: 【QQYUN-9422】短信模板管理，阿里云---
+        // Giải thích logic mã: 【QQYUN-9422】Quản lý mẫu SMS, Alibaba Cloud---
         String templateCode = dySmsEnum.getTemplateCode();
         JeecgSmsTemplateConfig baseConfig = SpringContextUtils.getBean(JeecgSmsTemplateConfig.class);
         if(baseConfig != null && CollectionUtil.isNotEmpty(baseConfig.getTemplateCode())){
             Map<String, String> smsTemplate = baseConfig.getTemplateCode();
             if(smsTemplate.containsKey(templateCode) && StringUtils.isNotEmpty(smsTemplate.get(templateCode))){
                 templateCode = smsTemplate.get(templateCode);   
-                logger.info("yml中读取短信code{}",templateCode);
+                logger.info("yml Đọc SMS trong code{}",templateCode);
             }
         }
-        //签名名称
+        //Tên chữ ký
         String signName = dySmsEnum.getSignName();
         if(baseConfig != null && StringUtils.isNotEmpty(baseConfig.getSignature())){
-            logger.info("yml中读取签名名称{}",baseConfig.getSignature());
+            logger.info("yml Đọc tên chữ ký trong{}",baseConfig.getSignature());
             signName = baseConfig.getSignature();
         }
         
-        //组装请求对象-具体描述见控制台-文档部分内容
+        //Lắp ráp đối tượng yêu cầu-Xem mô tả cụ thể trong bảng điều khiển-Nội dung phần tài liệu
         SendSmsRequest request = new SendSmsRequest();
-        //必填:待发送手机号
+        //Bắt buộc:Số điện thoại chờ gửi
         request.setPhoneNumbers(phone);
-        //必填:短信签名-可在短信控制台中找到
+        //Bắt buộc:Chữ ký SMS-Có thể tìm thấy trong bảng điều khiển SMS
         request.setSignName(signName);
-        //必填:短信模板-可在短信控制台中找到
+        //Bắt buộc:Mẫu SMS-Có thể tìm thấy trong bảng điều khiển SMS
         request.setTemplateCode(templateCode);
-        //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
+        //Tùy chọn:Chuỗi JSON thay thế biến trong mẫu,Như nội dung mẫu là"Kính gửi${name},Mã xác thực của bạn là${code}"giờ,Giá trị tại đây là
         request.setTemplateParam(templateParamJson.toJSONString());
         
-        //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
+        //Không bắt buộc-Mã mở rộng SMS gửi lên(Người dùng không có nhu cầu đặc biệt vui lòng bỏ qua trường này)
         //request.setSmsUpExtendCode("90997");
 
-        //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
+        //Tùy chọn:outId Là trường mở rộng cung cấp cho bên nghiệp vụ,Cuối cùng giá trị này sẽ được đưa trở lại cho bên gọi trong tin nhắn hồi đáp SMS
         //request.setOutId("yourOutId");
 
         boolean result = false;
 
-        //hint 此处可能会抛出异常，注意catch
+        //hint Tại đây có thể ném ngoại lệ, lưu ý catch
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-        logger.info("短信接口返回的数据----------------");
+        logger.info("Dữ liệu trả về của giao diện SMS----------------");
         logger.info("{Code:" + sendSmsResponse.getCode()+",Message:" + sendSmsResponse.getMessage()+",RequestId:"+ sendSmsResponse.getRequestId()+",BizId:"+sendSmsResponse.getBizId()+"}");
         String ok = "OK";
         if (ok.equals(sendSmsResponse.getCode())) {
@@ -140,7 +140,7 @@ public class DySmsHelper {
     	String [] keyArr = keys.split(",");
     	for(String item :keyArr) {
     		if(!templateParamJson.containsKey(item)) {
-    			throw new RuntimeException("模板缺少参数："+item);
+    			throw new RuntimeException("Mẫu thiếu tham số:"+item);
     		}
     	}
     }

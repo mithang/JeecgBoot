@@ -6,26 +6,26 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * @Description: 本地线程变量存储工具类
+ * @Description: Lớp công cụ lưu trữ biến cục bộ của luồng (thread-local)
  * @author: lsq
- * @date: 2022年03月25日 11:42
+ * @date: 2022 năm 03 tháng 25 ngày 11:42
  */
 public class ThreadLocalDataHelper {
     /**
-     * 线程的本地变量
+     * Biến cục bộ của luồng
      */
     private static final ThreadLocal<ConcurrentHashMap> REQUEST_DATA = new ThreadLocal<>();
 
     /**
-     * 存储本地参数
+     * Lưu trữ tham số cục bộ
      */
     private static final ConcurrentHashMap DATA_MAP = new ConcurrentHashMap<>();
 
     /**
-     * 设置请求参数
+     * Đặt tham số yêu cầu
      *
-     * @param key  参数key
-     * @param value 参数值
+     * @param key  Tham số key
+     * @param value Giá trị tham số
      */
     public static void put(String key, Object value) {
         if(ObjectUtil.isNotEmpty(value)) {
@@ -35,9 +35,9 @@ public class ThreadLocalDataHelper {
     }
 
     /**
-     * 获取请求参数值
+     * Lấy giá trị tham số yêu cầu
      *
-     * @param key 请求参数
+     * @param key Tham số yêu cầu
      * @return
      */
     public static <T> T get(String key) {
@@ -49,9 +49,9 @@ public class ThreadLocalDataHelper {
     }
 
     /**
-     * 获取请求参数
+     * Lấy tham số yêu cầu
      *
-     * @return 请求参数 MAP 对象
+     * @return Đối tượng MAP tham số yêu cầu
      */
     public static void clear() {
         DATA_MAP.clear();

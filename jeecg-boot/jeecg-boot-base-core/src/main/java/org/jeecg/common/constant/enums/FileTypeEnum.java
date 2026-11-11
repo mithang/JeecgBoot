@@ -3,10 +3,10 @@ package org.jeecg.common.constant.enums;
 import org.jeecg.common.util.oConvertUtils;
 
 /**
- * 文件类型
+ * Loại tệp
  */
 public enum FileTypeEnum {
-    //    文档类型（folder:文件夹 excel:excel doc:word pp:ppt image:图片  archive:其他文档 video:视频 voice:语音）
+    //    Loại tài liệu（folder:Thư mục excel:excel doc:word pp:ppt image:Hình ảnh  archive:Tài liệu khác video:Video voice:Giọng nói)
 //    FOLDER
     xls(".xls","excel","excel"),
     xlsx(".xlsx","excel","excel"),
@@ -14,21 +14,21 @@ public enum FileTypeEnum {
     docx(".docx","doc","word"),
     ppt(".ppt","pp","ppt"),
     pptx(".pptx","pp","ppt"),
-    gif(".gif","image","图片"),
-    jpg(".jpg","image","图片"),
-    jpeg(".jpeg","image","图片"),
-    png(".png","image","图片"),
-    txt(".txt","text","文本"),
-    avi(".avi","video","视频"),
-    mov(".mov","video","视频"),
-    rmvb(".rmvb","video","视频"),
-    rm(".rm","video","视频"),
-    flv(".flv","video","视频"),
-    mp4(".mp4","video","视频"),
-    zip(".zip","zip","压缩包"),
+    gif(".gif","image","Hình ảnh"),
+    jpg(".jpg","image","Hình ảnh"),
+    jpeg(".jpeg","image","Hình ảnh"),
+    png(".png","image","Hình ảnh"),
+    txt(".txt","text","Văn bản"),
+    avi(".avi","video","Video"),
+    mov(".mov","video","Video"),
+    rmvb(".rmvb","video","Video"),
+    rm(".rm","video","Video"),
+    flv(".flv","video","Video"),
+    mp4(".mp4","video","Video"),
+    zip(".zip","zip","Tệp nén"),
     pdf(".pdf","pdf","pdf"),
-    mp3(".mp3","mp3","语音"),
-    wav(".wav","wav","语音");
+    mp3(".mp3","mp3","Giọng nói"),
+    wav(".wav","wav","Giọng nói");
 
     private String type;
     private String value;

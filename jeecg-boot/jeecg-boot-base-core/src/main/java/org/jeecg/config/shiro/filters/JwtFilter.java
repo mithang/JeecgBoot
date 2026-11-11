@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * @Description: 鉴权登录拦截器
+ * @Description: Interceptor xác thực đăng nhập
  * @Author: Scott
  * @Date: 2018/10/7
  **/
@@ -27,8 +27,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
-     * 默认开启跨域设置（使用单体）
-     * 微服务情况下，此属性设置为false
+     * Mặc định bật cài đặt cross-domain (dùng kiến trúc đơn khối)
+     * Trong trường hợp microservice, thuộc tính này được đặt thành false
      */
     private boolean allowOrigin = true;
 
@@ -38,7 +38,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     }
 
     /**
-     * 执行登录认证
+     * Thực hiện xác thực đăng nhập
      *
      * @param request
      * @param response
@@ -48,7 +48,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         try {
-            // 判断当前路径是不是注解了@IngoreAuth路径，如果是，则放开验证
+            // Kiểm tra xem đường dẫn hiện tại có được chú thích hay không@IngoreAuth đường dẫn, nếu có thì bỏ qua xác thực
             if (InMemoryIgnoreAuth.contains(((HttpServletRequest) request).getServletPath())) {
                 return true;
             }
@@ -56,7 +56,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             executeLogin(request, response);
             return true;
         } catch (Exception e) {
-            // 使用异常中的具体错误信息，保留"不允许同一账号多地同时登录"等具体提示
+            // Sử dụng thông báo lỗi cụ thể trong ngoại lệ, giữ lại"Không cho phép cùng một tài khoản đăng nhập đồng thời ở nhiều nơi"và các gợi ý cụ thể khác
             String errorMsg = e.getMessage();
             if (oConvertUtils.isEmpty(errorMsg)) {
                 errorMsg = CommonConstant.TOKEN_IS_INVALID_MSG;
@@ -73,20 +73,20 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(CommonConstant.X_ACCESS_TOKEN);
-        // 代码逻辑说明: JT-355 OA聊天添加token验证，获取token参数
+        // Giải thích logic mã: JT-355 OA Trò chuyện thêm xác thực token, lấy tham số token
         if (oConvertUtils.isEmpty(token)) {
             token = httpServletRequest.getParameter("token");
         }
 
         JwtToken jwtToken = new JwtToken(token);
-        // 提交给realm进行登入，如果错误他会抛出异常并被捕获
+        // Gửi cho realm để đăng nhập, nếu lỗi sẽ ném ra ngoại lệ và bị bắt
         getSubject(request, response).login(jwtToken);
-        // 如果没有抛出异常则代表登入成功，返回true
+        // Nếu không ném ra ngoại lệ thì đăng nhập thành công, trả về true
         return true;
     }
 
     /**
-     * 对跨域提供支持
+     * Hỗ trợ cross-domain
      */
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
@@ -94,22 +94,22 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         if(allowOrigin){
             httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, httpServletRequest.getHeader(HttpHeaders.ORIGIN));
-            // 允许客户端请求方法
+            // Cho phép phương thức yêu cầu của client
             httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET,POST,OPTIONS,PUT,DELETE");
-            // 允许客户端提交的Header
+            // Cho phép client gửi Header
             String requestHeaders = httpServletRequest.getHeader(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS);
             if (StringUtils.isNotEmpty(requestHeaders)) {
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, requestHeaders);
             }
-            // 允许客户端携带凭证信息(是否允许发送Cookie)
+            // Cho phép client mang theo thông tin xác thực(Có cho phép gửi hay không Cookie)
             httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
         }
-        // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
+        // Khi cross-domain sẽ gửi trước một yêu cầu option, ở đây chúng ta trả về trực tiếp trạng thái bình thường cho yêu cầu option
         if (RequestMethod.OPTIONS.name().equalsIgnoreCase(httpServletRequest.getMethod())) {
             httpServletResponse.setStatus(HttpStatus.OK.value());
             return false;
         }
-        // 代码逻辑说明: 多租户用到
+        // Giải thích logic mã: Dùng cho đa tenant
         String tenantId = httpServletRequest.getHeader(CommonConstant.TENANT_ID);
         TenantContext.setTenant(tenantId);
 
@@ -117,7 +117,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     }
 
     /**
-     * JwtFilter中ThreadLocal需要及时清除 #3634
+     * JwtFilter ThreadLocal trong JwtFilter cần được xóa kịp thời #3634
      *
      * @param request
      * @param response
@@ -126,7 +126,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     public void afterCompletion(ServletRequest request, ServletResponse response, Exception exception) throws Exception {
-        //log.info("------清空线程中多租户的ID={}------",TenantContext.getTenant());
+        //log.info("------Xóa tenant trong luồng ID={}------",TenantContext.getTenant());
         TenantContext.clear();
     }
 }

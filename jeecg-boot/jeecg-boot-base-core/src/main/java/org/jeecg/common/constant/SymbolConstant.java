@@ -1,123 +1,123 @@
 package org.jeecg.common.constant;
 
 /**
- * @Description: 符号和特殊符号常用类
+ * @Description: Lớp thường dùng cho ký hiệu và ký tự đặc biệt
  * @author: wangshuai
- * @date: 2022年03月30日 17:44
+ * @date: 2022 năm 03 tháng 30 ngày 17:44
  */
 public class SymbolConstant {
 
     /**
-     * 符号：点
+     * Ký hiệu: Dấu chấm
      */
     public static final String SPOT = ".";
 
     /**
-     * 符号：双斜杠
+     * Ký hiệu: hai dấu gạch chéo
      */
     public static final String DOUBLE_BACKSLASH = "\\";
 
     /**
-     * 符号：冒号
+     * Ký hiệu: Dấu hai chấm
      */
     public static final String COLON = ":";
 
     /**
-     * 符号：逗号
+     * Ký hiệu: Dấu phẩy
      */
     public static final String COMMA = ",";
 
     /**
-     * 符号：左花括号 }
+     * Ký hiệu: Dấu ngoặc nhọn trái }
      */
     public static final String LEFT_CURLY_BRACKET = "{";
 
     /**
-     * 符号：右花括号 }
+     * Ký hiệu: Dấu ngoặc nhọn phải }
      */
     public static final String RIGHT_CURLY_BRACKET = "}";
 
     /**
-     * 符号：井号 #
+     * Ký hiệu: Dấu thăng #
      */
     public static final String WELL_NUMBER = "#";
 
     /**
-     * 符号：单斜杠
+     * Ký hiệu: Dấu gạch chéo đơn
      */
     public static final String SINGLE_SLASH = "/";
 
     /**
-     * 符号：双斜杠
+     * Ký hiệu: hai dấu gạch chéo
      */
     public static final String DOUBLE_SLASH = "//";
 
     /**
-     * 符号：感叹号
+     * Ký hiệu: Dấu chấm than
      */
     public static final String EXCLAMATORY_MARK = "!";
 
     /**
-     * 符号：下划线
+     * Ký hiệu: Dấu gạch dưới
      */
     public static final String UNDERLINE = "_";
 
     /**
-     * 符号：单引号
+     * Ký hiệu: Dấu nháy đơn
      */
     public static final String SINGLE_QUOTATION_MARK = "'";
 
     /**
-     * 符号：星号
+     * Ký hiệu: Dấu sao
      */
     public static final String ASTERISK = "*";
 
     /**
-     * 符号：百分号
+     * Ký hiệu: Dấu phần trăm
      */
     public static final String PERCENT_SIGN = "%";
 
     /**
-     * 符号：美元 $
+     * Ký hiệu: Đô la Mỹ $
      */
     public static final String DOLLAR = "$";
 
     /**
-     * 符号：和 &
+     * Ký hiệu: Và &
      */
     public static final String AND = "&";
 
     /**
-     * 符号：../
+     * Ký hiệu:../
      */
     public static final String SPOT_SINGLE_SLASH = "../";
 
     /**
-     * 符号：..\\
+     * Ký hiệu:..\\
      */
     public static final String SPOT_DOUBLE_BACKSLASH = "..\\";
 
     /**
-     * 系统变量前缀 #{
+     * Tiền tố biến hệ thống #{
      */
     public static final String SYS_VAR_PREFIX = "#{";
 
     /**
-     * 符号 {{
+     * Ký hiệu {{
      */
     public static final String DOUBLE_LEFT_CURLY_BRACKET = "{{";
 
     /**
-     * 符号：[
+     * Ký hiệu:[
      */
     public static final String SQUARE_BRACKETS_LEFT = "[";
     /**
-     * 符号：]
+     * Ký hiệu:]
      */
     public static final String SQUARE_BRACKETS_RIGHT = "]";
 
     /**
-     * 拼接字符串符号 分号 ;
+     * Ký tự nối chuỗi: Dấu chấm phẩy ;
      */
     public static final String SEMICOLON = ";";
 }

@@ -3,15 +3,15 @@ package org.jeecg.config.vo;
 import lombok.Data;
 
 /**
-* @Description: 高德开放api配置
+* @Description: Cấu hình API mở Gaode
 *
 * @author: wangshuai
 * @date: 2025/7/17 20:32
 */
 @Data
 public class GaoDeApi {
-    /**应用key*/
+    /**Ứng dụng key*/
     private String apiKey;
-    /**应用秘钥*/
+    /**Khóa bí mật ứng dụng*/
     private String secretKey;
 }

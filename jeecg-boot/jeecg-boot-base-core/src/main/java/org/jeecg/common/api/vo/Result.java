@@ -9,52 +9,52 @@ import org.jeecg.common.constant.CommonConstant;
 import java.io.Serializable;
 
 /**
- *   接口返回数据格式
+ *   Định dạng dữ liệu trả về của API
  * @author scott
  * @email jeecgos@163.com
- * @date  2019年1月19日
+ * @date  2019 năm 1 tháng 19 ngày
  */
 @Data
-@Schema(description="接口返回对象")
+@Schema(description="Đối tượng trả về của API")
 public class Result<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 成功标志
+	 * Cờ thành công
 	 */
-	@Schema(description = "成功标志")
+	@Schema(description = "Cờ thành công")
 	private boolean success = true;
 
 	/**
-	 * 返回处理消息
+	 * Trả về thông báo xử lý
 	 */
-	@Schema(description = "返回处理消息")
+	@Schema(description = "Trả về thông báo xử lý")
 	private String message = "";
 
 	/**
-	 * 返回代码
+	 * Mã trả về
 	 */
-	@Schema(description = "返回代码")
+	@Schema(description = "Mã trả về")
 	private Integer code = 0;
 	
 	/**
-	 * 返回数据对象 data
+	 * Trả về đối tượng dữ liệu data
 	 */
-	@Schema(description = "返回数据对象")
+	@Schema(description = "Trả về đối tượng dữ liệu")
 	private T result;
 	
 	/**
-	 * 时间戳
+	 * Dấu thời gian
 	 */
-	@Schema(description = "时间戳")
+	@Schema(description = "Dấu thời gian")
 	private long timestamp = System.currentTimeMillis();
 
 	public Result() {
 	}
 
     /**
-     * 兼容VUE3版token失效不跳转登录页面
+     * Tương thích bản VUE3 khi token hết hiệu lực thì không chuyển tới trang đăng nhập
      * @param code
      * @param message
      */
@@ -81,7 +81,7 @@ public class Result<T> implements Serializable {
 		Result<T> r = new Result<T>();
 		r.setSuccess(true);
 		r.setCode(CommonConstant.SC_OK_200);
-		//Result OK(String msg)方法会造成兼容性问题 issues/I4IP3D
+		//Result OK(String msg)Phương thức sẽ gây ra vấn đề tương thích issues/I4IP3D
 		r.setResult((T) msg);
 		r.setMessage(msg);
 		return r;
@@ -103,7 +103,7 @@ public class Result<T> implements Serializable {
 	}
 
 	/**
-	 * 此方法是为了兼容升级所创建
+	 * Phương thức này được tạo ra để tương thích khi nâng cấp
 	 *
 	 * @param msg
 	 * @param <T>
@@ -114,7 +114,7 @@ public class Result<T> implements Serializable {
 		r.setSuccess(true);
 		r.setCode(CommonConstant.SC_OK_200);
 		r.setMessage(msg);
-		//Result OK(String msg)方法会造成兼容性问题 issues/I4IP3D
+		//Result OK(String msg)Phương thức sẽ gây ra vấn đề tương thích issues/I4IP3D
 		r.setResult((T) msg);
 		return r;
 	}
@@ -165,7 +165,7 @@ public class Result<T> implements Serializable {
 	}
 
 	/**
-	 * 无权限访问返回结果
+	 * Kết quả trả về khi không có quyền truy cập
 	 */
 	public static<T> Result<T> noauth(String msg) {
 		return error(CommonConstant.SC_JEECG_NO_AUTHZ, msg);

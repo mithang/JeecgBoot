@@ -7,23 +7,23 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
-  *  数据权限注解
+  *  Annotation quyền dữ liệu
  * @Author taoyan
- * @Date 2019年4月11日
+ * @Date 2019 năm 4 tháng 11 ngày
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE,ElementType.METHOD})
 @Documented
 public @interface PermissionData {
 	/**
-	 * 暂时没用
+	 * Tạm thời chưa dùng
 	 * @return
 	 */
 	String value() default "";
 	
 	
 	/**
-	 * 配置菜单的组件路径,用于数据权限
+	 * Đường dẫn component của menu đã cấu hình,Dùng cho quyền dữ liệu
 	 */
 	String pageComponent() default "";
 }

@@ -43,7 +43,7 @@
 //
 //    /**
 //     *
-//     * 显示swagger-ui.html文档展示页，还必须注入swagger资源：
+//     * Hiển thị swagger-ui.html Trang hiển thị tài liệu còn phải inject tài nguyên swagger：
 //     *
 //     * @param registry
 //     */
@@ -55,7 +55,7 @@
 //    }
 //
 //    /**
-//     * swagger2的配置文件，这里可以配置swagger2的一些基本的内容，比如扫描的包等等
+//     * swagger2 của tệp cấu hình, tại đây có thể cấu hình một số nội dung cơ bản của swagger2, chẳng hạn như package được quét, v.v.
 //     *
 //     * @return Docket
 //     */
@@ -64,9 +64,9 @@
 //        return new Docket(DocumentationType.SWAGGER_2)
 //                .apiInfo(apiInfo())
 //                .select()
-//                //此包路径下的类，才生成接口文档
+//                //Chỉ các class trong package này mới được tạo tài liệu API
 //                .apis(RequestHandlerSelectors.basePackage("org.jeecg"))
-//                //加了ApiOperation注解的类，才生成接口文档
+//                //Chỉ các class có annotation ApiOperation mới được tạo tài liệu API
 //                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
 //                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
 //                .paths(PathSelectors.any())
@@ -77,8 +77,8 @@
 //    }
 //
 //    /***
-//     * oauth2配置
-//     * 需要增加swagger授权回调地址
+//     * oauth2 Cấu hình
+//     * Cần thêm địa chỉ callback ủy quyền của swagger
 //     * http://localhost:8888/webjars/springfox-swagger-ui/o2c.html
 //     * @return
 //     */
@@ -97,7 +97,7 @@
 //        pars.add(tokenPar.build());
 //        if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
 //            ParameterBuilder tenantPar = new ParameterBuilder();
-//            tenantPar.name(CommonConstant.TENANT_ID).description("租户ID").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+//            tenantPar.name(CommonConstant.TENANT_ID).description("Tenant ID").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
 //            pars.add(tenantPar.build());
 //        }
 //
@@ -105,20 +105,20 @@
 //    }
 //
 //    /**
-//     * api文档的详细信息函数,注意这里的注解引用的是哪个
+//     * api Hàm thông tin chi tiết của tài liệu,Lưu ý annotation ở đây tham chiếu đến cái nào
 //     *
 //     * @return
 //     */
 //    private ApiInfo apiInfo() {
 //        return new ApiInfoBuilder()
-//                // //大标题
-//                .title("JeecgBoot 后台服务API接口文档")
-//                // 版本号
+//                // //Tiêu đề lớn
+//                .title("JeecgBoot Tài liệu API giao diện dịch vụ backend")
+//                // Số phiên bản
 //                .version("1.0")
 ////				.termsOfServiceUrl("NO terms of service")
-//                // 描述
-//                .description("后台API接口")
-//                // 作者
+//                // Mô tả
+//                .description("API giao diện backend")
+//                // Tác giả
 //                .contact(new Contact("北京国炬信息技术有限公司","www.jeccg.com","jeecgos@163.com"))
 //                .license("The Apache License, Version 2.0")
 //                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
@@ -126,7 +126,7 @@
 //    }
 //
 //    /**
-//     * 新增 securityContexts 保持登录状态
+//     * Thêm mới securityContexts để giữ trạng thái đăng nhập
 //     */
 //    private List<SecurityContext> securityContexts() {
 //        return new ArrayList(
@@ -146,7 +146,7 @@
 //    }
 //
 //    /**
-//     * 解决springboot2.6 和springfox不兼容问题
+//     * Giải quyết springboot2.6 Vấn đề không tương thích với springfox
 //     * @return
 //     */
 //    @Bean

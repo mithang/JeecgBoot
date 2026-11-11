@@ -1,41 +1,41 @@
 package org.jeecg.common.constant.enums;
 
 /**
-* @Description: 文件类型枚举类
+* @Description: Lớp enum loại tệp
 *
 * @author: wangshuai
 * @date: 2025/6/26 17:29
 */
 public enum NoticeTypeEnum {
     
-    //VUE3专用
-    NOTICE_TYPE_FILE("知识库消息","file"),
-    NOTICE_TYPE_FLOW("工作流消息","flow"),
-    NOTICE_TYPE_PLAN("日程消息","plan"),
-    //暂时没用到
-    NOTICE_TYPE_MEETING("会议消息","meeting"),
-    NOTICE_TYPE_SYSTEM("系统消息","system"),
+    //VUE3 dành riêng
+    NOTICE_TYPE_FILE("Tin nhắn kho tri thức","file"),
+    NOTICE_TYPE_FLOW("Tin nhắn quy trình làm việc","flow"),
+    NOTICE_TYPE_PLAN("Tin nhắn lịch trình","plan"),
+    //Tạm thời chưa dùng đến
+    NOTICE_TYPE_MEETING("Tin nhắn cuộc họp","meeting"),
+    NOTICE_TYPE_SYSTEM("Tin nhắn hệ thống","system"),
     /**
-     * 协同工作
-     * for [JHHB-136]【vue3】协同工作系统消息需要添加一个类型
+     * Làm việc cộng tác
+     * for [JHHB-136]【vue3】Tin nhắn hệ thống làm việc cộng tác cần thêm một loại
      */
-    NOTICE_TYPE_COLLABORATION("协同工作", "collab"),
+    NOTICE_TYPE_COLLABORATION("Làm việc cộng tác", "collab"),
     /**
-     * 督办
+     * Đôn đốc
      */
-    NOTICE_TYPE_SUPERVISE("督办管理", "supe"),
+    NOTICE_TYPE_SUPERVISE("Quản lý đôn đốc", "supe"),
     /**
-     * 考勤
+     * Chấm công
      */
-    NOTICE_TYPE_ATTENDANCE("考勤消息", "attendance");
+    NOTICE_TYPE_ATTENDANCE("Tin nhắn chấm công", "attendance");
 
     /**
-     * 文件类型名称
+     * Tên loại tệp
      */
     private String name;
 
     /**
-     * 文件类型值
+     * Giá trị loại tệp
      */
     private String value;
 
@@ -61,7 +61,7 @@ public enum NoticeTypeEnum {
     }
 
     /**
-     * 获取聊天通知类型
+     * Lấy loại thông báo trò chuyện
      * 
      * @param value
      * @return
@@ -71,7 +71,7 @@ public enum NoticeTypeEnum {
     }
 
     /**
-     * 获取通知名称
+     * Lấy tên thông báo
      *
      * @param value
      * @return
@@ -83,6 +83,6 @@ public enum NoticeTypeEnum {
                 return e.getName();
             }
         }
-        return "系统消息";
+        return "Tin nhắn hệ thống";
     }
 }

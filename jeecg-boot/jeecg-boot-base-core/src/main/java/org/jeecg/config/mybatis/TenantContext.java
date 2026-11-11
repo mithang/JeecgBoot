@@ -3,7 +3,7 @@
 //import lombok.extern.slf4j.Slf4j;
 //
 ///**
-// * 多租户 tenant_id存储器
+// * Đa tenant tenant_id Bộ lưu trữ
 // * @author: jeecg-boot
 // */
 //@Slf4j

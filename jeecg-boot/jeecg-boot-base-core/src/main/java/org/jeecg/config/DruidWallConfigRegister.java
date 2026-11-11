@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 启动程序修改DruidWallConfig配置
- * 允许SELECT语句的WHERE子句是一个永真条件
+ * Chương trình khởi động sửa cấu hình DruidWallConfig
+ * Cho phép mệnh đề WHERE của câu lệnh SELECT là một điều kiện luôn đúng
  * @author eightmonth
  * @date 2024/4/8 11:37
  */
@@ -25,7 +25,7 @@ public class DruidWallConfigRegister implements SpringApplicationRunListener {
 
 
     /**
-     * 必备，否则启动报错
+     * Bắt buộc, nếu không khởi động sẽ báo lỗi
      * @param application
      * @param args
      */

@@ -9,13 +9,13 @@ import org.jeecgframework.poi.excel.annotation.Excel;
  * @Version 1.0
  */
 public class SysCategoryModel {
-    /**主键*/
+    /**Khóa chính*/
     private java.lang.String id;
-    /**父级节点*/
+    /**Nút cha*/
     private java.lang.String pid;
-    /**类型名称*/
+    /**Tên loại*/
     private java.lang.String name;
-    /**类型编码*/
+    /**Mã loại*/
     private java.lang.String code;
 
     public String getId() {

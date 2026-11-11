@@ -3,35 +3,35 @@ package org.jeecg.common.constant.enums;
 import org.jeecg.common.util.oConvertUtils;
 
 /**
- * 邮件html模板配置地址美剧
+ * Enum địa chỉ cấu hình mẫu HTML của email
  *
  * @author: liusq
  * @Date: 2023-10-13
  */
 public enum EmailTemplateEnum {
     /**
-     * 流程催办
+     * Đôn đốc quy trình
      */
     BPM_CUIBAN_EMAIL("bpm_cuiban_email", "/templates/email/bpm_cuiban_email.ftl"),
     /**
-     * 流程抄送
+     * Sao gửi quy trình
      */
     BPM_CC_EMAIL("bpm_cc_email", "/templates/email/bpm_cc_email.ftl"),
     /**
-     * 流程新任务
+     * Nhiệm vụ mới của quy trình
      */
     BPM_NEW_TASK_EMAIL("bpm_new_task_email", "/templates/email/bpm_new_task_email.ftl"),
     /**
-     * 表单新增记录
+     * Bản ghi mới thêm của biểu mẫu
      */
     DESFORM_NEW_DATA_EMAIL("desform_new_data_email", "/templates/email/desform_new_data_email.ftl");
 
     /**
-     * 模板名称
+     * Tên mẫu
      */
     private String name;
     /**
-     * 模板地址
+     * Địa chỉ mẫu
      */
     private String url;
 

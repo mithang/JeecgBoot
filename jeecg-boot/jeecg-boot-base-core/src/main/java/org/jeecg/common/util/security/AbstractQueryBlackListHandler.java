@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 查询表/字段 黑名单处理
+ * Bảng truy vấn/Xử lý danh sách đen trường
  * @Author taoYan
  * @Date 2022/3/17 11:21
  **/
@@ -19,16 +19,16 @@ import java.util.regex.Pattern;
 public abstract class AbstractQueryBlackListHandler {
 
     /**
-     * key-表名
-     * value-字段名，多个逗号隔开
-     * 两种配置方式-- 全部配置成小写
-     * ruleMap.put("sys_user", "*")sys_user所有的字段不支持查询
-     * ruleMap.put("sys_user", "username,password")sys_user中的username和password不支持查询
+     * key-Tên bảng
+     * value-Tên trường, phân tách bằng nhiều dấu phẩy
+     * Hai cách cấu hình-- Tất cả cấu hình thành chữ thường
+     * ruleMap.put("sys_user", "*")sys_user Tất cả các trường đều không hỗ trợ truy vấn
+     * ruleMap.put("sys_user", "username,password")sys_user trong đó username và password không hỗ trợ truy vấn
      */
     public static Map<String, String> ruleMap = new HashMap<>();
 
     /**
-     * 以下字符不能出现在表名中或是字段名中
+     * Các ký tự sau không được xuất hiện trong tên bảng hoặc tên trường
      */
     public static final Pattern ILLEGAL_NAME_REG = Pattern.compile("[-]{2,}");
 
@@ -38,8 +38,8 @@ public abstract class AbstractQueryBlackListHandler {
 
 
     /**
-     * 根据 sql语句 获取表和字段信息，需要到具体的实现类重写此方法-
-     * 不同的场景 处理可能不太一样 需要自定义，但是返回值确定
+     * Lấy thông tin bảng và trường theo câu lệnh SQL, cần ghi đè phương thức này trong lớp triển khai cụ thể-
+     * Các kịch bản khác nhau có thể xử lý hơi khác nhau và cần tùy chỉnh, nhưng giá trị trả về là xác định
      * @param sql
      * @return
      */
@@ -47,23 +47,23 @@ public abstract class AbstractQueryBlackListHandler {
 
 
     /**
-     * 校验sql语句 成功返回true
+     * Kiểm chứng câu lệnh SQL, thành công trả về true
      * @param sql
      * @return
      */
     public boolean isPass(String sql) {
         List<QueryTable> list = null;
-        //【jeecg-boot/issues/4040】在线报表不支持子查询，解析报错 #4040
+        //【jeecg-boot/issues/4040】 Báo cáo trực tuyến không hỗ trợ truy vấn con, lỗi phân giải #4040
         try {
             list = this.getQueryTableInfo(sql.toLowerCase());
         } catch (Exception e) {
-            log.warn("校验sql语句，解析报错：{}",e.getMessage());
+            log.warn("Kiểm tra câu lệnh sql, lỗi phân tích:{}",e.getMessage());
         }
         
         if(list==null){
             return true;
         }
-        log.debug("  获取sql信息 ：{} ", list.toString());
+        log.debug("  Lấy thông tin SQL: {} ", list.toString());
         boolean flag = checkTableAndFieldsName(list);
         if(flag == false){
             return false;
@@ -73,11 +73,11 @@ public abstract class AbstractQueryBlackListHandler {
         for (QueryTable table : list) {
             String name = table.getName();
             String fieldRule = ruleMap.get(name);
-            // 有没有配置这张表
+            // Có cấu hình bảng này không
             if (fieldRule != null) {
                 if ("*".equals(fieldRule) || table.isAll()) {
                     flag = false;
-                    log.warn("sql黑名单校验，表【"+name+"】禁止查询");
+                    log.warn("sql Kiểm chứng danh sách đen, bảng 【"+name+"】Cấm truy vấn");
                     break;
                 } else if (table.existSameField(fieldRule)) {
                     flag = false;
@@ -85,19 +85,19 @@ public abstract class AbstractQueryBlackListHandler {
                 }
 
             }
-            // 判断是否调用了黑名单数据库
+            // Phán đoán có gọi cơ sở dữ liệu trong danh sách đen không
             String dbName = table.getDbName();
             if (oConvertUtils.isNotEmpty(dbName)) {
                 dbName = dbName.toLowerCase().trim();
                 if (xssTableSet.contains(dbName)) {
                     flag = false;
-                    log.warn("sql黑名单校验，数据库【" + dbName + "】禁止查询");
+                    log.warn("sql Kiểm chứng danh sách đen, cơ sở dữ liệu 【" + dbName + "】Cấm truy vấn");
                     break;
                 }
             }
         }
 
-        // 返回黑名单校验结果（不合法直接抛出异常）
+        // Trả về kết quả kiểm chứng danh sách đen (nếu không hợp lệ thì ném ngoại lệ trực tiếp)
         if(!flag){
             log.error(this.getError());
             throw new JeecgSqlInjectionException(this.getError());
@@ -106,7 +106,7 @@ public abstract class AbstractQueryBlackListHandler {
     }
 
     /**
-     * 校验表名和字段名是否有效，或是是否会带些特殊的字符串进行sql注入
+     * Kiểm chứng tên bảng và tên trường có hợp lệ không, hoặc có mang theo chuỗi đặc biệt nào để thực hiện SQL injection không
      * issues/4983 SQL Injection in 3.5.1 #4983
      * @return
      */
@@ -116,14 +116,14 @@ public abstract class AbstractQueryBlackListHandler {
             String tableName = queryTable.getName();
             if(hasSpecialString(tableName)){
                 flag = false;
-                log.warn("sql黑名单校验，表名【"+tableName+"】包含特殊字符");
+                log.warn("sql Kiểm chứng danh sách đen, tên bảng 【"+tableName+"】Chứa ký tự đặc biệt");
                 break;
             }
             Set<String> fields = queryTable.getFields();
             for(String name: fields){
                 if(hasSpecialString(name)){
                     flag = false;
-                    log.warn("sql黑名单校验，字段名【"+name+"】包含特殊字符");
+                    log.warn("sql Kiểm chứng danh sách đen, tên trường 【"+name+"】Chứa ký tự đặc biệt");
                     break;
                 } 
             }
@@ -132,7 +132,7 @@ public abstract class AbstractQueryBlackListHandler {
     }
 
     /**
-     * 是否包含特殊的字符串
+     * Có chứa chuỗi đặc biệt không
      * @param name
      * @return
      */
@@ -146,18 +146,18 @@ public abstract class AbstractQueryBlackListHandler {
     
 
     /**
-     * 查询的表的信息
+     * Thông tin của bảng được tìm kiếm
      */
     protected class QueryTable {
-        //数据库名
+        //Tên cơ sở dữ liệu
         private String dbName;
-        //表名
+        //Tên bảng
         private String name;
-        //表的别名
+        //Bí danh của bảng
         private String alias;
-        // 字段名集合
+        // Tập hợp tên trường
         private Set<String> fields;
-        // 是否查询所有字段
+        // Có tìm kiếm tất cả các trường hay không
         private boolean all;
 
         public QueryTable() {
@@ -215,7 +215,7 @@ public abstract class AbstractQueryBlackListHandler {
         }
 
         /**
-         * 判断是否有相同字段
+         * Kiểm tra có trường trùng nhau hay không
          *
          * @param fieldString
          * @return
@@ -225,17 +225,17 @@ public abstract class AbstractQueryBlackListHandler {
             for (String sqlField : fields) {
                 for (String controlField : controlFields) {
                     if (sqlField.equals(controlField)) {
-                        // 非常明确的列直接比较
-                        log.warn("sql黑名单校验，表【"+name+"】中字段【"+controlField+"】禁止查询");
+                        // Cột rất rõ ràng thì so sánh trực tiếp
+                        log.warn("sql Kiểm chứng danh sách đen, bảng 【"+name+"】 trường trong 【"+controlField+"】Cấm truy vấn");
                         return true;
                     } else {
-                        // 使用表达式的列 只能判读字符串包含了
+                        // Cột dùng biểu thức chỉ có thể phán đoán chuỗi có chứa
                         String aliasColumn = controlField;
                         if (StringUtils.isNotBlank(alias)) {
                             aliasColumn = alias + "." + controlField;
                         }
                         if (sqlField.indexOf(aliasColumn) != -1) {
-                            log.warn("sql黑名单校验，表【"+name+"】中字段【"+controlField+"】禁止查询");
+                            log.warn("sql Kiểm chứng danh sách đen, bảng 【"+name+"】 trường trong 【"+controlField+"】Cấm truy vấn");
                             return true;
                         }
                     }
@@ -257,7 +257,7 @@ public abstract class AbstractQueryBlackListHandler {
 
     public String getError(){
         // TODO
-        return "系统设置了安全规则，敏感表和敏感字段禁止查询，联系管理员授权!";
+        return "Hệ thống đã đặt quy tắc an toàn, bảng nhạy cảm và trường nhạy cảm bị cấm truy vấn, vui lòng liên hệ quản trị viên để được cấp quyền!";
     }
 
 }

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 流程审批意见DTO
+ * Ý kiến phê duyệt quy trình DTO
  * @author scott
  * @date 2025-01-29
  */
@@ -16,32 +16,32 @@ public class ApprovalCommentDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     
     /**
-     * 任务ID
+     * Nhiệm vụ ID
      */
     private String taskId;
     
     /**
-     * 任务名称
+     * Tên nhiệm vụ
      */
     private String taskName;
     
     /**
-     * 审批人ID
+     * Người duyệt ID
      */
     private String approverId;
     
     /**
-     * 审批人姓名
+     * Tên người phê duyệt
      */
     private String approverName;
     
     /**
-     * 审批意见
+     * Ý kiến phê duyệt
      */
     private String approvalComment;
     
     /**
-     * 审批时间
+     * Thời gian phê duyệt
      */
     private Date approvalTime;
 }

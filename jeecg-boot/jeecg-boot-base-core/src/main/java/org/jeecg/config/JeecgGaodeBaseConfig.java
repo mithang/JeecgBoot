@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 /**
- * 高德账号配置
+ * Cấu hình tài khoản Gaode
  */
 @Lazy(false)
 @Configuration("jeecgGaodeBaseConfig")
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Lazy;
 public class JeecgGaodeBaseConfig {
 
     /**
-     * 高德开放API配置
+     * Cấu hình API mở Gaode
      */
     private GaoDeApi gaoDeApi;
 

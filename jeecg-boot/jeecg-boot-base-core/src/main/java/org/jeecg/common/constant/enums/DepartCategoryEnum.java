@@ -3,17 +3,17 @@ package org.jeecg.common.constant.enums;
 import org.jeecg.common.util.oConvertUtils;
 
 /**
-* @Description: 部门类型枚举类
+* @Description: Lớp enum loại phòng ban
 *
 * @author: wangshuai
 * @date: 2025/8/19 21:37
 */
 public enum DepartCategoryEnum {
     
-    DEPART_CATEGORY_COMPANY("部门类型：公司","公司","1"),
-    DEPART_CATEGORY_DEPART("部门类型：部门","部门","2"),
-    DEPART_CATEGORY_POST("部门类型：岗位","岗位","3"),
-    DEPART_CATEGORY_SUB_COMPANY("部门类型：子公司","子公司","4");
+    DEPART_CATEGORY_COMPANY("Loại phòng ban: Công ty","Công ty","1"),
+    DEPART_CATEGORY_DEPART("Loại phòng ban: Phòng ban","Phòng ban","2"),
+    DEPART_CATEGORY_POST("Loại phòng ban: Vị trí công tác","Vị trí công tác","3"),
+    DEPART_CATEGORY_SUB_COMPANY("Loại phòng ban: Công ty con","Công ty con","4");
 
     DepartCategoryEnum(String described, String name, String value) {
         this.value = value;
@@ -22,16 +22,16 @@ public enum DepartCategoryEnum {
     }
 
     /**
-     * 描述
+     * Mô tả
      */
     private String described;
     /**
-     * 值
+     * Giá trị
      */
     private String value;
 
     /**
-     * 名称
+     * Tên
      */
     private String name;
 
@@ -60,7 +60,7 @@ public enum DepartCategoryEnum {
     }
 
     /**
-     * 根据值获取名称
+     * Lấy tên theo giá trị
      * 
      * @param value
      * @return
@@ -78,7 +78,7 @@ public enum DepartCategoryEnum {
     }
     
     /**
-     * 根据名称获取值
+     * Lấy giá trị theo tên
      * 
      * @param name
      * @return

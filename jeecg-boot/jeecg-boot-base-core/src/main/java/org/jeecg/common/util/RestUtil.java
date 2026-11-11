@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * 调用 Restful 接口 Util
+ * Gọi API Restful Util
  *
  * @author sunjianlei
  */
@@ -29,8 +29,8 @@ public class RestUtil {
         if (domain == null) {
             domain = SpringContextUtils.getDomain();
             // issues/2959
-            // 微服务版集成企业微信单点登录
-            // 因为微服务版没有端口号，导致 SpringContextUtils.getDomain() 方法获取的域名的端口号变成了:-1所以出问题了，只需要把这个-1给去掉就可以了。
+            // Phiên bản microservice tích hợp đăng nhập một lần (SSO) WeCom
+            // Vì phiên bản microservice không có số cổng, dẫn đến SpringContextUtils.getDomain() số cổng của tên miền mà phương thức lấy được đã trở thành:-1 nên đã xảy ra lỗi, chỉ cần loại bỏ-1 là được.
             String port=":-1";
             if (domain.endsWith(port)) {
                 domain = domain.substring(0, domain.length() - 3);
@@ -53,18 +53,18 @@ public class RestUtil {
     }
 
     /**
-     * RestAPI 调用器
+     * RestAPI Bộ gọi
      */
     private final static RestTemplate RT;
 
     static {
-        // 解决[issues/8859]online表单java增强失效------------
-        // 使用 Apache HttpClient 避免 JDK HttpURLConnection 的 too many bytes written 问题
+        // Giải quyết[issues/8859]online Tăng cường java của biểu mẫu không có hiệu lực------------
+        // Sử dụng Apache HttpClient để tránh vấn đề too many bytes written của JDK HttpURLConnection
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setConnectionRequestTimeout(30000);
         requestFactory.setReadTimeout(30000);
         RT = new RestTemplate(requestFactory);
-        // 解决乱码问题（替换 StringHttpMessageConverter 为 UTF-8）
+        // Giải quyết vấn đề ký tự lỗi (thay StringHttpMessageConverter bằng UTF-8）
         for (int i = 0; i < RT.getMessageConverters().size(); i++) {
             if (RT.getMessageConverters().get(i) instanceof StringHttpMessageConverter) {
                 RT.getMessageConverters().set(i, new StringHttpMessageConverter(StandardCharsets.UTF_8));
@@ -78,140 +78,140 @@ public class RestUtil {
     }
 
     /**
-     * 发送 get 请求
+     * Gửi yêu cầu get
      */
     public static JSONObject get(String url) {
         return getNative(url, null, null).getBody();
     }
 
     /**
-     * 发送 get 请求
+     * Gửi yêu cầu get
      */
     public static JSONObject get(String url, JSONObject variables) {
         return getNative(url, variables, null).getBody();
     }
 
     /**
-     * 发送 get 请求
+     * Gửi yêu cầu get
      */
     public static JSONObject get(String url, JSONObject variables, JSONObject params) {
         return getNative(url, variables, params).getBody();
     }
 
     /**
-     * 发送 get 请求，返回原生 ResponseEntity 对象
+     * Gửi yêu cầu GET, trả về đối tượng ResponseEntity gốc
      */
     public static ResponseEntity<JSONObject> getNative(String url, JSONObject variables, JSONObject params) {
         return request(url, HttpMethod.GET, variables, params);
     }
 
     /**
-     * 发送 Post 请求
+     * Gửi yêu cầu Post
      */
     public static JSONObject post(String url) {
         return postNative(url, null, null).getBody();
     }
 
     /**
-     * 发送 Post 请求
+     * Gửi yêu cầu Post
      */
     public static JSONObject post(String url, JSONObject params) {
         return postNative(url, null, params).getBody();
     }
 
     /**
-     * 发送 Post 请求
+     * Gửi yêu cầu Post
      */
     public static JSONObject post(String url, JSONObject variables, JSONObject params) {
         return postNative(url, variables, params).getBody();
     }
 
     /**
-     * 发送 POST 请求，返回原生 ResponseEntity 对象
+     * Gửi yêu cầu POST, trả về đối tượng ResponseEntity gốc
      */
     public static ResponseEntity<JSONObject> postNative(String url, JSONObject variables, JSONObject params) {
         return request(url, HttpMethod.POST, variables, params);
     }
 
     /**
-     * 发送 put 请求
+     * Gửi yêu cầu put
      */
     public static JSONObject put(String url) {
         return putNative(url, null, null).getBody();
     }
 
     /**
-     * 发送 put 请求
+     * Gửi yêu cầu put
      */
     public static JSONObject put(String url, JSONObject params) {
         return putNative(url, null, params).getBody();
     }
 
     /**
-     * 发送 put 请求
+     * Gửi yêu cầu put
      */
     public static JSONObject put(String url, JSONObject variables, JSONObject params) {
         return putNative(url, variables, params).getBody();
     }
 
     /**
-     * 发送 put 请求，返回原生 ResponseEntity 对象
+     * Gửi yêu cầu PUT, trả về đối tượng ResponseEntity gốc
      */
     public static ResponseEntity<JSONObject> putNative(String url, JSONObject variables, JSONObject params) {
         return request(url, HttpMethod.PUT, variables, params);
     }
 
     /**
-     * 发送 delete 请求
+     * Gửi yêu cầu delete
      */
     public static JSONObject delete(String url) {
         return deleteNative(url, null, null).getBody();
     }
 
     /**
-     * 发送 delete 请求
+     * Gửi yêu cầu delete
      */
     public static JSONObject delete(String url, JSONObject variables, JSONObject params) {
         return deleteNative(url, variables, params).getBody();
     }
 
     /**
-     * 发送 delete 请求，返回原生 ResponseEntity 对象
+     * Gửi yêu cầu DELETE, trả về đối tượng ResponseEntity gốc
      */
     public static ResponseEntity<JSONObject> deleteNative(String url, JSONObject variables, JSONObject params) {
         return request(url, HttpMethod.DELETE, null, variables, params, JSONObject.class);
     }
 
     /**
-     * 发送请求
+     * Gửi yêu cầu
      */
     public static ResponseEntity<JSONObject> request(String url, HttpMethod method, JSONObject variables, JSONObject params) {
         return request(url, method, getHeaderApplicationJson(), variables, params, JSONObject.class);
     }
 
     /**
-     * 发送请求
+     * Gửi yêu cầu
      *
-     * @param url          请求地址
-     * @param method       请求方式
-     * @param headers      请求头  可空
-     * @param variables    请求url参数 可空
-     * @param params       请求body参数 可空
-     * @param responseType 返回类型
+     * @param url          Địa chỉ yêu cầu
+     * @param method       Phương thức yêu cầu
+     * @param headers      Request header Có thể rỗng
+     * @param variables    Tham số url của yêu cầu Có thể rỗng
+     * @param params       Tham số body của yêu cầu Có thể rỗng
+     * @param responseType Kiểu trả về
      * @return ResponseEntity<responseType>
      */
     public static <T> ResponseEntity<T> request(String url, HttpMethod method, HttpHeaders headers, JSONObject variables, Object params, Class<T> responseType) {
         log.debug(" RestUtil  --- request ---  url = "+ url);
         if (StringUtils.isEmpty(url)) {
-            throw new RuntimeException("url 不能为空");
+            throw new RuntimeException("url Không được trống");
         }
         if (method == null) {
-            throw new RuntimeException("method 不能为空");
+            throw new RuntimeException("method Không được trống");
         }
         if (headers == null) {
             headers = new HttpHeaders();
         }
-        // 请求体
+        // Request body
         String body = "";
         if (params != null) {
             if (params instanceof JSONObject) {
@@ -221,35 +221,35 @@ public class RestUtil {
                 body = params.toString();
             }
         }
-        // 拼接 url 参数
+        // Nối tham số url
         if (variables != null && !variables.isEmpty()) {
             url += ("?" + asUrlVariables(variables));
         }
-        // 解决[issues/8951]从jeecgboot 3.8.2 升级到 3.8.3 在线表单java增强功能报错------------
-        // Content-Length 强制设置（解决可能出现的截断问题）
+        // Giải quyết[issues/8951]Từ jeecgboot 3.8.2 Nâng cấp lên 3.8.3 Lỗi chức năng tăng cường Java của biểu mẫu trực tuyến------------
+        // Content-Length Thiết lập bắt buộc (giải quyết vấn đề cắt ngắn có thể xảy ra)
         if (StringUtils.isNotEmpty(body)) {
             int contentLength = body.getBytes(StandardCharsets.UTF_8).length;
             String current = headers.getFirst(HttpHeaders.CONTENT_LENGTH);
             if (current == null || !current.equals(String.valueOf(contentLength))) {
                 headers.setContentLength(contentLength);
-                log.debug(" RestUtil  --- request --- 修正/设置 Content-Length = " + contentLength + (current!=null?" (原值="+current+")":""));
+                log.debug(" RestUtil  --- request --- Sửa/Cài đặt Content-Length = " + contentLength + (current!=null?" (Giá trị gốc="+current+")":""));
             }
         }
-        // 发送请求
+        // Gửi yêu cầu
         HttpEntity<String> request = new HttpEntity<>(body, headers);
         return RT.exchange(URI.create(url), method, request, responseType);
     }
 
     /**
-     * 发送请求（支持自定义超时时间）
+     * Gửi yêu cầu (hỗ trợ tùy chỉnh thời gian timeout)
      *
-     * @param url          请求地址
-     * @param method       请求方式
-     * @param headers      请求头  可空
-     * @param variables    请求url参数 可空
-     * @param params       请求body参数 可空
-     * @param responseType 返回类型
-     * @param timeout      超时时间（毫秒），如果为0或负数则使用默认超时
+     * @param url          Địa chỉ yêu cầu
+     * @param method       Phương thức yêu cầu
+     * @param headers      Request header Có thể rỗng
+     * @param variables    Tham số url của yêu cầu Có thể rỗng
+     * @param params       Tham số body của yêu cầu Có thể rỗng
+     * @param responseType Kiểu trả về
+     * @param timeout      Thời gian timeout (mili giây), nếu bằng 0 hoặc số âm thì dùng thời gian timeout mặc định
      * @return ResponseEntity<responseType>
      */
     public static <T> ResponseEntity<T> request(String url, HttpMethod method, HttpHeaders headers,
@@ -257,24 +257,24 @@ public class RestUtil {
         log.debug(" RestUtil  --- request ---  url = "+ url + ", timeout = " + timeout);
 
         if (StringUtils.isEmpty(url)) {
-            throw new RuntimeException("url 不能为空");
+            throw new RuntimeException("url Không được trống");
         }
         if (method == null) {
-            throw new RuntimeException("method 不能为空");
+            throw new RuntimeException("method Không được trống");
         }
         if (headers == null) {
             headers = new HttpHeaders();
         }
 
-        // 创建自定义RestTemplate（如果需要设置超时）
+        // Tạo RestTemplate tùy chỉnh (nếu cần thiết lập thời gian timeout)
         RestTemplate restTemplate = RT;
         if (timeout > 0) {
-            // 代码逻辑说明: [issues/8859]online表单java增强失效------------
+            // Giải thích logic mã: [issues/8859]online Tăng cường java của biểu mẫu không có hiệu lực------------
             HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
             requestFactory.setConnectionRequestTimeout(timeout);
             requestFactory.setReadTimeout(timeout);
             restTemplate = new RestTemplate(requestFactory);
-            // 解决乱码问题（替换 StringHttpMessageConverter 为 UTF-8）
+            // Giải quyết vấn đề ký tự lỗi (thay StringHttpMessageConverter bằng UTF-8）
             for (int i = 0; i < restTemplate.getMessageConverters().size(); i++) {
                 if (restTemplate.getMessageConverters().get(i) instanceof StringHttpMessageConverter) {
                     restTemplate.getMessageConverters().set(i, new StringHttpMessageConverter(StandardCharsets.UTF_8));
@@ -283,7 +283,7 @@ public class RestUtil {
             }
         }
 
-        // 请求体
+        // Request body
         String body = "";
         if (params != null) {
             if (params instanceof JSONObject) {
@@ -293,35 +293,35 @@ public class RestUtil {
             }
         }
 
-        // 拼接 url 参数
+        // Nối tham số url
         if (variables != null && !variables.isEmpty()) {
             url += ("?" + asUrlVariables(variables));
         }
 
-        // Content-Length 强制设置（解决可能出现的截断问题）
+        // Content-Length Thiết lập bắt buộc (giải quyết vấn đề cắt ngắn có thể xảy ra)
         if (StringUtils.isNotEmpty(body) && !headers.containsHeader(HttpHeaders.CONTENT_LENGTH)) {
             int contentLength = body.getBytes(StandardCharsets.UTF_8).length;
             String current = headers.getFirst(HttpHeaders.CONTENT_LENGTH);
             if (current == null || !current.equals(String.valueOf(contentLength))) {
                 headers.setContentLength(contentLength);
-                log.debug(" RestUtil  --- request(timeout) --- 修正/设置 Content-Length = " + contentLength + (current!=null?" (原值="+current+")":""));
+                log.debug(" RestUtil  --- request(timeout) --- Sửa/Cài đặt Content-Length = " + contentLength + (current!=null?" (Giá trị gốc="+current+")":""));
             }
         }
 
-        // 发送请求
+        // Gửi yêu cầu
         HttpEntity<String> request = new HttpEntity<>(body, headers);
         return restTemplate.exchange(URI.create(url), method, request, responseType);
     }
 
     /**
-     * 获取JSON请求头
+     * Lấy request header JSON
      */
     public static HttpHeaders getHeaderApplicationJson() {
         return getHeader(MediaType.APPLICATION_JSON_VALUE);
     }
 
     /**
-     * 获取请求头
+     * Lấy request header
      */
     public static HttpHeaders getHeader(String mediaType) {
         HttpHeaders headers = new HttpHeaders();
@@ -331,7 +331,7 @@ public class RestUtil {
     }
 
     /**
-     * 将 JSONObject 转为 a=1&b=2&c=3...&n=n 的形式
+     * Chuyển JSONObject thành a=1&b=2&c=3...&n=n dạng
      */
     public static String asUrlVariables(JSONObject variables) {
         Map<String, Object> source = variables.getInnerMap();
@@ -343,15 +343,15 @@ public class RestUtil {
             Object object = source.get(key);
             if (object != null) {
                 if (!StringUtils.isEmpty(object.toString())) {
-                    //update-begin---author:sjlei---date:20260414  for：【jeecg-ai#17】修复工具节点参数值含{}时URI模板展开报错-----------
-                    // URL 编码参数值，防止值中含 {}、空格等特殊字符导致 URI 解析异常
+                    //update-begin---author:sjlei---date:20260414  for：【jeecg-ai#17】Sửa lỗi giá trị tham số của nút công cụ chứa{}thì việc mở rộng mẫu URI báo lỗi-----------
+                    // URL Mã hóa giá trị tham số, tránh trường hợp giá trị chứa {}, khoảng trắng và các ký tự đặc biệt khác gây ra lỗi phân tích URI
                     value = URLEncoder.encode(object.toString(), StandardCharsets.UTF_8);
-                    //update-end-----author:sjlei---date:20260414  for：【jeecg-ai#17】修复工具节点参数值含{}时URI模板展开报错-----------
+                    //update-end-----author:sjlei---date:20260414  for：【jeecg-ai#17】Sửa lỗi giá trị tham số của nút công cụ chứa{}thì việc mở rộng mẫu URI báo lỗi-----------
                 }
             }
             urlVariables.append("&").append(key).append("=").append(value);
         }
-        // 去掉第一个&
+        // Loại bỏ ký tự đầu tiên&
         return urlVariables.substring(1);
     }
 

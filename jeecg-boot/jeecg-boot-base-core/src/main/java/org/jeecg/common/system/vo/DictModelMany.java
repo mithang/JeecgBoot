@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 查询多个字典时用到
+ * Dùng khi tìm kiếm nhiều từ điển
  * @author: jeecg-boot
  */
 @Data
@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 public class DictModelMany extends DictModel {
 
     /**
-     * 字典code，根据多个字段code查询时才用到，用于区分不同的字典选项
+     * Mã từ điển, chỉ dùng khi tìm kiếm theo mã của nhiều trường, để phân biệt các tùy chọn từ điển khác nhau
      */
     private String dictCode;
 

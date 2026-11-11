@@ -1,7 +1,7 @@
 package org.jeecg.common.es;
 
 /**
- * 用于创建 ElasticSearch 的 queryString
+ * Dùng để tạo queryString của ElasticSearch queryString
  *
  * @author sunjianlei
  */
@@ -18,12 +18,12 @@ public class QueryStringBuilder {
     }
 
     /**
-     * 创建 StringBuilder
+     * Tạo StringBuilder
      *
      * @param field
      * @param str
-     * @param not     是否是不匹配
-     * @param addQuot 是否添加双引号
+     * @param not     Có phải là không khớp không
+     * @param addQuot Có thêm dấu ngoặc kép không
      * @return
      */
     public StringBuilder createBuilder(String field, String str, boolean not, boolean addQuot) {
@@ -66,14 +66,14 @@ public class QueryStringBuilder {
     }
 
     /**
-    * 添加双引号（模糊查询，不能加双引号）
+    * Thêm dấu ngoặc kép (tìm kiếm mờ, không được thêm dấu ngoặc kép)
     */
     private QueryStringBuilder addQuot(String str, boolean addQuot) {
         return this.addQuotEffect(this.builder, str, addQuot);
     }
 
     /**
-     * 是否在两边加上双引号
+     * Có thêm dấu ngoặc kép ở hai bên không
      * @param builder
      * @param str
      * @param addQuot

@@ -5,46 +5,46 @@ import org.jeecg.common.util.oConvertUtils;
 import java.util.List;
 
 /**
- * 首页自定义
- * 通过角色编码与首页组件路径配置
- * 枚举的顺序有权限高低权重作用（也就是配置多个角色，在前面的角色首页，会优先生效）
+ * Tùy chỉnh trang chủ
+ * Cấu hình theo mã vai trò và đường dẫn component trang chủ
+ * Thứ tự của enum có tác dụng trọng số về mức độ quyền hạn (tức là khi cấu hình nhiều vai trò, trang chủ của vai trò đứng trước sẽ có hiệu lực ưu tiên)
  * @author: jeecg-boot
  */
 public enum RoleIndexConfigEnum {
 
-    /**首页自定义 admin*/
+    /**Tùy chỉnh trang chủ admin*/
 //    ADMIN("admin", "dashboard/Analysis"),
     //TEST("test",  "dashboard/IndexChart"),
-    /**首页自定义 hr*/
+    /**Tùy chỉnh trang chủ hr*/
 //    HR("hr", "dashboard/IndexBdc");
   
     //DM("dm", "dashboard/IndexTask"),
 
-    // 注：此值仅为防止报错，无任何实际意义
+    // Ghi chú: Giá trị này chỉ để tránh báo lỗi, không có ý nghĩa thực tế nào
     ROLE_INDEX_CONFIG_ENUM("RoleIndexConfigEnumDefault", "dashboard/Analysis");
 
     /**
-     * 角色编码
+     * Mã vai trò
      */
     String roleCode;
     /**
-     * 路由index
+     * Route index
      */
     String componentUrl;
 
     /**
-     * 构造器
+     * Hàm khởi tạo
      *
-     * @param roleCode 角色编码
-     * @param componentUrl 首页组件路径（规则跟菜单配置一样）
+     * @param roleCode Mã vai trò
+     * @param componentUrl Đường dẫn component trang chủ (quy tắc giống cấu hình menu)
      */
     RoleIndexConfigEnum(String roleCode, String componentUrl) {
         this.roleCode = roleCode;
         this.componentUrl = componentUrl;
     }
     /**
-     * 根据code找枚举
-     * @param roleCode 角色编码
+     * Tìm enum theo code
+     * @param roleCode Mã vai trò
      * @return
      */
     private static RoleIndexConfigEnum getEnumByCode(String roleCode) {
@@ -56,8 +56,8 @@ public enum RoleIndexConfigEnum {
         return null;
     }
     /**
-     * 根据code找index
-     * @param roleCode 角色编码
+     * Tìm index theo code index
+     * @param roleCode Mã vai trò
      * @return
      */
     private static String getIndexByCode(String roleCode) {

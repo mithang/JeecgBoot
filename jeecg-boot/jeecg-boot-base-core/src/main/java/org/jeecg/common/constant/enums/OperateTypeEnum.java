@@ -3,49 +3,49 @@ package org.jeecg.common.constant.enums;
 import org.jeecg.common.constant.CommonConstant;
 
 /**
- * @Description: 操作类型
+ * @Description: Loại thao tác
  * @author: jeecg-boot
  * @date: 2022/3/31 10:05
  */
 public enum OperateTypeEnum {
 
     /**
-     * 列表
+     * Danh sách
      */
     LIST(CommonConstant.OPERATE_TYPE_1, "list"),
 
     /**
-     * 新增
+     * Thêm mới
      */
     ADD(CommonConstant.OPERATE_TYPE_2, "add"),
 
     /**
-     * 编辑
+     * Chỉnh sửa
      */
     EDIT(CommonConstant.OPERATE_TYPE_3, "edit"),
 
     /**
-     * 删除
+     * Xóa
      */
     DELETE(CommonConstant.OPERATE_TYPE_4, "delete"),
 
     /**
-     * 导入
+     * Import
      */
     IMPORT(CommonConstant.OPERATE_TYPE_5, "import"),
 
     /**
-     * 导出
+     * Xuất
      */
     EXPORT(CommonConstant.OPERATE_TYPE_6, "export");
 
     /**
-     * 类型 1列表,2新增,3编辑,4删除,5导入,6导出
+     * Loại 1: danh sách,2 Thêm mới,3 Chỉnh sửa,4 Xóa,5 Import,6 Xuất
      */
     int type;
 
     /**
-     * 编码(请求方式)
+     * Mã(Phương thức yêu cầu)
      */
     String code;
 
@@ -67,10 +67,10 @@ public enum OperateTypeEnum {
     }
 
     /**
-     * 构造器
+     * Hàm khởi tạo
      *
-     * @param type 类型
-     * @param code 编码(请求方式)
+     * @param type Loại
+     * @param code Mã(Phương thức yêu cầu)
      */
     OperateTypeEnum(int type, String code) {
         this.type = type;
@@ -79,10 +79,10 @@ public enum OperateTypeEnum {
 
 
     /**
-     * 根据请求名称匹配
+     * Khớp theo tên yêu cầu
      *
-     * @param methodName 请求名称
-     * @return Integer 类型
+     * @param methodName Tên yêu cầu
+     * @return Integer Loại
      */
     public static Integer getTypeByMethodName(String methodName) {
         for (OperateTypeEnum e : OperateTypeEnum.values()) {

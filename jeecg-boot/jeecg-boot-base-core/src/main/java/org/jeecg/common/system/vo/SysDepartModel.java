@@ -1,39 +1,39 @@
 package org.jeecg.common.system.vo;
 
 /**
- * 部门机构model
+ * Cơ quan phòng ban model
  * @author: lvdandan
  */
 public class SysDepartModel {
     /**ID*/
     private String id;
-    /**父机构ID*/
+    /**Cơ quan cấp trên ID*/
     private String parentId;
-    /**机构/部门名称*/
+    /**Tổ chức/Tên phòng ban*/
     private String departName;
-    /**英文名*/
+    /**Tên tiếng Anh*/
     private String departNameEn;
-    /**缩写*/
+    /**Tên viết tắt*/
     private String departNameAbbr;
-    /**机构/部门路径名称*/
+    /**Tổ chức/Tên đường dẫn phòng ban*/
     private String departPathName;
-    /**排序*/
+    /**Sắp xếp*/
     private Integer departOrder;
-    /**描述*/
+    /**Mô tả*/
     private String description;
-    /**机构类别 1组织机构，2岗位*/
+    /**Loại cơ quan: 1 tổ chức, 2 vị trí công tác*/
     private String orgCategory;
-    /**机构类型*/
+    /**Loại tổ chức*/
     private String orgType;
-    /**机构编码*/
+    /**Mã tổ chức*/
     private String orgCode;
-    /**手机号*/
+    /**Số điện thoại*/
     private String mobile;
-    /**传真*/
+    /**Fax*/
     private String fax;
-    /**地址*/
+    /**Địa chỉ*/
     private String address;
-    /**备注*/
+    /**Ghi chú*/
     private String memo;
 
     public String getId() {

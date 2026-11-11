@@ -1,30 +1,30 @@
 package org.jeecg.common.constant;
 
 /**
- * VXESocket 常量
+ * VXESocket Hằng số
  * @author: jeecg-boot
  */
 public class VxeSocketConst {
 
     /**
-     * 消息类型
+     * Loại tin nhắn
      */
     public static final String TYPE = "type";
     /**
-     * 消息数据
+     * Dữ liệu tin nhắn
      */
     public static final String DATA = "data";
 
     /**
-     * 消息类型：心跳检测
+     * Loại thông báo: Kiểm tra heartbeat
      */
     public static final String TYPE_HB = "heart_beat";
     /**
-     * 消息类型：通用数据传递
+     * Loại tin nhắn: Truyền dữ liệu chung
      */
     public static final String TYPE_CSD = "common_send_date";
     /**
-     * 消息类型：更新vxe table数据
+     * Loại tin nhắn: cập nhật dữ liệu vxe table
      */
     public static final String TYPE_UVT = "update_vxe_table";
 

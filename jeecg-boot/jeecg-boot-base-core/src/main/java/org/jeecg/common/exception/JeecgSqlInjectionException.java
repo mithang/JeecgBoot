@@ -1,7 +1,7 @@
 package org.jeecg.common.exception;
 
 /**
- * @Description: jeecg-boot自定义SQL注入异常
+ * @Description: jeecg-boot Ngoại lệ SQL injection tùy chỉnh
  * @author: jeecg-boot
  */
 public class JeecgSqlInjectionException extends RuntimeException {

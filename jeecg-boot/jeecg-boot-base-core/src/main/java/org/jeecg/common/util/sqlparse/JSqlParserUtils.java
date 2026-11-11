@@ -20,13 +20,13 @@
 //public class JSqlParserUtils {
 //
 //    /**
-//     * 解析 查询（select）sql的信息，
-//     * 此方法会展开所有子查询到一个map里，
-//     * key只存真实的表名，如果查询的没有真实的表名，则会被忽略。
-//     * value只存真实的字段名，如果查询的没有真实的字段名，则会被忽略。
+//     * Phân giải thông tin SQL truy vấn (select),
+//     * Phương thức này sẽ mở rộng tất cả truy vấn con vào một map,
+//     * key chỉ lưu tên bảng thực; nếu truy vấn không có tên bảng thực thì sẽ bị bỏ qua.
+//     * value chỉ lưu tên trường thực; nếu truy vấn không có tên trường thực thì sẽ bị bỏ qua.
 //     * <p>
-//     * 例如：SELECT a.*,d.age,(SELECT count(1) FROM sys_depart) AS count FROM (SELECT username AS foo, realname FROM sys_user) a, demo d
-//     * 解析后的结果为：{sys_user=[username, realname], demo=[age], sys_depart=[]}
+//     * Ví dụ:SELECT a.*,d.age,(SELECT count(1) FROM sys_depart) AS count FROM (SELECT username AS foo, realname FROM sys_user) a, demo d
+//     * Kết quả sau khi phân giải là:{sys_user=[username, realname], demo=[age], sys_depart=[]}
 //     *
 //     * @param selectSql
 //     * @return
@@ -35,13 +35,13 @@
 //        if (oConvertUtils.isEmpty(selectSql)) {
 //            return null;
 //        }
-//        // log.info("解析查询Sql：{}", selectSql);
+//        // log.info("Phân tích SQL tìm kiếm：{}", selectSql);
 //        JSqlParserAllTableManager allTableManager = new JSqlParserAllTableManager(selectSql);
 //        return allTableManager.parse();
 //    }
 //
 //    /**
-//     * 解析 查询（select）sql的信息，子查询嵌套
+//     * Phân giải thông tin SQL truy vấn (select), truy vấn con lồng nhau
 //     *
 //     * @param selectSql
 //     * @return
@@ -50,66 +50,66 @@
 //        if (oConvertUtils.isEmpty(selectSql)) {
 //            return null;
 //        }
-//        // log.info("解析查询Sql：{}", selectSql);
-//        // 使用 JSqlParer 解析sql
-//        // 1、创建解析器
+//        // log.info("Phân tích SQL tìm kiếm：{}", selectSql);
+//        // Dùng JSqlParer để phân giải sql
+//        // 1、Tạo trình phân giải
 //        CCJSqlParserManager mgr = new CCJSqlParserManager();
-//        // 2、使用解析器解析sql生成具有层次结构的java类
+//        // 2、Dùng trình phân giải để phân giải SQL và tạo lớp Java có cấu trúc phân cấp
 //        Statement stmt = mgr.parse(new StringReader(selectSql));
 //        if (stmt instanceof Select) {
 //            Select selectStatement = (Select) stmt;
-//            // 3、解析select查询sql的信息
+//            // 3、Phân giải thông tin SQL truy vấn select
 //            return JSqlParserUtils.parseBySelectBody(selectStatement.getSelectBody());
 //        } else {
-//            // 非 select 查询sql，不做处理
-//            throw new JeecgBootException("非 select 查询sql，不做处理");
+//            // Không phải câu truy vấn select, không xử lý
+//            throw new JeecgBootException("Không phải câu truy vấn select, không xử lý");
 //        }
 //    }
 //
 //    /**
-//     * 解析 select 查询sql的信息
+//     * Phân giải thông tin SQL truy vấn select
 //     *
 //     * @param selectBody
 //     * @return
 //     */
 //    private static SelectSqlInfo parseBySelectBody(SelectBody selectBody) {
-//        // 判断是否使用了union等操作
+//        // Phán đoán có dùng thao tác union hay tương tự không
 //        if (selectBody instanceof SetOperationList) {
-//            // 如果使用了union等操作，则只解析第一个查询
+//            // Nếu đã dùng thao tác union hay tương tự thì chỉ phân giải truy vấn đầu tiên
 //            List<SelectBody> selectBodyList = ((SetOperationList) selectBody).getSelects();
 //            return JSqlParserUtils.parseBySelectBody(selectBodyList.get(0));
 //        }
-//        // 简单的select查询
+//        // Truy vấn select đơn giản
 //        if (selectBody instanceof PlainSelect) {
 //            SelectSqlInfo sqlInfo = new SelectSqlInfo(selectBody);
 //            PlainSelect plainSelect = (PlainSelect) selectBody;
 //            FromItem fromItem = plainSelect.getFromItem();
-//            // 解析 aliasName
+//            // Phân tích cú pháp aliasName
 //            if (fromItem.getAlias() != null) {
 //                sqlInfo.setFromTableAliasName(fromItem.getAlias().getName());
 //            }
-//            // 解析 表名
+//            // Phân giải tên bảng
 //            if (fromItem instanceof Table) {
-//                // 通过表名的方式from
+//                // Theo cách dùng tên bảng from
 //                Table fromTable = (Table) fromItem;
 //                sqlInfo.setFromTableName(fromTable.getName());
 //            } else if (fromItem instanceof SubSelect) {
-//                // 通过子查询的方式from
+//                // Theo cách dùng truy vấn con from
 //                SubSelect fromSubSelect = (SubSelect) fromItem;
 //                SelectSqlInfo subSqlInfo = JSqlParserUtils.parseBySelectBody(fromSubSelect.getSelectBody());
 //                sqlInfo.setFromSubSelect(subSqlInfo);
 //            }
-//            // 解析 selectFields
+//            // Phân tích cú pháp selectFields
 //            List<SelectItem> selectItems = plainSelect.getSelectItems();
 //            for (SelectItem selectItem : selectItems) {
 //                if (selectItem instanceof AllColumns || selectItem instanceof AllTableColumns) {
-//                    // 全部字段
+//                    // Tất cả các trường
 //                    sqlInfo.setSelectAll(true);
 //                    sqlInfo.setSelectFields(null);
 //                    sqlInfo.setRealSelectFields(null);
 //                    break;
 //                } else if (selectItem instanceof SelectExpressionItem) {
-//                    // 获取单个查询字段名
+//                    // Lấy tên trường truy vấn đơn lẻ
 //                    SelectExpressionItem selectExpressionItem = (SelectExpressionItem) selectItem;
 //                    Expression expression = selectExpressionItem.getExpression();
 //                    Alias alias = selectExpressionItem.getAlias();
@@ -118,34 +118,34 @@
 //            }
 //            return sqlInfo;
 //        } else {
-//            log.warn("暂时尚未处理该类型的 SelectBody: {}", selectBody.getClass().getName());
-//            throw new JeecgBootException("暂时尚未处理该类型的 SelectBody");
+//            log.warn("Tạm thời chưa xử lý loại này của SelectBody: {}", selectBody.getClass().getName());
+//            throw new JeecgBootException("Tạm thời chưa xử lý loại này của SelectBody");
 //        }
 //    }
 //
 //    /**
-//     * 处理查询字段表达式
+//     * Xử lý biểu thức trường tìm kiếm
 //     *
 //     * @param sqlInfo
 //     * @param expression
-//     * @param alias      是否有别名，无传null
+//     * @param alias      Có bí danh không, nếu không thì truyền null
 //     */
 //    private static void handleExpression(SelectSqlInfo sqlInfo, Expression expression, Alias alias) {
-//        // 处理函数式字段  CONCAT(name,'(',age,')')
+//        // Xử lý trường dạng hàm  CONCAT(name,'(',age,')')
 //        if (expression instanceof Function) {
 //            JSqlParserUtils.handleFunctionExpression((Function) expression, sqlInfo);
 //            return;
 //        }
-//        // 处理字段上的子查询
+//        // Xử lý truy vấn con trên trường
 //        if (expression instanceof SubSelect) {
 //            SubSelect subSelect = (SubSelect) expression;
 //            SelectSqlInfo subSqlInfo = JSqlParserUtils.parseBySelectBody(subSelect.getSelectBody());
-//            // 注：字段上的子查询，必须只查询一个字段，否则会报错，所以可以放心合并
+//            // Lưu ý: truy vấn con trên trường bắt buộc chỉ truy vấn một trường, nếu không sẽ báo lỗi, vì vậy có thể yên tâm gộp
 //            sqlInfo.getSelectFields().addAll(subSqlInfo.getSelectFields());
 //            sqlInfo.getRealSelectFields().addAll(subSqlInfo.getAllRealSelectFields());
 //            return;
 //        }
-//        // 不处理字面量
+//        // Không xử lý literal
 //        if (expression instanceof StringValue ||
 //                expression instanceof NullValue ||
 //                expression instanceof LongValue ||
@@ -158,15 +158,15 @@
 //            return;
 //        }
 //
-//        // 查询字段名
+//        // Tên trường tìm kiếm
 //        String selectField = expression.toString();
-//        // 实际查询字段名
+//        // Tên trường truy vấn thực tế
 //        String realSelectField = selectField;
-//        // 判断是否有别名
+//        // Phán đoán có bí danh không
 //        if (alias != null) {
 //            selectField = alias.getName();
 //        }
-//        // 获取真实字段名
+//        // Lấy tên trường thực
 //        if (expression instanceof Column) {
 //            Column column = (Column) expression;
 //            realSelectField = column.getColumnName();
@@ -175,7 +175,7 @@
 //    }
 //
 //    /**
-//     * 处理函数式字段
+//     * Xử lý trường dạng hàm
 //     *
 //     * @param functionExp
 //     * @param sqlInfo

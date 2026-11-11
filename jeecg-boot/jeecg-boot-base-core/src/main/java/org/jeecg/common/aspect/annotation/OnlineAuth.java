@@ -3,7 +3,7 @@ package org.jeecg.common.aspect.annotation;
 import java.lang.annotation.*;
 
 /**
- * online请求拦截专用注解
+ * online Annotation chuyên dùng chặn yêu cầu
  * @author: jeecg-boot
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 public @interface OnlineAuth {
 
     /**
-     * 请求关键字，在xxx/code之前的字符串
+     * Từ khóa yêu cầu, nằm ở xxx/code chuỗi trước đó
      * @return
      */
     String value();

@@ -3,17 +3,17 @@ package org.jeecg.common.handler;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 填值规则接口
+ * Interface quy tắc điền giá trị
  *
  * @author Yan_东
- * 如需使用填值规则功能，规则实现类必须实现此接口
+ * Nếu cần sử dụng chức năng quy tắc điền giá trị, lớp triển khai quy tắc phải implements interface này
  */
 public interface IFillRuleHandler {
 
     /**
-     * 填值规则
-     * @param params 页面配置固定参数
-     * @param formData  动态表单参数
+     * Quy tắc điền giá trị
+     * @param params Tham số cố định cấu hình trang
+     * @param formData  Tham số biểu mẫu động
      * @return
      */
     public Object execute(JSONObject params, JSONObject formData);

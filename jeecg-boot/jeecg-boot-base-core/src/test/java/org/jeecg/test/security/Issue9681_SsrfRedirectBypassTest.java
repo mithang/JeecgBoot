@@ -28,29 +28,29 @@ import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
 
 /**
- * 【issues/9681】SSRF 重定向绕过漏洞修复 (CWE-918) — 单元测试
+ * 【issues/9681】Sửa lỗi bỏ qua SSRF bằng chuyển hướng (CWE-918) — Kiểm thử đơn vị
  *
- * ── 漏洞 ──────────────────────────────────────────────────────────────────────
- * 修复前：download2DiskFromNet / getDownInputStream 仅在打开连接前对 fileUrl 做了
- * 一次 SsrfFileTypeFilter.checkSsrfHttpUrl(...)，随后用 HttpURLConnection 打开连接，
- * 而 JDK 默认 followRedirects=true 会【自动跟随 3xx 重定向】。
+ * ── Lỗ hổng ──────────────────────────────────────────────────────────────────────
+ * Trước khi sửa：download2DiskFromNet / getDownInputStream chỉ thực hiện kiểm tra fileUrl trước khi mở kết nối
+ * một lần SsrfFileTypeFilter.checkSsrfHttpUrl(...)，sau đó dùng HttpURLConnection để mở kết nối,
+ * mà JDK mặc định followRedirects=true sẽ【tự động theo chuyển hướng 3xx】.
  *
- * 攻击者：传入公网地址 http://attacker.com/x（首检通过），其服务器返回
- *   302 Location: http://127.0.0.1:xxx/... 或 http://169.254.169.254/latest/meta-data/。
- * JDK 自动跟随该跳且【不再复检】，于是访问到内网/云元数据 —— SSRF 成立。
- * 根因：被校验的 URL 与最终被访问的 URL 不一致（重定向逃逸）。
+ * Kẻ tấn công: truyền vào địa chỉ mạng công cộng http://attacker.com/x(Kiểm tra lần đầu đạt), máy chủ của nó trả về
+ *   302 Location: http://127.0.0.1:xxx/... hoặc http://169.254.169.254/latest/meta-data/。
+ * JDK Tự động theo bước nhảy này và【không kiểm tra lại nữa】, do đó truy cập vào mạng nội bộ/metadata đám mây —— SSRF thành công.
+ * Nguyên nhân gốc: URL được kiểm tra không nhất quán với URL cuối cùng được truy cập (thoát bằng chuyển hướng).
  *
- * ── 修复 ──────────────────────────────────────────────────────────────────────
- * openSafeConnection(...)：setInstanceFollowRedirects(false) 关闭自动跳转，改为手动
- * 循环（最多 5 跳），对【初始 URL 及每一跳重定向目标】都重新 checkSsrfHttpUrl，
- * 相对 Location 解析为绝对地址后再校验，超过次数抛异常。
+ * ── Sửa ──────────────────────────────────────────────────────────────────────
+ * openSafeConnection(...)：setInstanceFollowRedirects(false) Tắt tự động chuyển hướng, đổi thành thủ công
+ * vòng lặp (tối đa 5 bước nhảy), kiểm tra lại checkSsrfHttpUrl đối với【URL ban đầu và mục tiêu chuyển hướng của mỗi bước nhảy】,
+ * Phân giải Location tương đối thành địa chỉ tuyệt đối rồi kiểm tra lại, vượt quá số lần sẽ ném ra ngoại lệ.
  *
- * ── 测试策略 ──────────────────────────────────────────────────────────────────
- * 1. 漏洞根因（用真实过滤器，无网络）：证明"公网首检通过、内网目标会被拦"，
- *    从而说明单次前置校验对重定向无效，必须逐跳复检。
- * 2. 修复行为（mockStatic + 本地 HttpServer）：本地测试服在 127.0.0.1，会被真实
- *    SSRF 过滤器拦截，故用 mockStatic 放行测试服，专注断言"每一跳都调用了
- *    checkSsrfHttpUrl"以及"某一跳校验失败会整体抛异常 / 不会自动跟随"。
+ * ── Chiến lược kiểm thử ──────────────────────────────────────────────────────────────────
+ * 1. Nguyên nhân gốc của lỗ hổng (dùng bộ lọc thật, không có mạng): Chứng minh"Kiểm tra lần đầu mạng công cộng đạt, mục tiêu mạng nội bộ sẽ bị chặn"，
+ *    từ đó cho thấy kiểm tra tiền đề một lần không có hiệu quả đối với chuyển hướng, phải kiểm tra lại từng bước nhảy.
+ * 2. Hành vi sửa (mockStatic + HttpServer cục bộ): máy chủ kiểm thử cục bộ tại 127.0.0.1，sẽ bị bộ lọc thật
+ *    SSRF chặn, vì vậy dùng mockStatic để cho qua máy chủ kiểm thử, tập trung khẳng định"mỗi bước nhảy đều đã gọi
+ *    checkSsrfHttpUrl"và"một bước nhảy kiểm tra thất bại sẽ ném ra ngoại lệ toàn cục / sẽ không tự động theo"。
  *
  * @author wangshuai
  * @date 2026-06-17
@@ -65,27 +65,27 @@ public class Issue9681_SsrfRedirectBypassTest {
     static void startServer() throws IOException {
         server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 
-        // 302 相对跳转 /redirect -> /target，验证"相对 Location 解析 + 逐跳复检"
+        // 302 Chuyển hướng tương đối /redirect -> /target，xác minh"Phân tích Location tương đối + Kiểm tra lại từng bước nhảy"
         server.createContext("/redirect", ex -> {
             ex.getResponseHeaders().add("Location", "/target");
             ex.sendResponseHeaders(302, -1);
             ex.close();
         });
-        // 最终 200 资源
+        // Tài nguyên 200 cuối cùng
         server.createContext("/target", ex -> {
             byte[] body = "OK-BODY".getBytes(StandardCharsets.UTF_8);
             ex.sendResponseHeaders(200, body.length);
             ex.getResponseBody().write(body);
             ex.close();
         });
-        // 直接 200，无重定向
+        // Trực tiếp 200, không chuyển hướng
         server.createContext("/direct", ex -> {
             byte[] body = "DIRECT".getBytes(StandardCharsets.UTF_8);
             ex.sendResponseHeaders(200, body.length);
             ex.getResponseBody().write(body);
             ex.close();
         });
-        // 无限自跳，验证"最大重定向次数"保护
+        // Tự nhảy vô hạn, xác minh"Số lần chuyển hướng tối đa"Bảo vệ
         server.createContext("/loop", ex -> {
             ex.getResponseHeaders().add("Location", "/loop");
             ex.sendResponseHeaders(302, -1);
@@ -102,7 +102,7 @@ public class Issue9681_SsrfRedirectBypassTest {
         }
     }
 
-    /** 反射调用 private static FileDownloadUtils.openSafeConnection，并解包反射异常。 */
+    /** Gọi bằng reflection private static FileDownloadUtils.openSafeConnection，và giải nén ngoại lệ reflection. */
     private HttpURLConnection openSafeConnection(String url) throws Throwable {
         Method m = FileDownloadUtils.class.getDeclaredMethod("openSafeConnection", String.class);
         m.setAccessible(true);
@@ -114,59 +114,59 @@ public class Issue9681_SsrfRedirectBypassTest {
     }
 
     // ==================================================================
-    // 一、漏洞根因：单次前置校验无法防住重定向（真实过滤器，无网络）
+    // 1. Nguyên nhân gốc của lỗ hổng: kiểm chứng tiền tố một lần không ngăn được chuyển hướng (bộ lọc thật, không có mạng)
     // ==================================================================
 
     @Nested
-    @DisplayName("漏洞根因 —— 为什么单次前置校验会被重定向绕过")
+    @DisplayName("Nguyên nhân gốc của lỗ hổng —— Vì sao kiểm chứng tiền tố một lần bị chuyển hướng bỏ qua")
     class RootCause {
 
         @Test
-        @DisplayName("攻击者提供的公网 URL 首检通过（旧逻辑只校验这一次）")
+        @DisplayName("URL mạng công cộng do kẻ tấn công cung cấp đạt kiểm tra lần đầu (logic cũ chỉ kiểm chứng lần này)")
         void publicUrlPassesFirstCheck() {
             assertDoesNotThrow(() -> SsrfFileTypeFilter.checkSsrfHttpUrl("http://cdn.example.com/x"));
-            System.out.println("[publicUrlPassesFirstCheck] 公网 http://cdn.example.com/x 首检通过（攻击者入口）");
+            System.out.println("[publicUrlPassesFirstCheck] Mạng công cộng http://cdn.example.com/x Kiểm tra lần đầu đạt (cửa vào của kẻ tấn công)");
         }
 
         @Test
-        @DisplayName("重定向目标(内网/元数据)若被复检则会拦截 —— 旧逻辑因自动跟随而漏检")
+        @DisplayName("Mục tiêu chuyển hướng(Mạng nội bộ/Metadata)Nếu bị kiểm tra lại sẽ bị chặn —— Logic cũ bỏ sót do tự động theo dõi")
         void redirectTargetWouldBeBlockedIfRechecked() {
-            // 这两个地址正是攻击者用 302 跳过去的目标；旧逻辑 JDK 自动跟随、不复检 → 绕过
+            // Hai địa chỉ này chính là mục tiêu kẻ tấn công nhảy tới bằng 302; logic cũ JDK tự động theo dõi, không kiểm tra lại → Bypass
             JeecgBootException e1 = assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl("http://127.0.0.1:6379/"));
             JeecgBootException e2 = assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl("http://169.254.169.254/latest/meta-data/"));
-            System.out.println("[redirectTargetWouldBeBlockedIfRechecked] 127.0.0.1:6379 复检 -> " + e1.getMessage());
-            System.out.println("[redirectTargetWouldBeBlockedIfRechecked] 169.254.169.254 复检 -> " + e2.getMessage());
-            System.out.println("[redirectTargetWouldBeBlockedIfRechecked] 结论：校验的URL≠实际访问的URL，必须逐跳复检");
+            System.out.println("[redirectTargetWouldBeBlockedIfRechecked] 127.0.0.1:6379 Kiểm tra lại -> " + e1.getMessage());
+            System.out.println("[redirectTargetWouldBeBlockedIfRechecked] 169.254.169.254 Kiểm tra lại -> " + e2.getMessage());
+            System.out.println("[redirectTargetWouldBeBlockedIfRechecked] Kết luận: URL được kiểm chứng URL≠URL thực tế được truy cập, phải kiểm tra lại từng bước nhảy");
         }
     }
 
     // ==================================================================
-    // 二、修复行为：openSafeConnection 逐跳复检 + 关闭自动跳转
+    // Hai, hành vi sau khi sửa: openSafeConnection kiểm tra lại từng bước nhảy + Tắt tự động chuyển hướng
     // ==================================================================
 
     @Nested
-    @DisplayName("修复行为 —— openSafeConnection 对每一跳重定向都复检")
+    @DisplayName("Hành vi sau khi sửa —— openSafeConnection kiểm tra lại mọi bước nhảy chuyển hướng")
     class FixBehavior {
 
         @Test
-        @DisplayName("发生重定向时，初始 URL 与重定向目标都各被 checkSsrfHttpUrl 校验一次")
+        @DisplayName("Khi xảy ra chuyển hướng, URL ban đầu và mục tiêu chuyển hướng đều được checkSsrfHttpUrl kiểm chứng một lần")
         void everyHopIsValidated() throws Throwable {
             java.util.List<String> checked = new java.util.ArrayList<>();
             try (MockedStatic<SsrfFileTypeFilter> mocked = mockStatic(SsrfFileTypeFilter.class)) {
-                // 默认放行（void 方法 mock 后即 no-op），让本地测试服可达；同时记录每一跳被校验的 URL
+                // Mặc định cho qua (sau khi mock phương thức void tức là no-op)，để máy chủ kiểm thử cục bộ có thể truy cập được; đồng thời ghi lại URL
                 mocked.when(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(anyString()))
                         .thenAnswer(inv -> { checked.add(inv.getArgument(0)); return null; });
 
                 HttpURLConnection conn = openSafeConnection(base + "/redirect");
 
-                System.out.println("[everyHopIsValidated] 被 SSRF 复检的每一跳 = " + checked);
-                System.out.println("[everyHopIsValidated] 最终响应码 = " + conn.getResponseCode());
+                System.out.println("[everyHopIsValidated] mỗi bước nhảy được kiểm tra lại bởi SSRF = " + checked);
+                System.out.println("[everyHopIsValidated] Mã phản hồi cuối cùng = " + conn.getResponseCode());
 
-                assertEquals(200, conn.getResponseCode(), "应手动跟随到最终 200 资源");
+                assertEquals(200, conn.getResponseCode(), "nên theo thủ công đến tài nguyên 200 cuối cùng");
 
-                // 关键断言：初始跳与重定向目标都被复检 —— 证明没有走 JDK 自动跟随
+                // Assertion quan trọng: bước nhảy ban đầu và mục tiêu chuyển hướng đều được kiểm tra lại —— Chứng minh không đi theo tự động theo dõi của JDK
                 mocked.verify(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(base + "/redirect"), times(1));
                 mocked.verify(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(base + "/target"), times(1));
                 conn.disconnect();
@@ -174,32 +174,32 @@ public class Issue9681_SsrfRedirectBypassTest {
         }
 
         @Test
-        @DisplayName("重定向目标被判定为危险地址时，整体抛 JeecgBootException（绕过被堵死）")
+        @DisplayName("Khi mục tiêu chuyển hướng bị xác định là địa chỉ nguy hiểm, toàn bộ ném JeecgBootException (đường bỏ qua bị chặn chết)")
         void blockedRedirectTargetThrows() {
             try (MockedStatic<SsrfFileTypeFilter> mocked = mockStatic(SsrfFileTypeFilter.class)) {
-                // 模拟：初始公网放行，但重定向目标(/target，代表内网)校验失败
+                // Mô phỏng: mạng công cộng ban đầu được cho qua, nhưng mục tiêu chuyển hướng(/target，đại diện cho mạng nội bộ)Kiểm tra thất bại
                 mocked.when(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(anyString())).thenAnswer(inv -> {
                     String u = inv.getArgument(0);
                     if (u.contains("/target")) {
-                        throw new JeecgBootException("非法URL：禁止访问本机或链路本地地址");
+                        throw new JeecgBootException("URL không hợp lệ: Cấm truy cập máy local hoặc địa chỉ link-local");
                     }
                     return null;
                 });
 
                 JeecgBootException ex = assertThrows(JeecgBootException.class,
                         () -> openSafeConnection(base + "/redirect"));
-                System.out.println("[blockedRedirectTargetThrows] 重定向到内网被拦截 -> " + ex.getMessage());
-                assertTrue(ex.getMessage().contains("禁止访问"),
-                        "应在跟随重定向前就因目标地址校验失败而中断");
+                System.out.println("[blockedRedirectTargetThrows] Chuyển hướng tới mạng nội bộ bị chặn -> " + ex.getMessage());
+                assertTrue(ex.getMessage().contains("Cấm truy cập"),
+                        "Nên bị gián đoạn trước khi theo dõi chuyển hướng do kiểm chứng địa chỉ đích thất bại");
             }
         }
 
         @Test
-        @DisplayName("无重定向的直连资源：仅校验一次并正常返回 200")
+        @DisplayName("Tài nguyên kết nối trực tiếp không có chuyển hướng: chỉ kiểm tra một lần và trả về bình thường 200")
         void directResourceValidatedOnce() throws Throwable {
             try (MockedStatic<SsrfFileTypeFilter> mocked = mockStatic(SsrfFileTypeFilter.class)) {
                 HttpURLConnection conn = openSafeConnection(base + "/direct");
-                System.out.println("[directResourceValidatedOnce] 直连无重定向，响应码 = " + conn.getResponseCode());
+                System.out.println("[directResourceValidatedOnce] Kết nối trực tiếp không có chuyển hướng, mã phản hồi = " + conn.getResponseCode());
                 assertEquals(200, conn.getResponseCode());
                 mocked.verify(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(base + "/direct"), times(1));
                 conn.disconnect();
@@ -207,14 +207,14 @@ public class Issue9681_SsrfRedirectBypassTest {
         }
 
         @Test
-        @DisplayName("重定向次数超过上限(5)时抛异常，防止恶意死循环跳转")
+        @DisplayName("Số lần chuyển hướng vượt quá giới hạn(5)sẽ ném ngoại lệ, ngăn chuyển hướng vòng lặp vô hạn độc hại")
         void tooManyRedirectsThrows() {
             try (MockedStatic<SsrfFileTypeFilter> mocked = mockStatic(SsrfFileTypeFilter.class)) {
                 JeecgBootException ex = assertThrows(JeecgBootException.class,
                         () -> openSafeConnection(base + "/loop"));
-                System.out.println("[tooManyRedirectsThrows] 死循环跳转被阻断 -> " + ex.getMessage());
-                assertTrue(ex.getMessage().contains("重定向次数过多"));
-                // 初始 + 5 次重定向 = 共 6 次校验（i 从 0 到 5）
+                System.out.println("[tooManyRedirectsThrows] Chuyển hướng vòng lặp vô hạn bị chặn -> " + ex.getMessage());
+                assertTrue(ex.getMessage().contains("Số lần chuyển hướng quá nhiều"));
+                // Ban đầu + 5 lần chuyển hướng = Tổng cộng 6 lần kiểm chứng (i từ 0 đến 5)
                 mocked.verify(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(anyString()), times(6));
             }
         }

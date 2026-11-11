@@ -11,11 +11,11 @@ import java.util.Map;
 
 
 /**
- * 数据源缓存池
+ * Pool cache nguồn dữ liệu
  * @author: jeecg-boot
  */
 public class DataSourceCachePool {
-    /** 数据源连接池缓存【本地 class缓存 - 不支持分布式】 */
+    /** Cache pool kết nối nguồn dữ liệu 【cache class cục bộ - Không hỗ trợ phân tán】 */
     private static Map<String, DruidDataSource> dbSources = new HashMap<>();
     private static RedisTemplate<String, Object> redisTemplate;
 
@@ -27,7 +27,7 @@ public class DataSourceCachePool {
     }
 
     /**
-     * 获取多数据源缓存
+     * Lấy cache đa nguồn dữ liệu
      *
      * @param dbKey
      * @return
@@ -50,7 +50,7 @@ public class DataSourceCachePool {
     }
 
     /**
-     * put 数据源缓存
+     * put Cache nguồn dữ liệu
      *
      * @param dbKey
      * @param db
@@ -60,32 +60,32 @@ public class DataSourceCachePool {
     }
 
     /**
-     * 清空数据源缓存
+     * Xóa cache nguồn dữ liệu
      */
     public static void cleanAllCache() {
-        //关闭数据源连接
+        //Đóng kết nối nguồn dữ liệu
         for(Map.Entry<String, DruidDataSource> entry : dbSources.entrySet()){
             String dbkey = entry.getKey();
             DruidDataSource druidDataSource = entry.getValue();
             if(druidDataSource!=null && druidDataSource.isEnable()){
                 druidDataSource.close();
             }
-            //清空redis缓存
+            //Xóa cache Redis
             getRedisTemplate().delete(CacheConstant.SYS_DYNAMICDB_CACHE + dbkey);
         }
-        //清空缓存
+        //Xóa bộ nhớ đệm
         dbSources.clear();
     }
 
     public static void removeCache(String dbKey) {
-        //关闭数据源连接
+        //Đóng kết nối nguồn dữ liệu
         DruidDataSource druidDataSource = dbSources.get(dbKey);
         if(druidDataSource!=null && druidDataSource.isEnable()){
             druidDataSource.close();
         }
-        //清空redis缓存
+        //Xóa cache Redis
         getRedisTemplate().delete(CacheConstant.SYS_DYNAMICDB_CACHE + dbKey);
-        //清空缓存
+        //Xóa bộ nhớ đệm
         dbSources.remove(dbKey);
     }
 

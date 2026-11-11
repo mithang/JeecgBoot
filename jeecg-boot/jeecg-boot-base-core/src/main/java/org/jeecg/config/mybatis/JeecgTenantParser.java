@@ -14,7 +14,7 @@
 //import java.util.List;
 //
 ///**
-// * 复写租户条件
+// * Ghi đè điều kiện tenant
 // */
 //public class JeecgTenantParser extends TenantSqlParser {
 //
@@ -38,7 +38,7 @@
 //                setTableAliasNameForColumn((Column) in.getLeftExpression(), tableAliasName);
 //            }
 //
-//            // 比较操作
+//            // Thao tác so sánh
 //        } else if (expression instanceof BinaryExpression) {
 //            BinaryExpression compare = (BinaryExpression) expression;
 //            if (compare.getLeftExpression() instanceof Column) {
@@ -62,9 +62,9 @@
 //    }
 //
 //    /**
-//     * 默认是按 tenant_id=1 按等于条件追加
+//     * Mặc định là theo tenant_id=1 Thêm theo điều kiện bằng
 //     *
-//     * @param currentExpression 现有的条件：比如你原来的sql查询条件
+//     * @param currentExpression Điều kiện hiện có: ví dụ điều kiện truy vấn SQL ban đầu của bạn
 //     * @param table
 //     * @return
 //     */

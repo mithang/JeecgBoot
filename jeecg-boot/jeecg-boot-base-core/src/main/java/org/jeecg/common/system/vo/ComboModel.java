@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * @Description: 文档管理
+ * @Description: Quản lý tài liệu
  * @author: jeecg-boot
  */
 @Data
@@ -18,13 +18,13 @@ import java.io.Serializable;
 public class ComboModel implements Serializable {
     private String id;
     private String title;
-    /**文档管理 表单table默认选中*/
+    /**Quản lý tài liệu: table biểu mẫu được chọn mặc định*/
     private boolean checked;
-    /**文档管理 表单table 用户账号*/
+    /**Quản lý tài liệu: tài khoản người dùng trong table biểu mẫu*/
     private String username;
-    /**文档管理 表单table 用户邮箱*/
+    /**Quản lý tài liệu: email người dùng trong table biểu mẫu*/
     private String email;
-    /**文档管理 表单table 角色编码*/
+    /**Quản lý tài liệu: mã vai trò trong table biểu mẫu*/
     private String roleCode;
 
     public ComboModel(){

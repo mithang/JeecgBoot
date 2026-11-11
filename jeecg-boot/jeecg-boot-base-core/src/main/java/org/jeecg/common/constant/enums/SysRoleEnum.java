@@ -4,30 +4,30 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 /**
- * 系统内置固定角色编码枚举（角色 role_code 固定不可改，代码里涉及这些角色的判断统一引用本枚举，禁止散落硬编码字符串）
+ * Enum mã vai trò cố định tích hợp sẵn của hệ thống (vai trò role_code cố định, không được thay đổi; các phán đoán liên quan đến các vai trò này trong mã nguồn thống nhất tham chiếu enum này, cấm rải rác chuỗi viết cứng)
  *
  * @author scott
- * @since 2026-10-13 【安全】系统固定角色常量化：组织管理类接口放行 admin / 租户管理员
+ * @since 2026-10-13 【Bảo mật】Hằng số hóa vai trò cố định của hệ thống: Cho phép các API quản lý tổ chức admin / Quản trị viên tenant
  */
 public enum SysRoleEnum {
 
     /**
-     * 系统超级管理员
+     * Quản trị viên cấp cao của hệ thống
      */
-    ADMIN("admin", "超管角色"),
+    ADMIN("admin", "Vai trò siêu quản trị"),
 
     /**
-     * 系统租户管理员（后台授予；SaaS多租户模式下注册用户默认不含此角色）
+     * Quản trị viên tenant của hệ thống (cấp qua giao diện quản trị; trong chế độ đa tenant SaaS, người dùng đăng ký mặc định không có vai trò này)
      */
-    TENANT_ADMIN("zuhuadmin", "租户管理员");
+    TENANT_ADMIN("zuhuadmin", "Quản trị viên tenant");
 
     /**
-     * 角色编码（sys_role.role_code，固定不可改）
+     * Mã vai trò (sys_role.role_code, cố định không được thay đổi)
      */
     private final String roleCode;
 
     /**
-     * 角色名称（仅说明用）
+     * Tên vai trò (chỉ dùng để giải thích)
      */
     private final String roleName;
 
@@ -45,10 +45,10 @@ public enum SysRoleEnum {
     }
 
     /**
-     * 当前登录用户是否拥有任意一个指定的系统固定角色
+     * Người dùng hiện đang đăng nhập có sở hữu bất kỳ vai trò cố định nào của hệ thống được chỉ định hay không
      *
-     * @param roles 待判断的系统固定角色
-     * @return 拥有其中任意一个返回true
+     * @param roles Vai trò cố định của hệ thống cần phán đoán
+     * @return Sở hữu bất kỳ vai trò nào trong đó sẽ trả về true
      */
     public static boolean hasAnyRole(SysRoleEnum... roles) {
         if (roles == null || roles.length == 0) {

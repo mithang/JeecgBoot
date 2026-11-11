@@ -2,24 +2,24 @@ package org.jeecg.common.system.vo;
 
 
 /**
- * @Description: 系统文件实体类
+ * @Description: Lớp thực thể tệp hệ thống
  * @author: wangshuai
- * @date: 2022年08月11日 9:48
+ * @date: 2022 năm 08 tháng 11 ngày 9:48
  */
 public class SysFilesModel {
-    /**主键id*/
+    /**Khóa chính id*/
     private String id;
-    /**文件名称*/
+    /**Tên tệp*/
     private String fileName;
-    /**文件地址*/
+    /**Địa chỉ tệp*/
     private String url;
-    /**文档类型（folder:文件夹 excel:excel doc:word pp:ppt image:图片  archive:其他文档 video:视频）*/
+    /**Loại tài liệu（folder:Thư mục excel:excel doc:word pp:ppt image:Hình ảnh  archive:Tài liệu khác video:Video）*/
     private String fileType;
-    /**文件上传类型(temp/本地上传(临时文件) manage/知识库)*/
+    /**Loại tải file lên(temp/Tải lên cục bộ(Tệp tạm thời) manage/Kho tri thức)*/
     private String storeType;
-    /**文件大小（kb）*/
+    /**Kích thước tệp (kb)*/
     private Double fileSize;
-    /**租户id*/
+    /**Tenant id*/
     private String tenantId;
 
     public String getId() {

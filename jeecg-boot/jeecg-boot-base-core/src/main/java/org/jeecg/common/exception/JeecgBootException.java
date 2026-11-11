@@ -3,14 +3,14 @@ package org.jeecg.common.exception;
 import org.jeecg.common.constant.CommonConstant;
 
 /**
- * @Description: jeecg-boot自定义异常
+ * @Description: jeecg-boot Ngoại lệ tùy chỉnh
  * @author: jeecg-boot
  */
 public class JeecgBootException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 返回给前端的错误code
+	 * Lỗi trả về cho frontend code
 	 */
 	private int errCode = CommonConstant.SC_INTERNAL_SERVER_ERROR_500;
 

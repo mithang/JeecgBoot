@@ -6,17 +6,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 查询的表的信息
+ * Thông tin của bảng được tìm kiếm
  */
 @Slf4j
 public class SysDictTableWhite {
-    //表名
+    //Tên bảng
     private String name;
-    //表的别名
+    //Bí danh của bảng
     private String alias;
-    // 字段名集合
+    // Tập hợp tên trường
     private Set<String> fields;
-    // 是否查询所有字段
+    // Có tìm kiếm tất cả các trường hay không
     private boolean all;
 
     public SysDictTableWhite() {
@@ -67,13 +67,13 @@ public class SysDictTableWhite {
     }
 
     /**
-     * 判断是否有相同字段
+     * Kiểm tra có trường trùng nhau hay không
      *
      * @param fieldControlString
      * @return
      */
     public boolean isAllFieldsValid(String fieldControlString) {
-        //如果白名单中没有配置字段，则返回false
+        //Nếu trong danh sách trắng không cấu hình trường thì trả về false
         String[] controlFields = fieldControlString.split(",");
         if (oConvertUtils.isEmpty(fieldControlString)) {
             return false;
@@ -81,7 +81,7 @@ public class SysDictTableWhite {
 
         for (String queryField : fields) {
             if (oConvertUtils.isIn(queryField, controlFields)) {
-                log.warn("字典表白名单校验，表【" + name + "】中字段【" + queryField + "】无权限查询");
+                log.warn("Kiểm tra danh sách trắng bảng từ điển, trong bảng 【" + name + "】 trường trong 【" + queryField + "】 không có quyền truy vấn");
                 return false;
             }
         }

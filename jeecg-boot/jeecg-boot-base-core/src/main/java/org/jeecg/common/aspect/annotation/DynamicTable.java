@@ -3,7 +3,7 @@ package org.jeecg.common.aspect.annotation;
 import java.lang.annotation.*;
 
 /**
- * 动态table切换
+ * Chuyển đổi table động
  *
  * @author :zyf
  * @date:2020-04-25
@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface DynamicTable {
     /**
-     * 需要动态解析的表名
+     * Tên bảng cần phân tích động
      * @return
      */
     String value();

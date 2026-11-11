@@ -18,17 +18,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * SSRF 出站地址校验工具：
+ * SSRF Công cụ kiểm chứng địa chỉ outbound:
  * <ul>
- *     <li>访问本服务自身（本机地址 + 本服务监听端口）放行；</li>
- *     <li>命中白名单 jeecg.firewall.localAddressWhiteList 即放行：域名、IP、CIDR 网段、地址:端口（只放行该端口）；</li>
- *     <li>链路本地（含云元数据 169.254.169.254）、0.0.0.0/8、[::] 始终拒绝，写进白名单也不放行；</li>
- *     <li>本机其他端口拒绝；内网段（10/172.16/192.168/100.64/fc00::/7）默认放行，allowLocalAddress=false 时拒绝；</li>
- *     <li>IPv6 过渡地址（NAT64、6to4、Teredo、IPv4兼容/映射）按内嵌 IPv4 判断。</li>
+ *     <li>Truy cập chính dịch vụ này (địa chỉ máy cục bộ + cổng mà dịch vụ này đang lắng nghe) thì cho qua;</li>
+ *     <li>Trúng danh sách trắng jeecg.firewall.localAddressWhiteList thì cho qua: tên miền, IP, dải CIDR, địa chỉ:cổng (chỉ cho qua cổng đó);</li>
+ *     <li>Địa chỉ link-local (bao gồm metadata đám mây 169.254.169.254）、0.0.0.0/8、[::] luôn bị từ chối, dù đã ghi vào danh sách trắng cũng không cho qua;</li>
+ *     <li>Các cổng khác trên máy này bị từ chối; dải mạng nội bộ (10/172.16/192.168/100.64/fc00::/7) mặc định cho qua,allowLocalAddress=false thì bị từ chối;</li>
+ *     <li>IPv6 Địa chỉ chuyển đổi (NAT64, 6to4, Teredo, tương thích IPv4/ánh xạ) được đánh giá theo IPv4 được nhúng.</li>
  * </ul>
  *
  * @author scott
- * @since 2026-10-27 【GHSA-5g5g-43q2-g87v】【GHSA-2m5w-w7v9-qwx7】【GHSA-hw5p-65q6-qcxr】从 SsrfFileTypeFilter 抽取，专门用于 SSRF 校验
+ * @since 2026-10-27 【GHSA-5g5g-43q2-g87v】【GHSA-2m5w-w7v9-qwx7】【GHSA-hw5p-65q6-qcxr】 Được trích xuất từ SsrfFileTypeFilter, chuyên dùng cho kiểm chứng SSRF
  */
 @Slf4j
 public class LocalAddressCheckUtils {
@@ -37,89 +37,89 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 校验HTTP(S) URL，防止SSRF攻击（最小化拦截，只挡真正危险的目标）。
-     * 规则：
-     * 1. 仅允许 http / https 协议；
-     * 2. 解析主机IP，拒绝 loopback（127.x / ::1）、link-local（169.254.x，含云元数据 169.254.169.254 / fe80:）、0.0.0.0/8、[::]，
-     *    以及内嵌这些地址的 IPv6 过渡地址（NAT64、6to4、Teredo、IPv4兼容/映射）；
-     * 3. 访问本服务自身（本机地址 + 本服务监听端口）放行。
-     * 4. 命中白名单 jeecg.firewall.localAddressWhiteList（域名、IP、CIDR 网段、地址:端口）即放行，链路本地、0.0.0.0 除外。
-     * 注意：RFC1918 私网段（10/172.16/192.168）默认允许通过，兼容企业内网 MinIO/OSS/文件服务等合法用途；
-     *    配置 jeecg.firewall.allowLocalAddress=false 后拦截。
+     * Kiểm chứng HTTP(S) URL, ngăn chặn tấn công SSRF (chặn tối thiểu, chỉ chặn các mục tiêu thực sự nguy hiểm).
+     * Quy tắc:
+     * 1. Chỉ cho phép http / https giao thức;
+     * 2. Phân tích IP của máy chủ, từ chối loopback (127.x / ::1）、link-local（169.254.x，chứa siêu dữ liệu đám mây 169.254.169.254 / fe80:）、0.0.0.0/8、[::]，
+     *    và các địa chỉ chuyển đổi IPv6 nhúng các địa chỉ này (NAT64, 6to4, Teredo, IPv4 tương thích/ánh xạ);
+     * 3. Truy cập chính dịch vụ này (địa chỉ máy cục bộ + cổng mà dịch vụ này đang lắng nghe) thì cho qua.
+     * 4. Trúng danh sách trắng jeecg.firewall.localAddressWhiteList(tên miền, IP, dải CIDR, địa chỉ:cổng) thì cho qua ngay, địa chỉ link-local,0.0.0.0 ngoại trừ.
+     * Lưu ý: Dải mạng riêng RFC1918 (10/172.16/192.168) mặc định cho phép đi qua, tương thích với mạng nội bộ doanh nghiệp MinIO/OSS/dịch vụ tệp và các mục đích hợp pháp khác;
+     *    Cấu hình jeecg.firewall.allowLocalAddress=false sau đó mới chặn lại.
      *
      * @param fileUrl HTTP(S) URL
      * @author scott
-     * @since 2026-10-27 【GHSA-5g5g-43q2-g87v】由 SsrfFileTypeFilter.checkSsrfHttpUrl 迁移
+     * @since 2026-10-27 【GHSA-5g5g-43q2-g87v】 Do SsrfFileTypeFilter.checkSsrfHttpUrl Di chuyển
      */
     public static void checkUrl(String fileUrl) {
         if (StringUtils.isBlank(fileUrl)) {
-            throw new JeecgBootException("非法URL：地址为空");
+            throw new JeecgBootException("URL không hợp lệ: địa chỉ trống");
         }
         URI uri;
         try {
             uri = new URI(fileUrl);
         } catch (URISyntaxException e) {
-            throw new JeecgBootException("非法URL：格式错误");
+            throw new JeecgBootException("URL không hợp lệ: định dạng sai");
         }
         String scheme = uri.getScheme();
         if (scheme == null || !(scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"))) {
-            throw new JeecgBootException("非法URL：仅允许 http / https 协议");
+            throw new JeecgBootException("URL không hợp lệ: chỉ cho phép http / https Giao thức");
         }
         String host = uri.getHost();
         if (StringUtils.isBlank(host)) {
-            throw new JeecgBootException("非法URL：主机名为空");
+            throw new JeecgBootException("URL không hợp lệ: tên máy chủ trống");
         }
-        // 去掉 IPv6 的中括号
+        // Loại bỏ dấu ngoặc vuông của IPv6
         if (host.startsWith("[") && host.endsWith("]")) {
             host = host.substring(1, host.length() - 1);
         }
         try {
             checkAddresses(host, uri);
         } catch (UnknownHostException e) {
-            throw new JeecgBootException("非法URL：主机名无法解析");
+            throw new JeecgBootException("URL không hợp lệ: không thể phân tích tên máy chủ");
         }
     }
 
     /**
-     * 解析主机并校验所有解析结果，不合法时抛出 JeecgBootException
+     * Phân tích máy chủ và kiểm chứng tất cả kết quả phân tích, ném ra ngoại lệ khi không hợp lệ JeecgBootException
      *
-     * @param host 主机名（IPv6 已去掉中括号）
-     * @param uri  目标地址（用于取端口判断是否访问本服务自身）
-     * @throws UnknownHostException 主机名无法解析
+     * @param host Tên máy chủ (IPv6 đã loại bỏ dấu ngoặc vuông)
+     * @param uri  Địa chỉ đích (dùng để lấy cổng nhằm xác định có phải đang truy cập chính dịch vụ này hay không)
+     * @throws UnknownHostException Không thể phân tích tên máy chủ
      */
     private static void checkAddresses(String host, URI uri) throws UnknownHostException {
         Firewall firewall = getFirewall();
         boolean blockPrivate = firewall != null && Boolean.FALSE.equals(firewall.getAllowLocalAddress());
         List<String> whiteList = firewall == null ? null : firewall.getLocalAddressWhiteList();
         InetAddress[] addresses = InetAddress.getAllByName(host);
-        // 访问本服务自身（如本地存储文件 http://localhost:8080/jeecg-boot/sys/common/static/xx.png）不拦截
+        // Truy cập chính dịch vụ này (ví dụ tệp lưu trữ cục bộ http://localhost:8080/jeecg-boot/sys/common/static/xx.png) không chặn
         if (isSelfServiceAddress(addresses, uri)) {
             return;
         }
         int port = getPort(uri);
-        // 命中白名单即放行（域名、IP、网段、地址:端口），与开关无关；链路本地（云元数据）、0.0.0.0 仍拒绝
+        // Trúng danh sách trắng thì cho qua ngay (tên miền, IP, dải mạng, địa chỉ:cổng), không phụ thuộc vào công tắc; địa chỉ link-local (metadata đám mây),0.0.0.0 vẫn bị từ chối
         if (isInWhiteList(host, addresses, port, whiteList)) {
             for (InetAddress addr : addresses) {
                 if (isNeverAllowedAddress(addr)) {
-                    throw new JeecgBootException("非法URL：禁止访问链路本地或任意地址 " + addr.getHostAddress());
+                    throw new JeecgBootException("URL không hợp lệ: cấm truy cập địa chỉ link-local hoặc địa chỉ bất kỳ " + addr.getHostAddress());
                 }
             }
             return;
         }
-        String hint = "，如需放行请在 jeecg.firewall.localAddressWhiteList 中配置该地址，或 地址:端口（如 " + (host.contains(":") ? "[" + host + "]" : host) + ":" + port + "）";
+        String hint = ", nếu cần cho qua, vui lòng cấu hình trong jeecg.firewall.localAddressWhiteList địa chỉ đó, hoặc địa chỉ:cổng (ví dụ " + (host.contains(":") ? "[" + host + "]" : host) + ":" + port + "）";
         for (InetAddress addr : addresses) {
             if (addr.isLoopbackAddress()) {
-                throw new JeecgBootException("非法URL：禁止访问本机或链路本地地址 " + addr.getHostAddress() + hint);
+                throw new JeecgBootException("URL không hợp lệ: Cấm truy cập máy local hoặc địa chỉ link-local " + addr.getHostAddress() + hint);
             }
             checkDangerousAddress(addr, addr);
             if (blockPrivate && isPrivateAddress(addr)) {
-                throw new JeecgBootException("非法URL：禁止访问内网地址 " + addr.getHostAddress() + hint);
+                throw new JeecgBootException("URL không hợp lệ: cấm truy cập địa chỉ mạng nội bộ " + addr.getHostAddress() + hint);
             }
         }
     }
 
     /**
-     * 是否命中白名单：命中"地址:端口"，或每个解析结果都命中域名/IP/CIDR 网段条目
+     * Có trúng danh sách trắng hay không: trúng"Địa chỉ:Cổng", hoặc mỗi kết quả phân tích đều trúng tên miền/IP/CIDR mục dải mạng
      */
     private static boolean isInWhiteList(String host, InetAddress[] addresses, int port, List<String> whiteList) {
         if (whiteList == null || whiteList.isEmpty() || addresses.length == 0) {
@@ -137,14 +137,14 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 目标端口，未写端口时 https 为 443、其余为 80
+     * Cổng đích, khi không ghi cổng thì https là 443, còn lại là 80
      */
     private static int getPort(URI uri) {
         return uri.getPort() != -1 ? uri.getPort() : ("https".equalsIgnoreCase(uri.getScheme()) ? 443 : 80);
     }
 
     /**
-     * 是否命中白名单中的"地址:端口"条目：端口一致，且目标解析结果全部属于该条目地址的解析结果（写 localhost:9999 时 127.0.0.1:9999 同样命中）
+     * Có trúng mục trong danh sách trắng hay không"Địa chỉ:Cổng"mục: cổng phải khớp, và mọi kết quả phân tích của đích đều thuộc về kết quả phân tích địa chỉ của mục đó (khi viết localhost:9999 giờ 127.0.0.1:9999 cũng trúng)
      */
     private static boolean isInHostPortWhiteList(InetAddress[] addresses, int port, List<String> whiteList) {
         if (whiteList == null || whiteList.isEmpty() || addresses.length == 0) {
@@ -164,14 +164,14 @@ public class LocalAddressCheckUtils {
                     return true;
                 }
             } catch (Exception e) {
-                log.warn("SSRF 白名单配置无法解析，已忽略: {}", entry);
+                log.warn("SSRF Cấu hình danh sách trắng không thể phân tích, đã bỏ qua: {}", entry);
             }
         }
         return false;
     }
 
     /**
-     * 解析"地址:端口"条目：host:port 或 [IPv6]:port，返回 {host, port}；IP、CIDR、域名、不带中括号的 IPv6 返回 null
+     * Phân tích cú pháp"Địa chỉ:Cổng"mục:host:port hoặc [IPv6]:port, trả về {host, port}; IP, CIDR, tên miền, IPv6 không có dấu ngoặc vuông trả về null
      */
     private static String[] parseHostPort(String item) {
         if (item.startsWith("[")) {
@@ -186,10 +186,10 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 白名单也不能放行的地址：链路本地（含云元数据 169.254.169.254）、0.0.0.0/8、[::]，IPv6 过渡地址按内嵌 IPv4 判断
+     * Địa chỉ mà danh sách trắng cũng không thể cho qua: địa chỉ link-local (bao gồm metadata đám mây 169.254.169.254）、0.0.0.0/8、[::], địa chỉ chuyển đổi IPv6 được đánh giá theo IPv4 được nhúng
      */
     private static boolean isNeverAllowedAddress(InetAddress addr) {
-        // ::1 字节上形如 IPv4 兼容地址（内嵌 0.0.0.1），属于本机回环，不按内嵌地址判断
+        // ::1 Trên byte có dạng địa chỉ tương thích IPv4 (nhúng 0.0.0.1), thuộc về loopback của máy này, không đánh giá theo địa chỉ được nhúng
         if (addr.isLoopbackAddress()) {
             return false;
         }
@@ -206,17 +206,17 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 校验单个地址：本机、链路本地（含云元数据 169.254.169.254）、0.0.0.0/8、[::] 一律拒绝；
-     * IPv6 过渡地址（NAT64、6to4、Teredo、IPv4兼容/映射）取出内嵌的 IPv4 再按同样规则校验
+     * Kiểm chứng từng địa chỉ: máy này, địa chỉ link-local (bao gồm metadata đám mây 169.254.169.254）、0.0.0.0/8、[::] đều bị từ chối;
+     * IPv6 Địa chỉ chuyển đổi (NAT64, 6to4, Teredo, tương thích IPv4/ánh xạ) lấy IPv4 nhúng bên trong rồi kiểm chứng theo cùng quy tắc
      *
-     * @param addr     当前校验的地址
-     * @param original 原始解析地址（用于提示）
+     * @param addr     Địa chỉ đang kiểm chứng
+     * @param original Địa chỉ phân giải gốc (dùng cho gợi ý)
      */
     private static void checkDangerousAddress(InetAddress addr, InetAddress original) {
         byte[] b = addr.getAddress();
         boolean thisNetwork = b.length == 4 && b[0] == 0;
         if (addr.isLoopbackAddress() || addr.isLinkLocalAddress() || addr.isAnyLocalAddress() || thisNetwork) {
-            throw new JeecgBootException("非法URL：禁止访问本机或链路本地地址 " + original.getHostAddress());
+            throw new JeecgBootException("URL không hợp lệ: Cấm truy cập máy local hoặc địa chỉ link-local " + original.getHostAddress());
         }
         for (InetAddress embedded : getEmbeddedIpv4(addr)) {
             checkDangerousAddress(embedded, original);
@@ -224,12 +224,12 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 取出 IPv6 过渡地址中内嵌的 IPv4 地址，非过渡地址返回空列表
+     * Lấy địa chỉ IPv4 nhúng trong địa chỉ chuyển tiếp IPv6; địa chỉ không phải chuyển tiếp trả về danh sách rỗng
      * <ul>
-     *     <li>IPv4兼容 ::a.b.c.d、IPv4映射 ::ffff:a.b.c.d</li>
-     *     <li>NAT64 64:ff9b::/96、64:ff9b:1::/48（取末 32 位）</li>
-     *     <li>6to4 2002::/16（第 3~6 字节）</li>
-     *     <li>Teredo 2001:0::/32（服务器地址第 5~8 字节；客户端地址末 32 位按位取反）</li>
+     *     <li>IPv4 Tương thích ::a.b.c.d、Ánh xạ IPv4 ::ffff:a.b.c.d</li>
+     *     <li>NAT64 64:ff9b::/96、64:ff9b:1::/48(lấy 32 bit cuối)</li>
+     *     <li>6to4 2002::/16(thứ  3~6 byte)</li>
+     *     <li>Teredo 2001:0::/32(địa chỉ máy chủ thứ  5~8 byte; 32 bit cuối của địa chỉ máy khách được đảo bit)</li>
      * </ul>
      */
     private static List<InetAddress> getEmbeddedIpv4(InetAddress addr) {
@@ -261,13 +261,13 @@ public class LocalAddressCheckUtils {
                 result.add(InetAddress.getByAddress(client));
             }
         } catch (UnknownHostException ignored) {
-            // 4 字节数组不会触发
+            // 4 Mảng byte sẽ không kích hoạt
         }
         return result;
     }
 
     /**
-     * 是否内网地址：10/8、172.16/12、192.168/16、100.64/10（运营商级NAT）、fc00::/7（IPv6唯一本地地址），IPv6 过渡地址按内嵌 IPv4 判断
+     * Có phải địa chỉ mạng nội bộ không:10/8、172.16/12、192.168/16、100.64/10(NAT cấp nhà mạng)、fc00::/7(địa chỉ cục bộ duy nhất IPv6), địa chỉ chuyển tiếp IPv6 được phán đoán theo IPv4 nhúng bên trong
      */
     private static boolean isPrivateAddress(InetAddress addr) {
         byte[] b = addr.getAddress();
@@ -289,7 +289,7 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 单个地址是否命中白名单的域名/IP/CIDR 条目：域名精确匹配（不区分大小写）、IP 精确匹配或 CIDR 网段匹配
+     * Một địa chỉ có trúng tên miền trong danh sách trắng hay không/IP/CIDR Mục: tên miền khớp chính xác (không phân biệt hoa thường), IP khớp chính xác hoặc khớp dải mạng CIDR
      */
     private static boolean isInLocalAddressWhiteList(String host, InetAddress addr, List<String> whiteList) {
         if (whiteList == null || whiteList.isEmpty()) {
@@ -301,7 +301,7 @@ public class LocalAddressCheckUtils {
                 continue;
             }
             String item = entry.trim();
-            // "地址:端口" 条目由 isInHostPortWhiteList 处理
+            // "Địa chỉ:Cổng" Mục "địa chỉ:cổng" do isInHostPortWhiteList xử lý
             if (parseHostPort(item) != null) {
                 continue;
             }
@@ -315,7 +315,7 @@ public class LocalAddressCheckUtils {
                     ip = item.substring(0, item.indexOf('/'));
                     prefix = Integer.parseInt(item.substring(item.indexOf('/') + 1).trim());
                 }
-                // 只按字面量 IP 解析，非 IP 条目（域名）跳过，避免触发 DNS 查询
+                // Chỉ phân giải theo IP dạng literal, mục không phải IP (tên miền) sẽ bị bỏ qua để tránh kích hoạt truy vấn DNS
                 if (!ip.matches("^[0-9.]+$") && !ip.contains(":")) {
                     continue;
                 }
@@ -328,14 +328,14 @@ public class LocalAddressCheckUtils {
                     return true;
                 }
             } catch (Exception e) {
-                log.warn("SSRF 白名单配置无法解析，已忽略: {}", item);
+                log.warn("SSRF Cấu hình danh sách trắng không thể phân tích, đã bỏ qua: {}", item);
             }
         }
         return false;
     }
 
     /**
-     * 比较两个地址的前 bits 位是否相同
+     * So sánh xem bits bit đầu của hai địa chỉ có giống nhau không
      */
     private static boolean matchPrefix(byte[] net, byte[] target, int bits) {
         int fullBytes = bits / 8;
@@ -353,8 +353,8 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 是否访问本服务自身：解析结果全部为本机地址（回环或本机网卡 IP），且端口等于本服务实际监听端口。
-     * 端口取自服务器自身（请求连接器端口或 server.port），不读请求头，无法伪造；本机其他端口（Redis、数据库等）仍按规则拦截
+     * Có phải đang truy cập chính dịch vụ này không: kết quả phân giải toàn bộ là địa chỉ máy cục bộ (loopback hoặc IP card mạng của máy cục bộ), và cổng bằng cổng thực tế mà dịch vụ này đang lắng nghe.
+     * Cổng lấy từ chính máy chủ (cổng connector của yêu cầu hoặc  server.port), không đọc request header nên không thể giả mạo; các cổng khác trên máy cục bộ (Redis, cơ sở dữ liệu, v.v.) vẫn bị chặn theo quy tắc
      */
     private static boolean isSelfServiceAddress(InetAddress[] addresses, URI uri) {
         if (addresses == null || addresses.length == 0) {
@@ -374,7 +374,7 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 是否本机地址：回环地址，或绑定在本机某块网卡上的 IP（0.0.0.0、组播不算）
+     * Có phải địa chỉ máy cục bộ không: địa chỉ loopback, hoặc IP được gắn trên một card mạng nào đó của máy cục bộ (0.0.0.0、multicast không tính)
      */
     private static boolean isLocalMachineAddress(InetAddress addr) {
         if (addr.isLoopbackAddress()) {
@@ -391,7 +391,7 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 本服务实际监听端口：有请求上下文时取连接器端口，否则读 server.port（默认 8080），获取失败返回 null
+     * Cổng thực tế dịch vụ này đang lắng nghe: khi có ngữ cảnh yêu cầu thì lấy cổng connector, nếu không thì đọc  server.port(mặc định 8080), nếu lấy thất bại trả về  null
      */
     private static Integer getSelfServerPort() {
         try {
@@ -400,7 +400,7 @@ public class LocalAddressCheckUtils {
                 return request.getLocalPort();
             }
         } catch (Exception ignored) {
-            // 无请求上下文（定时任务、异步线程等）
+            // Không có ngữ cảnh yêu cầu (tác vụ định kỳ, luồng bất đồng bộ, v.v.)
         }
         try {
             return SpringContextUtils.getApplicationContext().getEnvironment().getProperty("server.port", Integer.class, 8080);
@@ -410,7 +410,7 @@ public class LocalAddressCheckUtils {
     }
 
     /**
-     * 读取平台安全配置，非 Spring 环境（如单元测试）返回 null，按默认值处理
+     * Đọc cấu hình bảo mật nền tảng; môi trường không phải Spring (ví dụ kiểm thử đơn vị) trả về null, xử lý theo giá trị mặc định
      */
     private static Firewall getFirewall() {
         try {

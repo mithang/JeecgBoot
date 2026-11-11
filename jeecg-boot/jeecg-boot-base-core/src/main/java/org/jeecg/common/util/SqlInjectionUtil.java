@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * sql注入处理工具类
+ * sql Lớp công cụ xử lý SQL injection
  * 
  * @author zhoujf
  */
@@ -20,26 +20,26 @@ import java.util.regex.Pattern;
 public class SqlInjectionUtil {
 
 	/**
-	 * sql注入黑名单数据库名
+	 * sql Tên cơ sở dữ liệu trong danh sách đen SQL injection
 	 */
 	public final static String XSS_STR_TABLE = "performance_schema|information_schema";
 
 	/**
-	 * 默认—sql注入关键词
+	 * Mặc định — Từ khóa SQL injection
 	 */
 	private final static String XSS_STR = "and |exec |performance_schema|information_schema|extractvalue|updatexml|geohash|gtid_subset|gtid_subtract|insert |select |delete |update |drop |count |chr |mid |master |truncate |char |declare |;|or |+|--";
 	/**
-	 * online报表专用—sql注入关键词
+	 * online Dành riêng cho báo cáo — Từ khóa SQL injection
 	 */
 	private static String specialReportXssStr = "exec |performance_schema|information_schema|extractvalue|updatexml|geohash|gtid_subset|gtid_subtract|insert |alter |delete |grant |update |drop |master |truncate |declare |--";
 	/**
-	 * 字典专用—sql注入关键词
+	 * Dành riêng cho danh mục — Từ khóa SQL injection
 	 *
-	 * @updateBy: sunjianlei 20260331 加上 substring 注入检测
+	 * @updateBy: sunjianlei 20260331 Thêm kiểm tra SQL injection bằng substring
 	 */
 	private static String specialDictSqlXssStr = "exec |performance_schema|information_schema|extractvalue|updatexml|geohash|gtid_subset|gtid_subtract|insert |select |delete |update |drop |count |chr |mid |master |truncate |char |declare |;|+|--|substring |substring(";
 	/**
-	 * 完整匹配的key，不需要考虑前空格
+	 * Key khớp hoàn toàn, không cần xét khoảng trắng ở phía trước
 	 */
 	private static List<String> FULL_MATCHING_KEYWRODS = new ArrayList<>();
 	static {
@@ -50,9 +50,9 @@ public class SqlInjectionUtil {
 	
 	
 	/**
-	 * sql注入风险的 正则关键字
+	 * sql Từ khóa regex có rủi ro SQL injection
 	 *
-	 * 函数匹配，需要用正则模式
+	 * Khớp hàm, cần dùng mẫu regex
 	 */
 	private final static String[] XSS_REGULAR_STR_ARRAY = new String[]{
 			"chr\\s*\\(",
@@ -65,14 +65,14 @@ public class SqlInjectionUtil {
 			"show\\s+databases",
 			"sleep\\(\\d*\\)",
 			"sleep\\(.*\\)",
-			// update-begin---author:sjlei---date:20260413  for：【#9523】修复 SQL 注入漏洞
-			// 时间盲注函数（#9523）：MySQL BENCHMARK、PostgreSQL pg_sleep、SQL Server WAITFOR DELAY
+			// update-begin---author:sjlei---date:20260413  for：【#9523】Sửa lỗ hổng SQL injection
+			// Hàm blind injection theo thời gian (#9523）：MySQL BENCHMARK、PostgreSQL pg_sleep、SQL Server WAITFOR DELAY
 			"benchmark\\s*\\(",
 			"pg_sleep\\s*\\(",
 			"waitfor\\s+delay",
-			// update-end-----author:sjlei---date:20260413  for：【#9523】修复 SQL 注入漏洞
-			// update-begin---author:zhangdaihao---date:20260427  for：【issue/9571】修复字典/Online报表 boolean-blind 信息泄露
-			// 通过 case-when + database()/version() 等函数 + LIKE 前缀枚举进行字符级数据提取（绕过 select/union 黑名单），
+			// update-end-----author:sjlei---date:20260413  for：【#9523】Sửa lỗ hổng SQL injection
+			// update-begin---author:zhangdaihao---date:20260427  for：【issue/9571】Sửa danh mục/Online Báo cáo boolean-blind Rò rỉ thông tin
+			// Thông qua case-when + database()/version() và các hàm khác + LIKE liệt kê tiền tố để trích xuất dữ liệu ở cấp ký tự (bỏ qua select/union danh sách đen),
 			"database\\s*\\(",
 			"version\\s*\\(",
 			"current_user\\s*\\(",
@@ -85,24 +85,24 @@ public class SqlInjectionUtil {
 			"load_file\\s*\\(",
 			"into\\s+outfile",
 			"into\\s+dumpfile",
-			// update-end-----author:zhangdaihao---date:20260427  for：【issue/9571】修复字典/Online报表 boolean-blind 信息泄露
+			// update-end-----author:zhangdaihao---date:20260427  for：【issue/9571】Sửa danh mục/Online Báo cáo boolean-blind Rò rỉ thông tin
 	};
 	/**
-	 * sql注释的正则
+	 * sql Regex của chú thích SQL
 	 */
 	private final static Pattern SQL_ANNOTATION = Pattern.compile("/\\*[\\s\\S]*\\*/");
 	private final static  String SQL_ANNOTATION2 = "--";
 	
 	/**
-	 * sql注入提示语
+	 * sql Thông báo nhắc nhở SQL injection
 	 */
-	private final static String SQL_INJECTION_KEYWORD_TIP = "请注意，存在SQL注入关键词---> {}";
-	private final static String SQL_INJECTION_TIP = "请注意，值可能存在SQL注入风险!--->";
-	private final static String SQL_INJECTION_TIP_VARIABLE = "请注意，值可能存在SQL注入风险!---> {}";
+	private final static String SQL_INJECTION_KEYWORD_TIP = "Xin lưu ý, tồn tại từ khóa SQL injection---> {}";
+	private final static String SQL_INJECTION_TIP = "Xin lưu ý, giá trị có thể tồn tại rủi ro SQL injection!--->";
+	private final static String SQL_INJECTION_TIP_VARIABLE = "Xin lưu ý, giá trị có thể tồn tại rủi ro SQL injection!---> {}";
 	
 
 	/**
-	 * sql注入过滤处理，遇到注入关键字抛异常
+	 * sql Xử lý lọc injection, gặp từ khóa injection thì ném ngoại lệ
 	 * @param values
 	 */
 	public static void filterContentMulti(String... values) {
@@ -110,9 +110,9 @@ public class SqlInjectionUtil {
 	}
 
 	/**
-	 * 校验比较严格
+	 * Kiểm chứng khá nghiêm ngặt
 	 * 
-	 * sql注入过滤处理，遇到注入关键字抛异常
+	 * sql Xử lý lọc injection, gặp từ khóa injection thì ném ngoại lệ
 	 *
 	 * @param value
 	 * @return
@@ -121,15 +121,15 @@ public class SqlInjectionUtil {
 		if (value == null || "".equals(value)) {
 			return;
 		}
-		// 一、校验sql注释 不允许有sql注释
+		// 1. Kiểm chứng chú thích SQL, không cho phép có chú thích SQL
 		checkSqlAnnotation(value);
-		// 转为小写进行后续比较
+		// Chuyển thành chữ thường để so sánh tiếp theo
 		value = value.toLowerCase().trim();
-		//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】修复换行符绕过SQL注入检测-----------
+		//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】Sửa lỗi ký tự xuống dòng bypass phát hiện SQL injection-----------
 		value = value.replaceAll("\\s+", " ");
-		//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】修复换行符绕过SQL注入检测-----------
+		//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】Sửa lỗi ký tự xuống dòng bypass phát hiện SQL injection-----------
 
-		// 二、SQL注入检测存在绕过风险 (普通文本校验)
+		// 2. Phát hiện SQL injection tồn tại rủi ro bypass (Kiểm chứng văn bản thường)
 		//https://gitee.com/jeecg/jeecg-boot/issues/I4NZGE
 		String[] xssArr = XSS_STR.split("\\|");
 		for (int i = 0; i < xssArr.length; i++) {
@@ -139,7 +139,7 @@ public class SqlInjectionUtil {
 				throw new JeecgSqlInjectionException(SqlInjectionUtil.SQL_INJECTION_TIP + value);
 			}
 		}
-		// 三、SQL注入检测存在绕过风险 (自定义传入普通文本校验)
+		// 3. Phát hiện SQL injection tồn tại rủi ro bypass (Kiểm chứng văn bản thường được truyền vào tùy chỉnh)
 		if (customXssString != null) {
 			String[] xssArr2 = customXssString.split("\\|");
 			for (int i = 0; i < xssArr2.length; i++) {
@@ -151,11 +151,11 @@ public class SqlInjectionUtil {
 			}
 		}
 
-		// 四、SQL注入检测存在绕过风险 (正则校验)
+		// IV. Kiểm tra SQL injection tồn tại rủi ro bị bỏ qua (Kiểm tra bằng biểu thức chính quy)
 		for (String regularOriginal : XSS_REGULAR_STR_ARRAY) {
-			//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】正则加DOTALL模式，防止换行绕过-----------
+			//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】Regex thêm chế độ DOTALL, ngăn bypass bằng ký tự xuống dòng-----------
 			String regular = "(?s).*" + regularOriginal + ".*";
-			//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】正则加DOTALL模式，防止换行绕过-----------
+			//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】Regex thêm chế độ DOTALL, ngăn bypass bằng ký tự xuống dòng-----------
 			if (Pattern.matches(regular, value)) {
 				log.error(SqlInjectionUtil.SQL_INJECTION_KEYWORD_TIP, regularOriginal);
 				log.error(SqlInjectionUtil.SQL_INJECTION_TIP_VARIABLE, value);
@@ -166,7 +166,7 @@ public class SqlInjectionUtil {
 	}
 
 	/**
-	 * 判断是否存在SQL注入关键词字符串
+	 * Kiểm tra có tồn tại chuỗi từ khóa SQL injection hay không
 	 *
 	 * @param keyword
 	 * @return
@@ -176,20 +176,20 @@ public class SqlInjectionUtil {
 		if (sql.startsWith(keyword.trim())) {
 			return true;
 		}
-		// update-begin---author:zhangdaihao---date:20260427  for：【issue/9572】修复 SQL 黑名单 keyword( 紧贴形式绕过
-		// 原来对带 trailing space 的关键字（如 "select "）只能匹配 "select " 形式，
-		// 导致 id=(select(id)from(sys_user)where(...)) 的 select( 形式绕过检测。
-		// 这里补充：对带 trailing space 的关键字，额外检测 trimmedKeyword + "(" 形式。
-		// FULL_MATCHING_KEYWRODS（;、+、--）保持原匹配逻辑不变。
+		// update-begin---author:zhangdaihao---date:20260427  for：【issue/9572】Sửa danh sách đen SQL keyword( Bỏ qua dạng dính liền
+		// Trước đây, đối với từ khóa có trailing space (như "select ") chỉ có thể khớp với "select " dạng,
+		// Dẫn đến id=(select(id)from(sys_user)where(...)) của select( dạng đã bỏ qua kiểm tra.
+		// Bổ sung tại đây: đối với từ khóa có trailing space, kiểm tra thêm trimmedKeyword + "(" dạng.
+		// FULL_MATCHING_KEYWRODS（;、+、--) giữ nguyên logic khớp ban đầu.
 		if (keyword.endsWith(" ") && !FULL_MATCHING_KEYWRODS.contains(keyword)) {
 			String trimmedKeyword = keyword.trim();
 			if (sql.contains(trimmedKeyword + "(")) {
 				return true;
 			}
 		}
-		// update-end-----author:zhangdaihao---date:20260427  for：【issue/9572】修复 SQL 黑名单 keyword( 紧贴形式绕过
+		// update-end-----author:zhangdaihao---date:20260427  for：【issue/9572】Sửa danh sách đen SQL keyword( Bỏ qua dạng dính liền
 		if (sql.contains(keyword)) {
-			// 需要匹配的，sql注入关键词
+			// Từ khóa SQL injection cần khớp
 			String matchingText = " " + keyword;
 			if(FULL_MATCHING_KEYWRODS.contains(keyword)){
 				matchingText = keyword;
@@ -198,24 +198,24 @@ public class SqlInjectionUtil {
 			if (sql.contains(matchingText)) {
 				return true;
 			} else {
-				// update-begin---author:sjlei---date:20260413  for：【#9524】修复 SQL 注入漏洞
-				// 检测关键词前紧跟非字母分隔符的情况，原来只检测前置空格，
-				// 导致 (updatexml(、(extractvalue( 等写法绕过检测（#9524）
+				// update-begin---author:sjlei---date:20260413  for：【#9524】Sửa lỗ hổng SQL injection
+				// Kiểm tra trường hợp ngay trước từ khóa là ký tự phân tách không phải chữ cái, trước đây chỉ kiểm tra khoảng trắng ở phía trước,
+				// Dẫn đến (updatexml(、(extractvalue( và các cách viết khác đã bỏ qua kiểm tra (#9524）
 				String[] sqlTokenPrefixes = {"(", ",", "=", "!", "<", ">"};
 				for (String prefix : sqlTokenPrefixes) {
 					if (sql.contains(prefix + keyword)) {
 						return true;
 					}
 				}
-				// update-end-----author:sjlei---date:20260413  for：【#9524】修复 SQL 注入漏洞
+				// update-end-----author:sjlei---date:20260413  for：【#9524】Sửa lỗ hổng SQL injection
 
-				// 检测编码空格绕过（%09 %0A %0D 等可替代空格的字符）
+				// Kiểm tra việc bỏ qua bằng khoảng trắng đã mã hóa (%09 %0A %0D và các ký tự khác có thể thay thế khoảng trắng)
 				String regularStr = "\\s+\\S+" + keyword;
 				List<String> resultFindAll = ReUtil.findAll(regularStr, sql, 0, new ArrayList<String>());
 				for (String res : resultFindAll) {
-					log.info("isExistSqlInjectKeyword —- 匹配到的SQL注入关键词：{}", res);
+					log.info("isExistSqlInjectKeyword —- Từ khóa SQL injection đã khớp được:{}", res);
 					/**
-					 * SQL注入中可以替换空格的字符(%09  %0A  %0D  +都可以替代空格)
+					 * SQL Ký tự có thể thay thế khoảng trắng trong SQL injection(%09  %0A  %0D  +đều có thể thay thế khoảng trắng)
 					 * http://blog.chinaunix.net/uid-12501104-id-2932639.html
 					 * https://www.cnblogs.com/Vinson404/p/7253255.html
 					 * */
@@ -229,14 +229,14 @@ public class SqlInjectionUtil {
 	}
 
 	/**
-	 * 判断是否存在SQL注入关键词字符串
+	 * Kiểm tra có tồn tại chuỗi từ khóa SQL injection hay không
 	 *
 	 * @param keyword
 	 * @return
 	 */
 	@SuppressWarnings("AlibabaUndefineMagicConstant")
 	private static boolean isExistSqlInjectTableKeyword(String sql, String keyword) {
-		// 需要匹配的，sql注入关键词
+		// Từ khóa SQL injection cần khớp
 		String[] matchingTexts = new String[]{"`" + keyword, "(" + keyword, "(`" + keyword};
 		for (String matchingText : matchingTexts) {
 			String[] checkTexts = new String[]{" " + matchingText, "from" + matchingText};
@@ -250,7 +250,7 @@ public class SqlInjectionUtil {
 	}
 
 	/**
-	 * sql注入过滤处理，遇到注入关键字抛异常
+	 * sql Xử lý lọc injection, gặp từ khóa injection thì ném ngoại lệ
 	 * 
 	 * @param values
 	 * @return
@@ -266,8 +266,8 @@ public class SqlInjectionUtil {
 	}
 
 	/**
-	 * 【提醒：不通用】
-	 * 仅用于字典条件SQL参数，注入过滤
+	 * 【Nhắc nhở：Không dùng chung】
+	 * Chỉ dùng cho tham số SQL điều kiện danh mục, lọc SQL injection
 	 *
 	 * @param value
 	 * @return
@@ -277,14 +277,14 @@ public class SqlInjectionUtil {
 		if (value == null || "".equals(value)) {
 			return;
 		}
-		// 一、校验sql注释 不允许有sql注释
+		// 1. Kiểm chứng chú thích SQL, không cho phép có chú thích SQL
 		checkSqlAnnotation(value);
 		value = value.toLowerCase().trim();
-		//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】修复换行符绕过SQL注入检测-----------
+		//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】Sửa lỗi ký tự xuống dòng bypass phát hiện SQL injection-----------
 		value = value.replaceAll("\\s+", " ");
-		//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】修复换行符绕过SQL注入检测-----------
+		//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】Sửa lỗi ký tự xuống dòng bypass phát hiện SQL injection-----------
 
-		// 二、SQL注入检测存在绕过风险 (普通文本校验)
+		// 2. Phát hiện SQL injection tồn tại rủi ro bypass (Kiểm chứng văn bản thường)
 		for (int i = 0; i < xssArr.length; i++) {
 			if (isExistSqlInjectKeyword(value, xssArr[i])) {
 				log.error(SqlInjectionUtil.SQL_INJECTION_KEYWORD_TIP, xssArr[i]);
@@ -301,11 +301,11 @@ public class SqlInjectionUtil {
             }
         }
 
-		// 三、SQL注入检测存在绕过风险 (正则校验)
+		// 3. Phát hiện SQL injection tồn tại rủi ro bypass (Kiểm tra bằng biểu thức chính quy)
 		for (String regularOriginal : XSS_REGULAR_STR_ARRAY) {
-			//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】正则加DOTALL模式，防止换行绕过-----------
+			//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】Regex thêm chế độ DOTALL, ngăn bypass bằng ký tự xuống dòng-----------
 			String regular = "(?s).*" + regularOriginal + ".*";
-			//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】正则加DOTALL模式，防止换行绕过-----------
+			//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】Regex thêm chế độ DOTALL, ngăn bypass bằng ký tự xuống dòng-----------
 			if (Pattern.matches(regular, value)) {
 				log.error(SqlInjectionUtil.SQL_INJECTION_KEYWORD_TIP, regularOriginal);
 				log.error(SqlInjectionUtil.SQL_INJECTION_TIP_VARIABLE, value);
@@ -316,19 +316,19 @@ public class SqlInjectionUtil {
 	}
 
 	/**
-	 * 【issues/9840】校验前端请求传入的字典条件 SQL。
+	 * 【issues/9840】 Kiểm chứng SQL điều kiện danh mục được frontend truyền vào trong yêu cầu.
 	 * <p>
-	 * 处理规则：
-	 * 1. 仅允许字段与常量组成比较、IN、LIKE、BETWEEN、IS NULL 条件，并支持括号、AND/OR 及安全排序；
-	 * 2. 禁止子查询、函数、字段间比较、SQL 注释、追加语句、未解析占位符及非法排序表达式；
-	 * 3. 从条件语法树提取字段并执行敏感字段校验，字典返回字段由服务入口执行相同校验；
-	 * 4. 敏感字段清单由 SensitiveTableCheckUtil 统一维护，非敏感字段保持原有字典能力。
+	 * Quy tắc xử lý:
+	 * 1. Chỉ cho phép trường và hằng số tạo thành điều kiện so sánh, IN, LIKE, BETWEEN, IS NULL, đồng thời hỗ trợ dấu ngoặc đơn,AND/OR và sắp xếp an toàn;
+	 * 2. Cấm truy vấn con, hàm, so sánh giữa các trường, chú thích SQL, câu lệnh nối thêm, placeholder chưa được phân tích và biểu thức sắp xếp không hợp lệ;
+	 * 3. Trích xuất trường từ cây cú pháp điều kiện và thực hiện kiểm chứng trường nhạy cảm; trường trả về của danh mục do điểm vào của dịch vụ thực hiện kiểm chứng tương tự;
+	 * 4. Danh sách trường nhạy cảm do SensitiveTableCheckUtil quản lý thống nhất, trường không nhạy cảm giữ nguyên khả năng danh mục vốn có.
 	 * </p>
 	 *
-	 * @param table 查询表名
-	 * @param value 字典过滤条件
+	 * @param table Tên bảng truy vấn
+	 * @param value Điều kiện lọc từ điển
 	 * @author scott
-	 * @since 2026-08-25 issues/9840 字典过滤条件 SQL 注入防护
+	 * @since 2026-08-25 issues/9840 Phòng chống SQL injection cho điều kiện lọc từ điển
 	 */
 	public static void filterDictConditionSqlFromRequest(String table, String value) {
 		if (value == null || "".equals(value)) {
@@ -349,8 +349,8 @@ public class SqlInjectionUtil {
 	}
 
     /**
-	 * 【提醒：不通用】
-     *  仅用于Online报表SQL解析，注入过滤
+	 * 【Nhắc nhở：Không dùng chung】
+     *  Chỉ dùng cho phân tích SQL của báo cáo Online, lọc SQL injection
      * @param value
      * @return
      */
@@ -359,14 +359,14 @@ public class SqlInjectionUtil {
 		if (value == null || "".equals(value)) {
 			return;
 		}
-		// 一、校验sql注释 不允许有sql注释
+		// 1. Kiểm chứng chú thích SQL, không cho phép có chú thích SQL
 		checkSqlAnnotation(value);
 		value = value.toLowerCase().trim();
-		//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】修复换行符绕过SQL注入检测-----------
+		//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】Sửa lỗi ký tự xuống dòng bypass phát hiện SQL injection-----------
 		value = value.replaceAll("\\s+", " ");
-		//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】修复换行符绕过SQL注入检测-----------
+		//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】Sửa lỗi ký tự xuống dòng bypass phát hiện SQL injection-----------
 
-		// 二、SQL注入检测存在绕过风险 (普通文本校验)
+		// 2. Phát hiện SQL injection tồn tại rủi ro bypass (Kiểm chứng văn bản thường)
 		for (int i = 0; i < xssArr.length; i++) {
 			if (isExistSqlInjectKeyword(value, xssArr[i])) {
 				log.error(SqlInjectionUtil.SQL_INJECTION_KEYWORD_TIP, xssArr[i]);
@@ -383,11 +383,11 @@ public class SqlInjectionUtil {
 			}
 		}
 
-		// 三、SQL注入检测存在绕过风险 (正则校验)
+		// 3. Phát hiện SQL injection tồn tại rủi ro bypass (Kiểm tra bằng biểu thức chính quy)
 		for (String regularOriginal : XSS_REGULAR_STR_ARRAY) {
-			//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】正则加DOTALL模式，防止换行绕过-----------
+			//update-begin---author:wangshuai ---date:2026-06-16  for：【issue/9677】Regex thêm chế độ DOTALL, ngăn bypass bằng ký tự xuống dòng-----------
 			String regular = "(?s).*" + regularOriginal + ".*";
-			//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】正则加DOTALL模式，防止换行绕过-----------
+			//update-end---author:wangshuai ---date:2026-06-16  for：【issue/9677】Regex thêm chế độ DOTALL, ngăn bypass bằng ký tự xuống dòng-----------
 			if (Pattern.matches(regular, value)) {
 				log.error(SqlInjectionUtil.SQL_INJECTION_KEYWORD_TIP, regularOriginal);
 				log.error(SqlInjectionUtil.SQL_INJECTION_TIP_VARIABLE, value);
@@ -399,12 +399,12 @@ public class SqlInjectionUtil {
 
 
 	/**
-	 * 校验是否有sql注释 
+	 * Kiểm chứng xem có chú thích SQL hay không 
 	 * @return
 	 */
 	public static void checkSqlAnnotation(String str){
 		if(str.contains(SQL_ANNOTATION2)){
-			String error = "请注意，SQL中不允许含注释，有安全风险！";
+			String error = "Xin lưu ý, SQL không được phép chứa chú thích, có rủi ro bảo mật!";
 			log.error(error);
 			throw new RuntimeException(error);
 		}
@@ -412,7 +412,7 @@ public class SqlInjectionUtil {
 		
 		Matcher matcher = SQL_ANNOTATION.matcher(str);
 		if(matcher.find()){
-			String error = "请注意，值可能存在SQL注入风险---> \\*.*\\";
+			String error = "Xin lưu ý, giá trị có thể tồn tại rủi ro SQL injection---> \\*.*\\";
 			log.error(error);
 			throw new JeecgSqlInjectionException(error);
 		}
@@ -420,9 +420,9 @@ public class SqlInjectionUtil {
 
 
 	/**
-	 * 返回查询表名
+	 * Trả về tên bảng truy vấn
 	 * <p>
-	 * sql注入过滤处理，遇到注入关键字抛异常
+	 * sql Xử lý lọc injection, gặp từ khóa injection thì ném ngoại lệ
 	 *
 	 * @param table
 	 */
@@ -432,38 +432,38 @@ public class SqlInjectionUtil {
 			return table;
 		}
 
-		// 代码逻辑说明: 表单设计器列表翻译存在表名带条件，导致翻译出问题----
+		// Giải thích logic mã: Việc dịch danh sách của trình thiết kế biểu mẫu tồn tại tên bảng kèm điều kiện, dẫn đến lỗi dịch----
 		int index = table.toLowerCase().indexOf(" where ");
 		if (index != -1) {
 			table = table.substring(0, index);
-			log.info("截掉where之后的新表名：" + table);
+			log.info("Tên bảng mới sau khi cắt bỏ phần sau where:" + table);
 		}
 
 		table = table.trim();
 		/**
-		 * 检验表名是否合法
+		 * Kiểm tra tên bảng có hợp lệ hay không
 		 *
-		 * 表名只能由字母、数字和下划线组成。
-		 * 表名必须以字母开头。
-		 * 表名长度通常有限制，例如最多为 64 个字符。
+		 * Tên bảng chỉ được gồm chữ cái, chữ số và dấu gạch dưới.
+		 * Tên bảng phải bắt đầu bằng chữ cái.
+		 * Độ dài tên bảng thường có giới hạn, ví dụ tối đa 64 ký tự.
 		 */
 		boolean isValidTableName = tableNamePattern.matcher(table).matches();
 		if (!isValidTableName) {
-			String errorMsg = "表名不合法，存在SQL注入风险!--->" + table;
+			String errorMsg = "Tên bảng không hợp lệ, tồn tại rủi ro SQL injection!--->" + table;
 			log.error(errorMsg);
 			throw new JeecgSqlInjectionException(errorMsg);
 		}
 
-		//进一步验证是否存在SQL注入风险
+		//Xác minh thêm có tồn tại rủi ro SQL injection hay không
 		filterContentMulti(table);
 		return table;
 	}
 
 
 	/**
-	 * 返回查询字段
+	 * Trả về trường truy vấn
 	 * <p>
-	 * sql注入过滤处理，遇到注入关键字抛异常
+	 * sql Xử lý lọc injection, gặp từ khóa injection thì ném ngoại lệ
 	 *
 	 * @param field
 	 */
@@ -480,25 +480,25 @@ public class SqlInjectionUtil {
 		}
 
 		/**
-		 * 校验表字段是否有效
+		 * Kiểm chứng trường của bảng có hợp lệ hay không
 		 *
-		 * 字段定义只能是是字母 数字 下划线的组合（不允许有空格、转义字符串等）
+		 * Định nghĩa trường chỉ có thể là tổ hợp của chữ cái, chữ số và dấu gạch dưới (không cho phép có khoảng trắng, chuỗi escape, v.v.)
 		 */
 		boolean isValidField = fieldPattern.matcher(field).matches();
 		if (!isValidField) {
-			String errorMsg = "字段不合法，存在SQL注入风险!--->" + field;
+			String errorMsg = "Trường không hợp lệ, tồn tại rủi ro SQL injection!--->" + field;
 			log.error(errorMsg);
 			throw new JeecgSqlInjectionException(errorMsg);
 		}
 
-		//进一步验证是否存在SQL注入风险
+		//Xác minh thêm có tồn tại rủi ro SQL injection hay không
 		filterContentMulti(field);
 		return field;
 	}
 
 	/**
-	 * 获取多个字段
-	 * 返回: 逗号拼接
+	 * Lấy nhiều trường
+	 * Trả về: Nối bằng dấu phẩy
 	 *
 	 * @param fields
 	 * @return
@@ -512,12 +512,12 @@ public class SqlInjectionUtil {
 
 
 	/**
-	 * 获取排序字段
-	 * 返回：字符串
+	 * Lấy trường sắp xếp
+	 * Trả về：Chuỗi
 	 *
-	 * 1.将驼峰命名转化成下划线 
-	 * 2.限制sql注入
-	 * @param sortField  排序字段
+	 * 1.Chuyển đổi tên camelCase thành dấu gạch dưới 
+	 * 2.Hạn chế SQL injection
+	 * @param sortField  Trường sắp xếp
 	 * @return
 	 */
 	public static String getSqlInjectSortField(String sortField) {
@@ -526,12 +526,12 @@ public class SqlInjectionUtil {
 	}
 
 	/**
-	 * 获取多个排序字段
-	 * 返回：数组
+	 * Lấy nhiều trường sắp xếp
+	 * Trả về: Mảng
 	 *
-	 * 1.将驼峰命名转化成下划线 
-	 * 2.限制sql注入
-	 * @param sortFields 多个排序字段
+	 * 1.Chuyển đổi tên camelCase thành dấu gạch dưới 
+	 * 2.Hạn chế SQL injection
+	 * @param sortFields Nhiều trường sắp xếp
 	 * @return
 	 */
 	public static List getSqlInjectSortFields(String... sortFields) {
@@ -543,11 +543,11 @@ public class SqlInjectionUtil {
 	}
 
 	/**
-	 * 获取 orderBy type
-	 * 返回：字符串
+	 * Lấy orderBy type
+	 * Trả về：Chuỗi
 	 * <p>
-	 * 1.检测是否为 asc 或 desc 其中的一个
-	 * 2.限制sql注入
+	 * 1.Kiểm tra xem có phải là một trong asc hoặc desc hay không
+	 * 2.Hạn chế SQL injection
 	 *
 	 * @param orderType
 	 * @return

@@ -3,32 +3,32 @@ package org.jeecg.common.system.vo;
 import lombok.Data;
 
 /**
- * 字典查询参数实体
+ * Thực thể tham số tìm kiếm từ điển
  * @author: jeecg-boot
  */
 @Data
 public class DictQuery {
     /**
-     * 表名
+     * Tên bảng
      */
     private String table;
     /**
-     * 存储列
+     * Cột lưu trữ
      */
     private String code;
 
     /**
-     * 显示列
+     * Cột hiển thị
      */
     private String text;
 
     /**
-     * 关键字查询
+     * Tìm kiếm theo từ khóa
      */
     private String keyword;
 
     /**
-     * 存储列的值 用于回显查询
+     * Giá trị của cột lưu trữ, dùng cho truy vấn hiển thị lại
      */
     private String codeValue;
 

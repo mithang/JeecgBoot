@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * @author 赵俊夫
  * @version V1.0
  * @Title:FreemarkerHelper
- * @description:Freemarker引擎协助类
+ * @description:Freemarker Lớp hỗ trợ engine
  * @date Jul 5, 2013 2:58:29 PM
  */
 @Slf4j
@@ -27,22 +27,22 @@ public class FreemarkerParseFactory {
 
     private static final String ENCODE = "utf-8";
     /**
-     * 参数格式化工具类
+     * Lớp công cụ định dạng tham số
      */
     private static final String MINI_DAO_FORMAT = "DaoFormat";
 
     /**
-     * 文件缓存
+     * Cache tệp
      */
     private static final Configuration TPL_CONFIG = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
     /**
-     * SQL 缓存
+     * SQL Cache
      */
     private static final Configuration SQL_CONFIG = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
 
     private static StringTemplateLoader stringTemplateLoader = new StringTemplateLoader();
 
-    /**使用内嵌的(?ms)打开单行和多行模式*/
+    /**Sử dụng cờ được nhúng(?ms)Bật chế độ một dòng và nhiều dòng*/
     private final static Pattern NOTES_PATTERN = Pattern
             .compile("(?ms)/\\*.*?\\*/|^\\s*//.*?$");
 
@@ -51,17 +51,17 @@ public class FreemarkerParseFactory {
         TPL_CONFIG.setNumberFormat("0.#####################");
         SQL_CONFIG.setTemplateLoader(stringTemplateLoader);
         SQL_CONFIG.setNumberFormat("0.#####################");
-        //classic_compatible设置，解决报空指针错误
+        //classic_compatible thiết lập, khắc phục lỗi báo con trỏ null
         SQL_CONFIG.setClassicCompatible(true);
 
-        // 解决freemarker模板注入问题 禁止解析ObjectConstructor，Execute和freemarker.template.utility.JythonRuntime。
+        // Khắc phục vấn đề template injection của Freemarker, cấm phân tích ObjectConstructor, Execute và freemarker.template.utility.JythonRuntime。
         //https://ackcent.com/in-depth-freemarker-template-injection/
         TPL_CONFIG.setNewBuiltinClassResolver(TemplateClassResolver.SAFER_RESOLVER);
         SQL_CONFIG.setNewBuiltinClassResolver(TemplateClassResolver.SAFER_RESOLVER);
     }
 
     /**
-     * 判断模板是否存在
+     * Kiểm tra mẫu có tồn tại hay không
      *
      * @throws Exception
      */
@@ -72,7 +72,7 @@ public class FreemarkerParseFactory {
                 return false;
             }
         } catch (Exception e) {
-            // 代码逻辑说明: 解决问题 - 错误提示sql文件不存在，实际问题是sql freemarker用法错误-----
+            // Giải thích logic mã: Khắc phục vấn đề - Thông báo lỗi cho rằng tệp SQL không tồn tại, nhưng vấn đề thực tế là cách dùng Freemarker trong SQL bị sai-----
             if (e instanceof ParseException) {
                 log.error(e.getMessage(), e.fillInStackTrace());
                 throw new Exception(e);
@@ -84,10 +84,10 @@ public class FreemarkerParseFactory {
     }
 
     /**
-     * 解析ftl模板
+     * Phân tích mẫu FTL
      *
-     * @param tplName 模板名
-     * @param paras   参数
+     * @param tplName Tên mẫu
+     * @param paras   Tham số
      * @return
      */
     public static String parseTemplate(String tplName, Map<String, Object> paras) {
@@ -96,7 +96,7 @@ public class FreemarkerParseFactory {
             StringWriter swriter = new StringWriter();
             Template mytpl = TPL_CONFIG.getTemplate(tplName, ENCODE);
             if (paras.containsKey(MINI_DAO_FORMAT)) {
-                throw new RuntimeException("DaoFormat 是 minidao 保留关键字，不允许使用 ，请更改参数定义！");
+                throw new RuntimeException("DaoFormat là từ khóa dự trữ của minidao, không được phép sử dụng, vui lòng thay đổi định nghĩa tham số!");
             }
             paras.put(MINI_DAO_FORMAT, new SimpleFormat());
             mytpl.process(paras, swriter);
@@ -105,19 +105,19 @@ public class FreemarkerParseFactory {
             return sql;
         } catch (Exception e) {
             log.error(e.getMessage(), e.fillInStackTrace());
-            log.error("发送一次的模板key:{ " + tplName + " }");
+            log.error("Mẫu gửi một lần key:{ " + tplName + " }");
             //System.err.println(e.getMessage());
-            //System.err.println("模板名:{ "+ tplName +" }");
-            throw new RuntimeException("解析SQL模板异常");
+            //System.err.println("Tên mẫu:{ "+ tplName +" }");
+            throw new RuntimeException("Lỗi phân tích mẫu SQL");
         }
     }
 
     /**
-     * 解析ftl
+     * Phân tích cú pháp ftl
      *
-     * @param tplContent 模板内容
-     * @param paras      参数
-     * @return String 模板解析后内容
+     * @param tplContent Nội dung mẫu
+     * @param paras      Tham số
+     * @return String Nội dung sau khi phân tích mẫu
      */
     public static String parseTemplateContent(String tplContent,Map<String, Object> paras) {
         return parseTemplateContent(tplContent, paras, false);
@@ -131,7 +131,7 @@ public class FreemarkerParseFactory {
             }
             Template mytpl = SQL_CONFIG.getTemplate(sqlUnderline + tplContent.hashCode(), ENCODE);
             if (paras.containsKey(MINI_DAO_FORMAT)) {
-                throw new RuntimeException("DaoFormat 是 minidao 保留关键字，不允许使用 ，请更改参数定义！");
+                throw new RuntimeException("DaoFormat là từ khóa dự trữ của minidao, không được phép sử dụng, vui lòng thay đổi định nghĩa tham số!");
             }
             paras.put(MINI_DAO_FORMAT, new SimpleFormat());
             mytpl.process(paras, swriter);
@@ -140,29 +140,29 @@ public class FreemarkerParseFactory {
             return sql;
         } catch (Exception e) {
             log.error(e.getMessage(), e.fillInStackTrace());
-            log.error("发送一次的模板key:{ " + tplContent + " }");
+            log.error("Mẫu gửi một lần key:{ " + tplContent + " }");
             //System.err.println(e.getMessage());
-            //System.err.println("模板内容:{ "+ tplContent +" }");
-            throw new RuntimeException("解析SQL模板异常");
+            //System.err.println("Nội dung mẫu:{ "+ tplContent +" }");
+            throw new RuntimeException("Lỗi phân tích mẫu SQL");
         }
     }
 
     /**
-     * 除去无效字段，去掉注释 不然批量处理可能报错 去除无效的等于
+     * Loại bỏ trường không hợp lệ, bỏ chú thích, nếu không xử lý hàng loạt có thể báo lỗi; loại bỏ dấu bằng không hợp lệ
      */
     private static String getSqlText(String sql) {
         return getSqlText(sql, false);
     }
 
     private static String getSqlText(String sql, boolean keepSpace) {
-        // 将注释替换成""
+        // Thay thế chú thích thành""
         sql = NOTES_PATTERN.matcher(sql).replaceAll("");
         if (!keepSpace) {
             sql = sql.replaceAll("\\n", " ").replaceAll("\\t", " ")
                     .replaceAll("\\s{1,}", " ").trim();
         }
-        // 去掉 最后是 where这样的问题
-        //where空格 "where "
+        // Loại bỏ vấn đề cuối cùng là where
+        //where Khoảng trắng "where "
         String whereSpace = DataBaseConstant.SQL_WHERE+" ";
         //"where and"
         String whereAnd = DataBaseConstant.SQL_WHERE+" and";
@@ -173,19 +173,19 @@ public class FreemarkerParseFactory {
         if (sql.endsWith(DataBaseConstant.SQL_WHERE) || sql.endsWith(whereSpace)) {
             sql = sql.substring(0, sql.lastIndexOf("where"));
         }
-        // 去掉where and 这样的问题
+        // Loại bỏ vấn đề where and
         int index = 0;
         while ((index = StringUtils.indexOfIgnoreCase(sql, whereAnd, index)) != -1) {
             sql = sql.substring(0, index + 5)
                     + sql.substring(index + 9, sql.length());
         }
-        // 去掉 , where 这样的问题
+        // Loại bỏ , where vấn đề như vậy
         index = 0;
         while ((index = StringUtils.indexOfIgnoreCase(sql, commaWhere, index)) != -1) {
             sql = sql.substring(0, index)
                     + sql.substring(index + 1, sql.length());
         }
-        // 去掉 最后是 ,这样的问题
+        // Loại bỏ phần cuối là ,vấn đề như vậy
         if (sql.endsWith(SymbolConstant.COMMA) || sql.endsWith(commaSpace)) {
             sql = sql.substring(0, sql.lastIndexOf(","));
         }

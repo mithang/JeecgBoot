@@ -8,20 +8,20 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 通用api
+ * Chung api
  * @author: jeecg-boot
  */
 public interface CommonAPI {
 
     /**
-     * 1查询用户角色信息
+     * 1 Truy vấn thông tin vai trò người dùng
      * @param username
      * @return
      */
     Set<String> queryUserRoles(String username);
     
     /**
-     * 1查询用户角色信息
+     * 1 Truy vấn thông tin vai trò người dùng
      * @param userId
      * @return
      */
@@ -29,14 +29,14 @@ public interface CommonAPI {
 
 
     /**
-     * 2查询用户权限信息
+     * 2 Truy vấn thông tin quyền hạn người dùng
      * @param userId
      * @return
      */
     Set<String> queryUserAuths(String userId);
 
     /**
-     * 3根据 id 查询数据库中存储的 DynamicDataSourceModel
+     * 3 Truy vấn theo id dữ liệu được lưu trong cơ sở dữ liệu DynamicDataSourceModel
      *
      * @param dbSourceId
      * @return
@@ -44,7 +44,7 @@ public interface CommonAPI {
     DynamicDataSourceModel getDynamicDbSourceById(String dbSourceId);
 
     /**
-     * 4根据 code 查询数据库中存储的 DynamicDataSourceModel
+     * 4 Theo code, truy vấn dữ liệu đã lưu trong cơ sở dữ liệu DynamicDataSourceModel
      *
      * @param dbSourceCode
      * @return
@@ -52,14 +52,14 @@ public interface CommonAPI {
     DynamicDataSourceModel getDynamicDbSourceByCode(String dbSourceCode);
 
     /**
-     * 5根据用户账号查询用户信息
+     * 5 Truy vấn thông tin người dùng theo tài khoản người dùng
      * @param username
      * @return
      */
     public LoginUser getUserByName(String username);
     
     /**
-     * 5根据用户账号查询用户Id
+     * 5 Truy vấn người dùng theo tài khoản người dùng Id
      * @param username
      * @return
      */
@@ -67,7 +67,7 @@ public interface CommonAPI {
 
 
     /**
-     * 6字典表的 翻译
+     * 6 Dịch bảng danh mục
      * @param table
      * @param text
      * @param code
@@ -77,7 +77,7 @@ public interface CommonAPI {
     String translateDictFromTable(String table, String text, String code, String key);
 
     /**
-     * 7普通字典的翻译
+     * 7 Dịch danh mục thông thường
      * @param code
      * @param key
      * @return
@@ -85,38 +85,38 @@ public interface CommonAPI {
     String translateDict(String code, String key);
 
     /**
-     * 8查询数据权限
-     * @param component 组件
-     * @param username 用户名
-     * @param requestPath 前段请求地址
+     * 8 Truy vấn quyền dữ liệu
+     * @param component Component
+     * @param username Tên người dùng
+     * @param requestPath Địa chỉ yêu cầu của frontend
      * @return
      */
     List<SysPermissionDataRuleModel> queryPermissionDataRule(String component, String requestPath, String username);
 
 
     /**
-     * 9查询用户信息
+     * 9 Truy vấn thông tin người dùng
      * @param username
      * @return
      */
     SysUserCacheInfo getCacheUser(String username);
 
     /**
-     * 10获取数据字典
+     * 10 Lấy từ điển dữ liệu
      * @param code
      * @return
      */
     public List<DictModel> queryDictItemsByCode(String code);
 
     /**
-     * 获取有效的数据字典项
+     * Lấy mục danh mục dữ liệu hợp lệ
      * @param code
      * @return
      */
     public List<DictModel> queryEnableDictItemsByCode(String code);
 
     /**
-     * 13获取表数据字典
+     * 13 Lấy danh mục dữ liệu bảng
      * @param tableFilterSql
      * @param text
      * @param code
@@ -125,30 +125,30 @@ public interface CommonAPI {
     List<DictModel> queryTableDictItemsByCode(String tableFilterSql, String text, String code);
 
     /**
-     * 14 普通字典的翻译，根据多个dictCode和多条数据，多个以逗号分割
-     * @param dictCodes 例如：user_status,sex
-     * @param keys 例如：1,2,0
+     * 14 Dịch danh mục thông thường, theo nhiều dictCode và nhiều bản ghi dữ liệu, nhiều mục phân tách bằng dấu phẩy
+     * @param dictCodes Ví dụ:user_status,sex
+     * @param keys Ví dụ:1,2,0
      * @return
      */
     Map<String, List<DictModel>> translateManyDict(String dictCodes, String keys);
 
     /**
-     * 15 字典表的 翻译，可批量
+     * 15 Dịch danh mục bảng, có thể thực hiện hàng loạt
      * @param table
      * @param text
      * @param code
-     * @param keys 多个用逗号分割
-     * @param dataSource 数据源
+     * @param keys Nhiều mục phân tách bằng dấu phẩy
+     * @param dataSource Nguồn dữ liệu
      * @return
      */
     List<DictModel> translateDictFromTableByKeys(String table, String text, String code, String keys, String dataSource);
 
     /**
-     * 16 运行AIRag流程
-     * for  [QQYUN-13634]在baseapi里面封装方法，方便其他模块调用
+     * 16 Chạy quy trình AIRag
+     * for  [QQYUN-13634]Đóng gói phương thức trong baseapi để các module khác gọi tiện lợi
      *
      * @param airagFlowDTO
-     * @return 流程执行结果,可能是String或者Map
+     * @return Kết quả thực thi quy trình,Có thể là String hoặc Map
      * @author chenrui
      * @date 2025/9/2 11:43
      */

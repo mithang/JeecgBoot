@@ -3,7 +3,7 @@ package org.jeecg.config.vo;
 import lombok.Data;
 
 /**
- * 百度开放api配置
+ * Cấu hình API mở Baidu
  */
 @Data
 public class BaiduApi {

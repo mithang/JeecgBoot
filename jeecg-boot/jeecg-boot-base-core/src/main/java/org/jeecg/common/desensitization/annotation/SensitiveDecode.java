@@ -3,9 +3,9 @@ package org.jeecg.common.desensitization.annotation;
 import java.lang.annotation.*;
 
 /**
- * 解密注解
+ * Annotation giải mã
  *
- * 在方法上定义 将方法返回对象中的敏感字段 解密，需要注意的是，如果没有加密过，解密会出问题，返回原字符串
+ * Định nghĩa trên phương thức để giải mã các trường nhạy cảm trong đối tượng trả về của phương thức; cần lưu ý nếu chưa từng được mã hóa thì việc giải mã sẽ gặp vấn đề và trả về chuỗi gốc
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 public @interface SensitiveDecode {
 
     /**
-     * 指明需要脱敏的实体类class
+     * Chỉ rõ lớp entity cần khử nhạy cảm class
      * @return
      */
     Class entity() default Object.class;

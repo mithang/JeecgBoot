@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * websocket 前端将token放到子协议里传入 与后端建立连接时需要用到http协议，此处用于校验token的有效性
+ * websocket Frontend đặt token vào sub-protocol để truyền vào; khi thiết lập kết nối với backend cần dùng giao thức HTTP, tại đây dùng để kiểm tra tính hợp lệ của token
  * @Author taoYan
  * @Date 2022/4/21 17:01
  **/
@@ -27,7 +27,7 @@ public class WebsocketFilter implements Filter {
     private static final String TOKEN_KEY = "Sec-WebSocket-Protocol";
 
     /**
-     * 系统通知websocket端点 /websocket/{userId}（仅单段路径，不含 /websocket/drag/{chartId} 等子路径接口）
+     * Endpoint websocket thông báo hệ thống /websocket/{userId}(chỉ đường dẫn một đoạn, không bao gồm /websocket/drag/{chartId} các API đường dẫn con khác)
      */
     private static final Pattern SYS_NOTICE_WS_PATTERN = Pattern.compile("^/websocket/([^/]+)/?$");
 
@@ -46,34 +46,34 @@ public class WebsocketFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         String token = request.getHeader(TOKEN_KEY);
 
-        log.debug("Websocket连接 Token安全校验，Path = {}，token:{}", request.getRequestURI(), token);
+        log.debug("Websocket Kết nối kiểm tra an toàn Token,Path = {}，token:{}", request.getRequestURI(), token);
 
         try {
             TokenUtils.verifyToken(token, commonApi, redisUtil);
         } catch (Exception exception) {
-            //log.error("Websocket连接 Token安全校验失败，IP:{}, Token:{}, Path = {}，异常：{}", oConvertUtils.getIpAddrByRequest(request), token, request.getRequestURI(), exception.getMessage());
-            log.debug("Websocket连接 Token安全校验失败，IP:{}, Token:{}, Path = {}，异常：{}", oConvertUtils.getIpAddrByRequest(request), token, request.getRequestURI(), exception.getMessage());
+            //log.error("Websocket Kết nối, kiểm chứng an toàn Token thất bại，IP:{}, Token:{}, Path = {}，Ngoại lệ：{}", oConvertUtils.getIpAddrByRequest(request), token, request.getRequestURI(), exception.getMessage());
+            log.debug("Websocket Kết nối, kiểm chứng an toàn Token thất bại，IP:{}, Token:{}, Path = {}，Ngoại lệ：{}", oConvertUtils.getIpAddrByRequest(request), token, request.getRequestURI(), exception.getMessage());
             return;
         }
-        //update-begin---author:scott ---date:20261013  for：【安全 GHSA-5j5w-pm5g-5wr8】系统通知websocket(/websocket/{userId})绑定token身份，禁止订阅他人的实时消息-----------
+        //update-begin---author:scott ---date:20261013  for: 【Bảo mật GHSA-5j5w-pm5g-5wr8】Thông báo hệ thống websocket(/websocket/{userId})Ràng buộc danh tính token, cấm đăng ký tin nhắn thời gian thực của người khác-----------
         String uri = request.getRequestURI();
-        //update-begin---author:scott ---date:20261026  for：【issues/4830】userId身份绑定只针对系统通知端点/websocket/{userId}，避免误拦大屏/websocket/drag/{chartId}等其他websocket接口-----------
-        // 去掉contextPath并合并连续斜杠，与Tomcat端点路由口径一致，防止 /websocket//{userId} 绕过校验
+        //update-begin---author:scott ---date:20261026  for：【issues/4830】Ràng buộc danh tính userId chỉ áp dụng cho endpoint thông báo hệ thống/websocket/{userId}，để tránh chặn nhầm màn hình lớn/websocket/drag/{chartId}và các API websocket khác-----------
+        // Loại bỏ contextPath và gộp các dấu gạch chéo liên tiếp, thống nhất với quy tắc định tuyến endpoint của Tomcat, ngăn chặn /websocket//{userId} bypass kiểm tra
         String path = uri.substring(request.getContextPath().length()).replaceAll("/{2,}", "/");
         Matcher sysNoticeMatcher = SYS_NOTICE_WS_PATTERN.matcher(path);
         if (sysNoticeMatcher.matches()) {
             String pathUserId = sysNoticeMatcher.group(1);
-        //update-end---author:scott ---date:20261026  for：【issues/4830】userId身份绑定只针对系统通知端点/websocket/{userId}，避免误拦大屏/websocket/drag/{chartId}等其他websocket接口-----------
-            // 前端路径userId格式为 {真实userId}_{wsClientId}(md5(token))，取下划线前的真实userId比对；同时兼容无后缀的纯userId
+        //update-end---author:scott ---date:20261026  for：【issues/4830】Ràng buộc danh tính userId chỉ áp dụng cho endpoint thông báo hệ thống/websocket/{userId}，để tránh chặn nhầm màn hình lớn/websocket/drag/{chartId}và các API websocket khác-----------
+            // Định dạng userId trong đường dẫn frontend là {thực userId}_{wsClientId}(md5(token)), lấy userId thực trước dấu gạch dưới để so sánh; đồng thời tương thích với userId thuần không có hậu tố userId
             int underline = pathUserId.indexOf('_');
             String realPathUserId = underline >= 0 ? pathUserId.substring(0, underline) : pathUserId;
             LoginUser loginUser = commonApi.getUserByName(JwtUtil.getUsername(token));
             if (loginUser == null || !loginUser.getId().equals(realPathUserId)) {
-                log.warn("Websocket连接 用户身份与路径userId不一致，已拒绝。Path = {}", uri);
+                log.warn("Websocket Kết nối: danh tính người dùng không khớp với userId trong đường dẫn, đã từ chối.Path = {}", uri);
                 return;
             }
         }
-        //update-end---author:scott ---date:20261013  for：【安全 GHSA-5j5w-pm5g-5wr8】系统通知websocket(/websocket/{userId})绑定token身份，禁止订阅他人的实时消息-----------
+        //update-end---author:scott ---date:20261013  for: 【Bảo mật GHSA-5j5w-pm5g-5wr8】Thông báo hệ thống websocket(/websocket/{userId})Ràng buộc danh tính token, cấm đăng ký tin nhắn thời gian thực của người khác-----------
         HttpServletResponse response = (HttpServletResponse)servletResponse;
         response.setHeader(TOKEN_KEY, token);
         filterChain.doFilter(servletRequest, servletResponse);

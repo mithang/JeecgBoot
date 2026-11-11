@@ -11,7 +11,7 @@ import org.jeecg.common.api.dto.LogDTO;
 public interface BaseCommonMapper {
 
     /**
-     * 保存日志
+     * Lưu nhật ký
      * @param dto
      */
     @InterceptorIgnore(illegalSql = "true", tenantLine = "true")

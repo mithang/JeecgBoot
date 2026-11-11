@@ -6,11 +6,11 @@ import org.jeecg.common.constant.enums.ModuleType;
 import java.lang.annotation.*;
 
 /**
- * 系统日志注解
+ * Chú thích nhật ký hệ thống
  * 
  * @Author scott
  * @email jeecgos@163.com
- * @Date 2019年1月14日
+ * @Date 2019 năm 1 tháng 14 ngày
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -18,28 +18,28 @@ import java.lang.annotation.*;
 public @interface AutoLog {
 
 	/**
-	 * 日志内容
+	 * Nội dung nhật ký
 	 * 
 	 * @return
 	 */
 	String value() default "";
 
 	/**
-	 * 日志类型
+	 * Loại nhật ký
 	 * 
-	 * @return 0:操作日志;1:登录日志;2:定时任务;
+	 * @return 0:Nhật ký thao tác;1:Nhật ký đăng nhập;2:Tác vụ định kỳ;
 	 */
 	int logType() default CommonConstant.LOG_TYPE_2;
 	
 	/**
-	 * 操作日志类型
+	 * Loại nhật ký thao tác
 	 * 
-	 * @return （1查询，2添加，3修改，4删除）
+	 * @return (1 Tìm kiếm, 2 Thêm, 3 Sửa, 4 Xóa)
 	 */
 	int operateType() default 0;
 
 	/**
-	 * 模块类型 默认为common
+	 * Loại module mặc định là common
 	 * @return
 	 */
 	ModuleType module() default ModuleType.COMMON;

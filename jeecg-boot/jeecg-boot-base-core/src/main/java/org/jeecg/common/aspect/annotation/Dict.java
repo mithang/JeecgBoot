@@ -6,47 +6,47 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 字典注解
+ * Annotation danh mục
  * @author: dangzhenghui
- * @date: 2019年03月17日-下午9:37:16
+ * @date: 2019 năm 03 tháng 17 ngày-Buổi chiều 9:37:16
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Dict {
     /**
-     * 方法描述:  数据code
-     * 作    者： dangzhenghui
-     * 日    期： 2019年03月17日-下午9:37:16
+     * Mô tả phương thức:  Dữ liệu code
+     * Tác giả: dangzhenghui
+     * Ngày: 17 tháng 03 năm 2019-Buổi chiều 9:37:16
      *
-     * @return 返回类型： String
+     * @return Kiểu trả về: String
      */
     String dicCode();
 
     /**
-     * 方法描述:  数据Text
-     * 作    者： dangzhenghui
-     * 日    期： 2019年03月17日-下午9:37:16
+     * Mô tả phương thức:  Dữ liệu Text
+     * Tác giả: dangzhenghui
+     * Ngày: 17 tháng 03 năm 2019-Buổi chiều 9:37:16
      *
-     * @return 返回类型： String
+     * @return Kiểu trả về: String
      */
     String dicText() default "";
 
     /**
-     * 方法描述: 数据字典表
-     * 作    者： dangzhenghui
-     * 日    期： 2019年03月17日-下午9:37:16
+     * Mô tả phương thức: Bảng từ điển dữ liệu
+     * Tác giả: dangzhenghui
+     * Ngày: 17 tháng 03 năm 2019-Buổi chiều 9:37:16
      *
-     * @return 返回类型： String
+     * @return Kiểu trả về: String
      */
     String dictTable() default "";
 
 
     /**
-     * 方法描述: 数据字典表所在数据源名称
-     * 作    者： chenrui
-     * 日    期： 2023年12月20日-下午4:58
+     * Mô tả phương thức: Tên nguồn dữ liệu nơi bảng từ điển dữ liệu nằm
+     * Tác giả: chenrui
+     * Ngày: 20 tháng 12 năm 2023-Buổi chiều 4:58
      *
-     * @return 返回类型： String
+     * @return Kiểu trả về: String
      */
     String ds() default "";
 }

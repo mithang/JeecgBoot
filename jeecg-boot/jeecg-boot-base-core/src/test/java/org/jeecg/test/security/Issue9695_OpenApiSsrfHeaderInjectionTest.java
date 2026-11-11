@@ -17,38 +17,38 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * 【issues/9695】OpenAPI 转发 SSRF 漏洞修复 (CWE-918) — 单元测试
+ * 【issues/9695】Sửa lỗi SSRF chuyển tiếp OpenAPI (CWE-918) — Kiểm thử đơn vị
  *
- * ── 漏洞是怎么引起的 ──────────────────────────────────────────────────────────
- * OpenApiController#call(/openapi/call/{path}) 是一个"服务端转发"接口：它读取数据库里
- * 配置的 originUrl，由【服务器】自己发起 restTemplate.exchange(...) 去请求该地址，并把
- * 内部用户的 X-Access-Token 一并带上。
+ * ── Lỗ hổng được gây ra như thế nào ──────────────────────────────────────────────────────────
+ * OpenApiController#call(/openapi/call/{path}) là một"Chuyển tiếp phía server"API: nó đọc trong cơ sở dữ liệu
+ * originUrl đã cấu hình, do 【máy chủ】tự khởi xướng restTemplate.exchange(...) đi yêu cầu địa chỉ đó, và mang theo
+ * của người dùng nội bộ X-Access-Token cùng mang theo.
  *
- * 当 originUrl 是相对路径（如 /house/list）时，需要补一个 baseUrl 拼成完整地址。
- * baseUrl 由 CommonUtils.getBaseUrl(request) 计算，而该方法为兼容微服务网关，会直接信任
- * 请求头 X_GATEWAY_BASE_PATH 作为 base。
+ * Khi originUrl là đường dẫn tương đối (như /house/list) thì cần bổ sung một baseUrl để ghép thành địa chỉ đầy đủ.
+ * baseUrl Do CommonUtils.getBaseUrl(request) tính toán, mà phương thức này để tương thích với gateway microservice, sẽ trực tiếp tin tưởng
+ * Request header X_GATEWAY_BASE_PATH làm base.
  *
- * 问题就在这里：X_GATEWAY_BASE_PATH 是【客户端可控的请求头】。修复前，攻击者只要发：
+ * Vấn đề nằm ở đây：X_GATEWAY_BASE_PATH là【header yêu cầu do client kiểm soát】. Trước khi sửa, kẻ tấn công chỉ cần gửi：
  *     POST /openapi/call/xxx
- *     X_GATEWAY_BASE_PATH: http://169.254.169.254   (或 http://attacker.com)
- * 服务器就会把转发目标拼成 http://169.254.169.254/<originUrl>，并由服务器主动访问，
- * 从而探测云元数据 / 内网服务 / 把携带内部 token 的请求打到攻击者站点 —— 典型 SSRF。
- * 根因：把"客户端可控的 header"当成"可信的服务端 base 地址"使用。
+ *     X_GATEWAY_BASE_PATH: http://169.254.169.254   (hoặc http://attacker.com)
+ * Máy chủ sẽ ghép mục tiêu chuyển tiếp thành http://169.254.169.254/<originUrl>，và máy chủ chủ động truy cập,
+ * từ đó thăm dò metadata đám mây / dịch vụ mạng nội bộ / Gửi yêu cầu mang token nội bộ tới trang web của kẻ tấn công —— SSRF điển hình.
+ * Nguyên nhân gốc: Đem"do client kiểm soát header"coi như"địa chỉ base phía server đáng tin cậy"để sử dụng.
  *
- * ── 修复 ──────────────────────────────────────────────────────────────────────
- * 1) CommonUtils.validateGatewayBasePath(header)：对 X_GATEWAY_BASE_PATH 做白名单校验——
- *    仅允许 http/https、禁止 userInfo（防 http://victim@evil 混淆）、host 不能为空，
- *    并【从解析后的 URI 组件重新拼接】返回，过滤掉注入字符；非法则返回 null 直接忽略该头。
- * 2) CommonUtils.checkInternalUrl(url)：relative-path 转发场景下，再校验解析出的 baseUrl
- *    host 必须是内网地址（回环/局域网/链路本地），解析到公网地址则抛 JeecgBootException。
- * SpringContextUtils.getDomain() 走同一套 validateGatewayBasePathForDomain 校验。
+ * ── Sửa ──────────────────────────────────────────────────────────────────────
+ * 1) CommonUtils.validateGatewayBasePath(header)：Đối với X_GATEWAY_BASE_PATH thực hiện kiểm tra danh sách trắng——
+ *    Chỉ cho phép http/https、cấm userInfo (phòng http://victim@evil nhầm lẫn)、host không được rỗng,
+ *    và【ghép lại từ các thành phần URI sau khi phân tích】để trả về, lọc bỏ ký tự tiêm; nếu không hợp lệ thì trả về null và bỏ qua trực tiếp header đó.
+ * 2) CommonUtils.checkInternalUrl(url)：relative-path Trong trường hợp chuyển tiếp, kiểm tra lại baseUrl
+ *    host phải là địa chỉ mạng nội bộ (loopback/Mạng LAN/link-local), nếu phân giải ra địa chỉ công khai thì ném JeecgBootException.
+ * SpringContextUtils.getDomain() Dùng cùng một bộ kiểm tra validateGatewayBasePathForDomain.
  *
- * ── 测试策略 ──────────────────────────────────────────────────────────────────
- * 校验逻辑都收敛在 CommonUtils 的 public static 方法里，可纯单测、无需 Spring / 无需联网
- * （全部使用 URI 解析与字面量 IP，不触发 DNS）。三组用例分别覆盖：
- *   一、入口复现：getBaseUrl 对恶意 X_GATEWAY_BASE_PATH 头不再信任；
- *   二、header 白名单：validateGatewayBasePath 的放行/拒绝边界；
- *   三、SSRF 兜底：checkInternalUrl 拦截公网地址、放行内网地址。
+ * ── Chiến lược kiểm thử ──────────────────────────────────────────────────────────────────
+ * Logic kiểm tra đều tập trung trong phương thức public static của CommonUtils, có thể kiểm thử đơn thuần, không cần Spring / không cần kết nối mạng
+ * (đều dùng phân tích URI và IP dạng literal, không kích hoạt DNS). Ba nhóm trường hợp kiểm thử lần lượt bao phủ：
+ *   Một, tái hiện tại điểm vào: getBaseUrl đối với header độc hại X_GATEWAY_BASE_PATH không còn tin tưởng;
+ *   2. Danh sách trắng header: việc cho qua của validateGatewayBasePath/ranh giới từ chối;
+ *   Ba, SSRF dự phòng: checkInternalUrl chặn địa chỉ công khai, cho qua địa chỉ mạng nội bộ.
  *
  * @author wangshuai
  * @date 2026-06-17
@@ -56,10 +56,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(PrintTestResultExtension.class)
 public class Issue9695_OpenApiSsrfHeaderInjectionTest {
 
-    /** 构造带指定 X_GATEWAY_BASE_PATH 头的 mock 请求。 */
+    /** Tạo mock request mang header X_GATEWAY_BASE_PATH được chỉ định. */
     private MockHttpServletRequest requestWithGatewayHeader(String headerValue) {
         MockHttpServletRequest req = new MockHttpServletRequest();
-        // MockHttpServletRequest 默认 scheme=http, serverName=localhost, serverPort=80
+        // MockHttpServletRequest Mặc định scheme=http, serverName=localhost, serverPort=80
         if (headerValue != null) {
             req.addHeader(ServiceNameConstants.X_GATEWAY_BASE_PATH, headerValue);
         }
@@ -67,72 +67,72 @@ public class Issue9695_OpenApiSsrfHeaderInjectionTest {
     }
 
     // ==================================================================
-    // 一、入口复现：复刻 OpenApiController#call 对相对路径的两层防御
-    //    第 1 层 getBaseUrl(...)        —— header 格式白名单（协议/userInfo/host）
-    //    第 2 层 checkInternalUrl(base) —— 解析出的 baseUrl 必须是内网地址
-    // 注意：单看 getBaseUrl 并不足以挡住 http://attacker.com（格式合法），
-    //      真正挡住公网外联的是随后那一句 checkInternalUrl —— 两层缺一不可。
+    // Một, tái hiện tại điểm vào: Tái hiện OpenApiController#call hai lớp phòng vệ đối với đường dẫn tương đối
+    //    Lớp 1 getBaseUrl(...)        —— Danh sách trắng định dạng header (giao thức/userInfo/host）
+    //    Lớp 2 checkInternalUrl(base) —— baseUrl sau khi phân tích phải là địa chỉ mạng nội bộ
+    // Lưu ý: Chỉ nhìn getBaseUrl thì không đủ để chặn http://attacker.com(định dạng hợp lệ),
+    //      Thứ thực sự chặn kết nối ra ngoài tới mạng công khai là câu checkInternalUrl ngay sau đó —— hai lớp thiếu một cũng không được.
     // ==================================================================
 
     @Nested
-    @DisplayName("漏洞入口 —— 复刻 controller 对相对路径转发的两层防御")
+    @DisplayName("Điểm vào lỗ hổng —— Tái hiện hai lớp phòng vệ của controller đối với chuyển tiếp đường dẫn tương đối")
     class GetBaseUrlEntry {
 
-        /** 复刻 OpenApiController#call 中相对路径分支：getBaseUrl 后再 checkInternalUrl。 */
+        /** Tái hiện OpenApiController#call Nhánh đường dẫn tương đối trong: sau getBaseUrl lại checkInternalUrl. */
         private String resolveBaseUrlAsController(String gatewayHeader) {
             String baseUrl = CommonUtils.getBaseUrl(requestWithGatewayHeader(gatewayHeader));
-            CommonUtils.checkInternalUrl(baseUrl);   // controller 在拼接前的强制校验
+            CommonUtils.checkInternalUrl(baseUrl);   // controller Kiểm tra bắt buộc trước khi ghép
             return baseUrl;
         }
 
         @Test
-        @DisplayName("【漏洞复现】注入公网地址 http://attacker.com：格式校验放过，但被 checkInternalUrl 拦死")
+        @DisplayName("【Tái hiện lỗ hổng】Tiêm địa chỉ công khai http://attacker.com：Kiểm tra định dạng cho qua, nhưng bị checkInternalUrl chặn cứng")
         void maliciousPublicGatewayHeaderBlockedByInternalCheck() {
-            // getBaseUrl 只做格式白名单，attacker.com 格式合法 → 会被原样返回
+            // getBaseUrl Chỉ làm danh sách trắng định dạng,attacker.com Định dạng hợp lệ → sẽ được trả về nguyên trạng
             String baseUrl = CommonUtils.getBaseUrl(requestWithGatewayHeader("http://attacker.com"));
             assertEquals("http://attacker.com", baseUrl,
-                    "getBaseUrl 仅校验头部格式，不负责拦公网（这一层挡不住）");
+                    "getBaseUrl Chỉ kiểm tra định dạng header, không chịu trách nhiệm chặn mạng công khai (lớp này không chặn được)");
 
-            // 真正的 SSRF 防线是 controller 紧接着的 checkInternalUrl
+            // Tuyến phòng thủ SSRF thực sự là câu checkInternalUrl ngay sau đó của controller checkInternalUrl
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> resolveBaseUrlAsController("http://attacker.com"));
             System.out.println("[maliciousPublicGatewayHeaderBlockedByInternalCheck] -> " + ex.getMessage());
-            assertTrue(ex.getMessage().contains("内网"),
-                    "controller 完整流程下，注入公网网关头最终被 checkInternalUrl 拦截");
+            assertTrue(ex.getMessage().contains("Mạng nội bộ"),
+                    "controller Trong quy trình đầy đủ, header gateway công khai bị tiêm cuối cùng bị checkInternalUrl chặn");
         }
 
         @Test
-        @DisplayName("【漏洞复现】带 userInfo 的混淆头(http://localhost@evil.com)在第 1 层就被忽略 → 回落本机")
+        @DisplayName("【Tái hiện lỗ hổng】Header gây nhầm lẫn mang userInfo(http://localhost@evil.com)đã bị bỏ qua ngay tại lớp 1 → rơi về máy cục bộ")
         void userInfoObfuscationHeaderIsIgnored() {
-            // userInfo 混淆地址连格式白名单都过不了 → validateGatewayBasePath 返回 null → 忽略该头
+            // userInfo Địa chỉ gây nhầm lẫn ngay cả danh sách trắng định dạng cũng không qua được → validateGatewayBasePath Trả về null → Bỏ qua header đó
             String baseUrl = resolveBaseUrlAsController("http://localhost@evil.com");
-            System.out.println("[userInfoObfuscationHeaderIsIgnored] 注入 http://localhost@evil.com -> baseUrl=" + baseUrl);
+            System.out.println("[userInfoObfuscationHeaderIsIgnored] tiêm http://localhost@evil.com -> baseUrl=" + baseUrl);
 
-            assertFalse(baseUrl.contains("evil.com"), "userInfo 混淆地址不得被采纳");
-            assertTrue(baseUrl.startsWith("http://localhost"), "非法头被忽略后回落到当前服务自身地址");
+            assertFalse(baseUrl.contains("evil.com"), "userInfo Địa chỉ gây nhầm lẫn không được áp dụng");
+            assertTrue(baseUrl.startsWith("http://localhost"), "Sau khi header không hợp lệ bị bỏ qua, sẽ rơi về địa chỉ của chính dịch vụ hiện tại");
         }
 
         @Test
-        @DisplayName("合法的内网网关头被采纳（保证微服务网关正常功能不被误伤）")
+        @DisplayName("Header gateway mạng nội bộ hợp lệ được áp dụng (đảm bảo chức năng bình thường của gateway microservice không bị ảnh hưởng nhầm)")
         void legitInternalGatewayHeaderIsAccepted() {
             String baseUrl = resolveBaseUrlAsController("http://127.0.0.1:8080/jeecg-boot");
             System.out.println("[legitInternalGatewayHeaderIsAccepted] baseUrl=" + baseUrl);
 
             assertEquals("http://127.0.0.1:8080/jeecg-boot", baseUrl,
-                    "合法内网 http 网关头应通过两层校验并被规范化采纳");
+                    "Header gateway http mạng nội bộ hợp lệ nên vượt qua hai lớp kiểm tra và được áp dụng sau khi chuẩn hóa");
         }
     }
 
     // ==================================================================
-    // 二、header 白名单：validateGatewayBasePath 的放行/拒绝边界
+    // 2. Danh sách trắng header: việc cho qua của validateGatewayBasePath/Ranh giới từ chối
     // ==================================================================
 
     @Nested
-    @DisplayName("网关头白名单 —— validateGatewayBasePathForDomain")
+    @DisplayName("Danh sách trắng header gateway —— validateGatewayBasePathForDomain")
     class GatewayHeaderWhitelist {
 
         @Test
-        @DisplayName("合法 http/https 地址：从 URI 组件重新拼接后返回")
+        @DisplayName("Hợp lệ http/https Địa chỉ：Ghép lại từ các thành phần URI rồi trả về")
         void validHttpUrlPasses() {
             assertEquals("http://10.0.0.5:9999/jeecg-boot",
                     CommonUtils.validateGatewayBasePathForDomain("http://10.0.0.5:9999/jeecg-boot"));
@@ -141,7 +141,7 @@ public class Issue9695_OpenApiSsrfHeaderInjectionTest {
         }
 
         @Test
-        @DisplayName("非 http(s) 协议(file/gopher/...)一律拒绝 → 返回 null")
+        @DisplayName("Không phải http(s) Giao thức(file/gopher/...)Đều bị từ chối → Trả về null")
         void nonHttpSchemeRejected() {
             assertNull(CommonUtils.validateGatewayBasePathForDomain("file:///etc/passwd"));
             assertNull(CommonUtils.validateGatewayBasePathForDomain("gopher://127.0.0.1:6379/_xxx"));
@@ -149,13 +149,13 @@ public class Issue9695_OpenApiSsrfHeaderInjectionTest {
         }
 
         @Test
-        @DisplayName("含 userInfo 的混淆地址拒绝 → 返回 null")
+        @DisplayName("Địa chỉ gây nhầm lẫn chứa userInfo bị từ chối → Trả về null")
         void userInfoRejected() {
             assertNull(CommonUtils.validateGatewayBasePathForDomain("http://trusted.com@evil.com/"));
         }
 
         @Test
-        @DisplayName("空值 / 无 host / 非法字符 一律返回 null")
+        @DisplayName("Giá trị rỗng / Không có host / Ký tự không hợp lệ đều trả về null")
         void emptyOrMalformedReturnsNull() {
             assertNull(CommonUtils.validateGatewayBasePathForDomain(null));
             assertNull(CommonUtils.validateGatewayBasePathForDomain(""));
@@ -165,41 +165,41 @@ public class Issue9695_OpenApiSsrfHeaderInjectionTest {
     }
 
     // ==================================================================
-    // 二·补：网关头只接受纯路径 —— 拒绝查询串/片段/路径穿越（GHSA-3c5r-mgw9-jq74）
-    //   漏洞：validateGatewayBasePath 原用 uri.getPath()（解码后）重建基址，未拒绝
-    //   解码后出现的 ? / #，攻击者传 X_GATEWAY_BASE_PATH: http://127.0.0.1:8080/jeecg-boot%3f
-    //   （%3f 解码为 ?）即可篡改转发目标。修复：拒绝 rawQuery/rawFragment，且 path 走字符白名单、禁止 ..
+    // Hai·bổ sung: Header gateway chỉ chấp nhận đường dẫn thuần — từ chối chuỗi truy vấn/Fragment/Vượt qua đường dẫn (GHSA-3c5r-mgw9-jq74）
+    //   Lỗ hổng: validateGatewayBasePath ban đầu dùng uri.getPath()(sau khi giải mã) để tái tạo địa chỉ cơ sở, chưa từ chối
+    //   xuất hiện sau khi giải mã ? / #，kẻ tấn công truyền X_GATEWAY_BASE_PATH: http://127.0.0.1:8080/jeecg-boot%3f
+    //   （%3f Giải mã thành ?) là có thể thay đổi mục tiêu chuyển tiếp. Sửa: Từ chối rawQuery/rawFragment，và path đi theo danh sách trắng ký tự, cấm ..
     // ==================================================================
 
     @Nested
-    @DisplayName("网关头纯路径校验 —— 拒绝查询串/片段/路径穿越 (GHSA-3c5r)")
+    @DisplayName("Kiểm tra đường dẫn thuần của header gateway —— Từ chối chuỗi truy vấn/Fragment/Vượt đường dẫn (GHSA-3c5r)")
     class GatewayHeaderPathOnly {
 
         @Test
-        @DisplayName("【漏洞复现】编码问号 %3f 篡改转发目标 → 被拒绝返回 null")
+        @DisplayName("【Tái hiện lỗ hổng】Dấu hỏi đã mã hóa %3f Thay đổi mục tiêu chuyển tiếp → Bị từ chối và trả về null")
         void encodedQuestionMarkRejected() {
-            // 实测利用载荷：%3f 解码为 ?，原逻辑会把基址变为 http://127.0.0.1:8080/jeecg-boot? 打到上下文根
+            // Payload khai thác thực tế：%3f Giải mã thành ?，logic ban đầu sẽ biến địa chỉ cơ sở thành http://127.0.0.1:8080/jeecg-boot? đánh tới gốc context
             assertNull(CommonUtils.validateGatewayBasePathForDomain("http://127.0.0.1:8080/jeecg-boot%3f"),
-                    "解码后路径含 ? 必须被拒绝");
+                    "Đường dẫn sau khi giải mã chứa ? Phải bị từ chối");
             assertNull(CommonUtils.validateGatewayBasePathForDomain("http://127.0.0.1:8080/jeecg-boot%23frag"),
-                    "解码后路径含 # 必须被拒绝");
+                    "Đường dẫn sau khi giải mã chứa # Phải bị từ chối");
         }
 
         @Test
-        @DisplayName("字面量查询串 ? 与片段 # 被拒绝 → 返回 null")
+        @DisplayName("Chuỗi truy vấn dạng literal ? và fragment # Bị từ chối → Trả về null")
         void rawQueryAndFragmentRejected() {
             assertNull(CommonUtils.validateGatewayBasePathForDomain("http://127.0.0.1:8080/jeecg-boot?x=1"));
             assertNull(CommonUtils.validateGatewayBasePathForDomain("http://127.0.0.1:8080/jeecg-boot#frag"));
         }
 
         @Test
-        @DisplayName("路径穿越 .. 被拒绝 → 返回 null")
+        @DisplayName("Vượt đường dẫn .. Bị từ chối → Trả về null")
         void pathTraversalRejected() {
             assertNull(CommonUtils.validateGatewayBasePathForDomain("http://127.0.0.1:8080/jeecg-boot/../actuator"));
         }
 
         @Test
-        @DisplayName("正常纯路径基址仍被采纳（不误伤合法网关头）")
+        @DisplayName("Địa chỉ cơ sở đường dẫn thuần bình thường vẫn được áp dụng (không ảnh hưởng nhầm header gateway hợp lệ)")
         void plainPathStillAccepted() {
             assertEquals("http://127.0.0.1:8080/jeecg-boot",
                     CommonUtils.validateGatewayBasePathForDomain("http://127.0.0.1:8080/jeecg-boot"));
@@ -209,33 +209,33 @@ public class Issue9695_OpenApiSsrfHeaderInjectionTest {
     }
 
     // ==================================================================
-    // 三、SSRF 兜底：checkInternalUrl 仅放行内网地址
+    // Ba, SSRF dự phòng: checkInternalUrl chỉ cho qua địa chỉ mạng nội bộ
     // ==================================================================
 
     @Nested
-    @DisplayName("SSRF 兜底 —— checkInternalUrl 仅允许内网地址")
+    @DisplayName("SSRF Dự phòng —— checkInternalUrl chỉ cho phép địa chỉ mạng nội bộ")
     class CheckInternalUrl {
 
         @Test
-        @DisplayName("内网地址（回环/局域网）放行，不抛异常")
+        @DisplayName("Địa chỉ mạng nội bộ (loopback/mạng LAN) được cho qua, không ném ngoại lệ")
         void internalAddressesPass() {
-            // 字面量 IP，不触发 DNS，离线可重复执行
+            // IP dạng literal, không kích hoạt DNS, có thể thực thi lặp lại khi offline
             assertDoesNotThrow(() -> CommonUtils.checkInternalUrl("http://127.0.0.1:8080/jeecg-boot"));
             assertDoesNotThrow(() -> CommonUtils.checkInternalUrl("http://10.0.0.8/api"));
             assertDoesNotThrow(() -> CommonUtils.checkInternalUrl("http://192.168.1.20:9999/x"));
         }
 
         @Test
-        @DisplayName("【漏洞复现】公网地址被拦截 → 抛 JeecgBootException，堵死 SSRF 外联")
+        @DisplayName("【Tái hiện lỗ hổng】Địa chỉ công khai bị chặn → Ném JeecgBootException, chặn chết kết nối SSRF ra ngoài")
         void publicAddressIsBlocked() {
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> CommonUtils.checkInternalUrl("http://8.8.8.8/latest/meta-data/"));
-            System.out.println("[publicAddressIsBlocked] 公网 8.8.8.8 被拦截 -> " + ex.getMessage());
-            assertTrue(ex.getMessage().contains("内网"), "应明确提示仅允许内网地址");
+            System.out.println("[publicAddressIsBlocked] Mạng công cộng 8.8.8.8 Bị chặn -> " + ex.getMessage());
+            assertTrue(ex.getMessage().contains("Mạng nội bộ"), "Nên thông báo rõ ràng chỉ cho phép địa chỉ mạng nội bộ");
         }
 
         @Test
-        @DisplayName("host 为空的非法 URL 被拦截")
+        @DisplayName("host URL không hợp lệ có host rỗng bị chặn")
         void emptyHostBlocked() {
             assertThrows(JeecgBootException.class, () -> CommonUtils.checkInternalUrl("/no/host/url"));
         }

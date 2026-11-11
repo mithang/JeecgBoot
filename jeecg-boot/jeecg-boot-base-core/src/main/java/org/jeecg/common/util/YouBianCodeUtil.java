@@ -3,7 +3,7 @@ package org.jeecg.common.util;
 import io.netty.util.internal.StringUtil;
 
 /**
- * 流水号生成规则(按默认规则递增，数字从1-99开始递增，数字到99，递增字母;位数不够增加位数)
+ * Quy tắc tạo số thứ tự(Tăng dần theo quy tắc mặc định, số bắt đầu từ 1-99 bắt đầu tăng dần, khi số đến 99 thì tăng dần chữ cái;Không đủ số chữ số thì tăng thêm số chữ số)
  * A001
  * A001A002
  * @Author zhangdaihao
@@ -11,9 +11,9 @@ import io.netty.util.internal.StringUtil;
  */
 public class YouBianCodeUtil {
 
-	// 数字位数(默认生成3位的数字)
+	// Số chữ số(Mặc định tạo số có 3 chữ số)
 
-    /**代表数字位数*/
+    /**Đại diện cho số chữ số*/
 	private static final int NUM_LENGTH = 2;
 
 	public static final int ZHANWEI_LENGTH = 1+ NUM_LENGTH;
@@ -21,8 +21,8 @@ public class YouBianCodeUtil {
 	public static final char LETTER= 'Z';
 
 	/**
-	 * 根据前一个code，获取同级下一个code
-	 * 例如:当前最大code为D01A04，下一个code为：D01A05
+	 * Dựa trên code trước đó, lấy code tiếp theo cùng cấp code
+	 * Ví dụ:Hiện tại code lớn nhất là D01A04, code tiếp theo là:D01A05
 	 * 
 	 * @param code
 	 * @return
@@ -44,20 +44,20 @@ public class YouBianCodeUtil {
 
 			String nextNum = "";
 			char nextZimu = 'A';
-			// 先判断数字等于999*，则计数从1重新开始，递增
+			// Kiểm tra trước số có bằng 999*, thì đếm lại từ 1 và tăng dần
 			if (afterCodeNum == getMaxNumByLength(NUM_LENGTH)) {
 				nextNum = getNextStrNum(0);
 			} else {
 				nextNum = getNextStrNum(afterCodeNum);
 			}
-			// 先判断数字等于999*，则字母从A重新开始,递增
+			// Kiểm tra trước số có bằng 999*, thì chữ cái bắt đầu lại từ A,Tăng dần
 			if(afterCodeNum == getMaxNumByLength(NUM_LENGTH)) {
 				nextZimu = getNextZiMu(afterCodeZimu);
 			}else{
 				nextZimu = afterCodeZimu;
 			}
 
-			// 例如Z99，下一个code就是Z99A01
+			// Ví dụ Z99, code tiếp theo là Z99A01
 			if (LETTER == afterCodeZimu && getMaxNumByLength(NUM_LENGTH) == afterCodeNum) {
 				newcode = code + (nextZimu + nextNum);
 			} else {
@@ -69,14 +69,14 @@ public class YouBianCodeUtil {
 	}
 
 	/**
-	 * 根据父亲code,获取下级的下一个code
+	 * Dựa trên code của cha code,Lấy code tiếp theo của cấp dưới code
 	 * 
-	 * 例如：父亲CODE:A01
-	 *       当前CODE:A01B03
-	 *       获取的code:A01B04
+	 * Ví dụ: code của cha CODE:A01
+	 *       Hiện tại CODE:A01B03
+	 *       Đã lấy được code:A01B04
 	 *       
-	 * @param parentCode   上级code
-	 * @param localCode    同级code
+	 * @param parentCode   Cấp trên code
+	 * @param localCode    Cùng cấp code
 	 * @return
 	 */
 	public static synchronized String getSubYouBianCode(String parentCode,String localCode) {
@@ -94,7 +94,7 @@ public class YouBianCodeUtil {
 	
 
 	/**
-	 * 将数字前面位数补零
+	 * Đệm số 0 vào các vị trí phía trước của số
 	 * 
 	 * @param num
 	 * @return
@@ -104,7 +104,7 @@ public class YouBianCodeUtil {
 	}
 
 	/**
-	 * 将数字前面位数补零
+	 * Đệm số 0 vào các vị trí phía trước của số
 	 * 
 	 * @param num
 	 * @return
@@ -115,7 +115,7 @@ public class YouBianCodeUtil {
 	}
 
 	/**
-	 * 递增获取下个数字
+	 * Tăng dần để lấy số tiếp theo
 	 * 
 	 * @param num
 	 * @return
@@ -126,7 +126,7 @@ public class YouBianCodeUtil {
 	}
 
 	/**
-	 * 递增获取下个字母
+	 * Tăng dần để lấy chữ cái tiếp theo
 	 * 
 	 * @param num
 	 * @return
@@ -140,7 +140,7 @@ public class YouBianCodeUtil {
 	}
 	
 	/**
-	 * 根据数字位数获取最大值
+	 * Lấy giá trị lớn nhất dựa trên số chữ số
 	 * @param length
 	 * @return
 	 */
@@ -158,7 +158,7 @@ public class YouBianCodeUtil {
 		if(code==null || StringUtil.isNullOrEmpty(code)){
 			return null;
 		}else{
-			//获取标准长度为numLength+1,截取的数量为code.length/numLength+1
+			//Lấy độ dài chuẩn là numLength+1,Số lượng cắt lấy là code.length/numLength+1
 			int c = code.length()/(NUM_LENGTH +1);
 			String[] cutcode = new String[c];
 			for(int i =0 ; i <c;i++){

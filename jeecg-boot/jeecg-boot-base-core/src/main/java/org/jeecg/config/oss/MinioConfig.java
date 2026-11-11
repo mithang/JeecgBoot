@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 /**
- * Minio文件上传配置文件
+ * Minio Tệp cấu hình tải tệp lên
  * @author: jeecg-boot
  */
 @Lazy(false)

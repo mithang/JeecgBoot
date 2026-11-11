@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * 带业务参数的模板消息
+ * Tin nhắn mẫu mang tham số nghiệp vụ
  * @author: jeecg-boot
  */
 @Data
@@ -15,12 +15,12 @@ public class BusTemplateMessageDTO extends TemplateMessageDTO implements Seriali
     private static final long serialVersionUID = -4277810906346929459L;
 
     /**
-     * 业务类型
+     * Loại nghiệp vụ
      */
     private String busType;
 
     /**
-     * 业务id
+     * Nghiệp vụ id
      */
     private String busId;
 
@@ -29,7 +29,7 @@ public class BusTemplateMessageDTO extends TemplateMessageDTO implements Seriali
     }
 
     /**
-     * 构造 带业务参数的模板消息
+     * Tạo tin nhắn mẫu mang tham số nghiệp vụ
      * @param fromUser
      * @param toUser
      * @param title

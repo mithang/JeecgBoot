@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * ai配置类，通用的配置可以放到这里面
+ * ai Lớp cấu hình; các cấu hình chung có thể đặt vào đây
  *
  * @Author: wangshuai
  * @Date: 2025/12/17 14:00
@@ -17,33 +17,33 @@ public class AiRagConfigBean {
     public static final String PREFIX = "jeecg.airag";
     
     /**
-     * 敏感节点
-     * stdio mpc命令行功能开启，sql：AI流程SQL节点开启
+     * Nút nhạy cảm
+     * stdio mpc Bật tính năng dòng lệnh, sql: bật nút SQL của quy trình AI
      */
     private String allowSensitiveNodes = "";
 
-    //update-begin---author:wangshuai ---date:2026-04-15  for：Brave Search配置迁移到AiRagConfigBean，去掉enabled字段，apiKey为空即不启用-----------
+    //update-begin---author:wangshuai ---date:2026-04-15  for：Di chuyển cấu hình Brave Search sang AiRagConfigBean, bỏ trường enabled, apiKey trống tức là không bật-----------
     /**
-     * Brave Search 联网检索配置
+     * Brave Search Cấu hình tìm kiếm liên mạng
      */
     private BraveSearchConfig braveSearch = new BraveSearchConfig();
 
     @Data
     public static class BraveSearchConfig {
-        /** Brave Search API Key；为空时联网检索不生效 */
+        /** Brave Search API Key; khi để trống thì tìm kiếm liên mạng không có hiệu lực */
         private String apiKey;
-        /** API 端点，默认官方地址 */
+        /** API Endpoint, mặc định là địa chỉ chính thức */
         private String endpoint = "https://api.search.brave.com/res/v1/web/search";
-        /** 默认返回结果条数，最大 20 */
+        /** Số kết quả trả về mặc định, tối đa  20 */
         private Integer count = 10;
-        /** 请求超时秒数 */
+        /** Số giây timeout của yêu cầu */
         private Integer timeout = 15;
         /**
-         * 搜索结果缓存时长（分钟）。
-         * 大于 0 时开启缓存，相同参数的查询直接返回缓存结果，不重复调用 API。
-         * 设为 0 或不配置则关闭缓存。
+         * Thời gian lưu cache kết quả tìm kiếm (phút).
+         * Khi lớn hơn 0 thì bật cache; truy vấn có cùng tham số sẽ trả về trực tiếp kết quả cache mà không gọi lại API.
+         * Đặt thành 0 hoặc không cấu hình thì tắt cache.
          */
         private Integer cacheExpireMinutes = 60;
     }
-    //update-end---author:wangshuai ---date:2026-04-15  for：Brave Search配置迁移到AiRagConfigBean，去掉enabled字段，apiKey为空即不启用-----------
+    //update-end---author:wangshuai ---date:2026-04-15  for：Di chuyển cấu hình Brave Search sang AiRagConfigBean, bỏ trường enabled, apiKey trống tức là không bật-----------
 }

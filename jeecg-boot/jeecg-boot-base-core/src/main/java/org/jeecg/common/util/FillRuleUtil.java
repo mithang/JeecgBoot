@@ -14,10 +14,10 @@ import org.jeecg.common.system.query.QueryGenerator;
 
 
 /**
- * 规则值自动生成工具类
+ * Lớp công cụ tự động tạo giá trị quy tắc
  *
  * @author qinfeng
- * @举例： 自动生成订单号；自动生成当前日期
+ * @Ví dụ: tự động tạo mã đơn hàng; tự động tạo ngày hiện tại
  */
 @Slf4j
 public class FillRuleUtil {
@@ -30,17 +30,17 @@ public class FillRuleUtil {
     public static Object executeRule(String ruleCode, JSONObject formData) {
         if (!StringUtils.isEmpty(ruleCode)) {
             try {
-                // 获取 Service
+                // Lấy Service
                 ServiceImpl impl = (ServiceImpl) SpringContextUtils.getBean("sysFillRuleServiceImpl");
-                // 根据 ruleCode 查询出实体
+                // Truy vấn thực thể theo ruleCode
                 QueryWrapper queryWrapper = new QueryWrapper();
                 queryWrapper.eq("rule_code", ruleCode);
                 JSONObject entity = JSON.parseObject(JSON.toJSONString(impl.getOne(queryWrapper)));
                 if (entity == null) {
-                    log.warn("填值规则：" + ruleCode + " 不存在");
+                    log.warn("Quy tắc điền giá trị:" + ruleCode + " Không tồn tại");
                     return null;
                 }
-                // 获取必要的参数
+                // Lấy các tham số cần thiết
                 String ruleClass = entity.getString("ruleClass");
                 JSONObject params = entity.getJSONObject("ruleParams");
                 if (params == null) {
@@ -49,10 +49,10 @@ public class FillRuleUtil {
 
                 HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
 
-                // 解析 params 中的变量
-                // 优先级：queryString > 系统变量 > 默认值
+                // Phân tích biến trong params
+                // Mức độ ưu tiên:queryString > Biến hệ thống > Giá trị mặc định
                 for (String key : params.keySet()) {
-                    // 1. 判断 queryString 中是否有该参数，如果有就优先取值
+                    // 1. Kiểm tra queryString có tham số đó không, nếu có sẽ ưu tiên lấy giá trị
                     //noinspection ConstantValue
                     if (request != null) {
                         String parameter = request.getParameter(key);
@@ -63,7 +63,7 @@ public class FillRuleUtil {
                     }
 
                     String value = params.getString(key);
-                    // 2. 用于替换 系统变量的值 #{sys_user_code}
+                    // 2. Dùng để thay thế giá trị của biến hệ thống #{sys_user_code}
                     if (value != null && value.contains(SymbolConstant.SYS_VAR_PREFIX)) {
                         value = QueryGenerator.getSqlRuleValue(value);
                         params.put(key, value);
@@ -73,18 +73,18 @@ public class FillRuleUtil {
                 if (formData == null) {
                     formData = new JSONObject();
                 }
-                // 包路径白名单校验，防止任意类加载漏洞
+                // Kiểm chứng whitelist đường dẫn gói, ngăn lỗ hổng tải lớp tùy ý
                 if (!ruleClass.startsWith("org.jeecg.")) {
-                    log.error("检测到非法填值规则类加载尝试: {}", ruleClass);
-                    throw new SecurityException("不允许加载非 org.jeecg 包路径下的填值规则类: " + ruleClass);
+                    log.error("Phát hiện nỗ lực tải lớp quy tắc điền giá trị không hợp lệ: {}", ruleClass);
+                    throw new SecurityException("Không cho phép tải lớp không thuộc org.jeecg lớp quy tắc điền giá trị dưới đường dẫn gói: " + ruleClass);
                 }
 
-                // 通过反射执行配置的类里的方法（先加载类并校验接口，再实例化）
-                //update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName使用上下文类加载器，增强部署兼容性-----------
+                // Thực thi phương thức trong lớp đã cấu hình qua reflection (tải lớp và kiểm chứng giao diện trước, sau đó khởi tạo)
+                //update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
                 Class<?> clazz = Class.forName(ruleClass, true, Thread.currentThread().getContextClassLoader());
-                //update-end---author:scott ---date:20260416  for：【PR#9538】Class.forName使用上下文类加载器，增强部署兼容性-----------
+                //update-end---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
                 if (!IFillRuleHandler.class.isAssignableFrom(clazz)) {
-                    throw new IllegalArgumentException("类 " + ruleClass + " 未实现 IFillRuleHandler 接口");
+                    throw new IllegalArgumentException("Lớp " + ruleClass + " Chưa triển khai giao diện IFillRuleHandler");
                 }
                 IFillRuleHandler ruleHandler = (IFillRuleHandler) clazz.getDeclaredConstructor().newInstance();
                 return ruleHandler.execute(params, formData);

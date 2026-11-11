@@ -8,17 +8,17 @@ import org.springframework.context.annotation.Lazy;
 /**
  * @Author: Scott
  * @Date: 2018/2/7
- * @description: autopoi 配置类
+ * @description: autopoi Lớp cấu hình
  */
 @Lazy(false)
 @Configuration
 public class AutoPoiConfig {
 
     /**
-     * excel注解字典参数支持(导入导出字典值，自动翻译)
-     * 举例： @Excel(name = "性别", width = 15, dicCode = "sex")
-     * 1、导出的时候会根据字典配置，把值1,2翻译成：男、女;
-     * 2、导入的时候，会把男、女翻译成1,2存进数据库;
+     * excel Hỗ trợ tham số từ điển cho annotation(Nhập/xuất giá trị từ điển, tự động dịch)
+     * Ví dụ: @Excel(name = "Giới tính", width = 15, dicCode = "sex")
+     * 1、Khi xuất sẽ căn cứ cấu hình danh mục để chuyển giá trị 1,2 Dịch thành：Nam, Nữ;
+     * 2、Khi nhập sẽ dịch Nam, Nữ thành 1,2 Lưu vào cơ sở dữ liệu;
      * @return
      */
     @Bean

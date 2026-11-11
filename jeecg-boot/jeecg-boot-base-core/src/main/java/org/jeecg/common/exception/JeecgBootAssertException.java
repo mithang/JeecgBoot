@@ -1,7 +1,7 @@
 package org.jeecg.common.exception;
 
 /**
- * jeecgboot断言异常
+ * jeecgboot Ngoại lệ assertion
  * for [QQYUN-10990]AIRAG
  * @author chenrui
  * @date 2025/2/14 14:31

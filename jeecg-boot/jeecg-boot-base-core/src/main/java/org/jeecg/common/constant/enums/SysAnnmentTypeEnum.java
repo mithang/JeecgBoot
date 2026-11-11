@@ -3,56 +3,56 @@ package org.jeecg.common.constant.enums;
 import org.jeecg.common.util.oConvertUtils;
 
 /**
- * 系统公告自定义跳转方式
+ * Cách chuyển hướng tùy chỉnh của thông báo hệ thống
  * @author: jeecg-boot
  */
 public enum SysAnnmentTypeEnum {
     /**
-     * 邮件跳转组件
+     * Component chuyển hướng email
      */
     EMAIL("email", "component", "modules/eoa/email/modals/EoaEmailInForm"),
     /**
-     * 流程跳转到我的任务
+     * Quy trình chuyển đến nhiệm vụ của tôi
      */
     BPM("bpm", "url", "/bpm/task/MyTaskList"),
     
     /**
-     * 流程抄送任务
+     * Nhiệm vụ sao gửi quy trình
      */
     BPM_VIEW("bpm_cc", "url", "/bpm/task/MyTaskList"),
     /**
-     * 邀请用户跳转到个人设置
+     * Mời người dùng chuyển đến cài đặt cá nhân
      */
     TENANT_INVITE("tenant_invite", "url", "/system/usersetting"),
     /**
-     * 协同工作-待办通知
-     * for [JHHB-136]【vue3】协同工作系统消息需要添加一个类型
+     * Làm việc cộng tác-Thông báo việc cần làm
+     * for [JHHB-136]【vue3】Tin nhắn hệ thống làm việc cộng tác cần thêm một loại
      */
     EOA_CO_NOTIFY("eoa_co_notify", "url", "/collaboration/pending"),
     /**
-     * 协同工作-催办通知
-     * for [JHHB-136]【vue3】协同工作系统消息需要添加一个类型
+     * Làm việc cộng tác-Thông báo đôn đốc
+     * for [JHHB-136]【vue3】Tin nhắn hệ thống làm việc cộng tác cần thêm một loại
      */
     EOA_CO_REMIND("eoa_co_remind", "url", "/collaboration/pending"),
     /**
-     * 督办管理-催办
+     * Quản lý đôn đốc-Đôn đốc
      */
     EOA_SUP_REMIND("eoa_sup_remind", "url", "/superivse/list"),
     /**
-     * 督办管理-通知
+     * Quản lý đôn đốc-Thông báo
      */
     EOA_SUP_NOTIFY("eoa_sup_notify", "url", "/superivse/list");
 
     /**
-     * 业务类型(email:邮件 bpm:流程)
+     * Loại nghiệp vụ(email:Email bpm:Quy trình)
      */
     private String type;
     /**
-     * 打开方式 组件：component 路由：url
+     * Cách mở: Component: component; Route:url
      */
     private String openType;
     /**
-     * 组件/路由 地址
+     * Component/Địa chỉ route
      */
     private String openPage;
 

@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * 敏感数据切面处理类
+ * Lớp xử lý aspect dữ liệu nhạy cảm
  * @Author taoYan
  * @Date 2022/4/20 17:45
  **/
@@ -25,7 +25,7 @@ import java.util.List;
 public class SensitiveDataAspect {
 
     /**
-     * 定义切点Pointcut
+     * Định nghĩa điểm cắt Pointcut
      */
     @Pointcut("@annotation(org.jeecg.common.desensitization.annotation.SensitiveEncode) || @annotation(org.jeecg.common.desensitization.annotation.SensitiveDecode)")
     public void sensitivePointCut() {
@@ -33,7 +33,7 @@ public class SensitiveDataAspect {
 
     @Around("sensitivePointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        // 处理结果
+        // Kết quả xử lý
         Object result = point.proceed();
         if(result == null){
             return result;
@@ -42,10 +42,10 @@ public class SensitiveDataAspect {
         log.debug(" resultClass  = {}" , resultClass);
 
         if(resultClass.isPrimitive()){
-            //是基本类型 直接返回 不需要处理
+            //Là kiểu cơ bản thì trả về trực tiếp, không cần xử lý
             return result;
         }
-        // 获取方法注解信息：是哪个实体、是加密还是解密
+        // Lấy thông tin annotation của phương thức: là thực thể nào, là mã hóa hay giải mã
         boolean isEncode = true;
         Class entity = null;
         MethodSignature methodSignature = (MethodSignature) point.getSignature();
@@ -63,17 +63,17 @@ public class SensitiveDataAspect {
 
         long startTime=System.currentTimeMillis();
         if(resultClass.equals(entity) || entity.equals(Object.class)){
-            // 方法返回实体和注解的entity一样，如果注解没有申明entity属性则认为是(方法返回实体和注解的entity一样)
+            // Thực thể trả về của phương thức giống với entity của annotation; nếu annotation không khai báo thuộc tính entity thì được coi là(Thực thể trả về của phương thức giống với entity của annotation)
             SensitiveInfoUtil.handlerObject(result, isEncode);
         } else if(result instanceof List){
-            // 方法返回List<实体>
+            // Phương thức trả về List<Entity>
             SensitiveInfoUtil.handleList(result, entity, isEncode);
         }else{
-            // 方法返回一个对象
+            // Phương thức trả về một đối tượng
             SensitiveInfoUtil.handleNestedObject(result, entity, isEncode);
         }
         long endTime=System.currentTimeMillis();
-        log.debug((isEncode ? "加密操作，" : "解密操作，") + "Aspect程序耗时：" + (endTime - startTime) + "ms");
+        log.debug((isEncode ? "Thao tác mã hóa," : "Thao tác giải mã,") + "Aspect Thời gian chạy chương trình:" + (endTime - startTime) + "ms");
 
         return result;
     }

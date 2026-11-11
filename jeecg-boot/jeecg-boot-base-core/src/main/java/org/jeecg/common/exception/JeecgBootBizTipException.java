@@ -3,7 +3,7 @@ package org.jeecg.common.exception;
 import org.jeecg.common.constant.CommonConstant;
 
 /**
- * @Description: 业务提醒异常(用于操作业务提醒)
+ * @Description: Ngoại lệ nhắc nhở nghiệp vụ(Dùng để thao tác nhắc nhở nghiệp vụ)
  * @date: 2024-04-26
  * @author: scott
  */
@@ -11,7 +11,7 @@ public class JeecgBootBizTipException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 返回给前端的错误code
+	 * Lỗi trả về cho frontend code
 	 */
 	private int errCode = CommonConstant.SC_INTERNAL_SERVER_ERROR_500;
 

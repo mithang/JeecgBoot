@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @Description: 查询过滤器，SQL拼接写法拆成独立工具类
+ * @Description: Bộ lọc truy vấn: cách viết nối SQL được tách thành lớp công cụ độc lập
  * @author:qinfeng
  * @date 20230904
  */
@@ -28,7 +28,7 @@ import java.util.List;
 public class SqlConcatUtil {
 
     /**
-     * 获取单个查询条件的值
+     * Lấy giá trị của một điều kiện truy vấn
      * @param rule
      * @param field
      * @param value
@@ -40,7 +40,7 @@ public class SqlConcatUtil {
     }
     
     /**
-     * 报表获取查询条件 支持多数据源
+     * Báo cáo lấy điều kiện tìm kiếm, hỗ trợ nhiều nguồn dữ liệu
      * @param field
      * @param alias
      * @param value
@@ -58,7 +58,7 @@ public class SqlConcatUtil {
     }
 
     /**
-     * 获取单个查询条件的值
+     * Lấy giá trị của một điều kiện truy vấn
      * @param rule
      * @param field
      * @param value
@@ -110,7 +110,7 @@ public class SqlConcatUtil {
     }
 
     /**
-     * 获取查询条件的值
+     * Lấy giá trị của điều kiện tìm kiếm
      * @param value
      * @param isString
      * @param dataBaseType
@@ -141,7 +141,7 @@ public class SqlConcatUtil {
                 return " '"+str+"' ";
             }
         }else {
-            // 如果不是字符串 有一种特殊情况 popup调用都走这个逻辑 参数传递的可能是“‘admin’”这种格式的
+            // Nếu không phải là chuỗi thì có một trường hợp đặc biệt: các lệnh gọi popup đều đi theo logic này, tham số truyền vào có thể có định dạng "'admin'"
             if(DataBaseConstant.DB_TYPE_SQLSERVER.equals(dataBaseType) && str.endsWith(SymbolConstant.SINGLE_QUOTATION_MARK) && str.startsWith(SymbolConstant.SINGLE_QUOTATION_MARK)){
                 return " N"+str;
             }
@@ -150,7 +150,7 @@ public class SqlConcatUtil {
     }
 
     private static String getInConditionValue(Object value,boolean isString) {
-        // 代码逻辑说明: 查询条件如果输入,导致sql报错
+        // Giải thích logic mã: Nếu điều kiện tìm kiếm nhập,sẽ khiến sql báo lỗi
         String[] temp = value.toString().split(",");
         if(temp.length==0){
             return "('')";
@@ -171,8 +171,8 @@ public class SqlConcatUtil {
     }
 
     /**
-     * 先根据值判断 走左模糊还是右模糊
-     * 最后如果值不带任何标识(*或者%)，则再根据ruleEnum判断
+     * Trước tiên dựa vào giá trị để xác định đi tìm kiếm mờ bên trái hay bên phải
+     * Cuối cùng, nếu giá trị không mang bất kỳ dấu hiệu nào(*Hoặc%)thì lại xác định theo ruleEnum
      * @param value
      * @param ruleEnum
      * @return
@@ -214,7 +214,7 @@ public class SqlConcatUtil {
                 }
             }else {
 
-                // 走到这里说明 value不带有任何模糊查询的标识(*或者%)
+                // Đi tới đây nghĩa là value không mang bất kỳ dấu hiệu tìm kiếm mờ nào(*Hoặc%)
                 if (ruleEnum == QueryRuleEnum.LEFT_LIKE) {
                     if (DataBaseConstant.DB_TYPE_SQLSERVER.equals(getDbType())) {
                         return "N'%" + str + "'";
@@ -240,35 +240,35 @@ public class SqlConcatUtil {
     }
 
     /**
-     * 获取系统数据库类型
+     * Lấy loại cơ sở dữ liệu hệ thống
      */
     private static String getDbType() {
         return CommonUtils.getDatabaseType();
     }
 
     /**
-     * 获取前端传过来的 "多字段排序信息: sortInfoString"
+     * Lấy từ frontend truyền tới "Thông tin sắp xếp nhiều trường: sortInfoString"
      * @return
      */
     public static List<OrderItem> getQueryConditionOrders(String column, String order, String queryInfoString){
         List<OrderItem> list = new ArrayList<>();
         if(oConvertUtils.isEmpty(queryInfoString)){
-            //默认以创建时间倒序查询
+            //Mặc định tìm kiếm theo thứ tự giảm dần của thời gian tạo
             if(CommonConstant.ORDER_TYPE_DESC.equalsIgnoreCase(order)){
                 list.add(OrderItem.desc(column));
             }else{
                 list.add(OrderItem.asc(column));
             }
         }else{
-            // 【TV360X-967】URL解码（微服务下需要）
+            // 【TV360X-967】Giải mã URL (cần thiết trong microservice)
             if (queryInfoString.contains("%22column%22")) {
-                log.info("queryInfoString 原生 = {}", queryInfoString);
+                log.info("queryInfoString Gốc = {}", queryInfoString);
                 try {
                     queryInfoString = URLDecoder.decode(queryInfoString, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     throw new JeecgBootException(e);
                 }
-                log.info("queryInfoString 解码 = {}", queryInfoString);
+                log.info("queryInfoString Giải mã = {}", queryInfoString);
             }
             JSONArray array = JSONArray.parseArray(queryInfoString);
             Iterator it = array.iterator();

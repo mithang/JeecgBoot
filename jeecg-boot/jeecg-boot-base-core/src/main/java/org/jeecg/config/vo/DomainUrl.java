@@ -14,8 +14,8 @@ public class DomainUrl {
     private String app;
 
     /**
-     * 后端自代理 baseUrl：相对路径 originUrl 转发时使用，
-     * 解决 Docker / K8s NodePort / 反向代理等入站端口与监听端口不一致问题。
+     * Backend tự proxy baseUrl: Dùng khi chuyển tiếp originUrl đường dẫn tương đối,
+     * Giải quyết Docker / K8s NodePort / Vấn đề cổng vào và cổng lắng nghe không nhất quán trong reverse proxy.
      */
     private String back;
 }

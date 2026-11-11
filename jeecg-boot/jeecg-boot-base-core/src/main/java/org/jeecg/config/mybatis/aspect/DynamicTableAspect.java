@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 /**
- * 动态table切换 切面处理
+ * Xử lý aspect chuyển đổi table động
  *
  * @author :zyf
  * @date:2020-04-25
@@ -26,7 +26,7 @@ public class DynamicTableAspect {
 
 
     /**
-     * 定义切面拦截切入点
+     * Định nghĩa điểm cắt (pointcut) chặn của aspect
      */
     @Pointcut("@annotation(org.jeecg.common.aspect.annotation.DynamicTable)")
     public void dynamicTable() {
@@ -39,15 +39,15 @@ public class DynamicTableAspect {
         Method method = signature.getMethod();
         DynamicTable dynamicTable = method.getAnnotation(DynamicTable.class);
         HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
-        //获取前端传递的版本标记
+        //Lấy dấu phiên bản mà frontend truyền sang
         String version = request.getHeader(CommonConstant.VERSION);
-        //存储版本号到本地线程变量
+        //Lưu số phiên bản vào biến cục bộ của luồng
         ThreadLocalDataHelper.put(CommonConstant.VERSION, version);
-        //存储表名到本地线程变量
+        //Lưu tên bảng vào biến cục bộ của luồng
         ThreadLocalDataHelper.put(CommonConstant.DYNAMIC_TABLE_NAME, dynamicTable.value());
-        //执行方法
+        //Thực thi phương thức
         Object result = point.proceed();
-        //清空本地变量
+        //Xóa biến cục bộ
         ThreadLocalDataHelper.clear();
         return result;
     }

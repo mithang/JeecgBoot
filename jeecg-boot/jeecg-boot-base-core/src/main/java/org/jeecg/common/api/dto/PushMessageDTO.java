@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 移动端消息推送
+ * Đẩy tin nhắn trên mobile
  * @author liusq
  * @date 2025/11/12 14:11
  */
@@ -24,32 +24,32 @@ public class PushMessageDTO implements Serializable {
     private static final long serialVersionUID = 7431775881170684867L;
 
     /**
-     * 消息标题
+     * Tiêu đề tin nhắn
      */
     private String title;
 
     /**
-     * 消息内容
+     * Nội dung tin nhắn
      */
     private String content;
 
     /**
-     * 推送形式：all：全推送 single：单用户推送
+     * Hình thức đẩy: all: đẩy toàn bộ; single: đẩy cho một người dùng
      */
     private String pushType;
 
     /**
-     * 用户名usernameList
+     * Tên người dùng usernameList
      */
     List<String> usernames;
 
     /**
-     * 用户名idList
+     * Tên người dùng idList
      */
     List<String> userIds;
 
     /**
-     * 消息附加参数
+     * Tham số bổ sung của tin nhắn
      */
     Map<String,Object> payload;
 }

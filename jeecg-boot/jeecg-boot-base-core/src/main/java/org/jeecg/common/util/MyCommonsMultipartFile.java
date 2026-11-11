@@ -9,8 +9,8 @@ import java.io.*;
  * @date 2025-09-04
  * @author scott
  * 
- * 升级springboot3 无法使用 CommonsMultipartFile
- * 自定义 MultipartFile 实现类，支持从 FileItem 构造
+ * Nâng cấp lên Spring Boot 3 nên không thể sử dụng CommonsMultipartFile
+ * Lớp triển khai MultipartFile tùy chỉnh, hỗ trợ khởi tạo từ FileItem
  */
 public class MyCommonsMultipartFile implements MultipartFile {
 
@@ -18,7 +18,7 @@ public class MyCommonsMultipartFile implements MultipartFile {
     private final String fileName;
     private final String contentType;
 
-    // 新增构造方法，支持 FileItem 参数
+    // Thêm phương thức khởi tạo mới, hỗ trợ tham số FileItem
     public MyCommonsMultipartFile(FileItem fileItem) throws IOException {
         this.fileName = fileItem.getName();
         this.contentType = fileItem.getContentType();
@@ -27,7 +27,7 @@ public class MyCommonsMultipartFile implements MultipartFile {
         }
     }
     
-    // 现有构造方法
+    // Phương thức khởi tạo hiện có
     public MyCommonsMultipartFile(InputStream inputStream, String fileName, String contentType) throws IOException {
         this.fileName = fileName;
         this.contentType = contentType;

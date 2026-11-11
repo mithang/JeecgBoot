@@ -6,7 +6,7 @@ import org.jeecg.common.desensitization.enums.SensitiveEnum;
 import java.lang.annotation.*;
 
 /**
- * 在字段上定义 标识字段存储的信息是敏感的
+ * Định nghĩa trên trường, đánh dấu thông tin mà trường lưu trữ là nhạy cảm
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -14,7 +14,7 @@ import java.lang.annotation.*;
 public @interface SensitiveField {
 
     /**
-     * 不同类型处理不同
+     * Các loại khác nhau xử lý khác nhau
      * @return
      */
     SensitiveEnum type() default SensitiveEnum.ENCODE;

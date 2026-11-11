@@ -10,13 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * SsrfFileTypeFilter.checkSsrfHttpUrl SSRF 防护单元测试
+ * SsrfFileTypeFilter.checkSsrfHttpUrl SSRF Kiểm thử đơn vị phòng vệ
  *
- * 覆盖：
- *  - 【issues/9672】RFC1918 私网地址（10.x / 172.16-31.x / 192.168.x）应放行，兼容企业内网 MinIO/OSS
- *  - 回归：loopback / link-local 仍拦截
- *  - 回归：公网 URL 正常放行
- *  - 协议校验、空值校验
+ * Bao phủ：
+ *  - 【issues/9672】Địa chỉ mạng riêng RFC1918 (10.x / 172.16-31.x / 192.168.x) nên được cho qua, tương thích với mạng nội bộ doanh nghiệp MinIO/OSS
+ *  - Hồi quy：loopback / link-local Vẫn chặn
+ *  - Hồi quy: URL công khai được cho qua bình thường
+ *  - Kiểm tra giao thức, kiểm tra giá trị rỗng
  *
  * @author wangshuai
  * @date 2026-06-16
@@ -25,128 +25,128 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Issue9672_SsrfFileTypeFilterTest {
 
     @Nested
-    @DisplayName("【issues/9672】RFC1918 私网地址应放行（兼容内网 MinIO/OSS）")
+    @DisplayName("【issues/9672】Địa chỉ mạng riêng RFC1918 nên được cho qua (tương thích mạng nội bộ MinIO/OSS）")
     class Issue9672_PrivateNetwork {
 
         @Test
-        @DisplayName("10.0.0.0/8 段应放行（内网 MinIO 等服务）")
+        @DisplayName("10.0.0.0/8 Dải này nên được cho qua (dịch vụ nội bộ như MinIO)")
         void shouldAllow_10Network() {
             String url = "http://10.0.0.1/secret.txt";
             assertDoesNotThrow(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  放行(RFC1918 私网)");
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Cho qua(RFC1918 Mạng riêng)");
         }
 
         @Test
-        @DisplayName("172.16.0.0/12 段应放行（内网 MinIO 等服务）")
+        @DisplayName("172.16.0.0/12 Dải này nên được cho qua (dịch vụ nội bộ như MinIO)")
         void shouldAllow_172_16Network() {
             String url = "http://172.16.0.1:9000/bucket/file.pdf";
             assertDoesNotThrow(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  放行(RFC1918 私网)");
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Cho qua(RFC1918 Mạng riêng)");
         }
 
         @Test
-        @DisplayName("192.168.0.0/16 段应放行（内网 MinIO 等服务）")
+        @DisplayName("192.168.0.0/16 Dải này nên được cho qua (dịch vụ nội bộ như MinIO)")
         void shouldAllow_192_168Network() {
             String url = "http://192.168.1.100/internal/data.txt";
             assertDoesNotThrow(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  放行(RFC1918 私网)");
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Cho qua(RFC1918 Mạng riêng)");
         }
     }
 
     @Nested
-    @DisplayName("回归：loopback / link-local 仍拦截")
+    @DisplayName("Hồi quy：loopback / link-local Vẫn chặn")
     class Regression_LoopbackLinkLocal {
 
         @Test
-        @DisplayName("127.0.0.1 应被拦截")
+        @DisplayName("127.0.0.1 nên bị chặn")
         void shouldBlock_loopback_ipv4() {
             String url = "http://127.0.0.1/etc/passwd";
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            assertTrue(ex.getMessage().contains("本机或链路本地地址"));
-            System.out.println("    [SSRF校验] " + url + "  ->  拦截: " + ex.getMessage());
+            assertTrue(ex.getMessage().contains("Địa chỉ máy cục bộ hoặc link-local"));
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Chặn: " + ex.getMessage());
         }
 
         @Test
-        @DisplayName("localhost 应被拦截")
+        @DisplayName("localhost nên bị chặn")
         void shouldBlock_localhost() {
             String url = "http://localhost:8080/admin";
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  拦截: " + ex.getMessage());
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Chặn: " + ex.getMessage());
         }
 
         @Test
-        @DisplayName("169.254.169.254 云元数据应被拦截")
+        @DisplayName("169.254.169.254 Metadata đám mây nên bị chặn")
         void shouldBlock_cloudMetadata() {
             String url = "http://169.254.169.254/latest/meta-data/";
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  拦截(云元数据): " + ex.getMessage());
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Chặn(Metadata đám mây): " + ex.getMessage());
         }
     }
 
     @Nested
-    @DisplayName("公网 URL 正常放行")
+    @DisplayName("URL công khai được cho qua bình thường")
     class PublicUrl_AllowThrough {
 
         @Test
-        @DisplayName("HTTPS 公网 URL 应放行")
+        @DisplayName("HTTPS URL mạng công cộng nên được cho qua")
         void shouldAllow_publicHttps() {
             String url = "https://www.baidu.com/index.html";
             assertDoesNotThrow(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  放行(公网)");
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Cho qua(Mạng công cộng)");
         }
 
         @Test
-        @DisplayName("HTTP 公网 URL 应放行")
+        @DisplayName("HTTP URL mạng công cộng nên được cho qua")
         void shouldAllow_publicHttp() {
             String url = "http://cdn.example.com/file.pdf";
             assertDoesNotThrow(() -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  放行(公网)");
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Cho qua(Mạng công cộng)");
         }
     }
 
     @Nested
-    @DisplayName("协议与格式校验")
+    @DisplayName("Kiểm tra giao thức và định dạng")
     class ProtocolAndFormat {
 
         @Test
-        @DisplayName("空 URL 应拦截")
+        @DisplayName("URL rỗng nên bị chặn")
         void shouldBlock_emptyUrl() {
             assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl(""));
             assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl(null));
-            System.out.println("    [SSRF校验] 空值 \"\" / null  ->  拦截");
+            System.out.println("    [SSRF Kiểm chứng] Giá trị rỗng \"\" / null  ->  Chặn");
         }
 
         @Test
-        @DisplayName("非 http/https 协议应拦截")
+        @DisplayName("Không phải http/https Giao thức nên bị chặn")
         void shouldBlock_nonHttpProtocol() {
             for (String url : new String[]{"file:///etc/passwd", "ftp://192.168.1.1/data", "gopher://127.0.0.1:6379/_INFO"}) {
                 JeecgBootException ex = assertThrows(JeecgBootException.class,
                         () -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-                System.out.println("    [SSRF校验] " + url + "  ->  拦截(非 http/https): " + ex.getMessage());
+                System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Chặn(Không phải http/https): " + ex.getMessage());
             }
         }
 
         @Test
-        @DisplayName("格式错误的 URL 应拦截")
+        @DisplayName("URL sai định dạng nên bị chặn")
         void shouldBlock_malformedUrl() {
             String url = "http://";
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  拦截(格式错误): " + ex.getMessage());
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Chặn(Lỗi định dạng): " + ex.getMessage());
         }
 
         @Test
-        @DisplayName("无法解析的主机名应拦截")
+        @DisplayName("Tên máy chủ không thể phân giải nên bị chặn")
         void shouldBlock_unresolvableHost() {
             String host = "this-host-does-not-exist-12345.invalid";
             String url = "http://" + host + "/test";
-            // 某些网络环境存在通配 DNS（把任意不存在域名解析到一个真实公网地址），
-            // 此时该 host 并非"无法解析"，本用例前提不成立，跳过以免环境误报。
+            // Một số môi trường mạng tồn tại wildcard DNS (phân giải bất kỳ tên miền không tồn tại nào thành một địa chỉ công khai thực),
+            // Lúc này host đó không phải là"không thể phân giải"，tiền đề của trường hợp kiểm thử này không thỏa mãn, bỏ qua để tránh báo sai do môi trường.
             boolean resolvable;
             try {
                 java.net.InetAddress.getByName(host);
@@ -155,11 +155,11 @@ public class Issue9672_SsrfFileTypeFilterTest {
                 resolvable = false;
             }
             org.junit.jupiter.api.Assumptions.assumeFalse(resolvable,
-                    "当前网络存在通配 DNS，" + host + " 被解析为真实地址，跳过该用例");
+                    "Mạng hiện tại tồn tại wildcard DNS," + host + " đã bị phân giải thành địa chỉ thực, bỏ qua trường hợp kiểm thử này");
 
             JeecgBootException ex = assertThrows(JeecgBootException.class,
                     () -> SsrfFileTypeFilter.checkSsrfHttpUrl(url));
-            System.out.println("    [SSRF校验] " + url + "  ->  拦截(主机无法解析): " + ex.getMessage());
+            System.out.println("    [SSRF Kiểm chứng] " + url + "  ->  Chặn(Máy chủ không thể phân giải): " + ex.getMessage());
         }
     }
 }

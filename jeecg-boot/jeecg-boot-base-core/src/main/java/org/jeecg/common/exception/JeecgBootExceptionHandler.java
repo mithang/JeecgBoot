@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 异常处理器
+ * Bộ xử lý ngoại lệ
  * 
  * @Author scott
  * @Date 2019
@@ -56,11 +56,11 @@ public class JeecgBootExceptionHandler {
 	public Result<?> handleValidationExceptions(MethodArgumentNotValidException e) {
 		log.error(e.getMessage(), e);
 		addSysLog(e);
-		return Result.error("校验失败！" + e.getBindingResult().getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(",")));
+		return Result.error("Kiểm chứng thất bại!" + e.getBindingResult().getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(",")));
 	}
 	
 	/**
-	 * 处理自定义异常
+	 * Xử lý ngoại lệ tùy chỉnh
 	 */
 	@ExceptionHandler(JeecgBootException.class)
 	public Result<?> handleJeecgBootException(JeecgBootException e){
@@ -70,7 +70,7 @@ public class JeecgBootExceptionHandler {
 	}
 	
 	/**
-	 * 处理自定义异常
+	 * Xử lý ngoại lệ tùy chỉnh
 	 */
 	@ExceptionHandler(JeecgBootBizTipException.class)
 	public Result<?> handleJeecgBootBizTipException(JeecgBootBizTipException e){
@@ -79,7 +79,7 @@ public class JeecgBootExceptionHandler {
 	}
 
 	/**
-	 * 处理自定义微服务异常
+	 * Xử lý ngoại lệ microservice tùy chỉnh
 	 */
 	@ExceptionHandler(JeecgCloudException.class)
 	public Result<?> handleJeecgCloudException(JeecgCloudException e){
@@ -89,7 +89,7 @@ public class JeecgBootExceptionHandler {
 	}
 
 	/**
-	 * 处理自定义异常
+	 * Xử lý ngoại lệ tùy chỉnh
 	 */
 	@ExceptionHandler(JeecgBoot401Exception.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -103,53 +103,53 @@ public class JeecgBootExceptionHandler {
 	public Result<?> handlerNoFoundException(Exception e) {
 		log.error(e.getMessage(), e);
 		addSysLog(e);
-		return Result.error(404, "路径不存在，请检查路径是否正确");
+		return Result.error(404, "Đường dẫn không tồn tại, vui lòng kiểm tra đường dẫn có chính xác không");
 	}
 
 	/**
-	 * 处理静态资源不存在异常（Spring Boot 3.2+）
-	 * Source Map、WebSocket路径被当作静态资源请求时会触发此异常，降级为debug日志避免刷屏
+	 * Xử lý ngoại lệ tài nguyên tĩnh không tồn tại (Spring Boot 3.2+）
+	 * Source Map, khi đường dẫn WebSocket bị xem như yêu cầu tài nguyên tĩnh sẽ kích hoạt ngoại lệ này, hạ xuống log debug để tránh spam
 	 */
 	@ExceptionHandler(NoResourceFoundException.class)
 	public Result<?> handleNoResourceFoundException(NoResourceFoundException e, HttpServletRequest request) {
 		String uri = request.getRequestURI();
-		// Source Map仅用于浏览器调试，缺失不影响业务功能，降级为debug日志
+		// Source Map Chỉ dùng để debug trình duyệt, thiếu cũng không ảnh hưởng chức năng nghiệp vụ, hạ xuống log debug
 		if (uri.endsWith(".map")) {
-			log.debug("Source Map资源不存在: {}", uri);
+			log.debug("Source Map Tài nguyên không tồn tại: {}", uri);
 		} else if (uri.contains("Socket/") || uri.contains("websocket/") || uri.contains("Websocket/")) {
-			// WebSocket路径的非upgrade请求，降级为debug日志
-			log.debug("WebSocket路径被当作静态资源请求: {}", uri);
+			// WebSocket Yêu cầu không phải upgrade của đường dẫn, hạ xuống log debug
+			log.debug("WebSocket Đường dẫn bị xem như yêu cầu tài nguyên tĩnh: {}", uri);
 		} else {
 			log.error(e.getMessage(), e);
 			addSysLog(e);
 		}
-		return Result.error(404, "路径不存在，请检查路径是否正确");
+		return Result.error(404, "Đường dẫn không tồn tại, vui lòng kiểm tra đường dẫn có chính xác không");
 	}
 
 	@ExceptionHandler(DuplicateKeyException.class)
 	public Result<?> handleDuplicateKeyException(DuplicateKeyException e){
 		log.error(e.getMessage(), e);
 		addSysLog(e);
-		return Result.error("数据库中已存在该记录");
+		return Result.error("Bản ghi này đã tồn tại trong cơ sở dữ liệu");
 	}
 
 	@ExceptionHandler({UnauthorizedException.class, AuthorizationException.class})
 	public Result<?> handleAuthorizationException(AuthorizationException e){
 		log.error(e.getMessage(), e);
-		return Result.noauth("没有权限，请联系管理员分配权限！");
+		return Result.noauth("Không có quyền, vui lòng liên hệ quản trị viên để được cấp quyền!");
 	}
 
 	@ExceptionHandler(Exception.class)
 	public Result<?> handleException(Exception e){
 		log.error(e.getMessage(), e);
-		// 代码逻辑说明: 处理Sentinel限流自定义异常
+		// Giải thích logic mã: Xử lý ngoại lệ giới hạn lưu lượng Sentinel tùy chỉnh
 		Throwable throwable = e.getCause();
 		SentinelErrorInfoEnum errorInfoEnum = SentinelErrorInfoEnum.getErrorByException(throwable);
 		if (ObjectUtil.isNotEmpty(errorInfoEnum)) {
 			return Result.error(errorInfoEnum.getError());
 		}
 		addSysLog(e);
-		return Result.error("操作失败，"+e.getMessage());
+		return Result.error("Thao tác thất bại,"+e.getMessage());
 	}
 	
 	/**
@@ -160,10 +160,10 @@ public class JeecgBootExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public Result<?> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
 		StringBuffer sb = new StringBuffer();
-		sb.append("不支持");
+		sb.append("Không hỗ trợ");
 		sb.append(e.getMethod());
-		sb.append("请求方法，");
-		sb.append("支持以下");
+		sb.append("Phương thức yêu cầu,");
+		sb.append("Hỗ trợ các phương thức sau");
 		String [] methods = e.getSupportedMethods();
 		if(methods!=null){
 			for(String str:methods){
@@ -172,25 +172,25 @@ public class JeecgBootExceptionHandler {
 			}
 		}
 		log.error(sb.toString(), e);
-		//return Result.error("没有权限，请联系管理员授权");
+		//return Result.error("Không có quyền hạn, vui lòng liên hệ quản trị viên để cấp quyền");
 		addSysLog(e);
 		return Result.error(405,sb.toString());
 	}
 	
 	 /** 
-	  * spring默认上传大小100MB 超出大小捕获异常MaxUploadSizeExceededException 
+	  * spring Kích thước tải lên mặc định 100MB, bắt ngoại lệ khi vượt quá kích thước MaxUploadSizeExceededException 
 	  */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public Result<?> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
     	log.error(e.getMessage(), e);
 		addSysLog(e);
-        return Result.error("文件大小超出10MB限制, 请压缩或降低文件质量! ");
+        return Result.error("Kích thước tệp vượt quá giới hạn 10MB, Vui lòng nén hoặc giảm chất lượng tệp! ");
     }
 
 	/**
-	 * 处理文件过大异常.
-	 * jdk17中的MultipartException异常类已经被拆分成了MultipartException和MaxUploadSizeExceededException
-	 * for [QQYUN-11716]上传大图片失败没有精确提示
+	 * Xử lý ngoại lệ tệp quá lớn.
+	 * jdk17 Trong JDK 17, lớp ngoại lệ MultipartException đã được tách thành MultipartException và MaxUploadSizeExceededException
+	 * for [QQYUN-11716]Tải lên hình ảnh lớn thất bại nhưng không có thông báo chính xác
 	 * @param e
 	 * @return
 	 * @author chenrui
@@ -200,9 +200,9 @@ public class JeecgBootExceptionHandler {
 	public Result<?> handleMaxUploadSizeExceededException(MultipartException e) {
 		Throwable cause = e.getCause();
 		if (cause instanceof IllegalStateException) {
-			log.error("文件大小超出限制: {}", cause.getMessage(), e);
+			log.error("Kích thước tệp vượt quá giới hạn: {}", cause.getMessage(), e);
 			addSysLog(e);
-			return Result.error("文件大小超出限制, 请压缩或降低文件质量!");
+			return Result.error("Kích thước tệp vượt quá giới hạn, Vui lòng nén hoặc giảm chất lượng tệp!");
 		} else {
 			return handleException(e);
 		}
@@ -212,20 +212,20 @@ public class JeecgBootExceptionHandler {
     public Result<?> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
     	log.error(e.getMessage(), e);
 		addSysLog(e);
-    	//【issues/3624】数据库执行异常handleDataIntegrityViolationException提示有误 #3624
-        return Result.error("执行数据库异常,违反了完整性例如：违反惟一约束、违反非空限制、字段内容超出长度等");
+    	//【issues/3624】Thông báo lỗi khi thực thi cơ sở dữ liệu handleDataIntegrityViolationException chưa chính xác #3624
+        return Result.error("Lỗi thực thi cơ sở dữ liệu,đã vi phạm tính toàn vẹn, ví dụ: vi phạm ràng buộc duy nhất, vi phạm giới hạn không rỗng, nội dung trường vượt quá độ dài, v.v.");
     }
 
     @ExceptionHandler(PoolException.class)
     public Result<?> handlePoolException(PoolException e) {
     	log.error(e.getMessage(), e);
 		addSysLog(e);
-        return Result.error("Redis 连接异常!");
+        return Result.error("Redis Ngoại lệ kết nối!");
     }
 
 
 	/**
-	 * SQL注入风险，全局异常处理
+	 * SQL Rủi ro injection, xử lý ngoại lệ toàn cục
 	 *
 	 * @param exception
 	 * @return
@@ -237,16 +237,16 @@ public class JeecgBootExceptionHandler {
 		final String updatexml = "updatexml";
 		boolean hasSensitiveInformation = msg.indexOf(extractvalue) >= 0 || msg.indexOf(updatexml) >= 0;
 		if (msg != null && hasSensitiveInformation) {
-			log.error("校验失败，存在SQL注入风险！{}", msg);
-			return Result.error("校验失败，存在SQL注入风险！");
+			log.error("Kiểm chứng thất bại, tồn tại rủi ro SQL injection!{}", msg);
+			return Result.error("Kiểm chứng thất bại, tồn tại rủi ro SQL injection!");
 		}
 		addSysLog(exception);
-		return Result.error("校验失败，存在SQL注入风险！" + msg);
+		return Result.error("Kiểm chứng thất bại, tồn tại rủi ro SQL injection!" + msg);
 	}
 
 	/**
-	 * 添加异常新系统日志
-	 * @param e 异常
+	 * Thêm log hệ thống mới cho ngoại lệ
+	 * @param e Ngoại lệ
 	 * @author chenrui
 	 * @date 2024/4/22 17:16
 	 */
@@ -255,32 +255,32 @@ public class JeecgBootExceptionHandler {
         log.setLogType(CommonConstant.LOG_TYPE_4);
         log.setLogContent(e.getClass().getName()+":"+e.getMessage());
 		log.setRequestParam(ExceptionUtils.getStackTrace(e));
-        //获取request
+        //Lấy request
         HttpServletRequest request = null;
         try {
             request = SpringContextUtils.getHttpServletRequest();
         } catch (NullPointerException | BeansException ignored) {
         }
         if (null != request) {
-			//请求的参数
+			//Tham số của yêu cầu
 			if (!isTooBigException(e)) {
-				// 文件上传过大异常时不能获取参数,否则会报错
+				// Khi xảy ra ngoại lệ tải tệp lên quá lớn thì không thể lấy tham số,nếu không sẽ báo lỗi
 				Map<String, String[]> parameterMap = request.getParameterMap();
 				if(!CollectionUtils.isEmpty(parameterMap)) {
-					//update-begin---author:scott ---date:2026-05-09  for：sys_log.method字段长度1000，过长导致Data truncation异常吞掉原始错误-----------
+					//update-begin---author:scott ---date:2026-05-09  for：sys_log.method Độ dài trường là 1000, quá dài khiến ngoại lệ Data truncation nuốt mất lỗi gốc-----------
 					String methodStr = oConvertUtils.mapToString(request.getParameterMap());
 					if (methodStr != null && methodStr.length() > 950) {
 						methodStr = methodStr.substring(0, 950) + "...(truncated)";
 					}
 					log.setMethod(methodStr);
-					//update-end---author:scott ---date:2026-05-09  for：sys_log.method字段长度1000，过长导致Data truncation异常吞掉原始错误-----------
+					//update-end---author:scott ---date:2026-05-09  for：sys_log.method Độ dài trường là 1000, quá dài khiến ngoại lệ Data truncation nuốt mất lỗi gốc-----------
 				}
 			}
-            // 请求地址
+            // Địa chỉ yêu cầu
             log.setRequestUrl(request.getRequestURI());
-            //设置IP地址
+            //Thiết lập địa chỉ IP
             log.setIp(IpUtils.getIpAddr(request));
-            //设置客户端
+            //Thiết lập client
 			if(BrowserUtils.isDesktop(request)){
 				log.setClientType(ClientTerminalTypeEnum.PC.getKey());
 			}else{
@@ -289,7 +289,7 @@ public class JeecgBootExceptionHandler {
         }
 
        
-		//获取登录用户信息
+		//Lấy thông tin người dùng đăng nhập
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		if(sysUser!=null){
 			log.setUserid(sysUser.getUsername());
@@ -301,8 +301,8 @@ public class JeecgBootExceptionHandler {
     }
 
 	/**
-	 * 是否文件过大异常
-	 * for [QQYUN-11716]上传大图片失败没有精确提示
+	 * Có phải là ngoại lệ tệp quá lớn không
+	 * for [QQYUN-11716]Tải lên hình ảnh lớn thất bại nhưng không có thông báo chính xác
 	 * @param e
 	 * @return
 	 * @author chenrui

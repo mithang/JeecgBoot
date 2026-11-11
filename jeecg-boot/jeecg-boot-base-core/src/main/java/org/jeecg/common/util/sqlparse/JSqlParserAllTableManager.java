@@ -18,7 +18,7 @@
 //import java.util.Map;
 //
 ///**
-// * 解析所有表名和字段的类
+// * Lớp phân giải tất cả tên bảng và trường
 // */
 //@Slf4j
 //public class JSqlParserAllTableManager {
@@ -26,12 +26,12 @@
 //    private final String sql;
 //    private final Map<String, SelectSqlInfo> allTableMap = new HashMap<>();
 //    /**
-//     * 别名对应实际表名
+//     * Bí danh tương ứng với tên bảng thực tế
 //     */
 //    private final Map<String, String> tableAliasMap = new HashMap<>();
 //
 //    /**
-//     * 解析后的sql
+//     * Sau khi phân giải sql
 //     */
 //    private String parsedSql = null;
 //
@@ -40,76 +40,76 @@
 //    }
 //
 //    /**
-//     * 开始解析
+//     * Bắt đầu phân giải
 //     *
 //     * @return
 //     * @throws JSQLParserException
 //     */
 //    public Map<String, SelectSqlInfo> parse() throws JSQLParserException {
-//        // 1. 创建解析器
+//        // 1. Tạo trình phân giải
 //        CCJSqlParserManager mgr = new CCJSqlParserManager();
-//        // 2. 使用解析器解析sql生成具有层次结构的java类
+//        // 2. Dùng trình phân giải để phân giải SQL và tạo lớp Java có cấu trúc phân cấp
 //        Statement stmt = mgr.parse(new StringReader(this.sql));
 //        if (stmt instanceof Select) {
 //            Select selectStatement = (Select) stmt;
 //            SelectBody selectBody = selectStatement.getSelectBody();
 //            this.parsedSql = selectBody.toString();
-//            // 3. 解析select查询sql的信息
+//            // 3. Phân giải thông tin SQL truy vấn select
 //            if (selectBody instanceof PlainSelect) {
 //                PlainSelect plainSelect = (PlainSelect) selectBody;
-//                // 4. 合并 fromItems
+//                // 4. Hợp nhất fromItems
 //                List<FromItem> fromItems = new ArrayList<>();
 //                fromItems.add(plainSelect.getFromItem());
-//                // 4.1 处理join的表
+//                // 4.1 Xử lý bảng join
 //                List<Join> joins = plainSelect.getJoins();
 //                if (joins != null) {
 //                    joins.forEach(join -> fromItems.add(join.getRightItem()));
 //                }
-//                // 5. 处理 fromItems
+//                // 5. Xử lý fromItems
 //                for (FromItem fromItem : fromItems) {
-//                    // 5.1 通过表名的方式from
+//                    // 5.1 Theo cách dùng tên bảng from
 //                    if (fromItem instanceof Table) {
 //                        this.addSqlInfoByTable((Table) fromItem);
 //                    }
-//                    // 5.2 通过子查询的方式from
+//                    // 5.2 Theo cách dùng truy vấn con from
 //                    else if (fromItem instanceof SubSelect) {
 //                        this.handleSubSelect((SubSelect) fromItem);
 //                    }
 //                }
-//                // 6. 解析 selectFields
+//                // 6. Phân tích cú pháp selectFields
 //                List<SelectItem> selectItems = plainSelect.getSelectItems();
 //                for (SelectItem selectItem : selectItems) {
-//                    // 6.1 查询的是全部字段
+//                    // 6.1 Truy vấn tất cả các trường
 //                    if (selectItem instanceof AllColumns) {
-//                        // 当 selectItem 为 AllColumns 时，fromItem 必定为 Table
+//                        // Khi selectItem là AllColumns thì fromItem nhất định là  Table
 //                        String tableName = plainSelect.getFromItem(Table.class).getName();
-//                        // 此处必定不为空，因为在解析 fromItem 时，已经将表名添加到 allTableMap 中
+//                        // Chỗ này nhất định không rỗng, vì khi phân giải fromItem đã thêm tên bảng vào allTableMap
 //                        SelectSqlInfo sqlInfo = this.allTableMap.get(tableName);
 //                        assert sqlInfo != null;
-//                        // 设置为查询全部字段
+//                        // Đặt thành tìm kiếm tất cả các trường
 //                        sqlInfo.setSelectAll(true);
 //                        sqlInfo.setSelectFields(null);
 //                        sqlInfo.setRealSelectFields(null);
 //                    }
-//                    // 6.2 查询的是带表别名（ u.* )的全部字段
+//                    // 6.2 Truy vấn tất cả các trường mang bí danh bảng ( u.* )của tất cả các trường
 //                    else if (selectItem instanceof AllTableColumns) {
 //                        AllTableColumns allTableColumns = (AllTableColumns) selectItem;
 //                        String aliasName = allTableColumns.getTable().getName();
-//                        // 通过别名获取表名
+//                        // Lấy tên bảng qua bí danh
 //                        String tableName = this.tableAliasMap.get(aliasName);
 //                        if (tableName == null) {
 //                            tableName = aliasName;
 //                        }
 //                        SelectSqlInfo sqlInfo = this.allTableMap.get(tableName);
-//                        // 如果此处为空，则说明该字段是通过子查询获取的，所以可以不处理，只有实际表才需要处理
+//                        // Nếu chỗ này rỗng thì chứng tỏ trường đó lấy được qua truy vấn con, vì vậy có thể không xử lý; chỉ bảng thực tế mới cần xử lý
 //                        if (sqlInfo != null) {
-//                            // 设置为查询全部字段
+//                            // Đặt thành tìm kiếm tất cả các trường
 //                            sqlInfo.setSelectAll(true);
 //                            sqlInfo.setSelectFields(null);
 //                            sqlInfo.setRealSelectFields(null);
 //                        }
 //                    }
-//                    // 6.3 各种字段表达式处理
+//                    // 6.3 Xử lý các biểu thức trường khác nhau
 //                    else if (selectItem instanceof SelectExpressionItem) {
 //                        SelectExpressionItem selectExpressionItem = (SelectExpressionItem) selectItem;
 //                        Expression expression = selectExpressionItem.getExpression();
@@ -118,41 +118,41 @@
 //                    }
 //                }
 //            } else {
-//                log.warn("暂时尚未处理该类型的 SelectBody: {}", selectBody.getClass().getName());
-//                throw new JeecgBootException("暂时尚未处理该类型的 SelectBody");
+//                log.warn("Tạm thời chưa xử lý loại này của SelectBody: {}", selectBody.getClass().getName());
+//                throw new JeecgBootException("Tạm thời chưa xử lý loại này của SelectBody");
 //            }
 //        } else {
-//            // 非 select 查询sql，不做处理
-//            throw new JeecgBootException("非 select 查询sql，不做处理");
+//            // Không phải câu truy vấn select, không xử lý
+//            throw new JeecgBootException("Không phải câu truy vấn select, không xử lý");
 //        }
 //        return this.allTableMap;
 //    }
 //
 //    /**
-//     * 处理子查询
+//     * Xử lý truy vấn con
 //     *
 //     * @param subSelect
 //     */
 //    private void handleSubSelect(SubSelect subSelect) {
 //        try {
 //            String subSelectSql = subSelect.getSelectBody().toString();
-//            // 递归调用解析
+//            // Gọi đệ quy để phân giải
 //            Map<String, SelectSqlInfo> map = JSqlParserUtils.parseAllSelectTable(subSelectSql);
 //            if (map != null) {
 //                this.assignMap(map);
 //            }
 //        } catch (Exception e) {
-//            log.error("解析子查询出错", e);
+//            log.error("Lỗi khi phân giải truy vấn con", e);
 //        }
 //    }
 //
 //    /**
-//     * 处理查询字段表达式
+//     * Xử lý biểu thức trường tìm kiếm
 //     *
 //     * @param expression
 //     */
 //    private void handleExpression(Expression expression, Alias alias, FromItem fromItem) {
-//        // 处理函数式字段  CONCAT(name,'(',age,')')
+//        // Xử lý trường dạng hàm  CONCAT(name,'(',age,')')
 //        if (expression instanceof Function) {
 //            Function functionExp = (Function) expression;
 //            List<Expression> expressions = functionExp.getParameters().getExpressions();
@@ -161,12 +161,12 @@
 //            }
 //            return;
 //        }
-//        // 处理字段上的子查询
+//        // Xử lý truy vấn con trên trường
 //        if (expression instanceof SubSelect) {
 //            this.handleSubSelect((SubSelect) expression);
 //            return;
 //        }
-//        // 不处理字面量
+//        // Không xử lý literal
 //        if (expression instanceof StringValue ||
 //                expression instanceof NullValue ||
 //                expression instanceof LongValue ||
@@ -179,10 +179,10 @@
 //            return;
 //        }
 //
-//        // 处理字段
+//        // Xử lý trường
 //        if (expression instanceof Column) {
 //            Column column = (Column) expression;
-//            // 查询字段名
+//            // Tên trường tìm kiếm
 //            String fieldName = column.getColumnName();
 //            String aliasName = fieldName;
 //            if (alias != null) {
@@ -190,34 +190,34 @@
 //            }
 //            String tableName;
 //            if (column.getTable() != null) {
-//                // 通过列的表名获取 sqlInfo
-//                // 例如 user.name，这里的 tableName 就是 user
+//                // Lấy qua tên bảng của cột  sqlInfo
+//                // Ví dụ user.name, tableName ở đây chính là  user
 //                tableName = column.getTable().getName();
-//                // 有可能是别名，需要转换为真实表名
+//                // Có thể là bí danh, cần chuyển đổi thành tên bảng thực
 //                if (this.tableAliasMap.get(tableName) != null) {
 //                    tableName = this.tableAliasMap.get(tableName);
 //                }
 //            } else {
-//                // 当column的table为空时，说明是 fromItem 中的字段
+//                // Khi table của column rỗng thì chứng tỏ đó là trường trong fromItem
 //                tableName = ((Table) fromItem).getName();
 //            }
 //            SelectSqlInfo $sqlInfo = this.allTableMap.get(tableName);
 //            if ($sqlInfo != null) {
 //                $sqlInfo.addSelectField(aliasName, fieldName);
 //            } else {
-//                log.warn("发生意外情况，未找到表名为 {} 的 SelectSqlInfo", tableName);
+//                log.warn("Xảy ra tình huống bất ngờ, không tìm thấy SelectSqlInfo có tên bảng là  {} của SelectSqlInfo", tableName);
 //            }
 //        }
 //    }
 //
 //    /**
-//     * 根据表名添加sqlInfo
+//     * Thêm theo tên bảng sqlInfo
 //     *
 //     * @param table
 //     */
 //    private void addSqlInfoByTable(Table table) {
 //        String tableName = table.getName();
-//        // 解析 aliasName
+//        // Phân tích cú pháp aliasName
 //        if (table.getAlias() != null) {
 //            this.tableAliasMap.put(table.getAlias().getName(), tableName);
 //        }
@@ -227,7 +227,7 @@
 //    }
 //
 //    /**
-//     * 合并map
+//     * Hợp nhất map
 //     *
 //     * @param source
 //     */
@@ -237,7 +237,7 @@
 //            if (sqlInfo == null) {
 //                this.allTableMap.put(entry.getKey(), entry.getValue());
 //            } else {
-//                // 合并
+//                // Hợp nhất
 //                if (sqlInfo.getSelectFields() == null) {
 //                    sqlInfo.setSelectFields(entry.getValue().getSelectFields());
 //                } else {

@@ -18,21 +18,21 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
- * @Description: 校验文件敏感后缀
+ * @Description: Kiểm chứng hậu tố nhạy cảm của tệp
  * @author: lsq
- * @date: 2023年09月12日 15:29
+ * @date: 2023 năm 09 tháng 12 ngày 15:29
  */
 @Slf4j
 public class SsrfFileTypeFilter {
 
     /**
-     * 允许操作文件类型白名单
+     * Danh sách trắng các loại tệp được phép thao tác
      */
     private final static List<String> FILE_TYPE_WHITE_LIST = new ArrayList<>();
-    /**初始化文件头类型，不够的自行补充*/
+    /**Khởi tạo loại header tệp, nếu chưa đủ thì tự bổ sung*/
     final static HashMap<String, String> FILE_TYPE_MAP = new HashMap<>();
     static {
-        //图片文件
+        //Tệp hình ảnh
         FILE_TYPE_WHITE_LIST.add("jpg");
         FILE_TYPE_WHITE_LIST.add("jpeg");
         FILE_TYPE_WHITE_LIST.add("png");
@@ -42,7 +42,7 @@ public class SsrfFileTypeFilter {
         FILE_TYPE_WHITE_LIST.add("ico");
         FILE_TYPE_WHITE_LIST.add("heic");
 
-        //文本文件
+        //Tệp văn bản
         FILE_TYPE_WHITE_LIST.add("txt");
         FILE_TYPE_WHITE_LIST.add("doc");
         FILE_TYPE_WHITE_LIST.add("docx");
@@ -51,7 +51,7 @@ public class SsrfFileTypeFilter {
 //        FILE_TYPE_WHITE_LIST.add("xml");
         FILE_TYPE_WHITE_LIST.add("md");
 
-        //音视频文件
+        //Tệp âm thanh/video
         FILE_TYPE_WHITE_LIST.add("mp4");
         FILE_TYPE_WHITE_LIST.add("avi");
         FILE_TYPE_WHITE_LIST.add("mov");
@@ -59,25 +59,25 @@ public class SsrfFileTypeFilter {
         FILE_TYPE_WHITE_LIST.add("mp3");
         FILE_TYPE_WHITE_LIST.add("wav");
 
-        //表格文件
+        //Tệp bảng tính
         FILE_TYPE_WHITE_LIST.add("xls");
         FILE_TYPE_WHITE_LIST.add("xlsx");
 
-        //压缩文件
+        //Tệp nén
         FILE_TYPE_WHITE_LIST.add("zip");
         FILE_TYPE_WHITE_LIST.add("rar");
         FILE_TYPE_WHITE_LIST.add("7z");
         FILE_TYPE_WHITE_LIST.add("tar");
 
-        //app文件后缀
+        //app Hậu tố tệp
         FILE_TYPE_WHITE_LIST.add("apk");
         FILE_TYPE_WHITE_LIST.add("wgt");
 
-        //幻灯片文件后缀
+        //Hậu tố tệp trình chiếu
         FILE_TYPE_WHITE_LIST.add("ppt");
         FILE_TYPE_WHITE_LIST.add("pptx");
 
-        //设置禁止文件的头部标记
+        //Đặt dấu header của tệp bị cấm
         FILE_TYPE_MAP.put("3c25402070616765206c", "jsp");
         FILE_TYPE_MAP.put("3c3f7068700a0a2f2a2a0a202a205048", "php");
         FILE_TYPE_MAP.put("cafebabe0000002e0041", "class");
@@ -140,7 +140,7 @@ public class SsrfFileTypeFilter {
     /**
      * @param fileName
      * @return String
-     * @description 通过文件后缀名获取文件类型
+     * @description Lấy loại tệp qua hậu tố tên tệp
      */
     private static String getFileTypeBySuffix(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
@@ -148,23 +148,23 @@ public class SsrfFileTypeFilter {
 
 
     /**
-     * 下载文件类型过滤
+     * Lọc loại tệp tải xuống
      *
      * @param filePath
      */
     public static void checkDownloadFileType(String filePath) throws IOException {
-        //文件后缀
+        //Hậu tố tệp
         String suffix = getFileTypeBySuffix(filePath);
-        log.debug(" 【文件下载校验】文件后缀 suffix: {}", suffix);
+        log.debug(" 【Kiểm chứng tải xuống tệp】 Hậu tố tệp suffix: {}", suffix);
         boolean isAllowExtension = FILE_TYPE_WHITE_LIST.contains(suffix.toLowerCase());
-        //是否允许下载的文件
+        //Tệp có được phép tải xuống hay không
         if (!isAllowExtension) {
-            throw new JeecgBootException("下载失败，存在非法文件类型：" + suffix);
+            throw new JeecgBootException("Tải xuống thất bại, tồn tại loại tệp không hợp lệ:" + suffix);
         }
     }
 
     /**
-     * 上传文件类型过滤
+     * Lọc loại tệp tải lên
      *
      * @param file
      */
@@ -173,37 +173,37 @@ public class SsrfFileTypeFilter {
     }
     
     /**
-     * 上传文件类型过滤
+     * Lọc loại tệp tải lên
      *
      * @param file
      */
     public static void checkUploadFileType(MultipartFile file, String customPath) throws Exception {
-        //1. 路径安全校验
+        //1. Kiểm chứng an toàn đường dẫn
         validatePathSecurity(customPath);
-        //2. 校验文件后缀和头
+        //2. Kiểm chứng hậu tố và header của tệp
         String suffix = getFileType(file, customPath);
-        log.info("【文件上传校验】文件后缀 suffix: {}，customPath：{}", suffix, customPath);
+        log.info("【Kiểm chứng tải lên tệp】 Hậu tố tệp suffix: {}，customPath：{}", suffix, customPath);
         boolean isAllowExtension = FILE_TYPE_WHITE_LIST.contains(suffix.toLowerCase());
-        //是否允许下载的文件
+        //Tệp có được phép tải xuống hay không
         if (!isAllowExtension) {
-            throw new JeecgBootException("上传失败，存在非法文件类型：" + suffix);
+            throw new JeecgBootException("Tải lên thất bại, tồn tại loại tệp không hợp lệ:" + suffix);
         }
-        //3. SVG文件内容安全校验（issues/9693）
+        //3. SVG Kiểm chứng an toàn nội dung tệp (issues/9693）
         if ("svg".equalsIgnoreCase(suffix)) {
             checkSvgSafety(file);
         }
     }
 
     /**
-     * 通过读取文件头部获得文件类型
+     * Lấy loại tệp bằng cách đọc header tệp
      *
      * @param file
-     * @return 文件类型
+     * @return Loại tệp
      * @throws Exception
      */
 
     private static String getFileType(MultipartFile file, String customPath) throws Exception {
-        // 代码逻辑说明: [issue/4672]方法造成的文件被占用，注释掉此方法tomcat就能自动清理掉临时文件
+        // Giải thích logic mã: [issue/4672]Phương thức này khiến tệp bị chiếm dụng; chú thích lại phương thức này thì Tomcat có thể tự động dọn các tệp tạm
         String fileExtendName = null;
         InputStream is = null;
         try {
@@ -215,25 +215,25 @@ public class SsrfFileTypeFilter {
             Iterator<String> keyIter = FILE_TYPE_MAP.keySet().iterator();
             while (keyIter.hasNext()) {
                 String key = keyIter.next();
-                //update-begin---author:lsq ---date:2026-05-26  for：修复SVG文件被误判为php的问题（<?xml与<?php前2.5字节相同，扩大比较长度到10位避免误判）-----------
-                // 验证前10个字符比较（5字节），避免<?xml与<?php因前5位hex相同而误判
+                //update-begin---author:lsq ---date:2026-05-26  for：Sửa lỗi tệp SVG bị nhận nhầm thành php (<?xml và<?php trước 2.5 byte giống nhau, mở rộng độ dài so sánh lên 10 để tránh nhận nhầm)-----------
+                // Kiểm chứng so sánh 10 ký tự đầu (5 byte), tránh <?xml và<?php bị phán đoán nhầm do 5 ký tự hex đầu giống nhau
                 int compareLen = Math.min(10, Math.min(key.length(), fileTypeHex.length()));
                 if (key.toLowerCase().startsWith(fileTypeHex.toLowerCase().substring(0, compareLen))
                         || fileTypeHex.toLowerCase().substring(0, compareLen).startsWith(key.toLowerCase())) {
-                //update-end---author:lsq ---date:2026-05-26  for：修复SVG文件被误判为php的问题（<?xml与<?php前2.5字节相同，扩大比较长度到10位避免误判）-----------
+                //update-end---author:lsq ---date:2026-05-26  for：Sửa lỗi tệp SVG bị nhận nhầm thành php (<?xml và<?php trước 2.5 byte giống nhau, mở rộng độ dài so sánh lên 10 để tránh nhận nhầm)-----------
                     fileExtendName = FILE_TYPE_MAP.get(key);
                     break;
                 }
             }
-            log.debug("-----获取到的指定文件类型------"+fileExtendName);
-            // 如果不是上述类型，则判断扩展名
+            log.debug("-----Loại tệp đã chỉ định đã lấy được------"+fileExtendName);
+            // Nếu không phải các loại trên thì phán đoán phần mở rộng
             if (StringUtils.isBlank(fileExtendName)) {
                 String fileName = file.getOriginalFilename();
-                // 如果无扩展名，则直接返回空串
+                // Nếu không có phần mở rộng thì trả về trực tiếp chuỗi rỗng
                 if (-1 == fileName.indexOf(".")) {
                     return "";
                 }
-                // 如果有扩展名，则返回扩展名
+                // Nếu có phần mở rộng thì trả về phần mở rộng
                 return getFileTypeBySuffix(fileName);
             }
             is.close();
@@ -249,7 +249,7 @@ public class SsrfFileTypeFilter {
     }
 
     /**
-     * 获得文件头部字符串
+     * Lấy chuỗi header tệp
      *
      * @param src
      * @return
@@ -271,57 +271,57 @@ public class SsrfFileTypeFilter {
     }
 
     /**
-     * 路径安全校验
+     * Kiểm chứng an toàn đường dẫn
      */
     private static void validatePathSecurity(String customPath) throws JeecgBootException {
         if (customPath == null || customPath.trim().isEmpty()) {
             return;
         }
 
-        // 统一分隔符为 /
+        // Thống nhất ký tự phân cách thành  /
         String normalized = customPath.replace("\\", "/");
 
-        // 1. 防止路径遍历攻击
+        // 1. Ngăn chặn tấn công duyệt đường dẫn
         if (normalized.contains("..") || normalized.contains("~")) {
-            throw new JeecgBootException("上传业务路径包含非法字符！");
+            throw new JeecgBootException("Đường dẫn nghiệp vụ tải lên chứa ký tự không hợp lệ!");
         }
 
-        // 2. 限制路径深度
+        // 2. Giới hạn độ sâu đường dẫn
         int depth = normalized.split("/").length;
         if (depth > 5) {
-            throw new JeecgBootException("上传业务路径深度超出限制！");
+            throw new JeecgBootException("Độ sâu đường dẫn nghiệp vụ tải lên vượt quá giới hạn!");
         }
 
-        // 3. 限制字符集（只允许字母、数字、下划线、横线、斜杠）
+        // 3. Giới hạn bộ ký tự (chỉ cho phép chữ cái, chữ số, dấu gạch dưới, dấu gạch ngang, dấu gạch chéo)
         if (!normalized.matches("^[a-zA-Z0-9/_-]+$")) {
-            throw new JeecgBootException("上传业务路径包含非法字符！");
+            throw new JeecgBootException("Đường dẫn nghiệp vụ tải lên chứa ký tự không hợp lệ!");
         }
     }
 
     /**
-     * 校验文件路径安全性，防止路径遍历攻击
-     * @param filePath 文件路径
+     * Kiểm chứng tính an toàn của đường dẫn tệp, ngăn chặn tấn công duyệt đường dẫn
+     * @param filePath Đường dẫn tệp
      */
     public static void checkPathTraversal(String filePath) {
         if (StringUtils.isBlank(filePath)) {
             return;
         }
-        // 1. 防止路径遍历：不允许 ..
+        // 1. Ngăn chặn duyệt đường dẫn: không cho phép  ..
         if (filePath.contains("..")) {
-            throw new JeecgBootException("文件路径包含非法字符");
+            throw new JeecgBootException("Đường dẫn tệp chứa ký tự không hợp lệ");
         }
-        // 2. 防止URL编码绕过：%2e = .
+        // 2. Ngăn chặn vượt qua bằng mã hóa URL:%2e = .
         String fileLower = filePath.toLowerCase();
         if (fileLower.contains("%2e")) {
-            throw new JeecgBootException("文件路径包含非法字符");
+            throw new JeecgBootException("Đường dẫn tệp chứa ký tự không hợp lệ");
         }
     }
 
     /** 
-     * 【issues/9553】修复二次SSRF漏洞，对HTTP下载URL进行安全校验
+     * 【issues/9553】Sửa lỗ hổng SSRF lần hai, thực hiện kiểm chứng an toàn đối với URL tải xuống HTTP
      * 2026-04-15
      * 
-     * 校验HTTP(S) URL，防止SSRF攻击，规则见 {@link LocalAddressCheckUtils#checkUrl(String)}
+     * Kiểm chứng HTTP(S) URL, ngăn chặn tấn công SSRF, xem quy tắc tại  {@link LocalAddressCheckUtils#checkUrl(String)}
      *
      * @param fileUrl HTTP(S) URL
      */
@@ -330,8 +330,8 @@ public class SsrfFileTypeFilter {
     }
 
     /**
-     * 批量校验文件路径安全性（逗号分隔的多个文件路径）
-     * @param files 逗号分隔的文件路径
+     * Kiểm chứng hàng loạt tính an toàn của đường dẫn tệp (nhiều đường dẫn tệp phân cách bằng dấu phẩy)
+     * @param files Đường dẫn tệp phân cách bằng dấu phẩy
      */
     public static void checkPathTraversalBatch(String files) {
         if (StringUtils.isBlank(files)) {
@@ -345,7 +345,7 @@ public class SsrfFileTypeFilter {
     }
 
     /**
-     * SVG 危险标签黑名单（标签名统一小写比较）
+     * SVG Danh sách đen thẻ nguy hiểm (tên thẻ được so sánh thống nhất ở dạng chữ thường)
      */
     private static final Set<String> SVG_DANGEROUS_TAGS = new HashSet<>(Arrays.asList(
             "script", "foreignobject", "iframe", "object", "embed", "applet",
@@ -355,7 +355,7 @@ public class SsrfFileTypeFilter {
     ));
 
     /**
-     * SVG 危险属性正则：匹配事件属性（on*="..."）和 javascript: 协议
+     * SVG Regex thuộc tính nguy hiểm: khớp thuộc tính sự kiện (on*="...") và  javascript: Giao thức
      */
     private static final Pattern SVG_EVENT_ATTR_PATTERN = Pattern.compile(
             "\\bon\\w+\\s*=", Pattern.CASE_INSENSITIVE
@@ -364,17 +364,17 @@ public class SsrfFileTypeFilter {
             "javascript\\s*:", Pattern.CASE_INSENSITIVE
     );
     /**
-     * HTML entity 编码的 javascript 协议（&#106;avascript: 等变体）
+     * HTML entity giao thức javascript đã mã hoá (&#106;avascript: và các biến thể khác)
      */
     private static final Pattern SVG_ENTITY_JS_PATTERN = Pattern.compile(
             "&#\\d+;|&#x[0-9a-f]+;", Pattern.CASE_INSENSITIVE
     );
 
     /**
-     * 校验 SVG 文件内容是否安全，防止存储型 XSS（issues/9693）。
-     * 采用文本扫描方式检测危险标签、事件属性和 javascript: 协议。
+     * Kiểm chứng nội dung tệp SVG có an toàn không, ngăn chặn XSS lưu trữ (issues/9693）。
+     * Dùng phương thức quét văn bản để phát hiện thẻ nguy hiểm, thuộc tính sự kiện và  javascript: giao thức.
      *
-     * @param file 上传的 SVG 文件
+     * @param file Tệp SVG đã tải lên
      */
     private static void checkSvgSafety(MultipartFile file) throws Exception {
         String originalContent;
@@ -382,29 +382,29 @@ public class SsrfFileTypeFilter {
             originalContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
         }
         String content = originalContent.toLowerCase();
-        // 检测危险标签
+        // Phát hiện thẻ nguy hiểm
         for (String tag : SVG_DANGEROUS_TAGS) {
             if (content.contains("<" + tag + ">") || content.contains("<" + tag + " ")
                     || content.contains("<" + tag + "/") || content.contains("<" + tag + "\t")
                     || content.contains("<" + tag + "\n") || content.contains("<" + tag + "\r")) {
-                throw new JeecgBootException("上传失败，SVG文件包含不安全的标签：<" + tag + ">");
+                throw new JeecgBootException("Tải lên thất bại, tệp SVG chứa thẻ không an toàn:<" + tag + ">");
             }
         }
-        // 检测事件属性（onclick、onload、onerror、onbegin 等）
+        // Phát hiện thuộc tính sự kiện (onclick, onload, onerror, onbegin, v.v.)
         if (SVG_EVENT_ATTR_PATTERN.matcher(originalContent).find()) {
-            throw new JeecgBootException("上传失败，SVG文件包含不安全的事件属性");
+            throw new JeecgBootException("Tải lên thất bại, tệp SVG chứa thuộc tính sự kiện không an toàn");
         }
-        // 检测 javascript: 协议
+        // Kiểm tra javascript: Giao thức
         if (SVG_JS_PROTOCOL_PATTERN.matcher(originalContent).find()) {
-            throw new JeecgBootException("上传失败，SVG文件包含不安全的javascript协议");
+            throw new JeecgBootException("Tải lên thất bại, tệp SVG chứa giao thức javascript không an toàn");
         }
-        // 检测 HTML entity 编码（防止 &#106;avascript: 等绕过）
+        // Phát hiện mã hoá HTML entity (ngăn chặn  &#106;avascript: và các cách vượt qua khác)
         if (SVG_ENTITY_JS_PATTERN.matcher(originalContent).find()) {
-            throw new JeecgBootException("上传失败，SVG文件包含不安全的编码内容");
+            throw new JeecgBootException("Tải lên thất bại, tệp SVG chứa nội dung đã mã hoá không an toàn");
         }
-        // 检测 DOCTYPE/ENTITY 声明（防止 XML Bomb / Billion Laughs DoS 攻击）
+        // Kiểm tra DOCTYPE/ENTITY khai báo (ngăn chặn  XML Bomb / Billion Laughs DoS tấn công)
         if (content.contains("<!doctype") || content.contains("<!entity")) {
-            throw new JeecgBootException("上传失败，SVG文件包含不安全的DOCTYPE/ENTITY声明");
+            throw new JeecgBootException("Tải lên thất bại, tệp SVG chứa nội dung không an toàn DOCTYPE/ENTITY Khai báo");
         }
     }
 

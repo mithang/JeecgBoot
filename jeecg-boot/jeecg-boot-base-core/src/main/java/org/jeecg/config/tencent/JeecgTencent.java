@@ -3,7 +3,7 @@ package org.jeecg.config.tencent;
 import lombok.Data;
 
 /**
-* @Description: 腾讯短信配置
+* @Description: Cấu hình SMS Tencent
 *
 * @author: wangshuai
 * @date: 2025/10/30 18:22
@@ -12,27 +12,27 @@ import lombok.Data;
 public class JeecgTencent {
 
     /**
-     * 接入域名
+     * Tên miền truy cập
      */
     private String endpoint;
     
     /**
-     * api秘钥id
+     * api Khóa bí mật id
      */
     private String secretId;
     
     /**
-     * api秘钥key
+     * api Khóa bí mật key
      */
     private String secretKey;
     
     /**
-     * 应用id
+     * Ứng dụng id
      */
     private String sdkAppId;
 
     /**
-     * 地域信息
+     * Thông tin khu vực
      */
     private String region;
 }

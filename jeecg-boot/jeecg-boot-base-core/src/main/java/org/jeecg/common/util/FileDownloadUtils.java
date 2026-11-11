@@ -23,7 +23,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * @program: file
- * @description: 文件下载
+ * @description: Tải xuống tệp
  * @author: chenrui
  * @date: 2019-05-24 16:34
  **/
@@ -31,11 +31,11 @@ import java.util.zip.ZipOutputStream;
 public class FileDownloadUtils {
 
     /**
-     * 单文件下载
+     * Tải xuống một tệp
      *
      * @param response
-     * @param storePath 下载文件储存地址
-     * @param fileName  文件名称
+     * @param storePath Địa chỉ lưu trữ tệp tải xuống
+     * @param fileName  Tên tệp
      * @author: chenrui
      * @date: 2019/5/24 17:10
      */
@@ -48,17 +48,17 @@ public class FileDownloadUtils {
         if (fileName == null || fileName.isEmpty()) {
             throw new NullPointerException("The file name can not null");
         }
-        // 配置文件下载
+        // Tải xuống tệp cấu hình
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream");
-        // 下载文件能正常显示中文
+        // Tệp tải xuống có thể hiển thị tiếng Trung bình thường
         try {
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage(), e);
         }
-        // 实现文件下载
+        // Triển khai tải xuống tệp
         byte[] buffer = new byte[1024];
         try (FileInputStream fis = new FileInputStream(file);
              BufferedInputStream bis = new BufferedInputStream(fis);) {
@@ -74,15 +74,15 @@ public class FileDownloadUtils {
     }
 
     /**
-     * 多文件下载
+     * Tải xuống nhiều tệp
      *
-     * @param filesPath   下载文件集合
-     * @param zipFileName 多文件合称名
+     * @param filesPath   Tập hợp tệp tải xuống
+     * @param zipFileName Tên chung của nhiều tệp
      * @author: chenrui
      * @date: 2019/5/24 17:48
      */
     public static void downloadFileMulti(HttpServletResponse response, List<String> filesPath, String zipFileName) throws IOException {
-        //设置压缩包的名字
+        //Đặt tên gói nén
         String downloadName = zipFileName + ".zip";
         response.setCharacterEncoding("UTF-8");
         response.setHeader("content-type", "application/octet-stream");
@@ -90,20 +90,20 @@ public class FileDownloadUtils {
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(downloadName, "UTF-8"));
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
 
-        log.info("开始压缩文件:" + filesPath);
-        //设置压缩流：直接写入response，实现边压缩边下载
+        log.info("Bắt đầu nén tệp:" + filesPath);
+        //Đặt luồng nén: ghi trực tiếp vào response, vừa nén vừa tải xuống
         try (ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(response.getOutputStream()));
              DataOutputStream os = new DataOutputStream(zipOut);) {
-            //设置压缩方法
+            //Đặt phương pháp nén
             zipOut.setMethod(ZipOutputStream.DEFLATED);
             for (String filePath : filesPath) {
-                //循环将文件写入压缩流
+                //Lặp lại việc ghi tệp vào luồng nén
                 File file = new File(filePath);
                 if (file.exists()) {
-                    //添加ZipEntry，并ZipEntry中写入文件流也就是将文件压入zip文件的目录下
+                    //Thêm ZipEntry, và ghi luồng tệp vào ZipEntry, tức là nén tệp vào thư mục của tệp zip
                     String fileName = file.getName();
                     zipOut.putNextEntry(new ZipEntry(fileName));
-                    //格式输出流文件
+                    //Định dạng tệp luồng đầu ra
 
                     InputStream is = Files.newInputStream(file.toPath());
                     byte[] b = new byte[1024];
@@ -121,28 +121,28 @@ public class FileDownloadUtils {
         }
     }
 
-    //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9681】修复SSRF重定向绕过漏洞(CWE-918)，禁止自动跳转并逐跳校验-----------
+    //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9681] Sửa lỗ hổng vượt qua chuyển hướng SSRF(CWE-918), cấm tự động chuyển hướng và kiểm chứng từng bước nhảy-----------
     /**
-     * 安全地打开 HTTP(S) 连接：禁止自动重定向，对初始 URL 及每一跳重定向目标都做 SSRF 校验，
-     * 返回最终已连接（且校验通过）的连接对象。
+     * Mở một cách an toàn HTTP(S) kết nối: cấm tự động chuyển hướng, thực hiện kiểm chứng SSRF đối với URL ban đầu và từng đích chuyển hướng,
+     * Trả về đối tượng kết nối cuối cùng đã kết nối (và đã vượt qua kiểm chứng).
      *
-     * @param fileUrl 文件URL
-     * @return 已连接的 HttpURLConnection
-     * @throws IOException 连接异常
+     * @param fileUrl Tệp URL
+     * @return Đã kết nối HttpURLConnection
+     * @throws IOException Ngoại lệ kết nối
      */
     private static HttpURLConnection openSafeConnection(String fileUrl) throws IOException {
         int maxRedirects = 5;
         String currentUrl = fileUrl;
         for (int i = 0; i <= maxRedirects; i++) {
-            // 每一跳（含初始 URL）都重新做 SSRF 校验，拦截 loopback / link-local / 云元数据地址
+            // Mỗi bước chuyển hướng (bao gồm URL ban đầu) đều thực hiện lại kiểm chứng SSRF, chặn loopback / link-local / Địa chỉ metadata đám mây
             SsrfFileTypeFilter.checkSsrfHttpUrl(currentUrl);
 
             HttpURLConnection conn = (HttpURLConnection) new URL(currentUrl).openConnection();
-            // 关键：禁止 JDK 自动跟随重定向，否则会绕过上面的校验
+            // Điểm mấu chốt: cấm JDK tự động theo chuyển hướng, nếu không sẽ vượt qua kiểm chứng ở trên
             conn.setInstanceFollowRedirects(false);
             conn.setConnectTimeout(5 * 1000);
             conn.setReadTimeout(30 * 1000);
-            // 防止屏蔽程序
+            // Ngăn chặn chương trình chặn
             conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
             conn.connect();
 
@@ -151,33 +151,33 @@ public class FileDownloadUtils {
                 String location = conn.getHeaderField("Location");
                 conn.disconnect();
                 if (oConvertUtils.isEmpty(location)) {
-                    throw new JeecgBootException("非法重定向：Location 为空");
+                    throw new JeecgBootException("Chuyển hướng không hợp lệ: Location trống");
                 }
-                // 处理相对路径跳转，解析为绝对地址后回到循环顶部再次校验
+                // Xử lý chuyển hướng đường dẫn tương đối, phân tích thành địa chỉ tuyệt đối rồi quay lại đầu vòng lặp để kiểm chứng lại
                 currentUrl = new URL(new URL(currentUrl), location).toString();
                 continue;
             }
             return conn;
         }
-        throw new JeecgBootException("非法URL：重定向次数过多");
+        throw new JeecgBootException("URL không hợp lệ: số lần chuyển hướng quá nhiều");
     }
-    //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9681】修复SSRF重定向绕过漏洞(CWE-918)，禁止自动跳转并逐跳校验-----------
+    //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9681] Sửa lỗ hổng vượt qua chuyển hướng SSRF(CWE-918), cấm tự động chuyển hướng và kiểm chứng từng bước nhảy-----------
 
-    //update-begin---author:liusq ---date:2026-06-29  for：【issues/9725】uploadImgByHttp 复用安全连接，修复SSRF重定向绕过漏洞(CWE-918)-----------
+    //update-begin---author:liusq ---date:2026-06-29  for：【issues/9725】uploadImgByHttp tái sử dụng kết nối an toàn, sửa lỗ hổng bypass chuyển hướng SSRF(CWE-918)-----------
     /**
-     * 安全地从网络下载资源为字节数组：内部复用 {@link #openSafeConnection(String)}，
-     * 禁止自动跟随重定向，并对初始 URL 及每一跳重定向目标都做 SSRF 校验。
+     * Tải tài nguyên từ mạng một cách an toàn thành mảng byte: bên trong tái sử dụng {@link #openSafeConnection(String)}，
+     * Cấm tự động theo chuyển hướng, và thực hiện kiểm chứng SSRF đối với URL ban đầu và từng đích chuyển hướng.
      *
-     * @param fileUrl 文件URL
-     * @return 文件字节数组
-     * @throws IOException 连接或读取异常
+     * @param fileUrl Tệp URL
+     * @return Mảng byte của tệp
+     * @throws IOException Ngoại lệ kết nối hoặc đọc
      */
     public static byte[] download2BytesFromNet(String fileUrl) throws IOException {
         HttpURLConnection conn = openSafeConnection(fileUrl);
         try {
             int responseCode = conn.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_OK) {
-                throw new IOException("HTTP请求失败，响应码: " + responseCode);
+                throw new IOException("HTTP Yêu cầu thất bại, mã phản hồi: " + responseCode);
             }
             try (InputStream inputStream = conn.getInputStream();
                  ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -192,10 +192,10 @@ public class FileDownloadUtils {
             conn.disconnect();
         }
     }
-    //update-end---author:liusq ---date:2026-06-29  for：【issues/9725】uploadImgByHttp 复用安全连接，修复SSRF重定向绕过漏洞(CWE-918)-----------
+    //update-end---author:liusq ---date:2026-06-29  for：【issues/9725】uploadImgByHttp tái sử dụng kết nối an toàn, sửa lỗ hổng bypass chuyển hướng SSRF(CWE-918)-----------
 
     /**
-     * 下载网络资源到磁盘
+     * Tải tài nguyên mạng xuống đĩa
      *
      * @param fileUrl
      * @param storePath
@@ -203,28 +203,28 @@ public class FileDownloadUtils {
      * @date 2024/1/19 10:09
      */
     public static String download2DiskFromNet(String fileUrl, String storePath) {
-        //update-begin---author:liusq ---date:2026-03-30  for：【issues/9437】修复download2DiskFromNet storePath路径遍历漏洞(CWE-22)-----------
-        // 路径遍历校验：拦截 ../ 等遍历字符，并确保规范化路径与原始路径一致
+        //update-begin---author:liusq ---date:2026-03-30  for：【issues/9437】Sửa lỗ hổng path traversal của storePath trong download2DiskFromNet(CWE-22)-----------
+        // Kiểm chứng duyệt đường dẫn: chặn ../ các ký tự duyệt đường dẫn tương tự, và đảm bảo đường dẫn đã chuẩn hóa khớp với đường dẫn gốc
         SsrfFileTypeFilter.checkPathTraversal(storePath);
         try {
             String canonicalPath = new File(storePath).getCanonicalPath();
             String absolutePath = new File(storePath).getAbsolutePath();
             if (!canonicalPath.equals(absolutePath)) {
-                throw new JeecgBootException("非法存储路径，路径包含遍历字符: " + storePath);
+                throw new JeecgBootException("Đường dẫn lưu trữ không hợp lệ, đường dẫn chứa ký tự duyệt đường dẫn: " + storePath);
             }
         } catch (IOException e) {
-            throw new JeecgBootException("存储路径校验失败: " + storePath, e);
+            throw new JeecgBootException("Kiểm chứng đường dẫn lưu trữ thất bại: " + storePath, e);
         }
-        //update-end---author:liusq ---date:2026-03-30  for：【issues/9437】修复download2DiskFromNet storePath路径遍历漏洞(CWE-22)-----------
-        //update-begin---author:zhangdaihao ---date:2026-04-15  for：【issues/9553】下载网络资源前增加SSRF校验-----------
+        //update-end---author:liusq ---date:2026-03-30  for：【issues/9437】Sửa lỗ hổng path traversal của storePath trong download2DiskFromNet(CWE-22)-----------
+        //update-begin---author:zhangdaihao ---date:2026-04-15  for：【issues/9553】Thêm kiểm chứng SSRF trước khi tải tài nguyên mạng-----------
         SsrfFileTypeFilter.checkSsrfHttpUrl(fileUrl);
-        //update-end---author:zhangdaihao ---date:2026-04-15  for：【issues/9553】下载网络资源前增加SSRF校验-----------
+        //update-end---author:zhangdaihao ---date:2026-04-15  for：【issues/9553】Thêm kiểm chứng SSRF trước khi tải tài nguyên mạng-----------
         try {
-            //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9681】修复SSRF重定向绕过漏洞，改用禁止自动跳转并逐跳校验的安全连接-----------
-            // 安全打开连接：内部已对初始 URL 及每一跳重定向目标做 SSRF 校验，并禁止自动跟随重定向
+            //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9681】Sửa lỗ hổng bypass chuyển hướng SSRF, đổi sang kết nối an toàn cấm tự động chuyển hướng và kiểm chứng từng bước nhảy-----------
+            // Mở kết nối an toàn: bên trong đã thực hiện kiểm chứng SSRF đối với URL ban đầu và từng mục tiêu chuyển hướng, đồng thời cấm tự động theo chuyển hướng
             HttpURLConnection conn = openSafeConnection(fileUrl);
-            //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9681】修复SSRF重定向绕过漏洞，改用禁止自动跳转并逐跳校验的安全连接-----------
-            // 确保目录存在
+            //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9681】Sửa lỗ hổng bypass chuyển hướng SSRF, đổi sang kết nối an toàn cấm tự động chuyển hướng và kiểm chứng từng bước nhảy-----------
+            // Đảm bảo thư mục tồn tại
             File file = ensureDestFileDir(storePath);
             try (InputStream inStream = conn.getInputStream();
                  FileOutputStream fs = new FileOutputStream(file);) {
@@ -246,12 +246,12 @@ public class FileDownloadUtils {
 
 
     /**
-     * 获取不重名的文件
+     * Lấy tệp không trùng tên
      *
      * @param file
      * @return
      * @author chenrui
-     * @date 2017年5月24日下午6:29:13
+     * @date 2017 năm 24 tháng 5 buổi chiều 6:29:13
      * @version v0.0.1
      */
     public static File getUniqueFile(final File file) {
@@ -271,7 +271,7 @@ public class FileDownloadUtils {
     }
 
     /**
-     * 确保输出文件目录
+     * Đảm bảo thư mục tệp đầu ra
      *
      * @param destFilePath
      * @return
@@ -285,11 +285,11 @@ public class FileDownloadUtils {
     }
 
     /**
-     * 验证文件夹存在且创建目录
+     * Kiểm chứng thư mục tồn tại và tạo thư mục
      *
      * @param dir
      * @author chenrui
-     * @date 2017年5月24日下午6:29:24
+     * @date 2017 năm 24 tháng 5 buổi chiều 6:29:24
      * @version v0.0.1
      */
     public static void checkDirAndCreate(File dir) {
@@ -300,78 +300,78 @@ public class FileDownloadUtils {
 
 
     /**
-     * 下载单个文件到ZIP流
-     * 核心功能：获取文件流，写入ZIP条目
-     * @param fileUrl 文件URL（可以是HTTP URL或本地路径）
-     * @param fileName ZIP内的文件名
-     * @param zous ZIP输出流
+     * Tải một tệp xuống luồng ZIP
+     * Chức năng cốt lõi: lấy luồng tệp, ghi vào mục ZIP
+     * @param fileUrl URL tệp (có thể là URL HTTP hoặc đường dẫn cục bộ)
+     * @param fileName ZIP Tên tệp trong
+     * @param zous ZIP Luồng đầu ra
      */
     public static void downLoadSingleFile(String fileUrl, String fileName, String uploadUrl,ZipArchiveOutputStream zous) {
         InputStream inputStream = null;
         try {
-            // 创建ZIP条目：每个文件在ZIP中都是一个独立条目
+            // Tạo mục ZIP: mỗi tệp trong ZIP đều là một mục độc lập
             ZipArchiveEntry entry = new ZipArchiveEntry(fileName);
             zous.putArchiveEntry(entry);
 
-            // 获取文件输入流：区分普通文件和快捷方式
+            // Lấy luồng đầu vào của tệp: phân biệt tệp thông thường và lối tắt
             if (fileUrl.endsWith(".url")) {
-                // 处理快捷方式：生成.url文件内容
+                // Xử lý lối tắt: tạo.url Nội dung tệp
                 inputStream = FileDownloadUtils.createInternetShortcut(fileName, fileUrl, "");
             } else {
-                // 普通文件下载：从URL或本地路径获取流
+                // Tải tệp thông thường: lấy luồng từ URL hoặc đường dẫn cục bộ
                 inputStream = getDownInputStream(fileUrl,uploadUrl);
             }
 
             if (inputStream != null) {
-                // 将文件流写入ZIP
+                // Ghi luồng tệp vào ZIP
                 IOUtils.copy(inputStream, zous);
             }
-            // 关闭当前ZIP条目
+            // Đóng mục ZIP hiện tại
             zous.closeArchiveEntry();
         } catch (IOException e) {
-            log.error("文件下载失败: {}",  e);
+            log.error("Tải xuống tệp thất bại: {}",  e);
         } finally {
-            // 确保输入流关闭
+            // Đảm bảo luồng đầu vào đã đóng
             IoUtil.close(inputStream);
         }
     }
 
     /**
-     * 获取下载文件输入流
-     * 功能：根据URL类型（HTTP或本地）获取文件流
-     * @param fileUrl 文件URL（支持HTTP和本地路径）
-     * @return 文件输入流，失败返回null
+     * Lấy luồng đầu vào của tệp tải xuống
+     * Chức năng: lấy luồng tệp theo loại URL (HTTP hoặc cục bộ)
+     * @param fileUrl URL tệp (hỗ trợ HTTP và đường dẫn cục bộ)
+     * @return Luồng đầu vào của tệp, trả về khi thất bại null
      */
     public static InputStream getDownInputStream(String fileUrl, String uploadUrl) {
         try {
-            // 处理HTTP URL：通过网络下载
+            // Xử lý URL HTTP: tải xuống qua mạng
             if (oConvertUtils.isNotEmpty(fileUrl) && fileUrl.startsWith(CommonConstant.STR_HTTP)) {
-                //update-begin---author:zhangdaihao ---date:2026-04-15  for：【issues/9553】修复二次SSRF漏洞，对HTTP下载URL进行安全校验-----------
+                //update-begin---author:zhangdaihao ---date:2026-04-15  for：【issues/9553】Sửa lỗ hổng SSRF lần hai, thực hiện kiểm chứng an toàn đối với URL tải xuống HTTP-----------
                 SsrfFileTypeFilter.checkSsrfHttpUrl(fileUrl);
-                //update-end---author:zhangdaihao ---date:2026-04-15  for：【issues/9553】修复二次SSRF漏洞，对HTTP下载URL进行安全校验-----------
-                //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9681】修复SSRF重定向绕过漏洞，改用禁止自动跳转并逐跳校验的安全连接-----------
-                // 安全打开连接：内部已对初始 URL 及每一跳重定向目标做 SSRF 校验，并禁止自动跟随重定向
+                //update-end---author:zhangdaihao ---date:2026-04-15  for：【issues/9553】Sửa lỗ hổng SSRF lần hai, thực hiện kiểm chứng an toàn đối với URL tải xuống HTTP-----------
+                //update-begin---author:wangshuai ---date:2026-06-17  for：【issues/9681】Sửa lỗ hổng bypass chuyển hướng SSRF, đổi sang kết nối an toàn cấm tự động chuyển hướng và kiểm chứng từng bước nhảy-----------
+                // Mở kết nối an toàn: bên trong đã thực hiện kiểm chứng SSRF đối với URL ban đầu và từng mục tiêu chuyển hướng, đồng thời cấm tự động theo chuyển hướng
                 HttpURLConnection connection = openSafeConnection(fileUrl);
-                //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9681】修复SSRF重定向绕过漏洞，改用禁止自动跳转并逐跳校验的安全连接-----------
+                //update-end---author:wangshuai ---date:2026-06-17  for：【issues/9681】Sửa lỗ hổng bypass chuyển hướng SSRF, đổi sang kết nối an toàn cấm tự động chuyển hướng và kiểm chứng từng bước nhảy-----------
                 return connection.getInputStream();
             } else {
-                // 处理本地文件：直接读取文件系统
+                // Xử lý tệp cục bộ: đọc trực tiếp hệ thống tệp
                 String downloadFilePath = uploadUrl + File.separator + fileUrl;
-                // 安全检查：防止下载危险文件类型
+                // Kiểm tra an toàn: ngăn tải xuống loại tệp nguy hiểm
                 SsrfFileTypeFilter.checkDownloadFileType(downloadFilePath);
                 return new BufferedInputStream(new FileInputStream(downloadFilePath));
             }
         } catch (IOException e) {
-            // 异常时返回null，上层会处理空流情况
+            // Khi có ngoại lệ trả về null, tầng trên sẽ xử lý trường hợp luồng rỗng
             return null;
         }
     }
 
     /**
-     * 获取文件扩展名
-     * 功能：从文件名中提取扩展名
-     * @param fileName 文件名
-     * @return 文件扩展名（不含点），如"txt"、"png"
+     * Lấy phần mở rộng của tệp
+     * Chức năng: trích xuất phần mở rộng từ tên tệp
+     * @param fileName Tên tệp
+     * @return Phần mở rộng tệp (không có dấu chấm), ví dụ như"txt"、"png"
      */
     public static String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
@@ -379,68 +379,68 @@ public class FileDownloadUtils {
     }
 
     /**
-     * 创建快捷方式（.url文件内容）
-     * 功能：生成Internet快捷方式文件内容
-     * @param name 快捷方式名称
-     * @param url 目标URL地址
-     * @param icon 图标路径（可选）
-     * @return 包含.url文件内容的输入流
+     * Tạo lối tắt (.url nội dung tệp)
+     * Chức năng: tạo nội dung tệp lối tắt Internet
+     * @param name Tên lối tắt
+     * @param url Địa chỉ URL đích
+     * @param icon Đường dẫn biểu tượng (tùy chọn)
+     * @return Chứa.url Luồng đầu vào của nội dung tệp
      */
     public static InputStream createInternetShortcut(String name, String url, String icon) {
         StringWriter sw = new StringWriter();
         try {
-            // 按照Windows快捷方式格式写入内容
+            // Ghi nội dung theo định dạng lối tắt Windows
             sw.write("[InternetShortcut]\n");
             sw.write("URL=" + url + "\n");
             if (oConvertUtils.isNotEmpty(icon)) {
                 sw.write("IconFile=" + icon + "\n");
             }
-            // 将字符串内容转换为输入流
+            // Chuyển đổi nội dung chuỗi thành luồng đầu vào
             return new ByteArrayInputStream(sw.toString().getBytes(StandardCharsets.UTF_8));
         } finally {
             IoUtil.close(sw);
         }
     }
     /**
-     * 从URL中提取文件名
-     * 功能：从HTTP URL或本地路径中提取纯文件名
-     * @param fileUrl 文件URL
-     * @return 文件名（不含路径）
+     * Trích xuất tên tệp từ URL
+     * Chức năng: trích xuất tên tệp thuần từ URL HTTP hoặc đường dẫn cục bộ
+     * @param fileUrl Tệp URL
+     * @return Tên tệp (không có đường dẫn)
      */
     public static String getFileNameFromUrl(String fileUrl) {
         try {
-            // 处理HTTP URL：从路径部分提取文件名
+            // Xử lý URL HTTP: trích xuất tên tệp từ phần đường dẫn
             if (fileUrl.startsWith(CommonConstant.STR_HTTP)) {
                 URL url = new URL(fileUrl);
                 String path = url.getPath();
                 return path.substring(path.lastIndexOf('/') + 1);
             }
 
-            // 处理本地文件路径：从文件路径提取文件名
+            // Xử lý đường dẫn tệp cục bộ: trích xuất tên tệp từ đường dẫn tệp
             return fileUrl.substring(fileUrl.lastIndexOf(File.separator) + 1);
         } catch (Exception e) {
-            // 如果解析失败，使用时间戳作为文件名
+            // Nếu phân tích thất bại, dùng timestamp làm tên tệp
             return "file_" + System.currentTimeMillis();
         }
     }
     /**
-     * 生成ZIP中的文件名
-     * 功能：避免文件名冲突，为多个文件添加序号
-     * @param fileUrl 文件URL（用于提取原始文件名）
-     * @param index 文件序号（从0开始）
-     * @param total 文件总数
-     * @return 处理后的文件名（带序号）
+     * Tạo tên tệp trong ZIP
+     * Chức năng: tránh xung đột tên tệp, thêm số thứ tự cho nhiều tệp
+     * @param fileUrl URL tệp (dùng để trích xuất tên tệp gốc)
+     * @param index Số thứ tự tệp (bắt đầu từ 0)
+     * @param total Tổng số tệp
+     * @return Tên tệp sau khi xử lý (có số thứ tự)
      */
     public static String generateFileName(String fileUrl, int index, int total) {
-        // 从URL中提取原始文件名
+        // Trích xuất tên tệp gốc từ URL
         String originalFileName = getFileNameFromUrl(fileUrl);
 
-        // 如果只有一个文件，直接使用原始文件名
+        // Nếu chỉ có một tệp, dùng trực tiếp tên tệp gốc
         if (total == 1) {
             return originalFileName;
         }
 
-        // 多个文件时，使用序号+原始文件名
+        // Khi có nhiều tệp, dùng số thứ tự+Tên tệp gốc
         String extension = getFileExtension(originalFileName);
         String nameWithoutExtension = originalFileName.replace("." + extension, "");
 

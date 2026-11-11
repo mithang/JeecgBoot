@@ -13,20 +13,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * IP地址
+ * IP Địa chỉ
  * 
  * @Author scott
  * @email jeecgos@163.com
- * @Date 2019年01月14日
+ * @Date 2019 năm 01 tháng 14 ngày
  */
 public class IpUtils {
 	private static Logger logger = LoggerFactory.getLogger(IpUtils.class);
 
 	/**
-	 * 获取IP地址
+	 * Lấy địa chỉ IP
 	 * 
-	 * 使用Nginx等反向代理软件， 则不能通过request.getRemoteAddr()获取IP地址
-	 * 如果使用了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP地址，X-Forwarded-For中第一个非unknown的有效IP字符串，则为真实IP地址
+	 * Khi dùng phần mềm proxy ngược như Nginx thì không thể thông qua request.getRemoteAddr()Lấy địa chỉ IP
+	 * Nếu đã dùng proxy ngược nhiều cấp,X-Forwarded-For giá trị không chỉ có một mà là một chuỗi địa chỉ IP,X-Forwarded-For IP hợp lệ đầu tiên không phải unknown trong đó chính là địa chỉ IP thực
 	 */
 	public static String getIpAddr(HttpServletRequest request) {
     	String ip = null;
@@ -51,8 +51,8 @@ public class IpUtils {
         	logger.error("IPUtils ERROR ", e);
         }
 
-        //logger.info("获取客户端 ip：{} ", ip);
-        // 使用代理，则获取第一个IP地址
+        //logger.info("Lấy ip của máy khách:{} ", ip);
+        // Khi dùng proxy thì lấy địa chỉ IP đầu tiên
         if (StringUtils.isNotEmpty(ip) && ip.length() > 15) {
             if (ip.indexOf(",") > 0) {
                 //ip = ip.substring(0, ip.indexOf(","));
@@ -71,7 +71,7 @@ public class IpUtils {
 
 
     /**
-     * 判断是否是IP格式
+     * Kiểm tra có phải định dạng IP không
      * @param ipAddress
      * @return
      */
@@ -83,7 +83,7 @@ public class IpUtils {
     }
     
     /**
-     * 获取服务器上的ip
+     * Lấy trên máy chủ ip
      * @return
      */
     public static String getServerIp(){
@@ -91,10 +91,10 @@ public class IpUtils {
         try {
             inetAddress = InetAddress.getLocalHost();
             String ipAddress = inetAddress.getHostAddress();
-            //System.out.println("IP地址: " + ipAddress);
+            //System.out.println("IP Địa chỉ: " + ipAddress);
             return ipAddress;
         } catch (UnknownHostException e) {
-            logger.error("获取ip地址失败", e);
+            logger.error("Lấy địa chỉ IP thất bại", e);
         }
         return "";
     }
