@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 
 /**
- * 动态引入 super 下的组件
+ * Import động các component dưới super
  */
 export async function registerSuper(app: App) {
   const modules = import.meta.glob('./**/register.ts');
@@ -10,7 +10,7 @@ export async function registerSuper(app: App) {
     if (typeof register === 'function') {
       await register(app);
     } else {
-      console.error(`${url} 没有导出 register 函数，无法完成注册！`);
+      console.error(`${url} không export hàm register, không thể hoàn thành đăng ký!`);
     }
   }
 }

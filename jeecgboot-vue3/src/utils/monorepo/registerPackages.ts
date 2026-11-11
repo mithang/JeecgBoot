@@ -2,7 +2,7 @@ import type { App } from 'vue';
 import { warn } from '/@/utils/log';
 import { registerDynamicRouter } from '/@/utils/monorepo/dynamicRouter';
 
-// 懒加载模块配置（按需加载，访问相关路由时才加载对应包）
+// Cấu hình module tải lười (tải theo nhu cầu, chỉ tải gói tương ứng khi truy cập route liên quan)
 const lazyPackages = [
   { name: '@jeecg/aiflow', importer: () => import('@jeecg/aiflow') },
 ];
@@ -15,7 +15,7 @@ const installOptions = {
 };
 
 export function registerPackages(app: App) {
-  // 仅保存 app 实例，不立即加载模块
+  // Chỉ lưu app Instance, không tải module ngay
   appInstance = app;
   // app.component(
   //   'SuperQuery',
@@ -27,13 +27,13 @@ export function registerPackages(app: App) {
   // );
 }
 
-/** 已加载的包缓存 */
+/** Cache gói đã tải */
 const loadedPackages = new Map<string, any>();
-/** 正在加载的包 Promise 缓存（防止重复加载） */
+/** Gói đang tải Promise Cache (tránh tải trùng) */
 const loadingPromises = new Map<string, Promise<any>>();
 
 /**
- * 按需加载包并注册
+ * Tải gói theo nhu cầu và đăng ký
  */
 async function ensurePackageLoaded(pkgConfig: typeof lazyPackages[number]) {
   const { name, importer } = pkgConfig;
@@ -57,12 +57,12 @@ async function ensurePackageLoaded(pkgConfig: typeof lazyPackages[number]) {
 }
 
 /**
- * 根据 component 路径关键字匹配优先加载的包
+ * Theo component Gói được tải ưu tiên khi từ khóa đường dẫn khớp
  */
 function getMatchedPackage(component: string): typeof lazyPackages[number] | null {
   const lc = component.toLowerCase();
   for (const pkgConfig of lazyPackages) {
-    // 从包名中提取关键字，如 @jeecg/online -> online, @jeecg/aiflow -> aiflow
+    // Trích từ khóa từ tên gói, ví dụ @jeecg/online -> online, @jeecg/aiflow -> aiflow
     const keyword = pkgConfig.name.split('/').pop()!;
     if (lc.includes(keyword)) {
       return pkgConfig;
@@ -72,7 +72,7 @@ function getMatchedPackage(component: string): typeof lazyPackages[number] | nul
 }
 
 /**
- * 从指定包中查找组件
+ * Tìm component trong gói đã chỉ định
  */
 async function findComponentInPackage(pkgConfig: typeof lazyPackages[number], component: string): Promise<(() => Promise<Recordable>) | null> {
   try {
@@ -89,22 +89,22 @@ async function findComponentInPackage(pkgConfig: typeof lazyPackages[number], co
       }
     }
   } catch (e) {
-    // 包不存在或加载失败，跳过
+    // Gói không tồn tại hoặc tải thất bại, bỏ qua
   }
   return null;
 }
 
 /**
- * 按需加载包组件：当路由匹配不到本地组件时调用
- * 根据 component 路径中的关键字优先匹配对应包，避免无意义的遍历
+ * Tải component gói theo nhu cầu: gọi khi route không khớp component local
+ * Theo component Từ khóa trong đường dẫn ưu tiên khớp gói tương ứng, tránh duyệt vô nghĩa
  */
 export async function loadPackageComponent(component: string): Promise<(() => Promise<Recordable>) | null> {
-  // 优先根据关键字精准匹配包
+  // Ưu tiên khớp chính xác gói theo từ khóa
   const matched = getMatchedPackage(component);
   if (matched) {
     return findComponentInPackage(matched, component);
   }
-  // 未匹配到关键字，依次尝试所有包
+  // Chưa khớp từ khóa, thử lần lượt tất cả các gói
   for (const pkgConfig of lazyPackages) {
     const result = await findComponentInPackage(pkgConfig, component);
     if (result) return result;
@@ -112,20 +112,20 @@ export async function loadPackageComponent(component: string): Promise<(() => Pr
   return null;
 }
 
-// 模块里可使用的import
+// Có thể dùng trong moduleimport
 const importGlobs = [import.meta.glob('../../utils/**/*.{ts,js,tsx}'), import.meta.glob('../../hooks/**/*.{ts,js,tsx}')];
 
 /**
- * 基础项目导包
- * 目前支持导入如下
+ * Import gói dự án cơ sở
+ * Hiện tại hỗ trợ import như sau
  * /@/utils/**
  * /@/hooks/**
  *
- * @param path 文件路径，ts无需输入后缀名。如：/@/utils/common/compUtils
+ * @param path Đường dẫn tệp,tsKhông cần nhập hậu tố. Ví dụ:/@/utils/common/compUtils
  */
 async function baseImport(path: string) {
   if (path) {
-    // 将 /@/ 替换成 ../../
+    // Sẽ /@/ Thay thành ../../
     path = path.replace(/^\/@\//, '../../');
     for (const glob of importGlobs) {
       for (const key of Object.keys(glob)) {
@@ -134,7 +134,7 @@ async function baseImport(path: string) {
         }
       }
     }
-    warn(`引入失败：${path} 不存在`);
+    warn(`Import thất bại:${path} Không tồn tại`);
   }
   return null;
 }

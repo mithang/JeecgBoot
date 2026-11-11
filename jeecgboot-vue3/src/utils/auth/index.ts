@@ -7,19 +7,19 @@ const { permissionCacheType } = projectSetting;
 const isLocal = permissionCacheType === CacheTypeEnum.LOCAL;
 
 /**
- * 获取token
+ * Lấytoken
  */
 export function getToken() {
   return getAuthCache<string>(TOKEN_KEY);
 }
 /**
- * 获取登录信息
+ * Lấy thông tin đăng nhập
  */
 export function getLoginBackInfo() {
   return getAuthCache(LOGIN_INFO_KEY);
 }
 /**
- * 获取租户id
+ * Lấy tenantid
  */
 export function getTenantId() {
   return getAuthCache<string>(TENANT_ID);
@@ -36,7 +36,7 @@ export function setAuthCache(key: BasicKeys, value) {
 }
 
 /**
- * 设置动态key
+ * Cài đặt độngkey
  * @param key
  * @param value
  */
@@ -46,7 +46,7 @@ export function setCacheByDynKey(key, value) {
 }
 
 /**
- * 获取动态key
+ * Lấy độngkey
  * @param key
  */
 export function getCacheByDynKey<T>(key) {
@@ -55,7 +55,7 @@ export function getCacheByDynKey<T>(key) {
 }
 
 /**
- * 移除动态key
+ * Xóa độngkey
  * @param key
  */
 export function removeCacheByDynKey<T>(key) {
@@ -63,9 +63,9 @@ export function removeCacheByDynKey<T>(key) {
   return fn(key) as T;
 }
 /**
- * 移除缓存中的某个属性
+ * Xóa một thuộc tính trong cache
  * @param key
- * @update:移除缓存中的某个属性
+ * @update:Xóa một thuộc tính trong cache
  * @updateBy:lsq
  * @updateDate:2021-09-07
  */

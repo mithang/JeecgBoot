@@ -17,7 +17,7 @@ const newPropTypes = createTypes({
   integer: undefined,
 }) as PropTypes;
 
-// 从 vue-types v5.0 开始，extend()方法已经废弃，当前已改为官方推荐的ES6+方法 https://dwightjack.github.io/vue-types/advanced/extending-vue-types.html#the-extend-method
+// Từ vue-types v5.0 Bắt đầu,extend()Phương thức đã bị bỏ, hiện đã đổi thành cách chính thức khuyến nghịES6+Phương thức https://dwightjack.github.io/vue-types/advanced/extending-vue-types.html#the-extend-method
 class _propTypes extends newPropTypes {
   // a native-like validator that supports the `.validable` method
   static get style() {
@@ -33,7 +33,7 @@ class _propTypes extends newPropTypes {
   }
 }
 
-//update-begin-author:liaozhiyang date:2026-05-12 for: 修复 class extends vue-types 实例后，TS 看不到 .string/.bool/.oneOfType 等静态成员导致大面积 "Property xxx does not exist on type 'typeof propTypes'" 报错——在导出处把类型断言成「类自身 ∪ PropTypes 静态视图」
+//update-begin-author:liaozhiyang date:2026-05-12 for: Sửa class extends vue-types Sau instance,TS Không nhìn thấy .string/.bool/.oneOfType thành viên tĩnh v.v. gây ra trên diện rộng "Property xxx does not exist on type 'typeof propTypes'" Báo lỗi——Ở chỗ export, khẳng định kiểu thành "chính lớp ∪ PropTypes View tĩnh」
 const propTypes = _propTypes as unknown as typeof _propTypes & PropTypes;
 export { propTypes };
 //update-end-author:liaozhiyang date:2026-05-12

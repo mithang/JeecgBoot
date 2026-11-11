@@ -7,7 +7,7 @@ import { isObject, isFunction, isString } from '/@/utils/is';
 import { dynamicPages } from './dynamicPages';
 import Big from 'big.js';
 import dayjs from "dayjs";
-// 代码逻辑说明: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
+// Giải thích logic mã: 【VUEN-656】Cấu hình URL bên ngoài không mở được, nguyên nhân là do có ký tự #, cần thay thế
 export const URL_HASH_TAB = `__AGWE4H__HASH__TAG__PWHRG__`;
 
 export const noop = () => {};
@@ -41,7 +41,7 @@ export function setObjToUrlParams(baseUrl: string, obj: any): string {
 export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
   let key: string;
   for (key in target) {
-    // 代码逻辑说明: 【QQYUN-7872】online表单label较长优化
+    // Giải thích logic mã: 【QQYUN-7872】Tối ưu label dài của form online
     if (isObject(src[key]) && isObject(target[key])) {
       src[key] = deepMerge(src[key], target[key]);
     } else {
@@ -74,7 +74,7 @@ export function getDynamicProps<T, U>(props: T): Partial<U> {
 }
 
 /**
- * 获取表单字段值数据类型
+ * Lấy kiểu dữ liệu của giá trị trường biểu mẫu
  * @param props
  * @param field
  * @updateBy:zyf
@@ -84,7 +84,7 @@ export function getValueType(props, field) {
   let valueType = 'string';
   if (formSchema) {
     let schema = formSchema.filter((item) => item.field === field)[0];
-    // 代码逻辑说明: 【issues/8976】useListPage 查询中componentProps是函数时获取不到valueType
+    // Giải thích logic mã: 【issues/8976】Trong truy vấn useListPage, khi componentProps là hàm thì không lấy được valueType
     if (schema && schema.componentProps) {
       if (isFunction(schema.componentProps)) {
         try {
@@ -100,7 +100,7 @@ export function getValueType(props, field) {
 }
 
 /**
- * 获取表单字段值数据类型
+ * Lấy kiểu dữ liệu của giá trị trường biểu mẫu
  * @param schema
  * @param formAction
  */
@@ -108,7 +108,7 @@ export function getValueTypeBySchema(schema: FormSchema, formAction: FormActionT
   let valueType = 'string';
   if (schema) {
     const componentProps = formAction.getSchemaComponentProps(schema);
-    // 代码逻辑说明: 【issues/8738】componentProps是函数时获取不到valueType
+    // Giải thích logic mã: 【issues/8738】khi componentProps là hàm thì không lấy được valueType
     if (isFunction(componentProps)) {
       try {
         const result = componentProps({ schema, tableAction: {}, formModel: {}, formActionType: {} });
@@ -122,7 +122,7 @@ export function getValueTypeBySchema(schema: FormSchema, formAction: FormActionT
 }
 
 /**
- * 通过picker属性获取日期数据
+ * Lấy dữ liệu ngày qua thuộc tính picker
  * @param data
  * @param picker
  */
@@ -135,9 +135,9 @@ export function getDateByPicker(data, picker) {
     return null;
   }
   /**
-   * 需要把年、年月、设置成这段时间内的第一天（[年季度]不需要处理antd回传的就是该季度的第一天，[年周]也不处理）
-   * 例如日期格式是年，传给数据库的时间必须是20240101
-   * 例如日期格式是年月（选择了202502），传给数据库的时间必须是20250201
+   * Cần đặt năm, năm-tháng thành ngày đầu tiên trong khoảng thời gian này ([năm-quý] không cần xử lý vì antd trả về chính là ngày đầu tiên của quý đó, [năm-tuần] cũng không xử lý)
+   * Ví dụ định dạng ngày là năm, thời gian truyền cho cơ sở dữ liệu phải là 20240101
+   * Ví dụ định dạng ngày là năm-tháng (đã chọn 202502), thời gian truyền cho cơ sở dữ liệu phải là 20250201
    */
   if (picker === 'year') {
     return dayjs(data).set('month', 0).set('date', 1).format('YYYY-MM-DD');
@@ -164,16 +164,16 @@ export function getRawRoute(route: RouteLocationNormalized): RouteLocationNormal
   };
 }
 /**
- * 深度克隆对象、数组
- * @param obj 被克隆的对象
- * @return 克隆后的对象
+ * Sao chép sâu (deep clone) đối tượng, mảng
+ * @param obj Đối tượng được sao chép
+ * @return Đối tượng sau khi sao chép
  */
 export function cloneObject(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
 export const withInstall = <T>(component: T, alias?: string) => {
-  //console.log("---初始化---", component)
+  //console.log("---Khởi tạo---", component)
 
   const comp = component as any;
   comp.install = (app: App) => {
@@ -187,7 +187,7 @@ export const withInstall = <T>(component: T, alias?: string) => {
 };
 
 /**
- * 获取url地址参数
+ * Lấy tham số địa chỉ URL
  * @param paraName
  */
 export function getUrlParam(paraName) {
@@ -212,9 +212,9 @@ export function getUrlParam(paraName) {
 }
 
 /**
- * 休眠（setTimeout的promise版）
- * @param ms 要休眠的时间，单位：毫秒
- * @param fn callback，可空
+ * Tạm dừng (phiên bản promise của setTimeout)
+ * @param ms Thời gian tạm dừng, đơn vị: mili giây
+ * @param fn callback, có thể để trống
  * @return Promise
  */
 export function sleep(ms: number, fn?: Fn) {
@@ -227,11 +227,11 @@ export function sleep(ms: number, fn?: Fn) {
 }
 
 /**
- * 不用正则的方式替换所有值
- * @param text 被替换的字符串
- * @param checker  替换前的内容
- * @param replacer 替换后的内容
- * @returns {String} 替换后的字符串
+ * Thay thế tất cả giá trị mà không dùng regex
+ * @param text Chuỗi bị thay thế
+ * @param checker  Nội dung trước khi thay thế
+ * @param replacer Nội dung sau khi thay thế
+ * @returns {String} Chuỗi sau khi thay thế
  */
 export function replaceAll(text, checker, replacer) {
   let lastText = text;
@@ -243,7 +243,7 @@ export function replaceAll(text, checker, replacer) {
 }
 
 /**
- * 获取URL上参数
+ * Lấy tham số trên URL
  * @param url
  */
 export function getQueryVariable(url) {
@@ -262,7 +262,7 @@ export function getQueryVariable(url) {
   return s;
 }
 /**
- * 判断是否显示办理按钮
+ * Xác định có hiển thị nút xử lý hay không
  * @param bpmStatus
  * @returns {*}
  */
@@ -273,7 +273,7 @@ export function showDealBtn(bpmStatus) {
   return false;
 }
 /**
- * 数字转大写
+ * Chuyển đổi số thành chữ số viết hoa
  * @param value
  * @returns {*}
  */
@@ -305,7 +305,7 @@ export function numToUpper(value) {
       }
     };
     let lth = value.toString().length;
-    // 代码逻辑说明: 【issues/7493】numToUpper方法返回解决错误
+    // Giải thích logic mã: 【issues/7493】Khắc phục lỗi trả về của phương thức numToUpper
     value = new Big(value).times(100);
     value += '';
     let length = value.length;
@@ -336,7 +336,7 @@ export function numToUpper(value) {
   return null;
 }
 
-// 代码逻辑说明: 解决老的vue2动态导入文件语法 vite不支持的问题
+// Giải thích logic mã: Giải quyết vấn đề cú pháp import động file của vue2 cũ mà vite không hỗ trợ
 export function importViewsFile(path): Promise<any> {
   if (path.startsWith('/')) {
     path = path.substring(1);
@@ -359,20 +359,20 @@ export function importViewsFile(path): Promise<any> {
       }
     }
     if (flag) {
-      reject('该文件不存在:' + page);
+      reject('Tệp này không tồn tại:' + page);
     }
   });
 }
 
 
 /**
- * 跳转至积木报表的 预览页面
+ * Chuyển đến trang xem trước của báo cáo Jimu
  * @param url
  * @param id
  * @param token
  */
 export function goJmReportViewPage(url, id, token) {
-  // URL支持{{ window.xxx }}占位符变量
+  // URL hỗ trợ biến giữ chỗ {{ window.xxx }}
   url = url.replace(/{{([^}]+)?}}/g, (_s1, s2) => _eval(s2))
   if (url.includes('?')) {
     url += '&'
@@ -385,7 +385,7 @@ export function goJmReportViewPage(url, id, token) {
 }
 
 /**
- * 获取随机颜色
+ * Lấy màu ngẫu nhiên
  */
 export function getRandomColor(index?) {
 
@@ -432,7 +432,7 @@ export function getRefPromise(componentRef) {
 /**
  * 2023-09-04
  * liaozhiyang
- * 用new Function替换eval
+ * Dùng new Function thay cho eval
  */
 export function _eval(str: string) {
  return new Function(`return ${str}`)();
@@ -441,42 +441,42 @@ export function _eval(str: string) {
 /**
  * 2024-04-30
  * liaozhiyang
- * 通过时间或者时间戳获取对应antd的年、月、周、季度。
+ * Lấy năm, tháng, tuần, quý tương ứng của antd qua thời gian hoặc timestamp.
  */
 export function getWeekMonthQuarterYear(date) {
-  // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-15】表单填入2026年26周，列表显示的是2026年25周
-  // 获取 ISO 8601 周数及对应的周所属年份
+  // update-begin--author:liaozhiyang---date:20260713---for: 【LHZP-15】Form nhập tuần 26 năm 2026, danh sách hiển thị tuần 25 năm 2026
+  // Lấy số tuần ISO 8601 và năm tương ứng của tuần đó
   const getISOWeek = (date) => {
-    // 归一化到当天0点，避免时分秒干扰
+    // Chuẩn hóa về 0 giờ trong ngày, tránh nhiễu giờ/phút/giây
     const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    // ISO 规定周一为一周起点：周一=0 ... 周日=6
+    // ISO quy định thứ Hai là ngày bắt đầu tuần: Thứ Hai=0 ... Chủ Nhật=6
     const dayNr = (target.getDay() + 6) % 7;
-    // 移动到本周的周四（周四决定该周归属的年份）
+    // Di chuyển đến thứ Năm của tuần này (thứ Năm quyết định năm của tuần đó)
     target.setDate(target.getDate() - dayNr + 3);
     const isoYear = target.getFullYear();
-    // 该 ISO 年第一个周四所在周的周四
+    // Thứ Năm của tuần chứa thứ Năm đầu tiên của năm ISO đó
     const firstThursday = new Date(isoYear, 0, 4);
     const firstDayNr = (firstThursday.getDay() + 6) % 7;
     firstThursday.setDate(firstThursday.getDate() - firstDayNr + 3);
-    const oneWeek = 7 * 86400000; // 一周的毫秒数
+    const oneWeek = 7 * 86400000; // Số mili giây của một tuần
     const week = 1 + Math.round((target.getTime() - firstThursday.getTime()) / oneWeek);
     return { week, isoYear };
   };
-  // 将时间戳转换为日期对象
+  // Chuyển timestamp thành đối tượng ngày
   const dateObj = new Date(date);
-  // 计算周
+  // Tính tuần
   const { week, isoYear } = getISOWeek(dateObj);
-  // update-end--author:liaozhiyang---date:20260713---for：【LHZP-15】表单填入2026年26周，列表显示的是2026年25周
-  // 计算月
-  const month = dateObj.getMonth() + 1; // 月份是从0开始的，所以要加1
-  // 计算季度
+  // update-end--author:liaozhiyang---date:20260713---for: 【LHZP-15】Form nhập tuần 26 năm 2026, danh sách hiển thị tuần 25 năm 2026
+  // Tính tháng
+  const month = dateObj.getMonth() + 1; // Tháng bắt đầu từ 0 nên phải cộng 1
+  // Tính quý
   const quarter = Math.floor(dateObj.getMonth() / 3) + 1;
-  // 计算年
+  // Tính năm
   const year = dateObj.getFullYear();
   return {
     year: `${year}`,
     month: `${year}-${month.toString().padStart(2, '0')}`,
-    week: `${isoYear}-${week}周`,
+    week: `${isoYear}-${week}tuần`,
     quarter: `${year}-Q${quarter}`,
   };
 }
@@ -484,7 +484,7 @@ export function getWeekMonthQuarterYear(date) {
 /**
  * 2024-05-17
  * liaozhiyang
- * 设置挂载的modal元素有可能会有多个，需要找到对应的。
+ * Có thể có nhiều phần tử modal được mount, cần tìm phần tử tương ứng.
  */
 export const setPopContainer = (node, selector) => {
   if (typeof selector === 'string') {
@@ -520,77 +520,77 @@ export const setPopContainer = (node, selector) => {
 /**
  * 2024-06-14
  * liaozhiyang
- * 根据控件显示条件
- * label、value通用，title、val给权限管理用的
+ * Theo điều kiện hiển thị của control
+ * label, value dùng chung; title, val dùng cho quản lý quyền hạn
  */
 export function useConditionFilter() {
 
-  // 通用条件
+  // Điều kiện chung
   const commonConditionOptions = [
-    {label: '为空', value: 'empty', val: 'EMPTY'},
-    {label: '不为空', value: 'not_empty', val: 'NOT_EMPTY'},
+    {label: 'Trống', value: 'empty', val: 'EMPTY'},
+    {label: 'Không trống', value: 'not_empty', val: 'NOT_EMPTY'},
   ]
 
-  // 数值
+  // Số
   const numberConditionOptions = [
-    { label: '等于', value: 'eq', val: '=' },
-    { label: '不等于', value: 'ne', val: '!=' },
-    { label: '大于', value: 'gt', val: '>' },
-    { label: '大于等于', value: 'ge', val: '>=' },
-    { label: '小于', value: 'lt', val: '<' },
-    { label: '小于等于', value: 'le', val: '<=' },
+    { label: 'Bằng', value: 'eq', val: '=' },
+    { label: 'Không bằng', value: 'ne', val: '!=' },
+    { label: 'Lớn hơn', value: 'gt', val: '>' },
+    { label: 'Lớn hơn hoặc bằng', value: 'ge', val: '>=' },
+    { label: 'Nhỏ hơn', value: 'lt', val: '<' },
+    { label: 'Nhỏ hơn hoặc bằng', value: 'le', val: '<=' },
     ...commonConditionOptions,
   ];
 
-  // 日期、日期时间、时间：不支持"在...中"（包含）
+  // Ngày, ngày giờ, giờ: không hỗ trợ "Trong..." (bao gồm)
   const dateConditionOptions = [
-    { label: '等于', value: 'eq', val: '=' },
-    { label: '不等于', value: 'ne', val: '!=' },
-    { label: '大于', value: 'gt', val: '>' },
-    { label: '大于等于', value: 'ge', val: '>=' },
-    { label: '小于', value: 'lt', val: '<' },
-    { label: '小于等于', value: 'le', val: '<=' },
+    { label: 'Bằng', value: 'eq', val: '=' },
+    { label: 'Không bằng', value: 'ne', val: '!=' },
+    { label: 'Lớn hơn', value: 'gt', val: '>' },
+    { label: 'Lớn hơn hoặc bằng', value: 'ge', val: '>=' },
+    { label: 'Nhỏ hơn', value: 'lt', val: '<' },
+    { label: 'Nhỏ hơn hoặc bằng', value: 'le', val: '<=' },
     ...commonConditionOptions,
   ];
 
-  // 文本、多行文本
+  // Văn bản, văn bản nhiều dòng
   const inputConditionOptions = [
-    { label: '等于', value: 'eq', val: '=' },
-    { label: '模糊', value: 'like', val: 'LIKE' },
-    { label: '以..开始', value: 'right_like', title: '右模糊', val: 'RIGHT_LIKE' },
-    { label: '以..结尾', value: 'left_like', title: '左模糊', val: 'LEFT_LIKE' },
-    { label: '在...中', value: 'in', val: 'IN', title: '包含' },
-    { label: '不等于', value: 'ne', val: '!=' },
+    { label: 'Bằng', value: 'eq', val: '=' },
+    { label: 'Mờ', value: 'like', val: 'LIKE' },
+    { label: 'Bắt đầu bằng..', value: 'right_like', title: 'Mờ phải', val: 'RIGHT_LIKE' },
+    { label: 'Kết thúc bằng..', value: 'left_like', title: 'Mờ trái', val: 'LEFT_LIKE' },
+    { label: 'Trong...', value: 'in', val: 'IN', title: 'Bao gồm' },
+    { label: 'Không bằng', value: 'ne', val: '!=' },
     ...commonConditionOptions,
   ];
-  // -update-begin--author:liaozhiyang---date:20260810---for：【LHZP-523】高级查询组件查询条件调整
-  // 单值选择控件：下拉、省市区、单选、开关、下拉搜索、分类字典、自定义树
+  // -update-begin--author:liaozhiyang---date:20260810---for: 【LHZP-523】Điều chỉnh điều kiện truy vấn của component truy vấn nâng cao
+  // Control chọn đơn trị: dropdown, tỉnh/thành/quận huyện, radio, switch, tìm kiếm dropdown, từ điển phân loại, cây tùy chỉnh
   const singleSelectConditionOptions = [
-    { label: '等于', value: 'eq', val: '=' },
-    { label: '不等于', value: 'ne', val: '!=' },
+    { label: 'Bằng', value: 'eq', val: '=' },
+    { label: 'Không bằng', value: 'ne', val: '!=' },
     ...commonConditionOptions,
   ];
-  // -update-end--author:liaozhiyang---date:20260810---for：【LHZP-523】高级查询组件查询条件调整
+  // -update-end--author:liaozhiyang---date:20260810---for: 【LHZP-523】Điều chỉnh điều kiện truy vấn của component truy vấn nâng cao
 
-  // 支持多值的选择控件：多选、用户、部门、关联记录、popup、popupDict、下拉多选
+  // Control chọn hỗ trợ nhiều giá trị: chọn nhiều, người dùng, phòng ban, bản ghi liên kết, popup, popupDict, dropdown nhiều lựa chọn
   const multiSelectConditionOptions = [
-    { label: '等于', value: 'eq', val: '=' },
-    { label: '在...中', value: 'in', val: 'IN', title: '包含' },
-    { label: '不等于', value: 'ne', val: '!=' },
+    { label: 'Bằng', value: 'eq', val: '=' },
+    { label: 'Trong...', value: 'in', val: 'IN', title: 'Bao gồm' },
+    { label: 'Không bằng', value: 'ne', val: '!=' },
     ...commonConditionOptions,
   ];
 
   const def = [
-    { label: '等于', value: 'eq', val: '=' },
-    { label: '模糊', value: 'like', val: 'LIKE' },
-    { label: '以..开始', value: 'right_like', title: '右模糊', val: 'RIGHT_LIKE' },
-    { label: '以..结尾', value: 'left_like', title: '左模糊', val: 'LEFT_LIKE' },
-    { label: '在...中', value: 'in', val: 'IN', title: '包含' },
-    { label: '不等于', value: 'ne', val: '!=' },
-    { label: '大于', value: 'gt', val: '>' },
-    { label: '大于等于', value: 'ge', val: '>=' },
-    { label: '小于', value: 'lt', val: '<' },
-    { label: '小于等于', value: 'le', val: '<=' },
+    { label: 'Bằng', value: 'eq', val: '=' },
+    { label: 'Mờ', value: 'like', val: 'LIKE' },
+    { label: 'Bắt đầu bằng..', value: 'right_like', title: 'Mờ phải', val: 'RIGHT_LIKE' },
+    { label: 'Kết thúc bằng..', value: 'left_like', title: 'Mờ trái', val: 'LEFT_LIKE' },
+    { label: 'Trong...', value: 'in', val: 'IN', title: 'Bao gồm' },
+    { label: 'Không bằng', value: 'ne', val: '!=' },
+    { label: 'Lớn hơn', value: 'gt', val: '>' },
+    { label: 'Lớn hơn hoặc bằng', value: 'ge', val: '>=' },
+    { label: 'Nhỏ hơn', value: 'lt', val: '<' },
+    { label: 'Nhỏ hơn hoặc bằng', value: 'le', val: '<=' },
     ...commonConditionOptions,
   ];
 
@@ -628,7 +628,7 @@ export function useConditionFilter() {
       case 'datetime':
       case 'time':
         return dateConditionOptions;
-      // number是虚拟的
+      // number là ảo
       case 'number':
         return numberConditionOptions;
       default:
@@ -637,7 +637,7 @@ export function useConditionFilter() {
   };
   return { filterCondition };
 }
-// 获取url中的参数
+// Lấy tham số trong URL
 export const getUrlParams = (url) => {
   const result = {
     url: '',
@@ -659,8 +659,8 @@ export const getUrlParams = (url) => {
 
 /* 20250325
  * liaozhiyang
- * 分割url字符成数组
- * 【issues/7990】图片参数中包含逗号会错误的识别成多张图
+ * Tách chuỗi URL thành mảng
+ * 【issues/7990】Tham số hình ảnh chứa dấu phẩy sẽ bị nhận dạng nhầm thành nhiều ảnh
  * */
 export const split = (str) => {
   if (isString(str)) {
@@ -671,17 +671,17 @@ export const split = (str) => {
       let currentUrl = '';
       for (const part of parts) {
         if (part.startsWith('http://') || part.startsWith('https://')) {
-          // 如果遇到新的URL开头，保存当前URL并开始新的URL
+          // Nếu gặp phần bắt đầu URL mới, lưu URL hiện tại và bắt đầu URL mới
           if (currentUrl) {
             urls.push(currentUrl);
           }
           currentUrl = part;
         } else {
-          // 否则，是当前URL的一部分（如参数）
+          // Ngược lại, là một phần của URL hiện tại (ví dụ tham số)
           currentUrl += ',' + part;
         }
       }
-      // 添加最后一个URL
+      // Thêm URL cuối cùng
       if (currentUrl) {
         urls.push(currentUrl);
       }
@@ -693,8 +693,8 @@ export const split = (str) => {
   return str;
 };
 /**
- * 解码 HTML 实体（如 &lt;thead&gt; → <thead>），用于修复混合格式内容
- * update-begin--author:liaozhiyang---date:20260807---for:【LHZP-1128】修复thead标签没解析出来
+ * Giải mã thực thể HTML (ví dụ &lt;thead&gt; → <thead>), dùng để sửa nội dung định dạng hỗn hợp
+ * update-begin--author:liaozhiyang---date:20260807---for:【LHZP-1128】Khắc phục thẻ thead không được phân tích
  */
 export const decodeHtmlEntities = (html: string): string => {
   if (!html || !/&(?:#x?[0-9a-f]+|[a-z]+);/i.test(html)) {
@@ -704,10 +704,10 @@ export const decodeHtmlEntities = (html: string): string => {
   textarea.innerHTML = html;
   return textarea.value;
 };
-// update-end--author:liaozhiyang---date:20260807---for:【LHZP-1128】修复thead标签没解析出来
+// update-end--author:liaozhiyang---date:20260807---for:【LHZP-1128】Khắc phục thẻ thead không được phân tích
 
 /**
-  * 处理word文档中的o:p标签
+  * Xử lý thẻ o:p trong tài liệu Word
   * @param html
  */
 export const removeSpecialTags = (html: string): string => {
@@ -716,9 +716,9 @@ export const removeSpecialTags = (html: string): string => {
     const BORDER = '1px solid #8c8c8c';
 
     // ===================================================================
-    // 第一步：移除 Office 垃圾标签（纯字符串）
+    // Bước 1: Loại bỏ các thẻ rác của Office (chuỗi thuần)
     // ===================================================================
-    // o:p 标签（转义和普通形式）
+    // Thẻ o:p (dạng escaped và dạng thường)
     html = html.replace(/&lt;o:p[^&]*?&gt;.*?&lt;\/o:p&gt;/gis, '');
     html = html.replace(/&lt;o:p[^&]*?\/?&gt;/gis, '');
     html = html.replace(/&lt;\/o:p&gt;/gis, '');
@@ -726,21 +726,21 @@ export const removeSpecialTags = (html: string): string => {
     html = html.replace(/<o:p[^>]*\/?>/gis, '');
     html = html.replace(/<\/o:p>/gis, '');
 
-    // style 标签（转义和普通形式）
+    // Thẻ style (dạng escaped và dạng thường)
     html = html.replace(/&lt;style[^&]*?&gt;.*?&lt;\/style&gt;/gis, '');
     html = html.replace(/&lt;style[^&]*?\/?&gt;/gis, '');
     html = html.replace(/&lt;\/style&gt;/gis, '');
     html = html.replace(/<style[^>]*>.*?<\/style>/gis, '');
 
-    // 条件注释和 Office 命名空间标签
+    // Chú thích điều kiện và thẻ namespace Office
     html = html.replace(/<!--\[if[^>]*>.*?<!\[endif\]-->/gis, '');
     html = html.replace(/<\/?w:[^>]*>/gis, '');
     html = html.replace(/<\/?xml[^>]*>/gis, '');
     html = html.replace(/<\/?v:[^>]*>/gis, '');
 
     // ===================================================================
-    // 第二步：DOM 清理（仅清理空段落，完全不动表格行结构）
-    //   ★ 关键：放在边框处理之前，防止 DOM 序列化丢失 !important
+    // Bước 2: Dọn dẹp DOM (chỉ dọn đoạn trống, hoàn toàn không động đến cấu trúc hàng của bảng)
+    //   ★ Quan trọng: đặt trước khi xử lý viền, tránh mất !important khi serialize DOM
     // ===================================================================
     try {
       const DOMParserCtor: any =
@@ -749,7 +749,7 @@ export const removeSpecialTags = (html: string): string => {
         const parser = new DOMParserCtor() as DOMParser;
         const doc = parser.parseFromString(html, 'text/html') as Document;
 
-        // 仅清理单元格内的空 <p> 标签
+        // Chỉ dọn các thẻ <p> trống trong ô
         const cells = doc.querySelectorAll('td,th');
         for (let ci = 0; ci < cells.length; ci++) {
           const cell = cells[ci] as HTMLElement;
@@ -772,14 +772,14 @@ export const removeSpecialTags = (html: string): string => {
         html = doc.body.innerHTML;
       }
     } catch (_) {
-      // DOM 不可用，跳过段落清理（不影响边框修复）
+      // DOM không khả dụng, bỏ qua dọn đoạn (không ảnh hưởng sửa viền)
     }
 
     // ===================================================================
-    // 第三步：注入表格样式 <style>（兜底保障）
-    //   ★ 放在 DOM 序列化之后，确保 <style> 标签不会被 DOM 改写
-    //   ★ 选择器必须限定在 .jeecg-rich-content 内：v-html 中的 <style> 会进入文档并全局生效，
-    //     若写成裸 table/img 选择器，会污染页面上的 Ant Design Table 等其它表格样式。
+    // Bước 3: Chèn style cho bảng <style> (bảo đảm dự phòng)
+    //   ★ Đặt sau khi serialize DOM, đảm bảo thẻ <style> không bị DOM ghi đè
+    //   ★ Selector phải giới hạn trong .jeecg-rich-content: <style> trong v-html sẽ vào document và có hiệu lực toàn cục,
+    //     nếu viết selector table/img trần sẽ làm ô nhiễm các style bảng khác trên trang như Ant Design Table.
     // ===================================================================
     const RICH_CONTENT_CLASS = 'jeecg-rich-content';
     const scopedCSS = `<style>
@@ -788,22 +788,22 @@ export const removeSpecialTags = (html: string): string => {
 .${RICH_CONTENT_CLASS} table td p,.${RICH_CONTENT_CLASS} table th p{margin:0!important;padding:0!important;line-height:1.4!important;}
 .${RICH_CONTENT_CLASS} img{max-width:100%!important;height:auto!important;display:block!important;}
 </style>`;
-    // update-begin--author:liaozhiyang---date:20260803---for:【LHZP-1239】我的消息页面点击通知公告数据查看按钮页面表格样式变了
-    // 用作用域容器包裹正文，保证上面的选择器只命中富文本内部
+    // update-begin--author:liaozhiyang---date:20260803---for:【LHZP-1239】Trang "Tin nhắn của tôi" bấm nút xem dữ liệu thông báo thì style bảng của trang bị thay đổi
+    // Dùng container có phạm vi bao nội dung chính, đảm bảo selector trên chỉ áp dụng trong rich text
     html = `${scopedCSS}<div class="${RICH_CONTENT_CLASS}">${html}</div>`;
-    // update-end--author:liaozhiyang---date:20260803---for:【LHZP-1239】我的消息页面点击通知公告数据查看按钮页面表格样式变了
+    // update-end--author:liaozhiyang---date:20260803---for:【LHZP-1239】Trang "Tin nhắn của tôi" bấm nút xem dữ liệu thông báo thì style bảng của trang bị thay đổi
     // ===================================================================
-    // 第四步：纯字符串处理内联样式（核心边框修复）
-    //   ★ 最后执行！确保输出 HTML 中的 !important 不会被任何后续处理丢失
+    // Bước 4: Xử lý inline style bằng chuỗi thuần (sửa viền cốt lõi)
+    //   ★ Thực hiện cuối cùng! Đảm bảo !important trong HTML đầu ra không bị mất bởi bất kỳ xử lý nào sau đó
     //
-    //   策略：按分号拆分 style 值，逐条判断属性名，
-    //         过滤掉所有 border* 和 mso-* 声明，
-    //         然后追加统一的边框声明（含 !important）
+    //   Chiến lược: tách giá trị style theo dấu chấm phẩy, xét từng thuộc tính,
+    //         lọc bỏ mọi khai báo border* và mso-*,
+    //         sau đó thêm khai báo viền thống nhất (kèm !important)
     // ===================================================================
 
     /**
-     * 从 CSS style 字符串中移除所有 border* 和 mso-* 声明，
-     * 保留其余布局相关属性（width, height, padding, text-align 等）
+     * Loại bỏ mọi khai báo border* và mso-* khỏi chuỗi CSS style,
+     * giữ lại các thuộc tính liên quan đến bố cục khác (width, height, padding, text-align, v.v.)
      */
     function stripBorderAndMso(styleStr: string): string {
       return styleStr
@@ -812,19 +812,19 @@ export const removeSpecialTags = (html: string): string => {
             const trimmed = decl.trim();
             if (!trimmed) return false;
             const colonIdx = trimmed.indexOf(':');
-            if (colonIdx === -1) return true; // 保留无效声明（安全起见）
+            if (colonIdx === -1) return true; // Giữ lại khai báo không hợp lệ (để an toàn)
             const prop = trimmed.substring(0, colonIdx).trim().toLowerCase();
-            // 移除所有 border 开头和 mso- 开头的属性
+            // Loại bỏ mọi thuộc tính bắt đầu bằng border và mso-
             if (prop.startsWith('border') || prop.startsWith('mso-')) return false;
             return true;
           })
           .join(';');
     }
 
-    // 4a. 移除 <table> 上的 border="0" HTML 属性
+    // 4a. Loại bỏ thuộc tính HTML border="0" trên <table>
     html = html.replace(/(<table\b[^>]*?)\sborder\s*=\s*['"]?0['"]?/gi, '$1');
 
-    // 4b. 处理 <table> 标签的内联样式
+    // 4b. Xử lý inline style của thẻ <table>
     html = html.replace(/<table(\s[^>]*)>/gi, function (fullMatch, attrs) {
       try {
         const sm = attrs.match(/\sstyle\s*=\s*(["'])([\s\S]*?)\1/i);
@@ -842,7 +842,7 @@ export const removeSpecialTags = (html: string): string => {
       } catch (_) { return fullMatch; }
     });
 
-    // 4c. 处理 <td>/<th> 标签的内联样式
+    // 4c. Xử lý inline style của thẻ <td>/<th>
     const cellBorderCSS =
         `border-top:${BORDER}!important;` +
         `border-right:${BORDER}!important;` +

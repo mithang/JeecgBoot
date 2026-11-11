@@ -22,17 +22,17 @@ export function usePermission() {
   const userStore = useUserStore();
   const appStore = useAppStore();
   const permissionStore = usePermissionStore();
-  //动态加载流程节点表单权限
+  //Tải động quyền biểu mẫu nút quy trình
   let formData: any = {};
   function initBpmFormData(_bpmFormData) {
     formData = _bpmFormData;
   }
   const { closeAll } = useTabs(router);
 
-  //==================================工作流权限判断-begin=========================================
+  //==================================Kiểm tra quyền quy trình làm việc-begin=========================================
   function hasBpmPermission(code, type) {
-    // 禁用-type=2
-    // 显示-type=1
+    // Vô hiệu hóa-type=2
+    // Hiển thị-type=1
     let codeList: string[] = [];
     let permissionList = formData.permissionList;
     if (permissionList && permissionList.length > 0) {
@@ -44,7 +44,7 @@ export function usePermission() {
     }
     return codeList.indexOf(code) >= 0;
   }
-  //==================================工作流权限判断-end=========================================
+  //==================================Kiểm tra quyền quy trình làm việc-end=========================================
 
   /**
    * Change permission mode
@@ -73,7 +73,7 @@ export function usePermission() {
   }
 
   /**
-   * 确定是否存在权限
+   * Xác nhận có tồn tại quyền không
    */
   function hasPermission(value?: RoleEnum | RoleEnum[] | string | string[], def = true): boolean {
     // Visible by default
@@ -93,14 +93,14 @@ export function usePermission() {
     if (PermissionModeEnum.BACK === permMode) {
       const allCodeList = permissionStore.getPermCodeList as string[];
       if (!isArray(value) && allCodeList && allCodeList.length > 0) {
-        //=============================工作流权限判断-显示-begin==============================================
+        //=============================Kiểm tra quyền quy trình làm việc-Hiển thị-begin==============================================
         if (formData) {
           let code = value as string;
           if (hasBpmPermission(code, '1') === true) {
             return true;
           }
         }
-        //=============================工作流权限判断-显示-end==============================================
+        //=============================Kiểm tra quyền quy trình làm việc-Hiển thị-end==============================================
         return allCodeList.includes(value);
       }
       return (intersection(value, allCodeList) as string[]).length > 0;
@@ -108,21 +108,21 @@ export function usePermission() {
     return true;
   }
   /**
-   * 是否禁用组件
+   * Có vô hiệu hóa component không
    */
   function isDisabledAuth(value?: RoleEnum | RoleEnum[] | string | string[], def = true): boolean {
-    //=============================工作流权限判断-禁用-begin==============================================
+    //=============================Kiểm tra quyền quy trình làm việc-Vô hiệu hóa-begin==============================================
     if (formData) {
       let code = value as string;
       if (hasBpmPermission(code, '2') === true) {
         return true;
       }
-      // 代码逻辑说明: VUEN-1342【流程】编码方式 节点权限配置好后，未生效
+      // Giải thích logic mã: VUEN-1342[Quy trình] Cách mã hóa Sau khi cấu hình quyền nút xong, chưa có hiệu lực
       if (isCodingButNoConfig(code) == true) {
         return false;
       }
     }
-    //=============================工作流权限判断-禁用-end==============================================
+    //=============================Kiểm tra quyền quy trình làm việc-Vô hiệu hóa-end==============================================
     return !hasPermission(value);
   }
 
@@ -150,7 +150,7 @@ export function usePermission() {
   }
 
   /**
-   * 判断是不是 代码里写了逻辑但是没有配置权限这种情况
+   * Kiểm tra có phải không Trường hợp trong mã đã viết logic nhưng chưa cấu hình quyền
    */
   function isCodingButNoConfig(code) {
     let all = permissionStore.allAuthList;
@@ -161,7 +161,7 @@ export function usePermission() {
           return true;
         }
       } else {
-        // 代码逻辑说明: 【TV360X-1604】按钮禁用权限在接口中查不到也禁用
+        // Giải thích logic mã: 【TV360X-1604]Quyền vô hiệu hóa nút, nếu không tra được trong API thì cũng vô hiệu hóa
         return false;
       }
     }

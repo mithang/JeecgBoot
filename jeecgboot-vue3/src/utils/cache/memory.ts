@@ -96,12 +96,12 @@ export class Memory<T = any, V = any> {
   }
 
   clear() {
-    console.log('------clear------进入clear方法');
+    console.log('------clear------VàoclearPhương thức');
     Object.keys(this.cache).forEach((key) => {
       const item = this.cache[key];
       item.timeoutId && clearTimeout(item.timeoutId);
     });
-    // 代码逻辑说明: 不删除登录用户的租户id，其他缓存信息都清除----
+    // Giải thích logic mã: Không xóa tenant của người dùng đang đăng nhậpid, các thông tin cache khác đều xóa----
     this.cache = {
       ...omit(this.cache, [TOKEN_KEY, USER_INFO_KEY, ROLES_KEY, DB_DICT_DATA_KEY, DB_DICT_VERSION_KEY, TENANT_ID, LOGIN_INFO_KEY, PROJ_CFG_KEY]),
     };

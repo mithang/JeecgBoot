@@ -1,30 +1,30 @@
 /*
  *
- * 这里填写用户自定义的表达式
- * 可用在Online表单的默认值表达式中使用
- * 需要外部使用的变量或方法一定要 export，否则无法识别
- * 示例：
- *   export const name = '张三'; // const 是常量
- *   export let age = 17; // 看情况 export const 还是 let ，两者都可正常使用
- *   export function content(arg) { // export 方法，可传参数，使用时要加括号，值一定要return回去，可以返回Promise
+ * Ở đây điền biểu thức tùy chỉnh của người dùng
+ * Có thể dùng trongOnlineDùng trong biểu thức giá trị mặc định của biểu mẫu
+ * Biến hoặc phương thức cần dùng bên ngoài nhất định phải export, nếu không không thể nhận biết
+ * Ví dụ:
+ *   export const name = 'Trương Tam'; // const là hằng số
+ *   export let age = 17; // Tùy tình huống export const vẫn là let , cả hai đều có thể dùng bình thường
+ *   export function content(arg) { // export Phương thức, có thể truyền tham số, khi dùng phải thêm dấu ngoặc, giá trị nhất định phảireturnQuay lại, có thể trả vềPromise
  *     return 'content' + arg;
  *   }
- *   export const address = (arg) => content(arg) + ' | 北京市'; // export 箭头函数也可以
+ *   export const address = (arg) => content(arg) + ' | Bắc Kinh'; // export Hàm mũi tên cũng có thể
  *
  */
 
-/** 字段默认值官方示例：获取地址 */
+/** Ví dụ chính thức giá trị mặc định của trường: lấy địa chỉ */
 export function demoFieldDefVal_getAddress(arg) {
   if (!arg) {
-    arg = '朝阳区';
+    arg = 'Quận Triều Dương';
   }
-  return `北京市 ${arg}`;
+  return `Bắc Kinh ${arg}`;
 }
 
-/** 自定义JS函数示例 */
+/** Tùy chỉnhJSVí dụ hàm */
 export function sayHi(name) {
   if (!name) {
-    name = '张三';
+    name = 'Trương Tam';
   }
-  return `您好，我叫： ${name}`;
+  return `Xin chào, tôi tên là: ${name}`;
 }

@@ -15,7 +15,7 @@ import { defHttp } from '/@/utils/http/axios';
 
 let cssText = '';
 export async function changeTheme(color: string) {
-  // 代码逻辑说明: 【QQYUN-6366】升级到antd4.x
+  // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
   const appStore = useAppStore();
   appStore.setProjectConfig({ themeColor: color });
   const colors = generateColors({
@@ -24,7 +24,7 @@ export async function changeTheme(color: string) {
     tinycolor,
     color,
   });
-  // 代码逻辑说明: 【QQYUN-8570】生产环境暗黑模式下主题色不生效
+  // Giải thích logic mã: 【QQYUN-8570]Trong môi trường production, màu theme ở chế độ tối không có hiệu lực
   if (import.meta.env.PROD && appStore.getDarkMode === 'dark') {
     if (!darkCssIsReady && !cssText) {
       await loadDarkThemeCss();
@@ -44,9 +44,9 @@ export async function changeTheme(color: string) {
     fixDark();
   }
 }
-// 【LOWCOD-2262】修复黑暗模式下切换皮肤无效的问题
+// 【LOWCOD-2262]Sửa vấn đề chuyển skin ở chế độ tối không có hiệu lực
 async function fixDark() {
-  // 代码逻辑说明: 【QQYUN-8570】生产环境暗黑模式下主题色不生效
+  // Giải thích logic mã: 【QQYUN-8570]Trong môi trường production, màu theme ở chế độ tối không có hiệu lực
   const el = document.getElementById(styleTagId);
   if (el) {
     el.innerHTML = el.innerHTML.replace(/\\["']dark\\["']/g, `'dark'`);

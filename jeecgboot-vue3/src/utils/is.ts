@@ -53,7 +53,7 @@ export function isNumber(val: unknown): val is number {
 }
 
 export function isPromise<T = any>(val: any): val is Promise<T> {
-  // 代码逻辑说明: 不能既是 Promise 又是 Object --------
+  // Giải thích logic mã: Không thể vừa là Promise lại là Object --------
   return is(val, 'Promise') && isFunction(val.then) && isFunction(val.catch);
 }
 

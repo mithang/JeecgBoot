@@ -11,42 +11,42 @@ import { filterObj } from '/@/utils/common/compUtils';
 import { isFunction } from '@/utils/is';
 const { handleExportXls, handleImportXls } = useMethods();
 
-// 定义 useListPage 方法所需参数
+// Định nghĩa useListPage Tham số cần cho phương thức
 interface ListPageOptions {
-  // 样式作用域范围
+  // Phạm vi tác dụng của kiểu
   designScope?: string;
-  // 【必填】表格参数配置
+  // [Bắt buộc] Cấu hình tham số bảng
   tableProps: TableProps;
-  // 是否分页
+  // Có phân trang không
   pagination?: boolean;
-  // 导出配置
+  // Cấu hình xuất
   exportConfig?: {
     url: string | (() => string);
-    // 导出文件名
+    // Tên tệp xuất
     name?: string | (() => string);
-    //导出参数
+    //Tham số xuất
     params?: object | (() => object);
   };
-  // 导入配置
+  // Cấu hình import
   importConfig?: {
-    // 代码逻辑说明: erp代码生成 子表 导入地址是动态的
+    // Giải thích logic mã: erpTạo mã Bảng con Địa chỉ import là động
     url: string | (() => string);
-    // 导出成功后的回调
+    // Callback sau khi xuất thành công
     success?: (fileInfo?: any) => void;
   };
 }
 
 interface IDoRequestOptions {
-  // 是否显示确认对话框，默认 true
+  // Có hiển thị hộp thoại xác nhận không, mặc định true
   confirm?: boolean;
-  // 是否自动刷新表格，默认 true
+  // Có tự động làm mới bảng không, mặc định true
   reload?: boolean;
-  // 是否自动清空选择，默认 true
+  // Có tự động xóa lựa chọn không, mặc định true
   clearSelection?: boolean;
 }
 
 /**
- * listPage页面公共方法
+ * listPagePhương thức chung của trang
  *
  * @param options
  */
@@ -61,21 +61,21 @@ export function useListPage(options: ListPageOptions) {
 
   const [, { getForm, reload, setLoading, getColumns }, { selectedRowKeys }] = tableContext;
 
-  // 导出 excel
+  // Xuất excel
   async function onExportXls() {
-    // 代码逻辑说明: 导出新增自定义参数------------
+    // Giải thích logic mã: Xuất thêm tham số tùy chỉnh------------
     let { url, name, params } = options?.exportConfig ?? {};
     let realUrl = typeof url === 'function' ? url() : url;
     if (realUrl) {
       let title = typeof name === 'function' ? name() : name;
-      // 代码逻辑说明: erp代码生成 子表 导出报错，原因未知-
+      // Giải thích logic mã: erpTạo mã Bảng con Xuất báo lỗi, nguyên nhân chưa rõ-
       let paramsForm:any = {};
       try {
-        //当useSearchFor不等于false的时候，才去触发validate
+        //KhiuseSearchForKhông bằngfalsekhi, mới kích hoạtvalidate
         if (options?.tableProps?.useSearchForm !== false) {
           paramsForm = await getForm().validate();
           console.log('paramsForm', paramsForm);
-          // 在这里把执行beforeFetch
+          // Ở đây thực thibeforeFetch
           if (options?.tableProps?.beforeFetch) {
             paramsForm = await options?.tableProps?.beforeFetch(paramsForm);
           }
@@ -84,15 +84,15 @@ export function useListPage(options: ListPageOptions) {
         console.warn(e);
       }
 
-      // 代码逻辑说明: [/issues/409]导出功能没有按排序结果导出,设置导出默认排序，创建时间倒序
+      // Giải thích logic mã: [/issues/409]Chức năng xuất không xuất theo kết quả sắp xếp,Cài đặt sắp xếp mặc định khi export, thời gian tạo giảm dần
       if(!paramsForm?.column){
          Object.assign(paramsForm,{column:'createTime',order:'desc'});
       }
 
-      //如果参数不为空，则整合到一起
-      // 代码逻辑说明: erp代码生成 子表 导出动态设置mainId
+      //Nếu tham số không trống, thì gộp lại với nhau
+      // Giải thích logic mã: erpTạo mã Bảng con Cài đặt động xuấtmainId
       if (params) {
-        // 代码逻辑说明: [QQYUN-11627]代码生成原生表单，数据导出，前端报错，并且范围参数没有转换 #7962
+        // Giải thích logic mã: [QQYUN-11627]Tạo mã biểu mẫu gốc, xuất dữ liệu, frontend báo lỗi, và tham số phạm vi chưa được chuyển đổi #7962
         const realParams = isFunction(params) ? await params() : { ...(params || {}) };
         Object.keys(realParams).map((k) => {
           let temp = (realParams as object)[k];
@@ -105,9 +105,9 @@ export function useListPage(options: ListPageOptions) {
         paramsForm['selections'] = selectedRowKeys.value.join(',');
       }
 
-      //是否显示表格设置
+      //Có hiển thị cài đặt bảng không
       if(options?.tableProps?.showTableSetting !== false){
-        //是否显示配置字段
+        //Có hiển thị trường cấu hình không
         if(options?.tableProps?.tableSetting?.setting !== false){
           await exportColumns(paramsForm)
         }
@@ -115,23 +115,23 @@ export function useListPage(options: ListPageOptions) {
     
       return handleExportXls(title as string, realUrl, filterObj(paramsForm));
     } else {
-      $message.createMessage.warn('没有传递 exportConfig.url 参数');
+      $message.createMessage.warn('Chưa truyền exportConfig.url Tham số');
       return Promise.reject();
     }
   }
 
   /**
-   * 设置导出的列
+   * Cài đặt cột export
    * 
    * @param paramsForm
    */
   async function exportColumns(paramsForm: any) {
-    //获取表格的列
+    //Lấy cột của bảng
     let columns = getColumns();
     if(columns && columns.length >0){
-      //需要导出的字段
+      //Trường cần export
       let exportFields:any = [];
-      //是否有隐藏列
+      //Có cột ẩn không
       let hiddenColumns = false;
       for (const column of columns) {
         if(!column.defaultHidden){
@@ -150,23 +150,23 @@ export function useListPage(options: ListPageOptions) {
     }
   }
 
-  // 导入 excel
+  // Import excel
   function onImportXls(file) {
     let { url, success } = options?.importConfig ?? {};
-    // 代码逻辑说明: erp代码生成 子表 导入地址是动态的
+    // Giải thích logic mã: erpTạo mã Bảng con Địa chỉ import là động
     let realUrl = typeof url === 'function' ? url() : url;
     if (realUrl) {
       return handleImportXls(file, realUrl, success || reload);
     } else {
-      $message.createMessage.warn('没有传递 importConfig.url 参数');
+      $message.createMessage.warn('Chưa truyền importConfig.url Tham số');
       return Promise.reject();
     }
   }
 
   /**
-   * 通用请求处理方法，可自动刷新表格，自动清空选择
-   * @param api 请求api
-   * @param options 是否显示确认框
+   * Phương thức xử lý yêu cầu chung, có thể tự động làm mới bảng, tự động xóa lựa chọn
+   * @param api Yêu cầuapi
+   * @param options Có hiển thị hộp xác nhận không
    */
   function doRequest(api: () => Promise<any>, options?: IDoRequestOptions) {
     return new Promise((resolve, reject) => {
@@ -190,8 +190,8 @@ export function useListPage(options: ListPageOptions) {
       if (options?.confirm ?? true) {
         $message.createConfirm({
           iconType: 'warning',
-          title: '删除',
-          content: '确定要删除吗？',
+          title: 'Xóa',
+          content: 'Bạn có chắc chắn muốn xóa không?',
           onOk: () => execute(),
           onCancel: () => reject(),
         });
@@ -201,7 +201,7 @@ export function useListPage(options: ListPageOptions) {
     });
   }
 
-  /** 执行单个删除操作 */
+  /** Thực hiện một thao tác xóa */
   function doDeleteRecord(api: () => Promise<any>) {
     return doRequest(api, { confirm: false, clearSelection: false });
   }
@@ -217,16 +217,16 @@ export function useListPage(options: ListPageOptions) {
   };
 }
 
-// 定义表格所需参数
+// Định nghĩa tham số cần cho bảng
 type TableProps = Partial<DynamicProps<BasicTableProps>>;
 type UseTableMethod = TableActionType & {
   getForm: () => FormActionType;
 };
 
 /**
- * useListTable 列表页面标准表格参数
+ * useListTable Tham số bảng chuẩn của trang danh sách
  *
- * @param tableProps 表格参数
+ * @param tableProps Tham số bảng
  */
 export function useListTable(tableProps: TableProps): [
   (instance: TableActionType, formInstance: UseTableMethod) => void,
@@ -239,7 +239,7 @@ export function useListTable(tableProps: TableProps): [
     selectedRowKeys: Ref<any[]>;
   }
 ] {
-  // 自适应列配置
+  // Cấu hình cột tự thích ứng
   const adaptiveColProps: Partial<ColEx> = {
     xs: 24, // <576px
     sm: 12, // ≥576px
@@ -250,19 +250,19 @@ export function useListTable(tableProps: TableProps): [
   };
   const defaultTableProps: TableProps = {
     rowKey: 'id',
-    // 使用查询条件区域
+    // Sử dụng vùng điều kiện truy vấn
     useSearchForm: true,
-    // 查询条件区域配置
+    // Cấu hình vùng điều kiện truy vấn
     formConfig: {
-      // 紧凑模式
+      // Chế độ gọn
       compact: true,
-      // label默认宽度
+      // labelChiều rộng mặc định
       // labelWidth: 120,
-      // 按下回车后自动提交
+      // Nhấn Enter sẽ tự động gửi
       autoSubmitOnEnter: true,
-      // 默认 row 配置
+      // Mặc định row Cấu hình
       rowProps: { gutter: 8 },
-      // 默认 col 配置
+      // Mặc định col Cấu hình
       baseColProps: {
         ...adaptiveColProps,
       },
@@ -275,67 +275,67 @@ export function useListTable(tableProps: TableProps): [
         xxl: 6,
       },
       wrapperCol: {},
-      // 是否显示 展开/收起 按钮
+      // Có hiển thị không Mở rộng/Thu gọn Nút
       showAdvancedButton: true,
-      // 超过指定列数默认折叠
+      // Vượt số cột chỉ định thì mặc định thu gọn
       autoAdvancedCol: 3,
-      // 操作按钮配置
+      // Cấu hình nút thao tác
       actionColOptions: {
         ...adaptiveColProps,
         style: { textAlign: 'left' },
       },
     },
-    // 斑马纹
+    // Vằn ngựa vằn
     striped: false,
-    // 是否可以自适应高度
+    // Có thể tự thích ứng chiều cao không
     canResize: true,
-    // 表格最小高度
-    // update-begin--author:liaozhiyang---date:20240603---for【TV360X-861】列表查询区域不可往上滚动
+    // Chiều cao tối thiểu bảng
+    // update-begin--author:liaozhiyang---date:20240603---for【TV360X-861]Vùng truy vấn danh sách không cuộn lên được
     minHeight: 300,
-    // update-end--author:liaozhiyang---date:20240603---for【TV360X-861】列表查询区域不可往上滚动
-    // 点击行选中
+    // update-end--author:liaozhiyang---date:20240603---for【TV360X-861]Vùng truy vấn danh sách không cuộn lên được
+    // Nhấp hàng để chọn
     clickToRowSelect: false,
-    // 是否显示边框
+    // Có hiển thị viền không
     bordered: true,
-    // 是否显示序号列
+    // Có hiển thị cột số thứ tự không
     showIndexColumn: false,
-    // 显示表格设置
+    // Hiển thị cài đặt bảng
     showTableSetting: true,
-    // 表格全屏设置
+    // Cài đặt toàn màn hình bảng
     tableSetting: {
       fullScreen: false,
     },
-    // 是否显示操作列
+    // Có hiển thị cột thao tác không
     showActionColumn: true,
-    // 操作列
+    // Cột thao tác
     actionColumn: {
       width: 120,
-      title: '操作',
-      //是否锁定操作列取值 right ,left,false
+      title: 'Thao tác',
+      //Có khóa giá trị cột thao tác không right ,left,false
       fixed: false,
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
   };
-  // 合并用户个性化配置
+  // Hợp nhất cấu hình cá nhân hóa của người dùng
   if (tableProps) {
-    // 代码逻辑说明: 【issues/6180】前端代码配置表变查询条件显示列不生效---
+    // Giải thích logic mã: 【issues/6180]Cấu hình mã frontend cho bảng, đổi điều kiện truy vấn thì cột hiển thị không có hiệu lực---
     if(tableProps.formConfig){
       setTableProps(tableProps.formConfig);
     }
-    // merge 方法可深度合并对象
+    // merge Phương thức có thể hợp nhất sâu đối tượng
     merge(defaultTableProps, tableProps);
   }
 
-  // 发送请求之前调用的方法
+  // Phương thức gọi trước khi gửi yêu cầu
   function beforeFetch(params) {
-    // 判断是否已有排序参数（defSort 为数组时会转换为 defSortString）
+    // Kiểm tra đã có tham số sắp xếp chưa (defSort Khi là mảng sẽ chuyển thành defSortString)
     const hasSortParams = params.column || params.defSortString || params.order;
-    // 默认以 createTime 降序排序
+    // Mặc định với createTime Sắp xếp giảm dần
     return Object.assign(hasSortParams ? {} : { column: 'createTime', order: 'desc' }, params);
   }
 
-  // 合并方法
+  // Phương thức hợp nhất
   Object.assign(defaultTableProps, { beforeFetch });
   if (typeof tableProps.beforeFetch === 'function') {
     defaultTableProps.beforeFetch = function (params) {
@@ -346,17 +346,17 @@ export function useListTable(tableProps: TableProps): [
     };
   }
 
-  // 当前选择的行
+  // Hàng đang chọn
   const selectedRowKeys = ref<any[]>([]);
-  // 选择的行记录
+  // Bản ghi hàng đã chọn
   const selectedRows = ref<Recordable[]>([]);
 
-  // 表格选择列配置
+  // Cấu hình cột chọn bảng
   const rowSelection: any = tableProps?.rowSelection ?? {};
   const defaultRowSelection = reactive({
     ...rowSelection,
     type: rowSelection.type ?? 'checkbox',
-    // 选择列宽度，默认 50
+    // Chiều rộng cột chọn, mặc định 50
     columnWidth: rowSelection.columnWidth ?? 50,
     selectedRows: selectedRows,
     selectedRowKeys: selectedRowKeys,
@@ -371,7 +371,7 @@ export function useListTable(tableProps: TableProps): [
   delete defaultTableProps.rowSelection;
 
   /**
-   * 设置表格参数
+   * Cài đặt tham số bảng
    *
    * @param formConfig
    */

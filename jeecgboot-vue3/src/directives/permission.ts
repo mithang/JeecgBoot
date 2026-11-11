@@ -8,10 +8,10 @@ import type { App, Directive, DirectiveBinding } from 'vue';
 import { usePermission } from '/@/hooks/web/usePermission';
 
 function isAuth(el: Element, binding: any) {
-  // update-begin--author:liaozhiyang---date:20240529---for【TV360X-460】basicForm支持v-auth指令(权限控制显隐)
+  // update-begin--author:liaozhiyang---date:20240529---for【TV360X-460】basicFormHỗ trợv-authChỉ thị(Kiểm soát quyền hiện/ẩn)
   const value = binding.value;
   if (!value) return;
-  // update-end--author:liaozhiyang---date:20240529---for【TV360X-460】basicForm支持v-auth指令(权限控制显隐)
+  // update-end--author:liaozhiyang---date:20240529---for【TV360X-460】basicFormHỗ trợv-authChỉ thị(Kiểm soát quyền hiện/ẩn)
   const { hasPermission } = usePermission();
   if (!hasPermission(value)) {
     el.parentNode?.removeChild(el);

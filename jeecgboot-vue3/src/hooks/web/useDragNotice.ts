@@ -11,38 +11,38 @@ import { useRouter } from 'vue-router';
 import { useMessage } from '@/hooks/web/useMessage';
 const { createMessage } = useMessage();
 export function useDragNotice() {
-  //*********************************websocket配置begin******************************************
+  //*********************************websocketCấu hìnhbegin******************************************
   const glob = useGlobSetting();
   const { push, currentRoute } = useRouter();
   const userStore = useUserStore();
   const instance: any = getCurrentInstance();
-  // 初始化 WebSocket
+  // Khởi tạo WebSocket
   function initWebSocket() {
     const token = getToken();
-    //将登录token生成一个短的标识
+    //Đưa đăng nhậptokenTạo một định danh ngắn
     const wsClientId = md5(token);
-    // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
+    // WebSocketkhác với giao thức dùng cho yêu cầu thông thường,wsTương đương vớihttp, wssTương đương vớihttps
     const url = glob.domainUrl?.replace('https://', 'wss://').replace('http://', 'ws://') + '/dragChannelSocket/' + wsClientId;
     connectWebSocket(url);
     onWebSocket(onWebSocketMessage);
   }
 
   async function onWebSocketMessage(data) {
-    console.log('仪表盘监听按钮点击事件websocket', data);
+    console.log('Bảng điều khiển lắng nghe sự kiện nhấp nútwebsocket', data);
     if (data?.CMD === 'drag') {
-      //触发动作： url：路径 modal：弹窗
+      //Hành động kích hoạt: url: Đường dẫn modal: Popup
       const action = data.result.action;
-      //弹窗类型： 点击按钮打开什么弹窗，根据type打开不同的弹窗
+      //Loại popup: Nhấp nút mở popup nào, theotypeMở popup khác nhau
       const type = data.result.type;
-      //url地址，可以是路由，也可以是外部链接
+      //urlĐịa chỉ, có thể là route, cũng có thể là liên kết ngoài
       let url = data.result.url;
-      //弹窗参数或者url参数
+      //Tham số popup hoặcurlTham số
       const record = data.result.records || {};
-      console.log('仪表盘监听点击事件类型type', type);
-      console.log('仪表盘监听点击事件动作action', action);
-      console.log('仪表盘监听点击事件路径url', url);
-      console.log('仪表盘监听点击事件参数', record);
-      //1.路径的话，判断外部链接还是内部路由跳转
+      console.log('Loại sự kiện nhấp của bảng điều khiểntype', type);
+      console.log('Hành động sự kiện nhấp của bảng điều khiểnaction', action);
+      console.log('Đường dẫn sự kiện nhấp của bảng điều khiểnurl', url);
+      console.log('Tham số sự kiện nhấp của bảng điều khiển', record);
+      //1.Nếu là đường dẫn, phán đoán liên kết ngoài hay chuyển route nội bộ
       if (action == 'url') {
         if (record?.type && record?.type === 'file') {
           const fileUrl = getFileAccessHttpUrl(record.fileUrl);
@@ -54,7 +54,7 @@ export function useDragNotice() {
           window.open(record.linkUrl, '_blank');
           return;
         }
-        //常用下載特殊处理
+        //Xử lý đặc biệt khi tải xuống thường dùng
         if (url == 'fileUrl') {
           url = record[url];
         }
@@ -65,10 +65,10 @@ export function useDragNotice() {
           push({ path: urlParamsObj.url, query: { ...urlParamsObj.params, ...record } });
         }
       } else {
-        //2.弹窗方式打开项目组件
+        //2.Mở component dự án bằng popup
         switch (type) {
           case 'email':
-            //邮箱查看弹窗
+            //Popup xem hộp thư
             handleOpenType('email', { record });
             break;
           default:
@@ -77,19 +77,19 @@ export function useDragNotice() {
       }
     }
   }
-  //*********************************websocket配置end******************************************
+  //*********************************websocketCấu hìnhend******************************************
 
-  //*********************************打开弹窗修改，动态设置弹窗begin*******************************
-  //当前表单弹窗
+  //*********************************Mở popup để sửa, cài đặt động popupbegin*******************************
+  //Popup biểu mẫu hiện tại
   const currentModal = ref<string | null>(null);
-  //当前表单参数
+  //Tham số biểu mẫu hiện tại
   const modalParams = ref<Recordable>({});
-  //表单注册缓存
+  //Cache đăng ký biểu mẫu
   const modalRegCache = ref<Recordable>({});
-  //组件绑定参数
+  //Tham số liên kết component
   const bindParams = ref<Recordable>({});
   /**
-   * 根据类型打开不同弹窗
+   * Theo loại mở popup khác nhau
    * @param type
    * @param params
    */
@@ -98,31 +98,31 @@ export function useDragNotice() {
     modalParams.value = { ...params };
     switch (type) {
       case 'email':
-        //邮件查看
+        //Xem email
         currentModal.value = 'EoaMailBoxInModal';
         break;
       default:
         currentModal.value = null;
         break;
     }
-    //注册表单弹窗
+    //Đăng ký popup biểu mẫu
     initModalRegister();
     await nextTick(() => {
       if (modalRegCache.value[currentModal.value!]?.isRegister) {
-        console.log('已注冊，走缓存');
+        console.log('Đã đăng ký, đi theo cache');
         modalRegCache.value[currentModal.value!].modalMethods.openModal(true, modalParams.value);
       }
     });
   }
   /**
-   * 初始化弹窗注册
+   * Đăng ký popup khởi tạo
    */
   function initModalRegister() {
-    //如果当前选择表单为null，就不处理
+    //Nếu biểu mẫu đang chọn lànull, thì không xử lý
     if (!currentModal.value) {
       return;
     }
-    //判断缓存中是否存在，不存在就走缓存逻辑
+    //Kiểm tra trong cache có tồn tại không, không tồn tại thì đi theo logic cache
     if (!modalRegCache.value[currentModal.value]) {
       const [registerModal, modalMethods] = useModal();
       modalRegCache.value[currentModal.value] = {
@@ -134,26 +134,26 @@ export function useDragNotice() {
   }
 
   /**
-   * 绑定注册弹窗
+   * Popup đăng ký liên kết
    * @param regFn
    * @param modalMethod
    */
   function bindRegisterModal(regFn, modalMethod) {
     return async (...args) => {
-      console.log('开始注册：', currentModal.value);
+      console.log('Bắt đầu đăng ký:', currentModal.value);
       await regFn(...args);
-      console.log('注册完成：', currentModal.value);
-      //打开弹窗
+      console.log('Đăng ký xong:', currentModal.value);
+      //Mở popup
       modalMethod.openModal(true, modalParams.value);
-      //设置缓存标识
+      //Cài đặt định danh cache
       modalRegCache.value[currentModal.value!].isRegister = true;
     };
   }
-  //*********************************打开弹窗修改，动态设置弹窗end******************************************
-  //刷新页面
+  //*********************************Mở popup để sửa, cài đặt động popupend******************************************
+  //Làm mới trang
   function reloadPage() {
     const iframes: any = document.getElementsByClassName('jeecg-iframe-page__main');
-    // 将 HTMLCollection 转换为数组
+    // Sẽ HTMLCollection Chuyển thành mảng
     const iframeArray = Array.from(iframes);
     if (currentRoute.value?.meta?.frameSrc && isDragFrameSrc(currentRoute.value.meta.frameSrc)) {
       const targetIframe: any = iframeArray.find((iframe: any) => iframe.src == currentRoute.value?.meta?.frameSrc);
@@ -164,15 +164,15 @@ export function useDragNotice() {
     }
   }
   /**
-   * 判断 frameSrc 是否为仪表盘页面
-   * 支持两种 URL 形式：
-   *   1. /drag/view?pageId=xxx（query 形式，老版本约定）
-   *   2. /drag/view/xxx（path 形式，新版本约定）
+   * Kiểm tra frameSrc Có phải trang bảng điều khiển không
+   * Hỗ trợ hai loại URL Hình thức:
+   *   1. /drag/view?pageId=xxx(query Hình thức, quy ước phiên bản cũ)
+   *   2. /drag/view/xxx(path Hình thức, quy ước phiên bản mới)
    */
   function isDragFrameSrc(frameSrc: string): boolean {
     return /\/(drag|jimubi)\/view(\?|\/|$)/.test(frameSrc || '');
   }
-  // update-end--author:liusq---date:20260804---for:【仪表盘】从我的消息切回仪表盘 tab 时布局变化，原判断仅匹配 /drag/view?pageId= 形式，未覆盖 /drag/view/:id path 形式，导致 iframe 内仪表盘未刷新
+  // update-end--author:liusq---date:20260804---for:[Dashboard] Từ tin nhắn của tôi chuyển về dashboard tab thì bố cục thay đổi, kiểm tra gốc chỉ khớp /drag/view?pageId= Hình thức, chưa bao phủ /drag/view/:id path Hình thức, gây ra iframe Bảng điều khiển bên trong chưa làm mới
   return {
     initDragWebSocket: initWebSocket,
     handleOpenType,

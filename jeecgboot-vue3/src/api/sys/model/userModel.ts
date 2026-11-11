@@ -31,23 +31,23 @@ export interface LoginResultModel {
  */
 export interface GetUserInfoModel {
   roles: RoleInfo[];
-  // 用户id
+  // Người dùngid
   userId: string | number;
-  // 用户名
+  // Tên người dùng
   username: string;
-  // 真实名字
+  // Tên thật
   realname: string;
-  // 头像
+  // Ảnh đại diện
   avatar: string;
-  // 介绍
+  // Giới thiệu
   desc?: string;
-  // 用户信息
+  // Thông tin người dùng
   userInfo?: any;
-  // 缓存字典项
+  // Mục từ điển trong cache
   sysAllDictItems?: any;
-  // 字典版本号
+  // Phiên bản từ điển
   dictVersion?: string;
-  // 三级等保强密码开关
+  // Công tắc mật khẩu mạnh bảo mật cấp 3
   enableStrongPwd?: boolean;
 }
 

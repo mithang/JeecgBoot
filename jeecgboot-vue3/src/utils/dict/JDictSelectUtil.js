@@ -1,5 +1,5 @@
 /**
- * 字典 util
+ * Từ điển util
  * author: scott
  * date: 20190109
  */
@@ -7,17 +7,17 @@
 import { ajaxGetDictItems, getDictItemsByCode } from './index';
 
 /**
- * 获取字典数组
- * 【目前仅表单设计器页面使用该方法】
- * @param dictCode 字典Code
- * @param isTransformResponse 是否转换返回结果
+ * Lấy mảng từ điển
+ * [Hiện tại chỉ trang designer biểu mẫu dùng phương thức này]
+ * @param dictCode Từ điểnCode
+ * @param isTransformResponse Có chuyển đổi kết quả trả về không
  * @return List<Map>
  */
 export async function initDictOptions(dictCode, isTransformResponse = true) {
   if (!dictCode) {
-    return '字典Code不能为空!';
+    return 'Từ điểnCodeKhông được trống!';
   }
-  //优先从缓存中读取字典配置
+  //Ưu tiên đọc cấu hình từ điển từ cache
   if (getDictItemsByCode(dictCode)) {
     let res = {};
     res.result = getDictItemsByCode(dictCode);
@@ -28,21 +28,21 @@ export async function initDictOptions(dictCode, isTransformResponse = true) {
       return res;
     }
   }
-  //获取字典数组
+  //Lấy mảng từ điển
   return await ajaxGetDictItems(dictCode, {}, { isTransformResponse });
 }
 
 /**
- * 字典值替换文本通用方法
- * @param dictOptions  字典数组
- * @param text  字典值
+ * Phương thức chung thay thế văn bản bằng giá trị từ điển
+ * @param dictOptions  Mảng từ điển
+ * @param text  Giá trị từ điển
  * @return String
  */
 export function filterDictText(dictOptions, text) {
-  // --update-begin----author:sunjianlei---date:20200323------for: 字典翻译 text 允许逗号分隔 ---
+  // --update-begin----author:sunjianlei---date:20200323------for: Dịch từ điển text Cho phép tách bằng dấu phẩy ---
   if (text != null && Array.isArray(dictOptions)) {
     let result = [];
-    // 允许多个逗号分隔，允许传数组对象
+    // Cho phép tách bằng nhiều dấu phẩy, cho phép truyền đối tượng mảng
     let splitText;
     if (Array.isArray(text)) {
       splitText = text;
@@ -52,7 +52,7 @@ export function filterDictText(dictOptions, text) {
     for (let txt of splitText) {
       let dictText = txt;
       for (let dictItem of dictOptions) {
-        // 代码逻辑说明: 【TV360X-469】兼容数据null值防止报错
+        // Giải thích logic mã: 【TV360X-469]Tương thích dữ liệunullGiá trị tránh báo lỗi
         if (dictItem == null) continue;
         if (dictItem.value == null) continue;
         if (txt.toString() === dictItem.value.toString()) {
@@ -65,17 +65,17 @@ export function filterDictText(dictOptions, text) {
     return result.join(',');
   }
   return text;
-  // --update-end----author:sunjianlei---date:20200323------for: 字典翻译 text 允许逗号分隔 ---
+  // --update-end----author:sunjianlei---date:20200323------for: Dịch từ điển text Cho phép tách bằng dấu phẩy ---
 }
 
 /**
- * 字典值替换文本通用方法(多选)
- * @param dictOptions  字典数组
- * @param text  字典值
+ * Phương thức chung thay thế văn bản bằng giá trị từ điển(Chọn nhiều)
+ * @param dictOptions  Mảng từ điển
+ * @param text  Giá trị từ điển
  * @return String
  */
 export function filterMultiDictText(dictOptions, text) {
-  //js “!text” 认为0为空，所以做提前处理
+  //js “!text” Cho rằng0Trống nên xử lý trước
   if (text === 0 || text === '0') {
     if (dictOptions) {
       for (let dictItem of dictOptions) {
@@ -109,10 +109,10 @@ export function filterMultiDictText(dictOptions, text) {
 }
 
 /**
- * 字典值替换文本通用方法(多选)
- * @param dictOptions  字典数组
- * @param val  字典值
- * @return {*[]} 返回字典项原对象
+ * Phương thức chung thay thế văn bản bằng giá trị từ điển(Chọn nhiều)
+ * @param dictOptions  Mảng từ điển
+ * @param val  Giá trị từ điển
+ * @return {*[]} Trả về đối tượng gốc của mục từ điển
  */
 export function filterMultiDictObjs(dictOptions, val) {
   val = val?.toString?.() ?? '';
@@ -136,7 +136,7 @@ export function filterMultiDictObjs(dictOptions, val) {
 }
 
 /**
- * 翻译字段值对应的文本
+ * Văn bản tương ứng với giá trị trường dịch
  * @param children
  * @returns string
  */
@@ -145,9 +145,9 @@ export function filterDictTextByCache(dictCode, key) {
     return;
   }
   if (!dictCode) {
-    return '字典Code不能为空!';
+    return 'Từ điểnCodeKhông được trống!';
   }
-  //优先从缓存中读取字典配置
+  //Ưu tiên đọc cấu hình từ điển từ cache
   if (getDictItemsByCode(dictCode)) {
     let item = getDictItemsByCode(dictCode).filter((t) => t['value'] == key);
     if (item && item.length > 0) {
@@ -156,9 +156,9 @@ export function filterDictTextByCache(dictCode, key) {
   }
 }
 
-/** 通过code获取字典数组 */
+/** Thông quacodeLấy mảng từ điển */
 export async function getDictItems(dictCode, params) {
-  //优先从缓存中读取字典配置
+  //Ưu tiên đọc cấu hình từ điển từ cache
   if (getDictItemsByCode(dictCode)) {
     let desformDictItems = getDictItemsByCode(dictCode).map((item) => ({
       ...item,
@@ -167,12 +167,12 @@ export async function getDictItems(dictCode, params) {
     return Promise.resolve(desformDictItems);
   }
 
-  //缓存中没有，就请求后台
+  //Trong cache không có, thì yêu cầu backend
   return await ajaxGetDictItems(dictCode, params)
     .then((result) => {
       if (result.length) {
         let res = result.map((item) => ({ ...item, label: item.text }));
-        console.log('------- 从DB中获取到了字典-------dictCode : ', dictCode, res);
+        console.log('------- TừDBđã lấy được từ điển trong-------dictCode : ', dictCode, res);
         return Promise.resolve(res);
       } else {
         console.error('getDictItems error: : ', res);

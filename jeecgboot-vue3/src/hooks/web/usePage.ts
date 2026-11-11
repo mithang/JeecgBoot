@@ -17,7 +17,7 @@ function handleError(e: Error) {
 
 // page switch
 export function useGo(_router?: Router) {
-  // 代码逻辑说明: 【issues/694】404返回首页问题
+  // Giải thích logic mã: 【issues/694】404Vấn đề trả về trang chủ
   const userStore = useUserStore();
   const homePath = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
   let router;
@@ -51,7 +51,7 @@ export const useRedo = (_router?: Router, otherQuery?: Recordable) => {
         resolve(false);
         return;
       }
-      // 代码逻辑说明: 【QQYUN-7099】动态路由匹配右键重新加载404
+      // Giải thích logic mã: 【QQYUN-7099]Route động khớp, nhấp chuột phải tải lại404
       const tabStore = useMultipleTabStore();
       if (otherQuery && Object.keys(otherQuery).length > 0) {
         Object.keys(otherQuery).forEach((key) => {

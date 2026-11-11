@@ -4,18 +4,18 @@ interface TreeHelperConfig {
   pid: string;
 }
 
-// 默认配置
+// Cấu hình mặc định
 const DEFAULT_CONFIG: TreeHelperConfig = {
   id: 'id',
   children: 'children',
   pid: 'pid',
 };
 
-// 获取配置。  Object.assign 从一个或多个源对象复制到目标对象
+// Lấy cấu hình.  Object.assign Sao chép từ một hoặc nhiều đối tượng nguồn sang đối tượng đích
 const getConfig = (config: Partial<TreeHelperConfig>) => Object.assign({}, DEFAULT_CONFIG, config);
 
 // tree from list
-// 列表中的树
+// Cây trong danh sách
 export function listToTree<T = any>(list: any[], config: Partial<TreeHelperConfig> = {}): T[] {
   const conf = getConfig(config) as TreeHelperConfig;
   const nodeMap = new Map();
@@ -115,10 +115,10 @@ export function findPathAll(tree: any, func: Fn, config: Partial<TreeHelperConfi
 export function filter<T = any>(
   tree: T[],
   func: (n: T) => boolean,
-  // Partial 将 T 中的所有属性设为可选
+  // Partial Sẽ T đặt tất cả thuộc tính trong thành tùy chọn
   config: Partial<TreeHelperConfig> = {}
 ): T[] {
-  // 获取配置
+  // Lấy cấu hình
   config = getConfig(config);
   const children = config.children as string;
 
@@ -126,9 +126,9 @@ export function filter<T = any>(
     return list
       .map((node: any) => ({ ...node }))
       .filter((node) => {
-        // 递归调用 对含有children项  进行再次调用自身函数 listFilter
+        // Gọi đệ quy Đối với cái chứachildrenMục  Tiến hành gọi lại hàm của chính nó listFilter
         node[children] = node[children] && listFilter(node[children]);
-        // 执行传入的回调 func 进行过滤
+        // Thực thi callback được truyền vào func Tiến hành lọc
         return func(node) || (node[children] && node[children].length);
       });
   }
@@ -141,7 +141,7 @@ export function forEach<T = any>(tree: T[], func: (n: T) => any, config: Partial
   const list: any[] = [...tree];
   const { children } = config;
   for (let i = 0; i < list.length; i++) {
-    //func 返回true就终止遍历，避免大量节点场景下无意义循环，引起浏览器卡顿
+    //func Trả vềtruethì dừng duyệt, tránh lặp vô nghĩa trong trường hợp nhiều nút, gây giật trình duyệt
     if (func(list[i])) {
       return;
     }
@@ -151,7 +151,7 @@ export function forEach<T = any>(tree: T[], func: (n: T) => any, config: Partial
 
 /**
  * @description: Extract tree specified structure
- * @description: 提取树指定结构
+ * @description: Trích cấu trúc chỉ định của cây
  */
 export function treeMap<T = any>(treeData: T[], opt: { children?: string; conversion: Fn }): T[] {
   return treeData.map((item) => treeMapEach(item, opt));
@@ -159,7 +159,7 @@ export function treeMap<T = any>(treeData: T[], opt: { children?: string; conver
 
 /**
  * @description: Extract tree specified structure
- * @description: 提取树指定结构
+ * @description: Trích cấu trúc chỉ định của cây
  */
 export function treeMapEach(data: any, { children = 'children', conversion }: { children?: string; conversion: Fn }) {
   const haveChildren = Array.isArray(data[children]) && data[children].length > 0;
@@ -182,10 +182,10 @@ export function treeMapEach(data: any, { children = 'children', conversion }: { 
 }
 
 /**
- * 递归遍历树结构
- * @param treeDatas 树
- * @param callBack 回调
- * @param parentNode 父节点
+ * Duyệt đệ quy cấu trúc cây
+ * @param treeDatas Cây
+ * @param callBack Callback
+ * @param parentNode Nút cha
  */
 export function eachTree(treeDatas: any[], callBack: Fn, parentNode = {}) {
   treeDatas.forEach((element) => {

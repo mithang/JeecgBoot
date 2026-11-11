@@ -84,7 +84,7 @@ export function useMenuSetting() {
 
   const getRealWidth = computed(() => {
     if (unref(getIsMixSidebar)) {
-      // 代码逻辑说明: 【QQYUN-8774】侧边混合导航菜单宽度调整
+      // Giải thích logic mã: 【QQYUN-8774]Điều chỉnh độ rộng menu điều hướng hỗn hợp bên hông
       return unref(getCollapsed) && !unref(getMixSideFixed) ? unref(getMiniWidthNumber) : unref(getMenuWidth) - 60;
     }
     return unref(getCollapsed) ? unref(getMiniWidthNumber) : unref(getMenuWidth);

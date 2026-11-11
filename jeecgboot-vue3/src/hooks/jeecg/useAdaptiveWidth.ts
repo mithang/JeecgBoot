@@ -1,5 +1,5 @@
 /**
- * 自适应宽度构造器
+ * Constructor chiều rộng tự thích ứng
  *
  * @time 2022-4-8
  * @author sunjianlei
@@ -8,7 +8,7 @@ import { ref } from 'vue';
 import { useDebounceFn, tryOnUnmounted } from '@vueuse/core';
 import { useEventListener } from '/@/hooks/event/useEventListener';
 
-// key = js运算符+数字
+// key = jsToán tử+Số
 const defWidthConfig: configType = {
   '<=565': '100%',
   '<=1366': '800px',
@@ -20,11 +20,11 @@ const defWidthConfig: configType = {
 type configType = Record<string, string | number>;
 
 /**
- * 自适应宽度
+ * Chiều rộng tự thích ứng
  *
- * @param widthConfig 宽度配置，可参考 defWidthConfig 配置
- * @param assign 是否合并默认配置
- * @param debounce 去抖毫秒数
+ * @param widthConfig Cấu hình độ rộng, có thể tham khảo defWidthConfig Cấu hình
+ * @param assign Có hợp nhất cấu hình mặc định không
+ * @param debounce Số mili giây debounce
  */
 export function useAdaptiveWidth(widthConfig = defWidthConfig, assign = true, debounce = 50) {
   const widthConfigAssign = assign ? Object.assign({}, defWidthConfig, widthConfig) : widthConfig;
@@ -33,14 +33,14 @@ export function useAdaptiveWidth(widthConfig = defWidthConfig, assign = true, de
   const adaptiveWidth = ref<string | number>();
 
   /**
-   * 进行计算宽度
+   * Tiến hành tính chiều rộng
    * @param innerWidth
    */
   function calcWidth(innerWidth) {
     let width;
     for (const key of configKeys) {
       try {
-        // 通过js运算
+        // Thông quajsTính toán
         let flag = new Function(`return ${innerWidth} ${key}`)();
         if (flag) {
           width = widthConfigAssign[key];
@@ -53,27 +53,27 @@ export function useAdaptiveWidth(widthConfig = defWidthConfig, assign = true, de
     if (width) {
       adaptiveWidth.value = width;
     } else {
-      console.warn('没有找到匹配的自适应宽度');
+      console.warn('Không tìm thấy chiều rộng tự thích ứng khớp');
     }
   }
 
-  // 初始计算
+  // Tính toán ban đầu
   calcWidth(window.innerWidth);
 
-  // 监听 resize 事件
+  // Lắng nghe resize Sự kiện
   const { removeEvent } = useEventListener({
     el: window,
     name: 'resize',
     listener: useDebounceFn(() => calcWidth(window.innerWidth), debounce),
   });
-  // 卸载组件时取消监听事件
+  // Khi gỡ component thì hủy lắng nghe sự kiện
   tryOnUnmounted(() => removeEvent());
 
   return { adaptiveWidth };
 }
 
 /**
- * 抽屉自适应宽度
+ * Drawer tự thích ứng chiều rộng
  */
 export function useDrawerAdaptiveWidth() {
   return useAdaptiveWidth(

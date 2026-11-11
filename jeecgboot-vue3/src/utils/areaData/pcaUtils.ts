@@ -1,34 +1,34 @@
 import {areaList} from '@vant/area-data'
 import {freezeDeep} from "@/utils/common/compUtils";
 
-// 扁平化的省市区数据
+// Dữ liệu tỉnh/thành/quận huyện đã làm phẳng
 export const pcaa = freezeDeep(usePlatPcaaData())
 
 /**
- * 获取扁平化的省市区数据
+ * Lấy dữ liệu tỉnh/thành/quận đã làm phẳng
  */
 function usePlatPcaaData() {
   const {city_list: city, county_list: county, province_list: province} = areaList;
   const dataMap = new Map<string, Recordable>()
   const flatData: Recordable = {'86': province}
-  // 省
+  // Tỉnh
   Object.keys(province).forEach((code) => {
     flatData[code] = {}
     dataMap.set(code.slice(0, 2), flatData[code])
   })
-  // 市区
+  // Thành phố
   Object.keys(city).forEach((code) => {
     flatData[code] = {}
     dataMap.set(code.slice(0, 4), flatData[code])
-    // 填充上一级
+    // Điền cấp trên
     const getProvince = dataMap.get(code.slice(0, 2))
     if (getProvince) {
       getProvince[code] = city[code]
     }
   });
-  // 县
+  // Quận/huyện
   Object.keys(county).forEach((code) => {
-    // 填充上一级
+    // Điền cấp trên
     const getCity = dataMap.get(code.slice(0, 4))
     if (getCity) {
       getCity[code] = county[code]

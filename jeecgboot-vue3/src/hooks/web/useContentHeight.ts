@@ -6,7 +6,7 @@ import { getViewportOffset } from '/@/utils/domUtils';
 import { isNumber, isString } from '/@/utils/is';
 
 export interface CompensationHeight {
-  // 使用 layout Footer 高度作为判断补偿高度的条件
+  // Sử dụng layout Footer Chiều cao làm điều kiện phán đoán chiều cao bù
   useLayoutFooter: boolean;
   // refs HTMLElement
   elements?: Ref[];
@@ -15,16 +15,16 @@ export interface CompensationHeight {
 type Upward = number | string | null | undefined;
 
 /**
- * 动态计算内容高度，根据锚点dom最下坐标到屏幕最下坐标，根据传入dom的高度、padding、margin等值进行动态计算
- * 最终获取合适的内容高度
+ * Tính động chiều cao nội dung, theo điểm neodomTọa độ dưới cùng đến tọa độ dưới cùng của màn hình, theo truyền vàodomchiều cao,padding, marginGiá trị bằng nhau thì tính động
+ * Cuối cùng lấy chiều cao nội dung phù hợp
  *
- * @param flag 用于开启计算的响应式标识
- * @param anchorRef 锚点组件 Ref<ElRef | ComponentRef>
- * @param subtractHeightRefs 待减去高度的组件列表 Ref<ElRef | ComponentRef>
- * @param substractSpaceRefs 待减去空闲空间(margins/paddings)的组件列表 Ref<ElRef | ComponentRef>
- * @param offsetHeightRef 计算偏移的响应式高度，计算高度时将直接减去此值
- * @param upwardSpace 向上递归减去空闲空间的 层级 或 直到指定class为止 数值为2代表向上递归两次|数值为ant-layout表示向上递归直到碰见.ant-layout为止
- * @returns 响应式高度
+ * @param flag Dùng để bật định danh responsive cho tính toán
+ * @param anchorRef Component neo Ref<ElRef | ComponentRef>
+ * @param subtractHeightRefs Danh sách component có chiều cao cần trừ Ref<ElRef | ComponentRef>
+ * @param substractSpaceRefs Không gian trống cần trừ(margins/paddings)danh sách component Ref<ElRef | ComponentRef>
+ * @param offsetHeightRef Tính chiều cao responsive bù trừ, khi tính chiều cao sẽ trừ trực tiếp giá trị này
+ * @param upwardSpace Đệ quy lên trừ đi không gian trống Cấp bậc hoặc Cho đến khi chỉ địnhclasscho đến Giá trị số là2Đại diện cho việc đệ quy lên hai lần|Giá trị số làant-layoutBiểu thị đệ quy lên trên cho đến khi gặp.ant-layoutcho đến
+ * @returns Chiều cao responsive
  */
 export function useContentHeight(
   flag: ComputedRef<Boolean>,

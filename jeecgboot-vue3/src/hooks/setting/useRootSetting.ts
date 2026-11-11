@@ -43,7 +43,7 @@ export function useRootSetting() {
   const getColorWeak = computed(() => appStore.getProjectConfig.colorWeak);
 
   const getGrayMode = computed(() => appStore.getProjectConfig.grayMode);
-  // 代码逻辑说明: 【QQYUN-10952】AI助手支持通过设置来配置是否显示
+  // Giải thích logic mã: 【QQYUN-10952】AITrợ lý hỗ trợ cấu hình có hiển thị hay không qua cài đặt
   const getAiIconShow = computed(() => appStore.getProjectConfig.aiIconShow);
   const getLockTime = computed(() => appStore.getProjectConfig.lockTime);
 

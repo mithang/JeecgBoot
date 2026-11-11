@@ -1,6 +1,6 @@
 import { isObject, isString } from '/@/utils/is';
 import dayjs from "dayjs";
-// 代码逻辑说明: 【QQYUN-9138】系统用户保存的时间没有秒
+// Giải thích logic mã: 【QQYUN-9138]Thời gian lưu của người dùng hệ thống không có giây
 const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 export function joinTimestamp<T extends boolean>(join: boolean, restful: T): T extends true ? string : object;
@@ -25,7 +25,7 @@ export function formatRequestDate(params: Recordable) {
   }
 
   for (const key in params) {
-    // 判断是否是dayjs实例
+    // Kiểm tra có phải là khôngdayjsInstance
     if (dayjs.isDayjs(params[key])) {
       params[key] = params[key].format(DATE_TIME_FORMAT);
     }

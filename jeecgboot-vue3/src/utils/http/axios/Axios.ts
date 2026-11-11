@@ -75,7 +75,7 @@ export class VAxios {
 
     const axiosCanceler = new AxiosCanceler();
 
-    // 请求侦听器配置处理
+    // Xử lý cấu hình request listener
     this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
       // If cancel repeat request is turned on, then cancel repeat request is prohibited
       // @ts-ignore
@@ -90,12 +90,12 @@ export class VAxios {
       return config;
     }, undefined);
 
-    // 请求拦截器错误捕获
+    // Bắt lỗi request interceptor
     requestInterceptorsCatch &&
       isFunction(requestInterceptorsCatch) &&
       this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
 
-    // 响应结果拦截器处理
+    // Xử lý interceptor kết quả phản hồi
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
       res && axiosCanceler.removePending(res.config);
       if (responseInterceptors && isFunction(responseInterceptors)) {
@@ -104,18 +104,18 @@ export class VAxios {
       return res;
     }, undefined);
 
-    // 响应结果拦截器错误捕获
+    // Bắt lỗi interceptor kết quả phản hồi
     responseInterceptorsCatch &&
       isFunction(responseInterceptorsCatch) &&
       this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
   }
 
   /**
-   * 文件上传
+   * Tải lên tệp
    */
-  //--@updateBy-begin----author:liusq---date:20211117------for:增加上传回调参数callback------
+  //--@updateBy-begin----author:liusq---date:20211117------for:Thêm tham số callback tải lêncallback------
   uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams, callback?: UploadFileCallBack) {
-    //--@updateBy-end----author:liusq---date:20211117------for:增加上传回调参数callback------
+    //--@updateBy-end----author:liusq---date:20211117------for:Thêm tham số callback tải lêncallback------
     const formData = new window.FormData();
     const customFilename = params.name || 'file';
 
@@ -151,14 +151,14 @@ export class VAxios {
         },
       })
       .then((res: any) => {
-        //--@updateBy-begin----author:liusq---date:20210914------for:上传判断是否包含回调方法------
+        //--@updateBy-begin----author:liusq---date:20210914------for:Tải lên, kiểm tra có chứa phương thức callback không------
         if (callback?.success && isFunction(callback?.success)) {
           callback?.success(res?.data);
-          //--@updateBy-end----author:liusq---date:20210914------for:上传判断是否包含回调方法------
+          //--@updateBy-end----author:liusq---date:20210914------for:Tải lên, kiểm tra có chứa phương thức callback không------
         } else if (callback?.isReturnResponse) {
-          //--@updateBy-begin----author:liusq---date:20211117------for:上传判断是否返回res信息------
+          //--@updateBy-begin----author:liusq---date:20211117------for:Tải lên, kiểm tra có trả về khôngresThông tin------
           return Promise.resolve(res?.data);
-          //--@updateBy-end----author:liusq---date:20211117------for:上传判断是否返回res信息------
+          //--@updateBy-end----author:liusq---date:20211117------for:Tải lên, kiểm tra có trả về khôngresThông tin------
         } else {
           if (res.data.success == true && res.data.code == 200) {
             createMessage.success(res.data.message);
@@ -169,7 +169,7 @@ export class VAxios {
       });
   }
 
-  // 支持表单数据
+  // Hỗ trợ dữ liệu biểu mẫu
   supportFormData(config: AxiosRequestConfig) {
     const headers = config.headers || this.options.headers;
     const contentType = headers?.['Content-Type'] || headers?.['content-type'];
@@ -222,11 +222,11 @@ export class VAxios {
         .then((res: AxiosResponse<Result>) => {
           if (transformRequestHook && isFunction(transformRequestHook)) {
             try {
-              //update-begin---author:scott ---date:20260728  for：【LHZP-860】业务失败时支持在响应转换前读取特殊标识-----------
-              // 先回调原始响应，确保业务失败抛出异常前调用方仍可读取响应中的特殊标识
+              //update-begin---author:scott ---date:20260728  for: 【LHZP-860]Khi nghiệp vụ thất bại, hỗ trợ đọc định danh đặc biệt trước khi chuyển đổi phản hồi-----------
+              // Gọi callback phản hồi gốc trước, đảm bảo bên gọi vẫn đọc được định danh đặc biệt trong phản hồi trước khi nghiệp vụ thất bại ném ngoại lệ
               config.success && config.success(res.data);
               const ret = transformRequestHook(res, opt);
-              //update-end---author:scott ---date:20260728  for：【LHZP-860】业务失败时支持在响应转换前读取特殊标识-----------
+              //update-end---author:scott ---date:20260728  for: 【LHZP-860]Khi nghiệp vụ thất bại, hỗ trợ đọc định danh đặc biệt trước khi chuyển đổi phản hồi-----------
               resolve(ret);
             } catch (err) {
               reject(err || new Error('request error!'));
@@ -241,7 +241,7 @@ export class VAxios {
             return;
           }
           if (axios.isAxiosError(e)) {
-            // 在此处重写来自axios的错误消息
+            // Ở đây viết lại từaxiosthông báo lỗi
           }
           reject(e);
         });
@@ -250,7 +250,7 @@ export class VAxios {
 
 
   /**
-   * 【用于评论功能】自定义文件上传-请求
+   * [Dùng cho chức năng bình luận] Upload tệp tùy chỉnh-Yêu cầu
    * @param url
    * @param formData
    */

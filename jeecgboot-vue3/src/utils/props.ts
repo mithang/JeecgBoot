@@ -72,7 +72,7 @@ export type BuildPropReturn<T, D, R, V, C> = {
 
 /**
  * @description Build prop. It can better optimize prop types
- * @description 生成 prop，能更好地优化类型
+ * @description Tạo prop, có thể tối ưu loại tốt hơn
  * @example
   // limited options
   // the type will be PropType<'light' | 'dark'>

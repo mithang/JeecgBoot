@@ -19,8 +19,8 @@ import {
   GraphicComponent,
 } from 'echarts/components';
 
-// TODO 如果想换成SVG渲染，就导出SVGRenderer，
-//  并且放到 echarts.use 里，注释掉 CanvasRenderer
+// TODO Nếu muốn đổi thànhSVGRender, thì exportSVGRenderer, 
+//  và đặt vào echarts.use trong, comment lại CanvasRenderer
 import { /*SVGRenderer*/ CanvasRenderer } from 'echarts/renderers';
 
 echarts.use([
@@ -36,7 +36,7 @@ echarts.use([
   PieChart,
   MapChart,
   RadarChart,
-  // TODO 因为要兼容Online图表自适应打印，所以改成 CanvasRenderer，可能会模糊
+  // TODO Vì cần tương thíchOnlineBiểu đồ tự thích ứng khi in, nên đổi thành CanvasRenderer, có thể bị mờ
   CanvasRenderer,
   PictorialBarChart,
   RadarComponent,

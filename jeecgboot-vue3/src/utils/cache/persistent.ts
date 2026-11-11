@@ -62,9 +62,9 @@ function initPersistentMemory() {
 
 export class Persistent {
   static getLocal<T>(key: LocalKeys) {
-    // 代码逻辑说明: token过期退出重新登录，online菜单还是提示token过期----------
+    // Giải thích logic mã: tokenHết hạn thoát đăng nhập lại,onlineMenu hay gợi ýtokenHết hạn----------
     const globalCache = ls.get(APP_LOCAL_CACHE_KEY);
-    // 代码逻辑说明: 【issues/7250】自动锁屏无法解锁
+    // Giải thích logic mã: 【issues/7250]Tự động khóa màn hình không mở khóa được
     if (globalCache && router?.currentRoute?.value.path !== PageEnum.BASE_LOGIN) {
       localMemory.setCache(globalCache);
     }
@@ -115,8 +115,8 @@ export class Persistent {
 }
 
 window.addEventListener('beforeunload', function () {
-  // TOKEN_KEY 在登录或注销时已经写入到storage了，此处为了解决同时打开多个窗口时token不同步的问题
-  // LOCK_INFO_KEY 在锁屏和解锁时写入，此处也不应修改
+  // TOKEN_KEY Khi đăng nhập hoặc đăng xuất đã ghi vàostoragerồi, ở đây để giải quyết khi mở nhiều cửa sổ cùng lúctokenVấn đề không đồng bộ
+  // LOCK_INFO_KEY Ghi khi khóa và mở khóa màn hình, ở đây cũng không nên sửa
   ls.set(APP_LOCAL_CACHE_KEY, {
     ...omit(localMemory.getCache, LOCK_INFO_KEY),
     ...pick(ls.get(APP_LOCAL_CACHE_KEY), [TOKEN_KEY, USER_INFO_KEY, LOCK_INFO_KEY]),

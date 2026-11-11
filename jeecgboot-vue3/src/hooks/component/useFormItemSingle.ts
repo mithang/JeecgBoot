@@ -40,7 +40,7 @@ export function useRuleFormItem<T extends Recordable>(props: T, key: keyof T = '
       nextTick(() => {
         emit?.(changeEvent, value, ...(toRaw(unref(emitData)) || []));
         // https://antdv.com/docs/vue/migration-v3-cn
-        // antDv3升级后需要调用这个方法更新校验的值
+        // antDv3Sau khi nâng cấp cần gọi phương thức này để cập nhật giá trị kiểm tra
         nextTick(() => formItemContext.onFieldChange());
       });
     },

@@ -61,7 +61,7 @@ export function updateSidebarBgColor(color?: string) {
       color = appStore.getMenuSetting.bgColor;
     }
   }
-  // 代码逻辑说明: 【QQYUN-5922】logo背景色渐变
+  // Giải thích logic mã: 【QQYUN-5922】logoGradient màu nền
   let findIndex = SIDE_BAR_BG_COLOR_LIST.findIndex((item) => item === color);
   setCssVar(SIDER_LOGO_BG_COLOR, findIndex == -1 ? 'linear-gradient(180deg, #000000, #282828)' : SIDER_LOGO_BG_COLOR_LIST[findIndex]);
   setCssVar(SIDER_DARK_BG_COLOR, color);
@@ -70,7 +70,7 @@ export function updateSidebarBgColor(color?: string) {
 
   // only #ffffff is light
   // Only when the background color is #fff, the theme of the menu will be changed to light
-  // 代码逻辑说明: 【QQYUN-8922】左侧导航栏文字颜色调整区分彩色和暗黑
+  // Giải thích logic mã: 【QQYUN-8922]Điều chỉnh màu chữ thanh điều hướng bên trái để phân biệt chế độ màu và chế độ tối
   let theme;
   let isThemeBright = false;
   if (['#fff', '#ffffff'].includes(color!.toLowerCase()) && !darkMode) {

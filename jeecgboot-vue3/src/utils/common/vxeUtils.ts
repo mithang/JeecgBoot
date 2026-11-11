@@ -2,26 +2,26 @@ import { getValueType } from '/@/utils';
 
 export const VALIDATE_FAILED = Symbol();
 /**
- * 一次性验证主表单和所有的次表单(新版本)
- * @param form 主表单 form 对象
- * @param cases 接收一个数组，每项都是一个JEditableTable实例
+ * Kiểm tra một lần biểu mẫu chính và tất cả biểu mẫu phụ(Phiên bản mới)
+ * @param form Biểu mẫu chính form Đối tượng
+ * @param cases Nhận một mảng, mỗi mục đều là mộtJEditableTableInstance
  * @returns {Promise<any>}
  */
 export async function validateFormModelAndTables(validate, formData, cases, props, autoJumpTab?) {
   if (!(validate && typeof validate === 'function')) {
-    throw `validate 参数需要的是一个方法，而传入的却是${typeof validate}`;
+    throw `validate Tham số cần là một phương thức, nhưng truyền vào lại là${typeof validate}`;
   }
   let dataMap = {};
   let values = await new Promise((resolve, reject) => {
-    // 验证主表表单
+    // Kiểm tra biểu mẫu bảng chính
     validate()
       .then(() => {
-        // 代码逻辑说明: [VUEN-912]一对多用户组件（所有风格，单表和树没问题）保存报错------------
+        // Giải thích logic mã: [VUEN-912]Component người dùng một-nhiều (mọi kiểu, bảng đơn và cây không có vấn đề) báo lỗi khi lưu------------
         for (let data in formData) {
-          //如果该数据是数组
+          //Nếu dữ liệu này là mảng
           if (formData[data] instanceof Array) {
             let valueType = getValueType(props, data);
-            //如果是字符串类型的需要变成以逗号分割的字符串
+            //Nếu là kiểu chuỗi thì cần đổi thành chuỗi tách bằng dấu phẩy
             if (valueType === 'string') {
               formData[data] = formData[data].join(',');
             }
@@ -29,26 +29,26 @@ export async function validateFormModelAndTables(validate, formData, cases, prop
         }
         resolve(formData);
       })
-      // 代码逻辑说明: 【TV360X-1064】非原生提交表单滚动校验没通过的项---
+      // Giải thích logic mã: 【TV360X-1064]Các mục kiểm tra cuộn khi submit biểu mẫu không phải native không đạt---
       .catch(({ errorFields }) => {
         reject({ error: VALIDATE_FAILED, index: 0, errorFields: errorFields });
       });
   });
   Object.assign(dataMap, { formValue: values });
-  // 验证所有子表的表单
+  // Kiểm tra biểu mẫu tất cả bảng con
   let subData = await validateTables(cases, autoJumpTab);
-  // 合并最终数据
+  // Hợp nhất dữ liệu cuối cùng
   dataMap = Object.assign(dataMap, { tablesValue: subData });
   return dataMap;
 }
 /**
- * 验证并获取一个或多个表格的所有值
- * @param cases 接收一个数组，每项都是一个JEditableTable实例
- * @param autoJumpTab 是否自动跳转到报错的tab
+ * Kiểm tra và lấy tất cả giá trị của một hoặc nhiều bảng
+ * @param cases Nhận một mảng, mỗi mục đều là mộtJEditableTableInstance
+ * @param autoJumpTab Có tự động chuyển đến chỗ báo lỗi khôngtab
  */
 export function validateTables(cases, autoJumpTab = true) {
   if (!(cases instanceof Array)) {
-    throw `'validateTables'函数的'cases'参数需要的是一个数组，而传入的却是${typeof cases}`;
+    throw `'validateTables'của hàm'cases'Tham số cần là một mảng, nhưng truyền vào lại là${typeof cases}`;
   }
   return new Promise((resolve, reject) => {
     let tablesData: any = [];
@@ -59,27 +59,27 @@ export function validateTables(cases, autoJumpTab = true) {
     (function next() {
       let vm = cases[index];
       vm.value.validateTable().then((errMap) => {
-        // 校验通过
+        // Kiểm tra đạt
         if (!errMap) {
           tablesData[index] = { tableData: vm.value.getTableData() };
-          // 判断校验是否全部完成，完成返回成功，否则继续进行下一步校验
+          // Kiểm tra việc kiểm chứng đã hoàn thành hết chưa, hoàn thành thì trả về thành công, nếu không thì tiếp tục bước kiểm chứng tiếp theo
           if (++index === cases.length) {
             resolve(tablesData);
           } else next();
         } else {
-          // 尝试获取tabKey，如果在ATab组件内即可获取
+          // Thử lấytabKey, nếu ởATabTrong component là có thể lấy
           let paneKey;
           let tabPane = getVmParentByName(vm.value, 'ATabPane');
           if (tabPane) {
             paneKey = tabPane.$.vnode.key;
-            // 自动跳转到该表格
+            // Tự động chuyển đến bảng đó
             if (autoJumpTab) {
               let tabs = getVmParentByName(tabPane, 'Tabs');
               tabs && tabs.setActiveKey && tabs.setActiveKey(paneKey);
             }
           }
-          // 出现未验证通过的表单，不再进行下一步校验，直接返回失败
-          // 代码逻辑说明: TV360X-478 一对多tab，校验未通过时，tab没有跳转
+          // Xuất hiện biểu mẫu chưa qua kiểm tra, không thực hiện bước kiểm tra tiếp theo nữa, trả về thất bại trực tiếp
+          // Giải thích logic mã: TV360X-478 Một-nhiềutab, khi kiểm tra không đạt,tabKhông chuyển
           reject({ error: VALIDATE_FAILED, index, paneKey, errMap, subIndex: index });
         }
       });

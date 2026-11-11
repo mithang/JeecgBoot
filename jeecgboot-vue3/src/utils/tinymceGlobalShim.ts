@@ -1,12 +1,12 @@
-// update-begin--author:copilot---date:20260711---for:【依赖升级排查】修复 Rolldown 严格 CJS 互操作导致 tinymce 全局未挂载
-// tinymce 核心包(tinymce/tinymce)是 UMD 写法：`typeof module === 'object' && module.exports ? module.exports = tinymce : window.tinymce = tinymce`。
-// Rolldown 对 CJS 的互操作比 Rollup/esbuild 更严格，会给这个文件提供真实的 module 对象，
-// 导致它总是走 module.exports 分支，不再顺带把 window.tinymce 设置上。
-// 而 tinymce 的各个 plugin/theme 包（如 tinymce/plugins/fullscreen）在模块顶层直接引用裸变量 `tinymce`
-// （例如 `tinymce.util.Tools.resolve('tinymce.PluginManager')`），依赖 window.tinymce 已提前挂载，
-// 否则会抛出 `ReferenceError: tinymce is not defined`。
-// 这里统一从本文件导入 tinymce 核心，保证在其余 tinymce 子模块（themes/plugins/icons）被 import 之前，
-// window.tinymce 已经显式挂载好。
+// update-begin--author:copilot---date:20260711---for:[Kiểm tra nâng cấp dependency] Sửa Rolldown Nghiêm ngặt CJS Tương tác gây ra tinymce Toàn cục chưa được mount
+// tinymce Gói lõi(tinymce/tinymce)là UMD Cách viết:`typeof module === 'object' && module.exports ? module.exports = tinymce : window.tinymce = tinymce`.
+// Rolldown Đối với CJS tương tác của Rollup/esbuild Nghiêm ngặt hơn, sẽ cung cấp cho tệp này module Đối tượng,
+// Khiến nó luôn đi module.exports Nhánh, không kèm theo window.tinymce Cài đặt xong.
+// mà tinymce các plugin/theme Gói (ví dụ tinymce/plugins/fullscreen) tham chiếu trực tiếp biến trần ở tầng trên cùng của module `tinymce`
+// (Ví dụ `tinymce.util.Tools.resolve('tinymce.PluginManager')`), phụ thuộc window.tinymce Đã mount trước,
+// Nếu không sẽ ném ra `ReferenceError: tinymce is not defined`.
+// Ở đây thống nhất import từ tệp này tinymce Lõi, đảm bảo trong phần còn lại tinymce Module con (themes/plugins/icons) bị import Trước đây,
+// window.tinymce Đã mount rõ ràng.
 import tinymceCore from 'tinymce/tinymce';
 
 if (typeof window !== 'undefined') {
@@ -14,4 +14,4 @@ if (typeof window !== 'undefined') {
 }
 
 export default tinymceCore;
-// update-end--author:copilot---date:20260711---for:【依赖升级排查】修复 Rolldown 严格 CJS 互操作导致 tinymce 全局未挂载
+// update-end--author:copilot---date:20260711---for:[Kiểm tra nâng cấp dependency] Sửa Rolldown Nghiêm ngặt CJS Tương tác gây ra tinymce Toàn cục chưa được mount

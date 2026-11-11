@@ -11,31 +11,31 @@ export function useThirdLogin() {
   const { t } = useI18n();
   const glob = useGlobSetting();
   const userStore = useUserStore();
-  //第三方类型
+  //Loại bên thứ ba
   const thirdType = ref('');
-  //第三方登录相关信息
+  //Thông tin liên quan đăng nhập bên thứ ba
   const thirdLoginInfo = ref<any>({});
-  //状态
+  //Trạng thái
   const thirdLoginState = ref(false);
-  //绑定手机号弹窗
+  //Popup liên kết số điện thoại
   const bindingPhoneModal = ref(false);
-  //第三方用户UUID
+  //Người dùng bên thứ baUUID
   const thirdUserUuid = ref('');
-  //提示窗
+  //Cửa sổ gợi ý
   const thirdConfirmShow = ref(false);
-  //绑定密码弹窗
+  //Popup mật khẩu liên kết
   const thirdPasswordShow = ref(false);
-  //绑定密码
+  //Mật khẩu liên kết
   const thirdLoginPassword = ref('');
-  //绑定用户
+  //Liên kết người dùng
   const thirdLoginUser = ref('');
-  //加载中
+  //Đang tải
   const thirdCreateUserLoding = ref(false);
-  //绑定手机号
+  //Liên kết số điện thoại
   const thirdPhone = ref('');
-  //验证码
+  //Mã xác thực
   const thirdCaptcha = ref('');
-  //第三方登录
+  //Đăng nhập bên thứ ba
   function onThirdLogin(source) {
     let url = `${glob.uploadUrl}/sys/thirdLogin/render/${source}`;
     const openWin = window.open(
@@ -49,36 +49,36 @@ export function useThirdLogin() {
     let receiveMessage = function (event) {
       let token = event.data;
       if (typeof token === 'string') {
-        //如果是字符串类型 说明是token信息
-        if (token === '登录失败') {
+        //Nếu là kiểu chuỗi Giải thích làtokenThông tin
+        if (token === 'Đăng nhập thất bại') {
           createMessage.warning(token);
-        } else if (token.includes('绑定手机号')) {
+        } else if (token.includes('Liên kết số điện thoại')) {
           bindingPhoneModal.value = true;
           let strings = token.split(',');
           thirdUserUuid.value = strings[1];
         } else if (token.split('.').length === 3) {
-          // JWT 格式校验：必须包含两个 '.'，过滤飞书 SDK 等第三方 postMessage（如 [tea-sdk]ready）
+          // JWT Kiểm tra định dạng: phải chứa hai '.', lọc Feishu SDK bên thứ ba v.v. postMessage(Ví dụ [tea-sdk]ready)
           doThirdLogin(token);
         }
       } else if (typeof token === 'object') {
-        //对象类型 说明需要提示是否绑定现有账号
+        //Loại đối tượng Giải thích cần nhắc có liên kết tài khoản hiện có không
         if (token['isObj'] === true) {
           thirdConfirmShow.value = true;
           thirdLoginInfo.value = { ...token };
         }
       } else {
-        createMessage.warning('不识别的信息传递');
+        createMessage.warning('Truyền thông tin không nhận dạng được');
       }
-      // 代码逻辑说明: 【TV360X-1827】mac系统谷歌浏览器企业微信第三方登录成功后没有弹出绑定手机弹窗
+      // Giải thích logic mã: 【TV360X-1827】macSau khi đăng nhập bên thứ ba WeCom bằng Chrome hệ thống thành công, không bật popup liên kết điện thoại
       if (openWin?.closed) {
         window.removeEventListener('message', receiveMessage, false);
       }
     };
-    // 代码逻辑说明: 【TV360X-1827】mac系统谷歌浏览器企业微信第三方登录成功后没有弹出绑定手机弹窗
+    // Giải thích logic mã: 【TV360X-1827】macSau khi đăng nhập bên thứ ba WeCom bằng Chrome hệ thống thành công, không bật popup liên kết điện thoại
     window.removeEventListener('message', receiveMessage, false);
     window.addEventListener('message', receiveMessage, false);
   }
-  // 根据token执行登录
+  // TheotokenThực hiện đăng nhập
   function doThirdLogin(token) {
     if (unref(thirdLoginState) === false) {
       thirdLoginState.value = true;
@@ -99,22 +99,22 @@ export function useThirdLogin() {
 
   function requestFailed(err) {
     notification.error({
-      message: '登录失败',
-      description: ((err.response || {}).data || {}).message || err.message || '请求出现错误，请稍后再试',
+      message: 'Đăng nhập thất bại',
+      description: ((err.response || {}).data || {}).message || err.message || 'Yêu cầu gặp lỗi, vui lòng thử lại sau',
       duration: 4,
     });
   }
-  // 绑定已有账号 需要输入密码
+  // Liên kết tài khoản đã có Cần nhập mật khẩu
   function thirdLoginUserBind() {
     thirdLoginPassword.value = '';
     thirdLoginUser.value = thirdLoginInfo.value.uuid;
     thirdConfirmShow.value = false;
     thirdPasswordShow.value = true;
   }
-  //创建新账号
+  //Tạo tài khoản mới
   function thirdLoginUserCreate() {
     thirdCreateUserLoding.value = true;
-    // 账号名后面添加两位随机数
+    // Thêm hai số ngẫu nhiên sau tên tài khoản
     thirdLoginInfo.value.suffix = parseInt(Math.random() * 98 + 1);
     defHttp
       .post({ url: '/sys/third/user/create', params: { thirdLoginInfo: unref(thirdLoginInfo) } }, { isTransformResponse: false })
@@ -131,7 +131,7 @@ export function useThirdLogin() {
         thirdCreateUserLoding.value = false;
       });
   }
-  // 核实密码
+  // Xác minh mật khẩu
   function thirdLoginCheckPassword() {
     let params = Object.assign({}, unref(thirdLoginInfo), { password: unref(thirdLoginPassword) });
     defHttp.post({ url: '/sys/third/user/checkPassword', params }, { isTransformResponse: false }).then((res) => {
@@ -143,25 +143,25 @@ export function useThirdLogin() {
       }
     });
   }
-  // 没有密码 取消操作
+  // Không có mật khẩu Hủy thao tác
   function thirdLoginNoPassword() {
     thirdPasswordShow.value = false;
     thirdLoginPassword.value = '';
     thirdLoginUser.value = '';
   }
 
-  //倒计时执行前的函数
+  //Hàm chạy trước khi đếm ngược
   function sendCodeApi() {
     //return setThirdCaptcha({mobile:unref(thirdPhone)});
     return getCaptcha({ mobile: unref(thirdPhone), smsmode: '0' });
   }
-  //绑定手机号点击确定按钮
+  //Nhấp nút xác nhận để liên kết số điện thoại
   function thirdHandleOk() {
     if (!unref(thirdPhone)) {
-      cmsFailed('请输入手机号');
+      cmsFailed('Vui lòng nhập số điện thoại');
     }
     if (!unref(thirdCaptcha)) {
-      cmsFailed('请输入验证码');
+      cmsFailed('Vui lòng nhập mã xác thực');
     }
     let params = {
       mobile: unref(thirdPhone),
@@ -179,13 +179,13 @@ export function useThirdLogin() {
   }
   function cmsFailed(err) {
     notification.error({
-      message: '登录失败',
+      message: 'Đăng nhập thất bại',
       description: err,
       duration: 4,
     });
     return;
   }
-  //返回数据和方法
+  //Trả về dữ liệu và phương thức
   return {
     thirdPasswordShow,
     thirdLoginCheckPassword,

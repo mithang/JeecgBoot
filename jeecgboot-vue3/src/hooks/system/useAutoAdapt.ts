@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import { ScreenSizeEnum } from '/@/enums/sizeEnum';
 import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
-// 定义 useAdapt 方法参数
+// Định nghĩa useAdapt Tham số phương thức
 interface AdaptOptions {
   // xl>1200
   xl?: string | number;
@@ -13,17 +13,17 @@ interface AdaptOptions {
   sm?: string | number;
   // xl>480
   xs?: string | number;
-  //xl<480默认值
+  //xl<480Giá trị mặc định
   mindef?: string | number;
-  //默认值
+  //Giá trị mặc định
   def?: string | number;
 }
 export function useAdapt(props?: AdaptOptions) {
-  //默认宽度
+  //Chiều rộng mặc định
   const width = ref<string | number>(props?.def || '600px');
-  //获取宽度
+  //Lấy chiều rộng
   useWindowSizeFn(calcWidth, 100, { immediate: true });
-  //计算宽度
+  //Tính chiều rộng
   function calcWidth() {
     let windowWidth = document.documentElement.clientWidth;
     switch (true) {

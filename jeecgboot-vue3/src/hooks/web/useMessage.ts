@@ -88,7 +88,7 @@ const getBaseOptions = () => {
 };
 
 function createModalOptions(options: ModalOptionsPartial, icon: string): ModalOptionsPartial {
-  // 代码逻辑说明: 可以自定义图标
+  // Giải thích logic mã: Có thể tùy chỉnh biểu tượng
   let titleIcon:any = ''
   if(options.icon){
     titleIcon = options.icon;
@@ -123,7 +123,7 @@ interface MOE extends Omit<ModalOptionsEx, 'iconType'> {
   iconType?: ModalOptionsEx['iconType'];
 }
 
-// 提示框，无需传入iconType，默认为warning
+// Hộp gợi ý, không cần truyền vàoiconType, mặc định làwarning
 function createConfirmSync(options: MOE) {
   return new Promise((resolve) => {
     createConfirm({

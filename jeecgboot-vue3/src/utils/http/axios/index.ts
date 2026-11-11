@@ -1,4 +1,4 @@
-// axios配置  可自行根据项目进行更改，只需更改该文件即可，其他文件可以不动
+// axiosCấu hình  Có thể tự sửa theo dự án, chỉ cần sửa tệp này, các tệp khác không cần động vào
 // The axios configuration can be changed according to the project, just change the file, other files can be left unchanged
 
 import type { AxiosResponse } from 'axios';
@@ -24,45 +24,45 @@ const urlPrefix = globSetting.urlPrefix;
 const { createMessage, createErrorModal } = useMessage();
 
 /**
- * @description: 数据处理，方便区分多种处理方式
+ * @description: Xử lý dữ liệu, tiện phân biệt nhiều cách xử lý
  */
 const transform: AxiosTransform = {
   /**
-   * @description: 处理请求数据。如果数据不是预期格式，可直接抛出错误
+   * @description: Xử lý dữ liệu yêu cầu. Nếu dữ liệu không đúng định dạng mong đợi, có thể ném lỗi trực tiếp
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n();
     const { isTransformResponse, isReturnNativeResponse } = options;
-    // 是否返回原生响应头 比如：需要获取响应头时使用该属性
+    // Có trả về header phản hồi gốc không Ví dụ: khi cần lấy header phản hồi thì dùng thuộc tính này
     if (isReturnNativeResponse) {
       return res;
     }
-    // 不进行任何处理，直接返回
-    // 用于页面代码可能需要直接获取code，data，message这些信息时开启
+    // Không xử lý gì, trả về trực tiếp
+    // Dùng cho mã trang có thể cần lấy trực tiếpcode, data, messageKhi các thông tin này thì bật
     if (!isTransformResponse) {
       return res.data;
     }
-    // 错误的时候返回
+    // Khi lỗi thì trả về
 
     const { data } = res;
     if (!data) {
       // return '[HTTP] Request has no return value';
       throw new Error(t('sys.api.apiRequestFailed'));
     }
-    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+    //  Ở đây code, result, messagelà Trường thống nhất của backend, cần ở types.tsBên trong sửa thành định dạng trả về của API riêng của dự án
     const { code, result, message, success } = data;
-    // 这里逻辑可以根据项目进行修改
+    // Logic ở đây có thể sửa theo dự án
     const hasSuccess = data && Reflect.has(data, 'code') && (code === ResultEnum.SUCCESS || code === 200);
     if (hasSuccess) {
       if (success && message && options.successMessageMode === 'success') {
-        //信息成功提示
+        //Gợi ý thành công thông tin
         createMessage.success(message);
       }
       return result;
     }
 
-    // 在此处根据自己项目的实际情况对不同的code执行不同的操作
-    // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
+    // Ở đây căn cứ tình hình thực tế của dự án để xử lý khác nhaucodeThực hiện các thao tác khác nhau
+    // Nếu không muốn ngắt yêu cầu hiện tại, vui lòngreturndữ liệu, nếu không thì ném ngoại lệ trực tiếp
     let timeoutMsg = '';
     switch (code) {
       case ResultEnum.TIMEOUT:
@@ -77,8 +77,8 @@ const transform: AxiosTransform = {
         }
     }
 
-    // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
-    // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
+    // errorMessageMode=‘modal’khi sẽ hiển thịmodalPopup lỗi, chứ không phải gợi ý tin nhắn, dùng cho một số lỗi quan trọng
+    // errorMessageMode='none' Thông thường khi gọi, nêu rõ không muốn tự động bật gợi ý lỗi
     if (options.errorMessageMode === 'modal') {
       createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
     } else if (options.errorMessageMode === 'message') {
@@ -88,19 +88,19 @@ const transform: AxiosTransform = {
     throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
   },
 
-  // 请求之前处理config
+  // Xử lý trước khi yêu cầuconfig
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
 
-    // http开头的请求url，不加前缀
+    // httpYêu cầu bắt đầu bằngurl, không thêm tiền tố
     let isStartWithHttp = false;
     const requestUrl = config.url;
     if(requestUrl!=null && (requestUrl.startsWith("http:") || requestUrl.startsWith("https:"))){
       isStartWithHttp = true;
     }
-    // 代码逻辑说明: 【QQYUN-9685】构建 electron 桌面应用
+    // Giải thích logic mã: 【QQYUN-9685]Xây dựng electron Ứng dụng desktop
     if (!isStartWithHttp && requestUrl != null) {
-      // 由于electron的url是file://开头的，所以需要判断一下
+      // Doelectroncủaurllàfile://bắt đầu bằng, nên cần kiểm tra
       isStartWithHttp = requestUrl.startsWith('file://');
     }
     if (!isStartWithHttp && joinPrefix) {
@@ -116,10 +116,10 @@ const transform: AxiosTransform = {
     formatDate && data && !isString(data) && formatRequestDate(data);
     if (config.method?.toUpperCase() === RequestEnum.GET) {
       if (!isString(params)) {
-        // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
+        // Cho get Yêu cầu thêm tham số timestamp, tránh lấy dữ liệu từ cache.
         config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
       } else {
-        // 兼容restful风格
+        // Tương thíchrestfulPhong cách
         config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
         config.params = undefined;
       }
@@ -130,7 +130,7 @@ const transform: AxiosTransform = {
           config.data = data;
           config.params = params;
         } else {
-          // 非GET请求如果没有提供data，则将params视为data
+          // Không phảiGETYêu cầu nếu không cung cấpdata, thì sẽparamsCoi làdata
           config.data = params;
           config.params = undefined;
         }
@@ -138,13 +138,13 @@ const transform: AxiosTransform = {
           config.url = setObjToUrlParams(config.url as string, Object.assign({}, config.params, config.data));
         }
       } else {
-        // 兼容restful风格
+        // Tương thíchrestfulPhong cách
         config.url = config.url + params;
         config.params = undefined;
       }
     }
 
-    // 代码逻辑说明: 【JEECG作为乾坤子应用】作为乾坤子应用启动时，拼接请求路径
+    // Giải thích logic mã: 【JEECGLà micro app Qiankun] Khi khởi động dưới dạng micro app Qiankun, nối đường dẫn yêu cầu
     if (globSetting.isQiankunMicro) {
       if (config.url && config.url.startsWith('/')) {
         config.url = globSetting.qiankunMicroAppEntry + config.url
@@ -155,14 +155,14 @@ const transform: AxiosTransform = {
   },
 
   /**
-   * @description: 请求拦截器处理
+   * @description: Xử lý request interceptor
    */
   requestInterceptors: (config: Recordable, options) => {
-    // 请求之前处理config
+    // Xử lý trước khi yêu cầuconfig
     const token = getToken();
     let tenantId: string | number = getTenantId();
     
-    // 将签名和时间戳，添加在请求接口 Header
+    // Thêm chữ ký và dấu thời gian vào API yêu cầu Header
     config.headers[ConfigEnum.TIMESTAMP] = signMd5Utils.getTimestamp();
     config.headers[ConfigEnum.Sign] = signMd5Utils.getSign(config.url, cloneDeep(config.params), cloneDeep(config.data));
     
@@ -172,30 +172,30 @@ const transform: AxiosTransform = {
       config.headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token;
       config.headers[ConfigEnum.TOKEN] = token;
       
-      // 将签名和时间戳，添加在请求接口 Header
+      // Thêm chữ ký và dấu thời gian vào API yêu cầu Header
       //config.headers[ConfigEnum.TIMESTAMP] = signMd5Utils.getTimestamp();
       //config.headers[ConfigEnum.Sign] = signMd5Utils.getSign(config.url, config.params);
       if (!tenantId) {
         tenantId = 0;
       }
 
-      // 代码逻辑说明: 【QQYUN-5279】修复分享的应用租户和当前登录租户不一致时，提示404的问题
+      // Giải thích logic mã: 【QQYUN-5279]Sửa gợi ý khi tenant của ứng dụng được chia sẻ không khớp với tenant đang đăng nhập404vấn đề
       const userStore = useUserStoreWithOut();
-      // 判断是否有临时租户id
+      // Kiểm tra có tenant tạm thời khôngid
       if (userStore.hasShareTenantId && userStore.shareTenantId !== 0) {
-        // 临时租户id存在，使用临时租户id
+        // Tenant tạm thờiidTồn tại, dùng tenant tạm thờiid
         tenantId = userStore.shareTenantId!;
       }
 
       config.headers[ConfigEnum.TENANT_ID] = tenantId;
-      //--update-end--author:liusq---date:20211105---for:将多租户id，添加在请求接口 Header
+      //--update-end--author:liusq---date:20211105---for:Đưa nhiều tenantid, thêm vào API request Header
 
       // ========================================================================================
-      // 代码逻辑说明: 添加低代码应用ID
+      // Giải thích logic mã: Thêm ứng dụng low-codeID
       let routeParams = router.currentRoute.value.params;
       if (routeParams.appId) {
         config.headers[ConfigEnum.X_LOW_APP_ID] = routeParams.appId;
-        // lowApp自定义筛选条件
+        // lowAppĐiều kiện lọc tùy chỉnh
         if (routeParams.lowAppFilter) {
           config.params = { ...config.params, ...JSON.parse(routeParams.lowAppFilter as string) };
           delete routeParams.lowAppFilter;
@@ -208,14 +208,14 @@ const transform: AxiosTransform = {
   },
 
   /**
-   * @description: 响应拦截器处理
+   * @description: Xử lý interceptor phản hồi
    */
   responseInterceptors: (res: AxiosResponse<any>) => {
     return res;
   },
 
   /**
-   * @description: 响应错误处理
+   * @description: Xử lý lỗi phản hồi
    */
   responseInterceptorsCatch: (error: any) => {
     const { t } = useI18n();
@@ -223,7 +223,7 @@ const transform: AxiosTransform = {
     errorLogStore.addAjaxErrorInfo(error);
     const { response, code, message, config } = error || {};
     const errorMessageMode = config?.requestOptions?.errorMessageMode || 'none';
-    //scott 20211022 token失效提示信息
+    //scott 20211022 tokenThông tin gợi ý hết hiệu lực
     //const msg: string = response?.data?.error?.message ?? '';
     const msg: string = response?.data?.message ?? '';
     const err: string = error?.toString?.() ?? '';
@@ -259,43 +259,43 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
     deepMerge(
       {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
-        // authentication schemes，e.g: Bearer
+        // authentication schemes, e.g: Bearer
         // authenticationScheme: 'Bearer',
         authenticationScheme: '',
-        //接口超时设置
+        //Cài đặt timeout API
         timeout: 10 * 1000,
-        // 基础接口地址
+        // Địa chỉ API cơ sở
         // baseURL: globSetting.apiUrl,
         headers: { 'Content-Type': ContentTypeEnum.JSON },
-        // 如果是form-data格式
+        // Nếu làform-dataĐịnh dạng
         // headers: { 'Content-Type': ContentTypeEnum.FORM_URLENCODED },
-        // 数据处理方式
+        // Cách xử lý dữ liệu
         transform,
-        // 配置项，下面的选项都可以在独立的接口请求中覆盖
+        // Mục cấu hình, các tùy chọn dưới đây đều có thể ghi đè trong request API độc lập
         requestOptions: {
-          // 默认将prefix 添加到url
+          // Mặc định sẽprefix Thêm vàourl
           joinPrefix: true,
-          // 是否返回原生响应头 比如：需要获取响应头时使用该属性
+          // Có trả về header phản hồi gốc không Ví dụ: khi cần lấy header phản hồi thì dùng thuộc tính này
           isReturnNativeResponse: false,
-          // 需要对返回数据进行处理
+          // Cần xử lý dữ liệu trả về
           isTransformResponse: true,
-          // post请求的时候添加参数到url
+          // postKhi yêu cầu thêm tham số vàourl
           joinParamsToUrl: false,
-          // 格式化提交参数时间
+          // Định dạng thời gian tham số gửi
           formatDate: true,
-          // 异常消息提示类型
+          // Loại gợi ý thông báo ngoại lệ
           errorMessageMode: 'message',
-          // 成功消息提示类型
+          // Loại gợi ý thông báo thành công
           successMessageMode: 'success',
-          // 接口地址
+          // Địa chỉ API
           apiUrl: globSetting.apiUrl,
-          // 接口拼接地址
+          // Địa chỉ nối API
           urlPrefix: urlPrefix,
-          //  是否加入时间戳
+          //  Có thêm dấu thời gian không
           joinTime: true,
-          // 忽略重复请求
+          // Bỏ qua yêu cầu trùng lặp
           ignoreCancelToken: true,
-          // 是否携带token
+          // Có mang theo khôngtoken
           withToken: true,
         },
       },

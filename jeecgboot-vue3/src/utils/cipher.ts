@@ -55,19 +55,19 @@ export function encryptByMd5(password: string) {
   return md5(password).toString();
 }
 
-// ================== 密码加密相关 ==================
-// 密码加密统一使用 AES CBC 模式，前后端 key 和 iv 必须保持一致
-// AES_KEY 和 AES_IV 需与后端配置完全一致，否则加密/解密会失败
-// ================== 密码加密相关 ===========BEGIN=======
+// ================== Liên quan đến mã hóa mật khẩu ==================
+// Mã hóa mật khẩu thống nhất dùng AES CBC Chế độ, frontend và backend key và iv Phải giữ nhất quán
+// AES_KEY và AES_IV Cần hoàn toàn nhất quán với cấu hình backend, nếu không mã hóa/Giải mã sẽ thất bại
+// ================== Liên quan đến mã hóa mật khẩu ===========BEGIN=======
 
-// AES加密key和iv常量
+// AESMã hóakeyvàivHằng số
 export const AES_KEY = '1234567890adbcde';
 export const AES_IV = '1234567890hjlkew';
 
 /**
- * AES CBC 加密，使用全局常量 AES_KEY 和 AES_IV
- * @param plainText 明文
- * @returns 加密后的密文
+ * AES CBC Mã hóa, dùng hằng số toàn cục AES_KEY và AES_IV
+ * @param plainText Văn bản rõ
+ * @returns Văn bản mã hóa sau khi mã hóa
  */
 export function encryptAESCBC(plainText: string): string {
   const key = parse(AES_KEY);
@@ -78,4 +78,4 @@ export function encryptAESCBC(plainText: string): string {
     padding: pkcs7
   }).toString();
 }
-// ================== 密码加密相关 =============END=====
+// ================== Liên quan đến mã hóa mật khẩu =============END=====

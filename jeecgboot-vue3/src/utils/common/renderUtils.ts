@@ -11,7 +11,7 @@ const { createMessage } = useMessage();
 
 const render = {
   /**
-   * 渲染列表头像
+   * Render ảnh đại diện danh sách
    */
   renderAvatar: (param) => {
     if (param == null) return h('span', '');
@@ -40,10 +40,10 @@ const render = {
     }
   },
   /**
-   * 根据字典编码 渲染
-   * @param v 值
-   * @param code 字典编码
-   * @param renderTag 是否使用tag渲染
+   * Theo mã từ điển Render
+   * @param v Giá trị
+   * @param code Mã từ điển
+   * @param renderTag Có dùng khôngtagRender
    */
   renderDict: (v, code, renderTag = false) => {
     let text = '';
@@ -56,11 +56,11 @@ const render = {
       text = obj[0].text;
       color = obj[0].color;
     }
-    //【jeecgboot-vue3/issues/903】render.renderDict使用tag渲染报警告问题 #903
+    //【jeecgboot-vue3/issues/903】render.renderDictSử dụngtagRender báo vấn đề cảnh báo #903
     return isEmpty(text) || !renderTag ? h('span', text) : h(Tag,{ color }, () => text);
   },
   /**
-   * 渲染图片
+   * Render hình ảnh
    * @param text
    */
   renderImage: (param) => {
@@ -92,7 +92,7 @@ const render = {
     );
   },
   /**
-   * 渲染 Tooltip
+   * Render Tooltip
    * @param text
    * @param len
    */
@@ -107,7 +107,7 @@ const render = {
     return text;
   },
   /**
-   * 渲染a标签
+   * RenderaNhãn
    * @param text
    */
   renderHref: (param) => {
@@ -123,7 +123,7 @@ const render = {
     return h('a', { href: text, target: '_blank' }, text);
   },
   /**
-   * 根据字典渲染
+   * Render theo từ điển
    * @param v
    * @param array
    */
@@ -140,7 +140,7 @@ const render = {
     return isEmpty(text) || !renderTag ? h('span', text) : h(Tag, { color }, () => text);
   },
   /**
-   * 渲染富文本
+   * Render rich text
    */
   renderTinymce: ({ model, field }) => {
     return h(Tinymce, {
@@ -166,11 +166,11 @@ const render = {
 };
 
 /**
- * 文件下载
+ * Tải xuống tệp
  */
 function downloadFile(url) {
   if (!url) {
-    createMessage.warning('未知的文件');
+    createMessage.warning('Tệp không xác định');
     return;
   }
   if (url.indexOf(',') > 0) {

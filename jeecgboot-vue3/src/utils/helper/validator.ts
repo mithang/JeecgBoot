@@ -17,7 +17,7 @@ export const rules = {
         required: required ? required : false,
         validator: async (_rule, value) => {
           if (required == true && !value) {
-            return Promise.reject('请输入邮箱!');
+            return Promise.reject('Vui lòng nhập email!');
           }
           if (
             value &&
@@ -25,7 +25,7 @@ export const rules = {
               /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             ).test(value)
           ) {
-            return Promise.reject('请输入正确邮箱格式!');
+            return Promise.reject('Vui lòng nhập đúng định dạng email!');
           }
           return Promise.resolve();
         },
@@ -39,10 +39,10 @@ export const rules = {
         required: required,
         validator: async (_, value) => {
           if (required && !value) {
-            return Promise.reject('请输入手机号码!');
+            return Promise.reject('Vui lòng nhập số điện thoại!');
           }
           if (!/^1[3456789]\d{9}$/.test(value)) {
-            return Promise.reject('手机号码格式有误');
+            return Promise.reject('Định dạng số điện thoại sai');
           }
           return Promise.resolve();
         },
@@ -56,10 +56,10 @@ export const rules = {
         required: required ? required : false,
         validator: (_, value) => {
           if (required && !value) {
-            return Promise.reject('请选择开始时间');
+            return Promise.reject('Vui lòng chọn thời gian bắt đầu');
           }
           if (endTime && value && dateUtil(endTime).isBefore(value)) {
-            return Promise.reject('开始时间需小于结束时间');
+            return Promise.reject('Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc');
           }
           return Promise.resolve();
         },
@@ -73,10 +73,10 @@ export const rules = {
         required: required ? required : false,
         validator: (_, value) => {
           if (required && !value) {
-            return Promise.reject('请选择结束时间');
+            return Promise.reject('Vui lòng chọn thời gian kết thúc');
           }
           if (startTime && value && dateUtil(value).isBefore(startTime)) {
-            return Promise.reject('结束时间需大于开始时间');
+            return Promise.reject('Thời gian kết thúc phải lớn hơn thời gian bắt đầu');
           }
           return Promise.resolve();
         },
@@ -90,10 +90,10 @@ export const rules = {
         required: required ? required : false,
         validator: (_, value) => {
           if (!value) {
-            return Promise.reject('密码不能为空');
+            return Promise.reject('Mật khẩu không được trống');
           }
           if (value !== values.password) {
-            return Promise.reject('两次输入的密码不一致!');
+            return Promise.reject('Mật khẩu nhập hai lần không khớp!');
           }
           return Promise.resolve();
         },
@@ -105,7 +105,7 @@ export const rules = {
       {
         validator: (_, value) => {
           if (!value && required) {
-            return Promise.reject(`请输入${schema.label}`);
+            return Promise.reject(`Vui lòng nhập${schema.label}`);
           }
           return new Promise<void>((resolve, reject) => {
             duplicateCheck({
@@ -115,10 +115,10 @@ export const rules = {
               dataId: model.id,
             })
               .then((res) => {
-                res.success ? resolve() : reject(res.message || '校验失败');
+                res.success ? resolve() : reject(res.message || 'Kiểm tra thất bại');
               })
               .catch((err) => {
-                reject(err.message || '验证失败');
+                reject(err.message || 'Kiểm tra thất bại');
               });
           });
         },
@@ -127,9 +127,9 @@ export const rules = {
   },
 };
 
-//update-begin---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】三级等保密码强度校验工具函数-----------
+//update-begin---author:wangshuai ---date:2026-06-29  for: 【QQYUN-16619]Hàm tiện ích kiểm tra độ mạnh mật khẩu theo tiêu chuẩn bảo mật cấp 3-----------
 /**
- * 判断密码是否存在3位及以上连续递增的数字或字母
+ * Kiểm tra mật khẩu có tồn tại không3ký tự trở lên là các số hoặc chữ cái tăng liên tiếp
  */
 function hasConsecutiveChars(password: string): boolean {
   const arr = password.split('');
@@ -145,53 +145,53 @@ function hasConsecutiveChars(password: string): boolean {
 }
 
 /**
- * 简单密码校验：8位及以上，包含字母+数字+特殊符号
+ * Kiểm tra mật khẩu đơn giản:8ký tự trở lên, chứa chữ cái+Số+Ký tự đặc biệt
  */
 export function validateSimplePassword(value: string, oldPassword?: string) {
   if (!value) {
     return Promise.resolve();
   }
   if (oldPassword && value === oldPassword) {
-    return Promise.reject('不能使用系统密码作为新密码!');
+    return Promise.reject('Không được dùng mật khẩu hệ thống làm mật khẩu mới!');
   }
   const reg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{8,}$/;
   if (!reg.test(value)) {
-    return Promise.reject('密码由 8 位及以上数字、大小写字母和特殊符号组成！');
+    return Promise.reject('Mật khẩu do 8 ký tự trở lên, gồm số, chữ hoa, chữ thường và ký tự đặc biệt!');
   }
   return Promise.resolve();
 }
 
 /**
- * 三级等保强密码校验：8位及以上，必须包含数字+大写+小写+特殊符号，不允许3位连续/重复字符
+ * Kiểm tra mật khẩu mạnh bảo mật cấp 3:8ký tự trở lên, phải chứa số+Chữ hoa+Chữ thường+Ký tự đặc biệt, không cho phép3ký tự liên tiếp/Ký tự trùng lặp
  */
 export function validateStrongPassword(value: string, oldPassword?: string) {
   if (!value) {
     return Promise.resolve();
   }
   if (oldPassword && value === oldPassword) {
-    return Promise.reject('不能使用系统密码作为新密码!');
+    return Promise.reject('Không được dùng mật khẩu hệ thống làm mật khẩu mới!');
   }
   if (value.length < 8) {
-    return Promise.reject('密码长度不能少于8位');
+    return Promise.reject('Độ dài mật khẩu không được ít hơn8ký tự');
   }
   const hasNumber = /[0-9]/.test(value);
   const hasLowercase = /[a-z]/.test(value);
   const hasUppercase = /[A-Z]/.test(value);
   const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(value);
   if (!(hasNumber && hasLowercase && hasUppercase && hasSpecialChar)) {
-    return Promise.reject('密码必须包含数字、大小写字母和特殊字符');
+    return Promise.reject('Mật khẩu phải chứa số, chữ hoa, chữ thường và ký tự đặc biệt');
   }
   if (hasConsecutiveChars(value)) {
-    return Promise.reject('密码不能出现3位及以上的连续数字或字母');
+    return Promise.reject('Mật khẩu không được xuất hiện3ký tự trở lên là các số hoặc chữ cái liên tiếp');
   }
   if (/(.)\1{2,}/.test(value)) {
-    return Promise.reject('密码不能出现相同字符连续3位或以上');
+    return Promise.reject('Mật khẩu không được xuất hiện ký tự giống nhau liên tiếp3ký tự trở lên');
   }
   return Promise.resolve();
 }
 
 /**
- * 缓存三级等保密码开关值（只从 API 取一次）
+ * Cache giá trị công tắc mật khẩu bảo mật cấp 3 (chỉ từ API Lấy một lần)
  */
 let _enableStrongPwdCache: boolean | null = null;
 
@@ -209,8 +209,8 @@ async function fetchEnableStrongPwd(): Promise<boolean> {
 }
 
 /**
- * 根据三级等保开关创建密码校验 validator（从 API 获取配置并缓存）
- * @param oldPassword 旧密码（可选，用于禁止与旧密码相同）
+ * Tạo kiểm tra mật khẩu theo công tắc bảo mật cấp 3 validator(Từ API Lấy cấu hình và cache)
+ * @param oldPassword Mật khẩu cũ (tùy chọn, dùng để cấm trùng với mật khẩu cũ)
  */
 export function createPasswordValidator(oldPassword?: string) {
   return async (_: any, value: string) => {
@@ -221,14 +221,14 @@ export function createPasswordValidator(oldPassword?: string) {
     return validateSimplePassword(value, oldPassword);
   };
 }
-//update-end---author:wangshuai ---date:2026-06-29  for：【QQYUN-16619】三级等保密码强度校验工具函数-----------
+//update-end---author:wangshuai ---date:2026-06-29  for: 【QQYUN-16619]Hàm tiện ích kiểm tra độ mạnh mật khẩu theo tiêu chuẩn bảo mật cấp 3-----------
 
 /**
- * 唯一校验函数，给原生<a-form>使用，vben的表单校验建议使用上述rules
- * @param tableName 表名
- * @param fieldName 字段名
- * @param fieldVal 字段值
- * @param dataId 数据ID
+ * Hàm kiểm tra duy nhất, cho native<a-form>Sử dụng,vbenkhuyến nghị kiểm tra biểu mẫu dùng như trênrules
+ * @param tableName Tên bảng
+ * @param fieldName Tên trường
+ * @param fieldVal Giá trị trường
+ * @param dataId Dữ liệuID
  */
 export async function duplicateValidate(tableName, fieldName, fieldVal, dataId) {
   try {
@@ -242,9 +242,9 @@ export async function duplicateValidate(tableName, fieldName, fieldVal, dataId) 
     if (res.success) {
       return Promise.resolve();
     } else {
-      return Promise.reject(res.message || '校验失败');
+      return Promise.reject(res.message || 'Kiểm tra thất bại');
     }
   } catch (e) {
-    return Promise.reject('校验失败,可能是断网等问题导致的校验失败');
+    return Promise.reject('Kiểm tra thất bại,Có thể là kiểm tra thất bại do mất mạng và các vấn đề khác');
   }
 }

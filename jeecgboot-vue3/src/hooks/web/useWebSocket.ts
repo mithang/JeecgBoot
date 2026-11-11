@@ -8,38 +8,38 @@ let result: WebSocketResult<any>;
 const listeners = new Map();
 
 /**
- * 开启 WebSocket 链接，全局只需执行一次
+ * Bật WebSocket Liên kết, toàn cục chỉ cần thực thi một lần
  * @param url
  */
 export function connectWebSocket(url: string) {
-  // 代码逻辑说明: v2.4.6 的 websocket 服务端，存在性能和安全问题。 #3278
+  // Giải thích logic mã: v2.4.6 của websocket Phía server, tồn tại vấn đề hiệu năng và bảo mật. #3278
   const token = (getToken() || '') as string;
   result = useWebSocket(url, {
-    // 自动重连 (遇到错误最多重复连接10次)
+    // Tự động kết nối lại (Gặp lỗi thì kết nối lại tối đa10lần)
     autoReconnect: {
       retries : 10,
       delay : 5000
     },
-    // 心跳检测
+    // Kiểm tra heartbeat
     heartbeat: {
       message: "ping",
       interval: 55000
     },
     protocols: [token],
-    // 代码逻辑说明: [issues/6662] 演示系统socket总断，换一个写法
+    // Giải thích logic mã: [issues/6662] Hệ thống demosocketTổng bị ngắt, đổi cách viết khác
     onConnected: function (ws) {
-      console.log('[WebSocket] 连接成功', ws);
+      console.log('[WebSocket] Kết nối thành công', ws);
     },
     onDisconnected: function (ws, event) {
-      console.log('[WebSocket] 连接断开：', ws, event);
+      console.log('[WebSocket] Kết nối bị ngắt:', ws, event);
     },
     onError: function (ws, event) {
-      console.log('[WebSocket] 连接发生错误: ', ws, event);
+      console.log('[WebSocket] Kết nối gặp lỗi: ', ws, event);
     },
     onMessage: function (_ws, e) {
-      console.debug('[WebSocket] -----接收消息-------', e.data);
+      console.debug('[WebSocket] -----Nhận tin nhắn-------', e.data);
       try {
-        // 代码逻辑说明: 【issues/1161】前端websocket因心跳导致监听不起作用---
+        // Giải thích logic mã: 【issues/1161]FrontendwebsocketDo heartbeat khiến việc lắng nghe không có tác dụng---
         if (e.data === 'ping') {
           return;
         }
@@ -52,7 +52,7 @@ export function connectWebSocket(url: string) {
           }
         }
       } catch (err) {
-        console.error('[WebSocket] data解析失败：', err);
+        console.error('[WebSocket] dataPhân tích thất bại:', err);
       }
     },
   });
@@ -72,21 +72,21 @@ export function connectWebSocket(url: string) {
 }
 
 function onOpen() {
-  console.log('[WebSocket] 连接成功');
+  console.log('[WebSocket] Kết nối thành công');
 }
 
 function onClose(e) {
-  console.log('[WebSocket] 连接断开：', e);
+  console.log('[WebSocket] Kết nối bị ngắt:', e);
 }
 
 function onError(e) {
-  console.log('[WebSocket] 连接发生错误: ', e);
+  console.log('[WebSocket] Kết nối gặp lỗi: ', e);
 }
 
 function onMessage(e) {
-  console.debug('[WebSocket] -----接收消息-------', e.data);
+  console.debug('[WebSocket] -----Nhận tin nhắn-------', e.data);
   try {
-    // 代码逻辑说明: 【issues/1161】前端websocket因心跳导致监听不起作用---
+    // Giải thích logic mã: 【issues/1161]FrontendwebsocketDo heartbeat khiến việc lắng nghe không có tác dụng---
     if(e==='ping'){
       return;
     }
@@ -99,13 +99,13 @@ function onMessage(e) {
       }
     }
   } catch (err) {
-    console.error('[WebSocket] data解析失败：', err);
+    console.error('[WebSocket] dataPhân tích thất bại:', err);
   }
 }
 
 
 /**
- * 添加 WebSocket 消息监听
+ * Thêm WebSocket Lắng nghe tin nhắn
  * @param callback
  */
 export function onWebSocket(callback: (data: object) => any) {
@@ -113,13 +113,13 @@ export function onWebSocket(callback: (data: object) => any) {
     if (typeof callback === 'function') {
       listeners.set(callback, null);
     } else {
-      console.debug('[WebSocket] 添加 WebSocket 消息监听失败：传入的参数不是一个方法');
+      console.debug('[WebSocket] Thêm WebSocket Lắng nghe tin nhắn thất bại: tham số truyền vào không phải là một phương thức');
     }
   }
 }
 
 /**
- * 解除 WebSocket 消息监听
+ * Hủy WebSocket Lắng nghe tin nhắn
  *
  * @param callback
  */

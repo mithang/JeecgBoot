@@ -14,13 +14,13 @@ import { useI18n } from "@/hooks/web/useI18n";
 import {$electron} from "@/electron";
 import {router} from "@/router";
 import {encryptByBase64} from "@/utils/cipher";
-//存放部门路径的数组
+//Mảng lưu đường dẫn phòng ban
 const departNamePath = ref<Record<string, string>>({});
-// 正在请求中的部门路径名称，避免同一参数并发重复调用
+// Tên đường dẫn phòng ban đang yêu cầu, tránh gọi trùng đồng thời cùng tham số
 const departPathNameInflight = new Map<string, Promise<any>>();
 
 /**
- * 组织层级变更后清空部门路径缓存
+ * Sau khi thay đổi cấp tổ chức, xóa cache đường dẫn phòng ban
  */
 export function clearDepartPathNameCache() {
   departNamePath.value = {};
@@ -30,19 +30,19 @@ export function clearDepartPathNameCache() {
 const globSetting = useGlobSetting();
 const baseApiUrl = globSetting.domainUrl;
 /**
- *  获取文件服务访问路径
- * @param fileUrl 文件路径
- * @param prefix(默认http)  文件路径前缀 http/https
+ *  Lấy đường dẫn truy cập dịch vụ tệp
+ * @param fileUrl Đường dẫn tệp
+ * @param prefix(Mặc địnhhttp)  Tiền tố đường dẫn tệp http/https
  */
 export const getFileAccessHttpUrl = (fileUrl, prefix = 'http') => {
   let result = fileUrl;
   try {
     if (fileUrl && fileUrl.length > 0 && !fileUrl.startsWith(prefix)) {
-      //判断是否是数组格式
+      //Kiểm tra có phải định dạng mảng không
       let isArray = fileUrl.indexOf('[') != -1;
       if (!isArray) {
         let prefix = `${baseApiUrl}/sys/common/static/`;
-        // 判断是否已包含前缀
+        // Kiểm tra đã chứa tiền tố chưa
         if (!fileUrl.startsWith(prefix)) {
           result = `${prefix}${fileUrl}`;
         }
@@ -52,8 +52,8 @@ export const getFileAccessHttpUrl = (fileUrl, prefix = 'http') => {
   return result;
 };
 /**
- *  获取桌面端wps的文件服务访问路径
- * @param fileUrl 文件路径
+ *  Lấy desktopwpsđường dẫn truy cập dịch vụ tệp của
+ * @param fileUrl Đường dẫn tệp
  */
 export const getElectronFileUrl = (url) => {
   let fileUrl: any = url;
@@ -64,7 +64,7 @@ export const getElectronFileUrl = (url) => {
 };
 
 /**
- * 触发 window.resize
+ * Kích hoạt window.resize
  */
 export function triggerWindowResizeEvent() {
   let event: any = document.createEvent('HTMLEvents');
@@ -74,18 +74,18 @@ export function triggerWindowResizeEvent() {
 }
 
 /**
- * 获取随机数
- *  @param length 数字位数
+ * Lấy số ngẫu nhiên
+ *  @param length Số chữ số
  */
 export const getRandom = (length: number = 1) => {
   return '-' + parseInt(String(Math.random() * 10000 + 1), length);
 };
 
 /**
- * 随机生成字符串
- * @param length 字符串的长度
- * @param chats 可选字符串区间（只会生成传入的字符串中的字符）
- * @return string 生成的字符串
+ * Tạo chuỗi ngẫu nhiên
+ * @param length Độ dài chuỗi
+ * @param chats Khoảng chuỗi tùy chọn (chỉ tạo các ký tự trong chuỗi được truyền vào)
+ * @return string Chuỗi đã tạo
  */
 export function randomString(length: number, chats?: string) {
   if (!length) length = 1;
@@ -102,10 +102,10 @@ export function randomString(length: number, chats?: string) {
 }
 
 /**
- * 将普通列表数据转化为tree结构
- * @param array tree数据
- * @param opt  配置参数
- * @param startPid 父节点
+ * Chuyển dữ liệu danh sách thông thường thànhtreeCấu trúc
+ * @param array treeDữ liệu
+ * @param opt  Cấu hình tham số
+ * @param startPid Nút cha
  */
 export const listToTree = (array, opt, startPid) => {
   const obj = {
@@ -123,7 +123,7 @@ export const listToTree = (array, opt, startPid) => {
   return toTree(array, obj.startPid, obj.currentDept, obj);
 };
 /**
- *  递归构建tree
+ *  Xây dựng đệ quytree
  * @param list
  * @param startPid
  * @param currentDept
@@ -138,11 +138,11 @@ export const toTree = (array, startPid, currentDept, opt) => {
   if (array && array.length > 0) {
     child = array
       .map((item) => {
-        // 筛查符合条件的数据（主键 = startPid）
+        // Sàng lọc dữ liệu thỏa điều kiện (khóa chính = startPid)
         if (typeof item[opt.parentKey] !== 'undefined' && item[opt.parentKey] === startPid) {
-          // 满足条件则递归
+          // Thỏa điều kiện thì đệ quy
           const nextChild = toTree(array, item[opt.primaryKey], currentDept + 1, opt);
-          // 节点信息保存
+          // Lưu thông tin nút
           if (nextChild.length > 0) {
             item['isLeaf'] = false;
             item[opt.childKey] = nextChild;
@@ -164,37 +164,37 @@ export const toTree = (array, startPid, currentDept, opt) => {
 };
 
 /**
- * 表格底部合计工具方法
- * @param tableData 表格数据
- * @param fieldKeys 要计算合计的列字段
+ * Phương thức tiện ích tổng ở dưới cùng bảng
+ * @param tableData Dữ liệu bảng
+ * @param fieldKeys Trường cột cần tính tổng
  */
 export function mapTableTotalSummary(tableData: Recordable[], fieldKeys: string[]) {
-  let totals: any = { _row: '合计', _index: '合计' };
+  let totals: any = { _row: 'Tổng cộng', _index: 'Tổng cộng' };
   fieldKeys.forEach((key) => {
     totals[key] = tableData.reduce((prev, next) => {
-      // 代码逻辑说明: 【QQYUN-7891】PR 合计工具方法，转换为Nuber类型再计算
+      // Giải thích logic mã: 【QQYUN-7891】PR Phương thức tiện ích tổng cộng, chuyển thànhNuberLoại tính lại
       const value = Number(next[key]);
       if (!Number.isNaN(value)) {
-        // 代码逻辑说明: 【issues/7830】合计小数计算精度
+        // Giải thích logic mã: 【issues/7830]Độ chính xác tính toán số thập phân tổng cộng
         prev = Big(prev).plus(value).toString();
       }
       return prev;
     }, 0);
-    // 代码逻辑说明: 【issues/7830】合计小数计算精度
+    // Giải thích logic mã: 【issues/7830]Độ chính xác tính toán số thập phân tổng cộng
     totals[key] = +totals[key];
   });
   return totals;
 }
 
 /**
- * 简单实现防抖方法
+ * Triển khai đơn giản phương thức debounce
  *
- * 防抖(debounce)函数在第一次触发给定的函数时，不立即执行函数，而是给出一个期限值(delay)，比如100ms。
- * 如果100ms内再次执行函数，就重新开始计时，直到计时结束后再真正执行函数。
- * 这样做的好处是如果短时间内大量触发同一事件，只会执行一次函数。
+ * Debounce(debounce)Hàm khi được kích hoạt lần đầu với hàm đã cho, không thực thi ngay mà đưa ra một giá trị thời hạn(delay), ví dụ100ms.
+ * Nếu100msBên trong thực thi hàm lần nữa, thì bắt đầu tính giờ lại, đến khi hết giờ mới thực sự thực thi hàm.
+ * Lợi ích của cách này là nếu cùng một sự kiện được kích hoạt nhiều lần trong thời gian ngắn, chỉ thực thi hàm một lần.
  *
- * @param fn 要防抖的函数
- * @param delay 防抖的毫秒数
+ * @param fn Hàm cần debounce
+ * @param delay Số mili giây debounce
  * @returns {Function}
  */
 export function simpleDebounce(fn, delay = 100) {
@@ -212,9 +212,9 @@ export function simpleDebounce(fn, delay = 100) {
 }
 
 /**
- * 日期格式化
- * @param date 日期
- * @param block 格式化字符串
+ * Định dạng ngày
+ * @param date Ngày
+ * @param block Định dạng chuỗi
  */
 export function dateFormat(date, block) {
   if (!date) {
@@ -223,13 +223,13 @@ export function dateFormat(date, block) {
   let format = block || 'yyyy-MM-dd';
   date = new Date(date);
   const map = {
-    M: date.getMonth() + 1, // 月份
-    d: date.getDate(), // 日
-    h: date.getHours(), // 小时
-    m: date.getMinutes(), // 分
-    s: date.getSeconds(), // 秒
-    q: Math.floor((date.getMonth() + 3) / 3), // 季度
-    S: date.getMilliseconds(), // 毫秒
+    M: date.getMonth() + 1, // Tháng
+    d: date.getDate(), // ngày
+    h: date.getHours(), // Giờ
+    m: date.getMinutes(), // phút
+    s: date.getSeconds(), // giây
+    q: Math.floor((date.getMonth() + 3) / 3), // Quý
+    S: date.getMilliseconds(), // Mili giây
   };
   format = format.replace(/([yMdhmsqS])+/g, (all, t) => {
     let v = map[t];
@@ -251,8 +251,8 @@ export function dateFormat(date, block) {
 }
 
 /**
- * 获取事件冒泡路径，兼容 IE11，Edge，Chrome，Firefox，Safari
- * 目前使用的地方：JVxeTable Span模式
+ * Lấy đường dẫn nổi bọt sự kiện, tương thích IE11, Edge, Chrome, Firefox, Safari
+ * Nơi đang dùng hiện tại:JVxeTable SpanChế độ
  */
 export function getEventPath(event) {
   let target = event.target;
@@ -279,11 +279,11 @@ export function getEventPath(event) {
 }
 
 /**
- * 如果值不存在就 push 进数组，反之不处理
- * @param array 要操作的数据
- * @param value 要添加的值
- * @param key 可空，如果比较的是对象，可能存在地址不一样但值实际上是一样的情况，可以传此字段判断对象中唯一的字段，例如 id。不传则直接比较实际值
- * @returns {boolean} 成功 push 返回 true，不处理返回 false
+ * Nếu giá trị không tồn tại thì push Vào mảng, ngược lại không xử lý
+ * @param array Dữ liệu cần thao tác
+ * @param value Giá trị cần thêm
+ * @param key Có thể trống, nếu so sánh đối tượng, có thể địa chỉ khác nhau nhưng giá trị thực tế giống nhau, có thể truyền trường này để kiểm tra trường duy nhất trong đối tượng, ví dụ id. Nếu không truyền thì so sánh trực tiếp giá trị thực tế
+ * @returns {boolean} Thành công push Trả về true, không xử lý trả về false
  */
 export function pushIfNotExist(array, value, key?) {
   for (let item of array) {
@@ -297,7 +297,7 @@ export function pushIfNotExist(array, value, key?) {
   return true;
 }
 /**
- * 过滤对象中为空的属性
+ * Lọc thuộc tính trống trong đối tượng
  * @param obj
  * @returns {*}
  */
@@ -315,7 +315,7 @@ export function filterObj(obj) {
 }
 
 /**
- * 下划线转驼峰
+ * Chuyển gạch dưới sang camelCase
  * @param string
  */
 export function underLine2CamelCase(string: string) {
@@ -323,17 +323,17 @@ export function underLine2CamelCase(string: string) {
 }
 
 /**
- * 查找树结构
+ * Tìm cấu trúc cây
  * @param treeList
- * @param fn 查找方法
+ * @param fn Tìm phương thức
  * @param childrenKey
  */
 export function findTree(treeList: any[], fn: Fn, childrenKey = 'children') {
-  //update-begin---wangshuai---date:20260721  for：[LHZP-1135]我的部门 右侧展示的信息不对，控制台报错了------------
+  //update-begin---wangshuai---date:20260721  for: [LHZP-1135]Phòng ban của tôi Thông tin hiển thị bên phải không đúng, console báo lỗi------------
   if(!treeList){
     return null;
   }
-  //update-end---author:wangshuai ---date:20260721  for：[LHZP-1135]我的部门 右侧展示的信息不对，控制台报错了------------
+  //update-end---author:wangshuai ---date:20260721  for: [LHZP-1135]Phòng ban của tôi Thông tin hiển thị bên phải không đúng, console báo lỗi------------
   for (let i = 0; i < treeList.length; i++) {
     let item = treeList[i];
     if (fn(item, i, treeList)) {
@@ -350,7 +350,7 @@ export function findTree(treeList: any[], fn: Fn, childrenKey = 'children') {
   return null;
 }
 
-/** 获取 mapFormSchema 方法 */
+/** Lấy mapFormSchema Phương thức */
 export function bindMapFormSchema<T>(spanMap, spanTypeDef: T) {
   return function (s: FormSchema, spanType: T = spanTypeDef) {
     return merge(
@@ -364,45 +364,45 @@ export function bindMapFormSchema<T>(spanMap, spanTypeDef: T) {
 }
 
 /**
- * 字符串是否为null或null字符串
+ * Chuỗi có phải là khôngnullhoặcnullChuỗi
  * @param str
  * @return {boolean}
  */
 export function stringIsNull(str) {
-  // 两个 == 可以同时判断 null 和 undefined
+  // Hai == Có thể kiểm tra đồng thời null và undefined
   return str == null || str === 'null' || str === 'undefined';
 }
 
 /**
- * 【组件多了可能存在性能问题】获取弹窗div，将下拉框、日期等组件挂载到modal上，解决弹窗遮盖问题
+ * [Nhiều component có thể gây vấn đề hiệu năng] Lấy popupdiv, mount các component như dropdown, ngày tháng vàomodaltrên, giải quyết vấn đề popup bị che khuất
  * @param node
  */
 export function getAutoScrollContainer(node: HTMLElement) {
   let element: Nullable<HTMLElement> = node
   while (element != null) {
     if (element.classList.contains('scrollbar__view')) {
-      // 判断是否有滚动条
+      // Kiểm tra có thanh cuộn không
       if (element.clientHeight < element.scrollHeight) {
-        // 有滚动条时，挂载到父级，解决滚动问题
+        // Khi có thanh cuộn, mount vào cấp cha, giải quyết vấn đề cuộn
         return node.parentElement
       } else {
-        // 无滚动条时，挂载到body上，解决下拉框遮盖问题
+        // Khi không có thanh cuộn, mount vàobodytrên, giải quyết vấn đề dropdown bị che khuất
         return document.body
       }
     } else {
       element = element.parentElement
     }
   }
-  // 不在弹窗内，走默认逻辑
+  // Không nằm trong popup, đi theo logic mặc định
   return node.parentElement
 }
 
 /**
- * 判断子菜单是否全部隐藏
+ * Kiểm tra submenu có ẩn hết không
  * @param menuTreeItem
  */
 export  function checkChildrenHidden(menuTreeItem){
-  //是否是聚合路由
+  //Có phải route tổng hợp không
   let alwaysShow=menuTreeItem.alwaysShow;
   if(alwaysShow){
     return false;
@@ -414,10 +414,10 @@ export  function checkChildrenHidden(menuTreeItem){
 }
 
 /**
- * 计算文件大小
+ * Tính kích thước tệp
  * @param fileSize
  * @param unit
- * @return 返回大小及后缀
+ * @return Trả về kích thước và hậu tố
  */
 export function calculateFileSize(fileSize, unit?) {
   let unitArr = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
@@ -430,13 +430,13 @@ export function calculateFileSize(fileSize, unit?) {
     size /= 1024;
     unitIndex++;
   }
-  //保留两位小数，四舍五入
+  //Giữ hai chữ số thập phân, làm tròn
   size = Math.round(size * 100) / 100;
   return size + unitArr[unitIndex];
 }
 
 /**
- * 获取上传header
+ * Lấy uploadheader
  */
 export function getHeaders() {
   let tenantId = getTenantId();
@@ -446,16 +446,16 @@ export function getHeaders() {
   });
 }
 
-/** 根据表达式获取相应的用户信息 */
+/** Lấy thông tin người dùng tương ứng theo biểu thức */
 export function getUserInfoByExpression(expression) {
   if (!expression) {
     return expression;
   }
-  // 当前日期
+  // Ngày hiện tại
   if (expression === 'sys_date' || expression === 'sysDate') {
     return dayjs().format('YYYY-MM-DD');
   }
-  // 当前时间
+  // Thời gian hiện tại
   if (expression === 'sys_time' || expression === 'sysTime') {
     return dayjs().format('HH:mm:ss');
   }
@@ -465,14 +465,14 @@ export function getUserInfoByExpression(expression) {
     switch (expression) {
       case 'sysUserId':
         return userInfo.id;
-      // 当前登录用户登录账号
+      // Tài khoản đăng nhập của người dùng đang đăng nhập
       case 'sysUserCode':
       case 'sys_user_code':
         return userInfo.username;
-      // 当前登录用户真实名称
+      // Tên thật của người dùng đang đăng nhập
       case 'sysUserName':
         return userInfo.realname;
-      // 当前登录用户部门编号
+      // Mã phòng ban của người dùng đang đăng nhập
       case 'sysOrgCode':
       case 'sys_org_code':
         return userInfo.orgCode;
@@ -482,7 +482,7 @@ export function getUserInfoByExpression(expression) {
 }
 
 /**
- * 替换表达式（#{xxx}）为用户信息
+ * Thay thế biểu thức (#{xxx}) là thông tin người dùng
  * @param expression
  */
 export function replaceUserInfoByExpression(expression: string | any[]) {
@@ -513,26 +513,26 @@ export function replaceUserInfoByExpression(expression: string | any[]) {
 }
 
 /**
- * 设置租户缓存，当租户退出的时候
+ * Cài đặt cache tenant, khi tenant thoát
  * 
  * @param tenantId
  */
 export async function userExitChangeLoginTenantId(tenantId){
   const userStore = useUserStoreWithOut();
-  //step 1 获取用户租户
+  //step 1 Lấy tenant người dùng
   const url = '/sys/tenant/getCurrentUserTenant'
   let currentTenantId = null;
   const data = await defHttp.get({ url });
   if(data && data.list){
     let arr = data.list;
     if(arr.length>0){
-      //step 2.判断当前id是否存在用户租户中
+      //step 2.Kiểm tra hiện tạiidCó tồn tại trong tenant người dùng không
       let filterTenantId = arr.filter((item) => item.id == tenantId);
-      //存在说明不是退出的不是当前租户，还用用来的租户即可
+      //Tồn tại nghĩa là không phải thoát, không phải tenant hiện tại, cứ dùng tenant đã dùng là được
       if(filterTenantId && filterTenantId.length>0){
         currentTenantId = tenantId;
       }else{
-        //不存在默认第一个
+        //Không tồn tại thì mặc định lấy cái đầu tiên
         currentTenantId = arr[0].id
       }
     }
@@ -540,24 +540,24 @@ export async function userExitChangeLoginTenantId(tenantId){
   let loginTenantId = getTenantId();
   userStore.setTenant(currentTenantId);
 
-  //租户为空，说明没有租户了，需要刷新页面。或者当前租户和退出的租户一致则需要刷新浏览器
+  //Tenant trống, nghĩa là không còn tenant, cần làm mới trang. Hoặc tenant hiện tại và tenant đã thoát giống nhau thì cần làm mới trình duyệt
   if(!currentTenantId || tenantId == loginTenantId){
     window.location.reload();
   }
 }
 
 /**
- * 我的租户模块需要开启多租户提示
+ * Module tenant của tôi cần bật gợi ý đa tenant
  * 
- * @param title 标题
+ * @param title Tiêu đề
  */
 export function tenantSaasMessage(title){
   let tenantId = getTenantId();
   if(!tenantId){
     Modal.confirm({
       title:title,
-      content: '此菜单需要在多租户模式下使用，否则数据会出现混乱',
-      okText: '确认',
+      content: 'Menu này cần dùng trong chế độ đa tenant, nếu không dữ liệu sẽ rối loạn',
+      okText: 'Xác nhận',
       okType: 'danger',
       // @ts-ignore
       cancelButtonProps: { style: { display: 'none' } },
@@ -566,26 +566,26 @@ export function tenantSaasMessage(title){
 }
 
 /**
- * 判断日期和当前时间是否为同一天
+ * Kiểm tra ngày và thời gian hiện tại có phải cùng một ngày không
  * @param dateStr
  */
 export function sameDay(dateStr) {
   if (!dateStr) {
     return false;
   }
-  // 获取当前日期
+  // Lấy ngày hiện tại
   let currentDate = new Date();
   let currentDay = currentDate.getDate();
   let currentMonth = currentDate.getMonth();
   let currentYear = currentDate.getFullYear();
 
-  //创建另一个日期进行比较
+  //Tạo một ngày khác để so sánh
   let otherDate = new Date(dateStr);
   let otherDay = otherDate.getDate();
   let otherMonth = otherDate.getMonth();
   let otherYear = otherDate.getFullYear();
 
-  //比较日期
+  //So sánh ngày
   if (currentDay === otherDay && currentMonth === otherMonth && currentYear === otherYear) {
     return true;
   } else {
@@ -595,7 +595,7 @@ export function sameDay(dateStr) {
 
 
 /**
- * 翻译菜单名称
+ * Dịch tên menu
  * 2024-02-28
  * liaozhiyang
  * @param data
@@ -619,7 +619,7 @@ export function translateTitle(data) {
 
 /**
  *
- * 深度冻结对象
+ * Đóng băng sâu đối tượng
  * @param obj Object or Array
  */
 export function freezeDeep(obj: Recordable | Recordable[]) {
@@ -637,19 +637,19 @@ export function freezeDeep(obj: Recordable | Recordable[]) {
 }
 
 /**
- * 获取父级名称
+ * Lấy tên cấp cha
  * 
- * @param orgCode 当前部门的code
- * @param label 当前默认显示的值
+ * @param orgCode của phòng ban hiện tạicode
+ * @param label Giá trị hiển thị mặc định hiện tại
  * @param depId depId
- * @return 部门名称
+ * @return Tên phòng ban
  */
 export async function getDepartPathNameByOrgCode(orgCode, label, depId){
   if (orgCode) {
     depId = "";
   }
   const cacheKey = `${orgCode || ''}_${depId || ''}`;
-  // 如果已有相同参数的请求在进行中，直接复用，避免并发重复调用
+  // Nếu đã có yêu cầu cùng tham số đang chạy, tái sử dụng trực tiếp, tránh gọi trùng đồng thời
   if (departPathNameInflight.has(cacheKey)) {
     return departPathNameInflight.get(cacheKey);
   }
@@ -670,18 +670,18 @@ export async function getDepartPathNameByOrgCode(orgCode, label, depId){
 }
 
 /**
- * 判断是否为有效的ID（排除中文文本等脏数据）
+ * Kiểm tra có hợp lệ khôngID(Loại trừ dữ liệu bẩn như văn bản tiếng Trung)
  */
 function isValidId(val: string): boolean {
-  // 有效ID为纯字母数字（长数字ID或UUID格式），不包含中文等特殊字符
+  // Hiệu lựcIDlà chữ và số thuần (số dàiIDhoặcUUIDĐịnh dạng), không chứa ký tự đặc biệt như tiếng Trung
   return /^[a-zA-Z0-9]+$/.test(val);
 }
 
 /**
- * 批量预加载部门路径名称到缓存中
- * 从表格数据中收集所有部门/岗位ID，一次性调用批量接口查询，避免逐条请求
- * @param records 表格当前页数据
- * @param fields 需要提取ID的字段名数组
+ * Tải trước hàng loạt tên đường dẫn phòng ban vào cache
+ * Thu thập tất cả phòng ban từ dữ liệu bảng/Vị trí công tácID, gọi một lần API batch để truy vấn, tránh request từng mục
+ * @param records Dữ liệu trang hiện tại của bảng
+ * @param fields Cần trích xuấtIDmảng tên trường của
  */
 export async function batchPreloadDepartPathNames(records: any[], fields: string[] = ['belongDepIds', 'departIds', 'mainDepPostId', 'otherDepPostId']) {
   const idSet = new Set<string>();
@@ -711,21 +711,21 @@ export async function batchPreloadDepartPathNames(records: any[], fields: string
       }
     }
   } catch (e) {
-    console.warn('批量预加载部门路径名称失败', e);
+    console.warn('Tải trước hàng loạt tên đường dẫn phòng ban vào cache thất bại', e);
   }
 }
 
 /**
- * 获取部门路径名称
+ * Lấy tên đường dẫn phòng ban
  * @param title
- * @param key 部门code或者部门id
- * @param izOrgCode 是否是机构编码
+ * @param key Phòng bancodehoặc phòng banid
+ * @param izOrgCode Có phải mã cơ quan không
  */
 export function getDepartPathName(title,key,izOrgCode) {
   if (!key) {
     return title || '';
   }
-  // 如果key不是合法ID（如中文脏数据"国炬副总经理"），直接返回key本身作为显示文本
+  // NếukeyKhông hợp lệID(Ví dụ dữ liệu bẩn tiếng Trung"Phó tổng giám đốc Quốc Cự"), trả về trực tiếpkeyBản thân làm văn bản hiển thị
   if (!isValidId(String(key))) {
     return key;
   }
@@ -745,7 +745,7 @@ export function getDepartPathName(title,key,izOrgCode) {
 }
 
 /**
- * 获取多个部门路径名称
+ * Lấy tên đường dẫn nhiều phòng ban
  * @param title
  * @param id
  */
@@ -770,8 +770,8 @@ export function getMultiDepartPathName(title,id) {
 }
 
 /**
- * 获取部门名称 返回h
- * @param departNamePath 部门路径
+ * Lấy tên phòng ban Trả vềh
+ * @param departNamePath Đường dẫn phòng ban
  */
 export function getDepartName(departNamePath) {
   if(departNamePath){
@@ -780,7 +780,7 @@ export function getDepartName(departNamePath) {
     for (let i = 0; i < names.length; i++) {
       textElements.push(h("p", { style: { marginBottom: '2px'} }, names[i]));
     }
-    // 组合完整内容字符串用于title属性
+    // Kết hợp chuỗi nội dung đầy đủ để dùng chotitleThuộc tính
     const fullContent = names.join('\n');
     return h("div",{
       style: {
@@ -794,7 +794,7 @@ export function getDepartName(departNamePath) {
         width: '100%',
         whiteSpace: 'normal'
       },
-      // 鼠标悬停显示全部内容
+      // Di chuột hiển thị toàn bộ nội dung
       title: fullContent
     },textElements)
   }
@@ -802,7 +802,7 @@ export function getDepartName(departNamePath) {
 }
 
 /**
- * 获取文件表
+ * Lấy bảng tệp
  * @param fileUrl
  */
 export function getFileIcon(fileUrl) {
@@ -832,7 +832,7 @@ export function getFileIcon(fileUrl) {
 }
 
 /**
- * 获取文件图标颜色
+ * Lấy màu icon tệp
  *
  * @param fileUrl
  */

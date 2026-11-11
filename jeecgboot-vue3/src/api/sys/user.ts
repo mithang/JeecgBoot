@@ -16,32 +16,32 @@ enum Api {
   phoneLogin = '/sys/phoneLogin',
   Logout = '/sys/logout',
   GetUserInfo = '/sys/user/getUserInfo',
-  // 获取系统权限
-  // 1、查询用户拥有的按钮/表单访问权限
-  // 2、所有权限
-  // 3、系统安全模式
+  // Lấy quyền hệ thống
+  // 1, Truy vấn nút người dùng sở hữu/Quyền truy cập biểu mẫu
+  // 2, Tất cả quyền hạn
+  // 3, Chế độ an toàn hệ thống
   GetPermCode = '/sys/permission/getPermCode',
-  //新加的获取图形验证码的接口
+  //API mới lấy mã xác thực hình ảnh
   getInputCode = '/sys/randomImage',
-  //获取短信验证码的接口
+  //API lấy mã xác thực SMS
   getCaptcha = '/sys/sms',
-  //注册接口
+  //API đăng ký
   registerApi = '/sys/user/register',
-  //校验用户接口
+  //API kiểm tra người dùng
   checkOnlyUser = '/sys/user/checkOnlyUser',
-  //SSO登录校验
+  //SSOKiểm tra đăng nhập
   validateCasLogin = '/sys/cas/client/validateLogin',
-  //校验手机号
+  //Kiểm tra số điện thoại
   phoneVerify = '/sys/user/phoneVerification',
-  //修改密码
+  //Đổi mật khẩu
   passwordChange = '/sys/user/passwordChange',
-  //第三方登录
+  //Đăng nhập bên thứ ba
   thirdLogin = '/sys/thirdLogin/getLoginUser',
-  //第三方登录
+  //Đăng nhập bên thứ ba
   getThirdCaptcha = '/sys/thirdSms',
-  //获取二维码信息
+  //Lấy thông tin mã QR
   getLoginQrcode = '/sys/getLoginQrcode',
-  //监控二维码扫描状态
+  //Giám sát trạng thái quét mã QR
   getQrcodeToken = '/sys/getQrcodeToken',
 }
 
@@ -80,16 +80,16 @@ export function phoneLoginApi(params: LoginParams, mode: ErrorMessageMode = 'mod
  */
 export function getUserInfo() {
   return defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo }, {}).catch((e) => {
-    // Token过期失效，直接跳转登录页面
+    // TokenHết hạn không có hiệu lực, chuyển thẳng trang đăng nhập
     if (e && (e.message.includes('timeout') || e.message.includes('401'))) {
-      //接口不通时跳转到登录界面
+      //Khi API không thông thì chuyển đến giao diện đăng nhập
       const userStore = useUserStoreWithOut();
       userStore.setToken('');
       setAuthCache(TOKEN_KEY, null);
       router.push({
         path: PageEnum.BASE_LOGIN,
         query: {
-          // 传入当前的路由，登录成功后跳转到当前路由
+          // Truyền route hiện tại, sau khi đăng nhập thành công sẽ chuyển đến route hiện tại
           redirect: router.currentRoute.value.fullPath,
         }
       });
@@ -110,7 +110,7 @@ export function getCodeInfo(currdatetime) {
   return defHttp.get({ url: url });
 }
 /**
- * @description: 获取短信验证码
+ * @description: Lấy mã xác thực SMS
  */
 export function getCaptcha(params) {
   return new Promise((resolve, reject) => {
@@ -119,52 +119,52 @@ export function getCaptcha(params) {
       if (res.success) {
         resolve(true);
       } else {
-        // 代码逻辑说明: 【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
+        // Giải thích logic mã: 【QQYUN-9005】Cùng mộtIP, 1Vượt quá số phút5tin nhắn SMS, thì gợi ý cần mã xác thực---
         if(res.code != ExceptionEnum.PHONE_SMS_FAIL_CODE){
-          createErrorModal({ title: '错误提示', content: res.message || '未知问题' });
+          createErrorModal({ title: 'Gợi ý lỗi', content: res.message || 'Vấn đề không xác định' });
           reject();
         }
         reject(res);
       }
     }).catch((res)=>{
-      createErrorModal({ title: '错误提示', content: res.message || '未知问题' });
+      createErrorModal({ title: 'Gợi ý lỗi', content: res.message || 'Vấn đề không xác định' });
       reject();
     });
   });
 }
 
 /**
- * @description: 注册接口
+ * @description: API đăng ký
  */
 export function register(params) {
   return defHttp.post({ url: Api.registerApi, params }, { isReturnNativeResponse: true });
 }
 
 /**
- *校验用户是否存在
+ *Kiểm tra người dùng có tồn tại không
  * @param params
  */
 export const checkOnlyUser = (params) => defHttp.get({ url: Api.checkOnlyUser, params }, { isTransformResponse: false });
 /**
- *校验手机号码
+ *Kiểm tra số điện thoại
  * @param params
  */
 export const phoneVerify = (params) => defHttp.post({ url: Api.phoneVerify, params }, { isTransformResponse: false });
 /**
- *密码修改
+ *Sửa mật khẩu
  * @param params
  */
 export const passwordChange = (params) => defHttp.get({ url: Api.passwordChange, params }, { isTransformResponse: false });
 /**
- * @description: 第三方登录
+ * @description: Đăng nhập bên thứ ba
  */
 export function thirdLogin(params, mode: ErrorMessageMode = 'modal') {
-  //==========begin 第三方登录/auth2登录需要传递租户id===========
+  //==========begin Đăng nhập bên thứ ba/auth2Đăng nhập cần truyền tenantid===========
   let tenantId = "0";
   if(!params.tenantId){
     tenantId = params.tenantId;
   }
-  //==========end 第三方登录/auth2登录需要传递租户id===========
+  //==========end Đăng nhập bên thứ ba/auth2Đăng nhập cần truyền tenantid===========
   return defHttp.get<LoginResultModel>(
     {
       url: `${Api.thirdLogin}/${params.token}/${params.thirdType}/${tenantId}`,
@@ -175,7 +175,7 @@ export function thirdLogin(params, mode: ErrorMessageMode = 'modal') {
   );
 }
 /**
- * @description: 获取第三方短信验证码
+ * @description: Lấy mã xác thực SMS bên thứ ba
  */
 export function setThirdCaptcha(params) {
   return new Promise((resolve, reject) => {
@@ -184,7 +184,7 @@ export function setThirdCaptcha(params) {
       if (res.success) {
         resolve(true);
       } else {
-        createErrorModal({ title: '错误提示', content: res.message || '未知问题' });
+        createErrorModal({ title: 'Gợi ý lỗi', content: res.message || 'Vấn đề không xác định' });
         reject();
       }
     });
@@ -192,7 +192,7 @@ export function setThirdCaptcha(params) {
 }
 
 /**
- * 获取登录二维码信息
+ * Lấy thông tin mã QR đăng nhập
  */
 export function getLoginQrcode() {
   let url = Api.getLoginQrcode;
@@ -200,7 +200,7 @@ export function getLoginQrcode() {
 }
 
 /**
- * 监控扫码状态
+ * Giám sát trạng thái quét mã
  */
 export function getQrcodeToken(params) {
   let url = Api.getQrcodeToken;
@@ -208,7 +208,7 @@ export function getQrcodeToken(params) {
 }
 
 /**
- * SSO登录校验
+ * SSOKiểm tra đăng nhập
  */
 export async function validateCasLogin(params) {
   let url = Api.validateCasLogin;

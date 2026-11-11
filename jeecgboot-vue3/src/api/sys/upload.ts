@@ -15,10 +15,10 @@ export function uploadApi(params: UploadFileParams, onUploadProgress: (progressE
       onUploadProgress,
     },
     params,
-    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1385】修复上传示例报错
-    // 返回上传接口完整响应，避免调用方拿到 undefined 被当成失败
+    // update-begin--author:liaozhiyang---date:20260804---for: 【LHZP-1385]Sửa lỗi ví dụ tải lên
+    // Trả về phản hồi đầy đủ của API upload, tránh bên gọi lấy được undefined Bị coi là thất bại
     { isReturnResponse: true }
-    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1385】修复上传示例报错
+    // update-end--author:liaozhiyang---date:20260804---for: 【LHZP-1385]Sửa lỗi ví dụ tải lên
   );
 }
 /**

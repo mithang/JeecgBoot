@@ -1,8 +1,8 @@
 /**
- * 判断是否 十六进制颜色值.
- * 输入形式可为 #fff000 #f00
+ * Kiểm tra có hay không Giá trị màu hex.
+ * Dạng nhập có thể là #fff000 #f00
  *
- * @param   String  color   十六进制颜色值
+ * @param   String  color   Giá trị màu hex
  * @return  Boolean
  */
 export function isHexColor(color: string) {
@@ -11,10 +11,10 @@ export function isHexColor(color: string) {
 }
 
 /**
- * RGB 颜色值转换为 十六进制颜色值.
- * r, g, 和 b 需要在 [0, 255] 范围内
+ * RGB Chuyển giá trị màu thành Giá trị màu hex.
+ * r, g, và b Cần ở [0, 255] Trong phạm vi
  *
- * @return  String          类似#ff00ff
+ * @return  String          Tương tự#ff00ff
  * @param r
  * @param g
  * @param b

@@ -16,21 +16,21 @@ enum Api {
   getCategoryData = '/sys/category/loadAllData',
   refreshDragCache = '/drag/page/refreshCache',
   refreshDefaultIndexCache = '/sys/sysRoleIndex/cleanDefaultIndexCache',
-  //异步获取部门和岗位
+  //Lấy bất đồng bộ phòng ban và vị trí
   queryDepartAndPostTreeSync = '/sys/sysDepart/queryDepartAndPostTreeSync',
-  //查询部门岗位下的用户
+  //Truy vấn người dùng thuộc phòng ban/vị trí
   queryDepartPostUserPageList = '/sys/user/queryDepartPostUserPageList',
-  //查询所选部门的所有父节点ID
+  //Truy vấn tất cả nút cha của phòng ban đã chọnID
   queryAllParentId = '/sys/sysDepart/queryAllParentId',
 }
 
 /**
- * 上传父路径
+ * Đường dẫn cha khi tải lên
  */
 export const uploadUrl = `${baseUploadUrl}/sys/common/upload`;
 
 /**
- * 职务列表
+ * Danh sách chức vụ
  * @param params
  */
 export const getPositionList = (params) => {
@@ -38,7 +38,7 @@ export const getPositionList = (params) => {
 };
 
 /**
- * 用户列表
+ * Danh sách người dùng
  * @param params
  */
 export const getUserList = (params) => {
@@ -46,7 +46,7 @@ export const getUserList = (params) => {
 };
 
 /**
- * 角色列表
+ * Danh sách vai trò
  * @param params
  */
 export const getRoleList = (params) => {
@@ -54,89 +54,89 @@ export const getRoleList = (params) => {
 };
 
 /**
- * 异步获取部门树列表
+ * Lấy bất đồng bộ danh sách cây phòng ban
  */
 export const queryDepartTreeSync = (params?) => {
   return defHttp.get({ url: Api.queryDepartTreeSync, params });
 };
 /**
- * 异步获取部门职位树列表
+ * Lấy bất đồng bộ danh sách cây vị trí phòng ban
  */
 export const queryDepartAndPostTreeSync = (params?) => {
   return defHttp.get({ url: Api.queryDepartAndPostTreeSync, params });
 };
 
 /**
- * 获取部门树列表
+ * Lấy danh sách cây phòng ban
  */
 export const queryTreeList = (params?) => {
   return defHttp.get({ url: Api.queryTreeList, params });
 };
 
 /**
- * 分类字典树控件 加载节点
+ * Control cây từ điển phân loại Tải nút
  */
 export const loadTreeData = (params?) => {
   return defHttp.get({ url: Api.loadTreeData, params });
 };
 
 /**
- * 根据字典code加载字典text
+ * Theo từ điểncodeTải từ điểntext
  */
 export const loadDictItem = (params?) => {
   return defHttp.get({ url: Api.loadDictItem, params });
 };
 
 /**
- * 根据字典code加载字典text
+ * Theo từ điểncodeTải từ điểntext
  */
 export const getDictItems = (dictCode) => {
   return defHttp.get({ url: Api.getDictItems + dictCode }, { joinTime: false });
 };
 /**
- * 部门用户modal选择列表加载list
+ * Người dùng phòng banmodalTải danh sách chọnlist
  */
 export const getTableList = (params) => {
   return defHttp.get({ url: Api.getTableList, params });
 };
 
 /**
- * 部门岗位用户modal【查询部门岗位下的用户】
+ * Người dùng vị trí phòng banmodal[Truy vấn người dùng dưới vị trí phòng ban]
  */
 export const queryDepartPostUserPageList = (params) => {
   return defHttp.get({ url: Api.queryDepartPostUserPageList, params });
 };
 
 /**
- * 查询所选部门的所有父节点ID
+ * Truy vấn tất cả nút cha của phòng ban đã chọnID
  */
 export const queryAllParentId = (params) => {
   return defHttp.get({ url: Api.queryAllParentId, params });
 };
 
 /**
- * 加载全部分类字典数据
+ * Tải tất cả dữ liệu từ điển phân loại
  */
 export const loadCategoryData = (params) => {
   return defHttp.get({ url: Api.getCategoryData, params });
 };
 /**
- * 文件上传
+ * Tải lên tệp
  */
 export const uploadFile = (params, success) => {
   return defHttp.uploadFile({ url: uploadUrl }, params, { success });
 };
 /**
- * 下载文件
- * @param url 文件路径
- * @param fileName 文件名
+ * Tải xuống tệp
+ * @param url Đường dẫn tệp
+ * @param fileName Tên tệp
  * @param parameter
  * @returns {*}
  */
 export const downloadFile = (url, fileName?, parameter?) => {
   return getFileblob(url, parameter).then((data) => {
     if (!data || data.size === 0) {
-      message.warning('文件下载失败');
+      message.warning('Tải xuống tệp thất bại');
       return;
     }
     if (typeof window.navigator.msSaveBlob !== 'undefined') {
@@ -149,14 +149,14 @@ export const downloadFile = (url, fileName?, parameter?) => {
       link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link); //下载完成移除元素
-      window.URL.revokeObjectURL(url); //释放掉blob对象
+      document.body.removeChild(link); //Tải xuống xong thì xóa phần tử
+      window.URL.revokeObjectURL(url); //Giải phóngblobĐối tượng
     }
   });
 };
 
 /**
- * 下载文件 用于excel导出
+ * Tải xuống tệp Dùng choexcelXuất
  * @param url
  * @param parameter
  * @returns {*}
@@ -173,18 +173,18 @@ export const getFileblob = (url, parameter) => {
 };
 
 /**
- * 【用于评论功能】自定义文件上传-方法
+ * [Dùng cho chức năng bình luận] Upload tệp tùy chỉnh-Phương thức
  */
 export const uploadMyFile = (url, data) => {
   return defHttp.uploadMyFile(url, data);
 };
 /**
- * 刷新仪表盘缓存
+ * Làm mới cache bảng điều khiển
  * @param params
  */
 export const refreshDragCache = () => defHttp.get({ url: Api.refreshDragCache }, { isTransformResponse: false });
 /**
- * 刷新默认首页缓存
+ * Làm mới cache trang chủ mặc định
  * @param params
  */
 export const refreshHomeCache = () => defHttp.get({ url: Api.refreshDefaultIndexCache }, { isTransformResponse: false });

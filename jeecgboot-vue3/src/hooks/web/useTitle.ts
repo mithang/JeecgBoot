@@ -29,7 +29,7 @@ export function useTitle() {
       if (route.name === REDIRECT_NAME) {
         return;
       }
-      // 代码逻辑说明: 【QQYUN-6938】online菜单名字和页面title不一致
+      // Giải thích logic mã: 【QQYUN-6938】onlineTên menu và trangtitleKhông nhất quán
       if (route.params && Object.keys(route.params).length) {
         if (!menus.value) {
           menus.value = await getMenus();
@@ -53,7 +53,7 @@ export function useTitle() {
 /** 
  2023-11-09
  liaozhiyang
- 获取路由匹配模式的真实页面名字
+ Lấy tên trang thật của chế độ khớp route
 */
 function getMatchingRouterName(menus, path) {
   for (let i = 0, len = menus.length; i < len; i++) {

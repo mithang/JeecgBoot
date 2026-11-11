@@ -18,7 +18,7 @@ enum Api {
 
 export const getMenuList = () => {
   return new Promise((resolve) => {
-    //为了兼容mock和接口数据
+    //Để tương thíchmockvà dữ liệu API
     defHttp.get<getMenuListResultModel>({ url: Api.GetMenuList }).then((res) => {
       if (Array.isArray(res)) {
         resolve(res);
@@ -30,12 +30,12 @@ export const getMenuList = () => {
 };
 
 /**
- * @description: 获取后台菜单权限和按钮权限
+ * @description: Lấy quyền menu backend và quyền nút
  */
 export function getBackMenuAndPerms() {
   return defHttp.get({ url: Api.GetMenuList }).catch((e) => {
-    console.log('接口 getBackMenuAndPerms 异常错误信息：', e);
-    // Token过期失效，直接跳转登录页面 2025-09-08 scott
+    console.log('API getBackMenuAndPerms Thông tin lỗi ngoại lệ:', e);
+    // TokenHết hạn không có hiệu lực, chuyển thẳng trang đăng nhập 2025-09-08 scott
     if (e && (e.message.includes('timeout') || e.message.includes('401') || e.message.includes('500'))) {
       const userStore = useUserStoreWithOut();
       userStore.setToken('');
@@ -43,7 +43,7 @@ export function getBackMenuAndPerms() {
       router.push({
         path: PageEnum.BASE_LOGIN,
         query: {
-          // 传入当前的路由，登录成功后跳转到当前路由
+          // Truyền route hiện tại, sau khi đăng nhập thành công sẽ chuyển đến route hiện tại
           redirect: router.currentRoute.value.fullPath,
         }
       });
@@ -52,7 +52,7 @@ export function getBackMenuAndPerms() {
 }
 
 /**
- * 切换成vue3菜单
+ * Chuyển thànhvue3Menu
  */
 // export const switchVue3Menu = () => {
 //   return new Promise((resolve) => {

@@ -4,17 +4,17 @@ import { getAuthCache } from '/@/utils/auth';
 import { DB_DICT_DATA_KEY } from '/@/enums/cacheEnum';
 
 /**
- * 从缓存中获取字典配置
+ * Lấy cấu hình từ điển từ cache
  * @param code
  */
 export const getDictItemsByCode = (code) => {
-  // 代码逻辑说明: 【QQYUN-6417】生产环境字典慢的问题
+  // Giải thích logic mã: 【QQYUN-6417]Vấn đề từ điển chậm trong môi trường production
   const userStore = useUserStore();
   const dictItems = userStore.getAllDictItems;
   if (null != dictItems && typeof dictItems === 'object' && dictItems[code]) {
     return dictItems[code];
   }
-  //兼容以前的旧写法
+  //Tương thích cách viết cũ trước đây
   if (getAuthCache(DB_DICT_DATA_KEY) && getAuthCache(DB_DICT_DATA_KEY)[code]) {
     return getAuthCache(DB_DICT_DATA_KEY)[code];
   }
@@ -22,7 +22,7 @@ export const getDictItemsByCode = (code) => {
 
 };
 /**
- * 从缓存中获取Pop字典配置
+ * Lấy từ cachePopCấu hình từ điển
  * @param text
  * @param code
  */
@@ -37,30 +37,30 @@ export const getPopDictByCode = (text, codeStr) => {
   );
 };
 /**
- * 获取字典数组
- * @param dictCode 字典Code
+ * Lấy mảng từ điển
+ * @param dictCode Từ điểnCode
  * @return List<Map>
  */
 export const initDictOptions = (code) => {
-  //1.优先从缓存中读取字典配置
+  //1.Ưu tiên đọc cấu hình từ điển từ cache
   if (getDictItemsByCode(code)) {
     return new Promise((resolve, reject) => {
       resolve(getDictItemsByCode(code));
     });
   }
-  //2.获取字典数组
-  // 代码逻辑说明: 字典数据请求前将参数编码处理，但是不能直接编码，因为可能之前已经编码过了
+  //2.Lấy mảng từ điển
+  // Giải thích logic mã: Trước khi yêu cầu dữ liệu từ điển, mã hóa tham số, nhưng không thể mã hóa trực tiếp vì có thể trước đây đã mã hóa rồi
   if (code.indexOf(',') > 0 && code.indexOf(' ') > 0) {
-    // 编码后类似sys_user%20where%20username%20like%20xxx' 是不包含空格的,这里判断如果有空格和逗号说明需要编码处理
+    // Sau khi mã hóa tương tựsys_user%20where%20username%20like%20xxx' là không chứa khoảng trắng,Ở đây phán đoán nếu có khoảng trắng và dấu phẩy nghĩa là cần xử lý mã hóa
     code = encodeURI(code);
   }
   return defHttp.get({ url: `/sys/dict/getDictItems/${code}` });
 };
 /**
- * 获取字典数组
- * @param code 字典Code
- * @param params 查询参数
- * @param options 查询配置
+ * Lấy mảng từ điển
+ * @param code Từ điểnCode
+ * @param params Tham số truy vấn
+ * @param options Cấu hình truy vấn
  * @return List<Map>
  */
 export const ajaxGetDictItems = (code, params, options?) => defHttp.get({ url: `/sys/dict/getDictItems/${code}`, params }, options);

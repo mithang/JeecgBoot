@@ -1,10 +1,10 @@
-// 获取所有动态页面(views目录下的所有vue文件和tsx文件)
+// Lấy tất cả trang động(viewsTất cả dưới thư mụcvueTệp vàtsxTệp)
 const allFiles = import.meta.glob(
   [
-    '../views/**/*.{vue,tsx}',// 获取所有vue和tsx文件
-    // 排除特定文件夹
+    '../views/**/*.{vue,tsx}',// Lấy tất cảvuevàtsxTệp
+    // Loại trừ thư mục cụ thể
     '!../views/system/approvalrole/compoments/**',
   ]
 );
-// 合并所有动态页面
+// Hợp nhất tất cả trang động
 export const dynamicPages = { ...allFiles };

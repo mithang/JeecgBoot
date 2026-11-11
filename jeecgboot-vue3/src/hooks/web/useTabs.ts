@@ -23,7 +23,7 @@ export function useTabs(_router?: Router) {
   function canIUseTabs(): boolean {
     const { show } = appStore.getMultiTabsSetting;
     if (!show) {
-      throw new Error('The multi-tab page is currently not open, please open it in the settings！');
+      throw new Error('The multi-tab page is currently not open, please open it in the settings!');
     }
     return !!show;
   }
@@ -76,7 +76,7 @@ export function useTabs(_router?: Router) {
         break;
 
       case TableActionEnum.CLOSE_LEFT:
-        // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+        // Giải thích logic mã: 【TV360X-732]Không phải trang hiện tại, nhấp phải đóng bên trái, đóng bên phải, đóng các cái khác dùng bình thường
         await tabStore.closeLeftTabs(tab || currentTab, router);
         break;
 
@@ -96,7 +96,7 @@ export function useTabs(_router?: Router) {
   }
 
   /**
-   * 关闭相同的路由
+   * Đóng các route giống nhau
    * @param path
    */
   function closeSameRoute(path) {
@@ -112,7 +112,7 @@ export function useTabs(_router?: Router) {
   return {
     refreshPage: () => handleTabAction(TableActionEnum.REFRESH),
     changeDesign: () => handleTabAction(TableActionEnum.HOME_DESIGN),
-    // 代码逻辑说明: 【TV360X-732】非当前页右键关闭左侧、关闭右侧、关闭其它功能正常使用
+    // Giải thích logic mã: 【TV360X-732]Không phải trang hiện tại, nhấp phải đóng bên trái, đóng bên phải, đóng các cái khác dùng bình thường
     closeAll: (tab) => handleTabAction(TableActionEnum.CLOSE_ALL, tab),
     closeLeft: (tab) => handleTabAction(TableActionEnum.CLOSE_LEFT, tab),
     closeRight: (tab) => handleTabAction(TableActionEnum.CLOSE_RIGHT, tab),

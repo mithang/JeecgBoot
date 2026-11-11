@@ -2,9 +2,9 @@ import { isRef, unref, watch, Ref, ComputedRef } from 'vue';
 import Clipboard from 'clipboard';
 import { ModalOptionsEx, useMessage } from '/@/hooks/web/useMessage';
 
-/** 带复制按钮的弹窗 */
+/** Popup có nút sao chép */
 interface IOptions extends ModalOptionsEx {
-  // 要复制的文本，可以是一个 ref 对象，动态更新
+  // Văn bản cần sao chép, có thể là một ref Đối tượng, cập nhật động
   copyText: string | Ref<string> | ComputedRef<string>;
 }
 
@@ -17,15 +17,15 @@ export function useCopyModal() {
 
 const { createMessage, createConfirm } = useMessage();
 
-/** 创建复制弹窗 */
+/** Tạo popup sao chép */
 function createCopyModal(options: Partial<IOptions>) {
   let modal = createConfirm({
     ...options,
     iconType: options.iconType ?? 'info',
     width: options.width ?? 500,
-    title: options.title ?? '复制',
+    title: options.title ?? 'Sao chép',
     maskClosable: options.maskClosable ?? true,
-    okText: options.okText ?? '复制',
+    okText: options.okText ?? 'Sao chép',
     okButtonProps: {
       ...options.okButtonProps,
       class: COPY_CLASS,
@@ -36,11 +36,11 @@ function createCopyModal(options: Partial<IOptions>) {
         const clipboard = new Clipboard('.' + COPY_CLASS);
         clipboard.on('success', () => {
           clipboard.destroy();
-          createMessage.success('复制成功');
+          createMessage.success('Sao chép thành công');
           resolve();
         });
         clipboard.on('error', () => {
-          createMessage.error('该浏览器不支持自动复制');
+          createMessage.error('Trình duyệt đó không hỗ trợ sao chép tự động');
           clipboard.destroy();
           resolve();
         });
@@ -48,7 +48,7 @@ function createCopyModal(options: Partial<IOptions>) {
     },
   });
 
-  // 动态更新 copyText
+  // Cập nhật động copyText
   if (isRef(options.copyText)) {
     watch(options.copyText, (copyText) => {
       modal.update({

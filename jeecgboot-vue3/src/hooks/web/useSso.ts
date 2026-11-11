@@ -1,4 +1,4 @@
-// 单点登录核心类
+// Lớp lõi đăng nhập một lần
 import { getToken } from '/@/utils/auth';
 import { getUrlParam } from '/@/utils';
 import { useGlobSetting } from '/@/hooks/setting';
@@ -8,8 +8,8 @@ const globSetting = useGlobSetting();
 const openSso = globSetting.openSso;
 
 /**
- * 获取 CAS 登录回调地址，保留当前页面路径并移除 CAS 追加的 ticket 参数
- * for: 【issues/9797】开启CAS验证，回跳地址错误
+ * Lấy CAS Địa chỉ callback đăng nhập, giữ đường dẫn trang hiện tại và xóa CAS được thêm vào ticket Tham số
+ * for: 【issues/9797]BậtCASKiểm tra, địa chỉ quay lại sai
  */
 export function getCasServiceUrl() {
   const serviceUrl = new URL(window.location.href);
@@ -18,11 +18,11 @@ export function getCasServiceUrl() {
 }
 
 export function useSso() {
-  // 代码逻辑说明: 【QQYUN-7805】SSO登录强制用http #957---
+  // Giải thích logic mã: 【QQYUN-7805】SSOĐăng nhập bắt buộc dùnghttp #957---
   let locationUrl = document.location.protocol +"//" + window.location.host + '/';
 
   /**
-   * 单点登录
+   * Đăng nhập một lần
    */
   async function ssoLogin() {
     if (openSso == 'true') {
@@ -47,7 +47,7 @@ export function useSso() {
   }
 
   /**
-   * 退出登录
+   * Đăng xuất
    */
   async function ssoLoginOut() {
     window.location.href = globSetting.casBaseUrl + '/logout?service=' + encodeURIComponent(locationUrl);

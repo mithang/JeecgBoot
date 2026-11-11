@@ -4,7 +4,7 @@ import { VALIDATE_FAILED, validateFormModelAndTables } from '/@/utils/common/vxe
 
 export function useJvxeMethod(requestAddOrEdit, classifyIntoFormData, tableRefs, activeKey, refKeys, validateSubForm?) {
   const formRef = ref();
-  /** 查询某个tab的数据 */
+  /** Truy vấn một cái nào đótabdữ liệu */
   function requestSubTableData(url, params, tab, success) {
     tab.loading = true;
     defHttp
@@ -25,29 +25,29 @@ export function useJvxeMethod(requestAddOrEdit, classifyIntoFormData, tableRefs,
       });
   }
 
-  /* --- handle 事件 --- */
+  /* --- handle Sự kiện --- */
 
-  /** ATab 选项卡切换事件 */
+  /** ATab Sự kiện chuyển tab */
   function handleChangeTabs(key) {
-    // 自动重置scrollTop状态，防止出现白屏
+    // Tự động đặt lạiscrollTopTrạng thái, tránh xuất hiện trang trắng
     tableRefs[key]?.value?.resetScrollTop(0);
   }
 
-  /** 获取所有的editableTable实例*/
+  /** Lấy tất cảeditableTableInstance*/
   function getAllTable() {
     let values = Object.values(tableRefs);
     return Promise.all(values);
   }
-  /** 确定按钮点击事件 */
+  /** Sự kiện nhấp nút xác nhận */
   function handleSubmit() {
-    /** 触发表单验证 */
+    /** Kích hoạt kiểm tra biểu mẫu */
     getAllTable()
       .then((tables) => {
         let values = formRef.value.getFieldsValue();
         return validateFormModelAndTables(formRef.value.validate, values, tables, formRef.value.getProps, false);
       })
       .then((allValues) => {
-        /** 一次性验证一对一的所有子表 */
+        /** Kiểm tra một lần tất cả bảng con một-một */
         return validateSubForm && typeof validateSubForm === 'function' ? validateSubForm(allValues) : validateAllSubOne(allValues);
       })
       .then((allValues) => {
@@ -55,20 +55,20 @@ export function useJvxeMethod(requestAddOrEdit, classifyIntoFormData, tableRefs,
           throw throwNotFunction('classifyIntoFormData');
         }
         let formData = classifyIntoFormData(allValues);
-        // 发起请求
+        // Gửi yêu cầu
         return requestAddOrEdit(formData);
       })
       .catch((e) => {
         if (e.error === VALIDATE_FAILED) {
-          // 如果有未通过表单验证的子表，就自动跳转到它所在的tab
-          // 代码逻辑说明: VUEN-2866【代码生成】Tab风格 一对多子表校验不通过时，点击提交表单空白了，流程附加页面也有此问题
+          // Nếu có bảng con chưa qua kiểm tra biểu mẫu, sẽ tự động chuyển đến chỗ của nótab
+          // Giải thích logic mã: VUEN-2866[Tạo mã]TabPhong cách Khi kiểm tra bảng con một-nhiều không đạt, nhấp gửi biểu mẫu thì trống, trang đính kèm quy trình cũng gặp vấn đề này
           if(e.paneKey){
             activeKey.value = e.paneKey
           }else{
-            // 代码逻辑说明: TV360X-478 一对多tab，校验未通过时，tab没有跳转
+            // Giải thích logic mã: TV360X-478 Một-nhiềutab, khi kiểm tra không đạt,tabKhông chuyển
             activeKey.value = e.subIndex == null ? (e.index == null ? unref(activeKey) : refKeys.value[e.index]) : Object.keys(tableRefs)[e.subIndex];
           }
-          // 代码逻辑说明: 【TV360X-1064】非原生提交表单滚动校验没通过的项---
+          // Giải thích logic mã: 【TV360X-1064]Các mục kiểm tra cuộn khi submit biểu mẫu không phải native không đạt---
           if (e?.errorFields) {
             const firstField = e.errorFields[0];
             if (firstField) {
@@ -81,7 +81,7 @@ export function useJvxeMethod(requestAddOrEdit, classifyIntoFormData, tableRefs,
         }
       });
   }
-  //校验所有子表表单
+  //Kiểm tra tất cả biểu mẫu bảng con
   function validateAllSubOne(allValues) {
     return new Promise((resolve) => {
       resolve(allValues);
@@ -91,21 +91,21 @@ export function useJvxeMethod(requestAddOrEdit, classifyIntoFormData, tableRefs,
 
   /** not a function */
   function throwNotFunction(name) {
-    return `${name} 未定义或不是一个函数`;
+    return `${name} Chưa định nghĩa hoặc không phải là một hàm`;
   }
 
   /** not a array */
   function throwNotArray(name) {
-    return `${name} 未定义或不是一个数组`;
+    return `${name} Chưa định nghĩa hoặc không phải là một mảng`;
   }
   return [handleChangeTabs, handleSubmit, requestSubTableData, formRef];
 }
 
 /**
- * 校验多个表单和子表table，用于原生的antd-vue的表单
- * @param activeKey 子表表单/vxe-table 所在tabs的 activeKey
- * @param refMap 子表表单/vxe-table对应的ref对象 map结构
- * 示例：
+ * Kiểm tra nhiều biểu mẫu và bảng contable, dùng cho nativeantd-vuebiểu mẫu
+ * @param activeKey Biểu mẫu bảng con/vxe-table nơi ởtabscủa activeKey
+ * @param refMap Biểu mẫu bảng con/vxe-tabletương ứngrefĐối tượng mapCấu trúc
+ * Ví dụ:
  * useValidateAntFormAndTable(activeKey, {
  *   'tableA': tableARef,
  *   'formB': formBRef
@@ -113,7 +113,7 @@ export function useJvxeMethod(requestAddOrEdit, classifyIntoFormData, tableRefs,
  */
 export function useValidateAntFormAndTable(activeKey, refMap) {
   /**
-   * 获取所有子表数据
+   * Lấy dữ liệu tất cả bảng con
    */
   async function getSubFormAndTableData() {
     let formData = {};
@@ -138,7 +138,7 @@ export function useValidateAntFormAndTable(activeKey, refMap) {
   }
 
   /**
-   * 转换数据用 如果有数组转成逗号分割的格式
+   * Dùng để chuyển dữ liệu Nếu có mảng thì chuyển thành định dạng tách bằng dấu phẩy
    * @param data
    */
   function transformData(data) {
@@ -153,7 +153,7 @@ export function useValidateAntFormAndTable(activeKey, refMap) {
   }
 
   /**
-   * 子表table
+   * Bảng contable
    * @param instance
    * @param key
    */
@@ -163,14 +163,14 @@ export function useValidateAntFormAndTable(activeKey, refMap) {
       return instance.getTableData();
     } else {
       activeKey.value = key;
-      // 自动重置scrollTop状态，防止出现白屏
+      // Tự động đặt lạiscrollTopTrạng thái, tránh xuất hiện trang trắng
       instance.resetScrollTop(0);
       return Promise.reject(1);
     }
   }
 
   /**
-   * 子表表单
+   * Biểu mẫu bảng con
    * @param instance
    * @param key
    */
