@@ -11,9 +11,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * 单个JOB对应的每个执行器，最久为使用的优先被选举
- *      a、LFU(Least Frequently Used)：最不经常使用，频率/次数
- *      b(*)、LRU(Least Recently Used)：最近最久未使用，时间
+ * Đối với mỗi executor tương ứng với một JOB, executor lâu nhất chưa được sử dụng được ưu tiên chọn
+ *      a, LFU (Least Frequently Used): ít được sử dụng nhất, tần suất/số lần
+ *      b(*), LRU (Least Recently Used): lâu nhất chưa được sử dụng gần đây, thời gian
  *
  * Created by xuxueli on 17/3/10.
  */
@@ -40,8 +40,8 @@ public class ExecutorRouteLRU extends ExecutorRouter {
         if (lruItem == null) {
             /**
              * LinkedHashMap
-             *      a、accessOrder：true=访问顺序排序（get/put时排序）；false=插入顺序排期；
-             *      b、removeEldestEntry：新增元素时将会调用，返回true时会删除最老元素；可封装LinkedHashMap并重写该方法，比如定义最大容量，超出是返回true即可实现固定长度的LRU算法；
+             *      a, accessOrder: true=Sắp xếp theo thứ tự truy cập (sắp xếp khi get/put); false=Sắp xếp theo thứ tự chèn;
+             *      b, removeEldestEntry: được gọi khi thêm phần tử mới, trả về true sẽ xóa phần tử cũ nhất; có thể đóng gói LinkedHashMap và ghi đè phương thức này, ví dụ định nghĩa dung lượng tối đa, khi vượt quá trả về true là có thể triển khai thuật toán LRU có độ dài cố định;
              */
             lruItem = new LinkedHashMap<>(16, 0.75f, true);
             jobLRUMap.putIfAbsent(jobId, lruItem);

@@ -3,18 +3,18 @@
 * ================
 *
 * 1、data_filter：
-*      searchBtn：       搜索
-*      resetBtn：        重置
+*      searchBtn:       Tìm kiếm
+*      resetBtn:        Đặt lại
 * 2、data_operation：
 *      action：
-*          - add：       新增
-*          - update：    更新
-*          - delete：    删除
+*          - add:       Thêm mới
+*          - update:    Cập nhật
+*          - delete:    Xóa
 *      style：
-*          - selectOnlyOne： 单选
-*          - selectAny：     多选
+*          - selectOnlyOne: Chọn một
+*          - selectAny:     Chọn nhiều
 * 3、data_list
-*      mainDataTable：   表格
+*      mainDataTable:   Bảng
 *
 * @author       xuxueli
 * @repository   https://github.com/xuxueli/xxl-boot
@@ -168,20 +168,20 @@
                 };
             },
             columns: columns,
-            clickToSelect: true, 			// 是否启用点击选中行
-            multipleSelectRow: true,        // 启动多选行：点击 选择单行，Shift+点击 选择连续行, Commond+点击 非连续选择多行
-            sortable: false, 				// 是否启用排序
-            pagination: true, 				// 是否显示分页
-            pageNumber: 1, 					// 默认第一页
-            pageList: [10, 25, 50, 100] , 	// 可供选择的每页的行数（*）
-            smartDisplay: false,			// 当总记录数小于分页数，是否显示可选项
+            clickToSelect: true, 			// Có bật chọn hàng khi nhấn hay không
+            multipleSelectRow: true,        // Bật chọn nhiều hàng: nhấn để chọn một hàng, Shift+nhấn để chọn các hàng liên tiếp, Command+nhấn để chọn nhiều hàng không liên tiếp
+            sortable: false, 				// Có bật sắp xếp hay không
+            pagination: true, 				// Có hiển thị phân trang hay không
+            pageNumber: 1, 					// Mặc định là trang đầu tiên
+            pageList: [10, 25, 50, 100] , 	// Số hàng mỗi trang có thể chọn (*)
+            smartDisplay: false,			// Khi tổng số bản ghi nhỏ hơn số phân trang, có hiển thị tùy chọn hay không
             paginationParts:  ['pageInfoShort', 'pageSize', 'pageList'],
-            paginationPreText: '<<',		// 跳转页面的 上一页按钮
-            paginationNextText: '>>',		// 跳转页面的 下一页按钮
-            paginationLoop: false,          // 是否循环翻页
-            showRefresh: true,				// 显示刷新按钮
-            showColumns: true,				// 显示/隐藏列
-            minimumCountColumns: 2,			// 最少允许的列数
+            paginationPreText: '<<',		// Nút trang trước khi chuyển trang
+            paginationNextText: '>>',		// Nút trang sau khi chuyển trang
+            paginationLoop: false,          // Có lặp lại khi chuyển trang hay không
+            showRefresh: true,				// Hiển thị nút làm mới
+            showColumns: true,				// Hiển thị/Ẩn cột
+            minimumCountColumns: 2,			// Số cột tối thiểu cho phép
             // onLoadSuccess: function(data) {}
             onAll: function(name, args) {
                 // filter
@@ -204,7 +204,7 @@
             }
         });
 
-        // toolbar 样式调整；
+        // Điều chỉnh kiểu của toolbar;
         var toolbarElement = document.querySelector('.fixed-table-toolbar');
         if (toolbarElement) {
             toolbarElement.classList.remove('fixed-table-toolbar');
@@ -235,27 +235,27 @@
                 return result.data;
             },
             treeEnable:true,
-            idField: 'id',					// 树形id
-            parentIdField: 'parentId',		// 父级字段
-            treeShowField: 'name',			// 树形字段
+            idField: 'id',					// id dạng cây
+            parentIdField: 'parentId',		// Trường cấp cha
+            treeShowField: 'name',			// Trường dạng cây
             onPostBody: function(data) {
                 $("#data_list").treegrid({
-                    treeColumn: 1,												// 选择第几列作为树形字段
-                    initialState: 'expanded',									// 默认展开；expanded、collapsed
-                    expanderExpandedClass: 'fa fa-fw  fa-minus-square-o',		// 树形展开图标
-                    expanderCollapsedClass: 'fa fa-fw  fa-plus-square-o',		// 树形折叠图标
+                    treeColumn: 1,												// Chọn cột thứ mấy làm trường dạng cây
+                    initialState: 'expanded',									// Mặc định mở rộng; expanded, collapsed
+                    expanderExpandedClass: 'fa fa-fw  fa-minus-square-o',		// Biểu tượng mở rộng dạng cây
+                    expanderCollapsedClass: 'fa fa-fw  fa-plus-square-o',		// Biểu tượng thu gọn dạng cây
                     onChange () {
-                        $("#data_list").bootstrapTable('resetView')				// 树形表格重绘
+                        $("#data_list").bootstrapTable('resetView')				// Vẽ lại bảng dạng cây
                     }
                 })
             },
             columns:columns,
-            clickToSelect: true, 			// 是否启用点击选中行
-            multipleSelectRow: true,        // 启动多选行：点击 选择单行，Shift+点击 选择连续行, Commond+点击 非连续选择多行
-            sortable: false, 				// 是否启用排序
-            showRefresh: true,				// 显示刷新按钮
-            showColumns: true,				// 显示/隐藏列
-            minimumCountColumns: 2,			// 最少允许的列数
+            clickToSelect: true, 			// Có bật chọn hàng khi nhấn hay không
+            multipleSelectRow: true,        // Bật chọn nhiều hàng: nhấn để chọn một hàng, Shift+nhấn để chọn các hàng liên tiếp, Command+nhấn để chọn nhiều hàng không liên tiếp
+            sortable: false, 				// Có bật sắp xếp hay không
+            showRefresh: true,				// Hiển thị nút làm mới
+            showColumns: true,				// Hiển thị/Ẩn cột
+            minimumCountColumns: 2,			// Số cột tối thiểu cho phép
             onAll: function(name, args) {
                 // filter
                 if (!(['check.bs.table', "uncheck.bs.table", "check-all.bs.table", "uncheck-all.bs.table"].indexOf(name) > -1)) {
@@ -277,7 +277,7 @@
             }
         });
 
-        // toolbar 样式调整；
+        // Điều chỉnh kiểu của toolbar;
         var toolbarElement = document.querySelector('.fixed-table-toolbar');
         if (toolbarElement) {
             toolbarElement.classList.remove('fixed-table-toolbar');

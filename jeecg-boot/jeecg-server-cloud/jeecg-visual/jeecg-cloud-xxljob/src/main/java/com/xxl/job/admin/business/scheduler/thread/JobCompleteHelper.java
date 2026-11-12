@@ -59,7 +59,7 @@ public class JobCompleteHelper {
 		jobMonitorThread = new CyclicThread("JobCompleteHelper#jobMonitorThread", true, new Runnable() {
 			@Override
 			public void run() {
-				// 任务结果丢失处理：调度记录停留在 "运行中" 状态超过10min，且对应执行器心跳注册失败不在线，则将本地调度主动标记失败；
+				// Xử lý mất kết quả nhiệm vụ: bản ghi lập lịch ở trạng thái "Đang chạy" quá 10 phút, và heartbeat đăng ký của executor tương ứng thất bại, không trực tuyến, thì chủ động đánh dấu lập lịch cục bộ là thất bại;
 				Date losedTime = DateTool.addMinutes(new Date(), -10);
 				List<Long> losedJobIds  = XxlJobAdminBootstrap.getInstance().getXxlJobLogMapper().findLostJobIds(losedTime);
 

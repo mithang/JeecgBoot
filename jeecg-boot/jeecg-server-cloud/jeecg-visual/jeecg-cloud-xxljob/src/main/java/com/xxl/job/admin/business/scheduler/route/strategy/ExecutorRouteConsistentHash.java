@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * 分组下机器地址相同，不同JOB均匀散列在不同机器上，保证分组下机器分配JOB平均；且每个JOB固定调度其中一台机器；
- *      a、virtual node：解决不均衡问题
- *      b、hash method replace hashCode：String的hashCode可能重复，需要进一步扩大hashCode的取值范围
+ * Các địa chỉ máy trong cùng một nhóm giống nhau, các JOB khác nhau được băm đều lên các máy khác nhau, đảm bảo JOB được phân bổ trung bình cho các máy trong nhóm; và mỗi JOB được lập lịch cố định trên một máy;
+ *      a, virtual node: giải quyết vấn đề mất cân bằng
+ *      b, hash method replace hashCode: hashCode của String có thể trùng lặp, cần mở rộng thêm phạm vi giá trị của hashCode
  *
  * Created by xuxueli on 17/3/10.
  */
@@ -23,7 +23,7 @@ public class ExecutorRouteConsistentHash extends ExecutorRouter {
     private static final int VIRTUAL_NODE_NUM = 100;
 
     /**
-     * get hash code on 2^32 ring (md5散列的方式计算hash值)
+     * get hash code on 2^32 ring (tính giá trị hash bằng phương pháp băm md5)
      *
      * @param key key
      * @return hash code

@@ -2,11 +2,11 @@
 * Admin Setting for XXL-BOOT
 * ================
 *
-* 1、logout：         退出登录
-* 2、updatePwd：      修改密码
-* 3、slideToTop：     回到顶部
-* 4、change skin：    切换皮肤
-* 5、menu/sidebar-toggle： 菜单/侧边来，展示切换
+* 1. logout:          Đăng xuất
+* 2. updatePwd:       Đổi mật khẩu
+* 3. slideToTop:      Về đầu trang
+* 4. change skin:     Đổi giao diện (skin)
+* 5. menu/sidebar-toggle:  Menu/thanh bên, chuyển đổi hiển thị
 *
 * @author       xuxueli
 * @repository   https://github.com/xuxueli/xxl-boot
@@ -51,7 +51,7 @@ $(function(){
      * updatePwd Modal
      */
     let updatePwd = $(`
-        <!-- 修改密码.模态框 -->
+        <!-- Đổi mật khẩu. Hộp thoại modal -->
         <div class="modal fade" id="updatePwdModal" tabindex="-1" role="dialog"  aria-hidden="true">
             <div class="modal-dialog ">
                 <div class="modal-content">
@@ -107,11 +107,11 @@ $(function(){
         messages : {
             oldPassword : {
                 required : I18n.system_please_input +I18n.change_pwd_field_oldpwd,
-                rangelength : "密码长度限制为4~50"
+                rangelength : "Độ dài mật khẩu giới hạn từ 4~50"
             },
             password : {
                 required : I18n.system_please_input +I18n.change_pwd_field_newpwd,
-                rangelength : "密码长度限制为4~50"
+                rangelength : "Độ dài mật khẩu giới hạn từ 4~50"
             }
         },
         highlight : function(element) {
@@ -213,7 +213,7 @@ $(function(){
      * skinModal
      */
     let skinModal = $(`
-        <!-- 主题切换.模态框 -->
+        <!-- Chuyển đổi chủ đề. Hộp thoại modal -->
         <div class="modal fade" id="skinModal" tabindex="-1" role="dialog"  aria-hidden="true">
             <div class="modal-dialog ">
                 <div class="modal-content">
@@ -222,7 +222,7 @@ $(function(){
                         <h4 class="modal-title" >` + I18n.change_skin +`</h4>
                     </div>
                     <div class="modal-body">
-                        <!-- 主题列表 -->
+                        <!-- Danh sách chủ đề -->
                         <ul class="list-unstyled clearfix" >
                             <!-- level 1 -->
                             <li style="float:left; width: 33.33333%; padding: 5px;">

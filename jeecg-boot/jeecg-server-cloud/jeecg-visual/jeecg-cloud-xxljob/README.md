@@ -1,25 +1,25 @@
-- 初始化脚本(mysql)
+- Khởi tạo script (mysql)
 
   db\tables_xxl_job.sql
   
-- 修改数据库连接
+- Sửa kết nối cơ sở dữ liệu
 
   jeecg-cloud-xxljob\src\main\resources\application.yml
   
-- 启动项目
+- Khởi động dự án
 
   jeecg-cloud-xxljob\src\main\java\com\xxl\job\admin\XxlJobAdminApplication.java
   
- - 访问项目
+ - Truy cập dự án
   http://127.0.0.1:9080/xxl-job-admin/toLogin
   admin/123456
   
- - docker方式安装
+ - Cài đặt bằng Docker
  
    https://my.oschina.net/jeecg/blog/4729020
    
    
    
- 概念说明
- 1、手工创建执行器，AppName对应服务名字  比如： jeecg-demo
- 2、手工创建定时任务，选择执行器（服务）、JobHandler对应XxlJob的值
+ Giải thích khái niệm
+ 1. Tạo executor thủ công, AppName tương ứng với tên service, ví dụ: jeecg-demo
+ 2. Tạo nhiệm vụ định kỳ thủ công, chọn executor (service), JobHandler tương ứng với giá trị của XxlJob

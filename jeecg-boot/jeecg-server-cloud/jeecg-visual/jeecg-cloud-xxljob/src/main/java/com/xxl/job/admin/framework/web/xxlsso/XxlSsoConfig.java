@@ -34,7 +34,7 @@ public class XxlSsoConfig implements WebMvcConfigurer {
 
 
     /**
-     * 1、配置 XxlSsoBootstrap
+     * 1. Cấu hình XxlSsoBootstrap
      */
     @Bean(initMethod = "start", destroyMethod = "stop")
     public XxlSsoBootstrap xxlSsoBootstrap() {
@@ -47,7 +47,7 @@ public class XxlSsoConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 2、配置 XxlSso 拦截器
+     * 2. Cấu hình interceptor XxlSso
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

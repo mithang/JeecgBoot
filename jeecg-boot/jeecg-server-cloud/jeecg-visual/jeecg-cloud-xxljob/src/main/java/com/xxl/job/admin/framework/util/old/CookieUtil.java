@@ -11,13 +11,13 @@
 // */
 //public class CookieUtil {
 //
-//	// 默认缓存时间,单位/秒, 2H
+//	// Thời gian cache mặc định, đơn vị/giây, 2H
 //	private static final int COOKIE_MAX_AGE = Integer.MAX_VALUE;
-//	// 保存路径,根路径
+//	// Đường dẫn lưu, đường dẫn gốc
 //	private static final String COOKIE_PATH = "/";
 //
 //	/**
-//	 * 保存
+//	 * Lưu
 //	 *
 //	 * @param response
 //	 * @param key
@@ -30,7 +30,7 @@
 //	}
 //
 //	/**
-//	 * 保存
+//	 * Lưu
 //	 *
 //	 * @param response
 //	 * @param key
@@ -49,7 +49,7 @@
 //	}
 //
 //	/**
-//	 * 查询value
+//	 * Truy vấn value
 //	 *
 //	 * @param request
 //	 * @param key
@@ -64,7 +64,7 @@
 //	}
 //
 //	/**
-//	 * 查询Cookie
+//	 * Truy vấn Cookie
 //	 *
 //	 * @param request
 //	 * @param key
@@ -82,7 +82,7 @@
 //	}
 //
 //	/**
-//	 * 删除Cookie
+//	 * Xóa Cookie
 //	 *
 //	 * @param request
 //	 * @param response

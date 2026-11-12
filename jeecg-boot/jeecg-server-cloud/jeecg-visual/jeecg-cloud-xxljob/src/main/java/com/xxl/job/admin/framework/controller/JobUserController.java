@@ -42,7 +42,7 @@ public class JobUserController {
     @XxlSso(role = Consts.ADMIN_ROLE)
     public String index(Model model) {
 
-        // 执行器列表
+        // Danh sách executor
         List<XxlJobGroup> groupList = xxlJobGroupMapper.findAll();
         model.addAttribute("groupList", groupList);
 

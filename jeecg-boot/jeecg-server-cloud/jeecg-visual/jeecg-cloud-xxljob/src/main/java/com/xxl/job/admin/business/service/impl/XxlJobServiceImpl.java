@@ -270,10 +270,10 @@ public class XxlJobServiceImpl implements XxlJobService {
 			return Response.ofFail ( (I18nUtil.getString("jobinfo_field_id")+I18nUtil.getString("system_not_found")) );
 		}
 
-		// next trigger time (5s后生效，避开预读周期)
+		// next trigger time (có hiệu lực sau 5s, tránh chu kỳ đọc trước)
 		long nextTriggerTime = exists_jobInfo.getTriggerNextTime();
 		boolean scheduleDataNotChanged = jobInfo.getScheduleType().equals(exists_jobInfo.getScheduleType())
-				&& jobInfo.getScheduleConf().equals(exists_jobInfo.getScheduleConf());		// 触发配置如果不变，避免重复计算；
+				&& jobInfo.getScheduleConf().equals(exists_jobInfo.getScheduleConf());		// Nếu cấu hình kích hoạt không thay đổi, tránh tính toán trùng lặp;
 		if (exists_jobInfo.getTriggerStatus() == TriggerStatus.RUNNING.getValue() && !scheduleDataNotChanged) {
 			try {
 				// generate next trigger time
@@ -358,7 +358,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 			return Response.ofFail(I18nUtil.getString("schedule_type_none_limit_start"));
 		}
 
-		// next trigger time (5s后生效，避开预读周期)
+		// next trigger time (có hiệu lực sau 5s, tránh chu kỳ đọc trước)
 		long nextTriggerTime = 0;
 		try {
 			// generate next trigger time

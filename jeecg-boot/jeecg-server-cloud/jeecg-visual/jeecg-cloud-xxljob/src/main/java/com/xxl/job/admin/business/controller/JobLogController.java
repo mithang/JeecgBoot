@@ -227,23 +227,23 @@ public class JobLogController {
 		Date clearBeforeTime = null;
 		int clearBeforeNum = 0;
 		if (type == 1) {
-			clearBeforeTime = DateTool.addMonths(new Date(), -1);	// 清理一个月之前日志数据
+			clearBeforeTime = DateTool.addMonths(new Date(), -1);	// Dọn dữ liệu nhật ký trước một tháng
 		} else if (type == 2) {
-			clearBeforeTime = DateTool.addMonths(new Date(), -3);	// 清理三个月之前日志数据
+			clearBeforeTime = DateTool.addMonths(new Date(), -3);	// Dọn dữ liệu nhật ký trước ba tháng
 		} else if (type == 3) {
-			clearBeforeTime = DateTool.addMonths(new Date(), -6);	// 清理六个月之前日志数据
+			clearBeforeTime = DateTool.addMonths(new Date(), -6);	// Dọn dữ liệu nhật ký trước sáu tháng
 		} else if (type == 4) {
-			clearBeforeTime = DateTool.addYears(new Date(), -1);	// 清理一年之前日志数据
+			clearBeforeTime = DateTool.addYears(new Date(), -1);	// Dọn dữ liệu nhật ký trước một năm
 		} else if (type == 5) {
-			clearBeforeNum = 1000;		// 清理一千条以前日志数据
+			clearBeforeNum = 1000;		// Dọn dữ liệu nhật ký trước một nghìn bản ghi
 		} else if (type == 6) {
-			clearBeforeNum = 10000;		// 清理一万条以前日志数据
+			clearBeforeNum = 10000;		// Dọn dữ liệu nhật ký trước mười nghìn bản ghi
 		} else if (type == 7) {
-			clearBeforeNum = 30000;		// 清理三万条以前日志数据
+			clearBeforeNum = 30000;		// Dọn dữ liệu nhật ký trước ba mươi nghìn bản ghi
 		} else if (type == 8) {
-			clearBeforeNum = 100000;	// 清理十万条以前日志数据
+			clearBeforeNum = 100000;	// Dọn dữ liệu nhật ký trước một trăm nghìn bản ghi
 		} else if (type == 9) {
-			clearBeforeNum = 0;			// 清理所有日志数据
+			clearBeforeNum = 0;			// Dọn toàn bộ dữ liệu nhật ký
 		} else {
 			return Response.ofFail(I18nUtil.getString("joblog_clean_type_invalid"));
 		}

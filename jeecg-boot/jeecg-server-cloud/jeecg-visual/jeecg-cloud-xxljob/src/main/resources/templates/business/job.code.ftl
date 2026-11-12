@@ -95,7 +95,7 @@
 	<div class="content-wrapper" id="ideWindow" >
 	</div>
 
-	<!-- 保存.模态框 -->
+	<!-- Lưu. Hộp thoại modal -->
 	<div class="modal fade" id="saveModal" tabindex="-1" role="dialog"  aria-hidden="true">
 		<div class="modal-dialog ">
 			<div class="modal-content">

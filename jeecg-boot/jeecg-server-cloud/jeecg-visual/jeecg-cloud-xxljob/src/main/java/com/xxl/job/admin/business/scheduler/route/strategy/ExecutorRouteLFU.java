@@ -9,9 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * 单个JOB对应的每个执行器，使用频率最低的优先被选举
- *      a(*)、LFU(Least Frequently Used)：最不经常使用，频率/次数
- *      b、LRU(Least Recently Used)：最近最久未使用，时间
+ * Đối với mỗi executor tương ứng với một JOB, executor có tần suất sử dụng thấp nhất được ưu tiên chọn
+ *      a(*), LFU (Least Frequently Used): ít được sử dụng nhất, tần suất/số lần
+ *      b, LRU (Least Recently Used): lâu nhất chưa được sử dụng gần đây, thời gian
  *
  * Created by xuxueli on 17/3/10.
  */
@@ -34,16 +34,16 @@ public class ExecutorRouteLFU extends ExecutorRouter {
         }
 
         // lfu item init
-        HashMap<String, Integer> lfuItemMap = jobLfuMap.get(jobId);     // Key排序可以用TreeMap+构造入参Compare；Value排序暂时只能通过ArrayList；
+        HashMap<String, Integer> lfuItemMap = jobLfuMap.get(jobId);     // Sắp xếp Key có thể dùng TreeMap + tham số khởi tạo Compare; sắp xếp Value tạm thời chỉ có thể dùng ArrayList;
         if (lfuItemMap == null) {
             lfuItemMap = new HashMap<>();
-            jobLfuMap.putIfAbsent(jobId, lfuItemMap);   // 避免重复覆盖
+            jobLfuMap.putIfAbsent(jobId, lfuItemMap);   // Tránh ghi đè trùng lặp
         }
 
         // put new
         for (String address: addressList) {
             if (!lfuItemMap.containsKey(address) || lfuItemMap.get(address) >1000000 ) {
-                lfuItemMap.put(address, new Random().nextInt(addressList.size()));  // 初始化时主动Random一次，缓解首次压力
+                lfuItemMap.put(address, new Random().nextInt(addressList.size()));  // Khi khởi tạo chủ động Random một lần để giảm áp lực lần đầu
             }
         }
         // remove old
@@ -61,7 +61,7 @@ public class ExecutorRouteLFU extends ExecutorRouter {
 
         // load least userd count address
         List<Map.Entry<String, Integer>> lfuItemList = new ArrayList<>(lfuItemMap.entrySet());
-        lfuItemList.sort(Map.Entry.comparingByValue());     // 默认升序, 获取 Value 最小值
+        lfuItemList.sort(Map.Entry.comparingByValue());     // Mặc định tăng dần, lấy giá trị Value nhỏ nhất
 
         Map.Entry<String, Integer> addressItem = lfuItemList.get(0);
         addressItem.setValue(addressItem.getValue() + 1);

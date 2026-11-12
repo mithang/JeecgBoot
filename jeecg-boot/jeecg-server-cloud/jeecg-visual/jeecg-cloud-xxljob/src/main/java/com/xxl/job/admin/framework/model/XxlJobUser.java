@@ -8,11 +8,11 @@ package com.xxl.job.admin.framework.model;
 public class XxlJobUser {
 	
 	private int id;
-	private String username;		// 账号
-	private String password;		// 密码
-	private String token;			// 登录token
-	private int role;				// 角色：0-普通用户、1-管理员
-	private String permission;		// 权限：执行器ID列表，多个逗号分割
+	private String username;		// Tài khoản
+	private String password;		// Mật khẩu
+	private String token;			// Token đăng nhập
+	private int role;				// Vai trò: 0-Người dùng thường, 1-Quản trị viên
+	private String permission;		// Quyền: danh sách ID executor, nhiều ID phân tách bằng dấu phẩy
 
 	public int getId() {
 		return id;

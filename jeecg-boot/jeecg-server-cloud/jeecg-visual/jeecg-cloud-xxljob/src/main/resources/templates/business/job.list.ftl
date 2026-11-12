@@ -18,7 +18,7 @@
 
 		<!-- 2-content start -->
 
-		<#-- 查询区域 -->
+		<#-- Khu vực truy vấn -->
 		<div class="box" style="margin-bottom:9px;">
 			<div class="box-body">
 				<div class="row" id="data_filter" >
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 
-		<#-- 数据表格区域 -->
+		<#-- Khu vực bảng dữ liệu -->
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
@@ -79,13 +79,13 @@
 						<button class="btn btn-sm btn-danger selectOnlyOne delete" type="button"><i class="fa fa-remove "></i>${I18n.system_opt_del}</button>   <#-- delete -->
 						｜
 						<button class="btn btn-sm btn-default selectOnlyOne job_copy" type="button">${I18n.system_opt_copy}</button>
-						<button class="btn btn-sm btn-warning selectOnlyOne job_resume" type="button">${I18n.jobinfo_opt_start}</button>				<#-- 启动 -->
-						<button class="btn btn-sm btn-warning selectOnlyOne job_pause" type="button">${I18n.jobinfo_opt_stop}</button>					<#-- 停止 -->
+						<button class="btn btn-sm btn-warning selectOnlyOne job_resume" type="button">${I18n.jobinfo_opt_start}</button>				<#-- Khởi động -->
+						<button class="btn btn-sm btn-warning selectOnlyOne job_pause" type="button">${I18n.jobinfo_opt_stop}</button>					<#-- Dừng -->
 						｜
-						<button class="btn btn-sm btn-primary selectOnlyOne job_trigger" type="button">${I18n.jobinfo_opt_run}</button>					<#-- 执行一次 -->
-						<button class="btn btn-sm btn-primary selectOnlyOne job_log" type="button">${I18n.jobinfo_opt_log}</button>						<#-- 执行日志：base_url +'/joblog?jobId='+ row.id -->
-						<button class="btn btn-sm btn-default selectOnlyOne job_registryinfo" type="button">${I18n.jobinfo_opt_registryinfo}</button>	<#-- 注册节点 -->
-						<button class="btn btn-sm btn-default selectOnlyOne job_next_time" type="button">${I18n.jobinfo_opt_next_time}</button>			<#-- 下次执行时间：row.scheduleType == 'CRON' || row.scheduleType == 'FIX_RATE' -->
+						<button class="btn btn-sm btn-primary selectOnlyOne job_trigger" type="button">${I18n.jobinfo_opt_run}</button>					<#-- Thực thi một lần -->
+						<button class="btn btn-sm btn-primary selectOnlyOne job_log" type="button">${I18n.jobinfo_opt_log}</button>						<#-- Nhật ký thực thi: base_url +'/joblog?jobId='+ row.id -->
+						<button class="btn btn-sm btn-default selectOnlyOne job_registryinfo" type="button">${I18n.jobinfo_opt_registryinfo}</button>	<#-- Nút đăng ký -->
+						<button class="btn btn-sm btn-default selectOnlyOne job_next_time" type="button">${I18n.jobinfo_opt_next_time}</button>			<#-- Thời gian thực thi lần tới: row.scheduleType == 'CRON' || row.scheduleType == 'FIX_RATE' -->
 					</div>
 					<div class="box-body" >
 						<table id="data_list" class="table table-bordered table-striped" width="100%" >
@@ -98,7 +98,7 @@
 			</div>
 		</div>
 
-		<!-- job新增.模态框 -->
+		<!-- Thêm mới job. Hộp thoại modal -->
 		<div class="modal fade" id="addModal" tabindex="-1" role="dialog"  aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -108,7 +108,7 @@
 					<div class="modal-body">
 						<form class="form-horizontal form" role="form" >
 
-							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_base}</p>    <#-- 基础信息 -->
+							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_base}</p>    <#-- Thông tin cơ bản -->
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_jobgroup}<font color="red">*</font></label>
 								<div class="col-sm-4">
@@ -130,7 +130,7 @@
 							</div>
 
 							<br>
-							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_schedule}</p>    <#-- 调度 -->
+							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_schedule}</p>    <#-- Lập lịch -->
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">${I18n.schedule_type}<font color="red">*</font></label>
 								<div class="col-sm-4">
@@ -159,7 +159,7 @@
 							</div>
 
 							<br>
-							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_job}</p>    <#-- 任务配置 -->
+							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_job}</p>    <#-- Cấu hình nhiệm vụ -->
 
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_gluetype}<font color="red">*</font></label>
@@ -182,7 +182,7 @@
 							</div>
 
 							<br>
-							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_advanced}</p>    <#-- 高级配置 -->
+							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_advanced}</p>    <#-- Cấu hình nâng cao -->
 
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_executorRouteStrategy}<font color="black">*</font></label>
@@ -233,7 +233,7 @@
 								</div>
 							</div>
 
-<input type="hidden" name="glueRemark" value="GLUE代码初始化" >
+<input type="hidden" name="glueRemark" value="Khởi tạo mã GLUE" >
 <textarea name="glueSource" style="display:none;" ></textarea>
 <textarea class="glueSource_java" style="display:none;" >
 package com.xxl.job.service.handler;
@@ -258,10 +258,10 @@ echo "${I18n.jobinfo_script_location}：$0"
 echo "${I18n.jobinfo_field_executorparam}：$1"
 echo "${I18n.jobinfo_shard_index} = $2"
 echo "${I18n.jobinfo_shard_total} = $3"
-<#--echo "参数数量：$#"
+<#--echo "Số lượng tham số: $#"
 for param in $*
 do
-    echo "参数 : $param"
+    echo "Tham số : $param"
     sleep 1s
 done-->
 
@@ -298,14 +298,14 @@ print "${I18n.jobinfo_shard_index}：", sys.argv[2]
 print "${I18n.jobinfo_shard_total}：", sys.argv[3]
 <#--for i in range(1, len(sys.argv)):
 	time.sleep(1)
-	print "参数", i, sys.argv[i]-->
+	print "Tham số", i, sys.argv[i]-->
 
 print "Good bye!"
 exit(0)
 <#--
 import logging
 logging.basicConfig(level=logging.DEBUG)
-logging.info("脚本文件：" + sys.argv[0])
+logging.info("Tệp script: " + sys.argv[0])
 -->
 </textarea>
 <textarea class="glueSource_php" style="display:none;" >
@@ -334,7 +334,7 @@ console.log("${I18n.jobinfo_field_executorparam}: " + arguments[2])
 console.log("${I18n.jobinfo_shard_index}: " + arguments[3])
 console.log("${I18n.jobinfo_shard_total}: " + arguments[4])
 <#--for (var i = 2; i < arguments.length; i++){
-	console.log("参数 %s = %s", (i-1), arguments[i]);
+	console.log("Tham số %s = %s", (i-1), arguments[i]);
 }-->
 
 console.log("Good bye!")
@@ -358,7 +358,7 @@ exit 0
 			</div>
 		</div>
 
-		<!-- 更新.模态框 -->
+		<!-- Cập nhật. Hộp thoại modal -->
 		<div class="modal fade" id="updateModal" tabindex="-1" role="dialog"  aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -368,7 +368,7 @@ exit 0
 					<div class="modal-body">
 						<form class="form-horizontal form" role="form" >
 
-							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_base}</p>    <#-- 基础信息 -->
+							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_base}</p>    <#-- Thông tin cơ bản -->
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_jobgroup}<font color="red">*</font></label>
 								<div class="col-sm-4">
@@ -390,7 +390,7 @@ exit 0
 							</div>
 
 							<br>
-							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_schedule}</p>    <#-- 调度配置 -->
+							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_schedule}</p>    <#-- Cấu hình lập lịch -->
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">${I18n.schedule_type}<font color="red">*</font></label>
 								<div class="col-sm-4">
@@ -419,7 +419,7 @@ exit 0
 							</div>
 
 							<br>
-							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_job}</p>    <#-- 任务配置 -->
+							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_job}</p>    <#-- Cấu hình nhiệm vụ -->
 
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_gluetype}<font color="red">*</font></label>
@@ -442,7 +442,7 @@ exit 0
 							</div>
 
 							<br>
-							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_advanced}</p>    <#-- 高级配置 -->
+							<p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_advanced}</p>    <#-- Cấu hình nâng cao -->
 
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_executorRouteStrategy}<font color="red">*</font></label>
@@ -675,7 +675,7 @@ exit 0
 					width: '10',
 					widthUnit: '%',
 					formatter: function(value, row, index) {
-						// 调度状态：0-停止，1-运行
+						// Trạng thái lập lịch: 0-Dừng, 1-Đang chạy
 						if (1 == value) {
 							return '<small class="label label-success" >RUNNING</small>';
 						} else {

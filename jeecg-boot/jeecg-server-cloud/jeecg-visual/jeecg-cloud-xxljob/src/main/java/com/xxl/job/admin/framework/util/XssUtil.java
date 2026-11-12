@@ -5,12 +5,12 @@ import java.util.regex.Pattern;
 public class XssUtil {
 
     /**
-     * 定义常见的 XSS 攻击正则模式
+     * Định nghĩa các mẫu regex tấn công XSS thường gặp
      *
-     * 1. <script> 标签及其变体
-     * 2. javascript: vbscript: 等伪协议
-     * 3. 常见的事件处理器 (onload, onclick, onerror 等)
-     * 4. eval(), expression() 等危险函数
+     * 1. Thẻ <script> và các biến thể của nó
+     * 2. Các pseudo-protocol như javascript:, vbscript:
+     * 3. Các trình xử lý sự kiện thường gặp (onload, onclick, onerror, ...)
+     * 4. Các hàm nguy hiểm như eval(), expression()
      */
     private static final Pattern[] PATTERNS = {
             Pattern.compile("<(no)?script[^>]*>.*?</(no)?script>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL),
@@ -36,7 +36,7 @@ public class XssUtil {
             return false;
         }
 
-        // 遍历所有正则模式进行匹配
+        // Duyệt tất cả các mẫu regex để so khớp
         for (Pattern pattern : PATTERNS) {
             if (pattern.matcher(value).find()) {
                 return true;
@@ -47,7 +47,7 @@ public class XssUtil {
     }
 
     /**
-     * 清洗字符串，移除潜在的 XSS 攻击代码
+     * Làm sạch chuỗi, loại bỏ mã tấn công XSS tiềm ẩn
      *
      * @param value original string
      * @return cleaned string
@@ -59,19 +59,19 @@ public class XssUtil {
 
         String result = value;
 
-        // 1. 移除危险标签和脚本
+        // 1. Loại bỏ các thẻ và script nguy hiểm
         for (Pattern pattern : PATTERNS) {
             result = pattern.matcher(result).replaceAll("");
         }
 
-        // 2. 特殊字符 HTML 实体转义
+        // 2. Escape các ký tự đặc biệt thành HTML entity
         result = escapeHtml(result);
 
         return result;
     }
 
     /**
-     * 基础 HTML 字符转义
+     * Escape các ký tự HTML cơ bản
      */
     private static String escapeHtml(String input) {
         if (input == null) {

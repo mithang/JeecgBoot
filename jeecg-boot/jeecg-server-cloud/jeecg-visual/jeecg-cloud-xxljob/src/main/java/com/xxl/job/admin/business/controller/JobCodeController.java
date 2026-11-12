@@ -55,7 +55,7 @@ public class JobCodeController {
 		// valid jobGroup permission
 		JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.getJobGroup());
 
-		// Glue类型-字典
+		// Từ điển loại GLUE
 		model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());
 
 		model.addAttribute("jobInfo", jobInfo);

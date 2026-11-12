@@ -2,7 +2,7 @@
 * Admin Util for XXL-BOOT
 * ================
 *
-* 1、openTab：    打开新页面，兼容iframe和window.open
+* 1. openTab:     Mở trang mới, tương thích iframe và window.open
 *
 * @author       xuxueli
 * @repository   https://github.com/xuxueli/xxl-boot
@@ -13,11 +13,11 @@ $(function(){
     // ---------------------- openTab ----------------------
 
     /**
-     * 打开新页面，兼容iframe和window.open
+     * Mở trang mới, tương thích iframe và window.open
      *
-     * @param tabSrc            tab访问地址
-     * @param tabName           tab展示名称
-     * @param isCloseCurrent    是否关闭当前页
+     * @param tabSrc            Địa chỉ truy cập của tab
+     * @param tabName           Tên hiển thị của tab
+     * @param isCloseCurrent    Có đóng trang hiện tại hay không
      */
     window.openTab = function (tabSrc, tabName, isCloseCurrent) {
         // open tab
@@ -38,7 +38,7 @@ $(function(){
     // ---------------------- isOpenWithTab ----------------------
 
     /**
-     * 是否在Tab中打开
+     * Có mở trong Tab hay không
      */
     window.isOpenWithTab = function () {
         return !!window.parent.$.adminTab;

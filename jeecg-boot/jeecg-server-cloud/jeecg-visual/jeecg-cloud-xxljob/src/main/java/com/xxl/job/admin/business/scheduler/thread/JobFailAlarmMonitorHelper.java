@@ -56,7 +56,7 @@ public class JobFailAlarmMonitorHelper {
 						}
 
 						// 2、fail alarm monitor
-						int newAlarmStatus = 0;		// 告警状态：0-默认、-1=锁定状态、1-无需告警、2-告警成功、3-告警失败
+						int newAlarmStatus = 0;		// Trạng thái cảnh báo: 0-Mặc định, -1=Trạng thái khóa, 1-Không cần cảnh báo, 2-Cảnh báo thành công, 3-Cảnh báo thất bại
 						if (info != null) {
 							boolean alarmResult = XxlJobAdminBootstrap.getInstance().getJobAlarmer().alarm(info, log);
 							newAlarmStatus = alarmResult?2:3;

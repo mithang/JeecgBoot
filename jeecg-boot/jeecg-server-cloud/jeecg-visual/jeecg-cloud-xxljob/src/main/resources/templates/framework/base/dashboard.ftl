@@ -16,10 +16,10 @@
 
         <#-- 2-biz start -->
 
-        <!-- 任务信息 -->
+        <!-- Thông tin nhiệm vụ -->
         <div class="row">
 
-            <#-- 任务信息 -->
+            <#-- Thông tin nhiệm vụ -->
             <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="info-box bg-aqua">
                     <span class="info-box-icon"><i class="fa fa-flag-o"></i></span>
@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-            <#-- 调度信息 -->
+            <#-- Thông tin lập lịch -->
             <div class="col-md-4 col-sm-6 col-xs-12" >
                 <div class="info-box bg-yellow">
                     <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
@@ -51,14 +51,14 @@
                         <span class="progress-description">
                                 ${I18n.job_dashboard_trigger_num_tip}
                             <#--<#if jobLogCount gt 0>
-                                调度成功率：${(jobLogSuccessCount*100/jobLogCount)?string("0.00")}<small>%</small>
+                                Tỷ lệ lập lịch thành công: ${(jobLogSuccessCount*100/jobLogCount)?string("0.00")}<small>%</small>
                             </#if>-->
                             </span>
                     </div>
                 </div>
             </div>
 
-            <#-- 执行器 -->
+            <#-- Executor -->
             <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="info-box bg-green">
                     <span class="info-box-icon"><i class="fa ion-ios-settings-strong"></i></span>
@@ -77,7 +77,7 @@
 
         </div>
 
-        <#-- 调度报表：时间区间筛选，左侧折线图 + 右侧饼图 -->
+        <#-- Báo cáo lập lịch: lọc theo khoảng thời gian, biểu đồ đường bên trái + biểu đồ tròn bên phải -->
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
@@ -99,11 +99,11 @@
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <#-- 左侧折线图 -->
+                            <#-- Biểu đồ đường bên trái -->
                             <div class="col-md-8">
                                 <div id="lineChart" style="height: 350px;"></div>
                             </div>
-                            <#-- 右侧饼图 -->
+                            <#-- Biểu đồ tròn bên phải -->
                             <div class="col-md-4">
                                 <div id="pieChart" style="height: 350px;"></div>
                             </div>
@@ -140,11 +140,11 @@ $(function () {
     $('#filterTime').daterangepicker({
         autoApply:false,
         singleDatePicker:false,
-        showDropdowns:false,        // 是否显示年月选择条件
-        timePicker: true, 			// 是否显示小时和分钟选择条件
-        timePickerIncrement: 10, 	// 时间的增量，单位为分钟
+        showDropdowns:false,        // Có hiển thị điều kiện chọn năm-tháng không
+        timePicker: true, 			// Có hiển thị điều kiện chọn giờ và phút không
+        timePickerIncrement: 10, 	// Bước tăng thời gian, đơn vị phút
         timePicker24Hour : true,
-        opens : 'left', //日期选择框的弹出位置
+        opens : 'left', // Vị trí bật lên của hộp chọn ngày
         ranges: rangesConf,
         locale : {
             format: 'YYYY-MM-DD HH:mm:ss',
@@ -154,8 +154,8 @@ $(function () {
             cancelLabel : I18n.system_cancel ,
             fromLabel : I18n.daterangepicker_custom_starttime ,
             toLabel : I18n.daterangepicker_custom_endtime ,
-            daysOfWeek : I18n.daterangepicker_custom_daysofweek.split(',') ,        // '日', '一', '二', '三', '四', '五', '六'
-            monthNames : I18n.daterangepicker_custom_monthnames.split(',') ,        // '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
+            daysOfWeek : I18n.daterangepicker_custom_daysofweek.split(',') ,        // 'CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'
+            monthNames : I18n.daterangepicker_custom_monthnames.split(',') ,        // 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
             firstDay : 1
         },
         startDate: rangesConf[I18n.daterangepicker_ranges_recent_week][0] ,
@@ -296,7 +296,7 @@ $(function () {
             },
             series : [
                 {
-                    //name: '分布比例',
+                    //name: 'Tỷ lệ phân bổ',
                     type: 'pie',
                     radius : '55%',
                     center: ['50%', '60%'],

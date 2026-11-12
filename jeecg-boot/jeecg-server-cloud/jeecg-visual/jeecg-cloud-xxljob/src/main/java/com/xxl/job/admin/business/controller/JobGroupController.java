@@ -143,7 +143,7 @@ public class JobGroupController {
 		}
 
 		if (xxlJobGroup.getAddressType() == 0) {
-			// 0=自动注册
+			// 0=Đăng ký tự động
 			List<String> registryList = findRegistryByAppName(xxlJobGroup.getAppname());
 			String addressListStr = null;
 			if (CollectionTool.isNotEmpty(registryList)) {
@@ -152,7 +152,7 @@ public class JobGroupController {
 			}
 			xxlJobGroup.setAddressList(addressListStr);
 		} else {
-			// 1=手动录入
+			// 1=Nhập tay
 
 			// valid addressList
 			if (StringTool.isBlank(xxlJobGroup.getAddressList())) {

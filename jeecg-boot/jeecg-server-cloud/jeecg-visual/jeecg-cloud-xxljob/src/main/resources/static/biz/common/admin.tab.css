@@ -155,7 +155,7 @@ nav.page-tabs .page-tabs-content {
     color: #fff;
 }
 
-/** 遮罩层 **/
+/** Lớp che (overlay) **/
 .loaderbox {
     display: inline-block;
     min-width: 125px;

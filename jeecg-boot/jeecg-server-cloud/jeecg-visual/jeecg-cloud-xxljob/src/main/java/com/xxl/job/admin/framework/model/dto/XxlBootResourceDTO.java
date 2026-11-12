@@ -13,32 +13,32 @@ public class XxlBootResourceDTO implements Serializable {
     private static final long serialVersionUID = 42L;
 
     /**
-     * 资源ID
+     * ID tài nguyên
      */
     private int id;
 
     /**
-     * 父节点ID
+     * ID nút cha
      */
     private int parentId;
 
     /**
-     * 名称
+     * Tên
      */
     private String name;
 
     /**
-     * 类型：0-目录, 1-菜单, 2-按钮
+     * Loại: 0-Thư mục, 1-Menu, 2-Nút bấm
      */
     private int type;
 
     /**
-     * 权限标识
+     * Định danh quyền
      */
     private String permission;
 
     /**
-     * 菜单地址
+     * Địa chỉ menu
      */
     private String url;
 
@@ -48,22 +48,22 @@ public class XxlBootResourceDTO implements Serializable {
     private String icon;
 
     /**
-     * 顺序
+     * Thứ tự
      */
     private int order;
 
     /**
-     * 状态：0-正常、1-禁用
+     * Trạng thái: 0-Bình thường, 1-Vô hiệu hóa
      */
     private int status;
 
     /**
-     * 新增时间
+     * Thời gian thêm mới
      */
     private Date addTime;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     private Date updateTime;
 

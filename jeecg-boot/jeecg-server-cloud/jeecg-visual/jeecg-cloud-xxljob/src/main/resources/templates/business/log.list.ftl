@@ -20,7 +20,7 @@
 
 		<!-- 2-content start -->
 
-		<#-- 查询区域 -->
+		<#-- Khu vực truy vấn -->
 		<div class="box" style="margin-bottom:9px;">
 			<div class="box-body">
 				<div class="row" id="data_filter" >
@@ -78,7 +78,7 @@
 			</div>
 		</div>
 
-		<#-- 数据表格区域 -->
+		<#-- Khu vực bảng dữ liệu -->
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
@@ -99,7 +99,7 @@
 			</div>
 		</div>
 
-		<!-- 日志清理.模态框 -->
+		<!-- Dọn dẹp nhật ký. Hộp thoại modal -->
 		<div class="modal fade" id="clearLogModal" tabindex="-1" role="dialog"  aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -201,12 +201,12 @@
 
 		$('#filterTime').daterangepicker({
 			autoApply:false,
-			singleDatePicker:false,		// 范围选择 or 单时间选择
-			showDropdowns:true,         // 年月 选择条件是否为下拉框
+			singleDatePicker:false,		// Chọn khoảng hoặc chọn một thời gian
+			showDropdowns:true,         // Điều kiện chọn năm-tháng có phải là hộp thả xuống không
 			timePicker: true,
 			timePicker24Hour: true,
-			timePickerSeconds: true,	// 时间选择是否显示秒
-			opens : 'left', 			// 日期选择框的弹出位置
+			timePickerSeconds: true,	// Lựa chọn thời gian có hiển thị giây không
+			opens : 'left', 			// Vị trí bật lên của hộp chọn ngày
 			ranges: rangesConf,
 			locale : {
 				format: 'YYYY-MM-DD HH:mm:ss',
@@ -216,8 +216,8 @@
 				cancelLabel : I18n.system_cancel ,
 				fromLabel : I18n.daterangepicker_custom_starttime ,
 				toLabel : I18n.daterangepicker_custom_endtime ,
-				daysOfWeek : I18n.daterangepicker_custom_daysofweek.split(',') ,        // '日', '一', '二', '三', '四', '五', '六'
-				monthNames : I18n.daterangepicker_custom_monthnames.split(',') ,        // '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
+				daysOfWeek : I18n.daterangepicker_custom_daysofweek.split(',') ,        // 'CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'
+				monthNames : I18n.daterangepicker_custom_monthnames.split(',') ,        // 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
 				firstDay : 1
 			}/*,
 			startDate: rangesConf[I18n.daterangepicker_ranges_today][0],

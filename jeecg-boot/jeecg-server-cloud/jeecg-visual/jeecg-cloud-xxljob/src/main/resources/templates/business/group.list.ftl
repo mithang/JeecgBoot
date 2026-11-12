@@ -17,7 +17,7 @@
 
 		<!-- 2-content start -->
 
-		<#-- 查询区域 -->
+		<#-- Khu vực truy vấn -->
 		<div class="box" style="margin-bottom:9px;">
 			<div class="box-body">
 				<div class="row" id="data_filter" >
@@ -45,7 +45,7 @@
 			</div>
 		</div>
 
-		<#-- 数据表格区域 -->
+		<#-- Khu vực bảng dữ liệu -->
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
@@ -65,7 +65,7 @@
 			</div>
 		</div>
 
-		<!-- 注册列表查看.模态框 -->
+		<!-- Xem danh sách đăng ký. Hộp thoại modal -->
 		<div class="modal fade" id="showRegistryListModal" tabindex="-1" role="dialog"  aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -84,7 +84,7 @@
 			</div>
 		</div>
 
-		<!-- 新增.模态框 -->
+		<!-- Thêm mới. Hộp thoại modal -->
 		<div class="modal fade" id="addModal" tabindex="-1" role="dialog"  aria-hidden="true">
 			<div class="modal-dialog ">
 				<div class="modal-content">
@@ -128,7 +128,7 @@
 			</div>
 		</div>
 
-		<!-- 更新.模态框 -->
+		<!-- Cập nhật. Hộp thoại modal -->
 		<div class="modal fade" id="updateModal" tabindex="-1" role="dialog"  aria-hidden="true">
 			<div class="modal-dialog ">
 				<div class="modal-content">
@@ -321,7 +321,7 @@
 			var addressType = $(this).val();
 			var $addressList = $(this).parents("form").find("textarea[name=addressList]");
 			if (addressType == 0) {
-				$addressList.css("background-color", "#eee");	// 自动注册
+				$addressList.css("background-color", "#eee");	// Đăng ký tự động
 				$addressList.attr("readonly","readonly");
 				$addressList.val("");
 			} else {
@@ -341,10 +341,10 @@
 				$("#updateModal .form input[name='appname']").val( row.appname );
 				$("#updateModal .form input[name='title']").val( row.title );
 
-				// 注册方式
+				// Phương thức đăng ký
 				$("#updateModal .form input[name='addressType']").removeAttr('checked');
 				$("#updateModal .form input[name='addressType'][value='"+ row.addressType +"']").click();
-				// 机器地址
+				// Địa chỉ máy
 				$("#updateModal .form textarea[name='addressList']").val( row.addressList );
 
 			},

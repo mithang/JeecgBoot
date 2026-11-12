@@ -9,38 +9,38 @@ import java.util.Date;
  */
 public class XxlJobInfo {
 	
-	private int id;				// 主键ID
+	private int id;				// ID khóa chính
 	
-	private int jobGroup;		// 执行器主键ID
+	private int jobGroup;		// ID khóa chính của executor
 	private String jobDesc;
 	
 	private Date addTime;
 	private Date updateTime;
 	
-	private String author;		// 负责人
-	private String alarmEmail;	// 报警邮件
+	private String author;		// Người phụ trách
+	private String alarmEmail;	// Email cảnh báo
 
-	private String scheduleType;			// 调度类型：ScheduleTypeEnum
-	private String scheduleConf;			// 调度配置，值含义取决于调度类型
-	private String misfireStrategy;			// 调度过期策略：MisfireStrategyEnum
+	private String scheduleType;			// Loại lập lịch: ScheduleTypeEnum
+	private String scheduleConf;			// Cấu hình lập lịch, ý nghĩa của giá trị phụ thuộc vào loại lập lịch
+	private String misfireStrategy;			// Chiến lược hết hạn lập lịch: MisfireStrategyEnum
 
-	private String executorRouteStrategy;	// 执行器路由策略：ExecutorRouteStrategyEnum
-	private String executorHandler;		    // 执行器，任务Handler名称
-	private String executorParam;		    // 执行器，任务参数
-	private String executorBlockStrategy;	// 阻塞处理策略：ExecutorBlockStrategyEnum
-	private int executorTimeout;     		// 任务执行超时时间，单位秒
-	private int executorFailRetryCount;		// 失败重试次数
+	private String executorRouteStrategy;	// Chiến lược định tuyến executor: ExecutorRouteStrategyEnum
+	private String executorHandler;		    // Executor, tên Handler của nhiệm vụ
+	private String executorParam;		    // Executor, tham số nhiệm vụ
+	private String executorBlockStrategy;	// Chiến lược xử lý chặn: ExecutorBlockStrategyEnum
+	private int executorTimeout;     		// Thời gian chờ thực thi nhiệm vụ, đơn vị giây
+	private int executorFailRetryCount;		// Số lần thử lại khi thất bại
 	
-	private String glueType;		// GLUE类型：GlueTypeEnum
-	private String glueSource;		// GLUE源代码
-	private String glueRemark;		// GLUE备注
-	private Date glueUpdatetime;	// GLUE更新时间
+	private String glueType;		// Loại GLUE: GlueTypeEnum
+	private String glueSource;		// Mã nguồn GLUE
+	private String glueRemark;		// Ghi chú GLUE
+	private Date glueUpdatetime;	// Thời gian cập nhật GLUE
 
-	private String childJobId;		// 子任务ID，多个逗号分隔
+	private String childJobId;		// ID nhiệm vụ con, nhiều ID phân tách bằng dấu phẩy
 
-	private int triggerStatus;		// 调度状态：TriggerStatus
-	private long triggerLastTime;	// 上次调度时间
-	private long triggerNextTime;	// 下次调度时间
+	private int triggerStatus;		// Trạng thái lập lịch: TriggerStatus
+	private long triggerLastTime;	// Thời gian lập lịch lần trước
+	private long triggerNextTime;	// Thời gian lập lịch lần tới
 
 
 	public int getId() {

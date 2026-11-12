@@ -2,18 +2,18 @@
 * Admin Tab for XXL-BOOT
 * ================
 *
-* 1、menu：
-*      - J_menuItem:        菜单
-* 2、tab：
-*      - J_tabLeft:         左移按扭
+* 1. menu: 
+*      - J_menuItem:        Menu
+* 2. tab: 
+*      - J_tabLeft:         Nút di chuyển sang trái
 *      - J_menuTabs:
-*          - J_menuTab :    菜单Tab
-*      - J_tabRight:        右移按扭
-*      - J_tabCloseOther:   关闭其他Tab
-*      - J_tabCloseAll :    关闭所有Tab
-* 3、contont
+*          - J_menuTab :    Tab Menu
+*      - J_tabRight:        Nút di chuyển sang phải
+*      - J_tabCloseOther:   Đóng các Tab khác
+*      - J_tabCloseAll :    Đóng tất cả các Tab
+* 3. contont
 *      - J_mainContent
-*          - J_iframe :     页面iframe
+*          - J_iframe :     iframe của trang
 *
 * @author       xuxueli
 * @repository   https://github.com/xuxueli/xxl-boot
@@ -25,10 +25,10 @@
             initTab: function(options) {
 
                 /**
-                 * 点击菜单：打开Tab，展示Menu页面
+                 * Nhấn vào menu: mở Tab, hiển thị trang Menu
                  */
                 $('.J_menuItem').on('click', function (){
-                    // 获取Tab属性
+                    // Lấy thuộc tính của Tab
                     let tabSrc = $(this).attr('href');
                     let tabName = $.trim($(this).text());
 
@@ -37,47 +37,47 @@
                 });
 
                 /**
-                 * Tab关闭（x按钮）：关闭菜单页面
+                 * Đóng Tab (nút x): đóng trang menu
                  */
                 $('.J_menuTabs').on('click', '.J_menuTab i', closeTab);
 
                 /**
-                 * Tab单击（切换/激活）：展示Tab页面 + 左侧菜单active更新
+                 * Nhấn vào Tab (chuyển đổi/kích hoạt): hiển thị trang Tab + cập nhật trạng thái active của menu bên trái
                  */
                 $('.J_menuTabs').on('click', '.J_menuTab', activeTab);
 
                 /**
-                 * 选项卡-左移按扭：查看左侧隐藏的选项卡
+                 * Tab – nút di chuyển sang trái: xem các tab bị ẩn ở bên trái
                  */
                 $('.J_tabLeft').on('click', scrollTabLeft);
 
                 /**
-                 * 选项卡-右移按扭：查看右侧隐藏的选项卡
+                 * Tab – nút di chuyển sang phải: xem các tab bị ẩn ở bên phải
                  */
                 $('.J_tabRight').on('click', scrollTabRight);
 
                 /**
-                 * Tab-刷新按钮：刷新active的 Tab 页面
+                 * Nút làm mới Tab: làm mới trang Tab đang active
                  */
                 $('.tabReload').on('click', refreshTab);
 
                 /**
-                 * 关闭其他选项卡
+                 * Đóng các tab khác
                  */
                 $('.J_tabCloseOther').on('click', closeOtherTabs);
 
                 /**
-                 * 关闭当前选项卡
+                 * Đóng tab hiện tại
                  */
                 $('.tabCloseCurrent').on('click', tabCloseCurrent);
 
                 /**
-                 * 关闭全部选项卡
+                 * Đóng tất cả các tab
                  */
                 $('.J_tabCloseAll').on('click', tabCloseAll);
 
                 /**
-                 * 全屏显示
+                 * Hiển thị toàn màn hình
                  */
                 $('#fullScreen').on('click', function () {
                     let currentHash = window.location.hash;
@@ -92,61 +92,61 @@
                 });
 
                 /**
-                 * 默认打开菜单Tab：优先尝试打开url路径TAB，兜底打开首个菜单
+                 * Mặc định mở Tab menu: ưu tiên thử mở TAB theo đường dẫn url, nếu không được thì mở menu đầu tiên
                  */
                 openDefaultTab();
             },
             openTab: function(options, isCloseCurrent) {
-                // 当前页面是否关闭
+                // Trang hiện tại có bị đóng hay không
                 if (isCloseCurrent) {
                     tabCloseCurrent();
                 }
-                // 打开Tab页面
+                // Mở trang Tab
                 return openTab(options.tabSrc, options.tabName);
             }
         }
     });
 
-    // -------------------- tab：open default --------------------
+    // -------------------- tab: open default --------------------
 
     /**
-     * 默认打开菜单Tab：初始化首页菜单，然后 尝试打开url路径TAB
+     * Mặc định mở Tab menu: khởi tạo menu trang chủ, sau đó thử mở TAB theo đường dẫn url
      */
     function openDefaultTab() {
         // load url
         let tabSrc = window.location.hash.slice(1);
 
-        // 1、首页菜单：初始化
+        // 1. Menu trang chủ: khởi tạo
         let $firstMenuItem = $(".J_menuItem:first");
         if ($firstMenuItem.length > 0) {
             $firstMenuItem.click();
-            // 首页菜单特殊逻辑，不允许关闭
+            // Logic đặc biệt của menu trang chủ, không cho phép đóng
             $('.J_menuTab[data-id="' + $firstMenuItem.attr('href') + '"] i').remove();
         }
 
-        // 2、URL匹配到菜单，初始化
+        // 2. URL khớp với menu, khởi tạo
         if (tabSrc === '' || tabSrc === undefined || tabSrc === null) {
-            // URL菜单路径不存在则pass
+            // Nếu đường dẫn menu của URL không tồn tại thì bỏ qua
             return;
         }
         setTimeout(function (){
             var $menuItem = $('.J_menuItem').filter('a[href$="' + decodeURI(tabSrc) + '"]');
             if ($menuItem.length > 0) {
-                // URL匹配到菜单，初始化
+                // URL khớp với menu, khởi tạo
                 $menuItem.click();
                 return;
             } else {
-                // 匹配失败，兜底直接打开
+                // Khớp thất bại, mở trực tiếp theo phương án dự phòng
                 openTab(tabSrc, tabSrc);
             }
         }, 100)
 
     }
 
-    // -------------------- tab：open、close --------------------
+    // -------------------- tab: open、close --------------------
 
     /**
-     * 打开Tab：根据 url + 名称
+     * Mở Tab: theo url + tên
      *
      * @param tabSrc
      * @param tabName
@@ -162,19 +162,19 @@
         }
         let tabNameShow = tabName.length > 15 ? tabName.substring(0, 15) + '...' : tabName;
 
-        // 1、菜单Menu联动 + 页面锚点（hash参数）更新
+        // 1. Liên động menu + cập nhật anchor của trang (tham số hash)
         activeMenuAndPath(tabSrc);
 
-        // 2、匹配已存在Tab，切换/active展示
+        // 2. Khớp với Tab đã tồn tại, chuyển đổi/hiển thị active
         let tabExist = false;
         $('.J_menuTab').each(function () {
-            // 匹配成功
+            // Khớp thành công
             if ($(this).data('id') === tabSrc) {
-                // Tab是否展示，若否则切换展示
+                // Tab có đang hiển thị hay không, nếu không thì chuyển sang hiển thị
                 if (!$(this).hasClass('active')) {
                     $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
                     scrollToTab(this);
-                    // 显示Tab对应的内容区
+                    // Hiển thị vùng nội dung tương ứng với Tab
                     $('.J_mainContent .J_iframe').each(function () {
                         if ($(this).data('id') === tabSrc) {
                             $(this).show().siblings('.J_iframe').hide();
@@ -190,7 +190,7 @@
             return false;
         }
 
-        // 3、Tab不存在，初始化新Tab + IFrame
+        // 3. Tab chưa tồn tại, khởi tạo Tab mới + IFrame
         // build Tab (other tab no-active)
         $('.J_menuTab').removeClass('active');
         var tabStr = '<a href="javascript:;" class="active J_menuTab" data-id="' + tabSrc + '" title="'+ tabName +'" >' + tabNameShow + ' <i class="fa fa-times-circle"></i></a>';
@@ -198,19 +198,19 @@
         // build IFrame (other ifame hide)
         var iframeStr = '<iframe class="J_iframe" width="100%" height="100%" src="' + tabSrc + '" frameborder="0" data-id="' + tabSrc + '" seamless></iframe>';
 
-        // 4、添加Tab + IFrame
+        // 4. Thêm Tab + IFrame
         // append iframe
         $('.J_mainContent').find('iframe.J_iframe').hide();
         $('.J_mainContent').append(iframeStr);
         // append tab
         $('.J_menuTabs .page-tabs-content').append(tabStr);
 
-        // 添加遮罩层
+        // Thêm lớp che (overlay)
         NProgress.inc(0.2);
         NProgress.configure({
-            easing: 'ease',         // 动画缓动函数 (默认: 'ease')
-            speed: 500,             // 动画速度（毫秒）(默认: 200)
-            showSpinner: true      // 是否显示旋转图标 (默认: true)
+            easing: 'ease',         // Hàm easing của hiệu ứng (mặc định: 'ease')
+            speed: 500,             // Tốc độ hiệu ứng (mili giây) (mặc định: 200)
+            showSpinner: true      // Có hiển thị biểu tượng xoay hay không (mặc định: true)
         });
         NProgress.start();
 
@@ -220,17 +220,17 @@
             NProgress.done();
         }).on('error', function () {
             NProgress.done();
-            // 处理加载失败情况，防止跳转
+            // Xử lý trường hợp tải thất bại, ngăn chuyển hướng
             console.error('iframe load error, src = ' + $(this).attr('src'));
         });
 
-        // 5、滚动到已激活的Tab
+        // 5. Cuộn đến Tab đang được kích hoạt
         scrollToTab($('.J_menuTab.active'));
         return false;
     }
 
     /**
-     * 关闭Tab：根据点击 Tab元素
+     * Đóng Tab: theo phần tử Tab được nhấn
      *
      * @returns {boolean}
      */
@@ -241,15 +241,15 @@
 
         // process
         if ($(this).parents('.J_menuTab').hasClass('active')) {
-            // 1、当前元素处于活动状态
+            // 1. Phần tử hiện tại đang ở trạng thái hoạt động
 
-            // 当前元素后面有同辈元素，使后面的一个元素处于活动状态
+            // Phía sau phần tử hiện tại có phần tử cùng cấp, đặt phần tử phía sau vào trạng thái hoạt động
             if ($(this).parents('.J_menuTab').next('.J_menuTab').length > 0) {
-                // 后一个Tab，激活 Tab
+                // Tab tiếp theo, kích hoạt Tab
                 var activeId = $(this).parents('.J_menuTab').next('.J_menuTab:eq(0)').data('id');
                 $(this).parents('.J_menuTab').next('.J_menuTab:eq(0)').addClass('active');
 
-                // 后一个Tab，激活 iframe
+                // Tab tiếp theo, kích hoạt iframe
                 $('.J_mainContent .J_iframe').each(function () {
                     if ($(this).data('id') === activeId) {
                         $(this).show().siblings('.J_iframe').hide();
@@ -264,10 +264,10 @@
                     }, "fast");
                 }
 
-                //  移除 当前 Tab
+                //  Xóa Tab hiện tại
                 $(this).parents('.J_menuTab').remove();
 
-                // 移除 当前 iframe
+                // Xóa iframe hiện tại
                 $('.J_mainContent .J_iframe').each(function () {
                     if ($(this).data('id') === closeTabId) {
                         $(this).remove();
@@ -276,13 +276,13 @@
                 });
             }
 
-            // 当前元素后面没有同辈元素，使当前元素的上一个元素处于活动状态
+            // Phía sau phần tử hiện tại không có phần tử cùng cấp, đặt phần tử phía trước của phần tử hiện tại vào trạng thái hoạt động
             if ($(this).parents('.J_menuTab').prev('.J_menuTab').length > 0) {
-                // 前一个Tab，激活 Tab
+                // Tab trước đó, kích hoạt Tab
                 var activeId = $(this).parents('.J_menuTab').prev('.J_menuTab:last').data('id');
                 $(this).parents('.J_menuTab').prev('.J_menuTab:last').addClass('active');
 
-                // 前一个Tab，激活 iframe
+                // Tab trước đó, kích hoạt iframe
                 $('.J_mainContent .J_iframe').each(function () {
                     if ($(this).data('id') == activeId) {
                         $(this).show().siblings('.J_iframe').hide();
@@ -290,10 +290,10 @@
                     }
                 });
 
-                //  移除 当前 Tab
+                //  Xóa Tab hiện tại
                 $(this).parents('.J_menuTab').remove();
 
-                // 移除 当前 iframe
+                // Xóa iframe hiện tại
                 $('.J_mainContent .J_iframe').each(function () {
                     if ($(this).data('id') === closeTabId) {
                         $(this).remove();
@@ -302,12 +302,12 @@
                 });
             }
         } else {
-            // 2、当前元素不处于活动状态
+            // 2. Phần tử hiện tại không ở trạng thái hoạt động
 
-            //  移除 当前 Tab
+            //  Xóa Tab hiện tại
             $(this).parents('.J_menuTab').remove();
 
-            // 移除 当前 iframe
+            // Xóa iframe hiện tại
             $('.J_mainContent .J_iframe').each(function () {
                 if ($(this).data('id') == closeTabId) {
                     $(this).remove();
@@ -315,29 +315,29 @@
                 }
             });
 
-            // 滚动到active状态 Tab
+            // Cuộn đến Tab ở trạng thái active
             scrollToTab($('.J_menuTab.active'));
         }
 
-        // 3、菜单Menu联动 + 页面锚点（hash参数）更新
+        // 3. Liên động menu + cập nhật anchor của trang (tham số hash)
         activeMenuAndPath($('.page-tabs-content').find('.active').attr('data-id'));
         return false;
     }
 
     /**
-     * 菜单Menu联动 + 页面锚点（hash参数）更新
+     * Liên động menu + cập nhật anchor của trang (tham số hash)
      */
     function activeMenuAndPath(tabSrc) {
 
-        // 页面锚点（hash参数）更新
+        // Cập nhật anchor của trang (tham số hash)
         window.location.hash = tabSrc;
 
-        // 菜单Menu切换/active
+        // Chuyển đổi/active menu
         $(".sidebar-menu ul li, .sidebar-menu li").removeClass("active");
         $('.J_menuItem').each(function () {
             if ($(this).attr('href') === tabSrc) {
 
-                // 菜单Menu切换/active
+                // Chuyển đổi/active menu
                 $(this).parents("li").addClass("active");
 
 
@@ -348,15 +348,15 @@
     }
 
     /**
-     * Tab单击（切换/激活）：展示Tab页面 + 左侧菜单active更新
+     * Nhấn vào Tab (chuyển đổi/kích hoạt): hiển thị trang Tab + cập nhật trạng thái active của menu bên trái
      */
     function activeTab() {
-        // 是否已激活 active，避免重复处理
+        // Đã kích hoạt active hay chưa, tránh xử lý trùng lặp
         if (!$(this).hasClass('active')) {
-            // 待激活Tab信息
+            // Thông tin Tab chờ kích hoạt
             let tabSrc = $(this).data('id');
 
-            // Ifame 切换展示
+            // Chuyển đổi hiển thị Iframe
             $('.J_mainContent .J_iframe').each(function () {
                 if ($(this).data('id') === tabSrc) {
                     $(this).show().siblings('.J_iframe').hide();
@@ -364,11 +364,11 @@
                 }
             });
 
-            // Tab 激活
+            // Kích hoạt Tab
             $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
             scrollToTab(this);
 
-            // 菜单Menu联动
+            // Liên động menu
             activeMenuAndPath(tabSrc);
         }
     }
@@ -376,17 +376,17 @@
     // -------------------- tab: scroll --------------------
 
     /**
-     * 滚动到指定选项卡
+     * Cuộn đến tab được chỉ định
      */
     function scrollToTab(element) {
 
-        // 当前元素左侧宽度
+        // Chiều rộng bên trái của phần tử hiện tại
         var marginLeftVal = calSumWidth($(element).prevAll()), marginRightVal = calSumWidth($(element).nextAll());
-        // Tab外部区域宽度
+        // Chiều rộng vùng bên ngoài Tab
         var tabOuterWidth = calSumWidth($(".content-tabs").children().not(".J_menuTabs"));
-        // 可视区域Tab宽度
+        // Chiều rộng Tab trong vùng hiển thị
         var visibleWidth = $(".content-tabs").outerWidth(true) - tabOuterWidth;
-        // 实际滚动宽度
+        // Chiều rộng cuộn thực tế
         var scrollVal = 0;
         if ($(".page-tabs-content").outerWidth() < visibleWidth) {
             scrollVal = 0;
@@ -403,14 +403,14 @@
             scrollVal = marginLeftVal - $(element).prev().outerWidth(true);
         }
 
-        // 滚动处理
+        // Xử lý cuộn
         $('.page-tabs-content').animate({
             marginLeft: 0 - scrollVal + 'px'
         }, "fast");
     }
 
     /**
-     * 计算元素集合的总宽度
+     * Tính tổng chiều rộng của tập hợp phần tử
      */
     function calSumWidth(elements) {
         var width = 0;
@@ -423,24 +423,24 @@
     // -------------------- tab: scroll-left、scroll-right、 --------------------
 
     /**
-     * 选项卡-左移按扭：查看左侧隐藏的选项卡
+     * Tab – nút di chuyển sang trái: xem các tab bị ẩn ở bên trái
      */
     function scrollTabLeft() {
 
-        // 当前元素左侧宽度
+        // Chiều rộng bên trái của phần tử hiện tại
         var marginLeftVal = Math.abs(parseInt($('.page-tabs-content').css('margin-left')));
-        // Tab外部区域宽度
+        // Chiều rộng vùng bên ngoài Tab
         var tabOuterWidth = calSumWidth($(".content-tabs").children().not(".J_menuTabs"));
-        // 可视区域tab宽度
+        // Chiều rộng tab trong vùng hiển thị
         var visibleWidth = $(".content-tabs").outerWidth(true) - tabOuterWidth;
-        // 实际滚动宽度
+        // Chiều rộng cuộn thực tế
         var scrollVal = 0;
         if ($(".page-tabs-content").width() < visibleWidth) {
             return false;
         } else {
             var tabElement = $(".J_menuTab:first");
             var offsetVal = 0;
-            while ((offsetVal + $(tabElement).outerWidth(true)) <= marginLeftVal) {//找到离当前tab最近的元素
+            while ((offsetVal + $(tabElement).outerWidth(true)) <= marginLeftVal) {//Tìm phần tử gần tab hiện tại nhất
                 offsetVal += $(tabElement).outerWidth(true);
                 tabElement = $(tabElement).next();
             }
@@ -454,31 +454,31 @@
             }
         }
 
-        // 滚动处理
+        // Xử lý cuộn
         $('.page-tabs-content').animate({
             marginLeft: 0 - scrollVal + 'px'
         }, "fast");
     }
 
     /**
-     * 选项卡-右移按扭：查看右侧隐藏的选项卡
+     * Tab – nút di chuyển sang phải: xem các tab bị ẩn ở bên phải
      */
     function scrollTabRight() {
 
-        // 当前元素左侧宽度
+        // Chiều rộng bên trái của phần tử hiện tại
         var marginLeftVal = Math.abs(parseInt($('.page-tabs-content').css('margin-left')));
-        // 可视区域非tab宽度
+        // Chiều rộng vùng hiển thị không phải tab
         var tabOuterWidth = calSumWidth($(".content-tabs").children().not(".J_menuTabs"));
-        // 可视区域tab宽度
+        // Chiều rộng tab trong vùng hiển thị
         var visibleWidth = $(".content-tabs").outerWidth(true) - tabOuterWidth;
-        // 实际滚动宽度
+        // Chiều rộng cuộn thực tế
         var scrollVal = 0;
         if ($(".page-tabs-content").width() < visibleWidth) {
             return false;
         } else {
             var tabElement = $(".J_menuTab:first");
             var offsetVal = 0;
-            while ((offsetVal + $(tabElement).outerWidth(true)) <= marginLeftVal) {//找到离当前tab最近的元素
+            while ((offsetVal + $(tabElement).outerWidth(true)) <= marginLeftVal) {//Tìm phần tử gần tab hiện tại nhất
                 offsetVal += $(tabElement).outerWidth(true);
                 tabElement = $(tabElement).next();
             }
@@ -499,46 +499,46 @@
     // -------------------- tab: refresh、close-other、close-current、close-all --------------------
 
     /**
-     * Tab-刷新按钮：刷新active的 Tab 页面
+     * Nút làm mới Tab: làm mới trang Tab đang active
      */
     function refreshTab() {
 
-        // 显示进度条
+        // Hiển thị thanh tiến trình
         NProgress.inc(0.2);
         NProgress.configure({
-            easing: 'ease',         // 动画缓动函数 (默认: 'ease')
-            speed: 500,             // 动画速度（毫秒）(默认: 200)
-            showSpinner: true       // 是否显示旋转图标 (默认: true)
+            easing: 'ease',         // Hàm easing của hiệu ứng (mặc định: 'ease')
+            speed: 500,             // Tốc độ hiệu ứng (mili giây) (mặc định: 200)
+            showSpinner: true       // Có hiển thị biểu tượng xoay hay không (mặc định: true)
         });
         NProgress.start();
 
-        // 1、获取当前激活的 Tab
+        // 1. Lấy Tab đang được kích hoạt
         var tabSrc = $('.page-tabs-content').find('.active').attr('data-id');
         var target = $('.J_iframe[data-id="' + tabSrc + '"]');
         var url = target.attr('src');
 
-        // 2、重新加载页面
+        // 2. Tải lại trang
         // target.attr('src', url).ready();
         target.attr('src', url).on('load', function () {
             NProgress.done();
 
-            // 3、菜单Menu联动 + 页面锚点（hash参数）更新
+            // 3. Liên động menu + cập nhật anchor của trang (tham số hash)
             activeMenuAndPath($('.page-tabs-content').find('.active').attr('data-id'));
 
         }).on('error', function () {
             NProgress.done();
-            // 处理加载失败情况，防止跳转
+            // Xử lý trường hợp tải thất bại, ngăn chuyển hướng
             console.error('iframe load error, src = ' + $(this).attr('src'));
         });
     }
 
     /**
-     * 选项卡-Tab双击：刷新菜单页面
+     * Nhấn đúp vào Tab: làm mới trang menu
      */
     /*$('.J_menuTabs').on('dblclick', '.J_menuTab', refreshTab);*/
 
     /**
-     * 滚动到已激活的选项卡
+     * Cuộn đến tab đang được kích hoạt
      */
     /*$('.J_tabShowActive').on('click', showActiveTab);
     function showActiveTab(){
@@ -546,7 +546,7 @@
     }*/
 
     /**
-     * 关闭其他选项卡
+     * Đóng các tab khác
      */
     function closeOtherTabs(){
         $('.page-tabs-content').children("[data-id]").not(":first").not(".active").each(function () {
@@ -557,29 +557,29 @@
     }
 
     /**
-     * 关闭当前选项卡
+     * Đóng tab hiện tại
      */
     function tabCloseCurrent() {
         $('.page-tabs-content').find('.active i').trigger("click");
     }
 
     /**
-     * 关闭全部选项卡
+     * Đóng tất cả các tab
      */
     function tabCloseAll(){
-        // 保留 第一个 Tab，其他删除（Tab+iframe）
+        // Giữ lại Tab đầu tiên, xóa các Tab khác (Tab+iframe)
         $('.page-tabs-content').children("[data-id]").not(":first").each(function () {
             $('.J_iframe[data-id="' + $(this).data('id') + '"]').remove();
             $(this).remove();
         });
-        // 第一个 Tab 激活/展示（Tab+iframe）
+        // Kích hoạt/hiển thị Tab đầu tiên (Tab+iframe)
         $('.page-tabs-content').children("[data-id]:first").each(function () {
             $('.J_iframe[data-id="' + $(this).data('id') + '"]').show();
             $(this).addClass("active");
         });
         $('.page-tabs-content').css("margin-left", "0");
 
-        // 菜单Menu联动 + 页面锚点（hash参数）更新
+        // Liên động menu + cập nhật anchor của trang (tham số hash)
         activeMenuAndPath($('.page-tabs-content').find('.active').attr('data-id'));
     }
 

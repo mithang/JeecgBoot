@@ -84,7 +84,7 @@ $(function () {
 			password : {
 				required  : I18n.login_password_empty  ,
 				minlength : I18n.login_password_lt_4
-				/*,maxlength:"登录密码不应超过18位"*/
+				/*,maxlength:"Mật khẩu đăng nhập không được vượt quá 18 ký tự"*/
 			}
 		},
 		highlight : function(element) {

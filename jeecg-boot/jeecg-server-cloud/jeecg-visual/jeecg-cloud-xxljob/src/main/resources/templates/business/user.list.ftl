@@ -17,7 +17,7 @@
 
 		<!-- 2-content start -->
 
-		<#-- 查询区域 -->
+		<#-- Khu vực truy vấn -->
 		<div class="box" style="margin-bottom:9px;">
 			<div class="box-body">
 				<div class="row" id="data_filter" >
@@ -49,7 +49,7 @@
 			</div>
 		</div>
 
-		<#-- 数据表格区域 -->
+		<#-- Khu vực bảng dữ liệu -->
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
@@ -69,7 +69,7 @@
 			</div>
 		</div>
 
-		<!-- 新增.模态框 -->
+		<!-- Thêm mới. Hộp thoại modal -->
 		<div class="modal fade" id="addModal" tabindex="-1" role="dialog"  aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -120,7 +120,7 @@
 			</div>
 		</div>
 
-		<!-- 更新.模态框 -->
+		<!-- Cập nhật. Hộp thoại modal -->
 		<div class="modal fade" id="updateModal" tabindex="-1" role="dialog"  aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">

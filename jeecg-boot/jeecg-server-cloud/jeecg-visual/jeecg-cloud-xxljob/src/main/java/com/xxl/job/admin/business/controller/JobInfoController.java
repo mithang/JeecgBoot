@@ -50,14 +50,14 @@ public class JobInfoController {
 	@RequestMapping
 	public String index(HttpServletRequest request, Model model, @RequestParam(value = "jobGroup", required = false, defaultValue = "-1") int jobGroup) {
 
-		// 枚举-字典
-		model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());	    // 路由策略-列表
-		model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());								// Glue类型-字典
-		model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategyEnum.values());	    // 阻塞处理策略-字典
-		model.addAttribute("ScheduleTypeEnum", ScheduleTypeEnum.values());	    				// 调度类型
-		model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());	    			// 调度过期策略
+		// Từ điển enum
+		model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());	    // Danh sách chiến lược định tuyến
+		model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());								// Từ điển loại GLUE
+		model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategyEnum.values());	    // Từ điển chiến lược xử lý chặn
+		model.addAttribute("ScheduleTypeEnum", ScheduleTypeEnum.values());	    				// Loại lập lịch
+		model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());	    			// Chiến lược hết hạn lập lịch
 
-		// 执行器列表
+		// Danh sách executor
 		List<XxlJobGroup> jobGroupListTotal =  xxlJobGroupMapper.findAll();
 
 		// filter group

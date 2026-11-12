@@ -41,7 +41,7 @@ public class JobCompleter {
         // 1、process child-job
         processChildJob(xxlJobLog);
 
-        // text最大64kb 避免长度过长
+        // text tối đa 64kb, tránh độ dài quá lớn
         if (xxlJobLog.getHandleMsg().length() > 15000) {
             xxlJobLog.setHandleMsg( xxlJobLog.getHandleMsg().substring(0, 15000) );
         }

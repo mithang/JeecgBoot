@@ -370,7 +370,7 @@
 
                 $.fn.cronGen.tools.cronParse(inputElement.val());
 
-                //绑定指定事件
+                //Bind the specified event
                 $.fn.cronGen.tools.initChangeEvent();
 
 
@@ -663,14 +663,14 @@
     };
     $.fn.cronGen.tools = {
         /**
-         * 每周期
+         * Every cycle
          */
         everyTime : function(dom){
             $("#"+dom+"Hidden").val("*");
             $.fn.cronGen.tools.clearCheckbox(dom);
         },
         /**
-         * 不指定
+         * Not specified
          */
         unAppoint : function(dom){
             var val = "?";
@@ -682,7 +682,7 @@
             $.fn.cronGen.tools.clearCheckbox(dom);
         },
         /**
-         * 周期
+         * Cycle
          */
         cycle : function(dom){
             var start = $("#"+dom+"Start_0").val();
@@ -691,7 +691,7 @@
             $.fn.cronGen.tools.clearCheckbox(dom);
         },
         /**
-         * 从开始
+         * Start from
          */
         startOn : function(dom) {
             var start = $("#"+dom+"Start_1").val();
@@ -700,14 +700,14 @@
             $.fn.cronGen.tools.clearCheckbox(dom);
         },
         /**
-         * 最后一天
+         * Last day
          */
         lastDay : function(dom){
             $("#"+dom+"Hidden").val("L");
             $.fn.cronGen.tools.clearCheckbox(dom);
         },
         /**
-         * 每周的某一天
+         * A specific day of the week
          */
         weekOfDay : function(dom){
             var start = $("#"+dom+"Start_0").val();
@@ -716,7 +716,7 @@
             $.fn.cronGen.tools.clearCheckbox(dom);
         },
         /**
-         * 最后一周
+         * Last week
          */
         lastWeek : function(dom){
             var start = $("#"+dom+"Start_2").val();
@@ -724,7 +724,7 @@
             $.fn.cronGen.tools.clearCheckbox(dom);
         },
         /**
-         * 工作日
+         * Working day
          */
         workDay : function(dom) {
             var start = $("#"+dom+"Start_2").val();
@@ -1035,7 +1035,7 @@
             }
         },
         cronParse : function(cronExpress) {
-            //获取参数中表达式的值
+            //Get the expression value from the parameters
             if (cronExpress) {
                 var regs = cronExpress.split(' ');
                 $("#secondHidden").val(regs[0]);
@@ -1083,7 +1083,7 @@
             return result;
         },
         clearCheckbox : function(dom){
-        	//清除选中的checkbox
+        	//Clear the selected checkboxes
             var list = $("."+dom+"List").children().filter(":checked");
             if ($(list).length > 0) {
             	$.each(list, function(index){
@@ -1094,7 +1094,7 @@
             }
         },
         initCheckBox : function(dom) {
-        	//移除checkbox禁用
+        	//Remove the disabled state of the checkboxes
             var list = $("."+dom+"List").children();
             if ($(list).length > 0) {
             	$.each(list, function(index){

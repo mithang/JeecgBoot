@@ -10,7 +10,7 @@
 // */
 //public class LocalCacheUtil {
 //
-//    private static ConcurrentMap<String, LocalCacheData> cacheRepository = new ConcurrentHashMap<String, LocalCacheData>();   // 类型建议用抽象父类，兼容性更好；
+//    private static ConcurrentMap<String, LocalCacheData> cacheRepository = new ConcurrentHashMap<String, LocalCacheData>();   // Loại nên dùng lớp cha trừu tượng, khả năng tương thích tốt hơn;
 //    private static class LocalCacheData{
 //        private String key;
 //        private Object val;
