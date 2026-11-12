@@ -408,11 +408,11 @@
     }
   }
 
-  // Lớp kiểu trạng thái
+  // Lớp kiểu trạng thái — trạng thái do LLM trả về, chấp nhận cả giá trị tiếng Trung (gốc) và tiếng Việt (sau khi dịch prompt đánh giá)
   const getStatusClass = (record) => {
-    if (record.status === '成功') return 'status-success';
-    if (record.status === '失败') return 'status-failed';
-    if (record.status === '警告') return 'status-warning';
+    if (record.status === '成功' || record.status === 'Thành công') return 'status-success';
+    if (record.status === '失败' || record.status === 'Thất bại') return 'status-failed';
+    if (record.status === '警告' || record.status === 'Cảnh báo') return 'status-warning';
     return '';
   };
 
