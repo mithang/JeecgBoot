@@ -5,7 +5,7 @@
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //
-///** 升级spring boot 3后，无法找到平替
+///** Sau khi nâng cấp lên spring boot 3, không tìm được phương án thay thế
 // * @author: zyf
 // * @date: 20210715
 // */
@@ -16,7 +16,7 @@
 //        FilterRegistrationBean registration = new FilterRegistrationBean();
 //        registration.setFilter(new CommonFilter());
 //        registration.addUrlPatterns("/*");
-//        // 入口资源关闭聚合
+//        // Tài nguyên entry đóng tính năng tổng hợp
 //        registration.addInitParameter(CommonFilter.WEB_CONTEXT_UNIFY, "false");
 //        registration.setName("sentinelFilter");
 //        registration.setOrder(1);

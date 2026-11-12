@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @Description: 余额请求对象
+ * @Description: Đối tượng yêu cầu số dư
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0

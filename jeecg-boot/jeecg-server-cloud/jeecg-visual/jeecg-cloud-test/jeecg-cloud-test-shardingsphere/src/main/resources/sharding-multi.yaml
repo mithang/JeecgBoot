@@ -1,7 +1,7 @@
-# !!!数据源名称要和动态数据源中配置的名称一致
+# !!!Tên nguồn dữ liệu phải khớp với tên đã cấu hình trong nguồn dữ liệu động
 databaseName: sharding-db
 
-# 具体参看官网文档说明
+# Xem chi tiết trong tài liệu chính thức
 dataSources:
   ds0:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource

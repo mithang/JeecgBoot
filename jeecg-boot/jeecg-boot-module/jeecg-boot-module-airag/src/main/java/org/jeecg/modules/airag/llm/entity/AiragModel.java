@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: AiRag模型配置
+ * @Description: AiRag Cấu hình mô hình
  * @Author: jeecg-boot
  * @Date: 2025-02-17
  * @Version: V1.0
@@ -31,100 +31,100 @@ import lombok.experimental.Accessors;
 @TableName("airag_model")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="AiRag模型配置")
+@Schema(description="AiRag Cấu hình mô hình")
 public class AiragModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * Khóa chính
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键")
+    @Schema(description = "Khóa chính")
     private String id;
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     @Dict(dictTable = "sys_user",dicCode = "username",dicText = "realname")
     private String createBy;
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private Date createTime;
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
+    @Schema(description = "Người cập nhật")
     private String updateBy;
     /**
-     * 更新日期
+     * Ngày cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private Date updateTime;
     /**
-     * 所属部门
+     * Phòng ban trực thuộc
      */
-    @Schema(description = "所属部门")
+    @Schema(description = "Phòng ban trực thuộc")
     private String sysOrgCode;
     /**
-     * 租户id
+     * Tenant id
      */
-    @Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+    @Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private String tenantId;
     /**
-     * 名称
+     * Tên
      */
-    @Excel(name = "名称", width = 15)
-    @Schema(description = "名称")
+    @Excel(name = "Tên", width = 15)
+    @Schema(description = "Tên")
     private String name;
     /**
-     * 供应者
+     * Nhà cung cấp
      */
-    @Excel(name = "供应者", width = 15, dicCode = "model_provider")
+    @Excel(name = "Nhà cung cấp", width = 15, dicCode = "model_provider")
     @Dict(dicCode = "model_provider")
-    @Schema(description = "供应者")
+    @Schema(description = "Nhà cung cấp")
     private String provider;
     /**
-     * 模型类型
+     * Loại mô hình
      */
-    @Excel(name = "模型类型", width = 15, dicCode = "model_type")
+    @Excel(name = "Loại mô hình", width = 15, dicCode = "model_type")
     @Dict(dicCode = "model_type")
-    @Schema(description = "模型类型")
+    @Schema(description = "Loại mô hình")
     private String modelType;
     /**
-     * 模型名称
+     * Tên mô hình
      */
-    @Excel(name = "模型名称", width = 15)
-    @Schema(description = "模型名称")
+    @Excel(name = "Tên mô hình", width = 15)
+    @Schema(description = "Tên mô hình")
     private String modelName;
     /**
-     * API域名
+     * API Tên miền
      */
-    @Excel(name = "API域名", width = 15)
-    @Schema(description = "API域名")
+    @Excel(name = "API Tên miền", width = 15)
+    @Schema(description = "API Tên miền")
     private String baseUrl;
     /**
-     * 凭证信息
+     * Thông tin chứng chỉ
      */
-    @Schema(description = "凭证信息")
+    @Schema(description = "Thông tin chứng chỉ")
     private String credential;
     /**
-     * 模型参数
+     * Tham số mô hình
      */
-    @Excel(name = "模型参数", width = 15)
-    @Schema(description = "模型参数")
+    @Excel(name = "Tham số mô hình", width = 15)
+    @Schema(description = "Tham số mô hình")
     private String modelParams;
 
     /**
-     * 是否激活(0=未激活,1=已激活)
+     * Có kích hoạt không(0=Chưa kích hoạt,1=Đã kích hoạt)
      */
-    @Excel(name = "是否激活", width = 15)
-    @Schema(description = "是否激活")
+    @Excel(name = "Có kích hoạt không", width = 15)
+    @Schema(description = "Có kích hoạt không")
     private Integer activateFlag;
 }

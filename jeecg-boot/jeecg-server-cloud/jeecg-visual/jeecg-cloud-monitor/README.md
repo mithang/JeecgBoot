@@ -1,2 +1,2 @@
 http://localhost:9111
-账号密码：admin/admin
+Tài khoản và mật khẩu:admin/admin

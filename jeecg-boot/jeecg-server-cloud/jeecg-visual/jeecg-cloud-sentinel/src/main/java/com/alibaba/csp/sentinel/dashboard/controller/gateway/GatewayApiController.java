@@ -27,7 +27,7 @@ import java.util.*;
 import static com.alibaba.csp.sentinel.adapter.gateway.common.SentinelGatewayConstants.*;
 
 /**
- * 网关API规则控制器
+ * Controller quy tắc API Gateway
  *
  * @author zyf
  * @date 2022-04-13
@@ -97,14 +97,14 @@ public class GatewayApiController extends BaseRuleController {
         }
         entity.setPort(port);
 
-        // API名称
+        // API Tên
         String apiName = reqVo.getApiName();
         if (StringUtil.isBlank(apiName)) {
             return Result.ofFail(-1, "apiName can't be null or empty");
         }
         entity.setApiName(apiName.trim());
 
-        // 匹配规则列表
+        // Danh sách quy tắc khớp
         List<ApiPredicateItemVo> predicateItems = reqVo.getPredicateItems();
         if (CollectionUtils.isEmpty(predicateItems)) {
             return Result.ofFail(-1, "predicateItems can't empty");
@@ -114,14 +114,14 @@ public class GatewayApiController extends BaseRuleController {
         for (ApiPredicateItemVo predicateItem : predicateItems) {
             ApiPredicateItemEntity predicateItemEntity = new ApiPredicateItemEntity();
 
-            // 匹配模式
+            // Chế độ khớp
             Integer matchStrategy = predicateItem.getMatchStrategy();
             if (!Arrays.asList(URL_MATCH_STRATEGY_EXACT, URL_MATCH_STRATEGY_PREFIX, URL_MATCH_STRATEGY_REGEX).contains(matchStrategy)) {
                 return Result.ofFail(-1, "invalid matchStrategy: " + matchStrategy);
             }
             predicateItemEntity.setMatchStrategy(matchStrategy);
 
-            // 匹配串
+            // Chuỗi khớp
             String pattern = predicateItem.getPattern();
             if (StringUtil.isBlank(pattern)) {
                 return Result.ofFail(-1, "pattern can't be null or empty");
@@ -132,7 +132,7 @@ public class GatewayApiController extends BaseRuleController {
         }
         entity.setPredicateItems(new LinkedHashSet<>(predicateItemEntities));
 
-        // 检查API名称不能重复
+        // Kiểm tra tên API không được trùng lặp
         List<ApiDefinitionEntity> allApis = repository.findAllByMachine(MachineInfo.of(app.trim(), ip.trim(), port));
         if (allApis.stream().map(o -> o.getApiName()).anyMatch(o -> o.equals(apiName.trim()))) {
             return Result.ofFail(-1, "apiName exists: " + apiName);
@@ -174,7 +174,7 @@ public class GatewayApiController extends BaseRuleController {
             return Result.ofFail(-1, "api does not exist, id=" + id);
         }
 
-        // 匹配规则列表
+        // Danh sách quy tắc khớp
         List<ApiPredicateItemVo> predicateItems = reqVo.getPredicateItems();
         if (CollectionUtils.isEmpty(predicateItems)) {
             return Result.ofFail(-1, "predicateItems can't empty");
@@ -184,14 +184,14 @@ public class GatewayApiController extends BaseRuleController {
         for (ApiPredicateItemVo predicateItem : predicateItems) {
             ApiPredicateItemEntity predicateItemEntity = new ApiPredicateItemEntity();
 
-            // 匹配模式
+            // Chế độ khớp
             int matchStrategy = predicateItem.getMatchStrategy();
             if (!Arrays.asList(URL_MATCH_STRATEGY_EXACT, URL_MATCH_STRATEGY_PREFIX, URL_MATCH_STRATEGY_REGEX).contains(matchStrategy)) {
                 return Result.ofFail(-1, "Invalid matchStrategy: " + matchStrategy);
             }
             predicateItemEntity.setMatchStrategy(matchStrategy);
 
-            // 匹配串
+            // Chuỗi khớp
             String pattern = predicateItem.getPattern();
             if (StringUtil.isBlank(pattern)) {
                 return Result.ofFail(-1, "pattern can't be null or empty");
@@ -248,7 +248,7 @@ public class GatewayApiController extends BaseRuleController {
         List<ApiDefinitionEntity> apis = repository.findAllByApp(app);
         try {
             apiPublisher.publish(app, apis);
-            //延迟加载
+            //Tải chậm
             delayTime();
             return true;
         } catch (Exception e) {

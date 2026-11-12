@@ -9,14 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>jeecg-system-cloud-start</artifactId>
-    <description>System项目微服务启动</description>
+    <description>System Khởi động microservice của dự án</description>
 
     <dependencies>
-        <!-- 引入jeecg-boot-starter-cloud依赖 -->
+        <!-- Import jeecg-boot-starter-cloud Dependency -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-cloud</artifactId>
-            <!-- 3.2版本号后，可选择是否排除jeecg-system-cloud-api，不排除会优先通过fegin调用接口
+            <!-- 3.2 Sau số phiên bản, có thể chọn có loại trừ hay không jeecg-system-cloud-api, nếu không loại trừ sẽ ưu tiên gọi API qua Feign
             <exclusions>
                 <exclusion>
                     <groupId>org.jeecgframework.boot3</groupId>
@@ -24,11 +24,11 @@
                 </exclusion>
             </exclusions>-->
         </dependency>
-        <!-- jeecg-system-biz依赖 -->
+        <!-- jeecg-system-biz Dependency -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-system-biz</artifactId>
-            <!-- 排除demo模块，demo模块采用微服务独立启动 -->
+            <!-- Loại trừ module demo, module demo khởi động độc lập dưới dạng microservice -->
             <exclusions>
                 <exclusion>
                     <groupId>org.jeecgframework.boot3</groupId>
@@ -42,25 +42,25 @@
             <artifactId>jeecg-boot-starter-job</artifactId>
         </dependency>
 
-        <!-- feign 熔断限流、分布式锁、xxljob示例（默认注释：依赖 rabbitmq，docker-compose 里没有 rabbitmq 时 system 启动要多等 7 分钟）
+        <!-- feign Ví dụ circuit breaker/giới hạn lưu lượng, khóa phân tán, xxljob (mặc định comment: phụ thuộc RabbitMQ,docker-compose khi trong docker-compose không có RabbitMQ thì system khởi động phải chờ thêm 7 phút)
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-cloud-test-more</artifactId>
             <version>${jeecgboot.version}</version>
         </dependency>-->
-        <!-- rabbitmq例子
+        <!-- rabbitmq Ví dụ
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-cloud-test-rabbitmq</artifactId>
             <version>${jeecgboot.version}</version>
         </dependency>-->
-        <!-- 分布式事务例子
+        <!-- Ví dụ giao dịch phân tán
        <dependency>
            <groupId>org.jeecgframework.boot3</groupId>
            <artifactId>jeecg-cloud-test-seata</artifactId>
            <version>${jeecgboot.version}</version>
        </dependency>-->
-        <!-- 分库分表例子
+        <!-- Ví dụ chia cơ sở dữ liệu/chia bảng
        <dependency>
            <groupId>org.jeecgframework.boot3</groupId>
            <artifactId>jeecg-cloud-test-shardingsphere</artifactId>

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * 常规feign接口定义
+ * Định nghĩa API Feign thông thường
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface JeecgTestClient {
 
     /**
-     * feign测试方法
+     * feign Phương thức kiểm thử
      * @param name
      * @return
      */

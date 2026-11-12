@@ -8,7 +8,7 @@ import org.jeecg.modules.test.rocketmq.constant.CloudConstant;
 import org.springframework.stereotype.Component;
 
 /**
- * 定义接收者（可以定义N个接受者，消息会均匀的发送到N个接收者中）
+ * Định nghĩa người nhận (có thể định nghĩa N người nhận, tin nhắn sẽ được gửi đều đến N người nhận)
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class HelloTimeReceiver implements RocketMQListener<BaseMap> {
 
     public void onMessage(BaseMap baseMap) {
-        log.info("helloTimeReceiver接收消息：" + baseMap);
+        log.info("helloTimeReceiver Nhận tin nhắn:" + baseMap);
     }
 
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 授权规则拉取(黑名单白名单)
+ * Kéo quy tắc ủy quyền(Danh sách đen / danh sách trắng)
  *
  * @author zyf
  * @date 2022-04-13

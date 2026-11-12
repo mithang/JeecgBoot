@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *  加载热点参数规则
+ *  Tải quy tắc tham số hotspot
  *
  * @author zyf
  * @date 2022-04-13

@@ -40,7 +40,7 @@ public class AiragExtDataController extends JeecgController<AiragExtData, IAirag
 	private IAiragExtDataService airagExtDataService;
 	
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 *
 	 * @param airagExtData
 	 * @param pageNo
@@ -48,8 +48,8 @@ public class AiragExtDataController extends JeecgController<AiragExtData, IAirag
 	 * @param req
 	 * @return
 	 */
-	//@AutoLog(value = "airag_ext_data-分页列表查询")
-	@Operation(summary="airag_ext_data-分页列表查询")
+	//@AutoLog(value = "airag_ext_data-Truy vấn danh sách phân trang")
+	@Operation(summary="airag_ext_data-Truy vấn danh sách phân trang")
 	@GetMapping(value = "/list")
 	@RequiresPermissions("airag:extData:list")
 	public Result<IPage<AiragExtData>> queryPageList(AiragExtData airagExtData,
@@ -63,7 +63,7 @@ public class AiragExtDataController extends JeecgController<AiragExtData, IAirag
 		return Result.OK(pageList);
 	}
 	/**
-	 * 调用轨迹列表查询
+	 * Gọi truy vấn danh sách quỹ đạo
 	 *
 	 * @param airagExtData
 	 * @param pageNo
@@ -71,7 +71,7 @@ public class AiragExtDataController extends JeecgController<AiragExtData, IAirag
 	 * @param req
 	 * @return
 	 */
-	@Operation(summary="airag_ext_data-分页列表查询")
+	@Operation(summary="airag_ext_data-Truy vấn danh sách phân trang")
 	@GetMapping(value = "/getTrackList")
 	@RequiresPermissions("airag:extData:getTrackList")
 	public Result<IPage<AiragExtData>> getTrackList(AiragExtData airagExtData,
@@ -90,104 +90,104 @@ public class AiragExtDataController extends JeecgController<AiragExtData, IAirag
 	}
 
 	/**
-	 *   添加
+	 *   Thêm
 	 *
 	 * @param airagExtData
 	 * @return
 	 */
-	@AutoLog(value = "airag_ext_data-添加")
-	@Operation(summary="airag_ext_data-添加")
+	@AutoLog(value = "airag_ext_data-Thêm")
+	@Operation(summary="airag_ext_data-Thêm")
 	@PostMapping(value = "/add")
 	@RequiresPermissions("airag:extData:add")
 	public Result<String> add(@RequestBody AiragExtData airagExtData) {
 		airagExtData.setBizType(AiPromptsConsts.BIZ_TYPE_EVALUATOR);
 		airagExtDataService.save(airagExtData);
-		return Result.OK("添加成功！");
+		return Result.OK("Thêm thành công!");
 	}
 	
 	/**
-	 *  编辑
+	 *  Chỉnh sửa
 	 *
 	 * @param airagExtData
 	 * @return
 	 */
-	@AutoLog(value = "airag_ext_data-编辑")
-	@Operation(summary="airag_ext_data-编辑")
+	@AutoLog(value = "airag_ext_data-Chỉnh sửa")
+	@Operation(summary="airag_ext_data-Chỉnh sửa")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	@RequiresPermissions("airag:extData:edit")
 	public Result<String> edit(@RequestBody AiragExtData airagExtData) {
 		airagExtDataService.updateById(airagExtData);
-		return Result.OK("编辑成功!");
+		return Result.OK("Chỉnh sửa thành công!");
 	}
 	
 	/**
-	 *   通过id删除
+	 *   Xóa theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "airag_ext_data-通过id删除")
-	@Operation(summary="airag_ext_data-通过id删除")
+	@AutoLog(value = "airag_ext_data-Xóa theo id")
+	@Operation(summary="airag_ext_data-Xóa theo id")
 	@DeleteMapping(value = "/delete")
 	@RequiresPermissions("airag:extData:delete")
 	public Result<String> delete(@RequestParam(name="id",required=true) String id) {
 		airagExtDataService.removeById(id);
-		return Result.OK("删除成功!");
+		return Result.OK("Xóa thành công!");
 	}
 	
 	/**
-	 *  批量删除
+	 *  Xóa hàng loạt
 	 *
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "airag_ext_data-批量删除")
-	@Operation(summary="airag_ext_data-批量删除")
+	@AutoLog(value = "airag_ext_data-Xóa hàng loạt")
+	@Operation(summary="airag_ext_data-Xóa hàng loạt")
 	@DeleteMapping(value = "/deleteBatch")
 	@RequiresPermissions("airag:extData:deleteBatch")
 	public Result<String> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.airagExtDataService.removeByIds(Arrays.asList(ids.split(",")));
-		return Result.OK("批量删除成功!");
+		return Result.OK("Xóa hàng loạt thành công!!");
 	}
 	
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	//@AutoLog(value = "airag_ext_data-通过id查询")
-	@Operation(summary="airag_ext_data-通过id查询")
+	//@AutoLog(value = "airag_ext_data-Tìm kiếm theo id")
+	@Operation(summary="airag_ext_data-Tìm kiếm theo id")
 	@GetMapping(value = "/queryById")
 	@RequiresPermissions("airag:extData:queryById")
 	public Result<AiragExtData> queryById(@RequestParam(name="id",required=true) String id) {
 		AiragExtData airagExtData = airagExtDataService.getById(id);
 		if(airagExtData==null) {
-			return Result.error("未找到对应数据");
+			return Result.error("Không tìm thấy dữ liệu tương ứng");
 		}
 		return Result.OK(airagExtData);
 	}
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	//@AutoLog(value = "airag_ext_data-通过id查询")
-	@Operation(summary="airag_ext_data-通过id查询")
+	//@AutoLog(value = "airag_ext_data-Tìm kiếm theo id")
+	@Operation(summary="airag_ext_data-Tìm kiếm theo id")
 	@GetMapping(value = "/queryTrackById")
 	@RequiresPermissions("airag:extData:queryTrackById")
 	public Result<List<AiragExtData>> queryTrackById(@RequestParam(name="id",required=true) String id) {
 		AiragExtData airagExtData = airagExtDataService.getById(id);
 		String status = airagExtData.getStatus();
 		if(AiPromptsConsts.STATUS_RUNNING.equals(status)) {
-			return Result.error("处理中，请稍后刷新");
+			return Result.error("Đang xử lý, vui lòng làm mới sau");
 		}
 		List<AiragExtData> trackList = airagExtDataService.queryTrackById(id);
 		return Result.OK(trackList);
 	}
 	 /**
-	  * 构造器调试
+	  * Gỡ lỗi constructor
 	  *
 	  * @param debugVo
 	  * @return
@@ -198,7 +198,7 @@ public class AiragExtDataController extends JeecgController<AiragExtData, IAirag
 		 return airagExtDataService.debugEvaluator(debugVo);
 	 }
     /**
-    * 导出excel
+    * Xuất excel
     *
     * @param request
     * @param airagExtData
@@ -210,7 +210,7 @@ public class AiragExtDataController extends JeecgController<AiragExtData, IAirag
     }
 
     /**
-      * 通过excel导入数据
+      * Nhập dữ liệu qua Excel
     *
     * @param request
     * @param response

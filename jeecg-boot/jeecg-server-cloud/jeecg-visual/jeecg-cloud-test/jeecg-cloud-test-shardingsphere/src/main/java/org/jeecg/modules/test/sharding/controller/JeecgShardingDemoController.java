@@ -15,13 +15,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Description: 分库分表测试
+ * @Description: Kiểm thử chia cơ sở dữ liệu và bảng
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
  */
 @Slf4j
-@Tag(name = "分库分表测试")
+@Tag(name = "Kiểm thử chia cơ sở dữ liệu và bảng")
 @RestController
 @RequestMapping("/demo/sharding")
 public class JeecgShardingDemoController extends JeecgController<ShardingSysLog, IShardingSysLogService> {
@@ -29,59 +29,59 @@ public class JeecgShardingDemoController extends JeecgController<ShardingSysLog,
     private IShardingSysLogService shardingSysLogService;
 
     /**
-     * 单库分表 —— 插入
+     * Chia bảng đơn cơ sở dữ liệu —— Chèn
      * @return
      */
     @PostMapping(value = "/insert")
-    @Operation(summary = "单库分表插入")
+    @Operation(summary = "Chèn chia bảng trên một cơ sở dữ liệu")
     public Result<?> insert() {
-        log.info("---------------------------------单库分表插入--------------------------------");
+        log.info("---------------------------------Chèn chia bảng trên một cơ sở dữ liệu--------------------------------");
         int size = 10;
         for (int i = 0; i < size; i++) {
             ShardingSysLog shardingSysLog = new ShardingSysLog();
-            shardingSysLog.setLogContent("采用shardingsphere实现分库分表，插入测试！");
+            shardingSysLog.setLogContent("Dùng ShardingSphere triển khai chia cơ sở dữ liệu/chia bảng, kiểm thử chèn!");
             shardingSysLog.setLogType(i);
             shardingSysLog.setOperateType(i);
             shardingSysLogService.save(shardingSysLog);
         }
-        return Result.OK("单库分表插入10条数据完成！");
+        return Result.OK("Chèn 10 bản ghi vào bảng đã chia của đơn cơ sở dữ liệu hoàn tất!");
     }
 
     /**
-     * 单库分表 —— 查询
+     * Chia bảng đơn cơ sở dữ liệu —— Truy vấn
      * @return
      */
     @PostMapping(value = "/list")
-    @Operation(summary = "单库分表查询")
+    @Operation(summary = "Truy vấn bảng đã chia của đơn cơ sở dữ liệu")
     public Result<?> list() {
         return Result.OK(shardingSysLogService.list());
     }
 
     /**
-     * 分库分表 - 插入
+     * Chia cơ sở dữ liệu và bảng - Chèn
      * @return
      */
     @PostMapping(value = "/insert2")
-    @Operation(summary = "分库分表插入")
+    @Operation(summary = "Chèn dữ liệu chia cơ sở dữ liệu/chia bảng")
     public Result<?> insert2() {
         int start=20;
         int size=30;
         for (int i = start; i <= size; i++) {
             ShardingSysLog shardingSysLog = new ShardingSysLog();
-            shardingSysLog.setLogContent("分库分表测试");
+            shardingSysLog.setLogContent("Kiểm thử chia cơ sở dữ liệu và bảng");
             shardingSysLog.setLogType(0);
             shardingSysLog.setOperateType(i);
             shardingSysLogService.save(shardingSysLog);
         }
-        return Result.OK("分库分表插入10条数据完成！");
+        return Result.OK("Chèn 10 bản ghi chia cơ sở dữ liệu/chia bảng hoàn tất!");
     }
 
     /**
-     * 分库分表 - 查询
+     * Chia cơ sở dữ liệu và bảng - Truy vấn
      * @return
      */
     @PostMapping(value = "/list2")
-    @Operation(summary = "分库分表查询")
+    @Operation(summary = "Truy vấn chia cơ sở dữ liệu/chia bảng")
     public Result<?> list2() {
         return Result.OK(shardingSysLogService.list());
     }

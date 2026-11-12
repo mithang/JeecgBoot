@@ -28,7 +28,7 @@ import static com.alibaba.csp.sentinel.adapter.gateway.common.SentinelGatewayCon
 import static com.alibaba.csp.sentinel.dashboard.datasource.entity.gateway.GatewayFlowRuleEntity.*;
 
 /**
- * 网关限流规则控制器
+ * Controller quy tắc giới hạn lưu lượng Gateway
  *
  * @author zyf
  * @date 2022-04-13
@@ -98,7 +98,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setPort(port);
 
-        // API类型, Route ID或API分组
+        // API Loại, Route ID hoặc nhóm API
         Integer resourceMode = reqVo.getResourceMode();
         if (resourceMode == null) {
             return Result.ofFail(-1, "resourceMode can't be null");
@@ -108,20 +108,20 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setResourceMode(resourceMode);
 
-        // API名称
+        // API Tên
         String resource = reqVo.getResource();
         if (StringUtil.isBlank(resource)) {
             return Result.ofFail(-1, "resource can't be null or empty");
         }
         entity.setResource(resource.trim());
 
-        // 针对请求属性
+        // Đối với thuộc tính yêu cầu
         GatewayParamFlowItemVo paramItem = reqVo.getParamItem();
         if (paramItem != null) {
             GatewayParamFlowItemEntity itemEntity = new GatewayParamFlowItemEntity();
             entity.setParamItem(itemEntity);
 
-            // 参数属性 0-ClientIP 1-Remote Host 2-Header 3-URL参数 4-Cookie
+            // Thuộc tính tham số 0-ClientIP 1-Remote Host 2-Header 3-URL Tham số 4-Cookie
             Integer parseStrategy = paramItem.getParseStrategy();
             if (!Arrays.asList(PARAM_PARSE_STRATEGY_CLIENT_IP, PARAM_PARSE_STRATEGY_HOST, PARAM_PARSE_STRATEGY_HEADER
                     , PARAM_PARSE_STRATEGY_URL_PARAM, PARAM_PARSE_STRATEGY_COOKIE).contains(parseStrategy)) {
@@ -129,9 +129,9 @@ public class GatewayFlowRuleController extends BaseRuleController {
             }
             itemEntity.setParseStrategy(paramItem.getParseStrategy());
 
-            // 当参数属性为2-Header 3-URL参数 4-Cookie时，参数名称必填
+            // Khi thuộc tính tham số là 2-Header 3-URL Tham số 4-Cookie thì tên tham số là bắt buộc
             if (Arrays.asList(PARAM_PARSE_STRATEGY_HEADER, PARAM_PARSE_STRATEGY_URL_PARAM, PARAM_PARSE_STRATEGY_COOKIE).contains(parseStrategy)) {
-                // 参数名称
+                // Tên tham số
                 String fieldName = paramItem.getFieldName();
                 if (StringUtil.isBlank(fieldName)) {
                     return Result.ofFail(-1, "fieldName can't be null or empty");
@@ -140,7 +140,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
             }
 
             String pattern = paramItem.getPattern();
-            // 如果匹配串不为空，验证匹配模式
+            // Nếu chuỗi khớp không trống, hãy kiểm tra chế độ khớp
             if (StringUtil.isNotEmpty(pattern)) {
                 itemEntity.setPattern(pattern);
                 Integer matchStrategy = paramItem.getMatchStrategy();
@@ -151,7 +151,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
             }
         }
 
-        // 阈值类型 0-线程数 1-QPS
+        // Loại ngưỡng 0-Số luồng 1-QPS
         Integer grade = reqVo.getGrade();
         if (grade == null) {
             return Result.ofFail(-1, "grade can't be null");
@@ -161,7 +161,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setGrade(grade);
 
-        // QPS阈值
+        // QPS Ngưỡng
         Double count = reqVo.getCount();
         if (count == null) {
             return Result.ofFail(-1, "count can't be null");
@@ -171,7 +171,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setCount(count);
 
-        // 间隔
+        // Khoảng thời gian
         Long interval = reqVo.getInterval();
         if (interval == null) {
             return Result.ofFail(-1, "interval can't be null");
@@ -181,7 +181,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setInterval(interval);
 
-        // 间隔单位
+        // Đơn vị khoảng thời gian
         Integer intervalUnit = reqVo.getIntervalUnit();
         if (intervalUnit == null) {
             return Result.ofFail(-1, "intervalUnit can't be null");
@@ -191,7 +191,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setIntervalUnit(intervalUnit);
 
-        // 流控方式 0-快速失败 2-匀速排队
+        // Phương thức kiểm soát lưu lượng 0-Thất bại nhanh 2-Xếp hàng đều tốc
         Integer controlBehavior = reqVo.getControlBehavior();
         if (controlBehavior == null) {
             return Result.ofFail(-1, "controlBehavior can't be null");
@@ -202,7 +202,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         entity.setControlBehavior(controlBehavior);
 
         if (CONTROL_BEHAVIOR_DEFAULT == controlBehavior) {
-            // 0-快速失败, 则Burst size必填
+            // 0-Thất bại nhanh, thì Burst size là bắt buộc
             Integer burst = reqVo.getBurst();
             if (burst == null) {
                 return Result.ofFail(-1, "burst can't be null");
@@ -212,7 +212,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
             }
             entity.setBurst(burst);
         } else if (CONTROL_BEHAVIOR_RATE_LIMITER == controlBehavior) {
-            // 1-匀速排队, 则超时时间必填
+            // 1-Xếp hàng đều tốc, thì thời gian timeout là bắt buộc
             Integer maxQueueingTimeoutMs = reqVo.getMaxQueueingTimeoutMs();
             if (maxQueueingTimeoutMs == null) {
                 return Result.ofFail(-1, "maxQueueingTimeoutMs can't be null");
@@ -260,13 +260,13 @@ public class GatewayFlowRuleController extends BaseRuleController {
             return Result.ofFail(-1, "gateway flow rule does not exist, id=" + id);
         }
 
-        // 针对请求属性
+        // Đối với thuộc tính yêu cầu
         GatewayParamFlowItemVo paramItem = reqVo.getParamItem();
         if (paramItem != null) {
             GatewayParamFlowItemEntity itemEntity = new GatewayParamFlowItemEntity();
             entity.setParamItem(itemEntity);
 
-            // 参数属性 0-ClientIP 1-Remote Host 2-Header 3-URL参数 4-Cookie
+            // Thuộc tính tham số 0-ClientIP 1-Remote Host 2-Header 3-URL Tham số 4-Cookie
             Integer parseStrategy = paramItem.getParseStrategy();
             if (!Arrays.asList(PARAM_PARSE_STRATEGY_CLIENT_IP, PARAM_PARSE_STRATEGY_HOST, PARAM_PARSE_STRATEGY_HEADER
                     , PARAM_PARSE_STRATEGY_URL_PARAM, PARAM_PARSE_STRATEGY_COOKIE).contains(parseStrategy)) {
@@ -274,9 +274,9 @@ public class GatewayFlowRuleController extends BaseRuleController {
             }
             itemEntity.setParseStrategy(paramItem.getParseStrategy());
 
-            // 当参数属性为2-Header 3-URL参数 4-Cookie时，参数名称必填
+            // Khi thuộc tính tham số là 2-Header 3-URL Tham số 4-Cookie thì tên tham số là bắt buộc
             if (Arrays.asList(PARAM_PARSE_STRATEGY_HEADER, PARAM_PARSE_STRATEGY_URL_PARAM, PARAM_PARSE_STRATEGY_COOKIE).contains(parseStrategy)) {
-                // 参数名称
+                // Tên tham số
                 String fieldName = paramItem.getFieldName();
                 if (StringUtil.isBlank(fieldName)) {
                     return Result.ofFail(-1, "fieldName can't be null or empty");
@@ -285,7 +285,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
             }
 
             String pattern = paramItem.getPattern();
-            // 如果匹配串不为空，验证匹配模式
+            // Nếu chuỗi khớp không trống, hãy kiểm tra chế độ khớp
             if (StringUtil.isNotEmpty(pattern)) {
                 itemEntity.setPattern(pattern);
                 Integer matchStrategy = paramItem.getMatchStrategy();
@@ -298,7 +298,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
             entity.setParamItem(null);
         }
 
-        // 阈值类型 0-线程数 1-QPS
+        // Loại ngưỡng 0-Số luồng 1-QPS
         Integer grade = reqVo.getGrade();
         if (grade == null) {
             return Result.ofFail(-1, "grade can't be null");
@@ -308,7 +308,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setGrade(grade);
 
-        // QPS阈值
+        // QPS Ngưỡng
         Double count = reqVo.getCount();
         if (count == null) {
             return Result.ofFail(-1, "count can't be null");
@@ -318,7 +318,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setCount(count);
 
-        // 间隔
+        // Khoảng thời gian
         Long interval = reqVo.getInterval();
         if (interval == null) {
             return Result.ofFail(-1, "interval can't be null");
@@ -328,7 +328,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setInterval(interval);
 
-        // 间隔单位
+        // Đơn vị khoảng thời gian
         Integer intervalUnit = reqVo.getIntervalUnit();
         if (intervalUnit == null) {
             return Result.ofFail(-1, "intervalUnit can't be null");
@@ -338,7 +338,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         }
         entity.setIntervalUnit(intervalUnit);
 
-        // 流控方式 0-快速失败 2-匀速排队
+        // Phương thức kiểm soát lưu lượng 0-Thất bại nhanh 2-Xếp hàng đều tốc
         Integer controlBehavior = reqVo.getControlBehavior();
         if (controlBehavior == null) {
             return Result.ofFail(-1, "controlBehavior can't be null");
@@ -349,7 +349,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         entity.setControlBehavior(controlBehavior);
 
         if (CONTROL_BEHAVIOR_DEFAULT == controlBehavior) {
-            // 0-快速失败, 则Burst size必填
+            // 0-Thất bại nhanh, thì Burst size là bắt buộc
             Integer burst = reqVo.getBurst();
             if (burst == null) {
                 return Result.ofFail(-1, "burst can't be null");
@@ -359,7 +359,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
             }
             entity.setBurst(burst);
         } else if (CONTROL_BEHAVIOR_RATE_LIMITER == controlBehavior) {
-            // 2-匀速排队, 则超时时间必填
+            // 2-Xếp hàng đều tốc, thì thời gian timeout là bắt buộc
             Integer maxQueueingTimeoutMs = reqVo.getMaxQueueingTimeoutMs();
             if (maxQueueingTimeoutMs == null) {
                 return Result.ofFail(-1, "maxQueueingTimeoutMs can't be null");
@@ -419,7 +419,7 @@ public class GatewayFlowRuleController extends BaseRuleController {
         List<GatewayFlowRuleEntity> rules = repository.findAllByApp(app);
         try {
             rulePublisher.publish(app, rules);
-            //延迟加载
+            //Tải chậm
             delayTime();
             return true;
         } catch (Exception e) {

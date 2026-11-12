@@ -5,7 +5,7 @@ import org.jeecg.modules.test.sharding.entity.ShardingSysLog;
 
 
 /**
- * @Description: 系统日志表 Mapper 接口
+ * @Description: Giao diện Mapper bảng nhật ký hệ thống
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0

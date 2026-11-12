@@ -18,34 +18,34 @@ spring:
       web-stat-filter:
         enabled: true
     dynamic:
-      druid: # 全局druid参数，绝大部分值和默认保持一致。(现已支持的参数如下,不清楚含义不要乱设置)
-        # 连接池的配置信息
-        # 初始化大小，最小，最大
+      druid: # Tham số druid toàn cục, phần lớn giá trị giữ giống mặc định.(Các tham số hiện đã hỗ trợ như sau,Không rõ ý nghĩa thì đừng đặt bừa)
+        # Thông tin cấu hình connection pool
+        # Kích thước khởi tạo, nhỏ nhất, lớn nhất
         initial-size: 5
         min-idle: 5
         maxActive: 1000
-        # 配置获取连接等待超时的时间
+        # Cấu hình thời gian chờ lấy kết nối
         maxWait: 60000
-        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        # Cấu hình khoảng thời gian kiểm tra một lần để phát hiện các kết nối nhàn rỗi cần đóng, đơn vị là mili giây
         timeBetweenEvictionRunsMillis: 60000
-        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        # Cấu hình thời gian tồn tại tối thiểu của một kết nối trong pool, đơn vị là mili giây
         minEvictableIdleTimeMillis: 300000
         #        validationQuery: SELECT 1
         testWhileIdle: true
         testOnBorrow: false
         testOnReturn: false
-        # 打开PSCache，并且指定每个连接上PSCache的大小
+        # Bật PSCache và chỉ định kích thước PSCache trên mỗi kết nối
         poolPreparedStatements: true
         maxPoolPreparedStatementPerConnectionSize: 20
-        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+        # Cấu hình filters chặn thống kê giám sát, sau khi bỏ thì SQL trên giao diện giám sát không thể thống kê,'wall'Dùng cho tường lửa
         # !!!!!mysql
         #        filters: stat,slf4j,wall
         # !!!!!DM
         filters: stat,slf4j
-        # 允许SELECT语句的WHERE子句是一个永真条件
+        # Cho phép mệnh đề WHERE của câu lệnh SELECT là một điều kiện luôn đúng
         #        wall:
         #          selectWhereAlwayTrueCheck: false
-        # 打开mergeSql功能；慢SQL记录
+        # Bật chức năng mergeSql; ghi lại SQL chậm
         stat:
           merge-sql: true
           slow-sql-millis: 5000

@@ -23,10 +23,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * 微服务启动类（采用此类启动项目为微服务模式）
- * 特别提醒:
- * 1、需要先初始化Nacos的数据库脚本，db/tables_nacos.sql
- * 2.需要集成mogodb请删除 exclude={MongoAutoConfiguration.class}
+ * Lớp khởi động microservice (dùng lớp này để khởi động dự án ở chế độ microservice)
+ * Nhắc nhở đặc biệt:
+ * 1, cần khởi tạo trước script cơ sở dữ liệu của Nacos,db/tables_nacos.sql
+ * 2.Cần tích hợp MongoDB thì hãy xóa exclude={MongoAutoConfiguration.class}
  * 
  * @author jeecg
  * @date: 2022/4/21 10:55
@@ -35,7 +35,7 @@ import java.net.UnknownHostException;
 @SpringBootApplication
 @EnableFeignClients(basePackages = {"org.jeecg"})
 @EnableScheduling
-@ImportAutoConfiguration(JustAuthAutoConfiguration.class)  // spring boot 3.x justauth 兼容性处理
+@ImportAutoConfiguration(JustAuthAutoConfiguration.class)  // spring boot 3.x justauth Xử lý tương thích
 public class JeecgSystemCloudApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
     @Autowired
@@ -55,22 +55,22 @@ public class JeecgSystemCloudApplication extends SpringBootServletInitializer im
                 "Application Jeecg-Boot is running! Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + path + "/doc.html\n" +
                 "External: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
-                "Swagger文档: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
+                "Swagger Tài liệu: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
                 "----------------------------------------------------------");
 
     }
 
     /**
-     * 启动的时候，触发下gateway网关刷新
+     * Khi khởi động, kích hoạt làm mới gateway
      *
-     * 解决： 先启动gateway后启动服务，Swagger接口文档访问不通的问题
+     * Giải quyết: Vấn đề tài liệu API Swagger không truy cập được khi khởi động gateway trước rồi mới khởi động dịch vụ
      * @param args
      */
     @Override
     public void run(String... args) {
         BaseMap params = new BaseMap();
         params.put(GlobalConstants.HANDLER_NAME, GlobalConstants.LODER_ROUDER_HANDLER);
-        //刷新网关
+        //Làm mới gateway
         redisTemplate.convertAndSend(GlobalConstants.REDIS_TOPIC_NAME, params);
     }
 }

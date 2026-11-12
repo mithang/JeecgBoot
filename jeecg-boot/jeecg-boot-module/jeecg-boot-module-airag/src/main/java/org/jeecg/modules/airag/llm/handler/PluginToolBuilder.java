@@ -26,9 +26,9 @@ import java.util.*;
 import java.util.function.BooleanSupplier;
 
 /**
- * 插件工具构建器
- * 根据插件配置构建ToolSpecification和ToolExecutor
- * for [QQYUN-12453]【AI】支持插件
+ * Bộ xây dựng công cụ plugin
+ * Theo cấu hình plugin, xây dựng ToolSpecification và ToolExecutor
+ * for [QQYUN-12453]【AI】Hỗ trợ plugin
  *
  * @author chenrui
  * @date 2025/10/30
@@ -36,12 +36,12 @@ import java.util.function.BooleanSupplier;
 @Slf4j
 public class PluginToolBuilder {
 
-	private static final String PLUGIN_UNAVAILABLE_MESSAGE = "插件已禁用或删除，本次不再调用该工具。请继续完成剩余任务。";
+	private static final String PLUGIN_UNAVAILABLE_MESSAGE = "Plugin đã bị vô hiệu hóa hoặc xóa, lần này sẽ không gọi công cụ này nữa. Vui lòng tiếp tục hoàn thành các nhiệm vụ còn lại.";
 
     /**
-     * 从插件配置构建工具Map
+     * Xây dựng công cụ từ cấu hình plugin Map
      *
-     * @param airagMcp 插件配置
+     * @param airagMcp Cấu hình plugin
      * @return Map<ToolSpecification, ToolExecutor>
      */
     public static Map<ToolSpecification, ToolExecutor> buildTools(AiragMcp airagMcp, HttpServletRequest currentHttpRequest) {
@@ -49,14 +49,14 @@ public class PluginToolBuilder {
 	}
 
 	/**
-	 * 从插件配置构建工具Map，并在执行HTTP请求前检查插件是否仍可用。
+	 * Xây dựng Map công cụ từ cấu hình plugin, và kiểm tra plugin còn khả dụng không trước khi thực thi yêu cầu HTTP.
 	 *
-	 * @param airagMcp 插件配置
-	 * @param currentHttpRequest 当前请求
-	 * @param availableChecker 插件实时可用状态检查器，为空时不检查
+	 * @param airagMcp Cấu hình plugin
+	 * @param currentHttpRequest Yêu cầu hiện tại
+	 * @param availableChecker Bộ kiểm tra trạng thái khả dụng theo thời gian thực của plugin, không kiểm tra khi trống
 	 * @return Map&lt;ToolSpecification, ToolExecutor&gt;
 	 * @author scott
-	 * @since 2026-08-10 插件禁用后立即阻止已加载会话继续调用
+	 * @since 2026-08-10 Ngay sau khi plugin bị vô hiệu hóa, chặn phiên đã tải tiếp tục gọi
 	 */
 	public static Map<ToolSpecification, ToolExecutor> buildTools(AiragMcp airagMcp, HttpServletRequest currentHttpRequest,
 			BooleanSupplier availableChecker) {
@@ -73,24 +73,24 @@ public class PluginToolBuilder {
 
             String baseUrl = airagMcp.getEndpoint();
             boolean isEmptyBaseUrl = oConvertUtils.isEmpty(baseUrl);
-            // 如果baseUrl为空，使用当前系统地址
+            // Nếu baseUrl trống, sử dụng địa chỉ hệ thống hiện tại
             if (isEmptyBaseUrl) {
                 if (currentHttpRequest != null) {
                     baseUrl = CommonUtils.getBaseUrl(currentHttpRequest);
-                    log.info("插件[{}]的BaseURL为空，使用系统地址: {}", airagMcp.getName(), baseUrl);
+                    log.info("Plugin[{}]có BaseURL trống, sử dụng địa chỉ hệ thống: {}", airagMcp.getName(), baseUrl);
                 } else {
-                    log.warn("插件[{}]的BaseURL为空且无法获取系统地址，跳过工具构建", airagMcp.getName());
+                    log.warn("Plugin[{}]có BaseURL trống và không lấy được địa chỉ hệ thống, bỏ qua việc xây dựng công cụ", airagMcp.getName());
                     return tools;
                 }
             }
 
-            // 解析headers
+            // Phân tích cú pháp headers
             Map<String, String> headersMap = parseHeaders(airagMcp.getHeaders());
 
-            // 判断是否需要加签
+            // Xác định có cần ký không
             boolean isNeedSign = isEmptyBaseUrl && ToolsNode.Helper.checkNeedSign(headersMap);
 
-            // 解析并应用授权配置（从metadata中读取）
+            // Phân tích và áp dụng cấu hình ủy quyền (đọc từ metadata)
             applyAuthConfig(headersMap, airagMcp.getMetadata(), currentHttpRequest);
 
             for (int i = 0; i < toolsArray.size(); i++) {
@@ -105,35 +105,35 @@ public class PluginToolBuilder {
                         tools.put(spec, executor);
                     }
                 } catch (Exception e) {
-                    log.error("构建插件工具失败，工具配置: {}", toolConfig.toJSONString(), e);
+                    log.error("Xây dựng công cụ plugin thất bại, cấu hình công cụ: {}", toolConfig.toJSONString(), e);
                 }
             }
         } catch (Exception e) {
-            log.error("解析插件工具配置失败，插件: {}", airagMcp.getName(), e);
+            log.error("Phân tích cấu hình công cụ plugin thất bại, plugin: {}", airagMcp.getName(), e);
         }
 
         return tools;
     }
 
     /**
-     * 构建ToolSpecification
+     * Xây dựng ToolSpecification
      */
     private static ToolSpecification buildToolSpecification(JSONObject toolConfig) {
         String name = toolConfig.getString("name");
         String description = toolConfig.getString("description");
 
         if (oConvertUtils.isEmpty(name) || oConvertUtils.isEmpty(description)) {
-            log.warn("工具配置缺少name或description字段");
+            log.warn("Cấu hình công cụ thiếu trường name hoặc description");
             return null;
         }
 
-        // 构建完整的描述信息（包含响应参数配置）
+        // Xây dựng thông tin mô tả đầy đủ (bao gồm cấu hình tham số phản hồi)
         StringBuilder fullDescription = new StringBuilder(description);
         
-        // 解析响应参数并拼接到描述中
+        // Phân tích tham số phản hồi và nối vào mô tả
         JSONArray responses = toolConfig.getJSONArray("responses");
         if (responses != null && !responses.isEmpty()) {
-            fullDescription.append("\n\n返回值说明：");
+            fullDescription.append("\n\n Mô tả giá trị trả về:");
             for (int i = 0; i < responses.size(); i++) {
                 JSONObject responseParam = responses.getJSONObject(i);
                 if (responseParam == null) {
@@ -159,7 +159,7 @@ public class PluginToolBuilder {
 
         JsonObjectSchema.Builder schemaBuilder = JsonObjectSchema.builder();
 
-        // 解析请求参数
+        // Phân tích tham số yêu cầu
         JSONArray parameters = toolConfig.getJSONArray("parameters");
         if (parameters != null && !parameters.isEmpty()) {
             List<String> requiredParams = new ArrayList<>();
@@ -168,12 +168,12 @@ public class PluginToolBuilder {
                 if (param == null) {
                     continue;
                 }
-                //update-begin---author:wangshuai ---date:20260804  for：【LHZP-1591】智普模型无法将AI应用信息写入记忆库-----------
-                // 服务端固定参数不暴露给模型，由工具执行器按 defaultValue 自动注入
+                //update-begin---author:wangshuai ---date:20260804  for：【LHZP-1591] Mô hình Zhipu không thể ghi thông tin ứng dụng AI vào kho bộ nhớ-----------
+                // Tham số cố định phía máy chủ không expose cho mô hình, bộ thực thi công cụ sẽ tự động chèn theo defaultValue
                 if (Boolean.TRUE.equals(param.getBoolean("hidden"))) {
                     continue;
                 }
-                //update-end---author:wangshuai ---date:20260804  for：【LHZP-1591】智普模型无法将AI应用信息写入记忆库-----------
+                //update-end---author:wangshuai ---date:20260804  for：【LHZP-1591] Mô hình Zhipu không thể ghi thông tin ứng dụng AI vào kho bộ nhớ-----------
                 String paramName = param.getString("name");
                 String paramDesc = param.getString("description");
                 String paramType = param.getString("type");
@@ -182,7 +182,7 @@ public class PluginToolBuilder {
                     continue;
                 }
 
-                // 根据参数类型添加属性
+                // Thêm thuộc tính theo loại tham số
                 if ("String".equalsIgnoreCase(paramType) || "string".equalsIgnoreCase(paramType)) {
                     schemaBuilder.addStringProperty(paramName, paramDesc != null ? paramDesc : "");
                 } else if ("Number".equalsIgnoreCase(paramType) || "number".equalsIgnoreCase(paramType)
@@ -191,11 +191,11 @@ public class PluginToolBuilder {
                 } else if ("Boolean".equalsIgnoreCase(paramType) || "boolean".equalsIgnoreCase(paramType)) {
                     schemaBuilder.addBooleanProperty(paramName, paramDesc != null ? paramDesc : "");
                 } else {
-                    // 默认作为String处理
+                    // Mặc định xử lý dưới dạng String
                     schemaBuilder.addStringProperty(paramName, paramDesc != null ? paramDesc : "");
                 }
 
-                // 检查是否必须
+                // Kiểm tra có bắt buộc không
                 Boolean required = param.getBooleanValue("required");
                 if (required != null && required) {
                     requiredParams.add(paramName);
@@ -215,7 +215,7 @@ public class PluginToolBuilder {
     }
 
     /**
-     * 构建ToolExecutor
+     * Xây dựng ToolExecutor
      */
     private static ToolExecutor buildToolExecutor(JSONObject toolConfig, String baseUrl, Map<String, String> defaultHeaders, boolean isNeedSign,
 			String pluginName, BooleanSupplier availableChecker) {
@@ -225,75 +225,75 @@ public class PluginToolBuilder {
         JSONArray parameters = toolConfig.getJSONArray("parameters");
 
         if (oConvertUtils.isEmpty(path) || oConvertUtils.isEmpty(method)) {
-            log.warn("工具配置缺少path或method字段");
+            log.warn("Cấu hình công cụ thiếu trường path hoặc method");
             return null;
         }
 
         return (toolExecutionRequest, memoryId) -> {
             try {
-				//update-begin---author:scott ---date:20260810  for：插件禁用后立即阻止已加载会话继续调用---
+				//update-begin---author:scott ---date:20260810  for: Sau khi vô hiệu hóa plugin, chặn ngay phiên đã tải tiếp tục gọi---
 				if (availableChecker != null && !availableChecker.getAsBoolean()) {
-					log.warn("插件[{}]已禁用或删除，终止工具[{}]调用", pluginName, toolName);
+					log.warn("Plugin[{}]Đã bị vô hiệu hóa hoặc xóa, dừng công cụ[{}]Gọi", pluginName, toolName);
 					return PLUGIN_UNAVAILABLE_MESSAGE;
 				}
-				//update-end---author:scott ---date:20260810  for：插件禁用后立即阻止已加载会话继续调用---
-                // 解析AI传入的参数
+				//update-end---author:scott ---date:20260810  for: Sau khi vô hiệu hóa plugin, chặn ngay phiên đã tải tiếp tục gọi---
+                // Phân tích tham số AI truyền vào
                 JSONObject args = JSONObject.parseObject(toolExecutionRequest.arguments());
 
-                // 构建完整URL
+                // Xây dựng đầy đủ URL
                 String url = buildUrl(baseUrl, path, parameters, args);
 
-                // 构建请求方法
+                // Xây dựng phương thức yêu cầu
                 HttpMethod httpMethod = parseHttpMethod(method);
 
-                // 构建请求头
+                // Xây dựng request header
                 HttpHeaders httpHeaders = buildHttpHeaders(parameters, args, defaultHeaders);
 
-                // 构建请求参数
+                // Xây dựng tham số yêu cầu
                 JSONObject urlVariables = buildUrlVariables(parameters, args);
                 Object body = buildRequestBody(parameters, args, httpHeaders);
 
                 if (isNeedSign) {
-                    // 发送请求前加签
+                    // Ký trước khi gửi yêu cầu
                     ToolsNode.Helper.applySignature(url, httpHeaders, urlVariables, body);
                 }
 
-                // 发送HTTP请求,增加超时时间
+                // Gửi yêu cầu HTTP,Tăng thời gian timeout
                 ResponseEntity<String> response = RestUtil.request(url, httpMethod, httpHeaders, urlVariables, body, String.class, AiragConsts.DEFAULT_TIMEOUT * 1000);
 
-                // 直接返回原始响应字符串，不进行解析
+                // Trả về trực tiếp chuỗi phản hồi gốc, không phân tích
                 return response.getBody() != null ? response.getBody() : "";
             } catch (HttpClientErrorException e) {
-                log.error("插件工具HTTP请求失败: {}", e.getMessage(), e);
-                //update-begin---author:wangshuai---date:2026-01-16---for:【QQYUN-14577】图片搜索失败会导致进行不下去---
-                return "插件调用失败（HTTP " + e.getStatusCode() + "）：" + e.getResponseBodyAsString()
-                        + "。请继续完成剩余任务。";
-                //update-end---author:wangshuai---date:2026-01-16---for:【QQYUN-14577】图片搜索失败会导致进行不下去---
+                log.error("Yêu cầu HTTP của công cụ plugin thất bại: {}", e.getMessage(), e);
+                //update-begin---author:wangshuai---date:2026-01-16---for:【QQYUN-14577] Tìm kiếm hình ảnh thất bại sẽ khiến quá trình không thể tiếp tục---
+                return "Gọi plugin thất bại (HTTP " + e.getStatusCode() + "）：" + e.getResponseBodyAsString()
+                        + ". Vui lòng tiếp tục hoàn thành các nhiệm vụ còn lại.";
+                //update-end---author:wangshuai---date:2026-01-16---for:【QQYUN-14577] Tìm kiếm hình ảnh thất bại sẽ khiến quá trình không thể tiếp tục---
             } catch (Exception e) {
-                log.error("插件工具执行失败: {}", e.getMessage(), e);
-                //update-begin---author:wangshuai---date:2026-01-16---for:【QQYUN-14577】图片搜索失败会导致进行不下去---
-                return "插件工具执行失败：" + e.getMessage()
-                        + "。请继续完成剩余任务。";
-                //update-end---author:wangshuai---date:2026-01-16---for:【QQYUN-14577】图片搜索失败会导致进行不下去---
+                log.error("Thực thi công cụ plugin thất bại: {}", e.getMessage(), e);
+                //update-begin---author:wangshuai---date:2026-01-16---for:【QQYUN-14577] Tìm kiếm hình ảnh thất bại sẽ khiến quá trình không thể tiếp tục---
+                return "Thực thi công cụ plugin thất bại:" + e.getMessage()
+                        + ". Vui lòng tiếp tục hoàn thành các nhiệm vụ còn lại.";
+                //update-end---author:wangshuai---date:2026-01-16---for:【QQYUN-14577] Tìm kiếm hình ảnh thất bại sẽ khiến quá trình không thể tiếp tục---
             }
         };
     }
 
     /**
-     * 构建完整URL（处理Path参数）
+     * Xây dựng URL đầy đủ (xử lý tham số Path)
      */
     private static String buildUrl(String baseUrl, String path, JSONArray parameters, JSONObject args) {
         String fullPath = path;
         if (!path.startsWith("/")) {
             fullPath = "/" + path;
         }
-        // 拼接URL时防止出现双斜杠
+        // Khi nối URL, tránh xuất hiện dấu gạch chéo kép
         if (baseUrl.endsWith("/") && fullPath.startsWith("/")) {
             fullPath = fullPath.substring(1);
         }
         String url = baseUrl + fullPath;
 
-        // 替换Path参数
+        // Thay thế tham số Path
         if (parameters != null && args != null) {
             for (int i = 0; i < parameters.size(); i++) {
                 JSONObject param = parameters.getJSONObject(i);
@@ -309,15 +309,15 @@ public class PluginToolBuilder {
 
                 Object value = args.get(paramName);
                 if (value != null) {
-                    //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9421】buildUrl路径遍历漏洞修复---
+                    //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9421】Sửa lỗ hổng path traversal của buildUrl---
                     String paramValue = value.toString();
-                    // 防止路径遍历注入：拒绝包含 ..、/ 、\ 的路径参数
+                    // Ngăn chèn duyệt đường dẫn: từ chối các tham số chứa ..、/ 、\ tham số đường dẫn
                     if (paramValue.contains("..") || paramValue.contains("/") || paramValue.contains("\\")
                             || paramValue.toLowerCase().contains("%2e") || paramValue.toLowerCase().contains("%2f")) {
-                        throw new IllegalArgumentException("Path参数包含非法字符: " + paramName);
+                        throw new IllegalArgumentException("Path Tham số chứa ký tự không hợp lệ: " + paramName);
                     }
                     url = url.replace("{" + paramName + "}", paramValue);
-                    //update-end---author:wangshuai---date:2026-03-30---for:【issues/9421】buildUrl路径遍历漏洞修复---
+                    //update-end---author:wangshuai---date:2026-03-30---for:【issues/9421】Sửa lỗ hổng path traversal của buildUrl---
                 }
             }
         }
@@ -326,17 +326,17 @@ public class PluginToolBuilder {
     }
 
     /**
-     * 构建请求头
+     * Xây dựng request header
      */
     private static HttpHeaders buildHttpHeaders(JSONArray parameters, JSONObject args, Map<String, String> defaultHeaders) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
-        // 添加默认请求头
+        // Thêm header yêu cầu mặc định
         if (defaultHeaders != null) {
             defaultHeaders.forEach(httpHeaders::set);
         }
 
-        // 添加Header类型的参数
+        // Thêm tham số loại Header
         if (parameters != null && args != null) {
             for (int i = 0; i < parameters.size(); i++) {
                 JSONObject param = parameters.getJSONObject(i);
@@ -357,7 +357,7 @@ public class PluginToolBuilder {
             }
         }
 
-        // 如果请求体不为空且没有设置Content-Type，默认设置为application/json
+        // Nếu request body không trống và chưa đặt Content-Type, mặc định đặt thành application/json
         if (!httpHeaders.containsHeader(HttpHeaders.CONTENT_TYPE)) {
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         }
@@ -366,7 +366,7 @@ public class PluginToolBuilder {
     }
 
     /**
-     * 构建URL查询参数
+     * Xây dựng tham số truy vấn URL
      */
     private static JSONObject buildUrlVariables(JSONArray parameters, JSONObject args) {
         JSONObject urlVariables = new JSONObject();
@@ -384,7 +384,7 @@ public class PluginToolBuilder {
             String paramLocation = param.getString("location");
 
             String location = paramLocation != null ? paramLocation : "";
-            // 显式指定Query类型，或者未指定类型（默认作为Query）
+            // Chỉ định rõ loại Query, hoặc chưa chỉ định loại (mặc định là Query)
             boolean isQueryParam = "Query".equalsIgnoreCase(location);
             boolean isOtherType = "Body".equalsIgnoreCase(location) || "Form-Data".equalsIgnoreCase(location)
                     || "Header".equalsIgnoreCase(location) || "Path".equalsIgnoreCase(location);
@@ -392,7 +392,7 @@ public class PluginToolBuilder {
             if (isQueryParam || !isOtherType) {
                 Object value = args.get(paramName);
                 if (value != null) {
-                    //如果是知识库的id赋值默认值
+                    //Nếu là id của kho tri thức thì gán giá trị mặc định
                     if ("knowledgeId".equalsIgnoreCase(paramName)) {
                         String defaultValue = param.getString("defaultValue");
                         urlVariables.put(paramName, defaultValue);
@@ -407,7 +407,7 @@ public class PluginToolBuilder {
     }
 
     /**
-     * 构建请求体
+     * Xây dựng request body
      */
     private static Object buildRequestBody(JSONArray parameters, JSONObject args, HttpHeaders httpHeaders) {
         if (parameters == null || args == null) {
@@ -417,7 +417,7 @@ public class PluginToolBuilder {
         boolean hasBody = false;
         boolean hasFormData = false;
 
-        // 检查是否有Body或Form-Data类型的参数
+        // Kiểm tra có tham số Body hoặc Form-Data loại tham số
         for (int i = 0; i < parameters.size(); i++) {
             JSONObject param = parameters.getJSONObject(i);
             if (param == null) {
@@ -432,14 +432,14 @@ public class PluginToolBuilder {
             }
         }
 
-        // Body和Form-Data互斥
+        // Body và Form-Data Loại trừ lẫn nhau
         if (hasBody && hasFormData) {
-            log.warn("工具配置同时包含Body和Form-Data类型参数，优先使用Body");
+            log.warn("Cấu hình công cụ đồng thời chứa Body và Form-Data loại tham số, ưu tiên sử dụng Body");
             hasFormData = false;
         }
 
         if (hasBody) {
-            // Body类型：构建JSON对象
+            // Body loại: xây dựng đối tượng JSON
             JSONObject body = new JSONObject();
             for (int i = 0; i < parameters.size(); i++) {
                 JSONObject param = parameters.getJSONObject(i);
@@ -455,7 +455,7 @@ public class PluginToolBuilder {
 
                 Object value = args.get(paramName);
                 if (value != null) {
-                    //如果是知识库的id赋值默认值
+                    //Nếu là id của kho tri thức thì gán giá trị mặc định
                     if ("knowledgeId".equalsIgnoreCase(paramName)) {
                         String defaultValue = param.getString("defaultValue");
                         body.put(paramName, defaultValue);
@@ -463,12 +463,12 @@ public class PluginToolBuilder {
                         body.put(paramName, value);
                     }
                 } else {
-                    // 检查是否有默认值
-                    // update-begin--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
-                    // 默认值按原类型取：流程插件 images 的默认值是图片数组，如 ["temp/a.png","temp/b.png"]，
-                    // 用 getString 会变成字符串 "[\"temp/a.png\",\"temp/b.png\"]"，流程 LLM 节点会按逗号拆成错误的图片路径
+                    // Kiểm tra có giá trị mặc định không
+                    // update-begin--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
+                    // Giá trị mặc định lấy theo kiểu gốc: giá trị mặc định của images trong plugin quy trình là mảng hình ảnh, như ["temp/a.png","temp/b.png"]，
+                    // dùng getString sẽ thành chuỗi "[\"temp/a.png\",\"temp/b.png\"]", nút LLM của quy trình sẽ tách theo dấu phẩy thành đường dẫn hình ảnh sai
                     Object defaultValue = param.get(FlowPluginContent.DEFAULT_VALUE);
-                    // update-end--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
+                    // update-end--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
                     if (oConvertUtils.isNotEmpty(defaultValue)) {
                         body.put(paramName, defaultValue);
                     }
@@ -477,7 +477,7 @@ public class PluginToolBuilder {
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
             return body.isEmpty() ? null : body;
         } else if (hasFormData) {
-            // Form-Data类型：构建JSON对象（RestUtil会处理）
+            // Form-Data loại: xây dựng đối tượng JSON (RestUtil sẽ xử lý)
             JSONObject formData = new JSONObject();
             for (int i = 0; i < parameters.size(); i++) {
                 JSONObject param = parameters.getJSONObject(i);
@@ -509,20 +509,20 @@ public class PluginToolBuilder {
     }
 
     /**
-     * 解析HTTP方法
+     * Phân tích phương thức HTTP
      */
     private static HttpMethod parseHttpMethod(String method) {
         try {
             return HttpMethod.valueOf(method.toUpperCase());
         } catch (IllegalArgumentException e) {
-            log.warn("无效的HTTP方法: {}，使用默认GET", method);
+            log.warn("Phương thức HTTP không hợp lệ: {}, sử dụng mặc định GET", method);
             return HttpMethod.GET;
         }
     }
 
 
     /**
-     * 解析headers JSON字符串为Map
+     * Phân tích chuỗi JSON headers thành Map
      */
     private static Map<String, String> parseHeaders(String headersStr) {
         Map<String, String> headersMap = new HashMap<>();
@@ -540,19 +540,19 @@ public class PluginToolBuilder {
                 });
             }
         } catch (Exception e) {
-            log.warn("解析headers失败: {}", headersStr);
+            log.warn("Phân tích headers thất bại: {}", headersStr);
         }
 
         return headersMap;
     }
 
     /**
-     * 应用授权配置到headers
-     * 从metadata中读取授权配置，如果是Token授权，添加到headers中
-     * 如果授权类型为token但没有设置token值，则从TokenUtils获取当前请求的token
+     * Áp dụng cấu hình ủy quyền vào headers
+     * Đọc cấu hình ủy quyền từ metadata, nếu là ủy quyền Token thì thêm vào headers
+     * Nếu loại ủy quyền là token nhưng chưa đặt giá trị token, lấy từ TokenUtils token
      *
-     * @param headersMap 请求头Map
-     * @param metadataStr 元数据JSON字符串
+     * @param headersMap Request header Map
+     * @param metadataStr Chuỗi JSON metadata
      */
     private static void applyAuthConfig(Map<String, String> headersMap, String metadataStr, HttpServletRequest currentHttpRequest) {
         if (oConvertUtils.isEmpty(metadataStr)) {
@@ -570,43 +570,43 @@ public class PluginToolBuilder {
                 return;
             }
 
-            // Token授权方式：从metadata中获取token配置并添加到headers
+            // Token Phương thức ủy quyền: lấy cấu hình token từ metadata và thêm vào headers
             String tokenParamName = metadata.getString("tokenParamName");
             String tokenParamValue = metadata.getString("tokenParamValue");
 
-            // 如果token参数名存在，但token值未设置，尝试从TokenUtils获取当前请求的token
+            // Nếu tên tham số token tồn tại nhưng giá trị token chưa được đặt, thử lấy từ TokenUtils token
             if (oConvertUtils.isNotEmpty(tokenParamName) && oConvertUtils.isEmpty(tokenParamValue)) {
                 try {
-                    // 注意：TokenUtils需要获取当前线程的request，所以必须在同步调用中使用
+                    // Lưu ý: TokenUtils cần lấy request của luồng hiện tại, vì vậy phải sử dụng trong lời gọi đồng bộ
                     String currentToken = TokenUtils.getTokenByRequest();
                     if(oConvertUtils.isEmpty(currentToken) && currentHttpRequest != null) {
                         currentToken = TokenUtils.getTokenByRequest(currentHttpRequest);
                     }
                     if (oConvertUtils.isNotEmpty(currentToken)) {
                         tokenParamValue = currentToken;
-                        log.debug("从TokenUtils获取Token并添加到请求头: {} = {}", tokenParamName, 
+                        log.debug("Lấy Token từ TokenUtils và thêm vào header yêu cầu: {} = {}", tokenParamName, 
                             currentToken.length() > 10 ? currentToken.substring(0, 10) + "..." : currentToken);
                     } else {
-                        log.warn("Token授权配置中tokenParamValue为空，且无法从TokenUtils获取当前请求的token");
+                        log.warn("Token tokenParamValue trong cấu hình ủy quyền trống và không thể lấy từ TokenUtils token");
                     }
                 } catch (Exception e) {
-                    log.warn("从TokenUtils获取token失败: {}", e.getMessage());
+                    log.warn("Lấy token từ TokenUtils thất bại: {}", e.getMessage());
                 }
             }
 
             if (oConvertUtils.isNotEmpty(tokenParamName) && oConvertUtils.isNotEmpty(tokenParamValue)) {
-                // 如果headers中已存在同名header，优先使用metadata中的配置（覆盖）
+                // Nếu trong headers đã tồn tại header cùng tên, ưu tiên dùng cấu hình trong metadata (ghi đè)
                 headersMap.put(tokenParamName, tokenParamValue);
-                // 日志中只显示token的前几个字符，避免泄露完整token
+                // Trong nhật ký chỉ hiển thị vài ký tự đầu của token, tránh rò rỉ toàn bộ token
                 String tokenPreview = tokenParamValue.length() > 10 
                     ? tokenParamValue.substring(0, 10) + "..." 
                     : tokenParamValue;
-                log.debug("添加Token授权到请求头: {} = {}", tokenParamName, tokenPreview);
+                log.debug("Thêm ủy quyền Token vào header yêu cầu: {} = {}", tokenParamName, tokenPreview);
             } else {
-                log.warn("Token授权配置不完整: tokenParamName={}, tokenParamValue={}", tokenParamName, tokenParamValue != null ? "***" : null);
+                log.warn("Token Cấu hình ủy quyền không đầy đủ: tokenParamName={}, tokenParamValue={}", tokenParamName, tokenParamValue != null ? "***" : null);
             }
         } catch (Exception e) {
-            log.warn("解析授权配置失败: {}", metadataStr, e);
+            log.warn("Phân tích cấu hình ủy quyền thất bại: {}", metadataStr, e);
         }
     }
 }

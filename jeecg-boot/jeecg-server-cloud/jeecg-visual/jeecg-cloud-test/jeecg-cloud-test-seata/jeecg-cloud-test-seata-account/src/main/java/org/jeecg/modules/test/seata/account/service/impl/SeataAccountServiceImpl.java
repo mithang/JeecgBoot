@@ -30,7 +30,7 @@ public class SeataAccountServiceImpl implements SeataAccountService {
     private SeataAccountMapper accountMapper;
 
     /**
-     * 事务传播特性设置为 REQUIRES_NEW 开启新的事务
+     * Đặt đặc tính lan truyền giao dịch thành REQUIRES_NEW Mở giao dịch mới
      */
     @DS("account")
     @Override
@@ -39,19 +39,19 @@ public class SeataAccountServiceImpl implements SeataAccountService {
         log.info("xid:"+ RootContext.getXID());
         log.info("=============ACCOUNT START=================");
         SeataAccount account = accountMapper.selectById(userId);
-        Assert.notNull(account, "用户不存在");
+        Assert.notNull(account, "Người dùng không tồn tại");
         BigDecimal balance = account.getBalance();
-        log.info("下单用户{}余额为 {},商品总价为{}", userId, balance, amount);
+        log.info("Người dùng đặt hàng{}Số dư là {},Tổng giá sản phẩm là{}", userId, balance, amount);
 
         if (balance.compareTo(amount)==-1) {
-            log.warn("用户 {} 余额不足，当前余额:{}", userId, balance);
-            return Result.error("余额不足");
+            log.warn("Người dùng {} Số dư không đủ, số dư hiện tại:{}", userId, balance);
+            return Result.error("Số dư không đủ");
         }
-        log.info("开始扣减用户 {} 余额", userId);
+        log.info("Bắt đầu trừ số dư của người dùng {} Số dư", userId);
         BigDecimal currentBalance = account.getBalance().subtract(amount);
         account.setBalance(currentBalance);
         accountMapper.updateById(account);
-        log.info("扣减用户 {} 余额成功,扣减后用户账户余额为{}", userId, currentBalance);
+        log.info("Trừ số dư của người dùng {} Số dư thành công,Sau khi trừ, số dư tài khoản người dùng là{}", userId, currentBalance);
         log.info("=============ACCOUNT END=================");
         return Result.OK();
     }

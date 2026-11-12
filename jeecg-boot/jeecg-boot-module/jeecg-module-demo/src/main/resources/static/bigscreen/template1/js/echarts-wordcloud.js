@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /**
  * @module zrender/core/util
  */
-// 用于处理merge时无法遍历Date等对象的问题
+// Dùng để xử lý vấn đề merge không thể duyệt các đối tượng như Date
 var BUILTIN_OBJECT = {
   '[object Function]': 1,
   '[object RegExp]': 1,
@@ -193,11 +193,11 @@ function merge(target, source, overwrite) {
       var sourceProp = source[key];
 
       if (isObject(sourceProp) && isObject(targetProp) && !isArray(sourceProp) && !isArray(targetProp) && !isDom(sourceProp) && !isDom(targetProp) && !isBuiltInObject(sourceProp) && !isBuiltInObject(targetProp) && !isPrimitive(sourceProp) && !isPrimitive(targetProp)) {
-        // 如果需要递归覆盖，就递归调用merge
+        // Nếu cần ghi đè đệ quy thì gọi đệ quy merge
         merge(targetProp, sourceProp, overwrite);
       } else if (overwrite || !(key in target)) {
-        // 否则只处理overwrite为true，或者在目标对象中没有此属性的情况
-        // NOTE，在 target[key] 不存在的时候也是直接覆盖
+        // Ngược lại chỉ xử lý trường hợp overwrite là true, hoặc khi đối tượng đích không có thuộc tính này
+        // NOTE, khi target[key] khi không tồn tại cũng ghi đè trực tiếp
         target[key] = clone(source[key], true);
       }
     }
@@ -276,7 +276,7 @@ function getContext() {
   return _ctx;
 }
 /**
- * 查询数组中元素的index
+ * Truy vấn chỉ mục của phần tử trong mảng index
  * @memberOf module:zrender/core/util
  */
 
@@ -297,11 +297,11 @@ function indexOf(array, value) {
   return -1;
 }
 /**
- * 构造类继承关系
+ * Xây dựng quan hệ kế thừa của lớp
  *
  * @memberOf module:zrender/core/util
- * @param {Function} clazz 源类
- * @param {Function} baseClazz 基类
+ * @param {Function} clazz Lớp nguồn
+ * @param {Function} baseClazz Lớp cơ sở
  */
 
 
@@ -351,7 +351,7 @@ function isArrayLike(data) {
   return typeof data.length == 'number';
 }
 /**
- * 数组或对象遍历
+ * Duyệt mảng hoặc đối tượng
  * @memberOf module:zrender/core/util
  * @param {Object|Array} obj
  * @param {Function} cb
@@ -379,7 +379,7 @@ function each(obj, cb, context) {
   }
 }
 /**
- * 数组映射
+ * Ánh xạ mảng
  * @memberOf module:zrender/core/util
  * @param {Array} obj
  * @param {Function} cb
@@ -431,7 +431,7 @@ function reduce(obj, cb, memo, context) {
   }
 }
 /**
- * 数组过滤
+ * Lọc mảng
  * @memberOf module:zrender/core/util
  * @param {Array} obj
  * @param {Function} cb
@@ -460,7 +460,7 @@ function filter(obj, cb, context) {
   }
 }
 /**
- * 数组项查找
+ * Tìm mục trong mảng
  * @memberOf module:zrender/core/util
  * @param {Array} obj
  * @param {Function} cb
@@ -1057,7 +1057,7 @@ Path.prototype = {
   }
 };
 /**
- * 扩展一个 Path element, 比如星形，圆等。
+ * Mở rộng một Path element, ví dụ như hình sao, hình tròn, v.v.
  * Extend a path element
  * @param {Object} props
  * @param {string} props.type Path type
@@ -1093,7 +1093,7 @@ Path.extend = function (defaults) {
     defaults.init && defaults.init.call(this, opts);
   };
 
-  zrUtil.inherits(Sub, Path); // FIXME 不能 extend position, rotation 等引用对象
+  zrUtil.inherits(Sub, Path); // FIXME Không thể extend position, rotation và các đối tượng tham chiếu khác
 
   for (var name in defaults) {
     // Extending prototype values and methods
@@ -1115,7 +1115,7 @@ module.exports = _default;
 
 var ArrayCtor = typeof Float32Array === 'undefined' ? Array : Float32Array;
 /**
- * 创建一个向量
+ * Tạo một vector
  * @param {number} [x=0]
  * @param {number} [y=0]
  * @return {Vector2}
@@ -1137,7 +1137,7 @@ function create(x, y) {
   return out;
 }
 /**
- * 复制向量数据
+ * Sao chép dữ liệu vector
  * @param {Vector2} out
  * @param {Vector2} v
  * @return {Vector2}
@@ -1150,7 +1150,7 @@ function copy(out, v) {
   return out;
 }
 /**
- * 克隆一个向量
+ * Sao chép (clone) một vector
  * @param {Vector2} v
  * @return {Vector2}
  */
@@ -1163,11 +1163,11 @@ function clone(v) {
   return out;
 }
 /**
- * 设置向量的两个项
+ * Đặt hai mục của vector
  * @param {Vector2} out
  * @param {number} a
  * @param {number} b
- * @return {Vector2} 结果
+ * @return {Vector2} Kết quả
  */
 
 
@@ -1177,7 +1177,7 @@ function set(out, a, b) {
   return out;
 }
 /**
- * 向量相加
+ * Cộng vector
  * @param {Vector2} out
  * @param {Vector2} v1
  * @param {Vector2} v2
@@ -1190,7 +1190,7 @@ function add(out, v1, v2) {
   return out;
 }
 /**
- * 向量缩放后相加
+ * Cộng vector sau khi co giãn
  * @param {Vector2} out
  * @param {Vector2} v1
  * @param {Vector2} v2
@@ -1204,7 +1204,7 @@ function scaleAndAdd(out, v1, v2, a) {
   return out;
 }
 /**
- * 向量相减
+ * Trừ vector
  * @param {Vector2} out
  * @param {Vector2} v1
  * @param {Vector2} v2
@@ -1217,7 +1217,7 @@ function sub(out, v1, v2) {
   return out;
 }
 /**
- * 向量长度
+ * Độ dài vector
  * @param {Vector2} v
  * @return {number}
  */
@@ -1230,7 +1230,7 @@ function len(v) {
 var length = len; // jshint ignore:line
 
 /**
- * 向量长度平方
+ * Bình phương độ dài vector
  * @param {Vector2} v
  * @return {number}
  */
@@ -1241,7 +1241,7 @@ function lenSquare(v) {
 
 var lengthSquare = lenSquare;
 /**
- * 向量乘法
+ * Nhân vector
  * @param {Vector2} out
  * @param {Vector2} v1
  * @param {Vector2} v2
@@ -1253,7 +1253,7 @@ function mul(out, v1, v2) {
   return out;
 }
 /**
- * 向量除法
+ * Chia vector
  * @param {Vector2} out
  * @param {Vector2} v1
  * @param {Vector2} v2
@@ -1266,7 +1266,7 @@ function div(out, v1, v2) {
   return out;
 }
 /**
- * 向量点乘
+ * Tích vô hướng vector
  * @param {Vector2} v1
  * @param {Vector2} v2
  * @return {number}
@@ -1277,7 +1277,7 @@ function dot(v1, v2) {
   return v1[0] * v2[0] + v1[1] * v2[1];
 }
 /**
- * 向量缩放
+ * Co giãn vector
  * @param {Vector2} out
  * @param {Vector2} v
  * @param {number} s
@@ -1290,7 +1290,7 @@ function scale(out, v, s) {
   return out;
 }
 /**
- * 向量归一化
+ * Chuẩn hóa vector
  * @param {Vector2} out
  * @param {Vector2} v
  */
@@ -1310,7 +1310,7 @@ function normalize(out, v) {
   return out;
 }
 /**
- * 计算向量间距离
+ * Tính khoảng cách giữa các vector
  * @param {Vector2} v1
  * @param {Vector2} v2
  * @return {number}
@@ -1323,7 +1323,7 @@ function distance(v1, v2) {
 
 var dist = distance;
 /**
- * 向量距离平方
+ * Bình phương khoảng cách vector
  * @param {Vector2} v1
  * @param {Vector2} v2
  * @return {number}
@@ -1335,7 +1335,7 @@ function distanceSquare(v1, v2) {
 
 var distSquare = distanceSquare;
 /**
- * 求负向量
+ * Tính vector âm
  * @param {Vector2} out
  * @param {Vector2} v
  */
@@ -1346,7 +1346,7 @@ function negate(out, v) {
   return out;
 }
 /**
- * 插值两个点
+ * Nội suy hai điểm
  * @param {Vector2} out
  * @param {Vector2} v1
  * @param {Vector2} v2
@@ -1360,7 +1360,7 @@ function lerp(out, v1, v2, t) {
   return out;
 }
 /**
- * 矩阵左乘向量
+ * Nhân ma trận bên trái với vector
  * @param {Vector2} out
  * @param {Vector2} v
  * @param {Vector2} m
@@ -1375,7 +1375,7 @@ function applyTransform(out, v, m) {
   return out;
 }
 /**
- * 求两个向量最小值
+ * Tính giá trị nhỏ nhất của hai vector
  * @param  {Vector2} out
  * @param  {Vector2} v1
  * @param  {Vector2} v2
@@ -1388,7 +1388,7 @@ function min(out, v1, v2) {
   return out;
 }
 /**
- * 求两个向量最大值
+ * Tính giá trị lớn nhất của hai vector
  * @param  {Vector2} out
  * @param  {Vector2} v1
  * @param  {Vector2} v2
@@ -1536,7 +1536,7 @@ BoundingRect.prototype = {
     var a = this;
     var sx = b.width / a.width;
     var sy = b.height / a.height;
-    var m = matrix.create(); // 矩阵右乘
+    var m = matrix.create(); // Nhân ma trận bên phải
 
     matrix.translate(m, m, [-a.x, -a.y]);
     matrix.scale(m, m, [sx, sy]);
@@ -1625,7 +1625,7 @@ var v2Create = _vector.create;
 var v2DistSquare = _vector.distSquare;
 
 /**
- * 曲线辅助模块
+ * Module hỗ trợ đường cong
  * @module zrender/core/curve
  * @author pissang(https://www.github.com/pissang)
  */
@@ -1634,7 +1634,7 @@ var mathSqrt = Math.sqrt;
 var EPSILON = 1e-8;
 var EPSILON_NUMERIC = 1e-4;
 var THREE_SQRT = mathSqrt(3);
-var ONE_THIRD = 1 / 3; // 临时变量
+var ONE_THIRD = 1 / 3; // Biến tạm thời
 
 var _v0 = v2Create();
 
@@ -1650,7 +1650,7 @@ function isNotAroundZero(val) {
   return val > EPSILON || val < -EPSILON;
 }
 /**
- * 计算三次贝塞尔值
+ * Tính giá trị Bézier bậc ba
  * @memberOf module:zrender/core/curve
  * @param  {number} p0
  * @param  {number} p1
@@ -1666,7 +1666,7 @@ function cubicAt(p0, p1, p2, p3, t) {
   return onet * onet * (onet * p0 + 3 * t * p1) + t * t * (t * p3 + 3 * onet * p2);
 }
 /**
- * 计算三次贝塞尔导数值
+ * Tính giá trị đạo hàm Bézier bậc ba
  * @memberOf module:zrender/core/curve
  * @param  {number} p0
  * @param  {number} p1
@@ -1682,7 +1682,7 @@ function cubicDerivativeAt(p0, p1, p2, p3, t) {
   return 3 * (((p1 - p0) * onet + 2 * (p2 - p1) * t) * onet + (p3 - p2) * t * t);
 }
 /**
- * 计算三次贝塞尔方程根，使用盛金公式
+ * Tính nghiệm phương trình Bézier bậc ba, sử dụng công thức Shengjin
  * @memberOf module:zrender/core/curve
  * @param  {number} p0
  * @param  {number} p1
@@ -1690,7 +1690,7 @@ function cubicDerivativeAt(p0, p1, p2, p3, t) {
  * @param  {number} p3
  * @param  {number} val
  * @param  {Array.<number>} roots
- * @return {number} 有效根数目
+ * @return {number} Số lượng nghiệm hợp lệ
  */
 
 
@@ -1779,14 +1779,14 @@ function cubicRootAt(p0, p1, p2, p3, val, roots) {
   return n;
 }
 /**
- * 计算三次贝塞尔方程极限值的位置
+ * Tính vị trí giá trị cực hạn của phương trình Bézier bậc ba
  * @memberOf module:zrender/core/curve
  * @param  {number} p0
  * @param  {number} p1
  * @param  {number} p2
  * @param  {number} p3
  * @param  {Array.<number>} extrema
- * @return {number} 有效数目
+ * @return {number} Số lượng hợp lệ
  */
 
 
@@ -1827,7 +1827,7 @@ function cubicExtrema(p0, p1, p2, p3, extrema) {
   return n;
 }
 /**
- * 细分三次贝塞尔曲线
+ * Chia nhỏ đường cong Bézier bậc ba
  * @memberOf module:zrender/core/curve
  * @param  {number} p0
  * @param  {number} p1
@@ -1857,8 +1857,8 @@ function cubicSubdivide(p0, p1, p2, p3, t, out) {
   out[7] = p3;
 }
 /**
- * 投射点到三次贝塞尔曲线上，返回投射距离。
- * 投射点有可能会有一个或者多个，这里只返回其中距离最短的一个。
+ * Chiếu điểm lên đường cong Bézier bậc ba, trả về khoảng cách chiếu.
+ * Điểm chiếu có thể có một hoặc nhiều điểm, ở đây chỉ trả về điểm có khoảng cách ngắn nhất.
  * @param {number} x0
  * @param {number} y0
  * @param {number} x1
@@ -1869,7 +1869,7 @@ function cubicSubdivide(p0, p1, p2, p3, t, out) {
  * @param {number} y3
  * @param {number} x
  * @param {number} y
- * @param {Array.<number>} [out] 投射点
+ * @param {Array.<number>} [out] Điểm chiếu
  * @return {number}
  */
 
@@ -1884,7 +1884,7 @@ function cubicProjectPoint(x0, y0, x1, y1, x2, y2, x3, y3, x, y, out) {
   var d1;
   var d2;
   _v0[0] = x;
-  _v0[1] = y; // 先粗略估计一下可能的最小距离的 t 值
+  _v0[1] = y; // Ước lượng sơ bộ giá trị t của khoảng cách tối thiểu có thể
   // PENDING
 
   for (var _t = 0; _t < 1; _t += 0.05) {
@@ -1940,7 +1940,7 @@ function cubicProjectPoint(x0, y0, x1, y1, x2, y2, x3, y3, x, y, out) {
   return mathSqrt(d);
 }
 /**
- * 计算二次方贝塞尔值
+ * Tính giá trị Bézier bậc hai
  * @param  {number} p0
  * @param  {number} p1
  * @param  {number} p2
@@ -1954,7 +1954,7 @@ function quadraticAt(p0, p1, p2, t) {
   return onet * (onet * p0 + 2 * t * p1) + t * t * p2;
 }
 /**
- * 计算二次方贝塞尔导数值
+ * Tính giá trị đạo hàm Bézier bậc hai
  * @param  {number} p0
  * @param  {number} p1
  * @param  {number} p2
@@ -1967,13 +1967,13 @@ function quadraticDerivativeAt(p0, p1, p2, t) {
   return 2 * ((1 - t) * (p1 - p0) + t * (p2 - p1));
 }
 /**
- * 计算二次方贝塞尔方程根
+ * Tính nghiệm phương trình Bézier bậc hai
  * @param  {number} p0
  * @param  {number} p1
  * @param  {number} p2
  * @param  {number} t
  * @param  {Array.<number>} roots
- * @return {number} 有效根数目
+ * @return {number} Số lượng nghiệm hợp lệ
  */
 
 
@@ -2018,7 +2018,7 @@ function quadraticRootAt(p0, p1, p2, val, roots) {
   return n;
 }
 /**
- * 计算二次贝塞尔方程极限值
+ * Tính giá trị cực hạn của phương trình Bézier bậc hai
  * @memberOf module:zrender/core/curve
  * @param  {number} p0
  * @param  {number} p1
@@ -2038,7 +2038,7 @@ function quadraticExtremum(p0, p1, p2) {
   }
 }
 /**
- * 细分二次贝塞尔曲线
+ * Chia nhỏ đường cong Bézier bậc hai
  * @memberOf module:zrender/core/curve
  * @param  {number} p0
  * @param  {number} p1
@@ -2062,8 +2062,8 @@ function quadraticSubdivide(p0, p1, p2, t, out) {
   out[5] = p2;
 }
 /**
- * 投射点到二次贝塞尔曲线上，返回投射距离。
- * 投射点有可能会有一个或者多个，这里只返回其中距离最短的一个。
+ * Chiếu điểm lên đường cong Bézier bậc hai, trả về khoảng cách chiếu.
+ * Điểm chiếu có thể có một hoặc nhiều điểm, ở đây chỉ trả về điểm có khoảng cách ngắn nhất.
  * @param {number} x0
  * @param {number} y0
  * @param {number} x1
@@ -2072,7 +2072,7 @@ function quadraticSubdivide(p0, p1, p2, t, out) {
  * @param {number} y2
  * @param {number} x
  * @param {number} y
- * @param {Array.<number>} out 投射点
+ * @param {Array.<number>} out Điểm chiếu
  * @return {number}
  */
 
@@ -2083,7 +2083,7 @@ function quadraticProjectPoint(x0, y0, x1, y1, x2, y2, x, y, out) {
   var interval = 0.005;
   var d = Infinity;
   _v0[0] = x;
-  _v0[1] = y; // 先粗略估计一下可能的最小距离的 t 值
+  _v0[1] = y; // Ước lượng sơ bộ giá trị t của khoảng cách tối thiểu có thể
   // PENDING
 
   for (var _t = 0; _t < 1; _t += 0.05) {
@@ -2861,8 +2861,8 @@ var _config = __webpack_require__(19);
 var dpr = _config.devicePixelRatio;
 
 /**
- * Path 代理，可以在`buildPath`中用于替代`ctx`, 会保存每个path操作的命令到pathCommands属性中
- * 可以用于 isInsidePath 判断以及获取boundingRect
+ * Path Proxy, có thể`buildPath`dùng để thay thế`ctx`, sẽ lưu lệnh của mỗi thao tác path vào thuộc tính pathCommands
+ * Có thể dùng để phán đoán isInsidePath và lấy boundingRect
  *
  * @module zrender/core/PathProxy
  * @author Yi Shen (http://www.github.com/pissang)
@@ -2917,7 +2917,7 @@ var PathProxy = function (notSaveData) {
   this._ctx = null;
 };
 /**
- * 快速计算Path包围盒（并不是最小包围盒）
+ * Tính nhanh hộp bao của Path (không phải hộp bao nhỏ nhất)
  * @return {Object}
  */
 
@@ -2976,10 +2976,10 @@ PathProxy.prototype = {
    */
   moveTo: function (x, y) {
     this.addData(CMD.M, x, y);
-    this._ctx && this._ctx.moveTo(x, y); // x0, y0, xi, yi 是记录在 _dashedXXXXTo 方法中使用
-    // xi, yi 记录当前点, x0, y0 在 closePath 的时候回到起始点。
-    // 有可能在 beginPath 之后直接调用 lineTo，这时候 x0, y0 需要
-    // 在 lineTo 方法中记录，这里先不考虑这种情况，dashed line 也只在 IE10- 中不支持
+    this._ctx && this._ctx.moveTo(x, y); // x0, y0, xi, yi được ghi trong _dashedXXXXTo phương thức để sử dụng
+    // xi, yi Ghi lại điểm hiện tại, x0, y0 Quay về điểm bắt đầu khi closePath.
+    // Có thể gọi trực tiếp lineTo sau beginPath, lúc này x0, y0 Cần
+    // Được ghi trong phương thức lineTo, tạm thời không xét trường hợp này, dashed line cũng chỉ IE10- không được hỗ trợ trong
 
     this._x0 = x;
     this._y0 = y;
@@ -3101,8 +3101,8 @@ PathProxy.prototype = {
   },
 
   /**
-   * Context 从外部传入，因为有可能是 rebuildPath 完之后再 fill。
-   * stroke 同样
+   * Context Được truyền vào từ bên ngoài, vì có thể fill sau khi rebuildPath hoàn tất.
+   * stroke tương tự
    * @param {CanvasRenderingContext2D} ctx
    * @return {module:zrender/core/PathProxy}
    */
@@ -3121,7 +3121,7 @@ PathProxy.prototype = {
   },
 
   /**
-   * 必须在其它绘制命令前调用
+   * Phải được gọi trước các lệnh vẽ khác
    * Must be invoked before all other path drawing methods
    * @return {module:zrender/core/PathProxy}
    */
@@ -3142,7 +3142,7 @@ PathProxy.prototype = {
   },
 
   /**
-   * 必须在其它绘制命令前调用
+   * Phải được gọi trước các lệnh vẽ khác
    * Must be invoked before all other path drawing methods
    * @return {module:zrender/core/PathProxy}
    */
@@ -3160,7 +3160,7 @@ PathProxy.prototype = {
   },
 
   /**
-   * 直接设置 Path 数据
+   * Đặt trực tiếp dữ liệu Path
    */
   setData: function (data) {
     var len = data.length;
@@ -3177,7 +3177,7 @@ PathProxy.prototype = {
   },
 
   /**
-   * 添加子路径
+   * Thêm đường dẫn con
    * @param {module:zrender/core/PathProxy|Array.<module:zrender/core/PathProxy>} path
    */
   appendPath: function (path) {
@@ -3209,8 +3209,8 @@ PathProxy.prototype = {
   },
 
   /**
-   * 填充 Path 数据。
-   * 尽量复用而不申明新的数组。大部分图形重绘的指令数据长度都是不变的。
+   * Điền dữ liệu Path.
+   * Cố gắng tái sử dụng thay vì khai báo mảng mới. Độ dài dữ liệu lệnh khi vẽ lại phần lớn hình đều không thay đổi.
    */
   addData: function (cmd) {
     if (!this._saveData) {
@@ -3220,8 +3220,8 @@ PathProxy.prototype = {
     var data = this.data;
 
     if (this._len + arguments.length > data.length) {
-      // 因为之前的数组已经转换成静态的 Float32Array
-      // 所以不够用时需要扩展一个新的动态数组
+      // Vì mảng trước đó đã được chuyển thành dạng tĩnh Float32Array
+      // Vì vậy khi không đủ dùng cần mở rộng một mảng động mới
       this._expandData();
 
       data = this.data;
@@ -3372,7 +3372,7 @@ PathProxy.prototype = {
   },
 
   /**
-   * 转成静态的 Float32Array 减少堆内存占用
+   * Chuyển thành Float32Array tĩnh để giảm mức sử dụng bộ nhớ heap
    * Convert dynamic array to static Float32Array
    */
   toStatic: function () {
@@ -3403,10 +3403,10 @@ PathProxy.prototype = {
       var cmd = data[i++];
 
       if (i == 1) {
-        // 如果第一个命令是 L, C, Q
-        // 则 previous point 同绘制命令的第一个 point
+        // Nếu lệnh đầu tiên là L, C, Q
+        // thì previous point giống với lệnh vẽ đầu tiên point
         //
-        // 第一个命令为 Arc 的情况下会在后面特殊处理
+        // Trong trường hợp lệnh đầu tiên là Arc sẽ được xử lý đặc biệt ở phía sau
         xi = data[i];
         yi = data[i + 1];
         x0 = xi;
@@ -3415,8 +3415,8 @@ PathProxy.prototype = {
 
       switch (cmd) {
         case CMD.M:
-          // moveTo 命令重新创建一个新的 subpath, 并且更新新的起点
-          // 在 closePath 的时候使用
+          // moveTo Lệnh tạo mới một subpath, và cập nhật điểm bắt đầu mới
+          // Dùng khi closePath
           x0 = data[i++];
           y0 = data[i++];
           xi = x0;
@@ -3446,20 +3446,20 @@ PathProxy.prototype = {
           break;
 
         case CMD.A:
-          // TODO Arc 判断的开销比较大
+          // TODO Arc Chi phí phán đoán khá lớn
           var cx = data[i++];
           var cy = data[i++];
           var rx = data[i++];
           var ry = data[i++];
           var startAngle = data[i++];
-          var endAngle = data[i++] + startAngle; // TODO Arc 旋转
+          var endAngle = data[i++] + startAngle; // TODO Arc Xoay
 
           var psi = data[i++];
           var anticlockwise = 1 - data[i++];
 
           if (i == 1) {
-            // 直接使用 arc 命令
-            // 第一个命令起点还未定义
+            // Dùng trực tiếp lệnh arc
+            // Điểm bắt đầu của lệnh đầu tiên chưa được định nghĩa
             x0 = mathCos(startAngle) * rx + cx;
             y0 = mathSin(startAngle) * ry + cy;
           }
@@ -3515,10 +3515,10 @@ PathProxy.prototype = {
       var cmd = d[i++];
 
       if (i == 1) {
-        // 如果第一个命令是 L, C, Q
-        // 则 previous point 同绘制命令的第一个 point
+        // Nếu lệnh đầu tiên là L, C, Q
+        // thì previous point giống với lệnh vẽ đầu tiên point
         //
-        // 第一个命令为 Arc 的情况下会在后面特殊处理
+        // Trong trường hợp lệnh đầu tiên là Arc sẽ được xử lý đặc biệt ở phía sau
         xi = d[i];
         yi = d[i + 1];
         x0 = xi;
@@ -3584,8 +3584,8 @@ PathProxy.prototype = {
           }
 
           if (i == 1) {
-            // 直接使用 arc 命令
-            // 第一个命令起点还未定义
+            // Dùng trực tiếp lệnh arc
+            // Điểm bắt đầu của lệnh đầu tiên chưa được định nghĩa
             x0 = mathCos(theta) * rx + cx;
             y0 = mathSin(theta) * ry + cy;
           }
@@ -3623,12 +3623,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
 /***/ (function(module, exports) {
 
 /**
- * 3x2矩阵操作类
+ * 3x2 Lớp thao tác ma trận
  * @exports zrender/tool/matrix
  */
 var ArrayCtor = typeof Float32Array === 'undefined' ? Array : Float32Array;
 /**
- * 创建一个单位矩阵
+ * Tạo một ma trận đơn vị
  * @return {Float32Array|Array.<number>}
  */
 
@@ -3638,7 +3638,7 @@ function create() {
   return out;
 }
 /**
- * 设置矩阵为单位矩阵
+ * Đặt ma trận thành ma trận đơn vị
  * @param {Float32Array|Array.<number>} out
  */
 
@@ -3653,7 +3653,7 @@ function identity(out) {
   return out;
 }
 /**
- * 复制矩阵
+ * Sao chép ma trận
  * @param {Float32Array|Array.<number>} out
  * @param {Float32Array|Array.<number>} m
  */
@@ -3669,7 +3669,7 @@ function copy(out, m) {
   return out;
 }
 /**
- * 矩阵相乘
+ * Nhân ma trận
  * @param {Float32Array|Array.<number>} out
  * @param {Float32Array|Array.<number>} m1
  * @param {Float32Array|Array.<number>} m2
@@ -3695,7 +3695,7 @@ function mul(out, m1, m2) {
   return out;
 }
 /**
- * 平移变换
+ * Phép biến đổi tịnh tiến
  * @param {Float32Array|Array.<number>} out
  * @param {Float32Array|Array.<number>} a
  * @param {Float32Array|Array.<number>} v
@@ -3712,7 +3712,7 @@ function translate(out, a, v) {
   return out;
 }
 /**
- * 旋转变换
+ * Phép biến đổi xoay
  * @param {Float32Array|Array.<number>} out
  * @param {Float32Array|Array.<number>} a
  * @param {number} rad
@@ -3737,7 +3737,7 @@ function rotate(out, a, rad) {
   return out;
 }
 /**
- * 缩放变换
+ * Phép biến đổi co giãn
  * @param {Float32Array|Array.<number>} out
  * @param {Float32Array|Array.<number>} a
  * @param {Float32Array|Array.<number>} v
@@ -3756,7 +3756,7 @@ function scale(out, a, v) {
   return out;
 }
 /**
- * 求逆矩阵
+ * Tính ma trận nghịch đảo
  * @param {Float32Array|Array.<number>} out
  * @param {Float32Array|Array.<number>} a
  */
@@ -4431,7 +4431,7 @@ var Element = __webpack_require__(16);
 var RectText = __webpack_require__(48);
 
 /**
- * 可绘制的图形基类
+ * Lớp cơ sở của hình có thể vẽ được
  * Base class of all displayable graphic objects
  * @module zrender/graphic/Displayable
  */
@@ -4467,7 +4467,7 @@ Displayable.prototype = {
   type: 'displayable',
 
   /**
-   * Displayable 是否为脏，Painter 中会根据该标记判断是否需要是否需要重新绘制
+   * Displayable Có phải là dirty không, Painter sẽ dựa vào dấu hiệu này để phán đoán có cần vẽ lại hay không
    * Dirty flag. From which painter will determine if this displayable object needs brush
    * @name module:zrender/graphic/Displayable#__dirty
    * @type {boolean}
@@ -4475,7 +4475,7 @@ Displayable.prototype = {
   __dirty: true,
 
   /**
-   * 图形是否可见，为true时不绘制图形，但是仍能触发鼠标事件
+   * Hình có hiển thị không, khi là true thì không vẽ hình nhưng vẫn có thể kích hoạt sự kiện chuột
    * If ignore drawing of the displayable object. Mouse event will still be triggered
    * @name module:/zrender/graphic/Displayable#invisible
    * @type {boolean}
@@ -4498,7 +4498,7 @@ Displayable.prototype = {
   z2: 0,
 
   /**
-   * z层level，决定绘画在哪层canvas中
+   * z Tầng level, quyết định vẽ ở tầng canvas nào
    * @name module:/zrender/graphic/Displayable#zlevel
    * @type {number}
    * @default 0
@@ -4506,7 +4506,7 @@ Displayable.prototype = {
   zlevel: 0,
 
   /**
-   * 是否可拖拽
+   * Có thể kéo thả không
    * @name module:/zrender/graphic/Displayable#draggable
    * @type {boolean}
    * @default false
@@ -4514,7 +4514,7 @@ Displayable.prototype = {
   draggable: false,
 
   /**
-   * 是否正在拖拽
+   * Có đang kéo thả hay không
    * @name module:/zrender/graphic/Displayable#draggable
    * @type {boolean}
    * @default false
@@ -4522,7 +4522,7 @@ Displayable.prototype = {
   dragging: false,
 
   /**
-   * 是否相应鼠标事件
+   * Có phản hồi sự kiện chuột hay không
    * @name module:/zrender/graphic/Displayable#silent
    * @type {boolean}
    * @default false
@@ -4560,21 +4560,21 @@ Displayable.prototype = {
   afterBrush: function (ctx) {},
 
   /**
-   * 图形绘制方法
+   * Phương thức vẽ hình
    * @param {CanvasRenderingContext2D} ctx
    */
   // Interface
   brush: function (ctx, prevEl) {},
 
   /**
-   * 获取最小包围盒
+   * Lấy hộp bao nhỏ nhất
    * @return {module:zrender/core/BoundingRect}
    */
   // Interface
   getBoundingRect: function () {},
 
   /**
-   * 判断坐标 x, y 是否在图形上
+   * Phán đoán tọa độ x, y Có nằm trên hình hay không
    * If displayable element contain coord x, y
    * @param  {number} x
    * @param  {number} y
@@ -4593,7 +4593,7 @@ Displayable.prototype = {
   },
 
   /**
-   * 判断坐标 x, y 是否在图形的包围盒上
+   * Phán đoán tọa độ x, y Có nằm trên hộp bao của hình hay không
    * If bounding rect of element contain coord x, y
    * @param  {number} x
    * @param  {number} y
@@ -4606,7 +4606,7 @@ Displayable.prototype = {
   },
 
   /**
-   * 标记图形元素为脏，并且在下一帧重绘
+   * Đánh dấu phần tử hình là dirty và vẽ lại ở khung hình tiếp theo
    * Mark displayable element dirty and refresh next frame
    */
   dirty: function () {
@@ -4616,11 +4616,11 @@ Displayable.prototype = {
   },
 
   /**
-   * 图形是否会触发事件
+   * Hình có kích hoạt sự kiện hay không
    * If displayable object binded any event
    * @return {boolean}
    */
-  // TODO, 通过 bind 绑定的事件
+  // TODO, Sự kiện được liên kết qua bind
   // isSilent: function () {
   //     return !(
   //         this.hoverable || this.draggable
@@ -4683,7 +4683,7 @@ var textContain = __webpack_require__(5);
 var numberUtil = __webpack_require__(9);
 
 /**
- * 每三位默认加,格式化
+ * Mặc định thêm sau mỗi ba chữ số,Định dạng
  * @param {string|number} x
  * @return {string}
  */
@@ -5062,9 +5062,9 @@ module.exports = _default;
 /***/ (function(module, exports) {
 
 /**
- * echarts设备环境识别
+ * echarts Nhận diện môi trường thiết bị
  *
- * @desc echarts基于Canvas，纯Javascript图表库，提供直观，生动，可交互，可个性化定制的数据统计图表。
+ * @desc echarts Dựa trên Canvas, thư viện biểu đồ Javascript thuần túy, cung cấp biểu đồ thống kê dữ liệu trực quan, sinh động, có thể tương tác và tùy chỉnh cá nhân hóa.
  * @author firede[firede@firede.us]
  * @desc thanks zepto.
  */
@@ -5165,7 +5165,7 @@ function detect(ua) {
     browser: browser,
     os: os,
     node: false,
-    // 原生canvas支持，改极端点了
+    // Hỗ trợ canvas gốc, đã sửa hơi quá đà
     // canvasSupported : !(browser.ie && parseFloat(browser.version) < 9)
     canvasSupported: !!document.createElement('canvas').getContext,
     svgSupported: typeof SVGRect !== 'undefined',
@@ -5212,7 +5212,7 @@ var Element = function (opts) {
   Eventful.call(this, opts);
   Animatable.call(this, opts);
   /**
-   * 画布元素ID
+   * Phần tử canvas ID
    * @type {string}
    */
 
@@ -5221,21 +5221,21 @@ var Element = function (opts) {
 
 Element.prototype = {
   /**
-   * 元素类型
+   * Loại phần tử
    * Element type
    * @type {string}
    */
   type: 'element',
 
   /**
-   * 元素名字
+   * Tên phần tử
    * Element name
    * @type {string}
    */
   name: '',
 
   /**
-   * ZRender 实例对象，会在 element 添加到 zrender 实例中后自动赋值
+   * ZRender Đối tượng instance, sẽ được gán tự động sau khi element được thêm vào instance zrender
    * ZRender instance will be assigned when element is associated with zrender
    * @name module:/zrender/Element#__zr
    * @type {module:zrender/ZRender}
@@ -5243,7 +5243,7 @@ Element.prototype = {
   __zr: null,
 
   /**
-   * 图形是否忽略，为true时忽略图形的绘制以及事件触发
+   * Hình có bị bỏ qua hay không, khi là true sẽ bỏ qua việc vẽ hình và kích hoạt sự kiện
    * If ignore drawing and events of the element object
    * @name module:/zrender/Element#ignore
    * @type {boolean}
@@ -5252,8 +5252,8 @@ Element.prototype = {
   ignore: false,
 
   /**
-   * 用于裁剪的路径(shape)，所有 Group 内的路径在绘制时都会被这个路径裁剪
-   * 该路径会继承被裁减对象的变换
+   * Đường dẫn dùng để cắt xén(shape), mọi đường dẫn trong Group khi vẽ đều sẽ bị đường dẫn này cắt xén
+   * Đường dẫn này sẽ kế thừa phép biến đổi của đối tượng bị cắt
    * @type {module:zrender/graphic/Path}
    * @see http://www.w3.org/TR/2dcontext/#clipping-region
    * @readOnly
@@ -5411,7 +5411,7 @@ Element.prototype = {
    * @param {module:zrender/ZRender} zr
    */
   addSelfToZr: function (zr) {
-    this.__zr = zr; // 添加动画
+    this.__zr = zr; // Thêm animation
 
     var animators = this.animators;
 
@@ -5432,7 +5432,7 @@ Element.prototype = {
    * @param {module:zrender/ZRender} zr
    */
   removeSelfFromZr: function (zr) {
-    this.__zr = null; // 移除动画
+    this.__zr = null; // Xóa animation
 
     var animators = this.animators;
 
@@ -5462,7 +5462,7 @@ var matrix = __webpack_require__(8);
 var vector = __webpack_require__(2);
 
 /**
- * 提供变换扩展
+ * Cung cấp mở rộng biến đổi
  * @module zrender/mixin/Transformable
  * @author pissang (https://www.github.com/pissang)
  */
@@ -5483,7 +5483,7 @@ var Transformable = function (opts) {
 
   if (!opts.position) {
     /**
-     * 平移
+     * Tịnh tiến
      * @type {Array.<number>}
      * @default [0, 0]
      */
@@ -5492,7 +5492,7 @@ var Transformable = function (opts) {
 
   if (opts.rotation == null) {
     /**
-     * 旋转
+     * Xoay
      * @type {Array.<number>}
      * @default 0
      */
@@ -5501,14 +5501,14 @@ var Transformable = function (opts) {
 
   if (!opts.scale) {
     /**
-     * 缩放
+     * Thu phóng
      * @type {Array.<number>}
      * @default [1, 1]
      */
     this.scale = [1, 1];
   }
   /**
-   * 旋转和缩放的原点
+   * Gốc tọa độ xoay và co giãn
    * @type {Array.<number>}
    * @default null
    */
@@ -5520,8 +5520,8 @@ var Transformable = function (opts) {
 var transformableProto = Transformable.prototype;
 transformableProto.transform = null;
 /**
- * 判断是否需要有坐标变换
- * 如果有坐标变换, 则从position, rotation, scale以及父节点的transform计算出自身的transform矩阵
+ * Phán đoán có cần biến đổi tọa độ hay không
+ * Nếu có biến đổi tọa độ, thì từ position, rotation, scale và transform của nút cha để tính ra ma trận transform của chính nó
  */
 
 transformableProto.needLocalTransform = function () {
@@ -5545,7 +5545,7 @@ transformableProto.updateTransform = function () {
     this.getLocalTransform(m);
   } else {
     mIdentity(m);
-  } // 应用父节点变换
+  } // Áp dụng biến đổi của nút cha
 
 
   if (parentHasTransform) {
@@ -5554,7 +5554,7 @@ transformableProto.updateTransform = function () {
     } else {
       matrix.copy(m, parent.transform);
     }
-  } // 保存这个变换矩阵
+  } // Lưu ma trận biến đổi này
 
 
   this.transform = m;
@@ -5566,7 +5566,7 @@ transformableProto.getLocalTransform = function (m) {
   return Transformable.getLocalTransform(this, m);
 };
 /**
- * 将自己的transform应用到context上
+ * Áp dụng transform của mình lên context
  * @param {CanvasRenderingContext2D} ctx
  */
 
@@ -5589,7 +5589,7 @@ transformableProto.restoreTransform = function (ctx) {
 
 var tmpTransform = [];
 /**
- * 分解`transform`矩阵到`position`, `rotation`, `scale`
+ * Phân rã`transform`ma trận thành`position`, `rotation`, `scale`
  */
 
 transformableProto.decomposeTransform = function () {
@@ -5660,7 +5660,7 @@ transformableProto.getGlobalScale = function () {
   return [sx, sy];
 };
 /**
- * 变换坐标位置到 shape 的局部坐标空间
+ * Biến đổi vị trí tọa độ sang không gian tọa độ cục bộ của shape
  * @method
  * @param {number} x
  * @param {number} y
@@ -5679,7 +5679,7 @@ transformableProto.transformCoordToLocal = function (x, y) {
   return v2;
 };
 /**
- * 变换局部坐标位置到全局坐标空间
+ * Biến đổi vị trí tọa độ cục bộ sang không gian tọa độ toàn cục
  * @method
  * @param {number} x
  * @param {number} y
@@ -6377,20 +6377,20 @@ if (typeof window !== 'undefined') {
   dpr = Math.max(window.devicePixelRatio || 1, 1);
 }
 /**
- * config默认配置项
+ * config Mục cấu hình mặc định
  * @exports zrender/config
  * @author Kener (@Kener-林峰, kener.linfeng@gmail.com)
  */
 
 /**
- * debug日志选项：catchBrushException为true下有效
- * 0 : 不生成debug数据，发布用
- * 1 : 异常抛出，调试用
- * 2 : 控制台输出，调试用
+ * debug Tùy chọn log: có hiệu lực khi catchBrushException là true
+ * 0 : Không tạo dữ liệu debug, dùng để phát hành
+ * 1 : Ném ngoại lệ, dùng để gỡ lỗi
+ * 2 : Xuất ra console, dùng để gỡ lỗi
  */
 
 
-var debugMode = 0; // retina 屏幕优化
+var debugMode = 0; // retina Tối ưu màn hình
 
 var devicePixelRatio = dpr;
 exports.debugMode = debugMode;
@@ -8694,13 +8694,13 @@ Model.prototype = {
   constructor: Model,
 
   /**
-   * Model 的初始化函数
+   * Model Hàm khởi tạo của
    * @param {Object} option
    */
   init: null,
 
   /**
-   * 从新的 Option merge
+   * Từ mới Option merge
    */
   mergeOption: function (option) {
     zrUtil.merge(this.option, option, true);
@@ -11178,7 +11178,7 @@ module.exports = _default;
 /***/ (function(module, exports) {
 
 /**
- * zrender: 生成唯一id
+ * zrender: Tạo duy nhất id
  *
  * @author errorrik (errorrik@gmail.com)
  */
@@ -11195,14 +11195,14 @@ module.exports = _default;
 /***/ (function(module, exports) {
 
 /**
- * 事件扩展
+ * Mở rộng sự kiện
  * @module zrender/mixin/Eventful
  * @author Kener (@Kener-林峰, kener.linfeng@gmail.com)
  *         pissang (https://www.github.com/pissang)
  */
 var arrySlice = Array.prototype.slice;
 /**
- * 事件分发器
+ * Bộ phân phối sự kiện
  * @alias module:zrender/mixin/Eventful
  * @constructor
  */
@@ -11215,10 +11215,10 @@ Eventful.prototype = {
   constructor: Eventful,
 
   /**
-   * 单次触发绑定，trigger后销毁
+   * Liên kết kích hoạt một lần, hủy sau khi trigger
    *
-   * @param {string} event 事件名
-   * @param {Function} handler 响应函数
+   * @param {string} event Tên sự kiện
+   * @param {Function} handler Hàm phản hồi
    * @param {Object} context
    */
   one: function (event, handler, context) {
@@ -11248,9 +11248,9 @@ Eventful.prototype = {
   },
 
   /**
-   * 绑定事件
-   * @param {string} event 事件名
-   * @param {Function} handler 事件处理函数
+   * Liên kết sự kiện
+   * @param {string} event Tên sự kiện
+   * @param {Function} handler Hàm xử lý sự kiện
    * @param {Object} [context]
    */
   on: function (event, handler, context) {
@@ -11280,7 +11280,7 @@ Eventful.prototype = {
   },
 
   /**
-   * 是否绑定了事件
+   * Có liên kết sự kiện hay không
    * @param  {string}  event
    * @return {boolean}
    */
@@ -11290,9 +11290,9 @@ Eventful.prototype = {
   },
 
   /**
-   * 解绑事件
-   * @param {string} event 事件名
-   * @param {Function} [handler] 事件处理函数
+   * Hủy liên kết sự kiện
+   * @param {string} event Tên sự kiện
+   * @param {Function} [handler] Hàm xử lý sự kiện
    */
   off: function (event, handler) {
     var _h = this._$handlers;
@@ -11326,9 +11326,9 @@ Eventful.prototype = {
   },
 
   /**
-   * 事件分发
+   * Phân phối sự kiện
    *
-   * @param {string} type 事件类型
+   * @param {string} type Loại sự kiện
    */
   trigger: function (type) {
     if (this._$handlers[type]) {
@@ -11381,8 +11381,8 @@ Eventful.prototype = {
   },
 
   /**
-   * 带有context的事件分发, 最后一个参数是事件回调的context
-   * @param {string} type 事件类型
+   * Phân phối sự kiện kèm context, Tham số cuối cùng là context của callback sự kiện context
+   * @param {string} type Loại sự kiện
    */
   triggerWithContext: function (type) {
     if (this._$handlers[type]) {
@@ -11434,7 +11434,7 @@ Eventful.prototype = {
 
     return this;
   }
-}; // 对象可以通过 onxxxx 绑定事件
+}; // Đối tượng có thể liên kết sự kiện qua onxxxx
 
 /**
  * @event module:zrender/mixin/Eventful#onclick
@@ -11555,7 +11555,7 @@ Animatable.prototype = {
   constructor: Animatable,
 
   /**
-   * 动画
+   * Animation
    *
    * @param {string} path The path to fetch value from object, like 'a.b.c'.
    * @param {boolean} [loop] Whether to loop animation.
@@ -11616,7 +11616,7 @@ Animatable.prototype = {
   },
 
   /**
-   * 停止动画
+   * Dừng animation
    * @param {boolean} forwardToLast If move to last frame before stop
    */
   stopAnimation: function (forwardToLast) {
@@ -12226,9 +12226,9 @@ var Animator = function (target, loop, getter, setter) {
 
 Animator.prototype = {
   /**
-   * 设置动画关键帧
-   * @param  {number} time 关键帧时间，单位是ms
-   * @param  {Object} props 关键帧的属性值，key-value表示
+   * Đặt keyframe của animation
+   * @param  {number} time Thời gian keyframe, đơn vị là ms
+   * @param  {Object} props Giá trị thuộc tính của keyframe,key-value biểu thị
    * @return {module:zrender/animation/Animator}
    */
   when: function (time
@@ -12273,7 +12273,7 @@ Animator.prototype = {
   },
 
   /**
-   * 添加动画每一帧的回调函数
+   * Thêm hàm callback cho mỗi khung hình của animation
    * @param  {Function} callback
    * @return {module:zrender/animation/Animator}
    */
@@ -12313,9 +12313,9 @@ Animator.prototype = {
   },
 
   /**
-   * 开始执行动画
+   * Bắt đầu thực thi animation
    * @param  {string|Function} [easing]
-   *         动画缓动函数，详见{@link module:zrender/animation/easing}
+   *         Hàm easing của animation, xem chi tiết tại{@link module:zrender/animation/easing}
    * @param  {boolean} forceAnimate
    * @return {module:zrender/animation/Animator}
    */
@@ -12377,7 +12377,7 @@ Animator.prototype = {
   },
 
   /**
-   * 停止动画
+   * Dừng animation
    * @param {boolean} forwardToLast If move to last frame before stop
    */
   stop: function (forwardToLast) {
@@ -12399,8 +12399,8 @@ Animator.prototype = {
   },
 
   /**
-   * 设置动画延迟开始的时间
-   * @param  {number} time 单位ms
+   * Đặt thời gian trì hoãn bắt đầu animation
+   * @param  {number} time Đơn vị ms
    * @return {module:zrender/animation/Animator}
    */
   delay: function (time) {
@@ -12409,7 +12409,7 @@ Animator.prototype = {
   },
 
   /**
-   * 添加动画结束的回调
+   * Thêm callback khi animation kết thúc
    * @param  {Function} cb
    * @return {module:zrender/animation/Animator}
    */
@@ -12438,12 +12438,12 @@ module.exports = _default;
 var easingFuncs = __webpack_require__(46);
 
 /**
- * 动画主控制器
- * @config target 动画对象，可以是数组，如果是数组的话会批量分发onframe等事件
- * @config life(1000) 动画时长
- * @config delay(0) 动画延迟时间
+ * Bộ điều khiển chính của animation
+ * @config target Đối tượng animation, có thể là mảng, nếu là mảng sẽ phân phối hàng loạt các sự kiện như onframe
+ * @config life(1000) Thời lượng animation
+ * @config delay(0) Thời gian trì hoãn animation
  * @config loop(true)
- * @config gap(0) 循环的间隔时间
+ * @config gap(0) Thời gian khoảng cách lặp lại
  * @config onframe
  * @config easing(optional)
  * @config ondestroy(optional)
@@ -12452,14 +12452,14 @@ var easingFuncs = __webpack_require__(46);
  * TODO pause
  */
 function Clip(options) {
-  this._target = options.target; // 生命周期
+  this._target = options.target; // Vòng đời
 
-  this._life = options.life || 1000; // 延时
+  this._life = options.life || 1000; // Trì hoãn
 
-  this._delay = options.delay || 0; // 开始时间
-  // this._startTime = new Date().getTime() + this._delay;// 单位毫秒
+  this._delay = options.delay || 0; // Thời gian bắt đầu
+  // this._startTime = new Date().getTime() + this._delay;// Đơn vị mili giây
 
-  this._initialized = false; // 是否循环
+  this._initialized = false; // Có lặp lại hay không
 
   this.loop = options.loop == null ? false : options.loop;
   this.gap = options.gap || 0;
@@ -12486,7 +12486,7 @@ Clip.prototype = {
       return;
     }
 
-    var percent = (globalTime - this._startTime - this._pausedTime) / this._life; // 还没开始
+    var percent = (globalTime - this._startTime - this._pausedTime) / this._life; // Chưa bắt đầu
 
     if (percent < 0) {
       return;
@@ -12496,16 +12496,16 @@ Clip.prototype = {
     var easing = this.easing;
     var easingFunc = typeof easing == 'string' ? easingFuncs[easing] : easing;
     var schedule = typeof easingFunc === 'function' ? easingFunc(percent) : percent;
-    this.fire('frame', schedule); // 结束
+    this.fire('frame', schedule); // Kết thúc
 
     if (percent == 1) {
       if (this.loop) {
-        this.restart(globalTime); // 重新开始周期
-        // 抛出而不是直接调用事件直到 stage.update 后再统一调用这些事件
+        this.restart(globalTime); // Bắt đầu lại chu kỳ
+        // Ném ra thay vì gọi trực tiếp sự kiện cho đến khi stage.update sau đó mới gọi thống nhất các sự kiện này
 
         return 'restart';
-      } // 动画完成将这个控制器标识为待删除
-      // 在Animation.update中进行批量删除
+      } // Khi animation hoàn thành, đánh dấu bộ điều khiển này là chờ xóa
+      // Trong Animation.update Thực hiện xóa hàng loạt trong
 
 
       this._needsRemove = true;
@@ -12542,7 +12542,7 @@ module.exports = _default;
 /***/ (function(module, exports) {
 
 /**
- * 缓动代码来自 https://github.com/sole/tween.js/blob/master/src/Tween.js
+ * Mã easing lấy từ https://github.com/sole/tween.js/blob/master/src/Tween.js
  * @see http://sole.github.io/tween.js/examples/03_graphs.html
  * @exports zrender/animation/easing
  */
@@ -12582,7 +12582,7 @@ var easing = {
 
     return -0.5 * (--k * (k - 2) - 1);
   },
-  // 三次方的缓动（t^3）
+  // Easing bậc ba (t^3）
 
   /**
   * @param {number} k
@@ -12611,7 +12611,7 @@ var easing = {
 
     return 0.5 * ((k -= 2) * k * k + 2);
   },
-  // 四次方的缓动（t^4）
+  // Easing bậc bốn (t^4）
 
   /**
   * @param {number} k
@@ -12640,7 +12640,7 @@ var easing = {
 
     return -0.5 * ((k -= 2) * k * k * k - 2);
   },
-  // 五次方的缓动（t^5）
+  // Easing bậc năm (t^5）
 
   /**
   * @param {number} k
@@ -12669,7 +12669,7 @@ var easing = {
 
     return 0.5 * ((k -= 2) * k * k * k * k + 2);
   },
-  // 正弦曲线的缓动（sin(t)）
+  // Easing đường cong sin (sin(t)）
 
   /**
   * @param {number} k
@@ -12694,7 +12694,7 @@ var easing = {
   sinusoidalInOut: function (k) {
     return 0.5 * (1 - Math.cos(Math.PI * k));
   },
-  // 指数曲线的缓动（2^t）
+  // Easing đường cong hàm mũ (2^t）
 
   /**
   * @param {number} k
@@ -12731,7 +12731,7 @@ var easing = {
 
     return 0.5 * (-Math.pow(2, -10 * (k - 1)) + 2);
   },
-  // 圆形曲线的缓动（sqrt(1-t^2)）
+  // Easing đường cong tròn (sqrt(1-t^2)）
 
   /**
   * @param {number} k
@@ -12760,7 +12760,7 @@ var easing = {
 
     return 0.5 * (Math.sqrt(1 - (k -= 2) * k) + 1);
   },
-  // 创建类似于弹簧在停止前来回振荡的动画
+  // Tạo animation giống như lò xo dao động qua lại trước khi dừng
 
   /**
   * @param {number} k
@@ -12846,7 +12846,7 @@ var easing = {
 
     return a * Math.pow(2, -10 * (k -= 1)) * Math.sin((k - s) * (2 * Math.PI) / p) * 0.5 + 1;
   },
-  // 在某一动画开始沿指示的路径进行动画处理前稍稍收回该动画的移动
+  // Thu lại một chút chuyển động của animation trước khi một animation nào đó bắt đầu xử lý animation dọc theo đường dẫn được chỉ định
 
   /**
   * @param {number} k
@@ -12879,7 +12879,7 @@ var easing = {
 
     return 0.5 * ((k -= 2) * k * ((s + 1) * k + s) + 2);
   },
-  // 创建弹跳效果
+  // Tạo hiệu ứng nảy
 
   /**
   * @param {number} k
@@ -13027,9 +13027,9 @@ var start = vec2.create();
 var end = vec2.create();
 var extremity = vec2.create();
 /**
- * 从顶点数组中计算出最小包围盒，写入`min`和`max`中
+ * Tính hộp bao nhỏ nhất từ mảng đỉnh, ghi vào`min`và`max`trong
  * @module zrender/core/bbox
- * @param {Array<Object>} points 顶点数组
+ * @param {Array<Object>} points Mảng đỉnh
  * @param {number} min
  * @param {number} max
  */
@@ -13080,7 +13080,7 @@ function fromLine(x0, y0, x1, y1, min, max) {
 var xDim = [];
 var yDim = [];
 /**
- * 从三阶贝塞尔曲线(p0, p1, p2, p3)中计算出最小包围盒，写入`min`和`max`中
+ * Từ đường cong Bézier bậc ba(p0, p1, p2, p3)tính ra hộp bao nhỏ nhất, ghi vào`min`và`max`trong
  * @memberOf module:zrender/core/bbox
  * @param {number} x0
  * @param {number} y0
@@ -13128,7 +13128,7 @@ function fromCubic(x0, y0, x1, y1, x2, y2, x3, y3, min, max) {
   max[1] = mathMax(y3, max[1]);
 }
 /**
- * 从二阶贝塞尔曲线(p0, p1, p2)中计算出最小包围盒，写入`min`和`max`中
+ * Từ đường cong Bézier bậc hai(p0, p1, p2)tính ra hộp bao nhỏ nhất, ghi vào`min`và`max`trong
  * @memberOf module:zrender/core/bbox
  * @param {number} x0
  * @param {number} y0
@@ -13155,7 +13155,7 @@ function fromQuadratic(x0, y0, x1, y1, x2, y2, min, max) {
   max[1] = mathMax(y0, y2, y);
 }
 /**
- * 从圆弧中计算出最小包围盒，写入`min`和`max`中
+ * Tính hộp bao nhỏ nhất từ cung tròn, ghi vào`min`và`max`trong
  * @method
  * @memberOf module:zrender/core/bbox
  * @param {number} x
@@ -13261,7 +13261,7 @@ var EPSILON = 1e-4;
 
 function isAroundEqual(a, b) {
   return Math.abs(a - b) < EPSILON;
-} // 临时数组
+} // Mảng tạm thời
 
 
 var roots = [-1, -1, -1];
@@ -13314,7 +13314,7 @@ function windingCubic(x0, y0, x1, y1, x2, y2, x3, y3, x, y) {
       }
 
       if (nExtrema == 2) {
-        // 分成三段单调函数
+        // Chia thành ba đoạn hàm đơn điệu
         if (t < extrema[0]) {
           w += y0_ < y0 ? unit : -unit;
         } else if (t < extrema[1]) {
@@ -13323,7 +13323,7 @@ function windingCubic(x0, y0, x1, y1, x2, y2, x3, y3, x, y) {
           w += y3 < y1_ ? unit : -unit;
         }
       } else {
-        // 分成两段单调函数
+        // Chia thành hai đoạn hàm đơn điệu
         if (t < extrema[0]) {
           w += y0_ < y0 ? unit : -unit;
         } else {
@@ -13385,7 +13385,7 @@ function windingQuadratic(x0, y0, x1, y1, x2, y2, x, y) {
     }
   }
 } // TODO
-// Arc 旋转
+// Arc Xoay
 
 
 function windingArc(cx, cy, r, startAngle, endAngle, anticlockwise, x, y) {
@@ -13470,7 +13470,7 @@ function containPath(data, lineWidth, isStroke, x, y) {
       // Close previous subpath
       if (!isStroke) {
         w += windingLine(xi, yi, x0, y0, x, y);
-      } // 如果被任何一个 subpath 包含
+      } // Nếu được bất kỳ subpath nào chứa
       // if (w !== 0) {
       //     return true;
       // }
@@ -13478,10 +13478,10 @@ function containPath(data, lineWidth, isStroke, x, y) {
     }
 
     if (i == 1) {
-      // 如果第一个命令是 L, C, Q
-      // 则 previous point 同绘制命令的第一个 point
+      // Nếu lệnh đầu tiên là L, C, Q
+      // thì previous point giống với lệnh vẽ đầu tiên point
       //
-      // 第一个命令为 Arc 的情况下会在后面特殊处理
+      // Trong trường hợp lệnh đầu tiên là Arc sẽ được xử lý đặc biệt ở phía sau
       xi = data[i];
       yi = data[i + 1];
       x0 = xi;
@@ -13490,8 +13490,8 @@ function containPath(data, lineWidth, isStroke, x, y) {
 
     switch (cmd) {
       case CMD.M:
-        // moveTo 命令重新创建一个新的 subpath, 并且更新新的起点
-        // 在 closePath 的时候使用
+        // moveTo Lệnh tạo mới một subpath, và cập nhật điểm bắt đầu mới
+        // Dùng khi closePath
         x0 = data[i++];
         y0 = data[i++];
         xi = x0;
@@ -13504,7 +13504,7 @@ function containPath(data, lineWidth, isStroke, x, y) {
             return true;
           }
         } else {
-          // NOTE 在第一个命令为 L, C, Q 的时候会计算出 NaN
+          // NOTE Khi lệnh đầu tiên là L, C, Q sẽ tính ra NaN
           w += windingLine(xi, yi, data[i], data[i + 1], x, y) || 0;
         }
 
@@ -13539,26 +13539,26 @@ function containPath(data, lineWidth, isStroke, x, y) {
         break;
 
       case CMD.A:
-        // TODO Arc 判断的开销比较大
+        // TODO Arc Chi phí phán đoán khá lớn
         var cx = data[i++];
         var cy = data[i++];
         var rx = data[i++];
         var ry = data[i++];
         var theta = data[i++];
-        var dTheta = data[i++]; // TODO Arc 旋转
+        var dTheta = data[i++]; // TODO Arc Xoay
 
         var psi = data[i++];
         var anticlockwise = 1 - data[i++];
         var x1 = Math.cos(theta) * rx + cx;
-        var y1 = Math.sin(theta) * ry + cy; // 不是直接使用 arc 命令
+        var y1 = Math.sin(theta) * ry + cy; // Không sử dụng trực tiếp lệnh arc
 
         if (i > 1) {
           w += windingLine(xi, yi, x1, y1, x, y);
         } else {
-          // 第一个命令起点还未定义
+          // Điểm bắt đầu của lệnh đầu tiên chưa được định nghĩa
           x0 = x1;
           y0 = y1;
-        } // zr 使用scale来模拟椭圆, 这里也对x做一定的缩放
+        } // zr Dùng scale để mô phỏng hình elip, Ở đây cũng thực hiện co giãn nhất định đối với x
 
 
         var _x = (x - cx) * ry / rx + cx;
@@ -13602,7 +13602,7 @@ function containPath(data, lineWidth, isStroke, x, y) {
           }
         } else {
           // Close a subpath
-          w += windingLine(xi, yi, x0, y0, x, y); // 如果被任何一个 subpath 包含
+          w += windingLine(xi, yi, x0, y0, x, y); // Nếu được bất kỳ subpath nào chứa
           // FIXME subpaths may overlap
           // if (w !== 0) {
           //     return true;
@@ -13638,7 +13638,7 @@ exports.containStroke = containStroke;
 /***/ (function(module, exports) {
 
 /**
- * 线段包含判断
+ * Phán đoán chứa đoạn thẳng
  * @param  {number}  x0
  * @param  {number}  y0
  * @param  {number}  x1
@@ -13684,7 +13684,7 @@ exports.containStroke = containStroke;
 var curve = __webpack_require__(4);
 
 /**
- * 三次贝塞尔曲线描边包含判断
+ * Phán đoán chứa nét vẽ đường cong Bézier bậc ba
  * @param  {number}  x0
  * @param  {number}  y0
  * @param  {number}  x1
@@ -13724,7 +13724,7 @@ var _curve = __webpack_require__(4);
 var quadraticProjectPoint = _curve.quadraticProjectPoint;
 
 /**
- * 二次贝塞尔曲线描边包含判断
+ * Phán đoán chứa nét vẽ đường cong Bézier bậc hai
  * @param  {number}  x0
  * @param  {number}  y0
  * @param  {number}  x1
@@ -13762,7 +13762,7 @@ var _util = __webpack_require__(22);
 var normalizeRadian = _util.normalizeRadian;
 var PI2 = Math.PI * 2;
 /**
- * 圆弧描边包含判断
+ * Phán đoán chứa nét vẽ cung tròn
  * @param  {number}  cx
  * @param  {number}  cy
  * @param  {number}  r
@@ -14004,7 +14004,7 @@ ZImage.prototype = {
 
     if (!image || !imageHelper.isImageReady(image)) {
       return;
-    } // 图片已经加载完成
+    } // Hình ảnh đã tải xong
     // if (image.nodeName.toUpperCase() == 'IMG') {
     //     if (!image.complete) {
     //         return;
@@ -14027,7 +14027,7 @@ ZImage.prototype = {
     } else if (width == null && height == null) {
       width = image.width;
       height = image.height;
-    } // 设置transform
+    } // Cài đặt transform
 
 
     this.setTransform(ctx);
@@ -14077,7 +14077,7 @@ var Element = __webpack_require__(16);
 var BoundingRect = __webpack_require__(3);
 
 /**
- * Group是一个容器，可以插入子节点，Group的变换也会被应用到子节点上
+ * Group là một container, có thể chèn nút con, phép biến đổi của Group cũng sẽ được áp dụng lên nút con
  * @module zrender/graphic/Group
  * @example
  *     var Group = require('zrender/container/Group');
@@ -14126,7 +14126,7 @@ Group.prototype = {
   type: 'group',
 
   /**
-   * 所有子孙元素是否响应鼠标事件
+   * Tất cả phần tử con cháu có phản hồi sự kiện chuột hay không
    * @name module:/zrender/container/Group#silent
    * @type {boolean}
    * @default false
@@ -14141,7 +14141,7 @@ Group.prototype = {
   },
 
   /**
-   * 获取指定 index 的儿子节点
+   * Lấy nút con có index được chỉ định
    * @param  {number} idx
    * @return {module:zrender/Element}
    */
@@ -14150,7 +14150,7 @@ Group.prototype = {
   },
 
   /**
-   * 获取指定名字的儿子节点
+   * Lấy nút con có tên được chỉ định
    * @param  {string} name
    * @return {module:zrender/Element}
    */
@@ -14172,7 +14172,7 @@ Group.prototype = {
   },
 
   /**
-   * 添加子节点到最后
+   * Thêm nút con vào cuối
    * @param {module:zrender/Element} child
    */
   add: function (child) {
@@ -14186,7 +14186,7 @@ Group.prototype = {
   },
 
   /**
-   * 添加子节点在 nextSibling 之前
+   * Thêm nút con trước nextSibling
    * @param {module:zrender/Element} child
    * @param {module:zrender/Element} nextSibling
    */
@@ -14225,7 +14225,7 @@ Group.prototype = {
   },
 
   /**
-   * 移除子节点
+   * Xóa nút con
    * @param {module:zrender/Element} child
    */
   remove: function (child) {
@@ -14254,7 +14254,7 @@ Group.prototype = {
   },
 
   /**
-   * 移除所有子节点
+   * Xóa tất cả nút con
    */
   removeAll: function () {
     var children = this._children;
@@ -14281,7 +14281,7 @@ Group.prototype = {
   },
 
   /**
-   * 遍历所有子节点
+   * Duyệt tất cả nút con
    * @param  {Function} cb
    * @param  {}   context
    */
@@ -14297,7 +14297,7 @@ Group.prototype = {
   },
 
   /**
-   * 深度优先遍历所有子孙节点
+   * Duyệt theo chiều sâu tất cả nút con cháu
    * @param  {Function} cb
    * @param  {}   context
    */
@@ -14466,7 +14466,7 @@ module.exports = _default;
 var Path = __webpack_require__(1);
 
 /**
- * 圆形
+ * Hình tròn
  * @module zrender/shape/Circle
  */
 var _default = Path.extend({
@@ -14505,7 +14505,7 @@ var Path = __webpack_require__(1);
 var fixClipWithShadow = __webpack_require__(63);
 
 /**
- * 扇形
+ * Hình quạt
  * @module zrender/graphic/shape/Sector
  */
 var _default = Path.extend({
@@ -14613,7 +14613,7 @@ module.exports = _default;
 var Path = __webpack_require__(1);
 
 /**
- * 圆环
+ * Vòng tròn
  * @module zrender/graphic/shape/Ring
  */
 var _default = Path.extend({
@@ -14646,7 +14646,7 @@ var Path = __webpack_require__(1);
 var polyHelper = __webpack_require__(23);
 
 /**
- * 多边形
+ * Đa giác
  * @module zrender/shape/Polygon
  */
 var _default = Path.extend({
@@ -14672,7 +14672,7 @@ var _vector = __webpack_require__(2);
 var v2Distance = _vector.distance;
 
 /**
- * Catmull-Rom spline 插值折线
+ * Catmull-Rom spline Đường gấp khúc nội suy
  * @module zrender/shape/util/smoothSpline
  * @author pissang (https://www.github.com/pissang)
  *         Kener (@Kener-林峰, kener.linfeng@gmail.com)
@@ -14689,7 +14689,7 @@ function interpolate(p0, p1, p2, p3, t, t2, t3) {
 }
 /**
  * @alias module:zrender/shape/util/smoothSpline
- * @param {Array} points 线段顶点数组
+ * @param {Array} points Mảng đỉnh đoạn thẳng
  * @param {boolean} isLoop
  * @return {Array}
  */
@@ -14751,7 +14751,7 @@ var v2Clone = _vector.clone;
 var v2Sub = _vector.sub;
 
 /**
- * 贝塞尔平滑曲线
+ * Đường cong mượt Bézier
  * @module zrender/shape/util/smoothBezier
  * @author pissang (https://www.github.com/pissang)
  *         Kener (@Kener-林峰, kener.linfeng@gmail.com)
@@ -14759,15 +14759,15 @@ var v2Sub = _vector.sub;
  */
 
 /**
- * 贝塞尔平滑曲线
+ * Đường cong mượt Bézier
  * @alias module:zrender/shape/util/smoothBezier
- * @param {Array} points 线段顶点数组
- * @param {number} smooth 平滑等级, 0-1
+ * @param {Array} points Mảng đỉnh đoạn thẳng
+ * @param {number} smooth Mức độ mượt, 0-1
  * @param {boolean} isLoop
- * @param {Array} constraint 将计算出来的控制点约束在一个包围盒内
- *                           比如 [[0, 0], [100, 100]], 这个包围盒会与
- *                           整个折线的包围盒做一个并集用来约束控制点。
- * @param {Array} 计算出来的控制点数组
+ * @param {Array} constraint Ràng buộc điểm điều khiển đã tính được trong một hộp bao
+ *                           ví dụ [[0, 0], [100, 100]], Hộp bao này sẽ
+ *                           lấy hợp với hộp bao của toàn bộ đường gấp khúc để ràng buộc điểm điều khiển.
+ * @param {Array} Mảng điểm điều khiển đã tính được
  */
 function _default(points, smooth, isLoop, constraint) {
   var cps = [];
@@ -14785,7 +14785,7 @@ function _default(points, smooth, isLoop, constraint) {
     for (var i = 0, len = points.length; i < len; i++) {
       v2Min(min, min, points[i]);
       v2Max(max, max, points[i]);
-    } // 与指定的包围盒做并集
+    } // Lấy hợp với hộp bao được chỉ định
 
 
     v2Min(min, min, constraint[0]);
@@ -14883,17 +14883,17 @@ var Path = __webpack_require__(1);
 var roundRectHelper = __webpack_require__(21);
 
 /**
- * 矩形
+ * Hình chữ nhật
  * @module zrender/graphic/shape/Rect
  */
 var _default = Path.extend({
   type: 'rect',
   shape: {
-    // 左上、右上、右下、左下角的半径依次为r1、r2、r3、r4
-    // r缩写为1         相当于 [1, 1, 1, 1]
-    // r缩写为[1]       相当于 [1, 1, 1, 1]
-    // r缩写为[1, 2]    相当于 [1, 2, 1, 2]
-    // r缩写为[1, 2, 3] 相当于 [1, 2, 3, 2]
+    // Bán kính các góc trái trên, phải trên, phải dưới, trái dưới lần lượt là r1, r2, r3,r4
+    // r Viết tắt là 1 tương đương với [1, 1, 1, 1]
+    // r viết tắt thành[1]       Tương đương với [1, 1, 1, 1]
+    // r viết tắt thành[1, 2]    Tương đương với [1, 2, 1, 2]
+    // r viết tắt thành[1, 2, 3] Tương đương với [1, 2, 3, 2]
     r: 0,
     x: 0,
     y: 0,
@@ -14926,7 +14926,7 @@ module.exports = _default;
 var Path = __webpack_require__(1);
 
 /**
- * 直线
+ * Đường thẳng
  * @module zrender/graphic/shape/Line
  */
 var _default = Path.extend({
@@ -14996,7 +14996,7 @@ var quadraticDerivativeAt = _curve.quadraticDerivativeAt;
 var cubicDerivativeAt = _curve.cubicDerivativeAt;
 
 /**
- * 贝塞尔曲线
+ * Đường cong Bézier
  * @module zrender/shape/BezierCurve
  */
 var out = [];
@@ -15103,7 +15103,7 @@ module.exports = _default;
 var Path = __webpack_require__(1);
 
 /**
- * 圆弧
+ * Cung tròn
  * @module zrender/graphic/shape/Arc
  */
 var _default = Path.extend({

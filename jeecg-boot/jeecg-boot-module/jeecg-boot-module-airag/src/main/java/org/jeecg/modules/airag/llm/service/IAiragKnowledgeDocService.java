@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 /**
- * airag知识库文档
+ * airag Tài liệu kho tri thức
  * @Author: jeecg-boot
  * @Date: 2025-02-18
  * @Version: V1.0
@@ -16,7 +16,7 @@ import java.util.List;
 public interface IAiragKnowledgeDocService extends IService<AiragKnowledgeDoc> {
 
     /**
-     * 重建文档
+     * Xây dựng lại tài liệu
      *
      * @param docIds
      * @return
@@ -26,7 +26,7 @@ public interface IAiragKnowledgeDocService extends IService<AiragKnowledgeDoc> {
     Result<?> rebuildDocument(String docIds);
 
     /**
-     * 添加文档
+     * Thêm tài liệu
      *
      * @param airagKnowledgeDoc
      * @return
@@ -37,7 +37,7 @@ public interface IAiragKnowledgeDocService extends IService<AiragKnowledgeDoc> {
 
 
     /**
-     * 通过知识库id重建文档
+     * Xây dựng lại tài liệu theo id kho tri thức
      *
      * @param knowId
      * @return
@@ -48,7 +48,7 @@ public interface IAiragKnowledgeDocService extends IService<AiragKnowledgeDoc> {
 
 
     /**
-     * 通过知识库id删除文档
+     * Xóa tài liệu theo id kho tri thức
      *
      * @param knowIds
      * @return
@@ -58,7 +58,7 @@ public interface IAiragKnowledgeDocService extends IService<AiragKnowledgeDoc> {
     Result<?> removeByKnowIds(List<String> knowIds);
 
     /**
-     * 通过文档id批量删除文档
+     * Xóa hàng loạt tài liệu theo id tài liệu
      *
      * @param docIds
      * @return
@@ -68,7 +68,7 @@ public interface IAiragKnowledgeDocService extends IService<AiragKnowledgeDoc> {
     Result<?> removeDocByIds(List<String> docIds);
 
     /**
-     * 通过知识库id删除所以文档
+     * Xóa tất cả tài liệu theo id kho tri thức
      *
      * @param knowId
      * @return
@@ -76,7 +76,7 @@ public interface IAiragKnowledgeDocService extends IService<AiragKnowledgeDoc> {
     Result<?> deleteAllByKnowId(String knowId);
 
     /**
-     * 从zip包导入文档
+     * Nhập tài liệu từ gói zip
      * @param knowId
      * @param file
      * @return

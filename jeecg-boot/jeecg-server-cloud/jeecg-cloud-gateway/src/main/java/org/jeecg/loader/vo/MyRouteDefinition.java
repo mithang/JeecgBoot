@@ -3,12 +3,12 @@ package org.jeecg.loader.vo;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 
 /**
- * 自定义RouteDefinition
+ * Tùy chỉnh RouteDefinition
  * @author zyf
  */
 public class MyRouteDefinition extends RouteDefinition {
     /**
-     * 路由状态
+     * Trạng thái route
      */
     private Integer status;
 

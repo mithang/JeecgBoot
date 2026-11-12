@@ -19,42 +19,42 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * MCP Server 示例 (Model Context Protocol)
+ * MCP Server Ví dụ (Model Context Protocol)
  * 
- * 这是一个符合 MCP 协议的服务端实现，支持 SSE 传输。
+ * Đây là một triển khai phía máy chủ tuân thủ giao thức MCP， hỗ trợ truyền tải SSE。
  * 
- * 连接地址: http://你的服务器:8080/jeecg-boot/demo/mcp/sse
+ * Địa chỉ kết nối: http://Máy chủ của bạn:8080/jeecg-boot/demo/mcp/sse
  * 
- * 提供的工具:
- * - hello: 打招呼工具
- * - get_time: 获取当前时间
- * - calculate: 简单计算器
+ * Các công cụ được cung cấp:
+ * - hello: Công cụ chào hỏi
+ * - get_time: Lấy thời gian hiện tại
+ * - calculate: Máy tính đơn giản
  */
 @Slf4j
 @RestController
 @RequestMapping("/demo/mcp")
-@Tag(name = "MCP Server 示例")
+@Tag(name = "MCP Server Ví dụ")
 public class McpDemoController {
 
-    // 存储 SSE 连接
+    // Lưu trữ kết nối SSE
     private final Map<String, SseEmitter> sseEmitters = new ConcurrentHashMap<>();
     
-    // 定义工具列表
+    // Định nghĩa danh sách công cụ
     private final List<Map<String, Object>> TOOLS = List.of(
             Map.of(
                     "name", "hello",
-                    "description", "打招呼工具，返回问候语",
+                    "description", "Công cụ chào hỏi， trả về lời chào",
                     "inputSchema", Map.of(
                             "type", "object",
                             "properties", Map.of(
-                                    "name", Map.of("type", "string", "description", "你的名字")
+                                    "name", Map.of("type", "string", "description", "Tên của bạn")
                             ),
                             "required", List.of("name")
                     )
             ),
             Map.of(
                     "name", "get_time",
-                    "description", "获取当前服务器时间",
+                    "description", "Lấy thời gian hiện tại của máy chủ",
                     "inputSchema", Map.of(
                             "type", "object",
                             "properties", Map.of()
@@ -62,13 +62,13 @@ public class McpDemoController {
             ),
             Map.of(
                     "name", "calculate",
-                    "description", "简单计算器，支持加减乘除",
+                    "description", "Máy tính đơn giản， hỗ trợ cộng， trừ， nhân， chia",
                     "inputSchema", Map.of(
                             "type", "object",
                             "properties", Map.of(
-                                    "a", Map.of("type", "number", "description", "第一个数"),
-                                    "b", Map.of("type", "number", "description", "第二个数"),
-                                    "operator", Map.of("type", "string", "description", "运算符: +, -, *, /")
+                                    "a", Map.of("type", "number", "description", "Số thứ nhất"),
+                                    "b", Map.of("type", "number", "description", "Số thứ hai"),
+                                    "operator", Map.of("type", "string", "description", "Toán tử: +, -, *, /")
                             ),
                             "required", List.of("a", "b", "operator")
                     )
@@ -76,74 +76,74 @@ public class McpDemoController {
     );
 
     /**
-     * MCP SSE 端点 - 客户端通过此接口建立 SSE 连接
+     * MCP SSE endpoint - Client thiết lập kết nối SSE qua API này
      */
     @IgnoreAuth
     @GetMapping(value = "/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @Operation(summary = "MCP SSE 连接端点")
+    @Operation(summary = "MCP SSE Endpoint kết nối")
     public SseEmitter sse(HttpServletRequest request) {
         String clientId = UUID.randomUUID().toString();
-        log.info("[MCP Server] 新客户端 SSE 连接: {}", clientId);
+        log.info("[MCP Server] Kết nối SSE của client mới: {}", clientId);
         
-        SseEmitter emitter = new SseEmitter(0L); // 不超时
+        SseEmitter emitter = new SseEmitter(0L); // Không timeout
         sseEmitters.put(clientId, emitter);
         
         emitter.onCompletion(() -> {
-            log.info("[MCP Server] 客户端断开: {}", clientId);
+            log.info("[MCP Server] Client ngắt kết nối: {}", clientId);
             sseEmitters.remove(clientId);
         });
         emitter.onTimeout(() -> {
-            log.info("[MCP Server] 客户端超时: {}", clientId);
+            log.info("[MCP Server] Client bị timeout: {}", clientId);
             sseEmitters.remove(clientId);
         });
         emitter.onError(e -> {
-            log.error("[MCP Server] SSE 错误: {}", e.getMessage());
+            log.error("[MCP Server] SSE Lỗi: {}", e.getMessage());
             sseEmitters.remove(clientId);
         });
         
-        // 发送 endpoint 事件，告诉客户端消息端点地址
+        // Gửi sự kiện endpoint， báo cho client địa chỉ endpoint của tin nhắn
         try {
             String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
             String messageEndpoint = baseUrl + request.getContextPath() + "/demo/mcp/message?sessionId=" + clientId;
             emitter.send(SseEmitter.event()
                     .name("endpoint")
                     .data(messageEndpoint));
-            log.info("[MCP Server] 发送 endpoint 事件: {}", messageEndpoint);
+            log.info("[MCP Server] Gửi sự kiện endpoint: {}", messageEndpoint);
         } catch (IOException e) {
-            log.error("[MCP Server] 发送 endpoint 事件失败", e);
+            log.error("[MCP Server] Gửi sự kiện endpoint thất bại", e);
         }
         
         return emitter;
     }
 
     /**
-     * Streamable HTTP 端点 - 同时支持 POST 到 /sse 的 JSON-RPC 请求
-     * Cursor 客户端会先尝试这种方式
+     * Streamable HTTP endpoint - Đồng thời hỗ trợ POST tới /sse của JSON-RPC Yêu cầu
+     * Cursor Client sẽ thử cách này trước
      */
     @IgnoreAuth
     @PostMapping(value = "/sse")
-    @Operation(summary = "MCP Streamable HTTP 端点")
+    @Operation(summary = "MCP Streamable HTTP endpoint")
     public void ssePost(@RequestBody String body, HttpServletResponse response) throws IOException {
-        log.info("[MCP Server] Streamable HTTP 请求: {}", body);
+        log.info("[MCP Server] Streamable HTTP Yêu cầu: {}", body);
         handleJsonRpcRequest(body, response);
     }
 
     /**
-     * MCP 消息处理端点 - 处理 JSON-RPC 请求
-     * 直接写入原始 JSON-RPC 响应，避免框架包装
+     * MCP Endpoint xử lý tin nhắn - Xử lý JSON-RPC Yêu cầu
+     * Ghi trực tiếp dữ liệu gốc JSON-RPC phản hồi， tránh framework bọc lại
      */
     @IgnoreAuth
     @PostMapping(value = "/message")
-    @Operation(summary = "MCP 消息处理")
+    @Operation(summary = "MCP Xử lý tin nhắn")
     public void handleMessage(@RequestParam(required = false) String sessionId,
                               @RequestBody String body,
                               HttpServletResponse response) throws IOException {
-        log.info("[MCP Server] 收到消息, sessionId: {}, body: {}", sessionId, body);
+        log.info("[MCP Server] Đã nhận tin nhắn, sessionId: {}, body: {}", sessionId, body);
         handleJsonRpcRequest(body, response);
     }
 
     /**
-     * 处理 JSON-RPC 请求的公共方法
+     * Xử lý JSON-RPC Phương thức công khai của yêu cầu
      */
     private void handleJsonRpcRequest(String body, HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
@@ -155,15 +155,15 @@ public class McpDemoController {
             Object id = request.get("id");
             JSONObject params = request.getJSONObject("params");
             
-            // 通知类消息（没有id）不需要响应
+            // Tin nhắn dạng thông báo（không có id）không cần phản hồi
             if (id == null) {
-                log.info("[MCP Server] 收到通知: {}", method);
+                log.info("[MCP Server] Đã nhận thông báo: {}", method);
                 writer.write("{}");
                 writer.flush();
                 return;
             }
             
-            // 构建 JSON-RPC 2.0 响应
+            // Xây dựng JSON-RPC 2.0 Phản hồi
             Map<String, Object> jsonRpcResponse = new LinkedHashMap<>();
             jsonRpcResponse.put("jsonrpc", "2.0");
             jsonRpcResponse.put("id", id);
@@ -178,15 +178,15 @@ public class McpDemoController {
                     case "notifications/cancelled" -> handleCancelled(params);
                     default -> {
                         if (method != null && method.startsWith("notifications/")) {
-                            log.info("[MCP Server] 忽略未知通知: {}", method);
+                            log.info("[MCP Server] Bỏ qua thông báo không xác định: {}", method);
                             yield Map.of();
                         }
-                        throw new RuntimeException("未知方法: " + method);
+                        throw new RuntimeException("Phương thức không xác định: " + method);
                     }
                 };
                 jsonRpcResponse.put("result", result);
             } catch (Exception e) {
-                log.error("[MCP Server] 处理请求失败", e);
+                log.error("[MCP Server] Xử lý yêu cầu thất bại", e);
                 jsonRpcResponse.put("error", Map.of(
                         "code", -32603,
                         "message", e.getMessage()
@@ -194,11 +194,11 @@ public class McpDemoController {
             }
             
             String responseJson = JSON.toJSONString(jsonRpcResponse);
-            log.info("[MCP Server] 返回: {}", responseJson);
+            log.info("[MCP Server] Trả về: {}", responseJson);
             writer.write(responseJson);
             
         } catch (Exception e) {
-            log.error("[MCP Server] 解析请求失败", e);
+            log.error("[MCP Server] Phân tích cú pháp yêu cầu thất bại", e);
             writer.write("{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32700,\"message\":\"Parse error\"}}");
         }
         
@@ -206,10 +206,10 @@ public class McpDemoController {
     }
 
     /**
-     * 处理 initialize 请求
+     * Xử lý yêu cầu initialize
      */
     private Map<String, Object> handleInitialize(JSONObject params) {
-        log.info("[MCP Server] 初始化请求: {}", params);
+        log.info("[MCP Server] Yêu cầu khởi tạo: {}", params);
         return Map.of(
                 "protocolVersion", "2024-11-05",
                 "capabilities", Map.of(
@@ -223,15 +223,15 @@ public class McpDemoController {
     }
     
     /**
-     * 处理 initialized 通知
+     * Xử lý thông báo initialized
      */
     private Map<String, Object> handleInitialized() {
-        log.info("[MCP Server] 客户端已初始化完成");
+        log.info("[MCP Server] Client đã hoàn tất khởi tạo");
         return Map.of();
     }
     
     /**
-     * 处理 ping 请求
+     * Xử lý yêu cầu ping
      */
     private Map<String, Object> handlePing() {
         log.info("[MCP Server] Ping");
@@ -239,23 +239,23 @@ public class McpDemoController {
     }
     
     /**
-     * 处理 notifications/cancelled 通知
+     * Xử lý notifications/cancelled Thông báo
      */
     private Map<String, Object> handleCancelled(JSONObject params) {
-        log.info("[MCP Server] 请求被取消: {}", params);
+        log.info("[MCP Server] Yêu cầu đã bị hủy: {}", params);
         return Map.of();
     }
 
     /**
-     * 处理 tools/list 请求
+     * Xử lý tools/list Yêu cầu
      */
     private Map<String, Object> handleToolsList() {
-        log.info("[MCP Server] 获取工具列表");
+        log.info("[MCP Server] Lấy danh sách công cụ");
         return Map.of("tools", TOOLS);
     }
 
     /**
-     * 处理 tools/call 请求
+     * Xử lý tools/call Yêu cầu
      */
     private Map<String, Object> handleToolsCall(JSONObject params) {
         String toolName = params.getString("name");
@@ -263,7 +263,7 @@ public class McpDemoController {
         if (arguments == null) {
             arguments = new JSONObject();
         }
-        log.info("[MCP Server] 调用工具: {}, 参数: {}", toolName, arguments);
+        log.info("[MCP Server] Gọi công cụ: {}, Tham số: {}", toolName, arguments);
         
         String result = switch (toolName) {
             case "hello" -> {
@@ -271,10 +271,10 @@ public class McpDemoController {
                 if (name == null || name.isEmpty()) {
                     name = "World";
                 }
-                yield "你好, " + name + "! 欢迎使用 JeecgBoot MCP 服务!";
+                yield "Xin chào, " + name + "! Chào mừng bạn sử dụng dịch vụ MCP JeecgBoot!";
             }
             case "get_time" -> {
-                yield "当前时间: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                yield "Thời gian hiện tại: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             }
             case "calculate" -> {
                 double a = arguments.getDoubleValue("a");
@@ -286,11 +286,11 @@ public class McpDemoController {
                     case "-" -> a - b;
                     case "*" -> a * b;
                     case "/" -> b != 0 ? a / b : Double.NaN;
-                    default -> throw new RuntimeException("不支持的运算符: " + op);
+                    default -> throw new RuntimeException("Toán tử không được hỗ trợ: " + op);
                 };
                 yield String.format("%.2f %s %.2f = %.2f", a, op, b, res);
             }
-            default -> throw new RuntimeException("未知工具: " + toolName);
+            default -> throw new RuntimeException("Công cụ không xác định: " + toolName);
         };
         
         return Map.of(
@@ -302,25 +302,25 @@ public class McpDemoController {
     }
 
     /**
-     * 使用说明页面
+     * Trang hướng dẫn sử dụng
      */
     @IgnoreAuth
     @GetMapping("/info")
-    @Operation(summary = "MCP Server 使用说明")
+    @Operation(summary = "MCP Server Hướng dẫn sử dụng")
     public Map<String, Object> info(HttpServletRequest request) {
-        log.info("[MCP Server] Hello 接口被访问");
+        log.info("[MCP Server] Hello API đã được truy cập");
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         return Map.of(
                 "success", true,
-                "message", "JeecgBoot MCP Server 示例",
+                "message", "JeecgBoot MCP Server Ví dụ",
                 "sseUrl", baseUrl + "/demo/mcp/sse",
                 "tools", List.of(
-                        Map.of("name", "hello", "description", "打招呼工具", "params", "name: 你的名字"),
-                        Map.of("name", "get_time", "description", "获取当前时间", "params", "无"),
-                        Map.of("name", "calculate", "description", "简单计算器", "params", "a, b, operator(+,-,*,/)")
+                        Map.of("name", "hello", "description", "Công cụ chào hỏi", "params", "name: Tên của bạn"),
+                        Map.of("name", "get_time", "description", "Lấy thời gian hiện tại", "params", "Không có"),
+                        Map.of("name", "calculate", "description", "Máy tính đơn giản", "params", "a, b, operator(+,-,*,/)")
                 ),
-                "usage", "在 Cursor/Claude 等 MCP 客户端中配置 SSE URL: " + baseUrl + "/demo/mcp/sse",
-                "example", "请调用 hello 工具，参数 name 填 \"测试用户\""
+                "usage", "Trong Cursor/Claude và các MCP client khác để cấu hình SSE URL: " + baseUrl + "/demo/mcp/sse",
+                "example", "Vui lòng gọi công cụ hello， điền tham số name \"Người dùng kiểm tra\""
         );
     }
 }

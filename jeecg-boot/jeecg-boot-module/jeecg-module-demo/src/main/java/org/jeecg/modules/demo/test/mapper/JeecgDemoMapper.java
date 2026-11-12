@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
- * @Description: jeecg 测试demo
+ * @Description: jeecg Kiểm tra demo
  * @Author: jeecg-boot
  * @Date:  2018-12-29
  * @Version: V1.0
@@ -18,14 +18,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public interface JeecgDemoMapper extends BaseMapper<JeecgDemo> {
 
     /**
-     * 根据姓名查询demo列表数据
-     * @param name 姓名
-     * @return demo集合
+     * Truy vấn dữ liệu danh sách demo theo tên
+     * @param name Họ tên
+     * @return demo tập hợp
      */
 	public List<JeecgDemo> getDemoByName(@Param("name") String name);
 	
 	/**
-	 * 查询列表数据 直接传数据权限的sql进行数据过滤
+	 * Truy vấn dữ liệu danh sách, truyền trực tiếp SQL quyền dữ liệu để lọc dữ liệu
 	 * @param page
 	 * @param permissionSql
 	 * @return
@@ -33,14 +33,14 @@ public interface JeecgDemoMapper extends BaseMapper<JeecgDemo> {
 	public IPage<JeecgDemo> queryListWithPermission(Page<JeecgDemo> page,@Param("permissionSql")String permissionSql);
 
 	/**
-	 * 根据前缀获取所有有效权限
+	 * Lấy tất cả quyền hợp lệ theo tiền tố
 	 * @param permsPrefix
 	 * @return
 	 */
 	public List<String> queryAllAuth(@Param("permsPrefix")String permsPrefix);
 
 	/**
-	 * 查询用户已授权字段
+	 * Truy vấn trường đã được ủy quyền của người dùng
 	 * @param userId
 	 * @param permsPrefix
 	 * @return
@@ -49,7 +49,7 @@ public interface JeecgDemoMapper extends BaseMapper<JeecgDemo> {
 
 
 	/**
-	 * 获取创建人
+	 * Lấy người tạo
 	 * @return
 	 */
 	List<String> getCreateByList();

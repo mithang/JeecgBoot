@@ -1,21 +1,21 @@
 [
   {
     "id": 31,
-    "name": "性能监控",
+    "name": "Giám sát hiệu năng",
     "component": "layouts/RouteView",
     "orderNum": 1,
     "hasChildren": true
   },
   {
     "id": 32,
-    "name": "在线文档",
+    "name": "Tài liệu trực tuyến",
     "component": "layouts/IframePageView",
     "orderNum": 2,
     "hasChildren": false
   },
   {
     "id": 33,
-    "name": "工作台",
+    "name": "Bàn làm việc",
     "component": "dashboard/Workplace",
     "orderNum": 3,
     "hasChildren": false

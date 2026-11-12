@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 系统规则控制器
+ * Controller quy tắc hệ thống
  *
  * @author zyf
  * @date 2022-04-13
@@ -236,7 +236,7 @@ public class SystemController extends BaseRuleController {
     private void publishRules(String app) throws Exception {
         List<SystemRuleEntity> rules = repository.findAllByApp(app);
         rulePublisher.publish(app, rules);
-        //延迟加载
+        //Tải chậm
         delayTime();
     }
 }

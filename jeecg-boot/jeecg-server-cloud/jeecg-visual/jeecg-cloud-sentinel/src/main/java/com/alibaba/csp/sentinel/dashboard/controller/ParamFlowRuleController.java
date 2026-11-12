@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 /**
- * 热点参数规则控制器
+ * Controller quy tắc tham số hotspot
  *
  * @author zyf
  * @date 2022-04-13
@@ -240,7 +240,7 @@ public class ParamFlowRuleController extends BaseRuleController {
     private void publishRules(String app) throws Exception {
         List<ParamFlowRuleEntity> rules = repository.findAllByApp(app);
         rulePublisher.publish(app, rules);
-        //延迟加载
+        //Tải chậm
         delayTime();
     }
 

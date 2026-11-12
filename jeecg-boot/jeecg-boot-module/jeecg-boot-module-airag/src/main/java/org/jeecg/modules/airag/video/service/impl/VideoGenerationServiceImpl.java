@@ -31,13 +31,13 @@ import java.time.Duration;
 import java.util.*;
 
 /**
- * AI视频生成服务实现
+ * AI Triển khai dịch vụ tạo video
  */
 @Slf4j
 @Service
 public class VideoGenerationServiceImpl implements IVideoGenerationService {
 
-    /** apiHost 从 yml 配置 jeecg.ai-chat.ai-model-video.api-host 读取，不再硬编码 */
+    /** apiHost được đọc từ cấu hình yml jeecg.ai-chat.ai-model-video.api-host , không còn hardcode */
 
     private static final String REDIS_KEY_PREFIX = "airag:video:";
 
@@ -46,25 +46,25 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
     private static final Map<String, List<String>> PRESET_PROMPTS = new LinkedHashMap<>();
 
     static {
-        PRESET_PROMPTS.put("通用演示", List.of(
-                "一只金毛犬在金色的沙滩上奔跑，海浪轻轻拍打着岸边，阳光明媚，慢动作镜头",
-                "航拍壮丽的山脉全景，云雾缭绕在山峰之间，镜头缓缓推进",
-                "樱花树下，花瓣随风飘落，一条小溪静静流淌，春日午后的宁静氛围"
+        PRESET_PROMPTS.put("Demo chung", List.of(
+                "Một chú chó Golden chạy trên bãi cát vàng, sóng biển nhẹ nhàng vỗ vào bờ, nắng đẹp, cảnh quay chậm",
+                "Quay từ trên cao toàn cảnh dãy núi hùng vĩ, mây mù bao quanh giữa các đỉnh núi, ống kính tiến chậm về phía trước",
+                "Dưới cây hoa anh đào, cánh hoa rơi theo gió, một con suối nhỏ lặng lẽ chảy, không khí yên tĩnh của buổi chiều xuân"
         ));
-        PRESET_PROMPTS.put("产品营销", List.of(
-                "一杯咖啡被缓缓倒入透明玻璃杯中，咖啡与牛奶融合形成美丽的纹理，微距特写",
-                "一款高端智能手表在旋转展示台上缓缓旋转，灯光打在表面上反射出金属光泽，黑色背景",
-                "一双运动鞋踩入水洼溅起水花，慢动作特写，动感活力的画面"
+        PRESET_PROMPTS.put("Marketing sản phẩm", List.of(
+                "Một ly cà phê được rót từ từ vào cốc thủy tinh trong suốt, cà phê và sữa hòa quyện tạo thành họa tiết đẹp, cận cảnh macro",
+                "Một chiếc đồng hồ thông minh cao cấp xoay chậm trên bệ trưng bày xoay, ánh sáng chiếu lên mặt đồng hồ phản chiếu ánh kim loại, nền đen",
+                "Một đôi giày thể thao dẫm vào vũng nước bắn tung tóe, cận cảnh quay chậm, hình ảnh năng động tràn đầy sức sống"
         ));
-        PRESET_PROMPTS.put("教育培训", List.of(
-                "地球从太空视角缓缓旋转，可以看到大气层和云层的细节，星空背景",
-                "一本书的书页被风吹动快速翻动，文字和插图若隐若现，知识流动的意象",
-                "显微镜下的细胞分裂过程，色彩鲜明的科学可视化风格"
+        PRESET_PROMPTS.put("Đào tạo giáo dục", List.of(
+                "Trái Đất từ góc nhìn vũ trụ xoay chậm, có thể thấy chi tiết của tầng khí quyển và tầng mây, nền trời sao",
+                "Các trang của một cuốn sách bị gió thổi lật nhanh, chữ và hình minh họa lúc ẩn lúc hiện, hình tượng tri thức tuôn chảy",
+                "Quá trình phân chia tế bào dưới kính hiển vi, phong cách trực quan hóa khoa học sắc màu tươi sáng"
         ));
-        PRESET_PROMPTS.put("创意设计", List.of(
-                "一座未来主义的城市在日落时分，霓虹灯光倒映在雨水的路面上，赛博朋克风格",
-                "水墨在水中缓缓扩散，形成抽象的山水画意境，中国风艺术效果",
-                "星空下的极光在天空中舞动，色彩绚烂，延时摄影效果"
+        PRESET_PROMPTS.put("Thiết kế sáng tạo", List.of(
+                "Một thành phố vị lai vào lúc hoàng hôn, ánh đèn neon phản chiếu trên mặt đường mưa, phong cách cyberpunk",
+                "Mực tàu lan chậm trong nước, tạo thành ý cảnh tranh sơn thủy trừu tượng, hiệu ứng nghệ thuật phong cách Trung Quốc",
+                "Cực quang dưới bầu trời sao nhảy múa trên không, sắc màu rực rỡ, hiệu ứng chụp timelapse"
         ));
     }
 
@@ -83,9 +83,9 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    /** 实际使用的ffmpeg路径，优先yml配置，其次自动查找 */
+    /** Đường dẫn ffmpeg thực tế đang dùng, ưu tiên cấu hình yml, sau đó tự động tìm */
     private String ffmpegPath;
-    /** 实际使用的edge-tts路径，优先yml配置，其次自动查找 */
+    /** Đường dẫn edge-tts thực tế đang dùng, ưu tiên cấu hình yml, sau đó tự động tìm */
     private String edgeTtsPath;
 
     private final HttpClient httpClient = HttpClient.newBuilder()
@@ -94,7 +94,7 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 
     @PostConstruct
     public void init() {
-        // 从yml配置读取，若为空则自动查找
+        // Đọc từ cấu hình yml, nếu trống thì tự động tìm
         AiChatConfig.VideoModelConfig videoConfig = aiChatConfig.getAiModelVideo();
         String configFfmpeg = videoConfig.getFfmpegPath();
         String configEdgeTts = videoConfig.getEdgeTtsPath();
@@ -111,21 +111,21 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
                     "", "D:/ProgramFiles/miniconda3/Scripts/edge-tts.exe");
         }
 
-        log.info("=== AI视频配音工具检测 ===");
+        log.info("=== AI Kiểm tra công cụ lồng tiếng video ===");
         if (ffmpegPath != null) {
-            log.info("  ffmpeg   : 已找到 -> {}", ffmpegPath);
+            log.info("  ffmpeg   : Đã tìm thấy -> {}", ffmpegPath);
         } else {
-            log.warn("  ffmpeg   : 未安装，视频配音功能将不可用");
+            log.warn("  ffmpeg   : Chưa cài đặt, tính năng lồng tiếng video sẽ không khả dụng");
         }
         if (edgeTtsPath != null) {
-            log.info("  edge-tts : 已找到 -> {}", edgeTtsPath);
+            log.info("  edge-tts : Đã tìm thấy -> {}", edgeTtsPath);
         } else {
-            log.warn("  edge-tts : 未安装，视频配音功能将不可用");
+            log.warn("  edge-tts : Chưa cài đặt, tính năng lồng tiếng video sẽ không khả dụng");
         }
         if (isToolsAvailable()) {
-            log.info("  视频配音功能: 已启用");
+            log.info("  Tính năng lồng tiếng video: Đã kích hoạt");
         } else {
-            log.warn("  视频配音功能: 已禁用（缺少依赖工具，调用配音接口将直接返回无声视频）");
+            log.warn("  Tính năng lồng tiếng video: Đã bị vô hiệu hóa (thiếu công cụ phụ thuộc, việc gọi API lồng tiếng sẽ trả về trực tiếp video không tiếng)");
         }
         log.info("===========================");
     }
@@ -143,14 +143,14 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
         JSONObject body = new JSONObject();
         body.put("model", model);
         body.put("prompt", vo.getPrompt());
-        //生成质量
+        //Chất lượng tạo
         body.put("quality", "quality");
 
-        // 前端传递 izAiAudio：1=使用AI合成音效，0=不使用
+        // Frontend truyền izAiAudio:1=Sử dụng AI để tổng hợp hiệu ứng âm thanh,0=Không dùng
         boolean aiAutoAudio = vo.getIzAiAudio() != null && vo.getIzAiAudio() == 1;
 
         if (model.contains("vidu2")) {
-            // vidu2系列模型使用 aspect_ratio 参数，将 size 转为宽高比
+            // vidu2 dòng mô hình sử dụng aspect_ratio tham số, chuyển size thành tỷ lệ khung hình
             if (vo.getSize() != null) {
                 body.put("aspect_ratio", convertSizeToAspectRatio(vo.getSize()));
             }
@@ -179,18 +179,18 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            log.info("视频生成任务提交响应: status={}, body={}", response.statusCode(), response.body());
+            log.info("Phản hồi gửi nhiệm vụ tạo video: status={}, body={}", response.statusCode(), response.body());
 
             if (response.statusCode() != 200) {
-                return buildFailResult(null, buildApiErrorMessage("提交视频任务", response.statusCode(), response.body()));
+                return buildFailResult(null, buildApiErrorMessage("Gửi nhiệm vụ video", response.statusCode(), response.body()));
             }
 
             JSONObject respJson = JSON.parseObject(response.body());
             String taskId = respJson.getString("id");
 
-            // 缓存prompt到Redis，供视频完成后自动生成语音使用
+            // Cache prompt vào Redis để tự động tạo giọng nói sau khi video hoàn thành
             redisUtil.set(REDIS_KEY_PREFIX + "prompt:" + taskId, vo.getPrompt(), 86400);
-            // 缓存是否AI自动生成音效标记
+            // Cache dấu hiệu có phải AI tự động tạo hiệu ứng âm thanh hay không
             redisUtil.set(REDIS_KEY_PREFIX + "aiAutoAudio:" + taskId, String.valueOf(aiAutoAudio), 86400);
 
             VideoTaskResultVo result = new VideoTaskResultVo();
@@ -198,16 +198,16 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
             result.setStatus("PROCESSING");
             return result;
         } catch (Exception e) {
-            log.error("提交视频生成任务异常", e);
+            log.error("Gửi nhiệm vụ tạo video xảy ra ngoại lệ", e);
             VideoTaskResultVo result = new VideoTaskResultVo();
             result.setStatus("FAIL");
-            result.setMessage("提交任务异常: " + e.getMessage());
+            result.setMessage("Gửi nhiệm vụ xảy ra ngoại lệ: " + e.getMessage());
             return result;
         }
     }
 
 	/**
-	 * 提交 MiniMax H3 异步视频生成任务。
+	 * Gửi nhiệm vụ tạo video bất đồng bộ MiniMax H3.
 	 */
 	private VideoTaskResultVo submitMiniMaxTask(VideoGenerateVo vo, AiChatConfig.ModelConfig config) {
 		try {
@@ -231,30 +231,30 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 					.timeout(Duration.ofSeconds(30))
 					.build();
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-			log.info("MiniMax视频生成任务提交响应: status={}, body={}", response.statusCode(), response.body());
+			log.info("MiniMax Phản hồi gửi nhiệm vụ tạo video: status={}, body={}", response.statusCode(), response.body());
 			if (response.statusCode() != 200) {
-				return buildFailResult(null, buildApiErrorMessage("提交视频任务", response.statusCode(), response.body()));
+				return buildFailResult(null, buildApiErrorMessage("Gửi nhiệm vụ video", response.statusCode(), response.body()));
 			}
 
 			JSONObject responseJson = JSON.parseObject(response.body());
 			String taskId = responseJson.getString("task_id");
 			if (taskId == null || taskId.isBlank()) {
-				return buildFailResult(null, "MiniMax视频任务提交成功，但未返回task_id");
+				return buildFailResult(null, "MiniMax Nhiệm vụ video đã gửi thành công nhưng chưa trả về task_id");
 			}
-			// 缓存生成文案，任务完成后用于保存生成历史。
+			// Cache văn bản đã tạo, sau khi nhiệm vụ hoàn thành dùng để lưu lịch sử tạo.
 			redisUtil.set(REDIS_KEY_PREFIX + "prompt:" + taskId, vo.getPrompt(), 86400);
 			VideoTaskResultVo result = new VideoTaskResultVo();
 			result.setTaskId(taskId);
 			result.setStatus("PROCESSING");
 			return result;
 		} catch (Exception e) {
-			log.error("提交MiniMax视频生成任务异常", e);
-			return buildFailResult(null, "提交MiniMax视频任务异常: " + e.getMessage());
+			log.error("Gửi nhiệm vụ tạo video MiniMax xảy ra ngoại lệ", e);
+			return buildFailResult(null, "Gửi nhiệm vụ video MiniMax xảy ra ngoại lệ: " + e.getMessage());
 		}
 	}
 
 	/**
-	 * 查询 MiniMax H3 异步视频生成任务。
+	 * Truy vấn nhiệm vụ tạo video bất đồng bộ MiniMax H3.
 	 */
 	private VideoTaskResultVo queryMiniMaxTask(String taskId, AiChatConfig.ModelConfig config) {
 		try {
@@ -266,21 +266,21 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 					.build();
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 			if (response.statusCode() != 200) {
-				return buildFailResult(taskId, buildApiErrorMessage("查询视频任务", response.statusCode(), response.body()));
+				return buildFailResult(taskId, buildApiErrorMessage("Truy vấn tác vụ video", response.statusCode(), response.body()));
 			}
 
 			JSONObject responseJson = JSON.parseObject(response.body());
 			JSONObject task = responseJson.getJSONObject("task");
 			if (task == null) {
-				return buildFailResult(taskId, "MiniMax查询响应中缺少task");
+				return buildFailResult(taskId, "MiniMax Trong phản hồi truy vấn thiếu task");
 			}
 			String status = task.getString("status");
-			log.info("查询MiniMax视频任务: taskId={}, 任务状态={}", taskId, status);
+			log.info("Truy vấn nhiệm vụ video MiniMax: taskId={}, Trạng thái nhiệm vụ={}", taskId, status);
 			if ("succeeded".equalsIgnoreCase(status)) {
 				JSONObject taskContent = task.getJSONObject("content");
 				String remoteVideoUrl = taskContent == null ? null : taskContent.getString("url");
 				if (remoteVideoUrl == null || remoteVideoUrl.isBlank()) {
-					return buildFailResult(taskId, "MiniMax视频生成成功，但未返回视频地址");
+					return buildFailResult(taskId, "MiniMax Tạo video thành công nhưng chưa trả về địa chỉ video");
 				}
 				VideoTaskResultVo result = new VideoTaskResultVo();
 				result.setTaskId(taskId);
@@ -288,7 +288,7 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 				String localVideoPath = downloadToLocal(remoteVideoUrl, "video_" + taskId + ".mp4");
 				result.setVideoUrl(localVideoPath);
 
-				// 前端会轮询任务状态，删除成功的请求负责入库，避免同一视频重复写入生成历史。
+				// Frontend sẽ thăm dò trạng thái nhiệm vụ; yêu cầu xóa thành công sẽ chịu trách nhiệm ghi vào kho, tránh ghi trùng lịch sử tạo cho cùng một video.
 				String promptKey = REDIS_KEY_PREFIX + "prompt:" + taskId;
 				Object cachedPrompt = redisTemplate.opsForValue().get(promptKey);
 				if (cachedPrompt != null && Boolean.TRUE.equals(redisTemplate.delete(promptKey))) {
@@ -305,8 +305,8 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 			result.setStatus("PROCESSING");
 			return result;
 		} catch (Exception e) {
-			log.error("查询MiniMax视频任务异常, taskId={}", taskId, e);
-			return buildFailResult(taskId, "查询MiniMax视频任务异常: " + e.getMessage());
+			log.error("Lỗi truy vấn nhiệm vụ video MiniMax, taskId={}", taskId, e);
+			return buildFailResult(taskId, "Lỗi truy vấn nhiệm vụ video MiniMax: " + e.getMessage());
 		}
 	}
 
@@ -330,13 +330,13 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                log.error("查询视频任务HTTP失败: taskId={}, httpStatus={}, body={}", taskId, response.statusCode(), response.body());
-                return buildFailResult(taskId, buildApiErrorMessage("查询视频任务", response.statusCode(), response.body()));
+                log.error("Truy vấn nhiệm vụ video qua HTTP thất bại: taskId={}, httpStatus={}, body={}", taskId, response.statusCode(), response.body());
+                return buildFailResult(taskId, buildApiErrorMessage("Truy vấn tác vụ video", response.statusCode(), response.body()));
             }
 
             JSONObject respJson = JSON.parseObject(response.body());
             String taskStatus = respJson.getString("task_status");
-            log.info("查询视频任务: taskId={}, 任务状态={}", taskId, taskStatus);
+            log.info("Truy vấn tác vụ video: taskId={}, Trạng thái nhiệm vụ={}", taskId, taskStatus);
 
             VideoTaskResultVo result = new VideoTaskResultVo();
             result.setTaskId(taskId);
@@ -348,26 +348,26 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
                     JSONObject firstVideo = videoResult.getJSONObject(0);
                     String remoteVideoUrl = firstVideo.getString("url");
                     String remoteCoverUrl = firstVideo.getString("cover_image_url");
-                    log.info("视频生成完成: taskId={}, videoUrl={}", taskId, remoteVideoUrl);
+                    log.info("Tạo video hoàn thành: taskId={}, videoUrl={}", taskId, remoteVideoUrl);
 
-                    // 删除prompt缓存，只有删除成功的请求才执行后续处理（防止并发轮询重复存储）
+                    // Xóa cache prompt; chỉ yêu cầu xóa thành công mới thực hiện xử lý tiếp theo (ngăn lưu trữ trùng lặp do thăm dò đồng thời)
                     String promptKey = REDIS_KEY_PREFIX + "prompt:" + taskId;
                     String aiAutoAudioKey = REDIS_KEY_PREFIX + "aiAutoAudio:" + taskId;
-                    //update-begin---author:wangshuai---date:2026-03-23---for:【QQYUN-14960】【AI生成视频】报错了，实际视频已经生成完了---
+                    //update-begin---author:wangshuai---date:2026-03-23---for:【QQYUN-14960】【AI tạo video】Đã báo lỗi, thực tế video đã được tạo xong---
                     Object cachedPrompt = redisTemplate.opsForValue().get(promptKey);
                     if (cachedPrompt != null) {
                         redisTemplate.delete(promptKey);
                     }
                     String prompt = cachedPrompt != null ? cachedPrompt.toString() : null;
-                    // 判断是否采用AI自动生成音效
+                    // Xác định có dùng AI tự động tạo hiệu ứng âm thanh hay không
                     Object cachedAiAutoAudio = redisTemplate.opsForValue().get(aiAutoAudioKey);
                     if (cachedAiAutoAudio != null) {
                         redisTemplate.delete(aiAutoAudioKey);
                     }
-                    //update-end---author:wangshuai---date:2026-03-23---for:【QQYUN-14960】【AI生成视频】报错了，实际视频已经生成完了---
+                    //update-end---author:wangshuai---date:2026-03-23---for:【QQYUN-14960】【AI tạo video】Đã báo lỗi, thực tế video đã được tạo xong---
                     boolean aiAutoAudio = cachedAiAutoAudio != null && "true".equals(cachedAiAutoAudio.toString());
 
-                    // 下载视频和封面到本地，避免远程链接失效
+                    // Tải video và ảnh bìa về máy local để tránh liên kết từ xa hết hạn
                     if (remoteCoverUrl != null && !remoteCoverUrl.isBlank()) {
                         String localCoverPath = downloadToLocal(remoteCoverUrl, "cover_" + taskId + ".jpg");
                         result.setCoverUrl(localCoverPath);
@@ -375,36 +375,36 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
                     String localVideoPath = downloadToLocal(remoteVideoUrl, "video_" + taskId + ".mp4");
                     result.setVideoUrl(localVideoPath);
 
-                    // 仅在prompt缓存存在时执行一次（getAndDelete保证只有一个请求能获取到）
+                    // Chỉ thực thi một lần khi cache prompt tồn tại (getAndDelete đảm bảo chỉ một yêu cầu có thể lấy được)
                     if (prompt != null && !prompt.isBlank()) {
                         if (aiAutoAudio) {
-                            log.info("AI自动生成音效模式，跳过autoAddVoiceover: taskId={}", taskId);
+                            log.info("AI Chế độ tự động tạo hiệu ứng âm thanh, bỏ qua autoAddVoiceover: taskId={}", taskId);
                         } else {
-                            log.info("非AI自动音效模式，开始autoAddVoiceover: taskId={}, prompt={}", taskId, prompt);
+                            log.info("Chế độ hiệu ứng âm thanh không phải AI tự động, bắt đầu autoAddVoiceover: taskId={}, prompt={}", taskId, prompt);
                             autoAddVoiceover(taskId, prompt, localVideoPath, result);
                         }
-                        // 存入Redis记录
+                        // Lưu bản ghi vào Redis
                         saveVideoToRedis(result, prompt);
                     } else {
-                        log.info("未检测到prompt缓存（已处理过或旧任务），跳过自动配音: taskId={}", taskId);
+                        log.info("Không phát hiện cache prompt (đã xử lý hoặc là nhiệm vụ cũ), bỏ qua tự động lồng tiếng: taskId={}", taskId);
                     }
                 }
             } else if ("FAIL".equals(taskStatus)) {
                 result.setStatus("FAIL");
                 result.setMessage(respJson.getString("message"));
-                log.error("视频生成失败: taskId={}, message={}", taskId, result.getMessage());
+                log.error("Tạo video thất bại: taskId={}, message={}", taskId, result.getMessage());
             } else {
                 result.setStatus("PROCESSING");
-                log.info("视频生成中: taskId={}, 等待完成...", taskId);
+                log.info("Đang tạo video: taskId={}, Đang chờ hoàn thành...", taskId);
             }
 
             return result;
         } catch (Exception e) {
-            log.error("查询视频任务异常, taskId={}", taskId, e);
+            log.error("Truy vấn nhiệm vụ video xảy ra ngoại lệ, taskId={}", taskId, e);
             VideoTaskResultVo result = new VideoTaskResultVo();
             result.setTaskId(taskId);
             result.setStatus("FAIL");
-            result.setMessage("查询任务异常: " + e.getMessage());
+            result.setMessage("Truy vấn nhiệm vụ xảy ra ngoại lệ: " + e.getMessage());
             return result;
         }
     }
@@ -422,27 +422,27 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 	}
 
 	/**
-	 * 将视频模型接口的HTTP错误转换为可操作的提示，避免 401 等被误认为是系统登录失效。
+	 * Chuyển lỗi HTTP của API mô hình video thành gợi ý có thể xử lý, tránh việc 401 v.v. bị nhầm là hết hạn đăng nhập hệ thống.
 	 *
-	 * @param action       操作名称，如“提交视频任务”
-	 * @param statusCode   第三方接口HTTP状态码
-	 * @param responseBody 第三方接口响应体
+	 * @param action       Tên thao tác, ví dụ “Gửi nhiệm vụ video”
+	 * @param statusCode   Mã trạng thái HTTP của API bên thứ ba
+	 * @param responseBody Body phản hồi của API bên thứ ba
 	 */
 	private String buildApiErrorMessage(String action, int statusCode, String responseBody) {
 		String reason = switch (statusCode) {
-			case 401, 403 -> "视频模型 API Key 无效或已过期，请联系管理员检查配置 jeecg.ai-chat.ai-model-video.apiKey";
-			case 404 -> "视频模型接口地址或模型不存在，请检查配置 jeecg.ai-chat.ai-model-video 的 apiHost 和 model";
-			case 429 -> "视频模型调用频率超限或账户余额不足，请稍后重试或检查模型平台账户额度";
-			case 400 -> "请求参数不被视频模型接受，请调整描述、尺寸或时长后重试";
-			default -> statusCode >= 500 ? "视频模型服务暂时不可用，请稍后重试" : "视频模型接口调用异常";
+			case 401, 403 -> "API Key của mô hình video không hợp lệ hoặc đã hết hạn, vui lòng liên hệ quản trị viên để kiểm tra cấu hình jeecg.ai-chat.ai-model-video.apiKey";
+			case 404 -> "Địa chỉ API mô hình video hoặc mô hình không tồn tại, vui lòng kiểm tra cấu hình jeecg.ai-chat.ai-model-video của apiHost và model";
+			case 429 -> "Tần suất gọi mô hình video vượt giới hạn hoặc số dư tài khoản không đủ, vui lòng thử lại sau hoặc kiểm tra hạn mức tài khoản nền tảng mô hình";
+			case 400 -> "Tham số yêu cầu không được mô hình video chấp nhận, vui lòng điều chỉnh mô tả, kích thước hoặc thời lượng rồi thử lại";
+			default -> statusCode >= 500 ? "Dịch vụ mô hình video tạm thời không khả dụng, vui lòng thử lại sau" : "Gọi API mô hình video xảy ra ngoại lệ";
 		};
 		String apiMessage = parseApiErrorMessage(responseBody);
-		String detail = apiMessage == null ? "HTTP " + statusCode : "HTTP " + statusCode + "，平台返回：" + apiMessage;
-		return action + "失败：" + reason + "（" + detail + "）";
+		String detail = apiMessage == null ? "HTTP " + statusCode : "HTTP " + statusCode + ", nền tảng trả về:" + apiMessage;
+		return action + "Thất bại:" + reason + "（" + detail + "）";
 	}
 
 	/**
-	 * 从第三方错误响应中提取错误信息，兼容智谱 error.message 与 MiniMax base_resp.status_msg。
+	 * Trích xuất thông tin lỗi từ phản hồi lỗi của bên thứ ba, tương thích với Zhipu error.message và MiniMax base_resp.status_msg。
 	 */
 	private String parseApiErrorMessage(String responseBody) {
 		try {
@@ -457,7 +457,7 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 			}
 			return responseJson.getString("message");
 		} catch (Exception ignored) {
-			// 非JSON错误响应不返回平台信息。
+			// Phản hồi lỗi không phải JSON không trả về thông tin nền tảng.
 			return null;
 		}
 	}
@@ -468,29 +468,29 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 			return error.getString("message");
 		}
 		String message = task.getString("message");
-		return message == null || message.isBlank() ? "MiniMax视频任务状态: " + status : message;
+		return message == null || message.isBlank() ? "MiniMax Trạng thái nhiệm vụ video: " + status : message;
 	}
 
     @Override
     public VideoTaskResultVo addVoiceover(String taskId, String prompt) {
-        // 1. 先查询任务状态，获取视频URL
+        // 1. Trước tiên truy vấn trạng thái nhiệm vụ để lấy video URL
         VideoTaskResultVo queryResult = queryTask(taskId);
         if (!"SUCCESS".equals(queryResult.getStatus())) {
-            queryResult.setMessage("视频任务尚未完成，当前状态: " + queryResult.getStatus());
+            queryResult.setMessage("Nhiệm vụ video chưa hoàn thành, trạng thái hiện tại: " + queryResult.getStatus());
             return queryResult;
         }
         String videoUrl = queryResult.getVideoUrl();
         if (videoUrl == null || videoUrl.isBlank()) {
             queryResult.setStatus("FAIL");
-            queryResult.setMessage("视频URL为空");
+            queryResult.setMessage("URL video trống");
             return queryResult;
         }
 
-        // 2. 检测依赖工具是否可用，不可用则直接返回无声视频
+        // 2. Kiểm tra công cụ phụ thuộc có khả dụng không; nếu không khả dụng thì trả về trực tiếp video không tiếng
         if (!isToolsAvailable()) {
-            log.warn("服务器未安装 edge-tts 或 ffmpeg，跳过配音，直接返回无声视频。" +
+            log.warn("Máy chủ chưa cài đặt edge-tts hoặc ffmpeg, bỏ qua lồng tiếng và trả về trực tiếp video không tiếng." +
                     "edge-tts={}, ffmpeg={}", edgeTtsPath, ffmpegPath);
-            queryResult.setMessage("服务器未安装配音依赖（edge-tts/ffmpeg），返回原始无声视频");
+            queryResult.setMessage("Máy chủ chưa cài đặt dependency lồng tiếng (edge-tts/ffmpeg), trả về video không tiếng gốc");
             return queryResult;
         }
 
@@ -502,43 +502,43 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 
             String timestamp = String.valueOf(System.currentTimeMillis());
 
-            // 3. 下载无声视频
+            // 3. Tải video không tiếng
             Path silentVideo = downloadFile(videoUrl, outputDir.resolve("silent_" + timestamp + ".mp4"));
-            log.info("无声视频已下载: {}", silentVideo);
+            log.info("Video không tiếng đã được tải xuống: {}", silentVideo);
 
-            // 4. 生成旁白文案
+            // 4. Tạo nội dung lời bình
             String narration = generateNarration(prompt);
-            log.info("旁白文案: {}", narration);
+            log.info("Nội dung lời dẫn: {}", narration);
 
-            // 5. TTS生成语音
+            // 5. TTS Tạo giọng nói
             Path audioPath = outputDir.resolve("voiceover_" + timestamp + ".mp3");
             generateTtsAudio(narration, audioPath);
-            log.info("语音已生成: {}", audioPath);
+            log.info("Giọng nói đã được tạo: {}", audioPath);
 
-            // 6. FFmpeg合成有声视频
+            // 6. FFmpeg Tổng hợp video có tiếng
             String finalFileName = "video_" + timestamp + ".mp4";
             Path finalVideo = outputDir.resolve(finalFileName);
             mergeVideoAudio(silentVideo, audioPath, finalVideo);
-            log.info("合成视频已生成: {}", finalVideo);
+            log.info("Video đã tổng hợp đã được tạo: {}", finalVideo);
 
-            // 7. 清理临时文件
+            // 7. Dọn dẹp tệp tạm
             Files.deleteIfExists(silentVideo);
             Files.deleteIfExists(audioPath);
 
-            // 8. 返回结果（使用相对路径，通过静态资源映射访问）
+            // 8. Trả về kết quả (sử dụng đường dẫn tương đối, truy cập qua ánh xạ tài nguyên tĩnh)
             String dbPath = bizPath + "/" + finalFileName;
             queryResult.setVoiceoverVideoUrl(dbPath);
             queryResult.setNarration(narration);
             return queryResult;
         } catch (Exception e) {
-            log.error("添加配音异常, taskId={}，降级返回无声视频", taskId, e);
-            queryResult.setMessage("配音处理异常（已降级返回无声视频）: " + e.getMessage());
+            log.error("Thêm lồng tiếng xảy ra ngoại lệ, taskId={}, hạ cấp trả về video không tiếng", taskId, e);
+            queryResult.setMessage("Xử lý lồng tiếng xảy ra ngoại lệ (đã hạ cấp trả về video không tiếng): " + e.getMessage());
             return queryResult;
         }
     }
 
     /**
-     * 检测 edge-tts 和 ffmpeg 是否可用
+     * Kiểm tra edge-tts và ffmpeg có khả dụng không
      */
     private boolean isToolsAvailable() {
         return edgeTtsPath != null && ffmpegPath != null;
@@ -579,16 +579,16 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
     }
 
     /**
-     * 将视频生成记录存入Redis
+     * Lưu bản ghi tạo video vào Redis
      *
-     * @param result 视频结果
-     * @param prompt 用户原始prompt
+     * @param result Kết quả video
+     * @param prompt Gốc của người dùng prompt
      */
     private void saveVideoToRedis(VideoTaskResultVo result, String prompt) {
         try {
             LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
             if (loginUser == null) {
-                log.warn("未获取到登录用户，跳过Redis存储");
+                log.warn("Chưa lấy được người dùng đăng nhập, bỏ qua lưu trữ Redis");
                 return;
             }
             String redisKey = REDIS_KEY_PREFIX + loginUser.getId();
@@ -603,14 +603,14 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
             record.put("createTime", java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
             redisUtil.lSet(redisKey, record.toJSONString());
-            log.info("视频记录已存入Redis列表: key={}", redisKey);
+            log.info("Bản ghi video đã được lưu vào danh sách Redis: key={}", redisKey);
         } catch (Exception e) {
-            log.warn("视频记录存入Redis失败，不影响主流程", e);
+            log.warn("Lưu bản ghi video vào Redis thất bại, không ảnh hưởng đến quy trình chính", e);
         }
     }
 
     /**
-     * 将远程文件下载到本地上传目录，返回相对路径（ai_video/xxx）
+     * Tải tệp từ xa về thư mục upload local, trả về đường dẫn tương đối (ai_video/xxx）
      */
     private String downloadToLocal(String remoteUrl, String fileName) {
         try {
@@ -621,16 +621,16 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 
             Path localFile = outputDir.resolve(fileName);
             downloadFile(remoteUrl, localFile);
-            log.info("远程文件已下载到本地: {} -> {}", remoteUrl, localFile);
+            log.info("Tệp từ xa đã được tải về máy local: {} -> {}", remoteUrl, localFile);
             return bizPath + "/" + fileName;
         } catch (Exception e) {
-            log.warn("下载远程文件到本地失败，返回原始URL: {}", remoteUrl, e);
+            log.warn("Tải tệp từ xa về máy local thất bại, trả về gốc URL: {}", remoteUrl, e);
             return remoteUrl;
         }
     }
 
     /**
-     * 下载文件到本地
+     * Tải tệp về máy local
      */
     private Path downloadFile(String url, Path outputPath) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
@@ -643,18 +643,18 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
     }
 
 	/**
-	 * 获取视频模型 API 基础地址并校验配置。
+	 * Lấy địa chỉ cơ sở API mô hình video và kiểm chứng cấu hình.
 	 */
 	private String getVideoApiBaseUrl(AiChatConfig.ModelConfig config) {
 		String apiHost = config.getApiHost();
 		if (apiHost == null || apiHost.isBlank()) {
-			throw new IllegalStateException("视频模型 api-host 未配置，请检查 jeecg.ai-chat.ai-model-video.api-host");
+			throw new IllegalStateException("Mô hình video api-host Chưa cấu hình, vui lòng kiểm tra jeecg.ai-chat.ai-model-video.api-host");
 		}
 		return apiHost.endsWith("/") ? apiHost.substring(0, apiHost.length() - 1) : apiHost;
 	}
 
     /**
-     * 调用智谱GLM生成旁白文案
+     * Gọi Zhipu GLM để tạo văn bản lời bình
      */
     private String generateNarration(String videoPrompt) throws IOException, InterruptedException {
         AiChatConfig.ModelConfig config = aiChatConfig.getAiModelVideo();
@@ -667,13 +667,13 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 
         JSONObject systemMsg = new JSONObject();
         systemMsg.put("role", "system");
-        systemMsg.put("content", "你是一位专业的视频旁白撰写者。根据用户给出的视频画面描述，"
-                + "撰写一段简短的旁白配音文案（30-50字），语言优美、富有感染力，适合作为视频解说词。"
-                + "只输出旁白文案本身，不要加引号或其他说明。");
+        systemMsg.put("content", "Bạn là một người viết lời bình video chuyên nghiệp. Dựa trên mô tả hình ảnh video mà người dùng đưa ra,"
+                + "hãy viết một đoạn văn bản lời bình lồng tiếng ngắn gọn (30-50 từ), ngôn ngữ đẹp, giàu cảm xúc, phù hợp làm lời thuyết minh video."
+                + "Chỉ xuất ra chính văn bản lời bình, không thêm dấu ngoặc kép hay giải thích khác.");
 
         JSONObject userMsg = new JSONObject();
         userMsg.put("role", "user");
-        userMsg.put("content", "视频画面：" + videoPrompt);
+        userMsg.put("content", "Hình ảnh video:" + videoPrompt);
 
         messages.add(systemMsg);
         messages.add(userMsg);
@@ -689,7 +689,7 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() != 200) {
-            throw new RuntimeException("旁白生成失败，状态码: " + response.statusCode());
+            throw new RuntimeException("Tạo lời bình thất bại, mã trạng thái: " + response.statusCode());
         }
 
         JSONObject respJson = JSON.parseObject(response.body());
@@ -701,7 +701,7 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
     }
 
     /**
-     * 使用 edge-tts 将文本转为语音
+     * Sử dụng edge-tts Chuyển văn bản thành giọng nói
      */
     private void generateTtsAudio(String text, Path audioPath) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder(
@@ -715,25 +715,25 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
         String output = new String(process.getInputStream().readAllBytes());
         int exitCode = process.waitFor();
         if (exitCode != 0) {
-            log.error("edge-tts 执行失败: {}", output);
-            throw new RuntimeException("edge-tts 执行失败，退出码: " + exitCode);
+            log.error("edge-tts Thực thi thất bại: {}", output);
+            throw new RuntimeException("edge-tts Thực thi thất bại, mã thoát: " + exitCode);
         }
     }
 
     /**
-     * 视频生成成功后，自动生成语音并合并（参照 addVoiceover 逻辑）
-     * 使用 TTS API（VoiceApiHelper）生成语音，ffmpeg 合并
-     * 失败时降级返回无声视频，不影响主流程
+     * Sau khi tạo video thành công, tự động tạo giọng nói và hợp nhất (tham khảo logic addVoiceover)
+     * Sử dụng TTS API (VoiceApiHelper) để tạo giọng nói, ffmpeg hợp nhất
+     * Khi thất bại, hạ cấp trả về video không tiếng, không ảnh hưởng đến quy trình chính
      *
-     * @param taskId         任务ID
-     * @param prompt         用户原始prompt
-     * @param localVideoPath 本地无声视频相对路径（如 video/video_xxx.mp4）
-     * @param result         结果对象，成功时更新 videoUrl 和 narration
+     * @param taskId         Nhiệm vụ ID
+     * @param prompt         Gốc của người dùng prompt
+     * @param localVideoPath Đường dẫn tương đối của video không tiếng trên máy local (ví dụ video/video_xxx.mp4）
+     * @param result         Đối tượng kết quả, khi thành công cập nhật videoUrl và narration
      */
     private void autoAddVoiceover(String taskId, String prompt, String localVideoPath, VideoTaskResultVo result) {
-        log.info(">>> autoAddVoiceover 开始: taskId={}, ffmpeg={}, localVideoPath={}", taskId, ffmpegPath, localVideoPath);
+        log.info(">>> autoAddVoiceover Bắt đầu: taskId={}, ffmpeg={}, localVideoPath={}", taskId, ffmpegPath, localVideoPath);
         if (ffmpegPath == null) {
-            log.info("ffmpeg不可用，跳过自动配音: taskId={}", taskId);
+            log.info("ffmpeg không khả dụng, bỏ qua tự động lồng tiếng: taskId={}", taskId);
             return;
         }
 
@@ -745,40 +745,40 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 
             String timestamp = String.valueOf(System.currentTimeMillis());
 
-            // 1. 生成旁白文案
-            log.info("自动配音第1步-生成旁白文案: taskId={}", taskId);
+            // 1. Tạo nội dung lời bình
+            log.info("Bước 1 lồng tiếng tự động-Tạo nội dung lời bình: taskId={}", taskId);
             String narration = generateNarration(prompt);
-            log.info("自动配音旁白文案: {}", narration);
+            log.info("Văn bản lời bình lồng tiếng tự động: {}", narration);
 
-            // 2. TTS API 生成语音
+            // 2. TTS API Tạo giọng nói
             Path audioPath = outputDir.resolve("auto_voice_" + taskId + "_" + timestamp + ".wav");
-            log.info("自动配音第2步-TTS生成语音: taskId={}, audioPath={}", taskId, audioPath);
+            log.info("Bước 2 lồng tiếng tự động-TTS Tạo giọng nói: taskId={}, audioPath={}", taskId, audioPath);
             voiceApiHelper.generateAudio(narration, audioPath);
-            log.info("自动配音语音已生成: {}, 文件存在={}", audioPath, Files.exists(audioPath));
+            log.info("Giọng nói lồng tiếng tự động đã được tạo: {}, Tệp tồn tại={}", audioPath, Files.exists(audioPath));
 
-            // 3. FFmpeg 合并视频和音频
+            // 3. FFmpeg Gộp video và âm thanh
             Path silentVideoFile = outputDir.resolve("video_" + taskId + ".mp4");
-            log.info("自动配音第3步-FFmpeg合并: silentVideo={} (存在={})", silentVideoFile, Files.exists(silentVideoFile));
+            log.info("Bước 3 lồng tiếng tự động-FFmpeg Hợp nhất: silentVideo={} (có={})", silentVideoFile, Files.exists(silentVideoFile));
             String mergedFileName = "video_voiced_" + taskId + "_" + timestamp + ".mp4";
             Path mergedVideo = outputDir.resolve(mergedFileName);
             mergeVideoAudio(silentVideoFile, audioPath, mergedVideo);
-            log.info("自动配音合成完成: {}, 文件存在={}", mergedVideo, Files.exists(mergedVideo));
+            log.info("Tổng hợp lồng tiếng tự động hoàn thành: {}, Tệp tồn tại={}", mergedVideo, Files.exists(mergedVideo));
 
-            // 4. 更新结果为有声视频
+            // 4. Cập nhật kết quả thành video có tiếng
             result.setVideoUrl(bizPath + "/" + mergedFileName);
             result.setNarration(narration);
 
-            // 5. 清理临时音频文件
+            // 5. Dọn dẹp tệp âm thanh tạm
             Files.deleteIfExists(audioPath);
 
-            log.info(">>> autoAddVoiceover 完成: taskId={}, videoUrl={}", taskId, result.getVideoUrl());
+            log.info(">>> autoAddVoiceover Hoàn thành: taskId={}, videoUrl={}", taskId, result.getVideoUrl());
         } catch (Exception e) {
-            log.error(">>> autoAddVoiceover 失败，降级返回无声视频: taskId={}", taskId, e);
+            log.error(">>> autoAddVoiceover Thất bại, hạ cấp trả về video không tiếng: taskId={}", taskId, e);
         }
     }
 
     /**
-     * 使用 FFmpeg 合并视频和音频
+     * Sử dụng FFmpeg để hợp nhất video và âm thanh
      */
     private void mergeVideoAudio(Path videoPath, Path audioPath, Path outputPath) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder(
@@ -796,24 +796,24 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
         String output = new String(process.getInputStream().readAllBytes());
         int exitCode = process.waitFor();
         if (exitCode != 0) {
-            log.error("FFmpeg 合成失败: {}", output);
-            throw new RuntimeException("FFmpeg 合成失败，退出码: " + exitCode);
+            log.error("FFmpeg Tổng hợp thất bại: {}", output);
+            throw new RuntimeException("FFmpeg Tổng hợp thất bại, mã thoát: " + exitCode);
         }
     }
 
     /**
-     * 将 size（如 "1920x1080"）转为 vidu2 的 aspect_ratio 格式（如 "16:9"）
-     * 支持的比例：16:9、9:16、1:1，无法识别时默认 16:9
+     * Chuyển size (ví dụ "1920x1080") thành của vidu2 aspect_ratio định dạng (ví dụ "16:9"）
+     * Các tỷ lệ được hỗ trợ:16:9、9:16、1:1, khi không nhận dạng được thì mặc định 16:9
      */
     private String convertSizeToAspectRatio(String size) {
         if (size == null || size.isBlank()) {
             return "16:9";
         }
-        // 已经是比例格式则直接返回
+        // Nếu đã là định dạng tỷ lệ thì trả về trực tiếp
         if (size.matches("\\d+:\\d+")) {
             return size;
         }
-        // 解析 WxH 格式
+        // Phân tích định dạng WxH
         String[] parts = size.toLowerCase().split("x");
         if (parts.length == 2) {
             try {
@@ -833,7 +833,7 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
     }
 
     /**
-     * 查找可用的命令路径，找不到返回null
+     * Tìm đường dẫn lệnh khả dụng, nếu không tìm thấy trả về null
      */
     private static String findCommand(String[] versionFlag, String... candidates) {
         for (String path : candidates) {

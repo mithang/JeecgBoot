@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 发送消息的入参
+ * @Description: Tham số đầu vào gửi tin nhắn
  * @Author: chenrui
  * @Date: 2025/2/25 11:47
  */
@@ -23,87 +23,87 @@ public class ChatSendParams {
     }
 
     /**
-     * 用户输入的聊天内容
+     * Nội dung trò chuyện do người dùng nhập
      */
     private String content;
 
     /**
-     * 对话会话ID
+     * Phiên hội thoại ID
      */
     private String conversationId;
 
     /**
-     * 对话主题ID（用于关联历史记录）
+     * ID chủ đề hội thoại (dùng để liên kết lịch sử)
      */
     private String topicId;
 
     /**
-     * 应用id
+     * Ứng dụng id
      */
     private String appId;
 
     /**
-     * 分享令牌（匿名访问必填）
+     * Token chia sẻ (bắt buộc đối với truy cập ẩn danh)
      *
      * @author scott
-     * @since 2026-07-21 【issues/9787】匿名发送携带分享令牌
+     * @since 2026-07-21 【issues/9787】Gửi ẩn danh mang theo token chia sẻ
      */
     private String shareToken;
 
     /**
-     * 图片列表
+     * Danh sách hình ảnh
      */
     private List<String> images;
 
     /**
-     * 文件列表
+     * Danh sách tệp
      */
     private List<String> files;
 
     /**
-     * 工作流额外入参配置
-     * key: 参数field, value: 参数值
-     * for [issues/8545]新建AI应用的时候只能选择没有自定义参数的AI流程
+     * Cấu hình tham số đầu vào bổ sung của quy trình làm việc
+     * key: Tham số field, value: Giá trị tham số
+     * for [issues/8545]Khi tạo ứng dụng AI mới, chỉ có thể chọn quy trình AI không có tham số tùy chỉnh
      */
     private Map<String, Object> flowInputs;
 
     /**
-     * 是否开启网络搜索（仅千问模型支持）
+     * Có bật tìm kiếm mạng hay không (chỉ mô hình Qwen hỗ trợ)
      */
     private Boolean enableSearch;
 
     /**
-     * 是否开启深度思考
+     * Có bật suy nghĩ sâu hay không
      */
     private Boolean enableThink;
 
     /**
-     * 会话类型: portal 应用门户
+     * Loại phiên: portal Cổng ứng dụng
      */
     private String sessionType;
 
     /**
-     * 是否开启生成绘画
+     * Có bật tạo hình vẽ hay không
      */
     private Boolean enableDraw;
 
     /**
-     * 绘画模型的id
+     * của mô hình vẽ tranh id
      */
     private String drawModelId;
 
     /**
-     * 图片尺寸
+     * Kích thước hình ảnh
      */
     private String imageSize;
 
     /**
-     * 一张图片
+     * Một hình ảnh
      */
     private String imageUrl;
 
     /**
-     * 是否保存会话
+     * Có lưu phiên không
      */
     private Boolean izSaveSession;
 

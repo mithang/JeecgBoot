@@ -12,51 +12,51 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 
 /**
- * 微服务单元测试
+ * Kiểm thử đơn vị microservice
  * @author: zyf
  * @date: 2022/04/21
  */
 @Slf4j
 @RestController
 @RequestMapping("/sys/test")
-@Tag(name = "【微服务】单元测试")
+@Tag(name = "【Microservice】Kiểm thử đơn vị")
 public class JeecgTestFeignController {
 
     @Autowired
     private JeecgTestClient jeecgTestClient;
 
     /**
-     * 熔断： fallbackFactory优先于 @SentinelResource
+     * Circuit breaker: fallbackFactory ưu tiên hơn @SentinelResource
      *
      * @param name
      * @return
      */
     @GetMapping("/getMessage")
-    @Operation(summary = "测试feign调用demo服务1")
+    @Operation(summary = "Kiểm thử gọi dịch vụ demo qua Feign 1")
     @SentinelResource(value = "test_more_getMessage", fallback = "getDefaultUser")
     public Result<String> getMessage(@RequestParam(value = "name", required = false) String name) {
-        log.info("---------Feign fallbackFactory优先级高于@SentinelResource-----------------");
-        String resultMsg = jeecgTestClient.getMessage(" I am jeecg-system 服务节点，呼叫 jeecg-demo!");
+        log.info("---------Feign fallbackFactory Mức ưu tiên cao hơn@SentinelResource-----------------");
+        String resultMsg = jeecgTestClient.getMessage(" I am jeecg-system nút dịch vụ, đang gọi jeecg-demo!");
         return Result.OK(null, resultMsg);
     }
 
     /**
-     * 测试方法：关闭demo服务，访问请求 http://127.0.0.1:9999/sys/test/getMessage
+     * Phương thức kiểm thử: tắt service demo, truy cập request http://127.0.0.1:9999/sys/test/getMessage
      *
      * @param name
      * @return
      */
     @GetMapping("/getMessage2")
-    @Operation(summary = "测试feign调用demo服务2")
+    @Operation(summary = "Kiểm thử gọi dịch vụ demo qua Feign 2")
     public Result<String> getMessage2(@RequestParam(value = "name", required = false) String name) {
-        log.info("---------测试 Feign fallbackFactory-----------------");
-        String resultMsg = jeecgTestClient.getMessage(" I am jeecg-system 服务节点，呼叫 jeecg-demo!");
+        log.info("---------Kiểm tra Feign fallbackFactory-----------------");
+        String resultMsg = jeecgTestClient.getMessage(" I am jeecg-system nút dịch vụ, đang gọi jeecg-demo!");
         return Result.OK(null, resultMsg);
     }
 
 
     @GetMapping("/fallback")
-    @Operation(summary = "测试熔断")
+    @Operation(summary = "Kiểm thử circuit breaker")
     @SentinelResource(value = "test_more_fallback", fallback = "getDefaultUser")
     public Result<Object> test(@RequestParam(value = "name", required = false) String name) {
         if (StringUtils.isEmpty(name)) {
@@ -66,13 +66,13 @@ public class JeecgTestFeignController {
     }
 
     /**
-     * 熔断，默认回调函数
+     * Ngắt mạch, hàm callback mặc định
      *
      * @param name
      * @return
      */
     public Result<Object> getDefaultUser(String name) {
-        log.info("熔断，默认回调函数");
-        return Result.error(null, "访问超时, 自定义 @SentinelResource Fallback");
+        log.info("Ngắt mạch, hàm callback mặc định");
+        return Result.error(null, "Truy cập quá thời gian, Tùy chỉnh @SentinelResource Fallback");
     }
 }

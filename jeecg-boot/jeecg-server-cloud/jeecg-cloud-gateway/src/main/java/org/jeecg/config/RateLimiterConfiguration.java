@@ -10,12 +10,12 @@ import reactor.core.publisher.Mono;
 /**
  * @author scott
  * @date 2020/5/26
- * 路由限流配置
+ * Cấu hình giới hạn lưu lượng route
  */
 @Configuration
 public class RateLimiterConfiguration {
     /**
-     * IP限流 (通过exchange对象可以获取到请求信息，这边用了HostName)
+     * IP Giới hạn lưu lượng (Thông qua đối tượng exchange có thể lấy được thông tin yêu cầu, ở đây đã dùng HostName)
      */
     @Bean
     @Primary
@@ -24,16 +24,16 @@ public class RateLimiterConfiguration {
     }
 
     /**
-     * 用户限流 (通过exchange对象可以获取到请求信息，获取当前请求的用户 TOKEN)
+     * Giới hạn lưu lượng theo người dùng (Thông qua đối tượng exchange có thể lấy được thông tin yêu cầu, lấy người dùng của yêu cầu hiện tại TOKEN)
      */
     @Bean
     public KeyResolver userKeyResolver() {
-        //使用这种方式限流，请求Header中必须携带X-Access-Token参数
+        //Khi dùng cách này để giới hạn lưu lượng, Header của yêu cầu phải mang theo X-Access-Token Tham số
         return exchange -> Mono.just(exchange.getRequest().getHeaders().getFirst(GlobalAccessTokenFilter.X_ACCESS_TOKEN));
     }
 
     /**
-     * 接口限流 (获取请求地址的uri作为限流key)
+     * Giới hạn lưu lượng theo API (Lấy uri địa chỉ yêu cầu làm giới hạn lưu lượng key)
      */
     @Bean
     public KeyResolver apiKeyResolver() {

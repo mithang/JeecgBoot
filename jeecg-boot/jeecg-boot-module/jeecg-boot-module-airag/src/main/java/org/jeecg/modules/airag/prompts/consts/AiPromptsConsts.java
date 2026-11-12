@@ -1,29 +1,29 @@
 package org.jeecg.modules.airag.prompts.consts;
 
 /**
- * AI提示词常量类
+ * AI Lớp hằng số prompt
  *
  */
 public class AiPromptsConsts {
 
     /**
-     * 状态:进行中
+     * Trạng thái:Đang tiến hành
      */
     public static final String STATUS_RUNNING = "run";
     /**
-     * 状态:完成
+     * Trạng thái:Hoàn thành
      */
     public static final String STATUS_COMPLETED = "completed";
     /**
-     * 状态:失败
+     * Trạng thái:Thất bại
      */
     public static final String STATUS_FAILED = "failed";
     /**
-     * 业务类型:评估器
+     * Loại nghiệp vụ:Bộ đánh giá
      */
     public static final String BIZ_TYPE_EVALUATOR = "evaluator";
     /**
-     * 业务类型:轨迹
+     * Loại nghiệp vụ:Quỹ đạo
      */
     public static final String BIZ_TYPE_TRACK = "track";
 

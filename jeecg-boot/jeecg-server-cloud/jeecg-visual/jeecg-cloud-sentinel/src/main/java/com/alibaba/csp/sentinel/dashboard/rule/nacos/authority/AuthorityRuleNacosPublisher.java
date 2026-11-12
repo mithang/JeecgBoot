@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 授权规则持久化(黑名单白名单)
+ * Lưu bền quy tắc ủy quyền(Danh sách đen / danh sách trắng)
  *
  * @author zyf
  * @date 2022-04-13
@@ -33,7 +33,7 @@ public class AuthorityRuleNacosPublisher implements DynamicRulePublisher<List<Au
         if (rules == null) {
             return;
         }
-        //  转换
+        //  Chuyển đổi
         List<AuthorityRuleCorrectEntity> list = rules.stream().map(rule -> {
             AuthorityRuleCorrectEntity entity = new AuthorityRuleCorrectEntity();
             BeanUtils.copyProperties(rule, entity);

@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 流控规则控制器
+ * Controller quy tắc kiểm soát lưu lượng
  *
  * @author zyf
  * @date 2022-04-13
@@ -224,7 +224,7 @@ public class FlowControllerV2 extends BaseRuleController {
     private void publishRules(/*@NonNull*/ String app) throws Exception {
         List<FlowRuleEntity> rules = repository.findAllByApp(app);
         rulePublisher.publish(app, rules);
-        //延迟加载
+        //Tải chậm
         delayTime();
     }
 }

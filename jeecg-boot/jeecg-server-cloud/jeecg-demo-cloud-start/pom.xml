@@ -10,10 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jeecg-demo-cloud-start</artifactId>
-    <description>Demo微服务启动</description>
+    <description>Demo Khởi động microservice</description>
 
     <dependencies>
-        <!--引入微服务启动依赖 starter-->
+        <!--Thêm dependency khởi động microservice starter-->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-cloud</artifactId>
@@ -29,7 +29,7 @@
             <artifactId>jeecg-boot-starter-job</artifactId>
         </dependency>
 
-        <!-- 引入demo模块 -->
+        <!-- Thêm module demo -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-module-demo</artifactId>

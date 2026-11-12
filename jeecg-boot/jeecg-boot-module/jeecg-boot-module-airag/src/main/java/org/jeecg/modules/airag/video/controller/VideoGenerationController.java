@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * AI视频生成Controller
+ * AI Tạo video Controller
  */
 @Slf4j
 @RestController
@@ -26,7 +26,7 @@ public class VideoGenerationController {
     private IVideoGenerationService videoGenerationService;
 
     /**
-     * 提交视频生成任务
+     * Gửi nhiệm vụ tạo video
      */
     @PostMapping("/submit")
     public Result<VideoTaskResultVo> submitTask(@RequestBody VideoGenerateVo vo) {
@@ -38,7 +38,7 @@ public class VideoGenerationController {
     }
 
     /**
-     * 查询视频生成任务状态
+     * Truy vấn trạng thái nhiệm vụ tạo video
      */
     @GetMapping("/query/{taskId}")
     public Result<VideoTaskResultVo> queryTask(@PathVariable String taskId) {
@@ -47,16 +47,16 @@ public class VideoGenerationController {
     }
 
     /**
-     * 为已完成的视频添加AI配音
-     * 流程：生成旁白文案 → TTS语音合成 → FFmpeg合并视频和音频
+     * Thêm lồng tiếng AI cho video đã hoàn thành
+     * Quy trình: Tạo văn bản lời bình → TTS Tổng hợp giọng nói → FFmpeg Gộp video và âm thanh
      */
     @PostMapping("/voiceover")
     public Result<VideoTaskResultVo> addVoiceover(@RequestBody VideoGenerateVo vo) {
         if (vo.getTaskId() == null || vo.getTaskId().isBlank()) {
-            return Result.error("taskId不能为空");
+            return Result.error("taskId Không được trống");
         }
         if (vo.getPrompt() == null || vo.getPrompt().isBlank()) {
-            return Result.error("prompt不能为空");
+            return Result.error("prompt Không được trống");
         }
         VideoTaskResultVo result = videoGenerationService.addVoiceover(vo.getTaskId(), vo.getPrompt());
         if ("FAIL".equals(result.getStatus())) {
@@ -66,7 +66,7 @@ public class VideoGenerationController {
     }
 
     /**
-     * 获取预设提示词
+     * Lấy prompt đặt sẵn
      */
     @GetMapping("/prompts")
     public Result<Map<String, List<String>>> getPresetPrompts() {
@@ -74,7 +74,7 @@ public class VideoGenerationController {
     }
 
     /**
-     * 查询当前用户的视频生成记录
+     * Truy vấn bản ghi tạo video của người dùng hiện tại
      */
     @GetMapping("/listByUser")
     public Result<List<JSONObject>> getVideoRecords() {
@@ -84,12 +84,12 @@ public class VideoGenerationController {
     }
 
     /**
-     * 删除视频生成记录
+     * Xóa bản ghi tạo video
      */
     @DeleteMapping("/deleteVideoRecord")
     public Result<String> deleteVideoRecord(@RequestParam String recordId) {
         String userId = ((LoginUser) SecurityUtils.getSubject().getPrincipal()).getId();
         boolean deleted = videoGenerationService.deleteVideoRecord(userId, recordId);
-        return deleted ? Result.OK("删除成功") : Result.error("记录不存在");
+        return deleted ? Result.OK("Xóa thành công") : Result.error("Bản ghi không tồn tại");
     }
 }

@@ -26,7 +26,7 @@
 //import java.util.concurrent.CountDownLatch;
 //
 ///**
-// * @Description: 流程测试
+// * @Description: Kiểm thử quy trình
 // * @Author: chenrui
 // * @Date: 2025/2/11 16:11
 // */
@@ -74,19 +74,19 @@
 //                .build();
 //        ChatLanguageModel chatModel = AiModelFactory.createChatModel(options);
 //
-//        // 读取文件并转换为 base64 编码字符串
+//        // Đọc tệp và chuyển đổi thành chuỗi mã hóa base64
 //        byte[] fileContent = Files.readAllBytes(Paths.get("src/test/resources/test.jpg"));
 //        String base64Data = Base64.getEncoder().encodeToString(fileContent);
 //
-//        // 获取文件的 MIME 类型
+//        // Lấy loại MIME của tệp
 //        String mimeType = Files.probeContentType(Paths.get("src/test/resources/test.jpg"));
 //
-//        // 构建 ImageContent 对象
+//        // Xây dựng đối tượng ImageContent
 //        ImageContent imageContent = new ImageContent(base64Data, mimeType);
 //
 //        UserMessage userMessage = UserMessage.from(
-//                TextContent.from("你看到了什么"),
-//                // 构建 ImageContent 对象
+//                TextContent.from("Bạn đã thấy gì"),
+//                // Xây dựng đối tượng ImageContent
 //                new ImageContent(base64Data, mimeType)
 //        );
 //        Response<AiMessage> generate = chatModel.generate(userMessage);
@@ -103,19 +103,19 @@
 //                .build();
 //        ChatLanguageModel chatModel = AiModelFactory.createChatModel(options);
 //
-//        // 读取文件并转换为 base64 编码字符串
+//        // Đọc tệp và chuyển đổi thành chuỗi mã hóa base64
 //        byte[] fileContent = Files.readAllBytes(Paths.get("src/test/resources/test.jpg"));
 //        String base64Data = Base64.getEncoder().encodeToString(fileContent);
 //
-//        // 获取文件的 MIME 类型
+//        // Lấy loại MIME của tệp
 //        String mimeType = Files.probeContentType(Paths.get("src/test/resources/test.jpg"));
 //
-//        // 构建 ImageContent 对象
+//        // Xây dựng đối tượng ImageContent
 //        ImageContent imageContent = new ImageContent(base64Data, mimeType);
 //
 //        UserMessage userMessage = UserMessage.from(
-//                TextContent.from("你看到了什么"),
-//                // 构建 ImageContent 对象
+//                TextContent.from("Bạn đã thấy gì"),
+//                // Xây dựng đối tượng ImageContent
 //                new ImageContent(base64Data, mimeType)
 //        );
 //        LLMHandler llmHandler = new LLMHandler();
@@ -138,18 +138,18 @@
 //                .build();
 //        ChatLanguageModel chatModel = AiModelFactory.createChatModel(options);
 //
-//        // 读取文件并转换为 base64 编码字符串
+//        // Đọc tệp và chuyển đổi thành chuỗi mã hóa base64
 //        byte[] fileContent = Files.readAllBytes(Paths.get("src/test/resources/test.jpg"));
 //        String base64Data = Base64.getEncoder().encodeToString(fileContent);
 //
-//        // 获取文件的 MIME 类型
+//        // Lấy loại MIME của tệp
 //        String mimeType = Files.probeContentType(Paths.get("src/test/resources/test.jpg"));
 //
-//        // 构建 ImageContent 对象
+//        // Xây dựng đối tượng ImageContent
 //        ImageContent imageContent = new ImageContent(base64Data, mimeType);
 //        UserMessage userMessage = UserMessage.from(
-//                TextContent.from("你看到了什么"),
-//                // 构建 ImageContent 对象
+//                TextContent.from("Bạn đã thấy gì"),
+//                // Xây dựng đối tượng ImageContent
 //                imageContent,
 //                ImageContent.from("https://jeecgdev.oss-cn-beijing.aliyuncs.com/temp/logo-qqy_1741658353407.png")
 //        );

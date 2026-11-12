@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 降级规则控制器
+ * Controller quy tắc giáng cấp
  *
  * @author zyf
  * @date 2022-04-13
@@ -150,7 +150,7 @@ public class DegradeController extends BaseRuleController {
     private void publishRules(/*@NonNull*/ String app) throws Exception {
         List<DegradeRuleEntity> rules = repository.findAllByApp(app);
         rulePublisher.publish(app, rules);
-        //延迟加载
+        //Tải chậm
         delayTime();
     }
 

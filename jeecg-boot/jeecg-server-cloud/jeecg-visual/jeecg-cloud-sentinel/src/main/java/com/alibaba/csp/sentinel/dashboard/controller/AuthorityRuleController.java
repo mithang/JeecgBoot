@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 授权规则控制器
+ * Controller quy tắc ủy quyền
  *
  * @author zyf
  * @date 2022-04-13
@@ -175,7 +175,7 @@ public class AuthorityRuleController extends BaseRuleController {
     private void publishRules(String app) throws Exception {
         List<AuthorityRuleEntity> rules = repository.findAllByApp(app);
         rulePublisher.publish(app, rules);
-        //延迟加载
+        //Tải chậm
         delayTime();
     }
 }

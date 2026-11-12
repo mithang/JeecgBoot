@@ -40,7 +40,7 @@ import java.util.*;
 import java.util.concurrent.Executor;
 
 /**
- * 动态路由加载器
+ * Bộ tải route động
  *
  * @author : zyf
  * @date :2020-11-10
@@ -62,7 +62,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
 
 
     /**
-     * 需要拼接key的路由条件
+     * Điều kiện route cần nối key
      */
     private static String[] GEN_KEY_ROUTERS = new String[]{"Path", "Host", "Method", "After", "Before", "Between", "RemoteAddr"};
 
@@ -81,27 +81,27 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
 
     public void init(BaseMap baseMap) {
         String dataType = gatewayRoutersConfig.getDataType();
-        log.info("初始化路由模式，dataType：" + dataType);
+        log.info("Khởi tạo chế độ Route, dataType:" + dataType);
         if (dataType == null) {
-            log.warn("路由配置dataType为null，跳过初始化");
+            log.warn("Cấu hình route có dataType là null, bỏ qua khởi tạo");
             return;
         }
         if (RouterDataType.nacos.toString().endsWith(dataType)) {
             loadRoutesByNacos();
         }
-        //从数据库加载路由
+        //Tải route từ cơ sở dữ liệu
         if (RouterDataType.database.toString().endsWith(dataType)) {
             loadRoutesByRedis(baseMap);
         }
     }
     /**
-     * 刷新路由
+     * Làm mới route
      *
      * @return
      */
     public Mono<Void> refresh(BaseMap baseMap) {
         String dataType = gatewayRoutersConfig.getDataType();
-        log.info("初始化路由模式，dataType：" + dataType);
+        log.info("Khởi tạo chế độ Route, dataType:" + dataType);
         if (dataType != null && !RouterDataType.yml.toString().endsWith(dataType)) {
             this.init(baseMap);
         }
@@ -110,7 +110,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
 
 
     /**
-     * 从nacos中读取路由配置
+     * Đọc cấu hình route từ nacos
      *
      * @return
      */
@@ -125,13 +125,13 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
             log.info("nacos.config.group = {}", gatewayRoutersConfig.getRouteGroup());
             String configInfo = configService.getConfig(gatewayRoutersConfig.getDataId(), gatewayRoutersConfig.getRouteGroup(), DEFAULT_TIMEOUT);
             if (StringUtils.isNotBlank(configInfo)) {
-                log.info("获取网关当前配置:\r\n{}", configInfo);
+                log.info("Lấy cấu hình hiện tại của gateway:\r\n{}", configInfo);
                 routes = JSON.parseArray(configInfo, RouteDefinition.class);
             }else{
-                log.warn("ERROR: 从Nacos获取网关配置为空，请确认Nacos配置是否正确！");
+                log.warn("ERROR: Lấy cấu hình gateway từ Nacos bị trống, vui lòng kiểm tra cấu hình Nacos có đúng không!");
             }
         } catch (NacosException e) {
-            log.error("初始化网关路由时发生错误", e);
+            log.error("Đã xảy ra lỗi khi khởi tạo route gateway", e);
             e.printStackTrace();
         }
         for (RouteDefinition definition : routes) {
@@ -144,7 +144,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
 
 
     /**
-     * 从redis中读取路由配置
+     * Đọc cấu hình route từ redis
      *
      * @return
      */
@@ -156,7 +156,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
         }
         Object configInfo = redisUtil.get(CacheConstant.GATEWAY_ROUTES);
         if (ObjectUtil.isNotEmpty(configInfo)) {
-            log.info("获取网关当前配置:\r\n{}", configInfo);
+            log.info("Lấy cấu hình hiện tại của gateway:\r\n{}", configInfo);
             JSONArray array = JSON.parseArray(configInfo.toString());
             try {
                 routes = getRoutesByJson(array);
@@ -164,7 +164,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
                 e.printStackTrace();
             }
         }else{
-            log.warn("ERROR: 从Redis获取网关配置为空，请确认system服务是否启动成功！");
+            log.warn("ERROR: Lấy cấu hình gateway từ Redis bị trống, vui lòng xác nhận service system đã khởi động thành công chưa!");
         }
         
         for (MyRouteDefinition definition : routes) {
@@ -186,7 +186,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
     }
 
     /**
-     * redis中的信息需要处理下 转成RouteDefinition对象
+     * redis Thông tin trong đó cần xử lý rồi chuyển thành đối tượng RouteDefinition
      * - id: login
      * uri: lb://cloud-jeecg-system
      * predicates:
@@ -211,16 +211,16 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
             }
             Object predicates = obj.get("predicates");
             if (predicates != null) {
-                // 代码逻辑说明: [issues/5331]网关路由配置问题
+                // Giải thích logic mã: [issues/5331]Vấn đề cấu hình route gateway
                 List<PredicatesVo> list = JSON.parseArray(predicates.toString(), PredicatesVo.class);
-                //获取合并后的Predicates，防止配置多个path导致路径失效的问题
+                //Lấy Predicates sau khi gộp, tránh vấn đề đường dẫn bị vô hiệu do cấu hình nhiều path
                 Map<String, List<String>> groupedPredicates = new HashMap<>();
                 for (PredicatesVo predicatesVo : list) {
                     String name = predicatesVo.getName();
                     List<String> args = predicatesVo.getArgs();
                     groupedPredicates.computeIfAbsent(name, k -> new ArrayList<>()).addAll(args);
                 }
-                //合并后的list
+                //Sau khi gộp list
                 list = new ArrayList<>();
                 for (Map.Entry<String, List<String>> entry : groupedPredicates.entrySet()) {
                     String name = entry.getKey();
@@ -231,10 +231,10 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
                 for (Object map : list) {
                     JSONObject json = JSON.parseObject(JSON.toJSONString(map));
                     PredicateDefinition predicateDefinition = new PredicateDefinition();
-                    // 代码逻辑说明: 【VUEN-762】路由条件添加异常问题,原因是部分路由条件参数需要设置固定key
+                    // Giải thích logic mã: 【VUEN-762】Vấn đề bất thường khi thêm điều kiện route,Nguyên nhân là một số tham số điều kiện route cần đặt key cố định key
                     String name=json.getString("name");
                     predicateDefinition.setName(name);
-                    //路由条件是否拼接Key
+                    //Điều kiện route có nối Key hay không Key
                     if(ArrayUtil.contains(GEN_KEY_ROUTERS,name)) {
                         JSONArray jsonArray = json.getJSONArray("args");
                         for (int j = 0; j < jsonArray.size(); j++) {
@@ -299,7 +299,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
 //            }
 //        });
 //        if (ObjectUtil.isNotEmpty(routeList)) {
-//            // 加载路由
+//            // Tải route
 //            routeList.forEach(route -> {
 //                RouteDefinition definition = new RouteDefinition();
 //                List<PredicateDefinition> predicatesList = Lists.newArrayList();
@@ -319,14 +319,14 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
 //                definition.setUri(uri);
 //                this.repository.save(Mono.just(definition)).subscribe();
 //            });
-//            log.info("加载路由:{}==============", routeList.size());
+//            log.info("Tải route:{}==============", routeList.size());
 //            Mono.empty();
 //        }
 //    }
 
 
     /**
-     * 监听Nacos下发的动态路由配置
+     * Lắng nghe cấu hình route động do Nacos gửi xuống
      *
      * @param dataId
      * @param group
@@ -336,7 +336,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
             configService.addListener(dataId, group, new Listener() {
                 @Override
                 public void receiveConfigInfo(String configInfo) {
-                    log.info("进行网关更新:\n\r{}", configInfo);
+                    log.info("Tiến hành cập nhật gateway:\n\r{}", configInfo);
                     List<MyRouteDefinition> definitionList = JSON.parseArray(configInfo, MyRouteDefinition.class);
                     for (MyRouteDefinition definition : definitionList) {
                         log.info("update route : {}", definition.toString());
@@ -351,12 +351,12 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
                 }
             });
         } catch (Exception e) {
-            log.error("从nacos接收动态路由配置出错!!!", e);
+            log.error("Nhận cấu hình route động từ nacos bị lỗi!!!", e);
         }
     }
 
     /**
-     * 创建ConfigService
+     * Tạo ConfigService
      *
      * @return
      */
@@ -375,7 +375,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
             }
             return configService = NacosFactory.createConfigService(properties);
         } catch (Exception e) {
-            log.error("创建ConfigService异常", e);
+            log.error("Tạo ConfigService gặp ngoại lệ", e);
             return null;
         }
     }

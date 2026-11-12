@@ -20,20 +20,20 @@ public interface IAiragPromptsService extends IService<AiragPrompts> {
 
     Result<?> promptExperiment(AiragExperimentVo experimentVo, HttpServletRequest request);
 
-    //update-begin---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】实现回收站取回和彻底删除-----------
+    //update-begin---author:chenrui ---date:2026-04-07  for：【QQYUN-14643] Triển khai thu hồi từ thùng rác và xóa hoàn toàn-----------
     /**
-     * 查询回收站分页列表
+     * Truy vấn danh sách phân trang thùng rác
      */
     IPage<AiragPrompts> recycleBinPage(Page<AiragPrompts> page);
 
     /**
-     * 从回收站取回（恢复 del_flag = 0）
+     * Thu hồi từ thùng rác (khôi phục del_flag = 0）
      */
     void revertRecycleBin(List<String> ids);
 
     /**
-     * 从回收站彻底删除（物理删除）
+     * Xóa hoàn toàn khỏi thùng rác (xóa vật lý)
      */
     void deleteRecycleBin(List<String> ids);
-    //update-end---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】实现回收站取回和彻底删除-----------
+    //update-end---author:chenrui ---date:2026-04-07  for：【QQYUN-14643] Triển khai thu hồi từ thùng rác và xóa hoàn toàn-----------
 }

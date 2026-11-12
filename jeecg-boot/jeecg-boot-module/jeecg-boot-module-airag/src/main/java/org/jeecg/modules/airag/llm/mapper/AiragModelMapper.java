@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.airag.llm.entity.AiragModel;
 
 /**
- * @Description: AiRag模型配置
+ * @Description: AiRag Cấu hình mô hình
  * @Author: jeecg-boot
  * @Date:   2025-02-14
  * @Version: V1.0
@@ -13,8 +13,8 @@ import org.jeecg.modules.airag.llm.entity.AiragModel;
 public interface AiragModelMapper extends BaseMapper<AiragModel> {
 
     /**
-     * 根据ID查询模型信息(忽略租户)
-     * for [QQYUN-12113]分享之后的聊天，应用、模型、知识库不根据租户查询
+     * Truy vấn thông tin mô hình theo ID(Bỏ qua tenant)
+     * for [QQYUN-12113]Sau khi chia sẻ, trò chuyện, ứng dụng, mô hình và kho tri thức không truy vấn theo tenant
      * @param id
      * @return
      * @author chenrui

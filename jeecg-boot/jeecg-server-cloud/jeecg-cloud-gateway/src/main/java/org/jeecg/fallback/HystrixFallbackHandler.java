@@ -16,7 +16,7 @@
 ///**
 // * @author scott
 // * @date 2020/05/26
-// * Hystrix 降级处理
+// * Hystrix Xử lý giáng cấp
 // */
 //@Slf4j
 //@Component
@@ -25,9 +25,9 @@
 //    public Mono<ServerResponse> handle(ServerRequest serverRequest) {
 //        Optional<Object> originalUris = serverRequest.attribute(GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
 //
-//        originalUris.ifPresent(originalUri -> log.error("网关执行请求:{}失败,hystrix服务降级处理", originalUri));
+//        originalUris.ifPresent(originalUri -> log.error("Gateway thực thi yêu cầu:{}Thất bại,hystrix Xử lý giáng cấp dịch vụ", originalUri));
 //
 //        return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-//                .header("Content-Type","text/plain; charset=utf-8").body(BodyInserters.fromObject("访问超时,请稍后再试"));
+//                .header("Content-Type","text/plain; charset=utf-8").body(BodyInserters.fromObject("Truy cập quá thời gian,Vui lòng thử lại sau"));
 //    }
 //}

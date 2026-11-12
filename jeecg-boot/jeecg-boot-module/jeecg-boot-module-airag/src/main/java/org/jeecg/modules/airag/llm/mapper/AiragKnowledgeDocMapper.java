@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.airag.llm.entity.AiragKnowledgeDoc;
 
 /**
- * @Description: airag知识库文档
+ * @Description: airag Tài liệu kho tri thức
  * @Author: jeecg-boot
  * @Date:   2025-02-18
  * @Version: V1.0
@@ -13,9 +13,9 @@ import org.jeecg.modules.airag.llm.entity.AiragKnowledgeDoc;
 public interface AiragKnowledgeDocMapper extends BaseMapper<AiragKnowledgeDoc> {
 
 	/**
-	 * 通过主表id删除子表数据
+	 * Xóa dữ liệu bảng con theo id bảng chính
 	 *
-	 * @param mainId 主表id
+	 * @param mainId Bảng chính id
 	 * @return boolean
 	 */
 	public boolean deleteByMainId(@Param("mainId") String mainId);

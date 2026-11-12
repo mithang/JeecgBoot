@@ -26,10 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * AI聊天接口错误协议测试。
+ * AI Kiểm thử giao thức lỗi giao diện trò chuyện.
  *
  * @author scott
- * @since 2026-07-21 【issues/9787】无效分享链接错误提示
+ * @since 2026-07-21 【issues/9787] Thông báo lỗi liên kết chia sẻ không hợp lệ
  */
 @ExtendWith(MockitoExtension.class)
 class AiragChatControllerTest {
@@ -54,7 +54,7 @@ class AiragChatControllerTest {
 
     @Test
     void shouldReturnSseErrorWhenShareAccessValidationFails() throws Exception {
-        when(chatService.send(any())).thenThrow(new JeecgBootException("分享链接无效或已取消发布"));
+        when(chatService.send(any())).thenThrow(new JeecgBootException("Liên kết chia sẻ không hợp lệ hoặc đã bị hủy phát hành"));
 
         MvcResult result = mockMvc.perform(post("/airag/chat/send")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -65,6 +65,6 @@ class AiragChatControllerTest {
         mockMvc.perform(asyncDispatch(result))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("\"event\":\"ERROR\"")))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("分享链接无效或已取消发布")));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Liên kết chia sẻ không hợp lệ hoặc đã bị hủy phát hành")));
     }
 }

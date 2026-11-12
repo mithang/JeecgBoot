@@ -43,31 +43,31 @@ spring:
                   - "*"
                 allowed-headers:
                   - "*"
-    #Sentinel配置
+    #Sentinel Cấu hình
     sentinel:
       transport:
         dashboard: jeecg-boot-sentinel:9000
-      # 支持链路限流
+      # Hỗ trợ giới hạn lưu lượng theo chuỗi liên kết
       web-context-unify: false
       filter:
         enabled: false
-      # 取消Sentinel控制台懒加载
+      # Hủy lazy load của console Sentinel
       eager: false
       datasource:
-        #流控规则
-        flow:  # 指定数据源名称
-          # 指定nacos数据源
+        #Quy tắc kiểm soát luồng
+        flow:  # Chỉ định tên nguồn dữ liệu
+          # Chỉ định nguồn dữ liệu nacos
           nacos:
             server-addr: @config.server-addr@
-            # 指定配置文件
+            # Chỉ định file cấu hình
             dataId: ${spring.application.name}-flow-rules
-            # 指定分组
+            # Chỉ định nhóm
             groupId: SENTINEL_GROUP
-            # 指定配置文件规则类型
+            # Chỉ định loại quy tắc của file cấu hình
             rule-type: flow
-            # 指定配置文件数据格式
+            # Chỉ định định dạng dữ liệu của file cấu hình
             data-type: json
-        #降级规则
+        #Quy tắc hạ cấp
         degrade:
           nacos:
             server-addr: @config.server-addr@
@@ -75,7 +75,7 @@ spring:
             groupId: SENTINEL_GROUP
             rule-type: degrade
             data-type: json
-        #系统规则
+        #Quy tắc hệ thống
         system:
           nacos:
             server-addr: @config.server-addr@
@@ -83,7 +83,7 @@ spring:
             groupId: SENTINEL_GROUP
             rule-type: system
             data-type: json
-        #授权规则
+        #Quy tắc ủy quyền
         authority:
           nacos:
             server-addr: @config.server-addr@
@@ -91,7 +91,7 @@ spring:
             groupId: SENTINEL_GROUP
             rule-type: authority
             data-type: json
-        #热点参数
+        #Tham số điểm nóng
         param-flow:
           nacos:
             server-addr: @config.server-addr@
@@ -99,7 +99,7 @@ spring:
             groupId: SENTINEL_GROUP
             rule-type: param-flow
             data-type: json
-        #网关流控规则
+        #Quy tắc kiểm soát lưu lượng của gateway
         gw-flow:
           nacos:
             server-addr: @config.server-addr@
@@ -107,7 +107,7 @@ spring:
             groupId: SENTINEL_GROUP
             rule-type: gw-flow
             data-type: json
-        #API流控规则
+        #API Quy tắc kiểm soát luồng
         gw-api-group:
           nacos:
             server-addr: @config.server-addr@

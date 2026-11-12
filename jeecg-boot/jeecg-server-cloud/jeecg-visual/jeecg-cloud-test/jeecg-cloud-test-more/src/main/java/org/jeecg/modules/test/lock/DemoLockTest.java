@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * 分布式锁测试demo
+ * Kiểm thử khóa phân tán demo
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -24,45 +24,45 @@ public class DemoLockTest {
 //    RabbitMqClient rabbitMqClient;
 
     /**
-     * 测试方法：
-     *    @Scheduled(cron = "0/5 * * * * ?") 表示每5秒执行一次
-     *    @JLock(lockKey = CloudConstant.REDISSON_DEMO_LOCK_KEY1)分布式锁，10秒钟才释放
-     *    结果：每10秒钟输出一次 “执行 分布式锁 业务逻辑1” 就说明锁成功了
+     * Phương thức kiểm thử:
+     *    @Scheduled(cron = "0/5 * * * * ?") Nghĩa là thực thi mỗi 5 giây một lần
+     *    @JLock(lockKey = CloudConstant.REDISSON_DEMO_LOCK_KEY1)Khóa phân tán, 10 giây sau mới giải phóng
+     *    Kết quả: cứ mỗi 10 giây in một lần “Thực thi logic nghiệp vụ 1 của khóa phân tán” thì chứng tỏ khóa đã thành công
      *
-     * 测试分布式锁【注解方式】
+     * Kiểm thử khóa phân tán [theo cách annotation]
      */
 //    @Scheduled(cron = "0/5 * * * * ?")
     @JLock(lockKey = CloudConstant.REDISSON_DEMO_LOCK_KEY1)
     public void execute() throws InterruptedException {
-        log.info("执行execute任务开始，休眠十秒开始，当前系统时间戳（秒）："+ System.currentTimeMillis()/1000);
+        log.info("Bắt đầu thực thi nhiệm vụ execute, bắt đầu ngủ 10 giây, dấu thời gian hệ thống hiện tại (giây):"+ System.currentTimeMillis()/1000);
         Thread.sleep(10000);
-        log.info("========执行 分布式锁 业务逻辑1=============");
+        log.info("========Thực thi logic nghiệp vụ khóa phân tán 1=============");
 //        Map map = new BaseMap();
 //        map.put("orderId", "BJ0001");
 //        rabbitMqClient.sendMessage(CloudConstant.MQ_JEECG_PLACE_ORDER, map);
-//        //延迟10秒发送
+//        //Trì hoãn 10 giây rồi gửi
 //        map.put("orderId", "NJ0002");
 //        rabbitMqClient.sendMessage(CloudConstant.MQ_JEECG_PLACE_ORDER, map, 10000);
 
-        log.info("execute任务结束，休眠十秒完成，当前系统时间戳（秒）："+ System.currentTimeMillis()/1000);
+        log.info("execute Nhiệm vụ kết thúc, ngủ 10 giây hoàn tất, dấu thời gian hệ thống hiện tại (giây):"+ System.currentTimeMillis()/1000);
     }
 
 
     /**
-     * 测试分布式锁【编码方式】
+     * Kiểm thử khóa phân tán [theo cách mã hóa]
      * @Scheduled(cron = "0/5 * * * * ?")
      */
     public void execute2() throws InterruptedException {
         int expireSeconds=6000;
         if (redissonLock.tryLock(CloudConstant.REDISSON_DEMO_LOCK_KEY2, -1, expireSeconds)) {
-            log.info("执行任务execute2开始，休眠十秒");
+            log.info("Bắt đầu thực thi nhiệm vụ execute2, ngủ 10 giây");
             Thread.sleep(10000);
-           log.info("=============业务逻辑2===================");
-            log.info("定时execute2结束，休眠十秒");
+           log.info("=============Logic nghiệp vụ 2===================");
+            log.info("execute2 theo lịch kết thúc, ngủ 10 giây");
 
             redissonLock.unlock(CloudConstant.REDISSON_DEMO_LOCK_KEY2);
         } else {
-            log.info("execute2获取锁失败");
+            log.info("execute2 Lấy khóa thất bại");
         }
     }
 

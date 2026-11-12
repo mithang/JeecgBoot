@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.airag.wordtpl.entity.AigcWordTemplate;
 
 /**
- * @Description: word模版管理
+ * @Description: word Quản lý mẫu
  * @Author: jeecg-boot
  * @Date:   2025-07-04
  * @Version: V1.0

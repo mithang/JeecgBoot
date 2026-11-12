@@ -1,26 +1,26 @@
-################ Sa-Token 配置 (文档: https://sa-token.cc) ################
+################ Sa-Token Cấu hình (Tài liệu: https://sa-token.cc) ################
 sa-token:
-  # token 名称（同时也是 cookie 名称）
+  # token Tên (đồng thời cũng là tên cookie)
   token-name: X-Access-Token
-  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  # token Thời hạn hiệu lực (đơn vị: giây) mặc định 30 ngày,-1 đại diện cho hiệu lực vĩnh viễn
   timeout: 2592000
-  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  # token Tần suất hoạt động tối thiểu (đơn vị: giây), nếu token vượt quá thời gian này mà không truy cập hệ thống sẽ bị đóng băng, mặc định-1 đại diện cho không giới hạn, không bao giờ bị đóng băng
   active-timeout: -1
-  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  # Có cho phép cùng một tài khoản đăng nhập đồng thời ở nhiều nơi hay không (khi là true thì cho phép đăng nhập cùng lúc, Khi là false thì lần đăng nhập mới sẽ đẩy lần đăng nhập cũ ra)
   is-concurrent: false
-  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  # Khi nhiều người đăng nhập cùng một tài khoản, có dùng chung một token không (khi là true thì mọi lần đăng nhập dùng chung một token, khi là false thì mỗi lần đăng nhập tạo mới một token)
   is-share: false
-  # token 风格（使用jwt-simple保持与原JWT token格式一致）
+  # token Kiểu (dùng jwt-simple giữ định dạng giống token JWT gốc)
   token-style: jwt-simple
-  # 是否输出操作日志
+  # Có xuất nhật ký thao tác không
   is-log: false
-  # 是否从 cookie 中读取 token
+  # Có đọc từ cookie không token
   is-read-cookie: false
-  # 是否从 head 中读取 token
+  # Có đọc từ head không token
   is-read-header: true
-  # 是否从请求体（URL参数）里读取 token
+  # Có đọc từ request body (tham số URL) không token
   is-read-body: true
-  # jwt秘钥（重要：请修改为你自己的秘钥，确保足够复杂）
+  # jwt Khóa bí mật (quan trọng: vui lòng đổi thành khóa bí mật của riêng bạn, đảm bảo đủ phức tạp)
   jwt-secret-key: "dd05f1c54d63749eda95f9fa6d49v442a"
   
 spring:

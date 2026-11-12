@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import jakarta.validation.constraints.NotNull;
 /**
- * @Description: 订单请求对象
+ * @Description: Đối tượng yêu cầu đơn hàng
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @Description: 应用变量配置
+ * @Description: Cấu hình biến ứng dụng
  * @Author: jeecg-boot
  * @Date: 2025-02-26
  * @Version: V1.0
@@ -15,32 +15,32 @@ public class AppVariableVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 变量名
+     * Tên biến
      */
     private String name;
 
     /**
-     * 描述
+     * Mô tả
      */
     private String description;
 
     /**
-     * 默认值
+     * Giá trị mặc định
      */
     private String defaultValue;
 
     /**
-     * 是否启用
+     * Có bật không
      */
     private Boolean enable;
 
     /**
-     * 动作
+     * Hành động
      */
     private String action;
 
     /**
-     * 排序
+     * Sắp xếp
      */
     private Integer orderNum;
 }

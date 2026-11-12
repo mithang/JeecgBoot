@@ -41,7 +41,7 @@ import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 /**
- * 大模型聊天工具类
+ * Lớp công cụ trò chuyện mô hình lớn
  *
  * @Author: chenrui
  * @Date: 2025/2/18 14:31
@@ -72,7 +72,7 @@ public class AIChatHandler implements IAIChatHandler {
     private AiChatConfig aiChatConfig;
     
     /**
-     * 问答
+     * Hỏi đáp
      *
      * @param modelId
      * @param messages
@@ -82,14 +82,14 @@ public class AIChatHandler implements IAIChatHandler {
      */
     @Override
     public String completions(String modelId, List<ChatMessage> messages) {
-        AssertUtils.assertNotEmpty("至少发送一条消息", messages);
-        AssertUtils.assertNotEmpty("请选择模型", modelId);
-        // 整理消息
+        AssertUtils.assertNotEmpty("Gửi ít nhất một tin nhắn", messages);
+        AssertUtils.assertNotEmpty("Vui lòng chọn mô hình", modelId);
+        // Sắp xếp tin nhắn
         return completions(modelId, messages, null);
     }
 
     /**
-     * 问答
+     * Hỏi đáp
      *
      * @param modelId
      * @param messages
@@ -100,16 +100,16 @@ public class AIChatHandler implements IAIChatHandler {
      */
     @Override
     public String completions(String modelId, List<ChatMessage> messages, AIChatParams params) {
-        AssertUtils.assertNotEmpty("至少发送一条消息", messages);
-        AssertUtils.assertNotEmpty("请选择模型", modelId);
+        AssertUtils.assertNotEmpty("Gửi ít nhất một tin nhắn", messages);
+        AssertUtils.assertNotEmpty("Vui lòng chọn mô hình", modelId);
 
         AiragModel airagModel = airagModelMapper.getByIdIgnoreTenant(modelId);
-        //AssertUtils.assertSame("模型未激活,请先在[AI模型配置]中[测试激活]模型", airagModel.getActivateFlag(), 1);
+        //AssertUtils.assertSame("Mô hình chưa được kích hoạt,Vui lòng trước tiên trong[AI Cấu hình mô hình]trong[Kiểm tra kích hoạt]Mô hình", airagModel.getActivateFlag(), 1);
         return completions(airagModel, messages, params);
     }
 
     /**
-     * 问答
+     * Hỏi đáp
      *
      * @param airagModel
      * @param messages
@@ -120,20 +120,20 @@ public class AIChatHandler implements IAIChatHandler {
      */
     public String completions(AiragModel airagModel, List<ChatMessage> messages, AIChatParams params) {
         params = mergeParams(airagModel, params);
-        //update-begin---author:scott ---date:20260429  for：[issues/9585]DeepSeek大模型切换为新发布deepseek-v4-flash，流程中调用出现异常------------
+        //update-begin---author:scott ---date:20260429  for：[issues/9585]DeepSeek Mô hình lớn chuyển sang bản phát hành mới deepseek-v4-flash, khi gọi trong quy trình xuất hiện lỗi bất thường------------
         messages = injectThinkingPlaceholderIfNeeded(messages, airagModel.getModelName());
-        //update-end---author:scott ---date:20260429  for：[issues/9585]DeepSeek大模型切换为新发布deepseek-v4-flash，流程中调用出现异常------------
+        //update-end---author:scott ---date:20260429  for：[issues/9585]DeepSeek Mô hình lớn chuyển sang bản phát hành mới deepseek-v4-flash, khi gọi trong quy trình xuất hiện lỗi bất thường------------
         String resp = null;
         try {
             resp = llmHandler.completions(messages, params);
         } catch (ToolExecutionException e) {
-            // 工具调用执行失败：先用 matchErrorMsg 翻译 cause，再拼装友好提示
+            // Gọi công cụ thực thi thất bại: dùng matchErrorMsg dịch cause trước, rồi ghép thành thông báo thân thiện
             String causeMsg = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             causeMsg = matchErrorMsg(causeMsg, causeMsg);
-            log.error("AI工具执行异常 - {}", causeMsg, e);
+            log.error("AI Thực thi công cụ bất thường - {}", causeMsg, e);
             return "";
         } catch (Exception e) {
-            throw translateLlmException(e, "调用大模型接口失败，详情请查看后台日志。");
+            throw translateLlmException(e, "Gọi API mô hình lớn thất bại, xem chi tiết trong nhật ký hệ thống.");
         }
         if (resp != null && resp.contains("</think>")
                 && (null == params.getNoThinking() || params.getNoThinking())) {
@@ -144,7 +144,7 @@ public class AIChatHandler implements IAIChatHandler {
     }
 
     /**
-     * 使用默认模型问答
+     * Sử dụng mô hình mặc định để hỏi đáp
      *
      * @param messages
      * @param params
@@ -158,7 +158,7 @@ public class AIChatHandler implements IAIChatHandler {
     }
 
     /**
-     * 聊天(流式)
+     * Trò chuyện(Streaming)
      *
      * @param modelId
      * @param messages
@@ -172,7 +172,7 @@ public class AIChatHandler implements IAIChatHandler {
     }
 
     /**
-     * 聊天(流式)
+     * Trò chuyện(Streaming)
      *
      * @param modelId
      * @param messages
@@ -183,22 +183,22 @@ public class AIChatHandler implements IAIChatHandler {
      */
     @Override
     public TokenStream chat(String modelId, List<ChatMessage> messages, AIChatParams params) {
-        AssertUtils.assertNotEmpty("至少发送一条消息", messages);
-        AssertUtils.assertNotEmpty("请选择模型", modelId);
+        AssertUtils.assertNotEmpty("Gửi ít nhất một tin nhắn", messages);
+        AssertUtils.assertNotEmpty("Vui lòng chọn mô hình", modelId);
 
         AiragModel airagModel = airagModelMapper.getByIdIgnoreTenant(modelId);
-        //update-begin---author:wangshuai---date:2026-03-02---for:【QQYUN-14781】实现一个AI模型未激活或者不可用的情况，直接使用平台底层配置的默认模型---
-        //未激活的模型走默认模型
+        //update-begin---author:wangshuai---date:2026-03-02---for:【QQYUN-14781】Triển khai trường hợp mô hình AI chưa kích hoạt hoặc không khả dụng thì dùng trực tiếp mô hình mặc định được cấu hình ở tầng nền tảng---
+        //Mô hình chưa kích hoạt sẽ dùng mô hình mặc định
         if(null == airagModel || airagModel.getActivateFlag() == 0){
-            log.warn("模型未激活,采用默认模型");
+            log.warn("Mô hình chưa được kích hoạt,Dùng mô hình mặc định");
             return chatByDefaultModel(messages,params);
         }
-        //update-end---author:wangshuai---date:2026-03-02---for:【QQYUN-14781】实现一个AI模型未激活或者不可用的情况，直接使用平台底层配置的默认模型---
+        //update-end---author:wangshuai---date:2026-03-02---for:【QQYUN-14781】Triển khai trường hợp mô hình AI chưa kích hoạt hoặc không khả dụng thì dùng trực tiếp mô hình mặc định được cấu hình ở tầng nền tảng---
         return chat(airagModel, messages, params);
     }
 
     /**
-     * 聊天(流式)
+     * Trò chuyện(Streaming)
      *
      * @param airagModel
      * @param messages
@@ -209,28 +209,28 @@ public class AIChatHandler implements IAIChatHandler {
      */
     private TokenStream chat(AiragModel airagModel, List<ChatMessage> messages, AIChatParams params) {
         params = mergeParams(airagModel, params);
-        //update-begin---author:scott ---date:20260429  for：[issues/9585]DeepSeek大模型切换为新发布deepseek-v4-flash，流程中调用出现异常------------
+        //update-begin---author:scott ---date:20260429  for：[issues/9585]DeepSeek Mô hình lớn chuyển sang bản phát hành mới deepseek-v4-flash, khi gọi trong quy trình xuất hiện lỗi bất thường------------
         messages = injectThinkingPlaceholderIfNeeded(messages, airagModel.getModelName());
-        //update-end---author:scott ---date:20260429  for：[issues/9585]DeepSeek大模型切换为新发布deepseek-v4-flash，流程中调用出现异常------------
+        //update-end---author:scott ---date:20260429  for：[issues/9585]DeepSeek Mô hình lớn chuyển sang bản phát hành mới deepseek-v4-flash, khi gọi trong quy trình xuất hiện lỗi bất thường------------
         return llmHandler.chat(messages, params);
     }
 
-    //update-begin---author:scott ---date:20260429  for：[issues/9585]DeepSeek大模型切换为新发布deepseek-v4-flash，流程中调用出现异常------------
+    //update-begin---author:scott ---date:20260429  for：[issues/9585]DeepSeek Mô hình lớn chuyển sang bản phát hành mới deepseek-v4-flash, khi gọi trong quy trình xuất hiện lỗi bất thường------------
     /**
-     * 当目标模型是 DeepSeek 推理模型(deepseek-v4-flash 等)时，
-     * 为历史 AI 消息(从 MessageHistory 重建出来的、thinking 字段为空的 AiMessage)注入占位 thinking。
+     * Khi mô hình đích là mô hình suy luận DeepSeek(deepseek-v4-flash v.v.)khi,
+     * Cho tin nhắn AI lịch sử(được xây dựng lại từ MessageHistory, trường thinking trống AiMessage)Chèn thinking giữ chỗ.
      *
-     * 原因：DeepSeek 推理模型校验请求时要求每条 assistant 历史消息携带 reasoning_content 字段；
-     * langchain4j 的 sendThinking 仅在 AiMessage.thinking() 非空时才会注入 reasoning_content；
-     * 而历史持久化层(MessageHistory)目前没有保存 reasoning_content，重建出的 AiMessage thinking 始终为 null，
-     * 导致 DeepSeek 返回 "The reasoning_content in the thinking mode must be passed back to the API."
+     * Nguyên nhân: mô hình suy luận DeepSeek khi kiểm tra yêu cầu thì yêu cầu mỗi tin nhắn lịch sử assistant mang theo reasoning_content trường;
+     * langchain4j sendThinking chỉ khi AiMessage.thinking() không trống mới chèn reasoning_content；
+     * còn tầng lưu trữ lịch sử(MessageHistory)hiện chưa lưu reasoning_content, AiMessage được xây dựng lại có thinking luôn là null,
+     * khiến DeepSeek trả về "The reasoning_content in the thinking mode must be passed back to the API."
      *
-     * 临时方案：注入占位字符串让 langchain4j 通过 isNullOrEmpty 校验、把 reasoning_content 字段带上，
-     * 后续若 MessageHistory 升级支持持久化 reasoning_content 可去掉该兜底。
+     * Phương án tạm thời: chèn chuỗi giữ chỗ để langchain4j vượt qua kiểm tra isNullOrEmpty, đưa reasoning_content trường kèm theo,
+     * Sau này nếu MessageHistory nâng cấp hỗ trợ lưu trữ reasoning_content có thể bỏ phương án dự phòng này.
      *
-     * @param messages  原始消息列表(可能为 null/空)
-     * @param modelName 目标模型名(用于判定是否需要注入)
-     * @return 处理后的新消息列表(若无需处理则原样返回)
+     * @param messages  Danh sách tin nhắn gốc(có thể là null/Trống)
+     * @param modelName Tên mô hình đích(dùng để xác định có cần chèn không)
+     * @return Danh sách tin nhắn mới sau xử lý(nếu không cần xử lý thì trả về nguyên trạng)
      * @author scott
      * @date 2026-04-29
      */
@@ -247,7 +247,7 @@ public class AIChatHandler implements IAIChatHandler {
                 if (oConvertUtils.isEmpty(aiMsg.thinking())) {
                     AiMessage rebuilt = AiMessage.builder()
                             .text(aiMsg.text())
-                            // 占位：让 langchain4j 把 reasoning_content 字段带上以满足 DeepSeek 校验
+                            // Giữ chỗ: để langchain4j đưa reasoning_content trường kèm theo để đáp ứng kiểm tra của DeepSeek
                             .thinking("...")
                             .toolExecutionRequests(aiMsg.toolExecutionRequests())
                             .attributes(aiMsg.attributes())
@@ -260,15 +260,15 @@ public class AIChatHandler implements IAIChatHandler {
             result.add(msg);
         }
         if (injected > 0) {
-            log.info("[AI-CHAT][issues/9585] 为 DeepSeek 推理模型[{}]的 {} 条历史 AI 消息注入了占位 thinking",
+            log.info("[AI-CHAT][issues/9585] Cho mô hình suy luận DeepSeek[{}]của {} tin nhắn AI lịch sử đã chèn thinking giữ chỗ thinking",
                     modelName, injected);
         }
         return result;
     }
-    //update-end---author:scott ---date:20260429  for：[issues/9585]DeepSeek大模型切换为新发布deepseek-v4-flash，流程中调用出现异常------------
+    //update-end---author:scott ---date:20260429  for：[issues/9585]DeepSeek Mô hình lớn chuyển sang bản phát hành mới deepseek-v4-flash, khi gọi trong quy trình xuất hiện lỗi bất thường------------
 
     /**
-     * 使用默认模型聊天
+     * Sử dụng mô hình mặc định để trò chuyện
      *
      * @param messages
      * @param params
@@ -282,7 +282,7 @@ public class AIChatHandler implements IAIChatHandler {
     }
 
     /**
-     * 合并 airagmodel和params,params为准
+     * Gộp airagmodel và params,params làm chuẩn
      *
      * @param airagModel
      * @param params
@@ -334,11 +334,11 @@ public class AIChatHandler implements IAIChatHandler {
             if (oConvertUtils.isObjectEmpty(params.getEnableSearch())) {
                 params.setEnableSearch(modelParams.getBoolean("enableSearch"));
             }
-            //update-begin---author:wangshuai---date:2026-03-20---for:【issues/8】保存激活qwen-vl-ocr模型报错---
+            //update-begin---author:wangshuai---date:2026-03-20---for:【issues/8】Lưu và kích hoạt qwen-vl-ocr Mô hình báo lỗi---
             if (oConvertUtils.isObjectEmpty(params.getExtraParams()) && modelParams.containsKey("extraParams")) {
                 params.setExtraParams(modelParams.getObject("extraParams", Map.class));
             }
-            //update-end---author:wangshuai---date:2026-03-20---for:【issues/8】保存激活qwen-vl-ocr模型报错---
+            //update-end---author:wangshuai---date:2026-03-20---for:【issues/8】Lưu và kích hoạt qwen-vl-ocr Mô hình báo lỗi---
         }
 
         // RAG
@@ -348,71 +348,71 @@ public class AIChatHandler implements IAIChatHandler {
             params.setQueryRouter(queryRouter);
         }
 
-        // 设置确保maxTokens值正确
+        // Đặt để đảm bảo giá trị maxTokens đúng
         if (oConvertUtils.isObjectNotEmpty(params.getMaxTokens()) && params.getMaxTokens() <= 0) {
             params.setMaxTokens(null);
         }
 
-        // 默认超时时间
+        // Thời gian timeout mặc định
         if(oConvertUtils.isObjectEmpty(params.getTimeout())){
             params.setTimeout(AiragConsts.DEFAULT_TIMEOUT);
         }
 
-        //deepseek-reasoner 推理模型不支持插件tool
+        //deepseek-reasoner Mô hình suy luận không hỗ trợ plugin tool
         String modelName = airagModel.getModelName();
-        //update-begin---author:wangshuai ---date:2026-06-29  for：【issues/9727】不支持Tool Calling的模型（如Ollama的deepseek-r1系列）发送工具调用时报错-----------
-        // modelName为空时从系统默认配置获取
+        //update-begin---author:wangshuai ---date:2026-06-29  for：【issues/9727] Mô hình không hỗ trợ Tool Calling (ví dụ Ollama deepseek-r1 dòng) gửi lệnh gọi công cụ sẽ báo lỗi-----------
+        // modelName Khi trống thì lấy từ cấu hình mặc định của hệ thống
         if(oConvertUtils.isEmpty(modelName) && oConvertUtils.isNotEmpty(aiChatConfig.getModel())){
             modelName = aiChatConfig.getModel();
         }
-        //update-begin---author:claude ---date:2026-08-07  for：Kimi k3 等模型采样参数需固定，覆盖用户配置避免 400 报错 "invalid temperature: only 1 is allowed for this model"-----------
+        //update-begin---author:claude ---date:2026-08-07  for: Các tham số lấy mẫu của mô hình như Kimi k3 cần được cố định, ghi đè cấu hình người dùng để tránh lỗi 400 "invalid temperature: only 1 is allowed for this model"-----------
         if (LLMConsts.isFixedSamplingParamModel(modelName)) {
-            log.info("[AI-CHAT] mergeParams modelName={} 采样参数固定，覆盖用户配置 temperature={}→1, topP={}→0.95, presencePenalty={}→0, frequencyPenalty={}→0",
+            log.info("[AI-CHAT] mergeParams modelName={} Tham số lấy mẫu cố định, ghi đè cấu hình người dùng temperature={}→1, topP={}→0.95, presencePenalty={}→0, frequencyPenalty={}→0",
                     modelName, params.getTemperature(), params.getTopP(), params.getPresencePenalty(), params.getFrequencyPenalty());
             params.setTemperature(1.0);
             params.setTopP(0.95);
             params.setPresencePenalty(0.0);
             params.setFrequencyPenalty(0.0);
         }
-        //update-end---author:claude ---date:2026-08-07  for：Kimi k3 等模型采样参数需固定，覆盖用户配置避免 400 报错 "invalid temperature: only 1 is allowed for this model"-----------
+        //update-end---author:claude ---date:2026-08-07  for: Các tham số lấy mẫu của mô hình như Kimi k3 cần được cố định, ghi đè cấu hình người dùng để tránh lỗi 400 "invalid temperature: only 1 is allowed for this model"-----------
         if(!LLMConsts.isToolCallingUnsupported(modelName)){
-            // 插件/MCP处理
+            // Plugin/MCP Xử lý
             buildPlugins(params);
         } else {
-            // 不支持Tool Calling的模型，清除上游已注入的默认工具，兼容旧版Ollama
+            // Mô hình không hỗ trợ Tool Calling, xóa công cụ mặc định đã chèn ở phía upstream, tương thích phiên bản cũ Ollama
             params.setTools(null);
             params.setPluginIds(null);
         }
-        //update-end---author:wangshuai ---date:2026-06-29  for：【issues/9727】不支持Tool Calling的模型（如Ollama的deepseek-r1系列）发送工具调用时报错-----------
+        //update-end---author:wangshuai ---date:2026-06-29  for：【issues/9727] Mô hình không hỗ trợ Tool Calling (ví dụ Ollama deepseek-r1 dòng) gửi lệnh gọi công cụ sẽ báo lỗi-----------
 
-        //update-begin---author:scott ---date:20260429  for：[issues/9585]DeepSeek大模型切换为新发布deepseek-v4-flash，流程中调用出现异常------------
-        // 仅对 DeepSeek 推理模型(deepseek-reasoner/deepseek-v4-flash 等)开启思考过程的捕获与回传，
-        // 否则 deepseek-v4-flash 在工具调用多轮对话中会返回:
+        //update-begin---author:scott ---date:20260429  for：[issues/9585]DeepSeek Mô hình lớn chuyển sang bản phát hành mới deepseek-v4-flash, khi gọi trong quy trình xuất hiện lỗi bất thường------------
+        // Chỉ đối với mô hình suy luận DeepSeek(deepseek-reasoner/deepseek-v4-flash v.v.)bật thu thập và trả lại quá trình suy nghĩ,
+        // Nếu không deepseek-v4-flash trong hội thoại nhiều vòng gọi công cụ sẽ trả về:
         // "The reasoning_content in the thinking mode must be passed back to the API."
-        // 注意：不要对 deepseek-chat 等非推理模型开启，避免无意义的请求字段污染。
+        // Lưu ý: đừng bật đối với deepseek-chat và các mô hình không suy luận khác, tránh làm ô nhiễm trường yêu cầu vô nghĩa.
         boolean isDsThinking = LLMConsts.isDeepSeekThinkingModel(modelName);
         log.info("[AI-CHAT][issues/9585] mergeParams provider={}, modelName={}, isDeepSeekThinkingModel={}, params.returnThinking={}, params.sendThinking={}",
                 airagModel.getProvider(), modelName, isDsThinking, params.getReturnThinking(), params.getSendThinking());
         if (isDsThinking) {
-            // returnThinking: 把响应中的 reasoning_content 解析到 AiMessage.thinking
-            //update-begin---author:wangshuai ---date:2026-05-11  for：[issues/9607]deepseek-v4-flash 联网搜索后模型调用异常-----------
-            //新模型中returnThinking必须为true，即深度思考
+            // returnThinking: Đưa trong phản hồi reasoning_content phân tích vào AiMessage.thinking
+            //update-begin---author:wangshuai ---date:2026-05-11  for：[issues/9607]deepseek-v4-flash Lỗi gọi mô hình sau khi tìm kiếm liên mạng-----------
+            //Trong mô hình mới, returnThinking phải là true, tức là suy nghĩ sâu
             params.setReturnThinking(true);
-            // sendThinking: 把 AiMessage.thinking 以 reasoning_content 字段回传到下次请求
+            // sendThinking: đưa AiMessage.thinking qua trường reasoning_content để trả lại trong yêu cầu tiếp theo
             params.setSendThinking(true);
-            //update-end---author:wangshuai ---date:2026-05-11  for：[issues/9607]deepseek-v4-flash 联网搜索后模型调用异常-----------
+            //update-end---author:wangshuai ---date:2026-05-11  for：[issues/9607]deepseek-v4-flash Lỗi gọi mô hình sau khi tìm kiếm liên mạng-----------
             log.info("[AI-CHAT][issues/9585][issues/9607] mergeParams after-fix returnThinking={}, sendThinking={}",
                     params.getReturnThinking(), params.getSendThinking());
         }
-        //update-end---author:scott ---date:20260429  for：[issues/9585]DeepSeek大模型切换为新发布deepseek-v4-flash，流程中调用出现异常------------
+        //update-end---author:scott ---date:20260429  for：[issues/9585]DeepSeek Mô hình lớn chuyển sang bản phát hành mới deepseek-v4-flash, khi gọi trong quy trình xuất hiện lỗi bất thường------------
 
         return params;
     }
 
     /**
-     * 构造插件和MCP工具
-     * for [QQYUN-12453]【AI】支持插件
-     * for [QQYUN-9234] MCP服务连接关闭 - 使用包装器保存连接引用
+     * Xây dựng plugin và công cụ MCP
+     * for [QQYUN-12453]【AI】Hỗ trợ plugin
+     * for [QQYUN-9234] MCP Đóng kết nối dịch vụ - Sử dụng wrapper để lưu tham chiếu kết nối
      * @param params
      * @author chenrui
      * @date 2025/10/31 14:04
@@ -430,23 +430,23 @@ public class AIChatHandler implements IAIChatHandler {
                 if (airagMcp == null) {
                     continue;
                 }
-                //update-begin---author:scott ---date:20260803  for：【LHZP-1497】插件禁用后仍可被AI调用：禁用插件不构建工具，防止LLM调用禁用插件---
+                //update-begin---author:scott ---date:20260803  for：【LHZP-1497】Plugin sau khi bị vô hiệu hóa vẫn có thể bị AI gọi: plugin bị vô hiệu hóa không được xây dựng thành công cụ, ngăn LLM gọi plugin đã bị vô hiệu hóa---
                 if (LLMConsts.STATUS_DISABLE.equals(airagMcp.getStatus())) {
-                    log.warn("插件[{}]已禁用，跳过工具构建", airagMcp.getName());
+                    log.warn("Plugin[{}]Đã bị vô hiệu hóa, bỏ qua xây dựng công cụ", airagMcp.getName());
                     continue;
                 }
-                //update-end---author:scott ---date:20260803  for：【LHZP-1497】插件禁用后仍可被AI调用：禁用插件不构建工具，防止LLM调用禁用插件---
+                //update-end---author:scott ---date:20260803  for：【LHZP-1497】Plugin sau khi bị vô hiệu hóa vẫn có thể bị AI gọi: plugin bị vô hiệu hóa không được xây dựng thành công cụ, ngăn LLM gọi plugin đã bị vô hiệu hóa---
 
                 String category = airagMcp.getCategory();
                 if (oConvertUtils.isEmpty(category)) {
-                    // 兼容旧数据：如果没有category字段，默认为mcp
+                    // Tương thích dữ liệu cũ: nếu không có trường category, mặc định là mcp
                     category = "mcp";
                 }
 
                 if ("mcp".equalsIgnoreCase(category)) {
-                    // MCP类型：构建McpToolProviderWrapper（包含连接引用用于后续关闭）
-                    // for [QQYUN-9234] MCP服务连接关闭
-                    //update-begin---author:wangshuai ---date:20260804  for：【LHZP-1501】配置的MCP报错，导致的右侧的会话直接调用大模型失败了---
+                    // MCP loại: xây dựng McpToolProviderWrapper (chứa tham chiếu kết nối để đóng sau)
+                    // for [QQYUN-9234] MCP Đóng kết nối dịch vụ
+                    //update-begin---author:wangshuai ---date:20260804  for：【LHZP-1501】MCP đã cấu hình báo lỗi, khiến phiên trò chuyện bên phải gọi trực tiếp mô hình lớn bị thất bại---
                     try {
                         McpToolProviderWrapper wrapper = buildMcpToolProviderWrapper(
                                 airagMcp.getName(),
@@ -460,34 +460,34 @@ public class AIChatHandler implements IAIChatHandler {
                             mcpToolProviderWrappers.add(wrapper);
                         }
                     } catch (Exception e) {
-                        log.warn("MCP插件[{}]初始化失败，已跳过该插件，不影响本次聊天。endpoint={}",
+                        log.warn("MCP Plugin[{}]Khởi tạo thất bại, đã bỏ qua plugin này, không ảnh hưởng đến cuộc trò chuyện lần này.endpoint={}",
                                 airagMcp.getName(), airagMcp.getEndpoint(), e);
                     }
-                    //update-end---author:wangshuai ---date:20260804  for：【LHZP-1501】配置的MCP报错，导致的右侧的会话直接调用大模型失败了---
+                    //update-end---author:wangshuai ---date:20260804  for：【LHZP-1501】MCP đã cấu hình báo lỗi, khiến phiên trò chuyện bên phải gọi trực tiếp mô hình lớn bị thất bại---
                 } else if ("plugin".equalsIgnoreCase(category)) {
-                    // 插件类型：构建ToolSpecification和ToolExecutor
-					//update-begin---author:scott ---date:20260810  for：插件禁用后立即阻止已加载会话继续调用---
+                    // Loại plugin: xây dựng ToolSpecification và ToolExecutor
+					//update-begin---author:scott ---date:20260810  for: Sau khi vô hiệu hóa plugin, chặn ngay phiên đã tải tiếp tục gọi---
 					Map<ToolSpecification, ToolExecutor> tools = PluginToolBuilder.buildTools(airagMcp, params.getCurrentHttpRequest(),
 							() -> isPluginAvailable(pluginId));
-					//update-end---author:scott ---date:20260810  for：插件禁用后立即阻止已加载会话继续调用---
+					//update-end---author:scott ---date:20260810  for: Sau khi vô hiệu hóa plugin, chặn ngay phiên đã tải tiếp tục gọi---
                     if (tools != null && !tools.isEmpty()) {
                         pluginTools.putAll(tools);
                     }
                 }
             }
 
-            // 设置MCP工具提供者
+            // Đặt nhà cung cấp công cụ MCP
             if (!mcpToolProviders.isEmpty()) {
                 params.setMcpToolProviders(mcpToolProviders);
             }
             
-            // 保存MCP连接包装器，用于后续关闭
-            // for [QQYUN-9234] MCP服务连接关闭
+            // Lưu wrapper kết nối MCP, dùng để đóng sau
+            // for [QQYUN-9234] MCP Đóng kết nối dịch vụ
             if (!mcpToolProviderWrappers.isEmpty()) {
                 params.setMcpToolProviderWrappers(mcpToolProviderWrappers);
             }
 
-            // 设置插件工具
+            // Đặt công cụ plugin
             if (!pluginTools.isEmpty()) {
                 if (params.getTools() == null) {
                     params.setTools(new HashMap<>());
@@ -498,12 +498,12 @@ public class AIChatHandler implements IAIChatHandler {
     }
 
 	/**
-	 * 查询插件执行时的最新状态，已删除或已禁用均视为不可用。
+	 * Truy vấn trạng thái mới nhất khi plugin thực thi, đã xóa hoặc đã vô hiệu hóa đều được coi là không khả dụng.
 	 *
-	 * @param pluginId 插件ID
-	 * @return 是否允许继续执行
+	 * @param pluginId Plugin ID
+	 * @return Có cho phép tiếp tục thực thi không
 	 * @author scott
-	 * @since 2026-08-10 插件禁用后立即阻止已加载会话继续调用
+	 * @since 2026-08-10 Ngay sau khi plugin bị vô hiệu hóa, chặn phiên đã tải tiếp tục gọi
 	 */
 	private boolean isPluginAvailable(String pluginId) {
 		AiragMcp latestPlugin = airagMcpMapper.selectById(pluginId);
@@ -512,11 +512,11 @@ public class AIChatHandler implements IAIChatHandler {
 
     @Override
     public UserMessage buildUserMessage(String content, List<String> images) {
-        AssertUtils.assertNotEmpty("请输入消息内容", content);
+        AssertUtils.assertNotEmpty("Vui lòng nhập nội dung tin nhắn", content);
         List<Content> contents = new ArrayList<>();
         contents.add(TextContent.from(content));
         if (oConvertUtils.isObjectNotEmpty(images)) {
-            // 获取所有图片,将他们转换为ImageContent
+            // Lấy tất cả hình ảnh,Chuyển đổi chúng thành ImageContent
             List<ImageContent> imageContents = buildImageContents(images);
             contents.addAll(imageContents);
         }
@@ -529,33 +529,33 @@ public class AIChatHandler implements IAIChatHandler {
         for (String imageUrl : images) {
             Matcher matcher = LLMConsts.WEB_PATTERN.matcher(imageUrl);
             if (matcher.matches()) {
-                // 来源于网络
+                // Lấy từ mạng
                 imageContents.add(ImageContent.from(imageUrl));
             } else {
-                // 本地文件
+                // Tệp cục bộ
                 String filePath = uploadpath + File.separator + imageUrl;
-                // 读取文件并转换为 base64 编码字符串
+                // Đọc tệp và chuyển đổi thành chuỗi mã hóa base64
                 try {
                     SsrfFileTypeFilter.checkPathTraversal(filePath);
                     Path path = Paths.get(filePath);
                     byte[] fileContent = Files.readAllBytes(path);
                     String base64Data = Base64.getEncoder().encodeToString(fileContent);
-                    // 获取文件的 MIME 类型
+                    // Lấy loại MIME của tệp
                     String mimeType = Files.probeContentType(path);
-                    // 构建 ImageContent 对象
+                    // Xây dựng đối tượng ImageContent
                     imageContents.add(ImageContent.from(base64Data, mimeType));
                 } catch (IOException e) {
-                    log.error("读取文件失败: {}", imageUrl, e);
-                    throw new RuntimeException("发送消息失败,读取文件异常:" + e.getMessage(), e);
+                    log.error("Đọc tệp thất bại: {}", imageUrl, e);
+                    throw new RuntimeException("Gửi tin nhắn thất bại,Đọc tệp bất thường:" + e.getMessage(), e);
                 }
             }
         }
         return imageContents;
     }
 
-    //================================================= begin【QQYUN-12145】【AI】AI 绘画创作 ========================================
+    //================================================= begin【QQYUN-12145】【AI】Sáng tạo hội họa bằng AI ========================================
     /**
-     * 文本生成图片
+     * Văn bản tạo hình ảnh
      * @param modelId
      * @param messages
      * @param params
@@ -563,14 +563,14 @@ public class AIChatHandler implements IAIChatHandler {
      */
     @Override
     public List<Map<String, Object>> imageGenerate(String modelId, String messages, AIChatParams params) {
-        AssertUtils.assertNotEmpty("至少发送一条消息", messages);
-        //AssertUtils.assertNotEmpty("请选择图片大模型", modelId);
+        AssertUtils.assertNotEmpty("Gửi ít nhất một tin nhắn", messages);
+        //AssertUtils.assertNotEmpty("Vui lòng chọn mô hình lớn hình ảnh", modelId);
         AiragModel airagModel = airagModelMapper.getByIdIgnoreTenant(modelId);
         return this.imageGenerate(airagModel, messages, params);
     }
 
     /**
-     * 文本生成图片
+     * Văn bản tạo hình ảnh
      *
      * @param airagModel
      * @param messages
@@ -580,11 +580,11 @@ public class AIChatHandler implements IAIChatHandler {
     public List<Map<String, Object>> imageGenerate(AiragModel airagModel, String messages, AIChatParams params) {
         if(airagModel == null || (airagModel.getActivateFlag()!=null && airagModel.getActivateFlag() == 0)){
             if (airagModel != null && oConvertUtils.isNotEmpty(airagModel.getId())) {
-                log.warn("模型未激活,采用默认文生图模型");
+                log.warn("Mô hình chưa được kích hoạt,Dùng mô hình text-to-image mặc định");
             }
-            //判断是否配置了默认模型
+            //Phán đoán có cấu hình mô hình mặc định hay không
             if(aiChatConfig == null || oConvertUtils.isEmpty(aiChatConfig.getAiModelDraw().getApiKey())){
-                throw new JeecgBootBizTipException("当前系统未配置默认图像模型，请前往yml中配置默认模型");
+                throw new JeecgBootBizTipException("Hệ thống hiện tại chưa cấu hình mô hình hình ảnh mặc định, vui lòng đến yml để cấu hình mô hình mặc định");
             }
             airagModel = this.getDefaultDrawModel(aiChatConfig.getAiModelDraw());
         }
@@ -592,13 +592,13 @@ public class AIChatHandler implements IAIChatHandler {
         try {
             return llmHandler.imageGenerate(messages, params);
         } catch (Exception e) {
-            throw translateLlmException(e, "调用绘画AI接口失败，详情请查看后台日志。");
+            throw translateLlmException(e, "Gọi API AI vẽ tranh thất bại, xem chi tiết trong nhật ký hệ thống.");
         }
     }
 
 
     /**
-     * 图生图
+     * Tạo ảnh từ ảnh
      * @param modelId
      * @param messages
      * @param params
@@ -606,13 +606,13 @@ public class AIChatHandler implements IAIChatHandler {
      */
     @Override
     public List<Map<String, Object>> imageEdit(String modelId, String messages, List<String> images, AIChatParams params) {
-        AssertUtils.assertNotEmpty("至少发送一条消息", messages);
+        AssertUtils.assertNotEmpty("Gửi ít nhất một tin nhắn", messages);
         AiragModel airagModel = airagModelMapper.getByIdIgnoreTenant(modelId);
         return this.imageEdit(airagModel, messages, images, params);
     }
 
     /**
-     * 图生图
+     * Tạo ảnh từ ảnh
      *
      * @param images
      * @param params
@@ -621,11 +621,11 @@ public class AIChatHandler implements IAIChatHandler {
     public List<Map<String, Object>> imageEdit(AiragModel airagModel,String messages, List<String> images, AIChatParams params) {
         if(null == airagModel || airagModel.getActivateFlag() == 0){
             if (airagModel != null && oConvertUtils.isNotEmpty(airagModel.getId())) {
-                log.warn("模型未激活,采用默认图生图模型");
+                log.warn("Mô hình chưa được kích hoạt,Dùng mô hình image-to-image mặc định");
             }
-            //判断是否配置了默认模型
+            //Phán đoán có cấu hình mô hình mặc định hay không
             if(aiChatConfig == null || oConvertUtils.isEmpty(aiChatConfig.getAiModelPicDraw().getApiKey())){
-                throw new JeecgBootBizTipException("当前系统未配置默认图像模型，请前往yml中配置默认模型");
+                throw new JeecgBootBizTipException("Hệ thống hiện tại chưa cấu hình mô hình hình ảnh mặc định, vui lòng đến yml để cấu hình mô hình mặc định");
             }
             airagModel = this.getDefaultDrawModel(aiChatConfig.getAiModelPicDraw());
         }
@@ -634,14 +634,14 @@ public class AIChatHandler implements IAIChatHandler {
         try {
             return llmHandler.imageEdit(messages, originalImageBase64List, params);
         } catch (Exception e) {
-            throw translateLlmException(e, "调用绘画AI接口失败，详情请查看后台日志。");
+            throw translateLlmException(e, "Gọi API AI vẽ tranh thất bại, xem chi tiết trong nhật ký hệ thống.");
         }
     }
 
     /**
-     * 需要将图片转换成Base64编码
-     * @param images 图片路径列表
-     * @return Base64编码字符串
+     * Cần chuyển hình ảnh thành mã Base64
+     * @param images Danh sách đường dẫn hình ảnh
+     * @return Base64 Chuỗi mã hóa
      */
     private List<String> getFirstImageBase64(List<String> images) {
         List<String> originalImageBase64List = new ArrayList<>();
@@ -651,54 +651,54 @@ public class AIChatHandler implements IAIChatHandler {
                 try {
                     byte[] fileContent;
                     if (matcher.matches()) {
-                        // 来源于网络
-                        //update-begin---author:zhangdaihao ---date:2026-08-06  for：【issues/9805】AI图生图imageUrl未校验导致SSRF，增加URL安全校验-----------
+                        // Lấy từ mạng
+                        //update-begin---author:zhangdaihao ---date:2026-08-06  for：【issues/9805】imageUrl của AI chuyển ảnh thành ảnh chưa được kiểm tra gây SSRF, thêm kiểm tra an toàn URL-----------
                         SsrfFileTypeFilter.checkSsrfHttpUrl(imageUrl);
-                        //update-end---author:zhangdaihao ---date:2026-08-06  for：【issues/9805】AI图生图imageUrl未校验导致SSRF，增加URL安全校验-----------
-                        //update-begin---author:wangshuai ---date:20261015  for：【GHSA-3wf5-4x79-98fq】只校验初始URL、openConnection默认跟随302导致SSRF重定向绕过，改用禁止自动跳转且逐跳SSRF校验的安全下载-----------
-                        // 原裸 openConnection 默认自动跟随 3xx 且跳转目标不复检，攻击者用跳板 302 跳到 127.0.0.1、169.254.169.254(云元数据) 即可绕过上面的初始校验；
-                        // download2BytesFromNet 内部禁止自动跳转，并对初始URL及每一跳重定向目标都做SSRF校验（与 #9681 同口径）。
+                        //update-end---author:zhangdaihao ---date:2026-08-06  for：【issues/9805】imageUrl của AI chuyển ảnh thành ảnh chưa được kiểm tra gây SSRF, thêm kiểm tra an toàn URL-----------
+                        //update-begin---author:wangshuai ---date:20261015  for：【GHSA-3wf5-4x79-98fq】Chỉ kiểm tra URL ban đầu, openConnection mặc định theo 302 gây vòng qua chuyển hướng SSRF, đổi sang tải xuống an toàn cấm tự động chuyển hướng và kiểm tra SSRF từng bước nhảy-----------
+                        // openConnection trần ban đầu mặc định tự động theo 3xx và không kiểm tra lại đích chuyển hướng, kẻ tấn công dùng bước đệm 302 để nhảy tới 127.0.0.1、169.254.169.254(Metadata đám mây) là có thể vượt qua kiểm tra ban đầu ở trên;
+                        // download2BytesFromNet nội bộ cấm tự động chuyển hướng, và thực hiện kiểm tra SSRF đối với URL ban đầu và đích chuyển hướng của mỗi bước (cùng #9681 tiêu chuẩn).
                         fileContent = FileDownloadUtils.download2BytesFromNet(imageUrl);
-                        //update-end---author:wangshuai ---date:20261015  for：【GHSA-3wf5-4x79-98fq】只校验初始URL、openConnection默认跟随302导致SSRF重定向绕过，改用禁止自动跳转且逐跳SSRF校验的安全下载-----------
+                        //update-end---author:wangshuai ---date:20261015  for：【GHSA-3wf5-4x79-98fq】Chỉ kiểm tra URL ban đầu, openConnection mặc định theo 302 gây vòng qua chuyển hướng SSRF, đổi sang tải xuống an toàn cấm tự động chuyển hướng và kiểm tra SSRF từng bước nhảy-----------
                     } else {
-                        //update-begin---author:liusq ---date:2026-03-30  for：【issues/9431】修复getFirstImageBase64路径遍历漏洞(CWE-22)-----------
-                        // 本地文件
+                        //update-begin---author:liusq ---date:2026-03-30  for：【issues/9431】Sửa lỗ hổng path traversal của getFirstImageBase64(CWE-22)-----------
+                        // Tệp cục bộ
                         String filePath = uploadpath + File.separator + imageUrl;
                         SsrfFileTypeFilter.checkPathTraversal(filePath);
-                        // 路径遍历校验：规范化后确保文件在uploadpath目录内
+                        // Kiểm tra duyệt đường dẫn: sau khi chuẩn hóa, đảm bảo tệp nằm trong thư mục uploadpath
                         File uploadDir = new File(uploadpath).getCanonicalFile();
                         File targetFile = new File(filePath).getCanonicalFile();
                         if (!targetFile.toPath().startsWith(uploadDir.toPath())) {
-                            throw new JeecgBootException("非法文件路径，禁止访问上传目录之外的文件: " + imageUrl);
+                            throw new JeecgBootException("Đường dẫn tệp không hợp lệ, cấm truy cập tệp ngoài thư mục tải lên: " + imageUrl);
                         }
                         fileContent = Files.readAllBytes(targetFile.toPath());
-                        //update-end---author:liusq ---date:2026-03-30  for：【issues/9431】修复getFirstImageBase64路径遍历漏洞(CWE-22)-----------
+                        //update-end---author:liusq ---date:2026-03-30  for：【issues/9431】Sửa lỗ hổng path traversal của getFirstImageBase64(CWE-22)-----------
                     }
                     originalImageBase64List.add(Base64.getEncoder().encodeToString(fileContent));
                 } catch (Exception e) {
-                    log.error("图片读取失败: {}", imageUrl, e);
-                    throw new JeecgBootException("图片读取失败: " + imageUrl, e);
+                    log.error("Đọc hình ảnh thất bại: {}", imageUrl, e);
+                    throw new JeecgBootException("Đọc hình ảnh thất bại: " + imageUrl, e);
                 }
             }
         }
         return originalImageBase64List;
     }
-    //================================================= end 【QQYUN-12145】【AI】AI 绘画创作 ========================================
+    //================================================= end 【QQYUN-12145】【AI】Sáng tạo hội họa bằng AI ========================================
 
     /**
-     * 将 LLM 调用异常统一翻译为友好的 JeecgBootException。
+     * Dịch thống nhất ngoại lệ khi gọi LLM thành JeecgBootException thân thiện.
      * <p>
-     * 处理优先级：
+     * Thứ tự ưu tiên xử lý:
      * <ol>
-     *   <li>请求超时（timeout）→ 排队提示</li>
-     *   <li>工具调用上下文丢失（messages with role 'tool'…）→ 友好提示</li>
-     *   <li>{@link IAIChatHandler#MODEL_ERROR_MAP} 中的关键字匹配 → 对应中文提示</li>
-     *   <li>兜底 → defaultMsg 参数</li>
+     *   <li>Yêu cầu timeout (timeout)→ Nhắc nhở xếp hàng</li>
+     *   <li>Mất ngữ cảnh gọi công cụ (messages with role 'tool'…）→ Thông báo thân thiện</li>
+     *   <li>{@link IAIChatHandler#MODEL_ERROR_MAP} khớp từ khóa trong → thông báo tiếng Trung tương ứng</li>
+     *   <li>Phương án dự phòng → defaultMsg Tham số</li>
      * </ol>
      *
-     * @param e          原始异常
-     * @param defaultMsg 兜底提示语
-     * @return 封装后的 JeecgBootException，供调用方直接 throw
+     * @param e          Ngoại lệ gốc
+     * @param defaultMsg Câu nhắc dự phòng
+     * @return JeecgBootException sau khi đóng gói, để bên gọi trực tiếp throw
      * @author chenrui
      * @date 2025/3/5
      */
@@ -707,25 +707,25 @@ public class AIChatHandler implements IAIChatHandler {
         String errMsg = defaultMsg;
 
         if (oConvertUtils.isNotEmpty(exceptionMsg)) {
-            // 1.工具调用消息序列不完整
-            //update-begin---author:scott ---date:20260810  for：修正匹配串拼写与大小写（原"preceeding"为拼写错误，且DeepSeek实际返回以"Messages"开头），该友好提示此前永不命中-----------
+            // 1.Chuỗi tin nhắn gọi công cụ không đầy đủ
+            //update-begin---author:scott ---date:20260810  for: sửa lỗi chính tả và chữ hoa/thường của chuỗi khớp (gốc"preceeding"là lỗi chính tả, và DeepSeek thực tế trả về bắt đầu bằng"Messages"ở đầu), thông báo thân thiện này trước đây không bao giờ khớp-----------
             if (exceptionMsg.toLowerCase().contains("must be a response to a preceding message with 'tool_calls'")) {
-            //update-end---author:scott ---date:20260810  for：修正匹配串拼写与大小写，该友好提示此前永不命中-----------
-                errMsg = "消息序列不完整，可能是因为历史消息数量设置过小导致工具调用上下文丢失。建议增加历史消息数量后重试。";
-                log.error("AI模型调用异常: 工具调用消息序列不完整，建议增加历史消息数量。异常详情: {}", exceptionMsg, e);
+            //update-end---author:scott ---date:20260810  for: sửa lỗi chính tả và chữ hoa/thường của chuỗi khớp, thông báo thân thiện này trước đây không bao giờ khớp-----------
+                errMsg = "Chuỗi tin nhắn không đầy đủ, có thể do số lượng tin nhắn lịch sử đặt quá nhỏ khiến ngữ cảnh gọi công cụ bị mất. Đề nghị tăng số lượng tin nhắn lịch sử rồi thử lại.";
+                log.error("AI Lỗi gọi mô hình: Chuỗi tin nhắn gọi công cụ không đầy đủ, đề nghị tăng số lượng tin nhắn lịch sử. Chi tiết ngoại lệ: {}", exceptionMsg, e);
                 return new JeecgBootException(errMsg);
             }
 
-            // 2.根据常见异常关键字做细致翻译（大小写不敏感）
+            // 2.Dịch chi tiết theo từ khóa ngoại lệ thường gặp (không phân biệt chữ hoa/thường)
             errMsg = matchErrorMsg(exceptionMsg, errMsg);
         }
 
-        log.error("AI模型调用异常: {}", errMsg, e);
+        log.error("AI Lỗi gọi mô hình: {}", errMsg, e);
         return new JeecgBootException(errMsg);
     }
 
     /**
-     * 获取默认图像模型
+     * Lấy mô hình hình ảnh mặc định
      *
      * @return
      */

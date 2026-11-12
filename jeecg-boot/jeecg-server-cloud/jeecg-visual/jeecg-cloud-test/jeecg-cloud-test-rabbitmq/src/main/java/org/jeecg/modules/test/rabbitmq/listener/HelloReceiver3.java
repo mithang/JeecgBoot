@@ -12,10 +12,10 @@ import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 
 /**
- * 定义接收者（可以定义N个接受者，消息会均匀的发送到N个接收者中）
+ * Định nghĩa người nhận (có thể định nghĩa N người nhận, tin nhắn sẽ được gửi đều đến N người nhận)
  *
- * RabbitMq接受者3【我是处理人3】
- * （@RabbitListener声明类方法上，一个类可以多监听多个队列）
+ * RabbitMq Receiver 3 【Tôi là người xử lý 3】
+ * （@RabbitListener khai báo trên phương thức của lớp, một lớp có thể lắng nghe nhiều hàng đợi)
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -28,9 +28,9 @@ public class HelloReceiver3 extends BaseRabbiMqHandler<BaseMap> {
         super.onMessage(baseMap, deliveryTag, channel, new MqListener<BaseMap>() {
             @Override
             public void handler(BaseMap map, Channel channel) {
-                //业务处理
+                //Xử lý nghiệp vụ
                 String orderId = map.get("orderId").toString();
-                log.info("【我是处理人3】MQ Receiver3，orderId : " + orderId);
+                log.info("[Tôi là người xử lý 3] MQ Receiver3,orderId : " + orderId);
             }
         });
     }

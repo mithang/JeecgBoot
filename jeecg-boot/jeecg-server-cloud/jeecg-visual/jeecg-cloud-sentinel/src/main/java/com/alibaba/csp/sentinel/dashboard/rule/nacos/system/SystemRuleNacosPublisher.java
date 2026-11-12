@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- *  持久化系统规则
+ *  Lưu bền quy tắc hệ thống
  *
  * @author zyf
  * @date 2022-04-13

@@ -1,39 +1,39 @@
 package com.alibaba.csp.sentinel.dashboard.constants;
 
 /**
- * sentinel常量配置
+ * sentinel Cấu hình hằng số
  * @author zyf
  */
 public class SentinelConStants {
     public static final String GROUP_ID = "SENTINEL_GROUP";
 
     /**
-     * 流控规则
+     * Quy tắc kiểm soát luồng
      */
     public static final String FLOW_DATA_ID_POSTFIX = "-flow-rules";
     /**
-     * 热点参数
+     * Tham số điểm nóng
      */
     public static final String PARAM_FLOW_DATA_ID_POSTFIX = "-param-rules";
     /**
-     * 降级规则
+     * Quy tắc hạ cấp
      */
     public static final String DEGRADE_DATA_ID_POSTFIX = "-degrade-rules";
     /**
-     * 系统规则
+     * Quy tắc hệ thống
      */
     public static final String SYSTEM_DATA_ID_POSTFIX = "-system-rules";
     /**
-     * 授权规则
+     * Quy tắc ủy quyền
      */
     public static final String AUTHORITY_DATA_ID_POSTFIX = "-authority-rules";
 
     /**
-     * 网关API
+     * Gateway API
      */
     public static final String GETEWAY_API_DATA_ID_POSTFIX = "-api-rules";
     /**
-     * 网关流控规则
+     * Quy tắc kiểm soát lưu lượng của gateway
      */
     public static final String GETEWAY_FLOW_DATA_ID_POSTFIX = "-flow-rules";
 }

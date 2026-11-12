@@ -18,7 +18,7 @@ import jakarta.annotation.Resource;
 import java.math.BigDecimal;
 
 /**
- * @Description: 产品服务类
+ * @Description: Lớp dịch vụ sản phẩm
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
@@ -31,7 +31,7 @@ public class SeataProductServiceImpl implements SeataProductService {
     private SeataProductMapper productMapper;
 
     /**
-     * 事务传播特性设置为 REQUIRES_NEW 开启新的事务
+     * Đặt đặc tính lan truyền giao dịch thành REQUIRES_NEW Mở giao dịch mới
      */
     @DS("product")
     @Transactional(propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)
@@ -39,23 +39,23 @@ public class SeataProductServiceImpl implements SeataProductService {
     public Result<BigDecimal> reduceStock(Long productId, Integer count) {
         log.info("xid:"+ RootContext.getXID());
         log.info("=============PRODUCT START=================");
-        // 检查库存
+        // Kiểm tra tồn kho
         SeataProduct product = productMapper.selectById(productId);
-        Assert.notNull(product, "商品不存在");
+        Assert.notNull(product, "Sản phẩm không tồn tại");
         Integer stock = product.getStock();
-        log.info("商品编号为 {} 的库存为{},订单商品数量为{}", productId, stock, count);
+        log.info("Mã sản phẩm là {} tồn kho là{},Số lượng sản phẩm trong đơn hàng là{}", productId, stock, count);
 
         if (stock < count) {
-            log.warn("商品编号为{} 库存不足，当前库存:{}", productId, stock);
-            return Result.error("库存不足");
+            log.warn("Mã sản phẩm là{} Tồn kho không đủ, tồn kho hiện tại:{}", productId, stock);
+            return Result.error("Tồn kho không đủ");
         }
-        log.info("开始扣减商品编号为 {} 库存,单价商品价格为{}", productId, product.getPrice());
-        // 扣减库存
+        log.info("Bắt đầu trừ tồn kho của sản phẩm có mã {} Tồn kho,Giá đơn vị sản phẩm là{}", productId, product.getPrice());
+        // Trừ kho
         int currentStock = stock - count;
         product.setStock(currentStock);
         productMapper.updateById(product);
         BigDecimal totalPrice = product.getPrice().multiply(new BigDecimal(count));
-        log.info("扣减商品编号为 {} 库存成功,扣减后库存为{}, {} 件商品总价为 {} ", productId, currentStock, count, totalPrice);
+        log.info("Trừ tồn kho của sản phẩm có mã {} Tồn kho thành công,Sau khi trừ, tồn kho còn{}, {} tổng giá của các sản phẩm là {} ", productId, currentStock, count, totalPrice);
         log.info("=============PRODUCT END=================");
         return Result.OK(totalPrice);
     }

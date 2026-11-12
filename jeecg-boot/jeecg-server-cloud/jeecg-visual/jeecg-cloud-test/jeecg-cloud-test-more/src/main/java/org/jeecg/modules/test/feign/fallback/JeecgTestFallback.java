@@ -7,7 +7,7 @@ import org.jeecg.modules.test.feign.client.JeecgTestClient;
 
 
 /**
-* 接口fallback实现
+* Triển khai fallback của API
 * 
 * @author: scott
 * @date: 2022/4/11 19:41
@@ -20,6 +20,6 @@ public class JeecgTestFallback implements JeecgTestClient {
 
     @Override
     public String getMessage(String name) {
-        return "访问超时, 自定义FallbackFactory";
+        return "Truy cập quá thời gian, Tùy chỉnh FallbackFactory";
     }
 }

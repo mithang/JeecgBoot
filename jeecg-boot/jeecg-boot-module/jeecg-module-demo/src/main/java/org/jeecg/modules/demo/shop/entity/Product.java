@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 /**
- * 商品实体
+ * Thực thể sản phẩm
  * @Author: chenrui
  * @Date: 2025-11-06
  */
@@ -17,32 +17,32 @@ import java.math.BigDecimal;
 public class Product {
     
     /**
-     * 商品ID
+     * Sản phẩm ID
      */
     private String id;
     
     /**
-     * 商品名称
+     * Tên sản phẩm
      */
     private String name;
     
     /**
-     * 商品价格
+     * Giá sản phẩm
      */
     private BigDecimal price;
     
     /**
-     * 商品分类
+     * Phân loại sản phẩm
      */
     private String category;
     
     /**
-     * 商品描述
+     * Mô tả sản phẩm
      */
     private String description;
     
     /**
-     * 库存数量
+     * Số lượng tồn kho
      */
     private Integer stock;
 }

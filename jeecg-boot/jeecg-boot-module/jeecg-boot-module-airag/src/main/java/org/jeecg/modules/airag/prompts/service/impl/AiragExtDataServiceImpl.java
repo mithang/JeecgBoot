@@ -36,22 +36,22 @@ public class AiragExtDataServiceImpl extends ServiceImpl<AiragExtDataMapper, Air
 
     @Override
     public Result debugEvaluator(AiragDebugVo debugVo) {
-        //1.提示词
+        //1.Prompt
         String prompt = debugVo.getPrompts();
-        AssertUtils.assertNotEmpty("请输入提示词", prompt);
+        AssertUtils.assertNotEmpty("Vui lòng nhập prompt", prompt);
 
-        //2.测试内容
+        //2.Nội dung kiểm tra
         String content = debugVo.getContent();
-        AssertUtils.assertNotEmpty("请输入测试内容", content);
+        AssertUtils.assertNotEmpty("Vui lòng nhập nội dung kiểm thử", content);
         List<ChatMessage> messages = Arrays.asList(new SystemMessage(prompt), new UserMessage(content));
 
-        //3.模型数据
+        //3.Dữ liệu mô hình
         String modelId = debugVo.getModelId();
-        AssertUtils.assertNotEmpty("请选择模型", modelId);
+        AssertUtils.assertNotEmpty("Vui lòng chọn mô hình", modelId);
 
-        //4.模型参数
+        //4.Tham số mô hình
         String modelParam = debugVo.getModelParam();
-        // 默认大模型参数
+        // Tham số mô hình lớn mặc định
         AIChatParams params = new AIChatParams();
         params.setTemperature(0.8);
         params.setTopP(0.9);
@@ -73,16 +73,16 @@ public class AiragExtDataServiceImpl extends ServiceImpl<AiragExtDataMapper, Air
                 params.setTemperature(param.getDoubleValue("frequencyPenalty"));
             }
         }
-        //5.AI问答
+        //5.AI Hỏi đáp
         String promptValue = aiChatHandler.completions(modelId,messages, params);
         if (promptValue == null || promptValue.isEmpty()) {
-            return Result.error("生成失败");
+            return Result.error("Tạo thất bại");
         }
         return Result.OK("success", promptValue);
     }
 
     /**
-     * 查询AI问答记录
+     * Truy vấn bản ghi hỏi đáp AI
      * @param id
      * @return
      */

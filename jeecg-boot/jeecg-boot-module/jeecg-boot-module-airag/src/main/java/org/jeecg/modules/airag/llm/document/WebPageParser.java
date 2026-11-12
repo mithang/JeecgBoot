@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * 网页解析器，使用Jsoup爬取网页并转换为Markdown格式
+ * Trình phân tích trang web, sử dụng Jsoup để thu thập trang web và chuyển đổi sang định dạng Markdown
  *
  * @author sjlei
  * @date 2026/3/19
@@ -25,12 +25,12 @@ import java.net.URL;
 public class WebPageParser {
 
     /**
-     * 请求超时时间(毫秒)
+     * Thời gian timeout yêu cầu(Mili giây)
      */
     private static final int TIMEOUT_MS = 15000;
 
     /**
-     * 最大body大小(5MB)
+     * Kích thước body tối đa(5MB)
      */
     private static final int MAX_BODY_SIZE = 5 * 1024 * 1024;
 
@@ -40,32 +40,32 @@ public class WebPageParser {
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
     /**
-     * 最大重定向次数
+     * Số lần chuyển hướng tối đa
      */
     private static final int MAX_REDIRECTS = 5;
 
     /**
-     * 爬取网页并转换为Markdown
+     * Thu thập trang web và chuyển đổi thành Markdown
      *
-     * @param url 网页URL
-     * @return Markdown格式的文本内容
-     * @throws IOException 网络请求失败时抛出
+     * @param url Trang web URL
+     * @return Markdown nội dung văn bản định dạng
+     * @throws IOException Ném ra khi yêu cầu mạng thất bại
      */
     public String parseToMarkdown(String url) throws IOException {
-        //update-begin---author:zhangdaihao ---date:2026-08-06  for：【issues/9808】AI知识库Web文档抓取SSRF漏洞修复，禁止自动跳转并逐跳校验-----------
+        //update-begin---author:zhangdaihao ---date:2026-08-06  for：【issues/9808】Sửa lỗ hổng SSRF khi thu thập tài liệu Web của kho tri thức AI, cấm tự động chuyển hướng và kiểm tra từng bước nhảy-----------
         String currentUrl = url;
         Connection.Response response = null;
         for (int i = 0; i <= MAX_REDIRECTS; i++) {
-            // 每一跳（含初始 URL）都重新做 SSRF 校验，拦截 loopback / link-local / 云元数据地址
+            // Mỗi bước chuyển hướng (bao gồm URL ban đầu) đều thực hiện lại kiểm chứng SSRF, chặn loopback / link-local / Địa chỉ metadata đám mây
             SsrfFileTypeFilter.checkSsrfHttpUrl(currentUrl);
 
             response = Jsoup.connect(currentUrl)
                     .userAgent(USER_AGENT)
                     .timeout(TIMEOUT_MS)
                     .maxBodySize(MAX_BODY_SIZE)
-                    // 允许任意 content-type（如 302 无 Content-Type），避免校验重定向前被 Jsoup 拦截
+                    // Cho phép bất kỳ content-type(như 302 không có Content-Type), tránh bị Jsoup chặn trước khi kiểm tra chuyển hướng
                     .ignoreContentType(true)
-                    // 关键：禁止 Jsoup 自动跟随重定向，否则 SSRF 校验会被绕过
+                    // Quan trọng: cấm Jsoup tự động theo chuyển hướng, nếu không kiểm tra SSRF sẽ bị bỏ qua
                     .followRedirects(false)
                     .execute();
 
@@ -73,9 +73,9 @@ public class WebPageParser {
             if (status >= 300 && status < 400) {
                 String location = response.header("Location");
                 if (oConvertUtils.isEmpty(location)) {
-                    throw new JeecgBootException("非法重定向：Location 为空");
+                    throw new JeecgBootException("Chuyển hướng không hợp lệ: Location trống");
                 }
-                // 相对 Location 解析为绝对地址后回到循环顶部再次校验
+                // Location tương đối được phân tích thành địa chỉ tuyệt đối rồi quay lại đầu vòng lặp để kiểm tra lại
                 currentUrl = new URL(response.url(), location).toString();
                 continue;
             }
@@ -83,41 +83,41 @@ public class WebPageParser {
         }
 
         if (response == null) {
-            throw new JeecgBootException("非法URL：请求失败");
+            throw new JeecgBootException("URL không hợp lệ: yêu cầu thất bại");
         }
         int finalStatus = response.statusCode();
         if (finalStatus >= 300 && finalStatus < 400) {
-            throw new JeecgBootException("非法URL：重定向次数过多");
+            throw new JeecgBootException("URL không hợp lệ: số lần chuyển hướng quá nhiều");
         }
 
         Document doc = response.parse();
-        //update-end---author:zhangdaihao ---date:2026-08-06  for：【issues/9808】AI知识库Web文档抓取SSRF漏洞修复，禁止自动跳转并逐跳校验-----------
+        //update-end---author:zhangdaihao ---date:2026-08-06  for：【issues/9808】Sửa lỗ hổng SSRF khi thu thập tài liệu Web của kho tri thức AI, cấm tự động chuyển hướng và kiểm tra từng bước nhảy-----------
 
-        // 移除脚本、样式、导航、页脚等无关元素
+        // Loại bỏ script, style, điều hướng, chân trang và các phần tử không liên quan khác
         doc.select("script, style, nav, footer, header, iframe, noscript, svg, form, button, input, select, textarea, .sidebar, .nav, .menu, .footer, .header, .ad, .advertisement, .comment, .comments").remove();
 
-        // 优先提取正文区域
+        // Ưu tiên trích xuất vùng nội dung chính
         Element body = extractMainContent(doc);
 
         StringBuilder markdown = new StringBuilder();
 
-        // 提取页面标题
+        // Trích xuất tiêu đề trang
         String title = doc.title();
         if (title != null && !title.trim().isEmpty()) {
             markdown.append("# ").append(title.trim()).append("\n\n");
         }
 
-        // 将HTML转为Markdown
+        // Chuyển HTML thành Markdown
         convertToMarkdown(body, markdown);
 
         return cleanMarkdown(markdown.toString());
     }
 
     /**
-     * 提取正文区域，优先使用article/main标签，否则使用body
+     * Trích xuất vùng nội dung chính, ưu tiên sử dụng article/main thẻ, nếu không thì sử dụng body
      */
     private Element extractMainContent(Document doc) {
-        // 按优先级尝试获取正文容器
+        // Thử lấy vùng chứa nội dung chính theo mức ưu tiên
         String[] selectors = {"article", "main", "[role=main]", ".content", ".post-content", ".article-content", ".entry-content", "#content"};
         for (String selector : selectors) {
             Elements elements = doc.select(selector);
@@ -129,7 +129,7 @@ public class WebPageParser {
     }
 
     /**
-     * 递归将HTML元素转换为Markdown
+     * Chuyển đổi đệ quy phần tử HTML thành Markdown
      */
     private void convertToMarkdown(Element element, StringBuilder sb) {
         for (Node child : element.childNodes()) {
@@ -195,7 +195,7 @@ public class WebPageParser {
                     case "img":
                         String src = el.attr("abs:src");
                         String alt = el.attr("alt");
-                        // 只保留http(s)开头的真实图片URL，过滤掉base64内联图片
+                        // Chỉ giữ lại http(s)URL hình ảnh thật bắt đầu bằng, lọc bỏ hình ảnh nội tuyến base64
                         if (!src.isEmpty() && src.startsWith("http")) {
                             sb.append("![").append(alt != null ? alt : "").append("](").append(src).append(")");
                         }
@@ -249,7 +249,7 @@ public class WebPageParser {
     }
 
     /**
-     * 将HTML表格转为Markdown表格
+     * Chuyển bảng HTML thành bảng Markdown
      */
     private void convertTableToMarkdown(Element table, StringBuilder sb) {
         Elements rows = table.select("tr");
@@ -272,7 +272,7 @@ public class WebPageParser {
             }
             sb.append("\n");
 
-            // 在第一行后添加分隔线
+            // Thêm đường phân tách sau dòng đầu tiên
             if (!headerDone) {
                 sb.append("|");
                 for (int i = 0; i < cells.size(); i++) {
@@ -286,12 +286,12 @@ public class WebPageParser {
     }
 
     /**
-     * 清理Markdown文本：去除多余空行、首尾空白
+     * Dọn dẹp văn bản Markdown: loại bỏ dòng trống thừa, khoảng trắng đầu cuối
      */
     private String cleanMarkdown(String markdown) {
-        // 去除连续3个以上换行为2个换行
+        // Loại bỏ 3 lần xuống dòng liên tiếp trở lên thành 2 lần xuống dòng
         markdown = markdown.replaceAll("\n{3,}", "\n\n");
-        // 去除行首尾空白(保留换行)
+        // Loại bỏ khoảng trắng đầu cuối dòng(Giữ lại ký tự xuống dòng)
         markdown = markdown.replaceAll("(?m)^[ \t]+|[ \t]+$", "");
         return markdown.trim();
     }

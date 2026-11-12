@@ -3,18 +3,18 @@
     "msg": "ok",
     "data": [
         {
-            "name": "H+交流群",
+            "name": "H+Nhóm trao đổi",
             "nums": 36,
             "id": 1,
             "item": [
                 {
                     "id": "101",
-                    "name": "H+ Bug反馈",
+                    "name": "H+ Bug Phản hồi",
                     "face": "http://tp2.sinaimg.cn/2211874245/180/40050524279/0"
                 },
                 {
                     "id": "102",
-                    "name": "H+ 技术交流",
+                    "name": "H+ Trao đổi kỹ thuật",
                     "face": "http://tp3.sinaimg.cn/1820711170/180/1286855219/1"
                 }
             ]
@@ -26,12 +26,12 @@
             "item": [
                 {
                     "id": "103",
-                    "name": "Bootstrap中文",
+                    "name": "Bootstrap Tiếng Trung",
                     "face": "http://tp2.sinaimg.cn/2211874245/180/40050524279/0"
                 },
                 {
                     "id": "104",
-                    "name": "Bootstrap资源",
+                    "name": "Bootstrap Tài nguyên",
                     "face": "http://tp3.sinaimg.cn/1820711170/180/1286855219/1"
                 }
             ]
@@ -43,12 +43,12 @@
             "item": [
                 {
                     "id": "105",
-                    "name": "移动开发",
+                    "name": "Phát triển di động",
                     "face": "http://tp2.sinaimg.cn/2211874245/180/40050524279/0"
                 },
                 {
                     "id": "106",
-                    "name": "H5前言",
+                    "name": "H5 Lời mở đầu",
                     "face": "http://tp3.sinaimg.cn/1820711170/180/1286855219/1"
                 }
             ]

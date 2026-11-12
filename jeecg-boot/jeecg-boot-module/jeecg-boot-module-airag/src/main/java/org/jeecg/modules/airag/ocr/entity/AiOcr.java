@@ -3,7 +3,7 @@ package org.jeecg.modules.airag.ocr.entity;
 import lombok.Data;
 
 /**
-* @Description: OCR识别实体类
+* @Description: OCR Lớp thực thể nhận dạng
 *
 * @author: wangshuai
 * @date: 2025/4/16 17:01
@@ -12,17 +12,17 @@ import lombok.Data;
 public class AiOcr {
 
     /**
-     * 编号
+     * Mã
      */
     private String id;
     
     /**
-     * 标题
+     * Tiêu đề
      */
     private String title;
     
     /**
-     * 提示词
+     * Prompt
      */
     private String prompt;
     

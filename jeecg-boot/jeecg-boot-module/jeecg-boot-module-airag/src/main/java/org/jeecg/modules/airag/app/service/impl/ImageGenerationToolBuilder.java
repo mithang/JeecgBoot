@@ -28,10 +28,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * AI应用图片生成工具构建器。(AI应用配置的绘画模型 做成工具注入到应用中)
+ * AI Bộ xây dựng công cụ tạo hình ảnh cho ứng dụng.(AI Mô hình vẽ mà ứng dụng cấu hình được tạo thành công cụ và đưa vào ứng dụng)
  *
  * @author scott
- * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+ * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
  */
 @Slf4j
 @Component
@@ -72,14 +72,14 @@ public class ImageGenerationToolBuilder {
 	private final IAIChatHandler aiChatHandler;
 	private final AiragMcpMapper airagMcpMapper;
 
-	//update-begin---author:scott ---date:20260810  for：图片类插件与应用内置绘画能力互斥---
+	//update-begin---author:scott ---date:20260810  for: Plugin loại hình ảnh xung đột với khả năng vẽ tích hợp của ứng dụng---
 	/**
-	 * 判断当前应用是否已启用图片搜索或图片生成类插件。
+	 * Kiểm tra xem ứng dụng hiện tại đã bật plugin tìm kiếm hình ảnh hoặc tạo hình ảnh hay chưa.
 	 *
-	 * @param params AI聊天参数
-	 * @return 是否存在图片类插件
+	 * @param params AI Tham số trò chuyện
+	 * @return Có tồn tại plugin hình ảnh hay không
 	 * @author scott
-	 * @since 2026-08-10 图片类插件与应用内置绘画能力互斥
+	 * @since 2026-08-10 Plugin hình ảnh và khả năng vẽ tích hợp sẵn của ứng dụng loại trừ lẫn nhau
 	 */
 	public boolean hasImageRelatedPlugin(AIChatParams params) {
 		if (params == null) {
@@ -104,7 +104,7 @@ public class ImageGenerationToolBuilder {
 					.filter(plugin -> !LLMConsts.STATUS_DISABLE.equals(plugin.getStatus()))
 					.anyMatch(this::isImageRelatedPlugin);
 		} catch (Exception e) {
-			log.warn("[AI-CHAT]识别图片类插件失败，保留应用内置绘画能力: {}", e.getMessage());
+			log.warn("[AI-CHAT]Nhận dạng plugin hình ảnh thất bại, giữ lại khả năng vẽ tích hợp sẵn của ứng dụng: {}", e.getMessage());
 			return false;
 		}
 	}
@@ -135,7 +135,7 @@ public class ImageGenerationToolBuilder {
 					.map(tool -> JSONObject.parseObject(tool.toString()))
 					.anyMatch(tool -> isImageRelatedCapability(tool.getString("name"), tool.getString("description")));
 		} catch (Exception e) {
-			log.warn("[AI-CHAT]插件[{}]工具定义解析失败，跳过图片能力识别: {}", plugin.getName(), e.getMessage());
+			log.warn("[AI-CHAT]Plugin[{}]Phân tích định nghĩa công cụ thất bại, bỏ qua việc nhận dạng khả năng hình ảnh: {}", plugin.getName(), e.getMessage());
 			return false;
 		}
 	}
@@ -146,16 +146,16 @@ public class ImageGenerationToolBuilder {
 		return IMAGE_PLUGIN_SUBJECT_PATTERN.matcher(capability).find()
 				&& IMAGE_PLUGIN_ACTION_PATTERN.matcher(capability).find();
 	}
-	//update-end---author:scott ---date:20260810  for：图片类插件与应用内置绘画能力互斥---
+	//update-end---author:scott ---date:20260810  for: Plugin loại hình ảnh xung đột với khả năng vẽ tích hợp của ứng dụng---
 
 	/**
-	 * 判断用户是否明确要求生成图片。
+	 * Kiểm tra xem người dùng có yêu cầu rõ ràng tạo hình ảnh hay không.
 	 *
-	 * @param app AI应用
-	 * @param content 用户消息
-	 * @return 是否需要由后端确保生成图片
+	 * @param app AI Ứng dụng
+	 * @param content Tin nhắn người dùng
+	 * @return Có cần backend đảm bảo tạo hình ảnh hay không
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	public boolean hasExplicitImageRequest(AiragApp app, String content) {
 		return oConvertUtils.isNotEmpty(resolveDrawModelId(app))
@@ -164,15 +164,15 @@ public class ImageGenerationToolBuilder {
 	}
 
 	/**
-	 * 按用户消息中指定的数量生成配图。
+	 * Tạo ảnh minh họa theo số lượng người dùng chỉ định trong tin nhắn.
 	 *
-	 * @param app AI应用
-	 * @param content 用户消息
-	 * @param articleContent 已生成的文章正文
-	 * @param imageUploader 图片上传函数
-	 * @return 已上传的图片地址
+	 * @param app AI Ứng dụng
+	 * @param content Tin nhắn người dùng
+	 * @param articleContent Nội dung bài viết đã tạo
+	 * @param imageUploader Hàm tải ảnh lên
+	 * @return Địa chỉ hình ảnh đã tải lên
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	public List<String> generateForRequest(AiragApp app, String content, String articleContent,
 			Function<Map<String, Object>, String> imageUploader) {
@@ -183,16 +183,16 @@ public class ImageGenerationToolBuilder {
 		try {
 			return generateImages(drawModelId, content, articleContent, resolveImageCount(content), imageUploader);
 		} catch (Exception e) {
-			log.error("[AI-CHAT]自动配图生成失败", e);
+			log.error("[AI-CHAT]Tự động tạo ảnh minh họa thất bại", e);
 			return Collections.emptyList();
 		}
 	}
 
 	/**
-	 * 构建正文配图占位要求，由文本模型决定图片在文章中的语义位置。
+	 * Xây dựng yêu cầu placeholder ảnh minh họa trong nội dung chính, do mô hình văn bản quyết định vị trí ngữ nghĩa của hình ảnh trong bài viết.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	public String buildPlacementInstruction(String content) {
 		int count = resolveImageCount(content);
@@ -203,18 +203,18 @@ public class ImageGenerationToolBuilder {
 			}
 			placeholders.append("{{IMAGE_").append(i).append("}}");
 		}
-		return "用户已明确要求生成" + count + "张配图。请正常完成文字正文，并根据上下文在最合适的位置各插入一次占位符"
-				+ placeholders + "。只允许输出这些精确占位符，禁止自行编造图片URL、Markdown图片标签、配图标题或‘此处插入图片’等其他占位文字；不要声称无法生成图片。";
+		return "Người dùng đã yêu cầu rõ ràng tạo" + count + "ảnh minh họa. Hãy hoàn thành nội dung văn bản bình thường, và dựa theo ngữ cảnh chèn một placeholder tại vị trí phù hợp nhất cho mỗi ảnh"
+				+ placeholders + ". Chỉ được phép xuất các placeholder chính xác này, cấm tự bịa URL hình ảnh, thẻ hình ảnh Markdown, tiêu đề ảnh minh họa hoặc các chữ placeholder khác như 'chèn hình ảnh tại đây'; đừng nói rằng không thể tạo hình ảnh.";
 	}
 
 	/**
-	 * 为已开启绘画能力的应用构建图片生成工具。
+	 * Xây dựng công cụ tạo hình ảnh cho ứng dụng đã bật khả năng vẽ.
 	 *
-	 * @param app AI应用
-	 * @param imageUploader 图片上传函数
-	 * @return 图片生成工具
+	 * @param app AI Ứng dụng
+	 * @param imageUploader Hàm tải ảnh lên
+	 * @return Công cụ tạo hình ảnh
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	public Map<ToolSpecification, ToolExecutor> buildTools(AiragApp app, Function<Map<String, Object>, String> imageUploader) {
 		String drawModelId = resolveDrawModelId(app);
@@ -239,35 +239,35 @@ public class ImageGenerationToolBuilder {
 	}
 
 	/**
-	 * 执行模型主动调用的图片生成工具。
+	 * Thực thi công cụ tạo hình ảnh mà mô hình chủ động gọi.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private String execute(String drawModelId, String arguments, Function<Map<String, Object>, String> imageUploader) {
 		try {
 			JSONObject args = JSONObject.parseObject(arguments);
 			String prompt = args == null ? null : args.getString("prompt");
 			if (oConvertUtils.isEmpty(prompt)) {
-				return buildError("图片生成提示词不能为空");
+				return buildError("Prompt tạo hình ảnh không được trống");
 			}
 			int count = normalizeCount(args.getInteger("count"));
 			List<String> imageUrls = generateImages(drawModelId, prompt, null, count, imageUploader);
 			if (imageUrls.isEmpty()) {
-				return buildError("图片生成失败，未返回有效图片");
+				return buildError("Tạo hình ảnh thất bại, chưa trả về hình ảnh hợp lệ");
 			}
 			return toMarkdown(imageUrls);
 		} catch (Exception e) {
-			log.error("[AI-CHAT]图片生成工具调用失败", e);
-			return buildError("图片生成失败：" + e.getMessage());
+			log.error("[AI-CHAT]Gọi công cụ tạo hình ảnh thất bại", e);
+			return buildError("Tạo hình ảnh thất bại: " + e.getMessage());
 		}
 	}
 
 	/**
-	 * 按数量逐张生成并上传图片，单张失败时继续处理后续图片。
+	 * Tạo và tải lên từng hình ảnh theo số lượng, khi một ảnh thất bại sẽ tiếp tục xử lý các ảnh tiếp theo.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private List<String> generateImages(String drawModelId, String prompt, String articleContent, int count,
 			Function<Map<String, Object>, String> imageUploader) {
@@ -279,7 +279,7 @@ public class ImageGenerationToolBuilder {
 			try {
 				generatedImages = aiChatHandler.imageGenerate(drawModelId, imagePrompt, params);
 			} catch (Exception e) {
-				log.warn("[AI-CHAT]第{}张配图生成失败，继续生成其他配图: {}", i + 1, e.getMessage());
+				log.warn("[AI-CHAT]Thứ{}ảnh minh họa tạo thất bại, tiếp tục tạo các ảnh minh họa khác: {}", i + 1, e.getMessage());
 				continue;
 			}
 			if (generatedImages == null) {
@@ -299,10 +299,10 @@ public class ImageGenerationToolBuilder {
 	}
 
 	/**
-	 * 根据正文局部内容构造只返回图片的绘画提示词。
+	 * Dựa theo nội dung cục bộ của bài viết để tạo prompt vẽ chỉ trả về hình ảnh.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private String buildImagePrompt(String userRequest, String articleContent, int imageIndex, int count) {
 		String visualContext = extractVisualContext(articleContent, imageIndex, count);
@@ -321,10 +321,10 @@ public class ImageGenerationToolBuilder {
 	}
 
 	/**
-	 * 提取图片占位符附近或文章均分位置附近的视觉上下文。
+	 * Trích xuất ngữ cảnh hình ảnh gần placeholder hình ảnh hoặc gần vị trí chia đều của bài viết.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private String extractVisualContext(String articleContent, int imageIndex, int count) {
 		if (oConvertUtils.isEmpty(articleContent)) {
@@ -345,10 +345,10 @@ public class ImageGenerationToolBuilder {
 	}
 
 	/**
-	 * 读取应用配置的绘画模型。
+	 * Đọc mô hình vẽ mà ứng dụng đã cấu hình.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private String resolveDrawModelId(AiragApp app) {
 		if (app == null || oConvertUtils.isEmpty(app.getMetadata())) {
@@ -361,16 +361,16 @@ public class ImageGenerationToolBuilder {
 			}
 			return metadata.getString(METADATA_DRAW_MODEL_ID);
 		} catch (Exception e) {
-			log.warn("[AI-CHAT]应用绘画配置解析失败，跳过图片生成工具: {}", e.getMessage());
+			log.warn("[AI-CHAT]Phân tích cấu hình vẽ của ứng dụng thất bại, bỏ qua công cụ tạo hình ảnh: {}", e.getMessage());
 			return null;
 		}
 	}
 
 	/**
-	 * 将图片数量限制在系统允许范围内。
+	 * Giới hạn số lượng hình ảnh trong phạm vi hệ thống cho phép.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private int normalizeCount(Integer count) {
 		if (count == null || count < DEFAULT_IMAGE_COUNT) {
@@ -380,10 +380,10 @@ public class ImageGenerationToolBuilder {
 	}
 
 	/**
-	 * 从用户消息中解析图片数量。
+	 * Phân tích số lượng hình ảnh từ tin nhắn người dùng.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private int resolveImageCount(String content) {
 		Matcher matcher = IMAGE_COUNT_PATTERN.matcher(content);
@@ -398,10 +398,10 @@ public class ImageGenerationToolBuilder {
 	}
 
 	/**
-	 * 将真实图片地址转换为Markdown图片标签。
+	 * Chuyển địa chỉ hình ảnh thật thành thẻ hình ảnh Markdown.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private String toMarkdown(List<String> imageUrls) {
 		return imageUrls.stream()
@@ -410,10 +410,10 @@ public class ImageGenerationToolBuilder {
 	}
 
 	/**
-	 * 构造图片工具的结构化错误结果。
+	 * Xây dựng kết quả lỗi có cấu trúc của công cụ hình ảnh.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	private String buildError(String message) {
 		JSONObject error = new JSONObject();

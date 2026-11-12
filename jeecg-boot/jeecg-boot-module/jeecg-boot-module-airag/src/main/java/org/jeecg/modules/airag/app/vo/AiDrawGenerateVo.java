@@ -3,7 +3,7 @@ package org.jeecg.modules.airag.app.vo;
 import lombok.Data;
 
 /**
-* @Description: AI绘画
+* @Description: AI Vẽ
 *
 * @author: wangshuai
 * @date: 2026/2/4 18:57
@@ -12,47 +12,47 @@ import lombok.Data;
 public class AiDrawGenerateVo {
 
     /**
-     * 绘画模型的id
+     * của mô hình vẽ tranh id
      */
     private String drawModelId;
 
     /**
-     * 图片尺寸
+     * Kích thước hình ảnh
      */
     private String imageSize;
 
     /**
-     * 一张图片或者多张图片，多张图片用逗号分隔
+     * Một hình ảnh hoặc nhiều hình ảnh, nhiều hình ảnh phân tách bằng dấu phẩy
      */
     private String imageUrl;
 
     /**
-     * 用户输入的聊天内容
+     * Nội dung trò chuyện do người dùng nhập
      */
     private String content;
 
     /**
-     * 风格
+     * Phong cách
      */
     private String style;
 
     /**
-     * 视角
+     * Góc nhìn
      */
     private String visualAngle;
 
     /**
-     * 人物镜头
+     * Ống kính nhân vật
      */
     private String characterShot;
 
     /**
-     * 灯光
+     * Ánh sáng
      */
     private String lighting;
 
     /**
-     * 类型 poster: 海报，draw：绘图，face 换脸，mix 混图 
+     * Loại poster: Áp phích, draw: vẽ, face: đổi mặt, mix: ghép ảnh 
      */
     private String type;
 }

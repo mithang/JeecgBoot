@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.Resource;
 
 /**
- * 路由刷新监听（实现方式：redis监听handler）
+ * Lắng nghe làm mới route (cách triển khai: handler lắng nghe redis)
  * @author zyf
  * @date: 2022/4/21 10:55
  */

@@ -23,6 +23,6 @@ function setAppScale() {
  
 
 $().ready(function(){
-        //初始化时调整大小
+        //Điều chỉnh kích thước khi khởi tạo
         setAppScale();    
 });

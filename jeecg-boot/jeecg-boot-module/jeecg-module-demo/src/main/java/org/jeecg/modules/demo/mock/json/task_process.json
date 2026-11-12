@@ -1,6 +1,6 @@
 {
 	"success": true,
-	"message": "操作成功！",
+	"message": "Thao tác thành công!",
 	"code": 0,
 	"result": {
 		"records": [
@@ -9,40 +9,40 @@
 				"name": "start",
 				"taskBeginTime": "2019-03-07 09:33:04",
 				"taskEndTime": "2019-03-08 04:03:01",
-				"principal": "测试体验账号",
-				"result": "已完成"
+				"principal": "Tài khoản trải nghiệm kiểm thử",
+				"result": "Đã hoàn thành"
 			},
 			{
 				"taskId": "48702",
-				"name": "部门领导审批",
+				"name": "Lãnh đạo phòng ban phê duyệt",
 				"taskBeginTime": "2019-03-07 09:33:04",
 				"taskEndTime": "2019-03-08 04:03:01",
-				"principal": "测试体验账号",
-				"result": "已完成"
+				"principal": "Tài khoản trải nghiệm kiểm thử",
+				"result": "Đã hoàn thành"
 			},
 			{
 				"taskId": "48703",
-				"name": "调整申请",
+				"name": "Đơn xin điều chỉnh",
 				"taskBeginTime": "2019-03-07 09:33:04",
 				"taskEndTime": "2019-03-08 04:03:01",
-				"principal": "测试体验账号",
-				"result": "已完成"
+				"principal": "Tài khoản trải nghiệm kiểm thử",
+				"result": "Đã hoàn thành"
 			},
 			{
 				"taskId": "48704",
-				"name": "人事审批",
+				"name": "Phê duyệt nhân sự",
 				"taskBeginTime": "2019-03-07 09:33:04",
 				"taskEndTime": "2019-03-08 04:03:01",
-				"principal": "测试体验账号",
-				"result": "已完成"
+				"principal": "Tài khoản trải nghiệm kiểm thử",
+				"result": "Đã hoàn thành"
 			},
 			{
 				"taskId": "48705",
 				"name": "end",
 				"taskBeginTime": "2019-03-07 09:33:04",
 				"taskEndTime": "2019-03-08 04:03:01",
-				"principal": "测试体验账号",
-				"result": "已完成"
+				"principal": "Tài khoản trải nghiệm kiểm thử",
+				"result": "Đã hoàn thành"
 			}
 		],
 		"total": 0,

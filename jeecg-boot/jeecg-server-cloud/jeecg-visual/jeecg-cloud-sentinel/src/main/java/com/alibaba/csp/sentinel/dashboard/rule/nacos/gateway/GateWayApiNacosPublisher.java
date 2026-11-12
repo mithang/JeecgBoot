@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 /**
- * 网关API规则推送
+ * Đẩy quy tắc API Gateway
  *
  * @author zyf
  * @date 2022-04-13

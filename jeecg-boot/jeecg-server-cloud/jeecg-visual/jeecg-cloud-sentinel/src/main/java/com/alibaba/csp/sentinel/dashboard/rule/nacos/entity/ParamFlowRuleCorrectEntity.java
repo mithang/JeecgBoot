@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author zyf
- * @description 重写热点规则实体类,。查看sentinel-dashboard在自定义ParamFlowRuleNacosPublisher时候 推送的数据是ParamFlowRuleEntity。 客户端接收的ParamFlowRule类
+ * @description Viết lại lớp thực thể quy tắc hotspot,. Xem sentinel-dashboard Khi tùy chỉnh ParamFlowRuleNacosPublisher, dữ liệu được đẩy là ParamFlowRuleEntity. Lớp ParamFlowRule mà client nhận
  * @date 2022-04-13
  */
 public class ParamFlowRuleCorrectEntity implements RuleEntity {

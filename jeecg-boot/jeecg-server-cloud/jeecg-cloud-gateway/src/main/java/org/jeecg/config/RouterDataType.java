@@ -1,21 +1,21 @@
 package org.jeecg.config;
 
 /**
- * nocos配置方式枚举
+ * nocos Enum phương thức cấu hình
  * @author zyf
  * @date: 2022/4/21 10:55
  */
 public enum RouterDataType {
     /**
-     * 数据库加载路由配置
+     * Cấu hình route tải từ cơ sở dữ liệu
      */
     database,
     /**
-     * 本地yml加载路由配置
+     * Cấu hình route tải từ yml cục bộ
      */
     yml,
     /**
-     * nacos加载路由配置
+     * nacos Tải cấu hình route
      */
     nacos
 }

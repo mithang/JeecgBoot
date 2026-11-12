@@ -38,8 +38,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * tika文档解析器,重写langchain4j的TikaDocumentParser <br/>
- * jeecgboot目前不支持poi5.x,所以langchain4j同的方法不能用,自己实现
+ * tika Trình phân tích tài liệu,Viết lại của langchain4j TikaDocumentParser <br/>
+ * jeecgboot Hiện tại chưa hỗ trợ poi5.x,vì vậy phương thức tương tự của langchain4j không thể dùng được,tự triển khai
  * @author chenrui
  * @date 2025/3/5 16:19
  */
@@ -54,7 +54,7 @@ public class TikaDocumentParser {
     private final Supplier<ContentHandler> contentHandlerSupplier;
     private final Supplier<Metadata> metadataSupplier;
     private final Supplier<ParseContext> parseContextSupplier;
-    //文件前缀
+    //Tiền tố tệp
     private static final Set<String> FILE_SUFFIX = new HashSet<>(Arrays.asList("docx", "doc", "pptx", "ppt", "xlsx", "xls"));
 
     public TikaDocumentParser() {
@@ -70,36 +70,36 @@ public class TikaDocumentParser {
     }
 
     public Document parse(File file) {
-        AssertUtils.assertNotEmpty("请选择文件", file);
-        // 使用 Tika 自动检测 MIME 类型
+        AssertUtils.assertNotEmpty("Vui lòng chọn tệp", file);
+        // Sử dụng Tika để tự động phát hiện loại MIME
         String fileName = file.getName().toLowerCase();
-        //后缀
+        //Hậu tố
         String ext = FilenameUtils.getExtension(fileName);
         if (fileName.endsWith(".txt")
                 || fileName.endsWith(".md")
                 || fileName.endsWith(".pdf")) {
-            // 用于解析(使用FileInputStream避免file.toPath()在Linux非UTF-8环境下中文文件名报错)
+            // Dùng để phân tích(Sử dụng FileInputStream để tránh file.toPath()trong môi trường Linux không phải UTF-8 tên tệp tiếng Trung báo lỗi trong môi trường)
             try (InputStream isForParsing = new FileInputStream(file)) {
                 return extractByTika(isForParsing);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        //update-begin---author:wangshuai---date:2026-01-09---for:【QQYUN-14261】【AI】AI助手，支持多模态能力- 文档---
+        //update-begin---author:wangshuai---date:2026-01-09---for:【QQYUN-14261】【AI】Trợ lý AI, hỗ trợ khả năng đa phương thức- Tài liệu---
         } else if (FILE_SUFFIX.contains(ext.toLowerCase())) {
             return parseDocExcelPdfUsingApachePoi(file);
-        //update-end---author:wangshuai---date:2026-01-09---for:【QQYUN-14261】【AI】AI助手，支持多模态能力- 文档---
+        //update-end---author:wangshuai---date:2026-01-09---for:【QQYUN-14261】【AI】Trợ lý AI, hỗ trợ khả năng đa phương thức- Tài liệu---
         } else {
-            throw new IllegalArgumentException("不支持的文件格式: " + FilenameUtils.getExtension(fileName));
+            throw new IllegalArgumentException("Định dạng tệp không được hỗ trợ: " + FilenameUtils.getExtension(fileName));
         }
     }
 
     /**
-     * langchain4j 内部解析器
+     * langchain4j Trình phân tích nội bộ
      * @param file
      * @return
      */
     public Document parseDocExcelPdfUsingApachePoi(File file) {
-        AssertUtils.assertNotEmpty("请选择文件", file);
+        AssertUtils.assertNotEmpty("Vui lòng chọn tệp", file);
         try (InputStream inputStream = new FileInputStream(file)) {
             ApachePoiDocumentParser parser = new ApachePoiDocumentParser();
             Document document = parser.parse(inputStream);
@@ -116,21 +116,21 @@ public class TikaDocumentParser {
 
     private static Document tryExtractDocOrDocx(InputStream inputStream) throws IOException {
         try {
-            // 先尝试 DOCX（基于 OPC XML 格式）
+            // Thử DOCX trước (dựa trên định dạng OPC XML)
             return extractTextFromDocx(inputStream);
         } catch (Exception e1) {
             try {
-                // 如果 DOCX 解析失败，则尝试 DOC（基于二进制格式）
+                // Nếu phân tích DOCX thất bại, thử DOC (dựa trên định dạng nhị phân)
                 return extractTextFromDoc(inputStream);
             } catch (Exception e2) {
-                throw new IOException("无法解析 DOC 或 DOCX 文件", e2);
+                throw new IOException("Không thể phân tích tệp DOC hoặc DOCX", e2);
             }
         }
     }
 
     /**
-     * 使用tika提取文件内容 <br/>
-     * pdf/text/md等文件使用tika提取
+     * Sử dụng Tika để trích xuất nội dung tệp <br/>
+     * pdf/text/md tệp khác sử dụng Tika để trích xuất
      *
      * @param inputStream
      * @return
@@ -160,14 +160,14 @@ public class TikaDocumentParser {
     }
 
     /**
-     * 提取docx文件内容
+     * Trích xuất nội dung tệp docx
      *
      * @param inputStream
      * @return
      * @throws IOException
      * @author chenrui
      * @date 2025/3/5 14:42
-     * @deprecated 因为jeecg主项目目前不支持poi5.x, 自己实现提取功能.
+     * @deprecated Vì dự án chính Jeecg hiện chưa hỗ trợ poi5.x, tự triển khai chức năng trích xuất.
      */
     @Deprecated
     private static Document extractTextFromDocx(InputStream inputStream) throws IOException {
@@ -181,14 +181,14 @@ public class TikaDocumentParser {
     }
 
     /**
-     * 提取doc文件内容
+     * Trích xuất nội dung tệp doc
      *
      * @param inputStream
      * @return
      * @throws IOException
      * @author chenrui
      * @date 2025/3/5 14:42
-     * @deprecated 因为jeecg主项目目前不支持poi5.x, 自己实现提取功能.
+     * @deprecated Vì dự án chính Jeecg hiện chưa hỗ trợ poi5.x, tự triển khai chức năng trích xuất.
      */
     @Deprecated
     private static Document extractTextFromDoc(InputStream inputStream) throws IOException {
@@ -199,14 +199,14 @@ public class TikaDocumentParser {
     }
 
     /**
-     * 提取excel文件内容
+     * Trích xuất nội dung tệp excel
      *
      * @param inputStream
      * @return
      * @throws IOException
      * @author chenrui
      * @date 2025/3/5 14:43
-     * @deprecated 因为jeecg主项目目前不支持poi5.x, 自己实现提取功能.
+     * @deprecated Vì dự án chính Jeecg hiện chưa hỗ trợ poi5.x, tự triển khai chức năng trích xuất.
      */
     @Deprecated
     private static Document extractTextFromExcel(InputStream inputStream) throws IOException {
@@ -227,14 +227,14 @@ public class TikaDocumentParser {
     }
 
     /**
-     * 提取pptx文件内容
+     * Trích xuất nội dung tệp pptx
      *
      * @param inputStream
      * @return
      * @throws IOException
      * @author chenrui
      * @date 2025/3/5 14:43
-     * @deprecated 因为jeecg主项目目前不支持poi5.x, 自己实现提取功能.
+     * @deprecated Vì dự án chính Jeecg hiện chưa hỗ trợ poi5.x, tự triển khai chức năng trích xuất.
      */
     @Deprecated
     private static Document extractTextFromPptx(InputStream inputStream) throws IOException {
@@ -256,14 +256,14 @@ public class TikaDocumentParser {
     }
 
     /**
-     * 提取ppt文件内容
+     * Trích xuất nội dung tệp ppt
      *
      * @param inputStream
      * @return
      * @throws IOException
      * @author chenrui
      * @date 2025/3/5 14:43
-     * @deprecated 因为jeecg主项目目前不支持poi5.x, 自己实现提取功能.
+     * @deprecated Vì dự án chính Jeecg hiện chưa hỗ trợ poi5.x, tự triển khai chức năng trích xuất.
      */
     @Deprecated
     private static Document extractTextFromPpt(InputStream inputStream) throws IOException {

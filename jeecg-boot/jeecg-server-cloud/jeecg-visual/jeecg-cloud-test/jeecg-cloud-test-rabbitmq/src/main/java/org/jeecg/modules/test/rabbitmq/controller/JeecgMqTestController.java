@@ -20,13 +20,13 @@ import io.swagger.v3.oas.annotations.Operation;
 
 
 /**
- * RabbitMqClient发送消息
+ * RabbitMqClient Gửi tin nhắn
  * @author: zyf
  * @date: 2022/04/21
  */
 @RestController
 @RequestMapping("/sys/test")
-@Tag(name = "【微服务】MQ单元测试")
+@Tag(name = "【Microservice】Kiểm thử đơn vị MQ")
 public class JeecgMqTestController {
 
     @Autowired
@@ -34,31 +34,31 @@ public class JeecgMqTestController {
 
 
     /**
-     * 测试方法：快速点击发送MQ消息
-     *  观察三个接受者如何分配处理消息：HelloReceiver1、HelloReceiver2、HelloReceiver3，会均衡分配
+     * Phương pháp kiểm thử: Nhấp nhanh để gửi tin nhắn MQ
+     *  Quan sát cách ba receiver phân phối và xử lý tin nhắn: HelloReceiver1, HelloReceiver2, HelloReceiver3, sẽ phân phối cân bằng
      *
      * @param req
      * @return
      */
     @GetMapping(value = "/rabbitmq")
-    @Operation(summary = "测试rabbitmq")
+    @Operation(summary = "Kiểm tra rabbitmq")
     public Result<?> rabbitMqClientTest(HttpServletRequest req) {
-        //rabbitmq消息队列测试
+        //rabbitmq Kiểm thử hàng đợi tin nhắn
         BaseMap map = new BaseMap();
         map.put("orderId", RandomUtil.randomNumbers(10));
         rabbitMqClient.sendMessage(CloudConstant.MQ_JEECG_PLACE_ORDER, map);
         rabbitMqClient.sendMessage(CloudConstant.MQ_JEECG_PLACE_ORDER_TIME, map,10);
-        return Result.OK("MQ发送消息成功");
+        return Result.OK("MQ Gửi tin nhắn thành công");
     }
 
     @GetMapping(value = "/rabbitmq2")
-    @Operation(summary = "rabbitmq消息总线测试")
+    @Operation(summary = "rabbitmq Kiểm thử bus tin nhắn")
     public Result<?> rabbitmq2(HttpServletRequest req) {
 
-        //rabbitmq消息总线测试
+        //rabbitmq Kiểm thử bus tin nhắn
         BaseMap params = new BaseMap();
         params.put("orderId", "123456");
         rabbitMqClient.publishEvent(CloudConstant.MQ_DEMO_BUS_EVENT, params);
-        return Result.OK("MQ发送消息成功");
+        return Result.OK("MQ Gửi tin nhắn thành công");
     }
 }

@@ -1,4 +1,4 @@
-/** 初始化 **/
+/** Khởi tạo **/
 
 html,
 body {
@@ -106,7 +106,7 @@ pre {
 }
 
 
-/** 滚动条 **/
+/** Thanh cuộn **/
 
 ::-webkit-scrollbar {
     width: 5px;
@@ -136,7 +136,7 @@ pre {
 }
 
 
-/*下拉框*/
+/*Dropdown*/
 
 .select {
     width: 1.6rem;

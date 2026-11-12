@@ -3,7 +3,7 @@ package org.jeecg.modules.airag.app.enums;
 import org.apache.commons.lang3.StringUtils;
 
 /**
-* @Description: 图片大小比例枚举
+* @Description: Enum tỷ lệ kích thước hình ảnh
 *
 * @author: wangshuai
 * @date: 2026/2/4 19:55
@@ -21,11 +21,11 @@ public enum ImageSizeEnum {
     }
 
     /**
-     * 大小
+     * Kích thước
      */
     private String size;
     /**
-     * 比例
+     * Tỷ lệ
      */
     private String ratio;
 
@@ -38,7 +38,7 @@ public enum ImageSizeEnum {
     }
 
     /**
-     * 根据size获取ratio
+     * Lấy theo size ratio
      *
      * @param size
      * @return

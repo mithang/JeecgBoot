@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description: AIRag知识库
+ * @Description: AIRag Kho tri thức
  * @Author: jeecg-boot
  * @Date: 2025-02-18
  * @Version: V1.0
@@ -36,7 +36,7 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
     
     @Override
     public Map<String, Object> getPluginMemory(String memoryId) {
-        //step 1获取知识库
+        //step 1 Lấy kho tri thức
         AiragKnowledge airagKnowledge = this.baseMapper.selectById(memoryId);
         if(airagKnowledge == null){
             return null;
@@ -45,31 +45,31 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
     }
 
     /**
-     * 获取插件信息
+     * Lấy thông tin plugin
      *
      * @param knowledgeId
      * @param descr
      * @return
      */
     public Map<String, Object> getKnowledgeToPlugin(String knowledgeId, String descr) {
-        //step1 构建插件
-        log.info("开始构建记忆库插件");
+        //step1 Xây dựng plugin
+        log.info("Bắt đầu xây dựng plugin kho bộ nhớ");
         if (oConvertUtils.isEmpty(knowledgeId)) {
             return null;
         }
 
         HttpServletRequest httpServletRequest = SpringContextUtils.getHttpServletRequest();
 
-        //返回数据
+        //Trả về dữ liệu
         Map<String, Object> result = new HashMap<>();
-        //插件
-        //插件id
+        //Plugin
+        //Plugin id
         AiragMcp tool = new AiragMcp();
-        // 2. 构建插件
+        // 2. Xây dựng plugin
         tool.setId(knowledgeId);
-        // 插件名称
+        // Tên plugin
         tool.setName(FlowPluginContent.PLUGIN_MEMORY_NAME);
-        // 描述
+        // Mô tả
         tool.setDescr(FlowPluginContent.PLUGIN_MEMORY_DESC);
         tool.setStatus(FlowConsts.FLOW_STATUS_ENABLE);
         tool.setSynced(CommonConstant.STATUS_1_INT);
@@ -77,24 +77,24 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
         tool.setEndpoint("");
 
         JSONArray toolsArray = new JSONArray();
-        // 添加记忆
+        // Thêm bộ nhớ
         toolsArray.add(buildAddMemoryTool(knowledgeId,descr));
-        // 查询记忆
+        // Truy vấn bộ nhớ
         toolsArray.add(buildQueryMemoryTool(knowledgeId,descr));
         tool.setTools(toolsArray.toJSONString());
         String tenantId = TokenUtils.getTenantIdByRequest(httpServletRequest);
-        //构建元数据（请求头）
+        //Xây dựng metadata (request header)
         String meataData = buildMetadata(tenantId);
         tool.setMetadata(meataData);
         Map<ToolSpecification, ToolExecutor> tools = PluginToolBuilder.buildTools(tool, httpServletRequest);
         result.put("pluginTool", tools);
         result.put("pluginId", knowledgeId);
-        log.info("构建记忆库插件结束");
+        log.info("Kết thúc xây dựng plugin kho bộ nhớ");
         return result;
     }
 
     /**
-     * 构建元数据
+     * Xây dựng metadata
      *
      * @param tenantId
      */
@@ -108,7 +108,7 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
     }
 
     /**
-     * 构建添加记忆工具
+     * Xây dựng công cụ thêm bộ nhớ
      *
      * @param knowId
      * @param descr
@@ -116,52 +116,52 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
      */
     private JSONObject buildAddMemoryTool(String knowId, String descr) {
         JSONObject tool = new JSONObject();
-        //update-begin---author:wangshuai---date:2026-01-08---for: 记忆库根据记忆库的描述做匹配，不写死---
+        //update-begin---author:wangshuai---date:2026-01-08---for: Kho bộ nhớ khớp theo mô tả của kho bộ nhớ, không viết cứng---
         tool.put(FlowPluginContent.NAME, "add_memory");
-        String addDescPrefix = "【自动触发】向记忆库添加长期信息。范围：";
-        String addDesc = oConvertUtils.isEmpty(descr) ? "按记忆库描述允许的个人资料（如姓名、职业、年龄）、偏好、属性等信息。" : descr;
-        tool.put(FlowPluginContent.DESCRIPTION, addDescPrefix + addDesc + " 必须在检测到相关信息时立即自动调用，无需用户指令。");
-        //update-end---author:wangshuai---date:2026-01-08---for: 记忆库根据记忆库的描述做匹配，不写死---
+        String addDescPrefix = "Thêm thông tin dài hạn vào kho bộ nhớ. Phạm vi:";
+        String addDesc = oConvertUtils.isEmpty(descr) ? "Thông tin cá nhân được phép theo mô tả kho bộ nhớ (như họ tên, nghề nghiệp, tuổi), sở thích, thuộc tính, v.v." : descr;
+        tool.put(FlowPluginContent.DESCRIPTION, addDescPrefix + addDesc + " Phải tự động gọi ngay khi phát hiện thông tin liên quan, không cần chỉ thị của người dùng.");
+        //update-end---author:wangshuai---date:2026-01-08---for: Kho bộ nhớ khớp theo mô tả của kho bộ nhớ, không viết cứng---
         tool.put(FlowPluginContent.PATH, FlowPluginContent.PLUGIN_MEMORY_ADD_PATH);
         tool.put(FlowPluginContent.METHOD, FlowPluginContent.POST);
         tool.put(FlowPluginContent.ENABLED, true);
 
         JSONArray parameters = new JSONArray();
 
-        // 知识库ID参数
+        // Tham số ID kho tri thức
         JSONObject knowIdParam = new JSONObject();
         knowIdParam.put(FlowPluginContent.NAME, "knowledgeId");
-        knowIdParam.put(FlowPluginContent.DESCRIPTION, "知识库ID,需要原值传递，不允许修改");
+        knowIdParam.put(FlowPluginContent.DESCRIPTION, "Kho tri thức ID,Cần truyền giá trị gốc, không được sửa đổi");
         knowIdParam.put(FlowPluginContent.TYPE, FlowPluginContent.TYPE_STRING);
         knowIdParam.put(FlowPluginContent.LOCATION, FlowPluginContent.LOCATION_BODY);
         knowIdParam.put(FlowPluginContent.REQUIRED, true);
         knowIdParam.put(FlowPluginContent.DEFAULT_VALUE, knowId);
-        //update-begin---author:wangshuai ---date:20260804  for：【LHZP-1591】智普模型无法将AI应用信息写入记忆库-----------
-        // 记忆库ID由服务端注入，避免模型因无法获知必填ID而放弃工具调用
+        //update-begin---author:wangshuai ---date:20260804  for：【LHZP-1591] Mô hình Zhipu không thể ghi thông tin ứng dụng AI vào kho bộ nhớ-----------
+        // ID kho bộ nhớ do phía máy chủ inject, tránh mô hình từ bỏ gọi công cụ vì không biết ID bắt buộc
         knowIdParam.put("hidden", true);
-        //update-end---author:wangshuai ---date:20260804  for：【LHZP-1591】智普模型无法将AI应用信息写入记忆库-----------
+        //update-end---author:wangshuai ---date:20260804  for：【LHZP-1591] Mô hình Zhipu không thể ghi thông tin ứng dụng AI vào kho bộ nhớ-----------
         parameters.add(knowIdParam);
 
-        // 内容参数
+        // Tham số nội dung
         JSONObject contentParam = new JSONObject();
         contentParam.put(FlowPluginContent.NAME, "content");
-        contentParam.put(FlowPluginContent.DESCRIPTION, "记忆内容。当前时间为：" + DateUtils.now() + "。格式要求：'在yyyy年MM月dd日 HH:mm分，用户[用户的行为/问题]，assistant[助手的回答/反应]。'");
+        contentParam.put(FlowPluginContent.DESCRIPTION, "Nội dung bộ nhớ. Thời gian hiện tại là:" + DateUtils.now() + ". Yêu cầu định dạng:'Vào ngày dd tháng MM năm yyyy HH:mm phút, người dùng[hành vi của người dùng/Vấn đề]，assistant[câu trả lời của trợ lý/phản ứng]。'");
         contentParam.put(FlowPluginContent.TYPE, FlowPluginContent.TYPE_STRING);
         contentParam.put(FlowPluginContent.LOCATION, FlowPluginContent.LOCATION_BODY);
         contentParam.put(FlowPluginContent.REQUIRED, true);
         parameters.add(contentParam);
 
-        // 标题参数
+        // Tham số tiêu đề
         JSONObject titleParam = new JSONObject();
         titleParam.put(FlowPluginContent.NAME, "title");
-        titleParam.put(FlowPluginContent.DESCRIPTION, "记忆标题");
+        titleParam.put(FlowPluginContent.DESCRIPTION, "Tiêu đề bộ nhớ");
         titleParam.put(FlowPluginContent.TYPE, FlowPluginContent.TYPE_STRING);
         titleParam.put(FlowPluginContent.LOCATION, FlowPluginContent.LOCATION_BODY);
         titleParam.put(FlowPluginContent.REQUIRED, false);
         parameters.add(titleParam);
         tool.put(FlowPluginContent.PARAMETERS, parameters);
 
-        // 响应
+        // Phản hồi
         JSONArray responses = new JSONArray();
         tool.put(FlowPluginContent.RESPONSES, responses);
 
@@ -169,7 +169,7 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
     }
 
     /**
-     * 构建查询记忆工具
+     * Xây dựng công cụ truy vấn bộ nhớ
      *
      * @param knowId
      * @param descr
@@ -177,49 +177,49 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
      */
     private JSONObject buildQueryMemoryTool(String knowId, String descr) {
         JSONObject tool = new JSONObject();
-        //update-begin---author:wangshuai---date:2026-01-08---for: 记忆库根据记忆库的描述做匹配，不写死---
-        //update-begin---author:wangshuai ---date:2026-04-21  for：【AI记忆】强化query_memory触发时机描述，避免LLM在未查询时直接反问用户-----------
-        String addDesc = oConvertUtils.isEmpty(descr) ? "用户曾提及的任何信息" : descr;
+        //update-begin---author:wangshuai---date:2026-01-08---for: Kho bộ nhớ khớp theo mô tả của kho bộ nhớ, không viết cứng---
+        //update-begin---author:wangshuai ---date:2026-04-21  for: 【Bộ nhớ AI】Tăng cường query_memory mô tả thời điểm kích hoạt, tránh LLM hỏi ngược người dùng khi chưa truy vấn-----------
+        String addDesc = oConvertUtils.isEmpty(descr) ? "Bất kỳ thông tin nào người dùng từng đề cập" : descr;
         tool.put(FlowPluginContent.NAME, "query_memory");
         tool.put(FlowPluginContent.DESCRIPTION,
-                "【强制查询】从记忆库中检索" + addDesc + "。" +
-                "当用户提出的问题可能依赖历史上下文时（如**根据我的爱好...**、**推荐适合我的...**、" +
-                "**我之前说过...**、**上次提到的...**等），必须先调用本工具检索，" +
-                "严禁在未查询前直接反问用户或声称**不知道**。" +
-                "只有当本工具返回**未找到相关信息**后，才有资格询问用户。宁可查空，不可不查。");
-        //update-end---author:wangshuai ---date:2026-04-21  for：【AI记忆】强化query_memory触发时机描述，避免LLM在未查询时直接反问用户-----------
-        //update-end---author:wangshuai---date:2026-01-08---for: 记忆库根据记忆库的描述做匹配，不写死---
+                "Truy xuất từ kho bộ nhớ" + addDesc + "。" +
+                "Khi câu hỏi của người dùng có thể phụ thuộc vào ngữ cảnh lịch sử (như**Theo sở thích của tôi...**、**Gợi ý phù hợp với tôi...**、" +
+                "**Tôi đã nói trước đây...**、**Đã đề cập lần trước...**v.v.), phải gọi công cụ này để truy xuất trước," +
+                "Nghiêm cấm hỏi lại người dùng trực tiếp hoặc tuyên bố trước khi truy vấn**Không biết**。" +
+                "Chỉ khi công cụ này trả về**Không tìm thấy thông tin liên quan**thì mới được phép hỏi người dùng. Thà truy vấn mà không có kết quả còn hơn không truy vấn.");
+        //update-end---author:wangshuai ---date:2026-04-21  for: 【Bộ nhớ AI】Tăng cường query_memory mô tả thời điểm kích hoạt, tránh LLM hỏi ngược người dùng khi chưa truy vấn-----------
+        //update-end---author:wangshuai---date:2026-01-08---for: Kho bộ nhớ khớp theo mô tả của kho bộ nhớ, không viết cứng---
         tool.put(FlowPluginContent.PATH, FlowPluginContent.PLUGIN_MEMORY_QUERY_PATH);
         tool.put(FlowPluginContent.METHOD, FlowPluginContent.POST);
         tool.put(FlowPluginContent.ENABLED, true);
 
         JSONArray parameters = new JSONArray();
 
-        // 知识库ID参数
+        // Tham số ID kho tri thức
         JSONObject knowIdParam = new JSONObject();
         knowIdParam.put(FlowPluginContent.NAME, "knowledgeId");
-        knowIdParam.put(FlowPluginContent.DESCRIPTION, "知识库ID,需要原值传递，不允许修改");
+        knowIdParam.put(FlowPluginContent.DESCRIPTION, "Kho tri thức ID,Cần truyền giá trị gốc, không được sửa đổi");
         knowIdParam.put(FlowPluginContent.TYPE, FlowPluginContent.TYPE_STRING);
         knowIdParam.put(FlowPluginContent.LOCATION, FlowPluginContent.LOCATION_BODY);
         knowIdParam.put(FlowPluginContent.REQUIRED, true);
         knowIdParam.put(FlowPluginContent.DEFAULT_VALUE, knowId);
-        //update-begin---author:wangshuai ---date:20260804  for：【LHZP-1591】智普模型无法将AI应用信息写入记忆库-----------
-        // 记忆库ID由服务端注入，避免模型因无法获知必填ID而放弃工具调用
+        //update-begin---author:wangshuai ---date:20260804  for：【LHZP-1591] Mô hình Zhipu không thể ghi thông tin ứng dụng AI vào kho bộ nhớ-----------
+        // ID kho bộ nhớ do phía máy chủ inject, tránh mô hình từ bỏ gọi công cụ vì không biết ID bắt buộc
         knowIdParam.put("hidden", true);
-        //update-end---author:wangshuai ---date:20260804  for：【LHZP-1591】智普模型无法将AI应用信息写入记忆库-----------
+        //update-end---author:wangshuai ---date:20260804  for：【LHZP-1591] Mô hình Zhipu không thể ghi thông tin ứng dụng AI vào kho bộ nhớ-----------
         parameters.add(knowIdParam);
 
-        // 查询内容参数
+        // Tham số nội dung truy vấn
         JSONObject queryTextParam = new JSONObject();
         queryTextParam.put(FlowPluginContent.NAME, "queryText");
-        queryTextParam.put(FlowPluginContent.DESCRIPTION, "查询内容");
+        queryTextParam.put(FlowPluginContent.DESCRIPTION, "Nội dung truy vấn");
         queryTextParam.put(FlowPluginContent.TYPE, FlowPluginContent.TYPE_STRING);
         queryTextParam.put(FlowPluginContent.LOCATION, FlowPluginContent.LOCATION_BODY);
         queryTextParam.put(FlowPluginContent.REQUIRED, true);
         parameters.add(queryTextParam);
         
         tool.put(FlowPluginContent.PARAMETERS, parameters);
-        // 响应
+        // Phản hồi
         JSONArray responses = new JSONArray();
         tool.put(FlowPluginContent.RESPONSES, responses);
 

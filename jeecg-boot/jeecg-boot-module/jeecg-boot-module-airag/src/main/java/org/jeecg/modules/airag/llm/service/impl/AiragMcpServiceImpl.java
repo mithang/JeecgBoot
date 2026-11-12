@@ -42,73 +42,73 @@ import java.util.stream.Collectors;
 public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> implements IAiragMcpService {
 
     @Autowired
-    private ObjectMapper objectMapper; // 使用全局配置的 Jackson ObjectMapper
+    private ObjectMapper objectMapper; // Sử dụng cấu hình toàn cục Jackson ObjectMapper
     @Autowired
     private AiRagConfigBean aiRagConfigBean;
 
     /**
-     * 新增或编辑Mcpserver
+     * Thêm mới hoặc chỉnh sửa Mcpserver
      *
-     * @param airagMcp MCP对象
-     * @return 返回保存后的MCP对象
+     * @param airagMcp MCP Đối tượng
+     * @return Trả về đối tượng MCP sau khi lưu
      * @author chenrui
      * @date 2025/10/21
      */
     @Override
     public Result<String> edit(AiragMcp airagMcp) {
-        // 校验必填项
+        // Kiểm chứng các mục bắt buộc
         if (airagMcp.getName() == null || airagMcp.getName().trim().isEmpty()) {
-            return Result.error("名称不能为空");
+            return Result.error("Tên không được trống");
         }
-        //update-begin---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】支持插件------------
-        // 设置默认category
+        //update-begin---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】Hỗ trợ plugin------------
+        // Đặt mặc định category
         if (oConvertUtils.isEmpty(airagMcp.getCategory())) {
             airagMcp.setCategory("mcp");
         }
-        // 对于MCP类型，需要校验type和endpoint
+        // Đối với loại MCP, cần kiểm chứng type và endpoint
         if ("mcp".equalsIgnoreCase(airagMcp.getCategory())) {
             if (airagMcp.getType() == null || airagMcp.getType().trim().isEmpty()) {
-                return Result.error("MCP类型不能为空");
+                return Result.error("MCP Loại không được trống");
             }
             if (airagMcp.getEndpoint() == null || airagMcp.getEndpoint().trim().isEmpty()) {
-                return Result.error("服务端点不能为空");
+                return Result.error("Endpoint phía máy chủ không được trống");
             }
         } else if ("plugin".equalsIgnoreCase(airagMcp.getCategory())) {
-            // 对于插件类型，BaseURL可选，不填时使用当前系统地址
-            // 不再校验endpoint是否为空
+            // Đối với loại plugin, BaseURL là tùy chọn; nếu không điền sẽ dùng địa chỉ hệ thống hiện tại
+            // Không còn kiểm chứng endpoint có trống hay không
         } else {
-            // 未知类型，默认为MCP并校验
+            // Loại không xác định, mặc định là MCP và kiểm chứng
             if (airagMcp.getEndpoint() == null || airagMcp.getEndpoint().trim().isEmpty()) {
-                return Result.error("服务端点不能为空");
+                return Result.error("Endpoint phía máy chủ không được trống");
             }
         }
-        //update-end---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】支持插件------------
+        //update-end---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】Hỗ trợ plugin------------
 
         if (airagMcp.getId() == null || airagMcp.getId().trim().isEmpty()) {
-            // 设置默认值
+            // Đặt giá trị mặc định
             airagMcp.setStatus("enable");
-            //update-begin---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】支持插件------------
-            // 只有MCP类型才设置synced字段，插件类型不需要同步默认为已同步
+            //update-begin---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】Hỗ trợ plugin------------
+            // Chỉ loại MCP mới đặt trường synced; loại plugin không cần đồng bộ, mặc định là đã đồng bộ
             if ("mcp".equalsIgnoreCase(airagMcp.getCategory())) {
                 airagMcp.setSynced(CommonConstant.STATUS_0_INT);
             } else {
                 airagMcp.setSynced(CommonConstant.STATUS_1_INT);
             }
-            //update-end---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】支持插件------------
-            // 新增
+            //update-end---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】Hỗ trợ plugin------------
+            // Thêm mới
             this.save(airagMcp);
         } else {
-            // 编辑
+            // Chỉnh sửa
             this.updateById(airagMcp);
         }
-        return Result.OK("保存成功");
+        return Result.OK("Lưu thành công");
     }
 
     /**
-     * 同步mcp的工具列表
+     * Đồng bộ danh sách công cụ của MCP
      *
-     * @param id mcp主键
-     * @return 工具列表
+     * @param id mcp Khóa chính
+     * @return Danh sách công cụ
      * @author chenrui
      * @date 2025/10/21
      */
@@ -116,18 +116,18 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
     public Result<?> sync(String id) {
         AiragMcp mcp = this.getById(id);
         if (mcp == null) {
-            return Result.error("未找到对应的MCP对象");
+            return Result.error("Không tìm thấy đối tượng MCP tương ứng");
         }
-        //update-begin---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】支持插件------------
-        // 只有MCP类型才支持同步，插件类型不支持
+        //update-begin---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】Hỗ trợ plugin------------
+        // Chỉ loại MCP mới hỗ trợ đồng bộ, loại plugin không hỗ trợ
         String category = mcp.getCategory();
         if (oConvertUtils.isEmpty(category)) {
-            category = "mcp"; // 兼容旧数据
+            category = "mcp"; // Tương thích dữ liệu cũ
         }
         if (!"mcp".equalsIgnoreCase(category)) {
-            return Result.error("只有MCP类型才支持同步操作");
+            return Result.error("Chỉ loại MCP mới hỗ trợ thao tác đồng bộ");
         }
-        //update-end---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】支持插件------------
+        //update-end---author:chenrui ---date:20251031  for：[QQYUN-12453]【AI】Hỗ trợ plugin------------
         String type = mcp.getType();
         String endpoint = mcp.getEndpoint();
         Map<String, String> headers = null;
@@ -139,13 +139,13 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
             }
         }
         if (type == null || endpoint == null) {
-            return Result.error("MCP类型或端点为空");
+            return Result.error("MCP Loại hoặc endpoint trống");
         }
         McpClient mcpClient = null;
         try {
             if ("sse".equalsIgnoreCase(type)) {
-                //TODO 1.4.0-beta10被弃用,推荐使用http
-                log.info("[MCP]使用SSE协议(HttpMcpTransport), endpoint:{}", endpoint);
+                //TODO 1.4.0-beta10 Đã bị loại bỏ,Khuyến nghị sử dụng http
+                log.info("[MCP]Sử dụng giao thức SSE(HttpMcpTransport), endpoint:{}", endpoint);
                 HttpMcpTransport.Builder builder = HttpMcpTransport.builder()
                         .sseUrl(endpoint)
                         .logRequests(true)
@@ -155,56 +155,56 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
                 }
                 mcpClient = new DefaultMcpClient.Builder().transport(builder.build()).build();
             } else if ("stdio".equalsIgnoreCase(type)) {
-                //update-begin---author:wangshuai---date:2025-12-18---for:【QQYUN-14242】【AI】添加参数控制 是否开启 默认禁用 stdio 调用执行命令---
+                //update-begin---author:wangshuai---date:2025-12-18---for:【QQYUN-14242】【AI】Thêm tham số điều khiển có bật hay không, mặc định vô hiệu hóa stdio gọi thực thi lệnh---
                 String openSafe = aiRagConfigBean.getAllowSensitiveNodes();
                 if(oConvertUtils.isNotEmpty(openSafe) && openSafe.toLowerCase().contains("stdio")) {
-                    log.info("[MCP]使用STDIO协议(StdioMcpTransport), endpoint:{}", endpoint);
-                    //update-begin---author:wangshuai---date:2026-10-21---for:【GHSA-p3r5-xh32-m66j】/【GHSA-vj3m-vf8p-cvgc】stdio命令注入加固：endpoint 会被 sh -c/cmd.exe /c 执行，执行前先校验拒绝 & | ; < > ` $ 等 shell 元字符，防命令注入(CWE-78) ---
+                    log.info("[MCP]Sử dụng giao thức STDIO(StdioMcpTransport), endpoint:{}", endpoint);
+                    //update-begin---author:wangshuai---date:2026-10-21---for:【GHSA-p3r5-xh32-m66j】/【GHSA-vj3m-vf8p-cvgc】Tăng cường chống injection lệnh stdio: endpoint sẽ bị sh -c/cmd.exe /c thực thi, kiểm tra và từ chối trước khi thực thi & | ; < > ` $ và các ký tự đặc biệt của shell khác, chống injection lệnh(CWE-78) ---
                     CommandExecUtil.validateArg(endpoint.trim());
-                    //update-end---author:wangshuai---date:2026-10-21---for:【GHSA-p3r5-xh32-m66j】/【GHSA-vj3m-vf8p-cvgc】stdio命令注入加固：endpoint 会被 sh -c/cmd.exe /c 执行，执行前先校验拒绝 & | ; < > ` $ 等 shell 元字符，防命令注入(CWE-78)---
-                    // stdio 类型：endpoint 可能是一个命令行
-                    // Windows 下需要通过 cmd.exe /c 来执行命令，否则找不到 npx 等程序
+                    //update-end---author:wangshuai---date:2026-10-21---for:【GHSA-p3r5-xh32-m66j】/【GHSA-vj3m-vf8p-cvgc】Tăng cường chống injection lệnh stdio: endpoint sẽ bị sh -c/cmd.exe /c thực thi, kiểm tra và từ chối trước khi thực thi & | ; < > ` $ và các ký tự đặc biệt của shell khác, chống injection lệnh(CWE-78)---
+                    // stdio Loại: endpoint có thể là một dòng lệnh
+                    // Windows cần thông qua cmd.exe /c để thực thi lệnh, nếu không sẽ không tìm thấy các chương trình như npx
                     List<String> cmdParts;
                     String os = System.getProperty("os.name").toLowerCase();
                     if (os.contains("win")) {
-                        // Windows: 使用 cmd.exe /c 执行
+                        // Windows: Sử dụng cmd.exe /c Thực thi
                         cmdParts = new ArrayList<>();
                         cmdParts.add("cmd.exe");
                         cmdParts.add("/c");
                         cmdParts.add(endpoint.trim());
                     } else {
-                        // Linux/Mac: 使用 sh -c 执行
+                        // Linux/Mac: Sử dụng sh -c Thực thi
                         cmdParts = new ArrayList<>();
                         cmdParts.add("sh");
                         cmdParts.add("-c");
                         cmdParts.add(endpoint.trim());
                     }
-                    log.info("[MCP]执行stdio命令: {}", cmdParts);
+                    log.info("[MCP]Thực thi lệnh stdio: {}", cmdParts);
                     StdioMcpTransport.Builder builder = new StdioMcpTransport.Builder()
                             .command(cmdParts)
                             .environment(headers);
                     mcpClient = new DefaultMcpClient.Builder().transport(builder.build()).build();
                 } else {
-                    String disabledMsg = "stdio 功能已禁用。若需启用，请在 yml 的 jeecg.airag.allow-sensitive-nodes 中加入 stdio。";
+                    String disabledMsg = "stdio Tính năng đã bị vô hiệu hóa. Nếu cần bật, hãy thêm stdio vào jeecg.airag.allow-sensitive-nodes trong yml.";
                     log.warn("[MCP]{}", disabledMsg);
                     return Result.error(disabledMsg);
                 }
-                //update-end---author:wangshuai---date:2025-12-19---for:【QQYUN-14242】【AI】添加参数控制 是否开启 默认禁用 stdio 调用执行命令---
+                //update-end---author:wangshuai---date:2025-12-19---for:【QQYUN-14242】【AI】Thêm tham số điều khiển có bật hay không, mặc định vô hiệu hóa stdio gọi thực thi lệnh---
             }else if("http".equalsIgnoreCase(type)){
-                log.info("[MCP]使用HTTP协议(StreamableHttpMcpTransport), endpoint:{}", endpoint);
-                //增加http选项
+                log.info("[MCP]Sử dụng giao thức HTTP(StreamableHttpMcpTransport), endpoint:{}", endpoint);
+                //Thêm tùy chọn http
                 mcpClient = mcpHttpCreate(endpoint,headers);
             } else {
-                return Result.error("不支持的MCP类型:" + type);
+                return Result.error("Loại MCP không được hỗ trợ:" + type);
             }
             List<ToolSpecification> toolSpecifications = mcpClient.listTools();
-            // 先尝试直接使用 ObjectMapper 序列化，若结果为 {} 则回退到反射 Map
+            // Thử sử dụng ObjectMapper để tuần tự hóa trực tiếp trước, nếu kết quả là {} thì quay lại dùng reflection Map
             List<Map<String, Object>> specMaps = toolSpecifications.stream()
                     .map(spec -> {
                         try {
                             String raw = objectMapper.writeValueAsString(spec);
                             if (raw != null && raw.length() > 2) {
-                                // 直接反序列化成 Map，保留 Jackson 认出的字段
+                                // Giải tuần tự hóa trực tiếp thành Map, giữ lại các trường Jackson nhận ra
                                 return objectMapper.readValue(raw, new TypeReference<Map<String, Object>>() {
                                 });
                             }
@@ -220,7 +220,7 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
                 jsonList = JSONObject.toJSONString(specMaps);
             }
             String firstJson = specMaps.isEmpty() ? "null" : safeWriteJson(specMaps.get(0));
-            log.info("MCP工具列表 id={}, size={}, first={}", id, toolSpecifications.size(), firstJson);
+            log.info("MCP Danh sách công cụ id={}, size={}, first={}", id, toolSpecifications.size(), firstJson);
             mcp.setTools(jsonList);
             mcp.setSynced(1);
 
@@ -232,10 +232,10 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
         } catch (Exception e) {
             String message = e.getMessage();
             if (e instanceof IllegalArgumentException) {
-                message = "，MCP客户端参数错误";
+                message = ", lỗi tham số MCP client";
             }
-            log.error("同步MCP工具失败 id={}, error={}", id, message, e);
-            return Result.error("同步失败" + message);
+            log.error("Đồng bộ công cụ MCP thất bại id={}, error={}", id, message, e);
+            return Result.error("Đồng bộ thất bại" + message);
         } finally {
             if (mcpClient != null) {
                 try {
@@ -243,14 +243,14 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
                     closeMethod.invoke(mcpClient);
                 } catch (NoSuchMethodException ignore) {
                 } catch (Exception ex) {
-                    log.warn("关闭MCP客户端失败 id={}, error={}", id, ex.getMessage());
+                    log.warn("Đóng MCP client thất bại id={}, error={}", id, ex.getMessage());
                 }
             }
         }
     }
 
     /**
-     * mcp插件http创建
+     * mcp Tạo plugin http
      * 
      * @param endpoint
      * @param headers
@@ -272,7 +272,7 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
                 .build();
     }
 
-    // 安全序列化单个对象为 JSON 字符串
+    // Tuần tự hóa an toàn một đối tượng thành chuỗi JSON
     private String safeWriteJson(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
@@ -281,7 +281,7 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
         }
     }
 
-    // 反射将 ToolSpecification 转成 Map，兼容 record/私有字段/仅 Jackson 注解场景 -> 改为直接调用访问器
+    // Dùng reflection để chuyển ToolSpecification thành Map, tương thích record/trường private/chỉ các trường hợp dùng annotation Jackson -> đổi thành gọi trực tiếp accessor
     private Map<String, Object> convertToolSpec(ToolSpecification spec) {
         Map<String, Object> map = new LinkedHashMap<>();
         if (spec == null) {
@@ -299,7 +299,7 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
                         Map<String, Object> fieldMap = new LinkedHashMap<>();
                         fieldMap.put("name", fieldName);
                         fieldMap.put("description", extractDescription(fieldSchema));
-                        // 若需要标记必填
+                        // Nếu cần đánh dấu bắt buộc
                         if (obj.required() != null && obj.required().contains(fieldName)) {
                             fieldMap.put("required", true);
                         }
@@ -313,7 +313,7 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
         return map;
     }
 
-    // 提取各类型 schema 的描述
+    // Trích xuất mô tả schema của từng loại
     private String extractDescription(Object schema) {
         if (schema == null) return null;
         try {
@@ -329,73 +329,73 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
     }
 
     /**
-     * 修改状态
+     * Sửa trạng thái
      *
-     * @param id     MCP主键
-     * @param action 操作（enable/disable）
-     * @return 操作结果
+     * @param id     MCP Khóa chính
+     * @param action Thao tác (enable/disable）
+     * @return Kết quả thao tác
      * @author chenrui
      * @date 2025/10/21 11:00
      */
     @Override
     public Result<?> toggleStatus(String id, String action) {
         if (oConvertUtils.isEmpty(id)) {
-            return Result.error("id不能为空");
+            return Result.error("id Không được trống");
         }
         if (oConvertUtils.isEmpty(action)) {
-            return Result.error("action不能为空");
+            return Result.error("action Không được trống");
         }
         String normalized = action.toLowerCase();
         if (!"enable".equals(normalized) && !"disable".equals(normalized)) {
-            return Result.error("action只能为enable或disable");
+            return Result.error("action chỉ có thể là enable hoặc disable");
         }
         AiragMcp mcp = this.getById(id);
         if (mcp == null) {
-            return Result.error("未找到对应的MCP服务");
+            return Result.error("Không tìm thấy dịch vụ MCP tương ứng");
         }
         if (normalized.equalsIgnoreCase(mcp.getStatus())) {
-            return Result.OK("操作成功");
+            return Result.OK("Thao tác thành công");
         }
         mcp.setStatus(normalized);
         this.updateById(mcp);
-        return Result.OK("操作成功");
+        return Result.OK("Thao tác thành công");
     }
 
     /**
-     * 保存插件工具（仅更新tools字段）
-     * for [QQYUN-12453]【AI】支持插件
-     * @param id 插件ID
-     * @param tools 工具列表JSON字符串
-     * @return 操作结果
+     * Lưu công cụ plugin (chỉ cập nhật trường tools)
+     * for [QQYUN-12453]【AI】Hỗ trợ plugin
+     * @param id Plugin ID
+     * @param tools Chuỗi JSON danh sách công cụ
+     * @return Kết quả thao tác
      * @author chenrui
      * @date 2025/10/30
      */
     @Override
     public Result<String> saveTools(String id, String tools) {
         if (oConvertUtils.isEmpty(id)) {
-            return Result.error("插件ID不能为空");
+            return Result.error("ID plugin không được trống");
         }
         AiragMcp mcp = this.getById(id);
         if (mcp == null) {
-            return Result.error("未找到对应的插件");
+            return Result.error("Không tìm thấy plugin tương ứng");
         }
-        // 验证是否为插件类型
+        // Xác minh có phải loại plugin không
         String category = mcp.getCategory();
         if (oConvertUtils.isEmpty(category)) {
-            category = "mcp"; // 兼容旧数据
+            category = "mcp"; // Tương thích dữ liệu cũ
         }
         if (!"plugin".equalsIgnoreCase(category)) {
-            return Result.error("只有插件类型才能保存工具");
+            return Result.error("Chỉ loại plugin mới có thể lưu công cụ");
         }
-        // 更新tools字段
+        // Cập nhật trường tools
         mcp.setTools(tools);
         
-        // 更新metadata中的tool_count
+        // Cập nhật trong metadata tool_count
         try {
             com.alibaba.fastjson.JSONArray toolsArray = com.alibaba.fastjson.JSONArray.parseArray(tools);
             int toolCount = toolsArray != null ? toolsArray.size() : 0;
             
-            // 解析现有metadata
+            // Phân tích các metadata
             JSONObject metadata = new JSONObject();
             if (oConvertUtils.isNotEmpty(mcp.getMetadata())) {
                 try {
@@ -404,21 +404,21 @@ public class AiragMcpServiceImpl extends ServiceImpl<AiragMcpMapper, AiragMcp> i
                         metadata.putAll(metadataJson);
                     }
                 } catch (Exception e) {
-                    log.warn("解析metadata失败，将重新创建: {}", mcp.getMetadata());
+                    log.warn("Phân tích metadata thất bại, sẽ tạo lại: {}", mcp.getMetadata());
                 }
             }
             
-            // 更新tool_count
+            // Cập nhật tool_count
             metadata.put("tool_count", toolCount);
             
-            // 保存metadata
+            // Lưu metadata
             mcp.setMetadata(metadata.toJSONString());
         } catch (Exception e) {
-            log.warn("更新工具数量失败: {}", e.getMessage());
-            // 即使更新tool_count失败，也不影响保存tools
+            log.warn("Cập nhật số lượng công cụ thất bại: {}", e.getMessage());
+            // Ngay cả khi cập nhật tool_count thất bại cũng không ảnh hưởng đến việc lưu tools
         }
         
         this.updateById(mcp);
-        return Result.OK("保存成功");
+        return Result.OK("Lưu thành công");
     }
 }

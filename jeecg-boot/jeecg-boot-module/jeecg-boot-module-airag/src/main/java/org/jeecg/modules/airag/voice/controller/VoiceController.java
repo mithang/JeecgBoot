@@ -16,7 +16,7 @@ import com.alibaba.fastjson2.JSONObject;
 import java.util.List;
 
 /**
- * 文生语音控制器
+ * Controller chuyển văn bản thành giọng nói
  */
 @Slf4j
 @RestController
@@ -27,54 +27,54 @@ public class VoiceController {
     private IVoiceService voiceService;
 
     /**
-     * 文本生成语音
+     * Chuyển văn bản thành giọng nói
      */
     @PostMapping("/generate")
     public Result<VoiceResultVo> generate(@RequestBody VoiceGenerateVo vo) {
-        // 参数校验
+        // Kiểm tra tham số
         if (vo.getContent() == null || vo.getContent().isBlank()) {
-            return Result.error("合成文本不能为空");
+            return Result.error("Văn bản tổng hợp không được trống");
         }
         if (vo.getSpeed() != null && (vo.getSpeed() < 0.25 || vo.getSpeed() > 4.0)) {
-            return Result.error("倍速范围须在0.25~4.0之间");
+            return Result.error("Tốc độ phát phải nằm trong khoảng 0.25~4.0 giữa");
         }
 
         try {
             VoiceResultVo result = voiceService.textToSpeech(vo);
             return Result.OK(result);
         } catch (Exception e) {
-            log.error("文生语音失败", e);
-            return Result.error("语音生成失败: " + e.getMessage());
+            log.error("Chuyển văn bản thành giọng nói thất bại", e);
+            return Result.error("Tạo giọng nói thất bại: " + e.getMessage());
         }
     }
 
-    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】语音生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo giọng nói chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
     /**
-     * 异步提交语音生成任务，立即返回 taskId
+     * Gửi bất đồng bộ nhiệm vụ tạo giọng nói, trả về ngay lập tức taskId
      */
     @PostMapping("/generateAsync")
     public Result<String> generateAsync(@RequestBody VoiceGenerateVo vo) {
         if (vo.getContent() == null || vo.getContent().isBlank()) {
-            return Result.error("合成文本不能为空");
+            return Result.error("Văn bản tổng hợp không được trống");
         }
         if (vo.getSpeed() != null && (vo.getSpeed() < 0.25 || vo.getSpeed() > 4.0)) {
-            return Result.error("倍速范围须在0.25~4.0之间");
+            return Result.error("Tốc độ phát phải nằm trong khoảng 0.25~4.0 giữa");
         }
         String taskId = voiceService.generateAsync(vo);
         return Result.OK(taskId);
     }
 
     /**
-     * 查询异步语音任务结果
+     * Truy vấn kết quả nhiệm vụ giọng nói bất đồng bộ
      */
     @GetMapping("/queryTask/{taskId}")
     public Result<?> queryVoiceTask(@PathVariable String taskId) {
         return voiceService.getVoiceTaskResult(taskId);
     }
-    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】语音生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo giọng nói chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
 
     /**
-     * 查询当前用户的语音生成记录
+     * Truy vấn bản ghi tạo giọng nói của người dùng hiện tại
      */
     @GetMapping("/listByUser")
     public Result<List<JSONObject>> getVoiceRecords() {
@@ -84,12 +84,12 @@ public class VoiceController {
     }
 
     /**
-     * 删除语音生成记录
+     * Xóa bản ghi tạo giọng nói
      */
     @DeleteMapping("/deleteVoiceRecord")
     public Result<String> deleteVoiceRecord(@RequestParam String recordId) {
         String userId = ((LoginUser) SecurityUtils.getSubject().getPrincipal()).getId();
         boolean deleted = voiceService.deleteVoiceRecord(userId, recordId);
-        return deleted ? Result.OK("删除成功") : Result.error("记录不存在");
+        return deleted ? Result.OK("Xóa thành công") : Result.error("Bản ghi không tồn tại");
     }
 }

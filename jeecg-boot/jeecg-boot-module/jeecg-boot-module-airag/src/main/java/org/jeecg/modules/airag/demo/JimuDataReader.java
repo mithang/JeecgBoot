@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Java增强Demo: Excel数据读取器
- * for [QQYUN-11718]【AI】积木报表对接AI流程编排接口展示报表
+ * Java Tăng cường Demo: Excel Trình đọc dữ liệu
+ * for [QQYUN-11718]Báo cáo Jimu tích hợp API điều phối quy trình AI để hiển thị báo cáo
  * @Author: chenrui
  * @Date: 2025/4/29 16:51
  */
@@ -42,36 +42,36 @@ public class JimuDataReader implements IAiRagEnhanceJava {
             return readExcelData(excelFile);
         } catch (Exception e) {
             log.error("Error processing Excel file", e);
-            throw new JeecgBootBizTipException("调用java增强失败", e);
+            throw new JeecgBootBizTipException("Gọi tăng cường Java thất bại", e);
         }
     }
 
     /**
-     * Excel导入工具方法，基于ExcelImportUtil
+     * Excel Phương thức công cụ nhập, dựa trên ExcelImportUtil
      *
-     * @param file Excel文件
-     * @return Excel读取结果，包含字段和数据
-     * @throws Exception 导入过程中的异常
+     * @param file Excel Tệp
+     * @return Excel Kết quả đọc, bao gồm trường và dữ liệu
+     * @throws Exception Ngoại lệ trong quá trình nhập
      */
     public static Map<String, Object> readExcelData(File file) throws Exception {
         Map<String, Object> result = new HashMap<>();
 
-        // 设置导入参数
+        // Đặt tham số nhập
         ImportParams params = new ImportParams();
-        params.setTitleRows(0); // 没有标题
-        params.setHeadRows(1);  // 第一行是表头
+        params.setTitleRows(0); // Không có tiêu đề
+        params.setHeadRows(1);  // Dòng đầu tiên là hàng tiêu đề
 
-        // 读取Excel数据
+        // Đọc dữ liệu Excel
         List<Map<String, Object>> dataList = ExcelImportUtil.importExcel(file, Map.class, params);
 
-        // 如果没有数据，返回空结果
+        // Nếu không có dữ liệu, trả về kết quả trống
         if (dataList == null || dataList.isEmpty()) {
             result.put("fields", new ArrayList<>());
             result.put("datas", new ArrayList<>());
             return result;
         }
 
-        // 从第一行数据中获取字段名
+        // Lấy tên trường từ dòng dữ liệu đầu tiên
         List<String> fieldNames = new ArrayList<>(dataList.get(0).keySet());
 
         result.put("fields", fieldNames);

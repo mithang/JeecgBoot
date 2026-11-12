@@ -15,28 +15,28 @@ var config = {
     aniTime: 200,
     right: -232,
     api: {
-        friend: 'js/plugins/layer/layim/data/friend.json', //好友列表接口
-        group: 'js/plugins/layer/layim/data/group.json', //群组列表接口
-        chatlog: 'js/plugins/layer/layim/data/chatlog.json', //聊天记录接口
-        groups: 'js/plugins/layer/layim/data/groups.json', //群组成员接口
-        sendurl: '' //发送消息接口
+        friend: 'js/plugins/layer/layim/data/friend.json', //API danh sách bạn bè
+        group: 'js/plugins/layer/layim/data/group.json', //API danh sách nhóm
+        chatlog: 'js/plugins/layer/layim/data/chatlog.json', //API lịch sử trò chuyện
+        groups: 'js/plugins/layer/layim/data/groups.json', //API thành viên nhóm
+        sendurl: '' //API gửi tin nhắn
     },
-    user: { //当前用户信息
-        name: '游客',
+    user: { //Thông tin người dùng hiện tại
+        name: 'Khách',
         face: 'img/a1.jpg'
     },
 
-    //自动回复内置文案，也可动态读取数据库配置
+    //Nội dung trả lời tự động tích hợp sẵn, cũng có thể đọc động cấu hình cơ sở dữ liệu
     autoReplay: [
-        '您好，我现在有事不在，一会再和您联系。',
-        '你没发错吧？',
-        '洗澡中，请勿打扰，偷窥请购票，个体四十，团体八折，订票电话：一般人我不告诉他！',
-        '你好，我是主人的美女秘书，有什么事就跟我说吧，等他回来我会转告他的。',
-        '我正在拉磨，没法招呼您，因为我们家毛驴去动物保护协会把我告了，说我剥夺它休产假的权利。',
+        'Xin chào, hiện tôi đang bận, lát nữa sẽ liên hệ lại với bạn.',
+        'Bạn không gửi nhầm đấy chứ?',
+        'Đang tắm, xin đừng làm phiền, muốn nhìn trộm xin mua vé, cá nhân bốn mươi, đoàn giảm 20%, số điện thoại đặt vé: người thường tôi không nói cho đâu!',
+        'Xin chào, tôi là thư ký xinh đẹp của chủ nhân, có việc gì cứ nói với tôi, đợi anh ấy về tôi sẽ chuyển lời.',
+        'Tôi đang kéo cối xay, không thể tiếp đón bạn, vì con lừa nhà tôi đã đến hiệp hội bảo vệ động vật kiện tôi, nói tôi tước quyền nghỉ thai sản của nó.',
         '<（@￣︶￣@）>',
-        '你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。',
-        '主人正在开机自检，键盘鼠标看好机会出去凉快去了，我是他的电冰箱，我打字比较慢，你慢慢说，别急……',
-        '(*^__^*) 嘻嘻，是贤心吗？'
+        'Bạn muốn nói chuyện với tôi? Bạn thực sự muốn nói chuyện với tôi? Bạn chắc chắn mình muốn nói chứ? Bạn nhất định phải nói sao? Vậy bạn nói đi, đây là trả lời tự động.',
+        'Chủ nhân đang khởi động kiểm tra hệ thống, bàn phím và chuột đã nhân cơ hội ra ngoài hóng mát, tôi là tủ lạnh của anh ấy, tôi gõ chữ khá chậm, bạn cứ nói từ từ, đừng vội…',
+        '(*^__^*) Hi hi, có phải Hiền Tâm không?'
     ],
 
 
@@ -61,7 +61,7 @@ var config = {
     }
 }, dom = [$(window), $(document), $('html'), $('body')], xxim = {};
 
-//主界面tab
+//Giao diện chính tab
 xxim.tabs = function(index){
     var node = xxim.node;
     node.tabs.eq(index).addClass('xxim_tabnow').siblings().removeClass('xxim_tabnow');
@@ -71,7 +71,7 @@ xxim.tabs = function(index){
     }
 };
 
-//节点
+//Nút
 xxim.renode = function(){
     var node = xxim.node = {
         tabs: $('#xxim_tabs>span'),
@@ -89,7 +89,7 @@ xxim.renode = function(){
     };
 };
 
-//主界面缩放
+//Thu phóng giao diện chính
 xxim.expend = function(){
     var node = xxim.node;
     if(xxim.layimNode.attr('state') !== '1'){
@@ -116,11 +116,11 @@ xxim.expend = function(){
     }
 };
 
-//初始化窗口格局
+//Khởi tạo bố cục cửa sổ
 xxim.layinit = function(){
     var node = xxim.node;
 
-    //主界面
+    //Giao diện chính
     try{
         /*
         if(!localStorage.layimState){
@@ -139,7 +139,7 @@ xxim.layinit = function(){
     }
 };
 
-//聊天窗口
+//Cửa sổ trò chuyện
 xxim.popchat = function(param){
     var node = xxim.node, log = {};
 
@@ -152,14 +152,14 @@ xxim.popchat = function(param){
         log.chatlist.html('<li data-id="'+ param.id +'" type="'+ param.type +'"  id="layim_user'+ param.type + param.id +'"><span>'+ param.name +'</span><em>×</em></li>')
         xxim.tabchat(param, xxim.chatbox);
 
-        //最小化聊天窗
+        //Thu nhỏ cửa sổ trò chuyện
         xxim.chatbox.find('.layer_setmin').on('click', function(){
             var indexs = layero.attr('times');
             layero.hide();
             node.layimMin.text(xxim.nowchat.name).show();
         });
 
-        //关闭窗口
+        //Đóng cửa sổ
         xxim.chatbox.find('.layim_close').on('click', function(){
             var indexs = layero.attr('times');
             layer.close(indexs);
@@ -168,7 +168,7 @@ xxim.popchat = function(param){
             config.chatings = 0;
         });
 
-        //关闭某个聊天
+        //Đóng một cuộc trò chuyện
         log.chatlist.on('mouseenter', 'li', function(){
             $(this).find('em').show();
         }).on('mouseleave', 'li', function(){
@@ -204,13 +204,13 @@ xxim.popchat = function(param){
             }
         });
 
-        //聊天选项卡
+        //Tab trò chuyện
         log.chatlist.on('click', 'li', function(){
             var othis = $(this), dataType = othis.attr('type'), dataId = othis.attr('data-id');
             xxim.tabchat(config.chating[dataType + dataId]);
         });
 
-        //发送热键切换
+        //Chuyển đổi phím tắt gửi
         log.sendType = $('#layim_sendtype'), log.sendTypes = log.sendType.find('span');
         $('#layim_enter').on('click', function(e){
             config.stopMP(e);
@@ -243,17 +243,17 @@ xxim.popchat = function(param){
             +'        <ul class="layim_chatview layim_chatthis"  id="layim_area'+ param.type + param.id +'"></ul>'
             +'    </div>'
             +'    <div class="layim_tool">'
-            +'        <i class="layim_addface fa fa-meh-o" title="发送表情"></i>'
-            +'        <a href="javascript:;"><i class="layim_addimage fa fa-picture-o" title="上传图片"></i></a>'
-            +'        <a href="javascript:;"><i class="layim_addfile fa fa-paperclip" title="上传附件"></i></a>'
-            +'        <a href="" target="_blank" class="layim_seechatlog"><i class="fa fa-comment-o"></i>聊天记录</a>'
+            +'        <i class="layim_addface fa fa-meh-o" title="Gửi biểu cảm"></i>'
+            +'        <a href="javascript:;"><i class="layim_addimage fa fa-picture-o" title="Tải lên hình ảnh"></i></a>'
+            +'        <a href="javascript:;"><i class="layim_addfile fa fa-paperclip" title="Tải lên tệp đính kèm"></i></a>'
+            +'        <a href="" target="_blank" class="layim_seechatlog"><i class="fa fa-comment-o"></i>Lịch sử trò chuyện</a>'
             +'    </div>'
             +'    <textarea class="layim_write" id="layim_write"></textarea>'
             +'    <div class="layim_send">'
-            +'        <div class="layim_sendbtn" id="layim_sendbtn">发送<span class="layim_enter" id="layim_enter"><em class="layim_zero"></em></span></div>'
+            +'        <div class="layim_sendbtn" id="layim_sendbtn">Gửi<span class="layim_enter" id="layim_enter"><em class="layim_zero"></em></span></div>'
             +'        <div class="layim_sendtype" id="layim_sendtype">'
-            +'            <span><i>√</i>按Enter键发送</span>'
-            +'            <span><i></i>按Ctrl+Enter键发送</span>'
+            +'            <span><i>√</i>Nhấn phím Enter để gửi</span>'
+            +'            <span><i></i>Nhấn Ctrl+Enter để gửi</span>'
             +'        </div>'
             +'    </div>'
             +'</div>'
@@ -291,20 +291,20 @@ xxim.popchat = function(param){
         xxim.tabchat(param);
     }
 
-    //群组
+    //Nhóm
     log.chatgroup = xxim.chatbox.find('#layim_groups');
     if(param.type === 'group'){
         log.chatgroup.find('ul').removeClass('layim_groupthis');
         log.chatgroup.append('<ul class="layim_groupthis" id="layim_group'+ param.type + param.id +'"></ul>');
         xxim.getGroups(param);
     }
-    //点击群员切换聊天窗
+    //Nhấp vào thành viên nhóm để chuyển cửa sổ trò chuyện
     log.chatgroup.on('click', 'ul>li', function(){
         xxim.popchatbox($(this));
     });
 };
 
-//定位到某个聊天队列
+//Định vị đến một hàng đợi trò chuyện
 xxim.tabchat = function(param){
     var node = xxim.node, log = {}, keys = param.type + param.id;
     xxim.nowchat = param;
@@ -330,14 +330,14 @@ xxim.tabchat = function(param){
 
 };
 
-//弹出聊天窗
+//Mở cửa sổ trò chuyện
 xxim.popchatbox = function(othis){
     var node = xxim.node, dataId = othis.attr('data-id'), param = {
-        id: dataId, //用户ID
+        id: dataId, //Người dùng ID
         type: othis.attr('type'),
-        name: othis.find('.xxim_onename').text(),  //用户名
-        face: othis.find('.xxim_oneface').attr('src'),  //用户头像
-        href: 'profile.html?user=' + dataId //用户主页
+        name: othis.find('.xxim_onename').text(),  //Tên người dùng
+        face: othis.find('.xxim_oneface').attr('src'),  //Ảnh đại diện người dùng
+        href: 'profile.html?user=' + dataId //Trang cá nhân người dùng
     }, key = param.type + dataId;
     if(!config.chating[key]){
         xxim.popchat(param);
@@ -354,7 +354,7 @@ xxim.popchatbox = function(othis){
     }
 };
 
-//请求群员
+//Yêu cầu thành viên nhóm
 xxim.getGroups = function(param){
     var keys = param.type + param.id, str = '',
     groupss = xxim.chatbox.find('#layim_group'+ keys);
@@ -367,7 +367,7 @@ xxim.getGroups = function(param){
                     str += '<li data-id="'+ datas.data[ii].id +'" type="one"><img src="'+ datas.data[ii].face +'" class="xxim_oneface"><span class="xxim_onename">'+ datas.data[ii].name +'</span></li>';
                 }
             } else {
-                str = '<li class="layim_errors">没有群员</li>';
+                str = '<li class="layim_errors">Không có thành viên nhóm</li>';
             }
 
         } else {
@@ -377,33 +377,33 @@ xxim.getGroups = function(param){
         groupss.html(str);
     }, function(){
         groupss.removeClass('loading');
-        groupss.html('<li class="layim_errors">请求异常</li>');
+        groupss.html('<li class="layim_errors">Yêu cầu bất thường</li>');
     });
 };
 
-//消息传输
+//Truyền tin nhắn
 xxim.transmit = function(){
     var node = xxim.node, log = {};
     node.sendbtn = $('#layim_sendbtn');
     node.imwrite = $('#layim_write');
 
-    //发送
+    //Gửi
     log.send = function(){
         var data = {
             content: node.imwrite.val(),
             id: xxim.nowchat.id,
-            sign_key: '', //密匙
+            sign_key: '', //Khóa bí mật
             _: +new Date
         };
 
         if(data.content.replace(/\s/g, '') === ''){
-            layer.tips('说点啥呗！', '#layim_write', 2);
+            layer.tips('Nói gì đi nào!', '#layim_write', 2);
             node.imwrite.focus();
         } else {
-            //此处皆为模拟
+            //Tất cả ở đây đều là mô phỏng
             var keys = xxim.nowchat.type + xxim.nowchat.id;
 
-            //聊天模版
+            //Mẫu trò chuyện
             log.html = function(param, type){
                 return '<li class="'+ (type === 'me' ? 'layim_chateme' : '') +'">'
                     +'<div class="layim_chatuser">'
@@ -461,18 +461,18 @@ xxim.transmit = function(){
     });
 };
 
-//事件
+//Sự kiện
 xxim.event = function(){
     var node = xxim.node;
 
-    //主界面tab
+    //Giao diện chính tab
     node.tabs.eq(0).addClass('xxim_tabnow');
     node.tabs.on('click', function(){
         var othis = $(this), index = othis.index();
         xxim.tabs(index);
     });
 
-    //列表展收
+    //Mở rộng/thu gọn danh sách
     node.list.on('click', 'h5', function(){
         var othis = $(this), chat = othis.siblings('.xxim_chatlist'), parentss = othis.find("i");
         if(parentss.hasClass('fa-caret-down')){
@@ -484,7 +484,7 @@ xxim.event = function(){
         }
     });
 
-    //设置在线隐身
+    //Cài đặt ẩn danh trực tuyến
     node.online.on('click', function(e){
         config.stopMP(e);
         node.setonline.show();
@@ -493,10 +493,10 @@ xxim.event = function(){
         var index = $(this).index();
         config.stopMP(e);
         if(index === 0){
-            node.onlinetex.html('在线');
+            node.onlinetex.html('Trực tuyến');
             node.online.removeClass('xxim_offline');
         } else if(index === 1) {
-            node.onlinetex.html('隐身');
+            node.onlinetex.html('Ẩn thân');
             node.online.addClass('xxim_offline');
         }
         node.setonline.hide();
@@ -505,14 +505,14 @@ xxim.event = function(){
     node.xximon.on('click', xxim.expend);
     node.xximHide.on('click', xxim.expend);
 
-    //搜索
+    //Tìm kiếm
     node.xximSearch.keyup(function(){
         var val = $(this).val().replace(/\s/g, '');
         if(val !== ''){
             node.searchMian.show();
             node.closeSearch.show();
-            //此处的搜索ajax参考xxim.getDates
-            node.list.eq(3).html('<li class="xxim_errormsg">没有符合条件的结果</li>');
+            //Tìm kiếm ajax ở đây tham khảo xxim.getDates
+            node.list.eq(3).html('<li class="xxim_errormsg">Không có kết quả phù hợp với điều kiện</li>');
         } else {
             node.searchMian.hide();
             node.closeSearch.hide();
@@ -524,28 +524,28 @@ xxim.event = function(){
         node.xximSearch.val('').focus();
     });
 
-    //弹出聊天窗
+    //Mở cửa sổ trò chuyện
     config.chatings = 0;
     node.list.on('click', '.xxim_childnode', function(){
         var othis = $(this);
         xxim.popchatbox(othis);
     });
 
-    //点击最小化栏
+    //Nhấp vào thanh thu nhỏ
     node.layimMin.on('click', function(){
         $(this).hide();
         $('#layim_chatbox').parents('.xubox_layer').show();
     });
 
 
-    //document事件
+    //document Sự kiện
     dom[1].on('click', function(){
         node.setonline.hide();
         $('#layim_sendtype').hide();
     });
 };
 
-//请求列表数据
+//Yêu cầu dữ liệu danh sách
 xxim.getDates = function(index){
     var api = [config.api.friend, config.api.group, config.api.chatlog],
         node = xxim.node, myf = node.list.eq(index);
@@ -575,24 +575,24 @@ xxim.getDates = function(index){
                 }
                 myf.html(str);
             } else {
-                myf.html('<li class="xxim_errormsg">没有任何数据</li>');
+                myf.html('<li class="xxim_errormsg">Không có dữ liệu nào</li>');
             }
             myf.removeClass('loading');
         } else {
             myf.html('<li class="xxim_errormsg">'+ datas.msg +'</li>');
         }
     }, function(){
-        myf.html('<li class="xxim_errormsg">请求失败</li>');
+        myf.html('<li class="xxim_errormsg">Yêu cầu thất bại</li>');
         myf.removeClass('loading');
     });
 };
 
-//渲染骨架
+//Render khung xương
 xxim.view = (function(){
     var xximNode = xxim.layimNode = $('<div id="xximmm" class="xxim_main">'
             +'<div class="xxim_top" id="xxim_top">'
             +'  <div class="xxim_search"><i class="fa fa-search"></i><input id="xxim_searchkey" /><span id="xxim_closesearch">×</span></div>'
-            +'  <div class="xxim_tabs" id="xxim_tabs"><span class="xxim_tabfriend" title="好友"><i class="fa fa-user"></i></span><span class="xxim_tabgroup" title="群组"><i class="fa fa-users"></i></span><span class="xxim_latechat"  title="最近聊天"><i class="fa fa-clock-o"></i></span></div>'
+            +'  <div class="xxim_tabs" id="xxim_tabs"><span class="xxim_tabfriend" title="Bạn bè"><i class="fa fa-user"></i></span><span class="xxim_tabgroup" title="Nhóm"><i class="fa fa-users"></i></span><span class="xxim_latechat"  title="Trò chuyện gần đây"><i class="fa fa-clock-o"></i></span></div>'
             +'  <ul class="xxim_list" style="display:block"></ul>'
             +'  <ul class="xxim_list"></ul>'
             +'  <ul class="xxim_list"></ul>'
@@ -600,14 +600,14 @@ xxim.view = (function(){
             +'</div>'
             +'<ul class="xxim_bottom" id="xxim_bottom">'
             +'<li class="xxim_online" id="xxim_online">'
-                +'<i class="xxim_nowstate fa fa-check-circle"></i><span id="xxim_onlinetex">在线</span>'
+                +'<i class="xxim_nowstate fa fa-check-circle"></i><span id="xxim_onlinetex">Trực tuyến</span>'
                 +'<div class="xxim_setonline">'
-                    +'<span><i class="fa fa-check-circle"></i>在线</span>'
-                    +'<span class="xxim_setoffline"><i class="fa fa-check-circle"></i>隐身</span>'
+                    +'<span><i class="fa fa-check-circle"></i>Trực tuyến</span>'
+                    +'<span class="xxim_setoffline"><i class="fa fa-check-circle"></i>Ẩn thân</span>'
                 +'</div>'
             +'</li>'
-            +'<li class="xxim_mymsg" id="xxim_mymsg" title="我的私信"><i class="fa fa-comment"></i><a href="'+ config.msgurl +'" target="_blank"></a></li>'
-            +'<li class="xxim_seter" id="xxim_seter" title="设置">'
+            +'<li class="xxim_mymsg" id="xxim_mymsg" title="Tin nhắn riêng của tôi"><i class="fa fa-comment"></i><a href="'+ config.msgurl +'" target="_blank"></a></li>'
+            +'<li class="xxim_seter" id="xxim_seter" title="Cài đặt">'
                 +'<i class="fa fa-gear"></i>'
                 +'<div>'
 

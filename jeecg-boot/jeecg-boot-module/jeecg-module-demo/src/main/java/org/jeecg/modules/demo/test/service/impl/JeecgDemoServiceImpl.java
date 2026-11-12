@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Description: jeecg 测试demo
+ * @Description: jeecg Kiểm tra demo
  * @Author: jeecg-boot
  * @Date:  2018-12-29
  * @Version: V1.0
@@ -32,56 +32,56 @@ public class JeecgDemoServiceImpl extends ServiceImpl<JeecgDemoMapper, JeecgDemo
 	JeecgDemoMapper jeecgDemoMapper;
 	
 	/**
-	 * 事务控制在service层面
-	 * 加上注解：@Transactional，声明的方法就是一个独立的事务（有异常DB操作全部回滚）
+	 * Kiểm soát giao dịch ở tầng service
+	 * Thêm annotation: @Transactional, phương thức được khai báo là một giao dịch độc lập (nếu có ngoại lệ, mọi thao tác DB sẽ được rollback)
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void testTran() {
 		JeecgDemo pp = new JeecgDemo();
 		pp.setAge(1111);
-		pp.setName("测试事务  小白兔 1");
+		pp.setName("Giao dịch kiểm thử Thỏ Trắng Nhỏ 1");
 		jeecgDemoMapper.insert(pp);
 		
 		JeecgDemo pp2 = new JeecgDemo();
 		pp2.setAge(2222);
-		pp2.setName("测试事务  小白兔 2");
+		pp2.setName("Giao dịch kiểm thử Thỏ Trắng Nhỏ 2");
 		jeecgDemoMapper.insert(pp2);
-        //自定义异常
+        //Ngoại lệ tùy chỉnh
 		Integer.parseInt("hello");
 		
 		JeecgDemo pp3 = new JeecgDemo();
 		pp3.setAge(3333);
-		pp3.setName("测试事务  小白兔 3");
+		pp3.setName("Giao dịch kiểm thử Thỏ Trắng Nhỏ 3");
 		jeecgDemoMapper.insert(pp3);
 		return ;
 	}
 
 
 	/**
-	 * 缓存注解测试： redis
+	 * Kiểm tra annotation cache:  redis
 	 */
 	@Override
 	@Cacheable(cacheNames = CacheConstant.TEST_DEMO_CACHE, key = "#id")
 	public JeecgDemo getByIdCacheable(String id) {
 		JeecgDemo t = jeecgDemoMapper.selectById(id);
-		System.err.println("---未读缓存，读取数据库---");
+		System.err.println("---Chưa đọc cache, đọc cơ sở dữ liệu---");
 		System.err.println(t);
 		return t;
 	}
 
 
 	/**
-	 * @Cacheable自定义TTL：#60（单位是秒，目前只支持这一种格式）
-	 * 通过注解方式，指定缓存有效期60秒
+	 * @Cacheable TTL tùy chỉnh: #60(đơn vị là giây, hiện chỉ hỗ trợ định dạng này)
+	 * Chỉ định thời gian hiệu lực của cache là 60 giây bằng annotation
 	 * 
-	 * 参考博客：https://www.cnblogs.com/h2285409/p/18324396
+	 * Tham khảo blog: https://www.cnblogs.com/h2285409/p/18324396
 	 */
 	@Override
 	@Cacheable(cacheNames = "ceshi:redis:ttl#60", key = "#id")
 	public JeecgDemo getByIdCacheableTTL(String id) {
 		JeecgDemo t = jeecgDemoMapper.selectById(id);
-		System.err.println("---未读缓存，读取数据库---");
+		System.err.println("---Chưa đọc cache, đọc cơ sở dữ liệu---");
 		System.err.println(t);
 		return t;
 	}
@@ -90,7 +90,7 @@ public class JeecgDemoServiceImpl extends ServiceImpl<JeecgDemoMapper, JeecgDemo
 	@Override
 	public IPage<JeecgDemo> queryListWithPermission(int pageSize,int pageNo) {
 		Page<JeecgDemo> page = new Page<>(pageNo, pageSize);
-		//编程方式，获取当前请求的数据权限规则SQL片段
+		//Lấy đoạn SQL quy tắc quyền dữ liệu của yêu cầu hiện tại bằng cách lập trình
 		String sql = QueryGenerator.installAuthJdbc(JeecgDemo.class);
 		return this.baseMapper.queryListWithPermission(page, sql);
 	}
@@ -98,22 +98,22 @@ public class JeecgDemoServiceImpl extends ServiceImpl<JeecgDemoMapper, JeecgDemo
 	@Override
 	public String getExportFields() {
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-		//权限配置列导出示例
-		//1.配置前缀与菜单中配置的列前缀一致
+		//Ví dụ xuất cột cấu hình quyền
+		//1.Tiền tố cấu hình phải trùng với tiền tố cột đã cấu hình trong menu
 		List<String> noAuthList = new ArrayList<>();
 		List<String> exportFieldsList = new ArrayList<>();
 		String permsPrefix = "testdemo:";
-		//查询配置菜单有效字段
+		//Truy vấn trường hợp lệ của menu cấu hình
 		List<String> allAuth = this.jeecgDemoMapper.queryAllAuth(permsPrefix);
-		//查询已授权字段
+		//Truy vấn trường đã được cấp quyền
 		List<String> userAuth = this.jeecgDemoMapper.queryUserAuth(sysUser.getId(),permsPrefix);
-		//列出未授权字段
+		//Liệt kê trường chưa được cấp quyền
 		for(String perms : allAuth){
 			if(!userAuth.contains(perms)){
 				noAuthList.add(perms.substring(permsPrefix.length()));
 			}
 		}
-		//实体类中字段与未授权字段比较，列出需导出字段
+		//So sánh trường trong lớp entity với trường chưa được cấp quyền, liệt kê trường cần xuất
 		Field[] fileds = JeecgDemo.class.getDeclaredFields();
 		List<Field> list = new ArrayList(Arrays.asList(fileds));
 		for(Field field : list){

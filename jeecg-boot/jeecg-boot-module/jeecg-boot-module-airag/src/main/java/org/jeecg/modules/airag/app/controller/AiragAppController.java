@@ -30,7 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.jeecg.common.system.vo.DictModel;
 
 /**
- * @Description: AI应用
+ * @Description: AI Ứng dụng
  * @Author: jeecg-boot
  * @Date: 2025-02-26
  * @Version: V1.0
@@ -46,7 +46,7 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     private IAiragChatService airagChatService;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param airagApp
      * @param pageNo
@@ -67,11 +67,11 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     }
 
     /**
-     * 字典列表查询（不分页，按创建时间倒序）
+     * Truy vấn danh sách từ điển (không phân trang, sắp xếp giảm dần theo thời gian tạo)
      *
-     * @param airagApp 支持通过实体字段动态过滤，如 type 等
-     * @param req HTTP请求
-     * @return 应用字典列表
+     * @param airagApp Hỗ trợ lọc động qua trường thực thể, ví dụ type, v.v.
+     * @param req HTTP Yêu cầu
+     * @return Danh sách từ điển ứng dụng
      */
     @GetMapping(value = "/listDict")
     @RequiresPermissions(value = {"airag:app:listDict", "airag:flow:debug"}, logical = Logical.OR)
@@ -87,7 +87,7 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     }
 
     /**
-     * 新增或编辑
+     * Thêm mới hoặc chỉnh sửa
      *
      * @param airagApp
      * @return
@@ -95,47 +95,47 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     @RequiresPermissions("airag:app:edit")
     public Result<String> edit(@RequestBody AiragApp airagApp, HttpServletRequest request) {
-        AssertUtils.assertNotEmpty("参数异常", airagApp);
-        AssertUtils.assertNotEmpty("请输入应用名称", airagApp.getName());
-        AssertUtils.assertNotEmpty("请选择应用类型", airagApp.getType());
-        //update-begin---author:zhangdaihao ---date:20260415  for：[issues/9462]AI应用edit接口跨租户数据写入漏洞------------
-        //SaaS多租户隔离：禁止跨租户写入，防止通过请求体伪造tenantId污染其他租户数据
+        AssertUtils.assertNotEmpty("Tham số bất thường", airagApp);
+        AssertUtils.assertNotEmpty("Vui lòng nhập tên ứng dụng", airagApp.getName());
+        AssertUtils.assertNotEmpty("Vui lòng chọn loại ứng dụng", airagApp.getType());
+        //update-begin---author:zhangdaihao ---date:20260415  for：[issues/9462]AI Lỗ hổng ghi dữ liệu xuyên tenant của API edit ứng dụng------------
+        //SaaS Cách ly đa tenant: cấm ghi chéo tenant, ngăn chặn việc giả mạo tenantId qua request body làm ô nhiễm dữ liệu của tenant khác
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             String currentTenantId = TokenUtils.getTenantIdByRequest(request);
             if (airagApp.getId() != null && !airagApp.getId().isEmpty()) {
                 AiragApp dbApp = airagAppService.getById(airagApp.getId());
                 if (dbApp == null || !dbApp.getTenantId().equals(currentTenantId)) {
-                    return Result.error("保存AI应用失败，不能修改其他租户的AI应用！");
+                    return Result.error("Lưu ứng dụng AI thất bại, không thể sửa ứng dụng AI của tenant khác!");
                 }
             }
-            //强制使用当前登录租户，忽略客户端传入值
+            //Bắt buộc sử dụng tenant đang đăng nhập, bỏ qua giá trị client truyền vào
             airagApp.setTenantId(currentTenantId);
         }
-        //update-end---author:zhangdaihao ---date:20260415  for：[issues/9462]AI应用edit接口跨租户数据写入漏洞------------
+        //update-end---author:zhangdaihao ---date:20260415  for：[issues/9462]AI Lỗ hổng ghi dữ liệu xuyên tenant của API edit ứng dụng------------
         airagApp.setStatus(AiAppConsts.STATUS_ENABLE);
         airagAppService.saveOrUpdate(airagApp);
-        return Result.OK("保存完成!", airagApp.getId());
+        return Result.OK("Lưu hoàn tất!", airagApp.getId());
     }
 
 	/**
-	 * 复制应用
+	 * Sao chép ứng dụng
 	 *
-	 * @param id 原应用ID
-	 * @param request HTTP请求
-	 * @return 新应用ID
+	 * @param id Ứng dụng gốc ID
+	 * @param request HTTP Yêu cầu
+	 * @return Ứng dụng mới ID
 	 * @author scott
-	 * @since 2026-08-06 【LHZP-1512】AI应用增加复制功能
+	 * @since 2026-08-06 【LHZP-1512] Ứng dụng AI bổ sung chức năng sao chép
 	 */
 	@PostMapping(value = "/copy")
 	@RequiresPermissions("airag:app:edit")
 	public Result<String> copy(@RequestParam(name = "id") String id, HttpServletRequest request) {
-		AssertUtils.assertNotEmpty("id必须填写", id);
+		AssertUtils.assertNotEmpty("id phải điền", id);
 		String copiedAppId = airagAppService.copyApp(id, TokenUtils.getTenantIdByRequest(request));
-		return Result.OK("复制成功", copiedAppId);
+		return Result.OK("Sao chép thành công", copiedAppId);
 	}
 
     /**
-     * 发布应用
+     * Phát hành ứng dụng
      *
      * @return
      */
@@ -144,30 +144,30 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     public Result<String> release(@RequestParam(name = "id") String id,
                                   @RequestParam(name = "release") Boolean release,
                                   HttpServletRequest request) {
-        AssertUtils.assertNotEmpty("id必须填写", id);
+        AssertUtils.assertNotEmpty("id phải điền", id);
         if (release == null) {
             release = true;
         }
         AiragApp app = airagAppService.getById(id);
         if (app == null) {
-            return Result.error("应用不存在");
+            return Result.error("Ứng dụng không tồn tại");
         }
-        // SaaS 多租户隔离：禁止跨租户发布/取消发布
+        // SaaS Cách ly đa tenant: cấm phát hành chéo tenant/Hủy phát hành
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             String currentTenantId = TokenUtils.getTenantIdByRequest(request);
             if (oConvertUtils.isEmpty(app.getTenantId()) || !app.getTenantId().equals(currentTenantId)) {
-                return Result.error("操作失败，不能操作其他租户的AI应用！");
+                return Result.error("Thao tác thất bại, không thể thao tác ứng dụng AI của tenant khác!");
             }
         }
         String shareToken = airagAppService.releaseApp(id, release);
-        // result 固定返回 shareToken（取消发布为 null），避免与提示文案混用
+        // result Luôn trả về shareToken (hủy phát hành là null), tránh lẫn với văn bản nhắc nhở
         Result<String> result = Result.OK(shareToken);
-        result.setMessage(release ? "发布成功" : "取消发布成功");
+        result.setMessage(release ? "Phát hành thành công" : "Hủy phát hành thành công");
         return result;
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
@@ -175,23 +175,23 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     @DeleteMapping(value = "/delete")
     @RequiresPermissions("airag:app:delete")
     public Result<String> delete(HttpServletRequest request,@RequestParam(name = "id", required = true) String id) {
-        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
-        //如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
+        //Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             AiragApp app = airagAppService.getById(id);
-            //获取当前租户
+            //Lấy tenant hiện tại
             String currentTenantId = TokenUtils.getTenantIdByRequest(request);
             if (null == app || !app.getTenantId().equals(currentTenantId)) {
-                return Result.error("删除AI应用失败，不能删除其他租户的AI应用！");
+                return Result.error("Xóa ứng dụng AI thất bại, không thể xóa ứng dụng AI của tenant khác!");
             }
         }
-        //update-end---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
+        //update-end---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
         airagAppService.removeById(id);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
@@ -201,14 +201,14 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     public Result<AiragApp> queryById(@RequestParam(name = "id", required = true) String id) {
         AiragApp airagApp = airagAppService.getById(id);
         if (airagApp == null) {
-            return Result.error("未找到对应数据");
+            return Result.error("Không tìm thấy dữ liệu tương ứng");
         }
         return Result.OK(airagApp);
     }
 
 
     /**
-     * 调试应用
+     * Gỡ lỗi ứng dụng
      *
      * @param appDebugParams
      * @return
@@ -221,7 +221,7 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     }
 
     /**
-     * 根据需求生成提示词
+     * Tạo prompt theo yêu cầu
      *
      * @param prompt
      * @return
@@ -234,7 +234,7 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     }
 
     /**
-     * 根据需求生成提示词
+     * Tạo prompt theo yêu cầu
      *
      * @param prompt
      * @return
@@ -247,8 +247,8 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     }
 
     /**
-     * 根据应用ID生成变量和记忆提示词 (SSE)
-     * for: 【QQYUN-14479】提示词单独拆分
+     * Tạo prompt biến và bộ nhớ theo ID ứng dụng (SSE)
+     * for: 【QQYUN-14479】 Tách riêng prompt
      * @param variables
      * @return
      */
@@ -259,26 +259,26 @@ public class AiragAppController extends JeecgController<AiragApp, IAiragAppServi
     }
 
     /**
-     * 写作保存
+     * Lưu bài viết
      */
     @PostMapping("/save/article/write")
     public Result<String> saveArticleWrite(@RequestBody AiArticleWriteVersionVo aiWriteVersionVo) {
         airagAppService.saveArticleWrite(aiWriteVersionVo);
-        return Result.OK("保存成功！");
+        return Result.OK("Lưu thành công!");
     }
     
     /**
-     * 写作删除
+     * Xóa bài viết
      */
     @DeleteMapping("/delete/article/write")
     public Result<String> deleteArticleWrite(@RequestParam(name = "version") String version) {
-        AssertUtils.assertNotEmpty("版本号不能为空", version);
+        AssertUtils.assertNotEmpty("Số phiên bản không được trống", version);
         airagAppService.deleteArticleWrite(version);
-        return Result.OK("删除成功！");
+        return Result.OK("Xóa thành công!");
     }
     
     /**
-     * 写作查询
+     * Truy vấn viết bài
      */
     @GetMapping("/list/article/write")
     public Result<List<AiArticleWriteVersionVo>> listArticleWrite() {

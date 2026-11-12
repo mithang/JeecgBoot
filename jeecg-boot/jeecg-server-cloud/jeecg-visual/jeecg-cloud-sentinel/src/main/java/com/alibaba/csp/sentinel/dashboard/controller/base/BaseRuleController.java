@@ -4,21 +4,21 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * Nacos持久化通用处理类
+ * Nacos Lớp xử lý chung lưu bền
  *
  * @author zyf
  * @date 2022-04-13
  */
 public class BaseRuleController {
     /**
-     * 延迟一下
+     * Trì hoãn một chút
      *
-     * 解释：列表加载数据的时候，Nacos持久化还没做完，导致加载数据不对
+     * Giải thích: khi danh sách tải dữ liệu, quá trình lưu bền Nacos chưa hoàn thành nên dữ liệu tải về không đúng
      */
     public static void delayTime(){
         try {
             TimeUnit.MILLISECONDS.sleep(100);
-            System.out.println("-------------睡100毫秒-----------");
+            System.out.println("-------------Ngủ 100 mili giây-----------");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -66,7 +66,7 @@ import static org.jeecg.modules.airag.llm.consts.LLMConsts.KNOWLEDGE_DOC_TYPE_FI
 import static org.jeecg.modules.airag.llm.consts.LLMConsts.KNOWLEDGE_DOC_TYPE_WEB;
 
 /**
- * 向量工具类
+ * Lớp công cụ vector
  *
  * @Author: chenrui
  * @Date: 2025/2/18 14:31
@@ -98,66 +98,66 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     private AiChatConfig aiChatConfig;
 
     /**
-     * 默认分段长度
+     * Độ dài phân đoạn mặc định
      */
     private static final int DEFAULT_SEGMENT_SIZE = 1000;
 
     /**
-     * 默认分段重叠长度
+     * Độ dài chồng chéo phân đoạn mặc định
      */
     private static final int DEFAULT_OVERLAP_SIZE = 50;
 
     /**
-     * 最大输出长度
+     * Độ dài đầu ra tối đa
      */
     private static final int DEFAULT_MAX_OUTPUT_CHARS = 4000;
 
     /**
-     * 向量存储元数据:knowledgeId
+     * Metadata lưu trữ vector:knowledgeId
      */
     public static final String EMBED_STORE_METADATA_KNOWLEDGEID = "knowledgeId";
 
     /**
-     * 向量存储元数据: 用户账号
+     * Metadata lưu trữ vector: Tài khoản người dùng
      */
     public static final String EMBED_STORE_METADATA_USER_NAME = "username";
 
     /**
-     * 向量存储元数据:docId
+     * Metadata lưu trữ vector:docId
      */
     public static final String EMBED_STORE_METADATA_DOCID = "docId";
 
     /**
-     * 向量存储元数据:docName
+     * Metadata lưu trữ vector:docName
      */
     public static final String EMBED_STORE_METADATA_DOCNAME = "docName";
 
     /**
-     * 向量存储元数据：创建时间
+     * Metadata kho vector: thời gian tạo
      */
     public static final String EMBED_STORE_CREATE_TIME = "createTime";
 
     /**
-     * 向量存储缓存
+     * Cache kho vector
      */
     private static final ConcurrentHashMap<String, EmbeddingStore<TextSegment>> EMBED_STORE_CACHE = new ConcurrentHashMap<>();
 
 
     /**
-     * 正则匹配: md图片
+     * Khớp biểu thức chính quy: md Hình ảnh
      * "!\\[(.*?)]\\((.*?)(\\s*=\\d+)?\\)"
      */
     private static final Pattern PATTERN_MD_IMAGE = Pattern.compile("!\\[(.*?)]\\((.*?)\\)");
 
-    //update-begin---author:wangshuai ---date:2026-04-20  for：【issues/9551】HTML表格向量化分段时被截断修复-----------
+    //update-begin---author:wangshuai ---date:2026-04-20  for：【issues/9551】Sửa lỗi bảng HTML bị cắt khi phân đoạn vector hóa-----------
     /**
-     * 正则匹配: HTML表格完整块（跨行，大小写不敏感）
+     * Khớp biểu thức chính quy: HTML Khối bảng đầy đủ (nhiều dòng, không phân biệt chữ hoa/thường)
      */
     private static final Pattern PATTERN_HTML_TABLE = Pattern.compile("(?is)<table\\b.*?</table>");
-    //update-end---author:wangshuai ---date:2026-04-20  for：【issues/9551】HTML表格向量化分段时被截断修复-----------
+    //update-end---author:wangshuai ---date:2026-04-20  for：【issues/9551】Sửa lỗi bảng HTML bị cắt khi phân đoạn vector hóa-----------
 
     /**
-     * 向量化文档
+     * Vector hóa tài liệu
      *
      * @param knowId
      * @param doc
@@ -167,16 +167,16 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      */
     public Map<String, Object> embeddingDocument(String knowId, AiragKnowledgeDoc doc) {
         AiragKnowledge airagKnowledge = airagKnowledgeService.getById(knowId);
-        AssertUtils.assertNotEmpty("知识库不存在", airagKnowledge);
-        AssertUtils.assertNotEmpty("请先为知识库配置向量模型库", airagKnowledge.getEmbedId());
-        AssertUtils.assertNotEmpty("文档不能为空", doc);
-        // 读取文档
+        AssertUtils.assertNotEmpty("Kho tri thức không tồn tại", airagKnowledge);
+        AssertUtils.assertNotEmpty("Vui lòng cấu hình thư viện mô hình vector cho kho tri thức trước", airagKnowledge.getEmbedId());
+        AssertUtils.assertNotEmpty("Tài liệu không được trống", doc);
+        // Đọc tài liệu
         String content = doc.getContent();
-        // 向量化并存储
+        // Vector hóa và lưu trữ
         if (oConvertUtils.isEmpty(content)) {
             switch (doc.getType()) {
                 case KNOWLEDGE_DOC_TYPE_FILE:
-                    //解析文件
+                    //Phân tích tệp
                     if (knowConfigBean.isEnableMinerU()) {
                         parseFileByMinerU(doc);
                     }
@@ -184,27 +184,27 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                     break;
                 case KNOWLEDGE_DOC_TYPE_WEB:
                     content = parseWebPage(doc);
-                    // 将解析的网页内容回写到文档，便于后续查看
+                    // Ghi nội dung trang web đã phân tích trở lại tài liệu, để xem sau
                     doc.setContent(content);
                     break;
             }
         }
-        //update-begin---author:chenrui ---date:20250307  for：[QQYUN-11443]【AI】是不是应该把标题也生成到向量库里，标题一般是有意义的------------
+        //update-begin---author:chenrui ---date:20250307  for：[QQYUN-11443]【AI】Có nên đưa cả tiêu đề vào kho vector không, tiêu đề thường có ý nghĩa------------
         if (oConvertUtils.isNotEmpty(doc.getTitle())) {
             content = doc.getTitle() + "\n\n" + content;
         }
-        //update-end---author:chenrui ---date:20250307  for：[QQYUN-11443]【AI】是不是应该把标题也生成到向量库里，标题一般是有意义的------------
+        //update-end---author:chenrui ---date:20250307  for：[QQYUN-11443]【AI】Có nên đưa cả tiêu đề vào kho vector không, tiêu đề thường có ý nghĩa------------
 
-        // 向量化 date:2025/2/18
+        // Vector hóa date:2025/2/18
         AiragModel model = getEmbedModelData(airagKnowledge.getEmbedId());
         AiModelOptions modelOp = buildModelOptions(model);
         EmbeddingModel embeddingModel = AiModelFactory.createEmbeddingModel(modelOp);
         EmbeddingStore<TextSegment> embeddingStore = getEmbedStore(model);
-        // 删除旧数据
+        // Xóa dữ liệu cũ
         embeddingStore.removeAll(metadataKey(EMBED_STORE_METADATA_DOCID).isEqualTo(doc.getId()));
-        // 分段器
+        // Bộ phân đoạn
         DocumentSplitter splitter = createDocumentSplitter(doc);
-        // 分段并存储
+        // Phân đoạn và lưu trữ
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(splitter)
                 .embeddingModel(embeddingModel)
@@ -213,10 +213,10 @@ public class EmbeddingHandler implements IEmbeddingHandler {
         Metadata metadata = Metadata.metadata(EMBED_STORE_METADATA_DOCID, doc.getId())
                 .put(EMBED_STORE_METADATA_KNOWLEDGEID, doc.getKnowledgeId())
                 .put(EMBED_STORE_METADATA_DOCNAME, FilenameUtils.getName(doc.getTitle()))
-                 //初始化记忆库的时候添加创建时间选项
+                 //Khi khởi tạo kho bộ nhớ, thêm tùy chọn thời gian tạo
                 .put(EMBED_STORE_CREATE_TIME, String.valueOf(doc.getCreateTime() != null ? doc.getCreateTime().getTime() : System.currentTimeMillis()));
-        //update-begin---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】支持记忆---
-        //添加用户名字到元数据里面，用于记忆库中数据隔离
+        //update-begin---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
+        //Thêm tên người dùng vào metadata, dùng để cách ly dữ liệu trong kho bộ nhớ
         String username = doc.getCreateBy();
         if (oConvertUtils.isEmpty(username)) {
             try {
@@ -224,16 +224,16 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                 String token = TokenUtils.getTokenByRequest(request);
                 username = JwtUtil.getUsername(token);
             } catch (Exception e) {
-                // ignore：token获取不到默认为admin
+                // ignore: không lấy được token thì mặc định là admin
                 username = "admin";
             }
         }
         if (oConvertUtils.isNotEmpty(username)) {
             metadata.put(EMBED_STORE_METADATA_USER_NAME, username);
         }
-        //update-end---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】支持记忆---
+        //update-end---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
         Document from = Document.from(content, metadata);
-        //update-begin---author:wangshuai ---date:2026-04-20  for：【issues/9551】HTML表格分段时被截断，保留完整表格块-----------
+        //update-begin---author:wangshuai ---date:2026-04-20  for：【issues/9551】Bảng HTML bị cắt khi phân đoạn, giữ nguyên khối bảng đầy đủ-----------
         boolean hasHtmlTable = content != null && PATTERN_HTML_TABLE.matcher(content).find();
         if (hasHtmlTable) {
             try {
@@ -241,26 +241,26 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                 List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
                 embeddingStore.addAll(embeddings, segments);
             } catch (Exception e) {
-                log.error("向量存储失败，请检查向量模型配置是否正确", e);
-                throw new JeecgBootException("向量存储失败：" + e.getMessage());
+                log.error("Lưu trữ vector thất bại, vui lòng kiểm tra cấu hình mô hình vector có đúng không", e);
+                throw new JeecgBootException("Lưu trữ vector thất bại:" + e.getMessage());
             }
         } else {
-            //update-begin---author:jeecg---date:2026-02-26---for:[#9374]【AI知识库】千帆向量报错，添加异常处理防止空指针
+            //update-begin---author:jeecg---date:2026-02-26---for:[#9374]【Kho tri thức AI】Vector Qianfan báo lỗi, thêm xử lý ngoại lệ để ngăn con trỏ null
             try {
                 ingestor.ingest(from);
             } catch (Exception e) {
-                log.error("向量存储失败，请检查向量模型配置是否正确", e);
-                throw new JeecgBootException("向量存储失败：" + e.getMessage());
+                log.error("Lưu trữ vector thất bại, vui lòng kiểm tra cấu hình mô hình vector có đúng không", e);
+                throw new JeecgBootException("Lưu trữ vector thất bại:" + e.getMessage());
             }
-            //update-end---author:jeecg---date:2026-02-26---for:[#9374]【AI知识库】千帆向量报错，添加异常处理防止空指针
+            //update-end---author:jeecg---date:2026-02-26---for:[#9374]【Kho tri thức AI】Vector Qianfan báo lỗi, thêm xử lý ngoại lệ để ngăn con trỏ null
         }
-        //update-end---author:wangshuai ---date:2026-04-20  for：【issues/9551】HTML表格分段时被截断，保留完整表格块-----------
+        //update-end---author:wangshuai ---date:2026-04-20  for：【issues/9551】Bảng HTML bị cắt khi phân đoạn, giữ nguyên khối bảng đầy đủ-----------
 
         return metadata.toMap();
     }
 
     /**
-     * 创建分段器
+     * Tạo bộ phân đoạn
      *
      * @param doc
      * @return
@@ -274,28 +274,28 @@ public class EmbeddingHandler implements IEmbeddingHandler {
             try {
                 JSONObject json = JSONObject.parseObject(doc.getMetadata());
 
-                //update-begin---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
-                // 文档使用知识库默认分段策略：读取知识库自身的 metadata 来决定分段方式
+                //update-begin---wangshuai---date:20260414  for：【QQYUN-14932] Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định sử dụng chiến lược phân đoạn của kho tri thức------------
+                // Tài liệu dùng chiến lược phân đoạn mặc định của kho tri thức: đọc metadata của chính kho tri thức để quyết định cách phân đoạn
                 Boolean useKnowledgeDefault = json.getBoolean(LLMConsts.USE_KNOWLEDGE_DEFAULT);
                 if (Boolean.TRUE.equals(useKnowledgeDefault)) {
                     if (oConvertUtils.isNotEmpty(doc.getKnowledgeId())) {
                         AiragKnowledge knowledge = airagKnowledgeMapper.selectById(doc.getKnowledgeId());
                         if (knowledge != null && oConvertUtils.isNotEmpty(knowledge.getMetadata())) {
-                            // 用知识库的 metadata 覆盖，后续逻辑统一处理
+                            // Ghi đè bằng metadata của kho tri thức, logic tiếp theo xử lý thống nhất
                             json = JSONObject.parseObject(knowledge.getMetadata());
                         } else {
-                            // 知识库没有配置分段策略，使用默认分段器
+                            // Kho tri thức chưa cấu hình chiến lược phân đoạn, dùng bộ phân đoạn mặc định
                             return DocumentSplitters.recursive(maxSegment, overlapSize);
                         }
                     } else {
                         return DocumentSplitters.recursive(maxSegment, overlapSize);
                     }
                 }
-                //update-end---wangshuai---date:20260414  for：【QQYUN-14932】创建知识库时，可以创建一个分段策略，知识库里面的文档默认使用知识库的分段策略------------
+                //update-end---wangshuai---date:20260414  for：【QQYUN-14932] Khi tạo kho tri thức, có thể tạo một chiến lược phân đoạn, tài liệu trong kho tri thức mặc định sử dụng chiến lược phân đoạn của kho tri thức------------
 
                 Object segmentStrategy = json.get(LLMConsts.SEGMENT_STRATEGY);
-                //update-begin---author:wangshuai ---date:2026-04-09  for：【issue/9418】AI知识库上传文件太大向量化失败-----------
-                // 1. 不论策略是auto还是custom，优先使用前端传入的分段大小和重叠度
+                //update-begin---author:wangshuai ---date:2026-04-09  for：【issue/9418】Tệp tải lên kho tri thức AI quá lớn khiến vector hóa thất bại-----------
+                // 1. Dù chiến lược là auto hay custom, ưu tiên dùng kích thước phân đoạn và độ chồng chéo do frontend truyền vào
                 Integer sizeObj = json.getInteger(LLMConsts.MAX_SEGMENT);
                 if (sizeObj != null && sizeObj > 0) {
                     maxSegment = sizeObj;
@@ -306,14 +306,14 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                     overlapSize = (int) (maxSegment * rate);
                 }
                 if(segmentStrategy != null && LLMConsts.SEGMENT_STRATEGY_CUSTOM.equals(segmentStrategy.toString())){
-                //update-end---author:wangshuai ---date:2026-04-09  for：【issue/9418】AI知识库上传文件太大向量化失败-----------
+                //update-end---author:wangshuai ---date:2026-04-09  for：【issue/9418】Tệp tải lên kho tri thức AI quá lớn khiến vector hóa thất bại-----------
                     String splitChar = json.getString(LLMConsts.SEPARATOR);
                     if (oConvertUtils.isNotEmpty(splitChar)) {
-                        //自定义
+                        //Tùy chỉnh
                         if(LLMConsts.SEGMENT_STRATEGY_CUSTOM.equals(splitChar)){
                             splitChar = oConvertUtils.getString(json.getString(LLMConsts.CUSTOM_SEPARATOR),"\n");
                         }
-                        // 处理转义字符
+                        // Xử lý ký tự thoát
                         splitChar = splitChar.replace("\\n", "\n").replace("\\t", "\t").replace("\\r", "\r");
                         String textRules = json.getString(LLMConsts.TEXT_RULES);
                         
@@ -321,7 +321,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                     }
                 }
             } catch (Exception e) {
-                log.warn("解析自定义分词配置失败: {}", e.getMessage());
+                log.warn("Phân tích cấu hình tách từ tùy chỉnh thất bại: {}", e.getMessage());
             }
         }
 
@@ -331,9 +331,9 @@ public class EmbeddingHandler implements IEmbeddingHandler {
         return splitter;
     }
 
-    //update-begin---author:wangshuai ---date:2026-04-20  for：【issues/9551】HTML表格分段时被截断，新增保留表格完整性的分段辅助方法-----------
+    //update-begin---author:wangshuai ---date:2026-04-20  for：【issues/9551】Bảng HTML bị cắt khi phân đoạn, thêm phương thức hỗ trợ phân đoạn giữ tính toàn vẹn của bảng-----------
     /**
-     * 按 HTML 表格边界分段：表格块完整保留，表格外文本交给 splitter 正常分段
+     * Phân đoạn theo biên bảng HTML: giữ nguyên khối bảng, văn bản ngoài bảng giao cho splitter phân đoạn bình thường
      */
     public static List<TextSegment> splitDocumentPreservingHtmlTables(Document document, DocumentSplitter splitter) {
         String text = document.text();
@@ -358,7 +358,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     }
 
     /**
-     * 将非表格文本交给 splitter 分段后追加到 result
+     * Đưa văn bản không phải bảng cho splitter phân đoạn rồi thêm vào result
      */
     public static void appendSplitText(String text, Metadata metadata, DocumentSplitter splitter, List<TextSegment> result) {
         List<TextSegment> segments = splitter.split(Document.from(text, metadata));
@@ -366,24 +366,24 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     }
 
     /**
-     * 将文本作为单个完整段追加到 result（不经过分段器，用于保留完整表格块）
+     * Thêm văn bản thành một đoạn đầy đủ vào result (không qua bộ phân đoạn, dùng để giữ nguyên khối bảng đầy đủ)
      */
     public static void appendSegment(String text, Metadata metadata, List<TextSegment> result) {
         result.add(TextSegment.from(text, metadata));
     }
 
     /**
-     * 为分段列表的 metadata 写入从 0 开始的连续 index，供检索时标识顺序
+     * Ghi vào metadata của danh sách phân đoạn index liên tục bắt đầu từ 0, để xác định thứ tự khi truy xuất
      */
     public static void reindexSegments(List<TextSegment> segments) {
         for (int i = 0; i < segments.size(); i++) {
             segments.get(i).metadata().put("index", String.valueOf(i));
         }
     }
-    //update-end---author:wangshuai ---date:2026-04-20  for：【issues/9551】HTML表格分段时被截断，新增保留表格完整性的分段辅助方法-----------
+    //update-end---author:wangshuai ---date:2026-04-20  for：【issues/9551】Bảng HTML bị cắt khi phân đoạn, thêm phương thức hỗ trợ phân đoạn giữ tính toàn vẹn của bảng-----------
 
     /**
-     * 向量查询(多知识库)
+     * Truy vấn vector(Nhiều kho tri thức)
      *
      * @param knowIds
      * @param queryText
@@ -395,12 +395,12 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      */
     @Override
     public KnowledgeSearchResult embeddingSearch(List<String> knowIds, String queryText, Integer topNumber, Double similarity) {
-        AssertUtils.assertNotEmpty("请选择知识库", knowIds);
-        AssertUtils.assertNotEmpty("请填写查询内容", queryText);
+        AssertUtils.assertNotEmpty("Vui lòng chọn kho tri thức", knowIds);
+        AssertUtils.assertNotEmpty("Vui lòng nhập nội dung truy vấn", queryText);
 
         topNumber = oConvertUtils.getInteger(topNumber, 5);
 
-        //命中的文档列表
+        //Danh sách tài liệu trúng
         List<Map<String, Object>> documents = new ArrayList<>(16);
         for (String knowId : knowIds) {
             List<Map<String, Object>> searchResp = searchEmbedding(knowId, queryText, topNumber, similarity);
@@ -410,10 +410,10 @@ public class EmbeddingHandler implements IEmbeddingHandler {
         }
 
         StringBuilder data = new StringBuilder();
-        //update-begin---author:wangshuai---date:2026-01-04---for:【QQYUN-14479】给ai的时候需要限制几个字---
-        //是否为记忆库
+        //update-begin---author:wangshuai---date:2026-01-04---for:【QQYUN-14479】Khi đưa cho AI cần giới hạn số ký tự---
+        //Có phải kho bộ nhớ không
         boolean memoryMode = false;
-        //记忆库只有一个
+        //Chỉ có một kho bộ nhớ
         if (knowIds.size() == 1) {
             String firstId = knowIds.get(0);
             if (oConvertUtils.isNotEmpty(firstId)) {
@@ -421,14 +421,14 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                 memoryMode = (k != null && LLMConsts.KNOWLEDGE_TYPE_MEMORY.equalsIgnoreCase(k.getType()));
             }
         }
-        //如果是记忆库按照创建时间排序，如果不是按照score分值进行排序
+        //Nếu là kho bộ nhớ thì sắp xếp theo thời gian tạo, nếu không thì sắp xếp theo điểm score
         List<Map<String, Object>> prepared = documents.stream()
                 .sorted(memoryMode
                         ? Comparator.comparingLong((Map<String, Object> doc) -> oConvertUtils.getLong(doc.get(EMBED_STORE_CREATE_TIME), 0L)).reversed()
                         : Comparator.comparingDouble((Map<String, Object> doc) -> (Double) doc.get("score")).reversed())
                 .collect(Collectors.toList());
         List<Map<String, Object>> limited = new ArrayList<>();
-        //将返回的结果按照最大的token进行长度限制
+        //Giới hạn độ dài kết quả trả về theo token tối đa
         for (Map<String, Object> doc : prepared) {
             if (limited.size() >= topNumber) {
                 break;
@@ -438,7 +438,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
             if (remain <= 0) {
                 break;
             }
-            //数据库中文本的长度和已经拼接的长度
+            //Độ dài văn bản trong cơ sở dữ liệu và độ dài đã nối
             if (content.length() <= remain) {
                 data.append(content).append("\n");
                 limited.add(doc);
@@ -449,11 +449,11 @@ public class EmbeddingHandler implements IEmbeddingHandler {
             }
         }
         return new KnowledgeSearchResult(data.toString(), limited);
-        //update-end---author:wangshuai---date:2026-01-04---for:【QQYUN-14479】给ai的时候需要限制几个字---
+        //update-end---author:wangshuai---date:2026-01-04---for:【QQYUN-14479】Khi đưa cho AI cần giới hạn số ký tự---
     }
 
     /**
-     * 向量查询
+     * Truy vấn vector
      *
      * @param knowId
      * @param queryText
@@ -464,10 +464,10 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      * @date 2025/2/18 16:52
      */
     public List<Map<String, Object>> searchEmbedding(String knowId, String queryText, Integer topNumber, Double similarity) {
-        AssertUtils.assertNotEmpty("请选择知识库", knowId);
+        AssertUtils.assertNotEmpty("Vui lòng chọn kho tri thức", knowId);
         AiragKnowledge knowledge = airagKnowledgeMapper.getByIdIgnoreTenant(knowId);
-        AssertUtils.assertNotEmpty("知识库不存在", knowledge);
-        AssertUtils.assertNotEmpty("请填写查询内容", queryText);
+        AssertUtils.assertNotEmpty("Kho tri thức không tồn tại", knowledge);
+        AssertUtils.assertNotEmpty("Vui lòng nhập nội dung truy vấn", queryText);
         AiragModel model = getEmbedModelData(knowledge.getEmbedId());
 
         AiModelOptions modelOp = buildModelOptions(model);
@@ -477,10 +477,10 @@ public class EmbeddingHandler implements IEmbeddingHandler {
         topNumber = oConvertUtils.getInteger(topNumber, modelOp.getTopNumber());
         similarity = oConvertUtils.getDou(similarity, modelOp.getSimilarity());
         
-        //update-begin---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】支持记忆---
+        //update-begin---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
         Filter filter = metadataKey(EMBED_STORE_METADATA_KNOWLEDGEID).isEqualTo(knowId);
 
-        // 记忆库的时候需要根据用户隔离
+        // Khi dùng kho bộ nhớ cần cách ly theo người dùng
         if (LLMConsts.KNOWLEDGE_TYPE_MEMORY.equalsIgnoreCase(knowledge.getType())) {
             try {
                 HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
@@ -491,10 +491,10 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                 }
             } catch (Exception e) {
                 // ignore
-                log.info("构建过滤器异常,{}",e.getMessage());
+                log.info("Lỗi xây dựng bộ lọc,{}",e.getMessage());
             }
         }
-        //update-end---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】支持记忆---
+        //update-end---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
         
         EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
                 .queryEmbedding(queryEmbedding)
@@ -514,7 +514,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                 Metadata metadata = matchRes.embedded().metadata();
                 data.put("chunk", metadata.getInteger("index"));
                 data.put(EMBED_STORE_METADATA_DOCNAME, metadata.getString(EMBED_STORE_METADATA_DOCNAME));
-                //查询返回的时候增加创建时间，用于排序
+                //Khi truy vấn trả về, thêm thời gian tạo để sắp xếp
                 String ct = metadata.getString(EMBED_STORE_CREATE_TIME);
                 data.put(EMBED_STORE_CREATE_TIME, ct);
                 return data;
@@ -524,7 +524,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     }
 
     /**
-     * 获取向量查询路由
+     * Lấy route truy vấn vector
      *
      * @param knowIds
      * @param topNumber
@@ -535,14 +535,14 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      */
     @Override
     public QueryRouter getQueryRouter(List<String> knowIds, Integer topNumber, Double similarity) {
-        AssertUtils.assertNotEmpty("请选择知识库", knowIds);
+        AssertUtils.assertNotEmpty("Vui lòng chọn kho tri thức", knowIds);
         List<ContentRetriever> retrievers = Lists.newArrayList();
         for (String knowId : knowIds) {
             if (oConvertUtils.isEmpty(knowId)) {
                 continue;
             }
             AiragKnowledge knowledge = airagKnowledgeMapper.getByIdIgnoreTenant(knowId);
-            AssertUtils.assertNotEmpty("知识库不存在", knowledge);
+            AssertUtils.assertNotEmpty("Kho tri thức không tồn tại", knowledge);
             AiragModel model = getEmbedModelData(knowledge.getEmbedId());
             AiModelOptions modelOptions = buildModelOptions(model);
             EmbeddingModel embeddingModel = AiModelFactory.createEmbeddingModel(modelOptions);
@@ -551,9 +551,9 @@ public class EmbeddingHandler implements IEmbeddingHandler {
             topNumber = oConvertUtils.getInteger(topNumber, 5);
             similarity = oConvertUtils.getDou(similarity, 0.75);
 
-            //update-begin---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】支持记忆---
+            //update-begin---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
             Filter filter = metadataKey(EMBED_STORE_METADATA_KNOWLEDGEID).isEqualTo(knowId);
-            // 记忆库的时候需要根据用户隔离
+            // Khi dùng kho bộ nhớ cần cách ly theo người dùng
             if (LLMConsts.KNOWLEDGE_TYPE_MEMORY.equalsIgnoreCase(knowledge.getType())) {
                 try {
                     HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
@@ -564,12 +564,12 @@ public class EmbeddingHandler implements IEmbeddingHandler {
                     }
                 } catch (Exception e) {
                     // ignore
-                    log.info("构建过滤器异常,{}",e.getMessage());
+                    log.info("Lỗi xây dựng bộ lọc,{}",e.getMessage());
                 }
             }
-            //update-end---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】支持记忆---
+            //update-end---author:wangshuai---date:2025-12-26---for:【QQYUN-14265】【AI】Hỗ trợ bộ nhớ---
             
-            // 构建一个嵌入存储内容检索器，用于从嵌入存储中检索内容
+            // Xây dựng một retriever nội dung nhúng để truy xuất nội dung từ kho nhúng
             EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                     .embeddingStore(embeddingStore)
                     .embeddingModel(embeddingModel)
@@ -587,7 +587,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     }
 
     /**
-     * 删除向量化文档
+     * Xóa tài liệu đã vector hóa
      *
      * @param knowId
      * @param modelId
@@ -595,16 +595,16 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      * @date 2025/2/18 19:07
      */
     public void deleteEmbedDocsByKnowId(String knowId, String modelId) {
-        AssertUtils.assertNotEmpty("选择知识库", knowId);
+        AssertUtils.assertNotEmpty("Chọn kho tri thức", knowId);
         AiragModel model = getEmbedModelData(modelId);
 
         EmbeddingStore<TextSegment> embeddingStore = getEmbedStore(model);
-        // 删除数据
+        // Xóa dữ liệu
         embeddingStore.removeAll(metadataKey(EMBED_STORE_METADATA_KNOWLEDGEID).isEqualTo(knowId));
     }
 
     /**
-     * 删除向量化文档
+     * Xóa tài liệu đã vector hóa
      *
      * @param docIds
      * @param modelId
@@ -612,16 +612,16 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      * @date 2025/2/18 19:07
      */
     public void deleteEmbedDocsByDocIds(List<String> docIds, String modelId) {
-        AssertUtils.assertNotEmpty("选择文档", docIds);
+        AssertUtils.assertNotEmpty("Chọn tài liệu", docIds);
         AiragModel model = getEmbedModelData(modelId);
 
         EmbeddingStore<TextSegment> embeddingStore = getEmbedStore(model);
-        // 删除数据
+        // Xóa dữ liệu
         embeddingStore.removeAll(metadataKey(EMBED_STORE_METADATA_DOCID).isIn(docIds));
     }
 
     /**
-     * 查询向量模型数据，若未指定或不存在则回退到 yml 中配置的默认向量模型
+     * Truy vấn dữ liệu mô hình vector; nếu chưa chỉ định hoặc không tồn tại thì quay về mô hình vector mặc định cấu hình trong yml
      *
      * @param modelId
      * @return
@@ -629,32 +629,32 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      * @date 2025/2/20 20:08
      */
     private AiragModel getEmbedModelData(String modelId) {
-        //update-begin---author:wangshuai---date:2026-03-09---for:【QQYUN-14645】添加默认向量模型---
+        //update-begin---author:wangshuai---date:2026-03-09---for:【QQYUN-14645】Thêm mô hình vector mặc định---
         if (oConvertUtils.isNotEmpty(modelId)) {
             AiragModel model = airagModelMapper.getByIdIgnoreTenant(modelId);
             if (model != null) {
-                AssertUtils.assertEquals("仅支持向量模型", LLMConsts.MODEL_TYPE_EMBED, model.getModelType());
-                // 判断模型是否已激活，未激活则回退到默认模型
+                AssertUtils.assertEquals("Chỉ hỗ trợ mô hình vector", LLMConsts.MODEL_TYPE_EMBED, model.getModelType());
+                // Kiểm tra mô hình đã kích hoạt chưa, nếu chưa kích hoạt thì quay về mô hình mặc định
                 if (model.getActivateFlag() != null && model.getActivateFlag() == 1) {
                     return model;
                 }
-                log.warn("向量模型[{}]未激活，尝试使用 yml 中配置的默认向量模型", modelId);
+                log.warn("Mô hình vector[{}]Chưa kích hoạt, thử dùng mô hình vector mặc định cấu hình trong yml", modelId);
             }
         }
-        // 回退到 yml 默认向量模型
+        // Quay về mô hình vector mặc định trong yml
         if (aiChatConfig != null && oConvertUtils.isNotEmpty(aiChatConfig.getAiModelEmbed().getApiKey())) {
-            log.info("使用 yml 中配置的默认向量模型: {}", aiChatConfig.getAiModelEmbed().getModel());
+            log.info("Sử dụng mô hình vector mặc định cấu hình trong yml: {}", aiChatConfig.getAiModelEmbed().getModel());
             return buildDefaultEmbedModel(aiChatConfig.getAiModelEmbed());
         }
-        AssertUtils.assertNotEmpty("向量模型不能为空，请先配置向量模型或在 yml 中设置默认向量模型(jeecg.ai-chat.ai-model-embed)", modelId);
+        AssertUtils.assertNotEmpty("Mô hình vector không được trống, vui lòng cấu hình mô hình vector trước hoặc đặt mô hình vector mặc định trong yml(jeecg.ai-chat.ai-model-embed)", modelId);
         return null;
-        //update-end---author:wangshuai---date:2026-03-09---for:【QQYUN-14645】添加默认向量模型---
+        //update-end---author:wangshuai---date:2026-03-09---for:【QQYUN-14645】Thêm mô hình vector mặc định---
     }
 
     /**
-     * 根据 yml 配置构建默认向量模型对象
+     * Xây dựng đối tượng mô hình vector mặc định theo cấu hình yml
      *
-     * @param embedConfig yml 中的向量模型配置
+     * @param embedConfig yml cấu hình mô hình vector trong
      * @return AiragModel
      */
     private AiragModel buildDefaultEmbedModel(AiChatConfig.ModelConfig embedConfig) {
@@ -670,7 +670,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     }
 
     /**
-     * 获取向量存储
+     * Lấy kho vector
      *
      * @param model
      * @return
@@ -678,7 +678,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      * @date 2025/2/18 14:56
      */
     private EmbeddingStore<TextSegment> getEmbedStore(AiragModel model) {
-        AssertUtils.assertNotEmpty("未配置模型", model);
+        AssertUtils.assertNotEmpty("Chưa cấu hình mô hình", model);
         String modelId = model.getId();
         String connectionInfo = embedStoreConfigBean.getHost() + embedStoreConfigBean.getPort() + embedStoreConfigBean.getDatabase();
         String key = modelId + connectionInfo;
@@ -692,14 +692,14 @@ public class EmbeddingHandler implements IEmbeddingHandler {
 
         String tableName = embedStoreConfigBean.getTable();
 
-        // update-begin---author:sunjianlei ---date:20250509  for：【QQYUN-12345】向量模型维度不一致问题
-        // 如果该模型不是默认的向量维度
+        // update-begin---author:sunjianlei ---date:20250509  for：【QQYUN-12345】Vấn đề chiều của mô hình vector không nhất quán
+        // Nếu mô hình này không có chiều vector mặc định
         int dimension = embeddingModel.dimension();
         if (!LLMConsts.EMBED_MODEL_DEFAULT_DIMENSION.equals(dimension)) {
-            // 就加上维度后缀，防止因维度不一致导致保存失败
+            // thì thêm hậu tố chiều, tránh lưu thất bại do chiều không nhất quán
             tableName += ("_" + dimension);
         }
-        // update-end-----author:sunjianlei ---date:20250509  for：【QQYUN-12345】向量模型维度不一致问题
+        // update-end-----author:sunjianlei ---date:20250509  for：【QQYUN-12345】Vấn đề chiều của mô hình vector không nhất quán
 
         EmbeddingStore<TextSegment> embeddingStore = PgVectorEmbeddingStore.builder()
                 // Connection and table parameters
@@ -729,7 +729,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     }
 
     /**
-     * 构造ModelOptions
+     * Xây dựng ModelOptions
      *
      * @param model
      * @return
@@ -755,45 +755,45 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     }
 
     /**
-     * 解析网页内容，使用Jsoup爬取并转换为Markdown
+     * Phân tích nội dung trang web, dùng Jsoup để thu thập và chuyển đổi thành Markdown
      *
-     * @param doc 知识库文档（metadata中需包含website字段）
-     * @return Markdown格式的网页内容
+     * @param doc tài liệu kho tri thức (metadata cần chứa trường website)
+     * @return Markdown nội dung trang web dạng
      * @date 2026/3/19
      */
     private String parseWebPage(AiragKnowledgeDoc doc) {
         String metadata = doc.getMetadata();
-        AssertUtils.assertNotEmpty("请先配置网页URL", metadata);
+        AssertUtils.assertNotEmpty("Vui lòng cấu hình trang web trước URL", metadata);
         JSONObject metadataJson = JSONObject.parseObject(metadata);
         String website = metadataJson.getString(LLMConsts.KNOWLEDGE_DOC_METADATA_WEBSITE);
-        AssertUtils.assertNotEmpty("请先配置网页URL", website);
+        AssertUtils.assertNotEmpty("Vui lòng cấu hình trang web trước URL", website);
 
         Matcher matcher = LLMConsts.WEB_PATTERN.matcher(website);
         if (!matcher.matches()) {
-            throw new JeecgBootException("网页URL格式不正确，请以http://或https://开头");
+            throw new JeecgBootException("Định dạng URL trang web không đúng, vui lòng bắt đầu bằng http://hoặc https://Đầu");
         }
-        //update-begin---author:zhangdaihao ---date:2026-08-06  for：【issues/9808】AI知识库Web文档抓取SSRF漏洞修复，抓取前调用SSRF校验器-----------
+        //update-begin---author:zhangdaihao ---date:2026-08-06  for：【issues/9808】Sửa lỗ hổng SSRF khi thu thập tài liệu Web của kho tri thức AI, gọi bộ kiểm tra SSRF trước khi thu thập-----------
         SsrfFileTypeFilter.checkSsrfHttpUrl(website);
-        //update-end---author:zhangdaihao ---date:2026-08-06  for：【issues/9808】AI知识库Web文档抓取SSRF漏洞修复，抓取前调用SSRF校验器-----------
+        //update-end---author:zhangdaihao ---date:2026-08-06  for：【issues/9808】Sửa lỗ hổng SSRF khi thu thập tài liệu Web của kho tri thức AI, gọi bộ kiểm tra SSRF trước khi thu thập-----------
 
         try {
             WebPageParser webPageParser = new WebPageParser();
             String content = webPageParser.parseToMarkdown(website);
             if (oConvertUtils.isEmpty(content)) {
-                throw new JeecgBootException("网页内容为空，请检查URL是否可访问");
+                throw new JeecgBootException("Nội dung trang web trống, vui lòng kiểm tra URL có truy cập được không");
             }
-            log.info("网页解析成功, URL: {}, 内容长度: {}", website, content.length());
+            log.info("Phân tích trang web thành công, URL: {}, Độ dài nội dung: {}", website, content.length());
             return content;
         } catch (JeecgBootException e) {
             throw e;
         } catch (Exception e) {
-            log.error("网页解析失败, URL: {}, 错误: {}", website, e.getMessage(), e);
-            throw new JeecgBootException("网页解析失败: " + e.getMessage());
+            log.error("Phân tích trang web thất bại, URL: {}, Lỗi: {}", website, e.getMessage(), e);
+            throw new JeecgBootException("Phân tích trang web thất bại: " + e.getMessage());
         }
     }
 
     /**
-     * 解析文件
+     * Phân tích tệp
      *
      * @param doc
      * @author chenrui
@@ -801,34 +801,34 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      */
     private String parseFile(AiragKnowledgeDoc doc) {
         String metadata = doc.getMetadata();
-        AssertUtils.assertNotEmpty("请先上传文件", metadata);
+        AssertUtils.assertNotEmpty("Vui lòng tải tệp lên trước", metadata);
         JSONObject metadataJson = JSONObject.parseObject(metadata);
         if (!metadataJson.containsKey(LLMConsts.KNOWLEDGE_DOC_METADATA_FILEPATH)) {
-            throw new JeecgBootException("请先上传文件");
+            throw new JeecgBootException("Vui lòng tải tệp lên trước");
         }
         String filePath = metadataJson.getString(LLMConsts.KNOWLEDGE_DOC_METADATA_FILEPATH);
-        AssertUtils.assertNotEmpty("请先上传文件", filePath);
-        // 网络资源,先下载到临时目录
+        AssertUtils.assertNotEmpty("Vui lòng tải tệp lên trước", filePath);
+        // Tài nguyên mạng,tải xuống thư mục tạm trước
         filePath = ensureFile(filePath);
-        // 提取文档内容
+        // Trích xuất nội dung tài liệu
         File docFile = new File(filePath);
         if (docFile.exists()) {
             Document document = new TikaDocumentParser(AutoDetectParser::new, null, null, null).parse(docFile);
             if (null != document) {
                 String content = document.text();
-                // 判断是否md文档
+                // Kiểm tra có phải tài liệu md không
                 String fileType = FilenameUtils.getExtension(docFile.getName());
                 if ("md".contains(fileType)) {
-                    // 如果是md文件，查找所有图片语法，如果是本地图片，替换成网络图片
+                    // Nếu là tệp md, tìm tất cả cú pháp hình ảnh; nếu là hình ảnh cục bộ, thay bằng hình ảnh mạng
                     String baseUrl = "#{domainURL}/sys/common/static/";
                     String sourcePath = metadataJson.getString(LLMConsts.KNOWLEDGE_DOC_METADATA_SOURCES_PATH);
                     if(oConvertUtils.isNotEmpty(sourcePath)) {
                         String escapedPath = uploadpath;
-                        //update-begin---author:wangshuai---date:2025-06-03---for:【QQYUN-12636】【AI知识库】文档库上传 本地local 文档中的图片不展示---
+                        //update-begin---author:wangshuai---date:2025-06-03---for:【QQYUN-12636】【Kho tri thức AI】Ảnh trong tài liệu local tải lên thư viện tài liệu không hiển thị---
                         /*if (File.separator.equals("\\")){
                             escapedPath = uploadpath.replace("//", "\\\\");
                         }*/
-                        //update-end---author:wangshuai---date:2025-06-03---for:【QQYUN-12636】【AI知识库】文档库上传 本地local 文档中的图片不展示---
+                        //update-end---author:wangshuai---date:2025-06-03---for:【QQYUN-12636】【Kho tri thức AI】Ảnh trong tài liệu local tải lên thư viện tài liệu không hiển thị---
                         sourcePath = sourcePath.replaceFirst("^" + escapedPath, "").replace("\\", "/");
                         String docFilePath = metadataJson.getString(LLMConsts.KNOWLEDGE_DOC_METADATA_FILEPATH);
                         docFilePath = FilenameUtils.getPath(docFilePath);
@@ -843,40 +843,40 @@ public class EmbeddingHandler implements IEmbeddingHandler {
         return null;
     }
 
-    //update-begin---author:wangshuai ---date:20260820  for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传: AI流程文件变量传入LLM前统一解析-----------
+    //update-begin---author:wangshuai ---date:20260820  for：【LHZP-1627】Tệp quy trình AI là bắt buộc, nhưng trong trò chuyện AI đó là đầu vào tệp chứ không phải tải tệp lên: AI Biến tệp quy trình được phân tích thống nhất trước khi truyền vào LLM-----------
     @Override
     public String parseFileContent(String filePath) {
-        AssertUtils.assertNotEmpty("文件地址不能为空", filePath);
+        AssertUtils.assertNotEmpty("Địa chỉ tệp không được trống", filePath);
         String localFilePath = ensureFile(filePath);
         Document document = new TikaDocumentParser(AutoDetectParser::new, null, null, null)
                 .parse(new File(localFilePath));
         if (document == null || oConvertUtils.isEmpty(document.text())) {
-            throw new JeecgBootException("文件内容为空或无法解析");
+            throw new JeecgBootException("Nội dung tệp trống hoặc không thể phân tích");
         }
         return document.text();
     }
-    //update-end---author:wangshuai ---date:20260820  for：【LHZP-1627】ai流程文件必填，但是在ai聊天中 是文件输入，而不是文件上传:AI流程文件变量传入LLM前统一解析-----------
+    //update-end---author:wangshuai ---date:20260820  for：【LHZP-1627】Tệp quy trình AI là bắt buộc, nhưng trong trò chuyện AI đó là đầu vào tệp chứ không phải tải tệp lên:AI Biến tệp quy trình được phân tích thống nhất trước khi truyền vào LLM-----------
 
     @NotNull
     private static StringBuffer replaceImageUrl(String content, String abstractBaseUrl, String relativeBaseUrl) {
-        // 正则表达式匹配md文件中的图片语法 ![alt text](image url)
+        // Biểu thức chính quy khớp cú pháp hình ảnh trong tệp md ![alt text](image url)
         Matcher matcher = PATTERN_MD_IMAGE.matcher(content);
 
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             String imageUrl = matcher.group(2);
-            // 检查是否是本地图片路径
+            // Kiểm tra có phải đường dẫn hình ảnh cục bộ không
             if (!imageUrl.startsWith("http")) {
-                // 替换成网络图片路径
+                // Thay bằng đường dẫn hình ảnh mạng
                 String networkImageUrl = abstractBaseUrl + imageUrl;
                 if(imageUrl.startsWith("/")) {
-                    // 绝对路径
+                    // Đường dẫn tuyệt đối
                     networkImageUrl = abstractBaseUrl + imageUrl;
                 }else{
-                    // 相对路径
+                    // Đường dẫn tương đối
                     networkImageUrl = relativeBaseUrl + imageUrl;
                 }
-                // 修改图片路径中//->/，但保留http://和https://
+                // Sửa trong đường dẫn hình ảnh//->/, nhưng giữ lại http://và https://
                 networkImageUrl = networkImageUrl.replaceAll("(?<!http:)(?<!https:)//", "/");
                 matcher.appendReplacement(sb, "![" + matcher.group(1) + "](" + networkImageUrl + ")");
             } else {
@@ -888,7 +888,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
     }
 
     /**
-     * 通过MinerU解析文件
+     * Phân tích tệp qua MinerU
      *
      * @param doc
      * @author chenrui
@@ -896,13 +896,13 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      */
     private void parseFileByMinerU(AiragKnowledgeDoc doc) {
         String metadata = doc.getMetadata();
-        AssertUtils.assertNotEmpty("请先上传文件", metadata);
+        AssertUtils.assertNotEmpty("Vui lòng tải tệp lên trước", metadata);
         JSONObject metadataJson = JSONObject.parseObject(metadata);
         if (!metadataJson.containsKey(LLMConsts.KNOWLEDGE_DOC_METADATA_FILEPATH)) {
-            throw new JeecgBootException("请先上传文件");
+            throw new JeecgBootException("Vui lòng tải tệp lên trước");
         }
         String filePath = metadataJson.getString(LLMConsts.KNOWLEDGE_DOC_METADATA_FILEPATH);
-        AssertUtils.assertNotEmpty("请先上传文件", filePath);
+        AssertUtils.assertNotEmpty("Vui lòng tải tệp lên trước", filePath);
         filePath = ensureFile(filePath);
 
         File docFile = new File(filePath);
@@ -913,16 +913,16 @@ public class EmbeddingHandler implements IEmbeddingHandler {
             return ;
         }
 
-        // 安全校验：拒绝文件名/路径中含有 Shell 注入字符的文件，防止命令注入
+        // Kiểm tra an toàn: từ chối tên tệp/tệp có ký tự chèn Shell trong đường dẫn, để ngăn chèn lệnh
         try {
             CommandExecUtil.validateFilePath(docFile.getAbsolutePath());
             CommandExecUtil.validateFilePath(docFile.getName());
         } catch (IllegalArgumentException e) {
-            log.error("文件路径包含非法字符，拒绝执行 MinerU 解析: {}", e.getMessage());
-            throw new JeecgBootException("文件名包含非法字符，无法处理该文件");
+            log.error("Đường dẫn tệp chứa ký tự không hợp lệ, từ chối thực thi phân tích MinerU: {}", e.getMessage());
+            throw new JeecgBootException("Tên tệp chứa ký tự không hợp lệ, không thể xử lý tệp này");
         }
 
-        // 使用 String[] 数组构建命令，避免 split(" ") 带来的参数边界问题
+        // Sử dụng String[] Xây dựng lệnh bằng mảng, tránh split(" ") vấn đề biên tham số do đó gây ra
         String[] command;
         if (oConvertUtils.isNotEmpty(knowConfigBean.getCondaEnv())) {
             command = new String[]{"conda", "run", "-n", knowConfigBean.getCondaEnv(), "magic-pdf"};
@@ -938,26 +938,26 @@ public class EmbeddingHandler implements IEmbeddingHandler {
 
         try {
             String execLog = CommandExecUtil.execCommand(command, args);
-            log.info("执行命令行:" + Arrays.toString(command) + " args:" + Arrays.toString(args) + "\n log::" + execLog);
-            // 如果成功,替换文件路径和静态资源路径
+            log.info("Thực thi dòng lệnh:" + Arrays.toString(command) + " args:" + Arrays.toString(args) + "\n log::" + execLog);
+            // Nếu thành công,Thay thế đường dẫn tệp và đường dẫn tài nguyên tĩnh
             String fileBaseName = FilenameUtils.getBaseName(docFile.getName());
             String newFileDir = outputPath + File.separator + fileBaseName + File.separator + "auto" + File.separator ;
-            // 先检查文件是否存在,存在才替换
+            // Kiểm tra trước tệp có tồn tại không,Chỉ thay thế khi tồn tại
             File convertedFile = new File(newFileDir + fileBaseName + ".md");
             if (convertedFile.exists()) {
-                log.info("文件转换成md成功,替换文件路径和静态资源路径");
+                log.info("Chuyển tệp sang md thành công,Thay thế đường dẫn tệp và đường dẫn tài nguyên tĩnh");
                 newFileDir = newFileDir.replaceFirst("^" + uploadpath, "");
                 metadataJson.put(LLMConsts.KNOWLEDGE_DOC_METADATA_FILEPATH, newFileDir + fileBaseName + ".md");
                 metadataJson.put(LLMConsts.KNOWLEDGE_DOC_METADATA_SOURCES_PATH, newFileDir);
                 doc.setMetadata(metadataJson.toJSONString());
             }
         } catch (IOException e) {
-            log.error("文件转换md失败,使用传统提取方案{}", e.getMessage(), e);
+            log.error("Chuyển tệp sang md thất bại,Sử dụng phương án trích xuất truyền thống{}", e.getMessage(), e);
         }
     }
 
     /**
-     * 确保文件存在
+     * Đảm bảo tệp tồn tại
      * @param filePath
      * @return
      * @author chenrui
@@ -965,11 +965,11 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      */
     @NotNull
     private String ensureFile(String filePath) {
-        // 网络资源,先下载到临时目录
+        // Tài nguyên mạng,tải xuống thư mục tạm trước
         Matcher matcher = LLMConsts.WEB_PATTERN.matcher(filePath);
         if (matcher.matches()) {
-            log.info("网络资源,下载到临时目录:" + filePath);
-            // 准备文件
+            log.info("Tài nguyên mạng,Tải xuống thư mục tạm:" + filePath);
+            // Chuẩn bị tệp
             String tempFilePath = uploadpath + File.separator + "tmp" + File.separator + UUIDGenerator.generate() + File.separator;
             String fileName = filePath;
             if (fileName.contains("?")) {
@@ -980,29 +980,29 @@ public class EmbeddingHandler implements IEmbeddingHandler {
             FileDownloadUtils.download2DiskFromNet(filePath, tempFilePath);
             filePath = tempFilePath;
         } else {
-            //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9424】CommandExecUtil 命令执行过程中存在疑似路径遍历漏洞/【issues/9425】EmbeddingHandler 知识库解析过程中疑似存在路径遍历漏洞---
-            // 1. 路径遍历检查：拒绝 .. 和 %2e 等绕过手段
+            //update-begin---author:wangshuai---date:2026-03-30---for:【issues/9424】CommandExecUtil tồn tại lỗ hổng path traversal nghi ngờ trong quá trình thực thi lệnh/【issues/9425】EmbeddingHandler tồn tại lỗ hổng path traversal nghi ngờ trong quá trình phân tích kho tri thức---
+            // 1. Kiểm tra duyệt đường dẫn: từ chối .. và %2e và các thủ đoạn vượt qua khác
             SsrfFileTypeFilter.checkPathTraversal(filePath);
-            // 2. 标准化路径并校验是否在 uploadpath 范围内
+            // 2. Chuẩn hóa đường dẫn và kiểm tra có nằm trong phạm vi uploadpath không
             Path root = Paths.get(uploadpath).toAbsolutePath().normalize();
-            //update-begin---author:wangshuai ---date:2026-04-13  for：zip文件 filePath 以 \ 或 / 开头，在Windows下被Path.resolve当成驱动器根路径导致误判路径遍历，先剥掉前导分隔符-----------
-            // 去除前导分隔符，保证作为相对路径 resolve 到 uploadpath 之下
+            //update-begin---author:wangshuai ---date:2026-04-13  for: Tệp zip filePath bắt đầu bằng \ hoặc / ở đầu, trong Windows bị Path.resolve coi là đường dẫn gốc của ổ đĩa gây nhận định sai path traversal, bóc dấu phân cách ở đầu trước-----------
+            // Loại bỏ dấu phân cách ở đầu, đảm bảo resolve thành đường dẫn tương đối nằm dưới uploadpath
             String relativePath = filePath.replaceAll("^[\\\\/]+", "");
             Path target = root.resolve(relativePath).toAbsolutePath().normalize();
-            //update-end---author:wangshuai ---date:2026-04-13  for：zip文件 filePath 以 \ 或 / 开头，在Windows下被Path.resolve当成驱动器根路径导致误判路径遍历，先剥掉前导分隔符-----------
+            //update-end---author:wangshuai ---date:2026-04-13  for: Tệp zip filePath bắt đầu bằng \ hoặc / ở đầu, trong Windows bị Path.resolve coi là đường dẫn gốc của ổ đĩa gây nhận định sai path traversal, bóc dấu phân cách ở đầu trước-----------
             if (!target.startsWith(root)) {
-                log.error("检测到路径遍历攻击! filePath: {}, 解析后: {}", filePath, target);
-                throw new JeecgBootException("文件路径包含非法字符");
+                log.error("Phát hiện tấn công path traversal! filePath: {}, Sau khi phân tích: {}", filePath, target);
+                throw new JeecgBootException("Đường dẫn tệp chứa ký tự không hợp lệ");
             }
             filePath = target.toString();
-            //update-end---author:wangshuai---date:2026-03-30---for:【issues/9424】CommandExecUtil 命令执行过程中存在疑似路径遍历漏洞/【issues/9425】EmbeddingHandler 知识库解析过程中疑似存在路径遍历漏洞---
+            //update-end---author:wangshuai---date:2026-03-30---for:【issues/9424】CommandExecUtil tồn tại lỗ hổng path traversal nghi ngờ trong quá trình thực thi lệnh/【issues/9425】EmbeddingHandler tồn tại lỗ hổng path traversal nghi ngờ trong quá trình phân tích kho tri thức---
         }
-        //update-begin---author:scott ---date:20260820  for：知识库文件写入禁止空文件假成功-----------
+        //update-begin---author:scott ---date:20260820  for: Ghi tệp kho tri thức cấm giả thành công với tệp rỗng-----------
         File sourceFile = new File(filePath);
         if (!sourceFile.isFile() || sourceFile.length() == 0) {
-            throw new JeecgBootException("文件内容为空或文件不存在，无法写入知识库");
+            throw new JeecgBootException("Nội dung tệp trống hoặc tệp không tồn tại, không thể ghi vào kho tri thức");
         }
-        //update-end---author:scott ---date:20260820  for：知识库文件写入禁止空文件假成功-----------
+        //update-end---author:scott ---date:20260820  for: Ghi tệp kho tri thức cấm giả thành công với tệp rỗng-----------
         return filePath;
     }
 

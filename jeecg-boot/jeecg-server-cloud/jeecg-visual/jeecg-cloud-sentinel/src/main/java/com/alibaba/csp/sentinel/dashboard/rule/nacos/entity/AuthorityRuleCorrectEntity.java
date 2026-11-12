@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author zyf
- * @description 重写授权规则实体类,原因同热点规则
+ * @description Viết lại lớp thực thể quy tắc ủy quyền,Nguyên nhân giống quy tắc hotspot
  * @date 2022-04-13
  */
 public class AuthorityRuleCorrectEntity implements RuleEntity {

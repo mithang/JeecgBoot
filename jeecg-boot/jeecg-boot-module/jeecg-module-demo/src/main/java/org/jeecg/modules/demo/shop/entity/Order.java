@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 订单实体
+ * Thực thể đơn hàng
  * @Author: chenrui
  * @Date: 2025-11-06
  */
@@ -18,47 +18,47 @@ import java.util.Date;
 public class Order {
     
     /**
-     * 订单ID
+     * Đơn hàng ID
      */
     private String id;
     
     /**
-     * 商品ID
+     * Sản phẩm ID
      */
     private String productId;
     
     /**
-     * 商品名称
+     * Tên sản phẩm
      */
     private String productName;
     
     /**
-     * 购买数量
+     * Số lượng mua
      */
     private Integer quantity;
     
     /**
-     * 单价
+     * Đơn giá
      */
     private BigDecimal unitPrice;
     
     /**
-     * 总金额
+     * Tổng số tiền
      */
     private BigDecimal totalAmount;
     
     /**
-     * 订单状态: pending-待支付, paid-已支付, cancelled-已取消
+     * Trạng thái đơn hàng: pending-Chờ thanh toán, paid-Đã thanh toán, cancelled-Đã hủy
      */
     private String status;
     
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     private Date createTime;
     
     /**
-     * 用户信息(可选)
+     * Thông tin người dùng(Tùy chọn)
      */
     private String userId;
 }

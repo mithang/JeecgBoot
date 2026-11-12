@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
- * @Description: 订单客户
+ * @Description: Khách hàng của đơn hàng
  * @Author: jeecg-boot
  * @Date:  2019-02-15
  * @Version: V1.0

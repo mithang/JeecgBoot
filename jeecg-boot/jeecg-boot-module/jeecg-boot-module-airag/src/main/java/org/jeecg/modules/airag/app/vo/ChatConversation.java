@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 聊天会话
+ * @Description: Phiên trò chuyện
  * @Author: chenrui
  * @Date: 2025/2/25 14:56
  */
@@ -17,17 +17,17 @@ import java.util.Map;
 public class ChatConversation {
 
     /**
-     * 会话id
+     * Phiên id
      */
     private String id;
 
     /**
-     * 会话标题
+     * Tiêu đề phiên
      */
     private String title;
 
     /**
-     * 消息记录
+     * Bản ghi tin nhắn
      */
     private List<MessageHistory> messages;
 
@@ -37,24 +37,24 @@ public class ChatConversation {
     private AiragApp app;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     private Date createTime;
 
     /**
-     * 流程入参配置（工作流的额外参数设置）
-     * key: 参数field, value: 参数值
-     * for [issues/8545]新建AI应用的时候只能选择没有自定义参数的AI流程
+     * Cấu hình tham số đầu vào quy trình (cài đặt tham số bổ sung của quy trình làm việc)
+     * key: Tham số field, value: Giá trị tham số
+     * for [issues/8545]Khi tạo ứng dụng AI mới, chỉ có thể chọn quy trình AI không có tham số tùy chỉnh
      */
     private Map<String, Object> flowInputs;
 
     /**
-     * portal 应用门户
+     * portal Cổng ứng dụng
      */
     private String sessionType;
 
     /**
-     * 是否保存会话
+     * Có lưu phiên không
      */
     private Boolean izSaveSession;
 }

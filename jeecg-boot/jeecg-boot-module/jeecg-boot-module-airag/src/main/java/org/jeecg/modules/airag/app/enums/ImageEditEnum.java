@@ -1,7 +1,7 @@
 package org.jeecg.modules.airag.app.enums;
 
 /**
-* @Description: 图像编辑枚举
+* @Description: Enum chỉnh sửa hình ảnh
 *
 * @author: wangshuai
 * @date: 2026/2/28 16:52
@@ -21,9 +21,9 @@ public enum ImageEditEnum {
     }
 
     /**
-     * 检查模型名称是否是图像编辑模型
-     * @param modelName 模型名称
-     * @return 是否是图像编辑模型
+     * Kiểm tra tên mô hình có phải là mô hình chỉnh sửa hình ảnh không
+     * @param modelName Tên mô hình
+     * @return Có phải là mô hình chỉnh sửa hình ảnh không
      */
     public static boolean isImageEditModel(String modelName) {
         for (ImageEditEnum model : values()) {

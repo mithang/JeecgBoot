@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Description: AI应用
+ * @Description: AI Ứng dụng
  * @Author: jeecg-boot
  * @Date: 2025-02-26
  * @Version: V1.0
@@ -30,188 +30,188 @@ import java.util.List;
 @TableName("airag_app")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="AI应用")
+@Schema(description="AI Ứng dụng")
 public class AiragApp implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * Khóa chính
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键")
+    @Schema(description = "Khóa chính")
     private java.lang.String id;
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     @Dict(dictTable = "sys_user",dicCode = "username",dicText = "realname")
     private java.lang.String createBy;
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private java.util.Date createTime;
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
+    @Schema(description = "Người cập nhật")
     private java.lang.String updateBy;
     /**
-     * 更新日期
+     * Ngày cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private java.util.Date updateTime;
     /**
-     * 所属部门
+     * Phòng ban trực thuộc
      */
-    @Schema(description = "所属部门")
+    @Schema(description = "Phòng ban trực thuộc")
     private java.lang.String sysOrgCode;
     /**
-     * 租户id
+     * Tenant id
      */
-    @Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+    @Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private java.lang.String tenantId;
     /**
-     * 应用名称
+     * Tên ứng dụng
      */
-    @Excel(name = "应用名称", width = 15)
-    @Schema(description = "应用名称")
+    @Excel(name = "Tên ứng dụng", width = 15)
+    @Schema(description = "Tên ứng dụng")
     private java.lang.String name;
     /**
-     * 应用描述
+     * Mô tả ứng dụng
      */
-    @Excel(name = "应用描述", width = 15)
-    @Schema(description = "应用描述")
+    @Excel(name = "Mô tả ứng dụng", width = 15)
+    @Schema(description = "Mô tả ứng dụng")
     private java.lang.String descr;
     /**
-     * 应用图标
+     * Biểu tượng ứng dụng
      */
-    @Excel(name = "应用图标", width = 15)
-    @Schema(description = "应用图标")
+    @Excel(name = "Biểu tượng ứng dụng", width = 15)
+    @Schema(description = "Biểu tượng ứng dụng")
     private java.lang.String icon;
     /**
-     * 应用类型
+     * Loại ứng dụng
      */
-    @Excel(name = "应用类型", width = 15, dicCode = "ai_app_type")
+    @Excel(name = "Loại ứng dụng", width = 15, dicCode = "ai_app_type")
     @Dict(dicCode = "ai_app_type")
-    @Schema(description = "应用类型")
+    @Schema(description = "Loại ứng dụng")
     private java.lang.String type;
     /**
-     * 开场白
+     * Lời mở đầu
      */
-    @Excel(name = "开场白", width = 15)
-    @Schema(description = "开场白")
+    @Excel(name = "Lời mở đầu", width = 15)
+    @Schema(description = "Lời mở đầu")
     private java.lang.String prologue;
     /**
-     * 预设问题
+     * Câu hỏi đặt sẵn
      */
-    @Excel(name = "预设问题", width = 15)
-    @Schema(description = "预设问题")
+    @Excel(name = "Câu hỏi đặt sẵn", width = 15)
+    @Schema(description = "Câu hỏi đặt sẵn")
     private java.lang.String presetQuestion;
     /**
-     * 提示词
+     * Prompt
      */
-    @Excel(name = "提示词", width = 15)
-    @Schema(description = "提示词")
+    @Excel(name = "Prompt", width = 15)
+    @Schema(description = "Prompt")
     private java.lang.String prompt;
     /**
-     * 模型配置
+     * Cấu hình mô hình
      */
-    @Excel(name = "模型配置", width = 15, dictTable = "airag_model where model_type = 'LLM' ", dicText = "name", dicCode = "id")
+    @Excel(name = "Cấu hình mô hình", width = 15, dictTable = "airag_model where model_type = 'LLM' ", dicText = "name", dicCode = "id")
     @Dict(dictTable = "airag_model where model_type = 'LLM' ", dicText = "name", dicCode = "id")
-    @Schema(description = "模型配置")
+    @Schema(description = "Cấu hình mô hình")
     private java.lang.String modelId;
     /**
-     * 历史消息数
+     * Số lượng tin nhắn lịch sử
      */
-    @Excel(name = "历史消息数", width = 15)
-    @Schema(description = "历史消息数")
+    @Excel(name = "Số lượng tin nhắn lịch sử", width = 15)
+    @Schema(description = "Số lượng tin nhắn lịch sử")
     private java.lang.Integer msgNum;
     /**
-     * 知识库
+     * Kho tri thức
      */
-    @Excel(name = "知识库", width = 15, dictTable = "airag_knowledge where status = 'enable'", dicText = "name", dicCode = "id")
+    @Excel(name = "Kho tri thức", width = 15, dictTable = "airag_knowledge where status = 'enable'", dicText = "name", dicCode = "id")
     @Dict(dictTable = "airag_knowledge where status = 'enable'", dicText = "name", dicCode = "id")
-    @Schema(description = "知识库")
+    @Schema(description = "Kho tri thức")
     private java.lang.String knowledgeIds;
     /**
-     * 流程
+     * Quy trình
      */
-    @Excel(name = "流程", width = 15, dictTable = "airag_flow where status = 'enable' ", dicText = "name", dicCode = "id")
+    @Excel(name = "Quy trình", width = 15, dictTable = "airag_flow where status = 'enable' ", dicText = "name", dicCode = "id")
     @Dict(dictTable = "airag_flow where status = 'enable' ", dicText = "name", dicCode = "id")
-    @Schema(description = "流程")
+    @Schema(description = "Quy trình")
     private java.lang.String flowId;
     /**
-     * 快捷指令
+     * Lệnh tắt
      */
-    @Excel(name = "快捷指令", width = 15)
-    @Schema(description = "快捷指令")
+    @Excel(name = "Lệnh tắt", width = 15)
+    @Schema(description = "Lệnh tắt")
     private java.lang.String quickCommand;
     /**
-     * 状态（enable=启用、disable=禁用、release=发布）
+     * Trạng thái (enable=Kích hoạt,disable=Vô hiệu hóa,release=Phát hành)
      */
-    @Excel(name = "状态", width = 15)
-    @Schema(description = "状态")
+    @Excel(name = "Trạng thái", width = 15)
+    @Schema(description = "Trạng thái")
     private java.lang.String status;
 
     /**
-     * 分享令牌（匿名聊天凭证，发布时生成，取消发布清空）
+     * Token chia sẻ (chứng chỉ trò chuyện ẩn danh, tạo khi phát hành, xóa khi hủy phát hành)
      *
      * @author scott
-     * @since 2026-07-21 【issues/9787】应用级分享令牌
+     * @since 2026-07-21 【issues/9787] Token chia sẻ cấp ứng dụng
      */
-    @Schema(description = "分享令牌")
+    @Schema(description = "Token chia sẻ")
     private java.lang.String shareToken;
 
     /**
-     * 元数据
+     * Metadata
      */
-    @Excel(name = "元数据", width = 15)
-    @Schema(description = "元数据")
+    @Excel(name = "Metadata", width = 15)
+    @Schema(description = "Metadata")
     private java.lang.String metadata;
 
     /**
-     * 插件 [{pluginId: '123213', pluginName: 'xxxx', category: 'mcp'}]
+     * Plugin [{pluginId: '123213', pluginName: 'xxxx', category: 'mcp'}]
      */
-    @Schema(description = "插件")
+    @Schema(description = "Plugin")
     private java.lang.String plugins;
 
     /**
-     * 是否开启记忆(0 不开启，1开启)
+     * Có bật bộ nhớ không(0 không bật, 1 là bật)
      */
-    @Schema(description = "是否开启记忆(0 不开启，1开启)")
+    @Schema(description = "Có bật bộ nhớ không(0 không bật, 1 là bật)")
     private java.lang.Integer izOpenMemory;
     /**
-     * 记忆库，知识库的id
+     * Của kho bộ nhớ, kho tri thức id
      */
-    @Schema(description = "记忆库")
+    @Schema(description = "Kho bộ nhớ")
     private java.lang.String memoryId;
 
     /**
-     * 变量
+     * Biến
      */
-    @Schema(description = "变量")
+    @Schema(description = "Biến")
     private java.lang.String variables;
 
     /**
-     * 记忆和变量提示词
+     * Prompt bộ nhớ và biến
      */
-    @Schema(description = "记忆和变量提示词")
+    @Schema(description = "Prompt bộ nhớ và biến")
     private java.lang.String memoryPrompt;
     
     /**
-     * 知识库ids
+     * Kho tri thức ids
      */
     @TableField(exist = false)
     private List<String> knowIds;
 
     /**
-     * 获取知识库id
+     * Lấy kho tri thức id
      *
      * @return
      * @author chenrui

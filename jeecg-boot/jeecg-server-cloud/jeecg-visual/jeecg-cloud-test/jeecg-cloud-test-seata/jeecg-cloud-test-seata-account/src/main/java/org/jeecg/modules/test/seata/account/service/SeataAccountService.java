@@ -5,16 +5,16 @@ import org.jeecg.common.api.vo.Result;
 import java.math.BigDecimal;
 
 /**
- * @Description: 账户接口
+ * @Description: API tài khoản
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
  */
 public interface SeataAccountService {
     /**
-     * 扣减金额
-     * @param userId 用户 ID
-     * @param amount  扣减金额
+     * Trừ số tiền
+     * @param userId Người dùng ID
+     * @param amount  Trừ số tiền
      */
     Result<?> reduceBalance(Long userId, BigDecimal amount);
 }

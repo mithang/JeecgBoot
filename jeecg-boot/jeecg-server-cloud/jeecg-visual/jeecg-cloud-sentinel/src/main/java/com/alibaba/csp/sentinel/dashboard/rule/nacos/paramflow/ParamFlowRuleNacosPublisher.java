@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *  持久化热点参数规则
+ *  Lưu bền quy tắc tham số hotspot
  *
  * @author zyf
  * @date 2022-04-13
@@ -37,7 +37,7 @@ public class ParamFlowRuleNacosPublisher implements DynamicRulePublisher<List<Pa
         }
         rules.forEach(e -> e.setApp(app));
 
-        //  转换
+        //  Chuyển đổi
         List<ParamFlowRuleCorrectEntity> list = rules.stream().map(rule -> {
             ParamFlowRuleCorrectEntity entity = new ParamFlowRuleCorrectEntity();
             BeanUtils.copyProperties(rule, entity);

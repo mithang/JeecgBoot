@@ -8,43 +8,43 @@ import org.jeecg.modules.airag.voice.vo.VoiceResultVo;
 import java.util.List;
 
 /**
- * 文生语音服务接口
+ * Giao diện dịch vụ chuyển văn bản thành giọng nói
  */
 public interface IVoiceService {
     /**
-     * 文本转语音
-     * @param vo 请求参数
-     * @return 生成结果
+     * Chuyển văn bản thành giọng nói
+     * @param vo Tham số yêu cầu
+     * @return Kết quả tạo
      */
     VoiceResultVo textToSpeech(VoiceGenerateVo vo);
 
-    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】语音生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo giọng nói chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
     /**
-     * 异步提交语音生成任务，立即返回 taskId
-     * @param vo 请求参数
+     * Gửi bất đồng bộ nhiệm vụ tạo giọng nói, trả về ngay lập tức taskId
+     * @param vo Tham số yêu cầu
      * @return taskId
      */
     String generateAsync(VoiceGenerateVo vo);
 
     /**
-     * 查询异步语音任务结果
-     * @param taskId 任务ID
-     * @return 结果（pending / success / failed）
+     * Truy vấn kết quả nhiệm vụ giọng nói bất đồng bộ
+     * @param taskId Nhiệm vụ ID
+     * @return Kết quả (pending / success / failed）
      */
     Result<?> getVoiceTaskResult(String taskId);
-    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】语音生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo giọng nói chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
 
     /**
-     * 查询用户语音生成记录列表
-     * @return 记录列表
+     * Truy vấn danh sách bản ghi tạo giọng nói của người dùng
+     * @return Danh sách bản ghi
      */
     List<JSONObject> getVoiceRecords(String userId);
 
     /**
-     * 删除用户语音生成记录
-     * @param userId 用户ID
-     * @param recordId 记录ID
-     * @return 是否删除成功
+     * Xóa bản ghi tạo giọng nói của người dùng
+     * @param userId Người dùng ID
+     * @param recordId Bản ghi ID
+     * @return Xóa thành công hay không
      */
     boolean deleteVoiceRecord(String userId, String recordId);
 }

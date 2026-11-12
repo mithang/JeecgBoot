@@ -19,7 +19,7 @@ import java.io.*;
 import java.util.Map;
 
 /**
- * @Description: word模版管理
+ * @Description: word Quản lý mẫu
  * @Author: jeecg-boot
  * @Date:   2025-07-04
  * @Version: V1.0
@@ -29,7 +29,7 @@ import java.util.Map;
 public class AigcWordTemplateServiceImpl extends ServiceImpl<AigcWordTemplateMapper, AigcWordTemplate> implements IAigcWordTemplateService {
 
     /**
-     * 内置的系统变量键列表
+     * Danh sách key biến hệ thống tích hợp sẵn
      */
     private static final String[] SYSTEM_KEYS = {
             DataBaseConstant.SYS_ORG_CODE, DataBaseConstant.SYS_ORG_CODE_TABLE, DataBaseConstant.SYS_MULTI_ORG_CODE,
@@ -46,27 +46,27 @@ public class AigcWordTemplateServiceImpl extends ServiceImpl<AigcWordTemplateMap
 
     @Override
     public void generateWordFromTpl(WordTplGenDTO wordTplGenDTO, ByteArrayOutputStream wordOutputStream) {
-        AssertUtils.assertNotEmpty("参数异常", wordTplGenDTO);
-        AssertUtils.assertNotEmpty("模版ID不能为空", wordTplGenDTO.getTemplateId());
+        AssertUtils.assertNotEmpty("Tham số bất thường", wordTplGenDTO);
+        AssertUtils.assertNotEmpty("ID mẫu không được trống", wordTplGenDTO.getTemplateId());
         String templateId = wordTplGenDTO.getTemplateId();
-        // 生成word模版 date:2025/7/10
+        // Tạo mẫu Word date:2025/7/10
         AigcWordTemplate template = getById(templateId);
         ByteArrayOutputStream wordTemplateOut = new ByteArrayOutputStream();
         wordTplUtils.generateWordTemplate(template, wordTemplateOut);
-        //根据word模版和数据生成word文件
+        //Tạo tệp Word dựa trên mẫu Word và dữ liệu
         Map<String, Object> data = wordTplGenDTO.getData();
         mergeSystemVarsToData(data);
         try {
             XWPFTemplate.compile(new ByteArrayInputStream(wordTemplateOut.toByteArray())).render(data).write(wordOutputStream);
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            throw new JeecgBootException("生成word文档失败，请检查模版和数据是否正确");
+            throw new JeecgBootException("Tạo tài liệu Word thất bại, vui lòng kiểm tra mẫu và dữ liệu có đúng không");
         }
 
     }
 
     /**
-     * 将系统变量合并到数据中
+     * Gộp biến hệ thống vào dữ liệu
      *
      * @param data
      * @author chenrui

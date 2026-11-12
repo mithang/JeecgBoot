@@ -324,8 +324,8 @@
        */
       function getShareUrl(item: any) {
         const shareToken = item?.shareToken;
-        // NOTE: giữ nguyên chuỗi tiếng Trung '发布成功'/'取消发布成功' — backend trả về đúng văn bản này làm shareToken khi lỗi, so sánh phải khớp văn bản backend (không dịch).
-        if (!item?.id || !shareToken || shareToken === '发布成功' || shareToken === '取消发布成功') {
+        // NOTE: backend trả về đúng văn bản này làm shareToken khi lỗi, so sánh phải khớp văn bản backend.
+        if (!item?.id || !shareToken || shareToken === 'Phát hành thành công' || shareToken === 'Hủy phát hành thành công') {
           return '';
         }
         return `${document.location.protocol}//${window.location.host}/ai/app/chat/${item.id}?shareToken=${shareToken}`;

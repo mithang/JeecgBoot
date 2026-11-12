@@ -8,11 +8,11 @@
         <version>3.9.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <description>消息队列测试模块</description>
+    <description>Mô-đun kiểm thử hàng đợi tin nhắn</description>
     <artifactId>jeecg-cloud-test-rocketmq</artifactId>
 
     <dependencies>
-        <!-- rocketmq消息队列-->
+        <!-- rocketmq Hàng đợi tin nhắn-->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-rocketmq</artifactId>

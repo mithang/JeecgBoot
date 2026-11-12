@@ -6,20 +6,20 @@ import org.jeecg.modules.demo.test.entity.JeecgDemo;
 import java.util.List;
 
 /**
- * @Description: 动态数据源测试
+ * @Description: Kiểm thử nguồn dữ liệu động
  * @Author: zyf
  * @Date:2020-04-21
  */
 public interface IJeecgDynamicDataService extends JeecgService<JeecgDemo> {
 
 	/**
-	 * 测试从header获取数据源
+	 * Kiểm tra lấy nguồn dữ liệu từ header
 	 * @return
 	 */
 	public List<JeecgDemo> selectSpelByHeader();
 
 	/**
-	 * 使用spel从参数获取
+	 * Lấy từ tham số bằng SpEL
 	 * @param dsName
 	 * @return
 	 */

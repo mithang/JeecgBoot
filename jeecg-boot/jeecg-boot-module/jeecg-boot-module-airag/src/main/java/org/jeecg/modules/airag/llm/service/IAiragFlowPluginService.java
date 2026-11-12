@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 获取流程mcp服务
+ * @Description: Lấy dịch vụ mcp của quy trình
  * @Author: wangshuai
  * @Date: 2025-12-22 15:34:20
  * @Version: V1.0
@@ -12,30 +12,30 @@ import java.util.Map;
 public interface IAiragFlowPluginService {
 
     /**
-     * 同步所有启用的流程到MCP插件配置
+     * Đồng bộ tất cả quy trình đã kích hoạt sang cấu hình plugin MCP
      *
-     * @param flowIds 多个流程id
+     * @param flowIds Nhiều quy trình id
      */
     Map<String, Object> getFlowsToPlugin(String flowIds);
 
     /**
-     * 获取流程插件（携带应用上下文参数）
+     * Lấy plugin quy trình (mang theo tham số ngữ cảnh ứng dụng)
      *
-     * @param flowIds  多个流程id
-     * @param appId    应用ID（变量节点需要）
-     * @param memoryId 记忆库ID（记忆节点需要）
+     * @param flowIds  Nhiều quy trình id
+     * @param appId    ID ứng dụng (nút biến cần)
+     * @param memoryId ID kho bộ nhớ (nút bộ nhớ cần)
      */
     Map<String, Object> getFlowsToPlugin(String flowIds, String appId, String memoryId);
 
-    // update-begin--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
+    // update-begin--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
     /**
-     * 获取流程插件（携带应用上下文和当前消息图片）
+     * Lấy plugin quy trình (mang theo ngữ cảnh ứng dụng và hình ảnh của tin nhắn hiện tại)
      *
-     * @param flowIds  多个流程id
-     * @param appId    应用ID（变量节点需要）
-     * @param memoryId 记忆库ID（记忆节点需要）
-     * @param images   当前消息上传的图片（流程开始节点的 images 入参需要）
+     * @param flowIds  Nhiều quy trình id
+     * @param appId    ID ứng dụng (nút biến cần)
+     * @param memoryId ID kho bộ nhớ (nút bộ nhớ cần)
+     * @param images   Hình ảnh tải lên trong tin nhắn hiện tại (tham số đầu vào images của nút bắt đầu quy trình cần)
      */
     Map<String, Object> getFlowsToPlugin(String flowIds, String appId, String memoryId, List<String> images);
-    // update-end--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
+    // update-end--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
 }

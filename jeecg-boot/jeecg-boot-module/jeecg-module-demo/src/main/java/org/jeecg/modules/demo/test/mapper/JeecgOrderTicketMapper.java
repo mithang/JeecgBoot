@@ -8,7 +8,7 @@ import org.jeecg.modules.demo.test.entity.JeecgOrderTicket;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @Description: 订单机票
+ * @Description: Vé máy bay của đơn hàng
  * @Author: jeecg-boot
  * @Date:  2019-02-15
  * @Version: V1.0
@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface JeecgOrderTicketMapper extends BaseMapper<JeecgOrderTicket> {
 
 	/**
-	 *  通过主表外键批量删除客户
+	 *  Xóa hàng loạt khách hàng qua khóa ngoại của bảng chính
 	 * @param mainId
 	 * @return
 	 */
@@ -24,9 +24,9 @@ public interface JeecgOrderTicketMapper extends BaseMapper<JeecgOrderTicket> {
 	public boolean deleteTicketsByMainId(String mainId);
 
     /**
-     * 通过主表订单外键查询订单机票
-     * @param mainId 订单id
-     * @return 返回订单机票集合
+     * Truy vấn vé máy bay của đơn hàng qua khóa ngoại đơn hàng của bảng chính
+     * @param mainId Đơn hàng id
+     * @return Trả về tập hợp vé máy bay của đơn hàng
      */
     @Select("SELECT * FROM JEECG_ORDER_TICKET WHERE ORDER_ID = #{mainId}")
 	public List<JeecgOrderTicket> selectTicketsByMainId(String mainId);

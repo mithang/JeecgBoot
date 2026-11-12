@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 /**
- * @Description: 命令行执行工具类
+ * @Description: Lớp công cụ thực thi dòng lệnh
  * @Author: chenrui
  * @Date: 2024/4/8 10:11
  */
@@ -17,7 +17,7 @@ public class CommandExecUtil {
 
 
     /**
-     * 执行命令行
+     * Thực thi dòng lệnh
      *
      * @param command
      * @param args
@@ -28,71 +28,71 @@ public class CommandExecUtil {
      */
     public static String execCommand(String command, String[] args) throws IOException {
         if (null == command || command.isEmpty()) {
-            throw new IllegalArgumentException("命令不能为空");
+            throw new IllegalArgumentException("Lệnh không được trống");
         }
         return execCommand(command.split(" "), args);
     }
 
     /**
-     * 禁止在参数中出现的 Shell 元字符（适用于 Windows cmd 和 Unix shell）
+     * Ký tự meta Shell bị cấm xuất hiện trong tham số (áp dụng cho Windows cmd và Unix shell)
      */
     private static final Pattern SHELL_INJECTION_PATTERN =
             Pattern.compile("[&|;<>`$!\\\\\\r\\n]");
 
     /**
-     * 禁止文件名中出现的危险字符（防止通过文件名注入命令）
+     * Ký tự nguy hiểm bị cấm xuất hiện trong tên tệp (ngăn chèn lệnh qua tên tệp)
      */
     private static final Pattern FILENAME_INJECTION_PATTERN =
             Pattern.compile("[&|;<>`$!\"'\\r\\n]");
 
     /**
-     * 校验单个命令参数，拒绝包含 Shell 注入字符的参数
+     * Kiểm tra từng tham số lệnh, từ chối tham số chứa ký tự chèn Shell
      *
-     * @param arg 待校验参数
-     * @throws IllegalArgumentException 若参数包含危险字符
+     * @param arg Tham số cần kiểm tra
+     * @throws IllegalArgumentException Nếu tham số chứa ký tự nguy hiểm
      */
     public static void validateArg(String arg) {
         if (arg != null && SHELL_INJECTION_PATTERN.matcher(arg).find()) {
-            throw new IllegalArgumentException("命令参数包含非法字符，已拒绝执行: " + arg);
+            throw new IllegalArgumentException("Tham số lệnh chứa ký tự không hợp lệ, đã từ chối thực thi: " + arg);
         }
     }
 
     /**
-     * 校验文件路径，拒绝包含危险字符（防止文件名注入）
+     * Kiểm tra đường dẫn tệp, từ chối đường dẫn chứa ký tự nguy hiểm (ngăn chèn qua tên tệp)
      *
-     * @param filePath 待校验文件路径
-     * @throws IllegalArgumentException 若文件路径包含危险字符
+     * @param filePath Đường dẫn tệp cần kiểm tra
+     * @throws IllegalArgumentException Nếu đường dẫn tệp chứa ký tự nguy hiểm
      */
     public static void validateFilePath(String filePath) {
         if (filePath != null && FILENAME_INJECTION_PATTERN.matcher(filePath).find()) {
-            throw new IllegalArgumentException("文件路径包含非法字符，已拒绝处理: " + filePath);
+            throw new IllegalArgumentException("Đường dẫn tệp chứa ký tự không hợp lệ, đã từ chối xử lý: " + filePath);
         }
     }
 
     /**
-     * 执行命令行
+     * Thực thi dòng lệnh
      *
-     * @param command 脚本目录
-     * @param args    参数
+     * @param command thư mục script
+     * @param args    Tham số
      * @author chenrui
      * @date 2024/4/09 10:30
      */
     public static String execCommand(String[] command, String[] args) throws IOException {
 
         if (null == command || command.length == 0) {
-            throw new IllegalArgumentException("命令不能为空");
+            throw new IllegalArgumentException("Lệnh không được trống");
         }
 
         if (null != args && args.length > 0) {
-            // 校验每一个用户可控的参数，防止命令注入
+            // Kiểm tra từng tham số do người dùng kiểm soát, ngăn chèn lệnh
             for (String arg : args) {
                 validateArg(arg);
             }
             command = (String[]) ArrayUtils.addAll(command, args);
         }
 
-        // 直接使用 ProcessBuilder，不经过系统 Shell（防止 Shell 注入）
-        // 注意：不再使用 cmd.exe /c 或 /bin/sh -c，参数数组由 JVM 直接传递给操作系统
+        // Dùng trực tiếp ProcessBuilder, không qua Shell hệ thống (ngăn chèn Shell)
+        // Lưu ý: không dùng nữa cmd.exe /c hoặc /bin/sh -c, mảng tham số do JVM truyền trực tiếp cho hệ điều hành
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.redirectErrorStream(false);
 
@@ -110,13 +110,13 @@ public class CommandExecUtil {
                 while ((num = processInStream.read(bs)) != -1) {
                     resultOutStream.write(bs, 0, num);
                     String stepMsg = new String(bs);
-//                    log.debug("命令行日志:" + stepMsg);
+//                    log.debug("Nhật ký dòng lệnh:" + stepMsg);
                     if (stepMsg.contains("input any key to continue...")) {
                         process.destroy();
                     }
                 }
                 String result = resultOutStream.toString();
-                log.debug("执行命令完成:" + result);
+                log.debug("Thực thi lệnh hoàn tất:" + result);
                 return result;
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -132,8 +132,8 @@ public class CommandExecUtil {
     }
 
     /**
-     * exec 控制台输出获取线程类
-     * 使用单独的线程获取控制台输出,防止输入流阻塞
+     * exec Lớp luồng lấy đầu ra console
+     * Sử dụng luồng riêng để lấy đầu ra console,Ngăn luồng đầu vào bị chặn
      *
      * @author chenrui
      * @date 2024/4/09 10:30

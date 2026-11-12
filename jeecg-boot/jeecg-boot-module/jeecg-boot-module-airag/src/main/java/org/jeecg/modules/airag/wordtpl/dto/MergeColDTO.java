@@ -3,7 +3,7 @@ package org.jeecg.modules.airag.wordtpl.dto;
 import lombok.Data;
 
 /**
- * 合并列DTO
+ * Gộp cột DTO
  * @author chenrui
  * @date 2025/7/4 18:36
  */
@@ -11,17 +11,17 @@ import lombok.Data;
 public class MergeColDTO {
 
 	/**
-	 * 合并列的行号
+	 * Số hàng của cột gộp
 	 */
 	private int row;
 
 	/**
-	 * 合并列的起始列号
+	 * Số cột bắt đầu của cột gộp
 	 */
 	private int from;
 
 	/**
-	 * 合并列的结束列号
+	 * Số cột kết thúc của cột gộp
 	 */
 	private int to;
 }

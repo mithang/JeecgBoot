@@ -33,67 +33,67 @@ import lombok.experimental.Accessors;
 public class AiragExtData implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键ID*/
+	/**Khóa chính ID*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键ID")
+    @Schema(description = "Khóa chính ID")
     private java.lang.String id;
-	/**业务类型标识(evaluator:评估器；track:测试追踪)*/
-	@Excel(name = "业务类型标识(evaluator:评估器；track:测试追踪)", width = 15)
-    @Schema(description = "业务类型标识(evaluator:评估器；track:测试追踪)")
+	/**Định danh loại nghiệp vụ(evaluator:Bộ đánh giá;track:Theo dõi kiểm thử)*/
+	@Excel(name = "Định danh loại nghiệp vụ(evaluator:Bộ đánh giá;track:Theo dõi kiểm thử)", width = 15)
+    @Schema(description = "Định danh loại nghiệp vụ(evaluator:Bộ đánh giá;track:Theo dõi kiểm thử)")
     private java.lang.String bizType;
-	/**名称*/
-	@Excel(name = "名称", width = 15)
-    @Schema(description = "名称")
+	/**Tên*/
+	@Excel(name = "Tên", width = 15)
+    @Schema(description = "Tên")
     private java.lang.String name;
-	/**描述信息*/
-	@Excel(name = "描述信息", width = 15)
-    @Schema(description = "描述信息")
+	/**Thông tin mô tả*/
+	@Excel(name = "Thông tin mô tả", width = 15)
+    @Schema(description = "Thông tin mô tả")
     private java.lang.String descr;
-	/**标签，多个用逗号分隔*/
-	@Excel(name = "标签，多个用逗号分隔", width = 15)
-    @Schema(description = "标签，多个用逗号分隔")
+	/**Nhãn, phân tách nhiều nhãn bằng dấu phẩy*/
+	@Excel(name = "Nhãn, phân tách nhiều nhãn bằng dấu phẩy", width = 15)
+    @Schema(description = "Nhãn, phân tách nhiều nhãn bằng dấu phẩy")
     private java.lang.String tags;
-	/**实际存储内容，json*/
-	@Excel(name = "实际存储内容，json", width = 15)
-    @Schema(description = "实际存储内容，json")
+	/**Nội dung lưu trữ thực tế,json*/
+	@Excel(name = "Nội dung lưu trữ thực tế,json", width = 15)
+    @Schema(description = "Nội dung lưu trữ thực tế,json")
     private java.lang.String dataValue;
-	/**元数据，用于存储补充业务数据信息*/
-	@Excel(name = "元数据，用于存储补充业务数据信息", width = 15)
-    @Schema(description = "元数据，用于存储补充业务数据信息")
+	/**Metadata, dùng để lưu trữ thông tin dữ liệu nghiệp vụ bổ sung*/
+	@Excel(name = "Metadata, dùng để lưu trữ thông tin dữ liệu nghiệp vụ bổ sung", width = 15)
+    @Schema(description = "Metadata, dùng để lưu trữ thông tin dữ liệu nghiệp vụ bổ sung")
     private java.lang.String metadata;
-	/**评测集数据*/
-	@Excel(name = "评测集数据", width = 15)
-    @Schema(description = "评测集数据")
+	/**Dữ liệu tập đánh giá*/
+	@Excel(name = "Dữ liệu tập đánh giá", width = 15)
+    @Schema(description = "Dữ liệu tập đánh giá")
     private java.lang.String datasetValue;
-	/**创建人*/
-    @Schema(description = "创建人")
+	/**Người tạo*/
+    @Schema(description = "Người tạo")
     private java.lang.String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间")
+    @Schema(description = "Thời gian tạo")
     private java.util.Date createTime;
-	/**修改人*/
-    @Schema(description = "修改人")
+	/**Người sửa đổi*/
+    @Schema(description = "Người sửa đổi")
     private java.lang.String updateBy;
-	/**修改时间*/
+	/**Thời gian chỉnh sửa*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "修改时间")
+    @Schema(description = "Thời gian chỉnh sửa")
     private java.util.Date updateTime;
-	/**所属部门*/
-    @Schema(description = "所属部门")
+	/**Phòng ban trực thuộc*/
+    @Schema(description = "Phòng ban trực thuộc")
     private java.lang.String sysOrgCode;
-	/**租户id*/
-	@Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+	/**Tenant id*/
+	@Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private java.lang.String tenantId;
-	/**状态*/
-	@Excel(name = "状态（run:进行中 completed：已完成）", width = 15)
-    @Schema(description = "状态（run:进行中 completed：已完成）")
+	/**Trạng thái*/
+	@Excel(name = "Trạng thái (run:Đang thực hiện completed: Đã hoàn thành)", width = 15)
+    @Schema(description = "Trạng thái (run:Đang thực hiện completed: Đã hoàn thành)")
     private java.lang.String status;
-	/**版本*/
-	@Excel(name = "版本", width = 15)
-    @Schema(description = "版本")
+	/**Phiên bản*/
+	@Excel(name = "Phiên bản", width = 15)
+    @Schema(description = "Phiên bản")
     private java.lang.Integer version;
 }

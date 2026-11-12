@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * 向量存储库配置
+ * Cấu hình kho lưu trữ vector
  *
  * @Author: chenrui
  * @Date: 2025/2/18 14:24
@@ -23,24 +23,24 @@ public class EmbedStoreConfigBean {
      */
     private String host = "127.0.0.1";
     /**
-     * 端口
+     * Cổng
      */
     private int port = 5432;
     /**
-     * 数据库
+     * Cơ sở dữ liệu
      */
     private String database = "postgres";
     /**
-     * 用户名
+     * Tên người dùng
      */
     private String user = "postgres";
     /**
-     * 密码
+     * Mật khẩu
      */
     private String password = "postgres";
 
     /**
-     * 存储向量的表
+     * Bảng lưu trữ vector
      */
     private String table = "embeddings";
 

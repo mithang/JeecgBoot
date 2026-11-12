@@ -14,106 +14,106 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 
 /**
- * @Description: AIRag知识库
+ * @Description: AIRag Kho tri thức
  * @Author: jeecg-boot
  * @Date: 2025-02-18
  * @Version: V1.0
  */
-@Schema(description="AIRag知识库")
+@Schema(description="AIRag Kho tri thức")
 @Data
 @TableName("airag_knowledge")
 public class AiragKnowledge implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * Khóa chính
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键")
+    @Schema(description = "Khóa chính")
     private java.lang.String id;
 
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     @Dict(dictTable = "sys_user",dicCode = "username",dicText = "realname")
     private java.lang.String createBy;
 
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private java.util.Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
+    @Schema(description = "Người cập nhật")
     private java.lang.String updateBy;
 
     /**
-     * 更新日期
+     * Ngày cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private java.util.Date updateTime;
 
     /**
-     * 所属部门
+     * Phòng ban trực thuộc
      */
-    @Schema(description = "所属部门")
+    @Schema(description = "Phòng ban trực thuộc")
     private java.lang.String sysOrgCode;
 
     /**
-     * 租户id
+     * Tenant id
      */
-    @Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+    @Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private java.lang.String tenantId;
 
     /**
-     * 知识库名称
+     * Tên kho tri thức
      */
-    @Excel(name = "知识库名称", width = 15)
-    @Schema(description = "知识库名称")
+    @Excel(name = "Tên kho tri thức", width = 15)
+    @Schema(description = "Tên kho tri thức")
     private java.lang.String name;
 
     /**
-     * 向量模型id
+     * Mô hình vector id
      */
-    @Excel(name = "向量模型id", width = 15, dictTable = "airag_model where model_type = 'EMBED'", dicText = "name", dicCode = "id")
+    @Excel(name = "Mô hình vector id", width = 15, dictTable = "airag_model where model_type = 'EMBED'", dicText = "name", dicCode = "id")
     @Dict(dictTable = "airag_model where model_type = 'EMBED'", dicText = "name", dicCode = "id")
-    @Schema(description = "向量模型id")
+    @Schema(description = "Mô hình vector id")
     private java.lang.String embedId;
 
     /**
-     * 描述
+     * Mô tả
      */
-    @Excel(name = "描述", width = 15)
-    @Schema(description = "描述")
+    @Excel(name = "Mô tả", width = 15)
+    @Schema(description = "Mô tả")
     private java.lang.String descr;
 
     /**
-     * 状态
+     * Trạng thái
      */
-    @Excel(name = "状态", width = 15)
-    @Schema(description = "状态")
+    @Excel(name = "Trạng thái", width = 15)
+    @Schema(description = "Trạng thái")
     private java.lang.String status;
 
     /**
-     * 类型(knowledge知识 memory 记忆)
+     * Loại(knowledge tri thức (knowledge), bộ nhớ (memory))
      */
-    @Excel(name="类型(knowledge知识 memory 记忆)", width = 15)
-    @Schema(description = "类型(knowledge知识 memory 记忆)")
+    @Excel(name="Loại(knowledge tri thức (knowledge), bộ nhớ (memory))", width = 15)
+    @Schema(description = "Loại(knowledge tri thức (knowledge), bộ nhớ (memory))")
     private java.lang.String type;
 
     /**
-     * 元数据
+     * Metadata
      */
-    @Excel(name = "元数据", width = 15)
-    @Schema(description = "元数据")
+    @Excel(name = "Metadata", width = 15)
+    @Schema(description = "Metadata")
     private java.lang.String metadata;
 }

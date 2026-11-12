@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 降级规则拉取
+ * Kéo quy tắc giáng cấp
  *
  * @author zyf
  * @date 2022-04-13

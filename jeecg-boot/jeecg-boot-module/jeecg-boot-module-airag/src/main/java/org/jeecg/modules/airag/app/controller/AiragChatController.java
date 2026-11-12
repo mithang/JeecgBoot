@@ -29,7 +29,7 @@ import java.util.UUID;
 
 
 /**
- * airag应用-chat
+ * airag Ứng dụng-chat
  *
  * @Author: chenrui
  * @Date: 2025-02-25 11:40
@@ -49,16 +49,16 @@ public class AiragChatController {
     private String uploadpath;
 
     /**
-     * 本地：local minio：minio 阿里：alioss
+     * Local: local, MinIO: minio, Alibaba Cloud:alioss
      */
     @Value(value="${jeecg.uploadType}")
     private String uploadType;
 
 
     /**
-     * 发送消息
+     * Gửi tin nhắn
      *
-     * @return 返回一个Result对象，表示发送消息的结果
+     * @return Trả về một đối tượng Result, biểu thị kết quả gửi tin nhắn
      * @author chenrui
      * @date 2025/2/25 11:42
      */
@@ -68,22 +68,22 @@ public class AiragChatController {
         try {
             rateLimitService.checkSendLimit(request);
         } catch (Exception e) {
-            log.warn("AI聊天发送接口限流: {}", e.getMessage());
+            log.warn("AI Giới hạn tốc độ API gửi trò chuyện: {}", e.getMessage());
             return buildErrorEmitter(e.getMessage());
         }
-        //update-begin---author:scott ---date:20260721  for：【issues/9787】匿名访问校验失败按SSE错误协议返回-----------
+        //update-begin---author:scott ---date:20260721  for：【issues/9787] Khi xác thực truy cập ẩn danh thất bại, trả về theo giao thức lỗi SSE-----------
         try {
             return chatService.send(chatSendParams);
         } catch (JeecgBootException e) {
-            log.warn("AI聊天发送接口访问校验失败: {}", e.getMessage());
+            log.warn("AI Xác thực truy cập API gửi trò chuyện thất bại: {}", e.getMessage());
             return buildErrorEmitter(e.getMessage());
         }
-        //update-end---author:scott ---date:20260721  for：【issues/9787】匿名访问校验失败按SSE错误协议返回-----------
+        //update-end---author:scott ---date:20260721  for：【issues/9787] Khi xác thực truy cập ẩn danh thất bại, trả về theo giao thức lỗi SSE-----------
     }
 
     /**
-     * 发送消息 <br/>
-     * 兼容旧版浏览器
+     * Gửi tin nhắn <br/>
+     * Tương thích trình duyệt phiên bản cũ
      * @param content
      * @param conversationId
      * @param topicId
@@ -102,25 +102,25 @@ public class AiragChatController {
         try {
             rateLimitService.checkSendLimit(request);
         } catch (Exception e) {
-            log.warn("AI聊天发送接口限流: {}", e.getMessage());
+            log.warn("AI Giới hạn tốc độ API gửi trò chuyện: {}", e.getMessage());
             return buildErrorEmitter(e.getMessage());
         }
         ChatSendParams chatSendParams = new ChatSendParams(content, conversationId, topicId, appId);
         chatSendParams.setShareToken(shareToken);
-        //update-begin---author:scott ---date:20260721  for：【issues/9787】兼容GET发送接口的匿名访问校验错误协议-----------
+        //update-begin---author:scott ---date:20260721  for：【issues/9787] Tương thích giao thức lỗi xác thực truy cập ẩn danh của API gửi GET-----------
         try {
             return chatService.send(chatSendParams);
         } catch (JeecgBootException e) {
-            log.warn("AI聊天GET发送接口访问校验失败: {}", e.getMessage());
+            log.warn("AI Xác thực truy cập API gửi trò chuyện GET thất bại: {}", e.getMessage());
             return buildErrorEmitter(e.getMessage());
         }
-        //update-end---author:scott ---date:20260721  for：【issues/9787】兼容GET发送接口的匿名访问校验错误协议-----------
+        //update-end---author:scott ---date:20260721  for：【issues/9787] Tương thích giao thức lỗi xác thực truy cập ẩn danh của API gửi GET-----------
     }
 
     /**
-     * 构造聊天错误 SSE 响应
+     * Xây dựng phản hồi SSE lỗi trò chuyện
      *
-     * @param errorMessage 错误消息
+     * @param errorMessage Thông báo lỗi
      * @return SseEmitter
      */
     private SseEmitter buildErrorEmitter(String errorMessage) {
@@ -131,16 +131,16 @@ public class AiragChatController {
         try {
             emitter.send(SseEmitter.event().data(JSONObject.toJSONString(eventData)));
         } catch (Exception e) {
-            log.error("发送聊天错误SSE事件失败", e);
+            log.error("Gửi sự kiện SSE lỗi trò chuyện thất bại", e);
         }
         emitter.complete();
         return emitter;
     }
 
     /**
-     * 获取所有对话
+     * Lấy tất cả cuộc trò chuyện
      *
-     * @return 返回一个Result对象，包含所有对话的信息
+     * @return Trả về một đối tượng Result chứa thông tin của tất cả các cuộc trò chuyện
      * @author chenrui
      * @date 2025/2/25 11:42
      */
@@ -152,9 +152,9 @@ public class AiragChatController {
     }
 
     /**
-     * 获取所有对话
+     * Lấy tất cả cuộc trò chuyện
      *
-     * @return 返回一个Result对象，包含所有对话的信息
+     * @return Trả về một đối tượng Result chứa thông tin của tất cả các cuộc trò chuyện
      * @author chenrui
      * @date 2025/2/25 11:42
      */
@@ -165,9 +165,9 @@ public class AiragChatController {
     }
 
     /**
-     * 根据类型获取所有对话
+     * Lấy tất cả cuộc trò chuyện theo loại
      *
-     * @return 返回一个Result对象，包含所有对话的信息
+     * @return Trả về một đối tượng Result chứa thông tin của tất cả các cuộc trò chuyện
      * @author wangshuai
      * @date 2025/12/11 11:42
      */
@@ -178,7 +178,7 @@ public class AiragChatController {
     }
 
     /**
-     * 删除会话
+     * Xóa phiên trò chuyện
      *
      * @param id
      * @return
@@ -192,7 +192,7 @@ public class AiragChatController {
     }
 
     /**
-     * 删除会话
+     * Xóa phiên trò chuyện
      *
      * @param id
      * @return
@@ -207,7 +207,7 @@ public class AiragChatController {
     }
 
     /**
-     * 更新会话标题
+     * Cập nhật tiêu đề phiên
      *
      * @param updateTitleParams
      * @return
@@ -221,9 +221,9 @@ public class AiragChatController {
     }
 
     /**
-     * 获取消息
+     * Lấy tin nhắn
      *
-     * @return 返回一个Result对象，包含消息的信息
+     * @return Trả về một đối tượng Result, chứa thông tin tin nhắn
      * @author chenrui
      * @date 2025/2/25 11:42
      */
@@ -235,7 +235,7 @@ public class AiragChatController {
     }
 
     /**
-     * 清空消息
+     * Xóa sạch tin nhắn
      *
      * @return
      * @author chenrui
@@ -248,7 +248,7 @@ public class AiragChatController {
     }    
     
     /**
-     * 清空消息
+     * Xóa sạch tin nhắn
      *
      * @return
      * @author wangshuai
@@ -262,7 +262,7 @@ public class AiragChatController {
     }
 
     /**
-     * 继续接收消息
+     * Tiếp tục nhận tin nhắn
      *
      * @param requestId
      * @return
@@ -277,10 +277,10 @@ public class AiragChatController {
 
 
     /**
-     * 根据请求ID停止某个请求的处理
+     * Dừng xử lý một yêu cầu theo ID yêu cầu
      *
-     * @param requestId 请求的唯一标识符，用于识别和停止特定的请求
-     * @return 返回一个Result对象，表示停止请求的结果
+     * @param requestId Định danh duy nhất của yêu cầu, dùng để nhận diện và dừng yêu cầu cụ thể
+     * @return Trả về một đối tượng Result, biểu thị kết quả dừng yêu cầu
      * @author chenrui
      * @date 2025/2/25 11:42
      */
@@ -292,8 +292,8 @@ public class AiragChatController {
 
 
     /**
-     * 上传文件
-     * for [QQYUN-12135]AI聊天，上传图片提示非法token
+     * Tải lên tệp
+     * for [QQYUN-12135]AI Trò chuyện, nhắc nhở tải lên hình ảnh không hợp lệ token
      *
      * @param request
      * @param response
@@ -306,7 +306,7 @@ public class AiragChatController {
     @PostMapping(value = "/upload")
     public Result<?> upload(HttpServletRequest request, HttpServletResponse response) throws Exception {
         rateLimitService.checkUploadLimit(request);
-        // 匿名上传必须携带已发布应用的分享令牌；登录用户放行
+        // Tải lên ẩn danh phải mang theo token chia sẻ của ứng dụng đã phát hành; người dùng đã đăng nhập được cho qua
         try {
             chatService.validateAnonymousShareAccess(request.getParameter("appId"), request.getParameter("shareToken"));
         } catch (JeecgBootException e) {
@@ -316,7 +316,7 @@ public class AiragChatController {
         String bizPath = "airag";
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        // 获取上传文件对象
+        // Lấy đối tượng tệp tải lên
         MultipartFile file = multipartRequest.getFile("file");
         String savePath;
         if (CommonConstant.UPLOAD_TYPE_LOCAL.equals(uploadType)) {
@@ -331,7 +331,7 @@ public class AiragChatController {
     }
 
     /**
-     * ai海报生成
+     * ai Tạo áp phích
      * @return
      */
     @PostMapping("/genAiPoster")
@@ -340,9 +340,9 @@ public class AiragChatController {
         return Result.OK(imageUrl);
     }
 
-    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】AI海报生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo áp phích AI chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
     /**
-     * 异步提交AI海报生成任务，立即返回taskId
+     * Gửi bất đồng bộ nhiệm vụ tạo poster AI, trả về ngay lập tức taskId
      */
     @PostMapping("/genAiPosterAsync")
     public Result<String> genAiPosterAsync(@RequestBody AiDrawGenerateVo aiDrawGenerateVo) {
@@ -351,18 +351,18 @@ public class AiragChatController {
     }
 
     /**
-     * 查询AI海报异步任务结果
+     * Truy vấn kết quả nhiệm vụ bất đồng bộ poster AI
      * status: pending / success / failed
      */
     @GetMapping("/getAiPosterResult/{taskId}")
     public Result<?> getAiPosterResult(@PathVariable String taskId) {
         return chatService.getAiPosterResult(taskId);
     }
-    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】AI海报生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo áp phích AI chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
 
 
     /**
-     * 生成ai写作
+     * Tạo bài viết AI
      * 
      * @param aiWriteGenerateVo
      * @return

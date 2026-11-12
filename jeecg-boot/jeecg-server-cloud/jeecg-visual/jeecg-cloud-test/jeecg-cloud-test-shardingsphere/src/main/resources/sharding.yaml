@@ -1,7 +1,7 @@
-# !!!数据源名称要和动态数据源中配置的名称一致
+# !!!Tên nguồn dữ liệu phải khớp với tên đã cấu hình trong nguồn dữ liệu động
 databaseName: sharding-db
 
-# 具体参看官网文档说明
+# Xem chi tiết trong tài liệu chính thức
 dataSources:
   db_0:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
@@ -12,14 +12,14 @@ dataSources:
 
 rules:
   - !SHARDING
-    tables: # 数据分片规则配置
-      sys_log: # 逻辑表名称
-        actualDataNodes: db_0.sys_log$->{0..1} # 由数据源名 + 表名组成（参考 Inline 语法规则）
-        databaseStrategy: # 分库策略，缺省表示使用默认分库策略，以下的分片策略只能选其一
+    tables: # Cấu hình quy tắc phân mảnh dữ liệu
+      sys_log: # Tên bảng logic
+        actualDataNodes: db_0.sys_log$->{0..1} # Do tên nguồn dữ liệu + và tên bảng tạo thành (tham khảo quy tắc cú pháp Inline)
+        databaseStrategy: # Chiến lược chia cơ sở dữ liệu, mặc định nghĩa là dùng chiến lược chia cơ sở dữ liệu mặc định, các chiến lược phân mảnh dưới đây chỉ được chọn một
           none:
-        tableStrategy: # 分表策略
-          standard: # 用于单分片键的标准分片场景
-            shardingColumn: log_type # 分片列名称
+        tableStrategy: # Chiến lược chia bảng
+          standard: # Dùng cho kịch bản phân mảnh chuẩn với một khóa phân mảnh duy nhất
+            shardingColumn: log_type # Tên cột phân mảnh
             shardingAlgorithmName: user_inline
         keyGenerateStrategy:
           column: id
@@ -29,7 +29,7 @@ rules:
         type: SNOWFLAKE
         props:
           worker-id: 123
-    # 分片算法配置
+    # Cấu hình thuật toán phân mảnh
     shardingAlgorithms:
       user_inline:
         type: INLINE

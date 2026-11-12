@@ -7,7 +7,7 @@ import org.jeecg.modules.demo.test.entity.JeecgOrderMain;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @Description: 订单
+ * @Description: Đơn hàng
  * @Author: jeecg-boot
  * @Date:  2019-02-15
  * @Version: V1.0

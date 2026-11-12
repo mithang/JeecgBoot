@@ -16,8 +16,8 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
 import java.util.*;
 
-/** 已使用knife4j-gateway支持该功能
- * 聚合各个服务的swagger接口
+/** Đã sử dụng knife4j-gateway hỗ trợ chức năng này
+ * Tổng hợp API swagger của các service
  * @author zyf
  * @date: 2022/4/21 10:55
  */
@@ -26,21 +26,21 @@ import java.util.*;
 @Primary
 public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
     /**
-     * swagger2默认的url后缀
+     * swagger2 Hậu tố url mặc định
      */
     private static final String SWAGGER2URL = "/v3/api-docs";
 
     /**
-     * 网关路由
+     * Route gateway
      */
     private final RouteLocator routeLocator;
     /**
-     * Nacos名字服务
+     * Nacos Dịch vụ đặt tên
      */
     private NamingService naming;
 
     /**
-     * nacos服务地址
+     * nacos Địa chỉ dịch vụ
      */
     @Value("${spring.cloud.nacos.discovery.server-addr}")
     private String serverAddr;
@@ -68,13 +68,13 @@ public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
     private String password;
 
     /**
-     * Swagger中需要排除的服务
+     * Swagger trong đó các service cần loại trừ
      */
     private String[] excludeServiceIds=new String[]{"jeecg-cloud-monitor"};
 
 
     /**
-     * 网关应用名称
+     * Tên ứng dụng gateway
      */
     @Value("${spring.application.name}")
     private String self;
@@ -88,21 +88,21 @@ public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
     public List<SwaggerResource> get() {
         List<SwaggerResource> resources = new ArrayList<>();
         List<String> routeHosts = new ArrayList<>();
-        // 获取所有可用的host：serviceId
+        // Lấy tất cả các host khả dụng:serviceId
         routeLocator.getRoutes().filter(route -> route.getUri().getHost() != null)
                 .filter(route -> !self.equals(route.getUri().getHost()))
                 .subscribe(route ->{
-                    // 代码逻辑说明: 过滤掉无效路由,避免接口文档报错无法打开
+                    // Giải thích logic mã: Lọc bỏ route không hợp lệ,Tránh tài liệu API báo lỗi không mở được
                     boolean hasRoute=checkRoute(route.getId());
                     if(hasRoute){
                         routeHosts.add(route.getUri().getHost());
                     }
                 });
 
-        // 记录已经添加过的server，存在同一个应用注册了多个服务在nacos上
+        // Ghi lại server đã thêm, tồn tại trường hợp cùng một ứng dụng đăng ký nhiều service trên nacos
         Set<String> dealed = new HashSet<>();
         routeHosts.forEach(instance -> {
-            // 拼接url
+            // đã ghép nối url
             String url = "/" + instance.toLowerCase() + SWAGGER2URL;
             if (!dealed.contains(url)) {
                 dealed.add(url);
@@ -111,7 +111,7 @@ public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
                 swaggerResource.setUrl(url);
                 swaggerResource.setSwaggerVersion("2.0");
                 swaggerResource.setName(instance);
-                //Swagger排除不展示的服务
+                //Swagger Loại trừ service không hiển thị
                 if(!ArrayUtil.contains(excludeServiceIds,instance)){
                     resources.add(swaggerResource);
                 }
@@ -121,14 +121,14 @@ public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
     }
 
     /**
-     * 检测nacos中是否有健康实例
+     * Kiểm tra xem trong nacos có instance khỏe mạnh không
      * @param routeId
      * @return
      */
     private Boolean checkRoute(String routeId) {
         Boolean hasRoute = false;
         try {
-            //修复使用带命名空间启动网关swagger看不到接口文档的问题
+            //Sửa lỗi khi khởi động gateway với namespace thì swagger không xem được tài liệu API
             Properties properties=new Properties();
             properties.setProperty("serverAddr",serverAddr);
             if(namespace!=null && !"".equals(namespace)){
@@ -141,7 +141,7 @@ public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
             if(password!=null && !"".equals(password)){
                 properties.setProperty("password",password);
             }
-            //【issues/5115】因swagger文档导致gateway内存溢出
+            //【issues/5115】Do tài liệu swagger gây tràn bộ nhớ gateway
             if (this.naming == null) {
                 this.naming = NamingFactory.createNamingService(properties);
             }

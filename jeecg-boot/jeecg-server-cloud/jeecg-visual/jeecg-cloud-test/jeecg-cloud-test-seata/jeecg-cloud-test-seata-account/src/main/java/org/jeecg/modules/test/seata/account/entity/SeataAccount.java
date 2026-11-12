@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @Description: 账户
+ * @Description: Tài khoản
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
@@ -23,7 +23,7 @@ public class SeataAccount {
     private Long id;
 
     /**
-     * 余额
+     * Số dư
      */
     private BigDecimal balance;
 

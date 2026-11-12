@@ -5,18 +5,18 @@ import lombok.Getter;
 /**
  * @author chenrui
  * @ClassName: TitleLevelEnum
- * @Description: 标题级别
- * @date 2024年5月4日07:38:30
+ * @Description: Cấp độ tiêu đề
+ * @date 2024 năm ngày 4 tháng 5 07:38:30
  */
 @Getter
 public enum WordTitleEnum {
 
-    FIRST("first", "标题1"),
-    SECOND("second", "标题2"),
-    THIRD("third", "标题3"),
-    FOURTH("fourth", "标题4"),
-    FIFTH("fifth", "标题5"),
-    SIXTH("sixth", "标题6");
+    FIRST("first", "Tiêu đề 1"),
+    SECOND("second", "Tiêu đề 2"),
+    THIRD("third", "Tiêu đề 3"),
+    FOURTH("fourth", "Tiêu đề 4"),
+    FIFTH("fifth", "Tiêu đề 5"),
+    SIXTH("sixth", "Tiêu đề 6");
 
     WordTitleEnum(String code, String name) {
         this.code = code;

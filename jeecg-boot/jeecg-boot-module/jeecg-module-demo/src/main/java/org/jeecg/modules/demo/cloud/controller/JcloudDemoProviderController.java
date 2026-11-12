@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.annotation.Resource;
 
 /**
- * 服务端提供方——feign接口
- * 【提供给system-start调用测试，看feign是否畅通】
+ * Phía cung cấp dịch vụ — API feign
+ * 【Cung cấp cho system-start gọi kiểm tra， xem feign có thông suốt không】
  * @author: jeecg-boot
  */
 @Slf4j
@@ -26,7 +26,7 @@ public class JcloudDemoProviderController {
     @GetMapping("/getMessage")
     public String getMessage(@RequestParam(name = "name") String name) {
         String msg = jcloudDemoService.getMessage(name);
-        log.info(" 微服务被调用：{} ",msg);
+        log.info(" Microservice được gọi：{} ",msg);
         return msg;
     }
 

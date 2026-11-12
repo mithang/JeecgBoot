@@ -1,9 +1,9 @@
-//计划完成表的当前所选
+//Lựa chọn hiện tại của bảng hoàn thành kế hoạch
 var indexnum = 0;
 var color=['#F35331','#2499F8','#3DF098','#33B734'];
 var fontColor='#FFF';
 
-//定义进度条组件和属性
+//Định nghĩa component thanh tiến độ và thuộc tính
 var y_gauge1 =null;
 var y_gauge2 =null;
 var y_gauge3 =null;
@@ -11,11 +11,11 @@ var y_gauge4 =null;
 var m_gauge1 =null;
 var option_Progress =null;
 
-//订单情况螺旋图
+//Biểu đồ xoắn ốc tình hình đơn hàng
 var orderStatus=null;
 var orderStatus_option =null;
 
-//定义仪表盘组件和属性
+//Định nghĩa component dashboard và thuộc tính
 var gauge1 =null;
 var gauge2 =null;
 var gauge3 =null;
@@ -23,29 +23,29 @@ var gauge4 =null;
 var gauge5 =null;
 var option_gauge =null;
 
-//产品饼图组件和属性
+//Thành phần và thuộc tính biểu đồ tròn sản phẩm
 var productPie=null;
 var productPie_option=null;
 
-//业务进展图组件和属性
+//Thành phần và thuộc tính biểu đồ tiến triển kinh doanh
 var businessProgress=null;
 var businessProgress_placeHoledStyle = null;
 var businessProgress_dataStyle =null;
 var businessProgress_option=null;
 
-//生产质量堆积图组件和属性
+//Định nghĩa component biểu đồ chồng chất chất lượng sản xuất và thuộc tính
 var quality_chart = null;
 var quality_option=null;
 
-//词云组件和属性
+//Thành phần và thuộc tính đám mây từ
 var wordCloud= null;
 var wordCloud_option=null;
 
-//生产计划折线图组件和属性
+//Định nghĩa component biểu đồ đường kế hoạch sản xuất và thuộc tính
 var plan_chart = null;
 var plan_option=null;
 
-//环形图的风格定义
+//Định nghĩa phong cách biểu đồ hình tròn
 var dataStyle = {
 	normal: {
 		label: {show:false},
@@ -63,15 +63,15 @@ var placeHolderStyle = {
 	}
 };
 
-//最大订单号
+//Mã đơn hàng lớn nhất
 var lastOrderNumber=1;
 
 $(document).ready(function ()
 {	
-	//环形进度条设置对象	
+	//Đối tượng cài đặt thanh tiến độ hình tròn	
 	option_Progress={
 		title : {
-			text: '目前进度',
+			text: 'Tiến độ hiện tại',
 			subtext: '50%',
 			x: 'center',
 			y: 90,
@@ -96,7 +96,7 @@ $(document).ready(function ()
 			x: '0%',
 			tooltip:{show:false},		
 			data : [{
-				name:'达成率', 
+				name:'Tỷ lệ đạt được', 
 				value:79,
 				itemStyle:{color :'rgba(0,153,255,0.8)'},
 				hoverAnimation: false, 
@@ -162,13 +162,13 @@ $(document).ready(function ()
 		}]
 	};	
 	
-	//年仪表盘
+	//Dashboard năm
 	y_gauge1 = echarts.init(document.getElementById('y_gauge1'));
 	y_gauge2 = echarts.init(document.getElementById('y_gauge2'));
 	y_gauge3 = echarts.init(document.getElementById('y_gauge3'));
 	y_gauge4 = echarts.init(document.getElementById('y_gauge4'));
 	
-	//订单完成情况螺旋图
+	//Biểu đồ xoắn ốc tình hình hoàn thành đơn hàng
 	var yearPlanData=[];
 	var yearOrderData=[];
 	var differenceData=[];
@@ -181,7 +181,7 @@ $(document).ready(function ()
 		yearOrderData.push(Math.round(Math.random()*yearPlanData[i]));
 		differenceData.push(yearPlanData[i]-yearOrderData[i]);
 		visibityData.push(yearOrderData[i]);
-		xAxisData.push((i+1).toString()+"月");
+		xAxisData.push((i+1).toString()+"tháng");
 	}
 	orderStatus= echarts.init(document.getElementById('orderStatus'));
 	orderStatus_option={
@@ -192,7 +192,7 @@ $(document).ready(function ()
 				return params[0].name + '<br/>'
 					   + params[0].seriesName + ' : ' + params[0].value + '<br/>'
 					   + params[1].seriesName + ' : ' + params[1].value + '<br/>'
-					   +'完成率：'
+					   +'Tỷ lệ hoàn thành: '
 					   + (params[0].value > 0 ? (params[1].value/params[0].value*100).toFixed(2)+'%' : '-') 
 					   + '<br/>'
 			},
@@ -209,7 +209,7 @@ $(document).ready(function ()
 				fontSize:24,
 				fontFamily:'微软雅黑'
 			},
-			data:['计划生产','已接订单']
+			data:['Sản xuất theo kế hoạch','Đơn hàng đã nhận']
 		},
 		xAxis: {
 			data: xAxisData,
@@ -252,7 +252,7 @@ $(document).ready(function ()
 			left: 100
 		},
 		series : [{
-				name:'计划生产',
+				name:'Sản xuất theo kế hoạch',
 				type:'line',
 				smooth :true,
 				symbol: 'circle',
@@ -262,7 +262,7 @@ $(document).ready(function ()
 				data:yearPlanData
 			},
 			{
-				name:'已接订单',
+				name:'Đơn hàng đã nhận',
 				type:'line',
 				smooth :true,
 				symbol: 'circle',
@@ -279,7 +279,7 @@ $(document).ready(function ()
 				data:yearOrderData
 			},
 			{
-				name:'不可见',
+				name:'Không hiển thị',
 				type:'bar',
 				stack: '1',
 				barWidth: 1,
@@ -294,7 +294,7 @@ $(document).ready(function ()
 				data:visibityData
 			},
 			{
-				name:'变化',
+				name:'Thay đổi',
 				type:'bar',
 				stack: '1',
 				barWidth: 1,
@@ -305,9 +305,9 @@ $(document).ready(function ()
 	}
 	orderStatus.setOption(orderStatus_option);
 	
-	//产品销售的环形图
-	var productLegend=[['轿车1','轿车2','轿车3','轿车4','轿车5','轿车6','轿车7','轿车8','轿车9'],['SUV1','SUV2','SUV3','SUV4'],['卡车1','卡车2','卡车3','卡车4','卡车5','卡车6']];
-	var productClassLegend=['轿车','SUV','卡车'];
+	//Biểu đồ vành khăn doanh số sản phẩm
+	var productLegend=[['Xe con 1','Xe con 2','Xe con 3','Xe con 4','Xe con 5','Xe con 6','Xe con 7','Xe con 8','Xe con 9'],['SUV1','SUV2','SUV3','SUV4'],['Xe tải 1','Xe tải 2','Xe tải 3','Xe tải 4','Xe tải 5','Xe tải 6']];
+	var productClassLegend=['Xe con','SUV','Xe tải'];
 	var productClassColor=['rgba(255,153,0,','rgba(153,204,102,','rgba(0,102,255,'];
 	var productClassData=[];
 	var productData=[];
@@ -331,7 +331,7 @@ $(document).ready(function ()
 	productPie=echarts.init(document.getElementById('productPie'));
 	productPie_option={
 		title : {
-			text: '销售额',			
+			text: 'Doanh số bán hàng',			
 			x: 'center',
 			y: 'center',
 			itemGap: 10,
@@ -353,7 +353,7 @@ $(document).ready(function ()
 		},
 		series : [
 			{
-				name:'类别',
+				name:'Danh mục',
 				type:'pie',
 				selectedMode: 'single',
 				radius : ['20%','40%'],				
@@ -378,7 +378,7 @@ $(document).ready(function ()
 				data:productClassData
 			},
 			{
-				name:'车型',
+				name:'Mẫu xe',
 				type:'pie',
 				radius : ['40%','70%'],				
 				width: '35%',
@@ -402,7 +402,7 @@ $(document).ready(function ()
 	};
 	productPie.setOption(productPie_option);
 	
-	//业务进展图
+	//Biểu đồ tiến triển nghiệp vụ
 	businessProgress=echarts.init(document.getElementById('businessProgress'));	
 	businessProgress_placeHoledStyle = {
 		normal:{
@@ -456,7 +456,7 @@ $(document).ready(function ()
 				color:'#B7E1FF',
 				fontSize:24
 			},
-			data:['项目投标', '投标进度','项目进行', '项目交付']
+			data:['Đấu thầu dự án', 'Tiến độ đấu thầu','Dự án đang thực hiện', 'Bàn giao dự án']
 		},
 		toolbox: {show : false},
 		grid: {
@@ -478,7 +478,7 @@ $(document).ready(function ()
 		yAxis : [
 			{
 				type : 'category',
-				data : ['重大业务1', '重大业务2', '重大业务3', '重大业务4'],
+				data : ['Nghiệp vụ trọng điểm 1', 'Nghiệp vụ trọng điểm 2', 'Nghiệp vụ trọng điểm 3', 'Nghiệp vụ trọng điểm 4'],
 				axisLabel: {
 					textStyle: {
 						color: '#B7E1FF',
@@ -497,58 +497,58 @@ $(document).ready(function ()
 		],
 		series : [
 			{
-				name:'项目投标',
+				name:'Đấu thầu dự án',
 				type:'bar',
-				stack: '进度',
+				stack: 'Tiến độ',
 				itemStyle : businessProgress_dataStyle,
 				data:[100, 100, 100, 70]
 			},
 			{
-				name:'项目投标',
+				name:'Đấu thầu dự án',
 				type:'bar',
-				stack: '进度',
+				stack: 'Tiến độ',
 				itemStyle: businessProgress_placeHoledStyle,
 				data:[0, 0, 0, 30]
 			},
 			{
-				name:'投标进度',
+				name:'Tiến độ đấu thầu',
 				type:'bar',
-				stack: '进度',
+				stack: 'Tiến độ',
 				itemStyle : businessProgress_dataStyle,
 				data:[100, 100, 42, 0]
 			},
 			{
-				name:'投标进度',
+				name:'Tiến độ đấu thầu',
 				type:'bar',
-				stack: '进度',
+				stack: 'Tiến độ',
 				itemStyle: businessProgress_placeHoledStyle,
 				data:[0, 0, 58, 100]
 			},
 			{
-				name:'项目进行',
+				name:'Dự án đang thực hiện',
 				type:'bar',
-				stack: '进度',
+				stack: 'Tiến độ',
 				itemStyle : businessProgress_dataStyle,
 				data:[100, 100, 0, 0]
 			},
 			{
-				name:'项目进行',
+				name:'Dự án đang thực hiện',
 				type:'bar',
-				stack: '进度',
+				stack: 'Tiến độ',
 				itemStyle: businessProgress_placeHoledStyle,
 				data:[0, 0, 100, 100]
 			},
 			{
-				name:'项目交付',
+				name:'Bàn giao dự án',
 				type:'bar',
-				stack: '进度',
+				stack: 'Tiến độ',
 				itemStyle : businessProgress_dataStyle,
 				data:[71, 50, 0, 0]
 			},
 			{
-				name:'项目交付',
+				name:'Bàn giao dự án',
 				type:'bar',
-				stack: '进度',
+				stack: 'Tiến độ',
 				itemStyle: businessProgress_placeHoledStyle,
 				data:[29, 50, 100, 100]
 			}
@@ -557,26 +557,26 @@ $(document).ready(function ()
 	businessProgress.setOption(businessProgress_option);
 	
 	
-	//监控仪表盘
+	//Dashboard giám sát
 	/*option_gauge = {		
 		title: {
-			text: '', //标题文本内容
+			text: '', //Nội dung văn bản tiêu đề
 		},
-		toolbox: { //可视化的工具箱
+		toolbox: { //Hộp công cụ trực quan hóa
 			show: false,                
 		},
-		tooltip: { //弹窗组件
+		tooltip: { //Component popup
 			formatter: "{a} <br/>{b} : {c}%"
 		},			
 		series: [{          
 			type: 'gauge',
-			axisLine: {// 坐标轴线
-				lineStyle: { // 属性lineStyle控制线条样式
+			axisLine: {// Đường trục tọa độ
+				lineStyle: { // Thuộc tính lineStyle điều khiển kiểu đường kẻ
 					color:[[0.2, color[0]],[0.8, color[1]],[1, color[0]]],
 					width: 18
 				 }
 			},				 
-			splitLine: { // 分隔线
+			splitLine: { // Đường phân cách
 					show:true,
 					length: 18,
 					lineStyle: {                            
@@ -584,7 +584,7 @@ $(document).ready(function ()
 						width: 1
 					}
 				},
-			axisTick : { //刻度线样式（及短线样式）
+			axisTick : { //Kiểu đường vạch chia (và kiểu đường ngắn)
 				show:false,
 				lineStyle: {                    
 						color: 'auto',
@@ -598,7 +598,7 @@ $(document).ready(function ()
 				fontFamily:'Verdana, Geneva, sans-serif'
 			},
 			title: {					
-					textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+					textStyle: { // Các thuộc tính còn lại mặc định dùng kiểu văn bản toàn cục, xem chi tiết TEXTSTYLE
 						fontWeight: 'bolder',
 						fontSize: 20,                          
 						color: '#FFF'
@@ -622,7 +622,7 @@ $(document).ready(function ()
 				},
 				offsetCenter: [0, '90%']
 			},
-			data: [{value: 45, name: '水'}]
+			data: [{value: 45, name: 'Nước'}]
 		}]
      };
 		
@@ -633,27 +633,27 @@ $(document).ready(function ()
 	gauge5 = echarts.init(document.getElementById('gauge5'));
 	option_gauge.series[0].axisLine.lineStyle.color=[[0.2, color[0]],[0.8, color[1]],[1, color[2]]];
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="水";
+	option_gauge.series[0].data[0].name ="Nước";
 	$('#vg1').html(option_gauge.series[0].data[0].value);
 	gauge1.setOption(option_gauge);
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="电";
+	option_gauge.series[0].data[0].name ="Điện";
 	$('#vg2').html(option_gauge.series[0].data[0].value);
 	gauge2.setOption(option_gauge);
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="天然气";
+	option_gauge.series[0].data[0].name ="Khí tự nhiên";
 	$('#vg3').html(option_gauge.series[0].data[0].value);
 	gauge3.setOption(option_gauge);
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="压缩空气";
+	option_gauge.series[0].data[0].name ="Khí nén";
 	$('#vg4').html(option_gauge.series[0].data[0].value);
 	gauge4.setOption(option_gauge);
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="蒸汽";
+	option_gauge.series[0].data[0].name ="Hơi nước";
 	$('#vg5').html(option_gauge.series[0].data[0].value);
 	gauge5.setOption(option_gauge);*/
 	
-	//生产质量堆积图
+	//Biểu đồ chồng chất chất lượng sản xuất
 	quality_chart = echarts.init(document.getElementById('quality'));
 	quality_option={
 		title: {			
@@ -666,7 +666,7 @@ $(document).ready(function ()
 			}
 		},
 		xAxis: {
-			data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+			data: ['1 tháng','2 tháng','3 tháng','4 tháng','5 tháng','6 tháng','7 tháng','8 tháng','9 tháng','10 tháng','11 tháng','12 tháng'],
 			axisLabel: {
 				textStyle: {
 					color: '#B7E1FF',
@@ -720,11 +720,11 @@ $(document).ready(function ()
 				fontSize:24,
 				fontFamily:'微软雅黑'
 			},
-			data:['AUDIT分数1','AUDIT分数']
+			data:['AUDIT Điểm số 1','AUDIT Điểm số']
 		},
 		series: [
 			{
-				name: 'AUDIT分数1',
+				name: 'AUDIT Điểm số 1',
 				type: 'bar',
 				stack: 'one',
 				itemStyle: 
@@ -735,7 +735,7 @@ $(document).ready(function ()
 				data:[2200,2900,3680,2200,2900,3680,2200,2900,3680,2200,2900,3680]
 			},
 			{
-				name: 'AUDIT分数',
+				name: 'AUDIT Điểm số',
 				type: 'bar',
 				stack: 'one',
 				itemStyle: {
@@ -758,12 +758,12 @@ $(document).ready(function ()
 	};
 	quality_chart.setOption(quality_option);
 	
-	//生产计划折线图
+	//Biểu đồ đường kế hoạch sản xuất
 	var plan_data1=[];
 	var plan_data2=[];
 	var plan_xAxis=[];
 	for (var i = 1; i <= 12; i++) {
-		plan_xAxis.push(i+"月");
+		plan_xAxis.push(i+"tháng");
 		plan_data1.push(Math.round(Math.random() * 100));
 		plan_data2.push(Math.round(Math.random() * 100));
 	}
@@ -823,11 +823,11 @@ $(document).ready(function ()
 				color: '#F00',
 				fontSize:24
 			},			
-			data:['计划完成数','实际完成数']
+			data:['Số lượng hoàn thành theo kế hoạch','Số lượng hoàn thành thực tế']
 		},
 		series: [
 			{
-				name: '计划完成数',
+				name: 'Số lượng hoàn thành theo kế hoạch',
 				type: 'bar',
 				itemStyle: 
 				{
@@ -838,7 +838,7 @@ $(document).ready(function ()
 				data:plan_data1
 			},
 			{
-				name: '实际完成数',
+				name: 'Số lượng hoàn thành thực tế',
 				type: 'line',
 				itemStyle: {
 					normal: {
@@ -867,17 +867,17 @@ $(document).ready(function ()
 	};
 	plan_chart.setOption(plan_option);
 	
-	//轮番显示tips
+	//Hiển thị luân phiên tips
 	/*function clock(){
 	  showToolTip_highlight(plan_chart);	  
 	}
 	setInterval(clock, 5000);*/
 	
-	//词云
+	//Đám mây từ
 	var cloudData=[];
 	for(var i=0;i<30;i++)
 	{
-		cloudData.push({name:'文字云字符'+i.toString(),value:Math.random()*1000});
+		cloudData.push({name:'Ký tự đám mây từ'+i.toString(),value:Math.random()*1000});
 	}
 	wordCloud=echarts.init(document.getElementById('wordCloud'));
 	wordCloud_option={
@@ -913,7 +913,7 @@ $(document).ready(function ()
 	
 	wordCloud.setOption(wordCloud_option);
 	
-	//地图开始
+	//Bắt đầu bản đồ
 	var map_chart = echarts.init(document.getElementById('map'));
 	/*map_option = {			
 		title : {show:false},
@@ -924,7 +924,7 @@ $(document).ready(function ()
 			},
 			trigger: 'item',
 			formatter:function(d){
-				return (d.value>=0)?d.name+'</br>战略力度：'+(d.value).toFixed(2):'';
+				return (d.value>=0)?d.name+'</br>Cường độ chiến lược：'+(d.value).toFixed(2):'';
 			},
 			textStyle: {
 				color: '#FFF',
@@ -949,7 +949,7 @@ $(document).ready(function ()
 			]
 		},		
 		series: [{
-			name: '布局',  
+			name: 'Bố cục',  
 			type: 'map',  
 			mapType: 'china',  
 			roam: false, 
@@ -970,34 +970,34 @@ $(document).ready(function ()
 				borderColor : 'rgba(255,0,0,0.8)'
 			},
 			data:[
-				{name: '北京', value:Math.random()*100},
-				{name: '天津', value:Math.random()*100},
-				{name: '上海', value:Math.random()*100},
-				{name: '重庆', value:Math.random()*100},
-				{name: '河北', value:Math.random()*100},
-				{name: '河南', value:Math.random()*100},				
-				{name: '辽宁', value:Math.random()*100},
-				{name: '黑龙江', value:Math.random()*100},
-				{name: '湖南', value:Math.random()*100},
-				{name: '安徽', value:Math.random()*100},
-				{name: '山东', value:Math.random()*100},				
-				{name: '江苏', value:Math.random()*100},
-				{name: '浙江', value:Math.random()*100},
-				{name: '江西', value:Math.random()*100},
-				{name: '湖北', value:Math.random()*100},
-				{name: '广西', value:Math.random()*100},
-				{name: '甘肃', value:Math.random()*100},
-				{name: '山西', value:Math.random()*100},
-				{name: '内蒙古', value:Math.random()*100},
-				{name: '陕西', value:Math.random()*100},
-				{name: '吉林', value:Math.random()*100},
-				{name: '福建', value:Math.random()*100},
-				{name: '贵州', value:Math.random()*100},
-				{name: '广东', value:Math.random()*100},
-				{name: '青海', value:Math.random()*100},				
-				{name: '四川', value:Math.random()*100},
-				{name: '宁夏', value:Math.random()*100},
-				{name: '海南', value:Math.random()*100}
+				{name: 'Bắc Kinh', value:Math.random()*100},
+				{name: 'Thiên Tân', value:Math.random()*100},
+				{name: 'Thượng Hải', value:Math.random()*100},
+				{name: 'Trùng Khánh', value:Math.random()*100},
+				{name: 'Hà Bắc', value:Math.random()*100},
+				{name: 'Hà Nam', value:Math.random()*100},				
+				{name: 'Liêu Ninh', value:Math.random()*100},
+				{name: 'Hắc Long Giang', value:Math.random()*100},
+				{name: 'Hồ Nam', value:Math.random()*100},
+				{name: 'An Huy', value:Math.random()*100},
+				{name: 'Sơn Đông', value:Math.random()*100},				
+				{name: 'Giang Tô', value:Math.random()*100},
+				{name: 'Chiết Giang', value:Math.random()*100},
+				{name: 'Giang Tây', value:Math.random()*100},
+				{name: 'Hồ Bắc', value:Math.random()*100},
+				{name: 'Quảng Tây', value:Math.random()*100},
+				{name: 'Cam Túc', value:Math.random()*100},
+				{name: 'Sơn Tây', value:Math.random()*100},
+				{name: 'Nội Mông', value:Math.random()*100},
+				{name: 'Thiểm Tây', value:Math.random()*100},
+				{name: 'Cát Lâm', value:Math.random()*100},
+				{name: 'Phúc Kiến', value:Math.random()*100},
+				{name: 'Quý Châu', value:Math.random()*100},
+				{name: 'Quảng Đông', value:Math.random()*100},
+				{name: 'Thanh Hải', value:Math.random()*100},				
+				{name: 'Tứ Xuyên', value:Math.random()*100},
+				{name: 'Ninh Hạ', value:Math.random()*100},
+				{name: 'Hải Nam', value:Math.random()*100}
 			]	
 		}]
 	};*/
@@ -1046,7 +1046,7 @@ $(document).ready(function ()
 			}
 		},
 		series: [{
-			name: '战略布局点',
+			name: 'Điểm bố trí chiến lược',
 			type: 'scatter',
 			coordinateSystem: 'geo',
 			zlevel: 1,
@@ -1067,7 +1067,7 @@ $(document).ready(function ()
 			data: mapData
 		},	
 		{
-			name: '战略布局TOP5',
+			name: 'Bố trí chiến lược TOP5',
 			type: 'effectScatter',
 			coordinateSystem: 'geo',
 			zlevel: 2,
@@ -1104,7 +1104,7 @@ $(document).ready(function ()
                 }).slice(0, 5)
 		},	
 		{
-			name: '点',
+			name: 'Điểm',
 			type: 'scatter',
 			coordinateSystem: 'geo',
 			symbol: 'pin',
@@ -1124,7 +1124,7 @@ $(document).ready(function ()
 			},
 			itemStyle: {
 				normal: {
-					color: 'rgba(246,33,87,1)', //标志颜色
+					color: 'rgba(246,33,87,1)', //Màu dấu hiệu
 				}
 			},
 			zlevel: 3,                
@@ -1138,7 +1138,7 @@ $(document).ready(function ()
 	
 	resresh();
 	
-	//开始定时刷新
+	//Bắt đầu làm mới định kỳ
 	setInterval(resresh, 5*1000);
 });
 
@@ -1163,7 +1163,7 @@ function showToolTip_highlight(mychart)
 {  
   var echartObj = mychart;
   	  
-  // 高亮当前图形
+  // Làm nổi bật hình hiện tại
   var highlight =setInterval(function() 
   {
 	  echartObj.dispatchAction({
@@ -1183,12 +1183,12 @@ function showToolTip_highlight(mychart)
   },1000);
 }
 
-//定时刷新数据
+//Làm mới dữ liệu định kỳ
 function resresh()
 {
 	var myDate = new Date();
 	
-	// $('#refresh').html("<img src=\"images/wait.gif\" align=\"absmiddle\"><span>数据刷新中...</span>");
+	// $('#refresh').html("<img src=\"images/wait.gif\" align=\"absmiddle\"><span>Đang làm mới dữ liệu...</span>");
 	$('#currentDate').html(myDate.getFullYear()+"/"+insertZero(myDate.getMonth()+1)+"/"+insertZero(myDate.getDate()));	
 	
 	var maxg=Math.round(Math.random()*500)+400;
@@ -1196,72 +1196,72 @@ function resresh()
 	var n2=Math.round(Math.random()*(n1-50))+50;	
 	var n3=(n2/maxg*100).toFixed(2);	
 	
-	//年进度条
-	option_Progress.title.text ="计划生产";
+	//Thanh tiến độ năm
+	option_Progress.title.text ="Sản xuất theo kế hoạch";
 	option_Progress.series[0].data[0].value = maxg;
-	option_Progress.title.subtext =maxg+"台";
+	option_Progress.title.subtext =maxg+"máy";
 	option_Progress.series[0].data[1].value =0;
 	y_gauge1.setOption(option_Progress);
 	
-	option_Progress.title.text ="已接订单";
+	option_Progress.title.text ="Đơn hàng đã nhận";
 	option_Progress.series[0].data[0].value = n1;
-	option_Progress.title.subtext =n1+"台";
+	option_Progress.title.subtext =n1+"máy";
 	option_Progress.series[0].data[1].value =(maxg-n1);
 	y_gauge2.setOption(option_Progress);
 	
-	option_Progress.title.text ="已经完成";
+	option_Progress.title.text ="Đã hoàn thành";
 	option_Progress.series[0].data[0].value = n2;
-	option_Progress.title.subtext =n2+"台";
+	option_Progress.title.subtext =n2+"máy";
 	option_Progress.series[0].data[1].value =(maxg-n2);
 	y_gauge3.setOption(option_Progress);
 	
-	option_Progress.title.text ="计划完成率";
+	option_Progress.title.text ="Tỷ lệ hoàn thành theo kế hoạch";
 	option_Progress.series[0].data[0].value = n3;
 	option_Progress.title.subtext =n3+"%";
 	option_Progress.series[0].data[1].value =(100-n3);
 	y_gauge4.setOption(option_Progress);
 	
-	//仪表盘刷新
+	//Làm mới dashboard
 	/*option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="水";
+	option_gauge.series[0].data[0].name ="Nước";
 	$('#vg1').html(option_gauge.series[0].data[0].value);
 	gauge1.setOption(option_gauge);
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="电";
+	option_gauge.series[0].data[0].name ="Điện";
 	$('#vg2').html(option_gauge.series[0].data[0].value);
 	gauge2.setOption(option_gauge);
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="天然气";
+	option_gauge.series[0].data[0].name ="Khí tự nhiên";
 	$('#vg3').html(option_gauge.series[0].data[0].value);
 	gauge3.setOption(option_gauge);
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="压缩空气";
+	option_gauge.series[0].data[0].name ="Khí nén";
 	$('#vg4').html(option_gauge.series[0].data[0].value);
 	gauge4.setOption(option_gauge);
 	option_gauge.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-	option_gauge.series[0].data[0].name ="蒸汽";
+	option_gauge.series[0].data[0].name ="Hơi nước";
 	$('#vg5').html(option_gauge.series[0].data[0].value);
 	gauge5.setOption(option_gauge);	*/
 			
-	//显示最后更新时间
-	$('#refresh').html("<span id=\"refreshTime\">最后刷新时间："+myDate.toLocaleDateString()+" "+myDate.toLocaleTimeString()+"</span>");
+	//Hiển thị thời gian cập nhật cuối cùng
+	$('#refresh').html("<span id=\"refreshTime\">Thời gian làm mới lần cuối:"+myDate.toLocaleDateString()+" "+myDate.toLocaleTimeString()+"</span>");
 }
 
-//生成订单号
+//Tạo mã đơn hàng
 function getOrderNumber(n)
 {
 	var no="000000"+n.toString();
 	return no.substring(no.length-6);
 }
 
-//前面补0
+//Bổ sung ở phía trước 0
 function insertZero(n)
 {
 	var no="000000"+n.toString();
 	return no.substring(no.length-2);
 }
 
-//打开模态窗口
+//Mở cửa sổ modal
 function openDialog(DlgName)
 {		
 	$('#'+DlgName).dialog('open');	

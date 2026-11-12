@@ -8,83 +8,83 @@ import lombok.Data;
 /**
  * @author chenrui
  * @ClassName: DocTextDto
- * @Description: word文本实体类
+ * @Description: word Lớp thực thể văn bản
  * @date 2024-09-24 10:19:57
  */
 @Data
 public class WordTextDTO {
 
     /**
-     * @Fields type : 类型
+     * @Fields type : Loại
      * @author chenrui
      * @date 2024-09-29 08:53:27
      */
     private String type;
     /**
-     * @Fields value : 内容
+     * @Fields value : Nội dung
      * @author chenrui
      * @date 2024-09-24 10:20:12
      */
     private String value = "";
 
     /**
-     * @Fields bold : 是否加粗 默认false
+     * @Fields bold : Có in đậm hay không, mặc định false
      * @author chenrui
      * @date 2024-09-24 10:20:33
      */
     private boolean bold = false;
 
     /**
-     * @Fields color : 字体颜色
+     * @Fields color : Màu chữ
      * @author chenrui
      * @date 2024-09-24 10:21:08
      */
     private String color;
 
     /**
-     * @Fields italic : 是否斜体 默认false
+     * @Fields italic : Có in nghiêng hay không, mặc định false
      * @author chenrui
      * @date 2024-09-24 10:21:25
      */
     private boolean italic = false;
 
     /**
-     * @Fields underline : 是否下划线 默认false
+     * @Fields underline : Có gạch chân hay không, mặc định false
      * @author chenrui
      * @date 2024-09-24 10:21:47
      */
     private boolean underline = false;
 
     /**
-     * @Fields strikeout : 删除线 默认false
+     * @Fields strikeout : Gạch ngang, mặc định false
      * @author chenrui
      * @date 2024-09-24 10:22:06
      */
     private boolean strikeout = false;
 
     /**
-     * @Fields size : 字号大小
+     * @Fields size : Cỡ chữ
      * @author chenrui
      * @date 2024-09-24 10:44:42
      */
     private int size;
 
     /**
-     * @Fields font : 字体，默认微软雅黑
+     * @Fields font : Phông chữ, mặc định Microsoft YaHei
      * @author chenrui
      * @date 2024-09-24 10:45:31
      */
     private String font = "微软雅黑";
 
     /**
-     * @Fields highlight : 高亮颜色
+     * @Fields highlight : Màu nổi bật
      * @author chenrui
      * @date 2024-09-25 11:20:23
      */
     private String highlight;
 
     /**
-     * @Fields rowFlex : 水平对齐方式，默认left
+     * @Fields rowFlex : Kiểu căn ngang, mặc định left
      * @author chenrui
      * @date 2024-09-27 09:12:18
      */

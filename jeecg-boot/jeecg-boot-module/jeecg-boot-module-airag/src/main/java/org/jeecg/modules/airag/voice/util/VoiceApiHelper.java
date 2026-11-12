@@ -19,7 +19,7 @@ import java.time.Duration;
 
 
 /**
-* @Description: <p>统一封装 语音 HTTP API 调用逻辑，供语音模块和视频模块复用</p>
+* @Description: <p>Đóng gói thống nhất logic gọi HTTP API giọng nói để module giọng nói và module video tái sử dụng</p>
 * 
 * @author: wangshuai
 * @date: 2026/3/13 16:19
@@ -36,10 +36,10 @@ public class VoiceApiHelper {
             .build();
 
     /**
-     * 调用 TTS API 生成语音文件（使用yml默认voice和speed）
+     * Gọi API TTS để tạo tệp giọng nói (dùng voice và speed mặc định trong yml)
      *
-     * @param text      要转换的文本
-     * @param audioPath 音频输出路径
+     * @param text      Văn bản cần chuyển đổi
+     * @param audioPath Đường dẫn xuất âm thanh
      */
     public void generateAudio(String text, Path audioPath) throws IOException, InterruptedException {
         AiChatConfig.VoiceModelConfig config = aiChatConfig.getAiModelVoice();
@@ -47,18 +47,18 @@ public class VoiceApiHelper {
     }
 
     /**
-     * 调用 TTS API 生成语音文件（自定义voice和speed）
+     * Gọi API TTS để tạo tệp giọng nói (tùy chỉnh voice và speed)
      *
-     * @param text      要转换的文本
-     * @param audioPath 音频输出路径
-     * @param voice     声色
-     * @param speed     语速
+     * @param text      Văn bản cần chuyển đổi
+     * @param audioPath Đường dẫn xuất âm thanh
+     * @param voice     Âm sắc
+     * @param speed     Tốc độ nói
      */
     public void generateAudio(String text, Path audioPath, String voice, double speed) throws IOException, InterruptedException {
         AiChatConfig.VoiceModelConfig config = aiChatConfig.getAiModelVoice();
         String apiHost = config.getApiHost();
 		if (apiHost == null || apiHost.isBlank()) {
-			throw new IllegalStateException("语音模型 api-host 未配置，请检查 jeecg.ai-chat.ai-model-voice.api-host");
+			throw new IllegalStateException("Mô hình giọng nói api-host Chưa cấu hình, vui lòng kiểm tra jeecg.ai-chat.ai-model-voice.api-host");
 		}
         String url = apiHost.endsWith("/") ? apiHost + "audio/speech" : apiHost + "/audio/speech";
 
@@ -69,7 +69,7 @@ public class VoiceApiHelper {
         body.put("speed", speed);
         body.put("response_format", "wav");
 
-        log.info("TTS请求: url={}, model={}, voice={}, speed={}, textLength={}", url, config.getModel(), voice, speed, text.length());
+        log.info("TTS Yêu cầu: url={}, model={}, voice={}, speed={}, textLength={}", url, config.getModel(), voice, speed, text.length());
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -82,13 +82,13 @@ public class VoiceApiHelper {
         HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
         if (response.statusCode() != 200) {
             String errorBody = new String(response.body().readAllBytes());
-            log.error("TTS API调用失败: status={}, body={}", response.statusCode(), errorBody);
-            throw new RuntimeException("TTS API调用失败，状态码: " + response.statusCode() + "，" + errorBody);
+            log.error("TTS API Gọi thất bại: status={}, body={}", response.statusCode(), errorBody);
+            throw new RuntimeException("TTS API Gọi thất bại, mã trạng thái: " + response.statusCode() + "，" + errorBody);
         }
 
         try (InputStream is = response.body()) {
             Files.copy(is, audioPath, StandardCopyOption.REPLACE_EXISTING);
         }
-        log.info("TTS语音已生成: {}", audioPath);
+        log.info("TTS Giọng nói đã được tạo: {}", audioPath);
     }
 }

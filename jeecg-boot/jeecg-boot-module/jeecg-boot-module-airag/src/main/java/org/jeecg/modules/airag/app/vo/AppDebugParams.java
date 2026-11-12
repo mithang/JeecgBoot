@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import org.jeecg.modules.airag.app.entity.AiragApp;
 
 /**
- * @Description: 应用调试入参
+ * @Description: Tham số đầu vào gỡ lỗi ứng dụng
  * @Author: chenrui
  * @Date: 2025/2/25 11:47
  */
@@ -13,7 +13,7 @@ import org.jeecg.modules.airag.app.entity.AiragApp;
 public class AppDebugParams extends ChatSendParams {
 
     /**
-     * 应用信息
+     * Thông tin ứng dụng
      */
     AiragApp app;
 

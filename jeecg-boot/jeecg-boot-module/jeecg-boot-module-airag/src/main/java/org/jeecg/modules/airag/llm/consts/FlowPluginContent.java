@@ -1,74 +1,74 @@
 package org.jeecg.modules.airag.llm.consts;
 
 /**
-* @Description: 流程插件常量
+* @Description: Hằng số plugin quy trình
 *
 * @author: wangshuai
 * @date: 2025/12/23 19:37
 */
 public interface FlowPluginContent {
     /**
-     * 名称
+     * Tên
      */
     String NAME = "name";
 
     /**
-     * 描述
+     * Mô tả
      */
     String DESCRIPTION = "description";
 
     /**
-     * 响应
+     * Phản hồi
      */
     String RESPONSES = "responses";
 
     /**
-     * 类型
+     * Loại
      */
     String TYPE = "type";
 
     /**
-     * 参数
+     * Tham số
      */
     String PARAMETERS = "parameters";
 
     /**
-     * 是否必须
+     * Có bắt buộc hay không
      */
     String REQUIRED = "required";
 
     /**
-     * 默认值
+     * Giá trị mặc định
      */
     String DEFAULT_VALUE = "defaultValue";
 
     /**
-     * 路径
+     * Đường dẫn
      */
     String PATH = "path";
 
     /**
-     * 方法
+     * Phương thức
      */
     String METHOD = "method";
 
     /**
-     * 位置
+     * Vị trí
      */
     String LOCATION = "location";
 
     /**
-     * 认证类型
+     * Loại xác thực
      */
     String AUTH_TYPE = "authType";
 
     /**
-     * token参数名称
+     * token Tên tham số
      */
     String TOKEN_PARAM_NAME = "tokenParamName";
 
     /**
-     * token参数值
+     * token Giá trị tham số
      */
     String TOKEN_PARAM_VALUE = "tokenParamValue";
 
@@ -78,137 +78,137 @@ public interface FlowPluginContent {
     String TOKEN = "token";
 
     /**
-     * Path位置
+     * Path Vị trí
      */
     String LOCATION_PATH = "Path";
 
     /**
-     * Header位置
+     * Header Vị trí
      */
     String LOCATION_HEADER = "Header";
 
     /**
-     * Query位置
+     * Query Vị trí
      */
     String LOCATION_QUERY = "Query";
 
     /**
-     * Body位置
+     * Body Vị trí
      */
     String LOCATION_BODY = "Body";
 
     /**
-     * Form-Data位置
+     * Form-Data Vị trí
      */
     String LOCATION_FORM_DATA = "Form-Data";
 
     /**
-     * String类型
+     * String Loại
      */
     String TYPE_STRING = "String";
 
     /**
-     * string类型
+     * string Loại
      */
     String TYPE_STRING_LOWER = "string";
 
     /**
-     * Number类型
+     * Number Loại
      */
     String TYPE_NUMBER = "Number";
 
     /**
-     * number类型
+     * number Loại
      */
     String TYPE_NUMBER_LOWER = "number";
 
     /**
-     * Integer类型
+     * Integer Loại
      */
     String TYPE_INTEGER = "Integer";
 
     /**
-     * integer类型
+     * integer Loại
      */
     String TYPE_INTEGER_LOWER = "integer";
 
     /**
-     * Boolean类型
+     * Boolean Loại
      */
     String TYPE_BOOLEAN = "Boolean";
 
     /**
-     * boolean类型
+     * boolean Loại
      */
     String TYPE_BOOLEAN_LOWER = "boolean";
 
     /**
-     * 工具数量
+     * Số lượng công cụ
      */
     String TOOL_COUNT = "tool_count";
 
     /**
-     * 是否启用
+     * Có bật không
      */
     String ENABLED = "enabled";
 
     /**
-     * 输入
+     * Đầu vào
      */
     String INPUTS = "inputs";
 
     /**
-     * 输出
+     * Đầu ra
      */
     String OUTPUTS = "outputs";
 
     /**
-     * POST请求
+     * POST Yêu cầu
      */
     String POST = "POST";
 
     /**
-     * token名称
+     * token Tên
      */
     String X_ACCESS_TOKEN = "X-Access-Token";
 
     /**
-     * 插件名称
+     * Tên plugin
      */
-    String PLUGIN_NAME = "流程调用";
+    String PLUGIN_NAME = "Gọi quy trình";
 
     /**
-     * 插件描述
+     * Mô tả plugin
      */
-    String PLUGIN_DESC = "调用工作流";
+    String PLUGIN_DESC = "Gọi quy trình làm việc";
 
     /**
-     * 流程工具名称前缀
+     * Tiền tố tên công cụ quy trình
      */
     String FLOW_TOOL_NAME_PREFIX = "flow_";
 
     /**
-     * 插件请求地址
+     * Địa chỉ yêu cầu plugin
      */
     String PLUGIN_REQUEST_URL = "/airag/flow/plugin/run/";
 
     /**
-     * 记忆库插件名称
+     * Tên plugin kho bộ nhớ
      */
-    String PLUGIN_MEMORY_NAME = "记忆库";
+    String PLUGIN_MEMORY_NAME = "Kho bộ nhớ";
 
     /**
-     * 记忆库插件描述
+     * Mô tả plugin kho bộ nhớ
      */
-    String PLUGIN_MEMORY_DESC = "用于记录长期记忆";
+    String PLUGIN_MEMORY_DESC = "Dùng để ghi lại bộ nhớ dài hạn";
     
     /**
-     * 添加记忆路径
+     * Đường dẫn thêm bộ nhớ
      */
     String PLUGIN_MEMORY_ADD_PATH = "/airag/knowledge/plugin/add";
 
     /**
-     * 查询记忆路径
+     * Đường dẫn truy vấn bộ nhớ
      */
     String PLUGIN_MEMORY_QUERY_PATH = "/airag/knowledge/plugin/query";
 }

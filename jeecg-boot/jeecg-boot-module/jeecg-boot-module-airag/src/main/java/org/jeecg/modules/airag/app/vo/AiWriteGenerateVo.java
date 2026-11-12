@@ -3,7 +3,7 @@ package org.jeecg.modules.airag.app.vo;
 import lombok.Data;
 
 /**
-* @Description: ai写作生成实体类
+* @Description: ai Lớp thực thể tạo nội dung viết
 *
 * @author: wangshuai
 * @date: 2026/1/12 15:59
@@ -12,37 +12,37 @@ import lombok.Data;
 public class AiWriteGenerateVo {
 
     /**
-     * 写作类型
+     * Loại viết
      */
     private String activeMode;
 
     /**
-     * 写作内容提示
+     * Gợi ý nội dung viết
      */
     private String prompt;
 
     /**
-     * 原文
+     * Văn bản gốc
      */
     private String originalContent;
 
     /**
-     * 长度
+     * Độ dài
      */
     private String length;
 
     /**
-     * 格式
+     * Định dạng
      */
     private String format;
 
     /**
-     * 语气
+     * Giọng điệu
      */
     private String tone;
 
     /**
-     * 语言
+     * Ngôn ngữ
      */
     private String language;
 }

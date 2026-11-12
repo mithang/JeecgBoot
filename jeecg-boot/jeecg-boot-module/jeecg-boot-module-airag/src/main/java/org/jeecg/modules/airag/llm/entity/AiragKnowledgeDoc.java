@@ -19,106 +19,106 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.UnsupportedEncodingException;
 
 /**
- * @Description: airag知识库文档
+ * @Description: airag Tài liệu kho tri thức
  * @Author: jeecg-boot
  * @Date: 2025-02-18
  * @Version: V1.0
  */
-@Schema(description="airag知识库文档")
+@Schema(description="airag Tài liệu kho tri thức")
 @Data
 @TableName("airag_knowledge_doc")
 public class AiragKnowledgeDoc implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * Khóa chính
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键")
+    @Schema(description = "Khóa chính")
     private String id;
 
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     @Dict(dictTable = "sys_user",dicCode = "username",dicText = "realname")
     private String createBy;
 
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
+    @Schema(description = "Người cập nhật")
     private String updateBy;
 
     /**
-     * 更新日期
+     * Ngày cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private Date updateTime;
 
     /**
-     * 所属部门
+     * Phòng ban trực thuộc
      */
-    @Schema(description = "所属部门")
+    @Schema(description = "Phòng ban trực thuộc")
     private String sysOrgCode;
 
     /**
-     * 租户id
+     * Tenant id
      */
-    @Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+    @Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private String tenantId;
 
     /**
-     * 知识库id
+     * Kho tri thức id
      */
-    @Schema(description = "知识库id")
+    @Schema(description = "Kho tri thức id")
     private String knowledgeId;
 
     /**
-     * 标题
+     * Tiêu đề
      */
-    @Excel(name = "标题", width = 15)
-    @Schema(description = "标题")
+    @Excel(name = "Tiêu đề", width = 15)
+    @Schema(description = "Tiêu đề")
     private String title;
 
     /**
-     * 类型
+     * Loại
      */
-    @Excel(name = "类型", width = 15, dicCode = "know_doc_type")
-    @Schema(description = "类型")
+    @Excel(name = "Loại", width = 15, dicCode = "know_doc_type")
+    @Schema(description = "Loại")
     private String type;
 
     /**
-     * 内容
+     * Nội dung
      */
-    @Excel(name = "内容", width = 15)
-    @Schema(description = "内容")
+    @Excel(name = "Nội dung", width = 15)
+    @Schema(description = "Nội dung")
     private String content;
 
     /**
-     * 元数据,存储上传文件的存储目录以及网站站点 <br/>
+     * Metadata,Thư mục lưu trữ tệp đã tải lên và trang web <br/>
      * eg. {"filePath":"https://xxxxxx","website":"http://hellp.jeecg.com"}
      */
-    @Excel(name = "元数据", width = 15)
-    @Schema(description = "元数据")
+    @Excel(name = "Metadata", width = 15)
+    @Schema(description = "Metadata")
     private String metadata;
 
     /**
-     * 状态
+     * Trạng thái
      */
-    @Excel(name = "状态", width = 15)
-    @Schema(description = "状态")
+    @Excel(name = "Trạng thái", width = 15)
+    @Schema(description = "Trạng thái")
     private String status;
 
 }

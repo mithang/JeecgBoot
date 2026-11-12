@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: 大屏预览入口
+ * @Description: Lối vào xem trước màn hình lớn
  * @Author: scott
  * @Date:2019-12-12
  * @Version:V1.0
@@ -39,7 +39,7 @@ public class BigScreenTemplatController extends JeecgController<JeecgDemo, IJeec
     }
 
     /**
-     * 生产销售监控模版
+     * Mẫu giám sát sản xuất và bán hàng
      * @param modelAndView
      * @return
      */
@@ -50,7 +50,7 @@ public class BigScreenTemplatController extends JeecgController<JeecgDemo, IJeec
     }
 
     /**
-     * 智慧物流监控模版
+     * Mẫu giám sát logistics thông minh
      * @param modelAndView
      * @return
      */

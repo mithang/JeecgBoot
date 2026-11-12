@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 /**
- * airag baseAPI 实现类
+ * airag baseAPI Lớp triển khai
  */
 @Slf4j
 @Primary
@@ -42,14 +42,14 @@ public class AiragBaseApiImpl implements IAiragBaseApi {
 
     @Override
     public String knowledgeWriteTextDocument(String knowledgeId, String title, String content, String segmentConfig) {
-        AssertUtils.assertNotEmpty("知识库ID不能为空", knowledgeId);
-        AssertUtils.assertNotEmpty("写入内容不能为空", content);
+        AssertUtils.assertNotEmpty("ID kho tri thức không được trống", knowledgeId);
+        AssertUtils.assertNotEmpty("Nội dung ghi vào không được trống", content);
         AiragKnowledgeDoc knowledgeDoc = new AiragKnowledgeDoc();
         knowledgeDoc.setKnowledgeId(knowledgeId);
         knowledgeDoc.setTitle(title);
         knowledgeDoc.setType(LLMConsts.KNOWLEDGE_DOC_TYPE_TEXT);
         knowledgeDoc.setContent(content);
-        // 将分段策略配置写入文档的metadata中，EmbeddingHandler会从中读取分段配置
+        // Ghi cấu hình chiến lược phân đoạn vào metadata của tài liệu, EmbeddingHandler sẽ đọc cấu hình phân đoạn từ đó
         if (oConvertUtils.isNotEmpty(segmentConfig)) {
             knowledgeDoc.setMetadata(segmentConfig);
         }
@@ -58,9 +58,9 @@ public class AiragBaseApiImpl implements IAiragBaseApi {
             throw new JeecgBootBizTipException(result.getMessage());
         }
         if (knowledgeDoc.getId() == null) {
-            throw new JeecgBootBizTipException("知识库文档ID为空");
+            throw new JeecgBootBizTipException("ID tài liệu kho tri thức trống");
         }
-        log.info("[AI-KNOWLEDGE] 文档写入完成，知识库:{}, 文档ID:{}", knowledgeId, knowledgeDoc.getId());
+        log.info("[AI-KNOWLEDGE] Đã ghi tài liệu xong, kho tri thức:{}, Tài liệu ID:{}", knowledgeId, knowledgeDoc.getId());
         return knowledgeDoc.getId();
     }
 
@@ -92,7 +92,7 @@ public class AiragBaseApiImpl implements IAiragBaseApi {
                 hasProcessing = true;
             }
         }
-        // 未查到的文档视为失败（可能被删除）
+        // Tài liệu không tìm thấy được coi là thất bại (có thể đã bị xóa)
         for (String id : idList) {
             if (!foundIds.contains(id)) {
                 hasFailed = true;
@@ -106,13 +106,13 @@ public class AiragBaseApiImpl implements IAiragBaseApi {
 
     @Override
     public String knowledgeWriteFileDocument(String knowledgeId, String title, String filePath, String segmentConfig) {
-        AssertUtils.assertNotEmpty("知识库ID不能为空", knowledgeId);
-        AssertUtils.assertNotEmpty("文件地址不能为空", filePath);
+        AssertUtils.assertNotEmpty("ID kho tri thức không được trống", knowledgeId);
+        AssertUtils.assertNotEmpty("Địa chỉ tệp không được trống", filePath);
         AiragKnowledgeDoc knowledgeDoc = new AiragKnowledgeDoc();
         knowledgeDoc.setKnowledgeId(knowledgeId);
         knowledgeDoc.setTitle(title);
         knowledgeDoc.setType(LLMConsts.KNOWLEDGE_DOC_TYPE_FILE);
-        // 文件类型文档将 filePath 放入 metadata，复用知识库文档功能的存储约定
+        // Tài liệu dạng tệp đặt filePath vào metadata, tái sử dụng quy ước lưu trữ của chức năng tài liệu kho tri thức
         JSONObject metadata;
         if (oConvertUtils.isNotEmpty(segmentConfig)) {
             metadata = JSONObject.parseObject(segmentConfig);
@@ -126,9 +126,9 @@ public class AiragBaseApiImpl implements IAiragBaseApi {
             throw new JeecgBootBizTipException(result.getMessage());
         }
         if (knowledgeDoc.getId() == null) {
-            throw new JeecgBootBizTipException("知识库文档ID为空");
+            throw new JeecgBootBizTipException("ID tài liệu kho tri thức trống");
         }
-        log.info("[AI-KNOWLEDGE] 文件文档写入完成，知识库:{}, 文档ID:{}, 文件:{}", knowledgeId, knowledgeDoc.getId(), filePath);
+        log.info("[AI-KNOWLEDGE] Đã ghi tài liệu tệp xong, kho tri thức:{}, Tài liệu ID:{}, Tệp:{}", knowledgeId, knowledgeDoc.getId(), filePath);
         return knowledgeDoc.getId();
     }
 
@@ -148,9 +148,9 @@ public class AiragBaseApiImpl implements IAiragBaseApi {
 
     @Override
     public void setChatVariable(String appId, String username, String name, String value) {
-        AssertUtils.assertNotEmpty("应用ID不能为空", appId);
-        AssertUtils.assertNotEmpty("用户名不能为空", username);
-        AssertUtils.assertNotEmpty("变量名不能为空", name);
+        AssertUtils.assertNotEmpty("ID ứng dụng không được trống", appId);
+        AssertUtils.assertNotEmpty("Tên người dùng không được trống", username);
+        AssertUtils.assertNotEmpty("Tên biến không được trống", name);
         airagVariableService.updateVariable(username, appId, name, value != null ? value : "");
     }
 
@@ -176,7 +176,7 @@ public class AiragBaseApiImpl implements IAiragBaseApi {
         }
         AiragPrompts prompt = airagPromptsService.getById(promptId);
         if (prompt == null) {
-            log.warn("[AiragBaseApi]提示词不存在，promptId={}", promptId);
+            log.warn("[AiragBaseApi]Prompt không tồn tại,promptId={}", promptId);
             return null;
         }
         return prompt.getContent();
@@ -184,7 +184,7 @@ public class AiragBaseApiImpl implements IAiragBaseApi {
 
     @Override
     public String parseFileContent(String filePath) {
-        AssertUtils.assertNotEmpty("文件地址不能为空", filePath);
+        AssertUtils.assertNotEmpty("Địa chỉ tệp không được trống", filePath);
         return embeddingHandler.parseFileContent(filePath);
     }
 

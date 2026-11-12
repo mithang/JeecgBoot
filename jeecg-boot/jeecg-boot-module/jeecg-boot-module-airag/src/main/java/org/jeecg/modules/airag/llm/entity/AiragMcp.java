@@ -34,105 +34,105 @@ public class AiragMcp implements Serializable {
     @Schema(description = "id")
     private java.lang.String id;
     /**
-     * 应用图标
+     * Biểu tượng ứng dụng
      */
-    @Excel(name = "应用图标", width = 15)
-    @Schema(description = "应用图标")
+    @Excel(name = "Biểu tượng ứng dụng", width = 15)
+    @Schema(description = "Biểu tượng ứng dụng")
     private java.lang.String icon;
     /**
-     * 名称
+     * Tên
      */
-    @Excel(name = "名称", width = 15)
-    @Schema(description = "名称")
+    @Excel(name = "Tên", width = 15)
+    @Schema(description = "Tên")
     private java.lang.String name;
     /**
-     * 描述
+     * Mô tả
      */
-    @Excel(name = "描述", width = 15)
-    @Schema(description = "描述")
+    @Excel(name = "Mô tả", width = 15)
+    @Schema(description = "Mô tả")
     private java.lang.String descr;
     /**
-     * 类型（plugin=插件，mcp=MCP）
-     * for [QQYUN-12453]【AI】支持插件
+     * Loại (plugin=Plugin,mcp=MCP）
+     * for [QQYUN-12453]【AI】Hỗ trợ plugin
      */
-    @Excel(name = "类型（plugin=插件，mcp=MCP）", width = 15)
-    @Schema(description = "类型（plugin=插件，mcp=MCP）")
+    @Excel(name = "Loại (plugin=Plugin,mcp=MCP）", width = 15)
+    @Schema(description = "Loại (plugin=Plugin,mcp=MCP）")
     private java.lang.String category;
     /**
-     * mcp类型（sse：sse类型；stdio：标准类型）
+     * mcp Loại (sse: loại sse; stdio: loại tiêu chuẩn)
      */
-    @Excel(name = "mcp类型（sse：sse类型；stdio：标准类型）", width = 15)
-    @Schema(description = "mcp类型（sse：sse类型；stdio：标准类型）")
+    @Excel(name = "mcp Loại (sse: loại sse; stdio: loại tiêu chuẩn)", width = 15)
+    @Schema(description = "mcp Loại (sse: loại sse; stdio: loại tiêu chuẩn)")
     private java.lang.String type;
     /**
-     * 服务端点（SSE类型为URL，stdio类型为命令）
+     * Điểm cuối dịch vụ (loại SSE là URL, loại stdio là lệnh)
      */
-    @Excel(name = "服务端点（SSE类型为URL，stdio类型为命令）", width = 15)
-    @Schema(description = "服务端点（SSE类型为URL，stdio类型为命令）")
+    @Excel(name = "Điểm cuối dịch vụ (loại SSE là URL, loại stdio là lệnh)", width = 15)
+    @Schema(description = "Điểm cuối dịch vụ (loại SSE là URL, loại stdio là lệnh)")
     private java.lang.String endpoint;
     /**
-     * 请求头（sse类型）、环境变量（stdio类型）
+     * Request header (loại sse), biến môi trường (loại stdio)
      */
-    @Excel(name = "请求头（sse类型）、环境变量（stdio类型）", width = 15)
-    @Schema(description = "请求头（sse类型）、环境变量（stdio类型）")
+    @Excel(name = "Request header (loại sse), biến môi trường (loại stdio)", width = 15)
+    @Schema(description = "Request header (loại sse), biến môi trường (loại stdio)")
     private java.lang.String headers;
     /**
-     * 工具列表
+     * Danh sách công cụ
      */
-    @Excel(name = "工具列表", width = 15)
-    @Schema(description = "工具列表")
+    @Excel(name = "Danh sách công cụ", width = 15)
+    @Schema(description = "Danh sách công cụ")
     private java.lang.String tools;
     /**
-     * 状态（enable=启用、disable=禁用）
+     * Trạng thái (enable=Kích hoạt,disable=Vô hiệu hóa)
      */
-    @Excel(name = "状态（enable=启用、disable=禁用）", width = 15)
-    @Schema(description = "状态（enable=启用、disable=禁用）")
+    @Excel(name = "Trạng thái (enable=Kích hoạt,disable=Vô hiệu hóa)", width = 15)
+    @Schema(description = "Trạng thái (enable=Kích hoạt,disable=Vô hiệu hóa)")
     private java.lang.String status;
     /**
-     * 是否同步
+     * Có đồng bộ không
      */
-    @Excel(name = "是否同步", width = 15)
-    @Schema(description = "是否同步")
+    @Excel(name = "Có đồng bộ không", width = 15)
+    @Schema(description = "Có đồng bộ không")
     private java.lang.Integer synced;
     /**
-     * 元数据
+     * Metadata
      */
-    @Excel(name = "元数据", width = 15)
-    @Schema(description = "元数据")
+    @Excel(name = "Metadata", width = 15)
+    @Schema(description = "Metadata")
     private java.lang.String metadata;
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     private java.lang.String createBy;
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private java.util.Date createTime;
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
+    @Schema(description = "Người cập nhật")
     private java.lang.String updateBy;
     /**
-     * 更新日期
+     * Ngày cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private java.util.Date updateTime;
     /**
-     * 所属部门
+     * Phòng ban trực thuộc
      */
-    @Schema(description = "所属部门")
+    @Schema(description = "Phòng ban trực thuộc")
     private java.lang.String sysOrgCode;
     /**
-     * 租户id
+     * Tenant id
      */
-    @Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+    @Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private java.lang.String tenantId;
 }

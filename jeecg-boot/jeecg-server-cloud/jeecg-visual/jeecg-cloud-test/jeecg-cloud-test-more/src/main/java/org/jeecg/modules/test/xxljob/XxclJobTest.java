@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- *  xxl-job定时任务测试
+ *  xxl-job Kiểm thử tác vụ định kỳ
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -17,7 +17,7 @@ public class XxclJobTest {
 
 
     /**
-     * 简单任务
+     * Tác vụ đơn giản
      *
      * @param params
      * @return
@@ -25,7 +25,7 @@ public class XxclJobTest {
 
     @XxlJob(value = "xxclJobTest")
     public Response<String> demoJobHandler(String params) {
-        log.info("我是 jeecg-system 服务里的定时任务 xxclJobTest , 我执行了...............................");
+        log.info("Tôi là jeecg-system Tác vụ định kỳ trong dịch vụ xxclJobTest , Tôi đã thực thi...............................");
         return Response.ofSuccess();
     }
 

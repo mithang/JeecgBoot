@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: Word模版工具类
+ * @Description: Word Lớp tiện ích mẫu
  * @Author: chenrui
  * @Date: 2025/7/4 10:54
  */
@@ -42,14 +42,14 @@ public class WordTplUtils {
     private String uploadpath;
 
     /**
-     * 本地：local minio：minio 阿里：alioss
+     * Local: local, MinIO: minio, Alibaba Cloud:alioss
      */
     @Value(value = "${jeecg.uploadType}")
     private String uploadType;
 
 
     /**
-     * 根据设计数据生成word模版
+     * Tạo mẫu Word dựa trên dữ liệu thiết kế
      *
      * @param template
      * @param outputStream
@@ -58,29 +58,29 @@ public class WordTplUtils {
      * @date 2025/7/9 11:14
      */
     public void generateWordTemplate(AigcWordTemplate template, ByteArrayOutputStream outputStream) {
-        AssertUtils.assertNotEmpty("模版数据不能为空", template);
+        AssertUtils.assertNotEmpty("Dữ liệu mẫu không được trống", template);
         XWPFDocument doc = new XWPFDocument();
 
-        //添加自定义标题
+        //Thêm tiêu đề tùy chỉnh
         for (int i = 1; i <= 6; i++) {
-            WordUtil.addCustomHeadingStyle(doc, "标题" + i, i);
+            WordUtil.addCustomHeadingStyle(doc, "Tiêu đề" + i, i);
         }
 
-        // 设置纸张大小
+        // Đặt kích thước giấy
         WordUtil.setPaperSize(doc, template.getHeight(), template.getWidth(), template.getPaperDirection());
-        // 设置边距
+        // Thiết lập lề
         JSONArray margins = JSONArray.parseArray(template.getMargins());
         WordUtil.setPaperMargins(doc, margins);
 
-        // TODO author: chenrui for:水印设置 date:2025/7/4
+        // TODO author: chenrui for:Cài đặt hình mờ date:2025/7/4
 
-        // 渲染页眉和页脚
+        // Kết xuất đầu trang và chân trang
         renderHeaderAndFooter(template, doc);
 
-        // 文档主体渲染 date:2025/7/4
+        // Kết xuất nội dung chính của tài liệu date:2025/7/4
         renderDocumentBody(doc, template);
 
-        // 页码
+        // Số trang
 //        addPageNumbers(doc, 0);
 
         try {
@@ -88,12 +88,12 @@ public class WordTplUtils {
             outputStream.flush();
             doc.close();
         } catch (Exception e) {
-            throw new RuntimeException("生成Word模版失败: " + e.getMessage(), e);
+            throw new RuntimeException("Tạo mẫu Word thất bại: " + e.getMessage(), e);
         }
     }
 
     /**
-     * 渲染页眉和页脚
+     * Kết xuất đầu trang và chân trang
      *
      * @param template
      * @param doc
@@ -101,7 +101,7 @@ public class WordTplUtils {
      * @date 2025/7/10 17:52
      */
     private static void renderHeaderAndFooter(AigcWordTemplate template, XWPFDocument doc) {
-        //页眉
+        //Đầu trang
         JSONArray header = JSON.parseArray(template.getHeader());
         if (oConvertUtils.isObjectNotEmpty(header)) {
             XWPFHeader docHeader = doc.createHeader(HeaderFooterType.DEFAULT);
@@ -127,7 +127,7 @@ public class WordTplUtils {
                 }
             }
         }
-        //页脚
+        //Chân trang
         JSONArray footer = JSON.parseArray(template.getFooter());
         if (oConvertUtils.isObjectNotEmpty(footer)) {
             XWPFFooter docFooter = doc.createFooter(HeaderFooterType.DEFAULT);
@@ -165,7 +165,7 @@ public class WordTplUtils {
 //    }
 
     /**
-     * 渲染文档主体内容
+     * Kết xuất nội dung chính của tài liệu
      *
      * @param doc
      * @param template
@@ -174,11 +174,11 @@ public class WordTplUtils {
      */
     private void renderDocumentBody(XWPFDocument doc, AigcWordTemplate template) {
 
-        // TODO author: chenrui for:整理图表???? date:2025/7/4
+        // TODO author: chenrui for:Sắp xếp biểu đồ???? date:2025/7/4
 
-        // TODO author: chenrui for:整理条码 date:2025/7/4
+        // TODO author: chenrui for:Sắp xếp mã vạch date:2025/7/4
 
-        //文档主体内容
+        //Nội dung chính của tài liệu
         JSONArray main = JSON.parseArray(template.getMain());
         int abstractNumID = 1;
         if (oConvertUtils.isObjectNotEmpty(main)) {
@@ -263,9 +263,9 @@ public class WordTplUtils {
                         if (paragraph == null) {
                             paragraph = doc.createParagraph();
                         }
-                        // TODO author: chenrui for:图表和条码 date:2025/7/4
+                        // TODO author: chenrui for:Biểu đồ và mã vạch date:2025/7/4
 //                        if (url.contains(chartUrlPrefix)) {
-//                            //图表
+//                            //Biểu đồ
 //                            if (!StringUtil.isEmptyMap(docTplChartsMap)) {
 //                                if (docTplChartsMap.containsKey(url)) {
 //                                    DocTplCharts tplCharts = docTplChartsMap.get(url).get(0);
@@ -310,7 +310,7 @@ public class WordTplUtils {
 //                                WordUtil.addImage(paragraph, content);
 //                            }
 //                        } else {
-                        //图片
+                        //Hình ảnh
                         WordUtil.addImage(paragraph, content);
 //                        }
                         break;
@@ -338,7 +338,7 @@ public class WordTplUtils {
     }
 
     public AigcWordTemplate parseWordFile(InputStream wordFileIs) throws Exception {
-        AssertUtils.assertNotEmpty("请上传word文档", wordFileIs);
+        AssertUtils.assertNotEmpty("Vui lòng tải lên tài liệu Word", wordFileIs);
         AigcWordTemplate template = new AigcWordTemplate();
         XWPFDocument xwpfDocument = new XWPFDocument(wordFileIs);
         CTSectPr sectPr = xwpfDocument.getDocument().getBody().getSectPr();
@@ -348,7 +348,7 @@ public class WordTplUtils {
                     template.setPaperDirection("horizontal");
                 }
             }
-            // [poi 5.x版本] getW() 和 getH() 返回 Object，需要强转为 BigInteger
+            // [poi 5.x Phiên bản] getW() và getH() Trả về Object, cần ép kiểu thành BigInteger
             BigInteger w = (BigInteger) sectPr.getPgSz().getW();
             double width = Math.ceil((double) w.intValue() / 20 * 1.33445);
             BigInteger h = (BigInteger) sectPr.getPgSz().getH();
@@ -574,14 +574,14 @@ public class WordTplUtils {
                 if (oConvertUtils.isObjectNotEmpty(xwpfRun.getFontFamily())) {
                     wordTextDTO.setFont(xwpfRun.getFontFamily());
                 }
-                // [poi 5.x版本] 获取高亮颜色
+                // [poi 5.x Phiên bản] Lấy màu làm nổi bật
                 if (xwpfRun.isHighlighted()) {
                     String color = WordUtil.getHighlightByName(xwpfRun.getTextHighlightColor().toString());
                     if (oConvertUtils.isObjectNotEmpty(color)) {
                         wordTextDTO.setHighlight(color);
                     }
                 }
-                // [poi 4.x版本] 获取高亮颜色
+                // [poi 4.x Phiên bản] Lấy màu làm nổi bật
 //                if (xwpfRun.getCTR() != null && xwpfRun.getCTR().getRPr() != null && xwpfRun.getCTR().getRPr().isSetHighlight()) {
 //                    String highlightVal = xwpfRun.getCTR().getRPr().getHighlight().getVal().toString();
 //                    String color = WordUtil.getHighlightByName(highlightVal);
@@ -796,14 +796,14 @@ public class WordTplUtils {
                 if (oConvertUtils.isObjectNotEmpty(xwpfRun.getFontFamily())) {
                     wordTextDto.setFont(xwpfRun.getFontFamily());
                 }
-                // [poi 5.x版本] 获取高亮颜色
+                // [poi 5.x Phiên bản] Lấy màu làm nổi bật
                 if (xwpfRun.isHighlighted()) {
                     String color = WordUtil.getHighlightByName(xwpfRun.getTextHighlightColor().toString());
                     if (oConvertUtils.isObjectNotEmpty(color)) {
                         wordTextDto.setHighlight(color);
                     }
                 }
-                // [poi 4.x版本] 获取高亮颜色
+                // [poi 4.x Phiên bản] Lấy màu làm nổi bật
 //                if (xwpfRun.getCTR() != null && xwpfRun.getCTR().getRPr() != null && xwpfRun.getCTR().getRPr().isSetHighlight()) {
 //                    String highlightVal = xwpfRun.getCTR().getRPr().getHighlight().getVal().toString();
 //                    String color = WordUtil.getHighlightByName(highlightVal);
@@ -893,7 +893,7 @@ public class WordTplUtils {
     }
 
     /**
-     * 是否分隔符
+     * Có phải dấu phân tách hay không
      *
      * @param paragraph
      * @return
@@ -922,7 +922,7 @@ public class WordTplUtils {
     }
 
     /**
-     * 获取上下标
+     * Lấy chỉ số trên/dưới
      *
      * @param run
      * @return
@@ -931,13 +931,13 @@ public class WordTplUtils {
      */
     private String getSupSubScriptType(XWPFRun run) {
         String result = "";
-        // [poi 5.x版本] 获取上下标
+        // [poi 5.x Phiên bản] Lấy chỉ số trên/dưới
        if (run.getCTR().getRPr() != null && run.getCTR().getRPr().getVertAlignArray() != null && run.getCTR().getRPr().getVertAlignArray().length > 0) {
             CTVerticalAlignRun CTVerticalAlignRun = run.getCTR().getRPr().getVertAlignArray()[0];
             result = String.valueOf(CTVerticalAlignRun.getVal());
        }
         
-        // [poi 4.x版本] 获取上下标
+        // [poi 4.x Phiên bản] Lấy chỉ số trên/dưới
 //        if (run.getCTR() != null) {
 //            if (run.getCTR().getRPr() != null) {
 //                if (run.getCTR().getRPr() != null && run.getCTR().getRPr().isSetVertAlign()) {
@@ -950,7 +950,7 @@ public class WordTplUtils {
     }
 
     /**
-     * 上传文件
+     * Tải lên tệp
      *
      * @param file
      * @return
@@ -974,7 +974,7 @@ public class WordTplUtils {
         template.setWidth(794);
         template.setPaperDirection("vertical");
         template.setMargins("[25.4,31.8,25.4,31.8]");
-//        template.setMain("[{\"value\":\"\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]},{\"value\":\"\",\"type\":\"title\",\"valueList\":[{\"value\":\"会\",\"font\":\"微软雅黑\",\"size\":26,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"微软雅黑\",\"size\":26,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]},{\"value\":\"纪\",\"font\":\"微软雅黑\",\"size\":26,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]},{\"value\":\"要\",\"font\":\"微软雅黑\",\"size\":26,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]}],\"level\":\"first\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"一\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"时\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"间\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"ml.meeting_time\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"二\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"地\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"点\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{{ml.location}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"三\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"题\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{ml.agenda}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"四\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"主\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"持\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"人\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{{ml.moderator}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"五\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"参\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"人\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"员\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{{ml.attendees}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{{ml.content}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"right\",\"dashArray\":[]},{\"value\":\"{{ml.formatted_date}}\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"right\"},{\"value\":\"http://localhost:9099/images/2025-07-03/1940720058774863873.png?t=1751538693508\",\"type\":\"image\",\"rowFlex\":\"right\",\"width\":137.64250695113952,\"height\":125.02599781096147,\"imgDisplay\":\"float-top\",\"imgFloatPosition\":{\"x\":551.6720123291016,\"y\":358.7252540588379,\"pageNo\":0}},{\"value\":\"     \",\"rowFlex\":\"right\"}]");
+//        template.setMain("[{\"value\":\"\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]},{\"value\":\"\",\"type\":\"title\",\"valueList\":[{\"value\":\"会\",\"font\":\"微软雅黑\",\"size\":26,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"微软雅黑\",\"size\":26,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]},{\"value\":\"纪\",\"font\":\"微软雅黑\",\"size\":26,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]},{\"value\":\"要\",\"font\":\"微软雅黑\",\"size\":26,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"center\",\"dashArray\":[]}],\"level\":\"first\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#FF0000\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"一\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"giờ\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"间\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"ml.meeting_time\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"二\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"地\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"点\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{{ml.location}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"三\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"题\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{ml.agenda}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"四\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"议\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"主\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"持\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"người\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{{ml.moderator}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"五\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"、\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"参\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"会\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"người\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"员\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"：\",\"font\":\"宋体\",\"size\":16,\"bold\":true,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{{ml.attendees}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\",\"dashArray\":[]},{\"value\":\"{{ml.content}}\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"left\"},{\"value\":\"\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"right\",\"dashArray\":[]},{\"value\":\"{{ml.formatted_date}}\\n\",\"font\":\"宋体\",\"size\":16,\"bold\":false,\"color\":\"#auto\",\"italic\":false,\"underline\":false,\"strikeout\":false,\"rowFlex\":\"right\"},{\"value\":\"http://localhost:9099/images/2025-07-03/1940720058774863873.png?t=1751538693508\",\"type\":\"image\",\"rowFlex\":\"right\",\"width\":137.64250695113952,\"height\":125.02599781096147,\"imgDisplay\":\"float-top\",\"imgFloatPosition\":{\"x\":551.6720123291016,\"y\":358.7252540588379,\"pageNo\":0}},{\"value\":\"     \",\"rowFlex\":\"right\"}]");
         template.setMain("[{\"value\":\"  \\n\\n222222222222\\n2222222222\"},{\"value\":\"http://localhost:9099/images/2025-07-08/1942502516700803074.png?t=1751963664591\",\"type\":\"image\",\"width\":200,\"height\":200,\"imgDisplay\":\"float-top\",\"imgFloatPosition\":{\"x\":232.421875,\"y\":111,\"pageNo\":0}},{\"value\":\"22222212312312312333333333333333333333333333333333\"}]");
 
         WordTplUtils utils = new WordTplUtils();
@@ -983,7 +983,7 @@ public class WordTplUtils {
         try (FileOutputStream fos = new FileOutputStream("/Users/chenrui/work/temp/testWordTpl/test.docx")) {
             wordTemplateOut.writeTo(fos);
             fos.flush();
-            //System.out.println("Word模版已保存到本地文件。");
+            //System.out.println("Word Mẫu đã được lưu vào tệp cục bộ.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -991,7 +991,7 @@ public class WordTplUtils {
     }
 
     /**
-     * 自定义的MultipartFile
+     * Tùy chỉnh MultipartFile
      */
     private static class CustomMultipartFile implements MultipartFile {
         private final File file;
@@ -1000,7 +1000,7 @@ public class WordTplUtils {
         private final String originalFilename;
         private final String contentType;
 
-        // 通过 File 构造
+        // Khởi tạo qua File
         public CustomMultipartFile(File file, String name, String contentType) {
             this.file = file;
             this.content = null;
@@ -1009,7 +1009,7 @@ public class WordTplUtils {
             this.contentType = contentType;
         }
 
-        // 通过字节数组构造
+        // Khởi tạo qua mảng byte
         public CustomMultipartFile(String name, String originalFilename, String contentType, byte[] content) {
             this.file = null;
             this.content = content;

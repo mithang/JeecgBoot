@@ -3,7 +3,7 @@ server:
 spring:
   data:
     redis:
-      ##redis 单机环境配置
+      ##redis Cấu hình môi trường máy đơn
       host: jeecg-boot-redis
       port: 6379
       database: 0
@@ -36,9 +36,9 @@ seata:
       default: 127.0.0.1:8091
     vgroup-mapping:
       springboot-seata-group: default
-  # seata 事务组编号 用于TC集群名
+  # seata Số hiệu nhóm giao dịch, dùng cho tên cụm TC
   tx-service-group: springboot-seata-group
   
-# 无用配置，为了避免扫码全代码导致启动慢
+# Cấu hình không dùng, để tránh quét toàn bộ mã gây khởi động chậm
 minidao:
   base-package: org.jeecg.modules.jmreport.*,org.jeecg.modules.chat2bi.*

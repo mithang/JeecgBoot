@@ -19,7 +19,7 @@
         <module>jeecg-system-cloud-start</module>
         <module>jeecg-demo-cloud-start</module>
         
-        <!-- 监控和测试例子 -->
+        <!-- Ví dụ giám sát và kiểm thử -->
         <module>jeecg-visual</module>
     </modules>
 

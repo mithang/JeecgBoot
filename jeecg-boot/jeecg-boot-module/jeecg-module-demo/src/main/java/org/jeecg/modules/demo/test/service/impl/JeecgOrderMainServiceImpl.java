@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
- * @Description: 订单
+ * @Description: Đơn hàng
  * @Author: jeecg-boot
  * @Date:  2019-02-15
  * @Version: V1.0
@@ -57,11 +57,11 @@ public class JeecgOrderMainServiceImpl extends ServiceImpl<JeecgOrderMainMapper,
     public void updateMain(JeecgOrderMain jeecgOrderMain, List<JeecgOrderCustomer> jeecgOrderCustomerList, List<JeecgOrderTicket> jeecgOrderTicketList) {
         jeecgOrderMainMapper.updateById(jeecgOrderMain);
 
-        //1.先删除子表数据
+        //1.Xóa dữ liệu bảng con trước
         jeecgOrderTicketMapper.deleteTicketsByMainId(jeecgOrderMain.getId());
         jeecgOrderCustomerMapper.deleteCustomersByMainId(jeecgOrderMain.getId());
 
-        //2.子表数据重新插入
+        //2.Chèn lại dữ liệu bảng con
         if (jeecgOrderCustomerList != null) {
             for (JeecgOrderCustomer entity : jeecgOrderCustomerList) {
                 entity.setOrderId(jeecgOrderMain.getId());
@@ -77,7 +77,7 @@ public class JeecgOrderMainServiceImpl extends ServiceImpl<JeecgOrderMainMapper,
     }
 
     /**
-     * 一对多维护逻辑改造  LOWCOD-315
+     * Cải tiến logic duy trì một-nhiều  LOWCOD-315
      * @param jeecgOrderMain
      * @param jeecgOrderCustomerList
      * @param jeecgOrderTicketList
@@ -87,36 +87,36 @@ public class JeecgOrderMainServiceImpl extends ServiceImpl<JeecgOrderMainMapper,
     public void updateCopyMain(JeecgOrderMain jeecgOrderMain, List<JeecgOrderCustomer> jeecgOrderCustomerList, List<JeecgOrderTicket> jeecgOrderTicketList) {
         jeecgOrderMainMapper.updateById(jeecgOrderMain);
 
-        // 循环前台传过来的数据
+        // Lặp qua dữ liệu được truyền từ frontend
         for (JeecgOrderTicket ticket:jeecgOrderTicketList){
-            // 先查询子表数据库
+            // Truy vấn cơ sở dữ liệu bảng con trước
             JeecgOrderTicket orderTicket = jeecgOrderTicketMapper.selectById(ticket.getId());
             if(orderTicket == null){
-                // 当传过来的id数据库不存在时，说明数据库没有，走新增逻辑
+                // Khi id truyền vào không tồn tại trong cơ sở dữ liệu, nghĩa là cơ sở dữ liệu chưa có, đi theo logic thêm mới
                 ticket.setOrderId(jeecgOrderMain.getId());
                 jeecgOrderTicketMapper.insert(ticket);
                 continue;
             }
             if(orderTicket.getId().equals(ticket.getId())){
-                // 传过来的id和数据库id一至时，说明数据库存在该数据，走更新逻辑
+                // Khi id truyền vào trùng với id trong cơ sở dữ liệu, nghĩa là cơ sở dữ liệu đã có dữ liệu này, đi theo logic cập nhật
                 jeecgOrderTicketMapper.updateById(ticket);
             }
         }
         for (JeecgOrderCustomer customer:jeecgOrderCustomerList){
-            // 先查询子表数据库
+            // Truy vấn cơ sở dữ liệu bảng con trước
             JeecgOrderCustomer customers = jeecgOrderCustomerMapper.selectById(customer.getId());
             if(customers == null){
-                // 当传过来的id数据库不存在时，说明数据库没有，走新增逻辑
+                // Khi id truyền vào không tồn tại trong cơ sở dữ liệu, nghĩa là cơ sở dữ liệu chưa có, đi theo logic thêm mới
                 customer.setOrderId(jeecgOrderMain.getId());
                 jeecgOrderCustomerMapper.insert(customer);
                 continue;
             }
             if(customers.getId().equals(customer.getId())){
-                //TODO 传过来的id和数据库id一至时，说明数据库存在该数据，走更新逻辑
+                //TODO Khi id truyền vào trùng với id trong cơ sở dữ liệu, nghĩa là cơ sở dữ liệu đã có dữ liệu này, đi theo logic cập nhật
                 jeecgOrderCustomerMapper.updateById(customer);
             }
         }
-        // 当跟新和删除之后取差集， 当传过来的id不存在，而数据库存在时，说明已删除，走删除逻辑
+        // Sau khi cập nhật và xóa thì lấy hiệu tập hợp; khi id được truyền tới không tồn tại mà trong cơ sở dữ liệu vẫn tồn tại thì có nghĩa là đã bị xóa, thực hiện logic xóa
         List<JeecgOrderTicket> jeecgOrderTickets = jeecgOrderTicketMapper.selectTicketsByMainId(jeecgOrderMain.getId());
         List<JeecgOrderTicket> collect = jeecgOrderTickets.stream()
                 .filter(item -> !jeecgOrderTicketList.stream()
@@ -124,7 +124,7 @@ public class JeecgOrderMainServiceImpl extends ServiceImpl<JeecgOrderMainMapper,
                 .collect(Collectors.toList())
                 .contains(item.getId()))
                 .collect(Collectors.toList());
-        // for循环删除id
+        // for Xóa theo vòng lặp id
         for (JeecgOrderTicket ticket:collect){
             jeecgOrderTicketMapper.deleteById(ticket.getId());
         }
@@ -136,7 +136,7 @@ public class JeecgOrderMainServiceImpl extends ServiceImpl<JeecgOrderMainMapper,
                         .collect(Collectors.toList())
                         .contains(item.getId()))
                 .collect(Collectors.toList());
-        //TODO for循环删除id
+        //TODO for Xóa theo vòng lặp id
         for (JeecgOrderCustomer c:customersCollect){
             jeecgOrderCustomerMapper.deleteById(c.getId());
         }

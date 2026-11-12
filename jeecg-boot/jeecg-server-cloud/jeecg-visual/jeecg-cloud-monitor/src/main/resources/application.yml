@@ -4,7 +4,7 @@ spring:
   boot:
     admin:
       ui:
-        title: JeecgCloud监控中心
+        title: JeecgCloud Trung tâm giám sát
       client:
         instance:
           metadata:
@@ -24,7 +24,7 @@ spring:
         metadata:
           user.name: ${spring.security.user.name}
           user.password: ${spring.security.user.password}
-# 服务端点检查
+# Kiểm tra endpoint của máy chủ
 management:
   httpexchanges:
     recording:

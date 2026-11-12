@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import java.util.List;
 
 /**
- * @Description: jeecg 测试demo
+ * @Description: jeecg Kiểm tra demo
  * @Author: jeecg-boot
  * @Date:  2018-12-29
  * @Version: V1.0
@@ -16,25 +16,25 @@ import java.util.List;
 public interface IJeecgDemoService extends JeecgService<JeecgDemo> {
 
     /**
-     * 测试事务
+     * Kiểm thử transaction
      */
 	public void testTran();
 
     /**
-     * 通过id过去demo数据，先读缓存，在读数据库
-     * @param id 数据库id
-     * @return demo对象
+     * Lấy dữ liệu demo theo id, đọc cache trước, rồi đọc cơ sở dữ liệu
+     * @param id Cơ sở dữ liệu id
+     * @return demo Đối tượng
      */
 	public JeecgDemo getByIdCacheable(String id);
     /**
-     * 通过id过去demo数据，先读缓存，在读数据库
-     * @param id 数据库id
-     * @return demo对象
+     * Lấy dữ liệu demo theo id, đọc cache trước, rồi đọc cơ sở dữ liệu
+     * @param id Cơ sở dữ liệu id
+     * @return demo Đối tượng
      */
 	public JeecgDemo getByIdCacheableTTL(String id);
 	
 	/**
-	 * 查询列表数据 在service中获取数据权限sql信息
+	 * Truy vấn dữ liệu danh sách, lấy thông tin SQL quyền dữ liệu trong service
 	 * @param pageSize
 	 * @param pageNo
 	 * @return
@@ -42,13 +42,13 @@ public interface IJeecgDemoService extends JeecgService<JeecgDemo> {
 	IPage<JeecgDemo> queryListWithPermission(int pageSize,int pageNo);
 
 	/**
-	 * 根据用户权限获取导出字段
+	 * Lấy trường xuất theo quyền người dùng
 	 * @return
 	 */
 	String getExportFields();
 
 	/**
-	 * 获取创建人
+	 * Lấy người tạo
 	 * @return
 	 */
 	List<String> getCreateByList();

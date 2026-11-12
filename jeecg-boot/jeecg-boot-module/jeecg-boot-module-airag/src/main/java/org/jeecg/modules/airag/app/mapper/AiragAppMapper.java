@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.airag.app.entity.AiragApp;
 
 /**
- * @Description: AI应用
+ * @Description: AI Ứng dụng
  * @Author: jeecg-boot
  * @Date:   2025-02-26
  * @Version: V1.0
@@ -13,7 +13,7 @@ import org.jeecg.modules.airag.app.entity.AiragApp;
 public interface AiragAppMapper extends BaseMapper<AiragApp> {
 
     /**
-     * 根据ID查询app信息(忽略租户)
+     * Truy vấn thông tin app theo ID(Bỏ qua tenant)
      * @param id
      * @return
      * @author chenrui

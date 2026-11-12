@@ -1,21 +1,21 @@
 [
   {
     "id": 1,
-    "name": "首页",
+    "name": "Trang chủ",
     "component": "dashboard/Analysis",
     "orderNum": 1,
     "hasChildren": false
   },
   {
     "id": 2,
-    "name": "常见案例",
+    "name": "Trường hợp thường gặp",
     "component": "layouts/RouteView",
     "orderNum": 2,
     "hasChildren": true
   },
   {
     "id": 3,
-    "name": "系统监控",
+    "name": "Giám sát hệ thống",
     "component": "layouts/RouteView",
     "orderNum": 3,
     "hasChildren": true

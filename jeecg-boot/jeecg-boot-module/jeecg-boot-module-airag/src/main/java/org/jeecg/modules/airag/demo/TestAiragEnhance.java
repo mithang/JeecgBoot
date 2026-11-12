@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * @Description: Java增强节点示例类
+ * @Description: Java Lớp ví dụ nút tăng cường
  * @Author: chenrui
  * @Date: 2025/3/6 11:42
  */
@@ -21,6 +21,6 @@ public class TestAiragEnhance implements IAiRagEnhanceJava {
         Object arg2 = inputParams.get("arg2");
         Object index = inputParams.get("index");
         log.info("arg1={}, arg2={}, index={}", arg1, arg2, index);
-        return Collections.singletonMap("result",arg1.toString()+"java拼接"+arg2.toString());
+        return Collections.singletonMap("result",arg1.toString()+"java đã ghép nối"+arg2.toString());
     }
 }

@@ -11,7 +11,7 @@ import org.jeecg.modules.demo.test.entity.JeecgOrderTicket;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * @Description: 订单
+ * @Description: Đơn hàng
  * @Author: jeecg-boot
  * @Date:  2019-02-15
  * @Version: V1.0
@@ -19,38 +19,38 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IJeecgOrderMainService extends IService<JeecgOrderMain> {
 
 	/**
-	 * 添加一对多
-	 * @param jeecgOrderMain 订单实体类
-     * @param jeecgOrderCustomerList 订单客户集合
-     * @param jeecgOrderTicketList 订单机票集合
+	 * Thêm một-nhiều
+	 * @param jeecgOrderMain Lớp thực thể đơn hàng
+     * @param jeecgOrderCustomerList Tập hợp khách hàng của đơn hàng
+     * @param jeecgOrderTicketList Tập hợp vé máy bay của đơn hàng
 	 */
 	public void saveMain(JeecgOrderMain jeecgOrderMain,List<JeecgOrderCustomer> jeecgOrderCustomerList,List<JeecgOrderTicket> jeecgOrderTicketList) ;
 	
 	/**
-	 * 修改一对多
-     * @param jeecgOrderMain 订单实体类
-     * @param jeecgOrderCustomerList 订单客户集合
-     * @param jeecgOrderTicketList 订单机票集合
+	 * Sửa quan hệ một-nhiều
+     * @param jeecgOrderMain Lớp thực thể đơn hàng
+     * @param jeecgOrderCustomerList Tập hợp khách hàng của đơn hàng
+     * @param jeecgOrderTicketList Tập hợp vé máy bay của đơn hàng
 	 */
 	public void updateMain(JeecgOrderMain jeecgOrderMain,List<JeecgOrderCustomer> jeecgOrderCustomerList,List<JeecgOrderTicket> jeecgOrderTicketList);
 	
 	/**
-	 * 删除一对多
-	 * @param id 订单id
+	 * Xóa một-nhiều
+	 * @param id Đơn hàng id
 	 */
 	public void delMain (String id);
 	
 	/**
-	 * 批量删除一对多
-	 * @param idList 订单id集合
+	 * Xóa hàng loạt một-nhiều
+	 * @param idList Tập hợp id đơn hàng
 	 */
 	public void delBatchMain (Collection<? extends Serializable> idList);
 
     /**
-     * 修改一对多
-     * @param jeecgOrderMain 订单实体类
-     * @param jeecgOrderCustomerList 订单客户集合
-     * @param jeecgOrderTicketList 订单机票集合
+     * Sửa quan hệ một-nhiều
+     * @param jeecgOrderMain Lớp thực thể đơn hàng
+     * @param jeecgOrderCustomerList Tập hợp khách hàng của đơn hàng
+     * @param jeecgOrderTicketList Tập hợp vé máy bay của đơn hàng
      */
 	public void updateCopyMain(JeecgOrderMain jeecgOrderMain, List<JeecgOrderCustomer> jeecgOrderCustomerList, List<JeecgOrderTicket> jeecgOrderTicketList);
 }

@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 /**
- * AI聊天匿名访问限流服务
- * 用于防止 /airag/chat/send、/airag/chat/upload 被恶意刷接口
+ * AI Dịch vụ giới hạn truy cập ẩn danh trò chuyện
+ * Dùng để ngăn chặn /airag/chat/send、/airag/chat/upload bị gọi API độc hại hàng loạt
  *
  * @author scott
  * @date 2026-07-20
@@ -28,12 +28,12 @@ public class AiragChatRateLimitService {
 	private static final DateTimeFormatter HOUR_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHH");
 
 	/**
-	 * 构造 AI 聊天助手访问限流服务
+	 * Xây dựng dịch vụ giới hạn truy cập trợ lý trò chuyện AI
 	 *
-	 * @param redisTemplate Redis 操作模板
-	 * @param aiChatConfig AI 聊天配置
+	 * @param redisTemplate Redis Mẫu thao tác
+	 * @param aiChatConfig AI Cấu hình trò chuyện
 	 * @author scott
-	 * @since 2026-09-01 issues/9871 AI聊天助手访问限流配置优化
+	 * @since 2026-09-01 issues/9871 AI Tối ưu cấu hình giới hạn tốc độ truy cập của trợ lý trò chuyện
 	 */
 	public AiragChatRateLimitService(RedisTemplate redisTemplate, AiChatConfig aiChatConfig) {
 		this.redisTemplate = redisTemplate;
@@ -41,7 +41,7 @@ public class AiragChatRateLimitService {
 	}
 
 	/**
-	 * 校验 /airag/chat/send 调用频次
+	 * Kiểm chứng /airag/chat/send Tần suất gọi
 	 *
 	 * @param request HttpServletRequest
 	 */
@@ -51,13 +51,13 @@ public class AiragChatRateLimitService {
 		String minute = LocalDateTime.now().format(MINUTE_FORMAT);
 
 		checkLimit("airag:rate:send:session:" + sessionId + ":" + minute, rateLimit.getSendPerSessionPerMinute(), 120,
-			"发送消息过于频繁，请稍后再试");
+			"Gửi tin nhắn quá thường xuyên, vui lòng thử lại sau");
 		checkLimit("airag:rate:send:ip:" + clientIp + ":" + minute, rateLimit.getSendPerIpPerMinute(), 120,
-			"发送消息过于频繁，请稍后再试");
+			"Gửi tin nhắn quá thường xuyên, vui lòng thử lại sau");
 	}
 
 	/**
-	 * 校验 /airag/chat/upload 调用频次
+	 * Kiểm chứng /airag/chat/upload Tần suất gọi
 	 *
 	 * @param request HttpServletRequest
 	 */
@@ -67,17 +67,17 @@ public class AiragChatRateLimitService {
 		String hour = LocalDateTime.now().format(HOUR_FORMAT);
 
 		checkLimit("airag:rate:upload:session:" + sessionId + ":" + hour, rateLimit.getUploadPerSessionPerHour(), 7200,
-			"上传文件过于频繁，请稍后再试");
+			"Tải tệp lên quá thường xuyên, vui lòng thử lại sau");
 		checkLimit("airag:rate:upload:ip:" + clientIp + ":" + hour, rateLimit.getUploadPerSessionPerHour(), 7200,
-			"上传文件过于频繁，请稍后再试");
+			"Tải tệp lên quá thường xuyên, vui lòng thử lại sau");
 	}
 
 	/**
-	 * 固定窗口计数限流
+	 * Giới hạn tốc độ đếm theo cửa sổ cố định
 	 *
 	 * @param key Redis key
-	 * @param limit 窗口上限
-	 * @param expireSeconds key 过期时间（秒）
+	 * @param limit Giới hạn trên của cửa sổ
+	 * @param expireSeconds key Thời gian hết hạn (giây)
 	 */
 	private void checkLimit(String key, Integer limit, int expireSeconds, String errorMessage) {
 		if (limit == null || limit <= 0) {

@@ -36,7 +36,7 @@ public class JeecgGatewayApplication  implements CommandLineRunner {
     }
 
     /**
-     * 容器初始化后加载路由
+     * Tải route sau khi container khởi tạo
      * @param strings
      */
     @Override
@@ -45,8 +45,8 @@ public class JeecgGatewayApplication  implements CommandLineRunner {
     }
 
     /**
-     * 接口地址（通过9999端口直接访问）
-     * 已使用knife4j-gateway支持该功能
+     * Địa chỉ API (truy cập trực tiếp qua cổng 9999)
+     * Đã sử dụng knife4j-gateway hỗ trợ chức năng này
      * @param indexHtml
      * @return
      */

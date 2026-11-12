@@ -8,7 +8,7 @@ import org.jeecg.modules.test.sharding.service.IShardingSysLogService;
 import org.springframework.stereotype.Service;
 
 /**
- * 系统日志表 服务实现类
+ * Bảng nhật ký hệ thống — Lớp triển khai Service
  * @author: zyf
  * @date: 2022/04/21
  */

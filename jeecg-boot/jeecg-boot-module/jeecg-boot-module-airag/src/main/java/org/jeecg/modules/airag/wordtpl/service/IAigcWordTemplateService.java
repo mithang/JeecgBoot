@@ -7,7 +7,7 @@ import org.jeecg.modules.airag.wordtpl.entity.AigcWordTemplate;
 import java.io.ByteArrayOutputStream;
 
 /**aigc_word_template
- * @Description: word模版管理
+ * @Description: word Quản lý mẫu
  * @Author: jeecg-boot
  * @Date:   2025-07-04
  * @Version: V1.0
@@ -15,7 +15,7 @@ import java.io.ByteArrayOutputStream;
 public interface IAigcWordTemplateService extends IService<AigcWordTemplate> {
 
     /**
-     * 通过模版生成word文档
+     * Tạo tài liệu Word qua mẫu
      *
      * @param wordTplGenDTO
      * @return

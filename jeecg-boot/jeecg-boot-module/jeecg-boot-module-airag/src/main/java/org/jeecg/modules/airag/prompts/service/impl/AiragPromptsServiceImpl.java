@@ -53,16 +53,16 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
 
     @Autowired
     private JeecgBaseConfig jeecgBaseConfig;
-    // 创建静态线程池，确保整个应用生命周期中只有一个实例
+    // Tạo thread pool tĩnh, đảm bảo chỉ có một instance trong toàn bộ vòng đời ứng dụng
     private static final ExecutorService executor = new ThreadPoolExecutor(
-            4, // 核心线程数
-            8, // 最大线程数
+            4, // Số luồng core
+            8, // Số luồng tối đa
             60L, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<>(100), // 防止内存溢出
-            new ThreadPoolExecutor.CallerRunsPolicy() // 拒绝策略
+            new ArrayBlockingQueue<>(100), // Ngăn tràn bộ nhớ
+            new ThreadPoolExecutor.CallerRunsPolicy() // Chính sách từ chối
     );
 
-    //update-begin---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】实现回收站取回和彻底删除-----------
+    //update-begin---author:chenrui ---date:2026-04-07  for：【QQYUN-14643] Triển khai thu hồi từ thùng rác và xóa hoàn toàn-----------
     @Override
     public IPage<AiragPrompts> recycleBinPage(Page<AiragPrompts> page) {
         return this.baseMapper.selectRecycleBinPage(page);
@@ -77,32 +77,32 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
     public void deleteRecycleBin(List<String> ids) {
         this.baseMapper.deleteRecycleBin(ids);
     }
-    //update-end---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】实现回收站取回和彻底删除-----------
+    //update-end---author:chenrui ---date:2026-04-07  for：【QQYUN-14643] Triển khai thu hồi từ thùng rác và xóa hoàn toàn-----------
 
     /**
-     * 提示词实验
+     * Thử nghiệm prompt
      * @param experimentVo
      * @return
      */
     @Override
     public Result<?> promptExperiment(AiragExperimentVo experimentVo, HttpServletRequest request) {
-        log.info("开始执行提示词实验，参数：{}", JSON.toJSONString(experimentVo));
+        log.info("Bắt đầu thực thi thử nghiệm prompt, tham số:{}", JSON.toJSONString(experimentVo));
 
-        // 参数验证
+        // Xác thực tham số
         String promptKey = experimentVo.getPromptKey();
-        AssertUtils.assertNotEmpty("请选择提示词", promptKey);
+        AssertUtils.assertNotEmpty("Vui lòng chọn prompt", promptKey);
         String dataId = experimentVo.getExtDataId();
-        AssertUtils.assertNotEmpty("请选择数据集", dataId);
+        AssertUtils.assertNotEmpty("Vui lòng chọn tập dữ liệu", dataId);
 
         Map<String, String> fieldMappings = experimentVo.getMappings();
-        AssertUtils.assertNotEmpty("请配置字段映射", fieldMappings);
+        AssertUtils.assertNotEmpty("Vui lòng cấu hình ánh xạ trường", fieldMappings);
 
         try {
-            //1.查询提示词
+            //1.Truy vấn prompt
             AiragPrompts airagPrompts = this.baseMapper.selectOne(new LambdaQueryWrapper<AiragPrompts>().eq(AiragPrompts::getId, promptKey));
-            AssertUtils.assertNotEmpty("未找到指定的提示词", airagPrompts);
+            AssertUtils.assertNotEmpty("Không tìm thấy prompt đã chỉ định", airagPrompts);
             String modelParam = airagPrompts.getModelParam();
-             // 过滤提示词变量
+             // Lọc biến prompt
             JSONArray promptVariables;
             if(oConvertUtils.isNotEmpty(modelParam)){
                 JSONObject airagPromptsParams = JSON.parseObject(modelParam);
@@ -114,55 +114,55 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
             } else {
                 promptVariables = null;
             }
-            //2.查询数据集
+            //2.Truy vấn tập dữ liệu
             AiragExtData airagExtData = airagExtDataService.getById(dataId);
-            AssertUtils.assertNotEmpty("未找到指定的数据集", airagExtData);
+            AssertUtils.assertNotEmpty("Không tìm thấy tập dữ liệu đã chỉ định", airagExtData);
             String datasetValue = airagExtData.getDatasetValue();
             if(oConvertUtils.isEmpty(datasetValue)){
-                return Result.error("评测集不能为空！");
+                return Result.error("Tập đánh giá không được trống!");
             }
 
-            //3.异步调用 根据映射字段，调用评估器测评
+            //3.Gọi bất đồng bộ: theo trường ánh xạ, gọi bộ đánh giá để đánh giá
             JSONObject datasetObj = JSONObject.parseObject(datasetValue);
-            //评测列配置
+            //Cấu hình cột đánh giá
             JSONArray columns = datasetObj.getJSONArray("columns");
-            //评测题库
+            //Ngân hàng câu hỏi đánh giá
             JSONArray datasetArray = datasetObj.getJSONArray("dataSource");
-            AssertUtils.assertNotEmpty("数据集中没有找到数据源", datasetArray);
-            AssertUtils.assertTrue("数据源为空", datasetArray.size() > 0);
+            AssertUtils.assertNotEmpty("Không tìm thấy nguồn dữ liệu trong tập dữ liệu", datasetArray);
+            AssertUtils.assertTrue("Nguồn dữ liệu trống", datasetArray.size() > 0);
 
-            //测评结果集 - 使用线程安全的CopyOnWriteArrayList
+            //Tập kết quả đánh giá - Sử dụng an toàn luồng CopyOnWriteArrayList
             List<JSONObject> scoreResult = new CopyOnWriteArrayList<>();
 
-            // 批量提交任务
+            // Gửi hàng loạt nhiệm vụ
             List<CompletableFuture<Void>> futures = IntStream.range(0, datasetArray.size())
                 .mapToObj(i -> CompletableFuture.runAsync(() -> {
                     try {
-                        log.info("开始处理第{}条数据", i + 1);
-                        //定义返回结果
+                        log.info("Bắt đầu xử lý thứ{}bản ghi dữ liệu", i + 1);
+                        //Định nghĩa kết quả trả về
                         JSONObject result = new JSONObject();
-                        //评测数据
+                        //Dữ liệu đánh giá
                         JSONObject dataset = datasetArray.getJSONObject(i);
                         result.putAll(dataset);
-                        //用户问题
+                        //Câu hỏi của người dùng
                         String userQuery = dataset.getString(fieldMappings.get("user_query"));
                         result.put("userQuery", userQuery);
-                        //变量处理
+                        //Xử lý biến
                        if(!CollectionUtils.isEmpty(promptVariables)){
                            String content = airagPrompts.getContent();
                            for (Object var : promptVariables){
                               JSONObject variable = JSONObject.parseObject(var.toString());
                               String name = dataset.getString(fieldMappings.get(variable.getString("name")));
-                              //提示词默认变量值
+                              //Giá trị biến mặc định của prompt
                               String defaultValue = variable.getString("value");
-                              // 获取目标类型
+                              // Lấy loại đích
                               String dataType = findDataType(columns, variable);
                                if("FILE".equals(dataType)){
                                   defaultValue = getFileAccessHttpUrl(request, defaultValue);
                                   name = getFileAccessHttpUrl(request, name);
                               }
                               if(oConvertUtils.isNotEmpty(name)){
-                                  //提示词 评估集变量值替换
+                                  //Thay thế giá trị biến của tập đánh giá trong prompt
                                   content = content.replaceAll(variable.getString("name"), name);
                               }else if(oConvertUtils.isNotEmpty(defaultValue)){
                                   content = content.replaceAll(variable.getString("name"), defaultValue);
@@ -171,34 +171,34 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
                            airagPrompts.setContent(content);
                        }
 
-                        //提示词答案
+                        //Câu trả lời của prompt
                         String promptAnswer = getPromptAnswer(airagPrompts, dataset, fieldMappings);
                         result.put("promptAnswer", promptAnswer);
 
-                        //评估器答案
+                        //Câu trả lời của bộ đánh giá
                         String answerScore = getAnswerScore(promptAnswer, dataset, fieldMappings, airagExtData);
                         result.put("answerScore", answerScore);
 
                         scoreResult.add(result);
-                        log.info("第{}条数据处理完成", i + 1);
+                        log.info("Thứ{}bản ghi dữ liệu đã xử lý xong", i + 1);
                     } catch (Exception e) {
-                        log.error("处理第{}条数据时发生异常", i + 1, e);
-                        // 重新抛出异常，让CompletableFuture捕获
+                        log.error("Xử lý thứ{}bản ghi dữ liệu thì xảy ra ngoại lệ", i + 1, e);
+                        // Ném lại ngoại lệ để CompletableFuture bắt được
                         throw new CompletionException(e);
                     }
                 }, executor))
                 .collect(Collectors.toList());
 
-            // 非阻塞方式处理完成
+            // Xử lý xong theo cách không chặn
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
-                        log.error("批量处理失败", ex);
-                        // 更新状态为失败
+                        log.error("Xử lý hàng loạt thất bại", ex);
+                        // Cập nhật trạng thái thành thất bại
                         airagExtData.setStatus(AiPromptsConsts.STATUS_FAILED);
                     } else {
-                        log.info("所有数据处理完成，共处理{}条数据", scoreResult.size());
-                        // 查询已存在的评测记录
+                        log.info("Tất cả dữ liệu đã xử lý xong, tổng cộng đã xử lý{}bản ghi dữ liệu", scoreResult.size());
+                        // Truy vấn bản ghi đánh giá đã tồn tại
                         List<AiragExtData> existingTracks = airagExtDataService.queryTrackById(dataId);
                         Integer version = 1;
                         if(!CollectionUtils.isEmpty(existingTracks)) {
@@ -208,41 +208,41 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
                                     .orElse(0) + 1;
                         }
                         for (JSONObject item : scoreResult) {
-                            // 保存结果
+                            // Lưu kết quả
                             AiragExtData track = new AiragExtData();
-                            //关联评估器ID
+                            //Liên kết bộ đánh giá ID
                             track.setMetadata(dataId);
-                            //定义类型
+                            //Định nghĩa loại
                             track.setBizType(AiPromptsConsts.BIZ_TYPE_TRACK);
-                            //定义版本
+                            //Định nghĩa phiên bản
                             track.setVersion(version);
-                            //定义状态
+                            //Định nghĩa trạng thái
                             track.setStatus(AiPromptsConsts.STATUS_COMPLETED);
-                            //定义评测结果
+                            //Định nghĩa kết quả đánh giá
                             track.setDataValue(item.toJSONString());
                             airagExtDataService.save(track);
                         }
-                        // 更新状态为完成
+                        // Cập nhật trạng thái thành hoàn thành
                         airagExtData.setStatus(AiPromptsConsts.STATUS_COMPLETED);
                     }
                     airagExtDataService.updateById(airagExtData);
                 });
 
-            //4.修改状态进行中
+            //4.Sửa trạng thái thành đang thực hiện
             airagExtData.setStatus(AiPromptsConsts.STATUS_RUNNING);
             airagExtDataService.updateById(airagExtData);
 
-            log.info("提示词实验已提交，共{}条数据待处理", datasetArray.size());
-            return Result.OK("实验已开始，正在处理数据");
+            log.info("Thử nghiệm prompt đã được gửi, tổng cộng{}bản ghi dữ liệu đang chờ xử lý", datasetArray.size());
+            return Result.OK("Thử nghiệm đã bắt đầu, đang xử lý dữ liệu");
         } catch (Exception e) {
-            log.error("提示词实验执行失败", e);
-            return Result.error("实验执行失败：" + e.getMessage());
+            log.error("Thực thi thử nghiệm prompt thất bại", e);
+            return Result.error("Thực thi thử nghiệm thất bại:" + e.getMessage());
         }
     }
 
 
     /**
-     * 提示词回答的结果
+     * Kết quả trả lời của prompt
      * @param airagPrompts
      * @param questions
      * @param fieldMappings
@@ -250,29 +250,29 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
      */
     public String getPromptAnswer(AiragPrompts airagPrompts, JSONObject questions, Map<String, String> fieldMappings) {
         try {
-            //0.判断是否配置了判断fieldMappings的value值 是否包含actual_output
+            //0.Kiểm tra xem có cấu hình giá trị value của fieldMappings để phán đoán hay không, có chứa actual_output
             if (!fieldMappings.containsValue("actual_output")) {
-                log.warn("字段映射中没有配置actual_output");
+                log.warn("Trong ánh xạ trường chưa cấu hình actual_output");
                 return null;
             }
 
-            //1.提示词
+            //1.Prompt
             String prompt = airagPrompts.getContent();
-            AssertUtils.assertNotEmpty("请输入提示词", prompt);
+            AssertUtils.assertNotEmpty("Vui lòng nhập prompt", prompt);
 
             String userQuery = questions.getString(fieldMappings.get("user_query"));
-            AssertUtils.assertNotEmpty("请输入测试内容", userQuery);
+            AssertUtils.assertNotEmpty("Vui lòng nhập nội dung kiểm thử", userQuery);
 
-            //2.ai问题组装
+            //2.ai Lắp ráp câu hỏi
             List<ChatMessage> messages = Arrays.asList(new SystemMessage(prompt), new UserMessage(userQuery));
 
-            //3.模型数据
+            //3.Dữ liệu mô hình
             String modelId = airagPrompts.getModelId();
-            AssertUtils.assertNotEmpty("请选择模型", modelId);
+            AssertUtils.assertNotEmpty("Vui lòng chọn mô hình", modelId);
 
-            //4.模型参数
+            //4.Tham số mô hình
             String modelParam = airagPrompts.getModelParam();
-            // 默认大模型参数
+            // Tham số mô hình lớn mặc định
             AIChatParams params = new AIChatParams();
             params.setTemperature(0.8);
             params.setTopP(0.9);
@@ -285,46 +285,46 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
                     params.setTemperature(param.getDoubleValue("temperature"));
                 }
                 if(param.containsKey("topP")){
-                    params.setTopP(param.getDoubleValue("topP")); // 修复：设置到正确的字段
+                    params.setTopP(param.getDoubleValue("topP")); // Sửa lỗi: đặt vào trường chính xác
                 }
                 if(param.containsKey("presencePenalty")){
-                    params.setPresencePenalty(param.getDoubleValue("presencePenalty")); // 修复：设置到正确的字段
+                    params.setPresencePenalty(param.getDoubleValue("presencePenalty")); // Sửa lỗi: đặt vào trường chính xác
                 }
                 if(param.containsKey("frequencyPenalty")){
-                    params.setFrequencyPenalty(param.getDoubleValue("frequencyPenalty")); // 修复：设置到正确的字段
+                    params.setFrequencyPenalty(param.getDoubleValue("frequencyPenalty")); // Sửa lỗi: đặt vào trường chính xác
                 }
             }
 
-            log.debug("调用AI模型，模型ID：{}，参数：{}", modelId, JSON.toJSONString(params));
-            //5.AI问答
+            log.debug("Gọi mô hình AI, ID mô hình:{}，tham số:{}", modelId, JSON.toJSONString(params));
+            //5.AI Hỏi đáp
             String promptAnswer = aiChatHandler.completions(modelId, messages, params);
-            log.debug("AI模型返回结果：{}", promptAnswer);
+            log.debug("AI Kết quả mô hình trả về:{}", promptAnswer);
 
             return promptAnswer;
         } catch (Exception e) {
-            log.error("获取提示词回答失败", e);
+            log.error("Lấy câu trả lời của prompt thất bại", e);
             return null;
         }
     }
 
     /**
-     * 评测答案分数
+     * Chấm điểm câu trả lời đánh giá
      * @return
      */
     public String getAnswerScore(String promptAnswer, JSONObject questions, Map<String, String> fieldMappings, AiragExtData airagExtData) {
         try {
-            //1.提示词
+            //1.Prompt
             String prompt = airagExtData.getDataValue();
-            AssertUtils.assertNotEmpty("请输入提示词", prompt);
-            prompt += "定义返回格式： 得分：最终的得分，必须输出一个数字，表示满足Prompt中评分标准的程度。得分范围从 0.0 到 1.0，1.0 表示完全满足评分标准，0.0 表示完全不满足评分标准。\n" +
-                    "原因：{对得分的可读性的解释，说明打分原因}。最后，必须用一句话结束理由，该句话为：因此，应该给出的分数是<你评测的的得分>。请勿返回提问的问题、添加分析过程、解释说明等内容，只返回要求的格式内容";
+            AssertUtils.assertNotEmpty("Vui lòng nhập prompt", prompt);
+            prompt += "Định nghĩa định dạng trả về: Điểm: điểm cuối cùng, phải xuất ra một số thể hiện mức độ đáp ứng tiêu chuẩn chấm điểm trong Prompt. Phạm vi điểm từ 0.0 đến 1.0，1.0 thể hiện hoàn toàn đáp ứng tiêu chuẩn chấm điểm,0.0 thể hiện hoàn toàn không đáp ứng tiêu chuẩn chấm điểm.\n" +
+                    "Lý do:{Giải thích về tính dễ đọc của điểm, nêu lý do chấm điểm}. Cuối cùng, phải kết thúc lý do bằng một câu, câu đó là: Vì vậy, điểm nên cho là<điểm bạn đã đánh giá>. Không được trả về câu hỏi đã hỏi, thêm quá trình phân tích, giải thích hay nội dung khác, chỉ trả về nội dung theo định dạng yêu cầu";
 
-            String userQuery = "输入的内容：";
-            //2.拼接测试内容
+            String userQuery = "Nội dung nhập vào:";
+            //2.Nối nội dung kiểm tra
             for (Map.Entry<String, String> entry : fieldMappings.entrySet()) {
-                // 评估器中的key
+                // trong bộ đánh giá key
                 String key = entry.getKey();
-                // 评估器中的映射的key
+                // của ánh xạ trong bộ đánh giá key
                 String value = entry.getValue();
                 String valueData;
                 if("actual_output".equalsIgnoreCase(value)){
@@ -336,14 +336,14 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
             }
             List<ChatMessage> messages = Arrays.asList(new SystemMessage(prompt), new UserMessage(userQuery));
 
-            //3.模型数据
+            //3.Dữ liệu mô hình
             String metadata = airagExtData.getMetadata();
             if(oConvertUtils.isNotEmpty(metadata)){
                 JSONObject modelParam = JSONObject.parseObject(metadata);
                 String modelId = modelParam.getString("modelId");
-                AssertUtils.assertNotEmpty("评估器模型ID不能为空", modelId);
+                AssertUtils.assertNotEmpty("ID mô hình bộ đánh giá không được trống", modelId);
 
-                // 默认大模型参数
+                // Tham số mô hình lớn mặc định
                 AIChatParams params = new AIChatParams();
                 params.setTemperature(0.8);
                 params.setTopP(0.9);
@@ -355,26 +355,26 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
                         params.setTemperature(modelParam.getDoubleValue("temperature"));
                     }
                     if(modelParam.containsKey("topP")){
-                        params.setTopP(modelParam.getDoubleValue("topP")); // 修复：设置到正确的字段
+                        params.setTopP(modelParam.getDoubleValue("topP")); // Sửa lỗi: đặt vào trường chính xác
                     }
                     if(modelParam.containsKey("presencePenalty")){
-                        params.setPresencePenalty(modelParam.getDoubleValue("presencePenalty")); // 修复：设置到正确的字段
+                        params.setPresencePenalty(modelParam.getDoubleValue("presencePenalty")); // Sửa lỗi: đặt vào trường chính xác
                     }
                     if(modelParam.containsKey("frequencyPenalty")){
-                        params.setFrequencyPenalty(modelParam.getDoubleValue("frequencyPenalty")); // 修复：设置到正确的字段
+                        params.setFrequencyPenalty(modelParam.getDoubleValue("frequencyPenalty")); // Sửa lỗi: đặt vào trường chính xác
                     }
                 }
 
-                log.debug("调用评估器模型，模型ID：{}，参数：{}", modelId, JSON.toJSONString(params));
-                //5.AI问答
+                log.debug("Gọi mô hình bộ đánh giá, ID mô hình:{}，tham số:{}", modelId, JSON.toJSONString(params));
+                //5.AI Hỏi đáp
                 String answerScore = aiChatHandler.completions(modelId, messages, params);
-                log.debug("评估器模型返回结果：{}", answerScore);
+                log.debug("Kết quả mô hình bộ đánh giá trả về:{}", answerScore);
 
                 return answerScore;
             }
             return null;
         } catch (Exception e) {
-            log.error("获取答案评分失败", e);
+            log.error("Lấy điểm chấm câu trả lời thất bại", e);
             return null;
         }
     }
@@ -386,19 +386,19 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
      * @return
      */
     public static String findDataType(JSONArray columns, JSONObject variable) {
-        // 获取目标字段值
+        // Lấy giá trị trường đích
         String targetName = variable.getString("name");
 
-        // 使用 Stream API 查找并获取 dataType
+        // Sử dụng Stream API để tìm và lấy dataType
         return columns.stream()
                 .map(obj -> JSONObject.parseObject(obj.toString()))
                 .filter(column -> targetName.equals(column.getString("name")))
                 .findFirst()
                 .map(column -> column.getString("dataType"))
-                .orElse(null); // 如果没有找到，返回 null
+                .orElse(null); // Nếu không tìm thấy, trả về null
     }
     /**
-     * 获取图片地址
+     * Lấy địa chỉ hình ảnh
      * @param request
      * @param url
      * @return

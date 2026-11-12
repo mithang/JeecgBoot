@@ -5,10 +5,10 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @Description: AI应用分享信息（/airag/chat/init 返回给聊天页的视图对象）。
- * 只暴露前端聊天页必需的字段，避免泄露 prompt、tenantId、modelId 等内部配置。
+ * @Description: AI Thông tin chia sẻ ứng dụng (/airag/chat/init Đối tượng view trả về cho trang trò chuyện).
+ * Chỉ công khai các trường bắt buộc của trang trò chuyện frontend, tránh rò rỉ prompt, tenantId, modelId và các cấu hình nội bộ khác.
  * @author scott
- * @since 2026-07-21 【issues/9787】init接口返回最小化VO，避免泄露prompt等内部配置
+ * @since 2026-07-21 【issues/9787】API init trả về VO tối thiểu, tránh rò rỉ prompt và các cấu hình nội bộ
  */
 @Data
 public class AiragAppShareInfoVO implements Serializable {
@@ -16,55 +16,55 @@ public class AiragAppShareInfoVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 应用ID（send 时回传）
+     * ID ứng dụng (truyền lại khi send)
      */
     private String id;
 
     /**
-     * 分享令牌（send 时回传，匿名访问必填）
+     * Token chia sẻ (truyền lại khi send, bắt buộc với truy cập ẩn danh)
      *
      * @author scott
-     * @since 2026-07-21 【issues/9787】分享VO回传shareToken
+     * @since 2026-07-21 【issues/9787】VO chia sẻ truyền lại shareToken
      */
     private String shareToken;
 
     /**
-     * 应用名称（聊天页标题）
+     * Tên ứng dụng (tiêu đề trang trò chuyện)
      */
     private String name;
 
     /**
-     * 应用描述
+     * Mô tả ứng dụng
      */
     private String descr;
 
     /**
-     * 应用图标
+     * Biểu tượng ứng dụng
      */
     private String icon;
 
     /**
-     * 应用类型（chat / chatFlow）
+     * Loại ứng dụng (chat / chatFlow）
      */
     private String type;
 
     /**
-     * 开场白
+     * Lời mở đầu
      */
     private String prologue;
 
     /**
-     * 预设问题
+     * Câu hỏi đặt sẵn
      */
     private String presetQuestion;
 
     /**
-     * 快捷指令
+     * Lệnh tắt
      */
     private String quickCommand;
 
     /**
-     * 元数据（不原样透传，仅保留白名单 key 重新组装：
+     * Metadata (không truyền nguyên dạng, chỉ giữ lại key danh sách trắng để tái tổ hợp: 
      * flowInputs、multiSession、izDraw、defaultSelect、drawModelId、modelInfo）
      */
     private String metadata;

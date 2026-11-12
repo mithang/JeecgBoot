@@ -8,15 +8,15 @@
         <version>3.9.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <description>公共测试模块</description>
+    <description>Module kiểm thử chung</description>
     <artifactId>jeecg-cloud-test-more</artifactId>
 
     <dependencies>
-        <!-- 引入jeecg-boot-starter-cloud依赖 -->
+        <!-- Import jeecg-boot-starter-cloud Dependency -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-cloud</artifactId>
-            <!--system模块需要排除jeecg-system-cloud-api-->
+            <!--system Module cần loại trừ jeecg-system-cloud-api-->
             <exclusions>
                 <exclusion>
                     <groupId>org.jeecgframework.boot3</groupId>
@@ -24,27 +24,27 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--定时任务-->
+        <!--Tác vụ định kỳ-->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-job</artifactId>
         </dependency>
-        <!--rabbitmq消息队列-->
+        <!--rabbitmq Hàng đợi tin nhắn-->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-rabbitmq</artifactId>
         </dependency>
-        <!--rabbitmq消息队列-->
+        <!--rabbitmq Hàng đợi tin nhắn-->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-sentinel</artifactId>
         </dependency>
-        <!-- 分布式锁依赖 -->
+        <!-- Dependency khóa phân tán -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-lock</artifactId>
         </dependency>
-        <!-- spring-cloud-function 5.0 需要 joda-time 但声明为 optional，显式引入 -->
+        <!-- spring-cloud-function 5.0 Cần joda-time Nhưng được khai báo là optional, thêm tường minh -->
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>

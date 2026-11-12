@@ -23,7 +23,7 @@ import jakarta.annotation.Resource;
 import java.math.BigDecimal;
 
 /**
- * @Description: 订单服务类
+ * @Description: Lớp dịch vụ đơn hàng
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
@@ -49,7 +49,7 @@ public class SeataOrderServiceImpl implements SeataOrderService {
         Long userId = request.getUserId();
         Long productId = request.getProductId();
         Integer count = request.getCount();
-        log.info("收到下单请求,用户:{}, 商品:{},数量:{}", userId, productId, count);
+        log.info("Nhận được yêu cầu đặt hàng,Người dùng:{}, Sản phẩm:{},Số lượng:{}", userId, productId, count);
 
 
         SeataOrder order = SeataOrder.builder()
@@ -60,28 +60,28 @@ public class SeataOrderServiceImpl implements SeataOrderService {
                 .build();
 
         orderMapper.insert(order);
-        log.info("订单一阶段生成，等待扣库存付款中");
-        // 扣减库存并计算总价
+        log.info("Đơn hàng giai đoạn một đã tạo, đang chờ trừ tồn kho và thanh toán");
+        // Trừ tồn kho và tính tổng giá
         Result<BigDecimal> productRes = productClient.reduceStock(productId, count);
         if (!productRes.isSuccess()) {
             String message = productRes.getMessage();
-            message = oConvertUtils.isEmpty(message) ? "操作失败" : message;
+            message = oConvertUtils.isEmpty(message) ? "Thao tác thất bại" : message;
             throw new JeecgBootBizTipException(message);
         }
         BigDecimal amount = productRes.getResult();
-        // 扣减余额
+        // Trừ số dư
         Result<?> accountRes = accountClient.reduceBalance(userId, amount);
-        // feign响应被二次封装，判断使主事务回滚
+        // feign Response bị đóng gói lần hai, phán đoán để giao dịch chính rollback
         if (!accountRes.isSuccess()) {
             String message = accountRes.getMessage();
-            message = oConvertUtils.isEmpty(message) ? "操作失败" : message;
+            message = oConvertUtils.isEmpty(message) ? "Thao tác thất bại" : message;
             throw new JeecgBootBizTipException(message);
         }
 
         order.setStatus(OrderStatus.SUCCESS);
         order.setTotalPrice(amount);
         orderMapper.updateById(order);
-        log.info("订单已成功下单");
+        log.info("Đơn hàng đã đặt thành công");
         log.info("=============ORDER END=================");
     }
 }

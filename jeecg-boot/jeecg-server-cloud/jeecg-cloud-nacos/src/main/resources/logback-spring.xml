@@ -17,19 +17,19 @@
   -->
 
 <!--
-    小技巧: 在根pom里面设置统一存放路径，统一管理方便维护
+    Mẹo nhỏ: Đặt đường dẫn lưu trữ thống nhất trong pom gốc, quản lý thống nhất để tiện bảo trì
     <properties>
         <log-path>/Users/lengleng</log-path>
     </properties>
-    1. 其他模块加日志输出，直接copy本文件放在resources 目录即可
-    2. 注意修改 <property name="${log-path}/log.path" value=""/> 的value模块
+    1. Các module khác muốn thêm đầu ra nhật ký, chỉ cần copy trực tiếp tệp này vào thư mục resources
+    2. Lưu ý sửa <property name="${log-path}/log.path" value=""/> của module value
 -->
 <configuration debug="false" scan="false">
     <property name="log.path" value="logs/${project.artifactId}"/>
-    <!-- 彩色日志格式 -->
+    <!-- Định dạng nhật ký màu -->
     <property name="CONSOLE_LOG_PATTERN"
               value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
-    <!-- 彩色日志依赖的渲染类 -->
+    <!-- Lớp render mà nhật ký màu phụ thuộc -->
     <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter"/>
     <conversionRule conversionWord="wex"
                     class="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
@@ -75,12 +75,12 @@
         <appender-ref ref="debug"/>
     </logger>
 
-    <!--nacos 心跳 INFO 屏蔽-->
+    <!--nacos Chặn INFO nhịp tim-->
     <logger name="com.alibaba.nacos" level="OFF">
         <appender-ref ref="error"/>
     </logger>
 
-    <!--AJ 验证码INFO 屏蔽-->
+    <!--AJ Chặn INFO mã xác thực-->
     <logger name="com.anji.captcha" level="OFF">
         <appender-ref ref="error"/>
     </logger>

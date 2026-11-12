@@ -3,7 +3,7 @@ package org.jeecg.loader.vo;
 import lombok.Data;
 
 /**
- * 路由参数模型
+ * Model tham số route
  * @author zyf
  * @date: 2022/4/21 10:55
  */

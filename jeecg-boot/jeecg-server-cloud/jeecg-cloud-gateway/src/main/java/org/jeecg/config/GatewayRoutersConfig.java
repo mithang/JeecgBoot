@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author scott
  * @date 2020/05/26
- * 路由配置信息
+ * Thông tin cấu hình route
  */
 @Configuration
 @RefreshScope
 public class GatewayRoutersConfig {
     /**
-     * 路由配置方式：database，yml，nacos
+     * Phương thức cấu hình route: database, yml,nacos
      */
     public String dataType;
     public String serverAddr;

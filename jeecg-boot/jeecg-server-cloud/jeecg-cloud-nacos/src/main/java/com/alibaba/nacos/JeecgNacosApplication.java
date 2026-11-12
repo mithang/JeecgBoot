@@ -14,7 +14,7 @@ import static org.springframework.boot.context.logging.LoggingApplicationListene
 import static org.springframework.core.io.ResourceLoader.CLASSPATH_URL_PREFIX;
 
 /**
- * Nacos 3.x 启动类（三阶段启动）
+ * Nacos 3.x Lớp khởi động (khởi động ba giai đoạn)
  *
  * @author jeecg
  */
@@ -34,14 +34,14 @@ public class JeecgNacosApplication {
 			.web(WebApplicationType.NONE)
 			.run(args);
 
-		// Start Console Context 先启动：让 IDEA Spring Boot Services 面板识别到的端口是 18080（管理界面），
-		// 而不是 NacosServerWebApplication 的 8848（API 端口），与用户实际访问的管理界面地址保持一致
+		// Start Console Context Khởi động trước: để cổng mà bảng Spring Boot Services của IDEA nhận diện là 18080 (giao diện quản lý),
+		// chứ không phải 8848 của NacosServerWebApplication (cổng API), giữ nhất quán với địa chỉ giao diện quản lý mà người dùng thực tế truy cập
 		NacosStartUpManager.start(NacosStartUp.CONSOLE_START_UP_PHASE);
 		ConfigurableApplicationContext consoleContext = new SpringApplicationBuilder(NacosConsole.class)
 			.parent(coreContext)
 			.run(args);
 
-		// Start Server Web Context 后启动：保持 NacosServerWebApplication 监听 8848 不变（接口不变）
+		// Start Server Web Context Khởi động sau: giữ NacosServerWebApplication lắng nghe 8848 không đổi (giao diện không đổi)
 		NacosStartUpManager.start(NacosStartUp.WEB_START_UP_PHASE);
 		new SpringApplicationBuilder(NacosServerWebApplication.class)
 			.parent(coreContext)
@@ -50,9 +50,9 @@ public class JeecgNacosApplication {
 		String consolePort = consoleContext.getEnvironment().getProperty("server.port", "18080");
 		String consolePath = consoleContext.getEnvironment().getProperty("server.servlet.context-path", "/nacos");
 		System.out.println(" ----------------------------------------------------------");
-		System.out.println("  Nacos 3.x 启动成功！");
-		System.out.println("  控制台地址：	http://localhost:" + consolePort + consolePath);
-		System.out.println("  服务器地址：	http://localhost:8848/nacos");
+		System.out.println("  Nacos 3.x Khởi động thành công!");
+		System.out.println("  Địa chỉ console:	http://localhost:" + consolePort + consolePath);
+		System.out.println("  Địa chỉ máy chủ:	http://localhost:8848/nacos");
 		System.out.println("---------------------------------------------------------- ");
 	}
 

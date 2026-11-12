@@ -3,16 +3,16 @@ package org.jeecg.modules.airag.voice.vo;
 import lombok.Data;
 
 /**
- * 文生语音响应VO
+ * Phản hồi chuyển văn bản thành giọng nói VO
  */
 @Data
 public class VoiceResultVo {
     /**
-     * 生成的音频文件相对路径
+     * Đường dẫn tương đối của tệp âm thanh đã tạo
      */
     private String voiceUrl;
     /**
-     * 文件名
+     * Tên tệp
      */
     private String fileName;
 }

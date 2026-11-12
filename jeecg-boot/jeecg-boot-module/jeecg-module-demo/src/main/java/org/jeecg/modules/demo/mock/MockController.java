@@ -29,8 +29,8 @@ public class MockController {
 	private final String JSON_PATH = "classpath:org/jeecg/modules/demo/mock/json";
 
 	/**
-	 * 通用json访问接口
-	 * 格式： http://localhost:8080/jeecg-boot/api/json/{filename}
+	 * API truy cập json chung
+	 * Định dạng： http://localhost:8080/jeecg-boot/api/json/{filename}
 	 * @param filename
 	 * @return
 	 */
@@ -52,7 +52,7 @@ public class MockController {
 	}
 
 	/**
-	 * 老的登录获取用户信息接口
+	 * API cũ để đăng nhập lấy thông tin người dùng
 	 * @return
 	 */
 	@GetMapping(value = "/user/info")
@@ -81,7 +81,7 @@ public class MockController {
 	}
 
 	/**
-	 * 省市县
+	 * Tỉnh/Thành phố/Huyện
 	 */
 	@GetMapping(value = "/area")
 	public String area() {
@@ -89,7 +89,7 @@ public class MockController {
 	}
 
 	/**
-	  * 测试报表数据
+	  * Dữ liệu báo cáo kiểm tra
 	 */
 	@GetMapping(value = "/report/getYearCountInfo")
 	public String getYearCountInfo() {
@@ -113,7 +113,7 @@ public class MockController {
 	}
 
 	/**
-	   * 实时磁盘监控
+	   * Giám sát đĩa theo thời gian thực
 	 * @param request
 	 * @param response
 	 * @return
@@ -122,11 +122,11 @@ public class MockController {
 	public Result<List<Map<String,Object>>> queryDiskInfo(HttpServletRequest request, HttpServletResponse response){
 		Result<List<Map<String,Object>>> res = new Result<>();
 		try {
-			// 当前文件系统类
+			// Lớp hệ thống tệp hiện tại
 	        FileSystemView fsv = FileSystemView.getFileSystemView();
-	        // 列出所有windows 磁盘
+	        // Liệt kê tất cả ổ đĩa windows
 	        File[] fs = File.listRoots();
-	        log.info("查询磁盘信息:"+fs.length+"个");
+	        log.info("Truy vấn thông tin ổ đĩa:"+fs.length+" cái");
 	        List<Map<String,Object>> list = new ArrayList<>();
 
 	        for (int i = 0; i < fs.length; i++) {
@@ -142,16 +142,16 @@ public class MockController {
 	        	log.info(map.toString());
 	        }
 	        res.setResult(list);
-	        res.success("查询成功");
+	        res.success("Tìm kiếm thành công");
 		} catch (Exception e) {
-			res.error500("查询失败"+e.getMessage());
+			res.error500("Tìm kiếm thất bại"+e.getMessage());
 		}
 		return res;
 	}
 
 	//-------------------------------------------------------------------------------------------
 	/**
-	 * 工作台首页的数据
+	 * Dữ liệu trang chủ của bàn làm việc
 	 * @return
 	 */
 	@GetMapping(value = "/list/search/projects")
@@ -180,26 +180,26 @@ public class MockController {
 	}
 	//-------------------------------------------------------------------------------------------
 
-	//author:lvdandan-----date：20190315---for:添加数据日志json----
+	//author:lvdandan-----date：20190315---for:Thêm nhật ký dữ liệu json----
     /**
-     * 数据日志
+     * Nhật ký dữ liệu
      */
 	public String sysDataLogJson() {
 		return readJson("classpath:org/jeecg/modules/demo/mock/json/sysdatalog.json");
 	}
-	//author:lvdandan-----date：20190315---for:添加数据日志json----
+	//author:lvdandan-----date：20190315---for:Thêm nhật ký dữ liệu json----
 
-	//--update-begin--author:wangshuai-----date：20201023---for:返回用户信息json数据----
+	//--update-begin--author:wangshuai-----date：20201023---for:Trả về dữ liệu JSON thông tin người dùng----
     /**
-     * 用户信息
+     * Thông tin người dùng
      */
     @GetMapping(value = "/getUserInfo")
 	public String getUserInfo(){
 		return readJson("classpath:org/jeecg/modules/demo/mock/json/userinfo.json");
 	}
-	//--update-end--author:wangshuai-----date：20201023---for:返回用户信息json数据----
+	//--update-end--author:wangshuai-----date：20201023---for:Trả về dữ liệu JSON thông tin người dùng----
 	/**
-	 * 读取json格式文件
+	 * Đọc tệp định dạng JSON
 	 * @param jsonSrc
 	 * @return
 	 */
@@ -208,7 +208,7 @@ public class MockController {
 		try {
 			//File jsonFile = ResourceUtils.getFile(jsonSrc);
 			//json = FileUtils.re.readFileToString(jsonFile);
-			//换个写法，解决springboot读取jar包中文件的问题
+			//Đổi cách viết khác để giải quyết vấn đề Spring Boot đọc file trong gói jar
 			InputStream stream = getClass().getClassLoader().getResourceAsStream(jsonSrc.replace("classpath:", ""));
 			json = IOUtils.toString(stream,"UTF-8");
 		} catch (IOException e) {

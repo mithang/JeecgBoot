@@ -6,7 +6,7 @@
 //import org.springframework.web.bind.annotation.RequestParam;
 //
 ///**
-// * 动态feign接口定义
+// * Định nghĩa API Feign động
 // */
 //public interface JeecgTestClientDyn {
 //

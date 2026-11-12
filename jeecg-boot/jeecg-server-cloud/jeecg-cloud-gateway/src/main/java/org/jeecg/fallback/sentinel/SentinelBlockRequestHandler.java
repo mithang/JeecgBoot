@@ -15,7 +15,7 @@
 //import javax.annotation.PostConstruct;
 //
 ///**
-// * 自定义限流返回信息
+// * Thông tin trả về khi giới hạn lưu lượng tùy chỉnh
 // * @author scott
 // */
 //@Slf4j
@@ -31,7 +31,7 @@
 //
 //    @Override
 //    public Mono<ServerResponse> handleRequest(ServerWebExchange exchange, Throwable ex) {
-//        String resultString = "{\"code\":403,\"message\":\"服务开启限流保护,请稍后再试!\"}";
+//        String resultString = "{\"code\":403,\"message\":\"Dịch vụ bật bảo vệ giới hạn lưu lượng,Vui lòng thử lại sau!\"}";
 //        return ServerResponse.status(HttpStatus.TOO_MANY_REQUESTS).contentType(MediaType.APPLICATION_JSON_UTF8).body(BodyInserters.fromObject(resultString));
 //    }
 //

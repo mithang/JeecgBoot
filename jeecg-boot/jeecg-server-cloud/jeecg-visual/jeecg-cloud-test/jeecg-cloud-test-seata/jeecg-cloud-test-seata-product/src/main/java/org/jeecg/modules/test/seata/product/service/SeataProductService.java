@@ -5,18 +5,18 @@ import org.jeecg.common.api.vo.Result;
 import java.math.BigDecimal;
 
 /**
- * @Description: 产品接口
+ * @Description: API sản phẩm
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
  */
 public interface SeataProductService {
     /**
-     * 扣减库存
+     * Trừ kho
      *
-     * @param productId 商品 ID
-     * @param count    扣减数量
-     * @return 商品总价
+     * @param productId Sản phẩm ID
+     * @param count    Số lượng trừ
+     * @return Tổng giá sản phẩm
      */
     Result<BigDecimal> reduceStock(Long productId, Integer count);
 }

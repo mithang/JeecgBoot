@@ -10,7 +10,7 @@ import org.jeecg.modules.test.seata.order.enums.OrderStatus;
 import java.math.BigDecimal;
 
 /**
- * @Description: 订单
+ * @Description: Đơn hàng
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
@@ -24,23 +24,23 @@ public class SeataOrder {
     private Integer id;
 
     /**
-     * 用户ID
+     * Người dùng ID
      */
     private Long userId;
     /**
-     * 商品ID
+     * Sản phẩm ID
      */
     private Long productId;
     /**
-     * 订单状态
+     * Trạng thái đơn hàng
      */
     private OrderStatus status;
     /**
-     * 数量
+     * Số lượng
      */
     private Integer count;
     /**
-     * 总金额
+     * Tổng số tiền
      */
     private BigDecimal totalPrice;
 }

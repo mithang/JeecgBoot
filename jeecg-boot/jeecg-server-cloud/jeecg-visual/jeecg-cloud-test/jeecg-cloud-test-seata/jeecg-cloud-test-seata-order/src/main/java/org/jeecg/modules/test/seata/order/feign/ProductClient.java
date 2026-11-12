@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 
 /**
- * 分布式事务产品feign客户端
+ * Client Feign sản phẩm giao dịch phân tán
  * @author: zyf
  * @date: 2022/04/21
  */
 @FeignClient(value ="seata-product")
 public interface ProductClient {
     /**
-     * 扣减库存
+     * Trừ kho
      *
      * @param productId
      * @param count

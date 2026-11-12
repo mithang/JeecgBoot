@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: AI应用变量服务实现
+ * @Description: AI Triển khai dịch vụ biến ứng dụng
  * @Author: jeecg-boot
  * @Date: 2025-02-26
  * @Version: V1.0
@@ -38,7 +38,7 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
     private static final String CACHE_PREFIX = "airag:app:var:";
 
     /**
-     * 初始化变量（仅不存在时设置）
+     * Khởi tạo biến (chỉ đặt khi chưa tồn tại)
      *
      * @param username
      * @param appId
@@ -55,12 +55,12 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
     }
 
     /**
-     * 获取变量值
+     * Lấy giá trị biến
      *
-     * @param username 用户名
-     * @param appId    应用ID
-     * @param name     变量名
-     * @return 变量值，不存在返回null
+     * @param username Tên người dùng
+     * @param appId    Ứng dụng ID
+     * @param name     Tên biến
+     * @return Giá trị biến, trả về khi không tồn tại null
      */
     @Override
     public String getVariable(String username, String appId, String name) {
@@ -73,7 +73,7 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
     }
 
     /**
-     * 追加提示词
+     * Thêm prompt
      * 
      * @param username
      * @param app
@@ -107,7 +107,7 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
             String name = variable.getName();
             String value = variable.getDefaultValue();
 
-            // 优先使用Redis中的值
+            // Ưu tiên sử dụng giá trị trong Redis
             if (savedValues.containsKey(name)) {
                 Object savedVal = savedValues.get(name);
                 if (savedVal != null) {
@@ -119,14 +119,14 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
                 value = "";
             }
 
-            // 替换 {{name}}
+            // Thay thế {{name}}
             memoryPrompt = memoryPrompt.replace("{{" + name + "}}", value);
         }
         return prompt + "\n" + memoryPrompt;
     }
 
     /**
-     * 更新变量值
+     * Cập nhật giá trị biến
      * 
      * @param userId
      * @param appId
@@ -144,7 +144,7 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
 
 
     /**
-     * 添加变量更新工具
+     * Thêm công cụ cập nhật biến
      *
      * @param params
      * @param aiApp
@@ -158,19 +158,19 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
         if (!AiAppConsts.IZ_OPEN_MEMORY.equals(aiApp.getIzOpenMemory())) {
             return;
         }
-        // 构建变量描述信息
+        // Xây dựng thông tin mô tả biến
         String variablesStr = aiApp.getVariables();
         List<AppVariableVo> variableList = null;
         if (oConvertUtils.isNotEmpty(variablesStr)) {
             variableList = JSONArray.parseArray(variablesStr, AppVariableVo.class);
         }
 
-        //工具描述
-        //update-begin---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
-        StringBuilder descriptionBuilder = new StringBuilder("批量更新应用变量的值。请将本次对话中所有需要更新的变量一次性传入updates数组，无需多次调用。仅当变量新值与当前值确实不同时才调用本工具。");
-        //update-end---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
+        //Mô tả công cụ
+        //update-begin---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
+        StringBuilder descriptionBuilder = new StringBuilder("Cập nhật hàng loạt giá trị biến ứng dụng. Hãy truyền tất cả các biến cần cập nhật trong cuộc trò chuyện này vào mảng updates trong một lần, không cần gọi nhiều lần. Chỉ gọi công cụ này khi giá trị mới của biến thực sự khác với giá trị hiện tại.");
+        //update-end---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
         if (variableList != null && !variableList.isEmpty()) {
-            descriptionBuilder.append("\n\n可用变量列表：");
+            descriptionBuilder.append("\n\n Danh sách biến khả dụng: ");
             for (AppVariableVo var : variableList) {
                 if (var.getEnable() != null && !var.getEnable()) {
                     continue;
@@ -180,41 +180,41 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
                     descriptionBuilder.append(": ").append(var.getDescription());
                 }
             }
-            //update-begin---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
-            descriptionBuilder.append("\n\n注意：variableName必须是上述列表中的名称之一，且本工具每轮对话只需调用一次。");
-            //update-end---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
+            //update-begin---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
+            descriptionBuilder.append("\n\n Lưu ý: variableName phải là một trong các tên trong danh sách trên, và công cụ này chỉ cần gọi một lần mỗi lượt trò chuyện.");
+            //update-end---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
         }
 
-        // A: 参数改为批量数组，一次可更新多个变量
+        // A: Tham số đổi thành mảng hàng loạt, một lần có thể cập nhật nhiều biến
         JsonObjectSchema itemSchema = JsonObjectSchema.builder()
-                .addStringProperty("variableName", "变量名称（必须是可用变量列表中的名称之一）")
-                .addStringProperty("value", "变量新值")
+                .addStringProperty("variableName", "Tên biến (phải là một trong các tên trong danh sách biến khả dụng)")
+                .addStringProperty("value", "Giá trị mới của biến")
                 .required("variableName", "value")
                 .build();
 
-        //构建更新变量的工具
+        //Xây dựng công cụ cập nhật biến
         ToolSpecification spec = ToolSpecification.builder()
                 .name("update_variable")
                 .description(descriptionBuilder.toString())
                 .parameters(JsonObjectSchema.builder()
-                        //update-begin---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
+                        //update-begin---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
                         .addProperty("updates", JsonArraySchema.builder()
-                                .description("需要更新的变量列表，可包含多个变量")
+                                .description("Danh sách biến cần cập nhật, có thể chứa nhiều biến")
                                 .items(itemSchema)
                                 .build())
                         .required("updates")
-                        //update-end---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
+                        //update-end---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
                         .build())
                 .build();
 
-        //监听工具的调用
+        //Lắng nghe lệnh gọi công cụ
         ToolExecutor executor = (toolExecutionRequest, memoryId) -> {
             try {
                 JSONObject args = JSONObject.parseObject(toolExecutionRequest.arguments());
                 JSONArray updates = args.getJSONArray("updates");
                 IAiragVariableService variableService = SpringContextUtils.getBean(IAiragVariableService.class);
-                //update-begin---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
-                // B: 返回结构化JSON，LLM可明确感知"已全部完成"
+                //update-begin---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
+                // B: Trả về JSON có cấu trúc, LLM có thể nhận biết rõ ràng"Đã hoàn thành tất cả"
                 JSONObject updatedMap = new JSONObject();
                 if (updates != null) {
                     for (int i = 0; i < updates.size(); i++) {
@@ -232,17 +232,17 @@ public class AiragVariableServiceImpl implements IAiragVariableService {
                 result.put("success", true);
                 result.put("updated", updatedMap);
                 result.put("count", updatedMap.size());
-                result.put("message", "已成功更新 " + updatedMap.size() + " 个变量，无需再次调用");
+                result.put("message", "Đã cập nhật thành công " + updatedMap.size() + " biến, không cần gọi lại");
                 return result.toJSONString();
-                //update-end---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
+                //update-end---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
             } catch (Exception e) {
-                log.error("更新变量失败", e);
-                //update-begin---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
+                log.error("Cập nhật biến thất bại", e);
+                //update-begin---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
                 JSONObject error = new JSONObject();
                 error.put("success", false);
-                error.put("message", "更新变量失败: " + e.getMessage());
+                error.put("message", "Cập nhật biến thất bại: " + e.getMessage());
                 return error.toJSONString();
-                //update-end---author:wangshuai ---date:2026-04-21  for：【AI变量】支持批量更新变量，返回结构化结果避免LLM重复调用-----------
+                //update-end---author:wangshuai ---date:2026-04-21  for: 【Biến AI】Hỗ trợ cập nhật hàng loạt biến, trả về kết quả có cấu trúc để tránh LLM gọi lặp lại-----------
             }
         };
 

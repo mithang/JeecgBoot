@@ -6,7 +6,7 @@ import org.jeecg.modules.airag.app.vo.AiArticleWriteVersionVo;
 import java.util.List;
 
 /**
- * @Description: AI应用
+ * @Description: AI Ứng dụng
  * @Author: jeecg-boot
  * @Date:   2025-02-26
  * @Version: V1.0
@@ -14,31 +14,31 @@ import java.util.List;
 public interface IAiragAppService extends IService<AiragApp> {
 
     /**
-     * 发布/取消发布应用，并维护分享令牌
+     * Phát hành/Hủy phát hành ứng dụng và duy trì token chia sẻ
      *
-     * @param id 应用ID
-     * @param release true=发布，false=取消发布
-     * @return 发布成功时返回 shareToken；取消发布返回 null
+     * @param id Ứng dụng ID
+     * @param release true=Phát hành,false=Hủy phát hành
+     * @return Khi phát hành thành công trả về shareToken; khi hủy phát hành trả về null
      * @author scott
-     * @since 2026-07-21 【issues/9787】应用级分享令牌
+     * @since 2026-07-21 【issues/9787] Token chia sẻ cấp ứng dụng
      */
     String releaseApp(String id, boolean release);
 
 	/**
-	 * 复制应用
+	 * Sao chép ứng dụng
 	 *
-	 * @param id 原应用ID
-	 * @param currentTenantId 当前租户ID
-	 * @return 新应用ID
+	 * @param id Ứng dụng gốc ID
+	 * @param currentTenantId Tenant hiện tại ID
+	 * @return Ứng dụng mới ID
 	 * @author scott
-	 * @since 2026-08-06 【LHZP-1512】AI应用增加复制功能
+	 * @since 2026-08-06 【LHZP-1512] Ứng dụng AI bổ sung chức năng sao chép
 	 */
 	String copyApp(String id, String currentTenantId);
 
     /**
-     * 生成提示词
+     * Tạo prompt
      * @param prompt
-     * @return blocking 是否阻塞
+     * @return blocking Có chặn hay không
      * @return
      * @author chenrui
      * @date 2025/3/12 14:45
@@ -46,7 +46,7 @@ public interface IAiragAppService extends IService<AiragApp> {
     Object generatePrompt(String prompt,boolean blocking);
 
     /**
-     * 根据应用id生成提示词
+     * Tạo prompt theo id ứng dụng
      *
      * @param variables
      * @param memoryId
@@ -56,21 +56,21 @@ public interface IAiragAppService extends IService<AiragApp> {
     Object generateMemoryByAppId(String variables, String memoryId, boolean blocking);
 
     /**
-     * 写作保存
+     * Lưu bài viết
      * 
      * @param aiWriteVersionVo
      */
     void saveArticleWrite(AiArticleWriteVersionVo aiWriteVersionVo);
 
     /**
-     * 写作列表
+     * Danh sách bài viết
      * 
      * @return
      */
     List<AiArticleWriteVersionVo> listArticleWrite();
 
     /**
-     * 写作删除
+     * Xóa bài viết
      * 
      * @param version
      */

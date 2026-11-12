@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 /**
- * 动态更新路由网关service
- * 1）实现一个Spring提供的事件推送接口ApplicationEventPublisherAware
- * 2）提供动态路由的基础方法，可通过获取bean操作该类的方法。该类提供新增路由、更新路由、删除路由，然后实现发布的功能。
+ * Cập nhật động route gateway service
+ * 1) Triển khai một API đẩy sự kiện do Spring cung cấp ApplicationEventPublisherAware
+ * 2) Cung cấp các phương thức cơ sở của route động, có thể thao tác các phương thức của class này bằng cách lấy bean. Class này cung cấp thêm route, cập nhật route, xóa route, rồi thực hiện chức năng publish.
  *
  * @author zyf
  */
@@ -25,7 +25,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
     private MyInMemoryRouteDefinitionRepository repository;
 
     /**
-     * 发布事件
+     * Publish sự kiện
      */
 
     private ApplicationEventPublisher publisher;
@@ -36,7 +36,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
     }
 
     /**
-     * 删除路由
+     * Xóa route
      *
      * @param id
      * @return
@@ -51,7 +51,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
     }
 
     /**
-     * 更新路由
+     * Cập nhật route
      *
      * @param definition
      * @return
@@ -72,7 +72,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
     }
 
     /**
-     * 增加路由
+     * Thêm route
      *
      * @param definition
      * @return

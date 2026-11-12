@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.Arrays;
 
 /**
- * xxl-job定时任务测试
+ * xxl-job Kiểm thử tác vụ định kỳ
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -26,34 +26,34 @@ public class DemoJobHandler {
 
 
     /**
-     * 简单任务
+     * Tác vụ đơn giản
      *
      * @param params
      * @return
      */
     @XxlJob(value = "demoJob")
     public Response<String> demoJobHandler(String params) {
-        log.info("我是 jeecg-system 服务里的定时任务 demoJob，我执行了...............................");
+        log.info("Tôi là jeecg-system Nhiệm vụ theo lịch demoJob trong service, tôi đã thực thi...............................");
         return Response.ofSuccess();
     }
 
     /**
-     * 2、分片广播任务
+     * 2, nhiệm vụ quảng bá phân mảnh
      */
     @XxlJob("shardingJobHandler")
     public Response<String> shardingJobHandler(String param) throws Exception {
 
-        // 获取分片序号和总分片数
+        // Lấy số thứ tự phân mảnh và tổng số phân mảnh
         int shardIndex = XxlJobHelper.getShardIndex();
         int shardTotal = XxlJobHelper.getShardTotal();
-        log.info("分片参数：当前分片序号 = {}, 总分片数 = {}", shardIndex, shardTotal);
+        log.info("Tham số phân mảnh: số thứ tự phân mảnh hiện tại = {}, Tổng số phân mảnh = {}", shardIndex, shardTotal);
 
-        // 业务逻辑
+        // Logic nghiệp vụ
         for (int i = 0; i < shardTotal; i++) {
             if (i == shardIndex) {
-                log.info("第 {} 片, 命中分片开始处理", i);
+                log.info("Thứ {} mảnh, Trúng phân mảnh, bắt đầu xử lý", i);
             } else {
-                log.info("第 {} 片, 忽略", i);
+                log.info("Thứ {} mảnh, Bỏ qua", i);
             }
         }
 
@@ -62,9 +62,9 @@ public class DemoJobHandler {
 
 
     /**
-     * 3、命令行任务
+     * 3, nhiệm vụ dòng lệnh
      *
-     * 输入参数：ipconfig /all
+     * Tham số đầu vào:ipconfig /all
      */
     @XxlJob("commandJobHandler")
     public Response<String> commandJobHandler(String param) throws Exception {
@@ -104,9 +104,9 @@ public class DemoJobHandler {
 
 
     /**
-     * 4、跨平台Http任务
+     * 4, nhiệm vụ Http đa nền tảng
      *
-     * 输入参数：
+     * Tham số đầu vào:
      * url: https://www.baidu.com
      * method: get
      * data: content
@@ -213,7 +213,7 @@ public class DemoJobHandler {
 
 
     /**
-     * 5、生命周期任务示例：任务初始化与销毁时，支持自定义相关逻辑；
+     * 5, ví dụ nhiệm vụ vòng đời: khi khởi tạo và hủy nhiệm vụ, hỗ trợ logic tùy chỉnh liên quan;
      */
     @XxlJob(value = "demoJobHandler2", init = "init", destroy = "destroy")
     public Response<String> demoJobHandler2(String param) throws Exception {

@@ -18,7 +18,7 @@
 // *
 // */
 //@Slf4j
-//@Tag(name = "【微服务】单元测试")
+//@Tag(name = "【Microservice】Kiểm thử đơn vị")
 //@RestController
 //@RequestMapping("/test")
 //public class JcloudDemoFeignController {
@@ -28,13 +28,13 @@
 ////    private ErpHelloApi erpHelloApi;
 //
 //    /**
-//     * 测试
+//     * Kiểm tra
 //     *
 //     * @return
 //     */
 //    @GetMapping("/callSystem")
 //    //@SentinelResource(value = "remoteDict",fallback = "getDefaultHandler")
-//    @Operation(summary = "通过feign调用system服务")
+//    @Operation(summary = "Gọi dịch vụ system qua feign")
 //    public Result getRemoteDict() {
 //        List<DictModel> list = sysBaseApi.queryAllDict();
 //        return Result.OK(list);
@@ -42,27 +42,27 @@
 //
 //
 ////    /**
-////     * 测试调用 erp 微服务接口
-////     * 【如何测试：通过archetype生成微服务模块，快速集成测试】
+////     * Kiểm tra gọi API microservice erp
+////     * 【Cách kiểm tra：tạo mô-đun microservice bằng archetype để kiểm tra tích hợp nhanh】
 ////     *  https://help.jeecg.com/java/springcloud/archetype.html
 ////     * @return
 ////     */
 ////    @GetMapping("/callErp")
-////    @Operation(summary = "测试feign erp")
+////    @Operation(summary = "Kiểm tra feign erp")
 ////    public Result callErp() {
-////        log.info("call erp 服务");
+////        log.info("call erp Dịch vụ");
 ////        String res = erpHelloApi.callHello();
 ////        return Result.OK(res);
 ////    }
 //
 //    /**
-//     * 熔断，默认回调函数
+//     * Ngắt mạch, hàm callback mặc định
 //     *
 //     * @return
 //     */
 //    public Result<Object> getDefaultHandler() {
-//        log.info("测试JcloudDemoController-remoteDict 熔断降级");
-//        return Result.error("测试JcloudDemoController-remoteDict 熔断降级");
+//        log.info("Kiểm tra JcloudDemoController-remoteDict Ngắt mạch giáng cấp");
+//        return Result.error("Kiểm tra JcloudDemoController-remoteDict Ngắt mạch giáng cấp");
 //    }
 //
 //}

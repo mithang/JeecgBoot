@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.airag.llm.entity.AiragKnowledge;
 
 /**
- * @Description: AIRag知识库
+ * @Description: AIRag Kho tri thức
  * @Author: jeecg-boot
  * @Date:   2025-02-18
  * @Version: V1.0
@@ -13,8 +13,8 @@ import org.jeecg.modules.airag.llm.entity.AiragKnowledge;
 public interface AiragKnowledgeMapper extends BaseMapper<AiragKnowledge> {
 
     /**
-     * 根据ID查询知识库信息(忽略租户)
-     * for [QQYUN-12113]分享之后的聊天，应用、模型、知识库不根据租户查询
+     * Truy vấn thông tin kho tri thức theo ID(Bỏ qua tenant)
+     * for [QQYUN-12113]Sau khi chia sẻ, trò chuyện, ứng dụng, mô hình và kho tri thức không truy vấn theo tenant
      * @param id
      * @return
      * @author chenrui

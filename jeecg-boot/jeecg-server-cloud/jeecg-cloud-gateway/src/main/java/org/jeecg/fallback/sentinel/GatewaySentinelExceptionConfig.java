@@ -14,7 +14,7 @@ import jakarta.annotation.PostConstruct;
 import java.util.HashMap;
 
 /**
- * @Description: 自定义Sentinel全局异常(需要启动Sentinel客户端)
+ * @Description: Ngoại lệ toàn cục Sentinel tùy chỉnh(Cần khởi động client Sentinel)
  * @author: zyf
  * @date: 2022/02/18
  * @version: V1.0
@@ -31,12 +31,12 @@ public class GatewaySentinelExceptionConfig {
             if (ObjectUtil.isNotEmpty(errorInfoEnum)) {
                 msg = errorInfoEnum.getError();
             } else {
-                msg = "未知限流降级";
+                msg = "Giáng cấp giới hạn lưu lượng không xác định";
             }
             HashMap<String, String> map = new HashMap(5);
             map.put("code", HttpStatus.TOO_MANY_REQUESTS.toString());
             map.put("message", msg);
-            //自定义异常处理
+            //Xử lý ngoại lệ tùy chỉnh
             return ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(map));
         };
 

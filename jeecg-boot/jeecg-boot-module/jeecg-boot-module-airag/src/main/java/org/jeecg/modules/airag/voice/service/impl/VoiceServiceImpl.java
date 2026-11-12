@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * 文生语音服务实现（智谱AI TTS）
+ * Triển khai dịch vụ chuyển văn bản thành giọng nói (Zhipu AI TTS)
  */
 @Slf4j
 @Service
@@ -55,23 +55,23 @@ public class VoiceServiceImpl implements IVoiceService {
         try {
             loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         } catch (Exception e) {
-            log.warn("获取登录用户失败", e);
+            log.warn("Lấy người dùng đăng nhập thất bại", e);
         }
         return textToSpeechWithUser(vo, loginUser);
     }
 
     /**
-     * 核心 TTS 逻辑，接受显式传入的 loginUser（兼容同步调用和异步线程）
+     * Logic TTS cốt lõi, nhận loginUser được truyền rõ ràng (tương thích gọi đồng bộ và luồng bất đồng bộ)
      */
     private VoiceResultVo textToSpeechWithUser(VoiceGenerateVo vo, LoginUser loginUser) {
         AiChatConfig.VoiceModelConfig config = aiChatConfig.getAiModelVoice();
 
-        // 合并参数：前端传值优先，未传则取yml默认值
+        // Gộp tham số: ưu tiên giá trị truyền từ frontend, nếu không truyền thì lấy giá trị mặc định trong yml
         String voice = vo.getVoice() != null ? vo.getVoice() : config.getVoice();
         double speed = vo.getSpeed() != null ? vo.getSpeed() : config.getSpeed();
 
         try {
-            // 准备输出目录
+            // Chuẩn bị thư mục đầu ra
             String uploadPath = jeecgBaseConfig.getPath().getUpload();
             String bizPath = "voice";
             Path outputDir = Paths.get(uploadPath, bizPath);
@@ -80,28 +80,28 @@ public class VoiceServiceImpl implements IVoiceService {
             String fileName = "voice_" + System.currentTimeMillis() + ".wav";
             Path audioFile = outputDir.resolve(fileName);
 
-            // 调用公共TTS API生成音频
+            // Gọi API TTS công khai để tạo âm thanh
             ttsApiHelper.generateAudio(vo.getContent(), audioFile, voice, speed);
 
-            // 返回结果
+            // Trả về kết quả
             String voiceUrl = bizPath + "/" + fileName;
             VoiceResultVo result = new VoiceResultVo();
             result.setVoiceUrl(voiceUrl);
             result.setFileName(fileName);
 
-            // 存入Redis
+            // Lưu vào Redis
             saveToRedis(vo, fileName, voiceUrl, loginUser);
 
             return result;
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
-            log.error("语音生成异常", e);
-            throw new RuntimeException("语音生成异常: " + e.getMessage(), e);
+            log.error("Lỗi tạo giọng nói", e);
+            throw new RuntimeException("Lỗi tạo giọng nói: " + e.getMessage(), e);
         }
     }
 
-    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】语音生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo giọng nói chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
     @Override
     public String generateAsync(VoiceGenerateVo vo) {
         String taskId = UUID.randomUUID().toString().replace("-", "");
@@ -111,12 +111,12 @@ public class VoiceServiceImpl implements IVoiceService {
         pending.put("status", "pending");
         redisUtil.set(taskKey, pending.toJSONString(), VOICE_TASK_TTL);
 
-        // 在异步线程执行前先获取登录用户，避免子线程中 Shiro 上下文丢失
+        // Trước khi thực thi trong luồng bất đồng bộ, lấy người dùng đăng nhập trước để tránh mất ngữ cảnh Shiro trong luồng con
         LoginUser loginUser = null;
         try {
             loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         } catch (Exception e) {
-            log.warn("异步语音任务获取登录用户失败", e);
+            log.warn("Tác vụ giọng nói bất đồng bộ lấy người dùng đăng nhập thất bại", e);
         }
         final LoginUser capturedUser = loginUser;
 
@@ -128,7 +128,7 @@ public class VoiceServiceImpl implements IVoiceService {
                 result.put("voiceUrl", voiceResult.getVoiceUrl());
                 result.put("fileName", voiceResult.getFileName());
             } catch (Exception e) {
-                log.error("异步语音生成失败: taskId={}", taskId, e);
+                log.error("Tạo giọng nói bất đồng bộ thất bại: taskId={}", taskId, e);
                 result.put("status", "failed");
                 result.put("message", e.getMessage());
             }
@@ -142,7 +142,7 @@ public class VoiceServiceImpl implements IVoiceService {
     public Result<?> getVoiceTaskResult(String taskId) {
         Object val = redisUtil.get(VOICE_TASK_PREFIX + taskId);
         if (val == null) {
-            return Result.error("任务不存在或已过期");
+            return Result.error("Nhiệm vụ không tồn tại hoặc đã hết hạn");
         }
         JSONObject task = JSONObject.parseObject(val.toString());
         String status = task.getString("status");
@@ -157,7 +157,7 @@ public class VoiceServiceImpl implements IVoiceService {
         }
         return Result.OK("pending", null);
     }
-    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】语音生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo giọng nói chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
 
     @Override
     public List<JSONObject> getVoiceRecords(String userId) {
@@ -190,12 +190,12 @@ public class VoiceServiceImpl implements IVoiceService {
     }
 
     /**
-     * 将语音生成记录存入Redis
+     * Lưu bản ghi tạo giọng nói vào Redis
      */
     private void saveToRedis(VoiceGenerateVo vo, String fileName, String voiceUrl, LoginUser loginUser) {
         try {
             if (loginUser == null) {
-                log.warn("未获取到登录用户，跳过Redis存储");
+                log.warn("Chưa lấy được người dùng đăng nhập, bỏ qua lưu trữ Redis");
                 return;
             }
             String redisKey = REDIS_KEY_PREFIX + loginUser.getId();
@@ -211,9 +211,9 @@ public class VoiceServiceImpl implements IVoiceService {
             record.put("voiceUrl", voiceUrl);
 
             redisUtil.lSet(redisKey, record.toJSONString());
-            log.info("语音记录已存入Redis列表: key={}", redisKey);
+            log.info("Bản ghi giọng nói đã được lưu vào danh sách Redis: key={}", redisKey);
         } catch (Exception e) {
-            log.warn("语音记录存入Redis失败，不影响主流程", e);
+            log.warn("Lưu bản ghi giọng nói vào Redis thất bại, không ảnh hưởng đến quy trình chính", e);
         }
     }
 }

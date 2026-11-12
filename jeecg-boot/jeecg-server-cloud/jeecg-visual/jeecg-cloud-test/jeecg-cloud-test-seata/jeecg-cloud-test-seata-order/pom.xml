@@ -8,7 +8,7 @@
         <version>3.9.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <description>分布式事务测试模块</description>
+    <description>Module kiểm thử giao dịch phân tán</description>
     <artifactId>jeecg-cloud-test-seata-order</artifactId>
 
 </project>

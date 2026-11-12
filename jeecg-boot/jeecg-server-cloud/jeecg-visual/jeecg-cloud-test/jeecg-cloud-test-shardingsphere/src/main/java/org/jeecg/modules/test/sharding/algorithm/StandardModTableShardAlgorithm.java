@@ -9,9 +9,9 @@ import java.util.Collection;
 import java.util.Properties;
 
 /**
- * 用于处理使用单一键
- * 根据分片字段的值和sharding-count进行取模运算
- * SQL 语句中有>，>=, <=，<，=，IN 和 BETWEEN AND 操作符，都可以应用此分片策略。
+ * Dùng để xử lý khi sử dụng một khóa duy nhất
+ * Dựa theo giá trị của trường phân mảnh và sharding-count thực hiện phép chia lấy dư
+ * SQL Trong câu lệnh có>，>=, <=，<，=, toán tử IN và BETWEEN AND đều có thể áp dụng chiến lược phân mảnh này.
  *
  * @author zyf
  */
@@ -20,10 +20,10 @@ public class StandardModTableShardAlgorithm implements StandardShardingAlgorithm
 
 
     /**
-     * 用于处理=和IN的分片
+     * Dùng để xử lý=phân mảnh của = và IN
      *
-     * @param collection           目标分片的集合(表名)
-     * @param preciseShardingValue 逻辑表相关信息
+     * @param collection           Tập hợp các phân mảnh đích(Tên bảng)
+     * @param preciseShardingValue Thông tin liên quan đến bảng logic
      * @return
      */
     @Override
@@ -31,7 +31,7 @@ public class StandardModTableShardAlgorithm implements StandardShardingAlgorithm
 
         for (String name : collection) {
             Integer value = preciseShardingValue.getValue();
-            //根据值进行取模，得到一个目标值
+            //Dựa theo giá trị thực hiện phép chia lấy dư, thu được một giá trị đích
             if (name.indexOf(value % 2+"") > -1) {
                 return name;
             }
@@ -40,7 +40,7 @@ public class StandardModTableShardAlgorithm implements StandardShardingAlgorithm
     }
 
     /**
-     * 用于处理BETWEEN AND分片，如果不配置RangeShardingAlgorithm，SQL中的BETWEEN AND将按照全库路由处理
+     * Dùng để xử lý phân mảnh BETWEEN AND, nếu không cấu hình RangeShardingAlgorithm, BETWEEN AND trong SQL sẽ được xử lý theo định tuyến toàn bộ cơ sở dữ liệu
      *
      * @param collection
      * @param rangeShardingValue
@@ -53,7 +53,7 @@ public class StandardModTableShardAlgorithm implements StandardShardingAlgorithm
     }
 
     /**
-     * 对应分片算法（sharding-algorithms）的类型
+     * Thuật toán phân mảnh tương ứng (sharding-algorithms) loại
      *
      * @return
      */

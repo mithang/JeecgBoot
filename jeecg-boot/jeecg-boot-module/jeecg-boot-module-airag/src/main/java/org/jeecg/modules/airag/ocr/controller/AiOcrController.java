@@ -50,7 +50,7 @@ public class AiOcrController  {
             aiOcrs.add(aiOcr);
             redisUtil.set(AI_OCR_REDIS_KEY,JSONObject.toJSONString(aiOcrs));
         }
-        return Result.OK("添加成功");
+        return Result.OK("Thêm thành công");
     }
 
     @PutMapping("/edit")
@@ -65,9 +65,9 @@ public class AiOcrController  {
             });
             redisUtil.set(AI_OCR_REDIS_KEY,JSONObject.toJSONString(aiOcrs));
         }else{
-            return Result.OK("编辑失败，未找到该数据");
+            return Result.OK("Chỉnh sửa thất bại, không tìm thấy dữ liệu này");
         }
-        return Result.OK("编辑成功");
+        return Result.OK("Chỉnh sửa thành công");
     }
 
     @DeleteMapping("/deleteById")
@@ -87,8 +87,8 @@ public class AiOcrController  {
                 redisUtil.removeAll(AI_OCR_REDIS_KEY);
             }
         }else{
-            return Result.OK("删除失败，未找到该数据");
+            return Result.OK("Xóa thất bại, không tìm thấy dữ liệu này");
         }
-        return Result.OK("删除成功");
+        return Result.OK("Xóa thành công");
     }
 }

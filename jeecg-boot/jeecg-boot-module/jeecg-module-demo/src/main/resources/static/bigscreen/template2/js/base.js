@@ -3,25 +3,25 @@ function fnW(str) {
     str >= 10 ? num = str : num = "0" + str;
     return num;
 }
-//获取当前时间
+//Lấy thời gian hiện tại
 var timer = setInterval(function () {
     var date = new Date();
-    var year = date.getFullYear(); //当前年份
-    var month = date.getMonth(); //当前月份
-    var data = date.getDate(); //天
-    var hours = date.getHours(); //小时
-    var minute = date.getMinutes(); //分
-    var second = date.getSeconds(); //秒
-    var day = date.getDay(); //获取当前星期几 
+    var year = date.getFullYear(); //Năm hiện tại
+    var month = date.getMonth(); //Tháng hiện tại
+    var data = date.getDate(); //Ngày
+    var hours = date.getHours(); //Giờ
+    var minute = date.getMinutes(); //phút
+    var second = date.getSeconds(); //giây
+    var day = date.getDay(); //Lấy thứ trong tuần hiện tại 
     var ampm = hours < 12 ? 'am' : 'pm';
     $('#time').html(fnW(hours) + ":" + fnW(minute) + ":" + fnW(second));
-    $('#date').html('<span>' + year + '/' + (month + 1) + '/' + data + '</span><span>' + ampm + '</span><span>周' + day + '</span>')
+    $('#date').html('<span>' + year + '/' + (month + 1) + '/' + data + '</span><span>' + ampm + '</span><span>Tuần' + day + '</span>')
 
 }, 1000)
 
 
 
-//页面地图数据
+//Dữ liệu bản đồ trang
 var geoCoordMap = {
     '海门': [121.15, 31.89],
     '鄂尔多斯': [109.781327, 39.608266],
@@ -42,7 +42,7 @@ var geoCoordMap = {
     '云浮': [112.02, 22.93],
     '梅州': [116.1, 24.55],
     '文登': [122.05, 37.2],
-    '上海': [121.48, 31.22],
+    'Thượng Hải': [121.48, 31.22],
     '攀枝花': [101.718637, 26.582347],
     '威海': [122.1, 37.5],
     '承德': [117.93, 40.97],
@@ -120,7 +120,7 @@ var geoCoordMap = {
     '柳州': [109.4, 24.33],
     '三亚': [109.511909, 18.252847],
     '自贡': [104.778442, 29.33903],
-    '吉林': [126.57, 43.87],
+    'Cát Lâm': [126.57, 43.87],
     '阳江': [111.95, 21.85],
     '泸州': [105.39, 28.91],
     '西宁': [101.74, 36.56],
@@ -142,9 +142,9 @@ var geoCoordMap = {
     '扬州': [119.42, 32.39],
     '常州': [119.95, 31.79],
     '潍坊': [119.1, 36.62],
-    '重庆': [106.54, 29.59],
+    'Trùng Khánh': [106.54, 29.59],
     '台州': [121.420757, 28.656386],
-    '南京': [118.78, 32.04],
+    'Nam Kinh': [118.78, 32.04],
     '滨州': [118.03, 37.36],
     '贵阳': [106.71, 26.57],
     '无锡': [120.29, 31.59],
@@ -155,7 +155,7 @@ var geoCoordMap = {
     '宝鸡': [107.15, 34.38],
     '焦作': [113.21, 35.24],
     '句容': [119.16, 31.95],
-    '北京': [116.46, 39.92],
+    'Bắc Kinh': [116.46, 39.92],
     '徐州': [117.2, 34.26],
     '衡水': [115.72, 37.72],
     '包头': [110, 40.58],
@@ -179,7 +179,7 @@ var geoCoordMap = {
     '沧州': [116.83, 38.33],
     '临沂': [118.35, 35.05],
     '南充': [106.110698, 30.837793],
-    '天津': [117.2, 39.13],
+    'Thiên Tân': [117.2, 39.13],
     '富阳': [119.95, 30.07],
     '泰安': [117.13, 36.18],
     '诸暨': [120.23, 29.71],
@@ -231,7 +231,7 @@ var geoCoordMap = {
     '江苏省': [118.46, 32.03],
     '江西省': [115.55, 28.40],
     '辽宁省': [123.25, 41.48],
-    '内蒙古': [108.41, 40.48],
+    'Nội Mông': [108.41, 40.48],
     '内蒙古自治区': [108.41, 40.48],
     '宁夏回族自治区': [106.16, 38.27],
     '青海省': [101.48, 36.38],
@@ -239,7 +239,7 @@ var geoCoordMap = {
     '山西省': [112.33, 37.54],
     '陕西省': [108.57, 34.17],
     '上海市': [121.29, 31.14],
-    '海南': [108.77, 19.10],
+    'Hải Nam': [108.77, 19.10],
     '四川省': [104.04, 30.40],
     '天津市': [117.12, 39.02],
     '西藏自治区': [91.08, 29.39],
@@ -254,7 +254,7 @@ var geoCoordMap = {
 $('.select').on('blur', function () {
         $(this).find('.select-ul').hide();
     })
-    //下拉框点击出现下拉框内容
+    //Nhấp vào hộp thả xuống để hiển thị nội dung hộp thả xuống
 $('.select-div').on('click', function () {
     if ($(this).siblings('.select-ul').is(":hidden")) {
         $(this).siblings('.select-ul').show();
@@ -269,7 +269,7 @@ $('.select-ul').on('click', 'li', function () {
     var parentDiv = $(this).parent().parent().parent();
 })
 
-//鼠标滑动到按钮，按钮内容变成白色
+//Di chuột đến nút, nội dung nút chuyển thành màu trắng
 var imgName;
 $('.title-box').children('button').hover(function () {
     imgName = $(this).children('img').attr('src').split('.png')[0];
@@ -285,9 +285,9 @@ var borderStartColor = ['#0077c5', '#a819d7', '#c99002', '#24bc00', '#b6cb04', '
 
 
 
-//入库量占比，带边框效果的饼图
+//Biểu đồ tròn thể hiện tỷ lệ lượng nhập kho, có hiệu ứng viền
 function chart1() {
-    //data 为模拟数据
+    //data là dữ liệu mô phỏng
     var data = [{
         name: '顺丰',
         value: 192581,
@@ -353,12 +353,12 @@ function chart1() {
                     y2: 1,
                     colorStops: [{
                         offset: 0,
-                        color: startColor[index] // 0% 处的颜色
+                        color: startColor[index] // 0% màu tại vị trí
                 }, {
                         offset: 1,
-                        color: startColor[index] // 100% 处的颜色
+                        color: startColor[index] // 100% màu tại vị trí
                 }],
-                    globalCoord: false // 缺省为 false
+                    globalCoord: false // Mặc định là false
                 },
             }
         }
@@ -374,12 +374,12 @@ function chart1() {
                     y2: 1,
                     colorStops: [{
                         offset: 0,
-                        color: borderStartColor[index] // 0% 处的颜色
+                        color: borderStartColor[index] // 0% màu tại vị trí
                 }, {
                         offset: 1,
-                        color: borderStartColor[index] // 100% 处的颜色
+                        color: borderStartColor[index] // 100% màu tại vị trí
                 }],
-                    globalCoord: false // 缺省为 false
+                    globalCoord: false // Mặc định là false
                 },
             }
         }
@@ -392,7 +392,7 @@ function chart1() {
             formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
         series: [
-        // 主要展示层的
+        // của lớp hiển thị chính
             {
                 radius: ['50%', '85%'],
                 center: ['50%', '50%'],
@@ -413,10 +413,10 @@ function chart1() {
                         show: false
                     }
                 },
-                name: "派件入库量占比内容",
+                name: "Nội dung tỷ lệ lượng hàng phát nhập kho",
                 data: RealData
         },
-        // 边框的设置
+        // Cài đặt viền
             {
                 radius: ['45%', '50%'],
                 center: ['50%', '50%'],
@@ -452,10 +452,10 @@ function chart1() {
 
 chart1()
 
-//----------------------派件入库量占比内容end---------------
+//----------------------Nội dung tỷ lệ lượng hàng phát nhập kho end---------------
 
-//------------广东省寄派件数据内容---------------
-//点击筛选按钮
+//------------Nội dung dữ liệu gửi/nhận kiện hàng tỉnh Quảng Đông---------------
+//Nhấp vào nút lọc
 $('#filBtn').on('click', function () {
         if ($('#filCon').is(":hidden")) {
             $('#filCon').attr('style', 'display:flex');
@@ -463,7 +463,7 @@ $('#filBtn').on('click', function () {
             $('#filCon').hide();
         }
     })
-    //点击筛选按钮end
+    //Nhấp vào nút lọc end
 
 
 function chart2(chartType) {
@@ -575,7 +575,7 @@ function chart2(chartType) {
             visualMap: {
                 min: 0,
                 max: yMax,
-                text: ['高', '低'],
+                text: ['Cao', 'Thấp'],
                 orient: 'horizontal',
                 itemWidth: 15,
                 itemHeight: 200,
@@ -590,13 +590,13 @@ function chart2(chartType) {
             },
             series: [
                 {
-                    name: '数据名称',
+                    name: 'Tên dữ liệu',
                     type: 'map',
                     mapType: '广东',
                     selectedMode: 'multiple',
                     tooltip: {
                         trigger: 'item',
-                        formatter: '{b}<br/>{c} (件)'
+                        formatter: '{b}<br/>{c} (cái)'
                     },
                     itemStyle: {
                         normal: {
@@ -606,7 +606,7 @@ function chart2(chartType) {
                                 show: false
                             }
                         },
-                        emphasis: { // 也是选中样式
+                        emphasis: { // cũng là kiểu đã chọn
                             borderWidth: 1,
                             borderColor: '#fff',
                             backgroundColor: 'red',
@@ -628,213 +628,213 @@ function chart2(chartType) {
 }
 chart2('');
 
-//------------广东省寄派件数据内容end---------------
+//------------Nội dung dữ liệu gửi/nhận kiện hàng tỉnh Quảng Đông end---------------
 
-//cityName全国的省级行政区域数据
+//cityName Dữ liệu khu vực hành chính cấp tỉnh trên toàn quốc
 var cityName = [{
     "ProID": 1,
-    "name": "北京",
+    "name": "Bắc Kinh",
     "ProSort": 1,
     "firstP": "B",
-    "ProRemark": "直辖市"
+    "ProRemark": "Thành phố trực thuộc trung ương"
 }, {
     "ProID": 2,
-    "name": "天津",
+    "name": "Thiên Tân",
     "ProSort": 2,
     "firstP": "T",
-    "ProRemark": "直辖市"
+    "ProRemark": "Thành phố trực thuộc trung ương"
 }, {
     "ProID": 3,
-    "name": "河北",
+    "name": "Hà Bắc",
     "ProSort": 5,
     "firstP": "H",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 4,
-    "name": "山西",
+    "name": "Sơn Tây",
     "ProSort": 6,
     "firstP": "S",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 5,
-    "name": "内蒙古",
+    "name": "Nội Mông",
     "ProSort": 32,
     "firstP": "N",
-    "ProRemark": "自治区"
+    "ProRemark": "Khu tự trị"
 }, {
     "ProID": 6,
-    "name": "辽宁",
+    "name": "Liêu Ninh",
     "ProSort": 8,
     "firstP": "L",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 7,
-    "name": "吉林",
+    "name": "Cát Lâm",
     "ProSort": 9,
-    "firstP": "J",
-    "ProRemark": "省份"
+    "firstP": "C",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 8,
-    "name": "黑龙江",
+    "name": "Hắc Long Giang",
     "ProSort": 10,
     "firstP": "H",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 9,
-    "name": "上海",
+    "name": "Thượng Hải",
     "ProSort": 3,
-    "firstP": "S",
-    "ProRemark": "直辖市"
+    "firstP": "T",
+    "ProRemark": "Thành phố trực thuộc trung ương"
 }, {
     "ProID": 10,
-    "name": "江苏",
+    "name": "Giang Tô",
     "ProSort": 11,
-    "firstP": "J",
-    "ProRemark": "省份"
+    "firstP": "G",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 11,
-    "name": "浙江",
+    "name": "Chiết Giang",
     "ProSort": 12,
-    "firstP": "Z",
-    "ProRemark": "省份"
+    "firstP": "C",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 12,
-    "name": "安徽",
+    "name": "An Huy",
     "ProSort": 13,
     "firstP": "A",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 13,
-    "name": "福建",
+    "name": "Phúc Kiến",
     "ProSort": 14,
-    "firstP": "F",
-    "ProRemark": "省份"
+    "firstP": "P",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 14,
-    "name": "江西",
+    "name": "Giang Tây",
     "ProSort": 15,
-    "firstP": "J",
-    "ProRemark": "省份"
+    "firstP": "G",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 15,
-    "name": "山东",
+    "name": "Sơn Đông",
     "ProSort": 16,
     "firstP": "S",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 16,
-    "name": "河南",
+    "name": "Hà Nam",
     "ProSort": 17,
     "firstP": "H",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 17,
-    "name": "湖北",
+    "name": "Hồ Bắc",
     "ProSort": 18,
     "firstP": "H",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 18,
-    "name": "湖南",
+    "name": "Hồ Nam",
     "ProSort": 19,
     "firstP": "H",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 19,
-    "name": "广东",
+    "name": "Quảng Đông",
     "ProSort": 20,
-    "firstP": "G",
-    "ProRemark": "省份"
+    "firstP": "Q",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 20,
-    "name": "海南",
+    "name": "Hải Nam",
     "ProSort": 24,
     "firstP": "H",
-    "ProRemark": "省份"
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 21,
-    "name": "广西",
+    "name": "Quảng Tây",
     "ProSort": 28,
-    "firstP": "G",
-    "ProRemark": "自治区"
+    "firstP": "Q",
+    "ProRemark": "Khu tự trị"
 }, {
     "ProID": 22,
-    "name": "甘肃",
+    "name": "Cam Túc",
     "ProSort": 21,
-    "firstP": "G",
-    "ProRemark": "省份"
+    "firstP": "C",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 23,
-    "name": "陕西省",
+    "name": "Thiểm Tây",
     "ProSort": 27,
-    "firstP": "S",
-    "ProRemark": "省份"
+    "firstP": "T",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 24,
-    "name": "新疆维吾尔",
+    "name": "Tân Cương",
     "ProSort": 31,
-    "firstP": "X",
-    "ProRemark": "自治区"
+    "firstP": "T",
+    "ProRemark": "Khu tự trị"
 }, {
     "ProID": 25,
-    "name": "青海",
+    "name": "Thanh Hải",
     "ProSort": 26,
-    "firstP": "Q",
-    "ProRemark": "省份"
+    "firstP": "T",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 26,
-    "name": "宁夏",
+    "name": "Ninh Hạ",
     "ProSort": 30,
     "firstP": "N",
-    "ProRemark": "自治区"
+    "ProRemark": "Khu tự trị"
 }, {
     "ProID": 27,
-    "name": "重庆",
+    "name": "Trùng Khánh",
     "ProSort": 4,
-    "firstP": "C",
-    "ProRemark": "直辖市"
+    "firstP": "T",
+    "ProRemark": "Thành phố trực thuộc trung ương"
 }, {
     "ProID": 28,
-    "name": "四川省",
+    "name": "Tứ Xuyên",
     "ProSort": 22,
-    "firstP": "S",
-    "ProRemark": "省份"
+    "firstP": "T",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 29,
-    "name": "贵州省",
+    "name": "Quý Châu",
     "ProSort": 23,
-    "firstP": "G",
-    "ProRemark": "省份"
+    "firstP": "Q",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 30,
-    "name": "云南省",
+    "name": "Vân Nam",
     "ProSort": 25,
-    "firstP": "Y",
-    "ProRemark": "省份"
+    "firstP": "V",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 31,
-    "name": "西藏",
+    "name": "Tây Tạng",
     "ProSort": 29,
-    "firstP": "X",
-    "ProRemark": "自治区"
+    "firstP": "T",
+    "ProRemark": "Khu tự trị"
 }, {
     "ProID": 32,
-    "name": "台湾",
+    "name": "Đài Loan",
     "ProSort": 7,
-    "firstP": "T",
-    "ProRemark": "省份"
+    "firstP": "D",
+    "ProRemark": "Tỉnh"
 }, {
     "ProID": 33,
-    "name": "澳门",
+    "name": "Ma Cao",
     "ProSort": 33,
-    "firstP": "A",
-    "ProRemark": "特别行政区"
+    "firstP": "M",
+    "ProRemark": "Khu hành chính đặc biệt"
 }, {
     "ProID": 34,
-    "name": "香港",
+    "name": "Hồng Kông",
     "ProSort": 34,
-    "firstP": "X",
-    "ProRemark": "特别行政区"
+    "firstP": "H",
+    "ProRemark": "Khu hành chính đặc biệt"
 }]
 
 addCityBtn(cityName);
@@ -866,9 +866,9 @@ $('.city-btn').on('click', 'li', function () {
         if ($(this).parent().data('city') == 1) {
             $('.ranking-box').show();
             if ($("#barType").find('.active').data('value') == 1) {
-                $('#titleQ').html('<span>全网</span>到珠海');
+                $('#titleQ').html('<span>Toàn mạng</span>đến Chu Hải');
             } else if ($("#barType").find('.active').data('value') == 2) {
-                $('#titleQ').html('珠海到<span>全网</span>')
+                $('#titleQ').html('Chu Hải đến<span>Toàn mạng</span>')
             }
             $('#city').html(li_con);
         } else if ($(this).parent().data('city') == 2) {
@@ -876,9 +876,9 @@ $('.city-btn').on('click', 'li', function () {
                 $('.ranking-box').show();
             }
             if ($("#barTypes").find('.active').data('value') == 1) {
-                $('#titleQs').html('<span>全网</span>到珠海');
+                $('#titleQs').html('<span>Toàn mạng</span>đến Chu Hải');
             } else if ($("#barTypes").find('.active').data('value') == 2) {
-                $('#titleQs').html('珠海到<span>全网</span>')
+                $('#titleQs').html('Chu Hải đến<span>Toàn mạng</span>')
             }
             $('#citys').html(li_con);
         }
@@ -898,9 +898,9 @@ $('#city').on('click', 'li', function () {
     $(this).addClass('active').siblings('li').removeClass('active');
     $('.center-bottom .ranking-box').hide();
     if ($("#barType").find('.active').data('value') == 1) {
-        $('#titleQ').html('<span>' + $(this).html() + '</span>到珠海');
+        $('#titleQ').html('<span>' + $(this).html() + '</span>đến Chu Hải');
     } else if ($("#barType").find('.active').data('value') == 2) {
-        $('#titleQ').html('珠海到<span>' + $(this).html() + '</span>')
+        $('#titleQ').html('Chu Hải đến<span>' + $(this).html() + '</span>')
     }
 })
 
@@ -908,16 +908,16 @@ $('#citys').on('click', 'li', function () {
     $(this).addClass('active').siblings('li').removeClass('active');
     $('.pop-data .ranking-box').hide();
     if ($("#barTypes").find('.active').data('value') == 1) {
-        $('#titleQs').html('<span>' + $(this).html() + '</span>到珠海');
+        $('#titleQs').html('<span>' + $(this).html() + '</span>đến Chu Hải');
     } else if ($("#barTypes").find('.active').data('value') == 2) {
-        $('#titleQs').html('珠海到<span>' + $(this).html() + '</span>')
+        $('#titleQs').html('Chu Hải đến<span>' + $(this).html() + '</span>')
     }
 })
 
-//寄派件选择
+//Lựa chọn gửi/nhận kiện hàng
 $("#barType").on('click', 'li', function () {
     $(this).addClass('active').siblings('li').removeClass('active');
-    $('#barTitle').html($(this).html() + '数据');
+    $('#barTitle').html($(this).html() + 'Dữ liệu');
     $('#tabBtn').data('state', $(this).data('value'));
     if ($(this).data('value') == 1) {
         $('.table1').eq(0).show().siblings('table').hide();
@@ -928,10 +928,10 @@ $("#barType").on('click', 'li', function () {
     chart4(chart4Data, $(this).data('value'), 0);
 })
 
-//寄派件选择
+//Lựa chọn gửi/nhận kiện hàng
 $("#barTypes").on('click', 'li', function () {
     $(this).addClass('active').siblings('li').removeClass('active');
-    $('#barTitles').html($(this).html() + '数据');
+    $('#barTitles').html($(this).html() + 'Dữ liệu');
     $('#tabBtns').data('state', $(this).data('value'));
     if ($(this).data('value') == 1) {
         $('.table2').eq(0).show().siblings('table').hide();
@@ -952,61 +952,61 @@ function chart3(type, chartType) {
         myCharts.resize();
     });
 
-    //    设置背景阴影的参数，获取数据的最大值
+    //    Tham số cài đặt bóng nền, lấy giá trị lớn nhất của dữ liệu
 
-    var data; //横坐标数据，不动
-    var data_; //模拟数据
+    var data; //Dữ liệu trục hoành, không thay đổi
+    var data_; //Dữ liệu mô phỏng
     if (type == 1) {
         data_ = [{
-                name: "入库件",
+                name: "Bưu kiện nhập kho",
                 value: 584
             },
             {
-                name: "滞留件",
+                name: "Bưu kiện tồn đọng",
                 value: 152
             }, {
-                name: "丢失件",
+                name: "Bưu kiện thất lạc",
                 value: 100
             },
             {
-                name: "正常件",
+                name: "Bưu kiện bình thường",
                 value: 689
             },
             {
-                name: "派送件",
+                name: "Bưu kiện đang giao",
                 value: 200
             }, {
-                name: "自提件",
+                name: "Bưu kiện tự lấy",
                 value: 121
             }, {
-                name: "退签件",
+                name: "Bưu kiện trả lại",
                 value: 92
             }]
     } else if (type == 2) {
         data_ = [{
-                name: "入库件",
+                name: "Bưu kiện nhập kho",
                 value: 568
                 }, {
-                name: "丢失件",
+                name: "Bưu kiện thất lạc",
                 value: 287
                 }, {
-                name: "滞留件",
+                name: "Bưu kiện tồn đọng",
                 value: 120
                 },
             {
-                name: "撤销件",
+                name: "Bưu kiện đã hủy",
                 value: 152
                 },
             {
-                name: "出库件",
+                name: "Bưu kiện xuất kho",
                 value: 125
                 }, {
-                name: "正常件",
+                name: "Bưu kiện bình thường",
                 value: 122
         }]
     }
-    var series_data; //绘制图表的数据
-    //绘制图表
+    var series_data; //Dữ liệu vẽ biểu đồ
+    //Vẽ biểu đồ
     var yMax = 0;
     for (var j = 0; j < data_.length; j++) {
         if (yMax < data_[j].value) {
@@ -1019,7 +1019,7 @@ function chart3(type, chartType) {
     }
 
     if (type == 1) {
-        data = ['入库件', '在库件', '出库件', '退签件', '丢失件'];
+        data = ['Bưu kiện nhập kho', 'Bưu kiện trong kho', 'Bưu kiện xuất kho', 'Bưu kiện trả lại', 'Bưu kiện thất lạc'];
 
         if (chartType == '') {
             $(' .dph-data1').html(data_[0].value);
@@ -1070,7 +1070,7 @@ function chart3(type, chartType) {
                 animation: false
             },
             {
-                name: '入库件',
+                name: 'Bưu kiện nhập kho',
                 type: 'bar',
                 barGap: '-100%',
                 barWidth: '40%',
@@ -1086,9 +1086,9 @@ function chart3(type, chartType) {
                 data: [data_[0], 0, 0, 0, 0],
             },
             {
-                name: '滞留件',
+                name: 'Bưu kiện tồn đọng',
                 type: 'bar',
-                stack: '在库件',
+                stack: 'Bưu kiện trong kho',
                 xAxisIndex: 1,
                 itemStyle: {
                     normal: {
@@ -1101,7 +1101,7 @@ function chart3(type, chartType) {
                 data: [0, data_[1], 0, 0, 0],
             },
             {
-                name: '丢失件',
+                name: 'Bưu kiện thất lạc',
                 type: 'bar',
                 xAxisIndex: 1,
                 itemStyle: {
@@ -1115,9 +1115,9 @@ function chart3(type, chartType) {
                 data: [0, 0, 0, 0, data_[2]],
             },
             {
-                name: '正常件',
+                name: 'Bưu kiện bình thường',
                 type: 'bar',
-                stack: '在库件',
+                stack: 'Bưu kiện trong kho',
                 xAxisIndex: 1,
                 itemStyle: {
                     normal: {
@@ -1130,9 +1130,9 @@ function chart3(type, chartType) {
                 data: [0, data_[3], 0, 0, 0],
             },
             {
-                name: '派送件',
+                name: 'Bưu kiện đang giao',
                 type: 'bar',
-                stack: '出库件',
+                stack: 'Bưu kiện xuất kho',
                 xAxisIndex: 1,
                 itemStyle: {
                     normal: {
@@ -1145,9 +1145,9 @@ function chart3(type, chartType) {
                 data: [0, 0, data_[4], 0, 0],
             },
             {
-                name: '自提件',
+                name: 'Bưu kiện tự lấy',
                 type: 'bar',
-                stack: '出库件',
+                stack: 'Bưu kiện xuất kho',
                 xAxisIndex: 1,
                 itemStyle: {
                     normal: {
@@ -1160,7 +1160,7 @@ function chart3(type, chartType) {
                 data: [0, 0, data_[5], 0, 0],
             },
             {
-                name: '退签件',
+                name: 'Bưu kiện trả lại',
                 type: 'bar',
                 xAxisIndex: 1,
                 itemStyle: {
@@ -1177,7 +1177,7 @@ function chart3(type, chartType) {
 
 
     } else if (type == 2) {
-        data = ['入库件', '在库件', '出库件', '丢失件', '撤销件'];
+        data = ['Bưu kiện nhập kho', 'Bưu kiện trong kho', 'Bưu kiện xuất kho', 'Bưu kiện thất lạc', 'Bưu kiện đã hủy'];
         if (chartType == '') {
             $('.mail-data1').html(data_[0].value);
             $('.mail-data2').html(data_[2].value + data_[5].value);
@@ -1221,7 +1221,7 @@ function chart3(type, chartType) {
                 animation: false
             },
             {
-                name: '入库件',
+                name: 'Bưu kiện nhập kho',
                 barGap: '-100%',
                 barWidth: '40%',
                 type: 'bar',
@@ -1237,9 +1237,9 @@ function chart3(type, chartType) {
                 data: [data_[0], 0, 0, 0, 0],
             },
             {
-                name: '正常件',
+                name: 'Bưu kiện bình thường',
                 type: 'bar',
-                stack: '在库件',
+                stack: 'Bưu kiện trong kho',
                 xAxisIndex: 1,
                 itemStyle: {
                     normal: {
@@ -1252,7 +1252,7 @@ function chart3(type, chartType) {
                 data: [0, data_[5], 0, 0, 0, 0],
                 },
             {
-                name: '丢失件',
+                name: 'Bưu kiện thất lạc',
                 type: 'bar',
                 xAxisIndex: 1,
                 itemStyle: {
@@ -1266,10 +1266,10 @@ function chart3(type, chartType) {
                 data: [0, 0, 0, data_[1], 0],
                     },
             {
-                name: '滞留件',
+                name: 'Bưu kiện tồn đọng',
                 type: 'bar',
                 xAxisIndex: 1,
-                stack: '在库件',
+                stack: 'Bưu kiện trong kho',
                 itemStyle: {
                     normal: {
                         color: 'rgba(239,176,19,0.4)'
@@ -1282,7 +1282,7 @@ function chart3(type, chartType) {
                 data: [0, data_[2], 0, 0, 0],
                     },
             {
-                name: '撤销件',
+                name: 'Bưu kiện đã hủy',
                 type: 'bar',
                 xAxisIndex: 1,
                 itemStyle: {
@@ -1296,10 +1296,10 @@ function chart3(type, chartType) {
                 data: [0, 0, 0, 0, data_[3]],
                     },
             {
-                name: '出库件',
+                name: 'Bưu kiện xuất kho',
                 type: 'bar',
                 xAxisIndex: 1,
-                stack: '退签件',
+                stack: 'Bưu kiện trả lại',
                 itemStyle: {
                     normal: {
                         color: 'rgba(196,64,239,0.8)'
@@ -1463,20 +1463,20 @@ $('#dateBtns').on('click', function () {
 $('#switchBtn').on('click', 'span', function () {
     $(this).addClass('active').siblings().removeClass('active');
     if ($(this).data('datatype') == 'income') {
-        $('#totalProfit').html('123,456.5元');
+        $('#totalProfit').html('123,456.5 đồng');
     } else if ($(this).data('datatype') == 'expend') {
-        $('#totalProfit').html('32,111.4元');
+        $('#totalProfit').html('32,111.4 đồng');
     }
 })
 
 $('#tabBtn').on('click', function () {
     var _this = $(this);
     if ($('.right-top').children('.chart-box').is(':hidden')) {
-        _this.children('span').html('图表');
+        _this.children('span').html('Biểu đồ');
         $('.right-top').children('.chart-box').show().siblings('.data-box').hide();
 
     } else {
-        _this.children('span').html('表格');
+        _this.children('span').html('Bảng');
         $('.right-top').children('.data-box').show().siblings('.chart-box').hide();
         if (_this.data('state') == 1) {
             $('.table1').eq(0).show().siblings('table').hide();
@@ -1490,11 +1490,11 @@ $('#tabBtn').on('click', function () {
 $('#tabBtns').on('click', function () {
     var _this = $(this);
     if (_this.siblings('.pop-chart').is(':hidden')) {
-        _this.children('span').html('图表');
+        _this.children('span').html('Biểu đồ');
         _this.siblings('.pop-chart').show().siblings('.data-box').hide();
 
     } else {
-        _this.children('span').html('表格');
+        _this.children('span').html('Bảng');
         _this.siblings('.data-box').show().siblings('.chart-box').hide();
         if (_this.data('state') == 1) {
             $('.table2').eq(0).show().siblings('table').hide();
@@ -1507,21 +1507,21 @@ $('#tabBtns').on('click', function () {
 
 
 
-//时间选择器
+//Bộ chọn thời gian
 var startV = '';
 var endV = '';
 laydate.skin('danlan');
 var startTime = {
     elem: '#startTime',
     format: 'YYYY-MM-DD',
-    min: '1997-01-01', //设定最小日期为当前日期
-    max: laydate.now(), //最大日期
+    min: '1997-01-01', //Đặt ngày tối thiểu là ngày hiện tại
+    max: laydate.now(), //Ngày tối đa
     istime: true,
     istoday: true,
     fixed: false,
     choose: function (datas) {
         startV = datas;
-        endTime.min = datas; //开始日选好后，重置结束日的最小日期
+        endTime.min = datas; //Sau khi chọn xong ngày bắt đầu, đặt lại ngày tối thiểu của ngày kết thúc
     }
 };
 var endTime = {
@@ -1533,7 +1533,7 @@ var endTime = {
     istoday: true,
     fixed: false,
     choose: function (datas) {
-        //        startTime.max = datas; //结束日选好后，重置开始日的最大日期
+        //        startTime.max = datas; //Sau khi chọn ngày kết thúc, đặt lại ngày tối đa của ngày bắt đầu
         endV = datas;
     }
 };
@@ -1541,21 +1541,21 @@ var endTime = {
 laydate(startTime);
 laydate(endTime);
 
-//时间选择器
+//Bộ chọn thời gian
 var startVs = '';
 var endVs = '';
 laydate.skin('danlan');
 var startTimes = {
     elem: '#startTimes',
     format: 'YYYY-MM-DD',
-    min: '1997-01-01', //设定最小日期为当前日期
-    max: '2099-06-16', //最大日期
+    min: '1997-01-01', //Đặt ngày tối thiểu là ngày hiện tại
+    max: '2099-06-16', //Ngày tối đa
     istime: true,
     istoday: true,
     fixed: false,
     choose: function (datas) {
         startVs = datas;
-        endTimes.min = datas; //开始日选好后，重置结束日的最小日期
+        endTimes.min = datas; //Sau khi chọn xong ngày bắt đầu, đặt lại ngày tối thiểu của ngày kết thúc
         setQgData($('#barTypes').parent().parent(), 1);
     }
 };
@@ -1568,7 +1568,7 @@ var endTimes = {
     istoday: true,
     fixed: false,
     choose: function (datas) {
-        //        startTime.max = datas; //结束日选好后，重置开始日的最大日期
+        //        startTime.max = datas; //Sau khi chọn ngày kết thúc, đặt lại ngày tối đa của ngày bắt đầu
         endVs = datas;
         setQgData($('#barTypes').parent().parent(), 1);
     }
@@ -1577,7 +1577,7 @@ var endTimes = {
 laydate(startTimes);
 laydate(endTimes);
 
-//点击时间选择器的时候更改样式
+//Thay đổi kiểu khi nhấp vào bộ chọn thời gian
 $('#endTime').on('click', function () {
     dateCss();
 })
@@ -1587,7 +1587,7 @@ $('#end').on('click', function () {
 })
 
 
-//更改日期插件的样式
+//Thay đổi kiểu của plugin ngày
 function dateCss() {
     var arr = $('#laydate_box').attr('style').split(';');
     var cssStr =
@@ -1603,7 +1603,7 @@ function dateCss() {
 
 
 
-//chart4Data模拟数据
+//chart4Data Dữ liệu mô phỏng
 var chart4Data = [{
     'name': "天津市",
     'value': 178546
@@ -1620,7 +1620,7 @@ var chart4Data = [{
     'name': "江苏省",
     'value': 45879
     }, {
-    'name': "海南",
+    'name': "Hải Nam",
     'value': 28584
     }, {
     'name': "四川省",
@@ -1635,13 +1635,13 @@ var chart4Data = [{
     'name': "香港特别行政区",
     'value': 2563
     }, {
-    'name': "内蒙古",
+    'name': "Nội Mông",
     'value': 856
     }]
 chart4(chart4Data, 1, '');
 
 function chart4(data, type, chartType) {
-    var str = '<li><span></span><p>城市</p><p>派件</p></li>';
+    var str = '<li><span></span><p>Thành phố</p><p>Phát bưu kiện</p></li>';
     for (var i = 0; i < 10; i++) {
         str += '<li><span>' + (i + 1) + '</span><p>' + data[i].name + '</p><p>' + data[i].value + '</p></li>';
     }
@@ -1845,7 +1845,7 @@ var time = {
     istoday: true,
     fixed: false,
     choose: function (datas) {
-        //        startTime.max = datas; //结束日选好后，重置开始日的最大日期
+        //        startTime.max = datas; //Sau khi chọn ngày kết thúc, đặt lại ngày tối đa của ngày bắt đầu
         workDate = datas;
     }
 };

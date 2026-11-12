@@ -50,7 +50,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Description: 一对多示例（JEditableTable行编辑）
+ * @Description: Ví dụ một-nhiều (chỉnh sửa hàng JEditableTable)
  * @Author: jeecg-boot
  * @Date:2019-02-15
  * @Version: V2.0
@@ -68,7 +68,7 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
     private IJeecgOrderTicketService jeecgOrderTicketService;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param jeecgOrderMain
      * @param pageNo
@@ -85,7 +85,7 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param jeecgOrderMainPage
      * @return
@@ -95,11 +95,11 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
         JeecgOrderMain jeecgOrderMain = new JeecgOrderMain();
         BeanUtils.copyProperties(jeecgOrderMainPage, jeecgOrderMain);
         jeecgOrderMainService.saveMain(jeecgOrderMain, jeecgOrderMainPage.getJeecgOrderCustomerList(), jeecgOrderMainPage.getJeecgOrderTicketList());
-        return Result.ok("添加成功！");
+        return Result.ok("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param jeecgOrderMainPage
      * @return
@@ -109,11 +109,11 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
         JeecgOrderMain jeecgOrderMain = new JeecgOrderMain();
         BeanUtils.copyProperties(jeecgOrderMainPage, jeecgOrderMain);
         jeecgOrderMainService.updateCopyMain(jeecgOrderMain, jeecgOrderMainPage.getJeecgOrderCustomerList(), jeecgOrderMainPage.getJeecgOrderTicketList());
-        return Result.ok("编辑成功！");
+        return Result.ok("Chỉnh sửa thành công!");
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
@@ -121,11 +121,11 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         jeecgOrderMainService.delMain(id);
-        return Result.ok("删除成功!");
+        return Result.ok("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
@@ -133,11 +133,11 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
     @DeleteMapping(value = "/deleteBatch")
     public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
         this.jeecgOrderMainService.delBatchMain(Arrays.asList(ids.split(",")));
-        return Result.ok("批量删除成功!");
+        return Result.ok("Xóa hàng loạt thành công!!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
@@ -149,7 +149,7 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
@@ -161,7 +161,7 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
@@ -173,17 +173,17 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      */
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, JeecgOrderMain jeecgOrderMain) {
-        // Step.1 组装查询条件
+        // Step.1 Lắp ráp điều kiện truy vấn
         QueryWrapper<JeecgOrderMain> queryWrapper = QueryGenerator.initQueryWrapper(jeecgOrderMain, request.getParameterMap());
-        //Step.2 AutoPoi 导出Excel
+        //Step.2 AutoPoi Xuất Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-        //获取当前用户
+        //Lấy người dùng hiện tại
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
         List<JeecgOrderMainPage> pageList = new ArrayList<JeecgOrderMainPage>();
@@ -192,28 +192,28 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
         for (JeecgOrderMain orderMain : jeecgOrderMainList) {
             JeecgOrderMainPage vo = new JeecgOrderMainPage();
             BeanUtils.copyProperties(orderMain, vo);
-            // 查询机票
+            // Truy vấn vé máy bay
             List<JeecgOrderTicket> jeecgOrderTicketList = jeecgOrderTicketService.selectTicketsByMainId(orderMain.getId());
             vo.setJeecgOrderTicketList(jeecgOrderTicketList);
-            // 查询客户
+            // Truy vấn khách hàng
             List<JeecgOrderCustomer> jeecgOrderCustomerList = jeecgOrderCustomerService.selectCustomersByMainId(orderMain.getId());
             vo.setJeecgOrderCustomerList(jeecgOrderCustomerList);
             pageList.add(vo);
         }
 
-        // 导出文件名称
-        mv.addObject(NormalExcelConstants.FILE_NAME, "一对多订单示例");
-        // 注解对象Class
+        // Tên file xuất
+        mv.addObject(NormalExcelConstants.FILE_NAME, "Ví dụ đơn hàng một-nhiều");
+        // Đối tượng annotation Class
         mv.addObject(NormalExcelConstants.CLASS, JeecgOrderMainPage.class);
-        // 自定义表格参数
-        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("自定义导出Excel内容标题", "导出人:" + sysUser.getRealname(), "自定义Sheet名字"));
-        // 导出数据列表
+        // Tham số bảng tùy chỉnh
+        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("Tiêu đề nội dung Excel xuất tùy chỉnh", "Người xuất:" + sysUser.getRealname(), "Tên Sheet tùy chỉnh"));
+        // Xuất danh sách dữ liệu
         mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
         return mv;
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param
@@ -224,7 +224,7 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 获取上传文件对象
+            // Lấy đối tượng tệp tải lên
             MultipartFile file = entity.getValue();
             ImportParams params = new ImportParams();
             params.setTitleRows(2);
@@ -237,10 +237,10 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
                     BeanUtils.copyProperties(page, po);
                     jeecgOrderMainService.saveMain(po, page.getJeecgOrderCustomerList(), page.getJeecgOrderTicketList());
                 }
-                return Result.ok("文件导入成功！");
+                return Result.ok("Nhập tệp thành công!");
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                return Result.error("文件导入失败：" + e.getMessage());
+                return Result.error("Nhập tệp thất bại:" + e.getMessage());
             } finally {
                 try {
                     file.getInputStream().close();
@@ -249,7 +249,7 @@ public class JeecgOrderMainController extends JeecgController<JeecgOrderMain, IJ
                 }
             }
         }
-        return Result.error("文件导入失败！");
+        return Result.error("Nhập tệp thất bại!");
     }
 
 }

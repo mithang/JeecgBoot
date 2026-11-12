@@ -10,7 +10,7 @@ import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 消息处理器【发布订阅】
+ * Bộ xử lý tin nhắn 【Publish-Subscribe】
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -24,7 +24,7 @@ public class DemoBusEvent implements JeecgBusEventHandler {
         if (ObjectUtil.isNotEmpty(obj)) {
             BaseMap baseMap = obj.getBaseMap();
             String orderId = baseMap.get("orderId");
-            log.info("业务处理----订单ID:" + orderId);
+            log.info("Xử lý nghiệp vụ----Đơn hàng ID:" + orderId);
         }
     }
 }

@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * @Description: 流程同步到MCP服务实现类
+ * @Description: Lớp triển khai đồng bộ quy trình sang dịch vụ MCP
  * @Author: wangshuai
  * @Date: 2025-12-22
  * @Version: V1.0
@@ -43,7 +43,7 @@ public class AiragFlowPluginServiceImpl implements IAiragFlowPluginService {
 
     @Override
     public Map<String, Object> getFlowsToPlugin(String flowIds, String appId, String memoryId) {
-    // update-begin--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
+    // update-begin--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
         return doGetFlowsToPlugin(flowIds, appId, memoryId, null);
     }
 
@@ -58,77 +58,77 @@ public class AiragFlowPluginServiceImpl implements IAiragFlowPluginService {
     }
 
     private Map<String, Object> doGetFlowsToPlugin(String flowIds, String appId, String memoryId, List<String> images) {
-    // update-end--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
-        log.info("开始构建流程插件");
-        // 1. 查询所有启用的流程
+    // update-end--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
+        log.info("Bắt đầu xây dựng plugin quy trình");
+        // 1. Truy vấn tất cả quy trình đã kích hoạt
         LambdaQueryWrapper<AiragFlow> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(AiragFlow::getStatus, FlowConsts.FLOW_STATUS_ENABLE, FlowConsts.FLOW_STATUS_RELEASE);
         queryWrapper.in(AiragFlow::getId, Arrays.asList(flowIds.split(SymbolConstant.COMMA)));
         List<AiragFlow> flows = airagFlowService.list(queryWrapper);
         HttpServletRequest httpServletRequest = SpringContextUtils.getHttpServletRequest();
         if (flows.isEmpty()) {
-            log.info("当前应用所选流程没有启用的流程");
+            log.info("Quy trình đã chọn của ứng dụng hiện tại không có quy trình nào đã kích hoạt");
             return null;
         }
-        //返回数据
+        //Trả về dữ liệu
         Map<String, Object> result = new HashMap<>();
-        //插件
-        //插件id
+        //Plugin
+        //Plugin id
         AiragMcp tool = new AiragMcp();
-        // 2. 构建插件
+        // 2. Xây dựng plugin
         String id = UUID.randomUUID().toString().replace("-", "");
         tool.setId(id);
-        // 插件名称
+        // Tên plugin
         tool.setName(FlowPluginContent.PLUGIN_NAME);
-        // 描述
+        // Mô tả
         tool.setDescr(FlowPluginContent.PLUGIN_DESC);
         tool.setStatus(FlowConsts.FLOW_STATUS_ENABLE);
         tool.setSynced(CommonConstant.STATUS_1_INT);
         tool.setCategory("plugin");
         tool.setEndpoint("");
         int toolCount = 0;
-        //构建拆件工具
+        //Xây dựng công cụ tách phần
         for (AiragFlow flow : flows) {
             try {
 
                 SubFlowResult flowVo = new SubFlowResult(flow);
-                // 获取入参参数
-                // update-begin--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
+                // Lấy tham số đầu vào
+                // update-begin--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
                 JSONArray parameter = getInputParameter(flow, flowVo, images);
-                // update-end--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
-                // 获取出参参数
+                // update-end--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
+                // Lấy tham số đầu ra
                 JSONArray outParams = getOutputParameter(flow, flowVo);
-                // name必须符合 ^[a-zA-Z0-9_-]+$
+                // name Phải tuân thủ ^[a-zA-Z0-9_-]+$
                 String validToolName = FlowPluginContent.FLOW_TOOL_NAME_PREFIX + flow.getId();
-                // 将原始名称拼接到描述中
+                // Nối tên gốc vào mô tả
                 String description = flow.getName();
                 if (oConvertUtils.isNotEmpty(flow.getDescr())) {
                     description += " : " + flow.getDescr();
                 }
-                // 构建插件请求路径（携带应用上下文参数）
+                // Xây dựng đường dẫn yêu cầu plugin (mang theo tham số ngữ cảnh ứng dụng)
                 String pluginPath = FlowPluginContent.PLUGIN_REQUEST_URL + flow.getId();
                 pluginPath = appendContextParams(pluginPath, appId, memoryId);
-                //构造工具参数
+                //Xây dựng tham số công cụ
                 String flowTool = buildParameter(parameter, outParams, pluginPath, tool.getTools(), validToolName, description);
                 tool.setTools(flowTool);
                 toolCount++;
             } catch (Exception e) {
-                log.error("处理流程[{}]转换插件失败: {}", flow.getName(), e.getMessage());
+                log.error("Xử lý quy trình[{}]Chuyển đổi plugin thất bại: {}", flow.getName(), e.getMessage());
             }
         }
         String tenantId = TokenUtils.getTenantIdByRequest(httpServletRequest);
-        //构建元数据（请求头）
+        //Xây dựng metadata (request header)
         String meataData = buildMetadata(toolCount, tenantId);
         tool.setMetadata(meataData);
         Map<ToolSpecification, ToolExecutor> tools = PluginToolBuilder.buildTools(tool, httpServletRequest);
         result.put("pluginTool", tools);
         result.put("pluginId", id);
-        log.info("构建流程插件结束");
+        log.info("Kết thúc xây dựng plugin quy trình");
         return result;
     }
 
     /**
-     * 构建元数据
+     * Xây dựng metadata
      *
      * @param toolCount
      * @param tenantId
@@ -144,11 +144,11 @@ public class AiragFlowPluginServiceImpl implements IAiragFlowPluginService {
     }
 
     /**
-     * 构建参数
+     * Xây dựng tham số
      *
      * @param parameter
      * @param outParams
-     * @param pluginPath 插件请求路径（已包含appId等上下文参数）
+     * @param pluginPath Đường dẫn yêu cầu plugin (đã bao gồm appId và các tham số ngữ cảnh khác)
      * @param tools
      * @param description
      * @param name
@@ -173,12 +173,12 @@ public class AiragFlowPluginServiceImpl implements IAiragFlowPluginService {
     }
 
     /**
-     * 将应用上下文参数追加到插件请求路径中
+     * Thêm tham số ngữ cảnh ứng dụng vào đường dẫn yêu cầu plugin
      *
-     * @param path     原始路径
-     * @param appId    应用ID
-     * @param memoryId 记忆库ID
-     * @return 追加查询参数后的路径
+     * @param path     Đường dẫn gốc
+     * @param appId    Ứng dụng ID
+     * @param memoryId Kho bộ nhớ ID
+     * @return Đường dẫn sau khi thêm tham số truy vấn
      */
     private String appendContextParams(String path, String appId, String memoryId) {
         StringBuilder sb = new StringBuilder(path);
@@ -194,22 +194,22 @@ public class AiragFlowPluginServiceImpl implements IAiragFlowPluginService {
     }
 
     /**
-     * URL编码
+     * URL Mã
      */
     private String urlEncode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
     /**
-     * 获取参数
+     * Lấy tham số
      *
      * @param flow
      * @param flowVo
-     * @param images 当前消息上传的图片
+     * @param images Hình ảnh tải lên trong tin nhắn hiện tại
      */
-    // update-begin--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
+    // update-begin--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
     private JSONArray getInputParameter(AiragFlow flow, SubFlowResult flowVo, List<String> images) {
-    // update-end--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
+    // update-end--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
         JSONArray parameters = new JSONArray();
 /*
         String metadata = flow.getMetadata();
@@ -227,35 +227,35 @@ public class AiragFlowPluginServiceImpl implements IAiragFlowPluginService {
             }
         }
 */
-        // 仅使用开始节点的入参(flowVo.getInputParams())：其 name 取真实字段名(field),可正确作为请求体的key。
-        // 不再叠加 metadata.inputs
-        // 直接作为参数会导致请求体的key错误(取不到字段),且与开始节点入参重复(同一字段出现两次)。
+        // Chỉ sử dụng tham số đầu vào của nút bắt đầu(flowVo.getInputParams()): name của nó lấy tên trường thực(field),có thể dùng đúng làm key của request body.
+        // Không chồng thêm nữa metadata.inputs
+        // Dùng trực tiếp làm tham số sẽ khiến key của request body bị sai(Không lấy được trường),và trùng với tham số đầu vào của nút bắt đầu(Cùng một trường xuất hiện hai lần)。
         List<FlowNodeConfig.NodeParam> inputParams = flowVo.getInputParams();
         if (inputParams != null) {
             for (FlowNodeConfig.NodeParam param : inputParams) {
                 String field = param.getField();
-                // update-begin--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
-                // 历史记录由聊天服务在直连流程时自动注入,作为工具入参暴露给模型只会成为噪音且无法被有效填写
+                // update-begin--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
+                // Lịch sử do dịch vụ trò chuyện tự động chèn khi kết nối trực tiếp với quy trình,Việc expose làm tham số đầu vào của công cụ cho mô hình chỉ tạo ra nhiễu và không thể điền hiệu quả
                 if (FlowConsts.FLOW_INPUT_PARAM_HISTORY.equals(field)) {
                     continue;
                 }
                 JSONObject p = new JSONObject();
-                // 参数名
+                // Tên tham số
                 p.put(FlowPluginContent.NAME, param.getField());
-                // 智能体的关联流程是作为工具让模型调用的，不会像“高级编排”直连流程那样自动注入图片。
-                // 原来这里直接跳过 images，流程永远拿不到图片，例如「示例_OCR」会直接返回“请提供图片”。
-                // 改为隐藏参数：不暴露给模型（避免模型编造或遗漏图片地址），由服务端把当前消息上传的图片作为默认值传给流程，如 ["temp/ocr_1760252400000.png"]
+                // Quy trình liên kết của tác tử thông minh được mô hình gọi dưới dạng công cụ, sẽ không tự động chèn hình ảnh như khi quy trình kết nối trực tiếp kiểu “Biên tập nâng cao”.
+                // Trước đây ở đây bỏ qua trực tiếp images, quy trình không bao giờ lấy được hình ảnh, ví dụ “Ví dụ_OCR” sẽ trả về trực tiếp “Vui lòng cung cấp hình ảnh”.
+                // Đổi thành tham số ẩn: không expose cho mô hình (tránh mô hình bịa đặt hoặc bỏ sót địa chỉ hình ảnh), phía máy chủ truyền hình ảnh tải lên trong tin nhắn hiện tại làm giá trị mặc định cho quy trình, như ["temp/ocr_1760252400000.png"]
                 if (FlowConsts.FLOW_INPUT_PARAM_IMAGES.equals(field)) {
                     p.put("hidden", true);
                     p.put(FlowPluginContent.DEFAULT_VALUE, images);
                 }
-                // update-end--author:wangshuai---date:20261012---for：【issues/9872】智能体中，涉及图片输入的流程无法关联对话中上传的图片
-                // 参数描述
+                // update-end--author:wangshuai---date:20261012---for：【issues/9872] Trong tác tử thông minh, quy trình liên quan đến nhập hình ảnh không thể liên kết với hình ảnh đã tải lên trong cuộc trò chuyện
+                // Mô tả tham số
                 String paramDesc = oConvertUtils.getString(param.getName(), param.getField());
                 p.put(FlowPluginContent.DESCRIPTION, paramDesc);
-                // 类型
+                // Loại
                 p.put(FlowPluginContent.TYPE, oConvertUtils.getString(param.getType(), FlowPluginContent.TYPE_STRING));
-                // 所有参数都在Body中
+                // Tất cả tham số đều nằm trong Body
                 p.put(FlowPluginContent.LOCATION, FlowPluginContent.LOCATION_BODY);
                 boolean required = param.getRequired() != null && param.getRequired();
                 p.put(FlowPluginContent.REQUIRED, required);
@@ -266,7 +266,7 @@ public class AiragFlowPluginServiceImpl implements IAiragFlowPluginService {
     }
 
     /**
-     * 构建返回值
+     * Xây dựng giá trị trả về
      */
     private JSONArray getOutputParameter(AiragFlow flow, SubFlowResult flowVo) {
         JSONArray parameters = new JSONArray();
@@ -282,15 +282,15 @@ public class AiragFlowPluginServiceImpl implements IAiragFlowPluginService {
 //        if (outputParams != null) {
 //            for (FlowNodeConfig.NodeParam param : outputParams) {
 //                JSONObject p = new JSONObject();
-//                // 参数名
+//                // Tên tham số
 //                p.put("name", param.getField());
 //                String paramDesc = param.getName();
 //                if (oConvertUtils.isEmpty(paramDesc)) {
 //                    paramDesc = param.getField();
 //                }
-//                // 参数描述
+//                // Mô tả tham số
 //                p.put("description", paramDesc);
-//                // 类型
+//                // Loại
 //                p.put("type", oConvertUtils.getString(param.getType(), "String"));
 //                parameters.add(p);
 //            }

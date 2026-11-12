@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * 知识库配置
+ * Cấu hình kho tri thức
  *
  * @Author: chenrui
  * @Date: 2025-04-01 14:19
@@ -19,12 +19,12 @@ public class KnowConfigBean {
     public static final String PREFIX = "jeecg.airag.know";
 
     /**
-     * 开启MinerU解析
+     * Bật phân tích MinerU
      */
     private boolean enableMinerU = false;
 
     /**
-     * conda的环境(默认不使用conda)
+     * conda môi trường(Mặc định không sử dụng conda)
      */
     private String condaEnv = null;
 

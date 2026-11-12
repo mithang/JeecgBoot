@@ -5,7 +5,7 @@ import org.jeecg.modules.airag.common.handler.AIChatParams;
 
 public interface IAiragVariableService {
     /**
-     * 更新变量值
+     * Cập nhật giá trị biến
      *
      * @param userId
      * @param appId
@@ -15,7 +15,7 @@ public interface IAiragVariableService {
     void updateVariable(String userId, String appId, String name, String value);
 
     /**
-     * 追加提示词
+     * Thêm prompt
      *
      * @param username
      * @param app
@@ -24,7 +24,7 @@ public interface IAiragVariableService {
     String additionalPrompt(String username, AiragApp app);
 
     /**
-     * 初始化变量（仅不存在时设置）
+     * Khởi tạo biến (chỉ đặt khi chưa tồn tại)
      *
      * @param userId
      * @param appId
@@ -34,17 +34,17 @@ public interface IAiragVariableService {
     void initVariable(String userId, String appId, String name, String defaultValue);
 
     /**
-     * 获取变量值
+     * Lấy giá trị biến
      *
-     * @param username 用户名
-     * @param appId    应用ID
-     * @param name     变量名
-     * @return 变量值，不存在返回null
+     * @param username Tên người dùng
+     * @param appId    Ứng dụng ID
+     * @param name     Tên biến
+     * @return Giá trị biến, trả về khi không tồn tại null
      */
     String getVariable(String username, String appId, String name);
 
     /**
-     * 添加变量更新工具
+     * Thêm công cụ cập nhật biến
      *
      * @param params
      * @param aiApp

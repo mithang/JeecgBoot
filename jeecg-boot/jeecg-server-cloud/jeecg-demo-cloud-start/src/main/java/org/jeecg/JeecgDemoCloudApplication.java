@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootApplication
 @EnableFeignClients
-@ImportAutoConfiguration(JustAuthAutoConfiguration.class)  // spring boot 3.x justauth 兼容性处理
+@ImportAutoConfiguration(JustAuthAutoConfiguration.class)  // spring boot 3.x justauth Xử lý tương thích
 public class JeecgDemoCloudApplication implements CommandLineRunner {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -23,16 +23,16 @@ public class JeecgDemoCloudApplication implements CommandLineRunner {
     }
 
     /**
-     * 启动的时候，触发下gateway网关刷新
+     * Khi khởi động, kích hoạt làm mới gateway
      *
-     * 解决： 先启动gateway后启动服务，Swagger接口文档访问不通的问题
+     * Giải quyết: Vấn đề tài liệu API Swagger không truy cập được khi khởi động gateway trước rồi mới khởi động dịch vụ
      * @param args
      */
     @Override
     public void run(String... args) {
         BaseMap params = new BaseMap();
         params.put(GlobalConstants.HANDLER_NAME, GlobalConstants.LODER_ROUDER_HANDLER);
-        //刷新网关
+        //Làm mới gateway
         redisTemplate.convertAndSend(GlobalConstants.REDIS_TOPIC_NAME, params);
     }
 }

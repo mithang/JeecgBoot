@@ -29,7 +29,7 @@ import com.alibaba.csp.sentinel.util.AssertUtil;
 import com.alibaba.nacos.api.config.ConfigService;
 
 /**
- * 流控规则推送
+ * Đẩy quy tắc kiểm soát lưu lượng
  *
  * @author zyf
  * @date 2022-04-13

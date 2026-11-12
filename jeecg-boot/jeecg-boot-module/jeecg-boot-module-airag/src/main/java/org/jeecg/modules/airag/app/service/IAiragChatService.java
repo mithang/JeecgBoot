@@ -5,7 +5,7 @@ import org.jeecg.modules.airag.app.vo.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
- * ai聊天
+ * ai Trò chuyện
  *
  * @author chenrui
  * @date 2025/2/25 13:36
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public interface IAiragChatService {
 
     /**
-     * 发送消息
+     * Gửi tin nhắn
      *
      * @param chatSendParams
      * @return
@@ -24,7 +24,7 @@ public interface IAiragChatService {
 
 
     /**
-     * 调试应用
+     * Gỡ lỗi ứng dụng
      *
      * @param appDebugParams
      * @return
@@ -34,7 +34,7 @@ public interface IAiragChatService {
     SseEmitter debugApp(AppDebugParams appDebugParams);
 
     /**
-     * 停止响应
+     * Dừng phản hồi
      *
      * @param requestId
      * @return
@@ -44,7 +44,7 @@ public interface IAiragChatService {
     Result<?> stop(String requestId);
 
     /**
-     * 获取所有对话
+     * Lấy tất cả cuộc trò chuyện
      *
      * @param appId
      * @return
@@ -54,10 +54,10 @@ public interface IAiragChatService {
     Result<?> getConversations(String appId);
 
     /**
-     * 获取对话聊天记录
+     * Lấy lịch sử trò chuyện của cuộc hội thoại
      *
      * @param conversationId
-     * @param sessionType 类型
+     * @param sessionType Loại
      * @return
      * @author chenrui
      * @date 2025/2/26 15:16
@@ -65,7 +65,7 @@ public interface IAiragChatService {
     Result<?> getMessages(String conversationId, String sessionType);
 
     /**
-     * 删除会话
+     * Xóa phiên trò chuyện
      *
      * @param conversationId
      * @param sessionType
@@ -76,7 +76,7 @@ public interface IAiragChatService {
     Result<?> deleteConversation(String conversationId, String sessionType);
 
     /**
-     * 更新会话标题
+     * Cập nhật tiêu đề phiên
      * @param updateTitleParams
      * @return
      * @author chenrui
@@ -85,7 +85,7 @@ public interface IAiragChatService {
     Result<?> updateConversationTitle(ChatConversation updateTitleParams);
 
     /**
-     * 清空消息
+     * Xóa sạch tin nhắn
      * @param conversationId
      * @param sessionType
      * @return
@@ -95,10 +95,10 @@ public interface IAiragChatService {
     Result<?> clearMessage(String conversationId, String sessionType);
 
     /**
-     * 初始化聊天(忽略租户)
-     * [QQYUN-12113]分享之后的聊天，应用、模型、知识库不根据租户查询
+     * Khởi tạo trò chuyện(Bỏ qua tenant)
+     * [QQYUN-12113]Sau khi chia sẻ, trò chuyện, ứng dụng, mô hình và kho tri thức không truy vấn theo tenant
      * @param appId
-     * @param shareToken 分享令牌（匿名访问必填）
+     * @param shareToken Token chia sẻ (bắt buộc đối với truy cập ẩn danh)
      * @return
      * @author chenrui
      * @date 2025/4/21 14:17
@@ -106,18 +106,18 @@ public interface IAiragChatService {
     Result<AiragAppShareInfoVO> initChat(String appId, String shareToken);
 
     /**
-     * 匿名分享访问校验（登录用户直接放行）。
-     * 用于 upload 等匿名写接口，与 send/init 共用同一套规则。
+     * Xác thực truy cập chia sẻ ẩn danh (người dùng đã đăng nhập được cho qua trực tiếp).
+     * Dùng cho các API ghi ẩn danh như upload, cùng send/init dùng chung một bộ quy tắc.
      *
-     * @param appId 应用ID
-     * @param shareToken 分享令牌
+     * @param appId Ứng dụng ID
+     * @param shareToken Token chia sẻ
      * @author scott
-     * @since 2026-07-21 【issues/9787】匿名上传补分享令牌校验
+     * @since 2026-07-21 【issues/9787】 Bổ sung xác thực token chia sẻ cho tải lên ẩn danh
      */
     void validateAnonymousShareAccess(String appId, String shareToken);
 
     /**
-     * 继续接收消息
+     * Tiếp tục nhận tin nhắn
      * @param requestId
      * @return
      * @author chenrui
@@ -126,7 +126,7 @@ public interface IAiragChatService {
     SseEmitter receiveByRequestId(String requestId);
 
     /**
-     * 根据类型获取会话列表
+     * Lấy danh sách phiên theo loại
      * 
      * @param sessionType
      * @return
@@ -134,30 +134,30 @@ public interface IAiragChatService {
     Result<?> getConversationsByType(String sessionType);
 
     /**
-     * 生成海报图片
+     * Tạo hình ảnh poster
      * @param aiDrawGenerateVo
      * @return
      */
     String genAiPoster(AiDrawGenerateVo aiDrawGenerateVo);
 
-    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】AI海报生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-begin---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo áp phích AI chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
     /**
-     * 异步生成海报图片，立即返回taskId
+     * Tạo bất đồng bộ hình ảnh poster, trả về ngay lập tức taskId
      * @param aiDrawGenerateVo
      * @return taskId
      */
     String genAiPosterAsync(AiDrawGenerateVo aiDrawGenerateVo);
 
     /**
-     * 查询异步海报任务结果
+     * Truy vấn kết quả nhiệm vụ poster bất đồng bộ
      * @param taskId
-     * @return Result，data为图片URL（成功）或status=pending/failed
+     * @return Result, data là URL hình ảnh (thành công) hoặc status=pending/failed
      */
     Result<?> getAiPosterResult(String taskId);
-    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568】AI海报生成改为异步，支持切换菜单后重新获取结果-----------
+    //update-end---author:wangshuai ---date:2026-04-15  for：【QQYUN-14568] Tạo áp phích AI chuyển sang bất đồng bộ, hỗ trợ lấy lại kết quả sau khi chuyển menu-----------
 
     /**
-     * 生成ai创作
+     * Tạo sáng tác AI
      *
      * @param chatSendParams
      * @return

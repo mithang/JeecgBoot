@@ -18,8 +18,8 @@
         "roleId": "admin",
         "role": {
           "id": "admin",
-          "name": "管理员",
-          "describe": "拥有所有权限",
+          "name": "Quản trị viên",
+          "describe": "Có tất cả quyền hạn",
           "status": 1,
           "creatorId": "system",
           "createTime": 1497160610259,
@@ -28,32 +28,32 @@
             {
               "roleId": "admin",
               "permissionId": "comment",
-              "permissionName": "评论管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bình luận",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -63,32 +63,32 @@
             {
               "roleId": "admin",
               "permissionId": "feedback",
-              "permissionName": "反馈管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý phản hồi",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -98,32 +98,32 @@
             {
               "roleId": "admin",
               "permissionId": "goods",
-              "permissionName": "商品管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý sản phẩm",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -133,32 +133,32 @@
             {
               "roleId": "admin",
               "permissionId": "member",
-              "permissionName": "会员管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý thành viên",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -168,27 +168,27 @@
             {
               "roleId": "admin",
               "permissionId": "menu",
-              "permissionName": "菜单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý menu",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -198,32 +198,32 @@
             {
               "roleId": "admin",
               "permissionId": "merchant",
-              "permissionName": "商家管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý cửa hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -233,32 +233,32 @@
             {
               "roleId": "admin",
               "permissionId": "order",
-              "permissionName": "订单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý đơn hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -268,27 +268,27 @@
             {
               "roleId": "admin",
               "permissionId": "permission",
-              "permissionName": "权限管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý quyền",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -298,27 +298,27 @@
             {
               "roleId": "admin",
               "permissionId": "role",
-              "permissionName": "角色管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý vai trò",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -328,32 +328,32 @@
             {
               "roleId": "admin",
               "permissionId": "table",
-              "permissionName": "桌子管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bàn",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -363,37 +363,37 @@
             {
               "roleId": "admin",
               "permissionId": "user",
-              "permissionName": "用户管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"},{\"action\":\"export\",\"defaultCheck\":false,\"describe\":\"导出\"}]",
+              "permissionName": "Quản lý người dùng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"},{\"action\":\"export\",\"defaultCheck\":false,\"describe\":\"Xuất\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 },
                 {
                   "action": "export",
-                  "describe": "导出",
+                  "describe": "Xuất",
                   "defaultCheck": false
                 }
               ],
@@ -406,7 +406,7 @@
       },
       {
         "id": "4291d7da9005377ec9aec4a71ea837f",
-        "name": "管理员",
+        "name": "Quản trị viên",
         "username": "admin",
         "password": "default",
         "status": 1,
@@ -420,8 +420,8 @@
         "roleId": "admin",
         "role": {
           "id": "admin",
-          "name": "管理员",
-          "describe": "拥有所有权限",
+          "name": "Quản trị viên",
+          "describe": "Có tất cả quyền hạn",
           "status": 1,
           "creatorId": "system",
           "createTime": 1497160610259,
@@ -430,32 +430,32 @@
             {
               "roleId": "admin",
               "permissionId": "comment",
-              "permissionName": "评论管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bình luận",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -465,32 +465,32 @@
             {
               "roleId": "admin",
               "permissionId": "feedback",
-              "permissionName": "反馈管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý phản hồi",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -500,32 +500,32 @@
             {
               "roleId": "admin",
               "permissionId": "goods",
-              "permissionName": "商品管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý sản phẩm",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -535,32 +535,32 @@
             {
               "roleId": "admin",
               "permissionId": "member",
-              "permissionName": "会员管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý thành viên",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -570,27 +570,27 @@
             {
               "roleId": "admin",
               "permissionId": "menu",
-              "permissionName": "菜单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý menu",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -600,32 +600,32 @@
             {
               "roleId": "admin",
               "permissionId": "merchant",
-              "permissionName": "商家管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý cửa hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -635,32 +635,32 @@
             {
               "roleId": "admin",
               "permissionId": "order",
-              "permissionName": "订单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý đơn hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -670,27 +670,27 @@
             {
               "roleId": "admin",
               "permissionId": "permission",
-              "permissionName": "权限管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý quyền",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -700,27 +700,27 @@
             {
               "roleId": "admin",
               "permissionId": "role",
-              "permissionName": "角色管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý vai trò",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -730,32 +730,32 @@
             {
               "roleId": "admin",
               "permissionId": "table",
-              "permissionName": "桌子管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bàn",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -765,37 +765,37 @@
             {
               "roleId": "admin",
               "permissionId": "user",
-              "permissionName": "用户管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"},{\"action\":\"export\",\"defaultCheck\":false,\"describe\":\"导出\"}]",
+              "permissionName": "Quản lý người dùng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"},{\"action\":\"export\",\"defaultCheck\":false,\"describe\":\"Xuất\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 },
                 {
                   "action": "export",
-                  "describe": "导出",
+                  "describe": "Xuất",
                   "defaultCheck": false
                 }
               ],
@@ -808,7 +808,7 @@
       },
       {
         "id": "4415f49c05f843579de26f79d62ed2d4",
-        "name": "每日咖啡 测试店",
+        "name": "Cửa hàng thử nghiệm Cà phê mỗi ngày",
         "username": "zengyp",
         "password": "default",
         "status": 1,
@@ -822,8 +822,8 @@
         "roleId": "user",
         "role": {
           "id": "user",
-          "name": "普通会员",
-          "describe": "普通用户，只能查询",
+          "name": "Thành viên thường",
+          "describe": "Người dùng thường, chỉ có thể truy vấn",
           "status": 1,
           "creatorId": "system",
           "createTime": 1497160610259,
@@ -832,17 +832,17 @@
             {
               "roleId": "user",
               "permissionId": "comment",
-              "permissionName": "评论管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý bình luận",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -852,17 +852,17 @@
             {
               "roleId": "user",
               "permissionId": "feedback",
-              "permissionName": "反馈管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý phản hồi",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -872,17 +872,17 @@
             {
               "roleId": "user",
               "permissionId": "goods",
-              "permissionName": "商品管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý sản phẩm",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -892,17 +892,17 @@
             {
               "roleId": "user",
               "permissionId": "member",
-              "permissionName": "会员管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý thành viên",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -912,7 +912,7 @@
             {
               "roleId": "user",
               "permissionId": "menu",
-              "permissionName": "菜单管理",
+              "permissionName": "Quản lý menu",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -921,17 +921,17 @@
             {
               "roleId": "user",
               "permissionId": "merchant",
-              "permissionName": "商家管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý cửa hàng",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -941,17 +941,17 @@
             {
               "roleId": "user",
               "permissionId": "order",
-              "permissionName": "订单管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý đơn hàng",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -961,7 +961,7 @@
             {
               "roleId": "user",
               "permissionId": "permission",
-              "permissionName": "权限管理",
+              "permissionName": "Quản lý quyền",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -970,7 +970,7 @@
             {
               "roleId": "user",
               "permissionId": "role",
-              "permissionName": "角色管理",
+              "permissionName": "Quản lý vai trò",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -979,17 +979,17 @@
             {
               "roleId": "user",
               "permissionId": "table",
-              "permissionName": "桌子管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý bàn",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -999,7 +999,7 @@
             {
               "roleId": "user",
               "permissionId": "user",
-              "permissionName": "用户管理",
+              "permissionName": "Quản lý người dùng",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -1025,8 +1025,8 @@
         "roleId": "shopuser",
         "role": {
           "id": "shopuser",
-          "name": "商户",
-          "describe": "商户组",
+          "name": "Nhà bán hàng",
+          "describe": "Nhóm nhà bán hàng",
           "status": 1,
           "creatorId": "system",
           "createTime": 1533107680557,
@@ -1035,17 +1035,17 @@
             {
               "roleId": "shopuser",
               "permissionId": "comment",
-              "permissionName": "评论管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý bình luận",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -1055,7 +1055,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "feedback",
-              "permissionName": "反馈管理",
+              "permissionName": "Quản lý phản hồi",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -1064,32 +1064,32 @@
             {
               "roleId": "shopuser",
               "permissionId": "goods",
-              "permissionName": "商品管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý sản phẩm",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1099,27 +1099,27 @@
             {
               "roleId": "shopuser",
               "permissionId": "member",
-              "permissionName": "会员管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý thành viên",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -1129,27 +1129,27 @@
             {
               "roleId": "shopuser",
               "permissionId": "menu",
-              "permissionName": "菜单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý menu",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -1159,7 +1159,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "merchant",
-              "permissionName": "商家管理",
+              "permissionName": "Quản lý cửa hàng",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -1168,32 +1168,32 @@
             {
               "roleId": "shopuser",
               "permissionId": "order",
-              "permissionName": "订单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý đơn hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1203,7 +1203,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "permission",
-              "permissionName": "权限管理",
+              "permissionName": "Quản lý quyền",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -1212,7 +1212,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "role",
-              "permissionName": "角色管理",
+              "permissionName": "Quản lý vai trò",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -1221,22 +1221,22 @@
             {
               "roleId": "shopuser",
               "permissionId": "shop",
-              "permissionName": "店铺管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý cửa hàng",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -1246,32 +1246,32 @@
             {
               "roleId": "shopuser",
               "permissionId": "table",
-              "permissionName": "桌子管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bàn",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1281,7 +1281,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "user",
-              "permissionName": "用户管理",
+              "permissionName": "Quản lý người dùng",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -1307,8 +1307,8 @@
         "roleId": "admin",
         "role": {
           "id": "admin",
-          "name": "管理员",
-          "describe": "拥有所有权限",
+          "name": "Quản trị viên",
+          "describe": "Có tất cả quyền hạn",
           "status": 1,
           "creatorId": "system",
           "createTime": 1497160610259,
@@ -1317,32 +1317,32 @@
             {
               "roleId": "admin",
               "permissionId": "comment",
-              "permissionName": "评论管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bình luận",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1352,32 +1352,32 @@
             {
               "roleId": "admin",
               "permissionId": "feedback",
-              "permissionName": "反馈管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý phản hồi",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1387,32 +1387,32 @@
             {
               "roleId": "admin",
               "permissionId": "goods",
-              "permissionName": "商品管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý sản phẩm",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1422,32 +1422,32 @@
             {
               "roleId": "admin",
               "permissionId": "member",
-              "permissionName": "会员管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý thành viên",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1457,27 +1457,27 @@
             {
               "roleId": "admin",
               "permissionId": "menu",
-              "permissionName": "菜单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý menu",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -1487,32 +1487,32 @@
             {
               "roleId": "admin",
               "permissionId": "merchant",
-              "permissionName": "商家管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý cửa hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1522,32 +1522,32 @@
             {
               "roleId": "admin",
               "permissionId": "order",
-              "permissionName": "订单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý đơn hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1557,27 +1557,27 @@
             {
               "roleId": "admin",
               "permissionId": "permission",
-              "permissionName": "权限管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý quyền",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1587,27 +1587,27 @@
             {
               "roleId": "admin",
               "permissionId": "role",
-              "permissionName": "角色管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý vai trò",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1617,32 +1617,32 @@
             {
               "roleId": "admin",
               "permissionId": "table",
-              "permissionName": "桌子管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bàn",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1652,37 +1652,37 @@
             {
               "roleId": "admin",
               "permissionId": "user",
-              "permissionName": "用户管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"},{\"action\":\"export\",\"defaultCheck\":false,\"describe\":\"导出\"}]",
+              "permissionName": "Quản lý người dùng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"},{\"action\":\"export\",\"defaultCheck\":false,\"describe\":\"Xuất\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 },
                 {
                   "action": "export",
-                  "describe": "导出",
+                  "describe": "Xuất",
                   "defaultCheck": false
                 }
               ],
@@ -1695,7 +1695,7 @@
       },
       {
         "id": "b8dcb4144a05b076f5bb07a9366e2c88",
-        "name": "言肆",
+        "name": "Ngôn Tứ",
         "username": "yladmxa",
         "password": "default",
         "status": 1,
@@ -1709,8 +1709,8 @@
         "roleId": "admin",
         "role": {
           "id": "admin",
-          "name": "管理员",
-          "describe": "拥有所有权限",
+          "name": "Quản trị viên",
+          "describe": "Có tất cả quyền hạn",
           "status": 1,
           "creatorId": "system",
           "createTime": 1497160610259,
@@ -1719,32 +1719,32 @@
             {
               "roleId": "admin",
               "permissionId": "comment",
-              "permissionName": "评论管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bình luận",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1754,32 +1754,32 @@
             {
               "roleId": "admin",
               "permissionId": "feedback",
-              "permissionName": "反馈管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý phản hồi",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1789,32 +1789,32 @@
             {
               "roleId": "admin",
               "permissionId": "goods",
-              "permissionName": "商品管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý sản phẩm",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1824,32 +1824,32 @@
             {
               "roleId": "admin",
               "permissionId": "member",
-              "permissionName": "会员管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý thành viên",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1859,27 +1859,27 @@
             {
               "roleId": "admin",
               "permissionId": "menu",
-              "permissionName": "菜单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý menu",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -1889,32 +1889,32 @@
             {
               "roleId": "admin",
               "permissionId": "merchant",
-              "permissionName": "商家管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý cửa hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1924,32 +1924,32 @@
             {
               "roleId": "admin",
               "permissionId": "order",
-              "permissionName": "订单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý đơn hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1959,27 +1959,27 @@
             {
               "roleId": "admin",
               "permissionId": "permission",
-              "permissionName": "权限管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý quyền",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -1989,27 +1989,27 @@
             {
               "roleId": "admin",
               "permissionId": "role",
-              "permissionName": "角色管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý vai trò",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -2019,32 +2019,32 @@
             {
               "roleId": "admin",
               "permissionId": "table",
-              "permissionName": "桌子管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bàn",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -2054,37 +2054,37 @@
             {
               "roleId": "admin",
               "permissionId": "user",
-              "permissionName": "用户管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"},{\"action\":\"export\",\"defaultCheck\":false,\"describe\":\"导出\"}]",
+              "permissionName": "Quản lý người dùng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"},{\"action\":\"export\",\"defaultCheck\":false,\"describe\":\"Xuất\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 },
                 {
                   "action": "export",
-                  "describe": "导出",
+                  "describe": "Xuất",
                   "defaultCheck": false
                 }
               ],
@@ -2111,8 +2111,8 @@
         "roleId": "shopuser",
         "role": {
           "id": "shopuser",
-          "name": "商户",
-          "describe": "商户组",
+          "name": "Nhà bán hàng",
+          "describe": "Nhóm nhà bán hàng",
           "status": 1,
           "creatorId": "system",
           "createTime": 1533107680557,
@@ -2121,17 +2121,17 @@
             {
               "roleId": "shopuser",
               "permissionId": "comment",
-              "permissionName": "评论管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"}]",
+              "permissionName": "Quản lý bình luận",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 }
               ],
@@ -2141,7 +2141,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "feedback",
-              "permissionName": "反馈管理",
+              "permissionName": "Quản lý phản hồi",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -2150,32 +2150,32 @@
             {
               "roleId": "shopuser",
               "permissionId": "goods",
-              "permissionName": "商品管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý sản phẩm",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -2185,27 +2185,27 @@
             {
               "roleId": "shopuser",
               "permissionId": "member",
-              "permissionName": "会员管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý thành viên",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -2215,27 +2215,27 @@
             {
               "roleId": "shopuser",
               "permissionId": "menu",
-              "permissionName": "菜单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"导入\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý menu",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"import\",\"defaultCheck\":false,\"describe\":\"Import\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "import",
-                  "describe": "导入",
+                  "describe": "Import",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -2245,7 +2245,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "merchant",
-              "permissionName": "商家管理",
+              "permissionName": "Quản lý cửa hàng",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -2254,32 +2254,32 @@
             {
               "roleId": "shopuser",
               "permissionId": "order",
-              "permissionName": "订单管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý đơn hàng",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -2289,7 +2289,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "permission",
-              "permissionName": "权限管理",
+              "permissionName": "Quản lý quyền",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -2298,7 +2298,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "role",
-              "permissionName": "角色管理",
+              "permissionName": "Quản lý vai trò",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,
@@ -2307,22 +2307,22 @@
             {
               "roleId": "shopuser",
               "permissionId": "shop",
-              "permissionName": "店铺管理",
-              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"}]",
+              "permissionName": "Quản lý cửa hàng",
+              "actions": "[{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"}]",
               "actionEntitySet": [
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 }
               ],
@@ -2332,32 +2332,32 @@
             {
               "roleId": "shopuser",
               "permissionId": "table",
-              "permissionName": "桌子管理",
-              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"新增\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"查询\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"详情\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"修改\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"删除\"}]",
+              "permissionName": "Quản lý bàn",
+              "actions": "[{\"action\":\"add\",\"defaultCheck\":false,\"describe\":\"Thêm mới\"},{\"action\":\"query\",\"defaultCheck\":false,\"describe\":\"Truy vấn\"},{\"action\":\"get\",\"defaultCheck\":false,\"describe\":\"Chi tiết\"},{\"action\":\"update\",\"defaultCheck\":false,\"describe\":\"Sửa\"},{\"action\":\"delete\",\"defaultCheck\":false,\"describe\":\"Xóa\"}]",
               "actionEntitySet": [
                 {
                   "action": "add",
-                  "describe": "新增",
+                  "describe": "Thêm mới",
                   "defaultCheck": false
                 },
                 {
                   "action": "query",
-                  "describe": "查询",
+                  "describe": "Truy vấn",
                   "defaultCheck": false
                 },
                 {
                   "action": "get",
-                  "describe": "详情",
+                  "describe": "Chi tiết",
                   "defaultCheck": false
                 },
                 {
                   "action": "update",
-                  "describe": "修改",
+                  "describe": "Sửa",
                   "defaultCheck": false
                 },
                 {
                   "action": "delete",
-                  "describe": "删除",
+                  "describe": "Xóa",
                   "defaultCheck": false
                 }
               ],
@@ -2367,7 +2367,7 @@
             {
               "roleId": "shopuser",
               "permissionId": "user",
-              "permissionName": "用户管理",
+              "permissionName": "Quản lý người dùng",
               "actions": "[]",
               "actionEntitySet": [],
               "actionList": null,

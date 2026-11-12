@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 分布式事务-账户服务
+ * Giao dịch phân tán-Dịch vụ tài khoản
  * @author zyf
  */
 @SpringBootApplication

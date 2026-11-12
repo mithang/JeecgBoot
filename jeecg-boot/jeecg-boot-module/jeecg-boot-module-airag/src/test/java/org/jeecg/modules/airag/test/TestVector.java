@@ -37,7 +37,7 @@
 //import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
 //
 ///**
-// * @Description: 流程测试
+// * @Description: Kiểm thử quy trình
 // * @Author: chenrui
 // * @Date: 2025/2/11 16:11
 // */
@@ -91,7 +91,7 @@
 //
 //    @Test
 //    public void testQueryByVector() {
-//        Embedding queryEmbedding = embeddingModel.embed("全日制工作与非全日制工作有什么区别?").content();
+//        Embedding queryEmbedding = embeddingModel.embed("Công việc toàn thời gian và công việc bán thời gian khác nhau như thế nào?").content();
 //        EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
 //                .queryEmbedding(queryEmbedding)
 //                .maxResults(5)
@@ -101,9 +101,9 @@
 //        List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.search(embeddingSearchRequest).matches();
 //        for (int i = 0; i < relevant.size(); i++) {
 //            EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(i);
-//            System.out.println("结果:" + i + "=================================================");
-//            System.out.println("分数:" + embeddingMatch.score()); // 0.8144288608390052
-//            System.out.println("内容:" + embeddingMatch.embedded().text()); // I like football.
+//            System.out.println("Kết quả:" + i + "=================================================");
+//            System.out.println("Điểm số:" + embeddingMatch.score()); // 0.8144288608390052
+//            System.out.println("Nội dung:" + embeddingMatch.embedded().text()); // I like football.
 //        }
 //    }
 //
@@ -134,273 +134,273 @@
 //        QueryRouter queryRouter = new DefaultQueryRouter(contentRetriever);
 //        RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder().queryRouter(queryRouter)
 //                .contentInjector(DefaultContentInjector.builder()
-//                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n\n用以下信息回答问题:\n{{contents}}\n\n"))
+//                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n\n Dùng thông tin sau để trả lời câu hỏi:\n{{contents}}\n\n"))
 //                        .build()).build();
 //        AiChatAssistant assistant = AiServices.builder(AiChatAssistant.class)
 //                .chatLanguageModel(chatModel)
 //                .chatMemory(chatMemory)
 //                .retrievalAugmentor(retrievalAugmentor)
 //                .build();
-//        String chat = assistant.chat("未签订劳动合同?");
+//        String chat = assistant.chat("Chưa ký hợp đồng lao động?");
 //        System.out.println(chat);
 //
 //    }
 //
 //
-//    String doc = "中华人民共和国劳动合同法\n" +
-//            "已根据2013.07.01实施的修正案修改\n" +
-//            "目录\n" +
-//            "第一章　总则\n" +
-//            "第二章　劳动合同的订立\n" +
-//            "第三章　劳动合同的履行和变更\n" +
-//            "第四章　劳动合同的解除和终止\n" +
-//            "第五章　特别规定\n" +
-//            "第六章　监督检查\n" +
-//            "第七章　法律责任\n" +
-//            "第八章　附则\n" +
-//            "第一章　总则\n" +
-//            "第一条　为了完善劳动合同制度，明确劳动合同双方当事人的权利和义务，保护劳动者的合法权益，构建和发展和谐稳定的劳动关系，制定本法。\n" +
-//            "第二条　中华人民共和国境内的企业、个体经济组织、民办非企业单位等组织(以下称用人单位)与劳动者建立劳动关系，订立、履行、变更、解除或者终止劳动合同，适用本法。\n" +
-//            "国家机关、事业单位、社会团体和与其建立劳动关系的劳动者，订立、履行、变更、解除或者终止劳动合同，依照本法执行。\n" +
-//            "第三条　订立劳动合同，应当遵循合法、公平、平等自愿、协商一致、诚实信用的原则。\n" +
-//            "依法订立的劳动合同具有约束力，用人单位与劳动者应当履行劳动合同约定的义务。\n" +
-//            "第四条　用人单位应当依法建立和完善劳动规章制度，保障劳动者享有劳动权利、履行劳动义务。\n" +
-//            "用人单位在制定、修改或者决定有关劳动报酬、工作时间、休息休假、劳动安全卫生、保险福利、职工培训、劳动纪律以及劳动定额管理等直接涉及劳动者切身利益的规章制度或者重大事项时，应当经职工代表大会或者全体职工讨论，提出方案和意见，与工会或者职工代表平等协商确定。\n" +
-//            "在规章制度和重大事项决定实施过程中，工会或者职工认为不适当的，有权向用人单位提出，通过协商予以修改完善。\n" +
-//            "用人单位应当将直接涉及劳动者切身利益的规章制度和重大事项决定公示，或者告知劳动者。\n" +
-//            "第五条　县级以上人民政府劳动行政部门会同工会和企业方面代表，建立健全协调劳动关系三方机制，共同研究解决有关劳动关系的重大问题。\n" +
-//            "第六条　工会应当帮助、指导劳动者与用人单位依法订立和履行劳动合同，并与用人单位建立集体协商机制，维护劳动者的合法权益。\n" +
-//            "第二章　劳动合同的订立\n" +
-//            "第七条　用人单位自用工之日起即与劳动者建立劳动关系。用人单位应当建立职工名册备查。\n" +
-//            "第八条　用人单位招用劳动者时，应当如实告知劳动者工作内容、工作条件、工作地点、职业危害、安全生产状况、劳动报酬，以及劳动者要求了解的其他情况;用人单位有权了解劳动者与劳动合同直接相关的基本情况，劳动者应当如实说明。\n" +
-//            "第九条　用人单位招用劳动者，不得扣押劳动者的居民身份证和其他证件，不得要求劳动者提供担保或者以其他名义向劳动者收取财物。\n" +
-//            "第十条　建立劳动关系，应当订立书面劳动合同。\n" +
-//            "已建立劳动关系，未同时订立书面劳动合同的，应当自用工之日起一个月内订立书面劳动合同。\n" +
-//            "用人单位与劳动者在用工前订立劳动合同的，劳动关系自用工之日起建立。\n" +
-//            "第十一条　用人单位未在用工的同时订立书面劳动合同，与劳动者约定的劳动报酬不明确的，新招用的劳动者的劳动报酬按照集体合同规定的标准执行;没有集体合同或者集体合同未规定的，实行同工同酬。\n" +
-//            "第十二条　劳动合同分为固定期限劳动合同、无固定期限劳动合同和以完成一定工作任务为期限的劳动合同。\n" +
-//            "第十三条　固定期限劳动合同，是指用人单位与劳动者约定合同终止时间的劳动合同。\n" +
-//            "用人单位与劳动者协商一致，可以订立固定期限劳动合同。\n" +
-//            "第十四条　无固定期限劳动合同，是指用人单位与劳动者约定无确定终止时间的劳动合同。\n" +
-//            "用人单位与劳动者协商一致，可以订立无固定期限劳动合同。有下列情形之一，劳动者提出或者同意续订、订立劳动合同的，除劳动者提出订立固定期限劳动合同外，应当订立无固定期限劳动合同：\n" +
-//            "(一)劳动者在该用人单位连续工作满十年的;\n" +
-//            "(二)用人单位初次实行劳动合同制度或者国有企业改制重新订立劳动合同时，劳动者在该用人单位连续工作满十年且距法定退休年龄不足十年的;\n" +
-//            "(三)连续订立二次固定期限劳动合同，且劳动者没有本法第三十九条和第四十条第一项、第二项规定的情形，续订劳动合同的。\n" +
-//            "用人单位自用工之日起满一年不与劳动者订立书面劳动合同的，视为用人单位与劳动者已订立无固定期限劳动合同。\n" +
-//            "第十五条　以完成一定工作任务为期限的劳动合同，是指用人单位与劳动者约定以某项工作的完成为合同期限的劳动合同。\n" +
-//            "用人单位与劳动者协商一致，可以订立以完成一定工作任务为期限的劳动合同。\n" +
-//            "第十六条　劳动合同由用人单位与劳动者协商一致，并经用人单位与劳动者在劳动合同文本上签字或者盖章生效。\n" +
-//            "劳动合同文本由用人单位和劳动者各执一份。\n" +
-//            "第十七条　劳动合同应当具备以下条款：\n" +
-//            "(一)用人单位的名称、住所和法定代表人或者主要负责人;\n" +
-//            "(二)劳动者的姓名、住址和居民身份证或者其他有效身份证件号码;\n" +
-//            "(三)劳动合同期限;\n" +
-//            "(四)工作内容和工作地点;\n" +
-//            "(五)工作时间和休息休假;\n" +
-//            "(六)劳动报酬;\n" +
-//            "(七)社会保险;\n" +
-//            "(八)劳动保护、劳动条件和职业危害防护;\n" +
-//            "(九)法律、法规规定应当纳入劳动合同的其他事项。\n" +
-//            "劳动合同除前款规定的必备条款外，用人单位与劳动者可以约定试用期、培训、保守秘密、补充保险和福利待遇等其他事项。\n" +
-//            "第十八条　劳动合同对劳动报酬和劳动条件等标准约定不明确，引发争议的，用人单位与劳动者可以重新协商;协商不成的，适用集体合同规定;没有集体合同或者集体合同未规定劳动报酬的，实行同工同酬;没有集体合同或者集体合同未规定劳动条件等标准的，适用国家有关规定。\n" +
-//            "第十九条　劳动合同期限三个月以上不满一年的，试用期不得超过一个月;劳动合同期限一年以上不满三年的，试用期不得超过二个月;三年以上固定期限和无固定期限的劳动合同，试用期不得超过六个月。\n" +
-//            "同一用人单位与同一劳动者只能约定一次试用期。\n" +
-//            "以完成一定工作任务为期限的劳动合同或者劳动合同期限不满三个月的，不得约定试用期。\n" +
-//            "试用期包含在劳动合同期限内。劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。\n" +
-//            "第二十条　劳动者在试用期的工资不得低于本单位相同岗位最低档工资或者劳动合同约定工资的百分之八十，并不得低于用人单位所在地的最低工资标准。\n" +
-//            "第二十一条　在试用期中，除劳动者有本法第三十九条和第四十条第一项、第二项规定的情形外，用人单位不得解除劳动合同。用人单位在试用期解除劳动合同的，应当向劳动者说明理由。\n" +
-//            "第二十二条　用人单位为劳动者提供专项培训费用，对其进行专业技术培训的，可以与该劳动者订立协议，约定服务期。\n" +
-//            "劳动者违反服务期约定的，应当按照约定向用人单位支付违约金。违约金的数额不得超过用人单位提供的培训费用。用人单位要求劳动者支付的违约金不得超过服务期尚未履行部分所应分摊的培训费用。\n" +
-//            "用人单位与劳动者约定服务期的，不影响按照正常的工资调整机制提高劳动者在服务期期间的劳动报酬。\n" +
-//            "第二十三条　用人单位与劳动者可以在劳动合同中约定保守用人单位的商业秘密和与知识产权相关的保密事项。\n" +
-//            "对负有保密义务的劳动者，用人单位可以在劳动合同或者保密协议中与劳动者约定竞业限制条款，并约定在解除或者终止劳动合同后，在竞业限制期限内按月给予劳动者经济补偿。劳动者违反竞业限制约定的，应当按照约定向用人单位支付违约金。\n" +
-//            "第二十四条　竞业限制的人员限于用人单位的高级管理人员、高级技术人员和其他负有保密义务的人员。竞业限制的范围、地域、期限由用人单位与劳动者约定，竞业限制的约定不得违反法律、法规的规定。\n" +
-//            "在解除或者终止劳动合同后，前款规定的人员到与本单位生产或者经营同类产品、从事同类业务的有竞争关系的其他用人单位，或者自己开业生产或者经营同类产品、从事同类业务的竞业限制期限，不得超过二年。\n" +
-//            "第二十五条　除本法第二十二条和第二十三条规定的情形外，用人单位不得与劳动者约定由劳动者承担违约金。\n" +
-//            "第二十六条　下列劳动合同无效或者部分无效：\n" +
-//            "(一)以欺诈、胁迫的手段或者乘人之危，使对方在违背真实意思的情况下订立或者变更劳动合同的;\n" +
-//            "(二)用人单位免除自己的法定责任、排除劳动者权利的;\n" +
-//            "(三)违反法律、行政法规强制性规定的。\n" +
-//            "对劳动合同的无效或者部分无效有争议的，由劳动争议仲裁机构或者人民法院确认。\n" +
-//            "第二十七条　劳动合同部分无效，不影响其他部分效力的，其他部分仍然有效。\n" +
-//            "第二十八条　劳动合同被确认无效，劳动者已付出劳动的，用人单位应当向劳动者支付劳动报酬。劳动报酬的数额，参照本单位相同或者相近岗位劳动者的劳动报酬确定。\n" +
-//            "第三章　劳动合同的履行和变更\n" +
-//            "第二十九条　用人单位与劳动者应当按照劳动合同的约定，全面履行各自的义务。\n" +
-//            "第三十条　用人单位应当按照劳动合同约定和国家规定，向劳动者及时足额支付劳动报酬。\n" +
-//            "用人单位拖欠或者未足额支付劳动报酬的，劳动者可以依法向当地人民法院申请支付令，人民法院应当依法发出支付令。\n" +
-//            "第三十一条　用人单位应当严格执行劳动定额标准，不得强迫或者变相强迫劳动者加班。用人单位安排加班的，应当按照国家有关规定向劳动者支付加班费。\n" +
-//            "第三十二条　劳动者拒绝用人单位管理人员违章指挥、强令冒险作业的，不视为违反劳动合同。\n" +
-//            "劳动者对危害生命安全和身体健康的劳动条件，有权对用人单位提出批评、检举和控告。\n" +
-//            "第三十三条　用人单位变更名称、法定代表人、主要负责人或者投资人等事项，不影响劳动合同的履行。\n" +
-//            "第三十四条　用人单位发生合并或者分立等情况，原劳动合同继续有效，劳动合同由承继其权利和义务的用人单位继续履行。\n" +
-//            "第三十五条　用人单位与劳动者协商一致，可以变更劳动合同约定的内容。变更劳动合同，应当采用书面形式。\n" +
-//            "变更后的劳动合同文本由用人单位和劳动者各执一份。\n" +
-//            "第四章　劳动合同的解除和终止\n" +
-//            "第三十六条　用人单位与劳动者协商一致，可以解除劳动合同。\n" +
-//            "第三十七条　劳动者提前三十日以书面形式通知用人单位，可以解除劳动合同。劳动者在试用期内提前三日通知用人单位，可以解除劳动合同。\n" +
-//            "第三十八条　用人单位有下列情形之一的，劳动者可以解除劳动合同：\n" +
-//            "(一)未按照劳动合同约定提供劳动保护或者劳动条件的;\n" +
-//            "(二)未及时足额支付劳动报酬的;\n" +
-//            "(三)未依法为劳动者缴纳社会保险费的;\n" +
-//            "(四)用人单位的规章制度违反法律、法规的规定，损害劳动者权益的;\n" +
-//            "(五)因本法第二十六条第一款规定的情形致使劳动合同无效的;\n" +
-//            "(六)法律、行政法规规定劳动者可以解除劳动合同的其他情形。\n" +
-//            "用人单位以暴力、威胁或者非法限制人身自由的手段强迫劳动者劳动的，或者用人单位违章指挥、强令冒险作业危及劳动者人身安全的，劳动者可以立即解除劳动合同，不需事先告知用人单位。\n" +
-//            "第三十九条　劳动者有下列情形之一的，用人单位可以解除劳动合同：\n" +
-//            "(一)在试用期间被证明不符合录用条件的;\n" +
-//            "(二)严重违反用人单位的规章制度的;\n" +
-//            "(三)严重失职，营私舞弊，给用人单位造成重大损害的;\n" +
-//            "(四)劳动者同时与其他用人单位建立劳动关系，对完成本单位的工作任务造成严重影响，或者经用人单位提出，拒不改正的;\n" +
-//            "(五)因本法第二十六条第一款第一项规定的情形致使劳动合同无效的;\n" +
-//            "(六)被依法追究刑事责任的。\n" +
-//            "第四十条　有下列情形之一的，用人单位提前三十日以书面形式通知劳动者本人或者额外支付劳动者一个月工资后，可以解除劳动合同：\n" +
-//            "(一)劳动者患病或者非因工负伤，在规定的医疗期满后不能从事原工作，也不能从事由用人单位另行安排的工作的;\n" +
-//            "(二)劳动者不能胜任工作，经过培训或者调整工作岗位，仍不能胜任工作的;\n" +
-//            "(三)劳动合同订立时所依据的客观情况发生重大变化，致使劳动合同无法履行，经用人单位与劳动者协商，未能就变更劳动合同内容达成协议的。\n" +
-//            "第四十一条　有下列情形之一，需要裁减人员二十人以上或者裁减不足二十人但占企业职工总数百分之十以上的，用人单位提前三十日向工会或者全体职工说明情况，听取工会或者职工的意见后，裁减人员方案经向劳动行政部门报告，可以裁减人员：\n" +
-//            "(一)依照企业破产法规定进行重整的;\n" +
-//            "(二)生产经营发生严重困难的;\n" +
-//            "(三)企业转产、重大技术革新或者经营方式调整，经变更劳动合同后，仍需裁减人员的;\n" +
-//            "(四)其他因劳动合同订立时所依据的客观经济情况发生重大变化，致使劳动合同无法履行的。\n" +
-//            "裁减人员时，应当优先留用下列人员：\n" +
-//            "(一)与本单位订立较长期限的固定期限劳动合同的;\n" +
-//            "(二)与本单位订立无固定期限劳动合同的;\n" +
-//            "(三)家庭无其他就业人员，有需要扶养的老人或者未成年人的。\n" +
-//            "用人单位依照本条第一款规定裁减人员，在六个月内重新招用人员的，应当通知被裁减的人员，并在同等条件下优先招用被裁减的人员。\n" +
-//            "第四十二条　劳动者有下列情形之一的，用人单位不得依照本法第四十条、第四十一条的规定解除劳动合同：\n" +
-//            "(一)从事接触职业病危害作业的劳动者未进行离岗前职业健康检查，或者疑似职业病病人在诊断或者医学观察期间的;\n" +
-//            "(二)在本单位患职业病或者因工负伤并被确认丧失或者部分丧失劳动能力的;\n" +
-//            "(三)患病或者非因工负伤，在规定的医疗期内的;\n" +
-//            "(四)女职工在孕期、产期、哺乳期的;\n" +
-//            "(五)在本单位连续工作满十五年，且距法定退休年龄不足五年的;\n" +
-//            "(六)法律、行政法规规定的其他情形。\n" +
-//            "第四十三条　用人单位单方解除劳动合同，应当事先将理由通知工会。用人单位违反法律、行政法规规定或者劳动合同约定的，工会有权要求用人单位纠正。用人单位应当研究工会的意见，并将处理结果书面通知工会。\n" +
-//            "第四十四条　有下列情形之一的，劳动合同终止：\n" +
-//            "(一)劳动合同期满的;\n" +
-//            "(二)劳动者开始依法享受基本养老保险待遇的;\n" +
-//            "(三)劳动者死亡，或者被人民法院宣告死亡或者宣告失踪的;\n" +
-//            "(四)用人单位被依法宣告破产的;\n" +
-//            "(五)用人单位被吊销营业执照、责令关闭、撤销或者用人单位决定提前解散的;\n" +
-//            "(六)法律、行政法规规定的其他情形。\n" +
-//            "第四十五条　劳动合同期满，有本法第四十二条规定情形之一的，劳动合同应当续延至相应的情形消失时终止。但是，本法第四十二条第二项规定丧失或者部分丧失劳动能力劳动者的劳动合同的终止，按照国家有关工伤保险的规定执行。\n" +
-//            "第四十六条　有下列情形之一的，用人单位应当向劳动者支付经济补偿：\n" +
-//            "(一)劳动者依照本法第三十八条规定解除劳动合同的;\n" +
-//            "(二)用人单位依照本法第三十六条规定向劳动者提出解除劳动合同并与劳动者协商一致解除劳动合同的;\n" +
-//            "(三)用人单位依照本法第四十条规定解除劳动合同的;\n" +
-//            "(四)用人单位依照本法第四十一条第一款规定解除劳动合同的;\n" +
-//            "(五)除用人单位维持或者提高劳动合同约定条件续订劳动合同，劳动者不同意续订的情形外，依照本法第四十四条第一项规定终止固定期限劳动合同的;\n" +
-//            "(六)依照本法第四十四条第四项、第五项规定终止劳动合同的;\n" +
-//            "(七)法律、行政法规规定的其他情形。\n" +
-//            "第四十七条　经济补偿按劳动者在本单位工作的年限，每满一年支付一个月工资的标准向劳动者支付。六个月以上不满一年的，按一年计算;不满六个月的，向劳动者支付半个月工资的经济补偿。\n" +
-//            "劳动者月工资高于用人单位所在直辖市、设区的市级人民政府公布的本地区上年度职工月平均工资三倍的，向其支付经济补偿的标准按职工月平均工资三倍的数额支付，向其支付经济补偿的年限最高不超过十二年。\n" +
-//            "本条所称月工资是指劳动者在劳动合同解除或者终止前十二个月的平均工资。\n" +
-//            "第四十八条　用人单位违反本法规定解除或者终止劳动合同，劳动者要求继续履行劳动合同的，用人单位应当继续履行;劳动者不要求继续履行劳动合同或者劳动合同已经不能继续履行的，用人单位应当依照本法第八十七条规定支付赔偿金。\n" +
-//            "第四十九条　国家采取措施，建立健全劳动者社会保险关系跨地区转移接续制度。\n" +
-//            "第五十条　用人单位应当在解除或者终止劳动合同时出具解除或者终止劳动合同的证明，并在十五日内为劳动者办理档案和社会保险关系转移手续。\n" +
-//            "劳动者应当按照双方约定，办理工作交接。用人单位依照本法有关规定应当向劳动者支付经济补偿的，在办结工作交接时支付。\n" +
-//            "用人单位对已经解除或者终止的劳动合同的文本，至少保存二年备查。\n" +
-//            "第五章　特别规定\n" +
-//            "第一节　集体合同\n" +
-//            "第五十一条　企业职工一方与用人单位通过平等协商，可以就劳动报酬、工作时间、休息休假、劳动安全卫生、保险福利等事项订立集体合同。集体合同草案应当提交职工代表大会或者全体职工讨论通过。\n" +
-//            "集体合同由工会代表企业职工一方与用人单位订立;尚未建立工会的用人单位，由上级工会指导劳动者推举的代表与用人单位订立。\n" +
-//            "第五十二条　企业职工一方与用人单位可以订立劳动安全卫生、女职工权益保护、工资调整机制等专项集体合同。\n" +
-//            "第五十三条　在县级以下区域内，建筑业、采矿业、餐饮服务业等行业可以由工会与企业方面代表订立行业性集体合同，或者订立区域性集体合同。\n" +
-//            "第五十四条　集体合同订立后，应当报送劳动行政部门;劳动行政部门自收到集体合同文本之日起十五日内未提出异议的，集体合同即行生效。\n" +
-//            "依法订立的集体合同对用人单位和劳动者具有约束力。行业性、区域性集体合同对当地本行业、本区域的用人单位和劳动者具有约束力。\n" +
-//            "第五十五条　集体合同中劳动报酬和劳动条件等标准不得低于当地人民政府规定的最低标准;用人单位与劳动者订立的劳动合同中劳动报酬和劳动条件等标准不得低于集体合同规定的标准。\n" +
-//            "第五十六条　用人单位违反集体合同，侵犯职工劳动权益的，工会可以依法要求用人单位承担责任;因履行集体合同发生争议，经协商解决不成的，工会可以依法申请仲裁、提起诉讼。\n" +
-//            "第二节　劳务派遣\n" +
-//            "第五十七条　经营劳务派遣业务应当具备下列条件：\n" +
-//            "    （一）注册资本不得少于人民币二百万元；\n" +
-//            "    （二）有与开展业务相适应的固定的经营场所和设施；\n" +
-//            "    （三）有符合法律、行政法规规定的劳务派遣管理制度；\n" +
-//            "    （四）法律、行政法规规定的其他条件。\n" +
-//            "    经营劳务派遣业务，应当向劳动行政部门依法申请行政许可；经许可的，依法办理相应的公司登记。未经许可，任何单位和个人不得经营劳务派遣业务。\n" +
-//            "第五十八条　劳务派遣单位是本法所称用人单位，应当履行用人单位对劳动者的义务。劳务派遣单位与被派遣劳动者订立的劳动合同，除应当载明本法第十七条规定的事项外，还应当载明被派遣劳动者的用工单位以及派遣期限、工作岗位等情况。\n" +
-//            "劳务派遣单位应当与被派遣劳动者订立二年以上的固定期限劳动合同，按月支付劳动报酬;被派遣劳动者在无工作期间，劳务派遣单位应当按照所在地人民政府规定的最低工资标准，向其按月支付报酬。\n" +
-//            "第五十九条　劳务派遣单位派遣劳动者应当与接受以劳务派遣形式用工的单位(以下称用工单位)订立劳务派遣协议。劳务派遣协议应当约定派遣岗位和人员数量、派遣期限、劳动报酬和社会保险费的数额与支付方式以及违反协议的责任。\n" +
-//            "用工单位应当根据工作岗位的实际需要与劳务派遣单位确定派遣期限，不得将连续用工期限分割订立数个短期劳务派遣协议。\n" +
-//            "第六十条　劳务派遣单位应当将劳务派遣协议的内容告知被派遣劳动者。\n" +
-//            "劳务派遣单位不得克扣用工单位按照劳务派遣协议支付给被派遣劳动者的劳动报酬。\n" +
-//            "劳务派遣单位和用工单位不得向被派遣劳动者收取费用。\n" +
-//            "第六十一条　劳务派遣单位跨地区派遣劳动者的，被派遣劳动者享有的劳动报酬和劳动条件，按照用工单位所在地的标准执行。\n" +
-//            "第六十二条　用工单位应当履行下列义务：\n" +
-//            "(一)执行国家劳动标准，提供相应的劳动条件和劳动保护;\n" +
-//            "(二)告知被派遣劳动者的工作要求和劳动报酬;\n" +
-//            "(三)支付加班费、绩效奖金，提供与工作岗位相关的福利待遇;\n" +
-//            "(四)对在岗被派遣劳动者进行工作岗位所必需的培训;\n" +
-//            "(五)连续用工的，实行正常的工资调整机制。\n" +
-//            "用工单位不得将被派遣劳动者再派遣到其他用人单位。\n" +
-//            "第六十三条　被派遣劳动者享有与用工单位的劳动者同工同酬的权利。用工单位应当按照同工同酬原则，对被派遣劳动者与本单位同类岗位的劳动者实行相同的劳动报酬分配办法。用工单位无同类岗位劳动者的，参照用工单位所在地相同或者相近岗位劳动者的劳动报酬确定。\n" +
-//            "劳务派遣单位与被派遣劳动者订立的劳动合同和与用工单位订立的劳务派遣协议，载明或者约定的向被派遣劳动者支付的劳动报酬应当符合前款规定。\n" +
-//            "第六十四条　被派遣劳动者有权在劳务派遣单位或者用工单位依法参加或者组织工会，维护自身的合法权益。\n" +
-//            "第六十五条　被派遣劳动者可以依照本法第三十六条、第三十八条的规定与劳务派遣单位解除劳动合同。\n" +
-//            "被派遣劳动者有本法第三十九条和第四十条第一项、第二项规定情形的，用工单位可以将劳动者退回劳务派遣单位，劳务派遣单位依照本法有关规定，可以与劳动者解除劳动合同。\n" +
-//            "第六十六条　劳动合同用工是我国的企业基本用工形式。劳务派遣用工是补充形式，只能在临时性、辅助性或者替代性的工作岗位上实施。\n" +
-//            "    前款规定的临时性工作岗位是指存续时间不超过六个月的岗位；辅助性工作岗位是指为主营业务岗位提供服务的非主营业务岗位；替代性工作岗位是指用工单位的劳动者因脱产学习、休假等原因无法工作的一定期间内，可以由其他劳动者替代工作的岗位。\n" +
-//            "    用工单位应当严格控制劳务派遣用工数量，不得超过其用工总量的一定比例，具体比例由国务院劳动行政部门规定。\n" +
-//            "第六十七条　用人单位不得设立劳务派遣单位向本单位或者所属单位派遣劳动者。\n" +
-//            "第三节　非全日制用工\n" +
-//            "第六十八条　非全日制用工，是指以小时计酬为主，劳动者在同一用人单位一般平均每日工作时间不超过四小时，每周工作时间累计不超过二十四小时的用工形式。\n" +
-//            "第六十九条　非全日制用工双方当事人可以订立口头协议。\n" +
-//            "从事非全日制用工的劳动者可以与一个或者一个以上用人单位订立劳动合同;但是，后订立的劳动合同不得影响先订立的劳动合同的履行。\n" +
-//            "第七十条　非全日制用工双方当事人不得约定试用期。\n" +
-//            "第七十一条　非全日制用工双方当事人任何一方都可以随时通知对方终止用工。终止用工，用人单位不向劳动者支付经济补偿。\n" +
-//            "第七十二条　非全日制用工小时计酬标准不得低于用人单位所在地人民政府规定的最低小时工资标准。\n" +
-//            "非全日制用工劳动报酬结算支付周期最长不得超过十五日。\n" +
-//            "第六章　监督检查\n" +
-//            "第七十三条　国务院劳动行政部门负责全国劳动合同制度实施的监督管理。\n" +
-//            "县级以上地方人民政府劳动行政部门负责本行政区域内劳动合同制度实施的监督管理。\n" +
-//            "县级以上各级人民政府劳动行政部门在劳动合同制度实施的监督管理工作中，应当听取工会、企业方面代表以及有关行业主管部门的意见。\n" +
-//            "第七十四条　县级以上地方人民政府劳动行政部门依法对下列实施劳动合同制度的情况进行监督检查：\n" +
-//            "(一)用人单位制定直接涉及劳动者切身利益的规章制度及其执行的情况;\n" +
-//            "(二)用人单位与劳动者订立和解除劳动合同的情况;\n" +
-//            "(三)劳务派遣单位和用工单位遵守劳务派遣有关规定的情况;\n" +
-//            "(四)用人单位遵守国家关于劳动者工作时间和休息休假规定的情况;\n" +
-//            "(五)用人单位支付劳动合同约定的劳动报酬和执行最低工资标准的情况;\n" +
-//            "(六)用人单位参加各项社会保险和缴纳社会保险费的情况;\n" +
-//            "(七)法律、法规规定的其他劳动监察事项。\n" +
-//            "第七十五条　县级以上地方人民政府劳动行政部门实施监督检查时，有权查阅与劳动合同、集体合同有关的材料，有权对劳动场所进行实地检查，用人单位和劳动者都应当如实提供有关情况和材料。\n" +
-//            "劳动行政部门的工作人员进行监督检查，应当出示证件，依法行使职权，文明执法。\n" +
-//            "第七十六条　县级以上人民政府建设、卫生、安全生产监督管理等有关主管部门在各自职责范围内，对用人单位执行劳动合同制度的情况进行监督管理。\n" +
-//            "第七十七条　劳动者合法权益受到侵害的，有权要求有关部门依法处理，或者依法申请仲裁、提起诉讼。\n" +
-//            "第七十八条　工会依法维护劳动者的合法权益，对用人单位履行劳动合同、集体合同的情况进行监督。用人单位违反劳动法律、法规和劳动合同、集体合同的，工会有权提出意见或者要求纠正;劳动者申请仲裁、提起诉讼的，工会依法给予支持和帮助。\n" +
-//            "第七十九条　任何组织或者个人对违反本法的行为都有权举报，县级以上人民政府劳动行政部门应当及时核实、处理，并对举报有功人员给予奖励。\n" +
-//            "第七章　法律责任\n" +
-//            "第八十条　用人单位直接涉及劳动者切身利益的规章制度违反法律、法规规定的，由劳动行政部门责令改正，给予警告;给劳动者造成损害的，应当承担赔偿责任。\n" +
-//            "第八十一条　用人单位提供的劳动合同文本未载明本法规定的劳动合同必备条款或者用人单位未将劳动合同文本交付劳动者的，由劳动行政部门责令改正;给劳动者造成损害的，应当承担赔偿责任。\n" +
-//            "第八十二条　用人单位自用工之日起超过一个月不满一年未与劳动者订立书面劳动合同的，应当向劳动者每月支付二倍的工资。\n" +
-//            "用人单位违反本法规定不与劳动者订立无固定期限劳动合同的，自应当订立无固定期限劳动合同之日起向劳动者每月支付二倍的工资。\n" +
-//            "第八十三条　用人单位违反本法规定与劳动者约定试用期的，由劳动行政部门责令改正;违法约定的试用期已经履行的，由用人单位以劳动者试用期满月工资为标准，按已经履行的超过法定试用期的期间向劳动者支付赔偿金。\n" +
-//            "第八十四条　用人单位违反本法规定，扣押劳动者居民身份证等证件的，由劳动行政部门责令限期退还劳动者本人，并依照有关法律规定给予处罚。\n" +
-//            "用人单位违反本法规定，以担保或者其他名义向劳动者收取财物的，由劳动行政部门责令限期退还劳动者本人，并以每人五百元以上二千元以下的标准处以罚款;给劳动者造成损害的，应当承担赔偿责任。\n" +
-//            "劳动者依法解除或者终止劳动合同，用人单位扣押劳动者档案或者其他物品的，依照前款规定处罚。\n" +
-//            "第八十五条　用人单位有下列情形之一的，由劳动行政部门责令限期支付劳动报酬、加班费或者经济补偿;劳动报酬低于当地最低工资标准的，应当支付其差额部分;逾期不支付的，责令用人单位按应付金额百分之五十以上百分之一百以下的标准向劳动者加付赔偿金：\n" +
-//            "(一)未按照劳动合同的约定或者国家规定及时足额支付劳动者劳动报酬的;\n" +
-//            "(二)低于当地最低工资标准支付劳动者工资的;\n" +
-//            "(三)安排加班不支付加班费的;\n" +
-//            "(四)解除或者终止劳动合同，未依照本法规定向劳动者支付经济补偿的。\n" +
-//            "第八十六条　劳动合同依照本法第二十六条规定被确认无效，给对方造成损害的，有过错的一方应当承担赔偿责任。\n" +
-//            "第八十七条　用人单位违反本法规定解除或者终止劳动合同的，应当依照本法第四十七条规定的经济补偿标准的二倍向劳动者支付赔偿金。\n" +
-//            "第八十八条　用人单位有下列情形之一的，依法给予行政处罚;构成犯罪的，依法追究刑事责任;给劳动者造成损害的，应当承担赔偿责任：\n" +
-//            "(一)以暴力、威胁或者非法限制人身自由的手段强迫劳动的;\n" +
-//            "(二)违章指挥或者强令冒险作业危及劳动者人身安全的;\n" +
-//            "(三)侮辱、体罚、殴打、非法搜查或者拘禁劳动者的;\n" +
-//            "(四)劳动条件恶劣、环境污染严重，给劳动者身心健康造成严重损害的。\n" +
-//            "第八十九条　用人单位违反本法规定未向劳动者出具解除或者终止劳动合同的书面证明，由劳动行政部门责令改正;给劳动者造成损害的，应当承担赔偿责任。\n" +
-//            "第九十条　劳动者违反本法规定解除劳动合同，或者违反劳动合同中约定的保密义务或者竞业限制，给用人单位造成损失的，应当承担赔偿责任。\n" +
-//            "第九十一条　用人单位招用与其他用人单位尚未解除或者终止劳动合同的劳动者，给其他用人单位造成损失的，应当承担连带赔偿责任。\n" +
-//            "第九十二条　违反本法规定，未经许可，擅自经营劳务派遣业务的，由劳动行政部门责令停止违法行为，没收违法所得，并处违法所得一倍以上五倍以下的罚款；没有违法所得的，可以处五万元以下的罚款。\n" +
-//            "    劳务派遣单位、用工单位违反本法有关劳务派遣规定的，由劳动行政部门责令限期改正；逾期不改正的，以每人五千元以上一万元以下的标准处以罚款，对劳务派遣单位，吊销其劳务派遣业务经营许可证。用工单位给被派遣劳动者造成损害的，劳务派遣单位与用工单位承担连带赔偿责任。\n" +
-//            "第九十三条　对不具备合法经营资格的用人单位的违法犯罪行为，依法追究法律责任;劳动者已经付出劳动的，该单位或者其出资人应当依照本法有关规定向劳动者支付劳动报酬、经济补偿、赔偿金;给劳动者造成损害的，应当承担赔偿责任。\n" +
-//            "第九十四条　个人承包经营违反本法规定招用劳动者，给劳动者造成损害的，发包的组织与个人承包经营者承担连带赔偿责任。\n" +
-//            "第九十五条　劳动行政部门和其他有关主管部门及其工作人员玩忽职守、不履行法定职责，或者违法行使职权，给劳动者或者用人单位造成损害的，应当承担赔偿责任;对直接负责的主管人员和其他直接责任人员，依法给予行政处分;构成犯罪的，依法追究刑事责任。\n" +
-//            "第八章　附则\n" +
-//            "第九十六条　事业单位与实行聘用制的工作人员订立、履行、变更、解除或者终止劳动合同，法律、行政法规或者国务院另有规定的，依照其规定;未作规定的，依照本法有关规定执行。\n" +
-//            "第九十七条　本法施行前已依法订立且在本法施行之日存续的劳动合同，继续履行;本法第十四条第二款第三项规定连续订立固定期限劳动合同的次数，自本法施行后续订固定期限劳动合同时开始计算。\n" +
-//            "本法施行前已建立劳动关系，尚未订立书面劳动合同的，应当自本法施行之日起一个月内订立。\n" +
-//            "本法施行之日存续的劳动合同在本法施行后解除或者终止，依照本法第四十六条规定应当支付经济补偿的，经济补偿年限自本法施行之日起计算;本法施行前按照当时有关规定，用人单位应当向劳动者支付经济补偿的，按照当时有关规定执行。\n" +
-//            "第九十八条　本法自2008年1月1日起施行。\n" +
+//    String doc = "Luật Hợp đồng lao động của Cộng hòa Nhân dân Trung Hoa\n" +
+//            "Đã căn cứ vào 2013.07.01 sửa đổi theo bản sửa đổi đã thi hành\n" +
+//            "Danh mục\n" +
+//            "Chương 1　Quy tắc chung\n" +
+//            "Chương 2　Ký kết hợp đồng lao động\n" +
+//            "Chương 3　Thực hiện và thay đổi hợp đồng lao động\n" +
+//            "Chương 4　Chấm dứt và kết thúc hợp đồng lao động\n" +
+//            "Chương 5　Quy định đặc biệt\n" +
+//            "Chương 6　Giám sát kiểm tra\n" +
+//            "Chương 7　Trách nhiệm pháp lý\n" +
+//            "Chương 8　Phụ tắc\n" +
+//            "Chương 1　Quy tắc chung\n" +
+//            "Điều 1　Để hoàn thiện chế độ hợp đồng lao động, làm rõ quyền và nghĩa vụ của các bên trong hợp đồng lao động, bảo vệ quyền và lợi ích hợp pháp của người lao động, xây dựng và phát triển quan hệ lao động hài hòa, ổn định, Luật này được ban hành.\n" +
+//            "Điều 2　Các doanh nghiệp, tổ chức kinh tế cá thể, đơn vị phi doanh nghiệp dân lập và các tổ chức khác trong lãnh thổ Cộng hòa Nhân dân Trung Hoa(sau đây gọi là đơn vị sử dụng lao động)Việc thiết lập quan hệ lao động với người lao động, ký kết, thực hiện, thay đổi, chấm dứt hoặc kết thúc hợp đồng lao động được áp dụng theo Luật này.\n" +
+//            "Cơ quan nhà nước, đơn vị sự nghiệp, đoàn thể xã hội và người lao động thiết lập quan hệ lao động với các đơn vị này khi ký kết, thực hiện, thay đổi, chấm dứt hoặc kết thúc hợp đồng lao động được thực hiện theo Luật này.\n" +
+//            "Điều 3　Khi ký kết hợp đồng lao động, phải tuân theo nguyên tắc hợp pháp, công bằng, bình đẳng tự nguyện, thỏa thuận nhất trí, trung thực và đáng tin cậy.\n" +
+//            "Hợp đồng lao động được ký kết theo pháp luật có hiệu lực ràng buộc, đơn vị sử dụng lao động và người lao động phải thực hiện các nghĩa vụ đã thỏa thuận trong hợp đồng lao động.\n" +
+//            "Điều 4　Đơn vị sử dụng lao động phải xây dựng và hoàn thiện hệ thống quy chế lao động theo quy định của pháp luật, bảo đảm người lao động được hưởng quyền lao động và thực hiện nghĩa vụ lao động.\n" +
+//            "Khi đơn vị sử dụng lao động xây dựng, sửa đổi hoặc quyết định các quy chế hoặc vấn đề quan trọng liên quan trực tiếp đến lợi ích thiết thân của người lao động như thù lao lao động, thời gian làm việc, nghỉ ngơi, an toàn vệ sinh lao động, bảo hiểm phúc lợi, đào tạo nhân viên, kỷ luật lao động và quản lý định mức lao động, phải thông qua đại hội đại biểu công nhân viên chức hoặc toàn thể công nhân viên chức thảo luận, đề xuất phương án và ý kiến, và cùng công đoàn hoặc đại diện công nhân viên chức thương lượng bình đẳng để quyết định.\n" +
+//            "Trong quá trình thực hiện các quy chế và quyết định về vấn đề quan trọng, nếu công đoàn hoặc công nhân viên chức cho rằng không phù hợp, có quyền đề xuất với đơn vị sử dụng lao động để sửa đổi, hoàn thiện thông qua thương lượng.\n" +
+//            "Đơn vị sử dụng lao động phải công khai các quy chế và quyết định về vấn đề quan trọng liên quan trực tiếp đến lợi ích thiết thân của người lao động, hoặc thông báo cho người lao động.\n" +
+//            "Điều 5　Cơ quan hành chính lao động của chính quyền nhân dân cấp huyện trở lên cùng với công đoàn và đại diện phía doanh nghiệp thiết lập và hoàn thiện cơ chế ba bên phối hợp quan hệ lao động, cùng nhau nghiên cứu và giải quyết các vấn đề quan trọng liên quan đến quan hệ lao động.\n" +
+//            "Điều 6　Công đoàn phải giúp đỡ, hướng dẫn người lao động ký kết và thực hiện hợp đồng lao động theo pháp luật với đơn vị sử dụng lao động, đồng thời thiết lập cơ chế thương lượng tập thể với đơn vị sử dụng lao động để bảo vệ quyền và lợi ích hợp pháp của người lao động.\n" +
+//            "Chương 2　Ký kết hợp đồng lao động\n" +
+//            "Điều 7　Đơn vị sử dụng lao động kể từ ngày bắt đầu sử dụng lao động thì thiết lập quan hệ lao động với người lao động. Đơn vị sử dụng lao động phải lập danh sách công nhân viên chức để tra cứu.\n" +
+//            "Điều 8　Khi tuyển dụng người lao động, đơn vị sử dụng lao động phải thông báo trung thực cho người lao động về nội dung công việc, điều kiện làm việc, địa điểm làm việc, nguy hại nghề nghiệp, tình hình an toàn sản xuất, thù lao lao động và các tình huống khác mà người lao động yêu cầu được biết;Đơn vị sử dụng lao động có quyền tìm hiểu tình hình cơ bản của người lao động có liên quan trực tiếp đến hợp đồng lao động, người lao động phải trình bày trung thực.\n" +
+//            "Điều 9　Khi tuyển dụng người lao động, đơn vị sử dụng lao động không được giữ chứng minh thư nhân dân và các giấy tờ khác của người lao động, không được yêu cầu người lao động cung cấp bảo lãnh hoặc thu tiền, tài sản của người lao động dưới bất kỳ danh nghĩa nào khác.\n" +
+//            "Điều 10　Khi thiết lập quan hệ lao động, phải ký kết hợp đồng lao động bằng văn bản.\n" +
+//            "Đã thiết lập quan hệ lao động nhưng chưa ký kết hợp đồng lao động bằng văn bản cùng lúc thì phải ký kết hợp đồng lao động bằng văn bản trong vòng một tháng kể từ ngày bắt đầu sử dụng lao động.\n" +
+//            "Nếu đơn vị sử dụng lao động và người lao động ký kết hợp đồng lao động trước khi bắt đầu sử dụng lao động, quan hệ lao động được thiết lập kể từ ngày bắt đầu sử dụng lao động.\n" +
+//            "Điều 11　Đơn vị sử dụng lao động không ký kết hợp đồng lao động bằng văn bản cùng lúc với việc sử dụng lao động, và thù lao lao động thỏa thuận với người lao động không rõ ràng thì thù lao lao động của người lao động mới tuyển dụng được thực hiện theo tiêu chuẩn quy định trong hợp đồng tập thể;Nếu không có hợp đồng tập thể hoặc hợp đồng tập thể không quy định thì thực hiện cùng công việc thì cùng mức lương.\n" +
+//            "Điều 12　Hợp đồng lao động được chia thành hợp đồng lao động có thời hạn xác định, hợp đồng lao động không xác định thời hạn và hợp đồng lao động có thời hạn theo thời gian hoàn thành một công việc nhất định.\n" +
+//            "Điều 13　Hợp đồng lao động có thời hạn xác định là hợp đồng lao động mà đơn vị sử dụng lao động và người lao động thỏa thuận về thời gian chấm dứt hợp đồng.\n" +
+//            "Đơn vị sử dụng lao động và người lao động thỏa thuận nhất trí có thể ký kết hợp đồng lao động có thời hạn xác định.\n" +
+//            "Điều 14　Hợp đồng lao động không xác định thời hạn là hợp đồng lao động mà đơn vị sử dụng lao động và người lao động thỏa thuận không có thời gian chấm dứt xác định.\n" +
+//            "Đơn vị sử dụng lao động và người lao động thỏa thuận nhất trí có thể ký kết hợp đồng lao động không xác định thời hạn. Trong các trường hợp sau đây, nếu người lao động đề xuất hoặc đồng ý gia hạn, ký kết hợp đồng lao động, trừ trường hợp người lao động đề xuất ký kết hợp đồng lao động có thời hạn xác định, thì phải ký kết hợp đồng lao động không xác định thời hạn:\n" +
+//            "(1)Người lao động làm việc liên tục đủ mười năm tại đơn vị sử dụng lao động đó;\n" +
+//            "(2)Khi đơn vị sử dụng lao động lần đầu thực hiện chế độ hợp đồng lao động hoặc doanh nghiệp nhà nước cải cách và ký kết lại hợp đồng lao động, người lao động làm việc liên tục đủ mười năm tại đơn vị sử dụng lao động đó và còn dưới mười năm đến tuổi nghỉ hưu theo luật định;\n" +
+//            "(3)Đã ký kết liên tiếp hai lần hợp đồng lao động có thời hạn xác định, và người lao động không thuộc các trường hợp quy định tại Điều 39 và khoản 1, khoản 2 Điều 40 của Luật này, khi gia hạn hợp đồng lao động.\n" +
+//            "Đơn vị sử dụng lao động kể từ ngày bắt đầu sử dụng lao động đủ một năm mà không ký kết hợp đồng lao động bằng văn bản với người lao động thì được coi là đơn vị sử dụng lao động và người lao động đã ký kết hợp đồng lao động không xác định thời hạn.\n" +
+//            "Điều 15　Hợp đồng lao động có thời hạn theo thời gian hoàn thành một công việc nhất định là hợp đồng lao động mà đơn vị sử dụng lao động và người lao động thỏa thuận lấy việc hoàn thành một công việc nào đó làm thời hạn hợp đồng.\n" +
+//            "Đơn vị sử dụng lao động và người lao động thỏa thuận nhất trí có thể ký kết hợp đồng lao động có thời hạn theo thời gian hoàn thành một công việc nhất định.\n" +
+//            "Điều 16　Hợp đồng lao động do đơn vị sử dụng lao động và người lao động thỏa thuận nhất trí, và có hiệu lực sau khi đơn vị sử dụng lao động và người lao động ký tên hoặc đóng dấu trên văn bản hợp đồng lao động.\n" +
+//            "Văn bản hợp đồng lao động do đơn vị sử dụng lao động và người lao động mỗi bên giữ một bản.\n" +
+//            "Điều 17　Hợp đồng lao động phải có các điều khoản sau:\n" +
+//            "(1)Tên, trụ sở và người đại diện theo pháp luật hoặc người phụ trách chính của đơn vị sử dụng lao động;\n" +
+//            "(2)Họ tên, địa chỉ và số chứng minh thư nhân dân hoặc số giấy tờ tùy thân hợp lệ khác của người lao động;\n" +
+//            "(3)Thời hạn hợp đồng lao động;\n" +
+//            "(4)Nội dung công việc và địa điểm làm việc;\n" +
+//            "(5)Thời gian làm việc và nghỉ ngơi;\n" +
+//            "(6)Thù lao lao động;\n" +
+//            "(7)Bảo hiểm xã hội;\n" +
+//            "(8)Bảo hộ lao động, điều kiện lao động và phòng hộ nguy hại nghề nghiệp;\n" +
+//            "(9)Các vấn đề khác mà pháp luật, quy định pháp luật quy định phải đưa vào hợp đồng lao động.\n" +
+//            "Ngoài các điều khoản bắt buộc quy định tại khoản trên, đơn vị sử dụng lao động và người lao động có thể thỏa thuận các vấn đề khác như thời gian thử việc, đào tạo, bảo mật, bảo hiểm bổ sung và phúc lợi.\n" +
+//            "Điều 18　Nếu hợp đồng lao động thỏa thuận không rõ ràng về các tiêu chuẩn như thù lao lao động và điều kiện lao động gây ra tranh chấp, đơn vị sử dụng lao động và người lao động có thể thương lượng lại;Nếu thương lượng không thành, áp dụng quy định của hợp đồng tập thể;Nếu không có hợp đồng tập thể hoặc hợp đồng tập thể không quy định về thù lao lao động thì thực hiện cùng công việc thì cùng mức lương;Nếu không có hợp đồng tập thể hoặc hợp đồng tập thể không quy định các tiêu chuẩn như điều kiện lao động thì áp dụng các quy định có liên quan của Nhà nước.\n" +
+//            "Điều 19　Hợp đồng lao động có thời hạn từ ba tháng trở lên và dưới một năm thì thời gian thử việc không được vượt quá một tháng;Hợp đồng lao động có thời hạn từ một năm trở lên và dưới ba năm thì thời gian thử việc không được vượt quá hai tháng;Đối với hợp đồng lao động có thời hạn xác định trên ba năm và hợp đồng lao động không xác định thời hạn, thời gian thử việc không được vượt quá sáu tháng.\n" +
+//            "Cùng một đơn vị sử dụng lao động và cùng một người lao động chỉ được thỏa thuận một lần thử việc.\n" +
+//            "Hợp đồng lao động có thời hạn theo thời gian hoàn thành một công việc nhất định hoặc hợp đồng lao động có thời hạn dưới ba tháng thì không được thỏa thuận thời gian thử việc.\n" +
+//            "Thời gian thử việc được tính trong thời hạn hợp đồng lao động. Hợp đồng lao động chỉ thỏa thuận về thời gian thử việc thì thời gian thử việc không thành lập, thời hạn đó là thời hạn hợp đồng lao động.\n" +
+//            "Điều 20　Tiền lương của người lao động trong thời gian thử việc không được thấp hơn mức lương thấp nhất của cùng vị trí trong đơn vị này hoặc 80% mức lương thỏa thuận trong hợp đồng lao động, và không được thấp hơn mức lương tối thiểu của địa phương nơi đơn vị sử dụng lao động đặt trụ sở.\n" +
+//            "Điều 21　Trong thời gian thử việc, trừ trường hợp người lao động thuộc các trường hợp quy định tại Điều 39 và khoản 1, khoản 2 Điều 40 của Luật này, đơn vị sử dụng lao động không được chấm dứt hợp đồng lao động. Nếu đơn vị sử dụng lao động chấm dứt hợp đồng lao động trong thời gian thử việc thì phải giải thích lý do cho người lao động.\n" +
+//            "Điều 22　Đơn vị sử dụng lao động cung cấp chi phí đào tạo chuyên môn cho người lao động để đào tạo kỹ thuật chuyên nghiệp thì có thể ký kết thỏa thuận với người lao động đó để thỏa thuận thời gian phục vụ.\n" +
+//            "Người lao động vi phạm thỏa thuận về thời gian phục vụ thì phải trả tiền phạt vi phạm cho đơn vị sử dụng lao động theo thỏa thuận. Số tiền phạt vi phạm không được vượt quá chi phí đào tạo mà đơn vị sử dụng lao động đã cung cấp. Tiền phạt vi phạm mà đơn vị sử dụng lao động yêu cầu người lao động trả không được vượt quá chi phí đào tạo được phân bổ cho phần thời gian phục vụ chưa thực hiện.\n" +
+//            "Việc đơn vị sử dụng lao động và người lao động thỏa thuận thời gian phục vụ không ảnh hưởng đến việc tăng thù lao lao động của người lao động trong thời gian phục vụ theo cơ chế điều chỉnh tiền lương bình thường.\n" +
+//            "Điều 23　Đơn vị sử dụng lao động và người lao động có thể thỏa thuận trong hợp đồng lao động về việc giữ bí mật thương mại của đơn vị sử dụng lao động và các vấn đề bảo mật liên quan đến quyền sở hữu trí tuệ.\n" +
+//            "Đối với người lao động có nghĩa vụ bảo mật, đơn vị sử dụng lao động có thể thỏa thuận điều khoản hạn chế cạnh tranh với người lao động trong hợp đồng lao động hoặc thỏa thuận bảo mật, và thỏa thuận sau khi chấm dứt hoặc kết thúc hợp đồng lao động, trong thời hạn hạn chế cạnh tranh sẽ bồi thường kinh tế hàng tháng cho người lao động. Người lao động vi phạm thỏa thuận hạn chế cạnh tranh thì phải trả tiền phạt vi phạm cho đơn vị sử dụng lao động theo thỏa thuận.\n" +
+//            "Điều 24　Những người bị hạn chế cạnh tranh chỉ giới hạn ở cán bộ quản lý cấp cao, nhân viên kỹ thuật cao cấp của đơn vị sử dụng lao động và những người khác có nghĩa vụ bảo mật. Phạm vi, khu vực, thời hạn hạn chế cạnh tranh do đơn vị sử dụng lao động và người lao động thỏa thuận, thỏa thuận hạn chế cạnh tranh không được vi phạm quy định của pháp luật, quy định pháp luật.\n" +
+//            "Sau khi chấm dứt hoặc kết thúc hợp đồng lao động, những người quy định tại khoản trên đến làm việc tại đơn vị sử dụng lao động khác có quan hệ cạnh tranh sản xuất hoặc kinh doanh sản phẩm cùng loại, kinh doanh cùng loại với đơn vị này, hoặc tự mở cơ sở sản xuất hoặc kinh doanh sản phẩm cùng loại, kinh doanh cùng loại thì thời hạn hạn chế cạnh tranh không được vượt quá hai năm.\n" +
+//            "Điều 25　Trừ các trường hợp quy định tại Điều 22 và Điều 23 của Luật này, đơn vị sử dụng lao động không được thỏa thuận với người lao động về việc người lao động phải chịu tiền phạt vi phạm.\n" +
+//            "Điều 26　Các hợp đồng lao động sau đây vô hiệu hoặc vô hiệu một phần:\n" +
+//            "(1)Dùng thủ đoạn lừa dối, ép buộc hoặc lợi dụng tình thế khó khăn của người khác để khiến đối phương ký kết hoặc thay đổi hợp đồng lao động trong trường hợp trái với ý chí thực sự;\n" +
+//            "(2)Đơn vị sử dụng lao động miễn trừ trách nhiệm pháp lý của mình, loại trừ quyền của người lao động;\n" +
+//            "(3)Vi phạm quy định bắt buộc của pháp luật, quy định hành chính.\n" +
+//            "Tranh chấp về việc hợp đồng lao động vô hiệu hoặc vô hiệu một phần do cơ quan trọng tài tranh chấp lao động hoặc tòa án nhân dân xác nhận.\n" +
+//            "Điều 27　Hợp đồng lao động vô hiệu một phần, không ảnh hưởng đến hiệu lực của các phần khác, các phần khác vẫn có hiệu lực.\n" +
+//            "Điều 28　Hợp đồng lao động bị xác nhận vô hiệu, người lao động đã lao động thì đơn vị sử dụng lao động phải trả thù lao lao động cho người lao động. Số tiền thù lao lao động được xác định tham chiếu thù lao lao động của người lao động ở vị trí tương tự hoặc gần tương tự trong đơn vị này.\n" +
+//            "Chương 3　Thực hiện và thay đổi hợp đồng lao động\n" +
+//            "Điều 29　Đơn vị sử dụng lao động và người lao động phải thực hiện đầy đủ nghĩa vụ của mình theo thỏa thuận trong hợp đồng lao động.\n" +
+//            "Điều 30　Đơn vị sử dụng lao động phải trả thù lao lao động cho người lao động kịp thời và đầy đủ theo thỏa thuận trong hợp đồng lao động và quy định của Nhà nước.\n" +
+//            "Đơn vị sử dụng lao động nợ hoặc không trả đủ thù lao lao động thì người lao động có thể theo pháp luật nộp đơn xin lệnh thanh toán lên tòa án nhân dân địa phương, tòa án nhân dân phải theo pháp luật ban hành lệnh thanh toán.\n" +
+//            "Điều 31　Đơn vị sử dụng lao động phải thực hiện nghiêm ngặt tiêu chuẩn định mức lao động, không được ép buộc hoặc ép buộc dưới hình thức khác để người lao động làm thêm giờ. Đơn vị sử dụng lao động bố trí làm thêm giờ thì phải trả tiền làm thêm giờ cho người lao động theo quy định có liên quan của Nhà nước.\n" +
+//            "Điều 32　Người lao động từ chối việc chỉ huy vi phạm quy định, ép buộc làm việc mạo hiểm của cán bộ quản lý đơn vị sử dụng lao động thì không bị coi là vi phạm hợp đồng lao động.\n" +
+//            "Người lao động có quyền phê bình, tố giác và tố cáo đơn vị sử dụng lao động về điều kiện lao động gây nguy hại đến tính mạng, an toàn và sức khỏe.\n" +
+//            "Điều 33　Việc đơn vị sử dụng lao động thay đổi tên gọi, người đại diện theo pháp luật, người phụ trách chính hoặc nhà đầu tư và các vấn đề khác không ảnh hưởng đến việc thực hiện hợp đồng lao động.\n" +
+//            "Điều 34　Khi đơn vị sử dụng lao động sáp nhập hoặc chia tách, hợp đồng lao động ban đầu tiếp tục có hiệu lực, hợp đồng lao động do đơn vị sử dụng lao động kế thừa quyền và nghĩa vụ của nó tiếp tục thực hiện.\n" +
+//            "Điều 35　Đơn vị sử dụng lao động và người lao động thỏa thuận nhất trí có thể thay đổi nội dung thỏa thuận trong hợp đồng lao động. Khi thay đổi hợp đồng lao động phải dùng hình thức văn bản.\n" +
+//            "Văn bản hợp đồng lao động sau khi thay đổi do đơn vị sử dụng lao động và người lao động mỗi bên giữ một bản.\n" +
+//            "Chương 4　Chấm dứt và kết thúc hợp đồng lao động\n" +
+//            "Điều 36　Đơn vị sử dụng lao động và người lao động thỏa thuận nhất trí có thể chấm dứt hợp đồng lao động.\n" +
+//            "Điều 37　Người lao động thông báo bằng văn bản cho đơn vị sử dụng lao động trước ba mươi ngày có thể chấm dứt hợp đồng lao động. Người lao động trong thời gian thử việc thông báo cho đơn vị sử dụng lao động trước ba ngày có thể chấm dứt hợp đồng lao động.\n" +
+//            "Điều 38　Đơn vị sử dụng lao động có một trong các trường hợp sau đây thì người lao động có thể chấm dứt hợp đồng lao động:\n" +
+//            "(1)Không cung cấp bảo hộ lao động hoặc điều kiện lao động theo thỏa thuận trong hợp đồng lao động;\n" +
+//            "(2)Không trả thù lao lao động kịp thời và đầy đủ;\n" +
+//            "(3)Không đóng bảo hiểm xã hội cho người lao động theo pháp luật;\n" +
+//            "(4)Quy chế của đơn vị sử dụng lao động vi phạm quy định của pháp luật, quy định pháp luật, làm tổn hại đến quyền lợi của người lao động;\n" +
+//            "(5)Do trường hợp quy định tại khoản 1 Điều 26 của Luật này khiến hợp đồng lao động vô hiệu;\n" +
+//            "(6)Các trường hợp khác mà pháp luật, quy định hành chính quy định người lao động có thể chấm dứt hợp đồng lao động.\n" +
+//            "Đơn vị sử dụng lao động dùng bạo lực, đe dọa hoặc hạn chế tự do thân thể bất hợp pháp để ép buộc người lao động làm việc, hoặc đơn vị sử dụng lao động chỉ huy vi phạm quy định, ép buộc làm việc mạo hiểm gây nguy hiểm đến an toàn thân thể của người lao động thì người lao động có thể chấm dứt hợp đồng lao động ngay lập tức mà không cần thông báo trước cho đơn vị sử dụng lao động.\n" +
+//            "Điều 39　Người lao động có một trong các trường hợp sau đây thì đơn vị sử dụng lao động có thể chấm dứt hợp đồng lao động:\n" +
+//            "(1)Trong thời gian thử việc bị chứng minh không đáp ứng điều kiện tuyển dụng;\n" +
+//            "(2)Vi phạm nghiêm trọng quy chế của đơn vị sử dụng lao động;\n" +
+//            "(3)Thiếu trách nhiệm nghiêm trọng, tư lợi gian lận, gây thiệt hại lớn cho đơn vị sử dụng lao động;\n" +
+//            "(4)Người lao động đồng thời thiết lập quan hệ lao động với đơn vị sử dụng lao động khác, gây ảnh hưởng nghiêm trọng đến việc hoàn thành nhiệm vụ công việc của đơn vị này, hoặc sau khi đơn vị sử dụng lao động đề xuất mà vẫn từ chối sửa chữa;\n" +
+//            "(5)Do trường hợp quy định tại khoản 1 Điều 26 của Luật này khiến hợp đồng lao động vô hiệu;\n" +
+//            "(6)Bị truy cứu trách nhiệm hình sự theo pháp luật.\n" +
+//            "Điều 40　Có một trong các trường hợp sau đây, đơn vị sử dụng lao động thông báo bằng văn bản cho người lao động trước ba mươi ngày hoặc trả thêm một tháng lương cho người lao động thì có thể chấm dứt hợp đồng lao động:\n" +
+//            "(1)Người lao động bị bệnh hoặc bị thương không phải do công việc, sau khi hết thời gian điều trị theo quy định không thể làm công việc ban đầu, cũng không thể làm công việc do đơn vị sử dụng lao động bố trí khác;\n" +
+//            "(2)Người lao động không đủ năng lực làm việc, sau khi đào tạo hoặc điều chỉnh vị trí công việc vẫn không đủ năng lực làm việc;\n" +
+//            "(3)Tình hình khách quan làm căn cứ khi ký kết hợp đồng lao động thay đổi lớn, khiến hợp đồng lao động không thể thực hiện được, sau khi đơn vị sử dụng lao động và người lao động thương lượng mà không đạt được thỏa thuận về việc thay đổi nội dung hợp đồng lao động.\n" +
+//            "Điều 41　Có một trong các trường hợp sau đây, cần cắt giảm từ hai mươi người trở lên hoặc cắt giảm dưới hai mươi người nhưng chiếm trên mười phần trăm tổng số công nhân viên chức của doanh nghiệp, đơn vị sử dụng lao động thông báo tình hình cho công đoàn hoặc toàn thể công nhân viên chức trước ba mươi ngày, lắng nghe ý kiến của công đoàn hoặc công nhân viên chức, sau đó phương án cắt giảm nhân sự được báo cáo lên cơ quan hành chính lao động thì có thể cắt giảm nhân sự:\n" +
+//            "(1)Tiến hành tái cơ cấu theo quy định của Luật Phá sản doanh nghiệp;\n" +
+//            "(2)Sản xuất kinh doanh gặp khó khăn nghiêm trọng;\n" +
+//            "(3)Doanh nghiệp chuyển đổi sản xuất, đổi mới kỹ thuật lớn hoặc điều chỉnh phương thức kinh doanh, sau khi thay đổi hợp đồng lao động vẫn cần cắt giảm nhân sự;\n" +
+//            "(4)Các trường hợp khác do tình hình kinh tế khách quan làm căn cứ khi ký kết hợp đồng lao động thay đổi lớn, khiến hợp đồng lao động không thể thực hiện được.\n" +
+//            "Khi cắt giảm nhân sự, phải ưu tiên giữ lại những người sau:\n" +
+//            "(1)Người đã ký kết hợp đồng lao động có thời hạn xác định dài hơn với đơn vị này;\n" +
+//            "(2)Người đã ký kết hợp đồng lao động không xác định thời hạn với đơn vị này;\n" +
+//            "(3)Gia đình không có người lao động khác, có người già hoặc trẻ vị thành niên cần nuôi dưỡng.\n" +
+//            "Đơn vị sử dụng lao động cắt giảm nhân sự theo quy định tại khoản 1 Điều này, trong vòng sáu tháng tuyển dụng lại nhân sự thì phải thông báo cho những người bị cắt giảm, và trong điều kiện tương đương ưu tiên tuyển dụng lại những người bị cắt giảm.\n" +
+//            "Điều 42　Người lao động có một trong các trường hợp sau đây thì đơn vị sử dụng lao động không được chấm dứt hợp đồng lao động theo quy định tại Điều 40, Điều 41 của Luật này:\n" +
+//            "(1)Người lao động làm công việc tiếp xúc với nguy hại bệnh nghề nghiệp chưa được kiểm tra sức khỏe nghề nghiệp trước khi rời khỏi vị trí, hoặc người nghi mắc bệnh nghề nghiệp đang trong thời gian chẩn đoán hoặc theo dõi y tế;\n" +
+//            "(2)Mắc bệnh nghề nghiệp hoặc bị thương do công việc tại đơn vị này và được xác nhận mất hoặc mất một phần khả năng lao động;\n" +
+//            "(3)Bị bệnh hoặc bị thương không phải do công việc, trong thời gian điều trị theo quy định;\n" +
+//            "(4)Lao động nữ trong thời kỳ mang thai, sinh con, nuôi con bằng sữa mẹ;\n" +
+//            "(5)Làm việc liên tục đủ mười lăm năm tại đơn vị này và còn dưới năm năm đến tuổi nghỉ hưu theo luật định;\n" +
+//            "(6)Các trường hợp khác theo quy định của pháp luật và quy định hành chính.\n" +
+//            "Điều 43　Đơn vị sử dụng lao động đơn phương chấm dứt hợp đồng lao động phải thông báo lý do cho công đoàn trước. Đơn vị sử dụng lao động vi phạm quy định của pháp luật, quy định hành chính hoặc thỏa thuận trong hợp đồng lao động thì công đoàn có quyền yêu cầu đơn vị sử dụng lao động sửa chữa. Đơn vị sử dụng lao động phải nghiên cứu ý kiến của công đoàn và thông báo bằng văn bản kết quả xử lý cho công đoàn.\n" +
+//            "Điều 44　Có một trong các trường hợp sau đây thì hợp đồng lao động kết thúc:\n" +
+//            "(1)Hợp đồng lao động hết hạn;\n" +
+//            "(2)Người lao động bắt đầu được hưởng chế độ bảo hiểm hưu trí cơ bản theo pháp luật;\n" +
+//            "(3)Người lao động chết, hoặc bị tòa án nhân dân tuyên bố đã chết hoặc tuyên bố mất tích;\n" +
+//            "(4)Đơn vị sử dụng lao động bị tuyên bố phá sản theo pháp luật;\n" +
+//            "(5)Đơn vị sử dụng lao động bị thu hồi giấy phép kinh doanh, bị yêu cầu đóng cửa, bị thu hồi hoặc đơn vị sử dụng lao động quyết định giải thể trước thời hạn;\n" +
+//            "(6)Các trường hợp khác theo quy định của pháp luật và quy định hành chính.\n" +
+//            "Điều 45　Khi hợp đồng lao động hết hạn, nếu có một trong các trường hợp quy định tại Điều 42 của Luật này thì hợp đồng lao động phải được gia hạn đến khi trường hợp tương ứng chấm dứt. Tuy nhiên, việc kết thúc hợp đồng lao động của người lao động mất hoặc mất một phần khả năng lao động quy định tại khoản 2 Điều 42 của Luật này được thực hiện theo quy định có liên quan của Nhà nước về bảo hiểm tai nạn lao động.\n" +
+//            "Điều 46　Có một trong các trường hợp sau đây thì đơn vị sử dụng lao động phải trả tiền bồi thường kinh tế cho người lao động:\n" +
+//            "(1)Người lao động chấm dứt hợp đồng lao động theo quy định tại Điều 38 của Luật này;\n" +
+//            "(2)Đơn vị sử dụng lao động đề xuất chấm dứt hợp đồng lao động với người lao động theo quy định tại Điều 36 của Luật này và thỏa thuận nhất trí với người lao động để chấm dứt hợp đồng lao động;\n" +
+//            "(3)Đơn vị sử dụng lao động chấm dứt hợp đồng lao động theo quy định tại Điều 40 của Luật này;\n" +
+//            "(4)Đơn vị sử dụng lao động chấm dứt hợp đồng lao động theo quy định tại khoản 1 Điều 41 của Luật này;\n" +
+//            "(5)Trừ trường hợp đơn vị sử dụng lao động duy trì hoặc nâng cao điều kiện thỏa thuận trong hợp đồng lao động để gia hạn hợp đồng lao động mà người lao động không đồng ý gia hạn, việc kết thúc hợp đồng lao động có thời hạn xác định theo quy định tại khoản 1 Điều 44;\n" +
+//            "(6)Việc kết thúc hợp đồng lao động theo quy định tại khoản 4, khoản 5 Điều 44 của Luật này;\n" +
+//            "(7)Các trường hợp khác theo quy định của pháp luật và quy định hành chính.\n" +
+//            "Điều 47　Tiền bồi thường kinh tế được trả cho người lao động theo số năm làm việc tại đơn vị này, mỗi năm đủ được trả theo tiêu chuẩn một tháng lương. Trên sáu tháng và dưới một năm được tính là một năm;Dưới sáu tháng thì trả cho người lao động tiền bồi thường kinh tế bằng nửa tháng lương.\n" +
+//            "Nếu lương tháng của người lao động cao hơn ba lần mức lương tháng trung bình của công nhân viên chức trong khu vực năm trước do chính quyền nhân dân thành phố trực thuộc trung ương, thành phố cấp quận nơi đơn vị sử dụng lao động đặt trụ sở công bố thì tiêu chuẩn trả tiền bồi thường kinh tế cho người lao động được tính theo số tiền bằng ba lần mức lương tháng trung bình của công nhân viên chức, số năm trả tiền bồi thường kinh tế tối đa không vượt quá mười hai năm.\n" +
+//            "Lương tháng quy định tại Điều này là mức lương trung bình của người lao động trong mười hai tháng trước khi hợp đồng lao động bị chấm dứt hoặc kết thúc.\n" +
+//            "Điều 48　Đơn vị sử dụng lao động vi phạm quy định của Luật này để chấm dứt hoặc kết thúc hợp đồng lao động, người lao động yêu cầu tiếp tục thực hiện hợp đồng lao động thì đơn vị sử dụng lao động phải tiếp tục thực hiện;Người lao động không yêu cầu tiếp tục thực hiện hợp đồng lao động hoặc hợp đồng lao động đã không thể tiếp tục thực hiện thì đơn vị sử dụng lao động phải trả tiền bồi thường theo quy định tại Điều 87 của Luật này.\n" +
+//            "Điều 49　Nhà nước áp dụng các biện pháp để thiết lập và hoàn thiện chế độ chuyển tiếp quan hệ bảo hiểm xã hội của người lao động giữa các khu vực.\n" +
+//            "Điều 50　Đơn vị sử dụng lao động phải cấp giấy chứng nhận chấm dứt hoặc kết thúc hợp đồng lao động khi chấm dứt hoặc kết thúc hợp đồng lao động, và trong vòng mười lăm ngày làm thủ tục chuyển hồ sơ và quan hệ bảo hiểm xã hội cho người lao động.\n" +
+//            "Người lao động phải thực hiện bàn giao công việc theo thỏa thuận của hai bên. Đơn vị sử dụng lao động theo quy định có liên quan của Luật này phải trả tiền bồi thường kinh tế cho người lao động thì trả khi hoàn tất bàn giao công việc.\n" +
+//            "Đơn vị sử dụng lao động phải lưu giữ văn bản hợp đồng lao động đã chấm dứt hoặc kết thúc ít nhất hai năm để tra cứu.\n" +
+//            "Chương 5　Quy định đặc biệt\n" +
+//            "Mục 1　Hợp đồng tập thể\n" +
+//            "Điều 51　Phía công nhân viên chức doanh nghiệp và đơn vị sử dụng lao động thông qua thương lượng bình đẳng có thể ký kết hợp đồng tập thể về các vấn đề như thù lao lao động, thời gian làm việc, nghỉ ngơi, an toàn vệ sinh lao động, bảo hiểm phúc lợi. Dự thảo hợp đồng tập thể phải được trình đại hội đại biểu công nhân viên chức hoặc toàn thể công nhân viên chức thảo luận và thông qua.\n" +
+//            "Hợp đồng tập thể do công đoàn đại diện phía công nhân viên chức doanh nghiệp ký kết với đơn vị sử dụng lao động;Đơn vị sử dụng lao động chưa thành lập công đoàn thì do công đoàn cấp trên hướng dẫn đại diện do người lao động bầu ra ký kết với đơn vị sử dụng lao động.\n" +
+//            "Điều 52　Phía công nhân viên chức doanh nghiệp và đơn vị sử dụng lao động có thể ký kết các hợp đồng tập thể chuyên đề như an toàn vệ sinh lao động, bảo vệ quyền lợi lao động nữ, cơ chế điều chỉnh tiền lương.\n" +
+//            "Điều 53　Trong khu vực dưới cấp huyện, các ngành như xây dựng, khai thác mỏ, dịch vụ ăn uống có thể do công đoàn và đại diện phía doanh nghiệp ký kết hợp đồng tập thể theo ngành hoặc hợp đồng tập thể theo khu vực.\n" +
+//            "Điều 54　Sau khi ký kết hợp đồng tập thể, phải báo cáo cơ quan hành chính lao động;Cơ quan hành chính lao động trong vòng mười lăm ngày kể từ ngày nhận được văn bản hợp đồng tập thể mà không có ý kiến phản đối thì hợp đồng tập thể có hiệu lực ngay.\n" +
+//            "Hợp đồng tập thể được ký kết theo pháp luật có hiệu lực ràng buộc đối với đơn vị sử dụng lao động và người lao động. Hợp đồng tập thể theo ngành, theo khu vực có hiệu lực ràng buộc đối với đơn vị sử dụng lao động và người lao động trong ngành, khu vực đó tại địa phương.\n" +
+//            "Điều 55　Các tiêu chuẩn như tiền lương và điều kiện lao động trong thỏa ước lao động tập thể không được thấp hơn mức tối thiểu do Chính quyền nhân dân địa phương quy định;Các tiêu chuẩn như tiền lương và điều kiện lao động trong hợp đồng lao động mà người sử dụng lao động ký kết với người lao động không được thấp hơn tiêu chuẩn quy định trong thỏa ước lao động tập thể。\n" +
+//            "Điều 56　Người sử dụng lao động vi phạm thỏa ước lao động tập thể， xâm phạm quyền và lợi ích lao động của người lao động， công đoàn có thể yêu cầu người sử dụng lao động chịu trách nhiệm theo quy định của pháp luật;Khi phát sinh tranh chấp do thực hiện thỏa ước lao động tập thể， nếu thương lượng không giải quyết được， công đoàn có thể yêu cầu trọng tài hoặc khởi kiện theo quy định của pháp luật。\n" +
+//            "Mục 2　Phái cử lao động\n" +
+//            "Điều 57　Kinh doanh dịch vụ phái cử lao động phải đáp ứng các điều kiện sau đây：\n" +
+//            "    （1）Vốn đăng ký không được ít hơn hai triệu Nhân dân tệ；\n" +
+//            "    （2）Có địa điểm kinh doanh và cơ sở vật chất cố định phù hợp với việc triển khai hoạt động kinh doanh；\n" +
+//            "    （3）Có chế độ quản lý phái cử lao động phù hợp với quy định của pháp luật và quy định hành chính；\n" +
+//            "    （4）Các điều kiện khác theo quy định của pháp luật và quy định hành chính。\n" +
+//            "    Kinh doanh dịch vụ phái cử lao động phải xin cấp phép hành chính từ cơ quan hành chính về lao động theo quy định của pháp luật； sau khi được cấp phép， phải làm thủ tục đăng ký công ty tương ứng theo quy định của pháp luật。 Nếu chưa được cấp phép， bất kỳ đơn vị hay cá nhân nào cũng không được kinh doanh dịch vụ phái cử lao động。\n" +
+//            "Điều 58　Đơn vị phái cử lao động là người sử dụng lao động theo Luật này， phải thực hiện nghĩa vụ của người sử dụng lao động đối với người lao động。 Trong hợp đồng lao động mà đơn vị phái cử lao động ký kết với người lao động được phái cử， ngoài các nội dung quy định tại Điều 17 của Luật này， còn phải ghi rõ đơn vị sử dụng lao động của người lao động được phái cử cũng như thời hạn phái cử， vị trí công việc và các thông tin khác。\n" +
+//            "Đơn vị phái cử lao động phải ký kết hợp đồng lao động có thời hạn cố định từ hai năm trở lên với người lao động được phái cử và trả tiền lương theo tháng;Trong thời gian người lao động được phái cử không có việc làm， đơn vị phái cử lao động phải trả lương cho họ theo tháng theo mức lương tối thiểu do Chính quyền nhân dân nơi đặt trụ sở quy định。\n" +
+//            "Điều 59　Đơn vị phái cử lao động khi phái cử người lao động phải cùng đơn vị tiếp nhận lao động theo hình thức phái cử lao động(sau đây gọi là đơn vị sử dụng lao động)Ký kết thỏa thuận phái cử lao động。Thỏa thuận phái cử lao động phải quy định vị trí phái cử và số lượng nhân sự、thời hạn phái cử、số tiền và phương thức thanh toán tiền lương và phí bảo hiểm xã hội、cũng như trách nhiệm khi vi phạm thỏa thuận。\n" +
+//            "Đơn vị sử dụng lao động phải xác định thời hạn phái cử với đơn vị phái cử lao động căn cứ vào nhu cầu thực tế của vị trí công việc， không được chia thời hạn sử dụng lao động liên tục thành nhiều thỏa thuận phái cử lao động ngắn hạn。\n" +
+//            "Điều 60　Đơn vị phái cử lao động phải thông báo nội dung của thỏa thuận phái cử lao động cho người lao động được phái cử。\n" +
+//            "Đơn vị phái cử lao động không được khấu trừ tiền lương mà đơn vị sử dụng lao động trả cho người lao động được phái cử theo thỏa thuận phái cử lao động。\n" +
+//            "Đơn vị phái cử lao động và đơn vị sử dụng lao động không được thu phí của người lao động được phái cử。\n" +
+//            "Điều 61　Khi đơn vị phái cử lao động phái cử người lao động sang khu vực khác， tiền lương và điều kiện lao động mà người lao động được phái cử được hưởng sẽ thực hiện theo tiêu chuẩn tại nơi đặt trụ sở của đơn vị sử dụng lao động。\n" +
+//            "Điều 62　Đơn vị sử dụng lao động phải thực hiện các nghĩa vụ sau đây：\n" +
+//            "(1)Thực hiện tiêu chuẩn lao động quốc gia， cung cấp điều kiện lao động và bảo hộ lao động tương ứng;\n" +
+//            "(2)Thông báo yêu cầu công việc và tiền lương cho người lao động được phái cử;\n" +
+//            "(3)Trả tiền làm thêm giờ， tiền thưởng hiệu suất， cung cấp phúc lợi liên quan đến vị trí công việc;\n" +
+//            "(4)Đào tạo cần thiết cho vị trí công việc đối với người lao động được phái cử đang làm việc;\n" +
+//            "(5)Đối với trường hợp sử dụng lao động liên tục， thực hiện cơ chế điều chỉnh tiền lương bình thường。\n" +
+//            "Đơn vị sử dụng lao động không được phái cử lại người lao động được phái cử sang người sử dụng lao động khác。\n" +
+//            "Điều 63　Người lao động được phái cử được hưởng quyền cùng công việc， cùng tiền lương như người lao động của đơn vị sử dụng lao động。 Đơn vị sử dụng lao động phải áp dụng cùng một phương pháp phân phối tiền lương đối với người lao động được phái cử và người lao động ở vị trí cùng loại trong đơn vị theo nguyên tắc cùng công việc， cùng tiền lương。 Nếu đơn vị sử dụng lao động không có người lao động ở vị trí cùng loại， tiền lương được xác định tham chiếu theo tiền lương của người lao động ở vị trí tương tự hoặc gần tương tự tại nơi đặt trụ sở của đơn vị sử dụng lao động。\n" +
+//            "Tiền lương trả cho người lao động được phái cử được ghi rõ hoặc thỏa thuận trong hợp đồng lao động mà đơn vị phái cử lao động ký kết với người lao động được phái cử và trong thỏa thuận phái cử lao động ký kết với đơn vị sử dụng lao động phải phù hợp với quy định tại khoản trên。\n" +
+//            "Điều 64　Người lao động được phái cử có quyền tham gia hoặc tổ chức công đoàn theo quy định của pháp luật tại đơn vị phái cử lao động hoặc đơn vị sử dụng lao động để bảo vệ quyền và lợi ích hợp pháp của mình。\n" +
+//            "Điều 65　Người lao động được phái cử có thể chấm dứt hợp đồng lao động với đơn vị phái cử lao động theo quy định tại Điều 36 và Điều 38 của Luật này。\n" +
+//            "Người lao động được phái cử thuộc các trường hợp quy định tại Điều 39 và khoản 1， khoản 2 Điều 40 của Luật này thì đơn vị sử dụng lao động có thể trả người lao động về đơn vị phái cử lao động， và đơn vị phái cử lao động có thể chấm dứt hợp đồng lao động với người lao động theo các quy định liên quan của Luật này。\n" +
+//            "Điều 66　Sử dụng lao động theo hợp đồng lao động là hình thức sử dụng lao động cơ bản của doanh nghiệp nước ta。 Sử dụng lao động theo hình thức phái cử lao động là hình thức bổ sung， chỉ được thực hiện ở các vị trí công việc mang tính tạm thời， phụ trợ hoặc thay thế。\n" +
+//            "    Vị trí công việc tạm thời quy định tại khoản trên là vị trí tồn tại không quá sáu tháng； vị trí công việc phụ trợ là vị trí không thuộc hoạt động kinh doanh chính， cung cấp dịch vụ cho vị trí thuộc hoạt động kinh doanh chính； vị trí công việc thay thế là vị trí mà trong một khoảng thời gian nhất định khi người lao động của đơn vị sử dụng lao động không thể làm việc do học tập trung， nghỉ phép và các lý do khác， có thể do người lao động khác thay thế làm việc。\n" +
+//            "    Đơn vị sử dụng lao động phải kiểm soát chặt chẽ số lượng lao động phái cử， không được vượt quá một tỷ lệ nhất định trong tổng số lao động sử dụng， tỷ lệ cụ thể do cơ quan hành chính về lao động thuộc Quốc vụ viện quy định。\n" +
+//            "Điều 67　Người sử dụng lao động không được thành lập đơn vị phái cử lao động để phái cử người lao động cho đơn vị mình hoặc đơn vị trực thuộc。\n" +
+//            "Mục 3　Sử dụng lao động bán thời gian\n" +
+//            "Điều 68　Sử dụng lao động bán thời gian là hình thức sử dụng lao động trong đó tiền lương được tính chủ yếu theo giờ， người lao động làm việc tại cùng một người sử dụng lao động với thời gian làm việc bình quân mỗi ngày thường không quá bốn giờ và tổng thời gian làm việc mỗi tuần không quá hai mươi bốn giờ。\n" +
+//            "Điều 69　Các bên trong quan hệ sử dụng lao động bán thời gian có thể giao kết thỏa thuận bằng lời nói。\n" +
+//            "Người lao động làm việc bán thời gian có thể ký kết hợp đồng lao động với một hoặc nhiều người sử dụng lao động;Tuy nhiên， hợp đồng lao động ký kết sau không được ảnh hưởng đến việc thực hiện hợp đồng lao động đã ký kết trước。\n" +
+//            "Điều 70　Các bên trong quan hệ sử dụng lao động bán thời gian không được thỏa thuận thời gian thử việc。\n" +
+//            "Điều 71　Bất kỳ bên nào trong quan hệ sử dụng lao động bán thời gian cũng có thể thông báo cho bên kia chấm dứt việc sử dụng lao động bất cứ lúc nào。 Khi chấm dứt việc sử dụng lao động， người sử dụng lao động không phải trả tiền bồi thường kinh tế cho người lao động。\n" +
+//            "Điều 72　Mức tính lương theo giờ đối với lao động bán thời gian không được thấp hơn mức lương tối thiểu theo giờ do Chính quyền nhân dân nơi đặt trụ sở của người sử dụng lao động quy định。\n" +
+//            "Chu kỳ quyết toán và trả tiền lương đối với lao động bán thời gian dài nhất không được quá mười lăm ngày。\n" +
+//            "Chương 6　Giám sát kiểm tra\n" +
+//            "Điều 73　Cơ quan hành chính về lao động thuộc Quốc vụ viện chịu trách nhiệm giám sát， quản lý việc thực hiện chế độ hợp đồng lao động trên phạm vi cả nước。\n" +
+//            "Cơ quan hành chính về lao động thuộc Chính quyền nhân dân địa phương cấp huyện trở lên chịu trách nhiệm giám sát， quản lý việc thực hiện chế độ hợp đồng lao động trong khu vực hành chính của mình。\n" +
+//            "Trong công tác giám sát， quản lý việc thực hiện chế độ hợp đồng lao động， cơ quan hành chính về lao động thuộc Chính quyền nhân dân các cấp từ cấp huyện trở lên phải lắng nghe ý kiến của công đoàn， đại diện phía doanh nghiệp và các cơ quan chủ quản ngành có liên quan。\n" +
+//            "Điều 74　Cơ quan hành chính về lao động thuộc Chính quyền nhân dân địa phương cấp huyện trở lên thực hiện giám sát， kiểm tra theo quy định của pháp luật đối với các trường hợp thực hiện chế độ hợp đồng lao động sau đây：\n" +
+//            "(1)Tình hình người sử dụng lao động ban hành và thực hiện nội quy， quy chế liên quan trực tiếp đến quyền lợi thiết thân của người lao động;\n" +
+//            "(2)Tình hình người sử dụng lao động ký kết và chấm dứt hợp đồng lao động với người lao động;\n" +
+//            "(3)Tình hình đơn vị phái cử lao động và đơn vị sử dụng lao động tuân thủ các quy định liên quan đến phái cử lao động;\n" +
+//            "(4)Tình hình người sử dụng lao động tuân thủ các quy định của Nhà nước về thời gian làm việc và nghỉ ngơi， nghỉ phép của người lao động;\n" +
+//            "(5)Tình hình người sử dụng lao động trả tiền lương theo thỏa thuận trong hợp đồng lao động và thực hiện mức lương tối thiểu;\n" +
+//            "(6)Tình hình người sử dụng lao động tham gia các loại bảo hiểm xã hội và đóng phí bảo hiểm xã hội;\n" +
+//            "(7)Các vấn đề thanh tra lao động khác theo quy định của pháp luật và quy định pháp luật。\n" +
+//            "Điều 75　Khi cơ quan hành chính về lao động thuộc Chính quyền nhân dân địa phương cấp huyện trở lên thực hiện giám sát， kiểm tra， có quyền xem xét các tài liệu liên quan đến hợp đồng lao động， thỏa ước lao động tập thể， có quyền kiểm tra thực địa tại nơi làm việc， và người sử dụng lao động cũng như người lao động đều phải cung cấp trung thực các thông tin và tài liệu liên quan。\n" +
+//            "Nhân viên của cơ quan hành chính về lao động khi thực hiện giám sát， kiểm tra phải xuất trình giấy tờ， thực hiện chức quyền theo quy định của pháp luật và chấp pháp một cách văn minh。\n" +
+//            "Điều 76　Các cơ quan chủ quản có liên quan như xây dựng， y tế， giám sát quản lý an toàn sản xuất thuộc Chính quyền nhân dân cấp huyện trở lên， trong phạm vi chức trách của mình， thực hiện giám sát， quản lý tình hình người sử dụng lao động thực hiện chế độ hợp đồng lao động。\n" +
+//            "Điều 77　Người lao động khi quyền và lợi ích hợp pháp bị xâm phạm có quyền yêu cầu cơ quan có liên quan xử lý theo quy định của pháp luật， hoặc yêu cầu trọng tài， khởi kiện theo quy định của pháp luật。\n" +
+//            "Điều 78　Công đoàn bảo vệ quyền và lợi ích hợp pháp của người lao động theo quy định của pháp luật， giám sát tình hình người sử dụng lao động thực hiện hợp đồng lao động và thỏa ước lao động tập thể。 Người sử dụng lao động vi phạm pháp luật lao động， quy định pháp luật， hợp đồng lao động và thỏa ước lao động tập thể thì công đoàn có quyền đưa ra ý kiến hoặc yêu cầu sửa chữa;Khi người lao động yêu cầu trọng tài hoặc khởi kiện， công đoàn sẽ hỗ trợ và giúp đỡ theo quy định của pháp luật。\n" +
+//            "Điều 79　Bất kỳ tổ chức hoặc cá nhân nào cũng có quyền tố cáo hành vi vi phạm Luật này， cơ quan hành chính về lao động thuộc Chính quyền nhân dân cấp huyện trở lên phải kịp thời xác minh， xử lý và khen thưởng những người tố cáo có công。\n" +
+//            "Chương 7　Trách nhiệm pháp lý\n" +
+//            "Điều 80　Nội quy， quy chế của người sử dụng lao động liên quan trực tiếp đến quyền lợi thiết thân của người lao động mà vi phạm quy định của pháp luật， quy định pháp luật thì cơ quan hành chính về lao động buộc sửa đổi và cảnh cáo;Nếu gây thiệt hại cho người lao động thì phải chịu trách nhiệm bồi thường.\n" +
+//            "Điều 81　Văn bản hợp đồng lao động do người sử dụng lao động cung cấp không ghi rõ các điều khoản bắt buộc của hợp đồng lao động theo quy định của Luật này， hoặc người sử dụng lao động không giao văn bản hợp đồng lao động cho người lao động， thì cơ quan hành chính về lao động buộc sửa đổi;Nếu gây thiệt hại cho người lao động thì phải chịu trách nhiệm bồi thường.\n" +
+//            "Điều 82　Người sử dụng lao động kể từ ngày bắt đầu sử dụng lao động， quá một tháng nhưng chưa đầy một năm mà chưa ký kết hợp đồng lao động bằng văn bản với người lao động， phải trả cho người lao động mỗi tháng gấp đôi tiền lương。\n" +
+//            "Người sử dụng lao động vi phạm quy định của Luật này， không ký kết hợp đồng lao động không xác định thời hạn với người lao động， thì kể từ ngày phải ký kết hợp đồng lao động không xác định thời hạn， phải trả cho người lao động mỗi tháng gấp đôi tiền lương。\n" +
+//            "Điều 83　Người sử dụng lao động vi phạm quy định của Luật này khi thỏa thuận thời gian thử việc với người lao động thì cơ quan hành chính về lao động buộc sửa đổi;Đối với thời gian thử việc đã thực hiện theo thỏa thuận trái pháp luật， người sử dụng lao động phải trả tiền bồi thường cho người lao động theo tiêu chuẩn là tiền lương tháng khi hết thời gian thử việc， tính theo thời gian đã thực hiện vượt quá thời gian thử việc theo quy định của pháp luật。\n" +
+//            "Điều 84　Người sử dụng lao động vi phạm quy định của Luật này， giữ chứng minh nhân dân và các giấy tờ khác của người lao động， thì cơ quan hành chính về lao động buộc trả lại cho chính người lao động trong thời hạn quy định và xử phạt theo quy định của pháp luật có liên quan。\n" +
+//            "Người sử dụng lao động vi phạm quy định của Luật này， thu tiền， tài sản của người lao động dưới danh nghĩa bảo lãnh hoặc danh nghĩa khác， thì cơ quan hành chính về lao động buộc trả lại cho chính người lao động trong thời hạn quy định và xử phạt với mức từ năm trăm Nhân dân tệ đến hai nghìn Nhân dân tệ cho mỗi người;Nếu gây thiệt hại cho người lao động thì phải chịu trách nhiệm bồi thường.\n" +
+//            "Người lao động chấm dứt hoặc kết thúc hợp đồng lao động theo quy định của pháp luật mà người sử dụng lao động giữ hồ sơ hoặc các vật phẩm khác của người lao động thì xử phạt theo quy định tại khoản trên。\n" +
+//            "Điều 85　Người sử dụng lao động thuộc một trong các trường hợp sau đây thì cơ quan hành chính về lao động buộc trả tiền lương， tiền làm thêm giờ hoặc tiền bồi thường kinh tế trong thời hạn quy định;Tiền lương thấp hơn mức lương tối thiểu của địa phương thì phải trả phần chênh lệch;Quá hạn không trả thì buộc người sử dụng lao động trả thêm tiền bồi thường cho người lao động theo mức từ 50% đến 100% số tiền phải trả：\n" +
+//            "(1)Không trả tiền lương cho người lao động kịp thời và đầy đủ theo thỏa thuận trong hợp đồng lao động hoặc theo quy định của Nhà nước;\n" +
+//            "(2)Trả lương cho người lao động thấp hơn mức lương tối thiểu của địa phương;\n" +
+//            "(3)Bố trí làm thêm giờ mà không trả tiền làm thêm giờ;\n" +
+//            "(4)Chấm dứt hoặc kết thúc hợp đồng lao động mà không trả tiền bồi thường kinh tế cho người lao động theo quy định của Luật này。\n" +
+//            "Điều 86　Hợp đồng lao động bị xác nhận vô hiệu theo quy định tại Điều 26 của Luật này， gây thiệt hại cho bên kia， thì bên có lỗi phải chịu trách nhiệm bồi thường。\n" +
+//            "Điều 87　Người sử dụng lao động vi phạm quy định của Luật này khi chấm dứt hoặc kết thúc hợp đồng lao động phải trả tiền bồi thường cho người lao động gấp đôi mức tiền bồi thường kinh tế quy định tại Điều 47 của Luật này。\n" +
+//            "Điều 88　Người sử dụng lao động thuộc một trong các trường hợp sau đây sẽ bị xử phạt hành chính theo quy định của pháp luật;Nếu cấu thành tội phạm， sẽ bị truy cứu trách nhiệm hình sự theo quy định của pháp luật;Gây thiệt hại cho người lao động thì phải chịu trách nhiệm bồi thường：\n" +
+//            "(1)Dùng bạo lực， đe dọa hoặc hạn chế trái pháp luật quyền tự do thân thể để ép buộc lao động;\n" +
+//            "(2)Chỉ huy vi phạm quy định hoặc ép buộc làm việc mạo hiểm gây nguy hiểm đến an toàn tính mạng của người lao động;\n" +
+//            "(3)Xúc phạm， trừng phạt thể xác， đánh đập， khám xét trái phép hoặc giam giữ trái phép người lao động;\n" +
+//            "(4)Điều kiện lao động tồi tệ， ô nhiễm môi trường nghiêm trọng， gây thiệt hại nghiêm trọng đến sức khỏe thể chất và tinh thần của người lao động。\n" +
+//            "Điều 89　Người sử dụng lao động vi phạm quy định của Luật này， không cấp văn bản chứng minh việc chấm dứt hoặc kết thúc hợp đồng lao động cho người lao động， thì cơ quan hành chính về lao động buộc sửa đổi;Nếu gây thiệt hại cho người lao động thì phải chịu trách nhiệm bồi thường.\n" +
+//            "Điều 90　Người lao động vi phạm quy định của Luật này khi chấm dứt hợp đồng lao động， hoặc vi phạm nghĩa vụ bảo mật hoặc hạn chế cạnh tranh đã thỏa thuận trong hợp đồng lao động， gây thiệt hại cho người sử dụng lao động， thì phải chịu trách nhiệm bồi thường。\n" +
+//            "Điều 91　Người sử dụng lao động tuyển dụng người lao động chưa chấm dứt hoặc kết thúc hợp đồng lao động với người sử dụng lao động khác， gây thiệt hại cho người sử dụng lao động khác， thì phải chịu trách nhiệm bồi thường liên đới。\n" +
+//            "Điều 92　Vi phạm quy định của Luật này， kinh doanh dịch vụ phái cử lao động khi chưa được cấp phép， thì cơ quan hành chính về lao động buộc chấm dứt hành vi vi phạm pháp luật， tịch thu thu nhập bất hợp pháp và xử phạt từ một đến năm lần thu nhập bất hợp pháp； nếu không có thu nhập bất hợp pháp thì có thể xử phạt dưới năm mươi nghìn Nhân dân tệ。\n" +
+//            "    Đơn vị phái cử lao động， đơn vị sử dụng lao động vi phạm các quy định của Luật này về phái cử lao động thì cơ quan hành chính về lao động buộc sửa đổi trong thời hạn quy định； quá hạn không sửa đổi thì xử phạt với mức từ năm nghìn Nhân dân tệ đến mười nghìn Nhân dân tệ cho mỗi người， đối với đơn vị phái cử lao động thì thu hồi giấy phép kinh doanh dịch vụ phái cử lao động。 Đơn vị sử dụng lao động gây thiệt hại cho người lao động được phái cử thì đơn vị phái cử lao động và đơn vị sử dụng lao động chịu trách nhiệm bồi thường liên đới。\n" +
+//            "Điều 93　Đối với hành vi vi phạm pháp luật và phạm tội của người sử dụng lao động không có tư cách kinh doanh hợp pháp， sẽ bị truy cứu trách nhiệm pháp lý theo quy định của pháp luật;Người lao động đã làm việc thì đơn vị đó hoặc người góp vốn của đơn vị đó phải trả tiền lương， tiền bồi thường kinh tế， tiền bồi thường cho người lao động theo các quy định liên quan của Luật này;Nếu gây thiệt hại cho người lao động thì phải chịu trách nhiệm bồi thường.\n" +
+//            "Điều 94　Cá nhân nhận thầu kinh doanh vi phạm quy định của Luật này khi tuyển dụng người lao động， gây thiệt hại cho người lao động， thì tổ chức giao thầu và cá nhân nhận thầu kinh doanh chịu trách nhiệm bồi thường liên đới。\n" +
+//            "Điều 95　Cơ quan hành chính về lao động và các cơ quan chủ quản có liên quan khác cùng nhân viên của họ lơ là chức trách， không thực hiện trách nhiệm theo quy định của pháp luật， hoặc thực hiện chức quyền trái pháp luật， gây thiệt hại cho người lao động hoặc người sử dụng lao động， thì phải chịu trách nhiệm bồi thường;Đối với cán bộ quản lý trực tiếp chịu trách nhiệm và các nhân viên chịu trách nhiệm trực tiếp khác， sẽ bị xử lý kỷ luật hành chính theo quy định của pháp luật;Nếu cấu thành tội phạm， sẽ bị truy cứu trách nhiệm hình sự theo quy định của pháp luật。\n" +
+//            "Chương 8　Phụ tắc\n" +
+//            "Điều 96　Đơn vị sự nghiệp ký kết， thực hiện， thay đổi， chấm dứt hoặc kết thúc hợp đồng lao động với nhân viên thực hiện chế độ tuyển dụng， nếu pháp luật， quy định hành chính hoặc Quốc vụ viện có quy định khác thì thực hiện theo quy định đó;Trường hợp chưa có quy định thì thực hiện theo các quy định liên quan của Luật này。\n" +
+//            "Điều 97　Hợp đồng lao động đã được ký kết hợp pháp trước khi Luật này có hiệu lực thi hành và còn hiệu lực vào ngày Luật này có hiệu lực thi hành thì tiếp tục thực hiện;Số lần ký kết liên tiếp hợp đồng lao động có thời hạn cố định quy định tại khoản 2， điểm 3 Điều 14 của Luật này được tính bắt đầu từ lần ký tiếp hợp đồng lao động có thời hạn cố định sau khi Luật này có hiệu lực thi hành。\n" +
+//            "Quan hệ lao động đã được thiết lập trước khi Luật này có hiệu lực thi hành mà chưa ký kết hợp đồng lao động bằng văn bản thì phải ký kết trong vòng một tháng kể từ ngày Luật này có hiệu lực thi hành。\n" +
+//            "Hợp đồng lao động còn hiệu lực vào ngày Luật này có hiệu lực thi hành mà bị chấm dứt hoặc kết thúc sau khi Luật này có hiệu lực thi hành， nếu theo quy định tại Điều 46 của Luật này phải trả tiền bồi thường kinh tế thì số năm tính tiền bồi thường kinh tế được tính kể từ ngày Luật này có hiệu lực thi hành;Trước khi Luật này có hiệu lực thi hành， theo các quy định hiện hành lúc đó， người sử dụng lao động phải trả tiền bồi thường kinh tế cho người lao động thì thực hiện theo các quy định hiện hành lúc đó。\n" +
+//            "Điều 98　Luật này có hiệu lực thi hành kể từ ngày 1 tháng 1 năm 2008。\n" +
 //            "\n";
 //
 //

@@ -3,14 +3,14 @@ package org.jeecg.modules.demo.cloud.service;
 import org.jeecg.common.api.vo.Result;
 
 /**
- * @Description: JcloudDemoService接口
+ * @Description: JcloudDemoService API
  * @author: jeecg-boot
  */
 public interface JcloudDemoService {
 
     /**
-     * 获取信息（测试）
-     * @param name 姓名
+     * Lấy thông tin（kiểm tra）
+     * @param name Họ tên
      * @return "Hello，" + name
      */
     String getMessage(String name);

@@ -1,7 +1,7 @@
 package org.jeecg.modules.test.seata.order.enums;
 
 /**
- * @Description: 订单状态
+ * @Description: Trạng thái đơn hàng
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0

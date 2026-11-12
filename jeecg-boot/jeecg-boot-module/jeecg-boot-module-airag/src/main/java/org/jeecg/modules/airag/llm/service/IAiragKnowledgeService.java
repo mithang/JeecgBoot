@@ -6,7 +6,7 @@ import org.jeecg.modules.airag.llm.entity.AiragKnowledge;
 import java.util.Map;
 
 /**
- * AIRag知识库
+ * AIRag Kho tri thức
  *
  * @Author: jeecg-boot
  * @Date: 2025-02-18
@@ -15,7 +15,7 @@ import java.util.Map;
 public interface IAiragKnowledgeService extends IService<AiragKnowledge> {
     
     /**
-     * 构建知识库的工具
+     * Xây dựng công cụ của kho tri thức
      * 
      * @param memoryId
      * @return Map<String, Object>

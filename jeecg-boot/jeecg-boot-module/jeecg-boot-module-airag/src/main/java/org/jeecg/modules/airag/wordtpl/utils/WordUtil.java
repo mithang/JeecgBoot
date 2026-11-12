@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * word工具类
+ * word Lớp công cụ
  *
  * @author chenrui
  * @date 2025/7/8 17:22
@@ -40,12 +40,12 @@ public class WordUtil {
 
 
     /**
-     * 正则表达式:是否是网页
+     * Biểu thức chính quy:Có phải trang web hay không
      */
     public static final Pattern WEB_PATTERN = Pattern.compile("^(http|https)://.*");
 
     /**
-     * 添加自定义标题样式
+     * Thêm kiểu tiêu đề tùy chỉnh
      *
      * @param doc
      * @param strStyleId
@@ -54,35 +54,35 @@ public class WordUtil {
      * @date 2025/7/4 11:08
      */
     public static void addCustomHeadingStyle(XWPFDocument doc, String strStyleId, int headingLevel) {
-        // 创建一个新的样式对象，并设置样式ID
+        // Tạo một đối tượng kiểu mới và thiết lập kiểu ID
         CTStyle ctStyle = CTStyle.Factory.newInstance();
         ctStyle.setStyleId(strStyleId);
 
-        // 设置样式名称
+        // Đặt tên kiểu
         CTString styleName = CTString.Factory.newInstance();
         styleName.setVal(strStyleId);
         ctStyle.setName(styleName);
 
-        // 设置样式优先级，数字越小越突出
+        // Đặt mức độ ưu tiên của kiểu, số càng nhỏ càng nổi bật
         CTDecimalNumber indentNumber = CTDecimalNumber.Factory.newInstance();
         indentNumber.setVal(BigInteger.valueOf(headingLevel));
         ctStyle.setUiPriority(indentNumber);
 
-        // 设置样式在样式栏中可见
+        // Đặt kiểu hiển thị trong thanh kiểu
         CTOnOff onoffnull = CTOnOff.Factory.newInstance();
         ctStyle.setUnhideWhenUsed(onoffnull);
 
-        // [poi5.x]设置段落属性，指定大纲级别（即标题级别）
+        // [poi5.x]Đặt thuộc tính đoạn văn, chỉ định cấp đề mục (tức cấp tiêu đề)
         CTPPrGeneral ctpPrGeneral = CTPPrGeneral.Factory.newInstance();
         ctpPrGeneral.setOutlineLvl(indentNumber);
         ctStyle.setPPr(ctpPrGeneral);
 
-//        // [poi4.x]设置段落属性，指定大纲级别（即标题级别）
+//        // [poi4.x]Đặt thuộc tính đoạn văn, chỉ định cấp đề mục (tức cấp tiêu đề)
 //        CTPPr ctpPr = CTPPr.Factory.newInstance();
 //        ctpPr.setOutlineLvl(indentNumber);
 //        ctStyle.setPPr(ctpPr);
 
-        // 创建 XWPFStyle 并添加到文档样式集合中
+        // Tạo XWPFStyle và thêm vào tập hợp kiểu của tài liệu
         XWPFStyle style = new XWPFStyle(ctStyle);
         XWPFStyles styles = doc.createStyles();
         style.setType(STStyleType.PARAGRAPH);
@@ -90,7 +90,7 @@ public class WordUtil {
     }
 
     /**
-     * 设置纸张大小
+     * Đặt kích thước giấy
      *
      * @param document
      * @param height
@@ -100,15 +100,15 @@ public class WordUtil {
      * @date 2025/7/4 11:29
      */
     public static void setPaperSize(XWPFDocument document, int height, int width, String pagerDirection) {
-        // 计算纸张实际宽高
+        // Tính chiều rộng và chiều cao thực tế của trang giấy
         int pagerWidth = (int) (width * 20 / 1.33445);
         int pagerHeight = (int) (height * 20 / 1.33445);
-        // 根据纸张方向设置纸张宽高
+        // Đặt chiều rộng và chiều cao trang giấy theo hướng giấy
         CTBody body = document.getDocument().getBody();
         CTSectPr sectPr = body.isSetSectPr() ? body.getSectPr() : body.addNewSectPr();
         CTPageSz pageSize = sectPr.addNewPgSz();
         if ("horizontal".equals(pagerDirection)) {
-            //横版
+            //Khổ ngang
             pageSize.setW(BigInteger.valueOf(pagerHeight));
             pageSize.setH(BigInteger.valueOf(pagerWidth));
             pageSize.setOrient(STPageOrientation.LANDSCAPE);
@@ -120,26 +120,26 @@ public class WordUtil {
     }
 
     /**
-     * 设置页面边距
+     * Đặt lề trang
      *
      * @param document
-     * @param margins  单位 mm
+     * @param margins  Đơn vị mm
      * @author chenrui
      * @date 2025/7/4 11:32
      */
     public static void setPaperMargins(XWPFDocument document, JSONArray margins) {
         if (oConvertUtils.isNotEmpty(margins)) {
-            // 获取CTSectPr，如果没有则创建
+            // Lấy CTSectPr, nếu không có thì tạo mới
             CTSectPr sectPr = document.getDocument().getBody().addNewSectPr();
             CTPageMar pageMar = sectPr.addNewPgMar();
 
-            // 设置上页边距
+            // Đặt lề trên của trang
             pageMar.setTop(BigInteger.valueOf((long) (margins.getLongValue(0)*14.4)));
-            // 设置下页边距
+            // Đặt lề dưới của trang
             pageMar.setBottom(BigInteger.valueOf((long) (margins.getLongValue(2)*14.4)));
-            // 设置左页边距
+            // Đặt lề trái của trang
             pageMar.setLeft(BigInteger.valueOf((long) (margins.getLongValue(3)*14.4)));
-            // 设置右页边距
+            // Đặt lề phải của trang
             pageMar.setRight(BigInteger.valueOf((long) (margins.getLongValue(1)*14.4)));
         }
     }
@@ -181,7 +181,7 @@ public class WordUtil {
     }
 
     /**
-     * 添加分页符
+     * Thêm dấu ngắt trang
      *
      * @param paragraph
      * @author chenrui
@@ -192,7 +192,7 @@ public class WordUtil {
     }
 
 //    /**
-//     * 添加页码
+//     * Thêm số trang
 //     * only poi 5.x
 //     * @param doc
 //     * @param startingNum
@@ -208,7 +208,7 @@ public class WordUtil {
 //    }
 
     /**
-     * 添加段落
+     * Thêm đoạn văn
      *
      * @param paragraph
      * @param content
@@ -220,9 +220,9 @@ public class WordUtil {
     public static void addParagraph(XWPFParagraph paragraph, JSONObject content, String titleStyle, boolean ignoreStartn) {
         XWPFRun run = paragraph.createRun();
         setRunText(run, content, "text", ignoreStartn);
-        // 对齐方式
+        // Cách căn chỉnh
         String rowFlex = content.getString("rowFlex");
-        // 行间距
+        // Khoảng cách dòng
         Float rowMargin = content.getFloat("rowMargin");
         if (oConvertUtils.isNotEmpty(rowFlex)) {
             switch (rowFlex) {
@@ -256,7 +256,7 @@ public class WordUtil {
 
 
     /**
-     * 添加标题段落
+     * Thêm đoạn tiêu đề
      *
      * @param paragraph
      * @param content
@@ -288,7 +288,7 @@ public class WordUtil {
     }
 
     /**
-     * 添加制表符
+     * Thêm ký tự tab
      *
      * @param paragraph
      * @param run
@@ -305,7 +305,7 @@ public class WordUtil {
     }
 
     /**
-     * 添加单独的行间距
+     * Thêm khoảng cách dòng riêng
      *
      * @param paragraph
      * @param rowMargin
@@ -318,14 +318,14 @@ public class WordUtil {
         CTSpacing spacing = ppr.isSetSpacing() ? ppr.getSpacing() : ppr.addNewSpacing();
         spacing.setAfter(BigInteger.valueOf(0));
         spacing.setBefore(BigInteger.valueOf(0));
-        //注意设置行距类型为 EXACT
+        //Lưu ý đặt loại giãn dòng là EXACT
         spacing.setLineRule(STLineSpacingRule.EXACT);
-        //1磅数是20
+        //1 Số point là 20
         spacing.setLine(BigInteger.valueOf((long) (rowMargin * 350)));
     }
 
     /**
-     * 设置Run文本内容
+     * Đặt nội dung văn bản của Run
      *
      * @param run
      * @param content
@@ -335,25 +335,25 @@ public class WordUtil {
      * @date 2025/7/4 14:33
      */
     private static void setRunText(XWPFRun run, JSONObject content, String type, boolean ignoreStartEnter) {
-        //内容
+        //Nội dung
         String value = content.getString("value");
-        //字体
+        //Phông chữ
         String font = content.getString("font");
-        //字体大小
+        //Cỡ chữ
         Float fontSize = content.getFloat("size");
-        //是否加粗
+        //Có in đậm hay không
         Boolean bold = content.getBoolean("bold");
-        //字体颜色
+        //Màu chữ
         String color = content.getString("color");
-        //是否斜体
+        //Có in nghiêng hay không
         Boolean italic = content.getBoolean("italic");
-        //高亮
+        //Tô sáng
         String highlight = content.getString("highlight");
-        //是否下划线
+        //Có gạch chân hay không
         Boolean underline = content.getBoolean("underline");
-        //是否删除线
+        //Có gạch ngang hay không
         Boolean strikeout = content.getBoolean("strikeout");
-        // 忽视第一个换行
+        // Bỏ qua lần xuống dòng đầu tiên
         if (ignoreStartEnter) {
             if (oConvertUtils.isNotEmpty(value) && value.startsWith("\n")) {
                 value = value.replaceFirst("\n", "");
@@ -361,9 +361,9 @@ public class WordUtil {
         }
         if (value.contains("\n")) {
             if ("\n".equals(value)) {
-                //update-begin---author:chenrui ---date:20250714  for：[QQYUN-13104]【word模版】设计器中有空格，导出到word空格没了------------
+                //update-begin---author:chenrui ---date:20250714  for：[QQYUN-13104]【Mẫu Word】Trong trình thiết kế có khoảng trắng, xuất sang Word thì khoảng trắng biến mất------------
                 run.addBreak();
-                //update-end---author:chenrui ---date:20250714  for：[QQYUN-13104]【word模版】设计器中有空格，导出到word空格没了------------
+                //update-end---author:chenrui ---date:20250714  for：[QQYUN-13104]【Mẫu Word】Trong trình thiết kế có khoảng trắng, xuất sang Word thì khoảng trắng biến mất------------
             } else {
                 String[] textes = (value + " ").split("\n");
                 for (int i = 0; i < textes.length; i++) {
@@ -398,12 +398,12 @@ public class WordUtil {
         } else {
             run.setFontFamily("微软雅黑");
         }
-        // 字体大小
+        // Cỡ chữ
         if (null != fontSize) {
-            // 字体大小转换为twips，1pt = 20 twips, 1px = 1/1.33445 pt
+            // Chuyển đổi cỡ chữ sang twips,1pt = 20 twips, 1px = 1/1.33445 pt
             run.setFontSize(Math.round(fontSize / 1.33445F));
         } else {
-            // 默认字体大小
+            // Cỡ chữ mặc định
             run.setFontSize(Math.round(16F / 1.33445F));
         }
         if (bold != null) {
@@ -418,15 +418,15 @@ public class WordUtil {
                 run.setColor(color);
             }
         }
-        // 斜体
+        // Nghiêng
         if (italic != null) {
             run.setItalic(italic);
         }
-        // 高亮
+        // Tô sáng
         if (oConvertUtils.isNotEmpty(highlight)) {
             run.setTextHighlightColor(getHighlightName(highlight));
         }
-        // 下划线
+        // Gạch chân
         if (underline != null && underline) {
             JSONObject textDecoration = content.getJSONObject("textDecoration");
             if (textDecoration == null || textDecoration.isEmpty()) {
@@ -463,7 +463,7 @@ public class WordUtil {
     }
 
     /**
-     * 添加上下标
+     * Thêm chỉ số trên/dưới
      *
      * @param paragraph
      * @param content
@@ -477,7 +477,7 @@ public class WordUtil {
     }
 
     /**
-     * 添加超链接
+     * Thêm siêu liên kết
      *
      * @param paragraph
      * @param content
@@ -501,7 +501,7 @@ public class WordUtil {
     }
 
     /**
-     * 添加列表
+     * Thêm danh sách
      *
      * @param document
      * @param content
@@ -562,7 +562,7 @@ public class WordUtil {
     }
 
     /**
-     * 添加表格列表
+     * Thêm danh sách bảng
      *
      * @param document
      * @param content
@@ -630,7 +630,7 @@ public class WordUtil {
     }
 
     /**
-     * 获取新的编号ID
+     * Lấy số thứ tự mới ID
      *
      * @param document
      * @param abstractNumID
@@ -681,7 +681,7 @@ public class WordUtil {
     }
 
     /**
-     * 添加图片
+     * Thêm hình ảnh
      *
      * @param paragraph
      * @param content
@@ -694,53 +694,53 @@ public class WordUtil {
             String imageUrl = content.getString("value");
             Matcher matcher = WEB_PATTERN.matcher(imageUrl);
             if (matcher.matches()) {
-                //update-begin---author:wangshuai ---date:2026-05-11  for：[issues/9610]【安全漏洞】修复WordUtil.addImage存储型SSRF漏洞(CWE-918)-----------
-                // 网络资源,先下载到临时目录
-                log.info("[批量下载文件]网络资源,下载到临时目录:" + imageUrl);
-                // SSRF 校验：拒绝 loopback / link-local（含云元数据 169.254.169.254 / ::1 / fe80:）
+                //update-begin---author:wangshuai ---date:2026-05-11  for：[issues/9610]【Lỗ hổng bảo mật】Sửa lỗi WordUtil.addImage Lỗ hổng SSRF dạng lưu trữ(CWE-918)-----------
+                // Tài nguyên mạng,tải xuống thư mục tạm trước
+                log.info("[Tải file hàng loạt]Tài nguyên mạng,Tải xuống thư mục tạm:" + imageUrl);
+                // SSRF Kiểm chứng: từ chối loopback / link-local(bao gồm metadata đám mây 169.254.169.254 / ::1 / fe80:）
                 SsrfFileTypeFilter.checkSsrfHttpUrl(imageUrl);
                 try {
                     String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
                     imageUrl = imageUrl.replace(fileName, URLEncoder.encode(fileName, "UTF-8"));
                     URL url = new URL(imageUrl);
                     URLConnection conn = url.openConnection();
-                    // 禁止重定向跟随，防止 302 跳转到内网/元数据接口绕过校验
+                    // Cấm theo dõi chuyển hướng để ngăn chuyển hướng 302 tới mạng nội bộ/Giao diện metadata bỏ qua kiểm chứng
                     if (conn instanceof HttpURLConnection) {
                         ((HttpURLConnection) conn).setInstanceFollowRedirects(false);
                     }
-                    // 设置超时间为3秒
+                    // Đặt thời gian timeout là 3 giây
                     conn.setConnectTimeout(3 * 1000);
                     conn.setReadTimeout(5 * 1000);
-                    // 防止屏蔽程序
+                    // Ngăn chặn chương trình chặn
                     conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
                     in = conn.getInputStream();
                 } catch (IOException e) {
                     log.error(e.getMessage(), e);
                     throw new JeecgBootException(e);
                 }
-                //update-end---author:wangshuai ---date:2026-05-11  for：[issues/9610]【安全漏洞】修复WordUtil.addImage存储型SSRF漏洞(CWE-918)-----------
+                //update-end---author:wangshuai ---date:2026-05-11  for：[issues/9610]【Lỗ hổng bảo mật】Sửa lỗi WordUtil.addImage Lỗ hổng SSRF dạng lưu trữ(CWE-918)-----------
             } else {
-                //update-begin---author:liusq ---date:2026-03-30  for：[issues/9429]【安全漏洞】修复WordUtil.addImage路径遍历漏洞(CWE-22)-----------
+                //update-begin---author:liusq ---date:2026-03-30  for：[issues/9429]【Lỗ hổng bảo mật】Sửa lỗi WordUtil.addImage Lỗ hổng path traversal(CWE-22)-----------
                 String uploadPath = SpringContextUtils.getApplicationContext()
                         .getEnvironment()
                         .getProperty("jeecg.path.upload", "");
-                // 将本地图片读取到 InputStream
+                // Đọc hình ảnh cục bộ vào InputStream
                 String filePath = uploadPath + File.separator + imageUrl;
-                // 路径遍历校验：规范化后确保文件在uploadPath目录内
+                // Kiểm chứng duyệt đường dẫn: sau khi chuẩn hóa, đảm bảo tệp nằm trong thư mục uploadPath
                 File uploadDir = new File(uploadPath).getCanonicalFile();
                 File targetFile = new File(filePath).getCanonicalFile();
                 if (!targetFile.toPath().startsWith(uploadDir.toPath())) {
-                    throw new JeecgBootException("非法文件路径，禁止访问上传目录之外的文件: " + imageUrl);
+                    throw new JeecgBootException("Đường dẫn tệp không hợp lệ, cấm truy cập tệp ngoài thư mục tải lên: " + imageUrl);
                 }
                 in = new FileInputStream(targetFile);
-                //update-end---author:liusq ---date:2026-03-30  for：[issues/9429]【安全漏洞】修复WordUtil.addImage路径遍历漏洞(CWE-22)-----------
+                //update-end---author:liusq ---date:2026-03-30  for：[issues/9429]【Lỗ hổng bảo mật】Sửa lỗi WordUtil.addImage Lỗ hổng path traversal(CWE-22)-----------
             }
             XWPFRun run = paragraph.createRun();
 
             String display = content.getString("imgDisplay");
 
             if(oConvertUtils.isNotEmpty(display) && display.toLowerCase().startsWith("float-")){
-                // 浮动图片
+                // Hình ảnh nổi
                 String behindDoc = "0";
                 if(!display.equalsIgnoreCase("float-bottom")){
                     behindDoc = "1";
@@ -772,11 +772,11 @@ public class WordUtil {
                 addFloatingPicture(imageBytes, paragraph.getDocument(), run, width, height, left, top, behindDoc);
                 return;
             }else{
-                // 内嵌图片
+                // Hình ảnh nhúng
                 run.addPicture(in, Document.PICTURE_TYPE_PNG, "",
                         Units.pixelToEMU(content.getIntValue("width")), Units.pixelToEMU(content.getIntValue("height")));
             }
-            String rowFlex = content.getString("rowFlex");//对齐方式
+            String rowFlex = content.getString("rowFlex");//Cách căn chỉnh
             if (oConvertUtils.isNotEmpty(rowFlex)) {
                 switch (rowFlex) {
                     case "left":
@@ -799,31 +799,31 @@ public class WordUtil {
                 paragraph.setAlignment(ParagraphAlignment.LEFT);
             }
         } catch (Exception e) {
-            log.error("添加图片异常", e);
-            throw new RuntimeException("添加图片异常: " + e.getMessage(), e);
+            log.error("Lỗi thêm hình ảnh", e);
+            throw new RuntimeException("Lỗi thêm hình ảnh: " + e.getMessage(), e);
         } finally {
             if (null != in) {
                 try {
                     in.close();
                 } catch (Exception e) {
                     // ignore
-                    log.error("关闭图片流异常", e);
+                    log.error("Lỗi khi đóng luồng hình ảnh", e);
                 }
             }
         }
     }
 
     /**
-     * 添加图片
+     * Thêm hình ảnh
      *
-     * @param imageData 图片流
-     * @param doc   文档对象
-     * @param run   文档运行对象
-     * @param width     宽度 px
-     * @param height    高度 px
-     * @param left      左边距 px
-     * @param top       上边距 px
-     * @param behindDoc 环绕方式 0 处于文字上方 1 处于文字下方
+     * @param imageData Luồng hình ảnh
+     * @param doc   Đối tượng tài liệu
+     * @param run   Đối tượng chạy của tài liệu
+     * @param width     Chiều rộng px
+     * @param height    Chiều cao px
+     * @param left      Lề trái px
+     * @param top       Lề trên px
+     * @param behindDoc Kiểu bao quanh: 0 ở trên văn bản, 1 ở dưới văn bản
      * @author chenrui
      * @date 2025-07-14 15:18
      */
@@ -831,22 +831,22 @@ public class WordUtil {
         if(null == imageData){
             return;
         }
-        // 生成 anchor XML
+        // Tạo anchor XML
         int widthNum = Units.pixelToEMU(width);
         int heightNum = Units.pixelToEMU(height);
         int leftNum = Units.pixelToEMU(left);
         int topNum = Units.pixelToEMU(top);
-        // 环绕方式 0 处于文字上方 1 处于文字下方
+        // Kiểu bao quanh: 0 ở trên văn bản, 1 ở dưới văn bản
         behindDoc = oConvertUtils.getString(behindDoc, "0");
         try {
-            // 添加图片数据
+            // Thêm dữ liệu hình ảnh
             String blipId = doc.addPictureData(imageData, Document.PICTURE_TYPE_JPEG);
                 /*
-                behindDoc：图片是否在文字之后。1 表示图片在文字后面，0 表示浮在文字上方。
-                locked：是否锁定对象（防止移动/编辑）。0 表示未锁定。
-                layoutInCell：如果插入在表格中，是否允许在单元格内部布局。1 表示允许。
-                allowOverlap：是否允许重叠。1 表示允许。
-                relativeHeight：相对层级高度，影响图像的叠放顺序。越大越靠前。
+                behindDoc: hình ảnh có nằm sau văn bản hay không. 1 nghĩa là hình ảnh nằm sau văn bản, 0 nghĩa là nổi phía trên văn bản.
+                locked: có khóa đối tượng hay không (ngăn di chuyển/chỉnh sửa). 0 nghĩa là chưa khóa.
+                layoutInCell: nếu chèn vào bảng, có cho phép bố cục bên trong ô hay không. 1 nghĩa là cho phép.
+                allowOverlap: có cho phép chồng lấp hay không. 1 nghĩa là cho phép.
+                relativeHeight: chiều cao cấp tương đối, ảnh hưởng đến thứ tự xếp chồng của hình ảnh. Càng lớn càng ở phía trước.
                  */
             String anchorXml =
                     "<wp:anchor xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" " +
@@ -885,7 +885,7 @@ public class WordUtil {
                             "</a:graphicData>" +
                             "</a:graphic>" +
                             "</wp:anchor>";
-            // 注入 anchor 到 drawing
+            // Tiêm anchor vào drawing
             XmlToken token = XmlToken.Factory.parse(anchorXml);
             CTDrawing drawing = run.getCTR().addNewDrawing();
             drawing.set(token);
@@ -896,7 +896,7 @@ public class WordUtil {
 
 
     /**
-     * 添加表格
+     * Thêm bảng
      *
      * @param doc
      * @param tableData
@@ -907,9 +907,9 @@ public class WordUtil {
      * @date 2025/7/4 14:49
      */
     public static int addTable(XWPFDocument doc, JSONObject tableData, int abstractNumID) {
-        //行数
+        //Số hàng
         int rows = 1;
-        //列数
+        //Số cột
         int cols = 1;
         JSONArray trList = tableData.getJSONArray("trList");
         rows = trList.size();
@@ -919,7 +919,7 @@ public class WordUtil {
         XWPFTable xwpfTable = doc.createTable(rows, cols);
         String borderType = tableData.getString("borderType");
         if ("empty".equals(borderType)) {
-            //无边框设置
+            //Cài đặt không viền
             CTTblPr tblPr = xwpfTable.getCTTbl().getTblPr();
             if (tblPr == null) tblPr = xwpfTable.getCTTbl().addNewTblPr();
             CTTblBorders tblBorders = tblPr.addNewTblBorders();
@@ -1078,7 +1078,7 @@ public class WordUtil {
     }
 
     /**
-     * 是否允许表格自动重调单元格宽度 对应【表格属性-表格-选项-自动重调尺寸以适应内容】
+     * Có cho phép bảng tự điều chỉnh chiều rộng ô hay không, tương ứng với [Thuộc tính bảng-Bảng-Tùy chọn-Tự điều chỉnh kích thước cho phù hợp với nội dung]
      *
      * @param table
      * @param isFixed
@@ -1094,7 +1094,7 @@ public class WordUtil {
     }
 
     /**
-     * 设置单元格的值
+     * Đặt giá trị của ô
      *
      * @param cell
      * @param cellInfo
@@ -1222,7 +1222,7 @@ public class WordUtil {
     }
 
     /**
-     * 获取单元格的纯文本内容
+     * Lấy nội dung văn bản thuần của ô
      *
      * @param cellInfo
      * @return
@@ -1235,7 +1235,7 @@ public class WordUtil {
         if (oConvertUtils.isNotEmpty(values)) {
             for (int i = 0; i < values.size(); i++) {
                 JSONObject content = values.getJSONObject(i);
-                String value = content.getString("value");//内容
+                String value = content.getString("value");//Nội dung
                 sb.append(value);
             }
         }
@@ -1243,7 +1243,7 @@ public class WordUtil {
     }
 
     /**
-     * 将rgb字符串转换成rgb数组
+     * Chuyển chuỗi rgb thành mảng rgb
      *
      * @param rgb
      * @return
@@ -1255,17 +1255,17 @@ public class WordUtil {
         rgb = rgb.replace("rgb", "");
         rgb = rgb.replace("(", "").replace(")", "").replaceAll(" ", "");
         String[] colors = rgb.split(",");
-        //update-begin---author:chenrui ---date:20250813  for：[QQYUN-13384]word设计器，导出word失败------------
-        // 只取前三个分量，忽略 alpha
+        //update-begin---author:chenrui ---date:20250813  for：[QQYUN-13384]word Trình thiết kế, xuất Word thất bại------------
+        // Chỉ lấy ba thành phần đầu, bỏ qua alpha
         for (int i = 0; i < 3 && i < colors.length; i++) {
             color[i] = Integer.parseInt(colors[i].replaceAll("[^0-9]", ""));
         }
-        //update-end---author:chenrui ---date:20250813  for：[QQYUN-13384]word设计器，导出word失败------------
+        //update-end---author:chenrui ---date:20250813  for：[QQYUN-13384]word Trình thiết kế, xuất Word thất bại------------
         return color;
     }
 
     /**
-     * 将RGB颜色值转换为十六进制字符串
+     * Chuyển giá trị màu RGB thành chuỗi thập lục phân
      *
      * @param r
      * @param g
@@ -1281,78 +1281,78 @@ public class WordUtil {
     /**
      * @param color
      * @return
-     * @date 2020年4月7日 下午7:16:39
+     * @date 2020 năm ngày 7 tháng 4 Buổi chiều 7:16:39
      */
     private static String getHighlightName(String color) {
         color = color.replaceAll("\\s+", "");
         if ("#FFFF00".equals(color)) {
-            return "yellow";//1-黄色
+            return "yellow";//1-Màu vàng
         } else if ("#00FF00".equals(color)) {
-            return "green";//2-绿色
+            return "green";//2-Màu xanh lá
         } else if ("#00FFFF".equals(color)) {
-            return "cyan";//3-青色
+            return "cyan";//3-Màu xanh lơ
         } else if ("#FF00FF".equals(color)) {
-            return "magenta";//4-粉红色
+            return "magenta";//4-Hồng
         } else if ("#0000FF".equals(color)) {
-            return "blue";//5-蓝色
+            return "blue";//5-Màu xanh dương
         } else if ("#FF0000".equals(color)) {
-            return "red";//6-红色
+            return "red";//6-Màu đỏ
         } else if ("#000080".equals(color)) {
-            return "darkBlue";//7-深蓝色
+            return "darkBlue";//7-Xanh dương đậm
         } else if ("#008080".equals(color)) {
-            return "darkCyan";//8-深青色
+            return "darkCyan";//8-Xanh cyan đậm
         } else if ("#008000".equals(color)) {
-            return "darkGreen";//9-深绿色
+            return "darkGreen";//9-Xanh lá đậm
         } else if ("#800080".equals(color)) {
-            return "darkMagenta";//10-深粉红色，紫色
+            return "darkMagenta";//10-Hồng đậm, tím
         } else if ("#800000".equals(color)) {
-            return "darkRed";//11-深红色
+            return "darkRed";//11-Đỏ đậm
         } else if ("#808000".equals(color)) {
-            return "darkYellow";//12-深黄色
+            return "darkYellow";//12-Vàng đậm
         } else if ("#808080".equals(color)) {
-            return "darkGray";//13-深灰色
+            return "darkGray";//13-Xám đậm
         } else if ("#C0C0C0".equals(color)) {
-            return "lightGray";//14-浅灰色
+            return "lightGray";//14-Xám nhạt
         } else if ("#000000".equals(color)) {
-            return "black";//15-黑色
+            return "black";//15-Màu đen
         } else {
-            return "none";//无色
+            return "none";//Không màu
         }
     }
 
     public static String getHighlightByName(String name) {
         if ("yellow".equals(name)) {
-            return "#FFFF00";//1-黄色
+            return "#FFFF00";//1-Màu vàng
         } else if ("green".equals(name)) {
-            return "#00FF00";//2-绿色
+            return "#00FF00";//2-Màu xanh lá
         } else if ("cyan".equals(name)) {
-            return "#00FFFF";//3-青色
+            return "#00FFFF";//3-Màu xanh lơ
         } else if ("magenta".equals(name)) {
-            return "#FF00FF";//4-粉红色
+            return "#FF00FF";//4-Hồng
         } else if ("blue".equals(name)) {
-            return "#0000FF";//5-蓝色
+            return "#0000FF";//5-Màu xanh dương
         } else if ("red".equals(name)) {
-            return "#FF0000";//6-红色
+            return "#FF0000";//6-Màu đỏ
         } else if ("darkBlue".equals(name)) {
-            return "#000080";//7-深蓝色
+            return "#000080";//7-Xanh dương đậm
         } else if ("darkCyan".equals(name)) {
-            return "#008080";//8-深青色
+            return "#008080";//8-Xanh cyan đậm
         } else if ("darkGreen".equals(name)) {
-            return "#008000";//9-深绿色
+            return "#008000";//9-Xanh lá đậm
         } else if ("darkMagenta".equals(name)) {
-            return "#800080";//10-深粉红色，紫色
+            return "#800080";//10-Hồng đậm, tím
         } else if ("#800000".equals(name)) {
-            return "darkRed";//11-深红色
+            return "darkRed";//11-Đỏ đậm
         } else if ("darkYellow".equals(name)) {
-            return "#808000";//12-深黄色
+            return "#808000";//12-Vàng đậm
         } else if ("darkGray".equals(name)) {
-            return "#808080";//13-深灰色
+            return "#808080";//13-Xám đậm
         } else if ("lightGray".equals(name)) {
-            return "#C0C0C0";//14-浅灰色
+            return "#C0C0C0";//14-Xám nhạt
         } else if ("black".equals(name)) {
-            return "#000000";//15-黑色
+            return "#000000";//15-Màu đen
         } else {
-            return "";//无色
+            return "";//Không màu
         }
     }
 

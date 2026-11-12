@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description: word模版管理
+ * @Description: word Quản lý mẫu
  * @Author: jeecg-boot
  * @Date: 2025-07-04
  * @Version: V1.0
@@ -24,103 +24,103 @@ import java.util.Date;
 @TableName("aigc_word_template")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "word模版管理")
+@Schema(description = "word Quản lý mẫu")
 public class AigcWordTemplate implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * Khóa chính
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键")
+    @Schema(description = "Khóa chính")
     private String id;
     /**
-     * 创建人
+     * Người tạo
      */
-    @Schema(description = "创建人")
+    @Schema(description = "Người tạo")
     private String createBy;
     /**
-     * 创建日期
+     * Ngày tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private Date createTime;
     /**
-     * 更新人
+     * Người cập nhật
      */
-    @Schema(description = "更新人")
+    @Schema(description = "Người cập nhật")
     private String updateBy;
     /**
-     * 更新日期
+     * Ngày cập nhật
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private Date updateTime;
     /**
-     * 所属部门
+     * Phòng ban trực thuộc
      */
-    @Schema(description = "所属部门")
+    @Schema(description = "Phòng ban trực thuộc")
     private String sysOrgCode;
     /**
-     * 模版名称
+     * Tên mẫu
      */
-    @Excel(name = "模版名称", width = 15)
-    @Schema(description = "模版名称")
+    @Excel(name = "Tên mẫu", width = 15)
+    @Schema(description = "Tên mẫu")
     private String name;
     /**
-     * 模版编码
+     * Mã mẫu
      */
-    @Excel(name = "模版编码", width = 15)
-    @Schema(description = "模版编码")
+    @Excel(name = "Mã mẫu", width = 15)
+    @Schema(description = "Mã mẫu")
     private String code;
     /**
-     * 页眉
+     * Đầu trang
      */
-    @Excel(name = "页眉", width = 15)
-    @Schema(description = "页眉")
+    @Excel(name = "Đầu trang", width = 15)
+    @Schema(description = "Đầu trang")
     private String header;
     /**
-     * 页脚
+     * Chân trang
      */
-    @Excel(name = "页脚", width = 15)
-    @Schema(description = "页脚")
+    @Excel(name = "Chân trang", width = 15)
+    @Schema(description = "Chân trang")
     private String footer;
     /**
-     * 主体内容
+     * Nội dung chính
      */
-    @Excel(name = "主体内容", width = 15)
-    @Schema(description = "主体内容")
+    @Excel(name = "Nội dung chính", width = 15)
+    @Schema(description = "Nội dung chính")
     private String main;
     /**
-     * 页边距
+     * Lề trang
      */
-    @Excel(name = "页边距", width = 15)
-    @Schema(description = "页边距")
+    @Excel(name = "Lề trang", width = 15)
+    @Schema(description = "Lề trang")
     private String margins;
     /**
-     * 宽度
+     * Chiều rộng
      */
-    @Excel(name = "宽度", width = 15)
-    @Schema(description = "宽度")
+    @Excel(name = "Chiều rộng", width = 15)
+    @Schema(description = "Chiều rộng")
     private Integer width;
     /**
-     * 高度
+     * Chiều cao
      */
-    @Excel(name = "高度", width = 15)
-    @Schema(description = "高度")
+    @Excel(name = "Chiều cao", width = 15)
+    @Schema(description = "Chiều cao")
     private Integer height;
     /**
-     * 纸张方向 vertical纵向 horizontal横向
+     * Hướng giấy: vertical là dọc, horizontal là ngang
      */
-    @Excel(name = "纸张方向 vertical纵向 horizontal横向", width = 15)
-    @Schema(description = "纸张方向 vertical纵向 horizontal横向")
+    @Excel(name = "Hướng giấy: vertical là dọc, horizontal là ngang", width = 15)
+    @Schema(description = "Hướng giấy: vertical là dọc, horizontal là ngang")
     private String paperDirection;
     /**
-     * 水印
+     * Watermark
      */
-    @Excel(name = "水印", width = 15)
-    @Schema(description = "水印")
+    @Excel(name = "Watermark", width = 15)
+    @Schema(description = "Watermark")
     private String watermark;
 }

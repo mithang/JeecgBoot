@@ -8,11 +8,11 @@
         <version>3.9.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <description>消息队列测试模块</description>
+    <description>Mô-đun kiểm thử hàng đợi tin nhắn</description>
     <artifactId>jeecg-cloud-test-rabbitmq</artifactId>
 
     <dependencies>
-        <!--rabbitmq消息队列-->
+        <!--rabbitmq Hàng đợi tin nhắn-->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-rabbitmq</artifactId>

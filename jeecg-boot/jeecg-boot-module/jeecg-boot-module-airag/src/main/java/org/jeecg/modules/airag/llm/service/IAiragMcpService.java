@@ -20,11 +20,11 @@ public interface IAiragMcpService extends IService<AiragMcp> {
     Result<?> toggleStatus(String id, String action);
 
     /**
-     * 保存插件工具（仅更新tools字段）
-     * for [QQYUN-12453]【AI】支持插件
-     * @param id 插件ID
-     * @param tools 工具列表JSON字符串
-     * @return 操作结果
+     * Lưu công cụ plugin (chỉ cập nhật trường tools)
+     * for [QQYUN-12453]【AI】Hỗ trợ plugin
+     * @param id Plugin ID
+     * @param tools Chuỗi JSON danh sách công cụ
+     * @return Kết quả thao tác
      * @author chenrui
      * @date 2025/10/30
      */

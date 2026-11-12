@@ -34,7 +34,7 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
     private IAiragMcpService airagMcpService;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param airagMcp
      * @param pageNo
@@ -42,7 +42,7 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
      * @param req
      * @return
      */
-    @Operation(summary = "MCP-分页列表查询")
+    @Operation(summary = "MCP-Truy vấn danh sách phân trang")
     @RequiresPermissions("airag:mcp:list")
     @GetMapping(value = "/list")
     public Result<IPage<AiragMcp>> queryPageList(AiragMcp airagMcp,
@@ -57,12 +57,12 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
     }
 
     /**
-     * 保存
+     * Lưu
      *
      * @param airagMcp
      * @return
      */
-    @Operation(summary = "MCP-保存")
+    @Operation(summary = "MCP-Lưu")
     @RequiresPermissions("airag:mcp:save")
     @PostMapping(value = "/save")
     public Result<String> save(@RequestBody AiragMcp airagMcp) {
@@ -72,14 +72,14 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
 
 
     /**
-     * 保存并同步
+     * Lưu và đồng bộ
      *
      * @param airagMcp
      * @return
      * @author chenrui
      * @date 2025/10/21 10:54
      */
-    @Operation(summary = "MCP-保存并同步")
+    @Operation(summary = "MCP-Lưu và đồng bộ")
     @RequiresPermissions("airag:mcp:save")
     @PostMapping(value = "/saveAndSync")
     public Result<?> saveAndSync(@RequestBody AiragMcp airagMcp) {
@@ -89,20 +89,20 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
         }
         String id = airagMcp.getId();
         if (id == null || id.trim().isEmpty()) {
-            return Result.error("保存失败");
+            return Result.error("Lưu thất bại");
         }
         return airagMcpService.sync(id);
     }
 
     /**
-     * 同步MCP信息
+     * Đồng bộ thông tin MCP
      *
      * @param id
      * @return
      * @author chenrui
      * @date 2025/10/20 20:09
      */
-    @Operation(summary = "MCP-同步MCP信息")
+    @Operation(summary = "MCP-Đồng bộ thông tin MCP")
     @RequiresPermissions("airag:mcp:save")
     @PostMapping(value = "/sync/{id}")
     public Result<?> sync(@PathVariable(name = "id", required = true) String id) {
@@ -111,14 +111,14 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
 
 
     /**
-     * 启用/禁用MCP信息
+     * Kích hoạt/Vô hiệu hóa thông tin MCP
      *
-     * @param action 启用：enable，禁用：disable
+     * @param action Bật: enable, tắt: disable
      * @return
      * @author chenrui
      * @date 2025/10/20 20:13
      */
-    @Operation(summary = "MCP-启用/禁用MCP信息")
+    @Operation(summary = "MCP-Kích hoạt/Vô hiệu hóa thông tin MCP")
     @RequiresPermissions("airag:mcp:save")
     @PostMapping(value = "/status/{id}/{action}")
     public Result<?> toggleStatus(@PathVariable(name = "id",required = true) String id,
@@ -127,14 +127,14 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
     }
 
     /**
-     * 保存插件工具
-     * for [QQYUN-12453]【AI】支持插件
-     * @param dto 包含插件ID和工具列表JSON字符串的DTO
+     * Lưu công cụ plugin
+     * for [QQYUN-12453]【AI】Hỗ trợ plugin
+     * @param dto của DTO chứa ID plugin và chuỗi JSON danh sách công cụ DTO
      * @return
      * @author chenrui
      * @date 2025/10/30
      */
-    @Operation(summary = "MCP-保存插件工具")
+    @Operation(summary = "MCP-Lưu công cụ plugin")
     @RequiresPermissions("airag:mcp:save")
     @PostMapping(value = "/saveTools")
     public Result<String> saveTools(@RequestBody SaveToolsDTO dto) {
@@ -142,38 +142,38 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    @Operation(summary = "MCP-通过id删除")
+    @Operation(summary = "MCP-Xóa theo id")
     @RequiresPermissions("airag:mcp:delete")
     @DeleteMapping(value = "/delete")
     public Result<String> delete(@RequestParam(name = "id", required = true) String id) {
         airagMcpService.removeById(id);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
-    @Operation(summary = "MCP-通过id查询")
+    @Operation(summary = "MCP-Tìm kiếm theo id")
     @RequiresPermissions("airag:mcp:queryById")
     @GetMapping(value = "/queryById")
     public Result<AiragMcp> queryById(@RequestParam(name = "id", required = true) String id) {
         AiragMcp airagMcp = airagMcpService.getById(id);
         if (airagMcp == null) {
-            return Result.error("未找到对应数据");
+            return Result.error("Không tìm thấy dữ liệu tương ứng");
         }
         return Result.OK(airagMcp);
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param airagMcp
@@ -185,7 +185,7 @@ public class AiragMcpController extends JeecgController<AiragMcp, IAiragMcpServi
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response

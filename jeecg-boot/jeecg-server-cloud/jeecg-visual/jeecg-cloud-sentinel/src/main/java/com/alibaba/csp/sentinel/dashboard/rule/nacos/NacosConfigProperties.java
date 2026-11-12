@@ -1,7 +1,7 @@
 package com.alibaba.csp.sentinel.dashboard.rule.nacos;
 
 /**
- * @Description: nacos配置
+ * @Description: nacos Cấu hình
  * @author: zyf
  * @date: 2022/03/01$
  * @version: V1.0

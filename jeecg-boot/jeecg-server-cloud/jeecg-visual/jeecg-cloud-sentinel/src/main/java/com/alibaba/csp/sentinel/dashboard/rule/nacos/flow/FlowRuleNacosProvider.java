@@ -30,7 +30,7 @@ import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.nacos.api.config.ConfigService;
 
 /**
- * 流控规则拉取
+ * Kéo quy tắc kiểm soát lưu lượng
  *
  * @author zyf
  * @date 2022-04-13

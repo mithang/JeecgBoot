@@ -9,7 +9,7 @@
 //import java.io.IOException;
 //
 ///**
-// * @Description: 流程测试
+// * @Description: Kiểm thử quy trình
 // * @Author: chenrui
 // * @Date: 2025/2/11 16:11
 // */
@@ -20,7 +20,7 @@
 //    public void testRunFlow(){
 //        String id = "1889499701976358913";
 ////        String id = "1889571074002247682"; //switch
-////        String id = "1889608218175463425"; //脚本
+////        String id = "1889608218175463425"; //Kịch bản
 //        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3Mzk1NDY0NDIsInVzZXJuYW1lIjoiamVlY2cifQ.CFIV79PUYmOAiqBKT3yjwihHWwf954DvS-4oKERmJVU";
 //        String request = request(id,token);
 //        System.out.println(request);
@@ -49,6 +49,6 @@
 //        }
 //    }
 //
-//    // TODO author: chenrui for:完善用例,使用java方式调用 date:2025/2/14
+//    // TODO author: chenrui for:Hoàn thiện trường hợp kiểm thử,Gọi bằng phương thức Java date:2025/2/14
 //
 //}

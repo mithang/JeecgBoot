@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 订单
+ * @Description: Đơn hàng
  * @Author: jeecg-boot
  * @Date:  2019-02-15
  * @Version: V1.0
@@ -20,30 +20,30 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class JeecgOrderMain implements Serializable {
     private static final long serialVersionUID = 1L;
     
-	/**主键*/
+	/**Khóa chính*/
     @TableId(type = IdType.ASSIGN_ID)
 	private java.lang.String id;
-	/**订单号*/
+	/**Số đơn hàng*/
 	private java.lang.String orderCode;
-	/**订单类型*/
+	/**Loại đơn hàng*/
 	private java.lang.String ctype;
-	/**订单日期*/
+	/**Ngày đặt hàng*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private java.util.Date orderDate;
-	/**订单金额*/
+	/**Số tiền đơn hàng*/
 	private java.lang.Double orderMoney;
-	/**订单备注*/
+	/**Ghi chú đơn hàng*/
 	private java.lang.String content;
-	/**创建人*/
+	/**Người tạo*/
 	private java.lang.String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createTime;
-	/**修改人*/
+	/**Người sửa đổi*/
 	private java.lang.String updateBy;
-	/**修改时间*/
+	/**Thời gian chỉnh sửa*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private java.util.Date updateTime;

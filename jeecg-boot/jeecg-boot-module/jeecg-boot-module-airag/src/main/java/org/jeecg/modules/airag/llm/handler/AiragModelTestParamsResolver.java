@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * AI模型测试连接参数解析器。
+ * AI Bộ phân tích tham số kiểm tra kết nối mô hình.
  *
  * @author scott
- * @since 2026-08-10 【无号】图片模型测试连接参数迁移至Airag模块
+ * @since 2026-08-10 【Không số】Tham số kết nối kiểm thử mô hình hình ảnh được chuyển sang module Airag
  */
 public final class AiragModelTestParamsResolver {
 
@@ -28,16 +28,16 @@ public final class AiragModelTestParamsResolver {
 	}
 
 	/**
-	 * 应用图片模型测试连接专用参数。
+	 * Tham số chuyên dùng để kiểm tra kết nối mô hình hình ảnh của ứng dụng.
 	 *
-	 * @param params AI调用参数
-	 * @param provider 供应商
-	 * @param modelName 模型名称
+	 * @param params AI Tham số gọi
+	 * @param provider Nhà cung cấp
+	 * @param modelName Tên mô hình
 	 * @author scott
-	 * @since 2026-08-10 【无号】图片模型测试连接参数迁移至Airag模块
+	 * @since 2026-08-10 【Không số】Tham số kết nối kiểm thử mô hình hình ảnh được chuyển sang module Airag
 	 */
 	public static void applyImageTestParams(AIChatParams params, String provider, String modelName) {
-		Objects.requireNonNull(params, "AI调用参数不能为空");
+		Objects.requireNonNull(params, "AI Tham số gọi không được trống");
 		params.setImageCount(TEST_IMAGE_COUNT);
 		params.setImageSize(resolveTestImageSize(provider, modelName));
 		params.setImageQuality(resolveTestImageQuality(provider, modelName));
@@ -45,13 +45,13 @@ public final class AiragModelTestParamsResolver {
 	}
 
 	/**
-	 * 获取测试连接专用的最小图片尺寸。
+	 * Lấy kích thước hình ảnh tối thiểu chuyên dùng cho kiểm tra kết nối.
 	 *
-	 * @param provider 供应商
-	 * @param modelName 模型名称
-	 * @return 测试图片尺寸，null表示使用供应商默认值
+	 * @param provider Nhà cung cấp
+	 * @param modelName Tên mô hình
+	 * @return Kích thước hình ảnh kiểm tra, null nghĩa là dùng giá trị mặc định của nhà cung cấp
 	 * @author scott
-	 * @since 2026-08-10 【无号】图片模型测试连接参数迁移至Airag模块
+	 * @since 2026-08-10 【Không số】Tham số kết nối kiểm thử mô hình hình ảnh được chuyển sang module Airag
 	 */
 	static String resolveTestImageSize(String provider, String modelName) {
 		if (provider == null || provider.isEmpty()) {
@@ -69,13 +69,13 @@ public final class AiragModelTestParamsResolver {
 	}
 
 	/**
-	 * 获取测试连接专用的最低图片质量。
+	 * Lấy chất lượng hình ảnh thấp nhất chuyên dùng cho kiểm tra kết nối.
 	 *
-	 * @param provider 供应商
-	 * @param modelName 模型名称
-	 * @return 测试图片质量，null表示使用供应商默认值
+	 * @param provider Nhà cung cấp
+	 * @param modelName Tên mô hình
+	 * @return Chất lượng hình ảnh kiểm tra, null nghĩa là dùng giá trị mặc định của nhà cung cấp
 	 * @author scott
-	 * @since 2026-08-10 【无号】图片模型测试连接参数迁移至Airag模块
+	 * @since 2026-08-10 【Không số】Tham số kết nối kiểm thử mô hình hình ảnh được chuyển sang module Airag
 	 */
 	static String resolveTestImageQuality(String provider, String modelName) {
 		String model = normalizeModelName(modelName);
@@ -86,13 +86,13 @@ public final class AiragModelTestParamsResolver {
 	}
 
 	/**
-	 * 获取测试连接专用扩展参数。
+	 * Lấy tham số mở rộng chuyên dùng cho kiểm tra kết nối.
 	 *
-	 * @param provider 供应商
-	 * @param modelName 模型名称
-	 * @return 测试扩展参数，null表示无需设置
+	 * @param provider Nhà cung cấp
+	 * @param modelName Tên mô hình
+	 * @return Tham số mở rộng kiểm tra, null nghĩa là không cần đặt
 	 * @author scott
-	 * @since 2026-08-10 【无号】图片模型测试连接参数迁移至Airag模块
+	 * @since 2026-08-10 【Không số】Tham số kết nối kiểm thử mô hình hình ảnh được chuyển sang module Airag
 	 */
 	static Map<String, Object> resolveTestImageExtraParams(String provider, String modelName) {
 		if (LLMHandler.isQwenImage3Model(provider, modelName)) {
@@ -102,12 +102,12 @@ public final class AiragModelTestParamsResolver {
 	}
 
 	/**
-	 * 规范化模型名称。
+	 * Chuẩn hóa tên mô hình.
 	 *
-	 * @param modelName 模型名称
-	 * @return 小写模型名称
+	 * @param modelName Tên mô hình
+	 * @return Tên mô hình viết thường
 	 * @author scott
-	 * @since 2026-08-10 【无号】图片模型测试连接参数迁移至Airag模块
+	 * @since 2026-08-10 【Không số】Tham số kết nối kiểm thử mô hình hình ảnh được chuyển sang module Airag
 	 */
 	private static String normalizeModelName(String modelName) {
 		return modelName == null ? "" : modelName.toLowerCase(Locale.ROOT);

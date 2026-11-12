@@ -3,7 +3,7 @@ package org.jeecg.modules.demo.mock.vxe.entity;
 import lombok.Data;
 
 /**
- * 模拟实体
+ * Thực thể mô phỏng
  * @author: jeecg-boot
  */
 @Data
@@ -14,14 +14,14 @@ public class MockEntity {
      */
     private String id;
     /**
-     * 父级ID
+     * Cấp cha ID
      */
     private String parentId;
     /**
-     * 状态
+     * Trạng thái
      */
     private String status;
 
-    /* -- 省略其他字段 -- */
+    /* -- Bỏ qua các trường khác -- */
 
 }

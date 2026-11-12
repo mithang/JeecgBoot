@@ -18,22 +18,22 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface AiragPromptsMapper extends BaseMapper<AiragPrompts> {
 
-    //update-begin---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】实现回收站取回和彻底删除-----------
+    //update-begin---author:chenrui ---date:2026-04-07  for：【QQYUN-14643] Triển khai thu hồi từ thùng rác và xóa hoàn toàn-----------
     /**
-     * 查询回收站分页列表（del_flag=1），绕过 @TableLogic 自动过滤
+     * Truy vấn danh sách phân trang thùng rác (del_flag=1), bỏ qua @TableLogic Tự động lọc
      */
     @Select("SELECT * FROM airag_prompts WHERE del_flag = 1")
     IPage<AiragPrompts> selectRecycleBinPage(IPage<AiragPrompts> page);
 
     /**
-     * 从回收站取回（将 del_flag 置为 0），绕过 @TableLogic 自动过滤
+     * Thu hồi từ thùng rác (đặt del_flag thành 0), bỏ qua @TableLogic Tự động lọc
      */
     void revertRecycleBin(@Param("ids") List<String> ids);
 
     /**
-     * 从回收站彻底删除（物理删除），绕过 @TableLogic 自动过滤
+     * Xóa hoàn toàn khỏi thùng rác (xóa vật lý), bỏ qua @TableLogic Tự động lọc
      */
     void deleteRecycleBin(@Param("ids") List<String> ids);
-    //update-end---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】实现回收站取回和彻底删除-----------
+    //update-end---author:chenrui ---date:2026-04-07  for：【QQYUN-14643] Triển khai thu hồi từ thùng rác và xóa hoàn toàn-----------
 
 }

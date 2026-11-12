@@ -3,24 +3,24 @@ package org.jeecg.modules.airag.voice.vo;
 import lombok.Data;
 
 /**
- * 文生语音请求VO
+ * Yêu cầu chuyển văn bản thành giọng nói VO
  */
 @Data
 public class VoiceGenerateVo {
     /**
-     * 待合成文本（必填）
+     * Văn bản cần tổng hợp (bắt buộc)
      */
     private String content;
     /**
-     * 声色，不传用yml默认值
+     * Âm sắc, nếu không truyền sẽ dùng giá trị mặc định trong yml
      */
     private String voice;
     /**
-     * 倍速，范围0.25~4.0
+     * Tốc độ phát, phạm vi 0.25~4.0
      */
     private Double speed;
     /**
-     * 音量增益(dB)
+     * Tăng âm lượng(dB)
      */
     private Double volume;
 }

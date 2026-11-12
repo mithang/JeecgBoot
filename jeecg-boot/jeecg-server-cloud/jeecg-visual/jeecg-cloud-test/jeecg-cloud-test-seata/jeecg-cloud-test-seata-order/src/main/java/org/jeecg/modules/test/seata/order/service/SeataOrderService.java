@@ -4,16 +4,16 @@ package org.jeecg.modules.test.seata.order.service;
 import org.jeecg.modules.test.seata.order.dto.PlaceOrderRequest;
 
 /**
- * @Description: 订单接口
+ * @Description: API đơn hàng
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
  */
 public interface SeataOrderService {
     /**
-     * 下单
+     * Đặt hàng
      *
-     * @param placeOrderRequest 订单请求参数
+     * @param placeOrderRequest Tham số yêu cầu đơn hàng
      */
     void placeOrder(PlaceOrderRequest placeOrderRequest);
 }

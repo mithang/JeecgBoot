@@ -1,7 +1,7 @@
 package org.jeecg.modules.airag.app.consts;
 
 /**
- * AI应用常量类
+ * AI Lớp hằng số ứng dụng
  *
  * @author chenrui
  * @date 2025/2/25 14:52
@@ -9,86 +9,86 @@ package org.jeecg.modules.airag.app.consts;
 public class AiAppConsts {
 
     /**
-     * 状态:启用
+     * Trạng thái:Kích hoạt
      */
     public static final String STATUS_ENABLE = "enable";
     /**
-     * 状态:禁用
+     * Trạng thái:Vô hiệu hóa
      */
     public static final String STATUS_DISABLE = "disable";
     /**
-     * 状态:发布
+     * Trạng thái:Phát hành
      */
     public static final String STATUS_RELEASE = "release";
 
 
     /**
-     * 默认应用id
+     * Ứng dụng mặc định id
      */
     public static final String DEFAULT_APP_ID = "default";
 
 	/**
-	 * 未保存应用的调试应用id
+	 * Ứng dụng gỡ lỗi của ứng dụng chưa được lưu id
 	 */
 	public static final String DEBUG_APP_ID = "__DEBUG_APP";
 
     /**
-     * 应用类型:简单聊天
+     * Loại ứng dụng:Trò chuyện đơn giản
      */
     public static final String APP_TYPE_CHAT_SIMPLE = "chatSimple";
 
     /**
-     * 应用类型:聊天流(高级编排)
+     * Loại ứng dụng:Luồng trò chuyện(Biên soạn nâng cao)
      */
     public static final String APP_TYPE_CHAT_FLOW = "chatFLow";
 
     /**
-     * 应用元数据:流程输入参数
-     * for [issues/8545]新建AI应用的时候只能选择没有自定义参数的AI流程
+     * Siêu dữ liệu ứng dụng:Tham số đầu vào của quy trình
+     * for [issues/8545]Khi tạo ứng dụng AI mới, chỉ có thể chọn quy trình AI không có tham số tùy chỉnh
      */
     public static final String APP_METADATA_FLOW_INPUTS = "flowInputs";
 
     /**
-     * 是否开启记忆
+     * Có bật bộ nhớ không
      */
     public static final Integer IZ_OPEN_MEMORY = 1;
 
     /**
-     * 会话标题最大长度
+     * Độ dài tối đa của tiêu đề phiên
      */
     public static final int CONVERSATION_MAX_TITLE_LENGTH = 10;
 
 
     /**
-     * AI写作的流程id
+     * AI Quy trình viết id
      */
     public static final String ARTICLE_WRITER_FLOW_ID = "2011769909807579138";
 
     /**
-     * AI写作redis请求前缀
+     * AI Tiền tố yêu cầu Redis cho viết
      */
     public static final String ARTICLE_WRITER_KEY = "airag:chat:article:write:{}";
 
     /**
-     * ai绘画类型: 绘图
+     * ai Loại hội họa: Vẽ hình
      */
     public static final String AI_DRAW_TYPE_DRAW = "draw";
 
     /**
-     * ai绘画类型: 换脸
+     * ai Loại hội họa: Đổi mặt
      */
     public static final String AI_DRAW_TYPE_FACE = "face";
 
     /**
-     * ai绘画类型: 混图
+     * ai Loại hội họa: Trộn ảnh
      */
     public static final String AI_DRAW_TYPE_MIX = "mix";
 
     /**
-     * ai绘画 会话redis请求前缀
+     * ai Tiền tố yêu cầu Redis của phiên vẽ
      */
     public static final String POSTER_TASK_PREFIX = "airag:poster:task:";
-    /** 任务结果在 Redis 中保留 1 小时 */
+    /** Kết quả nhiệm vụ được giữ trong Redis 1 giờ */
     public static final long POSTER_TASK_TTL = 3600L;
     
 }

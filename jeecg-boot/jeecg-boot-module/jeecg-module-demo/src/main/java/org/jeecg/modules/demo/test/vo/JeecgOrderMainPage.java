@@ -10,39 +10,39 @@ import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 import lombok.Data;
 
 /**
- * @Description: 一对多示例
+ * @Description: Ví dụ một đối nhiều
  * @author: jeecg-boot
  */
 @Data
 public class JeecgOrderMainPage {
 	
-	/**主键*/
+	/**Khóa chính*/
 	private java.lang.String id;
-	/**订单号*/
-	@Excel(name="订单号",width=15)
+	/**Số đơn hàng*/
+	@Excel(name="Số đơn hàng",width=15)
 	private java.lang.String orderCode;
-	/**订单类型*/
+	/**Loại đơn hàng*/
 	private java.lang.String ctype;
-	/**订单日期*/
-	@Excel(name="订单日期",width=15,format = "yyyy-MM-dd")
+	/**Ngày đặt hàng*/
+	@Excel(name="Ngày đặt hàng",width=15,format = "yyyy-MM-dd")
 	private java.util.Date orderDate;
-	/**订单金额*/
-	@Excel(name="订单金额",width=15)
+	/**Số tiền đơn hàng*/
+	@Excel(name="Số tiền đơn hàng",width=15)
 	private java.lang.Double orderMoney;
-	/**订单备注*/
+	/**Ghi chú đơn hàng*/
 	private java.lang.String content;
-	/**创建人*/
+	/**Người tạo*/
 	private java.lang.String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	private java.util.Date createTime;
-	/**修改人*/
+	/**Người sửa đổi*/
 	private java.lang.String updateBy;
-	/**修改时间*/
+	/**Thời gian chỉnh sửa*/
 	private java.util.Date updateTime;
 	
-	@ExcelCollection(name="客户")
+	@ExcelCollection(name="Khách hàng")
 	private List<JeecgOrderCustomer> jeecgOrderCustomerList;
-	@ExcelCollection(name="机票")
+	@ExcelCollection(name="Vé máy bay")
 	private List<JeecgOrderTicket> jeecgOrderTicketList;
 
 	private String bpmStatus;

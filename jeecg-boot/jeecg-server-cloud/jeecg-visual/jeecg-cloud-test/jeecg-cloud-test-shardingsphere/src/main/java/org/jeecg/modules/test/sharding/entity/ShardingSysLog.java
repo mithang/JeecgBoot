@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 系统日志表
+ * Bảng nhật ký hệ thống
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -31,29 +31,29 @@ public class ShardingSysLog implements Serializable {
     private String id;
 
     /**
-     * 创建人
+     * Người tạo
      */
     private String createBy;
 
     /**
-     * 创建时间
+     * Thời gian tạo
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
-     * 更新人
+     * Người cập nhật
      */
     private String updateBy;
 
     /**
-     * 更新时间
+     * Thời gian cập nhật
      */
     private Date updateTime;
 
     /**
-     * 耗时
+     * Thời gian tốn
      */
     private Long costTime;
 
@@ -63,45 +63,45 @@ public class ShardingSysLog implements Serializable {
     private String ip;
 
     /**
-     * 请求参数
+     * Tham số yêu cầu
      */
     private String requestParam;
 
     /**
-     * 请求类型
+     * Loại yêu cầu
      */
     private String requestType;
 
     /**
-     * 请求路径
+     * Đường dẫn yêu cầu
      */
     private String requestUrl;
     /**
-     * 请求方法
+     * Phương thức yêu cầu
      */
     private String method;
 
     /**
-     * 操作人用户名称
+     * Tên người dùng của người thao tác
      */
     private String username;
     /**
-     * 操作人用户账户
+     * Tài khoản người dùng của người thao tác
      */
     private String userid;
     /**
-     * 操作详细日志
+     * Nhật ký chi tiết thao tác
      */
     private String logContent;
 
     /**
-     * 日志类型（1登录日志，2操作日志）
+     * Loại nhật ký (1 Nhật ký đăng nhập, 2 Nhật ký thao tác)
      */
     @Dict(dicCode = "log_type")
     private Integer logType;
 
     /**
-     * 操作类型（1查询，2添加，3修改，4删除,5导入，6导出）
+     * Loại thao tác (1 tìm kiếm, 2 thêm mới, 3 chỉnh sửa, 4 xóa,5 nhập, 6 xuất）
      */
     @Dict(dicCode = "operate_type")
     private Integer operateType;

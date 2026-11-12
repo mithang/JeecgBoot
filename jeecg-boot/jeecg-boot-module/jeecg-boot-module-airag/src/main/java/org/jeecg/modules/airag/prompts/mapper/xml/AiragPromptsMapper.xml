@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.airag.prompts.mapper.AiragPromptsMapper">
-    <!-- 更新被逻辑删除的用户 -->
+    <!-- Cập nhật người dùng đã bị xóa logic -->
     <update id="revertRecycleBin">
         UPDATE
         airag_prompts
@@ -15,7 +15,7 @@
         </foreach>
     </update>
 
-    <!-- 彻底删除被逻辑删除的用户 -->
+    <!-- Xóa hoàn toàn người dùng đã bị xóa logic -->
     <delete id="deleteRecycleBin">
         DELETE FROM airag_prompts WHERE del_flag = 1 AND id IN
         <foreach collection="ids" item="promptId" open="(" close=")" separator="," >

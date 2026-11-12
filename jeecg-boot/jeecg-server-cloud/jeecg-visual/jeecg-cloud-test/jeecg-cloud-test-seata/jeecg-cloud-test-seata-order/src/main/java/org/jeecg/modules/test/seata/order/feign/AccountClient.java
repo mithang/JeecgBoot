@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public interface AccountClient {
 
     /**
-     *  扣减余额
+     *  Trừ số dư
      * @param userId
      * @param amount
      * @return

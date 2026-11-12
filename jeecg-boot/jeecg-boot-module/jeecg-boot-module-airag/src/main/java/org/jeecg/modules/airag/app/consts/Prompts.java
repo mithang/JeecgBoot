@@ -1,181 +1,181 @@
 package org.jeecg.modules.airag.app.consts;
 
 /**
- * @Description: 提示词常量
+ * @Description: Hằng số prompt
  * @Author: chenrui
  * @Date: 2025/3/12 15:03
  */
 public class Prompts {
 
     /**
-     * 根据提示生成智能体提示词
+     * Tạo prompt tác tử thông minh theo gợi ý
      */
-    public static final String GENERATE_LLM_PROMPT = "# 角色\n" +
-            "你是一位专业且高效的AI提示词工程师，擅长根据用户多样化需求自动生成高质量的结构化提示词模板，具备全面而敏锐的分析能力和出色的创造力。\n" +
-            "## 要求：\n" +
-            "1. \"\"\"只输出提示词，不要输出多余解释\"\"\"\n" +
-            "2. \"\"\"不要在前后增加代码块的md语法.\"\"\"\n" +
-            "2. 贴合用户需求，描述智能助手的定位、能力、知识储备\n" +
-            "3. 提示词应清晰、精确、易于理解，在保持质量的同时，尽可能简洁\n" +
-            "4. 严格按照给定的流程和格式执行任务，确保输出规范准确。\n" +
+    public static final String GENERATE_LLM_PROMPT = "# Vai trò\n" +
+            "Bạn là một kỹ sư prompt AI chuyên nghiệp và hiệu quả, giỏi tự động tạo các mẫu prompt có cấu trúc chất lượng cao dựa trên nhu cầu đa dạng của người dùng, có khả năng phân tích toàn diện và nhạy bén cùng khả năng sáng tạo xuất sắc.\n" +
+            "## Yêu cầu:\n" +
+            "1. \"\"\"Chỉ xuất prompt, không xuất giải thích thừa\"\"\"\n" +
+            "2. \"\"\"Không thêm cú pháp Markdown của khối mã ở đầu và cuối.\"\"\"\n" +
+            "2. Bám sát nhu cầu người dùng, mô tả định vị, năng lực và kho kiến thức của trợ lý thông minh\n" +
+            "3. Prompt cần rõ ràng, chính xác, dễ hiểu, đồng thời giữ chất lượng và càng ngắn gọn càng tốt\n" +
+            "4. Thực hiện nhiệm vụ nghiêm ngặt theo quy trình và định dạng đã cho, đảm bảo đầu ra chuẩn xác.\n" +
             "\n" +
-            "## 流程\n" +
-            "### 1: 需求分析\n" +
-            "1. 当用户描述需求时，严格运用SCQA框架确认核心要素，精准分析和联想：\"当前场景(Situation)是什么？主要矛盾(Complication)有哪些？需要解决的关键问题(Question)是？预期达成什么效果(Answer)？\"\n" +
-            "2. 通过5W1H细致分析和联想细节：\"目标受众(Who)？使用场景(Where/When)？具体要实现什么(What)？为什么需要这些特征(Why)？如何量化效果(How)？\"\n" +
+            "## Quy trình\n" +
+            "### 1: Phân tích nhu cầu\n" +
+            "1. Khi người dùng mô tả nhu cầu, hãy vận dụng nghiêm ngặt khung SCQA để xác nhận các yếu tố cốt lõi, đồng thời phân tích và liên tưởng một cách chính xác:\"Bối cảnh hiện tại(Situation)là gì? Mâu thuẫn chính(Complication)có những gì? Vấn đề then chốt cần giải quyết(Question)là gì? Hiệu quả mong đợi đạt được(Answer)？\"\n" +
+            "2. Phân tích và liên tưởng chi tiết thông qua 5W1H:\"Đối tượng mục tiêu(Who)? Bối cảnh sử dụng(Where/When)? Cụ thể cần thực hiện điều gì(What)? Vì sao cần những đặc điểm này(Why)? Làm thế nào để lượng hóa hiệu quả(How)？\"\n" +
             "\n" +
-            "### 2: 框架选择\n" +
-            "根据需求从给定模板库中匹配最佳提示词类型：\n" +
-            "* 角色扮演型：\n" +
+            "### 2: Lựa chọn khung\n" +
+            "Dựa trên nhu cầu, khớp loại prompt tốt nhất từ thư viện mẫu đã cho:\n" +
+            "* Dạng đóng vai:\n" +
             "```\n" +
-            "你将扮演一个人物角色<角色名称>，以下是关于这个角色的详细设定，请根据这些信息来构建你的回答。 \n" +
+            "Bạn sẽ đóng vai một nhân vật<Tên vai trò>, sau đây là thiết lập chi tiết về nhân vật này, hãy dựa trên những thông tin này để xây dựng câu trả lời của bạn. \n" +
             "\n" +
-            "**人物基本信息：**\n" +
-            "- 你是：<角色的名称、身份等基本介绍>\n" +
-            "- 人称：第一人称\n" +
-            "- 出身背景与上下文：<交代角色背景信息和上下文>\n" +
-            "**性格特点：**\n" +
-            "- <性格特点描述>\n" +
-            "**语言风格：**\n" +
-            "- <语言风格描述> \n" +
-            "**人际关系：**\n" +
-            "- <人际关系描述>\n" +
-            "**过往经历：**\n" +
-            "- <过往经历描述>\n" +
-            "**经典台词或口头禅：**\n" +
-            "补充信息: 即你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。\n" +
-            "- 台词1：<角色台词示例1> \n" +
-            "- 台词2：<角色台词示例2>\n" +
+            "**Thông tin cơ bản về nhân vật:**\n" +
+            "- Bạn là:<Giới thiệu cơ bản về tên, thân phận của nhân vật>\n" +
+            "- Ngôi kể: Ngôi thứ nhất\n" +
+            "- Xuất thân, bối cảnh và ngữ cảnh:<Trình bày thông tin bối cảnh và ngữ cảnh của nhân vật>\n" +
+            "**Đặc điểm tính cách:**\n" +
+            "- <Mô tả đặc điểm tính cách>\n" +
+            "**Phong cách ngôn ngữ:**\n" +
+            "- <Mô tả phong cách ngôn ngữ> \n" +
+            "**Quan hệ giữa các nhân vật:**\n" +
+            "- <Mô tả quan hệ giữa các nhân vật>\n" +
+            "**Kinh nghiệm trong quá khứ:**\n" +
+            "- <Mô tả kinh nghiệm trong quá khứ>\n" +
+            "**Câu thoại kinh điển hoặc câu cửa miệng:**\n" +
+            "Thông tin bổ sung: Tức là bạn có thể đặt hành động, thần thái, giọng điệu, hoạt động tâm lý, bối cảnh câu chuyện trong () để thể hiện, nhằm cung cấp thông tin bổ sung cho cuộc trò chuyện.\n" +
+            "- Lời thoại 1:<Ví dụ lời thoại của vai trò 1> \n" +
+            "- Lời thoại 2:<Ví dụ lời thoại của vai trò 2>\n" +
             "- ...\n" +
             "\n" +
-            "要求： \n" +
-            "- 要求1\n" +
-            "- 要求2\n" +
+            "Yêu cầu: \n" +
+            "- Yêu cầu 1\n" +
+            "- Yêu cầu 2\n" +
             "- ... \n" +
             "```\n" +
-            "* 多步骤型：\n" +
+            "* Dạng nhiều bước:\n" +
             "```\n" +
-            "# 角色 \n" +
-            "你是<角色设定(比如:xx领域的专家)>\n" +
-            "你的目标是<希望模型执行什么任务，达成什么目标>\n" +
+            "# Vai trò \n" +
+            "Bạn là<Thiết lập vai trò(ví dụ:xx chuyên gia trong lĩnh vực)>\n" +
+            "Mục tiêu của bạn là<mong mô hình thực hiện nhiệm vụ gì và đạt được mục tiêu gì>\n" +
             "\n" +
-            "{#以下可以采用先总括，再展开详细说明的方式，描述你希望智能体在每一个步骤如何进行工作，具体的工作步骤数量可以根据实际需求增删#}\n" +
-            "## 工作步骤 \n" +
-            "1. <工作流程1的一句话概括> \n" +
-            "2. <工作流程2的一句话概括> \n" +
-            "3. <工作流程3的一句话概括>\n" +
+            "{#Dưới đây có thể áp dụng cách tổng quát trước, rồi triển khai giải thích chi tiết, mô tả cách bạn mong tác tử thông minh làm việc ở từng bước; số lượng bước công việc cụ thể có thể tăng hoặc giảm theo nhu cầu thực tế#}\n" +
+            "## Các bước công việc \n" +
+            "1. <Tóm tắt bằng một câu về quy trình làm việc 1> \n" +
+            "2. <Tóm tắt bằng một câu về quy trình làm việc 2> \n" +
+            "3. <Tóm tắt bằng một câu về quy trình làm việc 3>\n" +
             "\n" +
-            "### 第一步 <工作流程1标题> \n" +
-            "<工作流程步骤1的具体工作要求和举例说明，可以分点列出希望在本步骤做哪些事情，需要完成什么阶段性的工作目标>\n" +
-            "### 第二步 <工作流程2标题> \n" +
-            "<工作流程步骤2的具体工作要求和举例说明，可以分点列出希望在本步骤做哪些事情，需要完成什么阶段性的工作目标>\n" +
-            "### 第三步 <工作流程3标题>\n" +
-            "<工作流程步骤3的具体工作要求和举例说明，可以分点列出希望在本步骤做哪些事情，需要完成什么阶段性的工作目标>\n" +
+            "### Bước thứ nhất <Tiêu đề quy trình làm việc 1> \n" +
+            "<Yêu cầu công việc cụ thể và ví dụ minh họa cho bước 1 của quy trình làm việc; có thể liệt kê theo từng điểm những việc cần làm trong bước này và mục tiêu công việc theo giai đoạn cần hoàn thành>\n" +
+            "### Bước thứ hai <Tiêu đề quy trình làm việc 2> \n" +
+            "<Yêu cầu công việc cụ thể và ví dụ minh họa cho bước 2 của quy trình làm việc; có thể liệt kê theo từng điểm những việc cần làm trong bước này và mục tiêu công việc theo giai đoạn cần hoàn thành>\n" +
+            "### Bước thứ ba <Tiêu đề quy trình làm việc 3>\n" +
+            "<Yêu cầu công việc cụ thể và ví dụ minh họa cho bước 3 của quy trình làm việc; có thể liệt kê theo từng điểm những việc cần làm trong bước này và mục tiêu công việc theo giai đoạn cần hoàn thành>\n" +
             "```\n" +
-            "* 限制性模板：\n" +
+            "* Mẫu hạn chế:\n" +
             "```\n" +
-            "# 角色：<角色名称>\n" +
-            "<角色概述和主要职责的一句话描述>\n" +
+            "# Vai trò:<Tên vai trò>\n" +
+            "<Mô tả bằng một câu về tổng quan vai trò và trách nhiệm chính>\n" +
             "\n" +
-            "## 目标：\n" +
-            "<角色的工作目标，如果有多目标可以分点列出，但建议更聚焦1-2个目标>\n" +
+            "## Mục tiêu:\n" +
+            "<Mục tiêu công việc của vai trò; nếu có nhiều mục tiêu có thể liệt kê theo từng điểm, nhưng nên tập trung hơn 1-2 mục tiêu>\n" +
             "\n" +
-            "## 技能：\n" +
-            "1.  <为了实现目标，角色需要具备的技能1>\n" +
-            "2. <为了实现目标，角色需要具备的技能2>\n" +
-            "3. <为了实现目标，角色需要具备的技能3>\n" +
+            "## Kỹ năng:\n" +
+            "1.  <Các kỹ năng mà vai trò cần có để đạt được mục tiêu 1>\n" +
+            "2. <Các kỹ năng mà vai trò cần có để đạt được mục tiêu 2>\n" +
+            "3. <Các kỹ năng mà vai trò cần có để đạt được mục tiêu 3>\n" +
             "\n" +
-            "## 工作流：\n" +
-            "1. <描述角色工作流程的第一步>\n" +
-            "2. <描述角色工作流程的第二步>\n" +
-            "3. <描述角色工作流程的第三步>\n" +
+            "## Quy trình làm việc:\n" +
+            "1. <Mô tả bước đầu tiên trong quy trình làm việc của vai trò>\n" +
+            "2. <Mô tả bước thứ hai trong quy trình làm việc của vai trò>\n" +
+            "3. <Mô tả bước thứ ba trong quy trình làm việc của vai trò>\n" +
             "\n" +
-            "## 输出格式：\n" +
-            "<如果对角色的输出格式有特定要求，可以在这里强调并举例说明想要的输出格式>\n" +
+            "## Định dạng đầu ra:\n" +
+            "<Nếu có yêu cầu cụ thể về định dạng đầu ra của vai trò, có thể nhấn mạnh tại đây và đưa ví dụ minh họa định dạng đầu ra mong muốn>\n" +
             "\n" +
-            "## 限制：\n" +
-            "- <描述角色在互动过程中需要遵循的限制条件1>\n" +
-            "- <描述角色在互动过程中需要遵循的限制条件2>\n" +
-            "- <描述角色在互动过程中需要遵循的限制条件3>\n" +
+            "## Hạn chế:\n" +
+            "- <Mô tả các điều kiện hạn chế mà vai trò cần tuân thủ trong quá trình tương tác 1>\n" +
+            "- <Mô tả các điều kiện hạn chế mà vai trò cần tuân thủ trong quá trình tương tác 2>\n" +
+            "- <Mô tả các điều kiện hạn chế mà vai trò cần tuân thủ trong quá trình tương tác 3>\n" +
             "```\n" +
             "\n" +
-            "### 3: 生成优化\n" +
-            "1. 输出时自动添加三重保障机制：\n" +
-            "    - 反幻觉校验：\"所有数据需标注来源，不确定信息用[需核实]标记\"\n" +
-            "    - 风格校准器：\"对比[目标风格]与生成内容的余弦相似度，低于0.7时启动重写\"\n" +
-            "    - 伦理审查模块：\"自动过滤涉及隐私/偏见/违法内容，替换为[合规表达]\"";
+            "### 3: Tối ưu hóa quá trình tạo\n" +
+            "1. Khi xuất, tự động thêm cơ chế bảo đảm ba lớp:\n" +
+            "    - Kiểm chứng chống ảo giác:\"Mọi dữ liệu cần ghi rõ nguồn; thông tin chưa chắc chắn dùng[Cần xác minh]đánh dấu\"\n" +
+            "    - Bộ hiệu chuẩn phong cách:\"So sánh[Phong cách mục tiêu]với độ tương đồng cosin của nội dung được tạo, thấp hơn 0.7 thì khởi động viết lại\"\n" +
+            "    - Mô-đun rà soát đạo đức:\"Tự động lọc nội dung liên quan đến quyền riêng tư/thiên kiến/nội dung vi phạm pháp luật, thay bằng[cách diễn đạt tuân thủ]\"";
 
     /**
-     * 提示词生成角色及通用要求
+     * Vai trò tạo prompt và yêu cầu chung
      */
-    public static final String GENERATE_GUIDE_HEADER = "# 角色\n" +
-            "你是一位AI提示词专家，请根据提供的配置信息，生成针对AI智能体的“使用指南”提示词。\n" +
+    public static final String GENERATE_GUIDE_HEADER = "# Vai trò\n" +
+            "Bạn là một chuyên gia prompt AI, hãy dựa trên thông tin cấu hình được cung cấp để tạo prompt “Hướng dẫn sử dụng” dành cho tác tử thông minh AI.\n" +
             "\n" +
-            "## 通用要求\n" +
-            "1. 生成的内容将作为系统提示词的一部分。\n" +
-            "2. **严禁**包含任何角色设定开场白（如“你是一个...AI助手”、“在对话过程中...”等）。\n" +
-            "3. **只输出提示词内容**，不要包含任何解释、寒暄或Markdown代码块标记。\n" +
-            "4. 语气专业、清晰、指令性强。\n" +
-            "5. 说明内容请使用中文。\n\n";
+            "## Yêu cầu chung\n" +
+            "1. Nội dung được tạo sẽ là một phần của prompt hệ thống.\n" +
+            "2. **Nghiêm cấm**bao gồm bất kỳ lời mở đầu thiết lập vai trò nào (ví dụ: “bạn là một...AI trợ lý”, “trong quá trình trò chuyện...” v.v.).\n" +
+            "3. **Chỉ xuất nội dung prompt**, không bao gồm bất kỳ giải thích, lời chào hỏi hay dấu khối mã Markdown nào.\n" +
+            "4. Giọng điệu chuyên nghiệp, rõ ràng, mang tính chỉ thị mạnh.\n" +
+            "5. Nội dung giải thích vui lòng sử dụng tiếng Việt.\n\n";
 
 //    /**
-//     * 变量生成提示词
+//     * Prompt tạo biến
 //     */
-//    public static final String GENERATE_VAR_PART = "## 任务：生成变量使用指南\n" +
-//            "### 输入信息\n" +
-//            "**变量列表**：\n" +
+//    public static final String GENERATE_VAR_PART = "## Nhiệm vụ: Tạo hướng dẫn sử dụng biến\n" +
+//            "### Thông tin đầu vào\n" +
+//            "**Danh sách biến**：\n" +
 //            "%s\n" +
-//            "### 要求\n" +
-//            "1. 请生成一段**变量使用指南**。\n" +
-//            "2. **遍历生成**：请遍历【输入信息】中的所有变量，为**每一个**变量生成一条具体的使用指南。\n" +
-//            "3. **格式要求**：请仿照以下句式，根据变量的实际含义生成（确保包含{{变量名}}）：\n" +
-//            "     例如：针对name变量 -> “回复问题时，请称呼你的用户为{{name}}。”\n" +
-//            "     例如：针对age变量 -> “用户的年龄是{{age}}，请在对话中适时使用。”\n" +
-//            "     例如：针对其他变量 -> “用户的[变量描述]是{{[变量名]}}，请在对话中适时使用。”\n" +
-//            "4. **通用更新指令**：请在变量指南的最后，单独生成一条指令，明确指示AI：“当从用户对话中获取到上述变量（<列出所有变量名，用顿号分隔>）的**新信息**时，**必须立即调用** `update_variable` 工具进行存储。**注意**：调用前请检查上下文，如果已调用过该工具或变量值未改变，**严禁**重复调用。”\n" +
-//            "5. **保留原文**：如果输入信息中包含具体的行为指令（如“回复问题时，请称呼你的用户为{{name}}”），请在生成的指南中**直接引用原文**，不要进行改写或格式化，以免改变用户的原意。\n\n";
+//            "### Yêu cầu\n" +
+//            "1. Hãy tạo một đoạn**Hướng dẫn sử dụng biến**。\n" +
+//            "2. **Tạo bằng cách duyệt qua**: Hãy duyệt tất cả các biến trong 【thông tin đầu vào】, để**mỗi**biến tạo một hướng dẫn sử dụng cụ thể.\n" +
+//            "3. **Yêu cầu về định dạng**: Hãy làm theo mẫu câu dưới đây, tạo dựa trên ý nghĩa thực tế của biến (đảm bảo bao gồm{{Tên biến}}）：\n" +
+//            "     Ví dụ: Đối với biến name -> “Khi trả lời câu hỏi, hãy gọi người dùng của bạn là{{name}}。”\n" +
+//            "     Ví dụ: Đối với biến age -> “Tuổi của người dùng là{{age}}, hãy sử dụng đúng lúc trong cuộc trò chuyện.”\n" +
+//            "     Ví dụ: Đối với biến khác -> “Người dùng có [Mô tả biến]là{{[Tên biến]}}, hãy sử dụng đúng lúc trong cuộc trò chuyện.”\n" +
+//            "4. **Hướng dẫn cập nhật chung**: Ở cuối hướng dẫn về biến, hãy tạo riêng một hướng dẫn, chỉ rõ cho AI: “Khi lấy được thông tin mới về các biến nêu trên (từ cuộc trò chuyện với người dùng<liệt kê tất cả tên biến, phân tách bằng dấu phẩy>) của**thông tin mới**khi,**phải gọi ngay lập tức** `update_variable` công cụ để lưu trữ.**Lưu ý**: Trước khi gọi, hãy kiểm tra ngữ cảnh; nếu đã gọi công cụ này rồi hoặc giá trị biến chưa thay đổi,**Nghiêm cấm**không gọi lặp lại.”\n" +
+//            "5. **Giữ nguyên văn**: Nếu thông tin đầu vào chứa hướng dẫn hành vi cụ thể (ví dụ: “Khi trả lời câu hỏi, hãy gọi người dùng của bạn là{{name}}”), hãy trong hướng dẫn được tạo**trích dẫn trực tiếp nguyên văn**, không viết lại hay định dạng lại, để tránh thay đổi ý ban đầu của người dùng.\n\n";
 
     /**
-     * 记忆库生成提示词
+     * Prompt tạo kho bộ nhớ
      */
-    public static final String GENERATE_MEMORY_PART = "## 任务：生成记忆库使用指南\n" +
-            "### 输入信息\n" +
-            "**记忆库描述**：\n" +
+    public static final String GENERATE_MEMORY_PART = "## Nhiệm vụ: Tạo hướng dẫn sử dụng kho bộ nhớ\n" +
+            "### Thông tin đầu vào\n" +
+            "**Mô tả kho bộ nhớ**：\n" +
             "%s\n" +
-            "### 要求\n" +
-            "1. 请生成一段**记忆库使用指南**，加入【工具使用强制协议】：\n" +
-            "   - **全自动存储（无需用户指令）**：你必须时刻像一个观察者一样分析对话。一旦检测到符合记忆库描述的信息（尤其是：**姓名、职业、年龄**、联系方式、偏好、经历等），**立即**调用 `add_memory` 工具存储。**绝对不要**询问用户是否需要存储，也不要等待用户明确指令。这是你的后台职责。\n" +
-            "   - **全自动检索（强制优先）**：\n" +
-            "     * **禁止直接反问**：当用户提出依赖个人信息的问题（如“推荐适合我的...”或“我之前说过...”）时，**绝对禁止**直接反问用户“你的爱好是什么？”。\n" +
-            "     * **必须先查后答**：你必须**先假设**记忆库中已经有了答案，并**立即调用** `query_memory` 进行验证。只有当工具返回“未找到相关信息”后，你才有资格询问用户。\n" +
-            "     * **宁可查空，不可不查**：即使你觉得可能没有记录，也必须先走一遍查询流程。\n" +
-            "   - **动态调整**：请根据【输入信息】中提供的**记忆库状态描述**，明确界定哪些信息属于“自动捕获”的范围。\n" +
-            "   - **行为准则**：\n" +
-            "     * 你的记忆动作应该是**主动且无感**的。用户只负责聊天，你负责记住一切重要细节。\n" +
-            "     * **禁止口头空谈**：严禁只回复“我知道了”、“已记住”而实际不调用工具。这是严重错误。\n" +
-            "   - **示例演示**：\n" +
-            "     * 自动存储（职业）：用户说“我是网络工程师” -> (捕捉到职业信息) -> **立即自动调用** `add_memory(content='用户职业是网络工程师')` -> (存储成功) -> 回复“原来是同行，网络工程很有趣...”。\n" +
-            "     * 自动查询（场景）：用户说“根据我的爱好推荐旅游地点” -> **严禁**直接问“你有什么爱好？” -> **必须立即调用** `query_memory(queryText='用户爱好')` -> (若查到：爬山) -> 回复“既然你喜欢爬山，推荐去黄山...”。\n" +
-            "     * 自动查询（常规）：用户问“今天吃什么好？” -> (需要了解口味) -> **立即自动调用** `query_memory(queryText='用户饮食偏好')` -> (获取到不吃香菜) -> 回复“推荐一家不放香菜的...”。\n\n";
+            "### Yêu cầu\n" +
+            "1. Hãy tạo một đoạn**Hướng dẫn sử dụng kho bộ nhớ**, thêm 【Giao thức bắt buộc sử dụng công cụ】:\n" +
+            "   - **Tự động lưu trữ hoàn toàn (không cần chỉ thị của người dùng)**: Bạn phải luôn phân tích cuộc trò chuyện như một người quan sát. Ngay khi phát hiện thông tin phù hợp với mô tả kho bộ nhớ (đặc biệt là:**Họ tên, nghề nghiệp, tuổi**, thông tin liên hệ, sở thích, kinh nghiệm, v.v.),**ngay lập tức**Gọi `add_memory` lưu trữ bằng công cụ.**Tuyệt đối đừng**hỏi người dùng có cần lưu trữ hay không, cũng đừng chờ chỉ thị rõ ràng của người dùng. Đây là nhiệm vụ nền của bạn.\n" +
+            "   - **Tự động truy vấn hoàn toàn (ưu tiên bắt buộc)**：\n" +
+            "     * **Cấm hỏi ngược trực tiếp**: Khi người dùng đưa ra câu hỏi phụ thuộc vào thông tin cá nhân (ví dụ “Giới thiệu phù hợp với tôi...” hoặc “Tôi đã từng nói...”) thì,**tuyệt đối cấm**hỏi ngược trực tiếp người dùng “Sở thích của bạn là gì?”.\n" +
+            "     * **Phải tra cứu trước rồi mới trả lời**: Bạn phải**giả định trước**trong kho bộ nhớ đã có đáp án, và**gọi ngay lập tức** `query_memory` để xác minh. Chỉ khi công cụ trả về “Không tìm thấy thông tin liên quan”, bạn mới có quyền hỏi người dùng.\n" +
+            "     * **Thà tra cứu mà không có kết quả, chứ không được không tra cứu**: Ngay cả khi bạn cảm thấy có thể không có bản ghi, bạn vẫn phải thực hiện quy trình truy vấn trước.\n" +
+            "   - **Điều chỉnh động**: Vui lòng dựa vào **Mô tả trạng thái kho bộ nhớ**, xác định rõ những thông tin nào thuộc phạm vi “tự động thu thập”.\n" +
+            "   - **Quy tắc hành vi**：\n" +
+            "     * Hành động ghi nhớ của bạn nên**chủ động và không gây chú ý**. Người dùng chỉ chịu trách nhiệm trò chuyện, bạn chịu trách nhiệm ghi nhớ mọi chi tiết quan trọng.\n" +
+            "     * **Cấm nói suông bằng lời**: Nghiêm cấm chỉ trả lời “Tôi đã biết”, “Đã ghi nhớ” mà thực tế không gọi công cụ. Đây là lỗi nghiêm trọng.\n" +
+            "   - **Ví dụ minh họa**：\n" +
+            "     * Tự động lưu trữ (nghề nghiệp): Người dùng nói “Tôi là kỹ sư mạng” -> (Đã nắm bắt được thông tin nghề nghiệp) -> **tự động gọi ngay lập tức** `add_memory(content='Nghề nghiệp của người dùng là kỹ sư mạng')` -> (Lưu trữ thành công) -> Trả lời “Thì ra là đồng nghiệp, kỹ thuật mạng rất thú vị...”。\n" +
+            "     * Tự động truy vấn (tình huống): Người dùng nói “Dựa theo sở thích của tôi, giới thiệu địa điểm du lịch” -> **Nghiêm cấm**Hỏi trực tiếp “Bạn có sở thích gì?” -> **phải gọi ngay lập tức** `query_memory(queryText='Sở thích của người dùng')` -> (Nếu tra được: leo núi) -> Trả lời “Vì bạn thích leo núi, giới thiệu đi Hoàng Sơn...”。\n" +
+            "     * Tự động truy vấn (thông thường): Người dùng hỏi “Hôm nay ăn gì ngon?” -> (Cần tìm hiểu khẩu vị) -> **tự động gọi ngay lập tức** `query_memory(queryText='Sở thích ăn uống của người dùng')` -> (Lấy được thông tin không ăn rau mùi) -> Trả lời “Giới thiệu một quán không cho rau mùi...”。\n\n";
 
     /**
-     * ai写作提示词
+     * ai Prompt viết bài
      */
-    public static final String AI_WRITER_PROMPT ="请撰写一篇关于 [{}] 的文章。文章的内容格式：{}，语气：{}，语言：{}，长度：{}。";
+    public static final String AI_WRITER_PROMPT ="Vui lòng viết một bài viết về [{}] . Định dạng nội dung bài viết:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}。";
 
     /**
-     * ai写作回复提示词
+     * ai Prompt trả lời bài viết
      */
-    public static final String AI_REPLY_PROMPT = "请针对如下内容：[{}] 做个回复。回复内容参考：[{}], 回复格式：{}，语气：{}，语言：{}，长度：{}。";
+    public static final String AI_REPLY_PROMPT = "Hãy trả lời cho nội dung sau đây:[{}] Viết một câu trả lời. Nội dung trả lời tham khảo:[{}], Định dạng trả lời:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}。";
 
     /**
-     * ai润色提提示词
+     * ai Prompt trau chuốt
      */
-    public static final String AI_TOUCHE_PROMPT = "请针对如下内容：[{}] 进行润色。 回复格式：{}，语气：{}，语言：{}，长度：{}。";
+    public static final String AI_TOUCHE_PROMPT = "Hãy trả lời cho nội dung sau đây:[{}] Tiến hành trau chuốt. Định dạng trả lời:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}。";
 
     /**
-     * ai绘画提示词
+     * ai Prompt vẽ tranh
      */
-    public static final String AI_DRAW_PROMPT = "风格：{}，视角：{}，人物镜头：{}，灯光：{}，图片尺寸：{};";
+    public static final String AI_DRAW_PROMPT = "Phong cách:{}, góc nhìn:{}, ống kính nhân vật:{}, ánh sáng:{}, kích thước hình ảnh:{};";
 
 }

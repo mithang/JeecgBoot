@@ -11,7 +11,7 @@
     <artifactId>jeecg-cloud-gateway</artifactId>
 
     <dependencies>
-        <!-- jeecg 微服务基础依赖-->
+        <!-- jeecg Dependency cơ sở của microservice-->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-cloud</artifactId>
@@ -22,18 +22,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- Gateway网关依赖,内置webflux-->
+        <!-- Gateway Dependency gateway,Tích hợp sẵn webflux-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
         </dependency>
-        <!-- redis方式限流 -->
+        <!-- redis Giới hạn lưu lượng theo phương thức -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
         </dependency>
 
-        <!--sentinel 限流熔点降级-->
+        <!--sentinel Giới hạn lưu lượng, ngắt mạch và giáng cấp-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>
@@ -48,25 +48,25 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- sentinel集成nacos作为数据源 -->
+        <!-- sentinel Tích hợp nacos làm nguồn dữ liệu -->
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-datasource-nacos</artifactId>
         </dependency>
-        <!--- sentinel流控链路不生效 -->
+        <!--- sentinel Kiểm soát lưu lượng theo chuỗi liên kết không có hiệu lực -->
         <!--<dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-web-servlet</artifactId>
         </dependency>-->
 
 
-        <!--健康监控-->
+        <!--Giám sát sức khỏe-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- Swagger API文档 -->
+        <!-- Swagger API Tài liệu -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>

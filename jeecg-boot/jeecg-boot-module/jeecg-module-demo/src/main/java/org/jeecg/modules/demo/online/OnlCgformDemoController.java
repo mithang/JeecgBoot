@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Online表单开发 demo 示例
+ * Online Ví dụ demo phát triển biểu mẫu
  *
  * @author sunjianlei
  * @date 2021-12-16
@@ -26,7 +26,7 @@ import java.util.List;
 public class OnlCgformDemoController {
 
     /**
-     * Online表单 http 增强，list增强示例
+     * Online Ví dụ tăng cường http cho biểu mẫu， tăng cường list
      * @param params
      * @return
      */
@@ -54,21 +54,21 @@ public class OnlCgformDemoController {
     }
 
     /**
-     * 模拟字典数据
+     * Dữ liệu từ điển mô phỏng
      *
      * @return
      */
     private List<DictModel> virtualDictData() {
         List<DictModel> dict = new ArrayList<>();
-        dict.add(new DictModel("bj", "北京"));
-        dict.add(new DictModel("sd", "山东"));
-        dict.add(new DictModel("ah", "安徽"));
+        dict.add(new DictModel("bj", "Bắc Kinh"));
+        dict.add(new DictModel("sd", "Sơn Đông"));
+        dict.add(new DictModel("ah", "An Huy"));
         return dict;
     }
 
 
     /**
-     * Online表单 http 增强，add、edit增强示例
+     * Online Ví dụ tăng cường http cho biểu mẫu， tăng cường add， edit
      * @param params
      * @return
      */
@@ -78,39 +78,39 @@ public class OnlCgformDemoController {
         String tableName = params.getString("tableName");
         JSONObject record = params.getJSONObject("record");
         /*
-         * 业务场景一： 获取提交表单数据，进行其他业务关联操作
-         * （比如：根据入库单，同步更改库存）
+         * Kịch bản nghiệp vụ 1： Lấy dữ liệu biểu mẫu đã gửi， thực hiện các thao tác liên kết nghiệp vụ khác
+         * （Ví dụ： theo phiếu nhập kho， đồng bộ thay đổi tồn kho）
          */
         log.info(" --- tableName：" + tableName);
-        log.info(" --- 行数据：" + record.toJSONString());
+        log.info(" --- Dữ liệu hàng：" + record.toJSONString());
         /*
-         * 业务场景二： 保存数据之前进行数据的校验
-         * 直接返回错误状态即可
+         * Kịch bản nghiệp vụ 2： Kiểm chứng dữ liệu trước khi lưu
+         * Chỉ cần trả về trực tiếp trạng thái lỗi là được
          */
         String phone = record.getString("phone");
         if (oConvertUtils.isEmpty(phone)) {
-            return Result.error("手机号不能为空！");
+            return Result.error("Số điện thoại không được trống！");
         }
         /*
-         * 业务场景三： 保存数据之对数据的处理
-         * 直接操作 record 即可
+         * Kịch bản nghiệp vụ 3： Xử lý dữ liệu sau khi lưu dữ liệu
+         * Chỉ cần thao tác trực tiếp trên record là được
          */
         record.put("phone", "010-" + phone);
 
-        /* 其他业务场景自行实现 */
+        /* Các kịch bản nghiệp vụ khác tự triển khai */
 
-        // 返回场景一： 不对 record 做任何修改的情况下，可以直接返回 code，
-        // 返回 0 = 丢弃当前数据
-        // 返回 1 = 新增当前数据
-        // 返回 2 = 修改当前数据 TODO（？）存疑
+        // Kịch bản trả về 1： Trong trường hợp không sửa đổi gì record， có thể trả về trực tiếp code，
+        // Trả về 0 = Bỏ dữ liệu hiện tại
+        // Trả về 1 = Thêm mới dữ liệu hiện tại
+        // Trả về 2 = Sửa dữ liệu hiện tại TODO（？）còn nghi vấn
 //		 return Result.OK(1);
 
-        // 返回场景二： 需要对 record 做修改的情况下，需要返回一个JSONObject对象（或者Map也行）
+        // Kịch bản trả về 2： Trong trường hợp cần sửa đổi record， cần trả về một đối tượng JSONObject（hoặc Map cũng được）
         JSONObject res = new JSONObject();
         res.put("code", 1);
-        // 将 record 返回以进行修改
+        // Trả về record để sửa đổi
         res.put("record", record);
-        // TODO 不要 code 的概念
+        // TODO Không cần khái niệm code
         return Result.OK(res);
     }
 

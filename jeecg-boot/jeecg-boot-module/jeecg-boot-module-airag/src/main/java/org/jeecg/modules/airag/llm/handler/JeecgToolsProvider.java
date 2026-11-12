@@ -7,15 +7,15 @@ import lombok.Getter;
 import java.util.Map;
 
 /**
- * for [QQYUN-13565]【AI助手】新增创建用户和查询用户的工具扩展
- * @Description: jeecg llm工具提供者
+ * for [QQYUN-13565]【Trợ lý AI】Mở rộng công cụ tạo người dùng và truy vấn người dùng mới
+ * @Description: jeecg llm Nhà cung cấp công cụ
  * @Author: chenrui
  * @Date: 2025/8/26 18:06
  */
 public interface JeecgToolsProvider {
 
     /**
-     * 获取默认的工具列表
+     * Lấy danh sách công cụ mặc định
      * @return
      * @author chenrui
      * @date 2025/8/27 09:49
@@ -23,7 +23,7 @@ public interface JeecgToolsProvider {
     public Map<ToolSpecification, ToolExecutor> getDefaultTools();
 
     /**
-     * jeecgLlm工具类
+     * jeecgLlm Lớp công cụ
      * @author chenrui
      * @date 2025/8/27 09:49
      */

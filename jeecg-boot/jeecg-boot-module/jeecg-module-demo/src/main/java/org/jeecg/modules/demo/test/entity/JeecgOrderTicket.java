@@ -10,7 +10,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 订单机票
+ * @Description: Vé máy bay của đơn hàng
  * @Author: jeecg-boot
  * @Date:  2019-02-15
  * @Version: V1.0
@@ -20,28 +20,28 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class JeecgOrderTicket implements Serializable {
     private static final long serialVersionUID = 1L;
     
-	/**主键*/
+	/**Khóa chính*/
     @TableId(type = IdType.ASSIGN_ID)
 	private java.lang.String id;
-	/**航班号*/
-	@Excel(name="航班号",width=15)
+	/**Số hiệu chuyến bay*/
+	@Excel(name="Số hiệu chuyến bay",width=15)
 	private java.lang.String ticketCode;
-	/**航班时间*/
+	/**Thời gian chuyến bay*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	@Excel(name="航班时间",width=15,format = "yyyy-MM-dd")
+	@Excel(name="Thời gian chuyến bay",width=15,format = "yyyy-MM-dd")
 	private java.util.Date tickectDate;
-	/**外键*/
+	/**Khóa ngoại*/
 	private java.lang.String orderId;
-	/**创建人*/
+	/**Người tạo*/
 	private java.lang.String createBy;
-	/**创建时间*/
+	/**Thời gian tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createTime;
-	/**修改人*/
+	/**Người sửa đổi*/
 	private java.lang.String updateBy;
-	/**修改时间*/
+	/**Thời gian chỉnh sửa*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private java.util.Date updateTime;

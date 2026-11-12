@@ -9,40 +9,40 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * AI视频生成服务接口
+ * AI Giao diện dịch vụ tạo video
  */
 public interface IVideoGenerationService {
 
     /**
-     * 提交视频生成任务
+     * Gửi nhiệm vụ tạo video
      */
     VideoTaskResultVo submitTask(VideoGenerateVo vo);
 
     /**
-     * 查询任务状态
+     * Truy vấn trạng thái nhiệm vụ
      */
     VideoTaskResultVo queryTask(String taskId);
 
     /**
-     * 为已完成的视频添加AI配音
-     * @param taskId 视频任务ID
-     * @param prompt 原始提示词（用于生成旁白）
-     * @return 包含配音视频URL的结果
+     * Thêm lồng tiếng AI cho video đã hoàn thành
+     * @param taskId Nhiệm vụ video ID
+     * @param prompt Prompt gốc (dùng để tạo lời bình)
+     * @return Kết quả chứa URL video có lồng tiếng
      */
     VideoTaskResultVo addVoiceover(String taskId, String prompt);
 
     /**
-     * 获取预设提示词
+     * Lấy prompt đặt sẵn
      */
     Map<String, List<String>> getPresetPrompts();
 
     /**
-     * 查询用户视频生成记录列表
+     * Truy vấn danh sách bản ghi tạo video của người dùng
      */
     List<JSONObject> getVideoRecords(String userId);
 
     /**
-     * 删除用户视频生成记录
+     * Xóa bản ghi tạo video của người dùng
      */
     boolean deleteVideoRecord(String userId, String recordId);
 }

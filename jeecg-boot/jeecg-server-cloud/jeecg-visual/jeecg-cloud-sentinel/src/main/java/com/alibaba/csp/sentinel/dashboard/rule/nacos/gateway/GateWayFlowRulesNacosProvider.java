@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 网关流控规则拉取
+ * Kéo quy tắc kiểm soát lưu lượng Gateway
  *
  * @author zyf
  * @date 2022-04-13

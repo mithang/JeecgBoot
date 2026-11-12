@@ -9,7 +9,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 /**
- * @Description: 产品
+ * @Description: Sản phẩm
  * @author: zyf
  * @date: 2022/01/24
  * @version: V1.0
@@ -22,11 +22,11 @@ public class SeataProduct {
     @TableId(type = IdType.AUTO)
     private Integer id;
     /**
-     * 价格
+     * Giá
      */
     private BigDecimal price;
     /**
-     * 库存
+     * Tồn kho
      */
     private Integer stock;
 

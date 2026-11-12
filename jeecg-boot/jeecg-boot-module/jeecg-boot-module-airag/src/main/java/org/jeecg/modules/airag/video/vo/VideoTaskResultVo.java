@@ -3,42 +3,42 @@ package org.jeecg.modules.airag.video.vo;
 import lombok.Data;
 
 /**
- * AI视频生成任务结果VO
+ * AI Kết quả nhiệm vụ tạo video VO
  */
 @Data
 public class VideoTaskResultVo {
     /**
-     * 任务ID
+     * Nhiệm vụ ID
      */
     private String taskId;
 
     /**
-     * 任务状态: PROCESSING, SUCCESS, FAIL
+     * Trạng thái nhiệm vụ: PROCESSING, SUCCESS, FAIL
      */
     private String status;
 
     /**
-     * 视频下载URL（SUCCESS时有值）
+     * URL tải video (có giá trị khi SUCCESS)
      */
     private String videoUrl;
 
     /**
-     * 视频封面URL（如有）
+     * URL ảnh bìa video (nếu có)
      */
     private String coverUrl;
 
     /**
-     * 带配音的视频URL
+     * Video có lồng tiếng URL
      */
     private String voiceoverVideoUrl;
 
     /**
-     * 旁白文案
+     * Nội dung lời dẫn
      */
     private String narration;
 
     /**
-     * 错误信息（FAIL时有值）
+     * Thông tin lỗi (có giá trị khi FAIL)
      */
     private String message;
 }

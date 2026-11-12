@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>jeecg-cloud-sentinel</artifactId>
 	<name>jeecg-cloud-sentinel</name>
-	<description>Sentinel Dashboard 启动模块</description>
+	<description>Sentinel Dashboard Mô-đun khởi động</description>
 	<version>3.9.6</version>
 
 	<dependencies>
@@ -18,13 +18,13 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-		<!-- Sentinel Dashboard（jeecg 定制版 v1.8.10） -->
+		<!-- Sentinel Dashboard(Bản tùy chỉnh Jeecg v1.8.10） -->
 		<dependency>
 			<groupId>org.jeecgframework.cloud</groupId>
 			<artifactId>sentinel-dashboard</artifactId>
 			<version>1.8.10</version>
 		</dependency>
-		<!-- Nacos 数据源 -->
+		<!-- Nacos Nguồn dữ liệu -->
 		<dependency>
 			<groupId>com.alibaba.csp</groupId>
 			<artifactId>sentinel-datasource-nacos</artifactId>

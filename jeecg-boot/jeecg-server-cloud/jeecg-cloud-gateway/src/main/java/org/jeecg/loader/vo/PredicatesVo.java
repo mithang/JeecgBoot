@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * 路由配置VO
+ * Cấu hình route VO
  * @author lsq
  * @Date 2023/10/15
  */

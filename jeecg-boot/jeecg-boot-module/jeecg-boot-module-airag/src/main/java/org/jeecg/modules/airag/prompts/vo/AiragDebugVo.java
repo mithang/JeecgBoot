@@ -25,15 +25,15 @@ import java.util.Date;
 public class AiragDebugVo implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * 提示词
+     * Prompt
      */
     private String prompts;
     /**
-     * 输入内容
+     * Nội dung nhập
      */
     private String content;
-	/**适配的大模型ID*/
+	/**Mô hình lớn tương thích ID*/
     private String modelId;
-	/**大模型的参数配置*/
+	/**Cấu hình tham số của mô hình lớn*/
     private String modelParam;
 }

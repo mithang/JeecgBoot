@@ -42,7 +42,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
  /**
- * @Description: 流程测试
+ * @Description: Kiểm thử quy trình
  * @Author: jeecg-boot
  * @Date:   2019-05-14
  * @Version: V1.0
@@ -55,7 +55,7 @@ public class JoaDemoController {
 	private IJoaDemoService joaDemoService;
 	
 	/**
-	  * 分页列表查询
+	  * Truy vấn danh sách phân trang
 	 * @param joaDemo
 	 * @param pageNo
 	 * @param pageSize
@@ -77,7 +77,7 @@ public class JoaDemoController {
 	}
 	
 	/**
-	  *   添加
+	  *   Thêm
 	 * @param joaDemo
 	 * @return
 	 */
@@ -86,16 +86,16 @@ public class JoaDemoController {
 		Result<JoaDemo> result = new Result<JoaDemo>();
 		try {
 			joaDemoService.save(joaDemo);
-			result.success("添加成功！");
+			result.success("Thêm thành công!");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
-			result.error500("操作失败");
+			result.error500("Thao tác thất bại");
 		}
 		return result;
 	}
 	
 	/**
-	  *  编辑
+	  *  Chỉnh sửa
 	 * @param joaDemo
 	 * @return
 	 */
@@ -104,12 +104,12 @@ public class JoaDemoController {
 		Result<JoaDemo> result = new Result<JoaDemo>();
 		JoaDemo joaDemoEntity = joaDemoService.getById(joaDemo.getId());
 		if(joaDemoEntity==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			boolean ok = joaDemoService.updateById(joaDemo);
-			//TODO 返回false说明什么？
+			//TODO Trả về false nghĩa là gì?
 			if(ok) {
-				result.success("修改成功!");
+				result.success("Chỉnh sửa thành công!");
 			}
 		}
 		
@@ -117,7 +117,7 @@ public class JoaDemoController {
 	}
 	
 	/**
-	  *   通过id删除
+	  *   Xóa theo id
 	 * @param id
 	 * @return
 	 */
@@ -126,11 +126,11 @@ public class JoaDemoController {
 		Result<JoaDemo> result = new Result<JoaDemo>();
 		JoaDemo joaDemo = joaDemoService.getById(id);
 		if(joaDemo==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			boolean ok = joaDemoService.removeById(id);
 			if(ok) {
-				result.success("删除成功!");
+				result.success("Xóa thành công!");
 			}
 		}
 		
@@ -138,7 +138,7 @@ public class JoaDemoController {
 	}
 	
 	/**
-	  *  批量删除
+	  *  Xóa hàng loạt
 	 * @param ids
 	 * @return
 	 */
@@ -146,16 +146,16 @@ public class JoaDemoController {
 	public Result<JoaDemo> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<JoaDemo> result = new Result<JoaDemo>();
 		if(ids==null || "".equals(ids.trim())) {
-			result.error500("参数不识别！");
+			result.error500("Không nhận dạng được tham số!");
 		}else {
 			this.joaDemoService.removeByIds(Arrays.asList(ids.split(",")));
-			result.success("删除成功!");
+			result.success("Xóa thành công!");
 		}
 		return result;
 	}
 	
 	/**
-	  * 通过id查询
+	  * Tìm kiếm theo id
 	 * @param id
 	 * @return
 	 */
@@ -164,7 +164,7 @@ public class JoaDemoController {
 		Result<JoaDemo> result = new Result<JoaDemo>();
 		JoaDemo joaDemo = joaDemoService.getById(id);
 		if(joaDemo==null) {
-			result.error500("未找到对应实体");
+			result.error500("Không tìm thấy thực thể tương ứng");
 		}else {
 			result.setResult(joaDemo);
 			result.setSuccess(true);
@@ -173,14 +173,14 @@ public class JoaDemoController {
 	}
 
   /**
-      * 导出excel
+      * Xuất excel
    *
    * @param request
    * @param response
    */
   @RequestMapping(value = "/exportXls")
   public ModelAndView exportXls(HttpServletRequest request, HttpServletResponse response) {
-      // Step.1 组装查询条件
+      // Step.1 Lắp ráp điều kiện truy vấn
       QueryWrapper<JoaDemo> queryWrapper = null;
       try {
           String paramsStr = request.getParameter("paramsStr");
@@ -193,19 +193,19 @@ public class JoaDemoController {
           e.printStackTrace();
       }
 
-      //Step.2 AutoPoi 导出Excel
+      //Step.2 AutoPoi Xuất Excel
       ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
       List<JoaDemo> pageList = joaDemoService.list(queryWrapper);
-      //导出文件名称
-      mv.addObject(NormalExcelConstants.FILE_NAME, "流程测试列表");
+      //Tên file xuất
+      mv.addObject(NormalExcelConstants.FILE_NAME, "Danh sách kiểm tra quy trình");
       mv.addObject(NormalExcelConstants.CLASS, JoaDemo.class);
-      mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("流程测试列表数据", "导出人:Jeecg", "导出信息"));
+      mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("Dữ liệu danh sách kiểm tra quy trình", "Người xuất:Jeecg", "Thông tin xuất"));
       mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
       return mv;
   }
 
   /**
-      * 通过excel导入数据
+      * Nhập dữ liệu qua Excel
    *
    * @param request
    * @param response
@@ -216,7 +216,7 @@ public class JoaDemoController {
       MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
       Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
       for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-          // 获取上传文件对象
+          // Lấy đối tượng tệp tải lên
           MultipartFile file = entity.getValue();
           ImportParams params = new ImportParams();
           params.setTitleRows(2);
@@ -227,10 +227,10 @@ public class JoaDemoController {
               for (JoaDemo joaDemoExcel : listJoaDemos) {
                   joaDemoService.save(joaDemoExcel);
               }
-              return Result.ok("文件导入成功！数据行数:" + listJoaDemos.size());
+              return Result.ok("Nhập tệp thành công! Số dòng dữ liệu:" + listJoaDemos.size());
           } catch (Exception e) {
               log.error(e.getMessage(),e);
-              return Result.error("文件导入失败:"+e.getMessage());
+              return Result.error("Nhập file thất bại:"+e.getMessage());
           } finally {
               try {
                   file.getInputStream().close();
@@ -239,7 +239,7 @@ public class JoaDemoController {
               }
           }
       }
-      return Result.ok("文件导入失败！");
+      return Result.ok("Nhập tệp thất bại!");
   }
 
 }

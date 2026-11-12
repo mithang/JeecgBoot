@@ -7,7 +7,7 @@ import org.jeecg.modules.airag.llm.entity.AiragModel;
 import java.util.List;
 
 /**
- * @Description: AiRag模型配置
+ * @Description: AiRag Cấu hình mô hình
  * @Author: jeecg-boot
  * @Date:   2025-02-14
  * @Version: V1.0
@@ -15,11 +15,11 @@ import java.util.List;
 public interface IAiragModelService extends IService<AiragModel> {
 
 	/**
-	 * 复制AI模型配置
+	 * Sao chép cấu hình mô hình AI
 	 *
-	 * @param id 原模型ID
+	 * @param id Mô hình gốc ID
 	 * @author scott
-	 * @since 2026-08-06 LHZP-1552 AI模型配置增加复制功能
+	 * @since 2026-08-06 LHZP-1552 AI Cấu hình mô hình bổ sung chức năng sao chép
 	 */
 	void copyModel(String id);
 

@@ -35,7 +35,7 @@ import com.alibaba.nacos.api.config.ConfigFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 
 /**
- *  sentinel配置类
+ *  sentinel Lớp cấu hình
  *
  * @author zyf
  * @date 2022-04-13
@@ -48,7 +48,7 @@ public class SentinelConfig {
 
 
     /**
-     * 流控规则
+     * Quy tắc kiểm soát luồng
      * @return
      */
     @Bean
@@ -61,7 +61,7 @@ public class SentinelConfig {
         return s -> JSON.parseArray(s, FlowRuleEntity.class);
     }
     /**
-     *  降级规则
+     *  Quy tắc hạ cấp
      * @return
      */
     @Bean
@@ -75,7 +75,7 @@ public class SentinelConfig {
     }
 
     /**
-     *   热点参数 规则
+     *   Quy tắc tham số hotspot
      * @return
      */
     @Bean
@@ -89,7 +89,7 @@ public class SentinelConfig {
     }
 
     /**
-     * 系统规则
+     * Quy tắc hệ thống
      * @return
      */
     @Bean
@@ -102,7 +102,7 @@ public class SentinelConfig {
         return s -> JSON.parseArray(s, SystemRuleEntity.class);
     }
     /**
-     * 授权规则
+     * Quy tắc ủy quyền
      * @return
      */
     @Bean
@@ -116,7 +116,7 @@ public class SentinelConfig {
     }
 
     /**
-     * 网关API
+     * Gateway API
      *
      * @return
      * @throws Exception
@@ -132,7 +132,7 @@ public class SentinelConfig {
     }
 
     /**
-     * 网关flowRule
+     * Gateway flowRule
      *
      * @return
      * @throws Exception

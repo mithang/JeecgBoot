@@ -37,12 +37,12 @@ import java.util.List;
 import java.util.Collections;
 
 /**
- * @Description: AiRag模型配置
+ * @Description: AiRag Cấu hình mô hình
  * @Author: jeecg-boot
  * @Date: 2025-02-14
  * @Version: V1.0
  */
-@Tag(name = "AiRag模型配置")
+@Tag(name = "AiRag Cấu hình mô hình")
 @RestController
 @RequestMapping("/airag/airagModel")
 @Slf4j
@@ -54,7 +54,7 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
     AIChatHandler aiChatHandler;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param airagModel
      * @param pageNo
@@ -68,16 +68,16 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
         QueryWrapper<AiragModel> queryWrapper = QueryGenerator.initQueryWrapper(airagModel, req.getParameterMap());
         Page<AiragModel> page = new Page<AiragModel>(pageNo, pageSize);
         IPage<AiragModel> pageList = airagModelService.page(page, queryWrapper);
-        //update-begin---author:scott ---date:20260506  for：【issues/9600】低权限用户可获取 LLM API Key——列表场景禁止回传 credential，避免有 airag:model:list 的角色一次性拖走所有模型的密钥。编辑场景密钥仍由 /queryById 单条返回-----------
+        //update-begin---author:scott ---date:20260506  for：【issues/9600】Người dùng quyền thấp có thể lấy LLM API Key — trong cảnh liệt kê cấm trả về credential, tránh việc có airag:model:list vai trò lấy đi toàn bộ khóa của mọi mô hình cùng lúc. Trong cảnh chỉnh sửa, khóa vẫn do /queryById trả về từng bản ghi-----------
         if (pageList != null && pageList.getRecords() != null) {
             pageList.getRecords().forEach(m -> m.setCredential(null));
         }
-        //update-end---author:scott ---date:20260506  for：【issues/9600】低权限用户可获取 LLM API Key——列表场景禁止回传 credential，避免有 airag:model:list 的角色一次性拖走所有模型的密钥。编辑场景密钥仍由 /queryById 单条返回-----------
+        //update-end---author:scott ---date:20260506  for：【issues/9600】Người dùng quyền thấp có thể lấy LLM API Key — trong cảnh liệt kê cấm trả về credential, tránh việc có airag:model:list vai trò lấy đi toàn bộ khóa của mọi mô hình cùng lúc. Trong cảnh chỉnh sửa, khóa vẫn do /queryById trả về từng bản ghi-----------
         return Result.OK(pageList);
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param airagModel
      * @return
@@ -85,35 +85,35 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
     @PostMapping(value = "/add")
     @RequiresPermissions("airag:model:add")
     public Result<String> add(@RequestBody AiragModel airagModel) {
-        // 验证 模型名称/模型类型/基础模型
-        AssertUtils.assertNotEmpty("模型名称不能为空", airagModel.getName());
-        AssertUtils.assertNotEmpty("模型类型不能为空", airagModel.getModelType());
-        AssertUtils.assertNotEmpty("基础模型不能为空", airagModel.getModelName());
-        // 默认未激活
+        // Kiểm chứng tên mô hình/Loại mô hình/Mô hình cơ sở
+        AssertUtils.assertNotEmpty("Tên mô hình không được trống", airagModel.getName());
+        AssertUtils.assertNotEmpty("Loại mô hình không được trống", airagModel.getModelType());
+        AssertUtils.assertNotEmpty("Mô hình cơ sở không được trống", airagModel.getModelName());
+        // Mặc định chưa kích hoạt
         if(oConvertUtils.isObjectEmpty(airagModel.getActivateFlag())){
             airagModel.setActivateFlag(0);
         }
         airagModelService.save(airagModel);
-        return Result.OK("添加成功！");
+        return Result.OK("Thêm thành công!");
     }
 
 	/**
-	 * 复制AI模型配置
+	 * Sao chép cấu hình mô hình AI
 	 *
-	 * @param id 原模型ID
-	 * @return 复制结果
+	 * @param id Mô hình gốc ID
+	 * @return Kết quả sao chép
 	 * @author scott
-	 * @since 2026-08-06 LHZP-1552 AI模型配置增加复制功能
+	 * @since 2026-08-06 LHZP-1552 AI Cấu hình mô hình bổ sung chức năng sao chép
 	 */
 	@PostMapping(value = "/copy/{id}")
 	@RequiresPermissions("airag:model:add")
 	public Result<String> copy(@PathVariable("id") String id) {
 		airagModelService.copyModel(id);
-		return Result.OK("复制成功！");
+		return Result.OK("Sao chép thành công!");
 	}
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param airagModel
      * @return
@@ -122,11 +122,11 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
     @RequiresPermissions("airag:model:edit")
     public Result<String> edit(@RequestBody AiragModel airagModel) {
         airagModelService.updateById(airagModel);
-        return Result.OK("编辑成功!");
+        return Result.OK("Chỉnh sửa thành công!");
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
@@ -134,23 +134,23 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
     @DeleteMapping(value = "/delete")
     @RequiresPermissions("airag:model:delete")
     public Result<String> delete(HttpServletRequest request, @RequestParam(name = "id", required = true) String id) {
-        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
-        //如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
+        //Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             AiragModel model = airagModelService.getById(id);
-            //获取当前租户
+            //Lấy tenant hiện tại
             String currentTenantId = TokenUtils.getTenantIdByRequest(request);
             if (null == model || !model.getTenantId().equals(currentTenantId)) {
-                return Result.error("删除AI模型失败，不能删除其他租户的AI模型！");
+                return Result.error("Xóa mô hình AI thất bại, không thể xóa mô hình AI của tenant khác!");
             }
         }
-        //update-end---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
+        //update-end---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
         airagModelService.removeById(id);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
@@ -160,14 +160,14 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
     public Result<AiragModel> queryById(@RequestParam(name = "id", required = true) String id) {
         AiragModel airagModel = airagModelService.getById(id);
         if (airagModel == null) {
-            return Result.error("未找到对应数据");
+            return Result.error("Không tìm thấy dữ liệu tương ứng");
         }
         return Result.OK(airagModel);
     }
 
-    //update-begin---author:scott ---date:20260506  for：【issues/9600】低权限用户可获取 LLM API Key——新增无权限的简化单条接口，返回模型基础信息但脱敏 credential，避免泄露 API Key-----------
+    //update-begin---author:scott ---date:20260506  for：【issues/9600】Người dùng quyền thấp có thể lấy LLM API Key — thêm API đơn giản không cần quyền cho từng bản ghi, trả về thông tin cơ bản của mô hình nhưng đã ẩn credential, tránh rò rỉ API Key-----------
     /**
-     * 通过id查询（简化版，无需权限），返回模型基础信息但脱敏 credential
+     * Truy vấn theo id (bản đơn giản, không cần quyền), trả về thông tin cơ bản của mô hình nhưng đã khử nhạy cảm credential
      *
      * @param id
      * @return
@@ -176,15 +176,15 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
     public Result<AiragModel> queryByIdSimple(@RequestParam(name = "id", required = true) String id) {
         AiragModel airagModel = airagModelService.getById(id);
         if (airagModel == null) {
-            return Result.error("未找到对应数据");
+            return Result.error("Không tìm thấy dữ liệu tương ứng");
         }
         airagModel.setCredential(null);
         return Result.OK(airagModel);
     }
-    //update-end---author:scott ---date:20260506  for：【issues/9600】低权限用户可获取 LLM API Key——新增无权限的简化单条接口，返回模型基础信息但脱敏 credential，避免泄露 API Key-----------
+    //update-end---author:scott ---date:20260506  for：【issues/9600】Người dùng quyền thấp có thể lấy LLM API Key — thêm API đơn giản không cần quyền cho từng bản ghi, trả về thông tin cơ bản của mô hình nhưng đã ẩn credential, tránh rò rỉ API Key-----------
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      * @param airagModel
@@ -192,11 +192,11 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
     @RequestMapping(value = "/exportXls")
     @RequiresPermissions("airag:model:exportXls")
     public ModelAndView exportXls(HttpServletRequest request, AiragModel airagModel) {
-        return super.exportXls(request, airagModel, AiragModel.class, "AiRag模型配置");
+        return super.exportXls(request, airagModel, AiragModel.class, "AiRag Cấu hình mô hình");
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -211,11 +211,11 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
     @PostMapping(value = "/test")
     @RequiresPermissions("airag:model:test")
     public Result<?> test(@RequestBody AiragModel airagModel) {
-        // 验证 模型名称/模型类型/基础模型
-        AssertUtils.assertNotEmpty("模型名称不能为空", airagModel.getName());
-        AssertUtils.assertNotEmpty("模型类型不能为空", airagModel.getModelType());
-        AssertUtils.assertNotEmpty("基础模型不能为空", airagModel.getModelName());
-        //测试连接默认为已激活状态
+        // Kiểm chứng tên mô hình/Loại mô hình/Mô hình cơ sở
+        AssertUtils.assertNotEmpty("Tên mô hình không được trống", airagModel.getName());
+        AssertUtils.assertNotEmpty("Loại mô hình không được trống", airagModel.getModelType());
+        AssertUtils.assertNotEmpty("Mô hình cơ sở không được trống", airagModel.getModelName());
+        //Kết nối kiểm tra mặc định ở trạng thái đã kích hoạt
         airagModel.setActivateFlag(1);
         try {
             if(LLMConsts.MODEL_TYPE_LLM.equals(airagModel.getModelType())){
@@ -224,13 +224,13 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
                 AiModelOptions aiModelOptions = EmbeddingHandler.buildModelOptions(airagModel);
                 EmbeddingModel embeddingModel = AiModelFactory.createEmbeddingModel(aiModelOptions);
                 embeddingModel.embed("test text");
-            //update-begin---author:wangshuai---date:2026-01-07---for:【QQYUN-12145】【AI】AI 绘画创作---=
+            //update-begin---author:wangshuai---date:2026-01-07---for:【QQYUN-12145】【AI】Sáng tạo hội họa bằng AI---=
             }else if(LLMConsts.MODEL_TYPE_IMAGE.equals(airagModel.getModelType())){
                 AIChatParams aiChatParams = new AIChatParams();
-				//update-begin---author:scott ---date:20260810  for：图片模型测试连接使用快速参数-----------
+				//update-begin---author:scott ---date:20260810  for: Kiểm tra kết nối mô hình hình ảnh dùng tham số nhanh-----------
 				AiragModelTestParamsResolver.applyImageTestParams(aiChatParams, airagModel.getProvider(), airagModel.getModelName());
-				//update-end---author:scott ---date:20260810  for：图片模型测试连接使用快速参数-----------
-                //update-begin---author:wangshuai---date:2026-03-02---for:兼容图生图模型测试---
+				//update-end---author:scott ---date:20260810  for: Kiểm tra kết nối mô hình hình ảnh dùng tham số nhanh-----------
+                //update-begin---author:wangshuai---date:2026-03-02---for:Tương thích kiểm thử mô hình chuyển ảnh thành ảnh---
                 String modelName = airagModel.getModelName();
                 if(ImageEditEnum.isImageEditModel(modelName)){
                     List<String> images = new ArrayList<>();
@@ -239,14 +239,14 @@ public class AiragModelController extends JeecgController<AiragModel, IAiragMode
                 }else{
                     aiChatHandler.imageGenerate(airagModel, "Generate a picture of a cartoon cat", aiChatParams);
                 }
-                //update-end---author:wangshuai---date:2026-03-02---for:兼容图生图模型测试---
+                //update-end---author:wangshuai---date:2026-03-02---for:Tương thích kiểm thử mô hình chuyển ảnh thành ảnh---
             }
-            //update-end---author:wangshuai---date:2026-01-07---for:【QQYUN-12145】【AI】AI 绘画创作---
+            //update-end---author:wangshuai---date:2026-01-07---for:【QQYUN-12145】【AI】Sáng tạo hội họa bằng AI---
         }catch (Exception e){
-            log.error("测试模型连接失败", e);
+            log.error("Kiểm tra kết nối mô hình thất bại", e);
             return Result.error(e.getMessage());
         }
-        // 测试成功激活数据
+        // Kiểm tra thành công, kích hoạt dữ liệu
         airagModel.setActivateFlag(1);
         airagModelService.updateById(airagModel);
         return Result.OK("");

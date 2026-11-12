@@ -33,7 +33,7 @@ import java.util.Map;
 
 
 /**
- * @Description: AIRag知识库
+ * @Description: AIRag Kho tri thức
  * @Author: jeecg-boot
  * @Date: 2025-02-18
  * @Version: V1.0
@@ -52,7 +52,7 @@ public class AiragKnowledgeController {
     EmbeddingHandler embeddingHandler;
 
     /**
-     * 分页列表查询知识库
+     * Truy vấn danh sách phân trang kho tri thức
      *
      * @param airagKnowledge
      * @param pageNo
@@ -73,9 +73,9 @@ public class AiragKnowledgeController {
     }
 
     /**
-     * 添加知识库
+     * Thêm kho tri thức
      *
-     * @param airagKnowledge 知识库
+     * @param airagKnowledge Kho tri thức
      * @return
      * @author chenrui
      * @date 2025/2/18 17:09
@@ -88,13 +88,13 @@ public class AiragKnowledgeController {
             airagKnowledge.setType(LLMConsts.KNOWLEDGE_TYPE_KNOWLEDGE);
         }
         airagKnowledgeService.save(airagKnowledge);
-        return Result.OK("添加成功！");
+        return Result.OK("Thêm thành công!");
     }
 
     /**
-     * 编辑知识库
+     * Chỉnh sửa kho tri thức
      *
-     * @param airagKnowledge 知识库
+     * @param airagKnowledge Kho tri thức
      * @return
      * @author chenrui
      * @date 2025/2/18 17:09
@@ -105,7 +105,7 @@ public class AiragKnowledgeController {
     public Result<String> edit(@RequestBody AiragKnowledge airagKnowledge) {
         AiragKnowledge airagKnowledgeEntity = airagKnowledgeService.getById(airagKnowledge.getId());
         if (airagKnowledgeEntity == null) {
-            return Result.error("未找到对应数据");
+            return Result.error("Không tìm thấy dữ liệu tương ứng");
         }
         String oldEmbedId = airagKnowledgeEntity.getEmbedId();
         if(oConvertUtils.isEmpty(airagKnowledgeEntity.getType())) {
@@ -113,14 +113,14 @@ public class AiragKnowledgeController {
         }
         airagKnowledgeService.updateById(airagKnowledge);
         if (!oldEmbedId.equalsIgnoreCase(airagKnowledge.getEmbedId())) {
-            // 更新了模型,重建文档
+            // Đã cập nhật mô hình,Xây dựng lại tài liệu
             airagKnowledgeDocService.rebuildDocumentByKnowId(airagKnowledge.getId());
         }
-        return Result.OK("编辑成功!");
+        return Result.OK("Chỉnh sửa thành công!");
     }
 
     /**
-     * 重建知识库
+     * Xây dựng lại kho tri thức
      *
      * @param knowIds
      * @return
@@ -138,7 +138,7 @@ public class AiragKnowledgeController {
     }
 
     /**
-     * 通过id删除知识库
+     * Xóa kho tri thức theo id
      *
      * @param id
      * @return
@@ -149,24 +149,24 @@ public class AiragKnowledgeController {
     @DeleteMapping(value = "/delete")
     @RequiresPermissions("airag:knowledge:delete")
     public Result<String> delete(HttpServletRequest request, @RequestParam(name = "id", required = true) String id) {
-        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
-        //如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
+        //Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             AiragKnowledge know = airagKnowledgeService.getById(id);
-            //获取当前租户
+            //Lấy tenant hiện tại
             String currentTenantId = TokenUtils.getTenantIdByRequest(request);
             if (null == know || !know.getTenantId().equals(currentTenantId)) {
-                return Result.error("删除AI知识库失败，不能删除其他租户的AI知识库！");
+                return Result.error("Xóa kho tri thức AI thất bại, không thể xóa kho tri thức AI của tenant khác!");
             }
         }
-        //update-end---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
+        //update-end---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
         airagKnowledgeDocService.removeByKnowIds(Collections.singletonList(id));
         airagKnowledgeService.removeById(id);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 通过id查询知识库
+     * Truy vấn kho tri thức theo id
      *
      * @param id
      * @return
@@ -177,13 +177,13 @@ public class AiragKnowledgeController {
     public Result<AiragKnowledge> queryById(@RequestParam(name = "id", required = true) String id) {
         AiragKnowledge airagKnowledge = airagKnowledgeService.getById(id);
         if (airagKnowledge == null) {
-            return Result.error("未找到对应数据");
+            return Result.error("Không tìm thấy dữ liệu tương ứng");
         }
         return Result.OK(airagKnowledge);
     }
 
     /**
-     * 文档分页查询
+     * Truy vấn phân trang tài liệu
      *
      * @param airagKnowledgeDoc
      * @param pageNo
@@ -199,7 +199,7 @@ public class AiragKnowledgeController {
                                                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                                                   HttpServletRequest req) {
-        AssertUtils.assertNotEmpty("请先选择知识库", airagKnowledgeDoc.getKnowledgeId());
+        AssertUtils.assertNotEmpty("Vui lòng chọn kho tri thức trước", airagKnowledgeDoc.getKnowledgeId());
         QueryWrapper<AiragKnowledgeDoc> queryWrapper = QueryGenerator.initQueryWrapper(airagKnowledgeDoc, req.getParameterMap());
         Page<AiragKnowledgeDoc> page = new Page<>(pageNo, pageSize);
         IPage<AiragKnowledgeDoc> pageList = airagKnowledgeDocService.page(page, queryWrapper);
@@ -207,9 +207,9 @@ public class AiragKnowledgeController {
     }
 
     /**
-     * 新增或编辑文档
+     * Thêm mới hoặc chỉnh sửa tài liệu
      *
-     * @param airagKnowledgeDoc 知识库文档
+     * @param airagKnowledgeDoc Tài liệu kho tri thức
      * @return
      * @author chenrui
      * @date 2025/2/18 15:47
@@ -222,7 +222,7 @@ public class AiragKnowledgeController {
 
 
     /**
-     * 从压缩包导入文档
+     * Nhập tài liệu từ gói nén
      * @return
      * @author chenrui
      * @date 2025/3/20 11:29
@@ -235,7 +235,7 @@ public class AiragKnowledgeController {
     }
 
     /**
-     * 通过文档库查询导入任务列表
+     * Truy vấn danh sách nhiệm vụ nhập qua kho tài liệu
      * @param knowId
      * @return
      * @author chenrui
@@ -247,9 +247,9 @@ public class AiragKnowledgeController {
     }
 
     /**
-     * 重新向量化文档
+     * Vector hóa lại tài liệu
      *
-     * @param docIds 文档id集合
+     * @param docIds Tập hợp id tài liệu
      * @return
      * @author chenrui
      * @date 2025/2/18 15:47
@@ -261,7 +261,7 @@ public class AiragKnowledgeController {
     }
 
     /**
-     * 批量删除文档
+     * Xóa hàng loạt tài liệu
      *
      * @param ids
      * @return
@@ -273,25 +273,25 @@ public class AiragKnowledgeController {
     @RequiresPermissions("airag:knowledge:doc:deleteBatch")
     public Result<String> deleteDocumentBatch(HttpServletRequest request, @RequestParam(name = "ids", required = true) String ids) {
         List<String> idsList = Arrays.asList(ids.split(","));
-        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
-        //如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
+        //Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             List<AiragKnowledgeDoc> docList = airagKnowledgeDocService.listByIds(idsList);
-            //获取当前租户
+            //Lấy tenant hiện tại
             String currentTenantId = TokenUtils.getTenantIdByRequest(request);
             docList.forEach(airagKnowledgeDoc -> {
                 if (null == airagKnowledgeDoc || !airagKnowledgeDoc.getTenantId().equals(currentTenantId)) {
-                    throw new IllegalArgumentException("删除AI知识库文档失败，不能删除其他租户的AI知识库文档！");
+                    throw new IllegalArgumentException("Xóa tài liệu kho tri thức AI thất bại, không thể xóa tài liệu kho tri thức AI của tenant khác!");
                 }
             });
         }
-        //update-end---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
+        //update-end---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
         airagKnowledgeDocService.removeDocByIds(idsList);
-        return Result.OK("批量删除成功！");
+        return Result.OK("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 清空知识库文档
+     * Xóa sạch tài liệu kho tri thức
      *
      * @param
      * @return
@@ -300,27 +300,27 @@ public class AiragKnowledgeController {
     @DeleteMapping(value = "/doc/deleteAll")
     @RequiresPermissions("airag:knowledge:doc:deleteAll")
     public Result<?> deleteDocumentAll(HttpServletRequest request, @RequestParam(name = "knowId") String knowId) {
-        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
-        //如果是saas隔离的情况下，判断当前租户id是否是当前租户下的
+        //update-begin---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
+        //Nếu trong trường hợp cách ly SaaS, xác định id tenant hiện tại có thuộc tenant hiện tại hay không
         if (MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
             AiragKnowledge know = airagKnowledgeService.getById(knowId);
-            //获取当前租户
+            //Lấy tenant hiện tại
             String currentTenantId = TokenUtils.getTenantIdByRequest(request);
             if (null == know || !know.getTenantId().equals(currentTenantId)) {
-                return Result.error("删除AI知识库失败，不能删除其他租户的AI知识库！");
+                return Result.error("Xóa kho tri thức AI thất bại, không thể xóa kho tri thức AI của tenant khác!");
             }
         }
-        //update-end---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
+        //update-end---author:chenrui ---date:20250606  for：[issues/8337]Về vấn đề quyền dữ liệu của danh sách công việc AI #8337------------
         return airagKnowledgeDocService.deleteAllByKnowId(knowId);
     }
 
     /**
-     * 命中测试
+     * Kiểm tra hit
      *
-     * @param knowId     知识库id
-     * @param queryText  查询内容
-     * @param topNumber  最多返回条数
-     * @param similarity 最小分数
+     * @param knowId     Kho tri thức id
+     * @param queryText  Nội dung truy vấn
+     * @param topNumber  Số lượng tối đa trả về
+     * @param similarity Điểm tối thiểu
      * @return
      * @author chenrui
      * @date 2025/2/18 17:09
@@ -335,12 +335,12 @@ public class AiragKnowledgeController {
     }
 
     /**
-     * 向量查询
+     * Truy vấn vector
      *
-     * @param knowIds    知识库ids
-     * @param queryText  查询内容
-     * @param topNumber  最多返回条数
-     * @param similarity 最小分数
+     * @param knowIds    Kho tri thức ids
+     * @param queryText  Nội dung truy vấn
+     * @param topNumber  Số lượng tối đa trả về
+     * @param similarity Điểm tối thiểu
      * @return
      * @author chenrui
      * @date 2025/2/18 17:09
@@ -355,7 +355,7 @@ public class AiragKnowledgeController {
     }
 
     /**
-     * 通过ids批量查询知识库
+     * Truy vấn hàng loạt kho tri thức theo ids
      *
      * @param ids
      * @return
@@ -370,50 +370,50 @@ public class AiragKnowledgeController {
     }
     
     /**
-     * 添加记忆
+     * Thêm bộ nhớ
      *
      * @param airagKnowledgeDoc
      * @return
      */
-    @Operation(summary = "添加记忆")
+    @Operation(summary = "Thêm bộ nhớ")
     @PostMapping(value = "/plugin/add")
     public Result<?> add(@RequestBody AiragKnowledgeDoc airagKnowledgeDoc, HttpServletRequest request) {
         if (oConvertUtils.isEmpty(airagKnowledgeDoc.getKnowledgeId())) {
-            return Result.error("知识库ID不能为空");
+            return Result.error("ID kho tri thức không được trống");
         }
         if (oConvertUtils.isEmpty(airagKnowledgeDoc.getContent())) {
-            return Result.error("内容不能为空");
+            return Result.error("Nội dung không được trống");
         }
 
-        // 设置默认值
+        // Đặt giá trị mặc định
         if (oConvertUtils.isEmpty(airagKnowledgeDoc.getTitle())) {
-            // 取内容前20个字作为标题
+            // Lấy 20 ký tự đầu của nội dung làm tiêu đề
             String content = airagKnowledgeDoc.getContent();
             String title = content.length() > 20 ? content.substring(0, 20) : content;
             airagKnowledgeDoc.setTitle(title);
         }
 
         airagKnowledgeDoc.setType(LLMConsts.KNOWLEDGE_DOC_TYPE_TEXT);
-        // 保存并构建向量
+        // Lưu và xây dựng vector
         return airagKnowledgeDocService.editDocument(airagKnowledgeDoc);
     }
 
     /**
-     * 查询记忆
+     * Truy vấn bộ nhớ
      *
      * @param params
      * @return
      */
-    @Operation(summary = "查询记忆")
+    @Operation(summary = "Truy vấn bộ nhớ")
     @PostMapping(value = "/plugin/query")
     public Result<?> pluginQuery(@RequestBody Map<String, Object> params, HttpServletRequest request) {
         String knowId = (String) params.get("knowledgeId");
         String queryText = (String) params.get("queryText");
         if (oConvertUtils.isEmpty(knowId)) {
-            return Result.error("知识库ID不能为空");
+            return Result.error("ID kho tri thức không được trống");
         }
         if (oConvertUtils.isEmpty(queryText)) {
-            return Result.error("查询内容不能为空");
+            return Result.error("Nội dung truy vấn không được trống");
         }
         LambdaQueryWrapper<AiragKnowledgeDoc> queryWrapper = new LambdaQueryWrapper<AiragKnowledgeDoc>();
         queryWrapper.eq(AiragKnowledgeDoc::getKnowledgeId, knowId);
@@ -421,7 +421,7 @@ public class AiragKnowledgeController {
         if(count == 0){
             return Result.ok("");
         }
-        // 默认查询前5条
+        // Mặc định truy vấn 5 bản ghi đầu
         KnowledgeSearchResult searchResp = embeddingHandler.embeddingSearch(Collections.singletonList(knowId), queryText, (int) count, null);
         return Result.ok(searchResp);
     }

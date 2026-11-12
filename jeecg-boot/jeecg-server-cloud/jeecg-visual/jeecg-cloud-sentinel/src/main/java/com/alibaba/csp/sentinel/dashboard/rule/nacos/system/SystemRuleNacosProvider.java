@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  加载系统规则
+ *  Tải quy tắc hệ thống
  *
  * @author zyf
  * @date 2022-04-13

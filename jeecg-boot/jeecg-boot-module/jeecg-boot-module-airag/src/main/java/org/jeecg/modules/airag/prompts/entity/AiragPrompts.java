@@ -33,72 +33,72 @@ import lombok.experimental.Accessors;
 public class AiragPrompts implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键ID*/
+	/**Khóa chính ID*/
 	@TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键ID")
+    @Schema(description = "Khóa chính ID")
     private java.lang.String id;
-	/**提示词名称*/
-	@Excel(name = "提示词名称", width = 15)
-    @Schema(description = "提示词名称")
+	/**Tên prompt*/
+	@Excel(name = "Tên prompt", width = 15)
+    @Schema(description = "Tên prompt")
     private java.lang.String name;
-	/**提示词功能描述*/
-	@Excel(name = "提示词功能描述", width = 15)
-    @Schema(description = "提示词功能描述")
+	/**Mô tả chức năng của prompt*/
+	@Excel(name = "Mô tả chức năng của prompt", width = 15)
+    @Schema(description = "Mô tả chức năng của prompt")
     private java.lang.String description;
-	/**提示词模板内容，支持变量占位符如 {{variable}}*/
-	@Excel(name = "提示词模板内容，支持变量占位符如 {{variable}}", width = 15)
-    @Schema(description = "提示词模板内容，支持变量占位符如 {{variable}}")
+	/**Nội dung mẫu prompt, hỗ trợ placeholder biến như {{variable}}*/
+	@Excel(name = "Nội dung mẫu prompt, hỗ trợ placeholder biến như {{variable}}", width = 15)
+    @Schema(description = "Nội dung mẫu prompt, hỗ trợ placeholder biến như {{variable}}")
     private java.lang.String content;
-	/**提示词分类*/
-	@Excel(name = "提示词分类", width = 15)
-    @Schema(description = "提示词分类")
+	/**Phân loại prompt*/
+	@Excel(name = "Phân loại prompt", width = 15)
+    @Schema(description = "Phân loại prompt")
     private java.lang.String category;
-	/**标签，多个逗号分割*/
-	@Excel(name = "标签，多个逗号分割", width = 15)
-    @Schema(description = "标签，多个逗号分割")
+	/**Nhãn, phân tách nhiều nhãn bằng dấu phẩy*/
+	@Excel(name = "Nhãn, phân tách nhiều nhãn bằng dấu phẩy", width = 15)
+    @Schema(description = "Nhãn, phân tách nhiều nhãn bằng dấu phẩy")
     private java.lang.String tags;
-	/**适配的大模型ID*/
-	@Excel(name = "适配的大模型ID", width = 15)
-    @Schema(description = "适配的大模型ID")
+	/**Mô hình lớn tương thích ID*/
+	@Excel(name = "Mô hình lớn tương thích ID", width = 15)
+    @Schema(description = "Mô hình lớn tương thích ID")
     private java.lang.String modelId;
-	/**大模型的参数配置*/
-	@Excel(name = "大模型的参数配置", width = 15)
-    @Schema(description = "大模型的参数配置")
+	/**Cấu hình tham số của mô hình lớn*/
+	@Excel(name = "Cấu hình tham số của mô hình lớn", width = 15)
+    @Schema(description = "Cấu hình tham số của mô hình lớn")
     private java.lang.String modelParam;
-	/**状态（0:未发布 1:已发布）*/
-	@Excel(name = "状态（0:未发布 1:已发布）", width = 15)
-    @Schema(description = "状态（0:未发布 1:已发布）")
+	/**Trạng thái (0:Chưa phát hành 1:Đã phát hành)*/
+	@Excel(name = "Trạng thái (0:Chưa phát hành 1:Đã phát hành)", width = 15)
+    @Schema(description = "Trạng thái (0:Chưa phát hành 1:Đã phát hành)")
     private java.lang.String status;
-	/**版本号(格式 0.0.1)*/
-	@Excel(name = "版本号(格式 0.0.1)", width = 15)
-    @Schema(description = "版本号(格式 0.0.1)")
+	/**Số phiên bản(Định dạng 0.0.1)*/
+	@Excel(name = "Số phiên bản(Định dạng 0.0.1)", width = 15)
+    @Schema(description = "Số phiên bản(Định dạng 0.0.1)")
     private java.lang.String version;
-	/**删除状态（0未删除 1已删除）*/
-	@Excel(name = "删除状态（0未删除 1已删除）", width = 15)
-    @Schema(description = "删除状态（0未删除 1已删除）")
+	/**Trạng thái xóa (0: chưa xóa, 1: đã xóa)*/
+	@Excel(name = "Trạng thái xóa (0: chưa xóa, 1: đã xóa)", width = 15)
+    @Schema(description = "Trạng thái xóa (0: chưa xóa, 1: đã xóa)")
     @TableLogic
     private java.lang.Integer delFlag;
-	/**创建人*/
-    @Schema(description = "创建人")
+	/**Người tạo*/
+    @Schema(description = "Người tạo")
     private java.lang.String createBy;
-	/**创建日期*/
+	/**Ngày tạo*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建日期")
+    @Schema(description = "Ngày tạo")
     private java.util.Date createTime;
-	/**更新人*/
-    @Schema(description = "更新人")
+	/**Người cập nhật*/
+    @Schema(description = "Người cập nhật")
     private java.lang.String updateBy;
-	/**更新日期*/
+	/**Ngày cập nhật*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新日期")
+    @Schema(description = "Ngày cập nhật")
     private java.util.Date updateTime;
-	/**所属部门*/
-    @Schema(description = "所属部门")
+	/**Phòng ban trực thuộc*/
+    @Schema(description = "Phòng ban trực thuộc")
     private java.lang.String sysOrgCode;
-	/**租户id*/
-	@Excel(name = "租户id", width = 15)
-    @Schema(description = "租户id")
+	/**Tenant id*/
+	@Excel(name = "Tenant id", width = 15)
+    @Schema(description = "Tenant id")
     private java.lang.String tenantId;
 }

@@ -17,91 +17,91 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
- * 商品管理模拟接口
- * 用于AI Agent通过工具帮助用户查询商品并采购的业务演示
+ * API mô phỏng quản lý sản phẩm
+ * Demo nghiệp vụ để AI Agent giúp người dùng tra cứu sản phẩm và mua hàng thông qua công cụ
  * @Author: chenrui
  * @Date: 2025-11-06
  */
-@Tag(name = "商品管理Demo")
+@Tag(name = "Quản lý sản phẩm Demo")
 @RestController
 @RequestMapping("/demo/shop")
 @Slf4j
 public class ShopController {
     
     /**
-     * 商品数据存储(内存)
+     * Lưu trữ dữ liệu sản phẩm(Bộ nhớ)
      */
     private final Map<String, Product> productStore = new ConcurrentHashMap<>();
     
     /**
-     * 订单数据存储(内存)
+     * Lưu trữ dữ liệu đơn hàng(Bộ nhớ)
      */
     private final Map<String, Order> orderStore = new ConcurrentHashMap<>();
     
     /**
-     * 订单ID生成器
+     * Bộ tạo ID đơn hàng
      */
     private final AtomicInteger orderIdGenerator = new AtomicInteger(1000);
     
     /**
-     * 初始化商品数据
+     * Khởi tạo dữ liệu sản phẩm
      *
      * @author chenrui
      * @date 2025/11/6 14:30
      */
     @PostConstruct
     public void initProducts() {
-        // 电子产品
-        productStore.put("P001", new Product("P001", "iPhone 15 Pro", new BigDecimal("7999.00"), "电子产品", "Apple最新旗舰手机,6.1英寸屏幕,钛金属边框", 50));
-        productStore.put("P002", new Product("P002", "MacBook Pro 14", new BigDecimal("14999.00"), "电子产品", "M3 Pro芯片,16GB内存,512GB存储", 30));
-        productStore.put("P003", new Product("P003", "AirPods Pro 2", new BigDecimal("1899.00"), "电子产品", "主动降噪无线耳机,支持空间音频", 100));
-        productStore.put("P004", new Product("P004", "iPad Air", new BigDecimal("4799.00"), "电子产品", "10.9英寸液晶显示屏,M1芯片", 60));
+        // Sản phẩm điện tử
+        productStore.put("P001", new Product("P001", "iPhone 15 Pro", new BigDecimal("7999.00"), "Sản phẩm điện tử", "Apple Điện thoại flagship mới nhất,6.1 Màn hình inch,Viền kim loại titan", 50));
+        productStore.put("P002", new Product("P002", "MacBook Pro 14", new BigDecimal("14999.00"), "Sản phẩm điện tử", "M3 Pro Chip,16GB Bộ nhớ,512GB Dung lượng lưu trữ", 30));
+        productStore.put("P003", new Product("P003", "AirPods Pro 2", new BigDecimal("1899.00"), "Sản phẩm điện tử", "Tai nghe không dây chống ồn chủ động,Hỗ trợ âm thanh không gian", 100));
+        productStore.put("P004", new Product("P004", "iPad Air", new BigDecimal("4799.00"), "Sản phẩm điện tử", "10.9 Màn hình LCD inch,M1 Chip", 60));
         
-        // 图书
-        productStore.put("B001", new Product("B001", "Java核心技术卷I", new BigDecimal("119.00"), "图书", "Java编程经典教材,适合初学者和进阶开发者", 200));
-        productStore.put("B002", new Product("B002", "深入理解计算机系统", new BigDecimal("139.00"), "图书", "CSAPP经典教材,计算机系统必读书籍", 150));
-        productStore.put("B003", new Product("B003", "设计模式", new BigDecimal("89.00"), "图书", "软件设计经典著作,GoF四人组著作", 180));
+        // Sách
+        productStore.put("B001", new Product("B001", "Java Tập công nghệ cốt lõi I", new BigDecimal("119.00"), "Sách", "Java Giáo trình lập trình kinh điển,Phù hợp với người mới bắt đầu và nhà phát triển nâng cao", 200));
+        productStore.put("B002", new Product("B002", "Hiểu sâu về hệ thống máy tính", new BigDecimal("139.00"), "Sách", "CSAPP Giáo trình kinh điển,Sách nên đọc về hệ thống máy tính", 150));
+        productStore.put("B003", new Product("B003", "Mẫu thiết kế", new BigDecimal("89.00"), "Sách", "Tác phẩm kinh điển về thiết kế phần mềm,GoF Tác phẩm của nhóm bốn tác giả (GoF)", 180));
         
-        // 生活用品
-        productStore.put("L001", new Product("L001", "小米电动牙刷", new BigDecimal("199.00"), "生活用品", "声波震动,IPX7防水,续航18天", 300));
-        productStore.put("L002", new Product("L002", "戴森吹风机", new BigDecimal("2990.00"), "生活用品", "快速干发,智能温控,保护头发", 80));
-        productStore.put("L003", new Product("L003", "膳魔师保温杯", new BigDecimal("259.00"), "生活用品", "真空保温,304不锈钢,保温12小时", 500));
+        // Đồ dùng sinh hoạt
+        productStore.put("L001", new Product("L001", "Bàn chải điện Xiaomi", new BigDecimal("199.00"), "Đồ dùng sinh hoạt", "Rung sóng âm,IPX7 Chống nước,Thời lượng pin 18 ngày", 300));
+        productStore.put("L002", new Product("L002", "Máy sấy tóc Dyson", new BigDecimal("2990.00"), "Đồ dùng sinh hoạt", "Sấy khô tóc nhanh,Điều khiển nhiệt độ thông minh,Bảo vệ tóc", 80));
+        productStore.put("L003", new Product("L003", "Bình giữ nhiệt Thermos", new BigDecimal("259.00"), "Đồ dùng sinh hoạt", "Giữ nhiệt chân không,304 Thép không gỉ,Giữ nhiệt 12 giờ", 500));
         
-        // 食品
-        productStore.put("F001", new Product("F001", "三只松鼠坚果礼盒", new BigDecimal("159.00"), "食品", "混合坚果大礼包,1500g装", 400));
-        productStore.put("F002", new Product("F002", "茅台飞天53度", new BigDecimal("2899.00"), "食品", "贵州茅台酒,500ml", 20));
-        productStore.put("F003", new Product("F003", "星巴克咖啡豆", new BigDecimal("128.00"), "食品", "中度烘焙,派克市场,250g", 250));
+        // Thực phẩm
+        productStore.put("F001", new Product("F001", "Hộp quà hạt hỗn hợp Three Squirrels", new BigDecimal("159.00"), "Thực phẩm", "Gói quà lớn hạt hỗn hợp,1500g gói", 400));
+        productStore.put("F002", new Product("F002", "Rượu Moutai Feitian 53 độ", new BigDecimal("2899.00"), "Thực phẩm", "Rượu Moutai Quý Châu,500ml", 20));
+        productStore.put("F003", new Product("F003", "Hạt cà phê Starbucks", new BigDecimal("128.00"), "Thực phẩm", "Rang vừa,Pike Place,250g", 250));
         
-        log.info("商品数据初始化完成,共{}个商品", productStore.size());
+        log.info("Khởi tạo dữ liệu sản phẩm hoàn tất,Tổng cộng{}sản phẩm", productStore.size());
     }
     
     /**
-     * 查询商品列表
+     * Truy vấn danh sách sản phẩm
      *
-     * @param category 商品分类(可选)
-     * @param keyword 搜索关键词(可选)
-     * @return 商品列表
+     * @param category Phân loại sản phẩm(Tùy chọn)
+     * @param keyword Từ khóa tìm kiếm(Tùy chọn)
+     * @return Danh sách sản phẩm
      * @author chenrui
      * @date 2025/11/6 14:30
      */
-    @Operation(summary = "查询商品列表", description = "支持按分类和关键词搜索")
+    @Operation(summary = "Truy vấn danh sách sản phẩm", description = "Hỗ trợ tìm kiếm theo danh mục và từ khóa")
     @GetMapping("/products")
     public Result<List<Product>> getProducts(
-            @Parameter(description = "商品分类") @RequestParam(required = false) String category,
-            @Parameter(description = "搜索关键词") @RequestParam(required = false) String keyword) {
+            @Parameter(description = "Phân loại sản phẩm") @RequestParam(required = false) String category,
+            @Parameter(description = "Từ khóa tìm kiếm") @RequestParam(required = false) String keyword) {
         
-        log.info("查询商品列表 - 分类: {}, 关键词: {}", category, keyword);
+        log.info("Truy vấn danh sách sản phẩm - Phân loại: {}, Từ khóa: {}", category, keyword);
         
         List<Product> products = new ArrayList<>(productStore.values());
         
-        // 按分类过滤
+        // Lọc theo danh mục
         if (category != null && !category.trim().isEmpty()) {
             products = products.stream()
                     .filter(p -> category.equals(p.getCategory()))
                     .collect(Collectors.toList());
         }
         
-        // 按关键词过滤(搜索商品名称和描述)
+        // Lọc theo từ khóa(Tìm kiếm tên và mô tả sản phẩm)
         if (keyword != null && !keyword.trim().isEmpty()) {
             String searchKey = keyword.toLowerCase();
             products = products.stream()
@@ -110,31 +110,31 @@ public class ShopController {
                     .collect(Collectors.toList());
         }
         
-        // 按价格排序
+        // Sắp xếp theo giá
         products.sort(Comparator.comparing(Product::getPrice));
         
-        log.info("查询到{}个商品", products.size());
+        log.info("Truy vấn được{}sản phẩm", products.size());
         return Result.OK(products);
     }
     
     /**
-     * 查询商品库存
+     * Truy vấn tồn kho sản phẩm
      *
-     * @param productId 商品ID
-     * @return 库存信息
+     * @param productId Sản phẩm ID
+     * @return Thông tin tồn kho
      * @author chenrui
      * @date 2025/11/6 14:30
      */
-    @Operation(summary = "查询商品库存", description = "根据商品ID查询库存数量")
+    @Operation(summary = "Truy vấn tồn kho sản phẩm", description = "Truy vấn số lượng tồn kho theo ID sản phẩm")
     @GetMapping("/stock")
     public Result<Map<String, Object>> getStock(
-            @Parameter(description = "商品ID", required = true) @RequestParam String productId) {
+            @Parameter(description = "Sản phẩm ID", required = true) @RequestParam String productId) {
         
-        log.info("查询商品库存 - 商品ID: {}", productId);
+        log.info("Truy vấn tồn kho sản phẩm - Sản phẩm ID: {}", productId);
         
         Product product = productStore.get(productId);
         if (product == null) {
-            return Result.error("商品不存在: " + productId);
+            return Result.error("Sản phẩm không tồn tại: " + productId);
         }
         
         Map<String, Object> stockInfo = new HashMap<>();
@@ -147,41 +147,41 @@ public class ShopController {
     }
     
     /**
-     * 购买商品(下单)
+     * Mua sản phẩm(Đặt hàng)
      *
-     * @param productId 商品ID
-     * @param quantity 购买数量
-     * @param userId 用户ID(可选)
-     * @return 订单信息
+     * @param productId Sản phẩm ID
+     * @param quantity Số lượng mua
+     * @param userId Người dùng ID(Tùy chọn)
+     * @return Thông tin đơn hàng
      * @author chenrui
      * @date 2025/11/6 14:30
      */
-    @Operation(summary = "购买商品", description = "创建订单,但不立即扣减库存")
+    @Operation(summary = "Mua sản phẩm", description = "Tạo đơn hàng,nhưng không trừ tồn kho ngay")
     @PostMapping("/purchase")
     public Result<Order> purchase(
-            @Parameter(description = "商品ID", required = true) @RequestParam String productId,
-            @Parameter(description = "购买数量", required = true) @RequestParam Integer quantity,
-            @Parameter(description = "用户ID") @RequestParam(required = false) String userId) {
+            @Parameter(description = "Sản phẩm ID", required = true) @RequestParam String productId,
+            @Parameter(description = "Số lượng mua", required = true) @RequestParam Integer quantity,
+            @Parameter(description = "Người dùng ID") @RequestParam(required = false) String userId) {
         
-        log.info("购买商品 - 商品ID: {}, 数量: {}, 用户: {}", productId, quantity, userId);
+        log.info("Mua sản phẩm - Sản phẩm ID: {}, Số lượng: {}, Người dùng: {}", productId, quantity, userId);
         
-        // 参数校验
+        // Kiểm tra tham số
         if (quantity == null || quantity <= 0) {
-            return Result.error("购买数量必须大于0");
+            return Result.error("Số lượng mua phải lớn hơn 0");
         }
         
-        // 查询商品
+        // Truy vấn sản phẩm
         Product product = productStore.get(productId);
         if (product == null) {
-            return Result.error("商品不存在: " + productId);
+            return Result.error("Sản phẩm không tồn tại: " + productId);
         }
         
-        // 检查库存
+        // Kiểm tra tồn kho
         if (product.getStock() < quantity) {
-            return Result.error("库存不足,当前库存: " + product.getStock());
+            return Result.error("Tồn kho không đủ,Tồn kho hiện tại: " + product.getStock());
         }
         
-        // 创建订单
+        // Tạo đơn hàng
         String orderId = "O" + orderIdGenerator.incrementAndGet();
         BigDecimal totalAmount = product.getPrice().multiply(new BigDecimal(quantity));
         
@@ -198,60 +198,60 @@ public class ShopController {
         
         orderStore.put(orderId, order);
         
-        log.info("订单创建成功 - 订单ID: {}, 总金额: {}", orderId, totalAmount);
+        log.info("Tạo đơn hàng thành công - Đơn hàng ID: {}, Tổng số tiền: {}", orderId, totalAmount);
         return Result.OK(order);
     }
     
     /**
-     * 扣减商品库存
+     * Trừ tồn kho sản phẩm
      *
-     * @param orderId 订单ID
-     * @return 扣减结果
+     * @param orderId Đơn hàng ID
+     * @return Kết quả trừ tồn kho
      * @author chenrui
      * @date 2025/11/6 14:30
      */
-    @Operation(summary = "扣减商品库存", description = "根据订单ID扣减对应商品库存")
+    @Operation(summary = "Trừ tồn kho sản phẩm", description = "Trừ tồn kho của sản phẩm tương ứng theo ID đơn hàng")
     @PostMapping("/stock/deduct")
     public Result<Map<String, Object>> deductStock(
-            @Parameter(description = "订单ID", required = true) @RequestParam String orderId) {
+            @Parameter(description = "Đơn hàng ID", required = true) @RequestParam String orderId) {
         
-        log.info("扣减库存 - 订单ID: {}", orderId);
+        log.info("Trừ kho - Đơn hàng ID: {}", orderId);
         
-        // 查询订单
+        // Truy vấn đơn hàng
         Order order = orderStore.get(orderId);
         if (order == null) {
-            return Result.error("订单不存在: " + orderId);
+            return Result.error("Đơn hàng không tồn tại: " + orderId);
         }
         
-        // 检查订单状态
+        // Kiểm tra trạng thái đơn hàng
         if ("paid".equals(order.getStatus())) {
-            return Result.error("订单已支付,库存已扣减");
+            return Result.error("Đơn hàng đã thanh toán,Tồn kho đã được trừ");
         }
         
         if ("cancelled".equals(order.getStatus())) {
-            return Result.error("订单已取消");
+            return Result.error("Đơn hàng đã bị hủy");
         }
         
-        // 查询商品
+        // Truy vấn sản phẩm
         Product product = productStore.get(order.getProductId());
         if (product == null) {
-            return Result.error("商品不存在: " + order.getProductId());
+            return Result.error("Sản phẩm không tồn tại: " + order.getProductId());
         }
         
-        // 检查库存
+        // Kiểm tra tồn kho
         synchronized (product) {
             if (product.getStock() < order.getQuantity()) {
-                return Result.error("库存不足,当前库存: " + product.getStock() + ", 需要: " + order.getQuantity());
+                return Result.error("Tồn kho không đủ,Tồn kho hiện tại: " + product.getStock() + ", Cần: " + order.getQuantity());
             }
             
-            // 扣减库存
+            // Trừ kho
             int newStock = product.getStock() - order.getQuantity();
             product.setStock(newStock);
             
-            // 更新订单状态
+            // Cập nhật trạng thái đơn hàng
             order.setStatus("paid");
             
-            log.info("库存扣减成功 - 商品: {}, 扣减数量: {}, 剩余库存: {}", 
+            log.info("Trừ tồn kho thành công - Sản phẩm: {}, Số lượng trừ: {}, Tồn kho còn lại: {}", 
                     product.getName(), order.getQuantity(), newStock);
         }
         
@@ -267,36 +267,36 @@ public class ShopController {
     }
     
     /**
-     * 查询订单详情
+     * Truy vấn chi tiết đơn hàng
      *
-     * @param orderId 订单ID
-     * @return 订单详情
+     * @param orderId Đơn hàng ID
+     * @return Chi tiết đơn hàng
      * @author chenrui
      * @date 2025/11/6 14:30
      */
-    @Operation(summary = "查询订单详情", description = "根据订单ID查询订单信息")
+    @Operation(summary = "Truy vấn chi tiết đơn hàng", description = "Truy vấn thông tin đơn hàng theo ID đơn hàng")
     @GetMapping("/order")
     public Result<Order> getOrder(
-            @Parameter(description = "订单ID", required = true) @RequestParam String orderId) {
+            @Parameter(description = "Đơn hàng ID", required = true) @RequestParam String orderId) {
         
-        log.info("查询订单 - 订单ID: {}", orderId);
+        log.info("Truy vấn đơn hàng - Đơn hàng ID: {}", orderId);
         
         Order order = orderStore.get(orderId);
         if (order == null) {
-            return Result.error("订单不存在: " + orderId);
+            return Result.error("Đơn hàng không tồn tại: " + orderId);
         }
         
         return Result.OK(order);
     }
     
     /**
-     * 获取所有商品分类
+     * Lấy tất cả danh mục sản phẩm
      *
-     * @return 分类列表
+     * @return Danh sách phân loại
      * @author chenrui
      * @date 2025/11/6 14:30
      */
-    @Operation(summary = "获取商品分类", description = "获取所有商品的分类列表")
+    @Operation(summary = "Lấy danh mục sản phẩm", description = "Lấy danh sách danh mục của tất cả sản phẩm")
     @GetMapping("/categories")
     public Result<List<String>> getCategories() {
         
@@ -311,23 +311,23 @@ public class ShopController {
     }
     
     /**
-     * 重置所有数据(仅用于测试)
+     * Đặt lại tất cả dữ liệu(Chỉ dùng để kiểm thử)
      *
-     * @return 重置结果
+     * @return Kết quả đặt lại
      * @author chenrui
      * @date 2025/11/6 14:30
      */
-    @Operation(summary = "重置数据", description = "清空所有订单并重置商品库存(仅用于测试)")
+    @Operation(summary = "Đặt lại dữ liệu", description = "Xóa tất cả đơn hàng và đặt lại tồn kho sản phẩm(Chỉ dùng để kiểm thử)")
     @PostMapping("/reset")
     public Result<String> reset() {
         
-        log.info("重置商品和订单数据");
+        log.info("Đặt lại dữ liệu sản phẩm và đơn hàng");
         
         orderStore.clear();
         orderIdGenerator.set(1000);
         productStore.clear();
         initProducts();
         
-        return Result.OK("数据重置成功");
+        return Result.OK("Đặt lại dữ liệu thành công");
     }
 }

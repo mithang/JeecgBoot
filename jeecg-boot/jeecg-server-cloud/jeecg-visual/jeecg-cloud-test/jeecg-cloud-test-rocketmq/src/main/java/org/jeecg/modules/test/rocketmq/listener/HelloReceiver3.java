@@ -8,10 +8,10 @@ import org.jeecg.modules.test.rocketmq.constant.CloudConstant;
 import org.springframework.stereotype.Component;
 
 /**
- * 定义接收者（可以定义N个接受者，消息会均匀的发送到N个接收者中）
+ * Định nghĩa người nhận (có thể định nghĩa N người nhận, tin nhắn sẽ được gửi đều đến N người nhận)
  *
- * RabbitMq接受者3【我是处理人3】
- * （@RabbitListener声明类方法上，一个类可以多监听多个队列）
+ * RabbitMq Receiver 3 【Tôi là người xử lý 3】
+ * （@RabbitListener khai báo trên phương thức của lớp, một lớp có thể lắng nghe nhiều hàng đợi)
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class HelloReceiver3 implements RocketMQListener<BaseMap> {
 
     public void onMessage(BaseMap baseMap) {
-        log.info("helloReceiver3接收消息：" + baseMap);
+        log.info("helloReceiver3 Nhận tin nhắn:" + baseMap);
     }
 
 }

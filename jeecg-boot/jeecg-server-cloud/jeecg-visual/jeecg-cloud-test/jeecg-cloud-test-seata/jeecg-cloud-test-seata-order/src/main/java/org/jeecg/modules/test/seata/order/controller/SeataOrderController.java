@@ -20,41 +20,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/test/seata/order")
-@Tag(name = "seata测试")
+@Tag(name = "seata Kiểm tra")
 public class SeataOrderController {
 
     @Autowired
     private SeataOrderService orderService;
 
     /**
-     * 自由下单
+     * Đặt hàng tự do
      */
     @PostMapping("/placeOrder")
-    @Operation(summary = "自由下单")
+    @Operation(summary = "Đặt hàng tự do")
     public String placeOrder(@Validated @RequestBody PlaceOrderRequest request) {
         orderService.placeOrder(request);
-        return "下单成功";
+        return "Đặt hàng thành công";
     }
 
     /**
-     * 测试商品库存不足-异常回滚
+     * Kiểm thử tồn kho sản phẩm không đủ-Rollback khi xảy ra ngoại lệ
      */
     @PostMapping("/test1")
-    @Operation(summary = "测试商品库存不足")
+    @Operation(summary = "Kiểm thử tồn kho sản phẩm không đủ")
     public String test1() {
-        //商品单价10元，库存20个,用户余额50元，模拟一次性购买22个。 期望异常回滚
+        //Đơn giá sản phẩm 10 tệ, tồn kho 20 cái,Số dư người dùng 50 tệ, mô phỏng mua một lần 22 cái. Kỳ vọng ngoại lệ sẽ rollback
         orderService.placeOrder(new PlaceOrderRequest(1L, 1L, 22));
-        return "下单成功";
+        return "Đặt hàng thành công";
     }
 
     /**
-     * 测试用户账户余额不足-异常回滚
+     * Kiểm thử số dư tài khoản người dùng không đủ-Rollback khi xảy ra ngoại lệ
      */
     @PostMapping("/test2")
-    @Operation(summary = "测试用户账户余额不足")
+    @Operation(summary = "Kiểm thử số dư tài khoản người dùng không đủ")
     public String test2() {
-        //商品单价10元，库存20个，用户余额50元，模拟一次性购买6个。 期望异常回滚
+        //Đơn giá sản phẩm 10 tệ, tồn kho 20 cái, số dư người dùng 50 tệ, mô phỏng mua một lần 6 cái. Kỳ vọng ngoại lệ sẽ rollback
         orderService.placeOrder(new PlaceOrderRequest(1L, 1L, 6));
-        return "下单成功";
+        return "Đặt hàng thành công";
     }
 }

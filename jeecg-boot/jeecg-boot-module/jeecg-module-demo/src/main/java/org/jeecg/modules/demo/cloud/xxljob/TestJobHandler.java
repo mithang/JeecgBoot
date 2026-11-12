@@ -15,7 +15,7 @@
 //
 //
 ///**
-// * xxl-job定时任务测试
+// * xxl-job Kiểm thử tác vụ định kỳ
 // */
 //@Slf4j
 //@Component
@@ -24,9 +24,9 @@
 //    ISysBaseAPI sysBaseApi;
 //
 //    /**
-//     * 简单任务
+//     * Tác vụ đơn giản
 //     *
-//     * 测试：无token调用feign接口
+//     * Kiểm thử: gọi API feign không có token
 //     *
 //     * @param params
 //     * @return
@@ -34,14 +34,14 @@
 //
 //    @XxlJob(value = "testJob")
 //    public ReturnT<String> demoJobHandler(String params) {
-//        //1.生成临时令牌Token到线程中
+//        //1.Tạo token tạm thời vào luồng
 //        UserTokenContext.setToken(getTemporaryToken());
 //
-//        log.info("我是 jeecg-demo 服务里的定时任务 testJob , 我执行了...............................");
-//        log.info("我调用 jeecg-system 服务的字典接口：{}",sysBaseApi.queryAllDict());
-//        //。。。此处可以写多个feign接口调用
+//        log.info("Tôi là jeecg-demo Tác vụ định kỳ trong dịch vụ testJob , Tôi đã thực thi...............................");
+//        log.info("Tôi gọi jeecg-system API từ điển của dịch vụ:{}",sysBaseApi.queryAllDict());
+//        //... Ở đây có thể viết nhiều lệnh gọi API feign
 //
-//        //2.使用完，删除临时令牌Token
+//        //2.Sau khi dùng xong, xóa token tạm thời Token
 //        UserTokenContext.remove();
 //        return ReturnT.SUCCESS;
 //    }
@@ -55,16 +55,16 @@
 //    }
 //
 //    /**
-//     * 获取临时令牌
+//     * Lấy token tạm thời
 //     *
-//     * 模拟登陆接口，获取模拟 Token
+//     * Mô phỏng API đăng nhập, lấy mô phỏng Token
 //     * @return
 //     */
 //    public static String getTemporaryToken() {
 //        RedisUtil redisUtil = SpringContextUtils.getBean(RedisUtil.class);
-//        // 模拟登录生成Token
+//        // Mô phỏng đăng nhập để tạo Token
 //        String token = JwtUtil.sign("??", "??");
-//        // 设置Token缓存有效时间为 5 分钟
+//        // Đặt thời gian hiệu lực cache của Token là 5 phút
 //        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 //        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, 5 * 60 * 1000);
 //        return token;

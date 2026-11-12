@@ -15,7 +15,7 @@ import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 定义接收者（可以定义N个接受者，消息会均匀的发送到N个接收者中）
+ * Định nghĩa người nhận (có thể định nghĩa N người nhận, tin nhắn sẽ được gửi đều đến N người nhận)
  * @author: zyf
  * @date: 2022/04/21
  */
@@ -29,7 +29,7 @@ public class HelloTimeReceiver extends BaseRabbiMqHandler<BaseMap> {
         super.onMessage(baseMap, deliveryTag, channel, new MqListener<BaseMap>() {
             @Override
             public void handler(BaseMap map, Channel channel) {
-                //业务处理
+                //Xử lý nghiệp vụ
                 String orderId = map.get("orderId").toString();
                 log.info("Time Receiver1，orderId : " + orderId);
             }

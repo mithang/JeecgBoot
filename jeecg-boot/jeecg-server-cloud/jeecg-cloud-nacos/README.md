@@ -1,16 +1,16 @@
-访问地址: http://localhost:18080
-账号密码：nacos/nacos
+Địa chỉ truy cập: http://localhost:18080
+Tài khoản và mật khẩu:nacos/nacos
 
 
-# 使用方法
+# Cách sử dụng
 
-- 1、目前只做了关闭鉴权模式
-- 2、此项目与官方同步，只是为了简化微服务部署
-- 3、如何不用此模块，使用自己的naocs，请创建下面目录中的配置文件
-     目录：jeecg-cloud-nacos/docs/config
-     配置文件： YAML
+- 1、Hiện tại mới chỉ làm chế độ tắt xác thực
+- 2、Dự án này đồng bộ với bản chính thức, chỉ để đơn giản hóa việc triển khai microservice
+- 3、Nếu không dùng module này mà dùng naocs của riêng bạn, vui lòng tạo file cấu hình trong các thư mục dưới đây
+     Thư mục：jeecg-cloud-nacos/docs/config
+     File cấu hình： YAML
 
 
-# 常见问题
+# Câu hỏi thường gặp
 - UnsupportedOperationException: Cannot determine JNI library name for ARCH='x86' OS='windows 10'
-  解决方案：http://t.zoukankan.com/mindzone-p-15808190.html
+  Giải pháp：http://t.zoukankan.com/mindzone-p-15808190.html

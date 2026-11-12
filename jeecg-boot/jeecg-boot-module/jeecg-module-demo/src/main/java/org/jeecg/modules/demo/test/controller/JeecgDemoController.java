@@ -37,13 +37,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 单表示例
+ * @Description: Ví dụ bảng đơn
  * @Author: jeecg-boot
  * @Date:2018-12-29
  * @Version:V2.0
  */
 @Slf4j
-@Tag(name = "单表DEMO")
+@Tag(name = "Bảng đơn DEMO")
 @RestController
 @RequestMapping("/test/jeecgDemo")
 public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoService> {
@@ -54,7 +54,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     private RedisUtil redisUtil;
 
     /**
-     * 分页列表查询
+     * Truy vấn danh sách phân trang
      *
      * @param jeecgDemo
      * @param pageNo
@@ -62,7 +62,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
      * @param req
      * @return
      */
-    @Operation(summary = "获取Demo数据列表")
+    @Operation(summary = "Lấy danh sách dữ liệu Demo")
     @GetMapping(value = "/list")
     @PermissionData(pageComponent = "system/examples/demo/index")
     public Result<?> list(JeecgDemo jeecgDemo, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
@@ -72,97 +72,97 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         Page<JeecgDemo> page = new Page<JeecgDemo>(pageNo, pageSize);
 
         IPage<JeecgDemo> pageList = jeecgDemoService.page(page, queryWrapper);
-        log.debug("查询当前页：" + pageList.getCurrent());
-        log.debug("查询当前页数量：" + pageList.getSize()); 
-        log.debug("查询结果数量：" + pageList.getRecords().size());
-        log.debug("数据总数：" + pageList.getTotal());
+        log.debug("Truy vấn trang hiện tại: " + pageList.getCurrent());
+        log.debug("Truy vấn số lượng trang hiện tại:" + pageList.getSize()); 
+        log.debug("Số lượng kết quả truy vấn:" + pageList.getRecords().size());
+        log.debug("Tổng số dữ liệu:" + pageList.getTotal());
         return Result.OK(pageList);
     }
 
     /**
-     * 添加
+     * Thêm
      *
      * @param jeecgDemo
      * @return
      */
     @PostMapping(value = "/add")
-    @AutoLog(value = "添加测试DEMO")
-    @Operation(summary = "添加DEMO")
+    @AutoLog(value = "Thêm kiểm tra DEMO")
+    @Operation(summary = "Thêm DEMO")
     public Result<?> add(@RequestBody JeecgDemo jeecgDemo) {
         jeecgDemoService.save(jeecgDemo);
-        return Result.OK("添加成功！");
+        return Result.OK("Thêm thành công!");
     }
 
     /**
-     * 编辑
+     * Chỉnh sửa
      *
      * @param jeecgDemo
      * @return
      */
-    @AutoLog(value = "编辑DEMO", operateType = CommonConstant.OPERATE_TYPE_3)
-    @Operation(summary = "编辑DEMO")
+    @AutoLog(value = "Chỉnh sửa DEMO", operateType = CommonConstant.OPERATE_TYPE_3)
+    @Operation(summary = "Chỉnh sửa DEMO")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
     public Result<?> edit(@RequestBody JeecgDemo jeecgDemo) {
         jeecgDemoService.updateById(jeecgDemo);
-        return Result.OK("更新成功！");
+        return Result.OK("Cập nhật thành công!");
     }
 
     /**
-     * 通过id删除
+     * Xóa theo id
      *
      * @param id
      * @return
      */
-    @AutoLog(value = "删除测试DEMO")
+    @AutoLog(value = "Xóa kiểm tra DEMO")
     @DeleteMapping(value = "/delete")
-    @Operation(summary = "通过ID删除DEMO")
+    @Operation(summary = "Xóa theo ID DEMO")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         jeecgDemoService.removeById(id);
-        return Result.OK("删除成功!");
+        return Result.OK("Xóa thành công!");
     }
 
     /**
-     * 批量删除
+     * Xóa hàng loạt
      *
      * @param ids
      * @return
      */
     @DeleteMapping(value = "/deleteBatch")
-    @Operation(summary = "批量删除DEMO")
+    @Operation(summary = "Xóa hàng loạt DEMO")
     public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
         this.jeecgDemoService.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.OK("批量删除成功！");
+        return Result.OK("Xóa hàng loạt thành công!");
     }
 
     /**
-     * 通过id查询
+     * Tìm kiếm theo id
      *
      * @param id
      * @return
      */
     @GetMapping(value = "/queryById")
-    @Operation(summary = "通过ID查询DEMO")
-    public Result<?> queryById(@Parameter(name = "id", description = "示例id", required = true) @RequestParam(name = "id", required = true) String id) {
+    @Operation(summary = "Truy vấn theo ID DEMO")
+    public Result<?> queryById(@Parameter(name = "id", description = "Ví dụ id", required = true) @RequestParam(name = "id", required = true) String id) {
         JeecgDemo jeecgDemo = jeecgDemoService.getById(id);
         return Result.OK(jeecgDemo);
     }
 
     /**
-     * 导出excel
+     * Xuất excel
      *
      * @param request
      */
     @RequestMapping(value = "/exportXls")
     @PermissionData(pageComponent = "jeecg/JeecgDemoList")
     public ModelAndView exportXls(HttpServletRequest request, JeecgDemo jeecgDemo) {
-        //获取导出表格字段
+        //Lấy trường bảng xuất
         String exportFields = jeecgDemoService.getExportFields();
-        //分sheet导出表格字段
-        return super.exportXlsSheet(request, jeecgDemo, JeecgDemo.class, "单表模型",exportFields,500);
+        //Xuất trường bảng theo từng sheet
+        return super.exportXlsSheet(request, jeecgDemo, JeecgDemo.class, "Mô hình bảng đơn",exportFields,500);
     }
 
     /**
-     * 通过excel导入数据
+     * Nhập dữ liệu qua Excel
      *
      * @param request
      * @param response
@@ -173,18 +173,18 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         return super.importExcel(request, response, JeecgDemo.class);
     }
 
-    // =====Redis 示例===============================================================================================
+    // =====Redis Ví dụ===============================================================================================
 
     /**
-     * redis操作 -- set
+     * redis Thao tác -- set
      */
     @GetMapping(value = "/redisSet")
     public void redisSet() {
-        redisUtil.set("name", "张三" + DateUtils.now());
+        redisUtil.set("name", "Trương Tam" + DateUtils.now());
     }
 
     /**
-     * redis操作 -- get
+     * redis Thao tác -- get
      */
     @GetMapping(value = "/redisGet")
     public String redisGet() {
@@ -192,7 +192,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     }
 
     /**
-     * redis操作 -- setObj
+     * redis Thao tác -- setObj
      */
     @GetMapping(value = "/redisSetObj")
     public void redisSetObj() {
@@ -200,13 +200,13 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         p.setAge(10);
         p.setBirthday(new Date());
         p.setContent("hello");
-        p.setName("张三");
-        p.setSex("男");
+        p.setName("Trương Tam");
+        p.setSex("Nam");
         redisUtil.set("user-zdh", p);
     }
 
     /**
-     * redis操作 -- setObj
+     * redis Thao tác -- setObj
      */
     @GetMapping(value = "/redisGetObj")
     public Object redisGetObj() {
@@ -214,7 +214,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     }
 
     /**
-     * redis操作 -- get
+     * redis Thao tác -- get
      */
     @GetMapping(value = "/redis/{id}")
     public JeecgDemo redisGetJeecgDemo(@PathVariable("id") String id) {
@@ -223,10 +223,10 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         return t;
     }
 
-    // ===Freemaker示例================================================================================
+    // ===Freemaker Ví dụ================================================================================
 
     /**
-     * freemaker方式 【页面路径： src/main/resources/templates】
+     * freemaker theo cách 【Đường dẫn trang:  src/main/resources/templates】
      *
      * @param modelAndView
      * @return
@@ -245,20 +245,20 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     }
 
 
-    // ==========================================动态表单 JSON接收测试===========================================
+    // ==========================================Kiểm tra nhận JSON của biểu mẫu động===========================================
     /**
-     * online新增数据
+     * online Thêm mới dữ liệu
      */
     @PostMapping(value = "/testOnlineAdd")
     public Result<?> testOnlineAdd(@RequestBody JSONObject json) {
         log.info(json.toJSONString());
-        return Result.OK("添加成功！");
+        return Result.OK("Thêm thành công!");
     }
 
-    /*----------------------------------------外部获取权限示例------------------------------------*/
+    /*----------------------------------------Ví dụ lấy quyền hạn từ bên ngoài------------------------------------*/
 
     /**
-     * 【数据权限示例 - 编程】mybatisPlus java类方式加载权限
+     * 【Ví dụ quyền dữ liệu - Lập trình】Tải quyền hạn bằng cách dùng lớp Java mybatisPlus
      *
      * @param pageNo
      * @param pageSize
@@ -270,7 +270,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     public Result<?> loadMpPermissonList(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                          HttpServletRequest req) {
         QueryWrapper<JeecgDemo> queryWrapper = new QueryWrapper<JeecgDemo>();
-        //编程方式，给queryWrapper装载数据权限规则
+        //Bằng cách lập trình, tải quy tắc quyền dữ liệu cho queryWrapper
         QueryGenerator.installAuthMplus(queryWrapper, JeecgDemo.class);
         Page<JeecgDemo> page = new Page<JeecgDemo>(pageNo, pageSize);
         IPage<JeecgDemo> pageList = jeecgDemoService.page(page, queryWrapper);
@@ -278,7 +278,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     }
 
     /**
-     * 【数据权限示例 - 编程】mybatis xml方式加载权限
+     * 【Ví dụ quyền dữ liệu - Lập trình】Tải quyền hạn bằng cách dùng mybatis xml
      *
      * @param jeecgDemo
      * @param pageNo
@@ -293,10 +293,10 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         IPage<JeecgDemo> pageList = jeecgDemoService.queryListWithPermission(pageSize, pageNo);
         return Result.OK(pageList);
     }
-    /*----------------------------------------外部获取权限示例------------------------------------*/
+    /*----------------------------------------Ví dụ lấy quyền hạn từ bên ngoài------------------------------------*/
 
     /**
-     * online api增强 列表
+     * online api Tăng cường Danh sách
      * @param params
      * @return
      */
@@ -313,7 +313,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     }
 
     /**
-     * online api增强 表单
+     * online api Tăng cường Biểu mẫu
      * @param params
      * @return
      */
@@ -332,7 +332,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         return "hello world!";
     }
 
-    // =====Vue3 Native  原生页面示例===============================================================================================
+    // =====Vue3 Native  Ví dụ trang gốc===============================================================================================
     @GetMapping(value = "/oneNative/list")
     public Result oneNativeList(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
         Object oneNative = redisUtil.get("one-native");
@@ -358,7 +358,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         data.add(jsonObject);
         nativeObject.put("data",data);
         redisUtil.set("one-native",nativeObject);
-        return Result.OK("添加成功");
+        return Result.OK("Thêm thành công");
     }
     
     @PutMapping("/oneNative/edit")
@@ -368,7 +368,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         data = getNativeById(data,jsonObject);
         oneNative.put("data", data);
         redisUtil.set("one-native", oneNative);
-        return Result.OK("修改成功");
+        return Result.OK("Chỉnh sửa thành công");
     }
 
     @DeleteMapping("/oneNative/delete")
@@ -381,11 +381,11 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
             nativeObject.put("data",data);
             redisUtil.set("one-native",nativeObject);
         }
-        return Result.OK("删除成功");
+        return Result.OK("Xóa thành công");
     }
     
     /**
-     * 获取redis对应id的数据
+     * Lấy dữ liệu redis theo id tương ứng
      * @param data
      * @param jsonObject
      * @return
@@ -403,7 +403,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     }
 
     /**
-     * 删除redis中包含的id数据
+     * Xóa dữ liệu id chứa trong redis
      * @param data
      * @param ids
      * @return
@@ -411,11 +411,11 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     public JSONArray deleteNativeById(JSONArray data,String ids){
         String dbId = "id";
         for (int i = 0; i < data.size(); i++) {
-            //如果id包含直接清除data中的数据
+            //Nếu id chứa thì xóa trực tiếp dữ liệu trong data
             if(ids.contains(data.getJSONObject(i).getString(dbId))){
                 data.fluentRemove(i);
             }
-            //判断data的长度是否还剩1位
+            //Kiểm tra xem độ dài của data có còn 1 ký tự không
             if(data.size() == 1 && ids.contains(data.getJSONObject(0).getString(dbId))){
                 data.fluentRemove(0);
             }
@@ -424,21 +424,21 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     }
 
     /**
-     * 模拟查询数据，可以根据父ID查询，可以分页
+     * Mô phỏng truy vấn dữ liệu, có thể truy vấn theo ID cha, có thể phân trang
      *
-     * @param dataList 数据列表
-     * @param pageNo   页码
-     * @param pageSize 页大小
+     * @param dataList Danh sách dữ liệu
+     * @param pageNo   Số trang
+     * @param pageSize Kích thước trang
      * @return
      */
     private IPage<JSONObject> queryDataPage(JSONArray dataList, Integer pageNo, Integer pageSize) {
-        // 根据父级id查询子级
+        // Truy vấn cấp con theo ID cha
         JSONArray dataDb = dataList;
-        // 模拟分页（实际中应用SQL自带的分页）
+        // Mô phỏng phân trang (trong thực tế dùng phân trang sẵn có của SQL)
         List<JSONObject> records = new ArrayList<>();
         IPage<JSONObject> page;
         long beginIndex, endIndex;
-        // 如果任意一个参数为null，则不分页
+        // Nếu bất kỳ tham số nào là null thì không phân trang
         if (pageNo == null || pageSize == null) {
             page = new Page<>(0, dataDb.size());
             beginIndex = 0;
@@ -451,7 +451,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         for (long i = beginIndex; (i < endIndex && i < dataDb.size()); i++) {
             JSONObject data = dataDb.getJSONObject((int) i);
             data = JSON.parseObject(data.toJSONString());
-            // 不返回 children
+            // Không trả về children
             data.remove("children");
             records.add(data);
         }
@@ -459,11 +459,11 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         page.setTotal(dataDb.size());
         return page;
     }
-    // =====Vue3 Native  原生页面示例===============================================================================================
+    // =====Vue3 Native  Ví dụ trang gốc===============================================================================================
 
 
     /**
-     * 获取创建人
+     * Lấy người tạo
      * @return
      */
     @GetMapping(value = "/groupList")
@@ -472,17 +472,17 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     }
 
     /**
-     * 测试Mono对象
+     * Kiểm tra đối tượng Mono
      * @return
      */
     @GetMapping(value ="/test")
     public Mono<String> test() {
-        //解决shiro报错No SecurityManager accessible to the calling code, either bound to the org.apache.shiro
+        //Khắc phục lỗi shiro No SecurityManager accessible to the calling code, either bound to the org.apache.shiro
         // https://blog.csdn.net/Japhet_jiu/article/details/131177210
         DefaultSecurityManager securityManager = new DefaultSecurityManager();
         SecurityUtils.setSecurityManager(securityManager);
         
-        return Mono.just("测试");
+        return Mono.just("Kiểm tra");
     }
 
 }

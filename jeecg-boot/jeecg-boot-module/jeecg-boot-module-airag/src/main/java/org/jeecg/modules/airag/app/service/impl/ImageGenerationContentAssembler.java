@@ -12,10 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 图片生成内容组装组件，负责清理模型内容并将真实图片插入文章。
+ * Thành phần lắp ráp nội dung tạo hình ảnh, chịu trách nhiệm làm sạch nội dung mô hình và chèn hình ảnh thật vào bài viết.
  *
  * @author scott
- * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+ * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
  */
 @Component("imageGenerationContentAssembler")
 public class ImageGenerationContentAssembler {
@@ -26,10 +26,10 @@ public class ImageGenerationContentAssembler {
 	private static final int GENERATED_ARTICLE_IMAGE_WIDTH = 720;
 
 	/**
-	 * 将组装后的内容写回AI消息，同时保留思考过程和工具调用信息。
+	 * Ghi nội dung đã lắp ráp trở lại tin nhắn AI, đồng thời giữ lại quá trình suy nghĩ và thông tin gọi công cụ.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	public AiMessage replaceAiMessageContent(AiMessage aiMessage, String content) {
 		if (aiMessage == null) {
@@ -44,10 +44,10 @@ public class ImageGenerationContentAssembler {
 	}
 
 	/**
-	 * 移除文本模型自行生成的图片标签，防止展示无效或虚构地址。
+	 * Loại bỏ thẻ hình ảnh do mô hình văn bản tự tạo, tránh hiển thị địa chỉ không hợp lệ hoặc hư cấu.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	public String removeGeneratedImageMarkdown(String content) {
 		if (oConvertUtils.isEmpty(content)) {
@@ -57,14 +57,14 @@ public class ImageGenerationContentAssembler {
 	}
 
 	/**
-	 * 将真实生成的图片替换到正文占位符或结构化插入位置。
+	 * Thay hình ảnh thật đã tạo vào placeholder trong nội dung chính hoặc vị trí chèn có cấu trúc.
 	 *
 	 * @author scott
-	 * @since 2026-08-10 AI应用支持智能识别和图文混合生成
+	 * @since 2026-08-10 AI Ứng dụng hỗ trợ nhận dạng thông minh và tạo nội dung kết hợp hình ảnh - văn bản
 	 */
 	public String mergeGeneratedImages(String content, List<String> imageUrls) {
 		if (CollectionUtils.isEmpty(imageUrls)) {
-			return removeGeneratedImagePlaceholders(content) + "\n\n> 配图生成失败：绘画模型未返回有效图片。";
+			return removeGeneratedImagePlaceholders(content) + "\n\n> Tạo ảnh minh họa thất bại: mô hình vẽ chưa trả về hình ảnh hợp lệ.";
 		}
 		String mergedContent = content;
 		List<String> unplacedImages = new ArrayList<>();

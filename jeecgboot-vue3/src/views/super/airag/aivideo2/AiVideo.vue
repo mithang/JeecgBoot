@@ -92,7 +92,7 @@
 
   const { createMessage } = useMessage();
 
-  const activeCategory = ref('通用演示');
+  const activeCategory = ref('Demo chung');
   const generating = ref(false);
   const videoUrl = ref('');
   const errorMessage = ref('');

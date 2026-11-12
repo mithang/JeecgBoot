@@ -107,13 +107,13 @@ liteflow:
   parse-mode: PARSE_ONE_ON_FIRST_EXEC
   rule-source-ext-data-map:
     applicationName: jeecg
-    #是否开启SQL日志
+    #Có bật nhật ký SQL không
     sqlLogEnabled: true
     chainTableName: airag_flow
-    #编排规则表中应用名称存储字段名
+    #Tên trường lưu tên ứng dụng trong bảng quy tắc biên soạn
     chainApplicationNameField: application_name
-    #规则名称存储的字段名
+    #Tên trường lưu tên quy tắc
     chainNameField: id
-    #EL表达式的字段(只存EL)
+    #EL Trường của biểu thức(Chỉ lưu EL)
     elDataField: chain
     chainCustomSql: select id, application_name, chain from airag_flow where status = 'enable' and chain is not null

@@ -37,7 +37,7 @@ public class AiragPromptsController extends JeecgController<AiragPrompts, IAirag
 	private IAiragPromptsService airagPromptsService;
 	
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 *
 	 * @param airagPrompts
 	 * @param pageNo
@@ -45,8 +45,8 @@ public class AiragPromptsController extends JeecgController<AiragPrompts, IAirag
 	 * @param req
 	 * @return
 	 */
-	//@AutoLog(value = "airag_prompts-分页列表查询")
-	@Operation(summary="airag_prompts-分页列表查询")
+	//@AutoLog(value = "airag_prompts-Truy vấn danh sách phân trang")
+	@Operation(summary="airag_prompts-Truy vấn danh sách phân trang")
 	@GetMapping(value = "/list")
 	@RequiresPermissions("airag:prompts:list")
 	public Result<IPage<AiragPrompts>> queryPageList(AiragPrompts airagPrompts,
@@ -59,7 +59,7 @@ public class AiragPromptsController extends JeecgController<AiragPrompts, IAirag
 		return Result.OK(pageList);
 	}
 	/**
-	 * 分页列表查询
+	 * Truy vấn danh sách phân trang
 	 *
 	 * @param airagPrompts
 	 * @param pageNo
@@ -67,10 +67,10 @@ public class AiragPromptsController extends JeecgController<AiragPrompts, IAirag
 	 * @param req
 	 * @return
 	 */
-	@Operation(summary="airag_prompts-回收站分页列表查询")
+	@Operation(summary="airag_prompts-Truy vấn danh sách phân trang thùng rác")
 	@GetMapping(value = "/recycleBinList")
 	@RequiresPermissions("airag:prompts:recycleBinList")
-	//update-begin---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】修复回收站查询逻辑，绕过@TableLogic过滤-----------
+	//update-begin---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】Sửa logic truy vấn thùng rác, bỏ qua@TableLogic Lọc-----------
 	public Result<IPage<AiragPrompts>> recycleBinList(AiragPrompts airagPrompts,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
@@ -79,110 +79,110 @@ public class AiragPromptsController extends JeecgController<AiragPrompts, IAirag
 		IPage<AiragPrompts> pageList = airagPromptsService.recycleBinPage(page);
 		return Result.OK(pageList);
 	}
-	//update-end---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】修复回收站查询逻辑，绕过@TableLogic过滤-----------
+	//update-end---author:chenrui ---date:2026-04-07  for：【QQYUN-14643】Sửa logic truy vấn thùng rác, bỏ qua@TableLogic Lọc-----------
 
 	/**
-	 *   添加
+	 *   Thêm
 	 *
 	 * @param airagPrompts
 	 * @return
 	 */
-	@AutoLog(value = "airag_prompts-添加")
-	@Operation(summary="airag_prompts-添加")
+	@AutoLog(value = "airag_prompts-Thêm")
+	@Operation(summary="airag_prompts-Thêm")
 	@PostMapping(value = "/add")
 	@RequiresPermissions("airag:prompts:add")
 	public Result<String> add(@RequestBody AiragPrompts airagPrompts) {
 		airagPrompts.setDelFlag(CommonConstant.DEL_FLAG_0);
 		airagPrompts.setStatus("0");
 		airagPromptsService.save(airagPrompts);
-		return Result.OK("添加成功！");
+		return Result.OK("Thêm thành công!");
 	}
 	
 	/**
-	 *  编辑
+	 *  Chỉnh sửa
 	 *
 	 * @param airagPrompts
 	 * @return
 	 */
-	@AutoLog(value = "airag_prompts-编辑")
-	@Operation(summary="airag_prompts-编辑")
+	@AutoLog(value = "airag_prompts-Chỉnh sửa")
+	@Operation(summary="airag_prompts-Chỉnh sửa")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	@RequiresPermissions("airag:prompts:edit")
 	public Result<String> edit(@RequestBody AiragPrompts airagPrompts) {
 		airagPromptsService.updateById(airagPrompts);
-		return Result.OK("编辑成功!");
+		return Result.OK("Chỉnh sửa thành công!");
 	}
 	
 	/**
-	 *   通过id删除
+	 *   Xóa theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "airag_prompts-通过id删除")
-	@Operation(summary="airag_prompts-通过id删除")
+	@AutoLog(value = "airag_prompts-Xóa theo id")
+	@Operation(summary="airag_prompts-Xóa theo id")
 	@DeleteMapping(value = "/delete")
 	@RequiresPermissions("airag:prompts:delete")
 	public Result<String> delete(@RequestParam(name="id",required=true) String id) {
 		airagPromptsService.removeById(id);
-		return Result.OK("删除成功!");
+		return Result.OK("Xóa thành công!");
 	}
 	
 	/**
-	 *  批量删除
+	 *  Xóa hàng loạt
 	 *
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "airag_prompts-批量删除")
-	@Operation(summary="airag_prompts-批量删除")
+	@AutoLog(value = "airag_prompts-Xóa hàng loạt")
+	@Operation(summary="airag_prompts-Xóa hàng loạt")
 	@DeleteMapping(value = "/deleteBatch")
 	@RequiresPermissions("airag:prompts:deleteBatch")
 	public Result<String> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.airagPromptsService.removeByIds(Arrays.asList(ids.split(",")));
-		return Result.OK("批量删除成功!");
+		return Result.OK("Xóa hàng loạt thành công!!");
 	}
 	
 	/**
-	 * 通过id查询
+	 * Tìm kiếm theo id
 	 *
 	 * @param id
 	 * @return
 	 */
-	//@AutoLog(value = "airag_prompts-通过id查询")
-	@Operation(summary="airag_prompts-通过id查询")
+	//@AutoLog(value = "airag_prompts-Tìm kiếm theo id")
+	@Operation(summary="airag_prompts-Tìm kiếm theo id")
 	@GetMapping(value = "/queryById")
 	@RequiresPermissions("airag:prompts:queryById")
 	public Result<AiragPrompts> queryById(@RequestParam(name="id",required=true) String id) {
 		AiragPrompts airagPrompts = airagPromptsService.getById(id);
 		if(airagPrompts==null) {
-			return Result.error("未找到对应数据");
+			return Result.error("Không tìm thấy dữ liệu tương ứng");
 		}
 		return Result.OK(airagPrompts);
 	}
 
 	 /**
-	  * 从回收站取回（支持多个id，逗号分割）
+	  * Thu hồi từ thùng rác (hỗ trợ nhiều id, phân tách bằng dấu phẩy)
 	  */
-	 @Operation(summary = "提示词-从回收站取回")
+	 @Operation(summary = "Prompt-Thu hồi từ thùng rác")
 	 @PutMapping(value = "/revertRecycleBin")
 	 @RequiresPermissions("airag:prompts:revertRecycleBin")
 	 public Result<?> revertRecycleBin(@RequestParam(name = "ids", required = true) String ids) {
 		 airagPromptsService.revertRecycleBin(Arrays.asList(ids.split(",")));
-		 return Result.OK("已从回收站取回!");
+		 return Result.OK("Đã thu hồi từ thùng rác!");
 	 }
 	 /**
-	  * 从回收站彻底删除（支持多个id，逗号分割）
+	  * Xóa hoàn toàn khỏi thùng rác (hỗ trợ nhiều id, phân tách bằng dấu phẩy)
 	  */
-	 @Operation(summary = "提示词-从回收站彻底删除")
+	 @Operation(summary = "Prompt-Xóa hoàn toàn khỏi thùng rác")
 	 @DeleteMapping(value = "/deleteRecycleBin")
 	 @RequiresPermissions("airag:prompts:deleteRecycleBin")
 	 public Result<?> deleteRecycleBin(@RequestParam(name = "ids", required = true) String ids) {
 		 airagPromptsService.deleteRecycleBin(Arrays.asList(ids.split(",")));
-		 return Result.OK("从回收站彻底删除!");
+		 return Result.OK("Xóa hoàn toàn khỏi thùng rác!");
 	 }
 	 /**
-	  * 构造器调试
+	  * Gỡ lỗi constructor
 	  *
 	  * @param experimentVo
 	  * @return
@@ -193,7 +193,7 @@ public class AiragPromptsController extends JeecgController<AiragPrompts, IAirag
 		 return airagPromptsService.promptExperiment(experimentVo,request);
 	 }
     /**
-    * 导出excel
+    * Xuất excel
     *
     * @param request
     * @param airagPrompts
@@ -205,7 +205,7 @@ public class AiragPromptsController extends JeecgController<AiragPrompts, IAirag
     }
 
     /**
-      * 通过excel导入数据
+      * Nhập dữ liệu qua Excel
     *
     * @param request
     * @param response

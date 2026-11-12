@@ -16,15 +16,15 @@ import java.util.Map;
 public class AiragExperimentVo implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * 提示词Id
+     * Prompt Id
      */
     private String promptKey;
     /**
-     * 输入内容
+     * Nội dung nhập
      */
     private String extDataId;
     /**
-     * 映射关系
+     * Quan hệ ánh xạ
      */
     private Map<String,String> mappings;
 }
