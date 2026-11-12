@@ -105,7 +105,7 @@ Giao diện trực quan của nó kết hợp điều phối luồng AI, pipelin
 | DeepSeek      |  √   |
 | ChatGTP       |  √   |
 | Qwq           |  √   |
-| ZhiKu | √ |
+| Kho tri thức | √ |
 | claude        |  √   |
 | Mô hình VL | √ |
 | Mô hình lớn Qianfan | √ |
