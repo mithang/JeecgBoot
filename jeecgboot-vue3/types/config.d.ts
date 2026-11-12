@@ -24,7 +24,7 @@ export interface MenuSetting {
   mode: MenuModeEnum;
   type: MenuTypeEnum;
   theme: ThemeEnum;
-  // 代码逻辑说明: 【QQYUN-8922】左侧导航栏文字颜色调整区分彩色和暗黑
+  // Giải thích logic code: 【QQYUN-8922】Điều chỉnh màu chữ của thanh điều hướng bên trái để phân biệt màu sắc và tối
   isThemeBright: boolean;
   topMenuAlign: 'start' | 'center' | 'end';
   trigger: TriggerEnum;
@@ -50,20 +50,20 @@ export interface HeaderSetting {
   fixed: boolean;
   show: boolean;
   theme: ThemeEnum;
-  // 是否显示全屏按钮
+  // Có hiển thị nút toàn màn hình không
   showFullScreen: boolean;
-  // 是否显示锁屏按钮
+  // Có hiển thị nút khóa màn hình không
   useLockPage: boolean;
-  // 是否显示文档连接
+  // Có hiển thị liên kết tài liệu không
   showDoc: boolean;
-  // 是否显示消息图标
+  // Có hiển thị biểu tượng tin nhắn không
   showNotice: boolean;
-  // 是否显示搜索按钮
+  // Có hiển thị nút tìm kiếm không
   showSearch: boolean;
 }
 
 export interface LocaleSetting {
-  // 是否显示国际化切换按钮
+  // Có hiển thị nút chuyển đổi ngôn ngữ không
   showPicker: boolean;
   // Current language
   locale: LocaleType;
@@ -149,7 +149,7 @@ export interface GlobConfig {
   // Service interface url
   apiUrl: string;
   domainUrl: string;
-  // Upload url (作废)
+  // Upload url (đã bỏ)
   uploadUrl?: string;
   openSso?: string;
   openQianKun?: string;
@@ -160,16 +160,16 @@ export interface GlobConfig {
   urlPrefix?: string;
   // Project abbreviation
   shortName: string;
-  // 短标题
+  // Tiêu đề ngắn
   shortTitle: string;
-  // 使用新任务弹窗
+  // Dùng popup nhiệm vụ mới
   useNewTaskModal: boolean;
-  // 当前是否运行在 electron 平台
+  // Hiện có đang chạy trên nền tảng electron không
   isElectronPlatform: boolean;
 
-  // 【JEECG作为乾坤子应用】是否以乾坤子应用模式启动
+  // 【JEECG là ứng dụng con qiankun】Có khởi động ở chế độ ứng dụng con qiankun không
   isQiankunMicro: boolean;
-  // 【JEECG作为乾坤子应用】乾坤子应用入口
+  // 【JEECG là ứng dụng con qiankun】Điểm vào của ứng dụng con qiankun
   qiankunMicroAppEntry?: string;
 }
 export interface GlobEnvConfig {
@@ -182,26 +182,26 @@ export interface GlobEnvConfig {
   VITE_GLOB_API_URL_PREFIX?: string;
   // Project abbreviation
   VITE_GLOB_APP_SHORT_NAME: string;
-  //是否开启单点登录
+  // Có bật đăng nhập một lần (SSO) không
   VITE_GLOB_APP_OPEN_SSO: string;
-  //是否开启微应用模式
+  // Có bật chế độ micro-app không
   VITE_GLOB_APP_OPEN_QIANKUN: string;
-  //单点服务端地址
+  // Địa chỉ server đăng nhập một lần
   VITE_GLOB_APP_CAS_BASE_URL: string;
   VITE_GLOB_DOMAIN_URL: string;
   // Upload url
   VITE_GLOB_UPLOAD_URL?: string;
   // view url
   VITE_GLOB_ONLINE_VIEW_URL?: string;
-  // 全局隐藏哪些布局，多个用逗号隔开
+  // Ẩn toàn cục những layout nào, nhiều layout ngăn cách bằng dấu phẩy
   VITE_GLOB_HIDE_LAYOUT_TYPES?: string;
 
-  // 【JEECG作为乾坤子应用】填写后将作为乾坤子应用启动，主应用注册时AppName需保持一致
+  // 【JEECG là ứng dụng con qiankun】Sau khi điền sẽ khởi động dưới dạng ứng dụng con qiankun; AppName khi ứng dụng chính đăng ký phải giữ nhất quán
   VITE_GLOB_QIANKUN_MICRO_APP_NAME?: string;
-  // 【JEECG作为乾坤子应用】作为乾坤子应用启动时必填，需与qiankun主应用注册子应用时填写的 entry 保持一致
+  // 【JEECG là ứng dụng con qiankun】Bắt buộc điền khi khởi động dưới dạng ứng dụng con qiankun; phải nhất quán với entry mà ứng dụng chính qiankun điền khi đăng ký ứng dụng con
   VITE_GLOB_QIANKUN_MICRO_APP_ENTRY?: string;
-  //在线文档编辑版本。可选属性：wps, onlyoffice
+  // Phiên bản chỉnh sửa tài liệu trực tuyến. Thuộc tính tùy chọn: wps, onlyoffice
   VITE_GLOB_ONLINE_DOCUMENT_VERSION?: string;
-  // 当前运行在什么平台
+  // Hiện đang chạy trên nền tảng nào
   VITE_GLOB_RUN_PLATFORM?: 'web' | 'electron';
 }

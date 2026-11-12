@@ -1,6 +1,6 @@
 [中文](./README.md) | English | [日本語](./README.ja-JP.md)
 
-![JEECG](https://jeecgos.oss-cn-beijing.aliyuncs.com/files/logov3.png "JeecgBoot低代码开发平台")
+![JEECG](https://jeecgos.oss-cn-beijing.aliyuncs.com/files/logov3.png "JeecgBoot Low-Code Development Platform")
 
 
 
@@ -195,7 +195,7 @@ Technical documentation
 - Demo ： [OnlineDemo](http://boot3.jeecg.com) | [APP](http://jeecg.com/appIndex)
 - Doc：  [DocumentCenter](http://help.jeecg.com) | [AI Config](https://help.jeecg.com/java/ai/aichat)
 - Newbie guide： [Quick start](http://www.jeecg.com/doc/quickstart) |   [Q&A ](http://www.jeecg.com/doc/qa)  |  [1 minute experience](https://my.oschina.net/jeecg/blog/3083313)
-- QQ group ： 716913034、964611995(满)、⑩716488839(满)、⑨808791225(满)
+- QQ group: 716913034, 964611995 (full), ⑩716488839 (full), ⑨808791225 (full)
 
 
 
@@ -352,8 +352,8 @@ Technical Architecture:
 |  Sqlserver2017   |  √   |
 |   PostgreSQL   |  √   |
 |   MariaDB   |  √   |
-|   达梦   |  √   |
-|   人大金仓   |  √   |
+|   Dameng   |  √   |
+|   Kingbase   |  √   |
 |   TiDB   |  √   |
 
 
@@ -364,9 +364,9 @@ Technical Architecture:
 | DeepSeek | √ |
 | ChatGPT | √ |
 | Qwq | √ |
-| 智库 | √ |
-| Ollama本地搭建大模型 | √ |
-| 等等。。 | √ |
+| Knowledge Base | √ |
+| Ollama Local Large Model Setup | √ |
+| etc. | √ |
 
 
 AI Config： https://help.jeecg.com/java/ai/aichat
@@ -395,10 +395,10 @@ AI APP: https://help.jeecg.com/aigc
 
    
 #### Microservice architecture diagram
-![微服务架构图](https://jeecgos.oss-cn-beijing.aliyuncs.com/files/jeecgboot_springcloud2022.png "在这里输入图片标题")
+![Microservices Architecture Diagram](https://jeecgos.oss-cn-beijing.aliyuncs.com/files/jeecgboot_springcloud2022.png "Enter image title here")
 
 ### Jeecg Boot product functionality blueprint
-![功能蓝图](https://jeecgos.oss-cn-beijing.aliyuncs.com/upload/test/Jeecg-Boot-lantu202005_1590912449914.jpg "在这里输入图片标题")
+![Feature Blueprint](https://jeecgos.oss-cn-beijing.aliyuncs.com/upload/test/Jeecg-Boot-lantu202005_1590912449914.jpg "Enter image title here")
 
 ### quick start
 - Microservice Development：  [Monomer upgrade to microservice](https://help.jeecg.com/java/springcloud/switchcloud/monomer)
@@ -450,15 +450,15 @@ AI Chat Assistant
 
 ![](https://oscimg.oschina.net/oscnet/up-000530d95df337b43089ac77e562494f454.png)
 
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14155402_AmlV.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14155402_AmlV.png "Enter image title here")
 
 ![](https://oscimg.oschina.net/oscnet/up-9d6f36f251e71a0b515a01323474b03004c.png)
 
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160813_KmXS.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160813_KmXS.png "Enter image title here")
 
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160935_Nibs.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160935_Nibs.png "Enter image title here")
 
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14161004_bxQ4.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14161004_bxQ4.png "Enter image title here")
 
 #####  interactive
 ![](https://oscimg.oschina.net/oscnet/up-78b151fc888d4319377bf1cc311fe826871.png)
@@ -469,11 +469,11 @@ AI Chat Assistant
 ##### process Designer
 ![](https://oscimg.oschina.net/oscnet/up-981ce174e4fbb48c8a2ce4ccfd7372e2994.png)
 
-![输入图片说明](https://static.oschina.net/uploads/img/201907/05165142_yyQ7.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201907/05165142_yyQ7.png "Enter image title here")
 
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160917_9Ftz.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160917_9Ftz.png "Enter image title here")
 
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160633_u59G.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160633_u59G.png "Enter image title here")
 
 ##### min process
 
@@ -554,14 +554,14 @@ AI Chat Assistant
 ##### chart
 ![](https://oscimg.oschina.net/oscnet/up-218bc6a1669496b241ebb23506440c0083e.png)
 
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160834_Lo23.png "在这里输入图片标题")
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160842_QK7B.png "在这里输入图片标题")
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160849_GBm5.png "在这里输入图片标题")
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160858_6RAM.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160834_Lo23.png "Enter image title here")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160842_QK7B.png "Enter image title here")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160849_GBm5.png "Enter image title here")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160858_6RAM.png "Enter image title here")
 
 ##### swagger
-![输入图片说明](https://static.oschina.net/uploads/img/201908/27095258_M2Xq.png "在这里输入图片标题")
-![输入图片说明](https://static.oschina.net/uploads/img/201904/14160957_hN3X.png "在这里输入图片标题")
+![Enter image description](https://static.oschina.net/uploads/img/201908/27095258_M2Xq.png "Enter image title here")
+![Enter image description](https://static.oschina.net/uploads/img/201904/14160957_hN3X.png "Enter image title here")
 
 
 ## donation

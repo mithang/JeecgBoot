@@ -1,4 +1,4 @@
-// tray = 系统托盘
+// tray = khay hệ thống
 import path from 'path';
 import { Tray, Menu, app, dialog, nativeImage, BrowserWindow, Notification, ipcMain } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
@@ -6,7 +6,7 @@ import {_PATHS} from '../paths';
 import {$env, isDev} from '../env';
 
 const TrayIcons = {
-  // 代码逻辑说明: 【JHHB-13】桌面应用消息通知
+  // Giải thích logic code: 【JHHB-13】Thông báo tin nhắn của ứng dụng desktop
   normal: nativeImage.createFromPath(
     process.platform === 'win32'
       ? path.join(_PATHS.publicRoot, 'logo.png')
@@ -15,22 +15,22 @@ const TrayIcons = {
   empty: nativeImage.createEmpty(),
 };
 
-// 创建托盘图标
+// Tạo biểu tượng khay hệ thống
 export function createTray(win: BrowserWindow) {
   const tray = new Tray(TrayIcons.normal);
 
   const TrayUtils = useTray(tray, win);
 
-  tray.setToolTip($env.VITE_GLOB_APP_TITLE! + (isDev ? ' (开发环境)' : ''));
+  tray.setToolTip($env.VITE_GLOB_APP_TITLE! + (isDev ? ' (Môi trường phát triển)' : ''));
 
-  // 左键托盘图标显示主窗口
+  // Nhấn chuột trái vào biểu tượng khay để hiển thị cửa sổ chính
   tray.on('click', () => TrayUtils.showMainWindow());
-  // 右键托盘图标显示托盘菜单
+  // Nhấn chuột phải vào biểu tượng khay để hiển thị menu khay
   tray.on('right-click', () => showTrayContextMenu());
 
   function showTrayContextMenu() {
     const trayContextMenu = getTrayMenus(win, TrayUtils);
-    // 弹出托盘菜单，不使用 setContextMenu 方法是因为要实时更新菜单内容
+    // Bật menu khay; không dùng phương thức setContextMenu vì cần cập nhật nội dung menu theo thời gian thực
     tray.popUpContextMenu(trayContextMenu);
   }
 }
@@ -43,7 +43,7 @@ export function useTray(tray: Tray, win: BrowserWindow) {
     win.show();
   }
 
-  // 开始闪动
+  // Bắt đầu nhấp nháy
   function startBlink() {
     isBlinking = true;
     tray.setImage(TrayIcons.empty);
@@ -57,7 +57,7 @@ export function useTray(tray: Tray, win: BrowserWindow) {
     }, 500);
   }
 
-  // 结束闪动
+  // Kết thúc nhấp nháy
   function stopBlink() {
     isBlinking = false;
     if (blinkTimer) {
@@ -67,13 +67,13 @@ export function useTray(tray: Tray, win: BrowserWindow) {
     tray.setImage(TrayIcons.normal);
   }
   ipcMain.on('tray-flash', (event: IpcMainInvokeEvent) => {
-    // 仅在 Windows 系统中闪烁
+    // Chỉ nhấp nháy trên hệ thống Windows
     if (process.platform === 'win32') {
       startBlink();
     }
   });
   ipcMain.on('tray-flash-stop', (event: IpcMainInvokeEvent) => {
-    // 仅在 Windows 系统中停止闪烁
+    // Chỉ dừng nhấp nháy trên hệ thống Windows
     if (process.platform === 'win32') {
       stopBlink();
     }
@@ -81,29 +81,29 @@ export function useTray(tray: Tray, win: BrowserWindow) {
   win.on('focus', () => {
     stopBlink();
   });
-  // 发送桌面通知
+  // Gửi thông báo desktop
   function sendDesktopNotice() {
-    // 判断是否支持桌面通知
+    // Kiểm tra có hỗ trợ thông báo desktop không
     if (!Notification.isSupported()) {
-      // todo 实际开发中不需要提示，直接返回或者换一种提示方式
+      // todo Trong quá trình phát triển thực tế không cần nhắc, trả về trực tiếp hoặc đổi sang cách nhắc khác
       dialog.showMessageBoxSync(win, {
         type: 'error',
-        title: '错误',
-        message: '当前系统不支持桌面通知',
+        title: 'Lỗi',
+        message: 'Hệ thống hiện tại không hỗ trợ thông báo desktop',
       });
       return;
     }
     const ins = new Notification({
-      title: '通知标题',
-      body: '通知内容第一行\n通知内容第二行',
+      title: 'Tiêu đề thông báo',
+      body: 'Dòng đầu tiên của nội dung thông báo\nDòng thứ hai của nội dung thông báo',
       // icon: TrayIcons.normal.resize({width: 32, height: 32}),
     });
 
     ins.on('click', () => {
       dialog.showMessageBoxSync(win, {
         type: 'info',
-        title: '提示',
-        message: '通知被点击',
+        title: 'Nhắc nhở',
+        message: 'Đã nhấn vào thông báo',
       });
     });
 
@@ -132,7 +132,7 @@ const MenuIcon = {
     }),
 };
 
-// 设置托盘菜单
+// Thiết lập menu khay hệ thống
 function getTrayMenus(win: BrowserWindow, TrayUtils: ReturnType<typeof useTray>) {
   const {startBlink, stopBlink, sendDesktopNotice} = TrayUtils;
   const isBlinking = TrayUtils.isBlinking();
@@ -141,25 +141,25 @@ function getTrayMenus(win: BrowserWindow, TrayUtils: ReturnType<typeof useTray>)
     ...(isDev
       ? [
         {
-          label: '开发工具',
+          label: 'Công cụ phát triển',
           submenu: [
             {
-              label: '以下菜单仅显示在开发环境',
-              sublabel: '当前为开发环境',
+              label: 'Các menu dưới đây chỉ hiển thị trong môi trường phát triển',
+              sublabel: 'Hiện đang ở môi trường phát triển',
               enabled: false,
             },
             {type: 'separator'},
             {
-              label: '切换 DevTools',
+              label: 'Bật/tắt DevTools',
               click: () => win.webContents.toggleDevTools(),
             },
             {
-              label: `托盘图标${isBlinking ? '停止' : '开始'}闪烁`,
-              sublabel: '模拟新消息提醒',
+              label: `Biểu tượng khay hệ thống ${isBlinking ? 'dừng' : 'bắt đầu'} nhấp nháy`,
+              sublabel: 'Mô phỏng nhắc tin nhắn mới',
               click: () => (isBlinking ? stopBlink() : startBlink()),
             },
             {
-              label: '发送桌面通知示例',
+              label: 'Ví dụ gửi thông báo desktop',
               click: () => sendDesktopNotice(),
             },
           ],
@@ -168,28 +168,28 @@ function getTrayMenus(win: BrowserWindow, TrayUtils: ReturnType<typeof useTray>)
       ]
       : ([] as any)),
     {
-      label: '显示主窗口',
-      // 文件图标
+      label: 'Hiển thị cửa sổ chính',
+      // Biểu tượng tệp
       icon: TrayIcons.normal.resize({width: 16, height: 16}),
       click: () => win.show(),
     },
     {type: 'separator'},
     {
-      label: '退出',
-      // base64图标
+      label: 'Thoát',
+      // Biểu tượng base64
       icon: MenuIcon.exit,
       click: () => {
-        // 弹出是否确认退出提示框
+        // Bật hộp thoại hỏi có xác nhận thoát không
         const choice = dialog.showMessageBoxSync(win, {
           type: 'question',
-          title: '提示',
-          message: '确定要退出应用吗？',
-          buttons: ['退出', '取消'],
+          title: 'Nhắc nhở',
+          message: 'Bạn có chắc chắn muốn thoát ứng dụng không?',
+          buttons: ['Thoát', 'Hủy'],
           defaultId: 1,
           cancelId: 1,
           noLink: true,
         });
-        // 用户选择了退出，直接 exit
+        // Người dùng đã chọn thoát, exit trực tiếp
         if (choice === 0) {
           // global.isQuitting = true;
           app.exit(0);

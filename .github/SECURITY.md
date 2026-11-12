@@ -1,25 +1,25 @@
-# Security Policy / 安全策略
+# Security Policy / Chính sách bảo mật
 
-## Supported Versions / 支持版本
+## Supported Versions / Các phiên bản được hỗ trợ
 
 Security fixes are generally provided for the latest released version of JeecgBoot. Please upgrade to the latest release before reporting an issue that may already have been fixed.
 
-JeecgBoot 原则上仅为最新正式版本提供安全修复。报告可能已经修复的问题前，请先升级到最新版本进行确认。
+Về nguyên tắc, JeecgBoot chỉ cung cấp bản sửa lỗi bảo mật cho phiên bản chính thức mới nhất. Trước khi báo cáo một vấn đề có thể đã được sửa, vui lòng nâng cấp lên phiên bản mới nhất để xác nhận.
 
-| Version / 版本 | Supported / 是否支持 |
+| Version / Phiên bản | Supported / Được hỗ trợ |
 | --- | --- |
-| Latest release / 最新正式版 | Yes / 是 |
-| Older releases / 历史版本 | No / 否 |
+| Latest release / Phiên bản chính thức mới nhất | Yes / Có |
+| Older releases / Phiên bản cũ | No / Không |
 
-## Reporting a Vulnerability / 报告安全漏洞
+## Reporting a Vulnerability / Báo cáo lỗ hổng bảo mật
 
 Please report suspected security vulnerabilities through [GitHub Private Vulnerability Reporting](https://github.com/jeecgboot/JeecgBoot/security/advisories/new).
 
-如发现疑似安全漏洞，请通过 [GitHub 私密漏洞报告](https://github.com/jeecgboot/JeecgBoot/security/advisories/new) 提交。
+Nếu phát hiện lỗ hổng bảo mật nghi ngờ, vui lòng gửi qua [Báo cáo lỗ hổng riêng tư trên GitHub](https://github.com/jeecgboot/JeecgBoot/security/advisories/new).
 
 **Do not disclose vulnerability details in a public GitHub issue, discussion, pull request, or other public channel before a fix is available.**
 
-**在修复发布前，请勿在公开的 GitHub Issue、Discussion、Pull Request 或其他公开渠道披露漏洞细节。**
+**Trước khi bản sửa lỗi được phát hành, vui lòng không tiết lộ chi tiết lỗ hổng trên GitHub Issue, Discussion, Pull Request công khai hoặc bất kỳ kênh công khai nào khác.**
 
 Please include as much of the following information as possible:
 
@@ -30,21 +30,21 @@ Please include as much of the following information as possible:
 - Security impact and possible attack scenarios
 - Suggested remediation, if available
 
-请尽可能提供以下信息：
+Vui lòng cung cấp càng nhiều thông tin sau đây càng tốt:
 
-- 受影响的 JeecgBoot 版本、分支和部署模式
-- 漏洞类型以及受影响的组件或接口
-- 利用所需权限和前置条件
-- 复现步骤或最小化验证代码（PoC）
-- 安全影响和可能的攻击场景
-- 修复建议（如有）
+- Phiên bản, nhánh và chế độ triển khai JeecgBoot bị ảnh hưởng
+- Loại lỗ hổng và component hoặc endpoint bị ảnh hưởng
+- Quyền hạn và điều kiện tiên quyết cần thiết để khai thác
+- Các bước tái hiện hoặc mã xác minh tối thiểu (PoC)
+- Tác động bảo mật và các kịch bản tấn công có thể xảy ra
+- Đề xuất khắc phục (nếu có)
 
-## Disclosure Process / 披露流程
+## Disclosure Process / Quy trình công bố
 
 Maintainers will review the report privately and may request additional information. If the report is confirmed, we will coordinate remediation and public disclosure with the reporter. Please allow a reasonable amount of time for investigation and remediation before any public disclosure.
 
-维护者将对报告进行私密审查，并可能要求补充信息。如果漏洞得到确认，我们会与报告者协调修复及公开披露。请在公开漏洞信息前，为调查和修复预留合理时间。
+Người duy trì sẽ xem xét báo cáo một cách riêng tư và có thể yêu cầu thêm thông tin. Nếu lỗ hổng được xác nhận, chúng tôi sẽ phối hợp với người báo cáo để khắc phục và công khai thông tin. Vui lòng dành một khoảng thời gian hợp lý cho việc điều tra và khắc phục trước khi công khai thông tin về lỗ hổng.
 
 Thank you for helping keep JeecgBoot and its users secure.
 
-感谢你帮助 JeecgBoot 及其用户提升安全性。
+Cảm ơn bạn đã giúp JeecgBoot và người dùng của nó nâng cao tính bảo mật.

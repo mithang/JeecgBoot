@@ -6,16 +6,16 @@ const demoList = (keyword, count = 20) => {
     list: [] as any[],
   };
   for (let index = 0; index < count; index++) {
-    //根据搜索关键词做一下匹配
-    let name = `选项${index}`;
+    // Khớp theo từ khóa tìm kiếm
+    let name = `Tùy chọn ${index}`;
     if(keyword && name.indexOf(keyword)!=-1){
       result.list.push({
-        name: `选项${index}`,
+        name: `Tùy chọn ${index}`,
         id: `${index}`,
       });
     }else if(!keyword){
       result.list.push({
-        name: `选项${index}`,
+        name: `Tùy chọn ${index}`,
         id: `${index}`,
       });
     }
@@ -30,7 +30,7 @@ export default [
     method: 'get',
     response: ({ query }) => {
       const { keyword,count} = query;
-      console.log("查询条件：", keyword);
+      console.log("Điều kiện tìm kiếm:", keyword);
       return resultSuccess(demoList(keyword,count));
     },
   },

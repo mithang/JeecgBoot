@@ -9,13 +9,13 @@ const demoTreeList = (keyword) => {
     const children: Recordable[] = [];
     for (let j = 0; j < 3; j++) {
       children.push({
-        title: `${keyword ?? ''}选项${index}-${j}`,
+        title: `${keyword ?? ''}Tùy chọn ${index}-${j}`,
         value: `${index}-${j}`,
         key: `${index}-${j}`,
       });
     }
     result.list.push({
-      title: `${keyword ?? ''}选项${index}`,
+      title: `${keyword ?? ''}Tùy chọn ${index}`,
       value: `${index}`,
       key: `${index}`,
       children,
@@ -31,7 +31,7 @@ export default [
     method: 'get',
     response: ({ query }) => {
       const { keyword } = query;
-      console.log("查询条件：", keyword);
+      console.log("Điều kiện tìm kiếm:", keyword);
       return resultSuccess(demoTreeList(keyword));
     },
   },

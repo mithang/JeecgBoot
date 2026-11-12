@@ -8,7 +8,7 @@ let yamlName = 'electron-builder.yaml';
 const sourcePath = fs.readFileSync(path.join(root, yamlName), 'utf-8');
 
 try {
-  // 通过正则表达式匹配 appId 和 productName
+  // Khớp appId và productName bằng biểu thức chính quy
   const appIdMatch = sourcePath.match(/appId:\s*['"]([^'"]+)['"]/);
   const productNameMatch = sourcePath.match(/productName:\s*['"]([^'"]+)['"]/);
   if (appIdMatch && productNameMatch) {
@@ -22,6 +22,6 @@ try {
   }
 } catch (e) {
   console.error(e);
-  console.error(`请检查 ${yamlName} 是否存在，或者内容是否正确`);
+  console.error(`Vui lòng kiểm tra ${yamlName} có tồn tại hay không, hoặc nội dung có đúng không`);
   process.exit(1);
 }

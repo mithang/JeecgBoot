@@ -75,7 +75,7 @@ services:
     restart: on-failure
     mac_address: 02:42:ac:11:00:02
     depends_on:
-      # 等依赖服务healthcheck通过后再启动应用（应用Dockerfile已去掉sleep，直接启动）
+      # Chỉ khởi động ứng dụng sau khi healthcheck của các service phụ thuộc đã pass (Dockerfile của ứng dụng đã bỏ sleep, khởi động trực tiếp)
       jeecg-boot-mysql:
         condition: service_healthy
       jeecg-boot-redis:

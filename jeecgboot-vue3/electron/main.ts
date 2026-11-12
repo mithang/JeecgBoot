@@ -4,16 +4,16 @@ import { createMainWindow, createIndexWindow } from './utils/window';
 import { getAppInfo } from './utils';
 import './ipc';
 
-// 隐藏所有菜单
+// Ẩn toàn bộ menu
 Menu.setApplicationMenu(null);
 
 let mainWindow: BrowserWindow | null = null;
 
 function main() {
   mainWindow = createMainWindow();
-  // 代码逻辑说明: 【JHHB-13】桌面应用消息通知
+  // Giải thích logic code: 【JHHB-13】Thông báo tin nhắn của ứng dụng desktop
   mainWindow.on('focus', () => {
-    // 清除任务栏闪烁
+    // Xóa nhấp nháy thanh tác vụ
     if (process.platform === 'win32') {
       mainWindow!.flashFrame(false);
     }
@@ -21,25 +21,25 @@ function main() {
   return mainWindow;
 }
 
-// 非开发环境，只允许一个实例运行
+// Môi trường không phải dev, chỉ cho phép một phiên bản chạy
 if (!isDev) {
-  // 是否取得了单一实例锁
+  // Đã lấy được khóa single-instance hay chưa
   const gotTheLock = app.requestSingleInstanceLock();
 
   if (gotTheLock) {
     app.on('second-instance', () => {
-      // 开启一个新的窗口
+      // Mở một cửa sổ mới
       createIndexWindow();
     });
   } else {
-    // 没有取得单一实例锁，则退出应用
+    // Không lấy được khóa single-instance thì thoát ứng dụng
     app.exit(0);
   }
 }
 
-// 生命周期管理
+// Quản lý vòng đời
 app.whenReady().then(() => {
-  // 获取应用信息
+  // Lấy thông tin ứng dụng
   const $appInfo = getAppInfo();
   if ($appInfo?.productName && $appInfo?.appId) {
     app.setName($appInfo.productName);

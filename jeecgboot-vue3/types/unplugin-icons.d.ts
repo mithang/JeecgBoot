@@ -1,6 +1,6 @@
 /**
- * unplugin-icons 类型声明
- * 为 ~icons 路径提供类型支持
+ * Khai báo kiểu cho unplugin-icons
+ * Cung cấp hỗ trợ kiểu cho đường dẫn ~icons
  */
 
 declare module '~icons/*' {

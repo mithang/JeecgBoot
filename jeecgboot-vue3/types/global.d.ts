@@ -64,13 +64,13 @@ declare global {
     VITE_USE_CDN: boolean;
     VITE_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none';
     VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean;
-    // 【JEECG作为乾坤子应用】乾坤子应用名，主应用注册时AppName需保持一致
+    // 【JEECG là ứng dụng con qiankun】Tên ứng dụng con qiankun; AppName khi ứng dụng chính đăng ký phải giữ nhất quán
     VITE_GLOB_QIANKUN_MICRO_APP_NAME?: string;
-    // 【JEECG作为乾坤子应用】非必填，需与qiankun主应用注册子应用时填写的 entry 保持一致
+    // 【JEECG là ứng dụng con qiankun】Không bắt buộc; phải nhất quán với entry mà ứng dụng chính qiankun điền khi đăng ký ứng dụng con
     VITE_GLOB_QIANKUN_MICRO_APP_ENTRY?: string;
-    // 当前运行在什么平台
+    // Hiện đang chạy trên nền tảng nào
     VITE_GLOB_RUN_PLATFORM?: 'web' | 'electron';
-    // iconify图标使用在线还是本地。可选属性：online, local
+    // Biểu tượng iconify dùng trực tuyến hay cục bộ. Thuộc tính tùy chọn: online, local
     VITE_GLOB_ICONIFY_USE_TYPE?: 'online' | 'local';
   }
 

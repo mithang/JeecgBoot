@@ -102,7 +102,7 @@ Optional microservices modules (activated via `-P SpringCloud`):
 
 ## Database
 
-**Supported:** MySQL 8.0+ (default), PostgreSQL, Oracle 11g+, SQL Server 2017+, MariaDB, DM8 (达梦), KingBase ES. Database-specific configs are in `application-{dbtype}.yml` profiles.
+**Supported:** MySQL 8.0+ (default), PostgreSQL, Oracle 11g+, SQL Server 2017+, MariaDB, DM8 (Dameng), KingBase ES. Database-specific configs are in `application-{dbtype}.yml` profiles.
 
 **Initial setup:** Import `db/jeecgboot-mysql-5.7.sql` for the base schema. Flyway handles incremental migrations (scripts organized by date folders like `202512/`).
 
@@ -121,8 +121,8 @@ Key config namespace: `jeecg.*` in YAML controls platform features (upload type,
 
 MySQL (port 13306), Redis, PostgreSQL+pgvector, MongoDB, and the application container (port 8080).
 
-## Online 低代码模块 (jeecg-boot-module-online)
+## Mô-đun low-code Online (jeecg-boot-module-online)
 
-Online 模块采用**元数据驱动**架构，通过数据库配置表（`onl_cgform_*`）实现运行时 CRUD，无需生成代码。配置存在数据库中而非文件系统，Claude Code 无法直接读取具体表单配置，需用户提供 JSON 导出或截图。
+Mô-đun Online áp dụng kiến trúc **điều khiển bằng metadata**, triển khai CRUD tại runtime thông qua các bảng cấu hình trong cơ sở dữ liệu (`onl_cgform_*`) mà không cần tạo mã. Cấu hình được lưu trong cơ sở dữ liệu chứ không phải hệ thống tệp, vì vậy Claude Code không thể đọc trực tiếp cấu hình biểu mẫu cụ thể; người dùng cần cung cấp bản xuất JSON hoặc ảnh chụp màn hình.
 
-**完整的配置 Schema、控件类型、默认值语法、增强机制等详见: [online-form-schema.md](online-form-schema.md)**
+**Schema cấu hình đầy đủ, các loại control, cú pháp giá trị mặc định, cơ chế tăng cường, v.v. xem chi tiết tại: [online-form-schema.md](online-form-schema.md)**

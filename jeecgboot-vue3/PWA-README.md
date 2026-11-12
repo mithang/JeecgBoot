@@ -1,188 +1,188 @@
-# PWA 功能说明
+# Hướng dẫn tính năng PWA
 
-## 概述
+## Tổng quan
 
-项目集成了 `vite-plugin-pwa` 插件，**适配按需加载**，实现资源缓存优化和离线支持。
+Dự án đã tích hợp plugin `vite-plugin-pwa`, **tương thích với tải theo nhu cầu**, giúp tối ưu bộ nhớ đệm tài nguyên và hỗ trợ ngoại tuyến.
 
-**升级亮点**：通过集成 vite-plugin-pwa 实现渐进式 Web 应用，提升了首屏加载速度，同时异步加载系统资源，点击菜单响应更迅速。
+**Điểm nổi bật của bản nâng cấp**:Thông qua việc tích hợp vite-plugin-pwa để triển khai Progressive Web App, tốc độ tải màn hình đầu tiên được cải thiện, đồng thời tài nguyên hệ thống được tải bất đồng bộ, giúp phản hồi khi nhấp menu nhanh hơn.
 
-**核心设计**：只预缓存关键资源，按需加载的路由组件 chunk 通过运行时缓存策略处理，避免预缓存过多资源。
+**Thiết kế cốt lõi**:Chỉ precache các tài nguyên quan trọng, các chunk của component route được tải theo nhu cầu sẽ được xử lý bằng chiến lược runtime cache, tránh precache quá nhiều tài nguyên.
 
-## 核心文件
+## Các tệp cốt lõi
 
-### 构建生成的文件
+### Các tệp được tạo ra khi build
 
-- **`sw.js`** - Service Worker 文件，由 `vite-plugin-pwa` 自动生成，包含：
-  - 预缓存资源列表（HTML、CSS、核心 JS、静态资源）
-  - 运行时缓存策略（JS chunk、CSS、图片、API 等）
-  - 缓存清理和更新逻辑
+- **`sw.js`** - Tệp Service Worker, được `vite-plugin-pwa` tự động tạo, bao gồm:
+  - Danh sách tài nguyên precache(HTML,CSS,JS cốt lõi, tài nguyên tĩnh)
+  - Chiến lược runtime cache(JS chunk,CSS,hình ảnh,API, v.v.)
+  - Logic dọn dẹp và cập nhật bộ nhớ đệm
 
-- **`workbox-*.js`** - Workbox 运行时库，Service Worker 的核心依赖
+- **`workbox-*.js`** - Thư viện runtime Workbox, dependency cốt lõi của Service Worker
 
-- **`manifest.webmanifest`** - PWA 清单文件，定义应用元数据
+- **`manifest.webmanifest`** - Tệp manifest PWA, định nghĩa metadata của ứng dụng
 
-### 配置文件
+### Tệp cấu hình
 
-- **`build/vite/plugin/pwa.ts`** - PWA 插件配置
-  - **预缓存策略**：只缓存关键资源
-    - 入口文件：`index.html`、`manifest.webmanifest`
-    - 核心 JS：入口 JS（`js/index-*.js`）、vendor chunk（`js/*-vendor-*.js`）
-    - 静态资源：CSS、图片、字体等
-    - **不预缓存**：按需加载的路由组件 chunk（避免预缓存过多资源）
-  - **运行时缓存**：按需加载的资源通过运行时缓存策略处理
-    - 按需加载的 JS chunk：NetworkFirst（优先网络，失败后使用缓存）
-    - CSS、图片、API 等：按需缓存
-  - **注册方式**：`injectRegister: 'inline'`（内联到 HTML，避免缓存问题）
+- **`build/vite/plugin/pwa.ts`** - Cấu hình plugin PWA
+  - **Chiến lược precache**:Chỉ cache các tài nguyên quan trọng
+    - Tệp entry:`index.html`,`manifest.webmanifest`
+    - JS cốt lõi:JS entry(`js/index-*.js`),vendor chunk(`js/*-vendor-*.js`)
+    - Tài nguyên tĩnh:CSS,hình ảnh,font chữ, v.v.
+    - **Không precache**:Chunk của component route tải theo nhu cầu(tránh precache quá nhiều tài nguyên)
+  - **Runtime cache**:Tài nguyên tải theo nhu cầu được xử lý bằng chiến lược runtime cache
+    - JS chunk tải theo nhu cầu:NetworkFirst(ưu tiên mạng, dùng bộ nhớ đệm khi thất bại)
+    - CSS,hình ảnh,API, v.v.:cache theo nhu cầu
+  - **Cách đăng ký**:`injectRegister: 'inline'`(inline vào HTML, tránh vấn đề bộ nhớ đệm)
 
-## 功能特性
+## Tính năng
 
-1. **资源缓存优化** - 通过缓存策略提升加载速度
-2. **离线支持** - 缓存静态资源，支持离线访问
+1. **Tối ưu bộ nhớ đệm tài nguyên** - Nâng cao tốc độ tải thông qua chiến lược cache
+2. **Hỗ trợ ngoại tuyến** - Cache tài nguyên tĩnh, hỗ trợ truy cập ngoại tuyến
 
-## 缓存策略
+## Chiến lược bộ nhớ đệm
 
-### 预缓存（Precache）
+### Precache
 
-| 资源类型 | 说明 |
+| Loại tài nguyên | Mô tả |
 |---------|------|
-| `index.html` | 入口 HTML 文件 |
-| `manifest.webmanifest` | PWA 清单文件 |
-| `js/index-*.js` | 入口 JS 文件 |
-| `js/*-vendor-*.js` | 核心 vendor chunk（Vue、Ant Design Vue 等） |
-| `assets/index-*.css` | **仅入口 CSS**（主样式文件） |
-| `favicon.ico`、`logo.png` | **仅关键静态资源**（logo、图标） |
+| `index.html` | Tệp HTML entry |
+| `manifest.webmanifest` | Tệp manifest PWA |
+| `js/index-*.js` | Tệp JS entry |
+| `js/*-vendor-*.js` | Vendor chunk cốt lõi(Vue,Ant Design Vue, v.v.) |
+| `assets/index-*.css` | **Chỉ CSS entry**(tệp style chính) |
+| `favicon.ico`,`logo.png` | **Chỉ tài nguyên tĩnh quan trọng**(logo, biểu tượng) |
 
-**重要优化**：
-- ❌ **不预缓存**：路由组件的 CSS（避免登录页加载全部 CSS）
-- ❌ **不预缓存**：路由组件的 JS chunk（按需加载）
-- ❌ **不预缓存**：所有图片和字体（按需加载）
-- ✅ **只预缓存**：登录页和首屏必需的关键资源
+**Tối ưu quan trọng**:
+- ❌ **Không precache**:CSS của component route(tránh việc trang đăng nhập tải toàn bộ CSS)
+- ❌ **Không precache**:JS chunk của component route(tải theo nhu cầu)
+- ❌ **Không precache**:Tất cả hình ảnh và font chữ(tải theo nhu cầu)
+- ✅ **Chỉ precache**:Các tài nguyên quan trọng cần thiết cho trang đăng nhập và màn hình đầu tiên
 
-**效果**：访问登录页时，只加载登录页相关资源，不会预加载系统大部分资源。
+**Hiệu quả**:Khi truy cập trang đăng nhập, chỉ tải các tài nguyên liên quan đến trang đăng nhập, không preload phần lớn tài nguyên của hệ thống.
 
-### 运行时缓存（Runtime Cache）
+### Runtime Cache
 
-| 资源类型 | 策略 | 有效期 | 说明 |
+| Loại tài nguyên | Chiến lược | Thời hạn hiệu lực | Mô tả |
 |---------|------|--------|------|
-| 按需加载 JS chunk | NetworkFirst | 7天 | 优先网络，失败后使用缓存 |
-| 路由组件 CSS | CacheFirst | 30天 | **按需加载**，优先缓存 |
-| 图片 | CacheFirst | 30天 | 优先缓存 |
-| API 请求 | NetworkFirst | 5分钟 | 优先网络，短时缓存 |
-| Google Fonts | CacheFirst | 365天 | 长期缓存 |
+| JS chunk tải theo nhu cầu | NetworkFirst | 7 ngày | Ưu tiên mạng, dùng bộ nhớ đệm khi thất bại |
+| CSS của component route | CacheFirst | 30 ngày | **Tải theo nhu cầu**,ưu tiên bộ nhớ đệm |
+| Hình ảnh | CacheFirst | 30 ngày | Ưu tiên bộ nhớ đệm |
+| Yêu cầu API | NetworkFirst | 5 phút | Ưu tiên mạng, cache trong thời gian ngắn |
+| Google Fonts | CacheFirst | 365 ngày | Cache dài hạn |
 
-**优势**：
-- ✅ **减少预缓存体积 80%+**：只预缓存关键资源，不预缓存路由组件 CSS/JS
-- ✅ **登录页加载优化**：访问登录页时只加载登录页资源，不会加载系统大部分资源
-- ✅ **按需加载**：路由组件的 CSS 和 JS 只在访问对应页面时加载和缓存
-- ✅ **节省存储空间**：按需加载的 chunk 只在需要时缓存
-- ✅ **网络优先策略**：确保用户获取最新代码
+**Ưu điểm**:
+- ✅ **Giảm dung lượng precache hơn 80%**:Chỉ precache tài nguyên quan trọng, không precache CSS/JS của component route
+- ✅ **Tối ưu tải trang đăng nhập**:Khi truy cập trang đăng nhập chỉ tải tài nguyên của trang đăng nhập, không tải phần lớn tài nguyên của hệ thống
+- ✅ **Tải theo nhu cầu**:CSS và JS của component route chỉ được tải và cache khi truy cập trang tương ứng
+- ✅ **Tiết kiệm dung lượng lưu trữ**:Chunk tải theo nhu cầu chỉ được cache khi cần
+- ✅ **Chiến lược ưu tiên mạng**:Đảm bảo người dùng nhận được mã mới nhất
 
-## 性能提升分析
+## Phân tích cải thiện hiệu năng
 
-### 首次访问（无缓存）
+### Lần truy cập đầu tiên(không có bộ nhớ đệm)
 
-- **Service Worker 注册**：~50-100ms（后台异步，不影响页面加载）
-- **预缓存安装**：~200-500ms（后台进行，关键资源已加载）
-- **页面加载**：无影响（Service Worker 在后台工作）
+- **Đăng ký Service Worker**:~50-100ms(bất đồng bộ ở chế độ nền, không ảnh hưởng đến việc tải trang)
+- **Cài đặt precache**:~200-500ms(thực hiện ở chế độ nền, tài nguyên quan trọng đã được tải)
+- **Tải trang**:Không ảnh hưởng(Service Worker hoạt động ở chế độ nền)
 
-### 二次访问（有缓存）
+### Lần truy cập thứ hai(đã có bộ nhớ đệm)
 
-| 指标 | 无 PWA | 有 PWA | 提升 |
+| Chỉ số | Không có PWA | Có PWA | Mức cải thiện |
 |------|--------|--------|------|
-| **首屏加载时间** | 2-5s | 0.5-1.5s | **60-70%** ⬇️ |
-| **关键资源加载** | 网络请求 | 缓存读取 | **90%+** ⬇️ |
-| **CSS 加载** | 100-300ms | <10ms | **95%+** ⬇️ |
-| **图片加载** | 200-500ms | <10ms | **95%+** ⬇️ |
-| **离线访问** | ❌ 不可用 | ✅ 可用 | - |
+| **Thời gian tải màn hình đầu tiên** | 2-5s | 0.5-1.5s | **60-70%** ⬇️ |
+| **Tải tài nguyên quan trọng** | Yêu cầu mạng | Đọc từ bộ nhớ đệm | **90%+** ⬇️ |
+| **Tải CSS** | 100-300ms | <10ms | **95%+** ⬇️ |
+| **Tải hình ảnh** | 200-500ms | <10ms | **95%+** ⬇️ |
+| **Truy cập ngoại tuyến** | ❌ Không khả dụng | ✅ Khả dụng | - |
 
-### 按需加载优化
+### Tối ưu tải theo nhu cầu
 
-- **预缓存体积**：仅 ~1-3MB（关键资源），而非全部资源（**减少 80%+**）
-- **Service Worker 安装时间**：减少 **60-80%**
-- **登录页加载**：只加载登录页资源，**不加载系统大部分资源**
-- **存储空间**：节省 **70-85%**（不预缓存路由组件 CSS/JS）
+- **Dung lượng precache**:Chỉ ~1-3MB(tài nguyên quan trọng),không phải toàn bộ tài nguyên(**giảm hơn 80%**)
+- **Thời gian cài đặt Service Worker**:Giảm **60-80%**
+- **Tải trang đăng nhập**:Chỉ tải tài nguyên của trang đăng nhập,**không tải phần lớn tài nguyên của hệ thống**
+- **Dung lượng lưu trữ**:Tiết kiệm **70-85%**(không precache CSS/JS của component route)
 
-### 实际场景性能提升
+### Cải thiện hiệu năng trong các tình huống thực tế
 
-1. **弱网环境（3G/4G）**
-   - 首屏加载：**3-5s → 0.8-1.5s**（提升 60-70%）
-   - 页面切换：**1-2s → 0.2-0.5s**（提升 75-80%）
+1. **Môi trường mạng yếu(3G/4G)**
+   - Tải màn hình đầu tiên:**3-5s → 0.8-1.5s**(cải thiện 60-70%)
+   - Chuyển trang:**1-2s → 0.2-0.5s**(cải thiện 75-80%)
 
-2. **离线访问**
-   - 已访问页面：**完全可用**
-   - 未访问页面：**部分可用**（关键资源已缓存）
+2. **Truy cập ngoại tuyến**
+   - Trang đã truy cập:**Hoàn toàn khả dụng**
+   - Trang chưa truy cập:**Khả dụng một phần**(tài nguyên quan trọng đã được cache)
 
-3. **重复访问**
-   - 资源加载：**网络 → 缓存**（提升 90%+）
-   - 用户体验：**秒开**（<100ms）
+3. **Truy cập lặp lại**
+   - Tải tài nguyên:**Mạng → Bộ nhớ đệm**(cải thiện hơn 90%)
+   - Trải nghiệm người dùng:**Mở ngay lập tức**(<100ms)
 
-## 前端体验优化建议
+## Đề xuất tối ưu trải nghiệm front-end
 
-### 1. 资源加载优化
+### 1. Tối ưu tải tài nguyên
 
-- ✅ **已实现**：
-  - 只预缓存关键资源（入口 JS、vendor、入口 CSS、logo）
-  - 路由组件的 CSS 和 JS **不预缓存**，按需加载
-  - 访问登录页时只加载登录页资源，不会加载系统大部分资源
-- 💡 **建议**：确保静态资源（图片、字体）使用 CDN，配合缓存策略
+- ✅ **Đã triển khai**:
+  - Chỉ precache tài nguyên quan trọng(JS entry, vendor, CSS entry, logo)
+  - CSS và JS của component route **không precache**,tải theo nhu cầu
+  - Khi truy cập trang đăng nhập chỉ tải tài nguyên của trang đăng nhập, không tải phần lớn tài nguyên của hệ thống
+- 💡 **Đề xuất**:Đảm bảo tài nguyên tĩnh(hình ảnh, font chữ)sử dụng CDN, kết hợp với chiến lược cache
 
-### 2. 网络策略优化
+### 2. Tối ưu chiến lược mạng
 
-- ✅ **已实现**：JS chunk 使用 NetworkFirst（3s 超时）
-- 💡 **建议**：可根据实际网络情况调整 `networkTimeoutSeconds`
-  - 弱网环境：可适当增加超时时间（5-8s）
-  - 强网环境：可减少超时时间（1-2s）
+- ✅ **Đã triển khai**:JS chunk sử dụng NetworkFirst(timeout 3s)
+- 💡 **Đề xuất**:Có thể điều chỉnh `networkTimeoutSeconds` theo tình hình mạng thực tế
+  - Môi trường mạng yếu:Có thể tăng thời gian timeout cho phù hợp(5-8s)
+  - Môi trường mạng mạnh:Có thể giảm thời gian timeout(1-2s)
 
-### 3. 缓存策略优化
+### 3. Tối ưu chiến lược bộ nhớ đệm
 
-- ✅ **已实现**：CSS、图片使用 CacheFirst（30天）
-- 💡 **建议**：
-  - 静态资源（logo、图标）：可延长至 90-180 天
-  - 业务图片：保持 30 天，确保内容更新及时
+- ✅ **Đã triển khai**:CSS, hình ảnh sử dụng CacheFirst(30 ngày)
+- 💡 **Đề xuất**:
+  - Tài nguyên tĩnh(logo, biểu tượng):Có thể kéo dài đến 90-180 ngày
+  - Hình ảnh nghiệp vụ:Giữ 30 ngày, đảm bảo nội dung được cập nhật kịp thời
 
-### 4. 存储空间管理
+### 4. Quản lý dung lượng lưu trữ
 
-- ✅ **已实现**：按需加载 chunk 限制 100 个，7 天过期
-- 💡 **建议**：
-  - 监控缓存使用情况（Chrome DevTools → Application → Storage）
-  - 根据用户访问模式调整 `maxEntries` 和 `maxAgeSeconds`
+- ✅ **Đã triển khai**:Chunk tải theo nhu cầu giới hạn 100 chunk, hết hạn sau 7 ngày
+- 💡 **Đề xuất**:
+  - Theo dõi tình hình sử dụng bộ nhớ đệm(Chrome DevTools → Application → Storage)
+  - Điều chỉnh `maxEntries` và `maxAgeSeconds` theo mô hình truy cập của người dùng
 
-### 5. 用户体验优化
+### 5. Tối ưu trải nghiệm người dùng
 
-- ✅ **已实现**：Service Worker 后台注册，不阻塞页面加载
-- 💡 **建议**：
-  - 添加加载提示（可选）：显示"正在准备离线功能"
-  - 错误处理：Service Worker 注册失败时优雅降级
+- ✅ **Đã triển khai**:Service Worker đăng ký ở chế độ nền, không chặn việc tải trang
+- 💡 **Đề xuất**:
+  - Thêm gợi ý đang tải(tùy chọn):Hiển thị "Đang chuẩn bị tính năng ngoại tuyến"
+  - Xử lý lỗi:Hạ cấp một cách mượt mà khi đăng ký Service Worker thất bại
 
-### 6. 性能监控
+### 6. Giám sát hiệu năng
 
-建议监控以下指标：
-- **FCP（First Contentful Paint）**：目标 < 1.5s
-- **LCP（Largest Contentful Paint）**：目标 < 2.5s
-- **TTI（Time to Interactive）**：目标 < 3.5s
-- **缓存命中率**：目标 > 80%
+Nên giám sát các chỉ số sau:
+- **FCP(First Contentful Paint)**:Mục tiêu < 1.5s
+- **LCP(Largest Contentful Paint)**:Mục tiêu < 2.5s
+- **TTI(Time to Interactive)**:Mục tiêu < 3.5s
+- **Tỷ lệ cache hit**:Mục tiêu > 80%
 
-## 注意事项
+## Lưu ý
 
-1. **仅生产环境生效** - 开发环境默认禁用
-2. **HTTPS 要求** - Service Worker 仅在 HTTPS 或 localhost 下工作
-3. **注册代码内联** - 使用 `injectRegister: 'inline'` 避免 `registerSW.js` 缓存问题
-4. **手动注册** - Service Worker 通过内联代码自动注册，但**不包含自动更新检测功能**
-5. **按需加载适配** - 配置已优化适配 Vue Router 的按需加载，只预缓存关键资源，路由组件 chunk 按需缓存
+1. **Chỉ có hiệu lực trong môi trường production** - Môi trường dev mặc định bị vô hiệu hóa
+2. **Yêu cầu HTTPS** - Service Worker chỉ hoạt động trên HTTPS hoặc localhost
+3. **Mã đăng ký inline** - Sử dụng `injectRegister: 'inline'` để tránh vấn đề cache của `registerSW.js`
+4. **Đăng ký thủ công** - Service Worker được tự động đăng ký qua mã inline, nhưng **không bao gồm tính năng phát hiện cập nhật tự động**
+5. **Tương thích tải theo nhu cầu** - Cấu hình đã được tối ưu để tương thích với tải theo nhu cầu của Vue Router, chỉ precache tài nguyên quan trọng, chunk của component route được cache theo nhu cầu
 
-## 禁用 PWA
+## Vô hiệu hóa PWA
 
-如需禁用 PWA 功能，在 `build/vite/plugin/index.ts` 中注释：
+Nếu cần vô hiệu hóa tính năng PWA, hãy comment trong `build/vite/plugin/index.ts`:
 
 ```typescript
 // vitePlugins.push(configPwaPlugin(isBuild));
 ```
 
-## 故障排查
+## Khắc phục sự cố
 
-### 清除 Service Worker
+### Xóa Service Worker
 
-浏览器控制台执行：
+Thực thi trong console của trình duyệt:
 
 ```javascript
 navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -190,7 +190,7 @@ navigator.serviceWorker.getRegistrations().then(registrations => {
 });
 ```
 
-### 检查 Service Worker 状态
+### Kiểm tra trạng thái Service Worker
 
 - Chrome DevTools → Application → Service Workers
-- 查看注册状态和缓存内容
+- Xem trạng thái đăng ký và nội dung bộ nhớ đệm

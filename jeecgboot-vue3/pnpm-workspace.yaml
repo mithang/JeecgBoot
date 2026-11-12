@@ -1,8 +1,8 @@
-# pnpm 11+ 不再从 .npmrc 读取这些设置，需放在这里
+# pnpm 11+ không còn đọc các thiết lập này từ .npmrc, cần đặt tại đây
 shamefullyHoist: true
 strictPeerDependencies: false
 
-# pnpm 10+ 默认禁止依赖的构建脚本，这里显式放行
+# pnpm 10+ mặc định cấm script build của dependency, ở đây cho phép tường minh
 allowBuilds:
   '@logicflow/core': true
   '@scarf/scarf': false

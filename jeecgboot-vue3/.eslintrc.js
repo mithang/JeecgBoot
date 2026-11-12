@@ -25,7 +25,7 @@ module.exports = defineConfig({
     'plugin:jest/recommended',
   ],
   rules: {
-    'prettier/prettier': 'off', // 彻底关闭 prettier 校验规则
+    'prettier/prettier': 'off', // Tắt triệt để quy tắc kiểm tra prettier
     'vue/script-setup-uses-vars': 'error',
     '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

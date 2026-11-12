@@ -6,7 +6,7 @@ export function createFakeUserList() {
     {
       userId: '1',
       username: 'admin',
-      realname: '管理员',
+      realname: 'Quản trị viên',
       avatar: 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640',
       desc: 'manager',
       password: '123456',
@@ -23,7 +23,7 @@ export function createFakeUserList() {
       userId: '2',
       username: 'jeecg',
       password: '123456',
-      realname: '测试用户',
+      realname: 'Người dùng kiểm thử',
       avatar: 'https://q1.qlogo.cn/g?b=qq&nk=339449197&s=640',
       desc: 'tester',
       token: 'fakeToken2',
@@ -56,7 +56,7 @@ export default [
         (item) => item.username === username && password === item.password
       );
       if (!checkUser) {
-        return resultError('Incorrect account or password！');
+        return resultError('Incorrect account or password!');
       }
       const { userId, username: _username, token, realname, desc, roles } = checkUser;
       return resultSuccess({

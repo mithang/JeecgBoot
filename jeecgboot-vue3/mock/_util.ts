@@ -52,12 +52,12 @@ export interface requestParams {
 }
 
 /**
- * @description 本函数用于从request数据中获取token，请根据项目的实际情况修改
+ * @description Hàm này dùng để lấy token từ dữ liệu request, vui lòng sửa theo tình hình thực tế của dự án
  *
  */
 export function getRequestToken({ headers }: requestParams): string | undefined {
   return headers?.authorization;
 }
 
-//TODO 接口父路径（写死不够灵活）
+//TODO Đường dẫn cha của API (viết cứng nên chưa linh hoạt)
 export const baseUrl = '/jeecgboot/mock';

@@ -4,7 +4,7 @@ import { openInBrowser } from '../utils';
 import { omit } from 'lodash-es';
 
 ipcMain.on('open-in-browser', (event: IpcMainInvokeEvent, url: string) => openInBrowser(url));
-// 处理任务栏闪烁
+// Xử lý nhấp nháy thanh tác vụ
 ipcMain.on('notify-flash', (event: IpcMainInvokeEvent, count: number = 0) => {
   const win = BrowserWindow.getAllWindows()[0];
   if (!win) return;
@@ -16,7 +16,7 @@ ipcMain.on('notify-flash', (event: IpcMainInvokeEvent, count: number = 0) => {
     // Mac
     if (app.dock) {
       app.dock.bounce('informational');
-      // 设置角标(未读消息)
+      // Đặt huy hiệu (tin nhắn chưa đọc)
       if (count > 0) {
         app.dock.setBadge(count.toString());
       } else {
@@ -25,7 +25,7 @@ ipcMain.on('notify-flash', (event: IpcMainInvokeEvent, count: number = 0) => {
     }
   }
 });
-// 通知 (点击通知打开指定页面)
+// Thông báo (nhấn vào thông báo để mở trang chỉ định)
 ipcMain.on('notify-with-path', (event: IpcMainInvokeEvent, options: NotificationConstructorOptions & { path: string }) => {
   const win = BrowserWindow.getAllWindows()[0];
   if (!win) return;

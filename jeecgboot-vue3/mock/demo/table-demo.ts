@@ -48,7 +48,7 @@ export default [
     method: 'get',
     response: ({ query }) => {
       const { page = 1, pageSize = 20 } = query;
-      // 代码逻辑说明: 【issues/6943】mock翻页之后数据id和图片没自动刷新
+      // Giải thích logic code: 【issues/6943】Sau khi mock chuyển trang, id dữ liệu và hình ảnh không tự động làm mới
       const pageNo = +(query.pageNo ?? page);
       return resultPageSuccess(pageNo, +pageSize, demoList);
     },

@@ -1,27 +1,27 @@
 ---
-name: 提交建议
-about: 请告诉我框架的不足之处，让我做得更好！
+name: Gửi đề xuất
+about: Hãy cho tôi biết những điểm còn thiếu sót của framework, để tôi làm tốt hơn!
 labels: help wanted
 assignees: getActivity
 
 ---
 
-##### 版本号：
+##### Phiên bản:
 
 
-##### 分支：
+##### Nhánh:
 
 
-##### 问题描述：
-
-
-
-##### 错误截图：
+##### Mô tả vấn đề:
 
 
 
+##### Ảnh chụp màn hình lỗi:
 
-#### 友情提示：
-  - 未按格式要求发帖、描述过于简单的，会被直接删掉;
-  - 描述问题请图文并茂，方便我们理解并快速定位问题;
-  - 如果使用的不是master，请说明你使用的分支;
+
+
+
+#### Lưu ý:
+  - Các bài đăng không đúng định dạng yêu cầu, mô tả quá đơn giản sẽ bị xóa trực tiếp;
+  - Khi mô tả vấn đề, vui lòng kèm cả hình ảnh và chữ để chúng tôi dễ hiểu và nhanh chóng xác định vấn đề;
+  - Nếu bạn không dùng nhánh master, vui lòng cho biết nhánh bạn đang sử dụng;

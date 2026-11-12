@@ -56,17 +56,17 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- AI 基础能力（LLMHandler/AiModelFactory）：商业版经 airag-flow 间接引入，开源版没有 airag-flow，需直接声明 -->
+        <!-- Năng lực AI cơ bản (LLMHandler/AiModelFactory): bản thương mại được đưa vào gián tiếp qua airag-flow, bản mã nguồn mở không có airag-flow nên cần khai báo trực tiếp -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-ai</artifactId>
         </dependency>
-        <!-- system单体 api-->
+        <!-- API của bản system đơn thể -->
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-system-local-api</artifactId>
         </dependency>
-        <!-- 微服务starter和system微服务 api
+        <!-- API starter microservice và microservice system
         <dependency>
             <groupId>org.jeecgframework.boot3</groupId>
             <artifactId>jeecg-boot-starter-cloud</artifactId>
@@ -81,7 +81,7 @@
             <artifactId>jeecg-aiflow-boot4</artifactId>
             <version>3.9.6</version>
         </dependency>
-        <!-- begin 注意：这几个依赖体积较大，每个约50MB。若发布时需要使用，请将 <scope>provided</scope> 删除 -->
+        <!-- begin Lưu ý: các dependency này có dung lượng lớn, mỗi cái khoảng 50MB. Nếu cần dùng khi phát hành, hãy xóa <scope>provided</scope> -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-scripting-jsr223</artifactId>
@@ -94,7 +94,7 @@
             <version>${liteflow.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- end 注意：这几个依赖体积较大，每个约50MB。若发布时需要使用，请将 <scope>provided</scope> 删除 -->
+        <!-- end Lưu ý: các dependency này có dung lượng lớn, mỗi cái khoảng 50MB. Nếu cần dùng khi phát hành, hãy xóa <scope>provided</scope> -->
 
 
         <!-- langChain4j model support -->
@@ -160,7 +160,7 @@
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-pgvector</artifactId>
         </dependency>
-        <!-- langChain4j Document Parser 适用于excel、ppt、word -->
+        <!-- langChain4j Document Parser dùng cho excel, ppt, word -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-document-parser-apache-poi</artifactId>
@@ -202,13 +202,13 @@
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-skills</artifactId>
         </dependency>
-        <!--命令模式-->
+        <!-- Chế độ lệnh -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-experimental-skills-shell</artifactId>
             <version>${langchain4j-community-bom.version}</version>
         </dependency>
-        <!-- word模版引擎 -->
+        <!-- Công cụ mẫu word -->
         <dependency>
             <groupId>com.deepoove</groupId>
             <artifactId>poi-tl</artifactId>

@@ -1,10 +1,10 @@
-// 应用参数
+// Tham số ứng dụng
 export type MainAppProps = {
   container?: HTMLElement;
-  // 隐藏侧边栏（菜单）
+  // Ẩn thanh bên (menu)
   hideSider?: boolean;
-  // 隐藏顶部
+  // Ẩn phần đầu trang
   hideHeader?: boolean;
-  // 隐藏 多Tab 切换
+  // Ẩn chuyển đổi đa Tab
   hideMultiTabs?: boolean;
 }

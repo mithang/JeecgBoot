@@ -2,28 +2,28 @@ export type ErrorMessageMode = 'none' | 'modal' | 'message' | undefined;
 export type SuccessMessageMode = 'none' | 'success' | 'error' | undefined;
 
 export interface RequestOptions {
-  // 将请求参数拼接到url
+  // Nối tham số request vào url
   joinParamsToUrl?: boolean;
-  // 格式化请求参数时间
+  // Định dạng thời gian của tham số request
   formatDate?: boolean;
-  // 是否处理请求结果
+  // Có xử lý kết quả request không
   isTransformResponse?: boolean;
-  // 是否返回本地响应头,需要获取响应头时使用此属性
+  // Có trả về response header gốc không; dùng thuộc tính này khi cần lấy response header
   isReturnNativeResponse?: boolean;
-  // 默认将prefix 添加到url
+  // Mặc định thêm prefix vào url
   joinPrefix?: boolean;
-  // 接口地址，如果保留为空，则使用默认值
+  // Địa chỉ API, nếu để trống sẽ dùng giá trị mặc định
   apiUrl?: string;
-  // 请求拼接路径
+  // Đường dẫn nối vào request
   urlPrefix?: string;
-  // 错误消息提示类型
+  // Kiểu nhắc thông báo lỗi
   errorMessageMode?: ErrorMessageMode;
-  // 成功消息提示类型
+  // Kiểu nhắc thông báo thành công
   successMessageMode?: SuccessMessageMode;
-  // 是否添加时间戳
+  // Có thêm dấu thời gian không
   joinTime?: boolean;
   ignoreCancelToken?: boolean;
-  //是否在标头中发送令牌
+  // Có gửi token trong header không
   withToken?: boolean;
 }
 
@@ -34,22 +34,22 @@ export interface Result<T = any> {
   result: T;
 }
 
-//文件上传参数
+// Tham số tải tệp lên
 export interface UploadFileParams {
-  // 其他参数
+  // Tham số khác
   data?: Recordable;
-  // 文件参数接口字段名
+  // Tên trường của tham số tệp trong API
   name?: string;
-  // 文件
+  // Tệp
   file: File | Blob;
-  // 文件名
+  // Tên tệp
   filename?: string;
   [key: string]: any;
 }
-//文件返回参数
+// Tham số trả về của tệp
 export interface UploadFileCallBack {
-  // 成功回调方法
+  // Phương thức callback khi thành công
   success?: any;
-  // 是否返回响应头,需要获取响应头时使用此属性
+  // Có trả về response header không; dùng thuộc tính này khi cần lấy response header
   isReturnResponse?: boolean;
 }

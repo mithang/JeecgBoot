@@ -33,7 +33,7 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
 
   const serverOptions: Recordable = {}
 
-  // JEECG 作为乾坤子应用时，需要开启跨域并指定 origin
+  // Khi JEECG là ứng dụng con qiankun, cần bật CORS và chỉ định origin
   const {VITE_GLOB_QIANKUN_MICRO_APP_NAME, VITE_GLOB_QIANKUN_MICRO_APP_ENTRY} = viteEnv;
   const isQiankunMicro = VITE_GLOB_QIANKUN_MICRO_APP_NAME != null && VITE_GLOB_QIANKUN_MICRO_APP_NAME !== '';
   if (isQiankunMicro && !isBuild) {
@@ -49,7 +49,7 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
     root,
     resolve: {
       alias: [
-        // 将 @rys-fe/vite-plugin-theme 客户端运行时重定向到内置版本（vite 8 适配），用 RegExp 精确匹配避免被父级别名误吞
+        // Chuyển hướng runtime phía client của @rys-fe/vite-plugin-theme sang phiên bản tích hợp sẵn (tương thích vite 8); dùng RegExp để khớp chính xác, tránh bị alias của cấp cha nuốt mất
         {
           find: /^@rys-fe\/vite-plugin-theme\/es\/client$/,
           replacement: pathResolve('build/vite/plugin/theme-plugin/client/client'),
@@ -66,18 +66,18 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
           find: 'vue-i18n',
           replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
         },
-        // /@/xxxx、@/xxxx => src/xxxx
+        // /@/xxxx, @/xxxx => src/xxxx
         {
           find: /\/?@\//,
           replacement: pathResolve('src') + '/',
         },
-        // /#/xxxx、#/xxxx => types/xxxx
+        // /#/xxxx, #/xxxx => types/xxxx
         {
           find: /\/?#\//,
           replacement: pathResolve('types') + '/',
         },
       ],
-      // 避免vue生态多份实例被重复解析/预构建，减少依赖发现和转换的开销
+      // Tránh việc nhiều bản sao của hệ sinh thái vue bị phân tích/tiền xây dựng trùng lặp, giảm chi phí phát hiện và chuyển đổi dependency
       dedupe: ['vue', 'vue-router', 'pinia', '@vue/shared'],
     },
     server: {
@@ -88,7 +88,7 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
       port: VITE_PORT,
       proxy: createProxy(VITE_PROXY),
       ...serverOptions,
-      // 启动时预构建部分常用入口页面，访问时更快
+      // Tiền xây dựng một số trang entry thường dùng khi khởi động, truy cập sẽ nhanh hơn
       warmup: {
         clientFiles: [
           './src/main.ts',
@@ -107,11 +107,11 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
           'src/views/super/airag/aiapp/AiAppList.vue',
         ],
       },
-      // update-end--author:liaozhiyang---date:20260306---for:【QQYUN-14801】vite启动的时候，预构建一些入口页面，访问时快一些
+      // update-end--author:liaozhiyang---date:20260306---for:【QQYUN-14801】Khi vite khởi động, tiền xây dựng một số trang entry để truy cập nhanh hơn
     },
     build: {
-      // Vite 8 默认使用 Oxc minifier；'esbuild' 已 deprecated。
-      // 这里保留 minify=true 显式启用，并对 console/debugger 做 drop。
+      // Vite 8 mặc định dùng Oxc minifier; 'esbuild' đã deprecated.
+      // Ở đây giữ minify=true để bật tường minh, đồng thời drop console/debugger.
       minify: true,
       target: 'es2015',
       cssTarget: 'chrome80',
@@ -120,11 +120,11 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
         output: {
           chunkFileNames: 'js/[name]-[hash].js',
           entryFileNames: 'js/[name]-[hash].js',
-          // update-begin--author:copilot---date:20260711---for:【vite8升级】rolldown不再支持对象形式的manualChunks，改为函数形式
-          // 官方推荐写法：id.includes('node_modules') + split('node_modules/') 取出包名，再映射到 chunk 名（依赖包从大到小排列）
+          // update-begin--author:copilot---date:20260711---for:【Nâng cấp vite8】rolldown không còn hỗ trợ manualChunks dạng đối tượng, đổi sang dạng hàm
+          // Cách viết chính thức khuyến nghị: id.includes('node_modules') + split('node_modules/') để lấy tên gói, rồi ánh xạ sang tên chunk (các gói dependency sắp xếp từ lớn đến nhỏ)
           manualChunks(id: string) {
             const normalizedId = id.replace(/\\/g, '/');
-            // tinymceGlobalShim 必须和 tinymce 核心/插件打进同一 chunk，保证 window.tinymce 挂载早于各 plugin/theme 顶层代码执行
+            // tinymceGlobalShim phải được đóng gói chung một chunk với lõi/plugin tinymce, đảm bảo window.tinymce được mount trước khi code cấp cao nhất của các plugin/theme thực thi
             if (normalizedId.includes('/src/utils/tinymceGlobalShim')) {
               return 'tinymce-vendor';
             }
@@ -146,15 +146,15 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
             };
             return packageToChunk[pkgName];
           },
-          // update-end--author:copilot---date:20260711---for:【vite8升级】rolldown不再支持对象形式的manualChunks，改为函数形式
-          // Vite 8 用 Oxc 替代 esbuild；原 esbuild.drop 迁移到这里。
-          // 详见 https://oxc.rs/docs/guide/usage/minifier/dead-code-elimination
+          // update-end--author:copilot---date:20260711---for:【Nâng cấp vite8】rolldown không còn hỗ trợ manualChunks dạng đối tượng, đổi sang dạng hàm
+          // Vite 8 dùng Oxc thay cho esbuild; esbuild.drop gốc được chuyển sang đây.
+          // Xem chi tiết tại https://oxc.rs/docs/guide/usage/minifier/dead-code-elimination
           minify: isBuild ? { compress: { drop: ['console', 'debugger'] } } : false,
         },
       },
-      // 关闭brotliSize显示可以稍微减少打包时间
+      // Tắt hiển thị brotliSize có thể giảm nhẹ thời gian đóng gói
       reportCompressedSize: false,
-      // 提高超大静态资源警告大小
+      // Tăng ngưỡng cảnh báo kích thước tài nguyên tĩnh siêu lớn
       chunkSizeWarningLimit: 2000,
     },
     define: {
@@ -164,7 +164,7 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
       __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
     css: {
-      // warmup 并发较高时，Less worker 与主线程通信可能超过 Vite 内部超时时间
+      // Khi warmup có độ đồng thời cao, việc giao tiếp giữa Less worker và luồng chính có thể vượt quá thời gian timeout nội bộ của Vite
       preprocessorMaxWorkers: 0,
       preprocessorOptions: {
         less: {
@@ -186,16 +186,16 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
         },
       },
       // @iconify/iconify: The dependency is dynamically and virtually loaded by @purge-icons/generated, so it needs to be specified explicitly
-      // vite8 显式预构建路由独有的重量级依赖，避免首次打开对应路由时因运行时才发现依赖而产生大量瀑布式请求
+      // vite8 tiền xây dựng tường minh các dependency nặng riêng của từng route, tránh việc khi mở route tương ứng lần đầu, do chỉ phát hiện dependency lúc runtime nên phát sinh nhiều request dạng thác nước
       include: [
         'clipboard',
         '@vue/shared',
         '@iconify/iconify',
         'ant-design-vue/es/locale/zh_CN',
         'ant-design-vue/es/locale/en_US',
-        // Vite 默认不扫描 node_modules 里已打包的 mjs，导致 ant-design-vue/es/vc-picker/generate/dayjs.js
-        // 引入的 dayjs 插件子路径（UMD/CJS）未被预打包，运行时报 "does not provide an export named 'default'"。
-        // 显式列出 vc-picker 用到的全部 dayjs 插件，强制 esbuild 预打包成 ESM。
+        // Vite mặc định không quét các mjs đã đóng gói trong node_modules, khiến ant-design-vue/es/vc-picker/generate/dayjs.js
+        // Các đường dẫn con của plugin dayjs được import (UMD/CJS) không được tiền đóng gói, lúc runtime báo lỗi "does not provide an export named 'default'".
+        // Liệt kê tường minh toàn bộ plugin dayjs mà vc-picker dùng, ép esbuild tiền đóng gói thành ESM.
         'dayjs/plugin/advancedFormat',
         'dayjs/plugin/customParseFormat',
         'dayjs/plugin/weekday',
@@ -211,7 +211,7 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
         'vxe-table-plugin-antd',
       ],
       exclude: [
-        //升级vite4后，需要排除online和aiflow依赖
+        // Sau khi nâng cấp lên vite4, cần loại trừ các dependency online và aiflow
         '@jeecg/aiflow',
       ],
     },

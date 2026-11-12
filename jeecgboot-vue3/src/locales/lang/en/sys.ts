@@ -52,7 +52,7 @@ export default {
     subTitle500: 'Sorry, the server is reporting an error.',
     noDataTitle: 'No data on the current page.',
     networkErrorTitle: 'Network Error',
-    networkErrorSubTitle: 'Sorry，Your network connection has been disconnected, please check your network!',
+    networkErrorSubTitle: 'Sorry, Your network connection has been disconnected, please check your network!',
   },
   lock: {
     unlock: 'Click to unlock',
@@ -102,7 +102,7 @@ export default {
     smsCode: 'SMS code',
     mobile: 'Mobile',
 
-    //重置密码页面英文
+    // Trang đặt lại mật khẩu (tiếng Anh)
     authentication:'authentication',
     resetLoginPassword:'reset login password',
     resetSuccess:'reset succeeded',

@@ -1,24 +1,24 @@
 appId: 'com.jeecg.boot3'
-# 产品名称
+# Tên sản phẩm
 productName: 'jeecgboot'
 files:
-  # 仅包含 dist 目录下所有文件
+  # Chỉ bao gồm toàn bộ tệp trong thư mục dist
   - 'dist/**/*'
-  # 特别排除 node_modules 目录
+  # Đặc biệt loại trừ thư mục node_modules
   - '!node_modules'
 directories:
-  # 输出目录
+  # Thư mục đầu ra
   output: 'dist-electron'
 win:
-  # win exe 程序图标
+  # Biểu tượng chương trình win exe
   icon: 'electron/icons/app.ico'
   artifactName: 'jeecgboot-setup-${version}.exe'
-# 安装包配置
+# Cấu hình gói cài đặt
 nsis:
   oneClick: false
-  # 是否允许用户选择安装目录
+  # Có cho phép người dùng chọn thư mục cài đặt không
   allowToChangeInstallationDirectory: true
-  # 是否创建桌面快捷方式
+  # Có tạo shortcut trên desktop không
   createDesktopShortcut: true
-  # 安装程序的图标
+  # Biểu tượng của trình cài đặt
   installerIcon: 'electron/icons/installer.ico'

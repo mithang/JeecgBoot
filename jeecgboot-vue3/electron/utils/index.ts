@@ -4,7 +4,7 @@ import {shell, dialog} from 'electron'
 import {_PATHS} from "../paths";
 import {isDev} from "../env";
 
-// 通过浏览器打开链接
+// Mở liên kết bằng trình duyệt
 export function openInBrowser(url: string) {
   return shell.openExternal(url);
 }
@@ -14,7 +14,7 @@ export function getAppInfo(): any {
   try {
     const yamlPath = isDev ? path.join(_PATHS.publicRoot, '../electron-builder.yaml') : path.join(_PATHS.electronRoot, 'env.yaml');
     const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
-    // 通过正则表达式匹配 appId 和 productName
+    // Khớp appId và productName bằng biểu thức chính quy
     const appIdMatch = yamlContent.match(/appId:\s*['"]([^'"]+)['"]/);
     const productNameMatch = yamlContent.match(/productName:\s*['"]([^'"]+)['"]/);
     const appId = appIdMatch ? appIdMatch[1] : '';
@@ -23,8 +23,8 @@ export function getAppInfo(): any {
   } catch (e) {
     dialog.showMessageBoxSync(null, {
       type: 'error',
-      title: '错误',
-      message: '应用启动失败，请从官网下载最新版本安装包后重新安装！',
+      title: 'Lỗi',
+      message: 'Khởi động ứng dụng thất bại, vui lòng tải gói cài đặt phiên bản mới nhất từ trang web chính thức rồi cài đặt lại!',
     });
     process.exit(-1);
   }

@@ -2,9 +2,9 @@ module.exports = {
   printWidth: 150,
   tabWidth: 2,
   useTabs: false,
-  semi: true, //语句末尾使用分号
+  semi: true, // Dùng dấu chấm phẩy ở cuối câu lệnh
   vueIndentScriptAndStyle: true,
-  singleQuote: true, // 使用单引号
+  singleQuote: true, // Dùng dấu ngoặc đơn
   quoteProps: 'as-needed',
   bracketSpacing: true,
   trailingComma: 'es5',
@@ -15,6 +15,6 @@ module.exports = {
   requirePragma: false,
   proseWrap: 'never',
   htmlWhitespaceSensitivity: 'strict',
-  endOfLine: 'auto', // 自动处理换行符（LF/CRLF）
+  endOfLine: 'auto', // Tự động xử lý ký tự xuống dòng (LF/CRLF)
   rangeStart: 0,
 };
