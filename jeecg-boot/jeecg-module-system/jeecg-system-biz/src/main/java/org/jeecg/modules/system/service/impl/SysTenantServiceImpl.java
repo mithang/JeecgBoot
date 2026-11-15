@@ -143,7 +143,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
             }else{
                 // Giải thích logic mã: 【QQYUN-5885】Lời nhắc mời người dùng tham gia không chính xác------------
                 String tenantErrorInfo = getTenantErrorInfo(userTenant.getStatus());
-                String errMsg = "Người dùng số điện thoại::" + userByPhone.getPhone() + " Biệt danh:" + userByPhone.getRealname() + "，" + tenantErrorInfo;
+                String errMsg = "Người dùng số điện thoại::" + userByPhone.getPhone() + " Biệt danh:" + userByPhone.getRealname() + "," + tenantErrorInfo;
                 throw new JeecgBootException(errMsg);
             }
         }
@@ -163,7 +163,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         messageDTO.setToAll(false);
         messageDTO.setToUser(user.getUsername());
         messageDTO.setFromUser("system");
-        String title = sysUser.getRealname() + " đã mời bạn tham gia "+sysTenant.getName()+"。";
+        String title = sysUser.getRealname() + " đã mời bạn tham gia "+sysTenant.getName()+".";
         messageDTO.setTitle(title);
         Map<String, Object> data = new HashMap<>();
         messageDTO.setData(data);
@@ -440,7 +440,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         if(null != sysUserTenant){
             result.setSuccess(false);
             String tenantErrorInfo = getTenantErrorInfo(sysUserTenant.getStatus());
-            String msg = "Người dùng số điện thoại::" + userByPhone.getPhone() + " Biệt danh:" + userByPhone.getRealname() + "，" + tenantErrorInfo;
+            String msg = "Người dùng số điện thoại::" + userByPhone.getPhone() + " Biệt danh:" + userByPhone.getRealname() + "," + tenantErrorInfo;
             result.setMessage(msg);
             return result;
         }
@@ -705,7 +705,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         messageDTO.setToAll(false);
         messageDTO.setToUser(String.join(",", userList));
         messageDTO.setFromUser("system");
-        String title = user.getRealname()+" Xin gia nhập "+sysTenant.getName()+"。";
+        String title = user.getRealname()+" Xin gia nhập "+sysTenant.getName()+".";
         messageDTO.setTitle(title);
         Map<String, Object> data = new HashMap<>();
         messageDTO.setData(data);
@@ -728,7 +728,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         messageDTO.setToUser(user.getUsername());
         messageDTO.setFromUser("system");
         // Giải thích logic mã: 【QQYUN-5730] Thông báo mời tham gia tenant nên hiển thị tên người mời------------
-        String title = realname + " mời bạn tham gia "+sysTenant.getName()+"。";
+        String title = realname + " mời bạn tham gia "+sysTenant.getName()+".";
         messageDTO.setTitle(title);
         Map<String, Object> data = new HashMap<>();
         messageDTO.setData(data);

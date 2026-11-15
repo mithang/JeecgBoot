@@ -65,7 +65,7 @@
     // Sau khi hoàn thành xử lý quốc tế hóa, mới thêm dấu trang chủ mặc định
     const isDefIndex = checkDefIndex(record);
     if (isDefIndex) {
-      displayText += `（${t('routes.basic.defaultHomePage')}）`;
+      displayText += `(${t('routes.basic.defaultHomePage')})`;
     }
     return displayText;
     // date-end--author:liaozhiyang---date:20250716---for：【issues/8317】Tên menu của trang chủ mặc định gây lỗi khi thích ứng quốc tế hóa

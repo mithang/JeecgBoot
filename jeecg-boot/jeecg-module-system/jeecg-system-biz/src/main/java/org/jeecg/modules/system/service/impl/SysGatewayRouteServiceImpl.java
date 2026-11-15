@@ -215,7 +215,7 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
         if (oConvertUtils.isNotEmpty(uri)) {
             String lowerUri = uri.trim().toLowerCase();
             if (ROUTE_URI_SCHEMES.stream().noneMatch(lowerUri::startsWith)) {
-                throw new JeecgBootException("Địa chỉ route chỉ hỗ trợ lb://、http(s)://、ws(s)://、forward: Giao thức");
+                throw new JeecgBootException("Địa chỉ route chỉ hỗ trợ lb://, http(s)://, ws(s)://, forward: Giao thức");
             }
         }
         checkNoSpel(predicates, "Điều kiện route");

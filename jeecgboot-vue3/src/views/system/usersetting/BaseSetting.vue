@@ -117,7 +117,7 @@ import { uploadImg } from '/@/api/sys/upload';
 import { getFileAccessHttpUrl, getRandom } from '/@/utils/common/compUtils';
 import dayjs from 'dayjs';
 import { ajaxGetDictItems, getDictItemsByCode, initDictOptions } from '/@/utils/dict';
-import { userEdit, getUserData, queryNameByCodes } from './UserSetting.api';
+import { userEdit, getUserData } from './UserSetting.api';
 import UserAccountModal from './commponents/UserAccountModal.vue';
 import { useModal } from '/@/components/Modal';
 import { cloneDeep } from 'lodash-es';

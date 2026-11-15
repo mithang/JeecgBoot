@@ -2130,7 +2130,7 @@ public class SysDepartServiceImpl extends ServiceImpl<SysDepartMapper, SysDepart
         if(0 != dropPosition && DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue().equals(orgCategory)){
             //Phòng ban hiện tại không được là công ty con, phòng ban hoặc vị trí
             if(!DepartCategoryEnum.DEPART_CATEGORY_COMPANY.getValue().equals(oldOrgCategory)){
-                throw new JeecgBootBizTipException("Loại phòng ban hiện tại là 【"+DepartCategoryEnum.getNameByValue(oldOrgCategory)+"】,Không được phép di chuyển đến công ty");
+                throw new JeecgBootBizTipException("Loại phòng ban hiện tại là ["+DepartCategoryEnum.getNameByValue(oldOrgCategory)+"],Không được phép di chuyển đến công ty");
             }
         }
         //Phòng ban là chức vụ, không được phép di chuyển vào

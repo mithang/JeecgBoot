@@ -379,7 +379,7 @@ public class ThirdLoginController {
 		result.setResult(obj);
 		result.setSuccess(true);
 		result.setCode(200);
-		baseCommonService.addLog("Tên người dùng: " + username + ",Đăng nhập thành công[Người dùng bên thứ ba]！", CommonConstant.LOG_TYPE_1, null);
+		baseCommonService.addLog("Tên người dùng: " + username + ",Đăng nhập thành công[Người dùng bên thứ ba]!", CommonConstant.LOG_TYPE_1, null);
 		return result;
 	}
 	/**

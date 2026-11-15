@@ -57,7 +57,7 @@ public class SysAppVersionController{
                 return Result.OK(sysAppVersion);
             } catch (Exception e) {
                 log.error(e.toString(),e);
-                return Result.error("app Lấy thông tin phiên bản app thất bại：" + e.getMessage());
+                return Result.error("app Lấy thông tin phiên bản app thất bại:" + e.getMessage());
             }
         }else{
             // Trong bộ nhớ đệm không có thì lấy từ tệp json đã cấu hình

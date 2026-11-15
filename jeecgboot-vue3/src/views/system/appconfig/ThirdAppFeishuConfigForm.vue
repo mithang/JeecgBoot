@@ -52,7 +52,7 @@
     <div class="sync-padding">
       <div style="font-size: 16px; width: 100%">3. Đồng bộ dữ liệu</div>
       <div style="margin-top: 20px" class="base-desc">
-        Đồng bộ từ Feishu vào hệ thống này (Feishu→cục bộ）
+        Đồng bộ từ Feishu vào hệ thống này (Feishu → cục bộ)
         <ul style="list-style-type: disc; margin-left: 20px">
           <li>Đồng bộ cấu trúc phòng ban trong danh bạ Feishu về cục bộ</li>
           <li>

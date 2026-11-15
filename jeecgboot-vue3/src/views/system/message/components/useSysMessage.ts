@@ -488,7 +488,13 @@ export function useMessageHref(emit, props){
     }
     if(query.taskDetail){
       // Hộp thoại xem chi tiết tác vụ
-      await showHistory(query.procInsId, {taskOriginalId:query.taskId,busType,id:busId,readFlag:record.readFlag})
+      // audit A1: endpoint lịch sử quy trình /act/process/... thuộc module workflow, không có trong repo này;
+      // bắt lỗi để không vỡ trang tin nhắn khi backend trả 404
+      try {
+        await showHistory(query.procInsId, {taskOriginalId:query.taskId,busType,id:busId,readFlag:record.readFlag})
+      } catch (e) {
+        createMessage.warning('Chức năng xem lịch sử quy trình cần module quy trình (workflow), hiện chưa khả dụng.');
+      }
     }else{
       // Chuyển định tuyến
       appStore.setMessageHrefParams(query);

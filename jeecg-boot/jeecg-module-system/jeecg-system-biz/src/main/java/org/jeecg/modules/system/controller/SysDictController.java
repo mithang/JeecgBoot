@@ -460,7 +460,7 @@ public class SysDictController {
 					failItem.put("dictName", sysDictPage.getDictName());
 					failItem.put("errorMsg", "Mã danh mục đã tồn tại!");
 					failList.add(failItem);
-					message.append("").append(i + 1).append(" danh mục[").append(sysDictPage.getDictCode()).append("]：Mã danh mục đã tồn tại!\n");
+					message.append("").append(i + 1).append(" danh mục[").append(sysDictPage.getDictCode()).append("]:Mã danh mục đã tồn tại!\n");
 					log.warn(" {}  danh mục[{}]Mã danh mục đã tồn tại", i + 1, sysDictPage.getDictCode());
 				}
 			} catch (Exception e) {
@@ -470,7 +470,7 @@ public class SysDictController {
 				failItem.put("dictName", sysDictPage.getDictName());
 				failItem.put("errorMsg", e.getMessage());
 				failList.add(failItem);
-				message.append("").append(i + 1).append(" danh mục[").append(sysDictPage.getDictCode()).append("]：").append(e.getMessage()).append("\n");
+				message.append("").append(i + 1).append(" danh mục[").append(sysDictPage.getDictCode()).append("]:").append(e.getMessage()).append("\n");
 				log.error(" {}  danh mục[{}]Xử lý ngoại lệ: {}", i + 1, sysDictPage.getDictCode(), e.getMessage(), e);
 			}
 		}

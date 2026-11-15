@@ -2170,7 +2170,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		//Gửi thông báo tin nhắn hệ thống
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		MessageDTO messageDTO = new MessageDTO();
-		String title = sysUser.getRealname() + " mời bạn tham gia " + tenantName + "。";
+		String title = sysUser.getRealname() + " mời bạn tham gia " + tenantName + ".";
 		messageDTO.setTitle(title);
 		Map<String, Object> data = new HashMap<>();
 		// Giải thích logic mã: 【QQYUN-8425] Sau khi nhập người dùng thành công, nhắc nhở bằng tin nhắn và chuyển đến trang đồng ý---

@@ -37,8 +37,6 @@ enum Api {
   passwordChange = '/sys/user/passwordChange',
   //Đăng nhập bên thứ ba
   thirdLogin = '/sys/thirdLogin/getLoginUser',
-  //Đăng nhập bên thứ ba
-  getThirdCaptcha = '/sys/thirdSms',
   //Lấy thông tin mã QR
   getLoginQrcode = '/sys/getLoginQrcode',
   //Giám sát trạng thái quét mã QR
@@ -174,23 +172,6 @@ export function thirdLogin(params, mode: ErrorMessageMode = 'modal') {
     }
   );
 }
-/**
- * @description: Lấy mã xác thực SMS bên thứ ba
- */
-export function setThirdCaptcha(params) {
-  return new Promise((resolve, reject) => {
-    defHttp.post({ url: Api.getThirdCaptcha, params }, { isTransformResponse: false }).then((res) => {
-      console.log(res);
-      if (res.success) {
-        resolve(true);
-      } else {
-        createErrorModal({ title: 'Gợi ý lỗi', content: res.message || 'Vấn đề không xác định' });
-        reject();
-      }
-    });
-  });
-}
-
 /**
  * Lấy thông tin mã QR đăng nhập
  */

@@ -45,6 +45,7 @@ public class SysUgroupUserController extends JeecgController<SysUgroupUser, ISys
 	 */
 	//@AutoLog(value = "Bảng quan hệ nhóm người dùng-Truy vấn danh sách phân trang")
 	@Operation(summary="Bảng quan hệ nhóm người dùng-Truy vấn danh sách phân trang")
+	@RequiresPermissions("system:sys_ugroup_user:list")
 	@GetMapping(value = "/list")
 	public Result<IPage<SysUgroupUser>> queryPageList(SysUgroupUser sysUgroupUser,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -127,6 +128,7 @@ public class SysUgroupUserController extends JeecgController<SysUgroupUser, ISys
 	 */
 	//@AutoLog(value = "Bảng quan hệ nhóm người dùng-Tìm kiếm theo id")
 	@Operation(summary="Bảng quan hệ nhóm người dùng-Tìm kiếm theo id")
+	@RequiresPermissions("system:sys_ugroup_user:list")
 	@GetMapping(value = "/queryById")
 	public Result<SysUgroupUser> queryById(@RequestParam(name="id",required=true) String id) {
 		SysUgroupUser sysUgroupUser = sysUgroupUserService.getById(id);

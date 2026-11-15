@@ -765,7 +765,7 @@ public class LoginController {
 		handleSingleSignOn(username, token, CommonConstant.CLIENT_TYPE_APP);
 		
 		// 8.Đăng nhập thành công, ghi nhật ký
-		baseCommonService.addLog("Tên người dùng: " + username + ",Đăng nhập thành công[Thiết bị di động]！", CommonConstant.LOG_TYPE_1, null);
+		baseCommonService.addLog("Tên người dùng: " + username + ",Đăng nhập thành công[Thiết bị di động]!", CommonConstant.LOG_TYPE_1, null);
 		return result;
 	}
 

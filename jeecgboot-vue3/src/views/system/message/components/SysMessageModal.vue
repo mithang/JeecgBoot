@@ -56,7 +56,7 @@
             <a-popover placement="bottomRight" :overlayStyle="{ width: '400px', zIndex: 1000 }" trigger="click" v-model:open="showSearch">
               <template #content>
                 <div>
-                  <span class="search-label">Trả lời, nhắc đến người của tôi?：</span>
+                  <span class="search-label">Trả lời, nhắc đến người của tôi?:</span>
                   <span style="display: inline-block;">
                     <div v-if="searchParams.fromUser" class="selected-user">
                       <span>{{searchParams.realname}}</span>
@@ -323,7 +323,7 @@
             arr.push(rangDates[0].text)
           }
         }
-        return arr.join('、')
+        return arr.join(', ')
       });
 
       //Đăng kýmodel

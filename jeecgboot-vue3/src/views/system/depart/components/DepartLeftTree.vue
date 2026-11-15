@@ -213,7 +213,7 @@
       return title;
     }
     const positionName = positionNameMap.value[data.positionId];
-    return positionName ? `${title}（${positionName}）` : title;
+    return positionName ? `${title}(${positionName})` : title;
   }
 
   // Tải thông tin phòng ban cấp con
@@ -503,7 +503,7 @@
     }else if (dropPosition === 1){
       pos = " ở phía dưới";
     }
-    let text = "Di chuyển【" + dragTitle + "】 tới【" + dropTitle + "】" + pos + "？";
+    let text = "Di chuyển \"" + dragTitle + "\" tới \"" + dropTitle + "\"" + pos + "?";
     Modal.confirm({
       title: 'Xác nhận di chuyển',
       content: h('div', {}, [

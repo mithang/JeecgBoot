@@ -89,10 +89,10 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 		if(oConvertUtils.isNotEmpty(pcode)) {
 			List<SysCategory> list = baseMapper.selectList(new LambdaQueryWrapper<SysCategory>().eq(SysCategory::getCode, pcode));
 			if(list==null || list.size() ==0) {
-				throw new JeecgBootException("Mã này【"+pcode+"】Không tồn tại, vui lòng kiểm tra!");
+				throw new JeecgBootException("Mã này["+pcode+"]Không tồn tại, vui lòng kiểm tra!");
 			}
 			if(list.size()>1) {
-				throw new JeecgBootException("Mã này【"+pcode+"】Tồn tại nhiều bản ghi, vui lòng kiểm tra!");
+				throw new JeecgBootException("Mã này["+pcode+"]Tồn tại nhiều bản ghi, vui lòng kiểm tra!");
 			}
 			pid = list.get(0).getId();
 		}

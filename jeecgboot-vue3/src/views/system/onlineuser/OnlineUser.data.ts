@@ -11,7 +11,7 @@ export const columns = [
     customRender: ( {text,record} ) => {
       let token = getToken();
       if(record.token === token) {
-        return text + '（tôi）'
+        return text + '(tôi)'
       }
       return text
     },

@@ -52,7 +52,7 @@ public class SysFillRuleServiceImpl extends ServiceImpl<SysFillRuleMapper, SysFi
             //update-end---author:wangshuai---date:20260807---for:Khi nhập quy tắc, trường kiểm toán sử dụng người dùng hiện tại và thời gian hiện tại---
             int excelRowNumber = params.getTitleRows() + params.getHeadRows() + i + 1;
             if (isRuleCodeExists(fillRule.getRuleCode())) {
-                errorMessages.add("Dòng Excel " + excelRowNumber + ": Mã quy tắc 【" + fillRule.getRuleCode() + "】Trùng lặp, bỏ qua nhập.");
+                errorMessages.add("Dòng Excel " + excelRowNumber + ": Mã quy tắc [" + fillRule.getRuleCode() + "]Trùng lặp, bỏ qua nhập.");
                 continue;
             }
             try {
@@ -63,7 +63,7 @@ public class SysFillRuleServiceImpl extends ServiceImpl<SysFillRuleMapper, SysFi
                 }
             } catch (Exception e) {
                 if (isDuplicateRuleCodeException(e)) {
-                    errorMessages.add("Dòng Excel " + excelRowNumber + ": Mã quy tắc 【" + fillRule.getRuleCode() + "】Trùng lặp, bỏ qua nhập.");
+                    errorMessages.add("Dòng Excel " + excelRowNumber + ": Mã quy tắc [" + fillRule.getRuleCode() + "]Trùng lặp, bỏ qua nhập.");
                 } else {
                     throw e;
                 }

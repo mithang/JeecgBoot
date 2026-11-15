@@ -15,9 +15,6 @@ enum Api {
   queryRolePermission = '/sys/permission/queryRolePermission',
   saveRolePermission = '/sys/permission/saveRolePermission',
   queryDataRule = '/sys/role/datarule',
-  getParentDesignList = '/act/process/extActDesignFlowData/getDesFormFlows',
-  getRoleDegisnList = '/joa/designform/designFormCommuse/getRoleDegisnList',
-  saveRoleDesign = '/joa/designform/designFormCommuse/sysRoleDesignAdd',
   userList = '/sys/user/userRoleList',
   deleteUserRole = '/sys/user/deleteUserRole',
   batchDeleteUserRole = '/sys/user/deleteUserRoleBatch',
@@ -120,20 +117,6 @@ export const queryDataRule = (params) =>
  * Lưu quy tắc dữ liệu của vai trò
  */
 export const saveDataRule = (params) => defHttp.post({ url: Api.queryDataRule, params });
-/**
- * Lấy dữ liệu biểu mẫu
- * @return List<Map>
- */
-export const getParentDesignList = () => defHttp.get({ url: Api.getParentDesignList });
-/**
- * Lấy dữ liệu biểu mẫu vai trò
- * @return List<Map>
- */
-export const getRoleDegisnList = (params) => defHttp.get({ url: Api.getRoleDegisnList, params });
-/**
- * Gửi thông tin phiếu công việc của vai trò
- */
-export const saveRoleDesign = (params) => defHttp.post({ url: Api.saveRoleDesign, params });
 /**
  * API danh sách vai trò
  * @param params

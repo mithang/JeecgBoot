@@ -130,7 +130,7 @@
       {
         label: record.status == 1 ? 'Vô hiệu hóa' : 'Kích hoạt',
         popConfirm: {
-          title: `Có phải${record.status == 1 ? 'Vô hiệu hóa' : 'Kích hoạt'}？`,
+          title: `Có phải${record.status == 1 ? 'Vô hiệu hóa' : 'Kích hoạt'}?`,
           confirm: handleChangeStatus.bind(null, record),
         },
       },

@@ -462,7 +462,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                     if (user != null && user.getStatus() != 2) {
                         user.setStatus(2);
                         sysUserService.updateById(user);
-                        syncInfo.addSuccessInfo("Vô hiệu hóa người dùng đã nghỉ việc：" + user.getRealname());
+                        syncInfo.addSuccessInfo("Vô hiệu hóa người dùng đã nghỉ việc:" + user.getRealname());
                         log.info("Feishu đồng bộ vô hiệu hóa người dùng：{}，openId={}", user.getRealname(), account.getThirdUserUuid());
                     }
                 }
@@ -526,7 +526,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
             }
         }
         if (StringUtils.isEmpty(deptName)) {
-            syncInfo.addFailInfo("Lấy tên phòng ban gốc Feishu thất bại:department.name、i18n_name.zh_cn Và giao diện tenant đều chưa trả về tên hợp lệ");
+            syncInfo.addFailInfo("Lấy tên phòng ban gốc Feishu thất bại:department.name, i18n_name.zh_cn Và giao diện tenant đều chưa trả về tên hợp lệ");
             return null;
         }
         //update-end---author:liusq ---date:2026-06-02  for：【QQYUN-12767】Phòng ban gốc ảo Feishu"0"Bản thân không có tên, lấy tên công ty theo cơ chế fallback ba cấp theo mức độ ưu tiên
@@ -777,7 +777,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                                 if (localDepart != null) {
                                     linkUserToDepart(openId, tenantId, localDepart.getId());
                                 }
-                                syncInfo.addSuccessInfo("Liên kết người dùng hiện có theo số điện thoại:" + name + "（" + strippedMobile + "）");
+                                syncInfo.addSuccessInfo("Liên kết người dùng hiện có theo số điện thoại:" + name + "(" + strippedMobile + ")");
                                 log.info("Đồng bộ Feishu liên kết người dùng hiện có theo số điện thoại:openId={}, phone={}, sysUserId={}",
                                         openId, strippedMobile, userByPhone.getId());
                             } catch (Exception e) {
@@ -802,7 +802,7 @@ public class ThirdAppFeishuServiceImpl implements IThirdAppService {
                                 sysUserDepartService.save(userDepart);
                             }
                             syncInfo.addSuccessInfo("Người dùng mới:" + name
-                                    + (StringUtils.isNotEmpty(email) ? "（" + email + "）" : ""));
+                                    + (StringUtils.isNotEmpty(email) ? "(" + email + ")" : ""));
                         } else {
                             syncInfo.addFailInfo("Tạo người dùng thất bại:" + name);
                         }

@@ -552,7 +552,7 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
                     break;
                 default:
             }
-            String str = String.format("Người dùng %s(%s) Đồng bộ thất bại! Mã lỗi：%s——%s", sysUser.getUsername(), sysUser.getRealname(), errCode, msg);
+            String str = String.format("Người dùng %s(%s) Đồng bộ thất bại! Mã lỗi:%s——%s", sysUser.getUsername(), sysUser.getRealname(), errCode, msg);
             syncInfo.addFailInfo(str);
             return false;
         } else {

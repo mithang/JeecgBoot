@@ -319,7 +319,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
      */
     private boolean syncDepartCollectErrInfo(Response<?> response, SysDepartTreeModel depart, SyncInfoVo syncInfo) {
         if (!response.isSuccess()) {
-            String str = String.format("Phòng ban %s(%s) Đồng bộ thất bại! Mã lỗi：%s——%s", depart.getDepartName(), depart.getOrgCode(), response.getErrcode(), response.getErrmsg());
+            String str = String.format("Phòng ban %s(%s) Đồng bộ thất bại! Mã lỗi:%s——%s", depart.getDepartName(), depart.getOrgCode(), response.getErrcode(), response.getErrmsg());
             syncInfo.addFailInfo(str);
             return false;
         } else {
@@ -568,7 +568,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
      */
     private boolean syncUserCollectErrInfo(Response<?> response, SysUser sysUser, SyncInfoVo syncInfo) {
         if (!response.isSuccess()) {
-            String str = String.format("Người dùng %s(%s) Đồng bộ thất bại! Mã lỗi：%s——%s", sysUser.getUsername(), sysUser.getRealname(), response.getErrcode(), response.getErrmsg());
+            String str = String.format("Người dùng %s(%s) Đồng bộ thất bại! Mã lỗi:%s——%s", sysUser.getUsername(), sysUser.getRealname(), response.getErrcode(), response.getErrmsg());
             syncInfo.addFailInfo(str);
             return false;
         } else {

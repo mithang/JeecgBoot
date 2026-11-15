@@ -203,7 +203,7 @@ public class SysDepartRoleController extends JeecgController<SysDepartRole, ISys
 		 departRoleUserService.deptRoleUserAdd(userId,newRoleId,oldRoleId);
          // Giải thích logic mã: [VUEN-234]Phân bổ vai trò phòng ban: thêm nhật ký nhạy cảm------------
          LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-         baseCommonService.addLog("Gán vai trò cho ID người dùng phòng ban:"+userId+"Phân bổ vai trò, người thao tác： " +loginUser.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
+         baseCommonService.addLog("Gán vai trò cho ID người dùng phòng ban:"+userId+"Phân bổ vai trò, người thao tác: " +loginUser.getUsername() ,CommonConstant.LOG_TYPE_2, 2);
          return Result.ok("Thêm thành công!");
 	 }
 

@@ -659,9 +659,9 @@ public class SysUserController {
 		LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         ExportParams exportParams = new ExportParams("Quy tắc nhập:\n" +
                 "1. Tên người dùng là mục bắt buộc, chỉ hỗ trợ nhập dữ liệu mới;\n" +
-                "2. Nhiều phòng ban, vai trò hoặc phòng ban phụ trách, vui lòng dùng dấu chấm phẩy tiếng Anh ; phân tách, ví dụ: Phòng Tài chính;Phòng Nghiên cứu và Phát triển；\n" +
+                "2. Nhiều phòng ban, vai trò hoặc phòng ban phụ trách, vui lòng dùng dấu chấm phẩy tiếng Anh ; phân tách, ví dụ: Phòng Tài chính;Phòng Nghiên cứu và Phát triển;\n" +
                 "3. Cấp phòng ban vui lòng dùng dấu gạch chéo tiếng Anh / phân tách, ví dụ: Công ty Bắc Kinh/Phòng Tài chính/Phòng Tài chính 1;\n" +
-                "4. Loại phòng ban cần nhất quán với cấp bậc phòng ban, cũng dùng /  phân tách, ví dụ: Công ty/Phòng ban/Phòng ban hoặc 1/3/3，nhiều loại dùng ; Phân tách. Mã loại tổ chức: công ty(1)，công ty con(4), phòng ban(3)；\n" +
+                "4. Loại phòng ban cần nhất quán với cấp bậc phòng ban, cũng dùng /  phân tách, ví dụ: Công ty/Phòng ban/Phòng ban hoặc 1/3/3, nhiều loại dùng ; Phân tách. Mã loại tổ chức: công ty(1), công ty con(4), phòng ban(3);\n" +
                 "5. Phòng ban khớp theo tên người dùng; nếu tồn tại nhiều phòng ban thì liên kết với phòng ban mới tạo nhất, nếu không tồn tại thì tự động thêm mới;\n" +
                 "6. Quy tắc import phòng ban phụ trách giống với phòng ban trực thuộc; nếu phòng ban trực thuộc không chứa phòng ban phụ trách thì không liên kết phòng ban phụ trách;\n" +
                 "7. Khi import vị trí chính của người dùng, hệ thống sẽ tự động tạo vị trí mới dưới phòng ban; khi cấp bậc rỗng thì mặc định không liên kết với vị trí.", "Người xuất:" + user.getRealname(), "Thông tin xuất");
@@ -871,6 +871,7 @@ public class SysUserController {
      * @param
      * @return
      */
+    @RequiresPermissions("system:sys_ugroup_user:add")
     @RequestMapping(value = "/addSysUserGroup", method = RequestMethod.POST)
     public Result<String> addSysUserGroup(@RequestBody SysUserGroupVO sysUserGroupVO) {
         Result<String> result = new Result<String>();
@@ -901,6 +902,7 @@ public class SysUserController {
      * @param
      * @return
      */
+    @RequiresPermissions("system:sys_ugroup_user:delete")
     @RequestMapping(value = "/deleteGroupUser", method = RequestMethod.DELETE)
     public Result<SysUgroupUser> deleteGroupUser(@RequestParam(name="groupId") String groupId,
                                                  @RequestParam(name="userId",required=true) String userId
@@ -923,6 +925,7 @@ public class SysUserController {
      * @param
      * @return
      */
+    @RequiresPermissions("system:sys_ugroup_user:deleteBatch")
     @RequestMapping(value = "/deleteUserGroupBatch", method = RequestMethod.DELETE)
     public Result<SysUgroupUser> deleteUserGroupBatch(
             @RequestParam(name="groupId") String groupId,
@@ -946,6 +949,7 @@ public class SysUserController {
      * @param req
      * @return
      */
+    @RequiresPermissions("system:sys_ugroup_user:list")
     @RequestMapping(value = "/groupUserList", method = RequestMethod.GET)
     public Result<IPage<SysUser>> groupUserList(@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
                                            @RequestParam(name="pageSize", defaultValue="10") Integer pageSize, HttpServletRequest req) {
@@ -2323,6 +2327,26 @@ public class SysUserController {
         result.setSuccess(true);
         result.setMessage("Gửi mã xác minh thành công!");
         return result;
+    }
+
+    /**
+     * Hủy tài khoản người dùng[Dành riêng cho QiaoQiaoYun]
+     * (audit A1: endpoint còn thiếu — frontend UserCancellationModal gọi PUT /sys/user/userLogOff
+     * nhưng controller chưa có, service ISysUserService.userLogOff đã tồn tại)
+     *
+     * @param jsonObject
+     * @return
+     */
+    @PutMapping(value = "/userLogOff")
+    public Result<String> userLogOff(@RequestBody JSONObject jsonObject, HttpServletRequest request) {
+        //Lấy tên đăng nhập
+        String username = JwtUtil.getUserNameByToken(request);
+        String name = jsonObject.getString("username");
+        if (oConvertUtils.isEmpty(name) || !name.equals(username)) {
+            return Result.error("Hủy tài khoản thất bại, người dùng không khớp!");
+        }
+        sysUserService.userLogOff(jsonObject, username);
+        return Result.OK("Hủy tài khoản thành công!");
     }
 
     /**

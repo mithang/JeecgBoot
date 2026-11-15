@@ -3,7 +3,6 @@ import { defHttp } from "/@/utils/http/axios";
 enum Api {
   userEdit='/sys/user/login/setting/userEdit',
   getUserData='/sys/user/login/setting/getUserData',
-  queryNameByCodes='/sys/position/queryByCodes',
   updateMobile='/sys/user/updateMobile',
   updateUserPassword='/sys/user/passwordChange',
   getTenantListByUserId = '/sys/tenant/getTenantListByUserId',
@@ -36,14 +35,6 @@ export const userEdit = (params) => {
  */
 export const getUserData = () => {
   return defHttp.get({ url: Api.getUserData },{ isTransformResponse:false });
-}
-
-/**
- * Lấy thông tin nhiều chức danh
- * @param params
- */
-export const queryNameByCodes = (params) => {
-  return defHttp.get({ url: Api.queryNameByCodes, params },{isTransformResponse:false});
 }
 
 /**
