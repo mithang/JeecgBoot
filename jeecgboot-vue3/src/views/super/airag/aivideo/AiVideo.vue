@@ -45,7 +45,7 @@
         <div class="preview-content">
           <div v-if="!currentVideoUrl && !generating" class="empty-state">
             <Icon icon="ant-design:video-camera-outlined" size="72" color="#c0c4cc" />
-            <p>Điền nội dung văn bản bên trái và nhấp「Bắt đầu tạo」</p>
+            <p>Điền nội dung văn bản bên trái và nhấp"Bắt đầu tạo"</p>
             <p class="tip">Hỗ trợ điều chỉnh độ dài video, phong cách và hiệu ứng, tạo nội dung video cá nhân hóa hơn</p>
           </div>
 

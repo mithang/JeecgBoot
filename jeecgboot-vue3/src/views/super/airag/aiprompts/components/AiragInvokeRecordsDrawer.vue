@@ -211,7 +211,7 @@
     color: rgba(0, 0, 0, 0.85);
 
     &::after {
-      content: '：';
+      content: ':';
     }
   }
 

@@ -45,20 +45,26 @@ public class ImageGenerationToolBuilder {
 	private static final int DEFAULT_IMAGE_COUNT = 1;
 	private static final int MAX_IMAGE_COUNT = 4;
 	private static final String IMAGE_TYPE_REGEX = "(?:图片|图像|配图|插图|海报|照片|插画)";
+	// Tiếng Việt: danh từ chỉ hình ảnh (cụm dài trước) — bổ sung bên cạnh mẫu tiếng Trung, không thay thế
+	private static final String VI_IMAGE_TYPE_REGEX = "(?:hình ảnh|hình minh họa|hình vẽ|áp phích|poster|tranh|ảnh)";
+	private static final String VI_IMAGE_QUANTITY_REGEX = "(?:ảnh|hình|tấm|bức|tờ)";
 	private static final String IMAGE_QUANTITY_REGEX = "(?:张(?:\\s*" + IMAGE_TYPE_REGEX + ")?|个\\s*" + IMAGE_TYPE_REGEX + ")";
 	private static final Pattern EXPLICIT_IMAGE_REQUEST_PATTERN = Pattern.compile(
 			"(?:生成|制作|创建|绘制|画|设计|添加|配).{0,20}" + IMAGE_TYPE_REGEX
-					+ "|(?:\\d+|[一二两三四])\\s*" + IMAGE_QUANTITY_REGEX
+					+ "|(?:tạo|vẽ|thiết kế|dựng).{0,20}" + VI_IMAGE_TYPE_REGEX
+					+ "|(?:\\d+|[一二两三四]|một|hai|ba|bốn)\\s*(?:" + IMAGE_QUANTITY_REGEX + "|" + VI_IMAGE_QUANTITY_REGEX + ")"
 	);
-	private static final Pattern IMAGE_COUNT_PATTERN = Pattern.compile("(\\d+|[一二两三四])\\s*" + IMAGE_QUANTITY_REGEX);
+	private static final Pattern IMAGE_COUNT_PATTERN = Pattern.compile("(\\d+|[一二两三四]|một|hai|ba|bốn)\\s*(?:" + IMAGE_QUANTITY_REGEX + "|" + VI_IMAGE_QUANTITY_REGEX + ")");
 	private static final Pattern IMAGE_PLUGIN_SUBJECT_PATTERN = Pattern.compile(
 			"(?:^|[^a-z0-9])(?:image|images|photo|photos|picture|pictures|illustration|illustrations)(?:$|[^a-z0-9])"
-					+ "|图片|图像|照片|配图|插图|海报|插画|图库",
+					+ "|图片|图像|照片|配图|插图|海报|插画|图库"
+					+ "|hình ảnh|hình minh họa|hình vẽ|áp phích|poster|tranh|ảnh",
 			Pattern.CASE_INSENSITIVE
 	);
 	private static final Pattern IMAGE_PLUGIN_ACTION_PATTERN = Pattern.compile(
 			"(?:^|[^a-z0-9])(?:search|find|generate|create|draw|render|design|produce|retrieve|fetch|get|query|list|recommend)(?:$|[^a-z0-9])"
-					+ "|搜索|查询|生成|绘制|创建|设计|获取|推荐",
+					+ "|搜索|查询|生成|绘制|创建|设计|获取|推荐"
+					+ "|tìm kiếm|tìm|tạo|vẽ|thiết kế",
 			Pattern.CASE_INSENSITIVE
 	);
 	private static final Map<String, Integer> CHINESE_IMAGE_COUNTS = Map.of(
@@ -67,6 +73,13 @@ public class ImageGenerationToolBuilder {
 			"两", 2,
 			"三", 3,
 			"四", 4
+	);
+	// Số lượng ảnh bằng tiếng Việt (một/hai/ba/bốn), tra cứu cùng với CHINESE_IMAGE_COUNTS
+	private static final Map<String, Integer> VIETNAMESE_IMAGE_COUNTS = Map.of(
+		"một", 1,
+		"hai", 2,
+		"ba", 3,
+		"bốn", 4
 	);
 
 	private final IAIChatHandler aiChatHandler;
@@ -199,7 +212,7 @@ public class ImageGenerationToolBuilder {
 		StringBuilder placeholders = new StringBuilder();
 		for (int i = 1; i <= count; i++) {
 			if (i > 1) {
-				placeholders.append("、");
+				placeholders.append(", ");
 			}
 			placeholders.append("{{IMAGE_").append(i).append("}}");
 		}
@@ -394,7 +407,11 @@ public class ImageGenerationToolBuilder {
 		if (countText.matches("\\d+")) {
 			return normalizeCount(Integer.parseInt(countText));
 		}
-		return normalizeCount(CHINESE_IMAGE_COUNTS.get(countText));
+		Integer count = CHINESE_IMAGE_COUNTS.get(countText);
+		if (count == null) {
+			count = VIETNAMESE_IMAGE_COUNTS.get(countText);
+		}
+		return normalizeCount(count);
 	}
 
 	/**

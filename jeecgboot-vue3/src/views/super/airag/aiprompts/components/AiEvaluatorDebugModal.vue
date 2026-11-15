@@ -165,7 +165,7 @@
                   <!-- Kiểu đặc biệt cho cột trạng thái -->
                   <template v-if="column.dataIndex === 'status'">
                     <span :class="['status-badge', getStatusClass(record)]">
-                      {{ text }}
+                      {{ getStatusText(record) }}
                     </span>
                   </template>
                 </template>
@@ -414,6 +414,14 @@
     if (record.status === '失败' || record.status === 'Thất bại') return 'status-failed';
     if (record.status === '警告' || record.status === 'Cảnh báo') return 'status-warning';
     return '';
+  };
+
+  // Hiển thị trạng thái bằng tiếng Việt — bản ghi đánh giá cũ (trước khi dịch prompt) vẫn lưu trạng thái tiếng Trung
+  const getStatusText = (record) => {
+    if (record.status === '成功' || record.status === 'Thành công') return 'Thành công';
+    if (record.status === '失败' || record.status === 'Thất bại') return 'Thất bại';
+    if (record.status === '警告' || record.status === 'Cảnh báo') return 'Cảnh báo';
+    return record.status;
   };
 
   // Kiểu dòng

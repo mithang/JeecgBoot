@@ -78,7 +78,7 @@
   // Lời chào (lấy họ tên hoặc tên người dùng của người dùng đăng nhập hiện tại)
   const userStore = useUserStore();
   const welcomeName = computed(() => userStore.getUserInfo?.realname || userStore.getUserInfo?.username || '');
-  const welcomeText = computed(() => (welcomeName.value ? `Xin chào，${welcomeName.value}。Bạn đã sẵn sàng bắt đầu chưa?` : 'Xin chào, bạn đã sẵn sàng bắt đầu chưa?'));
+  const welcomeText = computed(() => (welcomeName.value ? `Xin chào, ${welcomeName.value}. Bạn đã sẵn sàng bắt đầu chưa?` : 'Xin chào, bạn đã sẵn sàng bắt đầu chưa?'));
   const showWelcome = ref<boolean>(false);
 
   // Chỉ định độ dài và cơ số

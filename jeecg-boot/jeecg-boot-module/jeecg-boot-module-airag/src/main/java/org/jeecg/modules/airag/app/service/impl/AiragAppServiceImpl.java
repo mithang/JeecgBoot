@@ -386,7 +386,7 @@ public class AiragAppServiceImpl extends ServiceImpl<AiragAppMapper, AiragApp> i
             }
         }
         if (!actions.isEmpty()) {
-            sb.append("**Hướng dẫn hành vi**：\n");
+            sb.append("**Hướng dẫn hành vi**:\n");
             for (String act : actions) {
                 sb.append(act).append("\n");
             }
@@ -396,17 +396,17 @@ public class AiragAppServiceImpl extends ServiceImpl<AiragAppMapper, AiragApp> i
         // Giao thức cập nhật biến (ràng buộc cứng được viết chết, ngăn LLM gọi nhầm trong phiên mới update_variable）
         String varNames = enabledVars.stream()
                 .map(AppVariableVo::getName)
-                .collect(Collectors.joining("、"));
-        sb.append("**Giao thức cập nhật biến (bắt buộc đọc)**：\n");
+                .collect(Collectors.joining(", "));
+        sb.append("**Giao thức cập nhật biến (bắt buộc đọc)**:\n");
         sb.append("1. **Khi nào gọi `update_variable`**: Chỉ khi người dùng trong**cuộc trò chuyện lần này**chủ động cung cấp biến nêu trên (")
                 .append(varNames)
-                .append(") của**Giá trị mới**, và giá trị mới này khác với “Giá trị hiện tại” trong “Bảng tổng quan trạng thái biến”**Không nhất quán**thì mới phải gọi ngay lập tức `update_variable`。\n");
+                .append(") của**Giá trị mới**, và giá trị mới này khác với “Giá trị hiện tại” trong “Bảng tổng quan trạng thái biến”**Không nhất quán**thì mới phải gọi ngay lập tức `update_variable`.\n");
         sb.append("2. **Người dùng chất vấn/Tình huống sửa chữa phải cập nhật**: Nếu người dùng đối với “Giá trị hiện tại” đã có trong bảng bày tỏ rõ sự chất vấn, phủ nhận hoặc sửa chữa (ví dụ “Tôi không phải X, mà là Y”, “Bạn nhớ nhầm rồi, tôi tên là Z”, “Bây giờ nên đổi thành…”, “Giá trị này không đúng”), và đưa ra**Giá trị mới**, thì**phải ngay lập tức**Gọi `update_variable` ghi đè giá trị cũ bằng giá trị mới — đây chính là tình huống cập nhật hợp lệ, đừng vì “Nghiêm cấm kích hoạt nhầm” dưới đây mà từ chối thực hiện.\n");
-        sb.append("3. **Nghiêm cấm kích hoạt nhầm**：\n");
-        sb.append("   - Ngay cả khi**phiên mới vừa mở**của vòng đối thoại đầu tiên, giá trị hiện tại đã có trong “Bảng tổng quan trạng thái biến” cũng**không phải là thông tin mới**— nó đến từ phiên lịch sử/cấu hình đã tồn tại,**Nghiêm cấm**coi nó là “nội dung người dùng vừa mới nói với tôi” mà gọi `update_variable`。\n");
+        sb.append("3. **Nghiêm cấm kích hoạt nhầm**:\n");
+        sb.append("   - Ngay cả khi**phiên mới vừa mở**của vòng đối thoại đầu tiên, giá trị hiện tại đã có trong “Bảng tổng quan trạng thái biến” cũng**không phải là thông tin mới**— nó đến từ phiên lịch sử/cấu hình đã tồn tại,**Nghiêm cấm**coi nó là “nội dung người dùng vừa mới nói với tôi” mà gọi `update_variable`.\n");
         sb.append("   - Người dùng chưa chủ động bày tỏ ý định thay đổi, cũng chưa chất vấn giá trị hiện tại/sửa chữa,**Nghiêm cấm**chủ động gọi.\n");
         sb.append("   - Khi cùng một biến đã được gọi trong cùng một vòng đối thoại, hoặc giá trị mới trùng với giá trị hiện tại,**Nghiêm cấm**gọi lặp lại.\n");
-        sb.append("4. **Ba câu hỏi tự kiểm tra trước khi gọi**：(a) Có phải người dùng trong vòng này chủ động cung cấp mới, hoặc đã chất vấn giá trị hiện tại/sửa chữa?(b) Có khác với “Giá trị hiện tại” không?(c) Vòng này đã gọi chưa? Chỉ khi cả ba đều là có mới được phép gọi.\n");
+        sb.append("4. **Ba câu hỏi tự kiểm tra trước khi gọi**:(a) Có phải người dùng trong vòng này chủ động cung cấp mới, hoặc đã chất vấn giá trị hiện tại/sửa chữa?(b) Có khác với “Giá trị hiện tại” không?(c) Vòng này đã gọi chưa? Chỉ khi cả ba đều là có mới được phép gọi.\n");
 
         return sb.toString();
     }

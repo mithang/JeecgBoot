@@ -145,7 +145,7 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
         // Tham số nội dung
         JSONObject contentParam = new JSONObject();
         contentParam.put(FlowPluginContent.NAME, "content");
-        contentParam.put(FlowPluginContent.DESCRIPTION, "Nội dung bộ nhớ. Thời gian hiện tại là:" + DateUtils.now() + ". Yêu cầu định dạng:'Vào ngày dd tháng MM năm yyyy HH:mm phút, người dùng[hành vi của người dùng/Vấn đề]，assistant[câu trả lời của trợ lý/phản ứng]。'");
+        contentParam.put(FlowPluginContent.DESCRIPTION, "Nội dung bộ nhớ. Thời gian hiện tại là:" + DateUtils.now() + ". Yêu cầu định dạng:'Vào ngày dd tháng MM năm yyyy HH:mm phút, người dùng[hành vi của người dùng/Vấn đề], assistant[câu trả lời của trợ lý/phản ứng].'");
         contentParam.put(FlowPluginContent.TYPE, FlowPluginContent.TYPE_STRING);
         contentParam.put(FlowPluginContent.LOCATION, FlowPluginContent.LOCATION_BODY);
         contentParam.put(FlowPluginContent.REQUIRED, true);
@@ -182,10 +182,10 @@ public class AiragKnowledgeServiceImpl extends ServiceImpl<AiragKnowledgeMapper,
         String addDesc = oConvertUtils.isEmpty(descr) ? "Bất kỳ thông tin nào người dùng từng đề cập" : descr;
         tool.put(FlowPluginContent.NAME, "query_memory");
         tool.put(FlowPluginContent.DESCRIPTION,
-                "Truy xuất từ kho bộ nhớ" + addDesc + "。" +
-                "Khi câu hỏi của người dùng có thể phụ thuộc vào ngữ cảnh lịch sử (như**Theo sở thích của tôi...**、**Gợi ý phù hợp với tôi...**、" +
-                "**Tôi đã nói trước đây...**、**Đã đề cập lần trước...**v.v.), phải gọi công cụ này để truy xuất trước," +
-                "Nghiêm cấm hỏi lại người dùng trực tiếp hoặc tuyên bố trước khi truy vấn**Không biết**。" +
+                "Truy xuất từ kho bộ nhớ" + addDesc + "." +
+                "Khi câu hỏi của người dùng có thể phụ thuộc vào ngữ cảnh lịch sử (như**Theo sở thích của tôi...**, **Gợi ý phù hợp với tôi...**, " +
+                "**Tôi đã nói trước đây...**, **Đã đề cập lần trước...**v.v.), phải gọi công cụ này để truy xuất trước," +
+                "Nghiêm cấm hỏi lại người dùng trực tiếp hoặc tuyên bố trước khi truy vấn**Không biết**." +
                 "Chỉ khi công cụ này trả về**Không tìm thấy thông tin liên quan**thì mới được phép hỏi người dùng. Thà truy vấn mà không có kết quả còn hơn không truy vấn.");
         //update-end---author:wangshuai ---date:2026-04-21  for: 【Bộ nhớ AI】Tăng cường query_memory mô tả thời điểm kích hoạt, tránh LLM hỏi ngược người dùng khi chưa truy vấn-----------
         //update-end---author:wangshuai---date:2026-01-08---for: Kho bộ nhớ khớp theo mô tả của kho bộ nhớ, không viết cứng---

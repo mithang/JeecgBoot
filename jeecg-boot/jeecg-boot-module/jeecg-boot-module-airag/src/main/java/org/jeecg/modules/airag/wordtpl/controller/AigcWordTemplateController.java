@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.exception.JeecgBootException;
@@ -76,7 +77,7 @@ public class AigcWordTemplateController extends JeecgController<AigcWordTemplate
      */
     @AutoLog(value = "word Quản lý mẫu-Thêm")
     @Operation(summary = "word Quản lý mẫu-Thêm")
-//	@RequiresPermissions("wordtpl:template:add")
+	@RequiresPermissions("wordtpl:template:add")
     @PostMapping(value = "/add")
     public Result<String> add(@RequestBody AigcWordTemplate eoaWordTemplate) {
         AssertUtils.assertNotEmpty("Tham số bất thường", eoaWordTemplate);
@@ -95,7 +96,7 @@ public class AigcWordTemplateController extends JeecgController<AigcWordTemplate
      */
     @AutoLog(value = "word Quản lý mẫu-Chỉnh sửa")
     @Operation(summary = "word Quản lý mẫu-Chỉnh sửa")
-//	@RequiresPermissions("wordtpl:template:edit")
+	@RequiresPermissions("wordtpl:template:edit")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<String> edit(@RequestBody AigcWordTemplate eoaWordTemplate) {
         AssertUtils.assertNotEmpty("Tham số bất thường", eoaWordTemplate);
@@ -114,7 +115,7 @@ public class AigcWordTemplateController extends JeecgController<AigcWordTemplate
      */
     @AutoLog(value = "word Quản lý mẫu-Xóa theo id")
     @Operation(summary = "word Quản lý mẫu-Xóa theo id")
-//	@RequiresPermissions("wordtpl:template:delete")
+	@RequiresPermissions("wordtpl:template:delete")
     @DeleteMapping(value = "/delete")
     public Result<String> delete(@RequestParam(name = "id", required = true) String id) {
         eoaWordTemplateService.removeById(id);
@@ -129,7 +130,7 @@ public class AigcWordTemplateController extends JeecgController<AigcWordTemplate
      */
     @AutoLog(value = "word Quản lý mẫu-Xóa hàng loạt")
     @Operation(summary = "word Quản lý mẫu-Xóa hàng loạt")
-//	@RequiresPermissions("wordtpl:template:deleteBatch")
+	@RequiresPermissions("wordtpl:template:deleteBatch")
     @DeleteMapping(value = "/deleteBatch")
     public Result<String> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
         this.eoaWordTemplateService.removeByIds(Arrays.asList(ids.split(",")));

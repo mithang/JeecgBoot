@@ -83,7 +83,7 @@ public class VoiceApiHelper {
         if (response.statusCode() != 200) {
             String errorBody = new String(response.body().readAllBytes());
             log.error("TTS API Gọi thất bại: status={}, body={}", response.statusCode(), errorBody);
-            throw new RuntimeException("TTS API Gọi thất bại, mã trạng thái: " + response.statusCode() + "，" + errorBody);
+            throw new RuntimeException("TTS API Gọi thất bại, mã trạng thái: " + response.statusCode() + ", " + errorBody);
         }
 
         try (InputStream is = response.body()) {

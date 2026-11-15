@@ -208,7 +208,7 @@
           return;
         }
         if (!String(selectedPrompt.value.content ?? '').trim()) {
-          createMessage.warning('Dữ liệu prompt hiện tại chưa cấu hình nội dung prompt, vui lòng vào trang 「Prompt AI」 tìm dữ liệu tương ứng và hoàn tất cấu hình.');
+          createMessage.warning('Dữ liệu prompt hiện tại chưa cấu hình nội dung prompt, vui lòng vào trang "Prompt AI" tìm dữ liệu tương ứng và hoàn tất cấu hình.');
           return;
         }
         // update-end--author:liaozhiyang---date:20260810---for：【LHZP-1518】Sửa prompt của popup chọn, không hiển thị lại được nội dung

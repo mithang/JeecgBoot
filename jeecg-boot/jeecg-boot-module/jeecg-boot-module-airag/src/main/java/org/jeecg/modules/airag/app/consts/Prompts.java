@@ -21,8 +21,8 @@ public class Prompts {
             "\n" +
             "## Quy trình\n" +
             "### 1: Phân tích nhu cầu\n" +
-            "1. Khi người dùng mô tả nhu cầu, hãy vận dụng nghiêm ngặt khung SCQA để xác nhận các yếu tố cốt lõi, đồng thời phân tích và liên tưởng một cách chính xác:\"Bối cảnh hiện tại(Situation)là gì? Mâu thuẫn chính(Complication)có những gì? Vấn đề then chốt cần giải quyết(Question)là gì? Hiệu quả mong đợi đạt được(Answer)？\"\n" +
-            "2. Phân tích và liên tưởng chi tiết thông qua 5W1H:\"Đối tượng mục tiêu(Who)? Bối cảnh sử dụng(Where/When)? Cụ thể cần thực hiện điều gì(What)? Vì sao cần những đặc điểm này(Why)? Làm thế nào để lượng hóa hiệu quả(How)？\"\n" +
+            "1. Khi người dùng mô tả nhu cầu, hãy vận dụng nghiêm ngặt khung SCQA để xác nhận các yếu tố cốt lõi, đồng thời phân tích và liên tưởng một cách chính xác:\"Bối cảnh hiện tại(Situation)là gì? Mâu thuẫn chính(Complication)có những gì? Vấn đề then chốt cần giải quyết(Question)là gì? Hiệu quả mong đợi đạt được(Answer)?\"\n" +
+            "2. Phân tích và liên tưởng chi tiết thông qua 5W1H:\"Đối tượng mục tiêu(Who)? Bối cảnh sử dụng(Where/When)? Cụ thể cần thực hiện điều gì(What)? Vì sao cần những đặc điểm này(Why)? Làm thế nào để lượng hóa hiệu quả(How)?\"\n" +
             "\n" +
             "### 2: Lựa chọn khung\n" +
             "Dựa trên nhu cầu, khớp loại prompt tốt nhất từ thư viện mẫu đã cho:\n" +
@@ -140,38 +140,38 @@ public class Prompts {
      */
     public static final String GENERATE_MEMORY_PART = "## Nhiệm vụ: Tạo hướng dẫn sử dụng kho bộ nhớ\n" +
             "### Thông tin đầu vào\n" +
-            "**Mô tả kho bộ nhớ**：\n" +
+            "**Mô tả kho bộ nhớ**:\n" +
             "%s\n" +
             "### Yêu cầu\n" +
-            "1. Hãy tạo một đoạn**Hướng dẫn sử dụng kho bộ nhớ**, thêm 【Giao thức bắt buộc sử dụng công cụ】:\n" +
+            "1. Hãy tạo một đoạn**Hướng dẫn sử dụng kho bộ nhớ**, thêm [Giao thức bắt buộc sử dụng công cụ]:\n" +
             "   - **Tự động lưu trữ hoàn toàn (không cần chỉ thị của người dùng)**: Bạn phải luôn phân tích cuộc trò chuyện như một người quan sát. Ngay khi phát hiện thông tin phù hợp với mô tả kho bộ nhớ (đặc biệt là:**Họ tên, nghề nghiệp, tuổi**, thông tin liên hệ, sở thích, kinh nghiệm, v.v.),**ngay lập tức**Gọi `add_memory` lưu trữ bằng công cụ.**Tuyệt đối đừng**hỏi người dùng có cần lưu trữ hay không, cũng đừng chờ chỉ thị rõ ràng của người dùng. Đây là nhiệm vụ nền của bạn.\n" +
-            "   - **Tự động truy vấn hoàn toàn (ưu tiên bắt buộc)**：\n" +
+            "   - **Tự động truy vấn hoàn toàn (ưu tiên bắt buộc)**:\n" +
             "     * **Cấm hỏi ngược trực tiếp**: Khi người dùng đưa ra câu hỏi phụ thuộc vào thông tin cá nhân (ví dụ “Giới thiệu phù hợp với tôi...” hoặc “Tôi đã từng nói...”) thì,**tuyệt đối cấm**hỏi ngược trực tiếp người dùng “Sở thích của bạn là gì?”.\n" +
             "     * **Phải tra cứu trước rồi mới trả lời**: Bạn phải**giả định trước**trong kho bộ nhớ đã có đáp án, và**gọi ngay lập tức** `query_memory` để xác minh. Chỉ khi công cụ trả về “Không tìm thấy thông tin liên quan”, bạn mới có quyền hỏi người dùng.\n" +
             "     * **Thà tra cứu mà không có kết quả, chứ không được không tra cứu**: Ngay cả khi bạn cảm thấy có thể không có bản ghi, bạn vẫn phải thực hiện quy trình truy vấn trước.\n" +
             "   - **Điều chỉnh động**: Vui lòng dựa vào **Mô tả trạng thái kho bộ nhớ**, xác định rõ những thông tin nào thuộc phạm vi “tự động thu thập”.\n" +
-            "   - **Quy tắc hành vi**：\n" +
+            "   - **Quy tắc hành vi**:\n" +
             "     * Hành động ghi nhớ của bạn nên**chủ động và không gây chú ý**. Người dùng chỉ chịu trách nhiệm trò chuyện, bạn chịu trách nhiệm ghi nhớ mọi chi tiết quan trọng.\n" +
             "     * **Cấm nói suông bằng lời**: Nghiêm cấm chỉ trả lời “Tôi đã biết”, “Đã ghi nhớ” mà thực tế không gọi công cụ. Đây là lỗi nghiêm trọng.\n" +
-            "   - **Ví dụ minh họa**：\n" +
-            "     * Tự động lưu trữ (nghề nghiệp): Người dùng nói “Tôi là kỹ sư mạng” -> (Đã nắm bắt được thông tin nghề nghiệp) -> **tự động gọi ngay lập tức** `add_memory(content='Nghề nghiệp của người dùng là kỹ sư mạng')` -> (Lưu trữ thành công) -> Trả lời “Thì ra là đồng nghiệp, kỹ thuật mạng rất thú vị...”。\n" +
-            "     * Tự động truy vấn (tình huống): Người dùng nói “Dựa theo sở thích của tôi, giới thiệu địa điểm du lịch” -> **Nghiêm cấm**Hỏi trực tiếp “Bạn có sở thích gì?” -> **phải gọi ngay lập tức** `query_memory(queryText='Sở thích của người dùng')` -> (Nếu tra được: leo núi) -> Trả lời “Vì bạn thích leo núi, giới thiệu đi Hoàng Sơn...”。\n" +
-            "     * Tự động truy vấn (thông thường): Người dùng hỏi “Hôm nay ăn gì ngon?” -> (Cần tìm hiểu khẩu vị) -> **tự động gọi ngay lập tức** `query_memory(queryText='Sở thích ăn uống của người dùng')` -> (Lấy được thông tin không ăn rau mùi) -> Trả lời “Giới thiệu một quán không cho rau mùi...”。\n\n";
+            "   - **Ví dụ minh họa**:\n" +
+            "     * Tự động lưu trữ (nghề nghiệp): Người dùng nói “Tôi là kỹ sư mạng” -> (Đã nắm bắt được thông tin nghề nghiệp) -> **tự động gọi ngay lập tức** `add_memory(content='Nghề nghiệp của người dùng là kỹ sư mạng')` -> (Lưu trữ thành công) -> Trả lời “Thì ra là đồng nghiệp, kỹ thuật mạng rất thú vị...”.\n" +
+            "     * Tự động truy vấn (tình huống): Người dùng nói “Dựa theo sở thích của tôi, giới thiệu địa điểm du lịch” -> **Nghiêm cấm**Hỏi trực tiếp “Bạn có sở thích gì?” -> **phải gọi ngay lập tức** `query_memory(queryText='Sở thích của người dùng')` -> (Nếu tra được: leo núi) -> Trả lời “Vì bạn thích leo núi, giới thiệu đi Hoàng Sơn...”.\n" +
+            "     * Tự động truy vấn (thông thường): Người dùng hỏi “Hôm nay ăn gì ngon?” -> (Cần tìm hiểu khẩu vị) -> **tự động gọi ngay lập tức** `query_memory(queryText='Sở thích ăn uống của người dùng')` -> (Lấy được thông tin không ăn rau mùi) -> Trả lời “Giới thiệu một quán không cho rau mùi...”.\n\n";
 
     /**
      * ai Prompt viết bài
      */
-    public static final String AI_WRITER_PROMPT ="Vui lòng viết một bài viết về [{}] . Định dạng nội dung bài viết:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}。";
+    public static final String AI_WRITER_PROMPT ="Vui lòng viết một bài viết về [{}] . Định dạng nội dung bài viết:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}.";
 
     /**
      * ai Prompt trả lời bài viết
      */
-    public static final String AI_REPLY_PROMPT = "Hãy trả lời cho nội dung sau đây:[{}] Viết một câu trả lời. Nội dung trả lời tham khảo:[{}], Định dạng trả lời:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}。";
+    public static final String AI_REPLY_PROMPT = "Hãy trả lời cho nội dung sau đây:[{}] Viết một câu trả lời. Nội dung trả lời tham khảo:[{}], Định dạng trả lời:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}.";
 
     /**
      * ai Prompt trau chuốt
      */
-    public static final String AI_TOUCHE_PROMPT = "Hãy trả lời cho nội dung sau đây:[{}] Tiến hành trau chuốt. Định dạng trả lời:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}。";
+    public static final String AI_TOUCHE_PROMPT = "Hãy trả lời cho nội dung sau đây:[{}] Tiến hành trau chuốt. Định dạng trả lời:{}, giọng điệu:{}, ngôn ngữ:{}, độ dài:{}.";
 
     /**
      * ai Prompt vẽ tranh

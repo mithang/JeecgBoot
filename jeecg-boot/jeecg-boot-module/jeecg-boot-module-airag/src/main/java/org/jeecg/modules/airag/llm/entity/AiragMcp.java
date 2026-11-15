@@ -52,11 +52,11 @@ public class AiragMcp implements Serializable {
     @Schema(description = "Mô tả")
     private java.lang.String descr;
     /**
-     * Loại (plugin=Plugin,mcp=MCP）
+     * Loại (plugin=Plugin,mcp=MCP)
      * for [QQYUN-12453]【AI】Hỗ trợ plugin
      */
-    @Excel(name = "Loại (plugin=Plugin,mcp=MCP）", width = 15)
-    @Schema(description = "Loại (plugin=Plugin,mcp=MCP）")
+    @Excel(name = "Loại (plugin=Plugin,mcp=MCP)", width = 15)
+    @Schema(description = "Loại (plugin=Plugin,mcp=MCP)")
     private java.lang.String category;
     /**
      * mcp Loại (sse: loại sse; stdio: loại tiêu chuẩn)

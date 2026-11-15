@@ -316,7 +316,7 @@ public class AiragPromptsServiceImpl extends ServiceImpl<AiragPromptsMapper, Air
             //1.Prompt
             String prompt = airagExtData.getDataValue();
             AssertUtils.assertNotEmpty("Vui lòng nhập prompt", prompt);
-            prompt += "Định nghĩa định dạng trả về: Điểm: điểm cuối cùng, phải xuất ra một số thể hiện mức độ đáp ứng tiêu chuẩn chấm điểm trong Prompt. Phạm vi điểm từ 0.0 đến 1.0，1.0 thể hiện hoàn toàn đáp ứng tiêu chuẩn chấm điểm,0.0 thể hiện hoàn toàn không đáp ứng tiêu chuẩn chấm điểm.\n" +
+            prompt += "Định nghĩa định dạng trả về: Điểm: điểm cuối cùng, phải xuất ra một số thể hiện mức độ đáp ứng tiêu chuẩn chấm điểm trong Prompt. Phạm vi điểm từ 0.0 đến 1.0, 1.0 thể hiện hoàn toàn đáp ứng tiêu chuẩn chấm điểm,0.0 thể hiện hoàn toàn không đáp ứng tiêu chuẩn chấm điểm.\n" +
                     "Lý do:{Giải thích về tính dễ đọc của điểm, nêu lý do chấm điểm}. Cuối cùng, phải kết thúc lý do bằng một câu, câu đó là: Vì vậy, điểm nên cho là<điểm bạn đã đánh giá>. Không được trả về câu hỏi đã hỏi, thêm quá trình phân tích, giải thích hay nội dung khác, chỉ trả về nội dung theo định dạng yêu cầu";
 
             String userQuery = "Nội dung nhập vào:";

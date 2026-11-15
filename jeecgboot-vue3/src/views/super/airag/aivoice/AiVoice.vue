@@ -23,7 +23,7 @@
           <div class="preview-content">
             <div v-if="!currentAudioUrl" class="empty-state">
               <Icon icon="ant-design:customer-service-outlined" size="72" color="#c0c4cc" />
-              <p>Điền nội dung văn bản phía dưới và nhấp「Bắt đầu tổng hợp」</p>
+              <p>Điền nội dung văn bản phía dưới và nhấp"Bắt đầu tổng hợp"</p>
               <p class="tip">Hỗ trợ điều chỉnh tốc độ phát, độ tăng âm lượng và âm sắc, tạo hiệu quả giọng nói cá nhân hóa hơn</p>
             </div>
 

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.modules.airag.ocr.entity.AiOcr;
@@ -24,6 +25,7 @@ public class AiOcrController  {
     
     private static final String AI_OCR_REDIS_KEY = "airag:ocr"; 
     
+    @RequiresPermissions("airag:ocr:list")
     @GetMapping("/list")
     public Result<?> list(){
         Object aiOcr = redisUtil.get(AI_OCR_REDIS_KEY);
@@ -37,6 +39,7 @@ public class AiOcrController  {
         return Result.OK(page);
     }
     
+    @RequiresPermissions("airag:ocr:add")
     @PostMapping("/add")
     public Result<String> add(@RequestBody AiOcr aiOcr){
         Object aiOcrList = redisUtil.get(AI_OCR_REDIS_KEY);
@@ -53,6 +56,7 @@ public class AiOcrController  {
         return Result.OK("Thêm thành công");
     }
 
+    @RequiresPermissions("airag:ocr:edit")
     @PutMapping("/edit")
     public Result<String> updateById(@RequestBody AiOcr aiOcr){
         Object aiOcrList = redisUtil.get(AI_OCR_REDIS_KEY);
@@ -70,6 +74,7 @@ public class AiOcrController  {
         return Result.OK("Chỉnh sửa thành công");
     }
 
+    @RequiresPermissions("airag:ocr:delete")
     @DeleteMapping("/deleteById")
     public Result<String> deleteById(@RequestBody AiOcr aiOcr){
         Object aiOcrObj = redisUtil.get(AI_OCR_REDIS_KEY);

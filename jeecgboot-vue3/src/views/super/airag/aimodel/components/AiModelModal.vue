@@ -101,7 +101,7 @@
                 </AutoComplete>
               </template>
             </BasicForm>
-            <a-alert v-if="!modelActivate" message="Mô hình chưa kích hoạt, vui lòng kích hoạt mô hình hiện tại qua nút「Lưu và kích hoạt」phía dưới" type="warning" show-icon />
+            <a-alert v-if="!modelActivate" message="Mô hình chưa kích hoạt, vui lòng kích hoạt mô hình hiện tại qua nút &quot;Lưu và kích hoạt&quot; phía dưới" type="warning" show-icon />
           </div>
         </a-tab-pane>
         <a-tab-pane :key="2"  v-if="modelParamsShow">

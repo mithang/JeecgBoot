@@ -438,7 +438,7 @@ public class VideoGenerationServiceImpl implements IVideoGenerationService {
 		};
 		String apiMessage = parseApiErrorMessage(responseBody);
 		String detail = apiMessage == null ? "HTTP " + statusCode : "HTTP " + statusCode + ", nền tảng trả về:" + apiMessage;
-		return action + "Thất bại:" + reason + "（" + detail + "）";
+		return action + "Thất bại:" + reason + " (" + detail + ")";
 	}
 
 	/**

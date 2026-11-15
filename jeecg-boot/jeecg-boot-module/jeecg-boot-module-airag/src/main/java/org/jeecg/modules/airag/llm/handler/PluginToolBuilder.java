@@ -266,7 +266,7 @@ public class PluginToolBuilder {
             } catch (HttpClientErrorException e) {
                 log.error("Yêu cầu HTTP của công cụ plugin thất bại: {}", e.getMessage(), e);
                 //update-begin---author:wangshuai---date:2026-01-16---for:【QQYUN-14577] Tìm kiếm hình ảnh thất bại sẽ khiến quá trình không thể tiếp tục---
-                return "Gọi plugin thất bại (HTTP " + e.getStatusCode() + "）：" + e.getResponseBodyAsString()
+                return "Gọi plugin thất bại (HTTP " + e.getStatusCode() + "): " + e.getResponseBodyAsString()
                         + ". Vui lòng tiếp tục hoàn thành các nhiệm vụ còn lại.";
                 //update-end---author:wangshuai---date:2026-01-16---for:【QQYUN-14577] Tìm kiếm hình ảnh thất bại sẽ khiến quá trình không thể tiếp tục---
             } catch (Exception e) {

@@ -40,7 +40,7 @@
       });
 
       let formData = {};
-      const queryByIdUrl = '/wordtpl/eoaWordTemplate/queryById';
+      const queryByIdUrl = '/airag/word/queryById';
       async function initFormData() {
         let params = { id: props.formData.dataId };
         const data = await defHttp.get({ url: queryByIdUrl, params });

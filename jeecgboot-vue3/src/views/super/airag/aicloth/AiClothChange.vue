@@ -49,11 +49,11 @@
         <div class="preview-content">
           <div v-if="!generatedResult && !loading" class="empty-state">
             <Icon icon="ant-design:picture-outlined" size="64" color="#ccc" />
-            <p>Sau khi cấu hình ở bên trái nhấp「Tạo」</p>
+            <p>Sau khi cấu hình ở bên trái nhấp "Tạo"</p>
           </div>
 
           <div v-if="loading" class="loading-state">
-            <a-spin size="large" :tip="`Đang${genType === 'image' ? 'Tạo hình ảnh' : 'Tạo video'}，vui lòng chờ...`" />
+            <a-spin size="large" :tip="`Đang${genType === 'image' ? 'Tạo hình ảnh' : 'Tạo video'}, vui lòng chờ...`" />
           </div>
 
           <!-- Kết quả hình ảnh -->
@@ -131,7 +131,7 @@
     const modelImageNumber = clothCount + 1;
     const clothImageNumbers = Array.from({ length: clothCount }, (_, index) => `[Hình${index + 1}]`).join(', ');
     const fixedPrompt =
-      `Vai trò hình ảnh:${clothImageNumbers}Là chất liệu trang phục bắt buộc phải dùng，[Hình${modelImageNumber}]Là hình đích của người mẫu.` +
+      `Vai trò hình ảnh:${clothImageNumbers}Là chất liệu trang phục bắt buộc phải dùng, [Hình${modelImageNumber}]Là hình đích của người mẫu.` +
       `Lấy[Hình${modelImageNumber}]làm canvas duy nhất, sẽ${clothImageNumbers}mặc chính xác trang phục trong đó lên người người mẫu.` +
       'Phải giữ nguyên kiểu dáng, màu sắc, họa tiết, cổ áo, kiểu tay áo và chi tiết trang trí của chất liệu trang phục, không được tự thiết kế hoặc thay bằng trang phục khác;' +
       'Chỉ sửa vùng trang phục của người mẫu, giữ nguyên danh tính nhân vật, khuôn mặt, kiểu tóc, tư thế, vóc dáng, nền và bố cục, trang phục ôm tự nhiên, ánh sáng nhất quán, tả thực độ nét cao.';
