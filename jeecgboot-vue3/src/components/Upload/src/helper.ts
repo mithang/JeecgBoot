@@ -1,5 +1,5 @@
 export function checkFileType(file: File, accepts: string[]) {
-  // Giải thích logic mã: 【issues/7954]Component BasicUpload tải tệp lên, giới hạn định dạng tải lên bị lỗi kiểm chứng
+  // Giải thích logic mã: [issues/7954]Component BasicUpload tải tệp lên, giới hạn định dạng tải lên bị lỗi kiểm chứng
   const mimePatterns: string[] = [];
   const suffixList: string[] = [];
   // Xử lý theo loại accepts

@@ -110,7 +110,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
+  // Giải thích logic mã: [QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
   .colorText {
     display: inline-block;
     height: 20px;

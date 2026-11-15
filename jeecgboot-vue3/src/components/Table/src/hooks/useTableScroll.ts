@@ -106,7 +106,7 @@ export function useTableScroll(
     const paddingHeight = 32;
     // Pager height
     let paginationHeight = 2;
-    // 【issues/9217] khi đã cấu hìnhpagination: truegiờ,BasicTableChiều cao tự thích ứng của component bất thường
+    // [issues/9217] khi đã cấu hìnhpagination: truegiờ,BasicTableChiều cao tự thích ứng của component bất thường
     if (pagination !== false) {
       paginationEl = tableEl.querySelector('.ant-pagination') as HTMLElement;
       if (paginationEl) {
@@ -121,7 +121,7 @@ export function useTableScroll(
     }
 
     let footerHeight = 0;
-    // Giải thích logic mã: 【issues/1137]BasicTable tính chiều cao tự thích ứng chưa trừ đi chiều cao phần đuôi
+    // Giải thích logic mã: [issues/1137]BasicTable tính chiều cao tự thích ứng chưa trừ đi chiều cao phần đuôi
     footerEl = tableEl.querySelector('.ant-table-footer');
     if (footerEl) {
       const offsetHeight = footerEl.offsetHeight;
@@ -134,10 +134,10 @@ export function useTableScroll(
     }
 
     let height = bottomIncludeBody - (resizeHeightOffset || 0) - paddingHeight - paginationHeight - footerHeight - headerHeight;
-    // update-begin--author:liaozhiyang---date:20240603---for【TV360X-861]Vùng truy vấn danh sách không cuộn lên được
+    // update-begin--author:liaozhiyang---date:20240603---for[TV360X-861]Vùng truy vấn danh sách không cuộn lên được
     // 10+6(Lề ngoàipadding:10 + Lớp trongpadding-bottom:6)
     height -= 16;
-    // Giải thích logic mã: 【issues/8880]Component BasicTable tự điều chỉnh chiều cao trong modal
+    // Giải thích logic mã: [issues/8880]Component BasicTable tự điều chỉnh chiều cao trong modal
     try {
       // Khi BasicTable nằm trong container BasicModal,Trừ chiều cao đáy container
       const modalFooter = tableEl.closest('.ant-modal-root')?.querySelector('.ant-modal-footer');
@@ -151,7 +151,7 @@ export function useTableScroll(
     setHeight(height);
 
     bodyEl!.style.height = `${height}px`;
-    // update-begin--author:liaozhiyang---date:20240609---for【issues/8374] phân trang luôn hiển thị ở phía dưới
+    // update-begin--author:liaozhiyang---date:20240609---for[issues/8374] phân trang luôn hiển thị ở phía dưới
     nextTick(() => {
       if (maxHeight === undefined) {
         if (unref(getPaginationInfo) && unref(getDataSourceRef).length) {
@@ -178,7 +178,7 @@ export function useTableScroll(
         }
       }
     });
-    // update-end--author:liaozhiyang---date:20240609---for【issues/8374] phân trang luôn hiển thị ở phía dưới
+    // update-end--author:liaozhiyang---date:20240609---for[issues/8374] phân trang luôn hiển thị ở phía dưới
   }
   useWindowSizeFn(calcTableHeight, 280);
   onMountedOrActivated(() => {
@@ -193,13 +193,13 @@ export function useTableScroll(
     // if (unref(rowSelectionRef)) {
     //   width += 60;
     // }
-    // Giải thích logic mã: 【issues/5411]Cấu hình maxColumnWidth của BasicTable không có hiệu lực
+    // Giải thích logic mã: [issues/5411]Cấu hình maxColumnWidth của BasicTable không có hiệu lực
     const { maxColumnWidth } = unref(propsRef);
     // TODO props ?? 0;
     const NORMAL_WIDTH = maxColumnWidth ?? 150;
-    // date-begin--author:liaozhiyang---date:20250716---for：【QQYUN-13122] Khi có hàng chục trường chỉ hiển thị 2 trường, các trường còn lại làifShow:falseSẽ có thanh cuộn
+    // date-begin--author:liaozhiyang---date:20250716---for:[QQYUN-13122] Khi có hàng chục trường chỉ hiển thị 2 trường, các trường còn lại làifShow:falseSẽ có thanh cuộn
     const columns = unref(columnsRef).filter((item) => !(item.defaultHidden == true || item.ifShow == false))
-    // date-end--author:liaozhiyang---date:20250716---for：【QQYUN-13122] Khi có hàng chục trường chỉ hiển thị 2 trường, các trường còn lại làifShow:falseSẽ có thanh cuộn
+    // date-end--author:liaozhiyang---date:20250716---for:[QQYUN-13122] Khi có hàng chục trường chỉ hiển thị 2 trường, các trường còn lại làifShow:falseSẽ có thanh cuộn
     columns.forEach((item) => {
       width += Number.parseInt(item.width as string) || 0;
     });
@@ -209,7 +209,7 @@ export function useTableScroll(
     if (len !== 0) {
       width += len * NORMAL_WIDTH;
     }
-    // Giải thích logic mã: 【TV360X-116] Khi có nhiều trường kiểu nhúng, bảng bị lệch
+    // Giải thích logic mã: [TV360X-116] Khi có nhiều trường kiểu nhúng, bảng bị lệch
     if (slots.expandedRowRender) {
       width += propsRef.value.expandColumnWidth;
     }
@@ -225,7 +225,7 @@ export function useTableScroll(
     return {
       x: unref(getScrollX),
       y: canResize ? tableHeight : null,
-      // Giải thích logic mã: 【issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
+      // Giải thích logic mã: [issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
       scrollToFirstRowOnChange: table.scrollToFirstRowOnChange,
       ...scroll,
     };

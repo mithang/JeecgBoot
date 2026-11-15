@@ -11,7 +11,7 @@ export namespace JVxeComponent {
 
   /** Loại tăng cường component */
   export interface Enhanced {
-    // Tham số đăng ký (xem chi tiết:https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/renderer/edit）
+    // Tham số đăng ký (xem chi tiết:https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/renderer/edit)
     installOptions: {
       // Tên class tự động focus
       autofocus?: string;

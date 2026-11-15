@@ -9,10 +9,10 @@
   import { isString } from '/@/utils/is';
   import { propTypes } from '/@/utils/propTypes';
   const SVG_END_WITH_FLAG = '|svg';
-  // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
+  // update-begin--author:liaozhiyang---date:20260713---for:[LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
   // Cache instance Iconify, tránh mỗi lần import động gây chậm khi chèn biểu tượng (nhấp nháy)
   let iconifyInstance: any = null;
-  // update-end--author:liaozhiyang---date:20260713---for：【LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
+  // update-end--author:liaozhiyang---date:20260713---for:[LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
   export default defineComponent({
     name: 'Icon',
     components: { SvgIcon },
@@ -45,10 +45,10 @@
         await nextTick();
         const icon = unref(getIconRef);
         if (!icon) return;
-        // update-begin--author:liaozhiyang---date:20260304---for:【QQYUN-14802] thêm mớiunplugin-iconsPlugin, và icon hỗ trợ hai chế độ online và local
+        // update-begin--author:liaozhiyang---date:20260304---for:[QQYUN-14802] thêm mớiunplugin-iconsPlugin, và icon hỗ trợ hai chế độ online và local
         try {
           let svg: SVGElement | null = null;
-          // update-begin--author:liaozhiyang---date:20260713---for：【LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
+          // update-begin--author:liaozhiyang---date:20260713---for:[LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
           if (iconifyInstance) {
             svg = iconifyInstance.renderSVG(icon, {});
           } else if (import.meta.env.VITE_GLOB_ICONIFY_USE_TYPE === 'local') {
@@ -62,7 +62,7 @@
             iconifyInstance = iconifyModule.default;
             svg = iconifyInstance.renderSVG(icon, {});
           }
-          // update-end--author:liaozhiyang---date:20260713---for：【LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
+          // update-end--author:liaozhiyang---date:20260713---for:[LHZP-143] Icon trường mới thêm online sẽ nhấp nháy
           if (svg) {
             el.textContent = '';
             el.appendChild(svg);
@@ -77,7 +77,7 @@
         } catch (err) {
           console.error('Failed to render icon:', icon, err);
         }
-        // update-end--author:liaozhiyang---date:20260304---for:【QQYUN-14802] thêm mớiunplugin-iconsPlugin, và icon hỗ trợ hai chế độ online và local
+        // update-end--author:liaozhiyang---date:20260304---for:[QQYUN-14802] thêm mớiunplugin-iconsPlugin, và icon hỗ trợ hai chế độ online và local
       };
 
       const getWrapStyle = computed((): CSSProperties => {

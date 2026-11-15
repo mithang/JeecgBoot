@@ -111,8 +111,8 @@ const getAreaTextByCode = function (code) {
 /**
  * 20260204
  * liaozhiyang
- * 【QQYUN-14694]online hỗ trợ cấu hình tỉnh, thành phố, huyện độc lập (tìm văn bản theo code (hỗ trợ chỉ tỉnh, chỉ tỉnh/thành phố, tỉnh/thành phố/quận huyện))
- * @param includeParent Có trả về đường dẫn của cấp cha hay không. Mặc định false chỉ trả về cấp cuối cùng (ví dụ「Trường Trị」), true trả về đường dẫn đầy đủ (ví dụ「Sơn Tây/Thành phố Trường Trị")
+ * [QQYUN-14694]online hỗ trợ cấu hình tỉnh, thành phố, huyện độc lập (tìm văn bản theo code (hỗ trợ chỉ tỉnh, chỉ tỉnh/thành phố, tỉnh/thành phố/quận huyện))
+ * @param includeParent Có trả về đường dẫn của cấp cha hay không. Mặc định false chỉ trả về cấp cuối cùng (ví dụ"Trường Trị"), true trả về đường dẫn đầy đủ (ví dụ"Sơn Tây/Thành phố Trường Trị")
  * @param level Cấp bậc:1=Tỉnh,2=Thành phố,3=Huyện. Khi truyền vào thì dùng làm index, nếu không truyền thì suy ra từ code
  */
 const getAreaTextByCodeAnyLevel = function (code: string | number | undefined, includeParent = false, level?: 1 | 2 | 3): string {

@@ -27,14 +27,14 @@ export default defineComponent({
     useColumns(props, data, methods, slots);
     useDataSource(props, data, methods, refs);
     useDragSort(props, methods);
-    // Giải thích logic mã: 【QQYUN-8566] JVXETable không thể nhớ cài đặt cột
+    // Giải thích logic mã: [QQYUN-8566] JVXETable không thể nhớ cài đặt cột
     const { initSetting } = useColumnsCache({ cacheColumnsKey: props.cacheColumnsKey });
     initSetting(props);
     // Cuối cùng được truyền vào template props
     const finallyProps = useFinallyProps(props, data, methods);
     // Kết xuất component con
     const renderComponents = useRenderComponents(props, data, methods, slots);
-    // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+    // update-begin--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
     // Lưu trữ tham chiếu component trong giai đoạn setup, tránh mỗi lần render gọi resolveComponent để tìm kiếm
     const aSpinComp = Spin;
     const vxeGridComp = resolveComponent('vxe-grid');
@@ -43,7 +43,7 @@ export default defineComponent({
       ...finallyProps.vxeProps.value,
       data: data.vxeDataSource.value,
     }));
-    // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+    // update-end--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
     return {
       instanceRef,
       ...refs,

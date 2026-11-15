@@ -151,14 +151,14 @@
       function handleAddRecord(e) {
         prevent(e);
         openListModal(true, {
-          // Giải thích logic mã: 【TV360X-43] Sửa lỗi bản ghi liên kết có thể thêm dữ liệu trùng lặp
+          // Giải thích logic mã: [TV360X-43] Sửa lỗi bản ghi liên kết có thể thêm dữ liệu trùng lặp
           selectedRowKeys: selectRecords.value.map((item) => item.id),
           selectedRows: [...selectRecords.value],
         });
       }
 
       function addCard(data) {
-        // Giải thích logic mã: 【TV360X-43] Sửa lỗi bản ghi liên kết có thể thêm dữ liệu trùng lặp
+        // Giải thích logic mã: [TV360X-43] Sửa lỗi bản ghi liên kết có thể thêm dữ liệu trùng lặp
         let arr = [];
         for (let item of data) {
           let temp = { ...item };
@@ -232,12 +232,12 @@
       );
 
       onMounted(() => {
-        // Giải thích logic mã: 【TV360X-281] Khi độ phân giải nhỏ, chữ bản ghi liên kết bị hình ảnh chèn mất
+        // Giải thích logic mã: [TV360X-281] Khi độ phân giải nhỏ, chữ bản ghi liên kết bị hình ảnh chèn mất
         if (tableLinkCardRef.value.offsetWidth < 250) {
           fixedSpan.value = 24;
         }
       });
-      // Giải thích logic mã: 【TV360X-389] Dropdown và hình ảnh bản ghi liên kết của thẻ bị vỡ, cho một ảnh mặc định
+      // Giải thích logic mã: [TV360X-389] Dropdown và hình ảnh bản ghi liên kết của thẻ bị vỡ, cho một ảnh mặc định
       const handleImageError = (event) => {
         event.target.src = placeholderImage;
       };

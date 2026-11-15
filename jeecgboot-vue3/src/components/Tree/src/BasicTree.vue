@@ -99,7 +99,7 @@
       /**
        * 2024-04-26
        * liaozhiyang
-       * 【issues/1151]Khi cấp bậc độc lập mà đã tick nút cha, sau đó bấm liên kết cấp bậc thì nút con về mặt hiển thị đã được tick, nhưng khi lưu thì nút con không được lưu(Tách hàm ra riêng để tái sử dụng)
+       * [issues/1151]Khi cấp bậc độc lập mà đã tick nút cha, sau đó bấm liên kết cấp bậc thì nút con về mặt hiển thị đã được tick, nhưng khi lưu thì nút con không được lưu(Tách hàm ra riêng để tái sử dụng)
        * */
       const handleCheck = (v: CheckKeys, e?) => {
         let currentValue = toRaw(state.checkedKeys) as KeyType[];
@@ -323,7 +323,7 @@
           emit('change', v);
         },
       );
-      // Giải thích logic mã: 【issues/1151]Khi cấp bậc độc lập mà đã tick nút cha, sau đó bấm liên kết cấp bậc thì nút con về mặt hiển thị đã được tick, nhưng khi lưu thì nút con không được lưu
+      // Giải thích logic mã: [issues/1151]Khi cấp bậc độc lập mà đã tick nút cha, sau đó bấm liên kết cấp bậc thì nút con về mặt hiển thị đã được tick, nhưng khi lưu thì nút con không được lưu
       watch(
         () => props.checkStrictly,
         () => {
@@ -472,7 +472,7 @@
   });
 </script>
 <style lang="less" scoped>
-// Giải thích logic mã: 【JHHB-192] Lựa chọn chức danh chính, đổi hộp kiểm đa chọn thành chọn đơn
+// Giải thích logic mã: [JHHB-192] Lựa chọn chức danh chính, đổi hộp kiểm đa chọn thành chọn đơn
 .custom-radio {
   :deep(.ant-tree) {
     .ant-tree-checkbox {

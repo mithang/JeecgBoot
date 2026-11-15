@@ -8,7 +8,7 @@ export function useTableStyle(propsRef: ComputedRef<BasicTableProps>, prefixCls:
   /**
    * 2024-09-19
    * liaozhiyang
-   * 【issues/7200]basicTable sau khi chọn không có kiểu đã chọn
+   * [issues/7200]basicTable sau khi chọn không có kiểu đã chọn
    * */
   const isChecked = (propsRef, record) => {
     const getAutoCreateKey = () => {
@@ -45,7 +45,7 @@ export function useTableStyle(propsRef: ComputedRef<BasicTableProps>, prefixCls:
     if (rowClassName && isFunction(rowClassName)) {
       classNames.push(rowClassName(record, index));
     }
-    // Giải thích logic mã: 【issues/7200]basicTable sau khi chọn không có kiểu đã chọn
+    // Giải thích logic mã: [issues/7200]basicTable sau khi chọn không có kiểu đã chọn
     if (isChecked(propsRef, record)) {
       classNames.push('ant-table-row-selected');
     }

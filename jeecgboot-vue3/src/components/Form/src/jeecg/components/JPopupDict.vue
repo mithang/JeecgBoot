@@ -86,9 +86,9 @@
        * Mở hộp thoại pop
        */
       function handleOpen() {
-        // Giải thích logic mã: 【TV360X-317]Sau khi vô hiệu hóa, JPopup và JPopupdic vẫn có thể nhấn để mở popup
-        //update-begin---wangshuai---date:20260104  for：[issue/1560]Phía sau cột động không thể nối cột khác, ví dụ cột động cuối cùng thêm tổng hợp sẽ có vấn đề------------
-        //update-end---author:wangshuai ---date:20260104  for：[issue/1560]Phía sau cột động không thể nối cột khác, ví dụ cột động cuối cùng thêm tổng hợp sẽ có vấn đề------------
+        // Giải thích logic mã: [TV360X-317]Sau khi vô hiệu hóa, JPopup và JPopupdic vẫn có thể nhấn để mở popup
+        //update-begin---wangshuai---date:20260104  for:[issue/1560]Phía sau cột động không thể nối cột khác, ví dụ cột động cuối cùng thêm tổng hợp sẽ có vấn đề------------
+        //update-end---author:wangshuai ---date:20260104  for:[issue/1560]Phía sau cột động không thể nối cột khác, ví dụ cột động cuối cùng thêm tổng hợp sẽ có vấn đề------------
         if (props.disabled) {
           return;
         }
@@ -96,7 +96,7 @@
         openModal(true);
       }
 
-      // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
+      // update-begin--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
       const echoRows = ref<any[]>([]);
       /**
        * Chuyển giá trị hiện tại thành mảng chuỗi (trường lưu trữ có thể là kiểu số, thống nhất so sánh theo chuỗi)
@@ -121,11 +121,11 @@
       function translate(callBack) {
         cgRpConfigId.value ? loadData({ callBack }) : loadColumnsInfo({ callBack });
       }
-      // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
+      // update-end--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
       /**
        * liaozhiyang
        * 20260522
-       * 【QQYUN-15493] thêm mớia-inputtrong chế độ
+       * [QQYUN-15493] thêm mớia-inputtrong chế độ
        * */
       function syncShowLabel() {
         if (!props.useInput) return;
@@ -147,18 +147,18 @@
        * Lắng nghe giá trị value
        */
       /**
-       * Theo props.value Đồng bộ giá trị hiển thị (đồng bộ một chiều, không kích hoạt update:value）
+       * Theo props.value Đồng bộ giá trị hiển thị (đồng bộ một chiều, không kích hoạt update:value)
        */
       function syncFromProps() {
         syncingFromProps = true;
-        // update-begin--author:liusq---date:20260720---for：【LHZP-1003]Từ điển pop của bảng đơn, sau khi cài đặt, mở chỉnh sửa thì dữ liệu hiển thị lại rơi vào vòng lặp truy vấn vô hạn
+        // update-begin--author:liusq---date:20260720---for:[LHZP-1003]Từ điển pop của bảng đơn, sau khi cài đặt, mở chỉnh sửa thì dữ liệu hiển thị lại rơi vào vòng lặp truy vấn vô hạn
         // Giải thích logic mã: Phải sử dụng props.value thời gian thựcprops.valuechứ không phải val mà closure bắt được, nếu không khi callback bất đồng bộ
         // defaultValueKhi khác với giá trị bản ghi, nhiều callBack sẽ ghi đè luân phiên lên formModel, gây làm mới vô hạn
-        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3]Khi trường lưu trữ là số, giá trị hiển thị và kiểu value của options không nhất quán nên không dịch
+        // update-begin--author:liaozhiyang---date:20261029---for:[LHZP-3]Khi trường lưu trữ là số, giá trị hiển thị và kiểu value của options không nhất quán nên không dịch
         const values = getValues();
         showText.value = props.multi ? values : values[0] ?? '';
-        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3]Khi trường lưu trữ là số, giá trị hiển thị và kiểu value của options không nhất quán nên không dịch
-        // update-end--author:liusq---date:20260720---for：【LHZP-1003]Từ điển pop của bảng đơn, sau khi cài đặt, mở chỉnh sửa thì dữ liệu hiển thị lại rơi vào vòng lặp truy vấn vô hạn
+        // update-end--author:liaozhiyang---date:20261029---for:[LHZP-3]Khi trường lưu trữ là số, giá trị hiển thị và kiểu value của options không nhất quán nên không dịch
+        // update-end--author:liusq---date:20260720---for:[LHZP-1003]Từ điển pop của bảng đơn, sau khi cài đặt, mở chỉnh sửa thì dữ liệu hiển thị lại rơi vào vòng lặp truy vấn vô hạn
         syncShowLabel();
         nextTick(() => {
           syncingFromProps = false;
@@ -222,7 +222,7 @@
           .then((res) => {
             let data = res.result;
             if (data.records?.length) {
-              // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
+              // update-begin--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
               // Khi trường lưu trữ không duy nhất, tra ngược sẽ trả về nhiều bản ghi, cùng một giá trị chỉ lấy văn bản hiển thị của bản ghi đầu tiên; value thống nhất chuyển thành chuỗi, nhất quán với kiểu của giá trị hiển thị
               const map = new Map();
               data.records.forEach((item) => {
@@ -230,7 +230,7 @@
                 !map.has(key) && map.set(key, { value: key, text: item[labelFiled] });
               });
               options.value = [...map.values()];
-              // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
+              // update-end--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
             }
           })
           .finally(() => {
@@ -253,24 +253,24 @@
         if (props.multi) {
           showText.value = dataValue;
           result = dataValue.join(props.spliter);
-          //update-begin author:liaozhiyang date:20260522 for：【QQYUN-15493] thêm mớia-inputtrong chế độ
+          //update-begin author:liaozhiyang date:20260522 for:[QQYUN-15493] thêm mớia-inputtrong chế độ
           if (props.useInput) {
             showLabel.value = dataOptions.map((o: any) => o.text).join(props.spliter);
           }
-          //update-end author:liaozhiyang date:20260522 for：【QQYUN-15493] thêm mớia-inputtrong chế độ
+          //update-end author:liaozhiyang date:20260522 for:[QQYUN-15493] thêm mớia-inputtrong chế độ
         } else {
           showText.value = dataValue[0];
           result = dataValue[0];
-          //update-begin author:liaozhiyang date:20260522 for：【QQYUN-15493] thêm mớia-inputtrong chế độ
+          //update-begin author:liaozhiyang date:20260522 for:[QQYUN-15493] thêm mớia-inputtrong chế độ
           if (props.useInput) {
             showLabel.value = dataOptions[0]?.text || '';
           }
-          //update-end author:liaozhiyang date:20260522 for：【QQYUN-15493] thêm mớia-inputtrong chế độ
+          //update-end author:liaozhiyang date:20260522 for:[QQYUN-15493] thêm mớia-inputtrong chế độ
         }
-        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
+        // update-begin--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
         // Sau khi chọn cần dịch lại theo giá trị đã lưu
         const needTranslate = result != null && result !== '' && String(props.value ?? '') === String(result);
-        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
+        // update-end--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa từ điển popup, popup hiển thị lại phần đã tick
         nextTick(() => {
           emit('change', result);
           emit('update:value', result);
@@ -296,7 +296,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
+  // Giải thích logic mã: [QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JPopupDict {
     > .ant-form-item {
       display: none;

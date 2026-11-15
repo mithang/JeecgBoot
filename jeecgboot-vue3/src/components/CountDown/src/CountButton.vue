@@ -52,7 +52,7 @@
         if (beforeStartFunc && isFunction(beforeStartFunc)) {
           loading.value = true;
           try {
-            // Giải thích logic mã: 【QQYUN-9005]Cùng một IP, trong 1 phút gửi SMS quá 5 lần thì nhắc cần mã xác thực---
+            // Giải thích logic mã: [QQYUN-9005]Cùng một IP, trong 1 phút gửi SMS quá 5 lần thì nhắc cần mã xác thực---
             const canStart = await beforeStartFunc().catch((res) =>{
               if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
                 openCaptchaModal(true, {});

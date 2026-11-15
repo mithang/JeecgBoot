@@ -29,7 +29,7 @@
         type: String as PropType<string>,
         default: 'calc(100vh - 78px)',
       },
-      // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
+      // Giải thích logic mã: [QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
       seriesColor: {
         type: Array,
         default: () => [],
@@ -93,7 +93,7 @@
           });
           //dataDữ liệu
           obj['data'] = data;
-          // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
+          // Giải thích logic mã: [QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
           if (props.seriesColor?.length) {
             const findItem = props.seriesColor.find((item: any) => item.type === type);
             if (findItem?.color) {

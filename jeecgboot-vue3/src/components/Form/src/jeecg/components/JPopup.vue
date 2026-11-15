@@ -100,7 +100,7 @@
           avalid.value = false;
         }
       });
-      // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-2558] Giá trị popup lưu trữ nếu là số thì không hiển thị lại
+      // update-begin--author:liaozhiyang---date:20261029---for:[LHZP-2558] Giá trị popup lưu trữ nếu là số thì không hiển thị lại
       /**
        * value Chuyển thành văn bản hiển thị (khi điền lại chọn đơn sẽ giữ kiểu số)
        */
@@ -110,7 +110,7 @@
         }
         return String(val).split(props.spliter).join(',');
       }
-      // update-end--author:liaozhiyang---date:20261029---for：【LHZP-2558] Giá trị popup lưu trữ nếu là số thì không hiển thị lại
+      // update-end--author:liaozhiyang---date:20261029---for:[LHZP-2558] Giá trị popup lưu trữ nếu là số thì không hiển thị lại
       /**
        * Lắng nghe giá trị value
        */
@@ -221,13 +221,13 @@
        */
       function handleOpen() {
         emit('focus');
-        // Giải thích logic mã: 【TV360X-317]Sau khi vô hiệu hóa, JPopup và JPopupdic vẫn có thể nhấn để mở popup
+        // Giải thích logic mã: [TV360X-317]Sau khi vô hiệu hóa, JPopup và JPopupdic vẫn có thể nhấn để mở popup
         if (attrs.value.disabled) {
           return;
         }
-        // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
+        // update-begin--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
         echoRows.value = buildEchoRows();
-        // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
+        // update-end--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
         openModal(true);
       }
 
@@ -315,7 +315,7 @@
         let labels = []
         for (let item of fieldConfig) {
           let val = rows.map((row) => row[item.source]);
-          // Giải thích logic mã: 【QQYUN-7535]Mảng chỉ có một phần tử và là kiểu number, join sẽ thay đổi kiểu của giá trị thànhstring
+          // Giải thích logic mã: [QQYUN-7535]Mảng chỉ có một phần tử và là kiểu number, join sẽ thay đổi kiểu của giá trị thànhstring
           val = val.length == 1 ? val[0] : val.join(',');
           item.target.split(',').forEach((target) => {
             values[target] = val;
@@ -338,7 +338,7 @@
         props.formElRef && props.formElRef.setFieldsValue(values);
         //Gán giá trị theo cách truyền vào phương thức gán giá trị
         props.setFieldsValue && props.setFieldsValue(values);
-        // Giải thích logic mã: 【issues/5213] JPopup ném sự kiện change
+        // Giải thích logic mã: [issues/5213] JPopup ném sự kiện change
         emit('popUpChange', values);
       }
 
@@ -361,7 +361,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
+  // Giải thích logic mã: [QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JPopup {
     > .ant-form-item {
       display: none;

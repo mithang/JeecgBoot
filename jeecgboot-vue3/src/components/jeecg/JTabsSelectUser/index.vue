@@ -159,11 +159,11 @@
 </script>
 
 <style lang="less" scoped>
-  // update-begin--author:liaozhiyang---date:20240605---for：【TV360X-1050]Trang chỉ định người xử lý tiếp theo trên trình duyệt Safari, control chưa căn chỉnh
+  // update-begin--author:liaozhiyang---date:20240605---for:[TV360X-1050]Trang chỉ định người xử lý tiếp theo trên trình duyệt Safari, control chưa căn chỉnh
   .ant-select {
     vertical-align: middle;
   }
-  // update-end--author:liaozhiyang---date:20240605---for：【TV360X-1050]Trang chỉ định người xử lý tiếp theo trên trình duyệt Safari, control chưa căn chỉnh
+  // update-end--author:liaozhiyang---date:20240605---for:[TV360X-1050]Trang chỉ định người xử lý tiếp theo trên trình duyệt Safari, control chưa căn chỉnh
 
   // Kiểu nút tùy chỉnh
   .custom-btn {

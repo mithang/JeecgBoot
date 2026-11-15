@@ -95,7 +95,7 @@
         if (mergeProps.labelWidth) {
           mergeProps.labelCol = undefined;
         }
-        // Giải thích logic mã: 【QQYUN-6566] BasicForm hỗ trợ hiển thị một dòng(inline)
+        // Giải thích logic mã: [QQYUN-6566] BasicForm hỗ trợ hiển thị một dòng(inline)
         if (mergeProps.layout === 'inline') {
           if (mergeProps.labelCol === componentSetting.form.labelCol) {
             mergeProps.labelCol = undefined;
@@ -128,7 +128,7 @@
 
       const getBindValue = computed(() => {
         const bindValue = { ...attrs, ...props, ...unref(getProps) } as Recordable;
-        // Giải thích logic mã: 【issues/8484]Nhấp vào label của popup thêm mới trong từ điển phân loại sẽ kích hoạt vùng tìm kiếminput
+        // Giải thích logic mã: [issues/8484]Nhấp vào label của popup thêm mới trong từ điển phân loại sẽ kích hoạt vùng tìm kiếminput
         if (bindValue.name === undefined && bindValue.source === 'table-query') {
           bindValue.name = 'top-query-form';
         }
@@ -141,9 +141,9 @@
           const { defaultValue, component, componentProps } = schema;
           // handle date type
           if (defaultValue && dateItemType.includes(component)) {
-            // Giải thích logic mã: 【issues/435] Control ngày sinh mã gán giá trị mặc định bị lỗi------------
+            // Giải thích logic mã: [issues/435] Control ngày sinh mã gán giá trị mặc định bị lỗi------------
             let valueFormat:string = "";
-            // Giải thích logic mã: 【issues/8683]Khi componentProps của component DatePicker dùng dạng hàm thì giá trị khởi tạo lấy không đúng
+            // Giải thích logic mã: [issues/8683]Khi componentProps của component DatePicker dùng dạng hàm thì giá trị khởi tạo lấy không đúng
             if(isObject(componentProps)) {
               valueFormat = componentProps?.valueFormat;
             } else if (isFunction(componentProps)) {
@@ -153,7 +153,7 @@
               } catch (error) {
               }
             }
-            // update-end--author:liaozhiyang---date:20250818---for【issues/8683]Khi componentProps của component DatePicker dùng dạng hàm thì giá trị khởi tạo lấy không đúng
+            // update-end--author:liaozhiyang---date:20250818---for[issues/8683]Khi componentProps của component DatePicker dùng dạng hàm thì giá trị khởi tạo lấy không đúng
             if(!valueFormat){
               console.warn("Chưa cấu hìnhvalueFormat,Có thể gây lỗi định dạng!");
             }
@@ -161,7 +161,7 @@
               // Giải thích logic mã: [issues/215]Ô tìm kiếm ở trang danh sách (ô chọn ngày) đặt thời gian khởi tạo, vừa vào trang thì backend báo lỗi chuyển đổi kiểu ngày------------
               if(valueFormat){
                 // schema.defaultValue = dateUtil(defaultValue).format(valueFormat);
-                // Giải thích logic mã: 【TV360X-346 ] Component thời gian điền giá trị mặc định có vấn đề
+                // Giải thích logic mã: [TV360X-346 ] Component thời gian điền giá trị mặc định có vấn đề
                 schema.defaultValue = dateUtil(defaultValue, valueFormat).format(valueFormat);
               }else{
                 schema.defaultValue = dateUtil(defaultValue);
@@ -171,13 +171,13 @@
               defaultValue.forEach((item) => {
                 // Giải thích logic mã: [issues/215]Ô tìm kiếm ở trang danh sách (ô chọn ngày) đặt thời gian khởi tạo, vừa vào trang thì backend báo lỗi chuyển đổi kiểu ngày------------
                 if(valueFormat){
-                  // Giải thích logic mã: 【TV360X-346 ] Component thời gian điền giá trị mặc định có vấn đề
+                  // Giải thích logic mã: [TV360X-346 ] Component thời gian điền giá trị mặc định có vấn đề
                   def.push(dateUtil(item, valueFormat).format(valueFormat));
                 }else{
                   def.push(dateUtil(item));
                 }
               });
-              // Giải thích logic mã: 【issues/1114]rangepicker và các control thời gian khác báo lỗi (vue3.4Phiên bản trở lên có vấn đề)
+              // Giải thích logic mã: [issues/1114]rangepicker và các control thời gian khác báo lỗi (vue3.4Phiên bản trở lên có vấn đề)
               def.forEach((item, index) => {
                 defaultValue[index] = item;
               });
@@ -383,7 +383,7 @@
       //&:not(.ant-form-item-with-help) {
       //  margin-bottom: 24px;
       //}
-      // Giải thích logic mã: 【TV360X-1420] nhấp nháy khi kiểm chứng
+      // Giải thích logic mã: [TV360X-1420] nhấp nháy khi kiểm chứng
       &-has-error {
         margin-bottom: 24px;
       }
@@ -403,7 +403,7 @@
           margin-top: 4px;
         }
 
-        // 【QQYUN-12876]Khi suffix dạng thu gọn, chiều rộng của middleware component biểu mẫu không chiếm đầy
+        // [QQYUN-12876]Khi suffix dạng thu gọn, chiều rộng của middleware component biểu mẫu không chiếm đầy
         &.suffix-compact .j-form-item-middleware {
           flex: unset;
           width: auto;
@@ -445,7 +445,7 @@
         margin-bottom: 8px !important;
       }
     }
-    // Giải thích logic mã: 【QQYUN-6566] BasicForm hỗ trợ hiển thị một dòng(inline)
+    // Giải thích logic mã: [QQYUN-6566] BasicForm hỗ trợ hiển thị một dòng(inline)
     &.ant-form-inline {
       & > .ant-row {
         .ant-col { width:auto !important; }

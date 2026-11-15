@@ -66,7 +66,7 @@
       collapsedShowTitle: propTypes.bool,
       collapse: propTypes.bool,
       theme: propTypes.oneOf(['dark', 'light']),
-      // Giải thích logic mã: 【QQYUN-8927]Điều chỉnh màu chữ ở chế độ màu của menu cấp hai trong điều hướng sidebar
+      // Giải thích logic mã: [QQYUN-8927]Điều chỉnh màu chữ ở chế độ màu của menu cấp hai trong điều hướng sidebar
       isThemeBright: {
         type: Boolean,
         default: false,

@@ -98,7 +98,7 @@
         if (selectedRoleId.value) {
           params['roleId'] = selectedRoleId.value;
         }
-        // Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
+        // Giải thích logic mã: [QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
         if(props.excludeUserIdList && props.excludeUserIdList.length>0){
           params['excludeUserIdList'] = props.excludeUserIdList.join(",");
         }
@@ -126,15 +126,15 @@
       }
 
       const maxHeight = ref(300);
-      //update-begin---wangshuai---date:20260810  for：【LHZP-1106] Vai trò phê duyệt: thêm người theo vai trò, chiều cao quá lớn------------
+      //update-begin---wangshuai---date:20260810  for:[LHZP-1106] Vai trò phê duyệt: thêm người theo vai trò, chiều cao quá lớn------------
       maxHeight.value = window.innerHeight - 500;
-      //update-end---wangshuai---date:20260810  for：【LHZP-1106] Vai trò phê duyệt: thêm người theo vai trò, chiều cao quá lớn------------
+      //update-end---wangshuai---date:20260810  for:[LHZP-1106] Vai trò phê duyệt: thêm người theo vai trò, chiều cao quá lớn------------
       const containerStyle = computed(() => {
         return {
           'overflow-y': 'auto',
-          //update-begin---wangshuai---date:20260810  for：【LHZP-1106] Vai trò phê duyệt: thêm người theo vai trò, chiều cao quá lớn------------
+          //update-begin---wangshuai---date:20260810  for:[LHZP-1106] Vai trò phê duyệt: thêm người theo vai trò, chiều cao quá lớn------------
           'max-height': (maxHeight.value >= 300 ? maxHeight.value : 300) + 'px',
-          //update-end---author:wangshuai ---date:20260810  for：【LHZP-1106] Vai trò phê duyệt: thêm người theo vai trò, chiều cao quá lớn------------
+          //update-end---author:wangshuai ---date:20260810  for:[LHZP-1106] Vai trò phê duyệt: thêm người theo vai trò, chiều cao quá lớn------------
         };
       });
 

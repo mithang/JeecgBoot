@@ -173,7 +173,7 @@ export interface ColumnProps<T> {
    * @type object
    */
   customHeaderCell?: (column: ColumnProps<T>) => object;
-  // Giải thích logic mã: 【pull/1201]Thêm chức năng TableSummary của antd để tương thích với summary cũ (tổng cộng cuối bảng)
+  // Giải thích logic mã: [pull/1201]Thêm chức năng TableSummary của antd để tương thích với summary cũ (tổng cộng cuối bảng)
   customSummaryRender?: CustomRenderFunction<T> | VNodeChild | JSX.Element;
 
   /**

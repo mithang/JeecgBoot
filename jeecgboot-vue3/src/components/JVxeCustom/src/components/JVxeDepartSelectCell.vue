@@ -77,9 +77,9 @@
           maxTagCount: 1,
           // Viết lại hiển thị nhắc nhở, bỏ dấu ba chấm
           maxTagPlaceholder: ({ length }) => '+' + length,
-          // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
+          // -update-begin--author:liaozhiyang---date:20240617---for:[TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
           isDetailsMode: cellProps.value.disabledTable,
-          // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
+          // -update-end--author:liaozhiyang---date:20240617---for:[TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
         };
       });
 

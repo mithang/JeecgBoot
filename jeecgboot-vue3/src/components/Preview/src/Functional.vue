@@ -143,7 +143,7 @@
       function scaleFunc(num: number) {
         if (imgState.imgScale <= 0.2 && num < 0) return;
         imgState.imgScale += num;
-        // Giải thích logic mã: 【QQYUN-13162] Xem trước hình ảnh, nhấp thu nhỏ một cái là biến mất
+        // Giải thích logic mã: [QQYUN-13162] Xem trước hình ảnh, nhấp thu nhỏ một cái là biến mất
         if (imgState.imgScale < 0.2) {
           imgState.imgScale = 0.2;
         }

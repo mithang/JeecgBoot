@@ -112,7 +112,7 @@
           selectValues.value = value.split(',');
           tempSave = value.split(',');
         } else {
-          // 【VUEN-857] Tương thích mảng (vấn đề cách dùng chỉnh sửa dòng)
+          // [VUEN-857] Tương thích mảng (vấn đề cách dùng chỉnh sửa dòng)
           selectValues.value = value;
           tempSave = cloneDeep(value);
         }
@@ -130,7 +130,7 @@
       }
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
 
-       // Giải thích logic mã: 【TV360X-414] Phòng ban đã đặt giá trị mặc định, đặt lại truy vấn thì thành trống(Đồng bộ cách sửa của component JSelectUser)
+       // Giải thích logic mã: [TV360X-414] Phòng ban đã đặt giá trị mặc định, đặt lại truy vấn thì thành trống(Đồng bộ cách sửa của component JSelectUser)
       const handleClose = () => {
         if (tempSave.length) {
           selectValues.value = cloneDeep(tempSave);
@@ -146,7 +146,7 @@
         let result = typeof props.value == 'string' ? values.join(',') : values;
         emit('update:value', result);
         emit('change', result);
-        // Giải thích logic mã: 【TV360X-1648]Giao diện chỉnh sửa người dùng, liên động giữa "Phòng ban trực thuộc" và "Phòng ban phụ trách" bị lỗi (mã bị mất trước khi đồng bộ)
+        // Giải thích logic mã: [TV360X-1648]Giao diện chỉnh sửa người dùng, liên động giữa "Phòng ban trực thuộc" và "Phòng ban phụ trách" bị lỗi (mã bị mất trước khi đồng bộ)
         if (!values || values.length == 0) {
           emit('select', null, null);
         }
@@ -170,7 +170,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
+  // Giải thích logic mã: [QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JSelectDept {
     > .ant-form-item {
       display: none;

@@ -49,13 +49,13 @@
           // Không cho phép tìm kiếm
           showSearch: false,
           // Đặt số lượng hiển thị tối đa
-          // Giải thích logic mã: 【issues/7661]maxTagCount của component người dùng vxetable được truyền qua nghiệp vụ
+          // Giải thích logic mã: [issues/7661]maxTagCount của component người dùng vxetable được truyền qua nghiệp vụ
           maxTagCount: originColumn.value.maxTagCount ?? 1,
           // Viết lại hiển thị nhắc nhở, bỏ dấu ba chấm
           maxTagPlaceholder: ({ length }) => '+' + length,
-          // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
+          // -update-begin--author:liaozhiyang---date:20240617---for:[TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
           isDetailsMode: cellProps.value.disabledTable,
-          // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
+          // -update-end--author:liaozhiyang---date:20240617---for:[TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
         };
       });
 

@@ -170,7 +170,7 @@
       dictCode: 'sex',
       placeholder: 'Vui lòng chọn',
     },
-    // update-begin--author:liaozhiyang---date:20260507---for：【issues/7617]Bảng con vxetable hỗ trợ danh mục popup
+    // update-begin--author:liaozhiyang---date:20260507---for:[issues/7617]Bảng con vxetable hỗ trợ danh mục popup
     {
       title: 'PopupTừ điển(Người dùng)',
       key: 'popupUser',
@@ -181,7 +181,7 @@
       multi: true,
       placeholder: 'Vui lòng chọn',
     },
-    // update-end--author:liaozhiyang---date:20260507---for：【issues/7617]Bảng con vxetable hỗ trợ danh mục popup
+    // update-end--author:liaozhiyang---date:20260507---for:[issues/7617]Bảng con vxetable hỗ trợ danh mục popup
     {
       title: 'Dropdown_Chọn nhiều',
       key: 'select_multiple',
@@ -310,9 +310,9 @@
           return arr.join(',');
         })(),
         select_search: options[random(0, 3)],
-        // update-begin--author:liaozhiyang---date:20260507---for：【QQYUN-7961]Bảng con vxetable hỗ trợ danh mục popup
+        // update-begin--author:liaozhiyang---date:20260507---for:[QQYUN-7961]Bảng con vxetable hỗ trợ danh mục popup
         popupUser: ['jeecg', 'admin'][random(0, 1)],
-        // update-end--author:liaozhiyang---date:20260507---for：【QQYUN-7961]Bảng con vxetable hỗ trợ danh mục popup
+        // update-end--author:liaozhiyang---date:20260507---for:[QQYUN-7961]Bảng con vxetable hỗ trợ danh mục popup
         datetime: randomDatetime(),
         checkbox: ['Y', 'N'][random(0, 1)],
         planTimeRange: [dayjs().subtract(random(1, 30), 'day').format('YYYY-MM-DD'), dayjs().add(random(1, 30), 'day').format('YYYY-MM-DD')],
@@ -365,7 +365,7 @@
     console.log('handleValueChange.event: ', event);
   }
 
-  // Giải thích logic mã: 【issues/636] JVxeTable thêm sự kiện blur
+  // Giải thích logic mã: [issues/636] JVxeTable thêm sự kiện blur
   function handleBlur(event){
     console.log("blur",event);
   }

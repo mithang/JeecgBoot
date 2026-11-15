@@ -64,10 +64,10 @@
         table.setProps({
           size: key,
         });
-        // update-begin--author:liaozhiyang---date:20260827---for:【LHZP-511]Mật độ bảng online chuyển từ mặc định sang rộng rãi thì xuất hiện thanh cuộn
+        // update-begin--author:liaozhiyang---date:20260827---for:[LHZP-511]Mật độ bảng online chuyển từ mặc định sang rộng rãi thì xuất hiện thanh cuộn
         table.redoHeight();
-        // update-end--author:liaozhiyang---date:20260827---for:【LHZP-511]Mật độ bảng online chuyển từ mặc định sang rộng rãi thì xuất hiện thanh cuộn
-        // Giải thích logic mã: 【TV360X-100] lưu cache mật độ bảng
+        // update-end--author:liaozhiyang---date:20260827---for:[LHZP-511]Mật độ bảng online chuyển từ mặc định sang rộng rãi thì xuất hiện thanh cuộn
+        // Giải thích logic mã: [TV360X-100] lưu cache mật độ bảng
         $ls.set(cacheKey.value, key);
       }
       const cacheKey = computed(() => {

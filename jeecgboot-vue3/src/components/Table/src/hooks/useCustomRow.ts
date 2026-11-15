@@ -60,7 +60,7 @@ export function useCustomRow(
 
           const isRadio = rowSelection.type === 'radio';
           if (isRadio) {
-            // Giải thích logic mã: 【QQYUN-6794] Danh sách table thêm chức năng vô hiệu hóa radio
+            // Giải thích logic mã: [QQYUN-6794] Danh sách table thêm chức năng vô hiệu hóa radio
             const rowSelection = propsRef.value.rowSelection;
             if (rowSelection.getCheckboxProps) {
               const result = rowSelection.getCheckboxProps(record);

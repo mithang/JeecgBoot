@@ -107,7 +107,7 @@
 
       function onSelectFileOk(temp) {
         let arr = selectFileList.value;
-        // Giải thích logic mã: 【JHHB-524]Chức năng nhắn tin trong lịch trình của tôi, không thể chọn tệp đính kèm từ thư viện tệp
+        // Giải thích logic mã: [JHHB-524]Chức năng nhắn tin trong lịch trình của tôi, không thể chọn tệp đính kèm từ thư viện tệp
         temp.forEach((item) => {
           arr.push({
             ...item,

@@ -28,7 +28,7 @@
           :class="{ 'j-select-biz-wrap': isMultipleMode, 'j-select-biz-has-omitted-tags': hasOmittedTags }"
         >
           <template v-if="isCustomRenderTag" #tagRender="{ label, value, option}">
-            <!-- update-begin--author:liaozhiyang---date:20260804---for：【LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng  -->
+            <!-- update-begin--author:liaozhiyang---date:20260804---for:[LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng  -->
             <a-tag class="ant-select-selection-item j-select-biz-tag" style="margin-right: 4px">
               <JLeftEllipsis
                 content-class="ant-select-selection-item-content j-select-biz-tag-content"
@@ -40,7 +40,7 @@
                 <Icon icon="ant-design:close-outlined" size="12" @click="handleRemoveClick(value)"></Icon>
               </span>
             </a-tag>
-            <!-- update-end--author:liaozhiyang---date:20260804---for：【LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng  -->
+            <!-- update-end--author:liaozhiyang---date:20260804---for:[LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng  -->
           </template>
         </a-select>
       </a-col>
@@ -82,13 +82,13 @@
       },
       // Có đang tải không
       loading: propTypes.bool.def(false),
-      // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-1820] Khi chọn nhiều component phòng ban và vị trí ở vùng truy vấn thì truyềnmaxTagCount
+      // update-begin--author:liaozhiyang---date:20260826---for:[LHZP-1820] Khi chọn nhiều component phòng ban và vị trí ở vùng truy vấn thì truyềnmaxTagCount
       // Hiển thị tối đa bao nhiêu tag tag
       maxTagCount: propTypes.oneOfType([propTypes.number, propTypes.string]),
-      // update-end--author:liaozhiyang---date:20260826---for:【LHZP-1820] Khi chọn nhiều component phòng ban và vị trí ở vùng truy vấn thì truyềnmaxTagCount
+      // update-end--author:liaozhiyang---date:20260826---for:[LHZP-1820] Khi chọn nhiều component phòng ban và vị trí ở vùng truy vấn thì truyềnmaxTagCount
       // buttonIcon
       buttonIcon: propTypes.string.def(''),
-      // 【TV360X-1002] có phải chế độ chi tiết không
+      // [TV360X-1002] có phải chế độ chi tiết không
       isDetailsMode: propTypes.bool.def(false),
       //Có render tùy chỉnh tag khôngtag
       isCustomRenderTag: propTypes.bool.def(false),
@@ -107,7 +107,7 @@
       const departNamePath = ref<Record<string, string>>({});
 
       const isMultipleMode = computed(() => props.multiple === 'multiple' || props.multiple === 'tags');
-      // update-begin--author:liaozhiyang---date:20260811---for：【LHZP-513]Kiểu hiển thị của phòng ban một-nhiều trong online bị chồng chéo
+      // update-begin--author:liaozhiyang---date:20260811---for:[LHZP-513]Kiểu hiển thị của phòng ban một-nhiều trong online bị chồng chéo
       const hasOmittedTags = computed(
         () => typeof props.maxTagCount === 'number' && Array.isArray(selectValues.value) && selectValues.value.length > props.maxTagCount
       );
@@ -115,7 +115,7 @@
         const baseWidth = props.disabled ? 24 : 44;
         return hasOmittedTags.value ? baseWidth + 40 : baseWidth;
       });
-      // update-end--author:liaozhiyang---date:20260811---for：【LHZP-513]Kiểu hiển thị của phòng ban một-nhiều trong online bị chồng chéo
+      // update-end--author:liaozhiyang---date:20260811---for:[LHZP-513]Kiểu hiển thị của phòng ban một-nhiều trong online bị chồng chéo
 
       /**
        * Mở hộp popup
@@ -149,7 +149,7 @@
         return getTagFullText(label, value);
       }
 
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
+      // update-begin--author:liaozhiyang---date:20260804---for:[LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
       // Khi cấp bậc vị trí quá sâu, chữ bên phải đầy đủ, bên trái rút gọn
       function toDisplayText(val) {
         if (val == null || val === '') {
@@ -187,7 +187,7 @@
         }
         return fallback;
       }
-      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
+      // update-end--author:liaozhiyang---date:20260804---for:[LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
 
       /**
        * Mở popup khi nhấn vào hộp chọn
@@ -210,17 +210,17 @@
        * @param value
        */
       function handleRemoveClick(value) {
-        // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-583] Sau khi đặt component phòng ban thành chỉ đọc vẫn có thể xóa
+        // update-begin--author:liaozhiyang---date:20260714---for:[LHZP-583] Sau khi đặt component phòng ban thành chỉ đọc vẫn có thể xóa
         if (props.disabled) {
           return;
         }
-        // update-end--author:liaozhiyang---date:20260714---for：【LHZP-583] Sau khi đặt component phòng ban thành chỉ đọc vẫn có thể xóa
+        // update-end--author:liaozhiyang---date:20260714---for:[LHZP-583] Sau khi đặt component phòng ban thành chỉ đọc vẫn có thể xóa
         if (selectValues?.value) {
           let values = selectValues?.value.filter((item) => item !== value);
           handleChange(values);
         }
       }
-      // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
+      // -update-begin--author:liaozhiyang---date:20240617---for:[TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
       watch(
         [selectValues, options],
         () => {
@@ -233,7 +233,7 @@
         },
         { immediate: true }
       );
-      // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
+      // -update-end--author:liaozhiyang---date:20240617---for:[TV360X-1002]Tối ưu cách hiển thị component người dùng và component phòng ban khi chỉnh sửa hàng ở trang chi tiết
 
       return {
         attrs,
@@ -260,12 +260,12 @@
     align-items: flex-start;
 
     .left {
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
+      // update-begin--author:liaozhiyang---date:20260804---for:[LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
       flex: 1 1 auto;
       width: calc(100% - @width - 8px);
       max-width: calc(100% - @width - 8px);
       min-width: 0;
-      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
+      // update-end--author:liaozhiyang---date:20260804---for:[LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
     }
 
     .right {
@@ -282,7 +282,7 @@
       display: none !important;
     }
 
-    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
+    // update-begin--author:liaozhiyang---date:20260804---for:[LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
     :deep(.ant-select) {
       max-width: 100%;
     }
@@ -306,7 +306,7 @@
       min-width: 0;
     }
 
-    // update-begin--author:liaozhiyang---date:20260811---for：【LHZP-513]Kiểu hiển thị của phòng ban một-nhiều trong online bị chồng chéo
+    // update-begin--author:liaozhiyang---date:20260811---for:[LHZP-513]Kiểu hiển thị của phòng ban một-nhiều trong online bị chồng chéo
     :deep(.j-select-biz-has-omitted-tags .ant-select-selection-overflow) {
       flex-wrap: nowrap;
     }
@@ -319,7 +319,7 @@
     :deep(.j-select-biz-has-omitted-tags .ant-select-selection-overflow-item-suffix) {
       max-width: none;
     }
-    // update-end--author:liaozhiyang---date:20260811---for：【LHZP-513]Kiểu hiển thị của phòng ban một-nhiều trong online bị chồng chéo
+    // update-end--author:liaozhiyang---date:20260811---for:[LHZP-513]Kiểu hiển thị của phòng ban một-nhiều trong online bị chồng chéo
 
     :deep(.j-select-biz-tag) {
       display: inline-flex !important;
@@ -344,7 +344,7 @@
     :deep(.j-select-biz-tag .ant-select-selection-item-remove) {
       flex-shrink: 0;
     }
-    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
+    // update-end--author:liaozhiyang---date:20260804---for:[LHZP-602]Khi cấp bậc vị trí quá sâu, chữ bên phải hiển thị đầy đủ, bên trái rút gọn; chọn nhiều xuống dòng mở rộng
   }
   .detailStr {
     margin: 0;

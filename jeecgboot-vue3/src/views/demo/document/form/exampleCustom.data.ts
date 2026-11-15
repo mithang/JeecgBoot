@@ -138,7 +138,7 @@ export const schemas: FormSchema[] = [
     componentProps: {
       //Cấu hình code danh mục, ví dụ qua mã danh mục giới tính: sex, cũng có thể dùngdemo,name,id Tên bảng,Tên,dạng giá trị
       dictCode:'sex',
-      //Hỗ trợradio(Nút radio)、radioButton(Nút radio kiểu btn)、select(Dropdown)
+      //Hỗ trợradio(Nút radio), radioButton(Nút radio kiểu btn), select(Dropdown)
       type:'radioButton'
     },
   },

@@ -121,7 +121,7 @@
 </script>
 
 <style lang="less" scoped>
-  // update-begin--author:liaozhiyang---date:20260811---for：【LHZP-1694]Khi component chọn người dùng chuyển sang vị trí công tác thì thanh cuộn không kéo được
+  // update-begin--author:liaozhiyang---date:20260811---for:[LHZP-1694]Khi component chọn người dùng chuyển sang vị trí công tác thì thanh cuộn không kéo được
   .post-rank-tree {
     width: 100%;
     min-width: 0;
@@ -181,5 +181,5 @@
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22);
     backdrop-filter: blur(6px);
   }
-  // update-end--author:liaozhiyang---date:20260811---for：【LHZP-1694]Khi component chọn người dùng chuyển sang vị trí công tác thì thanh cuộn không kéo được
+  // update-end--author:liaozhiyang---date:20260811---for:[LHZP-1694]Khi component chọn người dùng chuyển sang vị trí công tác thì thanh cuộn không kéo được
 </style>

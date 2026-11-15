@@ -42,7 +42,7 @@ export const DictSearchInputCell = defineComponent({
     // Hàm lọc
     const filterOption = computed(() => {
       if (isAsync.value) {
-        //【jeecgboot-vue3/issues/I5QRT8】JVxeTypes.selectDictSearch syncVấn đề
+        //[jeecgboot-vue3/issues/I5QRT8]JVxeTypes.selectDictSearch syncVấn đề
         return ()=>true;
       }
       return (input, option) => option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0;

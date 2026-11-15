@@ -69,7 +69,7 @@ export default defineComponent({
         key: layer + effectIdx.value + randomString(6),
         class: ['j-vxe-reload-effect-span', `layer-${layer}`],
         style: {},
-        // Giải thích logic mã: 【issues/1175]Khắc phục vấn đề title hiển thị không đúng sau khi di chuột lên vxetable
+        // Giải thích logic mã: [issues/1175]Khắc phục vấn đề title hiển thị không đúng sau khi di chuột lên vxetable
         title: vNode,
 
       };

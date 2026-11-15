@@ -109,7 +109,7 @@
       const toggleSearchStatus = ref(false);
       const attrs = useAttrs();
       const tableScroll = ref({ x: true });
-      // Giải thích logic mã: 【issues/675] Dữ liệu popup của trường bảng con không cập nhật
+      // Giải thích logic mã: [issues/675] Dữ liệu popup của trường bảng con không cập nhật
       const getBindValue = computed(() => {
         return Object.assign({}, unref(props), unref(attrs));
       });
@@ -158,7 +158,7 @@
       watch(
         () => props.param,
         () => {
-          // Giải thích logic mã: 【issues/901] Component JPopup sau khi cấu hình tham số param thì bất thường
+          // Giải thích logic mã: [issues/901] Component JPopup sau khi cấu hình tham số param thì bất thường
           if (visible.value) {
             dynamicParamHandler();
             loadData();
@@ -209,7 +209,7 @@
         closeModal();
         checkedKeys.value = [];
         selectRows.value = [];
-        // Giải thích logic mã: 【issues/742] Sau khi chọn rồi xóa, giá trị mặc định vẫn tồn tại
+        // Giải thích logic mã: [issues/742] Sau khi chọn rồi xóa, giá trị mặc định vẫn tồn tại
         tableRef.value.clearSelectedRowKeys();
       }
 
@@ -249,7 +249,7 @@
       /**
        * 2024-07-24
        * liaozhiyang
-       * 【TV360X-1756] báo cáo thêm loại hình ảnh
+       * [TV360X-1756] báo cáo thêm loại hình ảnh
        * Hình ảnh
        * @param text
        */
@@ -262,7 +262,7 @@
       /**
        * 2024-07-24
        * liaozhiyang
-       * 【TV360X-1756] báo cáo thêm loại hình ảnh
+       * [TV360X-1756] báo cáo thêm loại hình ảnh
        * Xem trước hình ảnh cell trong danh sách
        * @param text
        */
@@ -279,7 +279,7 @@
           createImgPreview({ imageList: imgList });
         }
       }
-      // Giải thích logic mã: 【issues/3656] Hiển thị lại popupdict
+      // Giải thích logic mã: [issues/3656] Hiển thị lại popupdict
       watchEffect(() => {
         if (props.selected && props.rowkey && unref(visible)) {
           const selected = Array.isArray(props.selected) ? props.selected : [props.selected];

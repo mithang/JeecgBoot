@@ -22,7 +22,7 @@
   });
   const getHtmlData = computed(() => sanitizeRichText(converter.makeHtml(props.value || '')));
 
-  // Giải thích logic mã: 【issues/918] MarkdownViewer thêm chủ đề tối
+  // Giải thích logic mã: [issues/918] MarkdownViewer thêm chủ đề tối
   const isDarkTheme = ref(false);
   const { getDarkMode } = useRootSetting();
   watch(

@@ -37,7 +37,7 @@ export function useJVxeUploadCell(props: JVxeComponent.Props, options?) {
   });
   const hasFile = computed(() => innerFile.value != null);
   const responseName = computed(() => originColumn.value.responseName ?? 'message');
-  // update-begin--author:liaozhiyang---date:20250526---for：【issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
+  // update-begin--author:liaozhiyang---date:20250526---for:[issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
   const uploadData = computed(() => {
     const bizPath = originColumn.value.bizPath;
     const result: any = { isup: 1 };
@@ -46,7 +46,7 @@ export function useJVxeUploadCell(props: JVxeComponent.Props, options?) {
     }
     return result;
   });
-  // update-end--author:liaozhiyang---date:20250526---for：【issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
+  // update-end--author:liaozhiyang---date:20250526---for:[issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
   watch(
     innerValue,
     (val) => {

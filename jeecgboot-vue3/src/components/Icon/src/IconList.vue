@@ -88,7 +88,7 @@
       function handleSearchChange(e: ChangeEvent) {
         const value = e.target.value;
         console.log("value::::",value)
-        // Giải thích logic mã: 【issues/4947]Trang chỉnh sửa menu, mẫu chọn biểu tượng menu, chuyển đổi số lượng hiển thị mỗi trang không có hiệu lực------------
+        // Giải thích logic mã: [issues/4947]Trang chỉnh sửa menu, mẫu chọn biểu tượng menu, chuyển đổi số lượng hiển thị mỗi trang không có hiệu lực------------
         setCurrentPage(1);
         current.value = 1;
         if (!value) {
@@ -111,7 +111,7 @@
       }
 
       function handlePageChange(page: number, size: number) {
-        // Giải thích logic mã: 【issues/4947]Trang chỉnh sửa menu, mẫu chọn biểu tượng menu, chuyển đổi số lượng hiển thị mỗi trang không có hiệu lực------------
+        // Giải thích logic mã: [issues/4947]Trang chỉnh sửa menu, mẫu chọn biểu tượng menu, chuyển đổi số lượng hiển thị mỗi trang không có hiệu lực------------
         current.value = page;
         pageSize.value = size;
         setPageSize(size);

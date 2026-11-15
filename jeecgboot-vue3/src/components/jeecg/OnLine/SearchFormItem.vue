@@ -216,7 +216,7 @@
 </template>
 
 <script lang="ts">
-  //import JOnlineSearchSelect from '@/components/online/autoform/comp/JOnlineSearchSelect'
+  import JOnlineSearchSelect from '/@/views/super/online/cgform/auto/comp/JOnlineSearchSelect.vue';
   import { defineComponent, ref } from 'vue';
   import { DateTypeEnum } from '/@/enums/DateTypeEnum.ts';
   import { CompTypeEnum } from '/@/enums/CompTypeEnum.ts';
@@ -224,7 +224,7 @@
   export default defineComponent({
     name: 'SearchFormItem',
     components: {
-      //JOnlineSearchSelect
+      JOnlineSearchSelect,
       JDictSelectTag,
       JTreeSelect,
       JCategorySelect,
@@ -333,9 +333,9 @@
     overflow-wrap: break-word;
   }
 
-  /* update-begin--author:liaozhiyang---date:20260804---for：【LHZP-983] truy vấn ngày/Chiều rộng của component ngày giờ lấp đầy */
+  /* update-begin--author:liaozhiyang---date:20260804---for:[LHZP-983] truy vấn ngày/Chiều rộng của component ngày giờ lấp đầy */
   .jeecg-online-search :deep(.ant-picker) {
     width: 100%;
   }
-  /* update-end--author:liaozhiyang---date:20260804---for：【LHZP-983] truy vấn ngày/Chiều rộng của component ngày giờ lấp đầy */
+  /* update-end--author:liaozhiyang---date:20260804---for:[LHZP-983] truy vấn ngày/Chiều rộng của component ngày giờ lấp đầy */
 </style>

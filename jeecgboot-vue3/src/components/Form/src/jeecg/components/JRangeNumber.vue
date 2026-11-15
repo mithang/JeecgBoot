@@ -39,7 +39,7 @@
 
       function emitArray() {
         let arr = [];
-        // Giải thích logic mã: 【TV360X-1749] Số lượng 0 không nhập được, nhập vào thì bị xóa
+        // Giải thích logic mã: [TV360X-1749] Số lượng 0 không nhập được, nhập vào thì bị xóa
         let begin = beginValue.value ?? '';
         let end = endValue.value ?? '';
         arr.push(begin);
@@ -78,7 +78,7 @@
 </script>
 
 <style lang="less" scoped>
-  // Giải thích logic mã: 【TV360X-214] Control truy vấn theo khoảng không định dạng theo cấu hình
+  // Giải thích logic mã: [TV360X-214] Control truy vấn theo khoảng không định dạng theo cấu hình
   .ant-input-group {
     display: flex;
     .ant-input-number {

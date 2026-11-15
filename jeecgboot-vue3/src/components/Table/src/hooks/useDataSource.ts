@@ -132,7 +132,7 @@ export function useDataSource(
     if (row) {
       for (const field in row) {
         if (Reflect.has(record, field)) row[field] = record[field];
-        // Giải thích logic mã: 【TV360X-437] Bảng cây: sau khi một số component chỉnh sửa xong, danh sách chưa làm mới---
+        // Giải thích logic mã: [TV360X-437] Bảng cây: sau khi một số component chỉnh sửa xong, danh sách chưa làm mới---
         if (Reflect.has(record, field + '_dictText')) {
           row[field + '_dictText'] = record[field + '_dictText'];
         }
@@ -259,7 +259,7 @@ export function useDataSource(
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
-      // Giải thích logic mã: 【QQYUN-8316] điều kiện truy vấn của table,Khi gửi yêu cầu, loại bỏ các trường chuỗi rỗng
+      // Giải thích logic mã: [QQYUN-8316] điều kiện truy vấn của table,Khi gửi yêu cầu, loại bỏ các trường chuỗi rỗng
       for (let item of Object.entries(params)) {
         const [key, val] = item;
         if (val === '') {

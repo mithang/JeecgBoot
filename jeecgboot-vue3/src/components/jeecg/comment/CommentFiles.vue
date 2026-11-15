@@ -146,15 +146,15 @@
       }
       
       function onSelectFileOk(temp) {
-        // Giải thích logic mã: 【TV360X-935] Chọn tệp từ kho tri thức, kiểm tra xem có chưa chọn không
+        // Giải thích logic mã: [TV360X-935] Chọn tệp từ kho tri thức, kiểm tra xem có chưa chọn không
         if (temp.length === 0) return;
         let arr = selectFileList.value;
-        // -update-begin--author:liaozhiyang---date:20240614---for：【TV360X-938] Chọn tệp trong kho tri thức hỗ trợ đa chọn
+        // -update-begin--author:liaozhiyang---date:20240614---for:[TV360X-938] Chọn tệp trong kho tri thức hỗ trợ đa chọn
         temp.forEach((item) => {
           item.exist = true;
         });
         selectFileList.value = [...arr, ...temp];
-        // -update-end--author:liaozhiyang---date:20240614---for：【TV360X-938] Chọn tệp trong kho tri thức hỗ trợ đa chọn
+        // -update-end--author:liaozhiyang---date:20240614---for:[TV360X-938] Chọn tệp trong kho tri thức hỗ trợ đa chọn
       }
 
       return {

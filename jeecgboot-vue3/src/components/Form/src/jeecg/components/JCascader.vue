@@ -90,13 +90,13 @@ const emit = defineEmits<{
 const attrs = useAttrs();
 const inputPlaceholder = computed(() => String(unref(attrs as Record<string, unknown>).placeholder ?? 'Vui lòng chọn'));
 const inputDisabled = computed(() => Boolean(unref(attrs as Record<string, unknown>).disabled));
-// update-begin--author:liaozhiyang---date:20260804---for：【LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
+// update-begin--author:liaozhiyang---date:20260804---for:[LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
 /** Loại trừ allowClear/disabled, nút xóa do suffix tự định nghĩa */
 const inputAttrs = computed(() => {
   const { allowClear: _allowClear, disabled: _disabled, ...rest } = unref(attrs as Record<string, unknown>);
   return rest;
 });
-// update-end--author:liaozhiyang---date:20260804---for：【LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
+// update-end--author:liaozhiyang---date:20260804---for:[LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
 const rootRef = ref<HTMLElement>();
 const dropdownRef = ref<HTMLElement>();
 /** Dropdown có mở rộng hay không */
@@ -212,7 +212,7 @@ function handleClickOutside(e: MouseEvent) {
 function updatePopupPosition() {
   if (!rootRef.value) return;
   const rect = rootRef.value.getBoundingClientRect();
-  // update-begin--author:liaozhiyang---date:20260714---for【LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
+  // update-begin--author:liaozhiyang---date:20260714---for[LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
   const margin = 8;
   const viewportWidth = document.documentElement.clientWidth;
   const viewportHeight = document.documentElement.clientHeight;
@@ -235,16 +235,16 @@ function updatePopupPosition() {
   }
 
   dropdownPlaceStyle.value = { left: `${left}px`, top: `${top}px` };
-  // update-end--author:liaozhiyang---date:20260714---for：【LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
+  // update-end--author:liaozhiyang---date:20260714---for:[LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
 }
 
-// update-begin--author:liaozhiyang---date:20260714---for：【LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
+// update-begin--author:liaozhiyang---date:20260714---for:[LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
 watch(columns, () => {
   if (visible.value) {
     nextTick(updatePopupPosition);
   }
 });
-// update-end--author:liaozhiyang---date:20260714---for：【LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
+// update-end--author:liaozhiyang---date:20260714---for:[LHZP-100] Tỉnh/Thành/Quận huyện khi ở mép trang, cấp cuối cùng không chọn được
 
 /** Khi mở rộng: dùng value hiện tại để khởi tạo editingPath, tính toán vị trí, đăng ký đóng khi click bên ngoài; khi thu gọn thì gỡ bỏ lắng nghe */
 watch(visible, (v) => {

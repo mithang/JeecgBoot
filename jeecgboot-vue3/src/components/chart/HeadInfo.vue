@@ -32,7 +32,7 @@
         type: String,
         default: false,
       },
-      // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
+      // Giải thích logic mã: [QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
       iconColor: {
         type: String,
         default: '#2b99ff',

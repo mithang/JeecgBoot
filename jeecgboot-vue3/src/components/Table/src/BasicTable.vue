@@ -19,12 +19,12 @@
     <!-- antd v3 Tương thích nâng cấp, ngăn thu thập dữ liệu, tránh báo lỗi ở console -->
     <!-- https://antdv.com/docs/vue/migration-v3-cn -->
     <a-form-item-rest>
-      <!-- 【TV360X-377]Bắt buộc nhập của bản ghi liên kết ảnh hưởng đến kiểu của ô nhập và số trang của table -->
+      <!-- [TV360X-377]Bắt buộc nhập của bản ghi liên kết ảnh hưởng đến kiểu của ô nhập và số trang của table -->
       <a-form-item>
         <Table ref="tableElRef" v-bind="getBindValues" :rowClassName="getRowClassName" v-show="getEmptyDataIsShowTable" @resizeColumn="handleResizeColumn" @change="handleTableChange">
           <!-- antdSlot gốc của antd được truyền trực tiếp -->
           <template #[item]="data" v-for="item in slotNamesGroup.native" :key="item">
-            <!-- Giải thích logic mã: 【issues/1146]BasicTable dùng headerCell thì ô chọn tất cả không hiển thị -->
+            <!-- Giải thích logic mã: [issues/1146]BasicTable dùng headerCell thì ô chọn tất cả không hiển thị -->
             <template v-if="item === 'headerCell'">
               <CustomSelectHeader v-if="isCustomSelection(data.column)" v-bind="selectHeaderProps" />
               <slot v-else :name="item" v-bind="data || {}"></slot>
@@ -32,7 +32,7 @@
             <slot v-else :name="item" v-bind="data || {}"></slot>
           </template>
           <template #headerCell="{ column }">
-            <!-- Giải thích logic mã: 【QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật -->
+            <!-- Giải thích logic mã: [QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật -->
             <CustomSelectHeader v-if="isCustomSelection(column)" v-bind="selectHeaderProps"/>
             <HeaderCell v-else :column="column" />
           </template>
@@ -208,7 +208,7 @@
       const { getViewColumns, getColumns, getRefColumns, setCacheColumnsByField, setColumns, getColumnsRef, getCacheColumns } = useColumns(
         getProps,
         getPaginationInfo,
-        // Giải thích logic mã: 【QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật
+        // Giải thích logic mã: [QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật
         handleCustomSelectColumn,
       );
 
@@ -235,9 +235,9 @@
       };
 
       const { getHeaderProps } = useTableHeader(getProps, slots, handlers);
-      // Giải thích logic mã: 【pull/1201]Thêm chức năng TableSummary của antd để tương thích với summary cũ (tổng cộng cuối bảng)
+      // Giải thích logic mã: [pull/1201]Thêm chức năng TableSummary của antd để tương thích với summary cũ (tổng cộng cuối bảng)
       const getSummaryProps = computed(() => {
-        // Giải thích logic mã: 【issues/7956]SửashowSummary: falsethì khi có bảng con nhúng, thanh tổng bị lệch
+        // Giải thích logic mã: [issues/7956]SửashowSummary: falsethì khi có bảng con nhúng, thanh tổng bị lệch
         const result = pick(unref(getProps), ['summaryFunc', 'summaryData', 'hasExpandedRow', 'rowKey']);
         result['hasExpandedRow'] = Object.keys(slots).includes('expandedRowRender');
         return result;
@@ -257,9 +257,9 @@
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
         let propsData: Recordable = {
-          // date-begin--author:liaozhiyang---date:20250716---for：【issues/8564]Đổi TableLayout của basicTale thành auto không có hiệu lực
+          // date-begin--author:liaozhiyang---date:20250716---for:[issues/8564]Đổi TableLayout của basicTale thành auto không có hiệu lực
           tableLayout: 'fixed',
-          // date-begin--author:liaozhiyang---date:20250716---for：【issues/8564]Đổi TableLayout của basicTale thành auto không có hiệu lực
+          // date-begin--author:liaozhiyang---date:20250716---for:[issues/8564]Đổi TableLayout của basicTale thành auto không có hiệu lực
           // ...(dataSource.length === 0 ? { getPopupContainer: () => document.body } : {}),
           ...attrs,
           customRow,
@@ -276,7 +276,7 @@
           dataSource,
           footer: unref(getFooterProps),
           ...unref(getExpandOption),
-          // 【QQYUN-5837] tính toán động expandIconColumnIndex
+          // [QQYUN-5837] tính toán động expandIconColumnIndex
           expandIconColumnIndex: getExpandIconColumnIndex.value,
         };
 
@@ -288,7 +288,7 @@
         // Cột chọn tùy chỉnh, cần loại bỏ cột gốc
         delete propsData.rowSelection
 
-        // Giải thích logic mã: 【QQYUN-6387] cách viết mở rộng (loại bỏ lỗi)
+        // Giải thích logic mã: [QQYUN-6387] cách viết mở rộng (loại bỏ lỗi)
         !propsData.isTreeTable && delete propsData.expandIconColumnIndex;
         propsData.expandedRowKeys === null && delete propsData.expandedRowKeys;
         propsData = omit(propsData, ['class', 'onChange']);
@@ -350,7 +350,7 @@
         getRowSelection,
         getPaginationRef: getPagination,
         getColumns,
-        // Giải thích logic mã: 【issues/8529]Sau setColumns cấu hình cột không cập nhật liên động
+        // Giải thích logic mã: [issues/8529]Sau setColumns cấu hình cột không cập nhật liên động
         getColumnsRef: () => getColumnsRef,
         getCacheColumns,
         emit,
@@ -363,7 +363,7 @@
         getSize: () => {
           return unref(getBindValues).size as SizeType;
         },
-        // Giải thích logic mã: 【QQYUN-13558] Bảng chính kiểu ERP vẫn có thanh cuộn khi có 5 dòng dữ liệu
+        // Giải thích logic mã: [QQYUN-13558] Bảng chính kiểu ERP vẫn có thanh cuộn khi có 5 dòng dữ liệu
         getBindValuesRef: () => getBindValues,
       };
       createTableContext({ ...tableAction, wrapRef, getBindValues });
@@ -392,11 +392,11 @@
         }
         return { native, custom };
       });
-      // Giải thích logic mã: 【issues/945] Component BasicTable thiết lập mở rộng mặc định không có hiệu lực
+      // Giải thích logic mã: [issues/945] Component BasicTable thiết lập mở rộng mặc định không có hiệu lực
       nextTick(() => {
         getProps.value.defaultExpandAllRows && expandAll();
       })
-      // Giải thích logic mã: 【issues/7588] tự động làm mới bảng sau khi chọn
+      // Giải thích logic mã: [issues/7588] tự động làm mới bảng sau khi chọn
       expose({ ...tableAction, handleSearchInfoChange });
 
       emit('register', tableAction, formActions);
@@ -415,7 +415,7 @@
         tableAction,
         redoHeight,
         handleResizeColumn: (w, col) => {
-          // Giải thích logic mã: 【issues/7101] Cấu hình cộtresizable: truethì độ rộng cột của dòng tổng cuối bảng không thay đổi đồng bộ
+          // Giải thích logic mã: [issues/7101] Cấu hình cộtresizable: truethì độ rộng cột của dòng tổng cuối bảng không thay đổi đồng bộ
           const columns = getColumns();
           const findItem = columns.find((item) => {
             if (item['dataIndex'] != null) {
@@ -476,7 +476,7 @@
         background-color: @app-content-background;
       }
     }
-    // Giải thích logic mã: 【TV360X-1232] Sau khi vùng truy vấn bị ẩn, bấm làm mới không gửi yêu cầu nữa(Ẩn bằng CSS)
+    // Giải thích logic mã: [TV360X-1232] Sau khi vùng truy vấn bị ẩn, bấm làm mới không gửi yêu cầu nữa(Ẩn bằng CSS)
     > .table-search-area-hidden {
       display: none;
     }
@@ -584,13 +584,13 @@
     }
     // ------ Thống nhất đặt chiều rộng tối đa của cột bảng ------
 
-    // Giải thích logic mã: 【issues/622] Sửa vấn đề lệch tổng cuối bảng
+    // Giải thích logic mã: [issues/622] Sửa vấn đề lệch tổng cuối bảng
     &--show-summary {
       .ant-table > .ant-table-footer {
         padding: 12px 0 0;
       }
       .ant-table > .ant-table-footer {
-        // Giải thích logic mã: 【issues/7413] dòng tổng cộng hơi lệch
+        // Giải thích logic mã: [issues/7413] dòng tổng cộng hơi lệch
         padding-left: 0 !important;
         padding-right: 0 !important;
       }
@@ -598,7 +598,7 @@
         border: 0;
       }
     }
-    // Giải thích logic mã: 【TV360X-377]Bắt buộc nhập của bản ghi liên kết ảnh hưởng đến kiểu của ô nhập và số trang của table
+    // Giải thích logic mã: [TV360X-377]Bắt buộc nhập của bản ghi liên kết ảnh hưởng đến kiểu của ô nhập và số trang của table
     > .ant-form-item {
       margin-bottom: 0;
     }

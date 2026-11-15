@@ -6,7 +6,7 @@
 
 <script setup>
   import { ref } from 'vue';
-  // Giải thích logic mã: 【TV360X-1511] blur không có hiệu lực
+  // Giải thích logic mã: [TV360X-1511] blur không có hiệu lực
   const formItemId = ref(null);
   const props = defineProps(['formName', 'fieldName', 'source']);
   if (props.formName && props.fieldName && props.source !== 'table-query') {
@@ -15,7 +15,7 @@
 </script>
 
 <style lang="less" scoped>
-  // Giải thích logic mã: 【TV360X-1253] Vùng truy vấn sinh mã và component thêm mới không lấp đầy
+  // Giải thích logic mã: [TV360X-1253] Vùng truy vấn sinh mã và component thêm mới không lấp đầy
   div > :deep(.ant-picker) {
     width: 100%;
   }

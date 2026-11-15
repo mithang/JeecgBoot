@@ -9,7 +9,7 @@
     @ok="handleOk"
     wrapClassName="j-user-select-modal2"
   >
-    <!--update-begin---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt-->
+    <!--update-begin---author:wangshuai---date:20260807---for:[LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt-->
     <div class="role-modal-body">
       <!-- Hộp tìm kiếm -->
       <div class="role-search-bar">
@@ -49,7 +49,7 @@
         </div>
       </div>
     </div>
-    <!--update-end---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt-->
+    <!--update-end---author:wangshuai---date:20260807---for:[LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt-->
   </BasicModal>
 </template>
 
@@ -116,9 +116,9 @@
         if(!list || list.length ==0 ){
         }else{
           let selectedIdList = data.list || [];
-          //update-begin---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
+          //update-begin---author:wangshuai---date:20260807---for:[LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
           selectedKeys.value = [...selectedIdList];
-          //update-end---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
+          //update-end---author:wangshuai---date:20260807---for:[LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
           for(let item of list){
             if(selectedIdList.indexOf(item.id)>=0){
               item.checked = true;
@@ -171,7 +171,7 @@
         if(!list || list.length ==0 ){
           return;
         }
-        // Giải thích logic mã: 【issues/8078] Component chọn vai trò: bấm vào phần chữ sẽ luôn bị chọn
+        // Giải thích logic mã: [issues/8078] Component chọn vai trò: bấm vào phần chữ sẽ luôn bị chọn
         let findItem = list.find((item) => item.id == id);
         findItem.checked = false;
         selectedKeys.value = selectedKeys.value.filter((key) => key != id);
@@ -251,7 +251,7 @@
   };
 </script>
 <style scoped lang="less">
-  //update-begin---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
+  //update-begin---author:wangshuai---date:20260807---for:[LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
   .role-modal-body {
     position: relative;
   }
@@ -456,7 +456,7 @@
       }
     }
   }
-  //update-end---author:wangshuai---date:20260807---for:【LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
+  //update-end---author:wangshuai---date:20260807---for:[LHZP-141][Trình thiết kế biểu mẫu] Lọc: hiệu ứng popup chọn vai trò chưa tốt
 </style>
 
 <style lang="less">

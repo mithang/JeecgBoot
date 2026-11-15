@@ -151,7 +151,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
         return;
       }
 
-      // Giải thích logic mã: 【issues/9038] JVxeTable bảng bấm dòng để chọnBUG---
+      // Giải thích logic mã: [issues/9038] JVxeTable bảng bấm dòng để chọnBUG---
       if(!data.disabledRowIds.includes(row.id)){
         if (props.rowSelectionType === 'radio') {
           $table.setRadioRow(row);
@@ -201,9 +201,9 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
       return getEnhanced(column.params.type).aopEvents.activeMethod!.apply(instanceRef.value, arguments as any) ?? true;
     })();
     if (!flag) {
-      // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-1404] cảnh báo vxetable
+      // -update-begin--author:liaozhiyang---date:20240619---for:[TV360X-1404] cảnh báo vxetable
       getXTable().clearEdit();
-      // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-1404] cảnh báo vxetable
+      // -update-end--author:liaozhiyang---date:20240619---for:[TV360X-1404] cảnh báo vxetable
     }
     return flag;
   }
@@ -409,7 +409,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     if(options && options!.emitChange==true){
       trigger('valueChange', {column: 'all', row: result.row})
     }
-    // Giải thích logic mã: 【TV360X-279] Chỉnh sửa dòng thêm trường mới cuộn đến vị trí tương ứng
+    // Giải thích logic mã: [TV360X-279] Chỉnh sửa dòng thêm trường mới cuộn đến vị trí tương ứng
     let xTable = getXTable();
     setTimeout(() => {
       xTable.scrollToRow(result.row);
@@ -431,10 +431,10 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     // Chèn hàng
     let result = await xTable.insertAt(rows, index);
     if (setActive) {
-      // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-1404] cảnh báo vxetable
+      // -update-begin--author:liaozhiyang---date:20240619---for:[TV360X-1404] cảnh báo vxetable
       // Kích hoạt chế độ chỉnh sửa của hàng cuối cùng
       xTable.setEditRow(result.rows[result.rows.length - 1], true);
-      // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-1404] cảnh báo vxetable
+      // -update-end--author:liaozhiyang---date:20240619---for:[TV360X-1404] cảnh báo vxetable
     }
     await recalcSortNumber();
     return result;
@@ -459,7 +459,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
   /** Lấy giá trị trong biểu mẫu của bảng */
   function getValues(callback, rowIds) {
     let tableData = getTableData({ rowIds: rowIds });
-    // Giải thích logic mã: 【issues/7631]Sửa tham số hàm callback getValues của component JVxeTable
+    // Giải thích logic mã: [issues/7631]Sửa tham số hàm callback getValues của component JVxeTable
     callback(tableData, tableData);
   }
 
@@ -550,9 +550,9 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     // true = Xóa mục mới thêm,false=Chỉ xóaid
     let removeNewLine = optOrRm?.removeNewLine ?? true;
     for (let row of rows) {
-      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+      // update-begin--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
       let item = { ...row };
-      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+      // update-end--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
       if (insertRecords.includes(row)) {
         handler ? handler({ item, row, insertRecords }) : null;
         if (removeNewLine) {
@@ -734,7 +734,7 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
         if (row) {
           return row;
         } else {
-          console.warn(`【JVxeTable】removeRowsById：${id}Không tồn tại`);
+          console.warn(`[JVxeTable]removeRowsById:${id}Không tồn tại`);
           return null;
         }
       })
@@ -790,11 +790,11 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
       if (xTable.keepSource) {
         sort(xTable.internalData.tableSourceData);
       }
-      // -update-begin--author:liaozhiyang---date:20240620---for：【TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
+      // -update-begin--author:liaozhiyang---date:20240620---for:[TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
       if (isEnabledVirtualYScroll(props, xTable)) {
         await xTable.loadData(xTable.internalData.tableFullData);
       }
-      // -update-end--author:liaozhiyang---date:20240620---for：【TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
+      // -update-end--author:liaozhiyang---date:20240620---for:[TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
       return await recalcSortNumber(force);
     }
   }
@@ -872,9 +872,9 @@ export function useMethods(props: JVxeTableProps, { emit }, data: JVxeDataProps,
     }
     let records: Recordable[] = [];
     for (let row of rows) {
-      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+      // update-begin--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
       records.push({ ...row });
-      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+      // update-end--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
     }
     return records;
   }

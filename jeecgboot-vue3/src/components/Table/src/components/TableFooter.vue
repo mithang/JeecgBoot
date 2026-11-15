@@ -60,7 +60,7 @@
         if (!isFunction(summaryFunc)) {
           return [];
         }
-        // Giải thích logic mã: 【QQYUN-8172] Sau khi chỉnh sửa ô có thể chỉnh sửa xong không cập nhật giá trị tổng
+        // Giải thích logic mã: [QQYUN-8172] Sau khi chỉnh sửa ô có thể chỉnh sửa xong không cập nhật giá trị tổng
         let dataSource = cloneDeep(unref(table.getDataSource()));
         dataSource = summaryFunc(dataSource);
         dataSource.forEach((item, i) => {
@@ -71,10 +71,10 @@
 
       const getColumns = computed(() => {
         const dataSource = unref(getDataSource);
-        // Giải thích logic mã: 【issues/8502]Sau khi cột quyền không hiển thị, thanh tổng cộng ở hàng cuối bảng vẫn hiển thị gây lệch
+        // Giải thích logic mã: [issues/8502]Sau khi cột quyền không hiển thị, thanh tổng cộng ở hàng cuối bảng vẫn hiển thị gây lệch
         const allColumns = unref(getColumnsRef);
         let columns: BasicColumn[] = cloneDeep(table.getColumns({ ignoreAuth: true, ignoreIfShow: true }));
-        // Giải thích logic mã: 【issues/638]Tổng cộng bảng, khi cột tùy chỉnh ẩn hoặc hiển thị, thanh tổng cộng sẽ bị lệch
+        // Giải thích logic mã: [issues/638]Tổng cộng bảng, khi cột tùy chỉnh ẩn hoặc hiển thị, thanh tổng cộng sẽ bị lệch
         columns = columns.filter((item) => !item.defaultHidden);
         const index = columns.findIndex((item) => item.flag === INDEX_COLUMN_FLAG);
         const hasRowSummary = dataSource.some((item) => Reflect.has(item, SUMMARY_ROW_KEY));
@@ -96,7 +96,7 @@
         }
 
         if (hasSelection) {
-          // Giải thích logic mã: 【issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái(fixedCũng có thể đặttrue)
+          // Giải thích logic mã: [issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái(fixedCũng có thể đặttrue)
           const isFixed = columns.some((col) => col.fixed === 'left' || col.fixed === true);
           columns.unshift({
             width: 50,
@@ -121,7 +121,7 @@
         }
         return columns;
       });
-      // Giải thích logic mã: 【issues/7773] Dòng tổng không cuộn theo thanh cuộn trái/phải
+      // Giải thích logic mã: [issues/7773] Dòng tổng không cuộn theo thanh cuộn trái/phải
       let mainTableBody, footerTable;
       const handleSroll = () => {
         const scrollLeft = mainTableBody.scrollLeft;
@@ -142,7 +142,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái(Ẩn thanh cuộn của tổng cộng)
+  // Giải thích logic mã: [issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái(Ẩn thanh cuộn của tổng cộng)
   .ant-table-wrapper {
     :deep(.ant-table-body) {
       overflow-x: hidden !important;

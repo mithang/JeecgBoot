@@ -68,14 +68,14 @@
       /**
        * Lắng nghe giá trị component
        */
-      // Giải thích logic mã: 【pull/8014]Trong popup dạng slot, hủy trạng thái chọn của checkbox dữ liệu này thì cần bấm lần thứ hai mới có hiệu lực.
+      // Giải thích logic mã: [pull/8014]Trong popup dạng slot, hủy trạng thái chọn của checkbox dữ liệu này thì cần bấm lần thứ hai mới có hiệu lực.
       watch(
         () => props.value,
         () => {
           if (props.value) {
             initValue();
           } else {
-            // Giải thích logic mã: 【issues/8233] Khi resetFields không thể đặt lại
+            // Giải thích logic mã: [issues/8233] Khi resetFields không thể đặt lại
             if (selectValues.value?.length) {
               selectValues.value = [];
             }
@@ -144,7 +144,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
+  // Giải thích logic mã: [QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JSelectPosition {
     > .ant-form-item {
       display: none;

@@ -123,7 +123,7 @@
   const { t } = useI18n();
   const { prefixCls } = useDesign('icon-picker');
 
-  // Giải thích logic mã: 【QQYUN-8924] Component chọn thư viện icon không tiện bằng vue2---
+  // Giải thích logic mã: [QQYUN-8924] Component chọn thư viện icon không tiện bằng vue2---
   const iconOpen = ref<boolean>(false);
   //Biểu tượng định hướng
   const directionIcons = ['ant-design:step-backward-outlined', 'ant-design:step-forward-outlined', 'ant-design:fast-backward-outlined', 'ant-design:fast-forward-outlined', 'ant-design:shrink-outlined', 'ant-design:arrows-alt-outlined', 'ant-design:down-outlined', 'ant-design:up-outlined', 'ant-design:left-outlined', 'ant-design:right-outlined', 'ant-design:caret-up-outlined', 'ant-design:caret-down-outlined', 'ant-design:caret-left-outlined', 'ant-design:caret-right-outlined', 'ant-design:up-circle-outlined', 'ant-design:down-circle-outlined', 'ant-design:left-circle-outlined', 'ant-design:right-circle-outlined',  'ant-design:double-right-outlined', 'ant-design:double-left-outlined', 'ant-design:vertical-left-outlined', 'ant-design:vertical-right-outlined', 'ant-design:forward-outlined', 'ant-design:backward-outlined', 'ant-design:rollback-outlined', 'ant-design:enter-outlined', 'ant-design:retweet-outlined', 'ant-design:swap-outlined', 'ant-design:swap-left-outlined', 'ant-design:swap-right-outlined', 'ant-design:arrow-up-outlined', 'ant-design:arrow-down-outlined', 'ant-design:arrow-left-outlined', 'ant-design:arrow-right-outlined', 'ant-design:play-circle-outlined', 'ant-design:up-square-outlined', 'ant-design:down-square-outlined', 'ant-design:left-square-outlined', 'ant-design:right-square-outlined', 'ant-design:login-outlined', 'ant-design:logout-outlined', 'ant-design:menu-fold-outlined', 'ant-design:menu-unfold-outlined', 'ant-design:border-bottom-outlined', 'ant-design:border-horizontal-outlined', 'ant-design:border-inner-outlined', 'ant-design:border-left-outlined', 'ant-design:border-right-outlined', 'ant-design:border-top-outlined', 'ant-design:border-verticle-outlined', 'ant-design:pic-center-outlined', 'ant-design:pic-left-outlined', 'ant-design:pic-right-outlined', 'ant-design:radius-bottomleft-outlined', 'ant-design:radius-bottomright-outlined', 'ant-design:radius-upleft-outlined', 'ant-design:radius-upright-outlined', 'ant-design:fullscreen-outlined', 'ant-design:fullscreen-exit-outlined']
@@ -141,7 +141,7 @@
   const otherIcons = ref<any>([]);
 
   watchEffect(() => {
-    // Giải thích logic mã: 【TV360X-136] Đổi biểu tượng nút thành lựa chọn component biểu tượng
+    // Giải thích logic mã: [TV360X-136] Đổi biểu tượng nút thành lựa chọn component biểu tượng
     let value = props.value;
     if (!props.iconPrefixSave && value) {
       value = `${props.iconPrefix}:${value}`;
@@ -152,7 +152,7 @@
   watch(
     () => currentSelect.value,
     (v) => {
-      // Giải thích logic mã: 【TV360X-136] Đổi biểu tượng nút thành lựa chọn component biểu tượng
+      // Giải thích logic mã: [TV360X-136] Đổi biểu tượng nút thành lựa chọn component biểu tượng
       let value = v;
       if (!props.iconPrefixSave && value) {
         value = value.split(':').pop();

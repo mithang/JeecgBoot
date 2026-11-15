@@ -56,9 +56,9 @@
       
       const { createErrorModal } = useMessage();
       const setup = useFileCell(props, UploadTypeEnum.image, { multiple: true });
-      // Giải thích logic mã: 【TV360X-470]jVxetable giới hạn loại của component tải lên hình ảnh
+      // Giải thích logic mã: [TV360X-470]jVxetable giới hạn loại của component tải lên hình ảnh
       const acceptFileType = 'image/*';
-      // Giải thích logic mã: 【issues/953] bảng con onlinevxe-tableHình ảnh tải lên trong chi tiết dạng hiển thị có thể nhấp được
+      // Giải thích logic mã: [issues/953] bảng con onlinevxe-tableHình ảnh tải lên trong chi tiết dạng hiển thị có thể nhấp được
       const clickEvent = computed(() => {
         return unref(setup.cellProps).disabled ? null : 'click';
       });
@@ -87,7 +87,7 @@
           });
         }
       }
-      // Giải thích logic mã: 【TV360X-121] Trạng thái vô hiệu hóa của component tệp jvxetable(Chi tiết)có thể tải xuống
+      // Giải thích logic mã: [TV360X-121] Trạng thái vô hiệu hóa của component tệp jvxetable(Chi tiết)có thể tải xuống
       const handlePreview = () => {
         if (unref(setup.cellProps).disabled) {
           createImgPreview({ imageList: imgList.value });

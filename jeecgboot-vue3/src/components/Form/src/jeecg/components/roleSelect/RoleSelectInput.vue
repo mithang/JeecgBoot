@@ -39,7 +39,7 @@
         type: Boolean,
         default: false,
       },
-      // Giải thích logic mã: 【issues/8078] Component chọn vai trò: bấm vào phần chữ sẽ luôn bị chọn
+      // Giải thích logic mã: [issues/8078] Component chọn vai trò: bấm vào phần chữ sẽ luôn bị chọn
       maxSelectCount: {
         type: Number,
         default: 2,

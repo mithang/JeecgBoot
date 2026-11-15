@@ -102,7 +102,7 @@
     setup(props, { emit, refs }) {
       const options = ref<any[]>([]);
       const loading = ref(false);
-      // Giải thích logic mã: 【issues/897] Component JSearchSelect thêmclass/styleKiểu không có hiệu lực
+      // Giải thích logic mã: [issues/897] Component JSearchSelect thêmclass/styleKiểu không có hiệu lực
       const attrs = useAttrs({'excludeDefaultKeys': false});
       const selectedValue = ref([]);
       const selectedAsyncValue = ref([]);
@@ -171,7 +171,7 @@
         if (!isDictTable.value) {
           return;
         }
-        // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
+        // Giải thích logic mã: [TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
         pageNo = 1;
         isHasData = true;
         searchKeyword = value;
@@ -196,10 +196,10 @@
                 return;
               }
               options.value = res;
-              // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
+              // Giải thích logic mã: [TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
               pageNo++;
             } else {
-              // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
+              // Giải thích logic mã: [TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
               pageNo == 1 && (isHasData = false);
             }
           });
@@ -251,7 +251,7 @@
             });
           }
         } else {
-          // Giải thích logic mã: 【issues/8101]Component dict ở frontend gây tràn bộ nhớ: component tìm kiếm hỗ trợ chọn nhiều---
+          // Giải thích logic mã: [issues/8101]Component dict ở frontend gây tràn bộ nhớ: component tìm kiếm hỗ trợ chọn nhiều---
           if(!props.multiple){
             selectedValue.value = value.toString();
             if(props.immediateChange == true){
@@ -293,7 +293,7 @@
           if (!dict) {
             console.error('Component tìm kiếm chưa cấu hình mục từ điển');
           } else {
-            // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
+            // Giải thích logic mã: [TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
             pageNo = 1;
             isHasData = true;
             searchKeyword = '';
@@ -310,10 +310,10 @@
                 loading.value = false;
                 if (res && res.length > 0) {
                   options.value = res;
-                  // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
+                  // Giải thích logic mã: [TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
                   pageNo++;
                 } else {
-                  // Giải thích logic mã: 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
+                  // Giải thích logic mã: [TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
                   pageNo == 1 && (isHasData = false);
                 }
               });
@@ -436,7 +436,7 @@
       function getParentContainer(node) {
         // Giải thích logic mã: getPopupContainerLuôn có giá trị khiến logic của popContainer mãi không được thực thi, hãy chuyển nó lên phía trước để kiểm tra
         if (props.popContainer) {
-          // Giải thích logic mã: 【QQYUN-9339]Khi có nhiều popup modal đều chứa component chọn nhiều trong danh mục thả xuống và component tìm kiếm thả xuống, khi mở một modal khác thì options của component không hiển thị
+          // Giải thích logic mã: [QQYUN-9339]Khi có nhiều popup modal đều chứa component chọn nhiều trong danh mục thả xuống và component tìm kiếm thả xuống, khi mở một modal khác thì options của component không hiển thị
           return setPopContainer(node, props.popContainer);
         } else {
           if (typeof props.getPopupContainer === 'function') {
@@ -461,15 +461,15 @@
           return text;
         }
       }
-      // Giải thích logic mã: 【TV360X-26]Sau khi chọn mục trong control tìm kiếm dropdown rồi bấm lại dropdown thì nên hiển thị các mục dropdown ban đầu, thay vì chỉ hiển thị kết quả đã chọn
+      // Giải thích logic mã: [TV360X-26]Sau khi chọn mục trong control tìm kiếm dropdown rồi bấm lại dropdown thì nên hiển thị các mục dropdown ban đầu, thay vì chỉ hiển thị kết quả đã chọn
       const handleAsyncFocus = () => {
-        // Giải thích logic mã: 【issues/6681] truy vấn không đồng bộ không có hiệu lực
+        // Giải thích logic mã: [issues/6681] truy vấn không đồng bộ không có hiệu lực
         if ((isObject(selectedAsyncValue.value) || selectedAsyncValue.value?.length) && isDictTable.value && props.async) {
-          // Giải thích logic mã: 【TV360X-2062]Sau khi chọn dữ liệu trang thứ hai trong tìm kiếm dropdown, lần nhấn đầu tiên(nhận focus)Thanh cuộn chưa khôi phục về vị trí ban đầu và dữ liệu sẽ tải dữ liệu trang thứ hai(Chỉ nên tải dữ liệu của trang đầu tiên)
+          // Giải thích logic mã: [TV360X-2062]Sau khi chọn dữ liệu trang thứ hai trong tìm kiếm dropdown, lần nhấn đầu tiên(nhận focus)Thanh cuộn chưa khôi phục về vị trí ban đầu và dữ liệu sẽ tải dữ liệu trang thứ hai(Chỉ nên tải dữ liệu của trang đầu tiên)
           options.value = [];
           initDictTableData();
         }
-        // Giải thích logic mã: 【TV360X-2348]Khi nhận focus, mục options hiển thị nội dung trang đầu tiên (giải quyết việc khi thêm mới hiển thị nội dung không phải trang đầu tiên)
+        // Giải thích logic mã: [TV360X-2348]Khi nhận focus, mục options hiển thị nội dung trang đầu tiên (giải quyết việc khi thêm mới hiển thị nội dung không phải trang đầu tiên)
         if (Array.isArray(selectedAsyncValue.value) && selectedAsyncValue.value.length === 0 && isDictTable.value && props.async) {
           if (pageNo > 2) {
             options.value = [];
@@ -482,7 +482,7 @@
       /**
        * 2024-07-30
        * liaozhiyang
-       * 【TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
+       * [TV360X-1898]Component JsearchSelect khi truyền vào định dạng bảng từ điển thì hỗ trợ tải cuộn
        * */
       const handlePopupScroll = async (e) => {
         // Chỉ bảng từ điển mới hỗ trợ tải khi cuộn

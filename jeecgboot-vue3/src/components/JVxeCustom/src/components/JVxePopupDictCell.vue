@@ -9,7 +9,7 @@
   import { dispatchEvent } from '/@/components/jeecg/JVxeTable/utils';
   import { defHttp } from '/@/utils/http/axios';
 
-  // Phân tích dictCode ("code,labelField,valueField"）
+  // Phân tích dictCode ("code,labelField,valueField")
   function parseDictCode(dictCode: string | undefined) {
     const arr = (dictCode || '').split(',');
     return { code: arr[0] || '', labelField: arr[1] || '', valueField: arr[2] || '' };

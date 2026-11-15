@@ -177,7 +177,7 @@
     }
   }
 
-  // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73]Tối ưu nút thao tác tải ảnh lên (khắc phục lỗi khiến mũi tên và icon tải xuống không hiển thị)
+  // update-begin--author:liaozhiyang---date:20260826---for:[LHZP-73]Tối ưu nút thao tác tải ảnh lên (khắc phục lỗi khiến mũi tên và icon tải xuống không hiển thị)
   // Thêm nút có thể di chuyển trái/phải
   function onAddActionsButton(event: MouseEvent) {
     const uploadItem = event.currentTarget as HTMLElement | null;
@@ -193,9 +193,9 @@
     div.className = 'upload-actions-container';
     createApp(UploadItemActions, {
       element: uploadItem,
-      // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
+      // update-begin--author:liaozhiyang---date:20260831---for:[LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
       container: containerRef.value,
-      // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
+      // update-end--author:liaozhiyang---date:20260831---for:[LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
       fileList: fileList,
       mover: props.mover,
       download: props.download,
@@ -205,7 +205,7 @@
     uploadItem.setAttribute('data-has-actions', 'true');
     uploadItem.removeEventListener('mouseover', onAddActionsButton);
   }
-  // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73]Tối ưu nút thao tác tải ảnh lên (khắc phục lỗi khiến mũi tên và icon tải xuống không hiển thị)
+  // update-end--author:liaozhiyang---date:20260826---for:[LHZP-73]Tối ưu nút thao tác tải ảnh lên (khắc phục lỗi khiến mũi tên và icon tải xuống không hiển thị)
 
   // Phân tích chuỗi phân tách bằng dấu phẩy được lưu trong cơ sở dữ liệu
   function parsePathsValue(paths) {
@@ -214,7 +214,7 @@
       return;
     }
     let list: any[] = [];
-    // Giải thích logic mã: 【issues/7990]Tham số hình ảnh chứa dấu phẩy sẽ bị nhận nhầm thành nhiều ảnh
+    // Giải thích logic mã: [issues/7990]Tham số hình ảnh chứa dấu phẩy sẽ bị nhận nhầm thành nhiều ảnh
     const result = split(paths);
     for (const item of result) {
       let url = getFileAccessHttpUrl(item);
@@ -321,9 +321,9 @@
         successFileList = fileListTemp.filter(item=>{
           return item.uid!=info.file.uid;
         });
-        // update-begin--author:liaozhiyang---date:20260825---for：【LHZP-329] tải lên thất bại, hiển thị thông báo của APImessage
+        // update-begin--author:liaozhiyang---date:20260825---for:[LHZP-329] tải lên thất bại, hiển thị thông báo của APImessage
         createMessage.error(`${info.file.response.message}`);
-        // update-end--author:liaozhiyang---date:20260825---for：【LHZP-329] tải lên thất bại, hiển thị thông báo của APImessage
+        // update-end--author:liaozhiyang---date:20260825---for:[LHZP-329] tải lên thất bại, hiển thị thông báo của APImessage
       }
       fileListTemp = successFileList;
     } else if (info.file.status === 'error') {
@@ -462,7 +462,7 @@
       .ant-upload-text-icon {
         color: @primary-color;
       }
-      // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73] tối ưu nút thao tác tải lên hình ảnh
+      // update-begin--author:liaozhiyang---date:20260826---for:[LHZP-73] tối ưu nút thao tác tải lên hình ảnh
       .ant-upload-list-item {
         &:not(.has-upload-mover-actions) {
           .ant-upload-list-item-actions {
@@ -537,7 +537,7 @@
           }
         }
       }
-      // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73] tối ưu nút thao tác tải lên hình ảnh
+      // update-end--author:liaozhiyang---date:20260826---for:[LHZP-73] tối ưu nút thao tác tải lên hình ảnh
     }
   }
 

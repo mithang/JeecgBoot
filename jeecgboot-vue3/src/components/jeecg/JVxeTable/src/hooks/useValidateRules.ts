@@ -29,11 +29,11 @@ export function useValidateRules(args: HandleArgs) {
               break;
             }
           }
-          // update-begin--author:liaozhiyang---date:20260714---for：【LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
+          // update-begin--author:liaozhiyang---date:20260714---for:[LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
           const regExp = reg instanceof RegExp ? reg : new RegExp(reg);
           delete rule.pattern;
           rule.validator = emptySkipPatternValidator(regExp);
-          // update-end--author:liaozhiyang---date:20260714---for：【LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
+          // update-end--author:liaozhiyang---date:20260714---for:[LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
         }
       } else if (typeof rule.handler === 'function') {
         // Kiểm chứng hàm tùy chỉnh
@@ -49,7 +49,7 @@ export function useValidateRules(args: HandleArgs) {
 function uniqueValidator({ methods }: HandleArgs) {
   return function (event) {
     const { cellValue, column, rule } = event;
-    // Giải thích logic mã: 【TV360X-299]Component JVxetable kiểm chứng duy nhất sẽ lọc bỏ chuỗi rỗng
+    // Giải thích logic mã: [TV360X-299]Component JVxetable kiểm chứng duy nhất sẽ lọc bỏ chuỗi rỗng
     if (cellValue == '') return Promise.resolve();
     let tableData = methods.getTableData();
     let findCount = 0;
@@ -84,7 +84,7 @@ function handlerConvertToValidator(event) {
   });
 }
 
-// update-begin--author:liaozhiyang---date:20260714---for：【LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
+// update-begin--author:liaozhiyang---date:20260714---for:[LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
 /** pattern Trình kiểm chứng: giá trị rỗng không kiểm chứng (giá trị không rỗng giao cho quy tắc required), chỉ khi có giá trị mới kiểm chứng bằng regex */
 function emptySkipPatternValidator(regExp: RegExp) {
   return function (event) {
@@ -95,7 +95,7 @@ function emptySkipPatternValidator(regExp: RegExp) {
     return regExp.test(String(cellValue)) ? Promise.resolve() : Promise.reject(new Error(rule.message));
   };
 }
-// update-end--author:liaozhiyang---date:20260714---for：【LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
+// update-end--author:liaozhiyang---date:20260714---for:[LHZP-172]Khi kiểm chứng pattern của chỉnh sửa hàng mà giá trị trống thì không nên kích hoạt, chỉ kiểm chứng khi có giá trị (không trống do quy tắc required chịu trách nhiệm)
 
 // Tương thích với quy tắc của online
 const fooPatterns = [
@@ -109,7 +109,7 @@ const fooPatterns = [
     value: 'url',
     pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:\/~+#]*[\w\-@?^=%&\/~+#])?$/,
   },
-  // Giải thích logic mã: 【TV360X-466] Quy tắc kiểm chứng email thống nhất với quy tắc kiểm chứng một-một đầu tiên
+  // Giải thích logic mã: [TV360X-466] Quy tắc kiểm chứng email thống nhất với quy tắc kiểm chứng một-một đầu tiên
   { title: 'Email', value: 'e', pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/ },
   { title: 'Số điện thoại', value: 'm', pattern: /^1[3456789]\d{9}$/ },
   { title: 'Mã bưu chính', value: 'p', pattern: /^\d{6}$/ },

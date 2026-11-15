@@ -59,7 +59,7 @@
      */
     lazyTime: { type: Number, default: 0 },
   });
-  // Giải thích logic mã: 【issues/7402]Component CollapseContainer thêm thuộc tính mặc định không mở rộng
+  // Giải thích logic mã: [issues/7402]Component CollapseContainer thêm thuộc tính mặc định không mở rộng
   const show = ref(props.defaultExpan);
 
   const { prefixCls } = useDesign('collapse-container');

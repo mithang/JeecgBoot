@@ -113,7 +113,7 @@
       //Tích hợpwarpClassName
       const getWrapClassName = computed(() => {
         let clsName = toRef(getMergeProps.value, 'wrapClassName').value || '';
-        // Giải thích logic mã: 【issues/7260]Gốca-modalVị trí nút đóng bị lệch
+        // Giải thích logic mã: [issues/7260]Gốca-modalVị trí nút đóng bị lệch
         clsName = `${clsName} jeecg-modal-code-generate`;
         return unref(fullScreenRef) ? `jeecg-full-screen-modal-code-generate ${clsName} ` : unref(clsName);
       });
@@ -326,7 +326,7 @@
     }
   }
   /*end Kiểu modal popup toàn màn hình*/
-  // Giải thích logic mã: 【issues/7260]Gốca-modalVị trí nút đóng bị lệch
+  // Giải thích logic mã: [issues/7260]Gốca-modalVị trí nút đóng bị lệch
   .jeecg-modal-code-generate {
     .ant-modal {
       .ant-modal-close {

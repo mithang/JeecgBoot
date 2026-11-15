@@ -109,7 +109,7 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
             from: CodeMirror.Pos(cur.line, start),
             to: CodeMirror.Pos(cur.line, end),
           });
-          // Giải thích logic mã: 【QQYUN-8865] js tăng cường thêm nhắc nhở khi di chuột vào
+          // Giải thích logic mã: [QQYUN-8865] js tăng cường thêm nhắc nhở khi di chuột vào
           const item = currentKeywords[0];
           if (item?.desc) {
             setTimeout(() => {

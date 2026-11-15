@@ -120,7 +120,7 @@
     display: flex;
     height: 95%;
     align-items: center;
-    // Giải thích logic mã: 【issues/7260]Gốca-modalVị trí nút đóng bị lệch
+    // Giải thích logic mã: [issues/7260]Gốca-modalVị trí nút đóng bị lệch
     margin-top: -2px;
     > span {
       margin-left: 48px;

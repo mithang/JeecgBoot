@@ -32,12 +32,12 @@ export const JTreeSelect = defineAsyncComponent(() => import('./src/jeecg/compon
 export const JSearchSelect = defineAsyncComponent(() => import('./src/jeecg/components/JSearchSelect.vue'));
 export const JSelectUserByDept = defineAsyncComponent(() => import('./src/jeecg/components/JSelectUserByDept.vue'));
 export const JSelectUserByDepartment = defineAsyncComponent(() => import('./src/jeecg/components/JSelectUserByDepartment.vue'));
-// update-begin--author:liaozhiyang---date:20260227---for:【QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
+// update-begin--author:liaozhiyang---date:20260227---for:[QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
 export const JEditor = defineAsyncComponent(() => import('./src/jeecg/components/JEditor.vue'));
-// update-end--author:liaozhiyang---date:20260227---for:【QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
+// update-end--author:liaozhiyang---date:20260227---for:[QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
 export const JImageUpload = defineAsyncComponent(() => import('./src/jeecg/components/JImageUpload.vue'));
 // JeecgKiểm chứng tùy chỉnh
-// update-begin--author:liaozhiyang---date:20260303---for:【QQYUN-14815]JCronValidator được comment khỏi Form để ngăn tải trang chủ, đổi sang import trực tiếp trong nghiệp vụ
+// update-begin--author:liaozhiyang---date:20260303---for:[QQYUN-14815]JCronValidator được comment khỏi Form để ngăn tải trang chủ, đổi sang import trực tiếp trong nghiệp vụ
 // export { default as JCronValidator } from '/@/components/Form/src/jeecg/components/JEasyCron/validator';
-// update-end--author:liaozhiyang---date:20260303---for:【QQYUN-14815]JCronValidator được comment khỏi Form để ngăn tải trang chủ, đổi sang import trực tiếp trong nghiệp vụ
+// update-end--author:liaozhiyang---date:20260303---for:[QQYUN-14815]JCronValidator được comment khỏi Form để ngăn tải trang chủ, đổi sang import trực tiếp trong nghiệp vụ
 export { BasicForm };

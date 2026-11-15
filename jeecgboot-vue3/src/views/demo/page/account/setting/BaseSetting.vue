@@ -68,7 +68,7 @@
       });
 
       function updateAvatar(src: string, data: string) {
-        console.log('data====》', data);
+        console.log('data====>', data);
         const userinfo = userStore.getUserInfo;
         userinfo.avatar = data;
         userStore.setUserInfo(userinfo);

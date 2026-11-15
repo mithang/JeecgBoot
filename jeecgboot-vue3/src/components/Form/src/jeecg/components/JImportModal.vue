@@ -37,7 +37,7 @@
               <InboxOutlined />
             </div>
             <div class="upload-title">Bấm hoặc kéo tệp Excel vào đây</div>
-            <div class="upload-description">Hỗ trợ .xls、.xlsx định dạng, có thể chọn nhiều tệp cùng lúc</div>
+            <div class="upload-description">Hỗ trợ .xls, .xlsx định dạng, có thể chọn nhiều tệp cùng lúc</div>
           </template>
           <div v-else class="selected-files">
             <div class="selected-files__header">
@@ -134,7 +134,7 @@
 
       //Phương thức đóng
       function handleClose() {
-        // Giải thích logic mã: 【QQYUN-7477]Đóng popup sẽ xóa nội dung (trước đây sau khi tải lên thất bại rồi đóng sẽ không xóa)
+        // Giải thích logic mã: [QQYUN-7477]Đóng popup sẽ xóa nội dung (trước đây sau khi tải lên thất bại rồi đóng sẽ không xóa)
         closeModal();
         reset();
       }
@@ -168,7 +168,7 @@
         if (unref(foreignKeys) && unref(foreignKeys).length > 0) {
           formData.append('foreignKeys', unref(foreignKeys));
         }
-        // Giải thích logic mã: 【issues/6124]Khi người dùng không có quyền của trang [Phát triển biểu mẫu Online] thì người dùng không có quyền nhập dữ liệu bảng con
+        // Giải thích logic mã: [issues/6124]Khi người dùng không có quyền của trang [Phát triển biểu mẫu Online] thì người dùng không có quyền nhập dữ liệu bảng con
         if (isObject(foreignKeys.value)) {
           formData.append('foreignKeys', JSON.stringify(foreignKeys.value));
         }

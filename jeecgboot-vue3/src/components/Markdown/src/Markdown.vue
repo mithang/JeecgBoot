@@ -110,7 +110,7 @@
         const wrapEl = unref(wrapRef) as HTMLElement;
         if (!wrapEl) return;
 
-        // vditorCấu hình đường dẫn bản địa hóa của component [QQYUN-12053】
+        // vditorCấu hình đường dẫn bản địa hóa của component [QQYUN-12053]
         let localCdn = '/resource/vditor@3.9.4';
         if ($electron.isElectron()) {
           localCdn = '.' + localCdn;
@@ -120,7 +120,7 @@
         const insEditor = new Vditor(wrapEl, {
           theme: getDarkMode.value === 'dark' ? 'dark' : 'classic',
           lang: unref(getCurrentLang),
-          // Giải thích logic mã: 【TV360X-146] Component Markdown bỏ tùy chọn ghi âm
+          // Giải thích logic mã: [TV360X-146] Component Markdown bỏ tùy chọn ghi âm
           toolbar: [
             'emoji',
             'headings',
@@ -248,7 +248,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【TV360X-318]Khắc phục nút phóng to của control markdown vẫn có thể nhấp khi ở trạng thái bị vô hiệu hóa
+  // Giải thích logic mã: [TV360X-318]Khắc phục nút phóng to của control markdown vẫn có thể nhấp khi ở trạng thái bị vô hiệu hóa
   :deep(.vditor-menu--disabled) {
     pointer-events: none;
   }

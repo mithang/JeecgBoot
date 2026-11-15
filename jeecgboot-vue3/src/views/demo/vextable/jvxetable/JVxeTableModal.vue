@@ -173,7 +173,7 @@
         //Làm mới danh sách
         emit('success');
       }
-      // Giải thích logic mã: 【QQYUN-5866] phóng to số dòng tự thích ứng
+      // Giải thích logic mã: [QQYUN-5866] phóng to số dòng tự thích ứng
       const handleFullScreen = (val) => {
         tableH.value=val ? document.documentElement.clientHeight - 387 :  300;
       };

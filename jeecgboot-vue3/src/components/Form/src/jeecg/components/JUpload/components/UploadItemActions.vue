@@ -23,19 +23,19 @@
 
   const props = defineProps({
     element: { type: HTMLElement, required: true },
-    // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
+    // update-begin--author:liaozhiyang---date:20260831---for:[LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
     container: { type: HTMLElement, required: true },
-    // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
+    // update-end--author:liaozhiyang---date:20260831---for:[LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
     fileList: { type: Object, required: true },
     mover: { type: Boolean, required: true },
     download: { type: Boolean, required: true },
     emitValue: { type: Function, required: true },
   });
   const list = computed(() => unref(props.fileList));
-  // update-begin--author:liaozhiyang---date:20260826---for:【LHZP-73] tối ưu nút thao tác tải lên hình ảnh
+  // update-begin--author:liaozhiyang---date:20260826---for:[LHZP-73] tối ưu nút thao tác tải lên hình ảnh
   const canMove = computed(() => props.mover && list.value.length > 1);
   watchEffect(() => props.element.classList.toggle('has-upload-mover-actions', canMove.value));
-  // update-end--author:liaozhiyang---date:20260826---for:【LHZP-73] tối ưu nút thao tác tải lên hình ảnh
+  // update-end--author:liaozhiyang---date:20260826---for:[LHZP-73] tối ưu nút thao tác tải lên hình ảnh
 
   // Di chuyển hình ảnh về phía trước
   function onMoveForward() {
@@ -76,7 +76,7 @@
     }
   }
 
-  // update-begin--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
+  // update-begin--author:liaozhiyang---date:20260831---for:[LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
   function getIndex() {
     const uploadItems = Array.from(props.container.getElementsByClassName('ant-upload-list-item'));
     const index = uploadItems.indexOf(props.element);
@@ -85,7 +85,7 @@
     }
     return getIndexByUrl();
   }
-  // update-end--author:liaozhiyang---date:20260831---for:【LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
+  // update-end--author:liaozhiyang---date:20260831---for:[LHZP-73] Nhắc nhở di chuyển trái/phải sau khi tải lên hàng loạt hình ảnh-1
 
   function getIndexByUrl() {
     const url = props.element?.getElementsByTagName('img')[0]?.src;

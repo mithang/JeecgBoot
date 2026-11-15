@@ -32,7 +32,7 @@
     props: useJVxeCompProps(),
     setup(props: JVxeComponent.Props) {
       const { rowIndex, originColumn, fullDataLength, trigger } = useJVxeComponent(props);
-      // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
+      // Giải thích logic mã: [QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
       const isAllowDrag = computed(() => {
         const notAllowDrag = originColumn.value.notAllowDrag;
         if (notAllowDrag.length) {

@@ -96,7 +96,7 @@
    * Sự kiện thêm mới
    */
   function handleCreate() {
-    console.log('orderId=====》', orderId);
+    console.log('orderId=====>', orderId);
     if (isEmpty(unref(orderId))) {
       $message.createMessage.warning('Vui lòng chọn một thông tin đơn hàng');
       return;

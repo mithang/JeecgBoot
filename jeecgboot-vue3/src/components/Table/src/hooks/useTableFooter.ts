@@ -44,7 +44,7 @@ export function useTableFooter(
       const tableEl = unref(tableElRef);
       if (!tableEl) return;
       let bodyDom;
-      // Giải thích logic mã: 【issues/7422]Khi thuộc tính canResize của danh sách BasicTable là true thì hàng tổng cộng không thể cuộn ngang
+      // Giải thích logic mã: [issues/7422]Khi thuộc tính canResize của danh sách BasicTable là true thì hàng tổng cộng không thể cuộn ngang
       if (canResize) {
         setTimeout(() => {
           bodyDom = tableEl.$el.querySelector('.ant-table-body');

@@ -84,7 +84,7 @@ export function useFormEvents({
       const hasKey = Reflect.has(values, key);
 
       value = handleInputNumberValue(schema?.component, value);
-      // Giải thích logic mã: 【QQYUN-7535]Lỗi xác thực của component inputNumber trong trường điền lại của popup
+      // Giải thích logic mã: [QQYUN-7535]Lỗi xác thực của component inputNumber trong trường điền lại của popup
       value = handleInputStringValue(schema?.component, value);
       // 0| '' is allow
       if (hasKey && fields.includes(key)) {
@@ -220,14 +220,14 @@ export function useFormEvents({
     updateData.forEach((item) => {
       unref(getSchema).forEach((val) => {
         if (val.field === item.field) {
-          // update-begin-author:liaozhiyang date:2026-05-12 for:【issue/9612] Hàm trong updateSchema thực thi hai lần
+          // update-begin-author:liaozhiyang date:2026-05-12 for:[issue/9612] Hàm trong updateSchema thực thi hai lần
           const { componentProps: itemCp, ...restItem } = item as any;
           const newSchema = deepMerge(val, restItem);
           if (Reflect.has(item, 'componentProps')) {
-            //【issues/7940]Khi componentProps viết dưới dạng hàm, updateSchema viết dưới dạng đối tượng, tham số không được gộp
+            //[issues/7940]Khi componentProps viết dưới dạng hàm, updateSchema viết dưới dạng đối tượng, tham số không được gộp
             newSchema.componentProps = mergeComponentProps(val.componentProps, itemCp);
           }
-          // update-end-author:liaozhiyang date:2026-05-12 for:【issue/9612] Hàm trong updateSchema thực thi hai lần
+          // update-end-author:liaozhiyang date:2026-05-12 for:[issue/9612] Hàm trong updateSchema thực thi hai lần
           schema.push(newSchema as FormSchema);
         } else {
           schema.push(val);

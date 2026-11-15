@@ -90,7 +90,7 @@
         // Định dạng thụt lề
         tabSize: 2,
         // Chủ đề, JS của thư viện chủ đề tương ứng cần được import trước
-        // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
+        // Giải thích logic mã: [QQYUN-8639] thích ứng chủ đề tối
         theme: getDarkMode.value == ThemeEnum.DARK ? 'monokai' : props.theme,
         smartIndent: true, // Có thụt lề thông minh không
         // Hiển thị số dòng
@@ -103,9 +103,9 @@
         // Bật tính năng liên quan đến gấp mã:Kết thúc
         // Làm nổi bật dòng con trỏ
         styleActiveLine: true,
-        // Giải thích logic mã: 【issues/869] Component JCodeEditor khi khởi tạo chưa thiết lậpmode
+        // Giải thích logic mã: [issues/869] Component JCodeEditor khi khởi tạo chưa thiết lậpmode
         mode: props.language,
-        // Giải thích logic mã: 【TV360X-898] Bản xem trước sau khi sinh mã đổi thành chỉ đọc
+        // Giải thích logic mã: [TV360X-898] Bản xem trước sau khi sinh mã đổi thành chỉ đọc
         readOnly: props.disabled,
         // Khớp dấu ngoặc
         matchBrackets: true,
@@ -142,7 +142,7 @@
         }
         return _props;
       });
-      // Giải thích logic mã: 【QQYUN-5955] Tăng cường JS online, thêm gợi ý mã
+      // Giải thích logic mã: [QQYUN-5955] Tăng cường JS online, thêm gợi ý mã
       const { codeHintingMount, codeHintingRegistry } = useCodeHinting(CodeMirror, props.keywords, props.language);
       codeHintingRegistry();
       /**
@@ -158,7 +158,7 @@
       );
       onMounted(() => {
         initialize();
-        // Giải thích logic mã: 【QQYUN-8473] Trình chỉnh sửa mã lần đầu tải sẽ bị che khuất
+        // Giải thích logic mã: [QQYUN-8473] Trình chỉnh sửa mã lần đầu tải sẽ bị che khuất
         setTimeout(() => {
           refresh();
           // Khởi tạo + refresh Sau khi hoàn tất tất cả thì thông báo cho component cha
@@ -173,7 +173,7 @@
        */
       function setValue(value: string, trigger = true) {
         if (value && isJsonObjectString(value)) {
-          // update-begin--author:liaozhiyang---date:20260617---for:【issues/9699] JS tăng cường viết sai thì trang báo lỗi
+          // update-begin--author:liaozhiyang---date:20260617---for:[issues/9699] JS tăng cường viết sai thì trang báo lỗi
           // isJsonObjectString Chỉ phán đoán ký tự đầu và cuối, không thể đảm bảo JSON hợp lệ; khi phân tích thất bại thì giữ nguyên giá trị gốc, tránh nội dung không phải JSON (như mã tăng cường JS) bị lỗi kẹt khi mở
           try {
             value = JSON.stringify(JSON.parse(value), null, 2);
@@ -181,11 +181,11 @@
             // JSON không hợp lệ thì hiển thị theo văn bản gốc
           }
         }
-        // update-end--author:liaozhiyang---date:20260617---for:【issues/9699] JS tăng cường viết sai thì trang báo lỗi
+        // update-end--author:liaozhiyang---date:20260617---for:[issues/9699] JS tăng cường viết sai thì trang báo lỗi
         coder?.setValue(value ?? '');
         innerValue = value;
         trigger && emitChange(innerValue);
-        // Giải thích logic mã: 【QQYUN-9231] trình soạn thảo mã bị che khuất
+        // Giải thích logic mã: [QQYUN-9231] trình soạn thảo mã bị che khuất
         setTimeout(() => {
           refresh();
           // Làm mới lại lần nữa để tránh vấn đề che khuất với xác suất nhỏ
@@ -216,18 +216,18 @@
         coder.on('change', onChange);
         // Gán giá trị một lần khi khởi tạo thành công
         setValue(innerValue, false);
-        // Giải thích logic mã: 【QQYUN-5955] Tăng cường JS online, thêm gợi ý mã
+        // Giải thích logic mã: [QQYUN-5955] Tăng cường JS online, thêm gợi ý mã
         codeHintingMount(coder);
       }
 
       // Chuyển đổi trạng thái toàn màn hình
       function onToggleFullScreen() {
         isFullScreen.value = !isFullScreen.value;
-        // update-begin--author:liaozhiyang---date:20260713---for:【LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
+        // update-begin--author:liaozhiyang---date:20260713---for:[LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
         nextTick(() => {
           setTimeout(() => refresh(), 100);
         });
-        // update-end--author:liaozhiyang---date:20260713---for:【LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
+        // update-end--author:liaozhiyang---date:20260713---for:[LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
       }
 
       // Giải thích logic mã: codeEditorVô hiệu hóa chức năng
@@ -349,9 +349,9 @@
 
         .full-screen-child,
         .CodeMirror {
-          // update-begin--author:liaozhiyang---date:20260713---for:【LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
+          // update-begin--author:liaozhiyang---date:20260713---for:[LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
           height: 100% !important;
-          // update-end--author:liaozhiyang---date:20260713---for:【LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
+          // update-end--author:liaozhiyang---date:20260713---for:[LHZP-236]Tăng cường onlinejs xem dữ liệu trong lịch sử, khi phóng to để xem, nội dung không thể cuộn
           max-height: 100%;
           min-height: 100%;
         }
@@ -377,7 +377,7 @@
     max-width: 600px;
     max-height: 300px;
   }
-  // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
+  // Giải thích logic mã: [QQYUN-8639] thích ứng chủ đề tối
   html[data-theme='dark'] {
     .@{prefix-cls} {
       .CodeMirror {

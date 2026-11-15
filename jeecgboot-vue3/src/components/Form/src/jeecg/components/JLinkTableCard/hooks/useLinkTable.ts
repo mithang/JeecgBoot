@@ -89,7 +89,7 @@ export function useLinkTable(props) {
         mainContentField.value = textFields[0] || '';
         // otherColumns: các trường sau trường đầu tiên trong textField, dùng để hiển thị nội dung phụ của thẻ
         otherColumns.value = textFields.slice(1).map((f) => ({ title: f, dataIndex: f }));
-        // tableColumns Ghi lại tất cả các trường (dùng trong transData, ở chế độ allTable thực chất là no-op）
+        // tableColumns Ghi lại tất cả các trường (dùng trong transData, ở chế độ allTable thực chất là no-op)
         tableColumns.value = textFields.map((f) => ({ title: f, dataIndex: f }));
         dictOptions.value = {};
         return;
@@ -187,7 +187,7 @@ export function useLinkTable(props) {
       }
     }
     //Thêm một đối tượng trống làm chỗ cho thao tác add
-    // Giải thích logic mã: 【TV360X-1095] Truy vấn nâng cao, bản ghi liên kết bỏ nút chỉnh sửa và bỏ nút bản ghi
+    // Giải thích logic mã: [TV360X-1095] Truy vấn nâng cao, bản ghi liên kết bỏ nút chỉnh sửa và bỏ nút bản ghi
     props.editBtnShow && dataList.push({});
     selectOptions.value = dataList;
   }
@@ -357,7 +357,7 @@ export function useLinkTable(props) {
   function getImageSrc(item) {
     if (props.imageField) {
       let url = item[props.imageField];
-      // Giải thích logic mã: 【TV360X-38]Không gian bản ghi liên kết, khi dữ liệu được liên kết có nhiều hình ảnh thì ảnh bìa không hiển thị
+      // Giải thích logic mã: [TV360X-38]Không gian bản ghi liên kết, khi dữ liệu được liên kết có nhiều hình ảnh thì ảnh bìa không hiển thị
       if (typeof url === 'string') {
         // Khi có nhiều hình ảnh, mặc định lấy hình đầu tiên
         url = url.split(',')[0];

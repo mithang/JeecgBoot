@@ -21,7 +21,7 @@ import JVxeTextareaCell from './components/cells/JVxeTextareaCell.vue';
 import JVxeTreeSelectCell from './components/cells/JVxeTreeSelectCell.vue';
 import JVxeCategorySelectCell from './components/cells/JVxeCategorySelectCell.vue';
 
-// Giải thích logic mã: 【issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
+// Giải thích logic mã: [issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
 const JVxeComponents = 'JVxeComponents__';
 /** span Cuối component */
 export const spanEnds: string = ':span';
@@ -53,14 +53,14 @@ export function addComponent(type: JVxeTypes, component: JVxeVueComponent, spanC
   if (spanComponent) {
     componentMap.set(type + spanEnds, spanComponent);
   }
-  // Giải thích logic mã: 【issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
+  // Giải thích logic mã: [issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
   import.meta.env.DEV && (window[JVxeComponents] = componentMap);
 }
 
 export function deleteComponent(type: JVxeTypes) {
   componentMap.delete(type);
   componentMap.delete(type + spanEnds);
-  // Giải thích logic mã: 【issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
+  // Giải thích logic mã: [issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
   import.meta.env.DEV && (window[JVxeComponents] = componentMap);
 }
 
@@ -88,10 +88,10 @@ export function definedComponent() {
 
   // addComponent(JVxeTypes.departSelect, JVxeDepartSelectCell)
   // addComponent(JVxeTypes.userSelect, JVxeUserSelectCell)
-  // update-begin--author:liaozhiyang---date:20260413---for:【issues/7633] Bảng con online hỗ trợ cây danh mục phân loại, cây tùy chỉnh
+  // update-begin--author:liaozhiyang---date:20260413---for:[issues/7633] Bảng con online hỗ trợ cây danh mục phân loại, cây tùy chỉnh
   addComponent(JVxeTypes.treeSelect, JVxeTreeSelectCell);
   addComponent(JVxeTypes.catTreeSelect, JVxeCategorySelectCell);
-  // update-end--author:liaozhiyang---date:20260413---for:【issues/7633] Bảng con online hỗ trợ cây danh mục phân loại, cây tùy chỉnh
+  // update-end--author:liaozhiyang---date:20260413---for:[issues/7633] Bảng con online hỗ trợ cây danh mục phân loại, cây tùy chỉnh
 }
 
 export { componentMap, clearComponent } from './componentMapStore';

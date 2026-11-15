@@ -21,12 +21,12 @@ export function useData(props: JVxeTableProps): JVxeDataProps {
         isHover: true,
       },
 
-      // --- 【issues/209]tooltip đi kèm sẽ bị lệch vị trí, nên thay bằng title gốctitle ---
+      // --- [issues/209]tooltip đi kèm sẽ bị lệch vị trí, nên thay bằng title gốctitle ---
       // Ẩn khi tràn và hiển thị tooltiptooltip
       showOverflow: "title",
       // Tiêu đề bảng tràn sẽ ẩn và hiển thịtooltip
       showHeaderOverflow: "title",
-      // --- 【issues/209]tooltip đi kèm sẽ bị lệch vị trí, nên thay bằng title gốctitle ---
+      // --- [issues/209]tooltip đi kèm sẽ bị lệch vị trí, nên thay bằng title gốctitle ---
 
       showFooterOverflow: true,
       // Cấu hình có thể chỉnh sửa
@@ -60,12 +60,12 @@ export function useData(props: JVxeTableProps): JVxeDataProps {
         reserve: true,
         highlight: true,
       },
-      // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+      // update-begin--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
       // Cấm xóa trạng thái kiểm chứng khi nhấn bên ngoài bảng, tránh việc mỗi lần nhấn vùng trống đều kích hoạt reactData.validErrorMaps={} Gây ra việc render lại không cần thiết
       validConfig: {
         autoClear: false,
       },
-      // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+      // update-end--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
       keyboardConfig: {
         // Chức năng phím Delete
         isDel: false,

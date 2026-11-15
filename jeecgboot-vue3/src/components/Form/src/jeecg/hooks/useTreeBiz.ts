@@ -41,7 +41,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
       if(!values){
         return;
       }
-      // Giải thích logic mã: 【issues/8232] Đặt giá trị component JSelectDept bằng mã không được dịch
+      // Giải thích logic mã: [issues/8232] Đặt giá trị component JSelectDept bằng mã không được dịch
       if (values.length > 0) {
         // Ngăn chặn nhiều yêu cầu
         if (isEqual(values, prevSelectValues)) return;
@@ -167,7 +167,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
         }
         return;
       }
-      // Giải thích logic mã: 【JHHB-250] Chọn phòng ban thêm một liên kết cấp bậc/Cấu hình độc lập, hiện tại bấm là tick tất cả---
+      // Giải thích logic mã: [JHHB-250] Chọn phòng ban thêm một liên kết cấp bậc/Cấu hình độc lập, hiện tại bấm là tick tất cả---
       checkedKeys.value = checkStrictly.value ? keys.checked : keys;
       const { checkedNodes } = info;
       let rows = <any[]>[];
@@ -183,7 +183,7 @@ export function useTreeBiz(treeRef, getList, props, realProps, emit) {
    */
   async function checkALL(checkAll) {
     getTree().checkAll(checkAll);
-    // Giải thích logic mã: 【issues/394] Thao tác cây phòng ban trực thuộc: tick tất cả không có hiệu lực/【issues/4646] Sau khi tích chọn tất cả phòng ban, nhấn nút xác nhận thì thông tin phòng ban bị mất------------
+    // Giải thích logic mã: [issues/394] Thao tác cây phòng ban trực thuộc: tick tất cả không có hiệu lực/[issues/4646] Sau khi tích chọn tất cả phòng ban, nhấn nút xác nhận thì thông tin phòng ban bị mất------------
     await nextTick();
     checkedKeys.value = getTree().getCheckedKeys();
     if(checkAll){

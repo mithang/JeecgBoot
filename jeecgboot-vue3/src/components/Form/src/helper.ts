@@ -26,11 +26,11 @@ export function createPlaceholderMessage(component: ComponentType) {
     // return `Vui lòng chọn${label}`;
     return t('common.chooseText');
   }
-  //update-begin---author:liaozhiyang ---date:20260518  for：[issues/9638]BasicFormTrong đó dùng JUpload và khi bắt buộc thì kiểm chứng luôn nhắc chưa tải lên, bổ sung tiền tố nhắc bắt buộc của loại Upload-----------
+  //update-begin---author:liaozhiyang ---date:20260518  for:[issues/9638]BasicFormTrong đó dùng JUpload và khi bắt buộc thì kiểm chứng luôn nhắc chưa tải lên, bổ sung tiền tố nhắc bắt buộc của loại Upload-----------
   if (component.includes('Upload')) {
     return t('common.uploadText');
   }
-  //update-end---author:liaozhiyang ---date:20260518  for：[issues/9638]BasicFormTrong đó dùng JUpload và khi bắt buộc thì kiểm chứng luôn nhắc chưa tải lên, bổ sung tiền tố nhắc bắt buộc của loại Upload-----------
+  //update-end---author:liaozhiyang ---date:20260518  for:[issues/9638]BasicFormTrong đó dùng JUpload và khi bắt buộc thì kiểm chứng luôn nhắc chưa tải lên, bổ sung tiền tố nhắc bắt buộc của loại Upload-----------
   return '';
 }
 
@@ -77,7 +77,7 @@ export function handleInputNumberValue(component?: ComponentType, val?: any) {
 */ 
 export function handleInputStringValue(component?: ComponentType, val?: any) {
   if (!component) return val;
-  // Giải thích logic mã: 【TV360X-13] InputNumber thiết lập chính xác 3 chữ số thập phân khi truyền vào''đã trở thành0.00
+  // Giải thích logic mã: [TV360X-13] InputNumber thiết lập chính xác 3 chữ số thập phân khi truyền vào''đã trở thành0.00
   if (['InputNumber'].includes(component) && typeof val === 'string' && val != '') {
     return Number(val);
   }

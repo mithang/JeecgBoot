@@ -85,7 +85,7 @@
   /**
    * Lắng nghe thay đổi dict
    */
-  // Giải thích logic mã: 【issues/1283]Component JtreeSelect ban đầu đã gọi API hai lần
+  // Giải thích logic mã: [issues/1283]Component JtreeSelect ban đầu đã gọi API hai lần
   watch(
     () => props.dict,
     () => {
@@ -93,7 +93,7 @@
       loadRoot();
     }
   );
-  // Giải thích logic mã: 【TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
+  // Giải thích logic mã: [TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
   watch(
     () => props.hiddenNodeKey,
     () => {
@@ -109,7 +109,7 @@
     () => props.reload,
     async () => {
       treeData.value = [];
-      // Giải thích logic mã: 【TV360X-88]Khi bảng cây online thêm mới lặp lại, dữ liệu nút cha tải không đầy đủ và nút con đã mở không tải lại
+      // Giải thích logic mã: [TV360X-88]Khi bảng cây online thêm mới lặp lại, dữ liệu nút cha tải không đầy đủ và nút con đã mở không tải lại
       show.value = false;
       nextTick(() => {
         show.value = true;
@@ -136,7 +136,7 @@
       if(props.url){
         getItemFromTreeData();
       }else{
-        // Giải thích logic mã: 【issues/8093] Sau khi chọn node sẽ chuyển thành mã trước rồi mới hiển thị văn bản label
+        // Giải thích logic mã: [issues/8093] Sau khi chọn node sẽ chuyển thành mã trước rồi mới hiển thị văn bản label
         if (props.value) {
           if (isArray(treeValue.value)) {
             let isNotRequestTransform = false;
@@ -209,7 +209,7 @@
         i.value = i.key;
         i.isLeaf = !!i.leaf;
       }
-      // Giải thích logic mã: 【TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
+      // Giải thích logic mã: [TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
       handleHiddenNode(res.result);
       treeData.value = [...res.result];
     } else {
@@ -255,7 +255,7 @@
         i.value = i.key;
         i.isLeaf = !!i.leaf;
       }
-      // Giải thích logic mã: 【TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
+      // Giải thích logic mã: [TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
       handleHiddenNode(res.result);
       //Thêm nút con
       addChildren(pid, res.result, treeData.value);
@@ -295,7 +295,7 @@
     } else {
       emitValue(value.value);
     }
-    // Giải thích logic mã: 【issues/8093]Sau khi xóa sẽ chuyển thành mã trước rồi mới hiển thị chữ label
+    // Giải thích logic mã: [issues/8093]Sau khi xóa sẽ chuyển thành mã trước rồi mới hiển thị chữ label
     if (isArray(value)) {
       // Khi chỉnh sửa hoặc xóa, giá trị đã chọn là bất đồng bộ (từ cấp hai trở lên) sẽ không hiển thịlabel
       value.forEach((item) => {
@@ -362,7 +362,7 @@
         i.key = i.value ?? i.id;
         i.isLeaf = !!i.leaf;
       }
-      // Giải thích logic mã: 【TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
+      // Giải thích logic mã: [TV360X-87]Khi chỉnh sửa bảng cây không được chọn chính mình và các nút con cháu làm nút cha
       handleHiddenNode(res.result);
       treeData.value = [...res.result];
     } else {
@@ -426,7 +426,7 @@
   /**
    * 2024-07-30
    * liaozhiyang
-   * 【issues/6953]Component JTreeSelect có thể hỗ trợ tương ứng của antdva-tree-select Slot của component
+   * [issues/6953]Component JTreeSelect có thể hỗ trợ tương ứng của antdva-tree-select Slot của component
    */
   const slotNamesGroup = computed(() => {
     const native: string[] = [];

@@ -55,9 +55,9 @@
                 let str = ''
                 if(arr && arr.length>0){
                   // Giải thích logic mã: [issues/6368] rangeDateBỏ kiểm tra cho phép mục bắt đầu hoặc mục kết thúc trống để tương thíchallowEmpty
-                  // update-begin--author:wangshuai---date:20260819---for：【LHZP-322][Trình thiết kế biểu mẫu] Hỗ trợ tuần, quý
+                  // update-begin--author:wangshuai---date:20260819---for:[LHZP-322][Trình thiết kế biểu mẫu] Hỗ trợ tuần, quý
                   str = arr.map(normalizePickerValue).join(',')
-                  // update-end--author:wangshuai---date:20260819---for：【LHZP-322][Trình thiết kế biểu mẫu] Hỗ trợ tuần, quý
+                  // update-end--author:wangshuai---date:20260819---for:[LHZP-322][Trình thiết kế biểu mẫu] Hỗ trợ tuần, quý
                 }
                 emit('change', str);
                 emit('update:value', str);

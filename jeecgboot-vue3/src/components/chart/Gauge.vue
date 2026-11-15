@@ -25,7 +25,7 @@
         type: String as PropType<string>,
         default: 'calc(100vh - 78px)',
       },
-      // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
+      // Giải thích logic mã: [QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
       seriesColor: {
         type: String,
         default: '#1890ff',
@@ -98,7 +98,7 @@
         }
         option.series[0].data[0].name = props.chartData.name;
         option.series[0].data[0].value = props.chartData.value;
-        // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
+        // Giải thích logic mã: [QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
         option.series[0].color = props.seriesColor;
         setOptions(option);
       }

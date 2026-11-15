@@ -77,7 +77,7 @@
         let seriesData = [];
         typeArr.forEach((type) => {
           let obj: any = { name: type, type: props.type };
-          // Giải thích logic mã: 【QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
+          // Giải thích logic mã: [QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
           const findItem: any = props.chartData.find((item: any) => item.type == type);
           if (findItem && findItem.color) {
             obj.color = findItem.color;

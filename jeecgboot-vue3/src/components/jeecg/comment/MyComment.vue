@@ -96,7 +96,7 @@
       const buttonLoading = ref(false);
       const myComment = ref<string>('');
       function sendComment(e) {
-        // Giải thích logic mã: 【TV360X-932] bình luận thêm xuống dòng
+        // Giải thích logic mã: [TV360X-932] bình luận thêm xuống dòng
         const keyCode = e.keyCode || e.which;
         if (keyCode == 13 && e.shiftKey) {
           return;
@@ -158,7 +158,7 @@
           if (realname && username) {
             let str = `${realname}[${username}]`;
             let temp = myComment.value;
-            // Giải thích logic mã: 【TV360X-929] chọn@người dùng, nên chèn vào vị trí con trỏ
+            // Giải thích logic mã: [TV360X-929] chọn@người dùng, nên chèn vào vị trí con trỏ
             if (!temp) {
               myComment.value = '@' + str + ' ';
             } else {
@@ -180,7 +180,7 @@
               }
             }
 
-            // Giải thích logic mã: 【QQYUN-8002] Sau khi chọn xong người, con trỏ chuột nên đặt ở phía sau và thêm dấu cách ở phía trước---
+            // Giải thích logic mã: [QQYUN-8002] Sau khi chọn xong người, con trỏ chuột nên đặt ở phía sau và thêm dấu cách ở phía trước---
             showHtml.value = false;
             commentRef.value.focus();
             commentActive.value = true;
@@ -188,7 +188,7 @@
         }
         closeModal();        
       }
-      // Giải thích logic mã: 【TV360X-927】@Chỉ khi nhập mới hiện popup người dùng, khi xóa thì không nên hiện
+      // Giải thích logic mã: [TV360X-927]@Chỉ khi nhập mới hiện popup người dùng, khi xóa thì không nên hiện
       function handleCommentChange(e) {
         if (e.data === '@') {
           e.target.blur();
@@ -219,7 +219,7 @@
         if (str.indexOf('::') > 0) {
           str = str.substring(0, str.indexOf(':') + 1);
         }
-        // Giải thích logic mã: 【TV360X-931] chèn biểu cảm bình luận vào vị trí con trỏ
+        // Giải thích logic mã: [TV360X-931] chèn biểu cảm bình luận vào vị trí con trỏ
         const index = commentRef.value?.selectionStart ?? temp.length;
         // myComment.value = temp + str;
         const startStr = temp.substring(0, index);
@@ -342,7 +342,7 @@
 </script>
 
 <style lang="less">
-  // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
+  // Giải thích logic mã: [QQYUN-8639] thích ứng chủ đề tối
   .comment-main {
     border: 1px solid #eee;
     margin: 0;
@@ -370,7 +370,7 @@
     width: 100%;
     border: solid 0px;
     outline: none;
-    // Giải thích logic mã: 【TV360X-933]Sau khi kéo khung bình luận, danh sách bình luận phía dưới bị che mất một phần
+    // Giải thích logic mã: [TV360X-933]Sau khi kéo khung bình luận, danh sách bình luận phía dưới bị che mất một phần
     resize: none;
     .emoji-item {
       display: inline-block !important;
@@ -430,7 +430,7 @@
   .emoji-type-image.emoji-set-apple {
     background-image: url("./image/emoji.png");
   }
-  // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
+  // Giải thích logic mã: [QQYUN-8639] thích ứng chủ đề tối
   html[data-theme='dark'] {
     .emoji-type-image.emoji-set-apple {
       background-image: url("./image/emoji_native.png");

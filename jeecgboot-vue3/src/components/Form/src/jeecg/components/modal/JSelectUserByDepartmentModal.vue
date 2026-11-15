@@ -689,7 +689,7 @@
         /* Dự trữ không gian cho thanh cuộn, tránh bố cục bị nhảy khi hover làm dày lên */
         padding-bottom: 6px;
         /* Làm đẹp thanh cuộn: mặc định mỏng, khi di chuột qua thì dày lên để dễ kéo */
-        // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-869] Khi breadcrumb của component phòng ban có thanh cuộn, di chuột vào sẽ in đậm để tiện kéo
+        // update-begin--author:liaozhiyang---date:20260804---for:[LHZP-869] Khi breadcrumb của component phòng ban có thanh cuộn, di chuột vào sẽ in đậm để tiện kéo
         &::-webkit-scrollbar {
           width: 4px;
           height: 4px;
@@ -718,7 +718,7 @@
             background: #f0f0f0;
           }
         }
-        // update-end--author:liaozhiyang---date:20260804---for：【LHZP-869] Khi breadcrumb của component phòng ban có thanh cuộn, di chuột vào sẽ in đậm để tiện kéo
+        // update-end--author:liaozhiyang---date:20260804---for:[LHZP-869] Khi breadcrumb của component phòng ban có thanh cuộn, di chuột vào sẽ in đậm để tiện kéo
       }
       li {
         flex: none;

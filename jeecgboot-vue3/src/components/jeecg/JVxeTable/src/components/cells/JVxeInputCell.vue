@@ -138,7 +138,7 @@
       getValue(value, ctx) {
         if (ctx?.props?.type === JVxeTypes.inputNumber && isString(value)) {
           if (NumberRegExp.test(value)) {
-            // 【issues/I5IHN7] sửa lỗi không thể nhập dấu thập phânbug
+            // [issues/I5IHN7] sửa lỗi không thể nhập dấu thập phânbug
             if (/\.0*$/.test(value)) {
               return value;
             }

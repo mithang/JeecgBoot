@@ -30,24 +30,24 @@
       displayLevel: propTypes.oneOf(['province', 'city', 'region', 'all']),
       //Có hiển thị quận huyện không
       showArea: propTypes.bool.def(true),
-      // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
+      // update-begin--author:liaozhiyang---date:20260804---for:[LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
       disabled: propTypes.bool.def(false),
-      // update-end--author:liaozhiyang---date:20260804---for：【LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
+      // update-end--author:liaozhiyang---date:20260804---for:[LHZP-707] Sửa lỗi Tỉnh/Thành/Quận huyện ở trạng thái vô hiệu hóa vẫn có thể bấm x để xóa
       // Lưu trữ dữ liệu (khi all: dữ liệu truyền ra ngoài là mảng;province, city, regiongiá trị truyền ra ngoài là chuỗi)
       saveCode: propTypes.oneOf(['province', 'city', 'region', 'all']).def('all'),
     },
     emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit }) {
-      // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+      // update-begin--author:liaozhiyang---date:20260204---for:[QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
       const showLastLevelOnly = computed(() => {
         return props.displayLevel === 'province' || props.displayLevel === 'city' || props.displayLevel === 'region';
       });
-      // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+      // update-end--author:liaozhiyang---date:20260204---for:[QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
       const attrs = useAttrs();
       // const [state] = useRuleFormItem(props, 'value', 'change', emitData);
       const cascaderValue = ref<(string | number)[]>([]);
       const getOptions = computed(() => {
-        // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+        // update-begin--author:liaozhiyang---date:20260204---for:[QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
         if (props.displayLevel) {
           if (props.displayLevel === 'all') {
             return regionData;
@@ -65,13 +65,13 @@
             return provinceAndCityData;
           }
         }
-        // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+        // update-end--author:liaozhiyang---date:20260204---for:[QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
       });
       /**
        * Lắng nghe thay đổi của value
        */
       watchEffect(() => {
-        // Giải thích logic mã: 【TV360X-1223] tỉnh/thành/quận huyện đổi component mới
+        // Giải thích logic mã: [TV360X-1223] tỉnh/thành/quận huyện đổi component mới
         if (props.value) {
           initValue();
         } else {
@@ -101,21 +101,21 @@
        */
       function initValue() {
         let value = props.value ? props.value : [];
-        // Giải thích logic mã: 【TV360X-501] tỉnh/thành/quận huyện đổi component mới
+        // Giải thích logic mã: [TV360X-501] tỉnh/thành/quận huyện đổi component mới
         if (value && typeof value === 'string' && value != 'null' && value != 'undefined') {
           const arr = value.split(',');
           if (props.displayLevel) {
-            // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+            // update-begin--author:liaozhiyang---date:20260204---for:[QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
             const code = arr[0];
             cascaderValue.value = buildDisplayPathFromCode(code, props.displayLevel);
-            // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+            // update-end--author:liaozhiyang---date:20260204---for:[QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
           } else {
             cascaderValue.value = transform(arr);
           }
         } else if (isArray(value)) {
           if (value.length) {
             if (props.displayLevel) {
-              // update-begin--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+              // update-begin--author:liaozhiyang---date:20260204---for:[QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
               // Dữ liệu cũ khi saveCode là all thì lưu mảng đường dẫn đầy đủ [Tỉnh,Thành phố,Quận], cắt trực tiếp theo displayLevel
               if (value.length >= 2) {
                 const len = props.displayLevel === 'province' ? 1 : props.displayLevel === 'city' ? 2 : Math.min(3, value.length);
@@ -124,7 +124,7 @@
                 const code = value[0];
                 cascaderValue.value = buildDisplayPathFromCode(code, props.displayLevel);
               }
-              // update-end--author:liaozhiyang---date:20260204---for:【QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
+              // update-end--author:liaozhiyang---date:20260204---for:[QQYUN-14694] Online hỗ trợ cấu hình riêng Tỉnh, Thành phố, Huyện
             } else {
               cascaderValue.value = transform(value);
             }
@@ -152,7 +152,7 @@
       /**
        * liaozhiyang
        * 2024-06-17
-       * 【TV360X-1224] Giá trị mặc định component Tỉnh/Thành/Quận huyện truyền ra ngoài là chuỗi phân tách bằng dấu phẩy
+       * [TV360X-1224] Giá trị mặc định component Tỉnh/Thành/Quận huyện truyền ra ngoài là chuỗi phân tách bằng dấu phẩy
        * */
       const send = (data) => {
         let result = data;
@@ -169,7 +169,7 @@
       };
 
       function handleChange(arr) {
-        // Giải thích logic mã: 【TV360X-501] tỉnh/thành/quận huyện đổi component mới
+        // Giải thích logic mã: [TV360X-501] tỉnh/thành/quận huyện đổi component mới
         if (arr?.length) {
           let result: any = [];
           if (props.saveCode === 'region') {

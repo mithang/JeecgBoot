@@ -56,7 +56,7 @@ function handleIndexColumn(propsRef: ComputedRef<BasicTableProps>, getPagination
       columns.splice(indIndex, 1);
     }
   });
-  // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Checkbox hiển thị cột không nên xét trạng thái checkbox của cột số thứ tự]
+  // Giải thích logic mã: [TV360X-105] vấn đề cài đặt hiển thị cột[Checkbox hiển thị cột không nên xét trạng thái checkbox của cột số thứ tự]
   if (columns.length === 0 && showIndexColumn) {
     const indIndex = columns.findIndex((column) => column.flag === INDEX_COLUMN_FLAG);
     if (indIndex === -1) {
@@ -69,7 +69,7 @@ function handleIndexColumn(propsRef: ComputedRef<BasicTableProps>, getPagination
 
   columns.unshift({
     flag: INDEX_COLUMN_FLAG,
-    // Giải thích logic mã: 【TV360X-1634] Khi mật độ là chế độ rộng rãi, tiêu đề cột số thứ tự bị xuống dòng
+    // Giải thích logic mã: [TV360X-1634] Khi mật độ là chế độ rộng rãi, tiêu đề cột số thứ tự bị xuống dòng
     width: propsRef.value.size === 'large' ? 65 : 50,
     title: t('component.table.index'),
     align: 'center',
@@ -114,7 +114,7 @@ export function useColumns(
 
   const getColumnsRef = computed(() => {
     const columns = cloneDeep(unref(columnsRef));
-    // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
+    // Giải thích logic mã: [issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
     if (isArray(columns)) {
       columns.forEach((item) => {
         item.title = isFunction(item.title) ? item.title() : item.title;
@@ -122,7 +122,7 @@ export function useColumns(
     }
     handleIndexColumn(propsRef, getPaginationRef, columns);
     handleActionColumn(propsRef, columns);
-    // Giải thích logic mã: 【QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật
+    // Giải thích logic mã: [QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật
     handleCustomSelectColumn(columns);
 
     if (!columns) {
@@ -159,7 +159,7 @@ export function useColumns(
     const columns = cloneDeep(viewColumns);
     const formatEditColumn = (columns) => {
       return columns.map((column) => {
-        // Giải thích logic mã: 【issues-179] antd3 một số cảnh báo và lỗi(Đối với bảng)
+        // Giải thích logic mã: [issues-179] antd3 một số cảnh báo và lỗi(Đối với bảng)
         if(column.slots?.customRender) {
           // slotsBản sao lưu, tương thích với cách viết cũ, chuyển sang cách viết mới để tránh cảnh báo console
           column.slotsBak = column.slots;
@@ -189,16 +189,16 @@ export function useColumns(
         if ((edit || editRow) && !isDefaultAction) {
           column.customRender = renderEditCell(column);
         }
-        // Giải thích logic mã: 【pull/7333] Sửa lỗi bảng có thể chỉnh sửa với tiêu đề nhóm bị vô hiệu
+        // Giải thích logic mã: [pull/7333] Sửa lỗi bảng có thể chỉnh sửa với tiêu đề nhóm bị vô hiệu
         if (column.children?.length) {
           formatEditColumn(column.children.filter((item) => hasPermission(column.auth) && isIfShow(column)));
         }
         return reactive(column);
       });
     };
-    // Giải thích logic mã: 【pull/7333] Sửa lỗi bảng có thể chỉnh sửa với tiêu đề nhóm bị vô hiệu
+    // Giải thích logic mã: [pull/7333] Sửa lỗi bảng có thể chỉnh sửa với tiêu đề nhóm bị vô hiệu
     const result = formatEditColumn(columns.filter((item) => hasPermission(item.auth) && isIfShow(item)));
-    // Giải thích logic mã: 【QQYUN-6387] cách viết mở rộng (loại bỏ lỗi)
+    // Giải thích logic mã: [QQYUN-6387] cách viết mở rộng (loại bỏ lỗi)
     if (propsRef.value.expandedRowKeys && !propsRef.value.isTreeTable) {
       let index = 0;
       const findIndex = result.findIndex((item) => item.key === CUS_SEL_COLUMN_KEY);
@@ -284,7 +284,7 @@ export function useColumns(
     }
     // Lọc cột chọn tùy chỉnh
     columns = columns.filter((item) => item.key !== CUS_SEL_COLUMN_KEY);
-    // Giải thích logic mã: 【issues/8502] Giải quyết vấn đề cột quyền không hiển thị trong danh sách nhưng vẫn hiển thị trong cấu hình cột
+    // Giải thích logic mã: [issues/8502] Giải quyết vấn đề cột quyền không hiển thị trong danh sách nhưng vẫn hiển thị trong cấu hình cột
     if (ignoreAuth) {
       columns = columns.filter((item) => {
         if (item.auth) {

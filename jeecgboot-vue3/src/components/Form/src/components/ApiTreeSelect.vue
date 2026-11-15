@@ -44,7 +44,7 @@
       watch(
         () => props.params,
         () => {
-          // Giải thích logic mã: 【QQYUN-8346]Khi tham số đầu vào của component ApiTreeSelect thay đổi, dữ liệu không được làm mới kịp thời #1054---
+          // Giải thích logic mã: [QQYUN-8346]Khi tham số đầu vào của component ApiTreeSelect thay đổi, dữ liệu không được làm mới kịp thời #1054---
           unref(isFirstLoaded) && fetch();
         },
         { deep: true }

@@ -110,7 +110,7 @@
 
       const getComponentProps = computed(() => {
         let compProps;
-        // Giải thích logic mã: 【issues/8680]editComponentProps có thể nhận một hàm truyền vàorecord
+        // Giải thích logic mã: [issues/8680]editComponentProps có thể nhận một hàm truyền vàorecord
         if (isFunction(props.column?.editComponentProps)) {
           compProps = props.column?.editComponentProps(props.record);
         } else {
@@ -128,7 +128,7 @@
         const val = unref(currentValueRef);
 
         const value = isCheckValue ? (isNumber(val) && isBoolean(val) ? val : !!val) : val;
-        // Giải thích logic mã: 【issues/7136]Gợi ý tooltip trên ô, nếu bảng có thanh cuộn thì sẽ không cuộn theo ô---
+        // Giải thích logic mã: [issues/7136]Gợi ý tooltip trên ô, nếu bảng có thanh cuộn thì sẽ không cuộn theo ô---
         let tooltipPosition:any = unref(table?.wrapRef.value)?.parentElement?.querySelector('.ant-table-body');
         if(tooltipPosition){
           tooltipPosition.style.position = 'relative';
@@ -160,7 +160,7 @@
 
         const options: LabelValueOptions = editComponentProps?.options ?? (unref(optionsRef) || []);
         const option = options.find((item) => `${item.value}` === `${value}`);
-        // Giải thích logic mã: 【QQYUN-13251]Ô có thể chỉnh sửa của bảng apiSelect chọn nhiều không dịch ---
+        // Giải thích logic mã: [QQYUN-13251]Ô có thể chỉnh sửa của bảng apiSelect chọn nhiều không dịch ---
         if (['tags', 'multiple'].includes(editComponentProps?.mode)) {
           const result = options
             .filter((item) => {
@@ -379,7 +379,7 @@
       function initCbs(cbs: 'submitCbs' | 'validCbs' | 'cancelCbs', handle: Fn) {
         if (props.record) {
           /* eslint-disable  */
-          // Giải thích logic mã: 【issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
+          // Giải thích logic mã: [issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
           const { dataIndex, key } = props.column;
           const field: any = dataIndex || key;
           if (isArray(props.record[cbs])) {
@@ -406,7 +406,7 @@
         }
         /* eslint-disable  */
         props.record.onCancelEdit = () => {
-          // Giải thích logic mã: 【issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
+          // Giải thích logic mã: [issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
           isArray(props.record?.cancelCbs) &&
             props.record?.cancelCbs.forEach((item) => {
               const [fn] = Object.values(item);
@@ -418,7 +418,7 @@
           if (isArray(props.record?.submitCbs)) {
             if (!props.record?.onValid?.()) return;
             const submitFns = props.record?.submitCbs || [];
-            // Giải thích logic mã: 【issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
+            // Giải thích logic mã: [issues/1165]Khắc phục lỗi canResize bằng true thì dòng đầu tiên không qua kiểm chứng
             submitFns.forEach((item) => {
               const [fn] = Object.values(item);
               fn(false, false);

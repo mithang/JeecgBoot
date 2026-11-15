@@ -142,7 +142,7 @@
       const initOptions = computed(() => {
         const { height, options, toolbar, plugins, menubar } = props;
         let publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
-        // Giải thích logic mã: 【QQYUN-8571] đường dẫn phát hành không kết thúc bằng/tài nguyên sẽ tải thất bại nếu không kết thúc bằng /
+        // Giải thích logic mã: [QQYUN-8571] đường dẫn phát hành không kết thúc bằng/tài nguyên sẽ tải thất bại nếu không kết thúc bằng /
         if (!publicPath.endsWith('/')) {
           publicPath += '/';
         }
@@ -181,7 +181,7 @@
           link_title: false,
           object_resizing: true,
           toolbar_mode: 'sliding',
-          // Giải thích logic mã: 【TV360X-416]Sinh mã bảng đơn, khi biểu mẫu mở ra sẽ focus trước vào component rich text và cuộn đến vị trí của component rich text---
+          // Giải thích logic mã: [TV360X-416]Sinh mã bảng đơn, khi biểu mẫu mở ra sẽ focus trước vào component rich text và cuộn đến vị trí của component rich text---
           auto_focus: props.autoFocus,
           // toolbar_groups: true,
           skin: skinName.value,
@@ -208,7 +208,7 @@
             };
             uploadFile(params, uploadSuccess);
         }),
-          // update-begin--author:liaozhiyang---date:20260617---for:【JHHB-1433]Nội dung tin tức cần hỗ trợ chèn video, plugin hiện tại không có thao tác chèn video
+          // update-begin--author:liaozhiyang---date:20260617---for:[JHHB-1433]Nội dung tin tức cần hỗ trợ chèn video, plugin hiện tại không có thao tác chèn video
           media_live_embeds: true,
           media_alt_source: false,
           media_poster: false,
@@ -239,17 +239,17 @@
             };
             input.click();
           },
-          // update-end--author:liaozhiyang---date:20260617---for:【JHHB-1433]Nội dung tin tức cần hỗ trợ chèn video, plugin hiện tại không có thao tác chèn video
+          // update-end--author:liaozhiyang---date:20260617---for:[JHHB-1433]Nội dung tin tức cần hỗ trợ chèn video, plugin hiện tại không có thao tác chèn video
           content_css: publicPath + 'resource/tinymce/skins/ui/' + skinName.value + '/content.min.css',
           ...options,
           setup: (editor: any) => {
             editorRef.value = editor;
             editor.on('init', (e) => {
               initSetup(e);
-              // update-begin--author:liaozhiyang---date:20260306---for:【issues/9448]Khi cuộn, nếu dropdown của tinymce đang mở thì ẩn đi
+              // update-begin--author:liaozhiyang---date:20260306---for:[issues/9448]Khi cuộn, nếu dropdown của tinymce đang mở thì ẩn đi
               // Khi cuộn trong popup thì đóng menu dropdown của tinymce, tránh menu dropdown gắn vào body khiến vị trí không bám theo
               bindScrollCloseMenu(editor);
-              // update-end--author:liaozhiyang---date:20260306---for:【issues/9448]Khi cuộn, nếu dropdown của tinymce đang mở thì ẩn đi
+              // update-end--author:liaozhiyang---date:20260306---for:[issues/9448]Khi cuộn, nếu dropdown của tinymce đang mở thì ẩn đi
             });
             //update-begin-author:liusq---date:2025-11-19--for: JHHB-1070 Bảng sao chép từ Word không căn chỉnh được
             // Chức năng căn chỉnh bảng
@@ -484,7 +484,7 @@
       function getUploadingImgName(name: string) {
         return `[uploading:${name}]`;
       }
-      // Giải thích logic mã: 【TV360X-35] Rich text, tải lên hình ảnh che các nút khác
+      // Giải thích logic mã: [TV360X-35] Rich text, tải lên hình ảnh che các nút khác
       let executeCount = 0;
       watch(
         () => props.showImageUpload,
@@ -516,7 +516,7 @@
           executeCount++;
         }, 100);
       };
-      // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
+      // Giải thích logic mã: [QQYUN-8639] thích ứng chủ đề tối
       function changeColor() {
         setTimeout(() => {
           const iframe = editorRootRef.value?.querySelector('iframe');
@@ -579,13 +579,13 @@
         let match;
         while ((match = imgTagRegex.exec(pasteContent)) !== null) {
           imgReplaceList.push({
-            // Thẻ img đầy đủ (ví dụ<img class="xxx" src="xxx" alt="xxx">）
+            // Thẻ img đầy đủ (ví dụ<img class="xxx" src="xxx" alt="xxx">)
             fullTag: match[0],
             // Hình ảnh gốcURL
             src: match[2],
-            // srcthuộc tính trước (nhưclass="xxx" ）
+            // srcthuộc tính trước (nhưclass="xxx" )
             prefix: match[1],
-            // srcthuộc tính sau (như alt="xxx"）
+            // srcthuộc tính sau (như alt="xxx")
             suffix: match[3]
           });
         }
@@ -826,7 +826,7 @@
     .tox:not(.tox-tinymce-inline) .tox-editor-header {
       padding:0;
     }
-    // Giải thích logic mã: 【TV360X-329] Ở trạng thái vô hiệu hóa của rich text, thanh công cụ khi di chuột qua bị mất viền
+    // Giải thích logic mã: [TV360X-329] Ở trạng thái vô hiệu hóa của rich text, thanh công cụ khi di chuột qua bị mất viền
     .tox .tox-tbtn--disabled,
     .tox .tox-tbtn--disabled:hover,
     .tox .tox-tbtn:disabled,

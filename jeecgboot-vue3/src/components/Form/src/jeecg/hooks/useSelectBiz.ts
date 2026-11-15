@@ -28,7 +28,7 @@ export function useSelectBiz(getList, props, emit?) {
     () => {
       //if (selectValues['change'] == false && !isEmpty(selectValues['value'])) {
       if (selectValues['change'] == false && !isEmpty(selectValues['value'])) {
-        // Giải thích logic mã: 【issues/7405]Chọn người dùng theo phòng ban đồng thời chọn tất cả người dùng của hai trang, hiển thị lại lên trang cha. Người dùng ở trang thứ hai hiển thị không phải tên thật
+        // Giải thích logic mã: [issues/7405]Chọn người dùng theo phòng ban đồng thời chọn tất cả người dùng của hai trang, hiển thị lại lên trang cha. Người dùng ở trang thứ hai hiển thị không phải tên thật
         let params = { isMultiTranslate: 'true', pageSize: selectValues.value?.length };
         params[props.rowKey] = selectValues['value'].join(',');
         loadingEcho.value = isFirstLoadEcho;
@@ -40,7 +40,7 @@ export function useSelectBiz(getList, props, emit?) {
           });
       }
       //Đặt mục chọn mặc định của danh sách
-      // Giải thích logic mã: 【QQYUN-12155] Tick trong popup, rồi bấm Hủy, giá trị vẫn bị chọn
+      // Giải thích logic mã: [QQYUN-12155] Tick trong popup, rồi bấm Hủy, giá trị vẫn bị chọn
       checkedKeys['value'] = [...selectValues['value']];
     },
     { immediate: true }
@@ -61,7 +61,7 @@ export function useSelectBiz(getList, props, emit?) {
   }
 
   /**
-   * Cấu hình cột chọn (phản ứng: khi prop isRadioSelection thay đổi, type tự động chuyển radio/checkbox）
+   * Cấu hình cột chọn (phản ứng: khi prop isRadioSelection thay đổi, type tự động chuyển radio/checkbox)
    */
   const rowSelection = computed(() => ({
     type: props.isRadioSelection ? 'radio' : 'checkbox',
@@ -101,7 +101,7 @@ export function useSelectBiz(getList, props, emit?) {
       code: selectValues['value'].join(','),
       pageSize: selectValues['value'].length,
     });
-    // Giải thích logic mã: 【QQYUN-12155] Tick trong popup, rồi bấm Hủy, giá trị vẫn bị chọn
+    // Giải thích logic mã: [QQYUN-12155] Tick trong popup, rồi bấm Hủy, giá trị vẫn bị chọn
     checkedKeys['value'] = [...selectValues['value']];
     selectRows['value'] = records;
   }
@@ -111,12 +111,12 @@ export function useSelectBiz(getList, props, emit?) {
    */
   async function visibleChange(visible) {
     if (visible) {
-      // Giải thích logic mã: 【QQYUN-12179]Popup đã chọn giá trị, nhấn hủy rồi mở lại popup thì vẫn còn giá trị đã chọn lần trước
+      // Giải thích logic mã: [QQYUN-12179]Popup đã chọn giá trị, nhấn hủy rồi mở lại popup thì vẫn còn giá trị đã chọn lần trước
       checkedKeys['value'] = [...selectValues['value']];
       //Đặt mục chọn mặc định của danh sách
       props.showSelected && initSelectRows();
     } else {
-      // Giải thích logic mã: 【QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
+      // Giải thích logic mã: [QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
       emit?.('close');
     }
   }
@@ -142,7 +142,7 @@ export function useSelectBiz(getList, props, emit?) {
   }
   //Xóa thông tin đã chọn
   function handleDeleteSelected(record) {
-    // Giải thích logic mã: 【issues/424]Sau khi bật danh sách bên phải, khi xóa người dùng trong danh sách bên phải thì logic có vấn đề------------
+    // Giải thích logic mã: [issues/424]Sau khi bật danh sách bên phải, khi xóa người dùng trong danh sách bên phải thì logic có vấn đề------------
     checkedKeys.value = checkedKeys.value.filter((item) => item != record[props.rowKey]);
     selectRows.value = selectRows.value.filter((item) => item[props.rowKey] !== record[props.rowKey]);
   }

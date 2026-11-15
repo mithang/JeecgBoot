@@ -1,7 +1,7 @@
 <template>
   <a-card title="SQLKiểm chứng chặn inject (GHSA-jgwm / GHSA-xmw4 / GHSA-g87f）" size="small" style="margin-bottom: 16px">
     <a-alert
-      message="Các nút dưới đây sẽ dùng payload lỗ hổng để gọi API liên quan đến danh mục, khi bản sửa có hiệu lực thì tất cả đều phải bị chặn (success=false）。"
+      message="Các nút dưới đây sẽ dùng payload lỗ hổng để gọi API liên quan đến danh mục, khi bản sửa có hiệu lực thì tất cả đều phải bị chặn (success=false)."
       type="warning"
       show-icon
     />
@@ -23,7 +23,7 @@
     <template #description>
       <div>1. Thả xuống / Tìm kiếm: dictCode viết thành "Tên bảng,Trường văn bản,Trường mã,Điều kiện lọc"</div>
       <div>2. Cây dropdown: dict viết thành "tên bảng where điều kiện lọc,Trường văn bản,trường mã", trong điều kiện lọc không được có dấu phẩy (dict tách theo dấu phẩy)</div>
-      <div>3. Điều kiện lọc chỉ hỗ trợ tổ hợp "Trường So sánh Hằng số" (=、!=、&gt;、&lt;、like、in、between、is null、and/or, order by), không hỗ trợ chú thích, dấu gạch chéo ngược, truy vấn con và hàm</div>
+      <div>3. Điều kiện lọc chỉ hỗ trợ tổ hợp "Trường So sánh Hằng số" (=, !=, &gt;, &lt;, like, in, between, is null, and/or, order by), không hỗ trợ chú thích, dấu gạch chéo ngược, truy vấn con và hàm</div>
       <div>4. Bản ghi liên kết hiển thị lại theo id, tìm kiếm theo từ khóa đều là binding tham số, không cần và cũng không được phép truyền điều kiện SQL</div>
     </template>
   </a-alert>

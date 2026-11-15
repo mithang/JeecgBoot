@@ -73,7 +73,7 @@
         const { showAdvancedButton, actionSpan: span, actionColOptions } = props;
         const actionSpan = 24 - span;
         const advancedSpanObj = showAdvancedButton ? { span: actionSpan < 6 ? 24 : actionSpan } : {};
-        // Giải thích logic mã: 【QQYUN-6566] BasicForm hỗ trợ hiển thị một dòng(inline)
+        // Giải thích logic mã: [QQYUN-6566] BasicForm hỗ trợ hiển thị một dòng(inline)
         const defaultSpan = props.layout == 'inline' ? {} : { span: showAdvancedButton ? 6 : 4 };
         const actionColOpt: Partial<ColEx> = {
           style: { textAlign: 'right' },
@@ -124,7 +124,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【TV360X-999]Ở độ rộng 1753px, phần mở rộng của truy vấn trên trang thiết kế quy trình bị xuống dòng
+  // Giải thích logic mã: [TV360X-999]Ở độ rộng 1753px, phần mở rộng của truy vấn trên trang thiết kế quy trình bị xuống dòng
   .btnArea {
     :deep(.ant-form-item-control-input-content) {
       display: flex;

@@ -120,12 +120,12 @@
       position: fixed;
       z-index: 10000;
     }
-    // Giải thích logic mã: 【QQYUN-8647]Nút tải ảnh lên của component tinymce online che khuất nút toàn màn hình trên thanh công cụ
+    // Giải thích logic mã: [QQYUN-8647]Nút tải ảnh lên của component tinymce online che khuất nút toàn màn hình trên thanh công cụ
     .ant-btn {
       padding: 2px 4px;
       font-size: 12px;
       height: 24px;
-      // Giải thích logic mã: 【TV360X-235]Ở trạng thái vô hiệu hóa của rich text, chữ trên nút tải lên hình ảnh nhìn không rõ
+      // Giải thích logic mã: [TV360X-235]Ở trạng thái vô hiệu hóa của rich text, chữ trên nút tải lên hình ảnh nhìn không rõ
       &.is-disabled {
         color: rgba(255, 255, 255, 0.5);
       }

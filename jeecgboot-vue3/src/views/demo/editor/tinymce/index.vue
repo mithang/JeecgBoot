@@ -19,7 +19,7 @@
       function handleChange(value: string) {
         console.log(value);
       }
-      //【issues/9448】
+      //[issues/9448]
       const contentHeight = computed(() => {
         return `calc(100vh - ${headerHeightRef.value}px)`;
       });

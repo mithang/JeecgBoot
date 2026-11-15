@@ -104,12 +104,12 @@ watch(innerValue, (val) => {
     val = ''
     openDatePicker()
   }
-  // update-begin--author:wangshuai---date:20260819---for：【LHZP-322][Trình thiết kế biểu mẫu] online tuần, quý chưa chuyển đổi thành công
+  // update-begin--author:wangshuai---date:20260819---for:[LHZP-322][Trình thiết kế biểu mẫu] online tuần, quý chưa chuyển đổi thành công
   const normalizedValue = normalizePickerValue(val)
   emit('change', normalizedValue)
   emit('update:value', normalizedValue)
-  // update-end--author:wangshuai---date:20260819---for：【LHZP-322][Trình thiết kế biểu mẫu] online tuần, quý chưa chuyển đổi thành công
-  // Giải thích logic mã: 【QQYUN-9227] kiểm tra ngày chưa được xóa
+  // update-end--author:wangshuai---date:20260819---for:[LHZP-322][Trình thiết kế biểu mẫu] online tuần, quý chưa chuyển đổi thành công
+  // Giải thích logic mã: [QQYUN-9227] kiểm tra ngày chưa được xóa
   formItemContext?.onFieldChange();
 })
 

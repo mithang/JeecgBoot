@@ -209,7 +209,7 @@
       /**
        * 2024-07-24
        * liaozhiyang
-       * 【TV360X-1756] báo cáo thêm loại hình ảnh
+       * [TV360X-1756] báo cáo thêm loại hình ảnh
        * Hình ảnh
        * @param text
        */
@@ -222,7 +222,7 @@
       /**
        * 2024-07-24
        * liaozhiyang
-       * 【TV360X-1756] báo cáo thêm loại hình ảnh
+       * [TV360X-1756] báo cáo thêm loại hình ảnh
        * Xem trước hình ảnh cell trong danh sách
        * @param text
        */

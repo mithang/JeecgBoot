@@ -24,7 +24,7 @@ export function useJVxeCompProps() {
 
 export function useJVxeComponent(props: JVxeComponent.Props) {
   const value = computed(() => {
-    // Giải thích logic mã: 【QQYUN-9125]Trường kiểu ngày của cơ sở dữ liệu oracle sẽ mặc định kèm theo giờ phút giây
+    // Giải thích logic mã: [QQYUN-9125]Trường kiểu ngày của cơ sở dữ liệu oracle sẽ mặc định kèm theo giờ phút giây
     const val = props.params.row[props.params.column.property];
     if (props.type === 'date' && typeof val === 'string') {
       return val.split(' ').shift();
@@ -77,7 +77,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     if (renderOptions.isDisabledRow(row.value, rowIndex.value)) {
       cellProps['disabled'] = true;
     }
-    // Giải thích logic mã: 【TV360X-291] Không tick đồng bộ cơ sở dữ liệu thì vô hiệu hóa chức năng sắp xếp
+    // Giải thích logic mã: [TV360X-291] Không tick đồng bộ cơ sở dữ liệu thì vô hiệu hóa chức năng sắp xếp
     if (col.props && col.props.isDisabledCell) {
       if (col.props.isDisabledCell({ row: row.value, rowIndex: rowIndex.value, column: col, columnIndex: columnIndex.value })) {
         cellProps['disabled'] = true;
@@ -86,7 +86,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     // Kiểm tra xem có vô hiệu hóa tất cả component không
     if (renderOptions.disabled === true) {
       cellProps['disabled'] = true;
-      // Giải thích logic mã: 【TV360X-1068] Khi chỉnh sửa dòng bị vô hiệu hóa toàn bộ, nút tải lên không hiển thị
+      // Giải thích logic mã: [TV360X-1068] Khi chỉnh sửa dòng bị vô hiệu hóa toàn bộ, nút tải lên không hiển thị
       cellProps['disabledTable'] = true;
     }
     // Giải thích logic mã: VUEN-1111 Bảng con một-nhiều: chọn phòng ban không nên liên kết cấp
@@ -140,10 +140,10 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
   watch(
     value,
     (newValue) => {
-      // -update-begin--author:liaozhiyang---date:20241210---for：【issues/7497] Sau khi ẩn một cột, từ điển không được dịch, khôi phục lại thì bình thường
+      // -update-begin--author:liaozhiyang---date:20241210---for:[issues/7497] Sau khi ẩn một cột, từ điển không được dịch, khôi phục lại thì bình thường
       // TODO Tạm sửa như vậy để giải quyết vấn đề, nguyên nhân gốc sẽ xem sau
       // enhanced = getEnhanced(props.type);
-      // -update-end--author:liaozhiyang---date:20241210---for：【issues/7497] Sau khi ẩn một cột, từ điển không được dịch, sau khi khôi phục
+      // -update-end--author:liaozhiyang---date:20241210---for:[issues/7497] Sau khi ẩn một cột, từ điển không được dịch, sau khi khôi phục
       // Khắc phục vấn đề trong online khi nhấp chỉnh sửa nhiều lần cùng một bản ghi thì trường của bảng khác biến thành khoảng trắng
       if (props.type === 'input' && originColumn.value.flag === 'link-table-field' && (newValue === undefined || newValue === null)) {
         return;
@@ -156,7 +156,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
         vModel(newValue, row, column);
       }
       innerValue.value = enhanced.setValue(newValue, ctx);
-      // Giải thích logic mã: 【QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
+      // Giải thích logic mã: [QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
       if (props.type === 'date' && props.renderType === JVxeRenderType.spaner && enhanced.translate.enabled === true) {
         if (isFunction(enhanced.translate.handler)) {
           innerValue.value = enhanced.translate.handler(newValue, ctx);
@@ -164,7 +164,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
         return;
       }
 
-      // Giải thích logic mã: 【issues/7203] Vấn đề hiển thị lại Tỉnh/Thành/Quận huyện trong mã biểu mẫu một-nhiều được tạo tự động---
+      // Giải thích logic mã: [issues/7203] Vấn đề hiển thị lại Tỉnh/Thành/Quận huyện trong mã biểu mẫu một-nhiều được tạo tự động---
       if (props.type === 'pca' && props.renderType === JVxeRenderType.spaner) {
         innerValue.value = getAreaTextByCode(newValue);
         return;
@@ -186,7 +186,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     { immediate: true }
   );
 
-  // update-begin--author:liaozhiyang---date:20250526---for：【QQYUN-15511]Sau khi options của bảng con một-nhiều được sửa bằng js, làm mới rồi chỉnh sửa thì giá trị hiển thị lại không phải làlabel
+  // update-begin--author:liaozhiyang---date:20250526---for:[QQYUN-15511]Sau khi options của bảng con một-nhiều được sửa bằng js, làm mới rồi chỉnh sửa thì giá trị hiển thị lại không phải làlabel
   // Lắng nghe thay đổi của options (giải quyết việc khi cập nhật động options cần dịch lại)
   watch(
     () => originColumn.value?.options,
@@ -206,13 +206,13 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
     },
     { deep: true }
   );
-  // update-end--author:liaozhiyang---date:20250526---for：【QQYUN-15511]Sau khi options của bảng con một-nhiều được sửa bằng js, làm mới rồi chỉnh sửa thì giá trị hiển thị lại không phải làlabel
+  // update-end--author:liaozhiyang---date:20250526---for:[QQYUN-15511]Sau khi options của bảng con một-nhiều được sửa bằng js, làm mới rồi chỉnh sửa thì giá trị hiển thị lại không phải làlabel
 
   /** Xử lý chung sự kiện change */
   function handleChangeCommon($value, force = false) {
     const newValue = enhanced.getValue($value, ctx);
     const oldValue = value.value;
-    // Giải thích logic mã: 【issues-5025] Sự kiện của JVueTable @valueChangeVấn đề kích hoạt lặp lại
+    // Giải thích logic mã: [issues-5025] Sự kiện của JVueTable @valueChangeVấn đề kích hoạt lặp lại
     const execute = force ? true : newValue !== oldValue;
     if (execute) {
       trigger('change', { value: newValue });
@@ -230,7 +230,7 @@ export function useJVxeComponent(props: JVxeComponent.Props) {
 
   /** Xử lý chung sự kiện blur */
   function handleBlurCommon($value) {
-    // Giải thích logic mã: 【issues/636] JVxeTable thêm sự kiện blur
+    // Giải thích logic mã: [issues/636] JVxeTable thêm sự kiện blur
     const newValue = enhanced.getValue($value, ctx);
     const oldValue = value.value;
     //trigger('blur', { value });

@@ -100,7 +100,7 @@ export interface FormProps {
   // Nếu showAdvancedButton là true, khi vượt quá số cột quy định sẽ mặc định thu gọn, mặc định là3
   autoAdvancedCol?: number;
   // Nếu showAdvancedButton là true, vượt quá số hàng chỉ định thì mặc định thu gọn
-  // Giải thích logic mã: 【issues/7261]Cấu hình autoAdvancedLine của mục truy vấn phía trên bảng không có hiệu lực (xóa autoAdvancedLine)
+  // Giải thích logic mã: [issues/7261]Cấu hình autoAdvancedLine của mục truy vấn phía trên bảng không có hiệu lực (xóa autoAdvancedLine)
   // autoAdvancedLine?: number;
   // Số dòng luôn hiển thị khi thu gọn
   alwaysShowLines?: number;
@@ -134,7 +134,7 @@ export interface FormSchema {
   // Variable name bound to v-model Default value
   valueField?: string;
   // Label name
-  // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
+  // Giải thích logic mã: [issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
   label: string | VNode | Fn;
   // Auxiliary text
   subLabel?: string;
@@ -156,7 +156,7 @@ export interface FormSchema {
   required?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);
 
   suffix?: string | number | VueNode | ((values: RenderCallbackParams) => string | number | VueNode);
-  // 【QQYUN-12876]Có phải suffix dạng gọn hay không (khi chiều rộng component chưa chiếm hết, có thể áp sát phía phải của component)
+  // [QQYUN-12876]Có phải suffix dạng gọn hay không (khi chiều rộng component chưa chiếm hết, có thể áp sát phía phải của component)
   suffixCompact?: boolean;
 
   // Validation rules
@@ -207,9 +207,9 @@ export interface FormSchema {
   
   //labelKiểm soát số ký tự (chiều rộng label)
   labelLength?: number;
-  // update-begin--author:liaozhiyang---date:20240529---for【TV360X-460] basicForm hỗ trợv-authChỉ thị(Kiểm soát quyền hiện/ẩn)
+  // update-begin--author:liaozhiyang---date:20240529---for[TV360X-460] basicForm hỗ trợv-authChỉ thị(Kiểm soát quyền hiện/ẩn)
   auth?: string;
-  // update-end--author:liaozhiyang---date:20240529---for【TV360X-460] basicForm hỗ trợv-authChỉ thị(Kiểm soát quyền hiện/ẩn)
+  // update-end--author:liaozhiyang---date:20240529---for[TV360X-460] basicForm hỗ trợv-authChỉ thị(Kiểm soát quyền hiện/ẩn)
 }
 export interface HelpComponentProps {
   maxWidth: string;

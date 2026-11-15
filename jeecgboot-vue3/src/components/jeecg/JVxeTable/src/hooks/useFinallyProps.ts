@@ -22,7 +22,7 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
       onRadioChange: methods.handleVxeRadioChange,
       onCheckboxAll: methods.handleVxeCheckboxAll,
       onCheckboxChange: methods.handleVxeCheckboxChange,
-      // Giải thích logic mã: 【QQYUN-8566] JVXETable không thể nhớ cài đặt cột
+      // Giải thích logic mã: [QQYUN-8566] JVXETable không thể nhớ cài đặt cột
       onCustom: methods.handleCustom,
     };
     // Sự kiện do người dùng truyền vào sẽ được hợp nhất
@@ -42,7 +42,7 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
 
   // vxe Cuối cùng props
   const vxePropsMerge = computed(() => {
-    // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
+    // Giải thích logic mã: [QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
     let rowClass = {};
     if (props.dragSort) {
       rowClass = {
@@ -80,7 +80,7 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
         editRules: unref(vxeEditRules),
         height: props.height === 'auto' ? null : props.height,
         maxHeight: props.maxHeight,
-        // Giải thích logic mã: 【QQYUN-5133] Nâng cấp chỉnh sửa dòng của JVxeTable
+        // Giải thích logic mã: [QQYUN-5133] Nâng cấp chỉnh sửa dòng của JVxeTable
         scrollY: props.scrollY,
         scrollX: props.scrollX,
         border: props.bordered,
@@ -120,7 +120,7 @@ export function useFinallyProps(props: JVxeTableProps, data: JVxeDataProps, meth
   const vxeProps = computed(() => {
     return {
       ...unref(vxePropsMerge),
-      // 【issue/8695]Tách riêng columns để tránh vấn đề hiệu năng
+      // [issue/8695]Tách riêng columns để tránh vấn đề hiệu năng
       columns: unref(vxeColumnsRef),
     }
   });

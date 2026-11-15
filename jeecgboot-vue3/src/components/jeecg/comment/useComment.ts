@@ -379,7 +379,7 @@ export function useFileList() {
         await initViewDomain();
         //Kiểm tra local cần thay địa chỉ tệplocalhost/127.0.0.1Thay thànhIP, Hoặc sửa trực tiếp toàn cụcdomain
         //url = url.replace('localhost', '192.168.1.100')
-        // Giải thích logic mã: 【TV360X-952]Nâng cấp lênkkfileview4.1.0---
+        // Giải thích logic mã: [TV360X-952]Nâng cấp lênkkfileview4.1.0---
         let previewUrl = encodeURIComponent(encryptByBase64(url));
         window.open(onlinePreviewDomain+'?url='+previewUrl);
       }

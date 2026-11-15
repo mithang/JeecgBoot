@@ -115,12 +115,12 @@
         }
         // Giải thích logic mã: VUEN-1112 Một-nhiều: chọn người dùng chưa hiển thị số lượng đã chọn, và xóa
         setTimeout(() => {
-          // update-begin--author:liaozhiyang---date:20260120--for：【issues/9275] Component người dùng khi nhấn hủy lần thứ hai thì giá trị đã tích chọn vẫn hiển thị lại
+          // update-begin--author:liaozhiyang---date:20260120--for:[issues/9275] Component người dùng khi nhấn hủy lần thứ hai thì giá trị đã tích chọn vẫn hiển thị lại
           let selectedData = selectValues['value'];
           if (isArray(selectedData)) {
             selectedData = cloneDeep(selectedData);
           }
-          // update-end--author:liaozhiyang---date:20260120--for：【issues/9275] Component người dùng khi nhấn hủy lần thứ hai thì giá trị đã tích chọn vẫn hiển thị lại
+          // update-end--author:liaozhiyang---date:20260120--for:[issues/9275] Component người dùng khi nhấn hủy lần thứ hai thì giá trị đã tích chọn vẫn hiển thị lại
           if (tableRef.value) {
             tableRef.value.setSelectedRowKeys(selectedData || []);
           }
@@ -149,7 +149,7 @@
         },
         { deep: true, immediate: true }
       );
-      // Giải thích logic mã: 【issues/657] xóa trong danh sách đã chọn bên phải không có hiệu lực
+      // Giải thích logic mã: [issues/657] xóa trong danh sách đã chọn bên phải không có hiệu lực
       watch(checkedKeys, (newVal) => {
         // Giải thích logic mã: nullLỗi con trỏ null khiến console báo lỗi, trang không hiển thị------------
         if(tableRef.value){
@@ -293,12 +293,12 @@
         }
         return record;
       }
-      // Giải thích logic mã: 【QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
+      // Giải thích logic mã: [QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
       const handleCancel = () => {
         emit('close');
       };
 
-      // Giải thích logic mã: 【TV360X-305] màn hình nhỏ hiển thị 10 dòng
+      // Giải thích logic mã: [TV360X-305] màn hình nhỏ hiển thị 10 dòng
       const clientHeight = document.documentElement.clientHeight * 200;
       maxHeight.value = clientHeight > 600 ? 600 : clientHeight;
 

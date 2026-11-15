@@ -104,7 +104,7 @@
           ...props,
           ...(unref(propsRef) as any),
         };
-        // Giải thích logic mã: 【QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
+        // Giải thích logic mã: [QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
         if (getIsMobile.value) {
           result.canFullscreen = false;
           result.defaultFullscreen = true;
@@ -139,7 +139,7 @@
       });
 
       const getBindValue = computed((): Recordable => {
-        // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
+        // Giải thích logic mã: [QQYUN-6366]Nâng cấp lênantd4.x
         const attr = {
           ...attrs,
           ...unref(getMergeProps),
@@ -159,7 +159,7 @@
 
       watchEffect(() => {
         fullScreenRef.value = !!props.defaultFullscreen;
-        // Giải thích logic mã: 【QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
+        // Giải thích logic mã: [QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
         if (getIsMobile.value) {
           fullScreenRef.value = true
         }
@@ -221,7 +221,7 @@
         }
         if (Reflect.has(props, 'defaultFullscreen')) {
           fullScreenRef.value = !!props.defaultFullscreen;
-           // Giải thích logic mã: 【QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
+           // Giải thích logic mã: [QQYUN-8643] Popup trên thiết bị di động thống nhất toàn màn hình
           if (getIsMobile.value) {
             fullScreenRef.value = true
           }
@@ -257,22 +257,22 @@
         }else{
           commentSpan.value = 0
         }
-        // Giải thích logic mã: 【TV360X-485] Sau khi bật bình luận, nút popup căn phải cách một khoảng bình luận
+        // Giải thích logic mã: [TV360X-485] Sau khi bật bình luận, nút popup căn phải cách một khoảng bình luận
         emit('comment-open', commentSpan.value === 0, commentSpan.value);
       }
 
-      // Giải thích logic mã: 【QQYUN-5866] phóng to số dòng tự thích ứng
+      // Giải thích logic mã: [QQYUN-5866] phóng to số dòng tự thích ứng
       watch(fullScreenRef,(val)=>{
         emit('fullScreen',val);
       });
 
-      // update-begin--author:liaozhiyang---date:20260805---for:【LHZP-865]Khi basicModal không có tiêu đề thì không chừa chiều cao header, khi có tiêu đề thì tính lại chiều cao vùng nội dung
+      // update-begin--author:liaozhiyang---date:20260805---for:[LHZP-865]Khi basicModal không có tiêu đề thì không chừa chiều cao header, khi có tiêu đề thì tính lại chiều cao vùng nội dung
       watch(isNoTitle, () => {
         nextTick(() => {
           modalMethods.redoModalHeight();
         });
       });
-      // update-end--author:liaozhiyang---date:20260805---for:【LHZP-865]Khi basicModal không có tiêu đề thì không chừa chiều cao header, khi có tiêu đề thì tính lại chiều cao vùng nội dung
+      // update-end--author:liaozhiyang---date:20260805---for:[LHZP-865]Khi basicModal không có tiêu đề thì không chừa chiều cao header, khi có tiêu đề thì tính lại chiều cao vùng nội dung
       return {
         handleCancel,
         getBindValue,
@@ -305,7 +305,7 @@
   }
   .jeecg-modal-content{
     >.scroll-container{
-      // Giải thích logic mã: 【QQYUN-7297] Khi bấm nút phóng to của popup thảo luận biểu mẫu chỉ hiển thị một phần---
+      // Giải thích logic mã: [QQYUN-7297] Khi bấm nút phóng to của popup thảo luận biểu mẫu chỉ hiển thị một phần---
       padding: 6px;
     }
   }

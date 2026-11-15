@@ -99,7 +99,7 @@
       const formItemContext = Form.useInjectFormItemContext();
       const state = ref<any>(props.value);
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
-      // update-begin-author:liaozhiyang date:2026-05-12 for:【issues/9420] Khi hiển thị lại đa chọn chức danh của người dùng hệ thống sẽ hiển thị1,2,3
+      // update-begin-author:liaozhiyang date:2026-05-12 for:[issues/9420] Khi hiển thị lại đa chọn chức danh của người dùng hệ thống sẽ hiển thị1,2,3
       watch(
         () => props.value,
         (val) => {
@@ -114,7 +114,7 @@
         },
         { immediate: true }
       );
-      // update-end-author:liaozhiyang date:2026-05-12 for:【issues/9420] Khi hiển thị lại đa chọn chức danh của người dùng hệ thống sẽ hiển thị1,2,3
+      // update-end-author:liaozhiyang date:2026-05-12 for:[issues/9420] Khi hiển thị lại đa chọn chức danh của người dùng hệ thống sẽ hiển thị1,2,3
       // Có đang tải dữ liệu hiển thị lại không
       const loadingEcho = ref<boolean>(false);
       // Có phải lần đầu tải và hiển thị lại không, chỉ lần đầu tải mới hiển thị loading
@@ -191,7 +191,7 @@
         }
         state.value = changeValue;
 
-        // Giải thích logic mã: 【issues/4507]Khi dùng component JDictSelectTag, trình duyệt đưa ra cảnh báo:Expected Function, got Array------------
+        // Giải thích logic mã: [issues/4507]Khi dùng component JDictSelectTag, trình duyệt đưa ra cảnh báo:Expected Function, got Array------------
         emit('update:value', changeValue);
         // Không còn phụ thuộc vào setter của useRuleFormItem để tự động emit('change'), tại đây kích hoạt một cách tường minh, đảm bảo wrapper onChange của BasicForm có thể ghi lại vào formModel và kiểm chứng
         emit('change', changeValue);
@@ -202,7 +202,7 @@
       function handleChangeRadio(e) {
         const radioValue = e?.target?.value ?? e;
         state.value = radioValue;
-        // Giải thích logic mã: 【issues/506] Component JDictSelectTag type="radio" Không có giá trị trả về------------
+        // Giải thích logic mã: [issues/506] Component JDictSelectTag type="radio" Không có giá trị trả về------------
         emit('update:value', radioValue);
         emit('change', radioValue);
         nextTick(() => formItemContext.onFieldChange());
@@ -210,7 +210,7 @@
 
       /** Dùng để tìm kiếm nội dung trong hộp thả xuống */
       function handleFilterOption(input, option) {
-        // Giải thích logic mã: 【QQYUN-6514]Khi cấu hình, trục Y không thể nhập nhiều trường, console báo lỗi
+        // Giải thích logic mã: [QQYUN-6514]Khi cấu hình, trục Y không thể nhập nhiều trường, console báo lỗi
         if (typeof option.children === 'function') {
           // Tìm kiếm trong label
           let labelIf = option.children()[0]?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -242,7 +242,7 @@
   });
 </script>
 <style scoped lang="less">
-  // Giải thích logic mã: 【QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
+  // Giải thích logic mã: [QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
   .colorText {
     display: inline-block;
     height: 20px;
@@ -253,5 +253,5 @@
     color: #fff;
     font-size: 12px;
   }
-  // Giải thích logic mã: 【QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
+  // Giải thích logic mã: [QQYUN-7799] Component từ điển (trừ component gốc) thêm cấu hình màu sắc
 </style>

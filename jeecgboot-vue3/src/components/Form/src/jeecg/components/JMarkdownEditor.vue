@@ -42,7 +42,7 @@
       function onChange(value) {
         emit('change', value);
         emit('update:value', value);
-        // Giải thích logic mã: 【QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
+        // Giải thích logic mã: [QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
         nextTick(() => {
           formItemContext?.onFieldChange();
         });

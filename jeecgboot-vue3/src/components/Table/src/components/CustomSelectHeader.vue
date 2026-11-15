@@ -32,7 +32,7 @@
       type: Boolean,
       default: false,
     },
-    // Giải thích logic mã: 【QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
+    // Giải thích logic mã: [QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
     disabled: {
       type: Boolean,
       required: true,

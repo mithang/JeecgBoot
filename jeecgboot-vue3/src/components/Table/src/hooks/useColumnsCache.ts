@@ -16,7 +16,7 @@ export function useColumnsCache(opt, setColumns, handleColumnFixed) {
   const route = useRoute();
   // Cache cấu hình danh sáchkey
   const cacheKey = computed(() => {
-    // Giải thích logic mã: 【QQYUN-8367]Việc lưu hiển thị cột cấu hình báo cáo online ảnh hưởng đến việc hiển thị/ẩn trường table của các trang khác (môi trường dev khi hot update sẽ có vấn đề này, môi trường production không có vấn đề)
+    // Giải thích logic mã: [QQYUN-8367]Việc lưu hiển thị cột cấu hình báo cáo online ảnh hưởng đến việc hiển thị/ẩn trường table của các trang khác (môi trường dev khi hot update sẽ có vấn đề này, môi trường production không có vấn đề)
     const path = route.path;
     let key = path.replace(/[\/\\]/g, '_');
     let cacheKey = table.getBindValues.value.tableSetting?.cacheKey;
@@ -96,7 +96,7 @@ export function useColumnsCache(opt, setColumns, handleColumnFixed) {
   /** Lưu cấu hình cột */
   function saveSetting() {
     const { checkedList } = opt.state;
-    // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Sau khi đặt lại, thứ tự đã lưu vẫn là thứ tự lần trước]
+    // Giải thích logic mã: [TV360X-105] vấn đề cài đặt hiển thị cột[Sau khi đặt lại, thứ tự đã lưu vẫn là thứ tự lần trước]
     let sortedList = [];
     if (opt.restAfterOptions.value) {
       sortedList = opt.restAfterOptions.value.map((item) => item.value);

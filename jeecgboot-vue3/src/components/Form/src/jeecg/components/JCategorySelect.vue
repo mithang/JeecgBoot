@@ -85,7 +85,7 @@
         () => {
           loadItemByCode();
         },
-        // Giải thích logic mã: 【TV360X-480]Biểu mẫu đóng gói và biểu mẫu gốc, trường có vấn đề khi sinh giá trị mặc định: cây danh mục phân loại kèm giá trị mặc định không có hiệu lực---
+        // Giải thích logic mã: [TV360X-480]Biểu mẫu đóng gói và biểu mẫu gốc, trường có vấn đề khi sinh giá trị mặc định: cây danh mục phân loại kèm giá trị mặc định không có hiệu lực---
         { deep: true, immediate: true }
       );
       watch(
@@ -221,7 +221,7 @@
           backValue(value.value, value.label);
           treeValue.value = value;
         }
-        // Giải thích logic mã: 【QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
+        // Giải thích logic mã: [QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
         nextTick(() => {
           formItemContext?.onFieldChange();
         });

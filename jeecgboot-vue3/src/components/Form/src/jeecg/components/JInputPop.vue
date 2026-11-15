@@ -104,7 +104,7 @@
 
   .@{prefix-cls} {
     &-popover {
-      // Giải thích logic mã: 【TV360X-144]Khi title không có trong component văn bản nhiều dòng của jVxetable thì bỏ đường kẻ thừa
+      // Giải thích logic mã: [TV360X-144]Khi title không có trong component văn bản nhiều dòng của jVxetable thì bỏ đường kẻ thừa
       .ant-popover-title:has(.emptyTitle) {
         border-bottom: none;
       }

@@ -283,7 +283,7 @@
           }
         }
       }
-      // Giải thích logic mã: 【TV360X-932] bình luận thêm xuống dòng
+      // Giải thích logic mã: [TV360X-932] bình luận thêm xuống dòng
       const lineFeed = (content) => {
         if (!content) return '';
         return content.replace(/\n/g, '<br>');
@@ -350,7 +350,7 @@
   .tx{
     margin-top: 4px;
   }
-  // Giải thích logic mã: 【QQYUN-8639] thích ứng chủ đề tối
+  // Giải thích logic mã: [QQYUN-8639] thích ứng chủ đề tối
   .comment-area {
     position: absolute;
     bottom: 0;

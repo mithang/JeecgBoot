@@ -28,9 +28,9 @@ export const vxeProps = () => ({
   })),
   // Có hiển thị số dòng không
   rowNumber: propTypes.bool.def(false),
-  // Cố định vị trí số dòng hoặc không cố định [QQYUN-8405】
+  // Cố định vị trí số dòng hoặc không cố định [QQYUN-8405]
   rowNumberFixed: propTypes.oneOf(['left', 'none']).def('left'),
-  // Giải thích logic mã: 【issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
+  // Giải thích logic mã: [issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
   dragSortFixed: propTypes.oneOf(['left', 'none']).def('left'),
   rowSelectionFixed: propTypes.oneOf(['left', 'none']).def('left'),
   // Có thể chọn hàng không
@@ -98,13 +98,13 @@ export const vxeProps = () => ({
   // Có bật chỉnh sửa bằng bàn phím không
   keyboardEdit: propTypes.bool.def(false),
   // Cấu hình cuộn ảo ngang (không hỗ trợ dòng mở rộng)
-  // 【QQYUN-7676] Khi thanh cuộn x cuộn, từ điển biến thànhid
+  // [QQYUN-7676] Khi thanh cuộn x cuộn, từ điển biến thànhid
   scrollX: propTypes.object.def(() => ({ enabled: false })),
   // Cấu hình cuộn ảo dọc (không hỗ trợ dòng mở rộng)
   scrollY: propTypes.object.def(() => ({ enabled: true })),
-  //【QQYUN-8566] Key của cài đặt cột cache (duy nhất trong trang route)
+  //[QQYUN-8566] Key của cài đặt cột cache (duy nhất trong trang route)
   cacheColumnsKey: propTypes.string.def(''),
-  // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
+  // Giải thích logic mã: [QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
   rowClassName: {
     type: [String, Function],
     default: null,

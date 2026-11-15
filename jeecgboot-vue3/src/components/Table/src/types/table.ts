@@ -38,7 +38,7 @@ export interface TableRowSelection<T = any> extends ITableRowSelection {
    * @type Function
    */
   onSelectInvert?: (selectedRows: string[] | number[]) => any;
-  //【issues/8163] bản ghi liên kết thêm mới bị mất
+  //[issues/8163] bản ghi liên kết thêm mới bị mất
   selectedRows?: any[];
 }
 
@@ -80,7 +80,7 @@ export interface FetchParams {
 export interface GetColumnsParams {
   ignoreIndex?: boolean;
   ignoreAction?: boolean;
-  // Giải thích logic mã: 【issues/8502] Giải quyết vấn đề cột quyền không hiển thị trong danh sách nhưng vẫn hiển thị trong cấu hình cột
+  // Giải thích logic mã: [issues/8502] Giải quyết vấn đề cột quyền không hiển thị trong danh sách nhưng vẫn hiển thị trong cấu hình cột
   ignoreAuth?: boolean;
   ignoreIfShow?: boolean | ((column: BasicColumn) => boolean);
   sort?: boolean;
@@ -328,7 +328,7 @@ export interface BasicTableProps<T = any> {
    * you need to add style .ant-table td { white-space: nowrap; }.
    * @type object
    */
-  // Giải thích logic mã: 【issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
+  // Giải thích logic mã: [issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
   scroll?: { x?: number | true | 'max-content'; y?: number; scrollToFirstRowOnChange?: boolean };
 
   /**
@@ -434,7 +434,7 @@ export interface BasicColumn extends ColumnProps<Recordable> {
 
   //
   flag?: 'INDEX' | 'DEFAULT' | 'CHECKBOX' | 'RADIO' | 'ACTION';
-  // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
+  // Giải thích logic mã: [issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
   title: string | Fn;
   customTitle?: VueNode;
 
@@ -455,7 +455,7 @@ export interface BasicColumn extends ColumnProps<Recordable> {
   editRow?: boolean;
   editable?: boolean;
   editComponent?: ComponentType;
-  // Giải thích logic mã: 【issues/8680]editComponentProps có thể nhận một hàm truyền vàorecord
+  // Giải thích logic mã: [issues/8680]editComponentProps có thể nhận một hàm truyền vàorecord
   editComponentProps?: Recordable | ((record: Recordable) => Recordable);
   editRule?: boolean | ((text: string, record: Recordable) => Promise<string>);
   editValueMap?: (value: any) => string;
@@ -466,7 +466,7 @@ export interface BasicColumn extends ColumnProps<Recordable> {
   ifShow?: boolean | ((column: BasicColumn) => boolean);
   //compType-Dùng để ghi lại loại
   compType?: string;
-  // Giải thích logic mã: 【pull/1201]Thêm chức năng TableSummary của antd để tương thích với summary cũ (tổng cộng cuối bảng)
+  // Giải thích logic mã: [pull/1201]Thêm chức năng TableSummary của antd để tương thích với summary cũ (tổng cộng cuối bảng)
   customSummaryRender?: (opt: {
     value: any;
     text: any;

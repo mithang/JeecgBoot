@@ -38,10 +38,10 @@ export function usePagination(props: JVxeTableProps, methods: JVxeTableMethods) 
 
   function handleShowSizeChange(current, pageSize) {
     innerPagination.pageSize = pageSize;
-    // -update-begin--author:liaozhiyang---date:20251209---for:【issues/9169]Khi chuyển trang, sự kiện pageChange đã tải hai lần
+    // -update-begin--author:liaozhiyang---date:20251209---for:[issues/9169]Khi chuyển trang, sự kiện pageChange đã tải hai lần
     // Vì handleShowSizeChange kích hoạt trước, ngay sau đó sẽ kích hoạt handleChange, nên có thể ghi chú lại.
     // methods.trigger('pageChange', { current, pageSize });
-    // -update-end--author:liaozhiyang---date:20251209---for:【issues/9169]Khi chuyển trang, sự kiện pageChange đã tải hai lần
+    // -update-end--author:liaozhiyang---date:20251209---for:[issues/9169]Khi chuyển trang, sự kiện pageChange đã tải hai lần
   }
 
   /** Kết xuất phân trang */
@@ -55,7 +55,7 @@ export function usePagination(props: JVxeTableProps, methods: JVxeTableMethods) 
         [
           h(Pagination, {
             ...bindProps.value,
-            // Giải thích logic mã: 【issues/8137] Bảng vxetable sau khi vô hiệu hóa thì phân trang bị ẩn
+            // Giải thích logic mã: [issues/8137] Bảng vxetable sau khi vô hiệu hóa thì phân trang bị ẩn
             disabled: false,
             onChange: handleChange,
             onShowSizeChange: handleShowSizeChange,

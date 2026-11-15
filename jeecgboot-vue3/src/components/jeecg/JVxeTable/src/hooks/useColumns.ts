@@ -110,7 +110,7 @@ export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: 
       handleInnerColumn(args, selectionColumn, handleSelectionColumn);
       handleInnerColumn(args, expandColumn, handleExpandColumn);
       handleInnerColumn(args, dragSortColumn, handleDragSortColumn, true);
-      // update-begin--author:liaozhiyang---date:2024-05-30---for【TV360X-371] component không thể chỉnh sửa thiếu dấu * bắt buộc*dấu
+      // update-begin--author:liaozhiyang---date:2024-05-30---for[TV360X-371] component không thể chỉnh sửa thiếu dấu * bắt buộc*dấu
       customComponentAddStar(columns);
     }
     return columns;
@@ -141,9 +141,9 @@ function customComponentAddStar(columns) {
         ].includes(type)
       ) {
         if (validateRules.find((item) => item.required)) {
-          // update-begin--author:liaozhiyang---date:20260807---for:【LHZP-703]Dấu bắt buộc của người dùng, phòng ban, hình ảnh, tệp, công tắc hiển thị không phải màu đỏ
+          // update-begin--author:liaozhiyang---date:20260807---for:[LHZP-703]Dấu bắt buộc của người dùng, phòng ban, hình ảnh, tệp, công tắc hiển thị không phải màu đỏ
           column.headerClassName = 'jvxe-col--required';
-          // update-end--author:liaozhiyang---date:20260807---for:【LHZP-703]Dấu bắt buộc của người dùng, phòng ban, hình ảnh, tệp, công tắc hiển thị không phải màu đỏ
+          // update-end--author:liaozhiyang---date:20260807---for:[LHZP-703]Dấu bắt buộc của người dùng, phòng ban, hình ảnh, tệp, công tắc hiển thị không phải màu đỏ
         }
       }
     }
@@ -181,11 +181,11 @@ function handleSeqColumn({ props, col, columns }: HandleArgs) {
       type: 'seq',
       title: '#',
       width: 60,
-      // 【QQYUN-8405】
+      // [QQYUN-8405]
       fixed: props.rowNumberFixed,
       align: 'center',
     };
-    // Giải thích logic mã: 【QQYUN-8405]vxetable hỗ trợ cố định số thứ tự hay không (cần cho mobile)
+    // Giải thích logic mã: [QQYUN-8405]vxetable hỗ trợ cố định số thứ tự hay không (cần cho mobile)
     if (props.rowNumberFixed === 'none') {
       delete column.fixed;
     }
@@ -202,9 +202,9 @@ function handleSeqColumn({ props, col, columns }: HandleArgs) {
  */
 function handleSelectionColumn({ props, data, col, columns }: HandleArgs) {
   // Kiểm tra xem có bật hàng có thể chọn không
-  // -update-begin--author:liaozhiyang---date:20240617---for：【TV360X-1002] trang chi tiết không hiển thị chỉnh sửa hàngcheckbox
+  // -update-begin--author:liaozhiyang---date:20240617---for:[TV360X-1002] trang chi tiết không hiển thị chỉnh sửa hàngcheckbox
   if (props.rowSelection && props.disabled == false) {
-    // -update-end--author:liaozhiyang---date:20240617---for：【TV360X-1002] trang chi tiết không hiển thị chỉnh sửa hàngcheckbox
+    // -update-end--author:liaozhiyang---date:20240617---for:[TV360X-1002] trang chi tiết không hiển thị chỉnh sửa hàngcheckbox
     let width = 45;
     if (data.statistics.has && !props.rowExpand && !props.dragSort) {
       width = 60;
@@ -215,7 +215,7 @@ function handleSelectionColumn({ props, data, col, columns }: HandleArgs) {
       fixed: 'left',
       align: 'center',
     };
-    // Giải thích logic mã: 【issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
+    // Giải thích logic mã: [issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
     if (props.rowSelectionFixed === 'none') {
       delete column.fixed;
     }
@@ -266,14 +266,14 @@ function handleDragSortColumn({ props, data, col, columns, renderOptions }: Hand
       width: width,
       fixed: 'left',
       align: 'center',
-      // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
+      // Giải thích logic mã: [QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
       params: {
         insertRow: props.insertRow,
         notAllowDrag: props.notAllowDrag,
         ...col?.params,
       },
     };
-    // Giải thích logic mã: 【issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
+    // Giải thích logic mã: [issues/1162]Khi cột JVxeTable quá dài (xuất hiện thanh cuộn ngang) thì không thể kéo thả sắp xếp
     if (props.dragSortFixed === 'none') {
       delete column.fixed;
     }
@@ -311,7 +311,7 @@ function handlerCol(args: HandleArgs) {
     // $renderOptions.type = (enhanced.switches.visible || props.alwaysEdit) ? 'visible' : 'default'
   }
   col[renderName] = $renderOptions;
-  // Giải thích logic mã: 【QQYUN-5806]Mã tăng cường js thay đổi options tìm kiếm của dropdown (thêm customOptions là true thì không đọc danh mục, đi theo options của chính nó)
+  // Giải thích logic mã: [QQYUN-5806]Mã tăng cường js thay đổi options tìm kiếm của dropdown (thêm customOptions là true thì không đọc danh mục, đi theo options của chính nó)
   !col.params.customOptions && handleDict(args);
   handleRules(args);
   handleStatistics(args);

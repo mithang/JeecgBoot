@@ -594,13 +594,13 @@
       searchCollapseDom.value = document.querySelector('.jeecg-menu-item-search-collapse');
       
       setTableStyle()
-      // update-begin--author:liaozhiyang---date:20270724---for:【LHZP-1452] Sửa lỗi mục lục Word cần sửa nội dung chính mới hiển thị
+      // update-begin--author:liaozhiyang---date:20270724---for:[LHZP-1452] Sửa lỗi mục lục Word cần sửa nội dung chính mới hiển thị
       await createEditor(props.content);
       // Sau khi khởi tạo xong chủ động render mục lục một lần, tránh việc phải nhấn nút mục lục mới hiển thị
       if (formState.showCataLogDom) {
         updateCatalog();
       }
-      // update-end--author:liaozhiyang---date:20270724---for:【LHZP-1452] Sửa lỗi mục lục Word cần sửa nội dung chính mới hiển thị
+      // update-end--author:liaozhiyang---date:20270724---for:[LHZP-1452] Sửa lỗi mục lục Word cần sửa nội dung chính mới hiển thị
       // Thêm trình lắng nghe sự kiện sau khi component được mount
       document.addEventListener('click', handleClickOutside);
       //Lắng nghe sự kiện phím Ctrl hoặc Cmd và phím S

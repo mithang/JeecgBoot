@@ -137,7 +137,7 @@
         e.preventDefault();
         e.stopPropagation();
       }
-//Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
+//Giải thích logic mã: [QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
 /*      function records2DataList() {
         let arr:any[] = [];
         let excludeList = props.excludeUserIdList;

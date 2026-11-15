@@ -34,7 +34,7 @@
         return format ? format : isDatetime.value ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
       });
       const openPicker = ref(true);
-      // Giải thích logic mã: 【QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
+      // Giải thích logic mã: [QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
       const picker = computed(() => {
         const picker = originColumn.value.picker;
         return picker ? picker : null;
@@ -52,7 +52,7 @@
       );
 
       function handleChange(_mom, dateStr) {
-        // Giải thích logic mã: 【QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
+        // Giải thích logic mã: [QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
         if (picker.value) {
           //update-begin-author:liusq---date:2026-08-06--for: LHZP-1052 Bảng con jvxe được sinh ra, khi lưu nếu Năm, Năm-tháng, Tuần, Quý có một mục chưa nhập giá trị thì sẽ báo lỗi
           const dateValue = _mom && dayjs(_mom).isValid() ? dayjs(_mom).format(dateFormat.value) : null;
@@ -77,7 +77,7 @@
     enhanced: {
       aopEvents: {
       },
-      // Giải thích logic mã: 【QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
+      // Giải thích logic mã: [QQYUN-9205] Quan hệ một-nhiều(jVxetableComponentdate)Hỗ trợ năm, năm-tháng, năm-quý, năm-tuần
       translate: {
         enabled: true,
         handler(value, ctx) {

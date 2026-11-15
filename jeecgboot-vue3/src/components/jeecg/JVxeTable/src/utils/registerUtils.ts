@@ -52,7 +52,7 @@ export async function registerAsyncComponent(type: JVxeTypes, promise: Promise<a
  * 2024-03-08
  * liaozhiyang
  * Đăng ký bất đồng bộ component tùy chỉnh vxe
- * 【QQYUN-8241】
+ * [QQYUN-8241]
  * @param type
  * @param promise
  */
@@ -90,7 +90,7 @@ export function registerOneComponent(type: JVxeTypes) {
       createCellRender(type, component);
     }
   } else {
-    throw new Error(`【registerOneComponent】"${type}"không tồn tại trong componentMap`);
+    throw new Error(`[registerOneComponent]"${type}"không tồn tại trong componentMap`);
   }
 }
 
@@ -131,12 +131,12 @@ function createCellRender(type: JVxeTypes, component: Component = <Component>com
 
 function createRender(type, component, renderType) {
   return function (renderOptions, params) {
-    // update-begin--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+    // update-begin--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
     // Tạo key duy nhất cho mỗi cell, tránh các cột kề nhau (giá trị giống nhau nhưng options khác nhau) bị tái sử dụng sai
     const rowId = params.row?.id ?? params.rowIndex ?? '';
     const colId = params.column?.property ?? params.column?.id ?? '';
     const cellKey = `cell-${rowId}-${colId}`;
-    // update-end--author:liaozhiyang---date:20260316---for:【QQYUN-13751] Tối ưu jVxetable
+    // update-end--author:liaozhiyang---date:20260316---for:[QQYUN-13751] Tối ưu jVxetable
     return [
       h(component, {
         key: cellKey,

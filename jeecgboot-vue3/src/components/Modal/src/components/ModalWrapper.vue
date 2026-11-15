@@ -46,7 +46,7 @@
 
       useWindowSizeFn(setModalHeight.bind(null, false));
 
-      // Giải thích logic mã: 【TV360X-145]Sau khi khôi phục popup về toàn màn hình, đóng rồi mở lại cửa sổ bị thu nhỏ
+      // Giải thích logic mã: [TV360X-145]Sau khi khôi phục popup về toàn màn hình, đóng rồi mở lại cửa sổ bị thu nhỏ
       let observer,
         recordCount: any = {};
       watch(
@@ -95,7 +95,7 @@
       });
 
       const spinStyle = computed((): CSSProperties => {
-        // Giải thích logic mã: 【QQYUN-7147] Cài đặt chiều cao của Model không có hiệu lực
+        // Giải thích logic mã: [QQYUN-7147] Cài đặt chiều cao của Model không có hiệu lực
         if (props.fullScreen) {
           return {
             height: `${unref(realHeightRef)}px`,
@@ -116,7 +116,7 @@
           } else {
             return {
               minHeight: `${props.minHeight === null ? defaultMiniHeight : props.minHeight}px`,
-              // Giải thích logic mã: 【QQYUN-7641]Component basicModal thêm thuộc tính MaxHeight
+              // Giải thích logic mã: [QQYUN-7641]Component basicModal thêm thuộc tính MaxHeight
               maxHeight: `${props.maxHeight ? Math.min(props.maxHeight, unref(availableHeightRef) || props.maxHeight) : unref(realHeightRef)}px`,
             };
           }
@@ -166,7 +166,7 @@
         if (!props.visible) return;
         const wrapperRefDom = unref(wrapperRef);
         if (!wrapperRefDom) return;
-        // Giải thích logic mã: 【QQYUN-8573]Component BasicModal khi không ở chế độ toàn màn hình thì việc lấy chiều cao tối đa bị bất thường, bất kể chiều cao nội dung có vượt quá chiều cao màn hình hay không, đều bằng chiều cao nội dung
+        // Giải thích logic mã: [QQYUN-8573]Component BasicModal khi không ở chế độ toàn màn hình thì việc lấy chiều cao tối đa bị bất thường, bất kể chiều cao nội dung có vượt quá chiều cao màn hình hay không, đều bằng chiều cao nội dung
         const bodyDom = wrapperRefDom.$el.parentElement?.parentElement?.parentElement;
         if (!bodyDom) return;
         // bodyDom.style.padding = '0';
@@ -201,7 +201,7 @@
           } else {
             realHeightRef.value = props.height ? props.height : realHeight > maxHeight ? maxHeight : realHeight;
           }
-          // Giải thích logic mã: 【QQYUN-9035]basicModal không đặt maxHeight hoặc height sẽ luôn thực thi setModalHeight, cần hủy kịp thờiMutationObserver
+          // Giải thích logic mã: [QQYUN-9035]basicModal không đặt maxHeight hoặc height sẽ luôn thực thi setModalHeight, cần hủy kịp thờiMutationObserver
           if (source == 'muob') {
             callBack(realHeightRef.value);
           }

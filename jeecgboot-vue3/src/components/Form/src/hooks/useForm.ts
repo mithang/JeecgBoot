@@ -88,7 +88,7 @@ export function useForm(props?: Props): UseFormReturnType {
       if(values){
         Object.keys(values).map(key=>{
           if (values[key] instanceof Array) {
-            // Giải thích logic mã: 【issues/4330] Kiểm tra nếu là mảng đối tượng thì không nối
+            // Giải thích logic mã: [issues/4330] Kiểm tra nếu là mảng đối tượng thì không nối
             let isObject = typeof (values[key][0] || '') === 'object';
             if (!isObject) {
               values[key] = values[key].join(',');

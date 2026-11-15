@@ -30,13 +30,13 @@ export function handleRangeTimeValue(props, values) {
       continue;
     }
 
-    // 【issues/I53G9Y] Component khoảng ngày có thể là chuỗi
+    // [issues/I53G9Y] Component khoảng ngày có thể là chuỗi
     let timeValue = values[field];
     if (!Array.isArray(timeValue)) {
       timeValue = timeValue.split(',');
     }
     const [startTime, endTime]: string[] = timeValue;
-    // Giải thích logic mã: 【issues/7216]Khi giá trị của component RangePicker cho phép bắt đầu/Khi kết thúc để trống,Xử lý bất thường của fieldMapToTime trong biểu mẫu---
+    // Giải thích logic mã: [issues/7216]Khi giá trị của component RangePicker cho phép bắt đầu/Khi kết thúc để trống,Xử lý bất thường của fieldMapToTime trong biểu mẫu---
     startTime && (values[startTimeKey] = dateUtil(startTime).format(format));
     endTime && (values[endTimeKey] = dateUtil(endTime).format(format));
     Reflect.deleteProperty(values, field);

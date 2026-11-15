@@ -15,6 +15,6 @@ export { componentMap };
  */
 export function clearComponent() {
   componentMap.clear();
-  // Giải thích logic mã: 【issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
+  // Giải thích logic mã: [issues/860] Mã một-nhiều được tạo, sau khi cập nhật nóng nhấn thêm mới bị kẹt[Tạm thời xử lý trước]
   import.meta.env.DEV && (window[JVxeComponents] = componentMap);
 }

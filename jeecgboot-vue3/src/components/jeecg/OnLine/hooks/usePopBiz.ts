@@ -13,7 +13,7 @@ import {replaceUserInfoByExpression} from "@/utils/common/compUtils";
 import { isString } from '/@/utils/is';
 
 export function usePopBiz(ob, tableRef?) {
-  // Giải thích logic mã: 【issues/675] Dữ liệu popup của trường bảng con không cập nhật
+  // Giải thích logic mã: [issues/675] Dữ liệu popup của trường bảng con không cập nhật
   let props: any;
   if (isRef(ob)) {
     props = ob.value;
@@ -116,13 +116,13 @@ export function usePopBiz(ob, tableRef?) {
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     // Sửa lỗi giá trị đã chọn khi chỉnh sửa chọn đơn ở trang thứ hai, khi lưu ở trang thứ nhất thì lưu không được
     const prevRows = [...selectRows.value];
-    // Giải thích logic mã: 【QQYUN-7514] hiển thị radio khi popup chọn đơnradio
+    // Giải thích logic mã: [QQYUN-7514] hiển thị radio khi popup chọn đơnradio
     if (!props.multi) {
       selectRows.value = [];
       checkedKeys.value = [];
       // selectedRowKeys = [selectedRowKeys[selectedRowKeys.length - 1]];
     }
-    // Giải thích logic mã: 【QQYUN-4263] vấn đề xuất khi chọn qua nhiều trang
+    // Giải thích logic mã: [QQYUN-4263] vấn đề xuất khi chọn qua nhiều trang
     if (!selectedRowKeys || selectedRowKeys.length == 0) {
       selectRows.value = [];
       checkedKeys.value = [];
@@ -142,9 +142,9 @@ export function usePopBiz(ob, tableRef?) {
         selectedRowKeys.forEach((key) => {
           if (!beforeRowKeys.find((item) => item === key)) {
             // Đó chính là dòng mới được chọn thêm
-            // update-begin--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
+            // update-begin--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
             const row = getRowByKey(key) || prevRows.find((item) => combineRowKey(item) === key);
-            // update-end--author:liaozhiyang---date:20261029---for：【LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
+            // update-end--author:liaozhiyang---date:20261029---for:[LHZP-3] Khi chỉnh sửa popup, popup hiển thị lại phần đã tick
             row && append.push(row);
           }
         });
@@ -179,7 +179,7 @@ export function usePopBiz(ob, tableRef?) {
   function combineRowKey(record) {
     let res = record?.id || '';
     if (props?.rowkey) {
-      // Giải thích logic mã: 【issues/3656] Hiển thị lại popupdict
+      // Giải thích logic mã: [issues/3656] Hiển thị lại popupdict
       res = record[props.rowkey];
     } else {
       Object.keys(record).forEach((key) => {
@@ -216,7 +216,7 @@ export function usePopBiz(ob, tableRef?) {
             currColumns[a].sortOrder = unref(iSorter).order === 'asc' ? 'ascend' : 'descend';
           }
         }
-        // Giải thích logic mã: 【issues/946] Độ rộng cột popup và độ rộng cột báo cáo online đọc cấu hình
+        // Giải thích logic mã: [issues/946] Độ rộng cột popup và độ rộng cột báo cáo online đọc cấu hình
         currColumns.forEach((item) => {
           if (item.fieldWidth != null) {
             if (isString(item.fieldWidth) && item.fieldWidth.trim().length == 0) return;
@@ -232,7 +232,7 @@ export function usePopBiz(ob, tableRef?) {
             width: 60,
             align: 'center',
             customRender: function ({ text }) {
-              // Giải thích logic mã: 【QQYUN-7584] Khi popup có tổng, cột số thứ tự sẽ xuất hiệnNaN
+              // Giải thích logic mã: [QQYUN-7584] Khi popup có tổng, cột số thứ tự sẽ xuất hiệnNaN
               if (text == undefined) {
                 return '';
               } else {
@@ -259,14 +259,14 @@ export function usePopBiz(ob, tableRef?) {
     if (query) {
       url = url + query
     }
-    // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1296]Khi thanh địa chỉ có tham số thì yêu cầu đầu tiên mang theo luôn, tránh kích hoạt thêm hai yêu cầu nữa
+    // update-begin--author:liaozhiyang---date:20260804---for:[LHZP-1296]Khi thanh địa chỉ có tham số thì yêu cầu đầu tiên mang theo luôn, tránh kích hoạt thêm hai yêu cầu nữa
     // Trước lần yêu cầu đầu tiên, hợp nhất trước các tham số trên thanh địa chỉ để đảm bảo nhất quán với điều kiện tìm kiếm sau đó
     if (props.routeQuery && Object.keys(props.routeQuery).length > 0) {
       queryParam.value = Object.assign({}, queryParam.value, props.routeQuery);
     }
     let params = getQueryParams();
     params['onlRepUrlParamStr'] = getUrlParamString();
-    // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1296]Khi thanh địa chỉ có tham số thì yêu cầu đầu tiên mang theo luôn, tránh kích hoạt thêm hai yêu cầu nữa
+    // update-end--author:liaozhiyang---date:20260804---for:[LHZP-1296]Khi thanh địa chỉ có tham số thì yêu cầu đầu tiên mang theo luôn, tránh kích hoạt thêm hai yêu cầu nữa
     //Cachekey
     let groupIdKey = props.groupId ? `${props.groupId}${url}${JSON.stringify(params)}` : '';
     httpGroupRequest(() => defHttp.get({ url, params }, { isTransformResponse: false, successMessageMode: 'none' }), groupIdKey).then((res) => {
@@ -279,7 +279,7 @@ export function usePopBiz(ob, tableRef?) {
         const fieldHrefSlotKeysMap = {};
         fieldHrefSlots.forEach((item) => (fieldHrefSlotKeysMap[item.slotName] = item));
         let currColumns: any = handleColumnHrefAndDict(metaColumnList, fieldHrefSlotKeysMap);
-        // Giải thích logic mã: 【issues/946] Độ rộng cột popup và độ rộng cột báo cáo online đọc cấu hình
+        // Giải thích logic mã: [issues/946] Độ rộng cột popup và độ rộng cột báo cáo online đọc cấu hình
         currColumns.forEach((item) => {
           if (isString(item.fieldWidth) && item.fieldWidth.trim().length == 0) return;
           if (item.fieldWidth != null) {
@@ -309,7 +309,7 @@ export function usePopBiz(ob, tableRef?) {
         columns.value = [...currColumns];
         initQueryInfo(res.result.data);
       } else {
-        // Giải thích logic mã: VUEN-583【vue3】JeecgBootException: sqlKiểm chứng danh sách đen chưa đạt,Vui lòng liên hệ quản trị viên!,Giao diện không hiển thị nhắc nhở
+        // Giải thích logic mã: VUEN-583[vue3]JeecgBootException: sqlKiểm chứng danh sách đen chưa đạt,Vui lòng liên hệ quản trị viên!,Giao diện không hiển thị nhắc nhở
         createMessage.warning(res.message);
       }
     });
@@ -403,7 +403,7 @@ export function usePopBiz(ob, tableRef?) {
       if (column.isTotal === '1') {
         arr.push(column.dataIndex!);
       }
-        // 【VUEN-1569] [Báo cáo online] Tổng không có hiệu lực
+        // [VUEN-1569] [Báo cáo online] Tổng không có hiệu lực
       if (column.children && column.children.length > 0) {
         let subArray = getNeedSumColumns(column.children);
         if (subArray.length > 0) {
@@ -539,7 +539,7 @@ export function usePopBiz(ob, tableRef?) {
               return getToken()
             }
 
-            // Giải thích logic mã: 【QQYUN-6390]Thay eval bằng new Function, khắc phục cảnh báo build
+            // Giải thích logic mã: [QQYUN-6390]Thay eval bằng new Function, khắc phục cảnh báo build
             return _eval(s0);
           } catch (e) {
             console.error(e);
@@ -565,7 +565,7 @@ export function usePopBiz(ob, tableRef?) {
     const { handleExportXls } = useMethods();
     let url = `${configUrl.export}${cgRpConfigId.value}`;
     let params = getQueryParams(); //Điều kiện tìm kiếm
-    // 【VUEN-1568] Nếu đã chọn một số dòng, thì chỉ xuất các dòng đã chọn
+    // [VUEN-1568] Nếu đã chọn một số dòng, thì chỉ xuất các dòng đã chọn
     let keys = unref(checkedKeys);
     if (keys.length > 0) {
       keys = keys
@@ -659,7 +659,7 @@ export function usePopBiz(ob, tableRef?) {
     params['onlRepUrlParamStr'] = getUrlParamString();
     console.log('params', params);
     loading.value = true;
-    // Giải thích logic mã: 【TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
+    // Giải thích logic mã: [TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
     let url = `${configUrl.getColumnsAndData}${unref(cgRpConfigId)}`;
     const {query} = handleCodeParams()
     if (query) {
@@ -668,10 +668,10 @@ export function usePopBiz(ob, tableRef?) {
     //Cachekey
     let groupIdKey = props.groupId ? `${props.groupId}${url}${JSON.stringify(params)}` : '';
     httpGroupRequest(() => defHttp.get({ url, params }, { isTransformResponse: false, successMessageMode: 'none' }), groupIdKey).then((res) => {
-      // Giải thích logic mã: 【TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
+      // Giải thích logic mã: [TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
       res.result.dictOptions && initDictOptionData(res.result.dictOptions);
       loading.value = false;
-      // Giải thích logic mã: 【TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
+      // Giải thích logic mã: [TV360X-578]Dịch SQL báo cáo online, trang thứ hai không lật trang dữ liệu
       let data = res.result.data;
       console.log('Thông tin bảng:', data);
       setDataSource(data);
@@ -759,7 +759,7 @@ export function usePopBiz(ob, tableRef?) {
     if (props.param) {
       Object.keys(props.param).map((key) => {
         let str = props.param[key];
-        //【issues/8426] Giải quyết component JPopup truyền tham số không nhận được
+        //[issues/8426] Giải quyết component JPopup truyền tham số không nhận được
         if (key in queryParam.value) {
           if (str && str.startsWith("'") && str.endsWith("'")) {
             str = str.substring(1, str.length - 1);
@@ -805,7 +805,7 @@ export function usePopBiz(ob, tableRef?) {
    */
   function clickThenCheck(record) {
     if (clickThenCheckFlag === true) {
-      // Giải thích logic mã: 【QQYUN-7514] hiển thị radio khi popup chọn đơnradio
+      // Giải thích logic mã: [QQYUN-7514] hiển thị radio khi popup chọn đơnradio
       if (!props.multi) {
         selectRows.value = [];
         checkedKeys.value = [];
@@ -830,7 +830,7 @@ export function usePopBiz(ob, tableRef?) {
           //selectRows.value.splice(rowKey_index, 1);
         }
       }
-      // Giải thích logic mã: 【issues/5357] nhấp vào hàng để chọn
+      // Giải thích logic mã: [issues/5357] nhấp vào hàng để chọn
       tableRef.value.setSelectedRowKeys([...checkedKeys.value]);
     }
   }

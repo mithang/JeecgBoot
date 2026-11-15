@@ -45,7 +45,7 @@ export async function registerJVxeTable(app: App) {
 function preventClosingPopUp(this: any, params) {
   // Lấy tăng cường component
   let col = params.column.params;
-  // Giải thích logic mã: 【issues/8178] sử dụng gốcvxe-tableComponent ở chế độ chỉnh sửa bị mất focus sẽ báo lỗi
+  // Giải thích logic mã: [issues/8178] sử dụng gốcvxe-tableComponent ở chế độ chỉnh sửa bị mất focus sẽ báo lỗi
   if (col === undefined) {
     // Cho biết đang sử dụng thuần gốcvxe-table
     return;

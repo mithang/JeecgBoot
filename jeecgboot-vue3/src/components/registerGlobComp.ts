@@ -24,14 +24,14 @@ export function registerGlobComp(app: App) {
   //Dashboard phụ thuộc vào Tinymce, cần tải trước (không còn cách nào tải theo nhu cầu nữa)
   // app.component(Editor.name, Editor);
   // Giải thích logic mã: TinymceTải không đồng bộ
-  // update-begin--author:liaozhiyang---date:20260227---for:【QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
+  // update-begin--author:liaozhiyang---date:20260227---for:[QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
   app.component(
     'Tinymce',
     createAsyncComponent(() => import('./Tinymce/src/Editor.vue'), {
       loading: true,
     })
   );
-  // update-end--author:liaozhiyang---date:20260227---for:【QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
+  // update-end--author:liaozhiyang---date:20260227---for:[QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
   app
     .use(registerOnlineComp)
     .use(Button)

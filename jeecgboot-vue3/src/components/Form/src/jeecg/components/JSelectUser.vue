@@ -101,7 +101,7 @@
       //   }
       // });
 
-      // Giải thích logic mã: 【QQYUN-5685] 5. Nhân viên đã nghỉ việc có thể chọn chính mình------------
+      // Giải thích logic mã: [QQYUN-5685] 5. Nhân viên đã nghỉ việc có thể chọn chính mình------------
       const excludeUserIdList = ref<any>([]);
       
       /**
@@ -131,7 +131,7 @@
           selectValues.value = value.split(',');
           tempSave = value.split(',');
         } else {
-          // 【VUEN-857] Tương thích mảng (vấn đề cách dùng chỉnh sửa dòng)
+          // [VUEN-857] Tương thích mảng (vấn đề cách dùng chỉnh sửa dòng)
           selectValues.value = value;
           tempSave = cloneDeep(value);
         }
@@ -151,7 +151,7 @@
       // Component cha sau khi updateSchema thay đổi props v-bind="getBindValue" Sẽ không tính lại
       // Sau khi đổi thành computed,props/attrs Bất kỳ thay đổi nào cũng sẽ hợp nhất lại rồi truyền tiếp cho UserSelectModal
       const getBindValue = computed(() => Object.assign({}, unref(props), unref(attrs)));
-      // Giải thích logic mã: 【QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
+      // Giải thích logic mã: [QQYUN-9366]Component chọn người dùng khi hủy và đóng sẽ mang dữ liệu đã chọn vào
       const handleClose = () => {
         if (tempSave.length) {
           selectValues.value = cloneDeep(tempSave);
@@ -187,7 +187,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
+  // Giải thích logic mã: [QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JselectUser {
     > .ant-form-item {
       display: none;

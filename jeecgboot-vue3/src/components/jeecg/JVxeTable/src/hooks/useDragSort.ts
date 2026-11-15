@@ -19,7 +19,7 @@ export function useDragSort(props: JVxeTableProps, methods: JVxeTableMethods) {
         sortable2.destroy();
       }
     });
-    // update-begin--author:liaozhiyang---date:20260415---for:【QQYUN-15134]Sửa lỗi jvxetable dùng fixed cố định thì không kéo thả được
+    // update-begin--author:liaozhiyang---date:20260415---for:[QQYUN-15134]Sửa lỗi jvxetable dùng fixed cố định thì không kéo thả được
     // Giải thích logic mã: Lắng nghe sự thay đổi của maxHeight (popup toàn màn hình↔Kích hoạt khi chuyển đổi thu nhỏ).
     // Giải pháp: khi maxHeight thay đổi thì hủy Sortable cũ và khởi tạo lại, để nó gắn vào tbody chính xác.
     watch(
@@ -73,7 +73,7 @@ export function useDragSort(props: JVxeTableProps, methods: JVxeTableMethods) {
 
       sortable2 = Sortable.create(dom as HTMLElement, {
         handle: '.drag-btn',
-        // Giải thích logic mã: 【QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
+        // Giải thích logic mã: [QQYUN-8785]id vị trí cột của biểu mẫu online chưa được giới hạn, kéo cột khác lên trên cột id, khi đồng bộ cơ sở dữ liệu sẽ báo lỗi
         filter: '.not-allow-drag',
         draggable: '.allow-drag',
         direction: 'vertical',
@@ -107,7 +107,7 @@ export function useDragSort(props: JVxeTableProps, methods: JVxeTableMethods) {
           clearRowClass('j-vxe-drag-source');
           clearRowClass('j-vxe-drag-hover-top');
           clearRowClass('j-vxe-drag-hover-bottom');
-          // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
+          // -update-begin--author:liaozhiyang---date:20240619---for:[TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
           const isRealEnabledVirtual = isEnabledVirtualYScroll(props, xTable);
           let newIndex: number;
           let oldIndex: number;
@@ -132,7 +132,7 @@ export function useDragSort(props: JVxeTableProps, methods: JVxeTableMethods) {
             newIndex = hoverIndex;
             if (oldIndex === newIndex) return;
           }
-          // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
+          // -update-end--author:liaozhiyang---date:20240619---for:[TV360X-585] Kéo trường thì cuộn ảo không hoạt động tốt
 
           nextTick(() => {
             methods.doSort(oldIndex, newIndex);
@@ -141,6 +141,6 @@ export function useDragSort(props: JVxeTableProps, methods: JVxeTableMethods) {
         },
       });
     }
-    // update-begin--author:liaozhiyang---date:20260415---for:【QQYUN-15134]Sửa lỗi jvxetable dùng fixed cố định thì không kéo thả được
+    // update-begin--author:liaozhiyang---date:20260415---for:[QQYUN-15134]Sửa lỗi jvxetable dùng fixed cố định thì không kéo thả được
   }
 }

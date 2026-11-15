@@ -96,7 +96,7 @@
         },
         { flush: 'post' }
       );
-      // Giải thích logic mã: 【QQYUN-8922]Điều chỉnh màu chữ thanh điều hướng bên trái để phân biệt chế độ màu và chế độ tối
+      // Giải thích logic mã: [QQYUN-8922]Điều chỉnh màu chữ thanh điều hướng bên trái để phân biệt chế độ màu và chế độ tối
       watch(
         () => appStore.getProjectConfig.menuSetting,
         (menuSetting) => {
@@ -130,14 +130,14 @@
 
       async function handleSelect(key: string) {
         if (isUrl(key)) {
-          // Giải thích logic mã: 【VUEN-656]Cấu hình URL ngoài không mở được, nguyên nhân là có#số, cần thay thế
+          // Giải thích logic mã: [VUEN-656]Cấu hình URL ngoài không mở được, nguyên nhân là có#số, cần thay thế
           let url = key.replace(URL_HASH_TAB, '#');
           window.open(url)
           //openWindow(url);
-          // Giải thích logic mã: 【VUEN-656]Cấu hình URL ngoài không mở được, nguyên nhân là có#số, cần thay thế
+          // Giải thích logic mã: [VUEN-656]Cấu hình URL ngoài không mở được, nguyên nhân là có#số, cần thay thế
           return;
         }
-        // Giải thích logic mã: 【QQYUN-6366] Route nội bộ cũng có thể hỗ trợ mở bằng tab trình duyệt mới
+        // Giải thích logic mã: [QQYUN-6366] Route nội bộ cũng có thể hỗ trợ mở bằng tab trình duyệt mới
         const findItem = getMatchingMenu(props.items, key);
         if (findItem?.internalOrExternal == true) {
           window.open(location.origin + key);

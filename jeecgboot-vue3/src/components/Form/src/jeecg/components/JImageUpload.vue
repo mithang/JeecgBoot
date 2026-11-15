@@ -134,7 +134,7 @@
       watch(
         () => props.value,
         (val, prevCount) => {
-         // Giải thích logic mã: 【issues/556]Component JImageUpload gán giá trị ban đầu cho value nhưng không hiển thị hình ảnh------------
+         // Giải thích logic mã: [issues/556]Component JImageUpload gán giá trị ban đầu cho value nhưng không hiển thị hình ảnh------------
             if (val && val instanceof Array) {
             val = val.join(',');
           }
@@ -190,7 +190,7 @@
         if (file.status === 'error') {
           createMessage.error(`${file.name} Tải lên thất bại.`);
         }
-        // Giải thích logic mã: 【TV360X-1640] Tối ưu hiển thị khi kích thước hình ảnh tải lên vượt giới hạn
+        // Giải thích logic mã: [TV360X-1640] Tối ưu hiển thị khi kích thước hình ảnh tải lên vượt giới hạn
         if (file.status === 'done' && file.response.success === false) {
           const failIndex = uploadFileList.value.findIndex((item) => item.uid === file.uid);
           if (failIndex != -1) {

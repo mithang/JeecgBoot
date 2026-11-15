@@ -58,10 +58,10 @@ componentMap.set('JImageUpload', createAsyncComponent(() => import('./jeecg/comp
 componentMap.set('JDictSelectTag', createAsyncComponent(() => import('./jeecg/components/JDictSelectTag.vue')));
 componentMap.set('JSelectDept', createAsyncComponent(() => import('./jeecg/components/JSelectDept.vue')));
 componentMap.set('JAreaSelect', createAsyncComponent(() => import('./jeecg/components/JAreaSelect.vue')));
-// update-begin--author:liaozhiyang---date:20260227---for:【QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
+// update-begin--author:liaozhiyang---date:20260227---for:[QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
 componentMap.set('JLinkTableCard', createAsyncComponent(() => import('./jeecg/components/JLinkTableCard/JLinkTableCard.vue'), { loading: true }));
 componentMap.set('JEditor', createAsyncComponent(() => import('./jeecg/components/JEditor.vue')));
-// update-end--author:liaozhiyang---date:20260227---for:【QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
+// update-end--author:liaozhiyang---date:20260227---for:[QQYUN-14751]tinymce rich text, JEasyCron, JLinkTableCard tải bất đồng bộ
 componentMap.set('JMarkdownEditor', createAsyncComponent(() => import('./jeecg/components/JMarkdownEditor.vue')));
 componentMap.set('JSelectInput', createAsyncComponent(() => import('./jeecg/components/JSelectInput.vue')));
 componentMap.set('JCodeEditor', createAsyncComponent(() => import('./jeecg/components/JCodeEditor.vue')));
@@ -69,7 +69,7 @@ componentMap.set('JCategorySelect', createAsyncComponent(() => import('./jeecg/c
 componentMap.set('JSelectMultiple', createAsyncComponent(() => import('./jeecg/components/JSelectMultiple.vue')));
 componentMap.set('JSelectSingle', createAsyncComponent(() => import('./jeecg/components/JSelectSingle.vue')));
 componentMap.set('JPopup', createAsyncComponent(() => import('./jeecg/components/JPopup.vue')));
-// Giải thích logic mã: 【QQYUN-7961] Từ điển popupDict
+// Giải thích logic mã: [QQYUN-7961] Từ điển popupDict
 componentMap.set('JPopupDict', createAsyncComponent(() => import('./jeecg/components/JPopupDict.vue')));
 componentMap.set('JSwitch', createAsyncComponent(() => import('./jeecg/components/JSwitch.vue')));
 componentMap.set('JTreeDict', createAsyncComponent(() => import('./jeecg/components/JTreeDict.vue')));

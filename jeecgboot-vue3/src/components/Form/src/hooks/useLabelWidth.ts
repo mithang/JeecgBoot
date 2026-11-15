@@ -30,7 +30,7 @@ export function useItemLabelWidth(schemaItemRef: Ref<FormSchema>, propsRef: Ref<
 
     if (width) {
       width = isNumber(width) ? `${width}px` : width;
-      // Giải thích logic mã: 【issues/6865] Cấu hình labelWidth riêng lẻ không có hiệu lực
+      // Giải thích logic mã: [issues/6865] Cấu hình labelWidth riêng lẻ không có hiệu lực
       col = {};
     }
 

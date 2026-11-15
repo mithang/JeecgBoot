@@ -75,7 +75,7 @@
       },
       disabled: propTypes.bool,
       collapsedShowTitle: propTypes.bool,
-      // Giải thích logic mã: 【QQYUN-8927]Điều chỉnh màu chữ ở chế độ màu của menu cấp hai trong điều hướng sidebar
+      // Giải thích logic mã: [QQYUN-8927]Điều chỉnh màu chữ ở chế độ màu của menu cấp hai trong điều hướng sidebar
       isThemeBright: {
         type: Boolean,
         default: false,
@@ -133,7 +133,7 @@
       const getTheme = computed(() => rootProps.theme);
 
       const getOverlayStyle = computed((): CSSProperties => {
-        // Giải thích logic mã: 【QQYUN-8774]Điều chỉnh độ rộng menu điều hướng hỗn hợp bên hông
+        // Giải thích logic mã: [QQYUN-8774]Điều chỉnh độ rộng menu điều hướng hỗn hợp bên hông
         return {
           minWidth: '150px',
         };

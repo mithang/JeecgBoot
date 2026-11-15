@@ -60,12 +60,12 @@
       instance && emit('register', drawerInstance, instance.uid);
 
       const getMergeProps = computed((): DrawerProps => {
-        // Giải thích logic mã: 【QQYUN-8389】vue3.4Phiên bản trên gây lỗi logic ẩn footer của ngăn kéo vai trò (đổi toRaw thành cloneDeep, nếu không sự thay đổi của props sẽ không kích hoạt computed)
+        // Giải thích logic mã: [QQYUN-8389]vue3.4Phiên bản trên gây lỗi logic ẩn footer của ngăn kéo vai trò (đổi toRaw thành cloneDeep, nếu không sự thay đổi của props sẽ không kích hoạt computed)
         return { ...deepMerge(cloneDeep(props), unref(propsRef)) };
       });
 
       const getProps = computed((): DrawerProps => {
-        // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
+        // Giải thích logic mã: [QQYUN-6366]Nâng cấp lênantd4.x
         const opt = {
           placement: 'right',
           ...unref(attrs),

@@ -98,7 +98,7 @@
       const getActions = computed(() => {
         return (toRaw(props.actions) || [])
           .filter((action) => {
-            // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
+            // -update-begin--author:liaozhiyang---date:20240619---for:[TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
             const auth: any = action.auth;
             let authResult;
             if (action.auth && typeof tempActionsAuth[auth] === 'boolean') {
@@ -108,11 +108,11 @@
               action.auth && (tempActionsAuth[auth] = authResult);
             }
             return authResult && isIfShow(action);
-            // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
+            // -update-end--author:liaozhiyang---date:20240619---for:[TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
           })
           .map((action) => {
             const { popConfirm } = action;
-            // Giải thích logic mã: 【issues/951] Khi table xóa bản ghi, nút hiển thị bị lệch vị trí
+            // Giải thích logic mã: [issues/951] Khi table xóa bản ghi, nút hiển thị bị lệch vị trí
             if (popConfirm) {
               const overlayClassName = popConfirm.overlayClassName;
               popConfirm.overlayClassName = `${overlayClassName ? overlayClassName : ''} ${prefixCls}-popconfirm`;
@@ -123,7 +123,7 @@
               size: 'small',
               ...action,
               ...(popConfirm || {}),
-              // Giải thích logic mã: 【issues/936]Khi xóa ở thanh thao tác của bảng mà API thất bại, hộp xác nhận bong bóng sẽ không biến mất
+              // Giải thích logic mã: [issues/936]Khi xóa ở thanh thao tác của bảng mà API thất bại, hộp xác nhận bong bóng sẽ không biến mất
               onConfirm: handelConfirm(popConfirm?.confirm),
               onCancel: popConfirm?.cancel,
               enable: !!popConfirm,
@@ -134,7 +134,7 @@
       const getDropdownList = computed((): any[] => {
         //Lọc bỏ các mục đã ẩndropdown,Tránh xuất hiện đường phân cách thừa
         const list = (toRaw(props.dropDownActions) || []).filter((action) => {
-          // -update-begin--author:liaozhiyang---date:20240619---for：【TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
+          // -update-begin--author:liaozhiyang---date:20240619---for:[TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
           const auth: any = action.auth;
           let authResult;
           if (action.auth && typeof tempDropdownListAuth[auth] === 'boolean') {
@@ -144,22 +144,22 @@
             action.auth && (tempDropdownListAuth[auth] = authResult);
           }
           return authResult && isIfShow(action);
-          // -update-end--author:liaozhiyang---date:20240619---for：【TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
+          // -update-end--author:liaozhiyang---date:20240619---for:[TV360X-528] Danh sách đã cấu hình quyền, khi di chuột qua hàng trong danh sách đều sẽ thực thihasPermission
         });
         return list.map((action, index) => {
           const { label, popConfirm } = action;
-          // Giải thích logic mã: 【issues/951] Khi table xóa bản ghi, nút hiển thị bị lệch vị trí
+          // Giải thích logic mã: [issues/951] Khi table xóa bản ghi, nút hiển thị bị lệch vị trí
           if (popConfirm) {
             const overlayClassName = popConfirm.overlayClassName;
             popConfirm.overlayClassName = `${overlayClassName ? overlayClassName : ''} ${prefixCls}-popconfirm`;
-            // Giải thích logic mã: 【issues/7028]Sau khi bảng toàn màn hình, menu thả xuống và hộp xác nhận bong bóng trong cột thao tác không hiển thị
+            // Giải thích logic mã: [issues/7028]Sau khi bảng toàn màn hình, menu thả xuống và hộp xác nhận bong bóng trong cột thao tác không hiển thị
             if (!popConfirm.getPopupContainer) {
               popConfirm.getPopupContainer = () => {
                 return (table as any)?.wrapRef?.value ?? document.body;
               };
             }
           }
-          // Giải thích logic mã: 【issues/936]Khi xóa ở thanh thao tác của bảng mà API thất bại, hộp xác nhận bong bóng sẽ không biến mất
+          // Giải thích logic mã: [issues/936]Khi xóa ở thanh thao tác của bảng mà API thất bại, hộp xác nhận bong bóng sẽ không biến mất
           if (popConfirm) {
             popConfirm.confirm = handelConfirm(popConfirm?.confirm);
           }
@@ -223,7 +223,7 @@
         });
         isInButton && e.stopPropagation();
       }
-      // Giải thích logic mã: 【issues/7028]Sau khi bảng toàn màn hình, menu thả xuống và hộp xác nhận bong bóng trong cột thao tác không hiển thị
+      // Giải thích logic mã: [issues/7028]Sau khi bảng toàn màn hình, menu thả xuống và hộp xác nhận bong bóng trong cột thao tác không hiển thị
       const dropdownGetPopupContainer = () => {
         return (table as any)?.wrapRef?.value ?? document.body;
       };
@@ -288,13 +288,13 @@
     &-popconfirm {
       .ant-popconfirm-buttons {
         min-width: 120px;
-        // Giải thích logic mã: 【issues/1019]Hộp xác nhận popConfirm bị lỗi kiểu dáng trong quá trình chờ backend trả về (đang xử lý)
+        // Giải thích logic mã: [issues/1019]Hộp xác nhận popConfirm bị lỗi kiểu dáng trong quá trình chờ backend trả về (đang xử lý)
         display: flex;
         align-items: center;
         justify-content: center;
       }
     }
-    // Giải thích logic mã: 【QQYUN-8762] điều chỉnh thanh thao tác của tableant-dropdownKiểu
+    // Giải thích logic mã: [QQYUN-8762] điều chỉnh thanh thao tác của tableant-dropdownKiểu
     &-dropdown {
       .ant-dropdown-menu .ant-dropdown-menu-item-divider {
         margin: 2px 0;

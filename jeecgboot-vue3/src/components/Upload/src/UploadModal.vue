@@ -182,7 +182,7 @@
               item.percent = complete;
             }
           );
-          // update-begin--author:liaozhiyang---date:20260804---for：【LHZP-1385]Sửa lỗi ví dụ tải lên
+          // update-begin--author:liaozhiyang---date:20260804---for:[LHZP-1385]Sửa lỗi ví dụ tải lên
           const data = res?.data ?? res;
           const isSuccess = data && (data.success === true || data.code === 0);
           const url = data?.url || data?.result || data?.message;
@@ -191,7 +191,7 @@
           }
           item.status = UploadResultStatus.SUCCESS;
           item.responseData = { ...data, url };
-          // update-end--author:liaozhiyang---date:20260804---for：【LHZP-1385]Sửa lỗi ví dụ tải lên
+          // update-end--author:liaozhiyang---date:20260804---for:[LHZP-1385]Sửa lỗi ví dụ tải lên
           return {
             success: true,
             error: null,

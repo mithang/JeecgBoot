@@ -71,7 +71,7 @@
        */
       watch(selectValues, () => {
         if (selectValues) {
-          // Giải thích logic mã: 【QQYUN-12869]Qua component chọn người dùng theo phòng ban, ở trạng thái bắt buộc sau khi chọn người dùng rồi bấm đặt lại thì sẽ xuất hiện thông tin kiểm chứng
+          // Giải thích logic mã: [QQYUN-12869]Qua component chọn người dùng theo phòng ban, ở trạng thái bắt buộc sau khi chọn người dùng rồi bấm đặt lại thì sẽ xuất hiện thông tin kiểm chứng
           if (props.value === undefined && selectValues.value?.length == 0) {
             return;
           }

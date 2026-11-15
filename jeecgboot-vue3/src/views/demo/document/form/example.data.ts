@@ -382,11 +382,11 @@ export const schemas: FormSchema[] = [
     componentProps: {
       //Có đường nét đứt hay không
       dashed: false,
-      //Vị trí tiêu đề đường phân cách (left | right | center）
+      //Vị trí tiêu đề đường phân cách (left | right | center)
       orientation: 'center',
       //Chữ có hiển thị theo kiểu văn bản thường hay không
       plain: true,
-      //Loại ngang hay dọc (horizontal | vertical）
+      //Loại ngang hay dọc (horizontal | vertical)
       type: 'horizontal',
     },
   },

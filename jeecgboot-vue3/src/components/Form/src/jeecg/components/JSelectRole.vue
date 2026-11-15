@@ -116,7 +116,7 @@
         //emitData.value = values.join(",");
         state.value = values;
         selectValues.value = values;
-        // Giải thích logic mã: 【issues/7948]Sửa lỗi component JselectRole không hỗ trợ binding hai chiều
+        // Giải thích logic mã: [issues/7948]Sửa lỗi component JselectRole không hỗ trợ binding hai chiều
         emit('update:value', values);
       }
       const getBindValue = Object.assign({}, unref(props), unref(attrs));
@@ -136,7 +136,7 @@
   });
 </script>
 <style lang="less" scoped>
-  // Giải thích logic mã: 【QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
+  // Giải thích logic mã: [QQYUN-9260] Ở chế độ bắt buộc sẽ ảnh hưởng đến kiểu của component antd trong popup
   .JSelectRole {
     > .ant-form-item {
       display: none;

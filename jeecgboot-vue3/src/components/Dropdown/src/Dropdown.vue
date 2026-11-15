@@ -105,7 +105,7 @@
   @prefix-cls: ~'@{namespace}-basic-dropdown';
 
   .@{prefix-cls} {
-    // Giải thích logic mã: 【VUEN-180Menu dropdown "Thêm", chỉ bấm trúng chữ mới có hiệu lực, bấm vào chỗ trống thì không xảy ra gì, trải nghiệm không tốt
+    // Giải thích logic mã: [VUEN-180Menu dropdown "Thêm", chỉ bấm trúng chữ mới có hiệu lực, bấm vào chỗ trống thì không xảy ra gì, trải nghiệm không tốt
     &-menu .ant-dropdown-menu-item.is-pop-confirm {
       padding: 0;
 

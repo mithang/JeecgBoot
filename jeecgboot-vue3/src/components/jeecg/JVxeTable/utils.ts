@@ -36,11 +36,11 @@ export function dispatchEvent(options: dispatchEventOptions) {
     if (row && column) {
       let selector = `table.vxe-table--body tbody tr[rowid='${row.id}'] td[colid='${column.id}']`;
       let cellDom = instance!.vnode?.el?.querySelector(selector);
-      // -update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6390]Khắc phục cảnh báo khi thêm trường mới trong online (tương thích)
+      // -update-begin--author:liaozhiyang---date:20230830---for:[QQYUN-6390]Khắc phục cảnh báo khi thêm trường mới trong online (tương thích)
       if (!cellDom) {
         cellDom = instance!.$el?.querySelector(selector);
       }
-      // -update-begin--author:liaozhiyang---date:20230830---for：【QQYUN-6390]Khắc phục cảnh báo khi thêm trường mới trong online (tương thích)
+      // -update-begin--author:liaozhiyang---date:20230830---for:[QQYUN-6390]Khắc phục cảnh báo khi thêm trường mới trong online (tương thích)
       if (cellDom) {
         paths.unshift(cellDom);
       }

@@ -47,7 +47,7 @@ export function useCustomSelection(
 
   // Làm phẳng dữ liệu, dữ liệu children cũng sẽ được đặt cùng nhau
   const flattedData = computed(() => {
-    // Giải thích logic mã: 【QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
+    // Giải thích logic mã: [QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
     const data = flattenData(tableData.value, childrenColumnName.value);
     const rowSelection = propsRef.value.rowSelection;
     if (rowSelection?.type === 'checkbox' && rowSelection.getCheckboxProps) {
@@ -121,16 +121,16 @@ export function useCustomSelection(
       onSelectAll,
       isRadio: isRadio.value,
       selectedLength: flattedData.value.filter((data) => selectedKeys.value.includes(getRecordKey(data))).length,
-      // 【TV360X-53] Khi trống sẽ báo lỗi, tăng cường kiểm tra
+      // [TV360X-53] Khi trống sẽ báo lỗi, tăng cường kiểm tra
       pageSize: flattedData.value?.length ?? 0,
-      // 【QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
+      // [QQYUN-6774] Giải quyết vấn đề sau khi vô hiệu hóa checkbox thì chọn tất cả vẫn có thể tích chọn
       disabled: flattedData.value.length == 0,
       hideSelectAll: unref(propsRef)?.rowSelection?.hideSelectAll,
     };
   });
 
   // Lắng nghe dữ liệu được truyền vàoselectedRowKeys
-  // Giải thích logic mã: 【QQYUN-8390] Component nhân sự phòng ban bấm đặt lại chưa xóa (selectedRowKeys.value=[], watch không lắng nghe được thì thêm deep)
+  // Giải thích logic mã: [QQYUN-8390] Component nhân sự phòng ban bấm đặt lại chưa xóa (selectedRowKeys.value=[], watch không lắng nghe được thì thêm deep)
   watch(
     () => unref(propsRef)?.rowSelection?.selectedRowKeys,
     (val: string[]) => {
@@ -175,7 +175,7 @@ export function useCustomSelection(
         return false;
       }
     } else {
-      // Giải thích logic mã: 【QQYUN-9123]popupdict mở popup, mở chương trình chạy
+      // Giải thích logic mã: [QQYUN-9123]popupdict mở popup, mở chương trình chạy
       if (isEqual(a, b)) {
         return true;
       }
@@ -231,21 +231,21 @@ export function useCustomSelection(
   function updateRowHeight() {
     const el = bodyEl.value?.querySelector('tbody.ant-table-tbody tr.ant-table-row') as HTMLDivElement;
     if (el) {
-      // Giải thích logic mã: 【issues/7442]basicTable khi chuyển từ mặc định sang rộng rãi/thu gọn thì ô chọn nhiều hiển thị bất thường
+      // Giải thích logic mã: [issues/7442]basicTable khi chuyển từ mặc định sang rộng rãi/thu gọn thì ô chọn nhiều hiển thị bất thường
       nextTick(() => rowHeight.value = el.offsetHeight);
     }
   }
 
   // Chọn tất cả
   function onSelectAll(checked: boolean, flag = 'currentPage') {
-    // Giải thích logic mã: 【issues/5577]Khi component BasicTable chọn tất cả và hủy chọn tất cả thì không kích hoạt sự kiện onSelectAll
+    // Giải thích logic mã: [issues/5577]Khi component BasicTable chọn tất cả và hủy chọn tất cả thì không kích hoạt sự kiện onSelectAll
     if (unref(propsRef)?.rowSelection?.onSelectAll) {
       allSelected = checked;
       changeRows = getInvertRows(selectedRows.value, checked, flag);
     }
     // Bỏ chọn tất cả
     if (!checked) {
-      // Giải thích logic mã: 【issues/6958]Hủy không kích hoạt sự kiện onSelectAll, sau khi chọn trên nhiều trang thì changeRows rỗng
+      // Giải thích logic mã: [issues/6958]Hủy không kích hoạt sự kiện onSelectAll, sau khi chọn trên nhiều trang thì changeRows rỗng
       if (flag === 'allPage') {
         selectedKeys.value = [];
         selectedRows.value = [];
@@ -317,7 +317,7 @@ export function useCustomSelection(
           } else {
             setTimeout(() => {
               emitChange('all');
-              // Giải thích logic mã: 【QQYUN-5687] Chọn hàng loạt, sau khi nhắc thành công lại xuất hiện thêm một nhắc nhở
+              // Giải thích logic mã: [QQYUN-5687] Chọn hàng loạt, sau khi nhắc thành công lại xuất hiện thêm một nhắc nhở
               setTimeout(() =>resolve(), 0);
             }, 500);
           }
@@ -331,7 +331,7 @@ export function useCustomSelection(
     onSelectChild(record, checked);
     updateSelected(record, checked);
     onSelectParent(record, checked);
-    // Giải thích logic mã: 【issues/8690]rowSelection của BasicTable thêm mới phương thức onSelect
+    // Giải thích logic mã: [issues/8690]rowSelection của BasicTable thêm mới phương thức onSelect
     propsRef.value.rowSelection?.onSelect?.(toRaw(record), checked, toRaw(selectedRows.value));
     emitChange();
   }
@@ -355,7 +355,7 @@ export function useCustomSelection(
         selectedRows.value.splice(index, 1);
       }
     }
-    // Giải thích logic mã: 【issues/7200]basicTable sau khi chọn không có kiểu đã chọn
+    // Giải thích logic mã: [issues/7200]basicTable sau khi chọn không có kiểu đã chọn
     clearTimeout(timer);
     timer = setTimeout(() => {
       selectedKeys.value = [...selectedKeys.value];
@@ -377,7 +377,7 @@ export function useCustomSelection(
       keys: getSelectRowKeys(),
       rows: getSelectRows(),
     });
-    // Giải thích logic mã: 【issues/5577]Khi component BasicTable chọn tất cả và hủy chọn tất cả thì không kích hoạt sự kiện onSelectAll
+    // Giải thích logic mã: [issues/5577]Khi component BasicTable chọn tất cả và hủy chọn tất cả thì không kích hoạt sự kiện onSelectAll
     if (mode == 'all') {
       const rowSelection = unref(propsRef)?.rowSelection;
       if (rowSelection?.onSelectAll) {
@@ -406,7 +406,7 @@ export function useCustomSelection(
    * 2024-09-24
    * liaozhiyang
    * Khi liên kết theo cấp bậc, chọn dữ liệu cấp trên
-   * 【issues/7217]Đặt checkStrictly cho bảng cây của BasicTable không có hiệu lực
+   * [issues/7217]Đặt checkStrictly cho bảng cây của BasicTable không có hiệu lực
    * */
   function onSelectParent(record, checked) {
     if (unref(propsRef)?.isTreeTable && unref(propsRef)?.rowSelection?.checkStrictly === false && !isRadio.value) {
@@ -483,7 +483,7 @@ export function useCustomSelection(
   // Kết xuất tùy chỉnhBody
   function bodyCustomRender(params) {
     const { index } = params;
-    // Giải thích logic mã: 【issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái
+    // Giải thích logic mã: [issues/776] hiển thị 100 dòng//trang, vấn đề hộp kiểm chỉ hiển thị được 3 cái
     if (propsRef.value.canResize && !recordIsShow(index)) {
       return '';
     }
@@ -516,7 +516,7 @@ export function useCustomSelection(
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
-        // Giải thích logic mã: 【QQYUN-8694] BasicTable đang được dùngclickToRowSelect=truedưới,selection-change Sự kiện sẽ kích hoạt nhiều lần
+        // Giải thích logic mã: [QQYUN-8694] BasicTable đang được dùngclickToRowSelect=truedưới,selection-change Sự kiện sẽ kích hoạt nhiều lần
         onClick={(e) => e.stopPropagation()}
       />
     );
@@ -541,7 +541,7 @@ export function useCustomSelection(
         key={'j-select__' + recordKey}
         checked={selectedKeys.value.includes(recordKey)}
         onUpdate:checked={(checked) => onSelect(record, checked)}
-        // Giải thích logic mã: 【QQYUN-8694] BasicTable đang được dùngclickToRowSelect=truedưới,selection-change Sự kiện sẽ kích hoạt nhiều lần
+        // Giải thích logic mã: [QQYUN-8694] BasicTable đang được dùngclickToRowSelect=truedưới,selection-change Sự kiện sẽ kích hoạt nhiều lần
         onClick={(e) => e.stopPropagation()}
       />
     );
@@ -549,13 +549,13 @@ export function useCustomSelection(
 
   // Tạo cột chọn
   function handleCustomSelectColumn(columns: BasicColumn[]) {
-    // Giải thích logic mã: 【issues/757]Cấu hình cố định cột chọn của bảng JPopup không có hiệu lực
+    // Giải thích logic mã: [issues/757]Cấu hình cố định cột chọn của bảng JPopup không có hiệu lực
     const rowSelection = propsRef.value.rowSelection;
     if (!rowSelection) {
       return;
     }
     const isFixedLeft = rowSelection.fixed || columns.some((item) => item.fixed === 'left');
-    // Giải thích logic mã: 【issues/757]Cấu hình cố định cột chọn của bảng JPopup không có hiệu lực
+    // Giải thích logic mã: [issues/757]Cấu hình cố định cột chọn của bảng JPopup không có hiệu lực
     columns.unshift({
       title: 'Chọn cột',
       flag: 'CHECKBOX',
@@ -600,7 +600,7 @@ export function useCustomSelection(
       const found = allSelectedRows.find((item) => getRecordKey(item) === key);
       found && trueSelectedRows.push(found);
     });
-    // Giải thích logic mã: 【issues/828] khắc phục sự cố treo
+    // Giải thích logic mã: [issues/828] khắc phục sự cố treo
     if (!(isSomeRowKeys && equal(selectedRows.value, trueSelectedRows))) {
       selectedRows.value = trueSelectedRows;
       emitChange();
@@ -673,7 +673,7 @@ export function useCustomSelection(
     }
   }
 
-  // 【QQYUN-5837] tính toán động expandIconColumnIndex
+  // [QQYUN-5837] tính toán động expandIconColumnIndex
   const getExpandIconColumnIndex = computed(() => {
     const { expandIconColumnIndex } = unref(propsRef);
     // Nếu chưa đặt cột chọn thì giữ nguyên

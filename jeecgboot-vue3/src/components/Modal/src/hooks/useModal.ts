@@ -63,7 +63,7 @@ export function useModal(): UseModalReturnType {
     },
 
     openModal: <T = any>(visible = true, data?: T, openOnSet = true): void => {
-      // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
+      // Giải thích logic mã: [QQYUN-6366]Nâng cấp lênantd4.x
       getInstance()?.setModalProps({
         open: visible,
       });
@@ -82,7 +82,7 @@ export function useModal(): UseModalReturnType {
     },
 
     closeModal: () => {
-      // Giải thích logic mã: 【QQYUN-6366]Nâng cấp lênantd4.x
+      // Giải thích logic mã: [QQYUN-6366]Nâng cấp lênantd4.x
       getInstance()?.setModalProps({ open: false });
     },
   };

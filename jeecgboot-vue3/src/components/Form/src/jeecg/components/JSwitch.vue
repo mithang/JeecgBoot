@@ -41,7 +41,7 @@
     () => props.value,
     (val) => {
       if (!props.query) {
-        // Giải thích logic mã: 【QQYUN-7473] sử dụng options[0,1], khiến công tắc không thể chuyển đổi
+        // Giải thích logic mã: [QQYUN-7473] sử dụng options[0,1], khiến công tắc không thể chuyển đổi
         if (!val && !props.options.includes(val)) {
           checked.value = false;
           emitValue(props.options[1]);

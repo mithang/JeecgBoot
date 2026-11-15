@@ -108,7 +108,7 @@ export const basicProps = {
   },
   minHeight: propTypes.number,
   maxHeight: propTypes.number,
-  // Giải thích logic mã: 【TV360X-116] Khi có nhiều trường kiểu nhúng, bảng bị lệch
+  // Giải thích logic mã: [TV360X-116] Khi có nhiều trường kiểu nhúng, bảng bị lệch
   expandColumnWidth: propTypes.number.def(48),
   // Thống nhất đặt chiều rộng tối đa của cột
   maxColumnWidth: propTypes.number,
@@ -130,7 +130,7 @@ export const basicProps = {
     type: Function as PropType<(record: TableCustomRecord<any>, index: number) => string>,
   },
   scroll: {
-    // Giải thích logic mã: 【issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
+    // Giải thích logic mã: [issues/1188]BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
     type: Object as PropType<{ x?: number | true; y?: number; scrollToFirstRowOnChange?: boolean }>,
     default: null,
   },

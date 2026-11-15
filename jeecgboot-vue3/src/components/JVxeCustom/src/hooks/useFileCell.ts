@@ -64,12 +64,12 @@ export function useFileCell(props, fileType: UploadTypeEnum, options?) {
       maxCount: maxCount.value,
       multiple: originColumn.value.props?.multiple ?? maxCount.value !== 1,
       fileType: fileType,
-      // update-begin--author:liaozhiyang---date:20250526---for：【issues/9657]Lỗi khi tải lên lại trong lúc chỉnh sửa tải lên hình ảnh của component jvxetable
+      // update-begin--author:liaozhiyang---date:20250526---for:[issues/9657]Lỗi khi tải lên lại trong lúc chỉnh sửa tải lên hình ảnh của component jvxetable
       action: originColumn.value.action ?? setup.uploadAction,
-      // update-end--author:liaozhiyang---date:20250526---for：【issues/9657]Lỗi khi tải lên lại trong lúc chỉnh sửa tải lên hình ảnh của component jvxetable
-      // update-begin--author:liaozhiyang---date:20250526---for：【issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
+      // update-end--author:liaozhiyang---date:20250526---for:[issues/9657]Lỗi khi tải lên lại trong lúc chỉnh sửa tải lên hình ảnh của component jvxetable
+      // update-begin--author:liaozhiyang---date:20250526---for:[issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
       bizPath: originColumn.value.bizPath ?? 'temp',
-      // update-end--author:liaozhiyang---date:20250526---for：【issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
+      // update-end--author:liaozhiyang---date:20250526---for:[issues/9652]vxetable tải lên, tải tệp lên, tải hình ảnh lên thêm đường dẫn tùy chỉnh
     });
   }
 

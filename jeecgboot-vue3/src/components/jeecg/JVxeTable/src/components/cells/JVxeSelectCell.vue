@@ -172,9 +172,9 @@
       
         let { allowSearch, allowInput } = originColumn.value;
         if (allowSearch === true || allowInput === true) {
-          // Giải thích logic mã: 【QQYUN-5806] JS tăng cường thay đổi tìm kiếm trong danh sách thả xuốngoptions (Ngăn chặnoption.titleBáo lỗi khi là null)
+          // Giải thích logic mã: [QQYUN-5806] JS tăng cường thay đổi tìm kiếm trong danh sách thả xuốngoptions (Ngăn chặnoption.titleBáo lỗi khi là null)
           if (option.title == null) return false;
-          // Giải thích logic mã: 【issues/5305】JVxeTypes.select Không thể tìm kiếm như mong đợi
+          // Giải thích logic mã: [issues/5305]JVxeTypes.select Không thể tìm kiếm như mong đợi
           return option.title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
         }
         return true;

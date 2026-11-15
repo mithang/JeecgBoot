@@ -243,7 +243,7 @@
           params['departId'] = selectedDepart.value;
         }
 
-        // Giải thích logic mã: 【QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
+        // Giải thích logic mã: [QQYUN-8239]Vai trò người dùng, khi thêm người dùng trả về dữ liệu 2 trang, thực tế chỉ hiển thị một trang---
         if(unref(excludeUserIdList) && unref(excludeUserIdList).length>0){
           params['excludeUserIdList'] = excludeUserIdList.value.join(",");
         }

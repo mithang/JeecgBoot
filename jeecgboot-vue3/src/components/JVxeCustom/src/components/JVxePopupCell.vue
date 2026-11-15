@@ -18,7 +18,7 @@
       const { innerValue, row, originColumn, cellProps, handleChangeCommon } = useJVxeComponent(props);
       const groupId = ref<string>('j-vxe-popup');
       const popupProps = computed(() => {
-        // Giải thích logic mã: 【issues/5371] Bảng con một-nhiều popup thêm đa chọn
+        // Giải thích logic mã: [issues/5371] Bảng con một-nhiều popup thêm đa chọn
         return {
           ...cellProps.value,
           value: innerValue.value,
@@ -28,9 +28,9 @@
           // orgFields: originColumn.value.orgFields,
           // destFields: originColumn.value.destFields,
           groupId: groupId.value,
-          // update-begin--author:liaozhiyang---date:20260203---for:【issues/9212】JVxeTypes.popupSau khi truyền tham số cho thuộc tính param trong, dữ liệu popup trống
+          // update-begin--author:liaozhiyang---date:20260203---for:[issues/9212]JVxeTypes.popupSau khi truyền tham số cho thuộc tính param trong, dữ liệu popup trống
           param: originColumn.value.params ?? originColumn.value.param,
-          // update-end--author:liaozhiyang---date:20260203---for:【issues/9212】JVxeTypes.popupSau khi truyền tham số cho thuộc tính param trong, dữ liệu popup trống
+          // update-end--author:liaozhiyang---date:20260203---for:[issues/9212]JVxeTypes.popupSau khi truyền tham số cho thuộc tính param trong, dữ liệu popup trống
           sorter: originColumn.value.sorter,
           setFieldsValue: (values) => {
             if (!isEmpty(values)) {
@@ -49,7 +49,7 @@
           },
         };
       });
-      // Giải thích logic mã: 【issues/675] Dữ liệu popup của trường bảng con không cập nhật
+      // Giải thích logic mã: [issues/675] Dữ liệu popup của trường bảng con không cập nhật
       const handleFocus = () => {
         groupId.value = '';
       };

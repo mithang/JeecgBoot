@@ -39,7 +39,7 @@
 </script>
 
 <style scoped lang="less">
-  // Giải thích logic mã: 【TV360X-1090] Label của biểu mẫu quá dài thì hiển thị rút gọn
+  // Giải thích logic mã: [TV360X-1090] Label của biểu mẫu quá dài thì hiển thị rút gọn
   .jeecg-and-modal-form {
     :deep(.ant-form-item-label) {
       overflow: hidden;
@@ -55,7 +55,7 @@
       }
     }
   }
-  // update-end--author:liaozhiyang---date:20240719---for：【TV360X-1090] Label của biểu mẫu quá dài thì hiển thị rút gọn
+  // update-end--author:liaozhiyang---date:20240719---for:[TV360X-1090] Label của biểu mẫu quá dài thì hiển thị rút gọn
   .jeecg-form-container-disabled {
     cursor: not-allowed;
   }
@@ -67,7 +67,7 @@
     -ms-pointer-events: none;
     pointer-events: none;
   }
-  // update-begin--author:liaozhiyang---date:20240605---for：【TV360X-857] Điều chỉnh style chi tiết sinh mã online
+  // update-begin--author:liaozhiyang---date:20240605---for:[TV360X-857] Điều chỉnh style chi tiết sinh mã online
   // begin antdv Kiểu dáng vô hiệu hóa
   // .jeecg-form-container-disabled :deep(.ant-input-number),
   // .jeecg-form-container-disabled :deep(.ant-input),
@@ -195,7 +195,7 @@
     }
   }
   // end antdv Kiểu dáng vô hiệu hóa
-  // Giải thích logic mã: 【TV360X-857] Điều chỉnh style chi tiết sinh mã online
+  // Giải thích logic mã: [TV360X-857] Điều chỉnh style chi tiết sinh mã online
   .jeecg-form-container-disabled :deep(.ant-upload-select) {
     cursor: grabbing;
   }

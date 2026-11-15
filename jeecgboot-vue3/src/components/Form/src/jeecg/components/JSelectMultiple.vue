@@ -82,12 +82,12 @@
         type: Boolean,
         default: false,
       },
-      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
+      // update-begin--author:liaozhiyang---date:20260204---for:[issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
       // Số bản ghi mỗi trang khi phân trang, chỉ có hiệu lực khi scrollLoad là true và dictCode có định dạng bảng từ điển
       pageSize: { type: Number, default: 10 },
       // Có tải cuộn hay không, khi là true và dictCode có định dạng bảng từ điển(table,text,code)thì đi qua /sys/dict/loadDict/, nếu không sẽ dùng initDictOptions
       scrollLoad: { type: Boolean, default: false },
-      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
+      // update-begin--author:liaozhiyang---date:20260204---for:[issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
     },
     emits: ['options-change', 'change', 'input', 'update:value'],
     setup(props, { emit }) {
@@ -99,10 +99,10 @@
       const dictOptions = ref<any[]>([]);
       const attrs = useAttrs();
       const [state, , , formItemContext] = useRuleFormItem(props, 'value', 'change', emitData);
-      // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
+      // update-begin--author:liaozhiyang---date:20260204---for:[issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
       const scrollLoadApi = useScrollLoadDict(props, dictOptions, arrayValue);
       const { useLoadDict, loading, loadDictOptions: loadDictOptionsScroll, ensureValueInOptions, handleSearch, handleDropdownVisibleChange, handlePopupScroll, isDictTable } = scrollLoadApi;
-      // update-end--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
+      // update-end--author:liaozhiyang---date:20260204---for:[issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
       // Xử lý tùy chọn dropdown
       const getOptions = computed(() => {
         if (!Array.isArray(dictOptions.value)) {
@@ -157,10 +157,10 @@
       //Áp dụng cho thao tác thay đổi động các tùy chọn dropdown
       watch(()=>props.options, ()=>{
         if (props.dictCode) {
-          // update-begin--author:liaozhiyang---date:20260325---for:【QQYUN-15021] Tăng cường JS online sửa dropdown không có hiệu lực
+          // update-begin--author:liaozhiyang---date:20260325---for:[QQYUN-15021] Tăng cường JS online sửa dropdown không có hiệu lực
           // online jsThay đổi tăng cườngoptions
           dictOptions.value = props.options;
-          // update-end--author:liaozhiyang---date:20260325---for:【QQYUN-15021] Tăng cường JS online sửa dropdown không có hiệu lực
+          // update-end--author:liaozhiyang---date:20260325---for:[QQYUN-15021] Tăng cường JS online sửa dropdown không có hiệu lực
         } else {
           dictOptions.value = props.options;
         }
@@ -174,7 +174,7 @@
           emit('input', selectedValue.join(props.spliter));
           emit('update:value', selectedValue.join(props.spliter));
         }
-        // Giải thích logic mã: 【QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
+        // Giải thích logic mã: [QQYUN-9110] kiểm chứng vẫn không biến mất khi component có giá trị
         nextTick(() => {
           formItemContext?.onFieldChange();
         });
@@ -184,13 +184,13 @@
         if (!props.popContainer) {
           return node?.parentNode;
         } else {
-          // Giải thích logic mã: 【QQYUN-9339]Khi có nhiều popup modal đều chứa component chọn nhiều trong danh mục thả xuống và component tìm kiếm thả xuống, khi mở một modal khác thì options của component không hiển thị
+          // Giải thích logic mã: [QQYUN-9339]Khi có nhiều popup modal đều chứa component chọn nhiều trong danh mục thả xuống và component tìm kiếm thả xuống, khi mở một modal khác thì options của component không hiển thị
           return setPopContainer(node, props.popContainer);
         }
       }
 
       async function loadDictOptions() {
-        // update-begin--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
+        // update-begin--author:liaozhiyang---date:20260204---for:[issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
         if (useLoadDict.value) {
           loadDictOptionsScroll();
         } else {
@@ -203,7 +203,7 @@
             dictOptions.value = [];
           }
         }
-        // update-end--author:liaozhiyang---date:20260204---for:【issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
+        // update-end--author:liaozhiyang---date:20260204---for:[issues/9307] Dropdown online tải từ điển bảng cần tải cuộn
       }
 
       // Giải thích logic mã: VUEN-1145 Dropdown đa chọn, khi tìm kiếm không tra được dữ liệu

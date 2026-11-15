@@ -67,7 +67,7 @@
         type: String,
         default: 'Chọn phòng ban',
       },
-      // Giải thích logic mã: 【QQYUN-7678]Nội dung component phòng ban quá nhiều nhưng không có thanh cuộn (đặt một chiều cao tối đa mặc định)
+      // Giải thích logic mã: [QQYUN-7678]Nội dung component phòng ban quá nhiều nhưng không có thanh cuộn (đặt một chiều cao tối đa mặc định)
       maxHeight: {
         type: Number,
         default: 500,

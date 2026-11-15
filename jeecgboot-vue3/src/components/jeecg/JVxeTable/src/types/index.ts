@@ -40,17 +40,17 @@ export interface IJVxeColumn extends VxeColumnProps {
   allowClear?: boolean; // Cho phép xóa
   // Có phải là cột thống kê không, chỉ inputNumber mới có thể đặt cột thống kê. Cột thống kê: sum là tính tổng; average là giá trị trung bình
   statistics?: boolean | [statisticsTypes, statisticsTypes?];
-  // 【select】
+  // [select]
   dictCode?: string; // Từ điển code
   options?: { title?: string; label?: string; text?: string; value: any; disabled?: boolean }[]; // Danh sách tùy chọn dropdown
   allowInput?: boolean; // Cho phép nhập
   allowSearch?: boolean; // Cho phép tìm kiếm
-  // 【slot】
+  // [slot]
   slotName?: string; // Tên slot
-  // 【checkbox】
+  // [checkbox]
   customValue?: [any, any]; // Giá trị tùy chỉnh
   defaultChecked?: boolean; // Được chọn mặc định
-  // 【upload】 upload
+  // [upload] upload
   btnText?: string; // Văn bản nút tải lên
   token?: boolean; // Có truyền hay không token
   responseName?: string; // Tên giá trị trả về
@@ -61,7 +61,7 @@ export interface IJVxeColumn extends VxeColumnProps {
   dict?: string; // Thông tin cấu hình bảng từ điển: Tên bảng cơ sở dữ liệu,Tên trường hiển thị,Tên trường lưu trữ
   async?: boolean; // Có phải chế độ đồng bộ không
   tipsContent?: string;
-  // 【popup】
+  // [popup]
   popupCode?: string;
   field?: string;
   orgFields?: string;

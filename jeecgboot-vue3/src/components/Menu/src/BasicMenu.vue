@@ -57,7 +57,7 @@
         selectedKeys: [],
         collapsedOpenKeys: [],
       });
-      // Giải thích logic mã: 【QQYUN-8691]Ở chế độ menu trên cùng, online không hiển thị tên menu mà hiển thị biểu mẫu trực tuyến auto mặc định
+      // Giải thích logic mã: [QQYUN-8691]Ở chế độ menu trên cùng, online không hiển thị tên menu mà hiển thị biểu mẫu trực tuyến auto mặc định
       createBasicRootMenuContext({ menuState: menuState });
       const { prefixCls } = useDesign('basic-menu');
       const { items, mode, accordion } = toRefs(props);
@@ -118,13 +118,13 @@
       // Giải thích logic mã: VUEN-1144 online Sau khi cấu hình thành menu, mở menu, tên hiển thị không hiển thị thành tên menu
       async function handleMenuClick({ item, key }: { item: any; key: string; keyPath: string[] }) {
         const { beforeClickFn } = props;
-        // Giải thích logic mã: 【QQYUN-8773]Cấu hình URL bên ngoài không mở được ở chế độ menu trên cùng và trong tìm kiếm
+        // Giải thích logic mã: [QQYUN-8773]Cấu hình URL bên ngoài không mở được ở chế độ menu trên cùng và trong tìm kiếm
         if (isUrl(key)) {
           key = key.replace(URL_HASH_TAB, '#');
           window.open(key);
           return;
         }
-        // Giải thích logic mã: 【issues/7706]Điều hướng trên thanh trên cùng, route nội bộ cũng có thể hỗ trợ mở bằng tab trình duyệt mới
+        // Giải thích logic mã: [issues/7706]Điều hướng trên thanh trên cùng, route nội bộ cũng có thể hỗ trợ mở bằng tab trình duyệt mới
         const menus = await getMenus();
         const findItem = getMatchingPath(menus, key);
         if (findItem?.internalOrExternal == true && !findItem?.children?.length) {
@@ -136,7 +136,7 @@
           const flag = await beforeClickFn(key);
           if (!flag) return;
         }
-        // Giải thích logic mã: 【QQYUN-8773] điều hướng kết hợp phía trên(Menu kết hợp bên trái phía trên)Menu cấp một nếu không cấu hình redirect thì mặc định nhảy tới menu con đầu tiên
+        // Giải thích logic mã: [QQYUN-8773] điều hướng kết hợp phía trên(Menu kết hợp bên trái phía trên)Menu cấp một nếu không cấu hình redirect thì mặc định nhảy tới menu con đầu tiên
         if (props.type === MenuTypeEnum.MIX) {
           const menuItem = getMatchingPath(menus, key);
           if (handleMixMenuClick(menuItem, key)) {
@@ -186,12 +186,12 @@
             if (result) {
               return result;
             }
-            // update-begin--author:liaozhiyang---date:20250401---for：【issues/9405] Sửa lỗi khi bấm menu cấp một ở chế độ điều hướng hỗn hợp phía trên,Nếu cấp cuối cùng là route ẩn thì hiển thị không đúng
+            // update-begin--author:liaozhiyang---date:20250401---for:[issues/9405] Sửa lỗi khi bấm menu cấp một ở chế độ điều hướng hỗn hợp phía trên,Nếu cấp cuối cùng là route ẩn thì hiển thị không đúng
             // Khi tất cả menu con đều là route ẩn, trả về cấp trên làm mục tiêu điều hướng
             if (item.path && !item.hideMenu) {
               return item;
             }
-            // update-end--author:liaozhiyang---date:20250401---for：【issues/9405] Sửa lỗi khi bấm menu cấp một ở chế độ điều hướng hỗn hợp phía trên,Nếu cấp cuối cùng là route ẩn thì hiển thị không đúng
+            // update-end--author:liaozhiyang---date:20250401---for:[issues/9405] Sửa lỗi khi bấm menu cấp một ở chế độ điều hướng hỗn hợp phía trên,Nếu cấp cuối cùng là route ẩn thì hiển thị không đúng
           }
         }
         return null;

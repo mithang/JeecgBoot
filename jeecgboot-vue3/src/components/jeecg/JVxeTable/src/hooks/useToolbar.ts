@@ -20,7 +20,7 @@ export function useToolbar(props: JVxeTableProps, data: JVxeDataProps, methods: 
           removeBtnCfg: props.removeBtnCfg,
           // Sự kiện thêm mới
           onAdd: () => {
-            // Giải thích logic mã: 【TV360X-212] Thêm trường mới online là xuất hiện nhắc kiểm chứng
+            // Giải thích logic mã: [TV360X-212] Thêm trường mới online là xuất hiện nhắc kiểm chứng
             setTimeout(() => {
               methods.addRows();
             }, 0);

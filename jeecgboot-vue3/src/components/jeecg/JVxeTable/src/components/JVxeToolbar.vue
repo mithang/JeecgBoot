@@ -128,7 +128,7 @@
     collapsed.value = !collapsed.value;
   }
 
-  // 【TV360X-1975]Trong thiết kế Online, khi có nhiều trường, do sẽ đồng bộ xóa các bảng khác nên thời gian xóa trở nên dài hơn, vì vậy tăng thêm loading khi xóa, để tránh tưởng rằng nút xóa bấm không có tác dụng
+  // [TV360X-1975]Trong thiết kế Online, khi có nhiều trường, do sẽ đồng bộ xóa các bảng khác nên thời gian xóa trở nên dài hơn, vì vậy tăng thêm loading khi xóa, để tránh tưởng rằng nút xóa bấm không có tác dụng
   const deleting = ref(false);
 
   let deleteTimer: any = null

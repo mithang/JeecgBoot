@@ -143,12 +143,12 @@
     setup(props, { emit, attrs }) {
       const { t } = useI18n();
       const table = useTableContext();
-      // Giải thích logic mã: 【issues/8301] vô hiệu hóa cột số thứ tự của bảng cây
+      // Giải thích logic mã: [issues/8301] vô hiệu hóa cột số thứ tự của bảng cây
       const isTreeTable = computed(() => table.getBindValues.value.isTreeTable);
       const popoverVisible = ref(false);
       // nextTick(() => popoverVisible.value = false);
       const defaultRowSelection = omit(table.getRowSelection(), 'selectedRowKeys');
-      // Giải thích logic mã: 【issues/8529]Sau setColumns cấu hình cột không cập nhật liên động
+      // Giải thích logic mã: [issues/8529]Sau setColumns cấu hình cột không cập nhật liên động
       const getColumnsRef = table.getColumnsRef();
       let inited = false;
 
@@ -217,20 +217,20 @@
         checkIndex.value = !!values.showIndexColumn;
         checkSelect.value = !!values.rowSelection;
       });
-      // Giải thích logic mã: 【issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
+      // Giải thích logic mã: [issues/6908]Khi chuyển đổi đa ngôn ngữ không cần làm mới, giá trị trong BasicColumn và FormSchema không thể chuyển đổi bình thường
       watch([localeStore], () => {
         const columns = getColumns();
         plainOptions.value = columns;
         plainSortOptions.value = columns;
         cachePlainOptions.value = columns;
       });
-      // Giải thích logic mã: 【issues/8529]Sau khi setColumns hiển thị cột vốn bị ẩn, trong cấu hình cột lại không tích chọn cột đó
+      // Giải thích logic mã: [issues/8529]Sau khi setColumns hiển thị cột vốn bị ẩn, trong cấu hình cột lại không tích chọn cột đó
       watch([getColumnsRef], () => {
         init();
       });
       function getColumns() {
         const ret: Options[] = [];
-        // Giải thích logic mã: 【issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
+        // Giải thích logic mã: [issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
         let t = table.getColumns({ ignoreIndex: true, ignoreAction: true, ignoreAuth: true, ignoreIfShow: true });
         if (!t.length) {
           t = table.getCacheColumns();
@@ -257,7 +257,7 @@
             return item.dataIndex || item.title;
           })
           .filter(Boolean) as string[];
-        // Giải thích logic mã: 【issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
+        // Giải thích logic mã: [issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
         const { sortedList = [] } = getCache() || {};
         await nextTick();
         if (!plainOptions.value.length) {
@@ -282,7 +282,7 @@
               item.fixed = findItem.fixed;
             }
           });
-          // Giải thích logic mã: 【issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
+          // Giải thích logic mã: [issues/7996]Component cột bảng bỏ chọn tất cả hoặc chỉ tích ở giữa, hiển thị không như mong đợi
           if (sortedList?.length) {
             plainOptions.value.sort((prev, next) => {
               return sortedList.indexOf(prev.value) - sortedList.indexOf(next.value);
@@ -291,7 +291,7 @@
         }
         state.isInit = true;
         state.checkedList = checkList;
-        // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Nếu trong hiển thị cột tồn tại cột chưa được tích chọn, sau khi lưu và làm mới, kiểu dáng checkbox hiển thị cột sẽ bị lỗi]
+        // Giải thích logic mã: [TV360X-105] vấn đề cài đặt hiển thị cột[Nếu trong hiển thị cột tồn tại cột chưa được tích chọn, sau khi lưu và làm mới, kiểu dáng checkbox hiển thị cột sẽ bị lỗi]
         state.checkAll = columns.length === checkList.length;
       }
 
@@ -327,12 +327,12 @@
 
       // reset columns
       function reset() {
-        // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Cần đặt lại hai lần mới trở về trạng thái ban đầu]
+        // Giải thích logic mã: [TV360X-105] vấn đề cài đặt hiển thị cột[Cần đặt lại hai lần mới trở về trạng thái ban đầu]
         setColumns(table.getCacheColumns());
         setTimeout(() => {
           const columns = getColumns();
           // state.checkedList = [...state.defaultCheckList];
-          // Giải thích logic mã: 【issues/825] Vấn đề chuyển route sau khi lưu khi thiết lập ẩn cột trong cài đặt cột của tabel[Đặt lại mục chưa chọn]
+          // Giải thích logic mã: [issues/825] Vấn đề chuyển route sau khi lưu khi thiết lập ẩn cột trong cài đặt cột của tabel[Đặt lại mục chưa chọn]
           state.checkedList = table
             .getColumns({ ignoreAction: true, ignoreAuth: true, ignoreIfShow: true })
             .map((item) => {
@@ -353,7 +353,7 @@
       // Open the pop-up window for drag and drop initialization
       function handleVisibleChange() {
         if (inited) return;
-        // Giải thích logic mã: 【TV360X-254] Cài đặt cột nhấp nháy và popup trình duyệt Apple quá dài
+        // Giải thích logic mã: [TV360X-254] Cài đặt cột nhấp nháy và popup trình duyệt Apple quá dài
         setTimeout(() => {
           const columnListEl = unref(columnListRef);
           if (!columnListEl) return;
@@ -382,13 +382,13 @@
               }
 
               plainSortOptions.value = columns;
-              // Giải thích logic mã: 【TV360X-108]Sau khi làm mới, tích chọn trường trước đó chưa được tích rồi kéo thả thì cột bảng tương ứng với trường đó biến mất
+              // Giải thích logic mã: [TV360X-108]Sau khi làm mới, tích chọn trường trước đó chưa được tích rồi kéo thả thì cột bảng tương ứng với trường đó biến mất
               const cols = columns.map((item) => item.value);
               const arr = cols.filter((cItem) => state.checkedList.find((lItem) => lItem === cItem));
               setColumns(arr);
               // Mã ban đầu
               // setColumns(columns);
-              // Giải thích logic mã: 【TV360X-105] vấn đề cài đặt hiển thị cột[Sau khi đặt lại, thứ tự đã lưu vẫn là thứ tự lần trước]
+              // Giải thích logic mã: [TV360X-105] vấn đề cài đặt hiển thị cột[Sau khi đặt lại, thứ tự đã lưu vẫn là thứ tự lần trước]
               restAfterOptions.value = null;
             },
           });
@@ -557,7 +557,7 @@
         // flex-wrap: wrap;
       }
 
-      // Giải thích logic mã: 【TV360X-254] Cài đặt cột nhấp nháy và popup trình duyệt Apple quá dài
+      // Giải thích logic mã: [TV360X-254] Cài đặt cột nhấp nháy và popup trình duyệt Apple quá dài
       &.ant-popover,
       .ant-popover-content,
       .ant-popover-inner,
