@@ -154,7 +154,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 		} catch (RuntimeException e) {
 			throw new JeecgBootException(e.getMessage(), e);
 		}catch (Exception e) {
-			throw new JeecgBootException("Backend không tìm thấy tên class này：" + jobClassName, e);
+			throw new JeecgBootException("Backend không tìm thấy tên class này:" + jobClassName, e);
 		}
 	}
 
@@ -180,7 +180,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 	private static Job getClass(String classname) throws Exception {
 		// Kiểm tra danh sách trắng tên gói, ngăn chặn việc khởi tạo lớp tùy ý gây ra RCE
 		if (classname == null || !classname.startsWith("org.jeecg.")) {
-			throw new IllegalArgumentException("Tên lớp tác vụ không hợp lệ:" + classname + "，chỉ cho phép org.jeecg  trong package Job");
+			throw new IllegalArgumentException("Tên lớp tác vụ không hợp lệ:" + classname + ",chỉ cho phép org.jeecg  trong package Job");
 		}
 		//update-begin---author:scott ---date:20260416  for：【PR#9538】Class.forName Dùng trình tải lớp theo ngữ cảnh, tăng khả năng tương thích khi triển khai-----------
 		Class<?> clazz = Class.forName(classname, true, Thread.currentThread().getContextClassLoader());

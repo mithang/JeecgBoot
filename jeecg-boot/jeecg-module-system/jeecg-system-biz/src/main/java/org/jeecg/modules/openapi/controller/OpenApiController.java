@@ -185,7 +185,19 @@ public class OpenApiController extends JeecgController<OpenApi, OpenApiService> 
         String method = openApi.getRequestMethod();
         String appkey = request.getHeader("appkey");
         OpenApiAuth openApiAuth = openApiAuthService.getByAppkey(appkey);
+        if (Objects.isNull(openApiAuth)) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("code", 401);
+            result.put("data", null);
+            return Result.error("Appkey không hợp lệ hoặc đã hết hạn", result);
+        }
         SysUser systemUser = sysUserService.getUserByName(openApiAuth.getCreateBy());
+        if (Objects.isNull(systemUser)) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("code", 401);
+            result.put("data", null);
+            return Result.error("Người dùng tạo API không tồn tại", result);
+        }
         String token = this.getToken(systemUser.getUsername(), systemUser.getPassword());
         httpHeaders.put("X-Access-Token", Lists.newArrayList(token));
         httpHeaders.put("Content-Type",Lists.newArrayList("application/json"));

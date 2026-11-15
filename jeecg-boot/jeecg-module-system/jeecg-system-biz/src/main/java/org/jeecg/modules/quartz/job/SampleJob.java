@@ -17,7 +17,7 @@ public class SampleJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-		log.info(" Job Execution key："+jobExecutionContext.getJobDetail().getKey());
+		log.info(" Job Execution key:"+jobExecutionContext.getJobDetail().getKey());
 		log.info(String.format(" Jeecg-Boot Nhiệm vụ định kỳ thông thường SampleJob !  Thời gian:" + DateUtils.getTimestamp()));
 	}
 }

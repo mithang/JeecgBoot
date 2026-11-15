@@ -227,7 +227,7 @@ public class SysAnnouncementController {
 	 * @param sysAnnouncement
 	 * @return
 	 */
-	//@RequiresPermissions("system:sysAnnouncement:editIzTop")
+	@RequiresPermissions("system:sysAnnouncement:editIzTop")
 	@RequestMapping(value = "/editIzTop", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<SysAnnouncement> editIzTop(@RequestBody SysAnnouncement sysAnnouncement) {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
@@ -436,7 +436,7 @@ public class SysAnnouncementController {
 
 		// Lấy ngày đầu tiên của tháng trước (chỉ tra thông báo trong gần hai tháng)
 		Date lastMonthStartDay = DateRangeUtils.getLastMonthStartDay();
-		log.info("-----Truy vấn thông báo chưa đọc nhận được trong gần hai tháng-----，ngày đầu tiên của 2 tháng gần nhất：{}", lastMonthStartDay);
+		log.info("-----Truy vấn thông báo chưa đọc nhận được trong gần hai tháng-----,ngày đầu tiên của 2 tháng gần nhất:{}", lastMonthStartDay);
 		
 //		//Bổ sung dữ liệu đẩy (bảng quan hệ giữa người dùng và thông báo)
 //		completeNoteThreadPool.execute(()->{
@@ -478,7 +478,7 @@ public class SysAnnouncementController {
 
 		// Lấy ngày đầu tiên của tháng trước (chỉ tra thông báo trong gần hai tháng)
 		Date lastMonthStartDay = DateRangeUtils.getLastMonthStartDay();
-		log.debug(" ------Truy vấn số lượng tin nhắn thông báo chưa đọc nhận được trong gần hai tháng------，ngày đầu tiên của 2 tháng gần nhất：{}", lastMonthStartDay);
+		log.debug(" ------Truy vấn số lượng tin nhắn thông báo chưa đọc nhận được trong gần hai tháng------,ngày đầu tiên của 2 tháng gần nhất:{}", lastMonthStartDay);
         // Giải thích logic mã: 【QQYUN-12162] Cải tạo dự án OA, tách hệ thống tin nhắn nặng; hiện các tin nhắn đang ở chung với nhau, cần tách theo danh mục---
         Map<String,Integer> unreadMessageCount = new HashMap<>();
         //Số lượng tin nhắn hệ thống
@@ -571,7 +571,7 @@ public class SysAnnouncementController {
 	 * @param anntId
 	 * @return
 	 */
-	//@RequiresPermissions("system:sysAnnouncement:syncNotic")
+	@RequiresPermissions("system:sysAnnouncement:syncNotic")
 	@RequestMapping(value = "/syncNotic", method = RequestMethod.GET)
 	public Result<SysAnnouncement> syncNotic(@RequestParam(name="anntId",required=false) String anntId, HttpServletRequest request) {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
@@ -767,6 +767,7 @@ public class SysAnnouncementController {
 	 * @param id
 	 * @return
 	 */
+	@RequiresPermissions("system:sysAnnouncement:addVisitsNumber")
 	@RequestMapping(value = "/addVisitsNumber", method = RequestMethod.GET)
 	public Result<?> addVisitsNumber(@RequestParam(name="id",required=true) String id) {
 		int count = oConvertUtils.getInt(redisUtil.get(ANNO_CACHE_KEY+id),0) + 1;
