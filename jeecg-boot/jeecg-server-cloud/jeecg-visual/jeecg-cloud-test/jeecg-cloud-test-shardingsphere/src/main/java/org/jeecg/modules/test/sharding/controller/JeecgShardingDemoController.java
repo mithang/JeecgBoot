@@ -29,7 +29,7 @@ public class JeecgShardingDemoController extends JeecgController<ShardingSysLog,
     private IShardingSysLogService shardingSysLogService;
 
     /**
-     * Chia bảng đơn cơ sở dữ liệu —— Chèn
+     * Chia bảng đơn cơ sở dữ liệu -- Chèn
      * @return
      */
     @PostMapping(value = "/insert")
@@ -48,7 +48,7 @@ public class JeecgShardingDemoController extends JeecgController<ShardingSysLog,
     }
 
     /**
-     * Chia bảng đơn cơ sở dữ liệu —— Truy vấn
+     * Chia bảng đơn cơ sở dữ liệu -- Truy vấn
      * @return
      */
     @PostMapping(value = "/list")

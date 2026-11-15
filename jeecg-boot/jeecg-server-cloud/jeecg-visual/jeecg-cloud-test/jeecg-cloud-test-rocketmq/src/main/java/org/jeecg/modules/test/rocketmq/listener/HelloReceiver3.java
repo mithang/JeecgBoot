@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 /**
  * Định nghĩa người nhận (có thể định nghĩa N người nhận, tin nhắn sẽ được gửi đều đến N người nhận)
  *
- * RabbitMq Receiver 3 【Tôi là người xử lý 3】
- * （@RabbitListener khai báo trên phương thức của lớp, một lớp có thể lắng nghe nhiều hàng đợi)
+ * RabbitMq Receiver 3 [Tôi là người xử lý 3]
+ * (@RabbitListener khai báo trên phương thức của lớp, một lớp có thể lắng nghe nhiều hàng đợi)
  * @author: zyf
  * @date: 2022/04/21
  */

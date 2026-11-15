@@ -241,7 +241,7 @@
 					formatter: function(value, row, index) {
 						tableData['key' + row.id] = row;
 						return row.registryList
-								?'<a class="show_registryList" href="javascript:;" _id="'+ row.id +'" >' + I18n.system_show +' ( ' + row.registryList.length+ ' ）</a>'
+								?'<a class="show_registryList" href="javascript:;" _id="'+ row.id +'" >' + I18n.system_show +' ( ' + row.registryList.length+ ' )</a>'
 								:I18n.system_empty;
 					}
 				}

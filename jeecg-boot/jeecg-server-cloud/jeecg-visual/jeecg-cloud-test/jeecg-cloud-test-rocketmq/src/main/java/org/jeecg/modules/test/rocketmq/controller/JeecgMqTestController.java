@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/sys/test")
-@Tag(name = "【Microservice】Kiểm thử đơn vị MQ")
+@Tag(name = "[Microservice]Kiểm thử đơn vị MQ")
 public class JeecgMqTestController {
 
     @Autowired

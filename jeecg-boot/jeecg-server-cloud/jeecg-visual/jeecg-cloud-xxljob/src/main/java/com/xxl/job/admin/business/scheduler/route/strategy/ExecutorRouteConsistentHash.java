@@ -62,7 +62,7 @@ public class ExecutorRouteConsistentHash extends ExecutorRouter {
      */
     public String hashJob(int jobId, List<String> addressList) {
 
-        // 1、hash ring
+        // 1,hash ring
         // ------A1------A2-------A3------
         // -----------J1------------------
         TreeMap<Long, String> addressRing = new TreeMap<>();
@@ -73,10 +73,10 @@ public class ExecutorRouteConsistentHash extends ExecutorRouter {
             }
         }
 
-        // 2、generate job-hash
+        // 2,generate job-hash
         long jobHash = hash(String.valueOf(jobId));
 
-        // 3、route job-node
+        // 3,route job-node
         Map.Entry<Long, String> ceilingEntry = addressRing.ceilingEntry(jobHash);
         if (ceilingEntry != null) {
             return ceilingEntry.getValue();
@@ -86,7 +86,7 @@ public class ExecutorRouteConsistentHash extends ExecutorRouter {
             return lastRing.get(lastRing.firstKey());
         }*/
 
-        // 4、default first node
+        // 4,default first node
         return addressRing.firstEntry().getValue();
     }
 

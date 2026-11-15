@@ -64,7 +64,7 @@ public class JobLogController {
 						@RequestParam(value = "jobGroup", required = false, defaultValue = "0") Integer jobGroup,
 						@RequestParam(value = "jobId", required = false, defaultValue = "0") Integer jobId) {
 
-		// 1、init JobGroupList
+		// 1,init JobGroupList
 		// find all jobGroup
 		List<XxlJobGroup> jobGroupListTotal =  xxlJobGroupMapper.findAll();
 
@@ -75,7 +75,7 @@ public class JobLogController {
 		}
 		List<Integer> jobGroupIds = jobGroupList.stream().map(XxlJobGroup::getId).toList();
 
-		// 2、check jobId
+		// 2,check jobId
 		if (jobId > 0) {
 			// valid jobId
 			XxlJobInfo jobInfo = xxlJobInfoMapper.loadById(jobId);
@@ -86,16 +86,16 @@ public class JobLogController {
 			jobGroup = jobInfo.getJobGroup();
 		}
 
-		// 3、init jobGroup, default first 1
+		// 3,init jobGroup, default first 1
 		if (!jobGroupIds.contains(jobGroup)) {
 			jobGroup = jobGroupList.get(0).getId();
 		}
 
-		// 4、init jobInfoList
+		// 4,init jobInfoList
 		List<XxlJobInfo> jobInfoList = xxlJobInfoMapper.getJobsByGroup(jobGroup);
 		List<Integer> jobIds = jobInfoList.stream().map(XxlJobInfo::getId).toList();
 
-		// 5、init JobId, default 0
+		// 5,init JobId, default 0
 		if (!jobIds.contains(jobId)) {
 			jobId = 0;
 		}

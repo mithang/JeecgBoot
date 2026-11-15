@@ -11,7 +11,7 @@ public class MisfireFireOnceNow extends MisfireHandler {
 
     @Override
     public void handle(int jobId) {
-        // FIRE_ONCE_NOW 》 trigger
+        // FIRE_ONCE_NOW > trigger
         XxlJobAdminBootstrap.getInstance().getJobTriggerPoolHelper().trigger(jobId, TriggerTypeEnum.MISFIRE, -1, null, null, null);
         logger.warn(">>>>>>>>>>> xxl-job, schedule MisfireFireOnceNow: jobId = " + jobId );
     }

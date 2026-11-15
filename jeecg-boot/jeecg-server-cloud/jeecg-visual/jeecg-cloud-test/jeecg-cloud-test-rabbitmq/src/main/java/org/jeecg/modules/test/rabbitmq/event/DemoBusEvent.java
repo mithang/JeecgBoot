@@ -10,7 +10,7 @@ import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Bộ xử lý tin nhắn 【Publish-Subscribe】
+ * Bộ xử lý tin nhắn [Publish-Subscribe]
  * @author: zyf
  * @date: 2022/04/21
  */

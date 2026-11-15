@@ -29,7 +29,7 @@ public class JobLogReportHelper {
     public void start(){
 
         /**
-         * last clean log time  （ Thread-safe concurrent reading and writing ）
+         * last clean log time  ( Thread-safe concurrent reading and writing )
           */
         lastCleanLogTime = new AtomicLong(0);
 
@@ -38,7 +38,7 @@ public class JobLogReportHelper {
             @Override
             public void run() {
 
-                // 1、log-report refresh: refresh log report in 3 days
+                // 1,log-report refresh: refresh log report in 3 days
                 for (int i = 0; i < 3; i++) {
 
                     // today
@@ -86,7 +86,7 @@ public class JobLogReportHelper {
                         }*/
                 }
 
-                // 2、log-clean: switch open & once each day
+                // 2,log-clean: switch open & once each day
                 if (XxlJobAdminBootstrap.getInstance().getLogretentiondays()>0
                         && System.currentTimeMillis() - lastCleanLogTime.longValue() > 24*60*60*1000) {
 

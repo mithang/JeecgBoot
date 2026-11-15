@@ -231,7 +231,7 @@ public class DynamicRouteLoader implements ApplicationEventPublisherAware {
                 for (Object map : list) {
                     JSONObject json = JSON.parseObject(JSON.toJSONString(map));
                     PredicateDefinition predicateDefinition = new PredicateDefinition();
-                    // Giải thích logic mã: 【VUEN-762】Vấn đề bất thường khi thêm điều kiện route,Nguyên nhân là một số tham số điều kiện route cần đặt key cố định key
+                    // Giải thích logic mã: [VUEN-762]Vấn đề bất thường khi thêm điều kiện route,Nguyên nhân là một số tham số điều kiện route cần đặt key cố định key
                     String name=json.getString("name");
                     predicateDefinition.setName(name);
                     //Điều kiện route có nối Key hay không Key

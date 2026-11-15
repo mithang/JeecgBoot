@@ -134,7 +134,7 @@ services:
     hostname: jeecg-boot-gateway
     # Điểm mấu chốt khi khởi động lần đầu: chủ động thăm dò nacos cho đến khi jeecg-system đăng ký thành instance khỏe mạnh rồi mới khởi động gateway,
     # Tránh gateway đăng ký trước system mà nhận được route trống (swagger trống, frontend không gọi được backend, cần khởi động lại gateway thủ công)
-    # Lưu ý：Nacos 3.x đã bị loại bỏ v1/v2 open-api, truy vấn instance cần dùng giao diện admin v3
+    # Lưu ý:Nacos 3.x đã bị loại bỏ v1/v2 open-api, truy vấn instance cần dùng giao diện admin v3
     command:
       - sh
       - -c

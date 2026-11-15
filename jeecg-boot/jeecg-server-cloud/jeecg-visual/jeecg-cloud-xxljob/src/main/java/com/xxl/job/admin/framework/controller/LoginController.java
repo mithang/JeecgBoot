@@ -57,7 +57,7 @@ public class LoginController {
 			return Response.ofFail( I18nUtil.getString("login_param_empty") );
 		}
 
-		// valid user、status
+		// valid user,status
 		XxlJobUser xxlJobUser = xxlJobUserMapper.loadByUserName(userName);
 		if (xxlJobUser == null) {
 			return Response.ofFail( I18nUtil.getString("login_param_invalid") );

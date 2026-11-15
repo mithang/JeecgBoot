@@ -87,7 +87,7 @@ public class AdminBizTest {
 
     @Test
     public void jobManage() throws Exception {
-        // jobAdd、jobUpdate、jobRemove、jobStart、jobStop
+        // jobAdd,jobUpdate,jobRemove,jobStart,jobStop
     }
 
 }

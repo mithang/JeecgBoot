@@ -16,8 +16,8 @@ import java.util.Map;
 /**
  * Simple LoginStore
  *
- * 1、store by database；
- * 2、If you have higher performance requirements, it is recommended to use RedisLoginStore；
+ * 1,store by database;
+ * 2,If you have higher performance requirements, it is recommended to use RedisLoginStore;
  *
  * @author xuxueli 2025-08-03
  */

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * Định nghĩa người nhận (có thể định nghĩa N người nhận, tin nhắn sẽ được gửi đều đến N người nhận)
  *
  * RabbitMq Bên nhận 1
- * （@RabbitListener khai báo trên lớp, một lớp chỉ có thể lắng nghe một hàng đợi)
+ * (@RabbitListener khai báo trên lớp, một lớp chỉ có thể lắng nghe một hàng đợi)
  * @author: zyf
  * @date: 2022/04/21
  */

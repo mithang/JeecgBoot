@@ -9,7 +9,7 @@ import org.jeecg.modules.test.rocketmq.constant.CloudConstant;
 import org.springframework.stereotype.Component;
 
 /**
- * Bộ xử lý tin nhắn 【Publish-Subscribe】
+ * Bộ xử lý tin nhắn [Publish-Subscribe]
  * @author: zyf
  * @date: 2022/04/21
  */

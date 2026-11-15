@@ -2,18 +2,18 @@
 * Admin Table for XXL-BOOT
 * ================
 *
-* 1、data_filter：
+* 1,data_filter:
 *      searchBtn:       Tìm kiếm
 *      resetBtn:        Đặt lại
-* 2、data_operation：
-*      action：
+* 2,data_operation:
+*      action:
 *          - add:       Thêm mới
 *          - update:    Cập nhật
 *          - delete:    Xóa
-*      style：
+*      style:
 *          - selectOnlyOne: Chọn một
 *          - selectAny:     Chọn nhiều
-* 3、data_list
+* 3,data_list
 *      mainDataTable:   Bảng
 *
 * @author       xuxueli

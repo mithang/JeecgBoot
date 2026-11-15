@@ -5,7 +5,7 @@
 //import reactor.core.publisher.Mono;
 //
 ///**
-// * Bộ xử lý ngắt mạch khi phản hồi timeout 【Nâng cấp springboot2.6.6 xong, class này bị loại bỏ】
+// * Bộ xử lý ngắt mạch khi phản hồi timeout [Nâng cấp springboot2.6.6 xong, class này bị loại bỏ]
 // *
 // * @author zyf
 // */

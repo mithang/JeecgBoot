@@ -48,7 +48,7 @@ public class JobScheduleHelper {
         scheduleThreadToStop = false;
         ringThreadToStop = false;
 
-        // 1、schedule thread
+        // 1,schedule thread
         scheduleThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -77,7 +77,7 @@ public class JobScheduleHelper {
                     TransactionStatus transactionStatus = null;
                     try {
                         transactionStatus = XxlJobAdminBootstrap.getInstance().getTransactionManager().getTransaction(new DefaultTransactionDefinition());
-                        // 1、job lock
+                        // 1,job lock
                         String lockedRecord = XxlJobAdminBootstrap.getInstance().getXxlJobLockMapper().scheduleLock();
                         long nowTime = System.currentTimeMillis();
 
@@ -85,63 +85,63 @@ public class JobScheduleHelper {
                         List<XxlJobInfo> scheduleList = XxlJobAdminBootstrap.getInstance().getXxlJobInfoMapper().scheduleJobQuery(nowTime + PRE_READ_MS, preReadCount);
                         if (CollectionTool.isNotEmpty(scheduleList)) {
 
-                            // 2、push time-ring
+                            // 2,push time-ring
                             for (XxlJobInfo jobInfo: scheduleList) {
 
                                 // time-ring jump
                                 if (nowTime > jobInfo.getTriggerNextTime() + PRE_READ_MS) {
-                                    // 2.1、trigger-expire > 5s：pass && make next-trigger-time
+                                    // 2.1,trigger-expire > 5s:pass && make next-trigger-time
 
-                                    // 1、misfire handle
+                                    // 1,misfire handle
                                     MisfireStrategyEnum misfireStrategyEnum = MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), MisfireStrategyEnum.DO_NOTHING);
                                     misfireStrategyEnum.getMisfireHandler().handle(jobInfo.getId());
 
-                                    // 2、fresh next
+                                    // 2,fresh next
                                     refreshNextTriggerTime(jobInfo, new Date());
 
                                 } else if (nowTime >= jobInfo.getTriggerNextTime()) {
-                                    // 2.2、trigger-expire < 5s：direct-trigger && make next-trigger-time
+                                    // 2.2,trigger-expire < 5s:direct-trigger && make next-trigger-time
 
-                                    // 1、trigger direct
+                                    // 1,trigger direct
                                     XxlJobAdminBootstrap.getInstance().getJobTriggerPoolHelper().trigger(jobInfo.getId(), TriggerTypeEnum.CRON, -1, null, null, null);
                                     logger.debug(">>>>>>>>>>> xxl-job, schedule expire, direct trigger : jobId = " + jobInfo.getId() );
 
-                                    // 2、fresh next
+                                    // 2,fresh next
                                     refreshNextTriggerTime(jobInfo, new Date());
 
                                     // next-trigger-time in 5s, pre-read again
                                     if (jobInfo.getTriggerStatus()== TriggerStatus.RUNNING.getValue() && nowTime + PRE_READ_MS > jobInfo.getTriggerNextTime()) {
 
-                                        // 1、make ring second
+                                        // 1,make ring second
                                         int ringSecond = (int)((jobInfo.getTriggerNextTime()/1000)%60);
 
-                                        // 2、push time ring (pre read)
+                                        // 2,push time ring (pre read)
                                         pushTimeRing(ringSecond, jobInfo.getId());
                                         logger.debug(">>>>>>>>>>> xxl-job, schedule pre-read, push trigger : jobId = " + jobInfo.getId() );
 
-                                        // 3、fresh next
+                                        // 3,fresh next
                                         refreshNextTriggerTime(jobInfo, new Date(jobInfo.getTriggerNextTime()));
 
                                     }
 
                                 } else {
-                                    // 2.3、trigger-pre-read：time-ring trigger && make next-trigger-time
+                                    // 2.3,trigger-pre-read:time-ring trigger && make next-trigger-time
 
-                                    // 1、make ring second
+                                    // 1,make ring second
                                     int ringSecond = (int)((jobInfo.getTriggerNextTime()/1000)%60);
 
-                                    // 2、push time ring
+                                    // 2,push time ring
                                     pushTimeRing(ringSecond, jobInfo.getId());
                                     logger.debug(">>>>>>>>>>> xxl-job, schedule normal, push trigger : jobId = " + jobInfo.getId() );
 
-                                    // 3、fresh next
+                                    // 3,fresh next
                                     refreshNextTriggerTime(jobInfo, new Date(jobInfo.getTriggerNextTime()));
 
                                 }
 
                             }
 
-                            // 3、update trigger info
+                            // 3,update trigger info
                             /*for (XxlJobInfo jobInfo: scheduleList) {
                                 XxlJobAdminBootstrap.getInstance().getXxlJobInfoMapper().scheduleUpdate(jobInfo);
                             }*/
@@ -195,7 +195,7 @@ public class JobScheduleHelper {
         scheduleThread.setName("xxl-job, admin JobScheduleHelper#scheduleThread");
         scheduleThread.start();
 
-        // 2、ring thread
+        // 2,ring thread
         ringThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -315,7 +315,7 @@ public class JobScheduleHelper {
      */
     public void stop(){
 
-        // 1、stop schedule
+        // 1,stop schedule
         scheduleThreadToStop = true;
         try {
             TimeUnit.SECONDS.sleep(1);  // wait
@@ -351,7 +351,7 @@ public class JobScheduleHelper {
             }
         }
 
-        // 2、stop ring (wait job-in-memory stop)
+        // 2,stop ring (wait job-in-memory stop)
         ringThreadToStop = true;
         try {
             TimeUnit.SECONDS.sleep(1);

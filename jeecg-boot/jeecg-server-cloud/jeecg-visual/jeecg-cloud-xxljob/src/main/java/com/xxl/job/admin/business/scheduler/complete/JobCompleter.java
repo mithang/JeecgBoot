@@ -38,7 +38,7 @@ public class JobCompleter {
      */
     public int complete(XxlJobLog xxlJobLog) {
 
-        // 1、process child-job
+        // 1,process child-job
         processChildJob(xxlJobLog);
 
         // text tối đa 64kb, tránh độ dài quá lớn
@@ -46,10 +46,10 @@ public class JobCompleter {
             xxlJobLog.setHandleMsg( xxlJobLog.getHandleMsg().substring(0, 15000) );
         }
 
-        // 2、fix_delay trigger next
+        // 2,fix_delay trigger next
         // on the way
 
-        // 3、update job handle-info
+        // 3,update job handle-info
         return xxlJobLogMapper.updateHandleInfo(xxlJobLog);
     }
 
@@ -59,7 +59,7 @@ public class JobCompleter {
      */
     private void processChildJob(XxlJobLog xxlJobLog){
 
-        // 1、handle success, to trigger child job
+        // 1,handle success, to trigger child job
         String triggerChildMsg = null;
         if (XxlJobContext.HANDLE_CODE_SUCCESS == xxlJobLog.getHandleCode()) {
             XxlJobInfo xxlJobInfo = xxlJobInfoMapper.loadById(xxlJobLog.getJobId());
@@ -103,7 +103,7 @@ public class JobCompleter {
             }
         }
 
-        // 2、append trigger-child message
+        // 2,append trigger-child message
         if (StringTool.isNotBlank(triggerChildMsg)) {
             xxlJobLog.setHandleMsg( xxlJobLog.getHandleMsg() + triggerChildMsg );
         }

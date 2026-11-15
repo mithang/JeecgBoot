@@ -53,8 +53,8 @@ public interface XxlJobInfoMapper {
 	/**
 	 * update schedule job
 	 *
-	 * 	1、can only update "trigger_status = 1", Avoid stopping tasks from being opened
-	 * 	2、valid "triggerStatus gte 0", filter illegal state
+	 * 	1,can only update "trigger_status = 1", Avoid stopping tasks from being opened
+	 * 	2,valid "triggerStatus gte 0", filter illegal state
 	 *
 	 * @param xxlJobInfo
 	 * @return

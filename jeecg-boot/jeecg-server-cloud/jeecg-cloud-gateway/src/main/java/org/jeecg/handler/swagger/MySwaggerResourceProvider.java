@@ -141,7 +141,7 @@ public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
             if(password!=null && !"".equals(password)){
                 properties.setProperty("password",password);
             }
-            //【issues/5115】Do tài liệu swagger gây tràn bộ nhớ gateway
+            //[issues/5115]Do tài liệu swagger gây tràn bộ nhớ gateway
             if (this.naming == null) {
                 this.naming = NamingFactory.createNamingService(properties);
             }

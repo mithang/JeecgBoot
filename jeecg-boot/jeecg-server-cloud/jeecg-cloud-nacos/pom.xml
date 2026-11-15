@@ -64,7 +64,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- JRaft(Tương thích Java 17 không cần add-opens） -->
+        <!-- JRaft(Tương thích Java 17 không cần add-opens) -->
         <dependency>
             <groupId>io.github.pig-mesh.sofa</groupId>
             <artifactId>jraft-core</artifactId>

@@ -5,7 +5,7 @@
 	<#import "../framework/common/common.macro.ftl" as netCommon>
 
 	<!-- 1-style start -->
-	<#-- select2：should before adminlte -->
+	<#-- select2:should before adminlte -->
 	<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/select2/select2.min.css">
 	<@netCommon.commonStyle />
 	<link rel="stylesheet" href="${request.contextPath}/static/plugins/bootstrap-table/bootstrap-table.min.css">
@@ -75,7 +75,7 @@
 					<div class="box-header pull-left" id="data_operation" >
 						<button class="btn btn-sm btn-info add" type="button"><i class="fa fa-plus" ></i>${I18n.system_opt_add}</button>                        <#-- add -->
 						<button class="btn btn-sm btn-warning selectOnlyOne update" type="button"><i class="fa fa-edit"></i>${I18n.system_opt_edit}</button>    <#-- update -->
-                        <button class="btn btn-sm btn-warning selectOnlyOne glue_ide" type="button">GLUE IDE</button>									        <#-- GLUE IDE：'BEAN' != row.glueType -->
+                        <button class="btn btn-sm btn-warning selectOnlyOne glue_ide" type="button">GLUE IDE</button>									        <#-- GLUE IDE:'BEAN' != row.glueType -->
 						<button class="btn btn-sm btn-danger selectOnlyOne delete" type="button"><i class="fa fa-remove "></i>${I18n.system_opt_del}</button>   <#-- delete -->
 						｜
 						<button class="btn btn-sm btn-default selectOnlyOne job_copy" type="button">${I18n.system_opt_copy}</button>
@@ -150,11 +150,11 @@
 								</div>
 								<div class="schedule_conf schedule_conf_FIX_RATE" style="display: none" >
 									<label for="lastname" class="col-sm-2 control-label">${I18n.schedule_type_fix_rate}<font color="red">*</font></label>
-									<div class="col-sm-4"><input type="text" class="form-control" name="schedule_conf_FIX_RATE" placeholder="${I18n.system_please_input} （ Second ）" maxlength="10" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" ></div>
+									<div class="col-sm-4"><input type="text" class="form-control" name="schedule_conf_FIX_RATE" placeholder="${I18n.system_please_input} ( Second )" maxlength="10" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" ></div>
 								</div>
 								<div class="schedule_conf schedule_conf_FIX_DELAY" style="display: none" >
 									<label for="lastname" class="col-sm-2 control-label">${I18n.schedule_type_fix_delay}<font color="red">*</font></label>
-									<div class="col-sm-4"><input type="text" class="form-control" name="schedule_conf_FIX_DELAY" placeholder="${I18n.system_please_input} （ Second ）" maxlength="10" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" ></div>
+									<div class="col-sm-4"><input type="text" class="form-control" name="schedule_conf_FIX_DELAY" placeholder="${I18n.system_please_input} ( Second )" maxlength="10" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" ></div>
 								</div>
 							</div>
 
@@ -254,8 +254,8 @@ public class DemoGlueJobHandler extends IJobHandler {
 #!/bin/bash
 echo "xxl-job: hello shell"
 
-echo "${I18n.jobinfo_script_location}：$0"
-echo "${I18n.jobinfo_field_executorparam}：$1"
+echo "${I18n.jobinfo_script_location}:$0"
+echo "${I18n.jobinfo_field_executorparam}:$1"
 echo "${I18n.jobinfo_shard_index} = $2"
 echo "${I18n.jobinfo_shard_total} = $3"
 <#--echo "Số lượng tham số: $#"
@@ -276,10 +276,10 @@ import sys
 
 print("xxl-job: hello python")
 
-print("${I18n.jobinfo_script_location}：", sys.argv[0])
-print("${I18n.jobinfo_field_executorparam}：", sys.argv[1])
-print("${I18n.jobinfo_shard_index}：", sys.argv[2])
-print("${I18n.jobinfo_shard_total}：", sys.argv[3])
+print("${I18n.jobinfo_script_location}:", sys.argv[0])
+print("${I18n.jobinfo_field_executorparam}:", sys.argv[1])
+print("${I18n.jobinfo_shard_index}:", sys.argv[2])
+print("${I18n.jobinfo_shard_total}:", sys.argv[3])
 
 print("Good bye!")
 exit(0)
@@ -292,10 +292,10 @@ import sys
 
 print "xxl-job: hello python"
 
-print "${I18n.jobinfo_script_location}：", sys.argv[0]
-print "${I18n.jobinfo_field_executorparam}：", sys.argv[1]
-print "${I18n.jobinfo_shard_index}：", sys.argv[2]
-print "${I18n.jobinfo_shard_total}：", sys.argv[3]
+print "${I18n.jobinfo_script_location}:", sys.argv[0]
+print "${I18n.jobinfo_field_executorparam}:", sys.argv[1]
+print "${I18n.jobinfo_shard_index}:", sys.argv[2]
+print "${I18n.jobinfo_shard_total}:", sys.argv[3]
 <#--for i in range(1, len(sys.argv)):
 	time.sleep(1)
 	print "Tham số", i, sys.argv[i]-->
@@ -313,8 +313,8 @@ logging.info("Tệp script: " + sys.argv[0])
 
     echo "xxl-job: hello php  \n";
 
-    echo "${I18n.jobinfo_script_location}：$argv[0]  \n";
-    echo "${I18n.jobinfo_field_executorparam}：$argv[1]  \n";
+    echo "${I18n.jobinfo_script_location}:$argv[0]  \n";
+    echo "${I18n.jobinfo_field_executorparam}:$argv[1]  \n";
     echo "${I18n.jobinfo_shard_index} = $argv[2]  \n";
     echo "${I18n.jobinfo_shard_total} = $argv[3]  \n";
 
@@ -410,11 +410,11 @@ exit 0
 								</div>
 								<div class="schedule_conf schedule_conf_FIX_RATE" style="display: none" >
 									<label for="lastname" class="col-sm-2 control-label">${I18n.schedule_type_fix_rate}<font color="red">*</font></label>
-									<div class="col-sm-4"><input type="text" class="form-control" name="schedule_conf_FIX_RATE" placeholder="${I18n.system_please_input} （ Second ）" maxlength="10" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" ></div>
+									<div class="col-sm-4"><input type="text" class="form-control" name="schedule_conf_FIX_RATE" placeholder="${I18n.system_please_input} ( Second )" maxlength="10" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" ></div>
 								</div>
 								<div class="schedule_conf schedule_conf_FIX_DELAY" style="display: none" >
 									<label for="lastname" class="col-sm-2 control-label">${I18n.schedule_type_fix_delay}<font color="red">*</font></label>
-									<div class="col-sm-4"><input type="text" class="form-control" name="schedule_conf_FIX_DELAY" placeholder="${I18n.system_please_input} （ Second ）" maxlength="10" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" ></div>
+									<div class="col-sm-4"><input type="text" class="form-control" name="schedule_conf_FIX_DELAY" placeholder="${I18n.system_please_input} ( Second )" maxlength="10" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" ></div>
 								</div>
 							</div>
 
@@ -559,7 +559,7 @@ exit 0
 
 		// ---------------------- filter ----------------------
 
-		// select2：init
+		// select2:init
 		$('#jobGroup').select2();
 
 		/**
@@ -643,7 +643,7 @@ exit 0
 					widthUnit: '%',
 					formatter: function(value, row, index) {
 						if (row.scheduleConf) {
-							return row.scheduleType + '：'+ row.scheduleConf;
+							return row.scheduleType + ':'+ row.scheduleConf;
 						} else {
 							return row.scheduleType;
 						}
@@ -664,7 +664,7 @@ exit 0
 
 						// append handler
 						if (row.executorHandler) {
-							return glueTypeTitle +"：" + row.executorHandler;
+							return glueTypeTitle +":" + row.executorHandler;
 						} else {
 							return glueTypeTitle;
 						}
@@ -1075,10 +1075,10 @@ exit 0
 				$("#addModal .form input[name='schedule_conf_CRON']").show().siblings().remove();
 				$("#addModal .form input[name='schedule_conf_CRON']").cronGen({});
 
-				// 》init scheduleType
+				// >init scheduleType
 				$("#addModal .form select[name=scheduleType]").change();
 
-				// 》init glueType
+				// >init glueType
 				$("#addModal .form select[name=glueType]").change();
 			},
 			readFormData: function() {
@@ -1199,7 +1199,7 @@ exit 0
 					$("#updateModal .form input[name='schedule_conf_FIX_DELAY']").val( row.scheduleConf );
 				}
 
-				// 》init scheduleType
+				// >init scheduleType
 				$("#updateModal .form select[name=scheduleType]").change();
 
 				// fill job
@@ -1207,10 +1207,10 @@ exit 0
 				$("#updateModal .form input[name='executorHandler']").val( row.executorHandler );
 				$("#updateModal .form textarea[name='executorParam']").val( row.executorParam );
 
-				// 》init glueType
+				// >init glueType
 				$("#updateModal .form select[name=glueType]").change();
 
-				// 》init-cronGen
+				// >init-cronGen
 				$("#updateModal .form input[name='schedule_conf_CRON']").show().siblings().remove();
 				$("#updateModal .form input[name='schedule_conf_CRON']").cronGen({});
 
@@ -1290,7 +1290,7 @@ exit 0
 				$("#addModal .form input[name='schedule_conf_FIX_DELAY']").val( row.scheduleConf );
 			}
 
-			// 》init scheduleType
+			// >init scheduleType
 			$("#addModal .form select[name=scheduleType]").change();
 
 			// fill job
@@ -1298,10 +1298,10 @@ exit 0
 			$("#addModal .form input[name='executorHandler']").val( row.executorHandler );
 			$("#addModal .form textarea[name='executorParam']").val( row.executorParam );
 
-			// 》init glueType
+			// >init glueType
 			$("#addModal .form select[name=glueType]").change();
 
-			// 》init-cronGen
+			// >init-cronGen
 			$("#addModal .form input[name='schedule_conf_CRON']").show().siblings().remove();
 			$("#addModal .form input[name='schedule_conf_CRON']").cronGen({});
 

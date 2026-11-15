@@ -202,20 +202,20 @@
 //     * @throws SchedulerException
 //     */
 //	public static boolean addJob(String jobName, String cronExpression) throws SchedulerException {
-//    	// 1、job key
+//    	// 1,job key
 //        TriggerKey triggerKey = TriggerKey.triggerKey(jobName);
 //        JobKey jobKey = new JobKey(jobName);
 //
-//        // 2、valid
+//        // 2,valid
 //        if (scheduler.checkExists(triggerKey)) {
 //            return true;    // PASS
 //        }
 //
-//        // 3、corn trigger
+//        // 3,corn trigger
 //        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionDoNothing();   // withMisfireHandlingInstructionDoNothing bỏ qua các lần lập lịch bị bỏ qua trong quá trình dừng lập lịch
 //        CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withSchedule(cronScheduleBuilder).build();
 //
-//        // 4、job detail
+//        // 4,job detail
 //		Class<? extends Job> jobClass_ = RemoteHttpJobBean.class;   // Class.forName(jobInfo.getJobClass());
 //		JobDetail jobDetail = JobBuilder.newJob(jobClass_).withIdentity(jobKey).build();
 //
@@ -225,7 +225,7 @@
 //        	// JobExecutionContext context.getMergedJobDataMap().get("mailGuid");
 //		}*/
 //
-//        // 5、schedule job
+//        // 5,schedule job
 //        Date date = scheduler.scheduleJob(jobDetail, cronTrigger);
 //
 //        logger.info(">>>>>>>>>>> addJob success(quartz), jobDetail:{}, cronTrigger:{}, date:{}", jobDetail, cronTrigger, date);
@@ -265,27 +265,27 @@
 //     */
 //	public static boolean updateJobCron(String jobName, String cronExpression) throws SchedulerException {
 //
-//        // 1、job key
+//        // 1,job key
 //        TriggerKey triggerKey = TriggerKey.triggerKey(jobName);
 //
-//        // 2、valid
+//        // 2,valid
 //        if (!scheduler.checkExists(triggerKey)) {
 //            return true;    // PASS
 //        }
 //
 //        CronTrigger oldTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
 //
-//        // 3、avoid repeat cron
+//        // 3,avoid repeat cron
 //        String oldCron = oldTrigger.getCronExpression();
 //        if (oldCron.equals(cronExpression)){
 //            return true;    // PASS
 //        }
 //
-//        // 4、new cron trigger
+//        // 4,new cron trigger
 //        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionDoNothing();
 //        oldTrigger = oldTrigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(cronScheduleBuilder).build();
 //
-//        // 5、rescheduleJob
+//        // 5,rescheduleJob
 //        scheduler.rescheduleJob(triggerKey, oldTrigger);
 //
 //        /*

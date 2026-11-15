@@ -33,7 +33,7 @@ public class JobCompleteHelper {
 	 */
 	public void start(){
 
-		// 1、callbackThreadPool
+		// 1,callbackThreadPool
 		callbackThreadPool = new ThreadPoolExecutor(
 				2,
 				20,
@@ -55,7 +55,7 @@ public class JobCompleteHelper {
 				});
 
 
-		// 2、jobMonitorThread
+		// 2,jobMonitorThread
 		jobMonitorThread = new CyclicThread("JobCompleteHelper#jobMonitorThread", true, new Runnable() {
 			@Override
 			public void run() {
@@ -88,10 +88,10 @@ public class JobCompleteHelper {
 	 */
 	public void stop(){
 
-		// 1、callbackThreadPool
+		// 1,callbackThreadPool
 		callbackThreadPool.shutdownNow();
 
-		// 2、jobMonitorThread
+		// 2,jobMonitorThread
 		jobMonitorThread.stop();
 	}
 

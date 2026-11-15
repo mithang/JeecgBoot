@@ -52,10 +52,10 @@ public class XxlSsoConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        // 2.1、build xxl-sso interceptor
+        // 2.1,build xxl-sso interceptor
         XxlSsoWebInterceptor webInterceptor = new XxlSsoWebInterceptor(excludedPaths, loginPath);
 
-        // 2.2、add interceptor
+        // 2.2,add interceptor
         registry.addInterceptor(webInterceptor).addPathPatterns("/**");
     }
 

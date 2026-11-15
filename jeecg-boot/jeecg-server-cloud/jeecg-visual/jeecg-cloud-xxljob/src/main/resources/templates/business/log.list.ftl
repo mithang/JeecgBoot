@@ -5,7 +5,7 @@
 	<#import "../framework/common/common.macro.ftl" as netCommon>
 
 	<!-- 1-style start -->
-	<#-- select2：should before adminlte -->
+	<#-- select2:should before adminlte -->
 	<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/select2/select2.min.css">
 	<@netCommon.commonStyle />
 	<link rel="stylesheet" href="${request.contextPath}/static/plugins/bootstrap-table/bootstrap-table.min.css">
@@ -109,7 +109,7 @@
 					<div class="modal-body">
 						<form class="form-horizontal form" role="form" >
 							<div class="form-group">
-								<label class="col-sm-3 control-label">${I18n.jobinfo_field_jobgroup}：</label>
+								<label class="col-sm-3 control-label">${I18n.jobinfo_field_jobgroup}:</label>
 								<div class="col-sm-9">
 									<input type="text" class="form-control jobGroupText" readonly >
 									<input type="hidden" name="jobGroup" >
@@ -117,7 +117,7 @@
 							</div>
 
 							<div class="form-group">
-								<label class="col-sm-3 control-label">${I18n.jobinfo_job}：</label>
+								<label class="col-sm-3 control-label">${I18n.jobinfo_job}:</label>
 								<div class="col-sm-9">
 									<input type="text" class="form-control jobIdText" readonly >
 									<input type="hidden" name="jobId" >
@@ -125,7 +125,7 @@
 							</div>
 
 							<div class="form-group">
-								<label class="col-sm-3 control-label">${I18n.joblog_clean_type}：</label>
+								<label class="col-sm-3 control-label">${I18n.joblog_clean_type}:</label>
 								<div class="col-sm-9">
 									<select class="form-control" name="type" >
 										<option value="1" >${I18n.joblog_clean_type_1}</option>
@@ -283,7 +283,7 @@
 					align: 'left',
 					formatter: function(value, row, index) {
                         // build
-                        let jobShow = '【'+ row.jobId +'】';
+                        let jobShow = '['+ row.jobId +']';
                         let jobDesc = $("#jobId").find("option[value='"+ row.jobId +"']").text();
                         if (jobDesc) {
                             jobShow += jobDesc;

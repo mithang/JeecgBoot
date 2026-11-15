@@ -18,20 +18,20 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Cấm bên ngoài truy cập API nội bộ của microservice qua gateway /sys/api/**、/airag/api/**、/online/api/**、/drag/api/**、/airag/flow/api/**、/eoa/api/**、/desform/inner/api/**、/act/designer/miniDesFlow/inner/api/**
+ * Cấm bên ngoài truy cập API nội bộ của microservice qua gateway /sys/api/**,/airag/api/**,/online/api/**,/drag/api/**,/airag/flow/api/**,/eoa/api/**,/desform/inner/api/**,/act/designer/miniDesFlow/inner/api/**
  * <p>
  * Đây là các API nội bộ Feign mà các service cung cấp cho các microservice khác (bao gồm mật khẩu plaintext của nguồn dữ liệu, thông tin người dùng, đọc/ghi dữ liệu bảng tùy ý, v.v.),
  * Feign Kết nối trực tiếp theo tên service, không qua gateway, vì vậy việc chặn ở gateway không ảnh hưởng đến gọi nội bộ.
  *
  * @author scott
- * @since 2026-10-14 Trong chế độ microservice, yêu cầu bên ngoài có thể gọi trực tiếp API nội bộ qua gateway (GHSA-vrqv-3gwg-423j / GHSA-hh6j-6p7c-8hrf / GHSA-483m-f38h-369m / GHSA-5q28-hq94-q2fj）
+ * @since 2026-10-14 Trong chế độ microservice, yêu cầu bên ngoài có thể gọi trực tiếp API nội bộ qua gateway (GHSA-vrqv-3gwg-423j / GHSA-hh6j-6p7c-8hrf / GHSA-483m-f38h-369m / GHSA-5q28-hq94-q2fj)
  */
 @Slf4j
 @Component
 public class InnerApiBlockFilter implements GlobalFilter, Ordered {
 
     /**
-     * Tiền tố đường dẫn API nội bộ của microservice (chữ thường):/sys/api、/airag/api、/online/api、/drag/api、/airag/flow/api、/eoa/api（GHSA-v952-qq2h-377j / GHSA-qj27-82m3-9q8q / GHSA-2xf5-w883-78m9）
+     * Tiền tố đường dẫn API nội bộ của microservice (chữ thường):/sys/api,/airag/api,/online/api,/drag/api,/airag/flow/api,/eoa/api(GHSA-v952-qq2h-377j / GHSA-qj27-82m3-9q8q / GHSA-2xf5-w883-78m9)
      */
     private static final String[] INNER_API_PREFIXES = {"/sys/api/", "/airag/api/", "/online/api/", "/drag/api/", "/airag/flow/api/", "/eoa/api/", "/desform/inner/api/", "/act/designer/minidesflow/inner/api/"};
 
@@ -43,7 +43,7 @@ public class InnerApiBlockFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = normalizePath(exchange.getRequest().getURI().getRawPath());
-        //update-begin---author:scott ---date:20261014  for：【GHSA-v952-qq2h-377j/GHSA-qj27-82m3-9q8q】 các API nội bộ bị gateway chặn do /sys/api mở rộng thành nhiều tiền tố, bổ sung /airag/api、/online/api、/drag/api、/airag/flow/api、/eoa/api-----------
+        //update-begin---author:scott ---date:20261014  for:[GHSA-v952-qq2h-377j/GHSA-qj27-82m3-9q8q] các API nội bộ bị gateway chặn do /sys/api mở rộng thành nhiều tiền tố, bổ sung /airag/api,/online/api,/drag/api,/airag/flow/api,/eoa/api-----------
         for (String prefix : INNER_API_PREFIXES) {
             int idx = path.indexOf(prefix);
             if (idx >= 0 || path.endsWith(prefix.substring(0, prefix.length() - 1))) {
@@ -54,7 +54,7 @@ public class InnerApiBlockFilter implements GlobalFilter, Ordered {
                 }
             }
         }
-        //update-end---author:scott ---date:20261014  for：【GHSA-v952-qq2h-377j/GHSA-qj27-82m3-9q8q】 các API nội bộ bị gateway chặn do /sys/api mở rộng thành nhiều tiền tố, bổ sung /airag/api、/online/api、/drag/api、/airag/flow/api、/eoa/api-----------
+        //update-end---author:scott ---date:20261014  for:[GHSA-v952-qq2h-377j/GHSA-qj27-82m3-9q8q] các API nội bộ bị gateway chặn do /sys/api mở rộng thành nhiều tiền tố, bổ sung /airag/api,/online/api,/drag/api,/airag/flow/api,/eoa/api-----------
         return chain.filter(exchange);
     }
 

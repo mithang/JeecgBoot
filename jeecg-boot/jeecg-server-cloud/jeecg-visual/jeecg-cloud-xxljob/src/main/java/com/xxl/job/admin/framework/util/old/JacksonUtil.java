@@ -13,8 +13,8 @@
 ///**
 // * Jackson util
 // *
-// * 1、obj need private and set/get；
-// * 2、do not support inner class；
+// * 1,obj need private and set/get;
+// * 2,do not support inner class;
 // *
 // * @author xuxueli 2015-9-25 18:02:56
 // */
@@ -27,7 +27,7 @@
 //    }
 //
 //    /**
-//     * bean、array、List、Map --> json
+//     * bean,array,List,Map --> json
 //     *
 //     * @param obj
 //     * @return json string
@@ -47,7 +47,7 @@
 //    }
 //
 //    /**
-//     * string --> bean、Map、List(array)
+//     * string --> bean,Map,List(array)
 //     *
 //     * @param jsonStr
 //     * @param clazz

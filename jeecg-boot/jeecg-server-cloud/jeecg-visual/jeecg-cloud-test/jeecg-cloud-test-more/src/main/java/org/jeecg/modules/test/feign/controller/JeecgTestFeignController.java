@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @Slf4j
 @RestController
 @RequestMapping("/sys/test")
-@Tag(name = "【Microservice】Kiểm thử đơn vị")
+@Tag(name = "[Microservice]Kiểm thử đơn vị")
 public class JeecgTestFeignController {
 
     @Autowired

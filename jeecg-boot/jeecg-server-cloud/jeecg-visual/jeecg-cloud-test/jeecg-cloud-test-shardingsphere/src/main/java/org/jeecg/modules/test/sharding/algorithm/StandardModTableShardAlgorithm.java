@@ -11,7 +11,7 @@ import java.util.Properties;
 /**
  * Dùng để xử lý khi sử dụng một khóa duy nhất
  * Dựa theo giá trị của trường phân mảnh và sharding-count thực hiện phép chia lấy dư
- * SQL Trong câu lệnh có>，>=, <=，<，=, toán tử IN và BETWEEN AND đều có thể áp dụng chiến lược phân mảnh này.
+ * SQL Trong câu lệnh có>,>=, <=,<,=, toán tử IN và BETWEEN AND đều có thể áp dụng chiến lược phân mảnh này.
  *
  * @author zyf
  */

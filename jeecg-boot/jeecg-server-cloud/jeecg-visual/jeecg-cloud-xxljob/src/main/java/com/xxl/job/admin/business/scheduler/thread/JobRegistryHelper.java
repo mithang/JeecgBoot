@@ -39,7 +39,7 @@ public class JobRegistryHelper {
 	 */
 	public void start(){
 
-		// 1、for registry or remove
+		// 1,for registry or remove
 		registryOrRemoveThreadPool = new ThreadPoolExecutor(
 				2,
 				10,
@@ -60,7 +60,7 @@ public class JobRegistryHelper {
 					}
 				});
 
-		// 2、for registry monitor
+		// 2,for registry monitor
 		registryMonitorThread = new CyclicThread("JobRegistryHelper#registryMonitorThread", true, new Runnable() {
 			@Override
 			public void run() {
@@ -124,10 +124,10 @@ public class JobRegistryHelper {
 	 */
 	public void stop(){
 
-		// 1、registryOrRemoveThreadPool
+		// 1,registryOrRemoveThreadPool
 		registryOrRemoveThreadPool.shutdownNow();
 
-		// 2、registryMonitorThread
+		// 2,registryMonitorThread
 		registryMonitorThread.stop();
 	}
 

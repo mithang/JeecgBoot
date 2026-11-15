@@ -42,7 +42,7 @@
 				<div class="collapse navbar-collapse pull-left" id="navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li class="active" >
-							<a href="javascript:;">${I18n.jobinfo_job}：${jobInfo.jobDesc} ｜<#list GlueTypeEnum as item><#if item == jobInfo.glueType>${item.desc}</#if></#list></a>
+							<a href="javascript:;">${I18n.jobinfo_job}:${jobInfo.jobDesc} ｜<#list GlueTypeEnum as item><#if item == jobInfo.glueType>${item.desc}</#if></#list></a>
 						</li>
 					</ul>
 				</div>
@@ -55,7 +55,7 @@
 							<ul class="dropdown-menu" role="menu">
 								<li <#if jobLogGlues?exists && jobLogGlues?size gt 0 >style="display: none;"</#if> >
 									<a href="javascript:;" class="source_version" version="version_now" glueType="${jobInfo.glueType}" >
-										<#list GlueTypeEnum as item><#if item == jobInfo.glueType>${item.desc}</#if></#list>： ${jobInfo.glueRemark}
+										<#list GlueTypeEnum as item><#if item == jobInfo.glueType>${item.desc}</#if></#list>: ${jobInfo.glueRemark}
 									</a>
 								</li>
 								<textarea id="version_now" style="display:none;" >${jobInfo.glueSource}</textarea>
@@ -63,7 +63,7 @@
 									<#list jobLogGlues as glue>
 										<li>
 											<a href="javascript:;" class="source_version" version="version_${glue.id}" glueType="${glue.glueType}" >
-												${glue.addTime?string["yyyy-MM-dd HH:mm:ss"]}： ${glue.glueRemark}
+												${glue.addTime?string["yyyy-MM-dd HH:mm:ss"]}: ${glue.glueRemark}
 											</a>
 										</li>
 										<textarea id="version_${glue.id}" style="display:none;" >${glue.glueSource}</textarea>

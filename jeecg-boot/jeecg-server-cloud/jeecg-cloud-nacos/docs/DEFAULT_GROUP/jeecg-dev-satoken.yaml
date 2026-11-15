@@ -139,7 +139,7 @@ jeecg:
     enabled: true
   ai-chat:
     enabled: false
-    apiKey: "？？？？"
+    apiKey: "????"
     apiHost: "https://api.openai.com"
     timeout: 60
   ai-rag:

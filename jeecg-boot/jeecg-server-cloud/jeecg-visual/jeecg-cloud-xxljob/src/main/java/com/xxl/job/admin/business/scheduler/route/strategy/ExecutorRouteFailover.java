@@ -29,10 +29,10 @@ public class ExecutorRouteFailover extends ExecutorRouter {
                 beatResult = Response.ofFail(e.getMessage() );
             }
             beatResultSB.append( (beatResultSB.length()>0)?"<br><br>":"")
-                    .append(I18nUtil.getString("jobconf_beat") + "：")
-                    .append("<br>address：").append(address)
-                    .append("<br>code：").append(beatResult.getCode())
-                    .append("<br>msg：").append(beatResult.getMsg());
+                    .append(I18nUtil.getString("jobconf_beat") + ":")
+                    .append("<br>address:").append(address)
+                    .append("<br>code:").append(beatResult.getCode())
+                    .append("<br>msg:").append(beatResult.getMsg());
 
             // beat success
             if (beatResult.isSuccess()) {

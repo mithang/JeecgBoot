@@ -143,7 +143,7 @@
 
     }
 
-    // -------------------- tab: open、close --------------------
+    // -------------------- tab: open,close --------------------
 
     /**
      * Mở Tab: theo url + tên
@@ -153,7 +153,7 @@
      * @returns {boolean}
      */
     function openTab(tabSrc, tabName) {
-        // 0、valid dateurl
+        // 0,valid dateurl
         if (tabSrc === undefined || $.trim(tabSrc).length === 0){
             return false;
         }
@@ -420,7 +420,7 @@
         return width;
     }
 
-    // -------------------- tab: scroll-left、scroll-right、 --------------------
+    // -------------------- tab: scroll-left,scroll-right, --------------------
 
     /**
      * Tab – nút di chuyển sang trái: xem các tab bị ẩn ở bên trái
@@ -496,7 +496,7 @@
         }
     }
 
-    // -------------------- tab: refresh、close-other、close-current、close-all --------------------
+    // -------------------- tab: refresh,close-other,close-current,close-all --------------------
 
     /**
      * Nút làm mới Tab: làm mới trang Tab đang active

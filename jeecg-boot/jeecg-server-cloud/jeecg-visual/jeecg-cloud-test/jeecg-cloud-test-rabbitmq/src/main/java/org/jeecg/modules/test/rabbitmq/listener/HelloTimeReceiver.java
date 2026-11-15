@@ -31,7 +31,7 @@ public class HelloTimeReceiver extends BaseRabbiMqHandler<BaseMap> {
             public void handler(BaseMap map, Channel channel) {
                 //Xử lý nghiệp vụ
                 String orderId = map.get("orderId").toString();
-                log.info("Time Receiver1，orderId : " + orderId);
+                log.info("Time Receiver1,orderId : " + orderId);
             }
         });
     }

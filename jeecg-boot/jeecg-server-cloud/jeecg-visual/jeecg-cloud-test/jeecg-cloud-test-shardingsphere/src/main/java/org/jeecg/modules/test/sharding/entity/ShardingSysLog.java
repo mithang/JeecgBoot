@@ -101,7 +101,7 @@ public class ShardingSysLog implements Serializable {
     private Integer logType;
 
     /**
-     * Loại thao tác (1 tìm kiếm, 2 thêm mới, 3 chỉnh sửa, 4 xóa,5 nhập, 6 xuất）
+     * Loại thao tác (1 tìm kiếm, 2 thêm mới, 3 chỉnh sửa, 4 xóa,5 nhập, 6 xuất)
      */
     @Dict(dicCode = "operate_type")
     private Integer operateType;

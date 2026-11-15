@@ -110,7 +110,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 		if (GlueTypeEnum.BEAN==GlueTypeEnum.match(jobInfo.getGlueType()) && StringTool.isBlank(jobInfo.getExecutorHandler()) ) {
 			return Response.ofFail ( (I18nUtil.getString("system_please_input")+"JobHandler") );
 		}
-		// 》fix "\r" in shell
+		// >fix "\r" in shell
 		if (GlueTypeEnum.GLUE_SHELL==GlueTypeEnum.match(jobInfo.getGlueType()) && jobInfo.getGlueSource()!=null) {
 			jobInfo.setGlueSource(jobInfo.getGlueSource().replaceAll("\r", ""));
 		}
@@ -126,7 +126,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 			return Response.ofFail ( (I18nUtil.getString("jobinfo_field_executorBlockStrategy")+I18nUtil.getString("system_invalid")) );
 		}
 
-		// 》ChildJobId valid
+		// >ChildJobId valid
 		if (StringTool.isNotBlank(jobInfo.getChildJobId())) {
 			String[] childJobIds = jobInfo.getChildJobId().split(",");
 			for (String childJobIdItem: childJobIds) {
@@ -220,7 +220,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 			return Response.ofFail ( (I18nUtil.getString("jobinfo_field_executorBlockStrategy")+I18nUtil.getString("system_invalid")) );
 		}
 
-		// 》ChildJobId valid
+		// >ChildJobId valid
 		if (StringTool.isNotBlank(jobInfo.getChildJobId())) {
 			String[] childJobIds = jobInfo.getChildJobId().split(",");
 			for (String childJobIdItem: childJobIds) {

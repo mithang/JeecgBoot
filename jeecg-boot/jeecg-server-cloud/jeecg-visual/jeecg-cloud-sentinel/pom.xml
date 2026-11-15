@@ -18,7 +18,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-		<!-- Sentinel Dashboard(Bản tùy chỉnh Jeecg v1.8.10） -->
+		<!-- Sentinel Dashboard(Bản tùy chỉnh Jeecg v1.8.10) -->
 		<dependency>
 			<groupId>org.jeecgframework.cloud</groupId>
 			<artifactId>sentinel-dashboard</artifactId>

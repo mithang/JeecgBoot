@@ -47,7 +47,7 @@ public class JobFailAlarmMonitorHelper {
 						XxlJobLog log = XxlJobAdminBootstrap.getInstance().getXxlJobLogMapper().load(failLogId);
 						XxlJobInfo info = XxlJobAdminBootstrap.getInstance().getXxlJobInfoMapper().loadById(log.getJobId());
 
-						// 1、fail retry monitor
+						// 1,fail retry monitor
 						if (log.getExecutorFailRetryCount() > 0) {
 							XxlJobAdminBootstrap.getInstance().getJobTriggerPoolHelper().trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount()-1), log.getExecutorShardingParam(), log.getExecutorParam(), null);
 							String retryMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>"+ I18nUtil.getString("jobconf_trigger_type_retry") +"<<<<<<<<<<< </span><br>";
@@ -55,7 +55,7 @@ public class JobFailAlarmMonitorHelper {
 							XxlJobAdminBootstrap.getInstance().getXxlJobLogMapper().updateTriggerInfo(log);
 						}
 
-						// 2、fail alarm monitor
+						// 2,fail alarm monitor
 						int newAlarmStatus = 0;		// Trạng thái cảnh báo: 0-Mặc định, -1=Trạng thái khóa, 1-Không cần cảnh báo, 2-Cảnh báo thành công, 3-Cảnh báo thất bại
 						if (info != null) {
 							boolean alarmResult = XxlJobAdminBootstrap.getInstance().getJobAlarmer().alarm(info, log);
