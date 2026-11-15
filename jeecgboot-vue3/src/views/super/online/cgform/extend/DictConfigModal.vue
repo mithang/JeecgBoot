@@ -12,14 +12,14 @@
   >
     <BasicForm @register="registerForm" />
     <div class="dict-config-tip">
-      <p>· <b>Từ điển hệ thống</b>: chỉ điền Code(ví dụ như <code>sex</code>）</p>
-      <p>· <b>Từ điển bảng</b>：Table=Tên bảng,Code=trường lưu trữ giá trị,Text=Trường hiển thị; có điều kiện thì có thể ở Table thêm vào sau <code>where ...</code></p>
-      <p>· <b>Popup Popup</b>：Table=Báo cáo code，Code=Trường báo cáo,Text=Trường điền ngược của bảng này, nhiều trường dùng dấu phẩy</p>
-      <p>· <b>Popup từ điển</b>：Table=Báo cáo code，Code/Text mỗi cái một trường</p>
-      <p>· <b>Cây tùy chỉnh</b>：Text=<code>id,pid,Trường hiển thị,Có trường nút con</code></p>
-      <p>· <b>Dropdown liên động</b>：Table điền JSON chuỗi,Code/Text Để trống</p>
-      <p>· <b>bản ghi liên kết</b>：Table=Tên bảng liên kết,Code=trường lưu trữ giá trị (thường là <code>id</code>），Text=Trường tiêu đề,Trường hiển thị khác (ví dụ <code>name,age,sex</code>, cái đầu tiên là trường tiêu đề)</p>
-      <p>· <b>trường bảng khác</b>：Table=Tên trường bản ghi liên kết của bảng này,Code Để trống,Text=Trường cần hiển thị trong bảng liên kết (ví dụ <code>name</code>）</p>
+      <p>· <b>Từ điển hệ thống</b>: chỉ điền Code (ví dụ như <code>sex</code>)</p>
+      <p>· <b>Từ điển bảng</b>: Table = Tên bảng, Code = trường lưu trữ giá trị, Text = Trường hiển thị; có điều kiện thì có thể ở Table thêm vào sau <code>where ...</code></p>
+      <p>· <b>Popup Popup</b>: Table = Báo cáo code, Code = Trường báo cáo, Text = Trường điền ngược của bảng này, nhiều trường dùng dấu phẩy</p>
+      <p>· <b>Popup từ điển</b>: Table = Báo cáo code, Code/Text mỗi cái một trường</p>
+      <p>· <b>Cây tùy chỉnh</b>: Text = <code>id,pid,Trường hiển thị,Có trường nút con</code></p>
+      <p>· <b>Dropdown liên động</b>: Table điền JSON chuỗi, Code/Text để trống</p>
+      <p>· <b>bản ghi liên kết</b>: Table = Tên bảng liên kết, Code = trường lưu trữ giá trị (thường là <code>id</code>), Text = Trường tiêu đề, Trường hiển thị khác (ví dụ <code>name,age,sex</code>, cái đầu tiên là trường tiêu đề)</p>
+      <p>· <b>trường bảng khác</b>: Table = Tên trường bản ghi liên kết của bảng này, Code để trống, Text = Trường cần hiển thị trong bảng liên kết (ví dụ <code>name</code>)</p>
     </div>
   </BasicModal>
 </template>

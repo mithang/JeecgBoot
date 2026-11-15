@@ -492,17 +492,17 @@
         const sysVarLabel = getSysVarLabel(record.ruleValue);
         if (sysVarLabel) return sysVarLabel;
         if (isFuzzyRuleOperator(record.ruleOperator)) {
-          return Array.isArray(record.ruleValue) ? record.ruleValue.join('、') : String(record.ruleValue ?? '');
+          return Array.isArray(record.ruleValue) ? record.ruleValue.join(', ') : String(record.ruleValue ?? '');
         }
         if (field?.view === 'popup_dict') {
           const config = getPopupDictConfig(field);
           const values = Array.isArray(record.ruleValue) ? record.ruleValue : String(record.ruleValue ?? '').split(',');
           const normalizedValues = values.map((value) => String(value).trim()).filter(Boolean);
-          if (!config) return normalizedValues.join('、');
+          if (!config) return normalizedValues.join(', ');
           const labelMap = popupLabelMaps[config.dictCode] || {};
           const missingValues = normalizedValues.filter((value) => !labelMap[value]);
           if (missingValues.length) loadRuleValuePopupDict(field, missingValues);
-          return normalizedValues.map((value) => labelMap[value] || value).join('、');
+          return normalizedValues.map((value) => labelMap[value] || value).join(', ');
         }
         // Lựa chọn của người dùng: truy vấn tên hiển thị theo trường lưu trữ trong cấu hình mở rộng của trường, định dạng là"Tên hiển thị (giá trị thực)", khi thiếu tên thì chỉ hiển thị giá trị thật
         if (field?.view === 'sel_user') {
@@ -520,7 +520,7 @@
               const displayValue = ellipsisValue ? ellipsisText(value, 5) : value;
               return label ? `${label}(${displayValue})` : displayValue;
             })
-            .join('、');
+            .join(', ');
         }
         // Chọn phòng ban: truy vấn tên hiển thị theo trường lưu trữ trong cấu hình mở rộng của trường, định dạng là"Tên hiển thị (giá trị thực)", khi thiếu tên thì chỉ hiển thị giá trị thật
         if (field?.view === 'sel_depart') {
@@ -538,7 +538,7 @@
               const displayValue = ellipsisValue ? ellipsisText(value, 5) : value;
               return label ? `${label}(${displayValue})` : displayValue;
             })
-            .join('、');
+            .join(', ');
         }
         const dictCode = getRuleValueDictCode(field);
         if (!dictCode) {
@@ -548,9 +548,9 @@
         const values = Array.isArray(record.ruleValue) ? record.ruleValue : String(record.ruleValue ?? '').split(',');
         if (!labelMap) {
           loadRuleValueDict(field);
-          return values.join('、');
+          return values.join(', ');
         }
-        return values.map((value) => labelMap[String(value).trim()] || value).join('、');
+        return values.map((value) => labelMap[String(value).trim()] || value).join(', ');
       }
 
       /** Cắt ngắn văn bản: vượt quá maxLen ký tự thì hiển thị phần đầu maxLen ký tự + ... */

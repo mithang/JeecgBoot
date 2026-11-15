@@ -128,7 +128,7 @@
         let baseUrl = `/online/graphreport/chart/${record.id}`;
         let copyText = ref(baseUrl);
         createCopyModal({
-          title: `Địa chỉ cấu hình 【${record.name}】`,
+          title: `Địa chỉ cấu hình [${record.name}]`,
           content: () => h('div', {}, copyText.value),
           copyText: copyText,
           copyTitle: `${record.name}`,

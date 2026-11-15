@@ -463,7 +463,7 @@ export function getRuleValueDisplayText(field, value, ruleOperator?) {
             .map((item) => item.trim())
             .filter(Boolean)
         : [rawValue];
-    return values.map((item) => getAreaTextByCodeAnyLevel(item, !level, level) || item).join('、');
+    return values.map((item) => getAreaTextByCodeAnyLevel(item, !level, level) || item).join(', ');
   }
   return rawValue;
 }

@@ -30,11 +30,11 @@ export const useGuide = () => {
         },
         {
           title: 'Bước hai',
-          intro: `Tìm dữ liệu vừa mới tạo trong danh sách, tại cột thao tác nhấp vào<strong>"Thêm"</strong>, lựa chọn<strong>"Đồng bộ cơ sở dữ liệu"</strong>。`,
+          intro: `Tìm dữ liệu vừa mới tạo trong danh sách, tại cột thao tác nhấp vào<strong>"Thêm"</strong>, lựa chọn<strong>"Đồng bộ cơ sở dữ liệu"</strong>.`,
         },
         {
           title: 'Bước ba',
-          intro: `Tìm dữ liệu vừa mới tạo trong danh sách, tại cột thao tác nhấp vào<strong>"Thêm"</strong>, lựa chọn<strong>"Kiểm thử chức năng"</strong>。`,
+          intro: `Tìm dữ liệu vừa mới tạo trong danh sách, tại cột thao tác nhấp vào<strong>"Thêm"</strong>, lựa chọn<strong>"Kiểm thử chức năng"</strong>.`,
         },
         {
           title: 'AITạo bảng',

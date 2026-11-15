@@ -206,7 +206,7 @@
         $confirm({
           iconType: 'info',
           width: 500,
-          title: `Liên kết menu 【${record.name}】`,
+          title: `Liên kết menu [${record.name}]`,
           content: baseUrl,
           closable: true,
           maskClosable: true,

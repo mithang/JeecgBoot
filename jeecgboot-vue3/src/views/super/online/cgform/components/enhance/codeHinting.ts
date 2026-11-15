@@ -61,7 +61,7 @@ export const keywords: any = {
     { text: '.loading', displayText: 'loading', superiors: 'this', desc: 'Có đang tải hay không, cái trả về là mộtrefđối tượng' },
     { text: '.isUpdate', displayText: 'isUpdate', superiors: 'this', desc: 'Có phải trang chỉnh sửa hay không, cái trả về là mộtrefđối tượng' },
     { text: '.onlineFormRef', displayText: 'onlineFormRef', superiors: 'this', desc: 'bảng chính/của biểu mẫu bảng đơnrefđối tượng' },
-    { text: '.refMap', displayText: 'refMap', superiors: 'this', desc: 'Biểu mẫu bảng con/bảng contablecủarefđối tượngmap，keylà tên bảng con' },
+    { text: '.refMap', displayText: 'refMap', superiors: 'this', desc: 'Đối tượng map chứa ref của các bảng con (key là tên bảng con)' },
     { text: '.subActiveKey', displayText: 'subActiveKey', superiors: 'this', desc: 'đang kích hoạt của bảng contabChuỗi tương ứng với giá trị chỉ mục, từ ‘0’bắt đầu, giá trị trả về là mộtrefđối tượng' },
     { text: '.sh', displayText: 'sh', superiors: 'this', desc: 'bảng đơn/Trạng thái hiển thị/ẩn của trường bảng chính' },
     { text: '.submitFlowFlag', displayText: 'submitFlowFlag', superiors: 'this', desc: 'Có tự động gửi quy trình sau khi gửi biểu mẫu hay không, trả về mộtrefđối tượng' },
@@ -98,7 +98,7 @@ export const keywords: any = {
       text: '.triggleChangeValues(values,id,target)',
       displayText: 'triggleChangeValues(values,id,target)',
       superiors: 'this',
-      desc: 'Thay đổi bảng đơn/bảng chính/bảng con Giá trị của trường, thường dùng chochangesự kiện, trong đóid，targetCần thông quachangelấy qua tham số tích hợp của sự kiện, nếu không truyềnid，targetgiá trị của, thì cái thay đổi là trường của bảng chính',
+      desc: 'Thay đổi giá trị trường của bảng đơn/bảng chính/bảng con, thường dùng cho sự kiện change; trong đó id, target lấy qua tham số tích hợp của sự kiện change, nếu không truyền id, target thì trường thay đổi là trường của bảng chính',
     },
     { text: '.triggleChangeValue(field, value)', displayText: 'triggleChangeValue(field, value)', superiors: 'this', desc: 'Thiết lập bảng đơn/bảng chính Giá trị của trường' },
     {

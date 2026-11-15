@@ -180,7 +180,7 @@
         }
         //update-end-author:taoyan date:2022-5-17 for: vue3Không có phong cách cổ điển Mặc định làjvxePhong cách
         single.value = main.tableType == 1;
-        title.value = 'Sinh mã 【' + main.tableName + '】';
+        title.value = 'Sinh mã [' + main.tableName + ']';
         if (!model.projectPath) {
           model.projectPath = projectPath;
           window.localStorage.setItem(JEECG_ONL_PROJECT_PATH, projectPath);
@@ -240,12 +240,12 @@
           if(hasViewPath){
             $ls.set(
               'code.genenrate.success.msg',
-              `Bảng 【${values.tableName_tmp}】Sinh mã thành công! Mã frontend đã tự động làm mới,JavaBackend cần khởi động lại mới có hiệu lực!`,
+              `Bảng [${values.tableName_tmp}] sinh mã thành công! Mã frontend đã tự động làm mới, backend Java cần khởi động lại mới có hiệu lực!`,
               15
             );
           }else{
             notification.success({
-              message: `Bảng 【${values.tableName_tmp}】Sinh mã thành công`,
+              message: `Bảng [${values.tableName_tmp}] sinh mã thành công`,
               description: h('div', [
                 '1. Mã frontend vui lòng di chuyển tới VUE3Dự án (hạng mục)', h('br'),
                 '2. MenuSQLđặt vàojeecg-system-startcủaflywayThư mục', h('br'),

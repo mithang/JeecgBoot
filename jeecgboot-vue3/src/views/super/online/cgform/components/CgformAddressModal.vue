@@ -53,7 +53,7 @@
               </a-input>
             </a-col>
           </a-row>
-          <div v-if="externalLinkActions.length === 0" style="color: rgba(0, 0, 0, 0.45)">Chưa tích chọn thao tác được phép, vui lòng tích chọn thêm mới trong 【Thao tác được phép】 của cấu hình biểu mẫu/Chỉnh sửa/Chi tiết</div>
+          <div v-if="externalLinkActions.length === 0" style="color: rgba(0, 0, 0, 0.45)">Chưa tích chọn thao tác được phép, vui lòng tích chọn thêm mới trong [Thao tác được phép] của cấu hình biểu mẫu/Chỉnh sửa/Chi tiết</div>
           <div v-if="hasExtAction('edit') || hasExtAction('detail')" style="text-align: right; color: red">Lưu ý:<span style="font-weight: bold">{dataId}</span> là dữ liệuid</div>
         </a-collapse-panel>
       </a-collapse>

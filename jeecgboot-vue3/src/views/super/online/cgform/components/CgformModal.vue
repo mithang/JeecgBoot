@@ -91,7 +91,7 @@
               style="width: 300px; margin: 0 10px 0 0;text-align: left;"
             >
               <template v-for="(item, index) in aiTableList" :key="index">
-                <a-select-option :value="item.name">{{ item.title + '（' + item.name + '）' }}</a-select-option>
+                <a-select-option :value="item.name">{{ item.title + '(' + item.name + ')' }}</a-select-option>
               </template>
             </a-select>
             <a-button type="primary" ghost @click="initVirtualData">Tạo dữ liệu&gt;&gt;</a-button>

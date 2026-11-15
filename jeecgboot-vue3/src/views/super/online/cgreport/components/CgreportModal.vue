@@ -23,10 +23,10 @@
           <a-popover title="Hướng dẫn sử dụng" trigger="hover" style="margin: 0 10px 0 6px">
             <template #content>
               Bạn có thể nhập “” làm một tham số, tại đâyabclà tên của tham số. Ví dụ:<br />
-              select * from table where id = ${abc}。<br />
-              select * from table where id like concat('%',${abc},'%')。(mysqlTruy vấn mờ)<br />
-              select * from table where id like '%'||${abc}||'%'。(oracleTruy vấn mờ)<br />
-              select * from table where id like '%'+${abc}+'%'。(sqlserverTruy vấn mờ)<br />
+              select * from table where id = ${abc}.<br />
+              select * from table where id like concat('%',${abc},'%'). (MySQL truy vấn mờ)<br />
+              select * from table where id like '%'||${abc}||'%'. (Oracle truy vấn mờ)<br />
+              select * from table where id like '%'+${abc}+'%'. (SQL Server truy vấn mờ)<br />
               <span style="color: red">Chú thích: tham số chỉ hỗ trợ báo cáo động,popupTạm thời chưa hỗ trợ</span>
             </template>
             <a-icon type="question-circle" />

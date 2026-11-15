@@ -4,7 +4,7 @@
       <a-col v-for="(item, index) in schemas" :key="index" :span="getItemSpan(item)">
         <template v-if="item.hidden"></template>
         <div v-else class="detail-item">
-          <div class="item-title" :class="getLabelWidthClass(item)" :title="item.label"> {{ filterLable(item) }}： </div>
+          <div class="item-title" :class="getLabelWidthClass(item)" :title="item.label"> {{ filterLable(item) }}: </div>
           <div class="item-content" v-if="item.view === 'markdown'">
              <MarkdownViewer v-model:value="detailFormData[item.field]" placeholder="" />
           </div>

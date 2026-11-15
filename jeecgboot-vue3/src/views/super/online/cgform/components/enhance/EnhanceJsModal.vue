@@ -24,7 +24,7 @@
           :language-change="false"
           @change="onCodeChange"
           :keywords="formKeyWords"
-          placeholder="Mẹo gợi ý mã:&#10;Đối tượng toàn cục: this.Gọi thuộc tính hoặc phương thức&#10;Phương thức sự kiện:beforeSubmit、loaded、onlChange、getAction、postAction、putAction、deleteAction、deleteAction、openCustomModalv.v."
+          placeholder="Mẹo gợi ý mã:&#10;Đối tượng toàn cục: this. Gọi thuộc tính hoặc phương thức&#10;Phương thức sự kiện: beforeSubmit, loaded, onlChange, getAction, postAction, putAction, deleteAction, openCustomModal, v.v."
         />
       </a-tab-pane>
       <a-tab-pane key="list" forceRender>
@@ -50,7 +50,7 @@
           :language-change="false"
           @change="onCodeChange"
           :keywords="listKeyWords"
-          placeholder="Mẹo gợi ý mã:&#10;Đối tượng toàn cục: this.Gọi thuộc tính hoặc phương thức &#10;Phương thức sự kiện:beforeDelete、beforeEdit、getAction、postAction、putAction、deleteAction、deleteAction、openCustomModalv.v."
+          placeholder="Mẹo gợi ý mã:&#10;Đối tượng toàn cục: this. Gọi thuộc tính hoặc phương thức &#10;Phương thức sự kiện: beforeDelete, beforeEdit, getAction, postAction, putAction, deleteAction, openCustomModal, v.v."
         />
       </a-tab-pane>
     </a-tabs>

@@ -365,15 +365,23 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
     };
     let postOption = { isTransformResponse: false };
     return new Promise((resolve, reject) => {
-      defHttp.post(postConfig, postOption).then((res) => {
-        if (res.success) {
-          resolve(res);
-          $message.success(res.message);
-        } else {
+      defHttp
+        .post(postConfig, postOption)
+        .then((res) => {
+          if (res.success) {
+            resolve(res);
+            $message.success(res.message);
+          } else {
+            reject();
+            $message.warning(res.message);
+          }
+        })
+        .catch(() => {
+          // Module quy trình làm việc (/act) chưa có trong hệ thống nên không thể gửi quy trình;
+          // chỉ cảnh báo, không để lỗi lan ra ngoài làm treo giao diện
+          $message.warning('Chức năng gửi quy trình chưa khả dụng: module quy trình làm việc chưa được cài đặt trong hệ thống.');
           reject();
-          $message.warning(res.message);
-        }
-      });
+        });
     });
   }
 
@@ -382,7 +390,11 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
    * @param record
    */
   async function handleSubmitFlow(record) {
-    await startProcess(record);
+    try {
+      await startProcess(record);
+    } catch (e) {
+      // startProcess đã hiển thị cảnh báo cho người dùng; vẫn làm mới danh sách
+    }
     onlineTableContext.loadData();
   }
 
@@ -497,7 +509,7 @@ export function useListButton(onlineTableContext, extConfigJson: Ref<ExtConfigTy
         });
         const enhanceSkippedCount = results.filter((item) => item.status === 'rejected').length;
         if (enhanceSkippedCount > 0) {
-          const reason = rejectMsgs.length > 0 ? `：${rejectMsgs.join('；')}` : '';
+          const reason = rejectMsgs.length > 0 ? `: ${rejectMsgs.join('; ')}` : '';
           if (idSet.length <= 0) {
             $message.warning(`Dữ liệu đã chọn đều không thể xóa${reason}`);
             return false;

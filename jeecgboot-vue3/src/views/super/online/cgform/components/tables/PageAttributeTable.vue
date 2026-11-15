@@ -346,15 +346,15 @@
         let dbType = dbTable.value!.tableRef!.getTableData({ rowIds: [row.id] })[0].dbType;
         //Khi loại control là thời gian, loại cơ sở dữ liệu phải làStringLoại
         if (cellValue === 'time' && dbType !== 'string') {
-          callback(false, 'Khi loại control là thời gian,Loại trường trong thuộc tính cơ sở dữ liệu phải làString！');
+          callback(false, 'Khi loại control là thời gian, loại trường trong thuộc tính cơ sở dữ liệu phải là String!');
         }
         // Khi loại control là ngày, loại cơ sở dữ liệu phải làDateLoại
         else if (cellValue === 'date' && dbType !== 'Date' && dbType !== 'Datetime') {
-          callback(false, 'Khi loại control là ngày, loại trường trong thuộc tính cơ sở dữ liệu phải làDatehoặcDatetime！');
+          callback(false, 'Khi loại control là ngày, loại trường trong thuộc tính cơ sở dữ liệu phải là Date hoặc Datetime!');
         }
         // Khi loại control là yyyy-MM-dd HH:mm:ss khi đó, loại cơ sở dữ liệu phải làDatetimeLoại
         else if (cellValue === 'datetime' && dbType !== 'Datetime') {
-          callback(false, 'Khi loại control làdatetimekhi đó, loại trường trong thuộc tính cơ sở dữ liệu phải làDatetime！');
+          callback(false, 'Khi loại control là datetime, loại trường trong thuộc tính cơ sở dữ liệu phải là Datetime!');
         } else {
           callback(true);
         }
@@ -700,7 +700,7 @@
           if (['double', 'int', 'long', 'BigDecimal', 'Date', 'Datetime'].includes(dbType) || row.fieldShowType === 'time') {
             callback(true);
           } else {
-            callback(false, 'Truy vấn theo phạm vi, chỉ hỗ trợ loại trường trong thuộc tính cơ sở dữ liệu là:Integer、Long、Double、BigDecimalvàDate、Datetime hoặc Loại control là thời gian(HH:mm:ss)');
+            callback(false, 'Truy vấn theo phạm vi chỉ hỗ trợ loại trường trong thuộc tính cơ sở dữ liệu là: Integer, Long, Double, BigDecimal và Date, Datetime hoặc loại control là thời gian (HH:mm:ss)');
           }
         } else if (cellValue === 'like') {
           if (['string'].includes(dbType) && row.fieldShowType === 'text') {

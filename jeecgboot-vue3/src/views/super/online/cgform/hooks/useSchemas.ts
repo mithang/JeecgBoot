@@ -471,7 +471,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
         ifShow: isNotOneToOneSub,
         componentProps: {
           style: 'width: 70%',
-          placeholder: 'Độ rộng tối thiểu của popup (đơn vị:px）',
+          placeholder: 'Độ rộng tối thiểu của popup (đơn vị: px)',
         },
         // update-begin--author:liaozhiyang---date:20240520---for：【TV360X-77】Sau khi popup toàn màn hình, ô nhập độ rộng bị vô hiệu hóa
         dynamicDisabled: ({ model }) => !!model.modelFullscreen,
@@ -570,7 +570,7 @@ export function useExtendConfigFormSchemas(_props, handlers) {
             {
               validator({}, value) {
                 if (/\/jmreport\/view\/{Báo cáo JimuID}/.test(value)) {
-                  return Promise.reject('Vui lòng đưa{Báo cáo JimuID}Thay thế bằng báo cáo Jimu thậtID！');
+                  return Promise.reject('Vui lòng thay {Báo cáo Jimu ID} bằng ID báo cáo Jimu thật!');
                 }
                 return Promise.resolve();
               },

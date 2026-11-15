@@ -32,7 +32,7 @@ public class OnlCgformDemoController {
      */
     @PostMapping("/enhanceJavaListHttp")
     public Result<?> enhanceJavaListHttp(@RequestBody JSONObject params) {
-        log.info(" --- params：" + params.toJSONString());
+        log.info(" --- params: " + params.toJSONString());
         JSONArray dataList = params.getJSONArray("dataList");
         List<DictModel> dict = virtualDictData();
         for (int i = 0; i < dataList.size(); i++) {
@@ -74,22 +74,22 @@ public class OnlCgformDemoController {
      */
     @PostMapping("/enhanceJavaHttp")
     public Result<?> enhanceJavaHttp(@RequestBody JSONObject params) {
-        log.info(" --- params：" + params.toJSONString());
+        log.info(" --- params: " + params.toJSONString());
         String tableName = params.getString("tableName");
         JSONObject record = params.getJSONObject("record");
         /*
          * Kịch bản nghiệp vụ 1： Lấy dữ liệu biểu mẫu đã gửi， thực hiện các thao tác liên kết nghiệp vụ khác
          * （Ví dụ： theo phiếu nhập kho， đồng bộ thay đổi tồn kho）
          */
-        log.info(" --- tableName：" + tableName);
-        log.info(" --- Dữ liệu hàng：" + record.toJSONString());
+        log.info(" --- tableName: " + tableName);
+        log.info(" --- Dữ liệu hàng: " + record.toJSONString());
         /*
          * Kịch bản nghiệp vụ 2： Kiểm chứng dữ liệu trước khi lưu
          * Chỉ cần trả về trực tiếp trạng thái lỗi là được
          */
         String phone = record.getString("phone");
         if (oConvertUtils.isEmpty(phone)) {
-            return Result.error("Số điện thoại không được trống！");
+            return Result.error("Số điện thoại không được trống!");
         }
         /*
          * Kịch bản nghiệp vụ 3： Xử lý dữ liệu sau khi lưu dữ liệu

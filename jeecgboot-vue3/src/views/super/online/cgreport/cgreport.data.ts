@@ -322,7 +322,7 @@ export const onlCgreportItemColumns: JVxeColumn[] = [
     key: 'dictCode',
     type: JVxeTypes.input,
     width: '120px',
-    titleSuffix: { content: 'Điền mã từ điển, hoặcSQL：SELECT trường AS value, trường AS text FROM bảng. KingbaseES,PostgreSQL dưới text là từ khóa, bí danh bắt buộc phải viết AS' },
+    titleSuffix: { content: 'Điền mã từ điển, hoặc SQL: SELECT trường AS value, trường AS text FROM bảng. KingbaseES, PostgreSQL: text là từ khóa nên bí danh bắt buộc phải viết AS' },
     placeholder: 'Vui lòng nhập${title}',
     defaultValue: '',
   },

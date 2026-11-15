@@ -377,7 +377,7 @@ export function useCgformList(options: IOptions) {
       onlineUrl = `/online/cgformList/${record.id}`;
     }
     addressModal.openModal(true, {
-      title: `Liên kết menu 【${record.tableTxt}】`,
+      title: `Liên kết menu [${record.tableTxt}]`,
       content: onlineUrl,
       copyText: onlineUrl,
       copyTitle: `${record.tableTxt}`,

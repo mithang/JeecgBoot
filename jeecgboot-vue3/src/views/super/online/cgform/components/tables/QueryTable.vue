@@ -34,8 +34,8 @@
           options: [
             { title: 'Ô văn bản', value: 'text' },
             { title: 'Ngày(yyyy-MM-dd)', value: 'date' },
-            { title: 'Ngày (yyyy-MM-dd HH:mm:ss）', value: 'datetime' },
-            { title: 'Thời gian (HH:mm:ss）', value: 'time' },
+            { title: 'Ngày (yyyy-MM-dd HH:mm:ss)', value: 'datetime' },
+            { title: 'Thời gian (HH:mm:ss)', value: 'time' },
             // update-begin--author:liaozhiyang---date:20240531---for：【TV360X-415】Truy vấn cá nhân hóa hỗ trợ năm, tháng, tuần, quý
             // ảodate_year、date_month、date_week、date_quarterThực ra vẫn đi quadateComponent, để truy vấn
             { title: 'Ngày-Năm', value: 'date_year' },
