@@ -66,7 +66,8 @@ const setting: ProjectConfig = {
   showLogo: true,
 
   // Có hiển thị thông tin copyright ở dưới cùng không
-  showFooter: false,
+  // Phase 4 Bước 5 (G9): bật mặc định — khung app có footer bản quyền tiếng Việt.
+  showFooter: true,
 
   // Có hiển thị biểu tượng AI không
   aiIconShow: false,
@@ -178,7 +179,8 @@ const setting: ProjectConfig = {
   lockTime: 0,
 
   // Hiển thị breadcrumb
-  showBreadCrumb: false,
+  // Phase 4 Bước 5 (G9): bật mặc định — thay lời chào ở header bằng breadcrumb điều hướng.
+  showBreadCrumb: true,
 
   // Hiển thị biểu tượng breadcrumb
   showBreadCrumbIcon: true,

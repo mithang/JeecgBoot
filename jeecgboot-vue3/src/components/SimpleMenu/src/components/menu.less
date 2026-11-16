@@ -56,12 +56,15 @@
         color: @menu-dark-subsidiary-color;
         // background: @menu-dark-active-bg;
 
+        // Phase 4 Bước 5: hover có nền mờ để trạng thái menu rõ hơn trên nền sider tối.
         &:hover {
           color: #fff;
+          background-color: rgba(255, 255, 255, 0.08);
         }
 
         &-selected {
           color: #fff;
+          font-weight: 600;
           background-color: @primary-color !important;
         }
       }
@@ -245,6 +248,14 @@
       }
     }
 
+    // Phase 4 Bước 5: hover menu sáng có nền mờ cùng tông với trạng thái active.
+    &-light&-vertical &-item,
+    &-light&-vertical &-submenu-title {
+      &:hover {
+        background-color: fade(@primary-color, 6);
+      }
+    }
+
     &-light&-vertical&-collapse {
       > li.@{menu-prefix-cls}-item-active,
       .@{menu-prefix-cls}-submenu-active {
@@ -272,11 +283,14 @@
       color: @menu-dark-subsidiary-color;
       &-active:not(.@{menu-prefix-cls}-submenu) {
         color: #fff !important;
+        font-weight: 600;
         background-color: @primary-color !important;
       }
 
+      // Phase 4 Bước 5: hover có nền mờ để trạng thái menu rõ hơn trên nền sider tối.
       &:hover {
         color: #fff;
+        background-color: rgba(255, 255, 255, 0.08);
       }
     }
     // update-begin--author:liaozhiyang---date:20240408---for：【QQYUN-8922]Điều chỉnh màu chữ thanh điều hướng bên trái để phân biệt chế độ màu và chế độ tối

@@ -7,7 +7,7 @@
 
       <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>
     </div>
-    <div>Copyright &copy;2021 Sản phẩm của Cộng đồng mã nguồn mở JEECG</div>
+    <div>Copyright &copy;{{ currentYear }} Sản phẩm của {{ COPYRIGHT_COMPANY }}</div>
   </Footer>
 </template>
 
@@ -17,7 +17,7 @@
 
   import { GithubFilled } from '@ant-design/icons-vue';
 
-  import { DOC_URL, GITHUB_URL, SITE_URL } from '/@/settings/siteSetting';
+  import { DOC_URL, GITHUB_URL, SITE_URL, COPYRIGHT_COMPANY } from '/@/settings/siteSetting';
   import { openWindow } from '/@/utils';
 
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -51,6 +51,8 @@
         }
         return unref(getShowFooter) && !unref(currentRoute).meta?.hiddenFooter;
       });
+      // Phase 4 Bước 5: năm bản quyền tự động theo năm hiện tại.
+      const currentYear = new Date().getFullYear();
       // Cài đặt màu khi di chuột vào
       const hoverColor = computed(() => {
         return unref(isDark) ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 0.85)';
@@ -62,6 +64,8 @@
         DOC_URL,
         GITHUB_URL,
         SITE_URL,
+        COPYRIGHT_COMPANY,
+        currentYear,
         openWindow,
         footerRef,
         hoverColor,
@@ -78,6 +82,10 @@
   .@{prefix-cls} {
     color: @normal-color;
     text-align: center;
+    // Phase 4 Bước 5: đường phân cách nhẹ để footer tách khỏi nội dung, tạo chiều sâu cho khung.
+    padding: 16px 24px 12px;
+    border-top: 1px solid @border-color-split;
+    background-color: transparent;
 
     &__links {
       margin-bottom: 8px;

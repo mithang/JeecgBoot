@@ -64,8 +64,17 @@
     cursor: pointer;
     transition: all 0.2s ease;
     //Chế độ menu bên trái và chế độ hỗn hợp menu bên trái thêm màu nền chuyển sắc
+    // Phase 4 Bước 5: đường phân cách dưới vùng logo để tách khỏi menu, tạo chiều sâu cho khung sider.
     &.jeecg-layout-mix-sider-logo,&.jeecg-layout-menu-logo{
       background:@sider-logo-bg-color;
+
+      &.dark {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      &.light {
+        border-bottom: 1px solid @border-color-split;
+      }
     }
     // &.light {
     //   border-bottom: 1px solid @border-color-base;
@@ -85,7 +94,9 @@
 
     &__title {
       font-size: 18px;
-      font-weight: 600;
+      // Phase 4 Bước 5: tiêu đề logo đậm hơn (Be Vietnam Pro 700) để vùng logo rõ nét.
+      font-weight: 700;
+      letter-spacing: 0.2px;
       transition: all 0.5s;
       line-height: normal;
     }
