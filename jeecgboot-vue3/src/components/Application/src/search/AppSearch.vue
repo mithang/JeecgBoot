@@ -68,12 +68,16 @@
   }
 
   // Màn nhỏ: thu lại chỉ còn icon để không chiếm chỗ trên header.
+  // Phase 4 Bước 10 (G6): giữ vùng chạm tối thiểu 44x44 cho nút tìm kiếm trên mobile.
   @media (max-width: 768px) {
     .app-search-trigger {
-      padding: 0 8px;
+      height: 44px;
+      min-width: 44px;
+      padding: 0 10px;
       margin: 0 2px;
       background-color: transparent;
       border-color: transparent;
+      justify-content: center;
 
       &__text {
         display: none;

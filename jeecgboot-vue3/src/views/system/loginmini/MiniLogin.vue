@@ -635,7 +635,8 @@
     margin-right: 10px;
   }
   .aui-link-login{
-    height: 42px;
+    // Phase 4 Bước 10 (G6): nút đăng nhập chính — vùng chạm tối thiểu 44px.
+    height: 44px;
     padding: 10px 15px;
     font-size: 14px;
     border-radius: 8px;

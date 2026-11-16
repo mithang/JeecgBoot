@@ -2,7 +2,7 @@
   <a-form id="loginContentForm" ref="loginRef" :model="formState" :rules="getFormRules" @keyup.enter.native="accountLoginClick">
     <div class="content-item current-active" @click="formStateInputClick('account')">
       <a-form-item name="account">
-        <a-input ref="accountRef" id="accountLogin" v-model:value="formState.account" style="height: 40px" @blur="formStateInputBlur" />
+        <a-input ref="accountRef" id="accountLogin" v-model:value="formState.account" style="height: 44px" @blur="formStateInputBlur" />
         <div class="form-title" :class="activekey === 'account' ? 'active-title' : ''">
           {{ t('sys.login.userName') }}
         </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="content-item current-active" @click="formStateInputClick('password')">
       <a-form-item name="password">
-        <a-input id="pwdLogin" ref="" type="password" v-model:value="formState.password" style="height: 40px" @blur="formStateInputBlur"/>
+        <a-input id="pwdLogin" ref="" type="password" v-model:value="formState.password" style="height: 44px" @blur="formStateInputBlur"/>
         <div class="form-title" :class="activekey === 'password' ? 'active-title' : ''">
           {{ t('sys.login.password') }}
         </div>
@@ -20,7 +20,7 @@
       <a-row :span="24">
         <a-col :span="15">
           <a-form-item name="inputCode" @click="formStateInputClick('inputCode')">
-            <a-input ref="codeRef" v-model:value="formState.inputCode" style="height: 40px" @blur="formStateInputBlur" />
+            <a-input ref="codeRef" v-model:value="formState.inputCode" style="height: 44px" @blur="formStateInputBlur" />
             <div class="form-title" :class="activekey === 'inputCode' ? 'active-title' : ''">
               {{ t('sys.login.inputCode') }}
             </div>
@@ -209,7 +209,7 @@
     position: relative;
     margin-top: 24px;
     background: #ffffff;
-    height: 40px;
+    height: 44px;
     box-sizing: border-box;
   }
   .form-title {
@@ -260,9 +260,9 @@
 
   .login-btn {
     width: 100%;
-    height: 40px;
+    height: 44px;
     display: block;
-    background: #2296f3;
+    background: #0B57D0;
     border-radius: 4px;
     font-size: 14px;
     color: #fff;
@@ -271,8 +271,8 @@
   }
   .phone-login-btn {
     width: 100%;
-    height: 40px;
-    line-height: 40px;
+    height: 44px;
+    line-height: 44px;
     display: block;
     background: #ffffff;
     border-radius: 4px;

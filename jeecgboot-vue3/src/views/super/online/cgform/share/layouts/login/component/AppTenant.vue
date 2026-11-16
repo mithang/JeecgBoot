@@ -30,7 +30,7 @@
           <a-form ref="joinRef" :model="formJoinState" :rules="getFormJoinRules">
             <div class="content-item" :class="getHouseNumberClass" @click="formStateInputClick('houseNumber')">
               <a-form-item name="houseNumber">
-                <a-input ref="hoseNumberRef" v-model:value="formJoinState.houseNumber" style="height: 40px" @blur="formStateInputBlur" />
+                <a-input ref="hoseNumberRef" v-model:value="formJoinState.houseNumber" style="height: 44px" @blur="formStateInputBlur" />
                 <div class="form-title" :class="activekey === 'houseNumber' ? 'active-title' : ''"> Ví dụ mẫu: J9A2K8R </div>
               </a-form-item>
             </div>
@@ -58,7 +58,7 @@
                 <a-input
                   ref="nameRef"
                   v-model:value="formCreateState.name"
-                  style="height: 40px; font-size: 13px; color: rgba(0, 0, 0, 0.65)"
+                  style="height: 44px; font-size: 13px; color: rgba(0, 0, 0, 0.65)"
                   @blur="formStateInputBlur"
                 />
                 <div class="form-title" :class="activekey === 'name' ? 'active-title' : ''"> Tên tổ chức </div>
@@ -66,25 +66,25 @@
             </div>
             <div class="content-item">
               <a-form-item name="trade">
-                <a-select placeholder="Vui lòng chọn" style="height: 40px" :options="tradeOption" v-model:value="formCreateState.trade" />
+                <a-select placeholder="Vui lòng chọn" style="height: 44px" :options="tradeOption" v-model:value="formCreateState.trade" />
                 <div class="active-form-title"> Ngành nghề </div>
               </a-form-item>
             </div>
             <div class="content-item">
               <a-form-item name="companySize">
-                <a-select placeholder="Vui lòng chọn" style="height: 40px" :options="companySizeOption" v-model:value="formCreateState.companySize" />
+                <a-select placeholder="Vui lòng chọn" style="height: 44px" :options="companySizeOption" v-model:value="formCreateState.companySize" />
                 <div class="active-form-title"> Quy mô </div>
               </a-form-item>
             </div>
             <div class="content-item">
               <a-form-item name="position">
-                <a-select placeholder="Vui lòng chọn" style="height: 40px" :options="positionOption" v-model:value="formCreateState.position" />
+                <a-select placeholder="Vui lòng chọn" style="height: 44px" :options="positionOption" v-model:value="formCreateState.position" />
                 <div class="active-form-title"> Cấp bậc chức vụ của bạn </div>
               </a-form-item>
             </div>
             <div class="content-item">
               <a-form-item name="department">
-                <a-select placeholder="Vui lòng chọn" style="height: 40px" :options="departmentOption" v-model:value="formCreateState.department" />
+                <a-select placeholder="Vui lòng chọn" style="height: 44px" :options="departmentOption" v-model:value="formCreateState.department" />
                 <div class="active-form-title"> Phòng ban của bạn </div>
               </a-form-item>
             </div>
@@ -386,7 +386,7 @@
     position: relative;
     margin-top: 30px;
     background: #ffffff;
-    height: 40px;
+    height: 44px;
     box-sizing: border-box;
   }
   .current-active {
@@ -413,21 +413,21 @@
     background: #fff;
   }
   .content-item :deep(.ant-select-selector) {
-    height: 40px;
+    height: 44px;
   }
   .content-item :deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder) {
-    line-height: 40px !important;
+    line-height: 44px !important;
   }
   .content-item :deep(.ant-select-single.ant-select-show-arrow .ant-select-selection-item) {
-    line-height: 40px !important;
+    line-height: 44px !important;
   }
   .create-btn {
     font-weight: 600;
     width: 100%;
-    height: 40px;
-    line-height: 40px;
+    height: 44px;
+    line-height: 44px;
     display: block;
-    background: #2296f3;
+    background: #0B57D0;
     border-radius: 4px;
     font-size: 14px;
     color: #fff;

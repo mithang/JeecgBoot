@@ -334,13 +334,22 @@
   }
 
   .aui-third-login {
-    width: 30px;
-    height: 30px;
+    // Phase 4 Bước 10 (G6): nút đăng nhập bên thứ ba — vùng chạm tối thiểu 44x44.
+    width: 44px;
+    height: 44px;
     margin: 0 auto;
     font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     a {
       color: #888;
+      display: flex;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
     }
   }
 

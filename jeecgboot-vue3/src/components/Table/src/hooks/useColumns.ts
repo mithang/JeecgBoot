@@ -5,6 +5,7 @@ import { Table } from 'ant-design-vue';
 import { computed, Ref, ref, toRaw, unref, watch, reactive } from 'vue';
 import { renderEditCell } from '../components/editable';
 import { usePermission } from '/@/hooks/web/usePermission';
+import { useAppInject } from '/@/hooks/web/useAppInject';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
@@ -104,6 +105,32 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
   }
 }
 
+// Phase 4 Bước 10 (G6): trên mobile, cố định cột đầu tiên của bảng để khi cuộn ngang
+// người dùng vẫn thấy cột định danh (tên/tài khoản/tiêu đề). Chỉ áp dụng khi chưa có cột
+// nào được cố định sẵn (tôn trọng cấu hình từng trang); cột chưa có width được gán 160
+// (antd cần cột fixed có width để tính vị trí sticky). Cuộn ngang đã có sẵn qua
+// useTableScroll.getScrollX (trả về tổng width khi cột vượt khung hình).
+function handleMobileFixedFirstColumn(getIsMobile: ComputedRef<boolean>, columns: BasicColumn[]) {
+  if (!unref(getIsMobile)) return;
+  if (columns.some((column) => column.fixed === 'left')) return;
+  const indexColumn = columns.find((column) => column.flag === INDEX_COLUMN_FLAG);
+  if (indexColumn) {
+    indexColumn.fixed = 'left';
+  }
+  const firstColumn = columns.find(
+    (column) =>
+      column.flag !== INDEX_COLUMN_FLAG &&
+      column.flag !== ACTION_COLUMN_FLAG &&
+      column.key !== CUS_SEL_COLUMN_KEY &&
+      !column.children,
+  );
+  if (!firstColumn) return;
+  if (!firstColumn.width) {
+    firstColumn.width = 160;
+  }
+  firstColumn.fixed = 'left';
+}
+
 export function useColumns(
   propsRef: ComputedRef<BasicTableProps>,
   getPaginationRef: ComputedRef<boolean | PaginationProps>,
@@ -111,6 +138,7 @@ export function useColumns(
 ) {
   const columnsRef = ref(unref(propsRef).columns) as unknown as Ref<BasicColumn[]>;
   let cacheColumns = unref(propsRef).columns;
+  const { getIsMobile } = useAppInject();
 
   const getColumnsRef = computed(() => {
     const columns = cloneDeep(unref(columnsRef));
@@ -124,6 +152,7 @@ export function useColumns(
     handleActionColumn(propsRef, columns);
     // Giải thích logic mã: [QQYUN-5571] Tự đóng gói cột chọn, giải quyết vấn đề chọn dòng dữ liệu bị giật
     handleCustomSelectColumn(columns);
+    handleMobileFixedFirstColumn(getIsMobile, columns);
 
     if (!columns) {
       return [];

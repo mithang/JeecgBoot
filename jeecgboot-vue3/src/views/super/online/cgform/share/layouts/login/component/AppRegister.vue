@@ -11,7 +11,7 @@
         <a-form ref="registerRef" :model="formData" :rules="getFormRules">
           <div class="content-item" :class="getPhoneClass" @click="formDataInputClick('mobile')">
             <a-form-item name="mobile">
-              <a-input ref="phoneRef" v-model:value="formData.mobile" style="height: 40px" @blur="formDataInputBlur" />
+              <a-input ref="phoneRef" v-model:value="formData.mobile" style="height: 44px" @blur="formDataInputBlur" />
               <div class="form-title" :class="activekey === 'mobile' ? 'active-title' : ''">
                 {{ t('sys.login.mobile') }}
               </div>
@@ -19,7 +19,7 @@
           </div>
           <div class="content-item" :class="getSmsCodeClass">
             <a-form-item name="sms" @click="formDataInputClick('sms')">
-              <a-input ref="smscodeRef" :maxLength="6" v-model:value="formData.sms" style="height: 40px" @blur="formDataInputBlur" />
+              <a-input ref="smscodeRef" :maxLength="6" v-model:value="formData.sms" style="height: 44px" @blur="formDataInputBlur" />
               <div class="form-title" :class="activekey === 'sms' ? 'active-title' : ''">
                 {{ t('sys.login.smsCode') }}
               </div>
@@ -36,7 +36,7 @@
           </div>
           <div class="content-item" :class="getPasswordClass" @click="formDataInputClick('regPassword')">
             <a-form-item name="regPassword">
-              <a-input ref="pwdRef" type="password" v-model:value="formData.regPassword" style="height: 40px" @blur="formDataInputBlur" autocomplete="new-password"/>
+              <a-input ref="pwdRef" type="password" v-model:value="formData.regPassword" style="height: 44px" @blur="formDataInputBlur" autocomplete="new-password"/>
               <div class="form-title" :class="activekey === 'regPassword' ? 'active-title' : ''">
                 8-20ký tự, phải bao gồm chữ cái và chữ số
               </div>
@@ -352,7 +352,7 @@
     position: relative;
     margin-top: 30px;
     background: #ffffff;
-    height: 40px;
+    height: 44px;
     box-sizing: border-box;
   }
   .form-title {
@@ -401,9 +401,9 @@
   .registr-btn {
     font-weight: 600;
     width: 100%;
-    height: 40px;
+    height: 44px;
     display: block;
-    background: #2296f3;
+    background: #0B57D0;
     border-radius: 4px;
     font-size: 14px;
     color: #fff;

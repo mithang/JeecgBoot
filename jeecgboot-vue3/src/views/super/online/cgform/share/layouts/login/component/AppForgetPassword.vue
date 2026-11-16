@@ -11,7 +11,7 @@
         <a-form ref="phoneUpdateRef" :model="formState" :rules="getFormRules" v-show="activeUpdateKey === 'vailPhone'">
           <div class="content-item" :class="getPhoneClass" @click="formStateInputClick('phone')">
             <a-form-item name="phone">
-              <a-input ref="phoneRef" v-model:value="formState.phone" style="height: 40px" @blur="formStateInputBlur" />
+              <a-input ref="phoneRef" v-model:value="formState.phone" style="height: 44px" @blur="formStateInputBlur" />
               <div class="form-title" :class="activekey === 'phone' ? 'active-title' : ''">
                 {{ t('sys.login.mobile') }}
               </div>
@@ -19,7 +19,7 @@
           </div>
           <div class="content-item" :class="getSmsCodeClass">
             <a-form-item name="smscode" @click="formStateInputClick('smscode')">
-              <a-input ref="smscodeRef" :maxLength="6" v-model:value="formState.smscode" style="height: 40px" @blur="formStateInputBlur" />
+              <a-input ref="smscodeRef" :maxLength="6" v-model:value="formState.smscode" style="height: 44px" @blur="formStateInputBlur" />
               <div class="form-title" :class="activekey === 'smscode' ? 'active-title' : ''">
                 {{ t('sys.login.smsCode') }}
               </div>
@@ -42,7 +42,7 @@
         <a-form ref="pwdUpdateRef" :model="accountData" :rules="getFormPwdRules" v-show="activeUpdateKey === 'vailPwd'">
           <div class="content-item" :class="getPhoneClass">
             <a-form-item name="username">
-              <a-input ref="phoneRef" v-model:value="accountData.username" style="height: 40px" disabled />
+              <a-input ref="phoneRef" v-model:value="accountData.username" style="height: 44px" disabled />
               <div class="active-form-title">
                 {{ t('sys.login.userName') }}
               </div>
@@ -50,7 +50,7 @@
           </div>
           <div class="content-item" :class="getPasswordClass" @click="formStateInputClick('forgetPassword')">
             <a-form-item name="forgetPassword">
-              <a-input ref="pwdRef" type="password" v-model:value="accountData.forgetPassword" style="height: 40px" @blur="formStateInputBlur" />
+              <a-input ref="pwdRef" type="password" v-model:value="accountData.forgetPassword" style="height: 44px" @blur="formStateInputBlur" />
               <div class="form-title" :class="activekey === 'password' ? 'active-title' : ''">
                 {{ t('sys.login.password') }}
               </div>
@@ -58,7 +58,7 @@
           </div>
           <div class="content-item" :class="getConfirmPasswordClass" @click="formStateInputClick('confirmPassword')">
             <a-form-item name="confirmPassword">
-              <a-input ref="conPwdRef" type="password" v-model:value="accountData.confirmPassword" style="height: 40px" @blur="formStateInputBlur" />
+              <a-input ref="conPwdRef" type="password" v-model:value="accountData.confirmPassword" style="height: 44px" @blur="formStateInputBlur" />
               <div class="form-title" :class="activekey === 'password' ? 'active-title' : ''">
                 {{ t('sys.login.confirmPassword') }}
               </div>
@@ -362,7 +362,7 @@
     position: relative;
     margin-top: 30px;
     background: #ffffff;
-    height: 40px;
+    height: 44px;
     box-sizing: border-box;
   }
 
@@ -417,10 +417,10 @@
   .forget-btn {
     font-weight: 600;
     width: 100%;
-    height: 40px;
-    line-height: 40px;
+    height: 44px;
+    line-height: 44px;
     display: block;
-    background: #2296f3;
+    background: #0B57D0;
     border-radius: 4px;
     font-size: 14px;
     color: #fff;

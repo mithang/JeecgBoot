@@ -74,4 +74,12 @@
       transform: scale(0.88);
     }
   }
+
+  // Phase 4 Bước 10 (G6): nút trợ lý AI nổi giữa màn hình — vùng chạm tối thiểu 44x44 trên mobile.
+  @media (max-width: 768px) {
+    .aide-wrap {
+      height: 44px;
+      width: 44px;
+    }
+  }
 </style>

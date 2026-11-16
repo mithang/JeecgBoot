@@ -15,13 +15,13 @@
       <a-form ref="formRef" :model="formState" :rules="getFormRules">
         <div class="content-item" :class="getUserNameClass" @click="formStateInputClick('realname')">
           <a-form-item name="realname">
-            <a-input ref="realNameRef" v-model:value="formState.realname" style="height: 40px" @blur="formStateInputBlur" />
+            <a-input ref="realNameRef" v-model:value="formState.realname" style="height: 44px" @blur="formStateInputBlur" />
             <div class="form-title" :class="activekey === 'username' ? 'active-title' : ''"> Biệt danh </div>
           </a-form-item>
         </div>
         <div class="content-item" :class="getEmailClass" @click="formStateInputClick('email')">
           <a-form-item name="email">
-            <a-input ref="emailRef" v-model:value="formState.email" style="height: 40px" @blur="formStateInputBlur" />
+            <a-input ref="emailRef" v-model:value="formState.email" style="height: 44px" @blur="formStateInputBlur" />
             <div class="form-title" :class="activekey === 'email' ? 'active-title' : ''"> {{ t('sys.login.email') }} </div>
           </a-form-item>
         </div>
@@ -217,7 +217,7 @@
     position: relative;
     margin-top: 30px;
     background: #ffffff;
-    height: 40px;
+    height: 44px;
     box-sizing: border-box;
   }
   .form-title {
@@ -246,9 +246,9 @@
   .next-step {
     font-weight: 600;
     width: 100%;
-    height: 40px;
+    height: 44px;
     display: block;
-    background: #2296f3;
+    background: #0B57D0;
     border-radius: 4px;
     font-size: 14px;
     color: #fff;

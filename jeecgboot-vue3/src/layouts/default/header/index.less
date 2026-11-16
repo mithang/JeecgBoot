@@ -35,11 +35,21 @@
     }
 
     .@{header-trigger-prefix-cls} {
-      padding: 0 4px 0 8px !important;
+      // Phase 4 Bước 10 (G6): vùng chạm tối thiểu 44px cho nút thu/mở sider trên mobile.
+      min-width: 44px;
+      padding: 0 8px 0 8px !important;
+      justify-content: center;
     }
 
     .@{header-prefix-cls}-action {
       padding-right: 4px;
+
+      // Phase 4 Bước 10 (G6): vùng chạm tối thiểu 44px cho các nút icon ở header trên mobile
+      // (tìm kiếm, đổi ngôn ngữ, cài đặt...). Chiều cao header 60px đã đủ, chỉ cần đảm bảo bề ngang.
+      &__item {
+        min-width: 44px;
+        justify-content: center;
+      }
     }
   }
 

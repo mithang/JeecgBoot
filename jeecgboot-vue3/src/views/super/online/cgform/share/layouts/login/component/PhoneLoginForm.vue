@@ -2,7 +2,7 @@
   <a-form ref="loginPhoneRef" :model="formData" :rules="getFormRules" @keyup.enter.native="phoneLoginClick">
     <div class="content-item" :class="geMobileClass" @click="formDataInputClick('mobile')">
       <a-form-item name="mobile">
-        <a-input ref="mobileRef" v-model:value="formData.mobile" style="height: 40px" @blur="formDataInputBlur" />
+        <a-input ref="mobileRef" v-model:value="formData.mobile" style="height: 44px" @blur="formDataInputBlur" />
         <div class="form-title" :class="activekey === 'mobile' ? 'active-title' : ''">
           {{ t('sys.login.mobile') }}
         </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="content-item" :class="getSmsCodeClass">
       <a-form-item name="sms" @click="formDataInputClick('sms')">
-        <a-input ref="smsCodeRef" :maxLength="6" v-model:value="formData.sms" style="height: 40px" @blur="formDataInputBlur" />
+        <a-input ref="smsCodeRef" :maxLength="6" v-model:value="formData.sms" style="height: 44px" @blur="formDataInputBlur" />
         <div class="form-title" :class="activekey === 'sms' ? 'active-title' : ''">
           {{ t('sys.login.smsCode') }}
         </div>
@@ -209,7 +209,7 @@
     position: relative;
     margin-top: 30px;
     background: #ffffff;
-    height: 40px;
+    height: 44px;
     box-sizing: border-box;
   }
   .form-title {
@@ -242,9 +242,9 @@
 
   .login-btn {
     width: 100%;
-    height: 40px;
+    height: 44px;
     display: block;
-    background: #2296f3;
+    background: #0B57D0;
     border-radius: 4px;
     font-size: 14px;
     color: #fff;
@@ -253,8 +253,8 @@
   }
   .phone-login-btn {
     width: 100%;
-    height: 40px;
-    line-height: 40px;
+    height: 44px;
+    line-height: 44px;
     display: block;
     background: #ffffff;
     border-radius: 4px;
