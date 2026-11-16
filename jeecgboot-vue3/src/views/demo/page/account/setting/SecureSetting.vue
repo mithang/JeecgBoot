@@ -62,7 +62,7 @@
     margin-top: 10px;
     margin-right: 30px;
     font-weight: normal;
-    color: #1890ff;
+    color: #0B57D0;
     cursor: pointer;
   }
 </style>

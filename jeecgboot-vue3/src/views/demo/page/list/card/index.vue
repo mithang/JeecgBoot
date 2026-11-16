@@ -3,9 +3,9 @@
     <template #headerContent>
       Dựa trênVue Next, TypeScript, Ant Design Vuemột hệ thống quản lý backend cấp doanh nghiệp hoàn chỉnh.
       <div :class="`${prefixCls}__link`">
-        <a><Icon icon="bx:bx-paper-plane" color="#1890ff" /><span>Bắt đầu</span></a>
-        <a><Icon icon="carbon:warning" color="#1890ff" /><span>Giới thiệu</span></a>
-        <a><Icon icon="ion:document-text-outline" color="#1890ff" /><span>Tài liệu</span></a>
+        <a><Icon icon="bx:bx-paper-plane" color="#0B57D0" /><span>Bắt đầu</span></a>
+        <a><Icon icon="carbon:warning" color="#0B57D0" /><span>Giới thiệu</span></a>
+        <a><Icon icon="ion:document-text-outline" color="#0B57D0" /><span>Tài liệu</span></a>
       </div>
     </template>
 

@@ -164,7 +164,7 @@
   .panel {
     pointer-events: auto;
     background: rgba(7, 16, 32, 0.82);
-    border: 1px solid rgba(110, 180, 255, 0.22);
+    border: 1px solid rgba(91, 141, 239, 0.22);
     border-radius: 6px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
     display: flex;
@@ -179,7 +179,7 @@
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.5px;
-      border-bottom: 1px solid rgba(110, 180, 255, 0.18);
+      border-bottom: 1px solid rgba(91, 141, 239, 0.18);
     }
     .panel-body {
       padding: 10px 12px;
@@ -225,16 +225,16 @@
   }
 
   .btn {
-    border: 1px solid rgba(110, 180, 255, 0.3);
-    background: rgba(24, 144, 255, 0.2);
+    border: 1px solid rgba(91, 141, 239, 0.3);
+    background: rgba(11, 87, 208, 0.2);
     color: #fff;
     border-radius: 3px;
     padding: 3px 10px;
     font-size: 12px;
     cursor: pointer;
     &:hover {
-      background: #1890ff;
-      border-color: #1890ff;
+      background: #0B57D0;
+      border-color: #0B57D0;
     }
     &.ghost {
       background: transparent;
@@ -267,7 +267,7 @@
       color: #52c41a;
     }
     &.out .log-dir {
-      color: #1890ff;
+      color: #2E6FE8;
     }
   }
 </style>
