@@ -343,7 +343,7 @@
   .atm-selected-tip {
     padding: 4px 10px;
     font-size: 13px;
-    color: #1890ff;
+    color: #0b57d0;
     background: #e6f7ff;
     border-radius: 4px;
   }
@@ -406,14 +406,14 @@
 
     &:hover {
       border-color: #91caff;
-      box-shadow: 0 6px 16px rgba(24, 144, 255, 0.1);
+      box-shadow: 0 6px 16px rgba(11, 87, 208, 0.1);
       transform: translateY(-1px);
     }
 
     &.atm-card--selected {
-      border-color: #1890ff;
+      border-color: #0b57d0;
       background: #f6fbff;
-      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.12);
+      box-shadow: 0 0 0 2px rgba(11, 87, 208, 0.12);
     }
   }
 
@@ -428,7 +428,7 @@
   }
 
   .atm-check-icon--on {
-    color: #1890ff;
+    color: #0b57d0;
   }
 
   .atm-check-icon--off {

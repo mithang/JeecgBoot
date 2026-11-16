@@ -416,7 +416,7 @@ export default defineComponent({
 /* ===== Kiểu chung của thẻ ===== */
 .atm-selected-tip {
   font-size: 13px;
-  color: #1890ff;
+  color: #0b57d0;
 }
 
 .atm-clear-link {
@@ -464,7 +464,7 @@ export default defineComponent({
   }
 
   &.atm-card--selected {
-    border-color: #1890ff;
+    border-color: #0b57d0;
   }
 }
 
@@ -478,7 +478,7 @@ export default defineComponent({
 }
 
 .atm-check-icon--on {
-  color: #1890ff;
+  color: #0b57d0;
 }
 
 .atm-check-icon--off {

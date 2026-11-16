@@ -113,11 +113,11 @@
     }
 
     .tox-textfield:hover {
-      border-color: #40a9ff;
+      border-color: #2e6fe8;
     }
 
     .tox-textfield:focus {
-      border-color: #409eff;
+      border-color: #2e6fe8;
       box-shadow: 0 0 0 2px rgb(64 158 255 / 12%);
     }
 

@@ -175,6 +175,6 @@
 
 <style scoped>
   #box:hover {
-    border-color: #40a9ff;
+    border-color: #2e6fe8;
   }
 </style>

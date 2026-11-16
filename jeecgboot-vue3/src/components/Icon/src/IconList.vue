@@ -185,7 +185,7 @@
     margin: 0.3rem;
   }
   .icon-border {
-    border: 1px solid rgba(24, 144, 255) !important;
+    border: 1px solid rgba(11, 87, 208, 1) !important;
   }
   .justify-content-right {
     justify-content: right;

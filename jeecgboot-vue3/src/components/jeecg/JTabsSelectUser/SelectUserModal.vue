@@ -668,19 +668,19 @@
   }
 
   .user-group-item:hover {
-    border-color: #40a9ff;
-    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+    border-color: #2e6fe8;
+    box-shadow: 0 2px 8px rgba(11, 87, 208, 0.1);
   }
 
   .user-group-item-selected {
-    border-color: #1890ff;
+    border-color: #0b57d0;
     background-color: #f0f8ff;
-    color: #1890ff;
+    color: #0b57d0;
     font-weight: 500;
   }
 
   .user-group-item-selected:hover {
-    border-color: #096dd9;
+    border-color: #2e6fe8;
     background-color: #e6f7ff;
   }
 
@@ -758,14 +758,14 @@
 
   .clear-link {
     flex-shrink: 0;
-    color: #1890ff; /* Màu liên kết */
+    color: #0b57d0; /* Màu liên kết */
     text-decoration: none; /* Bỏ gạch chân */
     white-space: nowrap; /* Không cho xuống dòng */
     cursor: pointer; /* Con trỏ hình bàn tay */
   }
 
   .clear-link:hover {
-    color: #40a9ff; /* Màu khi di chuột qua */
+    color: #2e6fe8; /* Màu khi di chuột qua */
     text-decoration: underline; /* Gạch chân khi di chuột */
   }
 </style>
