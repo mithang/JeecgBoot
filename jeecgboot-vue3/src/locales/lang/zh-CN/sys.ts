@@ -67,8 +67,13 @@ export default {
     signUpFormTitle: 'Đăng ký',
     forgetFormTitle: 'Đặt lại mật khẩu',
 
-    signInTitle: 'Jeecg Boot',
-    signInDesc: 'Là nền tảng low-code cấp doanh nghiệp có ảnh hưởng nhất tại Trung Quốc! Phát triển trực tuyến, thiết kế kéo thả trực quan, không cần code vẫn thực hiện được 80% chức năng cơ bản~',
+    signInTitle: 'JeecgBoot',
+    signInDesc:
+      'Nền tảng Low-Code cho doanh nghiệp Việt — thiết kế kéo thả trực quan, biểu mẫu trực tuyến, không cần viết code vẫn làm được 80% chức năng cơ bản.',
+    signInTagline: 'Nền tảng Low-Code cho doanh nghiệp Việt',
+    signInFeature1: 'Kéo thả trực quan — tạo biểu mẫu và báo cáo trong vài phút',
+    signInFeature2: 'Biểu mẫu trực tuyến & quy trình — số hoá nghiệp vụ không cần viết code',
+    signInFeature3: 'AI RAG & trợ lý AI — tra cứu tri thức doanh nghiệp tức thì',
     policy: 'Tôi đồng ý với chính sách bảo mật Qiaoqiaoyun',
     scanSign: `Sau khi quét mã, bạn có thể hoàn tất đăng nhập`,
     scanSuccess: `Quét mã thành công, đang đăng nhập`,
@@ -78,6 +83,7 @@ export default {
     rememberMe: 'Ghi nhớ tôi',
     forgetPassword: 'Quên mật khẩu?',
     otherSignIn: 'Cách đăng nhập khác',
+    moreSignIn: 'Thêm cách đăng nhập',
 
     // notify
     loginSuccessTitle: 'Đăng nhập thành công',

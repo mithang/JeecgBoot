@@ -3,8 +3,16 @@
     <div class="aui-container">
       <div class="aui-form">
         <div class="aui-image">
-          <div class="aui-image-text">
-            <img :src="adTextImg" alt="" />
+          <div class="aui-brand-panel">
+            <img :src="brandBannerImg" alt="" class="aui-brand-banner" />
+            <h2 class="aui-brand-title">{{ t('sys.login.signInTitle') }}</h2>
+            <p class="aui-brand-desc">{{ t('sys.login.signInDesc') }}</p>
+            <ul class="aui-brand-features">
+              <li v-for="key in loginFeatures" :key="key">
+                <CheckCircleFilled class="aui-brand-feature-icon" />
+                <span>{{ t(key) }}</span>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="aui-formBox">
@@ -99,7 +107,8 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getCaptcha, passwordChange, phoneVerify } from '/@/api/sys/user';
   import logoImg from '/@/assets/loginmini/icon/jeecg_logo.png'
-  import adTextImg from '/@/assets/loginmini/icon/jeecg_ad_text.png'
+  import brandBannerImg from '/@/assets/svg/login-brand-banner.svg'
+  import { CheckCircleFilled } from '@ant-design/icons-vue';
   import successImg from '/@/assets/loginmini/icon/icon-success.png'
   import CaptchaModal from '@/components/jeecg/captcha/CaptchaModal.vue';
   import { useModal } from "@/components/Modal";
@@ -109,6 +118,12 @@
   //Kiểm soát bước tiếp theo
   const activeKey = ref<number>(1);
   const { t } = useI18n();
+  // 3 điểm nổi bật của nền tảng hiển thị ở panel thương hiệu (Phase 4 Bước 6)
+  const loginFeatures = [
+    'sys.login.signInFeature1',
+    'sys.login.signInFeature2',
+    'sys.login.signInFeature3',
+  ];
   const { handleBackLogin } = useLoginState();
   const { notification, createMessage, createErrorModal } = useMessage();
   //Có hiển thị lấy mã xác thực không

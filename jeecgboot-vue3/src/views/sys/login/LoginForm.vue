@@ -75,8 +75,14 @@
 
     <Divider class="enter-x">{{ t('sys.login.otherSignIn') }}</Divider>
 
-    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
-      <a @click="onThirdLogin('github')" title="github"><GithubFilled /></a>
+    <!-- Đăng nhập bên thứ ba (Phase 4 Bước 6): mặt tiền mặc định chỉ còn
+         GitHub + nút "Khác"; WeCom/DingTalk/WeChat (hệ sinh thái Trung Quốc)
+         ẩn sau nút "Khác" — không xóa code, backend vẫn hỗ trợ. -->
+    <div class="flex justify-center gap-8 enter-x" :class="`${prefixCls}-sign-in-way`">
+      <a @click="onThirdLogin('github')" title="GitHub"><GithubFilled /></a>
+      <a @click="showMoreThird = !showMoreThird" :title="t('sys.login.moreSignIn')"><EllipsisOutlined /></a>
+    </div>
+    <div v-show="showMoreThird" class="flex justify-center gap-8 mt-3 enter-x" :class="`${prefixCls}-sign-in-way`">
       <a @click="onThirdLogin('wechat_enterprise')" title="WeCom"> <icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
       <a @click="onThirdLogin('dingtalk')" title="DingTalk"><DingtalkCircleFilled /></a>
       <a @click="onThirdLogin('wechat_open')" title="WeChat"><WechatFilled /></a>
@@ -89,7 +95,7 @@
   import { reactive, ref, toRaw, unref, computed, onMounted } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
-  import { GithubFilled, WechatFilled, DingtalkCircleFilled } from '@ant-design/icons-vue';
+  import { GithubFilled, WechatFilled, DingtalkCircleFilled, EllipsisOutlined } from '@ant-design/icons-vue';
   import { IconFont } from '/@/utils/iconfont2';
   import LoginFormTitle from './LoginFormTitle.vue';
   import ThirdModal from './ThirdModal.vue';
@@ -118,6 +124,8 @@
   const thirdModalRef = ref();
   const loading = ref(false);
   const rememberMe = ref(false);
+  // Hiện/ẩn nhóm đăng nhập bên thứ ba hệ sinh thái Trung Quốc (Phase 4 Bước 6)
+  const showMoreThird = ref(false);
 
   const formData = reactive({
     account: 'admin',

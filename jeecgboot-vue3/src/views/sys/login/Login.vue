@@ -2,22 +2,29 @@
   <div :class="prefixCls" class="relative w-full h-full px-4">
     <AppLocalePicker class="absolute text-white top-4 right-4 enter-x xl:text-gray-600" :showText="false" v-if="!sessionTimeout && showLocale" />
     <AppDarkModeToggle class="absolute top-3 right-7 enter-x" v-if="!sessionTimeout" />
-    <span class="-enter-x xl:hidden">
+    <div class="-enter-x xl:hidden login-brand-strip">
       <AppLogo :alwaysShowTitle="true" />
-    </span>
+      <p class="mt-1 text-xs text-white/85">{{ t('sys.login.signInTagline') }}</p>
+    </div>
 
     <div class="container relative h-full py-2 mx-auto sm:px-10">
       <div class="flex h-full">
         <div class="hidden min-h-full pl-4 mr-4 xl:flex xl:flex-col xl:w-6/12">
           <AppLogo class="-enter-x" />
           <div class="my-auto">
-            <img :alt="title" src="../../../assets/svg/login-box-bg.svg" class="w-1/2 -mt-16 -enter-x" />
-            <div class="mt-10 font-medium text-white -enter-x">
+            <img :alt="title" src="../../../assets/svg/login-brand-banner.svg" class="w-10/12 -enter-x" />
+            <div class="mt-8 font-medium text-white -enter-x">
               <span class="inline-block mt-4 text-3xl"> {{ t('sys.login.signInTitle') }}</span>
             </div>
-            <div class="mt-5 font-normal text-white text-md dark:text-gray-500 -enter-x">
+            <div class="mt-4 font-normal text-white text-md dark:text-gray-500 -enter-x">
               {{ t('sys.login.signInDesc') }}
             </div>
+            <ul class="mt-6 space-y-3 -enter-x">
+              <li v-for="key in loginFeatures" :key="key" class="flex items-start gap-2 text-sm text-white/90">
+                <CheckCircleFilled class="mt-0.5 shrink-0 text-base" style="color: #9db9f5" />
+                <span>{{ t(key) }}</span>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">
@@ -38,6 +45,7 @@
 </template>
 <script lang="ts" setup>
   import { computed } from 'vue';
+  import { CheckCircleFilled } from '@ant-design/icons-vue';
   import { AppLogo } from '/@/components/Application';
   import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import LoginForm from './LoginForm.vue';
@@ -64,6 +72,12 @@
   const title = computed(() => globSetting?.title ?? '');
   const { handleBackLogin } = useLoginState();
   handleBackLogin();
+  // 3 điểm nổi bật của nền tảng hiển thị ở panel thương hiệu (Phase 4 Bước 6)
+  const loginFeatures = [
+    'sys.login.signInFeature1',
+    'sys.login.signInFeature2',
+    'sys.login.signInFeature3',
+  ];
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-login';
@@ -112,6 +126,29 @@
 
       .@{prefix-cls}-form {
         background-color: #fff;
+      }
+    }
+
+    // Dải banner thương hiệu trên mobile (Phase 4 Bước 6): logo + tagline
+    // trên nền gradient thương hiệu, thay cho logo trần trước đây.
+    .login-brand-strip {
+      margin-top: 12px;
+      padding: 12px 16px 10px;
+      background: linear-gradient(120deg, #0a3d91 0%, #0b57d0 55%, #2e6fe8 100%);
+      border-radius: 12px;
+
+      .@{logo-prefix-cls} {
+        position: static;
+        height: auto;
+
+        &__title {
+          font-size: 18px;
+          color: #fff;
+        }
+
+        img {
+          width: 36px;
+        }
       }
     }
 

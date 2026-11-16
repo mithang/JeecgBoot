@@ -3,8 +3,16 @@
     <div class="aui-container">
       <div class="aui-form">
         <div class="aui-image">
-          <div class="aui-image-text">
-            <img :src="jeecgAdTextImg" alt="" />
+          <div class="aui-brand-panel">
+            <img :src="brandBannerImg" alt="" class="aui-brand-banner" />
+            <h2 class="aui-brand-title">{{ t('sys.login.signInTitle') }}</h2>
+            <p class="aui-brand-desc">{{ t('sys.login.signInDesc') }}</p>
+            <ul class="aui-brand-features">
+              <li v-for="key in loginFeatures" :key="key">
+                <CheckCircleFilled class="aui-brand-feature-icon" />
+                <span>{{ t(key) }}</span>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="aui-formBox">
@@ -91,7 +99,8 @@
   import { SmsEnum } from '/@/views/sys/login/useLogin';
   import { useMessage } from '/@/hooks/web/useMessage';
   import logoImg from '/@/assets/loginmini/icon/jeecg_logo.png';
-  import jeecgAdTextImg from '/@/assets/loginmini/icon/jeecg_ad_text.png';
+  import brandBannerImg from '/@/assets/svg/login-brand-banner.svg';
+  import { CheckCircleFilled } from '@ant-design/icons-vue';
   import eyeKImg from '/@/assets/loginmini/icon/icon-eye-k.png';
   import eyeGImg from '/@/assets/loginmini/icon/icon-eye-g.png';
   import { useI18n } from "/@/hooks/web/useI18n";
@@ -100,6 +109,12 @@
   import { ExceptionEnum } from "@/enums/exceptionEnum";
 
   const { t } = useI18n();
+  // 3 điểm nổi bật của nền tảng hiển thị ở panel thương hiệu (Phase 4 Bước 6)
+  const loginFeatures = [
+    'sys.login.signInFeature1',
+    'sys.login.signInFeature2',
+    'sys.login.signInFeature3',
+  ];
   const { notification, createErrorModal, createMessage } = useMessage();
   const emit = defineEmits(['go-back', 'success', 'register']);
   const formRef = ref();

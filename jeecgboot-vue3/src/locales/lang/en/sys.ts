@@ -69,8 +69,13 @@ export default {
     signUpFormTitle: 'Sign up',
     forgetFormTitle: 'Reset password',
 
-    signInTitle: 'Backstage management system',
-    signInDesc: 'Enter your personal details and get started!',
+    signInTitle: 'JeecgBoot',
+    signInDesc:
+      'The Low-Code platform for Vietnamese enterprises — visual drag-and-drop design, online forms, build 80% of common features without writing code.',
+    signInTagline: 'The Low-Code platform for Vietnamese enterprises',
+    signInFeature1: 'Visual drag-and-drop — build forms and reports in minutes',
+    signInFeature2: 'Online forms & workflows — digitize operations without code',
+    signInFeature3: 'AI RAG & AI assistant — query enterprise knowledge instantly',
     policy: 'I agree to the xxx Privacy Policy',
     scanSign: `scanning the code to complete the login`,
 
@@ -79,6 +84,7 @@ export default {
     rememberMe: 'Remember me',
     forgetPassword: 'Forget Password?',
     otherSignIn: 'Sign in with',
+    moreSignIn: 'More sign-in options',
 
     // notify
     loginSuccessTitle: 'Login successful',

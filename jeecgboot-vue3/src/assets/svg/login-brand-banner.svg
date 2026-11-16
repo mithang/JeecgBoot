@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440">
+  <title>JeecgBoot — banner đăng nhập</title>
+  <defs>
+    <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2E6FE8" />
+      <stop offset="0.55" stop-color="#0B57D0" />
+      <stop offset="1" stop-color="#0A3D91" />
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFB020" />
+      <stop offset="0.55" stop-color="#F4502A" />
+      <stop offset="1" stop-color="#E8290B" />
+    </linearGradient>
+    <clipPath id="winClip">
+      <rect x="48" y="36" width="544" height="336" rx="18" />
+    </clipPath>
+  </defs>
+
+  <!-- decorative soft circles -->
+  <circle cx="576" cy="56" r="92" fill="#FFFFFF" opacity="0.07" />
+  <circle cx="72" cy="404" r="70" fill="#FFFFFF" opacity="0.07" />
+  <circle cx="600" cy="400" r="46" fill="#FFB020" opacity="0.14" />
+
+  <!-- window shadow -->
+  <rect x="48" y="48" width="544" height="336" rx="18" fill="#062A63" opacity="0.35" />
+
+  <!-- browser window -->
+  <rect x="48" y="36" width="544" height="336" rx="18" fill="#FFFFFF" />
+  <g clip-path="url(#winClip)">
+    <!-- title bar -->
+    <rect x="48" y="36" width="544" height="48" fill="#EEF2F7" />
+    <circle cx="76" cy="60" r="7" fill="#FF5F57" />
+    <circle cx="100" cy="60" r="7" fill="#FFBD2E" />
+    <circle cx="124" cy="60" r="7" fill="#28C840" />
+    <rect x="430" y="48" width="140" height="24" rx="12" fill="#FFFFFF" stroke="#DCE4EE" />
+    <rect x="444" y="56" width="72" height="8" rx="4" fill="#C7D2E0" />
+
+    <!-- sidebar -->
+    <rect x="48" y="84" width="150" height="288" fill="#0B2447" />
+    <rect x="68" y="104" width="28" height="28" rx="8" fill="url(#brandGrad)" />
+    <rect x="104" y="111" width="74" height="12" rx="6" fill="#FFFFFF" opacity="0.9" />
+    <rect x="68" y="152" width="110" height="12" rx="6" fill="#FFFFFF" opacity="0.9" />
+    <rect x="64" y="152" width="4" height="12" rx="2" fill="#FFB020" />
+    <rect x="68" y="178" width="110" height="12" rx="6" fill="#FFFFFF" opacity="0.35" />
+    <rect x="68" y="204" width="110" height="12" rx="6" fill="#FFFFFF" opacity="0.35" />
+    <rect x="68" y="230" width="82" height="12" rx="6" fill="#FFFFFF" opacity="0.35" />
+    <rect x="68" y="316" width="110" height="32" rx="8" fill="#FFFFFF" opacity="0.12" />
+    <rect x="80" y="328" width="60" height="8" rx="4" fill="#FFFFFF" opacity="0.5" />
+
+    <!-- content header -->
+    <rect x="222" y="104" width="180" height="14" rx="7" fill="#1B2A4A" opacity="0.85" />
+    <rect x="222" y="126" width="120" height="10" rx="5" fill="#C7D2E0" />
+
+    <!-- stat cards -->
+    <g>
+      <rect x="222" y="150" width="104" height="64" rx="12" fill="#F0F4F8" />
+      <rect x="234" y="162" width="20" height="20" rx="6" fill="#0B57D0" />
+      <rect x="234" y="190" width="56" height="8" rx="4" fill="#94A3B8" />
+      <rect x="342" y="150" width="104" height="64" rx="12" fill="#F0F4F8" />
+      <rect x="354" y="162" width="20" height="20" rx="6" fill="#2E6FE8" />
+      <rect x="354" y="190" width="56" height="8" rx="4" fill="#94A3B8" />
+      <rect x="462" y="150" width="104" height="64" rx="12" fill="#F0F4F8" />
+      <rect x="474" y="162" width="20" height="20" rx="6" fill="#F4502A" />
+      <rect x="474" y="190" width="56" height="8" rx="4" fill="#94A3B8" />
+    </g>
+
+    <!-- chart card -->
+    <rect x="222" y="230" width="230" height="118" rx="12" fill="#FFFFFF" stroke="#E2E8F0" />
+    <rect x="238" y="244" width="90" height="10" rx="5" fill="#1B2A4A" opacity="0.7" />
+    <line x1="238" y1="330" x2="436" y2="330" stroke="#E2E8F0" stroke-width="2" />
+    <rect x="244" y="300" width="18" height="30" rx="4" fill="#5B8DEF" />
+    <rect x="274" y="275" width="18" height="55" rx="4" fill="#2E6FE8" />
+    <rect x="304" y="290" width="18" height="40" rx="4" fill="#0B57D0" />
+    <rect x="334" y="250" width="18" height="80" rx="4" fill="#F4502A" />
+    <rect x="364" y="268" width="18" height="62" rx="4" fill="#0B57D0" />
+    <rect x="394" y="282" width="18" height="48" rx="4" fill="#5B8DEF" />
+
+    <!-- form card -->
+    <rect x="468" y="230" width="100" height="118" rx="12" fill="#F0F4F8" />
+    <rect x="480" y="244" width="76" height="22" rx="6" fill="#FFFFFF" stroke="#DCE4EE" />
+    <rect x="480" y="274" width="76" height="22" rx="6" fill="#FFFFFF" stroke="#DCE4EE" />
+    <rect x="480" y="304" width="76" height="24" rx="6" fill="#0B57D0" />
+    <rect x="496" y="313" width="44" height="6" rx="3" fill="#FFFFFF" />
+  </g>
+
+  <!-- floating flame badge -->
+  <circle cx="560" cy="380" r="30" fill="url(#flameGrad)" />
+  <circle cx="560" cy="380" r="30" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.65" />
+  <path d="M548 380 l8 8 l16 -18" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- floating chip -->
+  <rect x="28" y="14" width="128" height="36" rx="18" fill="#FFFFFF" />
+  <circle cx="48" cy="32" r="9" fill="#FFB020" />
+  <rect x="64" y="26" width="72" height="7" rx="3.5" fill="#94A3B8" />
+  <rect x="64" y="37" width="48" height="6" rx="3" fill="#C7D2E0" />
+</svg>

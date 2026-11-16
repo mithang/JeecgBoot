@@ -30,18 +30,67 @@
 }
 
 .aui-image {
-  padding: 180px 80px;
+  padding: 48px 44px;
   flex-basis: 60%;
   -webkit-flex-basis: 60%;
-  background-color: #0198cd;
-  background-image: url(../icon/jeecg_ad.png);
-  background-size: cover;
+  // Panel thương hiệu (Phase 4 Bước 6): gradient "Xanh Jeecg" thay cho ảnh
+  // collage cyan cũ (jeecg_ad.png) — nội dung là HTML + banner SVG, không
+  // còn ảnh PNG chứa chữ tiếng Trung.
+  background: linear-gradient(160deg, #0a3d91 0%, #0b57d0 55%, #2e6fe8 100%);
+  display: flex;
+  align-items: center;
 }
 
-.aui-image-text {
-  top: 50%;
-  left: 50%;
+.aui-brand-panel {
   width: 100%;
+  color: #fff;
+}
+
+.aui-brand-banner {
+  width: 82%;
+  max-width: 420px;
+  display: block;
+  margin: 0 auto 28px;
+}
+
+.aui-brand-title {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #fff;
+  margin: 0 0 12px;
+}
+
+.aui-brand-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 0 20px;
+}
+
+.aui-brand-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aui-brand-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.aui-brand-feature-icon {
+  margin-top: 2px;
+  font-size: 15px;
+  color: #9db9f5;
+  flex-shrink: 0;
 }
 
 .aui-formBox {

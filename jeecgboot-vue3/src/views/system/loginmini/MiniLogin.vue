@@ -9,16 +9,25 @@
         </h3>
       </div>
     </div>
-    <div v-else class="aui-phone-logo">
-      <img :src="logoImg" alt="jeecg" />
+    <div v-else class="aui-phone-strip">
+      <img :src="logoImg" alt="jeecg" class="aui-phone-strip-logo" />
+      <span class="aui-phone-strip-tagline">{{ t('sys.login.signInTagline') }}</span>
     </div>
     <div v-show="type === 'login'">
       <div class="aui-content">
         <div class="aui-container">
           <div class="aui-form">
             <div class="aui-image">
-              <div class="aui-image-text">
-                <img :src="adTextImg" />
+              <div class="aui-brand-panel">
+                <img :src="brandBannerImg" alt="" class="aui-brand-banner" />
+                <h2 class="aui-brand-title">{{ t('sys.login.signInTitle') }}</h2>
+                <p class="aui-brand-desc">{{ t('sys.login.signInDesc') }}</p>
+                <ul class="aui-brand-features">
+                  <li v-for="key in loginFeatures" :key="key">
+                    <CheckCircleFilled class="aui-brand-feature-icon" />
+                    <span>{{ t(key) }}</span>
+                  </li>
+                </ul>
               </div>
             </div>
             <div class="aui-formBox">
@@ -129,12 +138,22 @@
                     <span>{{ t('sys.login.otherSignIn') }}</span>
                   </div>
                 </div>
+                <!-- Đăng nhập bên thứ ba (Phase 4 Bước 6): mặt tiền mặc định chỉ còn
+                     GitHub + nút "Khác"; WeCom/DingTalk/WeChat (hệ sinh thái Trung Quốc)
+                     ẩn sau nút "Khác" — không xóa code, backend vẫn hỗ trợ. -->
                 <div class="aui-flex" :class="`${prefixCls}-sign-in-way`">
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a title="github" @click="onThirdLogin('github')"><GithubFilled /></a>
+                      <a title="GitHub" @click="onThirdLogin('github')"><GithubFilled /></a>
                     </div>
                   </div>
+                  <div class="aui-flex-box">
+                    <div class="aui-third-login">
+                      <a :title="t('sys.login.moreSignIn')" @click="showMoreThird = !showMoreThird"><EllipsisOutlined /></a>
+                    </div>
+                  </div>
+                </div>
+                <div v-show="showMoreThird" class="aui-flex aui-third-more" :class="`${prefixCls}-sign-in-way`">
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
                       <a title="WeCom" @click="onThirdLogin('wechat_enterprise')"><icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
@@ -186,13 +205,13 @@
   const MiniRegister = defineAsyncComponent(() => import('./MiniRegister.vue'));
   const MiniCodelogin = defineAsyncComponent(() => import('./MiniCodelogin.vue'));
   import logoImg from '/@/assets/loginmini/icon/jeecg_logo.png';
-  import adTextImg from '/@/assets/loginmini/icon/jeecg_ad_text.png';
+  import brandBannerImg from '/@/assets/svg/login-brand-banner.svg';
   import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import { useLocaleStore } from '/@/store/modules/locale';
   import { createLocalStorage } from '/@/utils/cache';
   import { useDesign } from "/@/hooks/web/useDesign";
   import { useAppInject } from "/@/hooks/web/useAppInject";
-  import { GithubFilled, WechatFilled, DingtalkCircleFilled } from '@ant-design/icons-vue';
+  import { GithubFilled, WechatFilled, DingtalkCircleFilled, EllipsisOutlined, CheckCircleFilled } from '@ant-design/icons-vue';
   import '/@/utils/iconfont2';
   import CaptchaModal from '@/components/jeecg/captcha/CaptchaModal.vue';
   import { useModal } from "@/components/Modal";
@@ -215,6 +234,14 @@
   });
   // Ghi nhớ tên người dùng
   const rememberMe = ref<boolean>(false);
+  // Hiện/ẩn nhóm đăng nhập bên thứ ba hệ sinh thái Trung Quốc (Phase 4 Bước 6)
+  const showMoreThird = ref<boolean>(false);
+  // 3 điểm nổi bật của nền tảng hiển thị ở panel thương hiệu (Phase 4 Bước 6)
+  const loginFeatures = [
+    'sys.login.signInFeature1',
+    'sys.login.signInFeature2',
+    'sys.login.signInFeature3',
+  ];
   const REMEMBER_USERNAME_KEY = 'LOGIN_REMEMBER_USERNAME';
   //Đăng nhập bằng số điện thoại hay đăng nhập bằng tài khoản
   const activeIndex = ref<string>('accountLogin');
@@ -617,12 +644,31 @@
     flex: 1;
     color: #fff;
   }
-  .aui-phone-logo{
+  // Dải thương hiệu trên mobile (Phase 4 Bước 6): logo + tagline trên nền trắng
+  // mờ, chừa chỗ cho nút chọn ngôn ngữ / dark mode ở góc phải.
+  .aui-phone-strip {
     position: absolute;
-    margin-left: 10px;
-    width: 60px;
-    top:2px;
+    top: 8px;
+    left: 8px;
+    right: 104px;
     z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(11, 36, 71, 0.12);
+  }
+  .aui-phone-strip-logo {
+    width: 56px;
+    flex-shrink: 0;
+  }
+  .aui-phone-strip-tagline {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #0b2447;
+    font-weight: 500;
   }
   .top-3{
     top: 0.45rem;
