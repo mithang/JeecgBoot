@@ -21,7 +21,12 @@
     <a-form-item-rest>
       <!-- [TV360X-377]Bắt buộc nhập của bản ghi liên kết ảnh hưởng đến kiểu của ô nhập và số trang của table -->
       <a-form-item>
-        <Table ref="tableElRef" v-bind="getBindValues" :rowClassName="getRowClassName" v-show="getEmptyDataIsShowTable" @resizeColumn="handleResizeColumn" @change="handleTableChange">
+        <Table ref="tableElRef" v-bind="getBindValues" :rowClassName="getRowClassName" v-show="getEmptyDataIsShowTable && !showListSkeleton" @resizeColumn="handleResizeColumn" @change="handleTableChange">
+          <!-- Phase 4 Bước 8 (G7): trạng thái rỗng mặc định (ảnh nodata + mô tả);
+            chỉ render khi trang không tự định nghĩa emptyText/locale.emptyText -->
+          <template v-if="!hasCustomEmptyText" #emptyText>
+            <JeecgEmpty />
+          </template>
           <!-- antdSlot gốc của antd được truyền trực tiếp -->
           <template #[item]="data" v-for="item in slotNamesGroup.native" :key="item">
             <!-- Giải thích logic mã: [issues/1146]BasicTable dùng headerCell thì ô chọn tất cả không hiển thị -->
@@ -51,6 +56,8 @@
             </slot>
           </template>
         </Table>
+        <!-- Phase 4 Bước 8 (G7): skeleton khi tải danh sách lần đầu (chưa có dòng nào) -->
+        <Skeleton v-if="showListSkeleton" active :title="{ width: '30%' }" :paragraph="{ rows: 6 }" class="basic-table-skeleton" />
       </a-form-item>
     </a-form-item-rest>
   </div>
@@ -59,8 +66,9 @@
   import type { BasicTableProps, TableActionType, SizeType, ColumnChangeParam, BasicColumn } from './types/table';
 
   import { defineComponent, ref, computed, unref, toRaw, inject, watchEffect, watch, onUnmounted, onMounted, nextTick } from 'vue';
-  import { Table } from 'ant-design-vue';
+  import { Table, Skeleton } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
+  import { JeecgEmpty } from '/@/components/Empty';
   import { PageWrapperFixedHeightKey } from '/@/components/Page/injectionKey';
   import CustomSelectHeader from './components/CustomSelectHeader.vue'
   import expandIcon from './components/ExpandIcon';
@@ -91,6 +99,8 @@
   export default defineComponent({
     components: {
       Table,
+      Skeleton,
+      JeecgEmpty,
       BasicForm,
       HeaderCell,
       TableSummary,
@@ -324,6 +334,21 @@
         return !!unref(getDataSourceRef).length;
       });
 
+      // Phase 4 Bước 8 (G7): trạng thái rỗng mặc định dùng JeecgEmpty (ảnh
+      // nodata.png + mô tả tiếng Việt). Trang nào tự định nghĩa slot
+      // emptyText hoặc prop locale.emptyText thì giữ nguyên bản của trang đó.
+      const hasCustomEmptyText = computed(() => {
+        const locale = unref(getProps).locale as Recordable | undefined;
+        return !!slots.emptyText || !!locale?.emptyText;
+      });
+
+      // Phase 4 Bước 8 (G7): skeleton thay cho bảng trống trong lúc đang tải
+      // lần đầu (đang loading mà chưa có dòng nào). Khi đã có dữ liệu rồi tải
+      // lại thì giữ spinner mặc định của antd trên bảng.
+      const showListSkeleton = computed(() => {
+        return unref(getLoading) && unref(getIsEmptyData);
+      });
+
       function setProps(props: Partial<BasicTableProps>) {
         innerPropsRef.value = { ...unref(innerPropsRef), ...props };
       }
@@ -409,6 +434,8 @@
         registerForm,
         handleSearchInfoChange,
         getEmptyDataIsShowTable,
+        hasCustomEmptyText,
+        showListSkeleton,
         handleTableChange,
         getRowClassName,
         wrapRef,
@@ -602,5 +629,13 @@
     > .ant-form-item {
       margin-bottom: 0;
     }
+  }
+
+  // Phase 4 Bước 8 (G7): skeleton khi tải danh sách lần đầu
+  .basic-table-skeleton {
+    padding: 16px;
+    background: #fff;
+    border: 1px solid @border-color-split;
+    border-radius: 8px;
   }
 </style>

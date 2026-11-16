@@ -16,6 +16,8 @@ export default {
   redo: 'Làm mới',
   back: 'Quay lại',
 
+  noDataText: 'Không có dữ liệu',
+
   light: 'Giao diện sáng',
   dark: 'Giao diện tối',
 };

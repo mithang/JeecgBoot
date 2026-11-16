@@ -65,6 +65,7 @@
   import { omit } from 'lodash-es';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useAppInject } from '/@/hooks/web/useAppInject';
+  import componentSetting from '/@/settings/componentSetting';
 
 
   export default defineComponent({
@@ -146,6 +147,11 @@
           open: unref(visibleRef),
           wrapClassName: unref(getWrapClassName),
         };
+        // Phase 4 Bước 8 (G7): chiều rộng modal form chuẩn hóa (800px, khớp
+        // quy ước phổ biến nhất trong repo) khi trang không truyền width riêng.
+        if (attr.width == null) {
+          attr.width = componentSetting.pattern.modalFormWidth;
+        }
         if (unref(fullScreenRef)) {
           return omit(attr, ['height', 'title', 'visible']);
         }

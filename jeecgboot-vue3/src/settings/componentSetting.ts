@@ -18,7 +18,8 @@ export default {
       totalField: 'total',
     },
     // Các tùy chọn phân trang
-    pageSizeOptions: ['10', '50', '80', '100'],
+    // Phase 4 Bước 8 (G7): thêm 20/30 cho bước nhảy hợp lý (trước đây thiếu, nhảy thẳng 10 -> 50)
+    pageSizeOptions: ['10', '20', '30', '50', '100'],
     // Kích thước mặc định của bảng
     defaultSize: 'middle',
     // Mặc định mỗi trang hiển thị bao nhiêu mục
@@ -48,6 +49,16 @@ export default {
     },
     // Giải thích logic mã: 【issues/1188】BasicTable thêm định nghĩa kiểu scrollToFirstRowOnChange
     scrollToFirstRowOnChange: false,
+  },
+  // Chuẩn pattern danh sách/CRUD (Phase 4 Bước 8 — G7): chiều rộng mặc định
+  // cho drawer/modal form khi trang không truyền width riêng. Drawer chi
+  // tiết (isDetail) vẫn toàn màn hình; modal 800 khớp quy ước phổ biến nhất
+  // trong repo (20 chỗ dùng :width="800").
+  pattern: {
+    // Chiều rộng mặc định cho drawer form
+    drawerFormWidth: 600,
+    // Chiều rộng mặc định cho modal form
+    modalFormWidth: 800,
   },
   // Cấu hình component cuộn
   scrollbar: {

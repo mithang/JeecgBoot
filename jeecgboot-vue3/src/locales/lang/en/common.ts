@@ -16,6 +16,8 @@ export default {
   redo: 'Refresh',
   back: 'Back',
 
+  noDataText: 'No data',
+
   light: 'Light',
   dark: 'Dark',
 };

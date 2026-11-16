@@ -36,6 +36,7 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { cloneDeep } from 'lodash-es';
+  import componentSetting from '/@/settings/componentSetting';
 
   export default defineComponent({
     components: { Drawer, ScrollContainer, DrawerFooter, DrawerHeader },
@@ -86,6 +87,10 @@
             // TODO type error?
             opt.getContainer = `.${prefixVar}-layout-content` as any;
           }
+        } else if (!width) {
+          // Phase 4 Bước 8 (G7): chiều rộng drawer form chuẩn hóa (600px) khi
+          // trang không truyền width riêng; drawer có width riêng giữ nguyên.
+          opt.width = componentSetting.pattern.drawerFormWidth;
         }
         return opt as DrawerProps;
       });
