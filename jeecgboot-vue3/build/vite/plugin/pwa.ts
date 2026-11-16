@@ -14,20 +14,36 @@ export function configPwaPlugin(isBuild: boolean): PluginOption | PluginOption[]
   const pwaOptions: Partial<VitePWAOptions> = {
     registerType: 'manual',
     injectRegister: 'inline', // 将 Service Worker 注册代码内联到 HTML 中，避免缓存问题
-    includeAssets: ['favicon.ico', 'logo.png'],
+    includeAssets: ['favicon.ico', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png'],
     manifest: {
-      name: 'JeecgBoot',
-      short_name: 'Jeecg',
-      theme_color: '#ffffff',
+      name: 'JeecgBoot — Nền tảng Low-Code doanh nghiệp',
+      short_name: 'JeecgBoot',
+      description: 'JeecgBoot — Nền tảng Low-Code doanh nghiệp',
+      lang: 'vi',
+      display: 'standalone',
+      orientation: 'portrait',
+      theme_color: '#0B57D0',
+      background_color: '#0B2447',
       icons: [
         {
-          src: '/logo.png',
+          src: '/icons/icon-192.png',
           sizes: '192x192',
           type: 'image/png',
         },
         {
-          src: '/logo.png',
+          src: '/icons/icon-512.png',
           sizes: '512x512',
+          type: 'image/png',
+        },
+        {
+          src: '/icons/icon-maskable-512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable',
+        },
+        {
+          src: '/icons/apple-touch-icon.png',
+          sizes: '180x180',
           type: 'image/png',
         },
       ],
@@ -42,7 +58,10 @@ export function configPwaPlugin(isBuild: boolean): PluginOption | PluginOption[]
         'manifest.webmanifest',
         'assets/index-*.css', // 仅入口 CSS
         'favicon.ico',
-        'logo.png',
+        'icons/icon-192.png',
+        'icons/icon-512.png',
+        'icons/icon-maskable-512.png',
+        'icons/apple-touch-icon.png',
         'js/index-*.js',
         'js/*-vendor-*.js',
       ],
@@ -99,7 +118,7 @@ export function configPwaPlugin(isBuild: boolean): PluginOption | PluginOption[]
         //update-begin---author:scott ---date:20260417  for：[issues/9564]PWA图片规则过宽导致/filereview/等业务接口走缓存-----------
         // 图片资源（仅缓存构建产物，避免命中 /filereview/、/jeecgboot/ 等业务接口返回的图片）
         {
-          urlPattern: /\/(?:assets|img|static|resource)\/.*\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
+          urlPattern: /\/(?:assets|img|static|resource|icons)\/.*\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
           handler: 'CacheFirst',
           options: {
             cacheName: 'image-cache',

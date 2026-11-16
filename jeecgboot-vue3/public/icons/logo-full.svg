@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512" width="1024" height="512">
+  <title>JeecgBoot — logo full (mark + wordmark)</title>
+  <defs>
+    <linearGradient id="jGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E6FE8"/>
+      <stop offset="0.55" stop-color="#0B57D0"/>
+      <stop offset="1" stop-color="#0A3D91"/>
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFB020"/>
+      <stop offset="0.55" stop-color="#F4502A"/>
+      <stop offset="1" stop-color="#E8290B"/>
+    </linearGradient>
+  </defs>
+<g transform="translate(15.4 6.9) scale(0.94)">
+  <path d="M 352 160 L 352 384 C 352 452 320 480 262 480 C 200 480 162 448 160 404" fill="none" stroke="url(#jGrad)" stroke-width="88" stroke-linecap="round"/>
+  <path d="M 348 156 C 310 156 292 124 299 88 C 303 65 314 48 325 33 C 329 48 336 57 345 61 C 345 42 352 23 366 6 C 370 32 383 51 386 78 C 389 112 380 156 348 156 Z" fill="url(#flameGrad)"/>
+  </g>
+  <text x="560" y="268" font-family="Be Vietnam Pro, sans-serif" font-size="120" font-weight="700" fill="#0B2447">JeecgBoot</text>
+  <text x="564" y="340" font-family="Be Vietnam Pro, sans-serif" font-size="40" font-weight="500" fill="#5B6B7F">Nền tảng Low-Code doanh nghiệp</text>
+</svg>
