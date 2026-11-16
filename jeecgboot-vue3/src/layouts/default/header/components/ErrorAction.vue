@@ -1,8 +1,18 @@
 <template>
-  <Tooltip :title="t('layout.header.tooltipErrorLog')" placement="bottom" :mouseEnterDelay="0.5" @click="handleToErrorList">
-    <Badge :count="getCount" :offset="[0, 10]" :overflowCount="99">
-      <Icon icon="ion:bug-outline" />
-    </Badge>
+  <Tooltip :title="t('layout.header.tooltipErrorLog')" placement="bottom" :mouseEnterDelay="0.5">
+    <!-- Phase 4 Bước 11 (G12): nút nhật ký lỗi tới được bằng bàn phím. -->
+    <span
+      tabindex="0"
+      role="button"
+      :aria-label="t('layout.header.tooltipErrorLog')"
+      @click="handleToErrorList"
+      @keydown.enter="handleToErrorList"
+      @keydown.space.prevent="handleToErrorList"
+    >
+      <Badge :count="getCount" :offset="[0, 10]" :overflowCount="99">
+        <Icon icon="ion:bug-outline" />
+      </Badge>
+    </span>
   </Tooltip>
 </template>
 <script lang="ts">

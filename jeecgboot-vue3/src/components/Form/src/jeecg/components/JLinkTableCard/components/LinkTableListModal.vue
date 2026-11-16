@@ -468,6 +468,18 @@ export default defineComponent({
   }
 }
 
+// Phase 4 Bước 11 (G12): dark mode — thẻ bảng không còn nền trắng chói.
+html[data-theme='dark'] {
+  .atm-card {
+    background: #141414;
+  }
+
+  .atm-card--selected {
+    background: rgba(46, 111, 232, 0.16);
+    border-color: #2e6fe8;
+  }
+}
+
 .atm-card-check {
   position: absolute;
   top: 6px;

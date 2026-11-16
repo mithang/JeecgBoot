@@ -78,14 +78,16 @@
     <!-- Đăng nhập bên thứ ba (Phase 4 Bước 6): mặt tiền mặc định chỉ còn
          GitHub + nút "Khác"; WeCom/DingTalk/WeChat (hệ sinh thái Trung Quốc)
          ẩn sau nút "Khác" — không xóa code, backend vẫn hỗ trợ. -->
+    <!-- Phase 4 Bước 11 (G12): các nút đăng nhập bên thứ ba (a không có href vốn
+         không focus được) tới được bằng bàn phím qua tabindex + Enter/Space. -->
     <div class="flex justify-center gap-8 enter-x" :class="`${prefixCls}-sign-in-way`">
-      <a @click="onThirdLogin('github')" title="GitHub"><GithubFilled /></a>
-      <a @click="showMoreThird = !showMoreThird" :title="t('sys.login.moreSignIn')"><EllipsisOutlined /></a>
+      <a @click="onThirdLogin('github')" title="GitHub" tabindex="0" @keydown.enter="onThirdLogin('github')" @keydown.space.prevent="onThirdLogin('github')"><GithubFilled /></a>
+      <a @click="showMoreThird = !showMoreThird" :title="t('sys.login.moreSignIn')" tabindex="0" @keydown.enter="showMoreThird = !showMoreThird" @keydown.space.prevent="showMoreThird = !showMoreThird"><EllipsisOutlined /></a>
     </div>
     <div v-show="showMoreThird" class="flex justify-center gap-8 mt-3 enter-x" :class="`${prefixCls}-sign-in-way`">
-      <a @click="onThirdLogin('wechat_enterprise')" title="WeCom"> <icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
-      <a @click="onThirdLogin('dingtalk')" title="DingTalk"><DingtalkCircleFilled /></a>
-      <a @click="onThirdLogin('wechat_open')" title="WeChat"><WechatFilled /></a>
+      <a @click="onThirdLogin('wechat_enterprise')" title="WeCom" tabindex="0" @keydown.enter="onThirdLogin('wechat_enterprise')" @keydown.space.prevent="onThirdLogin('wechat_enterprise')"> <icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
+      <a @click="onThirdLogin('dingtalk')" title="DingTalk" tabindex="0" @keydown.enter="onThirdLogin('dingtalk')" @keydown.space.prevent="onThirdLogin('dingtalk')"><DingtalkCircleFilled /></a>
+      <a @click="onThirdLogin('wechat_open')" title="WeChat" tabindex="0" @keydown.enter="onThirdLogin('wechat_open')" @keydown.space.prevent="onThirdLogin('wechat_open')"><WechatFilled /></a>
     </div>
   </Form>
   <!-- Các hộp thoại liên quan đến đăng nhập bên thứ ba -->

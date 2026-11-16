@@ -32,11 +32,29 @@
             </div>
             <div class="aui-formBox">
               <div class="aui-formWell">
-                <div class="aui-flex aui-form-nav investment_title">
-                  <div class="aui-flex-box" :class="activeIndex === 'accountLogin' ? 'activeNav on' : ''" @click="loginClick('accountLogin')"
+                <!-- Phase 4 Bước 11 (G12): tab đăng nhập tới được bằng bàn phím
+                     (role="tab" + Enter/Space) và báo trạng thái qua aria-selected. -->
+                <div class="aui-flex aui-form-nav investment_title" role="tablist">
+                  <div
+                    class="aui-flex-box"
+                    :class="activeIndex === 'accountLogin' ? 'activeNav on' : ''"
+                    role="tab"
+                    tabindex="0"
+                    :aria-selected="activeIndex === 'accountLogin'"
+                    @click="loginClick('accountLogin')"
+                    @keydown.enter="loginClick('accountLogin')"
+                    @keydown.space.prevent="loginClick('accountLogin')"
                     >{{ t('sys.login.signInFormTitle') }}
                   </div>
-                  <div class="aui-flex-box" :class="activeIndex === 'phoneLogin' ? 'activeNav on' : ''" @click="loginClick('phoneLogin')"
+                  <div
+                    class="aui-flex-box"
+                    :class="activeIndex === 'phoneLogin' ? 'activeNav on' : ''"
+                    role="tab"
+                    tabindex="0"
+                    :aria-selected="activeIndex === 'phoneLogin'"
+                    @click="loginClick('phoneLogin')"
+                    @keydown.enter="loginClick('phoneLogin')"
+                    @keydown.space.prevent="loginClick('phoneLogin')"
                     >{{ t('sys.login.mobileSignInFormTitle') }}
                   </div>
                 </div>
@@ -60,9 +78,29 @@
                         <a-form-item>
                           <a-input class="fix-auto-fill" type="text" :placeholder="t('sys.login.inputCode')" v-model:value="formData.inputCode" />
                         </a-form-item>
+                        <!-- Phase 4 Bước 11 (G12): ảnh captcha đổi được bằng bàn phím. -->
                         <div class="aui-code">
-                          <img v-if="randCodeData.requestCodeSuccess" :src="randCodeData.randCodeImage" @click="handleChangeCheckCode" />
-                          <img v-else style="margin-top: 2px; max-width: initial" :src="codeImg" @click="handleChangeCheckCode" />
+                          <img
+                            v-if="randCodeData.requestCodeSuccess"
+                            :src="randCodeData.randCodeImage"
+                            tabindex="0"
+                            role="button"
+                            aria-label="Đổi mã xác nhận"
+                            @click="handleChangeCheckCode"
+                            @keydown.enter="handleChangeCheckCode"
+                            @keydown.space.prevent="handleChangeCheckCode"
+                          />
+                          <img
+                            v-else
+                            style="margin-top: 2px; max-width: initial"
+                            :src="codeImg"
+                            tabindex="0"
+                            role="button"
+                            aria-label="Đổi mã xác nhận"
+                            @click="handleChangeCheckCode"
+                            @keydown.enter="handleChangeCheckCode"
+                            @keydown.space.prevent="handleChangeCheckCode"
+                          />
                         </div>
                       </div>
                       <div class="aui-inputClear" v-if="showDepart">
@@ -85,7 +123,7 @@
                           </div>
                         </div>
                         <div class="aui-forget">
-                          <a @click="forgetHandelClick"> {{ t('sys.login.forgetPassword') }}</a>
+                          <a tabindex="0" @click="forgetHandelClick" @keydown.enter="forgetHandelClick" @keydown.space.prevent="forgetHandelClick"> {{ t('sys.login.forgetPassword') }}</a>
                         </div>
                       </div>
                     </div>
@@ -97,7 +135,17 @@
                       </div>
                       <div class="aui-inputClear">
                         <a-input class="fix-auto-fill" :maxlength="6" :placeholder="t('sys.login.smsCode')" v-model:value="phoneFormData.smscode" />
-                        <div v-if="showInterval" class="aui-code" @click="getLoginCode">
+                        <!-- Phase 4 Bước 11 (G12): nút lấy mã SMS tới được bằng bàn phím. -->
+                        <div
+                          v-if="showInterval"
+                          class="aui-code"
+                          tabindex="0"
+                          role="button"
+                          :aria-label="t('component.countdown.normalText')"
+                          @click="getLoginCode"
+                          @keydown.enter="getLoginCode"
+                          @keydown.space.prevent="getLoginCode"
+                        >
                           <a>{{ t('component.countdown.normalText') }}</a>
                         </div>
                         <div v-else class="aui-code">
@@ -125,10 +173,10 @@
                       {{ t('sys.login.loginButton') }}</a-button>
                   </div>
                   <div class="aui-flex">
-                    <a class="aui-linek-code aui-flex-box" @click="codeHandleClick">{{ t('sys.login.qrSignInFormTitle') }}</a>
+                    <a class="aui-linek-code aui-flex-box" tabindex="0" @click="codeHandleClick" @keydown.enter="codeHandleClick" @keydown.space.prevent="codeHandleClick">{{ t('sys.login.qrSignInFormTitle') }}</a>
                   </div>
                   <div class="aui-flex">
-                    <a class="aui-linek-code aui-flex-box" @click="registerHandleClick">{{ t('sys.login.registerButton') }}</a>
+                    <a class="aui-linek-code aui-flex-box" tabindex="0" @click="registerHandleClick" @keydown.enter="registerHandleClick" @keydown.space.prevent="registerHandleClick">{{ t('sys.login.registerButton') }}</a>
                   </div>
                 </div>
               </div>
@@ -141,32 +189,34 @@
                 <!-- Đăng nhập bên thứ ba (Phase 4 Bước 6): mặt tiền mặc định chỉ còn
                      GitHub + nút "Khác"; WeCom/DingTalk/WeChat (hệ sinh thái Trung Quốc)
                      ẩn sau nút "Khác" — không xóa code, backend vẫn hỗ trợ. -->
+                <!-- Phase 4 Bước 11 (G12): các nút đăng nhập bên thứ ba (a không có href
+                     vốn không focus được) tới được bằng bàn phím qua tabindex + Enter/Space. -->
                 <div class="aui-flex" :class="`${prefixCls}-sign-in-way`">
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a title="GitHub" @click="onThirdLogin('github')"><GithubFilled /></a>
+                      <a title="GitHub" tabindex="0" @click="onThirdLogin('github')" @keydown.enter="onThirdLogin('github')" @keydown.space.prevent="onThirdLogin('github')"><GithubFilled /></a>
                     </div>
                   </div>
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a :title="t('sys.login.moreSignIn')" @click="showMoreThird = !showMoreThird"><EllipsisOutlined /></a>
+                      <a :title="t('sys.login.moreSignIn')" tabindex="0" @click="showMoreThird = !showMoreThird" @keydown.enter="showMoreThird = !showMoreThird" @keydown.space.prevent="showMoreThird = !showMoreThird"><EllipsisOutlined /></a>
                     </div>
                   </div>
                 </div>
                 <div v-show="showMoreThird" class="aui-flex aui-third-more" :class="`${prefixCls}-sign-in-way`">
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a title="WeCom" @click="onThirdLogin('wechat_enterprise')"><icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
+                      <a title="WeCom" tabindex="0" @click="onThirdLogin('wechat_enterprise')" @keydown.enter="onThirdLogin('wechat_enterprise')" @keydown.space.prevent="onThirdLogin('wechat_enterprise')"><icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
                     </div>
                   </div>
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a title="DingTalk" @click="onThirdLogin('dingtalk')"><DingtalkCircleFilled /></a>
+                      <a title="DingTalk" tabindex="0" @click="onThirdLogin('dingtalk')" @keydown.enter="onThirdLogin('dingtalk')" @keydown.space.prevent="onThirdLogin('dingtalk')"><DingtalkCircleFilled /></a>
                     </div>
                   </div>
                   <div class="aui-flex-box">
                     <div class="aui-third-login">
-                      <a title="WeChat" @click="onThirdLogin('wechat_open')"><WechatFilled /></a>
+                      <a title="WeChat" tabindex="0" @click="onThirdLogin('wechat_open')" @keydown.enter="onThirdLogin('wechat_open')" @keydown.space.prevent="onThirdLogin('wechat_open')"><WechatFilled /></a>
                     </div>
                   </div>
                 </div>
@@ -605,9 +655,9 @@
   @import '/@/assets/loginmini/style/home.less';
   @import '/@/assets/loginmini/style/base.less';
 
-  :deep(.ant-input:focus) {
-    box-shadow: none;
-  }
+  // Phase 4 Bước 11 (G12): KHÔNG tắt vòng focus của ô input ở trang login nữa —
+  // trước đây :deep(.ant-input:focus) { box-shadow: none } khiến người dùng bàn
+  // phím không thấy ô nào đang focus; vòng focus mặc định của Ant Design được giữ.
   .aui-get-code {
     float: right;
     position: relative;

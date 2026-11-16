@@ -417,6 +417,21 @@
     }
   }
 
+  // Phase 4 Bước 11 (G12): dark mode — thẻ bảng không còn nền trắng chói
+  // (nền #fff + viền #e5e7eb trước đây nổi bật trên modal tối; mục đã chọn
+  // dùng nền xanh mờ thay cho #f6fbff).
+  html[data-theme='dark'] {
+    .atm-card {
+      background: #141414;
+      border-color: #434343;
+    }
+
+    .atm-card--selected {
+      background: rgba(46, 111, 232, 0.16);
+      border-color: #2e6fe8;
+    }
+  }
+
   /* Icon đã chọn (góc trên bên phải, nằm trong thẻ) */
   .atm-card-check {
     position: absolute;

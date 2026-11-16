@@ -1,5 +1,17 @@
 <template>
-  <div v-if="getShowDarkModeToggle" :class="getClass" @click="toggleDarkMode">
+  <!-- Phase 4 Bước 11 (G12): nút chuyển chế độ tối phải tới được bằng bàn phím:
+       role="switch" + tabindex + xử lý Enter/Space, nhãn aria từ i18n. -->
+  <div
+    v-if="getShowDarkModeToggle"
+    :class="getClass"
+    tabindex="0"
+    role="switch"
+    :aria-checked="isDark"
+    :aria-label="t('layout.setting.darkMode')"
+    @click="toggleDarkMode"
+    @keydown.enter="toggleDarkMode"
+    @keydown.space.prevent="toggleDarkMode"
+  >
     <div :class="`${prefixCls}-inner`"> </div>
     <SvgIcon size="14" name="sun" />
     <SvgIcon size="14" name="moon" />
@@ -9,12 +21,14 @@
   import { computed, unref } from 'vue';
   import { SvgIcon } from '/@/components/Icon';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useI18n } from '/@/hooks/web/useI18n';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
   import { updateHeaderBgColor, updateSidebarBgColor } from '/@/logics/theme/updateBackground';
   import { updateDarkTheme } from '/@/logics/theme/dark';
   import { ThemeEnum } from '/@/enums/appEnum';
 
   const { prefixCls } = useDesign('dark-switch');
+  const { t } = useI18n();
   const { getDarkMode, setDarkMode, getShowDarkModeToggle } = useRootSetting();
 
   const isDark = computed(() => getDarkMode.value === ThemeEnum.DARK);

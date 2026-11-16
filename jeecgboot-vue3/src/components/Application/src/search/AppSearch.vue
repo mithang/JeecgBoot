@@ -14,10 +14,26 @@
         showModal.value = show;
       }
 
+      // Phase 4 Bước 11 (G12): nút tìm kiếm tới được bằng bàn phím.
+      function onTriggerKeydown(e: KeyboardEvent) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          changeModal(true);
+        }
+      }
+
       return () => {
         return (
           // Phase 4 Bước 5: nút tìm kiếm dạng ô pill có chữ để nổi bật hơn icon trần.
-          <div class="app-search-trigger" onClick={changeModal.bind(null, true)} title={t('common.searchText')}>
+          <div
+            class="app-search-trigger"
+            tabindex={0}
+            role="button"
+            aria-label={t('common.searchText')}
+            onClick={changeModal.bind(null, true)}
+            onKeyDown={onTriggerKeydown}
+            title={t('common.searchText')}
+          >
             <SearchOutlined />
             <span class="app-search-trigger__text">{t('common.searchText')}</span>
             <AppSearchModal onClose={changeModal.bind(null, false)} visible={unref(showModal)} />

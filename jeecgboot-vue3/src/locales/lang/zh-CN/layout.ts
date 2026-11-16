@@ -20,6 +20,9 @@ export default {
 
     tooltipEntryFull: 'Toàn màn hình',
     tooltipExitFull: 'Thoát toàn màn hình',
+    // Phase 4 Bước 11 (G12): nhãn aria cho nút thu/mở menu ở header
+    tooltipCollapseMenu: 'Thu gọn menu',
+    tooltipExpandMenu: 'Mở rộng menu',
 
     // lock
     lockScreenPassword: 'Mật khẩu khóa màn hình',

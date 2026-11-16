@@ -363,6 +363,23 @@
       border-top: 2px solid #f7f1f1;
     }
 
+    // Phase 4 Bước 11 (G12): dark mode — footer bảng tổng và tiêu đề thẻ nhiệm vụ
+    // không còn nền sáng chói / chữ khó đọc: footer theo nền tối #141414; đầu thẻ
+    // #7196fb -> xanh đậm thương hiệu #0A3D91 (chữ trắng tương phản ~7:1),
+    // link hover #152ede (tương phản ~2:1 trên #7196fb) -> #5B8DEF.
+    :global(html[data-theme='dark'] .ant-table-footer) {
+      background: #141414;
+      border-top-color: #303030;
+    }
+
+    :global(html[data-theme='dark'] .ant-card-head) {
+      background: #0a3d91 !important;
+    }
+
+    :global(html[data-theme='dark'] .ant-card-head .ant-card-extra a:hover) {
+      color: #5b8def;
+    }
+
     .index-md-title {
       position: relative;
       width: 100%;

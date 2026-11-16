@@ -1,8 +1,19 @@
 <template>
   <div :class="prefixCls">
-    <Badge :count="messageCount" :overflowCount="9" :offset="[-4, 18]" :numberStyle="numberStyle" @click="clickBadge('')">
-      <BellOutlined />
-    </Badge>
+    <!-- Phase 4 Bước 11 (G12): chuông thông báo tới được bằng bàn phím (bọc Badge
+         bằng span focusable; click chuột vẫn qua Badge như trước). -->
+    <span
+      tabindex="0"
+      role="button"
+      :aria-label="t('layout.header.tooltipNotify')"
+      @click="clickBadge('')"
+      @keydown.enter="clickBadge('')"
+      @keydown.space.prevent="clickBadge('')"
+    >
+      <Badge :count="messageCount" :overflowCount="9" :offset="[-4, 18]" :numberStyle="numberStyle">
+        <BellOutlined />
+      </Badge>
+    </span>
 
     <DynamicNotice ref="dynamicNoticeRef" v-bind="dynamicNoticeProps" />
     <DetailModal @register="registerDetail" />
@@ -30,6 +41,7 @@
   import { getToken } from '/@/utils/auth';
   import md5 from 'crypto-js/md5';
   import { useRouter } from 'vue-router';
+  import { useI18n } from '/@/hooks/web/useI18n';
 
   import SysMessageModal from '/@/views/system/message/components/SysMessageModal.vue'
   import ChangePasswordModal from './ChangePasswordModal.vue'
@@ -51,6 +63,7 @@
     },
     setup() {
       const { prefixCls } = useDesign('header-notify');
+      const { t } = useI18n();
       const instance: any = getCurrentInstance();
       const userStore = useUserStore();
       const glob = useGlobSetting();
@@ -258,6 +271,7 @@
 
       return {
         prefixCls,
+        t,
         // listData,
         // count,
         clickBadge,

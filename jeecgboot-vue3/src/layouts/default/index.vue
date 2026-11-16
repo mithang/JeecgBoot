@@ -104,6 +104,12 @@
     background-color: @content-bg;
     flex-direction: column;
 
+    // Phase 4 Bước 11 (G12): dark mode — nền khung chính dùng đen của Ant Design
+    // dark (#000) thay cho @content-bg #F0F4F8 (sáng) để không còn mảng sáng lạc tông.
+    html[data-theme='dark'] & {
+      background-color: #000;
+    }
+
     &--menu {
       // 
       &-mix-sidebar {

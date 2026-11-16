@@ -54,13 +54,27 @@ body {
   overflow-x: hidden;
 }
 
-a:focus,
+// Phase 4 Bước 11 (G12): KHÔNG tắt outline focus toàn cục nữa — người dùng
+// bàn phím cần thấy rõ phần tử đang focus. Chỉ bỏ outline khi focus bằng
+// chuột (:focus:not(:focus-visible)); khi tab bằng bàn phím hiện viền xanh
+// thương hiệu #2E6FE8 (tương phản ≥3:1 cả nền sáng lẫn nền tối, theo WCAG 2.4.11).
+// Không áp cho input/select (Ant Design đã tự vẽ vòng focus bằng box-shadow).
+a:focus:not(:focus-visible),
 a:active,
-button,
+button:focus:not(:focus-visible),
 div,
 svg,
 span {
-  outline: none !important;
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+[role='button']:focus-visible,
+[role='switch']:focus-visible,
+[role='tab']:focus-visible {
+  outline: 2px solid #2e6fe8;
+  outline-offset: 2px;
 }
 
 // Giữ và windi Kiểu toàn cục giống nhau, giảm ảnh hưởng do nâng cấp mang lại

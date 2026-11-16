@@ -185,7 +185,10 @@
   border-radius: 2px;
 }
 
-.aui-forgot .aui-input-line:focus {
+// Phase 4 Bước 11 (G12): :focus trên div container không bao giờ kích hoạt
+// (div không focus được — focus vào ô input bên trong); dùng :focus-within
+// để viền dưới chuyển xanh thương hiệu khi người dùng tab vào ô input.
+.aui-forgot .aui-input-line:focus-within {
   border-color: #0B57D0;
 }
 
@@ -420,7 +423,9 @@
   background-image: url(../icon/icon-code.png);
 }
 
-.aui-inputClear:focus {
+// Phase 4 Bước 11 (G12): như trên — :focus trên div container là dead code,
+// :focus-within mới báo đúng khi ô input bên trong được focus.
+.aui-inputClear:focus-within {
   border-bottom: 1px solid #0B57D0;
 }
 

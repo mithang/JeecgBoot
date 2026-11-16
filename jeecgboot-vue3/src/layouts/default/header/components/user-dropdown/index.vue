@@ -1,6 +1,16 @@
 <template>
   <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
-    <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
+    <!-- Phase 4 Bước 11 (G12): menu người dùng tới được bằng bàn phím — Enter/Space
+         kích hoạt click để Dropdown của Ant Design mở menu; nhãn aria là tên user. -->
+    <span
+      :class="[prefixCls, `${prefixCls}--${theme}`]"
+      class="flex"
+      tabindex="0"
+      role="button"
+      :aria-label="getUserInfo.realname"
+      @keydown.enter="onTriggerKeydown"
+      @keydown.space.prevent="onTriggerKeydown"
+    >
       <img :class="`${prefixCls}__header`" :src="getAvatarUrl" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
@@ -149,6 +159,12 @@
         await getRefPromise(updatePasswordRef);
         updatePasswordRef.value.show(userStore.getUserInfo.username);
       }
+      // Phase 4 Bước 11 (G12): mở menu người dùng bằng bàn phím — phát lại click
+      // để trigger click của Ant Design Dropdown mở menu (Dropdown không tự
+      // xử lý keydown trên phần tử trigger).
+      function onTriggerKeydown(e: KeyboardEvent) {
+        (e.currentTarget as HTMLElement).click();
+      }
       function handleMenuClick(e: { key: MenuEvent }) {
         switch (e.key) {
           case 'logout':
@@ -181,6 +197,7 @@
         t,
         getUserInfo,
         getAvatarUrl,
+        onTriggerKeydown,
         handleMenuClick,
         getShowDoc,
         register,

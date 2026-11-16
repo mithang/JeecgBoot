@@ -1,6 +1,16 @@
 <template>
-  <Tooltip :title="t('layout.header.tooltipLock')" placement="bottom" :mouseEnterDelay="0.5" @click="handleLock">
-    <LockOutlined />
+  <Tooltip :title="t('layout.header.tooltipLock')" placement="bottom" :mouseEnterDelay="0.5">
+    <!-- Phase 4 Bước 11 (G12): nút khóa màn hình tới được bằng bàn phím. -->
+    <span
+      tabindex="0"
+      role="button"
+      :aria-label="t('layout.header.tooltipLock')"
+      @click="handleLock"
+      @keydown.enter="handleLock"
+      @keydown.space.prevent="handleLock"
+    >
+      <LockOutlined />
+    </span>
   </Tooltip>
   <LockModal ref="modalRef" v-if="lockModalVisible" @register="register" />
 </template>

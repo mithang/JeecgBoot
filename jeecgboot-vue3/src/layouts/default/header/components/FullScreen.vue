@@ -1,6 +1,14 @@
 <template>
   <Tooltip :title="getTitle" placement="bottom" :mouseEnterDelay="0.5">
-    <span @click="toggle">
+    <!-- Phase 4 Bước 11 (G12): nút toàn màn hình tới được bằng bàn phím. -->
+    <span
+      tabindex="0"
+      role="button"
+      :aria-label="getTitle"
+      @click="toggle"
+      @keydown.enter="toggle"
+      @keydown.space.prevent="toggle"
+    >
       <FullscreenOutlined v-if="!isFullscreen" />
       <FullscreenExitOutlined v-else />
     </span>

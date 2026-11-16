@@ -684,6 +684,30 @@
     background-color: #e6f7ff;
   }
 
+  /* Phase 4 Bước 11 (G12): dark mode — thẻ nhóm người dùng theo nền tối
+     (nền trắng #fff + viền #d9d9d9 trước đây chói trên modal tối; mục đã chọn
+     dùng xanh nhạt #5B8DEF trên nền xanh mờ để chữ vẫn đọc được). */
+  html[data-theme='dark'] .user-group-item {
+    background-color: #141414;
+    border-color: #434343;
+  }
+
+  html[data-theme='dark'] .user-group-item:hover {
+    border-color: #2e6fe8;
+    box-shadow: 0 2px 8px rgba(46, 111, 232, 0.15);
+  }
+
+  html[data-theme='dark'] .user-group-item-selected {
+    border-color: #2e6fe8;
+    background-color: rgba(46, 111, 232, 0.16);
+    color: #5b8def;
+  }
+
+  html[data-theme='dark'] .user-group-item-selected:hover {
+    border-color: #5b8def;
+    background-color: rgba(46, 111, 232, 0.22);
+  }
+
   .user-group-title {
     flex: 1;
     font-size: 14px;

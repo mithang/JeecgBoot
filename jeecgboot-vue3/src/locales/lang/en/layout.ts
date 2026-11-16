@@ -18,6 +18,9 @@ export default {
 
     tooltipEntryFull: 'Full Screen',
     tooltipExitFull: 'Exit Full Screen',
+    // Phase 4 Step 11 (G12): aria labels for the header menu collapse toggle
+    tooltipCollapseMenu: 'Collapse menu',
+    tooltipExpandMenu: 'Expand menu',
 
     // lock
     lockScreenPassword: 'Password',

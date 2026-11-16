@@ -21,4 +21,11 @@
       height: 100%;
     }
   }
+
+  // Phase 4 Bước 11 (G12): dark mode — nền khung chat không còn trắng chói.
+  html[data-theme='dark'] {
+    .wrap .content {
+      background: #141414;
+    }
+  }
 </style>
