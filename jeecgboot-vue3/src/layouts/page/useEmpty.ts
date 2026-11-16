@@ -12,7 +12,8 @@ export const useEmpty = () => {
   const { getMenuBgColor } = useMenuSetting();
   const pageTip = ref('');
   const effectVars = computed(() => {
-    const primary = unref(getThemeColor) || '#1890ff';
+    // Phase 4 Step 3 (G2): fallback = màu chính thương hiệu "Xanh Jeecg"
+    const primary = unref(getThemeColor) || '#0B57D0';
     const menuBg = unref(getMenuBgColor) || '#ffffff';
     const headerBg = unref(getHeaderBgColor);
     const isDark = unref(getDarkMode) === 'dark';

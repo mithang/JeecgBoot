@@ -79,7 +79,8 @@
             colorTextBase: '#333',
             colorSuccess: '#55D187',
             colorInfo: primary,
-            borderRadius: 4,
+            // Phase 4 Step 3 (G2): bo tròn 8px theo bảng màu thương hiệu (kế hoạch mục 10 Bước 3)
+            borderRadius: 8,
             sizeStep: 4,
             sizeUnit: 4,
             colorWarning: '#EFBD47',

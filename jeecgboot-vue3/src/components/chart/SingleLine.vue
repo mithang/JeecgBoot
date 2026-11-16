@@ -25,9 +25,10 @@
         default: 'calc(100vh - 78px)',
       },
       // Giải thích logic mã: [QQYUN-8762] Mặc định trang chủ và điều chỉnh màu echars
+      // Phase 4 Step 3 (G2): mặc định = màu chính thương hiệu "Xanh Jeecg"
       seriesColor: {
         type: String,
-        default: '#1890ff',
+        default: '#0B57D0',
       },
     },
     setup(props) {

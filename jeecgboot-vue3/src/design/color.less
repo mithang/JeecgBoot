@@ -1,19 +1,30 @@
 html {
+  // Phase 4 Step 3 (G2) — Bảng màu thương hiệu "Xanh Jeecg":
+  // primary #0B57D0 | dark #0A3D91 (header) | navy #0B2447 (sider) | nền nội dung #F0F4F8.
+  // Các biến CSS này là giá trị mặc định trước khi JS (updateBackground.ts) ghi đè
+  // bằng màu đã chọn trong designSetting.ts; giữ hai nơi đồng bộ.
   // header
-  --header-bg-color: #394664;
-  --header-bg-hover-color: #273352;
-  --header-active-menu-bg-color: #273352;
+  --header-bg-color: #0a3d91;
+  --header-bg-hover-color: #0e4dae;
+  --header-active-menu-bg-color: #0e4dae;
 
   // sider
-  --sider-dark-bg-color: #273352;
-  --sider-dark-darken-bg-color: #273352;
-  --sider-dark-lighten-bg-color: #273352;
-  --sider-logo-bg-color:linear-gradient(180deg, #000000, #021d37);
+  --sider-dark-bg-color: #0b2447;
+  --sider-dark-darken-bg-color: #0b2447;
+  --sider-dark-lighten-bg-color: #0b2447;
+  --sider-logo-bg-color: linear-gradient(180deg, #0b2447, #0a3d91);
 }
 
 @white: #fff;
 
-@content-bg: #f4f7f9;
+// Phase 4 Step 3 (G2) — biến Less của bảng màu thương hiệu (dùng cho các style dùng chung)
+@brand-primary: #0b57d0;
+@brand-primary-dark: #0a3d91;
+@brand-primary-light: #2e6fe8;
+@brand-primary-tint: #5b8def;
+@brand-navy: #0b2447;
+
+@content-bg: #f0f4f8;
 
 // :export {
 //   name: "less";
