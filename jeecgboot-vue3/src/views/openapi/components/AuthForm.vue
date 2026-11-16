@@ -2,7 +2,7 @@
   <a-spin :spinning="confirmLoading">
     <a-row :span="24" style="margin-bottom: 10px">
       <a-col :span="12" v-for="item in apiList" @click="handleSelect(item)">
-        <a-card :style="item.checked ? { border: '1px solid #3370ff' } : {}" hoverable class="checkbox-card" :body-style="{ width: '100%', padding: '10px' }">
+        <a-card :style="item.checked ? { border: '1px solid #0b57d0' } : {}" hoverable class="checkbox-card" :body-style="{ width: '100%', padding: '10px' }">
           <div class="checkbox-name" style="display: flex; width: 100%; justify-content: space-between">
             <span>Tên API: {{ item.name }}</span>
             <a-checkbox v-model:checked="item.checked" @click.stop class="quantum-checker" @change="(e) => handleChange(e, item)"> </a-checkbox>

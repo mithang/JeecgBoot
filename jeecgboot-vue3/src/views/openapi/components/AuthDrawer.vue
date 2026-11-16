@@ -169,7 +169,7 @@
     border: 1px solid #d9d9d9;
 
     &--checked {
-      border-color: #1890ff;
+      border-color: #0b57d0;
       background-color: #e6f7ff;
     }
   }

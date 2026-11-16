@@ -51,7 +51,7 @@
   const currentPort = ref('--');
 
   const overviewCards = computed(() => [
-    { label: 'Bộ nhớ đã dùng', value: currentMemory.value, color: '#1890ff' },
+    { label: 'Bộ nhớ đã dùng', value: currentMemory.value, color: '#0b57d0' },
     { label: 'Số lượng Key', value: currentKeys.value, color: '#52c41a' },
     { label: 'Thời gian chạy', value: currentUptime.value, color: '#faad14' },
     { label: 'Cổng lắng nghe', value: currentPort.value, color: '#722ed1' },
@@ -71,7 +71,7 @@
       formatter(params) {
         const p = params[0];
         return `<div style="font-weight:500;margin-bottom:4px">${p.axisValue}</div>
-                <span style="color:#1890ff">● Bộ nhớ</span>: ${p.value} KB`;
+                <span style="color:#0b57d0">● Bộ nhớ</span>: ${p.value} KB`;
       },
     },
     grid: { top: 50, right: 20, bottom: 30, left: 60 },
@@ -98,15 +98,15 @@
         symbol: 'circle',
         symbolSize: 4,
         showSymbol: false,
-        lineStyle: { color: '#1890ff', width: 2 },
-        itemStyle: { color: '#1890ff' },
+        lineStyle: { color: '#0b57d0', width: 2 },
+        itemStyle: { color: '#0b57d0' },
         areaStyle: {
           color: {
             type: 'linear',
             x: 0, y: 0, x2: 0, y2: 1,
             colorStops: [
-              { offset: 0, color: 'rgba(24,144,255,0.25)' },
-              { offset: 1, color: 'rgba(24,144,255,0.02)' },
+              { offset: 0, color: 'rgba(11,87,208,0.25)' },
+              { offset: 1, color: 'rgba(11,87,208,0.02)' },
             ],
           },
         },
@@ -283,7 +283,7 @@
       background: #fff;
       border-radius: 6px;
       padding: 20px 24px;
-      border-top: 3px solid #1890ff;
+      border-top: 3px solid #0b57d0;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
       transition: box-shadow 0.3s;
 

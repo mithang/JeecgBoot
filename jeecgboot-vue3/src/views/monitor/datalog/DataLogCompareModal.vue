@@ -311,7 +311,7 @@
   .field-name {
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 12px;
-    color: #1890ff;
+    color: #0b57d0;
   }
 
   .cell-text {
@@ -370,7 +370,7 @@
 
     &--left {
       background: #e6f7ff;
-      color: #1890ff;
+      color: #0b57d0;
     }
 
     &--right {

@@ -93,7 +93,7 @@
         </div>
         <div
           v-if="showBodyExample"
-          style="margin-bottom: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px; border-left: 3px solid #1890ff"
+          style="margin-bottom: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px; border-left: 3px solid #0b57d0"
         >
           <div style="margin-bottom: 8px; color: #666; font-size: 12px">
             <strong>Tham khảo ví dụ:</strong> Dưới đây là ví dụ JSON request body thường gặp, vui lòng điều chỉnh theo trường API thực tế rồi điền vào trình soạn thảo bên dưới.

@@ -481,7 +481,7 @@
       font-size: 14px;
     }
     &:hover {
-      color: #40a9ff;
+      color: #2e6fe8;
     }
   }
   .detail-iframe {
@@ -509,7 +509,7 @@
       display: flex;
       .ant-upload-list-item-name {
         margin: 0 6px;
-        color: #56befa;
+        color: #2e6fe8;
       }
     }
     .files-area-operate {
@@ -519,7 +519,7 @@
         cursor: pointer;
         margin: 0 6px;
         &:hover {
-          color: #56befa;
+          color: #2e6fe8;
         }
       }
     }
