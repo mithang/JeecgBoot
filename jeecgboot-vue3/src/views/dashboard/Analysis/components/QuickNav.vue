@@ -17,36 +17,37 @@
 
   const CardGrid = Card.Grid;
   const $message = useMessage();
+  // Phase 4 Step 7 (G5): màu icon theo bảng màu thương hiệu "Xanh Jeecg".
   const navItems = [
     {
       title: 'Tiếp nhận nghiệp vụ',
       icon: 'ion:home-outline',
-      color: '#1fdaca',
+      color: '#0B57D0',
     },
     {
       title: 'Quản lý nghiệp vụ',
       icon: 'ion:grid-outline',
-      color: '#bf0c2c',
+      color: '#2E6FE8',
     },
     {
       title: 'Quản lý tệp',
       icon: 'ion:layers-outline',
-      color: '#e18525',
+      color: '#5B8DEF',
     },
     {
       title: 'Truy vấn thông tin',
       icon: 'ion:settings-outline',
-      color: '#3fb27f',
-    }, 
+      color: '#F4502A',
+    },
 		{
 				title: 'Thông báo',
 				icon: 'ion:notifications',
-				color: '#13b0ff',
-		}, 
+				color: '#34A853',
+		},
 		{
 				title: 'Nhiệm vụ của tôi',
 				icon: 'ion:person-stalker',
-				color: '#b27315',
+				color: '#F5A623',
 		}
   ];
 

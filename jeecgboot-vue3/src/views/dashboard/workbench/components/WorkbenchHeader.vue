@@ -2,8 +2,8 @@
   <div class="lg:flex">
     <Avatar :src="userinfo.avatar || headerImg" :size="72" class="!mx-auto !block" />
     <div class="md:ml-6 flex flex-col justify-center md:mt-0 mt-2">
-      <h1 class="md:text-lg text-md">Chào buổi sáng, {{ userinfo.realname }}, Bắt đầu một ngày làm việc của bạn!</h1>
-      <span class="text-secondary"> Hôm nay trời nắng,20℃ - 32℃! </span>
+      <h1 class="md:text-lg text-md">{{ greeting }}, {{ userinfo.realname }}!</h1>
+      <span class="text-secondary">{{ todayText }}</span>
     </div>
     <div class="flex flex-1 justify-end md:mt-0 mt-4">
       <div class="flex flex-col justify-center text-right">
@@ -27,7 +27,12 @@
   import { Avatar } from 'ant-design-vue';
   import { useUserStore } from '/@/store/modules/user';
   import headerImg from '/@/assets/images/header.jpg';
+  import { getTimeGreeting, formatVietnameseDate } from '../../dashboardHelpers';
 
   const userStore = useUserStore();
   const userinfo = computed(() => userStore.getUserInfo);
+  // Phase 4 Step 7 (G5): lời chào theo giờ thật + ngày thật, thay cho câu chào
+  // "buổi sáng" và thời tiết giả cố định trước đây.
+  const greeting = computed(() => getTimeGreeting());
+  const todayText = computed(() => formatVietnameseDate());
 </script>

@@ -60,6 +60,7 @@
   import Gauge from '/@/components/chart/Gauge.vue';
   import QuickNav from './QuickNav.vue';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
+  import { BRAND_CHART_ORANGE } from '../../dashboardHelpers';
 
   defineProps({
     loading: {
@@ -95,20 +96,13 @@
   }
 
   const seriesColor = computed(() => {
+    // Phase 4 Step 7 (G5): chuỗi thứ hai dùng cam thương hiệu cố định, thay cho màu random mỗi lần render.
     interactiveColor.value = [
       { type: 'jeecg', color: getThemeColor.value },
-      { type: 'jeebt', color: getRandomColor() },
+      { type: 'jeebt', color: BRAND_CHART_ORANGE },
     ];
     return getThemeColor.value;
   });
-  function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
 </script>
 
 <style lang="less" scoped>

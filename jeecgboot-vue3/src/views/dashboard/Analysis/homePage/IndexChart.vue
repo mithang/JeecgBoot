@@ -1,5 +1,6 @@
 <template>
   <div class="p-4">
+    <WelcomeBanner />
     <ChartGroupCard class="enter-y" :loading="loading" type="chart" />
     <SaleTabCard class="!my-4 enter-y" :loading="loading" />
     <a-row>
@@ -20,10 +21,12 @@
   import { ref, watch } from 'vue';
   import ChartGroupCard from '../components/ChartGroupCard.vue';
   import SaleTabCard from '../components/SaleTabCard.vue';
+  import WelcomeBanner from '../components/WelcomeBanner.vue';
   import LineMulti from '/@/components/chart/LineMulti.vue';
   import HeadInfo from '/@/components/chart/HeadInfo.vue';
   import { getLoginfo, getVisitInfo } from '../api.ts';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
+  import { BRAND_CHART_GREEN } from '../../dashboardHelpers';
 
   const loading = ref(true);
   const { getThemeColor } = useRootSetting();
@@ -62,7 +65,8 @@
     () => getThemeColor.value,
     () => {
       seriesColor.value = getThemeColor.value;
-      visitColor.value = '#67B962';
+      // Phase 4 Step 7 (G5): chuỗi "lượt truy cập" dùng xanh lá thương hiệu, đi cùng xanh chính.
+      visitColor.value = BRAND_CHART_GREEN;
       ipColor.value = getThemeColor.value;
       initLogInfo();
     },

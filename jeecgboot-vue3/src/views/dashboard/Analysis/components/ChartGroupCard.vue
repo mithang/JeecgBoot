@@ -104,6 +104,7 @@
   const dataList = computed(() => (props.type === 'dbc' ? bdcCardList : chartCardList));
 
   function getTotal(total, index) {
-    return index === 0 ? `￥${total}` : index === 3 ? `${total}%` : total;
+    // Phase 4 Step 7 (G5): ký hiệu tiền tệ Việt (₫) thay cho ký hiệu nhân dân tệ (￥).
+    return index === 0 ? `₫${total}` : index === 3 ? `${total}%` : total;
   }
 </script>

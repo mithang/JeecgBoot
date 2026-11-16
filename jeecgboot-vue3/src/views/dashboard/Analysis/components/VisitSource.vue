@@ -7,6 +7,7 @@
   import { Ref, ref, watch } from 'vue';
   import { Card } from 'ant-design-vue';
   import { useECharts } from '/@/hooks/web/useECharts';
+  import { BRAND_CHART_COLORS } from '../../dashboardHelpers';
   const props = defineProps({
     loading: Boolean,
     width: {
@@ -36,7 +37,8 @@
         },
         series: [
           {
-            color: ['#5ab1ef', '#b6a2de', '#67e0e3', '#2ec7c9'],
+            // Phase 4 Step 7 (G5): màu biểu đồ theo thương hiệu "Xanh Jeecg".
+            color: BRAND_CHART_COLORS.slice(0, 4),
             name: 'Nguồn truy cập',
             type: 'pie',
             radius: ['40%', '70%'],

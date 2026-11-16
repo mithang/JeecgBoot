@@ -11,6 +11,10 @@ interface NavItem {
   title: string;
   icon: string;
   color: string;
+  /** Route đích khi bấm vào ô lối tắt. */
+  path: string;
+  /** Mã quyền (seed sys_permission) — chỉ hiện ô này khi người dùng có quyền. */
+  auth?: string;
 }
 
 interface DynamicInfoItem {
@@ -20,36 +24,47 @@ interface DynamicInfoItem {
   desc: string;
 }
 
+// Phase 4 Step 7 (G5): khối lối tắt theo vai trò — mỗi ô điều hướng tới route thật,
+// mục cần quyền chỉ hiện khi người dùng có mã quyền đó (seed sys_permission).
+// Màu icon theo bảng màu thương hiệu "Xanh Jeecg".
 export const navItems: NavItem[] = [
   {
     title: 'Trang chủ',
     icon: 'ion:home-outline',
-    color: '#1fdaca',
+    color: '#0B57D0',
+    path: '/dashboard/analysis',
   },
   {
     title: 'Bảng điều khiển',
     icon: 'ion:grid-outline',
-    color: '#bf0c2c',
+    color: '#2E6FE8',
+    path: '/dashboard/workbench',
   },
   {
-    title: 'Component',
+    title: 'Biểu mẫu Online',
     icon: 'ion:layers-outline',
-    color: '#e18525',
+    color: '#5B8DEF',
+    path: '/online/cgform',
   },
   {
     title: 'Quản lý hệ thống',
     icon: 'ion:settings-outline',
-    color: '#3fb27f',
+    color: '#34A853',
+    path: '/system/user',
+    auth: 'system:user:list',
   },
   {
-    title: 'Quản lý quyền',
+    title: 'Quản lý vai trò',
     icon: 'ion:key-outline',
-    color: '#4daf1bc9',
+    color: '#F4502A',
+    path: '/system/role',
+    auth: 'system:role:list',
   },
   {
-    title: 'Biểu đồ',
+    title: 'Ứng dụng AI',
     icon: 'ion:bar-chart-outline',
-    color: '#00d8ff',
+    color: '#F5A623',
+    path: '/super/airag/aiapp/AiAppList',
   },
 ];
 
