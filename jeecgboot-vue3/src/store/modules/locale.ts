@@ -32,7 +32,7 @@ export const useLocaleStore = defineStore('app-locale', {
       return !!this.localInfo?.showPicker;
     },
     getLocale(): LocaleType {
-      return this.localInfo?.locale ?? 'zh_CN';
+      return this.localInfo?.locale ?? 'vi_VN';
     },
     // Giải thích logic mã: VUEN-1144 online sau khi cấu hình thành menu, khi mở menu, tên hiển thị không hiển thị đúng tên menu
     getPathTitle: (state) => {
