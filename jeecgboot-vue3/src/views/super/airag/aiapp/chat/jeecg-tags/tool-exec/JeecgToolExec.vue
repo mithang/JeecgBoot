@@ -292,7 +292,7 @@ function formatData(value: unknown): string {
 }
 
 .status-running {
-  border-color: #1677ff;
+  border-color: #0b57d0;
   background-color: #e6f4ff;
 }
 

@@ -594,7 +594,7 @@ function handleToolEditSuccess() {
   .detail-edit-btn {
     padding: 4px 8px;
     &:hover {
-      color: #1890ff;
+      color: #0b57d0;
       background-color: rgba(24, 144, 255, 0.1);
     }
   }

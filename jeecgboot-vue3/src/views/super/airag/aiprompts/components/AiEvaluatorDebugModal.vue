@@ -431,7 +431,7 @@
 </script>
 
 <style lang="less" scoped>
-  @primary-color: #1890ff;
+  @primary-color: #0b57d0;
   @success-color: #52c41a;
   @warning-color: #faad14;
   @error-color: #ff4d4f;
@@ -750,7 +750,7 @@
   .table-title {
     font-size: 16px;
     font-weight: 600;
-    color: #1890ff;
+    color: #0b57d0;
   }
 
   .table-subtitle {
@@ -767,7 +767,7 @@
     background-color: #f5f5f5;
     font-weight: 600;
     color: #333;
-    border-bottom: 2px solid #1890ff;
+    border-bottom: 2px solid #0b57d0;
   }
 
   :deep(.ant-table-tbody > tr.even-row) {
@@ -842,7 +842,7 @@
   }
 
   .output-cell.reference .cell-value {
-    color: #1890ff;
+    color: #0b57d0;
   }
 
   .output-cell.actual .cell-value {
@@ -874,7 +874,7 @@
   .footer-value {
     font-size: 14px;
     font-weight: 500;
-    color: #1890ff;
+    color: #0b57d0;
   }
 
   .no-data-container {

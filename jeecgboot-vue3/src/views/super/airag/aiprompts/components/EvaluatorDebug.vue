@@ -203,13 +203,13 @@ defineExpose({
 }
 
 .run-btn {
-  background: #1890ff;
-  border-color: #1890ff;
+  background: #0b57d0;
+  border-color: #0b57d0;
 }
 
 .run-btn:hover {
-  background: #40a9ff;
-  border-color: #40a9ff;
+  background: #2e6fe8;
+  border-color: #2e6fe8;
 }
 
 /* Kiểu khu vực nội dung */
@@ -248,13 +248,13 @@ defineExpose({
 }
 
 .output-icon {
-  color: #1890ff;
+  color: #0b57d0;
 }
 
 .output-content {
   padding: 16px;
   background: #e6f7ff;
-  color: #096dd9;
+  color: #2e6fe8;
   font-size: 14px;
   line-height: 1.5;
   min-height: 80px;

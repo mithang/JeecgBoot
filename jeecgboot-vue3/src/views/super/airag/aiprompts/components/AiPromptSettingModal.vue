@@ -665,7 +665,7 @@
     button {
       padding: 0 6px;
       height: 25px;
-      color: #155aef !important;
+      color: #0b57d0 !important;
       margin-right: 10px;
       border: none;
     }
@@ -819,13 +819,13 @@
     // Hiệu ứng di chuột
     &:hover {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      border-color: #1890ff;
+      border-color: #0b57d0;
       transform: translateY(-2px);
     }
 
     // Hiệu ứng tập trung
     &.variable-focused {
-      border-color: #1890ff;
+      border-color: #0b57d0;
       box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
     }
 
@@ -837,7 +837,7 @@
       top: 0;
       bottom: 0;
       width: 4px;
-      background: #1890ff;
+      background: #0b57d0;
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -862,7 +862,7 @@
 
     .variable-name {
       font-weight: 600;
-      color: #1890ff;
+      color: #0b57d0;
       font-size: 14px;
     }
   }
@@ -877,12 +877,12 @@
       transition: all 0.3s;
 
       &:hover {
-        border-color: #40a9ff;
+        border-color: #2e6fe8;
       }
 
       &:focus,
       &:focus-within {
-        border-color: #1890ff;
+        border-color: #0b57d0;
         box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
       }
     }
@@ -907,7 +907,7 @@
 
       &:hover {
         background: #f0f8ff;
-        color: #1890ff;
+        color: #0b57d0;
         transform: scale(1.05);
       }
     }

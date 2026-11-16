@@ -247,7 +247,7 @@
     transition: all 0.3s;
 
     &:hover {
-      border-color: #1890ff;
+      border-color: #0b57d0;
       background: #f6fbff;
     }
 
@@ -345,7 +345,7 @@
 
     :deep(.ant-input-group-addon) {
       background: #e6f7ff;
-      color: #1890ff;
+      color: #0b57d0;
       font-weight: 500;
     }
   }

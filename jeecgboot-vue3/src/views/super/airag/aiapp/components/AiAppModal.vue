@@ -18,7 +18,7 @@
               v-for="item in appTypeOption"
               style="margin-right: 10px; cursor: pointer; width: 100%"
               @click="model[field] = item.value"
-              :style="model[field] === item.value ? { borderColor: '#3370ff' } : {}"
+              :style="model[field] === item.value ? { borderColor: '#0b57d0' } : {}"
             >
               <a-radio :value="item.value">
                 <div class="type-title">{{ item.title }}</div>

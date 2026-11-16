@@ -370,7 +370,7 @@
     color: #1f2329;
     margin-bottom: 20px;
     padding-left: 8px;
-    border-left: 4px solid #1890ff;
+    border-left: 4px solid #0b57d0;
     line-height: 1;
   }
 
@@ -424,8 +424,8 @@
       backdrop-filter: blur(6px);
 
       .preview-button {
-        color: #1677ff;
-        border-color: #1677ff;
+        color: #0b57d0;
+        border-color: #0b57d0;
       }
     }
 

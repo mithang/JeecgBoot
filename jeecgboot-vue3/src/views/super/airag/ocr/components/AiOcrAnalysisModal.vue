@@ -119,7 +119,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #1677ff 0%, #69b1ff 100%);
+    background: linear-gradient(135deg, #0b57d0 0%, #69b1ff 100%);
     box-shadow: 0 0 0 6px rgba(22, 119, 255, 0.08);
   }
   .main {
@@ -153,7 +153,7 @@
   :deep(.ant-input:focus),
   :deep(textarea.ant-input:focus),
   :deep(.ant-input-focused) {
-    border-color: #1677ff !important;
+    border-color: #0b57d0 !important;
     box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15);
     background: #fff;
   }

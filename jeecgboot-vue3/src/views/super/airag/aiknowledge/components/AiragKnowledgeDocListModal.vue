@@ -101,7 +101,7 @@
                   <div class="knowledge-header">
                     <div class="header-text flex">
                       <Icon v-if="item.type==='text'" icon="ant-design:file-text-outlined" size="32" color="#00a7d0"></Icon>
-                      <Icon v-if="item.type==='web'" icon="ant-design:global-outlined" size="32" color="#1890ff"></Icon>
+                      <Icon v-if="item.type==='web'" icon="ant-design:global-outlined" size="32" color="#0b57d0"></Icon>
                       <Icon v-if="item.type==='file' && getFileSuffix(item.metadata) === 'pdf'" icon="ant-design:file-pdf-outlined" size="32" color="rgb(211, 47, 47)"></Icon>
                       <Icon v-if="item.type==='file' && getFileSuffix(item.metadata) === 'docx'" icon="ant-design:file-word-outlined" size="32" color="rgb(68, 138, 255)"></Icon>
                       <Icon v-if="item.type==='file' && getFileSuffix(item.metadata) === 'pptx'" icon="ant-design:file-ppt-outlined" size="32" color="rgb(245, 124, 0)"></Icon>

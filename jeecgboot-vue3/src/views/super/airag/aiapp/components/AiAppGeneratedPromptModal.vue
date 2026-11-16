@@ -19,8 +19,8 @@
             <div class="command">
               <span style="margin-right: 5px">Lệnh</span>
               <a-tooltip title="Thư viện prompt">
-                <span @click="openPromptApps" style="color:#1890ff;cursor: pointer">
-                  <Icon icon="ant-design:bulb-outlined" color="#1890ff"></Icon>Chọn kho từ
+                <span @click="openPromptApps" style="color:#0b57d0;cursor: pointer">
+                  <Icon icon="ant-design:bulb-outlined" color="#0b57d0"></Icon>Chọn kho từ
                 </span>
               </a-tooltip>
             </div>

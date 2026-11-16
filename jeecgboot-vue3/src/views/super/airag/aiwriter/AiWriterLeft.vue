@@ -265,7 +265,7 @@
 
         &.active {
           background: #fff;
-          color: #1677ff;
+          color: #0b57d0;
           font-weight: 500;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
@@ -315,19 +315,19 @@
       background: #fff;
 
       &:hover {
-        color: #1677ff;
-        border-color: #1677ff;
+        color: #0b57d0;
+        border-color: #0b57d0;
       }
 
       &.active {
-        color: #1677ff;
-        border-color: #1677ff;
+        color: #0b57d0;
+        border-color: #0b57d0;
         background: #e6f7ff;
       }
     }
 
     .example-link {
-      color: #1677ff;
+      color: #0b57d0;
       cursor: pointer;
       font-size: 12px;
       float: right;

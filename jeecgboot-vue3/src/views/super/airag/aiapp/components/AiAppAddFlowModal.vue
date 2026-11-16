@@ -280,9 +280,9 @@
 
       function getCardStyle(item) {
         if (props.multiple) {
-          return item.checked ? { border: '1px solid #3370ff' } : {};
+          return item.checked ? { border: '1px solid #0b57d0' } : {};
         }
-        return item.id === flowId.value ? { border: '1px solid #3370ff' } : {};
+        return item.id === flowId.value ? { border: '1px solid #0b57d0' } : {};
       }
       /*===========end Chọn quy trình hỗ trợ chọn nhiều ===========*/
       

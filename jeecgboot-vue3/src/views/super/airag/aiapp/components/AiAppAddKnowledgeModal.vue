@@ -248,9 +248,9 @@
        */
       function getCardStyle(item) {
         if (props.multiple) {
-          return item.checked ? { border: '1px solid #3370ff' } : {};
+          return item.checked ? { border: '1px solid #0b57d0' } : {};
         }
-        return item.id === knowledgeIds.value ? { border: '1px solid #3370ff' } : {};
+        return item.id === knowledgeIds.value ? { border: '1px solid #0b57d0' } : {};
       }
 
       return {

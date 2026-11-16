@@ -56,7 +56,7 @@
             </div>
             <div class="header-tag">
               <a-tag color="#EBF1FF" style="margin-right: 0" v-if="item.type === 'chatSimple'">
-                <span style="color: #3370ff">Tác tử thông minh</span>
+                <span style="color: #0b57d0">Tác tử thông minh</span>
               </a-tag>
               <a-tag color="#FDF6EC" style="margin-right: 0" v-if="item.type === 'chatFLow'">
                 <span style="color: #e6a343">Sắp xếp nâng cao</span>

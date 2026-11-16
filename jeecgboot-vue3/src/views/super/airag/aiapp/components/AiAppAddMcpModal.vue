@@ -260,7 +260,7 @@
     transition: box-shadow 0.25s, border-color 0.25s;
     cursor: pointer;
     &.is-active {
-      border-color: #3370ff;
+      border-color: #0b57d0;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
     &:hover {

@@ -80,7 +80,7 @@ const [registerModal] = useModalInner(async (data) => {
 </script>
 
 <style lang="less" scoped>
-@primary-color: #1890ff;
+@primary-color: #0b57d0;
 @border-color: #e8e8e8;
 @text-color: #262626;
 @text-secondary: #8c8c8c;

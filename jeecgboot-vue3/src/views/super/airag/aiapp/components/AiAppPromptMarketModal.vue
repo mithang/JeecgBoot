@@ -291,12 +291,12 @@
         }
 
         &.selected {
-          border-color: #1890ff;
+          border-color: #0b57d0;
           background-color: #e6f7ff; // Thêm màu nền khi chọn
           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
 
           .card-title .title-text {
-            color: #1890ff;
+            color: #0b57d0;
           }
         }
 

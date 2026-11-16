@@ -218,8 +218,8 @@ async function refreshDataset() {
 }
 
 .config-btn {
-  color: #1890ff;
-  border-color: #1890ff;
+  color: #0b57d0;
+  border-color: #0b57d0;
 }
 
 .table-container {
@@ -255,12 +255,12 @@ async function refreshDataset() {
 }
 
 .edit-btn {
-  color: #1890ff;
-  border-color: #1890ff;
+  color: #0b57d0;
+  border-color: #0b57d0;
 
   &:hover {
-    color: #40a9ff;
-    border-color: #40a9ff;
+    color: #2e6fe8;
+    border-color: #2e6fe8;
   }
 }
 

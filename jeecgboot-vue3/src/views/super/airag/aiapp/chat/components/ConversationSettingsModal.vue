@@ -422,8 +422,8 @@
       flex-shrink: 0;
       
       &:hover {
-        border-color: #1890ff;
-        color: #1890ff;
+        border-color: #0b57d0;
+        color: #0b57d0;
       }
       
       .upload-text {
@@ -433,7 +433,7 @@
       }
       
       &:hover .upload-text {
-        color: #1890ff;
+        color: #0b57d0;
       }
     }
   }

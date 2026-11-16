@@ -607,7 +607,7 @@
     button {
       padding: 0 6px;
       height: 25px;
-      color: #155aef !important;
+      color: #0b57d0 !important;
       margin-right: 10px;
       border: none;
     }
@@ -721,14 +721,14 @@
   }
 
   .output-format-icon {
-    color: #155aef;
+    color: #0b57d0;
     font-size: 16px;
     margin-right: 8px;
   }
 
   .output-format-title {
     font-weight: 600;
-    color: #155aef;
+    color: #0b57d0;
     font-size: 14px;
   }
 
@@ -751,7 +751,7 @@
   }
 
   .output-item-bullet {
-    color: #155aef;
+    color: #0b57d0;
     font-weight: bold;
     font-size: 14px;
   }
@@ -786,7 +786,7 @@
     transition: all 0.3s ease;
 
     &:hover {
-      border-color: #1890ff;
+      border-color: #0b57d0;
       box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
     }
 
@@ -799,7 +799,7 @@
 
       .output-format-icon {
         font-size: 16px;
-        color: #1890ff;
+        color: #0b57d0;
         margin-right: 8px;
       }
 
@@ -816,7 +816,7 @@
         padding: 8px 12px;
         background: #fff;
         border-radius: 4px;
-        border-left: 3px solid #1890ff;
+        border-left: 3px solid #0b57d0;
 
         &:last-child {
           margin-bottom: 0;
@@ -848,7 +848,7 @@
     transition: all 0.3s ease;
 
     &:hover {
-      border-color: #1890ff;
+      border-color: #0b57d0;
       box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
     }
 
@@ -861,7 +861,7 @@
 
       .output-format-icon {
         font-size: 16px;
-        color: #1890ff;
+        color: #0b57d0;
         margin-right: 8px;
       }
 
@@ -889,7 +889,7 @@
           &.required-tag {
             background-color: #e6f7ff;
             border: 1px solid #91d5ff;
-            color: #1890ff;
+            color: #0b57d0;
           }
 
           &.optional-tag {

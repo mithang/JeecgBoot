@@ -105,7 +105,7 @@
       id: 1,
       name: 'Phong chính quyền thanh nhã',
       prompt:
-        'Poster ngang phong chính quyền thanh nhã, tông màu chính xanh nhạt + Trắng gạo + xám nhạt, phong cách vector phẳng, chồng thêm họa tiết giấy Tuyên mịn; Yếu tố cốt lõi của hình ảnh: đường nét tòa nhà văn phòng chính quyền giản lược (đường nét đơn giản), bút máy vàng, cuốn công văn mở ra, họa tiết mây lành xanh nhạt, trang trí cành ô liu; Nền là chuyển màu trắng ngà + họa tiết sọc dọc xanh nhạt, điểm xuyết viền vàng mảnh; Thiết kế chữ: ở giữa viết ‘Chính quyền vì dân・Hiệu quả chuẩn mực’ bằng phông Hei, phía dưới thêm chữ nhỏ xanh nhạt ‘Phục vụ tận tâm・Thiết thực vững vàng’; Không khí tổng thể thanh nhã trang trọng, chuyên nghiệp đơn giản, phân lớp rõ ràng, ánh sáng mềm, chi tiết độ nét cao, bố cục dọc 9:16',
+        'Poster ngang phong chính quyền thanh nhã, tông màu chính xanh nhạt + Trắng gạo + xám nhạt, phong cách vector phẳng, chồng thêm họa tiết giấy Tuyên mịn; Yếu tố cốt lõi của hình ảnh: đường nét tòa nhà văn phòng chính quyền giản lược (đường nét đơn giản), bút máy vàng, cuốn công văn mở ra, họa tiết mây lành xanh nhạt, trang trí cành ô liu; Nền là chuyển màu trắng ngà + họa tiết sọc dọc xanh nhạt, điểm xuyết viền vàng mảnh; Thiết kế chữ: ở giữa viết ‘Chính quyền vì dân · Hiệu quả chuẩn mực’ bằng phông Hei, phía dưới thêm chữ nhỏ xanh nhạt ‘Phục vụ tận tâm · Thiết thực vững vàng’; Không khí tổng thể thanh nhã trang trọng, chuyên nghiệp đơn giản, phân lớp rõ ràng, ánh sáng mềm, chi tiết độ nét cao, bố cục dọc 9:16',
       size: '720*1280',
       url: 'https://upload.jeecg.com/jeecg/AI/simple.png',
     },
@@ -121,7 +121,7 @@
       id: 3,
       name: 'Tuyên truyền công nghệ',
       prompt:
-        'Poster tuyên truyền cảm giác công nghệ tương lai, tông màu chính chuyển màu xanh tím + màu kim loại trắng bạc, hiệu ứng ánh sáng neon lạnh, chất cảm đường nét cyberpunk; Yếu tố cốt lõi của hình ảnh: mô hình dữ liệu Trái Đất chiếu toàn tức, dòng dữ liệu xanh lam chảy động, họa tiết bảng mạch phát sáng, chip và bánh răng cơ khí lơ lửng, đường nét kiến trúc đậm chất tương lai; điểm xuyết hiệu ứng ánh sáng hạt, giao diện toàn tức trong suốt, dải ánh sáng neon; Thiết kế chữ: ở giữa viết ‘Công nghệ tiếp sức・Trí tuệ mở lối’ bằng phông không chân đậm chất tương lai, phía dưới thêm chữ nhỏ ‘Đổi mới dẫn dắt・Hướng tới tương lai’, chữ có viền phát sáng nhẹ; Không khí tổng thể đơn giản cao cấp, tràn đầy cảm giác tương lai, phân lớp rõ ràng, ánh sáng sắc nét, chi tiết độ nét cao, bố cục ngang 16:9',
+        'Poster tuyên truyền cảm giác công nghệ tương lai, tông màu chính chuyển màu xanh tím + màu kim loại trắng bạc, hiệu ứng ánh sáng neon lạnh, chất cảm đường nét cyberpunk; Yếu tố cốt lõi của hình ảnh: mô hình dữ liệu Trái Đất chiếu toàn tức, dòng dữ liệu xanh lam chảy động, họa tiết bảng mạch phát sáng, chip và bánh răng cơ khí lơ lửng, đường nét kiến trúc đậm chất tương lai; điểm xuyết hiệu ứng ánh sáng hạt, giao diện toàn tức trong suốt, dải ánh sáng neon; Thiết kế chữ: ở giữa viết ‘Công nghệ tiếp sức · Trí tuệ mở lối’ bằng phông không chân đậm chất tương lai, phía dưới thêm chữ nhỏ ‘Đổi mới dẫn dắt · Hướng tới tương lai’, chữ có viền phát sáng nhẹ; Không khí tổng thể đơn giản cao cấp, tràn đầy cảm giác tương lai, phân lớp rõ ràng, ánh sáng sắc nét, chi tiết độ nét cao, bố cục ngang 16:9',
       size: '720*1280',
       url: 'https://upload.jeecg.com/jeecg/AI/technology.png',
     },
@@ -332,12 +332,12 @@
         gap: 6px;
 
         &:hover {
-          border-color: #1890ff;
+          border-color: #0b57d0;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         &.active {
-          border-color: #1890ff;
+          border-color: #0b57d0;
           background-color: #e6f7ff;
         }
 
@@ -423,7 +423,7 @@
       color: #1f2329;
       margin-bottom: 20px;
       padding-left: 8px;
-      border-left: 4px solid #1890ff;
+      border-left: 4px solid #0b57d0;
       line-height: 1;
     }
 
@@ -477,8 +477,8 @@
         backdrop-filter: blur(6px);
 
         .preview-button {
-          color: #1677ff;
-          border-color: #1677ff;
+          color: #0b57d0;
+          border-color: #0b57d0;
         }
       }
 
