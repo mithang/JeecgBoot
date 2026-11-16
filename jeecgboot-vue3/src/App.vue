@@ -85,7 +85,9 @@
             colorWarning: '#EFBD47',
             colorError: '#ED6F6F',
             fontFamily:
-              '-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol',
+              // Phase 4 Step 2 (G1): Be Vietnam Pro tự host đứng đầu (xem src/design/fonts.less);
+              // giữ nguyên các fallback hệ thống cũ phía sau
+              "'Be Vietnam Pro',-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol",
           },
         },
       };

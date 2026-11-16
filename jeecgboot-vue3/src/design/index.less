@@ -1,3 +1,4 @@
+@import './fonts.less';
 @import 'transition/index.less';
 @import 'var/index.less';
 @import 'public.less';
@@ -22,9 +23,11 @@ html,
 body {
   width: 100%;
   height: 100%;
-  // bodyThêm chiều cao dòng giữ theo3.xNhất quán
-  line-height: 1.5715;
-  
+  // Phase 4 Step 2 (G1): font tiếng Việt Be Vietnam Pro (xem src/design/fonts.less);
+  // line-height thân 1.5 để dấu xếp chồng (ầ, ữ, ợ, ệ, Đ) không chạm dòng trên
+  font-family: @font-family-base;
+  line-height: 1.5;
+
   &.color-weak {
     filter: invert(80%);
   }
@@ -33,6 +36,16 @@ body {
     filter: grayscale(100%);
     filter: progid:dximagetransform.microsoft.basicimage(grayscale=1);
   }
+}
+
+// Phase 4 Step 2 (G1): tiêu đề line-height ≥ 1.25 để dấu xếp chồng không chạm dòng trên
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.25;
 }
 
 /* 【LOWCOD-2300】【vue3】online--onlinePhát triển biểu mẫu, khi vị trí dropdown ở dưới, mở dropdown, toàn màn hình nhảy */
