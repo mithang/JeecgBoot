@@ -263,7 +263,7 @@
       font-size: 14px;
 
       code {
-        color: #1677ff;
+        color: #0b57d0;
         background: #f0f5ff;
         padding: 0 4px;
         border-radius: 2px;

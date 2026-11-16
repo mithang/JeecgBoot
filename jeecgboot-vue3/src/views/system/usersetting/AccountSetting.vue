@@ -193,7 +193,7 @@
     }
 
     .blue-e5 {
-      color: #1e88e5;
+      color: #0b57d0;
     }
 
     .phone-margin {

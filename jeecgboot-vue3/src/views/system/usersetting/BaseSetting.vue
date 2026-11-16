@@ -45,7 +45,7 @@
         </div>
         <div class="font-size-13">
           <span class="item-label"></span>
-          <span class="item-label pointer" style="color:#1e88e5" @click="openEditModal">Chỉnh sửa</span>
+          <span class="item-label pointer" style="color:#0b57d0" @click="openEditModal">Chỉnh sửa</span>
         </div>
       </div>
       <!-- Thông tin liên hệ -->
@@ -526,7 +526,7 @@ onMounted(async () => {
       margin-top: 10px;
       font-size: 13px;
       span {
-        color: #1e88e5;
+        color: #0b57d0;
         margin-left: 5px;
       }
     }

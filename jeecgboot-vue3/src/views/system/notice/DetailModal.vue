@@ -128,7 +128,7 @@
       margin-left: 5px;
     }
     &:hover {
-      color: #40a9ff;
+      color: #2e6fe8;
     }
   }
   .detail-iframe {

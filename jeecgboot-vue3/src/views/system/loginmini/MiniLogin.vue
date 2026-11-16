@@ -613,16 +613,16 @@
     position: relative;
     z-index: 3;
     background: #ffffff;
-    color: #1573e9;
+    color: #0b57d0;
     border-radius: 100px;
     padding: 5px 16px;
     margin: 7px;
-    border: 1px solid #1573e9;
+    border: 1px solid #0b57d0;
     top: 12px;
   }
 
   .aui-get-code:hover {
-    color: #1573e9;
+    color: #0b57d0;
   }
 
   .code-shape {

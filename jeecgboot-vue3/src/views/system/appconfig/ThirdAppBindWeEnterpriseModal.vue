@@ -76,7 +76,7 @@
       //Gán giá trị cho biểu mẫu
       const [registerModal, { closeModal }] = useModalInner(async (data) => {
         loading.value = true;
-        console.log('izBind：：', izBind);
+        console.log('izBind::', izBind);
         if (!data.izBind) {
           await getUnboundData();
         } else {
@@ -157,7 +157,7 @@
           okText: 'Xác nhận',
           onOk: () => {
             let json = JSON.stringify(params);
-            console.log('json：：', json);
+            console.log('json::', json);
             wechatEnterpriseToLocal({ jwUserDepartJson: json })
               .then((res) => {
                 let options = {};

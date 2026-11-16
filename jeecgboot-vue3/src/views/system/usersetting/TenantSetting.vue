@@ -706,7 +706,7 @@ const userDetail = ref({
 .invited-row-list{
   padding: 0px 34px;
   .common{
-    color: #1e88e5;
+    color: #0b57d0;
     cursor: pointer;
   }
   .refuse{

@@ -350,7 +350,7 @@
     border: none;
     border-radius: 3px;
     box-sizing: border-box;
-    color: #1e88e5;
+    color: #0b57d0;
     cursor: pointer;
     display: inline-block;
     outline: none;
@@ -421,7 +421,7 @@
     border: none;
     border-radius: 3px;
     box-sizing: border-box;
-    color: #1e88e5;
+    color: #0b57d0;
     cursor: pointer;
     display: inline-block;
     outline: none;

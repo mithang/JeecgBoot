@@ -102,7 +102,7 @@
     }
   }
   .active {
-    border-bottom-color: #2196f3 !important;
+    border-bottom-color: #0b57d0 !important;
 
     a {
       color: #333 !important;

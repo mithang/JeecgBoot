@@ -45,7 +45,7 @@
         </a-collapse-panel>
       </a-collapse>
       <div class="sync-padding">
-        <div style="font-size: 16px; width: 100%"> 3.Đồng bộ dữ liệu</div>
+        <div style="font-size: 16px; width: 100%"> 3. Đồng bộ dữ liệu</div>
         <div style="margin-top: 20px" class="base-desc">
           Đồng bộ từ WeCom vào Qiaoqiao Cloud
           <a style="margin-left: 10px" @click="seeBindWeChat">Xem người dùng WeCom đã liên kết</a>

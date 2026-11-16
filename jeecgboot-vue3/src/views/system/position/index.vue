@@ -268,7 +268,7 @@
       font-size: 12px;
       font-weight: 600;
       border-radius: 50%;
-      background: #1677ff;
+      background: #0b57d0;
     }
 
     &__name {

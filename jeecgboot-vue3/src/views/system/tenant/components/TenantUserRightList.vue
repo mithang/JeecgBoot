@@ -75,7 +75,7 @@
        * @param value
        */
       function initData(value) {
-        console.log('value：：', value);
+        console.log('value::', value);
         Object.assign(tenantPackData, value);
         reload();
       }
