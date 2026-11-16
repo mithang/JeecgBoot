@@ -57,11 +57,14 @@
     <Icon icon="ant-design:global-outlined" style="font-size: 13px; color: #9e9e9e" />
     <a-dropdown :trigger="['click']" placement="top">
       <span class="language-drop pointer" @click.prevent>
-        {{ languageValue === 'zh_CN' ? 'CN' : 'EN' }}
+        {{ languageValue === 'vi_VN' ? 'VI' : languageValue === 'zh_CN' ? 'CN' : 'EN' }}
         <Icon icon="ant-design:down-outlined" style="color: #9e9e9e; font-size: 13px" />
       </span>
       <template #overlay>
         <a-menu v-model:value="languageValue" @click="handleMenuEvent">
+          <a-menu-item key="vi_VN">
+            <span>Tiếng Việt</span>
+          </a-menu-item>
           <a-menu-item key="zh_CN">
             <span>Tiếng Trung giản thể</span>
           </a-menu-item>
@@ -121,8 +124,8 @@
     smscode: '',
   });
   const { notification, createErrorModal } = useMessage();
-  //tiếng Trung hay tiếng Anh
-  const languageValue = ref<string>('zh_CN');
+  //Ngôn ngữ giao diện (mặc định theo locale của app)
+  const languageValue = ref<string>(unref(getLocale) as string);
   //Hiện tại có phải là liên kết tài khoản hay không
   const bindThirdAccount = ref<boolean>(false);
   const spinningLogin = ref<boolean>(false);
@@ -352,7 +355,7 @@
 
   .register-account {
     font-size: 14px;
-    color: #2196f3;
+    color: #0b57d0;
     display: block;
     margin: 20px auto 0;
     text-align: center;

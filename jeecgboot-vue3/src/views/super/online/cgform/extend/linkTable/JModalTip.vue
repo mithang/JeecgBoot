@@ -60,7 +60,7 @@
                   height: 42px;
                   border-radius: 42px;
                   color: rgb(255, 255, 255);
-                  background-color: rgb(33, 150, 243);
+                  background-color: rgb(11, 87, 208);
                   line-height: 42px;
                   padding: 0px 10px 0px 24px;
                   z-index: 9;
@@ -98,7 +98,7 @@
                       line-height: 28px;
                       padding: 0px 18px;
                       border-radius: 28px;
-                      color: rgb(62, 164, 252);
+                      color: rgb(46, 111, 232);
                       background-color: rgb(255, 255, 255);
                       font-weight: 600;
                       &:hover {

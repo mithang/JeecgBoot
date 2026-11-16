@@ -873,8 +873,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
       &:hover {
-        border-color: var(--ant-color-primary, #1677ff);
-        color: var(--ant-color-primary, #1677ff);
+        border-color: var(--ant-color-primary, #0b57d0);
+        color: var(--ant-color-primary, #0b57d0);
       }
     }
     .dict-config-btn {

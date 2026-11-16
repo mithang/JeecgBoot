@@ -232,7 +232,7 @@
       padding: 0 4px;
     }
     .active-title {
-      color: #2196f3;
+      color: #0b57d0;
     }
   }
 

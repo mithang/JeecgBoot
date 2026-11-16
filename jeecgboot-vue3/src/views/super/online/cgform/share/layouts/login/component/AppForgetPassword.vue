@@ -388,7 +388,7 @@
     }
 
     .active-title {
-      color: #2196f3;
+      color: #0b57d0;
     }
   }
 
@@ -443,7 +443,7 @@
 
   .to-login {
     font-size: 14px;
-    color: #2196f3;
+    color: #0b57d0;
     display: block;
     margin: 20px auto 0;
     text-align: center;

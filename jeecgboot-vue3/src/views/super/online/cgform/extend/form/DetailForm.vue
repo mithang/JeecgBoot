@@ -225,7 +225,7 @@
         // update-end--author:liaozhiyang---date:20231226---for：【QQYUN-7470】Hiển thị theo chiều dọc trong chi tiết văn bản giàu
         .anticon {
           &:hover {
-            color: #40a9ff;
+            color: #2e6fe8;
           }
         }
 

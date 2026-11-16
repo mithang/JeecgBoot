@@ -399,7 +399,7 @@
       padding: 0 4px;
     }
     .active-title {
-      color: #2196f3;
+      color: #0b57d0;
     }
   }
   .active-form-title {
@@ -445,7 +445,7 @@
 
   .tenant-number {
     align-items: center;
-    color: #1e88e5;
+    color: #0b57d0;
     margin-top: 16px;
     vertical-align: middle;
   }

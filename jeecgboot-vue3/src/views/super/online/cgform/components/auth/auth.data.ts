@@ -296,7 +296,7 @@ function dateTimeWidget(view, fieldExtendJson) {
     try {
       const json = JSON.parse(fieldExtendJson);
       if (json.picker && json.picker != 'default') {
-        picker = json.picker; // year、month、week、quarter
+        picker = json.picker; // year, month, week, quarter
       }
     } catch (_error) {}
   }

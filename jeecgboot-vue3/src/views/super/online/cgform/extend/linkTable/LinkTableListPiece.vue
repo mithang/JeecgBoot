@@ -56,7 +56,7 @@
     }
     &:hover {
       background-color: #dfebfa;
-      color: #2196f3;
+      color: #0b57d0;
     }
   }
 </style>
